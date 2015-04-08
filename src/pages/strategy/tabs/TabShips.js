@@ -25,14 +25,14 @@ var TabShips = {
 		var tempItems, ctr, ThisShip, MasterShip;
 		
 		// Compile items on Index
-		tempItems = JSON.parse(localStorage["user_items"]);
+		tempItems = JSON.parse(localStorage.user_items);
 		for(ctr in tempItems){
 			this._items[ tempItems[ctr].api_id ] = tempItems[ctr];
 		}
 		delete tempItems;
 		
 		// Compile ships on Index
-		tempItems = JSON.parse(localStorage["user_ships"]);
+		tempItems = JSON.parse(localStorage.user_ships);
 		for(ctr in tempItems){
 			ThisShip = tempItems[ctr];
 			MasterShip = master.ship[ThisShip.api_ship_id];
@@ -58,7 +58,6 @@ var TabShips = {
 				lk: ThisShip.api_lucky[0]
 			});
 		}
-		delete tempItems;
 		console.log(this._ships);
 	},
 	
@@ -173,7 +172,7 @@ var TabShips = {
 				case "ev": returnVal = b.ev[self.equipMode] - a.ev[self.equipMode]; break;
 				case "ls": returnVal = b.ls[self.equipMode] - a.ls[self.equipMode]; break;
 				case "lk": returnVal = b.lk  - a.lk; break;
-				default: return 1; break;
+				default: returnVal = 0; break;
 			}
 			if(!self.sortAsc){ returnVal =- returnVal; }
 			return returnVal;
@@ -183,7 +182,7 @@ var TabShips = {
 		for(shipCtr in FilteredShips){
 			cShip = FilteredShips[shipCtr];
 			cElm = $(".page_ships .factory .ship_item").clone().appendTo(".page_ships .ship_list");
-			if(shipCtr%2==0){ cElm.addClass("even"); }else{ cElm.addClass("odd"); }
+			if(shipCtr%2 === 0){ cElm.addClass("even"); }else{ cElm.addClass("odd"); }
 			
 			$(".ship_id", cElm).text( cShip.id );
 			$(".ship_img img", cElm).attr("src", "../../images/ships/"+cShip.bid+".png");

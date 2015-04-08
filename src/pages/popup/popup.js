@@ -7,13 +7,13 @@ $(document).on("ready", function(){
 	
 	// Refresh API Link
 	$("#get_api").on('click', function(){
-		localStorage["extract_api"] = true;
+		localStorage.extract_api = true;
 		window.open("http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/", "kc4_game");
 	});
 	
 	// Play direct DMM
 	$("#play_dmm").on('click', function(){
-		localStorage["extract_api"] = false;
+		localStorage.extract_api = false;
 		window.open("http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/", "kc4_game");
 	});
 	

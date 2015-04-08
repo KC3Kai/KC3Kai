@@ -6,15 +6,15 @@ function ActivateGame(){
 	waiting = false;
 	$("#wait-box").hide();
 	$("#game-box").show();
-	$("#game-swf").attr("src", localStorage["absoluteswf"]);
+	$("#game-swf").attr("src", localStorage.absoluteswf);
 }
 
 $(document).on("ready", function(){
 	
 	// API link determines which screen to show
-	var absoluteSwf = localStorage["absoluteswf"];
+	var absoluteSwf = localStorage.absoluteswf;
 	if(absoluteSwf){
-		$(".api_txt textarea").text(localStorage["absoluteswf"])
+		$(".api_txt textarea").text(localStorage.absoluteswf);
 		$("#wait-box").show();
 		waiting = true;
 	}else{
@@ -23,13 +23,13 @@ $(document).on("ready", function(){
 	
 	// Update API Link
 	$(".api_submit").on('click', function(){
-		localStorage["absoluteswf"] = $(".api_text").val();
+		localStorage.absoluteswf = $(".api_text").val();
 		window.location.reload();
 	});
 	
 	// Forget API Link
 	$(".forget_btn").on('click', function(){
-		localStorage["absoluteswf"] = "";
+		localStorage.absoluteswf = "";
 		window.location.reload();
 	});
 	

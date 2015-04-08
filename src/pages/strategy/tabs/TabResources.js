@@ -47,6 +47,7 @@ var TabResources = {
 		records.reverse();
 		
 		var prevDay = 0;
+		var i;
 		for(i in records){
 			d = new Date(records[i].time);
 			// if(d.getDate() == prevDay){ return false; }

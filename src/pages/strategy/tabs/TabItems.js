@@ -17,7 +17,7 @@ var TabItems = {
 		
 		// Compile all Master Items
 		for(ctr in master.slotitem){
-			if(master.slotitem[ctr] != null){
+			if(typeof master.slotitem[ctr] !== "undefined"){
 				ThisItem = master.slotitem[ctr];
 				if(ThisItem.api_id < 500){ 
 					this._compile[ ThisItem.api_id ] = {
@@ -34,7 +34,7 @@ var TabItems = {
 		// console.log(this._compile);
 		
 		// Compile items on Index
-		tempItems = JSON.parse(localStorage["user_items"]);
+		tempItems = JSON.parse(localStorage.user_items);
 		for(ctr in tempItems){
 			ThisItem = tempItems[ctr];
 			this._items[ ThisItem.api_id ] = {
