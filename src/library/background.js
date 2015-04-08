@@ -25,8 +25,8 @@ var KC4BG = {
 	API Link extracted, save and open
 	------------------------------------------*/
 	set_api_link:function(request, sender, response){
-		localStorage["absoluteswf"] = request.swfsrc;
-		localStorage["extract_api"] = false;
+		localStorage.absoluteswf = request.swfsrc;
+		localStorage.extract_api = false;
 		window.open("../pages/game/game.html", "kc4_game");
 		response({success:true});
 		chrome.tabs.remove([sender.tab.id], function(){});

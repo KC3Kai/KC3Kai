@@ -8,12 +8,11 @@ KC3.prototype.Assets = {
 	},
 	
 	shipIcon :function(id){
-		if(this._imageList,length > 0){
-			
+		if(typeof this._imageList[id] !== "undefined"){
+			return this.cdn + this._imageList[id];
 		}else{
 			return '../../images/ui/empty.png';
 		}
-		return this.cdn+""
 	}
 	
 };

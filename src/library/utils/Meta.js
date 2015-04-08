@@ -58,8 +58,8 @@
 	-------------------------------------------------------*/
 	translate: function(jp_name, dtype){
 		switch(dtype){
-			case "ship": return this.ship(jp_name); break;
-			default: return this.generic(jp_name); break;
+			case "ship": return this.ship(jp_name);
+			default: return this.generic(jp_name);
 		}
 	},
 	
@@ -113,4 +113,4 @@
 		return this._cache[jp_name];
 	}
 	
-}
+};
