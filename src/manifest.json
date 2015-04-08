@@ -4,6 +4,16 @@
 	"short_name": "KC3改",
 	"description": "Kantai Collection Game Viewer and Tools",
 	"version": "1",
+	"devtools_page": "pages/devtools/devtools.html",
+	"icons": {
+		"16": "images/logo/16.png",
+        "48": "images/logo/48.png",
+        "128": "images/logo/128.png"
+	},
+	"browser_action": {
+		"default_icon": "images/logo/16.png",
+		"default_popup": "pages/popup/popup.html"
+	},
 	"permissions": [
 		"unlimitedStorage",
 		"storage",
@@ -11,6 +21,22 @@
 		"activeTab",
 		"notifications",
 		"<all_urls>"
+	],
+	"background": {
+		"scripts": ["scripts/background.js"]
+	},
+	"content_scripts": [
+		{
+			"matches":["*://*.dmm.com/*"],
+			"js": ["scripts/cookie.js"],
+			"run_at": "document_end"
+		},
+		{
+			"matches":["*://osapi.dmm.com/gadgets/*aid=854854*"],
+			"js": ["scripts/osapi.js"],
+			"run_at": "document_end",
+			"all_frames": true
+		}
 	],
 	"content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }
