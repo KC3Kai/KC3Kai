@@ -1,0 +1,524 @@
+#dashboard {
+	width:550px;
+	height:100%;
+	min-height:390px;
+	overflow:hidden;
+	margin:0px auto;
+	background:#fff;
+	/*display:none;*/
+}
+.dash-panel {
+	height:330px;
+	float:left;
+}
+
+/* LEFT PANEL
+-----------------------*/
+#dash-panel-left {
+	width:220px;
+	height:100%;
+	padding:0px 5px;
+	-webkit-box-shadow: 3px 0px 2px 0px rgba(0,0,0,0.3);
+	-moz-box-shadow: 3px 0px 2px 0px rgba(0,0,0,0.3);
+	box-shadow: 3px 0px 2px 0px rgba(0,0,0,0.3);
+}
+/* HQ */
+#hqinfo {
+	width:210px;
+	height:60px;
+	margin:5px 0px 0px 0px;
+}
+.hqinfo-box {
+	height:60px;
+	float:left;
+}
+#hqadmiral {
+	width:120px;
+}
+#hqadmiral .hqname {
+	width:115px;
+	height:24px;
+	overflow:hidden;
+	line-height:24px;
+	font-size:18px;
+	margin:0px 0px 2px 0px;
+}
+#hqadmiral .hqcomm {
+	width:115px;
+	height:16px;
+	overflow:hidden;
+	line-height:16px;
+	font-size:12px;
+	color:#aaa;
+	margin:0px 0px 2px 0px;
+}
+#hqadmiral .hqrank {
+	width:115px;
+	height:16px;
+	overflow:hidden;
+	line-height:16px;
+	font-size:12px;
+	margin:0px 0px 2px 0px;
+}
+#hqlevel {
+	width:90px;
+}
+.hqlevel {
+	width:90px;
+	height:24px;
+	line-height:24px;
+	margin:0px 0px 2px 0px;
+}
+.hqlevel .hqlv-lbl {
+	height:24px;
+	font-size:12px;
+	float:left;
+	margin:0px 5px 0px 0px;
+}
+.hqlevel .hqlv-cur {
+	height:24px;
+	font-size:20px;
+	float:left;
+}
+.hqexpbox {
+	height:16px;
+	line-height:16px;
+	margin:0px 0px 2px 0px;
+	padding:2px 0px 0px 0px;
+}
+.hqexpbox .hqexpbar {
+	width:90px;
+	height:12px;
+	border:1px solid #000;
+	background:#555;
+	margin:0px;
+}
+.hqexpbox .hqexpbar .hqexpval {
+	height:10px;
+	background:#0f0;
+}
+.hqexptxt {
+	height:16px;
+	line-height:16px;
+	/*background:#ccf;*/
+	font-size:11px;
+}
+/* Materials */
+.box-material {
+	width:210px;
+	height:24px;
+}
+#box-material-1 {
+	margin:10px 0px 0px 0px;
+}
+#box-material-3 {
+	margin:0px 0px 10px 0px;
+}
+.material-item {
+	width:105px;
+	height:24px;
+	float:left;
+}
+.material-icon {
+	width:24px;
+	height:24px;
+	float:left;
+	/*background:#faa;*/
+	margin:0px 6px 0px 0px;
+}
+.material-icon img {
+	width:16px;
+	height:16px;
+	margin:4px;
+}
+.material-text {
+	width:70px;
+	height:24px;
+	line-height:24px;
+	float:left;
+	/*background:#cff;*/
+}
+.material-count {
+	font-size:14px;
+}
+.material-max {
+	font-size:11px;
+	color:#888;
+}
+/* Timer boxes */
+.box-timers {
+	width:210px;
+	height:60px;
+	margin:5px 0px 0px 0px;
+	overflow:hidden;
+}
+.timer-item {
+	/*border:1px solid #000;*/
+}
+.timer-img {
+	border-radius:25px;
+}
+#box-expeditions .timer-img {
+	background:#0099CC;
+}
+#box-repairs .timer-img {
+	background:#FFCC00;
+}
+#box-constructions .timer-img {
+	background:#996600;
+}
+
+.box-timers-2 .timer-item {
+	width:71px;
+	height:60px;
+	float:left;
+}
+.box-timers-2 .timer-img {
+	width:44px;
+	height:44px;
+	margin:0px auto 2px;
+}
+.box-timers-2 .timer-img img {
+	width:38px;
+	height:38px;
+	margin:3px;
+}
+.box-timers-2 .timer-name {
+	display:none;
+}
+.box-timers-2 .timer-time {
+	width:70px;
+	height:14px;
+	line-height:14px;
+	text-align:center;
+	font-size:12px;
+	/*background:#fcc;*/
+}
+
+.box-timers-3 .timer-item {
+	width:70px;
+	height:60px;
+	float:left;
+}
+.box-timers-3 .timer-img {
+	width:44px;
+	height:44px;
+	margin:0px auto 2px;
+}
+.box-timers-3 .timer-img img {
+	width:38px;
+	height:38px;
+	margin:3px;
+}
+.box-timers-3 .timer-name {
+	display:none;
+}
+.box-timers-3 .timer-time {
+	width:70px;
+	height:14px;
+	line-height:14px;
+	text-align:center;
+	font-size:12px;
+	/*background:#fcc;*/
+}
+
+.box-timers-4 .timer-item {
+	width:105px;
+	height:30px;
+	float:left;
+}
+.box-timers-4 .timer-img {
+	width::28px;
+	height:28px;
+	margin:1px 5px 1px 0px;
+	float:left;
+	/*background:#fcc;*/
+}
+.box-timers-4 .timer-img img {
+	width::22px;
+	height:22px;
+	margin:3px;
+}
+.box-timers-4 .timer-name {
+	display:none;
+}
+.box-timers-4 .timer-time {
+	width:70px;
+	height:30px;
+	line-height:30px;
+	float:left;
+	/*background:#ccf;*/
+}
+
+/* Specific Timer boxes */
+/*#exped-box-1 { background:#f00; }
+#exped-box-2 { background:#0f0; }
+#exped-box-3 { background:#00f; }
+#repair-box-1 { background:#f00; }
+#repair-box-2 { background:#0f0; }
+#repair-box-3 { background:#00f; }
+#repair-box-4 { background:#ff0; }
+#build-box-1 { background:#f00; }
+#build-box-2 { background:#0f0; }
+#build-box-3 { background:#00f; }
+#build-box-4 { background:#ff0; }*/
+/* Quests boxes */
+#box-quests {
+	width:210px;
+	height:80px;
+	margin:5px 0px 0px 0px;
+	/*background:#f00;*/
+}
+.quest-item {
+	width:210px;
+	height:15px;
+	line-height:15px;
+	font-size:12px;
+	margin:0px 0px 1px 0px;
+	border:1px solid #000;
+	/*background:#00f;
+	color:#fff;*/
+}
+
+/* SHADOW PANEL
+-----------------------*/
+#dash-panel-shadow {
+	width:10px;
+	height:100%;
+	/*background:#0f0;
+	opacity:.3;*/
+}
+
+/* RIGHT PANEL
+-----------------------*/
+#dash-panel-right {
+	width:320px;
+}
+/* Buttons */
+#fleet-buttons {
+	width:310px;
+	height:30px;
+	line-height:30px;
+	margin:0px 0px 10px 0px;
+	/*background:#f00;*/
+	color:#000;
+	text-align:center;
+}
+#fleet-buttons .fleet-button {
+	width:40px;
+	height:30px;
+	margin:0px 5px 0px 0px;
+	float:left;
+	font-weight:bold;
+	font-size:16px;
+	background:#ace;
+	border-radius:0px 0px 10px 10px;
+}
+#fleet-buttons .fleet-button.active {
+	background:#369;
+	color:#fff;
+}
+#share-button {
+	width:100px;
+	height:30px;
+	float:right;
+	font-weight:bold;
+	font-size:14px;
+	background:#5c5;
+	border-radius:0px 0px 10px 10px;
+}
+/* Summary */
+#fleet-summary {
+	width:310px;
+	height:24px;
+	line-height:24px;
+	margin:0px 0px 6px 0px;
+}
+#fleet-summary .summary-field {
+	width:75px;
+	height:24px;
+	margin:0px 2px 0px 0px;
+	float:left;
+}
+#fleet-summary .summary-field.incomplete  {
+	background:#fbb;
+}
+#fleet-summary .summary-icon {
+	width:22px;
+	height:24px;
+	float:left;
+	margin:0px 3px 0px 0px;
+}
+#fleet-summary .summary-icon img {
+	width:18px;
+	height:18px;
+	margin:3px 2px;
+}
+#fleet-summary .summary-text {
+	width:50px;
+	height:24px;
+	line-height:24px;
+	float:left;
+	font-weight:bold;
+	font-size:14px;
+}
+
+/* Ships */
+#fleet-ships {
+	width:310px;
+	height:312px;
+}
+.fleet-ship {
+	width:310px;
+	height:50px;
+	margin:0px 0px 2px 0px;
+	font-size:10px;
+	background:#eee;
+	overflow:hidden;
+}
+
+#fleet-ships .ship-img {
+	width:46px;
+	height:46px;
+	border-radius:22px 0px 0px 22px;
+	margin:2px 0px 2px 2px;
+	float:left;
+	background:#555;
+}
+#fleet-ships .ship-img img {
+	width:42px;
+	height:42px;
+	margin:2px;
+}
+
+#fleet-ships .ship-info {
+	width:100px;
+	height:50px;
+	float:left;
+	margin:0px 10px 0px 0px;
+	/*background:#cfc;*/
+}
+#fleet-ships .ship-name {
+	width:100px;
+	height:18px;
+	line-height:18px;
+	font-size:12px;
+	float:left;
+	/*background:#fcc;*/
+	margin:2px 0px 0px 0px;
+	padding:0px 0px 0px 3px;
+}
+#fleet-ships .ship-type {
+	width:35px;
+	height:16px;
+	line-height:14px;
+	float:left;
+	font-weight:bold;
+	font-size:11px;
+	color:#aaa;
+	/*background:#cfc;*/
+	padding:0px 0px 0px 3px;
+}
+#fleet-ships .ship-hp-text {
+	width:65px;
+	height:16px;
+	font-size:12px;
+	font-weight:bold;
+	float:left;
+	text-align:right;
+}
+#fleet-ships .ship-hp-bar {
+	width:100px;
+	height:12px;
+	float:left;
+	background:#555;
+	padding:2px 2px 2px 0px;
+}
+#fleet-ships .ship-hp-bar .ship-hp-val {
+	width:98px;
+	height:8px;
+	float:left;
+	background:#0f0;
+}
+
+#fleet-ships .ship-level {
+	width:60px;
+	height:50px;
+	float:left;
+	margin:0px 2px 0px 0px;
+}
+#fleet-ships .ship-lvl-lbl {
+	width:25px;
+	height:18px;
+	line-height:18px;
+	font-size:12px;
+	float:left;
+	color:#777;
+	margin:2px 0px 0px 0px;
+}
+#fleet-ships .ship-lvl-txt {
+	width:35px;
+	height:18px;
+	line-height:18px;
+	font-size:16px;
+	float:left;
+	margin:2px 0px 0px 0px;
+	font-weight:bold;
+}
+#fleet-ships .ship-lvl-next {
+	width:60px;
+	height:16px;
+	line-height:16px;
+	font-size:10px;
+	float:left;
+	text-align:center;
+}
+#fleet-ships .ship-lvl-bar {
+	width:60px;
+	height:12px;
+	float:left;
+	background:#555;
+	padding:2px;
+}
+#fleet-ships .ship-lvl-val {
+	width:56px;
+	height:8px;
+	float:left;
+	background:#00ccff;
+}
+
+
+#fleet-ships .ship-morale {
+	width:40px;
+	height:50px;
+	float:left;
+	margin:0px 0px 0px 0px;
+}
+#fleet-ships .ship-morale-box {
+	width:36px;
+	height:36px;
+	line-height:34px;
+	border-radius:18px;
+	border:2px solid #aaa;
+	background:#fff;
+	margin:7px 2px 0px 2px;
+	font-size:16px;
+	font-weight:bold;text-align:center;
+}
+
+#fleet-ships .ship-equip {
+	width:50px;
+	height:50px;
+	padding:5px;
+	float:left;
+	
+}
+#fleet-ships .ship-gear {
+	width:20px;
+	height:20px;
+	float:left;
+}
+#fleet-ships .ship-gear img {
+	width:20px;
+	height:20px;
+}

@@ -1,0 +1,73 @@
+html,body {
+	margin:0;padding:0;height:100%;
+}
+body {
+	background:#def;
+}
+.refresh {
+	width:50px;
+	height:50px;
+	line-height:50px;
+	background:#000;
+	opacity:.4;
+	position:fixed;
+	top:5px;
+	right:5px;
+	color:#fff;
+	text-align:center;
+	font-size:16px;
+}
+
+.idfreset {
+	width:50px;
+	height:50px;
+	line-height:50px;
+	background:#000;
+	opacity:.4;
+	position:fixed;
+	top:70px;
+	right:5px;
+	color:#fff;
+	text-align:center;
+	font-size:16px;
+}
+
+/* ACTION BOXES
+-----------------------------*/
+.actionBox {
+	width:370px;
+    background-color: #fff;
+	margin:20px auto 0px;
+	padding:10px;
+	border-radius:10px;
+	display:none;
+}
+.actionBox-red {
+	background-color: #fbb;
+}
+.actionBox-yellow {
+	background:#fda;
+}
+.actionBox-image {
+	width:40px;
+	height:40px;
+	margin:0px 10px 0px 0px;
+	float:left;
+}
+.actionBox-image img {
+	width:40px;
+	height:40px;
+}
+.actionBox-title {
+	width:300px;
+	height:40px;
+	line-height:40px;
+	font-size:14px;
+	font-weight:bold;
+	float:left;
+}
+.actionBox-description {
+	width:350px;
+	margin:10px 0px 0px 0px;
+	font-size:12px;
+}

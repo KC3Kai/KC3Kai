@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link href="../../assets/bootstrap.css" rel="stylesheet" type="text/css">
+		<link href="../../assets/global.css" rel="stylesheet" type="text/css">
+		<link href="../../assets/effects.css" rel="stylesheet">
+		<link href="dashboard.css" rel="stylesheet" type="text/css">
+		<link href="panel.css" rel="stylesheet" type="text/css">
+	</head>
+	<body>
+		<a href=""><div class="refresh">F5</div></a>
+		<div class="idfreset">Idb</div>
+		
+		<!-- ACTION MESSAGE BOXES -->
+		<div id="actionBox-activating" class="actionBox">
+			<div class="actionBox-image"><img src="../../images/ui/construction.png" /></div>
+			<div class="actionBox-title">Activating Command Center...</div>
+			<div class="clear"></div>
+		</div>
+		<div id="actionBox-gameok" class="actionBox">
+			<div class="actionBox-image"><img src="../../images/ui/construction.png" /></div>
+			<div class="actionBox-title">Game activated, loading assets and data...</div>
+			<div class="clear"></div>
+		</div>
+		<div id="actionBox-arriving" class="actionBox">
+			<div class="actionBox-image"><img src="../../images/ui/construction.png" /></div>
+			<div class="actionBox-title">Game data OK! Arriving at naval base...</div>
+			<div class="clear"></div>
+		</div>
+		<div id="actionBox-waiting" class="actionBox">
+			<div class="actionBox-image"><img src="../../images/ui/construction.png" /></div>
+			<div class="actionBox-title">Waiting for game actions...</div>
+			<div class="clear"></div>
+		</div>
+		<div id="actionBox-homeport" class="actionBox">
+			<div class="actionBox-image"><img src="../../images/ui/construction.png" /></div>
+			<div class="actionBox-title">Please go to Home Port screen...</div>
+			<div class="clear"></div>
+		</div>
+		<div id="actionBox-nosupport" class="actionBox actionBox-yellow">
+			<div class="actionBox-image"><img src="../../images/ui/construction.png" /></div>
+			<div class="actionBox-title">Unable to show Admiral Dashboard!</div>
+			<div class="clear"></div>
+			<div class="actionBox-description">If you want to see this panel, please (re)load the game while this is open, we need to see you click Game Start. You can't just open this in the middle of your game.</div>
+		</div>
+		<div id="actionBox-changeuser" class="actionBox actionBox-yellow">
+			<div class="actionBox-image"><img src="../../images/ui/construction.png" /></div>
+			<div class="actionBox-title">New player detected!</div>
+			<div class="clear"></div>
+			<div class="actionBox-description">It seems you have switched account while the panel is open. Please re-open this panel, and reload the game.</div>
+		</div>
+		<div id="actionBox-catbomb" class="actionBox actionBox-red">
+			<div class="actionBox-image"><img src="../../images/ui/catbomb.png" /></div>
+			<div class="actionBox-title"></div>
+			<div class="clear"></div>
+			<div class="actionBox-description"></div>
+		</div>
+		
+		<!-- MAIN DASHBOARD -->
+		<div id="dashboard">
+			<!-- LEFT PANEL -->
+			<div id="dash-panel-left" class="dash-panel">
+				<!-- HQ Information -->
+				<div id="hqinfo">
+					<div id="hqadmiral" class="hqinfo-box">
+						<div class="hqname"></div>
+						<div class="hqcomm"></div>
+						<div class="hqrank"></div>
+					</div>
+					<div id="hqlevel" class="hqinfo-box">
+						<div class="hqlevel">
+							<div class="hqlv-lbl">HQ Lv.</div> <div class="hqlv-cur">100</div>
+							<div class="clear"></div>
+						</div>
+						<div class="hqexpbox">
+							<div class="hqexpbar"><div class="hqexpval"></div></div>
+						</div>
+						<div class="hqexptxt">
+							Next: <span>100</span>
+						</div>
+					</div>
+					<div class="clear"></div>
+				</div>
+				
+				<!-- Resources Line 1 -->
+				<div id="box-material-1" class="box-material">
+					<div id="material-box-1" class="material-item">
+						<div class="material-icon"><img src="../../images/client/bucket.png" /></div>
+						<div class="material-text">
+							<span class="material-count"></span>
+							<span class="material-max"></span>
+						</div>
+					</div>
+					<div id="material-box-2" class="material-item">
+						<div class="material-icon"><img src="../../images/client/ship.png" /></div>
+						<div class="material-text">
+							<span class="material-count"></span>
+							<span class="material-max"></span>
+						</div>
+					</div>
+				</div>
+				<!-- Resources Line 2 -->
+				<div id="box-material-2" class="box-material">
+					<div id="material-box-3" class="material-item">
+						<div class="material-icon"><img src="../../images/client/ibuild.png" /></div>
+						<div class="material-text">
+							<span class="material-count"></span>
+							<span class="material-max"></span>
+						</div>
+					</div>
+					<div id="material-box-4" class="material-item">
+						<div class="material-icon"><img src="../../images/client/gear.png" /></div>
+						<div class="material-text">
+							<span class="material-count"></span>
+							<span class="material-max"></span>
+						</div>
+					</div>
+				</div>
+				<!-- Resources Line 3 -->
+				<div id="box-material-3" class="box-material">
+					<div id="material-box-5" class="material-item">
+						<div class="material-icon"><img src="../../images/client/screws.png" /></div>
+						<div class="material-text">
+							<span class="material-count"></span>
+							<span class="material-max"></span>
+						</div>
+					</div>
+					<div id="material-box-6" class="material-item">
+						<div class="material-icon"><img src="../../images/client/coin.png" /></div>
+						<div class="material-text">
+							<span class="material-count"></span>
+							<span class="material-max"></span>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Expedition boxes -->
+				<div id="box-expeditions" class="box-timers box-timers-3">
+					<div id="exped-box-1" class="timer-item">
+						<div class="timer-img"><img src="../../images/ships/9.png" /></div>
+						<div class="timer-name"></div>
+						<div class="timer-time">00:00:00</div>
+					</div>
+					<div id="exped-box-2" class="timer-item">
+						<div class="timer-img"><img src="../../images/ships/10.png" /></div>
+						<div class="timer-name"></div>
+						<div class="timer-time">00:00:00</div>
+					</div>
+					<div id="exped-box-3" class="timer-item">
+						<div class="timer-img"><img src="../../images/ships/11.png" /></div>
+						<div class="timer-name"></div>
+						<div class="timer-time">00:00:00</div>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<!-- Repair Boxes -->
+				<div id="box-repairs" class="box-timers box-timers-2">
+					<div id="repair-box-1" class="timer-item">
+						<div class="timer-img"><img src="../../images/ships/12.png" /></div>
+						<div class="timer-name"></div>
+						<div class="timer-time">00:00:00</div>
+					</div>
+					<div id="repair-box-2" class="timer-item">
+						<div class="timer-img"><img src="../../images/ships/13.png" /></div>
+						<div class="timer-name"></div>
+						<div class="timer-time">00:00:00</div>
+					</div>
+					<div id="repair-box-3" class="timer-item">
+						<div class="timer-img"><img src="../../images/ships/14.png" /></div>
+						<div class="timer-name"></div>
+						<div class="timer-time">00:00:00</div>
+					</div>
+					<div id="repair-box-4" class="timer-item">
+						<div class="timer-img"><img src="../../images/ships/15.png" /></div>
+						<div class="timer-name"></div>
+						<div class="timer-time">00:00:00</div>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<!-- Construction Boxes -->
+				<div id="box-constructions" class="box-timers box-timers-2">
+					<div id="build-box-1" class="timer-item">
+						<div class="timer-img"><img src="http://i708.photobucket.com/albums/ww87/dragonjet25/KC3%20Ship%20Icons/99_zpsu0sw6nbz.png" /></div>
+						<div class="timer-name"></div>
+						<div class="timer-time">00:00:00</div>
+					</div>
+					<div id="build-box-2" class="timer-item">
+						<div class="timer-img"><img src="../../images/ships/17.png" /></div>
+						<div class="timer-name"></div>
+						<div class="timer-time">00:00:00</div>
+					</div>
+					<div id="build-box-3" class="timer-item">
+						<div class="timer-img"><img src="../../images/ships/18.png" /></div>
+						<div class="timer-name"></div>
+						<div class="timer-time">00:00:00</div>
+					</div>
+					<div id="build-box-4" class="timer-item">
+						<div class="timer-img"><img src="../../images/ships/19.png" /></div>
+						<div class="timer-name"></div>
+						<div class="timer-time">00:00:00</div>
+					</div>
+					<div class="clear"></div>
+				</div>
+				
+				<!-- Quest boxes -->
+				<!-- <div id="box-quests" class="box-quests">
+					<div id="quest-box-1" class="quest-item">Daily Sortie 1</div>
+					<div id="quest-box-2" class="quest-item"></div>
+					<div id="quest-box-3" class="quest-item"></div>
+					<div id="quest-box-4" class="quest-item"></div>
+					<div id="quest-box-5" class="quest-item"></div>
+					<div class="clear"></div>
+				</div> -->
+			</div>
+			<div id="dash-panel-shadow" class="dash-panel"></div>
+			
+			<!-- RIGHT PANEL -->
+			<div id="dash-panel-right" class="dash-panel">
+				<div id="fleet-buttons">
+					<div id="fleet-button-1" class="fleet-button active hover" data-id="1">1</div>
+					<div id="fleet-button-2" class="fleet-button hover" data-id="2">2</div>
+					<div id="fleet-button-3" class="fleet-button hover" data-id="3">3</div>
+					<div id="fleet-button-4" class="fleet-button hover" data-id="4">4</div>
+					<div id="share-button" class="hover">SHARE</div>
+					<div class="clear"></div>
+				</div>
+				<div id="fleet-summary">
+					<div class="summary-field summary-level">
+						<div class="summary-icon"><img src="../../images/stats/lv.png" /></div>
+						<div class="summary-text"></div>
+						<div class="clear"></div>
+					</div>
+					<div class="summary-field summary-eqlos hover">
+						<div class="summary-icon"><img src="../../images/stats/los3.png" /></div>
+						<div class="summary-text"></div>
+						<div class="clear"></div>
+					</div>
+					<div class="summary-field summary-airfp">
+						<div class="summary-icon"><img src="../../images/stats/ac.png" /></div>
+						<div class="summary-text"></div>
+						<div class="clear"></div>
+					</div>
+					<div class="summary-field summary-speed">
+						<div class="summary-icon"><img src="../../images/stats/sp.png" /></div>
+						<div class="summary-text"></div>
+						<div class="clear"></div>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div id="fleet-ships">
+					<div id="fleet-ship-1" class="fleet-ship">
+						<div class="ship-img"><img src="../../images/ui/empty.png" /></div>
+						<div class="ship-info">
+							<div class="ship-name"></div>
+							<div class="ship-type"></div>
+							<div class="ship-hp-text"></div>
+							<div class="ship-hp-bar"><div class="ship-hp-val"></div></div>
+						</div>
+						<div class="ship-level">
+							<div class="ship-lvl-lbl">Lv.</div>
+							<div class="ship-lvl-txt"></div>
+							<div class="ship-lvl-next"></div>
+							<div class="ship-lvl-bar"><div class="ship-lvl-val"></div></div>
+						</div>
+						<div class="ship-morale">
+							<div class="ship-morale-box"></div>
+						</div>
+						<div class="ship-equip">
+							<div class="ship-gear-1 ship-gear"><img src="../../images/ui/empty.png" /></div>
+							<div class="ship-gear-2 ship-gear"><img src="../../images/ui/empty.png" /></div>
+							<div class="ship-gear-3 ship-gear"><img src="../../images/ui/empty.png" /></div>
+							<div class="ship-gear-4 ship-gear"><img src="../../images/ui/empty.png" /></div>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div id="fleet-ship-2" class="fleet-ship">
+						<div class="ship-img"><img src="../../images/ui/empty.png" /></div>
+						<div class="ship-info">
+							<div class="ship-name"></div>
+							<div class="ship-type"></div>
+							<div class="ship-hp-text"></div>
+							<div class="ship-hp-bar"><div class="ship-hp-val"></div></div>
+						</div>
+						<div class="ship-level">
+							<div class="ship-lvl-lbl">Lv.</div>
+							<div class="ship-lvl-txt"></div>
+							<div class="ship-lvl-next"></div>
+							<div class="ship-lvl-bar"><div class="ship-lvl-val"></div></div>
+						</div>
+						<div class="ship-morale">
+							<div class="ship-morale-box"></div>
+						</div>
+						<div class="ship-equip">
+							<div class="ship-gear-1 ship-gear"><img src="../../images/ui/empty.png" /></div>
+							<div class="ship-gear-2 ship-gear"><img src="../../images/ui/empty.png" /></div>
+							<div class="ship-gear-3 ship-gear"><img src="../../images/ui/empty.png" /></div>
+							<div class="ship-gear-4 ship-gear"><img src="../../images/ui/empty.png" /></div>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div id="fleet-ship-3" class="fleet-ship">
+						<div class="ship-img"><img src="../../images/ui/empty.png" /></div>
+						<div class="ship-info">
+							<div class="ship-name"></div>
+							<div class="ship-type"></div>
+							<div class="ship-hp-text"></div>
+							<div class="ship-hp-bar"><div class="ship-hp-val"></div></div>
+						</div>
+						<div class="ship-level">
+							<div class="ship-lvl-lbl">Lv.</div>
+							<div class="ship-lvl-txt"></div>
+							<div class="ship-lvl-next"></div>
+							<div class="ship-lvl-bar"><div class="ship-lvl-val"></div></div>
+						</div>
+						<div class="ship-morale">
+							<div class="ship-morale-box"></div>
+						</div>
+						<div class="ship-equip">
+							<div class="ship-gear-1 ship-gear"><img src="../../images/ui/empty.png" /></div>
+							<div class="ship-gear-2 ship-gear"><img src="../../images/ui/empty.png" /></div>
+							<div class="ship-gear-3 ship-gear"><img src="../../images/ui/empty.png" /></div>
+							<div class="ship-gear-4 ship-gear"><img src="../../images/ui/empty.png" /></div>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div id="fleet-ship-4" class="fleet-ship">
+						<div class="ship-img"><img src="../../images/ui/empty.png" /></div>
+						<div class="ship-info">
+							<div class="ship-name"></div>
+							<div class="ship-type"></div>
+							<div class="ship-hp-text"></div>
+							<div class="ship-hp-bar"><div class="ship-hp-val"></div></div>
+						</div>
+						<div class="ship-level">
+							<div class="ship-lvl-lbl">Lv.</div>
+							<div class="ship-lvl-txt"></div>
+							<div class="ship-lvl-next"></div>
+							<div class="ship-lvl-bar"><div class="ship-lvl-val"></div></div>
+						</div>
+						<div class="ship-morale">
+							<div class="ship-morale-box"></div>
+						</div>
+						<div class="ship-equip">
+							<div class="ship-gear-1 ship-gear"><img src="../../images/ui/empty.png" /></div>
+							<div class="ship-gear-2 ship-gear"><img src="../../images/ui/empty.png" /></div>
+							<div class="ship-gear-3 ship-gear"><img src="../../images/ui/empty.png" /></div>
+							<div class="ship-gear-4 ship-gear"><img src="../../images/ui/empty.png" /></div>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div id="fleet-ship-5" class="fleet-ship">
+						<div class="ship-img"><img src="../../images/ui/empty.png" /></div>
+						<div class="ship-info">
+							<div class="ship-name"></div>
+							<div class="ship-type"></div>
+							<div class="ship-hp-text"></div>
+							<div class="ship-hp-bar"><div class="ship-hp-val"></div></div>
+						</div>
+						<div class="ship-level">
+							<div class="ship-lvl-lbl">Lv.</div>
+							<div class="ship-lvl-txt"></div>
+							<div class="ship-lvl-next"></div>
+							<div class="ship-lvl-bar"><div class="ship-lvl-val"></div></div>
+						</div>
+						<div class="ship-morale">
+							<div class="ship-morale-box"></div>
+						</div>
+						<div class="ship-equip">
+							<div class="ship-gear-1 ship-gear"><img src="../../images/ui/empty.png" /></div>
+							<div class="ship-gear-2 ship-gear"><img src="../../images/ui/empty.png" /></div>
+							<div class="ship-gear-3 ship-gear"><img src="../../images/ui/empty.png" /></div>
+							<div class="ship-gear-4 ship-gear"><img src="../../images/ui/empty.png" /></div>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div id="fleet-ship-6" class="fleet-ship">
+						<div class="ship-img"><img src="../../images/ui/empty.png" /></div>
+						<div class="ship-info">
+							<div class="ship-name"></div>
+							<div class="ship-type"></div>
+							<div class="ship-hp-text">000 / 000</div>
+							<div class="ship-hp-bar"><div class="ship-hp-val"></div></div>
+						</div>
+						<div class="ship-level">
+							<div class="ship-lvl-lbl">Lv.</div>
+							<div class="ship-lvl-txt"></div>
+							<div class="ship-lvl-next"></div>
+							<div class="ship-lvl-bar"><div class="ship-lvl-val"></div></div>
+						</div>
+						<div class="ship-morale">
+							<div class="ship-morale-box"></div>
+						</div>
+						<div class="ship-equip">
+							<div class="ship-gear-1 ship-gear"><img src="../../images/ui/empty.png" /></div>
+							<div class="ship-gear-2 ship-gear"><img src="../../images/ui/empty.png" /></div>
+							<div class="ship-gear-3 ship-gear"><img src="../../images/ui/empty.png" /></div>
+							<div class="ship-gear-4 ship-gear"><img src="../../images/ui/empty.png" /></div>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- SCRIPTS -->
+		<script type="text/javascript" src="../../assets/jquery-2.1.3.min.js"></script>
+		<script type="text/javascript" src="../../assets/Dexie.min.js"></script>
+		<script type="text/javascript" src="../../assets/global.js"></script>
+		
+		<script type="text/javascript" src="../../classes/KC3.js"></script>
+		<script type="text/javascript" src="../../classes/Battle.js"></script>
+		<script type="text/javascript" src="../../classes/Config.js"></script>
+		<script type="text/javascript" src="../../classes/FleetSummary.js"></script>
+		<script type="text/javascript" src="../../classes/FleetTimer.js"></script>
+		<script type="text/javascript" src="../../classes/Logging.js"></script>
+		<script type="text/javascript" src="../../classes/Master.js"></script>
+		<script type="text/javascript" src="../../classes/Meta.js"></script>
+		<script type="text/javascript" src="../../classes/Player.js"></script>
+		<script type="text/javascript" src="../../classes/Server.js"></script>
+		<script type="text/javascript" src="../../classes/Util.js"></script>
+		
+		<script type="text/javascript" src="classes/Activator.js"></script>
+		<script type="text/javascript" src="classes/Dashboard.js"></script>
+		<script type="text/javascript" src="classes/Listener.js"></script>
+		<script type="text/javascript" src="classes/Reactor.js"></script>
+		
+		<script type="text/javascript" src="panel.js"></script>
+	</body>
+</html>
