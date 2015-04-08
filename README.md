@@ -15,7 +15,7 @@ Like the old KC3, **there is no need to worry about updating**. Chrome extension
 If you're still not seeing the latest version as it is claimed on the KC3改 introduction page, you can force to update Chrome Extensions by going to `chrome://extensions/`, tick "*Developer mode*" and a button saying "*Update extensions now*" will appear.
 
 #### Other Chromium-based Browsers
-If you're not using Google Chrome, and prefer to use [another Chromium-based browser](http://en.wikipedia.org/wiki/Chromium_%28web_browser%29%23Other_browsers_based_on_Chromium) such as Comodo Dragon, Rockment, Opera, etc, you can request a `.crx` file on [Issues Tracker](https://github.com/dragonjet/KC3Kai/issues), name it "*CRX Request*", and mark it with "*help wanted*" label. There are not fully supported browsers though, you may attempt to use the `.crx` file but there's no guaranteed help.
+If you're not using Google Chrome, and prefer to use [another Chromium-based browser](http://en.wikipedia.org/wiki/Chromium_%28web_browser%29%23Other_browsers_based_on_Chromium) such as Comodo Dragon, Rockment, Opera, etc, you can request a `.crx` file on [Issues Tracker](https://github.com/dragonjet/KC3Kai/issues), name it "*CRX Request*", and mark it with "*help wanted*" label. They are not fully supported browsers though, you may attempt to use the `.crx` file but there's no guaranteed help.
 
 
 ## Features
@@ -45,6 +45,7 @@ In case you want to play directly on DMM without API Links (*e.g. it's your pref
 #### Strategy Room
 * Interactive Ship List and Equipment List
 * Quest list **with Flowchart** and completion highlights
+* **Resource** Logs with **line graph** for usage **visualization**
 * Detailed Sortie and **Event Battle Logs**
 * Ship Construction Logs
 * Equipment Crafting Logs
@@ -53,6 +54,9 @@ In case you want to play directly on DMM without API Links (*e.g. it's your pref
 
 ## FAQ
 For more information and FAQs, please visit the official [KC3改 introduction page on KanColle English Wikia](#).
+
+#### Is this safe?
+**Yes**, there is nothing in between the client game and the servers, the network is 100% natural. There are no packets changed in between neither sent off towards the server. KC3改 only feeds off of **history** on the "Network" tab on the F12 panel (the reason why it's there beside it). The keyword is **history**, means the calls already happened before we receive it and we're **not intercepting** anything. Nothing gets safer than this to the paranoid level.
 
 #### Do I need to have both KC3 and KC3改 installed?
 **No**, actually, t is even recommended to uninstall the old KC3 so it won't conflict, like for example when getting a new API link. Both will attempt to extract it when you go to DMM. You will also have less icons on your browser if you uninstall the traditional KC3.

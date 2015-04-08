@@ -2,7 +2,11 @@ module.exports = function(grunt) {
 	
 	grunt.initConfig({
 		jshint: {
-			all: ['Gruntfile.js', 'src/assets/js/global.js', 'src/library/**/*.js', 'src/pages/**/*.js']
+			all: [
+				'src/assets/js/global.js',
+				'src/library/**/*.js',
+				'src/pages/**/*.js'
+			]
 		},
 		clean: {
 			build: {
