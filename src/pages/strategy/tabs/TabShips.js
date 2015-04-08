@@ -29,7 +29,6 @@ var TabShips = {
 		for(ctr in tempItems){
 			this._items[ tempItems[ctr].api_id ] = tempItems[ctr];
 		}
-		delete tempItems;
 		
 		// Compile ships on Index
 		tempItems = JSON.parse(localStorage.user_ships);

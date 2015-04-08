@@ -43,7 +43,6 @@ var TabItems = {
 				holder: false,
 			};
 		}
-		delete tempItems;
 		console.log(this._items);
 		
 		/*for(ctr in tempItems){
