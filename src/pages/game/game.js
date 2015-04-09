@@ -7,6 +7,8 @@ function ActivateGame(){
 	$("#wait-box").hide();
 	$("#game-box").show();
 	$("#game-swf").attr("src", localStorage.absoluteswf);
+	
+	// $("#body").css("background", );
 }
 
 $(document).on("ready", function(){
@@ -52,7 +54,7 @@ $(document).on("ready", function(){
 
 // Extension Interaction
 chrome.runtime.onMessage.addListener(function(request, sender, response) {
-    if(request.game==="kancolle" && request.type==="game"){
+	if(request.game==="kancolle" && request.type==="game"){
 		switch(request.action){
 		
 			// Admiral Dashboard opened, activate game
