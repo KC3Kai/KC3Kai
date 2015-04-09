@@ -22,6 +22,7 @@ module.exports = function(grunt) {
 					'assets/img/**',
 					'assets/js/Chart.min.js',
 					'assets/js/Dexie.min.js',
+					'data/**/*.json',
 				],
 				dest: 'build/release/'
 			}
@@ -35,26 +36,33 @@ module.exports = function(grunt) {
 				src: ['src/assets/js/jquery-2.1.3.min.js', 'build/globals.js'],
 				dest: 'build/release/assets/js/globals.js'
 			},
-			library: [
-				{ src: 'src/library/actors/*.js', dest: 'build/lib_actors.js' },
-				{ src: 'src/library/models/*.js', dest: 'build/lib_models.js' },
-				{ src: 'src/library/utils/*.js', dest: 'build/lib_utils.js' }
-			],
-			views: [
-				{
-					src: [
+			library: {
+				files: {
+					'build/lib_actors.js' : ['src/library/actors/*.js'],
+					'build/lib_models.js' : ['src/library/models/*.js'],
+					'build/lib_utils.js' : ['src/library/utils/*.js']
+				}
+			},
+			views: {
+				files: {
+					'build/view_dashboard.js' : [
 						'src/library/views/Dashboard.Fleet.js',
 						'src/library/views/Dashboard.Info.js',
 						'src/library/views/Dashboard.Timers.js',
-					],
-					dest: 'build/view_dashboard.js'
+					]
 				}
-			],
+			},
 		},
 		cssmin: {
 			global_css: {
 				src: 'build/globals.css',
 				dest: 'build/release/assets/css/globals.css',
+			},
+			pages: {
+				expand: true,
+				cwd: 'src/',
+				src: ['pages/**/*.css'],
+				dest: 'build/release/',
 			}
 		},
 		uglify: {
@@ -62,17 +70,61 @@ module.exports = function(grunt) {
 				src: 'src/assets/js/global.js',
 				dest: 'build/globals.js'
 			},
-			library: [
-				{ src: 'build/lib_actors.js', dest: 'build/release/assets/js/actors.js' },
-				{ src: 'build/lib_models.js', dest: 'build/release/assets/js/models.js' },
-				{ src: 'build/lib_utils.js', dest: 'build/release/assets/js/utils.js' }
-			],
-			views: [
-				{ src: 'build/view_dashboard.js', dest: 'build/release/assets/js/view.dashboard.js' },
-			],
+			library: {
+				files: {
+					'build/release/library/background.js' : 'src/library/background.js',
+					'build/release/library/cookie.js' : 'src/library/cookie.js',
+					'build/release/library/osapi.js' : 'src/library/osapi.js',
+					'build/release/library/actors.js' : 'build/lib_actors.js',
+					'build/release/library/models.js' : 'build/lib_models.js',
+					'build/release/library/utils.js' : 'build/lib_utils.js',
+				}
+			},
+			views: {
+				files: {
+					'build/release/assets/js/view.dashboard.js' : 'build/view_dashboard.js',
+				}
+			},
+			pages: {
+				expand: true,
+				cwd: 'src/',
+				src: ['pages/**/*.js'],
+				dest: 'build/release/',
+			}
+		},
+		useminPrepare: {
+			html: 'src/pages/popup/popup.html',
+			options: {
+				flow: { steps: { js: [], css: [] }, post: {} }
+			}
+		},
+		usemin: {
+			html: 'src/pages/popup/popup.html',
+			options: {
+				dest: 'build/release'
+			}
 		},
 		htmlmin: {
-			
+			pages: {
+				expand: true,
+				cwd: 'src/',
+				src: ['pages/**/*.html'],
+				dest: 'build/release/',
+				options: {
+					removeComments: true,
+					collapseWhitespace: true
+				},
+			}
+		},
+		'json-minify': {
+			data: {
+				files: 'build/release/data/*.json'
+			}
+		},
+		jsonlint: {
+			data: {
+				src: 'build/release/data/**/*.json'
+			}
 		}
 	});
 	
@@ -88,6 +140,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-usemin');
 	
 	grunt.registerTask('default', [
+		// 'useminPrepare',
 		'jshint',
 		'clean:build',
 		'copy:statics',
@@ -99,6 +152,12 @@ module.exports = function(grunt) {
 		'uglify:library',
 		'concat:views',
 		'uglify:views',
+		'htmlmin:pages',
+		'cssmin:pages',
+		'uglify:pages',
+		'json-minify:data',
+		'jsonlint:data',
+		// 'usemin'
 	]);
 	
 };
