@@ -6,6 +6,7 @@ var waiting = false;
 // Show game screens
 function ActivateGame(){
 	waiting = false;
+	$(".box-wrap").css("background", "#fff");
 	$(".box-wait").hide();
 	$(".box-game .game-swf").attr("src", localStorage.absoluteswf);
 	$(".box-game").show();
