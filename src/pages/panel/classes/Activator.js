@@ -16,7 +16,7 @@ KC3.prototype.Activator  = {
 		var self = this;
 		
 		app.Dashboard.state = "activating";
-		app.Dashboard.showActionBox("activating");
+		// app.Dashboard.showActionBox("activating");
 		
 		// Ask background page to activate game page on inspected tab
 		chrome.runtime.sendMessage({
@@ -28,7 +28,7 @@ KC3.prototype.Activator  = {
 			// Check if game page responded
 			if(response.success){
 				self.gameActivated = true;
-				app.Dashboard.showActionBox("gameok");
+				// app.Dashboard.showActionBox("gameok");
 			}
 		});
 	},
@@ -41,7 +41,7 @@ KC3.prototype.Activator  = {
 			// If the flag was not set by the activation attempt
 			if(!self.gameActivated){
 				app.Dashboard.state = "dead";
-				app.Dashboard.showActionBox("waiting");
+				// app.Dashboard.showActionBox("waiting");
 			}
 		}, 1000);
 	}

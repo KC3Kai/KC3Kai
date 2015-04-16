@@ -27,4 +27,5 @@ build
 node_modules
 
 # Custom KC3 Ignores
+$devFiles
 src/assets/img/ships

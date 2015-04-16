@@ -1,7 +1,7 @@
 var app = new KC3();
 
 // If awaiting activation
-var waiting = false;
+var waiting = true;
 
 // Show game screens
 function ActivateGame(){
