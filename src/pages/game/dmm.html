@@ -6,66 +6,17 @@
 		<link href="../../assets/css/global.css" rel="stylesheet" type="text/css">
 		<link href="keys.css" rel="stylesheet" type="text/css">
 		<link href="game.css" rel="stylesheet" type="text/css">
+		<link href="dmm.css" rel="stylesheet" type="text/css">
 		<title>KC3改</title>
-		<link rel="shortcut icon" href="../../images/logo/48.png" type="image/x-icon" />
+		<link rel="shortcut icon" href="../../assets/img/logo/48.png" type="image/x-icon" />
 	</head>
 	<body>
-		<div class="wrapper">
-			
-			<!-- NO API LINK -->
-			<div id="no-api" class="main_box">
-				<div class="alert_box">
-					You have do not have any recorded API Link.
-				</div>
-				
-				<div class="faq_title">What is an API Link?</div>
-				<div class="faq_content">
-					These are direct URLs to your game, <em>recognized as</em> or <em>associated with</em> your account. As long as you carry this link, you are automatically "logged-in" and can then bypass login via DMM, therefore eliminating the need to go through VPN each time you open the game.
-				</div>
-				
-				<div class="faq_title">Reminder for New Players</div>
-				<div class="faq_content">
-					Do not use KC3改 while you have not yet passed through the lottery process. This viewer assumes that the account being logged-in while extracting API Links is already playable. Once you have joined a server, you will also need to input your admiral name while not in API link.
-				</div>
-				
-				<div class="faq_title">Existing API links</div>
-				<div class="faq_content">
-					<div class="field">
-						<input type="text" class="api_text" />
-					</div>
-					<div class="field">
-						<button class="api_submit">Update API Link</button>
-					</div>
-					<div class="clear"></div>
-				</div>
-				
-				<div class="faq_title">To get an API link</div>
-				<div class="faq_content">
-					Use the <img src="../popup/img/refresh.png" /> <strong>Refresh API Link</strong> from the KC3改 menu at the top-right of your Chrome browser.
-				</div>
-				
-				<div class="faq_title">Alternatives</div>
-				<div class="faq_content">
-					If you do not want to use an API link and prefer to play how KanColle is supposed to be played, the <strong>[F12]</strong> panel also works even if you're playing straight from DMM website. It's also even supposed to work when using the API link directly on browser address bar.
-				</div>
-			</div>
+		<div class="box-wrap">
 			
 			<!-- WAIT ACTIVATION -->
-			<div id="wait-dmm" class="main_box">
-				
-			</div>
-			
-			<!-- WAIT ACTIVATION -->
-			<div id="wait-box" class="main_box">
-				<div class="alert_box">
-					Your have a saved API Link
-				</div>
-				
-				<div class="api_txt">
-					<textarea></textarea>
-				</div>
-				
-				<div class="faq_title">Admiral Dashboard</div>
+			<div class="box-wait">
+				<div class="notice">Natural DMM Portal Gameplay within KC3改</div>
+				<div class="faq_title">To Start the Game with Admiral Dashboard</div>
 				<div class="faq_content">
 					To start your game and get critical information on your HQ and fleet statuses, you can open the Admiral Dashboard. This will show you information such as HQ Rank, Ship slots, Equipment LoS, Air Fighter Power, Fleet Speed, Morale, etc. You may activate this via:
 					<ul>
@@ -73,31 +24,21 @@
 						<li>or <kbd class="light">Ctrl</kbd> + <kbd class="light">Shift</kbd> + <kbd class="light">J</kbd></li>
 						<li>While on Mac: <kbd class="light">Cmd</kbd> + <kbd class="light">Opt</kbd> + <kbd class="light">I</kbd></li>
 					</ul>
-					When the Chrome panel opens, there will be a tab "KC3 Kai"
+					When the Chrome panel opens, there will be a tab "<strong>KC3 Kai</strong>"
 				</div>
-				
-				<div class="faq_title">Quick Play</div>
+				<div class="faq_title"><em>Just Let Me Play Now</em></div>
 				<div class="faq_content">
 					If you want to opt out of all those features and just want to start the game now...
 					<div class="play_now">
 						<button class="play_btn">Start the game anyway</button>
 					</div>
 				</div>
-				
-				<div class="faq_title">Remove API link</div>
-				<div class="faq_content">
-					If in any case you want to remove the saved API Link from this extension:
-					<div class="forget">
-						<button class="forget_btn">Forget the API Link</button>
-					</div>
-				</div>
-				
 			</div>
 			
-			<!-- GAME BOX -->
-			<div id="game-box">
-				<iframe id="game-swf" frameborder="0" src=""></iframe>
-				<div id="overlays"></div>
+			<!-- PLAY GAME -->
+			<div class="box-game">
+				<iframe class="game-swf" frameborder="0" src=""></iframe>
+				<div class="overlays"></div>
 			</div>
 			
 		</div>

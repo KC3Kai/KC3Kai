@@ -6,60 +6,28 @@ var waiting = false;
 // Show game screens
 function ActivateGame(){
 	waiting = false;
-	$("#wait-box").hide();
-	
-	if(app.Config.background.substring(0,1) == "#"){
-		$("body").css("background", app.Config.background);
-	}else{
-		$("body").css("background-image", "url("+app.Config.background+")");
-		$("body").css("background-repeat", "no-repeat");
-		$("body").css("background-size", "cover");
-	}
-	
-	$("#game-box").css("margin-top", app.Config.gambox_margin);
-	
-	$("#game-box").show();
-	$("#game-swf").attr("src", localStorage.absoluteswf);
+	$(".box-wrap").css("background", "#fff");
+	$(".box-wait").hide();
+	$(".box-game .game-swf").attr("src", "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/");
+	$(".box-game").show();
 }
 
 $(document).on("ready", function(){
+	
+	// Apply initial configuration
 	app.Config.init();
-	
-	// API link determines which screen to show
-	var absoluteSwf = localStorage.absoluteswf;
-	if(absoluteSwf){
-		$(".api_txt textarea").text(localStorage.absoluteswf);
-		$("#wait-box").show();
-		waiting = true;
+	$(".box-wrap").css("margin-top", app.Config.gambox_margin);
+	if(app.Config.background.substring(0,1) == "#"){
+		$("body").css("background", app.Config.background);
 	}else{
-		$("#no-api").show();
+		$("body").css("background-size", "cover");
+		$("body").css("background-repeat", "no-repeat");
+		$("body").css("background-image", "url("+app.Config.background+")");
 	}
-	
-	// Update API Link
-	$(".api_submit").on('click', function(){
-		localStorage.absoluteswf = $(".api_text").val();
-		window.location.reload();
-	});
-	
-	// Forget API Link
-	$(".forget_btn").on('click', function(){
-		localStorage.absoluteswf = "";
-		window.location.reload();
-	});
 	
 	// Quick Play
 	$(".play_btn").on('click', function(){
 		ActivateGame();
-	});
-	
-	// API link select all textarea
-	$(".api_txt textarea").on("focus", function() {
-		var $this = $(this);
-		$this.select();
-		$this.mouseup(function() {
-			$this.unbind("mouseup");
-			return false;
-		});
 	});
 	
 });
