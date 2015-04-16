@@ -1,6 +1,9 @@
-// looks for API link
+// Initialize global variables
+var intervalChecker;
+
+// Looks for API link
 function checkAgain(){
-	// if API link is found
+	// If API link is found
 	if(document.getElementById("externalswf")){
 		// send it to background script
 		chrome.runtime.sendMessage({
@@ -11,23 +14,8 @@ function checkAgain(){
 		}, function(response) {
 			// stop interval, and close this window
 			clearInterval(intervalChecker);
-			window.close();
 		});
 	}
 }
 
-// initialize global variable for interval
-var intervalChecker = {};
-
-// Check if we are tasked to extract API or not
-chrome.runtime.sendMessage({
-	game:"kancolle",
-	type:"background",
-	action:"get_option",
-	field: "extract_api"
-}, function(response) {
-	// if yes, start interval to re-check API link
-	if(response.value=="true"){
-		intervalChecker = setInterval(checkAgain, 500);
-	}
-});
+intervalChecker = setInterval(checkAgain, 500);
