@@ -43,6 +43,18 @@ var KC4BG = {
 			action:"activate"
 		}, response);
 		return true; // dual-async response
+	},
+	
+	/* [override_style]
+	Check if tab is a KC3改 frame and tell to override styles or not
+	------------------------------------------*/
+	override_style:function(request, sender, response){
+		console.log('DMM KanColle asks if we are on KC3改 frame: Tab#'+sender.tab.id);
+		if(sender.tab.url.indexOf("/pages/game/dmm.html") > -1){
+			response({value:true});
+		}else{
+			response({value:false});
+		}
 	}
 	
 };

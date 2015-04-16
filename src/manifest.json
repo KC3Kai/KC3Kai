@@ -33,6 +33,12 @@
 			"run_at": "document_end"
 		},
 		{
+			"matches":["*://www.dmm.com/netgame/*/app_id=854854*"],
+			"js": ["assets/js/jquery-2.1.3.min.js", "library/dmm.js"],
+			"run_at": "document_end",
+			"all_frames": true
+		},
+		{
 			"matches":["*://osapi.dmm.com/gadgets/*aid=854854*"],
 			"js": ["library/osapi.js"],
 			"run_at": "document_end",
