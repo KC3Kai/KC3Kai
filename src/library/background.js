@@ -25,14 +25,13 @@ var KC4BG = {
 	API Link extracted, save and open
 	------------------------------------------*/
 	set_api_link:function(request, sender, response){
-		// console.log("Receives a new API link from Tab#"+sender.tab.id);
-		
 		// Set api link on internal storage
 		localStorage.absoluteswf = request.swfsrc;
 		
 		// If refreshing API link, close source tabs and re-open game frame
 		if(localStorage.extract_api){
 			localStorage.extract_api = false;
+			// If not playing via DMM frame
 			if(sender.tab.url.indexOf("/pages/game/dmm.html") == -1){
 				chrome.tabs.remove([sender.tab.id], function(){});
 				window.open("../pages/game/api.html", "kc3kai_game");
@@ -46,7 +45,6 @@ var KC4BG = {
 	Try to activate game inside inspected tab
 	------------------------------------------*/
 	activate_game:function(request, sender, response){
-		// console.log('Admiral Dashboard requests to attempt game activation at Tab#'+request.tabId);
 		chrome.tabs.sendMessage(request.tabId, {
 			game:"kancolle",
 			type:"game",
@@ -59,7 +57,6 @@ var KC4BG = {
 	Check if tab is a KC3改 frame and tell to override styles or not
 	------------------------------------------*/
 	override_style:function(request, sender, response){
-		// console.log('DMM KanColle asks if we are on KC3改 frame: Tab#'+sender.tab.id);
 		if(sender.tab.url.indexOf("/pages/game/dmm.html") > -1){
 			response({value:true});
 		}else{
