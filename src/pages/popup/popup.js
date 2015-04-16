@@ -1,20 +1,24 @@
 $(document).on("ready", function(){
 	
+	// Play DMM Frame
+	$("#play_dmm").on('click', function(){
+		localStorage.extract_api = false;
+		localStorage.dmmplay = true;
+		window.open("../game/dmm.html", "kc3kai_game");
+	});
+	
 	// Play via API Link
 	$("#play_cc").on('click', function(){
-		window.open("../game/game.html", "kc4_game");
+		localStorage.extract_api = false;
+		localStorage.dmmplay = false;
+		window.open("../game/api.html", "kc3kai_game");
 	});
 	
 	// Refresh API Link
 	$("#get_api").on('click', function(){
 		localStorage.extract_api = true;
-		window.open("http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/", "kc4_game");
-	});
-	
-	// Play direct DMM
-	$("#play_dmm").on('click', function(){
-		localStorage.extract_api = false;
-		window.open("http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/", "kc4_game");
+		localStorage.dmmplay = false;
+		window.open("http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/", "kc3kai_game");
 	});
 	
 	// Activate Cookies

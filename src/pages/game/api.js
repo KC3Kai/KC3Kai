@@ -1,32 +1,45 @@
+var app = new KC3();
+
 // If awaiting activation
 var waiting = false;
 
 // Show game screens
 function ActivateGame(){
 	waiting = false;
-	$("#wait-box").hide();
-	$("#game-box").show();
-	$("#game-swf").attr("src", localStorage.absoluteswf);
-	
-	// $("#body").css("background", );
+	$(".box-wait").hide();
+	$(".box-game .game-swf").attr("src", localStorage.absoluteswf);
+	$(".box-game").show();
 }
 
 $(document).on("ready", function(){
+	
+	// Apply initial configuration
+	app.Config.init();
+	$(".box-wrap").css("margin-top", app.Config.gambox_margin);
+	if(app.Config.background.substring(0,1) == "#"){
+		$("body").css("background", app.Config.background);
+	}else{
+		$("body").css("background-size", "cover");
+		$("body").css("background-repeat", "no-repeat");
+		$("body").css("background-image", "url("+app.Config.background+")");
+	}
 	
 	// API link determines which screen to show
 	var absoluteSwf = localStorage.absoluteswf;
 	if(absoluteSwf){
 		$(".api_txt textarea").text(localStorage.absoluteswf);
-		$("#wait-box").show();
+		$(".box-wait").show();
 		waiting = true;
 	}else{
-		$("#no-api").show();
+		$(".box-nolink").show();
 	}
 	
 	// Update API Link
 	$(".api_submit").on('click', function(){
-		localStorage.absoluteswf = $(".api_text").val();
-		window.location.reload();
+		if($(".api_text").val().indexOf("mainD2.swf") > -1){
+			localStorage.absoluteswf = $(".api_text").val();
+			window.location.reload();
+		}
 	});
 	
 	// Forget API Link
