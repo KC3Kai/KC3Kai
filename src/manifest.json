@@ -5,6 +5,7 @@
 	"description": "Kantai Collection Game Viewer and Tools",
 	"version": "1",
 	"devtools_page": "pages/devtools/devtools.html",
+	"options_page": "pages/settings/settings.html",
 	"icons": {
 		"16": "assets/img/logo/16.png",
         "48": "assets/img/logo/48.png",
