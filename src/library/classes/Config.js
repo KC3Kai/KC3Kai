@@ -1,9 +1,8 @@
 KC3.prototype.Config  = {
 	timerAlert: true,
 	
-	gambox_margin: "20px",
-	// background: "#fff",
-	background: "http://www.wallpaperup.com/uploads/wallpapers/2013/12/30/210388/a932f17fe278c2951cf15456cfe789ef.jpg",
+	gambox_margin: "0px",
+	background: "#def",
 	tl_overlay: false,
 	size: 100,
 	
@@ -11,6 +10,9 @@ KC3.prototype.Config  = {
 	reveal_names: true,
 	
 	elos_mode: 3,
+	
+	theme_wide: "vertical",
+	theme_narrow: "horizontal",
 	
 	init :function(){
 		this.loadLocal();

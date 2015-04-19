@@ -25,6 +25,36 @@ KC3.prototype.Dashboard  = {
 			$("#catBomb").fadeOut(500);
 		});
 		
+		// Choose fleets
+		$(".fleet-button").on("click", function(){
+			$(".fleet-button").removeClass("active");
+			$(this).addClass("active");
+			app.Dashboard.Fleet.selectedFleet = $(this).data("id");
+			app.Dashboard.Fleet.update();
+		});
+		
+		// EqLos Formula Change
+		$(".fleet-summary .summary-eqlos").on("click", function(){
+			app.Config.scrollElosMode();
+			self.updateElosIcon();
+			self.Fleet.update();
+		});
+		
+		// Share compo button
+		$(".share-button").on('click', function(){
+			window.open("../strategy/strategy.html#share", "kc4_strategy");
+		});
+		
+		// Strategy Room
+		$(".btn-strategy").on('click', function(){
+			window.open("../strategy/strategy.html", "kc4_strategy");
+		});
+		
+		// Take a Screenshot
+		$(".btn-screenshot").on('click', function(){
+			
+		});
+		
 		// Dev-mode button to Reset IndexedDB
 		$(".idfreset").on("click", function(){
 			app.Logging.reset();
@@ -38,6 +68,15 @@ KC3.prototype.Dashboard  = {
 		$(".openpanel").on("click", function(){
 			self.showPanel();
 		});
+	},
+	
+	/* Update EqLos Icon on change Formula
+	-------------------------------------------------------*/
+	updateElosIcon :function(){
+		$(".fleet-summary .summary-eqlos .summary-icon img").attr(
+			"src",
+			"../../assets/img/stats/los"+app.Config.elos_mode+".png"
+		);
 	},
 	
 	/* Custom message boxes

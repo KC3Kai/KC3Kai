@@ -2,44 +2,44 @@ KC3.prototype.Dashboard.Fleet = {
 	selectedFleet: 1,
 	currentShipLos: 0,
 	
-	fillFleetInfo :function(animateID){
+	update :function(animateID){
 		if(typeof animateID == "undefined"){ animateID = -2; }
 		
 		// Clear old summary
-		app.FleetSummary.clear();
+		app.Fleet.clear();
 		
 		// Fleet Ships
 		var fleetShipIds = app.Player._fleets[this.selectedFleet-1].api_ship;
-		this.fillFleetShip(0, fleetShipIds[0], animateID);
-		this.fillFleetShip(1, fleetShipIds[1], animateID);
-		this.fillFleetShip(2, fleetShipIds[2], animateID);
-		this.fillFleetShip(3, fleetShipIds[3], animateID);
-		this.fillFleetShip(4, fleetShipIds[4], animateID);
-		this.fillFleetShip(5, fleetShipIds[5], animateID);
+		this.ship(0, fleetShipIds[0], animateID);
+		this.ship(1, fleetShipIds[1], animateID);
+		this.ship(2, fleetShipIds[2], animateID);
+		this.ship(3, fleetShipIds[3], animateID);
+		this.ship(4, fleetShipIds[4], animateID);
+		this.ship(5, fleetShipIds[5], animateID);
 		
 		// Fleet summary
-		if(!app.FleetSummary.complete){
-			$("#fleet-summary .summary-eqlos").addClass("incomplete");
-			$("#fleet-summary .summary-airfp").addClass("incomplete");
+		if(!app.Fleet.complete){
+			$(".fleet-summary .summary-eqlos").addClass("incomplete");
+			$(".fleet-summary .summary-airfp").addClass("incomplete");
 		}
-		$("#fleet-summary .summary-level .summary-text").text(app.FleetSummary.level);
-		$("#fleet-summary .summary-eqlos .summary-text").text(app.FleetSummary.getEffectiveLoS());
-		$("#fleet-summary .summary-airfp .summary-text").text(app.FleetSummary.fighter_power);
-		$("#fleet-summary .summary-speed .summary-text").text(app.FleetSummary.speed);
+		$(".fleet-summary .summary-level .summary-text").text(app.Fleet.level);
+		$(".fleet-summary .summary-eqlos .summary-text").text(app.Fleet.getEffectiveLoS());
+		$(".fleet-summary .summary-airfp .summary-text").text(app.Fleet.fighter_power);
+		$(".fleet-summary .summary-speed .summary-text").text(app.Fleet.speed);
 	},
 	
-	fillFleetShip :function(index, ship_id, animateID){
+	ship :function(index, ship_id, animateID){
 		var thisShip, masterShip, hpPercent, expPercent;
-		var thisElement = "#fleet-ship-"+(index+1);
+		var thisElement = ".fleet-ship-"+(index+1);
 		if(ship_id > -1){
 			thisShip = app.Player._ships[ship_id];
 			masterShip = app.Master.ship(thisShip.api_ship_id);
 			
-			app.FleetSummary.level += thisShip.api_lv;
-			app.FleetSummary.total_los += thisShip.api_sakuteki[0];
-			if(masterShip.api_soku < 10){ app.FleetSummary.speed = "Slow"; }
+			app.Fleet.level += thisShip.api_lv;
+			app.Fleet.total_los += thisShip.api_sakuteki[0];
+			if(masterShip.api_soku < 10){ app.Fleet.speed = "Slow"; }
 			
-			$(thisElement+" .ship-img img").attr("src", "../../images/ships/"+thisShip.api_ship_id+".png");
+			$(thisElement+" .ship-img img").attr("src", app.Assets.shipIcon(thisShip.api_ship_id, '../../assets/img/ui/empty.png'));
 			$(thisElement+" .ship-name").text(masterShip.english);
 			$(thisElement+" .ship-type").text(app.Meta.stype(masterShip.api_stype));
 			$(thisElement+" .ship-hp-text").text(thisShip.api_nowhp +" / "+ thisShip.api_maxhp);
@@ -88,13 +88,13 @@ KC3.prototype.Dashboard.Fleet = {
 			
 			this.currentShipLos = thisShip.api_sakuteki[0];
 			// console.log("starting ship: "+this.currentShipLos);
-			this.fillFleetEquip($(thisElement+" .ship-gear-1 img"), thisShip.api_slot[0], thisShip.api_onslot[0]);
-			this.fillFleetEquip($(thisElement+" .ship-gear-2 img"), thisShip.api_slot[1], thisShip.api_onslot[1]);
-			this.fillFleetEquip($(thisElement+" .ship-gear-3 img"), thisShip.api_slot[2], thisShip.api_onslot[2]);
-			this.fillFleetEquip($(thisElement+" .ship-gear-4 img"), thisShip.api_slot[3], thisShip.api_onslot[3]);
+			this.equip($(thisElement+" .ship-gear-1 img"), thisShip.api_slot[0], thisShip.api_onslot[0]);
+			this.equip($(thisElement+" .ship-gear-2 img"), thisShip.api_slot[1], thisShip.api_onslot[1]);
+			this.equip($(thisElement+" .ship-gear-3 img"), thisShip.api_slot[2], thisShip.api_onslot[2]);
+			this.equip($(thisElement+" .ship-gear-4 img"), thisShip.api_slot[3], thisShip.api_onslot[3]);
 			// console.log("added to naked los summation: "+this.currentShipLos);
-			app.FleetSummary.naked_los += Math.sqrt(this.currentShipLos);
-			// console.log("new naked los summation: "+app.FleetSummary.naked_los);
+			app.Fleet.naked_los += Math.sqrt(this.currentShipLos);
+			// console.log("new naked los summation: "+app.Fleet.naked_los);
 			
 			if(ship_id == animateID){
 				$("div", thisElement).hide();
@@ -107,11 +107,11 @@ KC3.prototype.Dashboard.Fleet = {
 		}
 	},
 	
-	fillFleetEquip :function(imgElement, gear_id, capacity){
+	equip :function(imgElement, gear_id, capacity){
 		if(gear_id > -1){
 			if(typeof app.Player._gears[gear_id] == "undefined"){
 				imgElement.hide();
-				app.FleetSummary.complete = false;
+				app.Fleet.complete = false;
 				return false;
 			}
 			
@@ -119,9 +119,9 @@ KC3.prototype.Dashboard.Fleet = {
 			masterItem = app.Master.slotitem(thisItem.api_slotitem_id);
 			
 			this.currentShipLos -= masterItem.api_saku;
-			app.FleetSummary.includeEquip(thisItem, masterItem, capacity);
+			app.Fleet.includeEquip(thisItem, masterItem, capacity);
 			
-			imgElement.attr("src", "../../images/items/"+masterItem.api_type[3]+".png");
+			imgElement.attr("src", "../../assets/img/items/"+masterItem.api_type[3]+".png");
 			imgElement.show();
 		}else{
 			imgElement.hide();

@@ -5,7 +5,7 @@ KC3.prototype.Listener  = {
 	init: function(){
 		var self = this;
 		chrome.devtools.network.onRequestFinished.addListener(function(request){
-			if(app.Dashboard.state == "reload_panel"){ return false; }
+			// if(app.Dashboard.state == "reload_panel"){ return false; }
 			self.onReceived(request);
 		});
 	},

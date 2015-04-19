@@ -15,8 +15,9 @@ KC3.prototype.Activator  = {
 	activateGame :function(){
 		var self = this;
 		
+		// Show initial message box and dashboard state
 		app.Dashboard.state = "activating";
-		// app.Dashboard.showActionBox("activating");
+		app.Dashboard.messageBox("Attempting to activate the game...");
 		
 		// Ask background page to activate game page on inspected tab
 		chrome.runtime.sendMessage({
@@ -28,7 +29,7 @@ KC3.prototype.Activator  = {
 			// Check if game page responded
 			if(response.success){
 				self.gameActivated = true;
-				// app.Dashboard.showActionBox("gameok");
+				app.Dashboard.messageBox("Game active! Please wait while it loads...");
 			}
 		});
 	},
@@ -40,8 +41,8 @@ KC3.prototype.Activator  = {
 		setTimeout(function(){
 			// If the flag was not set by the activation attempt
 			if(!self.gameActivated){
-				app.Dashboard.state = "dead";
-				// app.Dashboard.showActionBox("waiting");
+				app.Dashboard.state = "waiting";
+				app.Dashboard.messageBox("Waiting for game actions...");
 			}
 		}, 1000);
 	}

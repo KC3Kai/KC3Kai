@@ -1,0 +1,169 @@
+KC3.prototype.Fleet = {
+	complete: true,
+	total_los: 0,
+	naked_los: 0,
+	level: 0,
+	fighter_power: 0,
+	speed: "Fast",
+	
+	ship :{
+		
+	},
+	
+	clear :function(){
+		this.complete = true;
+		this.total_los = 0;
+		this.naked_los = 0;
+		this.level = 0;
+		this.fighter_power = 0;
+		this.speed = "Fast";
+		
+		this.method2.clear();
+		this.method3.clear();
+	},
+	
+	getEffectiveLoS :function(){
+		// Return effective los based on preferred formula
+		var ReturnVal;
+		switch( app.Config.elos_mode ){
+			case 1: ReturnVal = this.total_los; break;
+			case 2: ReturnVal = this.method2.total( this.total_los ); break;
+			case 3: ReturnVal = this.method3.total( this.naked_los ); break;
+			default: ReturnVal = this.method3.total( this.naked_los ); break;
+		}
+		return Math.round(ReturnVal * 100) / 100;
+	},
+	
+	includeEquip :function(ThisItem, MasterItem, Capacity){
+		this.equip_los += MasterItem.api_saku;
+		// console.log(MasterItem);
+		
+		// Add equip stats to effective los calculation
+		switch( app.Config.elos_mode ){
+			case 2:
+				this.method2.addItem(
+					MasterItem.api_type[1],
+					MasterItem.api_saku,
+					Capacity
+				); break;
+			case 3:
+				this.method3.addItem(
+					MasterItem.api_type[2],
+					MasterItem.api_saku,
+					Capacity
+				); break;
+			default: break;
+		}
+		
+		// Calculate Fighter Power
+		this.check_AirPower( MasterItem.api_type[2], MasterItem.api_tyku, Capacity );
+	},
+	
+	/* Air Superiority
+	Check an item for fighter power
+	------------------------------------*/
+	check_AirPower :function(Type, AntiAir, Capacity){
+		// Check if it's a fighter plane
+		if( [6,7,8,11].indexOf( Type ) > -1){
+			// Add equipment anti-air stats to fighter power
+			this.fighter_power += Math.floor(AntiAir * Math.sqrt(Capacity));
+		}
+	},
+	
+	/* LoS : "Old Formula"
+	= Recon LoS×2 + Radar LoS + v(Fleet total LoS - Recon LoS - Radar LoS)
+	------------------------------------*/
+	method2 : {
+		_plane: 0,
+		_radar: 0,
+		
+		clear :function(){
+			this._plane = 0;
+			this._radar = 0;
+		},
+		
+		addItem :function( ThisType, ThisLoS, Capacity ){
+			// console.log("adding item with type: "+ThisType+" ("+ThisLoS+" los / "+Capacity+" capacity)");
+			// Check for Plane LOS
+			if( ThisType == 7 && Capacity > 0){
+				// console.log("planelos: "+ThisLoS);
+				this._plane += ThisLoS;
+			}
+			
+			// Check for Radar LOS
+			if( ThisType == 8){
+				// console.log("radarlos: "+ThisLoS);
+				this._radar += ThisLoS;
+			}
+		},
+		
+		total :function( TotalLos ){
+			// console.log("meth2: "+(this._plane*2)+" + "+this._radar+"+ Math.sqrt("+TotalLos+" - "+this._plane+" - "+this._radar+")");
+			return (this._plane*2) + this._radar + Math.sqrt( TotalLos -  this._plane - this._radar )
+		}
+	},
+	
+	/* LoS : "New Formula"
+	= Dive Bomber LoS x (1.04) + Torpedo Bomber LoS x (1.37) + Carrier-based Recon Plane LoS x (1.66) + Recon Seaplane LoS x (2.00) + Seaplane Bomber LoS x (1.78) + Small Radar LoS x (1.00) + Large Radar LoS x (0.99) + Searchlight LoS x (0.91) + v(base LoS of each ship) x (1.69) + (HQ Lv. rounded up to the next multiple of 5) x (-0.61)
+	------------------------------------*/
+	method3 : {
+		_dive: 0,
+		_torp: 0,
+		_cbrp: 0,
+		_rspl: 0,
+		_splb: 0,
+		_smrd: 0,
+		_lgrd: 0,
+		_srch: 0,
+		
+		clear :function(){
+			this._dive = 0;
+			this._torp = 0;
+			this._cbrp = 0;
+			this._rspl = 0;
+			this._splb = 0;
+			this._smrd = 0;
+			this._lgrd = 0;
+			this._srch = 0;
+		},
+		
+		addItem :function( ThisType, ThisLoS, Capacity ){
+			switch(ThisType){
+				case  7: /*console.log("meth3: dive + "+ThisLoS);*/ this._dive += ThisLoS * (Capacity?1:0); break;
+				case  8: /*console.log("meth3: torp + "+ThisLoS);*/ this._torp += ThisLoS * (Capacity?1:0); break;
+				case  9: /*console.log("meth3: cbrp + "+ThisLoS);*/ this._cbrp += ThisLoS * (Capacity?1:0); break;
+				case 10: /*console.log("meth3: rspl + "+ThisLoS);*/ this._rspl += ThisLoS * (Capacity?1:0); break;
+				case 11: /*console.log("meth3: splb + "+ThisLoS);*/ this._splb += ThisLoS * (Capacity?1:0); break;
+				case 12: /*console.log("meth3: smrd + "+ThisLoS);*/ this._smrd += ThisLoS; break;
+				case 13: /*console.log("meth3: lgrd + "+ThisLoS);*/ this._lgrd += ThisLoS; break;
+				case 29: /*console.log("meth3: srch + "+ThisLoS);*/ this._srch += ThisLoS; break;
+				default: break;
+			}
+		},
+		
+		total :function( NakedLos ){
+			var total = ( this._dive * 1.04 )
+				+ ( this._torp * 1.37 )
+				+ ( this._cbrp * 1.66 )
+				+ ( this._rspl * 2.00 )
+				+ ( this._splb * 1.78 )
+				+ ( this._smrd * 1.00 )
+				+ ( this._lgrd * 0.99 )
+				+ ( this._srch * 0.91 )
+				+ NakedLos * 1.69
+				+ ( (Math.floor((app.Player.level + 4) / 5) * 5) * -0.61 );
+			/*console.log("this._dive: "+this._dive);
+			console.log("this._torp: "+this._torp);
+			console.log("this._cbrp: "+this._cbrp);
+			console.log("this._rspl: "+this._rspl);
+			console.log("this._splb: "+this._splb);
+			console.log("this._smrd: "+this._smrd);
+			console.log("this._lgrd: "+this._lgrd);
+			console.log("this._srch: "+this._srch);
+			console.log("using naked los: "+NakedLos);
+			console.log("total: "+total);*/
+			return total;
+		}
+	}
+	
+};

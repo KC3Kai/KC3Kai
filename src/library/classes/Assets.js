@@ -1,17 +1,17 @@
 KC3.prototype.Assets = {
 	cdn: "http://i708.photobucket.com/albums/ww87/dragonjet25/KC3%20Ship%20Icons/",
-	_imageList :[],
+	_ships :[],
 	
-	init :function(){
+	init :function(repo){
 		var self = this;
-		$.getJSON(repo+"icons.json", function(response){ self._imageList = response; });
+		$.getJSON(repo+"icons.json", function(response){ self._ships = response; });
 	},
 	
-	shipIcon :function(id){
-		if(typeof this._imageList[id] !== "undefined"){
-			return this.cdn + this._imageList[id];
+	shipIcon :function(id, empty){
+		if(typeof this._ships[id] !== "undefined"){
+			return this.cdn + this._ships[id];
 		}else{
-			return '../../images/ui/empty.png';
+			return empty;
 		}
 	}
 	

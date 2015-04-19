@@ -5,13 +5,13 @@ KC3.prototype.Reactor  = {
 	"api_start2":function(params, response, headers){
 		app.Master.processRaw( response.api_data );
 		app.Dashboard.state = "arriving";
-		app.Dashboard.showActionBox("arriving");
+		app.Dashboard.messageBox("Arriving at Naval Base...");
 	},
 	
 	/* [api_port/port] Home Port Screen
 	-------------------------------------------------------*/
 	"api_port/port":function(params, response, headers){
-		app.Dashboard.CheckAlive();
+		app.Dashboard.showPanel();
 		
 		app.Battle.EndSortie();
 		
@@ -52,10 +52,10 @@ KC3.prototype.Reactor  = {
 		});
 		
 		app.Player.saveLocal();
-		app.Dashboard.panel.fillHQInfo();
-		app.Dashboard.panel.fillCounts();
-		app.Dashboard.panel.fillTimers();
-		app.Dashboard.panel.fillFleetInfo();
+		app.Dashboard.Info.admiral();
+		app.Dashboard.Info.materials();
+		app.Dashboard.Timers.update();
+		app.Dashboard.Fleet.update();
 		/*
 		KanColleAccount.record({
 			exped: {
@@ -112,6 +112,7 @@ KC3.prototype.Reactor  = {
 			}
 		}
 		app.Player._buildCount = totalBuildDocks;
+		app.Dashboard.Timers.update();
 	},
 	
 	/* [api_get_member/record] HQ Record Screen
@@ -182,7 +183,7 @@ KC3.prototype.Reactor  = {
 			app.Player._ships[shipID].api_slot.splice(slotIndex, 1);
 			app.Player._ships[shipID].api_slot[3] = -1;
 		}
-		app.Dashboard.panel.fillFleetInfo(shipID);
+		app.Dashboard.Fleet.update(shipID);
 	},
 	
 	/* [api_req_kaisou/unsetslot_all] Remove all equipment
@@ -190,7 +191,7 @@ KC3.prototype.Reactor  = {
 	"api_req_kaisou/unsetslot_all":function(params, response, headers){
 		var shipID = app.Util.findParam(params, "api%5Fid");
 		app.Player._ships[shipID].api_slot = [-1,-1,-1,-1,-1];
-		app.Dashboard.panel.fillFleetInfo(shipID);
+		app.Dashboard.Fleet.update(shipID);
 	},
 	
 	/* [api_req_hensei/change] Change fleet member
@@ -205,7 +206,7 @@ KC3.prototype.Reactor  = {
 				app.Player._fleets[FleetIndex-1].api_ship[3] = -1;
 				app.Player._fleets[FleetIndex-1].api_ship[4] = -1;
 				app.Player._fleets[FleetIndex-1].api_ship[5] = -1;
-				app.Dashboard.panel.fillFleetInfo();
+				app.Dashboard.Fleet.update();
 				return true;
 			}
 		}
@@ -218,7 +219,7 @@ KC3.prototype.Reactor  = {
 			app.Player._fleets[FleetIndex-1].api_ship.splice(ChangedIndex, 1);
 			app.Player._fleets[FleetIndex-1].api_ship[5] = -1;
 		}
-		app.Dashboard.panel.fillFleetInfo();
+		app.Dashboard.Fleet.update();
 	},
 	
 	/* [api_get_member/ship2] Ship Infos mid-sortie
@@ -230,7 +231,7 @@ KC3.prototype.Reactor  = {
 		app.Player._fleets = response.api_data_deck;
 		
 		app.Player.saveLocal();
-		app.Dashboard.panel.fillFleetInfo();
+		app.Dashboard.Fleet.update();
 	},
 	
 	/* [api_get_member/ship3] Custom Ship Query
@@ -242,7 +243,7 @@ KC3.prototype.Reactor  = {
 		app.Player._fleets = response.api_data.api_deck_data;
 		
 		app.Player.saveLocal();
-		app.Dashboard.panel.fillFleetInfo();
+		app.Dashboard.Fleet.update();
 	},
 	
 	/* [api_req_quest/clearitemget] Receive Quest Reward
@@ -300,7 +301,39 @@ KC3.prototype.Reactor  = {
 	-------------------------------------------------------*/
 	"api_get_member/ndock":function(params, response, headers){
 		app.Player.setRepairDocks( response.api_data );
-		app.Dashboard.panel.fillFleetInfo();
+		app.Dashboard.Timers.update();
+		app.Dashboard.Fleet.update();
+	},
+	
+	/* [api_req_nyukyo/speedchange] Use bucket
+	-------------------------------------------------------*/
+	"api_req_nyukyo/speedchange":function(params, response, headers){
+		// app.Util.findParam(headers, "api%5Fndock%5Fid")
+	},
+	
+	/* [api_get_member/deck] Get Fleets
+	-------------------------------------------------------*/
+	"api_get_member/deck":function(params, response, headers){
+		app.Player.setFleets(response.api_data);
+		app.Dashboard.Timers.update();
+		app.Dashboard.Fleet.update();
+	},
+	
+	/* [api_req_kousyou/getship] Finish construction
+	-------------------------------------------------------*/
+	"api_req_kousyou/getship":function(params, response, headers){
+		app.Player._build = response.api_data.api_kdock;
+		var ctr;
+		var totalBuildDocks = 0;
+		for(ctr in response.api_data.api_kdock){
+			if( response.api_data.api_kdock[ctr].api_state > -1 ){
+				totalBuildDocks++;
+			}
+		}
+		app.Player._buildCount = totalBuildDocks;
+		app.Player.setShipsSafe([response.api_data.api_ship]);
+		app.Player.setGearsSafe(response.api_data.api_slotitem);
+		app.Dashboard.Timers.update();
 	},
 	
 	/* [dummyAPI] dummyAPI
