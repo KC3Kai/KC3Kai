@@ -1,5 +1,7 @@
 html,body {
-	margin:0;padding:0;height:100%;
+	margin:0;
+	padding:0;
+	height:100%;
 }
 body {
 	background:#def;
@@ -16,8 +18,9 @@ body {
 	color:#fff;
 	text-align:center;
 	font-size:16px;
+	z-index:2;
+	border:1px solid #fff;
 }
-
 .idfreset {
 	width:50px;
 	height:50px;
@@ -25,40 +28,88 @@ body {
 	background:#000;
 	opacity:.4;
 	position:fixed;
-	top:70px;
+	top:60px;
 	right:5px;
 	color:#fff;
 	text-align:center;
 	font-size:16px;
+	z-index:3;
+	border:1px solid #fff;
+}
+.cbomb {
+	width:50px;
+	height:50px;
+	line-height:50px;
+	background:#000;
+	opacity:.4;
+	position:fixed;
+	top:115px;
+	right:5px;
+	color:#fff;
+	text-align:center;
+	font-size:16px;
+	z-index:3;
+	border:1px solid #fff;
+}
+.actbox {
+	width:50px;
+	height:50px;
+	line-height:50px;
+	background:#000;
+	opacity:.4;
+	position:fixed;
+	top:170px;
+	right:5px;
+	color:#fff;
+	text-align:center;
+	font-size:16px;
+	z-index:3;
+	border:1px solid #fff;
+}
+.openpanel {
+	width:50px;
+	height:50px;
+	line-height:50px;
+	background:#000;
+	opacity:.4;
+	position:fixed;
+	top:225px;
+	right:5px;
+	color:#fff;
+	text-align:center;
+	font-size:16px;
+	z-index:3;
+	border:1px solid #fff;
 }
 
 /* ACTION BOXES
 -----------------------------*/
-.actionBox {
-	width:370px;
-    background-color: #fff;
-	margin:20px auto 0px;
-	padding:10px;
-	border-radius:10px;
+#messageBox {
+	width:100%;
+	height:100%;
+	position:absolute;
+	top:0px;
+	left:0px;
 	display:none;
 }
-.actionBox-red {
-	background-color: #fbb;
+#messageBox .box {
+	width:370px;
+    background:#fff;
+	margin:30px auto 0px;
+	padding:10px;
+	border-radius:10px;
 }
-.actionBox-yellow {
-	background:#fda;
-}
-.actionBox-image {
+#messageBox .image {
 	width:40px;
 	height:40px;
 	margin:0px 10px 0px 0px;
 	float:left;
 }
-.actionBox-image img {
+#messageBox .image img {
 	width:40px;
 	height:40px;
 }
-.actionBox-title {
+#messageBox .title {
 	width:300px;
 	height:40px;
 	line-height:40px;
@@ -66,8 +117,81 @@ body {
 	font-weight:bold;
 	float:left;
 }
-.actionBox-description {
-	width:350px;
+
+/* CAT BOMB
+-----------------------------*/
+#catBomb {
+	width:100%;
+	height:100%;
+	position:absolute;
+	top:0px;
+	left:0px;
+	display:none;
+}
+#catBomb .filter {
+	width:100%;
+	height:100%;
+	position:fixed;
+	top:0px;
+	left:0px;
+	z-index:1;
+	background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(0,0,0,0.5)), color-stop(100%,rgba(0,0,0,0.85)));
+	background: -webkit-radial-gradient(center, ellipse cover,  rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.85) 100%);
+}
+#catBomb .box {
+	width:400px;
+	height:120px;
+    background-color: #fdd;
+	margin:-60px auto 0px -200px;
+	padding:10px;
+	border-radius:10px;
+	position:absolute;
+	top:50%;
+	left:50%;
+	z-index:2;
+	color:#c44;
+}
+#catBomb .image {
+	width:40px;
+	height:40px;
+	margin:0px 10px 0px 0px;
+	float:left;
+}
+#catBomb .image img {
+	width:40px;
+	height:40px;
+}
+#catBomb .title {
+	width:300px;
+	height:40px;
+	line-height:40px;
+	font-size:14px;
+	font-weight:bold;
+	float:left;
+}
+#catBomb .closebtn {
+	width:25px;
+	height:40px;
+	line-height:30px;
+	font-size:14px;
+	font-weight:bold;
+	float:left;
+	text-align:right;
+	font-size:30px;
+	margin:0px 0px 0px 5px;
+	color:#e88;
+}
+#catBomb .closebtn:hover {
+	color:#f55;
+}
+#catBomb .description {
+	width:380px;
 	margin:10px 0px 0px 0px;
 	font-size:12px;
+}
+
+/* PANEL
+-----------------------------*/
+#panel-wrap {
+	/*display:none;*/
 }
