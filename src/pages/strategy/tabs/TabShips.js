@@ -1,12 +1,6 @@
-/*
-TabShips.js
-By: dragonjet
-*/
-
 var TabShips = {
 	active: false,
 	_ships:[],
-	_items:[],
 	sortBy: "id",
 	sortAsc: true,
 	filters:[
@@ -24,17 +18,10 @@ var TabShips = {
 		
 		var tempItems, ctr, ThisShip, MasterShip;
 		
-		// Compile items on Index
-		tempItems = JSON.parse(localStorage.user_items);
-		for(ctr in tempItems){
-			this._items[ tempItems[ctr].api_id ] = tempItems[ctr];
-		}
-		
 		// Compile ships on Index
-		tempItems = JSON.parse(localStorage.user_ships);
-		for(ctr in tempItems){
-			ThisShip = tempItems[ctr];
-			MasterShip = master.ship[ThisShip.api_ship_id];
+		for(ctr in app.Player._ships){
+			ThisShip = app.Player._ships[ctr];
+			MasterShip = app.Master.ship(ThisShip.api_ship_id);
 			
 			this._ships.push({
 				id : ThisShip.api_id,
@@ -63,11 +50,12 @@ var TabShips = {
 	/* Compute Derived Stats without Equipment
 	--------------------------------------------*/
 	getDerivedStatNaked :function(StatName, EquippedValue, Items){
-		var cEquip;
+		var cEquip, cSlotitem;
 		for(cEquip in Items){
 			if(Items[cEquip] > -1){
-				if(typeof this._items[Items[cEquip]] != "undefined"){
-					EquippedValue -= master.slotitem[ this._items[Items[cEquip]].api_slotitem_id ]["api_"+StatName];
+				if(typeof app.Player._gears[Items[cEquip]] != "undefined"){
+					cSlotitem = app.Master.slotitem( app.Player._gears[Items[cEquip]].api_slotitem_id );
+					EquippedValue -= cSlotitem["api_"+StatName];
 				}
 			}
 		}
@@ -80,18 +68,18 @@ var TabShips = {
 		var self = this;
 		
 		var sCtr, cElm;
-		for(sCtr in KanColleData.data_stype){
-			if(KanColleData.data_stype[sCtr]){
+		for(sCtr in app.Meta._stype){
+			if(app.Meta._stype[sCtr]){
 				cElm = $(".page_ships .factory .ship_filter_type").clone().appendTo(".page_ships .filters .ship_types");
 				cElm.data("id", sCtr);
-				$(".filter_name", cElm).text(KanColleData.data_stype[sCtr]);
+				$(".filter_name", cElm).text(app.Meta.stype(sCtr));
 				this.filters[sCtr] = true;
 			}
 		}
 		
 		$(".page_ships .filters .massSelect .all").on("click", function(){
 			$(".page_ships .ship_filter_type .filter_check").show();
-			for(sCtr in KanColleData.data_stype){
+			for(sCtr in app.Meta._stype){
 				self.filters[sCtr] = true;
 			}
 			self.listTable();
@@ -99,7 +87,7 @@ var TabShips = {
 		
 		$(".page_ships .filters .massSelect .none").on("click", function(){
 			$(".page_ships .ship_filter_type .filter_check").hide();
-			for(sCtr in KanColleData.data_stype){
+			for(sCtr in app.Meta._stype){
 				self.filters[sCtr] = false;
 			}
 			self.listTable();
@@ -184,9 +172,9 @@ var TabShips = {
 			if(shipCtr%2 === 0){ cElm.addClass("even"); }else{ cElm.addClass("odd"); }
 			
 			$(".ship_id", cElm).text( cShip.id );
-			$(".ship_img img", cElm).attr("src", "../../images/ships/"+cShip.bid+".png");
+			$(".ship_img img", cElm).attr("src", app.Assets.shipIcon(cShip.bid));
 			$(".ship_name", cElm).text( cShip.english );
-			$(".ship_type", cElm).text( KanColleData.data_stype[cShip.stype] );
+			$(".ship_type", cElm).text( app.Meta.stype(cShip.stype) );
 			$(".ship_lv", cElm).html( "<span>Lv.</span>" + cShip.level );
 			$(".ship_hp", cElm).text( cShip.hp );
 			$(".ship_lk", cElm).text( cShip.lk );
@@ -220,12 +208,12 @@ var TabShips = {
 	
 	equipImg :function(cElm, equipNum, gear_id){
 		if(gear_id > -1){
-			if(typeof this._items[gear_id] == "undefined"){
+			if(typeof app.Player._gears[gear_id] == "undefined"){
 				$(".ship_equip_"+equipNum, cElm).hide();
 				return false;
 			}
-			var MasterGear = master.slotitem[this._items[gear_id].api_slotitem_id];
-			$(".ship_equip_"+equipNum+" img", cElm).attr("src", "../../images/items/"+MasterGear.api_type[3]+".png");
+			var MasterGear = app.Master.slotitem(app.Player._gears[gear_id].api_slotitem_id);
+			$(".ship_equip_"+equipNum+" img", cElm).attr("src", "../../assets/img/items/"+MasterGear.api_type[3]+".png");
 		}else{
 			$(".ship_equip_"+equipNum, cElm).hide();
 		}
