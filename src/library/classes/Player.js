@@ -30,10 +30,6 @@ KC3.prototype.Player  = {
 	_build: [],
 	_buildCount: 2,
 	
-	init :function(){
-		this.loadLocal();
-	},
-	
 	/* First login
 	-------------------------------------*/
 	login :function(){
@@ -48,17 +44,18 @@ KC3.prototype.Player  = {
 	/* Set new data
 	-------------------------------------*/
 	setBasic :function(data){
+		// If first time, receiving basic info
 		if(this.id == 0){
-			this.id =  data.mid;
-			this.name =  data.name;
-			this.login();
-		}else{
-			if(this.id != data.mid){
+			// If same as old player in localStorage
+			if( this.checkLocal( data.mid ) ){
+				this.loadLocal();
+			}else{
 				localStorage.removeItem("player");
-				app.Dashboard.state = "reload_panel";
-				app.Dashboard.messageBox("changeuser");
-				return false;
+				this.id =  data.mid;
+				this.name =  data.name;
 			}
+			// login into the local database
+			this.login();
 		}
 		
 		this.desc = data.desc;
@@ -160,8 +157,21 @@ KC3.prototype.Player  = {
 	
 	/* Save/Load Local Storage
 	-------------------------------------*/
-	loadLocal :function(){
-		if(typeof localStorage["player"] !== "undefined"){
+	checkLocal :function( player_id ){
+		// If there is an old player in localStorage
+		if(typeof localStorage.player !== "undefined"){
+			// Get player info
+			var tmpData = JSON.parse(localStorage.player);
+			// If the same player as now
+			if(player_id == tmpData.id){
+				return true;
+			}
+		}
+		return false;
+	},
+	
+	loadLocal :function( new_player ){
+		if(typeof localStorage.player !== "undefined"){
 			var tmpData = JSON.parse(localStorage["player"]);
 			this.id 		= tmpData.id;
 			this.name 		= tmpData.name;
