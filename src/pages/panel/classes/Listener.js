@@ -62,7 +62,7 @@ KC3.prototype.Listener  = {
 			)){ return false; }
 			
 			// Set server via URL
-			// app.Server.init( request.request.url );
+			app.Server.init( request.request.url );
 			
 			responseObject.AAA = APIFunction;
 			console.log(responseObject);

@@ -137,10 +137,11 @@ KC3.prototype.Dashboard.Timers = {
 		var thisBuildSlot = app.Player._build[index];
 		if(typeof thisBuildSlot != "undefined"){
 			switch(thisBuildSlot.api_state){
-				case -1: break;
-				case 0:
-					$(".timer-img img", element).attr("src", "../../assets/img/ui/empty.png");
-					$(".timer-time", element).text("");
+				case 1:
+					var thisShip = app.Master.ship( thisBuildSlot.api_created_ship_id );
+					var now = new Date().getTime();
+					$(".timer-img img", element).attr("src", app.Assets.shipIcon(thisShip.api_ship_id, '../../assets/img/ui/empty.png'));
+					this.seconds[2][index] = Math.ceil(((thisBuildSlot.api_complete_time)-now)/1000);
 					break;
 				case 3:
 					var thisShip = app.Master.ship( thisBuildSlot.api_created_ship_id );
@@ -148,10 +149,8 @@ KC3.prototype.Dashboard.Timers = {
 					$(".timer-time", element).text("Complete!");
 					break;
 				default:
-					var thisShip = app.Master.ship( thisBuildSlot.api_created_ship_id );
-					var now = new Date().getTime();
-					$(".timer-img img", element).attr("src", app.Assets.shipIcon(thisShip.api_ship_id, '../../assets/img/ui/empty.png'));
-					this.seconds[2][index] = Math.ceil(((thisBuildSlot.api_complete_time)-now)/1000);
+					$(".timer-img img", element).attr("src", "../../assets/img/ui/empty.png");
+					$(".timer-time", element).text("");
 					break;
 			}
 		}
