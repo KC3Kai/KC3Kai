@@ -1,191 +1,120 @@
 KC3.prototype.Player  = {
-	id: 0,
-	name: "",
-	desc: "",
-	rank: "",
-	level: 0,
-	exp: [ 0, 0 ],
-	fcoin: 0,
 	
-	torch: 0,
-	buckets: 0,
-	devmats: 0,
-	screws: 0,
-	
-	resources: [0,0,0,0],
-	
-	_ships: [],
-	_shipSlot: [0,0],
-	
-	_gears: [],
-	_gearSlot: [0,0],
-	
-	_fleets: [],
-	_fleetCount: 1,
-	
-	_repair: [],
-	_repairCount: 2,
-	_repair_ids: [],
-	
-	_build: [],
-	_buildCount: 2,
-	
-	/* First login
-	-------------------------------------*/
-	login :function(){
-		app.Logging.index = app.Server.ip + "." + this.id;
-		app.Logging.Player({
-			server: app.Server.name,
-			mid: this.id,
-			name: this.name
-		});
+	init :function(){
+		this.server = "";
+		this.id = 0;
+		this.name = "";
+		this.desc = "";
+		this.rank = "";
+		this.level = 0;
+		this.exp = [0,0];
 	},
 	
-	/* Set new data
-	-------------------------------------*/
-	setBasic :function(data){
-		// If first time, receiving basic info
+	/* Make sure player is initialized
+	-------------------------------------------------------*/
+	login :function(data){
+		// If first time during this session
 		if(this.id == 0){
-			// If same as old player in localStorage
-			if( this.checkLocal( data.mid ) ){
-				this.loadLocal();
-			}else{
-				localStorage.removeItem("player");
-				this.id =  data.mid;
-				this.name =  data.name;
-			}
-			// login into the local database
-			this.login();
+			// Set static player info
+			this.id =  data.mid;
+			this.name =  data.name;
+			
+			// Make sure server info is updated
+			app.Server.assureLatest();
+			this.server = app.Server.num;
+			
+			// Make sure localDatabase is updated
+			app.Logging.index = this.id;
+			app.Logging.Player({
+				server: app.Server.num,
+				mid: this.id,
+				name: this.name
+			});
+		}
+	},
+	
+	/* When player suddely changed, logout previous player
+	-------------------------------------------------------*/
+	logout :function(){
+		console.log('logging out');
+		
+		// Remove all remembered player info
+		localStorage.removeItem("player");
+		localStorage.removeItem("player_ships");
+		localStorage.removeItem("player_gears");
+		localStorage.removeItem("player_statistics");
+		localStorage.removeItem("player_newsfeed");
+		
+		// Reset all player object properties to default
+		this.init();
+		app.Ships.clear();
+		app.Gears.clear();
+		app.Resources.init();
+		app.Docks.init();
+	},
+	
+	/* Set new basic player data
+	-------------------------------------------------------*/
+	set :function(data){
+		// Check if player suddenly changed
+		if(this.id != 0 && this.id != data.mid){
+			this.logout();
 		}
 		
+		// Make sure player is logged-in on KC3
+		this.login(data);
+		
+		// Set new player dynamic data
 		this.desc = data.desc;
 		this.rank = app.Meta.rank(data.rank);
 		this.level = data.level;
-		this.fcoin = data.fcoin;
+		if(typeof data.fcoin != "undefined"){ this.fcoin = data.fcoin; }
 		
+		// Computer level and experience values
 		var ExpCurrLevel = app.Meta.exp( this.level )[1];
 		var ExpNextLevel = app.Meta.exp( this.level+1 )[1];
 		var exp_percent = (data.exp - ExpCurrLevel) / (ExpNextLevel - ExpCurrLevel);
 		var exp_next = ExpNextLevel - data.exp;
 		this.exp = [ exp_percent, exp_next ];
-	},
-	
-	setShips :function(shipList){
-		var ctr;
-		this._ships = [];
-		for(ctr in shipList){
-			if(!!shipList[ctr]){
-				this._ships[shipList[ctr].api_id] = shipList[ctr];
-			}
-		}
-		this._shipSlot[0] = this._ships.length;
-	},
-	
-	setShipsSafe :function(shipList){
-		var ctr;
-		for(ctr in shipList){
-			this._ships[shipList[ctr].api_id] = shipList[ctr];
-		}
-	},
-	
-	setGears :function(gearList){
-		var ctr;
-		this._gears = [];
-		this._gearSlot[0] = 0;
-		for(ctr in gearList){
-			this._gearSlot[0]++;
-			if(!!gearList[ctr]){
-				this._gears[gearList[ctr].api_id] = gearList[ctr];
-			}
-		}
-	},
-	
-	setGearsSafe :function(gearList){
-		var ctr;
-		for(ctr in gearList){
-			this._gearSlot[0]++;
-			this._gears[gearList[ctr].api_id] = gearList[ctr];
-		}
-		this._gearSlot[0] = this._gears.length;
-	},
-	
-	setResource :function(data){
-		this.resources = data;
-		app.Logging.Resource(data);
-	},
-	
-	setUseitem :function(data){
-		this.torch = data.torch;
-		this.buckets = data.buckets;
-		this.devmats = data.devmats;
-		this.screws = data.screws;
-		app.Logging.Useitem(data);
-	},
-	
-	setFleets :function(data){
-		this._fleets = data;
-	},
-	
-	setRepairDocks :function(data){
-		this._repair = data;
 		
-		this._repairCount = 0;
-		this._repair_ids = [];
-		var ctr;
-		for(ctr in this._repair){
-			if( this._repair[ctr].api_state > -1 ){ this._repairCount++; }
-			this._repair_ids.push( this._repair[ctr].api_ship_id );
-		}
-		console.log("this._repair");
-		console.log(this._repair);
+		// Remember last player
+		this.save();
 	},
 	
-	setBuildDocks :function(data){
-		this._build = data;
-		
-		this._buildCount = 0;
-		var ctr;
-		for(ctr in this._build){
-			if( this._build[ctr].api_state > -1 ){
-				this._buildCount++;
-			}
-		}
-		
-		console.log("this._build");
-		console.log(this._build);
+	/* Set player statistics
+	-------------------------------------------------------*/
+	statistics :function(data){
+		localStorage.player_statistics = JSON.stringify(data);
 	},
 	
-	/* Save/Load Local Storage
-	-------------------------------------*/
-	checkLocal :function( player_id ){
-		// If there is an old player in localStorage
-		if(typeof localStorage.player !== "undefined"){
-			// Get player info
-			var tmpData = JSON.parse(localStorage.player);
-			// If the same player as now
-			if(player_id == tmpData.id){
-				return true;
-			}
-		}
-		return false;
+	/* Set player newsfeed
+	-------------------------------------------------------*/
+	newsfeed :function(data){
+		localStorage.player_newsfeed = JSON.stringify(data);
 	},
 	
-	loadLocal :function( new_player ){
-		if(typeof localStorage.player !== "undefined"){
-			var tmpData = JSON.parse(localStorage["player"]);
-			this.id 		= tmpData.id;
-			this.name 		= tmpData.name;
-			this.setShips(tmpData.ships);
-			this.setGears(tmpData.gears);
+	/* Load data from localStorage
+	-------------------------------------------------------*/
+	load :function(){
+		if(typeof localStorage.player != "undefined"){
+			this.login(JSON.parse(localStorage.player));
+			return true;
+		}else{
+			return false;
 		}
 	},
 	
-	saveLocal :function(){
-		localStorage["player"] = JSON.stringify({
-			id		: this.id,
+	/* Remember data to localStorage
+	-------------------------------------------------------*/
+	save: function(){
+		localStorage.player = JSON.stringify({
+			server	: this.server,
+			mid		: this.id,
 			name	: this.name,
-			ships	: this._ships,
-			gears	: this._gears,
+			desc	: this.desc,
+			rank	: this.rank,
+			level	: this.level
 		});
 	}
+	
 };

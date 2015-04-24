@@ -36,23 +36,27 @@ KC3.prototype.Dashboard.Timers = {
 	},
 	
 	timerText :function(element, remaining){
-		remaining = Math.floor(remaining);
-		
-		var hrs = Math.floor(remaining/3600);
-		remaining = remaining - (hrs * 3600);
-		if(hrs < 10){ hrs = "0"+hrs; }
-		
-		var min = Math.floor(remaining/60);
-		remaining = remaining - (min * 60);
-		if(min < 10){ min = "0"+min; }
-		
-		if(remaining < 10){ remaining = "0"+remaining; }
-		
-		$(element+" .timer-time").text(hrs+":"+min+":"+remaining);
+		if(remaining > 0){
+			remaining = Math.floor(remaining);
+			
+			var hrs = Math.floor(remaining/3600);
+			remaining = remaining - (hrs * 3600);
+			if(hrs < 10){ hrs = "0"+hrs; }
+			
+			var min = Math.floor(remaining/60);
+			remaining = remaining - (min * 60);
+			if(min < 10){ min = "0"+min; }
+			
+			if(remaining < 10){ remaining = "0"+remaining; }
+			
+			$(element+" .timer-time").text(hrs+":"+min+":"+remaining);
+		}else{
+			$(element+" .timer-time").text("Complete!");
+		}
 	},
 	
 	update :function(){
-		var tmpClass = "box-timers-"+app.Player._repairCount;
+		var tmpClass = "box-timers-"+app.Docks._repairCount;
 		if( !$(".box-repairs").hasClass(tmpClass) ){
 			$(".box-repairs").removeClass("box-timers-2");
 			$(".box-repairs").removeClass("box-timers-3");
@@ -60,7 +64,7 @@ KC3.prototype.Dashboard.Timers = {
 			$(".box-repairs").addClass(tmpClass);
 		}
 		
-		tmpClass = "box-timers-"+app.Player._buildCount;
+		tmpClass = "box-timers-"+app.Docks._buildCount;
 		if( !$(".box-constructions").hasClass(tmpClass) ){
 			$(".box-constructions").removeClass("box-timers-2");
 			$(".box-constructions").removeClass("box-timers-3");
@@ -86,11 +90,13 @@ KC3.prototype.Dashboard.Timers = {
 	expedition :function( element, index ){
 		this.seconds[0][index] = 0;
 		
-		var thisFleet = app.Player._fleets[index];
+		if(app.Docks._fleets.length === 0){ return false; }
+		
+		var thisFleet = app.Docks._fleets[index];
 		if(typeof thisFleet != "undefined"){
 			
 			if(thisFleet.api_ship[0] > -1){
-				var thisShip = app.Player._ships[ thisFleet.api_ship[0] ];
+				var thisShip = app.Ships.get( thisFleet.api_ship[0] );
 				$(".timer-img img", element).attr("src", app.Assets.shipIcon(thisShip.api_ship_id, '../../assets/img/ui/empty.png'));
 			}else{
 				$(".timer-img img", element).attr("src", "../../assets/img/ui/empty.png");
@@ -98,8 +104,7 @@ KC3.prototype.Dashboard.Timers = {
 			
 			if( thisFleet.api_mission[0] == 1 ){
 				var now = new Date().getTime();
-				this.seconds[0][index] = (((thisFleet.api_mission[2]-60000)-now)/1000);
-				
+				this.seconds[0][index] = (((thisFleet.api_mission[2]-(app.Config.time_dev*1000))-now)/1000);
 			}else if(thisFleet.api_mission[0]==2){
 				$(".timer-time", element).text("Complete!");
 				
@@ -113,7 +118,7 @@ KC3.prototype.Dashboard.Timers = {
 	repair :function( element, index ){
 		this.seconds[1][index] = 0;
 		
-		var thisRepairSlot = app.Player._repair[index];
+		var thisRepairSlot = app.Docks._repair[index];
 		if(typeof thisRepairSlot != "undefined"){
 			switch(thisRepairSlot.api_state){
 				case -1: break;
@@ -122,10 +127,10 @@ KC3.prototype.Dashboard.Timers = {
 					$(".timer-time", element).text("");
 					break;
 				default:
-					var thisShip = app.Player._ships[ thisRepairSlot.api_ship_id ];
+					var thisShip = app.Ships.get( thisRepairSlot.api_ship_id );
 					var now = new Date().getTime();
 					$(".timer-img img", element).attr("src", app.Assets.shipIcon(thisShip.api_ship_id, '../../assets/img/ui/empty.png'));
-					this.seconds[1][index] = Math.ceil(((thisRepairSlot.api_complete_time-60000)-now)/1000);
+					this.seconds[1][index] = Math.ceil(((thisRepairSlot.api_complete_time-(app.Config.time_dev*1000))-now)/1000);
 					break;
 			}
 		}
@@ -134,18 +139,18 @@ KC3.prototype.Dashboard.Timers = {
 	build :function( element, index ){
 		this.seconds[2][index] = 0;
 		
-		var thisBuildSlot = app.Player._build[index];
+		var thisBuildSlot = app.Docks._build[index];
 		if(typeof thisBuildSlot != "undefined"){
+			element.show();
 			switch(thisBuildSlot.api_state){
-				case 1:
-					var thisShip = app.Master.ship( thisBuildSlot.api_created_ship_id );
+				case 2:
 					var now = new Date().getTime();
-					$(".timer-img img", element).attr("src", app.Assets.shipIcon(thisShip.api_ship_id, '../../assets/img/ui/empty.png'));
+					$(".timer-img img", element).attr("src", app.Assets.shipIcon(thisBuildSlot.api_created_ship_id, '../../assets/img/ui/empty.png'));
 					this.seconds[2][index] = Math.ceil(((thisBuildSlot.api_complete_time)-now)/1000);
 					break;
 				case 3:
 					var thisShip = app.Master.ship( thisBuildSlot.api_created_ship_id );
-					$(".timer-img img", element).attr("src", app.Assets.shipIcon(thisShip.api_ship_id, '../../assets/img/ui/empty.png'));
+					$(".timer-img img", element).attr("src", app.Assets.shipIcon(thisBuildSlot.api_created_ship_id, '../../assets/img/ui/empty.png'));
 					$(".timer-time", element).text("Complete!");
 					break;
 				default:
@@ -153,6 +158,8 @@ KC3.prototype.Dashboard.Timers = {
 					$(".timer-time", element).text("");
 					break;
 			}
+		}else{
+			element.hide();
 		}
 	}
 	

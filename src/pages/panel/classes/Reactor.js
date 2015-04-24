@@ -1,6 +1,7 @@
 KC3.prototype.Reactor  = {
+	shipConstruction:{ active: false },
 	
-	/* [api_start2] Load Master Data
+	/* Load Master Data
 	-------------------------------------------------------*/
 	"api_start2":function(params, response, headers){
 		app.Master.processRaw( response.api_data );
@@ -8,56 +9,47 @@ KC3.prototype.Reactor  = {
 		app.Dashboard.messageBox("Arriving at Naval Base...");
 	},
 	
-	/* [api_port/port] Home Port Screen
+	/* Home Port Screen
 	-------------------------------------------------------*/
 	"api_port/port":function(params, response, headers){
 		app.Dashboard.showPanel();
 		
 		app.Battle.EndSortie();
 		
-		app.Player.setBasic({
+		app.Player.set({
 			mid: response.api_data.api_basic.api_member_id,
 			name: response.api_data.api_basic.api_nickname,
 			desc: response.api_data.api_basic.api_comment,
 			rank: response.api_data.api_basic.api_rank,
 			level: response.api_data.api_basic.api_level,
-			exp: response.api_data.api_basic.api_experience,
-			fcoin: response.api_data.api_basic.api_fcoin
+			exp: response.api_data.api_basic.api_experience
 		});
 		
-		app.Player.setShips(response.api_data.api_ship);
-		app.Player._shipSlot = [
-			response.api_data.api_ship.length,
-			response.api_data.api_basic.api_max_chara
-		];
+		app.Ships.set(response.api_data.api_ship);
 		
-		app.Player._gearSlot[1] = response.api_data.api_basic.api_max_slotitem;
+		app.Gears.max = response.api_data.api_basic.api_max_slotitem;
 		
-		app.Player.setFleets(response.api_data.api_deck_port);
-		app.Player.setRepairDocks( response.api_data.api_ndock );
-		app.Player._buildCount = response.api_data.api_basic.api_count_kdock;
+		app.Docks.setFleets(response.api_data.api_deck_port);
+		app.Docks.setRepair(response.api_data.api_ndock);
+		app.Docks._buildCount = response.api_data.api_basic.api_count_kdock;
 		
-		app.Player.setResource ([
+		app.Resources.setFcoin(response.api_data.api_basic.api_fcoin);
+		
+		app.Resources.set([
 			response.api_data.api_material[0].api_value,
 			response.api_data.api_material[1].api_value,
 			response.api_data.api_material[2].api_value,
 			response.api_data.api_material[3].api_value
 		]);
 		
-		app.Player.setUseitem({
+		app.Resources.useitem({
 			torch: response.api_data.api_material[4].api_value,
 			buckets: response.api_data.api_material[5].api_value,
 			devmats: response.api_data.api_material[6].api_value,
 			screws: response.api_data.api_material[7].api_value
 		});
 		
-		app.Player.saveLocal();
-		app.Dashboard.Info.admiral();
-		app.Dashboard.Info.materials();
-		app.Dashboard.Timers.update();
-		app.Dashboard.Fleet.update();
-		/*
-		KanColleAccount.record({
+		app.Player.statistics({
 			exped: {
 				rate: false,
 				total: response.api_data.api_basic.api_ms_count,
@@ -76,66 +68,56 @@ KC3.prototype.Reactor  = {
 				lose: response.api_data.api_basic.api_st_lose
 			}
 		});
-		KanColleAccount.log(response.api_data.api_log);*/
+		
+		app.Player.newsfeed(response.api_data.api_log);
+		
+		app.Dashboard.Info.admiral();
+		app.Dashboard.Info.materials();
+		app.Dashboard.Timers.update();
+		app.Dashboard.Fleet.update();
 	},
 	
-	/* [api_get_member/basic] User Basic Information
+	
+	/*-------------------------------------------------------*/
+	/*--------------------[ PLAYER INFO ]--------------------*/
+	/*-------------------------------------------------------*/
+	
+	/* User Basic Information
 	-------------------------------------------------------*/
 	"api_get_member/basic":function(params, response, headers){
-		app.Player.setBasic({
+		app.Player.set({
 			mid: response.api_data.api_member_id,
 			name: response.api_data.api_nickname,
 			desc: response.api_data.api_comment,
 			rank: response.api_data.api_rank,
 			level: response.api_data.api_level,
-			exp: response.api_data.api_experience,
-			fcoin: response.api_data.api_fcoin
+			exp: response.api_data.api_experience
 		});
+		app.Resources.setFcoin(response.api_data.api_fcoin);
 	},
 	
-	/* [api_get_member/slot_item] All owned equipment
-	-------------------------------------------------------*/
-	"api_get_member/slot_item": function(params, response, headers){
-		app.Player.setGears(response.api_data);
-	},
-	
-	
-	/* [api_get_member/kdock] Construction Docks
-	-------------------------------------------------------*/
-	"api_get_member/kdock":function(params, response, headers){
-		app.Player._build = response.api_data;
-		var ctr;
-		var totalBuildDocks = 0;
-		for(ctr in response.api_data){
-			if( response.api_data[ctr].api_state > -1 ){
-				totalBuildDocks++;
-			}
-		}
-		app.Player._buildCount = totalBuildDocks;
-		app.Dashboard.Timers.update();
-	},
-	
-	/* [api_get_member/record] HQ Record Screen
+	/* HQ Record Screen
 	-------------------------------------------------------*/
 	"api_get_member/record":function(params, response, headers){
-		/*KanColleAccount.basic({
-			url: url,
+		app.Player.set({
 			mid: response.api_data.api_member_id,
 			name: response.api_data.api_nickname,
 			desc: response.api_data.api_cmt,
 			rank: response.api_data.api_rank,
 			level: response.api_data.api_level,
-			exp: response.api_data.api_experience[0],
+			exp: response.api_data.api_experience[0]
 		});
-		KanColleAccount.repairDocks([], response.api_data.api_ndoc);
-		KanColleAccount.buildDocks([], response.api_data.api_kdoc);
-		KanColleAccount.fleets([], response.api_data.api_deck);
-		KanColleAccount.ships([], response.api_data.api_ship[0], response.api_data.api_ship[1]);
-		KanColleAccount.items([],
-			response.api_data.api_slotitem[0],
-			response.api_data.api_slotitem[1]
-		);
-		KanColleAccount.record({
+		
+		app.Resources.setFcoin(response.api_data.api_fcoin);
+		
+		app.Docks._fleetCount = response.api_data.api_deck;
+		app.Docks._repairCount = response.api_data.api_ndoc;
+		app.Docks._buildCount = response.api_data.api_kdoc;
+		
+		app.Ships.max = response.api_data.api_ship[1];
+		app.Gears.max = response.api_data.api_slotitem[1];
+		
+		app.Player.statistics({
 			exped: {
 				rate: response.api_data.api_mission.api_rate,
 				total: response.api_data.api_mission.api_count,
@@ -153,59 +135,151 @@ KC3.prototype.Reactor  = {
 				win: response.api_data.api_war.api_win,
 				lose: response.api_data.api_war.api_lose
 			}
-		});*/
+		});
+		
+		app.Dashboard.Info.admiral();
+		app.Dashboard.Info.materials();
 	},
 	
-	
-	
-	/* [api_get_member/questlist] Quest List
+	/* Get resource count
 	-------------------------------------------------------*/
-	"api_get_member/questlist":function(params, response, headers){
+	"api_get_member/material":function(params, response, headers){
 		
 	},
 	
-	/* [api_req_hokyu/charge] Re-supply
+	
+	/*-------------------------------------------------------*/
+	/*----------------------[ LIBRARY ]----------------------*/
+	/*-------------------------------------------------------*/
+	
+	/* Ship Infos mid-sortie
 	-------------------------------------------------------*/
-	"api_req_hokyu/charge":function(params, response, headers){
-		console.log(params);
-		console.log(response);
+	"api_get_member/ship2":function(params, response, headers){
+		app.Ships.set(response.api_data);
+		app.Docks.setFleets( response.api_data_deck );
+		app.Dashboard.Fleet.update();
 	},
 	
-	/* [api_req_kaisou/slotset] Change equipment
+	/* Custom Ship Query
 	-------------------------------------------------------*/
-	"api_req_kaisou/slotset":function(params, response, headers){
-		var itemID = app.Util.findParam(params, "api%5Fitem%5Fid");
-		var slotIndex = app.Util.findParam(params, "api%5Fslot%5Fidx");
-		var shipID = app.Util.findParam(params, "api%5Fid");
-		if(itemID > -1){
-			app.Player._ships[shipID].api_slot[slotIndex] = itemID;
-		}else{
-			app.Player._ships[shipID].api_slot.splice(slotIndex, 1);
-			app.Player._ships[shipID].api_slot[3] = -1;
+	"api_get_member/ship3":function(params, response, headers){
+		app.Ships.set( response.api_data.api_ship_data );
+		app.Docks.setFleets( response.api_data.api_deck_data );
+		app.Dashboard.Timers.update();
+		app.Dashboard.Fleet.update();
+	},
+	
+	/* All owned equipment
+	-------------------------------------------------------*/
+	"api_get_member/slot_item": function(params, response, headers){
+		app.Gears.set( response.api_data );
+	},
+	
+	/* Get Fleets
+	-------------------------------------------------------*/
+	"api_get_member/deck":function(params, response, headers){
+		app.Docks.setFleets( response.api_data );
+		app.Dashboard.Timers.update();
+		app.Dashboard.Fleet.update();
+	},
+	
+	
+	/*-------------------------------------------------------*/
+	/*-------------------[ CONSTRUCTION ]--------------------*/
+	/*-------------------------------------------------------*/
+	
+	/* Construct a Ship
+	-------------------------------------------------------*/
+	"api_req_kousyou/createship":function(params, response, headers){
+		this.shipConstruction = {
+			active: true,
+			dock_num: app.Util.findParam(params, "api%5Fkdock%5Fid"),
+			flagship: app.Docks._fleets[0].api_ship[0],
+			lsc: app.Util.findParam(params, "api%5Flarge%5Fflag"),
+			torched: app.Util.findParam(params, "api_highspeed"),
+			resources: [
+				app.Util.findParam(params, "api%5Fitem1"),
+				app.Util.findParam(params, "api%5Fitem2"),
+				app.Util.findParam(params, "api%5Fitem3"),
+				app.Util.findParam(params, "api%5Fitem4"),
+				app.Util.findParam(params, "api%5Fitem5")
+			]
+		};
+		console.log("this.shipConstruction");
+		console.log(this.shipConstruction);
+	},
+	
+	
+	/* View Construction Docks
+	-------------------------------------------------------*/
+	"api_get_member/kdock":function(params, response, headers){
+		if(this.shipConstruction.active){
+			if(this.shipConstruction.lsc == 1){
+				app.Logging.LSC({
+					flag: this.shipConstruction.flagship,
+					rsc1: this.shipConstruction.resources[0],
+					rsc2: this.shipConstruction.resources[1],
+					rsc3: this.shipConstruction.resources[2],
+					rsc4: this.shipConstruction.resources[3],
+					devmat: this.shipConstruction.resources[4],
+					result: response.api_data[this.shipConstruction.dock_num-1].api_created_ship_id,
+					time: new Date(app.Util.findParam(headers, "Date")).getTime()
+				});
+			}else{
+				app.Logging.Build({
+					flag: this.shipConstruction.flagship,
+					rsc1: this.shipConstruction.resources[0],
+					rsc2: this.shipConstruction.resources[1],
+					rsc3: this.shipConstruction.resources[2],
+					rsc4: this.shipConstruction.resources[3],
+					result: response.api_data[this.shipConstruction.dock_num-1].api_created_ship_id,
+					time: new Date(app.Util.findParam(headers, "Date")).getTime()
+				});
+			}
+			this.shipConstruction = { active: false };
 		}
-		app.Dashboard.Fleet.update(shipID);
+		
+		app.Docks.setBuild(response.api_data);
+		app.Dashboard.Timers.update();
 	},
 	
-	/* [api_req_kaisou/unsetslot_all] Remove all equipment
+	/* Instant-Torch a construction
 	-------------------------------------------------------*/
-	"api_req_kaisou/unsetslot_all":function(params, response, headers){
-		var shipID = app.Util.findParam(params, "api%5Fid");
-		app.Player._ships[shipID].api_slot = [-1,-1,-1,-1,-1];
-		app.Dashboard.Fleet.update(shipID);
+	"api_req_kousyou/createship_speedchange":function(params, response, headers){
+		app.Resources.torch--;
+		var kDockNum = app.Util.findParam(params, "api%5Fkdock%5Fid");
+		app.Docks._build[ kDockNum-1 ].api_state = 3;
+		app.Dashboard.Info.materials();
+		app.Dashboard.Timers.update();
 	},
 	
-	/* [api_req_hensei/change] Change fleet member
+	/* Get a completed construction
+	-------------------------------------------------------*/
+	"api_req_kousyou/getship":function(params, response, headers){
+		app.Docks.setBuild( response.api_data.api_kdock );
+		app.Ships.set([response.api_data.api_ship]);
+		app.Gears.set(response.api_data.api_slotitem);
+		app.Dashboard.Timers.update();
+		app.Dashboard.Info.materials();
+	},
+	
+	
+	/*-------------------------------------------------------*/
+	/*-------------------[ FLEET MANAGEMENT ]----------------*/
+	/*-------------------------------------------------------*/
+	
+	/* Change fleet member
 	-------------------------------------------------------*/
 	"api_req_hensei/change":function(params, response, headers){
 		var FleetIndex = app.Util.findParam(params, "api%5Fid");
 		
 		if(typeof response.api_data != "undefined"){
 			if(typeof response.api_data.api_change_count != "undefined"){
-				app.Player._fleets[FleetIndex-1].api_ship[1] = -1;
-				app.Player._fleets[FleetIndex-1].api_ship[2] = -1;
-				app.Player._fleets[FleetIndex-1].api_ship[3] = -1;
-				app.Player._fleets[FleetIndex-1].api_ship[4] = -1;
-				app.Player._fleets[FleetIndex-1].api_ship[5] = -1;
+				app.Docks._fleets[FleetIndex-1].api_ship[1] = -1;
+				app.Docks._fleets[FleetIndex-1].api_ship[2] = -1;
+				app.Docks._fleets[FleetIndex-1].api_ship[3] = -1;
+				app.Docks._fleets[FleetIndex-1].api_ship[4] = -1;
+				app.Docks._fleets[FleetIndex-1].api_ship[5] = -1;
 				app.Dashboard.Fleet.update();
 				return true;
 			}
@@ -214,51 +288,48 @@ KC3.prototype.Reactor  = {
 		var ChangedIndex = app.Util.findParam(params, "api%5Fship%5Fidx");
 		var NewShipOnSlet = app.Util.findParam(params, "api%5Fship%5Fid");
 		if(NewShipOnSlet > -1){
-			app.Player._fleets[FleetIndex-1].api_ship[ChangedIndex] = NewShipOnSlet;
+			app.Docks._fleets[FleetIndex-1].api_ship[ChangedIndex] = NewShipOnSlet;
 		}else{
-			app.Player._fleets[FleetIndex-1].api_ship.splice(ChangedIndex, 1);
-			app.Player._fleets[FleetIndex-1].api_ship[5] = -1;
+			app.Docks._fleets[FleetIndex-1].api_ship.splice(ChangedIndex, 1);
+			app.Docks._fleets[FleetIndex-1].api_ship[5] = -1;
 		}
 		app.Dashboard.Fleet.update();
 	},
 	
-	/* [api_get_member/ship2] Ship Infos mid-sortie
+	/* Change equipment of a ship
 	-------------------------------------------------------*/
-	"api_get_member/ship2":function(params, response, headers){
-		app.Player.setShips(response.api_data);
-		app.Player._shipSlot[0] = response.api_data.length;
-		
-		app.Player._fleets = response.api_data_deck;
-		
-		app.Player.saveLocal();
-		app.Dashboard.Fleet.update();
+	"api_req_kaisou/slotset":function(params, response, headers){
+		var itemID = app.Util.findParam(params, "api%5Fitem%5Fid");
+		var slotIndex = app.Util.findParam(params, "api%5Fslot%5Fidx");
+		var shipID = app.Util.findParam(params, "api%5Fid");
+		if(itemID > -1){
+			app.Ships.changeEquip(shipID, slotIndex), itemID;
+		}else{
+			app.Ships.clearEquip(shipID, slotIndex);
+		}
+		app.Dashboard.Fleet.update(shipID);
 	},
 	
-	/* [api_get_member/ship3] Custom Ship Query
+	/* Remove all equipment of a ship
 	-------------------------------------------------------*/
-	"api_get_member/ship3":function(params, response, headers){
-		app.Player.setShipsSafe(response.api_data.api_ship_data);
-		app.Player._shipSlot[0] = response.api_data.api_ship_data.length;
-		
-		app.Player._fleets = response.api_data.api_deck_data;
-		
-		app.Player.saveLocal();
-		app.Dashboard.Fleet.update();
+	"api_req_kaisou/unsetslot_all":function(params, response, headers){
+		var shipID = app.Util.findParam(params, "api%5Fid");
+		app.Ships.clearEquips(shipID);
+		app.Dashboard.Fleet.update(shipID);
 	},
 	
-	/* [api_req_quest/clearitemget] Receive Quest Reward
+	/* Re-supply a ship
 	-------------------------------------------------------*/
-	"api_req_quest/clearitemget":function(params, response, headers){
-		
-	},
-	
-	/* [api_get_member/material] Get resource count
-	-------------------------------------------------------*/
-	"api_get_member/material":function(params, response, headers){
+	"api_req_hokyu/charge":function(params, response, headers){
 		
 	},
 	
-	/* [api_req_map/start] Start Sortie
+	
+	/*-------------------------------------------------------*/
+	/*----------------------[ BATTLES ]----------------------*/
+	/*-------------------------------------------------------*/
+	
+	/* Start Sortie
 	-------------------------------------------------------*/
 	"api_req_map/start":function(params, response, headers){
 		app.Battle.StartSortie(
@@ -270,13 +341,13 @@ KC3.prototype.Reactor  = {
 		app.Battle.onNode = response.api_data.api_no;
 	},
 	
-	/* [api_req_map/next] Traverse Map
+	/* Traverse Map
 	-------------------------------------------------------*/
 	"api_req_map/next":function(params, response, headers){
 		app.Battle.onNode = response.api_data.api_no;
 	},
 	
-	/* [api_req_sortie/battle] Node Battle
+	/* Node Battle
 	-------------------------------------------------------*/
 	"api_req_sortie/battle":function(params, response, headers){
 		app.Battle.Engage(
@@ -285,60 +356,78 @@ KC3.prototype.Reactor  = {
 		);
 	},
 	
-	/* [api_req_battle_midnight/battle] YASEN!
+	/* YASEN!
 	-------------------------------------------------------*/
 	"api_req_battle_midnight/battle":function(params, response, headers){
-		app.Battle.Yasen(response.api_data);
+		app.Battle.Yasen( response.api_data );
 	},
 	
-	/* [api_req_sortie/battleresult] Battle Results
+	/* Battle Results
 	-------------------------------------------------------*/
 	"api_req_sortie/battleresult":function(params, response, headers){
 		app.Battle.Results( response.api_data );
 	},
 	
-	/* [api_get_member/ndock] Enter Repair Docks
+	
+	/*-------------------------------------------------------*/
+	/*-----------------------[ QUESTS ]----------------------*/
+	/*-------------------------------------------------------*/
+	
+	/* Quest List
+	-------------------------------------------------------*/
+	"api_get_member/questlist":function(params, response, headers){
+		
+	},
+	
+	/* Receive Quest Reward
+	-------------------------------------------------------*/
+	"api_req_quest/clearitemget":function(params, response, headers){
+		
+	},
+	
+	
+	/*-------------------------------------------------------*/
+	/*--------------------[ REPAIR DOCKS ]-------------------*/
+	/*-------------------------------------------------------*/
+	
+	/* Enter Repair Docks
 	-------------------------------------------------------*/
 	"api_get_member/ndock":function(params, response, headers){
-		app.Player.setRepairDocks( response.api_data );
+		app.Docks.setRepair( response.api_data );
 		app.Dashboard.Timers.update();
 		app.Dashboard.Fleet.update();
 	},
 	
-	/* [api_req_nyukyo/speedchange] Use bucket
+	/* Use bucket
 	-------------------------------------------------------*/
 	"api_req_nyukyo/speedchange":function(params, response, headers){
-		// app.Util.findParam(headers, "api%5Fndock%5Fid")
+		app.Resources.buckets--;
+		var nDockNum = app.Util.findParam(params, "api%5Fndock%5Fid");
+		app.Docks._repair[ nDockNum-1 ].api_state = 0;
+		app.Dashboard.Info.materials();
+		app.Dashboard.Timers.update();
 	},
 	
-	/* [api_get_member/deck] Get Fleets
+	
+	/*-------------------------------------------------------*/
+	/*----------------------[ OTHERS ]-----------------------*/
+	/*-------------------------------------------------------*/
+	
+	/* Scrap a Ship
 	-------------------------------------------------------*/
-	"api_get_member/deck":function(params, response, headers){
-		app.Player.setFleets(response.api_data);
-		app.Dashboard.Timers.update();
+	"api_req_kousyou/destroyship":function(params, response, headers){
+		var ship_id = app.Util.findParam(params, "api%5Fship%5Fid");
+		app.Ships.remove(ship_id);
+		app.Dashboard.Info.materials();
 		app.Dashboard.Fleet.update();
 	},
 	
-	/* [api_req_kousyou/getship] Finish construction
+	/* Scrap a Gear
 	-------------------------------------------------------*/
-	"api_req_kousyou/getship":function(params, response, headers){
-		app.Player._build = response.api_data.api_kdock;
-		var ctr;
-		var totalBuildDocks = 0;
-		for(ctr in response.api_data.api_kdock){
-			if( response.api_data.api_kdock[ctr].api_state > -1 ){
-				totalBuildDocks++;
-			}
-		}
-		app.Player._buildCount = totalBuildDocks;
-		app.Player.setShipsSafe([response.api_data.api_ship]);
-		app.Player.setGearsSafe(response.api_data.api_slotitem);
-		app.Dashboard.Timers.update();
-	},
-	
-	/* [dummyAPI] dummyAPI
-	-------------------------------------------------------*/
-	"dummyAPI":function(params, response, headers){
-		
+	"api_req_kousyou/destroyitem2":function(params, response, headers){
+		var gear_ids = app.Util.findParam(params, "api%5Fslotitem%5Fids");
+		app.Gears.remove(gear_ids.split("%2C"));
+		app.Dashboard.Info.materials();
 	}
+	
 };

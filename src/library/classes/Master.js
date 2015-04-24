@@ -70,8 +70,8 @@ KC3.prototype.Master = {
 	/* Save/Load Local Storage
 	-------------------------------------*/
 	loadLocal :function(){
-		if(typeof localStorage["master"] != "undefined"){
-			var tmpMaster = JSON.parse(localStorage["master"]);
+		if(typeof localStorage.master != "undefined"){
+			var tmpMaster = JSON.parse(localStorage.master);
 			this._ship = tmpMaster.ship;
 			this._slotitem = tmpMaster.slotitem;
 			this._stype = tmpMaster.stype;
@@ -82,7 +82,7 @@ KC3.prototype.Master = {
 	},
 	
 	saveLocal :function(){
-		localStorage["master"] = JSON.stringify({
+		localStorage.master = JSON.stringify({
 			ship		: this._ship,
 			slotitem	: this._slotitem,
 			stype		: this._stype,

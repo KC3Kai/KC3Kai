@@ -44,9 +44,11 @@ KC3.prototype.Listener  = {
 		// Chcek if statusCode is not 200, means not successful
 		// API always returns 200 even if "game error". Not 200 means something is wrong in between.
 		if(request.response.status != 200){
-			app.Dashboard.CatBomb("Server Communication Error", "One of the API calls ("+APIFunction+") failed to communicate with the server. It is not a matter of API link, but somewhat on your connectivity or environment.");
+			app.Dashboard.catBomb("Server Communication Error", "One of the API calls ("+APIFunction+") failed to communicate with the server. It is not a matter of API link, but somewhat on your connectivity or environment.");
 			return false;
 		}
+		
+		app.Server.lastUrl = request.request.url;
 		
 		// Get and Handle the Response Body
 		request.getContent(function(requestContent){
@@ -60,12 +62,6 @@ KC3.prototype.Listener  = {
 				responseObject,
 				request.response.headers
 			)){ return false; }
-			
-			// Set server via URL
-			app.Server.init( request.request.url );
-			
-			responseObject.AAA = APIFunction;
-			console.log(responseObject);
 			
 			// Check if API Function is supported
 			if(typeof app.Reactor[APIFunction] == "undefined"){ return false; }
@@ -87,7 +83,7 @@ KC3.prototype.Listener  = {
 			
 			// If it fails on "api_start2" which is the first API call
 			if(api_call == "api_start2"){
-				app.Dashboard.CatBomb("API Error", "Loading master data failed. Your API link is not working. Get a new API Link from the KC3 Kai menu.");
+				app.Dashboard.catBomb("API Error", "Loading master data failed. Your API link is not working. Get a new API Link from the KC3 Kai menu.");
 				return false;
 			}
 			
@@ -100,17 +96,17 @@ KC3.prototype.Listener  = {
 				// If clock difference is greater than 5 minutes
 				var timeDiff = Math.abs(ComputerClock - ServerClock);
 				if(timeDiff > 300000){
-					app.Dashboard.CatBomb("Wrong Computer Clock!", "Please correct your computer clock. You do not need to be on Japan timezone, but it needs to be the correct local time for your local timezone! Your clock is off by "+Math.ceil(timeDiff/60000)+" minutes.");
+					app.Dashboard.catBomb("Wrong Computer Clock!", "Please correct your computer clock. You do not need to be on Japan timezone, but it needs to be the correct local time for your local timezone! Your clock is off by "+Math.ceil(timeDiff/60000)+" minutes.");
 					
 				// Something else other than clock is wrong
 				}else{
-					app.Dashboard.CatBomb("Error when entering Home Port screen", "Please reload the game.");
+					app.Dashboard.catBomb("Error when entering Home Port screen", "Please reload the game.");
 				}
 				return false;
 			}
 			
 			// Some other API Call failed
-			app.Dashboard.CatBomb("API Data Error", "The most recent action completed the network communication with server but returned an error. Check if it's now maintenance, or if your API link is still working.");
+			app.Dashboard.catBomb("API Data Error", "The most recent action completed the network communication with server but returned an error. Check if it's now maintenance, or if your API link is still working.");
 			
 			return false;
 		}
@@ -124,13 +120,13 @@ KC3.prototype.Listener  = {
 		
 		// Chcek if statusCode=206, means PartialContent
 		if(request.response.status == 206){
-			app.Dashboard.CatBomb("Stuck loading a Game Asset!", "Your internet has stopped loading one of the game assets. Refresh. If it still doesn't work, you have an internet connection problem.");
+			app.Dashboard.catBomb("Stuck loading a Game Asset!", "Your internet has stopped loading one of the game assets. Refresh. If it still doesn't work, you have an internet connection problem.");
 			return false;
 		}
 		
 		// Chcek if statusCode is neither 200 nor 304, means not successful
 		if(request.response.status != 200 && request.response.status != 304){
-			app.Dashboard.CatBomb("Unable to retrieve a Game Asset!", "Your internet failed to load one of the game assets. Refresh. If it still doesn't work, you have an internet connection problem.");
+			app.Dashboard.catBomb("Unable to retrieve a Game Asset!", "Your internet failed to load one of the game assets. Refresh. If it still doesn't work, you have an internet connection problem.");
 			return false;
 		}
 		

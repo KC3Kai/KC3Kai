@@ -247,13 +247,26 @@
 	/*background:#ccf;*/
 }
 
-/* Other buttons */
-.theme-horizontal .other {
+/* Quests */
+.theme-horizontal .box-quests {
 	width:210px;
 	height:26px;
 	margin:5px 0px 0px 0px;
 	overflow:hidden;
-	/*background:#cfc;*/
+}
+.theme-horizontal .box-quest {
+	width:26px;
+	height:26px;
+	margin:0px 0px 0px 3px;
+	float:left;
+}
+
+/* Other buttons */
+/*.theme-horizontal .other {
+	width:210px;
+	height:26px;
+	margin:5px 0px 0px 0px;
+	overflow:hidden;
 }
 .theme-horizontal .other .other-btn {
 	width:100px;
@@ -270,7 +283,7 @@
 }
 .theme-horizontal .other .btn-screenshot {
 	float:right;
-}
+}*/
 
 /* Specific Timer boxes */
 /*#exped-box-1 { background:#f00; }
@@ -304,7 +317,6 @@
 	height:30px;
 	line-height:30px;
 	margin:0px 0px 10px 0px;
-	/*background:#f00;*/
 	color:#000;
 	text-align:center;
 }

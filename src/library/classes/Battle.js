@@ -5,12 +5,12 @@ KC3.prototype.Battle  = {
 	
 	CompileFleetInfo :function(index){
 		var ReturnObj = [];
-		var thisFleet = app.Player._fleets[index];
+		var thisFleet = app.Docks._fleets[index];
 		console.log(thisFleet);
 		var ctr, thisShip;
 		for(ctr in thisFleet.api_ship){
 			if(thisFleet.api_ship[ctr] > -1){
-				thisShip = app.Player._ships[ thisFleet.api_ship[ctr] ];
+				thisShip = app.Ships.get( thisFleet.api_ship[ctr] );
 				console.log(thisShip);
 				ReturnObj.push({
 					mst_id: thisShip.api_ship_id,
@@ -33,8 +33,8 @@ KC3.prototype.Battle  = {
 	
 	CompileShipEquip :function(gear_id){
 		if(gear_id > -1){
-			if(typeof app.Player._gears[gear_id] != "undefined"){
-				return app.Player._gears[gear_id].api_slotitem_id;
+			if(app.Gears.get(gear_id)){
+				return app.Gears.get(gear_id).api_slotitem_id;
 			}else{
 				return 9999;
 			}

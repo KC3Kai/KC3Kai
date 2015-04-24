@@ -11,3 +11,11 @@ Date.prototype.ddmmhh = function() {
    var hh  = this.getHours().toString();
    return (dd[1]?dd:"0"+dd[0])+"/"+(mm[1]?mm:"0"+mm[0])+"("+hh+"h)";
 };
+
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};

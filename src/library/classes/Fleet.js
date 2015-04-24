@@ -36,7 +36,6 @@ KC3.prototype.Fleet = {
 	
 	includeEquip :function(ThisItem, MasterItem, Capacity){
 		this.equip_los += MasterItem.api_saku;
-		// console.log(MasterItem);
 		
 		// Add equip stats to effective los calculation
 		switch( app.Config.elos_mode ){
@@ -83,7 +82,6 @@ KC3.prototype.Fleet = {
 		},
 		
 		addItem :function( ThisType, ThisLoS, Capacity ){
-			// console.log("adding item with type: "+ThisType+" ("+ThisLoS+" los / "+Capacity+" capacity)");
 			// Check for Plane LOS
 			if( ThisType == 7 && Capacity > 0){
 				// console.log("planelos: "+ThisLoS);
@@ -98,7 +96,6 @@ KC3.prototype.Fleet = {
 		},
 		
 		total :function( TotalLos ){
-			// console.log("meth2: "+(this._plane*2)+" + "+this._radar+"+ Math.sqrt("+TotalLos+" - "+this._plane+" - "+this._radar+")");
 			return (this._plane*2) + this._radar + Math.sqrt( TotalLos -  this._plane - this._radar )
 		}
 	},
@@ -129,14 +126,14 @@ KC3.prototype.Fleet = {
 		
 		addItem :function( ThisType, ThisLoS, Capacity ){
 			switch(ThisType){
-				case  7: /*console.log("meth3: dive + "+ThisLoS);*/ this._dive += ThisLoS * (Capacity?1:0); break;
-				case  8: /*console.log("meth3: torp + "+ThisLoS);*/ this._torp += ThisLoS * (Capacity?1:0); break;
-				case  9: /*console.log("meth3: cbrp + "+ThisLoS);*/ this._cbrp += ThisLoS * (Capacity?1:0); break;
-				case 10: /*console.log("meth3: rspl + "+ThisLoS);*/ this._rspl += ThisLoS * (Capacity?1:0); break;
-				case 11: /*console.log("meth3: splb + "+ThisLoS);*/ this._splb += ThisLoS * (Capacity?1:0); break;
-				case 12: /*console.log("meth3: smrd + "+ThisLoS);*/ this._smrd += ThisLoS; break;
-				case 13: /*console.log("meth3: lgrd + "+ThisLoS);*/ this._lgrd += ThisLoS; break;
-				case 29: /*console.log("meth3: srch + "+ThisLoS);*/ this._srch += ThisLoS; break;
+				case  7: this._dive += ThisLoS * (Capacity?1:0); break;
+				case  8: this._torp += ThisLoS * (Capacity?1:0); break;
+				case  9: this._cbrp += ThisLoS * (Capacity?1:0); break;
+				case 10: this._rspl += ThisLoS * (Capacity?1:0); break;
+				case 11: this._splb += ThisLoS * (Capacity?1:0); break;
+				case 12: this._smrd += ThisLoS; break;
+				case 13: this._lgrd += ThisLoS; break;
+				case 29: this._srch += ThisLoS; break;
 				default: break;
 			}
 		},
@@ -152,16 +149,6 @@ KC3.prototype.Fleet = {
 				+ ( this._srch * 0.91 )
 				+ NakedLos * 1.69
 				+ ( (Math.floor((app.Player.level + 4) / 5) * 5) * -0.61 );
-			/*console.log("this._dive: "+this._dive);
-			console.log("this._torp: "+this._torp);
-			console.log("this._cbrp: "+this._cbrp);
-			console.log("this._rspl: "+this._rspl);
-			console.log("this._splb: "+this._splb);
-			console.log("this._smrd: "+this._smrd);
-			console.log("this._lgrd: "+this._lgrd);
-			console.log("this._srch: "+this._srch);
-			console.log("using naked los: "+NakedLos);
-			console.log("total: "+total);*/
 			return total;
 		}
 	}

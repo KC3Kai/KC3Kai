@@ -9,6 +9,9 @@ $(document).on("ready", function(){
 	app.Assets.init("../../data/");
 	app.Master.init();
 	app.Logging.init();
+	app.Player.init();
+	app.Resources.init();
+	app.Docks.init();
 	
 	// Attempt to activate game screen
 	app.Activator.activateGame();

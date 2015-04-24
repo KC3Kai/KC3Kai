@@ -9,7 +9,7 @@ KC3.prototype.Dashboard.Fleet = {
 		app.Fleet.clear();
 		
 		// Fleet Ships
-		var fleetShipIds = app.Player._fleets[this.selectedFleet-1].api_ship;
+		var fleetShipIds = app.Docks._fleets[this.selectedFleet-1].api_ship;
 		this.ship(0, fleetShipIds[0], animateID);
 		this.ship(1, fleetShipIds[1], animateID);
 		this.ship(2, fleetShipIds[2], animateID);
@@ -32,7 +32,8 @@ KC3.prototype.Dashboard.Fleet = {
 		var thisShip, masterShip, hpPercent, expPercent;
 		var thisElement = ".fleet-ship-"+(index+1);
 		if(ship_id > -1){
-			thisShip = app.Player._ships[ship_id];
+			if(app.Ships.get(ship_id)===false){ $(thisElement).hide(); return false; }
+			thisShip = app.Ships.get(ship_id);
 			masterShip = app.Master.ship(thisShip.api_ship_id);
 			
 			app.Fleet.level += thisShip.api_lv;
@@ -48,20 +49,20 @@ KC3.prototype.Dashboard.Fleet = {
 			$(thisElement).removeClass("repair-effect");
 			$(thisElement).removeClass("danger-effect");
 			
-			if( app.Player._repair_ids.indexOf(ship_id) > -1 ){
+			if( app.Docks._repair_ids.indexOf(ship_id) > -1 ){
 				$(thisElement).addClass("repair-effect");
 			}
 			
 			if(hpPercent <= 0.25){
 				$(thisElement+" .ship-img").css("background", "#FF0000");
 				$(thisElement+" .ship-hp-val").css("background", "#FF0000");
-				if( app.Player._repair_ids.indexOf(ship_id) == -1 ){
+				if( app.Docks._repair_ids.indexOf(ship_id) == -1 ){
 					$(thisElement).addClass("danger-effect");
 				}
-			}else if(hpPercent < 0.50){
+			}else if(hpPercent <= 0.50){
 				$(thisElement+" .ship-img").css("background", "#FF9900");
 				$(thisElement+" .ship-hp-val").css("background", "#FF9900");
-			}else if(hpPercent < 0.75){
+			}else if(hpPercent <= 0.75){
 				$(thisElement+" .ship-img").css("background", "#555");
 				$(thisElement+" .ship-hp-val").css("background", "#FFFF00");
 			}else{
@@ -109,20 +110,19 @@ KC3.prototype.Dashboard.Fleet = {
 	
 	equip :function(imgElement, gear_id, capacity){
 		if(gear_id > -1){
-			if(typeof app.Player._gears[gear_id] == "undefined"){
-				imgElement.hide();
+			imgElement.show();
+			if(app.Gears.get(gear_id) === false){
+				imgElement.attr("src", "../../assets/img/items/0.png");
 				app.Fleet.complete = false;
 				return false;
 			}
 			
-			thisItem = app.Player._gears[gear_id];
+			thisItem = app.Gears.get(gear_id);
 			masterItem = app.Master.slotitem(thisItem.api_slotitem_id);
 			
 			this.currentShipLos -= masterItem.api_saku;
 			app.Fleet.includeEquip(thisItem, masterItem, capacity);
-			
 			imgElement.attr("src", "../../assets/img/items/"+masterItem.api_type[3]+".png");
-			imgElement.show();
 		}else{
 			imgElement.hide();
 		}
