@@ -74,6 +74,16 @@ body {
 	margin:0px 0px 10px 0px;
 	/*background:#cfc;*/
 }
+.section_head {
+	height:30px;
+	line-height:30px;
+	font-size:18px;
+	margin:0px 0px 10px 0px;
+	border-bottom:1px solid #ddd;
+}
+.section_body {
+	margin:0px 0px 20px 0px;
+}
 .factory {
 	display:none;
 }

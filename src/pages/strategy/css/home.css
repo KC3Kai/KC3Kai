@@ -1,17 +1,6 @@
 .page_home {
 	width:680px;
 }
-.page_home .section_head {
-	height:30px;
-	line-height:30px;
-	font-size:18px;
-	font-weight:bold;
-	margin:0px 0px 10px 0px;
-	border-bottom:1px solid #ccc;
-}
-.page_home .section_body {
-	margin:0px 0px 20px 0px;
-}
 
 /* ADMIRAL
 --------------------------------*/

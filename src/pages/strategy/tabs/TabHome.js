@@ -39,7 +39,6 @@ var TabHome = {
 	},
 	
 	showFeedItem :function( index, data ){
-		console.log(data);
 		switch(data.api_type){
 			case "1":
 				$(".page_home .feed_item_"+(index+1)+" .colorbox").css("background", "#ffcc00");

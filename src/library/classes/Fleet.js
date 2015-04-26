@@ -22,10 +22,13 @@ KC3.prototype.Fleet = {
 		this.method3.clear();
 	},
 	
-	getEffectiveLoS :function(){
+	getEffectiveLoS :function(forced){
+		var elos_mode = app.Config.elos_mode;
+		if(typeof forced != "undefined"){ elos_mode = forced; }
+		
 		// Return effective los based on preferred formula
 		var ReturnVal;
-		switch( app.Config.elos_mode ){
+		switch( elos_mode ){
 			case 1: ReturnVal = this.total_los; break;
 			case 2: ReturnVal = this.method2.total( this.total_los ); break;
 			case 3: ReturnVal = this.method3.total( this.naked_los ); break;
@@ -34,11 +37,14 @@ KC3.prototype.Fleet = {
 		return Math.round(ReturnVal * 100) / 100;
 	},
 	
-	includeEquip :function(ThisItem, MasterItem, Capacity){
+	includeEquip :function(ThisItem, MasterItem, Capacity, forced){
+		var elos_mode = app.Config.elos_mode;
+		if(typeof forced != "undefined"){ elos_mode = forced; }
+		
 		this.equip_los += MasterItem.api_saku;
 		
 		// Add equip stats to effective los calculation
-		switch( app.Config.elos_mode ){
+		switch( elos_mode ){
 			case 2:
 				this.method2.addItem(
 					MasterItem.api_type[1],
@@ -51,7 +57,21 @@ KC3.prototype.Fleet = {
 					MasterItem.api_saku,
 					Capacity
 				); break;
-			default: break;
+			case "all":
+				// console.log("adding all");
+				this.method2.addItem(
+					MasterItem.api_type[1],
+					MasterItem.api_saku,
+					Capacity
+				);
+				this.method3.addItem(
+					MasterItem.api_type[2],
+					MasterItem.api_saku,
+					Capacity
+				);
+				break;
+			default:
+				break;
 		}
 		
 		// Calculate Fighter Power
@@ -139,6 +159,8 @@ KC3.prototype.Fleet = {
 		},
 		
 		total :function( NakedLos ){
+			// console.log("NakedLos: "+NakedLos);
+			// console.log("app.Player.level: "+app.Player.level);
 			var total = ( this._dive * 1.04 )
 				+ ( this._torp * 1.37 )
 				+ ( this._cbrp * 1.66 )
