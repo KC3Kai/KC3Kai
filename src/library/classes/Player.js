@@ -97,7 +97,12 @@ KC3.prototype.Player  = {
 	-------------------------------------------------------*/
 	load :function(){
 		if(typeof localStorage.player != "undefined"){
-			this.login(JSON.parse(localStorage.player));
+			var player = JSON.parse(localStorage.player);
+			this.login(player);
+			this.desc = player.desc;
+			this.rank = player.rank;
+			this.server = player.server;
+			this.level = player.level;
 			return true;
 		}else{
 			return false;

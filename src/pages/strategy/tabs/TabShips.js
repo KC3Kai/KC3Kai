@@ -17,10 +17,12 @@ var TabShips = {
 		if(this.active) return false; this.active = true;
 		
 		var tempItems, ctr, ThisShip, MasterShip;
+		app.Ships.load();
+		app.Gears.load();
 		
 		// Compile ships on Index
-		for(ctr in app.Player._ships){
-			ThisShip = app.Player._ships[ctr];
+		for(ctr in app.Ships.list){
+			ThisShip = app.Ships.list[ctr];
 			MasterShip = app.Master.ship(ThisShip.api_ship_id);
 			
 			this._ships.push({
@@ -53,8 +55,8 @@ var TabShips = {
 		var cEquip, cSlotitem;
 		for(cEquip in Items){
 			if(Items[cEquip] > -1){
-				if(typeof app.Player._gears[Items[cEquip]] != "undefined"){
-					cSlotitem = app.Master.slotitem( app.Player._gears[Items[cEquip]].api_slotitem_id );
+				if(app.Gears.get(Items[cEquip])){
+					cSlotitem = app.Master.slotitem( app.Gears.get(Items[cEquip]).api_slotitem_id );
 					EquippedValue -= cSlotitem["api_"+StatName];
 				}
 			}
@@ -123,78 +125,88 @@ var TabShips = {
 	},
 	
 	listTable :function(){
-		var shipCtr, cElm, cShip;
 		var self = this;
-		var FilteredShips = [];
 		
 		// Clear list
 		$(".page_ships .ship_list").html("");
+		$(".page_ships .ship_list").hide();
 		
-		// Filtering
-		for(shipCtr in this._ships){
-			if(typeof this.filters[ this._ships[shipCtr].stype ] != "undefined"){
-				if(this.filters[ this._ships[shipCtr].stype ]){
-					FilteredShips.push(this._ships[shipCtr]);
+		// Wait until execute
+		setTimeout(function(){
+			var shipCtr, cElm, cShip;
+			var FilteredShips = [];
+			
+			// Filtering
+			for(shipCtr in self._ships){
+				if(typeof self.filters[ self._ships[shipCtr].stype ] != "undefined"){
+					if(self.filters[ self._ships[shipCtr].stype ]){
+						FilteredShips.push(self._ships[shipCtr]);
+					}
 				}
 			}
-		}
-		
-		// Sorting
-		FilteredShips.sort(function(a,b){
-			var returnVal = 0;
-			switch(self.sortBy){
-				case "id": returnVal = a.api_id  - b.api_id; break;
-				case "name":
-					if(a.english < b.english) returnVal = -1;
-					if(a.english > b.english) returnVal = 1;
-					break;
-				case "type": returnVal = a.stype  - b.stype; break;
-				case "lv": returnVal = b.level  - a.level; break;
-				case "hp": returnVal = b.hp  - a.hp; break;
-				case "fp": returnVal = b.fp[self.equipMode+1] - a.fp[self.equipMode+1]; break;
-				case "tp": returnVal = b.tp[self.equipMode+1] - a.tp[self.equipMode+1]; break;
-				case "aa": returnVal = b.aa[self.equipMode+1] - a.aa[self.equipMode+1]; break;
-				case "ar": returnVal = b.ar[self.equipMode+1] - a.ar[self.equipMode+1]; break;
-				case "as": returnVal = b.as[self.equipMode] - a.as[self.equipMode]; break;
-				case "ev": returnVal = b.ev[self.equipMode] - a.ev[self.equipMode]; break;
-				case "ls": returnVal = b.ls[self.equipMode] - a.ls[self.equipMode]; break;
-				case "lk": returnVal = b.lk  - a.lk; break;
-				default: returnVal = 0; break;
+			
+			// Sorting
+			FilteredShips.sort(function(a,b){
+				var returnVal = 0;
+				switch(self.sortBy){
+					case "id":
+						if((a.id-b.id) > 0){ returnVal = 1; }
+						else if((a.id-b.id) < 0){ returnVal = -1; }
+						break;
+					case "name":
+						if(a.english < b.english) returnVal = -1;
+						else if(a.english > b.english) returnVal = 1;
+						break;
+					case "type": returnVal = a.stype  - b.stype; break;
+					case "lv": returnVal = b.level  - a.level; break;
+					case "hp": returnVal = b.hp  - a.hp; break;
+					case "fp": returnVal = b.fp[self.equipMode+1] - a.fp[self.equipMode+1]; break;
+					case "tp": returnVal = b.tp[self.equipMode+1] - a.tp[self.equipMode+1]; break;
+					case "aa": returnVal = b.aa[self.equipMode+1] - a.aa[self.equipMode+1]; break;
+					case "ar": returnVal = b.ar[self.equipMode+1] - a.ar[self.equipMode+1]; break;
+					case "as": returnVal = b.as[self.equipMode] - a.as[self.equipMode]; break;
+					case "ev": returnVal = b.ev[self.equipMode] - a.ev[self.equipMode]; break;
+					case "ls": returnVal = b.ls[self.equipMode] - a.ls[self.equipMode]; break;
+					case "lk": returnVal = b.lk  - a.lk; break;
+					default: returnVal = 0; break;
+				}
+				if(!self.sortAsc){ returnVal =- returnVal; }
+				return returnVal;
+			});
+			
+			// Fill up list
+			for(shipCtr in FilteredShips){
+				cShip = FilteredShips[shipCtr];
+				cElm = $(".page_ships .factory .ship_item").clone().appendTo(".page_ships .ship_list");
+				if(shipCtr%2 === 0){ cElm.addClass("even"); }else{ cElm.addClass("odd"); }
+				
+				$(".ship_id", cElm).text( cShip.id );
+				$(".ship_img img", cElm).attr("src", app.Assets.shipIcon(cShip.bid));
+				$(".ship_name", cElm).text( cShip.english );
+				$(".ship_type", cElm).text( app.Meta.stype(cShip.stype) );
+				$(".ship_lv", cElm).html( "<span>Lv.</span>" + cShip.level );
+				$(".ship_hp", cElm).text( cShip.hp );
+				$(".ship_lk", cElm).text( cShip.lk );
+				
+				self.modernizableStat("fp", cElm, cShip.fp);
+				self.modernizableStat("tp", cElm, cShip.tp);
+				self.modernizableStat("aa", cElm, cShip.aa);
+				self.modernizableStat("ar", cElm, cShip.ar);
+				
+				$(".ship_as", cElm).text( cShip.as[self.equipMode] );
+				$(".ship_ev", cElm).text( cShip.ev[self.equipMode] );
+				$(".ship_ls", cElm).text( cShip.ls[self.equipMode] );
+				
+				self.equipImg(cElm, 1, cShip.equip[0]);
+				self.equipImg(cElm, 2, cShip.equip[1]);
+				self.equipImg(cElm, 3, cShip.equip[2]);
+				self.equipImg(cElm, 4, cShip.equip[3]);
+				
+				if(FilteredShips[shipCtr].locked){ $(".ship_lock img", cElm).show(); }
 			}
-			if(!self.sortAsc){ returnVal =- returnVal; }
-			return returnVal;
-		});
-		
-		// Fill up list
-		for(shipCtr in FilteredShips){
-			cShip = FilteredShips[shipCtr];
-			cElm = $(".page_ships .factory .ship_item").clone().appendTo(".page_ships .ship_list");
-			if(shipCtr%2 === 0){ cElm.addClass("even"); }else{ cElm.addClass("odd"); }
 			
-			$(".ship_id", cElm).text( cShip.id );
-			$(".ship_img img", cElm).attr("src", app.Assets.shipIcon(cShip.bid));
-			$(".ship_name", cElm).text( cShip.english );
-			$(".ship_type", cElm).text( app.Meta.stype(cShip.stype) );
-			$(".ship_lv", cElm).html( "<span>Lv.</span>" + cShip.level );
-			$(".ship_hp", cElm).text( cShip.hp );
-			$(".ship_lk", cElm).text( cShip.lk );
-			
-			this.modernizableStat("fp", cElm, cShip.fp);
-			this.modernizableStat("tp", cElm, cShip.tp);
-			this.modernizableStat("aa", cElm, cShip.aa);
-			this.modernizableStat("ar", cElm, cShip.ar);
-			
-			$(".ship_as", cElm).text( cShip.as[this.equipMode] );
-			$(".ship_ev", cElm).text( cShip.ev[this.equipMode] );
-			$(".ship_ls", cElm).text( cShip.ls[this.equipMode] );
-			
-			this.equipImg(cElm, 1, cShip.equip[0]);
-			this.equipImg(cElm, 2, cShip.equip[1]);
-			this.equipImg(cElm, 3, cShip.equip[2]);
-			this.equipImg(cElm, 4, cShip.equip[3]);
-			
-			if(FilteredShips[shipCtr].locked){ $(".ship_lock img", cElm).show(); }
-		}
+			$(".page_ships .ship_list").show();
+		},100);
 	},
 	
 	modernizableStat :function(stat, cElm, Values){
@@ -208,11 +220,11 @@ var TabShips = {
 	
 	equipImg :function(cElm, equipNum, gear_id){
 		if(gear_id > -1){
-			if(typeof app.Player._gears[gear_id] == "undefined"){
+			if(!app.Gears.get(gear_id)){
 				$(".ship_equip_"+equipNum, cElm).hide();
 				return false;
 			}
-			var MasterGear = app.Master.slotitem(app.Player._gears[gear_id].api_slotitem_id);
+			var MasterGear = app.Master.slotitem(app.Gears.get(gear_id).api_slotitem_id);
 			$(".ship_equip_"+equipNum+" img", cElm).attr("src", "../../assets/img/items/"+MasterGear.api_type[3]+".png");
 		}else{
 			$(".ship_equip_"+equipNum, cElm).hide();

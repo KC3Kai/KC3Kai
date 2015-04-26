@@ -3,12 +3,15 @@ var app = new KC3();
 
 // Collection of PageTab Wrapper Classes
 var PageTabs = {
+	"home": TabHome,
+	
 	"fleets": TabFleets,
 	"quests": TabDummy,
 	"expeds": TabDummy,
 	
 	"ships": TabShips,
 	"items": TabItems,
+	"showcase": TabDummy,
 	
 	"sortie": TabDummy,
 	"events": TabDummy,
@@ -37,7 +40,9 @@ $(document).on("ready", function(){
 	app.Assets.init("../../data/");
 	app.Master.init();
 	app.Logging.init();
-	app.Player.loadLocal();
+	app.Player.init();
+	app.Resources.init();
+	app.Docks.init();
 	
 	// Navigation Link onClicks
 	$(".nav.nav-link").on("click", function(){

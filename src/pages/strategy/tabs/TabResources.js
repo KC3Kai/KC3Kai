@@ -22,17 +22,13 @@ var TabResources = {
 	--------------------------------------------*/
 	show :function(){
 		var self = this;
+		
 		// Get latest resource records
-		database.transaction("rw", database.resource, function(){
-			database.resource
-				.orderBy("id")
-				.reverse()
-				.limit(14)
-				.toArray(function(ResourceRecords){
-					self.ctx = $("#myChart").get(0).getContext("2d");
-					self.chart = self.draw(ResourceRecords);
-				});
-		}).catch(function(error){ console.error(error); });
+		app.Logging.get_resource(function(ResourceRecords){
+			self.ctx = $("#myChart").get(0).getContext("2d");
+			self.chart = self.draw(ResourceRecords);
+		});
+		
 	},
 	
 	/* Draw the graph

@@ -14,7 +14,7 @@ KC3.prototype.Gears  = {
 	},
 	
 	clear :function(){
-		this.list = [];
+		this.list = {};
 		this.save();
 	},
 	
@@ -29,10 +29,7 @@ KC3.prototype.Gears  = {
 	},
 	
 	remove :function(ids, save){
-		console.log("scrapping gears");
-		console.log(ids);
 		if(typeof ids != "array"){ ids = [ids]; }
-		console.log(ids);
 		var ctr;
 		for(ctr in ids){
 			console.log("scrapping gear: "+ids[ctr]);

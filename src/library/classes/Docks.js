@@ -12,6 +12,7 @@ KC3.prototype.Docks  = {
 	
 	setFleets :function(data){
 		this._fleets = data;
+		localStorage.player_fleets = JSON.stringify(this._fleets);
 	},
 	
 	setRepair :function(data){

@@ -14,7 +14,7 @@ KC3.prototype.Ships  = {
 	},
 	
 	clear :function(){
-		this.list = [];
+		this.list = {};
 		this.save();
 	},
 	

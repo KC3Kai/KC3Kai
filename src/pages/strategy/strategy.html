@@ -5,6 +5,8 @@
 		<link href="../../assets/css/bootstrap.css" rel="stylesheet" type="text/css">
 		<link href="../../assets/css/global.css" rel="stylesheet" type="text/css">
 		<link href="strategy.css" rel="stylesheet" type="text/css">
+		<link href="css/home.css" rel="stylesheet" type="text/css">
+		<link href="css/ships.css" rel="stylesheet" type="text/css">
 		<title>KC3改 Strategy Room</title>
 		<link rel="shortcut icon" href="../../assets/img/logo/48.png" type="image/x-icon" />
 	</head>
@@ -16,33 +18,32 @@
 					<img src="../../assets/img/logo/128.png" />
 				</div>
 				
+				<div class="nav nav-link hover active" data-id="home">Home</div>
+				
 				<div class="nav nav-heading">Operations</div>
-				<div class="nav nav-link hover active" data-id="fleets">Fleets</div>
-				<div class="nav nav-link hover disabled" data-id="quests">Quests</div>
-				<div class="nav nav-link hover disabled" data-id="expeds">Expedition</div>
+				<div class="nav nav-link hover" data-id="fleets">Fleets</div>
+				<!-- <div class="nav nav-link hover" data-id="compos">Compositions</div> -->
+				<div class="nav nav-link hover" data-id="quests">Quests</div>
+				<!-- <div class="nav nav-link hover" data-id="expeds">Expedition</div> -->
 				
 				<div class="nav nav-heading">Library</div>
 				<div class="nav nav-link hover" data-id="ships">Ships</div>
 				<div class="nav nav-link hover" data-id="items">Equipment</div>
+				<!-- <div class="nav nav-link hover" data-id="showcase">Showcase</div> -->
 				
-				<div class="nav nav-heading">Sortie</div>
-				<div class="nav nav-link hover disabled" data-id="sortie">Normal</div>
-				<div class="nav nav-link hover disabled" data-id="events">Events</div>
+				<div class="nav nav-heading">Battles</div>
+				<div class="nav nav-link hover" data-id="sortie">Regular Maps</div>
+				<div class="nav nav-link hover" data-id="events">Spring 2015</div>
 				
 				<div class="nav nav-heading">History</div>
-				<div class="nav nav-link hover disabled" data-id="crafts">Crafting</div>
-				<div class="nav nav-link hover disabled" data-id="lscs">LSC</div>
-				<div class="nav nav-link hover disabled" data-id="drops">Map Drop</div>
+				<div class="nav nav-link hover" data-id="crafts">Crafting</div>
+				<div class="nav nav-link hover" data-id="lscs">LSC</div>
+				<!-- <div class="nav nav-link hover" data-id="drops">Map Drop</div> -->
 				<div class="nav nav-link hover" data-id="rscs">Resources</div>
 				
 				<div class="nav nav-heading">Tools</div>
 				<div class="nav nav-link hover disabled" data-id="expcalc">EXP Calc</div>
-				<div class="nav nav-link hover disabled" data-id="airsup">Air Superiority</div>
-				
-				<div class="nav nav-heading">KC3改</div>
-				<div class="nav nav-link hover disabled" data-id="settings">Settings</div>
-				<div class="nav nav-link hover disabled" data-id="faq">FAQ</div>
-				<div class="nav nav-link hover disabled" data-id="about">About</div>
+				<div class="nav nav-link hover disabled" data-id="expcalc">KC3改 Mods</div>
 			</div>
 			
 			<!-- CONTENT -->
@@ -56,13 +57,22 @@
 		<script type="text/javascript" src="../../assets/js/Dexie.min.js"></script>
 		<script type="text/javascript" src="../../assets/js/global.js"></script>
 		<script type="text/javascript" src="../../library/KC3.js"></script>
-		<script type="text/javascript" src="../../library/classes/Config.js"></script>
-		<script type="text/javascript" src="../../library/classes/Meta.js"></script>
 		<script type="text/javascript" src="../../library/classes/Assets.js"></script>
-		<script type="text/javascript" src="../../library/classes/Master.js"></script>
+		<script type="text/javascript" src="../../library/classes/Battle.js"></script>
+		<script type="text/javascript" src="../../library/classes/Config.js"></script>
+		<script type="text/javascript" src="../../library/classes/Docks.js"></script>
+		<script type="text/javascript" src="../../library/classes/Fleet.js"></script>
+		<script type="text/javascript" src="../../library/classes/Gears.js"></script>
 		<script type="text/javascript" src="../../library/classes/Logging.js"></script>
+		<script type="text/javascript" src="../../library/classes/Master.js"></script>
+		<script type="text/javascript" src="../../library/classes/Meta.js"></script>
 		<script type="text/javascript" src="../../library/classes/Player.js"></script>
+		<script type="text/javascript" src="../../library/classes/Resources.js"></script>
+		<script type="text/javascript" src="../../library/classes/Server.js"></script>
+		<script type="text/javascript" src="../../library/classes/Ships.js"></script>
+		<script type="text/javascript" src="../../library/classes/Util.js"></script>
 		<script type="text/javascript" src="tabs/TabDummy.js"></script>
+		<script type="text/javascript" src="tabs/TabHome.js"></script>
 		<script type="text/javascript" src="tabs/TabFleets.js"></script>
 		<script type="text/javascript" src="tabs/TabItems.js"></script>
 		<script type="text/javascript" src="tabs/TabResources.js"></script>

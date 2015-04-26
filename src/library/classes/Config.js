@@ -39,11 +39,11 @@ KC3.prototype.Config  = {
 	},
 	
 	loadField :function(data, fieldname){
-		console.log(fieldname+" on localStorage = "+data[fieldname]);
+		// console.log(fieldname+" on localStorage = "+data[fieldname]);
 		if(typeof data[fieldname] != "undefined"){
 			this[fieldname] = data[fieldname];
 		}else{
-			console.log(fieldname+" not in local. using default value: "+this[fieldname]);
+			// console.log(fieldname+" not in local. using default value: "+this[fieldname]);
 		}
 	},
 	

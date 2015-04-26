@@ -11,6 +11,13 @@ KC3.prototype.Server = {
 		this.getInfo();
 	},
 	
+	/* Manual Init via Server number
+	-------------------------------------------------------*/
+	setViaNumber :function(num){
+		this.num = num;
+		this.getInfo();
+	},
+	
 	/* Extract IP address from a defined URL
 	-------------------------------------------------------*/
 	extractIP :function(url){
