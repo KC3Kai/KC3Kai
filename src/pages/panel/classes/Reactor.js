@@ -35,19 +35,21 @@ KC3.prototype.Reactor  = {
 		
 		app.Resources.setFcoin(response.api_data.api_basic.api_fcoin);
 		
+		var UTCtime = app.Util.getUTC(headers);
+		
 		app.Resources.set([
 			response.api_data.api_material[0].api_value,
 			response.api_data.api_material[1].api_value,
 			response.api_data.api_material[2].api_value,
 			response.api_data.api_material[3].api_value
-		]);
+		], UTCtime);
 		
 		app.Resources.useitem({
 			torch: response.api_data.api_material[4].api_value,
 			buckets: response.api_data.api_material[5].api_value,
 			devmats: response.api_data.api_material[6].api_value,
 			screws: response.api_data.api_material[7].api_value
-		});
+		}, UTCtime);
 		
 		app.Player.statistics({
 			exped: {
@@ -194,7 +196,7 @@ KC3.prototype.Reactor  = {
 		this.shipConstruction = {
 			active: true,
 			dock_num: app.Util.findParam(params, "api%5Fkdock%5Fid"),
-			flagship: app.Docks._fleets[0].api_ship[0],
+			flagship: app.Ships.get( app.Docks._fleets[0].api_ship[0] ).api_ship_id,
 			lsc: app.Util.findParam(params, "api%5Flarge%5Fflag"),
 			torched: app.Util.findParam(params, "api_highspeed"),
 			resources: [
@@ -223,7 +225,7 @@ KC3.prototype.Reactor  = {
 					rsc4: this.shipConstruction.resources[3],
 					devmat: this.shipConstruction.resources[4],
 					result: response.api_data[this.shipConstruction.dock_num-1].api_created_ship_id,
-					time: new Date(app.Util.findParam(headers, "Date")).getTime()
+					time: app.Util.getUTC(headers)
 				});
 			}else{
 				app.Logging.Build({
@@ -233,7 +235,7 @@ KC3.prototype.Reactor  = {
 					rsc3: this.shipConstruction.resources[2],
 					rsc4: this.shipConstruction.resources[3],
 					result: response.api_data[this.shipConstruction.dock_num-1].api_created_ship_id,
-					time: new Date(app.Util.findParam(headers, "Date")).getTime()
+					time: app.Util.getUTC(headers)
 				});
 			}
 			this.shipConstruction = { active: false };
@@ -336,7 +338,7 @@ KC3.prototype.Reactor  = {
 			response.api_data.api_maparea_id,
 			response.api_data.api_mapinfo_no,
 			app.Util.findParam(params, "api%5Fdeck%5Fid"),
-			new Date(app.Util.findParam(headers, "Date")).getTime()
+			app.Util.getUTC(headers)
 		);
 		app.Battle.onNode = response.api_data.api_no;
 	},
@@ -352,7 +354,7 @@ KC3.prototype.Reactor  = {
 	"api_req_sortie/battle":function(params, response, headers){
 		app.Battle.Engage(
 			response.api_data,
-			new Date(app.Util.findParam(headers, "Date")).getTime()
+			app.Util.getUTC(headers)
 		);
 	},
 	

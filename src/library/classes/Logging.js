@@ -9,14 +9,14 @@ KC3.prototype.Logging  = {
 	--------------------------------------------*/
 	init: function(){
 		this.database = new Dexie("KC3");
-		this.database.version(3).stores({
+		this.database.version(1).stores({
 			account: "++id,&hq,server,mid,name",
 			build: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time",
 			lsc: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,devmat,result,time",
-			sortie: "++id,hq,world,mapnum,fleetnum,combined,fleet1,fleet2",
+			sortie: "++id,hq,world,mapnum,fleetnum,combined,fleet1,fleet2,time",
 			battle: "++id,hq,sortie_id,node,data,yasen,rating,drop,time",
-			resource: "++id,hq,rsc1,rsc2,rsc3,rsc4,time",
-			useitem: "++id,hq,torch,screw,bucket,devmat,time",
+			resource: "++id,hq,rsc1,rsc2,rsc3,rsc4,hour",
+			useitem: "++id,hq,torch,screw,bucket,devmat,hour",
 		});
 		this.database.open();
 	},
@@ -68,24 +68,21 @@ KC3.prototype.Logging  = {
 		this.database.battle.add(data);
 	},
 	
-	Resource :function(data){
+	Resource :function(data, stime){
+		var ResourceHour = Math.floor(stime/3600);
+		
 		if(this.lastResource == 0){
-			if(typeof localStorage["lastResource"] != "undefined"){
-				this.lastResource = localStorage["lastResource"];
+			if(typeof localStorage.lastResource != "undefined"){
+				this.lastResource = localStorage.lastResource;
 			}
 		}
 		
-		var TimeNow = parseInt(new Date().getTime(), 10);
-		
-		if(this.lastResource > 0){
-			var MinDiff = parseInt(app.Config.rsc_interval, 10) * 1000;
-			if( (TimeNow - MinDiff) < this.lastResource ){
-				return false;
-			}
+		if(this.lastResource == ResourceHour){
+			return false;
 		}
 		
-		this.lastResource = TimeNow;
-		localStorage["lastResource"] = TimeNow;
+		this.lastResource = ResourceHour;
+		localStorage.lastResource = ResourceHour;
 		
 		this.database.resource.add({
 			hq : this.index,
@@ -93,28 +90,25 @@ KC3.prototype.Logging  = {
 			rsc2 : data[1],
 			rsc3 : data[2],
 			rsc4 : data[3],
-			time : TimeNow
+			hour : ResourceHour
 		});
 	},
 	
-	Useitem :function(data){
+	Useitem :function(data, stime){
+		var ResourceHour = Math.floor(stime/3600);
+		
 		if(this.lastUseitem == 0){
-			if(typeof localStorage["lastUseitem"] != "undefined"){
-				this.lastUseitem = localStorage["lastUseitem"];
+			if(typeof localStorage.lastUseitem != "undefined"){
+				this.lastUseitem = localStorage.lastUseitem;
 			}
 		}
 		
-		var TimeNow = parseInt(new Date().getTime(), 10);
-		
-		if(this.lastUseitem > 0){
-			var MinDiff = parseInt(app.Config.rsc_interval, 10) * 1000;
-			if( (TimeNow - MinDiff) < this.lastUseitem ){
-				return false;
-			}
+		if(this.lastUseitem == ResourceHour){
+			return false;
 		}
 		
-		this.lastUseitem = TimeNow;
-		localStorage["lastUseitem"] = TimeNow;
+		this.lastUseitem = ResourceHour;
+		localStorage.lastUseitem = ResourceHour;
 		
 		this.database.useitem.add({
 			hq : this.index,
@@ -122,14 +116,40 @@ KC3.prototype.Logging  = {
 			screw : data.screws,
 			bucket : data.buckets,
 			devmat : data.devmats,
-			time : TimeNow
+			hour : ResourceHour
 		});
 	},
 	
 	/* [GET] Retrive logs from Local DB
 	--------------------------------------------*/
-	get_build :function(){
-		
+	get_build :function(pageNumber, callback){
+		var itemsPerPage = 25;
+		this.database.build
+			.where("hq").equals(this.index)
+			.reverse()
+			.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
+			.toArray(callback);
+	},
+	
+	count_build: function(callback){
+		this.database.build
+			.where("hq").equals(this.index)
+			.count(callback);
+	},
+	
+	get_lscs :function(pageNumber, callback){
+		var itemsPerPage = 25;
+		this.database.lsc
+			.where("hq").equals(this.index)
+			.reverse()
+			.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
+			.toArray(callback);
+	},
+	
+	count_lscs: function(callback){
+		this.database.lsc
+			.where("hq").equals(this.index)
+			.count(callback);
 	},
 	
 	get_lsc :function(){
@@ -148,15 +168,21 @@ KC3.prototype.Logging  = {
 		
 	},
 	
-	get_resource :function(callback){
-		var self  = this;
-		
-		this.database.transaction("rw", this.database.resource, function(){
-			console.log(self.index);
-			self.database.resource
-				// .where("hq").equals(self.index)
-				.orderBy("id").reverse().limit(14)
-				.toArray(callback);
-		}).catch(function(error){ console.error(error); });
+	get_resource :function(HourNow, callback){
+		var self = this;
+		this.database.resource
+			.where("hour").above(HourNow-720)
+			.toArray(function(response){
+				var callbackResponse = [];
+				
+				var ctr;
+				for(ctr in response){
+					if(response[ctr].hq == self.index){
+						callbackResponse.push(response[ctr]);
+					}
+				}
+				
+				callback(callbackResponse);
+			});
 	}
 };

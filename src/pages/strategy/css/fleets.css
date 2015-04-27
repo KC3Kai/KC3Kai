@@ -171,10 +171,11 @@
 	height:17px;
 }
 .page_fleets .fleet_ship .gear_name {
-	width:90px;
+	width:85px;
 	height:17px;
 	/*background:#cfc;*/
 	float:left;
 	font-size:10px;
+	white-space: nowrap;
 	overflow:hidden;
 }

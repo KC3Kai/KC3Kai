@@ -7,26 +7,17 @@ var PageTabs = {
 	
 	"fleets": TabFleets,
 	"quests": TabDummy,
-	"expeds": TabDummy,
 	
 	"ships": TabShips,
 	"items": TabItems,
 	"showcase": TabDummy,
 	
 	"sortie": TabDummy,
-	"events": TabDummy,
+	"e_spring2015": TabEspring2015,
 	
-	"crafts": TabDummy,
-	"lscs": TabDummy,
-	"drops": TabDummy,
-	"rscs": TabResources,
-	
-	"expcalc": TabDummy,
-	"airsup": TabDummy,
-	
-	"settings": TabDummy,
-	"faq": TabDummy,
-	"about": TabDummy,
+	"crafts": TabCrafts,
+	"lscs": TabLscs,
+	"rscs": TabResources
 };
 
 // Tab currently being loaded
@@ -43,6 +34,14 @@ $(document).on("ready", function(){
 	app.Player.init();
 	app.Resources.init();
 	app.Docks.init();
+	
+	// Test if local player available
+	app.Player.load();
+	if(app.Player.id == 0){
+		$(".navs .nav").hide();
+		return false;
+	}
+	$(".noplayernotice").hide();
 	
 	// Navigation Link onClicks
 	$(".nav.nav-link").on("click", function(){

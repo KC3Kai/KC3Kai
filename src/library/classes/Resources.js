@@ -8,20 +8,20 @@ KC3.prototype.Resources  = {
 		this.screws = 0;
 	},
 	
-	set :function(data){
-		app.Logging.Resource(data);
+	set :function(data, stime){
+		app.Logging.Resource(data, stime);
 	},
 	
 	setFcoin :function(value){
 		this.fcoin = value;
 	},
 	
-	useitem :function(data){
+	useitem :function(data, stime){
 		this.torch = data.torch;
 		this.buckets = data.buckets;
 		this.devmats = data.devmats;
 		this.screws = data.screws;
-		app.Logging.Useitem(data);
+		app.Logging.Useitem(data, stime);
 	}
 	
 };

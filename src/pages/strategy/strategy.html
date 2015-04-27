@@ -8,6 +8,10 @@
 		<link href="css/home.css" rel="stylesheet" type="text/css">
 		<link href="css/ships.css" rel="stylesheet" type="text/css">
 		<link href="css/fleets.css" rel="stylesheet" type="text/css">
+		<link href="css/crafts.css" rel="stylesheet" type="text/css">
+		<link href="css/items.css" rel="stylesheet" type="text/css">
+		<link href="css/rscs.css" rel="stylesheet" type="text/css">
+		<link href="css/lscs.css" rel="stylesheet" type="text/css">
 		<title>KC3改 Strategy Room</title>
 		<link rel="shortcut icon" href="../../assets/img/logo/48.png" type="image/x-icon" />
 	</head>
@@ -24,12 +28,12 @@
 				<div class="nav nav-heading">Operations</div>
 				<div class="nav nav-link hover" data-id="fleets">Fleets</div>
 				<!-- <div class="nav nav-link hover" data-id="compos">Compositions</div> -->
-				<div class="nav nav-link hover" data-id="quests">Quests</div>
+				<div class="nav nav-link hover disabled" data-id="quests">Quests</div>
 				<!-- <div class="nav nav-link hover" data-id="expeds">Expedition</div> -->
 				
 				<div class="nav nav-heading">Library</div>
 				<div class="nav nav-link hover" data-id="ships">Ships</div>
-				<div class="nav nav-link hover" data-id="items">Equipment</div>
+				<div class="nav nav-link hover disabled" data-id="items">Equipment</div>
 				<!-- <div class="nav nav-link hover" data-id="showcase">Showcase</div> -->
 				
 				<div class="nav nav-heading">Battles</div>
@@ -37,7 +41,8 @@
 				<div class="nav nav-link hover" data-id="events">Spring 2015</div>
 				
 				<div class="nav nav-heading">History</div>
-				<div class="nav nav-link hover" data-id="crafts">Crafting</div>
+				<div class="nav nav-link hover disabled" data-id="devmt">Development</div>
+				<div class="nav nav-link hover" data-id="crafts">Construction</div>
 				<div class="nav nav-link hover" data-id="lscs">LSC</div>
 				<!-- <div class="nav nav-link hover" data-id="drops">Map Drop</div> -->
 				<div class="nav nav-link hover" data-id="rscs">Resources</div>
@@ -49,7 +54,7 @@
 			
 			<!-- CONTENT -->
 			<div class="tabs-content">
-				
+				<div class="noplayernotice">No admiral information available. Please play the game to utilize the Strategy Room.</div>
 			</div>
 			
 		</div>
@@ -72,12 +77,14 @@
 		<script type="text/javascript" src="../../library/classes/Server.js"></script>
 		<script type="text/javascript" src="../../library/classes/Ships.js"></script>
 		<script type="text/javascript" src="../../library/classes/Util.js"></script>
+		<script type="text/javascript" src="tabs/TabCrafts.js"></script>
 		<script type="text/javascript" src="tabs/TabDummy.js"></script>
-		<script type="text/javascript" src="tabs/TabHome.js"></script>
 		<script type="text/javascript" src="tabs/TabFleets.js"></script>
+		<script type="text/javascript" src="tabs/TabHome.js"></script>
 		<script type="text/javascript" src="tabs/TabItems.js"></script>
 		<script type="text/javascript" src="tabs/TabResources.js"></script>
 		<script type="text/javascript" src="tabs/TabShips.js"></script>
+		<script type="text/javascript" src="tabs/TabLscs.js"></script>
 		<script type="text/javascript" src="strategy.js"></script>
 	</body>
 </html>

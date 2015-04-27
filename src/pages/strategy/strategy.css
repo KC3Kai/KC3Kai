@@ -65,6 +65,14 @@ body {
 .tab-content {
 	display:none;
 }
+.noplayernotice {
+	width:600px;
+	padding:10px 0px;
+	background:#fcc;
+	border:1px solid #d88;
+	margin:20px auto;
+	text-align:center;
+}
 .page_title {
 	width:680px;
 	height:30px;

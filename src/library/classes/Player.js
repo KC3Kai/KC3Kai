@@ -44,6 +44,8 @@ KC3.prototype.Player  = {
 		localStorage.removeItem("player_gears");
 		localStorage.removeItem("player_statistics");
 		localStorage.removeItem("player_newsfeed");
+		localStorage.removeItem("lastResource");
+		localStorage.removeItem("lastUseitem");
 		
 		// Reset all player object properties to default
 		this.init();

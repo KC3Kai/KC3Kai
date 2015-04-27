@@ -1,0 +1,84 @@
+.page_lscs {
+	
+}
+.page_lscs .build_list {
+	width:680px;
+}
+
+/* LIST
+--------------------------------*/
+.page_lscs .build_item {
+	width:680px;
+	height:24px;
+	line-height:24px;
+	margin:0px 0px 2px 0px;
+	background:#eee;
+}
+.page_lscs .build_item .build_field {
+	float:left;
+	height:24px;
+	/*background:#ccf;*/
+}
+.page_lscs .build_item .build_id {
+	width:50px;
+	margin:0px 3px 0px 0px;
+	text-align:center;
+}
+.page_lscs .build_item .build_icon {
+	width:24px;
+	margin:0px 3px 0px 0px;
+}
+.page_lscs .build_item .build_icon img {
+	width:20px;
+	height:20px;
+	margin:2px;
+}
+.page_lscs .build_item .build_name {
+	width:100px;
+	overflow:hidden;
+	margin:0px 5px 0px 0px;
+}
+.page_lscs .build_item .build_rsc {
+	width:50px;
+	margin:0px 5px 0px 0px;
+	text-align:center;
+}
+.page_lscs .build_item .build_rsc1 {
+	background:#C1FFC1;
+}
+.page_lscs .build_item .build_rsc2 {
+	background:#DFD7B3;
+}
+.page_lscs .build_item .build_rsc3 {
+	background:#ccc;
+}
+.page_lscs .build_item .build_rsc4 {
+	background:#FFDCA8;
+}
+.page_lscs .build_item .build_time {
+	width:130px;
+	font-size:11px;
+}
+
+/* PAGINATION
+--------------------------------*/
+.page_lscs .build_pages {
+	width:680px;
+	margin:10px 0px 0px 0px;
+}
+.page_lscs .build_pages .build_page {
+	width:30px;
+	height:20px;
+	line-height:20px;
+	float:left;
+	text-align:center;
+	margin:0px 3px 5px 0px;
+	border:1px solid #ace;
+	background:#def;
+	font-size:12px;
+}
+.page_lscs .build_pages .build_page.active {
+	background:#555;
+	color:#fff;
+	border:1px solid #000;
+}

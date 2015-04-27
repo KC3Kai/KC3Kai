@@ -1,8 +1,3 @@
-/*
-TabItems.js
-By: dragonjet
-*/
-
 var TabItems = {
 	active: false,
 	_compile: [],

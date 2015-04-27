@@ -42,7 +42,7 @@ KC3.prototype.Dashboard  = {
 		
 		// Share compo button
 		$(".share-button").on('click', function(){
-			window.open("../strategy/strategy.html#share", "kc4_strategy");
+			window.open("../strategy/strategy.html#fleets", "kc4_strategy");
 		});
 		
 		// Strategy Room
