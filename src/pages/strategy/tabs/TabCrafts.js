@@ -28,8 +28,6 @@ var TabCrafts = {
 			
 			$(".page_crafts .build_pages .build_page").first().click();
 		});
-		
-		
 	},
 	
 	showPage :function(pageNumber){

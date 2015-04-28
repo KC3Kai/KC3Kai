@@ -6,18 +6,22 @@ var PageTabs = {
 	"home": TabHome,
 	
 	"fleets": TabFleets,
-	"quests": TabDummy,
+	// "quests": TabQuests,
 	
 	"ships": TabShips,
-	"items": TabItems,
-	"showcase": TabDummy,
+	// "items": TabItems,
+	// "showcase": TabShowcase,
 	
-	"sortie": TabDummy,
-	"e_spring2015": TabEspring2015,
+	"sortie": TabSortie,
+	"e_spring2015": TabE_spring2015,
 	
+	// "devmt": TabDevmt,
 	"crafts": TabCrafts,
 	"lscs": TabLscs,
 	"rscs": TabResources
+	
+	// "expcalc": TabExpcalc,
+	// "mods": TabMods,
 };
 
 // Tab currently being loaded

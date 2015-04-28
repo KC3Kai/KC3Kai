@@ -11,7 +11,6 @@ KC3.prototype.Battle  = {
 		for(ctr in thisFleet.api_ship){
 			if(thisFleet.api_ship[ctr] > -1){
 				thisShip = app.Ships.get( thisFleet.api_ship[ctr] );
-				console.log(thisShip);
 				ReturnObj.push({
 					mst_id: thisShip.api_ship_id,
 					level: thisShip.api_lv,

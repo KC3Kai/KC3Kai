@@ -160,8 +160,77 @@ KC3.prototype.Logging  = {
 		
 	},
 	
-	get_sortie :function(){
+	count_sortie: function(callback){
+		this.database.sortie
+			.where("hq").equals(this.index)
+			.and(function(sortie){ return sortie.world < 10; })
+			.count(callback);
+	},
+	
+	get_sortie :function(pageNumber, callback){
+		var itemsPerPage = 25;
+		var self = this;
+		var sortieIds = [], bctr, sortieIndexed = {};
 		
+		this.database.sortie
+			.where("hq").equals(this.index)
+			.and(function(sortie){ return sortie.world < 10; })
+			.reverse()
+			.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
+			.toArray(function(sortieList){
+				// Compile all sortieIDs and indexify
+				for(bctr in sortieList){
+					sortieIds.push(sortieList[bctr].id);
+					sortieIndexed["s"+sortieList[bctr].id] = sortieList[bctr];
+					sortieIndexed["s"+sortieList[bctr].id].battles = [];
+				}
+				
+				// Get all battles on those sorties
+				self.database.battle
+					.where("sortie_id").anyOf(sortieIds)
+					.toArray(function(battleList){
+						for(bctr in battleList){
+							if(typeof sortieIndexed["s"+battleList[bctr].sortie_id] != "undefined"){
+								sortieIndexed["s"+battleList[bctr].sortie_id].battles.push(battleList[bctr]);
+							}else{
+								console.error("orphan battle", battleList[bctr]);
+							}
+						}
+						callback(sortieIndexed);
+					});
+			});
+	},
+	
+	get_event :function(world_id, callback){
+		var self = this;
+		var sortieIds = [], bctr, sortieIndexed = {};
+		
+		this.database.sortie
+			.where("hq").equals(this.index)
+			.and(function(sortie){ return sortie.world == world_id; })
+			.reverse()
+			.toArray(function(sortieList){
+				// Compile all sortieIDs and indexify
+				for(bctr in sortieList){
+					sortieIds.push(sortieList[bctr].id);
+					sortieIndexed["s"+sortieList[bctr].id] = sortieList[bctr];
+					sortieIndexed["s"+sortieList[bctr].id].battles = [];
+				}
+				
+				// Get all battles on those sorties
+				self.database.battle
+					.where("sortie_id").anyOf(sortieIds)
+					.toArray(function(battleList){
+						for(bctr in battleList){
+							if(typeof sortieIndexed["s"+battleList[bctr].sortie_id] != "undefined"){
+								sortieIndexed["s"+battleList[bctr].sortie_id].battles.push(battleList[bctr]);
+							}else{
+								console.error("orphan battle", battleList[bctr]);
+							}
+						}
+						callback(sortieIndexed);
+					});
+			});
 	},
 	
 	get_battle :function(){
