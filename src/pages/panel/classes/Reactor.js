@@ -370,6 +370,12 @@ KC3.prototype.Reactor  = {
 		app.Battle.Results( response.api_data );
 	},
 	
+	/* Combined Fleet Battle Results
+	-------------------------------------------------------*/
+	"api_req_combined_battle/battleresult":function(params, response, headers){
+		app.Battle.Results( response.api_data );
+	},
+	
 	
 	/*-------------------------------------------------------*/
 	/*-----------------------[ QUESTS ]----------------------*/
