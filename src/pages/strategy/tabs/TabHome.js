@@ -61,6 +61,10 @@ var TabHome = {
 					$(".page_home .feed_item_"+(index+1)+" .feed_text").html("You were attacked in PvP by \"<strong>"+opponent+"</strong>\" and LOST! lol skrub.");
 				}
 				break;
+			case "11":
+				$(".page_home .feed_item_"+(index+1)+" .colorbox").css("background", "#9999FF");
+				$(".page_home .feed_item_"+(index+1)+" .feed_text").html("Your ship library has been updated");
+				break;
 			default:
 				$(".page_home .feed_item_"+(index+1)+" .colorbox").css("background", "#ccc");
 				$(".page_home .feed_item_"+(index+1)+" .feed_text").html("<span style='font-size:12px;'>Unknown. To help, report that type "+data.api_type+" is "+data.api_message+"</span>");
