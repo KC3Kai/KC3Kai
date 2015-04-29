@@ -29,13 +29,16 @@ KC3.prototype.Ships  = {
 	},
 	
 	remove :function(id){
-		var ctr;
-		for(ctr in this.list["s"+id].api_slot){
-			if(this.list["s"+id].api_slot[ctr] > -1){
-				app.Gears.remove( this.list["s"+id].api_slot[ctr], false);
+		if(typeof ids != "array"){ ids = [ids]; }
+		var ctr, gctr;
+		for(ctr in ids){
+			for(gctr in this.list["s"+ids[ctr]].api_slot){
+				if(this.list["s"+ids[ctr]].api_slot[gctr] > -1){
+					app.Gears.remove( this.list["s"+ids[ctr]].api_slot[gctr], false);
+				}
 			}
+			delete this.list["s"+ids[ctr]];
 		}
-		delete this.list["s"+id];
 		this.save();
 		app.Gears.save();
 	},

@@ -421,6 +421,14 @@ KC3.prototype.Reactor  = {
 	/*----------------------[ OTHERS ]-----------------------*/
 	/*-------------------------------------------------------*/
 	
+	/* Modernize
+	-------------------------------------------------------*/
+	"api_req_kaisou/powerup":function(params, response, headers){
+		var consumed_ids = app.Util.findParam(params, "api%5Fid%5Fitems");
+		app.Ships.remove(consumed_ids.split("%2C"));
+		app.Dashboard.Info.materials();
+	},
+	
 	/* Scrap a Ship
 	-------------------------------------------------------*/
 	"api_req_kousyou/destroyship":function(params, response, headers){
