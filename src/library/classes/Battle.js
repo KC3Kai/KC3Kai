@@ -6,7 +6,6 @@ KC3.prototype.Battle  = {
 	CompileFleetInfo :function(index){
 		var ReturnObj = [];
 		var thisFleet = app.Docks._fleets[index];
-		console.log(thisFleet);
 		var ctr, thisShip;
 		for(ctr in thisFleet.api_ship){
 			if(thisFleet.api_ship[ctr] > -1){

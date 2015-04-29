@@ -32,8 +32,6 @@ KC3.prototype.Gears  = {
 		if(typeof ids != "array"){ ids = [ids]; }
 		var ctr;
 		for(ctr in ids){
-			console.log("scrapping gear: "+ids[ctr]);
-			console.log(this.list["g"+ids[ctr]]);
 			delete this.list["g"+ids[ctr]];
 		}
 		if(typeof save != "undefined"){
