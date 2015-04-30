@@ -21,6 +21,9 @@ KC3.prototype.Dashboard.Fleet = {
 		if(!app.Fleet.complete){
 			$(".fleet-summary .summary-eqlos").addClass("incomplete");
 			$(".fleet-summary .summary-airfp").addClass("incomplete");
+		}else{
+			$(".fleet-summary .summary-eqlos").removeClass("incomplete");
+			$(".fleet-summary .summary-airfp").removeClass("incomplete");
 		}
 		$(".fleet-summary .summary-level .summary-text").text(app.Fleet.level);
 		$(".fleet-summary .summary-eqlos .summary-text").text(app.Fleet.getEffectiveLoS());
