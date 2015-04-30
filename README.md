@@ -5,7 +5,8 @@ Successor to KanColle Command Center, KC3改 is a Kantai Collection Game Viewer 
 #### Installation
 Just visit KC3改 on Chrome Webstore and click on the "Free" button at the top:
 
-* Visit on Chrome Webstore (*not yet released*)
+* [Visit on Chrome Webstore](https://chrome.google.com/webstore/detail/kancolle-command-center-改/hkgmldnainaglpjngpajnnjfhpdjkohh)
+* **Please uninstall the old KC3!**
 
 *What are the requirements?* Just your [Google Chrome](http://www.google.com/chrome/) browser, and will work on any OS that has it, except for mobile devices.
 
