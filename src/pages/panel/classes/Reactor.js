@@ -358,6 +358,24 @@ KC3.prototype.Reactor  = {
 		);
 	},
 	
+	/* Air Battle
+	-------------------------------------------------------*/
+	"api_req_sortie/airbattle":function(params, response, headers){
+		app.Battle.Engage(
+			response.api_data,
+			app.Util.getUTC(headers)
+		);
+	},
+	
+	/* START AT YASEN!
+	-------------------------------------------------------*/
+	"api_req_battle_midnight/sp_midnight":function(params, response, headers){
+		app.Battle.Engage(
+			response.api_data,
+			app.Util.getUTC(headers)
+		);
+	},
+	
 	/* YASEN!
 	-------------------------------------------------------*/
 	"api_req_battle_midnight/battle":function(params, response, headers){
