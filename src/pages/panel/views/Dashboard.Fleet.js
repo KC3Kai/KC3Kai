@@ -79,7 +79,7 @@ KC3.prototype.Dashboard.Fleet = {
 			if(thisShip.api_cond>49){
 				$(thisElement+" .ship-morale-box").css("background", "#FFFF00");
 				$(thisElement+" .ship-morale-box").css("border-color", "#FFCC00");
-			}else if(thisShip.api_cond>29){
+			}else if(thisShip.api_cond>39){
 				$(thisElement+" .ship-morale-box").css("background", "#FFF");
 			}else if(thisShip.api_cond>19){
 				$(thisElement+" .ship-morale-box").css("background", "#FF9900");
