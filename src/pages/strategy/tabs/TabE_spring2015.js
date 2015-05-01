@@ -31,7 +31,7 @@ var TabE_spring2015 = {
 				
 				battleNum = 1;
 				for(bctr in thisSortie.battles){
-					$(".node-"+battleNum, buildbox).text("n"+thisSortie.battles[bctr].node);
+					$(".node-"+battleNum, buildbox).text(String.fromCharCode(thisSortie.battles[bctr].node+96).toUpperCase());
 					$(".node-"+battleNum, buildbox).show();
 					battleNum++;
 				}
