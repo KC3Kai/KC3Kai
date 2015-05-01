@@ -28,7 +28,7 @@ KC3.prototype.Ships  = {
 		this.save();
 	},
 	
-	remove :function(id){
+	remove :function(ids){
 		if(typeof ids != "array"){ ids = [ids]; }
 		var ctr, gctr;
 		for(ctr in ids){
