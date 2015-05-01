@@ -25,6 +25,9 @@ $(document).on("ready", function(){
 		$("body").css("background-image", "url("+app.Config.background+")");
 	}
 	
+	// Load game meta data
+	app.Meta.init("../../data/");
+	
 	// Quick Play
 	$(".play_btn").on('click', function(){
 		ActivateGame();
