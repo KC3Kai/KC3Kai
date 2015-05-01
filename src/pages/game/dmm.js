@@ -47,6 +47,34 @@ chrome.runtime.onMessage.addListener(function(request, sender, response) {
 				}
 				break;
 			
+			// Quest Overlay
+			case "quest_overlay":
+				$(".box-game .overlays").html("");
+				var qci, tmpQuest;
+				for(qci in request.questlist){
+					if(request.questlist[qci]!=-1){
+						tmpQuest = app.Meta.quest(request.questlist[qci].api_no);
+						
+						var tmpQuestOverlay = $("#factory .ol_quest").clone().appendTo(".box-game .overlays");
+						tmpQuestOverlay.css("top", (parseInt(app.Config.gambox_margin,10)+113+(qci*68))+"px");
+						
+						if(tmpQuest){
+							$(".name", tmpQuestOverlay).text(tmpQuest.name);
+							$(".desc", tmpQuestOverlay).text(tmpQuest.desc);
+						}else{
+							$(".name", tmpQuestOverlay).text(request.questlist[qci].api_title);
+							$(".desc", tmpQuestOverlay).text(request.questlist[qci].api_detail);
+						}
+					}
+				}
+				response({success:true});
+				break;
+				
+			// Remove overlays
+			case "clear_overlays":
+				$(".box-game .overlays").html("");
+				response({success:true});
+				break;
 			
 			default: response({success:false, message:"Unknown action"}); break;
 		}
