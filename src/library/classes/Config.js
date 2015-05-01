@@ -3,7 +3,7 @@ KC3.prototype.Config  = {
 	
 	gambox_margin: "0px",
 	background: "#def",
-	tl_overlay: false,
+	tl_overlay: true,
 	size: 100,
 	time_dev: 45,
 	rsc_interval: 3600,

@@ -1,3 +1,7 @@
+#factory {
+	display:none;
+}
+
 /* NO API LINK
 --------------------------*/
 .box-nolink {
@@ -93,4 +97,35 @@
 }
 .box-game .overlays {
 	
+}
+
+/* OVERLAYS
+--------------------------*/
+.overlays {
+	
+}
+.overlay {
+	position:absolute;
+}
+
+/* OVERLAY: QUEST
+--------------------------*/
+.ol_quest {
+	width:400px;
+	height:37px;
+	background:#E4D5C2;
+	margin-left:215px;
+}
+.ol_quest .name {
+	width:400px;
+	height:14px;
+	line-height:14px;
+	font-size:14px;
+	margin:0px 0px 3px 0px;
+}
+.ol_quest .desc {
+	width:400px;
+	height:10px;
+	line-height:10px;
+	font-size:10px;
 }

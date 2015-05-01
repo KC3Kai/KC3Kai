@@ -41,6 +41,13 @@ KC3.prototype.Listener  = {
 	handleApiCall :function(APIFunction, request){
 		var self = this;
 		
+		// Clear quest overlays regardless
+		chrome.runtime.sendMessage({
+			game:"kancolle",
+			type:"game",
+			action:"clear_overlays"
+		}, function(response){});
+		
 		// Chcek if statusCode is not 200, means not successful
 		// API always returns 200 even if "game error". Not 200 means something is wrong in between.
 		if(request.response.status != 200){

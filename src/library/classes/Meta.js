@@ -35,7 +35,7 @@
 	
 	quest :function(id){
 		if(typeof this._quests[id] != "undefined"){ return this._quests[id]; }
-		return { name: "Unknown Quest", desc: "" };
+		return false;
 	},
 	
 	rank :function(id){
