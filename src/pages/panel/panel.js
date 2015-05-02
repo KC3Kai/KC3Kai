@@ -13,6 +13,8 @@ $(document).on("ready", function(){
 	app.Resources.init();
 	app.Docks.init();
 	
+	app.Gears.load();
+	
 	// Attempt to activate game screen
 	app.Activator.activateGame();
 	app.Activator.waitActivation();
