@@ -86,7 +86,43 @@ KC3.prototype.Player  = {
 	/* Set player statistics
 	-------------------------------------------------------*/
 	statistics :function(data){
-		localStorage.player_statistics = JSON.stringify(data);
+		// Initialize record object
+		var statistics = { exped: { rate: "?", total: "?", success: "?" }, pvp: { rate: "?", win: "?", lose: "?", attacked: "?", attacked_win: "?" }, sortie: { rate: "?", win: "?", lose: "?" } };
+		
+		// If old statistics exist
+		if(typeof localStorage.player_statistics != "undefined"){
+			statistics = JSON.parse(localStorage.player_statistics);
+		}
+		
+		// Common always-present stats
+		statistics.exped.total = data.exped.total;
+		statistics.exped.success = data.exped.success;
+		statistics.pvp.win = data.pvp.win;
+		statistics.pvp.lose = data.pvp.lose;
+		statistics.sortie.win = data.sortie.win;
+		statistics.sortie.lose = data.sortie.lose;
+		
+		// api_port Optionals
+		if(data.sortie.rate !== false){
+			statistics.sortie.rate = (data.sortie.rate*100)+"%";
+		}
+		if(data.pvp.rate !== false){
+			statistics.pvp.rate = data.pvp.rate+"%";
+		}
+		if(data.exped.rate !== false){
+			statistics.exped.rate = data.exped.rate+"%";
+		}
+		
+		// record_basic Optionals
+		if(data.pvp.attacked !== false){
+			statistics.pvp.attacked = data.pvp.attacked;
+		}
+		if(data.pvp.attacked_win !== false){
+			statistics.pvp.attacked_win = data.pvp.attacked_win;
+		}
+		
+		// Save to local
+		localStorage.player_statistics = JSON.stringify(statistics);
 	},
 	
 	/* Set player newsfeed
