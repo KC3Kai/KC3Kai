@@ -179,6 +179,7 @@ var TabShips = {
 				cShip = FilteredShips[shipCtr];
 				cElm = $(".page_ships .factory .ship_item").clone().appendTo(".page_ships .ship_list");
 				if(shipCtr%2 === 0){ cElm.addClass("even"); }else{ cElm.addClass("odd"); }
+				if(shipCtr%10 === 0){ cElm.addClass("ten-margin"); }
 				
 				$(".ship_id", cElm).text( cShip.id );
 				$(".ship_img img", cElm).attr("src", app.Assets.shipIcon(cShip.bid));

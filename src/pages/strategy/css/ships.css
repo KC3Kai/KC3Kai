@@ -54,7 +54,7 @@
 .page_ships .ship_header {
 	width:680px;
 	height:20px;
-	margin:0px 0px 5px 0px;
+	margin:0px 0px 0px 0px;
 }
 .page_ships .ship_header .ship_item {
 	height:20px;
@@ -93,6 +93,10 @@
 .page_ships .ship_item.even .ship_field {
 	background:#e4e4e4;
 }
+.page_ships .ship_item.ten-margin {
+	margin:10px 0px 0px 0px;
+}
+
 .page_ships .ship_item:hover .ship_field {
 	background:#ffffcc;
 }
