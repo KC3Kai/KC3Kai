@@ -203,6 +203,14 @@
         "name": "Organise the 22nd Destroyer Division",
         "desc": "Have only Satsuki (\u7690\u6708), Fumizuki (\u6587\u6708), Nagatsuki (\u9577\u6708) and 1 more DD in your main fleet."
     },
+    "152": {
+        "name": "Organise the New Edition of the Mikawa Fleet",
+        "desc": "Have Choukai Kai2 (\u9ce5\u6d77\u6539\u30cb) as the flagship and any five of Aoba (\u9752\u8449), Kinugasa (\u8863\u7b20), Kako (\u52a0\u53e4), Furutaka (\u53e4\u9df9), Tenryuu (\u5929\u9f8d), Yuubari (\u5915\u5f35) in your main fleet."
+    },
+    "153": {
+        "name": "Organise the 18th Cruiser Division",
+        "desc": "Have Tenryuu (\u5929\u9f8d), Tatsuta (\u9f8d\u7530) and 2 or more other ships in your fleet."
+    },
     "201": {
         "name": "Daily Sortie 1",
         "desc": "Defeat an enemy fleet."
@@ -471,6 +479,18 @@
         "name": "Deploy the Remodelled Anti-Aircraft Heavy Cruiser",
         "desc": "Sortie a fleet with Maya (\u6469\u8036) Kai or Kai2, 1 CL, 2 DD and up to two additional ships to World 2-3 and score an S rank victory at the boss node."
     },
+    "273": {
+        "name": "Deploy the Mikawa Fleet to Solomon Islands",
+        "desc": "Sortie the main fleet with Choukai Kai2 (\u9ce5\u6d77\u6539\u30cb) as the flagship and any five of Aoba (\u9752\u8449), Kinugasa (\u8863\u7b20), Kako (\u52a0\u53e4), Furutaka (\u53e4\u9df9), Tenryuu (\u5929\u9f8d), Yuubari (\u5915\u5f35) to World 5-1 and score an S rank victory at the boss node."
+    },
+    "274": {
+        "name": "6th Destroyer Division's Anti-Submarine Patrol",
+        "desc": "Deploy Akatsuki (\u6681), Hibiki (\u97ff or \u0412\u0435\u0440\u043d\u044b\u0439), Inazuma (\u96f7) and Ikazuchi (\u96fb) to World 1-5. At least C rank is required at the boss node."
+    },
+    "275": {
+        "name": "18th Cruiser Division, Set Sail",
+        "desc": "Sortie Tenryuu (\u5929\u9f8d), Tatsuta (\u9f8d\u7530) and 2 or more other ships to World 2-3 and sink the enemy flagship at the boss node."
+    },
     "301": {
         "name": "First Exercise!",
         "desc": "Challenge another fleet in practice mode."
@@ -490,6 +510,14 @@
     "306": {
         "name": "In Preparation of Love (Part 2)",
         "desc": "Show your love by getting 2 victories in practice mode."
+    },
+    "307": {
+        "name": "Improve the Efficiency of the Fleet",
+        "desc": "Get 3 victories in exercises (practice mode)."
+    },
+    "308": {
+        "name": "Improve the Efficiency of the Fleet One More Time",
+        "desc": "Get 4 victories in exercises (practice mode)."
     },
     "401": {
         "name": "First Expedition",
@@ -554,6 +582,14 @@
     "417": {
         "name": "Deploy the Decoy Task Force",
         "desc": "Complete expedition 15 (\u56ee\u6a5f\u52d5\u90e8\u968a\u652f\u63f4\u4f5c\u6226)."
+    },
+    "418": {
+        "name": "Naval Ceremony Preparations",
+        "desc": "Complete expedition 7 (\u89b3\u8266\u5f0f\u4e88\u884c) two times."
+    },
+    "419": {
+        "name": "Naval Ceremony",
+        "desc": "Complete expedition 8."
     },
     "501": {
         "name": "First Supply",
