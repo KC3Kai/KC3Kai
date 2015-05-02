@@ -1,0 +1,346 @@
+/* GLOBAL
+--------------------------*/
+body {
+	background:#eee;
+}
+.wrapper {
+	width:800px;
+	margin:0px auto;
+	background:#fff;
+	padding:10px;
+}
+ul {
+	margin:0px;
+	padding:0px;
+}
+.about {
+	width:300px;
+	float:left;
+	/*background:#ccc;*/
+}
+.extlink {
+	margin:-7px 0px 0px 2px;
+}
+
+/* ABOUT: KC3
+--------------------------*/
+.about_box {
+	width:300px;
+	margin:0px 0px 10px 0px;
+	/*background:#fcc;*/
+}
+.about_box .about_logo {
+	width:100px;
+	height:100px;
+	float:left;
+	/*background:#ccf;*/
+}
+.about_box .about_logo img {
+	width:100px;
+	height:100px;
+}
+.about_box .about_text {
+	width:200px;
+	height:100px;
+	float:left;
+	/*background:#ffc;*/
+	padding:15px 0px 0px 10px;
+}
+.about_box .about_text .about_title {
+	width:190px;
+	height:30px;
+	line-height:30px;
+	font-size:24px;
+	font-weight:bold;
+	/*background:#fcf;*/
+}
+.about_box .about_text .about_version {
+	width:190px;
+	height:20px;
+	line-height:20px;
+	font-size:14px;
+	margin:0px 0px 5px 0px;
+	/*background:#cff;*/
+}
+.about_box .about_text .about_home {
+	width:190px;
+	height:16px;
+	line-height:16px;
+	font-size:12px;
+	/*background:#cff;*/
+}
+.about_box .about_text .about_home img {
+	width:12px;
+	height:12px;
+}
+
+/* ABOUT: LINKS
+--------------------------*/
+.about_links {
+	width:300px;
+	margin:0px 0px 10px 0px;
+	/*background:#fcc;*/
+	line-height:20px;
+	font-size:14px;
+}
+.about_link {
+	width:300px;
+	height:20px;
+	margin:0px 0px 5px 0px;
+	/*background:#cff;*/
+}
+.about_link .about_icon {
+	width:20px;
+	height:20px;
+	margin:0px 5px 0px 0px;
+	float:left;
+}
+.about_link .about_text {
+	width:270px;
+	height:20px;
+	line-height:20px;
+	float:left;
+}
+.github {
+	margin:0px 0px 10px 0px;
+}
+
+/* ABOUT: SECTIONS
+--------------------------*/
+.about .section {
+	width:300px;
+	margin:0px 0px 10px 0px;
+	/*background:#fcc;*/
+}
+.about .section .title {
+	width:300px;
+	font-size:14px;
+	font-weight:bold;
+	margin:0px 0px 5px 0px;
+	color:#bbb;
+	/*background:#ccf;*/
+}
+.about .section .contents {
+	width:290px;
+	font-size:12px;
+	border-radius:10px;
+	padding:5px;
+	margin:0px 0px 0px 10px;
+	/*background:#cfc;*/
+}
+
+/* ABOUT: PEOPLE
+--------------------------*/
+.user_pic {
+	width:50px;
+	height:50px;
+	margin:0px 10px 0px 0px;
+	float:left;
+	border-radius:8px;
+	overflow:hidden;
+	background:#ccc;
+}
+.user_pic img {
+	width:50px;
+	height:50px
+}
+.user_name {
+	width:200px;
+	height:20px;
+	line-height:20px;
+	float:left;
+	font-size:14px;
+	font-weight:bold;
+}
+.user_links {
+	width:200px;
+	height:30px;
+	line-height:30px;
+	float:left;
+	font-size:12px;
+	font-weight:bold;
+}
+.user_links a {
+	width:20px;
+	height:20px;
+	line-height:20px;
+	margin:5px 5px 0px 0px;
+	display:block;
+	float:left;
+}
+.user_links a img {
+	width:20px;
+	height:20px;
+	margin:0px;
+	padding:0px;
+}
+
+/* ABOUT: LIST
+--------------------------*/
+.about .section ul {
+	padding:0px 0px 0px 20px;
+}
+.about .section ul.small_list li {
+	margin:0px 0px 5px 0px;
+	padding:0px;
+}
+.about .section ul.big_list li {
+	margin:0px 0px 10px 0px;
+	padding:0px;
+}
+
+/* SETTINGS
+--------------------------*/
+.settings {
+	width:470px;
+	float:right;
+}
+.settings .section {
+	width:470px;
+	background:#f3f3f3;
+	border-radius:10px;
+	padding:0px 0px 0px 0px;
+	overflow:hidden;
+	margin:0px 0px 10px 0px;
+	border:1px solid #ace;
+}
+.settings .section .title {
+	width:470px;
+	height:26px;
+	line-height:26px;
+	padding:0px 0px 0px 10px;
+	font-weight:bold;
+	margin:0px 0px 5px 0px;
+	background:#def;
+	border-bottom:1px solid #ace;
+}
+.settings .section .note {
+	width:470px;
+	padding:0px 5px;
+	font-size:12px;
+	margin:0px 0px 5px 0px;
+}
+.settings .section .contents {
+	font-size:12px;
+}
+
+/* SETTINGS: CHECK
+--------------------------*/
+.content-check {
+	width:400px;
+	margin:0px 0px 10px 20px;
+	padding:0px;
+}
+.content-check .check-box {
+	width:20px;
+	height:20px;
+	line-height:20px;
+	margin:0px 5px 0px 5px;
+	text-align:center;
+	float:left;
+}
+.content-check .check-label {
+	width:370px;
+	height:20px;
+	line-height:20px;
+	float:left;
+}
+.content-check .option {
+	background:#e7e7e7;
+	margin:0px 0px 3px 0px;
+}
+.content-check .option:hover {
+	background:#ffc;
+}
+
+/* SETTINGS: RADIO
+--------------------------*/
+.content-radio {
+	width:400px;
+	margin:0px 0px 10px 20px;
+	padding:0px;
+}
+.content-radio .radio-box {
+	width:20px;
+	height:20px;
+	line-height:20px;
+	margin:0px 5px 0px 5px;
+	text-align:center;
+	float:left;
+}
+.content-radio .radio-label {
+	width:370px;
+	height:20px;
+	line-height:20px;
+	float:left;
+}
+.content-radio .option {
+	background:#e7e7e7;
+	margin:0px 0px 3px 0px;
+}
+.content-radio .option:hover {
+	background:#ffc;
+}
+
+/* SETTINGS: TEXT
+--------------------------*/
+.content-text {
+	width:400px;
+	margin:0px 0px 10px 20px;
+	padding:0px;
+}
+.content-text .option-ltext .text-box {
+	width:400px;
+	height:20px;
+	line-height:20px;
+	margin:0px 5px 0px 5px;
+	text-align:center;
+	float:left;
+}
+.content-text .option-ltext .text-box input {
+	width:400px;
+	height:20px;
+	text-align:center;
+}
+.content-text .option-text .text-box {
+	width:40px;
+	height:20px;
+	line-height:20px;
+	margin:0px 5px 0px 5px;
+	text-align:center;
+	float:left;
+}
+.content-text .option-text .text-box input {
+	width:40px;
+	height:20px;
+	text-align:center;
+}
+.content-text .option-text .text-label {
+	width:350px;
+	height:20px;
+	line-height:20px;
+	float:left;
+}
+.content-radio .option {
+	background:#e7e7e7;
+	margin:0px 0px 3px 0px;
+}
+.content-radio .option:hover {
+	background:#ffc;
+}
+
+/* SETTINGS: CUSTOM
+--------------------------*/
+.content-custom {
+	width:450px;
+	margin:0px 0px 10px 10px;
+	background:#ccc;
+}
+
+/* SETTINGS: TIMERS
+--------------------------*/
+
+
+
+/* SETTINGS: GAME SCREEN
+--------------------------*/
