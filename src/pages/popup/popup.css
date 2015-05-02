@@ -5,7 +5,7 @@ body {
 }
 .wrapper {
 	width:240px;
-	height:380px;
+	height:377px;
 	overflow:hidden;
 }
 .separator {
@@ -19,8 +19,10 @@ body {
 --------------------------*/
 .menu {
 	width:240px;
-	height:60px;
+	height:63px;
 	padding:5px;
+	border-top:1px solid #fff;
+	border-bottom:1px solid #ddd;
 }
 .menu:hover {
 	background:#cfc;
@@ -53,24 +55,4 @@ body {
 	font-size:11px;
 	float:left;
 	color:#aaa;
-}
-
-/* FOOTER
---------------------------*/
-.note {
-	width:240px;
-	height:20px;
-	line-height:20px;
-	overflow:hidden;
-	font-size:14px;
-	font-weight:bold;
-	text-align:center;
-}
-.links {
-	width:240px;
-	height:20px;
-	line-height:20px;
-	overflow:hidden;
-	font-size:12px;
-	text-align:center;
 }

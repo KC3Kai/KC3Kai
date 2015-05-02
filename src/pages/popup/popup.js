@@ -39,4 +39,9 @@ $(document).on("ready", function(){
 		window.open("../strategy/strategy.html", "kc4_strategy");
 	});
 	
+	// Settings
+	$("#settings").on('click', function(){
+		window.open("../settings/settings.html", "kc4_settings");
+	});
+	
 });
