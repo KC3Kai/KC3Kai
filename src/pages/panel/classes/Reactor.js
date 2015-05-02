@@ -96,6 +96,36 @@ KC3.prototype.Reactor  = {
 			exp: response.api_data.api_experience
 		});
 		app.Resources.setFcoin(response.api_data.api_fcoin);
+		
+		app.Docks._fleetCount = response.api_data.api_count_deck;
+		app.Docks._repairCount = response.api_data.api_count_ndock;
+		app.Docks._buildCount = response.api_data.api_count_kdock;
+		
+		app.Ships.max = response.api_data.api_max_chara;
+		app.Gears.max = response.api_data.api_max_slotitem;
+		
+		app.Player.statistics({
+			exped: {
+				rate: false,
+				total: response.api_data.api_ms_count,
+				success: response.api_data.api_ms_success
+			},
+			pvp: {
+				rate: false,
+				win: response.api_data.api_pt_win,
+				lose: response.api_data.api_pt_lose,
+				attacked: response.api_data.api_pt_challenged,
+				attacked_win: response.api_data.api_pt_challenged_win
+			},
+			sortie: {
+				rate: false,
+				win: response.api_data.api_st_win,
+				lose: response.api_data.api_st_lose
+			}
+		});
+		
+		app.Dashboard.Info.admiral();
+		app.Dashboard.Info.materials();
 	},
 	
 	/* HQ Record Screen
@@ -367,6 +397,21 @@ KC3.prototype.Reactor  = {
 		);
 	},
 	
+	/* 
+	-------------------------------------------------------*/
+	"api_req_combined_battle/battle_water":function(params, response, headers){
+		app.Battle.Engage(
+			response.api_data,
+			app.Util.getUTC(headers)
+		);
+	},
+	
+	/* 
+	-------------------------------------------------------*/
+	"api_req_combined_battle/goback_port":function(params, response, headers){
+		
+	},
+	
 	/* START AT YASEN!
 	-------------------------------------------------------*/
 	"api_req_battle_midnight/sp_midnight":function(params, response, headers){
@@ -402,7 +447,14 @@ KC3.prototype.Reactor  = {
 	/* Quest List
 	-------------------------------------------------------*/
 	"api_get_member/questlist":function(params, response, headers){
-		
+		if(app.Config.tl_overlay){
+			chrome.runtime.sendMessage({
+				game:"kancolle",
+				type:"game",
+				action:"quest_overlay",
+				questlist: response.api_data.api_list
+			}, function(response){});
+		}
 	},
 	
 	/* Receive Quest Reward
@@ -416,12 +468,20 @@ KC3.prototype.Reactor  = {
 	/*--------------------[ REPAIR DOCKS ]-------------------*/
 	/*-------------------------------------------------------*/
 	
-	/* Enter Repair Docks
+	/* Repair Docks
 	-------------------------------------------------------*/
 	"api_get_member/ndock":function(params, response, headers){
-		app.Docks.setRepair( response.api_data );
+		app.Docks.setRepair(response.api_data);
 		app.Dashboard.Timers.update();
 		app.Dashboard.Fleet.update();
+	},
+	
+	/* Start repair
+	-------------------------------------------------------*/
+	"api_req_nyukyo/start":function(params, response, headers){
+		var ship_id = app.Util.findParam(params, "api%5Fship%5Fid");
+		var bucket = app.Util.findParam(params, "api%5Fhighspeed");
+		var nDockNum = app.Util.findParam(params, "api%5Fndock%5Fid");
 	},
 	
 	/* Use bucket
@@ -433,7 +493,6 @@ KC3.prototype.Reactor  = {
 		app.Dashboard.Info.materials();
 		app.Dashboard.Timers.update();
 	},
-	
 	
 	/*-------------------------------------------------------*/
 	/*----------------------[ OTHERS ]-----------------------*/
