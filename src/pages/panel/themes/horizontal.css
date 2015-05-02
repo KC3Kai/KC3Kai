@@ -259,6 +259,7 @@
 	height:26px;
 	margin:0px 0px 0px 3px;
 	float:left;
+	background:#ddd;
 }
 
 /* Other buttons */
@@ -452,7 +453,13 @@
 }
 .theme-horizontal .fleet-ships .ship-hp-bar .ship-hp-val {
 	width:98px;
-	height:8px;
+	height:5px;
+	float:left;
+	background:#0f0;
+}
+.theme-horizontal .fleet-ships .ship-hp-bar .ship-hp-nval {
+	width:98px;
+	height:3px;
 	float:left;
 	background:#0f0;
 }
