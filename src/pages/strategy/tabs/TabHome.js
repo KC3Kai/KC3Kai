@@ -16,17 +16,17 @@ var TabHome = {
 		$(".page_home .hq_level .hq_content").html(app.Player.level);
 		
 		this.cache_stats = JSON.parse(localStorage.player_statistics);
-		$(".page_home .stat_sortie .stat_rate .stat_value").html((this.cache_stats.sortie.rate*100)+"%");
+		$(".page_home .stat_sortie .stat_rate .stat_value").html(this.cache_stats.sortie.rate);
 		$(".page_home .stat_sortie .stat_win .stat_value").html(this.cache_stats.sortie.win);
 		$(".page_home .stat_sortie .stat_lose .stat_value").html(this.cache_stats.sortie.lose);
 		
-		$(".page_home .stat_pvp .stat_rate .stat_value").html(this.cache_stats.pvp.rate+"%");
+		$(".page_home .stat_pvp .stat_rate .stat_value").html(this.cache_stats.pvp.rate);
 		$(".page_home .stat_pvp .stat_win .stat_value").html(this.cache_stats.pvp.win);
 		$(".page_home .stat_pvp .stat_lose .stat_value").html(this.cache_stats.pvp.lose);
 		$(".page_home .stat_pvp .stat_atk .stat_value").html(this.cache_stats.pvp.attacked);
 		$(".page_home .stat_pvp .stat_atkwin .stat_value").html(this.cache_stats.pvp.attacked_win);
 		
-		$(".page_home .stat_exped .stat_rate .stat_value").html(this.cache_stats.exped.rate+"%");
+		$(".page_home .stat_exped .stat_rate .stat_value").html(this.cache_stats.exped.rate);
 		$(".page_home .stat_exped .stat_success .stat_value").html(this.cache_stats.exped.success);
 		$(".page_home .stat_exped .stat_total .stat_value").html(this.cache_stats.exped.total);
 		
@@ -56,9 +56,9 @@ var TabHome = {
 				$(".page_home .feed_item_"+(index+1)+" .colorbox").css("background", "#98E75F");
 				var opponent = data.api_message.substring(1, data.api_message.indexOf("」"));
 				if(data.api_message.indexOf("勝利") > -1){
-					$(".page_home .feed_item_"+(index+1)+" .feed_text").html("You were attacked in PvP by \"<strong>"+opponent+"</strong>\" and WON!");
+					$(".page_home .feed_item_"+(index+1)+" .feed_text").html("You were attacked in PvP by \"<strong>"+opponent+"</strong>\" but won!");
 				}else if(data.api_message.indexOf("敗北") > -1){
-					$(".page_home .feed_item_"+(index+1)+" .feed_text").html("You were attacked in PvP by \"<strong>"+opponent+"</strong>\" and LOST! lol skrub.");
+					$(".page_home .feed_item_"+(index+1)+" .feed_text").html("You were attacked in PvP by \"<strong>"+opponent+"</strong>\" and lost!");
 				}
 				break;
 			case "11":
