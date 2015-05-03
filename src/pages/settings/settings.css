@@ -301,11 +301,10 @@ ul {
 	height:20px;
 	line-height:20px;
 	margin:0px 5px 0px 5px;
-	text-align:center;
 	float:left;
 }
 .content-text .option-ltext .text-box input {
-	width:400px;
+	width:360px;
 	height:20px;
 	text-align:left;
 }
@@ -314,7 +313,6 @@ ul {
 	height:20px;
 	line-height:20px;
 	margin:0px 5px 0px 5px;
-	text-align:center;
 	float:left;
 }
 .content-text .option-text .text-box input {
