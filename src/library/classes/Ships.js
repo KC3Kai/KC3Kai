@@ -29,7 +29,7 @@ KC3.prototype.Ships  = {
 	},
 	
 	remove :function(ids){
-		if(typeof ids != "array"){ ids = [ids]; }
+		if(typeof ids != "object"){ ids = [ids]; }
 		var ctr, gctr;
 		for(ctr in ids){
 			for(gctr in this.list["s"+ids[ctr]].api_slot){

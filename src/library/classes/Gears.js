@@ -29,7 +29,7 @@ KC3.prototype.Gears  = {
 	},
 	
 	remove :function(ids, save){
-		if(typeof ids != "array"){ ids = [ids]; }
+		if(typeof ids != "object"){ ids = [ids]; }
 		var ctr;
 		for(ctr in ids){
 			delete this.list["g"+ids[ctr]];
