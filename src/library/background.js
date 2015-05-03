@@ -29,7 +29,7 @@ var KC4BG = {
 		localStorage.absoluteswf = request.swfsrc;
 		
 		// If refreshing API link, close source tabs and re-open game frame
-		if(localStorage.extract_api){
+		if(localStorage.extract_api==="true"){
 			localStorage.extract_api = false;
 			// If not playing via DMM frame
 			if(sender.tab.url.indexOf("/pages/game/dmm.html") == -1){
