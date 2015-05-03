@@ -3,7 +3,7 @@ KC3.prototype.Config  = {
 	init :function(){
 		// Set Defaults
 		this.version = 5;
-		this.timerAlert = 4;
+		this.timerAlert = 1;
 		this.gambox_margin = 0;
 		this.background = "#def";
 		this.tl_overlay = false;
