@@ -25,6 +25,7 @@ KC3.prototype.Reactor  = {
 			exp: response.api_data.api_basic.api_experience
 		});
 		
+		app.Ships.clear();
 		app.Ships.set(response.api_data.api_ship);
 		
 		app.Gears.max = response.api_data.api_basic.api_max_slotitem;
