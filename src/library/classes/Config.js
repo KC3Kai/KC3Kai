@@ -2,7 +2,7 @@ KC3.prototype.Config  = {
 	
 	init :function(){
 		// Set Defaults
-		this.version = 4;
+		this.version = 5;
 		this.timerAlert = 4;
 		this.gambox_margin = 0;
 		this.background = "#def";
@@ -14,6 +14,7 @@ KC3.prototype.Config  = {
 		this.elos_mode = 3;
 		this.alert_volume = 60;
 		this.desktop_notif = true;
+		this.ss_mode = 0;
 		// Load existing user config
 		this.load();
 	},
@@ -61,6 +62,7 @@ KC3.prototype.Config  = {
 			this.loadField(tmpData, "elos_mode");
 			this.loadField(tmpData, "alert_volume");
 			this.loadField(tmpData, "desktop_notif");
+			this.loadField(tmpData, "ss_mode");
 		}
 	},
 	
@@ -83,7 +85,8 @@ KC3.prototype.Config  = {
 			reveal_names 	: this.reveal_names,
 			elos_mode 		: this.elos_mode,
 			alert_volume 	: this.alert_volume,
-			desktop_notif 	: this.desktop_notif
+			desktop_notif 	: this.desktop_notif,
+			ss_mode 		: this.ss_mode
 		});
 	}
 };
