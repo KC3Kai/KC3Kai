@@ -1,23 +1,36 @@
 KC3.prototype.Config  = {
-	timerAlert: true,
-	
-	gambox_margin: "0px",
-	background: "#def",
-	tl_overlay: true,
-	size: 100,
-	time_dev: 45,
-	rsc_interval: 3600,
-	reveal_names: true,
-	
-	elos_mode: 3,
 	
 	init :function(){
+		// Set Defaults
+		this.version = 3;
+		this.timerAlert = true;
+		this.gambox_margin = 0;
+		this.background = "#def";
+		this.tl_overlay = false;
+		this.size = 100;
+		this.time_dev = 45;
+		this.rsc_interval = 3600;
+		this.reveal_names = true;
+		this.elos_mode = 3;
+		this.alert_volume = 60;
+		this.desktop_notif = true;
+		// Load existing user config
 		this.load();
 	},
 	
+	/* Toggle Equipment LoS
+	-------------------------------------*/
 	scrollElosMode :function(){
 		this.elos_mode++;
 		if(this.elos_mode > 3){ this.elos_mode=1; }
+		this.save();
+	},
+	
+	/* Restore Defaults
+	-------------------------------------*/
+	clear :function(){
+		localStorage.removeItem("config");
+		this.init();
 		this.save();
 	},
 	
@@ -26,6 +39,15 @@ KC3.prototype.Config  = {
 	load :function(){
 		if(typeof localStorage.config !== "undefined"){
 			var tmpData = JSON.parse(localStorage.config);
+			
+			if(typeof tmpData.version !== "undefined"){
+				if(tmpData.version != this.version){
+					this.clear();
+				}
+			}else{
+				this.clear();
+			}
+			
 			this.loadField(tmpData, "timerAlert");
 			this.loadField(tmpData, "gambox_margin");
 			this.loadField(tmpData, "background");
@@ -49,6 +71,7 @@ KC3.prototype.Config  = {
 	
 	save :function(){
 		localStorage.config = JSON.stringify({
+			version 		: this.version,
 			timerAlert 		: this.timerAlert,
 			gambox_margin 	: this.gambox_margin,
 			background 		: this.background,
