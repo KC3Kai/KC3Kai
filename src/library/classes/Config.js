@@ -2,8 +2,8 @@ KC3.prototype.Config  = {
 	
 	init :function(){
 		// Set Defaults
-		this.version = 3;
-		this.timerAlert = true;
+		this.version = 4;
+		this.timerAlert = 4;
 		this.gambox_margin = 0;
 		this.background = "#def";
 		this.tl_overlay = false;
@@ -21,6 +21,7 @@ KC3.prototype.Config  = {
 	/* Toggle Equipment LoS
 	-------------------------------------*/
 	scrollElosMode :function(){
+		this.load();
 		this.elos_mode++;
 		if(this.elos_mode > 3){ this.elos_mode=1; }
 		this.save();
@@ -48,6 +49,7 @@ KC3.prototype.Config  = {
 				this.clear();
 			}
 			
+			this.loadField(tmpData, "version");
 			this.loadField(tmpData, "timerAlert");
 			this.loadField(tmpData, "gambox_margin");
 			this.loadField(tmpData, "background");
@@ -57,15 +59,14 @@ KC3.prototype.Config  = {
 			this.loadField(tmpData, "rsc_interval");
 			this.loadField(tmpData, "reveal_names");
 			this.loadField(tmpData, "elos_mode");
+			this.loadField(tmpData, "alert_volume");
+			this.loadField(tmpData, "desktop_notif");
 		}
 	},
 	
 	loadField :function(data, fieldname){
-		// console.log(fieldname+" on localStorage = "+data[fieldname]);
 		if(typeof data[fieldname] != "undefined"){
 			this[fieldname] = data[fieldname];
-		}else{
-			// console.log(fieldname+" not in local. using default value: "+this[fieldname]);
 		}
 	},
 	
@@ -80,7 +81,9 @@ KC3.prototype.Config  = {
 			time_dev 		: this.time_dev,
 			rsc_interval 	: this.rsc_interval,
 			reveal_names 	: this.reveal_names,
-			elos_mode 		: this.elos_mode
+			elos_mode 		: this.elos_mode,
+			alert_volume 	: this.alert_volume,
+			desktop_notif 	: this.desktop_notif
 		});
 	}
 };
