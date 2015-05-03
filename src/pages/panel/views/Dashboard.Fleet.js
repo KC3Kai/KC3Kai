@@ -49,7 +49,7 @@ KC3.prototype.Dashboard.Fleet = {
 			$(thisElement+" .ship-hp-text").text(thisShip.api_nowhp +" / "+ thisShip.api_maxhp);
 			hpPercent = thisShip.api_nowhp / thisShip.api_maxhp;
 			$(thisElement+" .ship-hp-val").css("width", (98*hpPercent)+"px");
-			$(thisElement+" .ship-hp-nval").css("width", ((98*hpPercent)-10)+"px");
+			$(thisElement+" .ship-hp-nval").css("width", (98*hpPercent)+"px");
 			$(thisElement).removeClass("repair-effect");
 			$(thisElement).removeClass("danger-effect");
 			
@@ -73,6 +73,7 @@ KC3.prototype.Dashboard.Fleet = {
 				$(thisElement+" .ship-img").css("background", "#555");
 				$(thisElement+" .ship-hp-val").css("background", "#00FF00");
 			}
+			$(thisElement+" .ship-hp-nval").css("background", $(thisElement+" .ship-hp-val").css("background"));
 			 
 			$(thisElement+" .ship-lvl-txt").text(thisShip.api_lv);
 			$(thisElement+" .ship-lvl-next").text("-"+thisShip.api_exp[1]);
