@@ -6,81 +6,25 @@ html,body {
 body {
 	background:#def;
 }
-.refresh {
+.devBox {
 	width:50px;
 	height:50px;
 	line-height:50px;
 	background:#000;
 	opacity:.4;
 	position:fixed;
-	top:5px;
-	right:5px;
 	color:#fff;
 	text-align:center;
 	font-size:16px;
 	z-index:2;
 	border:1px solid #fff;
-}
-.idfreset {
-	width:50px;
-	height:50px;
-	line-height:50px;
-	background:#000;
-	opacity:.4;
-	position:fixed;
-	top:60px;
 	right:5px;
-	color:#fff;
-	text-align:center;
-	font-size:16px;
-	z-index:3;
-	border:1px solid #fff;
 }
-.cbomb {
-	width:50px;
-	height:50px;
-	line-height:50px;
-	background:#000;
-	opacity:.4;
-	position:fixed;
-	top:115px;
-	right:5px;
-	color:#fff;
-	text-align:center;
-	font-size:16px;
-	z-index:3;
-	border:1px solid #fff;
-}
-.actbox {
-	width:50px;
-	height:50px;
-	line-height:50px;
-	background:#000;
-	opacity:.4;
-	position:fixed;
-	top:170px;
-	right:5px;
-	color:#fff;
-	text-align:center;
-	font-size:16px;
-	z-index:3;
-	border:1px solid #fff;
-}
-.openpanel {
-	width:50px;
-	height:50px;
-	line-height:50px;
-	background:#000;
-	opacity:.4;
-	position:fixed;
-	top:225px;
-	right:5px;
-	color:#fff;
-	text-align:center;
-	font-size:16px;
-	z-index:3;
-	border:1px solid #fff;
-}
+.refresh { top:5px; }
+.idfreset { top:60px; }
+.cbomb { top:115px; }
+.actbox { top:170px; }
+.openpanel { top:225px; }
 
 /* ACTION BOXES
 -----------------------------*/
