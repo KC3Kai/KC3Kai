@@ -139,15 +139,18 @@
 				
 			</div>
 			<div class="settings">
+				<div class="nextloadnote">
+					The following options will apply next time you load the game.
+				</div>
 				
-				<!-- ABOUT KC3 -->
+				<!-- QUEST TRANSLATIONS -->
 				<div class="section">
 					<div class="title">On-Screen Quest Translations</div>
 					<div class="note">On-screen translations are "<em>masking tapes</em>" that hover on top of the game screen. It is safe and does not meddle with game files nor the network. Much like how pop-up ads are, its totally outside of the game's flash client.</div>
 					<div class="contents content-check">
-						<div class="option option-check hover">
-							<div class="check-box"><input type="checkbox" name="desktop" /></div>
-							<div class="check-label">Enable. Show these translations</div>
+						<div class="option option-check hover tloverlay">
+							<div class="check-box"><input type="checkbox" /></div>
+							<div class="check-label">Show on-screen english translations</div>
 							<div class="clear"></div>
 						</div>
 					</div>
@@ -158,9 +161,9 @@
 					<div class="title">Timer Allowance</div>
 					<div class="note">Expedition and repairs are known to complete by at most, one minute before the intended time. This completion is affected by different factors and the actual time differs for every person. Usually it's 40 to 50 seconds so KC3改's default is 45 seconds. Set it to 60 seconds if you still get the full one minute free completion time.</div>
 					<div class="contents content-text">
-						<div class="option option-text hover">
-							<div class="text-box"><input type="text" name="allowance" /></div>
-							<div class="text-label">seconds</div>
+						<div class="option option-text hover allowance">
+							<div class="text-box"><input type="text" /></div>
+							<div class="text-label">seconds [ <a>Set</a> ]</div>
 							<div class="clear"></div>
 						</div>
 					</div>
@@ -170,25 +173,49 @@
 				<div class="section">
 					<div class="title">Alert Sounds</div>
 					<div class="note">Check the options below on how you want to be alerted when one of the timers complete for either expedition, repair or docks.</div>
-					<div class="contents content-radio">
-						<div class="option option-radio hover">
+					<div class="contents content-radio alerting">
+						<div class="option option-radio hover option-0" data-num="0">
+							<div class="radio-box"><input type="radio" name="alerter" /></div>
+							<div class="radio-label">Nothing. Keep quiet.</div>
+							<div class="clear"></div>
+						</div>
+						<div class="option option-radio hover option-1" data-num="1">
 							<div class="radio-box"><input type="radio" name="alerter" /></div>
 							<div class="radio-label">DING!</div>
 							<div class="clear"></div>
 						</div>
-						<div class="option option-radio hover">
+						<div class="option option-radio hover option-2" data-num="2">
 							<div class="radio-box"><input type="radio" name="alerter" /></div>
-							<div class="radio-label">My secretary will alert me</div>
+							<div class="radio-label">My current secretary will alert me</div>
 							<div class="clear"></div>
 						</div>
-						<div class="option option-radio hover">
+						<div class="option option-radio hover option-3" data-num="3">
+							<div class="radio-box"><input type="radio" name="alerter" /></div>
+							<div class="radio-label">My first wife will alert me</div>
+							<div class="clear"></div>
+						</div>
+						<div class="option option-radio hover option-4" data-num="4">
 							<div class="radio-box"><input type="radio" name="alerter" /></div>
 							<div class="radio-label">Flagship of returning fleet will alert me</div>
 							<div class="clear"></div>
 						</div>
-						<div class="option option-radio hover">
+						<div class="option option-radio hover option-5" data-num="5">
 							<div class="radio-box"><input type="radio" name="alerter" /></div>
-							<div class="radio-label">Custom, use this sound...</div>
+							<div class="radio-label">Use the custom sound placed on the extensions directory</div>
+							<div class="clear"></div>
+						</div>
+					</div>
+					<div class="note">To use the custom sound, go to the <a href="http://stackoverflow.com/questions/14543896/where-does-chrome-store-extensions" target="_blank">Chrome extensions directory<img src="../../assets/img/social/ext.png" class="extlink" /></a> on your computer and put the sound file on KC3改's <code>/assets/snd</code> folder and name it <code>alert.mp3</code>. The extension ID is <code class="kc3kaiextid">?</code>.</div>
+				</div>
+				
+				<!-- ALERT VOLUME -->
+				<div class="section">
+					<div class="title">Alert Volume</div>
+					<div class="note">Many complained about how annoying the "ding!" sound was, for the traditional KC3. Now, you can set the volume of whatever was chosen on the <strong>Alert Sounds</strong> section.</div>
+					<div class="contents content-text">
+						<div class="option option-text hover volume">
+							<div class="text-box"><input type="text" /></div>
+							<div class="text-label">% (<em>Select 0 to 100 only</em>) [ <a>Set</a> ]</div>
 							<div class="clear"></div>
 						</div>
 					</div>
@@ -199,9 +226,9 @@
 					<div class="title">Chrome Desktop Notifications</div>
 					<div class="note">This will show you a small popup on your notification area whenever a timer completes.</div>
 					<div class="contents content-check">
-						<div class="option option-check hover">
-							<div class="check-box"><input type="checkbox" name="desktop" /></div>
-							<div class="check-label">Enable. Alert me on my desktop</div>
+						<div class="option option-check hover desktop">
+							<div class="check-box"><input type="checkbox" /></div>
+							<div class="check-label">Enable. Alert me on my desktop.. or laptop :v</div>
 							<div class="clear"></div>
 						</div>
 					</div>
@@ -211,19 +238,19 @@
 				<div class="section">
 					<div class="title">Screenshot</div>
 					<div class="note">Choose what you want to do with the screenshots then from KC3改. You may either send it directly to your <em>Downloads</em> directory or automatically upload it to <strong>imgur</strong> service. Photos uploaded to imgur are remembered by KC3改.</div>
-					<div class="contents content-radio">
-						<div class="option option-radio hover">
-							<div class="radio-box"><input type="radio" name="ssmode" /></div>
+					<div class="contents content-radio ssmode">
+						<div class="option option-radio hover option-0" data-num="0">
+							<div class="radio-box"><input type="radio" name="ssmodes" /></div>
 							<div class="radio-label">Download to computer</div>
 							<div class="clear"></div>
 						</div>
-						<div class="option option-radio hover">
-							<div class="radio-box"><input type="radio" name="ssmode" /></div>
+						<div class="option option-radio hover option-1" data-num="1">
+							<div class="radio-box"><input type="radio" name="ssmodes" /></div>
 							<div class="radio-label">Upload to imgur</div>
 							<div class="clear"></div>
 						</div>
-						<div class="option option-radio hover">
-							<div class="radio-box"><input type="radio" name="ssmode" /></div>
+						<div class="option option-radio hover option-2" data-num="2">
+							<div class="radio-box"><input type="radio" name="ssmodes" /></div>
 							<div class="radio-label">Just show the pic on a new tab</div>
 							<div class="clear"></div>
 						</div>
@@ -235,16 +262,16 @@
 					<div class="title">Game Screen</div>
 					<div class="note"><strong>Top Margin</strong></div>
 					<div class="contents content-text">
-						<div class="option option-text hover">
-							<div class="text-box"><input type="text" name="topmargin" /></div>
+						<div class="option option-text margin">
+							<div class="text-box"><input type="text" /></div>
 							<div class="text-label">pixels</div>
 							<div class="clear"></div>
 						</div>
 					</div>
-					<div class="note"><strong>Background</strong></div>
+					<div class="note"><strong>Background</strong> (You may also put an external image direct link)</div>
 					<div class="contents content-text">
-						<div class="option option-ltext hover">
-							<div class="text-box"><input type="text" name="background" /></div>
+						<div class="option option-ltext background">
+							<div class="text-box"><input type="text" /></div>
 							<div class="clear"></div>
 						</div>
 					</div>
@@ -255,7 +282,7 @@
 					<div class="title">Ship Construction Face</div>
 					<div class="note">Some people do not want spoiler on their construction. If you're one of them, here's the option to turn off the faces in the construction timers in the Admiral's panel.</div>
 					<div class="contents content-check">
-						<div class="option option-check hover">
+						<div class="option option-check hover reveal">
 							<div class="check-box"><input type="checkbox" name="faces" /></div>
 							<div class="check-label">Show me ship faces in construction timers</div>
 							<div class="clear"></div>

@@ -195,6 +195,13 @@ ul {
 	width:470px;
 	float:right;
 }
+.settings .nextloadnote {
+	width:470px;
+	height:30px;
+	line-height:30px;
+	margin:0px 0px 5px 0px;
+	text-align:center;
+}
 .settings .section {
 	width:470px;
 	background:#f3f3f3;
@@ -300,7 +307,7 @@ ul {
 .content-text .option-ltext .text-box input {
 	width:400px;
 	height:20px;
-	text-align:center;
+	text-align:left;
 }
 .content-text .option-text .text-box {
 	width:40px;
@@ -313,7 +320,7 @@ ul {
 .content-text .option-text .text-box input {
 	width:40px;
 	height:20px;
-	text-align:center;
+	text-align:left;
 }
 .content-text .option-text .text-label {
 	width:350px;
