@@ -66,8 +66,6 @@ KC3.prototype.Dashboard.Timers = {
 		if(app.Config.desktop_notif){
 			num = parseInt(num, 10);
 			var notifData = { type: "basic" };
-			console.log(app.Docks._repair[num]);
-			console.log(app.Docks._build[num]);
 			
 			// Notification types show varying messages
 			switch(type){
@@ -85,10 +83,9 @@ KC3.prototype.Dashboard.Timers = {
 					notifData.iconUrl = "../../assets/img/quests/supply.jpg";
 					break;
 				case 2:
-					var thisBuild = app.Docks._build[num];
-					console.log("thisBuild", thisBuild);
+					var masterShip = app.Master.ship( app.Docks._build[num].api_created_ship_id );
 					notifData.title = "Construction Complete!";
-					// notifData.message = "New face "++" has been constructed!";
+					notifData.message = "New face "+masterShip.english+" has been constructed!";
 					notifData.iconUrl = "../../assets/img/quests/build.jpg";
 					break;
 				default:break;
@@ -223,7 +220,7 @@ KC3.prototype.Dashboard.Timers = {
 					}else{
 						$(".timer-img img", element).attr("src", "../../assets/img/ui/empty.png");
 					}
-					this.seconds[2][index] = Math.ceil(((thisBuildSlot.api_complete_time)-now)/1000);
+					this.seconds[2][index] = Math.ceil((thisBuildSlot.api_complete_time-now)/1000);
 					break;
 				case 3:
 					var thisShip = app.Master.ship( thisBuildSlot.api_created_ship_id );
