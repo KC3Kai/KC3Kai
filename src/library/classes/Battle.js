@@ -55,34 +55,32 @@ KC3.prototype.Battle  = {
 			fleet2: this.CompileFleetInfo(1),
 			fleet3: this.CompileFleetInfo(2),
 			fleet4: this.CompileFleetInfo(3),
-			support1: this.CheckIfSupporting(false),
-			support2: this.CheckIfSupporting(true),
+			support1: this.GetSupportingFleet(false),
+			support2: this.GetSupportingFleet(true),
 			time: stime
 		}, function(id){
 			self.onSortie = id;
 		});
 	},
 	
-	CheckIfSupporting :function(bossSupport){
+	GetSupportingFleet :function(bossSupport){
 		var expedNumbers;
 		if(bossSupport){
 			expedNumbers = [34,110,118,126,150];
-			return (this.CheckIfSupportingByFleet(expedNumbers, 1)
-				|| this.CheckIfSupportingByFleet(expedNumbers, 2)
-				|| this.CheckIfSupportingByFleet(expedNumbers, 3)
-				)?1:0;
+			return this.CheckIfFleetIsSupporting(expedNumbers, 1)
+				|| this.CheckIfFleetIsSupporting(expedNumbers, 2)
+				|| this.CheckIfFleetIsSupporting(expedNumbers, 3);
 		}else{
 			expedNumbers = [33,109,117,125,149];
-			return (this.CheckIfSupportingByFleet(expedNumbers, 1)
-				|| this.CheckIfSupportingByFleet(expedNumbers, 2)
-				|| this.CheckIfSupportingByFleet(expedNumbers, 3)
-				)?1:0;
+			return this.CheckIfFleetIsSupporting(expedNumbers, 1)
+				|| this.CheckIfFleetIsSupporting(expedNumbers, 2)
+				|| this.CheckIfFleetIsSupporting(expedNumbers, 3);
 		}
 	},
 	
-	CheckIfSupportingByFleet :function(expedNumbers, fleetNumber){
+	CheckIfFleetIsSupporting :function(expedNumbers, fleetNumber){
 		var fleetExpedition = app.Docks._fleets[fleetNumber].api_mission[1];
-		return (expedNumbers.indexOf(fleetExpedition)>-1)?true:false;
+		return (expedNumbers.indexOf(fleetExpedition)>-1)?fleetNumber:0;
 	},
 	
 	EndSortie :function(){
