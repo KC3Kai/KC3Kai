@@ -94,7 +94,7 @@
 	background:#e4e4e4;
 }
 .page_ships .ship_item.ten-margin {
-	margin:10px 0px 0px 0px;
+	margin-top:10px;
 }
 
 .page_ships .ship_item:hover .ship_field {
