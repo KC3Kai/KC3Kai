@@ -8,6 +8,7 @@ KC3.prototype.Docks  = {
 		this._repair_ids = [];
 		this._build = [];
 		this._buildCount = 2;
+		this._combined = 0;
 	},
 	
 	setFleets :function(data){

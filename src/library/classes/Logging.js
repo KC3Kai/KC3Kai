@@ -9,11 +9,11 @@ KC3.prototype.Logging  = {
 	--------------------------------------------*/
 	init: function(){
 		this.database = new Dexie("KC3");
-		this.database.version(1).stores({
+		this.database.version(4).stores({
 			account: "++id,&hq,server,mid,name",
 			build: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time",
 			lsc: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,devmat,result,time",
-			sortie: "++id,hq,world,mapnum,fleetnum,combined,fleet1,fleet2,time",
+			sortie: "++id,hq,world,mapnum,fleetnum,combined,fleet1,fleet2,fleet3,fleet4,support1,support2,time",
 			battle: "++id,hq,sortie_id,node,data,yasen,rating,drop,time",
 			resource: "++id,hq,rsc1,rsc2,rsc3,rsc4,hour",
 			useitem: "++id,hq,torch,screw,bucket,devmat,hour",

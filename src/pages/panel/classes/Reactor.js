@@ -74,6 +74,8 @@ KC3.prototype.Reactor  = {
 		
 		app.Player.newsfeed(response.api_data.api_log);
 		
+		app.Docks._combined = response.api_data.api_combined_flag;
+		
 		app.Dashboard.Info.admiral();
 		app.Dashboard.Info.materials();
 		app.Dashboard.Timers.update();
@@ -357,6 +359,11 @@ KC3.prototype.Reactor  = {
 		
 	},
 	
+	/* Combine/Uncombine Fleets
+	-------------------------------------------------------*/
+	"api_req_hensei/combined":function(params, response, headers){
+		app.Docks._combined = parseInt(app.Util.findParam(params, "api%5Fcombined%5Ftype"), 10);
+	},
 	
 	/*-------------------------------------------------------*/
 	/*----------------------[ BATTLES ]----------------------*/

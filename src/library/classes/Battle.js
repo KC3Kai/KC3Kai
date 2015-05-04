@@ -50,13 +50,39 @@ KC3.prototype.Battle  = {
 			world: world,
 			mapnum: mapnum,
 			fleetnum: fleetnum,
-			combined: 0,
+			combined: app.Docks._combined,
 			fleet1: this.CompileFleetInfo(0),
 			fleet2: this.CompileFleetInfo(1),
+			fleet3: this.CompileFleetInfo(2),
+			fleet4: this.CompileFleetInfo(3),
+			support1: this.CheckIfSupporting(false),
+			support2: this.CheckIfSupporting(true),
 			time: stime
 		}, function(id){
 			self.onSortie = id;
 		});
+	},
+	
+	CheckIfSupporting :function(bossSupport){
+		var expedNumbers;
+		if(bossSupport){
+			expedNumbers = [34,110,118,126,150];
+			return (this.CheckIfSupportingByFleet(expedNumbers, 1)
+				|| this.CheckIfSupportingByFleet(expedNumbers, 2)
+				|| this.CheckIfSupportingByFleet(expedNumbers, 3)
+				)?1:0;
+		}else{
+			expedNumbers = [33,109,117,125,149];
+			return (this.CheckIfSupportingByFleet(expedNumbers, 1)
+				|| this.CheckIfSupportingByFleet(expedNumbers, 2)
+				|| this.CheckIfSupportingByFleet(expedNumbers, 3)
+				)?1:0;
+		}
+	},
+	
+	CheckIfSupportingByFleet :function(expedNumbers, fleetNumber){
+		var fleetExpedition = app.Docks._fleets[fleetNumber].api_mission[1];
+		return (expedNumbers.indexOf(fleetExpedition)>-1)?true:false;
 	},
 	
 	EndSortie :function(){
