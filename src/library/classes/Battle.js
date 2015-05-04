@@ -49,7 +49,7 @@ KC3.prototype.Battle  = {
 		app.Logging.Sortie({
 			world: world,
 			mapnum: mapnum,
-			fleetnum: fleetnum,
+			fleetnum: parseInt(fleetnum, 10),
 			combined: app.Docks._combined,
 			fleet1: this.CompileFleetInfo(0),
 			fleet2: this.CompileFleetInfo(1),
