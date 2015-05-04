@@ -5,7 +5,7 @@ body {
 }
 .wrapper {
 	width:240px;
-	height:377px;
+	height:400px;
 	overflow:hidden;
 }
 .separator {
@@ -55,4 +55,17 @@ body {
 	font-size:11px;
 	float:left;
 	color:#aaa;
+}
+
+.schedule {
+	width:240px;
+	height:23px;
+	line-height:23px;
+	text-align:center;
+	border-top:1px solid #fff;
+	font-size:12px;
+}
+.schedule span.timer {
+	color:#f00;
+	font-weight:bold;
 }

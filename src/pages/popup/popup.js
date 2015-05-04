@@ -1,4 +1,25 @@
+var myVersion = parseInt(chrome.runtime.getManifest().version, 10);
+
 $(document).on("ready", function(){
+	// Show next version
+	$(".schedule span.version").text(myVersion+1);
+	
+	// Show estimated time until next update
+	$.ajax({
+		dataType: "json",
+		url: "https://raw.githubusercontent.com/dragonjet/KC3Kai/master/update",
+		success: function(data, textStatus, request){
+			if(myVersion != parseInt(data.version, 10)){
+				version = data.version;
+				setupUpdateTime(
+					new Date(request.getResponseHeader('Date')),
+					new Date(data.time)
+				);
+			}else{
+				$(".schedule").html("You are using the latest version!");
+			}
+		}
+	});
 	
 	// Play DMM Frame
 	$("#play_dmm").on('click', function(){
@@ -45,3 +66,35 @@ $(document).on("ready", function(){
 	});
 	
 });
+
+// Setup Update Time veriables
+var remaining = false;
+var version = false;
+function setupUpdateTime(timeNow, timeNxt){
+	remaining = Math.floor((timeNxt.getTime() - timeNow.getTime())/1000);
+	showUpdateTime();
+	setInterval(showUpdateTime, 1000);
+}
+
+// Actually show the update text
+function showUpdateTime(){
+	if(remaining===false){ return false; }
+	if(remaining > 0){
+		remaining--;
+		var secs = remaining;
+		
+		var hrs = Math.floor(secs/3600);
+		secs = secs - (hrs * 3600);
+		if(hrs < 10){ hrs = "0"+hrs; }
+		
+		var min = Math.floor(secs/60);
+		secs = secs - (min * 60);
+		if(min < 10){ min = "0"+min; }
+		
+		if(secs < 10){ secs = "0"+secs; }
+		
+		$(".schedule").html("KC3改 Update Warning: v"+version+" in <span class=\"timer\">"+hrs+":"+min+":"+secs+"</span>");
+	}else{
+		$(".schedule").html("v"+version+" scheduled release now, be alert~!</a>");
+	}
+}
