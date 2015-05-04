@@ -15,6 +15,7 @@ KC3.prototype.Config  = {
 		this.alert_volume = 60;
 		this.desktop_notif = true;
 		this.ss_mode = 0;
+		this.customsound = "";
 		// Load existing user config
 		this.load();
 	},
@@ -63,6 +64,7 @@ KC3.prototype.Config  = {
 			this.loadField(tmpData, "alert_volume");
 			this.loadField(tmpData, "desktop_notif");
 			this.loadField(tmpData, "ss_mode");
+			this.loadField(tmpData, "customsound");
 		}
 	},
 	
@@ -86,7 +88,8 @@ KC3.prototype.Config  = {
 			elos_mode 		: this.elos_mode,
 			alert_volume 	: this.alert_volume,
 			desktop_notif 	: this.desktop_notif,
-			ss_mode 		: this.ss_mode
+			ss_mode 		: this.ss_mode,
+			customsound 	: this.customsound
 		});
 	}
 };

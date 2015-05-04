@@ -198,14 +198,21 @@
 							<div class="radio-box"><input type="radio" name="alerter" /></div>
 							<div class="radio-label">Flagship of returning fleet will alert me</div>
 							<div class="clear"></div>
-						</div> -->
+						</div>  -->
 						<div class="option option-radio hover option-5" data-num="5">
 							<div class="radio-box"><input type="radio" name="alerter" /></div>
-							<div class="radio-label">Use the custom sound placed on the extensions directory</div>
+							<div class="radio-label">Use the custom sound URL I specified below</div>
 							<div class="clear"></div>
 						</div>
 					</div>
-					<div class="note">To use the custom sound, go to the <a href="http://stackoverflow.com/questions/14543896/where-does-chrome-store-extensions" target="_blank">Chrome extensions directory<img src="../../assets/img/social/ext.png" class="extlink" /></a> on your computer and put the sound file on KC3改's <code>/assets/snd</code> folder and name it <code>alert.mp3</code>. The extension ID is <code class="kc3kaiextid">?</code>.</div>
+					<div class="contents content-text soundurl">
+						<div class="option option-ltext">
+							<div class="text-box"><input type="text" value="http://" placeholder="http://" />  [ <a>Set</a> ]</div>
+							<div class="clear"></div>
+						</div>
+					</div>
+					<div class="note">Starting <code>v006</code>, custom sounds can only be set as external sound files. Chrome thinks the extension is corrupted if it detects a file it did not originally install as a part of the extension. Even if you replace <code>ding.mp3</code> it ill not work. Example that will work: <code>http://images.wikia.com/kancolle/images/6/62/Yuudachi_Equipment%281%29.ogg</code></div>
+					<!-- <div class="note">To use the custom sound, go to the <a href="http://stackoverflow.com/questions/14543896/where-does-chrome-store-extensions" target="_blank">Chrome extensions directory<img src="../../assets/img/social/ext.png" class="extlink" /></a> on your computer and put the sound file on KC3改's <code>/assets/snd</code> folder to <strong>replace</strong> <code>alert.mp3</code>. The extension ID is <code class="kc3kaiextid">?</code>.</div> -->
 				</div>
 				
 				<!-- ALERT VOLUME -->

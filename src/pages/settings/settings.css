@@ -341,11 +341,6 @@ ul {
 	margin:0px 0px 10px 10px;
 	background:#ccc;
 }
-
-/* SETTINGS: TIMERS
---------------------------*/
-
-
-
-/* SETTINGS: GAME SCREEN
---------------------------*/
+.soundurl {
+	display:none;
+}

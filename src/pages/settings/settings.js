@@ -36,6 +36,11 @@ $(document).on("ready", function(){
 		app.Config.save();
 		showInput_alerting();
 	});
+	$(".soundurl input").on("change", function(){
+		app.Config.customsound = $(this).val();
+		app.Config.save();
+		showInput_alerting();
+	});
 	
 	// Alert Volume
 	showInput_volume();
@@ -104,6 +109,12 @@ function showInput_allowance(){
 function showInput_alerting(){
 	$(".alerting").fadeOut(200, function(){
 		$(".option-"+app.Config.timerAlert+" input", this).prop("checked", true);
+		$(".soundurl input").val(app.Config.customsound);
+		if(app.Config.timerAlert==5){
+			$(".soundurl").show();
+		}else{
+			$(".soundurl").hide();
+		}
 		$(this).fadeIn(200);
 	});
 }

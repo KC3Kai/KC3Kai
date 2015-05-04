@@ -113,7 +113,7 @@ KC3.prototype.Dashboard.Timers = {
 				// case 2: notifSound = new Audio(); break; // current secretary
 				// case 3: notifSound = new Audio(); break; // first wife
 				// case 4: notifSound = new Audio(); break; // Flagship of returning fleet
-				case 5: notifSound = new Audio("../../assets/snd/alert.mp3"); break; // custom sound
+				case 5: notifSound = new Audio(app.Config.customsound); break; // custom sound
 				default: notifSound = false; break;
 			}
 			
