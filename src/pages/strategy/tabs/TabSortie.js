@@ -31,7 +31,7 @@ var TabSortie = {
 	showPage :function(pageNumber){
 		var self = this;
 		app.Logging.get_sortie(pageNumber, function(response){
-			console.log(response);
+			// console.log(response);
 			$(".page_sortie .sortie_list").html("")
 			
 			var ctr, thisBuild, buildbox, bctr, battleNum;
@@ -42,12 +42,20 @@ var TabSortie = {
 				
 				$(".worldmap", buildbox).text( thisSortie.world+"-"+thisSortie.mapnum );
 				
-				self.showFleetFace(buildbox, 1, thisSortie.fleet1[0].mst_id);
-				self.showFleetFace(buildbox, 2, thisSortie.fleet1[1].mst_id);
-				self.showFleetFace(buildbox, 3, thisSortie.fleet1[2].mst_id);
-				self.showFleetFace(buildbox, 4, thisSortie.fleet1[3].mst_id);
-				self.showFleetFace(buildbox, 5, thisSortie.fleet1[4].mst_id);
-				self.showFleetFace(buildbox, 6, thisSortie.fleet1[5].mst_id);
+				var fleetnum = parseInt(thisSortie.fleetnum, 10);
+				var sentFleet = false;
+				if(typeof thisSortie["fleet"+fleetnum] != "undefined"){
+					sentFleet = thisSortie["fleet"+fleetnum];
+				}
+				
+				if(sentFleet){
+					self.showFleetFace(buildbox, 1, sentFleet[0].mst_id);
+					self.showFleetFace(buildbox, 2, sentFleet[1].mst_id);
+					self.showFleetFace(buildbox, 3, sentFleet[2].mst_id);
+					self.showFleetFace(buildbox, 4, sentFleet[3].mst_id);
+					self.showFleetFace(buildbox, 5, sentFleet[4].mst_id);
+					self.showFleetFace(buildbox, 6, sentFleet[5].mst_id);
+				}
 				
 				$(".node", buildbox).hide();
 				
