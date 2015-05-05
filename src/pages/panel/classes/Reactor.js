@@ -207,6 +207,7 @@ KC3.prototype.Reactor  = {
 	/* All owned equipment
 	-------------------------------------------------------*/
 	"api_get_member/slot_item": function(params, response, headers){
+		app.Gears.clear();
 		app.Gears.set( response.api_data );
 	},
 	
@@ -240,12 +241,10 @@ KC3.prototype.Reactor  = {
 				app.Util.findParam(params, "api%5Fitem5")
 			]
 		};
-		console.log("this.shipConstruction");
-		console.log(this.shipConstruction);
 	},
 	
 	
-	/* View Construction Docks
+	/* Construction Docks
 	-------------------------------------------------------*/
 	"api_get_member/kdock":function(params, response, headers){
 		if(this.shipConstruction.active){
@@ -379,12 +378,15 @@ KC3.prototype.Reactor  = {
 			app.Util.getUTC(headers)
 		);
 		app.Battle.onNode = response.api_data.api_no;
+		
+		app.Dashboard.showCompass(response.api_data);
 	},
 	
 	/* Traverse Map
 	-------------------------------------------------------*/
 	"api_req_map/next":function(params, response, headers){
 		app.Battle.onNode = response.api_data.api_no;
+		app.Dashboard.showCompass(response.api_data);
 	},
 	
 	/* Node Battle
@@ -505,6 +507,21 @@ KC3.prototype.Reactor  = {
 	/*-------------------------------------------------------*/
 	/*----------------------[ OTHERS ]-----------------------*/
 	/*-------------------------------------------------------*/
+	
+	/* Craft Equipment
+	-------------------------------------------------------*/
+	"api_req_kousyou/createitem":function(params, response, headers){
+		var resourceUsed = [
+			app.Util.findParam(params, "api%5Fitem1"),
+			app.Util.findParam(params, "api%5Fitem2"),
+			app.Util.findParam(params, "api%5Fitem3"),
+			app.Util.findParam(params, "api%5Fitem4")
+		];
+		
+		if(typeof response.api_data.api_slot_item != "undefined"){
+			app.Dashboard.showCraft(response.api_data, resourceUsed);
+		}
+	},
 	
 	/* Modernize
 	-------------------------------------------------------*/

@@ -7,9 +7,9 @@ body {
 	background:#def;
 }
 .devBox {
-	width:50px;
-	height:50px;
-	line-height:50px;
+	width:30px;
+	height:30px;
+	line-height:30px;
 	background:#000;
 	opacity:.4;
 	position:fixed;
@@ -21,10 +21,12 @@ body {
 	right:5px;
 }
 .refresh { top:5px; }
-.idfreset { top:60px; }
-.cbomb { top:115px; }
-.actbox { top:170px; }
-.openpanel { top:225px; }
+.idfreset { top:40px; }
+.cbomb { top:75px; }
+.actbox { top:110px; }
+.openpanel { top:145px; }
+.craftmod { top:180px; }
+.compassmod { top:215px; }
 
 /* ACTION BOXES
 -----------------------------*/
@@ -64,7 +66,7 @@ body {
 
 /* CAT BOMB
 -----------------------------*/
-#catBomb {
+#modals {
 	width:100%;
 	height:100%;
 	position:absolute;
@@ -72,7 +74,7 @@ body {
 	left:0px;
 	display:none;
 }
-#catBomb .filter {
+#modals .filter {
 	width:100%;
 	height:100%;
 	position:fixed;
@@ -82,17 +84,29 @@ body {
 	background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(0,0,0,0.5)), color-stop(100%,rgba(0,0,0,0.85)));
 	background: -webkit-radial-gradient(center, ellipse cover,  rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.85) 100%);
 }
-#catBomb .box {
+#modals .box {
+	top:50%;
+	left:50%;
+	position:absolute;
+	z-index:2;
+	display:none;
+}
+#modals .toClose {
+	width:100%;
+	height:13px;
+	line-height:13px;
+	font-size:11px;
+	text-align:center;
+}
+
+/* Cat Bomb */
+#catBomb {
 	width:400px;
 	height:120px;
     background-color: #fdd;
 	margin:-60px auto 0px -200px;
 	padding:10px;
 	border-radius:10px;
-	position:absolute;
-	top:50%;
-	left:50%;
-	z-index:2;
 	color:#c44;
 }
 #catBomb .image {
@@ -132,6 +146,144 @@ body {
 	width:380px;
 	margin:10px 0px 0px 0px;
 	font-size:12px;
+}
+
+/* Development */
+#craftModal {
+	width:300px;
+	height:200px;
+    background-color: #ffeeaa;
+	margin:-100px auto 0px -150px;
+	padding:10px;
+	border-radius:10px;
+}
+#craftModal .content {
+	width:280px;
+	height:165px;
+    margin:0px 0px 2px 0px;
+}
+#craftModal .title {
+	width:280px;
+	height:25px;
+	line-height:25px;
+	font-size:16px;
+	font-weight:bold;
+	text-align:center;
+	color:#00f;
+	margin:0px 0px 10px 0px;
+}
+#craftModal .equipLine {
+	width:280px;
+	height:20px;
+	line-height:20px;
+	margin:0px 0px 5px 0px;
+}
+#craftModal .equipInfo {
+	
+}
+#craftModal .equipIcon {
+	width:20px;
+	height:20px;
+	margin:0px 5px 0px 0px;
+	float:left;
+}
+#craftModal .equipIcon img {
+	width:20px;
+	height:20px;
+}
+#craftModal .equipName {
+	width:250px;
+	height:20px;
+	float:left;
+	font-size:14px;
+	font-weight:bold;
+}
+#craftModal .equipJapanese {
+	
+}
+#craftModal .equipStats {
+	font-size:14px;
+}
+#craftModal .equipText {
+	font-size:14px;
+}
+#craftModal .equipResources {
+	
+}
+#craftModal .equipResource {
+	width:40px;
+	height:20px;
+	margin:0px 5px 0px 0px;
+	float:left;
+}
+#craftModal .equipResourceIcon {
+	width:20px;
+	height:20px;
+	float:left;
+}
+#craftModal .equipResourceIcon img {
+	width:16px;
+	height:16px;
+	margin:2px;
+}
+#craftModal .equipResourceValue {
+	width:20px;
+	height:20px;
+	float:left;
+	font-size:14px;
+	font-weight:bold;
+}
+
+/* Compass */
+#compassModal {
+	width:300px;
+	height:200px;
+    background-color: #ddffdd;
+	margin:-100px auto 0px -150px;
+	padding:10px;
+	border-radius:10px;
+}
+#compassModal .content {
+	width:280px;
+	height:165px;
+    margin:0px 0px 2px 0px;
+}
+#compassModal .title {
+	width:280px;
+	height:25px;
+	line-height:25px;
+	font-size:16px;
+	font-weight:bold;
+	text-align:center;
+	color:#00f;
+	margin:0px 0px 10px 0px;
+}
+#compassModal .compassBox {
+	margin:0px auto;
+	width:120px;
+	height:120px;
+	padding:30px 0px 0px 0px;
+	background:url(../../assets/img/client/compass.png);
+}
+#compassModal .nodeLetter {
+	width:120px;
+	height:30px;
+	line-height:30px;
+	font-weight:bold;
+	font-size:24px;
+	text-align:center;
+}
+#compassModal .enemyFleet {
+	width:120px;
+	height:20px;
+	line-height:20px;
+	font-size:14px;
+	text-align:center;
+	background:rgba(255,255,255,.7);
+}
+#compassModal .enemyFleet img {
+	width:16px;
+	height:16px;
 }
 
 /* PANEL

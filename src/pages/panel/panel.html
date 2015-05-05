@@ -15,6 +15,8 @@
 		<div class="devBox cbomb hover">Cat</div>
 		<div class="devBox actbox hover">Msg</div>
 		<div class="devBox openpanel hover">Open</div>
+		<div class="devBox craftmod hover">Crft</div>
+		<div class="devBox compassmod hover">Comps</div>
 		
 		<!-- MESSAGE BOX -->
 		<div id="messageBox">
@@ -25,17 +27,72 @@
 			</div>
 		</div>
 		
-		<!-- CAT BOMB -->
-		<div id="catBomb">
+		
+		<div id="modals">
 			<div class="filter"></div>
-			<div class="box">
+			
+			<!-- CAT BOMB -->
+			<div id="catBomb" class="box">
 				<div class="image"><img src="../../assets/img/ui/catbomb.png" /></div>
 				<div class="title"></div>
 				<div class="closebtn hover">x</div>
 				<div class="clear"></div>
 				<div class="description">B</div>
 			</div>
+			
+			<!-- DEVELOPMENT -->
+			<div id="craftModal" class="box hover">
+				<div class="content">
+					<div class="title">Equipment Craft!</div>
+					<div class="equipLine equipInfo">
+						<div class="equipIcon"><img/></div>
+						<div class="equipName">asdasd</div>
+						<div class="clear"></div>
+					</div>
+					<div class="equipLine equipJapanese"></div>
+					<div class="equipLine equipStats"></div>
+					<div class="equipLine equipText"></div>
+					<div class="equipLine equipResources">
+						<div class="equipResource equse_fuel">
+							<div class="equipResourceIcon"><img src="../../assets/img/client/fuel.png" /></div>
+							<div class="equipResourceValue"></div>
+							<div class="clear"></div>
+						</div>
+						<div class="equipResource equse_ammo">
+							<div class="equipResourceIcon"><img src="../../assets/img/client/ammo.png" /></div>
+							<div class="equipResourceValue"></div>
+							<div class="clear"></div>
+						</div>
+						<div class="equipResource equse_steel">
+							<div class="equipResourceIcon"><img src="../../assets/img/client/steel.png" /></div>
+							<div class="equipResourceValue"></div>
+							<div class="clear"></div>
+						</div>
+						<div class="equipResource equse_baux">
+							<div class="equipResourceIcon"><img src="../../assets/img/client/bauxite.png" /></div>
+							<div class="equipResourceValue"></div>
+							<div class="clear"></div>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>
+				<div class="toClose">Click on this box to close</div>
+			</div>
+			
+			<!-- COMPASS -->
+			<div id="compassModal" class="box hover">
+				<div class="content">
+					<div class="title">Compass: Next Node!</div>
+					<div class="compassBox">
+						<div class="nodeLetter"></div>
+						<div class="enemyFleet"></div>
+					</div>
+				</div>
+				<div class="toClose">Click on this box to close</div>
+			</div>
 		</div>
+		
+		
 		
 		<!-- DASHBOARD -->
 		<div id="panel-wrap">

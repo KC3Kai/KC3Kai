@@ -13,6 +13,17 @@ KC3.prototype.Gears  = {
 		return Object.size(this.list);
 	},
 	
+	countByType :function(slotitem_id){
+		var returnCount = 0;
+		var ctr = 0;
+		for(ctr in this.list){
+			if(this.list[ctr].api_slotitem_id == slotitem_id){
+				returnCount++;
+			}
+		}
+		return returnCount;
+	},
+	
 	clear :function(){
 		this.list = {};
 		this.save();
