@@ -11,7 +11,10 @@ var TabHome = {
 		$(".page_home .hq_id .hq_content").html(app.Player.id);
 		$(".page_home .hq_name .hq_content").html(app.Player.name);
 		$(".page_home .hq_desc .hq_content").html(app.Player.desc);
-		$(".page_home .hq_server .hq_content").html(app.Player.server);
+		
+		var MyServer = app.Meta.serverByNum(app.Player.server);
+		$(".page_home .hq_server .hq_content").html(MyServer.name);
+		
 		$(".page_home .hq_rank .hq_content").html(app.Player.rank);
 		$(".page_home .hq_level .hq_content").html(app.Player.level);
 		

@@ -53,6 +53,15 @@
 		return {name:"Unknown Server", num:0, ip:ip };
 	},
 	
+	serverByNum :function(num){
+		var ctr;
+		for(ctr in this._servers){
+			if(this._servers[ctr].num==num){
+				return this._servers[ctr];
+			}
+		}
+		return {name:"Unknown Server", num:0, ip:ip };
+	},
 	
 	/* Translate Gateway
 	-------------------------------------------------------*/
