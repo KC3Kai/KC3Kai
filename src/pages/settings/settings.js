@@ -90,6 +90,30 @@ $(document).on("ready", function(){
 		showInput_reveal();
 	});
 	
+	// Show compass results
+	showInput_compass();
+	$(".showCompass").on("click", function(){
+		app.Config.showCompass = !app.Config.showCompass;
+		app.Config.save();
+		showInput_compass();
+	});
+	
+	// Predict battles
+	showInput_predict();
+	$(".predictBattle").on("click", function(){
+		app.Config.predictBattle = !app.Config.predictBattle;
+		app.Config.save();
+		showInput_predict();
+	});
+	
+	// Show craft boxes
+	showInput_craft();
+	$(".showCraft").on("click", function(){
+		app.Config.showCraft = !app.Config.showCraft;
+		app.Config.save();
+		showInput_craft();
+	});
+	
 });
 
 function showInput_tloverlay(){
@@ -157,6 +181,27 @@ function showInput_background(){
 function showInput_reveal(){
 	$(".reveal").fadeOut(200, function(){
 		$("input", this).prop("checked", app.Config.reveal_names);
+		$(this).fadeIn(200);
+	});
+}
+
+function showInput_compass(){
+	$(".showCompass").fadeOut(200, function(){
+		$("input", this).prop("checked", app.Config.showCompass);
+		$(this).fadeIn(200);
+	});
+}
+
+function showInput_predict(){
+	$(".predictBattle").fadeOut(200, function(){
+		$("input", this).prop("checked", app.Config.predictBattle);
+		$(this).fadeIn(200);
+	});
+}
+
+function showInput_craft(){
+	$(".showCraft").fadeOut(200, function(){
+		$("input", this).prop("checked", app.Config.showCraft);
 		$(this).fadeIn(200);
 	});
 }

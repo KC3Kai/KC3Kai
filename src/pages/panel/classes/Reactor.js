@@ -379,14 +379,19 @@ KC3.prototype.Reactor  = {
 		);
 		app.Battle.onNode = response.api_data.api_no;
 		
-		app.Dashboard.showCompass(response.api_data);
+		if(app.Config.showCompass){
+			app.Dashboard.showCompass(response.api_data);
+		}
 	},
 	
 	/* Traverse Map
 	-------------------------------------------------------*/
 	"api_req_map/next":function(params, response, headers){
 		app.Battle.onNode = response.api_data.api_no;
-		app.Dashboard.showCompass(response.api_data);
+		
+		if(app.Config.showCompass){
+			app.Dashboard.showCompass(response.api_data);
+		}
 	},
 	
 	/* Node Battle
@@ -518,8 +523,10 @@ KC3.prototype.Reactor  = {
 			app.Util.findParam(params, "api%5Fitem4")
 		];
 		
-		if(typeof response.api_data.api_slot_item != "undefined"){
-			app.Dashboard.showCraft(response.api_data, resourceUsed);
+		if(app.Config.showCraft){
+			if(typeof response.api_data.api_slot_item != "undefined"){
+				app.Dashboard.showCraft(response.api_data, resourceUsed);
+			}
 		}
 	},
 	

@@ -16,6 +16,9 @@ KC3.prototype.Config  = {
 		this.desktop_notif = true;
 		this.ss_mode = 0;
 		this.customsound = "";
+		this.showCraft = true;
+		this.showCompass = true;
+		this.predictBattle = false;
 		// Load existing user config
 		this.load();
 	},
@@ -65,6 +68,9 @@ KC3.prototype.Config  = {
 			this.loadField(tmpData, "desktop_notif");
 			this.loadField(tmpData, "ss_mode");
 			this.loadField(tmpData, "customsound");
+			this.loadField(tmpData, "showCraft");
+			this.loadField(tmpData, "showCompass");
+			this.loadField(tmpData, "predictBattle");
 		}
 	},
 	
@@ -89,7 +95,10 @@ KC3.prototype.Config  = {
 			alert_volume 	: this.alert_volume,
 			desktop_notif 	: this.desktop_notif,
 			ss_mode 		: this.ss_mode,
-			customsound 	: this.customsound
+			customsound 	: this.customsound,
+			showCraft 		: this.showCraft,
+			showCompass 	: this.showCompass,
+			predictBattle 	: this.predictBattle
 		});
 	}
 };
