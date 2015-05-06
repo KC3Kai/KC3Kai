@@ -14,6 +14,11 @@ var TabFleets = {
 	/* Show the page
 	--------------------------------------------*/
 	show :function(){
+		if(typeof localStorage.player_fleets == "undefined"){
+			alert("Unable to load your ship list.");
+			return false;
+		}
+		
 		var fleets = JSON.parse(localStorage.player_fleets);
 		$(".page_fleets .fleet_list").html("");
 		this.showFleet( fleets[0] );
@@ -23,6 +28,11 @@ var TabFleets = {
 	},
 	
 	showFleet :function(fleet_data){
+		if(typeof fleet_data == "undefined"){
+			alert("Unable to load your ship list.");
+			return false;
+		}
+		
 		if(typeof fleet_data.api_id != "undefined"){
 			// Clear old summary
 			app.Fleet.clear();
