@@ -134,7 +134,7 @@ KC3.prototype.Dashboard  = {
 		var MasterItem = app.Master.slotitem(craftData.api_slot_item.api_slotitem_id);
 		
 		// Show basic info of the item
-		$("#craftModal .equipIcon img").attr("src", "../../assets/img/items/"+craftData.api_type3+".png");
+		$("#craftModal .equipIcon img").attr("src", "../../assets/img/items/"+MasterItem.api_type[3]+".png");
 		$("#craftModal .equipName").text(MasterItem.english);
 		$("#craftModal .equipJapanese").text(MasterItem.api_name);
 		
