@@ -3,7 +3,7 @@
 	"name": "KanColle Command Center 改",
 	"short_name": "KC3改",
 	"description": "Kantai Collection Game Viewer and Tools",
-	"version": "5",
+	"version": "6",
 	"devtools_page": "pages/devtools/devtools.html",
 	"options_page": "pages/settings/settings.html",
 	"icons": {
