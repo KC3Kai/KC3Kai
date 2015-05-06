@@ -18,7 +18,8 @@ var PageTabs = {
 	// "devmt": TabDevmt,
 	"crafts": TabCrafts,
 	"lscs": TabLscs,
-	"rscs": TabResources
+	"rscs": TabResources,
+	"consumes": TabConsumes
 	
 	// "expcalc": TabExpcalc,
 	// "mods": TabMods,

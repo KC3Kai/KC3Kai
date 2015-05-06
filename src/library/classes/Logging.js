@@ -274,5 +274,23 @@ KC3.prototype.Logging  = {
 				
 				callback(callbackResponse);
 			});
+	},
+	
+	get_useitem :function(HourNow, callback){
+		var self = this;
+		this.database.useitem
+			.where("hour").above(HourNow-720)
+			.toArray(function(response){
+				var callbackResponse = [];
+				
+				var ctr;
+				for(ctr in response){
+					if(response[ctr].hq == self.index){
+						callbackResponse.push(response[ctr]);
+					}
+				}
+				
+				callback(callbackResponse);
+			});
 	}
 };
