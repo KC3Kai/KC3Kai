@@ -60,7 +60,7 @@
 				return this._servers[ctr];
 			}
 		}
-		return {name:"Unknown Server", num:0, ip:ip };
+		return {name:"Unknown Server", num:num, ip:"0.0.0.0" };
 	},
 	
 	/* Translate Gateway
