@@ -180,9 +180,6 @@
 	height:38px;
 	margin:3px;
 }
-.theme-horizontal .box-timers-2 .timer-name {
-	display:none;
-}
 .theme-horizontal .box-timers-2 .timer-time {
 	width:70px;
 	height:14px;
@@ -207,8 +204,18 @@
 	height:38px;
 	margin:3px;
 }
-.theme-horizontal .box-timers-3 .timer-name {
-	display:none;
+.theme-horizontal .box-timers-3 .timer-expnum {
+	position:relative;
+	width:44px;
+	height:44px;
+	line-height:44px;
+	text-align:center;
+	margin:-46px auto 0px;
+	color:#fff;
+	text-shadow: -2px -2px 2px #000,  
+    2px -2px 2px #000,
+    -2px 2px 2px #000,
+     2px 2px 2px #000;
 }
 .theme-horizontal .box-timers-3 .timer-time {
 	width:70px;
@@ -235,9 +242,6 @@
 	width:22px;
 	height:22px;
 	margin:3px;
-}
-.theme-horizontal .box-timers-4 .timer-name {
-	display:none;
 }
 .theme-horizontal .box-timers-4 .timer-time {
 	width:70px;
