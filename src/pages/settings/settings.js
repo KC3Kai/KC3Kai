@@ -82,6 +82,14 @@ $(document).on("ready", function(){
 		showInput_background();
 	});
 	
+	// Panel: Background
+	showInput_backgroundPanel();
+	$(".background_panel input").on("change", function(){
+		app.Config.background_panel = $(this).val();
+		app.Config.save();
+		showInput_backgroundPanel();
+	});
+	
 	// Reveal ship face
 	showInput_reveal();
 	$(".reveal").on("click", function(){
@@ -174,6 +182,13 @@ function showInput_margin(){
 function showInput_background(){
 	$(".background").fadeOut(200, function(){
 		$("input", this).val(app.Config.background);
+		$(this).fadeIn(200);
+	});
+}
+
+function showInput_backgroundPanel(){
+	$(".background_panel").fadeOut(200, function(){
+		$("input", this).val(app.Config.background_panel);
 		$(this).fadeIn(200);
 	});
 }

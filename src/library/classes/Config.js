@@ -6,6 +6,7 @@ KC3.prototype.Config  = {
 		this.timerAlert = 1;
 		this.gambox_margin = 0;
 		this.background = "#def";
+		this.background_panel = "#def";
 		this.tl_overlay = false;
 		this.size = 100;
 		this.time_dev = 45;
@@ -58,6 +59,7 @@ KC3.prototype.Config  = {
 			this.loadField(tmpData, "timerAlert");
 			this.loadField(tmpData, "gambox_margin");
 			this.loadField(tmpData, "background");
+			this.loadField(tmpData, "background_panel");
 			this.loadField(tmpData, "tl_overlay");
 			this.loadField(tmpData, "size");
 			this.loadField(tmpData, "time_dev");
@@ -86,6 +88,7 @@ KC3.prototype.Config  = {
 			timerAlert 		: this.timerAlert,
 			gambox_margin 	: this.gambox_margin,
 			background 		: this.background,
+			background_panel: this.background_panel,
 			tl_overlay 		: this.tl_overlay,
 			size 			: this.size,
 			time_dev 		: this.time_dev,

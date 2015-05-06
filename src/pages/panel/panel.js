@@ -28,4 +28,13 @@ $(document).on("ready", function(){
 	app.Listener.init();
 	app.Dashboard.init();
 	app.Dashboard.Timers.init();
+	
+	// Apply interface configs
+	if(app.Config.background_panel.substring(0,1) == "#"){
+		$("body").css("background", app.Config.background_panel);
+	}else{
+		$("body").css("background-size", "cover");
+		$("body").css("background-repeat", "no-repeat");
+		$("body").css("background-image", "url("+app.Config.background_panel+")");
+	}
 });

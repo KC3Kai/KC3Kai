@@ -3,9 +3,6 @@ html,body {
 	padding:0;
 	height:100%;
 }
-body {
-	background:#def;
-}
 .devBox {
 	width:30px;
 	height:30px;
