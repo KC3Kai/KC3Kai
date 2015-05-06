@@ -54,8 +54,15 @@ KC3.prototype.Dashboard  = {
 		});
 		
 		// Share compo button
-		$(".share-button").on('click', function(){
-			window.open("../strategy/strategy.html#fleets", "kc4_strategy");
+		$(".screenshot-button").on('click', function(){
+			$(this).hide();
+			$(".screenshot-mode").text("OK");
+			$(".screenshot-mode").show();
+			setTimeout(function(){
+				$(".screenshot-button").show();
+				$(".screenshot-mode").hide();
+			}, 200);
+			self.takeScreenshot();
 		});
 		
 		// Strategy Room
@@ -228,5 +235,18 @@ KC3.prototype.Dashboard  = {
 				this.messageBox("Refresh the game to view this panel!");
 			}
 		}
+	},
+	
+	/* Screenshot Tool
+	-------------------------------------------------------*/
+	takeScreenshot :function(){
+		// Ask background page to ask game container to take screenshot
+		chrome.runtime.sendMessage({
+			game:"kancolle",
+			type:"background",
+			action:"screenshot",
+			tabId: chrome.devtools.inspectedWindow.tabId,
+			playerIndex: app.Player.id
+		});
 	}
 };

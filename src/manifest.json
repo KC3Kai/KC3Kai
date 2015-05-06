@@ -18,6 +18,8 @@
 	"permissions": [
 		"unlimitedStorage",
 		"storage",
+		"downloads",
+		"downloads.shelf",
 		"tabs",
 		"activeTab",
 		"notifications",

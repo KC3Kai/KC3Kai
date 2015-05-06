@@ -335,7 +335,7 @@
 	background:#369;
 	color:#fff;
 }
-.theme-horizontal .share-button {
+.theme-horizontal .screenshot-button {
 	width:100px;
 	height:30px;
 	float:right;
@@ -343,6 +343,14 @@
 	font-size:14px;
 	background:#5c5;
 	border-radius:0px 0px 10px 10px;
+}
+.theme-horizontal .screenshot-mode {
+	width:100px;
+	height:30px;
+	float:right;
+	font-weight:bold;
+	font-size:14px;
+	display:none;
 }
 /* Summary */
 .theme-horizontal .fleet-summary {

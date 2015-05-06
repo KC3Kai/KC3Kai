@@ -16,6 +16,9 @@ $(document).on("ready", function(){
 	
 	// Apply initial configuration
 	app.Config.init();
+	app.Logging.init();
+	
+	// Apply interface configs
 	$(".box-wrap").css("margin-top", app.Config.gambox_margin);
 	if(app.Config.background.substring(0,1) == "#"){
 		$("body").css("background", app.Config.background);
@@ -77,6 +80,11 @@ chrome.runtime.onMessage.addListener(function(request, sender, response) {
 			case "clear_overlays":
 				$(".box-game .overlays").html("");
 				response({success:true});
+				break;
+			
+			// Take Screenshot
+			case "screenshot":
+				(new KCScreenshot()).start(request.playerIndex, $(".box-wrap"));
 				break;
 			
 			default: response({success:false, message:"Unknown action"}); break;

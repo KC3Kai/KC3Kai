@@ -69,8 +69,19 @@ var KC4BG = {
 	------------------------------------------*/
 	notify_desktop:function(request, sender, response){
 		chrome.notifications.create("kc3kai_"+request.notifId, request.data);
-	}
+	},
 	
+	/* [screenshot]
+	Ask the game container to take a screenshot
+	------------------------------------------*/
+	screenshot:function(request, sender, response){
+		chrome.tabs.sendMessage(request.tabId, {
+			game:"kancolle",
+			type:"game",
+			action:"screenshot",
+			playerIndex:request.playerIndex
+		});
+	}
 };
 
 /* INTERACTION REQUESTS
