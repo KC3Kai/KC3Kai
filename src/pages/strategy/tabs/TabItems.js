@@ -80,8 +80,8 @@ var TabItems = {
 	--------------------------------------------*/
 	checkShipSlotForItemHolder :function(slot, ThisShip){
 		MasterShip = app.Master.ship(ThisShip.api_ship_id);
-		if(ThisShip.api_slot[0] > -1){
-			this._holders["s"+ThisShip.api_slot[0]] = {
+		if(ThisShip.api_slot[slot] > -1){
+			this._holders["s"+ThisShip.api_slot[slot]] = {
 				master: ThisShip.api_ship_id,
 				level: ThisShip.api_lv,
 				english: MasterShip.english
