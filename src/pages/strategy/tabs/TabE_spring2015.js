@@ -9,7 +9,6 @@ var TabE_spring2015 = {
 	show :function(){
 		var self = this;
 		app.Logging.get_event(30, function(response){
-			console.log(response);
 			$(".page_spr2015 .sortie_list").html("")
 			
 			var ctr, thisBuild, buildbox, bctr, battleNum;

@@ -30,9 +30,7 @@ var TabDevmt = {
 	},
 	
 	showPage :function(pageNumber){
-		console.log("showPage()", pageNumber);
 		app.Logging.get_devmt(pageNumber, function(response){
-			console.log("response", response);
 			$(".page_devmt .build_list").html("")
 			
 			var ctr, thisBuild, buildbox, MasterItem;

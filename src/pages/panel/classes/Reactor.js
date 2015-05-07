@@ -523,6 +523,7 @@ KC3.prototype.Reactor  = {
 			app.Util.findParam(params, "api%5Fitem4")
 		];
 		
+		// Log into development History
 		app.Logging.Develop({
 			flag: app.Ships.get( app.Docks._fleets[0].api_ship[0] ).api_ship_id,
 			rsc1: resourceUsed[0],
@@ -533,6 +534,7 @@ KC3.prototype.Reactor  = {
 			time: app.Util.getUTC(headers)
 		});
 		
+		// Call craft box if enabled
 		if(app.Config.showCraft){
 			if(typeof response.api_data.api_slot_item != "undefined"){
 				app.Dashboard.showCraft(response.api_data, resourceUsed);

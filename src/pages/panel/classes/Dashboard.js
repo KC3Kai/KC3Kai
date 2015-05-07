@@ -162,12 +162,12 @@ KC3.prototype.Dashboard  = {
 		}
 		
 		// Add the new equipment to local data
-		app.Gears.set({
+		app.Gears.set([{
 			api_id: craftData.api_slot_item.api_id,
 			api_level: 0,
 			api_locked: 0,
 			api_slotitem_id: MasterItem.api_id
-		});
+		}]);
 		
 		// Show resource used
 		$("#craftModal .equse_fuel .equipResourceValue").text(resourceUsed[0]);

@@ -25,6 +25,7 @@ var TabItems = {
 		for(ctr in app.Gears.list){
 			ThisItem = app.Gears.list[ctr];
 			MasterItem = app.Master.slotitem(ThisItem.api_slotitem_id);
+			if(!MasterItem) continue;
 			
 			// Check if slotitem_type is filled
 			if(typeof this._items["t"+MasterItem.api_type[3]] == "undefined"){
@@ -73,7 +74,6 @@ var TabItems = {
 			}
 		}
 		
-		console.log(this._items);
 	},
 	
 	/* Check a ship's equipment slot of an item is equipped
