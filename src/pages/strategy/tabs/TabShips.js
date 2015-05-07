@@ -3,12 +3,7 @@ var TabShips = {
 	_ships:[],
 	sortBy: "id",
 	sortAsc: true,
-	filters:[
-		/*true,true,true,true,true,true,true,
-		true,true,true,true,true,true,true,
-		true,true,true,true,true,true,true,
-		true,true,true,true,true,true,true*/
-	],
+	filters:[],
 	equipMode: 0,
 	
 	/* onReady, initialize
@@ -46,7 +41,7 @@ var TabShips = {
 				lk: ThisShip.api_lucky[0]
 			});
 		}
-		console.log(this._ships);
+		
 	},
 	
 	/* Compute Derived Stats without Equipment

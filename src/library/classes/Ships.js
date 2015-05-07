@@ -49,7 +49,6 @@ KC3.prototype.Ships  = {
 	
 	load :function(){
 		if(typeof localStorage.player_ships != "undefined"){
-			console.log("loading player ships");
 			this.list = JSON.parse(localStorage.player_ships);
 		}
 	},

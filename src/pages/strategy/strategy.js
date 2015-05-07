@@ -7,15 +7,16 @@ var PageTabs = {
 	
 	"fleets": TabFleets,
 	// "quests": TabQuests,
+	// "expeds": TabExpeds,
 	
 	"ships": TabShips,
-	// "items": TabItems,
+	"items": TabItems,
 	// "showcase": TabShowcase,
 	
 	"sortie": TabSortie,
 	"e_spring2015": TabE_spring2015,
 	
-	// "devmt": TabDevmt,
+	"devmt": TabDevmt,
 	"crafts": TabCrafts,
 	"lscs": TabLscs,
 	"rscs": TabResources,
