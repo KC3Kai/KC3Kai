@@ -523,6 +523,16 @@ KC3.prototype.Reactor  = {
 			app.Util.findParam(params, "api%5Fitem4")
 		];
 		
+		app.Logging.Develop({
+			flag: app.Ships.get( app.Docks._fleets[0].api_ship[0] ).api_ship_id,
+			rsc1: resourceUsed[0],
+			rsc2: resourceUsed[1],
+			rsc3: resourceUsed[2],
+			rsc4: resourceUsed[3],
+			result: response.api_data.api_slot_item.api_slotitem_id,
+			time: app.Util.getUTC(headers)
+		});
+		
 		if(app.Config.showCraft){
 			if(typeof response.api_data.api_slot_item != "undefined"){
 				app.Dashboard.showCraft(response.api_data, resourceUsed);

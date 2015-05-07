@@ -31,6 +31,18 @@ KC3.prototype.Logging  = {
 			screenshots: "++id,hq,imgur,ltime"
 		}).upgrade(function(t){});
 		
+		this.database.version(3).stores({
+			account: "++id,&hq,server,mid,name",
+			build: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time",
+			lsc: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,devmat,result,time",
+			sortie: "++id,hq,world,mapnum,fleetnum,combined,fleet1,fleet2,fleet3,fleet4,support1,support2,time",
+			battle: "++id,hq,sortie_id,node,data,yasen,rating,drop,time",
+			resource: "++id,hq,rsc1,rsc2,rsc3,rsc4,hour",
+			useitem: "++id,hq,torch,screw,bucket,devmat,hour",
+			screenshots: "++id,hq,imgur,ltime",
+			develop: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time"
+		}).upgrade(function(t){});
+		
 		this.database.open();
 	},
 	
@@ -139,6 +151,11 @@ KC3.prototype.Logging  = {
 			imgur : imgur,
 			ltime : Math.floor((new Date()).getTime()/1000),
 		});
+	},
+	
+	Develop :function(data){
+		data.hq = this.index;
+		this.database.develop.add(data);
 	},
 	
 	/* [GET] Retrive logs from Local DB
@@ -292,5 +309,21 @@ KC3.prototype.Logging  = {
 				
 				callback(callbackResponse);
 			});
+	},
+	
+	get_devmt :function(pageNumber, callback){
+		var itemsPerPage = 25;
+		this.database.develop
+			.where("hq").equals(this.index)
+			.reverse()
+			.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
+			.toArray(callback);
+	},
+	
+	count_devmt: function(callback){
+		this.database.develop
+			.where("hq").equals(this.index)
+			.count(callback);
 	}
+	
 };
