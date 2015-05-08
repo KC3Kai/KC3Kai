@@ -72,7 +72,7 @@ KC3.prototype.Dashboard.Timers = {
 				case 0:
 					var thisFleet = app.Docks._fleets[num];
 					notifData.title = "Expedition Complete!";
-					notifData.message = "Fleet "+(num+1)+" just arrived from expedition #"+thisFleet.api_mission[1];
+					notifData.message = "Fleet "+(num+1)+" just arrived from Expedition #"+thisFleet.api_mission[1];
 					notifData.iconUrl = "../../assets/img/quests/expedition.jpg";
 					break;
 				case 1:
