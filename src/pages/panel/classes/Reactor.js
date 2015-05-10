@@ -530,7 +530,10 @@ KC3.prototype.Reactor  = {
 			rsc2: resourceUsed[1],
 			rsc3: resourceUsed[2],
 			rsc4: resourceUsed[3],
-			result: response.api_data.api_slot_item.api_slotitem_id,
+			result:
+				(typeof response.api_data.api_slot_item != "undefined")
+				?response.api_data.api_slot_item.api_slotitem_id
+				:-1,
 			time: app.Util.getUTC(headers)
 		});
 		

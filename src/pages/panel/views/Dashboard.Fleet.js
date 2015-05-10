@@ -3,6 +3,10 @@ KC3.prototype.Dashboard.Fleet = {
 	currentShipLos: 0,
 	
 	update :function(animateID){
+		// If fleet doesn't exist yet (player has not yet unlocked the fleet)
+		if(typeof app.Docks._fleets[this.selectedFleet-1] == "undefined"){ return false; }
+		
+		// If there's no ship animating
 		if(typeof animateID == "undefined"){ animateID = -2; }
 		
 		// Clear old summary
