@@ -68,7 +68,9 @@ var KC4BG = {
 	Check if tab is a KC3改 frame and tell to override styles or not
 	------------------------------------------*/
 	notify_desktop:function(request, sender, response){
-		chrome.notifications.create("kc3kai_"+request.notifId, request.data);
+		chrome.notifications.clear("kc3kai_"+request.notifId, function(){
+			chrome.notifications.create("kc3kai_"+request.notifId, request.data);
+		});
 	},
 	
 	/* [screenshot]
