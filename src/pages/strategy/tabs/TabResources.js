@@ -166,7 +166,7 @@ var TabResources = {
 		for(backDays=30; backDays>=0; backDays--){
 			thisDay = this.day-backDays;
 			thisDateObj = new Date(thisDay*24*60*60*1000);
-			data.hours[graphIndex] = thisDateObj.getMonth()+"/"+thisDateObj.getDate();
+			data.hours[graphIndex] = (thisDateObj.getMonth()+1)+"/"+thisDateObj.getDate();
 			
 			// If a resource for this hour exists
 			if(typeof this.data_day["d"+thisDay] != "undefined"){
