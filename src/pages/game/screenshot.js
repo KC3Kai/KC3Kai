@@ -7,12 +7,14 @@ function KCScreenshot(){
 	this.domImg = {};
 	this.base64img = "";
 	this.playerIndex = "";
+	this.screenshotFilename = "";
 };
 
 KCScreenshot.prototype.start = function(playerIndex, element){
 	var self = this;
 	this.playerIndex = playerIndex;
 	this.gamebox = element;
+	this.screenshotFilename = generateScreenshotFilename();
 	
 	// Initialize HTML5 Canvas
 	this.canvas = document.createElement("canvas");
@@ -28,6 +30,22 @@ KCScreenshot.prototype.start = function(playerIndex, element){
 
 function chromeCapture(response){
 	chrome.tabs.captureVisibleTab(null, {format:"jpeg"}, response);
+}
+
+function generateScreenshotFilename() {
+  var d = new Date();
+  curr_month = d.getMonth() + "";
+  if (curr_month.length == 1) { curr_month = "0" + curr_month; }
+  curr_date = d.getDate() + "";
+  if (curr_date.length == 1) { curr_date = "0" + curr_date; }
+  curr_hour = d.getHours() + "";
+  if (curr_hour.length == 1) { curr_hour = "0" + curr_hour; }
+  curr_min = d.getMinutes() + "";
+  if (curr_min.length == 1) { curr_min = "0" + curr_min; }
+  curr_second = d.getSeconds() + "";
+  if (curr_second.length == 1) { curr_second = "0" + curr_second; }
+
+  return "KanColle_" + d.getFullYear() + "-" + curr_month + "-" + curr_date + "_" + curr_hour + "-" + curr_min + "-" + curr_second;
 }
 
 KCScreenshot.prototype.capture = function(){
@@ -86,7 +104,7 @@ KCScreenshot.prototype.saveDownload = function(){
 	chrome.downloads.setShelfEnabled(false);
 	chrome.downloads.download({
 		url: this.base64img,
-		filename: 'kancolle/'+Math.floor((new Date()).getTime()/1000)+"_"+Math.floor(Math.random()*100)+".jpg",
+		filename: 'KanColle/'+this.screenshotFilename+".jpg",
 		conflictAction: "uniquify"
 	}, function(downloadId){
 		setTimeout(function(){
