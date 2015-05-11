@@ -66,7 +66,7 @@ var TabHome = {
 				break;
 			case "7":
 				$(".page_home .feed_item_"+(index+1)+" .colorbox").css("background", "#D75048");
-				$(".page_home .feed_item_"+(index+1)+" .feed_text").html("Unlocked a new map");
+				$(".page_home .feed_item_"+(index+1)+" .feed_text").html("Cleared or unlocked a new map");
 				break;
 			case "11":
 				$(".page_home .feed_item_"+(index+1)+" .colorbox").css("background", "#9999FF");
