@@ -65,13 +65,18 @@ body {
 .tab-content {
 	display:none;
 }
-.noplayernotice {
-	width:600px;
-	padding:10px 0px;
+.tabs-content .tab-message {
+	width:500px;
+	padding:10px 20px;
 	background:#fcc;
-	border:1px solid #d88;
+	border:2px solid #d88;
 	margin:20px auto;
 	text-align:center;
+	color:#c44;
+	display:none;
+}
+.tabs-content .tab-html {
+	width:680px;
 }
 .page_title {
 	width:680px;
