@@ -173,11 +173,11 @@ KC3.prototype.Dashboard.Timers = {
 			}
 			
 			if( thisFleet.api_mission[0] == 1 ){
-				$(".timer-expnum", element).text("#"+thisFleet.api_mission[1]);
+				$(".timer-expnum", element).text(thisFleet.api_mission[1]);
 				var now = new Date().getTime();
 				this.seconds[0][index] = Math.ceil(((thisFleet.api_mission[2]-(app.Config.time_dev*1000))-now)/1000);
 			}else if(thisFleet.api_mission[0]==2){
-				$(".timer-expnum", element).text("#"+thisFleet.api_mission[1]);
+				$(".timer-expnum", element).text(thisFleet.api_mission[1]);
 				$(".timer-time", element).text("Complete!");
 				
 			}else{

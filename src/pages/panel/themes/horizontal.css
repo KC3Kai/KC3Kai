@@ -208,14 +208,14 @@
 	position:relative;
 	width:44px;
 	height:44px;
-	line-height:44px;
-	text-align:center;
+	line-height:70px;
+	text-align:right;
 	margin:-46px auto 0px;
 	color:#fff;
-	text-shadow: -2px -2px 2px #000,  
-    2px -2px 2px #000,
-    -2px 2px 2px #000,
-     2px 2px 2px #000;
+	text-shadow: -1px -1px 2px #000,  
+    1px -1px 2px #000,
+    -1px 1px 2px #000,
+     1px 1px 2px #000;
 }
 .theme-horizontal .box-timers-3 .timer-time {
 	width:70px;
