@@ -556,19 +556,19 @@ KC3.prototype.Reactor  = {
 			// Create map object
 			maps[ "m"+thisMap.api_id ] = {
 				id: thisMap.api_id,
-				clear: thisMap.api_cleared,
+				clear: thisMap.api_cleared
 			};
 			
 			// Check for boss gauge kills
 			if(typeof thisMap.api_defeat_count != "undefined"){
-				maps[ thisMap.api_id ].kills = thisMap.api_defeat_count;
+				maps[ "m"+thisMap.api_id ].kills = thisMap.api_defeat_count;
 			}
 			
 			// Check for event map info
 			if(typeof thisMap.api_eventmap != "undefined"){
-				maps[ thisMap.api_id ].curhp = thisMap.api_eventmap.api_now_maphp;
-				maps[ thisMap.api_id ].maxhp = thisMap.api_eventmap.api_max_maphp;
-				maps[ thisMap.api_id ].difficulty = thisMap.api_eventmap.api_selected_rank;
+				maps[ "m"+thisMap.api_id ].curhp = thisMap.api_eventmap.api_now_maphp;
+				maps[ "m"+thisMap.api_id ].maxhp = thisMap.api_eventmap.api_max_maphp;
+				maps[ "m"+thisMap.api_id ].difficulty = thisMap.api_eventmap.api_selected_rank;
 			}
 		}
 		localStorage.player_maps = JSON.stringify(maps);
