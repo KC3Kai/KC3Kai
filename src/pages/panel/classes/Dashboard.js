@@ -5,11 +5,19 @@ KC3.prototype.Dashboard  = {
 	-------------------------------------------------------*/
 	init :function(){
 		var self = this;
+		
 		// Load theme HTML
 		$.ajax({
 			url: 'themes/horizontal.html',
 			success: function(response){
 				$("#panel-wrap").html(response);
+				
+				// Apply panel box opacity
+				var oldBG = $(".theme-box").css("background-color");
+				var newBG = oldBG.insert( oldBG.length-1, ", "+(app.Config.panelAlpha/100) );
+				newBG = newBG.insert(3, "a"); // "rgb" -> "rgba"
+				$(".theme-box").css("background-color", newBG);
+				
 				self.ready();
 			}
 		});

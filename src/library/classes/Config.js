@@ -20,6 +20,7 @@ KC3.prototype.Config  = {
 		this.showCraft = true;
 		this.showCompass = true;
 		this.predictBattle = false;
+		this.panelAlpha = 100;
 		// Load existing user config
 		this.load();
 	},
@@ -73,6 +74,7 @@ KC3.prototype.Config  = {
 			this.loadField(tmpData, "showCraft");
 			this.loadField(tmpData, "showCompass");
 			this.loadField(tmpData, "predictBattle");
+			this.loadField(tmpData, "panelAlpha");
 		}
 	},
 	
@@ -101,7 +103,8 @@ KC3.prototype.Config  = {
 			customsound 	: this.customsound,
 			showCraft 		: this.showCraft,
 			showCompass 	: this.showCompass,
-			predictBattle 	: this.predictBattle
+			predictBattle 	: this.predictBattle,
+			panelAlpha 		: this.panelAlpha
 		});
 	}
 };
