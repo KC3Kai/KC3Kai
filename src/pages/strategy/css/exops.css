@@ -1,0 +1,71 @@
+.page_exops {
+	width:680px;
+}
+.page_exops .sorties {
+	width:680px;
+}
+
+/* MAP LIST
+---------------------------*/
+.page_exops .sortie_maps {
+	width:120px;
+	min-height:300px;
+	float:left;
+	padding:10px 0px 0px 0px;
+}
+.page_exops .map_notes {
+	width:120px;
+	margin:0px 0px 10px 0px;
+	text-align:center;
+	font-size:11px;
+	padding:0px 5px;
+}
+.page_exops .sortie_map {
+	width:120px;
+	height:50px;
+	margin:0px 0px 10px 0px;
+	padding:5px 0px;
+	font-weight:bold;
+	text-align:center;
+	border-radius:10px 0px 0px 10px;
+}
+.page_exops .sortie_map.active {
+	background:#def;
+}
+.page_exops .sortie_map .map_name {
+	width:120px;
+	height:24px;
+	line-height:24px;
+	font-size:14px;
+}
+.page_exops .sortie_map .map_name span {
+	font-size:12px;
+	color:#aaa;
+}
+.page_exops .sortie_map .map_hp {
+	width:120px;
+	height:16px;
+}
+.page_exops .sortie_map .map_bar {
+	width:100px;
+	height:10px;
+	margin:0px 10px;
+	background:#555;
+	border:1px solid #000;
+}
+.page_exops .sortie_map .map_val {
+	width:50px;
+	height:8px;
+	background:#0f0;
+}
+
+/* SORTIE LIST
+---------------------------*/
+.page_exops .sortie_lists {
+	width:560px;
+	min-height:600px;
+	float:left;
+	margin:0px 0px 0px -1px;
+	background:#def;
+	border-radius:10px;
+}
