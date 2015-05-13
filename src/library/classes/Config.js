@@ -18,7 +18,7 @@ KC3.prototype.Config  = {
 		this.ss_mode = 0;
 		this.customsound = "";
 		this.showCraft = true;
-		this.showCompass = true;
+		this.showCompass = false;
 		this.predictBattle = false;
 		this.panelAlpha = 100;
 		// Load existing user config
