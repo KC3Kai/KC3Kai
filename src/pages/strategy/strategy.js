@@ -16,7 +16,7 @@ $(document).on("ready", function(){
 	// Load player data
 	app.Player.load();
 	
-	// Check if player data is available
+	// Check if basic player data is available
 	if(app.Player.id==0){
 		// Error page, cannot continue
 		app.Strategy.showError("No player data available!");

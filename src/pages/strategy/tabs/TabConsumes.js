@@ -1,5 +1,16 @@
 var TabConsumes = {
-	active: false,
+	status: {
+		active: false,
+		error: false,
+		message: "",
+		check :function(){
+			if(this.error){
+				app.Strategy.showError( this.message );
+				return false;
+			}
+			return true;
+		}
+	},
 	
 	hour: 0,
 	zone: 0,
@@ -15,18 +26,23 @@ var TabConsumes = {
 	/* onReady, initialize
 	--------------------------------------------*/
 	init :function(){
-		if(this.active) return false; this.active = true;
+		if(this.status.active) return true;
+		
 		this.hour = Math.floor((new Date()).getTime()/(1*60*60*1000));
 		this.zone = Math.floor((new Date()).getTime()/(6*60*60*1000));
 		this.day = Math.floor((new Date()).getTime()/(24*60*60*1000));
 		
 		app.Player.load();
 		Chart.defaults.global.scaleBeginAtZero = true;
+		
+		this.status.active = true;
 	},
 	
 	/* Show the page
 	--------------------------------------------*/
 	show :function(){
+		if(!this.status.check()) return false;
+		
 		var self = this;
 		
 		// Get list of resources for the past 24 hours

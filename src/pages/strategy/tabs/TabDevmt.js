@@ -1,13 +1,26 @@
 var TabDevmt = {
-	active: false,
+	status: {
+		active: false,
+		error: false,
+		message: "",
+		check :function(){
+			if(this.error){
+				app.Strategy.showError( this.message );
+				return false;
+			}
+			return true;
+		}
+	},
 	
 	init :function(){
-		if(this.active) return false; this.active = true;
+		if(this.status.active) return true;
 		
-		app.Player.load();
+		this.status.active = true;
 	},
 	
 	show :function(){
+		if(!this.status.check()) return false;
+		
 		// Get pagination
 		app.Logging.count_devmt(function(NumRecords){
 			var itemsPerPage = 25;

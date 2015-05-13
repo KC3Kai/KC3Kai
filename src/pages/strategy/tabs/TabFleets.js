@@ -5,7 +5,7 @@ var TabFleets = {
 		message: "",
 		check :function(){
 			if(this.error){
-				app.Strategy.showError( this.status.message );
+				app.Strategy.showError( this.message );
 				return false;
 			}
 			return true;
@@ -20,21 +20,21 @@ var TabFleets = {
 		if(this.status.active) return true;
 		
 		// Load fleets and error if empty
-		if( app.Docks.loadFleets() == 0 ){
+		if(!app.Docks.loadFleets()){
 			this.status.error = true;
 			this.status.message = "Fleet information not available";
 			return false;
 		}
 		
 		// Load ships and error if empty
-		if( app.Ships.load() == 0 ){
+		if(!app.Ships.load()){
 			this.status.error = true;
 			this.status.message = "Ship list not available";
 			return false;
 		}
 		
 		// Load equipment and error if empty
-		if( app.Gears.load() == 0 ){
+		if(!app.Gears.load()){
 			this.status.error = true;
 			this.status.message = "Equipment list not available";
 			return false;
@@ -63,7 +63,7 @@ var TabFleets = {
 	--------------------------------------------*/
 	showFleet :function(fleet_data){
 		// Check if fleet exists
-		if(typeof fleet_data.api_id != "undefined"){
+		if(typeof fleet_data != "undefined"){
 			// Clear old summary
 			app.Fleet.clear();
 			

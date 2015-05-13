@@ -1,5 +1,17 @@
 var TabItems = {
-	active: false,
+	status: {
+		active: false,
+		error: false,
+		message: "",
+		check :function(){
+			if(this.error){
+				app.Strategy.showError( this.message );
+				return false;
+			}
+			return true;
+		}
+	},
+	
 	_items: {},
 	_holders: {},
 	
@@ -8,12 +20,22 @@ var TabItems = {
 	init :function(){
 		if(this.active) return false; this.active = true;
 		
-		var ctr, ThisItem, MasterItem, ThisShip, MasterShip;
+		// Load equipment and error if empty
+		if(!app.Gears.load()){
+			this.status.error = true;
+			this.status.message = "Equipment list not available";
+			return false;
+		}
 		
-		app.Ships.load();
-		app.Gears.load();
+		// Load ships and error if empty
+		if(!app.Ships.load()){
+			this.status.error = true;
+			this.status.message = "Ship list not available";
+			return false;
+		}
 		
 		// Compile equipment holders
+		var ctr, ThisItem, MasterItem, ThisShip, MasterShip;
 		for(ctr in app.Ships.list){
 			this.checkShipSlotForItemHolder(0, app.Ships.list[ctr]);
 			this.checkShipSlotForItemHolder(1, app.Ships.list[ctr]);
@@ -92,6 +114,8 @@ var TabItems = {
 	/* Show the page
 	--------------------------------------------*/
 	show :function(){
+		if(!this.status.check()) return false;
+		
 		var self = this;
 		
 		$(".page_items .item_type").on("click", function(){

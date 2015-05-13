@@ -5,7 +5,7 @@ var TabHome = {
 		message: "",
 		check :function(){
 			if(this.error){
-				app.Strategy.showError( this.status.message );
+				app.Strategy.showError( this.message );
 				return false;
 			}
 			return true;
