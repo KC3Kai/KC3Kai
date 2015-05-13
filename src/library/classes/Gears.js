@@ -61,6 +61,9 @@ KC3.prototype.Gears  = {
 	load :function(){
 		if(typeof localStorage.player_gears != "undefined"){
 			this.list = JSON.parse(localStorage.player_gears);
+			return true;
+		}else{
+			return false;
 		}
 	}
 };

@@ -16,6 +16,15 @@ KC3.prototype.Docks  = {
 		localStorage.player_fleets = JSON.stringify(this._fleets);
 	},
 	
+	loadFleets :function(){
+		if(typeof localStorage.player_fleets != "undefined"){
+			this._fleets = JSON.parse(localStorage.player_fleets);
+			return true;
+		}else{
+			return false;
+		}
+	},
+	
 	setRepair :function(data){
 		this._repair = data;
 		this._repairCount = 0;

@@ -1,13 +1,52 @@
 var TabHome = {
-	active: false,
-	cache_stats: {},
-	
-	init :function(){
-		if(this.active) return false; this.active = true;
-		app.Player.load();
+	status: {
+		active: false,
+		error: false,
+		message: "",
+		check :function(){
+			if(this.error){
+				app.Strategy.showError( this.status.message );
+				return false;
+			}
+			return true;
+		}
 	},
 	
+	statistics: {},
+	newsfeed: {},
+	
+	/* Load required data, set error if not available
+	---------------------------------------------------*/
+	init :function(){
+		if(this.status.active) return true;
+		
+		// Check for player statstics
+		if(typeof localStorage.player_statistics != "undefined"){
+			this.statistics = JSON.parse(localStorage.player_statistics);
+		}else{
+			this.status.error = true;
+			this.status.message = "Player statistics not available";
+			return false;
+		}
+		
+		// Check for player newsfeed
+		if(typeof localStorage.player_newsfeed != "undefined"){
+			this.newsfeed = JSON.parse(localStorage.player_newsfeed);
+		}else{
+			this.status.error = true;
+			this.status.message = "News Feed not available";
+			return false;
+		}
+		
+		this.status.active = true;
+	},
+	
+	/* Attempt to show the page
+	--------------------------------------------*/
 	show :function(){
+		if(!this.status.check()) return false;
+		
+		// Show player information
 		$(".page_home .hq_id .hq_content").html(app.Player.id);
 		$(".page_home .hq_name .hq_content").html(app.Player.name);
 		$(".page_home .hq_desc .hq_content").html(app.Player.desc);
@@ -18,29 +57,31 @@ var TabHome = {
 		$(".page_home .hq_rank .hq_content").html(app.Player.rank);
 		$(".page_home .hq_level .hq_content").html(app.Player.level);
 		
-		this.cache_stats = JSON.parse(localStorage.player_statistics);
-		$(".page_home .stat_sortie .stat_rate .stat_value").html(this.cache_stats.sortie.rate);
-		$(".page_home .stat_sortie .stat_win .stat_value").html(this.cache_stats.sortie.win);
-		$(".page_home .stat_sortie .stat_lose .stat_value").html(this.cache_stats.sortie.lose);
+		// Show statistics
+		$(".page_home .stat_sortie .stat_rate .stat_value").html(this.statistics.sortie.rate);
+		$(".page_home .stat_sortie .stat_win .stat_value").html(this.statistics.sortie.win);
+		$(".page_home .stat_sortie .stat_lose .stat_value").html(this.statistics.sortie.lose);
 		
-		$(".page_home .stat_pvp .stat_rate .stat_value").html(this.cache_stats.pvp.rate);
-		$(".page_home .stat_pvp .stat_win .stat_value").html(this.cache_stats.pvp.win);
-		$(".page_home .stat_pvp .stat_lose .stat_value").html(this.cache_stats.pvp.lose);
-		$(".page_home .stat_pvp .stat_atk .stat_value").html(this.cache_stats.pvp.attacked);
-		$(".page_home .stat_pvp .stat_atkwin .stat_value").html(this.cache_stats.pvp.attacked_win);
+		$(".page_home .stat_pvp .stat_rate .stat_value").html(this.statistics.pvp.rate);
+		$(".page_home .stat_pvp .stat_win .stat_value").html(this.statistics.pvp.win);
+		$(".page_home .stat_pvp .stat_lose .stat_value").html(this.statistics.pvp.lose);
+		$(".page_home .stat_pvp .stat_atk .stat_value").html(this.statistics.pvp.attacked);
+		$(".page_home .stat_pvp .stat_atkwin .stat_value").html(this.statistics.pvp.attacked_win);
 		
-		$(".page_home .stat_exped .stat_rate .stat_value").html(this.cache_stats.exped.rate);
-		$(".page_home .stat_exped .stat_success .stat_value").html(this.cache_stats.exped.success);
-		$(".page_home .stat_exped .stat_total .stat_value").html(this.cache_stats.exped.total);
+		$(".page_home .stat_exped .stat_rate .stat_value").html(this.statistics.exped.rate);
+		$(".page_home .stat_exped .stat_success .stat_value").html(this.statistics.exped.success);
+		$(".page_home .stat_exped .stat_total .stat_value").html(this.statistics.exped.total);
 		
-		var newfeed = JSON.parse(localStorage.player_newsfeed);
-		this.showFeedItem( 0, newfeed[0] );
-		this.showFeedItem( 1, newfeed[1] );
-		this.showFeedItem( 2, newfeed[2] );
-		this.showFeedItem( 3, newfeed[3] );
-		this.showFeedItem( 4, newfeed[4] );
+		// Show Newsfeed
+		this.showFeedItem( 0, this.newsfeed[0] );
+		this.showFeedItem( 1, this.newsfeed[1] );
+		this.showFeedItem( 2, this.newsfeed[2] );
+		this.showFeedItem( 3, this.newsfeed[3] );
+		this.showFeedItem( 4, this.newsfeed[4] );
 	},
 	
+	/* Show single news feed record
+	--------------------------------------------*/
 	showFeedItem :function( index, data ){
 		switch(data.api_type){
 			case "1":

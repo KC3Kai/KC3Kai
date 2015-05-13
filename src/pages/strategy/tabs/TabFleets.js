@@ -1,38 +1,68 @@
 var TabFleets = {
-	active: false,
+	status: {
+		active: false,
+		error: false,
+		message: "",
+		check :function(){
+			if(this.error){
+				app.Strategy.showError( this.status.message );
+				return false;
+			}
+			return true;
+		}
+	},
+	
 	currentShipLos: 0,
 	
-	/* onReady, initialize
-	--------------------------------------------*/
+	/* Load required data, set error if not available
+	---------------------------------------------------*/
 	init :function(){
-		if(this.active) return false; this.active = true;
-		app.Player.load();
-		app.Ships.load();
-		app.Gears.load();
+		if(this.status.active) return true;
+		
+		// Load fleets and error if empty
+		if( app.Docks.loadFleets() == 0 ){
+			this.status.error = true;
+			this.status.message = "Fleet information not available";
+			return false;
+		}
+		
+		// Load ships and error if empty
+		if( app.Ships.load() == 0 ){
+			this.status.error = true;
+			this.status.message = "Ship list not available";
+			return false;
+		}
+		
+		// Load equipment and error if empty
+		if( app.Gears.load() == 0 ){
+			this.status.error = true;
+			this.status.message = "Equipment list not available";
+			return false;
+		}
+		
+		this.status.active = true;
 	},
 	
-	/* Show the page
+	/* Attempt to show the page
 	--------------------------------------------*/
 	show :function(){
-		if(typeof localStorage.player_fleets == "undefined"){
-			alert("Unable to load your ship list.");
-			return false;
-		}
+		if(!this.status.check()) return false;
 		
-		var fleets = JSON.parse(localStorage.player_fleets);
+		// Empty fleet list
 		$(".page_fleets .fleet_list").html("");
-		this.showFleet( fleets[0] );
-		this.showFleet( fleets[1] );
-		this.showFleet( fleets[2] );
-		this.showFleet( fleets[3] );
+		
+		// Execute fleet fill
+		this.showFleet( app.Docks._fleets[0] );
+		this.showFleet( app.Docks._fleets[1] );
+		this.showFleet( app.Docks._fleets[2] );
+		this.showFleet( app.Docks._fleets[3] );
 	},
 	
+	
+	/* Show single fleet
+	--------------------------------------------*/
 	showFleet :function(fleet_data){
-		if(typeof fleet_data == "undefined"){
-			alert("Unable to load your ship list.");
-			return false;
-		}
-		
+		// Check if fleet exists
 		if(typeof fleet_data.api_id != "undefined"){
 			// Clear old summary
 			app.Fleet.clear();
@@ -46,17 +76,18 @@ var TabFleets = {
 			var shipCtr;
 			for(shipCtr in fleet_data.api_ship){
 				if(fleet_data.api_ship[shipCtr] > -1){
-					// console.log(fleet_data.api_ship[shipCtr]);
 					this.showShip( fleetBox , fleet_data.api_ship[shipCtr]);
 				}
 			}
 			
-			// Fleet summary
+			// Fleet info completion check
 			if(!app.Fleet.complete){
 				$(".detail_los2", fleetBox).addClass("incomplete");
 				$(".detail_los3", fleetBox).addClass("incomplete");
 				$(".detail_air", fleetBox).addClass("incomplete");
 			}
+			
+			// Show fleet info
 			$(".detail_level .detail_value", fleetBox).text(app.Fleet.level);
 			$(".detail_los2 .detail_value", fleetBox).text(app.Fleet.getEffectiveLoS(2));
 			$(".detail_los3 .detail_value", fleetBox).text(app.Fleet.getEffectiveLoS(3));
@@ -65,19 +96,19 @@ var TabFleets = {
 		}
 	},
 	
+	/* Show single ship
+	--------------------------------------------*/
 	showShip :function( fleetBox, ship_id ){
-		// console.log("showShip: "+ship_id);
-		// console.log("showShip2: "+app.Ships.get(ship_id));
+		
+		// If ship exists on current list
 		if(app.Ships.get(ship_id) !== false){
 			var thisShip = app.Ships.get(ship_id);
 			var masterShip = app.Master.ship(thisShip.api_ship_id);
-			// console.log(thisShip);
 			
 			app.Fleet.level += thisShip.api_lv;
 			app.Fleet.total_los += thisShip.api_sakuteki[0];
 			if(masterShip.api_soku < 10){ app.Fleet.speed = "Slow"; }
 			
-			// console.log(fleetBox.attr("id"));
 			var shipBox = $(".page_fleets .factory .fleet_ship").clone().appendTo("#"+fleetBox.attr("id")+" .fleet_ships");
 			$(".ship_type", shipBox).text( app.Meta.stype(masterShip.api_stype) );
 			$(".ship_pic img", shipBox).attr("src", app.Assets.shipIcon(masterShip.api_id) );
@@ -95,6 +126,8 @@ var TabFleets = {
 		}
 	},
 	
+	/* Show single equipment
+	--------------------------------------------*/
 	showEquip :function( gearBox, gear_id, capacity){
 		if(gear_id > -1){
 			if(app.Gears.get(gear_id) === false){
@@ -114,4 +147,5 @@ var TabFleets = {
 			gearBox.hide();
 		}
 	}
+	
 };
