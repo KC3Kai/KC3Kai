@@ -7,6 +7,8 @@
 	_ship: [],
 	_slotitem: [],
 	_servers: [],
+	_gauges: {},
+	_battle: {},
 	
 	/* Initialize Translation Data
 	-------------------------------------------------------*/
@@ -19,6 +21,8 @@
 		$.getJSON(repo+"ranks.json", function(response){ self._ranks = response; });
 		$.getJSON(repo+"stype.json", function(response){ self._stype = response; });
 		$.getJSON(repo+"servers.json", function(response){ self._servers = response; });
+		$.getJSON(repo+"gauges.json", function(response){ self._gauges = response; });
+		$.getJSON(repo+"battle.json", function(response){ self._battle = response; });
 		
 		// Load Translations
 		$.getJSON(repo+"translations/ships.json", function(response){ self._ship = response; });
@@ -61,6 +65,26 @@
 			}
 		}
 		return {name:"Unknown Server", num:num, ip:"0.0.0.0" };
+	},
+	
+	gauge :function(map_id){
+		if(typeof this._gauges["m"+map_id] != "undefined"){ return this._gauges["m"+map_id]; }
+		return 4;
+	},
+	
+	detection :function(index){
+		if(typeof this._battle.detection[index] != "undefined"){ return this._battle.detection[index]; }
+		return ["",""];
+	},
+	
+	airbattle :function(index){
+		if(typeof this._battle.airbattle[index] != "undefined"){ return this._battle.airbattle[index]; }
+		return ["",""];
+	},
+	
+	engagement :function(index){
+		if(typeof this._battle.engagement[index] != "undefined"){ return this._battle.engagement[index]; }
+		return ["",""];
 	},
 	
 	/* Translate Gateway

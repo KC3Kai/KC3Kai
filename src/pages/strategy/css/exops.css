@@ -54,18 +54,276 @@
 	border:1px solid #000;
 }
 .page_exops .sortie_map .map_val {
-	width:50px;
 	height:8px;
+	background:#faa;
+}
+.page_exops .sortie_map .map_hp.unknown .map_bar {
+	background:#aaa;
+	border:0px none;
+}
+.page_exops .sortie_map .map_hp.unknown .map_val {
+	display:none;
+}
+.page_exops .sortie_map .map_hp.cleared .map_bar {
 	background:#0f0;
+	border:0px none;
+}
+.page_exops .sortie_map .map_hp.cleared .map_val {
+	display:none;
 }
 
 /* SORTIE LIST
 ---------------------------*/
 .page_exops .sortie_lists {
-	width:560px;
-	min-height:600px;
+	width:300px;
 	float:left;
-	margin:0px 0px 0px -1px;
 	background:#def;
 	border-radius:10px;
+	overflow:hidden;
+}
+.page_exops .sortie_maptitle {
+	width:300px;
+	height:30px;
+	line-height:30px;
+	font-size:14px;
+	font-weight:bold;
+	text-align:center;
+	margin:0px 0px 5px 0px;
+}
+.page_exops .sortie_list {
+	width:300px;
+	min-height:580px;
+	padding:0px 10px;
+}
+.page_exops .sortie_more {
+	width:300px;
+	height:24px;
+	line-height:24px;
+	font-size:11px;
+	font-weight:bold;
+	color:#00f;
+	background:#ace;
+	text-align:center;
+}
+
+/* SORTIE LIST: ITEM
+---------------------------*/
+.page_exops .sortie_item {
+	width:280px;
+	height:50px;
+	background:#fff;
+	margin:0px 0px 5px 0px;
+	border-radius:8px;
+}
+.page_exops .sortie_item.active {
+	background:#bcd;
+}
+/* Record Box */
+.page_exops .sortie_item .sortie_record {
+	width:50px;
+	height:50px;
+	float:left;
+}
+.page_exops .sortie_item .sortie_id {
+	width:50px;
+	height:20px;
+	line-height:20px;
+	margin:8px 0px 0px 0px;
+	text-align:center;
+	font-size:14px;
+	font-weight:bold;
+	color:#55c;
+}
+.page_exops .sortie_item .sortie_date {
+	width:50px;
+	height:14px;
+	line-height:14px;
+	text-align:center;
+	font-size:11px;
+	color:#999;
+}
+/* Flagship */
+.page_exops .sortie_item .sortie_flag {
+	width:50px;
+	height:50px;
+	float:left;
+}
+.page_exops .sortie_item .sortie_flag img {
+	width:40px;
+	height:40px;
+	margin:5px;
+}
+/* Nodes */
+.page_exops .sortie_item .sortie_nodes {
+	width:180px;
+	height:50px;
+	float:left;
+}
+.page_exops .sortie_item .sortie_node {
+	width:30px;
+	height:30px;
+	line-height:30px;
+	border-radius:20px;
+	background:#c33;
+	margin:10px 2px;
+	float:left;
+	text-align:center;
+	font-size:15px;
+	font-weight:bold;
+	color:#fff;
+	display:none;
+}
+
+
+
+/* SORTIE INFO
+---------------------------*/
+.page_exops .sortie_info {
+	width:260px;
+	height:550px;
+	float:left;
+	margin:20px 0px 0px 0px;
+	background:#cde;
+	border-radius:0px 10px 10px 0px;
+	overflow:hidden;
+	display:none;
+}
+.page_exops .sortie_info .sortie_title {
+	width:260px;
+	height:30px;
+	line-height:30px;
+	font-size:14px;
+	font-weight:bold;
+	text-align:center;
+	margin:0px 0px 10px 0px;
+	background:#bcd;
+}
+/* Details */
+.page_exops .sortie_info .sortie_details {
+	width:240px;
+	margin:0px 10px 5px 10px;
+	background:#fff;
+	border-radius:7px;
+	padding:5px 0px;
+}
+.page_exops .sortie_info .sortie_fleet {
+	width:240px;
+	height:30px;
+	margin:0px 0px 5px 0px;
+}
+.page_exops .sortie_info .fleet_title {
+	width:62px;
+	height:30px;
+	line-height:30px;
+	font-size:11px;
+	padding:0px 0px 0px 5px;
+	margin:0px 3px 0px 0px;
+	float:left;
+	font-weight:bold;
+}
+.page_exops .sortie_info .fleet_img {
+	width:26px;
+	height:26px;
+	border-radius:14px;
+	margin:2px 3px 0px 0px;
+	float:left;
+	background:#ccc;
+}
+.page_exops .sortie_info .fleet_img img {
+	width:26px;
+	height:26px;
+}
+/* Nodes */
+.page_exops .sortie_info .sortie_battles {
+	width:240px;
+}
+.page_exops .sortie_info .sortie_battle {
+	width:240px;
+	height:70px;
+	margin:17px 10px 0px 10px;
+	background:#ffc;
+	border-radius:7px;
+	padding:5px 0px;
+}
+.page_exops .sortie_info .sortie_battle .battle_node {
+	width:30px;
+	height:30px;
+	line-height:28px;
+	border-radius:20px;
+	background:#c33;
+	margin:-15px 0px 0px 10px;
+	float:left;
+	text-align:center;
+	font-size:15px;
+	font-weight:bold;
+	color:#fff;
+	border:1px solid #f00;
+}
+.page_exops .sortie_info .sortie_battle .battle_date {
+	width:150px;
+	height:15px;
+	line-height:15px;
+	font-size:11px;
+	color:#888;
+	float:left;
+	padding:0px 0px 0px 10px;
+}
+.page_exops .sortie_info .sortie_battle .battle_replay {
+	width:50px;
+	height:15px;
+	line-height:15px;
+	font-size:11px;
+	float:left;
+	font-weight:bold;
+	color:#ccc;
+}
+.page_exops .sortie_info .sortie_battle .battle_data {
+	width:160px;
+	height:50px;
+	float:left;
+	margin:5px 5px 0px 0px;
+	font-size:11px;
+}
+.page_exops .sortie_info .sortie_battle .battle_label {
+	width:45px;
+	height:21px;
+	line-height:21px;
+	float:left;
+	/*background:#cfc;*/
+	margin:0px 0px 0px 5px;
+}
+.page_exops .sortie_info .sortie_battle .battle_value {
+	width:30px;
+	height:21px;
+	line-height:21px;
+	float:left;
+	font-weight:bold;
+	/*background:#fcc;*/
+}
+.page_exops .sortie_info .sortie_battle .battle_value.good {
+	color:#009900;
+}
+.page_exops .sortie_info .sortie_battle .battle_value.bad {
+	color:#f33;
+}
+.page_exops .sortie_info .sortie_battle .battle_rate {
+	width:30px;
+	height:50px;
+	float:left;
+	margin:0px 2px 0px 0px;
+}
+.page_exops .sortie_info .sortie_battle .battle_rate img {
+	width:26px;
+	height:26px;
+	margin:12px 2px;
+}
+.page_exops .sortie_info .sortie_battle .battle_drop {
+	width:40px;
+	height:50px;
+	float:left;
+}
+.page_exops .sortie_info .sortie_battle .battle_drop img {
+	width:36px;
+	height:36px;
+	margin:7px 2px;
 }

@@ -1,0 +1,27 @@
+{
+	"detection" : [
+		["", ""],
+		["OK", "good"],
+		["OK-", "good"],
+		["-", "bad"],
+		["NO", "bad"],
+		["OK+", "good"],
+		["NO+", "bad"]
+	],
+	
+	"airbattle" : [
+		["AP", ""],
+		["AS+", "good"],
+		["AS", "good"],
+		["AI", ""],
+		["AD", "bad"]
+	],
+	
+	"engagement" : [
+		"",
+		"Prll",
+		"HdOn",
+		"Gr-T",
+		"Rd-T"
+	]
+}

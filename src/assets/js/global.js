@@ -12,6 +12,12 @@ Date.prototype.ddmmhh = function() {
    return (dd[1]?dd:"0"+dd[0])+"/"+(mm[1]?mm:"0"+mm[0])+"("+hh+"h)";
 };
 
+Date.prototype.mmdd = function() {
+   var mm = (this.getMonth()+1).toString();
+   var dd  = this.getDate().toString();
+   return (mm[1]?mm:"0"+mm[0])+"/"+(dd[1]?dd:"0"+dd[0]);
+};
+
 Date.prototype.changeTimezone = function(offset) {
 	var utc = this.getTime() + (this.getTimezoneOffset() * 60000);
 	this.setTime(utc + (3600000*offset));
