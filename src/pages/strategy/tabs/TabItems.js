@@ -95,6 +95,8 @@ var TabItems = {
 		var self = this;
 		
 		$(".page_items .item_type").on("click", function(){
+			$(".page_items .item_type").removeClass("active");
+			$(this).addClass("active");
 			self.showType($(this).data("type"));
 		});
 		
