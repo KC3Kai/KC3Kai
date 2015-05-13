@@ -169,6 +169,8 @@ var TabShips = {
 				return returnVal;
 			});
 			
+			var totals = {lv:0, hp:0, fp:0, tp:0, aa:0, ar:0, as:0, ev:0, ls:0, lk:0 };
+			
 			// Fill up list
 			for(shipCtr in FilteredShips){
 				cShip = FilteredShips[shipCtr];
@@ -184,14 +186,27 @@ var TabShips = {
 				$(".ship_hp", cElm).text( cShip.hp );
 				$(".ship_lk", cElm).text( cShip.lk );
 				
+				totals.lv += parseInt(cShip.level, 10);
+				totals.hp += parseInt(cShip.hp, 10);
+				totals.lk += parseInt(cShip.lk, 10);
+				
 				self.modernizableStat("fp", cElm, cShip.fp);
 				self.modernizableStat("tp", cElm, cShip.tp);
 				self.modernizableStat("aa", cElm, cShip.aa);
 				self.modernizableStat("ar", cElm, cShip.ar);
 				
+				totals.fp += parseInt($(".ship_fp", cElm).text(), 10);
+				totals.tp += parseInt($(".ship_tp", cElm).text(), 10);
+				totals.aa += parseInt($(".ship_aa", cElm).text(), 10);
+				totals.ar += parseInt($(".ship_ar", cElm).text(), 10);
+				
 				$(".ship_as", cElm).text( cShip.as[self.equipMode] );
 				$(".ship_ev", cElm).text( cShip.ev[self.equipMode] );
 				$(".ship_ls", cElm).text( cShip.ls[self.equipMode] );
+				
+				totals.as += parseInt(cShip.as[self.equipMode], 10);
+				totals.ev += parseInt(cShip.ev[self.equipMode], 10);
+				totals.ls += parseInt(cShip.ls[self.equipMode], 10);
 				
 				self.equipImg(cElm, 1, cShip.equip[0]);
 				self.equipImg(cElm, 2, cShip.equip[1]);
@@ -200,6 +215,17 @@ var TabShips = {
 				
 				if(FilteredShips[shipCtr].locked){ $(".ship_lock img", cElm).show(); }
 			}
+			
+			$(".page_ships .ship_totals .total_level").text(totals.lv);
+			$(".page_ships .ship_totals .total_hp").text(totals.hp);
+			$(".page_ships .ship_totals .total_fp").text(totals.fp);
+			$(".page_ships .ship_totals .total_tp").text(totals.tp);
+			$(".page_ships .ship_totals .total_aa").text(totals.aa);
+			$(".page_ships .ship_totals .total_ar").text(totals.ar);
+			$(".page_ships .ship_totals .total_as").text(totals.as);
+			$(".page_ships .ship_totals .total_ev").text(totals.ev);
+			$(".page_ships .ship_totals .total_ls").text(totals.ls);
+			$(".page_ships .ship_totals .total_lk").text(totals.lk);
 			
 			$(".page_ships .ship_list").show();
 		},100);

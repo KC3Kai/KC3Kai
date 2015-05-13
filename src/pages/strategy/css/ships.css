@@ -1,3 +1,5 @@
+/* FILTERS
+------------------------------*/
 .page_ships .filters {
 	width:680px;
 	height:80px;
@@ -50,29 +52,76 @@
 	float:left;
 }
 
-
+/* HEADER
+------------------------------*/
 .page_ships .ship_header {
 	width:680px;
-	height:20px;
+	height:43px;
 	margin:0px 0px 0px 0px;
 }
+/* Icons */
 .page_ships .ship_header .ship_item {
+	width:680px;
 	height:20px;
 	line-height:20px;
 	font-size:12px;
 	font-weight:bold;
+	margin:0px 0px 3px 0px;
 }
 .page_ships .ship_header .ship_stat img {
 	width:16px;
 	height:16px;
 	margin:2px;
 }
+/* Totals */
+.page_ships .ship_header .ship_totals {
+	width:680px;
+	height:20px;
+	line-height:20px;
+	font-size:12px;
+	overflow:hidden;
+	/*background:#fcc;*/
+}
+.page_ships .ship_totals .total_field {
+	float:left;
+	height:20px;
+	text-align:center;
+	font-size:11px;
+	overflow:hidden;
+	/*background:#ccf;*/
+}
+.page_ships .ship_totals .total_left {
+	width:205px;
+	font-size:11px;
+	/*background:#cfc;*/
+}
+.page_ships .ship_totals .total_level {
+	width:50px;
+	margin:0px 5px 0px 0px;
+	font-weight:bold;
+	background:#cfc;
+}
+.page_ships .ship_totals .total_stat {
+	width:30px;
+	margin:0px 2px 0px 0px;
+	font-weight:bold;
+	background:#cfc;
+}
+.page_ships .ship_totals .total_mod {
+	width:35px;
+}
+.page_ships .ship_totals .total_ar {
+	margin:0px 5px 0px 0px;
+}
 
+/* SHIP LIST
+------------------------------*/
 .page_ships .ship_list {
 	width:680px;
 	min-height:50px;
-	/*background:#cfc;*/
+	margin:0px 0px 5px 0px;
 }
+/* Row */
 .page_ships .ship_list .ship_item {
 	width:680px;
 	height:20px;
@@ -80,8 +129,8 @@
 	font-size:12px;
 	margin:0px 0px 2px 0px;
 	overflow:hidden;
-	/*background:#ffc;*/
 }
+/* Cell */
 .page_ships .ship_item .ship_field {
 	height:20px;
 	float:left;
@@ -96,12 +145,12 @@
 .page_ships .ship_item.ten-margin {
 	margin-top:10px;
 }
-
 .page_ships .ship_item:hover .ship_field {
 	background:#ffffcc;
 }
+/* Fields: Basic */
 .page_ships .ship_item .ship_id {
-	width:30px;
+	width:44px;
 	text-align:center;
 }
 .page_ships .ship_item .ship_img {
@@ -112,7 +161,7 @@
 	height:20px;
 }
 .page_ships .ship_item .ship_name {
-	width:105px;
+	width:92px;
 	overflow:hidden;
 }
 .page_ships .ship_item .ship_type {
@@ -127,6 +176,7 @@
 .page_ships .ship_item .ship_lv span {
 	color:#888;
 }
+/* Fields: Stats */
 .page_ships .ship_item .ship_stat {
 	width:30px;
 	text-align:center;
@@ -157,6 +207,7 @@
 .page_ships .ship_item .ship_lk {
 	margin:0px 5px 0px 0px;
 }
+/* Fields: Equips */
 .page_ships .ship_item .ship_equip {
 	width:80px;
 	margin:0px 5px 0px 0px;
@@ -171,6 +222,7 @@
 	width:20px;
 	height:20px;
 }
+/* Fields: HeartLock */
 .page_ships .ship_item .ship_lock {
 	width:20px;
 }
