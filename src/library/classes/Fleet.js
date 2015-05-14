@@ -173,6 +173,34 @@ KC3.prototype.Fleet = {
 				+ ( (Math.floor((app.Player.level + 4) / 5) * 5) * -0.61 );
 			return total;
 		}
+	},
+	
+	/* Support Expedition Power
+	= 55 + (1.5 * FP) + (1.5 * \sum(TP)) + (2.0 * \sum(DB))
+	------------------------------------*/
+	support : {
+		_total: 0,
+		
+		addShip :function(shipData){
+			if(shipData /* if CV/CVL */){
+				this.addCarrier(shipData);
+			}else{
+				this.addNormal(shipData)
+			}
+		},
+		
+		addNormal :function(){
+			
+		},
+		
+		addCarrier :function(){
+			
+		},
+		
+		total :function(){
+			return this._total;
+		}
+		
 	}
 	
 };
