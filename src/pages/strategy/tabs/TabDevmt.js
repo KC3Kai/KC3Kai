@@ -49,7 +49,6 @@ var TabDevmt = {
 			var ctr, thisBuild, buildbox, MasterItem;
 			for(ctr in response){
 				thisBuild = response[ctr];
-				MasterItem = app.Master.slotitem(thisBuild.result);
 				
 				buildbox = $(".page_devmt .factory .build_item").clone().appendTo(".page_devmt .build_list");
 				
@@ -62,10 +61,17 @@ var TabDevmt = {
 				$(".build_rsc3", buildbox).text( thisBuild.rsc3 );
 				$(".build_rsc4", buildbox).text( thisBuild.rsc4 );
 				
+				if(thisBuild.result > -1){
+					MasterItem = app.Master.slotitem(thisBuild.result);
+					$(".build_ricon img", buildbox).attr("src", "../../assets/img/items/"+MasterItem.api_type[3]+".png");
+					$(".build_result", buildbox).text( MasterItem.english );
+				}else{
+					$(".build_ricon img", buildbox).attr("src", "../../assets/img/client/penguin.png");
+					$(".build_result", buildbox).text( "Penguin" );
+				}
 				
-				$(".build_ricon img", buildbox).attr("src", "../../assets/img/items/"+MasterItem.api_type[3]+".png");
-				$(".build_result", buildbox).text( MasterItem.english );
 				$(".build_time", buildbox).text( new Date(thisBuild.time*1000).format("mmm dd, yy - hh:MM tt") );
+				
 			}
 		});
 		
