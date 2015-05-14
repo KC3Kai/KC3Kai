@@ -156,11 +156,11 @@ var TabExops = {
 		
 		// Hide sortie details panel
 		$(".page_exops .sortie_info").hide();
+		$(".page_exops .sortie_info .sortie_battles").html("");
 		
 		// Get data from local database
 		app.Logging.get_sortie(sortie_id, function(response){
 			if(response){
-				console.log(response);
 				$(".page_exops .sortie_info .sortie_title span").text(response.id);
 				
 				self.showPanelFleet(1, response["fleet"+response.fleetnum]);
@@ -173,18 +173,22 @@ var TabExops = {
 				}
 				
 				// Check for support non-boss support
-				if( response.support1 > 0 ){
-					self.showPanelFleet(3, response["fleet"+response.support1]);
-				}else{
-					$(".page_exops .sortie_info .fleet_3").hide();
-				}
+				try {
+					if( response.support1 > 0 ){
+						self.showPanelFleet(3, response["fleet"+response.support1]);
+					}else{
+						$(".page_exops .sortie_info .fleet_3").hide();
+					}
+				}catch(e){ $(".page_exops .sortie_info .fleet_3").hide(); }
 				
 				// Check for support boss support
-				if( response.support2 > 0 ){
-					self.showPanelFleet(4, response["fleet"+response.support2]);
-				}else{
-					$(".page_exops .sortie_info .fleet_4").hide();
-				}
+				try {
+					if( response.support2 > 0 ){
+						self.showPanelFleet(4, response["fleet"+response.support2]);
+					}else{
+						$(".page_exops .sortie_info .fleet_4").hide();
+					}
+				}catch(e){ $(".page_exops .sortie_info .fleet_4").hide(); }
 				
 				// Show battle nodes
 				var bctr;
@@ -223,7 +227,6 @@ var TabExops = {
 	/* Add battle box on the panel
 	--------------------------------------------*/
 	showBattleBox :function(battleNum, battleData){
-		console.log(battleNum, battleData);
 		
 		// Clone and add new battle box
 		var battleBox = $(".page_exops .factory .sortie_battle").clone().appendTo(".page_exops .sortie_battles");
@@ -232,7 +235,6 @@ var TabExops = {
 		
 		// Detection
 		var detection = app.Meta.detection(battleData.data.api_search[0]);
-		console.log("detection", detection);
 		$(".battle_detect", battleBox).text( detection[0] );
 		if( detection[1] != "" ){ $(".battle_detect", battleBox).addClass( detection[1] ); }
 		
