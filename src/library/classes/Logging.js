@@ -198,11 +198,45 @@ KC3.prototype.Logging  = {
 		
 	},
 	
-	count_sortie: function(callback){
+	count_normal_sorties: function(callback){
 		this.database.sortie
 			.where("hq").equals(this.index)
-			.and(function(sortie){ return sortie.world < 10; })
+			.and(function(sortie){ return sortie.world < 10 && sortie.mapnum<5; })
 			.count(callback);
+	},
+	
+	get_normal_sorties :function(pageNumber, callback){
+		var itemsPerPage = 10;
+		var self = this;
+		var sortieIds = [], bctr, sortieIndexed = {};
+		
+		this.database.sortie
+			.where("hq").equals(this.index)
+			.and(function(sortie){ return sortie.world < 10 && sortie.mapnum<5; })
+			.reverse()
+			.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
+			.toArray(function(sortieList){
+				// Compile all sortieIDs and indexify
+				for(bctr in sortieList){
+					sortieIds.push(sortieList[bctr].id);
+					sortieIndexed["s"+sortieList[bctr].id] = sortieList[bctr];
+					sortieIndexed["s"+sortieList[bctr].id].battles = [];
+				}
+				
+				// Get all battles on those sorties
+				self.database.battle
+					.where("sortie_id").anyOf(sortieIds)
+					.toArray(function(battleList){
+						for(bctr in battleList){
+							if(typeof sortieIndexed["s"+battleList[bctr].sortie_id] != "undefined"){
+								sortieIndexed["s"+battleList[bctr].sortie_id].battles.push(battleList[bctr]);
+							}else{
+								console.error("orphan battle", battleList[bctr]);
+							}
+						}
+						callback(sortieIndexed);
+					});
+			});
 	},
 	
 	get_world :function(world, pageNumber, callback){

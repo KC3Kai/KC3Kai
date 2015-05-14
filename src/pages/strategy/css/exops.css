@@ -4,6 +4,15 @@
 .page_exops .sorties {
 	width:680px;
 }
+.page_exops .sortie_note {
+	width:600px;
+	margin:10px auto 20px;
+	padding:5px 10px;
+	background:#fcc;
+	border:1px solid #c55;
+	font-size:12px;
+	text-align:center;
+}
 
 /* MAP LIST
 ---------------------------*/
