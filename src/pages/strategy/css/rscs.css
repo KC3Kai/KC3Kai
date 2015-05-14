@@ -1,3 +1,49 @@
 .page_rscs {
 	width:680px;
 }
+
+.page_rscs .legend {
+	width:680px;
+	height:20px;
+	line-height:20px;
+	margin:20px 0px 10px 0px;
+}
+.page_rscs .legend_item {
+	width:120px;
+	height:20px;
+	float:left;
+}
+.page_rscs .legend_color {
+	width:20px;
+	height:20px;
+	margin:0px 5px 0px 0px;
+	float:left;
+	border:1px solid #555;
+}
+.page_rscs .color_fuel {
+	background:#AAFFAA;
+}
+.page_rscs .color_ammo {
+	background:#999900;
+}
+.page_rscs .color_steel {
+	background:#999999;
+}
+.page_rscs .color_baux {
+	background:#FF9933;
+}
+.page_rscs .legend_icon {
+	width:20px;
+	height:20px;
+	margin:0px 5px 0px 0px;
+	float:left;
+}
+.page_rscs .legend_icon img {
+	width:16px;
+	height:16px;
+	margin:2px;
+}
+.page_rscs .legend_label {
+	width:70px;
+	float:left;
+}
