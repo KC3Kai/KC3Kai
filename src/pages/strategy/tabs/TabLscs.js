@@ -36,10 +36,10 @@ var TabLscs = {
 				console.log(2);
 				$(".page_lscs .build_page").removeClass("active");
 				$(this).addClass("active");
-				PageTabs.crafts.showPage( $(this).text() );
+				app.Strategy.tabs.lscs.showPage( $(this).text() );
 			});
 			
-			$(".page_lscs .build_pages .build_page").first().click();
+			$(".page_lscs .build_pages .build_page").first().trigger("click");
 		});
 		
 		

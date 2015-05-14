@@ -35,10 +35,10 @@ var TabDevmt = {
 			$(".page_devmt .build_pages .build_page").on("click", function(){
 				$(".page_devmt .build_page").removeClass("active");
 				$(this).addClass("active");
-				PageTabs.devmt.showPage( $(this).text() );
+				app.Strategy.tabs.devmt.showPage( $(this).text() );
 			});
 			
-			$(".page_devmt .build_pages .build_page").first().click();
+			$(".page_devmt .build_pages .build_page").first().trigger("click");
 		});
 	},
 	

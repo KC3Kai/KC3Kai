@@ -35,10 +35,10 @@ var TabCrafts = {
 			$(".page_crafts .build_pages .build_page").on("click", function(){
 				$(".page_crafts .build_page").removeClass("active");
 				$(this).addClass("active");
-				PageTabs.crafts.showPage( $(this).text() );
+				app.Strategy.tabs.crafts.showPage( $(this).text() );
 			});
 			
-			$(".page_crafts .build_pages .build_page").first().click();
+			$(".page_crafts .build_pages .build_page").first().trigger("click");
 		});
 	},
 	
