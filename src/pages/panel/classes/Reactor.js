@@ -521,7 +521,8 @@ KC3.prototype.Reactor  = {
 			app.Util.findParam(params, "api%5Fitem2"),
 			app.Util.findParam(params, "api%5Fitem3"),
 			app.Util.findParam(params, "api%5Fitem4")
-		];
+		],
+		failed = (typeof response.api_data.api_slot_item == "undefined");
 		
 		// Log into development History
 		app.Logging.Develop({
@@ -531,17 +532,25 @@ KC3.prototype.Reactor  = {
 			rsc3: resourceUsed[2],
 			rsc4: resourceUsed[3],
 			result:
-				(typeof response.api_data.api_slot_item != "undefined")
+				!failed
 				?response.api_data.api_slot_item.api_slotitem_id
 				:-1,
 			time: app.Util.getUTC(headers)
 		});
 		
-		// Call craft box if enabled
-		if(app.Config.showCraft){
-			if(typeof response.api_data.api_slot_item != "undefined"){
+		// Checks if the development went great
+		if(!failed){
+			// Call craft box if enabled
+			if(app.Config.showCraft)
 				app.Dashboard.showCraft(response.api_data, resourceUsed);
-			}
+			
+			// Add new equipment to local data
+			(function(){app.Gears.set([{
+				api_id: craftData.api_slot_item.api_id,
+				api_level: 0,
+				api_locked: 0,
+				api_slotitem_id: MasterItem.api_id
+			}])})(response.api_data);
 		}
 	},
 	
