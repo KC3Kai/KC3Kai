@@ -305,8 +305,8 @@ KC3.prototype.Reactor  = {
 	/* Change fleet member
 	-------------------------------------------------------*/
 	"api_req_hensei/change":function(params, response, headers){
-		var FleetIndex = app.Util.findParam(params, "api%5Fid");
-		
+		var FleetIndex = Number(app.Util.findParam(params, "api%5Fid"));
+		var flatShips  = app.Docks._fleets.map(function(x){return x.api_ship;}).reduce(function(x,y){return x.concat(y);});
 		if(typeof response.api_data != "undefined"){
 			if(typeof response.api_data.api_change_count != "undefined"){
 				app.Docks._fleets[FleetIndex-1].api_ship[1] = -1;
@@ -318,14 +318,18 @@ KC3.prototype.Reactor  = {
 				return true;
 			}
 		}
-		
-		var ChangedIndex = app.Util.findParam(params, "api%5Fship%5Fidx");
-		var NewShipOnSlet = app.Util.findParam(params, "api%5Fship%5Fid");
-		if(NewShipOnSlet > -1){
-			app.Docks._fleets[FleetIndex-1].api_ship[ChangedIndex] = NewShipOnSlet;
+		var ChangedIndex = Number(app.Util.findParam(params, "api%5Fship%5Fidx")),
+			ChangingShip    = Number(app.Util.findParam(params, "api%5Fship%5Fid")),
+			OldSwaperSlot   = flatShips.indexOf(ChangingShip),                // move to slot
+			OldSwapeeSlot   = flatShips[ (FleetIndex-1) * 6 + ChangedIndex ]; // swap from slot
+		if(ChangingShip > -1){
+			// checks whether ship swapping performed.
+			if(OldSwaperSlot >= 0)
+				app.Docks._fleets[Math.floor(OldSwaperSlot / 6)].api_ship[OldSwaperSlot % 6] = OldSwapeeSlot;
+			app.Docks._fleets[FleetIndex-1].api_ship[ChangedIndex] = ChangingShip;
 		}else{
 			app.Docks._fleets[FleetIndex-1].api_ship.splice(ChangedIndex, 1);
-			app.Docks._fleets[FleetIndex-1].api_ship[5] = -1;
+			app.Docks._fleets[FleetIndex-1].api_ship.push(-1);
 		}
 		app.Dashboard.Fleet.update();
 	},
