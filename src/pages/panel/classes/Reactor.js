@@ -187,6 +187,13 @@ KC3.prototype.Reactor  = {
 	/*----------------------[ LIBRARY ]----------------------*/
 	/*-------------------------------------------------------*/
 	
+	/* Mid-sortie ship statuses
+	-------------------------------------------------------*/
+	"api_get_member/ship_deck":function(params, response, headers){
+		app.Ships.set(response.api_data.api_ship_data);
+		app.Dashboard.Fleet.update();
+	},
+	
 	/* Ship Infos mid-sortie
 	-------------------------------------------------------*/
 	"api_get_member/ship2":function(params, response, headers){
