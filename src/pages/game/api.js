@@ -3,6 +3,9 @@ var app = new KC3();
 // If awaiting activation
 var waiting = false;
 
+// If trusted exit
+var trustedExit = false;
+
 // Show game screens
 function ActivateGame(){
 	waiting = false;
@@ -45,6 +48,7 @@ $(document).on("ready", function(){
 	$(".api_submit").on('click', function(){
 		if($(".api_text").val().indexOf("mainD2.swf") > -1){
 			localStorage.absoluteswf = $(".api_text").val();
+			trustedExit = true;
 			window.location.reload();
 		}
 	});
@@ -52,6 +56,7 @@ $(document).on("ready", function(){
 	// Forget API Link
 	$(".forget_btn").on('click', function(){
 		localStorage.absoluteswf = "";
+		trustedExit = true;
 		window.location.reload();
 	});
 	
@@ -129,6 +134,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, response) {
 // Confirm exit
 function confirmOnPageExit(){
 	app.Config.load();
-	if(app.Config.askExit==1){ return "Ahh! you are closing the game!"; }
+	if(app.Config.askExit==1 && !trustedExit){ return "Ahh! you are closing the game!"; }
 }
 window.onbeforeunload = confirmOnPageExit;
