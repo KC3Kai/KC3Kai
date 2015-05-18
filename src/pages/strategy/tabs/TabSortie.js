@@ -31,7 +31,7 @@ var TabSortie = {
 		
 		// Get pagination
 		app.Logging.count_normal_sorties(function(NumRecords){
-			var itemsPerPage = 25;
+			var itemsPerPage = 10;
 			var numPages = Math.ceil(NumRecords/itemsPerPage);
 			
 			var pageCtr, pageBox;
@@ -58,6 +58,8 @@ var TabSortie = {
 	},
 	
 	showPage :function(pageNumber){
+		$(".page_sortie .sortie_list").html("");
+		
 		var self = this;
 		app.Logging.get_normal_sorties(pageNumber, function(response){
 			var ctr;
