@@ -63,6 +63,7 @@ var TabLscs = {
 				$(".build_rsc2", buildbox).text( thisBuild.rsc2 );
 				$(".build_rsc3", buildbox).text( thisBuild.rsc3 );
 				$(".build_rsc4", buildbox).text( thisBuild.rsc4 );
+				$(".build_devmat", buildbox).text( thisBuild.devmat );
 				
 				$(".build_ricon img", buildbox).attr("src", app.Assets.shipIcon(thisBuild.result) );
 				$(".build_result", buildbox).text( app.Master.ship(thisBuild.result).english );
