@@ -130,6 +130,14 @@ $(document).on("ready", function(){
 		showInput_craft();
 	});
 	
+	// Show Exit Confirmation
+	showInput_exiting();
+	$(".askExit .option").on("click", function(){
+		app.Config.askExit = $(this).data("num");
+		app.Config.save();
+		showInput_exiting();
+	});
+	
 });
 
 function showInput_tloverlay(){
@@ -232,6 +240,13 @@ function showInput_predict(){
 function showInput_craft(){
 	$(".showCraft").fadeOut(200, function(){
 		$("input", this).prop("checked", app.Config.showCraft);
+		$(this).fadeIn(200);
+	});
+}
+
+function showInput_exiting(){
+	$(".askExit").fadeOut(200, function(){
+		$(".option-"+app.Config.askExit+" input", this).prop("checked", true);
 		$(this).fadeIn(200);
 	});
 }

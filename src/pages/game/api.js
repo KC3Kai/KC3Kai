@@ -125,3 +125,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, response) {
 		}
 	}
 });
+
+// Confirm exit
+function confirmOnPageExit(){
+	app.Config.load();
+	if(app.Config.askExit==1){ return "Ahh! you are closing the game!"; }
+}
+window.onbeforeunload = confirmOnPageExit;
