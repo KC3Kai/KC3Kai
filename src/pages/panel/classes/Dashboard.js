@@ -169,14 +169,6 @@ KC3.prototype.Dashboard  = {
 			$("#craftModal .equipText").html("You already have <strong>"+countExisting+"</strong> of this equipment, +1!");
 		}
 		
-		// Add the new equipment to local data
-		app.Gears.set([{
-			api_id: craftData.api_slot_item.api_id,
-			api_level: 0,
-			api_locked: 0,
-			api_slotitem_id: MasterItem.api_id
-		}]);
-		
 		// Show resource used
 		$("#craftModal .equse_fuel .equipResourceValue").text(resourceUsed[0]);
 		$("#craftModal .equse_ammo .equipResourceValue").text(resourceUsed[1]);
