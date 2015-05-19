@@ -313,7 +313,8 @@ KC3.prototype.Reactor  = {
 	-------------------------------------------------------*/
 	"api_req_hensei/change":function(params, response, headers){
 		var FleetIndex = Number(app.Util.findParam(params, "api%5Fid"));
-		var flatShips  = app.Docks._fleets.map(function(x){return x.api_ship;}).reduce(function(x,y){return x.concat(y);});
+		
+		// If removing all ships except flagship
 		if(typeof response.api_data != "undefined"){
 			if(typeof response.api_data.api_change_count != "undefined"){
 				app.Docks._fleets[FleetIndex-1].api_ship[1] = -1;
@@ -325,14 +326,20 @@ KC3.prototype.Reactor  = {
 				return true;
 			}
 		}
-		var ChangedIndex = Number(app.Util.findParam(params, "api%5Fship%5Fidx")),
-			ChangingShip    = Number(app.Util.findParam(params, "api%5Fship%5Fid")),
-			OldSwaperSlot   = flatShips.indexOf(ChangingShip),                // move to slot
-			OldSwapeeSlot   = flatShips[ (FleetIndex-1) * 6 + ChangedIndex ]; // swap from slot
+		
+		var flatShips  = app.Docks._fleets
+			.map(function(x){ return x.api_ship; })
+			.reduce(function(x,y){ return x.concat(y); });
+		var ChangedIndex = Number(app.Util.findParam(params, "api%5Fship%5Fidx"));
+		var ChangingShip = Number(app.Util.findParam(params, "api%5Fship%5Fid"));
+		var OldSwaperSlot = flatShips.indexOf(ChangingShip); // move to slot
+		var OldSwapeeSlot = flatShips[ (FleetIndex-1) * 6 + ChangedIndex ]; // swap from slot
+		
 		if(ChangingShip > -1){
-			// checks whether ship swapping performed.
-			if(OldSwaperSlot >= 0)
+			// Checks whether ship swapping performed.
+			if(OldSwaperSlot >= 0){
 				app.Docks._fleets[Math.floor(OldSwaperSlot / 6)].api_ship[OldSwaperSlot % 6] = OldSwapeeSlot;
+			}
 			app.Docks._fleets[FleetIndex-1].api_ship[ChangedIndex] = ChangingShip;
 		}else{
 			app.Docks._fleets[FleetIndex-1].api_ship.splice(ChangedIndex, 1);
@@ -532,8 +539,9 @@ KC3.prototype.Reactor  = {
 			app.Util.findParam(params, "api%5Fitem2"),
 			app.Util.findParam(params, "api%5Fitem3"),
 			app.Util.findParam(params, "api%5Fitem4")
-		],
-		failed = (typeof response.api_data.api_slot_item == "undefined");
+		];
+		
+		var failed = (typeof response.api_data.api_slot_item == "undefined");
 		
 		// Log into development History
 		app.Logging.Develop({
@@ -542,26 +550,25 @@ KC3.prototype.Reactor  = {
 			rsc2: resourceUsed[1],
 			rsc3: resourceUsed[2],
 			rsc4: resourceUsed[3],
-			result:
-				!failed
-				?response.api_data.api_slot_item.api_slotitem_id
-				:-1,
+			result: (!failed)?response.api_data.api_slot_item.api_slotitem_id:-1,
 			time: app.Util.getUTC(headers)
 		});
 		
 		// Checks if the development went great
 		if(!failed){
+			
 			// Call craft box if enabled
-			if(app.Config.showCraft)
+			if(app.Config.showCraft){
 				app.Dashboard.showCraft(response.api_data, resourceUsed);
+			}
 			
 			// Add new equipment to local data
-			(function(){app.Gears.set([{
-				api_id: craftData.api_slot_item.api_id,
+			app.Gears.set([{
+				api_id: response.api_data.api_slot_item.api_id,
 				api_level: 0,
 				api_locked: 0,
 				api_slotitem_id: MasterItem.api_id
-			}])})(response.api_data);
+			}]);
 		}
 	},
 	
