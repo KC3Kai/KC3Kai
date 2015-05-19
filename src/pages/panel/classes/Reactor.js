@@ -550,7 +550,7 @@ KC3.prototype.Reactor  = {
 			
 			// Add new equipment to local data
 			(function(){app.Gears.set([{
-				api_id: craftData.api_slot_item.api_id,
+				api_id: response.api_data.api_slot_item.api_id,
 				api_level: 0,
 				api_locked: 0,
 				api_slotitem_id: MasterItem.api_id
