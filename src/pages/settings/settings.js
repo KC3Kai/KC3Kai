@@ -90,6 +90,22 @@ $(document).on("ready", function(){
 		showInput_backgroundPanel();
 	});
 	
+	// Panel: Background Align Horizontal
+	showInput_backgroundAlignH();
+	$(".background_align_h .option").on("click", function(){
+		app.Config.background_align_h = $(this).data("horizontal");
+		app.Config.save();
+		showInput_backgroundAlignH();
+	});
+
+	// Panel: Background Align Vertical
+	showInput_backgroundAlignV();
+	$(".background_align_v .option").on("click", function(){
+		app.Config.background_align_v = $(this).data("vertical");
+		app.Config.save();
+		showInput_backgroundAlignV();
+	});
+
 	// Panel Transparency
 	showInput_palpha();
 	$(".panelalpha input").on("change", function(){
@@ -205,6 +221,20 @@ function showInput_background(){
 function showInput_backgroundPanel(){
 	$(".background_panel").fadeOut(200, function(){
 		$("input", this).val(app.Config.background_panel);
+		$(this).fadeIn(200);
+	});
+}
+
+function showInput_backgroundAlignH(){
+	$(".background_align_h").fadeOut(200, function(){
+		$(".option-"+app.Config.background_align_h+" input", this).prop("checked", true);
+		$(this).fadeIn(200);
+	});
+}
+
+function showInput_backgroundAlignV(){
+	$(".background_align_v").fadeOut(200, function(){
+		$(".option-"+app.Config.background_align_v+" input", this).prop("checked", true);
 		$(this).fadeIn(200);
 	});
 }
