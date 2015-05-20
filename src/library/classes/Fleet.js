@@ -103,7 +103,7 @@ KC3.prototype.Fleet = {
 		
 		addItem :function( ThisType, ThisLoS, Capacity ){
 			// Check for Plane LOS
-			if( ThisType == 7 && Capacity > 0){
+			if( ThisType == 7){
 				// console.log("planelos: "+ThisLoS);
 				this._plane += ThisLoS;
 			}
@@ -146,11 +146,11 @@ KC3.prototype.Fleet = {
 		
 		addItem :function( ThisType, ThisLoS, Capacity ){
 			switch(ThisType){
-				case  7: this._dive += ThisLoS * (Capacity?1:0); break;
-				case  8: this._torp += ThisLoS * (Capacity?1:0); break;
-				case  9: this._cbrp += ThisLoS * (Capacity?1:0); break;
-				case 10: this._rspl += ThisLoS * (Capacity?1:0); break;
-				case 11: this._splb += ThisLoS * (Capacity?1:0); break;
+				case  7: this._dive += ThisLoS; break;
+				case  8: this._torp += ThisLoS; break;
+				case  9: this._cbrp += ThisLoS; break;
+				case 10: this._rspl += ThisLoS; break;
+				case 11: this._splb += ThisLoS; break;
 				case 12: this._smrd += ThisLoS; break;
 				case 13: this._lgrd += ThisLoS; break;
 				case 29: this._srch += ThisLoS; break;
