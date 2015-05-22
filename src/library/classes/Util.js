@@ -12,11 +12,8 @@ KC3.prototype.Util = {
 	
 	getUTC :function(headers){
 		var ydate = this.findParam(headers, "Date");
-		// console.log("header param data: "+ydate);
 		var xdate = new Date(ydate);
-		var zdate = Math.floor(xdate.getTime()/1000);;
-		// console.log("interpreted date: "+xdate);
-		// console.log("timestamp: "+zdate);
+		var zdate = Math.floor(xdate.getTime()/1000);
 		return zdate;
 	}
 	

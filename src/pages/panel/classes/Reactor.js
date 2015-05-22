@@ -488,6 +488,11 @@ KC3.prototype.Reactor  = {
 				questlist: response.api_data.api_list
 			}, function(response){});
 		}
+		
+		app.Quests.receivePage(
+			response.api_data.api_disp_page,
+			response.api_data.api_list
+		);
 	},
 	
 	/* Receive Quest Reward
@@ -496,6 +501,11 @@ KC3.prototype.Reactor  = {
 		
 	},
 	
+	/*api_req_quest/stop
+	api_quest_id
+	
+	api_req_quest/start
+	api_quest_id*/
 	
 	/*-------------------------------------------------------*/
 	/*--------------------[ REPAIR DOCKS ]-------------------*/

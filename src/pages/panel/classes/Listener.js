@@ -55,7 +55,11 @@ KC3.prototype.Listener  = {
 			return false;
 		}
 		
+		// Save last called URL for later use in determining server IP
 		app.Server.lastUrl = request.request.url;
+		
+		// Check for Quest Reset
+		app.Quests.checkReset(app.Util.getUTC(request.response.headers));
 		
 		// Get and Handle the Response Body
 		request.getContent(function(requestContent){

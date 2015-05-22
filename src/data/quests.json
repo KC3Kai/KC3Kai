@@ -211,10 +211,58 @@
         "name": "Organise the 18th Cruiser Division",
         "desc": "Have Tenryuu (\u5929\u9f8d), Tatsuta (\u9f8d\u7530) and 2 or more other ships in your fleet."
     },
+	
+	
     "201": {
+        "code": "Bd1",
         "name": "Daily Sortie 1",
-        "desc": "Defeat an enemy fleet."
+        "desc": "Defeat an enemy fleet",
+		"unlock": [ 216, 211, 212 ]
     },
+		 "216": {
+			"code": "Bd2",
+			"name": "Daily Sortie 2",
+			"desc": "Defeat the flagship of an enemy fleet",
+			"unlock": [ 210, 218, 214, 213 ]
+		},
+			 "210": {
+				"code": "Bd3",
+				"name": "Daily Sortie 3",
+				"desc": "Defeat 10 abyssal fleets (B rank+)"
+			},
+			 "218": {
+				"code": "Bd5",
+				"name": "Daily Sortie 5",
+				"desc": "Sink 3 enemy transport ships"
+			},
+				 "226": {
+					"code": "Bd7",
+					"name": "Daily Sortie 7",
+					"desc": "Defeat 5 bosses in World 2."
+				},
+			"214": {
+				"code": "Bw1",
+				"name": "Weekly Sortie 1",
+				"desc": "Sortie 36, Encounter 24 bosses, Win against 12 bosses, 6 S-ranks"
+			},
+			"213": {
+				"code": "Bw3",
+				"name": "Weekly Sortie 3",
+				"desc": "Sink 20 transport ships"
+			},
+			
+		 "211": {
+			"code": "Bd4",
+			"name": "Daily Sortie 4",
+			"desc": "Sink 3 abyssal CV(L)"
+		},
+		"212": {
+			"code": "Bd6",
+			"name": "Daily Sortie 6",
+			"desc": "Sink 5 abyssal transport ships"
+		},
+	
+	
     "202": {
         "name": "First Sortie!",
         "desc": "Deploy your main fleet on a combat mission."
@@ -247,42 +295,19 @@
         "name": "Sortie a Carrier Task Force!",
         "desc": "Deply a fleet with CV(L) as flagship and 5 DD\/CL\/AV for the escorts."
     },
-    "210": {
-        "name": "Daily Sortie 3",
-        "desc": "Defeat 10 enemy fleets."
-    },
-    "211": {
-        "name": "Daily Sortie 4",
-        "desc": "Sink 3 enemy aircraft carriers."
-    },
-    "212": {
-        "name": "Daily Sortie 6",
-        "desc": "Sink 5 enemy transport ships."
-    },
-    "213": {
-        "name": "Weekly Sortie 3",
-        "desc": "Sink 20 transport ships."
-    },
-    "214": {
-        "name": "Weekly Sortie 1",
-        "desc": "Sortie 36x, Encounter 24 bosses, Defeat 12 bosses, Get 6 S-ratings."
-    },
+   
+   
+    
     "215": {
         "name": "Second Fleet Sortie!",
         "desc": "Deploy your 2nd Fleet on a combat mission."
     },
-    "216": {
-        "name": "Daily Sortie 2",
-        "desc": "Defeat the flagship of an enemy fleet."
-    },
+   
     "217": {
         "name": "Sink Enemy Carrier!",
         "desc": "Sink an enemy aircraft carrier."
     },
-    "218": {
-        "name": "Daily Sortie 5",
-        "desc": "Sink 3 enemy transport ships."
-    },
+   
     "219": {
         "name": "Sortie the Mikawa Fleet!",
         "desc": "Deploy a fleet with Choukai, Aoba, Kako, Furutaka, Tenryuu and another fast ship."
@@ -311,10 +336,7 @@
         "name": "Sortie the Carrier Division 5!",
         "desc": "Deploy a fleet with Shoukaku, Zuikaku and any 4 ships. Score a victory against World 3-1 Boss."
     },
-    "226": {
-        "name": "Daily Sortie 7",
-        "desc": "Defeat 5 bosses in World 2."
-    },
+   
     "227": {
         "name": "Sortie the New Mikawa Fleet!",
         "desc": "Deploy a fleet with Choukai, Aoba, Kinugasa, Kako, Furutaka and Tenryuu. Score a victory against World 2-3 Boss."
@@ -384,7 +406,7 @@
         "desc": "Deploy Mutsuki (\u7766\u6708), Yayoi (\u5f25\u751f), Uzuki (\u536f\u6708) and Mochizuki (\u671b\u6708) to World 1-5 and reach the boss, scoring at least a C rank."
     },
     "249": {
-        "name": "Deploy the 5th Fleet",
+        "name": "[Monthly] Deploy the 5th Fleet",
         "desc": "Deploy Myoukou (\u5999\u9ad8), Nachi (\u90a3\u667a) and Haguro (\u7fbd\u9ed2) to World 2-5. You may add 3 other ships. Score an S rank victory against the boss."
     },
     "250": {
@@ -607,96 +629,138 @@
         "name": "Daily Resupplies",
         "desc": "Resupply your ships 15 times."
     },
+	
+	
+	
+	
+	
+	"605": {
+		"code": "F1",
+        "name": "Daily Equipment Development 1",
+        "desc": "Craft a piece of equipment (Failures are OK)",
+		"unlock": [ 606 ]
+    },
+	"606": {
+		"code": "F2",
+        "name": "Daily Ship Construction 1",
+        "desc": "Craft a ship",
+		"unlock": [ 607 ]
+    },
+	"607": {
+		"code": "F3",
+        "name": "Daily Development 2",
+        "desc": "Craft 3 pieces of equipment (Failures are OK)",
+		"unlock": [ 608 ]
+    },
+	 "608": {
+		"code": "F4",
+        "name": "Daily Construction 2",
+        "desc": "Craft 3 ships",
+		"unlock": [ 609, 619 ]
+    },
+	 "609": {
+		"code": "F5",
+        "name": "Daily Dismantlement",
+        "desc": "Scrap 2 ships"
+    },
     "601": {
+		"code": "F6",
         "name": "First Construction",
-        "desc": "Craft a ship."
+        "desc": "Craft a ship"
     },
     "602": {
+		"code": "F7",
         "name": "First Development",
-        "desc": "Craft a piece of equipment."
+        "desc": "Craft a piece of equipment"
     },
     "603": {
+		"code": "F8",
         "name": "First Dismantlement",
-        "desc": "Dismantle a ship."
+        "desc": "Dismantle a ship"
     },
     "604": {
+		"code": "F9",
         "name": "First Disposal",
-        "desc": "Scrap a piece of equipment."
-    },
-    "605": {
-        "name": "Daily Equipment Development 1",
-        "desc": "Craft a piece of equipment. (Failures are OK)"
-    },
-    "606": {
-        "name": "Daily Ship Construction 1",
-        "desc": "Craft a ship."
-    },
-    "607": {
-        "name": "Daily Development 2",
-        "desc": "Craft 3 pieces of equipment. (Failures are OK)"
-    },
-    "608": {
-        "name": "Daily Construction 2",
-        "desc": "Craft 3 ships."
-    },
-    "609": {
-        "name": "Daily Dismantlement",
-        "desc": "Scrap 2 ships."
+        "desc": "Scrap a piece of equipment"
     },
     "610": {
+		"code": "F10",
         "name": "Preparation for LSC (Part 2)",
-        "desc": "Scrap equipment 4 times."
+        "desc": "Scrap equipment 4 times"
     },
-    "611": {
-        "name": "In Preparation of Love! (Part 1)",
-        "desc": "Scrap equipment 2 times to show your love!."
-    },
-    "612": {
+	"612": {
+		"code": "F11",
         "name": "Prepare the Drum Canisters",
-        "desc": "Scrap equipment 3 times to acquire a shipping barrel"
+        "desc": "Scrap equipment 3 times"
     },
-    "613": {
+	 "613": {
+		"code": "F12",
         "name": "Weekly Dismantlement",
-        "desc": "Scrap equipment 24 times."
+        "desc": "Scrap equipment 24 times"
     },
-    "614": {
+	 "614": {
+		"code": "F13",
         "name": "Model Conversion (to Tenzan)",
-        "desc": "With an aircraft carrier equipped with Type 97 Torpedo Bomber (Tomonaga Squadron) as your secretary, scrap 2 Tenzans (simultaneously) to upgrade the Type 97 to Tenzan Model 12 (Tomonaga Squadron). The Type 97 must not be locked or you'll lose the Tenzans."
+        "desc": "Have flagship equipped with Type 97 Torpedo Bomber (Tomonaga Squadron), then scrap 2 Tenzan"
     },
-    "615": {
+	"615": {
+		"code": "F14",
         "name": "Model Conversion (to Suisei)",
-        "desc": "With an aircraft carrier equipped with Type 99 Dive Bomber (Ekusa Squadron) as your secretary, scrap 2 Suiseis (simultaneously) to upgrade the Type 99 to Suisei (Ekusa Squadron). The Type 99 must not be locked or you'll lose the Suiseis."
+        "desc": "Have flagship equipped with Type 99 Dive Bomber (Egusa Squadron), then scrap 2 Suisei"
     },
     "616": {
+		"code": "F15",
         "name": "Model Conversion (to Reppuu)",
-        "desc": "With an aircraft carrier equipped with Zero Fighter Type 52 Type C (601 Air Group) as your secretary, scrap 2 Reppuus to upgrade the Type 52 to Reppuu (601 Air Group). The Type 52 must not be locked or you'll lose the Reppuus."
+        "desc": "Have flagship equipped with Zero Fighter Type 52 Type C (601 Air Group), then scrap 2 Reppuu"
     },
-    "617": {
+	"617": {
+		"code": "F16",
         "name": "Preparing for Irako",
-        "desc": "Scrap equipment 10 times."
+        "desc": "Scrap equipment 10 times"
     },
-    "618": {
+	"618": {
+		"code": "F17",
         "name": "First Equipment Modernisation",
-        "desc": "Perform equipment modernisation once."
+        "desc": "Perform equipment modernisation once"
     },
     "619": {
+		"code": "F18",
         "name": "Daily Equipment Modernisation",
-        "desc": "Perform equipment modernisation once."
+        "desc": "Perform equipment modernisation once"
     },
+	
+	
+    
+	
+	
     "701": {
+		"code": "G1",
         "name": "First Modernization",
-        "desc": "Perform a successful modernization."
+        "desc": "Perform a successful modernization"
     },
     "702": {
+		"code": "G2",
         "name": "Daily Modernization",
-        "desc": "Perform 2 successful modernizations within the same day."
+        "desc": "Perform 2 successful modernizations",
+		"unlock": [ 703 ]
     },
     "703": {
+		"code": "G3",
         "name": "Weekly Modernization",
-        "desc": "Perform 15 successful modernizations within the same week."
+        "desc": "(Weekly) Perform 15 successful modernizations"
     },
     "704": {
+		"code": "G4",
         "name": "Preparation for LSC (Part 1)",
-        "desc": "Perform 4 successful modernizations."
+        "desc": "Perform 4 successful modernizations"
+    },
+	
+	
+	
+	
+	
+	"611": {
+        "name": "In Preparation of Love! (Part 1)",
+        "desc": "Scrap equipment 2 times to show your love!"
     }
 }

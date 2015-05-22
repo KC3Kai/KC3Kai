@@ -4,6 +4,7 @@ KC3.prototype.Strategy  = {
 	tabs: {
 		"home": TabHome,
 		"fleets": TabFleets,
+		"quests": TabQuests,
 		"ships": TabShips,
 		"items": TabItems,
 		"sortie": TabSortie,
