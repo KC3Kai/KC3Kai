@@ -50,6 +50,7 @@
 .box-wait .api_txt {
 	width:760px;
 	margin:0px 0px 15px 0px;
+	display:none;
 }
 .box-wait .api_txt textarea {
 	width:760px;
