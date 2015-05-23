@@ -213,54 +213,7 @@
     },
 	
 	
-    "201": {
-        "code": "Bd1",
-        "name": "Daily Sortie 1",
-        "desc": "Defeat an enemy fleet",
-		"unlock": [ 216, 211, 212 ]
-    },
-		 "216": {
-			"code": "Bd2",
-			"name": "Daily Sortie 2",
-			"desc": "Defeat the flagship of an enemy fleet",
-			"unlock": [ 210, 218, 214, 213 ]
-		},
-			 "210": {
-				"code": "Bd3",
-				"name": "Daily Sortie 3",
-				"desc": "Defeat 10 abyssal fleets (B rank+)"
-			},
-			 "218": {
-				"code": "Bd5",
-				"name": "Daily Sortie 5",
-				"desc": "Sink 3 enemy transport ships"
-			},
-				 "226": {
-					"code": "Bd7",
-					"name": "Daily Sortie 7",
-					"desc": "Defeat 5 bosses in World 2."
-				},
-			"214": {
-				"code": "Bw1",
-				"name": "Weekly Sortie 1",
-				"desc": "Sortie 36, Encounter 24 bosses, Win against 12 bosses, 6 S-ranks"
-			},
-			"213": {
-				"code": "Bw3",
-				"name": "Weekly Sortie 3",
-				"desc": "Sink 20 transport ships"
-			},
-			
-		 "211": {
-			"code": "Bd4",
-			"name": "Daily Sortie 4",
-			"desc": "Sink 3 abyssal CV(L)"
-		},
-		"212": {
-			"code": "Bd6",
-			"name": "Daily Sortie 6",
-			"desc": "Sink 5 abyssal transport ships"
-		},
+	
 	
 	
     "202": {
@@ -295,30 +248,17 @@
         "name": "Sortie a Carrier Task Force!",
         "desc": "Deply a fleet with CV(L) as flagship and 5 DD\/CL\/AV for the escorts."
     },
-   
-   
-    
     "215": {
         "name": "Second Fleet Sortie!",
         "desc": "Deploy your 2nd Fleet on a combat mission."
     },
-   
     "217": {
         "name": "Sink Enemy Carrier!",
         "desc": "Sink an enemy aircraft carrier."
     },
-   
     "219": {
         "name": "Sortie the Mikawa Fleet!",
         "desc": "Deploy a fleet with Choukai, Aoba, Kako, Furutaka, Tenryuu and another fast ship."
-    },
-    "220": {
-        "name": "Weekly Sortie 2",
-        "desc": "Sink 20 aircraft carriers."
-    },
-    "221": {
-        "name": "Weekly Sortie 4",
-        "desc": "Sink 50 transport ships."
     },
     "222": {
         "name": "Sortie the Destroyer Division 6!",
@@ -336,22 +276,9 @@
         "name": "Sortie the Carrier Division 5!",
         "desc": "Deploy a fleet with Shoukaku, Zuikaku and any 4 ships. Score a victory against World 3-1 Boss."
     },
-   
     "227": {
         "name": "Sortie the New Mikawa Fleet!",
         "desc": "Deploy a fleet with Choukai, Aoba, Kinugasa, Kako, Furutaka and Tenryuu. Score a victory against World 2-3 Boss."
-    },
-    "228": {
-        "name": "Weekly Sortie 5",
-        "desc": "Sink 15 submarines."
-    },
-    "229": {
-        "name": "Weekly Sortie 6",
-        "desc": "Defeat 12 bosses in World 4."
-    },
-    "230": {
-        "name": "Daily Sortie 8",
-        "desc": "Sink 6 enemy submarines."
     },
     "231": {
         "name": "Sortie a Submarine Fleet!",
@@ -373,18 +300,6 @@
         "name": "Sortie the Destroyer Division 18!",
         "desc": "Deploy a fleet with Kasumi, Arare, Kagerou, Shiranui and 2 additional ships. Score a victory against World 3-1 Boss."
     },
-    "241": {
-        "name": "Weekly Sortie 7",
-        "desc": "Defeat 5 bosses in Worlds 3-3, 3-4 or 3-5."
-    },
-    "242": {
-        "name": "Weekly Sortie 8",
-        "desc": "Defeat a boss in World 4-4."
-    },
-    "243": {
-        "name": "Weekly Sortie 9",
-        "desc": "Score two S rank victories at the boss node of World 5-2."
-    },
     "244": {
         "name": "Deploy the Destroyer Division 30 (Gen-1)",
         "desc": "Deploy a fleet that consists of Mutsuki (\u7766\u6708), Kisaragi (\u5982\u6708), Yayoi (\u5f25\u751f), Mochizuki (\u671b\u6708) and up to 2 additional DDs to world 3-2 and encounter the boss. C rank or above is required."
@@ -403,11 +318,7 @@
     },
     "248": {
         "name": "30th Destroyer Fleet's Anti-Submarine Patrol",
-        "desc": "Deploy Mutsuki (\u7766\u6708), Yayoi (\u5f25\u751f), Uzuki (\u536f\u6708) and Mochizuki (\u671b\u6708) to World 1-5 and reach the boss, scoring at least a C rank."
-    },
-    "249": {
-        "name": "[Monthly] Deploy the 5th Fleet",
-        "desc": "Deploy Myoukou (\u5999\u9ad8), Nachi (\u90a3\u667a) and Haguro (\u7fbd\u9ed2) to World 2-5. You may add 3 other ships. Score an S rank victory against the boss."
+        "desc": "Deploy Mutsuki, Yayoi, Uzuki and Mochizuki to World 1-5 and reach the boss, scoring at least a C rank."
     },
     "250": {
         "name": "Deploy the 2nd Carrier Division",
@@ -433,30 +344,18 @@
         "name": "Deploy a Torpedo Squadron to Bashi Islands",
         "desc": "Sortie a fleet of 1-2 light cruisers (with one of them as the flagship) and 4-5 destroyers to World 2-2. Score a victory at the boss and sink the enemy flagship."
     },
-    "256": {
-        "name": "Deploy a Submarine Fleet to World 6-1",
-        "desc": "Deploy to World 6-1 and obtain an S-rank victory at the boss node 3 times."
-    },
-    "257": {
-        "name": "Deploy a Torpedo Squadron",
-        "desc": "Deploy a fleet of up to 3 light cruisers (with a light cruiser flagship) and up to 5 destroyers to World 1-4. Score an S rank victory against the boss."
-    },
+    
+   
     "258": {
         "name": "Sortie the 2nd Squadron",
         "desc": "Deploy Nagato (\u9577\u9580), Mutsu (\u9678\u5965), Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce) and up to 2 additional ships to World 4-2. Score two S rank victories at the boss node."
     },
-    "259": {
-        "name": "Deploy a Battleship Squadron",
-        "desc": "Deploy three slow battleships, one light cruiser and up to two additional ships to World 5-1 and score an S rank victory at the boss node."
-    },
+   
     "260": {
         "name": "Deploy the Battleship Squadron in the Northern Waters",
         "desc": "Deploy two battleships, a light aircraft carrier and up to three additional ships to World 3-5 and score an S rank victory at the boss node."
     },
-    "261": {
-        "name": "Weekly Sortie 10",
-        "desc": "Deploy to World 1-5 and score an A rank victory (or higher) at the boss node 3 times."
-    },
+    
     "262": {
         "name": "Deploy the Nishimura Fleet in the Southern Waters",
         "desc": "Deploy Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce), Mogami (\u6700\u4e0a), Shigure (\u6642\u96e8) and Michishio (\u6e80\u6f6e) (you may also add another ship) to World 5-1 and score an S rank victory at the boss node."
@@ -465,18 +364,9 @@
         "name": "Deploy the Sixth Squadron to the Southwestern Waters",
         "desc": "Deploy Furutaka (\u53e4\u9df9), Kako (\u52a0\u53e4), Aoba (\u9752\u8449), Kinugasa (\u8863\u7b20) and up to two additional ships to World 2-5 and score an S rank victory at the boss node."
     },
-    "264": {
-        "name": "Sortie the Aircraft Carrier Task Force to the West",
-        "desc": "Deploy a fleet consisting of 2 CV, 2 DD and 2 additional ships to World 4-2. Score an S rank victory at the boss node."
-    },
-    "265": {
-        "name": "Monthly Escort Duty",
-        "desc": "Deploy a fleet to World 1-5 and score 10 A rank (or above) victories at the boss node."
-    },
-    "266": {
-        "name": "Deploy the Counterattack Squadron",
-        "desc": "Deploy a fleet with a DD flagship, 1 CA, 1 CL and 3 more DD to World 2-5 and score an S rank victory at the boss node."
-    },
+    
+    
+    
     "267": {
         "name": "Deploy the 11th Destroyer Division",
         "desc": "Deploy Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea), Murakumo(\u53e2\u96f2) and up to 2 additional ships to World 2-3 and score a victory at the boss node."
@@ -510,124 +400,319 @@
         "desc": "Deploy Akatsuki (\u6681), Hibiki (\u97ff or \u0412\u0435\u0440\u043d\u044b\u0439), Inazuma (\u96f7) and Ikazuchi (\u96fb) to World 1-5. At least C rank is required at the boss node."
     },
     "275": {
-        "name": "18th Cruiser Division, Set Sail",
-        "desc": "Sortie Tenryuu (\u5929\u9f8d), Tatsuta (\u9f8d\u7530) and 2 or more other ships to World 2-3 and sink the enemy flagship at the boss node."
+        "name": "Deploy the 18th Squadron",
+        "desc": "Tenryuu, Tatsuta, and at least 2 other ships to [W2-3] and S-rank the boss node"
     },
+	
+	
+	
+	
+	
+	"201": {
+        "code": "Bd1",
+        "name": "Daily Sortie 1",
+        "desc": "Defeat an enemy fleet",
+		"unlock": [ 216, 211, 212 ]
+    },
+	"216": {
+		"code": "Bd2",
+		"name": "Daily Sortie 2",
+		"desc": "Defeat the flagship of an enemy fleet",
+		"unlock": [ 210, 218, 214, 213 ]
+	},
+	"210": {
+		"code": "Bd3",
+		"name": "Daily Sortie 3",
+		"desc": "Defeat 10 abyssal fleets (B rank+)"
+	},
+	"211": {
+		"code": "Bd4",
+		"name": "Daily Sortie 4",
+		"desc": "Sink 3 abyssal CV(L)"
+	},
+	"218": {
+		"code": "Bd5",
+		"name": "Daily Sortie 5",
+		"desc": "Sink 3 enemy transport ships",
+		"unlock": [ 226, 220 ]
+	},
+	"212": {
+		"code": "Bd6",
+		"name": "Daily Sortie 6",
+		"desc": "Sink 5 abyssal transport ships"
+	},
+	"226": {
+		"code": "Bd7",
+		"name": "Daily Sortie 7",
+		"desc": "Defeat 5 bosses in horned nodes in World 2",
+		"unlock": [ 230 ]
+	},
+	"230": {
+		"code": "Bd8",
+        "name": "Daily Sortie 8",
+        "desc": "Sink 6 abyssal submarines"
+    },
+	
+	
+	
+	
+	
+	"214": {
+		"code": "Bw1",
+		"name": "Weekly Sortie 1",
+		"desc": "Sortie 36x, Encounter 24 bosses, Win vs 12 bosses, 6 S-ranks",
+		"unlock": [ 221 ]
+	},
+	"220": {
+		"code": "Bw2",
+        "name": "Weekly Sortie 2",
+        "desc": "Sink 20 abyssal CV(L)",
+		"unlock": [ 228 ]
+    },
+	"213": {
+		"code": "Bw3",
+		"name": "Weekly Sortie 3",
+		"desc": "Sink 20 transport ships"
+	},
+	"221": {
+		"code": "Bw4",
+        "name": "Weekly Sortie 4",
+        "desc": "Sink 50 transport ships",
+		"unlock": [ 261, 257, 264 ]
+    },
+	"228": {
+		"code": "Bw5",
+        "name": "Weekly Sortie 5",
+        "desc": "Sink 15 submarines",
+		"unlock": [ 229, 241, 613 ]
+    },
+	"229": {
+		"code": "Bw6",
+        "name": "Weekly Sortie 6",
+        "desc": "Defeat 12 bosses in horned nodes in World 4",
+		"unlock": [ 242 ]
+    },
+	"241": {
+		"code": "Bw7",
+        "name": "Weekly Sortie 7",
+        "desc": "Defeat 5 bosses in Worlds [W3-3], [W3-4] or [W3-5]"
+    },
+    "242": {
+		"code": "Bw8",
+        "name": "Weekly Sortie 8",
+        "desc": "Defeat a boss in World [W4-4]",
+		"unlock": [ 243 ]
+    },
+    "243": {
+		"code": "Bw9",
+        "name": "Weekly Sortie 9",
+        "desc": "Sortie to [W5-2] and S-rank the boss node 2 times"
+    },
+	"261": {
+		"code": "Bw10",
+        "name": "Weekly Sortie 10",
+        "desc": "Sortie to [W1-5] and A-rank+ the boss node 3 times"
+    },
+	
+	
+	
+	
+	
+	"249": {
+		"code": "Bm1",
+        "name": "Deploy the Fifth squadron",
+        "desc": "Deploy Myoukou, Nachi, Haguro, +3 ships to [W2-5]. S-rank the boss node",
+		"unlock": [ 265 ]
+    },
+	"256": {
+		"code": "Bm2",
+        "name": "Deploy a Submarine Fleet to World 6-1",
+        "desc": "Deploy to [W6-1] and obtain an S-rank the boss node 3 times"
+    },
+	"257": {
+		"code": "Bm3",
+        "name": "Deploy a Torpedo Squadron",
+        "desc": "1~3 CL (CL flagship) and 3~5 destroyers to [W1-4]. S-rank the boss node"
+    },
+	"259": {
+		"code": "Bm4",
+        "name": "Deploy a Battleship Squadron",
+        "desc": "Deploy 3 BB(V) + 1 CL + 2 ships to [W5-1] and S-rank victory the boss node"
+    },
+	"265": {
+		"code": "Bm5",
+        "name": "Monthly Escort Duty",
+        "desc": "Deploy a fleet to [W1-5] and A-rank+ the boss node 10 times"
+    },
+	"264": {
+		"code": "Bm6",
+        "name": "Sortie the Aircraft Carrier Task Force to the West",
+        "desc": "2 CV + 2 DD + 2 ships to [W4-2]. S-rank the boss node",
+		"unlock": [ 266 ]
+    },
+	"266": {
+		"code": "Bm7",
+        "name": "Deploy the Counterattack Squadron",
+        "desc": "4 DD (DD flagship) + 1 CA (Not CAV) + 1 CL to [W2-5] and S-rank the boss node"
+    },
+	
+	
+	
+	
+	
     "301": {
+		"code": "C1",
         "name": "First Exercise!",
-        "desc": "Challenge another fleet in practice mode."
+        "desc": "Challenge another fleet in practice mode"
+    },
+	 "303": {
+		"code": "C2",
+        "name": "Daily Exercises 1",
+        "desc": "Challenge 3 other fleets in practice mode",
+		"unlock": [ 304, 302 ]
+    },
+	"304": {
+		"code": "C3",
+        "name": "Daily Exercises 2",
+        "desc": "Get 5 victories in practice mode within the same day"
     },
     "302": {
+		"code": "C4",
         "name": "Weekly Exercises",
-        "desc": "Get 20 victories in practice mode within the same week."
-    },
-    "303": {
-        "name": "Daily Exercises 1",
-        "desc": "Challenge 3 other fleets in practice mode within the same day."
-    },
-    "304": {
-        "name": "Daily Exercises 2",
-        "desc": "Get 5 victories in practice mode within the same day."
-    },
-    "306": {
-        "name": "In Preparation of Love (Part 2)",
-        "desc": "Show your love by getting 2 victories in practice mode."
+        "desc": "(Weekly) Get 20 victories in practice mode"
     },
     "307": {
+		"code": "C5",
         "name": "Improve the Efficiency of the Fleet",
-        "desc": "Get 3 victories in exercises (practice mode)."
+        "desc": "Get 3 victories in practice mode"
     },
     "308": {
+		"code": "C6",
         "name": "Improve the Efficiency of the Fleet One More Time",
-        "desc": "Get 4 victories in exercises (practice mode)."
+        "desc": "Get 4 victories in practice mode"
     },
+	
+	
+	
+	
+	
     "401": {
+		"code": "D1",
         "name": "First Expedition",
-        "desc": "Perform an expedition."
+        "desc": "Perform an expedition"
     },
     "402": {
+		"code": "D2",
         "name": "Daily Expeditions 1",
-        "desc": "Perform 3 successful expeditions within the same day."
+        "desc": "Perform 3 successful expeditions",
+		"unlock": [ 403 ]
     },
     "403": {
+		"code": "D3",
         "name": "Daily Expeditions 2",
-        "desc": "Perform 10 successful expeditions within the same day."
+        "desc": "Perform 10 successful expeditions"
     },
     "404": {
+		"code": "D4",
         "name": "Weekly Expeditions",
-        "desc": "Perform 30 successful expeditions within the same week."
+        "desc": "(Weekly) Perform 30 successful expeditions"
     },
     "405": {
+		"code": "D5",
         "name": "The First Submarine Operation",
-        "desc": "Complete Expedition 30."
+        "desc": "Complete Expedition 30"
     },
     "406": {
+		"code": "D6",
         "name": "The Second Submarine Operation",
-        "desc": "Complete Expedition 30 one more time."
+        "desc": "Complete Expedition 30 one more time"
     },
     "408": {
+		"code": "D7",
         "name": "Continuation of Submarine Operations",
-        "desc": "Complete Expedition 30 two more times."
+        "desc": "Complete Expedition 30 two more times"
     },
     "409": {
+		"code": "D8",
         "name": "Strategy Meeting with Overseas Submarine Dispatch!",
-        "desc": "Complete expedition 31 and receive foreign destroyer Z1!"
+        "desc": "Complete Expedition 31"
     },
     "410": {
+		"code": "D9",
         "name": "Weekly Expedition 2",
-        "desc": "Complete expedition 37 or 38"
+        "desc": "(Weekly) Complete expedition 37 or 38",
+		"unlock": [ 411 ]
+    },
+	"412": {
+		"code": "D10",
+        "name": "Strengthen the Operation of the BBV",
+        "desc": "Complete expedition 23"
     },
     "411": {
+		"code": "D11",
         "name": "Weekly Expedition 3",
-        "desc": "Complete expedition 37 or 38 a total of 7 times in a week"
-    },
-    "412": {
-        "name": "Strengthen the Operation of the BBV",
-        "desc": "Complete expedition 23."
+        "desc": "(Weekly) Complete expedition 37 or 38 a total of 7 times"
     },
     "413": {
+		"code": "D12",
         "name": "Strengthen the Operation of the BBV (Cont.)",
-        "desc": "Complete expedition 23 four more times."
+        "desc": "Complete expedition 23 four more times"
     },
     "414": {
+		"code": "D13",
         "name": "Blue Waters Submarine Operation",
-        "desc": "Complete expedition 39."
+        "desc": "Complete expedition 39"
     },
     "415": {
+		"code": "D14",
         "name": "Blue Waters Extended Submarine Operation",
-        "desc": "Complete expedition 39 two more times."
+        "desc": "Complete expedition 39 two more times"
     },
     "416": {
+		"code": "D15",
         "name": "Air Defence Exercises",
-        "desc": "Complete expedition 6 (\u9632\u7a7a\u5c04\u6483\u6f14\u7fd2) three times."
+        "desc": "Complete expedition 6 three times"
     },
     "417": {
+		"code": "D16",
         "name": "Deploy the Decoy Task Force",
-        "desc": "Complete expedition 15 (\u56ee\u6a5f\u52d5\u90e8\u968a\u652f\u63f4\u4f5c\u6226)."
+        "desc": "Complete expedition 15"
     },
     "418": {
+		"code": "D17",
         "name": "Naval Ceremony Preparations",
-        "desc": "Complete expedition 7 (\u89b3\u8266\u5f0f\u4e88\u884c) two times."
+        "desc": "Complete Expedition 7 twice"
     },
     "419": {
+		"code": "D18",
         "name": "Naval Ceremony",
-        "desc": "Complete expedition 8."
+        "desc": "Complete expedition 8"
     },
+	
+	
+	
+	
+	
     "501": {
+		"code": "E1",
         "name": "First Supply",
-        "desc": "Resupply a ship."
+        "desc": "Resupply a ship"
     },
     "502": {
+		"code": "E2",
         "name": "First Docking",
-        "desc": "Repair a ship."
+        "desc": "Repair a ship"
     },
     "503": {
+		"code": "E3",
         "name": "Daily Repairs",
-        "desc": "Repair 5 ships."
+        "desc": "Repair 5 ships",
+		"unlock": [ 504 ]
     },
     "504": {
+		"code": "E4",
         "name": "Daily Resupplies",
-        "desc": "Resupply your ships 15 times."
+        "desc": "Resupply your ships 15 times"
     },
 	
 	
@@ -762,5 +847,9 @@
 	"611": {
         "name": "In Preparation of Love! (Part 1)",
         "desc": "Scrap equipment 2 times to show your love!"
+    },
+	"306": {
+        "name": "In Preparation of Love (Part 2)",
+        "desc": "Show your love by getting 2 victories in practice mode."
     }
 }
