@@ -9,24 +9,29 @@
 	_servers: [],
 	_gauges: {},
 	_battle: {},
+	_terms: {},
 	
 	/* Initialize Translation Data
 	-------------------------------------------------------*/
 	init: function(repo){
 		var self = this;
 		
+		// Get language chosen
+		var lang = app.Config.language || "en";
+		
 		// Load Game Metadata
 		$.getJSON(repo+"experience.json", function(response){ self._hqexp = response; });
-		$.getJSON(repo+"quests.json", function(response){ self._quests = response; });
-		$.getJSON(repo+"ranks.json", function(response){ self._ranks = response; });
-		$.getJSON(repo+"stype.json", function(response){ self._stype = response; });
-		$.getJSON(repo+"servers.json", function(response){ self._servers = response; });
 		$.getJSON(repo+"gauges.json", function(response){ self._gauges = response; });
-		$.getJSON(repo+"battle.json", function(response){ self._battle = response; });
 		
 		// Load Translations
-		$.getJSON(repo+"translations/ships.json", function(response){ self._ship = response; });
-		$.getJSON(repo+"translations/items.json", function(response){ self._slotitem = response; });
+		$.getJSON(repo+"translations/"+lang+"/ships.json", function(response){ self._ship = response; });
+		$.getJSON(repo+"translations/"+lang+"/items.json", function(response){ self._slotitem = response; });
+		$.getJSON(repo+"translations/"+lang+"/terms.json", function(response){ self._terms = response; });
+		$.getJSON(repo+"translations/"+lang+"/quests.json", function(response){ self._quests = response; });
+		$.getJSON(repo+"translations/"+lang+"/ranks.json", function(response){ self._ranks = response; });
+		$.getJSON(repo+"translations/"+lang+"/stype.json", function(response){ self._stype = response; });
+		$.getJSON(repo+"translations/"+lang+"/servers.json", function(response){ self._servers = response; });
+		$.getJSON(repo+"translations/"+lang+"/battle.json", function(response){ self._battle = response; });
 	},
 	
 	
@@ -86,6 +91,12 @@
 		if(typeof this._battle.engagement[index] != "undefined"){ return this._battle.engagement[index]; }
 		return ["",""];
 	},
+	
+	term :function( rootWord ){
+		if(typeof this._terms[rootWord] != "undefined"){ return this._terms[rootWord]; }
+		return rootWord;
+	},
+	
 	
 	/* Translate Gateway
 	-------------------------------------------------------*/
