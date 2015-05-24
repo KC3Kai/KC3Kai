@@ -2,8 +2,19 @@ KC3.prototype.Quests = {
 	active: [],
 	list: {},
 	
+	init :function(){
+		this.load();
+	},
+	
 	receivePage :function(pageNum, questList){
 		var ctr;
+		
+		// Disable all previously on this page
+		for(ctr in this.list){
+			
+		}
+		
+		// Update quest list with data received
 		for(ctr in questList){
 			
 			// If quest does not have entry yet, add
@@ -14,8 +25,12 @@ KC3.prototype.Quests = {
 					progress: questList[ctr].api_progress_flag,
 					status: questList[ctr].api_state,
 					page: pageNum,
-					tracking: {}
+					tracking: app.Meta.quest( questList[ctr].api_no ).tracking
 				};
+			}else{
+				this.list["q"+questList[ctr].api_no].progress  = questList[ctr].api_progress_flag;
+				this.list["q"+questList[ctr].api_no].status  = questList[ctr].api_state;
+				this.list["q"+questList[ctr].api_no].page  = questList[ctr].pageNum;
 			}
 			
 			// If quest is active, add to this.active
@@ -95,9 +110,28 @@ KC3.prototype.Quests = {
 		this.save();
 	},
 	
-	track :function(id, data){
-		
+	
+	/* Tracking
+	-------------------------------------------------------*/
+	track :function(id, callback){
+		if(typeof this.list["q"+id] != "undefined"){
+			if( this.list["q"+id].status == 2 ){
+				callback( this.list["q"+id].tracking );
+				app.Dashboard.showQuestProgress(this.list["q"+id]);
+				this.save();
+			}
+		}
 	},
+	
+	getTrackingText :function( questData ){
+		var trackingText = [];
+		var ctr;
+		for(ctr in questData.tracking){
+			trackingText.push(questData.tracking[ctr][0]+" / "+questData.tracking[ctr][1]);
+		}
+		return trackingText.join();
+	},
+	
 	
 	/* Load data from localStorage
 	-------------------------------------------------------*/

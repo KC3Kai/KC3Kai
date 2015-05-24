@@ -131,15 +131,19 @@ KC3.prototype.Dashboard  = {
 		$("#catBomb").fadeIn(300);
 	},
 	
+	/* Show Quest Progress
+	-------------------------------------------------------*/
+	showQuestProgress :function(questData){
+		this.checkModals();
+		console.log("showQuestProgress", questData);
+	},
+	
 	/* Show Development Results
 	-------------------------------------------------------*/
-	showCraft :function(craftData, resourceUsed){
+	showCraft :function(craftData, resourceUsed, MasterItem){
 		this.checkModals();
 		$("#modals").fadeIn(300);
 		$("#craftModal").fadeIn(300);
-		
-		// Get master data for equipment
-		var MasterItem = app.Master.slotitem(craftData.api_slot_item.api_slotitem_id);
 		
 		// Show basic info of the item
 		$("#craftModal .equipIcon img").attr("src", "../../assets/img/items/"+MasterItem.api_type[3]+".png");

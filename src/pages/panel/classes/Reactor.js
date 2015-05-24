@@ -248,6 +248,15 @@ KC3.prototype.Reactor  = {
 				app.Util.findParam(params, "api%5Fitem5")
 			]
 		};
+		
+		// F2: Daily Construction 1
+		app.Quests.track(606, function(trackingObj){
+			trackingObj[0][0]++;
+		});
+		// F4: Daily Construction 2
+		app.Quests.track(608, function(trackingObj){
+			trackingObj[0][0]++;
+		});
 	},
 	
 	
@@ -495,18 +504,6 @@ KC3.prototype.Reactor  = {
 		);
 	},
 	
-	/* Receive Quest Reward
-	-------------------------------------------------------*/
-	"api_req_quest/clearitemget":function(params, response, headers){
-		
-	},
-	
-	/*api_req_quest/stop
-	api_quest_id
-	
-	api_req_quest/start
-	api_quest_id*/
-	
 	/*-------------------------------------------------------*/
 	/*--------------------[ REPAIR DOCKS ]-------------------*/
 	/*-------------------------------------------------------*/
@@ -538,7 +535,80 @@ KC3.prototype.Reactor  = {
 	},
 	
 	/*-------------------------------------------------------*/
-	/*----------------------[ OTHERS ]-----------------------*/
+	/*-----------------------[ PVP ]-------------------------*/
+	/*-------------------------------------------------------*/
+	
+	/* PVP Start
+	-------------------------------------------------------*/
+	"api_req_practice/battle":function(params, response, headers){
+		
+	},
+	
+	/* PVP Result
+	-------------------------------------------------------*/
+	"api_req_practice/battle_result":function(params, response, headers){
+		// C2: Daily Exercises 1
+		app.Quests.track(303, function(trackingObj){
+			console.log("callbacked, trackingObj: ", trackingObj);
+			console.log("trackingObj[0][0]", trackingObj[0][0]);
+			trackingObj[0][0]++;
+		});
+		
+		// If victory
+		if(["A","B","S"].indexOf(response.api_data.api_win_rank) > -1){
+			// C3: Daily Exercises 2
+			app.Quests.track(304, function(trackingObj){
+				trackingObj[0][0]++;
+			});
+			// C4: Weekly Exercises
+			app.Quests.track(302, function(trackingObj){
+				trackingObj[0][0]++;
+			});
+		}
+	},
+	
+	
+	/*-------------------------------------------------------*/
+	/*--------------------[ EXPEDITION ]---------------------*/
+	/*-------------------------------------------------------*/
+	
+	/* Complete Expedition
+	-------------------------------------------------------*/
+	"api_req_mission/result":function(params, response, headers){
+		// If success or great success
+		if(response.api_data.api_clear_result > 0){
+			
+			// D2: Daily Expeditions 1
+			app.Quests.track(402, function(trackingObj){
+				trackingObj[0][0]++;
+			});
+			
+			// D3: Daily Expeditions 2
+			app.Quests.track(403, function(trackingObj){
+				trackingObj[0][0]++;
+			});
+			
+			// D4: Weekly Expeditions
+			app.Quests.track(404, function(trackingObj){
+				trackingObj[0][0]++;
+			});
+			
+			// D9: Weekly Expedition 2
+			app.Quests.track(410, function(trackingObj){
+				trackingObj[0][0]++;
+			});
+			
+			// D11: Weekly Expedition 3
+			app.Quests.track(411, function(trackingObj){
+				trackingObj[0][0]++;
+			});
+			
+		}
+	},
+	
+	
+	/*-------------------------------------------------------*/
+	/*---------------------[ ARSENAL ]-----------------------*/
 	/*-------------------------------------------------------*/
 	
 	/* Craft Equipment
@@ -564,6 +634,16 @@ KC3.prototype.Reactor  = {
 			time: app.Util.getUTC(headers)
 		});
 		
+		// F1: Daily Development 1
+		app.Quests.track(605, function(trackingObj){
+			trackingObj[0][0]++;
+		});
+		
+		// F3: Daily Development 2
+		app.Quests.track(607, function(trackingObj){
+			trackingObj[0][0]++;
+		});
+		
 		// Checks if the development went great
 		if(!failed){
 			
@@ -581,6 +661,38 @@ KC3.prototype.Reactor  = {
 			}]);
 		}
 	},
+	
+	/* Scrap a Ship
+	-------------------------------------------------------*/
+	"api_req_kousyou/destroyship":function(params, response, headers){
+		var ship_id = app.Util.findParam(params, "api%5Fship%5Fid");
+		app.Ships.remove(ship_id);
+		app.Dashboard.Info.materials();
+		app.Dashboard.Fleet.update();
+		
+		// F5: Daily Dismantlement
+		app.Quests.track(609, function(trackingObj){
+			trackingObj[0][0]++;
+		});
+	},
+	
+	/* Scrap a Gear
+	-------------------------------------------------------*/
+	"api_req_kousyou/destroyitem2":function(params, response, headers){
+		var gear_ids = app.Util.findParam(params, "api%5Fslotitem%5Fids");
+		app.Gears.remove(gear_ids.split("%2C"));
+		app.Dashboard.Info.materials();
+		
+		// F12: Weekly Dismantlement
+		app.Quests.track(613, function(trackingObj){
+			trackingObj[0][0]++;
+		});
+	},
+	
+	
+	/*-------------------------------------------------------*/
+	/*----------------------[ OTHERS ]-----------------------*/
+	/*-------------------------------------------------------*/
 	
 	/* View World Maps
 	-------------------------------------------------------*/
@@ -619,21 +731,10 @@ KC3.prototype.Reactor  = {
 		app.Dashboard.Info.materials();
 	},
 	
-	/* Scrap a Ship
+	/* Remodel
 	-------------------------------------------------------*/
-	"api_req_kousyou/destroyship":function(params, response, headers){
-		var ship_id = app.Util.findParam(params, "api%5Fship%5Fid");
-		app.Ships.remove(ship_id);
-		app.Dashboard.Info.materials();
-		app.Dashboard.Fleet.update();
-	},
-	
-	/* Scrap a Gear
-	-------------------------------------------------------*/
-	"api_req_kousyou/destroyitem2":function(params, response, headers){
-		var gear_ids = app.Util.findParam(params, "api%5Fslotitem%5Fids");
-		app.Gears.remove(gear_ids.split("%2C"));
-		app.Dashboard.Info.materials();
+	"xxxx":function(params, response, headers){
+		
 	}
 	
 };

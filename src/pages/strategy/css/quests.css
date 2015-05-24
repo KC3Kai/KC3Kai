@@ -24,19 +24,23 @@
 	padding:0px;
 	list-style: none;
 }
+/* Row Layout */
 .page_quests .questFlowItem {
 	line-height:20px;
 	margin:0px 0px 2px 0px;
 	font-size:12px;
 }
 .page_quests .questFlowItem .questInfo {
+	height:20px;
 	margin:0px 0px 2px 0px;
+	background:#f6f6f6;
 }
 .page_quests .questFlowItem .questChildren {
 	padding:0px 0px 0px 20px;
 	background:url(../../../assets/img/ui/branch.png);
 	background-repeat: repeat-y;
 }
+/* Base Styling */
 .page_quests .questFlowItem .questTrunk {
 	margin:0px 0px 0px -10px;
 	float:left;
@@ -46,22 +50,15 @@
 }
 .page_quests .questFlowItem .questIcon {
 	width:27px;
-	margin:0px 5px 0px 0px;
+	margin:1px 5px 0px 1px;
 	text-align:center;
 	font-size:10px;
 	font-weight:bold;
-	height:20px;
+	height:18px;
+	line-height:18px;
 	float:left;
 }
-.page_quests .questIcon.type1 { background:#33A459; color:#fff; }
-.page_quests .questIcon.type2 { background:#D75048; color:#fff; }
-.page_quests .questIcon.type3 { background:#98E75F; }
-.page_quests .questIcon.type4 { background:#ace; }
-.page_quests .questIcon.type5 { background:#ffcc00; }
-.page_quests .questIcon.type6 { background:#996600; color:#fff; }
-.page_quests .questIcon.type7 { background:#B7B7FF; }
 .page_quests .questFlowItem .questDesc {
-	/*width:310px;*/
 	max-width:446px;
 	margin:0px 5px 0px 0px;
 	height:20px;
@@ -69,13 +66,69 @@
 	overflow:hidden;
 }
 .page_quests .questFlowItem .questTrack {
-	max-width:70px;
-	height:20px;
+	width:70px;
+	height:16px;
+	line-height:16px;
 	overflow:hidden;
-	float:left;
-	margin:0px 4px 0px 0px;
-	background:#cfc;
+	float:right;
+	margin:2px 2px 0px 0px;
+	text-align:center;
+	color:#999;
 }
+
+/* Icon Colors */
+.page_quests .questIcon.type1 {
+	background:#33A459;
+	color:#fff;
+}
+.page_quests .questIcon.type2 {
+	background:#D75048;
+	color:#fff;
+}
+.page_quests .questIcon.type3 {
+	background:#98E75F;
+}
+.page_quests .questIcon.type4 {
+	background:#ace;
+}
+.page_quests .questIcon.type5 {
+	background:#EDD286;
+}
+.page_quests .questIcon.type6 {
+	background:#996600;
+	color:#fff;
+}
+.page_quests .questIcon.type7 {
+	background:#B7B7FF;
+}
+
+/* Statuses */
+.page_quests .questInfo.open {
+	
+}
+
+.page_quests .questInfo.disabled {
+	opacity:.4;
+}
+
+.page_quests .questInfo.active {
+	/* background:#FFDA46; */
+	background:#EE9;
+}
+.page_quests .questInfo.active .questTrack {
+	background:#fff;
+	color:#00f;
+	font-weight:bold;
+}
+
+.page_quests .questInfo.complete {
+	color:#00CC00;
+}
+.page_quests .questInfo.complete .questTrack {
+	display:none;
+}
+
+
 
 /* OTHER QUESTS
 --------------------------------*/

@@ -17,6 +17,7 @@ $(document).on("ready", function(){
 	app.Player.init();
 	app.Resources.init();
 	app.Docks.init();
+	app.Quests.init();
 	
 	app.Gears.load();
 	
