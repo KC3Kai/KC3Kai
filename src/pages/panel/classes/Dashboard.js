@@ -211,6 +211,9 @@ KC3.prototype.Dashboard  = {
 				case 2: iconFile = "../../assets/img/client/ammo.png"; break;
 				case 3: iconFile = "../../assets/img/client/steel.png"; break;
 				case 4: iconFile = "../../assets/img/client/bauxite.png"; break;
+				case 5: iconFile = "../../assets/img/client/ibuild.png"; break;
+				case 6: iconFile = "../../assets/img/client/bucket.png"; break;
+				case 7: iconFile = "../../assets/img/client/devmat.png"; break;
 				default: iconFile = "../../assets/img/client/compass.png"; break;
 			}
 			$("#compassModal .enemyFleet").html("<img src=\""+iconFile+"\" /> "+nodeData.api_itemget.api_getcount);
