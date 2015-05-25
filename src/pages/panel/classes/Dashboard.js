@@ -218,6 +218,19 @@ KC3.prototype.Dashboard  = {
 			}
 			$("#compassModal .enemyFleet").html("<img src=\""+iconFile+"\" /> "+nodeData.api_itemget.api_getcount);
 		}
+        
+        // Check if malstrom node
+		if (typeof nodeData.api_happening != "undefined") {
+			var iconFile;
+			switch(nodeData.api_happening.api_icon_id){
+				case 1: iconFile = "../../assets/img/client/fuel.png"; break;
+				case 2: iconFile = "../../assets/img/client/ammo.png"; break;
+				case 3: iconFile = "../../assets/img/client/steel.png"; break;
+				case 4: iconFile = "../../assets/img/client/bauxite.png"; break;
+				default: iconFile = "../../assets/img/client/compass.png"; break;
+			}
+			$("#compassModal .enemyFleet").html("<img src=\""+iconFile+"\" /> -"+nodeData.api_happening.api_count);
+		}
 	},
 	
 	/* If a modal is already visible, close it
