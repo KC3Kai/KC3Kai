@@ -198,13 +198,10 @@ KC3.prototype.Dashboard  = {
 		$("#compassModal").fadeIn(300);
 		$("#compassModal .nodeLetter").text(String.fromCharCode(nodeData.api_no+96).toUpperCase());
 		
-		// Check if enemy node
-		if(typeof nodeData.api_enemy != "undefined"){
+		if (typeof nodeData.api_enemy != "undefined") {              // Check if enemy node
 			$("#compassModal .enemyFleet").text("Enemy #"+nodeData.api_enemy.api_enemy_id);
-		}
-		
-		// Check if resource node
-		if(typeof nodeData.api_itemget != "undefined"){
+            
+		} else if (typeof nodeData.api_itemget != "undefined") {     // Check if resource node
 			var iconFile;
 			switch(nodeData.api_itemget.api_icon_id){
 				case 1: iconFile = "../../assets/img/client/fuel.png"; break;
@@ -217,7 +214,21 @@ KC3.prototype.Dashboard  = {
 				default: iconFile = "../../assets/img/client/compass.png"; break;
 			}
 			$("#compassModal .enemyFleet").html("<img src=\""+iconFile+"\" /> "+nodeData.api_itemget.api_getcount);
-		}
+            
+		} else if (typeof nodeData.api_happening != "undefined") {  // Check if malstrom node
+			var iconFile;
+			switch(nodeData.api_happening.api_icon_id){
+				case 1: iconFile = "../../assets/img/client/fuel.png"; break;
+				case 2: iconFile = "../../assets/img/client/ammo.png"; break;
+				case 3: iconFile = "../../assets/img/client/steel.png"; break;
+				case 4: iconFile = "../../assets/img/client/bauxite.png"; break;
+				default: iconFile = "../../assets/img/client/compass.png"; break;
+			}
+			$("#compassModal .enemyFleet").html("<img src=\""+iconFile+"\" /> -"+nodeData.api_happening.api_count);
+            
+		} else {
+            $("#compassModal .enemyFleet").html("Battle Avoided");
+        }
 	},
 	
 	/* If a modal is already visible, close it
