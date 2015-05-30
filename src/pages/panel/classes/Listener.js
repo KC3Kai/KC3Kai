@@ -25,15 +25,15 @@ KC3.prototype.Listener  = {
 			);
 			return true;
 		} else {
-            // Clear Quest Overlay when going to to Furniture Room
-            if (request.request.url.indexOf("/kcs/resources/image/furniture/") >= 0 ) {
-                chrome.runtime.sendMessage({
-                    game:"kancolle",
-                    type:"game",
-                    action:"clear_overlays"
-                }, function(response){});
-            }
-        }
+			// Clear Quest Overlay when going to to Furniture Room
+			if (request.request.url.indexOf("/kcs/resources/image/furniture/") >= 0 ) {
+				chrome.runtime.sendMessage({
+					game:"kancolle",
+					type:"game",
+					action:"clear_overlays"
+				}, function(response){});
+			}
+		}
 		
 		// If request is a Game Asset
 		indexOfkcs1 = request.request.url.indexOf("/kcs/");
