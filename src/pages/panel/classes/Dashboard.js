@@ -215,7 +215,7 @@ KC3.prototype.Dashboard  = {
 			}
 			$("#compassModal .enemyFleet").html("<img src=\""+iconFile+"\" /> "+nodeData.api_itemget.api_getcount);
             
-        } else if (typeof nodeData.api_itemget_eo_comment != "undefined") {     // Check if special resource node (1-6 Boss Node)
+		} else if (typeof nodeData.api_itemget_eo_comment != "undefined") {     // Check if special resource node (1-6 Boss Node)
 			var iconFile;
 			switch(nodeData.api_itemget_eo_comment.api_id){
 				case 1: iconFile = "../../assets/img/client/fuel.png"; break;
