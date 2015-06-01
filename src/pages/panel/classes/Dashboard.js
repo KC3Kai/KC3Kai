@@ -215,6 +215,20 @@ KC3.prototype.Dashboard  = {
 			}
 			$("#compassModal .enemyFleet").html("<img src=\""+iconFile+"\" /> "+nodeData.api_itemget.api_getcount);
             
+		} else if (typeof nodeData.api_itemget_eo_comment != "undefined") {     // Check if special resource node (1-6 Boss Node)
+			var iconFile;
+			switch(nodeData.api_itemget_eo_comment.api_id){
+				case 1: iconFile = "../../assets/img/client/fuel.png"; break;
+				case 2: iconFile = "../../assets/img/client/ammo.png"; break;
+				case 3: iconFile = "../../assets/img/client/steel.png"; break;
+				case 4: iconFile = "../../assets/img/client/bauxite.png"; break;
+				case 5: iconFile = "../../assets/img/client/ibuild.png"; break;
+				case 6: iconFile = "../../assets/img/client/bucket.png"; break;
+				case 7: iconFile = "../../assets/img/client/devmat.png"; break;
+				default: iconFile = "../../assets/img/client/compass.png"; break;
+			}
+			$("#compassModal .enemyFleet").html("<img src=\""+iconFile+"\" /> "+nodeData.api_itemget_eo_comment.api_getcount);
+               
 		} else if (typeof nodeData.api_happening != "undefined") {  // Check if malstrom node
 			var iconFile;
 			switch(nodeData.api_happening.api_icon_id){
