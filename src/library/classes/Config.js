@@ -18,6 +18,7 @@ KC3.prototype.Config  = {
 		this.alert_volume = 60;
 		this.desktop_notif = true;
 		this.ss_mode = 0;
+		this.ss_type = 'JPG';
 		this.customsound = "";
 		this.showCraft = true;
 		this.showCompass = false;
@@ -75,6 +76,7 @@ KC3.prototype.Config  = {
 			this.loadField(tmpData, "alert_volume");
 			this.loadField(tmpData, "desktop_notif");
 			this.loadField(tmpData, "ss_mode");
+			this.loadField(tmpData, "ss_type");
 			this.loadField(tmpData, "customsound");
 			this.loadField(tmpData, "showCraft");
 			this.loadField(tmpData, "showCompass");
@@ -108,6 +110,7 @@ KC3.prototype.Config  = {
 			alert_volume 		: this.alert_volume,
 			desktop_notif 		: this.desktop_notif,
 			ss_mode 			: this.ss_mode,
+			ss_type 			: this.ss_type,
 			customsound 		: this.customsound,
 			showCraft 			: this.showCraft,
 			showCompass 		: this.showCompass,

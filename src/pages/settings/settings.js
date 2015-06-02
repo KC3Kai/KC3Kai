@@ -66,6 +66,14 @@ $(document).on("ready", function(){
 		showInput_ssmode();
 	});
 	
+	// Screenshot Filetpye
+	showInput_sstype();
+	$(".sstype .option").on("click", function(){
+		app.Config.ss_type = $(this).data("val");
+		app.Config.save();
+		showInput_sstype();
+	});
+	
 	// Game Screen: Top Margin
 	showInput_margin();
 	$(".margin input").on("change", function(){
@@ -200,6 +208,13 @@ function showInput_desktop(){
 function showInput_ssmode(){
 	$(".ssmode").fadeOut(200, function(){
 		$(".option-"+app.Config.ss_mode+" input", this).prop("checked", true);
+		$(this).fadeIn(200);
+	});
+}
+
+function showInput_sstype(){
+	$(".sstype").fadeOut(200, function(){
+		$(".option-"+app.Config.ss_type+" input", this).prop("checked", true);
 		$(this).fadeIn(200);
 	});
 }
