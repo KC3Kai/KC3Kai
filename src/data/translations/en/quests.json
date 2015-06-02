@@ -205,11 +205,19 @@
     },
     "152": {
         "name": "Organise the New Edition of the Mikawa Fleet",
-        "desc": "Have Choukai Kai2 (\u9ce5\u6d77\u6539\u30cb) as the flagship and any five of Aoba (\u9752\u8449), Kinugasa (\u8863\u7b20), Kako (\u52a0\u53e4), Furutaka (\u53e4\u9df9), Tenryuu (\u5929\u9f8d), Yuubari (\u5915\u5f35) in your main fleet."
+        "desc": "Have Choukai Kai2 as the flagship and any five of Aoba, Kinugasa, Kako, Furutaka, Tenryuu, Yuubari in your main fleet"
     },
     "153": {
         "name": "Organise the 18th Cruiser Division",
-        "desc": "Have Tenryuu (\u5929\u9f8d), Tatsuta (\u9f8d\u7530) and 2 or more other ships in your fleet."
+        "desc": "Have Tenryuu, Tatsuta and 2 or more other ships in your fleet"
+    },
+	"154": {
+        "name": "Form the surface attack fleet",
+        "desc": "Have Hiei, Kirishima, Nagara, Akatsuki, Ikazuchi, Inazuma in your fleet"
+    },
+	"155": {
+        "name": "Form the new DesDiv6!",
+        "desc": "Have Akatsuki Kai ni as Flagship with Hibiki/Verniy, Ikazuchi, Inazuma in your fleet"
     },
 	
 	
@@ -399,6 +407,14 @@
     "275": {
         "name": "Deploy the 18th Squadron",
         "desc": "Tenryuu, Tatsuta, and at least 2 other ships to [W2-3] and S-rank the boss node"
+    },
+	"276": {
+        "name": "Sortie the surface attack fleet!",
+        "desc": "Sortie Hiei, Kirishima, Nagara, Akatsuki, Ikazuchi, Inazuma to 5-1 and clear the map with an S-rank"
+    },
+	"277": {
+        "name": "DesDiv6 Anti-Submarine Mission!",
+        "desc": "Sortie Akatsuki Kai2 , Hibiki/Verniy, Ikazuchi, Inazuma to 1-5 and clear the map with at least A-rank"
     },
 	
 	
