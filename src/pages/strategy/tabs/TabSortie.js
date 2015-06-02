@@ -50,7 +50,7 @@ var TabSortie = {
 			$(".page_sortie .sortie_list").on("click", ".sortie_item", function(){
 				$(".page_sortie .sortie_list .sortie_item").removeClass("active");
 				$(this).addClass("active");
-				self.showSortie( $(this).data("id") );
+				self.showSortie( $(this).data("id"), $(this).data("index") );
 			});
 			
 			$(".page_sortie .sortie_pages .sortie_page").first().click();
@@ -62,20 +62,22 @@ var TabSortie = {
 		
 		var self = this;
 		app.Logging.get_normal_sorties(pageNumber, function(response){
-			var ctr;
+			var ctr, index = 0;
 			for(ctr in response){
-				self.addSortieRecord( response[ctr] );
+				self.addSortieRecord( response[ctr], index );
+				index++;
 			}
 		});
 	},
 	
 	/* Show a single sortie record on list
 	--------------------------------------------*/
-	addSortieRecord :function(thisSortie){
+	addSortieRecord :function( thisSortie, index ){
 		
 		// Clone and add new record box
 		var buildbox = $(".page_sortie .factory .sortie_item").clone().appendTo(".page_sortie .sortie_list");
 		buildbox.data("id", thisSortie.id);
+		buildbox.data("index", index);
 		
 		// Show record info
 		$(".sortie_mapnum", buildbox).text( thisSortie.world+"-"+thisSortie.mapnum );
@@ -101,11 +103,12 @@ var TabSortie = {
 	
 	/* Show single sortie info on right panel
 	--------------------------------------------*/
-	showSortie :function(sortie_id){
+	showSortie :function(sortie_id, index){
 		var self = this;
 		
 		// Hide sortie details panel
 		$(".page_sortie .sortie_info").hide();
+		$(".page_sortie .sortie_info").css("margin-top", 20+(index*55));
 		$(".page_sortie .sortie_info .sortie_battles").html("");
 		
 		// Get data from local database
