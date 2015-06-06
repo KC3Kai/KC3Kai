@@ -13,6 +13,7 @@ function ActivateGame(){
 	$(".box-wait").hide();
 	$(".box-game .game-swf").attr("src", localStorage.absoluteswf);
 	$(".box-game").show();
+	app.Dom.init();
 }
 
 $(document).on("ready", function(){
@@ -94,7 +95,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, response) {
 			
 			// Quest Overlay
 			case "quest_overlay":
-				$(".box-game .overlays").html("");
+				app.Dom.clearOverlays();
 				var qci, tmpQuest;
 				for(qci in request.questlist){
 					if(request.questlist[qci]!=-1){
@@ -114,10 +115,13 @@ chrome.runtime.onMessage.addListener(function(request, sender, response) {
 				}
 				response({success:true});
 				break;
-				
+			case "record_overlay":
+				app.Dom.applyRecordOverlay(request.record);
+				response({success:true});
+				break;
 			// Remove overlays
 			case "clear_overlays":
-				$(".box-game .overlays").html("");
+				app.Dom.clearOverlays();
 				response({success:true});
 				break;
 			

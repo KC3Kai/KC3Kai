@@ -174,6 +174,13 @@ KC3.prototype.Reactor  = {
 		
 		app.Dashboard.Info.admiral();
 		app.Dashboard.Info.materials();
+
+		chrome.runtime.sendMessage({
+			game:"kancolle",
+			type:"game",
+			action:"record_overlay",
+			record: response.api_data
+		}, function(response){});
 	},
 	
 	/* Get resource count
