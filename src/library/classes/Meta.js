@@ -10,6 +10,7 @@
 	_gauges: {},
 	_battle: {},
 	_terms: {},
+	_record: {},
 	
 	/* Initialize Translation Data
 	-------------------------------------------------------*/
@@ -32,6 +33,7 @@
 		$.getJSON(repo+"translations/"+lang+"/stype.json", function(response){ self._stype = response; });
 		$.getJSON(repo+"translations/"+lang+"/servers.json", function(response){ self._servers = response; });
 		$.getJSON(repo+"translations/"+lang+"/battle.json", function(response){ self._battle = response; });
+		$.getJSON(repo+"translations/"+lang+"/record.json", function(response){ self._record = response; });
 	},
 	
 	
@@ -95,6 +97,10 @@
 	term :function( rootWord ){
 		if(typeof this._terms[rootWord] != "undefined"){ return this._terms[rootWord]; }
 		return rootWord;
+	},
+
+	record: function(key) {
+		return this._record[key] || key;
 	},
 	
 	
