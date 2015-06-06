@@ -135,8 +135,8 @@ KC3.prototype.Dashboard.Fleet = {
 			app.Fleet.includeEquip(thisItem, masterItem, capacity);
 			imgElement.attr("src", "../../assets/img/items/"+masterItem.api_type[3]+".png");
 
-			if (masterItem && masterItem.english) {
-				imgElement.attr("title", masterItem.english);
+			if (masterItem) {
+				imgElement.attr("title", masterItem.english + "\n" + masterItem.api_name);
 			}
 		}else{
 			imgElement.hide();
