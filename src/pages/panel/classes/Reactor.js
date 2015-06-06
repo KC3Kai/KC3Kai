@@ -382,7 +382,10 @@ KC3.prototype.Reactor  = {
 	/* Re-supply a ship
 	-------------------------------------------------------*/
 	"api_req_hokyu/charge":function(params, response, headers){
-		
+		// E4: Daily Resupplies
+		app.Quests.track(504, function(trackingObj){
+			trackingObj[0][0]++;
+		});
 	},
 	
 	/* Combine/Uncombine Fleets
@@ -519,9 +522,15 @@ KC3.prototype.Reactor  = {
 	/* Start repair
 	-------------------------------------------------------*/
 	"api_req_nyukyo/start":function(params, response, headers){
+		/* Unused codes at the moment
 		var ship_id = app.Util.findParam(params, "api%5Fship%5Fid");
 		var bucket = app.Util.findParam(params, "api%5Fhighspeed");
-		var nDockNum = app.Util.findParam(params, "api%5Fndock%5Fid");
+		var nDockNum = app.Util.findParam(params, "api%5Fndock%5Fid");*/
+		
+		// E3: Daily Repairs
+		app.Quests.track(503, function(trackingObj){
+			trackingObj[0][0]++;
+		});
 	},
 	
 	/* Use bucket
@@ -555,7 +564,7 @@ KC3.prototype.Reactor  = {
 		});
 		
 		// If victory
-		if(["A","B","S"].indexOf(response.api_data.api_win_rank) > -1){
+		if(["A","B","S","SS"].indexOf(response.api_data.api_win_rank) > -1){
 			// C3: Daily Exercises 2
 			app.Quests.track(304, function(trackingObj){
 				trackingObj[0][0]++;
@@ -730,6 +739,20 @@ KC3.prototype.Reactor  = {
 		var consumed_ids = app.Util.findParam(params, "api%5Fid%5Fitems");
 		app.Ships.remove(consumed_ids.split("%2C"));
 		app.Dashboard.Info.materials();
+		
+		// Check if successful modernization
+		if(response.api_data.api_powerup_flag==1){
+			
+			// G2: Daily Modernization
+			app.Quests.track(702, function(trackingObj){
+				trackingObj[0][0]++;
+			});
+			
+			// G3: Weekly Modernization
+			app.Quests.track(703, function(trackingObj){
+				trackingObj[0][0]++;
+			});
+		}
 	},
 	
 	/* Remodel
