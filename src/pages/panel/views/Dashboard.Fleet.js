@@ -134,6 +134,10 @@ KC3.prototype.Dashboard.Fleet = {
 			this.currentShipLos -= masterItem.api_saku;
 			app.Fleet.includeEquip(thisItem, masterItem, capacity);
 			imgElement.attr("src", "../../assets/img/items/"+masterItem.api_type[3]+".png");
+
+			if (masterItem) {
+				imgElement.attr("title", masterItem.english + "\n" + masterItem.api_name);
+			}
 		}else{
 			imgElement.hide();
 		}
