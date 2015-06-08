@@ -37,7 +37,7 @@ html,body {
 }
 #messageBox .box {
 	width:370px;
-    background:#fff;
+	background:#fff;
 	margin:30px auto 0px;
 	padding:10px;
 	border-radius:10px;
@@ -100,7 +100,7 @@ html,body {
 #catBomb {
 	width:400px;
 	height:120px;
-    background-color: #fdd;
+	background-color: #fdd;
 	margin:-60px auto 0px -200px;
 	padding:10px;
 	border-radius:10px;
@@ -149,7 +149,7 @@ html,body {
 #craftModal {
 	width:300px;
 	height:200px;
-    background-color: #ffeeaa;
+	background-color: #ffeeaa;
 	margin:-100px auto 0px -150px;
 	padding:10px;
 	border-radius:10px;
@@ -157,7 +157,7 @@ html,body {
 #craftModal .content {
 	width:280px;
 	height:165px;
-    margin:0px 0px 2px 0px;
+	margin:0px 0px 2px 0px;
 }
 #craftModal .title {
 	width:280px;
@@ -235,7 +235,7 @@ html,body {
 #compassModal {
 	width:300px;
 	height:200px;
-    background-color: #ddffdd;
+	background-color: #ddffdd;
 	margin:-100px auto 0px -150px;
 	padding:10px;
 	border-radius:10px;
@@ -243,7 +243,7 @@ html,body {
 #compassModal .content {
 	width:280px;
 	height:165px;
-    margin:0px 0px 2px 0px;
+	margin:0px 0px 2px 0px;
 }
 #compassModal .title {
 	width:280px;
@@ -264,11 +264,11 @@ html,body {
 }
 
 #compassModal .transparent-container {
-    width:240px;
-    height:120px;
-    background:rgba(255,255,255,.7);
-    margin-left:20px;
-    margin-top:-120px;
+	width:240px;
+	height:120px;
+	background:rgba(255,255,255,.7);
+	margin-left:20px;
+	margin-top:-120px;
 }
 
 #compassModal .nodeLetter {
@@ -292,7 +292,7 @@ html,body {
 	line-height:20px;
 	font-size:14px;
 	text-align:center;
-    margin-top:-40px;
+	margin-top:-40px;
 }
 #compassModal .enemyFleet .enemy-img {
 	width:80px;
