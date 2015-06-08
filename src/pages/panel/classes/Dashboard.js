@@ -198,8 +198,39 @@ KC3.prototype.Dashboard  = {
 		$("#compassModal").fadeIn(300);
 		$("#compassModal .nodeLetter").text(String.fromCharCode(nodeData.api_no+96).toUpperCase());
 		
+        $("#compassModal .enemyFleet").html("");
+        $("#compassModal .itemGet").html("");
+        
+        
 		if (typeof nodeData.api_enemy != "undefined") {              // Check if enemy node
-			$("#compassModal .enemyFleet").text("Enemy #"+nodeData.api_enemy.api_enemy_id);
+			var mapArea = nodeData.api_maparea_id;
+            var mapNo = nodeData.api_mapinfo_no;
+            var battleNode = nodeData.api_no;
+            var enemyId = nodeData.api_enemy.api_enemy_id;
+            var enemyText = "";
+            
+            app.Logging.get_battle(mapArea, mapNo, battleNode, enemyId, function(battle){
+                if (battle) {
+                    enemyText += "<img src=\"../../assets/img/formation/" + battle.data.api_formation[1] + ".jpg\"/><br>";
+                    for (var i = 1; i <= 6; i++) {
+                        if (battle.data.api_ship_ke[i] > -1) {
+                            enemyText += "<img class=\"enemy-img\" src=\"../../assets/img/abyssal/" + battle.data.api_ship_ke[i] + ".png\" alt=\"" + battle.data.api_ship_ke[i] + "\"/>";
+                        }
+                        if (i==3) {
+                            enemyText += "<br>";
+                        }
+                    }
+                } else {
+                    for (var i = 1; i <= 6; i++) {
+                        enemyText += "<img class=\"enemy-img\" src=\"../../assets/img/abyssal/Unknown.png\" alt=\"Unknown\"/>";
+                        if (i==3) {
+                            enemyText += "<br>";
+                        }
+                    }
+                }
+                $("#compassModal .enemyFleet").html("Enemy #" + nodeData.api_enemy.api_enemy_id + "<br>" + enemyText);
+                //$("#compassModal .enemyFleet").html(enemyText);
+            });
             
 		} else if (typeof nodeData.api_itemget != "undefined") {     // Check if resource node
 			var iconFile;
@@ -213,7 +244,7 @@ KC3.prototype.Dashboard  = {
 				case 7: iconFile = "../../assets/img/client/devmat.png"; break;
 				default: iconFile = "../../assets/img/client/compass.png"; break;
 			}
-			$("#compassModal .enemyFleet").html("<img src=\""+iconFile+"\" /> "+nodeData.api_itemget.api_getcount);
+			$("#compassModal .itemGet").html("<img src=\""+iconFile+"\" /> "+nodeData.api_itemget.api_getcount);
             
 		} else if (typeof nodeData.api_itemget_eo_comment != "undefined") {     // Check if special resource node (1-6 Boss Node)
 			var iconFile;
@@ -227,7 +258,7 @@ KC3.prototype.Dashboard  = {
 				case 7: iconFile = "../../assets/img/client/devmat.png"; break;
 				default: iconFile = "../../assets/img/client/compass.png"; break;
 			}
-			$("#compassModal .enemyFleet").html("<img src=\""+iconFile+"\" /> "+nodeData.api_itemget_eo_comment.api_getcount);
+			$("#compassModal .itemGet").html("<img src=\""+iconFile+"\" /> "+nodeData.api_itemget_eo_comment.api_getcount);
                
 		} else if (typeof nodeData.api_happening != "undefined") {  // Check if malstrom node
 			var iconFile;
@@ -238,7 +269,7 @@ KC3.prototype.Dashboard  = {
 				case 4: iconFile = "../../assets/img/client/bauxite.png"; break;
 				default: iconFile = "../../assets/img/client/compass.png"; break;
 			}
-			$("#compassModal .enemyFleet").html("<img src=\""+iconFile+"\" /> -"+nodeData.api_happening.api_count);
+			$("#compassModal .itemGet").html("<img src=\""+iconFile+"\" /> -"+nodeData.api_happening.api_count);
             
 		} else {
             $("#compassModal .enemyFleet").html("Battle Avoided");

@@ -1,7 +1,8 @@
 KC3.prototype.Battle  = {
 	onSortie : 0,
 	onNode : 0,
-	currentBattle : {},
+    enemyId : -1,
+    currentBattle : {},
 	
 	CompileFleetInfo :function(index){
 		var ReturnObj = [];
@@ -92,6 +93,7 @@ KC3.prototype.Battle  = {
 			this.currentBattle = {
 				sortie_id : this.onSortie,
 				node : this.onNode,
+                enemyId : this.enemyId,
 				yasen : {},
 				data : data,
 				time: stime

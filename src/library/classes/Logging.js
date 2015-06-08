@@ -43,7 +43,19 @@ KC3.prototype.Logging  = {
 			develop: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time"
 		}).upgrade(function(t){});
 		
-		this.database.open();
+		this.database.version(4).stores({
+			account: "++id,&hq,server,mid,name",
+			build: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time",
+			lsc: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,devmat,result,time",
+			sortie: "++id,hq,world,mapnum,fleetnum,combined,fleet1,fleet2,fleet3,fleet4,support1,support2,time",
+			battle: "++id,hq,sortie_id,node,enemyId,data,yasen,rating,drop,time",
+			resource: "++id,hq,rsc1,rsc2,rsc3,rsc4,hour",
+			useitem: "++id,hq,torch,screw,bucket,devmat,hour",
+			screenshots: "++id,hq,imgur,ltime",
+			develop: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time"
+		}).upgrade(function(t){});
+		
+        this.database.open();
 	},
 	
 	/* [Reset] Delete the IndexedDB
@@ -328,6 +340,41 @@ KC3.prototype.Logging  = {
 			});
 	},
 	
+    get_battle : function(mapArea, mapNo, battleNode, enemyId, callback) {
+		
+        var sortieIds = [];
+        var bctr;
+		
+        var self = this;
+        
+        this.database.sortie
+			.where("hq").equals(this.index)
+			.and(function(sortie){ return sortie.world == mapArea && sortie.mapnum == mapNo; })
+			.toArray(function(sortieList){
+				// Compile all sortieIDs and indexify
+                for( bctr in sortieList){
+                	sortieIds.push(sortieList[bctr].id);
+				}
+                
+                var foundBattle;
+                var callback2 = callback;
+                // Get all battles on those sorties
+                self.database.battle
+                    .where("sortie_id").anyOf(sortieIds)
+                    .toArray(function(battleList){
+                        
+                        for(bctr in battleList){
+                            if (battleList[bctr].enemyId == enemyId) {
+                                foundBattle = battleList[bctr];
+                                break;
+                            }
+                        }
+                        
+                        callback2(foundBattle);
+                    });
+			});
+	},
+    
 	get_resource :function(HourNow, callback){
 		var self = this;
 		this.database.resource

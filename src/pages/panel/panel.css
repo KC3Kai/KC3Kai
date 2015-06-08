@@ -262,8 +262,17 @@ html,body {
 	padding:30px 0px 0px 0px;
 	background:url(../../assets/img/client/compass.png);
 }
+
+#compassModal .transparent-container {
+    width:240px;
+    height:120px;
+    background:rgba(255,255,255,.7);
+    margin-left:20px;
+    margin-top:-120px;
+}
+
 #compassModal .nodeLetter {
-	width:120px;
+	width:240px;
 	height:30px;
 	line-height:30px;
 	font-weight:bold;
@@ -271,16 +280,23 @@ html,body {
 	text-align:center;
 }
 #compassModal .enemyFleet {
-	width:120px;
-	height:20px;
+	width:240px;
+	height:60px;
 	line-height:20px;
 	font-size:14px;
 	text-align:center;
-	background:rgba(255,255,255,.7);
 }
-#compassModal .enemyFleet img {
-	width:16px;
-	height:16px;
+#compassModal .itemGet {
+	width:240px;
+	height:30px;
+	line-height:20px;
+	font-size:14px;
+	text-align:center;
+    margin-top:-40px;
+}
+#compassModal .enemyFleet .enemy-img {
+	width:80px;
+	height:20px;
 }
 
 /* PANEL
