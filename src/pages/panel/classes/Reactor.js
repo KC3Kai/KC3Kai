@@ -415,6 +415,11 @@ KC3.prototype.Reactor  = {
 			app.Util.getUTC(headers)
 		);
 		app.Battle.onNode = response.api_data.api_no;
+		if (typeof response.api_data.api_enemy != "undefined") {
+			app.Battle.enemyId = response.api_data.api_enemy.api_enemy_id;
+		} else {
+			app.Battle.enemyId = -1;
+		}
 		
 		if(app.Config.showCompass){
 			app.Dashboard.showCompass(response.api_data);
@@ -425,6 +430,12 @@ KC3.prototype.Reactor  = {
 	-------------------------------------------------------*/
 	"api_req_map/next":function(params, response, headers){
 		app.Battle.onNode = response.api_data.api_no;
+		if (typeof response.api_data.api_enemy != "undefined") {
+			app.Battle.enemyId = response.api_data.api_enemy.api_enemy_id;
+		} else {
+			app.Battle.enemyId = -1;
+		}
+		
 		
 		if(app.Config.showCompass){
 			app.Dashboard.showCompass(response.api_data);
