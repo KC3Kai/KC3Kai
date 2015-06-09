@@ -281,6 +281,7 @@ var TabShips = {
 
 			if(!gear){
 				element.hide();
+				return;
 			}
 
 			var masterGear = app.Master.slotitem(gear.api_slotitem_id);
