@@ -68,7 +68,7 @@ KC3.prototype.Listener  = {
 		app.Server.lastUrl = request.request.url;
 		
 		// Check for Quest Reset
-		app.Quests.checkReset(app.Util.getUTC(request.response.headers));
+		// app.Quests.checkReset(app.Util.getUTC(request.response.headers));
 		
 		// Get and Handle the Response Body
 		request.getContent(function(requestContent){

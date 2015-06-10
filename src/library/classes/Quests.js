@@ -1,5 +1,6 @@
 KC3.prototype.Quests = {
 	active: [],
+	open: [],
 	list: {},
 	
 	init :function(){
@@ -7,106 +8,104 @@ KC3.prototype.Quests = {
 	},
 	
 	receivePage :function(pageNum, questList){
-		var ctr;
-		
-		// Disable all previously on this page
-		for(ctr in this.list){
-			
-		}
+		this.load();
 		
 		// Update quest list with data received
+		var ctr;
 		for(ctr in questList){
+			// console.log(questList[ctr]);
+			var questId = questList[ctr].api_no;
+			var questStatus = questList[ctr].api_state;
 			
 			// If quest does not have entry yet, add
-			if(typeof this.list["q"+questList[ctr].api_no] == "undefined"){
-				this.list["q"+questList[ctr].api_no] = {
-					id: questList[ctr].api_no,
-					type: questList[ctr].api_type,
-					progress: questList[ctr].api_progress_flag,
-					status: questList[ctr].api_state,
-					page: pageNum,
-					tracking: app.Meta.quest( questList[ctr].api_no ).tracking
+			if(typeof this.list["q"+questId] == "undefined"){
+				this.list["q"+questId] = {
+					id: questId,
+					status: questStatus,
+					tracking: app.Meta.quest( questId ).tracking
 				};
+				
+			// If quests exists on list, just update status
 			}else{
-				this.list["q"+questList[ctr].api_no].progress  = questList[ctr].api_progress_flag;
-				this.list["q"+questList[ctr].api_no].status  = questList[ctr].api_state;
-				this.list["q"+questList[ctr].api_no].page  = questList[ctr].pageNum;
+				this.list["q"+questId].status = questStatus;
 			}
 			
-			// If quest is active, add to this.active
-			if(questList[ctr].api_state == 2 || questList[ctr].api_state==3){
-				if(this.active.indexOf(questList[ctr].api_no) == -1){
-					this.active.push(questList[ctr].api_no);
-				}
+			// Status-based actions
+			switch( questStatus ){
+				// Quest shows up but not active
+				case 1:
+					if(this.open.indexOf(questId) == -1){ this.open.push(questId); }
+					break;
+				// Quest is active and tracking
+				case 2:
+					if(this.open.indexOf(questId) == -1){ this.open.push(questId); }
+					if(this.active.indexOf(questId) == -1){ this.active.push(questId); }
+					break;
+				// Quest is complete
+				case 3:
+					// Remove from open quests
+					var openIndex = this.open.indexOf(questId);
+					if(openIndex > -1){ this.open.splice(openIndex, 1); }
+					// Remove from active quests
+					var activeIndex = this.active.indexOf(questId);
+					if(activeIndex > -1){ this.active.splice(activeIndex, 1); }
+					break;
+				default: break;
 			}
-			
 		}
+		
+		/*console.log("Post-receivePage");
+		console.log("this.active", this.active);
+		console.log("this.open", this.open);
+		console.log("this.list", this.list);*/
 		
 		this.save();
 	},
 	
-	/* Automatic Reset
-	--------------------------------*/
-	checkReset :function(utcNow){
-		return false; // temporarily disabled
-		
-		// If there was a last quest time
-		if(typeof localStorage.lastQuest != "undefined"){
-			// Convert into Date objects
-			var dateQuest = new Date( localStorage.lastQuest * 1000 );
-			var dateNow = new Date( utcNow * 1000 );
-			// Get number of days since epoch
-			var epochDaysQuest = Math.floor(localStorage.lastQuest / 86400);
-			var epochDaysNow = Math.floor(utcNow / 86400);
-			
-			// Check if now is after 8pm AND (last check was earlier today OR anytime in the past days)
-			if(
-				(dateQuest.getHours() < 20 || epochDaysQuest < epochDaysNow)
-				&& dateNow.getHours() >= 20
-			){
-				resetDailies();
-				
-				/* HOLY SHIT I HATE JAVASCRIPT DATES
-				// Check if triggers a weekly reset as well
-				if(
-					(dateNow.getDay()==0) // if Sunday (reset is 8pm Sunday during UTC)
-					|| (dateNow.getDay() < dateQuest.getDay()) // if last check "day" is more than today, means last check was last week
-					|| (dateNow.getDay() == dateQuest.getDay()) // if it's the same day, 
-					|| (
-						(dateNow.getDay() > dateQuest.getDay()) // if day today is greater than last check
-						&& (epochDaysNow - epochDaysQuest > 7) // then must be more than 7 days difference
-					}
-				){
-					
-				}
-				*/
-			}
-			
-			// Check for monthly reset at midnight
-			
+	resetQuest :function(questId){
+		if(typeof this.list["q"+questId] != "undefined"){
+			this.list["q"+questId].status = -1;
+			this.list["q"+questId].tracking = app.Meta.quest( questId ).tracking;
 		}
-		
-		// Set time now as the last quest time
-		localStorage.lastQuest = utcNow;
 	},
 	
 	resetDailies :function(){
-		
+		this.load();
+		this.resetQuest(201);
+		this.resetQuest(216);
+		this.resetQuest(210);
+		this.resetQuest(211);
+		this.resetQuest(218);
+		this.resetQuest(212);
+		this.resetQuest(226);
+		this.resetQuest(230);
 		this.save();
 	},
 	
 	resetWeeklies :function(){
-		
+		this.load();
+		this.resetQuest(214);
+		this.resetQuest(220);
+		this.resetQuest(213);
+		this.resetQuest(221);
+		this.resetQuest(228);
+		this.resetQuest(229);
+		this.resetQuest(241);
+		this.resetQuest(242);
+		this.resetQuest(243);
+		this.resetQuest(261);
 		this.save();
 	},
 	
 	resetMonthlies :function(){
-		
-		this.save();
-	},
-	
-	acceptReward :function(id){
-		this.quests["q"+id].status = 3;
+		this.load();
+		this.resetQuest(249);
+		this.resetQuest(256);
+		this.resetQuest(257);
+		this.resetQuest(259);
+		this.resetQuest(265);
+		this.resetQuest(264);
+		this.resetQuest(266);
 		this.save();
 	},
 	
@@ -114,6 +113,7 @@ KC3.prototype.Quests = {
 	/* Tracking
 	-------------------------------------------------------*/
 	track :function(id, callback){
+		this.load();
 		if(typeof this.list["q"+id] != "undefined"){
 			if( this.list["q"+id].status == 2 ){
 				callback( this.list["q"+id].tracking );
@@ -127,11 +127,18 @@ KC3.prototype.Quests = {
 		var trackingText = [];
 		var ctr;
 		for(ctr in questData.tracking){
-			trackingText.push(questData.tracking[ctr][0]+" / "+questData.tracking[ctr][1]);
+			trackingText.push(questData.tracking[ctr][0]+"/"+questData.tracking[ctr][1]);
 		}
 		return trackingText.join();
 	},
 	
+	/* Reset all quests
+	-------------------------------------------------------*/
+	clear :function(){
+		if(typeof localStorage.player_quests != "undefined"){
+			localStorage.removeItem("player_quests");
+		}
+	},
 	
 	/* Load data from localStorage
 	-------------------------------------------------------*/
@@ -139,6 +146,7 @@ KC3.prototype.Quests = {
 		if(typeof localStorage.player_quests != "undefined"){
 			var quests = JSON.parse(localStorage.player_quests);
 			this.active = quests.active;
+			this.open = quests.open;
 			this.list = quests.list;
 			return true;
 		}else{
@@ -151,6 +159,7 @@ KC3.prototype.Quests = {
 	save: function(){
 		localStorage.player_quests = JSON.stringify({
 			active: this.active,
+			open: this.open,
 			list: this.list
 		});
 	}

@@ -47,6 +47,7 @@ var TabQuests = {
 			var rootQuestList = $(".page_quests .extralist ul.questList");
 			var ctr;
 			for(ctr in app.Quests.list){
+				// console.log("pending list",app.Quests.list[ctr]);
 				if(this.flowchartIds.indexOf(app.Quests.list[ctr].id) == -1){
 					this.addOtherQuest(app.Quests.list[ctr]);
 				}
@@ -56,6 +57,23 @@ var TabQuests = {
 			 $(".page_quests .questHead_2").hide();
 			 $(".page_quests .extralist").hide();
 		}
+		
+		$(".resetDailies").on("click", function(){
+			app.Quests.resetDailies();
+			window.location.reload();
+		});
+		$(".resetWeeklies").on("click", function(){
+			app.Quests.resetWeeklies();
+			window.location.reload();
+		});
+		$(".resetMonthlies").on("click", function(){
+			app.Quests.resetMonthlies();
+			window.location.reload();
+		});
+		$(".resetAllQuests").on("click", function(){
+			app.Quests.clear();
+			window.location.reload();
+		});
 	},
 	
 	/* Add a branch item to the flowchart
@@ -65,6 +83,7 @@ var TabQuests = {
 		
 		var thisBox = $(".page_quests .factory .questFlowItem").clone().appendTo("#"+parentElement.attr("id"));
 		
+		// console.log(thisQuest);
 		$(".questIcon", thisBox).text(thisQuest.code);
 		$(".questIcon", thisBox).addClass("type"+(String(quest_id).substring(0,1)));
 		
@@ -122,7 +141,7 @@ var TabQuests = {
 	--------------------------------------------*/
 	addOtherQuest :function( thisQuest ){
 		var masterQuest = app.Meta.quest( thisQuest.id );
-		console.log(masterQuest, thisQuest);
+		// console.log(masterQuest, thisQuest);
 	}
 	
 };

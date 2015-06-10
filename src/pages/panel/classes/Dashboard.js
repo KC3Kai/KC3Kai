@@ -311,5 +311,25 @@ KC3.prototype.Dashboard  = {
 			tabId: chrome.devtools.inspectedWindow.tabId,
 			playerIndex: app.Player.id
 		});
+	},
+	
+	/* Update quest boxes
+	-------------------------------------------------------*/
+	showQuests :function(){
+		app.Quests.load();
+		console.log(app.Quests.list);
+		
+		var ctr, questId;
+		for(ctr in app.Quests.active){
+			questId = app.Quests.active[ctr];
+			questData = app.Quests.list["q"+questId];
+			questMeta = app.Meta.quest(questId);
+			console.log(questId, questData);
+			
+			
+			$(".theme-horizontal .box-quest-"+(Number(ctr)+1)).text(questMeta.code);
+			$(".theme-horizontal .box-quest-"+(Number(ctr)+1)).addClass("type"+(String(questId).substring(0,1)));
+		}
 	}
+	
 };

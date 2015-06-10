@@ -13,6 +13,35 @@
 
 /* FLOWCHART
 --------------------------------*/
+.page_quests .questControls {
+	width:680px;
+	height:20px;
+	overflow:hidden;
+	margin:0px 0px 10px 0px;
+}
+.page_quests .questControls .questLabel {
+	width:90px;
+	height:20px;
+	line-height:20px;
+	font-size:12px;
+	float:left;
+	font-weight:bold;
+}
+.page_quests .questControls .questControl {
+	width:90px;
+	height:20px;
+	line-height:18px;
+	margin:0px 5px 0px 0px;
+	background:#eee;
+	font-size:12px;
+	text-align:center;
+	border:1px outset #ccc;
+	float:left;
+	border-radius:7px;
+}
+.page_quests .questControls .questControl:hover {
+	background:#ffc;
+}
 .page_quests .flowchart {
 	width:680px;
 	overflow:hidden;
@@ -59,14 +88,15 @@
 	float:left;
 }
 .page_quests .questFlowItem .questDesc {
-	max-width:446px;
+	max-width:381px;
 	margin:0px 5px 0px 0px;
 	height:20px;
 	float:left;
 	overflow:hidden;
+	font-size:11px;
 }
 .page_quests .questFlowItem .questTrack {
-	width:70px;
+	width:135px;
 	height:16px;
 	line-height:16px;
 	overflow:hidden;
