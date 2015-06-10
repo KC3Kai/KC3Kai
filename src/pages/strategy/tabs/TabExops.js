@@ -15,6 +15,7 @@ var TabExops = {
 	maps: false,
 	map: "",
 	page: 0,
+	sortieIndex: 0,
 	
 	/* Load data, still ok if not available, it's just gauge
 	---------------------------------------------------*/
@@ -55,7 +56,7 @@ var TabExops = {
 		$(".page_exops .sortie_list").on("click", ".sortie_item", function(){
 			$(".page_exops .sortie_list .sortie_item").removeClass("active");
 			$(this).addClass("active");
-			self.showSortie( $(this).data("id") );
+			self.showSortie( $(this).data("id"), $(this).data("index") );
 		});
 		
 		// If map infos exist, fill gauges
@@ -92,6 +93,7 @@ var TabExops = {
 	showMap :function(map_id){
 		this.map = map_id+"";
 		this.page = 0;
+		this.sortieIndex = 0;
 		$(".page_exops .sortie_maptitle span").text(this.map);
 		$(".page_exops .sortie_list").html("")
 		this.loadMore();
@@ -127,6 +129,8 @@ var TabExops = {
 		// Clone and add new record box
 		var buildbox = $(".page_exops .factory .sortie_item").clone().appendTo(".page_exops .sortie_list");
 		buildbox.data("id", thisSortie.id);
+		buildbox.data("index", this.sortieIndex);
+		this.sortieIndex++;
 		
 		// Show record info
 		$(".sortie_id", buildbox).text( thisSortie.id );
@@ -151,11 +155,12 @@ var TabExops = {
 	
 	/* Show single sortie info on right panel
 	--------------------------------------------*/
-	showSortie :function(sortie_id){
+	showSortie :function(sortie_id, index){
 		var self = this;
 		
 		// Hide sortie details panel
 		$(".page_exops .sortie_info").hide();
+		$(".page_exops .sortie_info").css("margin-top", 40+(index*55));
 		$(".page_exops .sortie_info .sortie_battles").html("");
 		
 		// Get data from local database

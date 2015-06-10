@@ -40,10 +40,13 @@ KC3.prototype.Player  = {
 		
 		// Remove all remembered player info
 		localStorage.removeItem("player");
+		localStorage.removeItem("player_fleets");
 		localStorage.removeItem("player_ships");
 		localStorage.removeItem("player_gears");
+		localStorage.removeItem("player_maps");
 		localStorage.removeItem("player_statistics");
 		localStorage.removeItem("player_newsfeed");
+		localStorage.removeItem("player_quests");
 		localStorage.removeItem("lastResource");
 		localStorage.removeItem("lastUseitem");
 		

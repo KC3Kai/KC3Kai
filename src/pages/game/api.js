@@ -3,6 +3,9 @@ var app = new KC3();
 // If awaiting activation
 var waiting = false;
 
+// If trusted exit
+var trustedExit = false;
+
 // Show game screens
 function ActivateGame(){
 	waiting = false;
@@ -10,6 +13,7 @@ function ActivateGame(){
 	$(".box-wait").hide();
 	$(".box-game .game-swf").attr("src", localStorage.absoluteswf);
 	$(".box-game").show();
+	app.Dom.init();
 }
 
 $(document).on("ready", function(){
@@ -45,6 +49,7 @@ $(document).on("ready", function(){
 	$(".api_submit").on('click', function(){
 		if($(".api_text").val().indexOf("mainD2.swf") > -1){
 			localStorage.absoluteswf = $(".api_text").val();
+			trustedExit = true;
 			window.location.reload();
 		}
 	});
@@ -52,6 +57,7 @@ $(document).on("ready", function(){
 	// Forget API Link
 	$(".forget_btn").on('click', function(){
 		localStorage.absoluteswf = "";
+		trustedExit = true;
 		window.location.reload();
 	});
 	
@@ -89,7 +95,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, response) {
 			
 			// Quest Overlay
 			case "quest_overlay":
-				$(".box-game .overlays").html("");
+				app.Dom.clearOverlays();
 				var qci, tmpQuest;
 				for(qci in request.questlist){
 					if(request.questlist[qci]!=-1){
@@ -109,10 +115,13 @@ chrome.runtime.onMessage.addListener(function(request, sender, response) {
 				}
 				response({success:true});
 				break;
-				
+			case "record_overlay":
+				app.Dom.applyRecordOverlay(request.record);
+				response({success:true});
+				break;
 			// Remove overlays
 			case "clear_overlays":
-				$(".box-game .overlays").html("");
+				app.Dom.clearOverlays();
 				response({success:true});
 				break;
 			
@@ -125,3 +134,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, response) {
 		}
 	}
 });
+
+// Confirm exit
+function confirmOnPageExit(){
+	app.Config.load();
+	if(app.Config.askExit==1 && !trustedExit){ return "Ahh! you are closing the game!"; }
+}
+window.onbeforeunload = confirmOnPageExit;

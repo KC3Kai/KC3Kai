@@ -8,6 +8,9 @@ function KCScreenshot(){
 	this.base64img = "";
 	this.playerIndex = "";
 	this.screenshotFilename = "";
+	this.format = (app.Config.ss_type=="JPG")
+		?["jpeg", "jpg", "image/jpeg"]
+		:["png", "png", "image/png"];
 };
 
 KCScreenshot.prototype.start = function(playerIndex, element){
@@ -28,8 +31,8 @@ KCScreenshot.prototype.start = function(playerIndex, element){
 	this.capture();
 };
 
-function chromeCapture(response){
-	chrome.tabs.captureVisibleTab(null, {format:"jpeg"}, response);
+function chromeCapture(captureFormat, response){
+	chrome.tabs.captureVisibleTab(null, {format: captureFormat}, response);
 }
 
 function generateScreenshotFilename() {
@@ -52,7 +55,7 @@ KCScreenshot.prototype.capture = function(){
 	var self = this;
 	
 	// Start capturing
-	chromeCapture(function(base64img){
+	chromeCapture(this.format[0], function(base64img){
 		self.domImg.src = base64img;
 		self.domImg.onload = self.crop();
 	})
@@ -85,7 +88,7 @@ KCScreenshot.prototype.crop = function(){
 		);
 		
 		// Convert image to base64
-		self.base64img = self.canvas.toDataURL("image/jpeg");
+		self.base64img = self.canvas.toDataURL(self.format[2]);
 		
 		// Call output function on what to do with the base64 image
 		self.output();
@@ -104,7 +107,7 @@ KCScreenshot.prototype.saveDownload = function(){
 	chrome.downloads.setShelfEnabled(false);
 	chrome.downloads.download({
 		url: this.base64img,
-		filename: 'KanColle/'+this.screenshotFilename+".jpg",
+		filename: 'KanColle/'+this.screenshotFilename+"."+this.format[1],
 		conflictAction: "uniquify"
 	}, function(downloadId){
 		setTimeout(function(){

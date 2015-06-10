@@ -274,15 +274,23 @@ var TabShips = {
 	/* Show single equipment icon
 	--------------------------------------------*/
 	equipImg :function(cElm, equipNum, gear_id){
-		if(gear_id > -1){
-			if(!app.Gears.get(gear_id)){
-				$(".ship_equip_"+equipNum, cElm).hide();
-				return false;
+		var element = $(".ship_equip_" + equipNum, cElm);
+
+		if (gear_id > -1) {
+			var gear = app.Gears.get(gear_id);
+
+			if(!gear){
+				element.hide();
+				return;
 			}
-			var MasterGear = app.Master.slotitem(app.Gears.get(gear_id).api_slotitem_id);
-			$(".ship_equip_"+equipNum+" img", cElm).attr("src", "../../assets/img/items/"+MasterGear.api_type[3]+".png");
-		}else{
-			$(".ship_equip_"+equipNum, cElm).hide();
+
+			var masterGear = app.Master.slotitem(gear.api_slotitem_id);
+
+			element.find("img")
+				.attr("src", "../../assets/img/items/" + masterGear.api_type[3] + ".png")
+				.attr("title", masterGear.english + "\n" + masterGear.api_name);
+		} else {
+			element.hide();
 		}
 	}
 	

@@ -20,7 +20,7 @@
 	/*background:#ccf;*/
 }
 .page_lscs .build_item .build_id {
-	width:50px;
+	width:30px;
 	margin:0px 3px 0px 0px;
 	text-align:center;
 }
@@ -39,7 +39,7 @@
 	margin:0px 5px 0px 0px;
 }
 .page_lscs .build_item .build_rsc {
-	width:50px;
+	width:45px;
 	margin:0px 5px 0px 0px;
 	text-align:center;
 }
@@ -54,6 +54,10 @@
 }
 .page_lscs .build_item .build_rsc4 {
 	background:#FFDCA8;
+}
+.page_lscs .build_item .build_devmat {
+	color:#fff;
+	background:#009999;
 }
 .page_lscs .build_item .build_time {
 	width:130px;

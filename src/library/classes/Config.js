@@ -7,6 +7,8 @@ KC3.prototype.Config  = {
 		this.gambox_margin = 0;
 		this.background = "#def";
 		this.background_panel = "#def";
+		this.background_align_h = "left";
+		this.background_align_v = "top";
 		this.tl_overlay = false;
 		this.size = 100;
 		this.time_dev = 45;
@@ -16,11 +18,13 @@ KC3.prototype.Config  = {
 		this.alert_volume = 60;
 		this.desktop_notif = true;
 		this.ss_mode = 0;
+		this.ss_type = 'JPG';
 		this.customsound = "";
 		this.showCraft = true;
 		this.showCompass = false;
 		this.predictBattle = false;
 		this.panelAlpha = 100;
+		this.askExit = 1;
 		// Load existing user config
 		this.load();
 	},
@@ -61,6 +65,8 @@ KC3.prototype.Config  = {
 			this.loadField(tmpData, "gambox_margin");
 			this.loadField(tmpData, "background");
 			this.loadField(tmpData, "background_panel");
+			this.loadField(tmpData, "background_align_h");
+			this.loadField(tmpData, "background_align_v");
 			this.loadField(tmpData, "tl_overlay");
 			this.loadField(tmpData, "size");
 			this.loadField(tmpData, "time_dev");
@@ -70,11 +76,13 @@ KC3.prototype.Config  = {
 			this.loadField(tmpData, "alert_volume");
 			this.loadField(tmpData, "desktop_notif");
 			this.loadField(tmpData, "ss_mode");
+			this.loadField(tmpData, "ss_type");
 			this.loadField(tmpData, "customsound");
 			this.loadField(tmpData, "showCraft");
 			this.loadField(tmpData, "showCompass");
 			this.loadField(tmpData, "predictBattle");
 			this.loadField(tmpData, "panelAlpha");
+			this.loadField(tmpData, "askExit");
 		}
 	},
 	
@@ -86,25 +94,29 @@ KC3.prototype.Config  = {
 	
 	save :function(){
 		localStorage.config = JSON.stringify({
-			version 		: this.version,
-			timerAlert 		: this.timerAlert,
-			gambox_margin 	: this.gambox_margin,
-			background 		: this.background,
-			background_panel: this.background_panel,
-			tl_overlay 		: this.tl_overlay,
-			size 			: this.size,
-			time_dev 		: this.time_dev,
-			rsc_interval 	: this.rsc_interval,
-			reveal_names 	: this.reveal_names,
-			elos_mode 		: this.elos_mode,
-			alert_volume 	: this.alert_volume,
-			desktop_notif 	: this.desktop_notif,
-			ss_mode 		: this.ss_mode,
-			customsound 	: this.customsound,
-			showCraft 		: this.showCraft,
-			showCompass 	: this.showCompass,
-			predictBattle 	: this.predictBattle,
-			panelAlpha 		: this.panelAlpha
+			version 			: this.version,
+			timerAlert 			: this.timerAlert,
+			gambox_margin 		: this.gambox_margin,
+			background 			: this.background,
+			background_panel	: this.background_panel,
+			background_align_h	: this.background_align_h,
+			background_align_v	: this.background_align_v,
+			tl_overlay 			: this.tl_overlay,
+			size 				: this.size,
+			time_dev 			: this.time_dev,
+			rsc_interval 		: this.rsc_interval,
+			reveal_names 		: this.reveal_names,
+			elos_mode 			: this.elos_mode,
+			alert_volume 		: this.alert_volume,
+			desktop_notif 		: this.desktop_notif,
+			ss_mode 			: this.ss_mode,
+			ss_type 			: this.ss_type,
+			customsound 		: this.customsound,
+			showCraft 			: this.showCraft,
+			showCompass 		: this.showCompass,
+			predictBattle 		: this.predictBattle,
+			panelAlpha 			: this.panelAlpha,
+			askExit 			: this.askExit
 		});
 	}
 };

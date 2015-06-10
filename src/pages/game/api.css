@@ -50,6 +50,7 @@
 .box-wait .api_txt {
 	width:760px;
 	margin:0px 0px 15px 0px;
+	display:none;
 }
 .box-wait .api_txt textarea {
 	width:760px;
@@ -115,6 +116,7 @@
 	height:37px;
 	background:#E4D5C2;
 	margin-left:215px;
+	pointer-events: none;
 }
 .ol_quest .name {
 	width:400px;
@@ -128,4 +130,92 @@
 	height:10px;
 	line-height:10px;
 	font-size:10px;
+}
+
+/* OVERLAY: RECORD
+--------------------------*/
+.ol_record_sorties,
+.ol_record_expeditions,
+.ol_record_pvp {
+	width: 100px;
+	height: 75px;
+	margin-left: 150px;
+	background-color: #313131;
+	font-size: 11px;
+	line-height: 12px;
+	color: #1CBCBF;
+}
+
+.ol_record_expeditions {
+	line-height: 10px;
+}
+
+.ol_record_pvp {
+	margin-left: 315px;
+}
+
+.ol_record_ownership,
+.ol_record_maxstats,
+.ol_record_levelup,
+.ol_record_bgm {
+	margin-left: 541px;
+	font-size: 11px;
+	line-height: 8px;
+	width: 158px;
+	background-color: #EBE2D7;
+}
+
+.ol_record_maxstats {
+	padding-top: 6px;
+	color: #1CBCBF;
+}
+
+.ol_record_maxstats > p:nth(3) {
+	font-size: 9px;
+	color: #23729F;
+}
+
+.ol_record_levelup {
+	margin-left: 515px;
+	width: 184px;
+	line-height: 16px;
+}
+
+.ol_record_bgm {
+	width: 102px;
+	margin-left: 515px;
+	padding-top: 6px;
+}
+
+.ol_record_experience {
+	margin-left: 255px;
+}
+
+.ol_record_experience > p {
+	background-color: #239E9F;
+	color: white;
+	font-size: 9px;
+	padding: 0 5px;
+	text-align: center;
+}
+
+.ol_record_name {
+	margin-left: 143px;
+}
+
+.ol_record_name > p {
+	color: #239E9F;
+	background-color: #F1EADD;
+	font-weight: bold;
+	font-size: 16px;
+	margin: 0;
+	padding: 5px;
+}
+
+.ol_record_rank {
+	margin-left: 305px;
+}
+
+.ol_record_rank > p {
+	background-color: #F1EADD;
 }

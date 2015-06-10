@@ -103,7 +103,7 @@ KC3.prototype.Fleet = {
 		
 		addItem :function( ThisType, ThisLoS, Capacity ){
 			// Check for Plane LOS
-			if( ThisType == 7 && Capacity > 0){
+			if( ThisType == 7){
 				// console.log("planelos: "+ThisLoS);
 				this._plane += ThisLoS;
 			}
@@ -146,11 +146,11 @@ KC3.prototype.Fleet = {
 		
 		addItem :function( ThisType, ThisLoS, Capacity ){
 			switch(ThisType){
-				case  7: this._dive += ThisLoS * (Capacity?1:0); break;
-				case  8: this._torp += ThisLoS * (Capacity?1:0); break;
-				case  9: this._cbrp += ThisLoS * (Capacity?1:0); break;
-				case 10: this._rspl += ThisLoS * (Capacity?1:0); break;
-				case 11: this._splb += ThisLoS * (Capacity?1:0); break;
+				case  7: this._dive += ThisLoS; break;
+				case  8: this._torp += ThisLoS; break;
+				case  9: this._cbrp += ThisLoS; break;
+				case 10: this._rspl += ThisLoS; break;
+				case 11: this._splb += ThisLoS; break;
 				case 12: this._smrd += ThisLoS; break;
 				case 13: this._lgrd += ThisLoS; break;
 				case 29: this._srch += ThisLoS; break;
@@ -174,6 +174,60 @@ KC3.prototype.Fleet = {
 			return total;
 		}
 	},
+	
+	/* LoS : Some other formula
+	= red plane×0.6+blue plane×0.8+recon×1.0+sea recon×1.2+sea bonber×1.0+radar×0.6+searchlight×0.5+root of each kanmusu's naked LoS, then add value for this for all ship together minus 0.4×hq level, and then take integer
+	------------------------------------*/
+	method4 : {
+		_dive: 0,
+		_torp: 0,
+		_cbrp: 0,
+		_rspl: 0,
+		_splb: 0,
+		_smrd: 0,
+		_lgrd: 0,
+		_srch: 0,
+		
+		clear :function(){
+			this._dive = 0;
+			this._torp = 0;
+			this._cbrp = 0;
+			this._rspl = 0;
+			this._splb = 0;
+			this._smrd = 0;
+			this._lgrd = 0;
+			this._srch = 0;
+		},
+		
+		addItem :function( ThisType, ThisLoS, Capacity ){
+			switch(ThisType){
+				case  7: this._dive += ThisLoS; break;
+				case  8: this._torp += ThisLoS; break;
+				case  9: this._cbrp += ThisLoS; break;
+				case 10: this._rspl += ThisLoS; break;
+				case 11: this._splb += ThisLoS; break;
+				case 12: this._smrd += ThisLoS; break;
+				case 13: this._lgrd += ThisLoS; break;
+				case 29: this._srch += ThisLoS; break;
+				default: break;
+			}
+		},
+		
+		total :function( NakedLos ){
+			var total = ( this._dive * 0.6 )
+				+ ( this._torp * 0.8 )
+				+ ( this._cbrp * 1 )
+				+ ( this._rspl * 1.2 )
+				+ ( this._splb * 1 )
+				+ ( this._smrd * 0.6 )
+				+ ( this._lgrd * 0.6 )
+				+ ( this._srch * 0.5 )
+				+ Math.sqrt( NakedLos ); // then add value for this for all ship together minus 0.4 ×hq level, and then take integer (??)
+				app.Player.level
+			return total;
+		}
+	},
+	
 	
 	/* Support Expedition Power
 	= 55 + (1.5 * FP) + (1.5 * \sum(TP)) + (2.0 * \sum(DB))

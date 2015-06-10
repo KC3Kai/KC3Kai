@@ -17,6 +17,7 @@ $(document).on("ready", function(){
 	app.Player.init();
 	app.Resources.init();
 	app.Docks.init();
+	app.Quests.init();
 	
 	app.Gears.load();
 	
@@ -36,5 +37,6 @@ $(document).on("ready", function(){
 		$("body").css("background-size", "cover");
 		$("body").css("background-repeat", "no-repeat");
 		$("body").css("background-image", "url("+app.Config.background_panel+")");
+		$("body").css("background-position", app.Config.background_align_h+" "+app.Config.background_align_v);
 	}
 });
