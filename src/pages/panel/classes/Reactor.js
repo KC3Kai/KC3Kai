@@ -673,7 +673,7 @@ KC3.prototype.Reactor  = {
 		
 		// Checks if the development went great
 		if(!failed){
-			var MasterItem = app.Gears.get(response.api_data.api_slot_item.api_slotitem_id);
+			var MasterItem = app.Master.slotitem(response.api_data.api_slot_item.api_slotitem_id);
 			
 			// Call craft box if enabled
 			if(app.Config.showCraft){
@@ -681,11 +681,7 @@ KC3.prototype.Reactor  = {
 			}
 			
 			// Add new equipment to local data
-<<<<<<< HEAD
-			(function(){app.Gears.set([{
-=======
 			app.Gears.set([{
->>>>>>> dragonjet/master
 				api_id: response.api_data.api_slot_item.api_id,
 				api_level: 0,
 				api_locked: 0,
