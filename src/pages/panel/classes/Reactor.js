@@ -673,7 +673,7 @@ KC3.prototype.Reactor  = {
 		
 		// Checks if the development went great
 		if(!failed){
-			var MasterItem = app.Gears.get(response.api_data.api_slot_item.api_slotitem_id);
+			var MasterItem = app.Master.slotitem(response.api_data.api_slot_item.api_slotitem_id);
 			
 			// Call craft box if enabled
 			if(app.Config.showCraft){
