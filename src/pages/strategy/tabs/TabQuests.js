@@ -12,7 +12,7 @@ var TabQuests = {
 		}
 	},
 	
-	flowchartIds: [201, 216, 210, 218, 226, 230, 220, 228, 229, 242, 243, 241, 613, 214, 221, 261, 257, 264, 266, 213, 211, 212, 303, 304, 302, 402, 403, 404, 410, 411, 503, 504, 605, 606, 607, 608, 609, 619, 702, 703, 249, 265, 256, 259],
+	flowchartIds: [],
 	
 	/* Load required data, set error if not available
 	---------------------------------------------------*/
@@ -79,24 +79,30 @@ var TabQuests = {
 	/* Add a branch item to the flowchart
 	--------------------------------------------*/
 	seedBranch :function( parentElement, quest_id ){
+		// Add this quest to flowchartIds used as exceptions from extra quests at bottom
+		this.flowchartIds.push(quest_id);
+		
+		// Get meta data of this quest
 		var thisQuest = app.Meta.quest(quest_id);
 		
+		// Create quest HTML box and fill initial data
 		var thisBox = $(".page_quests .factory .questFlowItem").clone().appendTo("#"+parentElement.attr("id"));
-		
-		// console.log(thisQuest);
 		$(".questIcon", thisBox).text(thisQuest.code);
 		$(".questIcon", thisBox).addClass("type"+(String(quest_id).substring(0,1)));
-		
 		$(".questDesc", thisBox).text(thisQuest.desc);
 		
-		this.type++;
-		
+		// If we have player data about the quest, not just meta data from json
 		if(typeof app.Quests.list["q"+quest_id] != "undefined"){
 			var questRecord = app.Quests.list["q"+quest_id];
+			
+			// Status-based actions
 			switch(questRecord.status){
+				// Open
 				case 1:
 					$(".questInfo", thisBox).addClass("open");
 					break;
+					
+				// Active
 				case 2:
 					$(".questInfo", thisBox).addClass("active");
 					$(".questInfo .questIcon", thisBox).text("");
@@ -106,6 +112,8 @@ var TabQuests = {
 						"margin-right": "0px"
 					});
 					break;
+				
+				// Complete
 				case 3:
 					$(".questInfo", thisBox).addClass("complete");
 					$(".questInfo .questIcon", thisBox).text("");
@@ -115,13 +123,16 @@ var TabQuests = {
 						"margin-right": "0px"
 					});
 					break;
+					
+				// Else
 				default:
 					$(".questInfo", thisBox).addClass("disabled");
 					break;
 			}
 			
 			$(".questTrack", thisBox).text( app.Quests.getTrackingText( questRecord ) );
-			
+		
+		// If we don't have player data about the quest
 		}else{
 			$(".questInfo", thisBox).addClass("disabled");
 		}
