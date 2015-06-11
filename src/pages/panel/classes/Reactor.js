@@ -80,6 +80,7 @@ KC3.prototype.Reactor  = {
 		app.Dashboard.Info.materials();
 		app.Dashboard.Timers.update();
 		app.Dashboard.Fleet.update();
+		app.Dashboard.showQuests();
 	},
 	
 	
@@ -523,7 +524,10 @@ KC3.prototype.Reactor  = {
 			response.api_data.api_disp_page,
 			response.api_data.api_list
 		);
+		
+		app.Dashboard.showQuests();
 	},
+	
 	
 	/*-------------------------------------------------------*/
 	/*--------------------[ REPAIR DOCKS ]-------------------*/
@@ -771,12 +775,6 @@ KC3.prototype.Reactor  = {
 				trackingObj[0][0]++;
 			});
 		}
-	},
-	
-	/* Remodel
-	-------------------------------------------------------*/
-	"xxxx":function(params, response, headers){
-		
 	}
 	
 };

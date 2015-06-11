@@ -317,18 +317,16 @@ KC3.prototype.Dashboard  = {
 	-------------------------------------------------------*/
 	showQuests :function(){
 		app.Quests.load();
-		console.log(app.Quests.list);
-		
-		var ctr, questId;
+		$(".theme-box .box-quests-list").html("");
+		var ctr, questId, tmpBox;
 		for(ctr in app.Quests.active){
 			questId = app.Quests.active[ctr];
 			questData = app.Quests.list["q"+questId];
 			questMeta = app.Meta.quest(questId);
-			console.log(questId, questData);
-			
-			
-			$(".theme-horizontal .box-quest-"+(Number(ctr)+1)).text(questMeta.code);
-			$(".theme-horizontal .box-quest-"+(Number(ctr)+1)).addClass("type"+(String(questId).substring(0,1)));
+			tmpBox = $(".theme-box .factory .box-quest").clone().appendTo(".theme-box .box-quests-list");
+			tmpBox.attr("title", questMeta.desc);
+			tmpBox.text(questMeta.code);
+			tmpBox.addClass("type"+(String(questId).substring(0,1)));
 		}
 	}
 	

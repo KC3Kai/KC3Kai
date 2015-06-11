@@ -34,10 +34,15 @@ KC3.prototype.Quests = {
 			switch( questStatus ){
 				// Quest shows up but not active
 				case 1:
+					// Add to open quests
 					if(this.open.indexOf(questId) == -1){ this.open.push(questId); }
+					// Remove from active quests
+					var activeIndex = this.active.indexOf(questId);
+					if(activeIndex > -1){ this.active.splice(activeIndex, 1); }
 					break;
 				// Quest is active and tracking
 				case 2:
+					// Add to open quests and active quests
 					if(this.open.indexOf(questId) == -1){ this.open.push(questId); }
 					if(this.active.indexOf(questId) == -1){ this.active.push(questId); }
 					break;
@@ -113,7 +118,16 @@ KC3.prototype.Quests = {
 		for(ctr in questData.tracking){
 			trackingText.push(questData.tracking[ctr][0]+"/"+questData.tracking[ctr][1]);
 		}
-		return trackingText.join();
+		return trackingText.join(" ");
+	},
+	
+	getTrackingHtml :function( questData ){
+		var trackingText = [];
+		var ctr;
+		for(ctr in questData.tracking){
+			trackingText.push(questData.tracking[ctr][0]+" / "+questData.tracking[ctr][1]);
+		}
+		return trackingText.join("<br />");
 	},
 	
 	/* Reset all quests
@@ -134,6 +148,9 @@ KC3.prototype.Quests = {
 			this.list = quests.list;
 			return true;
 		}else{
+			this.active = [];
+			this.open = [];
+			this.list = {};
 			return false;
 		}
 	},

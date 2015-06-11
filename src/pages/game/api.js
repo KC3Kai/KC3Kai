@@ -107,9 +107,13 @@ chrome.runtime.onMessage.addListener(function(request, sender, response) {
 						
 						if(tmpQuest){
 							var playerQuest = app.Quests.list["q"+request.questlist[qci].api_no];
-							$(".tracking", tmpQuestOverlay).text(app.Quests.getTrackingText( playerQuest ));
+							$(".tracking", tmpQuestOverlay).html(app.Quests.getTrackingHtml( playerQuest ));
 							$(".name", tmpQuestOverlay).text(tmpQuest.name);
 							$(".desc", tmpQuestOverlay).text(tmpQuest.desc);
+							// Special Bw1 case multiple requirements
+							if(request.questlist[qci].api_no == 214){
+								$(".tracking", tmpQuestOverlay).addClass("small");
+							}
 						}else{
 							$(".name", tmpQuestOverlay).text(request.questlist[qci].api_title);
 							$(".desc", tmpQuestOverlay).text(request.questlist[qci].api_detail);

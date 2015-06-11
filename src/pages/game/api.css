@@ -129,6 +129,10 @@
 	text-align:center;
 	color:#555;
 }
+.ol_quest .tracking.small {
+	line-height:15px;
+	font-size:14px;
+}
 .ol_quest .name {
 	width:400px;
 	height:14px;
