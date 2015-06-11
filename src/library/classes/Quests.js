@@ -69,43 +69,27 @@ KC3.prototype.Quests = {
 		}
 	},
 	
+	resetLoop: function( questIds ){
+		for(var ctr in questIds){
+			this.resetQuest( questIds[ctr] );
+		}
+	},
+	
 	resetDailies :function(){
 		this.load();
-		this.resetQuest(201);
-		this.resetQuest(216);
-		this.resetQuest(210);
-		this.resetQuest(211);
-		this.resetQuest(218);
-		this.resetQuest(212);
-		this.resetQuest(226);
-		this.resetQuest(230);
+		this.resetLoop([201, 216, 210, 211, 218, 212, 226, 230, 303, 304, 402, 403, 503, 504, 605, 606, 607, 608, 609, 619, 702]);
 		this.save();
 	},
 	
 	resetWeeklies :function(){
 		this.load();
-		this.resetQuest(214);
-		this.resetQuest(220);
-		this.resetQuest(213);
-		this.resetQuest(221);
-		this.resetQuest(228);
-		this.resetQuest(229);
-		this.resetQuest(241);
-		this.resetQuest(242);
-		this.resetQuest(243);
-		this.resetQuest(261);
+		this.resetLoop([214, 220, 213, 221, 228, 229, 241, 242, 243, 261, 302, 404, 410, 411, 613, 703]);
 		this.save();
 	},
 	
 	resetMonthlies :function(){
 		this.load();
-		this.resetQuest(249);
-		this.resetQuest(256);
-		this.resetQuest(257);
-		this.resetQuest(259);
-		this.resetQuest(265);
-		this.resetQuest(264);
-		this.resetQuest(266);
+		this.resetLoop([249, 256, 257, 259, 265, 264, 266]);
 		this.save();
 	},
 	
