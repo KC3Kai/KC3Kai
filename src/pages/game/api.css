@@ -112,11 +112,22 @@
 /* OVERLAY: QUEST
 --------------------------*/
 .ol_quest {
-	width:400px;
+	width:490px;
 	height:37px;
 	background:#E4D5C2;
 	margin-left:215px;
 	pointer-events: none;
+}
+.ol_quest .tracking {
+	width:60px;
+	height:60px;
+	line-height:60px;
+	float:right;
+	font-size:18px;
+	font-weight:bold;
+	background:#E4D5C2;
+	text-align:center;
+	color:#555;
 }
 .ol_quest .name {
 	width:400px;

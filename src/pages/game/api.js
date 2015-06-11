@@ -95,6 +95,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, response) {
 			
 			// Quest Overlay
 			case "quest_overlay":
+				app.Quests.load();
 				app.Dom.clearOverlays();
 				var qci, tmpQuest;
 				for(qci in request.questlist){
@@ -105,6 +106,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, response) {
 						tmpQuestOverlay.css("top", (parseInt(app.Config.gambox_margin,10)+113+(qci*68))+"px");
 						
 						if(tmpQuest){
+							var playerQuest = app.Quests.list["q"+request.questlist[qci].api_no];
+							$(".tracking", tmpQuestOverlay).text(app.Quests.getTrackingText( playerQuest ));
 							$(".name", tmpQuestOverlay).text(tmpQuest.name);
 							$(".desc", tmpQuestOverlay).text(tmpQuest.desc);
 						}else{
