@@ -106,6 +106,14 @@ KC3.prototype.Battle  = {
 	},
 	
 	Results :function(data){
+		if(["SS","S","A","B"].indexOf(data.api_win_rank)){
+			// Bd1: Daily Sortie 1
+			app.Quests.track(201, function(trackingObj){
+				trackingObj[0][0]++;
+			});
+		}
+		
+		// Logging
 		this.currentBattle.rating = data.api_win_rank;
 		if(typeof data.api_get_ship != "undefined"){
 			this.currentBattle.drop = data.api_get_ship.api_ship_id; 
