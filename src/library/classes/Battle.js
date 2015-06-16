@@ -8,23 +8,25 @@ KC3.prototype.Battle  = {
 		var ReturnObj = [];
 		var thisFleet = app.Docks._fleets[index];
 		var ctr, thisShip;
-		for(ctr in thisFleet.api_ship){
-			if(thisFleet.api_ship[ctr] > -1){
-				thisShip = app.Ships.get( thisFleet.api_ship[ctr] );
-				ReturnObj.push({
-					mst_id: thisShip.api_ship_id,
-					level: thisShip.api_lv,
-					kyouka: thisShip.api_kyouka,
-					morale: thisShip.api_cond,
-					equip: [
-						this.CompileShipEquip( thisShip.api_slot[0] ),
-						this.CompileShipEquip( thisShip.api_slot[1] ),
-						this.CompileShipEquip( thisShip.api_slot[2] ),
-						this.CompileShipEquip( thisShip.api_slot[3] )
-					],
-				});
-			}else{
-				ReturnObj.push(false);
+		if (typeof thisFleet != "undefined") {
+			for(ctr in thisFleet.api_ship){
+				if(thisFleet.api_ship[ctr] > -1){
+					thisShip = app.Ships.get( thisFleet.api_ship[ctr] );
+					ReturnObj.push({
+						mst_id: thisShip.api_ship_id,
+						level: thisShip.api_lv,
+						kyouka: thisShip.api_kyouka,
+						morale: thisShip.api_cond,
+						equip: [
+							this.CompileShipEquip( thisShip.api_slot[0] ),
+							this.CompileShipEquip( thisShip.api_slot[1] ),
+							this.CompileShipEquip( thisShip.api_slot[2] ),
+							this.CompileShipEquip( thisShip.api_slot[3] )
+						],
+					});
+				}else{
+					ReturnObj.push(false);
+				}
 			}
 		}
 		return ReturnObj;
