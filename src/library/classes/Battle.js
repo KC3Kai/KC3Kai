@@ -82,8 +82,11 @@ KC3.prototype.Battle  = {
 	},
 	
 	CheckIfFleetIsSupporting :function(expedNumbers, fleetNumber){
-		var fleetExpedition = app.Docks._fleets[fleetNumber].api_mission[1];
-		return (expedNumbers.indexOf(fleetExpedition)>-1)?fleetNumber:0;
+		if(typeof app.Docks._fleets[fleetNumber] != "undefined"){
+			var fleetExpedition = app.Docks._fleets[fleetNumber].api_mission[1];
+			return (expedNumbers.indexOf(fleetExpedition)>-1)?fleetNumber:0;
+		}
+		return 0;
 	},
 	
 	EndSortie :function(){

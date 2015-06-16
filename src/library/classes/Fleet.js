@@ -40,6 +40,7 @@ KC3.prototype.Fleet = {
 	includeEquip :function(ThisItem, MasterItem, Capacity, forced){
 		var elos_mode = app.Config.elos_mode;
 		if(typeof forced != "undefined"){ elos_mode = forced; }
+		if(!MasterItem){ return false; }
 		
 		this.equip_los += MasterItem.api_saku;
 		
