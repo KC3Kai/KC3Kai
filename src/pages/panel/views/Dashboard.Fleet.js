@@ -382,7 +382,7 @@ KC3.prototype.Dashboard.Fleet = {
 		$(".fleet-summary .summary-speed .summary-text").text(app.Fleet.speed);
             
                 var expeditionAdvice = app.ExpeditionHelper.analyzeFleet(fleetShipIds);
-                $(".expedition-estimate").text(JSON.stringify(expeditionAdvice));
+                $(".expedition-helper").text(JSON.stringify(expeditionAdvice));
 	},
 	
 	ship :function(index, ship_id, animateID){
