@@ -80,11 +80,11 @@ $(document).on("ready", function(){
 
 // Extension Interaction
 chrome.runtime.onMessage.addListener(function(request, sender, response) {
-	if(request.game==="kancolle" && request.type==="game"){
+	if(request.game==="kancolle" && request.type==="game" || request.identifier == "kc3_gamescreen"){
 		switch(request.action){
 		
 			// Admiral Dashboard opened, activate game
-			case "activate":
+			case "activate_game":
 				if(waiting){
 					ActivateGame();
 					response({success:true});

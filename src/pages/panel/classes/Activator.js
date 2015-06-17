@@ -19,19 +19,17 @@ KC3.prototype.Activator  = {
 		app.Dashboard.state = "activating";
 		app.Dashboard.messageBox("Attempting to activate the game...");
 		
-		// Ask background page to activate game page on inspected tab
-		chrome.runtime.sendMessage({
-			game:"kancolle",
-			type:"background",
-			action:"activate_game",
-			tabId: chrome.devtools.inspectedWindow.tabId
-		}, function(response) {
-			// Check if game page responded
-			if(response.success){
-				self.gameActivated = true;
-				app.Dashboard.messageBox("Game active! Please wait while it loads...");
+		// Send runtime message to hamescreen to activate
+		(new RMsg("gamescreen", "activate_game",
+			{ tabId: chrome.devtools.inspectedWindow.tabId },
+			function(response){
+				// Check if game page responded
+				if(response.success){
+					self.gameActivated = true;
+					app.Dashboard.messageBox("Game active! Please wait while it loads...");
+				}
 			}
-		});
+		)).execute();
 	},
 	
 	/* Wait for 1 second if game has auto-activated

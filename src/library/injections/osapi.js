@@ -25,7 +25,7 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 			(new RMsg(
 				"service",
 				"set_api_link",
-				{ swfsrc: document.getElementById("externalswf").getAttribute("src") },
+				{ swfsrc: document.getElementById("externalswf").getAttribute("src") }
 			)).execute();
 			
 			// Stop interval

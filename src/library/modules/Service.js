@@ -56,14 +56,6 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			}catch(e){ console.error(e); }
 		},
 		
-		/* ACTIVATE GAME
-		Try to activate game inside inspected tab
-		------------------------------------------*/
-		"activate_game" :function(request, sender, response){
-			(new TMsg(request.tabId, "gamescreen", "activate_game", {}, response)).execute();
-			return true; // dual-async response
-		},
-		
 		/* SCREENSHOT
 		Ask the game container to take a screenshot
 		------------------------------------------*/
@@ -84,11 +76,10 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	and execute what they want if applicable
 	*/
 	chrome.runtime.onMessage.addListener(function(request, sender, callback){
-		// Log message contents and sender for debugging
-		console.log("Received message", request, "from", sender);
-		
 		// Check if message is intended for this script
 		if( (request.identifier || false) == "kc3_service"){
+			// Log message contents and sender for debugging
+			console.log("Received Message", { "Request": request, "Sender": sender });
 			
 			// Check requested action is supported
 			if(typeof window.KC3Service[ request.action ] != "undefined"){
