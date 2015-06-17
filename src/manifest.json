@@ -38,17 +38,16 @@
 		{
 			"matches":["*://*.dmm.com/*"],
 			"js": ["library/injections/cookie.js"],
-			"run_at": "document_end"
-		},
-		{
-			"matches":["*://www.dmm.com/netgame/*/app_id=854854*"],
-			"js": ["assets/js/jquery-2.1.3.min.js", "library/injections/dmm.js"],
 			"run_at": "document_end",
 			"all_frames": true
 		},
 		{
 			"matches":["*://osapi.dmm.com/gadgets/*aid=854854*"],
-			"js": ["library/injections/osapi.js"],
+			"js": [
+				"assets/js/jquery-2.1.3.min.js",
+				"library/objects/Messengers.js",
+				"library/injections/osapi.js"
+			],
 			"run_at": "document_end",
 			"all_frames": true
 		}
