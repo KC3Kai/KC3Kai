@@ -44,6 +44,7 @@ KC3.prototype.ExpeditionHelper = {
         },
         10: function(info) {
             return info.shipCount >= 3
+                && info.flagShipLevel >= 3
                 && info.queryStype("CL").length >= 2;
         },
         11: function(info) {
@@ -135,6 +136,104 @@ KC3.prototype.ExpeditionHelper = {
                 && info.flagShip.stypeIsOneOf("CL")
                 && info.queryStype("CL").length >= 1
                 && info.queryStype("DD").length >= 4;
+        },
+        25: function(info) {
+            return info.shipCount >= 4
+                && info.flagShipLevel >= 25
+                && info.queryStype("CA").length >= 2
+                && info.queryStype("DD").length >= 2;
+        },
+        26: function(info) {
+            return info.shipCount >= 4
+                && info.flagShipLevel >= 30
+                && info.queryStype("CV CVL AV").length >= 1
+                && info.queryStype("CL").length >= 1
+                && info.queryStype("DD").length >= 2;
+        },
+        27: function(info) {
+            return info.shipCount >= 2
+                && info.flagShipLevel >= 1
+                && info.queryStype("SS SSV").length >= 2;
+        },
+        28: function(info) {
+            return info.shipCount >= 3
+                && info.flagShipLevel >= 30
+                && info.queryStype("SS SSV").length >= 3;
+        },
+        29: function(info) {
+            return info.shipCount >= 3
+                && info.flagShipLevel >= 50
+                && info.queryStype("SS SSV").length >= 3;
+        },
+        30: function(info) {
+            return info.shipCount >= 4
+                && info.flagShipLevel >= 55
+                && info.queryStype("SS SSV").length >= 4;
+        },
+        31: function(info) {
+            return info.shipCount >= 4
+                && info.flagShipLevel >= 60
+                && info.shipLevelCount >= 200
+                && info.queryStype("SS SSV").length >= 4;
+        },
+        32: function(info) {
+            return info.shipCount >= 3
+                && info.flagShipLevel >= 5
+                && info.flagShip.stypeIsOneOf("CT") // TODO: correct stype?
+                && info.queryStype("DD").length >= 2;
+        },
+        35: function(info) {
+            return info.shipCount >= 6
+                && info.flagShipLevel >= 40
+                && info.queryStype("CV CVL AV").length >= 2
+                && info.queryStype("CA").length >= 1
+                && info.queryStype("DD").length >= 1;
+        },
+        36: function(info) {
+            return info.shipCount >= 6
+                && info.flagShipLevel >= 30
+                && info.queryStype("AV").length >= 2
+                && info.queryStype("CL").length >= 1
+                && info.queryStype("DD").length >= 1;
+        },
+        37: function(info) {
+            var isDrumEquipped = KC3.prototype.ExpeditionHelper.utils.isDrumEquipped;
+            return $.grep(info.ships, isDrumEquipped).length >= 4
+                && info.shipCount >= 6
+                && info.flagShipLevel >= 50
+                && info.shipLevelCount >= 200
+                && info.queryStype("CL").length >= 1
+                && info.queryStype("DD").length >= 5;
+        },
+        38: function(info) {
+            var isDrumEquipped = KC3.prototype.ExpeditionHelper.utils.isDrumEquipped;
+            var countDrumEquipped = KC3.prototype.ExpeditionHelper.utils.countDrumEquipped;
+
+            var drumCount = 0;
+            $.each( info.ships, function(sInd, s) {
+                drumCount += countDrumEquipped(s);
+            });
+            return $.grep(info.ships, isDrumEquipped).length >= 4
+                && drumCount >= 8
+                && info.shipCount >= 6
+                && info.flagShipLevel >= 65
+                && info.shipLevelCount >= 240
+                && info.queryStype("DD").length >= 5;
+        },
+        39: function(info) {
+            return info.shipCount >= 5
+                && info.flagShipLevel >= 3
+                && info.shipLevelCount >= 180
+                && info.queryStype("AS").length >= 1
+                && info.queryStype("SS SSV").length >= 4;
+        },
+        40: function(info) {
+            return info.shipCount >= 6
+                && info.flagShipLevel >= 25
+                && info.shipLevelCount >= 150
+                && info.flagShip.stypeIsOneOf("CL") 
+                && info.queryStype("AV").length >= 2
+                && info.queryStype("DD").length >= 2;
         }
     },
     analyzeFleet: function(fleetShipIds) {
@@ -192,8 +291,8 @@ KC3.prototype.ExpeditionHelper = {
         },
         isDrumEquipped: function(ship) {
             var shipInst = ship.inst;
-            for (var slot in [0,1,2,3]) {
-                gear_id = shipInst.api_slot[slot];
+            for (var slotInd in shipInst.api_slot) {
+                gear_id = shipInst.api_slot[slotInd];
                 thisItem = app.Gears.get(gear_id);
                 if (thisItem) {
                     model = app.Master.slotitem(thisItem.api_slotitem_id);
@@ -202,6 +301,19 @@ KC3.prototype.ExpeditionHelper = {
                 }
             }
             return false;
+        },
+        countDrumEquipped: function(ship) {
+            var shipInst = ship.inst;
+            var count = 0;
+            $.each(shipInst.api_slot, function(ind,gear_id) {
+                thisItem = app.Gears.get(gear_id);
+                if (thisItem) {
+                    model = app.Master.slotitem(thisItem.api_slotitem_id);
+                    if (model.api_id == 75)
+                        ++ count;
+                }
+            });
+            return count;
         },
         collectFleetInfo: function(validFleetShipIds) {
             var shipLevelCount = 0;
@@ -268,9 +380,14 @@ KC3.prototype.Dashboard.Fleet = {
 		$(".fleet-summary .summary-eqlos .summary-text").text(app.Fleet.getEffectiveLoS());
 		$(".fleet-summary .summary-airfp .summary-text").text(app.Fleet.fighter_power);
 		$(".fleet-summary .summary-speed .summary-text").text(app.Fleet.speed);
-            
+
+            if (this.selectedFleet != 1) {
                 var expeditionAdvice = app.ExpeditionHelper.analyzeFleet(fleetShipIds);
-                $(".expedition-estimate").text(JSON.stringify(expeditionAdvice));
+                $(".expedition-helper").text(JSON.stringify(expeditionAdvice));
+                $(".expedition-helper").show();
+            } else {
+                $(".expedition-helper").hide();
+            }
 	},
 	
 	ship :function(index, ship_id, animateID){
