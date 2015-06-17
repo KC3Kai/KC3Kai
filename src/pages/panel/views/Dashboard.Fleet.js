@@ -136,6 +136,51 @@ KC3.prototype.ExpeditionHelper = {
                 && info.flagShip.stypeIsOneOf("CL")
                 && info.queryStype("CL").length >= 1
                 && info.queryStype("DD").length >= 4;
+        },
+        25: function(info) {
+            return info.shipCount >= 4
+                && info.flagShipLevel >= 25
+                && info.queryStype("CA").length >= 2
+                && info.queryStype("DD").length >= 2;
+        },
+        26: function(info) {
+            return info.shipCount >= 4
+                && info.flagShipLevel >= 30
+                && info.queryStype("CV CVL AV").length >= 1
+                && info.queryStype("CL").length >= 1
+                && info.queryStype("DD").length >= 2;
+        },
+        27: function(info) {
+            return info.shipCount >= 2
+                && info.flagShipLevel >= 1
+                && info.queryStype("SS SSV").length >= 2;
+        },
+        28: function(info) {
+            return info.shipCount >= 3
+                && info.flagShipLevel >= 30
+                && info.queryStype("SS SSV").length >= 3;
+        },
+        29: function(info) {
+            return info.shipCount >= 3
+                && info.flagShipLevel >= 50
+                && info.queryStype("SS SSV").length >= 3;
+        },
+        30: function(info) {
+            return info.shipCount >= 4
+                && info.flagShipLevel >= 55
+                && info.queryStype("SS SSV").length >= 4;
+        },
+        31: function(info) {
+            return info.shipCount >= 4
+                && info.flagShipLevel >= 60
+                && info.shipLevelCount >= 200
+                && info.queryStype("SS SSV").length >= 4;
+        },
+        32: function(info) {
+            return info.shipCount >= 3
+                && info.flagShipLevel >= 5
+                && info.flagShip.stypeIsOneOf("CT") // TODO: correct stype?
+                && info.queryStype("DD").length >= 2;
         }
     },
     analyzeFleet: function(fleetShipIds) {
