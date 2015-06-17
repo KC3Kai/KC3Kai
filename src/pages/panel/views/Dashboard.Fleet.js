@@ -380,9 +380,14 @@ KC3.prototype.Dashboard.Fleet = {
 		$(".fleet-summary .summary-eqlos .summary-text").text(app.Fleet.getEffectiveLoS());
 		$(".fleet-summary .summary-airfp .summary-text").text(app.Fleet.fighter_power);
 		$(".fleet-summary .summary-speed .summary-text").text(app.Fleet.speed);
-            
+
+            if (this.selectedFleet != 1) {
                 var expeditionAdvice = app.ExpeditionHelper.analyzeFleet(fleetShipIds);
                 $(".expedition-helper").text(JSON.stringify(expeditionAdvice));
+                $(".expedition-helper").show();
+            } else {
+                $(".expedition-helper").hide();
+            }
 	},
 	
 	ship :function(index, ship_id, animateID){
