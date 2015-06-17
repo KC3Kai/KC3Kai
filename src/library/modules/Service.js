@@ -5,68 +5,72 @@ It is always running, from Chrome startup until the browser is closed or explici
 This will serve as a central script that lets devtools and content scripts communicate.
 Sometimes, the scripts on different parts of the extension cannot communicate with each other, thus this can relay messages and events for them.
 Sometimes, specific scripts do not have access to Chrome APIs. Those scripts can then request it to be done by this service.
+
+Ultimately, this script handles data management on aspects that are best centralized such as:
+> [Countdown Timers]
+To have a consistent timer unaffected by lags on devtools and Chrome tabs
+> [Quest Management]
+To ensure all components are synced in real-time without relying on localStorage
+
+The above aspects are imported into the background service, and not necessarily on this file.
+See Manifest File [manifest.json] under "background" > "scripts"
 */
 (function(){
 	"use strict";
 	
-	console.log("Starting KC3改 Background Service...");
+	console.log("KC3改 Background Service loaded");
 	
 	window.KC3Service = {
 		
-		/* [set_api_link]
+		/* SET API LINK
 		API Link extracted, save and open
 		------------------------------------------*/
 		"set_api_link" :function(request, sender, callback){
-			// Set api link on internal storage
-			localStorage.absoluteswf = request.swfsrc;
-			
-			// If refreshing API link, close source tabs and re-open game frame
-			if(localStorage.extract_api==="true"){
-				localStorage.extract_api = false;
-				// If not playing via DMM frame
-				if(sender.tab.url.indexOf("/pages/game/dmm.html") == -1){
-					chrome.tabs.remove([sender.tab.id], function(){});
+			try {
+				// Set api link on internal storage
+				localStorage.absoluteswf = request.swfsrc;
+				
+				// If refreshing API link, close source tabs and re-open game frame
+				if(localStorage.extract_api==="true"){
+					localStorage.extract_api = false;
 					window.open("../pages/game/api.html", "kc3kai_game");
+					chrome.tabs.remove([sender.tab.id], function(){});
 				}
-			}
-			
-			callback({success:true});
+			}catch(e){ console.error(e); }
 		},
 		
 		
-		/* [notify_desktop]
+		/* NOTIFY DESKTOP
 		Check if tab is a KC3改 frame and tell to override styles or not
 		------------------------------------------*/
 		"notify_desktop" :function(request, sender, callback){
-			// Clear old notification first
-			chrome.notifications.clear("kc3kai_"+request.notifId, function(){
-				// Add notification
-				chrome.notifications.create("kc3kai_"+request.notifId, request.data);
-			});
+			try {
+				// Clear old notification first
+				chrome.notifications.clear("kc3kai_"+request.notifId, function(){
+					// Add notification
+					chrome.notifications.create("kc3kai_"+request.notifId, request.data);
+				});
+			}catch(e){ console.error(e); }
 		},
 		
-		/* [activate_game]
+		/* ACTIVATE GAME
 		Try to activate game inside inspected tab
 		------------------------------------------*/
 		"activate_game" :function(request, sender, response){
-			chrome.tabs.sendMessage(request.tabId, {
-				game:"kancolle",
-				type:"game",
-				action:"activate"
-			}, response);
+			(new TMsg(request.tabId, "gamescreen", "activate_game", {}, response)).execute();
 			return true; // dual-async response
 		},
 		
-		/* [screenshot]
+		/* SCREENSHOT
 		Ask the game container to take a screenshot
 		------------------------------------------*/
 		"screenshot" :function(request, sender, response){
-			chrome.tabs.sendMessage(request.tabId, {
-				game:"kancolle",
-				type:"game",
-				action:"screenshot",
-				playerIndex:request.playerIndex
-			});
+			(new TMsg(
+				request.tabId,
+				"gamescreen",
+				"screenshot",
+				{ playerIndex: request.playerIndex }
+			)).execute();
 		}
 		
 	};
@@ -96,6 +100,6 @@ Sometimes, specific scripts do not have access to Chrome APIs. Those scripts can
 		}
 	});
 	
-	console.log("Synchronous initialization complete.");
+	(new TMsg(123, "gamescreen", "activate_game")).execute();
 	
 })();

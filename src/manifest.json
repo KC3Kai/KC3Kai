@@ -26,7 +26,13 @@
 		"<all_urls>"
 	],
 	"background": {
-		"scripts": ["library/modules/Service.js"]
+		"scripts": [
+			"assets/js/jquery-2.1.3.min.js",
+			"library/managers/TimerManager.js",
+			"library/managers/QuestManager.js",
+			"library/objects/Messengers.js",
+			"library/modules/Service.js"
+		]
 	},
 	"content_scripts": [
 		{
