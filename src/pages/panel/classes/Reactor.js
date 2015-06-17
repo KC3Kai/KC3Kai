@@ -511,6 +511,13 @@ KC3.prototype.Reactor  = {
 	/* Quest List
 	-------------------------------------------------------*/
 	"api_get_member/questlist":function(params, response, headers){
+		app.Quests.receivePage(
+			response.api_data.api_disp_page,
+			response.api_data.api_list
+		);
+		
+		app.Dashboard.showQuests();
+		
 		if(app.Config.tl_overlay){
 			chrome.runtime.sendMessage({
 				game:"kancolle",
@@ -519,13 +526,6 @@ KC3.prototype.Reactor  = {
 				questlist: response.api_data.api_list
 			}, function(response){});
 		}
-		
-		app.Quests.receivePage(
-			response.api_data.api_disp_page,
-			response.api_data.api_list
-		);
-		
-		app.Dashboard.showQuests();
 	},
 	
 	

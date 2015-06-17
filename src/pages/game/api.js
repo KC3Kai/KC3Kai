@@ -106,17 +106,20 @@ chrome.runtime.onMessage.addListener(function(request, sender, response) {
 						tmpQuestOverlay.css("top", (parseInt(app.Config.gambox_margin,10)+113+(qci*68))+"px");
 						
 						if(tmpQuest){
-							var playerQuest = app.Quests.list["q"+request.questlist[qci].api_no];
-							$(".tracking", tmpQuestOverlay).html(app.Quests.getTrackingHtml( playerQuest ));
-							$(".name", tmpQuestOverlay).text(tmpQuest.name);
-							$(".desc", tmpQuestOverlay).text(tmpQuest.desc);
-							// Special Bw1 case multiple requirements
-							if(request.questlist[qci].api_no == 214){
-								$(".tracking", tmpQuestOverlay).addClass("small");
+							if(typeof app.Quests.list["q"+request.questlist[qci].api_no] != "undefined"){
+								var playerQuest = app.Quests.list["q"+request.questlist[qci].api_no];
+								$(".tracking", tmpQuestOverlay).html(app.Quests.getTrackingHtml( playerQuest ));
+								$(".name", tmpQuestOverlay).text(tmpQuest.name);
+								$(".desc", tmpQuestOverlay).text(tmpQuest.desc);
+								// Special Bw1 case multiple requirements
+								if(request.questlist[qci].api_no == 214){
+									$(".tracking", tmpQuestOverlay).addClass("small");
+								}
+							}else{
+								tmpQuestOverlay.hide();
 							}
 						}else{
-							$(".name", tmpQuestOverlay).text(request.questlist[qci].api_title);
-							$(".desc", tmpQuestOverlay).text(request.questlist[qci].api_detail);
+							tmpQuestOverlay.hide();
 						}
 					}
 				}
