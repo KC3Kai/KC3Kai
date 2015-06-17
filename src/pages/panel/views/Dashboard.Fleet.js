@@ -181,6 +181,59 @@ KC3.prototype.ExpeditionHelper = {
                 && info.flagShipLevel >= 5
                 && info.flagShip.stypeIsOneOf("CT") // TODO: correct stype?
                 && info.queryStype("DD").length >= 2;
+        },
+        35: function(info) {
+            return info.shipCount >= 6
+                && info.flagShipLevel >= 40
+                && info.queryStype("CV CVL AV").length >= 2
+                && info.queryStype("CA").length >= 1
+                && info.queryStype("DD").length >= 1;
+        },
+        36: function(info) {
+            return info.shipCount >= 6
+                && info.flagShipLevel >= 30
+                && info.queryStype("AV").length >= 2
+                && info.queryStype("CL").length >= 1
+                && info.queryStype("DD").length >= 1;
+        },
+        37: function(info) {
+            var isDrumEquipped = KC3.prototype.ExpeditionHelper.utils.isDrumEquipped;
+            return $.grep(info.ships, isDrumEquipped).length >= 4
+                && info.shipCount >= 6
+                && info.flagShipLevel >= 50
+                && info.shipLevelCount >= 200
+                && info.queryStype("CL").length >= 1
+                && info.queryStype("DD").length >= 5;
+        },
+        38: function(info) {
+            var isDrumEquipped = KC3.prototype.ExpeditionHelper.utils.isDrumEquipped;
+            var countDrumEquipped = KC3.prototype.ExpeditionHelper.utils.countDrumEquipped;
+
+            var drumCount = 0;
+            $.each( info.ships, function(sInd, s) {
+                drumCount += countDrumEquipped(s);
+            });
+            return $.grep(info.ships, isDrumEquipped).length >= 4
+                && drumCount >= 8
+                && info.shipCount >= 6
+                && info.flagShipLevel >= 65
+                && info.shipLevelCount >= 240
+                && info.queryStype("DD").length >= 5;
+        },
+        39: function(info) {
+            return info.shipCount >= 5
+                && info.flagShipLevel >= 3
+                && info.shipLevelCount >= 180
+                && info.queryStype("AS").length >= 1
+                && info.queryStype("SS SSV").length >= 4;
+        },
+        40: function(info) {
+            return info.shipCount >= 6
+                && info.flagShipLevel >= 25
+                && info.shipLevelCount >= 150
+                && info.flagShip.stypeIsOneOf("CL") 
+                && info.queryStype("AV").length >= 2
+                && info.queryStype("DD").length >= 2;
         }
     },
     analyzeFleet: function(fleetShipIds) {
@@ -248,6 +301,19 @@ KC3.prototype.ExpeditionHelper = {
                 }
             }
             return false;
+        },
+        countDrumEquipped: function(ship) {
+            var shipInst = ship.inst;
+            var count = 0;
+            $.each(shipInst.api_slot, function(ind,gear_id) {
+                thisItem = app.Gears.get(gear_id);
+                if (thisItem) {
+                    model = app.Master.slotitem(thisItem.api_slotitem_id);
+                    if (model.api_id == 75)
+                        ++ count;
+                }
+            });
+            return count;
         },
         collectFleetInfo: function(validFleetShipIds) {
             var shipLevelCount = 0;
