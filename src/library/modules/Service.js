@@ -23,7 +23,9 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	window.KC3Service = {
 		
 		/* SET API LINK
-		API Link extracted, save and open
+		From osapi content script, the API Link has been extracted
+		Save the link onto localStorage and disable extracing API further
+		If came from menu "Extract API Link", Open Play via API and close DMM source
 		------------------------------------------*/
 		"set_api_link" :function(request, sender, callback){
 			try {
@@ -31,8 +33,8 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				localStorage.absoluteswf = request.swfsrc;
 				
 				// If refreshing API link, close source tabs and re-open game frame
-				if(localStorage.extract_api==="true"){
-					localStorage.extract_api = false;
+				if( localStorage.extract_api === "true"){ // localStorage has problems with native boolean
+					localStorage.extract_api = "false";
 					window.open("../pages/game/api.html", "kc3kai_game");
 					chrome.tabs.remove([sender.tab.id], function(){});
 				}
@@ -41,7 +43,8 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		
 		
 		/* NOTIFY DESKTOP
-		Check if tab is a KC3改 frame and tell to override styles or not
+		Devtools do not have access to chrome.notifications API
+		Panel can request this background service to do notifications
 		------------------------------------------*/
 		"notify_desktop" :function(request, sender, callback){
 			try {
@@ -99,7 +102,5 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		
 		}
 	});
-	
-	(new TMsg(123, "gamescreen", "activate_game")).execute();
 	
 })();
