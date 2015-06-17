@@ -238,9 +238,8 @@ KC3.prototype.ExpeditionHelper = {
         },
         isDrumEquipped: function(ship) {
             var shipInst = ship.inst;
-            // TODO: misleading code
-            for (var slot in [0,1,2,3]) {
-                gear_id = shipInst.api_slot[slot];
+            for (var slotInd in shipInst.api_slot) {
+                gear_id = shipInst.api_slot[slotInd];
                 thisItem = app.Gears.get(gear_id);
                 if (thisItem) {
                     model = app.Master.slotitem(thisItem.api_slotitem_id);
