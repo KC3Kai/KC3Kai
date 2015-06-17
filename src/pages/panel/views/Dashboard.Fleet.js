@@ -44,6 +44,7 @@ KC3.prototype.ExpeditionHelper = {
         },
         10: function(info) {
             return info.shipCount >= 3
+                && info.flagShipLevel >= 3
                 && info.queryStype("CL").length >= 2;
         },
         11: function(info) {
@@ -192,6 +193,7 @@ KC3.prototype.ExpeditionHelper = {
         },
         isDrumEquipped: function(ship) {
             var shipInst = ship.inst;
+            // TODO: misleading code
             for (var slot in [0,1,2,3]) {
                 gear_id = shipInst.api_slot[slot];
                 thisItem = app.Gears.get(gear_id);
