@@ -19,11 +19,8 @@ Uses KC3Quest objects to play around with
 		Get a specific quest object in the list using its ID
 		------------------------------------------*/
 		get :function( questId ){
-			try {
-				// Return requested quest object of that ID
-				return this.list["q"+questId];
-				
-			}catch(e){ console.error(e); }
+			// Return requested quest object of that ID, or a new Quest object, whichever works
+			return (this.list["q"+questId] || (this.list["q"+questId] = new KC3Quest()));
 		},
 		
 		/* DEFINE PAGE
@@ -35,6 +32,9 @@ Uses KC3Quest objects to play around with
 				// Get that quest object and re-define its data contents
 				this.get( questList[ctr].api_no ).defineRaw( questList[ctr] );
 			}
+			
+			console.log("OBJ", this.list);
+			console.log("STR", JSON.stringify(this.list));
 		},
 		
 		
@@ -42,15 +42,11 @@ Uses KC3Quest objects to play around with
 		Write current quest data to localStorage
 		------------------------------------------*/
 		save :function(){
-			try {
-				
-				localStorage.player_quests = JSON.stringify({
-					active: this.active,
-					open: this.open,
-					list: this.list
-				});
-				
-			}catch(e){ console.error(e); }
+			localStorage.player_quests = JSON.stringify({
+				active: this.active,
+				open: this.open,
+				list: this.list
+			});
 		},
 		
 		/* LOAD

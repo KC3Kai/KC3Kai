@@ -28,17 +28,15 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		If came from menu "Extract API Link", Open Play via API and close DMM source
 		------------------------------------------*/
 		"set_api_link" :function(request, sender, callback){
-			try {
-				// Set api link on internal storage
-				localStorage.absoluteswf = request.swfsrc;
-				
-				// If refreshing API link, close source tabs and re-open game frame
-				if( localStorage.extract_api === "true"){ // localStorage has problems with native boolean
-					localStorage.extract_api = "false";
-					window.open("../pages/game/api.html", "kc3kai_game");
-					chrome.tabs.remove([sender.tab.id], function(){});
-				}
-			}catch(e){ console.error(e); }
+			// Set api link on internal storage
+			localStorage.absoluteswf = request.swfsrc;
+			
+			// If refreshing API link, close source tabs and re-open game frame
+			if( localStorage.extract_api === "true"){ // localStorage has problems with native boolean
+				localStorage.extract_api = "false";
+				window.open("../pages/game/api.html", "kc3kai_game");
+				chrome.tabs.remove([sender.tab.id], function(){});
+			}
 		},
 		
 		
@@ -47,13 +45,11 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		Panel can request this background service to do notifications
 		------------------------------------------*/
 		"notify_desktop" :function(request, sender, callback){
-			try {
-				// Clear old notification first
-				chrome.notifications.clear("kc3kai_"+request.notifId, function(){
-					// Add notification
-					chrome.notifications.create("kc3kai_"+request.notifId, request.data);
-				});
-			}catch(e){ console.error(e); }
+			// Clear old notification first
+			chrome.notifications.clear("kc3kai_"+request.notifId, function(){
+				// Add notification
+				chrome.notifications.create("kc3kai_"+request.notifId, request.data);
+			});
 		},
 		
 		/* SCREENSHOT

@@ -30,55 +30,47 @@ Sample Usage:
 	Send message to all components, which will only execute on "target"
 	------------------------------------------*/
 	window.RMsg = function(target, action, params, callback){
-		try {
-			// Compile params with required fields and sender's own data
-			this.params = $.extend({
-				identifier: "kc3_"+target,
-				action: action
-			}, params);
-			
-			// Save callback for later
-			this.callback = (callback || function(){});
-			
-			return true; // for async callbacks
-		}catch(e){ console.error(e); }
+		// Compile params with required fields and sender's own data
+		this.params = $.extend({
+			identifier: "kc3_"+target,
+			action: action
+		}, params);
+		
+		// Save callback for later
+		this.callback = (callback || function(){});
+		
+		return true; // for async callbacks
 	};
 	
 	RMsg.prototype.execute = function(){
-		try {
-			// Execute required Chrome APIs
-			chrome.runtime.sendMessage(this.params, this.callback);
-			return true; // for async callbacks
-		}catch(e){ console.error(e); }
+		// Execute required Chrome APIs
+		chrome.runtime.sendMessage(this.params, this.callback);
+		return true; // for async callbacks
 	};
 	
 	/* TAB MESSAGE
 	Send message to a specific Chrome tab
 	------------------------------------------*/
 	window.TMsg = function(tabId, target, action, params, callback){
-		try {
-			// Remember tabId to send it to
-			this.tabId = tabId;
-			
-			// Compile params with required fields and sender's own data
-			this.params = $.extend({
-				identifier: "kc3_"+target,
-				action: action
-			}, params);
-			
-			// Save callback for later
-			this.callback = (callback || function(){});
-			
-			return true; // for async callbacks
-		}catch(e){ console.error(e); }
+		// Remember tabId to send it to
+		this.tabId = tabId;
+		
+		// Compile params with required fields and sender's own data
+		this.params = $.extend({
+			identifier: "kc3_"+target,
+			action: action
+		}, params);
+		
+		// Save callback for later
+		this.callback = (callback || function(){});
+		
+		return true; // for async callbacks
 	};
 	
 	TMsg.prototype.execute = function(){
-		try {
-			// Execute required Chrome APIs
-			chrome.tabs.sendMessage(this.tabId, this.params, this.callback);
-			return true; // for async callbacks
-		}catch(e){ console.error(e); }
+		// Execute required Chrome APIs
+		chrome.tabs.sendMessage(this.tabId, this.params, this.callback);
+		return true; // for async callbacks
 	};
 	
 })();
