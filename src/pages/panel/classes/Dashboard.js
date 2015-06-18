@@ -198,9 +198,10 @@ KC3.prototype.Dashboard  = {
 		$("#compassModal").fadeIn(300);
 		$("#compassModal .nodeLetter").text(String.fromCharCode(nodeData.api_no+96).toUpperCase());
 		
-		$("#compassModal .enemyFleet").html("");
+		$("#compassModal .enemy-label").html("");
+		$("#compassModal .enemy-formation").html("");
+		$("#compassModal .enemy-ships").html("");
 		$("#compassModal .itemGet").html("");
-		
 		
 		if (typeof nodeData.api_enemy != "undefined") {              // Check if enemy node
 			var mapArea = nodeData.api_maparea_id;
@@ -211,25 +212,21 @@ KC3.prototype.Dashboard  = {
 			
 			app.Logging.get_battle(mapArea, mapNo, battleNode, enemyId, function(battle){
 				if (battle) {
-					enemyText += "<img src=\"../../assets/img/formation/" + battle.data.api_formation[1] + ".jpg\"/><br>";
+					$("#compassModal .enemy-formation").html("<img src=\"../../assets/img/formation/" + battle.data.api_formation[1] + ".jpg\"/>");
 					for (var i = 1; i <= 6; i++) {
 						if (battle.data.api_ship_ke[i] > -1) {
-							enemyText += "<img class=\"enemy-img\" src=\"../../assets/img/abyssal/" + battle.data.api_ship_ke[i] + ".png\" alt=\"" + battle.data.api_ship_ke[i] + "\"/>";
+							enemyUrl = app.Assets.abyssIcon(battle.data.api_ship_ke[i], "");
+							enemyText += "<img class=\"enemy-img\" src=\"" + enemyUrl + "\" alt=\"" + battle.data.api_ship_ke[i] + "\"/>";
 						}
 						if (i==3) {
 							enemyText += "<br>";
 						}
 					}
 				} else {
-					for (var i = 1; i <= 6; i++) {
-						enemyText += "<img class=\"enemy-img\" src=\"../../assets/img/abyssal/Unknown.png\" alt=\"Unknown\"/>";
-						if (i==3) {
-							enemyText += "<br>";
-						}
-					}
+					enemyText = "Unknown Enemy";
 				}
-				$("#compassModal .enemyFleet").html("Enemy #" + nodeData.api_enemy.api_enemy_id + "<br>" + enemyText);
-				//$("#compassModal .enemyFleet").html(enemyText);
+				//$("#compassModal .enemy-label").html("Enemy #" + nodeData.api_enemy.api_enemy_id);
+				$("#compassModal .enemy-ships").html(enemyText);
 			});
 			
 		} else if (typeof nodeData.api_itemget != "undefined") {     // Check if resource node
@@ -272,7 +269,7 @@ KC3.prototype.Dashboard  = {
 			$("#compassModal .itemGet").html("<img src=\""+iconFile+"\" /> -"+nodeData.api_happening.api_count);
 			
 		} else {
-			$("#compassModal .enemyFleet").html("Battle Avoided");
+			$("#compassModal .enemy-label").html("Battle Avoided");
 		}
 	},
 	

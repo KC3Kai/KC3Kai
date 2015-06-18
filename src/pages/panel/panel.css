@@ -286,6 +286,19 @@ html,body {
 	font-size:14px;
 	text-align:center;
 }
+
+#compassModal .enemy-formation img {
+	margin: 20px 20px 20px 20px;
+}
+
+#compassModal .enemyFleet .enemy-img {
+	width:35px;
+	height:35px;
+	border-radius:35px;
+	border:2px solid #aaa;
+	margin: 5px 5px 5px 5px;
+}
+
 #compassModal .itemGet {
 	width:240px;
 	height:30px;
@@ -293,10 +306,6 @@ html,body {
 	font-size:14px;
 	text-align:center;
 	margin-top:-40px;
-}
-#compassModal .enemyFleet .enemy-img {
-	width:80px;
-	height:20px;
 }
 
 /* PANEL
