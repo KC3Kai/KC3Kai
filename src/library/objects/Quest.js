@@ -30,6 +30,9 @@ Mainly used by QuestManager to store quest information
 		this.id = data.api_no;
 		this.status = data.api_state;
 		this.attachMeta();
+		
+		// Attach temporary raw data for quick reference
+		this.raw = function(){ return data; };
 	};
 	
 	/* ATTACH META

@@ -42,11 +42,8 @@ Uses KC3Quest objects to play around with
 		Write current quest data to localStorage
 		------------------------------------------*/
 		save :function(){
-			localStorage.player_quests = JSON.stringify({
-				active: this.active,
-				open: this.open,
-				list: this.list
-			});
+			// Store only the list. The actives and opens will be redefined on load()
+			localStorage.player_quests = JSON.stringify(this.list);
 		},
 		
 		/* LOAD
@@ -54,17 +51,30 @@ Uses KC3Quest objects to play around with
 		------------------------------------------*/
 		load :function(){
 			if(typeof localStorage.player_quests != "undefined"){
-				var quests = JSON.parse(localStorage.player_quests);
-				this.active = quests.active;
-				this.open = quests.open;
-				this.list = quests.list;
-				return true;
-			}else{
+				var tempQuests = JSON.parse(localStorage.player_quests);
+				var tempQuest;
+				
+				// Empty actives and opens since they will be re-added
 				this.active = [];
 				this.open = [];
-				this.list = {};
-				return false;
+				
+				for(var ctr in tempQuests){
+					tempQuest = tempQuests[ctr];
+					
+					// Add to actives or opens depeding on status
+					switch( tempQuest.status ){
+						case 1: this.open.push( tempQuest.id ); break;
+						case 2: this.active.push( tempQuest.id ); break;
+						case 3: this.active.push( tempQuest.id ); break;
+						default: break;
+					}
+					
+					// Add to manager's main list using Quest object
+					this.list["q"+tempQuest.id] = (new Quest()).define( tempQuests[ctr] );
+				}
+				return true;
 			}
+			return false;
 		}
 	};
 	
