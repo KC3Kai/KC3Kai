@@ -222,10 +222,10 @@ KC3.prototype.Dashboard  = {
 							enemyText += "<br>";
 						}
 					}
-                    $("#compassModal .enemy-ships").html(enemyText);
+					$("#compassModal .enemy-ships").html(enemyText);
 				} else {
 					//enemyText = "Unknown Enemy";
-                    $("#compassModal .enemy-label").html("Unknown Enemy");
+					$("#compassModal .enemy-label").html("Unknown Enemy");
 				}
 				//$("#compassModal .enemy-label").html("Enemy #" + nodeData.api_enemy.api_enemy_id);
 				
