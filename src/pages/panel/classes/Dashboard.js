@@ -222,11 +222,13 @@ KC3.prototype.Dashboard  = {
 							enemyText += "<br>";
 						}
 					}
+                    $("#compassModal .enemy-ships").html(enemyText);
 				} else {
-					enemyText = "Unknown Enemy";
+					//enemyText = "Unknown Enemy";
+                    $("#compassModal .enemy-label").html("Unknown Enemy");
 				}
 				//$("#compassModal .enemy-label").html("Enemy #" + nodeData.api_enemy.api_enemy_id);
-				$("#compassModal .enemy-ships").html(enemyText);
+				
 			});
 			
 		} else if (typeof nodeData.api_itemget != "undefined") {     // Check if resource node

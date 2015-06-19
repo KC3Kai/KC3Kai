@@ -287,6 +287,18 @@ html,body {
 	text-align:center;
 }
 
+#compassModal .enemyFleet table {
+	width: 100%;
+}
+
+#compassModal .enemyFleet td {
+	text-align:center;
+}
+
+#compassModal .enemy-ship {
+	text-align:center;
+}
+
 #compassModal .enemy-formation img {
 	margin: 20px 20px 20px 20px;
 }
