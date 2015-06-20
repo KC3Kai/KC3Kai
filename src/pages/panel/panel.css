@@ -231,6 +231,64 @@ html,body {
 	font-weight:bold;
 }
 
+/* Battle */
+#battleModal {
+	width:300px;
+	height:200px;
+	background-color: #ddffdd;
+	margin:-100px auto 0px -150px;
+	padding:10px;
+	border-radius:10px;
+}
+
+#battleModal .title {
+	width:280px;
+	height:25px;
+	line-height:25px;
+	font-size:16px;
+	font-weight:bold;
+	text-align:center;
+	color:#00f;
+	margin:0px 0px 10px 0px;
+}
+
+#battleModal .content {
+	width:280px;
+	height:165px;
+	margin:0px 0px 2px 0px;
+}
+
+#battleModal .battle-info {
+	width:100%;
+	text-align:center;
+}
+
+#battleModal .battle-info table.battle-status{
+	width: 240px;
+	margin-left: 20px;
+	text-align:left;
+}
+
+#battleModal .battle-info .battle-value{
+	width:30px;
+	height:21px;
+	line-height:21px;
+	font-weight:bold;
+}
+
+#battleModal .battle-info .good {
+	color:#009900;
+}
+
+#battleModal .battle-info .bad {
+	color:#f33;
+}
+
+#battleModal .plane-status img {
+	width:15px;
+	height:15px;
+}
+
 /* Compass */
 #compassModal {
 	width:300px;
@@ -284,6 +342,18 @@ html,body {
 	height:60px;
 	line-height:20px;
 	font-size:14px;
+	text-align:center;
+}
+
+#compassModal .enemyFleet table {
+	width: 100%;
+}
+
+#compassModal .enemyFleet td {
+	text-align:center;
+}
+
+#compassModal .enemy-ship {
 	text-align:center;
 }
 

@@ -198,7 +198,11 @@ var TabSortie = {
 		if( airbattle[1] != "" ){ $(".battle_air", battleBox).addClass( airbattle[1] ); }
 		
 		// Engagement
-		$(".battle_engage", battleBox).text( app.Meta.engagement( battleData.data.api_formation[2] ) );
+		var engagement = app.Meta.engagement( battleData.data.api_formation[2] );
+		$(".battle_engage", battleBox).text( engagement[0] );
+		if ( engagement[1] != "") {
+			$(".battle_engage", battleBox).addClass( engagement[1] );
+		}
 		
 		// Support Expedition
 		if( battleData.data.api_support_flag > 0 ){

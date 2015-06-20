@@ -46,6 +46,12 @@ KC3.prototype.Dashboard  = {
 			$("#modals").fadeOut(500);
 		});
 		
+		// Battle modal close
+		$("#battleModal").on("click", function(){
+			$(this).fadeOut(500);
+			$("#modals").fadeOut(500);
+		});
+		
 		// Choose fleets
 		$(".fleet-button").on("click", function(){
 			$(".fleet-button").removeClass("active");
@@ -190,6 +196,53 @@ KC3.prototype.Dashboard  = {
 		}
 	},
 	
+	showBattleModal : function(battleData) {
+		this.checkModals();
+		$("#modals").fadeIn(300);
+		$("#battleModal").fadeIn(300);
+		
+		// Show detection
+		var detection = app.Meta.detection(battleData.api_search[0]);
+		$("#battleModal #detect").html( "&nbsp;" + detection[0] );
+		if ( detection[1] != "" ) { 
+			$("#battleModal #detect").addClass( detection[1] ); 
+		}
+		
+		// Show Air Battle result
+		var airbattle = app.Meta.airbattle(battleData.api_kouku.api_stage1.api_disp_seiku);
+		$("#battleModal #air-battle").html( "&nbsp;" + airbattle[2] );
+		if ( airbattle[1] != "" ) { 
+			$("#battleModal #air-battle").addClass( airbattle[1] ); 
+		}
+		
+		// Engagement
+		var engagement = app.Meta.engagement( battleData.api_formation[2] );
+		$("#battleModal #engage").html( "&nbsp;" + engagement[2] );
+		if ( engagement[1] != "" ) { 
+			$("#battleModal #engage").addClass( engagement[1] ); 
+		}
+		
+		var allyPlaneBefore = battleData.api_kouku.api_stage1.api_f_count;
+		var allyPlaneAfter = allyPlaneBefore - battleData.api_kouku.api_stage1.api_f_lostcount;
+		$("#battleModal #ally-fighters").html("<img src=\"../../assets/img/items/6.png\" alt=\"Fighters\">" + allyPlaneBefore + " <img src=\"../../assets/img/ui/arrow.png\" alt=\"=>\"> " + allyPlaneAfter);
+		
+		var enemyPlaneBefore = battleData.api_kouku.api_stage1.api_e_count;
+		var enemyPlaneAfter = enemyPlaneBefore - battleData.api_kouku.api_stage1.api_e_lostcount;
+		$("#battleModal #enemy-fighters").html("<img src=\"../../assets/img/items/6.png\" alt=\"Fighters\">" + enemyPlaneBefore + " <img src=\"../../assets/img/ui/arrow.png\" alt=\"=>\"> " + enemyPlaneAfter);
+		
+		
+		
+		if (typeof battleData.api_kouku.api_stage2 != "undefined") {
+			allyPlaneBefore = battleData.api_kouku.api_stage2.api_f_count;
+			allyPlaneAfter = allyPlaneBefore - battleData.api_kouku.api_stage2.api_f_lostcount;
+			$("#battleModal #ally-bombers").html("<img src=\"../../assets/img/items/7.png\" alt=\"Bombers\">" + allyPlaneBefore + " <img src=\"../../assets/img/ui/arrow.png\" alt=\"=>\"> " + allyPlaneAfter);
+			
+			enemyPlaneBefore = battleData.api_kouku.api_stage2.api_e_count;
+			enemyPlaneAfter = enemyPlaneBefore - battleData.api_kouku.api_stage2.api_e_lostcount;
+			$("#battleModal #enemy-bombers").html("<img src=\"../../assets/img/items/7.png\" alt=\"Bombers\">" + enemyPlaneBefore + " <img src=\"../../assets/img/ui/arrow.png\" alt=\"=>\"> " + enemyPlaneAfter);
+		}
+	},
+	
 	/* Show Compass Results
 	-------------------------------------------------------*/
 	showCompass :function(nodeData){
@@ -222,11 +275,13 @@ KC3.prototype.Dashboard  = {
 							enemyText += "<br>";
 						}
 					}
+					$("#compassModal .enemy-ships").html(enemyText);
 				} else {
-					enemyText = "Unknown Enemy";
+					//enemyText = "Unknown Enemy";
+					$("#compassModal .enemy-label").html("Unknown Enemy");
 				}
 				//$("#compassModal .enemy-label").html("Enemy #" + nodeData.api_enemy.api_enemy_id);
-				$("#compassModal .enemy-ships").html(enemyText);
+				
 			});
 			
 		} else if (typeof nodeData.api_itemget != "undefined") {     // Check if resource node

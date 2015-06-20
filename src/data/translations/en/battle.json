@@ -10,19 +10,19 @@
 	],
 	
 	"airbattle" : [
-		["AP", ""],
-		["AS+", "good"],
-		["AS", "good"],
-		["AI", ""],
-		["AD", "bad"]
+		["AP", "", "Air Parity"],
+		["AS+", "good", "Air Supremacy"],
+		["AS", "good", "Air Superiority"],
+		["AI", "", "Air Incapability"],
+		["AD", "bad", "Air Denial"]
 	],
 	
 	"engagement" : [
-		"",
-		"Prll",
-		"HdOn",
-		"Gr-T",
-		"Rd-T"
+		["", "", ""],
+		["Prll", "", "Parallel"],
+		["HdOn", "", "Head-on"],
+		["Gr-T", "good", "Crossing the T"],
+		["Rd-T", "bad", "Crossing the T"]
 	]
 	
 }
