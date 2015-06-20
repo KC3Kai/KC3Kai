@@ -201,6 +201,9 @@ KC3.prototype.Dashboard  = {
 		$("#modals").fadeIn(300);
 		$("#battleModal").fadeIn(300);
 		
+		$("#battleModal .battle-value").removeClass("good");
+		$("#battleModal .battle-value").removeClass("bad");
+		
 		// Show detection
 		var detection = app.Meta.detection(battleData.api_search[0]);
 		$("#battleModal #detect").html( "&nbsp;" + detection[0] );
