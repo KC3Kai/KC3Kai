@@ -450,6 +450,7 @@ KC3.prototype.Reactor  = {
 			response.api_data,
 			app.Util.getUTC(headers)
 		);
+		app.Dashboard.showBattleModal(response.api_data);
 	},
 	
 	/* Air Battle
@@ -459,6 +460,7 @@ KC3.prototype.Reactor  = {
 			response.api_data,
 			app.Util.getUTC(headers)
 		);
+		app.Dashboard.showBattleModal(response.api_data);
 	},
 	
 	/* 
@@ -468,6 +470,7 @@ KC3.prototype.Reactor  = {
 			response.api_data,
 			app.Util.getUTC(headers)
 		);
+		app.Dashboard.showBattleModal(response.api_data);
 	},
 	
 	/* 
@@ -572,7 +575,7 @@ KC3.prototype.Reactor  = {
 	/* PVP Start
 	-------------------------------------------------------*/
 	"api_req_practice/battle":function(params, response, headers){
-		
+		app.Dashboard.showBattleModal(response.api_data);
 	},
 	
 	/* PVP Result
