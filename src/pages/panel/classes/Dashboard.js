@@ -243,6 +243,9 @@ KC3.prototype.Dashboard  = {
 			enemyPlaneBefore = battleData.api_kouku.api_stage2.api_e_count;
 			enemyPlaneAfter = enemyPlaneBefore - battleData.api_kouku.api_stage2.api_e_lostcount;
 			$("#battleModal #enemy-bombers").html("<img src=\"../../assets/img/items/7.png\" alt=\"Bombers\">" + enemyPlaneBefore + " <img src=\"../../assets/img/ui/arrow.png\" alt=\"=>\"> " + enemyPlaneAfter);
+		} else {
+			$("#battleModal #ally-bombers").html("");
+			$("#battleModal #enemy-bombers").html("");
 		}
 	},
 	
