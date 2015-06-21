@@ -24,6 +24,7 @@ To be dynamically used on the settings page
 			.on("change", function(){
 				ConfigManager[ self.config ] = $(this).prop("checked");
 				ConfigManager.save();
+				$(this).parent().siblings(".note").stop(true, true).show().fadeOut(2000);
 			})
 		);
 	};
@@ -38,6 +39,7 @@ To be dynamically used on the settings page
 			.on("change", function(){
 				ConfigManager[ self.config ] = $(this).val();
 				ConfigManager.save();
+				$(this).parent().siblings(".note").stop(true, true).show().fadeOut(2000);
 			})
 		);
 		$(".options", this.element).append( options.label );
@@ -55,6 +57,7 @@ To be dynamically used on the settings page
 			.on("change", function(){
 				ConfigManager[ self.config ] = $(this).val();
 				ConfigManager.save();
+				$(this).parent().siblings(".note").stop(true, true).show().fadeOut(2000);
 			})
 		);
 		$(".options", this.element).append( options.label );
@@ -77,6 +80,7 @@ To be dynamically used on the settings page
 					$(this).addClass("active");
 					ConfigManager[ self.config ] = $(this).data("value");
 					ConfigManager.save();
+					$(this).parent().siblings(".note").stop(true, true).show().fadeOut(2000);
 				})
 			);
 		}
