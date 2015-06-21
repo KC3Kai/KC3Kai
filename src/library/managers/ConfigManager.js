@@ -40,19 +40,6 @@ Retreives when needed to apply on components
 			};
 		},
 		
-		// Interface values to be shown on settings page
-		meta : function(){
-			return [
-				{
-					category: "Screen",
-					name: "Quest Translations and Tracking",
-					type: "check",
-					options: {},
-					help: ""
-				},
-			];
-		},
-		
 		// Reset to default values
 		clear : function(){
 			$.extend(this, this.defaults());
@@ -66,6 +53,7 @@ Retreives when needed to apply on components
 		
 		// Save current config onto localStorage
 		save : function(){
+			// console.log(this);
 			localStorage.config = JSON.stringify(this);
 		},
 		

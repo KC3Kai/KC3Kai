@@ -1,6 +1,7 @@
 (function(){
 	"use strict";
 	
+	// Document ready
 	$(document).on("ready", function(){
 		// Load previously stored configs
 		ConfigManager.load();
@@ -14,10 +15,17 @@
 			$("<div>").appendTo("#wrapper .developers").addClass("clear");
 		});
 		
+		var sectionBox;
+		
 		// Add configurable settings
 		$.getJSON("../../data/translations/en/settings.json", function(response){
-			for(var ctr in response){
-				addSettings( response[ctr] );
+			for(var sctr in response){
+				sectionBox = $("#factory .section").clone().appendTo("#wrapper .settings");
+				$(".title", sectionBox).text( response[sctr].section );
+				$("a", sectionBox).attr("href", response[sctr].help );
+				for(var cctr in response[sctr].contents){
+					new SettingsBox( response[sctr].contents[cctr] );
+				}
 			}
 		});
 		
@@ -36,19 +44,6 @@
 			$("a", linkBox).attr("href", info.links[code] );
 			$("img", linkBox).attr("src", "../../assets/img/social/"+code+".png");
 			$(".devLinks", devBox).append(linkBox);
-		}
-	}
-	
-	// Show one row of the settings
-	function addSettings( info ){
-		var settingBox = $("#factory .settingBox").clone().appendTo("#wrapper .settings");
-		settingBox.data("config", info.id);
-		$(".category", settingBox).text( info.category );
-		$(".title", settingBox).text( info.name );
-		if(info.help != ""){
-			$(".help", settingBox).attr("href", info.help );
-		}else{
-			$(".help", settingBox).hide();
 		}
 	}
 	

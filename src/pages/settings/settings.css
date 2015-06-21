@@ -185,53 +185,139 @@ body {
 .settings {
 	width:780px;
 }
-.settingBox {
+/* Section */
+.section {
 	width:780px;
+	height:24px;
+	padding:0px 0px 0px 10px;
+	margin:20px 0px 10px 0px;
+}
+.section .title {
+	height:24px;
+	float:left;
+	font-size:20px;
+	/*font-weight:bold;*/
+	line-height:24px;
+	margin:0px 10px 0px 0px;
+	color:#0099FF;
+}
+.section a {
+	height:24px;
+	float:right;
+	margin:0px 0px 0px 0px;
+	text-decoration:none;
+}
+.section .icon {
+	width:16px;
+	height:16px;
+	line-height:16px;
+	float:left;
+	border-radius:10px;
+	margin:4px 5px 0px 0px;
+	background:#555;
+	color:#ccc;
+	font-size:12px;
+	font-weight:bold;
+	text-align:center;
+	text-decoration:none;
+}
+.section .note {
+	width:100px;
+	height:24px;
+	font-size:12px;
+	line-height:24px;
+	/*background:#ccf;*/
+}
+/* Settings Boxes */
+.settingBox {
+	width:750px;
 	height:40px;
-	background:#FFE7CE;
+	/*background:#FFE7CE;*/
+	background:#f6f6f6;
 	border-radius:8px 20px 20px 8px;
-	margin:0px 0px 5px 0px;
+	margin:0px 0px 5px 20px;
 	overflow:hidden;
 }
-.settingBox .category {
-	width:70px;
-	height:40px;
-	line-height:40px;
-	float:left;
-	margin:0px 10px 0px 0px;
-	font-size:12px;
-	text-align:center;
-	background:#dde;
-	border-right:1px solid #bbe;
-	color:#88c;
-}
 .settingBox .title {
-	width:260px;
+	width:200px;
 	height:40px;
 	line-height:40px;
 	float:left;
 	font-size:14px;
 	font-weight:bold;
-	/*background:#fcc;*/
+	margin:0px 0px 0px 15px;
 }
 .settingBox .options {
-	width:400px;
+	width:450px;
 	height:40px;
 	float:left;
-	line-height:40px;
 	margin:0px 5px 0px 0px;
-	/*background:#cfc;*/
 }
-.settingBox .help {
-	width:30px;
+.settingBox .note {
+	width:70px;
+	height:40px;
+	line-height:40px;
+	float:left;
+	text-align:center;
+	font-size:16px;
+	font-weight:bold;
+	/*background:#eee;*/
+}
+/* Settings Options */
+.settingBox .options .checkbox {
+	width:20px;
+	height:20px;
+	margin:10px 0px 0px 0px;
+}
+.settingBox .options .small_text {
+	width:60px;
+	height:20px;
+	line-height:20px;
+	text-align:center;
+	font-size:16px;
+	font-weight:bold;
+	margin:10px 5px 0px 0px;
+	border:0px none;
+	background:transparent;
+}
+.settingBox .options .small_text:hover {
+	background:#ffc;
+}
+.settingBox .options .small_text:focus {
+	border:1px inset;
+	background:#ffc;
+	padding:0px 2px;
+}
+.settingBox .options .long_text {
+	width:440px;
+	height:22px;
+	line-height:22px;
+	font-size:12px;
+	margin:9px 5px 0px 0px;
+	border:0px none;
+	background:transparent;
+}
+.settingBox .options .long_text:hover {
+	background:#ffc;
+}
+.settingBox .options .long_text:focus {
+	border:1px inset;
+	background:#ffc;
+	padding:0px 2px;
+}
+.settingBox .options .radioBox {
 	height:30px;
 	line-height:30px;
 	float:left;
-	border-radius:15px;
-	margin:5px 0px 0px 0px;
-	background:#555;
-	color:#ffcc00;
-	font-size:20px;
-	text-align:center;
-	text-decoration:none;
+	background:#fff;
+	padding:0px 10px;
+	margin:5px 5px 0px 0px;
+	border-radius:7px;
+	font-weight:normal;
+}
+.settingBox .options .radioBox input {
+	width:16px;
+	height:16px;
+	float:left;
+	margin:7px 5px 0px 0px;
 }
