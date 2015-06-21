@@ -1,5 +1,35 @@
 [
 	{
+		"section": "Global",
+		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Global",
+		"contents" : [
+			{
+				"id" : "language",
+				"name" : "Language",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "en", "English" ],
+						[ "jp", "Japanese" ]
+					]
+				}
+			},
+			{
+				"id" : "elos_mode",
+				"name" : "Effective LoS Formula",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "1", "Sum" ],
+						[ "2", "Spring 2014" ],
+						[ "3", "Fall 2014" ],
+						[ "4", "Latest" ]
+					]
+				}
+			}
+		]
+	},
+	{
 		"section": "Game Screen",
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Screen",
 		"contents" : [
@@ -32,6 +62,29 @@
 				"name" : "Background Picture",
 				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
+			},
+			{
+				"id" : "ss_mode",
+				"name" : "Screenshot Mode",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "0", "Download" ],
+						[ "1", "Imgur" ],
+						[ "2", "New Tab" ]
+					]
+				}
+			},
+			{
+				"id" : "ss_type",
+				"name" : "Screenshot Filetype",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "JPG", "JPG" ],
+						[ "PNG", "PNG" ]
+					]
+				}
 			}
 		]
 	},
@@ -128,6 +181,18 @@
 				"name" : "HP Prediction",
 				"type" : "check",
 				"options" : {  }
+			}
+		]
+	},
+	{
+		"section": "Others",
+		"help" : "",
+		"contents" : [
+			{
+				"id" : "rsc_interval",
+				"name" : "Resource Interval",
+				"type" : "small_text",
+				"options" : { "label" : "seconds" }
 			}
 		]
 	}

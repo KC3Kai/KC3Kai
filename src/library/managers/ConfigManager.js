@@ -13,30 +13,35 @@ Retreives when needed to apply on components
 		// Default values. As a fucntion to not include on JSON string
 		defaults : function(){
 			return {
-				version 			: 5,
-				timerAlert 			: 1,
+				language			: "en",
+				elos_mode 			: 3,
+				
+				tl_overlay 			: false,
+				askExit 			: false,
+				size 				: 100,
 				gambox_margin 		: 0,
 				background 			: "#def",
-				background_panel 	: "#def",
 				background_align_h 	: "left",
 				background_align_v 	: "top",
-				tl_overlay 			: false,
-				size 				: 100,
-				time_dev 			: 59,
-				rsc_interval 		: 3600,
-				reveal_names 		: true,
-				elos_mode 			: 3,
-				alert_volume 		: 60,
-				desktop_notif 		: true,
 				ss_mode 			: 0,
 				ss_type 			: 'JPG',
-				customsound 		: "",
-				showCraft 			: true,
-				showCompass 		: false,
-				predictBattle 		: false,
+				
+				background_panel 	: "#def",
 				panelAlpha 			: 100,
-				askExit 			: 1,
-				language			: "en"
+				reveal_names 		: true,
+				
+				time_dev 			: 59,
+				timerAlert 			: 1,
+				customsound 		: "",
+				alert_volume 		: 60,
+				desktop_notif 		: true,
+				
+				showCraft 			: true,
+				showCompass 		: true,
+				showBattle 			: true,
+				predictBattle 		: false,
+				
+				rsc_interval 		: 3600
 			};
 		},
 		

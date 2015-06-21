@@ -62,20 +62,23 @@ To be dynamically used on the settings page
 	
 	SettingsBox.prototype.radio = function( options ){
 		var self = this;
-		var currentRadio, choiceId;
+		var choiceClass = "choices_" + this.config;
 		for(var ctr in options.choices){
-			currentRadio = $("#factory .radioBox").clone();
-			choiceId = "choice_"+this.config+"_"+options.choices[ctr][0];
-			
-			$(currentRadio).attr("for", choiceId);
-			
-			$("input", currentRadio).attr("id", choiceId);
-			$("input", currentRadio).attr("name", "choices_"+this.config);
-			$("input", currentRadio).attr("value", options.choices[ctr][0]);
-			
-			$("span", currentRadio).text( options.choices[ctr][1] );
-			
-			$(".options", this.element).append(currentRadio);
+			$(".options", this.element).append(
+				$("#factory .radioBox")
+				.clone()
+				.addClass( choiceClass )
+				.addClass( (options.choices[ctr][0]==ConfigManager[ self.config ])?"active":"" )
+				.data("class", choiceClass )
+				.data("value", options.choices[ctr][0] )
+				.text( options.choices[ctr][1] )
+				.on("click", function(){
+					$("."+$(this).data("class")).removeClass("active");
+					$(this).addClass("active");
+					ConfigManager[ self.config ] = $(this).data("value");
+					ConfigManager.save();
+				})
+			);
 		}
 	};
 	

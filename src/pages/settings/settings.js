@@ -20,9 +20,18 @@
 		// Add configurable settings
 		$.getJSON("../../data/translations/en/settings.json", function(response){
 			for(var sctr in response){
+				// Add section header
 				sectionBox = $("#factory .section").clone().appendTo("#wrapper .settings");
 				$(".title", sectionBox).text( response[sctr].section );
-				$("a", sectionBox).attr("href", response[sctr].help );
+				
+				// Learn more button
+				if(response[sctr].help!=""){
+					$("a", sectionBox).attr("href", response[sctr].help );
+				}else{
+					$("a", sectionBox).hide();
+				}
+				
+				// Add settings boxes under this section
 				for(var cctr in response[sctr].contents){
 					new SettingsBox( response[sctr].contents[cctr] );
 				}

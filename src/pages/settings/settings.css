@@ -83,6 +83,7 @@ body {
 	height:64px;
 	float:left;
 	background:#eee;
+	display:none;
 }
 
 /* DEVELOPERS
@@ -307,17 +308,18 @@ body {
 }
 .settingBox .options .radioBox {
 	height:30px;
-	line-height:30px;
+	line-height:28px;
 	float:left;
-	background:#fff;
-	padding:0px 10px;
-	margin:5px 5px 0px 0px;
+	padding:0px 15px;
+	margin:5px 10px 0px 0px;
 	border-radius:7px;
 	font-weight:normal;
+	background:#ffc;
+	border:1px solid #ccc;
+	color:#000;
 }
-.settingBox .options .radioBox input {
-	width:16px;
-	height:16px;
-	float:left;
-	margin:7px 5px 0px 0px;
+.settingBox .options .radioBox.active {
+	background:#7ad;
+	border:1px solid #369;
+	color:#fff;
 }
