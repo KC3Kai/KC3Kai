@@ -45,13 +45,9 @@ $(document).on("ready", function(){
 	// Activate Cookies
 	$("#cookies").on('click', function(){
 		chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-			chrome.tabs.sendMessage(tabs[0].id, {
-				game: "kancolle",
-				type: "content",
-				action: "activateCookies"
-			}, function(response) {
+			(new TMsg(tabs[0].id, "cookie", "", {}, function(response){
 				window.close();
-			});
+			})).execute();
 		});
 	});
 	
