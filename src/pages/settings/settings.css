@@ -3,348 +3,235 @@
 body {
 	background:#eee;
 }
-.wrapper {
+#wrapper {
 	width:800px;
 	margin:0px auto;
 	background:#fff;
 	padding:10px;
 }
-ul {
-	margin:0px;
-	padding:0px;
+#factory {
+	display:none;
 }
+
+/* ABOUT
+--------------------------*/
 .about {
-	width:300px;
-	float:left;
-	/*background:#ccc;*/
+	width:780px;
+	margin:0px 0px 15px 0px;
 }
-.extlink {
-	margin:-7px 0px 0px 2px;
-}
-.mini_avatar {
-	width:20px;
-	height:20px;
-}
-
-/* ABOUT: KC3
---------------------------*/
-.about_box {
-	width:300px;
-	margin:0px 0px 10px 0px;
-	/*background:#fcc;*/
-}
-.about_box .about_logo {
-	width:100px;
-	height:100px;
-	float:left;
-	/*background:#ccf;*/
-}
-.about_box .about_logo img {
-	width:100px;
-	height:100px;
-}
-.about_box .about_text {
-	width:200px;
-	height:100px;
-	float:left;
-	/*background:#ffc;*/
-	padding:15px 0px 0px 10px;
-}
-.about_box .about_text .about_title {
-	width:190px;
-	height:30px;
-	line-height:30px;
-	font-size:24px;
-	font-weight:bold;
-	/*background:#fcf;*/
-}
-.about_box .about_text .about_version {
-	width:190px;
-	height:20px;
-	line-height:20px;
-	font-size:14px;
-	margin:0px 0px 5px 0px;
-	/*background:#cff;*/
-}
-.about_box .about_text .about_home {
-	width:190px;
-	height:16px;
-	line-height:16px;
-	font-size:12px;
-	/*background:#cff;*/
-}
-.about_box .about_text .about_home img {
-	width:12px;
-	height:12px;
-}
-
-/* ABOUT: LINKS
---------------------------*/
-.about_links {
-	width:300px;
-	margin:0px 0px 10px 0px;
-	/*background:#fcc;*/
-	line-height:20px;
-	font-size:14px;
-}
-.about_link {
-	width:300px;
-	height:20px;
-	margin:0px 0px 5px 0px;
-	/*background:#cff;*/
-}
-.about_link .about_icon {
-	width:20px;
-	height:20px;
-	margin:0px 5px 0px 0px;
-	float:left;
-}
-.about_link .about_text {
-	width:270px;
-	height:20px;
-	line-height:20px;
-	float:left;
-}
-.github {
-	margin:0px 0px 10px 0px;
-}
-
-/* ABOUT: SECTIONS
---------------------------*/
-.about .section {
-	width:300px;
-	margin:0px 0px 10px 0px;
-	/*background:#fcc;*/
-}
-.about .section .title {
-	width:300px;
-	font-size:14px;
-	font-weight:bold;
-	margin:0px 0px 5px 0px;
-	color:#bbb;
-	/*background:#ccf;*/
-}
-.about .section .contents {
-	width:290px;
-	font-size:12px;
-	border-radius:10px;
-	padding:5px;
-	margin:0px 0px 0px 10px;
-	/*background:#cfc;*/
-}
-
-/* ABOUT: PEOPLE
---------------------------*/
-.user_pic {
-	width:50px;
-	height:50px;
-	margin:0px 10px 0px 0px;
-	float:left;
+.kc3 {
+	width:780px;
+	height:70px;
 	border-radius:8px;
-	overflow:hidden;
-	background:#ccc;
+	margin:0px 0px 3px 0px;
+	padding:3px 5px;
 }
-.user_pic img {
-	width:50px;
-	height:50px
+.kc3 .logo {
+	width:64px;
+	height:64px;
+	float:left;
+	margin:0px 10px 0px 0px;
 }
-.user_name {
-	width:200px;
+.kc3 .title {
+	width:100px;
+	height:64px;
+	float:left;
+	margin:0px 5px 0px 0px;
+}
+.kc3 .title .name {
+	width:100px;
+	height:22px;
+	line-height:22px;
+	font-size:22px;
+	font-weight:bold;
+	margin:15px 0px 3px 0px;
+}
+.kc3 .title .version {
+	width:100px;
+	height:13px;
+	line-height:13px;
+	font-size:13px;
+}
+.kc3 .links {
+	width:420px;
+	height:64px;
+	float:left;
+	margin:0px 10px 0px 0px;
+}
+.kc3 .links .link {
+	margin:20px 5px 0px 0px;
+	padding:3px 5px;
+	float:left;
+	line-height:16px;
+}
+.kc3 .links .link .icon {
+	width:16px;
+	height:16px;
+	float:left;
+	margin:0px 5px 0px 0px;
+}
+.kc3 .links .link .icon img {
+	width:16px;
+	height:16px;
+}
+.kc3 .links .link .text {
 	height:20px;
-	line-height:20px;
+	float:left;
+}
+.kc3 .update {
+	width:160px;
+	height:64px;
+	float:left;
+	background:#eee;
+}
+
+/* DEVELOPERS
+--------------------------*/
+.developers {
+	width:780px;
+}
+.devBox {
+	width:189px;
+	height:58px;
+	background:#def;
+	float:left;
+	margin:3px;
+	padding:4px;
+	border-radius:7px;
+}
+.devBox .devAvatar {
+	width:40px;
+	height:40px;
+	float:left;
+	margin:5px 8px 0px 3px;
+	border-radius:5px;
+	overflow:hidden;
+}
+.devBox .devAvatar img {
+	width:40px;
+	height:40px;
+}
+.devBox .devName {
+	width:130px;
 	float:left;
 	font-size:14px;
 	font-weight:bold;
+	line-height:16px;
 }
-.user_links {
-	width:200px;
-	height:30px;
-	line-height:30px;
+.devBox .devDesc {
+	width:130px;
 	float:left;
-	font-size:12px;
-	font-weight:bold;
+	font-size:11px;
+	line-height:13px;
+	color:#8ac;
 }
-.user_links a {
-	width:20px;
-	height:20px;
+.devBox .devLinks {
+	width:130px;
+	float:left;
+	list-style:none;
 	line-height:20px;
-	margin:5px 5px 0px 0px;
-	display:block;
-	float:left;
-}
-.user_links a img {
-	width:20px;
-	height:20px;
 	margin:0px;
 	padding:0px;
 }
-
-/* ABOUT: LIST
---------------------------*/
-.about .section ul {
-	padding:0px 0px 0px 20px;
+.devBox .devLinks .devLink {
+	float:left;
+	margin:0px 4px 0px 0px;
 }
-.about .section ul.small_list li {
-	margin:0px 0px 5px 0px;
-	padding:0px;
+.devBox .devLinks .devLink a {
+	
 }
-.about .section ul.big_list li {
-	margin:0px 0px 10px 0px;
-	padding:0px;
+.devBox .devLinks .devLink img {
+	width:16px; height:16px;
+}
+/* Help out box */
+.helpOut {
+	width:189px;
+	height:58px;
+	background:#def;
+	float:left;
+	margin:3px;
+	padding:4px;
+	border-radius:7px;
+}
+.helpOut .helpIcon {
+	width:40px;
+	height:40px;
+	float:left;
+	margin:5px 8px 0px 3px;
+	overflow:hidden;
+}
+.helpOut .helpIcon img {
+	width:40px;
+	height:40px;
+}
+.helpOut .helpTitle {
+	width:130px;
+	margin:3px 0px 2px 0px;
+	float:left;
+	font-size:14px;
+	font-weight:bold;
+	line-height:16px;
+}
+.helpOut .helpNote {
+	width:130px;
+	float:left;
+	font-size:11px;
+	line-height:13px;
+	color:#8ac;
 }
 
 /* SETTINGS
 --------------------------*/
 .settings {
-	width:470px;
-	float:right;
+	width:780px;
 }
-.settings .nextloadnote {
-	width:470px;
+.settingBox {
+	width:780px;
+	height:40px;
+	background:#FFE7CE;
+	border-radius:8px 20px 20px 8px;
+	margin:0px 0px 5px 0px;
+	overflow:hidden;
+}
+.settingBox .category {
+	width:70px;
+	height:40px;
+	line-height:40px;
+	float:left;
+	margin:0px 10px 0px 0px;
+	font-size:12px;
+	text-align:center;
+	background:#dde;
+	border-right:1px solid #bbe;
+	color:#88c;
+}
+.settingBox .title {
+	width:260px;
+	height:40px;
+	line-height:40px;
+	float:left;
+	font-size:14px;
+	font-weight:bold;
+	/*background:#fcc;*/
+}
+.settingBox .options {
+	width:400px;
+	height:40px;
+	float:left;
+	line-height:40px;
+	margin:0px 5px 0px 0px;
+	/*background:#cfc;*/
+}
+.settingBox .help {
+	width:30px;
 	height:30px;
 	line-height:30px;
-	margin:0px 0px 5px 0px;
+	float:left;
+	border-radius:15px;
+	margin:5px 0px 0px 0px;
+	background:#555;
+	color:#ffcc00;
+	font-size:20px;
 	text-align:center;
-}
-.settings .section {
-	width:470px;
-	background:#f3f3f3;
-	border-radius:10px;
-	padding:0px 0px 0px 0px;
-	overflow:hidden;
-	margin:0px 0px 10px 0px;
-	border:1px solid #ace;
-}
-.settings .section .title {
-	width:470px;
-	height:26px;
-	line-height:26px;
-	padding:0px 0px 0px 10px;
-	font-weight:bold;
-	margin:0px 0px 5px 0px;
-	background:#def;
-	border-bottom:1px solid #ace;
-}
-.settings .section .note {
-	width:470px;
-	padding:0px 5px;
-	font-size:12px;
-	margin:0px 0px 5px 0px;
-}
-.settings .section .contents {
-	font-size:12px;
-}
-
-/* SETTINGS: CHECK
---------------------------*/
-.content-check {
-	width:400px;
-	margin:0px 0px 10px 20px;
-	padding:0px;
-}
-.content-check .check-box {
-	width:20px;
-	height:20px;
-	line-height:20px;
-	margin:0px 5px 0px 5px;
-	text-align:center;
-	float:left;
-}
-.content-check .check-label {
-	width:370px;
-	height:20px;
-	line-height:20px;
-	float:left;
-}
-.content-check .option {
-	background:#e7e7e7;
-	margin:0px 0px 3px 0px;
-}
-.content-check .option:hover {
-	background:#ffc;
-}
-
-/* SETTINGS: RADIO
---------------------------*/
-.content-radio {
-	width:400px;
-	margin:0px 0px 10px 20px;
-	padding:0px;
-}
-.content-radio .radio-box {
-	width:20px;
-	height:20px;
-	line-height:20px;
-	margin:0px 5px 0px 5px;
-	text-align:center;
-	float:left;
-}
-.content-radio .radio-label {
-	width:370px;
-	height:20px;
-	line-height:20px;
-	float:left;
-}
-.content-radio .option {
-	background:#e7e7e7;
-	margin:0px 0px 3px 0px;
-}
-.content-radio .option:hover {
-	background:#ffc;
-}
-
-/* SETTINGS: TEXT
---------------------------*/
-.content-text {
-	width:400px;
-	margin:0px 0px 10px 20px;
-	padding:0px;
-}
-.content-text .option-ltext .text-box {
-	width:400px;
-	height:20px;
-	line-height:20px;
-	margin:0px 5px 0px 5px;
-	float:left;
-}
-.content-text .option-ltext .text-box input {
-	width:360px;
-	height:20px;
-	text-align:left;
-}
-.content-text .option-text .text-box {
-	width:40px;
-	height:20px;
-	line-height:20px;
-	margin:0px 5px 0px 5px;
-	float:left;
-}
-.content-text .option-text .text-box input {
-	width:40px;
-	height:20px;
-	text-align:left;
-}
-.content-text .option-text .text-label {
-	width:350px;
-	height:20px;
-	line-height:20px;
-	float:left;
-}
-.content-radio .option {
-	background:#e7e7e7;
-	margin:0px 0px 3px 0px;
-}
-.content-radio .option:hover {
-	background:#ffc;
-}
-
-/* SETTINGS: CUSTOM
---------------------------*/
-.content-custom {
-	width:450px;
-	margin:0px 0px 10px 10px;
-	background:#ccc;
-}
-.soundurl {
-	display:none;
+	text-decoration:none;
 }

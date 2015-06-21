@@ -1,0 +1,21 @@
+[
+	{
+		"id" : "tl_overlay",
+		"category" : "Screen",
+		"name" : "Quest Translations and Tracking",
+		"type" : "check",
+		"options" : {},
+		"label" : "",
+		"help" : ""
+	},
+	{
+		"id" : "time_dev",
+		"category" : "Alerts",
+		"name" : "Countdown Timer Allowance",
+		"type" : "small-text",
+		"options" : {
+			"label" : "seconds"
+		},
+		"help" : ""
+	}
+]
