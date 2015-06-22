@@ -53,7 +53,7 @@ Retreives when needed to apply on components
 		
 		// Load previously saved config
 		load : function(){
-			$.extend(this, this.defaults(), JSON.parse(localStorage.config || {}));
+			$.extend(this, this.defaults(), JSON.parse(localStorage.config || "{}"));
 		},
 		
 		// Save current config onto localStorage
