@@ -1,4 +1,12 @@
 {
-	"低速" : "Slow",
-	"高速" : "Fast"
+	"VERSION" : "Version",
+	"ABOUT_HOME" : "Home Page",
+	"ABOUT_SOURCE" : "Source",
+	"ABOUT_WIKI" : "Wiki & FAQ",
+	"ABOUT_REPORT" : "Report Bugs",
+	
+	"SPEED_FAST" : "Fast",
+	"SPEED_SLOW" : "Slow",
+	
+	"" : ""
 }

@@ -4,7 +4,7 @@
 	"short_name": "KC3改",
 	"description": "Kantai Collection Game Viewer and Tools",
 	"version": "9",
-	"devtools_page": "pages/devtools/devtools.html",
+	"devtools_page": "pages/devtools/init.html",
 	"options_page": "pages/settings/settings.html",
 	"icons": {
 		"16": "assets/img/logo/16.png",
