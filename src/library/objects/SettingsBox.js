@@ -74,7 +74,7 @@ To be dynamically used on the settings page
 				.addClass( (options.choices[ctr][0]==ConfigManager[ self.config ])?"active":"" )
 				.data("class", choiceClass )
 				.data("value", options.choices[ctr][0] )
-				.text( options.choices[ctr][1] )
+				.html( options.choices[ctr][1] )
 				.on("click", function(){
 					$("."+$(this).data("class")).removeClass("active");
 					$(this).addClass("active");

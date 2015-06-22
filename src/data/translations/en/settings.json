@@ -15,69 +15,74 @@
 				}
 			},
 			{
-				"id" : "elos_mode",
+				"id" : "elosFormula",
 				"name" : "Effective LoS Formula",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ "1", "Sum" ],
-						[ "2", "Spring 2014" ],
-						[ "3", "Fall 2014" ],
-						[ "4", "Latest" ]
+						[ 1, "Sum" ],
+						[ 2, "Old" ],
+						[ 3, "New" ]
 					]
 				}
+			},
+			{
+				"id" : "questTracking",
+				"name" : "Quest Tracking",
+				"type" : "check",
+				"options" : {}
 			}
 		]
 	},
 	{
-		"section": "Game Screen",
-		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Screen",
+		"section": "Game Information",
+		"help" : "",
 		"contents" : [
 			{
-				"id" : "tl_overlay",
-				"name" : "Quest Translations",
+				"id" : "info_face",
+				"name" : "Construction Faces",
 				"type" : "check",
 				"options" : {}
 			},
 			{
-				"id" : "askExit",
-				"name" : "Exit Confirmation",
+				"id" : "info_craft",
+				"name" : "Crafting Results",
 				"type" : "check",
 				"options" : {}
 			},
 			{
-				"id" : "size",
-				"name" : "Zoom Scale",
-				"type" : "small_text",
-				"options" : { "label" : "%" }
+				"id" : "info_compass",
+				"name" : "Compass and Enemy",
+				"type" : "check",
+				"options" : {}
 			},
 			{
-				"id" : "gambox_margin",
-				"name" : "Top Margin",
-				"type" : "small_text",
-				"options" : { "label" : "pixels" }
-			},
-			{
-				"id" : "background",
-				"name" : "Background Picture",
-				"type" : "long_text",
-				"options" : { "placeholder" : "http://" }
-			},
+				"id" : "info_battle",
+				"name" : "Battle Environment",
+				"type" : "check",
+				"options" : {}
+			}
+		]
+	},
+	{
+		"section": "Screenshot",
+		"help" : "",
+		"contents" : [
 			{
 				"id" : "ss_mode",
-				"name" : "Screenshot Mode",
+				"name" : "Output Mode",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ "0", "Download" ],
-						[ "1", "Imgur" ],
-						[ "2", "New Tab" ]
+						[ 0, "Download" ],
+						[ 1, "Imgur" ],
+						[ 2, "New Tab" ]
 					]
 				}
 			},
 			{
 				"id" : "ss_type",
-				"name" : "Screenshot Filetype",
+				"name" : "Filetype",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
@@ -89,110 +94,193 @@
 		]
 	},
 	{
-		"section": "Panel",
-		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Panel",
-		"contents" : [
-			{
-				"id" : "background_panel",
-				"name" : "Background Picture",
-				"type" : "long_text",
-				"options" : { "placeholder" : "http://" }
-			},
-			{
-				"id" : "panelAlpha",
-				"name" : "Interface Opacity",
-				"type" : "small_text",
-				"options" : { "label" : "%" }
-			},
-			{
-				"id" : "reveal_names",
-				"name" : "Reveal Construction",
-				"type" : "check",
-				"options" : {  }
-			}
-		]
-	},
-	{
 		"section": "Alerts",
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Alerts",
 		"contents" : [
 			{
-				"id" : "time_dev",
+				"id" : "alert_diff",
 				"name" : "Timer Allowance",
 				"type" : "small_text",
 				"options" : { "label" : "seconds" }
 			},
 			{
-				"id" : "timerAlert",
+				"id" : "alert_type",
 				"name" : "Sound Type",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ "0", "None" ],
-						[ "1", "DING!" ],
-						[ "5", "Custom" ]
+						[ 0, "None" ],
+						[ 1, "DING!" ],
+						[ 2, "Custom" ]
 					]
 				}
 			},
 			{
-				"id" : "customsound",
+				"id" : "alert_custom",
 				"name" : "Custom Sound URL",
 				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
 			},
 			{
 				"id" : "alert_volume",
-				"name" : "Alert Volume",
+				"name" : "Volume",
 				"type" : "small_text",
 				"options" : { "label" : "%" }
 			},
 			{
-				"id" : "desktop_notif",
-				"name" : "Desktop Notifications",
+				"id" : "alert_desktop",
+				"name" : "Desktop Notification",
 				"type" : "check",
-				"options" : {  }
+				"options" : {}
 			}
 		]
 	},
 	{
-		"section": "Information Popups",
-		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Infoboxes",
+		"section": "API Game Screen",
+		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Screen",
 		"contents" : [
 			{
-				"id" : "showCraft",
-				"name" : "Crafting Results",
+				"id" : "api_translation",
+				"name" : "Quest Translations",
 				"type" : "check",
-				"options" : {  }
+				"options" : {}
 			},
 			{
-				"id" : "showCompass",
-				"name" : "Compass and Enemy",
+				"id" : "api_askExit",
+				"name" : "Exit Confirmation",
 				"type" : "check",
-				"options" : {  }
+				"options" : {}
 			},
 			{
-				"id" : "showBattle",
-				"name" : "Battle Environment",
-				"type" : "check",
-				"options" : {  }
+				"id" : "api_margin",
+				"name" : "Top Margin",
+				"type" : "small_text",
+				"options" : { "label" : "pixels" }
 			},
 			{
-				"id" : "predictBattle",
-				"name" : "HP Prediction",
-				"type" : "check",
-				"options" : {  }
+				"id" : "api_bg_color",
+				"name" : "Background Color",
+				"type" : "long_text",
+				"options" : { "placeholder" : "See CSS background-color property" }
+			},
+			{
+				"id" : "api_bg_image",
+				"name" : "Background Image",
+				"type" : "long_text",
+				"options" : { "placeholder" : "http://" }
+			},
+			{
+				"id" : "api_bg_size",
+				"name" : "Background Size",
+				"type" : "long_text",
+				"options" : { "placeholder" : "See CSS background-size property" }
+			},
+			{
+				"id" : "api_bg_position",
+				"name" : "Background Position",
+				"type" : "long_text",
+				"options" : { "placeholder" : "See CSS background-position property" }
 			}
 		]
 	},
 	{
-		"section": "Others",
+		"section": "DMM Gameplay",
 		"help" : "",
 		"contents" : [
 			{
-				"id" : "rsc_interval",
-				"name" : "Resource Interval",
+				"id" : "dmm_customize",
+				"name" : "Apply Customizations",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "dmm_translation",
+				"name" : "Quest Translations",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "dmm_askExit",
+				"name" : "Exit Confirmation",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "dmm_margin",
+				"name" : "Top Margin",
 				"type" : "small_text",
-				"options" : { "label" : "seconds" }
+				"options" : { "label" : "pixels" }
+			},
+			{
+				"id" : "dmm_bg_color",
+				"name" : "Background Color",
+				"type" : "long_text",
+				"options" : { "placeholder" : "See CSS background-color property" }
+			},
+			{
+				"id" : "dmm_bg_image",
+				"name" : "Background Image",
+				"type" : "long_text",
+				"options" : { "placeholder" : "http://" }
+			},
+			{
+				"id" : "dmm_bg_size",
+				"name" : "Background Size",
+				"type" : "long_text",
+				"options" : { "placeholder" : "See CSS background-size property" }
+			},
+			{
+				"id" : "dmm_bg_position",
+				"name" : "Background Position",
+				"type" : "long_text",
+				"options" : { "placeholder" : "See CSS background-position property" }
+			}
+		]
+	},
+	{
+		"section": "Panel",
+		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Panel",
+		"contents" : [
+			{
+				"id" : "pan_theme",
+				"name" : "Theme",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "default", "Default" ],
+						[ "dark", "Dark" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_bg_color",
+				"name" : "Background Color",
+				"type" : "long_text",
+				"options" : { "placeholder" : "See CSS background-color property" }
+			},
+			{
+				"id" : "pan_bg_image",
+				"name" : "Background Image",
+				"type" : "long_text",
+				"options" : { "placeholder" : "http://" }
+			},
+			{
+				"id" : "pan_bg_size",
+				"name" : "Background Size",
+				"type" : "long_text",
+				"options" : { "placeholder" : "See CSS background-size property" }
+			},
+			{
+				"id" : "pan_bg_position",
+				"name" : "Background Position",
+				"type" : "long_text",
+				"options" : { "placeholder" : "See CSS background-position property" }
+			},
+			{
+				"id" : "pan_opacity",
+				"name" : "Interface Opacity",
+				"type" : "small_text",
+				"options" : { "label" : "%" }
 			}
 		]
 	}

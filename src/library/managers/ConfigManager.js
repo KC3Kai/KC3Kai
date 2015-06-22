@@ -13,35 +13,48 @@ Retreives when needed to apply on components
 		// Default values. As a fucntion to not include on JSON string
 		defaults : function(){
 			return {
+				version				: 6,
 				language			: "en",
-				elos_mode 			: 3,
+				elosFormula 		: 3,
+				questTracking 		: true,
 				
-				tl_overlay 			: false,
-				askExit 			: false,
-				size 				: 100,
-				gambox_margin 		: 0,
-				background 			: "#def",
-				background_align_h 	: "left",
-				background_align_v 	: "top",
+				info_face 			: true,
+				info_craft 			: true,
+				info_compass 		: true,
+				info_battle 		: true,
+				
 				ss_mode 			: 0,
 				ss_type 			: 'JPG',
 				
-				background_panel 	: "#def",
-				panelAlpha 			: 100,
-				reveal_names 		: true,
-				
-				time_dev 			: 59,
-				timerAlert 			: 1,
-				customsound 		: "",
+				alert_diff 			: 59,
+				alert_type 			: 1,
+				alert_custom 		: "",
 				alert_volume 		: 60,
-				desktop_notif 		: true,
+				alert_desktop 		: true,
 				
-				showCraft 			: true,
-				showCompass 		: true,
-				showBattle 			: true,
-				predictBattle 		: false,
+				api_translation		: true,
+				api_askExit			: true,
+				api_margin			: 0,
+				api_bg_color		: "#def",
+				api_bg_image		: "",
+				api_bg_size			: "cover",
+				api_bg_position		: "top center",
 				
-				rsc_interval 		: 3600
+				dmm_customize		: false,
+				dmm_translation		: true,
+				dmm_askExit			: false,
+				dmm_margin			: 0,
+				dmm_bg_color		: "#def",
+				dmm_bg_image		: "",
+				dmm_bg_size			: "cover",
+				dmm_bg_position		: "top center",
+				
+				pan_theme			: "default",
+				pan_bg_color		: "#def",
+				pan_bg_image		: "",
+				pan_bg_size			: "cover",
+				pan_bg_position		: "top center",
+				pan_opacity 		: 100
 			};
 		},
 		
@@ -53,7 +66,19 @@ Retreives when needed to apply on components
 		
 		// Load previously saved config
 		load : function(){
-			$.extend(this, this.defaults(), JSON.parse(localStorage.config || "{}"));
+			// Get old config or create dummy if none
+			var oldConfig = JSON.parse(localStorage.config || "{}");
+			
+			// Check if old config has versioning and if its lower version
+			if( !oldConfig.version || (oldConfig.version < this.defaults().version) ){
+				// Old config is an old version, clear it, set defaults, and save on storage
+				localStorage.removeItem("config");
+				$.extend(this, this.defaults());
+				this.save();
+			}else{
+				// Merge defaults, then old config values to ConfigManager
+				$.extend(this, this.defaults(), oldConfig);
+			}
 		},
 		
 		// Save current config onto localStorage
