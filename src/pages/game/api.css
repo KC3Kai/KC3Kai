@@ -1,5 +1,41 @@
+/* GLOBAL
+--------------------------*/
+body {
+	background-color:#def;
+}
+.box-wrap {
+	width:800px;
+	height:480px;
+	margin:0px auto;
+	overflow:hidden;
+	background:url(../../assets/img/client/base.jpg);
+}
 #factory {
 	display:none;
+}
+
+/* NOTES
+--------------------------*/
+.faq_title {
+	text-align:left;
+	font-weight:bold;
+	font-size:14px;
+	margin:0px 0px 5px 0px;
+}
+.faq_content {
+	margin:0px 0px 20px 0px;
+	font-size:12px;
+}
+.faq_content img {
+	width:18px;
+	height:18px;
+}
+.faq_content ul {
+	margin:10px 0px 10px 0px;
+	font-size:14px;
+}
+.faq_content ul li {
+	margin:0px 0px 5px 0px;
 }
 
 /* NO API LINK
