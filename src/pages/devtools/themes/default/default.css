@@ -1,0 +1,26 @@
+/* GLOBAL
+------------------------------*/
+#wait {
+	width:300px;
+}
+
+/* HORIZONTAL
+------------------------------*/
+#h {
+	width:500px;
+	height:450px;
+	background:#ccf;
+	margin:0px auto;
+	display:none;
+}
+
+
+/* VERTICAL
+------------------------------*/
+#v {
+	width:800px;
+	height:350px;
+	background:#fcc;
+	margin:0px auto;
+	display:none;
+}

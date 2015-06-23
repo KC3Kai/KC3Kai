@@ -9,7 +9,7 @@
 		// Check if theme exists
 		$.ajax({
 			type: "HEAD",
-			url: "themes/"+ConfigManager.pan_theme+"/main.html",
+			url: "themes/"+ConfigManager.pan_theme+"/"+ConfigManager.pan_theme+".html",
 			success: function(){
 				createPanel( ConfigManager.pan_theme );
 			},
@@ -22,7 +22,7 @@
 	
 	// Execute Chrome API to add panels to devtools
 	function createPanel( theme ){
-		chrome.devtools.panels.create("KC3改",
+		chrome.devtools.panels.create("KanColle", //"KC3改",
 			"../../assets/img/logo/16.png",
 			"pages/devtools/themes/"+theme+"/"+theme+".html",
 			function(panel){}

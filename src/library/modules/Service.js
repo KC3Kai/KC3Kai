@@ -25,7 +25,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		/* SET API LINK
 		From osapi content script, the API Link has been extracted
 		Save the link onto localStorage and disable extracing API further
-		If came from menu "Extract API Link", Open Play via API and close DMM source
+		If came from menu "Extract API Link", so open "Play via API" and close DMM source
 		------------------------------------------*/
 		"set_api_link" :function(request, sender, callback){
 			// Set api link on internal storage
@@ -38,7 +38,6 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				chrome.tabs.remove([sender.tab.id], function(){});
 			}
 		},
-		
 		
 		/* NOTIFY DESKTOP
 		Devtools do not have access to chrome.notifications API
@@ -56,12 +55,19 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		Ask the game container to take a screenshot
 		------------------------------------------*/
 		"screenshot" :function(request, sender, response){
-			(new TMsg(
-				request.tabId,
-				"gamescreen",
-				"screenshot",
-				{ playerIndex: request.playerIndex }
-			)).execute();
+			(new TMsg(request.tabId, "gamescreen", "screenshot", {
+				playerIndex: request.playerIndex
+			})).execute();
+		},
+		
+		/* ACTIVATE GAME
+		Request from devTools to activate game on its inspected window
+		DevTools does not have access to chrome.tabs API
+		Must go through here to be able to send runtime message to that specific window
+		We don't want global runtime message that will activate any game on any window
+		------------------------------------------*/
+		"activateGame" :function(request, sender, response){
+			(new TMsg(request.tabId, "gamescreen", "activateGame", {})).execute();
 		}
 		
 	};
@@ -70,7 +76,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	https://developer.chrome.com/extensions/messaging#simple
 	This script will wait for messages from other parts of the extension
 	and execute what they want if applicable
-	*/
+	------------------------------------------*/
 	chrome.runtime.onMessage.addListener(function(request, sender, callback){
 		// Check if message is intended for this script
 		if( (request.identifier || false) == "kc3_service"){
@@ -84,7 +90,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				return true; // dual-async response
 			}else{
 				// Unknown action
-				response({ success: false });
+				callback({ success: false });
 			}
 		
 		}
