@@ -10,15 +10,22 @@ Manages multiple instances of \library\modules\Dashboard.js
 	
 	window.KC3Panel = {
 		state: "waiting",
+		currentLayout: "horizontal",
 		horizontal: {},
 		vertical: {},
-		currentLayout: "horizontal",
+		gameStart: function(){},
+		
+		init :function( options ){
+			this.horizontal = options.horizontal;
+			this.vertical = options.vertical;
+			this.gameStart = options.gameStart;
+		},
 		
 		// Hide waiting message, and show the appropriate dashboard
 		activateDashboard :function(){
 			this.state = "running";
-			this.waitBox.hide();
 			this.detectOrientation();
+			this.gameStart();
 		},
 		
 		// Detect layout based on window width

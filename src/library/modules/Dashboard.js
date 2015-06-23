@@ -10,38 +10,41 @@ Use multiple instances for different layouts (horizontal vs vertical)
 	
 	// Default listeners if theme did not define it. Theme is expected to use default CSS selectors
 	var defaultListeners = {
-		catbomb : function( container ){
+		start : function(){
 			
 		},
-		hq : function( container ){
+		catbomb : function( container, data ){
 			
 		},
-		counts : function( container ){
+		hq : function( container, data ){
+			console.log("Default Listener [hq]", data);
+		},
+		counts : function( container, data ){
+			console.log("Default Listener [counts]", data);
+		},
+		timers : function( container, data ){
+			console.log("Default Listener [timers]", data);
+		},
+		quests : function( container, data ){
+			console.log("Default Listener [quests]", data);
+		},
+		fleet : function( container, data ){
+			console.log("Default Listener [fleet]", data);
+		},
+		compass : function( container, data ){
 			
 		},
-		timers : function( container ){
+		battleStart : function( container, data ){
 			
 		},
-		quests : function( container ){
-		
+		battleResult : function( container, data ){
+			
 		},
-		fleet : function( container ){
-		
+		equipmentCraft : function( container, data ){
+			
 		},
-		compass : function( container ){
-		
-		},
-		battleStart : function( container ){
-		
-		},
-		battleResult : function( container ){
-		
-		},
-		equipmentCraft : function( container ){
-		
-		},
-		shipCraft : function( container ){
-		
+		shipCraft : function( container, data ){
+			
 		},
 	};
 	
@@ -74,8 +77,9 @@ Use multiple instances for different layouts (horizontal vs vertical)
 	KC3Dashboard.prototype.show = function(){
 		this.domElement.show();
 		// Update interface values by triggering listeners, since it's not updated while hidden
-		for(var ctr in this.listeners){
-			this.listeners[ctr]();
+		var DataListeners = ["hq","counts","timers","quests","fleet"];
+		for(var ctr in DataListeners){
+			this.listeners[ DataListeners[ctr] ]( this.domElement, {} );
 		}
 	};
 	
@@ -89,8 +93,8 @@ Use multiple instances for different layouts (horizontal vs vertical)
 	/* TRIGGER
 	Execute one of the listeners
 	------------------------------------------*/
-	KC3Dashboard.prototype.trigger = function( listenerName ){
-		this.listeners[ listenerName ]();
+	KC3Dashboard.prototype.trigger = function( event ){
+		this.listeners[ event.name ]( this.domElement, event );
 	};
 	
 })();

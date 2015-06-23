@@ -2,12 +2,23 @@
 	"use strict";
 	
 	$(document).on("ready", function(){
-		
-		// Define horizontal dashboard and its listeners
-		KC3Panel.horizontal = new KC3Dashboard( $("#h") );
-		
-		// Define vertical dashboard and its listeners
-		KC3Panel.vertical = new KC3Dashboard( $("#v") );
+		// Initialize the panel
+		KC3Panel.init({
+			// Define horizontal dashboard and its listeners
+			horizontal: new KC3Dashboard( $("#h"), {
+				
+			}),
+			
+			// Define vertical dashboard and its listeners
+			vertical: new KC3Dashboard( $("#v"), {
+				
+			}),
+			
+			// Define additional game start sequence
+			gameStart: function(){
+				$("#wait").hide();
+			}
+		});
 		
 		// Detect initial orientation
 		KC3Panel.detectOrientation();
@@ -18,7 +29,8 @@
 		});
 		
 		// Listen to network and define callback for significant events
-		KCNetwork.listen(function( event ){
+		KC3Network.listen(function( event ){
+			console.log("event triggered", event);
 			// Trigger corresponding event on the current Dashboard
 			KC3Panel.layout().trigger( event );
 		});

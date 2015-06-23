@@ -62,12 +62,22 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		
 		/* ACTIVATE GAME
 		Request from devTools to activate game on its inspected window
-		DevTools does not have access to chrome.tabs API
+		DevTools does not have access to chrome.tabs API thus cannot send this message on its own
 		Must go through here to be able to send runtime message to that specific window
-		We don't want global runtime message that will activate any game on any window
+		We don't want global runtime message that will activate games on all windows
 		------------------------------------------*/
 		"activateGame" :function(request, sender, response){
 			(new TMsg(request.tabId, "gamescreen", "activateGame", {})).execute();
+		},
+		
+		/* CLEAR OVERLAYS
+		Request from devTools to clear overlays on its inspected window
+		DevTools does not have access to chrome.tabs API thus cannot send this message on its own
+		Must go through here to be able to send runtime message to that specific window
+		We don't want global runtime message that will clear overlays on all windows
+		------------------------------------------*/
+		"clearOverlays" :function(request, sender, response){
+			(new TMsg(request.tabId, "gamescreen", "clearOverlays", {})).execute();
 		}
 		
 	};
