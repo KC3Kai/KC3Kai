@@ -8,15 +8,56 @@ Listens to network history and triggers callback if game events happen
 	"use strict";
 	
 	window.KC3Network = {
-		trigger : function(){},
+		eventTypes : {
+			GameStart: [],
+			CatBomb: [],
+			HomeScreen: [],
+			HQ: [],
+			Consumables: [],
+			ShipSlots: [],
+			GearSlots: [],
+			Timers: [],
+			Quests: [],
+			Fleet: [],
+			SortieStart: [],
+			CompassResult: [],
+			BattleStart: [],
+			BattleNight: [],
+			BattleResult: [],
+			CraftGear: [],
+			CraftShip: [],
+			ClearedMap: [],
+		},
+		
+		/* ADD LISTENER
+		All callback to an event
+		------------------------------------------*/
+		addListener : function( eventName, callback ){
+			this.eventTypes[eventName].push(callback);
+		},
+		
+		/* ADD GLOBAL LISTENER
+		All callback to all events
+		------------------------------------------*/
+		addGlobalListener : function( callback ){
+			$.each(this.eventTypes, function( eventType, eventCallbacks ){
+				eventCallbacks.push( callback );
+			});
+		},
+		
+		/* TRIGGER
+		Execute subscribed callbacks to an event
+		------------------------------------------*/
+		trigger : function( eventName, data ){
+			$.each(this.eventTypes[eventName], function( index, callback ){
+				callback( eventName, data||{});
+			});
+		},
 		
 		/* LISTEN
 		Start listening and define callback
 		------------------------------------------*/
-		listen :function( definedCallback ){
-			// Assign defined callback
-			this.trigger = definedCallback;
-			
+		listen :function(){
 			// Call Chrome API to start listening
 			chrome.devtools.network.onRequestFinished.addListener(this.received);
 		},

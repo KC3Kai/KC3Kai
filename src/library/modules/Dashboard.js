@@ -10,42 +10,24 @@ Use multiple instances for different layouts (horizontal vs vertical)
 	
 	// Default listeners if theme did not define it. Theme is expected to use default CSS selectors
 	var defaultListeners = {
-		start : function(){
-			
-		},
-		catbomb : function( container, data ){
-			
-		},
-		hq : function( container, data ){
-			console.log("Default Listener [hq]", data);
-		},
-		counts : function( container, data ){
-			console.log("Default Listener [counts]", data);
-		},
-		timers : function( container, data ){
-			console.log("Default Listener [timers]", data);
-		},
-		quests : function( container, data ){
-			console.log("Default Listener [quests]", data);
-		},
-		fleet : function( container, data ){
-			console.log("Default Listener [fleet]", data);
-		},
-		compass : function( container, data ){
-			
-		},
-		battleStart : function( container, data ){
-			
-		},
-		battleResult : function( container, data ){
-			
-		},
-		equipmentCraft : function( container, data ){
-			
-		},
-		shipCraft : function( container, data ){
-			
-		},
+		GameStart: function(container, data){  },
+		CatBomb: function(container, data){  },
+		HomeScreen: function(container, data){  },
+		HQ: function(container, data){  },
+		Consumables: function(container, data){  },
+		ShipSlots: function(container, data){  },
+		GearSlots: function(container, data){  },
+		Timers: function(container, data){  },
+		Quests: function(container, data){  },
+		Fleet: function(container, data){  },
+		SortieStart: function(container, data){  },
+		CompassResult: function(container, data){  },
+		BattleStart: function(container, data){  },
+		BattleNight: function(container, data){  },
+		BattleResult: function(container, data){  },
+		CraftGear: function(container, data){  },
+		CraftShip: function(container, data){  },
+		ClearedMap: function(container, data){  }
 	};
 	
 	// Default params if theme did not define it
@@ -77,7 +59,7 @@ Use multiple instances for different layouts (horizontal vs vertical)
 	KC3Dashboard.prototype.show = function(){
 		this.domElement.show();
 		// Update interface values by triggering listeners, since it's not updated while hidden
-		var DataListeners = ["hq","counts","timers","quests","fleet"];
+		var DataListeners = ["HQ","Consumables","ShipSlots","GearSlots","Timers","Quests","Fleet"];
 		for(var ctr in DataListeners){
 			this.listeners[ DataListeners[ctr] ]( this.domElement, {} );
 		}
@@ -93,8 +75,8 @@ Use multiple instances for different layouts (horizontal vs vertical)
 	/* TRIGGER
 	Execute one of the listeners
 	------------------------------------------*/
-	KC3Dashboard.prototype.trigger = function( event ){
-		this.listeners[ event.name ]( this.domElement, event );
+	KC3Dashboard.prototype.trigger = function( event, data ){
+		this.listeners[ event ]( this.domElement, data );
 	};
 	
 })();

@@ -21,10 +21,13 @@ Previously known as "Reactor"
 		"api_port/port":function(params, response, headers){	
 			KC3Panel.activateDashboard();
 			
-			KC3Network.trigger({name: "hq"});
-			KC3Network.trigger({name: "counts"});
-			KC3Network.trigger({name: "timers"});
-			KC3Network.trigger({name: "fleet"});
+			KC3Network.trigger("HQ");
+			KC3Network.trigger("Consumables");
+			KC3Network.trigger("ShipSlots");
+			KC3Network.trigger("GearSlots");
+			KC3Network.trigger("Timers");
+			KC3Network.trigger("Quests");
+			KC3Network.trigger("Fleet");
 		}
 		
 	};
