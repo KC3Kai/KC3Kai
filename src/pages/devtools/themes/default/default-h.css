@@ -88,14 +88,14 @@
 	margin:0px 0px 2px 0px;
 	padding:2px 0px 0px 0px;
 }
-#h .hq_info .exp_bar {
+#h .hq_info .exp_barc {
 	width:90px;
 	height:12px;
 	border:1px solid #000;
 	background:#555;
 	margin:0px;
 }
-#h .hq_info .exp_val {
+#h .hq_info .exp_bar {
 	height:10px;
 	background:#0f0;
 }
@@ -109,7 +109,6 @@
 	width:210px;
 	height:72px;
 	margin:5px 0px 0px 0px;
-	/*background:#cfc;*/
 }
 #h .materials .material_item {
 	width:105px;

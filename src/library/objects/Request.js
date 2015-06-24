@@ -62,7 +62,7 @@ Executes processing and relies on KC3Network for the triggers
 			responseBody = JSON.parse(responseBody);
 			
 			self.gameStatus = responseBody.api_result;
-			self.response = responseBody.api_data;
+			self.response = responseBody;
 			
 			callback();
 		});

@@ -13,7 +13,7 @@ Previously known as "Reactor"
 		/* Master Data
 		-------------------------------------------------------*/
 		"api_start2":function(params, response, headers){
-			MasterManager.processRaw(response);
+			Master.init( response );
 			KC3Network.trigger("GameStart");
 		},
 		
@@ -22,7 +22,64 @@ Previously known as "Reactor"
 		"api_port/port":function(params, response, headers){	
 			KC3Network.trigger("HomeScreen");
 			
+			PlayerManager.setHQ({
+				mid: response.api_data.api_basic.api_member_id,
+				name: response.api_data.api_basic.api_nickname,
+				desc: response.api_data.api_basic.api_comment,
+				rank: response.api_data.api_basic.api_rank,
+				level: response.api_data.api_basic.api_level,
+				exp: response.api_data.api_basic.api_experience
+			});
+			PlayerManager.consumables.fcoin = response.api_data.api_basic.api_fcoin;
 			
+			// ShipManager.clear();
+			// ShipManager.set(response.api_data.api_ship);
+			
+			// GearManager.max = response.api_data.api_basic.api_max_slotitem;
+			
+			PlayerManager.setFleets( response.api_data.api_deck_port );
+			PlayerManager.setRepairDocks( response.api_data.api_ndock );
+			PlayerManager.buildSlots = response.api_data.api_basic.api_count_kdock;
+			
+			var UTCtime = Math.floor((new Date(headers.Date)).getTime()/1000)
+			
+			PlayerManager.setResources([
+				response.api_data.api_material[0].api_value,
+				response.api_data.api_material[1].api_value,
+				response.api_data.api_material[2].api_value,
+				response.api_data.api_material[3].api_value
+			], UTCtime);
+			
+			PlayerManager.setConsumables({
+				torch: response.api_data.api_material[4].api_value,
+				buckets: response.api_data.api_material[5].api_value,
+				devmats: response.api_data.api_material[6].api_value,
+				screws: response.api_data.api_material[7].api_value
+			}, UTCtime);
+			
+			PlayerManager.setStatistics({
+				exped: {
+					rate: false,
+					total: response.api_data.api_basic.api_ms_count,
+					success: response.api_data.api_basic.api_ms_success
+				},
+				pvp: {
+					rate: false,
+					win: response.api_data.api_basic.api_pt_win,
+					lose: response.api_data.api_basic.api_pt_lose,
+					attacked: response.api_data.api_basic.api_pt_challenged,
+					attacked_win: response.api_data.api_basic.api_pt_challenged_win
+				},
+				sortie: {
+					rate: false,
+					win: response.api_data.api_basic.api_st_win,
+					lose: response.api_data.api_basic.api_st_lose
+				}
+			});
+			
+			PlayerManager.setNewsfeed(response.api_data.api_log);
+			
+			PlayerManager.combinedFleet = response.api_data.api_combined_flag;
 			
 			KC3Network.trigger("HQ");
 			KC3Network.trigger("Consumables");

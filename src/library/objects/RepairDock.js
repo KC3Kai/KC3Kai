@@ -1,11 +1,13 @@
-/* Xxxxxxx.js
-KC3改 Xxxxxxx
+/* RepairDock.js
+KC3改 Repair Docks Object
 
-Xxxxxxx
+A repair slot
 */
 (function(){
 	"use strict";
 	
-	
+	window.KC3RepairDock = function(){
+		
+	};
 	
 })();

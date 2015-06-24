@@ -1,11 +1,13 @@
-/* Xxxxxxx.js
-KC3改 Xxxxxxx
+/* BuildDock.js
+KC3改 Build Dock Object
 
-Xxxxxxx
+A construction slot
 */
 (function(){
 	"use strict";
 	
-	
+	window.KC3BuildDock = function(){
+		
+	};
 	
 })();

@@ -1,6 +1,6 @@
 /* Ship.js
+KC3改 Ship Object
 
-Made in the advent of lib2, Needs Rewrite!
 */
 (function(){
 	"use strict";
@@ -8,7 +8,7 @@ Made in the advent of lib2, Needs Rewrite!
 	/* CONSTRUCTOR
 	Initialize ship data
 	--------------------------------------------------------------*/
-	window.Ship = function( data ){
+	window.KC3Ship = function( data ){
 		// Raw Data from API
 		if(typeof data.api_id != "undefined"){
 			this.rosterId = rawData.api_id;
@@ -25,10 +25,14 @@ Made in the advent of lib2, Needs Rewrite!
 	/* LOAD FIELD
 	Initialize single ship attribute using already-formatted data
 	--------------------------------------------------------------*/
-	window.Ship.prototype.loadField = function( data, fieldName ){
+	Ship.prototype.loadField = function( data, fieldName ){
 		// Put the attribute value from source into this ship object
 		this[fieldName] = data[fieldName];
 	}
+	
+	Ship.prototype.countDrums = function(){
+		
+	};
 	
 	/* STATS FULL
 	Get all stats "with" equipment

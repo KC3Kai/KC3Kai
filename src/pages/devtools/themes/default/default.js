@@ -3,7 +3,9 @@
 	
 	$(document).on("ready", function(){
 		ConfigManager.load();
-		MasterManager.init();
+		KC3Meta.init("../../../../data/");
+		KC3Master.init();
+		PlayerManager.init();
 		
 		/* PANEL INITIALIZATION
 		-----------------------------------*/
@@ -11,16 +13,12 @@
 		KC3Panel.init({
 			// Define horizontal dashboard and its listeners
 			horizontal: new KC3Dashboard( $("#h"), {
-				HQ: function(container, data){
-					$(".admiral_name", container).text("HORIZ");
-				}
+				
 			}, {}, "horizontal.html"),
 			
 			// Define vertical dashboard and its listeners
 			vertical: new KC3Dashboard( $("#v"), {
-				HQ: function(container, data){
-					
-				}
+				
 			}, {}, "vertical.html"),
 			
 			// Element to be initialized with background customizations
