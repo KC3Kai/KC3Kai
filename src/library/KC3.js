@@ -1,1 +1,0 @@
-function KC3(){}

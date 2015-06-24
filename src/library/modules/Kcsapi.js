@@ -13,13 +13,16 @@ Previously known as "Reactor"
 		/* Master Data
 		-------------------------------------------------------*/
 		"api_start2":function(params, response, headers){
-			
+			MasterManager.processRaw(response);
+			KC3Network.trigger("GameStart");
 		},
 		
 		/* Home Port Screen
 		-------------------------------------------------------*/
 		"api_port/port":function(params, response, headers){	
-			KC3Panel.activateDashboard();
+			KC3Network.trigger("HomeScreen");
+			
+			
 			
 			KC3Network.trigger("HQ");
 			KC3Network.trigger("Consumables");

@@ -2,6 +2,17 @@
 ------------------------------*/
 #wait {
 	width:300px;
+	height:50px;
+	line-height:50px;
+	background:#fff;
+	border-radius:10px;
+	margin:30px auto 0px;
+	text-align:center;
+	font-weight:bold;
+	font-size:14px;
+}
+#factory {
+	display:none;
 }
 
 /* CATBOMB
@@ -14,7 +25,7 @@
 	left:0px;
 	display:none;
 }
-#catBomb .filter {
+#catBomb .blackFilter {
 	width:100%;
 	height:100%;
 	position:fixed;
@@ -32,6 +43,10 @@
 	padding:10px;
 	border-radius:10px;
 	color:#c44;
+	top:50%;
+	left:50%;
+	position:absolute;
+	z-index:2;
 }
 #catBomb .image {
 	width:40px;
@@ -70,25 +85,4 @@
 	width:380px;
 	margin:10px 0px 0px 0px;
 	font-size:12px;
-}
-
-/* HORIZONTAL
-------------------------------*/
-#h {
-	width:500px;
-	height:450px;
-	background:#ccf;
-	margin:0px auto;
-	display:none;
-}
-
-
-/* VERTICAL
-------------------------------*/
-#v {
-	width:800px;
-	height:350px;
-	background:#fcc;
-	margin:0px auto;
-	display:none;
 }

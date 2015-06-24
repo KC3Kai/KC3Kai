@@ -40,7 +40,7 @@ Use multiple instances for different layouts (horizontal vs vertical)
 	Take in theme's custom listeners and params
 	If not defined, defaults will be used as seen on the merging
 	------------------------------------------*/
-	window.KC3Dashboard = function(domElement, definedListeners, definedParams){
+	window.KC3Dashboard = function(domElement, definedListeners, definedParams, externalHtml){
 		// The $(xxx) jQuery element of the container
 		this.domElement = domElement;
 		
@@ -51,6 +51,23 @@ Use multiple instances for different layouts (horizontal vs vertical)
 		// Assign custom params if defined or use default
 		this.params = {};
 		$.extend(this.params, defaultParams, definedParams || {});
+		
+		// Apply panel box opacity
+		var oldBG = this.domElement.css("background-color");
+		var newBG = oldBG.insert( oldBG.length-1, ", "+(ConfigManager.pan_opacity/100) );
+		newBG = newBG.insert(3, "a"); // "rgb" -> "rgba"
+		this.domElement.css("background-color", newBG);
+		
+		// Load external HTML
+		var self = this;
+		if(typeof externalHtml != "undefined"){
+			$.ajax({
+				url: externalHtml,
+				success: function(htmlContent){
+					self.domElement.html(htmlContent);
+				}
+			});
+		}
 	};
 	
 	/* SHOW

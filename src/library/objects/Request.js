@@ -27,10 +27,9 @@ Executes processing and relies on KC3Network for the triggers
 	KC3Request.prototype.validateHeaders = function(){
 		// If response header statusCode is not 200, means non-in-game error
 		if(this.statusCode != 200){
-			KC3Network.trigger({
-				name: "catbomb",
+			KC3Network.trigger("CatBomb", {
 				title: "Server Communication Error",
-				desc: "["+this.call+"] failed to communicate with the server. It is not a matter of API link, but somewhat on your connectivity or environment"
+				message: "["+this.call+"] failed to communicate with the server. It is not a matter of API link, but somewhat on your connectivity or environment"
 			});
 			return false;
 		}
@@ -78,10 +77,9 @@ Executes processing and relies on KC3Network for the triggers
 			
 			// If it fails on "api_start2" which is the first API call
 			if(this.call == "api_start2"){
-				KC3Network.trigger({
-					name: "catbomb",
+				KC3Network.trigger( "CatBomb", {
 					title: "Full API Error",
-					desc: "Your API link is not working. Either get a new API Link from the menu, or check if it's maintenance!"
+					message: "Your API link is not working. Either get a new API Link from the menu, or check if it's maintenance!"
 				});
 				return false;
 			}
@@ -95,28 +93,25 @@ Executes processing and relies on KC3Network for the triggers
 				// If clock difference is greater than 5 minutes
 				var timeDiff = Math.abs(ComputerClock - ServerClock);
 				if(timeDiff > 300000){
-					KC3Network.trigger({
-						name: "catbomb",
+					KC3Network.trigger("CatBomb", {
 						title: "Wrong Computer Clock!",
-						desc: "Please correct your computer clock. You do not need to be on Japan timezone, but it needs to be the correct local time for your local timezone! Your clock is off by "+Math.ceil(timeDiff/60000)+" minutes."
+						message: "Please correct your computer clock. You do not need to be on Japan timezone, but it needs to be the correct local time for your local timezone! Your clock is off by "+Math.ceil(timeDiff/60000)+" minutes."
 					});
 					
 				// Something else other than clock is wrong
 				}else{
-					KC3Network.trigger({
-						name: "catbomb",
+					KC3Network.trigger("CatBomb", {
 						title: "Error when entering Home Port screen",
-						desc: "Please reload the game."
+						message: "Please reload the game."
 					});
 				}
 				return false;
 			}
 			
 			// Some other API Call failed
-			KC3Network.trigger({
-				name: "catbomb",
+			KC3Network.trigger("CatBomb", {
 				title: "API Data Error",
-				desc: "The most recent action completed the network communication with server but returned an error. Check if it's now maintenance, or if your API link is still working."
+				message: "The most recent action completed the network communication with server but returned an error. Check if it's now maintenance, or if your API link is still working."
 			});
 			
 			return false;
