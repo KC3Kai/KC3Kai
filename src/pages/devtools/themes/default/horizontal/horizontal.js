@@ -113,7 +113,7 @@
 							$(".ship-img", ShipBox).css("background", "#FF0000");
 							$(".ship-hp-val", ShipBox).css("background", "#FF0000");
 							if( PlayerManager.repairShips.indexOf(rosterId) == -1 ){
-								// ShipBox.addClass("danger-effect");
+								// #68 no more red-glowing ship. interface is now hightlighted with red on the sides
 								container.css("box-shadow", "inset 0px 0px 50px rgba(255,200,200,1)");
 							}
 						}else if(hpPercent <= 0.50){
