@@ -1,29 +1,13 @@
 (function(){
 	"use strict";
 	
-	$(document).on("ready", function(){
-		ConfigManager.load();
-		KC3Meta.init("../../../../data/");
-		KC3Master.init();
-		PlayerManager.init();
-		
-		/* PANEL INITIALIZATION
-		-----------------------------------*/
-		// Initialize the panel
-		KC3Panel.init({
-			// Define horizontal dashboard and its listeners
-			horizontal: new KC3Dashboard( $("#h"), {
-				
-			}, {}, "horizontal.html"),
-			
-			// Define vertical dashboard and its listeners
-			vertical: new KC3Dashboard( $("#v"), {
-				
-			}, {}, "vertical.html"),
-			
-			// Element to be initialized with background customizations
-			backgroundElement: $("body")
-		});
+	/* PANEL INIT SUCCESS
+	-----------------------------------*/
+	function StartPanel(){
+		// Declare elements
+		KC3Panel.applyCustomizations( $("body") );
+		KC3Panel.horizontal = new KC3Dashboard( $("#h"), {}, {}, "horizontal.html");
+		KC3Panel.vertical = new KC3Dashboard( $("#v"), {}, {}, "vertical.html");
 		
 		// Detect initial orientation
 		KC3Panel.detectOrientation();
@@ -32,7 +16,6 @@
 		$(window).on("resize", function(){
 			KC3Panel.detectOrientation();
 		});
-		
 		
 		/* NETWORK
 		-----------------------------------*/
@@ -76,6 +59,33 @@
 		(new RMsg("service", "activateGame", {
 			tabId: chrome.devtools.inspectedWindow.tabId
 		})).execute();
+	}
+	
+	/* PAGE READY
+	-----------------------------------*/
+	$(document).on("ready", function(){
+		// Validate storage and initialize data managers
+		KC3Panel.init(function(success, message){
+			if(success){
+				// Successful initialization
+				StartPanel();
+			}else{
+				// Failed. Show an error box
+				$("#wait").hide();
+				$("<div>").css({
+					"width" : "450px",
+					"padding" : "15px 20px",
+					"background" : "#fcc",
+					"border-radius" : "10px",
+					"margin" : "30px auto 0px",
+					"text-align" : "center",
+					"font-weight" : "bold",
+					"font-size" : "12px",
+					"border" : "1px solid #c77"
+				}).html(message).appendTo("body");
+			}
+		});
+		
 	});
 	
 })();

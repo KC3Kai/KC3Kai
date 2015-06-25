@@ -14,19 +14,36 @@ Manages multiple instances of \library\modules\Dashboard.js
 		horizontal: {},
 		vertical: {},
 		
-		init :function( options ){
-			this.horizontal = options.horizontal;
-			this.vertical = options.vertical;
-			
+		init :function( callback ){
+			try {
+				// Check localStorage
+				if(!window.localStorage){
+					throw new Error("Your Chrome's localStorage is disabled on your settings. KC3改 needs this feature. <a href=\"http://stackoverflow.com/a/26671889/483704\" target=\"_blank\">See how to enable this</a>.");
+				}
+				
+				// Initialize data managers
+				ConfigManager.load();
+				KC3Meta.init("../../../../data/");
+				KC3Master.init();
+				PlayerManager.init();
+				
+				callback(true);
+			}catch(e){
+				callback(false, e.message);
+			}
+		},
+		
+		// Apply user's customizations to panel
+		applyCustomizations :function(element){
 			// Apply interface configs
 			if(ConfigManager.pan_bg_image == ""){
-				options.backgroundElement.css("background", ConfigManager.pan_bg_color);
+				element.css("background", ConfigManager.pan_bg_color);
 			}else{
-				options.backgroundElement.css("background-image", "url("+ConfigManager.pan_bg_image+")");
-				options.backgroundElement.css("background-color", ConfigManager.pan_bg_color);
-				options.backgroundElement.css("background-size", ConfigManager.pan_bg_size);
-				options.backgroundElement.css("background-position", ConfigManager.pan_bg_position);
-				options.backgroundElement.css("background-repeat", "no-repeat");
+				element.css("background-image", "url("+ConfigManager.pan_bg_image+")");
+				element.css("background-color", ConfigManager.pan_bg_color);
+				element.css("background-size", ConfigManager.pan_bg_size);
+				element.css("background-position", ConfigManager.pan_bg_position);
+				element.css("background-repeat", "no-repeat");
 			}
 		},
 		

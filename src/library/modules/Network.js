@@ -83,9 +83,9 @@ Listens to network history and triggers callback if game events happen
 			// If going to furniture rooom
 			if(request.request.url.indexOf("/kcs/resources/image/furniture/") >= -1){
 				// Ask background service to clear overlays on inspected window
-				(new RMsg("service", "clearOverlays", {
+				/*(new RMsg("service", "clearOverlays", {
 					tabId: chrome.devtools.inspectedWindow.tabId
-				})).execute();
+				})).execute();*/
 				return true;
 			}
 		}

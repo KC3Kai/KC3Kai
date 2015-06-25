@@ -25,26 +25,26 @@ KC3改 Ship Object
 	/* LOAD FIELD
 	Initialize single ship attribute using already-formatted data
 	--------------------------------------------------------------*/
-	Ship.prototype.loadField = function( data, fieldName ){
+	KC3Ship.prototype.loadField = function( data, fieldName ){
 		// Put the attribute value from source into this ship object
 		this[fieldName] = data[fieldName];
 	}
 	
-	Ship.prototype.countDrums = function(){
+	KC3Ship.prototype.countDrums = function(){
 		
 	};
 	
 	/* STATS FULL
 	Get all stats "with" equipment
 	--------------------------------------------------------------*/
-	window.Ship.prototype.statsFull = function(){
+	KC3Ship.prototype.statsFull = function(){
 		
 	}
 	
 	/* STATS BASE
 	Get all stats "without" equipment
 	--------------------------------------------------------------*/
-	window.Ship.prototype.statsBase = function(){
+	KC3Ship.prototype.statsBase = function(){
 		
 	}
 	

@@ -1,6 +1,7 @@
 var myVersion = parseInt(chrome.runtime.getManifest().version, 10);
 
 $(document).on("ready", function(){
+	
 	// Show next version
 	$(".schedule span.version").text(myVersion+1);
 	

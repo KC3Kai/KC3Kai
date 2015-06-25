@@ -13,7 +13,7 @@ Previously known as "Reactor"
 		/* Master Data
 		-------------------------------------------------------*/
 		"api_start2":function(params, response, headers){
-			Master.init( response );
+			KC3Master.init( response );
 			KC3Network.trigger("GameStart");
 		},
 		
