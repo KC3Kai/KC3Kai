@@ -78,29 +78,52 @@
 			<!-- PLAY GAME -->
 			<div class="box-game">
 				<iframe class="game-swf" frameborder="0" src=""></iframe>
-				<div class="overlays"></div>
+				<div class="overlays">
+					<!-- Quest Overlay -->
+					<div class="overlay_box overlay_quests">
+						
+					</div>
+					
+					<!-- Record Overlays -->
+					<div class="overlay_box overlay_record">
+						<div class="overlay ol_record_sorties"></div>
+						<div class="overlay ol_record_expeditions"></div>
+						<div class="overlay ol_record_pvp"></div>
+						<div class="overlay ol_record_ownership"></div>
+						<div class="overlay ol_record_maxstats"></div>
+						<div class="overlay ol_record_levelup"></div>
+						<div class="overlay ol_record_bgm"></div>
+						<div class="overlay ol_record_experience"></div>
+						<div class="overlay ol_record_name"></div>
+						<div class="overlay ol_record_rank"></div>
+					</div>
+				</div>
 			</div>
 			
 		</div>
 		
 		<!-- FACTORY -->
 		<div id="factory">
+			
 			<!-- Quest Overlay -->
-			<div class="overlay ol_quest">
+			<div class="overlay ol_quest ol_quest_exist">
+				<div class="icon"></div>
+				<div class="content">
+					<div class="name"></div>
+					<div class="desc"></div>
+				</div>
 				<div class="tracking"></div>
-				<div class="name">Deploy a fleet with a heavy cruiser as its flagship</div>
-				<div class="desc">Using Mutsuki, Kisaragi, Yayoi, and Mochizuki, get at least C rating on 3-2 boss node</div>
 			</div>
+			
+			<div class="overlay ol_quest ol_quest_empty"></div>
+			
 		</div>
 		
 		<script type="text/javascript" src="../../assets/js/jquery-2.1.3.min.js"></script>
-		<script type="text/javascript" src="../../assets/js/Dexie.min.js"></script>
-		<script type="text/javascript" src="../../library/KC3.js"></script>
-		<script type="text/javascript" src="../../library/classes/Config.js"></script>
-		<script type="text/javascript" src="../../library/classes/Meta.js"></script>
-		<script type="text/javascript" src="../../library/classes/Logging.js"></script>
-		<script type="text/javascript" src="../../library/classes/Dom.js"></script>
-		<script type="text/javascript" src="../../library/classes/Quests.js"></script>
+		<script type="text/javascript" src="../../library/managers/ConfigManager.js"></script>
+		<script type="text/javascript" src="../../library/managers/QuestManager.js"></script>
+		<script type="text/javascript" src="../../library/modules/Meta.js"></script>
+		<script type="text/javascript" src="../../library/objects/Quest.js"></script>
 		<script type="text/javascript" src="../../library/objects/Screenshot.js"></script>
 		<script type="text/javascript" src="api.js"></script>
 	</body>

@@ -77,6 +77,11 @@ Listens to network history and triggers callback if game events happen
 						}
 					});
 				}
+				
+				// Ask background service to clear overlays on inspected window
+				(new RMsg("service", "clearOverlays", {
+					tabId: chrome.devtools.inspectedWindow.tabId
+				})).execute();
 				return true;
 			}
 			

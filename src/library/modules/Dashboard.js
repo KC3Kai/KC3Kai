@@ -12,8 +12,9 @@ Use multiple instances for different layouts (horizontal vs vertical)
 	var defaultListeners = {
 		GameStart: function(container, data){  },
 		CatBomb: function(container, data){  },
-		HomeScreen: function(container, data){  },
-		
+		HomeScreen: function(container, data){
+			console.log(PlayerManager);
+		},
 		HQ: function(container, data){
 			$(".admiral_name", container).text( PlayerManager.hq.name );
 			$(".admiral_comm", container).text( PlayerManager.hq.desc );
@@ -27,8 +28,6 @@ Use multiple instances for different layouts (horizontal vs vertical)
 			$(".count_buckets", container).text( PlayerManager.consumables.buckets );
 			$(".count_screws", container).text( PlayerManager.consumables.screws );
 			$(".count_torch", container).text( PlayerManager.consumables.torch );
-			
-			console.log(PlayerManager);
 		},
 		ShipSlots: function(container, data){
 			// $(".count_ships", container).text( ShipManager.count() );
@@ -42,7 +41,31 @@ Use multiple instances for different layouts (horizontal vs vertical)
 			
 		},
 		Quests: function(container, data){
+			// Get active quests
+			var activeQuests = KC3QuestManager.getActives();
+			$(".box-quests .box-quest .color").removeClass("type1");
+			$(".box-quests .box-quest .color").removeClass("type2");
+			$(".box-quests .box-quest .color").removeClass("type3");
+			$(".box-quests .box-quest .color").removeClass("type4");
+			$(".box-quests .box-quest .color").removeClass("type5");
+			$(".box-quests .box-quest .color").removeClass("type6");
+			$(".box-quests .box-quest .color").removeClass("type7");
+			// $(".box-quests .box-quest .name").text("");
+			// $(".box-quests .box-quest .status").text("");
+			$(".box-quests .box-quest").hide();
 			
+			// Show each of them on interface
+			$.each(activeQuests, function(index, quest){
+				var questType = (quest.id+"").substring(0,1);
+				$(".box-quests .quest-box-"+(index+1)+" .color").addClass( "type"+questType );
+				if(quest.meta){
+					$(".box-quests .quest-box-"+(index+1)+" .name").text( quest.meta().name );
+				}else{
+					$(".box-quests .quest-box-"+(index+1)+" .name").text("Untranslated Quest");
+				}
+				$(".box-quests .quest-box-"+(index+1)+" .status").text( quest.outputShort() );
+				$(".box-quests .quest-box-"+(index+1)).show();
+			});
 		},
 		Fleet: function(container, data){
 			

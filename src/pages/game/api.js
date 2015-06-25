@@ -1,9 +1,7 @@
-var app = new KC3();
-
 // If awaiting activation
 var waiting = false;
 
-// If trusted exit
+// If trusted exit, for exit confirmation
 var trustedExit = false;
 
 // Show game screens
@@ -13,31 +11,29 @@ function ActivateGame(){
 	$(".box-wait").hide();
 	$(".box-game .game-swf").attr("src", localStorage.absoluteswf);
 	$(".box-game").show();
-	app.Dom.init();
 }
 
 $(document).on("ready", function(){
-	
-	// Apply initial configuration
-	app.Config.init();
-	app.Logging.init();
+
+	// Initialize data managers
+	ConfigManager.load();
+	KC3Meta.init("../../../../data/");
+	KC3QuestManager.load();
 	
 	// Apply interface configs
-	$(".box-wrap").css("margin-top", app.Config.gambox_margin);
-	if(app.Config.background.substring(0,1) == "#"){
-		$("body").css("background", app.Config.background);
+	$(".box-wrap").css("margin-top", ConfigManager.api_margin+"px");
+	if(ConfigManager.api_bg_image == ""){
+		$("body").css("background", ConfigManager.api_bg_color);
 	}else{
-		$("body").css("background-size", "cover");
+		$("body").css("background-image", "url("+ConfigManager.api_bg_image+")");
+		$("body").css("background-color", ConfigManager.api_bg_color);
+		$("body").css("background-size", ConfigManager.api_bg_size);
+		$("body").css("background-position", ConfigManager.api_bg_position);
 		$("body").css("background-repeat", "no-repeat");
-		$("body").css("background-image", "url("+app.Config.background+")");
 	}
 	
-	// Load game meta data
-	app.Meta.init("../../data/");
-	
 	// API link determines which screen to show
-	var absoluteSwf = localStorage.absoluteswf;
-	if(absoluteSwf){
+	if(localStorage.absoluteswf){
 		$(".api_txt textarea").text(localStorage.absoluteswf);
 		$(".box-wait").show();
 		waiting = true;
@@ -66,88 +62,99 @@ $(document).on("ready", function(){
 		ActivateGame();
 	});
 	
-	// API link select all textarea
-	$(".api_txt textarea").on("focus", function() {
-		var $this = $(this);
-		$this.select();
-		$this.mouseup(function() {
-			$this.unbind("mouseup");
-			return false;
-		});
-	});
+	// Exit confirmation
+	window.onbeforeunload = function(){
+		ConfigManager.load();
+		if(ConfigManager.api_askExit==1 && !trustedExit){
+			return "Ahh! you are closing the game!";
+		}
+	};
 	
 });
 
-// Extension Interaction
-chrome.runtime.onMessage.addListener(function(request, sender, response) {
-	if(request.identifier == "kc3_gamescreen"){
-		switch(request.action){
-		
-			// Admiral Dashboard opened, activate game
-			case "activateGame":
-				if(waiting){
-					ActivateGame();
-					response({success:true});
-				}else{
-					response({success:false});
-				}
-				break;
-			
-			// Quest Overlay
-			case "quest_overlay":
-				app.Quests.load();
-				app.Dom.clearOverlays();
-				var qci, tmpQuest;
-				for(qci in request.questlist){
-					if(request.questlist[qci]!=-1){
-						tmpQuest = app.Meta.quest(request.questlist[qci].api_no);
-						
-						var tmpQuestOverlay = $("#factory .ol_quest").clone().appendTo(".box-game .overlays");
-						tmpQuestOverlay.css("top", (parseInt(app.Config.gambox_margin,10)+113+(qci*68))+"px");
-						
-						if(tmpQuest){
-							if(typeof app.Quests.list["q"+request.questlist[qci].api_no] != "undefined"){
-								var playerQuest = app.Quests.list["q"+request.questlist[qci].api_no];
-								$(".tracking", tmpQuestOverlay).html(app.Quests.getTrackingHtml( playerQuest ));
-								$(".name", tmpQuestOverlay).text(tmpQuest.name);
-								$(".desc", tmpQuestOverlay).text(tmpQuest.desc);
-								// Special Bw1 case multiple requirements
-								if(request.questlist[qci].api_no == 214){
-									$(".tracking", tmpQuestOverlay).addClass("small");
-								}
-							}else{
-								tmpQuestOverlay.hide();
-							}
-						}else{
-							tmpQuestOverlay.hide();
-						}
+/* Invokable actions
+-----------------------------------*/
+var interactions = {
+	
+	// Panel is opened, activate the game
+	activateGame :function(request, sender, response){
+		if(waiting){
+			ActivateGame();
+			response({success:true});
+		}else{
+			response({success:false});
+		}
+	},
+	
+	// Quest page is opened, show overlays
+	questOverlay :function(request, sender, response){
+		KC3QuestManager.load();
+		console.log(KC3QuestManager.list);
+		$.each(request.questlist, function( index, QuestRaw ){
+			// console.log("showing quest",QuestRaw);
+			if( QuestRaw !=- 1 ){
+				var QuestBox = $("#factory .ol_quest_exist").clone().appendTo(".overlay_quests");
+				
+				// Get quest data
+				var QuestData = KC3QuestManager.get( QuestRaw.api_no );
+				console.log("QuestData", QuestData);
+				
+				// Show meta, title and description
+				if( QuestData.meta ){
+					$(".name", QuestBox).text( QuestData.meta().name );
+					$(".desc", QuestBox).text( QuestData.meta().desc );
+					
+					$(".tracking", QuestBox).html( QuestData.outputHtml() );
+					
+					// Special Bw1 case multiple requirements
+					if( QuestRaw.api_no == 214 ){
+						$(".tracking", QuestBox).addClass("small");
 					}
+				}else{
+					QuestBox.css({ visibility: "hidden" });
 				}
-				response({success:true});
-				break;
-			case "record_overlay":
-				app.Dom.applyRecordOverlay(request.record);
-				response({success:true});
-				break;
-			// Remove overlays
-			case "clear_overlays":
-				app.Dom.clearOverlays();
-				response({success:true});
-				break;
-			
-			// Take Screenshot
-			case "screenshot":
-				(new KCScreenshot()).start(request.playerIndex, $(".box-wrap"));
-				break;
-			
-			default: response({success:false, message:"Unknown action"}); break;
+			}
+		});
+		response({success:true});
+	},
+	
+	// In-game record screen translation
+	recordOverlay :function(request, sender, response){
+		// app.Dom.applyRecordOverlay(request.record);
+		response({success:true});
+	},
+	
+	// Remove HTML overlays
+	clearOverlays :function(request, sender, response){
+		// app.Dom.clearOverlays();
+		$(".overlay_quests").html("");
+		$(".overlay_record").hide();
+		response({success:true});
+	},
+	
+	// Screenshot triggered, capture the visible tab
+	screenshot :function(request, sender, response){
+		// ~Please rewrite the screenshot script
+		(new KCScreenshot()).start(request.playerIndex, $(".box-wrap"));
+		response({success:true});
+	},
+	
+	// Dummy action
+	dummy :function(request, sender, response){
+		
+	}
+};
+
+/* Listen to messaging triggers
+-----------------------------------*/
+chrome.runtime.onMessage.addListener(function(request, sender, response){
+	// If request is for this script
+	if((request.identifier||"") == "kc3_gamescreen"){
+		// If action requested is supported
+		if(typeof interactions[request.action] != "undefined"){
+			// Execute the action
+			interactions[request.action](request, sender, response);
+			return true;
 		}
 	}
 });
-
-// Confirm exit
-function confirmOnPageExit(){
-	app.Config.load();
-	if(app.Config.askExit==1 && !trustedExit){ return "Ahh! you are closing the game!"; }
-}
-window.onbeforeunload = confirmOnPageExit;

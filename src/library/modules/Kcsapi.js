@@ -88,6 +88,31 @@ Previously known as "Reactor"
 			KC3Network.trigger("Timers");
 			KC3Network.trigger("Quests");
 			KC3Network.trigger("Fleet");
+		},
+		
+		/* Quest List
+		-------------------------------------------------------*/
+		"api_get_member/questlist":function(params, response, headers){
+			// Update quest data for this page
+			KC3QuestManager.definePage(
+				response.api_data.api_list,
+				response.api_data.api_disp_page
+			);
+			
+			// Tell service to pass a message to gamescreen on inspected window to show overlays
+			(new RMsg("service", "questOverlay", {
+				tabId: chrome.devtools.inspectedWindow.tabId,
+				questlist: response.api_data.api_list
+			})).execute();
+			
+			// Trigger quest listeners
+			KC3Network.trigger("Quests");
+		},
+		
+		/* Dummy
+		-------------------------------------------------------*/
+		"dummy":function(params, response, headers){
+			
 		}
 		
 	};

@@ -8,14 +8,7 @@
 		KC3Panel.applyCustomizations( $("body") );
 		KC3Panel.horizontal = new KC3Dashboard( $("#h"), {}, {}, "horizontal.html");
 		KC3Panel.vertical = new KC3Dashboard( $("#v"), {}, {}, "vertical.html");
-		
-		// Detect initial orientation
 		KC3Panel.detectOrientation();
-		
-		// If window is resized, re-check orientation
-		$(window).on("resize", function(){
-			KC3Panel.detectOrientation();
-		});
 		
 		/* NETWORK
 		-----------------------------------*/
@@ -41,7 +34,9 @@
 		
 		// Global listener
 		KC3Network.addGlobalListener(function(event, data){
-			KC3Panel.layout().trigger(event, data);
+			if(KC3Panel.state == "running"){
+				KC3Panel.layout().trigger(event, data);
+			}
 		});
 		
 		// Start listening to network
@@ -55,7 +50,7 @@
 			$("#catBomb").fadeOut(300);
 		});
 		
-		// Attempt to activate game on inspected window
+		// Lastly, attempt to activate game on inspected window
 		(new RMsg("service", "activateGame", {
 			tabId: chrome.devtools.inspectedWindow.tabId
 		})).execute();
@@ -86,6 +81,11 @@
 			}
 		});
 		
+	});
+	
+	// If window is resized, re-check orientation
+	$(window).on("resize", function(){
+		KC3Panel.detectOrientation();
 	});
 	
 })();

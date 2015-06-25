@@ -97,7 +97,8 @@ Does not include Ships and Gears which are managed by other Managers
 		},
 		
 		setStatistics :function( data ){
-			$.extend( this.statistics, JSON.parse(localStorage.player_statistics)||{}, data);
+			$.extend( this.statistics, JSON.parse(localStorage.statistics || "{}"), data);
+			localStorage.statistics = JSON.stringify( this.statistics );
 		},
 		
 		setNewsfeed :function( data ){

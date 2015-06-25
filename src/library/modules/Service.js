@@ -70,6 +70,18 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			(new TMsg(request.tabId, "gamescreen", "activateGame", {})).execute();
 		},
 		
+		/* QUEST OVERLAYS
+		Request from devTools to show quest overlays on its inspected window
+		DevTools does not have access to chrome.tabs API thus cannot send this message on its own
+		Must go through here to be able to send runtime message to that specific window
+		We don't want global runtime message that will show overlays on all windows
+		------------------------------------------*/
+		"questOverlay" :function(request, sender, response){
+			(new TMsg(request.tabId, "gamescreen", "questOverlay", {
+				questlist: request.questlist
+			})).execute();
+		},
+		
 		/* CLEAR OVERLAYS
 		Request from devTools to clear overlays on its inspected window
 		DevTools does not have access to chrome.tabs API thus cannot send this message on its own

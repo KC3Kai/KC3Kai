@@ -23,20 +23,80 @@ Uses KC3Quest objects to play around with
 			return (this.list["q"+questId] || (this.list["q"+questId] = new KC3Quest()));
 		},
 		
+		/* GET ACTIVE
+		Get list of active quests
+		------------------------------------------*/
+		getActives :function(){
+			var activeQuestObjects = [];
+			var self = this;
+			$.each(this.active, function( index, element ){
+				activeQuestObjects.push( self.get(element) );
+			});
+			return activeQuestObjects;
+		},
+		
 		/* DEFINE PAGE
 		When a user loads a quest page, we use its data to update our list
 		------------------------------------------*/
-		definePage :function( questList ){
+		definePage :function( questList, questPage ){
 			// For each element in quest List
 			for(var ctr in questList){
 				// Get that quest object and re-define its data contents
 				this.get( questList[ctr].api_no ).defineRaw( questList[ctr] );
+				
+				// Add to actives or opens depeding on status
+				switch( questList[ctr].api_state ){
+					case 1:
+						this.isOpen( questList[ctr].api_no, true );
+						this.isActive( questList[ctr].api_no, false );
+						break;
+					case 2:
+						this.isOpen( questList[ctr].api_no, true );
+						this.isActive( questList[ctr].api_no, true );
+						break;
+					case 3:
+						this.isOpen( questList[ctr].api_no, false );
+						this.isActive( questList[ctr].api_no, false );
+						break;
+					default:
+						this.isOpen( questList[ctr].api_no, false );
+						this.isActive( questList[ctr].api_no, false );
+						break;
+				}
 			}
-			
-			console.log("OBJ", this.list);
-			console.log("STR", JSON.stringify(this.list));
+			console.log(this.open, this.active);
+			this.save();
 		},
 		
+		/* IS OPEN
+		Defines a questId as open, adds to list
+		------------------------------------------*/
+		isOpen :function(questId, mode){
+			if(mode){
+				if(this.open.indexOf(questId) == -1){
+					this.open.push(questId);
+				}
+			}else{
+				if(this.open.indexOf(questId) > -1){
+					this.open.splice(this.open.indexOf(questId), 1);
+				}
+			}
+		},
+		
+		/* IS ACTIVE
+		Defines a questId as active, adds to list
+		------------------------------------------*/
+		isActive :function(questId, mode){
+			if(mode){
+				if(this.active.indexOf(questId) == -1){
+					this.active.push(questId);
+				}
+			}else{
+				if(this.active.indexOf(questId) > -1){
+					this.active.splice(this.active.indexOf(questId), 1);
+				}
+			}
+		},
 		
 		/* SAVE
 		Write current quest data to localStorage
@@ -62,16 +122,33 @@ Uses KC3Quest objects to play around with
 					tempQuest = tempQuests[ctr];
 					
 					// Add to actives or opens depeding on status
+					if(tempQuest.status==1 || tempQuest.status==2){
+						
+					}
 					switch( tempQuest.status ){
-						case 1: this.open.push( tempQuest.id ); break;
-						case 2: this.active.push( tempQuest.id ); break;
-						case 3: this.active.push( tempQuest.id ); break;
-						default: break;
+						case 1:
+							this.isOpen( tempQuest.id, true );
+							this.isActive( tempQuest.id, false );
+							break;
+						case 2:
+							this.isOpen( tempQuest.id, true );
+							this.isActive( tempQuest.id, true );
+							break;
+						case 3:
+							this.isOpen( tempQuest.id, false );
+							this.isActive( tempQuest.id, false );
+							break;
+						default:
+							this.isOpen( tempQuest.id, false );
+							this.isActive( tempQuest.id, false );
+							break;
 					}
 					
 					// Add to manager's main list using Quest object
-					this.list["q"+tempQuest.id] = (new Quest()).define( tempQuests[ctr] );
+					this.list["q"+tempQuest.id] = new KC3Quest();
+					this.list["q"+tempQuest.id].define( tempQuest );
 				}
+				console.log(this.list);
 				return true;
 			}
 			return false;

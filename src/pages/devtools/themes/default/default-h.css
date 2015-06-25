@@ -1,7 +1,6 @@
 #h {
 	width:550px;
-	height:100%;
-	min-height:370px;
+	height:450px;
 	overflow:hidden;
 	margin:0px auto;
 	background:#fff;
@@ -9,7 +8,7 @@
 }
 #h .dash_panel {
 	float:left;
-	height:100%;
+	height:450px;
 }
 
 /* LEFT PANEL
@@ -108,7 +107,7 @@
 #h .materials {
 	width:210px;
 	height:72px;
-	margin:5px 0px 0px 0px;
+	margin:1px 0px 0px 0px;
 }
 #h .materials .material_item {
 	width:105px;
@@ -143,7 +142,7 @@
 #h .box-timers {
 	width:210px;
 	height:60px;
-	margin:5px 0px 0px 0px;
+	margin:4px 0px 0px 0px;
 	overflow:hidden;
 	/*background:#ccf;*/
 }
@@ -249,44 +248,67 @@
 /* Quests */
 #h .box-quests {
 	width:210px;
-	height:26px;
+	height:112px;
 	margin:5px 0px 0px 0px;
 	overflow:hidden;
+	/*background:#fcc;*/
 }
 #h .box-quest {
-	width:30px;
-	height:20px;
-	line-height:20px;
-	margin:0px 0px 0px 3px;
+	width:210px;
+	height:16px;
+	margin:0px 0px 2px 0px;
 	float:left;
 	background:#eee;
 	text-align:center;
 	font-size:11px;
 	font-weight:bold;
 }
+#h .box-quest .color {
+	width:12px;
+	height:12px;
+	float:left;
+	background:#000;
+	margin:2px 3px 0px 2px;
+}
+#h .box-quest .name {
+	width:150px;
+	height:14px;
+	float:left;
+	line-height:14px;
+	text-align:left;
+	margin:1px 0px 0px 0px;
+	/*background:#cfc;*/
+}
+#h .box-quest .status {
+	width:40px;
+	height:14px;
+	float:right;
+	line-height:14px;
+	font-size:11px;
+	text-align:center;
+	background:#ddd;
+	margin:1px 1px 0px 0px;
+}
 /* Icon Colors */
-#h .box-quest.type1 {
+#h .box-quest .color.type1 {
 	background:#33A459;
-	color:#fff;
 }
-#h .box-quest.type2 {
+#h .box-quest .color.type2 {
 	background:#D75048;
-	color:#fff;
 }
-#h .box-quest.type3 {
+#h .box-quest .color.type3 {
 	background:#98E75F;
 }
-#h .box-quest.type4 {
+#h .box-quest .color.type4 {
 	background:#ace;
 }
-#h .box-quest.type5 {
+#h .box-quest .color.type5 {
 	background:#EDD286;
 }
-#h .box-quest.type6 {
+#h .box-quest .color.type6 {
 	background:#996600;
-	color:#fff;
 }
-#h .box-quest.type7 {
+#h .box-quest .color.type7 {
 	background:#B7B7FF;
 }
 
@@ -294,12 +316,14 @@
 -----------------------*/
 #h .panel_mid {
 	width:10px;
+	height:450px;
 }
 
 /* RIGHT PANEL
 -----------------------*/
 #h .panel_right {
 	width:320px;
+	height:450px;
 }
 /* Buttons */
 #h .fleet-buttons {
@@ -377,6 +401,13 @@
 	font-size:14px;
 }
 
+#h .fleet-status {
+	width:310px;
+	height:60px;
+	background:#fcc;
+	margin:0px 0px 3px 0px;
+}
+
 /* Ships */
 #h .fleet-ships {
 	width:310px;
@@ -387,7 +418,7 @@
 	height:50px;
 	margin:0px 0px 2px 0px;
 	font-size:10px;
-	background:#ccc;
+	/*background:#ccc;*/
 	overflow:hidden;
 }
 

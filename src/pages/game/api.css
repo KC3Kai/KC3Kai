@@ -127,84 +127,110 @@ body {
 	width:800px;
 	height:480px;
 	display:none;
+	position:relative;
 }
 .box-game .game-swf {
 	width:800px;
 	height:480px;
 }
 .box-game .overlays {
-	
+	width:800px;
+	height:480px;
+	position:absolute;
+	top:0px;
+	left:0px;
+	overflow:hidden;
+	pointer-events:none;
 }
-
-/* OVERLAYS
---------------------------*/
-.overlays {
-	
-}
-.overlay {
+.box-game .overlay_box {
 	position:absolute;
 }
 
 /* OVERLAY: QUEST
 --------------------------*/
+.overlay_quests {
+	width:629px;
+	height:336px;
+	overflow:hidden;
+	top:110px;
+	left:144px;
+}
 .ol_quest {
-	width:490px;
-	height:37px;
+	width:629px;
+	height:64px;
+	margin:0px 0px 4px 0px;
+}
+.ol_quest .icon {
+	width:72px;
+	height:64px;
+	float:left;
+}
+.ol_quest .content {
+	width:431px;
+	height:40px;
 	background:#E4D5C2;
-	margin-left:215px;
-	pointer-events: none;
+	float:left;
+	margin:2px 0px 0px 0px;
+}
+.ol_quest .content .name {
+	width:431px;
+	height:13px;
+	line-height:13px;
+	font-size:13px;
+	margin:4px 0px 4px 0px;
+}
+.ol_quest .content .desc {
+	width:431px;
+	height:11px;
+	line-height:11px;
+	font-size:11px;
+	overflow:hidden;
 }
 .ol_quest .tracking {
 	width:60px;
 	height:60px;
 	line-height:60px;
-	float:right;
+	margin:2px 0px 0px 0px;
+	float:left;
 	font-size:18px;
 	font-weight:bold;
-	background:#E4D5C2;
 	text-align:center;
 	color:#555;
+	background:#E4D5C2;
 }
 .ol_quest .tracking.small {
 	line-height:15px;
-	font-size:14px;
+	font-size:13px;
 }
-.ol_quest .name {
-	width:400px;
-	height:14px;
-	line-height:14px;
-	font-size:14px;
-	margin:0px 0px 3px 0px;
-}
-.ol_quest .desc {
-	width:400px;
-	height:10px;
-	line-height:10px;
-	font-size:10px;
-}
+
 
 /* OVERLAY: RECORD
 --------------------------*/
-.ol_record_sorties,
-.ol_record_expeditions,
-.ol_record_pvp {
-	width: 100px;
-	height: 75px;
-	margin-left: 150px;
-	background-color: #313131;
+.overlay_record {
+	display:none;
+}
+.ol_record_sorties {
+	width:62px;
+	height:52px;
+	left:158px;
+	top:290px;
+	background: #313131;
 	font-size: 11px;
 	line-height: 12px;
 	color: #1CBCBF;
 }
-
+.ol_record_expeditions {
+	
+}
+.ol_record_pvp {
+	
+}
 .ol_record_expeditions {
 	line-height: 10px;
 }
-
 .ol_record_pvp {
 	margin-left: 315px;
 }
-
 .ol_record_ownership,
 .ol_record_maxstats,
 .ol_record_levelup,
@@ -215,33 +241,27 @@ body {
 	width: 158px;
 	background-color: #EBE2D7;
 }
-
 .ol_record_maxstats {
 	padding-top: 6px;
 	color: #1CBCBF;
 }
-
 .ol_record_maxstats > p:nth(3) {
 	font-size: 9px;
 	color: #23729F;
 }
-
 .ol_record_levelup {
 	margin-left: 515px;
 	width: 184px;
 	line-height: 16px;
 }
-
 .ol_record_bgm {
 	width: 102px;
 	margin-left: 515px;
 	padding-top: 6px;
 }
-
 .ol_record_experience {
 	margin-left: 255px;
 }
-
 .ol_record_experience > p {
 	background-color: #239E9F;
 	color: white;
@@ -249,11 +269,9 @@ body {
 	padding: 0 5px;
 	text-align: center;
 }
-
 .ol_record_name {
 	margin-left: 143px;
 }
-
 .ol_record_name > p {
 	color: #239E9F;
 	background-color: #F1EADD;
@@ -262,11 +280,9 @@ body {
 	margin: 0;
 	padding: 5px;
 }
-
 .ol_record_rank {
 	margin-left: 305px;
 }
-
 .ol_record_rank > p {
 	background-color: #F1EADD;
 }
