@@ -25,14 +25,13 @@ Saves and loads significant data for future use
 		/* Process raw data, fresh from API
 		-------------------------------------*/
 		processRaw :function(raw){
-			var tmpRecord;
+			var tmpRecord, i;
 			
 			// Organize master ship into indexes
 			for(i in raw.api_mst_ship){
 				tmpRecord = raw.api_mst_ship[i];
 				if(typeof tmpRecord.api_name != "undefined"){
 					this._ship[tmpRecord.api_id] = tmpRecord;
-					this._ship[tmpRecord.api_id].english = DataManager.shipName( tmpRecord );
 				}
 			}
 			
@@ -41,7 +40,6 @@ Saves and loads significant data for future use
 				tmpRecord = raw.api_mst_slotitem[i];
 				if(typeof tmpRecord.api_name != "undefined"){
 					this._slotitem[tmpRecord.api_id] = tmpRecord;
-					this._slotitem[tmpRecord.api_id].english = DataManager.gearName( tmpRecord );
 				}
 			}
 			
@@ -50,25 +48,39 @@ Saves and loads significant data for future use
 				tmpRecord = raw.api_mst_stype[i];
 				if(typeof tmpRecord.api_name != "undefined"){
 					this._stype[tmpRecord.api_id] = tmpRecord;
-					this._stype[tmpRecord.api_id].code = DataManager.stype( tmpRecord );
 				}
 			}
 			
+			console.log("processed raw",{
+				ship		: this._ship,
+				slotitem	: this._slotitem,
+				stype		: this._stype
+			});
 			this.save();
 			this.available = true;
 		},
 		
 		/* Data Access
-		-------------------------------------------------------*/
+		-------------------------------------*/
+		ship :function(id){
+			return this._ship[id] || false;
+		},
 		
+		slotitem :function(id){
+			return this._slotitem[id] || false;
+		},
+		
+		stype :function(id){
+			return this._stype[id] || false;
+		},
 		
 		/* Save to localStorage
 		-------------------------------------*/
 		save :function(){
 			localStorage.master = JSON.stringify({
-				ship		: this.ship,
-				slotitem	: this.slotitem,
-				stype		: this.stype,
+				ship		: this._ship,
+				slotitem	: this._slotitem,
+				stype		: this._stype
 			});
 		},
 		
@@ -77,9 +89,9 @@ Saves and loads significant data for future use
 		load :function(){
 			if(typeof localStorage.master != "undefined"){
 				var tmpMaster = JSON.parse(localStorage.master);
-				this.ship = tmpMaster.ship;
-				this.slotitem = tmpMaster.slotitem;
-				this.stype = tmpMaster.stype;
+				this._ship = tmpMaster.ship;
+				this._slotitem = tmpMaster.slotitem;
+				this._stype = tmpMaster.stype;
 				this.available = true;
 			}else{
 				this.available = false;

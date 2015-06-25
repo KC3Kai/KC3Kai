@@ -32,7 +32,7 @@ Contains summary information about a fleet and its 6 ships
 	};
 	
 	KC3Fleet.prototype.ship = function( slot ){
-		return ShipManager.get( this.ships[slot] );
+		return KC3ShipManager.get( this.ships[slot] );
 	};
 	
 	KC3Fleet.prototype.countShips = function( slot ){
@@ -73,6 +73,10 @@ Contains summary information about a fleet and its 6 ships
 	};
 	
 	KC3Fleet.prototype.fighterPower = function(){
+		
+	};
+	
+	KC3Fleet.prototype.speed = function(){
 		
 	};
 	

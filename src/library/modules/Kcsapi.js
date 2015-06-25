@@ -13,7 +13,7 @@ Previously known as "Reactor"
 		/* Master Data
 		-------------------------------------------------------*/
 		"api_start2":function(params, response, headers){
-			KC3Master.init( response );
+			KC3Master.init( response.api_data );
 			KC3Network.trigger("GameStart");
 		},
 		
@@ -32,8 +32,8 @@ Previously known as "Reactor"
 			});
 			PlayerManager.consumables.fcoin = response.api_data.api_basic.api_fcoin;
 			
-			// ShipManager.clear();
-			// ShipManager.set(response.api_data.api_ship);
+			KC3ShipManager.clear();
+			KC3ShipManager.set(response.api_data.api_ship);
 			
 			// GearManager.max = response.api_data.api_basic.api_max_slotitem;
 			

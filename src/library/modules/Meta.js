@@ -45,15 +45,15 @@ Provides access to data on built-in JSON files
 		/* Data Access
 		-------------------------------------------------------*/
 		shipIcon :function(id, empty){
-			if(typeof this.icons[id] !== "undefined"){
-				return "http://i708.photobucket.com/albums/ww87/dragonjet25/KC3%20Ship%20Icons/"+this.icons[id];
+			if(typeof this._icons[id] !== "undefined"){
+				return "http://i708.photobucket.com/albums/ww87/dragonjet25/KC3%20Ship%20Icons/"+this._icons[id];
 			}
 			return empty;
 		},
 		
 		abyssIcon :function(id, empty){
-			if(typeof this.icons[id] !== "undefined"){
-				return "http://i708.photobucket.com/albums/ww87/dragonjet25/KC3%20Abyss%20Icons/"+this.icons[id];
+			if(typeof this._icons[id] !== "undefined"){
+				return "http://i708.photobucket.com/albums/ww87/dragonjet25/KC3%20Abyss%20Icons/"+this._icons[id];
 			}
 			return empty;
 		},

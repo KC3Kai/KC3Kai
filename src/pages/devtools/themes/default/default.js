@@ -4,10 +4,13 @@
 	/* PANEL INIT SUCCESS
 	-----------------------------------*/
 	function StartPanel(){
-		// Declare elements
+		KC3Panel.horizontal = ThemeDefaultHorizontal;
+		KC3Panel.horizontal.start();
+		
+		KC3Panel.vertical = ThemeDefaultVertical;
+		KC3Panel.vertical.start();
+		
 		KC3Panel.applyCustomizations( $("body") );
-		KC3Panel.horizontal = new KC3Dashboard( $("#h"), {}, {}, "horizontal.html");
-		KC3Panel.vertical = new KC3Dashboard( $("#v"), {}, {}, "vertical.html");
 		KC3Panel.detectOrientation();
 		
 		/* NETWORK

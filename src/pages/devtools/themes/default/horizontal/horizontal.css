@@ -316,14 +316,14 @@
 -----------------------*/
 #h .panel_mid {
 	width:10px;
-	height:450px;
+	/*height:450px;*/
 }
 
 /* RIGHT PANEL
 -----------------------*/
 #h .panel_right {
 	width:320px;
-	height:450px;
+	/*height:450px;*/
 }
 /* Buttons */
 #h .fleet-buttons {
@@ -401,17 +401,11 @@
 	font-size:14px;
 }
 
-#h .fleet-status {
-	width:310px;
-	height:60px;
-	background:#fcc;
-	margin:0px 0px 3px 0px;
-}
-
 /* Ships */
 #h .fleet-ships {
 	width:310px;
 	height:312px;
+	margin:0px 0px 3px 0px;
 }
 #h .fleet-ship {
 	width:310px;
@@ -450,7 +444,7 @@
 	float:left;
 	margin:2px 0px 0px 0px;
 	padding:0px 0px 0px 3px;
-	font-family:"?????? Pro W3", "Hiragino Kaku Gothic Pro",Osaka, "????", Meiryo, "MS P????", "MS PGothic", sans-serif;
+
 }
 #h .fleet-ships .ship-type {
 	width:35px;
@@ -570,4 +564,13 @@
 #h .fleet-ships .ship-gear img {
 	width:20px;
 	height:20px;
+}
+
+/* ACTIVITY
+-------------------------*/
+#h .activity {
+	width:310px;
+	height:60px;
+	background:#fff;
+	border:1px solid #ccc;
 }
