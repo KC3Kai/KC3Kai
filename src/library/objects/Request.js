@@ -78,8 +78,8 @@ Executes processing and relies on KC3Network for the triggers
 			// If it fails on "api_start2" which is the first API call
 			if(this.call == "api_start2"){
 				KC3Network.trigger( "CatBomb", {
-					title: "Full API Error",
-					message: "Your API link is not working. Either get a new API Link from the menu, or check if it's maintenance!"
+					title: "Hard API Error",
+					message: "The server responded with an error for your API calls. You might be using an expired API link, or it's probably maintenance! You may want to <a href=\"http://kancolle.wikia.com/wiki/Recent_Updates#Future_updates\" target=\"_blank\">check the wikia for notices</a>, or refresh your API link."
 				});
 				return false;
 			}

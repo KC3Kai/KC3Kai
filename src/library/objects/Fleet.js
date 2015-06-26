@@ -73,7 +73,12 @@ Contains summary information about a fleet and its 6 ships
 	};
 	
 	KC3Fleet.prototype.fighterPower = function(){
-		
+		return this.ship(0).fighterPower()
+			+ this.ship(1).fighterPower()
+			+ this.ship(2).fighterPower()
+			+ this.ship(3).fighterPower()
+			+ this.ship(4).fighterPower()
+			+ this.ship(5).fighterPower();
 	};
 	
 	KC3Fleet.prototype.speed = function(){

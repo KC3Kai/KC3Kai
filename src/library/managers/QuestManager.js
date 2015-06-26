@@ -64,7 +64,6 @@ Uses KC3Quest objects to play around with
 						break;
 				}
 			}
-			console.log(this.open, this.active);
 			this.save();
 		},
 		
@@ -148,7 +147,6 @@ Uses KC3Quest objects to play around with
 					this.list["q"+tempQuest.id] = new KC3Quest();
 					this.list["q"+tempQuest.id].define( tempQuest );
 				}
-				console.log(this.list);
 				return true;
 			}
 			return false;

@@ -1,6 +1,8 @@
 /* ShipManager.js
+KC3改 Ship Manager
 
-Made in the advent of lib2, Needs Rewrite!
+Managesship roster and does indexing for data access.
+Saves and loads list to and from localStorage
 */
 (function(){
 	"use strict";

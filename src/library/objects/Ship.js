@@ -1,13 +1,9 @@
 /* Ship.js
 KC3改 Ship Object
-
 */
 (function(){
 	"use strict";
 	
-	/* CONSTRUCTOR
-	Initialize ship data
-	--------------------------------------------------------------*/
 	window.KC3Ship = function( data ){
 		// Default object properties incuded in stringifications
 		this.rosterId = 0;
@@ -24,9 +20,9 @@ KC3改 Ship Object
 		this.ls = 0;
 		this.lk = 0;
 		this.range = 0;
-		this.items = 0;
-		this.slots = 0;
-		this.mod = 0;
+		this.items = [0,0,0,0];
+		this.slots = [0,0,0,0];
+		this.mod = [0,0,0,0,0];
 		this.fuel = 0;
 		this.ammo = 0;
 		this.stars = 0;
@@ -70,12 +66,28 @@ KC3改 Ship Object
 	KC3Ship.prototype.master = function(){ return KC3Master.ship( this.masterId ); };
 	KC3Ship.prototype.name = function(){ return KC3Meta.shipName( this.master().api_name ); };
 	KC3Ship.prototype.stype = function(){ return KC3Meta.stype( this.master().api_stype ); };
+	KC3Ship.prototype.equipment = function(slot){ return KC3GearManager.get( this.items[slot] ); };
 	
 	/* COUNT DRUMS
 	Get number of drums held
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.countDrums = function(){
-		
+		var DrumCount = 0;
+		DrumCount += (this.equipment(0).masterId == 75)?1:0;
+		DrumCount += (this.equipment(1).masterId == 75)?1:0;
+		DrumCount += (this.equipment(2).masterId == 75)?1:0;
+		DrumCount += (this.equipment(3).masterId == 75)?1:0;
+		return DrumCount;
+	};
+	
+	/* FIGHTER POWER
+	Get fighter power of this ship
+	--------------------------------------------------------------*/
+	KC3Ship.prototype.fighterPower = function(){
+		return this.equipment(0).fighterPower( this.slots[0] )
+			+ this.equipment(1).fighterPower( this.slots[1] )
+			+ this.equipment(2).fighterPower( this.slots[2] )
+			+ this.equipment(3).fighterPower( this.slots[3] );
 	};
 	
 	/* STATS FULL

@@ -22,6 +22,8 @@ Previously known as "Reactor"
 		"api_port/port":function(params, response, headers){	
 			KC3Network.trigger("HomeScreen");
 			
+			// SortieManager.endSortie();
+			
 			PlayerManager.setHQ({
 				mid: response.api_data.api_basic.api_member_id,
 				name: response.api_data.api_basic.api_nickname,
@@ -35,13 +37,13 @@ Previously known as "Reactor"
 			KC3ShipManager.clear();
 			KC3ShipManager.set(response.api_data.api_ship);
 			
-			// GearManager.max = response.api_data.api_basic.api_max_slotitem;
+			KC3GearManager.max = response.api_data.api_basic.api_max_slotitem;
 			
 			PlayerManager.setFleets( response.api_data.api_deck_port );
 			PlayerManager.setRepairDocks( response.api_data.api_ndock );
 			PlayerManager.buildSlots = response.api_data.api_basic.api_count_kdock;
 			
-			var UTCtime = Math.floor((new Date(headers.Date)).getTime()/1000)
+			var UTCtime = Math.floor((new Date(headers.Date)).getTime()/1000);
 			
 			PlayerManager.setResources([
 				response.api_data.api_material[0].api_value,
@@ -89,6 +91,57 @@ Previously known as "Reactor"
 			KC3Network.trigger("Quests");
 			KC3Network.trigger("Fleet");
 		},
+		
+		/*-------------------------------------------------------*/
+		/*--------------------[ PLAYER INFO ]--------------------*/
+		/*-------------------------------------------------------*/
+		
+		/* User Basic Information
+		-------------------------------------------------------*/
+		"api_get_member/basic":function(params, response, headers){
+			PlayerManager.setHQ({
+				mid: response.api_data.api_member_id,
+				name: response.api_data.api_nickname,
+				desc: response.api_data.api_comment,
+				rank: response.api_data.api_rank,
+				level: response.api_data.api_level,
+				exp: response.api_data.api_experience
+			});
+			
+			PlayerManager.consumables.fcoin = response.api_data.api_fcoin;
+			PlayerManager.fleetCount = response.api_data.api_count_deck;
+			PlayerManager.repairSlots = response.api_data.api_count_ndock;
+			PlayerManager.buildSlots = response.api_data.api_count_kdock;
+			KC3ShipManager.max = response.api_data.api_max_chara;
+			KC3GearManager.max = response.api_data.api_max_slotitem;
+			
+			PlayerManager.setStatistics({
+				exped: {
+					rate: false,
+					total: response.api_data.api_ms_count,
+					success: response.api_data.api_ms_success
+				},
+				pvp: {
+					rate: false,
+					win: response.api_data.api_pt_win,
+					lose: response.api_data.api_pt_lose,
+					attacked: response.api_data.api_pt_challenged,
+					attacked_win: response.api_data.api_pt_challenged_win
+				},
+				sortie: {
+					rate: false,
+					win: response.api_data.api_st_win,
+					lose: response.api_data.api_st_lose
+				}
+			});
+			
+			KC3Network.trigger("HQ");
+			KC3Network.trigger("Consumables");
+			KC3Network.trigger("ShipSlots");
+			KC3Network.trigger("GearSlots");
+		},
+		
+		
 		
 		/* Quest List
 		-------------------------------------------------------*/

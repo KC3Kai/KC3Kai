@@ -80,10 +80,12 @@ Use multiple instances for different layouts (horizontal vs vertical)
 	KC3Dashboard.prototype.show = function(){
 		this.domElement.show();
 		// Update interface values by triggering listeners, since it's not updated while hidden
-		var DataListeners = ["HQ","Consumables","ShipSlots","GearSlots","Timers","Quests","Fleet"];
-		for(var ctr in DataListeners){
-			this.listeners[ DataListeners[ctr] ]( this.domElement, {}, this.data );
-		}
+		try {
+			var DataListeners = ["HQ","Consumables","ShipSlots","GearSlots","Timers","Quests","Fleet"];
+			for(var ctr in DataListeners){
+				this.listeners[ DataListeners[ctr] ]( this.domElement, {}, this.data );
+			}
+		}catch(e){ console.log("Updating interface values failed"); }
 	};
 	
 	/* HIDE

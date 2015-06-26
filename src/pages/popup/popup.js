@@ -6,7 +6,7 @@ $(document).on("ready", function(){
 	$(".schedule span.version").text(myVersion+1);
 	
 	// Show estimated time until next update
-	$.ajax({
+	/*$.ajax({
 		dataType: "json",
 		url: "https://raw.githubusercontent.com/dragonjet/KC3Kai/master/update",
 		success: function(data, textStatus, request){
@@ -20,7 +20,7 @@ $(document).on("ready", function(){
 				$(".schedule").html("You are using the latest version!");
 			}
 		}
-	});
+	});*/
 	
 	// Play via API Link
 	$("#play_cc").on('click', function(){
@@ -53,9 +53,9 @@ $(document).on("ready", function(){
 	});
 	
 	// Strategy Room
-	$("#strategy").on('click', function(){
+	/*$("#strategy").on('click', function(){
 		window.open("../strategy/strategy.html", "kc3kai_strategy");
-	});
+	});*/
 	
 	// Settings
 	$("#settings").on('click', function(){

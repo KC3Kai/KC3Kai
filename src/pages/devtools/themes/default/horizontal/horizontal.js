@@ -28,8 +28,7 @@
 				
 			},
 			HomeScreen: function(container, data, local){
-				console.log(PlayerManager);
-				console.log(KC3ShipManager);
+				console.log("Homescreen", PlayerManager, KC3ShipManager);
 			},
 			HQ: function(container, data, local){
 				$(".admiral_name", container).text( PlayerManager.hq.name );
@@ -88,7 +87,8 @@
 				$(".summary-level .summary-text", container).text( CurrentFleet.totalLevel() );
 				$(".summary-eqlos .summary-text", container).text( CurrentFleet.eLoS() );
 				$(".summary-airfp .summary-text", container).text( CurrentFleet.fighterPower() );
-				$(".summary-speed .summary-text", container).text( CurrentFleet.speed() );
+				// $(".summary-speed .summary-text", container).text( CurrentFleet.speed() );
+				$(".summary-speed .summary-text", container).text( CurrentFleet.countDrums() );
 				
 				var FleetContainer = $(".fleet-ships", container);
 				FleetContainer.html("");

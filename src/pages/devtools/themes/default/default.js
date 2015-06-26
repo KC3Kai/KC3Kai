@@ -30,8 +30,8 @@
 		// CatBomb error modal
 		KC3Network.addListener("CatBomb", function(event, data){
 			$("#catBomb").hide();
-			$("#catBomb .title").text( data.title );
-			$("#catBomb .description").text( data.message );
+			$("#catBomb .title").html( data.title );
+			$("#catBomb .description").html( data.message );
 			$("#catBomb").fadeIn(300);
 		});
 		
