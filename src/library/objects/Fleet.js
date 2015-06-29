@@ -39,6 +39,14 @@ Contains summary information about a fleet and its 6 ships
 		return $.grep(this.ships, function(shipId){ return shipId>-1; }).length;
 	};
 	
+	KC3Fleet.prototype.clearNonFlagShips = function(){
+		this.ships[1] = -1;
+		this.ships[2] = -1;
+		this.ships[3] = -1;
+		this.ships[4] = -1;
+		this.ships[5] = -1;
+	};
+	
 	KC3Fleet.prototype.totalLevel = function(){
 		return this.ship(0).level
 			+ this.ship(1).level
@@ -123,6 +131,34 @@ Contains summary information about a fleet and its 6 ships
 	
 	KC3Fleet.prototype.eLos3 = function(){
 		
+	};
+	
+	KC3Fleet.prototype.sortieJson = function(){
+		var ReturnObj = [];
+		var thisFleet = app.Docks._fleets[index];
+		var ctr, thisShip;
+		if (typeof thisFleet != "undefined") {
+			for(ctr in thisFleet.api_ship){
+				if(thisFleet.api_ship[ctr] > -1){
+					thisShip = app.Ships.get( thisFleet.api_ship[ctr] );
+					ReturnObj.push({
+						mst_id: thisShip.api_ship_id,
+						level: thisShip.api_lv,
+						kyouka: thisShip.api_kyouka,
+						morale: thisShip.api_cond,
+						equip: [
+							this.CompileShipEquip( thisShip.api_slot[0] ),
+							this.CompileShipEquip( thisShip.api_slot[1] ),
+							this.CompileShipEquip( thisShip.api_slot[2] ),
+							this.CompileShipEquip( thisShip.api_slot[3] )
+						],
+					});
+				}else{
+					ReturnObj.push(false);
+				}
+			}
+		}
+		return ReturnObj;
 	};
 	
 })();

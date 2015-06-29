@@ -20,7 +20,7 @@ KC3改 Ship Object
 		this.ls = 0;
 		this.lk = 0;
 		this.range = 0;
-		this.items = [0,0,0,0];
+		this.items = [-1,-1,-1,-1];
 		this.slots = [0,0,0,0];
 		this.mod = [0,0,0,0,0];
 		this.fuel = 0;
@@ -89,6 +89,10 @@ KC3改 Ship Object
 			+ this.equipment(2).fighterPower( this.slots[2] )
 			+ this.equipment(3).fighterPower( this.slots[3] );
 	};
+	
+	/*
+	.removeEquip( slotIndex )
+	*/
 	
 	/* STATS FULL
 	Get all stats "with" equipment
