@@ -7,7 +7,7 @@ A repair slot
 	"use strict";
 	
 	window.KC3RepairDock = function(){
-		
+		this.state = 0;
 	};
 	
 })();

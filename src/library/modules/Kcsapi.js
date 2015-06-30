@@ -375,6 +375,7 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_hensei/combined":function(params, response, headers){
 			PlayerManager.combinedFleet = parseInt( params.api_combined_type, 10 );
+			KC3Network.trigger("Fleet");
 		},
 		
 		/*-------------------------------------------------------*/
@@ -425,7 +426,7 @@ Previously known as "Reactor"
 				response.api_data,
 				Math.floor((new Date(headers.Date)).getTime()/1000)
 			);
-			app.Dashboard.showBattleModal(response.api_data);
+			KC3Network.trigger("BattleStart");
 		},
 		
 		"api_req_combined_battle/battle_water":function(params, response, headers){
@@ -433,7 +434,7 @@ Previously known as "Reactor"
 				response.api_data,
 				Math.floor((new Date(headers.Date)).getTime()/1000)
 			);
-			app.Dashboard.showBattleModal(response.api_data);
+			KC3Network.trigger("BattleStart");
 		},
 		
 		"api_req_battle_midnight/sp_midnight":function(params, response, headers){
@@ -441,25 +442,29 @@ Previously known as "Reactor"
 				response.api_data,
 				Math.floor((new Date(headers.Date)).getTime()/1000)
 			);
+			KC3Network.trigger("BattleNight");
 		},
 		
+		/* Yasen as second part of node battle
+		-------------------------------------------------------*/
 		"api_req_battle_midnight/battle":function(params, response, headers){
 			SortieManager.engageNight( response.api_data );
+			KC3Network.trigger("BattleNight");
 		},
 		
 		/* Battle Results
 		-------------------------------------------------------*/
 		"api_req_sortie/battleresult":function(params, response, headers){
 			SortieManager.resultScreen( response.api_data );
+			KC3Network.trigger("BattleResult");
 		},
 		
 		/* Combined Fleet Battle Results
 		-------------------------------------------------------*/
 		"api_req_combined_battle/battleresult":function(params, response, headers){
 			SortieManager.resultScreen( response.api_data );
+			KC3Network.trigger("BattleResult");
 		},
-		
-		
 		
 		/*-------------------------------------------------------*/
 		/*----------------------[ QUESTS ]-----------------------*/
@@ -482,6 +487,204 @@ Previously known as "Reactor"
 			
 			// Trigger quest listeners
 			KC3Network.trigger("Quests");
+		},
+		
+		/*-------------------------------------------------------*/
+		/*--------------------[ REPAIR DOCKS ]-------------------*/
+		/*-------------------------------------------------------*/
+		
+		/* Repair Docks
+		-------------------------------------------------------*/
+		"api_get_member/ndock":function(params, response, headers){
+			PlayerManager.setRepairDocks( response.api_data );
+			KC3Network.trigger("Timers");
+			KC3Network.trigger("Fleet");
+		},
+		
+		/* Start repair
+		-------------------------------------------------------*/
+		"api_req_nyukyo/start":function(params, response, headers){
+			/* Unused codes at the moment
+			var ship_id = app.Util.findParam(params, "api%5Fship%5Fid");
+			var bucket = app.Util.findParam(params, "api%5Fhighspeed");
+			var nDockNum = app.Util.findParam(params, "api%5Fndock%5Fid");*/
+			
+			QuestManager.get(503).increment(); // E3: Daily Repairs
+			KC3Network.trigger("Quests");
+		},
+		
+		/* Use bucket
+		-------------------------------------------------------*/
+		"api_req_nyukyo/speedchange":function(params, response, headers){
+			PlayerManager.consumables.buckets--;
+			PlayerManager.repairDocks[ params.api_ndock_id-1 ].state = 0;
+			KC3Network.trigger("Consumables");
+			KC3Network.trigger("Timers");
+		},
+		
+		/*-------------------------------------------------------*/
+		/*-----------------------[ PVP ]-------------------------*/
+		/*-------------------------------------------------------*/
+		
+		/* PVP Start
+		-------------------------------------------------------*/
+		"api_req_practice/battle":function(params, response, headers){
+			KC3Network.trigger("PvPStart", response.api_data);
+		},
+		
+		/* PVP Result
+		-------------------------------------------------------*/
+		"api_req_practice/battle_result":function(params, response, headers){
+			QuestManager.get(303).increment(); // C2: Daily Exercises 1
+			
+			// If victory
+			if(["A","B","S","SS"].indexOf(response.api_data.api_win_rank) > -1){
+				QuestManager.get(304).increment(); // C3: Daily Exercises 2
+				QuestManager.get(302).increment(); // C4: Weekly Exercises
+			}
+			
+			KC3Network.trigger("PvPEnd", response.api_data);
+			KC3Network.trigger("Quests");
+		},
+		
+		/*-------------------------------------------------------*/
+		/*--------------------[ EXPEDITION ]---------------------*/
+		/*-------------------------------------------------------*/
+		
+		/* Complete Expedition
+		-------------------------------------------------------*/
+		"api_req_mission/result":function(params, response, headers){
+			// If success or great success
+			if(response.api_data.api_clear_result > 0){
+				QuestManager.get(402).increment(); // D2: Daily Expeditions 1
+				QuestManager.get(403).increment(); // D3: Daily Expeditions 2
+				QuestManager.get(404).increment(); // D4: Weekly Expeditions
+				// If expedition 37 or 38
+				if(false){
+					QuestManager.get(410).increment(); // D9: Weekly Expedition 2
+					QuestManager.get(411).increment(); // D11: Weekly Expedition 3
+				}
+				KC3Network.trigger("Quests");
+			}
+		},
+		
+		/*-------------------------------------------------------*/
+		/*---------------------[ ARSENAL ]-----------------------*/
+		/*-------------------------------------------------------*/
+		
+		/* Craft Equipment
+		-------------------------------------------------------*/
+		"api_req_kousyou/createitem":function(params, response, headers){
+			var resourceUsed = [ params.api_item1, params.api_item2, params.api_item3, params.api_item4 ];
+			var failed = (typeof response.api_data.api_slot_item == "undefined");
+			
+			// Log into development History
+			KC3Database.Develop({
+				flag: PlayerManager._fleets[0].ship(0).masterId,
+				rsc1: resourceUsed[0],
+				rsc2: resourceUsed[1],
+				rsc3: resourceUsed[2],
+				rsc4: resourceUsed[3],
+				result: (!failed)?response.api_data.api_slot_item.api_slotitem_id:-1,
+				time: app.Util.getUTC(headers)
+			});
+			
+			QuestManager.get(605).increment(); // F1: Daily Development 1
+			QuestManager.get(607).increment(); // F3: Daily Development 2
+			
+			// Checks if the development went great
+			if(!failed){
+				// Add new equipment to local data
+				KC3GearManager.set([{
+					api_id: response.api_data.api_slot_item.api_id,
+					api_level: 0,
+					api_locked: 0,
+					api_slotitem_id: response.api_data.api_slot_item.api_slotitem_id
+				}]);
+				
+				// Trigger listeners passing crafted IDs
+				KC3Network.trigger("CraftGear", {
+					itemId: response.api_data.api_slot_item.api_id,
+					itemMasterId: response.api_data.api_slot_item.api_slotitem_id
+				});
+			}
+			
+			KC3Network.trigger("Quests");
+		},
+		
+		/* Scrap a Ship
+		-------------------------------------------------------*/
+		"api_req_kousyou/destroyship":function(params, response, headers){
+			KC3ShipManager.remove( params.api_ship_id );
+			QuestManager.get(609).increment(); // F5: Daily Dismantlement
+			KC3Network.trigger("ShipSlots");
+			KC3Network.trigger("GearSlots");
+			KC3Network.trigger("Fleet");
+			KC3Network.trigger("Quests");
+		},
+		
+		/* Scrap a Gear
+		-------------------------------------------------------*/
+		"api_req_kousyou/destroyitem2":function(params, response, headers){
+			$.each(params.api_slotitem_ids.split("%2C"), function(index, itemId){
+				KC3GearManager.remove( itemId );
+			});
+			QuestManager.get(613).increment(); // F12: Weekly Dismantlement
+			KC3Network.trigger("GearSlots");
+			KC3Network.trigger("Quests");
+		},
+		
+		/*-------------------------------------------------------*/
+		/*----------------------[ OTHERS ]-----------------------*/
+		/*-------------------------------------------------------*/
+		
+		/* View World Maps
+		-------------------------------------------------------*/
+		"api_get_member/mapinfo":function(params, response, headers){
+			var maps = {};
+			var ctr, thisMap;
+			for(ctr in response.api_data){
+				thisMap = response.api_data[ctr];
+				
+				// Create map object
+				maps[ "m"+thisMap.api_id ] = {
+					id: thisMap.api_id,
+					clear: thisMap.api_cleared
+				};
+				
+				// Check for boss gauge kills
+				if(typeof thisMap.api_defeat_count != "undefined"){
+					maps[ "m"+thisMap.api_id ].kills = thisMap.api_defeat_count;
+				}
+				
+				// Check for event map info
+				if(typeof thisMap.api_eventmap != "undefined"){
+					maps[ "m"+thisMap.api_id ].curhp = thisMap.api_eventmap.api_now_maphp;
+					maps[ "m"+thisMap.api_id ].maxhp = thisMap.api_eventmap.api_max_maphp;
+					maps[ "m"+thisMap.api_id ].difficulty = thisMap.api_eventmap.api_selected_rank;
+				}
+			}
+			localStorage.maps = JSON.stringify(maps);
+		},
+		
+		/* Modernize
+		-------------------------------------------------------*/
+		"api_req_kaisou/powerup":function(params, response, headers){
+			var consumed_ids = params.api_id_items;
+			KC3ShipManager.remove(consumed_ids.split("%2C"));
+			KC3Network.trigger("Consumables");
+			
+			// Check if successful modernization
+			if(response.api_data.api_powerup_flag==1){
+				QuestManager.get(702).increment(); // G2: Daily Modernization
+				QuestManager.get(703).increment(); // G3: Weekly Modernization
+			}
+		},
+		
+		/* Remodel
+		-------------------------------------------------------*/
+		"api_req_kaisou/remodeling":function(params, response, headers){
+			
 		},
 		
 		/* Dummy

@@ -42,6 +42,20 @@ Saves and loads list to and from localStorage
 			this.save();
 		},
 		
+		// Remove ship from the list, scrapped, mod-fodded, or sunk
+		remove :function( rosterId ){
+			var thisShip = this.list["x"+rosterId];
+			for(var gctr in thisShip.items){
+				if(thisShip.items[gctr] > -1){
+					KC3GearManager.remove( thisShip.items[gctr] );
+				}
+			}
+			
+			delete this.list["x"+rosterId];
+			this.save();
+			KC3GearManager.save();
+		},
+		
 		// Show JSON string of the list for debugging purposes
 		json: function(){
 			console.log(JSON.stringify(this.list));
