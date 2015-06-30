@@ -681,12 +681,6 @@ Previously known as "Reactor"
 			}
 		},
 		
-		/* Remodel
-		-------------------------------------------------------*/
-		"api_req_kaisou/remodeling":function(params, response, headers){
-			
-		},
-		
 		/* Dummy
 		-------------------------------------------------------*/
 		"dummy":function(params, response, headers){
