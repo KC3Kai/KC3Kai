@@ -19,6 +19,7 @@ Provides access to data on built-in JSON files
 		_servers:{},
 		_battle:{},
 		_record:{},
+		_terms:{},
 		
 		/* Initialization
 		-------------------------------------------------------*/
@@ -40,6 +41,7 @@ Provides access to data on built-in JSON files
 			$.getJSON(repo+"translations/"+lang+"/servers.json", function(response){ self._servers = response; });
 			$.getJSON(repo+"translations/"+lang+"/battle.json", function(response){ self._battle = response; });
 			$.getJSON(repo+"translations/"+lang+"/record.json", function(response){ self._record = response; });
+			$.getJSON(repo+"translations/"+lang+"/terms.json", function(response){ self._terms = response; });
 		},
 		
 		/* Data Access
@@ -136,8 +138,11 @@ Provides access to data on built-in JSON files
 		
 		record: function(key) {
 			return this._record[key] || key;
-		}
+		},
 		
+		term: function(key) {
+			return this._terms[key] || key;
+		}
 	};
 	
 })();

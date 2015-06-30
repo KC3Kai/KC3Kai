@@ -11,14 +11,14 @@ KC3改 Ship Object
 		this.level = 0;
 		this.exp = [0,0,0];
 		this.hp = [0,0];
-		this.fp = 0;
-		this.tp = 0;
-		this.aa = 0;
-		this.ar = 0;
-		this.ev = 0;
-		this.as = 0;
-		this.ls = 0;
-		this.lk = 0;
+		this.fp = [0,0];
+		this.tp = [0,0];
+		this.aa = [0,0];
+		this.ar = [0,0];
+		this.ev = [0,0];
+		this.as = [0,0];
+		this.ls = [0,0];
+		this.lk = [0,0];
 		this.range = 0;
 		this.items = [-1,-1,-1,-1];
 		this.slots = [0,0,0,0];
@@ -67,6 +67,19 @@ KC3改 Ship Object
 	KC3Ship.prototype.name = function(){ return KC3Meta.shipName( this.master().api_name ); };
 	KC3Ship.prototype.stype = function(){ return KC3Meta.stype( this.master().api_stype ); };
 	KC3Ship.prototype.equipment = function(slot){ return KC3GearManager.get( this.items[slot] ); };
+	KC3Ship.prototype.isFast = function(){ return this.master().api_soku>=10; };
+	
+	/* NAKED LOS
+	LoS without the equipment
+	--------------------------------------------------------------*/
+	KC3Ship.prototype.nakedLoS = function(){
+		var MyNakedLos = this.ls[0];
+		if(this.items[0] > -1){ MyNakedLos -= this.equipment(0).master().api_saku; }
+		if(this.items[1] > -1){ MyNakedLos -= this.equipment(1).master().api_saku; }
+		if(this.items[2] > -1){ MyNakedLos -= this.equipment(2).master().api_saku; }
+		if(this.items[3] > -1){ MyNakedLos -= this.equipment(3).master().api_saku; }
+		return MyNakedLos;
+	};
 	
 	/* COUNT DRUMS
 	Get number of drums held
@@ -84,10 +97,11 @@ KC3改 Ship Object
 	Get fighter power of this ship
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.fighterPower = function(){
-		return this.equipment(0).fighterPower( this.slots[0] )
+		var thisShipFighter = this.equipment(0).fighterPower( this.slots[0] )
 			+ this.equipment(1).fighterPower( this.slots[1] )
 			+ this.equipment(2).fighterPower( this.slots[2] )
 			+ this.equipment(3).fighterPower( this.slots[3] );
+		return thisShipFighter;
 	};
 	
 	/*

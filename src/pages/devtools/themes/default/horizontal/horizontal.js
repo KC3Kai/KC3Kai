@@ -18,6 +18,13 @@
 				self.trigger("Fleet");
 			});
 			
+			// Change eLoS Formula
+			$(".summary-eqlos img").attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png");
+			$(".summary-eqlos", this.domElement).on("click", function(){
+				ConfigManager.scrollElosMode();
+				KC3Network.trigger("Fleet");
+				$("img", $(this)).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png");
+			});
 			
 		},
 		listeners: {
@@ -85,13 +92,10 @@
 			Fleet: function(container, data, local){
 				var CurrentFleet = PlayerManager.fleets[local.selectedFleet-1];
 				$(".summary-level .summary-text", container).text( CurrentFleet.totalLevel() );
-				$(".summary-eqlos .summary-text", container).text( CurrentFleet.eLoS() );
+				$(".summary-eqlos .summary-text", container).text( Math.round( CurrentFleet.eLoS() * 100) / 100 );
 				$(".summary-airfp .summary-text", container).text( CurrentFleet.fighterPower() );
-				// $(".summary-speed .summary-text", container).text( CurrentFleet.speed() );
-				$(".summary-speed .summary-text", container).text( CurrentFleet.countDrums() );
+				$(".summary-speed .summary-text", container).text( CurrentFleet.speed() );
 				container.css("box-shadow", "none");
-				
-				console.log("all equipment",KC3GearManager.list);
 				
 				var FleetContainer = $(".fleet-ships", container);
 				FleetContainer.html("");

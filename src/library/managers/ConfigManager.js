@@ -89,8 +89,8 @@ Retreives when needed to apply on components
 		
 		// Toggle Equipment LoS
 		scrollElosMode :function(){
-			this.elos_mode++;
-			if(this.elos_mode > 3){ this.elos_mode=1; }
+			this.elosFormula++;
+			if(this.elosFormula > 3){ this.elosFormula=1; }
 			this.save();
 		}
 		

@@ -90,7 +90,14 @@ Contains summary information about a fleet and its 6 ships
 	};
 	
 	KC3Fleet.prototype.speed = function(){
-		
+		var FastFleet = true;
+		if(this.ships[0] > -1){ FastFleet = FastFleet && this.ship(0).isFast(); }
+		if(this.ships[1] > -1){ FastFleet = FastFleet && this.ship(1).isFast(); }
+		if(this.ships[2] > -1){ FastFleet = FastFleet && this.ship(2).isFast(); }
+		if(this.ships[3] > -1){ FastFleet = FastFleet && this.ship(3).isFast(); }
+		if(this.ships[4] > -1){ FastFleet = FastFleet && this.ship(4).isFast(); }
+		if(this.ships[5] > -1){ FastFleet = FastFleet && this.ship(5).isFast(); }
+		return (FastFleet) ? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow");
 	};
 	
 	KC3Fleet.prototype.qualifyingExpeditions = function(){
@@ -115,24 +122,119 @@ Contains summary information about a fleet and its 6 ships
 	
 	KC3Fleet.prototype.eLoS = function(){
 		switch(ConfigManager.elosFormula){
-			case 1: this.eLos1(); break;
-			case 2: this.eLos2(); break;
-			default: this.eLos3(); break;
+			case 1: return this.eLos1(); break;
+			case 2: return this.eLos2(); break;
+			default: return this.eLos3(); break;
 		}
 	};
 	
+	/* LoS : Fitted
+	Sum of all Ship LoS in the fleet WITH their equipment
+	------------------------------------*/
 	KC3Fleet.prototype.eLos1 = function(){
-		
+		return this.ship(0).ls[0]
+			+ this.ship(1).ls[0]
+			+ this.ship(2).ls[0]
+			+ this.ship(3).ls[0]
+			+ this.ship(4).ls[0]
+			+ this.ship(5).ls[0];
 	};
 	
+	/* LoS : "Old Formula"
+	= Recon LoS×2 + Radar LoS + v(Fleet total LoS - Recon LoS - Radar LoS)
+	------------------------------------*/
 	KC3Fleet.prototype.eLos2 = function(){
+		var PlaneLoS = 0;
+		var RadarLoS = 0;
 		
+		function ConsiderShip(shipData){
+			if(shipData.rosterId == 0) return false;
+			if(shipData.items[0] > -1){ ConsiderEquipment( shipData.equipment(0) ); }
+			if(shipData.items[1] > -1){ ConsiderEquipment( shipData.equipment(1) ); }
+			if(shipData.items[2] > -1){ ConsiderEquipment( shipData.equipment(2) ); }
+			if(shipData.items[3] > -1){ ConsiderEquipment( shipData.equipment(3) ); }
+		}
+		
+		function ConsiderEquipment(itemData){
+			if(itemData.itemId == 0) return false;
+			if( itemData.master().api_type[1] == 7){ PlaneLoS += itemData.master().api_saku; }
+			if( itemData.master().api_type[1] == 8){ RadarLoS += itemData.master().api_saku; }
+		}
+		
+		ConsiderShip( this.ship(0) );
+		ConsiderShip( this.ship(1) );
+		ConsiderShip( this.ship(2) );
+		ConsiderShip( this.ship(3) );
+		ConsiderShip( this.ship(4) );
+		ConsiderShip( this.ship(5) );
+		
+		return (PlaneLoS*2) + RadarLoS + Math.sqrt( this.eLos1() -  PlaneLoS - RadarLoS )
 	};
 	
+	/* LoS : "New Formula"
+	= Dive Bomber LoS x (1.04) + Torpedo Bomber LoS x (1.37) + Carrier-based Recon Plane LoS x (1.66) + Recon Seaplane LoS x (2.00) + Seaplane Bomber LoS x (1.78) + Small Radar LoS x (1.00) + Large Radar LoS x (0.99) + Searchlight LoS x (0.91) + v(base LoS of each ship) x (1.69) + (HQ Lv. rounded up to the next multiple of 5) x (-0.61)
+	------------------------------------*/
 	KC3Fleet.prototype.eLos3 = function(){
+		var dive = 0, torp = 0, cbrp = 0, rspl = 0, splb = 0, smrd = 0, lgrd = 0, srch = 0;
 		
+		var self = this;
+		function GetNakedLoS(){
+			return Math.sqrt(self.ship(0).nakedLoS())
+				+ Math.sqrt(self.ship(1).nakedLoS())
+				+ Math.sqrt(self.ship(2).nakedLoS())
+				+ Math.sqrt(self.ship(3).nakedLoS())
+				+ Math.sqrt(self.ship(4).nakedLoS())
+				+ Math.sqrt(self.ship(5).nakedLoS());
+		}
+		
+		function ConsiderShip(shipData){
+			if(shipData.rosterId == 0) return false;
+			if(shipData.items[0] > -1){ ConsiderEquipment( shipData.equipment(0) ); }
+			if(shipData.items[1] > -1){ ConsiderEquipment( shipData.equipment(1) ); }
+			if(shipData.items[2] > -1){ ConsiderEquipment( shipData.equipment(2) ); }
+			if(shipData.items[3] > -1){ ConsiderEquipment( shipData.equipment(3) ); }
+		}
+		
+		function ConsiderEquipment(itemData){
+			if(itemData.itemId == 0) return false;
+			switch( itemData.master().api_type[2] ){
+				case  7: dive += itemData.master().api_saku; break;
+				case  8: torp += itemData.master().api_saku; break;
+				case  9: cbrp += itemData.master().api_saku; break;
+				case 10: rspl += itemData.master().api_saku; break;
+				case 11: splb += itemData.master().api_saku; break;
+				case 12: smrd += itemData.master().api_saku; break;
+				case 13: lgrd += itemData.master().api_saku; break;
+				case 29: srch += itemData.master().api_saku; break;
+				default: break;
+			}
+		}
+		
+		ConsiderShip( this.ship(0) );
+		ConsiderShip( this.ship(1) );
+		ConsiderShip( this.ship(2) );
+		ConsiderShip( this.ship(3) );
+		ConsiderShip( this.ship(4) );
+		ConsiderShip( this.ship(5) );
+		
+		var total = ( dive * 1.04 )
+			+ ( torp * 1.37 )
+			+ ( cbrp * 1.66 )
+			+ ( rspl * 2.00 )
+			+ ( splb * 1.78 )
+			+ ( smrd * 1.00 )
+			+ ( lgrd * 0.99 )
+			+ ( srch * 0.91 )
+			+ ( GetNakedLoS() * 1.69 )
+			+ ( (Math.floor(( PlayerManager.hq.level + 4) / 5) * 5) * -0.61 );
+		return total;
 	};
 	
+	/* SORTIE JSON
+	Used for recording sorties on indexedDB
+	Generate fleet summary object without referential data (all masterId)
+	Data must be recorded on the state of sortie execution, thus no reference
+	------------------------------------*/
 	KC3Fleet.prototype.sortieJson = function(){
 		var ReturnObj = [];
 		var thisFleet = app.Docks._fleets[index];

@@ -30,13 +30,17 @@ KC3改 Equipment Object
 	KC3Gear.prototype.name = function(){ return KC3Meta.gearName( this.master().api_name ); };
 	
 	KC3Gear.prototype.fighterPower = function(capacity){
-		if(this.itemId==0){ /*console.log("accessing empty equipment");*/ return 0; }
+		// Empty item means no fighter power
+		if(this.itemId==0){ return 0; }
 		
 		// Check if this object is a fighter plane
 		if( [6,7,8,11].indexOf( this.master().api_type[2] ) > -1){
 			// Formula for each equipment
 			return Math.floor( this.master().api_tyku * Math.sqrt(capacity) );
 		}
+		
+		// Equipment did not return on plane check, no fighter power
+		return 0;
 	};
 	
 })();
