@@ -49,8 +49,8 @@
 				$(".max_ships", container).text( KC3ShipManager.max );
 			},
 			GearSlots: function(container, data, local){
-				// $(".count_gear", container).text( KC3GearManager.count() );
-				// $(".max_gear", container).text( KC3GearManager.max );
+				$(".count_gear", container).text( KC3GearManager.count() );
+				$(".max_gear", container).text( KC3GearManager.max );
 			},
 			Timers: function(container, data, local){
 				
@@ -89,6 +89,9 @@
 				$(".summary-airfp .summary-text", container).text( CurrentFleet.fighterPower() );
 				// $(".summary-speed .summary-text", container).text( CurrentFleet.speed() );
 				$(".summary-speed .summary-text", container).text( CurrentFleet.countDrums() );
+				container.css("box-shadow", "none");
+				
+				console.log("all equipment",KC3GearManager.list);
 				
 				var FleetContainer = $(".fleet-ships", container);
 				FleetContainer.html("");
@@ -96,43 +99,20 @@
 					if(rosterId > -1){
 						var CurrentShip = KC3ShipManager.get( rosterId );
 						var ShipBox = $(".factory .fleet-ship", container).clone().appendTo(FleetContainer);
-						// $(".xxxxxx", ShipBox).attr("src", "");
-						// $(".xxxxxx", ShipBox).text();
 						
-						var hpPercent = CurrentShip.hp[0] / CurrentShip.hp[1];
-						// console.log("CurrentShip", CurrentShip);
 						$(".ship-img img", ShipBox).attr("src", KC3Meta.shipIcon(CurrentShip.masterId, "../../assets/img/ui/empty.png"));
 						$(".ship-name", ShipBox).text( CurrentShip.name() );
 						$(".ship-type", ShipBox).text( CurrentShip.stype() );
-						$(".ship-hp-text", ShipBox).text( CurrentShip.hp[0] +" / "+ CurrentShip.hp[1] );
-						$(".ship-hp-val", ShipBox).css("width", (98*hpPercent)+"px");
-						$(".ship-hp-nval", ShipBox).css("width", (98*hpPercent)+"px");
-						container.css("box-shadow", "none");
-						
-						if(hpPercent <= 0.25){
-							$(".ship-img", ShipBox).css("background", "#FF0000");
-							$(".ship-hp-val", ShipBox).css("background", "#FF0000");
-							if( PlayerManager.repairShips.indexOf(rosterId) == -1 ){
-								// #68 no more red-glowing ship. interface is now hightlighted with red on the sides
-								container.css("box-shadow", "inset 0px 0px 50px rgba(255,200,200,1)");
-							}
-						}else if(hpPercent <= 0.50){
-							$(".ship-img", ShipBox).css("background", "#FF9900");
-							$(".ship-hp-val", ShipBox).css("background", "#FF9900");
-						}else if(hpPercent <= 0.75){
-							$(".ship-img", ShipBox).css("background", "#555");
-							$(".ship-hp-val", ShipBox).css("background", "#FFFF00");
-						}else{
-							$(".ship-img", ShipBox).css("background", "#555");
-							$(".ship-hp-val", ShipBox).css("background", "#00FF00");
-						}
-						$(".ship-hp-nval", ShipBox).css("background", $(".ship-hp-val", ShipBox).css("background"));
 						$(".ship-lvl-txt", ShipBox).text(CurrentShip.level);
 						$(".ship-lvl-next", ShipBox).text("-"+CurrentShip.exp[1]);
-						$(".ship-lvl-val", ShipBox).css("width", (56*(CurrentShip.exp[2]/100))+"px");
-						$(".ship-morale-box", ShipBox).text(CurrentShip.morale);
+						$(".ship-lvl-val", ShipBox).css("width", (60*(CurrentShip.exp[2]/100))+"px");
 						
-						
+						FleetHP(container, ShipBox, CurrentShip.hp, rosterId );
+						FleetMorale( $(".ship-morale-box", ShipBox), CurrentShip.morale );
+						FleetEquipment( $(".ship-gear-1 img", ShipBox), CurrentShip.equipment(0) );
+						FleetEquipment( $(".ship-gear-2 img", ShipBox), CurrentShip.equipment(1) );
+						FleetEquipment( $(".ship-gear-3 img", ShipBox), CurrentShip.equipment(2) );
+						FleetEquipment( $(".ship-gear-4 img", ShipBox), CurrentShip.equipment(3) );
 					}
 				});
 			},
@@ -162,5 +142,68 @@
 			}
 		}
 	});
+	
+	function FleetHP(container, ShipBox, hp, rosterId){
+		var hpPercent = hp[0] / hp[1];
+		$(".ship-hp-text", ShipBox).text( hp[0] +" / "+ hp[1] );
+		$(".ship-hp-val", ShipBox).css("width", (100*hpPercent)+"px");
+		
+		if(hpPercent <= 0.25){
+			$(".ship-img", ShipBox).css("background", "#FF0000");
+			$(".ship-hp-val", ShipBox).css("background", "#FF0000");
+			if( PlayerManager.repairShips.indexOf(rosterId) == -1 ){
+				// #68 no more red-glowing ship. interface is now hightlighted with red on the sides
+				container.css("box-shadow", "inset 0px 0px 50px rgba(255,0,0,0.6)");
+			}
+		}else if(hpPercent <= 0.50){
+			$(".ship-img", ShipBox).css("background", "#FF9900");
+			$(".ship-hp-val", ShipBox).css("background", "#FF9900");
+		}else if(hpPercent <= 0.75){
+			$(".ship-img", ShipBox).css("background", "#FFFF00");
+			$(".ship-hp-val", ShipBox).css("background", "#FFFF00");
+		}else{
+			$(".ship-img", ShipBox).css("background", "#00FF00");
+			$(".ship-hp-val", ShipBox).css("background", "#00FF00");
+		}
+	}
+	
+	function FleetMorale(element, morale){
+		element.text( morale );
+		switch(true){
+			case morale>53:
+				element.css("border-color", "#00FF00");
+				element.css("background", "#FFFF00");
+				break;
+			case morale>49:
+				element.css("border-color", "#D2D200");
+				element.css("background", "#FFFF99");
+				break;
+			case morale>39:
+				element.css("border-color", "#CCCCCC");
+				element.css("background", "#FFFFFF");
+				break;
+			case morale>29:
+				element.css("border-color", "#FFB871");
+				element.css("background", "#FFDDBB");
+				break;
+			case morale>19:
+				element.css("border-color", "#FF9B06");
+				element.css("background", "#FFB74A");
+				break;
+			default:
+				element.css("border-color", "#FF5555");
+				element.css("background", "#FFA6A6");
+				break;
+		}
+	}
+	
+	function FleetEquipment(element, item){
+		if(item.itemId > 0){
+			var folder = "../../../../../assets/img/items/";
+			element.attr("src", folder + item.master().api_type[3] + ".png");
+		}else{
+			element.hide();
+		}
+	}
 	
 })();

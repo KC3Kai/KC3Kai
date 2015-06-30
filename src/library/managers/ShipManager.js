@@ -73,11 +73,15 @@ Saves and loads list to and from localStorage
 		
 		// Load from storage and add each one to manager list
 		load: function(){
-			this.clear();
-			var ShipList = JSON.parse(localStorage.ships);
-			for(var ctr in ShipList){
-				this.add( ShipList[ctr] );
+			if(typeof localStorage.ships != "undefined"){
+				this.clear();
+				var ShipList = JSON.parse(localStorage.ships);
+				for(var ctr in ShipList){
+					this.add( ShipList[ctr] );
+				}
+				return true;
 			}
+			return false;
 		}
 		
 	};

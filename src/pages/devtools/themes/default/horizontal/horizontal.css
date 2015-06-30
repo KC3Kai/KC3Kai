@@ -422,7 +422,7 @@
 	border-radius:22px 0px 0px 22px;
 	margin:2px 0px 2px 2px;
 	float:left;
-	background:#555;
+	background:#0f0;
 }
 #h .fleet-ships .ship-img img {
 	width:42px;
@@ -448,8 +448,8 @@
 }
 #h .fleet-ships .ship-type {
 	width:35px;
-	height:16px;
-	line-height:14px;
+	height:18px;
+	line-height:16px;
 	float:left;
 	font-weight:bold;
 	font-size:11px;
@@ -458,7 +458,8 @@
 }
 #h .fleet-ships .ship-hp-text {
 	width:65px;
-	height:16px;
+	height:18px;
+	line-height:16px;
 	font-size:12px;
 	font-weight:bold;
 	float:left;
@@ -466,20 +467,13 @@
 }
 #h .fleet-ships .ship-hp-bar {
 	width:100px;
-	height:12px;
+	height:10px;
 	float:left;
 	background:#555;
-	padding:2px 2px 2px 0px;
 }
 #h .fleet-ships .ship-hp-bar .ship-hp-val {
-	width:98px;
-	height:5px;
-	float:left;
-	background:#0f0;
-}
-#h .fleet-ships .ship-hp-bar .ship-hp-nval {
-	width:98px;
-	height:3px;
+	width:100px;
+	height:10px;
 	float:left;
 	background:#0f0;
 }
@@ -492,8 +486,8 @@
 }
 #h .fleet-ships .ship-lvl-lbl {
 	width:25px;
-	height:18px;
-	line-height:18px;
+	height:20px;
+	line-height:20px;
 	font-size:12px;
 	float:left;
 	color:#777;
@@ -501,8 +495,8 @@
 }
 #h .fleet-ships .ship-lvl-txt {
 	width:35px;
-	height:18px;
-	line-height:18px;
+	height:20px;
+	line-height:20px;
 	font-size:16px;
 	float:left;
 	margin:2px 0px 0px 0px;
@@ -518,14 +512,14 @@
 }
 #h .fleet-ships .ship-lvl-bar {
 	width:60px;
-	height:12px;
+	height:10px;
 	float:left;
 	background:#555;
-	padding:2px;
+	padding:0px;
 }
 #h .fleet-ships .ship-lvl-val {
-	width:56px;
-	height:8px;
+	width:60px;
+	height:10px;
 	float:left;
 	background:#00ccff;
 }
