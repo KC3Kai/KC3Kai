@@ -248,8 +248,8 @@ Previously known as "Reactor"
 					params.api_item5
 				]
 			};
-			QuestManager.get(606).increment(); // F2: Daily Construction 1
-			QuestManager.get(608).increment(); // F4: Daily Construction 2
+			KC3QuestManager.get(606).increment(); // F2: Daily Construction 1
+			KC3QuestManager.get(608).increment(); // F4: Daily Construction 2
 			KC3Network.trigger("Quests");
 		},
 		
@@ -367,7 +367,7 @@ Previously known as "Reactor"
 		/* Re-supply a ship
 		-------------------------------------------------------*/
 		"api_req_hokyu/charge":function(params, response, headers){
-			QuestManager.get(504).increment(); // E4: Daily Resupplies
+			KC3QuestManager.get(504).increment(); // E4: Daily Resupplies
 			KC3Network.trigger("Quests");
 		},
 		
@@ -509,7 +509,7 @@ Previously known as "Reactor"
 			var bucket = app.Util.findParam(params, "api%5Fhighspeed");
 			var nDockNum = app.Util.findParam(params, "api%5Fndock%5Fid");*/
 			
-			QuestManager.get(503).increment(); // E3: Daily Repairs
+			KC3QuestManager.get(503).increment(); // E3: Daily Repairs
 			KC3Network.trigger("Quests");
 		},
 		
@@ -535,12 +535,12 @@ Previously known as "Reactor"
 		/* PVP Result
 		-------------------------------------------------------*/
 		"api_req_practice/battle_result":function(params, response, headers){
-			QuestManager.get(303).increment(); // C2: Daily Exercises 1
+			KC3QuestManager.get(303).increment(); // C2: Daily Exercises 1
 			
 			// If victory
 			if(["A","B","S","SS"].indexOf(response.api_data.api_win_rank) > -1){
-				QuestManager.get(304).increment(); // C3: Daily Exercises 2
-				QuestManager.get(302).increment(); // C4: Weekly Exercises
+				KC3QuestManager.get(304).increment(); // C3: Daily Exercises 2
+				KC3QuestManager.get(302).increment(); // C4: Weekly Exercises
 			}
 			
 			KC3Network.trigger("PvPEnd", response.api_data);
@@ -556,13 +556,13 @@ Previously known as "Reactor"
 		"api_req_mission/result":function(params, response, headers){
 			// If success or great success
 			if(response.api_data.api_clear_result > 0){
-				QuestManager.get(402).increment(); // D2: Daily Expeditions 1
-				QuestManager.get(403).increment(); // D3: Daily Expeditions 2
-				QuestManager.get(404).increment(); // D4: Weekly Expeditions
+				KC3QuestManager.get(402).increment(); // D2: Daily Expeditions 1
+				KC3QuestManager.get(403).increment(); // D3: Daily Expeditions 2
+				KC3QuestManager.get(404).increment(); // D4: Weekly Expeditions
 				// If expedition 37 or 38
 				if(false){
-					QuestManager.get(410).increment(); // D9: Weekly Expedition 2
-					QuestManager.get(411).increment(); // D11: Weekly Expedition 3
+					KC3QuestManager.get(410).increment(); // D9: Weekly Expedition 2
+					KC3QuestManager.get(411).increment(); // D11: Weekly Expedition 3
 				}
 				KC3Network.trigger("Quests");
 			}
@@ -580,17 +580,17 @@ Previously known as "Reactor"
 			
 			// Log into development History
 			KC3Database.Develop({
-				flag: PlayerManager._fleets[0].ship(0).masterId,
+				flag: PlayerManager.fleets[0].ship(0).masterId,
 				rsc1: resourceUsed[0],
 				rsc2: resourceUsed[1],
 				rsc3: resourceUsed[2],
 				rsc4: resourceUsed[3],
 				result: (!failed)?response.api_data.api_slot_item.api_slotitem_id:-1,
-				time: app.Util.getUTC(headers)
+				time: Math.floor((new Date(headers.Date)).getTime()/1000)
 			});
 			
-			QuestManager.get(605).increment(); // F1: Daily Development 1
-			QuestManager.get(607).increment(); // F3: Daily Development 2
+			KC3QuestManager.get(605).increment(); // F1: Daily Development 1
+			KC3QuestManager.get(607).increment(); // F3: Daily Development 2
 			
 			// Checks if the development went great
 			if(!failed){
@@ -616,7 +616,7 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_kousyou/destroyship":function(params, response, headers){
 			KC3ShipManager.remove( params.api_ship_id );
-			QuestManager.get(609).increment(); // F5: Daily Dismantlement
+			KC3QuestManager.get(609).increment(); // F5: Daily Dismantlement
 			KC3Network.trigger("ShipSlots");
 			KC3Network.trigger("GearSlots");
 			KC3Network.trigger("Fleet");
@@ -629,7 +629,7 @@ Previously known as "Reactor"
 			$.each(params.api_slotitem_ids.split("%2C"), function(index, itemId){
 				KC3GearManager.remove( itemId );
 			});
-			QuestManager.get(613).increment(); // F12: Weekly Dismantlement
+			KC3QuestManager.get(613).increment(); // F12: Weekly Dismantlement
 			KC3Network.trigger("GearSlots");
 			KC3Network.trigger("Quests");
 		},
@@ -676,8 +676,8 @@ Previously known as "Reactor"
 			
 			// Check if successful modernization
 			if(response.api_data.api_powerup_flag==1){
-				QuestManager.get(702).increment(); // G2: Daily Modernization
-				QuestManager.get(703).increment(); // G3: Weekly Modernization
+				KC3QuestManager.get(702).increment(); // G2: Daily Modernization
+				KC3QuestManager.get(703).increment(); // G3: Weekly Modernization
 			}
 		},
 		

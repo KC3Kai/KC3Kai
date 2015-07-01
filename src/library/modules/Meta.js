@@ -75,7 +75,7 @@ Provides access to data on built-in JSON files
 			}
 			if( jp_name.substr(jp_name.length-2, 2) == "改二" ){
 				var bare2 = jp_name.substr(0, jp_name.length-2);
-				if(typeof this.s_hip[bare2] !== "undefined"){
+				if(typeof this._ship[bare2] !== "undefined"){
 					this._cache[jp_name] = this._ship[bare2]+" Kai2";
 					return this._cache[jp_name];
 				}

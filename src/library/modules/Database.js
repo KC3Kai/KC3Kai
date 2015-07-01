@@ -13,6 +13,10 @@ Uses Dexie.js third-party plugin on the assets directory
 			
 		},
 		
+		Develop: function(){
+			
+		},
+		
 		Sortie: function(){
 			
 		},

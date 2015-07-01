@@ -66,6 +66,18 @@ Mainly used by QuestManager to store quest information
 		return "";
 	};
 	
+	/* INCREMENT
+	Add one to tracking progress
+	------------------------------------------*/
+	KC3Quest.prototype.increment = function(reqNum, amount){
+		if(this.tracking && this.status==2){
+			if(typeof reqNum == "undefined"){ reqNum=0; }
+			if(typeof amount == "undefined"){ amount=1; }
+			this.tracking[reqNum][0] += amount;
+			KC3QuestManager.save();
+		}
+	};
+	
 	/* ATTACH META
 	Add reference to its Meta data from the built-in JSON files
 	this.meta assigned as function to avoid being included in JSON.stringify
