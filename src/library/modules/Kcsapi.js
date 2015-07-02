@@ -674,7 +674,7 @@ Previously known as "Reactor"
 			localStorage.maps = JSON.stringify(maps);
 		},
 		
-		/* Modernize
+		/* Ship Modernize
 		-------------------------------------------------------*/
 		"api_req_kaisou/powerup":function(params, response, headers){
 			var consumed_ids = params.api_id_items;
@@ -690,6 +690,18 @@ Previously known as "Reactor"
 				KC3QuestManager.get(703).increment(); // G3: Weekly Modernization
 				KC3Network.trigger("Quests");
 			}
+		},
+		
+		/* Equipment Modernize
+		-------------------------------------------------------*/
+		"api_req_kousyou/remodel_slot":function(params, response, headers){
+			// Update equipment on local data
+			KC3GearManager.set([ response.api_data.api_after_slot ]);
+			PlayerManager.consumables.buckets = response.api_data.api_after_material[5];
+			PlayerManager.consumables.devmats = response.api_data.api_after_material[6];
+			PlayerManager.consumables.screws = response.api_data.api_after_material[7];
+			PlayerManager.consumables.torch = response.api_data.api_after_material[4];
+			KC3Network.trigger("Consumables");
 		},
 		
 		/* Dummy
