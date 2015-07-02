@@ -565,6 +565,123 @@
 #h .activity {
 	width:310px;
 	height:60px;
+	overflow:hidden;
 	background:#fff;
 	border:1px solid #ccc;
+}
+#h .activity .activityBox {
+	width:310px;
+	height:60px;
+	overflow:hidden;
+	/*display:none;*/
+}
+
+/* Development */
+#h .activity .craftGear {
+	
+}
+#h .activity .craftGear .equipInfo {
+	width:230px;
+	height:60px;
+	float:left;
+	/*background:#fcc;*/
+	padding:2px 5px;
+}
+#h .activity .craftGear .equipIcon {
+	width:20px;
+	height:20px;
+	margin:0px 5px 0px 0px;
+	float: left;
+	/*background:#ccf;*/
+}
+#h .activity .craftGear .equipIcon img {
+	width: 20px;
+	height: 20px;
+}
+#h .activity .craftGear .equipName {
+	width:195px;
+	height:20px;
+	line-height:20px;
+	float:left;
+	font-size:14px;
+	font-weight:bold;
+	/*background:#cfc;*/
+}
+#h .activity .craftGear .equipNote {
+	width:220px;
+	height:14px;
+	float:left;
+	line-height:14px;
+	font-size:12px;
+	margin:1px 0px 2px 0px;
+	/*background:#ccc;*/
+}
+#h .activity .craftGear .used {
+	width:50px;
+	height:16px;
+	line-height:16px;
+	float:left;
+	margin:0px 2px 0px 0px;
+}
+#h .activity .craftGear .used .icon {
+	width:16px;
+	height:16px;
+	float:left;
+	margin:0px 2px 0px 0px;
+	/*background:#cfc;*/
+}
+#h .activity .craftGear .used .icon img {
+	width: 16px;
+	height: 16px;
+	margin:0px;
+	vertical-align:top;
+}
+#h .activity .craftGear .used .value {
+	width:32px;
+	height:16px;
+	float:left;
+	font-size: 11px;
+	/*background:#ccf;*/
+}
+#h .activity .craftGear .equipStats {
+	width:80px;
+	height:60px;
+	line-height:20px;
+	float:left;
+	/*background:#cfc;*/
+}
+#h .activity .craftGear .equipStat {
+	width:40px;
+	height:19px;
+	float:left;
+}
+#h .activity .craftGear .equipStatIcon {
+	width:19px;
+	height:19px;
+	float:left;
+	margin:0px 1px 0px 0px;
+}
+#h .activity .craftGear .equipStatIcon img {
+	width:15px;
+	height:15px;
+	margin:2px;
+	vertical-align: top;
+}
+#h .activity .craftGear .equipStatText {
+	width:20px;
+	height:19px;
+	line-height:19px;
+	float:left;
+	font-size:12px;
+}
+
+
+/* Ship Drop */
+#h .activity .craftShip {
+	
+}
+
+/* Expedition Helper */
+#h .activity .expedHelp {
+	
 }

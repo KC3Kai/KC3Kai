@@ -19,7 +19,7 @@
 			});
 			
 			// Change eLoS Formula
-			$(".summary-eqlos img").attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png");
+			$(".summary-eqlos img", this.domElement).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png");
 			$(".summary-eqlos", this.domElement).on("click", function(){
 				ConfigManager.scrollElosMode();
 				KC3Network.trigger("Fleet");
@@ -104,7 +104,7 @@
 						var CurrentShip = KC3ShipManager.get( rosterId );
 						var ShipBox = $(".factory .fleet-ship", container).clone().appendTo(FleetContainer);
 						
-						$(".ship-img img", ShipBox).attr("src", KC3Meta.shipIcon(CurrentShip.masterId, "../../assets/img/ui/empty.png"));
+						$(".ship-img img", ShipBox).attr("src", KC3Meta.shipIcon(CurrentShip.masterId, "../../../../assets/img/ui/empty.png"));
 						$(".ship-name", ShipBox).text( CurrentShip.name() );
 						$(".ship-type", ShipBox).text( CurrentShip.stype() );
 						$(".ship-lvl-txt", ShipBox).text(CurrentShip.level);
@@ -136,7 +136,48 @@
 				
 			},
 			CraftGear: function(container, data, local){
+				// Hide any other activity box
+				$(".activityBox", container).hide();
 				
+				// Get equipment data
+				var PlayerItem = KC3GearManager.get( data.itemId );
+				var MasterItem = KC3Master.slotitem( data.itemMasterId );
+				
+				// Show basic info of the item
+				var icon = "../../../../assets/img/items/"+MasterItem.api_type[3]+".png";
+				$(".craftGear .equipIcon img", container).attr("src", icon);
+				$(".craftGear .equipName", container).text( PlayerItem.name() );
+				
+				// Show extra item info
+				var countExisting = KC3GearManager.countByMasterId( data.itemMasterId );
+				if(countExisting == 0){
+					$(".craftGear .equipNote").html("This is your <strong>first</strong>!");
+				}else{
+					$(".craftGear .equipNote").html("You have <strong>"+countExisting+"</strong> of this, +1!");
+				}
+				
+				// Show resource used
+				$(".craftGear .used1").text( data.resourceUsed[0] );
+				$(".craftGear .used2").text( data.resourceUsed[1] );
+				$(".craftGear .used3").text( data.resourceUsed[2] );
+				$(".craftGear .used4").text( data.resourceUsed[3] );
+				
+				// Show item stats
+				$(".equipStats", container).html("")
+				CraftGearStats(container, MasterItem, "souk", "ar");
+				CraftGearStats(container, MasterItem, "houg", "fp");
+				CraftGearStats(container, MasterItem, "raig", "tp");
+				CraftGearStats(container, MasterItem, "soku", "sp");
+				CraftGearStats(container, MasterItem, "baku", "dv");
+				CraftGearStats(container, MasterItem, "tyku", "aa");
+				CraftGearStats(container, MasterItem, "tais", "as");
+				CraftGearStats(container, MasterItem, "houm", "ht");
+				CraftGearStats(container, MasterItem, "houk", "ev");
+				CraftGearStats(container, MasterItem, "saku", "ls");
+				CraftGearStats(container, MasterItem, "leng", "rn");
+				
+				// Show the box
+				$(".craftGear", container).fadeIn(500);
 			},
 			CraftShip: function(container, data, local){
 				
@@ -146,6 +187,14 @@
 			}
 		}
 	});
+	
+	function CraftGearStats(container, MasterItem, StatProperty, Code){
+		if(MasterItem["api_"+StatProperty] != 0){
+			var thisStatBox = $(".factory .equipStat", container).clone().appendTo( $(".equipStats", container) );
+			$("img", thisStatBox).attr("src", "../../../../assets/img/stats/"+Code+".png");
+			$(".equipStatText", thisStatBox).text( MasterItem["api_"+StatProperty] );
+		}
+	}
 	
 	function FleetHP(container, ShipBox, hp, rosterId){
 		var hpPercent = hp[0] / hp[1];

@@ -605,7 +605,8 @@ Previously known as "Reactor"
 				// Trigger listeners passing crafted IDs
 				KC3Network.trigger("CraftGear", {
 					itemId: response.api_data.api_slot_item.api_id,
-					itemMasterId: response.api_data.api_slot_item.api_slotitem_id
+					itemMasterId: response.api_data.api_slot_item.api_slotitem_id,
+					resourceUsed: resourceUsed
 				});
 			}
 			

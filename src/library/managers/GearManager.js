@@ -22,6 +22,17 @@ Saves and loads list to and from localStorage
 			return Object.size(this.list);
 		},
 		
+		// Count number of equipment by master item
+		countByMasterId :function(slotitem_id){
+			var returnCount = 0;
+			for(var ctr in this.list){
+				if(this.list[ctr].masterId == slotitem_id){
+					returnCount++;
+				}
+			}
+			return returnCount;
+		},
+		
 		// Add or replace an item on the list
 		add :function(data){
 			if(typeof data.api_id != "undefined"){
