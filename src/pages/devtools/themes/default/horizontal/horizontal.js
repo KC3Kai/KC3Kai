@@ -50,6 +50,20 @@
 				KC3TimerManager.update();
 			}, 1000);
 			
+			// Screenshot button
+			$(".screenshot-button", this.domElement).on("click", function(){
+				$(this).hide();
+				
+				// Tell service to pass a message to gamescreen on inspected window to get a screenshot
+				(new RMsg("service", "screenshot", {
+					tabId: chrome.devtools.inspectedWindow.tabId,
+					playerName: PlayerManager.hq.name
+				}, function(response){
+					console.log(response);
+					$(".screenshot-button", self.domElement).show();
+				})).execute();
+			});
+			
 		},
 		listeners: {
 			GameStart: function(container, data, local){

@@ -57,8 +57,9 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		------------------------------------------*/
 		"screenshot" :function(request, sender, response){
 			(new TMsg(request.tabId, "gamescreen", "screenshot", {
-				playerIndex: request.playerIndex
-			})).execute();
+				playerName: request.playerName
+			}, response)).execute();
+			return true;
 		},
 		
 		/* ACTIVATE GAME

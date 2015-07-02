@@ -8,16 +8,16 @@ function KCScreenshot(){
 	this.base64img = "";
 	this.playerIndex = "";
 	this.screenshotFilename = "";
-	this.format = (app.Config.ss_type=="JPG")
+	this.format = (ConfigManager.ss_type=="JPG")
 		?["jpeg", "jpg", "image/jpeg"]
 		:["png", "png", "image/png"];
 };
 
-KCScreenshot.prototype.start = function(playerIndex, element){
+KCScreenshot.prototype.start = function(playerName, element){
 	var self = this;
-	this.playerIndex = playerIndex;
+	this.playerName = playerName;
 	this.gamebox = element;
-	this.screenshotFilename = generateScreenshotFilename();
+	this.generateScreenshotFilename();
 	
 	// Initialize HTML5 Canvas
 	this.canvas = document.createElement("canvas");
@@ -35,7 +35,7 @@ function chromeCapture(captureFormat, response){
 	chrome.tabs.captureVisibleTab(null, {format: captureFormat}, response);
 }
 
-function generateScreenshotFilename() {
+KCScreenshot.prototype.generateScreenshotFilename = function() {
   var d = new Date();
   curr_month = d.getMonth() + "";
   if (curr_month.length == 1) { curr_month = "0" + curr_month; }
@@ -48,7 +48,11 @@ function generateScreenshotFilename() {
   curr_second = d.getSeconds() + "";
   if (curr_second.length == 1) { curr_second = "0" + curr_second; }
 
-  return "KanColle_" + d.getFullYear() + "-" + curr_month + "-" + curr_date + "_" + curr_hour + "-" + curr_min + "-" + curr_second;
+  this.screenshotFilename = "["+this.playerName+"] "+d.getFullYear()+"-"+curr_month+"-"+curr_date+" "+curr_hour+"-"+curr_min+"-"+curr_second + " " + getRandomInt(10,99);
+}
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 KCScreenshot.prototype.capture = function(){
@@ -96,7 +100,7 @@ KCScreenshot.prototype.crop = function(){
 };
 
 KCScreenshot.prototype.output = function(){
-	switch(parseInt(app.Config.ss_mode, 10)){
+	switch(parseInt(ConfigManager.ss_mode, 10)){
 		case 0: this.saveDownload(); break;
 		case 1: this.saveImgur(); break;
 		default: this.saveTab(); break;
@@ -148,7 +152,7 @@ KCScreenshot.prototype.saveImgur = function(){
 						type: 'base64'
 					},
 					success: function(response){
-						app.Logging.Screenshot(response.data.link, self.playerIndex);
+						KC3Database.Screenshot(response.data.link, self.playerIndex);
 					}
 				});
 			}else{

@@ -66,6 +66,8 @@ $(document).on("ready", function(){
 	window.onbeforeunload = function(){
 		ConfigManager.load();
 		if(ConfigManager.api_askExit==1 && !trustedExit){
+			trustedExit = true;
+			setTimeout(function(){ trustedExit = false; }, 100);
 			return "Ahh! you are closing the game!";
 		}
 	};
@@ -141,7 +143,7 @@ var interactions = {
 	// Screenshot triggered, capture the visible tab
 	screenshot :function(request, sender, response){
 		// ~Please rewrite the screenshot script
-		(new KCScreenshot()).start(request.playerIndex, $(".box-wrap"));
+		(new KCScreenshot()).start(request.playerName, $(".box-wrap"));
 		response({success:true});
 	},
 	
