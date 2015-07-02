@@ -291,7 +291,7 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_kousyou/createship_speedchange":function(params, response, headers){
 			PlayerManager.consumables.torch--; // TOFIX: LSC is -10
-			PlayerManager.buildDocks[ params.api_kdock_id-1 ].api_state = 3;
+			// KC3TimerManager.build[ params.api_kdock_id-1 ].activate()
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Timers");
 		},
@@ -385,20 +385,20 @@ Previously known as "Reactor"
 		/* Start Sortie
 		-------------------------------------------------------*/
 		"api_req_map/start":function(params, response, headers){
-			SortieManager.startSortie(
+			KC3SortieManager.startSortie(
 				response.api_data.api_maparea_id,
 				response.api_data.api_mapinfo_no,
 				params.api_deck_id,
 				Math.floor((new Date(headers.Date)).getTime()/1000)
 			);
 			
-			SortieManager.setBoss(
+			KC3SortieManager.setBoss(
 				response.api_data.api_bosscell_no,
 				response.api_data.api_bosscomp
 			);
 			
-			SortieManager.advanceNode( response.api_data.api_no );
-			SortieManager.setEnemy( response.api_data.api_enemy );
+			KC3SortieManager.advanceNode( response.api_data.api_no );
+			KC3SortieManager.setEnemy( response.api_data.api_enemy );
 			
 			KC3Network.trigger("SortieStart");
 		},
@@ -406,15 +406,15 @@ Previously known as "Reactor"
 		/* Traverse Map
 		-------------------------------------------------------*/
 		"api_req_map/next":function(params, response, headers){
-			SortieManager.advanceNode( response.api_data.api_no );
-			SortieManager.setEnemy( response.api_data.api_enemy );
+			KC3SortieManager.advanceNode( response.api_data.api_no );
+			KC3SortieManager.setEnemy( response.api_data.api_enemy );
 			KC3Network.trigger("NextNode");
 		},
 		
 		/* Battle Starts
 		-------------------------------------------------------*/
 		"api_req_sortie/battle":function(params, response, headers){
-			SortieManager.engageBattle(
+			KC3SortieManager.engageBattle(
 				response.api_data,
 				Math.floor((new Date(headers.Date)).getTime()/1000)
 			);
@@ -422,7 +422,7 @@ Previously known as "Reactor"
 		},
 		
 		"api_req_sortie/airbattle":function(params, response, headers){
-			SortieManager.engageBattle(
+			KC3SortieManager.engageBattle(
 				response.api_data,
 				Math.floor((new Date(headers.Date)).getTime()/1000)
 			);
@@ -430,7 +430,7 @@ Previously known as "Reactor"
 		},
 		
 		"api_req_combined_battle/battle_water":function(params, response, headers){
-			SortieManager.engageBattle(
+			KC3SortieManager.engageBattle(
 				response.api_data,
 				Math.floor((new Date(headers.Date)).getTime()/1000)
 			);
@@ -438,7 +438,7 @@ Previously known as "Reactor"
 		},
 		
 		"api_req_battle_midnight/sp_midnight":function(params, response, headers){
-			SortieManager.engageBattle(
+			KC3SortieManager.engageBattle(
 				response.api_data,
 				Math.floor((new Date(headers.Date)).getTime()/1000)
 			);
@@ -448,21 +448,21 @@ Previously known as "Reactor"
 		/* Yasen as second part of node battle
 		-------------------------------------------------------*/
 		"api_req_battle_midnight/battle":function(params, response, headers){
-			SortieManager.engageNight( response.api_data );
+			KC3SortieManager.engageNight( response.api_data );
 			KC3Network.trigger("BattleNight");
 		},
 		
 		/* Battle Results
 		-------------------------------------------------------*/
 		"api_req_sortie/battleresult":function(params, response, headers){
-			SortieManager.resultScreen( response.api_data );
+			KC3SortieManager.resultScreen( response.api_data );
 			KC3Network.trigger("BattleResult");
 		},
 		
 		/* Combined Fleet Battle Results
 		-------------------------------------------------------*/
 		"api_req_combined_battle/battleresult":function(params, response, headers){
-			SortieManager.resultScreen( response.api_data );
+			KC3SortieManager.resultScreen( response.api_data );
 			KC3Network.trigger("BattleResult");
 		},
 		
@@ -529,7 +529,13 @@ Previously known as "Reactor"
 		/* PVP Start
 		-------------------------------------------------------*/
 		"api_req_practice/battle":function(params, response, headers){
-			KC3Network.trigger("PvPStart", response.api_data);
+			KC3Network.trigger("PvPStart", { battle: response.api_data });
+		},
+		
+		/* PVP Start
+		-------------------------------------------------------*/
+		"api_req_practice/midnight_battle":function(params, response, headers){
+			KC3Network.trigger("PvPNight", { battle: response.api_data });
 		},
 		
 		/* PVP Result
@@ -543,7 +549,7 @@ Previously known as "Reactor"
 				KC3QuestManager.get(302).increment(); // C4: Weekly Exercises
 			}
 			
-			KC3Network.trigger("PvPEnd", response.api_data);
+			KC3Network.trigger("PvPEnd", { result: response.api_data });
 			KC3Network.trigger("Quests");
 		},
 		
@@ -672,13 +678,17 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_kaisou/powerup":function(params, response, headers){
 			var consumed_ids = params.api_id_items;
-			KC3ShipManager.remove(consumed_ids.split("%2C"));
-			KC3Network.trigger("Consumables");
+			$.each(consumed_ids.split("%2C"), function(index, element){
+				KC3ShipManager.remove(element);
+				KC3Network.trigger("ShipSlots");
+				KC3Network.trigger("GearSlots");
+			});
 			
 			// Check if successful modernization
 			if(response.api_data.api_powerup_flag==1){
 				KC3QuestManager.get(702).increment(); // G2: Daily Modernization
 				KC3QuestManager.get(703).increment(); // G3: Weekly Modernization
+				KC3Network.trigger("Quests");
 			}
 		},
 		

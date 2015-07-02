@@ -28,6 +28,17 @@ Contains summary information about a fleet and its 6 ships
 			this.name = data.api_name;
 			this.ships = data.api_ship;
 			this.mission = data.api_mission;
+			if(data.api_id > 1){
+				if(this.mission[0] > 0){
+					KC3TimerManager.exped( data.api_id ).activate(
+						this.mission[2],
+						this.ship(0).masterId,
+						this.mission[1]
+					);
+				}else{
+					KC3TimerManager.exped( data.api_id ).deactivate();
+				}
+			}
 		}
 	};
 	

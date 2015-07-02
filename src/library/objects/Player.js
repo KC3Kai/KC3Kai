@@ -34,19 +34,18 @@ Instantiatable class to represent one player
 	
 	KC3Player.prototype.logout = function(){
 		localStorage.removeItem("player");
-		localStorage.removeItem("player_fleets");
-		localStorage.removeItem("player_ships");
-		localStorage.removeItem("player_gears");
-		localStorage.removeItem("player_maps");
-		localStorage.removeItem("player_statistics");
-		localStorage.removeItem("player_newsfeed");
-		localStorage.removeItem("player_quests");
-		localStorage.removeItem("lastResource");
-		localStorage.removeItem("lastUseitem");
+		// localStorage.removeItem("player_fleets");
+		localStorage.removeItem("ships");
+		localStorage.removeItem("gears");
+		// localStorage.removeItem("player_maps");
+		localStorage.removeItem("statistics");
+		localStorage.removeItem("quests");
+		// localStorage.removeItem("lastResource");
+		// localStorage.removeItem("lastUseitem");
 		
-		// ShipManager.clear();
-		// GearManager.clear();
-		// QuestManager.clear();
+		KC3ShipManager.clear();
+		KC3GearManager.clear();
+		KC3QuestManager.clear();
 		// SortieManager.clear();
 		// TimerManager.clear();
 	};

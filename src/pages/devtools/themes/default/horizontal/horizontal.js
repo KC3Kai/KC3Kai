@@ -26,6 +26,30 @@
 				$("img", $(this)).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png");
 			});
 			
+			// Initialize timer objects with bindingsto their UI
+			KC3TimerManager.init([
+				$(".exped-box-1", this.domElement),
+				$(".exped-box-2", this.domElement),
+				$(".exped-box-3", this.domElement)
+			],
+			[
+				$(".repair-box-1", this.domElement),
+				$(".repair-box-2", this.domElement),
+				$(".repair-box-3", this.domElement),
+				$(".repair-box-4", this.domElement)
+			],
+			[
+				$(".build-box-1", this.domElement),
+				$(".build-box-2", this.domElement),
+				$(".build-box-3", this.domElement),
+				$(".build-box-4", this.domElement)
+			]);
+			
+			// Update Timer UIs
+			setInterval(function(){
+				KC3TimerManager.update();
+			}, 1000);
+			
 		},
 		listeners: {
 			GameStart: function(container, data, local){
@@ -60,7 +84,25 @@
 				$(".max_gear", container).text( KC3GearManager.max );
 			},
 			Timers: function(container, data, local){
+				// Expedition numbers
+				KC3TimerManager._exped[0].expnum();
+				KC3TimerManager._exped[1].expnum();
+				KC3TimerManager._exped[2].expnum();
 				
+				// Repair faces
+				KC3TimerManager._repair[0].face();
+				KC3TimerManager._repair[1].face();
+				KC3TimerManager._repair[2].face();
+				KC3TimerManager._repair[3].face();
+				
+				// Construction faces
+				console.log("ConfigManager.info_face", ConfigManager.info_face);
+				if(ConfigManager.info_face){
+					KC3TimerManager._build[0].face();
+					KC3TimerManager._build[1].face();
+					KC3TimerManager._build[2].face();
+					KC3TimerManager._build[3].face();
+				}
 			},
 			Quests: function(container, data, local){
 				KC3QuestManager.load();
@@ -91,12 +133,15 @@
 			},
 			Fleet: function(container, data, local){
 				var CurrentFleet = PlayerManager.fleets[local.selectedFleet-1];
+				
+				// Fleet Summary Stats
 				$(".summary-level .summary-text", container).text( CurrentFleet.totalLevel() );
 				$(".summary-eqlos .summary-text", container).text( Math.round( CurrentFleet.eLoS() * 100) / 100 );
 				$(".summary-airfp .summary-text", container).text( CurrentFleet.fighterPower() );
 				$(".summary-speed .summary-text", container).text( CurrentFleet.speed() );
 				container.css("box-shadow", "none");
 				
+				// Fleet Ships
 				var FleetContainer = $(".fleet-ships", container);
 				FleetContainer.html("");
 				$.each(CurrentFleet.ships, function(index, rosterId){
@@ -119,6 +164,11 @@
 						FleetEquipment( $(".ship-gear-4 img", ShipBox), CurrentShip.equipment(3) );
 					}
 				});
+				
+				// Expedition Timer Faces
+				KC3TimerManager._exped[0].face();
+				KC3TimerManager._exped[1].face();
+				KC3TimerManager._exped[2].face();
 			},
 			SortieStart: function(container, data, local){
 				

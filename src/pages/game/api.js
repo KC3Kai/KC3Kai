@@ -89,7 +89,7 @@ var interactions = {
 	// Quest page is opened, show overlays
 	questOverlay :function(request, sender, response){
 		KC3QuestManager.load();
-		console.log(KC3QuestManager.list);
+		// console.log(KC3QuestManager.list);
 		$.each(request.questlist, function( index, QuestRaw ){
 			// console.log("showing quest",QuestRaw);
 			if( QuestRaw !=- 1 ){
@@ -97,7 +97,7 @@ var interactions = {
 				
 				// Get quest data
 				var QuestData = KC3QuestManager.get( QuestRaw.api_no );
-				console.log("QuestData", QuestData);
+				// console.log("QuestData", QuestData);
 				
 				// Show meta, title and description
 				if( QuestData.meta ){
@@ -115,6 +115,12 @@ var interactions = {
 				}
 			}
 		});
+		response({success:true});
+	},
+	
+	// Quest Progress Notification
+	questProgress :function(request, sender, response){
+		
 		response({success:true});
 	},
 	

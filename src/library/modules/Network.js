@@ -27,6 +27,9 @@ Listens to network history and triggers callback if game events happen
 			CraftGear: [],
 			CraftShip: [],
 			ClearedMap: [],
+			PvPStart: [],
+			PvPNight: [],
+			PvPEnd: []
 		},
 		
 		/* ADD LISTENER

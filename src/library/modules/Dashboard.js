@@ -99,7 +99,9 @@ Use multiple instances for different layouts (horizontal vs vertical)
 	Execute one of the listeners
 	------------------------------------------*/
 	KC3Dashboard.prototype.trigger = function( event, data ){
-		this.listeners[ event ]( this.domElement, data, this.data );
+		if(typeof this.listeners[ event ] != "undefined"){
+			this.listeners[ event ]( this.domElement, data, this.data );
+		}
 	};
 	
 })();

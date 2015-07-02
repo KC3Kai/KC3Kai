@@ -13,10 +13,8 @@ Does not include Ships and Gears which are managed by other Managers
 		consumables: {},
 		fleets: [],
 		fleetCount: 1,
-		repairDocks: [],
 		repairSlots: 2,
 		repairShips: [],
-		buildDocks: [],
 		buildSlots: 2,
 		combinedFleet: 0,
 		statistics: {},
@@ -36,18 +34,6 @@ Does not include Ships and Gears which are managed by other Managers
 				new KC3Fleet(),
 				new KC3Fleet(),
 				new KC3Fleet()
-			];
-			this.repairDocks = [
-				new KC3RepairDock(),
-				new KC3RepairDock(),
-				new KC3RepairDock(),
-				new KC3RepairDock()
-			];
-			this.buildDocks = [
-				new KC3BuildDock(),
-				new KC3BuildDock(),
-				new KC3BuildDock(),
-				new KC3BuildDock()
 			];
 		},
 		
@@ -71,21 +57,32 @@ Does not include Ships and Gears which are managed by other Managers
 		},
 		
 		setRepairDocks :function( data ){
-			this.repairDocks = [
-				new KC3RepairDock( data[0] || {} ),
-				new KC3RepairDock( data[1] || {} ),
-				new KC3RepairDock( data[2] || {} ),
-				new KC3RepairDock( data[3] || {} )
-			];
+			this.repairShips = [];
+			var self = this;
+			$.each(data, function(ctr, ndock){
+				if(ndock.api_state > 0){
+					self.repairShips.push( ndock.api_ship_id );
+					KC3TimerManager.repair( ndock.api_id ).activate(
+						ndock.api_complete_time,
+						KC3ShipManager.get( ndock.api_ship_id ).masterId
+					);
+				}else{
+					KC3TimerManager.repair( ndock.api_id ).deactivate();
+				}
+			});
 		},
 		
 		setBuildDocks :function( data ){
-			this.buildDocks = [
-				new KC3BuildDock( data[0] || {} ),
-				new KC3BuildDock( data[1] || {} ),
-				new KC3BuildDock( data[2] || {} ),
-				new KC3BuildDock( data[3] || {} )
-			];
+			$.each(data, function(ctr, kdock){
+				if(kdock.api_state > 0){
+					KC3TimerManager.build( kdock.api_id ).activate(
+						kdock.api_complete_time,
+						kdock.api_created_ship_id
+					);
+				}else{
+					KC3TimerManager.build( kdock.api_id ).deactivate();
+				}
+			});
 		},
 		
 		setResources :function( data ){

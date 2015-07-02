@@ -139,13 +139,6 @@
 	color:#888;
 }
 /* Timer boxes */
-#h .box-timers {
-	width:210px;
-	height:60px;
-	margin:4px 0px 0px 0px;
-	overflow:hidden;
-	/*background:#ccf;*/
-}
 #h .timer-img {
 	border-radius:25px;
 }
@@ -159,30 +152,12 @@
 	background:#996600;
 }
 
-#h .box-timers-2 .timer-item {
-	width:71px;
+#h .box-timers-3 {
+	width:210px;
 	height:60px;
-	float:left;
+	margin:4px 0px 0px 0px;
+	overflow:hidden;
 }
-#h .box-timers-2 .timer-img {
-	width:44px;
-	height:44px;
-	margin:0px auto 2px;
-}
-#h .box-timers-2 .timer-img img {
-	width:38px;
-	height:38px;
-	margin:3px;
-}
-#h .box-timers-2 .timer-time {
-	width:70px;
-	height:14px;
-	line-height:14px;
-	text-align:center;
-	font-size:12px;
-	/*background:#fcc;*/
-}
-
 #h .box-timers-3 .timer-item {
 	width:70px;
 	height:60px;
@@ -220,6 +195,18 @@
 	/*background:#fcc;*/
 }
 
+#h .box-timers-vertical {
+	width:210px;
+	height:120px;
+	margin:4px 0px 0px 0px;
+	overflow:hidden;
+}
+#h .box-timers-4 {
+	width:105px;
+	height:120px;
+	float:left;
+	overflow:hidden;
+}
 #h .box-timers-4 .timer-item {
 	width:105px;
 	height:30px;
@@ -573,7 +560,7 @@
 	width:310px;
 	height:60px;
 	overflow:hidden;
-	/*display:none;*/
+	display:none;
 }
 
 /* Development */

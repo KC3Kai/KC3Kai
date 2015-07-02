@@ -97,20 +97,27 @@ Uses KC3Quest objects to play around with
 			}
 		},
 		
+		/* CLEAR
+		Clear all quest data
+		------------------------------------------*/
+		clear :function(){
+			
+		},
+		
 		/* SAVE
 		Write current quest data to localStorage
 		------------------------------------------*/
 		save :function(){
 			// Store only the list. The actives and opens will be redefined on load()
-			localStorage.player_quests = JSON.stringify(this.list);
+			localStorage.quests = JSON.stringify(this.list);
 		},
 		
 		/* LOAD
 		Read and refill list from localStorage
 		------------------------------------------*/
 		load :function(){
-			if(typeof localStorage.player_quests != "undefined"){
-				var tempQuests = JSON.parse(localStorage.player_quests);
+			if(typeof localStorage.quests != "undefined"){
+				var tempQuests = JSON.parse(localStorage.quests);
 				var tempQuest;
 				
 				// Empty actives and opens since they will be re-added
