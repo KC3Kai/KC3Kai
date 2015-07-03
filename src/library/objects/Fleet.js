@@ -247,31 +247,29 @@ Contains summary information about a fleet and its 6 ships
 	Data must be recorded on the state of sortie execution, thus no reference
 	------------------------------------*/
 	KC3Fleet.prototype.sortieJson = function(){
-		var ReturnObj = [];
-		var thisFleet = app.Docks._fleets[index];
-		var ctr, thisShip;
-		if (typeof thisFleet != "undefined") {
-			for(ctr in thisFleet.api_ship){
-				if(thisFleet.api_ship[ctr] > -1){
-					thisShip = app.Ships.get( thisFleet.api_ship[ctr] );
+		if(this.active){
+			var ReturnObj = [];
+			var self = this;
+			$.each(this.ships, function(index, rosterId){
+				if(rosterId > -1){
 					ReturnObj.push({
-						mst_id: thisShip.api_ship_id,
-						level: thisShip.api_lv,
-						kyouka: thisShip.api_kyouka,
-						morale: thisShip.api_cond,
+						mst_id: self.ship(index).masterId,
+						level: self.ship(index).level,
+						kyouka: self.ship(index).mod,
+						morale: self.ship(index).morale,
 						equip: [
-							this.CompileShipEquip( thisShip.api_slot[0] ),
-							this.CompileShipEquip( thisShip.api_slot[1] ),
-							this.CompileShipEquip( thisShip.api_slot[2] ),
-							this.CompileShipEquip( thisShip.api_slot[3] )
+							self.ship(index).equipment(0).masterId,
+							self.ship(index).equipment(1).masterId,
+							self.ship(index).equipment(2).masterId,
+							self.ship(index).equipment(3).masterId
 						],
 					});
-				}else{
-					ReturnObj.push(false);
 				}
-			}
+			});
+			return ReturnObj;
+		}else{
+			return {};
 		}
-		return ReturnObj;
 	};
 	
 })();

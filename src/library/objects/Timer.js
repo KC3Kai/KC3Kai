@@ -27,6 +27,9 @@ Has functions for TimerManager to use
 		this.completion = 0;
 		this.faceId = 0;
 		this.expedNum = 0;
+		$(".timer-img img", this.element).attr("src", "../../../../assets/img/ui/empty.png");
+		$(".timer-expnum", this.element).text("");
+		$(".timer-time", this.element).text("");
 	};
 	
 	KC3Timer.prototype.time = function(){

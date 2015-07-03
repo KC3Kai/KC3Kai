@@ -6,6 +6,15 @@
 	background:#fff;
 	display:none;
 }
+
+/*--------------------------------------
+-------------- NORMAL MODE -------------
+--------------------------------------*/
+#h .normal {
+	width:550px;
+	height:450px;
+	display:none;
+}
 #h .dash_panel {
 	float:left;
 	height:450px;
@@ -662,7 +671,6 @@
 	font-size:12px;
 }
 
-
 /* Ship Drop */
 #h .activity .craftShip {
 	
@@ -671,4 +679,13 @@
 /* Expedition Helper */
 #h .activity .expedHelp {
 	
+}
+
+/*--------------------------------------
+------------- BATTLE MODE -------------
+--------------------------------------*/
+#h .battle {
+	width:550px;
+	height:450px;
+	background:url(../battlemode.png);
 }

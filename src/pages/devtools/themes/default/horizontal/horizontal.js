@@ -5,7 +5,8 @@
 		container: "#h",
 		externalHtml: "horizontal/horizontal.html",
 		variables: {
-			selectedFleet: 1
+			selectedFleet: 1,
+			mode: "normal"
 		},
 		ready: function(){
 			var self = this;
@@ -73,15 +74,24 @@
 				
 			},
 			HomeScreen: function(container, data, local){
-				console.log("Homescreen", PlayerManager, KC3ShipManager);
+				local.mode = "battle";
+				$(".normal", container).show();
+				$(".battle", container).hide();
 			},
 			HQ: function(container, data, local){
-				$(".admiral_name", container).text( PlayerManager.hq.name );
-				$(".admiral_comm", container).text( PlayerManager.hq.desc );
-				$(".admiral_rank", container).text( PlayerManager.hq.rank );
-				$(".level_value", container).text( PlayerManager.hq.level );
-				$(".exp_bar", container).css({width: (PlayerManager.hq.exp[0]*90)+"px"});
-				$(".exp_text", container).text( PlayerManager.hq.exp[1] );
+				if(local.mode=="normal"){
+					$(".admiral_name", container).text( PlayerManager.hq.name );
+					$(".admiral_comm", container).text( PlayerManager.hq.desc );
+					$(".admiral_rank", container).text( PlayerManager.hq.rank );
+					$(".level_value", container).text( PlayerManager.hq.level );
+					$(".exp_bar", container).css({width: (PlayerManager.hq.exp[0]*90)+"px"});
+					$(".exp_text", container).text( PlayerManager.hq.exp[1] );
+				}else if(local.mode=="battle"){
+					$(".admiral_name", container).text( PlayerManager.hq.name );
+					$(".level_value", container).text( PlayerManager.hq.level );
+					$(".exp_bar", container).css({width: (PlayerManager.hq.exp[0]*90)+"px"});
+					$(".exp_text", container).text( PlayerManager.hq.exp[1] );
+				}
 			},
 			Consumables: function(container, data, local){
 				$(".count_fcoin", container).text( PlayerManager.consumables.fcoin );
@@ -110,7 +120,6 @@
 				KC3TimerManager._repair[3].face();
 				
 				// Construction faces
-				console.log("ConfigManager.info_face", ConfigManager.info_face);
 				if(ConfigManager.info_face){
 					KC3TimerManager._build[0].face();
 					KC3TimerManager._build[1].face();
@@ -123,26 +132,26 @@
 				
 				// Get active quests
 				var activeQuests = KC3QuestManager.getActives();
-				$(".box-quests .box-quest .color").removeClass("type1");
-				$(".box-quests .box-quest .color").removeClass("type2");
-				$(".box-quests .box-quest .color").removeClass("type3");
-				$(".box-quests .box-quest .color").removeClass("type4");
-				$(".box-quests .box-quest .color").removeClass("type5");
-				$(".box-quests .box-quest .color").removeClass("type6");
-				$(".box-quests .box-quest .color").removeClass("type7");
-				$(".box-quests .box-quest").hide();
+				$(".box-quests .box-quest .color", container).removeClass("type1");
+				$(".box-quests .box-quest .color", container).removeClass("type2");
+				$(".box-quests .box-quest .color", container).removeClass("type3");
+				$(".box-quests .box-quest .color", container).removeClass("type4");
+				$(".box-quests .box-quest .color", container).removeClass("type5");
+				$(".box-quests .box-quest .color", container).removeClass("type6");
+				$(".box-quests .box-quest .color", container).removeClass("type7");
+				$(".box-quests .box-quest", container).hide();
 				
 				// Show each of them on interface
 				$.each(activeQuests, function(index, quest){
 					var questType = (quest.id+"").substring(0,1);
-					$(".box-quests .quest-box-"+(index+1)+" .color").addClass( "type"+questType );
+					$(".box-quests .quest-box-"+(index+1)+" .color", container).addClass( "type"+questType );
 					if(quest.meta){
-						$(".box-quests .quest-box-"+(index+1)+" .name").text( quest.meta().name );
+						$(".box-quests .quest-box-"+(index+1)+" .name", container).text( quest.meta().name );
 					}else{
-						$(".box-quests .quest-box-"+(index+1)+" .name").text("?");
+						$(".box-quests .quest-box-"+(index+1)+" .name", container).text("?");
 					}
-					$(".box-quests .quest-box-"+(index+1)+" .status").text( quest.outputShort() );
-					$(".box-quests .quest-box-"+(index+1)).show();
+					$(".box-quests .quest-box-"+(index+1)+" .status", container).text( quest.outputShort() );
+					$(".box-quests .quest-box-"+(index+1), container).show();
 				});
 			},
 			Fleet: function(container, data, local){
@@ -185,7 +194,9 @@
 				KC3TimerManager._exped[2].face();
 			},
 			SortieStart: function(container, data, local){
-				
+				local.mode = "battle";
+				$(".normal", container).hide();
+				$(".battle", container).show();
 			},
 			CompassResult: function(container, data, local){
 				

@@ -24,12 +24,35 @@ Xxxxxxx
 				fleet2: PlayerManager.fleets[1].sortieJson(),
 				fleet3: PlayerManager.fleets[2].sortieJson(),
 				fleet4: PlayerManager.fleets[3].sortieJson(),
-				support1: this.GetSupportingFleet(false),
-				support2: this.GetSupportingFleet(true),
+				support1: this.getSupportingFleet(false),
+				support2: this.getSupportingFleet(true),
 				time: stime
 			}, function(id){
 				self.onSortie = id;
 			});
+		},
+		
+		getSupportingFleet :function(bossSupport){
+			var expedNumbers;
+			if(bossSupport){
+				expedNumbers = [34,110,118,126,150];
+				return this.checkIfFleetIsSupporting(expedNumbers, 1)
+					|| this.checkIfFleetIsSupporting(expedNumbers, 2)
+					|| this.checkIfFleetIsSupporting(expedNumbers, 3);
+			}else{
+				expedNumbers = [33,109,117,125,149];
+				return this.checkIfFleetIsSupporting(expedNumbers, 1)
+					|| this.checkIfFleetIsSupporting(expedNumbers, 2)
+					|| this.checkIfFleetIsSupporting(expedNumbers, 3);
+			}
+		},
+		
+		checkIfFleetIsSupporting :function(expedNumbers, fleetNumber){
+			if(PlayerManager.fleets[fleetNumber].active){
+				var fleetExpedition = PlayerManager.fleets[fleetNumber].mission[1];
+				return (expedNumbers.indexOf(fleetExpedition)>-1)?fleetNumber:0;
+			}
+			return 0;
 		},
 		
 		setBoss :function(){
