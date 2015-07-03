@@ -8,10 +8,21 @@ Xxxxxxx
 	
 	window.KC3SortieManager = {
 		onSortie: 0,
+		fleetSent: 1,
+		map_world: 0,
+		map_num: 0,
+		bossNode: 0,
+		bossPattern: 0,
+		nodeNum: 0,
+		nodePattern: 0,
 		
 		startSortie :function(world, mapnum, fleetNum, stime){
 			// If still on sortie, end previous one
 			if(this.onSortie > 0){ this.endSortie(); }
+			
+			this.map_world = world;
+			this.map_num = mapnum;
+			this.fleetSent = fleetNum;
 			
 			// Save on database and remember current sortieId
 			var self = this;
@@ -59,12 +70,12 @@ Xxxxxxx
 			
 		},
 		
-		advanceNode :function(){
-			
+		advanceNode :function( nodeNum ){
+			this.nodeNum = nodeNum;
 		},
 		
-		setEnemy :function(){
-			
+		setEnemy :function( nodePattern ){
+			this.nodePattern = nodePattern;
 		},
 		
 		engageBattle :function(){
@@ -81,6 +92,13 @@ Xxxxxxx
 		
 		endSortie :function(){
 			this.onSortie = 0;
+			this.fleetSent = 1;
+			this.map_world = 0;
+			this.map_num = 0;
+			this.bossNode = 0;
+			this.bossPattern = 0;
+			this.nodeNum = 0;
+			this.nodePattern = 0;
 		},
 		
 	};

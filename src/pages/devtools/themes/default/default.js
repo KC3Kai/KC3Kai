@@ -13,6 +13,9 @@
 		KC3Panel.applyCustomizations( $("body") );
 		KC3Panel.detectOrientation();
 		
+		// $("#wait").hide();
+		// KC3Panel.activateDashboard();
+		
 		/* NETWORK
 		-----------------------------------*/
 		// GameStart on api_start2

@@ -23,7 +23,7 @@ Previously known as "Reactor"
 		"api_port/port":function(params, response, headers){	
 			KC3Network.trigger("HomeScreen");
 			
-			// SortieManager.endSortie();
+			KC3SortieManager.endSortie();
 			
 			PlayerManager.setHQ({
 				mid: response.api_data.api_basic.api_member_id,

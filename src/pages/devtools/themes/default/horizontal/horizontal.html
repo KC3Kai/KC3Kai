@@ -267,38 +267,66 @@
 <!-- BATTLE MODE -->
 <div class="battle">
 	
-	<div class="box-quests" class="box-quests">
-		<div class="box-quest quest-box-1">
-			<div class="color"></div>
-			<div class="name"></div>
-			<div class="status">24/24</div>
+	<div class="battle_hq">
+		<div class="battle_admiral"></div>
+		<div class="battle_hqlevel">
+			<div class="battle_hqlevel_text"></div>
+			<div class="battle_hqlevel_box">
+				<div class="battle_hqexpbar"><div class="battle_hqexpval"></div></div>
+			</div>
+			<div class="battle_hqlevel_next"></div>
 			<div class="clear"></div>
 		</div>
-		<div class="box-quest quest-box-2">
-			<div class="color"></div>
-			<div class="name"></div>
-			<div class="status">1/1</div>
+		<div class="battle_slots">
+			<div class="battle_slot battle_shipslot">
+				<div class="icon"><img src="../../../../assets/img/client/ship.png" /></div>
+				<div class="current count_ships"></div>
+				<div class="max max_ships"></div>
+				<div class="clear"></div>
+			</div>
+			<div class="battle_slot battle_gearslot">
+				<div class="icon"><img src="../../../../assets/img/client/gear.png" /></div>
+				<div class="current count_gear"></div>
+				<div class="max max_gear"></div>
+				<div class="clear"></div>
+			</div>
 			<div class="clear"></div>
 		</div>
-		<div class="box-quest quest-box-3">
-			<div class="color"></div>
-			<div class="name"></div>
-			<div class="status">3/3</div>
-			<div class="clear"></div>
-		</div>
-		<div class="box-quest quest-box-4">
+		<div class="battle_revert hover">Exit Battle Mode</div>
+	</div>
+	
+	<div class="battle_quests">
+		<div class="battle_quest quest-box-1">
 			<div class="color"></div>
 			<div class="name"></div>
 			<div class="status"></div>
 			<div class="clear"></div>
 		</div>
-		<div class="box-quest quest-box-5">
+		<div class="battle_quest quest-box-2">
 			<div class="color"></div>
 			<div class="name"></div>
 			<div class="status"></div>
 			<div class="clear"></div>
 		</div>
-		<div class="box-quest quest-box-6">
+		<div class="battle_quest quest-box-3">
+			<div class="color"></div>
+			<div class="name"></div>
+			<div class="status"></div>
+			<div class="clear"></div>
+		</div>
+		<div class="battle_quest quest-box-4">
+			<div class="color"></div>
+			<div class="name"></div>
+			<div class="status"></div>
+			<div class="clear"></div>
+		</div>
+		<div class="battle_quest quest-box-5">
+			<div class="color"></div>
+			<div class="name"></div>
+			<div class="status"></div>
+			<div class="clear"></div>
+		</div>
+		<div class="battle_quest quest-box-6">
 			<div class="color"></div>
 			<div class="name"></div>
 			<div class="status"></div>
@@ -306,13 +334,132 @@
 		</div>
 		<div class="clear"></div>
 	</div>
+	<div class="battle_sortie">
+		
+	</div>
+	<div class="battle_fleet">
+		<div class="battle_singlefleet">
+			
+		</div>
+		<div class="battle_mainfleet">
+			
+		</div>
+		<div class="battle_escorts">
+			
+		</div>
+	</div>
 	
-	
+	<div class="battle_details">
+		
+	</div>
 </div>
 
 
 <!-- FACTORY -->
 <div class="factory">
+
+	<!-- BATTLE MODE: SINGLE FLEET SHIP -->
+	<div class="battle-ship">
+		<div class="ship-img"><img src="../../../../assets/img/ui/empty.png" /></div>
+		<div class="ship-info">
+			<div class="ship-name"></div>
+			<div class="ship-type"></div>
+			<div class="ship-hp-text">000 / 000</div>
+			<div class="ship-hp-bar">
+				<div class="ship-hp-val"></div>
+			</div>
+		</div>
+		<div class="ship-level">
+			<div class="ship-lvl-lbl">Lv.</div>
+			<div class="ship-lvl-txt"></div>
+			<div class="ship-lvl-next"></div>
+			<div class="ship-lvl-bar"><div class="ship-lvl-val"></div></div>
+		</div>
+		<div class="ship-morale">
+			<div class="ship-morale-box"></div>
+		</div>
+		<div class="ship-equip">
+			<div class="ship-gear-1 ship-gear">
+				<img src="../../../../assets/img/ui/empty.png" />
+				<div class="ship-equip-capacity">00</div>
+			</div>
+			<div class="ship-gear-2 ship-gear">
+				<img src="../../../../assets/img/ui/empty.png" />
+				<div class="ship-equip-capacity">00</div>
+			</div>
+			<div class="ship-gear-3 ship-gear">
+				<img src="../../../../assets/img/ui/empty.png" />
+				<div class="ship-equip-capacity">00</div>
+			</div>
+			<div class="ship-gear-4 ship-gear">
+				<img src="../../../../assets/img/ui/empty.png" />
+				<div class="ship-equip-capacity">00</div>
+			</div>
+		</div>
+		<div class="ship-supply">
+			<div class="supply-fuel"><div class="supply-bar"></div></div>
+			<div class="supply-ammo"><div class="supply-bar"></div></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	
+	<!-- BATTLE MODE: COMBINED FLEET MAIN SHIP -->
+	<div class="battle-mship">
+		<div class="ship-img"><img src="../../../../assets/img/ui/empty.png" /></div>
+		<div class="ship-info">
+			<div class="ship-name"></div>
+			<div class="ship-type"></div>
+			<div class="ship-hp-text">000 / 000</div>
+			<div class="ship-hp-bar">
+				<div class="ship-hp-val"></div>
+			</div>
+		</div>
+		<div class="ship-level">
+			<div class="ship-lvl-lbl">Lv.</div>
+			<div class="ship-lvl-txt"></div>
+			<div class="ship-lvl-next"></div>
+			<div class="ship-lvl-bar"><div class="ship-lvl-val"></div></div>
+		</div>
+		<div class="ship-morale">
+			<div class="ship-morale-box"></div>
+		</div>
+		<div class="ship-equip">
+			<div class="ship-gear-1 ship-gear"><img src="../../../../assets/img/ui/empty.png" /></div>
+			<div class="ship-gear-2 ship-gear"><img src="../../../../assets/img/ui/empty.png" /></div>
+			<div class="ship-gear-3 ship-gear"><img src="../../../../assets/img/ui/empty.png" /></div>
+			<div class="ship-gear-4 ship-gear"><img src="../../../../assets/img/ui/empty.png" /></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	
+	<!-- BATTLE MODE: COMBINED FLEET ESCORT SHIP -->
+	<div class="battle-eship">
+		<div class="ship-img"><img src="../../../../assets/img/ui/empty.png" /></div>
+		<div class="ship-info">
+			<div class="ship-name"></div>
+			<div class="ship-type"></div>
+			<div class="ship-hp-text">000 / 000</div>
+			<div class="ship-hp-bar">
+				<div class="ship-hp-val"></div>
+			</div>
+		</div>
+		<div class="ship-level">
+			<div class="ship-lvl-lbl">Lv.</div>
+			<div class="ship-lvl-txt"></div>
+			<div class="ship-lvl-next"></div>
+			<div class="ship-lvl-bar"><div class="ship-lvl-val"></div></div>
+		</div>
+		<div class="ship-morale">
+			<div class="ship-morale-box"></div>
+		</div>
+		<div class="ship-equip">
+			<div class="ship-gear-1 ship-gear"><img src="../../../../assets/img/ui/empty.png" /></div>
+			<div class="ship-gear-2 ship-gear"><img src="../../../../assets/img/ui/empty.png" /></div>
+			<div class="ship-gear-3 ship-gear"><img src="../../../../assets/img/ui/empty.png" /></div>
+			<div class="ship-gear-4 ship-gear"><img src="../../../../assets/img/ui/empty.png" /></div>
+		</div>
+		<div class="clear"></div>
+	</div>
 	
 	<!-- FLEET SHIP -->
 	<div class="fleet-ship">
