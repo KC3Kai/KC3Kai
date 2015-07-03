@@ -15,6 +15,7 @@ Xxxxxxx
 		bossPattern: 0,
 		nodeNum: 0,
 		nodePattern: 0,
+		nextNodeCount: 0,
 		
 		startSortie :function(world, mapnum, fleetNum, stime){
 			// If still on sortie, end previous one
@@ -23,6 +24,7 @@ Xxxxxxx
 			this.map_world = world;
 			this.map_num = mapnum;
 			this.fleetSent = fleetNum;
+			this.nextNodeCount = 0;
 			
 			// Save on database and remember current sortieId
 			var self = this;
@@ -71,6 +73,7 @@ Xxxxxxx
 		},
 		
 		advanceNode :function( nodeNum ){
+			this.nextNodeCount++,
 			this.nodeNum = nodeNum;
 		},
 		
@@ -99,6 +102,7 @@ Xxxxxxx
 			this.bossPattern = 0;
 			this.nodeNum = 0;
 			this.nodePattern = 0;
+			this.nextNodeCount = 0;
 		},
 		
 	};

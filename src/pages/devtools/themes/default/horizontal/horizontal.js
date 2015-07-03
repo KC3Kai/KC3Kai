@@ -20,11 +20,11 @@
 			});
 			
 			// Change eLoS Formula
-			$(".summary-eqlos img", this.domElement).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png");
-			$(".summary-eqlos", this.domElement).on("click", function(){
+			$(".eqlos-toggle img", this.domElement).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png");
+			$(".eqlos-toggle", this.domElement).on("click", function(){
 				ConfigManager.scrollElosMode();
 				KC3Network.trigger("Fleet");
-				$("img", $(this)).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png");
+				$(".eqlos-toggle img", self.domElement).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png");
 			});
 			
 			// Initialize timer objects with bindingsto their UI
@@ -263,7 +263,7 @@
 						container.css("box-shadow", "none");
 						
 						// Fleet Ships
-						var FleetContainer = $(".battle_singlefleet", container);
+						var FleetContainer = $(".battle_singlefleet .battle_fleet_list", container);
 						FleetContainer.html("");
 						$.each(CurrentFleet.ships, function(index, rosterId){
 							if(rosterId > -1){
@@ -305,13 +305,16 @@
 				this.Fleet(container, {}, local);
 				this.Quests(container, {}, local);
 				
-				//xxx
+				$(".battle .battle_world").text("World "+KC3SortieManager.map_world+" - "+KC3SortieManager.map_num);
+				$(".battle .battle_node_"+KC3SortieManager.nextNodeCount, container).addClass( "active" );
+				$(".battle .battle_node_"+KC3SortieManager.nextNodeCount, container).text( KC3SortieManager.nodeNum );
 				
 				$(".normal", container).hide();
 				$(".battle", container).show();
 			},
 			CompassResult: function(container, data, local){
-				
+				$(".battle .battle_node_"+KC3SortieManager.nextNodeCount, container).addClass( "active" );
+				$(".battle .battle_node_"+KC3SortieManager.nextNodeCount, container).text( KC3SortieManager.nodeNum );
 			},
 			BattleStart: function(container, data, local){
 				

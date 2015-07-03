@@ -20,7 +20,7 @@ Listens to network history and triggers callback if game events happen
 			Quests: [],
 			Fleet: [],
 			SortieStart: [],
-			NextNode: [],
+			CompassResult: [],
 			BattleStart: [],
 			BattleNight: [],
 			BattleResult: [],

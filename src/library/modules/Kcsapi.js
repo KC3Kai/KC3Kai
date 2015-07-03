@@ -408,7 +408,7 @@ Previously known as "Reactor"
 		"api_req_map/next":function(params, response, headers){
 			KC3SortieManager.advanceNode( response.api_data.api_no );
 			KC3SortieManager.setEnemy( response.api_data.api_enemy );
-			KC3Network.trigger("NextNode");
+			KC3Network.trigger("CompassResult");
 		},
 		
 		/* Battle Starts
