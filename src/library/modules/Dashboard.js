@@ -79,8 +79,35 @@ Use multiple instances for different layouts (horizontal vs vertical)
 	------------------------------------------*/
 	KC3Dashboard.prototype.show = function(){
 		this.domElement.show();
+		
+		if (KC3Panel.mode == "normal") {
+			$(".normal", this.domElement).show();
+			$(".battle", this.domElement).hide();
+		} else {
+			$(".normal", this.domElement).hide();
+			$(".battle", this.domElement).show();
+		}
+		
 		// Update interface values by triggering listeners, since it's not updated while hidden
 		try {
+			KC3TimerManager.updateTimerElement([
+				$(".exped-box-1", this.domElement),
+				$(".exped-box-2", this.domElement),
+				$(".exped-box-3", this.domElement)
+			],
+			[
+				$(".repair-box-1", this.domElement),
+				$(".repair-box-2", this.domElement),
+				$(".repair-box-3", this.domElement),
+				$(".repair-box-4", this.domElement)
+			],
+			[
+				$(".build-box-1", this.domElement),
+				$(".build-box-2", this.domElement),
+				$(".build-box-3", this.domElement),
+				$(".build-box-4", this.domElement)
+			]);
+			
 			var DataListeners = ["HQ","Consumables","ShipSlots","GearSlots","Timers","Quests","Fleet"];
 			for(var ctr in DataListeners){
 				this.listeners[ DataListeners[ctr] ]( this.domElement, {}, this.data );

@@ -11,6 +11,7 @@ Manages multiple instances of \library\modules\Dashboard.js
 	window.KC3Panel = {
 		state: "waiting",
 		currentLayout: "",
+		mode: "normal", // normal OR battle
 		horizontal: {},
 		vertical: {},
 		

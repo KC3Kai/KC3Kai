@@ -48,6 +48,10 @@ Has functions for TimerManager to use
 		}
 	};
 	
+	KC3Timer.prototype.updateElement = function(element){
+		this.element = element;
+	}
+	
 	KC3Timer.prototype.text = function(){
 		if(this.active){
 			var remaining = this.completion - (new Date()).getTime();
