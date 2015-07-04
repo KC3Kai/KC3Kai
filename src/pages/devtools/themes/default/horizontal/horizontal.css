@@ -1142,6 +1142,15 @@
 	background:#555;
 	margin:5px 0px 0px 0px;
 }
+#h .battle-ship .supply-text {
+	width:50px;
+	height:14px;
+	float:left;
+	line-height:14px;
+	color:#fff;
+	font-size:11px;
+	text-align:center;
+}
 #h .battle-ship .supply-bar {
 	width:10px;
 	height:14px;

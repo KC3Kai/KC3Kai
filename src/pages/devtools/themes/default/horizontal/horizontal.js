@@ -286,6 +286,8 @@
 								
 								var FuelPercent = CurrentShip.fuel / CurrentShip.master().api_fuel_max;
 								var AmmoPercent = CurrentShip.ammo / CurrentShip.master().api_bull_max;
+								$(".supply-fuel .supply-text", ShipBox).text(Math.floor(FuelPercent*100)+"%");
+								$(".supply-ammo .supply-text", ShipBox).text(Math.floor(AmmoPercent*100)+"%");
 								$(".supply-fuel .supply-bar", ShipBox).css("width", (50*FuelPercent)+"px");
 								$(".supply-ammo .supply-bar", ShipBox).css("width", (50*AmmoPercent)+"px");
 							}
