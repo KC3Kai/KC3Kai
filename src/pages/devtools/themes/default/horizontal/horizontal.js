@@ -27,7 +27,7 @@
 				$(".eqlos-toggle img", self.domElement).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png");
 			});
 			
-			// Initialize timer objects with bindingsto their UI
+			// Initialize timer objects with bindings to their UI
 			KC3TimerManager.init([
 				$(".exped-box-1", this.domElement),
 				$(".exped-box-2", this.domElement),
@@ -226,10 +226,10 @@
 							
 							FleetHP(container, ShipBox, CurrentShip.hp, rosterId );
 							FleetMorale( $(".ship-morale-box", ShipBox), CurrentShip.morale );
-							FleetEquipment( $(".ship-gear-1 img", ShipBox), CurrentShip.equipment(0) );
-							FleetEquipment( $(".ship-gear-2 img", ShipBox), CurrentShip.equipment(1) );
-							FleetEquipment( $(".ship-gear-3 img", ShipBox), CurrentShip.equipment(2) );
-							FleetEquipment( $(".ship-gear-4 img", ShipBox), CurrentShip.equipment(3) );
+							FleetEquipment( $(".ship-gear-1", ShipBox), CurrentShip.equipment(0), CurrentShip.slots[0] );
+							FleetEquipment( $(".ship-gear-2", ShipBox), CurrentShip.equipment(1), CurrentShip.slots[1] );
+							FleetEquipment( $(".ship-gear-3", ShipBox), CurrentShip.equipment(2), CurrentShip.slots[2] );
+							FleetEquipment( $(".ship-gear-4", ShipBox), CurrentShip.equipment(3), CurrentShip.slots[3] );
 						}
 					});
 					
