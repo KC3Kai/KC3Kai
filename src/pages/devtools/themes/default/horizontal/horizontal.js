@@ -5,8 +5,7 @@
 		container: "#h",
 		externalHtml: "horizontal/horizontal.html",
 		variables: {
-			selectedFleet: 1,
-			mode: "normal"
+			selectedFleet: 1
 		},
 		ready: function(){
 			var self = this;
@@ -67,7 +66,7 @@
 			
 			// Exit battle mode
 			$(".battle .battle_revert", this.domElement).on("click", function(){
-				self.data.mode = "normal";
+				KC3Panel.mode = "normal";
 				$(".normal", self.domElement).show();
 				$(".battle", self.domElement).hide();
 				self.trigger("HQ");
@@ -88,22 +87,22 @@
 				
 			},
 			HomeScreen: function(container, data, local){
-				/*local.mode = "battle";
+				/*KC3Panel.mode = "battle";
 				$(".normal", container).hide();
 				$(".battle", container).show();*/
-				local.mode = "normal";
+				KC3Panel.mode = "normal";
 				$(".normal", container).show();
 				$(".battle", container).hide();
 			},
 			HQ: function(container, data, local){
-				if(local.mode=="normal"){
+				if(KC3Panel.mode=="normal"){
 					$(".admiral_name", container).text( PlayerManager.hq.name );
 					$(".admiral_comm", container).text( PlayerManager.hq.desc );
 					$(".admiral_rank", container).text( PlayerManager.hq.rank );
 					$(".level_value", container).text( PlayerManager.hq.level );
 					$(".exp_bar", container).css({width: (PlayerManager.hq.exp[0]*90)+"px"});
 					$(".exp_text", container).text( PlayerManager.hq.exp[1] );
-				}else if(local.mode=="battle"){
+				}else if(KC3Panel.mode=="battle"){
 					$(".battle_admiral", container).text( PlayerManager.hq.name );
 					$(".battle_hqlevel_text", container).text( PlayerManager.hq.level );
 					$(".battle_hqexpval", container).css({width: (PlayerManager.hq.exp[0]*60)+"px"});
@@ -149,7 +148,7 @@
 				// Get active quests
 				var activeQuests = KC3QuestManager.getActives();
 				
-				if(local.mode=="normal"){
+				if(KC3Panel.mode=="normal"){
 					$(".box-quests .box-quest .color", container).removeClass("type1");
 					$(".box-quests .box-quest .color", container).removeClass("type2");
 					$(".box-quests .box-quest .color", container).removeClass("type3");
@@ -172,7 +171,7 @@
 						$(".box-quests .quest-box-"+(index+1), container).show();
 					});
 					
-				}else if(local.mode=="battle"){
+				}else if(KC3Panel.mode=="battle"){
 					$(".battle_quests .battle_quest .color", container).removeClass("type1");
 					$(".battle_quests .battle_quest .color", container).removeClass("type2");
 					$(".battle_quests .battle_quest .color", container).removeClass("type3");
@@ -198,8 +197,8 @@
 			},
 			Fleet: function(container, data, local){
 				// console.log("Fleet Listener: local: ", local);
-				// console.log("Fleet Listener: local.mode: ", local.mode);
-				if(local.mode=="normal"){
+				// console.log("Fleet Listener: KC3Panel.mode: ", KC3Panel.mode);
+				if(KC3Panel.mode=="normal"){
 					var CurrentFleet = PlayerManager.fleets[local.selectedFleet-1];
 					
 					// Fleet Summary Stats
@@ -238,7 +237,7 @@
 					KC3TimerManager._exped[1].face();
 					KC3TimerManager._exped[2].face();
 					
-				}else if(local.mode=="battle"){
+				}else if(KC3Panel.mode=="battle"){
 					// Combined Fleet
 					if(PlayerManager.combinedFleet){
 						var MainFleet = PlayerManager.fleets[0];
@@ -300,7 +299,7 @@
 				}
 			},
 			SortieStart: function(container, data, local){
-				local.mode = "battle";
+				KC3Panel.mode = "battle";
 				this.HQ(container, {}, local);
 				this.ShipSlots(container, {}, local);
 				this.GearSlots(container, {}, local);
