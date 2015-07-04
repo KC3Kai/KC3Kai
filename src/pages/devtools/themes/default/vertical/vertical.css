@@ -579,9 +579,9 @@
 /* ACTIVITY
 -------------------------*/
 #v .activity {
-	width:241px;
-	height:102px;
-	margin: 5px 0px 0px 0px;
+	width:236px;
+	height:110px;
+	margin: 5px 5px 0px 0px;
 	float:left;
 	overflow:hidden;
 	background:#fff;
