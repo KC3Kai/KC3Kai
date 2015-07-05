@@ -297,11 +297,15 @@
 	line-height:14px;
 	text-align:left;
 	margin:1px 0px 0px 0px;
-	/*background:#cfc;*/
+	overflow:hidden;
+}
+#h .box-quest .name div {
+	width:500px;
 }
 #h .box-quest .status {
 	width:40px;
 	height:14px;
+	overflow:hidden;
 	float:right;
 	line-height:14px;
 	font-size:11px;
@@ -833,6 +837,7 @@
 	line-height:15px;
 	margin:0px 0px 1px 0px;
 	font-size:11px;
+	font-weight:bold;
 	background:#eee;
 }
 #h .battle .battle_quest .color {
@@ -845,8 +850,12 @@
 #h .battle .battle_quest .name {
 	width:123px;
 	height:15px;
+	overflow:hidden;
 	float:left;
 	text-align:left;
+}
+#h .battle .battle_quest .name div {
+	width:500px;
 }
 #h .battle .battle_quest .status {
 	width:40px;
@@ -855,6 +864,7 @@
 	font-size:11px;
 	text-align:center;
 	background:#ddd;
+	overflow:hidden;
 }
 #h .battle .battle_quest .color.type1 {
 	background:#33A459;

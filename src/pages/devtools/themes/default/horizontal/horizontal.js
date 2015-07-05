@@ -179,9 +179,9 @@
 						var questType = (quest.id+"").substring(0,1);
 						$(".box-quests .quest-box-"+(index+1)+" .color", container).addClass( "type"+questType );
 						if(quest.meta){
-							$(".box-quests .quest-box-"+(index+1)+" .name", container).text( quest.meta().name );
+							$(".box-quests .quest-box-"+(index+1)+" .name div", container).text( quest.meta().name );
 						}else{
-							$(".box-quests .quest-box-"+(index+1)+" .name", container).text("?");
+							$(".box-quests .quest-box-"+(index+1)+" .name div", container).text("?");
 						}
 						$(".box-quests .quest-box-"+(index+1)+" .status", container).text( quest.outputShort() );
 						$(".box-quests .quest-box-"+(index+1), container).show();
@@ -202,9 +202,9 @@
 						var questType = (quest.id+"").substring(0,1);
 						$(".battle_quests .quest-box-"+(index+1)+" .color", container).addClass( "type"+questType );
 						if(quest.meta){
-							$(".battle_quests .quest-box-"+(index+1)+" .name", container).text( quest.meta().name );
+							$(".battle_quests .quest-box-"+(index+1)+" .name div", container).text( quest.meta().name );
 						}else{
-							$(".battle_quests .quest-box-"+(index+1)+" .name", container).text("?");
+							$(".battle_quests .quest-box-"+(index+1)+" .name div", container).text("?");
 						}
 						$(".battle_quests .quest-box-"+(index+1)+" .status", container).text( quest.outputShort() );
 						$(".battle_quests .quest-box-"+(index+1), container).show();
@@ -433,22 +433,20 @@
 				$(".battle .battle_cond_airbattle .battle_cond_text", container).addClass( thisNode.airbattle[1] );
 				
 				// Fighter phase
-				console.log(thisNode.planeFighters, thisNode.planeBombers);
 				$(".battle .battle_airfighter .battle_airally .battle_airbefore", container).text(thisNode.planeFighters.player[0]);
-				$(".battle .battle_airfighter .battle_airally .battle_airafter", container).text("-"+thisNode.planeFighters.player[1]);
 				$(".battle .battle_airfighter .battle_airabyss .battle_airbefore", container).text(thisNode.planeFighters.abyssal[0]);
-				$(".battle .battle_airfighter .battle_airabyss .battle_airafter", container).text("-"+thisNode.planeFighters.abyssal[1]);
 				
 				// Bombing Phase
-				if(thisNode.bombingPhase){
-					$(".battle .battle_airbomber", container).show();
-					$(".battle .battle_airbomber .battle_airally .battle_airbefore", container).text(thisNode.planeBombers.player[0]);
-					$(".battle .battle_airbomber .battle_airally .battle_airafter", container).text("-"+thisNode.planeBombers.player[1]);
-					$(".battle .battle_airbomber .battle_airabyss .battle_airbefore", container).text(thisNode.planeBombers.abyssal[0]);
-					$(".battle .battle_airbomber .battle_airabyss .battle_airafter", container).text("-"+thisNode.planeBombers.abyssal[1]);
-				}else{
-					$(".battle .battle_airbomber", container).hide();
-				}
+				$(".battle .battle_airbomber", container).show();
+				$(".battle .battle_airbomber .battle_airally .battle_airbefore", container).text(thisNode.planeBombers.player[0]);
+				$(".battle .battle_airbomber .battle_airabyss .battle_airbefore", container).text(thisNode.planeBombers.abyssal[0]);
+				
+				// Plane losses
+				$(".battle .battle_airafter", container).text("");
+				if(thisNode.planeFighters.player[1] > 0){ $(".battle .battle_airfighter .battle_airally .battle_airafter", container).text("-"+thisNode.planeFighters.player[1]); }
+				if(thisNode.planeFighters.abyssal[1] > 0){ $(".battle .battle_airfighter .battle_airabyss .battle_airafter", container).text("-"+thisNode.planeFighters.abyssal[1]); }
+				if(thisNode.planeBombers.player[1] > 0){ $(".battle .battle_airbomber .battle_airally .battle_airafter", container).text("-"+thisNode.planeBombers.player[1]); }
+				if(thisNode.planeBombers.abyssal[1] > 0){ $(".battle .battle_airbomber .battle_airabyss .battle_airafter", container).text("-"+thisNode.planeBombers.abyssal[1]); }
 				
 				// Revert rating and drop to default icons since we don't know results yet
 				$(".battle .battle_rating img").attr("src", "../../../../assets/img/ui/rating.png");

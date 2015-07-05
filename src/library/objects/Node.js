@@ -89,7 +89,7 @@ Used by SortieManager
 		
 		this.airbattle = KC3Meta.airbattle( battleData.api_kouku.api_stage1.api_disp_seiku );
 		
-		// Fighter phase
+		// Fighter phase 1
 		this.planeFighters = {
 			player:[
 				battleData.api_kouku.api_stage1.api_f_count,
@@ -101,21 +101,25 @@ Used by SortieManager
 			]
 		};
 		
-		// Bombing phase
+		// Bombing phase 1
+		this.planeBombers = { player:[0,0], abyssal:[0,0] };
 		if(typeof battleData.api_kouku.api_stage2 != "undefined"){
-			this.bombingPhase = true;
-			this.planeBombers = {
-				player:[
-					battleData.api_kouku.api_stage2.api_f_count,
-					battleData.api_kouku.api_stage2.api_f_lostcount
-				],
-				abyssal:[
-					battleData.api_kouku.api_stage2.api_e_count,
-					battleData.api_kouku.api_stage2.api_e_lostcount
-				]
-			};
-		} else {
-			this.bombingPhase = false;
+			this.planeBombers.player[0] = battleData.api_kouku.api_stage2.api_f_count;
+			this.planeBombers.player[1] = battleData.api_kouku.api_stage2.api_f_lostcount;
+			this.planeBombers.abyssal[0] = battleData.api_kouku.api_stage2.api_e_count;
+			this.planeBombers.abyssal[1] = battleData.api_kouku.api_stage2.api_e_lostcount;
+		}
+		
+		// Fighter phase 2
+		if(typeof battleData.api_kouku2 != "undefined"){
+			this.planeFighters.player[1] += battleData.api_kouku2.api_stage1.api_f_lostcount;
+			this.planeFighters.abyssal[1] += battleData.api_kouku2.api_stage1.api_e_lostcount;
+			
+			// Bombine phase 2
+			if(typeof battleData.api_kouku2.api_stage2 != "undefined"){
+				this.planeBombers.player[1] += battleData.api_kouku2.api_stage2.api_f_lostcount;
+				this.planeBombers.abyssal[1] += battleData.api_kouku2.api_stage2.api_e_lostcount;
+			}
 		}
 		
 	};
