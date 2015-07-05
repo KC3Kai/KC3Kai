@@ -21,8 +21,8 @@
 		["", "", ""],
 		["Prll", "", "Parallel"],
 		["HdOn", "", "Head-on"],
-		["Gr-T", "good", "Crossing the T"],
-		["Rd-T", "bad", "Crossing the T"]
+		["Gr-T", "good", "Green T"],
+		["Rd-T", "bad", "Red T"]
 	]
 	
 }

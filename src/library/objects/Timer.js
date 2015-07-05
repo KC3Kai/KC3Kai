@@ -42,7 +42,8 @@ Has functions for TimerManager to use
 		}
 	};
 	
-	KC3Timer.prototype.face = function(){
+	KC3Timer.prototype.face = function( faceId){
+		if(typeof faceId != "undefined"){ this.faceId = faceId; }
 		if(this.faceId > 0){
 			$(".timer-img img", this.element).attr("src", KC3Meta.shipIcon(this.faceId, "../../../../assets/img/ui/empty.png"));
 		}

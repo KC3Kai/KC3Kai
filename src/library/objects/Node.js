@@ -90,27 +90,33 @@ Used by SortieManager
 		this.airbattle = KC3Meta.airbattle( battleData.api_kouku.api_stage1.api_disp_seiku );
 		
 		// Fighter phase
-		/*var allyPlaneBefore = battleData.api_kouku.api_stage1.api_f_count;
-		var allyPlaneAfter = allyPlaneBefore - battleData.api_kouku.api_stage1.api_f_lostcount;
-		$("#battleModal #ally-fighters").html("<img src=\"../../assets/img/items/6.png\" alt=\"Fighters\">" + allyPlaneBefore + " <img src=\"../../assets/img/ui/arrow.png\" alt=\"=>\"> " + allyPlaneAfter);
-		
-		var enemyPlaneBefore = battleData.api_kouku.api_stage1.api_e_count;
-		var enemyPlaneAfter = enemyPlaneBefore - battleData.api_kouku.api_stage1.api_e_lostcount;
-		$("#battleModal #enemy-fighters").html("<img src=\"../../assets/img/items/6.png\" alt=\"Fighters\">" + enemyPlaneBefore + " <img src=\"../../assets/img/ui/arrow.png\" alt=\"=>\"> " + enemyPlaneAfter);
+		this.planeFighters = {
+			player:[
+				battleData.api_kouku.api_stage1.api_f_count,
+				battleData.api_kouku.api_stage1.api_f_lostcount
+			],
+			abyssal:[
+				battleData.api_kouku.api_stage1.api_e_count,
+				battleData.api_kouku.api_stage1.api_e_lostcount
+			]
+		};
 		
 		// Bombing phase
-		if (typeof battleData.api_kouku.api_stage2 != "undefined") {
-			allyPlaneBefore = battleData.api_kouku.api_stage2.api_f_count;
-			allyPlaneAfter = allyPlaneBefore - battleData.api_kouku.api_stage2.api_f_lostcount;
-			$("#battleModal #ally-bombers").html("<img src=\"../../assets/img/items/7.png\" alt=\"Bombers\">" + allyPlaneBefore + " <img src=\"../../assets/img/ui/arrow.png\" alt=\"=>\"> " + allyPlaneAfter);
-			
-			enemyPlaneBefore = battleData.api_kouku.api_stage2.api_e_count;
-			enemyPlaneAfter = enemyPlaneBefore - battleData.api_kouku.api_stage2.api_e_lostcount;
-			$("#battleModal #enemy-bombers").html("<img src=\"../../assets/img/items/7.png\" alt=\"Bombers\">" + enemyPlaneBefore + " <img src=\"../../assets/img/ui/arrow.png\" alt=\"=>\"> " + enemyPlaneAfter);
+		if(typeof battleData.api_kouku.api_stage2 != "undefined"){
+			this.bombingPhase = true;
+			this.planeBombers = {
+				player:[
+					battleData.api_kouku.api_stage2.api_f_count,
+					battleData.api_kouku.api_stage2.api_f_lostcount
+				],
+				abyssal:[
+					battleData.api_kouku.api_stage2.api_e_count,
+					battleData.api_kouku.api_stage2.api_e_lostcount
+				]
+			};
 		} else {
-			$("#battleModal #ally-bombers").html("");
-			$("#battleModal #enemy-bombers").html("");
-		}*/
+			this.bombingPhase = false;
+		}
 		
 	};
 	

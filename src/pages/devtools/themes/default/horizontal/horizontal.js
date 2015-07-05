@@ -231,9 +231,9 @@
 					});
 					
 					// Expedition Timer Faces
-					KC3TimerManager._exped[0].face();
-					KC3TimerManager._exped[1].face();
-					KC3TimerManager._exped[2].face();
+					KC3TimerManager._exped[0].face( PlayerManager.fleets[1].ship(0).masterId );
+					KC3TimerManager._exped[1].face( PlayerManager.fleets[2].ship(0).masterId );
+					KC3TimerManager._exped[2].face( PlayerManager.fleets[3].ship(0).masterId );
 					
 				}else if(KC3Panel.mode=="battle"){
 					// Combined Fleet
@@ -416,7 +416,23 @@
 				$(".battle .battle_cond_airbattle .battle_cond_text", container).text( thisNode.airbattle[0] );
 				$(".battle .battle_cond_airbattle .battle_cond_text", container).addClass( thisNode.airbattle[1] );
 				
-				// Planes
+				// Fighter phase
+				console.log(thisNode.planeFighters, thisNode.planeBombers);
+				$(".battle .battle_airfighter .battle_airally .battle_airbefore", container).text(thisNode.planeFighters.player[0]);
+				$(".battle .battle_airfighter .battle_airally .battle_airafter", container).text("-"+thisNode.planeFighters.player[1]);
+				$(".battle .battle_airfighter .battle_airabyss .battle_airbefore", container).text(thisNode.planeFighters.abyssal[0]);
+				$(".battle .battle_airfighter .battle_airabyss .battle_airafter", container).text("-"+thisNode.planeFighters.abyssal[1]);
+				
+				// Bombing Phase
+				if(thisNode.bombingPhase){
+					$(".battle .battle_airbomber", container).show();
+					$(".battle .battle_airbomber .battle_airally .battle_airbefore", container).text(thisNode.planeBombers.player[0]);
+					$(".battle .battle_airbomber .battle_airally .battle_airafter", container).text("-"+thisNode.planeBombers.player[1]);
+					$(".battle .battle_airbomber .battle_airabyss .battle_airbefore", container).text(thisNode.planeBombers.abyssal[0]);
+					$(".battle .battle_airbomber .battle_airabyss .battle_airafter", container).text("-"+thisNode.planeBombers.abyssal[1]);
+				}else{
+					$(".battle .battle_airbomber", container).hide();
+				}
 				
 				// Revert rating and drop to default icons since we don't know results yet
 				$(".battle .battle_rating img").attr("src", "../../../../assets/img/ui/rating.png");
