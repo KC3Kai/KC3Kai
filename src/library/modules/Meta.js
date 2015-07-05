@@ -20,6 +20,7 @@ Provides access to data on built-in JSON files
 		_battle:{},
 		_record:{},
 		_terms:{},
+		_defaultIcon:"",
 		
 		/* Initialization
 		-------------------------------------------------------*/
@@ -46,9 +47,16 @@ Provides access to data on built-in JSON files
 		
 		/* Data Access
 		-------------------------------------------------------*/
+		defaultIcon :function(iconSrc){
+			this._defaultIcon = iconSrc;
+		},
+		
 		shipIcon :function(id, empty){
 			if(typeof this._icons[id] !== "undefined"){
 				return "http://i708.photobucket.com/albums/ww87/dragonjet25/KC3%20Ship%20Icons/"+this._icons[id];
+			}
+			if(typeof empty == "undefined"){
+				return this._defaultIcon;
 			}
 			return empty;
 		},
@@ -56,6 +64,9 @@ Provides access to data on built-in JSON files
 		abyssIcon :function(id, empty){
 			if(typeof this._icons[id] !== "undefined"){
 				return "http://i708.photobucket.com/albums/ww87/dragonjet25/KC3%20Abyss%20Icons/"+this._icons[id];
+			}
+			if(typeof empty == "undefined"){
+				return this._defaultIcon;
 			}
 			return empty;
 		},

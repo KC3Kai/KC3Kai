@@ -907,11 +907,15 @@
 	background:#ddd;
 	text-align:center;
 	font-weight:bold;
-	font-size:12px;
+	font-size:11px;
 	float:left;
 }
 #h .battle .battle_node.active {
 	background:#7D0000;
+	color:#fff;
+}
+#h .battle .battle_node.now {
+	background:#f00;
 	color:#fff;
 }
 
@@ -1222,8 +1226,59 @@
 	font-size:10px;
 	font-weight:bold;
 }
+#h .battle .battle_nodebox {
+	display:none;
+}
+
+#h .battle .battle_resicon {
+	width:20px;
+	height:20px;
+	float:left;
+	/*background:#fcc;*/
+}
+#h .battle .battle_resicon img {
+	width:20px;
+	height:20px;
+	vertical-align:top;
+}
+#h .battle .battle_resamt {
+	width:80px;
+	height:20px;
+	line-height:20px;
+	float:left;
+	padding:0px 0px 0px 5px;
+	/*background:#ccf;*/
+	font-weight:bold;
+}
+
 #h .battle .battle_resource {
-	
+	width:130px;
+	height:30px;
+	margin:5px 0px 3px 5px;
+	border-radius:8px;
+	border:1px solid #9EE49E;
+	background:#cfc;
+	padding:4px 10px;
+}
+#h .battle .battle_maelstrom {
+	width:130px;
+	height:30px;
+	margin:5px 0px 3px 5px;
+	border-radius:8px;
+	border:1px solid #E5AAE4;
+	background:#ECD0F7;
+	padding:4px 10px;
+}
+#h .battle .battle_empty {
+	width:130px;
+	height:30px;
+	line-height:28px;
+	margin:5px 0px 3px 5px;
+	border-radius:8px;
+	border:1px solid #A3D7EA;
+	background:#B2F9FC;
+	text-align:center;
+	font-size:12px;
 }
 #h .battle .battle_enemies {
 	width:140px;
@@ -1237,6 +1292,12 @@
 	margin:1px 0px 0px 8px;
 	background:#fff;
 	border-radius:15px;
+	overflow:hidden;
+}
+#h .battle .battle_enemies .battle_abyss img {
+	width:30px;
+	height:30px;
+	vertical-align:top;
 }
 #h .battle .battle_enemies .abyss_4 {
 	margin:1px 0px 0px 25px;
@@ -1244,6 +1305,7 @@
 #h .battle .battle_conditions {
 	width:140px;
 	margin:0px 0px 3px 0px;
+	display:none;
 }
 #h .battle .battle_cond {
 	width:140px;
@@ -1264,7 +1326,7 @@
 	vertical-align:top;
 }
 #h .battle .battle_cond_label {
-	width:60px;
+	width:45px;
 	height:16px;
 	margin:0px 2px 0px 0px;
 	font-size:11px;
@@ -1272,18 +1334,25 @@
 	/*background:#fcc;*/
 }
 #h .battle .battle_cond_text {
-	width:50px;
+	width:65px;
 	height:16px;
 	float:left;
 	font-size:11px;
 	font-weight:bold;
 	/*background:#fcc;*/
 }
+#h .battle .battle_cond_text.good {
+	color:#009900;
+}
+#h .battle .battle_cond_text.bad {
+	color:#f33;
+}
 
 #h .battle .battle_airbattle {
 	width:140px;
 	height:50px;
 	margin:0px 0px 3px 0px;
+	display:none;
 }
 #h .battle .battle_airsides {
 	width:140px;
@@ -1342,6 +1411,7 @@
 #h .battle .battle_results {
 	width:140px;
 	height:30px;
+	display:none;
 	/*background:#ffc;*/
 }
 #h .battle .battle_resulticon {
@@ -1392,6 +1462,10 @@
 	margin:1px 0px 0px 8px;
 	background:#fff;
 	border-radius:15px;
+}
+#h .battle .battle_boss .battle_abyss img {
+	width:30px;
+	height:30px;
 }
 #h .battle .battle_boss .abyss_4 {
 	margin:1px 0px 0px 25px;

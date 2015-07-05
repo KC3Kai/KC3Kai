@@ -397,17 +397,16 @@ Previously known as "Reactor"
 				response.api_data.api_bosscomp
 			);
 			
-			KC3SortieManager.advanceNode( response.api_data.api_no );
-			KC3SortieManager.setEnemy( response.api_data.api_enemy );
+			KC3SortieManager.advanceNode( response.api_data );
 			
 			KC3Network.trigger("SortieStart");
+			KC3Network.trigger("CompassResult");
 		},
 		
 		/* Traverse Map
 		-------------------------------------------------------*/
 		"api_req_map/next":function(params, response, headers){
-			KC3SortieManager.advanceNode( response.api_data.api_no );
-			KC3SortieManager.setEnemy( response.api_data.api_enemy );
+			KC3SortieManager.advanceNode( response.api_data );
 			KC3Network.trigger("CompassResult");
 		},
 		

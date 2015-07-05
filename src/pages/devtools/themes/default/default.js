@@ -13,6 +13,8 @@
 		KC3Panel.applyCustomizations( $("body") );
 		KC3Panel.detectOrientation();
 		
+		KC3Meta.defaultIcon("../../../../assets/img/ui/empty.png");
+		
 		// $("#wait").hide();
 		// KC3Panel.activateDashboard();
 		

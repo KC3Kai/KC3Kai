@@ -11,11 +11,9 @@ Xxxxxxx
 		fleetSent: 1,
 		map_world: 0,
 		map_num: 0,
-		bossNode: 0,
-		bossPattern: 0,
-		nodeNum: 0,
-		nodePattern: 0,
-		nextNodeCount: 0,
+		
+		nodes: [],
+		bossNode: {},
 		
 		startSortie :function(world, mapnum, fleetNum, stime){
 			// If still on sortie, end previous one
@@ -68,42 +66,69 @@ Xxxxxxx
 			return 0;
 		},
 		
-		setBoss :function(){
+		setBoss :function( cellno, comp ){
+			/*this.bossNode = (new KC3Node()).defineAsBattle({
+				api_enemy: { api_enemy_id:comp }
+			})*/
 			
+			this.bossNode = [-1,-1,-1,-1,-1,-1];
 		},
 		
-		advanceNode :function( nodeNum ){
-			this.nextNodeCount++,
-			this.nodeNum = nodeNum;
+		currentNode :function(){
+			return this.nodes[ this.nodes.length-1 ];
 		},
 		
-		setEnemy :function( nodePattern ){
-			this.nodePattern = nodePattern;
-		},
-		
-		engageBattle :function(){
+		advanceNode :function( nodeData ){
+			var thisNode;
 			
+			//  Battle Node
+			if(typeof nodeData.api_enemy != "undefined") {
+				thisNode = (new KC3Node( this.onSortie, nodeData.api_no )).defineAsBattle(nodeData);
+			// Resource Node
+			}else if (typeof nodeData.api_itemget != "undefined") {
+				thisNode = (new KC3Node( this.onSortie, nodeData.api_no )).defineAsResource(nodeData);
+			// Bounty Node
+			} else if (typeof nodeData.api_itemget_eo_comment != "undefined") {
+				thisNode = (new KC3Node( this.onSortie, nodeData.api_no )).defineAsBounty(nodeData);
+			// Maelstrom Node
+			} else if (typeof nodeData.api_happening != "undefined") {
+				thisNode = (new KC3Node( this.onSortie, nodeData.api_no )).defineAsMaelstrom(nodeData);
+			// Empty Node
+			}else{
+				thisNode = (new KC3Node( this.onSortie, nodeData.api_no )).defineAsDud(nodeData);
+			}
+			
+			this.nodes.push(thisNode);
 		},
 		
-		engageNight :function(){
-			
+		engageBattle :function( battleData, stime ){
+			if(this.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
+			this.currentNode().engage( battleData );
 		},
 		
-		resultScreen :function(){
-			
+		engageNight :function( nightData ){
+			if(this.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
+			 this.currentNode().night( nightData );
+		},
+		
+		resultScreen :function( resultData ){
+			if(this.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
+			this.currentNode().results( resultData );
 		},
 		
 		endSortie :function(){
+			this.updateDB();
 			this.onSortie = 0;
 			this.fleetSent = 1;
 			this.map_world = 0;
 			this.map_num = 0;
-			this.bossNode = 0;
-			this.bossPattern = 0;
-			this.nodeNum = 0;
-			this.nodePattern = 0;
-			this.nextNodeCount = 0;
+			this.nodes = [];
+			this.bossNode = {};
 		},
+		
+		updateDB :function(){
+			
+		}
 		
 	};
 	
