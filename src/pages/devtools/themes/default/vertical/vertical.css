@@ -227,7 +227,31 @@
 	margin:5px 5px 0px 5px;
 	float:right;
 	overflow:hidden;
+	position:relative;
 	/*background:#fcc;*/
+}
+
+#v .box-quest-resets {
+	width:210px;
+	height:112px;
+	position:absolute;
+	top:0px;
+	left:0px;
+	background:rgba(255,255,255,.6);
+	display:none;
+}
+#v .box-quest-resets .box-quest-reset {
+	width:150px;
+	height:20px;
+	line-height:18px;
+	text-align:center;
+	background:#fcc;
+	border:1px solid #c55;
+	color:#c55;
+	border-radius:9px;
+	margin:5px auto;
+	font-weight:bold;
+	font-size:12px;
 }
 
 #v .box-quest {
