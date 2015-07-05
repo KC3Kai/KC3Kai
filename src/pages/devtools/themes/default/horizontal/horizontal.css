@@ -248,6 +248,30 @@
 	margin:5px 0px 0px 0px;
 	overflow:hidden;
 	/*background:#fcc;*/
+	position:relative;
+	
+}
+#h .box-quest-resets {
+	width:210px;
+	height:112px;
+	position:absolute;
+	top:0px;
+	left:0px;
+	background:rgba(255,255,255,.6);
+	display:none;
+}
+#h .box-quest-resets .box-quest-reset {
+	width:150px;
+	height:20px;
+	line-height:18px;
+	text-align:center;
+	background:#fcc;
+	border:1px solid #c55;
+	color:#c55;
+	border-radius:9px;
+	margin:5px auto;
+	font-weight:bold;
+	font-size:12px;
 }
 #h .box-quest {
 	width:210px;

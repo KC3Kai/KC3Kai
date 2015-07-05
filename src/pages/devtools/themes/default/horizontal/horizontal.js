@@ -78,6 +78,22 @@
 				self.trigger("Quests");
 			});
 			
+			// Quest reset
+			$(".box-quests", this.domElement).on("mouseover", function(){
+				$(".box-quest-resets", this.domElement).show();
+			});
+			$(".box-quests", this.domElement).on("mouseout", function(){
+				$(".box-quest-resets", this.domElement).hide();
+			});
+			$(".box-quest-reset", this.domElement).on("click", function(){
+				switch($(this).data("type")){
+					case 1: KC3QuestManager.resetDailies(); break;
+					case 2: KC3QuestManager.resetWeeklies(); break;
+					case 3: KC3QuestManager.resetMonthlies(); break;
+					default: KC3QuestManager.clear(); break;
+				}
+				self.trigger("Quests");
+			});
 		},
 		listeners: {
 			GameStart: function(container, data, local){

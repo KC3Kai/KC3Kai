@@ -97,11 +97,47 @@ Uses KC3Quest objects to play around with
 			}
 		},
 		
-		/* CLEAR
-		Clear all quest data
+		/* RESETTING FUNCTIONS
+		Allows resetting quest state and counting
 		------------------------------------------*/
+		resetQuest :function(questId){
+			if(typeof this.list["q"+questId] != "undefined"){
+				this.list["q"+questId] = new KC3Quest(questId);
+			}
+		},
+		
+		resetLoop: function( questIds ){
+			for(var ctr in questIds){
+				this.resetQuest( questIds[ctr] );
+			}
+		},
+		
+		resetDailies :function(){
+			this.load();
+			console.log("resetting dailies");
+			this.resetLoop([201, 216, 210, 211, 218, 212, 226, 230, 303, 304, 402, 403, 503, 504, 605, 606, 607, 608, 609, 619, 702]);
+			this.save();
+		},
+		
+		resetWeeklies :function(){
+			this.load();
+			console.log("resetting weeklies");
+			this.resetLoop([214, 220, 213, 221, 228, 229, 241, 242, 243, 261, 302, 404, 410, 411, 613, 703]);
+			this.save();
+		},
+		
+		resetMonthlies :function(){
+			this.load();
+			console.log("resetting monthlies");
+			this.resetLoop([249, 256, 257, 259, 265, 264, 266]);
+			this.save();
+		},
 		clear :function(){
-			
+			console.log("resetting all quests");
+			if(typeof localStorage.quests != "undefined"){
+				localStorage.removeItem("quests")
+			}
+			this.load();
 		},
 		
 		/* SAVE
