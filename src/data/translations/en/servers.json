@@ -112,5 +112,11 @@
 		"name": "Saiki Bay Anchorage",
 		"jp": "佐伯湾泊地",
 		"ip": "203.104.209.55"
+	},
+	"203.104.209.102": {
+		"num": 20,
+		"name": "Hashirajima Anchorage",
+		"jp": "柱島泊地",
+		"ip": "203.104.209.102"
 	}
 }
