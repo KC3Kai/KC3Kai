@@ -1182,9 +1182,217 @@
 
 /* Battle details */
 #h .battle .battle_details {
-	width:150px;
-	height:350px;
+	width:140px;
+	height:345px;
 	float:left;
-	background:#ff0;
-	opacity:.5;
+	margin:0px 0px 0px 5px;
+}
+#h .battle .battle_space {
+	height:1px;
+}
+#h .battle .battle_environment {
+	width:140px;
+	height:250px;
+	margin:0px 0px 5px 0px;
+	background:#def;
+	border-radius:8px;
+	position:relative;
+}
+#h .battle .battle_nodenum {
+	width:30px;
+	height:30px;
+	line-height:30px;
+	font-size:14px;
+	font-weight:bold;
+	position:relative;
+	margin:-5px 0px 0px -5px;
+	background:#7D0000;
+	border-radius:15px;
+	text-align:center;
+	color:#fff;
+	float:left;
+}
+#h .battle .battle_current {
+	width:110px;
+	height:25px;
+	line-height:22px;
+	float:left;
+	margin:0px 0px 0px 5px;
+	color:#0099CC;
+	font-size:10px;
+	font-weight:bold;
+}
+#h .battle .battle_resource {
+	
+}
+#h .battle .battle_enemies {
+	width:140px;
+	height:65px;
+	margin:0px 0px 3px 0px;
+}
+#h .battle .battle_enemies .battle_abyss {
+	width:30px;
+	height:30px;
+	float:left;
+	margin:1px 0px 0px 8px;
+	background:#fff;
+	border-radius:15px;
+}
+#h .battle .battle_enemies .abyss_4 {
+	margin:1px 0px 0px 25px;
+}
+#h .battle .battle_conditions {
+	width:140px;
+	margin:0px 0px 3px 0px;
+}
+#h .battle .battle_cond {
+	width:140px;
+	height:16px;
+	line-height:16px;
+	margin:0px 0px 1px 0px;
+}
+#h .battle .battle_cond_icon {
+	width:16px;
+	height:16px;
+	float:left;
+	/*background:#fcc;*/
+	margin:0px 2px 0px 5px;
+}
+#h .battle .battle_cond_icon img {
+	width:16px;
+	height:16px;
+	vertical-align:top;
+}
+#h .battle .battle_cond_label {
+	width:60px;
+	height:16px;
+	margin:0px 2px 0px 0px;
+	font-size:11px;
+	float:left;
+	/*background:#fcc;*/
+}
+#h .battle .battle_cond_text {
+	width:50px;
+	height:16px;
+	float:left;
+	font-size:11px;
+	font-weight:bold;
+	/*background:#fcc;*/
+}
+
+#h .battle .battle_airbattle {
+	width:140px;
+	height:50px;
+	margin:0px 0px 3px 0px;
+}
+#h .battle .battle_airsides {
+	width:140px;
+	height:16px;
+	/*background:#ffc;*/
+}
+#h .battle .battle_airside_title {
+	width: 70px;
+	text-align: center;
+	float: left;
+	height: 16px;
+	line-height: 16px;
+	font-size: 11px;
+	font-weight:bold;
+	color:#0099cc;
+}
+#h .battle .battle_airtype {
+	width:140px;
+	height:16px;
+	/*background:#ffc;*/
+	line-height:16px;
+	margin:0px 0px 1px 0px;
+}
+#h .battle .battle_airside {
+	width:70px;
+	height:16px;
+	float:left;
+	/*background:#ccf;*/
+}
+#h .battle .battle_airicon {
+	width:16px;
+	height:16px;
+	float:left;
+	margin:0px 2px 0px 2px;
+	/*background:#cfc;*/
+}
+#h .battle .battle_airicon img {
+	width:16px;
+	height:16px;
+	vertical-align:top;
+}
+#h .battle .battle_airtext {
+	width:50px;
+	height:16px;
+	float:left;
+	/*background:#cff;*/
+	font-size:11px;
+}
+#h .battle .battle_airbefore {
+	color:#000;
+}
+#h .battle .battle_airafter {
+	color:#f00;
+}
+
+#h .battle .battle_results {
+	width:140px;
+	height:30px;
+	/*background:#ffc;*/
+}
+#h .battle .battle_resulticon {
+	width:27px;
+	height:27px;
+	/*background:#fcc;*/
+	margin:0px 0px 0px 6px;
+	float:left;
+}
+#h .battle .battle_resulticon img {
+	width:27px;
+	height:27px;
+}
+
+/* Boss Pattern */
+#h .battle .battle_boss {
+	width:140px;
+	height:90px;
+	background:#def;
+	border-radius:8px;
+}
+#h .battle .battle_boss_icon {
+	width:20px;
+	height:25px;
+	margin:-5px 0px 0px -5px;
+	position:relative;
+	float:left;
+}
+#h .battle .battle_boss_icon img {
+	width:20px;
+	height:20px;
+}
+#h .battle .battle_boss_text {
+	width:120px;
+	height:20px;
+	line-height:18px;
+	font-size:11px;
+	font-weight:bold;
+	position:relative;
+	float:left;
+	color:#0099CC;
+	margin:0px 0px 0px 5px;
+}
+#h .battle .battle_boss .battle_abyss {
+	width:30px;
+	height:30px;
+	float:left;
+	margin:1px 0px 0px 8px;
+	background:#fff;
+	border-radius:15px;
+}
+#h .battle .battle_boss .abyss_4 {
+	margin:1px 0px 0px 25px;
 }
