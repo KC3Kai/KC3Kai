@@ -7,7 +7,10 @@ Has functions for TimerManager to use
 (function(){
 	"use strict";
 	
-	window.KC3Timer = function(element){
+	window.KC3Timer = function(element, type, num){
+		this.alerted = false;
+		this.type = type;
+		this.num = num;
 		this.element = element;
 		this.deactivate();
 	};
@@ -20,6 +23,12 @@ Has functions for TimerManager to use
 		this.completion = completion;
 		if(typeof faceId != "undefined"){ if(faceId>0){ this.faceId = faceId; } }
 		if(typeof expedNum != "undefined"){ this.expedNum = expedNum; }
+		
+		var remaining = this.completion - (new Date()).getTime();
+		remaining = Math.ceil((remaining - (ConfigManager.alert_diff*1000))/1000);
+		if(remaining <= 0){
+			this.alerted = true;
+		}
 	};
 	
 	KC3Timer.prototype.deactivate = function(){
@@ -58,6 +67,8 @@ Has functions for TimerManager to use
 			var remaining = this.completion - (new Date()).getTime();
 			remaining = Math.ceil((remaining - (ConfigManager.alert_diff*1000))/1000);
 			if(remaining > 0){
+				this.alerted = false;
+				
 				var hrs = Math.floor(remaining/3600);
 				remaining = remaining - (hrs * 3600);
 				if(hrs < 10){ hrs = "0"+hrs; }
@@ -70,11 +81,64 @@ Has functions for TimerManager to use
 				
 				return hrs+":"+min+":"+remaining;
 			}else{
+				this.completionAlert();
 				return "Complete!";
 			}
 		}else{
 			return "";
 		}
+	};
+	
+	KC3Timer.prototype.completionAlert = function(){
+		if(this.alerted){ return false; }
+		this.alerted = true;
+		
+		// Sound Alerts
+		var notifSound;
+		switch(ConfigManager.alert_type){
+			case 1: notifSound = new Audio("../../../../assets/snd/ding.mp3"); break;
+			case 2: notifSound = new Audio(ConfigManager.alert_custom); break; 
+			default: notifSound = false; break;
+		}
+		if(notifSound){
+			notifSound.volume = ConfigManager.alert_volume / 100;
+			notifSound.play();
+		}
+		
+		// Desktop notification
+		if(ConfigManager.alert_desktop){
+			var notifData = { type: "basic" };
+			
+			// Notification types show varying messages
+			switch(this.type){
+				case 0:
+					var thisFleet = PlayerManager.fleets[this.num+1];
+					notifData.title = "Expedition Complete!";
+					notifData.message = "Fleet "+(this.num+2)+" just arrived from Expedition #"+thisFleet.mission[1];
+					notifData.iconUrl = "../../assets/img/quests/expedition.jpg";
+					break;
+				case 1:
+					var shipName = KC3ShipManager.get( PlayerManager.repairShips[this.num] ).name();
+					notifData.title = "Repairs Complete!";
+					notifData.message = shipName+" is out of the repair dock!";
+					notifData.iconUrl = "../../assets/img/quests/supply.jpg";
+					break;
+				case 2:
+					var shipName = KC3Meta.shipName( KC3Master.ship( this.faceId ).api_name )
+					notifData.title = "Construction Complete!";
+					notifData.message = "New face "+shipName+" has been constructed!";
+					notifData.iconUrl = "../../assets/img/quests/build.jpg";
+					break;
+				default:break;
+			}
+			
+			// Tell background page to show the notification, cant do it here
+			(new RMsg("service", "notify_desktop", {
+				notifId: this.type+"_"+this.num,
+				data: notifData
+			})).execute();
+		}
+		
 	};
 	
 })();

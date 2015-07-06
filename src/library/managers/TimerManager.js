@@ -13,21 +13,21 @@ Container object for timers for expedition, construction, and repair
 		
 		init :function(eMap, rMap, bMap){
 			this._exped = [
-				new KC3Timer(eMap[0]),
-				new KC3Timer(eMap[1]),
-				new KC3Timer(eMap[2])
+				new KC3Timer(eMap[0], 0, 0),
+				new KC3Timer(eMap[1], 0, 1),
+				new KC3Timer(eMap[2], 0, 2)
 			];
 			this._repair = [
-				new KC3Timer(rMap[0]),
-				new KC3Timer(rMap[1]),
-				new KC3Timer(rMap[2]),
-				new KC3Timer(rMap[3])
+				new KC3Timer(rMap[0], 1, 0),
+				new KC3Timer(rMap[1], 1, 1),
+				new KC3Timer(rMap[2], 1, 2),
+				new KC3Timer(rMap[3], 1, 3)
 			];
 			this._build = [
-				new KC3Timer(bMap[0]),
-				new KC3Timer(bMap[1]),
-				new KC3Timer(bMap[2]),
-				new KC3Timer(bMap[3])
+				new KC3Timer(bMap[0], 2, 0),
+				new KC3Timer(bMap[1], 2, 1),
+				new KC3Timer(bMap[2], 2, 2),
+				new KC3Timer(bMap[3], 2, 3)
 			];
 		},
 		
