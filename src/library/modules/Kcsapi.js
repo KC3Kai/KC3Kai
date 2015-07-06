@@ -479,6 +479,7 @@ Previously known as "Reactor"
 			);
 			
 			// Tell service to pass a message to gamescreen on inspected window to show overlays
+			KC3Network.hasOverlay = true;
 			(new RMsg("service", "questOverlay", {
 				tabId: chrome.devtools.inspectedWindow.tabId,
 				questlist: response.api_data.api_list
