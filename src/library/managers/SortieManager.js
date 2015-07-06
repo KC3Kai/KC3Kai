@@ -23,6 +23,7 @@ Xxxxxxx
 			this.map_num = mapnum;
 			this.fleetSent = fleetNum;
 			this.nextNodeCount = 0;
+			this.nodes = [];
 			
 			// Save on database and remember current sortieId
 			var self = this;

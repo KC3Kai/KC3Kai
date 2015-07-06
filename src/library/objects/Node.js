@@ -102,7 +102,7 @@ Used by SortieManager
 		};
 		
 		// Bombing phase
-		if(typeof battleData.api_kouku.api_stage2 != "undefined"){
+		if (battleData.api_kouku.api_stage2){
 			this.bombingPhase = true;
 			this.planeBombers = {
 				player:[
