@@ -565,8 +565,11 @@ Previously known as "Reactor"
 				KC3QuestManager.get(402).increment(); // D2: Daily Expeditions 1
 				KC3QuestManager.get(403).increment(); // D3: Daily Expeditions 2
 				KC3QuestManager.get(404).increment(); // D4: Weekly Expeditions
+				
 				// If expedition 37 or 38
-				if(false){
+				var expedNum = KC3TimerManager._exped[ parseInt(params.api_deck_id, 10)-2 ].expedNum;
+				expedNum = parseInt(expedNum, 10);
+				if(expedNum==37 || expedNum==38){
 					KC3QuestManager.get(410).increment(); // D9: Weekly Expedition 2
 					KC3QuestManager.get(411).increment(); // D11: Weekly Expedition 3
 				}
