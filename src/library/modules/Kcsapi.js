@@ -701,7 +701,9 @@ Previously known as "Reactor"
 			PlayerManager.consumables.devmats = response.api_data.api_after_material[6];
 			PlayerManager.consumables.screws = response.api_data.api_after_material[7];
 			PlayerManager.consumables.torch = response.api_data.api_after_material[4];
+			KC3QuestManager.get(619).increment();
 			KC3Network.trigger("Consumables");
+			KC3Network.trigger("Quests");
 		},
 		
 		/* Dummy
