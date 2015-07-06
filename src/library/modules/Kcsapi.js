@@ -290,8 +290,11 @@ Previously known as "Reactor"
 		/* Instant-Torch a construction
 		-------------------------------------------------------*/
 		"api_req_kousyou/createship_speedchange":function(params, response, headers){
-			PlayerManager.consumables.torch--; // TOFIX: LSC is -10
-			// KC3TimerManager.build[ params.api_kdock_id-1 ].activate()
+			if( KC3TimerManager.build( params.api_kdock_id ).lsc ){
+				PlayerManager.consumables.torch-=10;
+			}else{
+				PlayerManager.consumables.torch--;
+			}
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Timers");
 		},

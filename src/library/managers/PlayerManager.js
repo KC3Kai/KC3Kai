@@ -79,6 +79,11 @@ Does not include Ships and Gears which are managed by other Managers
 						kdock.api_complete_time,
 						kdock.api_created_ship_id
 					);
+					if(kdock.api_item1 > 999){
+						KC3TimerManager.build( kdock.api_id ).lsc = true;
+					}else{
+						KC3TimerManager.build( kdock.api_id ).lsc = false;
+					}
 				}else{
 					KC3TimerManager.build( kdock.api_id ).deactivate();
 				}
