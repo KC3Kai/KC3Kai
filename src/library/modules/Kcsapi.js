@@ -290,8 +290,11 @@ Previously known as "Reactor"
 		/* Instant-Torch a construction
 		-------------------------------------------------------*/
 		"api_req_kousyou/createship_speedchange":function(params, response, headers){
-			PlayerManager.consumables.torch--; // TOFIX: LSC is -10
-			// KC3TimerManager.build[ params.api_kdock_id-1 ].activate()
+			if( KC3TimerManager.build( params.api_kdock_id ).lsc ){
+				PlayerManager.consumables.torch-=10;
+			}else{
+				PlayerManager.consumables.torch--;
+			}
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Timers");
 		},
@@ -479,6 +482,7 @@ Previously known as "Reactor"
 			);
 			
 			// Tell service to pass a message to gamescreen on inspected window to show overlays
+			KC3Network.hasOverlay = true;
 			(new RMsg("service", "questOverlay", {
 				tabId: chrome.devtools.inspectedWindow.tabId,
 				questlist: response.api_data.api_list
@@ -564,8 +568,11 @@ Previously known as "Reactor"
 				KC3QuestManager.get(402).increment(); // D2: Daily Expeditions 1
 				KC3QuestManager.get(403).increment(); // D3: Daily Expeditions 2
 				KC3QuestManager.get(404).increment(); // D4: Weekly Expeditions
+				
 				// If expedition 37 or 38
-				if(false){
+				var expedNum = KC3TimerManager._exped[ parseInt(params.api_deck_id, 10)-2 ].expedNum;
+				expedNum = parseInt(expedNum, 10);
+				if(expedNum==37 || expedNum==38){
 					KC3QuestManager.get(410).increment(); // D9: Weekly Expedition 2
 					KC3QuestManager.get(411).increment(); // D11: Weekly Expedition 3
 				}
@@ -700,7 +707,9 @@ Previously known as "Reactor"
 			PlayerManager.consumables.devmats = response.api_data.api_after_material[6];
 			PlayerManager.consumables.screws = response.api_data.api_after_material[7];
 			PlayerManager.consumables.torch = response.api_data.api_after_material[4];
+			KC3QuestManager.get(619).increment();
 			KC3Network.trigger("Consumables");
+			KC3Network.trigger("Quests");
 		},
 		
 		/* Dummy

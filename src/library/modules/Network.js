@@ -8,6 +8,7 @@ Listens to network history and triggers callback if game events happen
 	"use strict";
 	
 	window.KC3Network = {
+		hasOverlay: false,
 		eventTypes : {
 			GameStart: [],
 			CatBomb: [],
@@ -82,19 +83,25 @@ Listens to network history and triggers callback if game events happen
 				}
 				
 				// Ask background service to clear overlays on inspected window
-				(new RMsg("service", "clearOverlays", {
-					tabId: chrome.devtools.inspectedWindow.tabId
-				})).execute();
+				if(KC3Network.hasOverlay){
+					KC3Network.hasOverlay = false;
+					(new RMsg("service", "clearOverlays", {
+						tabId: chrome.devtools.inspectedWindow.tabId
+					})).execute();
+				}
 				return true;
 			}
 			
-			// If going to furniture rooom
-			if(request.request.url.indexOf("/kcs/resources/image/furniture/") >= -1){
-				// Ask background service to clear overlays on inspected window
-				/*(new RMsg("service", "clearOverlays", {
-					tabId: chrome.devtools.inspectedWindow.tabId
-				})).execute();*/
-				return true;
+			if(KC3Network.hasOverlay){
+				// If going to furniture rooom
+				if(request.request.url.indexOf("/kcs/resources/image/furniture/") >= -1){
+					KC3Network.hasOverlay = false;
+					// Ask background service to clear overlays on inspected window
+					(new RMsg("service", "clearOverlays", {
+						tabId: chrome.devtools.inspectedWindow.tabId
+					})).execute();
+					return true;
+				}
 			}
 		}
 		
