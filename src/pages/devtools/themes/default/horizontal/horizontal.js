@@ -529,6 +529,82 @@
 			},
 			ClearedMap: function(container, data, local){
 				
+			},
+			PvPStart: function(container, data, local){
+				KC3Panel.mode = "battle";
+				$(".battle .battle_world", container).text("PvP Practice Battle");
+				$(".battle .battle_current", container).text("FIGHTING");
+				
+				// Trigger other listeners
+				this.HQ(container, {}, local);
+				this.ShipSlots(container, {}, local);
+				this.GearSlots(container, {}, local);
+				this.Fleet(container, {}, local);
+				this.Quests(container, {}, local);
+				
+				// Change interface mode
+				$(".normal", container).hide();
+				$(".battle", container).show();
+				
+				// Process PvP Battle
+				var thisPvP = (new KC3Node()).defineAsBattle({
+					pvp_opponents: data.battle.api_ship_ke.splice(0,1),
+				});
+				thisPvP.engage( data.battle );
+				
+				// Show opponent ships faces
+				$.each(thisPvP.eships, function(index, eshipId){
+					if(eshipId > -1){
+						$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).attr("src", KC3Meta.shipIcon(eshipId));
+						$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).show();
+					}else{
+						$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).hide();
+					}
+				});
+				
+				// Battle conditions
+				$(".battle .battle_cond_detect .battle_cond_text", container).text( thisPvP.detection[0] );
+				$(".battle .battle_cond_detect .battle_cond_text", container).addClass( thisPvP.detection[1] );
+				
+				$(".battle .battle_cond_engage .battle_cond_text", container).text( thisPvP.engagement[2] );
+				$(".battle .battle_cond_engage .battle_cond_text", container).addClass( thisPvP.engagement[1] );
+				
+				$(".battle .battle_cond_contact .battle_cond_text", container).text(thisPvP.fcontact +" vs "+thisPvP.econtact);
+				$(".battle .battle_cond_airbattle .battle_cond_text", container).text( thisPvP.airbattle[0] );
+				$(".battle .battle_cond_airbattle .battle_cond_text", container).addClass( thisPvP.airbattle[1] );
+				
+				// Fighter phase
+				$(".battle .battle_airfighter .battle_airally .battle_airbefore", container).text(thisPvP.planeFighters.player[0]);
+				$(".battle .battle_airfighter .battle_airabyss .battle_airbefore", container).text(thisPvP.planeFighters.abyssal[0]);
+				
+				// Bombing Phase
+				$(".battle .battle_airbomber", container).show();
+				$(".battle .battle_airbomber .battle_airally .battle_airbefore", container).text(thisPvP.planeBombers.player[0]);
+				$(".battle .battle_airbomber .battle_airabyss .battle_airbefore", container).text(thisPvP.planeBombers.abyssal[0]);
+				
+				// Plane losses
+				$(".battle .battle_airafter", container).text("");
+				if(thisPvP.planeFighters.player[1] > 0){ $(".battle .battle_airfighter .battle_airally .battle_airafter", container).text("-"+thisPvP.planeFighters.player[1]); }
+				if(thisPvP.planeFighters.abyssal[1] > 0){ $(".battle .battle_airfighter .battle_airabyss .battle_airafter", container).text("-"+thisPvP.planeFighters.abyssal[1]); }
+				if(thisPvP.planeBombers.player[1] > 0){ $(".battle .battle_airbomber .battle_airally .battle_airafter", container).text("-"+thisPvP.planeBombers.player[1]); }
+				if(thisPvP.planeBombers.abyssal[1] > 0){ $(".battle .battle_airbomber .battle_airabyss .battle_airafter", container).text("-"+thisPvP.planeBombers.abyssal[1]); }
+				
+				// Revert rating and drop to default icons since we don't know results yet
+				$(".battle .battle_rating img").attr("src", "../../../../assets/img/ui/rating.png");
+				$(".battle .battle_drop img").attr("src", "../../../../assets/img/ui/shipdrop.png");
+				
+				// Show/hide battle details boxes
+				$(".battle .battle_resource", container).hide();
+				$(".battle .battle_enemies", container).show();
+				$(".battle .battle_conditions", container).show();
+				$(".battle .battle_airbattle", container).show();
+				$(".battle .battle_results", container).show();
+			},
+			PvPNight: function(container, data, local){
+				
+			},
+			PvPEnd: function(container, data, local){
+				
 			}
 		}
 	});

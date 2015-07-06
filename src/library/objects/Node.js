@@ -8,22 +8,35 @@ Used by SortieManager
 	"use strict";
 	
 	window.KC3Node = function(sortie_id, id){
-		this.sortie = sortie_id;
-		this.id = id;
+		this.sortie = (sortie_id || 0);
+		this.id = (id || 0);
 		this.type = "";
 	};
 	
 	KC3Node.prototype.defineAsBattle = function( nodeData ){
 		this.type = "battle";
 		
-		this.epattern = nodeData.api_enemy.api_enemy_id;
-		this.checkEnemy();
+		// If passed initial values
+		if(typeof nodeData != "undefined"){
+			
+			// If passed raw data from compass
+			if(typeof nodeData.api_enemy != "undefined"){
+				this.epattern = nodeData.api_enemy.api_enemy_id;
+				this.checkEnemy();
+			}
+			
+			// If passed formatted enemy list from PVP
+			if(typeof nodeData.pvp_opponents != "undefined"){
+				this.eships = nodeData.pvp_opponents;
+			}
+		}
 		
 		return this;
 	};
 	
 	KC3Node.prototype.checkEnemy = function( nodeData ){
-		// this.epattern
+		// get from DB
+		// this.epattern // is the enemy ID
 		// this.eships = [ api_ship_ke[i++] ];
 		// this.eformation = api_formation[1];
 		this.eships = [-1,-1,-1,-1,-1,-1];
