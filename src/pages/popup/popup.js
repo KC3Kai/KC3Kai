@@ -53,9 +53,9 @@ $(document).on("ready", function(){
 	});
 	
 	// Strategy Room
-	/*$("#strategy").on('click', function(){
+	$("#strategy").on('click', function(){
 		window.open("../strategy/strategy.html", "kc3kai_strategy");
-	});*/
+	});
 	
 	// Settings
 	$("#settings").on('click', function(){
