@@ -5,102 +5,112 @@
 		<link href="../../assets/css/bootstrap.css" rel="stylesheet" type="text/css">
 		<link href="../../assets/css/global.css" rel="stylesheet" type="text/css">
 		<link href="strategy.css" rel="stylesheet" type="text/css">
-		
-		<link href="css/consumes.css" rel="stylesheet" type="text/css">
-		<link href="css/crafts.css" rel="stylesheet" type="text/css">
-		<link href="css/devmt.css" rel="stylesheet" type="text/css">
-		<link href="css/e_spring2015.css" rel="stylesheet" type="text/css">
-		<link href="css/exops.css" rel="stylesheet" type="text/css">
-		<link href="css/fleets.css" rel="stylesheet" type="text/css">
-		<link href="css/home.css" rel="stylesheet" type="text/css">
-		<link href="css/items.css" rel="stylesheet" type="text/css">
-		<link href="css/lscs.css" rel="stylesheet" type="text/css">
-		<link href="css/quests.css" rel="stylesheet" type="text/css">
-		<link href="css/rscs.css" rel="stylesheet" type="text/css">
-		<link href="css/ships.css" rel="stylesheet" type="text/css">
-		<link href="css/sortie.css" rel="stylesheet" type="text/css">
-		
 		<title>KC3改 Strategy Room</title>
 		<link rel="shortcut icon" href="../../assets/img/logo/48.png" type="image/x-icon" />
 	</head>
 	<body>
 		<div id="wrapper">
-			<!-- NAVIGATION -->
-			<div class="navs">
-				<div class="nav-logo">
-					<img src="../../assets/img/logo/128.png" />
+			<div id="body">
+				<!-- MENU -->
+				<div id="menu">
+					<div class="logo">
+						<img src="../../assets/img/logo/128.png" />
+					</div>
+					<div class="submenu">
+						<div class="title">Player</div>
+						<ul class="menulist">
+							<li class="active">Profile</li>
+							<li>Newsfeed</li>
+							<li>Resources</li>
+							<li>Items</li>
+							<li class="disabled">Showcase</li>
+							<li class="disabled">K2 Badge</li>
+							<li class="disabled">Completion</li>
+						</ul>
+					</div>
+					<div class="submenu">
+						<div class="title">Goals</div>
+						<ul class="menulist">
+							<li class="disabled">Resource</li>
+							<li class="disabled">Leveling</li>
+							<li class="disabled">Sparkling</li>
+							<li class="disabled">Remodel</li>
+						</ul>
+					</div>
+					<div class="submenu">
+						<div class="title">Quests</div>
+						<ul class="menulist">
+							<li>Flowchart</li>
+							<li class="disabled">History</li>
+						</ul>
+					</div>
+					<div class="submenu">
+						<div class="title">Sortie</div>
+						<ul class="menulist">
+							<li>Maps</li>
+							<li>ExOps</li>
+							<li>Event</li>
+						</ul>
+					</div>
+					<div class="submenu">
+						<div class="title">PvP</div>
+						<ul class="menulist">
+							<li class="disabled">History</li>
+							<li class="disabled">Attackers</li>
+						</ul>
+					</div>
+					<div class="submenu">
+						<div class="title">Expeditions</div>
+						<ul class="menulist">
+							<li class="disabled">Planner</li>
+							<li class="disabled">History</li>
+						</ul>
+					</div>
+					<div class="submenu">
+						<div class="title">Fleet</div>
+						<ul class="menulist">
+							<li>Current</li>
+							<li class="disabled">Teams</li>
+						</ul>
+					</div>
+					<div class="submenu">
+						<div class="title">Ships</div>
+						<ul class="menulist">
+							<li>Ship List</li>
+							<li>Construction</li>
+							<li>LSC</li>
+							<li class="disabled">Drop</li>
+							<li class="disabled">Memorial</li>
+							<li class="disabled">Modernization</li>
+							<li class="disabled">Remodel</li>
+						</ul>
+					</div>
+					<div class="submenu">
+						<div class="title">Equipment</div>
+						<ul class="menulist">
+							<li>Equipment List</li>
+							<li>Crafting</li>
+							<li class="disabled">Modernization</li>
+						</ul>
+					</div>
+					<div class="submenu">
+						<div class="title">Game Data</div>
+						<ul class="menulist">
+							<li class="disabled">Ships</li>
+							<li class="disabled">Slotitem</li>
+							<li class="disabled">Furniture</li>
+						</ul>
+					</div>
 				</div>
 				
-				<div class="nav nav-link hover active" data-id="home">Home</div>
-				
-				<div class="nav nav-heading">Operations</div>
-				<div class="nav nav-link hover" data-id="fleets">Fleets</div>
-				<div class="nav nav-link hover" data-id="quests">Quests</div>
-				<!-- <div class="nav nav-link hover" data-id="expeds">Expedition</div> -->
-				
-				<div class="nav nav-heading">Library</div>
-				<div class="nav nav-link hover" data-id="ships">Ships</div>
-				<div class="nav nav-link hover" data-id="items">Equipment</div>
-				<!-- <div class="nav nav-link hover" data-id="showcase">Showcase</div> -->
-				
-				<div class="nav nav-heading">Battles</div>
-				<div class="nav nav-link hover" data-id="sortie">Regular Maps</div>
-				<div class="nav nav-link hover" data-id="exops">Extra Ops</div>
-				<div class="nav nav-link hover" data-id="e_spring2015">Events</div>
-				
-				<div class="nav nav-heading">History</div>
-				<div class="nav nav-link hover" data-id="devmt">Development</div>
-				<div class="nav nav-link hover" data-id="crafts">Construction</div>
-				<div class="nav nav-link hover" data-id="lscs">LSC</div>
-				<div class="nav nav-link hover" data-id="rscs">Resources</div>
-				<div class="nav nav-link hover" data-id="consumes">Consumables</div>
-				
-				<!-- <div class="nav nav-heading">Tools</div>
-				<div class="nav nav-link hover" data-id="expcalc">EXP Calc</div>
-				<div class="nav nav-link hover" data-id="expcalc">KC3改 Mods</div> -->
+				<!-- CONTENT -->
+				<div id="content">
+					
+				</div>
+				<div class="clear"></div>
 			</div>
-			
-			<!-- CONTENT -->
-			<div class="tabs-content">
-				<div class="tab-message"></div>
-				<div class="tab-html"></div>
-			</div>
-			
 		</div>
 		<script type="text/javascript" src="../../assets/js/jquery-2.1.3.min.js"></script>
-		<script type="text/javascript" src="../../assets/js/Chart.min.js"></script>
-		<script type="text/javascript" src="../../assets/js/Dexie.min.js"></script>
-		<script type="text/javascript" src="../../assets/js/global.js"></script>
-		<script type="text/javascript" src="../../library/KC3.js"></script>
-		<script type="text/javascript" src="../../library/classes/Assets.js"></script>
-		<script type="text/javascript" src="../../library/classes/Battle.js"></script>
-		<script type="text/javascript" src="../../library/classes/Config.js"></script>
-		<script type="text/javascript" src="../../library/classes/Docks.js"></script>
-		<script type="text/javascript" src="../../library/classes/Fleet.js"></script>
-		<script type="text/javascript" src="../../library/classes/Gears.js"></script>
-		<script type="text/javascript" src="../../library/classes/Logging.js"></script>
-		<script type="text/javascript" src="../../library/classes/Master.js"></script>
-		<script type="text/javascript" src="../../library/classes/Meta.js"></script>
-		<script type="text/javascript" src="../../library/classes/Player.js"></script>
-		<script type="text/javascript" src="../../library/classes/Quests.js"></script>
-		<script type="text/javascript" src="../../library/classes/Resources.js"></script>
-		<script type="text/javascript" src="../../library/classes/Server.js"></script>
-		<script type="text/javascript" src="../../library/classes/Ships.js"></script>
-		<script type="text/javascript" src="../../library/classes/Util.js"></script>
-		<script type="text/javascript" src="tabs/TabConsumes.js"></script>
-		<script type="text/javascript" src="tabs/TabCrafts.js"></script>
-		<script type="text/javascript" src="tabs/TabDevmt.js"></script>
-		<script type="text/javascript" src="tabs/TabE_spring2015.js"></script>
-		<script type="text/javascript" src="tabs/TabExops.js"></script>
-		<script type="text/javascript" src="tabs/TabFleets.js"></script>
-		<script type="text/javascript" src="tabs/TabHome.js"></script>
-		<script type="text/javascript" src="tabs/TabItems.js"></script>
-		<script type="text/javascript" src="tabs/TabLscs.js"></script>
-		<script type="text/javascript" src="tabs/TabQuests.js"></script>
-		<script type="text/javascript" src="tabs/TabResources.js"></script>
-		<script type="text/javascript" src="tabs/TabShips.js"></script>
-		<script type="text/javascript" src="tabs/TabSortie.js"></script>
-		<script type="text/javascript" src="classes/Strategy.js"></script>
 		<script type="text/javascript" src="strategy.js"></script>
 	</body>
 </html>
