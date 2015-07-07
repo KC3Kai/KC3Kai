@@ -1,6 +1,6 @@
 #v {
 	width:800px;
-	height:600px;
+	height:300px;
 	overflow:hidden;
 	background:#fff;
 	margin:0px auto;
@@ -612,8 +612,8 @@
 	border:1px solid #ccc;
 }
 #v .activity .activityBox {
-	width:310px;
-	height:60px;
+	width:236px;
+	height:110px;
 	overflow:hidden;
 	display:none;
 }
@@ -623,29 +623,29 @@
 	
 }
 #v .activity .craftGear .equipInfo {
-	width:230px;
-	height:60px;
+	width:236px;
+	height:80px;
 	float:left;
 	/*background:#fcc;*/
 	padding:2px 5px;
 }
 #v .activity .craftGear .equipIcon {
-	width:20px;
-	height:20px;
+	width:30px;
+	height:30px;
 	margin:0px 5px 0px 0px;
 	float: left;
 	/*background:#ccf;*/
 }
 #v .activity .craftGear .equipIcon img {
-	width: 20px;
-	height: 20px;
+	width: 30px;
+	height: 30px;
 }
 #v .activity .craftGear .equipName {
-	width:195px;
-	height:20px;
-	line-height:20px;
+	width:191px;
+	height:30px;
+	line-height:15px;
 	float:left;
-	font-size:14px;
+	font-size:13px;
 	font-weight:bold;
 	/*background:#cfc;*/
 }
@@ -655,7 +655,7 @@
 	float:left;
 	line-height:14px;
 	font-size:12px;
-	margin:1px 0px 2px 0px;
+	margin:5px 0px 5px 0px;
 	/*background:#ccc;*/
 }
 #v .activity .craftGear .used {
@@ -686,10 +686,11 @@
 	/*background:#ccf;*/
 }
 #v .activity .craftGear .equipStats {
-	width:80px;
-	height:60px;
+	width:236px;
+	height:30px;
 	line-height:20px;
 	float:left;
+	margin: 5px 0px 0px 0xp;
 	/*background:#cfc;*/
 }
 #v .activity .craftGear .equipStat {
@@ -732,13 +733,25 @@
 --------------------------------------*/
 #v .battle {
 	width:800px;
-	height:600px;
+	height:300px;
 	/*background:url(../battlemode.png);*/
 }
 
-#v .battle .battle_info {
+#v .battle .battle_info_left {
+	width:190px;
+	height:300px;
+	float:left;
+}
+
+#v .battle .battle_info_mid {
+	width:210px;
+	height:300px;
+	float:left;
+}
+
+#v .battle .battle_info_right {
 	width:400px;
-	height:600px;
+	height:300px;
 	float:left;
 }
 
@@ -927,15 +940,16 @@
 }
 #v .battle .battle_gauge {
 	position:relative;
-	width:200px;
+	width:150px;
 	height:16px;
 	line-height:16px;
 	/*background:#cfc;*/
 	padding:2px 0px;
+	margin:0px 0px 0px 5px;
 	float:left;
 }
 #v .battle .battle_gauge_box {
-	width:190px;
+	width:150px;
 	height:12px;
 	background:#555;
 }
@@ -946,12 +960,18 @@
 #v .battle .battle_gauge_hp {
 	position:absolute;
 	top:0px;
-	width:190px;
+	width:150px;
 	height:16px;
 	line-height:16px;
 	/*background:#ccf;*/
 	font-size:12px;
 	text-align:center;
+	color:#fff;
+	z-index:1;
+	text-shadow: -1px -1px 2px #000, 	
+	1px -1px 2px #000,
+	-1px 1px 2px #000,
+	1px 1px 2px #000;
 }
 #v .battle .battle_nodes {
 	width:200px;
@@ -1281,17 +1301,17 @@
 
 /* Battle details */
 #v .battle .battle_details {
-	width:390px;
-	height:345px;
+	width:200px;
+	height:295px;
 	float:left;
-	margin:0px 5px 0px 5px;
+	margin:5px 5px 0px 5px;
 }
 #v .battle .battle_space {
 	height:1px;
 }
 #v .battle .battle_environment {
-	width:390px;
-	height:250px;
+	width:200px;
+	height:290px;
 	margin:0px 0px 5px 0px;
 	background:#def;
 	border-radius:8px;
@@ -1324,7 +1344,7 @@
 	color:#fff;
 }
 #v .battle .battle_nodenum.maelstrom_color {
-	background:#006C70;
+	background:#80007F;
 	color:#fff;
 }
 
@@ -1540,10 +1560,12 @@
 
 /* Boss Pattern */
 #v .battle .battle_boss {
-	width:140px;
+	width:180px;
 	height:90px;
 	background:#def;
 	border-radius:8px;
+	margin: 5px 5px 0px 5px;
+	float:left;
 }
 #v .battle .battle_boss_icon {
 	width:20px;
