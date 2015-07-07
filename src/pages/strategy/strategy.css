@@ -70,6 +70,9 @@ body {
 }
 #menu .submenu ul.menulist li.disabled {
 	opacity:0.3;
+	font-size:4px;
+	height:10px;
+	line-height:10px;
 }
 
 /* CONTENT */
@@ -81,4 +84,31 @@ body {
 	border-radius:10px;
 	border:1px solid #369;
 	box-shadow:-1px 1px 3px #888;
+	overflow:hidden;
+}
+#contentHtml {
+	width:700px;
+}
+
+/* COMMONS */
+.page_title {
+	width:700px;
+	font-size:18px;
+	height:30px;
+	line-height:30px;
+	padding:0px 0px 0px 10px;
+	background:#def;
+	border-bottom:1px solid #369;
+	color:#0066CC;
+}
+.page_padding {
+	width:700px;
+	padding:0px 10px 0px;
+}
+.page_section {
+	height:24px;
+	line-height:24px;
+	font-size:18px;
+	border-bottom:1px solid #ccc;
+	margin:20px 0px 5px 0px;
 }
