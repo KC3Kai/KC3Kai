@@ -119,7 +119,6 @@ Does not include Ships and Gears which are managed by other Managers
 					lose: data.sortie.lose || oldStatistics.sortie.lose
 				}
 			});
-			console.log(JSON.parse(localStorage.statistics));
 		},
 		
 		setNewsfeed :function( data ){

@@ -335,6 +335,12 @@
 				this.Fleet(container, {}, local);
 				this.Quests(container, {}, local);
 				
+				// Clear previous nodes
+				$(".battle .battle_node", container).removeClass("now");
+				$(".battle .battle_node", container).removeClass("active");
+				$(".battle .battle_node", container).text("");
+				$(".battle .battle_nodenum", container).text("");
+				
 				// Change interface mode
 				$(".normal", container).hide();
 				$(".battle", container).show();
@@ -535,6 +541,7 @@
 				KC3Panel.mode = "battle";
 				$(".battle .battle_world", container).text("PvP Practice Battle");
 				$(".battle .battle_current", container).text("FIGHTING");
+				KC3SortieManager.fleetSent = data.fleetSent;
 				
 				// Trigger other listeners
 				this.HQ(container, {}, local);
@@ -543,13 +550,21 @@
 				this.Fleet(container, {}, local);
 				this.Quests(container, {}, local);
 				
+				// Clear previous nodes
+				$(".battle .battle_node", container).removeClass("now");
+				$(".battle .battle_node", container).removeClass("active");
+				$(".battle .battle_node", container).text("");
+				$(".battle .battle_nodenum", container).text("");
+				
 				// Change interface mode
 				$(".normal", container).hide();
 				$(".battle", container).show();
 				
 				// Process PvP Battle
+				var enemyList = data.battle.api_ship_ke;
+				enemyList.splice(0,1)
 				var thisPvP = (new KC3Node()).defineAsBattle({
-					pvp_opponents: data.battle.api_ship_ke.splice(0,1),
+					pvp_opponents: enemyList
 				});
 				thisPvP.engage( data.battle );
 				

@@ -30,7 +30,6 @@ Used by SortieManager
 				this.eships = nodeData.pvp_opponents;
 			}
 		}
-		
 		return this;
 	};
 	

@@ -34,15 +34,12 @@
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
-			console.log(PlayerManager);
-			
 			// Show player information
 			$(".hq_id .hq_content").html(PlayerManager.hq.id);
 			$(".hq_name .hq_content").html(PlayerManager.hq.name);
 			$(".hq_desc .hq_content").html(PlayerManager.hq.desc);
 			
 			var MyServer = (new KC3Server()).setNum( PlayerManager.hq.server );
-			console.log(MyServer);
 			$(".hq_server .hq_content").html( MyServer.name );
 			
 			$(".hq_rank .hq_content").html(PlayerManager.hq.rank);
@@ -56,8 +53,8 @@
 			$(".stat_pvp .stat_rate .stat_value").html(this.statistics.pvp.rate+"%");
 			$(".stat_pvp .stat_win .stat_value").html(this.statistics.pvp.win);
 			$(".stat_pvp .stat_lose .stat_value").html(this.statistics.pvp.lose);
-			$(".stat_pvp .stat_atk .stat_value").html(this.statistics.pvp.attacked);
-			$(".stat_pvp .stat_atkwin .stat_value").html(this.statistics.pvp.attacked_win);
+			// $(".stat_pvp .stat_atk .stat_value").html(this.statistics.pvp.attacked);
+			// $(".stat_pvp .stat_atkwin .stat_value").html(this.statistics.pvp.attacked_win);
 			
 			$(".stat_exped .stat_rate .stat_value").html(this.statistics.exped.rate+"%");
 			$(".stat_exped .stat_success .stat_value").html(this.statistics.exped.success);
