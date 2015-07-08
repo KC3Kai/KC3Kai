@@ -34,30 +34,32 @@
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
-			$(".hq_id .hq_content").html("asdasd");
+			console.log(PlayerManager);
+			
 			// Show player information
-			// $(".hq_id .hq_content").html(this.player.id);
-			$(".hq_name .hq_content").html(this.player.name);
-			$(".hq_desc .hq_content").html(this.player.desc);
+			$(".hq_id .hq_content").html(PlayerManager.hq.id);
+			$(".hq_name .hq_content").html(PlayerManager.hq.name);
+			$(".hq_desc .hq_content").html(PlayerManager.hq.desc);
 			
-			var MyServer = KC3Meta.serverByNum(this.player.server);
-			$(".hq_server .hq_content").html(MyServer.name);
+			var MyServer = (new KC3Server()).setNum( PlayerManager.hq.server );
+			console.log(MyServer);
+			$(".hq_server .hq_content").html( MyServer.name );
 			
-			$(".hq_rank .hq_content").html(this.player.rank);
-			$(".hq_level .hq_content").html(this.player.level);
+			$(".hq_rank .hq_content").html(PlayerManager.hq.rank);
+			$(".hq_level .hq_content").html(PlayerManager.hq.level);
 			
 			// Show statistics
-			$(".stat_sortie .stat_rate .stat_value").html(this.statistics.sortie.rate);
+			$(".stat_sortie .stat_rate .stat_value").html((this.statistics.sortie.rate*100)+"%");
 			$(".stat_sortie .stat_win .stat_value").html(this.statistics.sortie.win);
 			$(".stat_sortie .stat_lose .stat_value").html(this.statistics.sortie.lose);
 			
-			$(".stat_pvp .stat_rate .stat_value").html(this.statistics.pvp.rate);
+			$(".stat_pvp .stat_rate .stat_value").html(this.statistics.pvp.rate+"%");
 			$(".stat_pvp .stat_win .stat_value").html(this.statistics.pvp.win);
 			$(".stat_pvp .stat_lose .stat_value").html(this.statistics.pvp.lose);
 			$(".stat_pvp .stat_atk .stat_value").html(this.statistics.pvp.attacked);
 			$(".stat_pvp .stat_atkwin .stat_value").html(this.statistics.pvp.attacked_win);
 			
-			$(".stat_exped .stat_rate .stat_value").html(this.statistics.exped.rate);
+			$(".stat_exped .stat_rate .stat_value").html(this.statistics.exped.rate+"%");
 			$(".stat_exped .stat_success .stat_value").html(this.statistics.exped.success);
 			$(".stat_exped .stat_total .stat_value").html(this.statistics.exped.total);
 		}

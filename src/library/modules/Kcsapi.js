@@ -695,6 +695,7 @@ Previously known as "Reactor"
 				KC3QuestManager.get(702).increment(); // G2: Daily Modernization
 				KC3QuestManager.get(703).increment(); // G3: Weekly Modernization
 				KC3Network.trigger("Quests");
+				KC3Network.trigger("Fleet");
 			}
 		},
 		

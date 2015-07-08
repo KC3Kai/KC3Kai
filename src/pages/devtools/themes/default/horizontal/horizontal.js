@@ -228,6 +228,7 @@
 					$.each(CurrentFleet.ships, function(index, rosterId){
 						if(rosterId > -1){
 							var CurrentShip = KC3ShipManager.get( rosterId );
+							if(CurrentShip.masterId == 0){ return false; }
 							var ShipBox = $(".factory .fleet-ship", container).clone().appendTo(FleetContainer);
 							
 							$(".ship-img img", ShipBox).attr("src", KC3Meta.shipIcon(CurrentShip.masterId));
