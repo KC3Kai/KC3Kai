@@ -90,8 +90,10 @@ var interactions = {
 	
 	// Quest page is opened, show overlays
 	questOverlay :function(request, sender, response){
+		// If translations enabled for API screen
+		if(!ConfigManager.api_translation){ response({success:false}); return true; }
+		
 		KC3QuestManager.load();
-		// console.log(KC3QuestManager.list);
 		$.each(request.questlist, function( index, QuestRaw ){
 			// console.log("showing quest",QuestRaw);
 			if( QuestRaw !=- 1 ){
