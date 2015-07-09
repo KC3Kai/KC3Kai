@@ -13,7 +13,7 @@
 		["AP", "", "Air Parity"],
 		["AS+", "good", "Air Supremacy"],
 		["AS", "good", "Air Superiority"],
-		["AI", "", "Air Incapability"],
+		["AI", "bad", "Air Incapability"],
 		["AD", "bad", "Air Denial"]
 	],
 	

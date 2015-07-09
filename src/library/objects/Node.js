@@ -96,8 +96,8 @@ Used by SortieManager
 		
 		this.detection = KC3Meta.detection( battleData.api_search[0] )
 		this.engagement = KC3Meta.engagement( battleData.api_formation[2] )
-		this.fcontact = (battleData.api_kouku.api_stage1.api_touch_plane==1)?"YES":"NO";
-		this.econtact = (battleData.api_kouku.api_stage1.api_touch_plane==1)?"YES":"NO";
+		this.fcontact = (battleData.api_kouku.api_stage1.api_touch_plane[0]==1)?"YES":"NO";
+		this.econtact = (battleData.api_kouku.api_stage1.api_touch_plane[1]==1)?"YES":"NO";
 		
 		this.airbattle = KC3Meta.airbattle( battleData.api_kouku.api_stage1.api_disp_seiku );
 		
@@ -112,6 +112,14 @@ Used by SortieManager
 				battleData.api_kouku.api_stage1.api_e_lostcount
 			]
 		};
+		
+		if(
+			this.planeFighters.player[0]===0
+			&& this.planeFighters.abyssal[0]===0
+			&& battleData.api_kouku.api_stage2===null
+		){
+			this.airbattle = ["None", "", "No Air Battle"];
+		}
 		
 		// Bombing phase 1
 		this.planeBombers = { player:[0,0], abyssal:[0,0] };
