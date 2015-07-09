@@ -490,6 +490,13 @@
 		</div>
 		
 		<div class="tools">
+			<div class="switch-ship-attribute-buttons">
+				<div class="switch-ship-attribute-button switch-exp-button active hover" title="Level & Experience">Lv</div>
+				<div class="switch-ship-attribute-button switch-morale-button hover" title="Morale">Mr</div>
+				<div class="switch-ship-attribute-button switch-equip-button hover" title="Equipment">Eq</div>
+				<div class="switch-ship-attribute-button switch-supply-button hover" title="Fuel">Fu</div>
+				<div class="clear"></div>
+			</div>
 			<div class="switch_fleet_type_button hover"></div>
 		</div>
 		
@@ -524,7 +531,27 @@
 			</div>
 			<div class="battle_mainfleet">
 				<div class="battle_fleet_summary">
-				
+					<div class="summary-field battle-level">
+						<div class="summary-icon"><img src="../../../../assets/img/stats/lv.png" /></div>
+						<div class="summary-text"></div>
+						<div class="clear"></div>
+					</div>
+					<div class="summary-field battle-eqlos eqlos-toggle hover">
+						<div class="summary-icon"><img src="../../../../assets/img/stats/los3.png" /></div>
+						<div class="summary-text"></div>
+						<div class="clear"></div>
+					</div>
+					<div class="summary-field battle-airfp">
+						<div class="summary-icon"><img src="../../../../assets/img/stats/ac.png" /></div>
+						<div class="summary-text"></div>
+						<div class="clear"></div>
+					</div>
+					<div class="summary-field battle-speed">
+						<div class="summary-icon"><img src="../../../../assets/img/stats/sp.png" /></div>
+						<div class="summary-text"></div>
+						<div class="clear"></div>
+					</div>
+					<div class="clear"></div>
 				</div>
 				<div class="battle_fleet_list">
 				
@@ -532,7 +559,27 @@
 			</div>
 			<div class="battle_escorts">
 				<div class="battle_fleet_summary">
-				
+					<div class="summary-field battle-level">
+						<div class="summary-icon"><img src="../../../../assets/img/stats/lv.png" /></div>
+						<div class="summary-text"></div>
+						<div class="clear"></div>
+					</div>
+					<div class="summary-field battle-eqlos eqlos-toggle hover">
+						<div class="summary-icon"><img src="../../../../assets/img/stats/los3.png" /></div>
+						<div class="summary-text"></div>
+						<div class="clear"></div>
+					</div>
+					<div class="summary-field battle-airfp">
+						<div class="summary-icon"><img src="../../../../assets/img/stats/ac.png" /></div>
+						<div class="summary-text"></div>
+						<div class="clear"></div>
+					</div>
+					<div class="summary-field battle-speed">
+						<div class="summary-icon"><img src="../../../../assets/img/stats/sp.png" /></div>
+						<div class="summary-text"></div>
+						<div class="clear"></div>
+					</div>
+					<div class="clear"></div>
 				</div>
 				<div class="battle_fleet_list">
 				
@@ -613,10 +660,26 @@
 			<div class="ship-morale-box"></div>
 		</div>
 		<div class="ship-equip">
-			<div class="ship-gear-1 ship-gear"><img src="../../../../assets/img/ui/empty.png" /></div>
-			<div class="ship-gear-2 ship-gear"><img src="../../../../assets/img/ui/empty.png" /></div>
-			<div class="ship-gear-3 ship-gear"><img src="../../../../assets/img/ui/empty.png" /></div>
-			<div class="ship-gear-4 ship-gear"><img src="../../../../assets/img/ui/empty.png" /></div>
+			<div class="ship-gear-1 ship-gear">
+				<img src="../../../../assets/img/ui/empty.png" />
+				<div class="ship-equip-capacity">00</div>
+			</div>
+			<div class="ship-gear-2 ship-gear">
+				<img src="../../../../assets/img/ui/empty.png" />
+				<div class="ship-equip-capacity">00</div>
+			</div>
+			<div class="ship-gear-3 ship-gear">
+				<img src="../../../../assets/img/ui/empty.png" />
+				<div class="ship-equip-capacity">00</div>
+			</div>
+			<div class="ship-gear-4 ship-gear">
+				<img src="../../../../assets/img/ui/empty.png" />
+				<div class="ship-equip-capacity">00</div>
+			</div>
+		</div>
+		<div class="ship-supply">
+			<div class="supply-fuel"><div class="supply-text"></div><div class="supply-bar"></div></div>
+			<div class="supply-ammo"><div class="supply-text"></div><div class="supply-bar"></div></div>
 		</div>
 		<div class="clear"></div>
 	</div>
@@ -642,10 +705,26 @@
 			<div class="ship-morale-box"></div>
 		</div>
 		<div class="ship-equip">
-			<div class="ship-gear-1 ship-gear"><img src="../../../../assets/img/ui/empty.png" /></div>
-			<div class="ship-gear-2 ship-gear"><img src="../../../../assets/img/ui/empty.png" /></div>
-			<div class="ship-gear-3 ship-gear"><img src="../../../../assets/img/ui/empty.png" /></div>
-			<div class="ship-gear-4 ship-gear"><img src="../../../../assets/img/ui/empty.png" /></div>
+			<div class="ship-gear-1 ship-gear">
+				<img src="../../../../assets/img/ui/empty.png" />
+				<div class="ship-equip-capacity">00</div>
+			</div>
+			<div class="ship-gear-2 ship-gear">
+				<img src="../../../../assets/img/ui/empty.png" />
+				<div class="ship-equip-capacity">00</div>
+			</div>
+			<div class="ship-gear-3 ship-gear">
+				<img src="../../../../assets/img/ui/empty.png" />
+				<div class="ship-equip-capacity">00</div>
+			</div>
+			<div class="ship-gear-4 ship-gear">
+				<img src="../../../../assets/img/ui/empty.png" />
+				<div class="ship-equip-capacity">00</div>
+			</div>
+		</div>
+		<div class="ship-supply">
+			<div class="supply-fuel"><div class="supply-text"></div><div class="supply-bar"></div></div>
+			<div class="supply-ammo"><div class="supply-text"></div><div class="supply-bar"></div></div>
 		</div>
 		<div class="clear"></div>
 	</div>

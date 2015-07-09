@@ -81,18 +81,52 @@
 			// Switch fleet type button
 			if (PlayerManager.combinedFleet) {
 				$(".battle .switch_fleet_type_button", this.domElement).text("Combined");
+				$(".battle .switch-ship-attribute-buttons", this.domElement).show();
 			} else {
 				$(".battle .switch_fleet_type_button", this.domElement).text("Single");
+				$(".battle .switch-ship-attribute-buttons", this.domElement).hide();
 			}
 			$(".battle .switch_fleet_type_button", this.domElement).on("click", function(){
 				if (PlayerManager.combinedFleet) {
 					PlayerManager.combinedFleet = false;
+					$(".battle .switch-ship-attribute-buttons", self.domElement).hide();
 					$(this).text("Single");
 				} else {
 					PlayerManager.combinedFleet = true;
+					$(".battle .switch-ship-attribute-buttons", self.domElement).show();
 					$(this).text("Combined");
 				}
 				self.trigger("Fleet");
+			});
+			
+			// Switch ship attribute button
+			$(".battle-mship .ship-morale", this.domElement).hide();
+			$(".battle-mship .ship-equip", this.domElement).hide();
+			$(".battle-mship .ship-supply", this.domElement).hide();
+			$(".battle .switch-ship-attribute-button ", this.domElement).on("click", function(){
+				console.log("switch button clicked!");
+				
+				$(".battle .switch-ship-attribute-button ", self.domElement).removeClass("active");
+				$(this).addClass("active");
+				
+				$(".battle-mship .ship-level", self.domElement).hide();
+				$(".battle-mship .ship-morale", self.domElement).hide();
+				$(".battle-mship .ship-equip", self.domElement).hide();
+				$(".battle-mship .ship-supply", self.domElement).hide();
+				
+				if ($(this).hasClass("switch-exp-button")) {
+					$(".battle-mship .ship-level", self.domElement).show();
+				}
+				if ($(this).hasClass("switch-morale-button")) {
+					$(".battle-mship .ship-morale", self.domElement).show();
+				}
+				if ($(this).hasClass("switch-equip-button")) {
+					$(".battle-mship .ship-equip", self.domElement).show();
+				}
+				if ($(this).hasClass("switch-supply-button")) {
+					$(".battle-mship .ship-supply", self.domElement).show();
+				}
+				
 			});
 			
 			// Quest reset
@@ -238,10 +272,10 @@
 					var CurrentFleet = PlayerManager.fleets[local.selectedFleet-1];
 					
 					// Fleet Summary Stats
-					$(".summary-level .summary-text", container).text( CurrentFleet.totalLevel() );
-					$(".summary-eqlos .summary-text", container).text( Math.round( CurrentFleet.eLoS() * 100) / 100 );
-					$(".summary-airfp .summary-text", container).text( CurrentFleet.fighterPower() );
-					$(".summary-speed .summary-text", container).text( CurrentFleet.speed() );
+					$(".normal .summary-level .summary-text", container).text( CurrentFleet.totalLevel() );
+					$(".normal .summary-eqlos .summary-text", container).text( Math.round( CurrentFleet.eLoS() * 100) / 100 );
+					$(".normal .summary-airfp .summary-text", container).text( CurrentFleet.fighterPower() );
+					$(".normal .summary-speed .summary-text", container).text( CurrentFleet.speed() );
 					container.css("box-shadow", "none");
 					
 					// Fleet Ships
@@ -282,6 +316,86 @@
 						console.log("MainFleet", MainFleet);
 						console.log("EscortFleet", EscortFleet);
 						
+						//var CurrentFleet = PlayerManager.fleets[ KC3SortieManager.fleetSent-1 ];
+						
+						// Load Main Fleet
+						// Fleet Summary Stats
+						$(".battle_mainfleet .battle-level .summary-text", container).text( MainFleet.totalLevel() );
+						$(".battle_mainfleet .battle-eqlos .summary-text", container).text( Math.round( MainFleet.eLoS() * 100) / 100 );
+						$(".battle_mainfleet .battle-airfp .summary-text", container).text( MainFleet.fighterPower() );
+						$(".battle_mainfleet .battle-speed .summary-text", container).text( MainFleet.speed() );
+						container.css("box-shadow", "none");
+						
+						// Fleet Ships
+						var FleetContainer = $(".battle_mainfleet .battle_fleet_list", container);
+						FleetContainer.html("");
+						$.each(MainFleet.ships, function(index, rosterId){
+							if(rosterId > -1){
+								var CurrentShip = KC3ShipManager.get( rosterId );
+								var ShipBox = $(".factory .battle-mship", container).clone().appendTo(FleetContainer);
+								
+								$(".ship-img img", ShipBox).attr("src", KC3Meta.shipIcon(CurrentShip.masterId));
+								$(".ship-name", ShipBox).text( CurrentShip.name() );
+								$(".ship-type", ShipBox).text( CurrentShip.stype() );
+								$(".ship-lvl-txt", ShipBox).text(CurrentShip.level);
+								$(".ship-lvl-next", ShipBox).text("-"+CurrentShip.exp[1]);
+								$(".ship-lvl-val", ShipBox).css("width", (60*(CurrentShip.exp[2]/100))+"px");
+								
+								FleetHP(container, ShipBox, CurrentShip.hp, rosterId );
+								FleetMorale( $(".ship-morale-box", ShipBox), CurrentShip.morale );
+								FleetEquipment( $(".ship-gear-1", ShipBox), CurrentShip.equipment(0), CurrentShip.slots[0] );
+								FleetEquipment( $(".ship-gear-2", ShipBox), CurrentShip.equipment(1), CurrentShip.slots[1] );
+								FleetEquipment( $(".ship-gear-3", ShipBox), CurrentShip.equipment(2), CurrentShip.slots[2] );
+								FleetEquipment( $(".ship-gear-4", ShipBox), CurrentShip.equipment(3), CurrentShip.slots[3] );
+								
+								var FuelPercent = CurrentShip.fuel / CurrentShip.master().api_fuel_max;
+								var AmmoPercent = CurrentShip.ammo / CurrentShip.master().api_bull_max;
+								$(".supply-fuel .supply-text", ShipBox).text(Math.floor(FuelPercent*100)+"%");
+								$(".supply-ammo .supply-text", ShipBox).text(Math.floor(AmmoPercent*100)+"%");
+								$(".supply-fuel .supply-bar", ShipBox).css("width", (50*FuelPercent)+"px");
+								$(".supply-ammo .supply-bar", ShipBox).css("width", (50*AmmoPercent)+"px");
+							}
+						});
+						
+						// Load Escort Fleet
+						// Fleet Summary Stats
+						$(".battle_escorts .battle-level .summary-text", container).text( EscortFleet.totalLevel() );
+						$(".battle_escorts .battle-eqlos .summary-text", container).text( Math.round( EscortFleet.eLoS() * 100) / 100 );
+						$(".battle_escorts .battle-airfp .summary-text", container).text( EscortFleet.fighterPower() );
+						$(".battle_escorts .battle-speed .summary-text", container).text( EscortFleet.speed() );
+						container.css("box-shadow", "none");
+						
+						// Fleet Ships
+						var FleetContainer = $(".battle_escorts .battle_fleet_list", container);
+						FleetContainer.html("");
+						$.each(EscortFleet.ships, function(index, rosterId){
+							if(rosterId > -1){
+								var CurrentShip = KC3ShipManager.get( rosterId );
+								var ShipBox = $(".factory .battle-mship", container).clone().appendTo(FleetContainer);
+								
+								$(".ship-img img", ShipBox).attr("src", KC3Meta.shipIcon(CurrentShip.masterId));
+								$(".ship-name", ShipBox).text( CurrentShip.name() );
+								$(".ship-type", ShipBox).text( CurrentShip.stype() );
+								$(".ship-lvl-txt", ShipBox).text(CurrentShip.level);
+								$(".ship-lvl-next", ShipBox).text("-"+CurrentShip.exp[1]);
+								$(".ship-lvl-val", ShipBox).css("width", (60*(CurrentShip.exp[2]/100))+"px");
+								
+								FleetHP(container, ShipBox, CurrentShip.hp, rosterId );
+								FleetMorale( $(".ship-morale-box", ShipBox), CurrentShip.morale );
+								FleetEquipment( $(".ship-gear-1", ShipBox), CurrentShip.equipment(0), CurrentShip.slots[0] );
+								FleetEquipment( $(".ship-gear-2", ShipBox), CurrentShip.equipment(1), CurrentShip.slots[1] );
+								FleetEquipment( $(".ship-gear-3", ShipBox), CurrentShip.equipment(2), CurrentShip.slots[2] );
+								FleetEquipment( $(".ship-gear-4", ShipBox), CurrentShip.equipment(3), CurrentShip.slots[3] );
+								
+								var FuelPercent = CurrentShip.fuel / CurrentShip.master().api_fuel_max;
+								var AmmoPercent = CurrentShip.ammo / CurrentShip.master().api_bull_max;
+								$(".supply-fuel .supply-text", ShipBox).text(Math.floor(FuelPercent*100)+"%");
+								$(".supply-ammo .supply-text", ShipBox).text(Math.floor(AmmoPercent*100)+"%");
+								$(".supply-fuel .supply-bar", ShipBox).css("width", (50*FuelPercent)+"px");
+								$(".supply-ammo .supply-bar", ShipBox).css("width", (50*AmmoPercent)+"px");
+							}
+						});
+						
 						$(".battle .battle_singlefleet", container).hide();
 						$(".battle .battle_mainfleet", container).show();
 						$(".battle .battle_escorts", container).show();
@@ -291,10 +405,10 @@
 						var CurrentFleet = PlayerManager.fleets[ KC3SortieManager.fleetSent-1 ];
 						
 						// Fleet Summary Stats
-						$(".battle-level .summary-text", container).text( CurrentFleet.totalLevel() );
-						$(".battle-eqlos .summary-text", container).text( Math.round( CurrentFleet.eLoS() * 100) / 100 );
-						$(".battle-airfp .summary-text", container).text( CurrentFleet.fighterPower() );
-						$(".battle-speed .summary-text", container).text( CurrentFleet.speed() );
+						$(".battle_singlefleet .battle-level .summary-text", container).text( CurrentFleet.totalLevel() );
+						$(".battle_singlefleet .battle-eqlos .summary-text", container).text( Math.round( CurrentFleet.eLoS() * 100) / 100 );
+						$(".battle_singlefleet .battle-airfp .summary-text", container).text( CurrentFleet.fighterPower() );
+						$(".battle_singlefleet .battle-speed .summary-text", container).text( CurrentFleet.speed() );
 						container.css("box-shadow", "none");
 						
 						// Fleet Ships
