@@ -112,3 +112,43 @@ body {
 	border-bottom:1px solid #ccc;
 	margin:20px 0px 5px 0px;
 }
+.page_help {
+	width:680px;
+	height:24px;
+	line-height:24px;
+	margin:10px 0px 10px 0px;
+	padding:0px 0px 0px 0px;
+	clear:both;
+	font-size:12px;
+	font-style:italic;
+	background:#cfc;
+	border-radius:12px;
+}
+.page_help_icon {
+	
+}
+.page_wiki {
+	height:30px;
+	text-align:right;
+	float:right;
+	margin:0px 10px 0px 0px;
+	font-size:12px;
+}
+.page_wiki a {
+	height:30px;
+}
+.page_wiki a span {
+	width:14px;
+	height:14px;
+	line-height:14px;
+	margin:7px 3px 3px 3px;
+	float:left;
+	background:#69c;
+	border-radius:9px;
+	font-weight:bold;
+	font-size:14px;
+	text-align:center;
+	color:#fff;
+	font-style:normal;
+	display:block;
+}

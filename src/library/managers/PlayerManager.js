@@ -99,8 +99,26 @@ Does not include Ships and Gears which are managed by other Managers
 		},
 		
 		setStatistics :function( data ){
-			$.extend( this.statistics, JSON.parse(localStorage.statistics || "{}"), data);
-			localStorage.statistics = JSON.stringify( this.statistics );
+			var oldStatistics = JSON.parse(localStorage.statistics || "{}");
+			localStorage.statistics = JSON.stringify({
+				exped: {
+					rate: data.exped.rate || oldStatistics.exped.rate,
+					total: data.exped.total || oldStatistics.exped.total,
+					success: data.exped.success || oldStatistics.exped.success
+				},
+				pvp: {
+					rate: data.pvp.rate || oldStatistics.pvp.rate,
+					win: data.pvp.win || oldStatistics.pvp.win,
+					lose: data.pvp.lose || oldStatistics.pvp.lose,
+					attacked: data.pvp.attacked || oldStatistics.pvp.attacked,
+					attacked_win: data.pvp.attacked_win || oldStatistics.pvp.attacked_win
+				},
+				sortie: {
+					rate: data.sortie.rate || oldStatistics.sortie.rate,
+					win: data.sortie.win || oldStatistics.sortie.win,
+					lose: data.sortie.lose || oldStatistics.sortie.lose
+				}
+			});
 		},
 		
 		setNewsfeed :function( data ){

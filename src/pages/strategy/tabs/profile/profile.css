@@ -23,7 +23,7 @@
 	font-weight:bold;
 }
 .tab_profile .hq_content {
-	width:500px;
+	width:590px;
 	height:20px;
 	float:left;
 	background:#fafafa;
@@ -33,49 +33,51 @@
 --------------------------------*/
 .tab_profile .statistics {
 	width:680px;
-	height:120px;
 }
 .tab_profile .stat_section {
-	width:200px;
+	width:215px;
 	float:left;
-	height:120px;
 	margin:0px 10px 0px 0px;
-	border-radius:12px;
-}
-.tab_profile .stat_exped {
-	background:#def;
-}
-.tab_profile .stat_pvp {
-	background:#cfc;
-}
-.tab_profile .stat_sortie {
-	background:#fcc;
 }
 .tab_profile .stat_head {
-	width:200px;
-	height:30px;
-	line-height:30px;
+	width:215px;
+	height:20px;
+	line-height:20px;
 	font-weight:bold;
 	text-align:center;
+	background:#fcc;
+	border-radius:8px 8px 0px 0px;
+	margin:0px 0px 2px 0px;
+}
+.tab_profile .stat_sortie .stat_head {
+	background:#fcc;
+}
+.tab_profile .stat_pvp .stat_head {
+	background:#ada;
+}
+.tab_profile .stat_exped .stat_head {
+	background:#ace;
 }
 .tab_profile .stat_body {
-	height:80px;
 	font-size:12px;
 }
 .tab_profile .stat_field {
-	width:200px;
-	height:15px;
-	margin:0px 0px 1px 0px;
+	width:215px;
+	height:18px;
+	line-height:18px;
+	margin:0px 0px 2px 0px;
+	background:#eee;
 }
 .tab_profile .stat_label {
 	width:100px;
 	height:15px;
 	float:left;
-	text-align:right;
+	/*text-align:right;*/
 	margin:0px 10px 0px 0px;
+	padding:0px 0px 0px 5px;
 }
 .tab_profile .stat_value {
-	width:90px;
+	width:100px;
 	height:15px;
 	float:left;
 	font-weight:bold;

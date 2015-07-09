@@ -7,19 +7,24 @@ Instantiatable class to represent one player
 	"use strict";
 	
 	window.KC3Player = function(){
-		this.id =  0;
-		this.name = "Unknown";
-		this.desc = "";
-		this.rank = "";
-		this.level = 1;
-		this.exp = [0,0];
-		this.server = 0;
+		if(!this.load()){
+			this.id =  0;
+			this.name = "Unknown";
+			this.desc = "";
+			this.rank = "";
+			this.level = 1;
+			this.exp = [0,0];
+			this.server = 0;
+		}
 	};
 	
 	KC3Player.prototype.update = function( data ){
 		this.id =  data.mid;
 		this.name = data.name;
-		this.server = 0;
+		
+		var MyServer = (new KC3Server()).setUrl( KC3Network.lastUrl );
+		this.server = MyServer.num;
+		
 		this.desc = data.desc;
 		this.rank = KC3Meta.rank( data.rank );
 		this.level = data.level;
@@ -46,12 +51,26 @@ Instantiatable class to represent one player
 		KC3ShipManager.clear();
 		KC3GearManager.clear();
 		KC3QuestManager.clear();
-		// SortieManager.clear();
-		// TimerManager.clear();
+		KC3SortieManager.clear();
 	};
 	
 	KC3Player.prototype.save = function(){
 		localStorage.player = JSON.stringify(this);
+	};
+	
+	KC3Player.prototype.load = function(){
+		if( typeof localStorage.player != "undefined" ){
+			var playerInfo = JSON.parse(localStorage.player);
+			this.id =  playerInfo.id;
+			this.name = playerInfo.name;
+			this.desc = playerInfo.desc;
+			this.rank = playerInfo.rank;
+			this.level = playerInfo.level;
+			this.exp = playerInfo.exp;
+			this.server = playerInfo.server;
+			return true;
+		}
+		return false;
 	};
 	
 })();

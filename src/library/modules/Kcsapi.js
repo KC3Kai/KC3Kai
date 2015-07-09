@@ -532,7 +532,10 @@ Previously known as "Reactor"
 		/* PVP Start
 		-------------------------------------------------------*/
 		"api_req_practice/battle":function(params, response, headers){
-			KC3Network.trigger("PvPStart", { battle: response.api_data });
+			KC3Network.trigger("PvPStart", {
+				battle: response.api_data,
+				fleetSent: params.api_deck_id
+			});
 		},
 		
 		/* PVP Start
@@ -695,6 +698,7 @@ Previously known as "Reactor"
 				KC3QuestManager.get(702).increment(); // G2: Daily Modernization
 				KC3QuestManager.get(703).increment(); // G3: Weekly Modernization
 				KC3Network.trigger("Quests");
+				KC3Network.trigger("Fleet");
 			}
 		},
 		
