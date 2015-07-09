@@ -113,6 +113,14 @@ Used by SortieManager
 			]
 		};
 		
+		if(
+			this.planeFighters.player[0]===0
+			&& this.planeFighters.abyssal[0]===0
+			&& battleData.api_kouku.api_stage2===null
+		){
+			this.airbattle = ["None", "", "No Air Battle"],;
+		}
+		
 		// Bombing phase 1
 		this.planeBombers = { player:[0,0], abyssal:[0,0] };
 		if(battleData.api_kouku.api_stage2 !== null){
