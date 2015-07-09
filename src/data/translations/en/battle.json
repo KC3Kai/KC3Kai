@@ -13,7 +13,7 @@
 		["AP", "", "Air Parity"],
 		["AS+", "good", "Air Supremacy"],
 		["AS", "good", "Air Superiority"],
-		["AI", "", "Air Incapability"],
+		["AI", "bad", "Air Incapability"],
 		["AD", "bad", "Air Denial"]
 	],
 	
@@ -21,8 +21,8 @@
 		["", "", ""],
 		["Prll", "", "Parallel"],
 		["HdOn", "", "Head-on"],
-		["Gr-T", "good", "Green T"],
-		["Rd-T", "bad", "Red T"]
+		["Gr-T", "", "Green T"],
+		["Rd-T", "", "Red T"]
 	]
 	
 }
