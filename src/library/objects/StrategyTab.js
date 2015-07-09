@@ -8,6 +8,11 @@
 		this.loadedStyle = false;
 	};
 	
+	KC3StrategyTab.prototype.definition = {
+		init :function(){ return false; },
+		execute :function(){}
+	};
+	
 	KC3StrategyTab.prototype.showError = function(message){
 		this.error = true;
 		this.errorMessage = message;

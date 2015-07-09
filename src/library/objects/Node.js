@@ -115,7 +115,7 @@ Used by SortieManager
 		
 		// Bombing phase 1
 		this.planeBombers = { player:[0,0], abyssal:[0,0] };
-		if(typeof battleData.api_kouku.api_stage2 != "undefined"){
+		if(battleData.api_kouku.api_stage2 !== null){
 			this.planeBombers.player[0] = battleData.api_kouku.api_stage2.api_f_count;
 			this.planeBombers.player[1] = battleData.api_kouku.api_stage2.api_f_lostcount;
 			this.planeBombers.abyssal[0] = battleData.api_kouku.api_stage2.api_e_count;
@@ -128,7 +128,7 @@ Used by SortieManager
 			this.planeFighters.abyssal[1] += battleData.api_kouku2.api_stage1.api_e_lostcount;
 			
 			// Bombine phase 2
-			if(typeof battleData.api_kouku2.api_stage2 != "undefined"){
+			if(battleData.api_kouku2.api_stage2 !== null){
 				this.planeBombers.player[1] += battleData.api_kouku2.api_stage2.api_f_lostcount;
 				this.planeBombers.abyssal[1] += battleData.api_kouku2.api_stage2.api_e_lostcount;
 			}
