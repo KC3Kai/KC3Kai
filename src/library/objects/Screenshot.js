@@ -37,7 +37,7 @@ function chromeCapture(captureFormat, response){
 
 KCScreenshot.prototype.generateScreenshotFilename = function() {
   var d = new Date();
-  curr_month = d.getMonth() + "";
+  curr_month = (d.getMonth()+1) + "";
   if (curr_month.length == 1) { curr_month = "0" + curr_month; }
   curr_date = d.getDate() + "";
   if (curr_date.length == 1) { curr_date = "0" + curr_date; }
