@@ -78,6 +78,23 @@
 				self.trigger("Quests");
 			});
 			
+			// Switch fleet type button
+			if (PlayerManager.combinedFleet) {
+				$(".battle .switch_fleet_type_button", this.domElement).text("Combined");
+			} else {
+				$(".battle .switch_fleet_type_button", this.domElement).text("Single");
+			}
+			$(".battle .switch_fleet_type_button", this.domElement).on("click", function(){
+				if (PlayerManager.combinedFleet) {
+					PlayerManager.combinedFleet = false;
+					$(this).text("Single");
+				} else {
+					PlayerManager.combinedFleet = true;
+					$(this).text("Combined");
+				}
+				self.trigger("Fleet");
+			});
+			
 			// Quest reset
 			$(".box-quests", this.domElement).on("mouseover", function(){
 				$(".box-quest-resets", this.domElement).show();
@@ -594,6 +611,9 @@
 				});
 				
 				// Battle conditions
+				$(".battle .battle_cond_text", container).removeClass( "good" );
+				$(".battle .battle_cond_text", container).removeClass( "bad" );
+				
 				$(".battle .battle_cond_detect .battle_cond_text", container).text( thisPvP.detection[0] );
 				$(".battle .battle_cond_detect .battle_cond_text", container).addClass( thisPvP.detection[1] );
 				

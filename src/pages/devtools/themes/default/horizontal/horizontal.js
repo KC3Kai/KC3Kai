@@ -422,6 +422,9 @@
 				}
 				
 				// Battle conditions
+				$(".battle .battle_cond_text", container).removeClass( "good" );
+				$(".battle .battle_cond_text", container).removeClass( "bad" );
+				
 				$(".battle .battle_cond_detect .battle_cond_text", container).text( thisNode.detection[0] );
 				$(".battle .battle_cond_detect .battle_cond_text", container).addClass( thisNode.detection[1] );
 				
@@ -563,6 +566,9 @@
 				});
 				
 				// Battle conditions
+				$(".battle .battle_cond_text", container).removeClass( "good" );
+				$(".battle .battle_cond_text", container).removeClass( "bad" );
+				
 				$(".battle .battle_cond_detect .battle_cond_text", container).text( thisPvP.detection[0] );
 				$(".battle .battle_cond_detect .battle_cond_text", container).addClass( thisPvP.detection[1] );
 				

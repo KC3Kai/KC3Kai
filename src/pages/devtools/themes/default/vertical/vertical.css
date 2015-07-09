@@ -354,7 +354,7 @@
 }
 
 /* Buttons */
-#v .tools {
+#v .normal .tools {
 	position:absolute;
 	right:0px;
 	width:100px;
@@ -744,13 +744,13 @@
 }
 
 #v .battle .battle_info_mid {
-	width:210px;
+	width:150px;
 	height:300px;
 	float:left;
 }
 
 #v .battle .battle_info_right {
-	width:400px;
+	width:460px;
 	height:300px;
 	float:left;
 }
@@ -924,10 +924,11 @@
 /* Sortie World Info */
 #v .battle .battle_sortie {
 	position:relative;
-	width:400px;
+	width:200px;
 	height:50px;
 	float:left;
 }
+
 #v .battle .battle_world {
 	width:200px;
 	height:28px;
@@ -1008,9 +1009,29 @@
 	color:#fff;
 }
 
+#v .battle .tools {
+	width:260px;
+	height:50px;
+	float:left;
+}
+
+#v .battle .tools .switch_fleet_type_button {
+	width:80px;
+	height:25px;
+	margin: 5px 5px 5px 5px;
+	padding: 5px 0px 5px 0px;
+	float:right;
+	font-weight:bold;
+	font-size:15px;
+	line-height:15px;
+	text-align:center;
+	background:#5c5;
+	border-radius:10px 10px 10px 10px;
+}
+
 /* All Fleets */
 #v .battle .battle_fleet {
-	width:400px;
+	width:460px;
 	height:350px;
 	float:left;
 	overflow:hidden;
@@ -1018,14 +1039,14 @@
 
 /* Fleet Main */
 #v .battle .battle_singlefleet {
-	width:400px;
+	width:460px;
 	height:250px;
 	float:left;
 	/*background:#cfc;*/
-	padding:5px 5px;
+	padding:3px 5px 5px 5px;
 }
 #v .battle .battle_fleet_summary {
-	width:400px;
+	width:460px;
 	height:24px;
 	margin:0px 0px 0px 0px;
 	/*background:#ccf;*/
@@ -1060,13 +1081,13 @@
 }
 
 #v .battle .battle_fleet_list {
-	width:400px;
+	width:450px;
 	height:222px;
 	margin:0px 0px 0px 0px;
 	/*background:#ffc;*/
 }
 #v .battle-ship {
-	width:390px;
+	width:450px;
 	height:35px;
 	margin:0px 0px 2px 0px;
 	font-size:10px;
@@ -1220,28 +1241,39 @@
 	text-align:center;
 }
 #v .battle-ship .ship-equip {
-	width:68px;
+	width:160px;
 	height:35px;
 	float:left;
 	/*background:#fcc;*/
 }
 #v .battle-ship .ship-gear {
-	width:34px;
-	height:17px;
+	position:relative;
+	width:30px;
+	height:35px;
 	float:left;
+	margin:0px 10px 0px 0px;
 }
 #v .battle-ship .ship-gear img {
-	width:17px;
-	height:17px;
+	width:30px;
+	height:30px;
 	/*vertical-align:top;
 	margin:2px 0px 0px 0px;*/
 }
 #v .battle-ship .ship-equip-capacity {
+	position:absolute;
+	bottom:0px;
+	right:0px;
 	width:17px;
 	height:17px;
 	float:right;
-	font-size:11px;
+	font-size:13px;
 	text-align:right;
+	color:#fff;
+	z-index:1;
+	text-shadow: -1px -1px 2px #000, 	
+	1px -1px 2px #000,
+	-1px 1px 2px #000,
+	1px 1px 2px #000;
 }
 #v .battle-ship .ship-supply {
 	width:50px;
@@ -1284,24 +1316,26 @@
 /* Fleet Main */
 #v .battle .battle_mainfleet {
 	width:230px;
-	height:350px;
+	height:250px;
 	float:left;
 	background:#f0f;
 	opacity:.5;
+	padding:3px 5px 5px 5px;
 }
 
 /* Escort Fleet */
 #v .battle .battle_escorts {
-	width:170px;
-	height:350px;
+	width:230px;
+	height:250px;
 	float:left;
 	background:#0ff;
 	opacity:.5;
+	padding:3px 5px 5px 5px;
 }
 
 /* Battle details */
 #v .battle .battle_details {
-	width:200px;
+	width:140px;
 	height:295px;
 	float:left;
 	margin:5px 5px 0px 5px;
@@ -1310,7 +1344,7 @@
 	height:1px;
 }
 #v .battle .battle_environment {
-	width:200px;
+	width:140px;
 	height:290px;
 	margin:0px 0px 5px 0px;
 	background:#def;
