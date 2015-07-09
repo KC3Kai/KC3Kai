@@ -118,7 +118,7 @@ Used by SortieManager
 			&& this.planeFighters.abyssal[0]===0
 			&& battleData.api_kouku.api_stage2===null
 		){
-			this.airbattle = ["None", "", "No Air Battle"],;
+			this.airbattle = ["None", "", "No Air Battle"];
 		}
 		
 		// Bombing phase 1
