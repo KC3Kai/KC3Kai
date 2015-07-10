@@ -61,7 +61,7 @@
 					
 					$(".build_ricon img", buildbox).attr("src", KC3Meta.shipIcon(thisBuild.result) );
 					$(".build_result", buildbox).text( KC3Meta.shipName( KC3Master.ship(thisBuild.result).api_name ) );
-					$(".build_time", buildbox).text( new Date(thisBuild.time*1000).format("mmm dd, yy - hh:MM tt") );
+					$(".build_time", buildbox).text( (new Date(thisBuild.time*1000)).format("mmm dd, yy - hh:MM tt") );
 				}
 			});
 		}
