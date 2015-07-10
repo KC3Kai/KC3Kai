@@ -179,14 +179,17 @@
 					return returnVal;
 				});
 				
-				var totals = {lv:0, hp:0, fp:0, tp:0, aa:0, ar:0, as:0, ev:0, ls:0, lk:0 };
+				// var totals = {lv:0, hp:0, fp:0, tp:0, aa:0, ar:0, as:0, ev:0, ls:0, lk:0 };
 				
 				// Fill up list
 				for(shipCtr in FilteredShips){
+					if(shipCtr%10 === 0){
+						$("<div>").addClass("ingame_page").html("Page "+Math.ceil((Number(shipCtr)+1)/10)).appendTo(".tab_ships .ship_list");
+					}
+					
 					cShip = FilteredShips[shipCtr]; //console.log(cShip);
 					cElm = $(".tab_ships .factory .ship_item").clone().appendTo(".tab_ships .ship_list");
 					if(shipCtr%2 === 0){ cElm.addClass("even"); }else{ cElm.addClass("odd"); }
-					if(shipCtr%10 === 0){ cElm.addClass("ten-margin"); }
 					
 					$(".ship_id", cElm).text( cShip.id );
 					$(".ship_img img", cElm).attr("src", KC3Meta.shipIcon(cShip.bid));
@@ -199,27 +202,27 @@
 					
 					if(cShip.morale >= 50){ $(".ship_morale", cElm).addClass("sparkled"); }
 					
-					totals.lv += parseInt(cShip.level, 10);
-					totals.hp += parseInt(cShip.hp, 10);
-					totals.lk += parseInt(cShip.lk, 10);
+					// totals.lv += parseInt(cShip.level, 10);
+					// totals.hp += parseInt(cShip.hp, 10);
+					// totals.lk += parseInt(cShip.lk, 10);
 					
 					self.modernizableStat("fp", cElm, cShip.fp);
 					self.modernizableStat("tp", cElm, cShip.tp);
 					self.modernizableStat("aa", cElm, cShip.aa);
 					self.modernizableStat("ar", cElm, cShip.ar);
 					
-					totals.fp += parseInt($(".ship_fp", cElm).text(), 10);
-					totals.tp += parseInt($(".ship_tp", cElm).text(), 10);
-					totals.aa += parseInt($(".ship_aa", cElm).text(), 10);
-					totals.ar += parseInt($(".ship_ar", cElm).text(), 10);
+					// totals.fp += parseInt($(".ship_fp", cElm).text(), 10);
+					// totals.tp += parseInt($(".ship_tp", cElm).text(), 10);
+					// totals.aa += parseInt($(".ship_aa", cElm).text(), 10);
+					// totals.ar += parseInt($(".ship_ar", cElm).text(), 10);
 					
 					$(".ship_as", cElm).text( cShip.as[self.equipMode] );
 					$(".ship_ev", cElm).text( cShip.ev[self.equipMode] );
 					$(".ship_ls", cElm).text( cShip.ls[self.equipMode] );
 					
-					totals.as += parseInt(cShip.as[self.equipMode], 10);
-					totals.ev += parseInt(cShip.ev[self.equipMode], 10);
-					totals.ls += parseInt(cShip.ls[self.equipMode], 10);
+					// totals.as += parseInt(cShip.as[self.equipMode], 10);
+					// totals.ev += parseInt(cShip.ev[self.equipMode], 10);
+					// totals.ls += parseInt(cShip.ls[self.equipMode], 10);
 					
 					self.equipImg(cElm, 1, cShip.equip[0]);
 					self.equipImg(cElm, 2, cShip.equip[1]);

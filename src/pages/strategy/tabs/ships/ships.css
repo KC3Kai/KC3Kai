@@ -135,6 +135,7 @@
 	font-size:12px;
 	margin:0px 0px 2px 0px;
 	overflow:hidden;
+	position:relative;
 }
 /* Cell */
 .tab_ships .ship_item .ship_field {
@@ -150,12 +151,13 @@
 }
 .tab_ships .ingame_page {
 	width:680px;
-	height:20px;
-	line-height:20px;
-	font-size:14px;
-	font-weight:bold;
-	margin:5px 0px 2px 0px;
-	text-align:right;
+	height:11px;
+	line-height:18px;
+	font-size:18px;
+	margin:0px 0px 2px 0px;
+	text-align:left;
+	padding:0px 0px 0px 10px;
+	color:#aaa;
 }
 .tab_ships .ship_item:hover .ship_field {
 	background:#ffffcc;

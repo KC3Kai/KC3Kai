@@ -2,6 +2,7 @@
 	"use strict";
 	
 	window.KC3StrategyTab = function(name){
+		this.initDone = false;
 		this.name = name;
 		this.error = false;
 		this.htmlContents = "";
@@ -56,7 +57,10 @@
 			
 		var self = this;
 		this.loadAssets(function(){
-			self.definition.init();
+			if(!self.initDone){
+				self.initDone = true;
+				self.definition.init();
+			}
 			if(!self.error){
 				self.show();
 				self.definition.execute();
