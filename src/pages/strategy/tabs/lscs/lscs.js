@@ -17,6 +17,7 @@
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
+			var self = this;
 			// Get pagination
 			KC3Database.count_lscs(function(NumRecords){
 				var itemsPerPage = 30;
@@ -27,12 +28,13 @@
 					pageBox = $(".tab_lscs .factory .build_page").clone().appendTo(".tab_lscs .build_pages");
 					pageBox.text(pageCtr+1);
 				}
+				$("<div>").addClass("clear").appendTo(".tab_lscs .build_pages");
 				
 				$(".tab_lscs .build_pages .build_page").on("click", function(){
 					console.log(2);
 					$(".tab_lscs .build_page").removeClass("active");
 					$(this).addClass("active");
-					app.Strategy.tabs.lscs.showPage( $(this).text() );
+					self.tabSelf.definition.showPage( $(this).text() );
 				});
 				
 				$(".tab_lscs .build_pages .build_page").first().trigger("click");
@@ -50,8 +52,8 @@
 					buildbox = $(".tab_lscs .factory .build_item").clone().appendTo(".tab_lscs .build_list");
 					
 					$(".build_id", buildbox).text( thisBuild.id );
-					$(".build_ficon img", buildbox).attr("src", app.Assets.shipIcon(thisBuild.flag) );
-					$(".build_flag", buildbox).text( app.Master.ship(thisBuild.flag).english );
+					$(".build_ficon img", buildbox).attr("src", KC3Meta.shipIcon(thisBuild.flag) );
+					$(".build_flag", buildbox).text( KC3Meta.shipName( KC3Master.ship(thisBuild.flag).api_name ) );
 					
 					$(".build_rsc1", buildbox).text( thisBuild.rsc1 );
 					$(".build_rsc2", buildbox).text( thisBuild.rsc2 );
