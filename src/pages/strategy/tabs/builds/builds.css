@@ -1,0 +1,90 @@
+.tab_builds {
+	
+}
+.tab_builds .build_list {
+	
+}
+.tab_builds .factory {
+	display:none;
+}
+
+/* LIST
+--------------------------------*/
+.tab_builds .build_item {
+	width:680px;
+	height:24px;
+	line-height:24px;
+	margin:0px 0px 2px 0px;
+	background:#eee;
+}
+.tab_builds .build_item .build_field {
+	float:left;
+	height:24px;
+	/*background:#ccf;*/
+}
+.tab_builds .build_item .build_id {
+	width:50px;
+	margin:0px 3px 0px 0px;
+	text-align:center;
+}
+.tab_builds .build_item .build_icon {
+	width:24px;
+	margin:0px 3px 0px 0px;
+}
+.tab_builds .build_item .build_icon img {
+	width:20px;
+	height:20px;
+	margin:2px;
+}
+.tab_builds .build_item .build_name {
+	width:100px;
+	overflow:hidden;
+	margin:0px 5px 0px 0px;
+}
+.tab_builds .build_item .build_rsc {
+	width:50px;
+	margin:0px 5px 0px 0px;
+	text-align:center;
+}
+.tab_builds .build_item .build_rsc1 {
+	background:#C1FFC1;
+}
+.tab_builds .build_item .build_rsc2 {
+	background:#DFD7B3;
+}
+.tab_builds .build_item .build_rsc3 {
+	background:#ccc;
+}
+.tab_builds .build_item .build_rsc4 {
+	background:#FFDCA8;
+}
+.tab_builds .build_item .build_time {
+	width:130px;
+	font-size:11px;
+}
+
+/* PAGINATION
+--------------------------------*/
+.tab_builds .build_pages {
+	width:700px;
+	margin:0px 0px 10px 0px;
+	background:#f0f5ff;
+	padding:5px 10px 0px;
+	border-bottom:1px solid #369;
+}
+.tab_builds .build_pages .build_page {
+	width:30px;
+	height:20px;
+	line-height:20px;
+	float:left;
+	text-align:center;
+	margin:0px 3px 5px 0px;
+	border:1px solid #ace;
+	background:#def;
+	font-size:12px;
+}
+.tab_builds .build_pages .build_page.active {
+	background:#58a;
+	color:#fff;
+	border:1px solid #def;
+}

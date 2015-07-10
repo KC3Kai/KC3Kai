@@ -237,7 +237,7 @@ Previously known as "Reactor"
 			this.shipConstruction = {
 				active: true,
 				dock_num: params.api_kdock_id,
-				flagship: PlayerManager.fleets[0].ship(0),
+				flagship: PlayerManager.fleets[0].ship(0).masterId,
 				lsc: params.api_large_flag,
 				torched: params.api_highspeed,
 				resources: [

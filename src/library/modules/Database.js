@@ -128,7 +128,6 @@ Uses Dexie.js third-party plugin on the assets directory
 		},
 		
 		Resource :function(data){
-			console.log("inserting", data);
 			data.hq = this.index;
 			this.con.resource.add(data);
 		},
@@ -154,7 +153,7 @@ Uses Dexie.js third-party plugin on the assets directory
 		/* [GET] Retrive logs from Local DB
 		--------------------------------------------*/
 		get_build :function(pageNumber, callback){
-			var itemsPerPage = 25;
+			var itemsPerPage = 30;
 			this.con.build
 				.where("hq").equals(this.index)
 				.reverse()
@@ -169,7 +168,7 @@ Uses Dexie.js third-party plugin on the assets directory
 		},
 		
 		get_lscs :function(pageNumber, callback){
-			var itemsPerPage = 25;
+			var itemsPerPage = 30;
 			this.con.lsc
 				.where("hq").equals(this.index)
 				.reverse()
