@@ -42,6 +42,14 @@ Contains summary information about a fleet and its 6 ships
 		}
 	};
 	
+	KC3Fleet.prototype.defineFormatted = function( data ){
+		this.active = data.active;
+		this.name = data.name;
+		this.ships = data.ships;
+		this.mission = data.mission;
+		return this;
+	};
+	
 	KC3Fleet.prototype.ship = function( slot ){
 		return KC3ShipManager.get( this.ships[slot] );
 	};

@@ -153,6 +153,18 @@ Does not include Ships and Gears which are managed by other Managers
 					});
 				}
 			})
+		},
+		
+		loadFleets :function(){
+			if(typeof localStorage.fleets != "undefined"){
+				var oldFleets =JSON.parse( localStorage.fleets );
+				this.fleets = [
+					(new KC3Fleet()).defineFormatted(oldFleets[0]),
+					(new KC3Fleet()).defineFormatted(oldFleets[1]),
+					(new KC3Fleet()).defineFormatted(oldFleets[2]),
+					(new KC3Fleet()).defineFormatted(oldFleets[3])
+				];
+			}
 		}
 		
 	};
