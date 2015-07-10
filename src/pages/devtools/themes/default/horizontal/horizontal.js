@@ -436,6 +436,7 @@
 				$(".battle .battle_cond_detect .battle_cond_text", container).addClass( thisNode.detection[1] );
 				
 				$(".battle .battle_cond_engage .battle_cond_text", container).text( thisNode.engagement[2] );
+				$(".battle .battle_cond_engage .battle_cond_text", container).addClass( thisNode.engagement[1] );
 				
 				$(".battle .battle_cond_contact .battle_cond_text", container).text(thisNode.fcontact +" vs "+thisNode.econtact);
 				$(".battle .battle_cond_airbattle .battle_cond_text", container).text( thisNode.airbattle[0] );
@@ -588,6 +589,7 @@
 				$(".battle .battle_cond_detect .battle_cond_text", container).addClass( thisPvP.detection[1] );
 				
 				$(".battle .battle_cond_engage .battle_cond_text", container).text( thisPvP.engagement[2] );
+				$(".battle .battle_cond_engage .battle_cond_text", container).addClass( thisPvP.engagement[1] );
 				
 				$(".battle .battle_cond_contact .battle_cond_text", container).text(thisPvP.fcontact +" vs "+thisPvP.econtact);
 				$(".battle .battle_cond_airbattle .battle_cond_text", container).text( thisPvP.airbattle[0] );

@@ -108,18 +108,4 @@ KC3改 Ship Object
 	.removeEquip( slotIndex )
 	*/
 	
-	/* STATS FULL
-	Get all stats "with" equipment
-	--------------------------------------------------------------*/
-	KC3Ship.prototype.statsFull = function(){
-		
-	};
-	
-	/* STATS BASE
-	Get all stats "without" equipment
-	--------------------------------------------------------------*/
-	KC3Ship.prototype.statsBase = function(){
-		
-	};
-	
 })();

@@ -1,0 +1,121 @@
+<div class="page_title">
+	Ship List
+	<div class="page_wiki">
+		<a href="https://github.com/dragonjet/KC3Kai/wiki/Strategy-Room:-Ships" target="_blank"><span>?</span> Help</a>
+	</div>
+</div>
+
+<!-- TOGGLE FILTERS -->
+<div class="filters">
+	<div class="massSelect">
+		<span class="massLabel">Select:</span>
+		<span class="hover all">All</span>
+		<span class="hover none">None</span>
+		&nbsp; &nbsp; &nbsp; &nbsp; 
+		<span class="massLabel">Equip Stats:</span>
+		<span class="hover equip_yes">Yes</span>
+		<span class="hover equip_no">No</span>
+		<!-- &nbsp; &nbsp; &nbsp; &nbsp; 
+		<span class="massLabel">Include Fleet</span>
+		<span class="hover fleet_yes">Yes</span>
+		<span class="hover fleet_no">No</span>
+		&nbsp; &nbsp; &nbsp; &nbsp; 
+		<span class="massLabel">Show pages</span>
+		<span class="hover pages_yes">Yes</span>
+		<span class="hover pages_no">No</span> -->
+	</div>
+	<div class="ship_types"></div>
+	<div class="clear"></div>
+</div>
+
+<!-- SHIP LIST -->
+<div class="page_padding">
+
+	<!-- HEADER LABELS AND ICONS -->
+	<div class="ship_header">
+		<div class="ship_item">
+			<div class="ship_field hover ship_id" data-type="id">ID</div>
+			<div class="ship_field ship_img"></div>
+			<div class="ship_field hover ship_name" data-type="name">Name</div>
+			<div class="ship_field hover ship_type"  data-type="type">Type</div>
+			<div class="ship_field hover ship_lv"  data-type="lv">Level</div>
+			<div class="ship_field hover ship_morale"  data-type="morale">:)</div>
+			
+			<div class="ship_field hover ship_stat ship_hp" data-type="hp"><img src="../../assets/img/stats/hp.png" /></div>
+			<div class="ship_field hover ship_stat ship_stat_mod ship_fp" data-type="fp"><img src="../../assets/img/stats/fp.png" /></div>
+			<div class="ship_field hover ship_stat ship_stat_mod ship_tp" data-type="tp"><img src="../../assets/img/stats/tp.png" /></div>
+			<div class="ship_field hover ship_stat ship_stat_mod ship_aa" data-type="aa"><img src="../../assets/img/stats/aa.png" /></div>
+			<div class="ship_field hover ship_stat ship_stat_mod ship_ar" data-type="ar"><img src="../../assets/img/stats/ar.png" /></div>
+			<div class="ship_field hover ship_stat ship_as" data-type="as"><img src="../../assets/img/stats/as.png" /></div>
+			<div class="ship_field hover ship_stat ship_ev" data-type="ev"><img src="../../assets/img/stats/ev.png" /></div>
+			<div class="ship_field hover ship_stat ship_ls" data-type="ls"><img src="../../assets/img/stats/ls.png" /></div>
+			<div class="ship_field hover ship_stat ship_lk" data-type="lk"><img src="../../assets/img/stats/lk.png" /></div>
+			
+			<div class="ship_field ship_equip">Equipment</div> 		
+			<div class="ship_field ship_lock"></div>			
+			<div class="clear"></div>
+		</div>
+		<!-- <div class="ship_totals">
+			<div class="total_field total_left">Stat totals of currently shown ships:</div>
+			<div class="total_field total_level"></div>
+			<div class="total_field total_stat total_hp"></div>
+			<div class="total_field total_stat total_mod total_fp"></div>
+			<div class="total_field total_stat total_mod total_tp"></div>
+			<div class="total_field total_stat total_mod total_aa"></div>
+			<div class="total_field total_stat total_mod total_ar"></div>
+			<div class="total_field total_stat total_as"></div>
+			<div class="total_field total_stat total_ev"></div>
+			<div class="total_field total_stat total_ls"></div>
+			<div class="total_field total_stat total_lk"></div>
+			<div class="clear"></div>
+		</div> -->
+	</div>
+	
+	<!-- SHIP LIST HTML CONTAINER -->
+	<div class="ship_list">
+		
+	</div>
+	
+	<div class="factory">
+		<!-- SHIP RECORD -->
+		<div class="ship_item">
+			<div class="ship_field ship_id"></div>
+			<div class="ship_field ship_img"><img/></div>
+			<div class="ship_field ship_name"></div>
+			<div class="ship_field ship_type"></div>
+			<div class="ship_field ship_lv"></div>
+			<div class="ship_field ship_morale"></div>
+			
+			<div class="ship_field ship_stat ship_hp"></div>
+			
+			<div class="ship_field ship_stat ship_stat_mod ship_fp"></div>
+			<div class="ship_field ship_stat ship_stat_mod ship_tp"></div>
+			<div class="ship_field ship_stat ship_stat_mod ship_aa"></div>
+			<div class="ship_field ship_stat ship_stat_mod ship_ar"></div>
+			
+			<div class="ship_field ship_stat ship_as"></div>
+			<div class="ship_field ship_stat ship_ev"></div>
+			<div class="ship_field ship_stat ship_ls"></div>
+			<div class="ship_field ship_stat ship_lk"></div>
+			
+			<div class="ship_field ship_equip">
+				<div class="ship_equip_icon ship_equip_1"><img/></div>
+				<div class="ship_equip_icon ship_equip_2"><img/></div>
+				<div class="ship_equip_icon ship_equip_3"><img/></div>
+				<div class="ship_equip_icon ship_equip_4"><img/></div>
+				<div class="clear"></div>
+			</div> 			
+			
+			<div class="ship_field ship_lock"><img src="../../assets/img/client/heartlock.png" /></div>
+			
+			<div class="clear"></div>
+		</div>
+		
+		<!-- SHIP TYPE CHECKBOX -->
+		<div class="ship_filter_type hover">
+			<div class="filter_box"><div class="filter_check"></div></div>
+			<div class="filter_name"></div>
+		</div>
+	</div>
+	
+</div>

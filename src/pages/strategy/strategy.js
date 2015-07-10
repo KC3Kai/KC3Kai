@@ -22,6 +22,7 @@
 			$(this).addClass("active");
 			$("#contentHtml").hide();
 			$("#contentHtml").html("");
+			window.location.hash = KC3StrategyTabs.loading;
 			
 			// Tab definition execution
 			var thisTab = KC3StrategyTabs[ KC3StrategyTabs.loading ];
@@ -35,9 +36,10 @@
 		});
 		
 		// If there is a hash tag on URL, set it as initial selected
-		if(window.location.hash != ""){
+		KC3StrategyTabs.pageParams = window.location.hash.substring(1).split("-");
+		if(KC3StrategyTabs.pageParams[0] != ""){
 			$("#menu .submenu ul.menulist li").removeClass("active");
-			$("#menu .submenu ul.menulist li[data-id="+window.location.hash.substring(1)+"]").addClass("active");
+			$("#menu .submenu ul.menulist li[data-id="+KC3StrategyTabs.pageParams[0]+"]").addClass("active");
 		}
 		
 		// Load initially selected
