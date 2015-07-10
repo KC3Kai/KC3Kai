@@ -17,8 +17,8 @@ KC3改 Equipment Object
 			if(typeof data.api_id != "undefined"){
 				this.itemId = data.api_id;
 				this.masterId = data.api_slotitem_id;
-				// this.stars = data.xxxxxx;
-				// this.lock = data.xxxxxx;
+				this.stars = data.api_level;
+				this.lock = data.api_locked;
 			// Initialized with formatted data
 			}else{
 				$.extend(this, data);

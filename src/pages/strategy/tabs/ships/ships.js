@@ -4,7 +4,7 @@
 	KC3StrategyTabs.ships = new KC3StrategyTab("ships");
 	
 	KC3StrategyTabs.ships.definition = {
-		tabSelf: KC3StrategyTabs.profile,
+		tabSelf: KC3StrategyTabs.ships,
 		
 		player: {},
 		statistics: {},
