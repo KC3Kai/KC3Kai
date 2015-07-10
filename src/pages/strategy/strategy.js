@@ -29,6 +29,7 @@
 			if(typeof thisTab != "undefined"){
 				// Execute Tab with callback
 				thisTab.apply();
+				window.scrollTo(0,0);
 			}else{
 				KC3StrategyTabs.loading = false;
 				console.log("Clicked "+$(this).data("id")+" menu with no bound actions");
