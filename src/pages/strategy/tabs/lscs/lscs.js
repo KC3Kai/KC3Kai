@@ -31,7 +31,6 @@
 				$("<div>").addClass("clear").appendTo(".tab_lscs .build_pages");
 				
 				$(".tab_lscs .build_pages .build_page").on("click", function(){
-					console.log(2);
 					$(".tab_lscs .build_page").removeClass("active");
 					$(this).addClass("active");
 					self.tabSelf.definition.showPage( $(this).text() );
@@ -61,8 +60,8 @@
 					$(".build_rsc4", buildbox).text( thisBuild.rsc4 );
 					$(".build_devmat", buildbox).text( thisBuild.devmat );
 					
-					$(".build_ricon img", buildbox).attr("src", app.Assets.shipIcon(thisBuild.result) );
-					$(".build_result", buildbox).text( app.Master.ship(thisBuild.result).english );
+					$(".build_ricon img", buildbox).attr("src", KC3Meta.shipIcon(thisBuild.result) );
+					$(".build_result", buildbox).text( KC3Meta.shipName( KC3Master.ship(thisBuild.result).api_name ) );
 					$(".build_time", buildbox).text( (new Date(thisBuild.time*1000)).format("mmm dd, yy - hh:MM tt") );
 				}
 			});
