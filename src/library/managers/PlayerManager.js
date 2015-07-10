@@ -121,22 +121,22 @@ Does not include Ships and Gears which are managed by other Managers
 		},
 		
 		setStatistics :function( data ){
-			var oldStatistics = JSON.parse(localStorage.statistics || "{}");
+			var oldStatistics = JSON.parse(localStorage.statistics || "{\"exped\":{},\"pvp\":{},\"sortie\":{}}");
 			localStorage.statistics = JSON.stringify({
 				exped: {
-					rate: data.exped.rate || oldStatistics.exped.rate,
+					rate: data.exped.rate || oldStatistics.exped.rate || 0,
 					total: data.exped.total || oldStatistics.exped.total,
 					success: data.exped.success || oldStatistics.exped.success
 				},
 				pvp: {
-					rate: data.pvp.rate || oldStatistics.pvp.rate,
+					rate: data.pvp.rate || oldStatistics.pvp.rate || 0,
 					win: data.pvp.win || oldStatistics.pvp.win,
 					lose: data.pvp.lose || oldStatistics.pvp.lose,
 					attacked: data.pvp.attacked || oldStatistics.pvp.attacked,
 					attacked_win: data.pvp.attacked_win || oldStatistics.pvp.attacked_win
 				},
 				sortie: {
-					rate: data.sortie.rate || oldStatistics.sortie.rate,
+					rate: data.sortie.rate || oldStatistics.sortie.rate || 0,
 					win: data.sortie.win || oldStatistics.sortie.win,
 					lose: data.sortie.lose || oldStatistics.sortie.lose
 				}

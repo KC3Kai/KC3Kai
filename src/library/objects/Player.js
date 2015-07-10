@@ -52,7 +52,7 @@ Instantiatable class to represent one player
 		KC3ShipManager.clear();
 		KC3GearManager.clear();
 		KC3QuestManager.clear();
-		KC3SortieManager.clear();
+		// KC3SortieManager.clear();
 	};
 	
 	KC3Player.prototype.save = function(){

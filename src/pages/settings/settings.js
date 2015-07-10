@@ -1,8 +1,12 @@
 (function(){
 	"use strict";
 	
+	var myVersion = chrome.runtime.getManifest().version;
+	
 	// Document ready
 	$(document).on("ready", function(){
+		$(".version").text("Version "+myVersion);
+		
 		// Load previously stored configs
 		ConfigManager.load();
 		
