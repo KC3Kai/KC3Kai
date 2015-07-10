@@ -90,12 +90,34 @@ Does not include Ships and Gears which are managed by other Managers
 			});
 		},
 		
-		setResources :function( data ){
-			// insert to IndexedDB
+		setResources :function( data, stime ){
+			if(typeof localStorage.lastResource == "undefined"){ localStorage.lastResource = 0; }
+			var ResourceHour = Math.floor(stime/3600);
+			if(ResourceHour == localStorage.lastResource){ return false; }
+			localStorage.lastResource = ResourceHour;
+			KC3Database.Resource({
+				rsc1 : data[0],
+				rsc2 : data[1],
+				rsc3 : data[2],
+				rsc4 : data[3],
+				hour : ResourceHour
+			});
 		},
 		
-		setConsumables :function( data ){
+		setConsumables :function( data, stime ){
 			$.extend(this.consumables, data);
+			
+			if(typeof localStorage.lastUseitem == "undefined"){ localStorage.lastUseitem = 0; }
+			var ResourceHour = Math.floor(stime/3600);
+			if(ResourceHour == localStorage.lastUseitem){ return false; }
+			localStorage.lastUseitem = ResourceHour;
+			KC3Database.Useitem({
+				torch : data.torch,
+				screw : data.screws,
+				bucket : data.buckets,
+				devmat : data.devmats,
+				hour : ResourceHour
+			});
 		},
 		
 		setStatistics :function( data ){
@@ -121,14 +143,14 @@ Does not include Ships and Gears which are managed by other Managers
 			});
 		},
 		
-		setNewsfeed :function( data ){
+		setNewsfeed :function( data, stime ){
 			$.each(data, function( index, element){
 				if(element.api_state=="1"){
-					// insert to IndexedDB
-					/* {
+					KC3Database.Newsfeed({
 						type: element.api_type,
-						message: element.api_message
-					} */
+						message: element.api_message,
+						time: stime
+					});
 				}
 			})
 		}

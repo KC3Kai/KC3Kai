@@ -1,0 +1,59 @@
+.tab_resources {
+	width:680px;
+}
+
+.tab_resources .legend {
+	width:700px;
+	margin:0px 0px 10px 0px;
+	background:#f0f5ff;
+	padding:5px 10px;
+	border-bottom:1px solid #369;
+}
+.tab_resources .legend_item {
+	width:120px;
+	height:20px;
+	float:left;
+}
+.tab_resources .legend_color {
+	width:14px;
+	height:14px;
+	margin:3px 5px 0px 3px;
+	float:left;
+	border:1px solid #555;
+}
+.tab_resources .color_fuel {
+	background:#AAFFAA;
+}
+.tab_resources .color_ammo {
+	background:#999900;
+}
+.tab_resources .color_steel {
+	background:#999999;
+}
+.tab_resources .color_baux {
+	background:#FF9933;
+}
+.tab_resources .legend_icon {
+	width:20px;
+	height:20px;
+	margin:0px 5px 0px 0px;
+	float:left;
+}
+.tab_resources .legend_icon img {
+	width:16px;
+	height:16px;
+	margin:2px;
+}
+.tab_resources .legend_label {
+	width:70px;
+	float:left;
+}
+
+.tab_resources .graph_title {
+	font-size:18px;
+	margin:0px 0px 5px 0px;
+}
+.tab_resources .graph_body {
+	font-size:18px;
+	margin:0px 0px 10px 0px;
+}

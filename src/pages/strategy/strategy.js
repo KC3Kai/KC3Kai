@@ -9,6 +9,7 @@
 		PlayerManager.init();
 		KC3ShipManager.load();
 		KC3GearManager.load();
+		KC3Database.init( PlayerManager.hq.id );
 		
 		// Click a menu item
 		$("#menu .submenu ul.menulist li").on("click", function(){

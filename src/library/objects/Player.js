@@ -21,6 +21,7 @@ Instantiatable class to represent one player
 	KC3Player.prototype.update = function( data ){
 		this.id =  data.mid;
 		this.name = data.name;
+		KC3Database.index = this.id;
 		
 		var MyServer = (new KC3Server()).setUrl( KC3Network.lastUrl );
 		this.server = MyServer.num;

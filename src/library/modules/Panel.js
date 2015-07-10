@@ -29,6 +29,7 @@ Manages multiple instances of \library\modules\Dashboard.js
 				PlayerManager.init();
 				KC3ShipManager.load();
 				KC3GearManager.load();
+				KC3Database.init();
 				
 				var fontFamily = "Arial";
 				switch(ConfigManager.language){
