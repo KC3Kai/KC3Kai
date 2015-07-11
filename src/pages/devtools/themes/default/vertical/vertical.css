@@ -3030,8 +3030,14 @@
 	margin:0px 10px 3px 10px;
 	display:none;
 }
-#v .battle .battle_cond {
+#v .battle.small .battle_cond {
 	width:140px;
+	height:16px;
+	line-height:16px;
+	margin:0px 0px 1px 0px;
+}
+#v .battle.big .battle_cond {
+	width:160px;
 	height:16px;
 	line-height:16px;
 	margin:0px 0px 1px 0px;
