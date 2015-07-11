@@ -833,7 +833,7 @@
 	height:80px;
 	float:left;
 	/*background:#fcc;*/
-	padding:2px 5px;
+	margin:2px 5px;
 }
 #v .activity .craftGear .equipIcon {
 	width:30px;
@@ -861,7 +861,7 @@
 	float:left;
 	line-height:14px;
 	font-size:12px;
-	margin:5px 0px 5px 0px;
+	margin:0px 0px 5px 0px;
 	/*background:#ccc;*/
 }
 #v .activity .craftGear .used {
