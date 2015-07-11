@@ -2935,7 +2935,7 @@
 	font-weight:bold;
 }
 
-#v .battle .battle_resource {
+#v .battle.small .battle_resource {
 	width:130px;
 	height:30px;
 	margin:5px 0px 3px 5px;
@@ -2944,7 +2944,16 @@
 	background:#cfc;
 	padding:4px 10px;
 }
-#v .battle .battle_maelstrom {
+#v .battle.big .battle_resource {
+	width:170px;
+	height:30px;
+	margin:5px 5px 3px 5px;
+	border-radius:8px;
+	border:1px solid #9EE49E;
+	background:#cfc;
+	padding:4px 10px;
+}
+#v .battle.small .battle_maelstrom {
 	width:130px;
 	height:30px;
 	margin:5px 0px 3px 5px;
@@ -2953,11 +2962,31 @@
 	background:#ECD0F7;
 	padding:4px 10px;
 }
-#v .battle .battle_empty {
+#v .battle.big .battle_maelstrom {
+	width:170px;
+	height:30px;
+	margin:5px 5px 3px 5px;
+	border-radius:8px;
+	border:1px solid #E5AAE4;
+	background:#ECD0F7;
+	padding:4px 10px;
+}
+#v .battle.small .battle_empty {
 	width:130px;
 	height:30px;
 	line-height:28px;
 	margin:5px 0px 3px 5px;
+	border-radius:8px;
+	border:1px solid #A3D7EA;
+	background:#B2F9FC;
+	text-align:center;
+	font-size:12px;
+}
+#v .battle.big .battle_empty {
+	width:170px;
+	height:30px;
+	line-height:28px;
+	margin:5px 5px 3px 5px;
 	border-radius:8px;
 	border:1px solid #A3D7EA;
 	background:#B2F9FC;
@@ -2997,8 +3026,8 @@
 	display:none;
 }
 #v .battle.big .battle_conditions {
-	width:140px;
-	margin:0px 0px 3px 20px;
+	width:160px;
+	margin:0px 10px 3px 10px;
 	display:none;
 }
 #v .battle .battle_cond {
@@ -3019,8 +3048,16 @@
 	height:16px;
 	vertical-align:top;
 }
-#v .battle .battle_cond_label {
+#v .battle.small .battle_cond_label {
 	width:45px;
+	height:16px;
+	margin:0px 2px 0px 0px;
+	font-size:11px;
+	float:left;
+	/*background:#fcc;*/
+}
+#v .battle.big .battle_cond_label {
+	width:55px;
 	height:16px;
 	margin:0px 2px 0px 0px;
 	font-size:11px;
@@ -3045,17 +3082,22 @@
 #v .battle.small .battle_airbattle {
 	width:140px;
 	height:50px;
-	margin:0px 0px 3px 0px;
-	display:none;
-}
-#v .battle.big .battle_airbattle {
-	width:140px;
-	height:50px;
 	margin:0px 0px 3px 20px;
 	display:none;
 }
-#v .battle .battle_airsides {
+#v .battle.big .battle_airbattle {
+	width:160px;
+	height:50px;
+	margin:0px 10px 3px 10px;
+	display:none;
+}
+#v .battle.small .battle_airsides {
 	width:140px;
+	height:16px;
+	/*background:#ffc;*/
+}
+#v .battle.small .battle_airsides {
+	width:160px;
 	height:16px;
 	/*background:#ffc;*/
 }
@@ -3069,15 +3111,28 @@
 	font-weight:bold;
 	color:#0099cc;
 }
-#v .battle .battle_airtype {
+#v .battle.small .battle_airtype {
 	width:140px;
 	height:16px;
 	/*background:#ffc;*/
 	line-height:16px;
 	margin:0px 0px 1px 0px;
 }
-#v .battle .battle_airside {
+#v .battle.big .battle_airtype {
+	width:160px;
+	height:16px;
+	/*background:#ffc;*/
+	line-height:16px;
+	margin:0px 1px 1px 10px;
+}
+#v .battle.small .battle_airside {
 	width:70px;
+	height:16px;
+	float:left;
+	/*background:#ccf;*/
+}
+#v .battle.big .battle_airside {
+	width:80px;
 	height:16px;
 	float:left;
 	/*background:#ccf;*/
