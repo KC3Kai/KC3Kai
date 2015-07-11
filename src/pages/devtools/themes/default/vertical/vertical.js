@@ -299,6 +299,16 @@
 							FleetEquipment( $(".ship-gear-2", ShipBox), CurrentShip.equipment(1), CurrentShip.slots[1] );
 							FleetEquipment( $(".ship-gear-3", ShipBox), CurrentShip.equipment(2), CurrentShip.slots[2] );
 							FleetEquipment( $(".ship-gear-4", ShipBox), CurrentShip.equipment(3), CurrentShip.slots[3] );
+							
+							var FuelPercent = CurrentShip.fuel / CurrentShip.master().api_fuel_max;
+							var AmmoPercent = CurrentShip.ammo / CurrentShip.master().api_bull_max;
+							$(".supply-fuel .supply-text", ShipBox).text(Math.floor(FuelPercent*100)+"%");
+							$(".supply-ammo .supply-text", ShipBox).text(Math.floor(AmmoPercent*100)+"%");
+							
+							var SupplyBarMaxWidth = $(".supply-fuel", ShipBox).css("width");
+							SupplyBarMaxWidth = Number(SupplyBarMaxWidth.substring(0, SupplyBarMaxWidth.length-2));
+							$(".supply-fuel .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*FuelPercent)+"px");
+							$(".supply-ammo .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*AmmoPercent)+"px");
 						}
 					});
 					
@@ -352,8 +362,11 @@
 								var AmmoPercent = CurrentShip.ammo / CurrentShip.master().api_bull_max;
 								$(".supply-fuel .supply-text", ShipBox).text(Math.floor(FuelPercent*100)+"%");
 								$(".supply-ammo .supply-text", ShipBox).text(Math.floor(AmmoPercent*100)+"%");
-								$(".supply-fuel .supply-bar", ShipBox).css("width", (50*FuelPercent)+"px");
-								$(".supply-ammo .supply-bar", ShipBox).css("width", (50*AmmoPercent)+"px");
+								
+								var SupplyBarMaxWidth = $(".supply-fuel", ShipBox).css("width");
+								SupplyBarMaxWidth = Number(SupplyBarMaxWidth.substring(0, SupplyBarMaxWidth.length-2));
+								$(".supply-fuel .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*FuelPercent)+"px");
+								$(".supply-ammo .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*AmmoPercent)+"px");
 							}
 						});
 						
@@ -391,8 +404,11 @@
 								var AmmoPercent = CurrentShip.ammo / CurrentShip.master().api_bull_max;
 								$(".supply-fuel .supply-text", ShipBox).text(Math.floor(FuelPercent*100)+"%");
 								$(".supply-ammo .supply-text", ShipBox).text(Math.floor(AmmoPercent*100)+"%");
-								$(".supply-fuel .supply-bar", ShipBox).css("width", (50*FuelPercent)+"px");
-								$(".supply-ammo .supply-bar", ShipBox).css("width", (50*AmmoPercent)+"px");
+								
+								var SupplyBarMaxWidth = $(".supply-fuel", ShipBox).css("width");
+								SupplyBarMaxWidth = Number(SupplyBarMaxWidth.substring(0, SupplyBarMaxWidth.length-2));
+								$(".supply-fuel .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*FuelPercent)+"px");
+								$(".supply-ammo .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*AmmoPercent)+"px");
 							}
 						});
 						
@@ -437,8 +453,11 @@
 								var AmmoPercent = CurrentShip.ammo / CurrentShip.master().api_bull_max;
 								$(".supply-fuel .supply-text", ShipBox).text(Math.floor(FuelPercent*100)+"%");
 								$(".supply-ammo .supply-text", ShipBox).text(Math.floor(AmmoPercent*100)+"%");
-								$(".supply-fuel .supply-bar", ShipBox).css("width", (50*FuelPercent)+"px");
-								$(".supply-ammo .supply-bar", ShipBox).css("width", (50*AmmoPercent)+"px");
+								
+								var SupplyBarMaxWidth = $(".supply-fuel", ShipBox).css("width");
+								SupplyBarMaxWidth = Number(SupplyBarMaxWidth.substring(0, SupplyBarMaxWidth.length-2));
+								$(".supply-fuel .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*FuelPercent)+"px");
+								$(".supply-ammo .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*AmmoPercent)+"px");
 							}
 						});
 						
@@ -785,7 +804,10 @@
 	function FleetHP(container, ShipBox, hp, rosterId){
 		var hpPercent = hp[0] / hp[1];
 		$(".ship-hp-text", ShipBox).text( hp[0] +" / "+ hp[1] );
-		$(".ship-hp-val", ShipBox).css("width", (100*hpPercent)+"px");
+		
+		var maxHpBarWidth = $(".ship-hp-bar", ShipBox).css("width");
+		maxHpBarWidth = Number(maxHpBarWidth.substring(0, maxHpBarWidth.length-2));
+		$(".ship-hp-val", ShipBox).css("width", (maxHpBarWidth*hpPercent)+"px");
 		
 		if(hpPercent <= 0.25){
 			$(".ship-img", ShipBox).css("background", "#FF0000");
