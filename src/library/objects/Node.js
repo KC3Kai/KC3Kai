@@ -146,8 +146,8 @@ Used by SortieManager
 	
 	KC3Node.prototype.night = function( nightData ){
 		this.battleNight = nightData;
-		this.fcontact = nightData.api_touch_plane[0];
-		this.econtact = nightData.api_touch_plane[1];
+		this.fcontact = (nightData.api_touch_plane[0] > -1)?"YES":"NO";
+		this.econtact = (nightData.api_touch_plane[1] > -1)?"YES":"NO";
 		this.flare = nightData.api_flare_pos[0]; //??
 		this.searchlight = nightData.api_flare_pos[1]; //??
 	};

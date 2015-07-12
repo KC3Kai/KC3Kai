@@ -17,7 +17,7 @@
 		equipMode: 0,
 		remodelOption: 0,
 		modernizationOption: 0,
-		
+		isLoading: false,
 		//shipList: $(".tab_ships .ship_list"),
 		
 		/* INIT
@@ -231,6 +231,9 @@
 		Reload ship list based on filters
 		---------------------------------*/
 		refreshTable :function(){
+			if(this.isLoading){ return false; }
+			this.isLoading = true;
+			
 			var self = this;
 			this.startTime = (new Date()).getTime();
 			
@@ -371,7 +374,7 @@
 				$(".tab_ships .ship_totals .total_lk").text(totals.lk);*/
 				
 				self.shipList.show();
-				
+				self.isLoading = false;
 				console.log("Showing this list took", ((new Date()).getTime() - self.startTime)-100 , "milliseconds");
 			},100);
 		},

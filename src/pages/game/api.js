@@ -72,7 +72,7 @@ $(document).on("ready", function(){
 		if(ConfigManager.api_askExit==1 && !trustedExit){
 			trustedExit = true;
 			setTimeout(function(){ trustedExit = false; }, 100);
-			return "Ahh! you are closing the game!";
+			return "Ahhh! You are leaving your girls! Are you sure you want to leave them?";
 		}
 	};
 	

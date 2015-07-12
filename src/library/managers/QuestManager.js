@@ -133,11 +133,10 @@ Uses KC3Quest objects to play around with
 			this.save();
 		},
 		clear :function(){
-			console.log("resetting all quests");
-			if(typeof localStorage.quests != "undefined"){
-				localStorage.removeItem("quests")
-			}
-			this.load();
+			this.list = {};
+			this.active = [];
+			this.open = [];
+			this.save();
 		},
 		
 		/* SAVE

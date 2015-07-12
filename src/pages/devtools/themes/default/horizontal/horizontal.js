@@ -644,11 +644,14 @@
 		$(".ship-hp-text", ShipBox).text( hp[0] +" / "+ hp[1] );
 		$(".ship-hp-val", ShipBox).css("width", (100*hpPercent)+"px");
 		
-		if(hpPercent <= 0.25){
+		if( PlayerManager.repairShips.indexOf(rosterId) > -1){
+			$(".ship-img", ShipBox).css("background", "#ACE");
+			$(".ship-hp-val", ShipBox).css("background", "#ACE");
+		}else if(hpPercent <= 0.25){
 			$(".ship-img", ShipBox).css("background", "#FF0000");
 			$(".ship-hp-val", ShipBox).css("background", "#FF0000");
+			ShipBox.css("background", "#FCC");
 			if( PlayerManager.repairShips.indexOf(rosterId) == -1 ){
-				// #68 no more red-glowing ship. interface is now hightlighted with red on the sides
 				container.css("box-shadow", "inset 0px 0px 50px rgba(255,0,0,0.6)");
 			}
 		}else if(hpPercent <= 0.50){
