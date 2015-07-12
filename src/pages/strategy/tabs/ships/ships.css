@@ -12,18 +12,37 @@
 	border-bottom:1px solid #369;
 }
 .tab_ships .massSelect {
+	/*
 	width:680px;
 	height:20px;
+	*/
 	line-height:20px;
 	margin:0px 0px 5px 0px;
 	font-size:12px;
 }
-.tab_ships .massSelect span.massLabel {
+.tab_ships .massSelect dl{
+	display: 	inline-block;
+	vertical-align: top;
+	margin: 	0 6px 0 0;
+	overflow: 	hidden;
+}
+.tab_ships .massSelect dl dt,
+.tab_ships .massSelect dl dd{
+	float: 		left;
+	line-height:inherit;
+}
+.tab_ships .massSelect .massLabel {
 	font-weight:bold;
 }
-.tab_ships .massSelect span.hover {
-	margin:0px 0px 0px 10px;
+.tab_ships .massSelect .hover {
+	margin:0px 0px 0px 4px;
+	padding: 0 3px;
+	border-radius: 4px;
 	color:#00f
+}
+.tab_ships .massSelect .hover.on {
+	color:#fff;
+	background: hsl(220, 100%, 60%);
 }
 .tab_ships .filters .ship_types {
 	width:680px;
