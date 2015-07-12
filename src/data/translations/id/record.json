@@ -1,0 +1,29 @@
+{
+    "SortieWinCount": "Jumlah Sortie Menang",
+    "SortieLoseCount": "Jumlah Sortie Kalah",
+    "SortieWinRate": "Rata-rata Sortie Menang",
+    "TotalExpeditions": "Total Expedisi",
+    "ExpeditionSuccessCount": "Jumlah Expedisi Sukses",
+    "ExpeditionSuccessRate": "Rata-rata Expedisi Sukses",
+    "PVPWinCount": "Jumlah PVP Menang",
+    "PVPLoseCount": "Jumlah PVP Kalah",
+    "PVPWinRate": "Rata-rata PVP Menang",
+    "FleetsOwned": "Armada Dimiliki",
+    "ConstructionDockCount": "Construction Dock Count", //Translate?
+    "RepairDockCount": "Repair Dock Count", //Translate?
+    "ShipGirlsOwned": "Jumlah Kapal Perempuan", //Ship girls lol. Biarin aja kapal perempuan jangan diganti ok ;)
+    "EquipmentItemCount": "Jumlah Item Equipment", //Translate?
+    "FurnitureOwned": "Furnitur Dimiliki", //Furnitur ato Perabotan?
+    "ServerName": "Nama Server",
+    "MaxFleetsAvailable": "Maksimal Armada Tersedia",
+    "MaxShipGirlsAvailable": "Maksimal Kapal Perempuan Tersedia",
+    "MaxHomeportUpgradesAvailable": "Maksimal Homeport Upgrades Available", //WTF is Homeport??? Emang ada kah homeport di KC?
+    "MaxEquipmentAvailable": "Maksimal Equipment Tersedia",
+    "QuestMarkersAvailable": "Penanda Quest Tersedia",
+    "ResourceSoftcapLimit": "Resource Softcap Limit", //Translate?
+    "MainScreenBGM": "BGM Tampilan Utama",
+    "LevelUpNotice": "Setiap level HQmu bertambah, softcap limit pun akan bertambah, dan memungkinkan untuk crafting equipment baru.",
+    "MainScreenBGM": "BGM Tampilan Utama",
+    "Experience": "Experience", //Translate?
+    "Name": "Nama"
+}
