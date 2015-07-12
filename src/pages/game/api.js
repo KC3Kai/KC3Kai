@@ -21,7 +21,11 @@ $(document).on("ready", function(){
 	KC3QuestManager.load();
 	
 	// Apply interface configs
-	$(".box-wrap").css("margin-top", ConfigManager.api_margin+"px");
+	$(".box-wrap")
+		.css({
+			"margin-top":	ConfigManager.api_margin+"px",
+			"zoom":			((ConfigManager.api_gameScale || 100) / 100)
+		});
 	if(ConfigManager.api_bg_image == ""){
 		$("body").css("background", ConfigManager.api_bg_color);
 	}else{

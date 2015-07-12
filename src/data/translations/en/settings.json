@@ -180,6 +180,12 @@
 				"name" : "Background Position",
 				"type" : "long_text",
 				"options" : { "placeholder" : "See CSS background-position property" }
+			},
+			{
+				"id" : "api_gameScale",
+				"name" : "Game Player Scale",
+				"type" : "small_text",
+				"options" : { "label" : "%" }
 			}
 		]
 	},
