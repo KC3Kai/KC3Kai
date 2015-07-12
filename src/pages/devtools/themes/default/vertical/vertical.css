@@ -1,23 +1,36 @@
 #v {
-	width:800px;
-	height:450px;
-	overflow:hidden;
+	/*1overflow:hidden;*/
 	background:#fff;
 	margin:0px auto;
 	display:none;
+	position:relative;
+}
+
+#v.panel-size-300px {
+	width:800px;
+	height:300px;
+}
+#v.panel-size-420px {
+	width:800px;
+	height:420px;
 }
 
 /*--------------------------------------
 -------------- NORMAL MODE -------------
 --------------------------------------*/
-#v .normal {
+#v.panel-size-300px .normal {
 	width:800px;
-	height:450px;
+	height:300px;
+	display:none;
+}
+#v.panel-size-420px .normal {
+	width:800px;
+	height:420px;
 	display:none;
 }
 #v .dash_panel {
 	float:left;
-	height:450px;
+	height:420px;
 }
 
 /* LEFT PANEL
@@ -417,13 +430,13 @@
 
 /* Small Ships in Normal Mode*/
 
-#v .small .fleet-ships {
+#v.panel-size-300px .fleet-ships {
 	width:554px;
 	height:111px;
 	margin:0px 0px 3px 5px;
 	float:left;
 }
-#v .small .fleet-ship {
+#v.panel-size-300px .fleet-ship {
 	width:275px;
 	height:35px;
 	margin:0px 0px 2px 0px;
@@ -433,7 +446,7 @@
 	overflow:hidden;
 }
 
-#v .small .fleet-ships .ship-img {
+#v.panel-size-300px .fleet-ships .ship-img {
 	width:31px;
 	height:31px;
 	border-radius:15px 0px 0px 15px;
@@ -441,20 +454,20 @@
 	float:left;
 	background:#0f0;
 }
-#v .small .fleet-ships .ship-img img {
+#v.panel-size-300px .fleet-ships .ship-img img {
 	width:27px;
 	height:27px;
 	margin:2px;
 }
 
-#v .small .fleet-ships .ship-info {
+#v.panel-size-300px .fleet-ships .ship-info {
 	position:relative;
 	width:100px;
 	height:35px;
 	float:left;
 	margin:0px 10px 0px 0px;
 }
-#v .small .fleet-ships .ship-name {
+#v.panel-size-300px .fleet-ships .ship-name {
 	width:150px;
 	height:18px;
 	line-height:18px;
@@ -464,7 +477,7 @@
 	padding:0px 0px 0px 3px;
 	overflow:hidden;
 }
-#v .small .fleet-ships .ship-type {
+#v.panel-size-300px .fleet-ships .ship-type {
 	position:absolute;
 	top:0px;
 	left:-35px;
@@ -480,7 +493,7 @@
 	-1px 1px 2px #000,
 	1px 1px 2px #000;
 }
-#v .small .fleet-ships .ship-hp-text {
+#v.panel-size-300px .fleet-ships .ship-hp-text {
 	position:absolute;
 	bottom:-4px;
 	right:5px;
@@ -496,28 +509,28 @@
 	-1px 1px 2px #000,
 	1px 1px 2px #000;
 }
-#v .small .fleet-ships .ship-hp-bar {
+#v.panel-size-300px .fleet-ships .ship-hp-bar {
 	position:absolute;
 	bottom:2px;
 	width:100px;
 	height:10px;
 	background:#555;
 }
-#v .small .fleet-ships .ship-hp-bar .ship-hp-val {
+#v.panel-size-300px .fleet-ships .ship-hp-bar .ship-hp-val {
 	width:100px;
 	height:10px;
 	float:left;
 	background:#0f0;
 }
 
-#v .small .fleet-ships .ship-level {
+#v.panel-size-300px .fleet-ships .ship-level {
 	position:relative;
 	width:60px;
 	height:35px;
 	float:left;
 	margin:0px 2px 0px 0px;
 }
-#v .small .fleet-ships .ship-lvl-lbl {
+#v.panel-size-300px .fleet-ships .ship-lvl-lbl {
 	width:25px;
 	height:20px;
 	line-height:20px;
@@ -526,7 +539,7 @@
 	color:#777;
 	margin:2px 0px 0px 0px;
 }
-#v .small .fleet-ships .ship-lvl-txt {
+#v.panel-size-300px .fleet-ships .ship-lvl-txt {
 	width:35px;
 	height:20px;
 	line-height:20px;
@@ -535,7 +548,7 @@
 	margin:2px 0px 0px 0px;
 	font-weight:bold;
 }
-#v .small .fleet-ships .ship-lvl-next {
+#v.panel-size-300px .fleet-ships .ship-lvl-next {
 	position:absolute;
 	bottom:-2px;
 	width:60px;
@@ -550,7 +563,7 @@
 	-1px 1px 2px #000,
 	1px 1px 2px #000;
 }
-#v .small .fleet-ships .ship-lvl-bar {
+#v.panel-size-300px .fleet-ships .ship-lvl-bar {
 	position:absolute;
 	bottom:2px;
 	width:60px;
@@ -558,19 +571,19 @@
 	background:#555;
 	padding:0px;
 }
-#v .small .fleet-ships .ship-lvl-val {
+#v.panel-size-300px .fleet-ships .ship-lvl-val {
 	width:60px;
 	height:10px;
 	float:left;
 	background:#00ccff;
 }
 
-#v .small .fleet-ships .ship-morale {
+#v.panel-size-300px .fleet-ships .ship-morale {
 	width:30px;
 	height:35px;
 	float:left;
 }
-#v .small .fleet-ships .ship-morale-box {
+#v.panel-size-300px .fleet-ships .ship-morale-box {
 	width:26px;
 	height:26px;
 	line-height:22px;
@@ -583,30 +596,30 @@
 	text-align:center;
 }
 
-#v .small .fleet-ships .ship-equip {
+#v.panel-size-300px .fleet-ships .ship-equip {
 	width:35px;
 	height:35px;
 	float:left;
 }
-#v .small .fleet-ships .ship-gear {
+#v.panel-size-300px .fleet-ships .ship-gear {
 	width:17px;
 	height:17px;
 	float:left;
 }
-#v .small .fleet-ships .ship-gear img {
+#v.panel-size-300px .fleet-ships .ship-gear img {
 	width:17px;
 	height:17px;
 }
 
 /* Big Ships in Normal Mode */
-#v .big .fleet-ships {
+#v.panel-size-420px .fleet-ships {
 	width:800px;
 	height:160px;
 	margin:5px 0px 3px 0px;
 	padding:5px;
 	float:left;
 }
-#v .big .fleet-ship {
+#v.panel-size-420px .fleet-ship {
 	width:390px;
 	height:50px;
 	margin:0px 0px 2px 0px;
@@ -616,7 +629,7 @@
 	float:left;
 }
 
-#v .big .fleet-ships .ship-img {
+#v.panel-size-420px .fleet-ships .ship-img {
 	width:46px;
 	height:46px;
 	border-radius:22px 0px 0px 22px;
@@ -624,19 +637,19 @@
 	float:left;
 	background:#0f0;
 }
-#v .big .fleet-ships .ship-img img {
+#v.panel-size-420px .fleet-ships .ship-img img {
 	width:42px;
 	height:42px;
 	margin:2px;
 }
 
-#v .big .fleet-ships .ship-info {
+#v.panel-size-420px .fleet-ships .ship-info {
 	width:100px;
 	height:50px;
 	float:left;
 	margin:0px 10px 0px 0px;
 }
-#v .big .fleet-ships .ship-name {
+#v.panel-size-420px .fleet-ships .ship-name {
 	width:150px;
 	height:18px;
 	line-height:18px;
@@ -647,7 +660,7 @@
 	font-weight:bold;
 	overflow:hidden;
 }
-#v .big .fleet-ships .ship-type {
+#v.panel-size-420px .fleet-ships .ship-type {
 	width:35px;
 	height:18px;
 	line-height:16px;
@@ -658,7 +671,7 @@
 	font-style:italic;
 	padding:0px 0px 0px 3px;
 }
-#v .big .fleet-ships .ship-hp-text {
+#v.panel-size-420px .fleet-ships .ship-hp-text {
 	width:65px;
 	height:18px;
 	line-height:16px;
@@ -667,26 +680,26 @@
 	float:left;
 	text-align:right;
 }
-#v .big .fleet-ships .ship-hp-bar {
+#v.panel-size-420px .fleet-ships .ship-hp-bar {
 	width:100px;
 	height:10px;
 	float:left;
 	background:#555;
 }
-#v .big .fleet-ships .ship-hp-bar .ship-hp-val {
+#v.panel-size-420px .fleet-ships .ship-hp-bar .ship-hp-val {
 	width:100px;
 	height:10px;
 	float:left;
 	background:#0f0;
 }
 
-#v .big .fleet-ships .ship-level {
+#v.panel-size-420px .fleet-ships .ship-level {
 	width:60px;
 	height:50px;
 	float:left;
 	margin:0px 2px 0px 0px;
 }
-#v .big .fleet-ships .ship-lvl-lbl {
+#v.panel-size-420px .fleet-ships .ship-lvl-lbl {
 	width:25px;
 	height:20px;
 	line-height:20px;
@@ -695,7 +708,7 @@
 	color:#777;
 	margin:2px 0px 0px 0px;
 }
-#v .big .fleet-ships .ship-lvl-txt {
+#v.panel-size-420px .fleet-ships .ship-lvl-txt {
 	width:35px;
 	height:20px;
 	line-height:20px;
@@ -704,7 +717,7 @@
 	margin:2px 0px 0px 0px;
 	font-weight:bold;
 }
-#v .big .fleet-ships .ship-lvl-next {
+#v.panel-size-420px .fleet-ships .ship-lvl-next {
 	width:60px;
 	height:16px;
 	line-height:16px;
@@ -712,27 +725,27 @@
 	float:left;
 	text-align:center;
 }
-#v .big .fleet-ships .ship-lvl-bar {
+#v.panel-size-420px .fleet-ships .ship-lvl-bar {
 	width:60px;
 	height:10px;
 	float:left;
 	background:#555;
 	padding:0px;
 }
-#v .big .fleet-ships .ship-lvl-val {
+#v.panel-size-420px .fleet-ships .ship-lvl-val {
 	width:60px;
 	height:10px;
 	float:left;
 	background:#00ccff;
 }
 
-#v .big .fleet-ships .ship-morale {
+#v.panel-size-420px .fleet-ships .ship-morale {
 	width:40px;
 	height:50px;
 	float:left;
 	margin:0px 0px 0px 0px;
 }
-#v .big .fleet-ships .ship-morale-box {
+#v.panel-size-420px .fleet-ships .ship-morale-box {
 	width:36px;
 	height:36px;
 	line-height:34px;
@@ -744,39 +757,39 @@
 	font-weight:bold;text-align:center;
 }
 
-#v .big .fleet-ships .ship-equip {
+#v.panel-size-420px .fleet-ships .ship-equip {
 	width:50px;
 	height:50px;
 	margin:0px 5px;
 	float:left;
 }
-#v .big .fleet-ships .ship-gear {
+#v.panel-size-420px .fleet-ships .ship-gear {
 	width:25px;
 	height:25px;
 	float:left;
 }
-#v .big .fleet-ships .ship-gear img {
+#v.panel-size-420px .fleet-ships .ship-gear img {
 	width:25px;
 	height:25px;
 }
-#v .big .fleet-ships .ship-supply {
+#v.panel-size-420px .fleet-ships .ship-supply {
 	width:50px;
 	height:50px;
 	float:left;
 }
-#v .big .fleet-ships .supply-fuel {
+#v.panel-size-420px .fleet-ships .supply-fuel {
 	width:50px;
 	height:14px;
 	background:#555;
 	margin:8px 0px 0px 0px;
 }
-#v .big .fleet-ships .supply-ammo {
+#v.panel-size-420px .fleet-ships .supply-ammo {
 	width:50px;
 	height:14px;
 	background:#555;
 	margin:5px 0px 0px 0px;
 }
-#v .big .fleet-ships .supply-text {
+#v.panel-size-420px .fleet-ships .supply-text {
 	width:50px;
 	height:14px;
 	float:left;
@@ -785,21 +798,21 @@
 	font-size:11px;
 	text-align:center;
 }
-#v .big .fleet-ships .supply-bar {
+#v.panel-size-420px .fleet-ships .supply-bar {
 	width:10px;
 	height:14px;
 }
-#v .big .fleet-ships .supply-fuel .supply-bar {
+#v.panel-size-420px .fleet-ships .supply-fuel .supply-bar {
 	background:#00CC00;
 }
-#v .big .fleet-ships .supply-ammo .supply-bar {
+#v.panel-size-420px .fleet-ships .supply-ammo .supply-bar {
 	background:#999900;
 }
 
 
 /* ACTIVITY
 -------------------------*/
-#v .small .activity {
+#v.panel-size-300px .activity {
 	width:236px;
 	height:110px;
 	margin: 5px 5px 0px 0px;
@@ -808,45 +821,51 @@
 	background:#fff;
 	border:1px solid #ccc;
 }
-#v .big .activity {
+#v.panel-size-420px .activity {
 	width:790px;
-	height:90px;
+	height:60px;
 	margin: 5px 5px 0px 5px;
 	float:left;
 	overflow:hidden;
 	background:#fff;
 	border:1px solid #ccc;
 }
-#v .activity .activityBox {
+#v.panel-size-300px .activity .activityBox {
 	width:236px;
-	height:90px;
+	height:110px;
+	overflow:hidden;
+	display:none;
+}
+#v.panel-size-420px .activity .activityBox {
+	width:790px;
+	height:60px;
 	overflow:hidden;
 	display:none;
 }
 
 /* Development */
-#v .activity .craftGear {
+#v.panel-size-300px .activity .craftGear {
 	
 }
-#v .activity .craftGear .equipInfo {
+#v.panel-size-300px .activity .craftGear .equipInfo {
 	width:236px;
-	height:80px;
+	height:100px;
 	float:left;
 	/*background:#fcc;*/
-	margin:2px 5px;
+	margin:5px 5px;
 }
-#v .activity .craftGear .equipIcon {
+#v.panel-size-300px .activity .craftGear .equipIcon {
 	width:30px;
 	height:30px;
 	margin:0px 5px 0px 0px;
 	float: left;
 	/*background:#ccf;*/
 }
-#v .activity .craftGear .equipIcon img {
+#v.panel-size-300px .activity .craftGear .equipIcon img {
 	width: 30px;
 	height: 30px;
 }
-#v .activity .craftGear .equipName {
+#v.panel-size-300px .activity .craftGear .equipName {
 	width:191px;
 	height:30px;
 	line-height:15px;
@@ -855,7 +874,7 @@
 	font-weight:bold;
 	/*background:#cfc;*/
 }
-#v .activity .craftGear .equipNote {
+#v.panel-size-300px .activity .craftGear .equipNote {
 	width:220px;
 	height:14px;
 	float:left;
@@ -864,59 +883,175 @@
 	margin:0px 0px 5px 0px;
 	/*background:#ccc;*/
 }
-#v .activity .craftGear .used {
+#v.panel-size-300px .activity .craftGear .resources {
+	width:208px;
+	height:16px;
+	line-height:16px;
+	float:left;
+	margin:0px 2px 0px 0px;
+}
+#v.panel-size-300px .activity .craftGear .used {
 	width:50px;
 	height:16px;
 	line-height:16px;
 	float:left;
 	margin:0px 2px 0px 0px;
 }
-#v .activity .craftGear .used .icon {
+#v.panel-size-300px .activity .craftGear .used .icon {
 	width:16px;
 	height:16px;
 	float:left;
 	margin:0px 2px 0px 0px;
 	/*background:#cfc;*/
 }
-#v .activity .craftGear .used .icon img {
+#v.panel-size-300px .activity .craftGear .used .icon img {
 	width: 16px;
 	height: 16px;
 	margin:0px;
 	vertical-align:top;
 }
-#v .activity .craftGear .used .value {
+#v.panel-size-300px .activity .craftGear .used .value {
 	width:32px;
 	height:16px;
 	float:left;
 	font-size: 11px;
 	/*background:#ccf;*/
 }
-#v .activity .craftGear .equipStats {
-	width:236px;
-	height:30px;
+#v.panel-size-300px .activity .craftGear .equipStats {
+	width:226px;
+	height:20px;
 	line-height:20px;
 	float:left;
 	margin: 5px 0px 0px 0xp;
 	/*background:#cfc;*/
 }
-#v .activity .craftGear .equipStat {
+#v.panel-size-300px .activity .craftGear .equipStat {
 	width:40px;
 	height:19px;
 	float:left;
 }
-#v .activity .craftGear .equipStatIcon {
+#v.panel-size-300px .activity .craftGear .equipStatIcon {
 	width:19px;
 	height:19px;
 	float:left;
 	margin:0px 1px 0px 0px;
 }
-#v .activity .craftGear .equipStatIcon img {
+#v.panel-size-300px .activity .craftGear .equipStatIcon img {
 	width:15px;
 	height:15px;
 	margin:2px;
 	vertical-align: top;
 }
-#v .activity .craftGear .equipStatText {
+#v.panel-size-300px .activity .craftGear .equipStatText {
+	width:20px;
+	height:19px;
+	line-height:19px;
+	float:left;
+	font-size:12px;
+}
+
+#v.panel-size-420px .activity .craftGear {
+	
+}
+#v.panel-size-420px .activity .craftGear .equipInfo {
+	width:780px;
+	height:50px;
+	float:left;
+	/*background:#fcc;*/
+	margin:5px 5px;
+	position:relative;
+}
+#v.panel-size-420px .activity .craftGear .equipIcon {
+	width:30px;
+	height:30px;
+	margin:0px 5px 0px 0px;
+	float: left;
+	/*background:#ccf;*/
+}
+#v.panel-size-420px .activity .craftGear .equipIcon img {
+	width: 30px;
+	height: 30px;
+}
+#v.panel-size-420px .activity .craftGear .equipName {
+	/*width:680px;*/
+	height:15px;
+	line-height:15px;
+	float:left;
+	font-size:13px;
+	font-weight:bold;
+	/*background:#cfc;*/
+	margin:0px 15px 0px 0px;
+}
+#v.panel-size-420px .activity .craftGear .equipNote {
+	width:220px;
+	height:14px;
+	float:left;
+	line-height:14px;
+	font-size:12px;
+	font-style:italic;
+	margin:0px 0px 5px 0px;
+	/*background:#ccc;*/
+}
+#v.panel-size-420px .activity .craftGear .resources {
+	width:700px;
+	height:16px;
+	line-height:16px;
+	float:left;
+	margin:0px 2px 0px 0px;
+}
+#v.panel-size-420px .activity .craftGear .used {
+	width:50px;
+	height:16px;
+	line-height:16px;
+	float:left;
+	margin:0px 2px 0px 0px;
+}
+#v.panel-size-420px .activity .craftGear .used .icon {
+	width:16px;
+	height:16px;
+	float:left;
+	margin:0px 2px 0px 0px;
+	/*background:#cfc;*/
+}
+#v.panel-size-420px .activity .craftGear .used .icon img {
+	width: 16px;
+	height: 16px;
+	margin:0px;
+	vertical-align:top;
+}
+#v.panel-size-420px .activity .craftGear .used .value {
+	width:32px;
+	height:16px;
+	float:left;
+	font-size: 11px;
+	/*background:#ccf;*/
+}
+#v.panel-size-420px .activity .craftGear .equipStats {
+	width:236px;
+	height:30px;
+	line-height:20px;
+	float:left;
+	margin: 0px 0px 0px 30px;
+	/*background:#cfc;*/
+}
+#v.panel-size-420px .activity .craftGear .equipStat {
+	width:40px;
+	height:19px;
+	float:left;
+}
+#v.panel-size-420px .activity .craftGear .equipStatIcon {
+	width:19px;
+	height:19px;
+	float:left;
+	margin:0px 1px 0px 0px;
+}
+#v.panel-size-420px .activity .craftGear .equipStatIcon img {
+	width:15px;
+	height:15px;
+	margin:2px;
+	vertical-align: top;
+}
+#v.panel-size-420px .activity .craftGear .equipStatText {
 	width:20px;
 	height:19px;
 	line-height:19px;
@@ -937,42 +1072,63 @@
 /*--------------------------------------
 ------------- BATTLE MODE -------------
 --------------------------------------*/
-#v .battle {
+#v.panel-size-300px .battle {
 	width:800px;
-	height:450px;
+	height:300px;
+	/*background:url(../battlemode.png);*/
+}
+#v.panel-size-420px .battle {
+	width:800px;
+	height:420px;
 	/*background:url(../battlemode.png);*/
 }
 
-#v .battle .battle_info_left {
+#v.panel-size-300px .battle .battle_info_left {
 	width:190px;
-	height:450px;
+	height:300px;
 	float:left;
 	position:relative;
 }
-
-#v .battle .battle_info_mid {
+#v.panel-size-420px .battle .battle_info_left {
+	width:190px;
+	height:420px;
+	float:left;
+	position:relative;
+}
+#v.panel-size-300px .battle .battle_info_mid {
 	width:150px;
-	height:450px;
+	height:300px;
 	float:left;
 	position:relative;
 }
-
-#v .battle .battle_info_right {
+#v.panel-size-420px .battle .battle_info_mid {
+	width:150px;
+	height:420px;
+	float:left;
+	position:relative;
+}
+#v.panel-size-300px .battle .battle_info_right {
 	width:460px;
-	height:450px;
+	height:300px;
+	float:left;
+	position:relative;
+}
+#v.panel-size-420px .battle .battle_info_right {
+	width:460px;
+	height:420px;
 	float:left;
 	position:relative;
 }
 
 /* HQ info box */
-#v .battle.small .battle_hq {
+#v.panel-size-300px .battle .battle_hq {
 	width:160px;
 	height:100px;
 	float:left;
 	/*background:#f00;*/
 	padding:0px 5px;
 }
-#v .battle.big .battle_hq {
+#v.panel-size-420px .battle .battle_hq {
 	width:170px;
 	height:100px;
 	float:left;
@@ -1079,7 +1235,7 @@
 }
 
 /* Quests box */
-#v .battle.small .battle_quests {
+#v.panel-size-300px .battle .battle_quests {
 	width:190px;
 	height:100px;
 	float:left;
@@ -1087,7 +1243,7 @@
 	padding:2px 5px 0px 5px;
 	/*opacity:.5;*/
 }
-#v .battle.big .battle_quests {
+#v.panel-size-420px .battle .battle_quests {
 	width:190px;
 	height:100px;
 	float:left;
@@ -1095,8 +1251,9 @@
 	padding:2px 5px 0px 5px;
 	/*opacity:.5;*/
 	position:absolute;
-	right:-450px;
-	margin:0px 5px;
+	right:0px;
+	bottom:0px;
+	/*margin:0px 5px;*/
 }
 #v .battle .battle_quest {
 	width:180px;
@@ -1152,13 +1309,13 @@
 }
 
 /* Sortie World Info */
-#v .battle.small .battle_sortie {
+#v.panel-size-300px .battle .battle_sortie {
 	position:relative;
 	width:200px;
 	height:50px;
 	float:left;
 }
-#v .battle.big .battle_sortie {
+#v.panel-size-420px .battle .battle_sortie {
 	position:absolute;
 	left:-340px;
 	width:200px;
@@ -1250,7 +1407,7 @@
 	height:50px;
 	float:left;
 }
-#v .battle.small .tools .switch-ship-attribute-buttons {
+#v.panel-size-300px .battle .tools .switch-ship-attribute-buttons {
 	width: 140px;
 	height:30px;
 	float:left;
@@ -1259,8 +1416,8 @@
 	color:#000;
 	text-align:center;
 }
-#v .battle.big .tools .switch-ship-attribute-buttons {
-	width: 140px;
+#v.panel-size-420px .battle .tools .switch-ship-attribute-buttons {
+	width: 180px;
 	height:30px;
 	float:left;
 	line-height:25px;
@@ -1268,10 +1425,10 @@
 	color:#000;
 	text-align:center;
 	position:absolute;
-	top:60px;
-	left:-80px;
+	top:40px;
+	left:65px;
 }
-#v .battle .tools .switch-ship-attribute-button {
+#v.panel-size-300px .battle .tools .switch-ship-attribute-button {
 	width:25px;
 	height:25px;
 	margin:5px 0px 0px 5px;
@@ -1281,13 +1438,23 @@
 	background:#ace;
 	border-radius:15px 15px 15px 15px;
 }
+#v.panel-size-420px .battle .tools .switch-ship-attribute-button {
+	width:35px;
+	height:25px;
+	margin:5px 5px 0px 5px;
+	float:left;
+	font-weight:bold;
+	font-size:16px;
+	background:#ace;
+	border-radius:6px;
+}
 
 #v .battle .tools .switch-ship-attribute-button.active {
 	background:#369;
 	color:#fff;
 }
 
-#v .battle.small .tools .switch_fleet_type_button {
+#v.panel-size-300px .battle .tools .switch_fleet_type_button {
 	width:80px;
 	height:25px;
 	margin: 5px 5px 5px 5px;
@@ -1300,7 +1467,7 @@
 	background:#5c5;
 	border-radius:10px 10px 10px 10px;
 }
-#v .battle.big .tools .switch_fleet_type_button {
+#v.panel-size-420px .battle .tools .switch_fleet_type_button {
 	width:80px;
 	height:25px;
 	margin: 5px 5px 5px 5px;
@@ -1313,28 +1480,33 @@
 	background:#5c5;
 	border-radius:10px 10px 10px 10px;
 	position:absolute;
-	left:-150px;
-	top:60px;
+	left:45px;
+	top:0px;
 }
 /* All Fleets */
-#v .battle .battle_fleet {
+#v.panel-size-420px .battle .battle_fleet {
 	width:460px;
-	height:400px;
+	height:370px;
 	float:left;
 	overflow:hidden;
 }
-
+#v.panel-size-300px .battle .battle_fleet {
+	width:460px;
+	height:250px;
+	float:left;
+	overflow:hidden;
+}
 /* Single Fleet in Battle Mode */
-#v .battle.small .battle_singlefleet {
+#v.panel-size-300px .battle .battle_singlefleet {
 	width:460px;
 	height:250px;
 	float:left;
 	/*background:#cfc;*/
 	padding:3px 5px 5px 5px;
 }
-#v .battle.big .battle_singlefleet {
+#v.panel-size-420px .battle .battle_singlefleet {
 	width:460px;
-	height:350px;
+	height:330px;
 	float:left;
 	/*background:#cfc;*/
 	padding:3px 5px 5px 5px;
@@ -1377,19 +1549,21 @@
 	font-size:14px;
 }
 
-#v .small .battle_singlefleet .battle_fleet_list {
+#v.panel-size-300px .battle_singlefleet .battle_fleet_list {
 	width:450px;
 	height:222px;
 	margin:0px 0px 0px 0px;
 	/*background:#ffc;*/
 }
-#v .big .battle_singlefleet .battle_fleet_list {
+#v.panel-size-420px .battle_singlefleet .battle_fleet_list {
 	width:450px;
-	height:312px;
-	margin:10px 0px 0px 0px;
+	height:300px;
+	margin:0px 0px 0px 0px;
 	/*background:#ffc;*/
+	position:absolute;
+	bottom:3px;
 }
-#v .small .battle-ship {
+#v.panel-size-300px .battle-ship {
 	width:450px;
 	height:35px;
 	margin:0px 0px 2px 0px;
@@ -1397,7 +1571,7 @@
 	float:left;
 	overflow:hidden;
 }
-#v .small .battle-ship .ship-img {
+#v.panel-size-300px .battle-ship .ship-img {
 	width:31px;
 	height:31px;
 	border-radius:15px 0px 0px 15px;
@@ -1405,19 +1579,19 @@
 	float:left;
 	background:#0f0;
 }
-#v .small .battle-ship .ship-img img {
+#v.panel-size-300px .battle-ship .ship-img img {
 	width:27px;
 	height:27px;
 	margin:2px;
 }
-#v .small .battle-ship .ship-info {
+#v.panel-size-300px .battle-ship .ship-info {
 	position:relative;
 	width:100px;
 	height:35px;
 	float:left;
 	margin:0px 10px 0px 0px;
 }
-#v .small .battle-ship .ship-name {
+#v.panel-size-300px .battle-ship .ship-name {
 	width:150px;
 	height:18px;
 	line-height:18px;
@@ -1427,7 +1601,7 @@
 	padding:0px 0px 0px 3px;
 	overflow:hidden;
 }
-#v .small .battle-ship .ship-type {
+#v.panel-size-300px .battle-ship .ship-type {
 	position:absolute;
 	top:0px;
 	left:-35px;
@@ -1443,7 +1617,7 @@
 	-1px 1px 2px #000,
 	1px 1px 2px #000;
 }
-#v .small .battle-ship .ship-hp-text {
+#v.panel-size-300px .battle-ship .ship-hp-text {
 	position:absolute;
 	bottom:-4px;
 	right:5px;
@@ -1459,27 +1633,27 @@
 	-1px 1px 2px #000,
 	1px 1px 2px #000;
 }
-#v .small .battle-ship .ship-hp-bar {
+#v.panel-size-300px .battle-ship .ship-hp-bar {
 	position:absolute;
 	bottom:2px;
 	width:100px;
 	height:10px;
 	background:#555;
 }
-#v .small .battle-ship .ship-hp-bar .ship-hp-val {
+#v.panel-size-300px .battle-ship .ship-hp-bar .ship-hp-val {
 	width:100px;
 	height:10px;
 	float:left;
 	background:#0f0;
 }
-#v .small .battle-ship .ship-level {
+#v.panel-size-300px .battle-ship .ship-level {
 	position:relative;
 	width:60px;
 	height:35px;
 	float:left;
 	margin:0px 2px 0px 0px;
 }
-#v .small .battle-ship .ship-lvl-lbl {
+#v.panel-size-300px .battle-ship .ship-lvl-lbl {
 	width:25px;
 	height:20px;
 	line-height:20px;
@@ -1488,7 +1662,7 @@
 	color:#777;
 	margin:2px 0px 0px 0px;
 }
-#v .small .battle-ship .ship-lvl-txt {
+#v.panel-size-300px .battle-ship .ship-lvl-txt {
 	width:35px;
 	height:20px;
 	line-height:20px;
@@ -1497,7 +1671,7 @@
 	margin:2px 0px 0px 0px;
 	font-weight:bold;
 }
-#v .small .battle-ship .ship-lvl-next {
+#v.panel-size-300px .battle-ship .ship-lvl-next {
 	position:absolute;
 	bottom:-2px;
 	width:60px;
@@ -1512,7 +1686,7 @@
 	-1px 1px 2px #000,
 	1px 1px 2px #000;
 }
-#v .small .battle-ship .ship-lvl-bar {
+#v.panel-size-300px .battle-ship .ship-lvl-bar {
 	position:absolute;
 	bottom:2px;
 	width:60px;
@@ -1521,18 +1695,18 @@
 	background:#555;
 	padding:0px;
 }
-#v .small .battle-ship .ship-lvl-val {
+#v.panel-size-300px .battle-ship .ship-lvl-val {
 	width:60px;
 	height:10px;
 	float:left;
 	background:#00ccff;
 }
-#v .small .battle-ship .ship-morale {
+#v.panel-size-300px .battle-ship .ship-morale {
 	width:30px;
 	height:35px;
 	float:left;
 }
-#v .small .battle-ship .ship-morale-box {
+#v.panel-size-300px .battle-ship .ship-morale-box {
 	width:26px;
 	height:26px;
 	line-height:22px;
@@ -1544,26 +1718,26 @@
 	font-weight:bold;
 	text-align:center;
 }
-#v .small .battle-ship .ship-equip {
+#v.panel-size-300px .battle-ship .ship-equip {
 	width:160px;
 	height:35px;
 	float:left;
 	/*background:#fcc;*/
 }
-#v .small .battle-ship .ship-gear {
+#v.panel-size-300px .battle-ship .ship-gear {
 	position:relative;
 	width:30px;
 	height:35px;
 	float:left;
 	margin:0px 10px 0px 0px;
 }
-#v .small .battle-ship .ship-gear img {
+#v.panel-size-300px .battle-ship .ship-gear img {
 	width:30px;
 	height:30px;
 	/*vertical-align:top;
 	margin:2px 0px 0px 0px;*/
 }
-#v .small .battle-ship .ship-equip-capacity {
+#v.panel-size-300px .battle-ship .ship-equip-capacity {
 	position:absolute;
 	bottom:0px;
 	right:0px;
@@ -1579,25 +1753,25 @@
 	-1px 1px 2px #000,
 	1px 1px 2px #000;
 }
-#v .small .battle-ship .ship-supply {
+#v.panel-size-300px .battle-ship .ship-supply {
 	width:50px;
 	height:35px;
 	float:left;
 	margin: 0px 0px 0px 3px;
 }
-#v .small .battle-ship .supply-fuel {
+#v.panel-size-300px .battle-ship .supply-fuel {
 	width:50px;
 	height:12px;
 	background:#555;
 	margin:5px 0px 0px 0px;
 }
-#v .small .battle-ship .supply-ammo {
+#v.panel-size-300px .battle-ship .supply-ammo {
 	width:50px;
 	height:12px;
 	background:#555;
 	margin:5px 0px 0px 0px;
 }
-#v .small .battle-ship .supply-text {
+#v.panel-size-300px .battle-ship .supply-text {
 	width:50px;
 	height:12px;
 	float:left;
@@ -1606,26 +1780,26 @@
 	font-size:11px;
 	text-align:center;
 }
-#v .small .battle-ship .supply-bar {
+#v.panel-size-300px .battle-ship .supply-bar {
 	width:10px;
 	height:12px;
 }
-#v .small .battle-ship .supply-fuel .supply-bar {
+#v.panel-size-300px .battle-ship .supply-fuel .supply-bar {
 	background:#00CC00;
 }
-#v .small .battle-ship .supply-ammo .supply-bar {
+#v.panel-size-300px .battle-ship .supply-ammo .supply-bar {
 	background:#999900;
 }
 
-#v .big .battle-ship {
+#v.panel-size-420px .battle-ship {
 	width:600px;
 	height:50px;
-	margin:0px 0px 2px 0px;
+	margin:0px 0px 0px 0px;
 	font-size:10px;
 	overflow:hidden;
 	float:left;
 }
-#v .big .battle-ship .ship-img {
+#v.panel-size-420px .battle-ship .ship-img {
 	width:46px;
 	height:46px;
 	border-radius:22px 0px 0px 22px;
@@ -1633,18 +1807,18 @@
 	float:left;
 	background:#0f0;
 }
-#v .big .battle-ship .ship-img img {
+#v.panel-size-420px .battle-ship .ship-img img {
 	width:42px;
 	height:42px;
 	margin:2px;
 }
-#v .big .battle-ship .ship-info {
+#v.panel-size-420px .battle-ship .ship-info {
 	width:150px;
 	height:50px;
 	float:left;
 	margin:0px 10px 0px 0px;
 }
-#v .big .battle-ship .ship-name {
+#v.panel-size-420px .battle-ship .ship-name {
 	width:150px;
 	height:18px;
 	line-height:18px;
@@ -1655,7 +1829,7 @@
 	font-weight:bold;
 	overflow:hidden;
 }
-#v .big .battle-ship .ship-type {
+#v.panel-size-420px .battle-ship .ship-type {
 	width:35px;
 	height:18px;
 	line-height:16px;
@@ -1666,7 +1840,7 @@
 	font-style:italic;
 	padding:0px 0px 0px 3px;
 }
-#v .big .battle-ship .ship-hp-text {
+#v.panel-size-420px .battle-ship .ship-hp-text {
 	width:115px;
 	height:18px;
 	line-height:16px;
@@ -1675,25 +1849,25 @@
 	float:left;
 	text-align:right;
 }
-#v .big .battle-ship .ship-hp-bar {
+#v.panel-size-420px .battle-ship .ship-hp-bar {
 	width:150px;
 	height:10px;
 	float:left;
 	background:#555;
 }
-#v .big .battle-ship .ship-hp-bar .ship-hp-val {
+#v.panel-size-420px .battle-ship .ship-hp-bar .ship-hp-val {
 	width:150px;
 	height:10px;
 	float:left;
 	background:#0f0;
 }
-#v .big .battle-ship .ship-level {
+#v.panel-size-420px .battle-ship .ship-level {
 	width:60px;
 	height:50px;
 	float:left;
 	margin:0px 2px 0px 0px;
 }
-#v .big .battle-ship .ship-lvl-lbl {
+#v.panel-size-420px .battle-ship .ship-lvl-lbl {
 	width:25px;
 	height:20px;
 	line-height:20px;
@@ -1702,7 +1876,7 @@
 	color:#777;
 	margin:2px 0px 0px 0px;
 }
-#v .big .battle-ship .ship-lvl-txt {
+#v.panel-size-420px .battle-ship .ship-lvl-txt {
 	width:35px;
 	height:20px;
 	line-height:20px;
@@ -1711,7 +1885,7 @@
 	margin:2px 0px 0px 0px;
 	font-weight:bold;
 }
-#v .big .battle-ship .ship-lvl-next {
+#v.panel-size-420px .battle-ship .ship-lvl-next {
 	width:60px;
 	height:16px;
 	line-height:16px;
@@ -1719,26 +1893,26 @@
 	float:left;
 	text-align:center;
 }
-#v .big .battle-ship .ship-lvl-bar {
+#v.panel-size-420px .battle-ship .ship-lvl-bar {
 	width:60px;
 	height:10px;
 	float:left;
 	background:#555;
 	padding:0px;
 }
-#v .big .battle-ship .ship-lvl-val {
+#v.panel-size-420px .battle-ship .ship-lvl-val {
 	width:60px;
 	height:10px;
 	float:left;
 	background:#00ccff;
 }
-#v .big .battle-ship .ship-morale {
+#v.panel-size-420px .battle-ship .ship-morale {
 	width:40px;
 	height:50px;
 	float:left;
 	margin:0px 10px 0px 10px;
 }
-#v .big .battle-ship .ship-morale-box {
+#v.panel-size-420px .battle-ship .ship-morale-box {
 	width:36px;
 	height:36px;
 	line-height:34px;
@@ -1749,50 +1923,50 @@
 	font-size:16px;
 	font-weight:bold;text-align:center;
 }
-#v .big .battle-ship .ship-equip {
+#v.panel-size-420px .battle-ship .ship-equip {
 	width:160px;
 	height:50px;
 	float:left;
 	/*background:#fcc;*/
 }
-#v .big .battle-ship .ship-gear {
+#v.panel-size-420px .battle-ship .ship-gear {
 	width:40px;
 	height:25px;
 	line-height:25px;
 	float:left;
 	margin:12px 0px;
 }
-#v .big .battle-ship .ship-gear img {
+#v.panel-size-420px .battle-ship .ship-gear img {
 	width:25px;
 	height:25px;
 	vertical-align:top;
 	margin:0px 0px 0px 0px;
 }
-#v .big .battle-ship .ship-equip-capacity {
+#v.panel-size-420px .battle-ship .ship-equip-capacity {
 	width:15px;
 	height:25px;
 	float:right;
 	font-size:14px;
 	text-align:left;
 }
-#v .big .battle-ship .ship-supply {
+#v.panel-size-420px .battle-ship .ship-supply {
 	width:70px;
 	height:50px;
 	float:left;
 }
-#v .big .battle-ship .supply-fuel {
+#v.panel-size-420px .battle-ship .supply-fuel {
 	width:70px;
 	height:14px;
 	background:#555;
 	margin:8px 0px 0px 0px;
 }
-#v .big .battle-ship .supply-ammo {
+#v.panel-size-420px .battle-ship .supply-ammo {
 	width:70px;
 	height:14px;
 	background:#555;
 	margin:5px 0px 0px 0px;
 }
-#v .big .battle-ship .supply-text {
+#v.panel-size-420px .battle-ship .supply-text {
 	width:70px;
 	height:14px;
 	float:left;
@@ -1801,29 +1975,30 @@
 	font-size:11px;
 	text-align:center;
 }
-#v .big .battle-ship .supply-bar {
+#v.panel-size-420px .battle-ship .supply-bar {
 	width:70px;
 	height:14px;
 }
-#v .big .battle-ship .supply-fuel .supply-bar {
+#v.panel-size-420px .battle-ship .supply-fuel .supply-bar {
 	background:#00CC00;
 }
-#v .big .battle-ship .supply-ammo .supply-bar {
+#v.panel-size-420px .battle-ship .supply-ammo .supply-bar {
 	background:#999900;
 }
 
 /* Main Fleet in Combined Fleet */
-#v .battle.small .battle_mainfleet {
+#v.panel-size-300px .battle .battle_mainfleet {
 	width:230px;
 	height:250px;
 	float:left;
 	/*background:#f0f;
 	opacity:.5;*/
 	padding:3px 5px 5px 5px;
+	position:relative;
 }
-#v .battle.big .battle_mainfleet {
-	width:230px;
-	height:350px;
+#v.panel-size-420px .battle .battle_mainfleet {
+	width:300px;
+	height:330px;
 	float:left;
 	/*background:#f0f;
 	opacity:.5;*/
@@ -1832,33 +2007,33 @@
 	bottom:0px;
 	left:-150px;
 }
-#v .small .battle_mainfleet .battle_fleet_summary {
-	width:2200px;
+#v.panel-size-300px .battle_mainfleet .battle_fleet_summary {
+	width:220px;
 	height:24px;
 	margin:0px 0px 0px 0px;
 	/*background:#ccf;*/
 }
-#v .small .battle_mainfleet .battle_fleet_summary .summary-field {
+#v.panel-size-300px .battle_mainfleet .battle_fleet_summary .summary-field {
 	/*width:75px;*/
 	height:24px;
 	margin:0px 5px 0px 0px;
 	float:left;
 }
-#v .small .battle_mainfleet .battle_fleet_summary .summary-field.incomplete  {
+#v.panel-size-300px .battle_mainfleet .battle_fleet_summary .summary-field.incomplete  {
 	background:#fbb;
 }
-#v .small .battle_mainfleet .battle_fleet_summary .summary-icon {
+#v.panel-size-300px .battle_mainfleet .battle_fleet_summary .summary-icon {
 	width:22px;
 	height:24px;
 	float:left;
 	margin:0px 0px 0px 0px;
 }
-#v .small .battle_mainfleet .battle_fleet_summary .summary-icon img {
+#v.panel-size-300px .battle_mainfleet .battle_fleet_summary .summary-icon img {
 	width:18px;
 	height:18px;
 	margin:3px 2px;
 }
-#v .small .battle_mainfleet .battle_fleet_summary .summary-text {
+#v.panel-size-300px .battle_mainfleet .battle_fleet_summary .summary-text {
 	/*width:50px;*/
 	height:24px;
 	line-height:24px;
@@ -1867,33 +2042,33 @@
 	font-size:14px;
 }
 
-#v .big .battle_mainfleet .battle_fleet_summary {
+#v.panel-size-420px .battle_mainfleet .battle_fleet_summary {
 	width:280px;
 	height:24px;
 	margin:0px 0px 0px 0px;
 	/*background:#ccf;*/
 }
-#v .big .battle_mainfleet .battle_fleet_summary .summary-field {
-	width:55px;
+#v.panel-size-420px .battle_mainfleet .battle_fleet_summary .summary-field {
+	width:65px;
 	height:24px;
-	margin:0px 15px 0px 0px;
+	margin:0px 5px 0px 0px;
 	float:left;
 }
-#v .big .battle_mainfleet .battle_fleet_summary .summary-field.incomplete  {
+#v.panel-size-420px .battle_mainfleet .battle_fleet_summary .summary-field.incomplete  {
 	background:#fbb;
 }
-#v .big .battle_mainfleet .battle_fleet_summary .summary-icon {
+#v.panel-size-420px .battle_mainfleet .battle_fleet_summary .summary-icon {
 	width:22px;
 	height:24px;
 	float:left;
 	margin:0px 0px 0px 0px;
 }
-#v .big .battle_mainfleet .battle_fleet_summary .summary-icon img {
+#v.panel-size-420px .battle_mainfleet .battle_fleet_summary .summary-icon img {
 	width:18px;
 	height:18px;
 	margin:3px 2px;
 }
-#v .big .battle_mainfleet .battle_fleet_summary .summary-text {
+#v.panel-size-420px .battle_mainfleet .battle_fleet_summary .summary-text {
 	/*width:50px;*/
 	height:24px;
 	line-height:24px;
@@ -1902,13 +2077,23 @@
 	font-size:14px;
 }
 
-#v .battle .battle_mainfleet .battle_fleet_list {
+#v.panel-size-300px .battle .battle_mainfleet .battle_fleet_list {
 	width:220px;
-	height:312px;
-	margin:10px 0px 0px 0px;
+	height:220px;
+	margin:0px 0px 0px 0px;
+	position:absolute;
+	/*bottom:3px;*/
 	/*background:#ffc;*/
 }
-#v .small .battle-mship {
+#v.panel-size-420px .battle .battle_mainfleet .battle_fleet_list {
+	width:220px;
+	height:300px;
+	margin:10px 0px 0px 0px;
+	position:absolute;
+	bottom:3px;
+	/*background:#ffc;*/
+}
+#v.panel-size-300px .battle-mship {
 	width:220px;
 	height:35px;
 	margin:0px 0px 2px 0px;
@@ -1916,7 +2101,7 @@
 	float:left;
 	overflow:hidden;
 }
-#v .small .battle-mship .ship-img {
+#v.panel-size-300px .battle-mship .ship-img {
 	width:31px;
 	height:31px;
 	border-radius:15px 0px 0px 15px;
@@ -1924,19 +2109,19 @@
 	float:left;
 	background:#0f0;
 }
-#v .small .battle-mship .ship-img img {
+#v.panel-size-300px .battle-mship .ship-img img {
 	width:27px;
 	height:27px;
 	margin:2px;
 }
-#v .small .battle-mship .ship-info {
+#v.panel-size-300px .battle-mship .ship-info {
 	position:relative;
 	width:100px;
 	height:35px;
 	float:left;
 	margin:0px 10px 0px 0px;
 }
-#v .small .battle-mship .ship-name {
+#v.panel-size-300px .battle-mship .ship-name {
 	width:150px;
 	height:18px;
 	line-height:18px;
@@ -1946,7 +2131,7 @@
 	padding:0px 0px 0px 3px;
 	overflow:hidden;
 }
-#v .small .battle-mship .ship-type {
+#v.panel-size-300px .battle-mship .ship-type {
 	position:absolute;
 	top:0px;
 	left:-35px;
@@ -1962,7 +2147,7 @@
 	-1px 1px 2px #000,
 	1px 1px 2px #000;
 }
-#v .small .battle-mship .ship-hp-text {
+#v.panel-size-300px .battle-mship .ship-hp-text {
 	position:absolute;
 	bottom:-4px;
 	right:5px;
@@ -1978,27 +2163,27 @@
 	-1px 1px 2px #000,
 	1px 1px 2px #000;
 }
-#v .small .battle-mship .ship-hp-bar {
+#v.panel-size-300px .battle-mship .ship-hp-bar {
 	position:absolute;
 	bottom:2px;
 	width:100px;
 	height:10px;
 	background:#555;
 }
-#v .small .battle-mship .ship-hp-bar .ship-hp-val {
+#v.panel-size-300px .battle-mship .ship-hp-bar .ship-hp-val {
 	width:100px;
 	height:10px;
 	float:left;
 	background:#0f0;
 }
-#v .small .battle-mship .ship-level {
+#v.panel-size-300px .battle-mship .ship-level {
 	position:relative;
 	width:60px;
 	height:35px;
 	float:left;
 	margin:0px 2px 0px 0px;
 }
-#v .small .battle-mship .ship-lvl-lbl {
+#v.panel-size-300px .battle-mship .ship-lvl-lbl {
 	width:25px;
 	height:20px;
 	line-height:20px;
@@ -2007,7 +2192,7 @@
 	color:#777;
 	margin:2px 0px 0px 0px;
 }
-#v .small .battle-mship .ship-lvl-txt {
+#v.panel-size-300px .battle-mship .ship-lvl-txt {
 	width:35px;
 	height:20px;
 	line-height:20px;
@@ -2016,7 +2201,7 @@
 	margin:2px 0px 0px 0px;
 	font-weight:bold;
 }
-#v .small .battle-mship .ship-lvl-next {
+#v.panel-size-300px .battle-mship .ship-lvl-next {
 	position:absolute;
 	bottom:-2px;
 	width:60px;
@@ -2031,7 +2216,7 @@
 	-1px 1px 2px #000,
 	1px 1px 2px #000;
 }
-#v .small .battle-mship .ship-lvl-bar {
+#v.panel-size-300px .battle-mship .ship-lvl-bar {
 	position:absolute;
 	bottom:2px;
 	width:60px;
@@ -2040,18 +2225,18 @@
 	background:#555;
 	padding:0px;
 }
-#v .small .battle-mship .ship-lvl-val {
+#v.panel-size-300px .battle-mship .ship-lvl-val {
 	width:60px;
 	height:10px;
 	float:left;
 	background:#00ccff;
 }
-#v .small .battle-mship .ship-morale {
+#v.panel-size-300px .battle-mship .ship-morale {
 	width:30px;
 	height:35px;
 	float:left;
 }
-#v .small .battle-mship .ship-morale-box {
+#v.panel-size-300px .battle-mship .ship-morale-box {
 	width:26px;
 	height:26px;
 	line-height:22px;
@@ -2063,26 +2248,26 @@
 	font-weight:bold;
 	text-align:center;
 }
-#v .small .battle-mship .ship-equip {
+#v.panel-size-300px .battle-mship .ship-equip {
 	width:70px;
 	height:35px;
 	float:left;
 	/*background:#fcc;*/
 }
-#v .small .battle-mship .ship-gear {
+#v.panel-size-300px .battle-mship .ship-gear {
 	position:relative;
 	width:35px;
 	height:17px;
 	float:left;
 	margin:0px 0px 0px 0px;
 }
-#v .small .battle-mship .ship-gear img {
+#v.panel-size-300px .battle-mship .ship-gear img {
 	width:17px;
 	height:17px;
 	/*vertical-align:top;
 	margin:2px 0px 0px 0px;*/
 }
-#v .small .battle-mship .ship-equip-capacity {
+#v.panel-size-300px .battle-mship .ship-equip-capacity {
 	width:17px;
 	height:17px;
 	float:right;
@@ -2090,25 +2275,25 @@
 	text-align:right;
 	color:#000;
 }
-#v .small .battle-mship .ship-supply {
+#v.panel-size-300px .battle-mship .ship-supply {
 	width:50px;
 	height:35px;
 	float:left;
 	margin: 0px 0px 0px 3px;
 }
-#v .small .battle-mship .supply-fuel {
+#v.panel-size-300px .battle-mship .supply-fuel {
 	width:50px;
 	height:12px;
 	background:#555;
 	margin:5px 0px 0px 0px;
 }
-#v .small .battle-mship .supply-ammo {
+#v.panel-size-300px .battle-mship .supply-ammo {
 	width:50px;
 	height:12px;
 	background:#555;
 	margin:5px 0px 0px 0px;
 }
-#v .small .battle-mship .supply-text {
+#v.panel-size-300px .battle-mship .supply-text {
 	width:50px;
 	height:12px;
 	float:left;
@@ -2117,26 +2302,26 @@
 	font-size:11px;
 	text-align:center;
 }
-#v .small .battle-mship .supply-bar {
+#v.panel-size-300px .battle-mship .supply-bar {
 	width:10px;
 	height:12px;
 }
-#v .small .battle-mship .supply-fuel .supply-bar {
+#v.panel-size-300px .battle-mship .supply-fuel .supply-bar {
 	background:#00CC00;
 }
-#v .small .battle-mship .supply-ammo .supply-bar {
+#v.panel-size-300px .battle-mship .supply-ammo .supply-bar {
 	background:#999900;
 }
 
-#v .big .battle-mship {
-	width:600px;
+#v.panel-size-420px .battle-mship {
+	width:300px;
 	height:50px;
-	margin:0px 0px 2px 0px;
+	margin:0px 0px 0px 0px;
 	font-size:10px;
 	overflow:hidden;
 	float:left;
 }
-#v .big .battle-mship .ship-img {
+#v.panel-size-420px .battle-mship .ship-img {
 	width:46px;
 	height:46px;
 	border-radius:22px 0px 0px 22px;
@@ -2144,18 +2329,18 @@
 	float:left;
 	background:#0f0;
 }
-#v .big .battle-mship .ship-img img {
+#v.panel-size-420px .battle-mship .ship-img img {
 	width:42px;
 	height:42px;
 	margin:2px;
 }
-#v .big .battle-mship .ship-info {
+#v.panel-size-420px .battle-mship .ship-info {
 	width:150px;
 	height:50px;
 	float:left;
 	margin:0px 10px 0px 0px;
 }
-#v .big .battle-mship .ship-name {
+#v.panel-size-420px .battle-mship .ship-name {
 	width:150px;
 	height:18px;
 	line-height:18px;
@@ -2166,7 +2351,7 @@
 	font-weight:bold;
 	overflow:hidden;
 }
-#v .big .battle-mship .ship-type {
+#v.panel-size-420px .battle-mship .ship-type {
 	width:35px;
 	height:18px;
 	line-height:16px;
@@ -2177,7 +2362,7 @@
 	font-style:italic;
 	padding:0px 0px 0px 3px;
 }
-#v .big .battle-mship .ship-hp-text {
+#v.panel-size-420px .battle-mship .ship-hp-text {
 	width:115px;
 	height:18px;
 	line-height:16px;
@@ -2186,25 +2371,25 @@
 	float:left;
 	text-align:right;
 }
-#v .big .battle-mship .ship-hp-bar {
+#v.panel-size-420px .battle-mship .ship-hp-bar {
 	width:150px;
 	height:10px;
 	float:left;
 	background:#555;
 }
-#v .big .battle-mship .ship-hp-bar .ship-hp-val {
+#v.panel-size-420px .battle-mship .ship-hp-bar .ship-hp-val {
 	width:150px;
 	height:10px;
 	float:left;
 	background:#0f0;
 }
-#v .big .battle-mship .ship-level {
+#v.panel-size-420px .battle-mship .ship-level {
 	width:60px;
 	height:50px;
 	float:left;
 	margin:0px 2px 0px 0px;
 }
-#v .big .battle-mship .ship-lvl-lbl {
+#v.panel-size-420px .battle-mship .ship-lvl-lbl {
 	width:25px;
 	height:20px;
 	line-height:20px;
@@ -2213,7 +2398,7 @@
 	color:#777;
 	margin:2px 0px 0px 0px;
 }
-#v .big .battle-mship .ship-lvl-txt {
+#v.panel-size-420px .battle-mship .ship-lvl-txt {
 	width:35px;
 	height:20px;
 	line-height:20px;
@@ -2222,7 +2407,7 @@
 	margin:2px 0px 0px 0px;
 	font-weight:bold;
 }
-#v .big .battle-mship .ship-lvl-next {
+#v.panel-size-420px .battle-mship .ship-lvl-next {
 	width:60px;
 	height:16px;
 	line-height:16px;
@@ -2230,26 +2415,26 @@
 	float:left;
 	text-align:center;
 }
-#v .big .battle-mship .ship-lvl-bar {
+#v.panel-size-420px .battle-mship .ship-lvl-bar {
 	width:60px;
 	height:10px;
 	float:left;
 	background:#555;
 	padding:0px;
 }
-#v .big .battle-mship .ship-lvl-val {
+#v.panel-size-420px .battle-mship .ship-lvl-val {
 	width:60px;
 	height:10px;
 	float:left;
 	background:#00ccff;
 }
-#v .big .battle-mship .ship-morale {
+#v.panel-size-420px .battle-mship .ship-morale {
 	width:40px;
 	height:50px;
 	float:left;
 	margin:0px 10px 0px 10px;
 }
-#v .big .battle-mship .ship-morale-box {
+#v.panel-size-420px .battle-mship .ship-morale-box {
 	width:36px;
 	height:36px;
 	line-height:34px;
@@ -2260,49 +2445,49 @@
 	font-size:16px;
 	font-weight:bold;text-align:center;
 }
-#v .big .battle-mship .ship-equip {
+#v.panel-size-420px .battle-mship .ship-equip {
 	width:80px;
 	height:50px;
 	float:left;
 	/*background:#fcc;*/
 }
-#v .big .battle-mship .ship-gear {
+#v.panel-size-420px .battle-mship .ship-gear {
 	width:40px;
 	height:25px;
 	line-height:25px;
 	float:left;
 }
-#v .big .battle-mship .ship-gear img {
+#v.panel-size-420px .battle-mship .ship-gear img {
 	width:25px;
 	height:25px;
 	vertical-align:top;
 	margin:0px 0px 0px 0px;
 }
-#v .big .battle-mship .ship-equip-capacity {
+#v.panel-size-420px .battle-mship .ship-equip-capacity {
 	width:15px;
 	height:25px;
 	float:right;
 	font-size:14px;
 	text-align:left;
 }
-#v .big .battle-mship .ship-supply {
+#v.panel-size-420px .battle-mship .ship-supply {
 	width:70px;
 	height:50px;
 	float:left;
 }
-#v .big .battle-mship .supply-fuel {
+#v.panel-size-420px .battle-mship .supply-fuel {
 	width:70px;
 	height:14px;
 	background:#555;
 	margin:8px 0px 0px 0px;
 }
-#v .big .battle-mship .supply-ammo {
+#v.panel-size-420px .battle-mship .supply-ammo {
 	width:70px;
 	height:14px;
 	background:#555;
 	margin:5px 0px 0px 0px;
 }
-#v .big .battle-mship .supply-text {
+#v.panel-size-420px .battle-mship .supply-text {
 	width:70px;
 	height:14px;
 	float:left;
@@ -2311,20 +2496,20 @@
 	font-size:11px;
 	text-align:center;
 }
-#v .big .battle-mship .supply-bar {
+#v.panel-size-420px .battle-mship .supply-bar {
 	width:70px;
 	height:14px;
 }
-#v .big .battle-mship .supply-fuel .supply-bar {
+#v.panel-size-420px .battle-mship .supply-fuel .supply-bar {
 	background:#00CC00;
 }
-#v .big .battle-mship .supply-ammo .supply-bar {
+#v.panel-size-420px .battle-mship .supply-ammo .supply-bar {
 	background:#999900;
 }
 
 
 /* Escort Fleet */
-#v .battle.small .battle_escorts {
+#v.panel-size-300px .battle .battle_escorts {
 	width:220px;
 	height:250px;
 	float:left;
@@ -2332,9 +2517,9 @@
 	opacity:.5;*/
 	padding:3px 5px 5px 5px;
 }
-#v .battle.big .battle_escorts {
-	width:220px;
-	height:350px;
+#v.panel-size-420px .battle .battle_escorts {
+	width:300px;
+	height:330px;
 	float:left;
 	/*background:#0ff;
 	opacity:.5;*/
@@ -2343,33 +2528,33 @@
 	bottom:0px;
 	left:150px;
 }
-#v .small .battle_escorts .battle_fleet_summary {
+#v.panel-size-300px .battle_escorts .battle_fleet_summary {
 	width:280px;
 	height:24px;
 	margin:0px 0px 0px 0px;
 	/*background:#ccf;*/
 }
-#v .small .battle_escorts .battle_fleet_summary .summary-field {
-	width:50px;
+#v.panel-size-300px .battle_escorts .battle_fleet_summary .summary-field {
+	/*width:50px;*/
 	height:24px;
-	margin:0px 15px 0px 0px;
+	margin:0px 5px 0px 0px;
 	float:left;
 }
-#v .small .battle_escorts .battle_fleet_summary .summary-field.incomplete  {
+#v.panel-size-300px .battle_escorts .battle_fleet_summary .summary-field.incomplete  {
 	background:#fbb;
 }
-#v .small .battle_escorts .battle_fleet_summary .summary-icon {
+#v.panel-size-300px .battle_escorts .battle_fleet_summary .summary-icon {
 	width:22px;
 	height:24px;
 	float:left;
 	margin:0px 0px 0px 0px;
 }
-#v .small .battle_escorts .battle_fleet_summary .summary-icon img {
+#v.panel-size-300px .battle_escorts .battle_fleet_summary .summary-icon img {
 	width:18px;
 	height:18px;
 	margin:3px 2px;
 }
-#v .small .battle_escorts .battle_fleet_summary .summary-text {
+#v.panel-size-300px .battle_escorts .battle_fleet_summary .summary-text {
 	/*width:50px;*/
 	height:24px;
 	line-height:24px;
@@ -2378,33 +2563,33 @@
 	font-size:14px;
 }
 
-#v .big .battle_escorts .battle_fleet_summary {
+#v.panel-size-420px .battle_escorts .battle_fleet_summary {
 	width:280px;
 	height:24px;
 	margin:0px 0px 0px 0px;
 	/*background:#ccf;*/
 }
-#v .big .battle_escorts .battle_fleet_summary .summary-field {
-	width:55px;
+#v.panel-size-420px .battle_escorts .battle_fleet_summary .summary-field {
+	width:65px;
 	height:24px;
-	margin:0px 15px 0px 0px;
+	margin:0px 5px 0px 0px;
 	float:left;
 }
-#v .big .battle_escorts .battle_fleet_summary .summary-field.incomplete  {
+#v.panel-size-420px .battle_escorts .battle_fleet_summary .summary-field.incomplete  {
 	background:#fbb;
 }
-#v .big .battle_escorts .battle_fleet_summary .summary-icon {
+#v.panel-size-420px .battle_escorts .battle_fleet_summary .summary-icon {
 	width:22px;
 	height:24px;
 	float:left;
 	margin:0px 0px 0px 0px;
 }
-#v .big .battle_escorts .battle_fleet_summary .summary-icon img {
+#v.panel-size-420px .battle_escorts .battle_fleet_summary .summary-icon img {
 	width:18px;
 	height:18px;
 	margin:3px 2px;
 }
-#v .big .battle_escorts .battle_fleet_summary .summary-text {
+#v.panel-size-420px .battle_escorts .battle_fleet_summary .summary-text {
 	/*width:50px;*/
 	height:24px;
 	line-height:24px;
@@ -2413,13 +2598,23 @@
 	font-size:14px;
 }
 
-#v .battle .battle_escorts .battle_fleet_list {
+#v.panel-size-300px .battle .battle_escorts .battle_fleet_list {
 	width:220px;
-	height:312px;
-	margin:10px 0px 0px 0px;
+	height:220px;
+	margin:0px 0px 0px 0px;
+	position:absolute;
+	/*bottom:3px;*/
 	/*background:#ffc;*/
 }
-#v .small .battle-eship {
+#v.panel-size-420px .battle .battle_escorts .battle_fleet_list {
+	width:300px;
+	height:300px;
+	margin:0px 0px 0px 0px;
+	position:absolute;
+	bottom:3px;
+	/*background:#ffc;*/
+}
+#v.panel-size-300px .battle-eship {
 	width:220px;
 	height:35px;
 	margin:0px 0px 2px 0px;
@@ -2427,7 +2622,7 @@
 	float:left;
 	overflow:hidden;
 }
-#v .small .battle-eship .ship-img {
+#v.panel-size-300px .battle-eship .ship-img {
 	width:31px;
 	height:31px;
 	border-radius:15px 0px 0px 15px;
@@ -2435,19 +2630,19 @@
 	float:left;
 	background:#0f0;
 }
-#v .small .battle-eship .ship-img img {
+#v.panel-size-300px .battle-eship .ship-img img {
 	width:27px;
 	height:27px;
 	margin:2px;
 }
-#v .small .battle-eship .ship-info {
+#v.panel-size-300px .battle-eship .ship-info {
 	position:relative;
 	width:100px;
 	height:35px;
 	float:left;
 	margin:0px 10px 0px 0px;
 }
-#v .small .battle-eship .ship-name {
+#v.panel-size-300px .battle-eship .ship-name {
 	width:150px;
 	height:18px;
 	line-height:18px;
@@ -2457,7 +2652,7 @@
 	padding:0px 0px 0px 3px;
 	overflow:hidden;
 }
-#v .small .battle-eship .ship-type {
+#v.panel-size-300px .battle-eship .ship-type {
 	position:absolute;
 	top:0px;
 	left:-35px;
@@ -2473,7 +2668,7 @@
 	-1px 1px 2px #000,
 	1px 1px 2px #000;
 }
-#v .small .battle-eship .ship-hp-text {
+#v.panel-size-300px .battle-eship .ship-hp-text {
 	position:absolute;
 	bottom:-4px;
 	right:5px;
@@ -2489,27 +2684,27 @@
 	-1px 1px 2px #000,
 	1px 1px 2px #000;
 }
-#v .small .battle-eship .ship-hp-bar {
+#v.panel-size-300px .battle-eship .ship-hp-bar {
 	position:absolute;
 	bottom:2px;
 	width:100px;
 	height:10px;
 	background:#555;
 }
-#v .small .battle-eship .ship-hp-bar .ship-hp-val {
+#v.panel-size-300px .battle-eship .ship-hp-bar .ship-hp-val {
 	width:100px;
 	height:10px;
 	float:left;
 	background:#0f0;
 }
-#v .small .battle-eship .ship-level {
+#v.panel-size-300px .battle-eship .ship-level {
 	position:relative;
 	width:60px;
 	height:35px;
 	float:left;
 	margin:0px 2px 0px 0px;
 }
-#v .small .battle-eship .ship-lvl-lbl {
+#v.panel-size-300px .battle-eship .ship-lvl-lbl {
 	width:25px;
 	height:20px;
 	line-height:20px;
@@ -2518,7 +2713,7 @@
 	color:#777;
 	margin:2px 0px 0px 0px;
 }
-#v .small .battle-eship .ship-lvl-txt {
+#v.panel-size-300px .battle-eship .ship-lvl-txt {
 	width:35px;
 	height:20px;
 	line-height:20px;
@@ -2527,7 +2722,7 @@
 	margin:2px 0px 0px 0px;
 	font-weight:bold;
 }
-#v .small .battle-eship .ship-lvl-next {
+#v.panel-size-300px .battle-eship .ship-lvl-next {
 	position:absolute;
 	bottom:-2px;
 	width:60px;
@@ -2542,7 +2737,7 @@
 	-1px 1px 2px #000,
 	1px 1px 2px #000;
 }
-#v .small .battle-eship .ship-lvl-bar {
+#v.panel-size-300px .battle-eship .ship-lvl-bar {
 	position:absolute;
 	bottom:2px;
 	width:60px;
@@ -2551,18 +2746,18 @@
 	background:#555;
 	padding:0px;
 }
-#v .small .battle-eship .ship-lvl-val {
+#v.panel-size-300px .battle-eship .ship-lvl-val {
 	width:60px;
 	height:10px;
 	float:left;
 	background:#00ccff;
 }
-#v .small .battle-eship .ship-morale {
+#v.panel-size-300px .battle-eship .ship-morale {
 	width:30px;
 	height:35px;
 	float:left;
 }
-#v .small .battle-eship .ship-morale-box {
+#v.panel-size-300px .battle-eship .ship-morale-box {
 	width:26px;
 	height:26px;
 	line-height:22px;
@@ -2574,26 +2769,26 @@
 	font-weight:bold;
 	text-align:center;
 }
-#v .small .battle-eship .ship-equip {
+#v.panel-size-300px .battle-eship .ship-equip {
 	width:70px;
 	height:35px;
 	float:left;
 	/*background:#fcc;*/
 }
-#v .small .battle-eship .ship-gear {
+#v.panel-size-300px .battle-eship .ship-gear {
 	position:relative;
 	width:35px;
 	height:17px;
 	float:left;
 	margin:0px 0px 0px 0px;
 }
-#v .small .battle-eship .ship-gear img {
+#v.panel-size-300px .battle-eship .ship-gear img {
 	width:17px;
 	height:17px;
 	/*vertical-align:top;
 	margin:2px 0px 0px 0px;*/
 }
-#v .small .battle-eship .ship-equip-capacity {
+#v.panel-size-300px .battle-eship .ship-equip-capacity {
 	width:17px;
 	height:17px;
 	float:right;
@@ -2601,25 +2796,25 @@
 	text-align:right;
 	color:#000;
 }
-#v .small .battle-eship .ship-supply {
+#v.panel-size-300px .battle-eship .ship-supply {
 	width:50px;
 	height:35px;
 	float:left;
 	margin: 0px 0px 0px 3px;
 }
-#v .small .battle-eship .supply-fuel {
+#v.panel-size-300px .battle-eship .supply-fuel {
 	width:50px;
 	height:12px;
 	background:#555;
 	margin:5px 0px 0px 0px;
 }
-#v .small .battle-eship .supply-ammo {
+#v.panel-size-300px .battle-eship .supply-ammo {
 	width:50px;
 	height:12px;
 	background:#555;
 	margin:5px 0px 0px 0px;
 }
-#v .small .battle-eship .supply-text {
+#v.panel-size-300px .battle-eship .supply-text {
 	width:50px;
 	height:12px;
 	float:left;
@@ -2628,27 +2823,27 @@
 	font-size:11px;
 	text-align:center;
 }
-#v .small .battle-eship .supply-bar {
+#v.panel-size-300px .battle-eship .supply-bar {
 	width:10px;
 	height:12px;
 }
-#v .small .battle-eship .supply-fuel .supply-bar {
+#v.panel-size-300px .battle-eship .supply-fuel .supply-bar {
 	background:#00CC00;
 }
-#v .small .battle-eship .supply-ammo .supply-bar {
+#v.panel-size-300px .battle-eship .supply-ammo .supply-bar {
 	background:#999900;
 }
 
 
-#v .big .battle-eship {
-	width:600px;
+#v.panel-size-420px .battle-eship {
+	width:300px;
 	height:50px;
-	margin:0px 0px 2px 0px;
+	margin:0px 0px 0px 0px;
 	font-size:10px;
 	overflow:hidden;
 	float:left;
 }
-#v .big .battle-eship .ship-img {
+#v.panel-size-420px .battle-eship .ship-img {
 	width:46px;
 	height:46px;
 	border-radius:22px 0px 0px 22px;
@@ -2656,18 +2851,18 @@
 	float:left;
 	background:#0f0;
 }
-#v .big .battle-eship .ship-img img {
+#v.panel-size-420px .battle-eship .ship-img img {
 	width:42px;
 	height:42px;
 	margin:2px;
 }
-#v .big .battle-eship .ship-info {
+#v.panel-size-420px .battle-eship .ship-info {
 	width:150px;
 	height:50px;
 	float:left;
 	margin:0px 10px 0px 0px;
 }
-#v .big .battle-eship .ship-name {
+#v.panel-size-420px .battle-eship .ship-name {
 	width:150px;
 	height:18px;
 	line-height:18px;
@@ -2678,7 +2873,7 @@
 	font-weight:bold;
 	overflow:hidden;
 }
-#v .big .battle-eship .ship-type {
+#v.panel-size-420px .battle-eship .ship-type {
 	width:35px;
 	height:18px;
 	line-height:16px;
@@ -2689,7 +2884,7 @@
 	font-style:italic;
 	padding:0px 0px 0px 3px;
 }
-#v .big .battle-eship .ship-hp-text {
+#v.panel-size-420px .battle-eship .ship-hp-text {
 	width:115px;
 	height:18px;
 	line-height:16px;
@@ -2698,25 +2893,25 @@
 	float:left;
 	text-align:right;
 }
-#v .big .battle-eship .ship-hp-bar {
+#v.panel-size-420px .battle-eship .ship-hp-bar {
 	width:150px;
 	height:10px;
 	float:left;
 	background:#555;
 }
-#v .big .battle-eship .ship-hp-bar .ship-hp-val {
+#v.panel-size-420px .battle-eship .ship-hp-bar .ship-hp-val {
 	width:150px;
 	height:10px;
 	float:left;
 	background:#0f0;
 }
-#v .big .battle-eship .ship-level {
+#v.panel-size-420px .battle-eship .ship-level {
 	width:60px;
 	height:50px;
 	float:left;
 	margin:0px 2px 0px 0px;
 }
-#v .big .battle-eship .ship-lvl-lbl {
+#v.panel-size-420px .battle-eship .ship-lvl-lbl {
 	width:25px;
 	height:20px;
 	line-height:20px;
@@ -2725,7 +2920,7 @@
 	color:#777;
 	margin:2px 0px 0px 0px;
 }
-#v .big .battle-eship .ship-lvl-txt {
+#v.panel-size-420px .battle-eship .ship-lvl-txt {
 	width:35px;
 	height:20px;
 	line-height:20px;
@@ -2734,7 +2929,7 @@
 	margin:2px 0px 0px 0px;
 	font-weight:bold;
 }
-#v .big .battle-eship .ship-lvl-next {
+#v.panel-size-420px .battle-eship .ship-lvl-next {
 	width:60px;
 	height:16px;
 	line-height:16px;
@@ -2742,26 +2937,26 @@
 	float:left;
 	text-align:center;
 }
-#v .big .battle-eship .ship-lvl-bar {
+#v.panel-size-420px .battle-eship .ship-lvl-bar {
 	width:60px;
 	height:10px;
 	float:left;
 	background:#555;
 	padding:0px;
 }
-#v .big .battle-eship .ship-lvl-val {
+#v.panel-size-420px .battle-eship .ship-lvl-val {
 	width:60px;
 	height:10px;
 	float:left;
 	background:#00ccff;
 }
-#v .big .battle-eship .ship-morale {
+#v.panel-size-420px .battle-eship .ship-morale {
 	width:40px;
 	height:50px;
 	float:left;
 	margin:0px 10px 0px 10px;
 }
-#v .big .battle-eship .ship-morale-box {
+#v.panel-size-420px .battle-eship .ship-morale-box {
 	width:36px;
 	height:36px;
 	line-height:34px;
@@ -2772,49 +2967,49 @@
 	font-size:16px;
 	font-weight:bold;text-align:center;
 }
-#v .big .battle-eship .ship-equip {
+#v.panel-size-420px .battle-eship .ship-equip {
 	width:80px;
 	height:50px;
 	float:left;
 	/*background:#fcc;*/
 }
-#v .big .battle-eship .ship-gear {
+#v.panel-size-420px .battle-eship .ship-gear {
 	width:40px;
 	height:25px;
 	line-height:25px;
 	float:left;
 }
-#v .big .battle-eship .ship-gear img {
+#v.panel-size-420px .battle-eship .ship-gear img {
 	width:25px;
 	height:25px;
 	vertical-align:top;
 	margin:0px 0px 0px 0px;
 }
-#v .big .battle-eship .ship-equip-capacity {
+#v.panel-size-420px .battle-eship .ship-equip-capacity {
 	width:15px;
 	height:25px;
 	float:right;
 	font-size:14px;
 	text-align:left;
 }
-#v .big .battle-eship .ship-supply {
+#v.panel-size-420px .battle-eship .ship-supply {
 	width:70px;
 	height:50px;
 	float:left;
 }
-#v .big .battle-eship .supply-fuel {
+#v.panel-size-420px .battle-eship .supply-fuel {
 	width:70px;
 	height:14px;
 	background:#555;
 	margin:8px 0px 0px 0px;
 }
-#v .big .battle-eship .supply-ammo {
+#v.panel-size-420px .battle-eship .supply-ammo {
 	width:70px;
 	height:14px;
 	background:#555;
 	margin:5px 0px 0px 0px;
 }
-#v .big .battle-eship .supply-text {
+#v.panel-size-420px .battle-eship .supply-text {
 	width:70px;
 	height:14px;
 	float:left;
@@ -2823,28 +3018,28 @@
 	font-size:11px;
 	text-align:center;
 }
-#v .big .battle-eship .supply-bar {
+#v.panel-size-420px .battle-eship .supply-bar {
 	width:70px;
 	height:14px;
 }
-#v .big .battle-eship .supply-fuel .supply-bar {
+#v.panel-size-420px .battle-eship .supply-fuel .supply-bar {
 	background:#00CC00;
 }
-#v .big .battle-eship .supply-ammo .supply-bar {
+#v.panel-size-420px .battle-eship .supply-ammo .supply-bar {
 	background:#999900;
 }
 
 
 /* Battle details */
-#v .battle.small .battle_details {
+#v.panel-size-300px .battle .battle_details {
 	width:140px;
 	height:295px;
 	float:left;
 	margin:5px 5px 0px 5px;
 }
-#v .battle.big .battle_details {
+#v.panel-size-420px .battle .battle_details {
 	width:140px;
-	height:445px;
+	height:415px;
 	float:left;
 	margin:5px 5px 0px 5px;
 	position:relative;
@@ -2852,7 +3047,7 @@
 #v .battle .battle_space {
 	height:1px;
 }
-#v .battle.small .battle_environment {
+#v.panel-size-300px .battle .battle_environment {
 	width:140px;
 	height:290px;
 	margin:0px 0px 5px 0px;
@@ -2860,9 +3055,9 @@
 	border-radius:8px;
 	position:relative;
 }
-#v .battle.big .battle_environment {
+#v.panel-size-420px .battle .battle_environment {
 	width:180px;
-	height:280px;
+	height:250px;
 	margin:0px 0px 5px 0px;
 	background:#def;
 	border-radius:8px;
@@ -2936,7 +3131,7 @@
 	font-weight:bold;
 }
 
-#v .battle.small .battle_resource {
+#v.panel-size-300px .battle .battle_resource {
 	width:130px;
 	height:30px;
 	margin:5px 0px 3px 5px;
@@ -2945,7 +3140,7 @@
 	background:#cfc;
 	padding:4px 10px;
 }
-#v .battle.big .battle_resource {
+#v.panel-size-420px .battle .battle_resource {
 	width:170px;
 	height:30px;
 	margin:5px 5px 3px 5px;
@@ -2954,7 +3149,7 @@
 	background:#cfc;
 	padding:4px 10px;
 }
-#v .battle.small .battle_maelstrom {
+#v.panel-size-300px .battle .battle_maelstrom {
 	width:130px;
 	height:30px;
 	margin:5px 0px 3px 5px;
@@ -2963,7 +3158,7 @@
 	background:#ECD0F7;
 	padding:4px 10px;
 }
-#v .battle.big .battle_maelstrom {
+#v.panel-size-420px .battle .battle_maelstrom {
 	width:170px;
 	height:30px;
 	margin:5px 5px 3px 5px;
@@ -2972,7 +3167,7 @@
 	background:#ECD0F7;
 	padding:4px 10px;
 }
-#v .battle.small .battle_empty {
+#v.panel-size-300px .battle .battle_empty {
 	width:130px;
 	height:30px;
 	line-height:28px;
@@ -2983,7 +3178,7 @@
 	text-align:center;
 	font-size:12px;
 }
-#v .battle.big .battle_empty {
+#v.panel-size-420px .battle .battle_empty {
 	width:170px;
 	height:30px;
 	line-height:28px;
@@ -2994,12 +3189,12 @@
 	text-align:center;
 	font-size:12px;
 }
-#v .battle.small .battle_enemies {
+#v.panel-size-300px .battle .battle_enemies {
 	width:140px;
 	height:65px;
 	margin:0px 0px 3px 0px;
 }
-#v .battle.big .battle_enemies {
+#v.panel-size-420px .battle .battle_enemies {
 	width:140px;
 	height:65px;
 	margin:0px 0px 3px 20px;
@@ -3021,23 +3216,23 @@
 #v .battle .battle_enemies .abyss_4 {
 	margin:1px 0px 0px 25px;
 }
-#v .battle.small .battle_conditions {
+#v.panel-size-300px .battle .battle_conditions {
 	width:140px;
 	margin:0px 0px 3px 0px;
 	display:none;
 }
-#v .battle.big .battle_conditions {
+#v.panel-size-420px .battle .battle_conditions {
 	width:160px;
 	margin:0px 10px 3px 10px;
 	display:none;
 }
-#v .battle.small .battle_cond {
+#v.panel-size-300px .battle .battle_cond {
 	width:140px;
 	height:16px;
 	line-height:16px;
 	margin:0px 0px 1px 0px;
 }
-#v .battle.big .battle_cond {
+#v.panel-size-420px .battle .battle_cond {
 	width:160px;
 	height:16px;
 	line-height:16px;
@@ -3055,7 +3250,7 @@
 	height:16px;
 	vertical-align:top;
 }
-#v .battle.small .battle_cond_label {
+#v.panel-size-300px .battle .battle_cond_label {
 	width:45px;
 	height:16px;
 	margin:0px 2px 0px 0px;
@@ -3063,7 +3258,7 @@
 	float:left;
 	/*background:#fcc;*/
 }
-#v .battle.big .battle_cond_label {
+#v.panel-size-420px .battle .battle_cond_label {
 	width:55px;
 	height:16px;
 	margin:0px 2px 0px 0px;
@@ -3086,24 +3281,24 @@
 	color:#f33;
 }
 
-#v .battle.small .battle_airbattle {
+#v.panel-size-300px .battle .battle_airbattle {
 	width:140px;
 	height:50px;
-	margin:0px 0px 3px 20px;
+	margin:0px 0px 3px 0px;
 	display:none;
 }
-#v .battle.big .battle_airbattle {
+#v.panel-size-420px .battle .battle_airbattle {
 	width:160px;
 	height:50px;
 	margin:0px 10px 3px 10px;
 	display:none;
 }
-#v .battle.small .battle_airsides {
+#v.panel-size-300px .battle .battle_airsides {
 	width:140px;
 	height:16px;
 	/*background:#ffc;*/
 }
-#v .battle.small .battle_airsides {
+#v.panel-size-420px .battle .battle_airsides {
 	width:160px;
 	height:16px;
 	/*background:#ffc;*/
@@ -3118,27 +3313,27 @@
 	font-weight:bold;
 	color:#0099cc;
 }
-#v .battle.small .battle_airtype {
+#v.panel-size-300px .battle .battle_airtype {
 	width:140px;
 	height:16px;
 	/*background:#ffc;*/
 	line-height:16px;
 	margin:0px 0px 1px 0px;
 }
-#v .battle.big .battle_airtype {
+#v.panel-size-420px .battle .battle_airtype {
 	width:160px;
 	height:16px;
 	/*background:#ffc;*/
 	line-height:16px;
 	margin:0px 1px 1px 10px;
 }
-#v .battle.small .battle_airside {
+#v.panel-size-300px .battle .battle_airside {
 	width:70px;
 	height:16px;
 	float:left;
 	/*background:#ccf;*/
 }
-#v .battle.big .battle_airside {
+#v.panel-size-420px .battle .battle_airside {
 	width:80px;
 	height:16px;
 	float:left;
@@ -3170,13 +3365,13 @@
 	color:#f00;
 }
 
-#v .battle.small .battle_results {
+#v.panel-size-300px .battle .battle_results {
 	width:140px;
 	height:30px;
 	display:none;
 	/*background:#ffc;*/
 }
-#v .battle.big .battle_results {
+#v.panel-size-420px .battle .battle_results {
 	width:140px;
 	height:30px;
 	margin:0px 0px 0px 20px;
@@ -3196,7 +3391,7 @@
 }
 
 /* Boss Pattern */
-#v .battle.small .battle_boss {
+#v.panel-size-300px .battle .battle_boss {
 	width:180px;
 	height:90px;
 	background:#def;
@@ -3204,15 +3399,16 @@
 	margin: 5px 5px 0px 5px;
 	float:left;
 }
-#v .battle.big .battle_boss {
+#v.panel-size-420px .battle .battle_boss {
 	width:180px;
-	height:90px;
+	height:87px;
 	background:#def;
 	border-radius:8px;
 	margin: 5px 5px 5px 5px;
 	float:left;
 	position:absolute;
-	bottom:0px;
+	top:0px;
+	left:200px;
 }
 #v .battle .battle_boss_icon {
 	width:20px;
@@ -3251,3 +3447,32 @@
 #v .battle .battle_boss .abyss_4 {
 	margin:1px 0px 0px 25px;
 }
+
+/* Outside Tools*/
+#v .outside-tools {
+	position:absolute;
+	top:0px;
+	left:800px;
+	width:50px;
+	height:80px;
+}
+
+#v .outside-tools .layout-button {
+	width:50px;
+	height:30px;
+	font-weight:bold;
+	font-size:14px;
+	line-height:30px;
+	background:#ace;
+	color:#000;
+	border-radius:0px 10px 10px 0px;
+	padding:0px 5px;
+	margin: 5px 0px 0px 0px;
+	float:left;
+}
+
+#v .outside-tools .layout-button.active {
+	background:#369;
+	color:#fff;
+}
+

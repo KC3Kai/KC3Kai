@@ -51,6 +51,7 @@ Retreives when needed to apply on components
 				dmm_bg_position		: "top center",
 				
 				pan_theme			: "default",
+				pan_size			: "big",
 				pan_bg_color		: "#def",
 				pan_bg_image		: "",
 				pan_bg_size			: "cover",

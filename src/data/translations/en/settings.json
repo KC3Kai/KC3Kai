@@ -259,6 +259,17 @@
 				}
 			},
 			{
+				"id" : "pan_size",
+				"name" : "Panel Size",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "small", "Small" ],
+						[ "big", "Big" ]
+					]
+				}
+			},
+			{
 				"id" : "pan_bg_color",
 				"name" : "Background Color",
 				"type" : "long_text",
