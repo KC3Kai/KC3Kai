@@ -10,6 +10,35 @@
 		ready: function(){
 			var self = this;
 			
+			// Set size of the panel
+			$("#v").removeClass("panel-size-300px");
+			$("#v").removeClass("panel-size-420px");
+			var classToAdd = "panel-size-" + ((ConfigManager.pan_size === "small") ? "300px" : "420px"); 
+			$("#v").addClass(classToAdd);
+			$(".layout-button").removeClass("active");
+			if (ConfigManager.pan_size === "small") {
+				$(".layout-button.small-layout").addClass("active");
+			} else {
+				$(".layout-button.big-layout").addClass("active");
+			}
+			$(".layout-button").on("click", function(){
+				console.log("Clicked");
+				$(".layout-button").removeClass("active");
+				$(this).addClass("active");
+				if ($(this).hasClass("small-layout")){
+					ConfigManager.pan_size = "small";
+				} else {
+					ConfigManager.pan_size = "big";
+				}
+				console.log(ConfigManager.pan_size);
+				$("#v").removeClass("panel-size-300px");
+				$("#v").removeClass("panel-size-420px");
+				var classToAdd = "panel-size-" + ((ConfigManager.pan_size === "small") ? "300px" : "420px"); 
+				$("#v").addClass(classToAdd);
+				ConfigManager.save();
+				self.trigger("Fleet");
+			});
+			
 			// Select fleet tab
 			$(".fleet-button", this.domElement).on("click", function(){
 				self.data.selectedFleet = $(this).data("id");
@@ -103,6 +132,9 @@
 			$(".battle-mship .ship-morale", this.domElement).hide();
 			$(".battle-mship .ship-equip", this.domElement).hide();
 			$(".battle-mship .ship-supply", this.domElement).hide();
+			$(".battle-eship .ship-morale", this.domElement).hide();
+			$(".battle-eship .ship-equip", this.domElement).hide();
+			$(".battle-eship .ship-supply", this.domElement).hide();
 			$(".battle .switch-ship-attribute-button ", this.domElement).on("click", function(){
 				console.log("switch button clicked!");
 				
@@ -113,18 +145,26 @@
 				$(".battle-mship .ship-morale", self.domElement).hide();
 				$(".battle-mship .ship-equip", self.domElement).hide();
 				$(".battle-mship .ship-supply", self.domElement).hide();
+				$(".battle-eship .ship-level", self.domElement).hide();
+				$(".battle-eship .ship-morale", self.domElement).hide();
+				$(".battle-eship .ship-equip", self.domElement).hide();
+				$(".battle-eship .ship-supply", self.domElement).hide();
 				
 				if ($(this).hasClass("switch-exp-button")) {
 					$(".battle-mship .ship-level", self.domElement).show();
+					$(".battle-eship .ship-level", self.domElement).show();
 				}
 				if ($(this).hasClass("switch-morale-button")) {
 					$(".battle-mship .ship-morale", self.domElement).show();
+					$(".battle-eship .ship-morale", self.domElement).show();
 				}
 				if ($(this).hasClass("switch-equip-button")) {
 					$(".battle-mship .ship-equip", self.domElement).show();
+					$(".battle-eship .ship-equip", self.domElement).show();
 				}
 				if ($(this).hasClass("switch-supply-button")) {
 					$(".battle-mship .ship-supply", self.domElement).show();
+					$(".battle-eship .ship-supply", self.domElement).show();
 				}
 				
 			});
@@ -384,7 +424,7 @@
 						$.each(EscortFleet.ships, function(index, rosterId){
 							if(rosterId > -1){
 								var CurrentShip = KC3ShipManager.get( rosterId );
-								var ShipBox = $(".factory .battle-mship", container).clone().appendTo(FleetContainer);
+								var ShipBox = $(".factory .battle-eship", container).clone().appendTo(FleetContainer);
 								
 								$(".ship-img img", ShipBox).attr("src", KC3Meta.shipIcon(CurrentShip.masterId));
 								$(".ship-name", ShipBox).text( CurrentShip.name() );
