@@ -39,6 +39,7 @@ Retreives when needed to apply on components
 				api_bg_image		: "",
 				api_bg_size			: "cover",
 				api_bg_position		: "top center",
+				api_gameScale		: 100,
 				
 				dmm_customize		: false,
 				dmm_translation		: true,
