@@ -94,6 +94,11 @@
 				}
 				self.trigger("Quests");
 			});
+			
+			// Hide activity boxes
+			$(".activityBox.craftGear").on("click", function(){
+				$(this).hide();
+			});
 		},
 		listeners: {
 			GameStart: function(container, data, local){
@@ -491,6 +496,8 @@
 				}
 			},
 			CraftGear: function(container, data, local){
+				if(!ConfigManager.info_craft){ return true; }
+				
 				// Hide any other activity box
 				$(".activityBox", container).hide();
 				
