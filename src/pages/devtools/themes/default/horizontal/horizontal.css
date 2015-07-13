@@ -629,6 +629,8 @@
 	font-size:14px;
 	font-weight:bold;
 	/*background:#cfc;*/
+	word-break: break-all;
+	overflow: hidden;
 }
 #h .activity .craftGear .equipNote {
 	width:220px;
