@@ -1136,6 +1136,7 @@
 	padding:0px 5px;
 	position:absolute;
 	right:-610px;
+	z-index:1;
 }
 #v .battle .battle_admiral {
 	width:150px;
