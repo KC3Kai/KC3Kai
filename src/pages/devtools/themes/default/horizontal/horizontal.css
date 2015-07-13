@@ -725,7 +725,7 @@
 	height:100px;
 	float:left;
 	/*background:#f00;*/
-	padding:0px 5px;
+	padding:0px 0px 0px 5px;
 }
 #h .battle .battle_admiral {
 	width:150px;
@@ -774,13 +774,13 @@
 	/*background:#fcc;*/
 }
 #h .battle .battle_slots {
-	width:150px;
+	width:155px;
 	height:20px;
 	/*background:#0f0;
 	opacity:.5;*/
 }
 #h .battle .battle_slot {
-	width:75px;
+	/*width:75px;*/
 	height:20px;
 	line-height:20px;
 	float:left;
@@ -799,12 +799,13 @@
 	vertical-align:top;
 }
 #h .battle .battle_slot .current {
-	width:30px;
+	/*width:30px;*/
 	height:20px;
 	float:left;
 	font-weight:bold;
 	font-size:14px;
 	text-align:center;
+	margin:0px 2px 0px 0px;
 }
 #h .battle .battle_slot .max {
 	width:25px;
