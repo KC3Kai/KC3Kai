@@ -324,6 +324,7 @@
 					$.each(CurrentFleet.ships, function(index, rosterId){
 						if(rosterId > -1){
 							var CurrentShip = KC3ShipManager.get( rosterId );
+							if(CurrentShip.masterId == 0){ return true; }
 							var ShipBox = $(".factory .fleet-ship", container).clone().appendTo(FleetContainer);
 							
 							$(".ship-img img", ShipBox).attr("src", KC3Meta.shipIcon(CurrentShip.masterId, "../../../../assets/img/ui/empty.png"));
@@ -861,7 +862,10 @@
 		maxHpBarWidth = Number(maxHpBarWidth.substring(0, maxHpBarWidth.length-2));
 		$(".ship-hp-val", ShipBox).css("width", (maxHpBarWidth*hpPercent)+"px");
 		
-		if(hpPercent <= 0.25){
+		if( PlayerManager.repairShips.indexOf(rosterId) > -1){
+			$(".ship-img", ShipBox).css("background", "#ACE");
+			$(".ship-hp-val", ShipBox).css("background", "#ACE");
+		}else if(hpPercent <= 0.25){
 			$(".ship-img", ShipBox).css("background", "#FF0000");
 			$(".ship-hp-val", ShipBox).css("background", "#FF0000");
 			if( PlayerManager.repairShips.indexOf(rosterId) == -1 ){
