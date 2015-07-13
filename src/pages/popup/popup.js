@@ -65,6 +65,11 @@
 			window.open("../settings/settings.html", "kc3kai_settings");
 		});
 		
+		// About
+		$("#about").on('click', function(){
+			window.open("../about/about.html", "kc3kai_about");
+		});
+		
 	});
 
 	// Setup Update Time veriables
