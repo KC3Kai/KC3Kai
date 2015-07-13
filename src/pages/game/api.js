@@ -112,7 +112,11 @@ var interactions = {
 					$(".name", QuestBox).text( QuestData.meta().name );
 					$(".desc", QuestBox).text( QuestData.meta().desc );
 					
-					$(".tracking", QuestBox).html( QuestData.outputHtml() );
+					if(ConfigManager.api_tracking){
+						$(".tracking", QuestBox).html( QuestData.outputHtml() );
+					}else{
+						$(".tracking", QuestBox).hide();
+					}
 					
 					// Special Bw1 case multiple requirements
 					if( QuestRaw.api_no == 214 ){
