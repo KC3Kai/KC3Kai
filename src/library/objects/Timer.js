@@ -65,7 +65,8 @@ Has functions for TimerManager to use
 	KC3Timer.prototype.text = function(){
 		if(this.active){
 			var remaining = this.completion - (new Date()).getTime();
-			remaining = Math.ceil((remaining - (ConfigManager.alert_diff*1000))/1000);
+			var timerAllowance = (this.type == 2)?0:ConfigManager.alert_diff;
+			remaining = Math.ceil((remaining - (timerAllowance*1000))/1000);
 			if(remaining > 0){
 				this.alerted = false;
 				
