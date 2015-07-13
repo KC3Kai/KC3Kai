@@ -1,6 +1,7 @@
 var imgurLimit = 0;
 
 function KCScreenshot(){
+	this.scale = ((ConfigManager.api_gameScale || 100) / 100);
 	this.gamebox = {};
 	this.canvas = {};
 	this.context = {};
@@ -21,8 +22,8 @@ KCScreenshot.prototype.start = function(playerName, element){
 	
 	// Initialize HTML5 Canvas
 	this.canvas = document.createElement("canvas");
-	this.canvas.width = 800;
-	this.canvas.height = 480;
+	this.canvas.width = 800 * this.scale;
+	this.canvas.height = 480 * this.scale;
 	this.context = this.canvas.getContext("2d");
 	
 	// Initialize Image Tag
@@ -72,10 +73,10 @@ KCScreenshot.prototype.crop = function(){
 	chrome.tabs.getZoom(null, function(zoomFactor){
 		// Get gamebox dimensions and position
 		var params = {
-			realWidth: 800 * zoomFactor,
-			realHeight: 480 * zoomFactor,
-			offTop: self.gamebox.offset().top * zoomFactor,
-			offLeft: self.gamebox.offset().left * zoomFactor,
+			realWidth: 800 * zoomFactor * self.scale,
+			realHeight: 480 * zoomFactor * self.scale,
+			offTop: self.gamebox.offset().top * zoomFactor * self.scale,
+			offLeft: self.gamebox.offset().left * zoomFactor * self.scale,
 		};
 		
 		// Actual Cropping
@@ -87,8 +88,8 @@ KCScreenshot.prototype.crop = function(){
 			params.realHeight,
 			0,
 			0,
-			800,
-			480
+			800 * self.scale,
+			480 * self.scale
 		);
 		
 		// Convert image to base64

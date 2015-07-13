@@ -11,21 +11,17 @@ function ActivateGame(){
 	$(".box-wait").hide();
 	$(".box-game .game-swf").attr("src", localStorage.absoluteswf);
 	$(".box-game").show();
+	$(".box-wrap").css("zoom", ((ConfigManager.api_gameScale || 100) / 100));
 }
 
 $(document).on("ready", function(){
-
 	// Initialize data managers
 	ConfigManager.load();
 	KC3Meta.init("../../../../data/");
 	KC3QuestManager.load();
 	
 	// Apply interface configs
-	$(".box-wrap")
-		.css({
-			"margin-top":	ConfigManager.api_margin+"px",
-			"zoom":			((ConfigManager.api_gameScale || 100) / 100)
-		});
+	$(".box-wrap").css("margin-top", ConfigManager.api_margin+"px");
 	if(ConfigManager.api_bg_image == ""){
 		$("body").css("background", ConfigManager.api_bg_color);
 	}else{
@@ -105,7 +101,6 @@ var interactions = {
 				
 				// Get quest data
 				var QuestData = KC3QuestManager.get( QuestRaw.api_no );
-				// console.log("QuestData", QuestData);
 				
 				// Show meta, title and description
 				if( QuestData.meta ){
