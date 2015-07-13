@@ -81,6 +81,10 @@ To be dynamically used on the settings page
 					ConfigManager[ self.config ] = $(this).data("value");
 					ConfigManager.save();
 					$(this).parent().siblings(".note").stop(true, true).show().fadeOut(2000);
+					// Refresh page when a language option is clicked
+					if($(this).hasClass("choices_language")){
+						window.location.reload();
+					}
 				})
 			);
 		}
