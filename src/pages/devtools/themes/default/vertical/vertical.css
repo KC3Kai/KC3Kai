@@ -289,6 +289,7 @@
 	margin:1px 0px 0px 0px;
 	/*background:#cfc;*/
 	overflow:hidden;
+	white-space:nowrap;
 }
 #v .box-quest .status {
 	width:40px;
@@ -1302,6 +1303,7 @@
 	float:left;
 	text-align:left;
 	overflow:hidden;
+	white-space:nowrap;
 }
 #v .battle .battle_quest .status {
 	width:40px;
