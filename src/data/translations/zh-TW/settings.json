@@ -10,7 +10,7 @@
 				"options" : {
 					"choices" : [
 						[ "en", "English" ],
-						[ "jp", "日本語" ]
+						[ "jp", "日本語" ],
 						[ "zh-TW", "中文 (台灣)" ]
 					]
 				}
