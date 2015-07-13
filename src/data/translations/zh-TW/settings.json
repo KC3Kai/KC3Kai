@@ -5,84 +5,85 @@
 		"contents" : [
 			{
 				"id" : "language",
-				"name" : "Language",
+				"name" : "語言",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
 						[ "en", "English" ],
 						[ "jp", "日本語" ]
+						[ "zh-TW", "中文 (台灣)" ]
 					]
 				}
 			},
 			{
 				"id" : "elosFormula",
-				"name" : "Effective LoS Formula",
+				"name" : "索敵值算法",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ 1, "Sum" ],
-						[ 2, "Old" ],
-						[ 3, "New" ]
+						[ 1, "簡單加總" ],
+						[ 2, "2-5式(舊)" ],
+						[ 3, "2-5式(秋)" ]
 					]
 				}
 			}
 		]
 	},
 	{
-		"section": "Game Information",
+		"section": "遊戲資訊",
 		"help" : "",
 		"contents" : [
 			{
 				"id" : "info_face",
-				"name" : "Construction Faces",
+				"name" : "Construction Face",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "info_craft",
-				"name" : "Crafting Results",
+				"name" : "建造結果",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "info_compass",
-				"name" : "Compass and Enemy",
+				"name" : "羅艦與敵構成",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "info_battle",
-				"name" : "Battle Environment",
+				"name" : "戰鬥環境",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "info_boss",
-				"name" : "Boss Composition",
+				"name" : "Boss構成",
 				"type" : "check",
 				"options" : {}
 			}
 		]
 	},
 	{
-		"section": "Screenshot",
+		"section": "截圖",
 		"help" : "",
 		"contents" : [
 			{
 				"id" : "ss_mode",
-				"name" : "Output Mode",
+				"name" : "輸出模式",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ 0, "Download" ],
+						[ 0, "下載" ],
 						[ 1, "Imgur" ],
-						[ 2, "New Tab" ]
+						[ 2, "新分頁" ]
 					]
 				}
 			},
 			{
 				"id" : "ss_type",
-				"name" : "Filetype",
+				"name" : "檔案格式",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
@@ -94,220 +95,220 @@
 		]
 	},
 	{
-		"section": "Alerts",
+		"section": "警告",
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Alerts",
 		"contents" : [
 			{
 				"id" : "alert_diff",
 				"name" : "Timer Allowance",
 				"type" : "small_text",
-				"options" : { "label" : "seconds" }
+				"options" : { "label" : "秒" }
 			},
 			{
 				"id" : "alert_type",
-				"name" : "Sound Type",
+				"name" : "警告音效",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
 						[ 0, "None" ],
-						[ 1, "DING!" ],
-						[ 2, "Custom" ]
+						[ 1, "叮一聲" ],
+						[ 2, "自訂" ]
 					]
 				}
 			},
 			{
 				"id" : "alert_custom",
-				"name" : "Custom Sound URL",
+				"name" : "自訂音效網址",
 				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
 			},
 			{
 				"id" : "alert_volume",
-				"name" : "Volume",
+				"name" : "音量",
 				"type" : "small_text",
 				"options" : { "label" : "%" }
 			},
 			{
 				"id" : "alert_desktop",
-				"name" : "Desktop Notification",
+				"name" : "桌面提示",
 				"type" : "check",
 				"options" : {}
 			}
 		]
 	},
 	{
-		"section": "API Game Screen",
+		"section": "API遊戲畫面",
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Screen",
 		"contents" : [
 			{
 				"id" : "api_translation",
-				"name" : "Quest Translations",
+				"name" : "仼務翻譯",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "api_tracking",
-				"name" : "Quest Tracking",
+				"name" : "仼務追蹤",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "api_askExit",
-				"name" : "Exit Confirmation",
+				"name" : "退出確認",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "api_margin",
-				"name" : "Top Margin",
+				"name" : "頂部邊界",
 				"type" : "small_text",
-				"options" : { "label" : "pixels" }
+				"options" : { "label" : "像素" }
 			},
 			{
 				"id" : "api_bg_color",
-				"name" : "Background Color",
+				"name" : "背景色",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-color property" }
+				"options" : { "placeholder" : "參見CSS background-color屬性" }
 			},
 			{
 				"id" : "api_bg_image",
-				"name" : "Background Image",
+				"name" : "背景圖片",
 				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
 			},
 			{
 				"id" : "api_bg_size",
-				"name" : "Background Size",
+				"name" : "背景大小",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-size property" }
+				"options" : { "placeholder" : "參見CSS background-size屬性" }
 			},
 			{
 				"id" : "api_bg_position",
-				"name" : "Background Position",
+				"name" : "背景位置",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-position property" }
+				"options" : { "placeholder" : "參見CSS background-position屬性" }
 			},
 			{
 				"id" : "api_gameScale",
-				"name" : "Game Player Scale",
+				"name" : "遊戲畫面比例",
 				"type" : "small_text",
 				"options" : { "label" : "%" }
 			}
 		]
 	},
 	{
-		"section": "DMM Gameplay",
+		"section": "DMM遊戲畫面",
 		"help" : "",
 		"contents" : [
 			{
 				"id" : "dmm_customize",
-				"name" : "Apply Customizations",
+				"name" : "套用自訂值",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "dmm_translation",
-				"name" : "Quest Translations",
+				"name" : "仼務翻譯",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "dmm_tracking",
-				"name" : "Quest Tracking",
+				"name" : "仼務追蹤",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "dmm_askExit",
-				"name" : "Exit Confirmation",
+				"name" : "退出時確認",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "dmm_margin",
-				"name" : "Top Margin",
+				"name" : "頂部邊界",
 				"type" : "small_text",
-				"options" : { "label" : "pixels" }
+				"options" : { "label" : "像素" }
 			},
 			{
 				"id" : "dmm_bg_color",
-				"name" : "Background Color",
+				"name" : "背景色",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-color property" }
+				"options" : { "placeholder" : "參見CSS background-color屬性" }
 			},
 			{
 				"id" : "dmm_bg_image",
-				"name" : "Background Image",
+				"name" : "背景圖片",
 				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
 			},
 			{
 				"id" : "dmm_bg_size",
-				"name" : "Background Size",
+				"name" : "背景大小",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-size property" }
+				"options" : { "placeholder" : "參見CSS background-size屬性" }
 			},
 			{
 				"id" : "dmm_bg_position",
-				"name" : "Background Position",
+				"name" : "背景位置",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-position property" }
+				"options" : { "placeholder" : "參見CSS background-position屬性" }
 			}
 		]
 	},
 	{
-		"section": "Panel",
+		"section": "面板",
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Panel",
 		"contents" : [
 			{
 				"id" : "pan_theme",
-				"name" : "Theme",
+				"name" : "主題",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ "default", "Default" ],
-						[ "dark", "Dark" ]
+						[ "default", "預設值" ],
+						[ "dark", "暗色" ]
 					]
 				}
 			},
 			{
 				"id" : "pan_size",
-				"name" : "Panel Size",
+				"name" : "面板大小",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ "small", "Small" ],
-						[ "big", "Big" ]
+						[ "small", "小" ],
+						[ "big", "大" ]
 					]
 				}
 			},
 			{
 				"id" : "pan_bg_color",
-				"name" : "Background Color",
+				"name" : "背景色",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-color property" }
+				"options" : { "placeholder" : "參見CSS background-color屬性" }
 			},
 			{
 				"id" : "pan_bg_image",
-				"name" : "Background Image",
+				"name" : "背景圖片",
 				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
 			},
 			{
 				"id" : "pan_bg_size",
-				"name" : "Background Size",
+				"name" : "背景大小",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-size property" }
+				"options" : { "placeholder" : "參見CSS background-size屬性" }
 			},
 			{
 				"id" : "pan_bg_position",
-				"name" : "Background Position",
+				"name" : "背景位置",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-position property" }
+				"options" : { "placeholder" : "參見CSS background-position屬性" }
 			},
 			{
 				"id" : "pan_opacity",
-				"name" : "Interface Opacity",
+				"name" : "界面透明度",
 				"type" : "small_text",
 				"options" : { "label" : "%" }
 			}
