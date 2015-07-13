@@ -7,20 +7,23 @@ Used by SortieManager
 (function(){
 	"use strict";
 	
-	window.KC3Node = function(sortie_id, id){
+	window.KC3Node = function(sortie_id, id, UTCTime){
 		this.sortie = (sortie_id || 0);
 		this.id = (id || 0);
 		this.type = "";
+		this.stime = UTCTime;
 	};
 	
 	KC3Node.prototype.defineAsBattle = function( nodeData ){
 		this.type = "battle";
+		this.enemyListAvailable = false;
 		
 		// If passed initial values
 		if(typeof nodeData != "undefined"){
 			
 			// If passed raw data from compass
 			if(typeof nodeData.api_enemy != "undefined"){
+				this.eships = [];
 				this.epattern = nodeData.api_enemy.api_enemy_id;
 				this.checkEnemy();
 			}
@@ -28,17 +31,28 @@ Used by SortieManager
 			// If passed formatted enemy list from PVP
 			if(typeof nodeData.pvp_opponents != "undefined"){
 				this.eships = nodeData.pvp_opponents;
+				// this.epattern = 
+				this.enemyListAvailable = true;
 			}
 		}
 		return this;
 	};
 	
 	KC3Node.prototype.checkEnemy = function( nodeData ){
-		// get from DB
-		// this.epattern // is the enemy ID
-		// this.eships = [ api_ship_ke[i++] ];
-		// this.eformation = api_formation[1];
-		this.eships = [-1,-1,-1,-1,-1,-1];
+		var self = this;
+		KC3Database.get_enemy(this.epattern, function(response){
+			if(response){
+				self.eships = response.ids;
+				self.eformation = response.formation
+			}else{
+				self.eships = [-1,-1,-1,-1,-1,-1];
+				self.eformation = -1;
+			}
+			self.enemyListAvailable = true;
+			if(typeof self.onEnemiesAvailable != "undefined"){
+				self.onEnemiesAvailable();
+			}
+		});
 	};
 	
 	KC3Node.prototype.defineAsResource = function( nodeData ){
@@ -160,15 +174,20 @@ Used by SortieManager
 		}else{
 			this.drop = 0;
 		}
+		
+		this.saveBattleOnDB();
 	};
 	
-	KC3Node.prototype.save = function( resultData ){
-		console.log({
+	KC3Node.prototype.saveBattleOnDB = function( resultData ){
+		KC3Database.Battle({
+			sortie_id: (this.sortie || KC3SortieManager.onSortie || 0),
 			node: this.id,
-			battle: this.battleDay,
-			yasen: this.battleNight,
+			enemyId: (this.epattern || 0),
+			data: (this.battleDay || {}),
+			yasen: (this.battleNight || {}),
 			rating: this.rating,
-			drop: this.rating,
+			drop: this.drop,
+			time: this.stime
 		});
 	};
 	

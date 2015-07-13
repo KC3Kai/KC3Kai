@@ -79,24 +79,24 @@ Xxxxxxx
 			return this.nodes[ this.nodes.length-1 ];
 		},
 		
-		advanceNode :function( nodeData ){
+		advanceNode :function( nodeData, UTCTime ){
 			var thisNode;
 			
 			//  Battle Node
 			if(typeof nodeData.api_enemy != "undefined") {
-				thisNode = (new KC3Node( this.onSortie, nodeData.api_no )).defineAsBattle(nodeData);
+				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsBattle(nodeData);
 			// Resource Node
 			}else if (typeof nodeData.api_itemget != "undefined") {
-				thisNode = (new KC3Node( this.onSortie, nodeData.api_no )).defineAsResource(nodeData);
+				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsResource(nodeData);
 			// Bounty Node
 			} else if (typeof nodeData.api_itemget_eo_comment != "undefined") {
-				thisNode = (new KC3Node( this.onSortie, nodeData.api_no )).defineAsBounty(nodeData);
+				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsBounty(nodeData);
 			// Maelstrom Node
 			} else if (typeof nodeData.api_happening != "undefined") {
-				thisNode = (new KC3Node( this.onSortie, nodeData.api_no )).defineAsMaelstrom(nodeData);
+				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsMaelstrom(nodeData);
 			// Empty Node
 			}else{
-				thisNode = (new KC3Node( this.onSortie, nodeData.api_no )).defineAsDud(nodeData);
+				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsDud(nodeData);
 			}
 			
 			this.nodes.push(thisNode);
@@ -118,19 +118,13 @@ Xxxxxxx
 		},
 		
 		endSortie :function(){
-			this.updateDB();
 			this.onSortie = 0;
 			this.fleetSent = 1;
 			this.map_world = 0;
 			this.map_num = 0;
 			this.nodes = [];
 			this.bossNode = {};
-		},
-		
-		updateDB :function(){
-			
 		}
-		
 	};
 	
 })();

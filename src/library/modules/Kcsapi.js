@@ -412,11 +412,12 @@ Previously known as "Reactor"
 		/* Start Sortie
 		-------------------------------------------------------*/
 		"api_req_map/start":function(params, response, headers){
+			var UTCTime = Math.floor((new Date(headers.Date)).getTime()/1000);
 			KC3SortieManager.startSortie(
 				response.api_data.api_maparea_id,
 				response.api_data.api_mapinfo_no,
 				params.api_deck_id,
-				Math.floor((new Date(headers.Date)).getTime()/1000)
+				UTCTime
 			);
 			
 			KC3SortieManager.setBoss(
@@ -424,7 +425,7 @@ Previously known as "Reactor"
 				response.api_data.api_bosscomp
 			);
 			
-			KC3SortieManager.advanceNode( response.api_data );
+			KC3SortieManager.advanceNode( response.api_data, UTCTime );
 			
 			KC3Network.trigger("SortieStart");
 			KC3Network.trigger("CompassResult");
@@ -433,7 +434,8 @@ Previously known as "Reactor"
 		/* Traverse Map
 		-------------------------------------------------------*/
 		"api_req_map/next":function(params, response, headers){
-			KC3SortieManager.advanceNode( response.api_data );
+			var UTCTime = Math.floor((new Date(headers.Date)).getTime()/1000);
+			KC3SortieManager.advanceNode( response.api_data, UTCTime );
 			KC3Network.trigger("CompassResult");
 		},
 		

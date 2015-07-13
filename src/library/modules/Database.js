@@ -313,7 +313,6 @@ Uses Dexie.js third-party plugin on the assets directory
 		},
 		
 		get_battle : function(mapArea, mapNo, battleNode, enemyId, callback) {
-			
 			var sortieIds = [];
 			var bctr;
 			
@@ -344,6 +343,23 @@ Uses Dexie.js third-party plugin on the assets directory
 							
 							callback2(foundBattle);
 						});
+				});
+		},
+		
+		get_enemy : function(enemyId, callback) {
+			var self = this;
+			this.con.battle
+				.where("enemyId").equals(enemyId)
+				.toArray(function(battleList){
+					if(battleList.length > 0){
+						battleList[0].data.api_ship_ke.splice(0, 1);
+						callback({
+							ids: battleList[0].data.api_ship_ke,
+							formation: battleList[0].data.api_formation[1]
+						});
+					}else{
+						callback(false);
+					}
 				});
 		},
 		
