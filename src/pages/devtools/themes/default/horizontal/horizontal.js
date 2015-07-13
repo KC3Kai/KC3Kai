@@ -405,8 +405,8 @@
 					// Maelstrom node
 					case "maelstrom":
 						$(".battle .battle_nodebox", container).hide();
-						$(".battle .battle_resource .battle_resicon img", container).attr("src", thisNode.icon("../../../../assets/img/client/"));
-						$(".battle .battle_resource .battle_resamt", container).text( thisNode.amount );
+						$(".battle .battle_maelstrom .battle_resicon img", container).attr("src", thisNode.icon("../../../../assets/img/client/"));
+						$(".battle .battle_maelstrom .battle_resamt", container).text( -thisNode.amount );
 						$(".battle .battle_maelstrom", container).fadeIn(500);
 						break;
 						

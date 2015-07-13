@@ -558,20 +558,30 @@
 				
 				$(".battle .battle_current", container).text("NEXT NODE");
 				
+				function showEnemyFaces(){
+					$(".battle .battle_enemies .battle_abyss img", container).attr("src", KC3Meta.abyssIcon(-1));
+					$.each(thisNode.eships, function(index, eshipId){
+						if(eshipId > -1){
+							$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).attr("src", KC3Meta.abyssIcon(eshipId));
+							$(".battle .battle_enemies .abyss_"+(index+1), container).show();
+						}else{
+							$(".battle .battle_enemies .abyss_"+(index+1), container).hide();
+						}
+					});
+				}
+				
 				switch(thisNode.type){
 					// Battle node
 					case "battle":
 						$(".battle .battle_nodebox", container).hide();
 						$(".battle .battle_node_"+numNodes, container).addClass( "battle_color" );
 						$(".battle .battle_nodenum", container).addClass( "battle_color" );
-						$.each(thisNode.eships, function(index, eshipId){
-							if(eshipId > -1){
-								$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).attr("src", KC3Meta.abyssIcon(eshipId));
-								$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).show();
-							}else{
-								$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).hide();
-							}
-						});
+						
+						if(thisNode.enemyListAvailable){
+							showEnemyFaces();
+						}else{
+							thisNode.onEnemiesAvailable = showEnemyFaces;
+						}
 						
 						$(".battle .battle_enemies", container).fadeIn(500);
 						break;
@@ -601,8 +611,8 @@
 						$(".battle .battle_nodebox", container).hide();
 						$(".battle .battle_node_"+numNodes, container).addClass( "maelstrom_color" );
 						$(".battle .battle_nodenum", container).addClass( "maelstrom_color" );
-						$(".battle .battle_resource .battle_resicon img", container).attr("src", thisNode.icon("../../../../assets/img/client/"));
-						$(".battle .battle_resource .battle_resamt", container).text( thisNode.amount );
+						$(".battle .battle_maelstrom .battle_resicon img", container).attr("src", thisNode.icon("../../../../assets/img/client/"));
+						$(".battle .battle_maelstrom .battle_resamt", container).text( -thisNode.amount );
 						$(".battle .battle_maelstrom", container).fadeIn(500);
 						break;
 						
@@ -703,6 +713,8 @@
 				}
 			},
 			CraftGear: function(container, data, local){
+				if(!ConfigManager.info_craft){ return true; }
+				
 				// Hide any other activity box
 				$(".activityBox", container).hide();
 				
