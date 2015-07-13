@@ -94,42 +94,42 @@
 		]
 	},
 	{
-		"section": "Alerts",
+		"section": "警報",
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Alerts",
 		"contents" : [
 			{
 				"id" : "alert_diff",
-				"name" : "Timer Allowance",
+				"name" : "タイマー手当",
 				"type" : "small_text",
-				"options" : { "label" : "seconds" }
+				"options" : { "label" : "秒" }
 			},
 			{
 				"id" : "alert_type",
-				"name" : "Sound Type",
+				"name" : "音の種類",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ 0, "None" ],
-						[ 1, "DING!" ],
-						[ 2, "Custom" ]
+						[ 0, "なし" ],
+						[ 1, "チーン!" ],
+						[ 2, "カスタム" ]
 					]
 				}
 			},
 			{
 				"id" : "alert_custom",
-				"name" : "Custom Sound URL",
+				"name" : "カスタム音のURL",
 				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
 			},
 			{
 				"id" : "alert_volume",
-				"name" : "Volume",
+				"name" : "ボリューム",
 				"type" : "small_text",
 				"options" : { "label" : "%" }
 			},
 			{
 				"id" : "alert_desktop",
-				"name" : "Desktop Notification",
+				"name" : "デスクトップ通知",
 				"type" : "check",
 				"options" : {}
 			}
