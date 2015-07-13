@@ -5,13 +5,16 @@
 	
 	// Document ready
 	$(document).on("ready", function(){
+		// Show installed version
 		$(".version").text("Version "+myVersion);
 		
 		// Load previously stored configs
 		ConfigManager.load();
 		
+		// Set HTML language
+		$("html").attr("lang", ConfigManager.language);
+		
 		// Load and show developer list
-		console.log(ConfigManager.language);
 		$.getJSON("../../data/translations/"+ConfigManager.language+"/developers.json", function(response){
 			for(var ctr in response){
 				addDeveloper( response[ctr] );

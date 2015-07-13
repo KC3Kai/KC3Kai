@@ -1,11 +1,11 @@
 [
 	{
-		"section": "Global",
+		"section": "グローバル",
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Global",
 		"contents" : [
 			{
 				"id" : "language",
-				"name" : "Language",
+				"name" : "言語",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
@@ -16,73 +16,73 @@
 			},
 			{
 				"id" : "elosFormula",
-				"name" : "Effective LoS Formula",
+				"name" : "効果的なLoS式",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ 1, "Sum" ],
-						[ 2, "Old" ],
-						[ 3, "New" ]
+						[ 1, "合計" ],
+						[ 2, "古い" ],
+						[ 3, "新" ]
 					]
 				}
 			}
 		]
 	},
 	{
-		"section": "Game Information",
+		"section": "ゲーム情報",
 		"help" : "",
 		"contents" : [
 			{
 				"id" : "info_face",
-				"name" : "Construction Faces",
+				"name" : "建設顔",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "info_craft",
-				"name" : "Crafting Results",
+				"name" : "工芸結果",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "info_compass",
-				"name" : "Compass and Enemy",
+				"name" : "コンパスと敵",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "info_battle",
-				"name" : "Battle Environment",
+				"name" : "バトル環境",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "info_boss",
-				"name" : "Boss Composition",
+				"name" : "ボス組成",
 				"type" : "check",
 				"options" : {}
 			}
 		]
 	},
 	{
-		"section": "Screenshot",
+		"section": "スクリーンショット",
 		"help" : "",
 		"contents" : [
 			{
 				"id" : "ss_mode",
-				"name" : "Output Mode",
+				"name" : "出力モード",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ 0, "Download" ],
+						[ 0, "ダウンロード" ],
 						[ 1, "Imgur" ],
-						[ 2, "New Tab" ]
+						[ 2, "新しいタブ" ]
 					]
 				}
 			},
 			{
 				"id" : "ss_type",
-				"name" : "Filetype",
+				"name" : "ファイルタイプ",
 				"type" : "radio",
 				"options" : {
 					"choices" : [

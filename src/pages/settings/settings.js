@@ -6,19 +6,13 @@
 		// Load previously stored configs
 		ConfigManager.load();
 		
-		// Load and show developer list
-		$.getJSON("../../data/translations/en/developers.json", function(response){
-			for(var ctr in response){
-				addDeveloper( response[ctr] );
-			}
-			$("#factory .helpOut").clone().appendTo("#wrapper .developers");
-			$("<div>").appendTo("#wrapper .developers").addClass("clear");
-		});
+		// Set HTML language
+		$("html").attr("lang", ConfigManager.language);
 		
 		var sectionBox;
 		
 		// Add configurable settings
-		$.getJSON("../../data/translations/en/settings.json", function(response){
+		$.getJSON("../../data/translations/"+ConfigManager.language+"/settings.json", function(response){
 			for(var sctr in response){
 				// Add section header
 				sectionBox = $("#factory .section").clone().appendTo("#wrapper .settings");
