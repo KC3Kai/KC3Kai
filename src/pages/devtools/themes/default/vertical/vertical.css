@@ -1122,14 +1122,14 @@
 
 /* HQ info box */
 #v.panel-size-300px .battle .battle_hq {
-	width:160px;
+	width:190px;
 	height:100px;
 	float:left;
 	/*background:#f00;*/
 	padding:0px 5px;
 }
 #v.panel-size-420px .battle .battle_hq {
-	width:170px;
+	width:190px;
 	height:100px;
 	float:left;
 	/*background:#f00;*/
@@ -1184,14 +1184,28 @@
 	text-align:center;
 	/*background:#fcc;*/
 }
-#v .battle .battle_slots {
-	width:160px;
+#v.panel-size-300px .battle .battle_slots {
+	width:180px;
 	height:20px;
 	/*background:#0f0;
 	opacity:.5;*/
 }
-#v .battle .battle_slot {
-	width:75px;
+#v.panel-size-420px .battle .battle_slots {
+	width:180px;
+	height:20px;
+	/*background:#0f0;
+	opacity:.5;*/
+}
+#v.panel-size-300px .battle .battle_slot {
+	width:90px;
+	height:20px;
+	line-height:20px;
+	float:left;
+	/*background:#00f;*/
+	/*opacity:.5;*/
+}
+#v.panel-size-420px .battle .battle_slot {
+	width:90px;
 	height:20px;
 	line-height:20px;
 	float:left;
@@ -1209,13 +1223,23 @@
 	margin:2px;
 	vertical-align:top;
 }
-#v .battle .battle_slot .current {
+#v.panel-size-300px .battle .battle_slot .current {
 	width:30px;
 	height:20px;
 	float:left;
 	font-weight:bold;
 	font-size:14px;
 	text-align:center;
+	margin:0px 5px 0px 0px;
+}
+#v.panel-size-420px .battle .battle_slot .current {
+	width:30px;
+	height:20px;
+	float:left;
+	font-weight:bold;
+	font-size:14px;
+	text-align:center;
+	margin:0px 5px 0px 0px;
 }
 #v .battle .battle_slot .max {
 	/*width:25px;*/
