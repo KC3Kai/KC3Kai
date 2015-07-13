@@ -41,7 +41,7 @@ Does not include Ships and Gears which are managed by other Managers
 			// Check if player suddenly changed
 			if(this.hq.id != 0 && this.hq.id != data.mid){
 				this.hq.logout();
-				this.hq = new Player();
+				this.hq = new KC3Player();
 			}
 			// Update player with new data
 			this.hq.update( data );
