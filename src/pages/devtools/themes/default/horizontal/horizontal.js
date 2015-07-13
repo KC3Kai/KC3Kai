@@ -491,7 +491,7 @@
 					"ALL DA BONUSES",
 					"KTKM hit le DD!",
 					"1 HP toplel",
-					"#DontGetYourHopesUp",
+					"#DontGetYourHopesUp"
 				][Math.floor(Math.random()*5)]);
 				var thisNode = KC3SortieManager.currentNode();
 			},
