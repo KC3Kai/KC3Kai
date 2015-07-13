@@ -187,6 +187,30 @@ Previously known as "Reactor"
 			}, function(response){});*/
 		},
 		
+		"api_get_member/material":function(params, response, headers){
+			var UTCtime = Math.floor((new Date(headers.Date)).getTime()/1000);
+			
+			var thisItem, myResources=[];
+			for(var ctr in response.api_data){
+				thisItem = response.api_data[ctr];
+				switch(thisItem.api_id){
+					case 1: myResources[1] = thisItem.api_value; break;
+					case 2: myResources[2] = thisItem.api_value; break;
+					case 3: myResources[3] = thisItem.api_value; break;
+					case 4: myResources[4] = thisItem.api_value; break;
+					case 5: PlayerManager.consumables.torch = thisItem.api_value; break;
+					case 6: PlayerManager.consumables.buckets = thisItem.api_value; break;
+					case 7: PlayerManager.consumables.devmats = thisItem.api_value; break;
+					case 8: PlayerManager.consumables.screws = thisItem.api_value; break;
+					default: break;
+				}
+			}
+			
+			PlayerManager.setResources(myResources, UTCtime);
+			KC3Network.trigger("Consumables");
+		},
+		
+		
 		/*-------------------------------------------------------*/
 		/*----------------------[ LIBRARY ]----------------------*/
 		/*-------------------------------------------------------*/
