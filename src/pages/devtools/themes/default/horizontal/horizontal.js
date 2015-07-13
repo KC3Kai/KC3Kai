@@ -485,11 +485,15 @@
 			},
 			BattleNight: function(container, data, local){
 				if(KC3SortieManager.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
-				$(".battle .battle_current", container).text("DESPERATE? :P");
+				$(".battle .battle_current", container).text([
+					"DESPERATE? :P",
+					"LOL SKRUB",
+					"ALL DA BONUSES",
+					"KTKM hit le DD!",
+					"1 HP toplel",
+					"#DontGetYourHopesUp",
+				][Math.floor(Math.random()*5)]);
 				var thisNode = KC3SortieManager.currentNode();
-				
-				
-				
 			},
 			BattleResult: function(container, data, local){
 				if(KC3SortieManager.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
