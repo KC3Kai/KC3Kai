@@ -1,28 +1,28 @@
 {
     "SortieWinCount": "Jumlah Menang Sortie ", 
     "SortieLoseCount": "Jumlah Kalah Sortie ",   
-    "SortieWinRate": "Rata-rata Menang Sortie ",  //ah masa.. Sortie : "Win Rate 99%" :T       
+    "SortieWinRate": "Rata-rata Menang Sortie ",
     "TotalExpeditions": "Total Expedisi", 
-    "ExpeditionSuccessCount": "Jumlah Berhasil Expedisi ", //how about this ?
+    "ExpeditionSuccessCount": "Jumlah Berhasil Expedisi ",
     "ExpeditionSuccessRate": "Rata-rata Berhasil Expedisi", 
     "PVPWinCount": "Jumlah Menang PVP ", 
     "PVPLoseCount": "Jumlah Kalah PVP ", 
     "PVPWinRate": "Rata-rata Menang PVP ",
     "FleetsOwned": "Armada Yang Dimiliki", 
-    "ConstructionDockCount": "Waktu Konstruksi ",  //like this ?
+    "ConstructionDockCount": "Waktu Konstruksi ",
     "RepairDockCount": "Waktu Perbaikan ", 
-    "ShipGirlsOwned": "Jumlah Kanmusu", //rilli? =w= 
-    "EquipmentItemCount": "Jumlah Item Equipment", //wait.. gk salah ?
-    "FurnitureOwned": "Furnitur Yang Dimiliki", 
+    "ShipGirlsOwned": "Jumlah Kapal Perempuan",
+    "EquipmentItemCount": "Jumlah Equipment",
+    "FurnitureOwned": "Furnitur Yang Dimiliki", 
     "ServerName": "Nama Server",
     "MaxFleetsAvailable": "Jumlah Maksimum Armada Yang Tersedia", 
-    "MaxShipGirlsAvailable": "Jumlah Maksimum Kanmusu Yang Tersedia", //rilli?? =w=;
-    "MaxHomeportUpgradesAvailable": "Maximum Tambahan Rumah Dermaga yang Tersedia", //pelabuhan ato dermaga ?
+    "MaxShipGirlsAvailable": "Jumlah Maksimum Kapal Perempuan Yang Tersedia",
+    "MaxHomeportUpgradesAvailable": "Tambahan Maksimum Rumah Dermaga yang Tersedia",
     "MaxEquipmentAvailable": "Maksimum Equipment Tersedia", 
     "QuestMarkersAvailable": "Penanda Quest Yang Tersedia",
     "ResourceSoftcapLimit": "Batas Resource", 
-    "MainScreenBGM": "BGM Tampilan Utama", //birkanlah :v /
-    "LevelUpNotice": "Setiap level HQmu bertambah, Softcap Limit pun akan bertambah, dan akan memungkinkan untuk membuat Equipment baru.", //like this ??
+    "MainScreenBGM": "BGM Tampilan Utama",
+    "LevelUpNotice": "Setiap level HQmu bertambah, Batas Resource pun akan bertambah, dan akan memungkinkan untuk membuat Equipment baru.",
     "MainScreenBGM": "BGM Tampilan Utama", 
     "Experience": "Experience", 
     "Name": "Nama"
