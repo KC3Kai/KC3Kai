@@ -49,7 +49,10 @@
 		"avatar": "https://avatars0.githubusercontent.com/u/10517990?v=3&s=40",
 		"desc": "Translator (JP)",
 		"links": {
-			"gh" :"https://github.com/nicky008"
+			"gh" :"https://github.com/nicky008",
+			"tw" : "https://twitter.com/nicky_008",
+			"fb" : "https://www.facebook.com/jamesnicky008",
+			"wk" : "http://kancolle.wikia.com/wiki/User:Nicky008"
 		}
 	},
 	{
@@ -146,7 +149,7 @@
 	{
 		"name": "freezebear",
 		"avatar" : "https://avatars2.githubusercontent.com/u/12047229?v=3&s=40",
-		"desc" : "ID TL Team",
+		"desc" : "Translator (ID)",
 		"links" : {
 			"fb" :"https://www.facebook.com/freezebear17",
 			"tw" :"https://twitter.com/freezebear17",
@@ -156,7 +159,7 @@
 	{
 		"name": "hufuhufu",
 		"avatar" : "https://avatars3.githubusercontent.com/u/13282383?v=3&s=40",
-		"desc" : "ID TL Team",
+		"desc" : "Translator (ID)",
 		"links" : {
 			"fb" :"https://www.facebook.com/arifLV2",
 			"wk" :"kancolle.wikia.com/wiki/User:hufuhufu"
