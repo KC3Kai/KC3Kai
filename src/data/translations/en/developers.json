@@ -142,5 +142,24 @@
 		"links" : {
 			"da" :"http://tykez269.deviantart.com"
 		}
-	}
+	},
+	{
+		"name": "freezebear",
+		"avatar" : "https://avatars2.githubusercontent.com/u/12047229?v=3&s=40",
+		"desc" : "ID TL Team",
+		"links" : {
+			"fb" :"https://www.facebook.com/freezebear17",
+			"tw" :"https://twitter.com/freezebear17",
+			"wk" :"kancolle.wikia.com/wiki/User:Freezebear"
+		}
+	},
+	{
+		"name": "hufuhufu",
+		"avatar" : "https://avatars3.githubusercontent.com/u/13282383?v=3&s=40",
+		"desc" : "ID TL Team",
+		"links" : {
+			"fb" :"https://www.facebook.com/arifLV2",
+			"wk" :"kancolle.wikia.com/wiki/User:hufuhufu"
+		}
+	},
 ]
