@@ -808,6 +808,13 @@
 					}
 				});
 				
+				// If night battle will be asked after this battle
+				if(thisPvP.yasenFlag){
+					$(".battle .battle_yasen img", container).attr("src", "../../../../assets/img/ui/yasen.png");
+				}else{
+					$(".battle .battle_yasen img", container).attr("src", "../../../../assets/img/ui/yasen-x.png");
+				}
+				
 				// Battle conditions
 				$(".battle .battle_cond_text", container).removeClass( "good" );
 				$(".battle .battle_cond_text", container).removeClass( "bad" );
