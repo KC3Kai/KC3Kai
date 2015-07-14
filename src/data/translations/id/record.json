@@ -1,29 +1,29 @@
 {
-    "SortieWinCount": "Jumlah Menang Sortie ", //kebalik bah.. =w=
+    "SortieWinCount": "Jumlah Menang Sortie ", 
     "SortieLoseCount": "Jumlah Kalah Sortie ",   
-    "SortieWinRate": "Rata-rata Menang Sortie ",          
+    "SortieWinRate": "Rata-rata Menang Sortie ",  //ah masa.. Sortie : "Win Rate 99%" :T       
     "TotalExpeditions": "Total Expedisi", 
-    "ExpeditionSuccessCount": "Jumlah Expedisi yang Sukses", 
-    "ExpeditionSuccessRate": "Rata-rata Expedisi yang Sukses", 
+    "ExpeditionSuccessCount": "Jumlah Berhasil Expedisi ", //how about this ?
+    "ExpeditionSuccessRate": "Rata-rata Berhasil Expedisi", 
     "PVPWinCount": "Jumlah Menang PVP ", 
     "PVPLoseCount": "Jumlah Kalah PVP ", 
     "PVPWinRate": "Rata-rata Menang PVP ",
     "FleetsOwned": "Armada Yang Dimiliki", 
-    "ConstructionDockCount": "Waktu Konstruksi Docking",  //Rough, pikirkan lagi..
-    "RepairDockCount": "Waktu Perbaikan Docking", //Rough, again.. pikirkan lagi..
-    "ShipGirlsOwned": "Jumlah Kapal Perempuan", //Kapan Perempuan lol. Biarin aja kapal perempuan jangan diganti ok ;) JK  //*kapal =w= masih termasuk Rough.. 
-    "EquipmentItemCount": "Jumlah Barang Perlengkapan", //Rough.. again.. 
-    "FurnitureOwned": "Furnitur Yang Dimiliki", //Furnitur ato Perabotan? //furnitur aja.. and jangan lupa selalu memakai kata 'yang'
+    "ConstructionDockCount": "Waktu Konstruksi ",  //like this ?
+    "RepairDockCount": "Waktu Perbaikan ", 
+    "ShipGirlsOwned": "Jumlah Kanmusu", //rilli? =w= 
+    "EquipmentItemCount": "Jumlah Item Equipment", //wait.. gk salah ?
+    "FurnitureOwned": "Furnitur Yang Dimiliki", 
     "ServerName": "Nama Server",
-    "MaxFleetsAvailable": "Jumlah Maksimal Armada Yang Tersedia", 
-    "MaxShipGirlsAvailable": "Jumlah Maksimal Kapal Perempuan Yang Tersedia",
-    "MaxHomeportUpgradesAvailable": "Maksimal Tambahan Jumlah Kapal Yang Tersedia", //homeport itu yg di bawah max shipgirls itu loh, yg ad plusnya.. and this is still rough, pikirkan lagi.. 
-    "MaxEquipmentAvailable": "Maksimal Equipment Tersedia", //bisa jadi alat,perlengkapan,ato perlalatan. pilih =w=
+    "MaxFleetsAvailable": "Jumlah Maksimum Armada Yang Tersedia", 
+    "MaxShipGirlsAvailable": "Jumlah Maksimum Kanmusu Yang Tersedia", //rilli?? =w=;
+    "MaxHomeportUpgradesAvailable": "Maximum Tambahan Rumah Dermaga yang Tersedia", //pelabuhan ato dermaga ?
+    "MaxEquipmentAvailable": "Maksimum Equipment Tersedia", 
     "QuestMarkersAvailable": "Penanda Quest Yang Tersedia",
-    "ResourceSoftcapLimit": "Batas Resource", //Translate? //Rough, pikirkan lagi..
-    "MainScreenBGM": "BGM Tampilan Utama", //pikirkan lagi.. 
-    "LevelUpNotice": "Setiap level HQmu bertambah, pembatas pun akan bertambah, dan akan memungkinkan untuk membuat peralatan baru.", //Rough.. pikirkan lagi.. 
-    "MainScreenBGM": "BGM Tampilan Utama", //double ?
-    "Experience": "Experience", //Translate? //klo Pengalaman jadi aneh.. kyknya gk usah d translate
+    "ResourceSoftcapLimit": "Batas Resource", 
+    "MainScreenBGM": "BGM Tampilan Utama", //birkanlah :v /
+    "LevelUpNotice": "Setiap level HQmu bertambah, Softcap Limit pun akan bertambah, dan akan memungkinkan untuk membuat Equipment baru.", //like this ??
+    "MainScreenBGM": "BGM Tampilan Utama", 
+    "Experience": "Experience", 
     "Name": "Nama"
 }
