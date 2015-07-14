@@ -172,19 +172,19 @@
 			},
 			{
 				"id" : "api_bg_image",
-				"name" : "Gambar Background ",
+				"name" : "Gambar Latar Belakang",
 				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
 			},
 			{
 				"id" : "api_bg_size",
-				"name" : "Ukuran Background",
+				"name" : "Ukuran Latar Belakang",
 				"type" : "long_text",
 				"options" : { "placeholder" : "Lihat property background-size CSS" }
 			},
 			{
 				"id" : "api_bg_position",
-				"name" : "Posisi Background",
+				"name" : "Posisi Latar Belakang",
 				"type" : "long_text",
 				"options" : { "placeholder" : "Lihat property background-position CSS" }
 			},
@@ -232,25 +232,25 @@
 			},
 			{
 				"id" : "dmm_bg_color",
-				"name" : "Warna Background",
+				"name" : "Warna Latar Belakang",
 				"type" : "long_text",
 				"options" : { "placeholder" : "Lihat property background-color CSS" }
 			},
 			{
 				"id" : "dmm_bg_image",
-				"name" : "Gambar Background",
+				"name" : "Gambar Latar Belakang",
 				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
 			},
 			{
 				"id" : "dmm_bg_size",
-				"name" : "Ukuran Background",
+				"name" : "Ukuran Latar Belakang",
 				"type" : "long_text",
 				"options" : { "placeholder" : "Lihat property background-size CSS" }
 			},
 			{
 				"id" : "dmm_bg_position",
-				"name" : "Posisi Background",
+				"name" : "Posisi Latar Belakang",
 				"type" : "long_text",
 				"options" : { "placeholder" : "Lihat property background-position CSS" }
 			}
@@ -266,7 +266,7 @@
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ "default", "Default" ],
+						[ "default", "Utama" ],
 						[ "dark", "Gelap" ]
 					]
 				}
@@ -284,25 +284,25 @@
 			},
 			{
 				"id" : "pan_bg_color",
-				"name" : "Warna Background",
+				"name" : "Warna Latar Belakang",
 				"type" : "long_text",
 				"options" : { "placeholder" : "Lihat property background-color CSS" }
 			},
 			{
 				"id" : "pan_bg_image",
-				"name" : "Gambar Background",
+				"name" : "Gambar Latar Belakang",
 				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
 			},
 			{
 				"id" : "pan_bg_size",
-				"name" : "Ukuran Background",
+				"name" : "Ukuran Latar Belakang",
 				"type" : "long_text",
 				"options" : { "placeholder" : "Lihat property background-size CSS" }
 			},
 			{
 				"id" : "pan_bg_position",
-				"name" : "Posisi Background",
+				"name" : "Posisi Latar Belakang",
 				"type" : "long_text",
 				"options" : { "placeholder" : "Lihat property background-position CSS" }
 			},
