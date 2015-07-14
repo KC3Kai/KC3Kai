@@ -560,6 +560,12 @@
 				
 				function showEnemyFaces(){
 					$(".battle .battle_enemies .battle_abyss img", container).attr("src", KC3Meta.abyssIcon(-1));
+					if ((typeof thisNode.eformation != "undefined") && (thisNode.eformation > -1)){
+						$(".battle .battle_enemy_formation img", container).attr("src", KC3Meta.formationIcon(thisNode.eformation));
+						$(".battle .battle_enemy_formation", container).show();
+					} else {
+						$(".battle .battle_enemies .battle_enemy_formation", container).hide();
+					}
 					$.each(thisNode.eships, function(index, eshipId){
 						if(eshipId > -1){
 							$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).attr("src", KC3Meta.abyssIcon(eshipId));

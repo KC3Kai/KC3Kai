@@ -3216,15 +3216,28 @@
 	text-align:center;
 	font-size:12px;
 }
+#v.panel-size-300px .battle .battle_enemy_formation {
+	width:140px;
+	height:40px;
+	padding:0px 0px 0px 50px;
+	margin:0px 0px 3px 0px;
+}
+#v.panel-size-420px .battle .battle_enemy_formation {
+	width:40px;
+	height:40px;
+	margin:15px 0px 3px 5px;
+	float:left;
+}
 #v.panel-size-300px .battle .battle_enemies {
 	width:140px;
 	height:65px;
 	margin:0px 0px 3px 0px;
 }
 #v.panel-size-420px .battle .battle_enemies {
-	width:140px;
+	width:135px;
 	height:65px;
-	margin:0px 0px 3px 20px;
+	margin:0px 0px 3px 0px;
+	float:left;
 }
 #v .battle .battle_enemies .battle_abyss {
 	width:30px;

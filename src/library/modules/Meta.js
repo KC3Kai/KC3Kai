@@ -71,6 +71,9 @@ Provides access to data on built-in JSON files
 			return empty;
 		},
 		
+		formationIcon :function(formationId){
+			return "../../../../assets/img/formation/" + formationId + ".jpg";
+		},
 		shipName :function( jp_name ){
 			if(typeof this._cache[jp_name] !== "undefined"){ return this._cache[jp_name]; }
 			if(typeof this._ship[jp_name] !== "undefined"){
