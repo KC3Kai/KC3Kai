@@ -112,13 +112,13 @@
 					"choices" : [
 						[ 0, "Matikan" ],
 						[ 1, "DING!" ],
-						[ 2, "Kustom" ]
+						[ 2, "Pilihan sendiri" ]
 					]
 				}
 			},
 			{
 				"id" : "alert_custom",
-				"name" : "URL Suara Kustom",
+				"name" : "URL Suara Pilihan Sendiri",
 				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
 			},
@@ -308,7 +308,7 @@
 			},
 			{
 				"id" : "pan_opacity",
-				"name" : "Kegelapan Antarmuka",
+				"name" : "Transparansi Antarmuka",
 				"type" : "small_text",
 				"options" : { "label" : "%" }
 			}
