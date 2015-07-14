@@ -1,5 +1,6 @@
 (function(){
 	"use strict";
+	_gaq.push(['_trackPageview']);
 	
 	var myVersion = parseInt(chrome.runtime.getManifest().version, 10);
 
@@ -34,6 +35,7 @@
 		
 		// Refresh API Link
 		$("#get_api").on('click', function(){
+			_gaq.push(['_trackEvent', "Refresh API", 'clicked']);
 			localStorage.extract_api = true;
 			localStorage.dmmplay = false;
 			window.open("http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/", "kc3kai_game");
@@ -48,6 +50,7 @@
 		
 		// Activate Cookies
 		$("#cookies").on('click', function(){
+			_gaq.push(['_trackEvent', "Region Cookies", 'clicked']);
 			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 				(new TMsg(tabs[0].id, "cookie", "", {}, function(response){
 					window.close();

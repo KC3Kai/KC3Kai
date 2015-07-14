@@ -1,5 +1,6 @@
 (function(){
 	"use strict";
+	_gaq.push(['_trackPageview']);
 	
 	$(document).on("ready", function(){
 		// Initialize data managers
@@ -17,6 +18,9 @@
 			if($(this).hasClass("disabled")){ return false; }
 			if(KC3StrategyTabs.loading){ return false; }
 			KC3StrategyTabs.loading = $(this).data("id");
+			
+			// Google Analytics
+			_gaq.push(['_trackEvent', "Strategy Room: "+KC3StrategyTabs.loading, 'clicked']);
 			
 			// Interface
 			$("#menu .submenu ul.menulist li").removeClass("active");

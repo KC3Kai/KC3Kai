@@ -73,12 +73,14 @@ Manages multiple instances of \library\modules\Dashboard.js
 				if(this.currentLayout!=""){ this.layout().hide(); }
 				this.currentLayout = "vertical";
 				this.layout().show();
+				_gaq.push(['_trackEvent', "Layout: Vertical", 'clicked']);
 				
 			// Narrow interface, switch to horizontal if not yet
 			}else if( $(window).width() < 800 && this.currentLayout != "horizontal" ){
 				if(this.currentLayout!=""){ this.layout().hide(); }
 				this.currentLayout = "horizontal";
 				this.layout().show();
+				_gaq.push(['_trackEvent', "Layout: Horizontal", 'clicked']);
 			}
 		},
 		

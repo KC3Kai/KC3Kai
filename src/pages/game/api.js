@@ -1,3 +1,5 @@
+_gaq.push(['_trackPageview']);
+
 // If awaiting activation
 var waiting = false;
 

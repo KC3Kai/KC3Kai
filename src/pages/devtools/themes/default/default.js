@@ -1,5 +1,6 @@
 (function(){
 	"use strict";
+	_gaq.push(['_trackEvent', "Panel: Default Theme", 'clicked']);
 	
 	/* PANEL INIT SUCCESS
 	-----------------------------------*/

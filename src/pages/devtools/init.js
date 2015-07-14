@@ -1,5 +1,6 @@
 (function(){
 	"use strict";
+	_gaq.push(['_trackEvent', "DevTools Opened", 'clicked']);
 	
 	// Document ready
 	$(document).on("ready", function(){
