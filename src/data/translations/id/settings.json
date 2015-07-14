@@ -5,7 +5,7 @@
 		"contents" : [
 			{
 				"id" : "language",
-				"name" : "Language",
+				"name" : "Bahasa",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
@@ -17,7 +17,7 @@
 			},
 			{
 				"id" : "elosFormula",
-				"name" : "efektivitas Formula LoS ",
+				"name" : "Efektivitas Formula LoS ",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
@@ -30,7 +30,7 @@
 		]
 	},
 	{
-		"section": "Game Information",
+		"section": "Informasi Permainan",
 		"help" : "",
 		"contents" : [
 			{
@@ -75,9 +75,9 @@
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ 0, "Download" ],
+						[ 0, "Unduh" ],
 						[ 1, "Imgur" ],
-						[ 2, "New Tab" ]
+						[ 2, "Tab Baru" ]
 					]
 				}
 			},
@@ -95,12 +95,12 @@
 		]
 	},
 	{
-		"section": "Alerts",
+		"section": "Peringatan",
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Alerts",
 		"contents" : [
 			{
 				"id" : "alert_diff",
-				"name" : "Kelonggaran Timer",
+				"name" : "Penyisihan Waktu",
 				"type" : "small_text",
 				"options" : { "label" : "Detik" }
 			},
@@ -110,21 +110,21 @@
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ 0, "None" ],
+						[ 0, "Matikan" ],
 						[ 1, "DING!" ],
-						[ 2, "Custom" ]
+						[ 2, "Kustom" ]
 					]
 				}
 			},
 			{
 				"id" : "alert_custom",
-				"name" : "URL Suara Custom",
+				"name" : "URL Suara Kustom",
 				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
 			},
 			{
 				"id" : "alert_volume",
-				"name" : "Volume",
+				"name" : "Volume Suara",
 				"type" : "small_text",
 				"options" : { "label" : "%" }
 			},
@@ -137,12 +137,12 @@
 		]
 	},
 	{
-		"section": "API Game Screen",
+		"section": "Tampilan Game API",
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Screen",
 		"contents" : [
 			{
 				"id" : "api_translation",
-				"name" : "Quest Terjemahan",
+				"name" : "Terjemahan Quest",
 				"type" : "check",
 				"options" : {}
 			},
@@ -162,13 +162,13 @@
 				"id" : "api_margin",
 				"name" : "Batas Atas",
 				"type" : "small_text",
-				"options" : { "label" : "pixels" }
+				"options" : { "label" : "pixel" }
 			},
 			{
 				"id" : "api_bg_color",
 				"name" : "Warna Background",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-color property" }
+				"options" : { "placeholder" : "Lihat property background-color CSS" }
 			},
 			{
 				"id" : "api_bg_image",
@@ -180,13 +180,13 @@
 				"id" : "api_bg_size",
 				"name" : "Ukuran Background",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-size property" }
+				"options" : { "placeholder" : "Lihat property background-size CSS" }
 			},
 			{
 				"id" : "api_bg_position",
 				"name" : "Posisi Background",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-position property" }
+				"options" : { "placeholder" : "Lihat property background-position CSS" }
 			},
 			{
 				"id" : "api_gameScale",
@@ -197,18 +197,18 @@
 		]
 	},
 	{
-		"section": "DMM Gameplay",
+		"section": "Gameplay DMM",
 		"help" : "",
 		"contents" : [
 			{
 				"id" : "dmm_customize",
-				"name" : "Terapkan Kustomisasi",
+				"name" : "Terapkan Pengaturan",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "dmm_translation",
-				"name" : "Quest Terjemahan",
+				"name" : "Terjemahan Quest",
 				"type" : "check",
 				"options" : {}
 			},
@@ -228,13 +228,13 @@
 				"id" : "dmm_margin",
 				"name" : "Batas Atas",
 				"type" : "small_text",
-				"options" : { "label" : "pixels" }
+				"options" : { "label" : "pixel" }
 			},
 			{
 				"id" : "dmm_bg_color",
 				"name" : "Warna Background",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-color property" }
+				"options" : { "placeholder" : "Lihat property background-color CSS" }
 			},
 			{
 				"id" : "dmm_bg_image",
@@ -246,13 +246,13 @@
 				"id" : "dmm_bg_size",
 				"name" : "Ukuran Background",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-size property" }
+				"options" : { "placeholder" : "Lihat property background-size CSS" }
 			},
 			{
 				"id" : "dmm_bg_position",
 				"name" : "Posisi Background",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-position property" }
+				"options" : { "placeholder" : "Lihat property background-position CSS" }
 			}
 		]
 	},
@@ -286,7 +286,7 @@
 				"id" : "pan_bg_color",
 				"name" : "Warna Background",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-color property" }
+				"options" : { "placeholder" : "Lihat property background-color CSS" }
 			},
 			{
 				"id" : "pan_bg_image",
@@ -298,17 +298,17 @@
 				"id" : "pan_bg_size",
 				"name" : "Ukuran Background",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-size property" }
+				"options" : { "placeholder" : "Lihat property background-size CSS" }
 			},
 			{
 				"id" : "pan_bg_position",
 				"name" : "Posisi Background",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-position property" }
+				"options" : { "placeholder" : "Lihat property background-position CSS" }
 			},
 			{
 				"id" : "pan_opacity",
-				"name" : "Kegelapan Interface",
+				"name" : "Kegelapan Antarmuka",
 				"type" : "small_text",
 				"options" : { "label" : "%" }
 			}
