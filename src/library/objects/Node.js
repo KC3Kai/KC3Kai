@@ -30,7 +30,7 @@ Used by SortieManager
 			// If passed formatted enemy list from PVP
 			if(typeof nodeData.pvp_opponents != "undefined"){
 				this.eships = nodeData.pvp_opponents;
-				KC3SortieManager.onEnemiesAvailable(this);
+				KC3SortieManager.onEnemiesAvailable();
 			}
 		}
 		return this;
@@ -46,7 +46,7 @@ Used by SortieManager
 				self.eships = [-1,-1,-1,-1,-1,-1];
 				self.eformation = -1;
 			}
-			KC3SortieManager.onEnemiesAvailable(this);
+			KC3SortieManager.onEnemiesAvailable();
 		});
 	};
 	
@@ -99,6 +99,12 @@ Used by SortieManager
 	---------------------------------------------*/
 	KC3Node.prototype.engage = function( battleData ){
 		this.battleDay = battleData;
+		
+		var enemyships = battleData.api_ship_ke;
+		enemyships.splice(0,1);
+		this.eships = enemyships;
+		this.eformation = battleData.api_formation[1];
+		KC3SortieManager.onEnemiesAvailable();
 		
 		this.supportFlag = (battleData.api_support_flag>0)?true:false;
 		this.yasenFlag = (battleData.api_midnight_flag>0)?true:false;

@@ -361,12 +361,21 @@
 				$(".battle .battle_node_"+numNodes, container).text( thisNode.id );
 				$(".battle .battle_nodenum", container).text( thisNode.id );
 				$(".battle .battle_current", container).text("NEXT NODE");
+				$(".battle .battle_formation", container).hide();
 				
 				switch(thisNode.type){
 					// Battle node
 					case "battle":
 						$(".battle .battle_nodebox", container).hide();
+						
 						KC3SortieManager.onEnemiesAvailable = function(){
+							if((typeof thisNode.eformation != "undefined") && (thisNode.eformation > -1)){
+								$(".battle .battle_formation img", container).attr("src", KC3Meta.formationIcon(thisNode.eformation));
+								$(".battle .battle_formation", container).show();
+							} else {
+								$(".battle .battle_formation", container).hide();
+							}
+							
 							$(".battle .battle_enemies .battle_abyss img", container).attr("src", KC3Meta.abyssIcon(-1));
 							$.each(thisNode.eships, function(index, eshipId){
 								if(eshipId > -1){
@@ -376,8 +385,8 @@
 									$(".battle .battle_enemies .abyss_"+(index+1), container).hide();
 								}
 							});
-						
 						};
+						
 						$(".battle .battle_enemies", container).fadeIn(500);
 						break;
 					
@@ -493,7 +502,7 @@
 					"Cut-in? Is that tasty?",
 					"It's futile mang",
 					"Let's all pray~",
-					"RNGesus bless this ttk",
+					"RNGesus bless him",
 					"I bless this run"
 				][Math.floor(Math.random()*5)]);
 				var thisNode = KC3SortieManager.currentNode();
