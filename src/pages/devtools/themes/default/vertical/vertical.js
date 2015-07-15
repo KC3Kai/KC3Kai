@@ -560,6 +560,12 @@
 				
 				function showEnemyFaces(){
 					$(".battle .battle_enemies .battle_abyss img", container).attr("src", KC3Meta.abyssIcon(-1));
+					if ((typeof thisNode.eformation != "undefined") && (thisNode.eformation > -1)){
+						$(".battle .battle_enemy_formation img", container).attr("src", KC3Meta.formationIcon(thisNode.eformation));
+						$(".battle .battle_enemy_formation", container).show();
+					} else {
+						$(".battle .battle_enemies .battle_enemy_formation", container).hide();
+					}
 					$.each(thisNode.eships, function(index, eshipId){
 						if(eshipId > -1){
 							$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).attr("src", KC3Meta.abyssIcon(eshipId));
@@ -807,6 +813,13 @@
 						$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).hide();
 					}
 				});
+				
+				// If night battle will be asked after this battle
+				if(thisPvP.yasenFlag){
+					$(".battle .battle_yasen img", container).attr("src", "../../../../assets/img/ui/yasen.png");
+				}else{
+					$(".battle .battle_yasen img", container).attr("src", "../../../../assets/img/ui/yasen-x.png");
+				}
 				
 				// Battle conditions
 				$(".battle .battle_cond_text", container).removeClass( "good" );

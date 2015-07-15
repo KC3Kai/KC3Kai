@@ -127,7 +127,11 @@ Has functions for TimerManager to use
 				case 2:
 					var shipName = KC3Meta.shipName( KC3Master.ship( this.faceId ).api_name )
 					notifData.title = "Construction Complete!";
-					notifData.message = "New face "+shipName+" has been constructed!";
+					if(ConfigManager.info_face){
+						notifData.message = "New face "+shipName+" has been constructed!";
+					}else{
+						notifData.message = "A newface is ready to see you in the construction docks!";
+					}
 					notifData.iconUrl = "../../assets/img/quests/build.jpg";
 					break;
 				default:break;
