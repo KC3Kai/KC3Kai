@@ -9,6 +9,7 @@ Listens to network history and triggers callback if game events happen
 	
 	window.KC3Network = {
 		hasOverlay: false,
+		previousUrl: "",
 		lastUrl: "",
 		eventTypes : {
 			GameStart: [],
@@ -73,6 +74,7 @@ Listens to network history and triggers callback if game events happen
 		received :function( request ){
 			// If request is an API Call
 			if(request.request.url.indexOf("/kcsapi/") > -1){
+				KC3Network.previousUrl = KC3Network.lastUrl;
 				KC3Network.lastUrl = request.request.url;
 				
 				// Create new request and process it
@@ -106,6 +108,10 @@ Listens to network history and triggers callback if game events happen
 					return true;
 				}
 			}
+		},
+		
+		isPreviousRequestStopQuest: function(){
+			return KC3Network.previousUrl.indexOf("api_req_quest/stop") > -1;
 		}
 		
 	};
