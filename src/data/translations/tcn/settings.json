@@ -11,6 +11,7 @@
 					"choices" : [
 						[ "en", "English" ],
 						[ "jp", "日本語" ],
+						[ "id", "Indonesia" ],
 						[ "tcn", "繁體中文" ]
 					]
 				}

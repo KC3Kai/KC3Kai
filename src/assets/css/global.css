@@ -5,3 +5,6 @@
 .clear {
 	clear:both;
 }
+.i18n {
+	visibility:hidden;
+}
