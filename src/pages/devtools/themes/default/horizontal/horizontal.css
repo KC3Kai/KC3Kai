@@ -1239,26 +1239,41 @@
 	border-radius:8px;
 	position:relative;
 }
+#h .battle .battle_formation {
+	width:30px;
+	height:30px;
+	position:absolute;
+	top:-5px;
+	left:-5px;
+	border-radius:15px;
+	overflow:hidden;
+	z-index:2;
+}
+#h .battle .battle_formation img {
+	width:30px;
+	height:30px;
+}
 #h .battle .battle_nodenum {
 	width:30px;
 	height:30px;
 	line-height:30px;
 	font-size:14px;
 	font-weight:bold;
-	position:relative;
-	margin:-5px 0px 0px -5px;
+	position:absolute;
+	top:-5px;
+	left:-5px;
 	background:#7D0000;
 	border-radius:15px;
 	text-align:center;
 	color:#fff;
-	float:left;
+	z-index:1;
 }
 #h .battle .battle_current {
-	width:110px;
+	width:140px;
 	height:25px;
 	line-height:22px;
 	float:left;
-	margin:0px 0px 0px 5px;
+	margin:0px 0px 0px 30px;
 	color:#0099CC;
 	font-size:10px;
 	font-weight:bold;
@@ -1321,6 +1336,7 @@
 	width:140px;
 	height:65px;
 	margin:0px 0px 3px 0px;
+	position:relative;
 }
 #h .battle .battle_enemies .battle_abyss {
 	width:30px;
