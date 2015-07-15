@@ -1,4 +1,6 @@
 {
+	"available": true,
+	
 	"SortieWinCount": "出撃の勝数",
     "SortieLoseCount": "出撃の敗数",
     "SortieWinRate": "出撃の勝率",
