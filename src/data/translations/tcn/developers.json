@@ -164,5 +164,13 @@
 			"fb" :"https://www.facebook.com/arifLV2",
 			"wk" :"kancolle.wikia.com/wiki/User:hufuhufu"
 		}
+	},
+	{
+		"name": "kololz",
+		"avatar" : "https://avatars0.githubusercontent.com/u/12908497?v=3&s=40",
+		"desc" : "翻譯(繁體中文)",
+		"links" : {
+			"gh" :"https://github.com/kololz"
+		}
 	}
 ]

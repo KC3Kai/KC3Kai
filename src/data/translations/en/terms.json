@@ -1,4 +1,6 @@
 {
+	"available": true,
+	
 	"SortieWinCount": "Sortie Win Count",
     "SortieLoseCount": "Sortie Lose Count",
     "SortieWinRate": "Sortie Win Rate",
@@ -33,8 +35,13 @@
 	"AboutWiki" : "Wiki & FAQ",
 	"AboutReport" : "Report Bugs",
 	
+	"SettingsTitle" : "KC3改 Settings",
+	"LearnMore" : "Learn more",
+	"Saved" : "Saved!",
+	
 	"SpeedFast" : "Fast",
 	"SpeedSlow" : "Slow",
+	
 	"HQText" : "HQ",
 	"LevelText" : "Level",
 	"LevelShort" : "Lv.",

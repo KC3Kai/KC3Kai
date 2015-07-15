@@ -1,4 +1,6 @@
 {
+	"available": true,
+	
 	"SortieWinCount": "Sortie Win Count",
     "SortieLoseCount": "Sortie Lose Count",
     "SortieWinRate": "Sortie Win Rate",
