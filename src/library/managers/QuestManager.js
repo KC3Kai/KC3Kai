@@ -46,17 +46,18 @@ Uses KC3Quest objects to play around with
 				
 				// Add to actives or opens depeding on status
 				switch( questList[ctr].api_state ){
-					case 1:
+					case 1:	// Unselected
 						this.isOpen( questList[ctr].api_no, true );
 						this.isActive( questList[ctr].api_no, false );
 						break;
-					case 2:
+					case 2:	// Selected
 						this.isOpen( questList[ctr].api_no, true );
 						this.isActive( questList[ctr].api_no, true );
 						break;
-					case 3:
+					case 3:	// Completed
 						this.isOpen( questList[ctr].api_no, false );
 						this.isActive( questList[ctr].api_no, false );
+						this.resetQuest(questList[ctr].api_no);
 						break;
 					default:
 						this.isOpen( questList[ctr].api_no, false );
