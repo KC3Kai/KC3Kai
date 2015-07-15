@@ -35,14 +35,68 @@ Uses KC3Quest objects to play around with
 			return activeQuestObjects;
 		},
 		
+		/*	DETECT DAILY/WEEKLY/MONTHLY RESET 
+		Compare the existing quest in the list with the quest data received 
+		from the response
+		*/
+		detectReset :function( oldQuest, newQuest){
+			// the quest is unselected by resetting
+			
+			if ((oldQuest.isSelected() || oldQuest.isCompleted()) 
+				&& newQuest.isUnselected() && !KC3Network.isPreviousRequestStopQuest()){
+				console.log("old quest selected: " + oldQuest.isSelected());
+				console.log("old quest completed: " + oldQuest.isCompleted());
+				console.log("new quest unselected: " + newQuest.isUnselected());
+				return true;
+			}
+			
+			// the progress of the quest is reset not by completing.
+			if ((oldQuest.progress > newQuest.progress) && (!newQuest.isCompleted())) {
+				console.log("progress: " + oldQuest.progress + " " + newQuest.progress);
+				return true;
+			}
+			return false;
+		},
+		
 		/* DEFINE PAGE
 		When a user loads a quest page, we use its data to update our list
 		------------------------------------------*/
 		definePage :function( questList, questPage ){
 			// For each element in quest List
+			console.log("=================PAGE " + questPage + "===================");
 			for(var ctr in questList){
-				// Get that quest object and re-define its data contents
-				this.get( questList[ctr].api_no ).defineRaw( questList[ctr] );
+				var questId = questList[ctr].api_no;
+				var oldQuest = this.get( questId );
+				
+				// if this quest object is not in the list
+				if (oldQuest.id == 0) { 
+					console.log("new quest");
+					// define its data contents
+					oldQuest.defineRaw( questList[ctr] );
+				} else {
+					console.log("old quest");
+					var newQuest = new KC3Quest();
+					newQuest.defineRaw( questList[ctr] );
+					
+					if (this.detectReset(oldQuest, newQuest)) {
+						console.log("detect reset: yes");
+						if (newQuest.isDaily()) {
+							this.resetDailies();
+							console.log("reset daily");
+						} else if (newQuest.isWeekly()) {
+							this.resetWeeklies();
+							console.log("reset weekly");
+						} else if (newQuest.isMonthly()) {
+							this.resetMonthlies();
+							console.log("reset monthly");
+						}
+					} else {
+						console.log("detect reset: no");
+					}
+					oldQuest.define( newQuest );
+				}
+				
+				oldQuest.autoAdjustCounter();
 				
 				// Add to actives or opens depeding on status
 				switch( questList[ctr].api_state ){
@@ -57,7 +111,6 @@ Uses KC3Quest objects to play around with
 					case 3:	// Completed
 						this.isOpen( questList[ctr].api_no, false );
 						this.isActive( questList[ctr].api_no, false );
-						this.resetQuest(questList[ctr].api_no);
 						break;
 					default:
 						this.isOpen( questList[ctr].api_no, false );
@@ -69,7 +122,7 @@ Uses KC3Quest objects to play around with
 		},
 		
 		/* IS OPEN
-		Defines a questId as open, adds to list
+		Defines a questId as open (not completed), adds to list
 		------------------------------------------*/
 		isOpen :function(questId, mode){
 			if(mode){
@@ -84,7 +137,7 @@ Uses KC3Quest objects to play around with
 		},
 		
 		/* IS ACTIVE
-		Defines a questId as active, adds to list
+		Defines a questId as active (the quest is selected), adds to list
 		------------------------------------------*/
 		isActive :function(questId, mode){
 			if(mode){
@@ -146,6 +199,7 @@ Uses KC3Quest objects to play around with
 		save :function(){
 			// Store only the list. The actives and opens will be redefined on load()
 			localStorage.quests = JSON.stringify(this.list);
+			//console.log("saved " + localStorage.quests);
 		},
 		
 		/* LOAD
@@ -164,19 +218,21 @@ Uses KC3Quest objects to play around with
 					tempQuest = tempQuests[ctr];
 					
 					// Add to actives or opens depeding on status
+					// 1: Unselected
+					// 2: Selected
 					if(tempQuest.status==1 || tempQuest.status==2){
 						
 					}
 					switch( tempQuest.status ){
-						case 1:
+						case 1:	// Unselected
 							this.isOpen( tempQuest.id, true );
 							this.isActive( tempQuest.id, false );
 							break;
-						case 2:
+						case 2:	// Selected
 							this.isOpen( tempQuest.id, true );
 							this.isActive( tempQuest.id, true );
 							break;
-						case 3:
+						case 3:	// Completed
 							this.isOpen( tempQuest.id, false );
 							this.isActive( tempQuest.id, false );
 							break;
