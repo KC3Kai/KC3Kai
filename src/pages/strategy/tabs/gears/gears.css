@@ -198,13 +198,14 @@
 .tab_gears .slotitem .holders dl:last-child{
 	position: 	absolute;
 	bottom: 	0;
-	font-size: 	12px;
+	font-size: 	14px;
+	font-weight:	bold;
 }
 .tab_gears .slotitem .holders dl dt span{
 	color: 		#45A9A5;
 }
 .tab_gears .slotitem .holders dl dt small{
-	font-weight:normal;
+	font-weight:bold;
 	padding-left: 1em
 }
 .tab_gears .slotitem .holders dl dd{
