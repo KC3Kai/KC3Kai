@@ -157,7 +157,7 @@ Quest Type:
 			this.tracking[0][0] = this.tracking[0][1];
 			return;
 		}
-		if (this.tracking && (this.id != 214)) {
+		if (this.tracking && (this.id != 214) && (this.id != 607)  && (this.id != 608)) {
 			var currentCount = this.tracking[0][0];
 			var maxCount = parseFloat(this.tracking[0][1]);
 			var progress = 0;
