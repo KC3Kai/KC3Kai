@@ -35,8 +35,13 @@
 	"AboutWiki" : "WikiとFAQ",
 	"AboutReport" : "バグレポート",
 	
+	"SettingsTitle" : "KC3改の設定",
+	"LearnMore" : "もっと詳しく",
+	"Saved" : "保存する！",
+	
 	"SpeedFast" : "高速",
 	"SpeedSlow" : "低速",
+	
 	"HQText" : "司令部",
 	"LevelText" : "レベル",
 	"LevelShort" : "Lv.",
