@@ -1,7 +1,5 @@
 {
-	"available": true,
-	
-	"SortieWinCount": "Sortie Win Count",
+    "SortieWinCount": "Sortie Win Count",
     "SortieLoseCount": "Sortie Lose Count",
     "SortieWinRate": "Sortie Win Rate",
     "TotalExpeditions": "Total Expeditions",
@@ -27,24 +25,5 @@
     "LevelUpNotice": "As your HQ level increases, softcap limit increases, and crafting of new equipment becomes possible.",
     "MainScreenBGM": "Main Screen BGM",
     "Experience": "Experience",
-    "Name": "Name",
-	
-	"Version" : "版本",
-	"AboutHome" : "KC3改主頁",
-	"AboutSource" : "編碼來源",
-	"AboutWiki" : "使用指南(英文)",
-	"AboutReport" : "回報問題",
-	
-	"SettingsTitle" : "KC3改設定",
-	"LearnMore" : "學會更多",
-	"Saved" : "已儲存!",
-	
-	"SpeedFast" : "高速",
-	"SpeedSlow" : "低速",
-	
-	"HQText" : "提督等級",
-	"LevelText" : "等級",
-	"LevelShort" : "Lv.",
-	"LevelNext" : "離下一等級只需",
-	"Screenshot" : "螢幕截圖"
+    "Name": "Name"
 }
