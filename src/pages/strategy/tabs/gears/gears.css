@@ -205,7 +205,7 @@
 	color: 		#45A9A5;
 }
 .tab_gears .slotitem .holders dl dt small{
-	font-weight:normal;
+	font-weight:bold;
 	padding-left: 1em
 }
 .tab_gears .slotitem .holders dl dd{
