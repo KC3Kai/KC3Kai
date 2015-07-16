@@ -26,7 +26,7 @@
 	{
 		"name": "Diablohu",
 		"avatar": "https://avatars0.githubusercontent.com/u/1946774?v=3&s=40",
-		"desc": "開発者", "翻訳者 (簡体字中国語)",
+		"desc": "開発者, 翻訳者 (簡体字中国語)",
 		"links": {
 			"wb" : "http://diablohu.com",
 			"gh" : "https://github.com/Diablohu",
@@ -37,7 +37,7 @@
 	{
 		"name": "McDohl",
 		"avatar": "https://avatars2.githubusercontent.com/u/13024936?v=3&s=40",
-		"desc": "開発者", "テスター",
+		"desc": "開発者, テスター",
 		"links": {
 			"gh" :"https://github.com/McDohl",
 			"wk" :"http://kancolle.wikia.com/wiki/User:McDohlJr",
@@ -58,7 +58,7 @@
 	{
 		"name": "CrazyTeitoku",
 		"avatar": "https://avatars3.githubusercontent.com/u/12234182?v=3&s=40",
-		"desc": "Wiki作家", "テスター",
+		"desc": "Wiki作家, テスター",
 		"links": {
 			"wk" :"http://kancolle.wikia.com/wiki/User:Crazy_teitoku"
 		}
