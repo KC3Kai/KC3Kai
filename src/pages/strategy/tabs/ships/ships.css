@@ -49,7 +49,7 @@
 	height:60px;
 }
 .tab_ships .filters .ship_filter_type {
-	width:80px;
+	width:110px;
 	height:18px;
 	line-height:18px;
 	margin:0px 5px 2px 0px;
@@ -72,7 +72,7 @@
 	background:#000;
 }
 .tab_ships .ship_filter_type .filter_name {
-	width:55px;
+	width:85px;
 	height:18px;
 	float:left;
 }
