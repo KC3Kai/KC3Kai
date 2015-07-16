@@ -15,6 +15,10 @@ Uses KC3Quest objects to play around with
 		open: [], // Array of quests seen on the quests page, regardless of state
 		active: [], // Array of quests that are active and counting
 		
+		timeToResetDailyQuests: -1,
+		timeToResetWeeklyQuests: -1,
+		timeToResetMonthlyQuests: -1,
+		
 		/* GET
 		Get a specific quest object in the list using its ID
 		------------------------------------------*/
@@ -35,27 +39,149 @@ Uses KC3Quest objects to play around with
 			return activeQuestObjects;
 		},
 		
-		/*	DETECT DAILY/WEEKLY/MONTHLY RESET 
-		Compare the existing quest in the list with the quest data received 
-		from the response
-		*/
-		detectReset :function( oldQuest, newQuest){
-			// the quest is unselected by resetting
-			
-			if ((oldQuest.isSelected() || oldQuest.isCompleted()) 
-				&& newQuest.isUnselected() && !KC3Network.isPreviousRequestStopQuest()){
-				console.log("old quest selected: " + oldQuest.isSelected());
-				console.log("old quest completed: " + oldQuest.isCompleted());
-				console.log("new quest unselected: " + newQuest.isUnselected());
-				return true;
+		getTimeToResetFromLocalStorage :function( timeType ){
+			var result = parseInt(localStorage[timeType]);
+			if (typeof result == "undefined"){
+				result = -1;
+				localStorage[timeType] = -1;
+			}
+			return result;
+		},
+		
+		checkAndResetQuests :function(serverJstTime){
+			//console.log($.isEmptyObject(this.list));
+			if ($.isEmptyObject(this.list)) {
+				this.load();
 			}
 			
-			// the progress of the quest is reset not by completing.
-			if ((oldQuest.progress > newQuest.progress) && (!newQuest.isCompleted())) {
-				console.log("progress: " + oldQuest.progress + " " + newQuest.progress);
-				return true;
+			// 5AM JST = 8PM GMT (previous day)
+			var millisecondsInDay = 24*60*60*1000;
+			var ServerJstClock = new Date( serverJstTime );
+			var today8PmGmt = new Date(ServerJstClock.getTime());
+			today8PmGmt.setUTCHours(20);
+			today8PmGmt.setUTCMinutes(0);
+			today8PmGmt.setUTCSeconds(0);
+			today8PmGmt.setUTCMilliseconds(0);
+			var tomorrow8PmGmt = new Date(today8PmGmt.getTime() + millisecondsInDay);
+			
+			var thisWeekSunday8PmGmt = new Date(today8PmGmt.getTime() - today8PmGmt.getUTCDay()*millisecondsInDay);
+			var nextWeekSunday8PmGmt = new Date(thisWeekSunday8PmGmt.getTime() + 7*millisecondsInDay);
+			
+			var thisMonthFirstDay8PmGmt = new Date(today8PmGmt.getTime() - (today8PmGmt.getUTCDate()-1)*millisecondsInDay);
+			var nextMonthFirstDay8PmGmt = new Date(thisMonthFirstDay8PmGmt.getTime());
+			nextMonthFirstDay8PmGmt.setUTCMonth(thisMonthFirstDay8PmGmt.getUTCMonth() + 1);
+			var thisMonthLastDay8PmGmt = new Date(nextMonthFirstDay8PmGmt.getTime() - millisecondsInDay);
+			
+			var nextNextMonthFirstDay8PmGmt = new Date(nextMonthFirstDay8PmGmt.getTime());
+			nextNextMonthFirstDay8PmGmt.setUTCMonth(nextMonthFirstDay8PmGmt.getUTCMonth() + 1);
+			var nextMonthLastDay8PmGmt = new Date(nextNextMonthFirstDay8PmGmt.getTime() - millisecondsInDay);
+			
+			//console.log("============================================");
+			//console.log( ServerJstClock );
+			//console.log( today8PmGmt );
+			//console.log( tomorrow8PmGmt );
+			//console.log( thisWeekSunday8PmGmt );
+			//console.log( nextWeekSunday8PmGmt );
+			//console.log( thisMonthLastDay8PmGmt );
+			//console.log( nextMonthLastDay8PmGmt );
+			
+			/*if ( ServerJstClock.getTime() > today8PmGmt.getTime()) {
+				console.log("Passed 5AM JST");
+			}*/
+			
+			
+			/* RESET DAILY QUESTS
+			-----------------------------------------------------*/
+			if (this.timeToResetDailyQuests === -1) {
+				var timeFromLocalStorage = this.getTimeToResetFromLocalStorage("timeToResetDailyQuests");
+				
+				// Nothing in localStorage
+				if (timeFromLocalStorage === -1) {
+					if (today8PmGmt.getTime() < ServerJstClock.getTime()) {
+						this.timeToResetDailyQuests = tomorrow8PmGmt.getTime();
+					} else {
+						this.timeToResetDailyQuests = today8PmGmt.getTime();
+					}
+					
+					// Update localStorage
+					localStorage.timeToResetDailyQuests = this.timeToResetDailyQuests
+				} else {
+					this.timeToResetDailyQuests = timeFromLocalStorage;
+				}
+				console.log("Reset Daily Quests: " + this.timeToResetDailyQuests + " " + new Date(this.timeToResetDailyQuests));
 			}
-			return false;
+			
+			if (this.timeToResetDailyQuests <= ServerJstClock.getTime()) {
+				this.resetDailies();
+				this.timeToResetDailyQuests = tomorrow8PmGmt.getTime();
+				localStorage.timeToResetDailyQuests = this.timeToResetDailyQuests;
+				KC3Network.trigger("Quests");
+			}
+			
+			var remainingTime = this.timeToResetDailyQuests - ServerJstClock.getTime();
+			var remainingHours = Math.floor(remainingTime / (60*60*1000));
+			var remainingMinutes = Math.floor((remainingTime / (60*1000))%60);
+			var remainingSeconds = Math.floor((remainingTime / (1000))%60);
+			
+			console.log("Time until reset daily quests: " + remainingHours + ":" + remainingMinutes + ":" + remainingSeconds);
+			
+			/* RESET WEEKLY QUESTS
+			-----------------------------------------------------*/
+			if (this.timeToResetWeeklyQuests === -1) {
+				var timeFromLocalStorage = this.getTimeToResetFromLocalStorage("timeToResetWeeklyQuests");
+				
+				// Nothing in localStorage
+				if (timeFromLocalStorage === -1) {
+					if (thisWeekSunday8PmGmt.getTime() < ServerJstClock.getTime()) {
+						this.timeToResetWeeklyQuests = nextWeekSunday8PmGmt.getTime();
+					} else {
+						this.timeToResetWeeklyQuests = thisWeekSunday8PmGmt.getTime();
+					}
+					
+					// Update localStorage
+					localStorage.timeToResetWeeklyQuests = this.timeToResetWeeklyQuests
+				} else {
+					this.timeToResetWeeklyQuests = timeFromLocalStorage;
+				}
+				console.log("Reset Weekly Quests: " + this.timeToResetWeeklyQuests + " " + new Date(this.timeToResetWeeklyQuests));
+			}
+			
+			if (this.timeToResetWeeklyQuests <= ServerJstClock.getTime()) {
+				this.resetWeeklies();
+				this.timeToResetWeeklyQuests = nextWeekSunday8PmGmt.getTime();
+				localStorage.timeToResetWeeklyQuests = this.timeToResetWeeklyQuests;
+				KC3Network.trigger("Quests");
+			}
+			
+			/* RESET MONTHLY QUESTS
+			-----------------------------------------------------*/
+			if (this.timeToResetMonthlyQuests === -1) {
+				var timeFromLocalStorage = this.getTimeToResetFromLocalStorage("timeToResetMonthlyQuests");
+				
+				// Nothing in localStorage
+				if (timeFromLocalStorage === -1) {
+					if (thisMonthLastDay8PmGmt.getTime() < ServerJstClock.getTime()) {
+						this.timeToResetMonthlyQuests = nextMonthLastDay8PmGmt.getTime();
+					} else {
+						this.timeToResetMonthlyQuests = thisMonthLastDay8PmGmt.getTime();
+					}
+					
+					// Update localStorage
+					localStorage.timeToResetMonthlyQuests = this.timeToResetMonthlyQuests
+				} else {
+					this.timeToResetMonthlyQuests = timeFromLocalStorage;
+				}
+				console.log("Reset Monthly Quests: " + this.timeToResetMonthlyQuests + " " + new Date(this.timeToResetMonthlyQuests));
+			}
+			
+			if (this.timeToResetMonthlyQuests <= ServerJstClock.getTime()) {
+				this.resetMonthlies();
+				this.timeToResetMonthlyQuests = nextMonthLastDay8PmGmt.getTime();
+				localStorage.timeToResetMonthlyQuests = this.timeToResetMonthlyQuests
+				KC3Network.trigger("Quests");
+			}
+			
+			this.save();
 		},
 		
 		/* DEFINE PAGE
@@ -63,39 +189,11 @@ Uses KC3Quest objects to play around with
 		------------------------------------------*/
 		definePage :function( questList, questPage ){
 			// For each element in quest List
-			console.log("=================PAGE " + questPage + "===================");
+			//console.log("=================PAGE " + questPage + "===================");
 			for(var ctr in questList){
 				var questId = questList[ctr].api_no;
 				var oldQuest = this.get( questId );
-				
-				// if this quest object is not in the list
-				if (oldQuest.id == 0) { 
-					console.log("new quest");
-					// define its data contents
-					oldQuest.defineRaw( questList[ctr] );
-				} else {
-					console.log("old quest");
-					var newQuest = new KC3Quest();
-					newQuest.defineRaw( questList[ctr] );
-					
-					if (this.detectReset(oldQuest, newQuest)) {
-						console.log("detect reset: yes");
-						if (newQuest.isDaily()) {
-							this.resetDailies();
-							console.log("reset daily");
-						} else if (newQuest.isWeekly()) {
-							this.resetWeeklies();
-							console.log("reset weekly");
-						} else if (newQuest.isMonthly()) {
-							this.resetMonthlies();
-							console.log("reset monthly");
-						}
-					} else {
-						console.log("detect reset: no");
-					}
-					oldQuest.define( newQuest );
-				}
-				
+				oldQuest.defineRaw( questList[ctr] );
 				oldQuest.autoAdjustCounter();
 				
 				// Add to actives or opens depeding on status
@@ -157,6 +255,8 @@ Uses KC3Quest objects to play around with
 		resetQuest :function(questId){
 			if(typeof this.list["q"+questId] != "undefined"){
 				this.list["q"+questId] = new KC3Quest(questId);
+				this.isOpen(questId, false);
+				this.isActive(questId, false);
 			}
 		},
 		
