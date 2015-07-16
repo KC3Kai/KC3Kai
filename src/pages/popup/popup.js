@@ -16,7 +16,7 @@
 		// Show estimated time until next update
 		$.ajax({
 			dataType: "json",
-			url: "https://raw.githubusercontent.com/dragonjet/KC3Kai/master/update",
+			url: "https://raw.githubusercontent.com/dragonjet/KC3Kai/master/update?v="+((new Date()).getTime()),
 			success: function(data, textStatus, request){
 				if(myVersion < parseInt(data.version, 10)){
 					version = data.version;
