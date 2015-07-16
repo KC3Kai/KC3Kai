@@ -164,7 +164,7 @@
 							}).append( $('<small/>').html(
 								'x' + (ThisSlotitem.arranged[i].heldCount + ThisSlotitem.arranged[i].extraCount)
 								+ ( ThisSlotitem.arranged[i].heldCount
-									? ' (' +ThisSlotitem.held.length+ ' Equipped, ' +ThisSlotitem.extras.length + ' Equipable)'
+									? ' (' +ThisSlotitem.held.length+ ' Equipped, ' +ThisSlotitem.extras.length + ' Equippable)'
 									: ''
 								)
 							) )
@@ -197,7 +197,7 @@
 					.append( $('<dd/>').html(
 						'Total ' + (ThisSlotitem.held.length+ThisSlotitem.extras.length)
 						+ ( ThisSlotitem.held.length
-							? ' (' +ThisSlotitem.held.length+ ' Equipped, ' +ThisSlotitem.extras.length + ' Equipable)'
+							? ' (' +ThisSlotitem.held.length+ ' Equipped, ' +ThisSlotitem.extras.length + ' Equippable)'
 							: ''
 						)
 					) )
