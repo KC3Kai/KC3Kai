@@ -5,6 +5,10 @@
 	var myVersion = parseInt(chrome.runtime.getManifest().version, 10);
 
 	$(document).on("ready", function(){
+		// Load previously stored configs
+		ConfigManager.load();
+		KC3Meta.init("../../data/");
+		KC3Translation.execute();
 		
 		// Show next version
 		$(".schedule span.version").text(myVersion+1);
@@ -21,7 +25,7 @@
 						new Date(data.time)
 					);
 				}else{
-					$(".schedule").html("You are using the latest version!");
+					$(".schedule").html( KC3Meta.term("MenuOnLatest") );
 				}
 			}
 		});

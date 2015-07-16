@@ -1,6 +1,28 @@
 ## Translation Changelog
 This note file will be maintained so translators from forks can easily check back if anything has changed within the EN json files, and have their locally translated files updated as well.
 
+https://github.com/dragonjet/KC3Kai/wiki/Localization
+
+#### 17th July 2015
+
+`terms.json`
+* AboutTitle
+* MenuPlayAPIName
+* MenuPlayAPIDesc
+* MenuRefreshAPIName
+* MenuRefreshAPIDesc
+* MenuPlayDMMName
+* MenuPlayDMMDesc
+* MenuCookiesName
+* MenuCookiesDesc
+* MenuStrategyName
+* MenuStrategyDesc
+* MenuSettingsDesc
+* MenuAboutDesc
+* MenuChecking
+* MenuOnLatest
+
+
 #### 16th July 2015
 
 `developers.json`
