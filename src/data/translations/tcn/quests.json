@@ -207,9 +207,9 @@
     },
     "152": {
         "name": "再編成「新三川艦隊」",
-        "desc": "於主艦隊編成「古鷹」、 「加古」、 「青葉」、 「衣笠」、 「夕張」及「天龍」6 艘艦中的任何 5 艘，並以「
+        "desc": "於主艦隊編成「古鷹」、 「加古」、 「青葉」、 「衣笠」、 「夕張」及「天龍」6 艘艦中的任何 5 艘，並以
 
-鳥海改二」作為旗艦。"
+「鳥海改二」作為旗艦。"
     },
     "153": {
         "name": "編成「新第十八戰隊」!",
@@ -649,37 +649,37 @@ Ikazuchi (\u96fb) to World 1-5. At least C rank is required at the boss node."
 	
     "301": {
 		"code": "C1",
-        "name": "First Exercise!",
-        "desc": "Challenge another fleet in practice mode"
+        "name": "初次演習!",
+        "desc": "與另一位提督的艦隊進行 1 次演習。"
     },
 	 "303": {
 		"code": "C2",
-        "name": "Daily Exercises 1",
-        "desc": "Challenge 3 other fleets in practice mode",
+        "name": "(日任) 每日演習!",
+        "desc": "(日任) 與另一位提督的艦隊進行 3 次演習。",
 		"unlock": [ 304, 302 ],
 		"tracking": [ [0,3] ]
     },
 	"304": {
 		"code": "C3",
-        "name": "Daily Exercises 2",
-        "desc": "Get 5 victories in practice mode within the same day",
+        "name": "(日任) 每日演習 2 !",
+        "desc": "(日任) 與另一位提督的艦隊進行五次演習且獲勝。",
 		"tracking": [ [0,5] ]
     },
     "302": {
 		"code": "C4",
-        "name": "Weekly Exercises",
-        "desc": "(Weekly) Get 20 victories in practice mode",
+        "name": "(週任) 每週演習!",
+        "desc": "(週任) 與另一位提督的艦隊進行 20 次演習且獲勝。",
 		"tracking": [ [0,20] ]
     },
     "307": {
 		"code": "C5",
-        "name": "Improve the Efficiency of the Fleet",
-        "desc": "Get 3 victories in practice mode"
+        "name": "演習練度向上!",
+        "desc": "在一天內與另一位提督的艦隊進行 3 次演習且獲勝。"
     },
     "308": {
 		"code": "C6",
-        "name": "Improve the Efficiency of the Fleet One More Time",
-        "desc": "Get 4 victories in practice mode"
+        "name": "演習練度向上 2 !",
+        "desc":"在一天內與另一位提督的艦隊進行 4 次演習且獲勝。"
     },
 	
 	
@@ -688,100 +688,100 @@ Ikazuchi (\u96fb) to World 1-5. At least C rank is required at the boss node."
 	
     "401": {
 		"code": "D1",
-        "name": "First Expedition",
-        "desc": "Perform an expedition"
+        "name": "初次遠征!",
+        "desc": "進行 1 次遠征。"
     },
     "402": {
 		"code": "D2",
-        "name": "Daily Expeditions 1",
-        "desc": "Perform 3 successful expeditions",
+        "name": "(日任) 每日遠征!",
+        "desc": "(日任) 完成 3 次成功的遠征。",
 		"unlock": [ 403 ],
 		"tracking": [ [0,3] ]
     },
     "403": {
 		"code": "D3",
-        "name": "Daily Expeditions 2",
-        "desc": "Perform 10 successful expeditions",
+        "name": "(日任) 每日遠征 2 !",
+        "desc": "(日任) 完成 10 次成功的遠征。",
 		"tracking": [ [0,10] ]
     },
     "404": {
 		"code": "D4",
-        "name": "Weekly Expeditions",
-        "desc": "(Weekly) Perform 30 successful expeditions",
+        "name": "(週任) 每週遠征!",
+        "desc": "(週任) 完成 30 次成功的遠征。",
 		"tracking": [ [0,30] ]
     },
     "405": {
 		"code": "D5",
-        "name": "The First Submarine Operation",
-        "desc": "Complete Expedition 30"
+        "name": "第一次潛水艦派遣作戰!",
+        "desc": "完成 1 次遠征 30 且成功。"
     },
     "406": {
 		"code": "D6",
-        "name": "The Second Submarine Operation",
-        "desc": "Complete Expedition 30 one more time"
+        "name": "第二次潛水艦派遣作戰!",
+        "desc": "再完成 1 次遠征 30 且成功。"
     },
     "408": {
 		"code": "D7",
-        "name": "Continuation of Submarine Operations",
-        "desc": "Complete Expedition 30 two more times"
+        "name": "第三次潛水艦派遣作戰!",
+        "desc": "再完成 2 次遠征 30 且成功。"
     },
     "409": {
 		"code": "D8",
-        "name": "Strategy Meeting with Overseas Submarine Dispatch!",
-        "desc": "Complete Expedition 31"
+        "name": "海外艦接觸作戰!",
+        "desc": "完成 1 次遠征 31 且成功。"
     },
     "410": {
 		"code": "D9",
-        "name": "Weekly Expedition 2",
-        "desc": "(Weekly) Complete expedition 37 or 38",
+        "name": "(週任) 每週急行 !",
+        "desc": "(週任) 完成 1 次遠征 37 或 38 且成功。",
 		"unlock": [ 411 ],
 		"tracking": [ [0,1] ]
     },
 	"412": {
 		"code": "D10",
-        "name": "Strengthen the Operation of the BBV",
-        "desc": "Complete expedition 23"
+        "name": "強化航空戰艦!",
+        "desc": "完成 1 次遠征 23 且成功。"
     },
     "411": {
 		"code": "D11",
-        "name": "Weekly Expedition 3",
-        "desc": "(Weekly) Complete expedition 37 or 38 a total of 7 times",
+        "name": "(週任) 每週急行 2 !",
+        "desc": "(週任) 完成 7 次遠征 37 或 38 且成功。",
 		"tracking": [ [0,7] ]
     },
     "413": {
 		"code": "D12",
-        "name": "Strengthen the Operation of the BBV (Cont.)",
-        "desc": "Complete expedition 23 four more times"
+        "name": "續．強化航空戰艦!",
+        "desc": "再完成 4 次遠征 23 且成功。"
     },
     "414": {
 		"code": "D13",
-        "name": "Blue Waters Submarine Operation",
-        "desc": "Complete expedition 39"
+        "name": "實施遠洋潛水艦作戰!",
+        "desc": "完成 1 次遠征 39 且成功。"
     },
     "415": {
 		"code": "D14",
-        "name": "Blue Waters Extended Submarine Operation",
-        "desc": "Complete expedition 39 two more times"
+        "name": "再實施遠洋潛水艦作戰!",
+        "desc": "再完成 2 次遠征 39 且成功。"
     },
     "416": {
 		"code": "D15",
-        "name": "Air Defence Exercises",
-        "desc": "Complete expedition 6 three times"
+        "name": "實施防空射撃演習!",
+        "desc": "完成 3 次遠征 6 且成功。"
     },
     "417": {
 		"code": "D16",
-        "name": "Deploy the Decoy Task Force",
-        "desc": "Complete expedition 15"
+        "name": "實施囮機動部隊支援作戰!",
+        "desc": "完成 1 次遠征 15 且成功。"
     },
     "418": {
 		"code": "D17",
-        "name": "Naval Ceremony Preparations",
-        "desc": "Complete Expedition 7 twice"
+        "name": "實施觀艦式預行!",
+        "desc": "完成 2 次遠征 7 且成功。"
     },
     "419": {
 		"code": "D18",
-        "name": "Naval Ceremony",
-        "desc": "Complete expedition 8"
+        "name": "實施觀艦式!",
+        "desc": "完成 1 次遠征 8 且成功。"
     },
 	
 	
@@ -790,25 +790,25 @@ Ikazuchi (\u96fb) to World 1-5. At least C rank is required at the boss node."
 	
     "501": {
 		"code": "E1",
-        "name": "First Supply",
-        "desc": "Resupply a ship"
+        "name": "初次補給!",
+        "desc": "補給 1 次。"
     },
     "502": {
 		"code": "E2",
-        "name": "First Docking",
-        "desc": "Repair a ship"
+        "name": "初次入渠!",
+        "desc": "修復 1 艘船。"
     },
     "503": {
 		"code": "E3",
-        "name": "Daily Repairs",
-        "desc": "Repair 5 ships",
+        "name": "(日任) 每日入渠!",
+        "desc": "(日任) 修復 5 艘船。",
 		"unlock": [ 504 ],
 		"tracking": [ [0,5] ]
     },
     "504": {
 		"code": "E4",
-        "name": "Daily Resupplies",
-        "desc": "Resupply your ships 15 times",
+        "name": "(日任) 每日補給!",
+        "desc": "(日任) 補給 15 次。",
 		"tracking": [ [0,15] ]
     },
 	
@@ -924,26 +924,26 @@ Ikazuchi (\u96fb) to World 1-5. At least C rank is required at the boss node."
 	
     "701": {
 		"code": "G1",
-        "name": "First Modernization",
-        "desc": "Perform a successful modernization"
+        "name": "初次近代化改修!",
+        "desc": "完成 1 次近代化改修。"
     },
     "702": {
 		"code": "G2",
-        "name": "Daily Modernization",
-        "desc": "Perform 2 successful modernizations",
+        "name": "(日任) 每日近代化改修!",
+        "desc": "(日任) 完成 2 次近代化改修。",
 		"unlock": [ 703 ],
 		"tracking": [ [0,2] ]
     },
     "703": {
 		"code": "G3",
-        "name": "Weekly Modernization",
-        "desc": "(Weekly) Perform 15 successful modernizations",
+        "name": "(週任) 每週近代化改修!",
+        "desc": "(週任) 完成 15 次近代化改修。",
 		"tracking": [ [0,15] ]
     },
     "704": {
 		"code": "G4",
-        "name": "Preparation for LSC (Part 1)",
-        "desc": "Perform 4 successful modernizations"
+        "name": "準備大型艦建造!",
+        "desc": "完成 4 次近代化改修。"
     },
 	
 	
@@ -951,11 +951,11 @@ Ikazuchi (\u96fb) to World 1-5. At least C rank is required at the boss node."
 	
 	
 	"611": {
-        "name": "In Preparation of Love! (Part 1)",
-        "desc": "Scrap equipment 2 times to show your love!"
+        "name": "婚禮準備! ( 1 )",
+        "desc": "廢棄裝備 2 次。"
     },
 	"306": {
-        "name": "In Preparation of Love (Part 2)",
-        "desc": "Show your love by getting 2 victories in practice mode."
+        "name": "婚禮準備! ( 2 )",
+        "desc": "與另一位提督的艦隊進行 2 次演習且獲勝。"
     }
 }
