@@ -12,6 +12,7 @@
 						[ "en", "English" ],
 						[ "jp", "日本語" ],
 						[ "id", "Indonesia" ],
+						[ "scn", "简体中文"],
 						[ "tcn", "繁體中文" ]
 					]
 				}
@@ -119,7 +120,7 @@
 			},
 			{
 				"id" : "alert_custom",
-				"name" : "カスタム音のURL",
+				"name" : "カスタム音",
 				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
 			},
