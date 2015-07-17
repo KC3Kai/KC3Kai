@@ -11,19 +11,28 @@ Xxxxxxx
 		fleetSent: 1,
 		map_world: 0,
 		map_num: 0,
-		
+		nextNodeCount: 0,
 		nodes: [],
-		bossNode: {},
+		boss: {},
+		onBossAvailable: function(){},
+		onEnemiesAvailable: function(node){},
 		
 		startSortie :function(world, mapnum, fleetNum, stime){
 			// If still on sortie, end previous one
 			if(this.onSortie > 0){ this.endSortie(); }
 			
+			this.fleetSent = fleetNum;
 			this.map_world = world;
 			this.map_num = mapnum;
-			this.fleetSent = fleetNum;
 			this.nextNodeCount = 0;
 			this.nodes = [];
+			this.boss = {
+				node: -1,
+				comp: -1,
+				info: false,
+				formation: -1,
+				ships: [ -1, -1, -1, -1, -1, -1 ]
+			};
 			
 			// Save on database and remember current sortieId
 			var self = this;
@@ -68,11 +77,18 @@ Xxxxxxx
 		},
 		
 		setBoss :function( cellno, comp ){
-			/*this.bossNode = (new KC3Node()).defineAsBattle({
-				api_enemy: { api_enemy_id:comp }
-			})*/
+			this.boss.node = cellno;
+			this.boss.comp = comp;
 			
-			this.bossNode = [-1,-1,-1,-1,-1,-1];
+			var self = this;
+			// Retrieve boss info from somewhere
+			setTimeout(function(){
+				console.log("");
+				self.boss.formation = -1;
+				// self.boss.ships = [ -1, -1, -1, -1, -1, -1 ];
+				self.boss.ships = [ 501,502,503,504,505,506 ];
+				self.onBossAvailable(self);
+			}, 1)
 		},
 		
 		currentNode :function(){
@@ -122,8 +138,15 @@ Xxxxxxx
 			this.fleetSent = 1;
 			this.map_world = 0;
 			this.map_num = 0;
+			this.nextNodeCount = 0;
 			this.nodes = [];
-			this.bossNode = {};
+			this.boss = {
+				node: -1,
+				comp: -1,
+				info: false,
+				formation: -1,
+				ships: [ -1, -1, -1, -1, -1, -1 ]
+			};
 		}
 	};
 	

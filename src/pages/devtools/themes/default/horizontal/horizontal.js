@@ -325,13 +325,15 @@
 				$(".battle .battle_world", container).text("World "+KC3SortieManager.map_world+" - "+KC3SortieManager.map_num);
 				
 				// Show boss node
-				$.each(KC3SortieManager.bossNode, function(index, eshipId){
-					if(eshipId > -1){
-						$(".battle .battle_boss .abyss_"+(index+1)+" img", container).attr("src", KC3Meta.abyssIcon(eshipId));
-					}else{
-						$(".battle .battle_boss .abyss_"+(index+1), container).hide();
-					}
-				});
+				KC3SortieManager.onBossAvailable = function(){
+					$.each(KC3SortieManager.boss.ships, function(index, eshipId){
+						if(eshipId > -1){
+							$(".battle .battle_boss .abyss_"+(index+1)+" img", container).attr("src", KC3Meta.abyssIcon(eshipId));
+						}else{
+							$(".battle .battle_boss .abyss_"+(index+1), container).hide();
+						}
+					});
+				};
 				
 				// Trigger other listeners
 				this.HQ(container, {}, local);
@@ -359,29 +361,31 @@
 				$(".battle .battle_node_"+numNodes, container).text( thisNode.id );
 				$(".battle .battle_nodenum", container).text( thisNode.id );
 				$(".battle .battle_current", container).text("NEXT NODE");
-				
-				function showEnemyFaces(){
-					$(".battle .battle_enemies .battle_abyss img", container).attr("src", KC3Meta.abyssIcon(-1));
-					$.each(thisNode.eships, function(index, eshipId){
-						if(eshipId > -1){
-							$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).attr("src", KC3Meta.abyssIcon(eshipId));
-							$(".battle .battle_enemies .abyss_"+(index+1), container).show();
-						}else{
-							$(".battle .battle_enemies .abyss_"+(index+1), container).hide();
-						}
-					});
-				}
+				$(".battle .battle_formation", container).hide();
 				
 				switch(thisNode.type){
 					// Battle node
 					case "battle":
 						$(".battle .battle_nodebox", container).hide();
 						
-						if(thisNode.enemyListAvailable){
-							showEnemyFaces();
-						}else{
-							thisNode.onEnemiesAvailable = showEnemyFaces;
-						}
+						KC3SortieManager.onEnemiesAvailable = function(){
+							if((typeof thisNode.eformation != "undefined") && (thisNode.eformation > -1)){
+								$(".battle .battle_formation img", container).attr("src", KC3Meta.formationIcon(thisNode.eformation));
+								$(".battle .battle_formation", container).show();
+							} else {
+								$(".battle .battle_formation", container).hide();
+							}
+							
+							$(".battle .battle_enemies .battle_abyss img", container).attr("src", KC3Meta.abyssIcon(-1));
+							$.each(thisNode.eships, function(index, eshipId){
+								if(eshipId > -1){
+									$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).attr("src", KC3Meta.abyssIcon(eshipId));
+									$(".battle .battle_enemies .abyss_"+(index+1), container).show();
+								}else{
+									$(".battle .battle_enemies .abyss_"+(index+1), container).hide();
+								}
+							});
+						};
 						
 						$(".battle .battle_enemies", container).fadeIn(500);
 						break;
@@ -405,8 +409,8 @@
 					// Maelstrom node
 					case "maelstrom":
 						$(".battle .battle_nodebox", container).hide();
-						$(".battle .battle_resource .battle_resicon img", container).attr("src", thisNode.icon("../../../../assets/img/client/"));
-						$(".battle .battle_resource .battle_resamt", container).text( thisNode.amount );
+						$(".battle .battle_maelstrom .battle_resicon img", container).attr("src", thisNode.icon("../../../../assets/img/client/"));
+						$(".battle .battle_maelstrom .battle_resamt", container).text( -thisNode.amount );
 						$(".battle .battle_maelstrom", container).fadeIn(500);
 						break;
 						
@@ -492,8 +496,17 @@
 					"KTKM hit le DD!",
 					"1 HP toplel",
 					"#DontGetYourHopesUp",
+					"She had ONE job :(",
+					"Sendai... onegai",
+					"Do you even teitoku?",
+					"Cut-in? Is that tasty?",
+					"It's futile mang",
+					"Let's all pray~",
+					"RNGesus bless him",
+					"I bless this run"
 				][Math.floor(Math.random()*5)]);
 				var thisNode = KC3SortieManager.currentNode();
+				
 			},
 			BattleResult: function(container, data, local){
 				if(KC3SortieManager.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
@@ -600,6 +613,13 @@
 						$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).hide();
 					}
 				});
+				
+				// If night battle will be asked after this battle
+				if(thisPvP.yasenFlag){
+					$(".battle .battle_yasen img", container).attr("src", "../../../../assets/img/ui/yasen.png");
+				}else{
+					$(".battle .battle_yasen img", container).attr("src", "../../../../assets/img/ui/yasen-x.png");
+				}
 				
 				// Battle conditions
 				$(".battle .battle_cond_text", container).removeClass("good");

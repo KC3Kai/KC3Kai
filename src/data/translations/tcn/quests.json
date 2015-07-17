@@ -1,0 +1,961 @@
+{
+    "101": {
+        "name": "第一編隊!",
+        "desc": "於主艦隊編成 2 艘艦。"
+    },
+    "102": {
+        "name": "編成一個驅逐戰隊!",
+        "desc": "於主艦隊編成 4 艘驅逐艦。"
+    },
+    "103": {
+        "name": "編成一個水雷戰隊!",
+        "desc": "於主艦隊編成 5 艘驅逐艦並以 1 艘輕巡洋艦作為旗艦。"
+    },
+    "104": {
+        "name": "編成一個有 6 艘艦的戰隊!",
+        "desc": "於主艦隊編成 6 艘艦。"
+    },
+    "105": {
+        "name": "編成一個有 2 艘輕巡洋艦的戰隊!",
+        "desc": "於主艦隊編成 2 艘輕巡洋艦。"
+    },
+    "106": {
+        "name": "編成一個重巡戰隊!",
+        "desc": "於主艦隊編成 2 艘重巡洋艦。"
+    },
+    "107": {
+        "name": "編成一個空母機動部隊!",
+        "desc": "於主艦隊編成 3 艘驅逐艦並以 1 艘正規空母/輕空母作為旗艦。"
+    },
+    "108": {
+        "name": "編成「天龍」型輕巡洋艦!",
+        "desc": "於主艦隊編成「天龍」及「龍田」。"
+    },
+    "109": {
+        "name": "編成「川內」型輕巡洋艦!",
+        "desc": "於主艦隊編成「川內」、「神通」及「那珂」。"
+    },
+    "110": {
+        "name": "編成「妙高」型重巡洋艦!",
+        "desc": "於主艦隊編成「妙高」、「那智」、「足柄」及「羽黑」。"
+    },
+    "111": {
+        "name": "編成「扶桑」型戰艦!",
+        "desc": "於主艦隊編成「扶桑」及「山城」。"
+    },
+    "112": {
+        "name": "編成「伊勢」型戰艦!",
+        "desc": "於主艦隊編成「伊勢」及「日向」。"
+    },
+    "113": {
+        "name": "編成一個有戰艦及重巡洋艦的戰隊!",
+        "desc": "於主艦隊編成 2 艘重巡洋艦及1艘戰艦。"
+    },
+    "114": {
+        "name": "編成「南雲機動部隊」!",
+        "desc": "於主艦隊編成「赤城」、「加賀」、「蒼龍」及「飛龍」，並不可以有其他艦娘。"
+    },
+    "115": {
+        "name": "編成第二艦隊!",
+        "desc": "於第二艦隊編成 1 艘艦。"
+    },
+    "116": {
+        "name": "準備一艘水上機母艦!",
+        "desc": "於主艦隊編成 1 艘水上機母艦。"
+    },
+    "117": {
+        "name": "於第二艦隊編成一個空母機動部隊!",
+        "desc": "於第二艦隊編成 3 艘驅逐艦並以 1 艘正規空母/輕空母作為旗艦。"
+    },
+    "118": {
+        "name": "編成「金剛」型戰艦!",
+        "desc": "於主艦隊編成「金剛」、「比叡」、「榛名」及「霧島」。"
+    },
+    "119": {
+        "name": "編成「三川艦隊」!",
+        "desc": "於主艦隊編成「鳥海」、「青葉」、「加古」、「古鷹」、「天龍」及 1 艘高速艦隻。"
+    },
+    "120": {
+        "name": "編成「第六驅逐隊」!",
+        "desc": "於主艦隊編成「暁」、「響」、「雷」及「電」，並不可以有其他艦娘。"
+    },
+    "121": {
+        "name": "編成「第四戰隊」!",
+        "desc": "於主艦隊編成「高雄」、「愛宕」、「鳥海」及「摩耶」。"
+    },
+    "122": {
+        "name": "編成「西村艦隊」!",
+        "desc": "於主艦隊編成「扶桑」、「山城」、「最上」及「時雨」。"
+    },
+    "123": {
+        "name": "編成「第五航空戰隊」!",
+        "desc": "於主艦隊編成「翔鶴」、「瑞鶴」及 2 艘驅逐艦。"
+    },
+    "124": {
+        "name": "編成「新三川艦隊」!",
+        "desc": "於主艦隊編成「鳥海」、「青葉」、「衣笠」、「加古」、「古鷹」及「天龍」。"
+    },
+    "125": {
+        "name": "編成潛水艦隊!",
+        "desc": "於任何艦隊編成 2 艘潛水艦。"
+    },
+    "126": {
+        "name": "編成航空水上打撃艦隊!",
+        "desc": "於主艦隊編成 2 艘航空戰艦及 2 艘航空巡洋艦，並不可以有其他艦娘。"
+    },
+    "127": {
+        "name": "編成中規模潛水艦隊!",
+        "desc": "於任何艦隊編成 3 艘潛水艦。"
+    },
+    "128": {
+        "name": "編成「第六戰隊」!",
+        "desc": "於主艦隊編成「古鷹」、「加古」、「衣笠」及「青葉」。"
+    },
+    "129": {
+        "name": "編成「第五艦隊」!",
+        "desc": "於主艦隊編成「那智」、「足柄」、「多摩」及「木曾」。"
+    },
+    "130": {
+        "name": "編成「第一水雷戰隊」!",
+        "desc": "於主艦隊編成「阿武隈」、「曙」、「潮」、「霞」及「不知火」。"
+    },
+    "131": {
+        "name": "編成「第八驅逐隊」!",
+        "desc": "於主艦隊編成「朝潮」、「大潮」、「滿潮」及「荒潮」，並不可以有其他艦娘。"
+    },
+    "132": {
+        "name": "編成「第十八驅逐隊」!",
+        "desc": "於主艦隊編成「霞」、「霰」、「陽炎」及「不知火」，並不可以有其他艦娘。"
+    },
+    "133": {
+        "name": "編成「第三十驅逐隊(第一次)」!",
+        "desc": "於主艦隊編成「睦月」、「如月」、「弥生」及「望月」，並不可以有其他艦娘。"
+    },
+    "134": {
+        "name": "婚禮準備! ( 3 )",
+        "desc": "於主艦隊編成 1 艘等級 90-99 的艦娘作為旗艦。"
+    },
+    "135": {
+        "name": "新的旅程!",
+        "desc": "於主艦隊編成 5 艘艦，並以 1 艘等級 100 或以上的艦娘作為旗艦!"
+    },
+    "136": {
+        "name": "編成「第三十驅逐隊(第二次)」!",
+        "desc": "於主艦隊編成「睦月」、「弥生」、「卯月」及「望月」，並不可以有其他艦娘。"
+    },
+    "137": {
+        "name": "編成「第五戰隊」!",
+        "desc": "於主艦隊編成「妙高」、「那智」及「羽黑」。."
+    },
+    "138": {
+        "name": "編成新的「第二航空戰隊」!",
+        "desc": "於主艦隊編成「蒼龍」及 2 艘驅逐艦，並以「飛龍改二」作為旗艦。"
+    },
+    "139": {
+        "name": "編成「第六潛水艦隊」!",
+        "desc": "於主艦隊編成 4 艘潛水艦並以潛水艇母艦作為旗艦。"
+    },
+    "140": {
+        "name": "配備新型電探!",
+        "desc": "於主艦隊編成「妙高改二」作為旗艦。"
+    },
+    "141": {
+        "name": "再編成新的「第二航空戰隊」!",
+        "desc": "於主艦隊編成「飛龍改二」及 2 艘驅逐艦，並以「蒼龍改二」作為旗艦。"
+    },
+    "142": {
+        "name": "編成精銳的「第三艦隊」!",
+        "desc": "於主艦隊編成「金剛改二」、「比叡改二」、「榛名改二」及「霧島改二」。"
+    },
+    "143": {
+        "name": "配備新型正規空母!",
+        "desc": "於主艦隊編成「雲龍」作為旗艦。"
+    },
+    "144": {
+        "name": "編成主力戰艦部隊「第二戰隊」!",
+        "desc": "於主艦隊編成「長門」、「陸奧」、「扶桑」及「山城」。"
+    },
+    "145": {
+        "name": "編成水上打擊部隊!",
+        "desc": "於主艦隊編成「長門」、「陸奧」、「伊勢」、「日向」、「扶桑」、「山城」、「大和」或「武藏」8 艘戰艦
+
+中的任何 3 艘，以及 1 艘輕巡洋艦。"
+    },
+    "146": {
+        "name": "準備改修工廠!",
+        "desc": "於主艦隊編成「明石」作為旗艦。"
+    },
+    "147": {
+        "name": "再編成「西村艦隊」!",
+        "desc": "於主艦隊編成「扶桑」、「山城」、「最上」、「時雨」及「滿潮」。"
+    },
+    "148": {
+        "name": "編成「水上反撃部隊」!",
+        "desc": "於主艦隊編成「足柄」、 1 艘輕巡洋艦及 3 艘驅逐艦，並以「霞」作為旗艦。"
+    },
+    "149": {
+        "name": "編成「第十一驅逐隊」",
+        "desc": "於主艦隊編成「吹雪」、「白雪」、「初雪」及「叢雲」，並不可以有其他艦娘。"
+    },
+    "150": {
+        "name": "編成「第二一驅逐隊」",
+        "desc": "於主艦隊編成「初春」、「初霜」、「子日」及「若葉」，並不可以有其他艦娘。"
+    },
+    "151": {
+        "name": "編成「第二二驅逐隊」",
+        "desc": "於主艦隊編成「皐月」、「文月」、「長月」，以及另外 1 艘驅逐艦。"
+    },
+    "152": {
+        "name": "再編成「新三川艦隊」",
+        "desc": "於主艦隊編成「古鷹」、 「加古」、 「青葉」、 「衣笠」、 「夕張」及「天龍」6 艘艦中的任何 5 艘，並以
+
+「鳥海改二」作為旗艦。"
+    },
+    "153": {
+        "name": "編成「新第十八戰隊」!",
+        "desc": "於主艦隊編成「天龍」、「龍田」，以及另外 2 艘艦。"
+    },
+	"154": {
+        "name": "編成海上突入部隊!",
+        "desc": "於主艦隊編成「比叡」、「霧島」、「長良」、「暁」、「雷」及「電」。"
+    },
+	"155": {
+        "name": "編成「新第六驅逐隊」!",
+        "desc": "於主艦隊編成「響/Верный」、「雷」及「電」，並以「暁改二」作為旗艦。。"
+    },
+	
+	
+	
+	
+	
+    "202": {
+        "name": "First Sortie!",
+        "desc": "Deploy your main fleet on a combat mission."
+    },
+    "203": {
+        "name": "Protect the Seas of Chinju-Fu!",
+        "desc": "Deploy to World 1-1 and clear the stage."
+    },
+    "204": {
+        "name": "Sortie to the Coast of Nansei Islands!",
+        "desc": "Deploy to World 1-2 and clear the stage."
+    },
+    "205": {
+        "name": "Intercept Approaching Enemy Vanguard Fleet!",
+        "desc": "Deploy to World 1-2 after defeating its boss and clear the stage."
+    },
+    "206": {
+        "name": "Sortie the Torpedo Squadron!",
+        "desc": "Deploy a fleet with a CL as flagship and 3 DD as escorts."
+    },
+    "207": {
+        "name": "Sortie a Heavy Cruiser!",
+        "desc": "Deploy a fleet with a CA as its flagship."
+    },
+    "208": {
+        "name": "Sortie a Battleship!",
+        "desc": "Deploy a fleet with a BB as its flagship. BBV don't count."
+    },
+    "209": {
+        "name": "Sortie a Carrier Task Force!",
+        "desc": "Deply a fleet with CV(L) as flagship and 5 DD\/CL\/AV for the escorts."
+    },
+    "215": {
+        "name": "Second Fleet Sortie!",
+        "desc": "Deploy your 2nd Fleet on a combat mission."
+    },
+    "217": {
+        "name": "Sink Enemy Carrier!",
+        "desc": "Sink an enemy aircraft carrier."
+    },
+    "219": {
+        "name": "Sortie the Mikawa Fleet!",
+        "desc": "Deploy a fleet with Choukai, Aoba, Kako, Furutaka, Tenryuu and another fast ship."
+    },
+    "222": {
+        "name": "Sortie the Destroyer Division 6!",
+        "desc": "Deploy a fleet with ONLY Akatsuki, Hibiki, Inazuma, and Ikazuchi."
+    },
+    "223": {
+        "name": "Sortie the Cruiser Division 4!",
+        "desc": "Deploy a fleet with Atago, Takao, Choukai, Maya and any 2 ships. Score a victory against World 2-2 Boss."
+    },
+    "224": {
+        "name": "Sortie the Nishimura Fleet!",
+        "desc": "Deploy a fleet with Fusou, Yamashiro, Mogami, Shigure and any 2 ships. Score a victory against World 2-3 Boss."
+    },
+    "225": {
+        "name": "Sortie the Carrier Division 5!",
+        "desc": "Deploy a fleet with Shoukaku, Zuikaku and any 4 ships. Score a victory against World 3-1 Boss."
+    },
+    "227": {
+        "name": "Sortie the New Mikawa Fleet!",
+        "desc": "Deploy a fleet with Choukai, Aoba, Kinugasa, Kako, Furutaka and Tenryuu. Score a victory against World 2-3 
+
+Boss."
+    },
+    "231": {
+        "name": "Sortie a Submarine Fleet!",
+        "desc": "Deploy a fleet with 2 SS and 4 additional ships. Score a victory against World 2-3 Boss."
+    },
+    "232": {
+        "name": "Sortie a Naval Aviation Strike Fleet!",
+        "desc": "Deploy a fleet with 2 BBV, 2 CAV and 2 additional ships. Score a victory against World 4-2 Boss."
+    },
+    "233": {
+        "name": "Sortie the Cruiser Division 6!",
+        "desc": "Deploy a fleet with Furutaka, Kako, Kinugasa, Aoba and 2 additional ships. Score a S rank victory against World 2
+
+-3 Boss."
+    },
+    "239": {
+        "name": "Sortie the Destroyer Division 8!",
+        "desc": "Deploy a fleet with Asashio, Michishio, Ooshio, Arashio and 2 additional ships. Score a victory against World 2-3 
+
+Boss."
+    },
+    "240": {
+        "name": "Sortie the Destroyer Division 18!",
+        "desc": "Deploy a fleet with Kasumi, Arare, Kagerou, Shiranui and 2 additional ships. Score a victory against World 3-1 
+
+Boss."
+    },
+    "244": {
+        "name": "Deploy the Destroyer Division 30 (Gen-1)",
+        "desc": "Deploy a fleet that consists of Mutsuki (\u7766\u6708), Kisaragi (\u5982\u6708), Yayoi (\u5f25\u751f), 
+
+Mochizuki (\u671b\u6708) and up to 2 additional DDs to world 3-2 and encounter the boss. C rank or above is required."
+    },
+    "245": {
+        "name": "In Preparation of Love! (Final)",
+        "desc": "Deploy a fleet with a high level (Lv.90~99) flagship to 2-3 obtain an S rank victory against the boss."
+    },
+    "246": {
+        "name": "Your First Mission Together!",
+        "desc": "Deploy a fleet to 4-3 with a bonded ship of Lv.100 or more as flagship and score an S rank victory against the 
+
+boss."
+    },
+    "247": {
+        "name": "Sortie an aviation battleship fleet!",
+        "desc": "Have 2 BBV ships in your main fleet and score a victory against World 4-4 Boss."
+    },
+    "248": {
+        "name": "30th Destroyer Fleet's Anti-Submarine Patrol",
+        "desc": "Deploy Mutsuki, Yayoi, Uzuki and Mochizuki to World 1-5 and reach the boss, scoring at least a C rank."
+    },
+    "250": {
+        "name": "Deploy the 2nd Carrier Division",
+        "desc": "Deploy Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c) as the flagship, Souryuu (\u84bc\u9f8d) and two destroyers to 
+
+World 5-2. You may add 2 other ships. Score an S rank victory against the boss."
+    },
+    "251": {
+        "name": "Deploy the Elite 2nd Carrier Division",
+        "desc": "Deploy Souryuu Kai Ni (\u84bc\u9f8d\u6539\u4e8c) as the flagship, Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c) 
+
+and two destroyers to World 4-3. You may add 2 other ships. Score an S rank victory against the boss."
+    },
+    "252": {
+        "name": "Deploy a Haruna-led Fleet",
+        "desc": "Deploy a fleet with Haruna Kai Ni (\u699b\u540d\u6539\u4e8c) as the flagship and up to 5 additional ships to 
+
+World 5-1 and score an S rank victory against the boss."
+    },
+    "253": {
+        "name": "Deploy the 601 Air Group",
+        "desc": "Deploy a fleet with Unryuu Kai (\u96f2\u9f8d\u6539) as the flagship to World 5-2 and score an S rank victory 
+
+against the boss."
+    },
+    "254": {
+        "name": "Deploy a Light Carrier Squadron",
+        "desc": "Sortie a fleet of 1-2 light aircraft carriers, 1 light cruiser and 3-4 destroyers to World 2-1 and score an S rank 
+
+victory against the boss."
+    },
+    "255": {
+        "name": "Deploy a Torpedo Squadron to Bashi Islands",
+        "desc": "Sortie a fleet of 1-2 light cruisers (with one of them as the flagship) and 4-5 destroyers to World 2-2. Score a 
+
+victory at the boss and sink the enemy flagship."
+    },
+    
+   
+    "258": {
+        "name": "Sortie the 2nd Squadron",
+        "desc": "Deploy Nagato (\u9577\u9580), Mutsu (\u9678\u5965), Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce) and 
+
+up to 2 additional ships to World 4-2. Score two S rank victories at the boss node."
+    },
+   
+    "260": {
+        "name": "Deploy the Battleship Squadron in the Northern Waters",
+        "desc": "Deploy two battleships, a light aircraft carrier and up to three additional ships to World 3-5 and score an S rank 
+
+victory at the boss node."
+    },
+    
+    "262": {
+        "name": "Deploy the Nishimura Fleet in the Southern Waters",
+        "desc": "Deploy Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce), Mogami (\u6700\u4e0a), Shigure (\u6642\u96e8) and 
+
+Michishio (\u6e80\u6f6e) (you may also add another ship) to World 5-1 and score an S rank victory at the boss node."
+    },
+    "263": {
+        "name": "Deploy the Sixth Squadron to the Southwestern Waters",
+        "desc": "Deploy Furutaka (\u53e4\u9df9), Kako (\u52a0\u53e4), Aoba (\u9752\u8449), Kinugasa (\u8863\u7b20) and up 
+
+to two additional ships to World 2-5 and score an S rank victory at the boss node."
+    },
+    "267": {
+        "name": "Deploy the 11th Destroyer Division",
+        "desc": "Deploy Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea), Murakumo(\u53e2\u96f2) 
+
+and up to 2 additional ships to World 2-3 and score a victory at the boss node."
+    },
+    "268": {
+        "name": "11th Destroyer Division's Anti-Submarine Patrol",
+        "desc": "Deploy Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea) and Murakumo(\u53e2
+
+\u96f2) to World 1-5 and get a score of at least C at the boss node."
+    },
+    "269": {
+        "name": "Deploy the 21st Destroyer Division",
+        "desc": "Deploy Hatsuharu (\u521d\u6625), Nenohi (\u5b50\u65e5), Wakaba (\u82e5\u8449) and Hatsushimo 
+
+(\u521d\u971c) and up to 2 additional ships to World 3-1 and score an S rank victory at the boss node."
+    },
+    "270": {
+        "name": "Deploy the 22nd Destroyer Division",
+        "desc": "Deploy Satsuki (\u7690\u6708), Fumizuki (\u6587\u6708), Nagatsuki (\u9577\u6708), 1 more DD and up to two 
+
+additional ships to World 1-4 and score an S rank victory at the boss node."
+    },
+    "271": {
+        "name": "Deploy Nachi's Squadron",
+        "desc": "Sortie a fleet with Nachi (\u90a3\u667a) as flagship, Hatsushimo (\u521d\u971c), Kasumi (\u971e), Ushio 
+
+(\u6f6e), Akebono (\u66d9) and one additional ship to world 2-2 and score an S rank victory at the boss node."
+    },
+    "272": {
+        "name": "Deploy the Remodelled Anti-Aircraft Heavy Cruiser",
+        "desc": "Sortie a fleet with Maya (\u6469\u8036) Kai or Kai2, 1 CL, 2 DD and up to two additional ships to World 2-3 and 
+
+score an S rank victory at the boss node."
+    },
+    "273": {
+        "name": "Deploy the Mikawa Fleet to Solomon Islands",
+        "desc": "Sortie the main fleet with Choukai Kai2 (\u9ce5\u6d77\u6539\u30cb) as the flagship and any five of Aoba 
+
+(\u9752\u8449), Kinugasa (\u8863\u7b20), Kako (\u52a0\u53e4), Furutaka (\u53e4\u9df9), Tenryuu (\u5929\u9f8d), Yuubari 
+
+(\u5915\u5f35) to World 5-1 and score an S rank victory at the boss node."
+    },
+    "274": {
+        "name": "6th Destroyer Division's Anti-Submarine Patrol",
+        "desc": "Deploy Akatsuki (\u6681), Hibiki (\u97ff or \u0412\u0435\u0440\u043d\u044b\u0439), Inazuma (\u96f7) and 
+
+Ikazuchi (\u96fb) to World 1-5. At least C rank is required at the boss node."
+    },
+    "275": {
+        "name": "Deploy the 18th Squadron",
+        "desc": "Tenryuu, Tatsuta, and at least 2 other ships to [W2-3] and S-rank the boss node"
+    },
+	"276": {
+        "name": "Sortie the surface attack fleet!",
+        "desc": "Sortie Hiei, Kirishima, Nagara, Akatsuki, Ikazuchi, Inazuma to 5-1 and clear the map with an S-rank"
+    },
+	"277": {
+        "name": "DesDiv6 Anti-Submarine Mission!",
+        "desc": "Sortie Akatsuki Kai2 , Hibiki/Verniy, Ikazuchi, Inazuma to 1-5 and clear the map with at least A-rank"
+    },
+	
+	
+	
+	
+	
+	"201": {
+        "code": "Bd1",
+        "name": "(日任) 擊敗敵艦隊!",
+        "desc": "(日任) 擊敗敵艦隊 1 次。",
+		"unlock": [ 216, 211, 212 ],
+		"tracking": [ [0,1] ]
+    },
+	"216": {
+		"code": "Bd2",
+		"name": "(日任) 擊沈敵軍旗艦!",
+		"desc": "(日任) 擊沈敵軍旗艦 1 次。",
+		"unlock": [ 210, 218, 214, 213 ],
+		"tracking": [ [0,1] ]
+	},
+	"210": {
+		"code": "Bd3",
+		"name": "(日任) 擊敗敵艦隊 2 !",
+		"desc": "(日任) 擊敗敵艦隊 10 次。",
+		"tracking": [ [0,10] ]
+	},
+	"211": {
+		"code": "Bd4",
+		"name": "(日任) 擊沈敵空母!",
+		"desc": "(日任) 擊沈 3 艘敵軍輕空母/正規空母。",
+		"tracking": [ [0,3] ]
+	},
+	"218": {
+		"code": "Bd5",
+		"name": "(日任) 擊沈敵補給艦!",
+		"desc": "(日任) 擊沈 3 艘敵軍補給艦。",
+		"unlock": [ 226, 220 ],
+		"tracking": [ [0,3] ]
+	},
+	"212": {
+		"code": "Bd6",
+		"name": "(日任) 擊沈敵補給艦 2 !",
+		"desc": "(日任) 擊沈 5 艘敵軍補給艦。",
+		"tracking": [ [0,5] ]
+	},
+	"226": {
+		"code": "Bd7",
+		"name": "(日任) 南西諸島海域出擊!",
+		"desc": "(日任) 在南西諸島海域擊敗敵軍主力艦隊 10 次。",
+		"unlock": [ 230 ],
+		"tracking": [ [0,5] ]
+	},
+	"230": {
+		"code": "Bd8",
+        "name": "(日任) 擊沈敵潛水艦!",
+        "desc": "(日任) 擊沈 6 艘敵軍潛水艦。",
+		"tracking": [ [0,6] ]
+    },
+	
+	
+	
+	
+	
+	"214": {
+		"code": "Bw1",
+		"name": "(週任) 全力出擊!",
+		"desc": "(週任) 出擊36次, 和敵軍頭目交戰24次, 擊敗敵軍頭目12次, 勝利S 6次。",
+		"unlock": [ 221 ],
+		"tracking": [ [0,36], [0,24], [0,12], [0,6] ]
+	},
+	"220": {
+		"code": "Bw2",
+        "name": "(週任) 擊沈敵空母!",
+        "desc": "(週任) 擊沈 20 艘敵軍輕空母/正規空母。",
+		"unlock": [ 228 ],
+		"tracking": [ [0,20] ]
+    },
+	"213": {
+		"code": "Bw3",
+		"name": "(週任) 擊沈敵補給艦!",
+		"desc": "(週任) 擊沈 20 艘敵軍補給艦。",
+		"tracking": [ [0,20] ]
+	},
+	"221": {
+		"code": "Bw4",
+        "name": "(週任) 擊沈敵補給艦 2 !",
+        "desc": "(週任) 擊沈 50 艘敵軍補給艦。",
+		"unlock": [ 261, 257, 264 ],
+		"tracking": [ [0,50] ]
+    },
+	"228": {
+		"code": "Bw5",
+        "name": "(週任) 擊沈敵潛水艦!",
+        "desc": "(週任) 擊沈 15 艘敵軍潛水艦。",
+		"unlock": [ 229, 241, 613 ],
+		"tracking": [ [0,15] ]
+    },
+	"229": {
+		"code": "Bw6",
+        "name": "(週任) 西方海域出擊!",
+        "desc": "(週任) 在西方海域擊敗敵軍主力艦隊 12 次。",
+		"unlock": [ 242 ],
+		"tracking": [ [0,12] ]
+    },
+	"241": {
+		"code": "Bw7",
+        "name": "(週任) 北方海域出擊!",
+        "desc": "(週任) 在北方海域的 3-3 、 3-4 、3-5 擊敗敵軍主力艦隊 5 次。",
+		"tracking": [ [0,5] ]
+    },
+    "242": {
+		"code": "Bw8",
+        "name": "(週任) 西方海域出擊 2 !",
+        "desc": "(週任) 在西方海域的 4-4 擊敗敵軍主力艦隊 1 次。",
+		"unlock": [ 243 ],
+		"tracking": [ [0,1] ]
+    },
+    "243": {
+		"code": "Bw9",
+        "name": "(週任) 南方海域出擊!",
+        "desc": "(週任) 在南方海域的 5-2 擊敗敵軍主力艦隊 2 次。(只限 S 勝)",
+		"tracking": [ [0,2] ]
+    },
+	"261": {
+		"code": "Bw10",
+        "name": "(週任) 鎮守府海域出擊!",
+        "desc": "(週任) 在鎮守府海域的 1-5 擊敗敵軍主力艦隊 3 次。(只限 A 勝以上)",
+		"tracking": [ [0,3] ]
+    },
+	
+	
+	
+	
+	
+	"249": {
+		"code": "Bm1",
+        "name": "(月任) 「第五戰隊」出擊!",
+        "desc": "(月任) 在2-5使用妙高、那智、羽黑及額外3艘艦S勝敵軍頭目1次。",
+		"unlock": [ 265 ]
+    },
+	"256": {
+		"code": "Bm2",
+        "name": "(月任) 「潛水艦隊」出擊!",
+        "desc": "(月任) 在中部海域的 6-1 擊敗敵軍主力艦隊 3 次。(只限 S 勝)",
+		"tracking": [ [0,3] ]
+    },
+	"257": {
+		"code": "Bm3",
+        "name": "(月任) 「水雷戰隊」出擊!",
+        "desc": "(月任) 在1-4使用1-3艘輕巡洋艦及3-5艘驅逐艦S勝敵軍頭目1次。"
+    },
+	"259": {
+		"code": "Bm4",
+        "name": "(月任) 「水上打撃戰隊」出擊!",
+        "desc": "(月任) 在5-1使用3艘低速戰艦、1艘輕巡及額外2艘艦S勝敵軍頭目1次。"
+    },
+	"265": {
+		"code": "Bm5",
+        "name": "(月任) 每月海上護衛!",
+        "desc": "(月任) 在鎮守府海域的 1-5 擊敗敵軍主力艦隊 10 次。(只限 A 勝以上)",
+		"tracking": [ [0,10] ]
+    },
+	"264": {
+		"code": "Bm6",
+        "name": "(月任) 「空母機動部隊」出擊!",
+        "desc": "(月任) 在4-2使用2艘輕/正空母、2艘驅逐及額外2艘艦S勝敵軍頭目1次。",
+		"unlock": [ 266 ]
+    },
+	"266": {
+		"code": "Bm7",
+        "name": "(月任) 「水上反撃部隊」出擊!",
+        "desc": "(月) 在2-5使用1艘旗艦驅逐+1艘重巡+1艘輕巡+3艘驅逐S勝敵軍頭目。"
+    },
+	
+	
+	
+	
+	
+    "301": {
+		"code": "C1",
+        "name": "初次演習!",
+        "desc": "與另一位提督的艦隊進行 1 次演習。"
+    },
+	 "303": {
+		"code": "C2",
+        "name": "(日任) 每日演習!",
+        "desc": "(日任) 與另一位提督的艦隊進行 3 次演習。",
+		"unlock": [ 304, 302 ],
+		"tracking": [ [0,3] ]
+    },
+	"304": {
+		"code": "C3",
+        "name": "(日任) 每日演習 2 !",
+        "desc": "(日任) 與另一位提督的艦隊進行五次演習且獲勝。",
+		"tracking": [ [0,5] ]
+    },
+    "302": {
+		"code": "C4",
+        "name": "(週任) 每週演習!",
+        "desc": "(週任) 與另一位提督的艦隊進行 20 次演習且獲勝。",
+		"tracking": [ [0,20] ]
+    },
+    "307": {
+		"code": "C5",
+        "name": "演習練度向上!",
+        "desc": "在一天內與另一位提督的艦隊進行 3 次演習且獲勝。"
+    },
+    "308": {
+		"code": "C6",
+        "name": "演習練度向上 2 !",
+        "desc":"在一天內與另一位提督的艦隊進行 4 次演習且獲勝。"
+    },
+	
+	
+	
+	
+	
+    "401": {
+		"code": "D1",
+        "name": "初次遠征!",
+        "desc": "進行 1 次遠征。"
+    },
+    "402": {
+		"code": "D2",
+        "name": "(日任) 每日遠征!",
+        "desc": "(日任) 完成 3 次成功的遠征。",
+		"unlock": [ 403 ],
+		"tracking": [ [0,3] ]
+    },
+    "403": {
+		"code": "D3",
+        "name": "(日任) 每日遠征 2 !",
+        "desc": "(日任) 完成 10 次成功的遠征。",
+		"tracking": [ [0,10] ]
+    },
+    "404": {
+		"code": "D4",
+        "name": "(週任) 每週遠征!",
+        "desc": "(週任) 完成 30 次成功的遠征。",
+		"tracking": [ [0,30] ]
+    },
+    "405": {
+		"code": "D5",
+        "name": "第一次潛水艦派遣作戰!",
+        "desc": "完成 1 次遠征 30 且成功。"
+    },
+    "406": {
+		"code": "D6",
+        "name": "第二次潛水艦派遣作戰!",
+        "desc": "再完成 1 次遠征 30 且成功。"
+    },
+    "408": {
+		"code": "D7",
+        "name": "第三次潛水艦派遣作戰!",
+        "desc": "再完成 2 次遠征 30 且成功。"
+    },
+    "409": {
+		"code": "D8",
+        "name": "海外艦接觸作戰!",
+        "desc": "完成 1 次遠征 31 且成功。"
+    },
+    "410": {
+		"code": "D9",
+        "name": "(週任) 每週急行 !",
+        "desc": "(週任) 完成 1 次遠征 37 或 38 且成功。",
+		"unlock": [ 411 ],
+		"tracking": [ [0,1] ]
+    },
+	"412": {
+		"code": "D10",
+        "name": "強化航空戰艦!",
+        "desc": "完成 1 次遠征 23 且成功。"
+    },
+    "411": {
+		"code": "D11",
+        "name": "(週任) 每週急行 2 !",
+        "desc": "(週任) 完成 7 次遠征 37 或 38 且成功。",
+		"tracking": [ [0,7] ]
+    },
+    "413": {
+		"code": "D12",
+        "name": "續．強化航空戰艦!",
+        "desc": "再完成 4 次遠征 23 且成功。"
+    },
+    "414": {
+		"code": "D13",
+        "name": "實施遠洋潛水艦作戰!",
+        "desc": "完成 1 次遠征 39 且成功。"
+    },
+    "415": {
+		"code": "D14",
+        "name": "再實施遠洋潛水艦作戰!",
+        "desc": "再完成 2 次遠征 39 且成功。"
+    },
+    "416": {
+		"code": "D15",
+        "name": "實施防空射撃演習!",
+        "desc": "完成 3 次遠征 6 且成功。"
+    },
+    "417": {
+		"code": "D16",
+        "name": "實施囮機動部隊支援作戰!",
+        "desc": "完成 1 次遠征 15 且成功。"
+    },
+    "418": {
+		"code": "D17",
+        "name": "實施觀艦式預行!",
+        "desc": "完成 2 次遠征 7 且成功。"
+    },
+    "419": {
+		"code": "D18",
+        "name": "實施觀艦式!",
+        "desc": "完成 1 次遠征 8 且成功。"
+    },
+	
+	
+	
+	
+	
+    "501": {
+		"code": "E1",
+        "name": "初次補給!",
+        "desc": "補給 1 次。"
+    },
+    "502": {
+		"code": "E2",
+        "name": "初次入渠!",
+        "desc": "修復 1 艘船。"
+    },
+    "503": {
+		"code": "E3",
+        "name": "(日任) 每日入渠!",
+        "desc": "(日任) 修復 5 艘船。",
+		"unlock": [ 504 ],
+		"tracking": [ [0,5] ]
+    },
+    "504": {
+		"code": "E4",
+        "name": "(日任) 每日補給!",
+        "desc": "(日任) 補給 15 次。",
+		"tracking": [ [0,15] ]
+    },
+	
+	
+	
+	
+	
+	"605": {
+		"code": "F1",
+        "name": "Daily Development 1",
+        "desc": "Craft a piece of equipment (Failures are OK)",
+		"unlock": [ 606 ],
+		"tracking": [ [0,1] ]
+    },
+	"606": {
+		"code": "F2",
+        "name": "Daily Construction 1",
+        "desc": "Craft a ship",
+		"unlock": [ 607 ],
+		"tracking": [ [0,1] ]
+    },
+	"607": {
+		"code": "F3",
+        "name": "Daily Development 2",
+        "desc": "Craft 3 pieces of equipment (Failures are OK)",
+		"unlock": [ 608 ],
+		"tracking": [ [0,3] ]
+    },
+	 "608": {
+		"code": "F4",
+        "name": "Daily Construction 2",
+        "desc": "Craft 3 ships",
+		"unlock": [ 609, 619 ],
+		"tracking": [ [0,3] ]
+    },
+	 "609": {
+		"code": "F5",
+        "name": "Daily Dismantlement",
+        "desc": "Scrap 2 ships",
+		"tracking": [ [0,2] ]
+    },
+    "601": {
+		"code": "F6",
+        "name": "First Construction",
+        "desc": "Craft a ship"
+    },
+    "602": {
+		"code": "F7",
+        "name": "First Development",
+        "desc": "Craft a piece of equipment"
+    },
+    "603": {
+		"code": "F8",
+        "name": "First Dismantlement",
+        "desc": "Dismantle a ship"
+    },
+    "604": {
+		"code": "F9",
+        "name": "First Disposal",
+        "desc": "Scrap a piece of equipment"
+    },
+    "610": {
+		"code": "F10",
+        "name": "Preparation for LSC (Part 2)",
+        "desc": "Scrap equipment 4 times"
+    },
+	"612": {
+		"code": "F11",
+        "name": "Prepare the Drum Canisters",
+        "desc": "Scrap equipment 3 times"
+    },
+	 "613": {
+		"code": "F12",
+        "name": "Weekly Dismantlement",
+        "desc": "Scrap equipment 24 times",
+		"tracking": [ [0,24] ]
+    },
+	 "614": {
+		"code": "F13",
+        "name": "Model Conversion (to Tenzan)",
+        "desc": "Have flagship equipped with Type 97 Torpedo Bomber (Tomonaga Squadron), then scrap 2 Tenzan"
+    },
+	"615": {
+		"code": "F14",
+        "name": "Model Conversion (to Suisei)",
+        "desc": "Have flagship equipped with Type 99 Dive Bomber (Egusa Squadron), then scrap 2 Suisei"
+    },
+    "616": {
+		"code": "F15",
+        "name": "Model Conversion (to Reppuu)",
+        "desc": "Have flagship equipped with Zero Fighter Type 52 Type C (601 Air Group), then scrap 2 Reppuu"
+    },
+	"617": {
+		"code": "F16",
+        "name": "Preparing for Irako",
+        "desc": "Scrap equipment 10 times"
+    },
+	"618": {
+		"code": "F17",
+        "name": "First Equipment Modernisation",
+        "desc": "Perform equipment modernisation once"
+    },
+    "619": {
+		"code": "F18",
+        "name": "Daily Equipment Modernisation",
+        "desc": "Perform equipment modernisation once",
+		"tracking": [ [0,1] ]
+    },
+	
+	
+    
+	
+	
+    "701": {
+		"code": "G1",
+        "name": "初次近代化改修!",
+        "desc": "完成 1 次近代化改修。"
+    },
+    "702": {
+		"code": "G2",
+        "name": "(日任) 每日近代化改修!",
+        "desc": "(日任) 完成 2 次近代化改修。",
+		"unlock": [ 703 ],
+		"tracking": [ [0,2] ]
+    },
+    "703": {
+		"code": "G3",
+        "name": "(週任) 每週近代化改修!",
+        "desc": "(週任) 完成 15 次近代化改修。",
+		"tracking": [ [0,15] ]
+    },
+    "704": {
+		"code": "G4",
+        "name": "準備大型艦建造!",
+        "desc": "完成 4 次近代化改修。"
+    },
+	
+	
+	
+	
+	
+	"611": {
+        "name": "婚禮準備! ( 1 )",
+        "desc": "廢棄裝備 2 次。"
+    },
+	"306": {
+        "name": "婚禮準備! ( 2 )",
+        "desc": "與另一位提督的艦隊進行 2 次演習且獲勝。"
+    }
+}

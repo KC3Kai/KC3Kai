@@ -1,15 +1,18 @@
 (function(){
 	"use strict";
+	_gaq.push(['_trackPageview']);
 	
 	var myVersion = chrome.runtime.getManifest().version;
 	
 	// Document ready
 	$(document).on("ready", function(){
 		// Show installed version
-		$(".version").text("Version "+myVersion);
+		$(".verNum").text(myVersion);
 		
 		// Load previously stored configs
 		ConfigManager.load();
+		KC3Meta.init("../../data/");
+		KC3Translation.execute();
 		
 		// Set HTML language
 		$("html").attr("lang", ConfigManager.language);

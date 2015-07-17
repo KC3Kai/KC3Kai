@@ -1,4 +1,6 @@
 {
+	"available": true,
+	
 	"SortieWinCount": "Sortie Win Count",
     "SortieLoseCount": "Sortie Lose Count",
     "SortieWinRate": "Sortie Win Rate",
@@ -27,14 +29,37 @@
     "Experience": "Experience",
     "Name": "Name",
 	
+	"MenuPlayAPIName" : "Play via API Link",
+	"MenuPlayAPIDesc" : "Play using your last saved API link or manually input one if you have it",
+	"MenuRefreshAPIName" : "Refresh API Link",
+	"MenuRefreshAPIDesc" : "Opens the DMM play page where we'll auto-extract your new API link",
+	"MenuPlayDMMName" : "Play on DMM Website",
+	"MenuPlayDMMDesc" : "Natural DMM Netgame Portal gameplay, for our cautious friends. Absolute Safe.",
+	"MenuCookiesName" : "Activate Cookies",
+	"MenuCookiesDesc" : "Use this anytime you encounter the \"Error Area\" screen on DMM.com",
+	"MenuStrategyName" : "Strategy Room",
+	"MenuStrategyDesc" : "Various tools to help you analyze and strategize, or just manage your fleet",
+	"MenuSettingsDesc" : "Various extension confguration which applies on the next game session",
+	"MenuAboutDesc" : "Information on KC3改, and its teams of developers, writers and testers",
+	"MenuChecking" : "Checking for next KC3改 update...",
+	"MenuOnLatest" : "You are using the latest version!",
+	
+	"AboutTitle" : "About KC3改 Developers",
 	"Version" : "Version",
 	"AboutHome" : "Home Page",
 	"AboutSource" : "Source",
 	"AboutWiki" : "Wiki & FAQ",
 	"AboutReport" : "Report Bugs",
+	"AboutHelpCommunity" : "You can help out",
+	"AboutHelpLearnMore" : "No need to code! Learn more how to do it >",
+	
+	"SettingsTitle" : "KC3改 Settings",
+	"LearnMore" : "Learn more",
+	"Saved" : "Saved!",
 	
 	"SpeedFast" : "Fast",
 	"SpeedSlow" : "Slow",
+	
 	"HQText" : "HQ",
 	"LevelText" : "Level",
 	"LevelShort" : "Lv.",

@@ -1,10 +1,13 @@
 (function(){
 	"use strict";
+	_gaq.push(['_trackPageview']);
 	
 	// Document ready
 	$(document).on("ready", function(){
 		// Load previously stored configs
 		ConfigManager.load();
+		KC3Meta.init("../../data/");
+		KC3Translation.execute();
 		
 		// Set HTML language
 		$("html").attr("lang", ConfigManager.language);

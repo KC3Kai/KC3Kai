@@ -3,7 +3,7 @@
 	"name": "KanColle Command Center 改",
 	"short_name": "KC3改",
 	"description": "Kantai Collection Game Viewer and Tools",
-	"version": "11.0",
+	"version": "11.2",
 	"devtools_page": "pages/devtools/init.html",
 	"options_page": "pages/settings/settings.html",
 	"icons": {
@@ -50,5 +50,5 @@
 			"all_frames": true
 		}
 	],
-	"content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com 'unsafe-eval'; object-src 'self'"
 }

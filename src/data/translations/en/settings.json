@@ -10,7 +10,10 @@
 				"options" : {
 					"choices" : [
 						[ "en", "English" ],
-						[ "jp", "日本語" ]
+						[ "jp", "日本語" ],
+						[ "id", "Indonesia" ],
+						[ "tcn", "繁體中文" ],
+						[ "scn", "简体中文" ]
 					]
 				}
 			},

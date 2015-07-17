@@ -26,7 +26,7 @@
 	{
 		"name": "Diablohu",
 		"avatar": "https://avatars0.githubusercontent.com/u/1946774?v=3&s=40",
-		"desc": "Developer",
+		"desc": "Developer, TL (SCN)",
 		"links": {
 			"wb" : "http://diablohu.com",
 			"gh" : "https://github.com/Diablohu",
@@ -42,6 +42,17 @@
 			"gh" :"https://github.com/McDohl",
 			"wk" :"http://kancolle.wikia.com/wiki/User:McDohlJr",
 			"fb" :"https://www.facebook.com/endruhugen"
+		}
+	},
+	{
+		"name": "nicky008",
+		"avatar": "https://avatars0.githubusercontent.com/u/10517990?v=3&s=40",
+		"desc": "Translator (JP)",
+		"links": {
+			"gh" :"https://github.com/nicky008",
+			"tw" : "https://twitter.com/nicky_008",
+			"fb" : "https://www.facebook.com/jamesnicky008",
+			"wk" : "http://kancolle.wikia.com/wiki/User:Nicky008"
 		}
 	},
 	{
@@ -133,6 +144,35 @@
 		"desc" : "Fairy Designer",
 		"links" : {
 			"da" :"http://tykez269.deviantart.com"
+		}
+	},
+	{
+		"name": "freezebear",
+		"avatar" : "https://avatars2.githubusercontent.com/u/12047229?v=3&s=40",
+		"desc" : "Translator (ID)",
+		"links" : {
+			"fb" :"https://www.facebook.com/freezebear17",
+			"tw" :"https://twitter.com/freezebear17",
+			"wk" :"kancolle.wikia.com/wiki/User:Freezebear"
+		}
+	},
+	{
+		"name": "hufuhufu",
+		"avatar" : "https://avatars3.githubusercontent.com/u/13282383?v=3&s=40",
+		"desc" : "Translator (ID)",
+		"links" : {
+			"fb" :"https://www.facebook.com/arifLV2",
+			"wk" :"kancolle.wikia.com/wiki/User:hufuhufu"
+		}
+	},
+	{
+		"name": "kololz",
+		"avatar" : "https://avatars0.githubusercontent.com/u/12908497?v=3&s=40",
+		"desc" : "Translator (TCN)",
+		"links" : {
+			"gh" :"https://github.com/kololz",
+			"fb" :"https://www.facebook.com/kololz",
+			"wk" :"https://kancolle.wikia.com/wiki/User:Kololz"
 		}
 	}
 ]

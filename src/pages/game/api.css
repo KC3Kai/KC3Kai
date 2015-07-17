@@ -196,6 +196,7 @@ body {
 	text-align:center;
 	color:#555;
 	background:#E4D5C2;
+	opacity:0.80;
 }
 .ol_quest .tracking.small {
 	line-height:15px;

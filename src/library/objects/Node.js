@@ -16,7 +16,6 @@ Used by SortieManager
 	
 	KC3Node.prototype.defineAsBattle = function( nodeData ){
 		this.type = "battle";
-		this.enemyListAvailable = false;
 		
 		// If passed initial values
 		if(typeof nodeData != "undefined"){
@@ -31,8 +30,7 @@ Used by SortieManager
 			// If passed formatted enemy list from PVP
 			if(typeof nodeData.pvp_opponents != "undefined"){
 				this.eships = nodeData.pvp_opponents;
-				// this.epattern = 
-				this.enemyListAvailable = true;
+				KC3SortieManager.onEnemiesAvailable();
 			}
 		}
 		return this;
@@ -48,10 +46,7 @@ Used by SortieManager
 				self.eships = [-1,-1,-1,-1,-1,-1];
 				self.eformation = -1;
 			}
-			self.enemyListAvailable = true;
-			if(typeof self.onEnemiesAvailable != "undefined"){
-				self.onEnemiesAvailable();
-			}
+			KC3SortieManager.onEnemiesAvailable();
 		});
 	};
 	
@@ -105,8 +100,14 @@ Used by SortieManager
 	KC3Node.prototype.engage = function( battleData ){
 		this.battleDay = battleData;
 		
-		this.supportFlag = (battleData.api_support_flag==1)?true:false;
-		this.yasenFlag = (battleData.api_midnight_flag==1)?true:false;
+		var enemyships = battleData.api_ship_ke;
+		enemyships.splice(0,1);
+		this.eships = enemyships;
+		this.eformation = battleData.api_formation[1];
+		KC3SortieManager.onEnemiesAvailable();
+		
+		this.supportFlag = (battleData.api_support_flag>0)?true:false;
+		this.yasenFlag = (battleData.api_midnight_flag>0)?true:false;
 		
 		this.detection = KC3Meta.detection( battleData.api_search[0] )
 		this.engagement = KC3Meta.engagement( battleData.api_formation[2] )
@@ -176,6 +177,10 @@ Used by SortieManager
 		}
 		
 		this.saveBattleOnDB();
+	};
+	
+	KC3Node.prototype.isBoss = function(){
+		return this.id == KC3SortieManager.boss.node;
 	};
 	
 	KC3Node.prototype.saveBattleOnDB = function( resultData ){
