@@ -18,7 +18,8 @@
 		$("html").attr("lang", ConfigManager.language);
 		
 		// Load and show developer list
-		$.getJSON("../../data/translations/"+ConfigManager.language+"/developers.json", function(response){
+		//$.getJSON("../../data/translations/"+ConfigManager.language+"/developers.json", function(response){
+		$.getTranslationJSON(ConfigManager.language, 'developers', function(response){
 			for(var ctr in response){
 				addDeveloper( response[ctr] );
 			}

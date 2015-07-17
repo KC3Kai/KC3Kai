@@ -15,7 +15,8 @@
 		var sectionBox;
 		
 		// Add configurable settings
-		$.getJSON("../../data/translations/"+ConfigManager.language+"/settings.json", function(response){
+		//$.getJSON("../../data/translations/"+ConfigManager.language+"/settings.json", function(response){
+		$.getTranslationJSON(ConfigManager.language, 'settings', function(response){
 			for(var sctr in response){
 				// Add section header
 				sectionBox = $("#factory .section").clone().appendTo("#wrapper .settings");
