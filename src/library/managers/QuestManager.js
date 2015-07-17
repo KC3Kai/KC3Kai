@@ -41,7 +41,7 @@ Uses KC3Quest objects to play around with
 		
 		getTimeToResetFromLocalStorage :function( timeType ){
 			var result = parseInt(localStorage[timeType]);
-			if (typeof result == "undefined"){
+			if (isNaN(result)){
 				result = -1;
 				localStorage[timeType] = -1;
 			}
