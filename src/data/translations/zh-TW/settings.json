@@ -41,13 +41,13 @@
 			},
 			{
 				"id" : "info_craft",
-				"name" : "建造結果",
+				"name" : "開發預覽",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "info_compass",
-				"name" : "羅艦與敵構成",
+				"name" : "羅艦、敵構成",
 				"type" : "check",
 				"options" : {}
 			},
