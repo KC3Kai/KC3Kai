@@ -5,6 +5,10 @@
 	var myVersion = parseInt(chrome.runtime.getManifest().version, 10);
 
 	$(document).on("ready", function(){
+		// Load previously stored configs
+		ConfigManager.load();
+		KC3Meta.init("../../data/");
+		KC3Translation.execute();
 		
 		// Show next version
 		$(".schedule span.version").text(myVersion+1);
@@ -12,7 +16,7 @@
 		// Show estimated time until next update
 		$.ajax({
 			dataType: "json",
-			url: "https://raw.githubusercontent.com/dragonjet/KC3Kai/master/update",
+			url: "https://raw.githubusercontent.com/dragonjet/KC3Kai/master/update?v="+((new Date()).getTime()),
 			success: function(data, textStatus, request){
 				if(myVersion < parseInt(data.version, 10)){
 					version = data.version;
@@ -21,7 +25,7 @@
 						new Date(data.time)
 					);
 				}else{
-					$(".schedule").html("You are using the latest version!");
+					$(".schedule").html( KC3Meta.term("MenuOnLatest") );
 				}
 			}
 		});
