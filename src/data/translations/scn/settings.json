@@ -4,23 +4,10 @@
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Global",
 		"contents" : [
 			{
-				"id" : "language",
-				"name" : "语言",
-				"type" : "radio",
-				"options" : {
-					"choices" : [
-						[ "en", "English" ],
-						[ "jp", "日本語" ],
-						[ "id", "Indonesia" ],
-						[ "tcn", "繁體中文" ],
-						[ "scn", "简体中文" ]
-					]
-				}
+				"name" : "语言"
 			},
 			{
-				"id" : "elosFormula",
 				"name" : "索敌公式",
-				"type" : "radio",
 				"options" : {
 					"choices" : [
 						[ 1, "总和" ],
@@ -36,34 +23,19 @@
 		"help" : "",
 		"contents" : [
 			{
-				"id" : "info_face",
-				"name" : "剧透建造结果",
-				"type" : "check",
-				"options" : {}
+				"name" : "剧透建造结果"
 			},
 			{
-				"id" : "info_craft",
-				"name" : "剧透开发结果",
-				"type" : "check",
-				"options" : {}
+				"name" : "剧透开发结果"
 			},
 			{
-				"id" : "info_compass",
-				"name" : "剧透航向和敌人配置",
-				"type" : "check",
-				"options" : {}
+				"name" : "剧透航向和敌人配置"
 			},
 			{
-				"id" : "info_battle",
-				"name" : "战斗模式",
-				"type" : "check",
-				"options" : {}
+				"name" : "战斗模式"
 			},
 			{
-				"id" : "info_boss",
-				"name" : "Boss配置",
-				"type" : "check",
-				"options" : {}
+				"name" : "Boss配置"
 			}
 		]
 	},
@@ -72,9 +44,7 @@
 		"help" : "",
 		"contents" : [
 			{
-				"id" : "ss_mode",
 				"name" : "输出方式",
-				"type" : "radio",
 				"options" : {
 					"choices" : [
 						[ 0, "自动下载至下载目录" ],
@@ -84,9 +54,7 @@
 				}
 			},
 			{
-				"id" : "ss_type",
 				"name" : "文件格式",
-				"type" : "radio",
 				"options" : {
 					"choices" : [
 						[ "JPG", "JPG" ],
@@ -101,40 +69,27 @@
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Alerts",
 		"contents" : [
 			{
-				"id" : "alert_diff",
 				"name" : "倒计时提前",
-				"type" : "small_text",
 				"options" : { "label" : "秒" }
 			},
 			{
-				"id" : "alert_type",
 				"name" : "提示音",
-				"type" : "radio",
 				"options" : {
 					"choices" : [
 						[ 0, "None" ],
 						[ 1, "DING!" ],
-						[ 2, "Custom" ]
+						[ 2, "自定义" ]
 					]
 				}
 			},
 			{
-				"id" : "alert_custom",
-				"name" : "自定义提示音",
-				"type" : "long_text",
-				"options" : { "placeholder" : "http://" }
+				"name" : "自定义提示音"
 			},
 			{
-				"id" : "alert_volume",
-				"name" : "提示音音量",
-				"type" : "small_text",
-				"options" : { "label" : "%" }
+				"name" : "提示音音量"
 			},
 			{
-				"id" : "alert_desktop",
-				"name" : "桌面通知",
-				"type" : "check",
-				"options" : {}
+				"name" : "桌面通知"
 			}
 		]
 	},
@@ -143,58 +98,36 @@
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Screen",
 		"contents" : [
 			{
-				"id" : "api_translation",
-				"name" : "任务翻译",
-				"type" : "check",
-				"options" : {}
+				"name" : "任务翻译"
 			},
 			{
-				"id" : "api_tracking",
-				"name" : "任务追踪",
-				"type" : "check",
-				"options" : {}
+				"name" : "任务追踪"
 			},
 			{
-				"id" : "api_askExit",
-				"name" : "退出游戏时需确认",
-				"type" : "check",
-				"options" : {}
+				"name" : "退出游戏时需确认"
 			},
 			{
-				"id" : "api_margin",
 				"name" : "上边边距",
-				"type" : "small_text",
-				"options" : { "label" : "像素" }
+				"options" : { "label" : "像素 (px)" }
 			},
 			{
-				"id" : "api_bg_color",
-				"name" : "背景颜色 (background-color)",
-				"type" : "long_text",
+				"name" : "背景颜色 (bg-color)",
 				"options" : { "placeholder" : "请查阅 CSS background-color 属性" }
 			},
 			{
-				"id" : "api_bg_image",
-				"name" : "背景图片 (background-image)",
-				"type" : "long_text",
+				"name" : "背景图片 (bg-image)",
 				"options" : { "placeholder" : "http://" }
 			},
 			{
-				"id" : "api_bg_size",
-				"name" : "背景尺寸 (background-size)",
-				"type" : "long_text",
+				"name" : "背景尺寸 (bg-size)",
 				"options" : { "placeholder" : "请查阅 CSS background-size 属性" }
 			},
 			{
-				"id" : "api_bg_position",
-				"name" : "背景位置 (background-position)",
-				"type" : "long_text",
+				"name" : "背景位置 (bg-position)",
 				"options" : { "placeholder" : "请查阅 CSS background-position 属性" }
 			},
 			{
-				"id" : "api_gameScale",
-				"name" : "游戏窗口缩放",
-				"type" : "small_text",
-				"options" : { "label" : "%" }
+				"name" : "游戏窗口缩放"
 			}
 		]
 	},
@@ -203,57 +136,34 @@
 		"help" : "",
 		"contents" : [
 			{
-				"id" : "dmm_customize",
-				"name" : "允许自定义",
-				"type" : "check",
-				"options" : {}
+				"name" : "允许自定义"
 			},
 			{
-				"id" : "dmm_translation",
-				"name" : "任务翻译",
-				"type" : "check",
-				"options" : {}
+				"name" : "任务翻译"
 			},
 			{
-				"id" : "dmm_tracking",
-				"name" : "任务追踪",
-				"type" : "check",
-				"options" : {}
+				"name" : "任务追踪"
 			},
 			{
-				"id" : "dmm_askExit",
-				"name" : "退出游戏时需确认",
-				"type" : "check",
-				"options" : {}
+				"name" : "退出游戏时需确认"
 			},
 			{
-				"id" : "dmm_margin",
 				"name" : "上边边距",
-				"type" : "small_text",
-				"options" : { "label" : "pixels" }
+				"options" : { "label" : "像素 (px)" }
 			},
 			{
-				"id" : "dmm_bg_color",
-				"name" : "背景颜色 (background-color)",
-				"type" : "long_text",
+				"name" : "背景颜色 (bg-color)",
 				"options" : { "placeholder" : "请查阅 CSS background-color 属性" }
 			},
 			{
-				"id" : "dmm_bg_image",
-				"name" : "背景图片 (background-image)",
-				"type" : "long_text",
-				"options" : { "placeholder" : "http://" }
+				"name" : "背景图片 (bg-image)"
 			},
 			{
-				"id" : "dmm_bg_size",
-				"name" : "背景尺寸 (background-size)",
-				"type" : "long_text",
+				"name" : "背景尺寸 (bg-size)",
 				"options" : { "placeholder" : "请查阅 CSS background-size 属性" }
 			},
 			{
-				"id" : "dmm_bg_position",
-				"name" : "背景位置 (background-position)",
-				"type" : "long_text",
+				"name" : "背景位置 (bg-position)",
 				"options" : { "placeholder" : "请查阅 CSS background-position 属性" }
 			}
 		]
@@ -263,9 +173,7 @@
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Panel",
 		"contents" : [
 			{
-				"id" : "pan_theme",
 				"name" : "主题",
-				"type" : "radio",
 				"options" : {
 					"choices" : [
 						[ "default", "默认" ],
@@ -274,9 +182,7 @@
 				}
 			},
 			{
-				"id" : "pan_size",
 				"name" : "面板尺寸",
-				"type" : "radio",
 				"options" : {
 					"choices" : [
 						[ "small", "小" ],
@@ -285,34 +191,23 @@
 				}
 			},
 			{
-				"id" : "pan_bg_color",
-				"name" : "背景颜色 (background-color)",
-				"type" : "long_text",
+				"name" : "背景颜色 (bg-color)",
 				"options" : { "placeholder" : "请查阅 CSS background-color 属性" }
 			},
 			{
-				"id" : "pan_bg_image",
-				"name" : "背景图片 (background-image)",
-				"type" : "long_text",
+				"name" : "背景图片 (bg-image)",
 				"options" : { "placeholder" : "http://" }
 			},
 			{
-				"id" : "pan_bg_size",
-				"name" : "背景尺寸 (background-size)",
-				"type" : "long_text",
+				"name" : "背景尺寸 (bg-size)",
 				"options" : { "placeholder" : "请查阅 CSS background-size 属性" }
 			},
 			{
-				"id" : "pan_bg_position",
-				"name" : "背景位置 (background-position)",
-				"type" : "long_text",
+				"name" : "背景位置 (bg-position)",
 				"options" : { "placeholder" : "请查阅 CSS background-position 属性" }
 			},
 			{
-				"id" : "pan_opacity",
-				"name" : "界面不透明度",
-				"type" : "small_text",
-				"options" : { "label" : "%" }
+				"name" : "界面不透明度 (opacity)"
 			}
 		]
 	}
