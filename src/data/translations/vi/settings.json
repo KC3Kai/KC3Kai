@@ -1,11 +1,11 @@
 [
 	{
-		"section": "Global",
+		"section": "Tổng quan",
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Global",
 		"contents" : [
 			{
 				"id" : "language",
-				"name" : "Bahasa",
+				"name" : "Ngôn Ngữ",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
@@ -13,79 +13,80 @@
 						[ "jp", "日本語" ],
 						[ "id", "Indonesia" ],
 						[ "tcn", "繁體中文" ],
+						[ "scn", "简体中文" ],
 						[ "vi", "Tiếng Việt" ]
 					]
 				}
 			},
 			{
 				"id" : "elosFormula",
-				"name" : "Efektivitas Formula LoS ",
+				"name" : "Công thức tầm nhìn hiệu quả",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ 1, "Jumlah" ],
-						[ 2, "Lama" ],
-						[ 3, "Baru" ]
+						[ 1, "Tổng" ],
+						[ 2, "Cũ" ],
+						[ 3, "Mới" ]
 					]
 				}
 			}
 		]
 	},
 	{
-		"section": "Informasi Permainan",
+		"section": "Thông tin trò chơi",
 		"help" : "",
 		"contents" : [
 			{
 				"id" : "info_face",
-				"name" : "Wajah Konstruksi",
+				"name" : "Kết quả đóng tàu",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "info_craft",
-				"name" : "Hasil Crafting", 
+				"name" : "Kết quả tạo thiết bị",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "info_compass",
-				"name" : "Kompas dan Musuh",
+				"name" : "La bàn và Kẻ địch",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "info_battle",
-				"name" : "Informasi Pertempuran",
+				"name" : "Môi trường chiến đấu",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "info_boss",
-				"name" : "Susunan Boss",
+				"name" : "Đội hình Boss",
 				"type" : "check",
 				"options" : {}
 			}
 		]
 	},
 	{
-		"section": "Screenshot",
+		"section": "Chụp màn hình",
 		"help" : "",
 		"contents" : [
 			{
 				"id" : "ss_mode",
-				"name" : "Hasil Output",
+				"name" : "Chế độ xuất ảnh",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ 0, "Unduh" ],
+						[ 0, "Download" ],
 						[ 1, "Imgur" ],
-						[ 2, "Tab Baru" ]
+						[ 2, "Tab mới" ]
 					]
 				}
 			},
 			{
 				"id" : "ss_type",
-				"name" : "Format File",
+				"name" : "Kiểu file",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
@@ -97,220 +98,220 @@
 		]
 	},
 	{
-		"section": "Peringatan",
+		"section": "Thông báo",
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Alerts",
 		"contents" : [
 			{
 				"id" : "alert_diff",
-				"name" : "Penyisihan Waktu",
+				"name" : "Chênh lệch giờ",
 				"type" : "small_text",
-				"options" : { "label" : "Detik" }
+				"options" : { "label" : "giây" }
 			},
 			{
 				"id" : "alert_type",
-				"name" : "Tipe suara",
+				"name" : "Tiếng kêu",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ 0, "Matikan" ],
+						[ 0, "Không gì cả" ],
 						[ 1, "DING!" ],
-						[ 2, "Pilihan sendiri" ]
+						[ 2, "Tự chọn" ]
 					]
 				}
 			},
 			{
 				"id" : "alert_custom",
-				"name" : "URL Suara Pilihan Sendiri",
+				"name" : "Đường dẫn tự chọn",
 				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
 			},
 			{
 				"id" : "alert_volume",
-				"name" : "Volume Suara",
+				"name" : "Âm lượng",
 				"type" : "small_text",
 				"options" : { "label" : "%" }
 			},
 			{
 				"id" : "alert_desktop",
-				"name" : "Notifikasi Desktop",
+				"name" : "Thông báo ở màn hình",
 				"type" : "check",
 				"options" : {}
 			}
 		]
 	},
 	{
-		"section": "Tampilan Game API",
+		"section": "Màn hình Trò chơi",
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Screen",
 		"contents" : [
 			{
 				"id" : "api_translation",
-				"name" : "Terjemahan Quest",
+				"name" : "Dịch nhiệm vụ",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "api_tracking",
-				"name" : "Penanda Quest",
+				"name" : "Truy vết nhiệm vụ",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "api_askExit",
-				"name" : "Konfirmasi Keluar",
+				"name" : "Xác nhận khi thoát",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "api_margin",
-				"name" : "Batas Atas",
+				"name" : "Lề trên",
 				"type" : "small_text",
 				"options" : { "label" : "pixel" }
 			},
 			{
 				"id" : "api_bg_color",
-				"name" : "Warna Background",
+				"name" : "Màu nền",
 				"type" : "long_text",
-				"options" : { "placeholder" : "Lihat property background-color CSS" }
+				"options" : { "placeholder" : "See CSS background-color property" }
 			},
 			{
 				"id" : "api_bg_image",
-				"name" : "Gambar Latar Belakang",
+				"name" : "Ảnh nền",
 				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
 			},
 			{
 				"id" : "api_bg_size",
-				"name" : "Ukuran Latar Belakang",
+				"name" : "Cỡ nền",
 				"type" : "long_text",
-				"options" : { "placeholder" : "Lihat property background-size CSS" }
+				"options" : { "placeholder" : "See CSS background-size property" }
 			},
 			{
 				"id" : "api_bg_position",
-				"name" : "Posisi Latar Belakang",
+				"name" : "Vị trí nền",
 				"type" : "long_text",
-				"options" : { "placeholder" : "Lihat property background-position CSS" }
+				"options" : { "placeholder" : "See CSS background-position property" }
 			},
 			{
 				"id" : "api_gameScale",
-				"name" : "Ukuran Game Player",
+				"name" : "Độ lớn",
 				"type" : "small_text",
 				"options" : { "label" : "%" }
 			}
 		]
 	},
 	{
-		"section": "Gameplay DMM",
+		"section": "Chơi ở DMM",
 		"help" : "",
 		"contents" : [
 			{
 				"id" : "dmm_customize",
-				"name" : "Terapkan Pengaturan",
+				"name" : "Áp dụng tùy chỉnh",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "dmm_translation",
-				"name" : "Terjemahan Quest",
+				"name" : "Dịch Nhiệm vụ",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "dmm_tracking",
-				"name" : "Penanda Quest",
+				"name" : "Truy vết nhiệm vụ",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "dmm_askExit",
-				"name" : "Konfirmasi Keluar",
+				"name" : "Xác nhận khi thoát",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "dmm_margin",
-				"name" : "Batas Atas",
+				"name" : "Lề trên",
 				"type" : "small_text",
 				"options" : { "label" : "pixel" }
 			},
 			{
 				"id" : "dmm_bg_color",
-				"name" : "Warna Latar Belakang",
+				"name" : "Màu nền",
 				"type" : "long_text",
-				"options" : { "placeholder" : "Lihat property background-color CSS" }
+				"options" : { "placeholder" : "See CSS background-color property" }
 			},
 			{
 				"id" : "dmm_bg_image",
-				"name" : "Gambar Latar Belakang",
+				"name" : "Ảnh nền",
 				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
 			},
 			{
 				"id" : "dmm_bg_size",
-				"name" : "Ukuran Latar Belakang",
+				"name" : "Cỡ nền",
 				"type" : "long_text",
-				"options" : { "placeholder" : "Lihat property background-size CSS" }
+				"options" : { "placeholder" : "See CSS background-size property" }
 			},
 			{
 				"id" : "dmm_bg_position",
-				"name" : "Posisi Latar Belakang",
+				"name" : "Vị trí nền",
 				"type" : "long_text",
-				"options" : { "placeholder" : "Lihat property background-position CSS" }
+				"options" : { "placeholder" : "See CSS background-position property" }
 			}
 		]
 	},
 	{
-		"section": "Panel",
+		"section": "Khung điều hành",
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Panel",
 		"contents" : [
 			{
 				"id" : "pan_theme",
-				"name" : "Tema",
+				"name" : "Theme",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ "default", "Utama" ],
-						[ "dark", "Gelap" ]
+						[ "default", "Mặc định" ],
+						[ "dark", "Tối" ]
 					]
 				}
 			},
 			{
 				"id" : "pan_size",
-				"name" : "Ukuran Panel",
+				"name" : "Cỡ khung",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ "small", "Kecil" ],
-						[ "big", "Besar" ]
+						[ "small", "Nhỏ" ],
+						[ "big", "To" ]
 					]
 				}
 			},
 			{
 				"id" : "pan_bg_color",
-				"name" : "Warna Latar Belakang",
+				"name" : "Màu nền",
 				"type" : "long_text",
-				"options" : { "placeholder" : "Lihat property background-color CSS" }
+				"options" : { "placeholder" : "See CSS background-color property" }
 			},
 			{
 				"id" : "pan_bg_image",
-				"name" : "Gambar Latar Belakang",
+				"name" : "Ảnh nền",
 				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
 			},
 			{
 				"id" : "pan_bg_size",
-				"name" : "Ukuran Latar Belakang",
+				"name" : "Cỡ nền",
 				"type" : "long_text",
-				"options" : { "placeholder" : "Lihat property background-size CSS" }
+				"options" : { "placeholder" : "See CSS background-size property" }
 			},
 			{
 				"id" : "pan_bg_position",
-				"name" : "Posisi Latar Belakang",
+				"name" : "Vị trí nền",
 				"type" : "long_text",
-				"options" : { "placeholder" : "Lihat property background-position CSS" }
+				"options" : { "placeholder" : "See CSS background-position property" }
 			},
 			{
 				"id" : "pan_opacity",
-				"name" : "Transparansi Antarmuka",
+				"name" : "Độ trong suốt",
 				"type" : "small_text",
 				"options" : { "label" : "%" }
 			}
