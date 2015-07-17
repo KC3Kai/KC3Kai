@@ -9,8 +9,8 @@
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ "en", "English" ],
-						[ "jp", "日本語" ],
+						[ "en", "英文" ],
+						[ "jp", "日文" ],
 						[ "zh-TW", "中文 (台灣)" ]
 					]
 				}
@@ -35,7 +35,7 @@
 		"contents" : [
 			{
 				"id" : "info_face",
-				"name" : "Construction Face",
+				"name" : "建造預覽",
 				"type" : "check",
 				"options" : {}
 			},
@@ -100,7 +100,7 @@
 		"contents" : [
 			{
 				"id" : "alert_diff",
-				"name" : "Timer Allowance",
+				"name" : "提早通知",
 				"type" : "small_text",
 				"options" : { "label" : "秒" }
 			},
