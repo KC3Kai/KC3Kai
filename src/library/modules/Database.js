@@ -223,6 +223,13 @@ Uses Dexie.js third-party plugin on the assets directory
 				});
 		},
 		
+		count_world :function(world, callback){
+			this.con.sortie
+				.where("hq").equals(this.index)
+				.and(function(sortie){ return sortie.world == world; })
+				.count(callback);
+		},
+		
 		get_world :function(world, pageNumber, callback){
 			var itemsPerPage = 10;
 			var self = this;
@@ -255,6 +262,13 @@ Uses Dexie.js third-party plugin on the assets directory
 							callback(sortieIndexed);
 						});
 				});
+		},
+		
+		count_map :function(world, map, callback){
+			this.con.sortie
+				.where("hq").equals(this.index)
+				.and(function(sortie){ return sortie.world == world && sortie.mapnum==map; })
+				.count(callback);
 		},
 		
 		get_map :function(world, map, pageNumber, callback){
@@ -411,6 +425,10 @@ Uses Dexie.js third-party plugin on the assets directory
 			this.con.develop
 				.where("hq").equals(this.index)
 				.count(callback);
+		},
+		
+		get_sortie_page :function( world, map, page, callback ){
+			
 		}
 		
 	};

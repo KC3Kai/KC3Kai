@@ -135,7 +135,7 @@ Provides access to data on built-in JSON files
 		},
 		
 		gauge :function(map_id){
-			return this._gauges["m"+map_id] || 4;
+			return this._gauges["m"+map_id] || false;
 		},
 		
 		detection :function(index){
