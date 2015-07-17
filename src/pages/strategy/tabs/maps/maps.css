@@ -1,0 +1,137 @@
+.tab_maps .factory {
+	display:none;
+}
+
+/* WORLD LIST
+---------------------------------*/
+.tab_maps .world_list {
+	width:700px;
+	height:31px;
+	background:#f0f5ff;
+	border-bottom:1px solid #369;
+}
+.tab_maps .world_box {
+	width:100px;
+	height:30px;
+	float:left;
+	line-height:28px;
+	border:1px outset #ace;
+	text-align:center;
+	font-weight:bold;
+	font-size:14px;
+	background: -webkit-linear-gradient(top, rgba(206,245,255,1) 0%, rgba(111,226,255,1) 100%);
+}
+.tab_maps .world_box.active {
+	height:31px;
+	border:1px inset #FFCC00;
+	line-height:29px;
+	border-bottom:0px none;
+	background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(240,248,255,1) 100%);
+}
+
+/* MAP LIST
+---------------------------------*/
+.tab_maps .map_list {
+	width:700px;
+	margin:0px 0px 0px 0px;
+	background:#f0f8ff;
+	padding:5px 10px;
+	border-bottom:1px solid #369;
+}
+.tab_maps .map_box {
+	width:90px;
+	height:56px;
+	background:#cde;
+	border-radius:8px;
+	float:left;
+	padding:5px 0px;
+	margin:0px 7px 0px 0px;
+}
+.tab_maps .map_box.active {
+	border:2px inset #ace;
+	padding-top:4px;
+}
+.tab_maps .map_box .map_title {
+	width:80px;
+	height:20px;
+	line-height:20px;
+	margin:0px auto;
+	font-weight:bold;
+	font-size:16px;
+	text-align:center;
+	color:#006699;
+}
+.tab_maps .map_box .map_hp_txt {
+	width:80px;
+	height:16px;
+	line-height:16px;
+	font-size:11px;
+	margin:0px auto;
+	text-align:center;
+}
+.tab_maps .map_box .map_gauge {
+	width:80px;
+	height:10px;
+	background:#555;
+	border-radius:5px;
+	border:1px solid #000;
+	margin:0px auto;
+	overflow:hidden;
+}
+.tab_maps .map_box .map_bar {
+	width:80px;
+	height:10px;
+	background:#f00;
+	border-right:1px solid #ace;
+}
+
+/* Map without gauge (All maps) */
+.tab_maps .map_box.empty .map_title {
+	width:90px;
+	margin:13px 0px 0px 0px;
+}
+.tab_maps .map_box.empty .map_hp_txt {
+	display:none;
+}
+.tab_maps .map_box.empty .map_gauge {
+	display:none;
+}
+
+/* Map is Cleared */
+.tab_maps .map_box.cleared .map_gauge {
+	background:#0f0;
+	border:1px solid #393;
+}
+.tab_maps .map_box.cleared .map_bar {
+	display:none;
+}
+
+/* Map is NOT Cleared */
+.tab_maps .map_box.notcleared {
+	background:#fdd;
+}
+.tab_maps .map_box.active.notcleared {
+	border:2px inset #FAA;
+}
+
+/* Map not cleared and no gauge */
+.tab_maps .map_box.noclearnogauge .map_title {
+	width:90px;
+	margin:6px 0px 0px 0px;
+}
+.tab_maps .map_box.noclearnogauge .map_gauge {
+	display:none;
+}
+
+/* PAGE LIST
+---------------------------------*/
+.tab_maps .page_list {
+	width:700px;
+	margin:0px 0px 0px 0px;
+	background:#f0f5ff;
+	border-bottom:1px solid #369;
+	padding:5px 0px;
+}
+
+/* SORTIE LIST
+---------------------------------*/
