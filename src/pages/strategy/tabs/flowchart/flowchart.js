@@ -144,7 +144,7 @@
 			var thisBox = $(".tab_flowchart .factory .questExtraItem").clone().appendTo(".tab_flowchart .extralist");
 			$(".questIcon", thisBox).text( thisQuest.id );
 			$(".questIcon", thisBox).addClass("type"+(String(thisQuest.id).substring(0,1)));
-			$(".questDesc", thisBox).text( thisQuest.meta().desc);
+			$(".questDesc", thisBox).text( thisQuest.meta().desc );
 			
 			// Status-based actions
 			switch(thisQuest.status){
