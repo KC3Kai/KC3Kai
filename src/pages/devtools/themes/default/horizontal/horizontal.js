@@ -611,11 +611,7 @@
 				$(".battle", container).show();
 				
 				// Process PvP Battle
-				var enemyList = data.battle.api_ship_ke;
-				enemyList.splice(0,1);
-				var thisPvP = (new KC3Node()).defineAsBattle({
-					pvp_opponents: enemyList
-				});
+				var thisPvP = (new KC3Node()).defineAsBattle();
 				thisPvP.engage( data.battle );
 				
 				// Show opponent ships faces
