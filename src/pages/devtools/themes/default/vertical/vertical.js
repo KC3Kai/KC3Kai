@@ -748,7 +748,7 @@
 				if(countExisting == 0){
 					$(".craftGear .equipNote").html("This is your <strong>first</strong>!");
 				}else{
-					$(".craftGear .equipNote").html("You have <strong>"+countExisting+"</strong> of this, +1!");
+					$(".craftGear .equipNote").html("You now have <strong>"+countExisting+"</strong> of this item!");
 				}
 				
 				// Show resource used
