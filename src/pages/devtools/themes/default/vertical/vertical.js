@@ -353,9 +353,15 @@
 						}
 					});
 					
+
                                     try {
                                         var expeditionAnalyzeResult = ExpeditionHelper.analyzeFleet( CurrentFleet );
-                                        $(".expedition-helper").text(JSON.stringify( expeditionAnalyzeResult ));
+                                        if (expeditionAnalyzeResult) {
+                                            expeditionAnalyzeResult.e = expeditionAnalyzeResult.e.join(",")
+                                            $(".expedition-helper").text(JSON.stringify( expeditionAnalyzeResult ));
+                                        } else {
+                                            $(".expedition-helper").text( "no result" );
+                                        }
                                     } catch (e) 
                                     {
                                         $(".expedition-helper").text("error: " + e);
