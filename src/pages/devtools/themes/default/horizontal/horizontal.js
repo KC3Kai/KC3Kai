@@ -251,7 +251,21 @@
 							FleetEquipment( $(".ship-gear-4", ShipBox), CurrentShip.equipment(3), CurrentShip.slots[3] );
 						}
 					});
-					
+                                    
+                                    
+                                    try {
+                                        var expeditionAnalyzeResult = ExpeditionHelper.analyzeFleet( CurrentFleet );
+                                        if (expeditionAnalyzeResult) {
+                                            expeditionAnalyzeResult.e = expeditionAnalyzeResult.e.join(",")
+                                            $(".expedition-helper").text(JSON.stringify( expeditionAnalyzeResult ));
+                                        } else {
+                                            $(".expedition-helper").text( "no result" );
+                                        }
+                                    } catch (e) 
+                                    {
+                                        $(".expedition-helper").text("error: " + e);
+                                    }
+
 					// Expedition Timer Faces
 					KC3TimerManager._exped[0].face( PlayerManager.fleets[1].ship(0).masterId );
 					KC3TimerManager._exped[1].face( PlayerManager.fleets[2].ship(0).masterId );
@@ -313,7 +327,7 @@
 						});
 						
 						$(".battle .battle_singlefleet", container).show();
-						$(".battle .battle_mainfleet", container).hide();
+					$(".battle .battle_mainfleet", container).hide();
 						$(".battle .battle_escorts", container).hide();
 					}
 				}
@@ -538,10 +552,10 @@
 				
 				// Show extra item info
 				var countExisting = KC3GearManager.countByMasterId( data.itemMasterId );
-				if(countExisting == 0){
+				if(countExisting == 1){
 					$(".craftGear .equipNote").html("This is your <strong>first</strong>!");
 				}else{
-					$(".craftGear .equipNote").html("You have <strong>"+countExisting+"</strong> of this, +1!");
+					$(".craftGear .equipNote").html("You now have <strong>"+countExisting+"</strong> of this item!");
 				}
 				
 				// Show resource used
@@ -597,11 +611,7 @@
 				$(".battle", container).show();
 				
 				// Process PvP Battle
-				var enemyList = data.battle.api_ship_ke;
-				enemyList.splice(0,1);
-				var thisPvP = (new KC3Node()).defineAsBattle({
-					pvp_opponents: enemyList
-				});
+				var thisPvP = (new KC3Node()).defineAsBattle();
 				thisPvP.engage( data.battle );
 				
 				// Show opponent ships faces
