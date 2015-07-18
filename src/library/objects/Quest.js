@@ -122,6 +122,13 @@ Quest Type:
 				if(this.tracking === false){
 					this.tracking = MyMeta.tracking;
 				}
+			}else{
+				// Attach meta info to this object 
+				this.meta = function(){ return {
+					code : "XX",
+					name : "Unknown Quest",
+					desc : "This is an unknown quest"
+				}};
 			}
 		}
 	};
