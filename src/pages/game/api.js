@@ -105,7 +105,7 @@ var interactions = {
 				var QuestData = KC3QuestManager.get( QuestRaw.api_no );
 				
 				// Show meta, title and description
-				if( QuestData.meta.available !== undefined ){
+				if( QuestData.meta.available != undefined ){
 					$(".name", QuestBox).text( QuestData.meta().name );
 					$(".desc", QuestBox).text( QuestData.meta().desc );
 					
