@@ -353,6 +353,14 @@
 						}
 					});
 					
+                                    try {
+                                        var expeditionAnalyzeResult = ExpeditionHelper.analyzeFleet( CurrentFleet );
+                                        $(".expedition-helper").text(JSON.stringify( expeditionAnalyzeResult ));
+                                    } catch (e) 
+                                    {
+                                        $(".expedition-helper").text("error: " + e);
+                                    }
+
 					// Expedition Timer Faces
 					KC3TimerManager._exped[0].face( PlayerManager.fleets[1].ship(0).masterId );
 					KC3TimerManager._exped[1].face( PlayerManager.fleets[2].ship(0).masterId );
