@@ -1,0 +1,62 @@
+{
+	"203.104.209.71": {
+		"name": "Yokosuka Naval District",
+	},
+	"125.6.184.15": {
+		"name": "Kure Naval District",
+	},
+	"125.6.184.16": {
+		"name": "Sasebo Naval District",
+	},
+	"125.6.187.205": {
+		"name": "Maizuru Naval District",
+	},
+	"125.6.187.229": {
+		"name": "Ominato Guard District",
+	},
+	"125.6.187.253": {
+		"name": "Truk Anchorage",
+	},
+	"125.6.188.25": {
+		"name": "Lingga Anchorage",
+	},
+	"203.104.248.135": {
+		"name": "Rabaul Naval Base",
+	},
+	"125.6.189.7": {
+		"name": "Shortland Anchorage",
+	},
+	"125.6.189.39": {
+		"name": "Buin Naval Base",
+	},
+	"125.6.189.71": {
+		"name": "Tawi-Tawi Anchorage",
+	},
+	"125.6.189.103": {
+		"name": "Palau Anchorage",
+	},
+	"125.6.189.135": {
+		"name": "Brunei Anchorage",
+	},
+	"125.6.189.167": {
+		"name": "Hitokappu Bay Anchorage",
+	},
+	"125.6.189.215": {
+		"name": "Paramushir Anchorage",
+	},
+	"125.6.189.247": {
+		"name": "Sukumo Bay Anchorage",
+	},
+	"203.104.209.23": {
+		"name": "Kanoya Airfield",
+	},
+	"203.104.209.39": {
+		"name": "Iwagawa Airfield",
+	},
+	"203.104.209.55": {
+		"name": "Saiki Bay Anchorage",
+	},
+	"203.104.209.102": {
+		"name": "Hashirajima Anchorage",
+	}
+}
