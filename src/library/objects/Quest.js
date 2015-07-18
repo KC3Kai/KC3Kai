@@ -114,6 +114,7 @@ Quest Type:
 			if(MyMeta){
 				// Attach meta info to this object 
 				this.meta = function(){ return {
+					available: true,
 					code : MyMeta.code,
 					name : MyMeta.name,
 					desc : MyMeta.desc
@@ -122,6 +123,13 @@ Quest Type:
 				if(this.tracking === false){
 					this.tracking = MyMeta.tracking;
 				}
+			}else{
+				// Attach meta info to this object 
+				this.meta = function(){ return {
+					code : "XX",
+					name : "Unidentified Quest",
+					desc : "This is an unidentified or untranslated quest. It cannot be shown here, so please visit the quest page in-game to view."
+				}};
 			}
 		}
 	};
