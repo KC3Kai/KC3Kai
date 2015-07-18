@@ -395,7 +395,21 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_hokyu/charge":function(params, response, headers){
 			KC3QuestManager.get(504).increment(); // E4: Daily Resupplies
+			var shipList = response.api_data.api_ship;
+			
+			$.each(shipList, function( index, ship ) {
+				var shipId = ship.api_id;
+				var shipToSupply = KC3ShipManager.get(shipId);
+				
+				shipToSupply.fuel = ship.api_fuel;
+				shipToSupply.ammo = ship.api_bull;
+				shipToSupply.slots = ship.api_onslot;
+			});
+			
+			KC3ShipManager.save();
+			
 			KC3Network.trigger("Quests");
+			KC3Network.trigger("Fleet");
 		},
 		
 		/* Combine/Uncombine Fleets
