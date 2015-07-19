@@ -100,7 +100,7 @@
 			$(".tab_maps .sortie_list").html("");
 			
 			// Show all sorties
-			if(this.selectedWorld == 0){
+			if(this.selectedWorld === 0){
 				KC3Database.count_normal_sorties(function(countPages){
 					self.showPagination(countPages);
 				});
@@ -108,7 +108,7 @@
 			// Selected specific world
 			}else{
 				// Show all on this world
-				if(this.selectedMap == 0){
+				if(this.selectedMap === 0){
 					KC3Database.count_world(this.selectedWorld, function(countPages){
 						self.showPagination(countPages);
 					});
@@ -128,8 +128,8 @@
 		Show list of clickable page boxes
 		---------------------------------*/
 		showPagination :function(countPages){
-			$(".factory .page_box")
-					page_list
+			// $(".factory .page_box")
+					// page_list
 		},
 		
 		/* SHOW PAGE
@@ -141,7 +141,7 @@
 			// this.selectedMap
 			console.log("showing list", this.selectedWorld, this.selectedMap, this.pageNum );
 			// Show all sorties
-			if(this.selectedWorld == 0){
+			if(this.selectedWorld === 0){
 				KC3Database.count_normal_sorties(function(countPages){
 					self.showPagination(countPages);
 				});
@@ -149,7 +149,7 @@
 			// Selected specific world
 			}else{
 				// Show all on this world
-				if(this.selectedMap == 0){
+				if(this.selectedMap === 0){
 					KC3Database.count_world(this.selectedWorld, function(countPages){
 						self.showPagination(countPages);
 					});

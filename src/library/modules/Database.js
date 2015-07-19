@@ -95,7 +95,7 @@ Uses Dexie.js third-party plugin on the assets directory
 				.where("hq")
 				.equals(this.index)
 				.count(function(NumRecords){
-					if(NumRecords == 0){
+					if(NumRecords === 0){
 						// insert if not yet on db
 						self.con.account.add({
 							hq: self.index,

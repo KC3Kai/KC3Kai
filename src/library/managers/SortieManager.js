@@ -88,7 +88,7 @@ Xxxxxxx
 				// self.boss.ships = [ -1, -1, -1, -1, -1, -1 ];
 				self.boss.ships = [ 501,502,503,504,505,506 ];
 				self.onBossAvailable(self);
-			}, 1)
+			}, 1);
 		},
 		
 		currentNode :function(){
@@ -99,7 +99,7 @@ Xxxxxxx
 			var thisNode;
 			
 			//  Battle Node
-			if(typeof nodeData.api_enemy != "undefined") {
+			if((nodeData.api_event_kind||0) == 1) {
 				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsBattle(nodeData);
 			// Resource Node
 			}else if (typeof nodeData.api_itemget != "undefined") {

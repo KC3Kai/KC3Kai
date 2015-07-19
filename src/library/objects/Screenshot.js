@@ -12,7 +12,7 @@ function KCScreenshot(){
 	this.format = (ConfigManager.ss_type=="JPG")
 		?["jpeg", "jpg", "image/jpeg"]
 		:["png", "png", "image/png"];
-};
+}
 
 KCScreenshot.prototype.start = function(playerName, element){
 	var self = this;
@@ -50,7 +50,7 @@ KCScreenshot.prototype.generateScreenshotFilename = function() {
   if (curr_second.length == 1) { curr_second = "0" + curr_second; }
 
   this.screenshotFilename = "["+this.playerName+"] "+d.getFullYear()+"-"+curr_month+"-"+curr_date+" "+curr_hour+"-"+curr_min+"-"+curr_second + " " + getRandomInt(10,99);
-}
+};
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -63,7 +63,7 @@ KCScreenshot.prototype.capture = function(){
 	chromeCapture(this.format[0], function(base64img){
 		self.domImg.src = base64img;
 		self.domImg.onload = self.crop();
-	})
+	});
 };
 
 KCScreenshot.prototype.crop = function(){

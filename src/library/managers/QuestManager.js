@@ -89,11 +89,12 @@ Uses KC3Quest objects to play around with
 				console.log("Passed 5AM JST");
 			}*/
 			
+			var timeFromLocalStorage;
 			
 			/* RESET DAILY QUESTS
 			-----------------------------------------------------*/
 			if (this.timeToResetDailyQuests === -1) {
-				var timeFromLocalStorage = this.getTimeToResetFromLocalStorage("timeToResetDailyQuests");
+				timeFromLocalStorage = this.getTimeToResetFromLocalStorage("timeToResetDailyQuests");
 				
 				// Nothing in localStorage
 				if (timeFromLocalStorage === -1) {
@@ -104,7 +105,7 @@ Uses KC3Quest objects to play around with
 					}
 					
 					// Update localStorage
-					localStorage.timeToResetDailyQuests = this.timeToResetDailyQuests
+					localStorage.timeToResetDailyQuests = this.timeToResetDailyQuests;
 				} else {
 					this.timeToResetDailyQuests = timeFromLocalStorage;
 				}
@@ -135,7 +136,7 @@ Uses KC3Quest objects to play around with
 			/* RESET WEEKLY QUESTS
 			-----------------------------------------------------*/
 			if (this.timeToResetWeeklyQuests === -1) {
-				var timeFromLocalStorage = this.getTimeToResetFromLocalStorage("timeToResetWeeklyQuests");
+				timeFromLocalStorage = this.getTimeToResetFromLocalStorage("timeToResetWeeklyQuests");
 				
 				// Nothing in localStorage
 				if (timeFromLocalStorage === -1) {
@@ -146,7 +147,7 @@ Uses KC3Quest objects to play around with
 					}
 					
 					// Update localStorage
-					localStorage.timeToResetWeeklyQuests = this.timeToResetWeeklyQuests
+					localStorage.timeToResetWeeklyQuests = this.timeToResetWeeklyQuests;
 				} else {
 					this.timeToResetWeeklyQuests = timeFromLocalStorage;
 				}
@@ -167,7 +168,7 @@ Uses KC3Quest objects to play around with
 			/* RESET MONTHLY QUESTS
 			-----------------------------------------------------*/
 			if (this.timeToResetMonthlyQuests === -1) {
-				var timeFromLocalStorage = this.getTimeToResetFromLocalStorage("timeToResetMonthlyQuests");
+				timeFromLocalStorage = this.getTimeToResetFromLocalStorage("timeToResetMonthlyQuests");
 				
 				// Nothing in localStorage
 				if (timeFromLocalStorage === -1) {
@@ -178,7 +179,7 @@ Uses KC3Quest objects to play around with
 					}
 					
 					// Update localStorage
-					localStorage.timeToResetMonthlyQuests = this.timeToResetMonthlyQuests
+					localStorage.timeToResetMonthlyQuests = this.timeToResetMonthlyQuests;
 				} else {
 					this.timeToResetMonthlyQuests = timeFromLocalStorage;
 				}
@@ -188,11 +189,11 @@ Uses KC3Quest objects to play around with
 			if (this.timeToResetMonthlyQuests <= ServerJstClock.getTime()) {
 				this.resetMonthlies();
 				if (this.timeToResetMonthlyQuests < thisMonthLastDay8PmGmt.getTime()) {
-					this.timeToResetMonthlyQuests < thisMonthLastDay8PmGmt.getTime();
+					this.timeToResetMonthlyQuests = thisMonthLastDay8PmGmt.getTime();
 				} else {
 					this.timeToResetMonthlyQuests = nextMonthLastDay8PmGmt.getTime();
 				}
-				localStorage.timeToResetMonthlyQuests = this.timeToResetMonthlyQuests
+				localStorage.timeToResetMonthlyQuests = this.timeToResetMonthlyQuests;
 				KC3Network.trigger("Quests");
 			}
 			

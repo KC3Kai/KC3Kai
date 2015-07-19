@@ -141,9 +141,9 @@ Contains summary information about a fleet and its 6 ships
 	
 	KC3Fleet.prototype.eLoS = function(){
 		switch(ConfigManager.elosFormula){
-			case 1: return this.eLos1(); break;
-			case 2: return this.eLos2(); break;
-			default: return this.eLos3(); break;
+			case 1: return this.eLos1();
+			case 2: return this.eLos2();
+			default: return this.eLos3();
 		}
 	};
 	
@@ -167,7 +167,7 @@ Contains summary information about a fleet and its 6 ships
 		var RadarLoS = 0;
 		
 		function ConsiderShip(shipData){
-			if(shipData.rosterId == 0) return false;
+			if(shipData.rosterId === 0) return false;
 			if(shipData.items[0] > -1){ ConsiderEquipment( shipData.equipment(0) ); }
 			if(shipData.items[1] > -1){ ConsiderEquipment( shipData.equipment(1) ); }
 			if(shipData.items[2] > -1){ ConsiderEquipment( shipData.equipment(2) ); }
@@ -175,7 +175,7 @@ Contains summary information about a fleet and its 6 ships
 		}
 		
 		function ConsiderEquipment(itemData){
-			if(itemData.itemId == 0) return false;
+			if(itemData.itemId === 0) return false;
 			if( itemData.master().api_type[1] == 7){ PlaneLoS += itemData.master().api_saku; }
 			if( itemData.master().api_type[1] == 8){ RadarLoS += itemData.master().api_saku; }
 		}
@@ -187,7 +187,7 @@ Contains summary information about a fleet and its 6 ships
 		ConsiderShip( this.ship(4) );
 		ConsiderShip( this.ship(5) );
 		
-		return (PlaneLoS*2) + RadarLoS + Math.sqrt( this.eLos1() -  PlaneLoS - RadarLoS )
+		return (PlaneLoS*2) + RadarLoS + Math.sqrt( this.eLos1() -  PlaneLoS - RadarLoS );
 	};
 	
 	/* LoS : "New Formula"
@@ -207,7 +207,7 @@ Contains summary information about a fleet and its 6 ships
 		}
 		
 		function ConsiderShip(shipData){
-			if(shipData.rosterId == 0) return false;
+			if(shipData.rosterId === 0) return false;
 			if(shipData.items[0] > -1){ ConsiderEquipment( shipData.equipment(0) ); }
 			if(shipData.items[1] > -1){ ConsiderEquipment( shipData.equipment(1) ); }
 			if(shipData.items[2] > -1){ ConsiderEquipment( shipData.equipment(2) ); }
@@ -215,7 +215,7 @@ Contains summary information about a fleet and its 6 ships
 		}
 		
 		function ConsiderEquipment(itemData){
-			if(itemData.itemId == 0) return false;
+			if(itemData.itemId === 0) return false;
 			switch( itemData.master().api_type[2] ){
 				case  7: dive += itemData.master().api_saku; break;
 				case  8: torp += itemData.master().api_saku; break;

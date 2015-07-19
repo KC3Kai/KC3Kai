@@ -118,7 +118,7 @@ Quest Type:
 					code : MyMeta.code,
 					name : MyMeta.name,
 					desc : MyMeta.desc
-				}};
+				}; };
 				// If tracking is empty and Meta is defined
 				if(this.tracking === false){
 					this.tracking = MyMeta.tracking;
@@ -129,7 +129,7 @@ Quest Type:
 					code : "XX",
 					name : "Unidentified Quest",
 					desc : "This is an unidentified or untranslated quest. It cannot be shown here, so please visit the quest page in-game to view."
-				}};
+				}; };
 			}
 		}
 	};
