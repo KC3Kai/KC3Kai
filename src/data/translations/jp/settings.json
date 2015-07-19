@@ -4,23 +4,10 @@
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Global",
 		"contents" : [
 			{
-				"id" : "language",
-				"name" : "言語",
-				"type" : "radio",
-				"options" : {
-					"choices" : [
-						[ "en", "English" ],
-						[ "jp", "日本語" ],
-						[ "id", "Indonesia" ],
-						[ "scn", "简体中文"],
-						[ "tcn", "繁體中文" ]
-					]
-				}
+				"name" : "言語"
 			},
 			{
-				"id" : "elosFormula",
 				"name" : "効果的なLoS式",
-				"type" : "radio",
 				"options" : {
 					"choices" : [
 						[ 1, "合計" ],
@@ -36,34 +23,19 @@
 		"help" : "",
 		"contents" : [
 			{
-				"id" : "info_face",
-				"name" : "建設顔",
-				"type" : "check",
-				"options" : {}
+				"name" : "建設顔"
 			},
 			{
-				"id" : "info_craft",
-				"name" : "工芸結果",
-				"type" : "check",
-				"options" : {}
+				"name" : "工芸結果"
 			},
 			{
-				"id" : "info_compass",
-				"name" : "コンパスと敵",
-				"type" : "check",
-				"options" : {}
+				"name" : "コンパスと敵"
 			},
 			{
-				"id" : "info_battle",
-				"name" : "バトル環境",
-				"type" : "check",
-				"options" : {}
+				"name" : "バトル環境"
 			},
 			{
-				"id" : "info_boss",
-				"name" : "ボス組成",
-				"type" : "check",
-				"options" : {}
+				"name" : "ボス組成"
 			}
 		]
 	},
@@ -72,9 +44,7 @@
 		"help" : "",
 		"contents" : [
 			{
-				"id" : "ss_mode",
 				"name" : "出力モード",
-				"type" : "radio",
 				"options" : {
 					"choices" : [
 						[ 0, "ダウンロード" ],
@@ -84,9 +54,7 @@
 				}
 			},
 			{
-				"id" : "ss_type",
 				"name" : "ファイルタイプ",
-				"type" : "radio",
 				"options" : {
 					"choices" : [
 						[ "JPG", "JPG" ],
@@ -101,15 +69,11 @@
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Alerts",
 		"contents" : [
 			{
-				"id" : "alert_diff",
 				"name" : "タイマー手当",
-				"type" : "small_text",
 				"options" : { "label" : "秒" }
 			},
 			{
-				"id" : "alert_type",
 				"name" : "音の種類",
-				"type" : "radio",
 				"options" : {
 					"choices" : [
 						[ 0, "なし" ],
@@ -119,22 +83,13 @@
 				}
 			},
 			{
-				"id" : "alert_custom",
-				"name" : "カスタム音",
-				"type" : "long_text",
-				"options" : { "placeholder" : "http://" }
+				"name" : "カスタム音"
 			},
 			{
-				"id" : "alert_volume",
-				"name" : "ボリューム",
-				"type" : "small_text",
-				"options" : { "label" : "%" }
+				"name" : "ボリューム"
 			},
 			{
-				"id" : "alert_desktop",
-				"name" : "デスクトップ通知",
-				"type" : "check",
-				"options" : {}
+				"name" : "デスクトップ通知"
 			}
 		]
 	},
@@ -143,58 +98,36 @@
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Screen",
 		"contents" : [
 			{
-				"id" : "api_translation",
-				"name" : "クエスト翻訳",
-				"type" : "check",
-				"options" : {}
+				"name" : "クエスト翻訳"
 			},
 			{
-				"id" : "api_tracking",
-				"name" : "クエスト追跡",
-				"type" : "check",
-				"options" : {}
+				"name" : "クエスト追跡"
 			},
 			{
-				"id" : "api_askExit",
-				"name" : "終了確認",
-				"type" : "check",
-				"options" : {}
+				"name" : "終了確認"
 			},
 			{
-				"id" : "api_margin",
 				"name" : "上余白",
-				"type" : "small_text",
 				"options" : { "label" : "pixels" }
 			},
 			{
-				"id" : "api_bg_color",
 				"name" : "背景の色",
-				"type" : "long_text",
 				"options" : { "placeholder" : "background-colorのCSSプロパティを参照してください。" }
 			},
 			{
-				"id" : "api_bg_image",
 				"name" : "背景の画像",
-				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
 			},
 			{
-				"id" : "api_bg_size",
 				"name" : "背景のサイズ",
-				"type" : "long_text",
 				"options" : { "placeholder" : "background-sizeのCSSプロパティを参照してください。" }
 			},
 			{
-				"id" : "api_bg_position",
 				"name" : "背景の位置",
-				"type" : "long_text",
 				"options" : { "placeholder" : "background-positionのCSSプロパティを参照してください。" }
 			},
 			{
-				"id" : "api_gameScale",
-				"name" : "ゲームプレイヤーのスケール",
-				"type" : "small_text",
-				"options" : { "label" : "%" }
+				"name" : "ゲームプレイヤーのスケール"
 			}
 		]
 	},
@@ -203,57 +136,35 @@
 		"help" : "",
 		"contents" : [
 			{
-				"id" : "dmm_customize",
-				"name" : "カスタマイズを適用",
-				"type" : "check",
-				"options" : {}
+				"name" : "カスタマイズを適用"
 			},
 			{
-				"id" : "dmm_translation",
-				"name" : "クエスト翻訳",
-				"type" : "check",
-				"options" : {}
+				"name" : "クエスト翻訳"
 			},
 			{
-				"id" : "dmm_tracking",
-				"name" : "クエスト追跡",
-				"type" : "check",
-				"options" : {}
+				"name" : "クエスト追跡"
 			},
 			{
-				"id" : "dmm_askExit",
-				"name" : "終了確認",
-				"type" : "check",
-				"options" : {}
+				"name" : "終了確認"
 			},
 			{
-				"id" : "dmm_margin",
 				"name" : "上余白",
-				"type" : "small_text",
 				"options" : { "label" : "pixels" }
 			},
 			{
-				"id" : "dmm_bg_color",
 				"name" : "背景の色",
-				"type" : "long_text",
 				"options" : { "placeholder" : "background-colorのCSSプロパティを参照してください。" }
 			},
 			{
-				"id" : "dmm_bg_image",
 				"name" : "背景の画像",
-				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
 			},
 			{
-				"id" : "dmm_bg_size",
 				"name" : "背景のサイズ",
-				"type" : "long_text",
 				"options" : { "placeholder" : "background-sizeのCSSプロパティを参照してください。" }
 			},
 			{
-				"id" : "dmm_bg_position",
 				"name" : "背景の位置",
-				"type" : "long_text",
 				"options" : { "placeholder" : "background-positionのCSSプロパティを参照してください。" }
 			}
 		]
@@ -263,9 +174,7 @@
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Panel",
 		"contents" : [
 			{
-				"id" : "pan_theme",
 				"name" : "テーマ",
-				"type" : "radio",
 				"options" : {
 					"choices" : [
 						[ "default", "デフォルト" ],
@@ -274,9 +183,7 @@
 				}
 			},
 			{
-				"id" : "pan_size",
 				"name" : "パネルのサイズ",
-				"type" : "radio",
 				"options" : {
 					"choices" : [
 						[ "small", "小" ],
@@ -285,34 +192,23 @@
 				}
 			},
 			{
-				"id" : "pan_bg_color",
 				"name" : "背景の色",
-				"type" : "long_text",
 				"options" : { "placeholder" : "background-colorのCSSプロパティを参照してください。" }
 			},
 			{
-				"id" : "pan_bg_image",
 				"name" : "背景の画像",
-				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
 			},
 			{
-				"id" : "pan_bg_size",
 				"name" : "背景のサイズ",
-				"type" : "long_text",
 				"options" : { "placeholder" : "background-sizeのCSSプロパティを参照してください。" }
 			},
 			{
-				"id" : "pan_bg_position",
 				"name" : "背景の位置",
-				"type" : "long_text",
 				"options" : { "placeholder" : "background-positionのCSSプロパティを参照してください。" }
 			},
 			{
-				"id" : "pan_opacity",
-				"name" : "インターフェイスの不透明度",
-				"type" : "small_text",
-				"options" : { "label" : "%" }
+				"name" : "インターフェイスの不透明度"
 			}
 		]
 	}

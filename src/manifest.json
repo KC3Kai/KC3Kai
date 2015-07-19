@@ -1,9 +1,9 @@
 {
 	"manifest_version": 2,
-	"name": "KanColle Command Center 改",
+	"name": "KC3改 Development",
 	"short_name": "KC3改",
-	"description": "Kantai Collection Game Viewer and Tools",
-	"version": "11.1",
+	"description": "Kantai Collection Game Viewer and Helper",
+	"version": "12.0",
 	"devtools_page": "pages/devtools/init.html",
 	"options_page": "pages/settings/settings.html",
 	"icons": {
@@ -12,7 +12,7 @@
         "128": "assets/img/logo/128.png"
 	},
 	"browser_action": {
-		"default_icon": "assets/img/logo/16.png",
+		"default_icon": "assets/img/logo/dev.png",
 		"default_popup": "pages/popup/popup.html"
 	},
 	"permissions": [

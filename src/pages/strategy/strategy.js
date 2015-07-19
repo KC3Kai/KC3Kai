@@ -43,7 +43,7 @@
 		
 		// If there is a hash tag on URL, set it as initial selected
 		KC3StrategyTabs.pageParams = window.location.hash.substring(1).split("-");
-		if(KC3StrategyTabs.pageParams[0] != ""){
+		if(KC3StrategyTabs.pageParams[0] !== ""){
 			$("#menu .submenu ul.menulist li").removeClass("active");
 			$("#menu .submenu ul.menulist li[data-id="+KC3StrategyTabs.pageParams[0]+"]").addClass("active");
 		}

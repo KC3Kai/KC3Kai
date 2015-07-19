@@ -395,7 +395,21 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_hokyu/charge":function(params, response, headers){
 			KC3QuestManager.get(504).increment(); // E4: Daily Resupplies
+			var shipList = response.api_data.api_ship;
+			
+			$.each(shipList, function( index, ship ) {
+				var shipId = ship.api_id;
+				var shipToSupply = KC3ShipManager.get(shipId);
+				
+				shipToSupply.fuel = ship.api_fuel;
+				shipToSupply.ammo = ship.api_bull;
+				shipToSupply.slots = ship.api_onslot;
+			});
+			
+			KC3ShipManager.save();
+			
 			KC3Network.trigger("Quests");
+			KC3Network.trigger("Fleet");
 		},
 		
 		/* Combine/Uncombine Fleets
@@ -597,6 +611,12 @@ Previously known as "Reactor"
 			KC3Network.trigger("Quests");
 		},
 		
+		/* Stop Quest
+		-------------------------------------------------------*/
+		"api_req_quest/stop":function(params, response, headers){
+			
+		},
+		
 		/*-------------------------------------------------------*/
 		/*--------------------[ REPAIR DOCKS ]-------------------*/
 		/*-------------------------------------------------------*/
@@ -612,20 +632,31 @@ Previously known as "Reactor"
 		/* Start repair
 		-------------------------------------------------------*/
 		"api_req_nyukyo/start":function(params, response, headers){
-			/* Unused codes at the moment
-			var ship_id = app.Util.findParam(params, "api%5Fship%5Fid");
-			var bucket = app.Util.findParam(params, "api%5Fhighspeed");
-			var nDockNum = app.Util.findParam(params, "api%5Fndock%5Fid");*/
+			var ship_id = parseInt( params.api_ship_id , 10);
+			var bucket = parseInt( params.api_highspeed , 10);
+			var nDockNum = parseInt( params.api_ndock_id , 10);
+			
+			if(bucket==1){
+				PlayerManager.consumables.buckets--;
+				
+				// If ship is still is the list being repaired, remove Her
+				var HerRepairIndex = PlayerManager.repairShips.indexOf( ship_id );
+				if(HerRepairIndex  > -1){
+					PlayerManager.repairShips.splice(HerRepairIndex, 1);
+				}
+				KC3ShipManager.get( ship_id ).hp[0] = KC3ShipManager.get( ship_id ).hp[1];
+				KC3TimerManager.repair( nDockNum ).deactivate();
+			}
 			
 			KC3QuestManager.get(503).increment(); // E3: Daily Repairs
 			KC3Network.trigger("Quests");
+			KC3Network.trigger("Fleet");
 		},
 		
 		/* Use bucket
 		-------------------------------------------------------*/
 		"api_req_nyukyo/speedchange":function(params, response, headers){
 			PlayerManager.consumables.buckets--;
-			PlayerManager.repairDocks[ params.api_ndock_id-1 ].state = 0;
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Timers");
 		},

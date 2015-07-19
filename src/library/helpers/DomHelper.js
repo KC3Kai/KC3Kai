@@ -104,7 +104,7 @@
         },
 
         injectRecordTranslations: function (container, selector, translationKeys) {
-            var elements = $(container.filter(selector))
+            var elements = $(container.filter(selector));
 
             elements.each(function (i, element) {
                 var currentElement = $(element);

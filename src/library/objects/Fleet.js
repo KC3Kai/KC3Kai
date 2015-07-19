@@ -141,9 +141,9 @@ Contains summary information about a fleet and its 6 ships
 	
 	KC3Fleet.prototype.eLoS = function(){
 		switch(ConfigManager.elosFormula){
-			case 1: return this.eLos1(); break;
-			case 2: return this.eLos2(); break;
-			default: return this.eLos3(); break;
+			case 1: return this.eLos1();
+			case 2: return this.eLos2();
+			default: return this.eLos3();
 		}
 	};
 	
@@ -151,12 +151,14 @@ Contains summary information about a fleet and its 6 ships
 	Sum of all Ship LoS in the fleet WITH their equipment
 	------------------------------------*/
 	KC3Fleet.prototype.eLos1 = function(){
-		return this.ship(0).ls[0]
-			+ this.ship(1).ls[0]
-			+ this.ship(2).ls[0]
-			+ this.ship(3).ls[0]
-			+ this.ship(4).ls[0]
-			+ this.ship(5).ls[0];
+		var rawSum = 0;
+		rawSum += (!this.ship(0).didFlee())? this.ship(0).ls[0] : 0;
+		rawSum += (!this.ship(1).didFlee())? this.ship(1).ls[0] : 0;
+		rawSum += (!this.ship(2).didFlee())? this.ship(2).ls[0] : 0;
+		rawSum += (!this.ship(3).didFlee())? this.ship(3).ls[0] : 0;
+		rawSum += (!this.ship(4).didFlee())? this.ship(4).ls[0] : 0;
+		rawSum += (!this.ship(5).didFlee())? this.ship(5).ls[0] : 0;
+		return rawSum;
 	};
 	
 	/* LoS : "Old Formula"
@@ -167,7 +169,8 @@ Contains summary information about a fleet and its 6 ships
 		var RadarLoS = 0;
 		
 		function ConsiderShip(shipData){
-			if(shipData.rosterId == 0) return false;
+			if(shipData.rosterId === 0) return false;
+			if(shipData.didFlee()) return false;
 			if(shipData.items[0] > -1){ ConsiderEquipment( shipData.equipment(0) ); }
 			if(shipData.items[1] > -1){ ConsiderEquipment( shipData.equipment(1) ); }
 			if(shipData.items[2] > -1){ ConsiderEquipment( shipData.equipment(2) ); }
@@ -175,7 +178,7 @@ Contains summary information about a fleet and its 6 ships
 		}
 		
 		function ConsiderEquipment(itemData){
-			if(itemData.itemId == 0) return false;
+			if(itemData.itemId === 0) return false;
 			if( itemData.master().api_type[1] == 7){ PlaneLoS += itemData.master().api_saku; }
 			if( itemData.master().api_type[1] == 8){ RadarLoS += itemData.master().api_saku; }
 		}
@@ -187,7 +190,7 @@ Contains summary information about a fleet and its 6 ships
 		ConsiderShip( this.ship(4) );
 		ConsiderShip( this.ship(5) );
 		
-		return (PlaneLoS*2) + RadarLoS + Math.sqrt( this.eLos1() -  PlaneLoS - RadarLoS )
+		return (PlaneLoS*2) + RadarLoS + Math.sqrt( this.eLos1() -  PlaneLoS - RadarLoS );
 	};
 	
 	/* LoS : "New Formula"
@@ -195,19 +198,12 @@ Contains summary information about a fleet and its 6 ships
 	------------------------------------*/
 	KC3Fleet.prototype.eLos3 = function(){
 		var dive = 0, torp = 0, cbrp = 0, rspl = 0, splb = 0, smrd = 0, lgrd = 0, srch = 0;
-		
-		var self = this;
-		function GetNakedLoS(){
-			return Math.sqrt(self.ship(0).nakedLoS())
-				+ Math.sqrt(self.ship(1).nakedLoS())
-				+ Math.sqrt(self.ship(2).nakedLoS())
-				+ Math.sqrt(self.ship(3).nakedLoS())
-				+ Math.sqrt(self.ship(4).nakedLoS())
-				+ Math.sqrt(self.ship(5).nakedLoS());
-		}
+		var nakedLos = 0;
 		
 		function ConsiderShip(shipData){
-			if(shipData.rosterId == 0) return false;
+			if(shipData.rosterId === 0) return false;
+			if(shipData.didFlee()) return false;
+			nakedLos += Math.sqrt( shipData.nakedLoS() );
 			if(shipData.items[0] > -1){ ConsiderEquipment( shipData.equipment(0) ); }
 			if(shipData.items[1] > -1){ ConsiderEquipment( shipData.equipment(1) ); }
 			if(shipData.items[2] > -1){ ConsiderEquipment( shipData.equipment(2) ); }
@@ -215,7 +211,7 @@ Contains summary information about a fleet and its 6 ships
 		}
 		
 		function ConsiderEquipment(itemData){
-			if(itemData.itemId == 0) return false;
+			if(itemData.itemId === 0) return false;
 			switch( itemData.master().api_type[2] ){
 				case  7: dive += itemData.master().api_saku; break;
 				case  8: torp += itemData.master().api_saku; break;
@@ -236,16 +232,16 @@ Contains summary information about a fleet and its 6 ships
 		ConsiderShip( this.ship(4) );
 		ConsiderShip( this.ship(5) );
 		
-		var total = ( dive * 1.04 )
-			+ ( torp * 1.37 )
-			+ ( cbrp * 1.66 )
-			+ ( rspl * 2.00 )
-			+ ( splb * 1.78 )
-			+ ( smrd * 1.00 )
-			+ ( lgrd * 0.99 )
-			+ ( srch * 0.91 )
-			+ ( GetNakedLoS() * 1.69 )
-			+ ( (Math.floor(( PlayerManager.hq.level + 4) / 5) * 5) * -0.61 );
+		var total = ( dive * 1.0376255 )
+			+ ( torp * 1.3677954 )
+			+ ( cbrp * 1.6592780 )
+			+ ( rspl * 2.0000000 )
+			+ ( splb * 1.7787282 )
+			+ ( smrd * 1.0045358 )
+			+ ( lgrd * 0.9906638 )
+			+ ( srch * 0.9067950 )
+			+ ( nakedLos * 1.6841056 )
+			+ ( (Math.floor(( PlayerManager.hq.level + 4) / 5) * 5) * -0.6142467 );
 		return total;
 	};
 	

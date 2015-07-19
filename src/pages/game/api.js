@@ -24,7 +24,7 @@ $(document).on("ready", function(){
 	
 	// Apply interface configs
 	$(".box-wrap").css("margin-top", ConfigManager.api_margin+"px");
-	if(ConfigManager.api_bg_image == ""){
+	if(ConfigManager.api_bg_image === ""){
 		$("body").css("background", ConfigManager.api_bg_color);
 	}else{
 		$("body").css("background-image", "url("+ConfigManager.api_bg_image+")");
@@ -105,7 +105,7 @@ var interactions = {
 				var QuestData = KC3QuestManager.get( QuestRaw.api_no );
 				
 				// Show meta, title and description
-				if( QuestData.meta ){
+				if( typeof QuestData.meta().available != "undefined" ){
 					$(".name", QuestBox).text( QuestData.meta().name );
 					$(".desc", QuestBox).text( QuestData.meta().desc );
 					
@@ -166,7 +166,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, response){
 	// If request is for this script
 	if((request.identifier||"") == "kc3_gamescreen"){
 		// If action requested is supported
-		if(typeof interactions[request.action] != "undefined"){
+		if(typeof interactions[request.action] !== "undefined"){
 			// Execute the action
 			interactions[request.action](request, sender, response);
 			return true;

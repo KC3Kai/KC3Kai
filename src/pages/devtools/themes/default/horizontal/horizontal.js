@@ -217,8 +217,9 @@
 				}
 			},
 			Fleet: function(container, data, local){
+				var CurrentFleet, FleetContainer;
 				if(KC3Panel.mode=="normal"){
-					var CurrentFleet = PlayerManager.fleets[local.selectedFleet-1];
+					CurrentFleet = PlayerManager.fleets[local.selectedFleet-1];
 					
 					// Fleet Summary Stats
 					$(".summary-level .summary-text", container).text( CurrentFleet.totalLevel() );
@@ -228,12 +229,12 @@
 					container.css("box-shadow", "none");
 					
 					// Fleet Ships
-					var FleetContainer = $(".fleet-ships", container);
+					FleetContainer = $(".fleet-ships", container);
 					FleetContainer.html("");
 					$.each(CurrentFleet.ships, function(index, rosterId){
 						if(rosterId > -1){
 							var CurrentShip = KC3ShipManager.get( rosterId );
-							if(CurrentShip.masterId == 0){ return true; }
+							if(CurrentShip.masterId === 0){ return true; }
 							var ShipBox = $(".factory .fleet-ship", container).clone().appendTo(FleetContainer);
 							
 							$(".ship-img img", ShipBox).attr("src", KC3Meta.shipIcon(CurrentShip.masterId));
@@ -251,7 +252,21 @@
 							FleetEquipment( $(".ship-gear-4", ShipBox), CurrentShip.equipment(3), CurrentShip.slots[3] );
 						}
 					});
-					
+                                    
+                                    
+                                    try {
+                                        var expeditionAnalyzeResult = ExpeditionHelper.analyzeFleet( CurrentFleet );
+                                        if (expeditionAnalyzeResult) {
+                                            expeditionAnalyzeResult.e = expeditionAnalyzeResult.e.join(",");
+                                            $(".expedition-helper").text(JSON.stringify( expeditionAnalyzeResult ));
+                                        } else {
+                                            $(".expedition-helper").text( "no result" );
+                                        }
+                                    } catch (e) 
+                                    {
+                                        $(".expedition-helper").text("error: " + e);
+                                    }
+
 					// Expedition Timer Faces
 					KC3TimerManager._exped[0].face( PlayerManager.fleets[1].ship(0).masterId );
 					KC3TimerManager._exped[1].face( PlayerManager.fleets[2].ship(0).masterId );
@@ -272,7 +287,7 @@
 						
 					// Single-Fleet Sortie
 					}else{
-						var CurrentFleet = PlayerManager.fleets[ KC3SortieManager.fleetSent-1 ];
+						CurrentFleet = PlayerManager.fleets[ KC3SortieManager.fleetSent-1 ];
 						
 						// Fleet Summary Stats
 						$(".battle-level .summary-text", container).text( CurrentFleet.totalLevel() );
@@ -282,7 +297,7 @@
 						container.css("box-shadow", "none");
 						
 						// Fleet Ships
-						var FleetContainer = $(".battle_singlefleet .battle_fleet_list", container);
+						FleetContainer = $(".battle_singlefleet .battle_fleet_list", container);
 						FleetContainer.html("");
 						$.each(CurrentFleet.ships, function(index, rosterId){
 							if(rosterId > -1){
@@ -313,7 +328,7 @@
 						});
 						
 						$(".battle .battle_singlefleet", container).show();
-						$(".battle .battle_mainfleet", container).hide();
+					$(".battle .battle_mainfleet", container).hide();
 						$(".battle .battle_escorts", container).hide();
 					}
 				}
@@ -367,27 +382,6 @@
 					// Battle node
 					case "battle":
 						$(".battle .battle_nodebox", container).hide();
-						
-						KC3SortieManager.onEnemiesAvailable = function(){
-							if((typeof thisNode.eformation != "undefined") && (thisNode.eformation > -1)){
-								$(".battle .battle_formation img", container).attr("src", KC3Meta.formationIcon(thisNode.eformation));
-								$(".battle .battle_formation", container).show();
-							} else {
-								$(".battle .battle_formation", container).hide();
-							}
-							
-							$(".battle .battle_enemies .battle_abyss img", container).attr("src", KC3Meta.abyssIcon(-1));
-							$.each(thisNode.eships, function(index, eshipId){
-								if(eshipId > -1){
-									$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).attr("src", KC3Meta.abyssIcon(eshipId));
-									$(".battle .battle_enemies .abyss_"+(index+1), container).show();
-								}else{
-									$(".battle .battle_enemies .abyss_"+(index+1), container).hide();
-								}
-							});
-						};
-						
-						$(".battle .battle_enemies", container).fadeIn(500);
 						break;
 					
 					// Resource node
@@ -431,6 +425,23 @@
 				$(".battle .battle_current", container).text("FIGHTING");
 				var thisNode = KC3SortieManager.currentNode();
 				var battleData = thisNode.battleDay;
+				
+				if((typeof thisNode.eformation != "undefined") && (thisNode.eformation > -1)){
+					$(".battle .battle_formation img", container).attr("src", KC3Meta.formationIcon(thisNode.eformation));
+					$(".battle .battle_formation", container).show();
+				} else {
+					$(".battle .battle_formation", container).hide();
+				}
+				
+				$(".battle .battle_enemies .battle_abyss img", container).attr("src", KC3Meta.abyssIcon(-1));
+				$.each(thisNode.eships, function(index, eshipId){
+					if(eshipId > -1){
+						$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).attr("src", KC3Meta.abyssIcon(eshipId));
+						$(".battle .battle_enemies .abyss_"+(index+1), container).show();
+					}else{
+						$(".battle .battle_enemies .abyss_"+(index+1), container).hide();
+					}
+				});
 				
 				// If support expedition is triggered on this battle
 				if(thisNode.supportFlag){
@@ -538,10 +549,10 @@
 				
 				// Show extra item info
 				var countExisting = KC3GearManager.countByMasterId( data.itemMasterId );
-				if(countExisting == 0){
+				if(countExisting == 1){
 					$(".craftGear .equipNote").html("This is your <strong>first</strong>!");
 				}else{
-					$(".craftGear .equipNote").html("You have <strong>"+countExisting+"</strong> of this, +1!");
+					$(".craftGear .equipNote").html("You now have <strong>"+countExisting+"</strong> of this item!");
 				}
 				
 				// Show resource used
@@ -551,7 +562,7 @@
 				$(".craftGear .used4").text( data.resourceUsed[3] );
 				
 				// Show item stats
-				$(".equipStats", container).html("")
+				$(".equipStats", container).html("");
 				CraftGearStats(container, MasterItem, "souk", "ar");
 				CraftGearStats(container, MasterItem, "houg", "fp");
 				CraftGearStats(container, MasterItem, "raig", "tp");
@@ -597,11 +608,7 @@
 				$(".battle", container).show();
 				
 				// Process PvP Battle
-				var enemyList = data.battle.api_ship_ke;
-				enemyList.splice(0,1);
-				var thisPvP = (new KC3Node()).defineAsBattle({
-					pvp_opponents: enemyList
-				});
+				var thisPvP = (new KC3Node()).defineAsBattle();
 				thisPvP.engage( data.battle );
 				
 				// Show opponent ships faces
@@ -672,7 +679,7 @@
 	});
 	
 	function CraftGearStats(container, MasterItem, StatProperty, Code){
-		if(MasterItem["api_"+StatProperty] != 0){
+		if(parseInt(MasterItem["api_"+StatProperty], 10) !== 0){
 			var thisStatBox = $(".factory .equipStat", container).clone().appendTo( $(".equipStats", container) );
 			$("img", thisStatBox).attr("src", "../../../../assets/img/stats/"+Code+".png");
 			$(".equipStatText", thisStatBox).text( MasterItem["api_"+StatProperty] );

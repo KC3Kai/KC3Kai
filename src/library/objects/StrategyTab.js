@@ -31,7 +31,7 @@
 		}
 		
 		// Attempt to load HTML
-		if(this.htmlContents == ""){
+		if(this.htmlContents === ""){
 			var self = this;
 			$.ajax({
 				url: "tabs/"+this.name+"/"+this.name+".html",

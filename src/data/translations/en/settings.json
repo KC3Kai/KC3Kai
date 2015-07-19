@@ -11,9 +11,10 @@
 					"choices" : [
 						[ "en", "English" ],
 						[ "jp", "日本語" ],
-						[ "id", "Indonesia" ],
+						[ "id", "Indonesian" ],
 						[ "tcn", "繁體中文" ],
-						[ "scn", "简体中文" ]
+						[ "scn", "简体中文" ],
+						[ "vi", "Tiếng Việt" ]
 					]
 				}
 			},

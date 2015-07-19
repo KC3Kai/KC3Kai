@@ -42,7 +42,7 @@
 		
 		showPage :function(pageNumber){
 			KC3Database.get_devmt(pageNumber, function(response){
-				$(".tab_crafts .build_list").html("")
+				$(".tab_crafts .build_list").html("");
 				
 				var ctr, thisBuild, buildbox, MasterItem;
 				for(ctr in response){

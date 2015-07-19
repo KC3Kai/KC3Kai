@@ -42,7 +42,7 @@
 		
 		showPage :function(pageNumber){
 			KC3Database.get_build(pageNumber, function(response){
-				$(".tab_builds .build_list").html("")
+				$(".tab_builds .build_list").html("");
 				
 				var ctr, thisBuild, buildbox;
 				for(ctr in response){

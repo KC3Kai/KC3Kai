@@ -8,7 +8,7 @@
 		
 		areTermsAvailable :function(){
 			var self = this;
-			if(KC3Meta._terms.available == undefined){
+			if(typeof KC3Meta._terms.available === "undefined"){
 				setTimeout(function(){ self.areTermsAvailable(); }, 100);
 			}else{
 				this.apply();

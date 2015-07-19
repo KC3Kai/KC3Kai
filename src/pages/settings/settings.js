@@ -15,14 +15,15 @@
 		var sectionBox;
 		
 		// Add configurable settings
-		$.getJSON("../../data/translations/"+ConfigManager.language+"/settings.json", function(response){
+		//$.getJSON("../../data/translations/"+ConfigManager.language+"/settings.json", function(response){
+		$.getTranslationJSON(ConfigManager.language, 'settings', function(response){
 			for(var sctr in response){
 				// Add section header
 				sectionBox = $("#factory .section").clone().appendTo("#wrapper .settings");
 				$(".title", sectionBox).text( response[sctr].section );
 				
 				// Learn more button
-				if(response[sctr].help!=""){
+				if(response[sctr].help!==""){
 					$("a", sectionBox).attr("href", response[sctr].help );
 				}else{
 					$("a", sectionBox).hide();

@@ -11,21 +11,22 @@
 					"choices" : [
 						[ "en", "English" ],
 						[ "jp", "日本語" ],
-						[ "id", "Indonesia" ],
-						[ "tcn", "繁體中文" ]
-						[ "scn", "简体中文" ]
+						[ "id", "Indonesian" ],
+						[ "tcn", "繁體中文" ],
+						[ "scn", "简体中文" ],
+						[ "vi", "Tiếng Việt" ]
 					]
 				}
 			},
 			{
 				"id" : "elosFormula",
-				"name" : "有效視野公式",
+				"name" : "索敵值算法",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ 1, "全艦總和" ],
-						[ 2, "舊公式" ],
-						[ 3, "新公式" ]
+						[ 1, "簡單加總" ],
+						[ 2, "2-5式(舊)" ],
+						[ 3, "2-5式(秋)" ]
 					]
 				}
 			}
@@ -37,19 +38,19 @@
 		"contents" : [
 			{
 				"id" : "info_face",
-				"name" : "預知建造結果",
+				"name" : "建造結果預覽",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "info_craft",
-				"name" : "預知開發結果",
+				"name" : "開發結果預覽",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "info_compass",
-				"name" : "預知指南針方向及敵艦隊編排",
+				"name" : "指南針方向及敵艦隊編排預覽",
 				"type" : "check",
 				"options" : {}
 			},
@@ -132,7 +133,7 @@
 			},
 			{
 				"id" : "alert_desktop",
-				"name" : "螢幕通知",
+				"name" : "桌面提示",
 				"type" : "check",
 				"options" : {}
 			}
@@ -170,7 +171,7 @@
 				"id" : "api_bg_color",
 				"name" : "背景顏色",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-color property" }
+				"options" : { "placeholder" : "參見CSS background-color屬性" }
 			},
 			{
 				"id" : "api_bg_image",
@@ -182,17 +183,17 @@
 				"id" : "api_bg_size",
 				"name" : "背景大小",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-size property" }
+				"options" : { "placeholder" : "參見CSS background-size屬性" }
 			},
 			{
 				"id" : "api_bg_position",
 				"name" : "背景圖像位置",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-position property" }
+				"options" : { "placeholder" : "參見CSS background-position屬性" }
 			},
 			{
 				"id" : "api_gameScale",
-				"name" : "遊戲視窗比例",
+				"name" : "遊戲畫面比例",
 				"type" : "small_text",
 				"options" : { "label" : "%" }
 			}
@@ -236,7 +237,7 @@
 				"id" : "dmm_bg_color",
 				"name" : "背景顏色",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-color property" }
+				"options" : { "placeholder" : "參見CSS background-color屬性" }
 			},
 			{
 				"id" : "dmm_bg_image",
@@ -248,13 +249,13 @@
 				"id" : "dmm_bg_size",
 				"name" : "背景大小",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-size property" }
+				"options" : { "placeholder" : "參見CSS background-size屬性" }
 			},
 			{
 				"id" : "dmm_bg_position",
 				"name" : "背景圖像位置",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-position property" }
+				"options" : { "placeholder" : "參見CSS background-position屬性" }
 			}
 		]
 	},
@@ -288,7 +289,7 @@
 				"id" : "pan_bg_color",
 				"name" : "背景顏色",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-color property" }
+				"options" : { "placeholder" : "參見CSS background-color屬性" }
 			},
 			{
 				"id" : "pan_bg_image",
@@ -300,13 +301,13 @@
 				"id" : "pan_bg_size",
 				"name" : "背景大小",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-size property" }
+				"options" : { "placeholder" : "參見CSS background-size屬性" }
 			},
 			{
 				"id" : "pan_bg_position",
 				"name" : "背景圖像位置",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-position property" }
+				"options" : { "placeholder" : "參見CSS background-position屬性" }
 			},
 			{
 				"id" : "pan_opacity",
