@@ -629,7 +629,7 @@
     "302": {
 		"code": "C4",
         "name": "Latihan Mingguan",
-        "desc": "(Mingguan) Dapatkan 20 kemenangan",
+        "desc": "(Mingguan) Dapatkan 20 kemenagan pada Mode Latihan",
 		"tracking": [ [0,20] ]
     },
     "307": {
