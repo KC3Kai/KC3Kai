@@ -28,6 +28,7 @@ module.exports = function(grunt) {
 					'assets/js/Dexie.min.js',
 					'assets/snd/**',
 					'data/**/*.json',
+					'pages/**/img/**/*',
 				],
 				dest: 'build/release/'
 			}
@@ -101,7 +102,7 @@ module.exports = function(grunt) {
 		htmlmin: {
 			pages: {
 				expand: true,
-				cwd: 'src/',
+				cwd: 'build/tmp/src/',
 				src: ['pages/**/*.html'],
 				dest: 'build/release/',
 				options: {
@@ -112,15 +113,81 @@ module.exports = function(grunt) {
 		},
 		'json-minify': {
 			data: {
-				files: 'build/release/data/*.json'
+				files: 'build/release/data/**/*.json'
+			},
+			manifest: {
+				files: 'build/release/manifest.json'
 			}
 		},
 		jsonlint: {
-			manifest: {
-				src: 'build/release/manifest.json'
+			all: {
+				src: [
+					'build/release/data/**/*.json',
+					'build/release/manifest.json'
+				]
+			}
+		},
+		'string-replace': {
+			allhtml: {
+				files: {
+					'build/tmp/': 'src/pages/**/*.html'
+				},
+				options: {
+					replacements: [
+						{
+							pattern: /<!-- @buildimportjs (.*?) -->/ig,
+							replacement: function (match, p1) {
+								return "<script type=\"text/javascript\" src=\""+p1+"\"></script>";
+							}
+						},
+						{
+							pattern: /<!-- @buildimportcss (.*?) -->/ig,
+							replacement: function (match, p1) {
+								return "<link href=\""+p1+"\" rel=\"stylesheet\" type=\"text/css\">";
+							}
+						},
+						{
+							pattern: /<!-- @nonbuildstart -->([\s\S]*?)<!-- @nonbuildend -->/ig,
+							replacement: function (match, p1) {
+								return "";
+							}
+						}
+					]
+				}
 			},
-			data: {
-				src: 'build/release/data/**/*.json'
+			manifest: {
+				files: {
+					'build/release/manifest.json': 'build/release/manifest.json'
+				},
+				options: {
+					replacements: [
+						{
+							pattern: 'KC3改 Development',
+							replacement: 'KanColle Command Center 改'
+						},
+						{
+							pattern: 'KC3改 Development',
+							replacement: 'KC3改'
+						},
+						{
+							pattern: /assets\/js\/jquery\-2\.1\.3\.min\.js/ig,
+							replacement: 'assets/js/globals.js'
+						},
+						{
+							pattern: /library\/objects\/Messengers\.js/ig,
+							replacement: 'library/objects.js'
+						},
+						{
+							pattern: /assets\/img\/logo\/dev\.png/ig,
+							replacement: 'assets/img/logo/19.png'
+						}
+					]
+				}
+			}
+		},
+		removelogging: {
+			'build/release': {
+				src: "build/release/**/*.js"
 			}
 		}
 	});
@@ -134,7 +201,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-json-minify');
 	grunt.loadNpmTasks('grunt-jsonlint');
-	grunt.loadNpmTasks('grunt-usemin');
+	grunt.loadNpmTasks('grunt-string-replace');
+	grunt.loadNpmTasks("grunt-remove-logging");
 	
 	grunt.registerTask('default', [
 		'jshint',
@@ -148,12 +216,15 @@ module.exports = function(grunt) {
 		'concat:library',
 		'uglify:library1',
 		'uglify:library2',
+		'string-replace:allhtml',
 		'htmlmin:pages',
 		'cssmin:pages',
 		'uglify:pages',
+		'string-replace:manifest',
 		'json-minify:data',
-		'jsonlint:data',
-		'jsonlint:manifest'
+		'json-minify:manifest',
+		'jsonlint:all'
+		// 'removelogging'
 	]);
 	
 };
