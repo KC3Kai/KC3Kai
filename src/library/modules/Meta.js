@@ -47,7 +47,6 @@ Provides access to data on built-in JSON files
 		_stype:{},
 		_servers:{},
 		_battle:{},
-		_record:{},
 		_terms:{},
 		_defaultIcon:"",
 		
@@ -81,7 +80,6 @@ Provides access to data on built-in JSON files
 			$.getTranslationJSON(lang, 'stype', function(response){ self._stype = response; });
 			$.getTranslationJSON(lang, 'servers', function(response){ self._servers = response; });
 			$.getTranslationJSON(lang, 'battle', function(response){ self._battle = response; });
-			$.getTranslationJSON(lang, 'record', function(response){ self._record = response; });
 			$.getTranslationJSON(lang, 'terms', function(response){ self._terms = response; });
 		},
 		
@@ -189,10 +187,6 @@ Provides access to data on built-in JSON files
 		
 		engagement :function(index){
 			return this._battle.engagement[index] || ["",""];
-		},
-		
-		record: function(key) {
-			return this._record[key] || key;
 		},
 		
 		term: function(key) {
