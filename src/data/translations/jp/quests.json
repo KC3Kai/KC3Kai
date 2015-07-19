@@ -1,0 +1,919 @@
+{
+    "101": {
+        "name": "はじめての「編成」！",
+        "desc": "2隻以上の艦で編成される「艦隊」を編成せよ！"
+    },
+    "102": {
+        "name": "「駆逐隊」を編成せよ！",
+        "desc": "駆逐艦4隻以上で編成される「駆逐隊」を編成せよ！"
+    },
+    "103": {
+        "name": "「水雷戦隊」を編成せよ！",
+        "desc": "軽巡洋艦を旗艦とし、数隻の駆逐艦で構成される「水雷戦隊」を編成せよ！"
+    },
+    "104": {
+        "name": "6隻編成の艦隊を編成せよ！",
+        "desc": "全6隻で構成される主力艦隊を編成せよ！"
+    },
+    "105": {
+        "name": "軽巡2隻を擁する隊を編成せよ！",
+        "desc": "軽巡洋艦2隻を擁する高速艦隊を編成せよ！"
+    },
+    "106": {
+        "name": "「重巡戦隊」を編成せよ！",
+        "desc": "重巡洋艦2隻を擁する重巡艦隊を編成せよ！"
+    },
+    "107": {
+        "name": "第2艦隊で空母機動部隊を編成せよ！",
+        "desc": "第2艦隊に空母を配備して、空母機動部隊を編成せよ！"
+    },
+    "108": {
+        "name": "「天龍」型軽巡姉妹の全2艦を編成せよ！",
+        "desc": "天龍型軽巡洋艦「天龍」「龍田」を同一艦隊に配属せよ！"
+    },
+    "109": {
+        "name": "「川内」型軽巡姉妹の全3艦を編成せよ！",
+        "desc": "川内型軽巡洋艦、「川内」「神通」「那珂」を同一艦隊に編成せよ！"
+    },
+    "110": {
+        "name": "「妙高」型重巡姉妹の全4隻を編成せよ！",
+        "desc": "妙高型重巡洋艦「妙高」「那智」「足柄」「羽黒」を同一艦隊に配属せよ！"
+    },
+    "111": {
+        "name": "「扶桑」型戦艦姉妹の全2隻を編成せよ！",
+        "desc": "扶桑型戦艦「扶桑」「山城」を同一艦隊に配属せよ！"
+    },
+    "112": {
+        "name": "「伊勢」型戦艦姉妹の全2隻を編成せよ！",
+        "desc": "扶桑型戦艦「扶桑」「山城」を同一艦隊に配属せよ！"
+    },
+    "113": {
+        "name": "戦艦と重巡による主力艦隊を編成せよ！",
+        "desc": "戦艦1隻以上、重巡2隻以上を主力とした水上打撃艦隊を編成せよ！"
+    },
+    "114": {
+        "name": "「南雲機動部隊」を編成せよ！",
+        "desc": "一航戦「赤城」「加賀」二航戦「飛龍」「蒼龍」からなる第一機動部隊を編成せよ！"
+    },
+    "115": {
+        "name": "第2艦隊を編成せよ！",
+        "desc": "二つ目の艦隊、第2艦隊の旗艦を指定して、第2艦隊を編成せよ！"
+    },
+    "116": {
+        "name": "「水上機母艦」を配備せよ！",
+        "desc": "多数の水上偵察機を運用する「水上機母艦」を艦隊に配備せよ！"
+    },
+    "117": {
+        "name": "第2艦隊で空母機動部隊を編成せよ！",
+        "desc": "第2艦隊に空母を配備して、空母機動部隊を編成せよ！　※第二艦隊に軽空母/空母/装母＋駆逐艦2隻で達成"
+    },
+    "118": {
+        "name": "「金剛」型による高速戦艦部隊を編成せよ！",
+        "desc": "金剛型戦艦「金剛」「比叡」「榛名」「霧島」全4隻の高速戦艦を集中配備せよ！"
+    },
+    "119": {
+        "name": "「三川艦隊」を編成せよ！",
+        "desc": "「鳥海」「青葉」「加古」「古鷹」「天龍」を含む高速艦隊を編成せよ！　※「三川艦隊」の5隻＋何か1隻（高速）の計6隻で達成"
+    },
+    "120": {
+        "name": "「第六駆逐隊」を編成せよ！",
+        "desc": "「暁」「響」「雷」「電」4隻による第六駆逐隊を編成せよ！　※表記4隻「のみ」の艦隊を作ると達成（響はВерныйでも任務達成可能）"
+    },
+    "121": {
+        "name": "「第四戦隊」を編成せよ！",
+        "desc": "「愛宕」「高雄」「鳥海」「摩耶」を基幹とした第四戦隊を編成せよ！"
+    },
+    "122": {
+        "name": "「西村艦隊」を編成せよ！",
+        "desc": "「扶桑」「山城」「最上」「時雨」を基幹とした西村艦隊を編成せよ！"
+    },
+    "123": {
+        "name": "「第五航空戦隊」を編成せよ！",
+        "desc": "「翔鶴」「瑞鶴」を基幹とし、駆逐艦2隻を加えた第五航空戦隊を編成せよ！"
+    },
+    "124": {
+        "name": "新「三川艦隊」を編成せよ！",
+        "desc": "「鳥海」「青葉」「衣笠」「加古」「古鷹」「天龍」からなる三川艦隊を編成せよ！"
+    },
+    "125": {
+        "name": "潜水艦隊を編成せよ！",
+        "desc": "伊号潜水艦2隻からなる潜水艦隊を編成せよ！　※潜水空母でも可　※まるゆ、U-511、呂500でも可"
+    },
+    "126": {
+        "name": "航空水上打撃艦隊を編成せよ！",
+        "desc": "航空戦艦2隻と航空巡洋艦2隻を基幹とする艦隊を編成せよ！"
+    },
+    "127": {
+        "name": "中規模潜水艦隊を編成せよ！",
+        "desc": "伊号潜水艦3隻以上からなる潜水艦隊を編成せよ！　※潜水空母でも可　※まるゆ、U-511、呂500でも可"
+    },
+    "128": {
+        "name": "「第六戦隊」を編成せよ！",
+        "desc": "「古鷹」「加古」「青葉」「衣笠」を基幹とした第六戦隊を編成せよ！"
+    },
+    "129": {
+        "name": "「第五艦隊」を編成せよ！",
+        "desc": "「那智」「足柄」「多摩」「木曾」を中核とした第五艦隊を編成せよ！"
+    },
+    "130": {
+        "name": "「第一水雷戦隊」を編成せよ！",
+        "desc": "「阿武隈」「曙」「潮」「霞(かすみ)」「不知火」を中核とした第1水雷戦隊を編成せよ！"
+    },
+    "131": {
+        "name": "「第八駆逐隊」を編成せよ！",
+        "desc": "「朝潮」「満潮」「大潮」「荒潮」4隻による第八駆逐隊を編成せよ！　※表記4隻「のみ」の艦隊を作ると達成"
+    },
+    "132": {
+        "name": "「第十八駆逐隊」を編成せよ！",
+        "desc": "「霞(かすみ)」「霰(あられ)」「陽炎」「不知火」4隻による第十八駆逐隊を編成せよ！　※表記4隻「のみ」の艦隊を作ると達成"
+    },
+    "133": {
+        "name": "「第三十駆逐隊(第一次)」を編成せよ！",
+        "desc": "「睦月」「如月」「弥生」「望月」4隻による第三十駆逐隊(第一次)を編成せよ！　※表記4隻「のみ」の艦隊を作ると達成"
+    },
+    "134": {
+        "name": "式の準備！(その参)",
+        "desc": "第一艦隊旗艦に練度の高い(Lv.90～99)艦娘を配備して気持ちを整理せよ！"
+    },
+    "135": {
+        "name": "新たなる旅立ち！",
+        "desc": "第一艦隊旗艦に強い絆を結んだLv.100以上の艦娘を配備した6隻の艦隊を編成せよ！　※旗艦以外はLv.100以上でなくても可"
+    },
+    "136": {
+        "name": "「第三十駆逐隊(第二次)」を編成せよ！",
+        "desc": "「睦月」「卯月」「弥生」「望月」4隻による第三十駆逐隊(第二次)を編成せよ！　※表記4隻「のみ」の艦隊を作ると達成"
+    },
+    "137": {
+        "name": "「第五戦隊」を編成せよ！",
+        "desc": "「妙高」「那智」「羽黒」を基幹とした第五戦隊を編成せよ！"
+    },
+    "138": {
+        "name": "新編「第二航空戦隊」を編成せよ！",
+        "desc": "「飛龍改二」(※旗艦)及び「蒼龍」を基幹とした二航戦(要駆逐艦2隻)を編成せよ！　※蒼龍は蒼龍改二でも達成可能
+    },
+    "139": {
+        "name": "潜水艦隊「第六艦隊」を編成せよ！",
+        "desc": "「潜水母艦」(※旗艦)と複数の潜水艦(4隻以上)からなる潜水艦隊「第六艦隊」を編成せよ！　※潜水空母ではなく潜水母艦であることに注意"
+    },
+    "140": {
+        "name": "新型電探を配備せよ！",
+        "desc": "新型電探運用試験のため、第一艦隊の旗艦に「妙高改二」を配備せよ！"
+    },
+    "141": {
+        "name": "再編成「第二航空戦隊」を強化せよ！",
+        "desc": "「蒼龍改二」(※旗艦)及び「飛龍改二」を基幹とした二航戦(要駆逐艦2隻)を編成せよ！"
+    },
+    "142": {
+        "name": "精鋭「第三戦隊」全艦集結せよ！",
+        "desc": "第二次改装を完了した改装金剛型高速戦艦4隻を集結させよ！"
+    },
+    "143": {
+        "name": "「新型正規空母」を配備せよ！",
+        "desc": "雲龍型航空母艦一番艦「雲龍」を第一艦隊機旗艦に配備せよ！"
+    },
+    "144": {
+        "name": "主力戦艦部隊「第二戦隊」を編成せよ！",
+        "desc": "長門型2隻及び扶桑型2隻の計4隻の主力戦艦からなる第二戦隊を編成せよ！"
+    },
+    "145": {
+        "name": "戦艦を主力とした水上打撃部隊を編成せよ！",
+        "desc": "大和型・長門型・伊勢型・扶桑型のいずれか3隻と軽巡1隻他の水上打撃部隊を配備せよ！　※大和型・長門型・伊勢型・扶桑型を4隻以上投入すると達成不可"
+    },
+    "146": {
+        "name": "改修工廠を準備せよ！",
+        "desc": "第一艦隊の旗艦に工作艦「明石」を配備、改修工廠の準備をせよ！"
+    },
+    "147": {
+        "name": "「西村艦隊」を再編成せよ！",
+        "desc": "「扶桑」「山城」「最上」「時雨」「満潮」を基幹とした西村艦隊を編成せよ！"
+    },
+    "148": {
+        "name": "軽快な「水上反撃部隊」を編成せよ！",
+        "desc": "駆逐艦「霞(かすみ)」を旗艦とした重巡「足柄」及び軽巡1隻駆逐艦4隻の水上挺身部隊を編成せよ！"
+    },
+    "149": {
+        "name": "「第十一駆逐隊」を編成せよ！",
+        "desc": "特Ⅰ型駆逐艦「吹雪」「白雪」「初雪」「叢雲」4隻による第十一駆逐隊を編成せよ！　※表記4隻「のみ」の艦隊を作ると達成"
+    },
+    "150": {
+        "name": "「第二一駆逐隊」を編成せよ！",
+        "desc": "「初春」「子日」「若葉」「初霜」4隻による「第二一駆逐隊」を編成せよ！　※表記4隻「のみ」の艦隊を作ると達成"
+    },
+    "151": {
+        "name": "「第二二駆逐隊」を編成せよ！",
+        "desc": "「皐月」「文月」「長月」他1隻計駆逐艦4隻による第二二駆逐隊を編成せよ！　※表記4隻「のみ」の艦隊を作ると達成"
+    },
+    "152": {
+        "name": "「三川艦隊」を新編、突入準備せよ！",
+        "desc": "第一艦隊において、「鳥海改二」を旗艦とする三川艦隊を編成せよ！　※「鳥海改二」を旗艦とし、「古鷹」「加古」「青葉」「衣笠」「夕張」「天龍」の中から5隻、合計6隻で達成の模様"
+    },
+    "153": {
+        "name": "「第十八戦隊」を新編成せよ！",
+        "desc": "軽巡洋艦「天龍」「龍田」を基幹戦力とした「第十八戦隊」を4隻以上で新編成せよ！　※上記の2隻+他に艦がいてもOK　※旗艦指定なし"
+    },
+	"154": {
+        "name": "海上突入部隊を編成せよ！",
+        "desc": "戦艦「比叡」「霧島」軽巡「長良」駆逐艦「暁」「雷」「電」による海上突入部隊を編成せよ！"
+    },
+	"155": {
+        "name": "新編「第六駆逐隊」を編成せよ！",
+        "desc": "「暁改二」を旗艦とした「響」「雷」「電」4隻による第六駆逐隊を編成せよ！　※表記4隻「のみ」の艦隊を作ると達成（響はВерныйでも任務達成可能）"
+    },
+	"156": {
+        "name": "「第一水雷戦隊」北方突入準備！",
+        "desc": "「阿武隈」を旗艦として「響」「初霜」「若葉」「五月雨」「島風」による一水戦を編成せよ！　※響はВерныйでも任務達成可能"
+    },
+	"157": {
+        "name": "「第一水雷戦隊」北方再突入準備！",
+        "desc": "「阿武隈改二」を旗艦として「響」「夕雲」「長波」「秋雲」「島風」の一水戦を再編成せよ！"
+    },
+	
+	
+	
+    "202": {
+        "name": "はじめての「出撃」！",
+        "desc": "艦隊を出撃させ、敵艦隊と交戦せよ！"
+    },
+    "203": {
+        "name": "鎮守府正面海域を護れ！",
+        "desc": "鎮守府正面海域に艦隊を出撃させ、敵艦の跋梁を阻止せよ！　※「敵主力艦隊」（1-1ボス戦）に勝利で達成"
+    },
+    "204": {
+        "name": "南西諸島沖に出撃せよ！",
+        "desc": "南西諸島沖に艦隊を出撃させ、敵艦隊と交戦せよ！"
+    },
+    "205": {
+        "name": "接近する「敵前衛艦隊」を迎撃せよ！",
+        "desc": "南西諸島沖に接近する「敵前衛艦隊」を捕捉、これを撃滅せよ！　※「敵主力部隊」（1-2ボス戦）に勝利で達成"
+    },
+    "206": {
+        "name": "「水雷戦隊」で出撃せよ！",
+        "desc": "軽巡洋艦1隻を旗艦とし、複数の駆逐艦からなる水雷戦隊で出撃せよ！"
+    },
+    "207": {
+        "name": "「重巡洋艦」を出撃させよ！",
+        "desc": "重巡洋艦を旗艦とした艦隊を編成、これを出撃させよ！"
+    },
+    "208": {
+        "name": "「戦艦」を出撃させよ！",
+        "desc": "海上の覇者、戦艦を旗艦とした艦隊を編成、これを出撃させよ！　※航空戦艦は不可"
+    },
+    "209": {
+        "name": "「空母機動部隊」出撃せよ！",
+        "desc": "空母1隻とその護衛艦艇で編成した空母機動部隊を出撃させよ！　※軽空母でも可、水上機母艦は不可　※空母1隻、護衛3隻の計4隻が必要"
+    },
+    "215": {
+        "name": "第2艦隊、出撃せよ！",
+        "desc": "新たに編成した「第2艦隊」を出撃せよ！"
+    },
+    "217": {
+        "name": "敵空母を撃沈せよ！",
+        "desc": "敵機動部隊を捕捉し、これを邀撃、敵空母を轟沈せよ！　※軽空母撃沈でも可。かつては出撃した艦隊に空母or軽空母がいる場合に限り追加報酬が発生していたが、現在はいなくてもいい模様"
+    },
+    "219": {
+        "name": "「三川艦隊」出撃せよ！",
+        "desc": "新編成した「三川艦隊」で出撃せよ！　※「三川艦隊」の5隻（「古鷹」「加古」「青葉」「鳥海」「天龍」）＋何か1隻（高速）の計6隻で出撃で達成　※途中帰還してもOK"
+    },
+    "222": {
+        "name": "「第六駆逐隊」出撃せよ！",
+        "desc": "「暁」「響」「雷」「電」による第六駆逐隊、出撃せよ！　※その他の艦を含まない、上記の4隻で出撃すると達成（響はВерныйでも任務達成可能）"
+    },
+    "223": {
+        "name": "「第四戦隊」出撃せよ！",
+        "desc": "「愛宕」「高雄」「鳥海」「摩耶」を基幹とする第四戦隊で、バシー島沖の敵を撃滅せよ！　※「敵通商破壊艦隊」（2-2ボス戦）に勝利で達成　※上記の4隻+他に艦がいてもOK"
+    },
+    "224": {
+        "name": "「西村艦隊」出撃せよ！",
+        "desc": "「扶桑」「山城」「最上」「時雨」を基幹とする西村艦隊で、オリョール海の敵を撃滅せよ！　※「敵主力打撃群」（2-3ボス戦）に勝利で達成　※上記の4隻+他に艦がいてもOK"
+    },
+    "225": {
+        "name": "「第五航空戦隊」出撃せよ！",
+        "desc": "「翔鶴」「瑞鶴」を基幹とする第五航空戦隊で、北方海域モーレイ海の敵を撃滅せよ！　※「敵北方侵攻艦隊」（3-1ボス戦）に勝利で達成　※上記の2隻+他に艦がいてもOK　※なお、A23の条件の駆逐艦2隻は加えなくてもよい"
+    },
+    "227": {
+        "name": "新「三川艦隊」出撃せよ！",
+        "desc": "完全編成した「三川艦隊」をもって、オリョール海の敵を撃滅せよ！　※「敵主力打撃群」（2-3ボス戦）に勝利で達成　※「新三川艦隊」（「鳥海」「青葉」「衣笠」「加古」「古鷹」「天龍」の6隻）なので間違えないように"
+    },
+    "231": {
+        "name": "「潜水艦隊」出撃せよ！",
+        "desc": "伊号潜水艦2隻からなる潜水艦隊でオリョール海の敵を撃滅せよ！　※「敵主力打撃群」（2-3ボス戦）に勝利で達成　※上記の2隻+他に艦がいてもOK　※まるゆ、U-511、呂500でも可　※同名の別任務「潜水艦隊」出撃せよ！（Bm2）があるので注意"
+    },
+    "232": {
+        "name": "「航空水上打撃艦隊」出撃せよ！",
+        "desc": "航空戦艦2隻、航空巡洋艦2隻を基幹とする艦隊でカレー洋の制海権を握れ！　※「東方主力艦隊」（4-2ボス戦）に勝利で達成　※上記の4隻+他に艦がいてもOK"
+    },
+    "233": {
+        "name": "「第六戦隊」出撃せよ！",
+        "desc": "編成した「第六戦隊」をもって出撃し、オリョール海の敵を撃滅「完全勝利」せよ！　※「敵主力打撃群」（2-3ボス戦）にS勝利で達成　※「第六戦隊」の4隻（「古鷹」「加古」「青葉」「衣笠」）+他に艦がいてもOK"
+    },
+    "239": {
+        "name": "「第八駆逐隊」出撃せよ！",
+        "desc": "編成した「第八駆逐隊」を含む艦隊で出撃し、オリョール海の敵を撃滅せよ！　※「敵主力打撃群」（2-3ボス戦）に勝利で達成　※「第八駆逐隊」の4隻（「朝潮」「満潮」「大潮」「荒潮」）+他に艦がいてもOK"
+    },
+    "240": {
+        "name": "「第十八駆逐隊」出撃せよ！",
+        "desc": "編成した「第十八駆逐隊」を含む艦隊で出撃し、モーレイ海の敵を撃滅せよ！　※「敵北方侵攻艦隊」（3-1ボス戦）に勝利で達成　※「第十八駆逐隊」の4隻（「霰」「霞」「陽炎」「不知火」）+他に艦がいてもOK"
+    },
+    "244": {
+        "name": "「第三十駆逐隊(第一次)」出撃せよ！",
+        "desc": "「第三十駆逐隊(第一次)」を含む艦隊で出撃しキス島沖の主力艦隊と交戦せよ！　※「敵キス島包囲艦隊」（3-2ボス戦）に勝利またはC敗北で達成（D敗北は不可）　※「第三十駆逐隊(一次)」の4隻（「睦月」「如月」「弥生」「望月」）+他に駆逐艦がいてもOK"
+    },
+    "245": {
+        "name": "式の準備！(最終)",
+        "desc": "練度の高い(Lv.90～99)第一艦隊旗艦で出撃し、オリョール海の暁に勝利を刻め！　※Lv.90~99の艦娘を第一艦隊旗艦にし東部オリョール海（2-3）のボス艦隊にS勝利で達成　※旗艦Lv100以上は達成不可"
+    },
+    "246": {
+        "name": "二人でする初めての任務！",
+        "desc": "強い絆を結んだ艦娘を旗艦とした第1艦隊でリランカ島へ出撃、敵中枢を撃滅せよ！　※Lv.100以上の艦娘を第一艦隊旗艦にしリランカ島空襲（4-3）のボス艦隊にS勝利で達成"
+    },
+    "247": {
+        "name": "「航空戦艦」抜錨せよ！",
+        "desc": "航空戦艦2隻を基幹とする艦隊で、西方海域カスガダマ島の敵勢力を撃破せよ！　※「敵東方中枢艦隊」（4-4ボス戦）に勝利で達成　※航空戦艦2隻+他に艦がいてもOK"
+    },
+    "248": {
+        "name": "「第三十駆逐隊」対潜哨戒！",
+        "desc": "「第三十駆逐隊(第二次)」は直ちに抜錨！鎮守府正面の対潜哨戒を実施せよ！　※「敵通商破壊主力艦隊」（1-5ボス戦）に勝利またはC敗北で達成（D敗北は不可）　※ルート分岐の関係上、「第三十駆逐隊(第二次)」の4隻（「睦月」「卯月」「弥生」「望月」）のみで出撃する必要がある"
+    },
+    "250": {
+        "name": "新編「第二航空戦隊」出撃せよ！",
+        "desc": "新編「二航戦」を基幹とした艦隊で、珊瑚諸島沖に出撃、敵機動部隊を撃滅せよ！　※「敵機動部隊本隊」（5-2ボス戦）にS勝利で達成　※「飛龍改二」を旗艦に置いた上で、随伴艦に「蒼龍(改、改二も可)」+駆逐艦2隻が必要+他に艦がいてもOK"
+    },
+    "251": {
+        "name": "精鋭「第二航空戦隊」抜錨せよ！",
+        "desc": "錬成を終え再編成「二航戦」を基幹とした艦隊で、敵リランカ島を空襲、破砕せよ！　※「東方主力艦隊」（4-3ボス戦）にS勝利で達成　※「蒼龍改二」を旗艦に置いた上で、随伴艦に「飛龍改二」+駆逐艦2隻が必要+他に艦がいてもOK"
+    },
+    "252": {
+        "name": "戦艦「榛名」出撃せよ！",
+        "desc": "第二次改装実施した「榛名改二」を基幹とした艦隊で「南方海域」へ進出、敵艦隊主力を撃滅せよ！　※「敵前線司令艦隊」（5-1ボス戦）にS勝利で達成　※他に艦がいてもOK、旗艦にする必要なし"
+    },
+    "253": {
+        "name": "「第六〇一航空隊」出撃せよ！",
+        "desc": "雲龍型航空母艦「雲龍改」含む機動部隊で珊瑚島沖に出撃、敵機動部隊を撃滅せよ！　※「敵機動部隊本隊」（5-2ボス戦）にS勝利で達成、旗艦にする必要なし　※改造後の雲龍でないと達成不可"
+    },
+    "254": {
+        "name": "「軽空母」戦隊、出撃せよ！",
+        "desc": "軽空母1～2隻、軽巡1隻、駆逐艦3～4隻の艦隊でカムラン半島の敵を撃滅せよ！　※「敵主力艦隊」（2-1ボス戦）にS勝利で達成　※軽空母、軽巡、駆逐艦以外の艦種を投入すると達成不可"
+    },
+    "255": {
+        "name": "「水雷戦隊」バシー島沖緊急展開",
+        "desc": "軽巡を旗艦とした水雷戦隊(軽巡最大2隻他駆逐艦)でバシー島沖の敵を撃滅せよ！　※「敵通商破壊艦隊」（2-2ボス戦）にS勝利で達成　※軽巡、駆逐艦以外の艦種を投入すると達成不可"
+    },
+    "258": {
+        "name": "「第二戦隊」抜錨！",
+        "desc": "「第二戦隊」を基幹とした艦隊でカレー洋に進出、反復出撃により敵海上兵力を撃破せよ！　※「東方主力艦隊」（4-2ボス戦）に2回S勝利で達成　※第二戦隊(長門型/扶桑型)の4隻+他に艦がいてもOK"
+    },
+    "260": {
+        "name": "「戦艦部隊」北方海域に突入せよ！",
+        "desc": "戦艦2隻と直援軽空母1隻(正規空母無し)基幹の艦隊で北方AL海域に突入、敵を撃滅せよ！　※「北方増援部隊主力」（3-5ボス戦）にS勝利で達成　※戦艦2隻軽空母1隻+他に艦がいてもOK　※正規空母1隻以上、戦艦3隻以上、軽空母2隻以上を投入すると達成不可　※航空戦艦では達成不可。また、航空戦艦を指定3隻の他に連れて行く事は可能だが、戦艦/空母系が4隻以上になるため高確率で逸れる"
+    },
+    "262": {
+        "name": "「西村艦隊」南方海域へ進出せよ！",
+        "desc": "「西村艦隊」を南方海域へ進出させ、敵主力艦隊へ突入、これを撃滅せよ！　※「敵前線司令艦隊」（5-1ボス戦）にS勝利で達成　※「西村艦隊」の5隻(扶桑/山城/最上/時雨/満潮)+他に艦がいてもOK、旗艦にする必要なし"
+    },
+    "263": {
+        "name": "「第六戦隊」南西海域へ出撃せよ！",
+        "desc": "「古鷹」「加古」「青葉」「衣笠」を基幹とした「第六戦隊」で、沖ノ島沖の敵艦隊を撃滅せよ！　※「敵主力艦隊」（2-5ボス戦）にS勝利で達成　※「第六戦隊」の4隻（「古鷹」「加古」「青葉」「衣笠」）+他に艦がいてもOK　※古鷹・加古・衣笠は改二でも達成可能"
+    },
+    "267": {
+        "name": "「第十一駆逐隊」出撃せよ！",
+        "desc": "「第十一駆逐隊」を含む艦隊で出撃し、オリョール海の敵を撃破せよ！　※「敵主力打撃群」（2-3ボス戦）に勝利で達成　※「第十一駆逐隊」の4隻（「吹雪」「白雪」「初雪」「叢雲」）の4隻+他に艦がいてもOK"
+    },
+    "268": {
+        "name": "「第十一駆逐隊」対潜哨戒！",
+        "desc": "「第十一駆逐隊」を含む艦隊で鎮守府正面へ展開、対潜哨戒を実施せよ！　※「敵通商破壊主力艦隊」（1-5ボス戦）に勝利またはC敗北で達成（D敗北は不可）　※ルート分岐の関係上、「第十一駆逐隊」の4隻（「吹雪」「白雪」「初雪」「叢雲」）のみで出撃する必要がある"
+    },
+    "269": {
+        "name": "「第二一駆逐隊」出撃せよ！",
+        "desc": "「第二一駆逐隊」を含む艦隊で出撃し、北方海域モーレイ海の敵を撃滅せよ！　※「敵北方侵攻艦隊」（3-1ボス戦）にS勝利で達成　※「初春」「子日」「若葉」「初霜」の4隻+他に艦がいてもOK"
+    },
+    "270": {
+        "name": "「第二二駆逐隊」出撃せよ！",
+        "desc": "「第二二駆逐隊」を含む艦隊で南西諸島防衛線に出撃、敵主力艦隊を撃滅せよ！　※「敵機動部隊」（1-4ボス戦）にS勝利で達成　※第二二駆逐隊の4隻(「皐月」「文月」「長月」+駆逐艦1隻)+他に艦がいてもOK
+    },
+    "271": {
+        "name": "「那智戦隊」抜錨せよ！",
+        "desc": "旗艦「那智」及び「初霜」「霞(かすみ)」「潮」「曙」他1隻の艦隊でバシー島沖の敵を殲滅せよ！　※「敵通商破壊艦隊」（2-2ボス戦）にS勝利で達成"
+    },
+    "272": {
+        "name": "「改装防空重巡」出撃せよ！",
+        "desc": "摩耶改または摩耶改二及び軽巡1駆逐2隻を含む艦隊でオリョール海の敵艦隊を撃滅せよ！　※「敵主力打撃群」（2-3ボス戦）にS勝利で達成　※上記の4隻+他に艦が居てもOK"
+    },
+    "273": {
+        "name": "新編「三川艦隊」ソロモン方面へ！",
+        "desc": "第一艦隊に編成した「三川艦隊」を南方海域に進出させ、同方面の敵艦隊を撃滅せよ！　※「敵前線司令艦隊」（5-1ボス戦）にS勝利で達成　※旗艦に「鳥海改二」を置いた上で、「古鷹」「加古」「青葉」「衣笠」「夕張」「天龍」の中から5隻選んで6隻の艦隊を編成する"
+    },
+    "274": {
+        "name": "「第六駆逐隊」対潜哨戒なのです！",
+        "desc": "「第六駆逐隊」を含む艦隊で鎮守府正面へ展開、対潜哨戒を実施せよ！　※「敵通商破壊主力艦隊」（1-5ボス戦）に勝利またはC敗北で達成（D敗北は不可）　※ルート分岐の関係上、「第六駆逐隊」の4隻（「暁」「響」「雷」「電」）のみで出撃する必要がある（響はВерныйでも任務達成可能）"
+    },
+    "275": {
+        "name": "抜錨！「第十八戦隊」",
+        "desc": "「天龍」「龍田」を基幹戦力とした「第十八戦隊」で出撃し、オリョール海の敵主力を撃滅せよ！　※「敵主力打撃群」（2-3ボス戦）にS勝利で達成　※編成任務同様、上記の2隻+他に艦がいてもOK　※こちらも旗艦指定なし"
+    },
+    "276": {
+        "name": "海上突入部隊、進発せよ！",
+        "desc": "「比叡」「霧島」「長良」「暁」「雷」「電」の艦隊で、南方海域進出作戦を実施、敵を撃滅せよ！　※「敵前線司令艦隊」（5-1ボス戦）にS勝利で達成"
+    },
+    "277": {
+        "name": "「第六駆逐隊」対潜哨戒を徹底なのです！",
+        "desc": "「第六駆逐隊」を含む艦隊で鎮守府正面で対潜哨戒を実施、敵潜水艦部隊を痛打せよ！　※1-5ボス艦隊A勝利以上(B以下は不可)で達成　※ルート分岐の関係上、「第六駆逐隊」の4隻（「暁」「響」「雷」「電」）のみで出撃する必要がある（響はВерныйでも任務達成可能）"
+    },
+    "278": {
+        "name": "「第一水雷戦隊」ケ号作戦、突入せよ！",
+        "desc": "北方突入準備を完了した「一水戦」で北方キス島に突入！包囲網を破り、友軍を救出せよ！　※「敵キス島包囲艦隊」（3-2ボス戦）に勝利で達成　※「阿武隈」を旗艦として「響」「初霜」「若葉」「五月雨」「島風」"
+    },
+    "279": {
+        "name": "「第一水雷戦隊」北方ケ号作戦、再突入！",
+        "desc": "北方再突入準備の新編「一水戦」で北方キス島に再突入を敢行、同撤収作戦を完遂せよ！　※「敵キス島包囲艦隊」（3-2ボス戦）にS勝利で達成　※「阿武隈改二」を旗艦として「響」「夕雲」「長波」「秋雲」「島風」"
+    },
+	
+	
+	
+    "201": {
+        "code": "Bd1",
+        "name": "Daily Sortie 1",
+        "desc": "Defeat an abyssal fleet",
+        "unlock": [ 216, 211, 212 ],
+        "tracking": [ [0,1] ]
+    },
+    "216": {
+        "code": "Bd2",
+        "name": "Daily Sortie 2",
+        "desc": "Defeat the flagship of an abyssal fleet",
+        "unlock": [ 210, 218, 214, 213 ],
+        "tracking": [ [0,1] ]
+	},
+	"210": {
+		"code": "Bd3",
+		"name": "Daily Sortie 3",
+		"desc": "Defeat 10 abyssal fleets (B rank+)",
+		"tracking": [ [0,10] ]
+	},
+	"211": {
+		"code": "Bd4",
+		"name": "Daily Sortie 4",
+		"desc": "Sink 3 abyssal CV(L)",
+		"tracking": [ [0,3] ]
+	},
+	"218": {
+		"code": "Bd5",
+		"name": "Daily Sortie 5",
+		"desc": "Sink 3 abyssal transport ships",
+		"unlock": [ 226, 220 ],
+		"tracking": [ [0,3] ]
+	},
+	"212": {
+		"code": "Bd6",
+		"name": "Daily Sortie 6",
+		"desc": "Sink 5 abyssal transport ships",
+		"tracking": [ [0,5] ]
+	},
+	"226": {
+		"code": "Bd7",
+		"name": "Daily Sortie 7",
+		"desc": "Defeat 5 bosses in horned nodes in World 2",
+		"unlock": [ 230 ],
+		"tracking": [ [0,5] ]
+	},
+	"230": {
+		"code": "Bd8",
+        "name": "Daily Sortie 8",
+        "desc": "Sink 6 abyssal submarines",
+		"tracking": [ [0,6] ]
+    },
+	
+	
+	
+	
+	
+	"214": {
+		"code": "Bw1",
+		"name": "Weekly Sortie 1",
+		"desc": "Sortie 36x, Encounter 24 bosses, Win vs 12 bosses, 6 S-ranks",
+		"unlock": [ 221 ],
+		"tracking": [ [0,36], [0,24], [0,12], [0,6] ]
+	},
+	"220": {
+		"code": "Bw2",
+        "name": "Weekly Sortie 2",
+        "desc": "Sink 20 abyssal CV(L)",
+		"unlock": [ 228 ],
+		"tracking": [ [0,20] ]
+    },
+	"213": {
+		"code": "Bw3",
+		"name": "Weekly Sortie 3",
+		"desc": "Sink 20 abyssal transport ships",
+		"tracking": [ [0,20] ]
+	},
+	"221": {
+		"code": "Bw4",
+        "name": "Weekly Sortie 4",
+        "desc": "Sink 50 abyssal transport ships",
+		"unlock": [ 261, 257, 264 ],
+		"tracking": [ [0,50] ]
+    },
+	"228": {
+		"code": "Bw5",
+        "name": "Weekly Sortie 5",
+        "desc": "Sink 15 submarines",
+		"unlock": [ 229, 241, 613 ],
+		"tracking": [ [0,15] ]
+    },
+	"229": {
+		"code": "Bw6",
+        "name": "Weekly Sortie 6",
+        "desc": "Defeat 12 bosses in horned nodes in World 4",
+		"unlock": [ 242 ],
+		"tracking": [ [0,12] ]
+    },
+	"241": {
+		"code": "Bw7",
+        "name": "Weekly Sortie 7",
+        "desc": "Defeat 5 bosses in Worlds [W3-3], [W3-4] or [W3-5]",
+		"tracking": [ [0,5] ]
+    },
+    "242": {
+		"code": "Bw8",
+        "name": "Weekly Sortie 8",
+        "desc": "Defeat a boss in World [W4-4]",
+		"unlock": [ 243 ],
+		"tracking": [ [0,1] ]
+    },
+    "243": {
+		"code": "Bw9",
+        "name": "Weekly Sortie 9",
+        "desc": "Sortie to [W5-2] and S-rank the boss node 2 times",
+		"tracking": [ [0,2] ]
+    },
+	"261": {
+		"code": "Bw10",
+        "name": "Weekly Sortie 10",
+        "desc": "Sortie to [W1-5] and A-rank+ the boss node 3 times",
+		"tracking": [ [0,3] ]
+    },
+	
+	
+	
+	
+	
+	"249": {
+		"code": "Bm1",
+        "name": "Deploy the Fifth squadron",
+        "desc": "Deploy Myoukou, Nachi, Haguro, +3 ships to [W2-5]. S-rank the boss node",
+		"unlock": [ 265 ]
+    },
+	"256": {
+		"code": "Bm2",
+        "name": "Deploy a Submarine Fleet to World 6-1",
+        "desc": "Deploy to [W6-1] and obtain an S-rank the boss node 3 times",
+		"tracking": [ [0,3] ]
+    },
+	"257": {
+		"code": "Bm3",
+        "name": "Deploy a Torpedo Squadron",
+        "desc": "1~3 CL (CL flagship) and 3~5 destroyers to [W1-4]. S-rank the boss node"
+    },
+	"259": {
+		"code": "Bm4",
+        "name": "Deploy a Battleship Squadron",
+        "desc": "Deploy 3 BB(V) + 1 CL + 2 ships to [W5-1] and S-rank the boss node"
+    },
+	"265": {
+		"code": "Bm5",
+        "name": "Monthly Escort Duty",
+        "desc": "Deploy a fleet to [W1-5] and A-rank+ the boss node 10 times",
+		"tracking": [ [0,10] ]
+    },
+	"264": {
+		"code": "Bm6",
+        "name": "Sortie the Aircraft Carrier Task Force to the West",
+        "desc": "2 CV + 2 DD + 2 ships to [W4-2]. S-rank the boss node",
+		"unlock": [ 266 ]
+    },
+	"266": {
+		"code": "Bm7",
+        "name": "Deploy the Counterattack Squadron",
+        "desc": "4 DD (DD flagship) + 1 CA (Not CAV) + 1 CL to [W2-5] and S-rank the boss node"
+    },
+	
+	
+	
+	
+	
+    "301": {
+		"code": "C1",
+        "name": "First Exercise!",
+        "desc": "Challenge another fleet in practice mode"
+    },
+	 "303": {
+		"code": "C2",
+        "name": "Daily Exercises 1",
+        "desc": "Challenge 3 other fleets in practice mode",
+		"unlock": [ 304, 302 ],
+		"tracking": [ [0,3] ]
+    },
+	"304": {
+		"code": "C3",
+        "name": "Daily Exercises 2",
+        "desc": "Get 5 victories in practice mode within the same day",
+		"tracking": [ [0,5] ]
+    },
+    "302": {
+		"code": "C4",
+        "name": "Weekly Exercises",
+        "desc": "(Weekly) Get 20 victories in practice mode",
+		"tracking": [ [0,20] ]
+    },
+    "307": {
+		"code": "C5",
+        "name": "Improve the Efficiency of the Fleet",
+        "desc": "Get 3 victories in practice mode within the same day"
+    },
+    "308": {
+		"code": "C6",
+        "name": "Improve the Efficiency of the Fleet One More Time",
+        "desc": "Get 4 victories in practice mode within the same day"
+    },
+	"309": {
+		"code": "C7",
+        "name": "Strive to Increase the Level of Training in Preparation for Another Rush to the Northern Sea",
+        "desc": "Get 4 victories in Exercises within the same day"
+    },
+	
+	
+	
+	
+    "401": {
+		"code": "D1",
+        "name": "First Expedition",
+        "desc": "Perform an expedition"
+    },
+    "402": {
+		"code": "D2",
+        "name": "Daily Expeditions 1",
+        "desc": "Perform 3 successful expeditions",
+		"unlock": [ 403 ],
+		"tracking": [ [0,3] ]
+    },
+    "403": {
+		"code": "D3",
+        "name": "Daily Expeditions 2",
+        "desc": "Perform 10 successful expeditions",
+		"tracking": [ [0,10] ]
+    },
+    "404": {
+		"code": "D4",
+        "name": "Weekly Expeditions",
+        "desc": "(Weekly) Perform 30 successful expeditions",
+		"tracking": [ [0,30] ]
+    },
+    "405": {
+		"code": "D5",
+        "name": "The First Submarine Operation",
+        "desc": "Complete Expedition 30"
+    },
+    "406": {
+		"code": "D6",
+        "name": "The Second Submarine Operation",
+        "desc": "Complete Expedition 30 one more time"
+    },
+    "408": {
+		"code": "D7",
+        "name": "Continuation of Submarine Operations",
+        "desc": "Complete Expedition 30 two more times"
+    },
+    "409": {
+		"code": "D8",
+        "name": "Strategy Meeting with Overseas Submarine Dispatch!",
+        "desc": "Complete Expedition 31"
+    },
+    "410": {
+		"code": "D9",
+        "name": "Weekly Expedition 2",
+        "desc": "(Weekly) Complete expedition 37 or 38",
+		"unlock": [ 411 ],
+		"tracking": [ [0,1] ]
+    },
+	"412": {
+		"code": "D10",
+        "name": "Strengthen the Operation of the BBV",
+        "desc": "Complete expedition 23"
+    },
+    "411": {
+		"code": "D11",
+        "name": "Weekly Expedition 3",
+        "desc": "(Weekly) Complete expedition 37 or 38 a total of 7 times",
+		"tracking": [ [0,7] ]
+    },
+    "413": {
+		"code": "D12",
+        "name": "Strengthen the Operation of the BBV (Cont.)",
+        "desc": "Complete expedition 23 four more times"
+    },
+    "414": {
+		"code": "D13",
+        "name": "Blue Waters Submarine Operation",
+        "desc": "Complete expedition 39"
+    },
+    "415": {
+		"code": "D14",
+        "name": "Blue Waters Extended Submarine Operation",
+        "desc": "Complete expedition 39 two more times"
+    },
+    "416": {
+		"code": "D15",
+        "name": "Air Defence Exercises",
+        "desc": "Complete expedition 6 three times"
+    },
+    "417": {
+		"code": "D16",
+        "name": "Deploy the Decoy Task Force",
+        "desc": "Complete expedition 15"
+    },
+    "418": {
+		"code": "D17",
+        "name": "Naval Ceremony Preparations",
+        "desc": "Complete Expedition 7 twice"
+    },
+    "419": {
+		"code": "D18",
+        "name": "Naval Ceremony",
+        "desc": "Complete expedition 8"
+    },
+	
+	
+	
+	
+	
+    "501": {
+		"code": "E1",
+        "name": "First Supply",
+        "desc": "Resupply a ship"
+    },
+    "502": {
+		"code": "E2",
+        "name": "First Docking",
+        "desc": "Repair a ship"
+    },
+    "503": {
+		"code": "E3",
+        "name": "Daily Repairs",
+        "desc": "Repair 5 ships",
+		"unlock": [ 504 ],
+		"tracking": [ [0,5] ]
+    },
+    "504": {
+		"code": "E4",
+        "name": "Daily Resupplies",
+        "desc": "Resupply your ships 15 times",
+		"tracking": [ [0,15] ]
+    },
+	
+	
+	
+	
+	
+	"605": {
+		"code": "F1",
+        "name": "Daily Development 1",
+        "desc": "Craft a piece of equipment (Failures are OK)",
+		"unlock": [ 606 ],
+		"tracking": [ [0,1] ]
+    },
+	"606": {
+		"code": "F2",
+        "name": "Daily Construction 1",
+        "desc": "Craft a ship",
+		"unlock": [ 607 ],
+		"tracking": [ [0,1] ]
+    },
+	"607": {
+		"code": "F3",
+        "name": "Daily Development 2",
+        "desc": "Craft 3 pieces of equipment (Failures are OK)",
+		"unlock": [ 608 ],
+		"tracking": [ [0,3] ]
+    },
+	 "608": {
+		"code": "F4",
+        "name": "Daily Construction 2",
+        "desc": "Craft 3 ships",
+		"unlock": [ 609, 619 ],
+		"tracking": [ [0,3] ]
+    },
+	 "609": {
+		"code": "F5",
+        "name": "Daily Dismantlement",
+        "desc": "Scrap 2 ships",
+		"tracking": [ [0,2] ]
+    },
+    "601": {
+		"code": "F6",
+        "name": "First Construction",
+        "desc": "Craft a ship"
+    },
+    "602": {
+		"code": "F7",
+        "name": "First Development",
+        "desc": "Craft a piece of equipment"
+    },
+    "603": {
+		"code": "F8",
+        "name": "First Dismantlement",
+        "desc": "Dismantle a ship"
+    },
+    "604": {
+		"code": "F9",
+        "name": "First Disposal",
+        "desc": "Scrap a piece of equipment"
+    },
+    "610": {
+		"code": "F10",
+        "name": "Preparation for LSC (Part 2)",
+        "desc": "Scrap equipment 4 times"
+    },
+	"612": {
+		"code": "F11",
+        "name": "Prepare the Drum Canisters",
+        "desc": "Scrap equipment 3 times"
+    },
+	 "613": {
+		"code": "F12",
+        "name": "Weekly Dismantlement",
+        "desc": "Scrap equipment 24 times",
+		"tracking": [ [0,24] ]
+    },
+	 "614": {
+		"code": "F13",
+        "name": "Model Conversion (to Tenzan)",
+        "desc": "Have flagship equipped with Type 97 Torpedo Bomber (Tomonaga Squadron), then scrap 2 Tenzan"
+    },
+	"615": {
+		"code": "F14",
+        "name": "Model Conversion (to Suisei)",
+        "desc": "Have flagship equipped with Type 99 Dive Bomber (Egusa Squadron), then scrap 2 Suisei"
+    },
+    "616": {
+		"code": "F15",
+        "name": "Model Conversion (to Reppuu)",
+        "desc": "Have flagship equipped with Zero Fighter Type 52 Type C (601 Air Group), then scrap 2 Reppuu"
+    },
+	"617": {
+		"code": "F16",
+        "name": "Preparing for Irako",
+        "desc": "Scrap equipment 10 times"
+    },
+	"618": {
+		"code": "F17",
+        "name": "First Equipment Modernisation",
+        "desc": "Perform equipment modernisation once"
+    },
+    "619": {
+		"code": "F18",
+        "name": "Daily Equipment Modernisation",
+        "desc": "Perform equipment modernisation once",
+		"tracking": [ [0,1] ]
+    },
+	
+	
+    
+	
+	
+    "701": {
+		"code": "G1",
+        "name": "First Modernization",
+        "desc": "Perform a successful modernization"
+    },
+    "702": {
+		"code": "G2",
+        "name": "Daily Modernization",
+        "desc": "Perform 2 successful modernizations",
+		"unlock": [ 703 ],
+		"tracking": [ [0,2] ]
+    },
+    "703": {
+		"code": "G3",
+        "name": "Weekly Modernization",
+        "desc": "(Weekly) Perform 15 successful modernizations",
+		"tracking": [ [0,15] ]
+    },
+    "704": {
+		"code": "G4",
+        "name": "Preparation for LSC (Part 1)",
+        "desc": "Perform 4 successful modernizations"
+    },
+	
+	
+	
+	
+	
+	"611": {
+        "name": "In Preparation of Love! (Part 1)",
+        "desc": "Scrap equipment 2 times to show your love!"
+    },
+	"306": {
+        "name": "In Preparation of Love (Part 2)",
+        "desc": "Show your love by getting 2 victories in practice mode."
+    }
+}
