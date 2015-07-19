@@ -381,27 +381,6 @@
 					// Battle node
 					case "battle":
 						$(".battle .battle_nodebox", container).hide();
-						
-						KC3SortieManager.onEnemiesAvailable = function(){
-							if((typeof thisNode.eformation != "undefined") && (thisNode.eformation > -1)){
-								$(".battle .battle_formation img", container).attr("src", KC3Meta.formationIcon(thisNode.eformation));
-								$(".battle .battle_formation", container).show();
-							} else {
-								$(".battle .battle_formation", container).hide();
-							}
-							
-							$(".battle .battle_enemies .battle_abyss img", container).attr("src", KC3Meta.abyssIcon(-1));
-							$.each(thisNode.eships, function(index, eshipId){
-								if(eshipId > -1){
-									$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).attr("src", KC3Meta.abyssIcon(eshipId));
-									$(".battle .battle_enemies .abyss_"+(index+1), container).show();
-								}else{
-									$(".battle .battle_enemies .abyss_"+(index+1), container).hide();
-								}
-							});
-						};
-						
-						$(".battle .battle_enemies", container).fadeIn(500);
 						break;
 					
 					// Resource node
@@ -445,6 +424,23 @@
 				$(".battle .battle_current", container).text("FIGHTING");
 				var thisNode = KC3SortieManager.currentNode();
 				var battleData = thisNode.battleDay;
+				
+				if((typeof thisNode.eformation != "undefined") && (thisNode.eformation > -1)){
+					$(".battle .battle_formation img", container).attr("src", KC3Meta.formationIcon(thisNode.eformation));
+					$(".battle .battle_formation", container).show();
+				} else {
+					$(".battle .battle_formation", container).hide();
+				}
+				
+				$(".battle .battle_enemies .battle_abyss img", container).attr("src", KC3Meta.abyssIcon(-1));
+				$.each(thisNode.eships, function(index, eshipId){
+					if(eshipId > -1){
+						$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).attr("src", KC3Meta.abyssIcon(eshipId));
+						$(".battle .battle_enemies .abyss_"+(index+1), container).show();
+					}else{
+						$(".battle .battle_enemies .abyss_"+(index+1), container).hide();
+					}
+				});
 				
 				// If support expedition is triggered on this battle
 				if(thisNode.supportFlag){
