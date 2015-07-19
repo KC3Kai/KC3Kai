@@ -10,11 +10,11 @@
 	],
 	
 	"airbattle" : [
-		["制空權平衡", "", "Air Parity"],
-		["制空權確保", "good", "Air Supremacy"],
-		["航空優勢", "good", "Air Superiority"],
-		["航空劣勢", "bad", "Air Incapability"],
-		["制空權喪失", "bad", "Air Denial"]
+		["均勢", "", "航空均勢"],
+		["空確", "good", "制空權確保"],
+		["空優", "good", "航空優勢"],
+		["空劣", "bad", "航空劣勢"],
+		["喪失", "bad", "制空權喪失"]
 	],
 	
 	"engagement" : [
