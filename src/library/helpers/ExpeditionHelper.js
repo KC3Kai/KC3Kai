@@ -280,9 +280,11 @@
 			    var shipModel = CurrentShip.master();
 			    return shipInst.fuel == shipModel.api_fuel_max
 				&& shipInst.ammo == shipModel.api_bull_max;
-			}
-
-			for (var sInd in allShips) {
+			};
+			
+			var sInd;
+			
+			for (sInd in allShips) {
 			    if (!isBulletAndFuelFull(allShips[sInd])) {
 				warnings.push( "resupply" );
 				break;
@@ -292,7 +294,7 @@
 			// check morale
 			// TODO: this might depend on the expedition task
 			// the lower bound is not yet confirmed, but I think >= 39 will be fine
-			for (var sInd in allShips) {
+			for (sInd in allShips) {
 			    if (allShips[sInd].morale <= 39) {
 				warnings.push( "morale" );
 				break;
@@ -345,7 +347,7 @@
 			var shipModel = CurrentShip.master();
 
 			var stypeIsOneOf = function(queryRaw) {
-			    var stype = KC3Meta.stype(shipModel.api_stype)
+			    var stype = KC3Meta.stype(shipModel.api_stype);
 			    var alts = queryRaw.split(" ");
 			    return $.inArray(stype,alts) > -1;
 			};

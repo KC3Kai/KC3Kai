@@ -41,7 +41,7 @@ Used by SortieManager
 		KC3Database.get_enemy(this.epattern, function(response){
 			if(response){
 				self.eships = response.ids;
-				self.eformation = response.formation
+				self.eformation = response.formation;
 			}else{
 				self.eships = [-1,-1,-1,-1,-1,-1];
 				self.eformation = -1;
@@ -109,8 +109,8 @@ Used by SortieManager
 		this.supportFlag = (battleData.api_support_flag>0)?true:false;
 		this.yasenFlag = (battleData.api_midnight_flag>0)?true:false;
 		
-		this.detection = KC3Meta.detection( battleData.api_search[0] )
-		this.engagement = KC3Meta.engagement( battleData.api_formation[2] )
+		this.detection = KC3Meta.detection( battleData.api_search[0] );
+		this.engagement = KC3Meta.engagement( battleData.api_formation[2] );
 		this.fcontact = (battleData.api_kouku.api_stage1.api_touch_plane[0] > -1)?"YES":"NO";
 		this.econtact = (battleData.api_kouku.api_stage1.api_touch_plane[1] > -1)?"YES":"NO";
 		

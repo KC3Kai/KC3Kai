@@ -4,7 +4,7 @@
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Global",
 		"contents" : [
 			{
-				"name" : "言語",
+				"name" : "言語"
 			},
 			{
 				"name" : "効果的なLoS式",
@@ -23,19 +23,19 @@
 		"help" : "",
 		"contents" : [
 			{
-				"name" : "建設顔",
+				"name" : "建設顔"
 			},
 			{
-				"name" : "工芸結果",
+				"name" : "工芸結果"
 			},
 			{
-				"name" : "コンパスと敵",
+				"name" : "コンパスと敵"
 			},
 			{
-				"name" : "バトル環境",
+				"name" : "バトル環境"
 			},
 			{
-				"name" : "ボス組成",
+				"name" : "ボス組成"
 			}
 		]
 	},
@@ -83,13 +83,13 @@
 				}
 			},
 			{
-				"name" : "カスタム音",
+				"name" : "カスタム音"
 			},
 			{
-				"name" : "ボリューム",
+				"name" : "ボリューム"
 			},
 			{
-				"name" : "デスクトップ通知",
+				"name" : "デスクトップ通知"
 			}
 		]
 	},
@@ -98,13 +98,13 @@
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Screen",
 		"contents" : [
 			{
-				"name" : "クエスト翻訳",
+				"name" : "クエスト翻訳"
 			},
 			{
-				"name" : "クエスト追跡",
+				"name" : "クエスト追跡"
 			},
 			{
-				"name" : "終了確認",
+				"name" : "終了確認"
 			},
 			{
 				"name" : "上余白",
@@ -127,7 +127,7 @@
 				"options" : { "placeholder" : "background-positionのCSSプロパティを参照してください。" }
 			},
 			{
-				"name" : "ゲームプレイヤーのスケール",
+				"name" : "ゲームプレイヤーのスケール"
 			}
 		]
 	},
@@ -136,16 +136,16 @@
 		"help" : "",
 		"contents" : [
 			{
-				"name" : "カスタマイズを適用",
+				"name" : "カスタマイズを適用"
 			},
 			{
-				"name" : "クエスト翻訳",
+				"name" : "クエスト翻訳"
 			},
 			{
-				"name" : "クエスト追跡",
+				"name" : "クエスト追跡"
 			},
 			{
-				"name" : "終了確認",
+				"name" : "終了確認"
 			},
 			{
 				"name" : "上余白",
@@ -208,7 +208,7 @@
 				"options" : { "placeholder" : "background-positionのCSSプロパティを参照してください。" }
 			},
 			{
-				"name" : "インターフェイスの不透明度",
+				"name" : "インターフェイスの不透明度"
 			}
 		]
 	}

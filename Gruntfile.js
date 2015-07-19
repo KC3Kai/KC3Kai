@@ -2,6 +2,10 @@ module.exports = function(grunt) {
 	
 	grunt.initConfig({
 		jshint: {
+			options: {
+				newcap: false,
+				laxbreak: true,
+			},
 			all: [
 				'src/assets/js/global.js',
 				'src/library/**/*.js',
@@ -22,6 +26,7 @@ module.exports = function(grunt) {
 					'assets/img/**',
 					'assets/js/Chart.min.js',
 					'assets/js/Dexie.min.js',
+					'assets/snd/**',
 					'data/**/*.json',
 				],
 				dest: 'build/release/'
@@ -29,34 +34,34 @@ module.exports = function(grunt) {
 		},
 		concat: {
 			global_css: {
-				src: 'src/assets/css/*.css',
-				dest: 'build/globals.css'
+				src: [
+					'src/assets/css/bootstrap.css',
+					'build/tmp/global.css',
+				],
+				dest: 'build/release/assets/css/global.css'
 			},
 			global_js: {
-				src: ['src/assets/js/jquery-2.1.3.min.js', 'build/globals.js'],
+				src: [
+					'src/assets/js/jquery-2.1.3.min.js',
+					'build/tmp/globals.js'
+				],
 				dest: 'build/release/assets/js/globals.js'
 			},
 			library: {
 				files: {
-					'build/lib_actors.js' : ['src/library/actors/*.js'],
-					'build/lib_models.js' : ['src/library/models/*.js'],
-					'build/lib_utils.js' : ['src/library/utils/*.js']
+					'build/tmp/managers.js' : ['src/library/managers/*.js'],
+					'build/tmp/objects.js' : ['src/library/objects/*.js']
 				}
-			},
-			views: {
-				files: {
-					'build/view_dashboard.js' : [
-						'src/library/views/Dashboard.Fleet.js',
-						'src/library/views/Dashboard.Info.js',
-						'src/library/views/Dashboard.Timers.js',
-					]
-				}
-			},
+			}
 		},
 		cssmin: {
 			global_css: {
-				src: 'build/globals.css',
-				dest: 'build/release/assets/css/globals.css',
+				src: 'src/assets/css/global.css',
+				dest: 'build/tmp/global.css',
+			},
+			keys_css : {
+				src: 'src/assets/css/keys.css',
+				dest: 'build/release/assets/css/keys.css'
 			},
 			pages: {
 				expand: true,
@@ -68,21 +73,22 @@ module.exports = function(grunt) {
 		uglify: {
 			global_js: {
 				src: 'src/assets/js/global.js',
-				dest: 'build/globals.js'
+				dest: 'build/tmp/globals.js'
 			},
-			library: {
-				files: {
-					'build/release/library/background.js' : 'src/library/background.js',
-					'build/release/library/cookie.js' : 'src/library/cookie.js',
-					'build/release/library/osapi.js' : 'src/library/osapi.js',
-					'build/release/library/actors.js' : 'build/lib_actors.js',
-					'build/release/library/models.js' : 'build/lib_models.js',
-					'build/release/library/utils.js' : 'build/lib_utils.js',
-				}
+			library1: {
+				expand: true,
+				cwd: 'src/',
+				src: [
+					'library/injections/*.js',
+					'library/modules/*.js',
+					'library/helpers/*.js'
+				],
+				dest: 'build/release/',
 			},
-			views: {
+			library2: {
 				files: {
-					'build/release/assets/js/view.dashboard.js' : 'build/view_dashboard.js',
+					'build/release/library/managers.js' : 'build/tmp/managers.js',
+					'build/release/library/objects.js' : 'build/tmp/objects.js'
 				}
 			},
 			pages: {
@@ -90,18 +96,6 @@ module.exports = function(grunt) {
 				cwd: 'src/',
 				src: ['pages/**/*.js'],
 				dest: 'build/release/',
-			}
-		},
-		useminPrepare: {
-			html: 'src/pages/popup/popup.html',
-			options: {
-				flow: { steps: { js: [], css: [] }, post: {} }
-			}
-		},
-		usemin: {
-			html: 'src/pages/popup/popup.html',
-			options: {
-				dest: 'build/release'
 			}
 		},
 		htmlmin: {
@@ -122,6 +116,9 @@ module.exports = function(grunt) {
 			}
 		},
 		jsonlint: {
+			manifest: {
+				src: 'build/release/manifest.json'
+			},
 			data: {
 				src: 'build/release/data/**/*.json'
 			}
@@ -140,24 +137,23 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-usemin');
 	
 	grunt.registerTask('default', [
-		// 'useminPrepare',
 		'jshint',
 		'clean:build',
 		'copy:statics',
-		'concat:global_css',
 		'cssmin:global_css',
+		'cssmin:keys_css',
+		'concat:global_css',
 		'uglify:global_js',
 		'concat:global_js',
 		'concat:library',
-		'uglify:library',
-		'concat:views',
-		'uglify:views',
+		'uglify:library1',
+		'uglify:library2',
 		'htmlmin:pages',
 		'cssmin:pages',
 		'uglify:pages',
 		'json-minify:data',
 		'jsonlint:data',
-		// 'usemin'
+		'jsonlint:manifest'
 	]);
 	
 };

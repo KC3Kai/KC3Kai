@@ -24,7 +24,7 @@ $(document).on("ready", function(){
 	
 	// Apply interface configs
 	$(".box-wrap").css("margin-top", ConfigManager.api_margin+"px");
-	if(ConfigManager.api_bg_image == ""){
+	if(ConfigManager.api_bg_image === ""){
 		$("body").css("background", ConfigManager.api_bg_color);
 	}else{
 		$("body").css("background-image", "url("+ConfigManager.api_bg_image+")");

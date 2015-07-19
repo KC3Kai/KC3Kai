@@ -172,5 +172,14 @@
 		"links" : {
 			"gh" :"https://github.com/kololz"
 		}
+	},
+	{
+		"name": "vrarara",
+		"avatar" : "https://avatars1.githubusercontent.com/u/13389407?v=3&s=40",
+		"desc" : "翻訳者 (インドネシア語)",
+		"links" : {
+			"gh" :"https://github.com/vrarara",
+			"fb" :"https://www.facebook.com/bayuuyab.fu"
+		}
 	}
 ]
