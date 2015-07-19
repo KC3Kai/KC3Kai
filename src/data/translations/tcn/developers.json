@@ -174,5 +174,14 @@
 			"fb" :"https://www.facebook.com/kololz",
 			"wk" :"https://kancolle.wikia.com/wiki/User:Kololz"
 		}
+	},
+	{
+		"name": "vrarara",
+		"avatar" : "https://avatars1.githubusercontent.com/u/13389407?v=3&s=40",
+		"desc" : "翻譯(印尼語)",
+		"links" : {
+			"gh" :"https://github.com/vrarara",
+			"fb" :"https://www.facebook.com/bayuuyab.fu"
+		}
 	}
 ]

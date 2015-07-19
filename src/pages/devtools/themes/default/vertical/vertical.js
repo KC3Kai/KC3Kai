@@ -185,6 +185,10 @@
 				}
 				self.trigger("Quests");
 			});
+			
+			$(".activityBox.craftGear").on("click", function(){
+				$(this).hide();
+			});
 		},
 		listeners: {
 			GameStart: function(container, data, local){

@@ -628,12 +628,12 @@
     "307": {
 		"code": "C5",
         "name": "Improve the Efficiency of the Fleet",
-        "desc": "Get 3 victories in practice mode"
+        "desc": "Get 3 victories in practice mode within the same day"
     },
     "308": {
 		"code": "C6",
         "name": "Improve the Efficiency of the Fleet One More Time",
-        "desc": "Get 4 victories in practice mode"
+        "desc": "Get 4 victories in practice mode within the same day"
     },
 	"309": {
 		"code": "C7",

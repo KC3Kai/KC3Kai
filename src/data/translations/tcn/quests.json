@@ -177,9 +177,7 @@
     },
     "145": {
         "name": "編成水上打擊部隊!",
-        "desc": "於主艦隊編成「長門」、「陸奧」、「伊勢」、「日向」、「扶桑」、「山城」、「大和」或「武藏」8 艘戰艦
-
-中的任何 3 艘，以及 1 艘輕巡洋艦。"
+        "desc": "於主艦隊編成「長門」、「陸奧」、「伊勢」、「日向」、「扶桑」、「山城」、「大和」或「武藏」8 艘戰艦。 中的任何 3 艘，以及 1 艘輕巡洋艦。"
     },
     "146": {
         "name": "準備改修工廠!",
@@ -207,9 +205,7 @@
     },
     "152": {
         "name": "再編成「新三川艦隊」",
-        "desc": "於主艦隊編成「古鷹」、 「加古」、 「青葉」、 「衣笠」、 「夕張」及「天龍」6 艘艦中的任何 5 艘，並以
-
-「鳥海改二」作為旗艦。"
+        "desc": "於主艦隊編成「古鷹」、 「加古」、 「青葉」、 「衣笠」、 「夕張」及「天龍」6 艘艦中的任何 5 艘，並以。 「鳥海改二」作為旗艦。"
     },
     "153": {
         "name": "編成「新第十八戰隊」!",
@@ -290,9 +286,7 @@
     },
     "227": {
         "name": "Sortie the New Mikawa Fleet!",
-        "desc": "Deploy a fleet with Choukai, Aoba, Kinugasa, Kako, Furutaka and Tenryuu. Score a victory against World 2-3 
-
-Boss."
+        "desc": "Deploy a fleet with Choukai, Aoba, Kinugasa, Kako, Furutaka and Tenryuu. Score a victory against World 2-3 Boss."
     },
     "231": {
         "name": "Sortie a Submarine Fleet!",
@@ -304,27 +298,19 @@ Boss."
     },
     "233": {
         "name": "Sortie the Cruiser Division 6!",
-        "desc": "Deploy a fleet with Furutaka, Kako, Kinugasa, Aoba and 2 additional ships. Score a S rank victory against World 2
-
--3 Boss."
+        "desc": "Deploy a fleet with Furutaka, Kako, Kinugasa, Aoba and 2 additional ships. Score a S rank victory against World 2-3 Boss."
     },
     "239": {
         "name": "Sortie the Destroyer Division 8!",
-        "desc": "Deploy a fleet with Asashio, Michishio, Ooshio, Arashio and 2 additional ships. Score a victory against World 2-3 
-
-Boss."
+        "desc": "Deploy a fleet with Asashio, Michishio, Ooshio, Arashio and 2 additional ships. Score a victory against World 2-3 Boss."
     },
     "240": {
         "name": "Sortie the Destroyer Division 18!",
-        "desc": "Deploy a fleet with Kasumi, Arare, Kagerou, Shiranui and 2 additional ships. Score a victory against World 3-1 
-
-Boss."
+        "desc": "Deploy a fleet with Kasumi, Arare, Kagerou, Shiranui and 2 additional ships. Score a victory against World 3-1 Boss."
     },
     "244": {
         "name": "Deploy the Destroyer Division 30 (Gen-1)",
-        "desc": "Deploy a fleet that consists of Mutsuki (\u7766\u6708), Kisaragi (\u5982\u6708), Yayoi (\u5f25\u751f), 
-
-Mochizuki (\u671b\u6708) and up to 2 additional DDs to world 3-2 and encounter the boss. C rank or above is required."
+        "desc": "Deploy a fleet that consists of Mutsuki (\u7766\u6708), Kisaragi (\u5982\u6708), Yayoi (\u5f25\u751f), Mochizuki (\u671b\u6708) and up to 2 additional DDs to world 3-2 and encounter the boss. C rank or above is required."
     },
     "245": {
         "name": "In Preparation of Love! (Final)",
@@ -332,9 +318,7 @@ Mochizuki (\u671b\u6708) and up to 2 additional DDs to world 3-2 and encounter t
     },
     "246": {
         "name": "Your First Mission Together!",
-        "desc": "Deploy a fleet to 4-3 with a bonded ship of Lv.100 or more as flagship and score an S rank victory against the 
-
-boss."
+        "desc": "Deploy a fleet to 4-3 with a bonded ship of Lv.100 or more as flagship and score an S rank victory against the boss."
     },
     "247": {
         "name": "Sortie an aviation battleship fleet!",
@@ -346,117 +330,79 @@ boss."
     },
     "250": {
         "name": "Deploy the 2nd Carrier Division",
-        "desc": "Deploy Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c) as the flagship, Souryuu (\u84bc\u9f8d) and two destroyers to 
-
-World 5-2. You may add 2 other ships. Score an S rank victory against the boss."
+        "desc": "Deploy Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c) as the flagship, Souryuu (\u84bc\u9f8d) and two destroyers to World 5-2. You may add 2 other ships. Score an S rank victory against the boss."
     },
     "251": {
         "name": "Deploy the Elite 2nd Carrier Division",
-        "desc": "Deploy Souryuu Kai Ni (\u84bc\u9f8d\u6539\u4e8c) as the flagship, Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c) 
-
-and two destroyers to World 4-3. You may add 2 other ships. Score an S rank victory against the boss."
+        "desc": "Deploy Souryuu Kai Ni (\u84bc\u9f8d\u6539\u4e8c) as the flagship, Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c) and two destroyers to World 4-3. You may add 2 other ships. Score an S rank victory against the boss."
     },
     "252": {
         "name": "Deploy a Haruna-led Fleet",
-        "desc": "Deploy a fleet with Haruna Kai Ni (\u699b\u540d\u6539\u4e8c) as the flagship and up to 5 additional ships to 
-
-World 5-1 and score an S rank victory against the boss."
+        "desc": "Deploy a fleet with Haruna Kai Ni (\u699b\u540d\u6539\u4e8c) as the flagship and up to 5 additional ships to World 5-1 and score an S rank victory against the boss."
     },
     "253": {
         "name": "Deploy the 601 Air Group",
-        "desc": "Deploy a fleet with Unryuu Kai (\u96f2\u9f8d\u6539) as the flagship to World 5-2 and score an S rank victory 
-
-against the boss."
+        "desc": "Deploy a fleet with Unryuu Kai (\u96f2\u9f8d\u6539) as the flagship to World 5-2 and score an S rank victory against the boss."
     },
     "254": {
         "name": "Deploy a Light Carrier Squadron",
-        "desc": "Sortie a fleet of 1-2 light aircraft carriers, 1 light cruiser and 3-4 destroyers to World 2-1 and score an S rank 
-
-victory against the boss."
+        "desc": "Sortie a fleet of 1-2 light aircraft carriers, 1 light cruiser and 3-4 destroyers to World 2-1 and score an S rank victory against the boss."
     },
     "255": {
         "name": "Deploy a Torpedo Squadron to Bashi Islands",
-        "desc": "Sortie a fleet of 1-2 light cruisers (with one of them as the flagship) and 4-5 destroyers to World 2-2. Score a 
-
-victory at the boss and sink the enemy flagship."
+        "desc": "Sortie a fleet of 1-2 light cruisers (with one of them as the flagship) and 4-5 destroyers to World 2-2. Score a victory at the boss and sink the enemy flagship."
     },
     
    
     "258": {
         "name": "Sortie the 2nd Squadron",
-        "desc": "Deploy Nagato (\u9577\u9580), Mutsu (\u9678\u5965), Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce) and 
-
-up to 2 additional ships to World 4-2. Score two S rank victories at the boss node."
+        "desc": "Deploy Nagato (\u9577\u9580), Mutsu (\u9678\u5965), Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce) and up to 2 additional ships to World 4-2. Score two S rank victories at the boss node."
     },
    
     "260": {
         "name": "Deploy the Battleship Squadron in the Northern Waters",
-        "desc": "Deploy two battleships, a light aircraft carrier and up to three additional ships to World 3-5 and score an S rank 
-
-victory at the boss node."
+        "desc": "Deploy two battleships, a light aircraft carrier and up to three additional ships to World 3-5 and score an S rank victory at the boss node."
     },
     
     "262": {
         "name": "Deploy the Nishimura Fleet in the Southern Waters",
-        "desc": "Deploy Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce), Mogami (\u6700\u4e0a), Shigure (\u6642\u96e8) and 
-
-Michishio (\u6e80\u6f6e) (you may also add another ship) to World 5-1 and score an S rank victory at the boss node."
+        "desc": "Deploy Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce), Mogami (\u6700\u4e0a), Shigure (\u6642\u96e8) and Michishio (\u6e80\u6f6e) (you may also add another ship) to World 5-1 and score an S rank victory at the boss node."
     },
     "263": {
         "name": "Deploy the Sixth Squadron to the Southwestern Waters",
-        "desc": "Deploy Furutaka (\u53e4\u9df9), Kako (\u52a0\u53e4), Aoba (\u9752\u8449), Kinugasa (\u8863\u7b20) and up 
-
-to two additional ships to World 2-5 and score an S rank victory at the boss node."
+        "desc": "Deploy Furutaka (\u53e4\u9df9), Kako (\u52a0\u53e4), Aoba (\u9752\u8449), Kinugasa (\u8863\u7b20) and up to two additional ships to World 2-5 and score an S rank victory at the boss node."
     },
     "267": {
         "name": "Deploy the 11th Destroyer Division",
-        "desc": "Deploy Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea), Murakumo(\u53e2\u96f2) 
-
-and up to 2 additional ships to World 2-3 and score a victory at the boss node."
+        "desc": "Deploy Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea), Murakumo(\u53e2\u96f2) and up to 2 additional ships to World 2-3 and score a victory at the boss node."
     },
     "268": {
         "name": "11th Destroyer Division's Anti-Submarine Patrol",
-        "desc": "Deploy Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea) and Murakumo(\u53e2
-
-\u96f2) to World 1-5 and get a score of at least C at the boss node."
+        "desc": "Deploy Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea) and Murakumo(\u53e2\u96f2) to World 1-5 and get a score of at least C at the boss node."
     },
     "269": {
         "name": "Deploy the 21st Destroyer Division",
-        "desc": "Deploy Hatsuharu (\u521d\u6625), Nenohi (\u5b50\u65e5), Wakaba (\u82e5\u8449) and Hatsushimo 
-
-(\u521d\u971c) and up to 2 additional ships to World 3-1 and score an S rank victory at the boss node."
+        "desc": "Deploy Hatsuharu (\u521d\u6625), Nenohi (\u5b50\u65e5), Wakaba (\u82e5\u8449) and Hatsushimo (\u521d\u971c) and up to 2 additional ships to World 3-1 and score an S rank victory at the boss node."
     },
     "270": {
         "name": "Deploy the 22nd Destroyer Division",
-        "desc": "Deploy Satsuki (\u7690\u6708), Fumizuki (\u6587\u6708), Nagatsuki (\u9577\u6708), 1 more DD and up to two 
-
-additional ships to World 1-4 and score an S rank victory at the boss node."
+        "desc": "Deploy Satsuki (\u7690\u6708), Fumizuki (\u6587\u6708), Nagatsuki (\u9577\u6708), 1 more DD and up to two additional ships to World 1-4 and score an S rank victory at the boss node."
     },
     "271": {
         "name": "Deploy Nachi's Squadron",
-        "desc": "Sortie a fleet with Nachi (\u90a3\u667a) as flagship, Hatsushimo (\u521d\u971c), Kasumi (\u971e), Ushio 
-
-(\u6f6e), Akebono (\u66d9) and one additional ship to world 2-2 and score an S rank victory at the boss node."
+        "desc": "Sortie a fleet with Nachi (\u90a3\u667a) as flagship, Hatsushimo (\u521d\u971c), Kasumi (\u971e), Ushio (\u6f6e), Akebono (\u66d9) and one additional ship to world 2-2 and score an S rank victory at the boss node."
     },
     "272": {
         "name": "Deploy the Remodelled Anti-Aircraft Heavy Cruiser",
-        "desc": "Sortie a fleet with Maya (\u6469\u8036) Kai or Kai2, 1 CL, 2 DD and up to two additional ships to World 2-3 and 
-
-score an S rank victory at the boss node."
+        "desc": "Sortie a fleet with Maya (\u6469\u8036) Kai or Kai2, 1 CL, 2 DD and up to two additional ships to World 2-3 and score an S rank victory at the boss node."
     },
     "273": {
         "name": "Deploy the Mikawa Fleet to Solomon Islands",
-        "desc": "Sortie the main fleet with Choukai Kai2 (\u9ce5\u6d77\u6539\u30cb) as the flagship and any five of Aoba 
-
-(\u9752\u8449), Kinugasa (\u8863\u7b20), Kako (\u52a0\u53e4), Furutaka (\u53e4\u9df9), Tenryuu (\u5929\u9f8d), Yuubari 
-
-(\u5915\u5f35) to World 5-1 and score an S rank victory at the boss node."
+        "desc": "Sortie the main fleet with Choukai Kai2 (\u9ce5\u6d77\u6539\u30cb) as the flagship and any five of Aoba (\u9752\u8449), Kinugasa (\u8863\u7b20), Kako (\u52a0\u53e4), Furutaka (\u53e4\u9df9), Tenryuu (\u5929\u9f8d), Yuubari (\u5915\u5f35) to World 5-1 and score an S rank victory at the boss node."
     },
     "274": {
         "name": "6th Destroyer Division's Anti-Submarine Patrol",
-        "desc": "Deploy Akatsuki (\u6681), Hibiki (\u97ff or \u0412\u0435\u0440\u043d\u044b\u0439), Inazuma (\u96f7) and 
-
-Ikazuchi (\u96fb) to World 1-5. At least C rank is required at the boss node."
+        "desc": "Deploy Akatsuki (\u6681), Hibiki (\u97ff or \u0412\u0435\u0440\u043d\u044b\u0439), Inazuma (\u96f7) and Ikazuchi (\u96fb) to World 1-5. At least C rank is required at the boss node."
     },
     "275": {
         "name": "Deploy the 18th Squadron",
