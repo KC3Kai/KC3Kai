@@ -2,6 +2,10 @@ module.exports = function(grunt) {
 	
 	grunt.initConfig({
 		jshint: {
+			options: {
+				newcap: false,
+				laxbreak: true,
+			},
 			all: [
 				'src/assets/js/global.js',
 				'src/library/**/*.js',

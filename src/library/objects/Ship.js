@@ -61,7 +61,7 @@ KC3改 Ship Object
 			}
 		}
 		
-	}
+	};
 	
 	KC3Ship.prototype.master = function(){ return KC3Master.ship( this.masterId ); };
 	KC3Ship.prototype.name = function(){ return KC3Meta.shipName( this.master().api_name ); };

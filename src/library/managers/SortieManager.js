@@ -88,7 +88,7 @@ Xxxxxxx
 				// self.boss.ships = [ -1, -1, -1, -1, -1, -1 ];
 				self.boss.ships = [ 501,502,503,504,505,506 ];
 				self.onBossAvailable(self);
-			}, 1)
+			}, 1);
 		},
 		
 		currentNode :function(){

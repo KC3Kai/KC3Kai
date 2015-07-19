@@ -23,7 +23,7 @@
 				$(".title", sectionBox).text( response[sctr].section );
 				
 				// Learn more button
-				if(response[sctr].help!=""){
+				if(response[sctr].help!==""){
 					$("a", sectionBox).attr("href", response[sctr].help );
 				}else{
 					$("a", sectionBox).hide();
