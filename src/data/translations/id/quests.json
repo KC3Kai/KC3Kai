@@ -133,11 +133,11 @@
     },
     "134": {
         "name": "Persiapan Cinta! (Bagian 3)",
-        "desc": "Atur Calon Waifu(Lv.90~99) di Armada Utama!"
+        "desc": "Persiapkan Calon Waifu \u2665 (Lv.90~99) di Armada Utama!"
     },
     "135": {
         "name": "Perjalanan Baru!",
-        "desc": "Atur Armada Berisi 6 Kapal Dengan Waifu Lv.100 atau Lebih Sebagai Kapal Pemimpin!"
+        "desc": "Persiapkan Armada Berisikan 6 Kapal Dengan Waifu-mu \u2665 (Cie yang Baru Nikah XD) Lv.100 atau Lebih Sebagai Kapal Pemimpin!"
     },
     "136": {
         "name": "Bentuk Kapal Perusak Divisi 30 (Gen.2)",
@@ -321,11 +321,11 @@
     },
     "245": {
         "name": "Persiapan Cinta! (Akhir)",
-        "desc": "Sorti dengan Waifu(Lv.90~99) sebagai Kapal Pemimpin ke 2-3. Dapatkan S-Rank pada Bos Node."
+        "desc": "Sorti dengan Waifu \u2665 (Lv.90~99) sebagai Kapal Pemimpin ke 2-3. Dapatkan S-Rank pada Bos Node."
     },
     "246": {
-        "name": "Misi Pertama Bersama Waifu!",
-        "desc": "Sorti ke 4-3 dengan Waifu Lv.100 atau lebih Sebagai Kapal Pemimpin . Dapatkan S-Rank pada Bos Node."
+        "name": "Misi Pertama Bersama Waifu \u2665 !",
+        "desc": "Sorti ke 4-3 dengan Waifu \u2665 Lv.100 atau lebih Sebagai Kapal Pemimpin (Cie yang baru nikah). Dapatkan S-Rank pada Bos Node."
     },
     "247": {
         "name": "Sorti Armada Kapal Tempur Aviasi!",
@@ -420,16 +420,16 @@
         "desc": "Sorti Hiei, Kirishima, Nagara, Akatsuki, Ikazuchi, Inazuma ke 5-1 dan Selesaikan Map dengan S-Rank."
     },
 	"277": {
-        "name": "Misi anti Kapal Selam Kapal Perusak Divisi ke6!",
+        "name": "Misi anti Kapal Selam Kapal Perusak Divisi ke-6!",
         "desc": "Sorti Akatsuki Kai Ni , Hibiki/Verniy, Ikazuchi, Inazuma ke 1-5 dan Selesaikan Map setidaknya A-Rank."
     },
 	"278": {
         "name": "Penyerbuan Skuadron Torpedo Pertama ke Operasi 'KE'",
-        "desc": "Sorti Abukuma Sebagai Kapal Pemimpin dengan Hibiki/Вер, Hatsushimo, Wakaba, Samidare dan Shimakaze ke 3-2. Dapatkan B-Rank+ pada Bos Node."
+        "desc": "Sorti Abukuma Sebagai Kapal Pemimpin dengan Hibiki/Вер, Hatsushimo, Wakaba, Samidare dan Shimakaze ke World 3-2. Dapatkan B-Rank+ pada Bos Node."
     },
 	"279": {
         "name": "Penyerbuan Skuadron Torpedo Pertama ke Operasi 'KE' Sekali Lagi!",
-        "desc": "Sorti Abukuma Kai-2 Sebagai Kapal Pemimpin dengan Hibiki/Вер, Yuugumo, Naganami, Akigumo dan Shimakaze ke 3-2. Dapatkan B-Rank+ pada Bos Node."
+        "desc": "Sorti Abukuma Kai Ni Sebagai Kapal Pemimpin dengan Hibiki/Вер, Yuugumo, Naganami, Akigumo dan Shimakaze ke World 3-2. Dapatkan B-Rank+ pada Bos Node."
     },
 	
 	
@@ -629,18 +629,23 @@
     "302": {
 		"code": "C4",
         "name": "Latihan Mingguan",
-        "desc": "(Mingguan) Dapatkan 20 kemenagan pada Mode Latihan",
+        "desc": "(Mingguan) Dapatkan 20 kemenangan",
 		"tracking": [ [0,20] ]
     },
     "307": {
 		"code": "C5",
         "name": "Tingkatkan efisiensi Armada",
-        "desc": "Dapatkan 3 Kemenangan di Mode Latihan"
+        "desc": "Dapatkan 3 Kemenangan di Mode Latihan pada Hari yang sama"
     },
     "308": {
 		"code": "C6",
         "name": "Sekali lagi, Tingkatkan efisiensi Armada",
-        "desc": "Dapatkan 4 Kemenangan pada Mode Latihan"
+        "desc": "Dapatkan 4 Kemenangan pada Mode Latihan pada Hari yang sama"
+    },
+	"309": {
+		"code": "C7",
+        "name": "Upaya Meningkatkan Level Latihan Untuk Menanggulangi Operasi 'KE'",
+        "desc": "Dapatkan 4 Kemenangan pada Mode Latihan pada Hari yang sama"
     },
 	
 	
@@ -913,10 +918,10 @@
 	
 	"611": {
         "name": "Persiapan Cinta! (bagian 1)",
-        "desc": "Hancurkan Persenjataan 2 kali untuk menunjukan rasa cintamu!"
+        "desc": "Hancurkan Persenjataan 2 kali demi Menunjukan Bukti Cinta Kepada Waifu-mu \u2665 !"
     },
 	"306": {
         "name": "Persiapan Cinta (Bagian 2)",
-        "desc": "Tunjukkan Cintamu dengan mendapatkan 2 Kemenangan di Mode Latihan."
+        "desc": "Tunjukkan Cintamu Kepada Waifu-mu \u2665 dengan Mendapatkan 2 Kemenangan di Mode Latihan."
     }
 }
