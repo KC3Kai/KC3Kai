@@ -9,12 +9,12 @@
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ "en", "English" ],
-						[ "jp", "日本語" ],
+						[ "en", "Inggris" ],
+						[ "jp", "Jepang" ],
 						[ "id", "Indonesia" ],
-						[ "tcn", "繁體中文" ],
-						[ "scn", "简体中文" ],
-						[ "vi", "Tiếng Việt" ]
+						[ "tcn", "Tradisional Cina" ],
+						[ "scn", "Simplified Cina" ],
+						[ "vi", "Vietnam" ]
 					]
 				}
 			},
