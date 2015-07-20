@@ -3,6 +3,15 @@ This note file will be maintained so translators from forks can easily check bac
 
 https://github.com/dragonjet/KC3Kai/wiki/Localization
 
+#### 20th July 2015
+
+`developers.json`
+* Added Admiral Mikado
+
+`settings.json`
+* Added German
+
+
 #### 17th July 2015
 
 `terms.json`
