@@ -267,8 +267,8 @@
 		"desc": "Deploy your 2nd Fleet on 1 combat mission."
 	},
 	"217": {
-		"name": "Sink Enemy Carrier!",
-		"desc": "Sink an enemy aircraft carrier."
+		"name": "Đánh chìm Enemy Carrier!",
+		"desc": "Đánh chìm an enemy aircraft carrier."
 	},
 	"219": {
 		"name": "Sortie the Mikawa Fleet!",
@@ -430,56 +430,36 @@
 	
 	
 	"201": {
-		"code": "Bd1",
-		"name": "Daily Sortie 1",
-		"desc": "Defeat an abyssal fleet",
-		"unlock": [ 216, 211, 212 ],
-		"tracking": [ [0,1] ]
+		"name": "Xuất Kích mỗi ngày 1",
+		"desc": "Đánh bại một hạm đội Abyssal"
 	},
 	"216": {
-		"code": "Bd2",
-		"name": "Daily Sortie 2",
-		"desc": "Defeat the flagship of an abyssal fleet",
-		"unlock": [ 210, 218, 214, 213 ],
-		"tracking": [ [0,1] ]
+		"name": "Xuất Kích mỗi ngày 2",
+		"desc": "Đánh bại kì hạm của một hạm đội Abyssal"
 	},
 	"210": {
-		"code": "Bd3",
-		"name": "Daily Sortie 3",
-		"desc": "Defeat 10 abyssal fleets (B rank+)",
-		"tracking": [ [0,10] ]
+		"name": "Xuất Kích mỗi ngày 3",
+		"desc": "Đánh bại 10 hạm đội Abyssal (rank B trở lên)"
 	},
 	"211": {
-		"code": "Bd4",
-		"name": "Daily Sortie 4",
-		"desc": "Sink 3 abyssal CV(L)",
-		"tracking": [ [0,3] ]
+		"name": "Xuất Kích mỗi ngày 4",
+		"desc": "Đánh chìm 3 CV(L) của Abyssal"
 	},
 	"218": {
-		"code": "Bd5",
-		"name": "Daily Sortie 5",
-		"desc": "Sink 3 abyssal transport ships",
-		"unlock": [ 226, 220 ],
-		"tracking": [ [0,3] ]
+		"name": "Xuất Kích mỗi ngày 5",
+		"desc": "Đánh chìm 3 tàu vận chuyển của Abyssal"
 	},
 	"212": {
-		"code": "Bd6",
-		"name": "Daily Sortie 6",
-		"desc": "Sink 5 abyssal transport ships",
-		"tracking": [ [0,5] ]
+		"name": "Xuất Kích mỗi ngày 6",
+		"desc": "Đánh chìm 5 tàu vận chuyển của Abyssal"
 	},
 	"226": {
-		"code": "Bd7",
-		"name": "Daily Sortie 7",
-		"desc": "Defeat 5 bosses in horned nodes in World 2",
-		"unlock": [ 230 ],
-		"tracking": [ [0,5] ]
+		"name": "Xuất Kích mỗi ngày 7",
+		"desc": "Đánh bại 5 boss ở World 2"
 	},
 	"230": {
-		"code": "Bd8",
-		"name": "Daily Sortie 8",
-		"desc": "Sink 6 abyssal submarines",
-		"tracking": [ [0,6] ]
+		"name": "Xuất Kích mỗi ngày 8",
+		"desc": "Đánh chìm 6 tàu ngầm của Abyssal"
 	},
 	
 	
@@ -496,47 +476,47 @@
 	"220": {
 		"code": "Bw2",
 		"name": "Weekly Sortie 2",
-		"desc": "Sink 20 abyssal CV(L)",
+		"desc": "Đánh chìm 20 abyssal CV(L)",
 		"unlock": [ 228 ],
 		"tracking": [ [0,20] ]
 	},
 	"213": {
 		"code": "Bw3",
 		"name": "Weekly Sortie 3",
-		"desc": "Sink 20 abyssal transport ships",
+		"desc": "Đánh chìm 20 abyssal transport ships",
 		"tracking": [ [0,20] ]
 	},
 	"221": {
 		"code": "Bw4",
 		"name": "Weekly Sortie 4",
-		"desc": "Sink 50 abyssal transport ships",
+		"desc": "Đánh chìm 50 abyssal transport ships",
 		"unlock": [ 261, 257, 264 ],
 		"tracking": [ [0,50] ]
 	},
 	"228": {
 		"code": "Bw5",
 		"name": "Weekly Sortie 5",
-		"desc": "Sink 15 submarines",
+		"desc": "Đánh chìm 15 submarines",
 		"unlock": [ 229, 241, 613 ],
 		"tracking": [ [0,15] ]
 	},
 	"229": {
 		"code": "Bw6",
 		"name": "Weekly Sortie 6",
-		"desc": "Defeat 12 bosses in horned nodes in World 4",
+		"desc": "Đánh bại 12 bosses in horned nodes in World 4",
 		"unlock": [ 242 ],
 		"tracking": [ [0,12] ]
 	},
 	"241": {
 		"code": "Bw7",
 		"name": "Weekly Sortie 7",
-		"desc": "Defeat 5 bosses in Worlds [W3-3], [W3-4] or [W3-5]",
+		"desc": "Đánh bại 5 bosses in Worlds [W3-3], [W3-4] or [W3-5]",
 		"tracking": [ [0,5] ]
 	},
 	"242": {
 		"code": "Bw8",
 		"name": "Weekly Sortie 8",
-		"desc": "Defeat 1 boss in World [W4-4]",
+		"desc": "Đánh bại 1 boss in World [W4-4]",
 		"unlock": [ 243 ],
 		"tracking": [ [0,1] ]
 	},
@@ -602,71 +582,53 @@
 	
 	
 	"301": {
-		"code": "C1",
-		"name": "First Exercise!",
-		"desc": "Challenge another fleet in practice mode"
+		"name": "Luyện tập đầu tiên!",
+		"desc": "Thách thức một hạm đội khác trong chế độ Luyện tập"
 	},
 	 "303": {
-		"code": "C2",
-		"name": "Daily Exercises 1",
-		"desc": "Challenge 3 other fleets in practice mode",
-		"unlock": [ 304, 302 ],
-		"tracking": [ [0,3] ]
+		"name": "Luyện tập mỗi ngày 1",
+		"desc": "Thách thức 3 hạm đội khác trong chế độ Luyện tập"
 	},
 	"304": {
-		"code": "C3",
-		"name": "Daily Exercises 2",
-		"desc": "Get 5 victories in practice mode within the same day",
-		"tracking": [ [0,5] ]
+		"name": "Luyện tập mỗi ngày 2",
+		"desc": "Giành được 5 chiến thắng trong chế độ Luyện tập trong cùng một ngày"
 	},
 	"302": {
-		"code": "C4",
-		"name": "Weekly Exercises",
-		"desc": "(Weekly) Get 20 victories in practice mode",
-		"tracking": [ [0,20] ]
+		"name": "Luyện tập mỗi tuần",
+		"desc": "Giành được 20 chiến thắng trong chế độ Luyện tập"
 	},
 	"307": {
-		"code": "C5",
-		"name": "Improve the Efficiency of the Fleet",
-		"desc": "Get 3 victories in practice mode"
+		"name": "Tăng cường độ hiệu quả của hạm đội",
+		"desc": "Giành được 3 chiến thắng trong chế độ Luyện tập"
 	},
 	"308": {
 		"code": "C6",
-		"name": "Improve the Efficiency of the Fleet One More Time",
-		"desc": "Get 4 victories in practice mode"
+		"name": "Tăng cường độ hiệu quả của hạm đội thêm lần nữa",
+		"desc": "Giành được 4 chiến thắng trong chế độ Luyện tập"
 	},
 	"309": {
-		"code": "C7",
 		"name": "Strive to Increase the Level of Training in Preparation for Another Rush to the Northern Sea",
-		"desc": "Get 4 victories in Exercises within the same day"
+		"desc": "Giành được 4 chiến thắng trong chế độ Luyện tập trong cùng ngày"
 	},
 	
 	
 	
 	
 	"401": {
-		"code": "D1",
-		"name": "First Expedition",
-		"desc": "Perform an expedition"
+		"name": "Viễn chinh đầu tiên",
+		"desc": "Thực hiện một cuộc viễn chinh"
 	},
 	"402": {
-		"code": "D2",
-		"name": "Daily Expeditions 1",
-		"desc": "Perform 3 successful expeditions",
-		"unlock": [ 403 ],
-		"tracking": [ [0,3] ]
+		"name": "Viễn chinh mỗi ngày 1",
+		"desc": "Thực hiện 3 cuộc viễn chinh thành công"
 	},
 	"403": {
-		"code": "D3",
-		"name": "Daily Expeditions 2",
-		"desc": "Perform 10 successful expeditions",
-		"tracking": [ [0,10] ]
+		"name": "Viễn chinh mỗi ngày 2",
+		"desc": "Thực hiện 10 cuộc viễn chinh thành công"
 	},
 	"404": {
-		"code": "D4",
-		"name": "Weekly Expeditions",
-		"desc": "(Weekly) Perform 30 successful expeditions",
-		"tracking": [ [0,30] ]
+		"name": "Viễn chinh mỗi tuần",
+		"desc": "Thực hiện 30 cuộc viễn chinh thành công"
 	},
 	"405": {
 		"code": "D5",
@@ -747,27 +709,20 @@
 	
 	
 	"501": {
-		"code": "E1",
-		"name": "First Supply",
-		"desc": "Resupply 1 ship"
+		"name": "Tiếp tế đầu tiên",
+		"desc": "Tiếp tế cho một tàu"
 	},
 	"502": {
-		"code": "E2",
-		"name": "First Docking",
-		"desc": "Repair 1 ship"
+		"name": "Sửa chữa đầu tiên",
+		"desc": "Sửa chữa một tàu"
 	},
 	"503": {
-		"code": "E3",
-		"name": "Daily Repairs",
-		"desc": "Repair 5 ships",
-		"unlock": [ 504 ],
-		"tracking": [ [0,5] ]
+		"name": "Sửa chữa mỗi ngày",
+		"desc": "Sửa chữa 5 tàu"
 	},
 	"504": {
-		"code": "E4",
-		"name": "Daily Resupplies",
-		"desc": "Resupply your ships 15 times",
-		"tracking": [ [0,15] ]
+		"name": "Tiếp tế mỗi ngày",
+		"desc": "Tiếp tế cho nữ hạm của bạn 15 lần"
 	},
 	
 	
@@ -775,38 +730,24 @@
 	
 	
 	"605": {
-		"code": "F1",
-		"name": "Daily Development 1",
-		"desc": "Craft 1 piece of equipment (Failures are OK)",
-		"unlock": [ 606 ],
-		"tracking": [ [0,1] ]
+		"name": "Chế thiết bị mỗi ngày 1",
+		"desc": "Chế tạo 1 thiết bị (có thể thất bại)"
 	},
 	"606": {
-		"code": "F2",
-		"name": "Daily Construction 1",
-		"desc": "Craft 1 ship",
-		"unlock": [ 607 ],
-		"tracking": [ [0,1] ]
+		"name": "Đóng tàu mỗi ngày 1",
+		"desc": "Đóng 1 tàu"
 	},
 	"607": {
-		"code": "F3",
-		"name": "Daily Development 2",
-		"desc": "Craft 3 pieces of equipment (Failures are OK)",
-		"unlock": [ 608 ],
-		"tracking": [ [0,3] ]
+		"name": "Chế thiết bị mỗi ngày 2",
+		"desc": "Chế tạo 3 thiết bị (có thể thất bại)"
 	},
 	 "608": {
-		"code": "F4",
-		"name": "Daily Construction 2",
-		"desc": "Craft 3 ships",
-		"unlock": [ 609, 619 ],
-		"tracking": [ [0,3] ]
+		"name": "Đóng tàu mỗi ngày 2",
+		"desc": "Đóng 3 tàu"
 	},
 	 "609": {
-		"code": "F5",
-		"name": "Daily Dismantlement",
-		"desc": "Scrap 2 ships",
-		"tracking": [ [0,2] ]
+		"name": "Dỡ bỏ mỗi ngày",
+		"desc": "Phá dỡ 2 tàu"
 	},
 	"601": {
 		"code": "F6",
@@ -865,15 +806,12 @@
 		"desc": "Scrap equipment 10 times"
 	},
 	"618": {
-		"code": "F17",
-		"name": "First Equipment Modernisation",
-		"desc": "Perform equipment modernisation once"
+		"name": "Hiện đại hóa Trang bị đầu tiên",
+		"desc": "Thực hiện Hiện đại hóa Trang bị 1 lần"
 	},
 	"619": {
-		"code": "F18",
-		"name": "Daily Equipment Modernisation",
-		"desc": "Perform equipment modernisation once",
-		"tracking": [ [0,1] ]
+		"name": "Hiện đại hóa Trang bị mỗi ngày",
+		"desc": "Thực hiện Hiện đại hóa Trang bị 1 lần"
 	},
 	
 	
@@ -881,27 +819,21 @@
 	
 	
 	"701": {
-		"code": "G1",
-		"name": "First Modernization",
-		"desc": "Perform 1 successful modernization"
+		"name": "Hiện đại hóa đầu tiên",
+		"desc": "Thực hiện 1 lần Hiện đại hóa thành công"
 	},
 	"702": {
-		"code": "G2",
-		"name": "Daily Modernization",
-		"desc": "Perform 2 successful modernizations",
-		"unlock": [ 703 ],
-		"tracking": [ [0,2] ]
+		"name": "Hiện đại hóa mỗi ngày",
+		"desc": "Thực hiện 2 lần Hiện đại hóa thành công"
 	},
 	"703": {
-		"code": "G3",
-		"name": "Weekly Modernization",
-		"desc": "(Weekly) Perform 15 successful modernizations",
+		"name": "Hiện đại hóa mỗi tuần",
+		"desc": "Thực hiện 15 lần Hiện đại hóa thành công",
 		"tracking": [ [0,15] ]
 	},
 	"704": {
-		"code": "G4",
-		"name": "Preparation for LSC (Part 1)",
-		"desc": "Perform 4 successful modernizations"
+		"name": "Chuẩn bị cho Đóng tàu cỡ lớn (Phần 1)",
+		"desc": "Thực hiện 4 lần Hiện đại hóa thành công"
 	},
 	
 	
@@ -914,6 +846,6 @@
 	},
 	"306": {
 		"name": "In Preparation of Love (Part 2)",
-		"desc": "Show your love by getting 2 victories in practice mode."
+		"desc": "Show your love by getting 2 victories trong chế độ Luyện tập."
 	}
 }
