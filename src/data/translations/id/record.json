@@ -1,29 +1,28 @@
 {
-    "SortieWinCount": "Jumlah Sortie Menang",
-    "SortieLoseCount": "Jumlah Sortie Kalah",
-    "SortieWinRate": "Rata-rata Sortie Menang",
+    "SortieWinCount": "Jumlah Menang Sorti",
+    "SortieLoseCount": "Jumlah Kalah Sorti",
+    "SortieWinRate": "Tingkat Kemenangan Sorti",
     "TotalExpeditions": "Total Expedisi",
-    "ExpeditionSuccessCount": "Jumlah Expedisi Sukses",
-    "ExpeditionSuccessRate": "Rata-rata Expedisi Sukses",
-    "PVPWinCount": "Jumlah PVP Menang",
-    "PVPLoseCount": "Jumlah PVP Kalah",
-    "PVPWinRate": "Rata-rata PVP Menang",
+    "ExpeditionSuccessCount": "Jumlah Berhasil Expedisi",
+    "ExpeditionSuccessRate": "Tingkat Keberhasilan Expedisi",
+    "PVPWinCount": "Jumlah Menang PVP",
+    "PVPLoseCount": "Jumlah Kalah PVP",
+    "PVPWinRate": "Tingkat Kemenangan PVP",
     "FleetsOwned": "Armada Dimiliki",
-    "ConstructionDockCount": "Construction Dock Count", //Translate?
-    "RepairDockCount": "Repair Dock Count", //Translate?
-    "ShipGirlsOwned": "Jumlah Kapal Perempuan", //Kapan Perempuan lol. Biarin aja kapal perempuan jangan diganti ok ;) JK
-    "EquipmentItemCount": "Jumlah Item Equipment", //Translate?
-    "FurnitureOwned": "Furnitur Dimiliki", //Furnitur ato Perabotan?
+    "ConstructionDockCount": "Jumlah Dermaga Konstruksi",
+    "RepairDockCount": "Jumlah Dermaga Perbaikan",
+    "ShipGirlsOwned": "Kanmusu Dimiliki",
+    "EquipmentItemCount": "Jumlah Item Perlengkapan",
+    "FurnitureOwned": "Furnitur Dimiliki",
     "ServerName": "Nama Server",
-    "MaxFleetsAvailable": "Maksimal Armada Tersedia",
-    "MaxShipGirlsAvailable": "Maksimal Kapal Perempuan Tersedia",
-    "MaxHomeportUpgradesAvailable": "Maksimal Homeport Upgrades Available", //WTF is Homeport??? Emang ada kah homeport di KC?
-    "MaxEquipmentAvailable": "Maksimal Equipment Tersedia",
+    "MaxFleetsAvailable": "Maks Armada Tersedia",
+    "MaxShipGirlsAvailable": "Maks Gadis Kapal(Kanmusu) Tersedia",
+    "MaxHomeportUpgradesAvailable": "Maks Rumah Dermaga Dapat Ditingkatkan",
+    "MaxEquipmentAvailable": "Maks Perlengkapan Tersedia",
     "QuestMarkersAvailable": "Penanda Quest Tersedia",
-    "ResourceSoftcapLimit": "Resource Softcap Limit", //Translate?
+    "ResourceSoftcapLimit": "Batas Sumber Daya(Softcap)",
     "MainScreenBGM": "BGM Tampilan Utama",
-    "LevelUpNotice": "Setiap level HQmu bertambah, softcap limit pun akan bertambah, dan memungkinkan untuk crafting equipment baru.",
-    "MainScreenBGM": "BGM Tampilan Utama",
-    "Experience": "Experience", //Translate?
+    "LevelUpNotice": "Saat Level HQmu meningkat, Batas softcap Meningkat, dan Memungkinkan Untuk Membuat Perlengkapan Baru.",
+    "Experience": "Pengalaman(Exp)",
     "Name": "Nama"
 }

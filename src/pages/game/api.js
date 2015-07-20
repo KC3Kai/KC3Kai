@@ -1,3 +1,5 @@
+_gaq.push(['_trackPageview']);
+
 // If awaiting activation
 var waiting = false;
 
@@ -11,10 +13,10 @@ function ActivateGame(){
 	$(".box-wait").hide();
 	$(".box-game .game-swf").attr("src", localStorage.absoluteswf);
 	$(".box-game").show();
+	$(".box-wrap").css("zoom", ((ConfigManager.api_gameScale || 100) / 100));
 }
 
 $(document).on("ready", function(){
-
 	// Initialize data managers
 	ConfigManager.load();
 	KC3Meta.init("../../../../data/");
@@ -22,7 +24,7 @@ $(document).on("ready", function(){
 	
 	// Apply interface configs
 	$(".box-wrap").css("margin-top", ConfigManager.api_margin+"px");
-	if(ConfigManager.api_bg_image == ""){
+	if(ConfigManager.api_bg_image === ""){
 		$("body").css("background", ConfigManager.api_bg_color);
 	}else{
 		$("body").css("background-image", "url("+ConfigManager.api_bg_image+")");
@@ -68,7 +70,7 @@ $(document).on("ready", function(){
 		if(ConfigManager.api_askExit==1 && !trustedExit){
 			trustedExit = true;
 			setTimeout(function(){ trustedExit = false; }, 100);
-			return "Ahh! you are closing the game!";
+			return "Ahhh! You are leaving your girls! Are you sure you want to leave them?";
 		}
 	};
 	
@@ -101,14 +103,17 @@ var interactions = {
 				
 				// Get quest data
 				var QuestData = KC3QuestManager.get( QuestRaw.api_no );
-				// console.log("QuestData", QuestData);
 				
 				// Show meta, title and description
-				if( QuestData.meta ){
+				if( typeof QuestData.meta().available != "undefined" ){
 					$(".name", QuestBox).text( QuestData.meta().name );
 					$(".desc", QuestBox).text( QuestData.meta().desc );
 					
-					$(".tracking", QuestBox).html( QuestData.outputHtml() );
+					if(ConfigManager.api_tracking){
+						$(".tracking", QuestBox).html( QuestData.outputHtml() );
+					}else{
+						$(".tracking", QuestBox).hide();
+					}
 					
 					// Special Bw1 case multiple requirements
 					if( QuestRaw.api_no == 214 ){
@@ -161,7 +166,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, response){
 	// If request is for this script
 	if((request.identifier||"") == "kc3_gamescreen"){
 		// If action requested is supported
-		if(typeof interactions[request.action] != "undefined"){
+		if(typeof interactions[request.action] !== "undefined"){
 			// Execute the action
 			interactions[request.action](request, sender, response);
 			return true;

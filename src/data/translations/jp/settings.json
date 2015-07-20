@@ -1,0 +1,215 @@
+[
+	{
+		"section": "グローバル",
+		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Global",
+		"contents" : [
+			{
+				"name" : "言語"
+			},
+			{
+				"name" : "効果的なLoS式",
+				"options" : {
+					"choices" : [
+						[ 1, "合計" ],
+						[ 2, "古い" ],
+						[ 3, "新" ]
+					]
+				}
+			}
+		]
+	},
+	{
+		"section": "ゲーム情報",
+		"help" : "",
+		"contents" : [
+			{
+				"name" : "建設顔"
+			},
+			{
+				"name" : "工芸結果"
+			},
+			{
+				"name" : "コンパスと敵"
+			},
+			{
+				"name" : "バトル環境"
+			},
+			{
+				"name" : "ボス組成"
+			}
+		]
+	},
+	{
+		"section": "スクリーンショット",
+		"help" : "",
+		"contents" : [
+			{
+				"name" : "出力モード",
+				"options" : {
+					"choices" : [
+						[ 0, "ダウンロード" ],
+						[ 1, "Imgur" ],
+						[ 2, "新しいタブ" ]
+					]
+				}
+			},
+			{
+				"name" : "ファイルタイプ",
+				"options" : {
+					"choices" : [
+						[ "JPG", "JPG" ],
+						[ "PNG", "PNG" ]
+					]
+				}
+			}
+		]
+	},
+	{
+		"section": "警報",
+		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Alerts",
+		"contents" : [
+			{
+				"name" : "タイマー手当",
+				"options" : { "label" : "秒" }
+			},
+			{
+				"name" : "音の種類",
+				"options" : {
+					"choices" : [
+						[ 0, "なし" ],
+						[ 1, "チーン!" ],
+						[ 2, "カスタム" ]
+					]
+				}
+			},
+			{
+				"name" : "カスタム音"
+			},
+			{
+				"name" : "ボリューム"
+			},
+			{
+				"name" : "デスクトップ通知"
+			}
+		]
+	},
+	{
+		"section": "APIゲーム画面",
+		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Screen",
+		"contents" : [
+			{
+				"name" : "クエスト翻訳"
+			},
+			{
+				"name" : "クエスト追跡"
+			},
+			{
+				"name" : "終了確認"
+			},
+			{
+				"name" : "上余白",
+				"options" : { "label" : "pixels" }
+			},
+			{
+				"name" : "背景の色",
+				"options" : { "placeholder" : "background-colorのCSSプロパティを参照してください。" }
+			},
+			{
+				"name" : "背景の画像",
+				"options" : { "placeholder" : "http://" }
+			},
+			{
+				"name" : "背景のサイズ",
+				"options" : { "placeholder" : "background-sizeのCSSプロパティを参照してください。" }
+			},
+			{
+				"name" : "背景の位置",
+				"options" : { "placeholder" : "background-positionのCSSプロパティを参照してください。" }
+			},
+			{
+				"name" : "ゲームプレイヤーのスケール"
+			}
+		]
+	},
+	{
+		"section": "DMMゲーム画面",
+		"help" : "",
+		"contents" : [
+			{
+				"name" : "カスタマイズを適用"
+			},
+			{
+				"name" : "クエスト翻訳"
+			},
+			{
+				"name" : "クエスト追跡"
+			},
+			{
+				"name" : "終了確認"
+			},
+			{
+				"name" : "上余白",
+				"options" : { "label" : "pixels" }
+			},
+			{
+				"name" : "背景の色",
+				"options" : { "placeholder" : "background-colorのCSSプロパティを参照してください。" }
+			},
+			{
+				"name" : "背景の画像",
+				"options" : { "placeholder" : "http://" }
+			},
+			{
+				"name" : "背景のサイズ",
+				"options" : { "placeholder" : "background-sizeのCSSプロパティを参照してください。" }
+			},
+			{
+				"name" : "背景の位置",
+				"options" : { "placeholder" : "background-positionのCSSプロパティを参照してください。" }
+			}
+		]
+	},
+	{
+		"section": "パネル",
+		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Panel",
+		"contents" : [
+			{
+				"name" : "テーマ",
+				"options" : {
+					"choices" : [
+						[ "default", "デフォルト" ],
+						[ "dark", "黒" ]
+					]
+				}
+			},
+			{
+				"name" : "パネルのサイズ",
+				"options" : {
+					"choices" : [
+						[ "small", "小" ],
+						[ "big", "大" ]
+					]
+				}
+			},
+			{
+				"name" : "背景の色",
+				"options" : { "placeholder" : "background-colorのCSSプロパティを参照してください。" }
+			},
+			{
+				"name" : "背景の画像",
+				"options" : { "placeholder" : "http://" }
+			},
+			{
+				"name" : "背景のサイズ",
+				"options" : { "placeholder" : "background-sizeのCSSプロパティを参照してください。" }
+			},
+			{
+				"name" : "背景の位置",
+				"options" : { "placeholder" : "background-positionのCSSプロパティを参照してください。" }
+			},
+			{
+				"name" : "インターフェイスの不透明度"
+			}
+		]
+	}
+]

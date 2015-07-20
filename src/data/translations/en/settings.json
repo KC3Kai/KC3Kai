@@ -10,7 +10,11 @@
 				"options" : {
 					"choices" : [
 						[ "en", "English" ],
-						[ "jp", "Japanese" ]
+						[ "jp", "日本語" ],
+						[ "id", "Indonesian" ],
+						[ "tcn", "繁體中文" ],
+						[ "scn", "简体中文" ],
+						[ "vi", "Tiếng Việt" ]
 					]
 				}
 			},
@@ -25,12 +29,6 @@
 						[ 3, "New" ]
 					]
 				}
-			},
-			{
-				"id" : "questTracking",
-				"name" : "Quest Tracking",
-				"type" : "check",
-				"options" : {}
 			}
 		]
 	},
@@ -59,6 +57,12 @@
 			{
 				"id" : "info_battle",
 				"name" : "Battle Environment",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_boss",
+				"name" : "Boss Composition",
 				"type" : "check",
 				"options" : {}
 			}
@@ -146,6 +150,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "api_tracking",
+				"name" : "Quest Tracking",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "api_askExit",
 				"name" : "Exit Confirmation",
 				"type" : "check",
@@ -180,6 +190,12 @@
 				"name" : "Background Position",
 				"type" : "long_text",
 				"options" : { "placeholder" : "See CSS background-position property" }
+			},
+			{
+				"id" : "api_gameScale",
+				"name" : "Game Player Scale",
+				"type" : "small_text",
+				"options" : { "label" : "%" }
 			}
 		]
 	},
@@ -196,6 +212,12 @@
 			{
 				"id" : "dmm_translation",
 				"name" : "Quest Translations",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "dmm_tracking",
+				"name" : "Quest Tracking",
 				"type" : "check",
 				"options" : {}
 			},
@@ -249,6 +271,17 @@
 					"choices" : [
 						[ "default", "Default" ],
 						[ "dark", "Dark" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_size",
+				"name" : "Panel Size",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "small", "Small" ],
+						[ "big", "Big" ]
 					]
 				}
 			},

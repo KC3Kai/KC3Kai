@@ -1,0 +1,907 @@
+{
+    "101": {
+        "name": "First Formation!",
+        "desc": "Have 2 ships in your main fleet."
+    },
+    "102": {
+        "name": "Form a Destroyer Squadron!",
+        "desc": "Have 4 DD in your main fleet."
+    },
+    "103": {
+        "name": "Form a Torpedo Squadron!",
+        "desc": "Have a CL as a flagship and 5 DD in your main fleet."
+    },
+    "104": {
+        "name": "Form a Six Ship Fleet!",
+        "desc": "Have 6 ships in your main fleet."
+    },
+    "105": {
+        "name": "Form a Squadron with Two CL!",
+        "desc": "Have 2 CL in your main fleet."
+    },
+    "106": {
+        "name": "Form a Heavy Cruiser Squadron!",
+        "desc": "Have 2 CA in your main fleet."
+    },
+    "107": {
+        "name": "Form a Carrier Task Force!",
+        "desc": "Have a CV\/CVL as a flagship and 3 DD in your main fleet."
+    },
+    "108": {
+        "name": "Form the Tenryuu-class!",
+        "desc": "Have Tenryuu (\u5929\u9f8d) and Tatsuta (\u9f8d\u7530) in your main fleet."
+    },
+    "109": {
+        "name": "Form the Sendai-class!",
+        "desc": "Have Sendai (\u5ddd\u5185), Jintsuu (\u795e\u901a) and Naka (\u90a3\u73c2) in your main fleet."
+    },
+    "110": {
+        "name": "Form the Myoukou-class!",
+        "desc": "Have Myoukou (\u5999\u9ad8), Nachi (\u90a3\u667a), Ashigara (\u8db3\u67c4) and Haguro (\u7fbd\u9ed2) in your main fleet."
+    },
+    "111": {
+        "name": "Form the Fusou-class!",
+        "desc": "Have Fusou (\u6276\u6851) and Yamashiro (\u5c71\u57ce) in your main fleet."
+    },
+    "112": {
+        "name": "Form the Ise-class!",
+        "desc": "Have Ise (\u4f0a\u52e2) and Hyuuga (\u65e5\u5411) in your main fleet."
+    },
+    "113": {
+        "name": "Form the Main Fleet with BB and CA!",
+        "desc": "Have a BB and 2 CA in your main fleet."
+    },
+    "114": {
+        "name": "Form the Nagumo Task Force!",
+        "desc": "Have ONLY Akagi (\u8d64\u57ce), Kaga (\u52a0\u8cc0), Hiryuu (\u98db\u9f8d) and Souryuu (\u84bc\u9f8d) in your main fleet."
+    },
+    "115": {
+        "name": "Form the Second Fleet!",
+        "desc": "Have a flagship in your second fleet."
+    },
+    "116": {
+        "name": "Ready a Seaplane Tender",
+        "desc": "Have an AV in your main fleet."
+    },
+    "117": {
+        "name": "Form a Carrier Task Force in the Second Fleet!",
+        "desc": "Have a CV\/CVL and 3 DD in your second fleet."
+    },
+    "118": {
+        "name": "Form the Kongou-class!",
+        "desc": "Have Kongou (\u91d1\u525b), Hiei (\u6bd4\u53e1), Haruna (\u699b\u540d) and Kirishima (\u9727\u5cf6) in your main fleet."
+    },
+    "119": {
+        "name": "Form the Mikawa Fleet!",
+        "desc": "Have Choukai (\u9ce5\u6d77), Aoba (\u9752\u8449), Kako (\u52a0\u53e4), Furutaka (\u53e4\u9df9), Tenryuu (\u5929\u9f8d) and a FAST speed ship in your main fleet."
+    },
+    "120": {
+        "name": "Form the Destroyer Division 6!",
+        "desc": "Have ONLY Akatsuki (\u6681), Hibiki (\u97ff), Inazuma (\u96f7) and Ikazuchi (\u96fb) in your main fleet."
+    },
+    "121": {
+        "name": "Form the Cruiser Division 4!",
+        "desc": "Have Atago (\u611b\u5b95), Takao (\u9ad8\u96c4), Choukai (\u9ce5\u6d77) and Maya (\u6469\u8036) in your main fleet."
+    },
+    "122": {
+        "name": "Form the Nishimura Fleet!",
+        "desc": "Have Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce), Mogami (\u6700\u4e0a) and Shigure (\u6642\u96e8) in your main fleet."
+    },
+    "123": {
+        "name": "Form the Carrier Division 5!",
+        "desc": "Have Shoukaku (\u7fd4\u9db4), Zuikaku (\u745e\u9db4) and 2 DD in your main fleet."
+    },
+    "124": {
+        "name": "Form the New Mikawa Fleet!",
+        "desc": "Have Choukai (\u9ce5\u6d77), Aoba (\u9752\u8449), Kinugasa (\u8863\u7b20), Kako (\u52a0\u53e4), Furutaka (\u53e4\u9df9) and Tenryuu (\u5929\u9f8d) in your main fleet."
+    },
+    "125": {
+        "name": "Form a Submarine Fleet!",
+        "desc": "Have 2 SS in your main fleet."
+    },
+    "126": {
+        "name": "Form a Naval Aviation Strike Fleet!",
+        "desc": "Have 2 BBV and 2 CAV in your main fleet."
+    },
+    "127": {
+        "name": "Form a Medium-Sized Submarine Fleet!",
+        "desc": "Have 3 SS in your main fleet."
+    },
+    "128": {
+        "name": "Form the Cruiser Division 6!",
+        "desc": "Have Furutaka (\u53e4\u9df9), Kako(\u52a0\u53e4), Aoba (\u9752\u8449) and Kinugasa (\u8863\u7b20) in your main fleet."
+    },
+    "129": {
+        "name": "Form the 5th Fleet!",
+        "desc": "Have Nachi (\u90a3\u667a), Ashigara (\u8db3\u67c4), Tama (\u591a\u6469), and Kiso (\u6728\u66fe) in your fleet."
+    },
+    "130": {
+        "name": "Form the Torpedo Squadron 1!",
+        "desc": "Have Abukuma (\u963f\u6b66\u9688), Akebono (\u66d9), Ushio (\u6f6e), Kasumi (\u971e) and Shiranui (\u4e0d\u77e5\u706b) in your fleet."
+    },
+    "131": {
+        "name": "Form the Destroyer Division 8!",
+        "desc": "Have Asashio (\u671d\u6f6e), Michishio (\u6e80\u6f6e), Ooshio (\u5927\u6f6e) and Arashio (\u8352\u6f6e) in your fleet."
+    },
+    "132": {
+        "name": "Form the Destroyer Division 18!",
+        "desc": "Have ONLY Kasumi (\u971e), Arare (\u9730), Kagerou (\u967d\u708e) and Shiranui (\u4e0d\u77e5\u706b) in your fleet."
+    },
+    "133": {
+        "name": "Form the Destroyer Division 30 (Gen-1)!",
+        "desc": "Have ONLY Mutsuki (\u7766\u6708), Kisaragi (\u5982\u6708), Yayoi (\u5f25\u751f) and Mochizuki (\u671b\u6708) in your fleet."
+    },
+    "134": {
+        "name": "In Preparation of Love! (Part 3)",
+        "desc": "Organize your feelings and deploy your fleet with a high level flagship (Lv.90~99)!"
+    },
+    "135": {
+        "name": "Journey Anew!",
+        "desc": "Organize a fleet of 6 ships with your newly bonded ship of Lv.100 or more as flagship!"
+    },
+    "136": {
+        "name": "Form the 30th Destroyer Fleet (Gen.2)",
+        "desc": "Have only Mutsuki (\u7766\u6708), Yayoi (\u5f25\u751f), Uzuki (\u536f\u6708) and Mochizuki (\u671b\u6708) in your fleet."
+    },
+    "137": {
+        "name": "Form the 5th Fleet",
+        "desc": "Have Myoukou (\u5999\u9ad8), Nachi (\u90a3\u667a) and Haguro (\u7fbd\u9ed2) in your fleet."
+    },
+    "138": {
+        "name": "Form the new 2nd Carrier Division",
+        "desc": "Have Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c, as the flagship), Souryuu (\u84bc\u9f8d) and 2 destroyers in your fleet."
+    },
+    "139": {
+        "name": "Form the 6th Submarine Fleet",
+        "desc": "Have a submarine tender and 4 (or more) submarines in your fleet."
+    },
+    "140": {
+        "name": "Test the new RADAR!",
+        "desc": "Have Myoukou Kai2 as the flagship of your fleet."
+    },
+    "141": {
+        "name": "Reorganise the Strengthened 2nd Carrier Division",
+        "desc": "Have Souryuu Kai-2 (\u84bc\u9f8d\u6539\u4e8c) as flagship with Hiryuu Kai-2 (\u98db\u9f8d\u6539\u4e8c) and 2 destroyers in your fleet."
+    },
+    "142": {
+        "name": "Organise the Elite 3rd Battleship Division",
+        "desc": "Have all four Kongou-class Kai 2 battleships in your main fleet."
+    },
+    "143": {
+        "name": "Deploy a New Standard Aircraft Carrier",
+        "desc": "Have Unryuu (\u96f2\u9f8d) as your flagship."
+    },
+    "144": {
+        "name": "Organise the Main Battleship Fleet: the 2nd Squadron",
+        "desc": "Have both Nagato-class and both Fusou-class battleships (and no other ships) in your main fleet."
+    },
+    "145": {
+        "name": "Organise the Main Battleship Force",
+        "desc": "Have three battleships of Nagato, Fusou, Ise or Yamato classes and a light cruiser in your fleet."
+    },
+    "146": {
+        "name": "Prepare the Arsenal for Renovations",
+        "desc": "Have Akashi (\u660e\u77f3) as your flagship in your main fleet."
+    },
+    "147": {
+        "name": "Organise the Nishimura Fleet",
+        "desc": "Have Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce), Mogami (\u6700\u4e0a), Shigure (\u6642\u96e8) and Michishio (\u6e80\u6f6e) in your main fleet."
+    },
+    "148": {
+        "name": "Organise the Counterattack Squadron",
+        "desc": "Have Kasumi (\u971e) as the flagship, Ashigara (\u8db3\u67c4), 1 CL and 3 more DDs in your main fleet."
+    },
+    "149": {
+        "name": "Organise the 11th Destroyer Division",
+        "desc": "Have the 4 Special-type destroyers: Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea) and Murakumo(\u53e2\u96f2) in your main fleet. One of them should be the flagship."
+    },
+    "150": {
+        "name": "Organise the 21st Destroyer Division",
+        "desc": "Have only Hatsuharu (\u521d\u6625), Nenohi (\u5b50\u65e5), Wakaba (\u82e5\u8449) and Hatsushimo (\u521d\u971c) in your main fleet."
+    },
+    "151": {
+        "name": "Organise the 22nd Destroyer Division",
+        "desc": "Have only Satsuki (\u7690\u6708), Fumizuki (\u6587\u6708), Nagatsuki (\u9577\u6708) and 1 more DD in your main fleet."
+    },
+    "152": {
+        "name": "Organise the New Edition of the Mikawa Fleet",
+        "desc": "Have Choukai Kai2 as the flagship and any five of Aoba, Kinugasa, Kako, Furutaka, Tenryuu, Yuubari in your main fleet"
+    },
+    "153": {
+        "name": "Reorganize the 18th Squadron!",
+        "desc": "Have Tenryuu, Tatsuta and 2 or more other ships in your fleet"
+    },
+	"154": {
+        "name": "Organize the surface attack fleet!",
+        "desc": "Have Hiei, Kirishima, Nagara, Akatsuki, Ikazuchi, Inazuma in your fleet"
+    },
+	"155": {
+        "name": "Organize the new 6th Destroyer Division!",
+        "desc": "Have Akatsuki Kai2 as Flagship with Hibiki/Bep, Ikazuchi, Inazuma in your fleet"
+    },
+	
+	
+	
+	
+	
+    "202": {
+        "name": "First Sortie!",
+        "desc": "Deploy your main fleet on a combat mission."
+    },
+    "203": {
+        "name": "Protect the Seas of Chinju-Fu!",
+        "desc": "Deploy to World 1-1 and clear the stage."
+    },
+    "204": {
+        "name": "Sortie to the Coast of Nansei Islands!",
+        "desc": "Deploy to World 1-2 and clear the stage."
+    },
+    "205": {
+        "name": "Intercept Approaching Enemy Vanguard Fleet!",
+        "desc": "Deploy to World 1-2 after defeating its boss and clear the stage."
+    },
+    "206": {
+        "name": "Sortie the Torpedo Squadron!",
+        "desc": "Deploy a fleet with a CL as flagship and 3 DD as escorts."
+    },
+    "207": {
+        "name": "Sortie a Heavy Cruiser!",
+        "desc": "Deploy a fleet with a CA as its flagship."
+    },
+    "208": {
+        "name": "Sortie a Battleship!",
+        "desc": "Deploy a fleet with a BB as its flagship. BBV don't count."
+    },
+    "209": {
+        "name": "Sortie a Carrier Task Force!",
+        "desc": "Deply a fleet with CV(L) as flagship and 5 DD\/CL\/AV for the escorts."
+    },
+    "215": {
+        "name": "Second Fleet Sortie!",
+        "desc": "Deploy your 2nd Fleet on a combat mission."
+    },
+    "217": {
+        "name": "Sink Enemy Carrier!",
+        "desc": "Sink an enemy aircraft carrier."
+    },
+    "219": {
+        "name": "Sortie the Mikawa Fleet!",
+        "desc": "Deploy a fleet with Choukai, Aoba, Kako, Furutaka, Tenryuu and another fast ship."
+    },
+    "222": {
+        "name": "Sortie the Destroyer Division 6!",
+        "desc": "Deploy a fleet with ONLY Akatsuki, Hibiki, Inazuma, and Ikazuchi."
+    },
+    "223": {
+        "name": "Sortie the Cruiser Division 4!",
+        "desc": "Deploy a fleet with Atago, Takao, Choukai, Maya and any 2 ships. Score a victory against World 2-2 Boss."
+    },
+    "224": {
+        "name": "Sortie the Nishimura Fleet!",
+        "desc": "Deploy a fleet with Fusou, Yamashiro, Mogami, Shigure and any 2 ships. Score a victory against World 2-3 Boss."
+    },
+    "225": {
+        "name": "Sortie the Carrier Division 5!",
+        "desc": "Deploy a fleet with Shoukaku, Zuikaku and any 4 ships. Score a victory against World 3-1 Boss."
+    },
+    "227": {
+        "name": "Sortie the New Mikawa Fleet!",
+        "desc": "Deploy a fleet with Choukai, Aoba, Kinugasa, Kako, Furutaka and Tenryuu. Score a victory against World 2-3 Boss."
+    },
+    "231": {
+        "name": "Sortie a Submarine Fleet!",
+        "desc": "Deploy a fleet with 2 SS and 4 additional ships. Score a victory against World 2-3 Boss."
+    },
+    "232": {
+        "name": "Sortie a Naval Aviation Strike Fleet!",
+        "desc": "Deploy a fleet with 2 BBV, 2 CAV and 2 additional ships. Score a victory against World 4-2 Boss."
+    },
+    "233": {
+        "name": "Sortie the Cruiser Division 6!",
+        "desc": "Deploy a fleet with Furutaka, Kako, Kinugasa, Aoba and 2 additional ships. Score a S rank victory against World 2-3 Boss."
+    },
+    "239": {
+        "name": "Sortie the Destroyer Division 8!",
+        "desc": "Deploy a fleet with Asashio, Michishio, Ooshio, Arashio and 2 additional ships. Score a victory against World 2-3 Boss."
+    },
+    "240": {
+        "name": "Sortie the Destroyer Division 18!",
+        "desc": "Deploy a fleet with Kasumi, Arare, Kagerou, Shiranui and 2 additional ships. Score a victory against World 3-1 Boss."
+    },
+    "244": {
+        "name": "Deploy the Destroyer Division 30 (Gen-1)",
+        "desc": "Deploy a fleet that consists of Mutsuki (\u7766\u6708), Kisaragi (\u5982\u6708), Yayoi (\u5f25\u751f), Mochizuki (\u671b\u6708) and up to 2 additional DDs to world 3-2 and encounter the boss. C rank or above is required."
+    },
+    "245": {
+        "name": "In Preparation of Love! (Final)",
+        "desc": "Deploy a fleet with a high level (Lv.90~99) flagship to 2-3 obtain an S rank victory against the boss."
+    },
+    "246": {
+        "name": "Your First Mission Together!",
+        "desc": "Deploy a fleet to 4-3 with a bonded ship of Lv.100 or more as flagship and score an S rank victory against the boss."
+    },
+    "247": {
+        "name": "Sortie an aviation battleship fleet!",
+        "desc": "Have 2 BBV ships in your main fleet and score a victory against World 4-4 Boss."
+    },
+    "248": {
+        "name": "30th Destroyer Fleet's Anti-Submarine Patrol",
+        "desc": "Deploy Mutsuki, Yayoi, Uzuki and Mochizuki to World 1-5 and reach the boss, scoring at least a C rank."
+    },
+    "250": {
+        "name": "Deploy the 2nd Carrier Division",
+        "desc": "Deploy Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c) as the flagship, Souryuu (\u84bc\u9f8d) and two destroyers to World 5-2. You may add 2 other ships. Score an S rank victory against the boss."
+    },
+    "251": {
+        "name": "Deploy the Elite 2nd Carrier Division",
+        "desc": "Deploy Souryuu Kai Ni (\u84bc\u9f8d\u6539\u4e8c) as the flagship, Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c) and two destroyers to World 4-3. You may add 2 other ships. Score an S rank victory against the boss."
+    },
+    "252": {
+        "name": "Deploy a Haruna-led Fleet",
+        "desc": "Deploy a fleet with Haruna Kai Ni (\u699b\u540d\u6539\u4e8c) as the flagship and up to 5 additional ships to World 5-1 and score an S rank victory against the boss."
+    },
+    "253": {
+        "name": "Deploy the 601 Air Group",
+        "desc": "Deploy a fleet with Unryuu Kai (\u96f2\u9f8d\u6539) as the flagship to World 5-2 and score an S rank victory against the boss."
+    },
+    "254": {
+        "name": "Deploy a Light Carrier Squadron",
+        "desc": "Sortie a fleet of 1-2 light aircraft carriers, 1 light cruiser and 3-4 destroyers to World 2-1 and score an S rank victory against the boss."
+    },
+    "255": {
+        "name": "Deploy a Torpedo Squadron to Bashi Islands",
+        "desc": "Sortie a fleet of 1-2 light cruisers (with one of them as the flagship) and 4-5 destroyers to World 2-2. Score a victory at the boss and sink the enemy flagship."
+    },
+    
+   
+    "258": {
+        "name": "Sortie the 2nd Squadron",
+        "desc": "Deploy Nagato (\u9577\u9580), Mutsu (\u9678\u5965), Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce) and up to 2 additional ships to World 4-2. Score two S rank victories at the boss node."
+    },
+   
+    "260": {
+        "name": "Deploy the Battleship Squadron in the Northern Waters",
+        "desc": "Deploy two battleships, a light aircraft carrier and up to three additional ships to World 3-5 and score an S rank victory at the boss node."
+    },
+    
+    "262": {
+        "name": "Deploy the Nishimura Fleet in the Southern Waters",
+        "desc": "Deploy Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce), Mogami (\u6700\u4e0a), Shigure (\u6642\u96e8) and Michishio (\u6e80\u6f6e) (you may also add another ship) to World 5-1 and score an S rank victory at the boss node."
+    },
+    "263": {
+        "name": "Deploy the Sixth Squadron to the Southwestern Waters",
+        "desc": "Deploy Furutaka (\u53e4\u9df9), Kako (\u52a0\u53e4), Aoba (\u9752\u8449), Kinugasa (\u8863\u7b20) and up to two additional ships to World 2-5 and score an S rank victory at the boss node."
+    },
+    "267": {
+        "name": "Deploy the 11th Destroyer Division",
+        "desc": "Deploy Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea), Murakumo(\u53e2\u96f2) and up to 2 additional ships to World 2-3 and score a victory at the boss node."
+    },
+    "268": {
+        "name": "11th Destroyer Division's Anti-Submarine Patrol",
+        "desc": "Deploy Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea) and Murakumo(\u53e2\u96f2) to World 1-5 and get a score of at least C at the boss node."
+    },
+    "269": {
+        "name": "Deploy the 21st Destroyer Division",
+        "desc": "Deploy Hatsuharu (\u521d\u6625), Nenohi (\u5b50\u65e5), Wakaba (\u82e5\u8449) and Hatsushimo (\u521d\u971c) and up to 2 additional ships to World 3-1 and score an S rank victory at the boss node."
+    },
+    "270": {
+        "name": "Deploy the 22nd Destroyer Division",
+        "desc": "Deploy Satsuki (\u7690\u6708), Fumizuki (\u6587\u6708), Nagatsuki (\u9577\u6708), 1 more DD and up to two additional ships to World 1-4 and score an S rank victory at the boss node."
+    },
+    "271": {
+        "name": "Deploy Nachi's Squadron",
+        "desc": "Sortie a fleet with Nachi (\u90a3\u667a) as flagship, Hatsushimo (\u521d\u971c), Kasumi (\u971e), Ushio (\u6f6e), Akebono (\u66d9) and one additional ship to world 2-2 and score an S rank victory at the boss node."
+    },
+    "272": {
+        "name": "Deploy the Remodelled Anti-Aircraft Heavy Cruiser",
+        "desc": "Sortie a fleet with Maya (\u6469\u8036) Kai or Kai2, 1 CL, 2 DD and up to two additional ships to World 2-3 and score an S rank victory at the boss node."
+    },
+    "273": {
+        "name": "Deploy the Mikawa Fleet to Solomon Islands",
+        "desc": "Sortie the main fleet with Choukai Kai2 (\u9ce5\u6d77\u6539\u30cb) as the flagship and any five of Aoba (\u9752\u8449), Kinugasa (\u8863\u7b20), Kako (\u52a0\u53e4), Furutaka (\u53e4\u9df9), Tenryuu (\u5929\u9f8d), Yuubari (\u5915\u5f35) to World 5-1 and score an S rank victory at the boss node."
+    },
+    "274": {
+        "name": "6th Destroyer Division's Anti-Submarine Patrol",
+        "desc": "Deploy Akatsuki (\u6681), Hibiki (\u97ff or \u0412\u0435\u0440\u043d\u044b\u0439), Inazuma (\u96f7) and Ikazuchi (\u96fb) to World 1-5. At least C rank is required at the boss node."
+    },
+    "275": {
+        "name": "Deploy the 18th Squadron",
+        "desc": "Tenryuu, Tatsuta, and at least 2 other ships to [W2-3] and S-rank the boss node"
+    },
+	"276": {
+        "name": "Sortie the surface attack fleet!",
+        "desc": "Sortie Hiei, Kirishima, Nagara, Akatsuki, Ikazuchi, Inazuma to 5-1 and clear the map with an S-rank"
+    },
+	"277": {
+        "name": "DesDiv6 Anti-Submarine Mission!",
+        "desc": "Sortie Akatsuki Kai2 , Hibiki/Verniy, Ikazuchi, Inazuma to 1-5 and clear the map with at least A-rank"
+    },
+	
+	
+	
+	
+	
+	"201": {
+        "code": "Bd1",
+        "name": "Daily Sortie 1",
+        "desc": "Defeat an abyssal fleet",
+		"unlock": [ 216, 211, 212 ],
+		"tracking": [ [0,1] ]
+    },
+	"216": {
+		"code": "Bd2",
+		"name": "Daily Sortie 2",
+		"desc": "Defeat the flagship of an abyssal fleet",
+		"unlock": [ 210, 218, 214, 213 ],
+		"tracking": [ [0,1] ]
+	},
+	"210": {
+		"code": "Bd3",
+		"name": "Daily Sortie 3",
+		"desc": "Defeat 10 abyssal fleets (B rank+)",
+		"tracking": [ [0,10] ]
+	},
+	"211": {
+		"code": "Bd4",
+		"name": "Daily Sortie 4",
+		"desc": "Sink 3 abyssal CV(L)",
+		"tracking": [ [0,3] ]
+	},
+	"218": {
+		"code": "Bd5",
+		"name": "Daily Sortie 5",
+		"desc": "Sink 3 abyssal transport ships",
+		"unlock": [ 226, 220 ],
+		"tracking": [ [0,3] ]
+	},
+	"212": {
+		"code": "Bd6",
+		"name": "Daily Sortie 6",
+		"desc": "Sink 5 abyssal transport ships",
+		"tracking": [ [0,5] ]
+	},
+	"226": {
+		"code": "Bd7",
+		"name": "Daily Sortie 7",
+		"desc": "Defeat 5 bosses in horned nodes in World 2",
+		"unlock": [ 230 ],
+		"tracking": [ [0,5] ]
+	},
+	"230": {
+		"code": "Bd8",
+        "name": "Daily Sortie 8",
+        "desc": "Sink 6 abyssal submarines",
+		"tracking": [ [0,6] ]
+    },
+	
+	
+	
+	
+	
+	"214": {
+		"code": "Bw1",
+		"name": "Weekly Sortie 1",
+		"desc": "Sortie 36x, Encounter 24 bosses, Win vs 12 bosses, 6 S-ranks",
+		"unlock": [ 221 ],
+		"tracking": [ [0,36], [0,24], [0,12], [0,6] ]
+	},
+	"220": {
+		"code": "Bw2",
+        "name": "Weekly Sortie 2",
+        "desc": "Sink 20 abyssal CV(L)",
+		"unlock": [ 228 ],
+		"tracking": [ [0,20] ]
+    },
+	"213": {
+		"code": "Bw3",
+		"name": "Weekly Sortie 3",
+		"desc": "Sink 20 abyssal transport ships",
+		"tracking": [ [0,20] ]
+	},
+	"221": {
+		"code": "Bw4",
+        "name": "Weekly Sortie 4",
+        "desc": "Sink 50 abyssal transport ships",
+		"unlock": [ 261, 257, 264 ],
+		"tracking": [ [0,50] ]
+    },
+	"228": {
+		"code": "Bw5",
+        "name": "Weekly Sortie 5",
+        "desc": "Sink 15 submarines",
+		"unlock": [ 229, 241, 613 ],
+		"tracking": [ [0,15] ]
+    },
+	"229": {
+		"code": "Bw6",
+        "name": "Weekly Sortie 6",
+        "desc": "Defeat 12 bosses in horned nodes in World 4",
+		"unlock": [ 242 ],
+		"tracking": [ [0,12] ]
+    },
+	"241": {
+		"code": "Bw7",
+        "name": "Weekly Sortie 7",
+        "desc": "Defeat 5 bosses in Worlds [W3-3], [W3-4] or [W3-5]",
+		"tracking": [ [0,5] ]
+    },
+    "242": {
+		"code": "Bw8",
+        "name": "Weekly Sortie 8",
+        "desc": "Defeat a boss in World [W4-4]",
+		"unlock": [ 243 ],
+		"tracking": [ [0,1] ]
+    },
+    "243": {
+		"code": "Bw9",
+        "name": "Weekly Sortie 9",
+        "desc": "Sortie to [W5-2] and S-rank the boss node 2 times",
+		"tracking": [ [0,2] ]
+    },
+	"261": {
+		"code": "Bw10",
+        "name": "Weekly Sortie 10",
+        "desc": "Sortie to [W1-5] and A-rank+ the boss node 3 times",
+		"tracking": [ [0,3] ]
+    },
+	
+	
+	
+	
+	
+	"249": {
+		"code": "Bm1",
+        "name": "Deploy the Fifth squadron",
+        "desc": "Deploy Myoukou, Nachi, Haguro, +3 ships to [W2-5]. S-rank the boss node",
+		"unlock": [ 265 ]
+    },
+	"256": {
+		"code": "Bm2",
+        "name": "Deploy a Submarine Fleet to World 6-1",
+        "desc": "Deploy to [W6-1] and obtain an S-rank the boss node 3 times",
+		"tracking": [ [0,3] ]
+    },
+	"257": {
+		"code": "Bm3",
+        "name": "Deploy a Torpedo Squadron",
+        "desc": "1~3 CL (CL flagship) and 3~5 destroyers to [W1-4]. S-rank the boss node"
+    },
+	"259": {
+		"code": "Bm4",
+        "name": "Deploy a Battleship Squadron",
+        "desc": "Deploy 3 BB(V) + 1 CL + 2 ships to [W5-1] and S-rank the boss node"
+    },
+	"265": {
+		"code": "Bm5",
+        "name": "Monthly Escort Duty",
+        "desc": "Deploy a fleet to [W1-5] and A-rank+ the boss node 10 times",
+		"tracking": [ [0,10] ]
+    },
+	"264": {
+		"code": "Bm6",
+        "name": "Sortie the Aircraft Carrier Task Force to the West",
+        "desc": "2 CV + 2 DD + 2 ships to [W4-2]. S-rank the boss node",
+		"unlock": [ 266 ]
+    },
+	"266": {
+		"code": "Bm7",
+        "name": "Deploy the Counterattack Squadron",
+        "desc": "4 DD (DD flagship) + 1 CA (Not CAV) + 1 CL to [W2-5] and S-rank the boss node"
+    },
+	
+	
+	
+	
+	
+    "301": {
+		"code": "C1",
+        "name": "First Exercise!",
+        "desc": "Challenge another fleet in practice mode"
+    },
+	 "303": {
+		"code": "C2",
+        "name": "Daily Exercises 1",
+        "desc": "Challenge 3 other fleets in practice mode",
+		"unlock": [ 304, 302 ],
+		"tracking": [ [0,3] ]
+    },
+	"304": {
+		"code": "C3",
+        "name": "Daily Exercises 2",
+        "desc": "Get 5 victories in practice mode within the same day",
+		"tracking": [ [0,5] ]
+    },
+    "302": {
+		"code": "C4",
+        "name": "Weekly Exercises",
+        "desc": "(Weekly) Get 20 victories in practice mode",
+		"tracking": [ [0,20] ]
+    },
+    "307": {
+		"code": "C5",
+        "name": "Improve the Efficiency of the Fleet",
+        "desc": "Get 3 victories in practice mode"
+    },
+    "308": {
+		"code": "C6",
+        "name": "Improve the Efficiency of the Fleet One More Time",
+        "desc": "Get 4 victories in practice mode"
+    },
+	
+	
+	
+	
+	
+    "401": {
+		"code": "D1",
+        "name": "First Expedition",
+        "desc": "Perform an expedition"
+    },
+    "402": {
+		"code": "D2",
+        "name": "Daily Expeditions 1",
+        "desc": "Perform 3 successful expeditions",
+		"unlock": [ 403 ],
+		"tracking": [ [0,3] ]
+    },
+    "403": {
+		"code": "D3",
+        "name": "Daily Expeditions 2",
+        "desc": "Perform 10 successful expeditions",
+		"tracking": [ [0,10] ]
+    },
+    "404": {
+		"code": "D4",
+        "name": "Weekly Expeditions",
+        "desc": "(Weekly) Perform 30 successful expeditions",
+		"tracking": [ [0,30] ]
+    },
+    "405": {
+		"code": "D5",
+        "name": "The First Submarine Operation",
+        "desc": "Complete Expedition 30"
+    },
+    "406": {
+		"code": "D6",
+        "name": "The Second Submarine Operation",
+        "desc": "Complete Expedition 30 one more time"
+    },
+    "408": {
+		"code": "D7",
+        "name": "Continuation of Submarine Operations",
+        "desc": "Complete Expedition 30 two more times"
+    },
+    "409": {
+		"code": "D8",
+        "name": "Strategy Meeting with Overseas Submarine Dispatch!",
+        "desc": "Complete Expedition 31"
+    },
+    "410": {
+		"code": "D9",
+        "name": "Weekly Expedition 2",
+        "desc": "(Weekly) Complete expedition 37 or 38",
+		"unlock": [ 411 ],
+		"tracking": [ [0,1] ]
+    },
+	"412": {
+		"code": "D10",
+        "name": "Strengthen the Operation of the BBV",
+        "desc": "Complete expedition 23"
+    },
+    "411": {
+		"code": "D11",
+        "name": "Weekly Expedition 3",
+        "desc": "(Weekly) Complete expedition 37 or 38 a total of 7 times",
+		"tracking": [ [0,7] ]
+    },
+    "413": {
+		"code": "D12",
+        "name": "Strengthen the Operation of the BBV (Cont.)",
+        "desc": "Complete expedition 23 four more times"
+    },
+    "414": {
+		"code": "D13",
+        "name": "Blue Waters Submarine Operation",
+        "desc": "Complete expedition 39"
+    },
+    "415": {
+		"code": "D14",
+        "name": "Blue Waters Extended Submarine Operation",
+        "desc": "Complete expedition 39 two more times"
+    },
+    "416": {
+		"code": "D15",
+        "name": "Air Defence Exercises",
+        "desc": "Complete expedition 6 three times"
+    },
+    "417": {
+		"code": "D16",
+        "name": "Deploy the Decoy Task Force",
+        "desc": "Complete expedition 15"
+    },
+    "418": {
+		"code": "D17",
+        "name": "Naval Ceremony Preparations",
+        "desc": "Complete Expedition 7 twice"
+    },
+    "419": {
+		"code": "D18",
+        "name": "Naval Ceremony",
+        "desc": "Complete expedition 8"
+    },
+	
+	
+	
+	
+	
+    "501": {
+		"code": "E1",
+        "name": "First Supply",
+        "desc": "Resupply a ship"
+    },
+    "502": {
+		"code": "E2",
+        "name": "First Docking",
+        "desc": "Repair a ship"
+    },
+    "503": {
+		"code": "E3",
+        "name": "Daily Repairs",
+        "desc": "Repair 5 ships",
+		"unlock": [ 504 ],
+		"tracking": [ [0,5] ]
+    },
+    "504": {
+		"code": "E4",
+        "name": "Daily Resupplies",
+        "desc": "Resupply your ships 15 times",
+		"tracking": [ [0,15] ]
+    },
+	
+	
+	
+	
+	
+	"605": {
+		"code": "F1",
+        "name": "Daily Development 1",
+        "desc": "Craft a piece of equipment (Failures are OK)",
+		"unlock": [ 606 ],
+		"tracking": [ [0,1] ]
+    },
+	"606": {
+		"code": "F2",
+        "name": "Daily Construction 1",
+        "desc": "Craft a ship",
+		"unlock": [ 607 ],
+		"tracking": [ [0,1] ]
+    },
+	"607": {
+		"code": "F3",
+        "name": "Daily Development 2",
+        "desc": "Craft 3 pieces of equipment (Failures are OK)",
+		"unlock": [ 608 ],
+		"tracking": [ [0,3] ]
+    },
+	 "608": {
+		"code": "F4",
+        "name": "Daily Construction 2",
+        "desc": "Craft 3 ships",
+		"unlock": [ 609, 619 ],
+		"tracking": [ [0,3] ]
+    },
+	 "609": {
+		"code": "F5",
+        "name": "Daily Dismantlement",
+        "desc": "Scrap 2 ships",
+		"tracking": [ [0,2] ]
+    },
+    "601": {
+		"code": "F6",
+        "name": "First Construction",
+        "desc": "Craft a ship"
+    },
+    "602": {
+		"code": "F7",
+        "name": "First Development",
+        "desc": "Craft a piece of equipment"
+    },
+    "603": {
+		"code": "F8",
+        "name": "First Dismantlement",
+        "desc": "Dismantle a ship"
+    },
+    "604": {
+		"code": "F9",
+        "name": "First Disposal",
+        "desc": "Scrap a piece of equipment"
+    },
+    "610": {
+		"code": "F10",
+        "name": "Preparation for LSC (Part 2)",
+        "desc": "Scrap equipment 4 times"
+    },
+	"612": {
+		"code": "F11",
+        "name": "Prepare the Drum Canisters",
+        "desc": "Scrap equipment 3 times"
+    },
+	 "613": {
+		"code": "F12",
+        "name": "Weekly Dismantlement",
+        "desc": "Scrap equipment 24 times",
+		"tracking": [ [0,24] ]
+    },
+	 "614": {
+		"code": "F13",
+        "name": "Model Conversion (to Tenzan)",
+        "desc": "Have flagship equipped with Type 97 Torpedo Bomber (Tomonaga Squadron), then scrap 2 Tenzan"
+    },
+	"615": {
+		"code": "F14",
+        "name": "Model Conversion (to Suisei)",
+        "desc": "Have flagship equipped with Type 99 Dive Bomber (Egusa Squadron), then scrap 2 Suisei"
+    },
+    "616": {
+		"code": "F15",
+        "name": "Model Conversion (to Reppuu)",
+        "desc": "Have flagship equipped with Zero Fighter Type 52 Type C (601 Air Group), then scrap 2 Reppuu"
+    },
+	"617": {
+		"code": "F16",
+        "name": "Preparing for Irako",
+        "desc": "Scrap equipment 10 times"
+    },
+	"618": {
+		"code": "F17",
+        "name": "First Equipment Modernisation",
+        "desc": "Perform equipment modernisation once"
+    },
+    "619": {
+		"code": "F18",
+        "name": "Daily Equipment Modernisation",
+        "desc": "Perform equipment modernisation once",
+		"tracking": [ [0,1] ]
+    },
+	
+	
+    
+	
+	
+    "701": {
+		"code": "G1",
+        "name": "First Modernization",
+        "desc": "Perform a successful modernization"
+    },
+    "702": {
+		"code": "G2",
+        "name": "Daily Modernization",
+        "desc": "Perform 2 successful modernizations",
+		"unlock": [ 703 ],
+		"tracking": [ [0,2] ]
+    },
+    "703": {
+		"code": "G3",
+        "name": "Weekly Modernization",
+        "desc": "(Weekly) Perform 15 successful modernizations",
+		"tracking": [ [0,15] ]
+    },
+    "704": {
+		"code": "G4",
+        "name": "Preparation for LSC (Part 1)",
+        "desc": "Perform 4 successful modernizations"
+    },
+	
+	
+	
+	
+	
+	"611": {
+        "name": "In Preparation of Love! (Part 1)",
+        "desc": "Scrap equipment 2 times to show your love!"
+    },
+	"306": {
+        "name": "In Preparation of Love (Part 2)",
+        "desc": "Show your love by getting 2 victories in practice mode."
+    }
+}

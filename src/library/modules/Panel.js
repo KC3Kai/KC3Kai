@@ -47,7 +47,7 @@ Manages multiple instances of \library\modules\Dashboard.js
 		// Apply user's customizations to panel
 		applyCustomizations :function(element){
 			// Apply interface configs
-			if(ConfigManager.pan_bg_image == ""){
+			if(ConfigManager.pan_bg_image === ""){
 				element.css("background", ConfigManager.pan_bg_color);
 			}else{
 				element.css("background-image", "url("+ConfigManager.pan_bg_image+")");
@@ -70,15 +70,17 @@ Manages multiple instances of \library\modules\Dashboard.js
 			
 			// Wide interface, switch to vertical if not yet
 			if( $(window).width() >= 800 && this.currentLayout != "vertical" ){
-				if(this.currentLayout!=""){ this.layout().hide(); }
+				if(this.currentLayout!==""){ this.layout().hide(); }
 				this.currentLayout = "vertical";
 				this.layout().show();
+				_gaq.push(['_trackEvent', "Layout: Vertical", 'clicked']);
 				
 			// Narrow interface, switch to horizontal if not yet
 			}else if( $(window).width() < 800 && this.currentLayout != "horizontal" ){
-				if(this.currentLayout!=""){ this.layout().hide(); }
+				if(this.currentLayout!==""){ this.layout().hide(); }
 				this.currentLayout = "horizontal";
 				this.layout().show();
+				_gaq.push(['_trackEvent', "Layout: Horizontal", 'clicked']);
 			}
 		},
 		

@@ -1,5 +1,6 @@
 (function(){
 	"use strict";
+	_gaq.push(['_trackPageview']);
 	
 	// Redirect to DMM play page when activated
 	function ActivateGame(){

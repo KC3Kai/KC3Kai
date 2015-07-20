@@ -2,26 +2,19 @@
 	{
 		"name": "dragonjet",
 		"avatar" : "https://graph.facebook.com/dragonjetmkii/picture",
-		"desc" : "Project Head",
+		"desc" : "プロジェクトリーダ",
 		"links" : {
 			"fb" :"https://www.facebook.com/dragonjetmkii",
 			"tw" :"https://twitter.com/dragonjetmkii",
 			"th" :"http://www.twitch.tv/jetrico",
-			"wk" :"http://kancolle.wikia.com/wiki/User:Dragonjet"
-		}
-	},
-	{
-		"name": "CrazyTeitoku",
-		"avatar": "https://avatars3.githubusercontent.com/u/12234182?v=3&s=40",
-		"desc": "Wiki Writer",
-		"links": {
-			"wk" :"http://kancolle.wikia.com/wiki/User:Crazy_teitoku"
+			"wk" :"http://kancolle.wikia.com/wiki/User:Dragonjet",
+			"gh" :"https://github.com/dragonjet"
 		}
 	},
 	{
 		"name": "bamboo3250",
 		"avatar": "https://avatars3.githubusercontent.com/u/8078323?v=3&s=40",
-		"desc": "Code Contributor",
+		"desc": "開発者",
 		"links": {
 			"wk" :"http://kancolle.wikia.com/wiki/User:bamboo3250",
 			"gh" : "https://github.com/bamboo3250",
@@ -31,9 +24,75 @@
 		}
 	},
 	{
+		"name": "Diablohu",
+		"avatar": "https://avatars0.githubusercontent.com/u/1946774?v=3&s=40",
+		"desc": "開発者, 翻訳者 (簡体字中国語)",
+		"links": {
+			"wb" : "http://diablohu.com",
+			"gh" : "https://github.com/Diablohu",
+			"tw" : "https://twitter.com/Diablohu",
+			"we" : "http://weibo.com/diablohu"
+		}
+	},
+	{
+		"name": "McDohl",
+		"avatar": "https://avatars2.githubusercontent.com/u/13024936?v=3&s=40",
+		"desc": "開発者, テスター",
+		"links": {
+			"gh" :"https://github.com/McDohl",
+			"wk" :"http://kancolle.wikia.com/wiki/User:McDohlJr",
+			"fb" :"https://www.facebook.com/endruhugen"
+		}
+	},
+	{
+		"name": "nicky008",
+		"avatar": "https://avatars0.githubusercontent.com/u/10517990?v=3&s=40",
+		"desc": "翻訳者 (日本語)",
+		"links": {
+			"gh" :"https://github.com/nicky008",
+			"tw" : "https://twitter.com/nicky_008",
+			"fb" : "https://www.facebook.com/jamesnicky008",
+			"wk" : "http://kancolle.wikia.com/wiki/User:Nicky008"
+		}
+	},
+	{
+		"name": "CrazyTeitoku",
+		"avatar": "https://avatars3.githubusercontent.com/u/12234182?v=3&s=40",
+		"desc": "Wiki作家, テスター",
+		"links": {
+			"wk" :"http://kancolle.wikia.com/wiki/User:Crazy_teitoku"
+		}
+	},
+	{
+		"name": "Erupi",
+		"avatar": "https://avatars1.githubusercontent.com/u/12823927?v=3&s=40",
+		"desc": "テスター",
+		"links": {
+			"wk" :"http://kancolle.wikia.com/wiki/User:Erupi",
+			"gh" :"https://github.com/Erupi"
+		}
+	},
+	{
+		"name": "LostLogia4",
+		"avatar": "https://avatars3.githubusercontent.com/u/12930396?v=3&s=40",
+		"desc": "テスター",
+		"links": {
+			"gh" :"https://github.com/LostLogia4",
+			"wk" :"http://kancolle.wikia.com/wiki/User:Ar-cen-ciel"
+		}
+	},
+	{
+		"name": "AlanSchaeffer",
+		"avatar": "https://avatars1.githubusercontent.com/u/11778507?v=3&s=40",
+		"desc": "テスター",
+		"links": {
+			"gh" :"https://github.com/AlanSchaeffer"
+		}
+	},
+	{
 		"name": "nevrending",
 		"avatar": "https://avatars3.githubusercontent.com/u/4745298?v=3&s=40",
-		"desc": "Code Contributor",
+		"desc": "開発者",
 		"links": {
 			"gh" : "https://github.com/nevrending",
 			"wk" :"http://kancolle.wikia.com/wiki/User:NevREnding",
@@ -45,7 +104,7 @@
 	{
 		"name": "Javran",
 		"avatar": "https://avatars3.githubusercontent.com/u/1096354?v=3&s=40",
-		"desc": "Code Contributor",
+		"desc": "開発者",
 		"links": {
 			"gh" : "https://github.com/Javran",
 			"tw" :"https://twitter.com/JavranC",
@@ -55,7 +114,7 @@
 	{
 		"name": "ReiFan49",
 		"avatar" : "https://avatars2.githubusercontent.com/u/9847780?v=3&s=40",
-		"desc" : "Code Contributor",
+		"desc" : "開発者",
 		"links" : {
 			"gh" :"https://github.com/ReiFan49"
 		}
@@ -63,7 +122,7 @@
 	{
 		"name": "tmerta",
 		"avatar" : "https://avatars0.githubusercontent.com/u/2845736?v=3&s=40",
-		"desc" : "Code Contributor",
+		"desc" : "開発者",
 		"links" : {
 			"gh" :"https://github.com/tmerta"
 		}
@@ -71,7 +130,7 @@
 	{
 		"name": "JDKurotoshigami",
 		"avatar" : "https://graph.facebook.com/JDKurotoshigami.Artworks/picture",
-		"desc" : "Logo Design",
+		"desc" : "ロゴデザイン",
 		"links" : {
 			"fb" :"https://www.facebook.com/JDKurotoshigami.Artworks",
 			"tw" :"https://twitter.com/JDKurotoshigami",
@@ -82,9 +141,45 @@
 	{
 		"name": "tykez269",
 		"avatar" : "http://a.deviantart.net/avatars/t/y/tykez269.jpg",
-		"desc" : "Fairy Designer",
+		"desc" : "妖精デザイン",
 		"links" : {
 			"da" :"http://tykez269.deviantart.com"
+		}
+	},
+	{
+		"name": "freezebear",
+		"avatar" : "https://avatars2.githubusercontent.com/u/12047229?v=3&s=40",
+		"desc" : "翻訳者 (インドネシア語)",
+		"links" : {
+			"fb" :"https://www.facebook.com/freezebear17",
+			"tw" :"https://twitter.com/freezebear17",
+			"wk" :"kancolle.wikia.com/wiki/User:Freezebear"
+		}
+	},
+	{
+		"name": "hufuhufu",
+		"avatar" : "https://avatars3.githubusercontent.com/u/13282383?v=3&s=40",
+		"desc" : "翻訳者 (インドネシア語)",
+		"links" : {
+			"fb" :"https://www.facebook.com/arifLV2",
+			"wk" :"kancolle.wikia.com/wiki/User:hufuhufu"
+		}
+	},
+	{
+		"name": "kololz",
+		"avatar" : "https://avatars0.githubusercontent.com/u/12908497?v=3&s=40",
+		"desc" : "翻訳者 (繁体字中国語)",
+		"links" : {
+			"gh" :"https://github.com/kololz"
+		}
+	},
+	{
+		"name": "vrarara",
+		"avatar" : "https://avatars1.githubusercontent.com/u/13389407?v=3&s=40",
+		"desc" : "翻訳者 (インドネシア語)",
+		"links" : {
+			"gh" :"https://github.com/vrarara",
+			"fb" :"https://www.facebook.com/bayuuyab.fu"
 		}
 	}
 ]

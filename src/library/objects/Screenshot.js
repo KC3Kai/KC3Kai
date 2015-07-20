@@ -1,6 +1,7 @@
 var imgurLimit = 0;
 
 function KCScreenshot(){
+	this.scale = ((ConfigManager.api_gameScale || 100) / 100);
 	this.gamebox = {};
 	this.canvas = {};
 	this.context = {};
@@ -11,7 +12,7 @@ function KCScreenshot(){
 	this.format = (ConfigManager.ss_type=="JPG")
 		?["jpeg", "jpg", "image/jpeg"]
 		:["png", "png", "image/png"];
-};
+}
 
 KCScreenshot.prototype.start = function(playerName, element){
 	var self = this;
@@ -21,8 +22,8 @@ KCScreenshot.prototype.start = function(playerName, element){
 	
 	// Initialize HTML5 Canvas
 	this.canvas = document.createElement("canvas");
-	this.canvas.width = 800;
-	this.canvas.height = 480;
+	this.canvas.width = 800 * this.scale;
+	this.canvas.height = 480 * this.scale;
 	this.context = this.canvas.getContext("2d");
 	
 	// Initialize Image Tag
@@ -49,7 +50,7 @@ KCScreenshot.prototype.generateScreenshotFilename = function() {
   if (curr_second.length == 1) { curr_second = "0" + curr_second; }
 
   this.screenshotFilename = "["+this.playerName+"] "+d.getFullYear()+"-"+curr_month+"-"+curr_date+" "+curr_hour+"-"+curr_min+"-"+curr_second + " " + getRandomInt(10,99);
-}
+};
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -62,7 +63,7 @@ KCScreenshot.prototype.capture = function(){
 	chromeCapture(this.format[0], function(base64img){
 		self.domImg.src = base64img;
 		self.domImg.onload = self.crop();
-	})
+	});
 };
 
 KCScreenshot.prototype.crop = function(){
@@ -72,10 +73,10 @@ KCScreenshot.prototype.crop = function(){
 	chrome.tabs.getZoom(null, function(zoomFactor){
 		// Get gamebox dimensions and position
 		var params = {
-			realWidth: 800 * zoomFactor,
-			realHeight: 480 * zoomFactor,
-			offTop: self.gamebox.offset().top * zoomFactor,
-			offLeft: self.gamebox.offset().left * zoomFactor,
+			realWidth: 800 * zoomFactor * self.scale,
+			realHeight: 480 * zoomFactor * self.scale,
+			offTop: self.gamebox.offset().top * zoomFactor * self.scale,
+			offLeft: self.gamebox.offset().left * zoomFactor * self.scale,
 		};
 		
 		// Actual Cropping
@@ -87,8 +88,8 @@ KCScreenshot.prototype.crop = function(){
 			params.realHeight,
 			0,
 			0,
-			800,
-			480
+			800 * self.scale,
+			480 * self.scale
 		);
 		
 		// Convert image to base64

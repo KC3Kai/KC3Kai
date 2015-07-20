@@ -4,7 +4,10 @@
 		<!-- HQ Information -->
 		<div class="hq_info">
 			<div class="admiral box">
-				<div class="admiral_name"></div>
+				<div class="name_censor hover">
+					<img src="../../../../assets/img/ui/censor-light.png" />
+				</div>
+				<div class="admiral_name hover"></div>
 				<div class="admiral_comm"></div>
 				<div class="admiral_rank"></div>
 			</div>
@@ -220,15 +223,19 @@
 			<div class="screenshot-button hover">Screenshot</div>
 			<div class="screenshot-mode"></div>
 			<div class="clear"></div>
-		</div>
-		
+		</div>	
 		<div class="fleet-ships">
 			
 		</div>
+
+                <div class="expedition-helper">
+
+                </div>
+
 		<div class="activity">
 			
 			<!-- DEVELOPMENT -->
-			<div class="activityBox craftGear">
+			<div class="activityBox craftGear hover">
 				<div class="equipInfo">
 					<div class="equipIcon"><img src="../../../../assets/img/items/6.png" /></div>
 					<div class="equipName">Type 52 Zero Fighter</div>
@@ -251,9 +258,7 @@
 							<div class="value used4">000</div>
 						</div>
 					</div>
-				</div>
-				<div class="equipStats">
-					
+					<div class="equipStats"></div>
 				</div>
 			</div>
 			
@@ -279,7 +284,10 @@
 <div class="battle">
 	<div class="battle_info_left">
 		<div class="battle_hq">
-			<div class="battle_admiral"></div>
+			<div class="name_censor hover">
+				<img src="../../../../assets/img/ui/censor-light.png" />
+			</div>
+			<div class="battle_admiral hover"></div>
 			<div class="battle_hqlevel">
 				<div class="battle_hqlevel_text"></div>
 				<div class="battle_hqlevel_box">
@@ -292,12 +300,14 @@
 				<div class="battle_slot battle_shipslot">
 					<div class="icon"><img src="../../../../assets/img/client/ship.png" /></div>
 					<div class="current count_ships"></div>
+					<div class="max">/</div>
 					<div class="max max_ships"></div>
 					<div class="clear"></div>
 				</div>
 				<div class="battle_slot battle_gearslot">
 					<div class="icon"><img src="../../../../assets/img/client/gear.png" /></div>
 					<div class="current count_gear"></div>
+					<div class="max">/</div>
 					<div class="max max_gear"></div>
 					<div class="clear"></div>
 				</div>
@@ -387,6 +397,9 @@
 				<div class="battle_nodebox battle_empty">
 					<em>Battle avoided!</em>
 				</div>
+				<div class="battle_nodebox battle_enemy_formation">
+					<img src=""/>
+				</div>
 				<div class="battle_nodebox battle_enemies">
 					<div class="battle_abyss abyss_1"><img src="../../../../assets/img/ui/empty.png" /></div>
 					<div class="battle_abyss abyss_2"><img src="../../../../assets/img/ui/empty.png" /></div>
@@ -419,8 +432,8 @@
 				</div>
 				<div class="battle_airbattle">
 					<div class="battle_airsides">
-						<div class="battle_airside_title">Yours</div>
-						<div class="battle_airside_title">Abyssal</div>
+						<div class="battle_airside_title">Friendly</div>
+						<div class="battle_airside_title">Enemy</div>
 						<div class="clear"></div>
 					</div>
 					<div class="battle_airtype battle_airfighter">
@@ -593,7 +606,6 @@
 
 <!-- FACTORY -->
 <div class="factory">
-
 	<!-- BATTLE MODE: SINGLE FLEET SHIP -->
 	<div class="battle-ship">
 		<div class="ship-img"><img src="../../../../assets/img/ui/empty.png" /></div>
@@ -755,6 +767,10 @@
 			<div class="ship-gear-3 ship-gear"><img src="../../../../assets/img/ui/empty.png" /></div>
 			<div class="ship-gear-4 ship-gear"><img src="../../../../assets/img/ui/empty.png" /></div>
 		</div>
+		<div class="ship-supply">
+			<div class="supply-fuel"><div class="supply-text"></div><div class="supply-bar"></div></div>
+			<div class="supply-ammo"><div class="supply-text"></div><div class="supply-bar"></div></div>
+		</div>
 		<div class="clear"></div>
 	</div>
 	
@@ -764,4 +780,10 @@
 		<div class="equipStatText"></div>
 	</div>
 	
+</div>
+
+<!-- SIZE OPTION-->
+<div class="outside-tools">
+	<div class="layout-button small-layout hover">300px</div>
+	<div class="layout-button big-layout hover">420px</div>
 </div>

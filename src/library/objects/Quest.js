@@ -3,6 +3,14 @@ KC3改 Quest Class
 
 Instantiatable class to represent a single Quest
 Mainly used by QuestManager to store quest information
+
+Quest Type:
+1 = One time
+2 = Daily
+3 = Weekly
+4 = Sink 3 Aircraft Carrier (only on dates ending in -3rd, -7th, or -0th) Bd4
+5 = Sink Transport Fleet (only on dates ending in -2nd or -8th} Bd6
+6 = Monthly
 */
 (function(){
 	"use strict";
@@ -11,6 +19,7 @@ Mainly used by QuestManager to store quest information
 		this.id = 0;
 		this.type = 0;
 		this.status = 0;
+		this.progress = 0;
 		this.tracking = false;
 	};
 	
@@ -20,7 +29,15 @@ Mainly used by QuestManager to store quest information
 	KC3Quest.prototype.define = function( data ){
 		this.id = data.id;
 		this.status = data.status;
-		this.tracking = data.tracking;
+		this.type = data.type;
+		if (data.progress) {
+			this.progress = data.progress;
+		} else {
+			this.progress =  0;
+		}
+		if (!this.tracking) {
+			this.tracking = data.tracking;
+		}
 		this.attachMeta();
 	};
 	
@@ -30,6 +47,8 @@ Mainly used by QuestManager to store quest information
 	KC3Quest.prototype.defineRaw = function( data ){
 		this.id = data.api_no;
 		this.status = data.api_state;
+		this.type = data.api_type;
+		this.progress = data.api_progress_flag;
 		this.attachMeta();
 		
 		// Attach temporary raw data for quick reference
@@ -70,10 +89,12 @@ Mainly used by QuestManager to store quest information
 	Add one to tracking progress
 	------------------------------------------*/
 	KC3Quest.prototype.increment = function(reqNum, amount){
-		if(this.tracking && this.status==2){
+		if(this.tracking && this.status==2){    //2 = On progress
 			if(typeof reqNum == "undefined"){ reqNum=0; }
 			if(typeof amount == "undefined"){ amount=1; }
-			this.tracking[reqNum][0] += amount;
+			if (this.tracking[reqNum][0] + amount <= this.tracking[reqNum][1]) {
+				this.tracking[reqNum][0] += amount;
+			}
 			KC3QuestManager.save();
 		}
 	};
@@ -93,18 +114,76 @@ Mainly used by QuestManager to store quest information
 			if(MyMeta){
 				// Attach meta info to this object 
 				this.meta = function(){ return {
+					available: true,
 					code : MyMeta.code,
 					name : MyMeta.name,
 					desc : MyMeta.desc
-				}};
+				}; };
 				// If tracking is empty and Meta is defined
 				if(this.tracking === false){
 					this.tracking = MyMeta.tracking;
 				}
+			}else{
+				// Attach meta info to this object 
+				this.meta = function(){ return {
+					code : "XX",
+					name : "Unidentified Quest",
+					desc : "This is an unidentified or untranslated quest. It cannot be shown here, so please visit the quest page in-game to view."
+				}; };
 			}
 		}
 	};
 	
+	KC3Quest.prototype.isDaily = function(){
+		return (this.type == 2) 	// Daily Quest
+			|| (this.type == 4) 	// Bd4
+			|| (this.type == 5);	// Bd6
+	};
 	
+	KC3Quest.prototype.isWeekly = function(){
+		return this.type == 3;	// Weekly Quest
+	};
+	
+	KC3Quest.prototype.isMonthly = function(){
+		return this.type == 6;	// Weekly Quest
+	};
+	
+	KC3Quest.prototype.isUnselected = function(){
+		return this.status == 1;	// Unselected 
+	};
+	
+	KC3Quest.prototype.isSelected = function(){
+		return this.status == 2;	// Selected
+	};
+	
+	KC3Quest.prototype.isCompleted = function(){
+		return this.status == 3;	// Completed
+	};
+	
+	KC3Quest.prototype.autoAdjustCounter = function(){
+		if (this.isCompleted()) {
+			this.tracking[0][0] = this.tracking[0][1];
+			return;
+		}
+		if (this.tracking && (this.id != 214) && (this.id != 607)  && (this.id != 608)) {
+			var currentCount = this.tracking[0][0];
+			var maxCount = parseFloat(this.tracking[0][1]);
+			var progress = 0;
+			if (this.progress == 1) {
+				progress = 0.5;
+			} else if (this.progress == 2) {
+				progress = 0.8;
+			}
+			if (currentCount/maxCount < progress) {
+				console.log(this.tracking);
+				console.log(this.tracking[0][0]);
+				console.log(this.tracking[0][1]);
+				console.log(currentCount);
+				console.log(maxCount);
+				console.log("Adjust: " + currentCount/maxCount + " " + progress + " " + Math.ceil(maxCount * progress));
+				this.tracking[0][0] = Math.ceil(maxCount * progress);
+			}
+		}
+	};
 	
 })();

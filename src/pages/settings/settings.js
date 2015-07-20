@@ -1,35 +1,29 @@
 (function(){
 	"use strict";
-	
-	var myVersion = chrome.runtime.getManifest().version;
+	_gaq.push(['_trackPageview']);
 	
 	// Document ready
 	$(document).on("ready", function(){
-		$(".version").text("Version "+myVersion);
-		
 		// Load previously stored configs
 		ConfigManager.load();
+		KC3Meta.init("../../data/");
+		KC3Translation.execute();
 		
-		// Load and show developer list
-		$.getJSON("../../data/translations/en/developers.json", function(response){
-			for(var ctr in response){
-				addDeveloper( response[ctr] );
-			}
-			$("#factory .helpOut").clone().appendTo("#wrapper .developers");
-			$("<div>").appendTo("#wrapper .developers").addClass("clear");
-		});
+		// Set HTML language
+		$("html").attr("lang", ConfigManager.language);
 		
 		var sectionBox;
 		
 		// Add configurable settings
-		$.getJSON("../../data/translations/en/settings.json", function(response){
+		//$.getJSON("../../data/translations/"+ConfigManager.language+"/settings.json", function(response){
+		$.getTranslationJSON(ConfigManager.language, 'settings', function(response){
 			for(var sctr in response){
 				// Add section header
 				sectionBox = $("#factory .section").clone().appendTo("#wrapper .settings");
 				$(".title", sectionBox).text( response[sctr].section );
 				
 				// Learn more button
-				if(response[sctr].help!=""){
+				if(response[sctr].help!==""){
 					$("a", sectionBox).attr("href", response[sctr].help );
 				}else{
 					$("a", sectionBox).hide();

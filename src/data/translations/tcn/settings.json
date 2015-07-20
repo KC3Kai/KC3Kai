@@ -1,0 +1,320 @@
+[
+	{
+		"section": "主要設定",
+		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Global",
+		"contents" : [
+			{
+				"id" : "language",
+				"name" : "語言",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "en", "English" ],
+						[ "jp", "日本語" ],
+						[ "id", "Indonesian" ],
+						[ "tcn", "繁體中文" ],
+						[ "scn", "简体中文" ],
+						[ "vi", "Tiếng Việt" ]
+					]
+				}
+			},
+			{
+				"id" : "elosFormula",
+				"name" : "索敵值算法",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 1, "簡單加總" ],
+						[ 2, "2-5式(舊)" ],
+						[ 3, "2-5式(秋)" ]
+					]
+				}
+			}
+		]
+	},
+	{
+		"section": "遊戲資訊",
+		"help" : "",
+		"contents" : [
+			{
+				"id" : "info_face",
+				"name" : "建造結果預覽",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_craft",
+				"name" : "開發結果預覽",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_compass",
+				"name" : "指南針方向及敵艦隊編排預覽",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_battle",
+				"name" : "戰鬥資料",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_boss",
+				"name" : "敵主力艦隊編排",
+				"type" : "check",
+				"options" : {}
+			}
+		]
+	},
+	{
+		"section": "螢幕截圖",
+		"help" : "",
+		"contents" : [
+			{
+				"id" : "ss_mode",
+				"name" : "輸出模式",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "下載至電腦" ],
+						[ 1, "上傳至Imgur" ],
+						[ 2, "在新分頁中顯示" ]
+					]
+				}
+			},
+			{
+				"id" : "ss_type",
+				"name" : "檔案格式",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "JPG", "JPG" ],
+						[ "PNG", "PNG" ]
+					]
+				}
+			}
+		]
+	},
+	{
+		"section": "建造、入渠及遠征警號",
+		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Alerts",
+		"contents" : [
+			{
+				"id" : "alert_diff",
+				"name" : "時間提前",
+				"type" : "small_text",
+				"options" : { "label" : "秒" }
+			},
+			{
+				"id" : "alert_type",
+				"name" : "警號音效",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "無" ],
+						[ 1, "叮!" ],
+						[ 2, "自選音效" ]
+					]
+				}
+			},
+			{
+				"id" : "alert_custom",
+				"name" : "自選音效鏈結",
+				"type" : "long_text",
+				"options" : { "placeholder" : "http://" }
+			},
+			{
+				"id" : "alert_volume",
+				"name" : "音量",
+				"type" : "small_text",
+				"options" : { "label" : "%" }
+			},
+			{
+				"id" : "alert_desktop",
+				"name" : "桌面提示",
+				"type" : "check",
+				"options" : {}
+			}
+		]
+	},
+	{
+		"section": "API 遊戲視窗",
+		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Screen",
+		"contents" : [
+			{
+				"id" : "api_translation",
+				"name" : "翻譯任務",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "api_tracking",
+				"name" : "追蹤任務",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "api_askExit",
+				"name" : "離開前再確定",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "api_margin",
+				"name" : "遊戲視窗和上面的距離",
+				"type" : "small_text",
+				"options" : { "label" : "像素" }
+			},
+			{
+				"id" : "api_bg_color",
+				"name" : "背景顏色",
+				"type" : "long_text",
+				"options" : { "placeholder" : "參見CSS background-color屬性" }
+			},
+			{
+				"id" : "api_bg_image",
+				"name" : "背景圖像",
+				"type" : "long_text",
+				"options" : { "placeholder" : "http://" }
+			},
+			{
+				"id" : "api_bg_size",
+				"name" : "背景大小",
+				"type" : "long_text",
+				"options" : { "placeholder" : "參見CSS background-size屬性" }
+			},
+			{
+				"id" : "api_bg_position",
+				"name" : "背景圖像位置",
+				"type" : "long_text",
+				"options" : { "placeholder" : "參見CSS background-position屬性" }
+			},
+			{
+				"id" : "api_gameScale",
+				"name" : "遊戲畫面比例",
+				"type" : "small_text",
+				"options" : { "label" : "%" }
+			}
+		]
+	},
+	{
+		"section": "DMM 遊戲視窗",
+		"help" : "",
+		"contents" : [
+			{
+				"id" : "dmm_customize",
+				"name" : "使用自定義",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "dmm_translation",
+				"name" : "翻譯任務",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "dmm_tracking",
+				"name" : "追蹤任務",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "dmm_askExit",
+				"name" : "離開前再確定",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "dmm_margin",
+				"name" : "遊戲視窗和上面的距離",
+				"type" : "small_text",
+				"options" : { "label" : "像素" }
+			},
+			{
+				"id" : "dmm_bg_color",
+				"name" : "背景顏色",
+				"type" : "long_text",
+				"options" : { "placeholder" : "參見CSS background-color屬性" }
+			},
+			{
+				"id" : "dmm_bg_image",
+				"name" : "背景圖像",
+				"type" : "long_text",
+				"options" : { "placeholder" : "http://" }
+			},
+			{
+				"id" : "dmm_bg_size",
+				"name" : "背景大小",
+				"type" : "long_text",
+				"options" : { "placeholder" : "參見CSS background-size屬性" }
+			},
+			{
+				"id" : "dmm_bg_position",
+				"name" : "背景圖像位置",
+				"type" : "long_text",
+				"options" : { "placeholder" : "參見CSS background-position屬性" }
+			}
+		]
+	},
+	{
+		"section": "F12 面板",
+		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Panel",
+		"contents" : [
+			{
+				"id" : "pan_theme",
+				"name" : "主題",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "default", "預設" ],
+						[ "dark", "暗色調" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_size",
+				"name" : "界面大小",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "small", "小" ],
+						[ "big", "大" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_bg_color",
+				"name" : "背景顏色",
+				"type" : "long_text",
+				"options" : { "placeholder" : "參見CSS background-color屬性" }
+			},
+			{
+				"id" : "pan_bg_image",
+				"name" : "背景圖像",
+				"type" : "long_text",
+				"options" : { "placeholder" : "http://" }
+			},
+			{
+				"id" : "pan_bg_size",
+				"name" : "背景大小",
+				"type" : "long_text",
+				"options" : { "placeholder" : "參見CSS background-size屬性" }
+			},
+			{
+				"id" : "pan_bg_position",
+				"name" : "背景圖像位置",
+				"type" : "long_text",
+				"options" : { "placeholder" : "參見CSS background-position屬性" }
+			},
+			{
+				"id" : "pan_opacity",
+				"name" : "界面透明度",
+				"type" : "small_text",
+				"options" : { "label" : "%" }
+			}
+		]
+	}
+]

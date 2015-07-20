@@ -7,10 +7,11 @@ Used by SortieManager
 (function(){
 	"use strict";
 	
-	window.KC3Node = function(sortie_id, id){
+	window.KC3Node = function(sortie_id, id, UTCTime){
 		this.sortie = (sortie_id || 0);
 		this.id = (id || 0);
 		this.type = "";
+		this.stime = UTCTime;
 	};
 	
 	KC3Node.prototype.defineAsBattle = function( nodeData ){
@@ -21,6 +22,7 @@ Used by SortieManager
 			
 			// If passed raw data from compass
 			if(typeof nodeData.api_enemy != "undefined"){
+				this.eships = [];
 				this.epattern = nodeData.api_enemy.api_enemy_id;
 				this.checkEnemy();
 			}
@@ -28,17 +30,24 @@ Used by SortieManager
 			// If passed formatted enemy list from PVP
 			if(typeof nodeData.pvp_opponents != "undefined"){
 				this.eships = nodeData.pvp_opponents;
+				KC3SortieManager.onEnemiesAvailable();
 			}
 		}
 		return this;
 	};
 	
 	KC3Node.prototype.checkEnemy = function( nodeData ){
-		// get from DB
-		// this.epattern // is the enemy ID
-		// this.eships = [ api_ship_ke[i++] ];
-		// this.eformation = api_formation[1];
-		this.eships = [-1,-1,-1,-1,-1,-1];
+		var self = this;
+		KC3Database.get_enemy(this.epattern, function(response){
+			if(response){
+				self.eships = response.ids;
+				self.eformation = response.formation;
+			}else{
+				self.eships = [-1,-1,-1,-1,-1,-1];
+				self.eformation = -1;
+			}
+			KC3SortieManager.onEnemiesAvailable();
+		});
 	};
 	
 	KC3Node.prototype.defineAsResource = function( nodeData ){
@@ -91,11 +100,17 @@ Used by SortieManager
 	KC3Node.prototype.engage = function( battleData ){
 		this.battleDay = battleData;
 		
-		this.supportFlag = (battleData.api_support_flag==1)?true:false;
-		this.yasenFlag = (battleData.api_midnight_flag==1)?true:false;
+		var enemyships = battleData.api_ship_ke;
+		enemyships.splice(0,1);
+		this.eships = enemyships;
+		this.eformation = battleData.api_formation[1];
+		KC3SortieManager.onEnemiesAvailable();
 		
-		this.detection = KC3Meta.detection( battleData.api_search[0] )
-		this.engagement = KC3Meta.engagement( battleData.api_formation[2] )
+		this.supportFlag = (battleData.api_support_flag>0)?true:false;
+		this.yasenFlag = (battleData.api_midnight_flag>0)?true:false;
+		
+		this.detection = KC3Meta.detection( battleData.api_search[0] );
+		this.engagement = KC3Meta.engagement( battleData.api_formation[2] );
 		this.fcontact = (battleData.api_kouku.api_stage1.api_touch_plane[0] > -1)?"YES":"NO";
 		this.econtact = (battleData.api_kouku.api_stage1.api_touch_plane[1] > -1)?"YES":"NO";
 		
@@ -146,8 +161,8 @@ Used by SortieManager
 	
 	KC3Node.prototype.night = function( nightData ){
 		this.battleNight = nightData;
-		this.fcontact = nightData.api_touch_plane[0];
-		this.econtact = nightData.api_touch_plane[1];
+		this.fcontact = (nightData.api_touch_plane[0] > -1)?"YES":"NO";
+		this.econtact = (nightData.api_touch_plane[1] > -1)?"YES":"NO";
 		this.flare = nightData.api_flare_pos[0]; //??
 		this.searchlight = nightData.api_flare_pos[1]; //??
 	};
@@ -160,15 +175,24 @@ Used by SortieManager
 		}else{
 			this.drop = 0;
 		}
+		
+		this.saveBattleOnDB();
 	};
 	
-	KC3Node.prototype.save = function( resultData ){
-		console.log({
+	KC3Node.prototype.isBoss = function(){
+		return this.id == KC3SortieManager.boss.node;
+	};
+	
+	KC3Node.prototype.saveBattleOnDB = function( resultData ){
+		KC3Database.Battle({
+			sortie_id: (this.sortie || KC3SortieManager.onSortie || 0),
 			node: this.id,
-			battle: this.battleDay,
-			yasen: this.battleNight,
+			enemyId: (this.epattern || 0),
+			data: (this.battleDay || {}),
+			yasen: (this.battleNight || {}),
 			rating: this.rating,
-			drop: this.rating,
+			drop: this.drop,
+			time: this.stime
 		});
 	};
 	

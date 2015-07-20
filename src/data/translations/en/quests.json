@@ -219,8 +219,14 @@
         "name": "Organize the new 6th Destroyer Division!",
         "desc": "Have Akatsuki Kai2 as Flagship with Hibiki/Bep, Ikazuchi, Inazuma in your fleet"
     },
-	
-	
+	"156": {
+        "name": "1st Torpedo Squadron, Prepare for a Rush to the Northern Sea",
+        "desc": "Have Abukuma as flagship with Hibiki/Вер, Hatsushimo, Wakaba, Samidare and Shimakaze in your main fleet"
+    },
+	"157": {
+        "name": "1st Torpedo Squadron, Prepare for Another Rush to the Northern Sea",
+        "desc": "Have Abukuma Kai Ni as flagship with Hibiki/Вер, Yuugumo, Naganami, Akigumo and Shimakaze in your main fleet"
+    },
 	
 	
 	
@@ -352,18 +358,14 @@
         "name": "Deploy a Torpedo Squadron to Bashi Islands",
         "desc": "Sortie a fleet of 1-2 light cruisers (with one of them as the flagship) and 4-5 destroyers to World 2-2. Score a victory at the boss and sink the enemy flagship."
     },
-    
-   
     "258": {
         "name": "Sortie the 2nd Squadron",
         "desc": "Deploy Nagato (\u9577\u9580), Mutsu (\u9678\u5965), Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce) and up to 2 additional ships to World 4-2. Score two S rank victories at the boss node."
     },
-   
     "260": {
         "name": "Deploy the Battleship Squadron in the Northern Waters",
         "desc": "Deploy two battleships, a light aircraft carrier and up to three additional ships to World 3-5 and score an S rank victory at the boss node."
     },
-    
     "262": {
         "name": "Deploy the Nishimura Fleet in the Southern Waters",
         "desc": "Deploy Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce), Mogami (\u6700\u4e0a), Shigure (\u6642\u96e8) and Michishio (\u6e80\u6f6e) (you may also add another ship) to World 5-1 and score an S rank victory at the boss node."
@@ -398,11 +400,11 @@
     },
     "273": {
         "name": "Deploy the Mikawa Fleet to Solomon Islands",
-        "desc": "Sortie the main fleet with Choukai Kai2 (\u9ce5\u6d77\u6539\u30cb) as the flagship and any five of Aoba (\u9752\u8449), Kinugasa (\u8863\u7b20), Kako (\u52a0\u53e4), Furutaka (\u53e4\u9df9), Tenryuu (\u5929\u9f8d), Yuubari (\u5915\u5f35) to World 5-1 and score an S rank victory at the boss node."
+        "desc": "Sortie the main fleet with Choukai Kai2 as the flagship and any five of Aoba, Kinugasa, Kako, Furutaka, Tenryuu, Yuubari to 5-1 and S-Rank the boss"
     },
     "274": {
         "name": "6th Destroyer Division's Anti-Submarine Patrol",
-        "desc": "Deploy Akatsuki (\u6681), Hibiki (\u97ff or \u0412\u0435\u0440\u043d\u044b\u0439), Inazuma (\u96f7) and Ikazuchi (\u96fb) to World 1-5. At least C rank is required at the boss node."
+        "desc": "Deploy Akatsuki, Hibiki (\u97ff or \u0412\u0435\u0440\u043d\u044b\u0439), Inazuma and Ikazuchi to 1-5. C-Rank+ the boss"
     },
     "275": {
         "name": "Deploy the 18th Squadron",
@@ -416,22 +418,28 @@
         "name": "DesDiv6 Anti-Submarine Mission!",
         "desc": "Sortie Akatsuki Kai2 , Hibiki/Verniy, Ikazuchi, Inazuma to 1-5 and clear the map with at least A-rank"
     },
-	
-	
+	"278": {
+        "name": "Rush the 1st Torpedo Squadron to Operation KE",
+        "desc": "Sortie Abukuma as flagship with Hibiki/Вер, Hatsushimo, Wakaba, Samidare and Shimakaze to 3-2 and B-Rank+ the boss"
+    },
+	"279": {
+        "name": "Rush the 1st Torpedo Squadron to Operation KE Again",
+        "desc": "Sortie Abukuma Kai-2 as flagship with Hibiki/Вер, Yuugumo, Naganami, Akigumo and Shimakaze to 3-2 and B-Rank+ the boss"
+    },
 	
 	
 	
 	"201": {
         "code": "Bd1",
         "name": "Daily Sortie 1",
-        "desc": "Defeat an enemy fleet",
+        "desc": "Defeat an abyssal fleet",
 		"unlock": [ 216, 211, 212 ],
 		"tracking": [ [0,1] ]
     },
 	"216": {
 		"code": "Bd2",
 		"name": "Daily Sortie 2",
-		"desc": "Defeat the flagship of an enemy fleet",
+		"desc": "Defeat the flagship of an abyssal fleet",
 		"unlock": [ 210, 218, 214, 213 ],
 		"tracking": [ [0,1] ]
 	},
@@ -450,7 +458,7 @@
 	"218": {
 		"code": "Bd5",
 		"name": "Daily Sortie 5",
-		"desc": "Sink 3 enemy transport ships",
+		"desc": "Sink 3 abyssal transport ships",
 		"unlock": [ 226, 220 ],
 		"tracking": [ [0,3] ]
 	},
@@ -495,13 +503,13 @@
 	"213": {
 		"code": "Bw3",
 		"name": "Weekly Sortie 3",
-		"desc": "Sink 20 transport ships",
+		"desc": "Sink 20 abyssal transport ships",
 		"tracking": [ [0,20] ]
 	},
 	"221": {
 		"code": "Bw4",
         "name": "Weekly Sortie 4",
-        "desc": "Sink 50 transport ships",
+        "desc": "Sink 50 abyssal transport ships",
 		"unlock": [ 261, 257, 264 ],
 		"tracking": [ [0,50] ]
     },
@@ -553,8 +561,7 @@
 		"code": "Bm1",
         "name": "Deploy the Fifth squadron",
         "desc": "Deploy Myoukou, Nachi, Haguro, +3 ships to [W2-5]. S-rank the boss node",
-		"unlock": [ 265 ],
-		"tracking": [ [0,1] ]
+		"unlock": [ 265 ]
     },
 	"256": {
 		"code": "Bm2",
@@ -565,14 +572,12 @@
 	"257": {
 		"code": "Bm3",
         "name": "Deploy a Torpedo Squadron",
-        "desc": "1~3 CL (CL flagship) and 3~5 destroyers to [W1-4]. S-rank the boss node",
-		"tracking": [ [0,1] ]
+        "desc": "1~3 CL (CL flagship) and 3~5 destroyers to [W1-4]. S-rank the boss node"
     },
 	"259": {
 		"code": "Bm4",
         "name": "Deploy a Battleship Squadron",
-        "desc": "Deploy 3 BB(V) + 1 CL + 2 ships to [W5-1] and S-rank the boss node",
-		"tracking": [ [0,1] ]
+        "desc": "Deploy 3 BB(V) + 1 CL + 2 ships to [W5-1] and S-rank the boss node"
     },
 	"265": {
 		"code": "Bm5",
@@ -584,14 +589,12 @@
 		"code": "Bm6",
         "name": "Sortie the Aircraft Carrier Task Force to the West",
         "desc": "2 CV + 2 DD + 2 ships to [W4-2]. S-rank the boss node",
-		"unlock": [ 266 ],
-		"tracking": [ [0,1] ]
+		"unlock": [ 266 ]
     },
 	"266": {
 		"code": "Bm7",
         "name": "Deploy the Counterattack Squadron",
-        "desc": "4 DD (DD flagship) + 1 CA (Not CAV) + 1 CL to [W2-5] and S-rank the boss node",
-		"tracking": [ [0,1] ]
+        "desc": "4 DD (DD flagship) + 1 CA (Not CAV) + 1 CL to [W2-5] and S-rank the boss node"
     },
 	
 	
@@ -625,14 +628,18 @@
     "307": {
 		"code": "C5",
         "name": "Improve the Efficiency of the Fleet",
-        "desc": "Get 3 victories in practice mode"
+        "desc": "Get 3 victories in practice mode within the same day"
     },
     "308": {
 		"code": "C6",
         "name": "Improve the Efficiency of the Fleet One More Time",
-        "desc": "Get 4 victories in practice mode"
+        "desc": "Get 4 victories in practice mode within the same day"
     },
-	
+	"309": {
+		"code": "C7",
+        "name": "Strive to Increase the Level of Training in Preparation for Another Rush to the Northern Sea",
+        "desc": "Get 4 victories in Exercises within the same day"
+    },
 	
 	
 	

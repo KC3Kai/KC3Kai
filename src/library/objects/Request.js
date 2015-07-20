@@ -123,6 +123,10 @@ Executes processing and relies on KC3Network for the triggers
 	
 	------------------------------------------*/
 	KC3Request.prototype.process = function(){
+		// check clock and clear quests at 5AM JST
+		var serverJstTime = new Date( this.headers.Date ).getTime();
+		KC3QuestManager.checkAndResetQuests(serverJstTime);
+		
 		// If API call is supported
 		if(typeof Kcsapi[this.call] != "undefined"){
 			// Execute by passing data

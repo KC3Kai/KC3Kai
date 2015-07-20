@@ -16,12 +16,12 @@ Retreives when needed to apply on components
 				version				: 6,
 				language			: "en",
 				elosFormula 		: 3,
-				questTracking 		: true,
 				
 				info_face 			: true,
 				info_craft 			: true,
 				info_compass 		: true,
 				info_battle 		: true,
+				info_boss 			: true,
 				
 				ss_mode 			: 0,
 				ss_type 			: 'JPG',
@@ -33,15 +33,18 @@ Retreives when needed to apply on components
 				alert_desktop 		: true,
 				
 				api_translation		: true,
+				api_tracking 		: true,
 				api_askExit			: true,
 				api_margin			: 0,
 				api_bg_color		: "#def",
 				api_bg_image		: "",
 				api_bg_size			: "cover",
 				api_bg_position		: "top center",
+				api_gameScale		: 100,
 				
 				dmm_customize		: false,
 				dmm_translation		: true,
+				dmm_tracking		: true,
 				dmm_askExit			: false,
 				dmm_margin			: 0,
 				dmm_bg_color		: "#def",
@@ -50,6 +53,7 @@ Retreives when needed to apply on components
 				dmm_bg_position		: "top center",
 				
 				pan_theme			: "default",
+				pan_size			: "big",
 				pan_bg_color		: "#def",
 				pan_bg_image		: "",
 				pan_bg_size			: "cover",

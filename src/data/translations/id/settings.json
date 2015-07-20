@@ -1,0 +1,320 @@
+[
+	{
+		"section": "Global",
+		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Global",
+		"contents" : [
+			{
+				"id" : "language",
+				"name" : "Bahasa",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "en", "Inggris" ],
+						[ "jp", "Jepang" ],
+						[ "id", "Indonesia" ],
+						[ "tcn", "Tradisional Cina" ],
+						[ "scn", "Simplified Cina" ],
+						[ "vi", "Vietnam" ]
+					]
+				}
+			},
+			{
+				"id" : "elosFormula",
+				"name" : "Efektivitas Formula LoS ",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 1, "Jumlah" ],
+						[ 2, "Lama" ],
+						[ 3, "Baru" ]
+					]
+				}
+			}
+		]
+	},
+	{
+		"section": "Informasi Permainan",
+		"help" : "",
+		"contents" : [
+			{
+				"id" : "info_face",
+				"name" : "Wajah Konstruksi",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_craft",
+				"name" : "Hasil Crafting", 
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_compass",
+				"name" : "Kompas dan Musuh",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_battle",
+				"name" : "Informasi Pertempuran",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_boss",
+				"name" : "Susunan Boss",
+				"type" : "check",
+				"options" : {}
+			}
+		]
+	},
+	{
+		"section": "Screenshot",
+		"help" : "",
+		"contents" : [
+			{
+				"id" : "ss_mode",
+				"name" : "Hasil Output",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "Unduh" ],
+						[ 1, "Imgur" ],
+						[ 2, "Tab Baru" ]
+					]
+				}
+			},
+			{
+				"id" : "ss_type",
+				"name" : "Format File",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "JPG", "JPG" ],
+						[ "PNG", "PNG" ]
+					]
+				}
+			}
+		]
+	},
+	{
+		"section": "Peringatan",
+		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Alerts",
+		"contents" : [
+			{
+				"id" : "alert_diff",
+				"name" : "Penyisihan Waktu",
+				"type" : "small_text",
+				"options" : { "label" : "Detik" }
+			},
+			{
+				"id" : "alert_type",
+				"name" : "Tipe suara",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "Matikan" ],
+						[ 1, "DING!" ],
+						[ 2, "Pilihan sendiri" ]
+					]
+				}
+			},
+			{
+				"id" : "alert_custom",
+				"name" : "URL Suara Pilihan Sendiri",
+				"type" : "long_text",
+				"options" : { "placeholder" : "http://" }
+			},
+			{
+				"id" : "alert_volume",
+				"name" : "Volume Suara",
+				"type" : "small_text",
+				"options" : { "label" : "%" }
+			},
+			{
+				"id" : "alert_desktop",
+				"name" : "Notifikasi Desktop",
+				"type" : "check",
+				"options" : {}
+			}
+		]
+	},
+	{
+		"section": "Tampilan Game API",
+		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Screen",
+		"contents" : [
+			{
+				"id" : "api_translation",
+				"name" : "Terjemahan Quest",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "api_tracking",
+				"name" : "Penanda Quest",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "api_askExit",
+				"name" : "Konfirmasi Keluar",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "api_margin",
+				"name" : "Batas Atas",
+				"type" : "small_text",
+				"options" : { "label" : "pixel" }
+			},
+			{
+				"id" : "api_bg_color",
+				"name" : "Warna Background",
+				"type" : "long_text",
+				"options" : { "placeholder" : "Lihat property background-color CSS" }
+			},
+			{
+				"id" : "api_bg_image",
+				"name" : "Gambar Latar Belakang",
+				"type" : "long_text",
+				"options" : { "placeholder" : "http://" }
+			},
+			{
+				"id" : "api_bg_size",
+				"name" : "Ukuran Latar Belakang",
+				"type" : "long_text",
+				"options" : { "placeholder" : "Lihat property background-size CSS" }
+			},
+			{
+				"id" : "api_bg_position",
+				"name" : "Posisi Latar Belakang",
+				"type" : "long_text",
+				"options" : { "placeholder" : "Lihat property background-position CSS" }
+			},
+			{
+				"id" : "api_gameScale",
+				"name" : "Ukuran Game Player",
+				"type" : "small_text",
+				"options" : { "label" : "%" }
+			}
+		]
+	},
+	{
+		"section": "Gameplay DMM",
+		"help" : "",
+		"contents" : [
+			{
+				"id" : "dmm_customize",
+				"name" : "Terapkan Pengaturan",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "dmm_translation",
+				"name" : "Terjemahan Quest",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "dmm_tracking",
+				"name" : "Penanda Quest",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "dmm_askExit",
+				"name" : "Konfirmasi Keluar",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "dmm_margin",
+				"name" : "Batas Atas",
+				"type" : "small_text",
+				"options" : { "label" : "pixel" }
+			},
+			{
+				"id" : "dmm_bg_color",
+				"name" : "Warna Latar Belakang",
+				"type" : "long_text",
+				"options" : { "placeholder" : "Lihat property background-color CSS" }
+			},
+			{
+				"id" : "dmm_bg_image",
+				"name" : "Gambar Latar Belakang",
+				"type" : "long_text",
+				"options" : { "placeholder" : "http://" }
+			},
+			{
+				"id" : "dmm_bg_size",
+				"name" : "Ukuran Latar Belakang",
+				"type" : "long_text",
+				"options" : { "placeholder" : "Lihat property background-size CSS" }
+			},
+			{
+				"id" : "dmm_bg_position",
+				"name" : "Posisi Latar Belakang",
+				"type" : "long_text",
+				"options" : { "placeholder" : "Lihat property background-position CSS" }
+			}
+		]
+	},
+	{
+		"section": "Panel",
+		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Panel",
+		"contents" : [
+			{
+				"id" : "pan_theme",
+				"name" : "Tema",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "default", "Utama" ],
+						[ "dark", "Gelap" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_size",
+				"name" : "Ukuran Panel",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "small", "Kecil" ],
+						[ "big", "Besar" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_bg_color",
+				"name" : "Warna Latar Belakang",
+				"type" : "long_text",
+				"options" : { "placeholder" : "Lihat property background-color CSS" }
+			},
+			{
+				"id" : "pan_bg_image",
+				"name" : "Gambar Latar Belakang",
+				"type" : "long_text",
+				"options" : { "placeholder" : "http://" }
+			},
+			{
+				"id" : "pan_bg_size",
+				"name" : "Ukuran Latar Belakang",
+				"type" : "long_text",
+				"options" : { "placeholder" : "Lihat property background-size CSS" }
+			},
+			{
+				"id" : "pan_bg_position",
+				"name" : "Posisi Latar Belakang",
+				"type" : "long_text",
+				"options" : { "placeholder" : "Lihat property background-position CSS" }
+			},
+			{
+				"id" : "pan_opacity",
+				"name" : "Transparansi Antarmuka",
+				"type" : "small_text",
+				"options" : { "label" : "%" }
+			}
+		]
+	}
+]

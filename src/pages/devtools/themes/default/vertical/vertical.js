@@ -10,6 +10,35 @@
 		ready: function(){
 			var self = this;
 			
+			// Set size of the panel
+			$("#v").removeClass("panel-size-300px");
+			$("#v").removeClass("panel-size-420px");
+			var classToAdd = "panel-size-" + ((ConfigManager.pan_size === "small") ? "300px" : "420px"); 
+			$("#v").addClass(classToAdd);
+			$(".layout-button").removeClass("active");
+			if (ConfigManager.pan_size === "small") {
+				$(".layout-button.small-layout").addClass("active");
+			} else {
+				$(".layout-button.big-layout").addClass("active");
+			}
+			$(".layout-button").on("click", function(){
+				console.log("Clicked");
+				$(".layout-button").removeClass("active");
+				$(this).addClass("active");
+				if ($(this).hasClass("small-layout")){
+					ConfigManager.pan_size = "small";
+				} else {
+					ConfigManager.pan_size = "big";
+				}
+				console.log(ConfigManager.pan_size);
+				$("#v").removeClass("panel-size-300px");
+				$("#v").removeClass("panel-size-420px");
+				var classToAdd = "panel-size-" + ((ConfigManager.pan_size === "small") ? "300px" : "420px"); 
+				$("#v").addClass(classToAdd);
+				ConfigManager.save();
+				self.trigger("Fleet");
+			});
+			
 			// Select fleet tab
 			$(".fleet-button", this.domElement).on("click", function(){
 				self.data.selectedFleet = $(this).data("id");
@@ -103,6 +132,9 @@
 			$(".battle-mship .ship-morale", this.domElement).hide();
 			$(".battle-mship .ship-equip", this.domElement).hide();
 			$(".battle-mship .ship-supply", this.domElement).hide();
+			$(".battle-eship .ship-morale", this.domElement).hide();
+			$(".battle-eship .ship-equip", this.domElement).hide();
+			$(".battle-eship .ship-supply", this.domElement).hide();
 			$(".battle .switch-ship-attribute-button ", this.domElement).on("click", function(){
 				console.log("switch button clicked!");
 				
@@ -113,18 +145,26 @@
 				$(".battle-mship .ship-morale", self.domElement).hide();
 				$(".battle-mship .ship-equip", self.domElement).hide();
 				$(".battle-mship .ship-supply", self.domElement).hide();
+				$(".battle-eship .ship-level", self.domElement).hide();
+				$(".battle-eship .ship-morale", self.domElement).hide();
+				$(".battle-eship .ship-equip", self.domElement).hide();
+				$(".battle-eship .ship-supply", self.domElement).hide();
 				
 				if ($(this).hasClass("switch-exp-button")) {
 					$(".battle-mship .ship-level", self.domElement).show();
+					$(".battle-eship .ship-level", self.domElement).show();
 				}
 				if ($(this).hasClass("switch-morale-button")) {
 					$(".battle-mship .ship-morale", self.domElement).show();
+					$(".battle-eship .ship-morale", self.domElement).show();
 				}
 				if ($(this).hasClass("switch-equip-button")) {
 					$(".battle-mship .ship-equip", self.domElement).show();
+					$(".battle-eship .ship-equip", self.domElement).show();
 				}
 				if ($(this).hasClass("switch-supply-button")) {
 					$(".battle-mship .ship-supply", self.domElement).show();
+					$(".battle-eship .ship-supply", self.domElement).show();
 				}
 				
 			});
@@ -144,6 +184,27 @@
 					default: KC3QuestManager.clear(); break;
 				}
 				self.trigger("Quests");
+			});
+			
+			$(".activityBox.craftGear").on("click", function(){
+				$(this).hide();
+			});
+			
+			// HQ name censor
+			$(".battle_admiral").on("click", function(){
+				$(".battle .name_censor").show();
+			});
+			
+			$(".battle .name_censor").on("click", function(){
+				$(this).hide();
+			});
+			
+			$(".admiral_name").on("click", function(){
+				$(".normal .name_censor").show();
+			});
+			
+			$(".normal .name_censor").on("click", function(){
+				$(this).hide();
 			});
 		},
 		listeners: {
@@ -268,8 +329,9 @@
 				}
 			},
 			Fleet: function(container, data, local){
+				var CurrentFleet, FleetContainer;
 				if(KC3Panel.mode=="normal"){
-					var CurrentFleet = PlayerManager.fleets[local.selectedFleet-1];
+					CurrentFleet = PlayerManager.fleets[local.selectedFleet-1];
 					
 					// Fleet Summary Stats
 					$(".normal .summary-level .summary-text", container).text( CurrentFleet.totalLevel() );
@@ -279,11 +341,12 @@
 					container.css("box-shadow", "none");
 					
 					// Fleet Ships
-					var FleetContainer = $(".fleet-ships", container);
+					FleetContainer = $(".fleet-ships", container);
 					FleetContainer.html("");
 					$.each(CurrentFleet.ships, function(index, rosterId){
 						if(rosterId > -1){
 							var CurrentShip = KC3ShipManager.get( rosterId );
+							if(CurrentShip.masterId === 0){ return true; }
 							var ShipBox = $(".factory .fleet-ship", container).clone().appendTo(FleetContainer);
 							
 							$(".ship-img img", ShipBox).attr("src", KC3Meta.shipIcon(CurrentShip.masterId, "../../../../assets/img/ui/empty.png"));
@@ -299,9 +362,33 @@
 							FleetEquipment( $(".ship-gear-2", ShipBox), CurrentShip.equipment(1), CurrentShip.slots[1] );
 							FleetEquipment( $(".ship-gear-3", ShipBox), CurrentShip.equipment(2), CurrentShip.slots[2] );
 							FleetEquipment( $(".ship-gear-4", ShipBox), CurrentShip.equipment(3), CurrentShip.slots[3] );
+							
+							var FuelPercent = CurrentShip.fuel / CurrentShip.master().api_fuel_max;
+							var AmmoPercent = CurrentShip.ammo / CurrentShip.master().api_bull_max;
+							$(".supply-fuel .supply-text", ShipBox).text(Math.floor(FuelPercent*100)+"%");
+							$(".supply-ammo .supply-text", ShipBox).text(Math.floor(AmmoPercent*100)+"%");
+							
+							var SupplyBarMaxWidth = $(".supply-fuel", ShipBox).css("width");
+							SupplyBarMaxWidth = Number(SupplyBarMaxWidth.substring(0, SupplyBarMaxWidth.length-2));
+							$(".supply-fuel .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*FuelPercent)+"px");
+							$(".supply-ammo .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*AmmoPercent)+"px");
 						}
 					});
 					
+
+                                    try {
+                                        var expeditionAnalyzeResult = ExpeditionHelper.analyzeFleet( CurrentFleet );
+                                        if (expeditionAnalyzeResult) {
+                                            expeditionAnalyzeResult.e = expeditionAnalyzeResult.e.join(",");
+                                            $(".expedition-helper").text(JSON.stringify( expeditionAnalyzeResult ));
+                                        } else {
+                                            $(".expedition-helper").text( "no result" );
+                                        }
+                                    } catch (e) 
+                                    {
+                                        $(".expedition-helper").text("error: " + e);
+                                    }
+
 					// Expedition Timer Faces
 					KC3TimerManager._exped[0].face( PlayerManager.fleets[1].ship(0).masterId );
 					KC3TimerManager._exped[1].face( PlayerManager.fleets[2].ship(0).masterId );
@@ -327,7 +414,7 @@
 						container.css("box-shadow", "none");
 						
 						// Fleet Ships
-						var FleetContainer = $(".battle_mainfleet .battle_fleet_list", container);
+						FleetContainer = $(".battle_mainfleet .battle_fleet_list", container);
 						FleetContainer.html("");
 						$.each(MainFleet.ships, function(index, rosterId){
 							if(rosterId > -1){
@@ -352,8 +439,11 @@
 								var AmmoPercent = CurrentShip.ammo / CurrentShip.master().api_bull_max;
 								$(".supply-fuel .supply-text", ShipBox).text(Math.floor(FuelPercent*100)+"%");
 								$(".supply-ammo .supply-text", ShipBox).text(Math.floor(AmmoPercent*100)+"%");
-								$(".supply-fuel .supply-bar", ShipBox).css("width", (50*FuelPercent)+"px");
-								$(".supply-ammo .supply-bar", ShipBox).css("width", (50*AmmoPercent)+"px");
+								
+								var SupplyBarMaxWidth = $(".supply-fuel", ShipBox).css("width");
+								SupplyBarMaxWidth = Number(SupplyBarMaxWidth.substring(0, SupplyBarMaxWidth.length-2));
+								$(".supply-fuel .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*FuelPercent)+"px");
+								$(".supply-ammo .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*AmmoPercent)+"px");
 							}
 						});
 						
@@ -366,12 +456,12 @@
 						container.css("box-shadow", "none");
 						
 						// Fleet Ships
-						var FleetContainer = $(".battle_escorts .battle_fleet_list", container);
+						FleetContainer = $(".battle_escorts .battle_fleet_list", container);
 						FleetContainer.html("");
 						$.each(EscortFleet.ships, function(index, rosterId){
 							if(rosterId > -1){
 								var CurrentShip = KC3ShipManager.get( rosterId );
-								var ShipBox = $(".factory .battle-mship", container).clone().appendTo(FleetContainer);
+								var ShipBox = $(".factory .battle-eship", container).clone().appendTo(FleetContainer);
 								
 								$(".ship-img img", ShipBox).attr("src", KC3Meta.shipIcon(CurrentShip.masterId));
 								$(".ship-name", ShipBox).text( CurrentShip.name() );
@@ -391,8 +481,11 @@
 								var AmmoPercent = CurrentShip.ammo / CurrentShip.master().api_bull_max;
 								$(".supply-fuel .supply-text", ShipBox).text(Math.floor(FuelPercent*100)+"%");
 								$(".supply-ammo .supply-text", ShipBox).text(Math.floor(AmmoPercent*100)+"%");
-								$(".supply-fuel .supply-bar", ShipBox).css("width", (50*FuelPercent)+"px");
-								$(".supply-ammo .supply-bar", ShipBox).css("width", (50*AmmoPercent)+"px");
+								
+								var SupplyBarMaxWidth = $(".supply-fuel", ShipBox).css("width");
+								SupplyBarMaxWidth = Number(SupplyBarMaxWidth.substring(0, SupplyBarMaxWidth.length-2));
+								$(".supply-fuel .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*FuelPercent)+"px");
+								$(".supply-ammo .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*AmmoPercent)+"px");
 							}
 						});
 						
@@ -402,7 +495,7 @@
 						
 					// Single-Fleet Sortie
 					}else{
-						var CurrentFleet = PlayerManager.fleets[ KC3SortieManager.fleetSent-1 ];
+						CurrentFleet = PlayerManager.fleets[ KC3SortieManager.fleetSent-1 ];
 						
 						// Fleet Summary Stats
 						$(".battle_singlefleet .battle-level .summary-text", container).text( CurrentFleet.totalLevel() );
@@ -412,7 +505,7 @@
 						container.css("box-shadow", "none");
 						
 						// Fleet Ships
-						var FleetContainer = $(".battle_singlefleet .battle_fleet_list", container);
+						FleetContainer = $(".battle_singlefleet .battle_fleet_list", container);
 						FleetContainer.html("");
 						$.each(CurrentFleet.ships, function(index, rosterId){
 							if(rosterId > -1){
@@ -437,8 +530,11 @@
 								var AmmoPercent = CurrentShip.ammo / CurrentShip.master().api_bull_max;
 								$(".supply-fuel .supply-text", ShipBox).text(Math.floor(FuelPercent*100)+"%");
 								$(".supply-ammo .supply-text", ShipBox).text(Math.floor(AmmoPercent*100)+"%");
-								$(".supply-fuel .supply-bar", ShipBox).css("width", (50*FuelPercent)+"px");
-								$(".supply-ammo .supply-bar", ShipBox).css("width", (50*AmmoPercent)+"px");
+								
+								var SupplyBarMaxWidth = $(".supply-fuel", ShipBox).css("width");
+								SupplyBarMaxWidth = Number(SupplyBarMaxWidth.substring(0, SupplyBarMaxWidth.length-2));
+								$(".supply-fuel .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*FuelPercent)+"px");
+								$(".supply-ammo .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*AmmoPercent)+"px");
 							}
 						});
 						
@@ -455,13 +551,15 @@
 				$(".battle .battle_world", container).text("World "+KC3SortieManager.map_world+" - "+KC3SortieManager.map_num);
 				
 				// Show boss node
-				$.each(KC3SortieManager.bossNode, function(index, eshipId){
-					if(eshipId > -1){
-						$(".battle .battle_boss .abyss_"+(index+1)+" img", container).attr("src", KC3Meta.abyssIcon(eshipId));
-					}else{
-						$(".battle .battle_boss .abyss_"+(index+1), container).hide();
-					}
-				});
+				KC3SortieManager.onBossAvailable = function(){
+					$.each(KC3SortieManager.boss.ships, function(index, eshipId){
+						if(eshipId > -1){
+							$(".battle .battle_boss .abyss_"+(index+1)+" img", container).attr("src", KC3Meta.abyssIcon(eshipId));
+						}else{
+							$(".battle .battle_boss .abyss_"+(index+1), container).hide();
+						}
+					});
+				};
 				
 				// Trigger other listeners
 				this.HQ(container, {}, local);
@@ -504,16 +602,6 @@
 						$(".battle .battle_nodebox", container).hide();
 						$(".battle .battle_node_"+numNodes, container).addClass( "battle_color" );
 						$(".battle .battle_nodenum", container).addClass( "battle_color" );
-						$.each(thisNode.eships, function(index, eshipId){
-							if(eshipId > -1){
-								$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).attr("src", KC3Meta.abyssIcon(eshipId));
-								$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).show();
-							}else{
-								$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).hide();
-							}
-						});
-						
-						$(".battle .battle_enemies", container).fadeIn(500);
 						break;
 					
 					// Resource node
@@ -541,8 +629,8 @@
 						$(".battle .battle_nodebox", container).hide();
 						$(".battle .battle_node_"+numNodes, container).addClass( "maelstrom_color" );
 						$(".battle .battle_nodenum", container).addClass( "maelstrom_color" );
-						$(".battle .battle_resource .battle_resicon img", container).attr("src", thisNode.icon("../../../../assets/img/client/"));
-						$(".battle .battle_resource .battle_resamt", container).text( thisNode.amount );
+						$(".battle .battle_maelstrom .battle_resicon img", container).attr("src", thisNode.icon("../../../../assets/img/client/"));
+						$(".battle .battle_maelstrom .battle_resamt", container).text( -thisNode.amount );
 						$(".battle .battle_maelstrom", container).fadeIn(500);
 						break;
 						
@@ -565,6 +653,23 @@
 				$(".battle .battle_current", container).text("FIGHTING");
 				var thisNode = KC3SortieManager.currentNode();
 				var battleData = thisNode.battleDay;
+				
+				if((typeof thisNode.eformation != "undefined") && (thisNode.eformation > -1)){
+					$(".battle .battle_enemy_formation img", container).attr("src", KC3Meta.formationIcon(thisNode.eformation));
+					$(".battle .battle_enemy_formation", container).show();
+				} else {
+					$(".battle .battle_enemies .battle_enemy_formation", container).hide();
+				}
+				
+				$(".battle .battle_enemies .battle_abyss img", container).attr("src", KC3Meta.abyssIcon(-1));
+				$.each(thisNode.eships, function(index, eshipId){
+					if(eshipId > -1){
+						$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).attr("src", KC3Meta.abyssIcon(eshipId));
+						$(".battle .battle_enemies .abyss_"+(index+1), container).show();
+					}else{
+						$(".battle .battle_enemies .abyss_"+(index+1), container).hide();
+					}
+				});
 				
 				// If support expedition is triggered on this battle
 				if(thisNode.supportFlag){
@@ -623,10 +728,23 @@
 			},
 			BattleNight: function(container, data, local){
 				if(KC3SortieManager.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
-				$(".battle .battle_current", container).text("DESPERATE? :P");
+				$(".battle .battle_current", container).text([
+					"DESPERATE? :P",
+					"LOL SKRUB",
+					"ALL DA BONUSES",
+					"KTKM hit le DD!",
+					"1 HP toplel",
+					"#DontGetYourHopesUp",
+					"She had ONE job :(",
+					"Sendai... onegai",
+					"Do you even teitoku?",
+					"Cut-in? Is that tasty?",
+					"It's futile mang",
+					"Let's all pray~",
+					"RNGesus bless him",
+					"I bless this run"
+				][Math.floor(Math.random()*5)]);
 				var thisNode = KC3SortieManager.currentNode();
-				
-				
 				
 			},
 			BattleResult: function(container, data, local){
@@ -643,6 +761,8 @@
 				}
 			},
 			CraftGear: function(container, data, local){
+				if(!ConfigManager.info_craft){ return true; }
+				
 				// Hide any other activity box
 				$(".activityBox", container).hide();
 				
@@ -657,10 +777,10 @@
 				
 				// Show extra item info
 				var countExisting = KC3GearManager.countByMasterId( data.itemMasterId );
-				if(countExisting == 0){
+				if(countExisting === 0){
 					$(".craftGear .equipNote").html("This is your <strong>first</strong>!");
 				}else{
-					$(".craftGear .equipNote").html("You have <strong>"+countExisting+"</strong> of this, +1!");
+					$(".craftGear .equipNote").html("You now have <strong>"+countExisting+"</strong> of this item!");
 				}
 				
 				// Show resource used
@@ -670,7 +790,7 @@
 				$(".craftGear .used4").text( data.resourceUsed[3] );
 				
 				// Show item stats
-				$(".equipStats", container).html("")
+				$(".equipStats", container).html("");
 				CraftGearStats(container, MasterItem, "souk", "ar");
 				CraftGearStats(container, MasterItem, "houg", "fp");
 				CraftGearStats(container, MasterItem, "raig", "tp");
@@ -696,6 +816,7 @@
 				KC3Panel.mode = "battle";
 				$(".battle .battle_world", container).text("PvP Practice Battle");
 				$(".battle .battle_current", container).text("FIGHTING");
+				KC3SortieManager.fleetSent = data.fleetSent;
 				
 				// Trigger other listeners
 				this.HQ(container, {}, local);
@@ -704,14 +825,21 @@
 				this.Fleet(container, {}, local);
 				this.Quests(container, {}, local);
 				
+				// Clear battle node
+				$(".battle .battle_node", container).removeClass("battle_color");
+				$(".battle .battle_node", container).removeClass("resource_color");
+				$(".battle .battle_node", container).removeClass("battle_avoided_color");
+				$(".battle .battle_node", container).removeClass("maelstrom_color");
+				$(".battle .battle_node", container).removeClass("now");
+				$(".battle .battle_node", container).text("");
+				$(".battle .battle_nodenum", container).text("");
+				
 				// Change interface mode
 				$(".normal", container).hide();
 				$(".battle", container).show();
 				
 				// Process PvP Battle
-				var thisPvP = (new KC3Node()).defineAsBattle({
-					pvp_opponents: data.battle.api_ship_ke.splice(0,1),
-				});
+				var thisPvP = (new KC3Node()).defineAsBattle();
 				thisPvP.engage( data.battle );
 				
 				// Show opponent ships faces
@@ -723,6 +851,13 @@
 						$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).hide();
 					}
 				});
+				
+				// If night battle will be asked after this battle
+				if(thisPvP.yasenFlag){
+					$(".battle .battle_yasen img", container).attr("src", "../../../../assets/img/ui/yasen.png");
+				}else{
+					$(".battle .battle_yasen img", container).attr("src", "../../../../assets/img/ui/yasen-x.png");
+				}
 				
 				// Battle conditions
 				$(".battle .battle_cond_text", container).removeClass( "good" );
@@ -775,7 +910,7 @@
 	});
 	
 	function CraftGearStats(container, MasterItem, StatProperty, Code){
-		if(MasterItem["api_"+StatProperty] != 0){
+		if(parseInt(MasterItem["api_"+StatProperty], 10) !== 0){
 			var thisStatBox = $(".factory .equipStat", container).clone().appendTo( $(".equipStats", container) );
 			$("img", thisStatBox).attr("src", "../../../../assets/img/stats/"+Code+".png");
 			$(".equipStatText", thisStatBox).text( MasterItem["api_"+StatProperty] );
@@ -785,9 +920,15 @@
 	function FleetHP(container, ShipBox, hp, rosterId){
 		var hpPercent = hp[0] / hp[1];
 		$(".ship-hp-text", ShipBox).text( hp[0] +" / "+ hp[1] );
-		$(".ship-hp-val", ShipBox).css("width", (100*hpPercent)+"px");
 		
-		if(hpPercent <= 0.25){
+		var maxHpBarWidth = $(".ship-hp-bar", ShipBox).css("width");
+		maxHpBarWidth = Number(maxHpBarWidth.substring(0, maxHpBarWidth.length-2));
+		$(".ship-hp-val", ShipBox).css("width", (maxHpBarWidth*hpPercent)+"px");
+		
+		if( PlayerManager.repairShips.indexOf(rosterId) > -1){
+			$(".ship-img", ShipBox).css("background", "#ACE");
+			$(".ship-hp-val", ShipBox).css("background", "#ACE");
+		}else if(hpPercent <= 0.25){
 			$(".ship-img", ShipBox).css("background", "#FF0000");
 			$(".ship-hp-val", ShipBox).css("background", "#FF0000");
 			if( PlayerManager.repairShips.indexOf(rosterId) == -1 ){

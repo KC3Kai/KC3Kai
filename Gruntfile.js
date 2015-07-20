@@ -2,6 +2,10 @@ module.exports = function(grunt) {
 	
 	grunt.initConfig({
 		jshint: {
+			options: {
+				newcap: false,
+				laxbreak: true,
+			},
 			all: [
 				'src/assets/js/global.js',
 				'src/library/**/*.js',
@@ -22,41 +26,43 @@ module.exports = function(grunt) {
 					'assets/img/**',
 					'assets/js/Chart.min.js',
 					'assets/js/Dexie.min.js',
+					'assets/snd/**',
 					'data/**/*.json',
+					'pages/**/img/**/*',
 				],
 				dest: 'build/release/'
 			}
 		},
 		concat: {
 			global_css: {
-				src: 'src/assets/css/*.css',
-				dest: 'build/globals.css'
+				src: [
+					'src/assets/css/bootstrap.css',
+					'build/tmp/global.css',
+				],
+				dest: 'build/release/assets/css/global.css'
 			},
 			global_js: {
-				src: ['src/assets/js/jquery-2.1.3.min.js', 'build/globals.js'],
+				src: [
+					'src/assets/js/jquery-2.1.3.min.js',
+					'build/tmp/globals.js'
+				],
 				dest: 'build/release/assets/js/globals.js'
 			},
 			library: {
 				files: {
-					'build/lib_actors.js' : ['src/library/actors/*.js'],
-					'build/lib_models.js' : ['src/library/models/*.js'],
-					'build/lib_utils.js' : ['src/library/utils/*.js']
+					'build/tmp/managers.js' : ['src/library/managers/*.js'],
+					'build/tmp/objects.js' : ['src/library/objects/*.js']
 				}
-			},
-			views: {
-				files: {
-					'build/view_dashboard.js' : [
-						'src/library/views/Dashboard.Fleet.js',
-						'src/library/views/Dashboard.Info.js',
-						'src/library/views/Dashboard.Timers.js',
-					]
-				}
-			},
+			}
 		},
 		cssmin: {
 			global_css: {
-				src: 'build/globals.css',
-				dest: 'build/release/assets/css/globals.css',
+				src: 'src/assets/css/global.css',
+				dest: 'build/tmp/global.css',
+			},
+			keys_css : {
+				src: 'src/assets/css/keys.css',
+				dest: 'build/release/assets/css/keys.css'
 			},
 			pages: {
 				expand: true,
@@ -68,21 +74,22 @@ module.exports = function(grunt) {
 		uglify: {
 			global_js: {
 				src: 'src/assets/js/global.js',
-				dest: 'build/globals.js'
+				dest: 'build/tmp/globals.js'
 			},
-			library: {
-				files: {
-					'build/release/library/background.js' : 'src/library/background.js',
-					'build/release/library/cookie.js' : 'src/library/cookie.js',
-					'build/release/library/osapi.js' : 'src/library/osapi.js',
-					'build/release/library/actors.js' : 'build/lib_actors.js',
-					'build/release/library/models.js' : 'build/lib_models.js',
-					'build/release/library/utils.js' : 'build/lib_utils.js',
-				}
+			library1: {
+				expand: true,
+				cwd: 'src/',
+				src: [
+					'library/injections/*.js',
+					'library/modules/*.js',
+					'library/helpers/*.js'
+				],
+				dest: 'build/release/',
 			},
-			views: {
+			library2: {
 				files: {
-					'build/release/assets/js/view.dashboard.js' : 'build/view_dashboard.js',
+					'build/release/library/managers.js' : 'build/tmp/managers.js',
+					'build/release/library/objects.js' : 'build/tmp/objects.js'
 				}
 			},
 			pages: {
@@ -92,22 +99,10 @@ module.exports = function(grunt) {
 				dest: 'build/release/',
 			}
 		},
-		useminPrepare: {
-			html: 'src/pages/popup/popup.html',
-			options: {
-				flow: { steps: { js: [], css: [] }, post: {} }
-			}
-		},
-		usemin: {
-			html: 'src/pages/popup/popup.html',
-			options: {
-				dest: 'build/release'
-			}
-		},
 		htmlmin: {
 			pages: {
 				expand: true,
-				cwd: 'src/',
+				cwd: 'build/tmp/src/',
 				src: ['pages/**/*.html'],
 				dest: 'build/release/',
 				options: {
@@ -118,12 +113,81 @@ module.exports = function(grunt) {
 		},
 		'json-minify': {
 			data: {
-				files: 'build/release/data/*.json'
+				files: 'build/release/data/**/*.json'
+			},
+			manifest: {
+				files: 'build/release/manifest.json'
 			}
 		},
 		jsonlint: {
-			data: {
-				src: 'build/release/data/**/*.json'
+			all: {
+				src: [
+					'build/release/data/**/*.json',
+					'build/release/manifest.json'
+				]
+			}
+		},
+		'string-replace': {
+			allhtml: {
+				files: {
+					'build/tmp/': 'src/pages/**/*.html'
+				},
+				options: {
+					replacements: [
+						{
+							pattern: /<!-- @buildimportjs (.*?) -->/ig,
+							replacement: function (match, p1) {
+								return "<script type=\"text/javascript\" src=\""+p1+"\"></script>";
+							}
+						},
+						{
+							pattern: /<!-- @buildimportcss (.*?) -->/ig,
+							replacement: function (match, p1) {
+								return "<link href=\""+p1+"\" rel=\"stylesheet\" type=\"text/css\">";
+							}
+						},
+						{
+							pattern: /<!-- @nonbuildstart -->([\s\S]*?)<!-- @nonbuildend -->/ig,
+							replacement: function (match, p1) {
+								return "";
+							}
+						}
+					]
+				}
+			},
+			manifest: {
+				files: {
+					'build/release/manifest.json': 'build/release/manifest.json'
+				},
+				options: {
+					replacements: [
+						{
+							pattern: 'KC3改 Development',
+							replacement: 'KanColle Command Center 改'
+						},
+						{
+							pattern: 'KC3改 Development',
+							replacement: 'KC3改'
+						},
+						{
+							pattern: /assets\/js\/jquery\-2\.1\.3\.min\.js/ig,
+							replacement: 'assets/js/globals.js'
+						},
+						{
+							pattern: /library\/objects\/Messengers\.js/ig,
+							replacement: 'library/objects.js'
+						},
+						{
+							pattern: /assets\/img\/logo\/dev\.png/ig,
+							replacement: 'assets/img/logo/19.png'
+						}
+					]
+				}
+			}
+		},
+		removelogging: {
+			'build/release': {
+				src: "build/release/**/*.js"
 			}
 		}
 	});
@@ -137,27 +201,30 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-json-minify');
 	grunt.loadNpmTasks('grunt-jsonlint');
-	grunt.loadNpmTasks('grunt-usemin');
+	grunt.loadNpmTasks('grunt-string-replace');
+	grunt.loadNpmTasks("grunt-remove-logging");
 	
 	grunt.registerTask('default', [
-		// 'useminPrepare',
 		'jshint',
 		'clean:build',
 		'copy:statics',
-		'concat:global_css',
 		'cssmin:global_css',
+		'cssmin:keys_css',
+		'concat:global_css',
 		'uglify:global_js',
 		'concat:global_js',
 		'concat:library',
-		'uglify:library',
-		'concat:views',
-		'uglify:views',
+		'uglify:library1',
+		'uglify:library2',
+		'string-replace:allhtml',
 		'htmlmin:pages',
 		'cssmin:pages',
 		'uglify:pages',
+		'string-replace:manifest',
 		'json-minify:data',
-		'jsonlint:data',
-		// 'usemin'
+		'json-minify:manifest',
+		'jsonlint:all'
+		// 'removelogging'
 	]);
 	
 };

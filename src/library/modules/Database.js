@@ -95,7 +95,7 @@ Uses Dexie.js third-party plugin on the assets directory
 				.where("hq")
 				.equals(this.index)
 				.count(function(NumRecords){
-					if(NumRecords == 0){
+					if(NumRecords === 0){
 						// insert if not yet on db
 						self.con.account.add({
 							hq: self.index,
@@ -223,6 +223,13 @@ Uses Dexie.js third-party plugin on the assets directory
 				});
 		},
 		
+		count_world :function(world, callback){
+			this.con.sortie
+				.where("hq").equals(this.index)
+				.and(function(sortie){ return sortie.world == world; })
+				.count(callback);
+		},
+		
 		get_world :function(world, pageNumber, callback){
 			var itemsPerPage = 10;
 			var self = this;
@@ -255,6 +262,13 @@ Uses Dexie.js third-party plugin on the assets directory
 							callback(sortieIndexed);
 						});
 				});
+		},
+		
+		count_map :function(world, map, callback){
+			this.con.sortie
+				.where("hq").equals(this.index)
+				.and(function(sortie){ return sortie.world == world && sortie.mapnum==map; })
+				.count(callback);
 		},
 		
 		get_map :function(world, map, pageNumber, callback){
@@ -313,7 +327,6 @@ Uses Dexie.js third-party plugin on the assets directory
 		},
 		
 		get_battle : function(mapArea, mapNo, battleNode, enemyId, callback) {
-			
 			var sortieIds = [];
 			var bctr;
 			
@@ -344,6 +357,23 @@ Uses Dexie.js third-party plugin on the assets directory
 							
 							callback2(foundBattle);
 						});
+				});
+		},
+		
+		get_enemy : function(enemyId, callback) {
+			var self = this;
+			this.con.battle
+				.where("enemyId").equals(enemyId)
+				.toArray(function(battleList){
+					if(battleList.length > 0){
+						battleList[0].data.api_ship_ke.splice(0, 1);
+						callback({
+							ids: battleList[0].data.api_ship_ke,
+							formation: battleList[0].data.api_formation[1]
+						});
+					}else{
+						callback(false);
+					}
 				});
 		},
 		
@@ -395,6 +425,10 @@ Uses Dexie.js third-party plugin on the assets directory
 			this.con.develop
 				.where("hq").equals(this.index)
 				.count(callback);
+		},
+		
+		get_sortie_page :function( world, map, page, callback ){
+			
 		}
 		
 	};

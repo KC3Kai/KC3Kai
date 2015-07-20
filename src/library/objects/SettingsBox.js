@@ -12,7 +12,7 @@ To be dynamically used on the settings page
 		$(".category", this.element).text( info.category );
 		$(".title", this.element).text( info.name );
 		this[info.type]( info.options );
-	}
+	};
 	
 	SettingsBox.prototype.check = function( options ){
 		var self = this;
@@ -75,15 +75,20 @@ To be dynamically used on the settings page
 				.data("class", choiceClass )
 				.data("value", options.choices[ctr][0] )
 				.html( options.choices[ctr][1] )
-				.on("click", function(){
-					$("."+$(this).data("class")).removeClass("active");
-					$(this).addClass("active");
-					ConfigManager[ self.config ] = $(this).data("value");
-					ConfigManager.save();
-					$(this).parent().siblings(".note").stop(true, true).show().fadeOut(2000);
-				})
 			);
 		}
+		
+		$("."+choiceClass, this.element).on("click", function(){
+			$("."+$(this).data("class")).removeClass("active");
+			$(this).addClass("active");
+			ConfigManager[ self.config ] = $(this).data("value");
+			ConfigManager.save();
+			$(this).parent().siblings(".note").stop(true, true).show().fadeOut(2000);
+			// Refresh page when a language option is clicked
+			if($(this).hasClass("choices_language")){
+				window.location.reload();
+			}
+		});
 	};
 	
 })();

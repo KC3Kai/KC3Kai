@@ -1,0 +1,182 @@
+/* GLOBAL
+--------------------------*/
+body {
+	background:#eee;
+}
+#wrapper {
+	width:800px;
+	margin:0px auto;
+	background:#fff;
+	padding:10px;
+}
+#factory {
+	display:none;
+}
+
+/* ABOUT
+--------------------------*/
+.about {
+	width:780px;
+	margin:0px 0px 15px 0px;
+}
+.kc3 {
+	width:780px;
+	height:70px;
+	border-radius:8px;
+	margin:0px 0px 3px 0px;
+	padding:3px 5px;
+}
+.kc3 .logo {
+	width:64px;
+	height:64px;
+	float:left;
+	margin:0px 10px 0px 0px;
+}
+.kc3 .title {
+	width:100px;
+	height:64px;
+	float:left;
+	margin:0px 5px 0px 0px;
+}
+.kc3 .title .name {
+	width:100px;
+	height:22px;
+	line-height:22px;
+	font-size:22px;
+	font-weight:bold;
+	margin:15px 0px 3px 0px;
+}
+.kc3 .title .version {
+	width:100px;
+	height:13px;
+	line-height:13px;
+	font-size:13px;
+}
+.kc3 .links {
+	width:420px;
+	height:64px;
+	float:left;
+	margin:0px 10px 0px 0px;
+}
+.kc3 .links .link {
+	margin:20px 5px 0px 0px;
+	padding:3px 5px;
+	float:left;
+	line-height:16px;
+}
+.kc3 .links .link .icon {
+	width:16px;
+	height:16px;
+	float:left;
+	margin:0px 5px 0px 0px;
+}
+.kc3 .links .link .icon img {
+	width:16px;
+	height:16px;
+}
+.kc3 .links .link .text {
+	height:20px;
+	float:left;
+}
+.kc3 .update {
+	width:160px;
+	height:64px;
+	float:left;
+	background:#eee;
+	display:none;
+}
+
+/* DEVELOPERS
+--------------------------*/
+.developers {
+	width:780px;
+}
+.devBox {
+	width:189px;
+	height:58px;
+	background:#def;
+	float:left;
+	margin:3px;
+	padding:4px;
+	border-radius:7px;
+}
+.devBox .devAvatar {
+	width:40px;
+	height:40px;
+	float:left;
+	margin:5px 8px 0px 3px;
+	border-radius:5px;
+	overflow:hidden;
+}
+.devBox .devAvatar img {
+	width:40px;
+	height:40px;
+}
+.devBox .devName {
+	width:130px;
+	float:left;
+	font-size:14px;
+	font-weight:bold;
+	line-height:16px;
+}
+.devBox .devDesc {
+	width:130px;
+	float:left;
+	font-size:11px;
+	line-height:13px;
+	color:#8ac;
+}
+.devBox .devLinks {
+	width:130px;
+	float:left;
+	list-style:none;
+	line-height:20px;
+	margin:0px;
+	padding:0px;
+}
+.devBox .devLinks .devLink {
+	float:left;
+	margin:0px 4px 0px 0px;
+}
+.devBox .devLinks .devLink a {
+	
+}
+.devBox .devLinks .devLink img {
+	width:16px; height:16px;
+}
+/* Help out box */
+.helpOut {
+	width:189px;
+	height:58px;
+	background:#def;
+	float:left;
+	margin:3px;
+	padding:4px;
+	border-radius:7px;
+}
+.helpOut .helpIcon {
+	width:40px;
+	height:40px;
+	float:left;
+	margin:5px 8px 0px 3px;
+	overflow:hidden;
+}
+.helpOut .helpIcon img {
+	width:40px;
+	height:40px;
+}
+.helpOut .helpTitle {
+	width:130px;
+	margin:3px 0px 2px 0px;
+	float:left;
+	font-size:14px;
+	font-weight:bold;
+	line-height:16px;
+}
+.helpOut .helpNote {
+	width:130px;
+	float:left;
+	font-size:11px;
+	line-height:13px;
+	color:#8ac;
+}

@@ -1,0 +1,927 @@
+{
+    "101": {
+        "name": "Formasi Pertama!",
+        "desc": "Miliki 2 Kapal di Armada Utama."
+    },
+    "102": {
+        "name": "Bentuk sebuah Skuadron Perusak!",
+        "desc": "Miliki 4 DD di Armada Utama."
+    },
+    "103": {
+        "name": "Bentuk sebuah Skuadron Torpedo!",
+        "desc": "Miliki CL Sebagai Kapal Pemimpin dan 5 DD di Armada Utama."
+    },
+    "104": {
+        "name": "Bentuk Armada yang terdiri dari 6 Kapal!",
+        "desc": "Miliki 6 Kapal di Armada Utama."
+    },
+    "105": {
+        "name": "Bentuk Skuadron Torpedo dengan dua CL!",
+        "desc": "Miliki 2 CL di Armada Utama."
+    },
+    "106": {
+        "name": "Bentuk Skuadron Penjelajah berat!",
+        "desc": "Miliki 2 CA di Armada Utama."
+    },
+    "107": {
+        "name": "Bentuk Armada Kapal Induk!",
+        "desc": "Miliki CV/CVL Sebagai Kapal Pemimpin dan 3 DD di Armada Utama."
+    },
+    "108": {
+        "name": "Bentuk Kelas Tenryuu!",
+        "desc": "Miliki Tenryuu (\u5929\u9f8d) dan Tatsuta (\u9f8d\u7530) di Armada Utama."
+    },
+    "109": {
+        "name": "Bentuk Kelas Sendai!",
+        "desc": "Miliki Sendai (\u5ddd\u5185), Jintsuu (\u795e\u901a) dan Naka (\u90a3\u73c2) di Armada Utama."
+    },
+    "110": {
+        "name": "Bentuk Kelas Myoukou!",
+        "desc": "Miliki Myoukou (\u5999\u9ad8), Nachi (\u90a3\u667a), Ashigara (\u8db3\u67c4) dan Haguro (\u7fbd\u9ed2) di Armada Utama."
+    },
+    "111": {
+        "name": "Bentuk Kelas Fusou!",
+        "desc": "Miliki Fusou (\u6276\u6851) dan Yamashiro (\u5c71\u57ce) di Armada Utama."
+    },
+    "112": {
+        "name": "Bentuk Kelas Ise!",
+        "desc": "Miliki Ise (\u4f0a\u52e2) dan Hyuuga (\u65e5\u5411) di Armada Utama."
+    },
+    "113": {
+        "name": "Bentuk Armada Utama dengan BB dan CA!",
+        "desc": "Miliki sebuah BB dan 2 CA di Armada Utama."
+    },
+    "114": {
+        "name": "Bentuk Armada Nagumo!",
+        "desc": "Bentuk Armada Utama HANYA dengan Akagi (\u8d64\u57ce), Kaga (\u52a0\u8cc0), Hiryuu (\u98db\u9f8d) dan Souryuu (\u84bc\u9f8d)"
+    },
+    "115": {
+        "name": "Bentuk Armada kedua!",
+        "desc": "Miliki Kapal Pemimpin di Armada kedua."
+    },
+    "116": {
+        "name": "Siapkan sebuah Kapal Induk Pesawat Amfibi",
+        "desc": "Miliki AV di Armada Utama."
+    },
+    "117": {
+        "name": "Bentuk sebuah Kapal Induk di Armada kedua!",
+        "desc": "Miliki CV/CVL dan 3 DD di Armada kedua."
+    },
+    "118": {
+        "name": "Bentuk Kelas Kongou!",
+        "desc": "Miliki Kongou (\u91d1\u525b), Hiei (\u6bd4\u53e1), Haruna (\u699b\u540d) dan Kirishima (\u9727\u5cf6) di Armada Utama."
+    },
+    "119": {
+        "name": "Bentuk Armada Mikawa!",
+        "desc": "Miliki Choukai (\u9ce5\u6d77), Aoba (\u9752\u8449), Kako (\u52a0\u53e4), Furutaka (\u53e4\u9df9), Tenryuu (\u5929\u9f8d) dan Kapal cepat di Armada."
+    },
+    "120": {
+        "name": "Bentuk Kapal Perusak Divisi 6!",
+        "desc": "Bentuk Armada HANYA dengan Akatsuki (\u6681), Hibiki (\u97ff), Inazuma (\u96f7) dan Ikazuchi (\u96fb)."
+    },
+    "121": {
+        "name": "Bentuk Kapal Penjelajah Berat Divisi 4!",
+        "desc": "Miliki Atago (\u611b\u5b95), Takao (\u9ad8\u96c4), Choukai (\u9ce5\u6d77) dan Maya (\u6469\u8036) di Armada Utama."
+    },
+    "122": {
+        "name": "Bentuk Armada Nishimura!",
+        "desc": "Miliki Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce), Mogami (\u6700\u4e0a) dan Shigure (\u6642\u96e8) di Armada Utama."
+    },
+    "123": {
+        "name": "Bentuk Kapal Induk Divisi 5!",
+        "desc": "Miliki Shoukaku (\u7fd4\u9db4), Zuikaku (\u745e\u9db4) dan 2 DD di Armada Utama."
+    },
+    "124": {
+        "name": "Bentuk Armada Mikawa yang baru!",
+        "desc": "Miliki Choukai (\u9ce5\u6d77), Aoba (\u9752\u8449), Kinugasa (\u8863\u7b20), Kako (\u52a0\u53e4), Furutaka (\u53e4\u9df9) dan Tenryuu (\u5929\u9f8d) di Armada Utama."
+    },
+    "125": {
+        "name": "Bentuk Armada Kapal Selam!",
+        "desc": "Miliki 2 SS di Armada Utama."
+    },
+    "126": {
+        "name": "Bentuk Armada Kapal Tempur Aviasi!",
+        "desc": "Miliki 2 BBV dan 2 CAV di Armada Utama."
+    },
+    "127": {
+        "name": "Bentuk Armada Kapal Selam!",
+        "desc": "Miliki 3 SS di Armada Utama."
+    },
+    "128": {
+        "name": "Bentuk Kapal Penjelajah Divisi 6!",
+        "desc": "Miliki Furutaka (\u53e4\u9df9), Kako(\u52a0\u53e4), Aoba (\u9752\u8449) dan Kinugasa (\u8863\u7b20) di Armada Utama."
+    },
+    "129": {
+        "name": "Bentuk Armada ke 5!",
+        "desc": "Miliki Nachi (\u90a3\u667a), Ashigara (\u8db3\u67c4), Tama (\u591a\u6469), dan Kiso (\u6728\u66fe) di Armada Utama."
+    },
+    "130": {
+        "name": "Bentuk Skuadron Torpedo ke 1!",
+        "desc": "Miliki Abukuma (\u963f\u6b66\u9688), Akebono (\u66d9), Ushio (\u6f6e), Kasumi (\u971e) dan Shiranui (\u4e0d\u77e5\u706b) di Armada Utama."
+    },
+    "131": {
+        "name": "Bentuk Kapal Perusak Divisi 8!",
+        "desc": "Miliki Asashio (\u671d\u6f6e), Michishio (\u6e80\u6f6e), Ooshio (\u5927\u6f6e) dan Arashio (\u8352\u6f6e) di Armada."
+    },
+    "132": {
+        "name": "Bentuk Kapal Perusak Divisi 18!",
+        "desc": "Bentuk Armada Utama HANYA dengan Kasumi (\u971e), Arare (\u9730), Kagerou (\u967d\u708e) dan Shiranui (\u4e0d\u77e5\u706b) di Armada."
+    },
+    "133": {
+        "name": "Bentuk Kapal Perusak Divisi 30 (Gen-1)!",
+        "desc": "Bentuk Armada Utama HANYA dengan Mutsuki (\u7766\u6708), Kisaragi (\u5982\u6708), Yayoi (\u5f25\u751f) dan Mochizuki (\u671b\u6708) di Armada."
+    },
+    "134": {
+        "name": "Persiapan Cinta! (Bagian 3)",
+        "desc": "Persiapkan Calon Waifu \u2665 (Lv.90~99) di Armada Utama!"
+    },
+    "135": {
+        "name": "Perjalanan Baru!",
+        "desc": "Persiapkan Armada Berisikan 6 Kapal Dengan Waifu-mu \u2665 (Cie yang Baru Nikah XD) Lv.100 atau Lebih Sebagai Kapal Pemimpin!"
+    },
+    "136": {
+        "name": "Bentuk Kapal Perusak Divisi 30 (Gen.2)",
+        "desc": "Bentuk Armada Utama HANYA dengan Mutsuki (\u7766\u6708), Yayoi (\u5f25\u751f), Uzuki (\u536f\u6708) dan Mochizuki (\u671b\u6708)."
+    },
+    "137": {
+        "name": "Bentuk Armada ke 5",
+        "desc": "Miliki Myoukou (\u5999\u9ad8), Nachi (\u90a3\u667a) dan Haguro (\u7fbd\u9ed2) di Armada Utama."
+    },
+    "138": {
+        "name": "Bentuk Kapal Induk Divisi kedua yang baru",
+        "desc": "Miliki Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c, Sebagai Kapal Pemimpin), Souryuu (\u84bc\u9f8d) dan 2 DD di Armada."
+    },
+    "139": {
+        "name": "Bentuk Armada Kapal Selam ke 6",
+        "desc": "Miliki Pengasuh Kapal Selam(AS) dan Minimal 4 Kapal Selam(SS) di Armada Utama."
+    },
+    "140": {
+        "name": "Coba RADAR baru!",
+        "desc": "Miliki Myoukou Kai Ni Sebagai Kapal Pemimpin Armada."
+    },
+    "141": {
+        "name": "Masukkan Kapal Induk Divisi Ke-2 yang Diperkuat",
+        "desc": "Miliki Souryuu Kai Ni (\u84bc\u9f8d\u6539\u4e8c) Sebagai Kapal Pemimpin dan Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c) dan 2 DD di Armada."
+    },
+    "142": {
+        "name": "Bentuk Kapal Tempur Elit Divisi ke-3",
+        "desc": "Miliki keempat Kelas Kongou Kai Ni di Armada."
+    },
+    "143": {
+        "name": "Bentuk Kapal Induk yang baru",
+        "desc": "Miliki Unryuu (\u96f2\u9f8d) Sebagai Kapal Pemimpin."
+    },
+    "144": {
+        "name": "Bentuk Armada Kapal Tempur utama: Skuadron ke2",
+        "desc": "Miliki 2 Kapal Tempur Kelas Nagato dan 2 Kelas Fusou di Armada Utama."
+    },
+    "145": {
+        "name": "Bentuk Kapal Tempur penyerang utama",
+        "desc": "Miliki 3 Kapal Tempur dari Kelas Nagato,Fusou,Ise atau Yamato and Penjelajah Ringan(CL) di Armada."
+    },
+    "146": {
+        "name": "Siapkan Pengembangan Arsenal",
+        "desc": "Miliki Akashi (\u660e\u77f3) Sebagai Kapal Pemimpin di Armada Utama."
+    },
+    "147": {
+        "name": "Bentuk Armada Nishimura",
+        "desc": "Miliki Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce), Mogami (\u6700\u4e0a), Shigure (\u6642\u96e8) dan Michishio (\u6e80\u6f6e) di Armada Utama."
+    },
+    "148": {
+        "name": "Bentuk Skuadron penyerang balik",
+        "desc": "Miliki Kasumi (\u971e) Sebagai Kapal Pemimpin, Ashigara (\u8db3\u67c4), 1 CL dan 3 DD di Armada Utama."
+    },
+    "149": {
+        "name": "Bentuk Kapal Perusak Divisi ke-11",
+        "desc": "Bentuk Armada Utama HANYA dengan 4 Kapal Perusak Khusus: Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea) dan Murakumo(\u53e2\u96f2)."
+    },
+    "150": {
+        "name": "Bentuk Kapal Perusak  Divisi ke-21",
+        "desc": "Bentuk Armada Utama HANYA dengan Hatsuharu (\u521d\u6625), Nenohi (\u5b50\u65e5), Wakaba (\u82e5\u8449) dan Hatsushimo (\u521d\u971c)."
+    },
+    "151": {
+        "name": "Bentuk  Kapal Perusak  Divisi ke-22",
+        "desc": "Bentuk Armada Utama HANYA dengan Satsuki (\u7690\u6708), Fumizuki (\u6587\u6708), Nagatsuki (\u9577\u6708) dan 1 DD."
+    },
+    "152": {
+        "name": "Bentuk Armada Mikawa edisi terbaru",
+        "desc": "Bentuk Armada Utama dengan Choukai Kai Ni Sebagai Kapal Pemimpin dan pilihlah 5 dari Aoba, Kinugasa, Kako, Furutaka, Tenryuu, Yuubari."
+    },
+    "153": {
+        "name": "Bentuk kembali Skuadron ke-18!",
+        "desc": "Miliki Tenryuu, Tatsuta dan minimal 2 Kapal lain di Armada"
+    },
+	"154": {
+        "name": "Bentuk Armada penyerang permukaan!",
+        "desc": "Miliki Hiei, Kirishima, Nagara, Akatsuki, Ikazuchi, Inazuma di Armada"
+    },
+	"155": {
+        "name": "Bentuk Kapal Perusak Divisi ke-6 yang baru!",
+        "desc": "Miliki Akatsuki Kai Ni Sebagai Kapal Pemimpin dengan Hibiki/Bep, Ikazuchi, Inazuma di Armada"
+    },
+	"156": {
+        "name": "Skuadron Torpedo Pertama, Siapkan penyerbuan ke Lautan Utara",
+        "desc": "Miliki Abukuma Sebagai Kapal Pemimpin dengan Hibiki/Вер, Hatsushimo, Wakaba, Samidare dan Shimakaze di Armada Utama"
+    },
+	"157": {
+        "name": "Skuadron Torpedo Pertama, Siapkan penyerbuan lain ke Lautan utara",
+        "desc": "Miliki Abukuma Kai Ni Sebagai Kapal Pemimpin dengan Hibiki/Вер, Yuugumo, Naganami, Akigumo dan Shimakaze di Armada Utama"
+    },
+	
+	
+	
+	
+    "202": {
+        "name": "Sorti Pertama!",
+        "desc": "Sorti dengan Armada Utama."
+    },
+    "203": {
+        "name": "Lindungi Lautan Chinju-Fu!",
+        "desc": "Sorti ke World 1-1 dan selesaikan."
+    },
+    "204": {
+        "name": "Sorti menuju pantai Pulau Nansei!",
+        "desc": "Sorti ke World 1-2 dan selesaikan."
+    },
+    "205": {
+        "name": "Hadang barisan depan Armada musuh yang datang!",
+        "desc": "Sorti ke World 1-2 setelah mengalahkan Bos dan selesaikan."
+    },
+    "206": {
+        "name": "Sorti Skuadron Torpedo!",
+        "desc": "Sorti dengan CL Sebagai Kapal Pemimpin dan 3 DD Sebagai Pengawal."
+    },
+    "207": {
+        "name": "Sorti Penjelajah Berat!",
+        "desc": "Sorti dengan CA Sebagai Kapal Pemimpin."
+    },
+    "208": {
+        "name": "Sorti Kapal Tempur!",
+        "desc": "Sorti dengan BB Sebagai Kapal Pemimpin. BBV Tidak Dihitung."
+    },
+    "209": {
+        "name": "Sorti Kapal Induk penyerang!",
+        "desc": "Sorti dengan CV(L) Sebagai Kapal Pemimpin dan 5 DD/CL/AV Sebagai Pengawal."
+    },
+    "215": {
+        "name": "Sorti Armada kedua!",
+        "desc": "Sorti Armada Kedua ke Medan Pertempuran."
+    },
+    "217": {
+        "name": "Tenggelamkan Kapal Induk musuh!",
+        "desc": "Tenggelamkan Kapal Induk Musuh."
+    },
+    "219": {
+        "name": "Sorti Armada Mikawa!",
+        "desc": "Sorti dengan Choukai, Aoba, Kako, Furutaka, Tenryuu dan Kapal dengan Kecepatan cepat lainnya."
+    },
+    "222": {
+        "name": "Sorti Kapal Perusak  Divisi ke-6!",
+        "desc": "Sorti HANYA dengan Akatsuki, Hibiki, Inazuma, and Ikazuchi."
+    },
+    "223": {
+        "name": "Sorti Kapal Penjelajah Divisi ke-4!",
+        "desc": "Sorti dengan Atago, Takao, Choukai, Maya dan 2 Kapal lainnya. Dapatkan Kemenangan pada Bos Node World 2-2."
+    },
+    "224": {
+        "name": "Sorti Armada Nishimura!",
+        "desc": "Sorti dengan Fusou, Yamashiro, Mogami, Shigure dan 2 Kapal lainnya. Dapatkan Kemenangan pada Bos Node World 2-3."
+    },
+    "225": {
+        "name": "Sorti Kapal Induk Divisi ke-5!",
+        "desc": "Sorti dengan Shoukaku, Zuikaku dan 4 Kapal lainnya. Dapatkan Kemenangan pada Bos Node World 3-1."
+    },
+    "227": {
+        "name": "Sorti Armada Mikawa yang baru!",
+        "desc": "Sorti dengan Choukai, Aoba, Kinugasa, Kako, Furutaka dan Tenryuu. Dapatkan Kemenangan pada Bos Node World 2-3."
+    },
+    "231": {
+        "name": "Sorti Armada Kapal Selam!",
+        "desc": "Sorti dengan 2 SS and 4 Kapal lainnya. Dapatkan Kemenangan pada Bos Node World 2-3."
+    },
+    "232": {
+        "name": "Sorti Armada penyerang penerbangan laut!",
+        "desc": "Sorti dengan 2 BBV, 2 CAV dan 2 Kapal apapun. Dapatkan Kemenangan pada Bos Node World 4-2."
+    },
+    "233": {
+        "name": "Sorti Kapal Penjelajah Divisi ke-6!",
+        "desc": "Sorti dengan Furutaka, Kako, Kinugasa, Aoba dan 2 Kapal apapun. Dapatkan S-Rank pada Bos Node World 2-3."
+    },
+    "239": {
+        "name": "Sorti Kapal Perusak  Divisi ke-8!",
+        "desc": "Sorti dengan Asashio, Michishio, Ooshio, Arashio dan 2 Kapal apapun. Dapatkan Kemenangan pada Bos Node World 2-3."
+    },
+    "240": {
+        "name": "Sorti Kapal Perusak  Divisi ke-18!",
+        "desc": "Sorti dengan Kasumi, Arare, Kagerou, Shiranui dan 2 Kapal apapun. Dapatkan Kemenangan pada Bos Node World 3-1."
+    },
+    "244": {
+        "name": "Sorti Kapal Perusak  Divisi ke-30 (Gen-1)",
+        "desc": "Sorti yang terdiri dari Mutsuki (\u7766\u6708), Kisaragi (\u5982\u6708), Yayoi (\u5f25\u751f), Mochizuki (\u671b\u6708) dan 2 Kapal DD apapun ke world 3-2 dan Lawan Bossnya. Dibutuhkan C-Rank keatas."
+    },
+    "245": {
+        "name": "Persiapan Cinta! (Akhir)",
+        "desc": "Sorti dengan Waifu \u2665 (Lv.90~99) sebagai Kapal Pemimpin ke 2-3. Dapatkan S-Rank pada Bos Node."
+    },
+    "246": {
+        "name": "Misi Pertama Bersama Waifu \u2665 !",
+        "desc": "Sorti ke 4-3 dengan Waifu \u2665 Lv.100 atau lebih Sebagai Kapal Pemimpin (Cie yang baru nikah). Dapatkan S-Rank pada Bos Node."
+    },
+    "247": {
+        "name": "Sorti Armada Kapal Tempur Aviasi!",
+        "desc": "Miliki 2 BBV di Armada Utama . Dapatkan Kemenangan pada Bos Node World 4-4."
+    },
+    "248": {
+        "name": "Patroli Anti Kapal Selam dengan Kapal Perusak Divisi ke-30",
+        "desc": "Sorti Mutsuki, Yayoi, Uzuki dan Mochizuki ke World 1-5, Dapatkan setidaknya C-Rank pada Bos Node."
+    },
+    "250": {
+        "name": "Sorti Kapal Induk Divisi ke2",
+        "desc": "Sorti Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c) Sebagai Kapal Pemimpin, Souryuu (\u84bc\u9f8d) dan 2 DD ke World 5-2. Kau bisa menambahkan 2 Kapal lain. Dapatkan S-Rank pada Bos Node."
+    },
+    "251": {
+        "name": "Sorti Kapal Induk Elit Divisi ke2",
+        "desc": "Sorti Souryuu Kai Ni (\u84bc\u9f8d\u6539\u4e8c) Sebagai Kapal Pemimpin, Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c) dan 2 DD ke World 4-3. Kau bisa tambahkan 2 Kapal lain. Dapatkan S-Rank pada Bos Node."
+    },
+    "252": {
+        "name": "Sorti dengan Armada yang Dimpimpin Haruna",
+        "desc": "Sorti dengan Haruna Kai Ni (\u699b\u540d\u6539\u4e8c) Sebagai Kapal Pemimpin dan 5 Kapal apapun ke World 5-1. Dapatkan S-Rank pada Bos Node."
+    },
+    "253": {
+        "name": "Sorti 601 Air Group",
+        "desc": "Sorti dengan Unryuu Kai (\u96f2\u9f8d\u6539) Sebagai Kapal Pemimpin ke World 5-2. Dapatkan S-Rank pada Bos Node."
+    },
+    "254": {
+        "name": "Sorti Skuadron Kapal Induk Kecil",
+        "desc": "Sorti Armada dengan 1-2 CVL, 1 CL dan 3-4 DD ke World 2-1. Dapatkan S-Rank pada Bos Node."
+    },
+    "255": {
+        "name": "Sorti Skuadron Torpedo ke Pulau Bashi",
+        "desc": "Sorti Armada dengan 1-2 CL (Salah satunya Sebagai Kapal Pemimpin) dan 4-5 DD ke World 2-2. Dapatkan Kemenangan pada Bos Node dan Tenggelamkan Kapal Pemimpin musuh."
+    },
+    
+   
+    "258": {
+        "name": "Sorti Skuadron ke2",
+        "desc": "Sorti Nagato (\u9577\u9580), Mutsu (\u9678\u5965), Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce) dan 2 Kapal apapun ke World 4-2. Dapatkan 2 S-Rank saat di Bos Node."
+    },
+   
+    "260": {
+        "name": "Sorti Skuadron Kapal Tempur ke Perairan Utara",
+        "desc": "Sorti 2 BB , 1 CVL dan 3 Kapal apapun ke World 3-5 . Dapatkan S-Rank pada Bos Node."
+    },
+    
+    "262": {
+        "name": "Sorti Armada Nishimura ke Perairan Selatan",
+        "desc": "Sorti Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce), Mogami (\u6700\u4e0a), Shigure (\u6642\u96e8) dan Michishio (\u6e80\u6f6e), 1 Kapal apapun ke World 5-1. Dapatkan S-Rank pada Bos Node."
+    },
+    "263": {
+        "name": "Sorti Skuadron ke-6 ke Perairan Barat Daya",
+        "desc": "Sorti Furutaka (\u53e4\u9df9), Kako (\u52a0\u53e4), Aoba (\u9752\u8449), Kinugasa (\u8863\u7b20) dan 2 Kapal apapun ke World 2-5 . Dapatkan S-Rank pada Bos Node."
+    },
+    "267": {
+        "name": "Sorti Kapal Perusak  Divisi ke-11",
+        "desc": "Sorti Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea), Murakumo(\u53e2\u96f2) dan 2 Kapal apapun ke World 2-3. Dapatkan Kemenangan pada Bos Node."
+    },
+    "268": {
+        "name": "Patroli Anti Kapal Selam Kapal Perusak  Divisi ke-11",
+        "desc": "Sorti Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea) dan Murakumo(\u53e2\u96f2) ke World 1-5. Dapatkan ranking C keatas pada Bos Node."
+    },
+    "269": {
+        "name": "Sorti Kapal Perusak  Divisi ke-21",
+        "desc": "Sorti Hatsuharu (\u521d\u6625), Nenohi (\u5b50\u65e5), Wakaba (\u82e5\u8449) dan Hatsushimo (\u521d\u971c) dan 2 Kapal apapun ke World 3-1. Dapatkan S-Rank pada Bos Node."
+    },
+    "270": {
+        "name": "Sorti Kapal Perusak  Divisi ke-22",
+        "desc": "Sorti Satsuki (\u7690\u6708), Fumizuki (\u6587\u6708), Nagatsuki (\u9577\u6708), 1 lagi DD dan 2 Kapal apapun ke World 1-4. Dapatkan S-Rank pada Bos Node."
+    },
+    "271": {
+        "name": "Sorti Skuadron Nachi",
+        "desc": "Sorti Nachi (\u90a3\u667a) Sebagai Kapal Pemimpin, Hatsushimo (\u521d\u971c), Kasumi (\u971e), Ushio (\u6f6e), Akebono (\u66d9) dan 1 Kapal apapun ke world 2-2. Dapatkan S-Rank pada Bos Node."
+    },
+    "272": {
+        "name": "Sorti Kapal penjelah berat anti pesawat yang telah di remodel",
+        "desc": "Sorti Maya (\u6469\u8036) Kai atau Kai Ni, 1 CL, 2 DD dan 2 Kapal apapun ke World 2-3. Dapatkan S-Rank pada Bos Node."
+    },
+    "273": {
+        "name": "Sorti Armada Mikawa ke Pulau Solomon",
+        "desc": "Sorti Choukai Kai Ni Sebagai Kapal Pemimpin dan 5 dari Aoba, Kinugasa, Kako, Furutaka, Tenryuu, Yuubari ke World 5-1. Dapatkan S-Rank pada Bos Node."
+    },
+    "274": {
+        "name": "Patroli Anti Kapal Selam Kapal Perusak Divisi ke-6",
+        "desc": "Sorti Akatsuki (\u6681), Hibiki (\u97ff atau \u0412\u0435\u0440\u043d\u044b\u0439), Inazuma (\u96f7) dan Ikazuchi (\u96fb) ke World 1-5. Setidaknya dapatkan C-Rank pada the Bos Node."
+    },
+    "275": {
+        "name": "Sorti Skuadron ke-18",
+        "desc": "Tenryuu, Tatsuta, dan setidaknya 2 Kapal lain ke World 2-3. Dapatkan S-Rank pada Bos Node."
+    },
+	"276": {
+        "name": "Sorti Armada penyerang permukaan!",
+        "desc": "Sorti Hiei, Kirishima, Nagara, Akatsuki, Ikazuchi, Inazuma ke 5-1 dan Selesaikan Map dengan S-Rank."
+    },
+	"277": {
+        "name": "Misi anti Kapal Selam Kapal Perusak Divisi ke-6!",
+        "desc": "Sorti Akatsuki Kai Ni , Hibiki/Verniy, Ikazuchi, Inazuma ke 1-5 dan Selesaikan Map setidaknya A-Rank."
+    },
+	"278": {
+        "name": "Penyerbuan Skuadron Torpedo Pertama ke Operasi 'KE'",
+        "desc": "Sorti Abukuma Sebagai Kapal Pemimpin dengan Hibiki/Вер, Hatsushimo, Wakaba, Samidare dan Shimakaze ke World 3-2. Dapatkan B-Rank+ pada Bos Node."
+    },
+	"279": {
+        "name": "Penyerbuan Skuadron Torpedo Pertama ke Operasi 'KE' Sekali Lagi!",
+        "desc": "Sorti Abukuma Kai Ni Sebagai Kapal Pemimpin dengan Hibiki/Вер, Yuugumo, Naganami, Akigumo dan Shimakaze ke World 3-2. Dapatkan B-Rank+ pada Bos Node."
+    },
+	
+	
+	
+	
+	
+	"201": {
+        "code": "Bd1",
+        "name": "Sorti Harian 1",
+        "desc": "Kalahkan Armada Abyssal",
+		"unlock": [ 216, 211, 212 ],
+		"tracking": [ [0,1] ]
+    },
+	"216": {
+		"code": "Bd2",
+		"name": "Sorti Harian 2",
+		"desc": "Kalahkan Kapal Pemimpin Armada Abyssal",
+		"unlock": [ 210, 218, 214, 213 ],
+		"tracking": [ [0,1] ]
+	},
+	"210": {
+		"code": "Bd3",
+		"name": "Sorti Harian 3",
+		"desc": "Kalahkan 10 Armada Abyssal (B rank+)",
+		"tracking": [ [0,10] ]
+	},
+	"211": {
+		"code": "Bd4",
+		"name": "Sorti Harian 4",
+		"desc": "Tenggelamkan 3 Abyssal CV(L)",
+		"tracking": [ [0,3] ]
+	},
+	"218": {
+		"code": "Bd5",
+		"name": "Sorti Harian 5",
+		"desc": "Tenggelamkan 3 Kapal Transport Abyssal",
+		"unlock": [ 226, 220 ],
+		"tracking": [ [0,3] ]
+	},
+	"212": {
+		"code": "Bd6",
+		"name": "Sorti Harian 6",
+		"desc": "Tenggelamkan 5 Kapal Transport Abyssal",
+		"tracking": [ [0,5] ]
+	},
+	"226": {
+		"code": "Bd7",
+		"name": "Sorti Harian 7",
+		"desc": "Kalahkan 5 Bos pada node bertanduk di World 2",
+		"unlock": [ 230 ],
+		"tracking": [ [0,5] ]
+	},
+	"230": {
+		"code": "Bd8",
+        "name": "Sorti Harian 8",
+        "desc": "Tenggelamkan 6 Kapal Selam Abyssal",
+		"tracking": [ [0,6] ]
+    },
+	
+	
+	
+	
+	
+	"214": {
+		"code": "Bw1",
+		"name": "Sorti Mingguan 1",
+		"desc": "Sorti 36x, Lawan 24 Bos, Menang vs 12 Bos, 6 S-Rank",
+		"unlock": [ 221 ],
+		"tracking": [ [0,36], [0,24], [0,12], [0,6] ]
+	},
+	"220": {
+		"code": "Bw2",
+        "name": "Sorti Mingguan 2",
+        "desc": "Tenggelamkan 20 Abyssal CV(L)",
+		"unlock": [ 228 ],
+		"tracking": [ [0,20] ]
+    },
+	"213": {
+		"code": "Bw3",
+		"name": "Sorti Mingguan 3",
+		"desc": "Tenggelamkan 20 Kapal Transport Abyssal",
+		"tracking": [ [0,20] ]
+	},
+	"221": {
+		"code": "Bw4",
+        "name": "Sorti Mingguan 4",
+        "desc": "Tenggelamkan 50 Kapal Transport Abyssal",
+		"unlock": [ 261, 257, 264 ],
+		"tracking": [ [0,50] ]
+    },
+	"228": {
+		"code": "Bw5",
+        "name": "Sorti Mingguan 5",
+        "desc": "Tenggelamkan 15 Kapal Selam Abyssal",
+		"unlock": [ 229, 241, 613 ],
+		"tracking": [ [0,15] ]
+    },
+	"229": {
+		"code": "Bw6",
+        "name": "Sorti Mingguan 6",
+        "desc": "Kalahkan 12 Bos pada node bertanduk di World 4",
+		"unlock": [ 242 ],
+		"tracking": [ [0,12] ]
+    },
+	"241": {
+		"code": "Bw7",
+        "name": "Sorti Mingguan 7",
+        "desc": "Kalahkan 5 Bos di Worlds [W3-3], [W3-4] atau [W3-5]",
+		"tracking": [ [0,5] ]
+    },
+    "242": {
+		"code": "Bw8",
+        "name": "Sorti Mingguan 8",
+        "desc": "Kalahkan Bos di World [W4-4]",
+		"unlock": [ 243 ],
+		"tracking": [ [0,1] ]
+    },
+    "243": {
+		"code": "Bw9",
+        "name": "Sorti Mingguan 9",
+        "desc": "Sorti ke [W5-2] . Dapatkan 2 S-Rank pada Bos Node",
+		"tracking": [ [0,2] ]
+    },
+	"261": {
+		"code": "Bw10",
+        "name": "Sorti Mingguan 10",
+        "desc": "Sorti ke [W1-5] . Dapatkan 3 A-Rank+ pada Bos Node",
+		"tracking": [ [0,3] ]
+    },
+	
+	
+	
+	
+	
+	"249": {
+		"code": "Bm1",
+        "name": "Sorti Skuadron ke-5",
+        "desc": "Sorti Myoukou, Nachi, Haguro, dan 3 Kapal lain ke [W2-5]. Dapatkan S-Rank pada Bos Node",
+		"unlock": [ 265 ]
+    },
+	"256": {
+		"code": "Bm2",
+        "name": "Sorti Kapal Selam ke World 6-1",
+        "desc": "Sorti ke [W6-1] . Dapatkan 3 kali S-Rank pada Bos Node",
+		"tracking": [ [0,3] ]
+    },
+	"257": {
+		"code": "Bm3",
+        "name": "Sorti Skuadron Torpedo",
+        "desc": "1~3 CL (CL Kapal Pemimpin) dan 3~5 DD ke [W1-4]. Dapatkan S-Rank pada Bos Node"
+    },
+	"259": {
+		"code": "Bm4",
+        "name": "Sorti Skuadron Kapal Tempur",
+        "desc": "Sorti 3 BB(V) + 1 CL + 2 Kapal lain ke [W5-1] . Dapatkan S-Rank pada Bos Node"
+    },
+	"265": {
+		"code": "Bm5",
+        "name": "Tugas pengawalan bulanan",
+        "desc": "Sorti ke [W1-5] . Dapatkan 10 kali A-Rank+",
+		"tracking": [ [0,10] ]
+    },
+	"264": {
+		"code": "Bm6",
+        "name": "Sorti Kapal Induk ke Barat",
+        "desc": "2 CV + 2 DD + 2 Kapal lain [W4-2]. Dapatkan S-Rank pada Bos Node",
+		"unlock": [ 266 ]
+    },
+	"266": {
+		"code": "Bm7",
+        "name": "Sorti Skuadron Penyerang Balik",
+        "desc": "4 DD (DD Kapal Pemimpin) + 1 CA (bukan CAV) + 1 CL ke [W2-5] . Dapatkan S-Rank pada Bos Node"
+    },
+	
+	
+	
+	
+	
+    "301": {
+		"code": "C1",
+        "name": "Latihan Pertama!",
+        "desc": "Tantang Armada lain pada Mode Latihan"
+    },
+	 "303": {
+		"code": "C2",
+        "name": "Latihan Harian 1",
+        "desc": "Tantang 3 Armada lain pada Mode Latihan",
+		"unlock": [ 304, 302 ],
+		"tracking": [ [0,3] ]
+    },
+	"304": {
+		"code": "C3",
+        "name": "Latihan Harian 2",
+        "desc": "Dapatkan 5 Kemenangan pada Mode Latihan pada Hari yang sama",
+		"tracking": [ [0,5] ]
+    },
+    "302": {
+		"code": "C4",
+        "name": "Latihan Mingguan",
+        "desc": "(Mingguan) Dapatkan 20 kemenagan pada Mode Latihan",
+		"tracking": [ [0,20] ]
+    },
+    "307": {
+		"code": "C5",
+        "name": "Tingkatkan efisiensi Armada",
+        "desc": "Dapatkan 3 Kemenangan di Mode Latihan pada Hari yang sama"
+    },
+    "308": {
+		"code": "C6",
+        "name": "Sekali lagi, Tingkatkan efisiensi Armada",
+        "desc": "Dapatkan 4 Kemenangan pada Mode Latihan pada Hari yang sama"
+    },
+	"309": {
+		"code": "C7",
+        "name": "Upaya Meningkatkan Level Latihan Untuk Menanggulangi Operasi 'KE'",
+        "desc": "Dapatkan 4 Kemenangan pada Mode Latihan pada Hari yang sama"
+    },
+	
+	
+	
+	
+	
+    "401": {
+		"code": "D1",
+        "name": "Ekspedisi Pertama",
+        "desc": "Lakukan sebuah Ekspedisi"
+    },
+    "402": {
+		"code": "D2",
+        "name": "Ekspedisi Harian 1",
+        "desc": "Lakukan 3 Ekspedisi dengan Sukses",
+		"unlock": [ 403 ],
+		"tracking": [ [0,3] ]
+    },
+    "403": {
+		"code": "D3",
+        "name": "Ekspedisi Harian 2",
+        "desc": "Lakukan 10 Ekspedisi dengan Sukses",
+		"tracking": [ [0,10] ]
+    },
+    "404": {
+		"code": "D4",
+        "name": "Ekspedisi Mingguan",
+        "desc": "(Mingguan) Lakukan 30 Ekspedisi dengan Sukses",
+		"tracking": [ [0,30] ]
+    },
+    "405": {
+		"code": "D5",
+        "name": "Operasi Kapal Selam Pertama kali",
+        "desc": "Selesaikan Ekspedisi 30"
+    },
+    "406": {
+		"code": "D6",
+        "name": "Operasi Kapal Selam kedua",
+        "desc": "Selesaikan lagi Ekspedisi 30"
+    },
+    "408": {
+		"code": "D7",
+        "name": "Kelanjutan dari Operasi Kapal Selam",
+        "desc": "Selesaikan Ekspedisi 30 dua kali lagi"
+    },
+    "409": {
+		"code": "D8",
+        "name": "Pertemuan Strategi dengan Menggunakan Kapal Selam di Seberang Lautan!",
+        "desc": "Selesaikan Ekspedisi 31"
+    },
+    "410": {
+		"code": "D9",
+        "name": "Ekspedisi Mingguan 2",
+        "desc": "(Mingguan) Selesaikan Ekspedisi 37 atau 38",
+		"unlock": [ 411 ],
+		"tracking": [ [0,1] ]
+    },
+	"412": {
+		"code": "D10",
+        "name": "Kuatkan Operasi BBV",
+        "desc": "Selesaikan Ekspedisi 23"
+    },
+    "411": {
+		"code": "D11",
+        "name": "Ekspedisi Mingguan 3",
+        "desc": "(Mingguan) Selesaikan Ekspedisi 37 atau 38 sebanyak 7 kali",
+		"tracking": [ [0,7] ]
+    },
+    "413": {
+		"code": "D12",
+        "name": "Kuatkan Operasi BBV (Lanjutan.)",
+        "desc": "Selesaikan Ekspedisi 23 Empat kali lagi"
+    },
+    "414": {
+		"code": "D13",
+        "name": "Operasi Kapal Selam Lautan Biru",
+        "desc": "Selesaikan Ekspedisi 39"
+    },
+    "415": {
+		"code": "D14",
+        "name": "Operasi Kapal Selam Lautan Biru Diperpanjang",
+        "desc": "Selesaikan Ekspedisi 39 Dua kali lagi"
+    },
+    "416": {
+		"code": "D15",
+        "name": "Latihan pertahanan udara",
+        "desc": "Selesaikan Ekspedisi 6 Tiga kali"
+    },
+    "417": {
+		"code": "D16",
+        "name": "Sorti Kapal Induk Pengumpan",
+        "desc": "Selesaikan Ekspedisi 15"
+    },
+    "418": {
+		"code": "D17",
+        "name": "Persiapan Upacara Angkatan Laut",
+        "desc": "Selesaikan Ekspedisi 7 dua kali"
+    },
+    "419": {
+		"code": "D18",
+        "name": "Upacara Angkatan laut",
+        "desc": "Selesaikan Ekspedisi 8"
+    },
+	
+	
+	
+	
+	
+    "501": {
+		"code": "E1",
+        "name": "Isi Ulang Pertama",
+        "desc": "Isi Ulang Kapal"
+    },
+    "502": {
+		"code": "E2",
+        "name": "Docking Pertama",
+        "desc": "Perbaiki Kapal"
+    },
+    "503": {
+		"code": "E3",
+        "name": "Perbaikan Harian",
+        "desc": "Perbaiki 5 Kapal",
+		"unlock": [ 504 ],
+		"tracking": [ [0,5] ]
+    },
+    "504": {
+		"code": "E4",
+        "name": "Isi Ulang Harian",
+        "desc": "Isi Ulang Kapal 15 kali",
+		"tracking": [ [0,15] ]
+    },
+	
+	
+	
+	
+	
+	"605": {
+		"code": "F1",
+        "name": "Perkembangan Harian 1",
+        "desc": "Buat 1 Persenjataan (Gagal tak masalah)",
+		"unlock": [ 606 ],
+		"tracking": [ [0,1] ]
+    },
+	"606": {
+		"code": "F2",
+        "name": "Konstruksi Harian 1",
+        "desc": "Buat sebuah Kapal",
+		"unlock": [ 607 ],
+		"tracking": [ [0,1] ]
+    },
+	"607": {
+		"code": "F3",
+        "name": "Pengembangan Harian 2",
+        "desc": "Buat 3 Persenjataan (Gagal tak masalah)",
+		"unlock": [ 608 ],
+		"tracking": [ [0,3] ]
+    },
+	 "608": {
+		"code": "F4",
+        "name": "Konstruksi Harian 2",
+        "desc": "Buat 3 Kapal",
+		"unlock": [ 609, 619 ],
+		"tracking": [ [0,3] ]
+    },
+	 "609": {
+		"code": "F5",
+        "name": "Pembongkaran Harian",
+        "desc": "Hancurkan 2 Kapal",
+		"tracking": [ [0,2] ]
+    },
+    "601": {
+		"code": "F6",
+        "name": "Konstruksi Pertama",
+        "desc": "Buat sebuah Kapal"
+    },
+    "602": {
+		"code": "F7",
+        "name": "Pengembangan Pertama",
+        "desc": "Buat sekeping Persenjataan"
+    },
+    "603": {
+		"code": "F8",
+        "name": "Pembongkaran Pertama",
+        "desc": "Bongkar sebuah Kapal"
+    },
+    "604": {
+		"code": "F9",
+        "name": "Pembuangan Pertama",
+        "desc": "Hancurkan sekeping Persenjataan"
+    },
+    "610": {
+		"code": "F10",
+        "name": "Persiapan untuk LSC (Bagian 2)",
+        "desc": "Hancurkan Persenjataan 4 kali"
+    },
+	"612": {
+		"code": "F11",
+        "name": "Siapkan Drum Canisters",
+        "desc": "Hancurkan Persenjataan 3 kali"
+    },
+	 "613": {
+		"code": "F12",
+        "name": "Pembongkaran Mingguan",
+        "desc": "Hancurkan Persenjataan 24 kali",
+		"tracking": [ [0,24] ]
+    },
+	 "614": {
+		"code": "F13",
+        "name": "Konversi model (ke Tenzan)",
+        "desc": "Miliki Kapal Pemimpin dilengkapi dengan Pesawat Type 97 Torpedo Bomber (Skuadron Tomonaga), Kemudian Hancurkan 2 Tenzan"
+    },
+	"615": {
+		"code": "F14",
+        "name": "Konversi model (ke Suisei)",
+        "desc": "Miliki Kapal pemimpim dilengkapi dengan Pesawat Type 99 Dive Bomber (Skuadron Egusa), Kemudian Hancurkan 2 Suisei"
+    },
+    "616": {
+		"code": "F15",
+        "name": "Konversi model (ke Reppuu)",
+        "desc": "Miliki Kapal Pemimpin dilengkapi dengan Pesawat Zero Fighter Type 52 Type C (601 Air Group), Kemudian Hancurkan 2 Reppuu"
+    },
+	"617": {
+		"code": "F16",
+        "name": "Persiapan untuk Irako",
+        "desc": "Hancurkan Persenjataan 10 kali"
+    },
+	"618": {
+		"code": "F17",
+        "name": "Modernisasi Perlangkapan Pertama",
+        "desc": "Lakukan Modernisasi Persenjataan sekali"
+    },
+    "619": {
+		"code": "F18",
+        "name": "Modernisasi Persenjataan Harian",
+        "desc": "Lakukan Modernisasi Persenjataan sekali",
+		"tracking": [ [0,1] ]
+    },
+	
+	
+    
+	
+	
+    "701": {
+		"code": "G1",
+        "name": "Modernisasi Pertama",
+        "desc": "Lakukan Modernisasi dengan Sukses"
+    },
+    "702": {
+		"code": "G2",
+        "name": "Modernisasi Harian",
+        "desc": "Lakukan 2 Modernisasi dengan Sukses",
+		"unlock": [ 703 ],
+		"tracking": [ [0,2] ]
+    },
+    "703": {
+		"code": "G3",
+        "name": "Modernisasi Mingguan",
+        "desc": "(Mingguan) Lakukan 15 kali Modernisasi dengan Sukses",
+		"tracking": [ [0,15] ]
+    },
+    "704": {
+		"code": "G4",
+        "name": "Persiapan untuk LSC (Bagian 1)",
+        "desc": "Lakukan 4 Modernisasi dengan Sukses"
+    },
+	
+	
+	
+	
+	
+	"611": {
+        "name": "Persiapan Cinta! (bagian 1)",
+        "desc": "Hancurkan Persenjataan 2 kali demi Menunjukan Bukti Cinta Kepada Waifu-mu \u2665 !"
+    },
+	"306": {
+        "name": "Persiapan Cinta (Bagian 2)",
+        "desc": "Tunjukkan Cintamu Kepada Waifu-mu \u2665 dengan Mendapatkan 2 Kemenangan di Mode Latihan."
+    }
+}
