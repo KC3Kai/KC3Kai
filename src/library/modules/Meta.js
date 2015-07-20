@@ -81,6 +81,13 @@ Provides access to data on built-in JSON files
 			$.getTranslationJSON(lang, 'servers', function(response){ self._servers = response; });
 			$.getTranslationJSON(lang, 'battle', function(response){ self._battle = response; });
 			$.getTranslationJSON(lang, 'terms', function(response){ self._terms = response; });
+				
+			var fontFamily = null;
+			switch(ConfigManager.language){
+				case "scn": fontFamily = '"HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,"Nimbus Sans L",Arial,"Lucida Grande","Liberation Sans","Microsoft YaHei UI","Microsoft YaHei","Hiragino Sans GB","Wenquanyi Micro Hei","WenQuanYi Zen Hei","ST Heiti",SimHei,"WenQuanYi Zen Hei Sharp",sans-serif'; break;
+				default: break;
+			}
+			$("body").css("font-family", fontFamily);
 		},
 		
 		/* Data Access
