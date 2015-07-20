@@ -10,6 +10,7 @@ Provides access to data on built-in JSON files
 		var enJSON = {}, localJSON;
 		
 		$.ajax('/data/translations/en/' + filename + '.json', {
+			async: false,
 			dataType:	'json',
 			success:	function(response){
 				enJSON = response;
