@@ -99,6 +99,24 @@
 			$(".activityBox.craftGear").on("click", function(){
 				$(this).hide();
 			});
+			
+			// HQ name censor
+			$(".battle_admiral").on("click", function(){
+				$(".battle .name_censor").show();
+			});
+			
+			$(".battle .name_censor").on("click", function(){
+				$(this).hide();
+			});
+			
+			$(".admiral_name").on("click", function(){
+				$(".normal .name_censor").show();
+			});
+			
+			$(".normal .name_censor").on("click", function(){
+				$(this).hide();
+			});
+			
 		},
 		listeners: {
 			GameStart: function(container, data, local){
