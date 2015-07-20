@@ -129,14 +129,14 @@ Provides access to data on built-in JSON files
 			if( jp_name.substr(jp_name.length-1, 1) == "改" ){
 				var bare1 = jp_name.substr(0, jp_name.length-1);
 				if(typeof this._ship[bare1] !== "undefined"){
-					this._cache[jp_name] = this._ship[bare1]+" Kai";
+					this._cache[jp_name] = this._ship[bare1] + " " + this._ship._Kai;
 					return this._cache[jp_name];
 				}
 			}
 			if( jp_name.substr(jp_name.length-2, 2) == "改二" ){
 				var bare2 = jp_name.substr(0, jp_name.length-2);
 				if(typeof this._ship[bare2] !== "undefined"){
-					this._cache[jp_name] = this._ship[bare2]+" Kai Ni";
+					this._cache[jp_name] = this._ship[bare2] + " " + this._ship._KaiNi;
 					return this._cache[jp_name];
 				}
 			}
