@@ -171,6 +171,8 @@
 		"desc" : "翻訳者 (繁体字中国語)",
 		"links" : {
 			"gh" :"https://github.com/kololz"
+			"fb" :"https://www.facebook.com/kololz",
+			"wk" :"https://kancolle.wikia.com/wiki/User:Kololz"
 		}
 	},
 	{
@@ -180,6 +182,24 @@
 		"links" : {
 			"gh" :"https://github.com/vrarara",
 			"fb" :"https://www.facebook.com/bayuuyab.fu"
+		}
+	},
+	{
+		"name": "Admiral Mikado",
+		"avatar" : "http://img3.wikia.nocookie.net/__cb1400960581/common/avatars/thumb/5/56/24980562.png/150px-24980562.png.jpg",
+		"desc" : "翻訳者 (ドイツ語)",
+		"links" : {
+			"wk" :"http://kancolle.wikia.com/wiki/User:Admiral_Mikado"
+		}
+	},
+	{
+		"name": "Arkayda",
+		"avatar" : "https://avatars1.githubusercontent.com/u/13376050?v=3&s=40",
+		"desc" : "翻訳者 (フランス語)",
+		"links" : {
+			"gh" :"https://github.com/Arkayda963",
+			"fb" :"https://www.facebook.com/ryu.nagakawa",
+			"wk" :"http://kancolle.wikia.com/wiki/User:Arkayda"
 		}
 	}
 ]
