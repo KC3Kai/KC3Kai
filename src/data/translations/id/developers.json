@@ -192,5 +192,15 @@
                 "links" : {
                         "wk" :"http://kancolle.wikia.com/wiki/User:Admiral_Mikado"
                 }
-	}
+	},
+	{
+		"name": "Arkayda",
+		"avatar" : "https://avatars1.githubusercontent.com/u/13376050?v=3&s=40",
+		"desc" : "Penerjemah (FR)",
+		"links" : {
+			"gh" :"https://github.com/Arkayda963",
+			"fb" :"https://www.facebook.com/ryu.nagakawa",
+			"wk" :"http://kancolle.wikia.com/wiki/User:Arkayda"
+		}
+	}  
 ]
