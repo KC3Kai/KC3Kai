@@ -2,7 +2,9 @@
 <html lang="en">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<!-- @nonbuildstart -->
 		<link href="../../assets/css/bootstrap.css" rel="stylesheet" type="text/css">
+		<!-- @nonbuildend -->
 		<link href="../../assets/css/global.css" rel="stylesheet" type="text/css">
 		<link href="strategy.css" rel="stylesheet" type="text/css">
 		<title>KC3改 Strategy Room</title>
@@ -108,35 +110,42 @@
 				<div class="clear"></div>
 			</div>
 		</div>
-		<script type="text/javascript" src="../../assets/js/jquery-2.1.3.min.js"></script>
+		
+		
 		<script type="text/javascript" src="../../assets/js/global.js"></script>
+		<!-- @nonbuildstart -->
+		<script type="text/javascript" src="../../assets/js/jquery-2.1.3.min.js"></script>
+		<!-- @nonbuildend -->
 		<script type="text/javascript" src="../../assets/js/Dexie.min.js"></script>
 		<script type="text/javascript" src="../../assets/js/Chart.min.js"></script>
 		<script type="text/javascript" src="../../library/modules/StrategyTabs.js"></script>
+		<!-- @buildimportjs ../../library/managers.js -->
+		<!-- @buildimportjs ../../library/objects.js -->
+		<!-- @nonbuildstart -->
 		<script type="text/javascript" src="../../library/objects/StrategyTab.js"></script>
-		
-		<script type="text/javascript" src="../../../../library/objects/Node.js"></script>
-		<script type="text/javascript" src="../../../../library/objects/Fleet.js"></script>
-		<script type="text/javascript" src="../../../../library/objects/Gear.js"></script>
-		<script type="text/javascript" src="../../../../library/objects/Messengers.js"></script>
-		<script type="text/javascript" src="../../../../library/objects/Player.js"></script>
-		<script type="text/javascript" src="../../../../library/objects/Quest.js"></script>
-		<script type="text/javascript" src="../../../../library/objects/Server.js"></script>
-		<script type="text/javascript" src="../../../../library/objects/Ship.js"></script>
-		<script type="text/javascript" src="../../../../library/objects/Sortie.js"></script>
-		
+		<script type="text/javascript" src="../../library/objects/Node.js"></script>
+		<script type="text/javascript" src="../../library/objects/Fleet.js"></script>
+		<script type="text/javascript" src="../../library/objects/Gear.js"></script>
+		<script type="text/javascript" src="../../library/objects/Messengers.js"></script>
+		<script type="text/javascript" src="../../library/objects/Player.js"></script>
+		<script type="text/javascript" src="../../library/objects/Quest.js"></script>
+		<script type="text/javascript" src="../../library/objects/Server.js"></script>
+		<script type="text/javascript" src="../../library/objects/Ship.js"></script>
+		<script type="text/javascript" src="../../library/objects/Sortie.js"></script>
 		<script type="text/javascript" src="../../library/managers/ConfigManager.js"></script>
 		<script type="text/javascript" src="../../library/managers/GearManager.js"></script>
 		<script type="text/javascript" src="../../library/managers/PlayerManager.js"></script>
 		<script type="text/javascript" src="../../library/managers/QuestManager.js"></script>
 		<script type="text/javascript" src="../../library/managers/ShipManager.js"></script>
+		<!-- @nonbuildend -->
 		
 		<script type="text/javascript" src="../../../../library/modules/Database.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/Master.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/Meta.js"></script>
 		
 		<script type="text/javascript" src="strategy.js"></script>
-		
+		<!-- @buildimportjs allstrategytabs.js -->
+		<!-- @nonbuildstart -->
 		<script type="text/javascript" src="tabs/profile/profile.js"></script>
 		<script type="text/javascript" src="tabs/ships/ships.js"></script>
 		<script type="text/javascript" src="tabs/gears/gears.js"></script>
@@ -152,5 +161,6 @@
 		<script type="text/javascript" src="tabs/maps/maps.js"></script>
 		<script type="text/javascript" src="tabs/exops/exops.js"></script>
 		<script type="text/javascript" src="tabs/event/event.js"></script>
+		<!-- @nonbuildend -->
 	</body>
 </html>

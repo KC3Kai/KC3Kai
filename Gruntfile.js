@@ -36,6 +36,7 @@ module.exports = function(grunt) {
 					'library/injections/*.js',
 					'library/modules/*.js',
 					'pages/**/*',
+					'!pages/strategy/tabs/**/*.js',
 					'manifest.json',
 					'data/**/*.json'
 				],
@@ -115,6 +116,20 @@ module.exports = function(grunt) {
 					]
 				}
 			},
+			devtooltitle: {
+				src: 'build/tmp/pages/devtools/init.js',
+				dest: 'build/tmp/',
+				options: {
+					replacements: [
+						{
+							pattern: /DevKC3Kai/ig,
+							replacement: function (match, p1) {
+								return "KC3改";
+							}
+						}
+					]
+				}
+			},
 			manifest: {
 				src: 'build/tmp/manifest.json',
 				dest: 'build/tmp/',
@@ -189,6 +204,11 @@ module.exports = function(grunt) {
 					'build/release/library/managers.js' : ['build/tmp/library/managers/*.js'],
 					'build/release/library/objects.js' : ['build/tmp/library/objects/*.js']
 				}
+			},
+			strategy: {
+				files: {
+					'build/release/pages/strategy/allstrategytabs.js' : ['build/tmp/pages/strategy/tabs/*/*.js'],
+				}
 			}
 		}
 	});
@@ -210,6 +230,7 @@ module.exports = function(grunt) {
 		'copy:tmpsrc',
 		'copy:statics',
 		'removelogging',
+		'string-replace:devtooltitle',
 		'jshint',
 		'cssmin',
 		'uglify',
@@ -221,8 +242,9 @@ module.exports = function(grunt) {
 		'copy:processed',
 		'concat:global_css',
 		'concat:global_js',
-		'concat:library'
-		// 'clean:tmp'
+		'concat:library',
+		'concat:strategy',
+		'clean:tmp'
 	]);
 	
 };
