@@ -1,0 +1,28 @@
+{
+	"détection" : [
+		["", ""],
+		["OK", "Bonne"],
+		["OK-", "Bonne"],
+		["-", "Mauvais"],
+		["NO", "Mauvais"],
+		["OK+", "Bonne"],
+		["NO+", "mauvais"]
+	],
+	
+	"Comba aérien" : [
+		["AP", "", "Air Parity"],
+		["AS+", "good", "Air Suprématie"],
+		["AS", "good", "Air Supérieur"],
+		["AI", "bad", "Air Impuissante"],
+		["AD", "bad", "Air Dénégation"]
+	],
+	
+	"engagement" : [
+		["", "", ""],
+		["Prll", "", "Parallelle"],
+		["HdOn", "", "De front"],
+		["Gr-T", "good", "Vert T"],
+		["Rd-T", "bad", "Rouge T"]
+	]
+	
+}

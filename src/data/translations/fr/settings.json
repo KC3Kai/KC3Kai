@@ -11,24 +11,22 @@
 					"choices" : [
 						[ "en", "English" ],
 						[ "jp", "日本語" ],
-						[ "id", "Indonesian" ],
+						[ "id", "Indonesia" ],
 						[ "tcn", "繁體中文" ],
 						[ "scn", "简体中文" ],
-						[ "vi", "Tiếng Việt" ],
-						[ "de", "Deutsch" ],
 						[ "fr", "Français" ]
 					]
 				}
 			},
 			{
 				"id" : "elosFormula",
-				"name" : "Effective LoS Formula",
+				"name" : "Formule LoS",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ 1, "Sum" ],
-						[ 2, "Old" ],
-						[ 3, "New" ]
+						[ 1, "Résumé" ],
+						[ 2, "Vieu" ],
+						[ 3, "Nouveau" ]
 					]
 				}
 			}
@@ -40,25 +38,25 @@
 		"contents" : [
 			{
 				"id" : "info_face",
-				"name" : "Construction Faces",
+				"name" : "Construction Visage",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "info_craft",
-				"name" : "Crafting Results",
+				"name" : "Craft Résultat",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "info_compass",
-				"name" : "Compass and Enemy",
+				"name" : "Boussole et Ennemie",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "info_battle",
-				"name" : "Battle Environment",
+				"name" : "Combat Environment",
 				"type" : "check",
 				"options" : {}
 			},
@@ -76,19 +74,19 @@
 		"contents" : [
 			{
 				"id" : "ss_mode",
-				"name" : "Output Mode",
+				"name" : "Mode de sortie",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ 0, "Download" ],
+						[ 0, "téléchargement" ],
 						[ 1, "Imgur" ],
-						[ 2, "New Tab" ]
+						[ 2, "Nouvelle onglet" ]
 					]
 				}
 			},
 			{
 				"id" : "ss_type",
-				"name" : "Filetype",
+				"name" : "Type de fichier",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
@@ -105,7 +103,7 @@
 		"contents" : [
 			{
 				"id" : "alert_diff",
-				"name" : "Timer Allowance",
+				"name" : "Allocation minuterie",
 				"type" : "small_text",
 				"options" : { "label" : "seconds" }
 			},
@@ -115,15 +113,15 @@
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ 0, "None" ],
+						[ 0, "Rien" ],
 						[ 1, "DING!" ],
-						[ 2, "Custom" ]
+						[ 2, "personalisé" ]
 					]
 				}
 			},
 			{
 				"id" : "alert_custom",
-				"name" : "Custom Sound URL",
+				"name" : "Son personalisé URL",
 				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
 			},
@@ -135,7 +133,7 @@
 			},
 			{
 				"id" : "alert_desktop",
-				"name" : "Desktop Notification",
+				"name" : "Notification de bureau",
 				"type" : "check",
 				"options" : {}
 			}
@@ -147,31 +145,31 @@
 		"contents" : [
 			{
 				"id" : "api_translation",
-				"name" : "Quest Translations",
+				"name" : "Traduction de quête",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "api_tracking",
-				"name" : "Quest Tracking",
+				"name" : "Suivi des quêtes",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "api_askExit",
-				"name" : "Exit Confirmation",
+				"name" : "Quitter Confirmation",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "api_margin",
-				"name" : "Top Margin",
+				"name" : "Marge supérieur",
 				"type" : "small_text",
 				"options" : { "label" : "pixels" }
 			},
 			{
 				"id" : "api_bg_color",
-				"name" : "Background Color",
+				"name" : "Couleur Background",
 				"type" : "long_text",
 				"options" : { "placeholder" : "See CSS background-color property" }
 			},
@@ -183,13 +181,13 @@
 			},
 			{
 				"id" : "api_bg_size",
-				"name" : "Background Size",
+				"name" : "Taille Background",
 				"type" : "long_text",
 				"options" : { "placeholder" : "See CSS background-size property" }
 			},
 			{
 				"id" : "api_bg_position",
-				"name" : "Background Position",
+				"name" : "Position du Background",
 				"type" : "long_text",
 				"options" : { "placeholder" : "See CSS background-position property" }
 			},
@@ -207,55 +205,55 @@
 		"contents" : [
 			{
 				"id" : "dmm_customize",
-				"name" : "Apply Customizations",
+				"name" : "Application des personalisations",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "dmm_translation",
-				"name" : "Quest Translations",
+				"name" : "Traduction des quêtes",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "dmm_tracking",
-				"name" : "Quest Tracking",
+				"name" : "Suivi des quêtes",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "dmm_askExit",
-				"name" : "Exit Confirmation",
+				"name" : "Quitter Confirmation",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "dmm_margin",
-				"name" : "Top Margin",
+				"name" : "Marge supérieur",
 				"type" : "small_text",
 				"options" : { "label" : "pixels" }
 			},
 			{
 				"id" : "dmm_bg_color",
-				"name" : "Background Color",
+				"name" : "Couleur du Background",
 				"type" : "long_text",
 				"options" : { "placeholder" : "See CSS background-color property" }
 			},
 			{
 				"id" : "dmm_bg_image",
-				"name" : "Background Image",
+				"name" : "Image du Background",
 				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
 			},
 			{
 				"id" : "dmm_bg_size",
-				"name" : "Background Size",
+				"name" : "Taille du Background",
 				"type" : "long_text",
 				"options" : { "placeholder" : "See CSS background-size property" }
 			},
 			{
 				"id" : "dmm_bg_position",
-				"name" : "Background Position",
+				"name" : "Position du Background",
 				"type" : "long_text",
 				"options" : { "placeholder" : "See CSS background-position property" }
 			}
@@ -272,48 +270,48 @@
 				"options" : {
 					"choices" : [
 						[ "default", "Default" ],
-						[ "dark", "Dark" ]
+						[ "dark", "Sombre" ]
 					]
 				}
 			},
 			{
 				"id" : "pan_size",
-				"name" : "Panel Size",
+				"name" : "Taille du panneau",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ "small", "Small" ],
-						[ "big", "Big" ]
+						[ "small", "Petit" ],
+						[ "big", "Grand" ]
 					]
 				}
 			},
 			{
 				"id" : "pan_bg_color",
-				"name" : "Background Color",
+				"name" : "Couleur du Background",
 				"type" : "long_text",
 				"options" : { "placeholder" : "See CSS background-color property" }
 			},
 			{
 				"id" : "pan_bg_image",
-				"name" : "Background Image",
+				"name" : "Image du Background",
 				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
 			},
 			{
 				"id" : "pan_bg_size",
-				"name" : "Background Size",
+				"name" : "Taille du Background",
 				"type" : "long_text",
 				"options" : { "placeholder" : "See CSS background-size property" }
 			},
 			{
 				"id" : "pan_bg_position",
-				"name" : "Background Position",
+				"name" : "Position du Background",
 				"type" : "long_text",
 				"options" : { "placeholder" : "See CSS background-position property" }
 			},
 			{
 				"id" : "pan_opacity",
-				"name" : "Interface Opacity",
+				"name" : "Opacité de l'interface",
 				"type" : "small_text",
 				"options" : { "label" : "%" }
 			}
