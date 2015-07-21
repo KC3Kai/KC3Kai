@@ -537,29 +537,32 @@
 	
 	
     "301": {
-        "name": "First Exercise!",
-        "desc": "Challenge another fleet in practice mode"
+        "name": "初次演习！",
+        "desc": "与其他提督进行 1 次演习"
     },
 	 "303": {
-        "name": "Daily Exercises 1",
-        "desc": "Challenge 3 other fleets in practice mode"
+        "name": "[日常] 演习",
+        "desc": "与其他提督进行 3 次演习"
     },
 	"304": {
-        "name": "Daily Exercises 2",
-        "desc": "Get 5 victories in practice mode within the same day"
+        "name": "[日常] 演习获胜",
+        "desc": "演习取得 5 次胜利"
     },
     "302": {
-        "name": "Weekly Exercises",
-        "desc": "(Weekly) Get 20 victories in practice mode"
+        "name": "[周常] 演习获胜",
+        "desc": "一周内演习取得 20 次胜利"
     },
     "307": {
         "name": "Improve the Efficiency of the Fleet",
-        "desc": "Get 3 victories in practice mode"
+        "desc": "演习取得 3 次胜利"
     },
     "308": {
-		"code": "C6",
         "name": "Improve the Efficiency of the Fleet One More Time",
-        "desc": "Get 4 victories in practice mode"
+        "desc": "演习取得 4 次胜利"
+    },
+	"309": {
+        "name": "Strive to Increase the Level of Training in Preparation for Another Rush to the Northern Sea",
+        "desc": "一天内演习取得 4 次胜利"
     },
 	
 	
@@ -567,76 +570,76 @@
 	
 	
     "401": {
-        "name": "First Expedition",
-        "desc": "Perform an expedition"
+        "name": "初次远征！",
+        "desc": "进行 1 次远征"
     },
     "402": {
-        "name": "Daily Expeditions 1",
-        "desc": "Perform 3 successful expeditions"
+        "name": "[日常] 远征成功",
+        "desc": "远征取得 3 次成功"
     },
     "403": {
-        "name": "Daily Expeditions 2",
-        "desc": "Perform 10 successful expeditions"
+        "name": "[日常] 远征成功",
+        "desc": "远征取得 10 次成功"
     },
     "404": {
-        "name": "Weekly Expeditions",
-        "desc": "(Weekly) Perform 30 successful expeditions"
+        "name": "[周常] 远征成功",
+        "desc": "一周内远征取得 30 次成功"
     },
     "405": {
         "name": "The First Submarine Operation",
-        "desc": "Complete Expedition 30"
+        "desc": "远征 #30 取得成功"
     },
     "406": {
         "name": "The Second Submarine Operation",
-        "desc": "Complete Expedition 30 one more time"
+        "desc": "远征 #30 再取得 1 次成功"
     },
     "408": {
         "name": "Continuation of Submarine Operations",
-        "desc": "Complete Expedition 30 two more times"
+        "desc": "远征 #30 再取得 2 次成功"
     },
     "409": {
         "name": "Strategy Meeting with Overseas Submarine Dispatch!",
-        "desc": "Complete Expedition 31"
+        "desc": "远征 #31 取得成功"
     },
     "410": {
-        "name": "Weekly Expedition 2",
-        "desc": "(Weekly) Complete expedition 37 or 38"
+        "name": "[周常] 东京急行远征",
+        "desc": "一周内远征 #37 和 #38 共取得 1 次成功"
     },
 	"412": {
         "name": "Strengthen the Operation of the BBV",
-        "desc": "Complete expedition 23"
+        "desc": "远征 #23 取得成功"
     },
     "411": {
-        "name": "Weekly Expedition 3",
-        "desc": "(Weekly) Complete expedition 37 or 38 a total of 7 times"
+        "name": "[周常] 东京急行远征",
+        "desc": "一周内远征 #37 和 #38 共取得 7 次成功"
     },
     "413": {
         "name": "Strengthen the Operation of the BBV (Cont.)",
-        "desc": "Complete expedition 23 four more times"
+        "desc": "远征 #23 再取得 4 次成功"
     },
     "414": {
         "name": "Blue Waters Submarine Operation",
-        "desc": "Complete expedition 39"
+        "desc": "远征 #39 取得成功"
     },
     "415": {
         "name": "Blue Waters Extended Submarine Operation",
-        "desc": "Complete expedition 39 two more times"
+        "desc": "远征 #39 再取得 2 次成功"
     },
     "416": {
         "name": "Air Defence Exercises",
-        "desc": "Complete expedition 6 three times"
+        "desc": "远征 #6 取得 3 次成功"
     },
     "417": {
         "name": "Deploy the Decoy Task Force",
-        "desc": "Complete expedition 15"
+        "desc": "远征 #5 取得成功"
     },
     "418": {
         "name": "Naval Ceremony Preparations",
-        "desc": "Complete Expedition 7 twice"
+        "desc": "远征 #7 取得 2 次成功"
     },
     "419": {
         "name": "Naval Ceremony",
-        "desc": "Complete expedition 8"
+        "desc": "远征 #8 取得成功"
     },
 	
 	
@@ -644,20 +647,20 @@
 	
 	
     "501": {
-        "name": "First Supply",
-        "desc": "Resupply a ship"
+        "name": "初次补给！",
+        "desc": "进行 1 次补给"
     },
     "502": {
-        "name": "First Docking",
-        "desc": "Repair a ship"
+        "name": "初次入渠！",
+        "desc": "进行 1 次入渠修理"
     },
     "503": {
-        "name": "Daily Repairs",
-        "desc": "Repair 5 ships"
+        "name": "[日常] 入渠修理",
+        "desc": "进行 5 次入渠修理"
     },
     "504": {
-        "name": "Daily Resupplies",
-        "desc": "Resupply your ships 15 times"
+        "name": "[日常] 补给",
+        "desc": "进行 15 次补给"
     },
 	
 	
@@ -665,40 +668,40 @@
 	
 	
 	"605": {
-        "name": "Daily Development 1",
-        "desc": "Craft a piece of equipment (Failures are OK)"
+        "name": "[日常] 开发",
+        "desc": "进行 1 次装备开发（可失败）"
     },
 	"606": {
-        "name": "Daily Construction 1",
-        "desc": "Craft a ship"
+        "name": "[日常] 建造",
+        "desc": "进行 1 次建造"
     },
 	"607": {
-        "name": "Daily Development 2",
-        "desc": "Craft 3 pieces of equipment (Failures are OK)"
+        "name": "[日常] 开发",
+        "desc": "进行 3 次装备开发（可失败）"
     },
 	 "608": {
-        "name": "Daily Construction 2",
-        "desc": "Craft 3 ships"
+        "name": "[日常] 建造",
+        "desc": "进行 3 次建造"
     },
 	 "609": {
-        "name": "Daily Dismantlement",
-        "desc": "Scrap 2 ships"
+        "name": "[日常] 解体",
+        "desc": "进行 2 次解体"
     },
     "601": {
-        "name": "First Construction",
-        "desc": "Craft a ship"
+        "name": "初次建造！",
+        "desc": "进行 1 次舰娘建造"
     },
     "602": {
-        "name": "First Development",
-        "desc": "Craft a piece of equipment"
+        "name": "初次开发！",
+        "desc": "进行 1 次装备开发"
     },
     "603": {
-        "name": "First Dismantlement",
-        "desc": "Dismantle a ship"
+        "name": "初次解体！",
+        "desc": "进行 1 次解体"
     },
     "604": {
-        "name": "First Disposal",
-        "desc": "Scrap a piece of equipment"
+        "name": "初次废弃！",
+        "desc": "进行 1 次装备废弃"
     },
     "610": {
         "name": "Preparation for LSC (Part 2)",
@@ -709,8 +712,8 @@
         "desc": "Scrap equipment 3 times"
     },
 	 "613": {
-        "name": "Weekly Dismantlement",
-        "desc": "Scrap equipment 24 times"
+        "name": "[周常] 装备废弃",
+        "desc": "进行 24 次装备废弃"
     },
 	 "614": {
         "name": "Model Conversion (to Tenzan)",
@@ -729,12 +732,12 @@
         "desc": "Scrap equipment 10 times"
     },
 	"618": {
-        "name": "First Equipment Modernisation",
-        "desc": "Perform equipment modernisation once"
+        "name": "初次装备改修！",
+        "desc": "进行 1 次装备改修"
     },
     "619": {
-        "name": "Daily Equipment Modernisation",
-        "desc": "Perform equipment modernisation once"
+        "name": "[日常] 装备改修",
+        "desc": "进行 1 次装备改修（可失败）"
     },
 	
 	
@@ -742,20 +745,20 @@
 	
 	
     "701": {
-        "name": "First Modernization",
-        "desc": "Perform a successful modernization"
+        "name": "初次近代化改修！",
+        "desc": "进行 1 次近代化改修（合成）"
     },
     "702": {
-        "name": "Daily Modernization",
-        "desc": "Perform 2 successful modernizations"
+        "name": "[日常] 近代化改修",
+        "desc": "进行 2 次近代化改修（合成）"
     },
     "703": {
-        "name": "Weekly Modernization",
-        "desc": "(Weekly) Perform 15 successful modernizations"
+        "name": "[周常] 近代化改修",
+        "desc": "一周内进行 15 次近代化改修（合成）"
     },
     "704": {
         "name": "Preparation for LSC (Part 1)",
-        "desc": "Perform 4 successful modernizations"
+        "desc": "进行 4 次近代化改修（合成）"
     },
 	
 	
