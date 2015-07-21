@@ -26,7 +26,7 @@
 	{
 		"name": "Diablohu",
 		"avatar": "https://avatars0.githubusercontent.com/u/1946774?v=3&s=40",
-		"desc": "Pengembang, Penerjemah (SCN)",
+		"desc": "Pengembang, TL (SCN)",
 		"links": {
 			"wb" : "http://diablohu.com",
 			"gh" : "https://github.com/Diablohu",
@@ -153,7 +153,7 @@
 		"links" : {
 			"fb" :"https://www.facebook.com/freezebear17",
 			"tw" :"https://twitter.com/freezebear17",
-			"wk" :"kancolle.wikia.com/wiki/User:Freezebear"
+			"wk" :"https://kancolle.wikia.com/wiki/User:Freezebear"
 		}
 	},
 	{
@@ -162,7 +162,8 @@
 		"desc" : "Penerjemah (ID)",
 		"links" : {
 			"fb" :"https://www.facebook.com/arifLV2",
-			"wk" :"kancolle.wikia.com/wiki/User:hufuhufu"
+			"gh" :"https://github.com/hufuhufu",
+			"wk" :"https://kancolle.wikia.com/wiki/User:hufuhufu"
 		}
 	},
 	{
@@ -183,5 +184,13 @@
 			"gh" :"https://github.com/vrarara",
 			"fb" :"https://www.facebook.com/bayuuyab.fu"
 		}
+	},
+	{
+		"name": "Admiral Mikado",
+                "avatar" : "http://img3.wikia.nocookie.net/__cb1400960581/common/avatars/thumb/5/56/24980562.png/150px-24980562.png.jpg",
+                "desc" : "Penerjemah (DE)",
+                "links" : {
+                        "wk" :"http://kancolle.wikia.com/wiki/User:Admiral_Mikado"
+                }
 	}
 ]
