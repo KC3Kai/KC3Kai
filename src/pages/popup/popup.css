@@ -54,7 +54,8 @@ body {
 	line-height:15px;
 	font-size:11px;
 	float:left;
-	color:#aaa;
+	/*color:#aaa;*/
+	color:#999;
 }
 
 .schedule {
