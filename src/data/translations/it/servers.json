@@ -1,0 +1,102 @@
+{
+	"203.104.209.71": {
+		"num": 1,
+		"name": "Distretto Navale di Yokosuka",
+		"ip": "203.104.209.71"
+	},
+	"125.6.184.15": {
+		"num": 2,
+		"name": "Distretto Navale di Kure",
+		"ip": "125.6.184.15"
+	},
+	"125.6.184.16": {
+		"num": 3,
+		"name": "Distretto Navale di Sasebo",
+		"ip": "125.6.184.16"
+	},
+	"125.6.187.205": {
+		"num": 4,
+		"name": "Distretto Navale di Maizuru",
+		"ip": "125.6.187.205"
+	},
+	"125.6.187.229": {
+		"num": 5,
+		"name": "Distretto Difensivo di Ominato",
+		"ip": "125.6.187.229"
+	},
+	"125.6.187.253": {
+		"num": 6,
+		"name": "Ormeggio di Truk",
+		"ip": "125.6.187.253"
+	},
+	"125.6.188.25": {
+		"num": 7,
+		"name": "Ormeggio di Lingga",
+		"ip": "125.6.188.25"
+	},
+	"203.104.248.135": {
+		"num": 8,
+		"name": "Base Navale di Rabaul",
+		"ip": "203.104.248.135"
+	},
+	"125.6.189.7": {
+		"num": 9,
+		"name": "Ormeggio di Shortland",
+		"ip": "125.6.189.7"
+	},
+	"125.6.189.39": {
+		"num": 10,
+		"name": "Base Navale di Buin",
+		"ip": "125.6.189.39"
+	},
+	"125.6.189.71": {
+		"num": 11,
+		"name": "Ormeggio di Tawi-Tawi",
+		"ip": "125.6.189.71"
+	},
+	"125.6.189.103": {
+		"num": 12,
+		"name": "Ormeggio di Palau",
+		"ip": "125.6.189.103"
+	},
+	"125.6.189.135": {
+		"num": 13,
+		"name": "Ormeggio di Brunei",
+		"ip": "125.6.189.135"
+	},
+	"125.6.189.167": {
+		"num": 14,
+		"name": "Ormeggio della Baia di Hitokappu",
+		"ip": "125.6.189.167"
+	},
+	"125.6.189.215": {
+		"num": 15,
+		"name": "Ormeggio di Paramushir",
+		"ip": "125.6.189.215"
+	},
+	"125.6.189.247": {
+		"num": 16,
+		"name": "Ormeggio della Baia di Sukumo",
+		"ip": "125.6.189.247"
+	},
+	"203.104.209.23": {
+		"num": 17,
+		"name": "Pista d'atterraggio di Kanoya",
+		"ip": "203.104.209.23"
+	},
+	"203.104.209.39": {
+		"num": 18,
+		"name": "Pista d'atterraggio di Iwagawa",
+		"ip": "203.104.209.39"
+	},
+	"203.104.209.55": {
+		"num": 19,
+		"name": "Ormeggio della Baia di Saiki",
+		"ip": "203.104.209.55"
+	},
+	"203.104.209.102": {
+		"num": 20,
+		"name": "Ormeggio di Hashirajima",
+		"ip": "203.104.209.102"
+	}
+}
