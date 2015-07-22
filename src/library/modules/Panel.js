@@ -19,7 +19,7 @@ Manages multiple instances of \library\modules\Dashboard.js
 			try {
 				// Check localStorage
 				if(!window.localStorage){
-					throw new Error("Your Chrome's localStorage is disabled on your settings. KC3改 needs this feature. <a href=\"http://stackoverflow.com/a/26671889/483704\" target=\"_blank\">See how to enable this</a>.");
+					throw new Error( KC3Meta.term("PanelErrorStorage") );
 				}
 				
 				// Initialize data managers
@@ -30,14 +30,6 @@ Manages multiple instances of \library\modules\Dashboard.js
 				KC3ShipManager.load();
 				KC3GearManager.load();
 				KC3Database.init();
-				
-				var fontFamily = "Arial";
-				switch(ConfigManager.language){
-					case "jp": fontFamily = "\"ヒラギノ角ゴ Pro W3\", \"Hiragino Kaku Gothic Pro\",Osaka, \"メイリオ\", Meiryo, \"ＭＳ Ｐゴシック\", \"MS PGothic\", sans-serif"; break;
-					default: break;
-				}
-				$("body").css("font-family", fontFamily);
-				
 				callback(true);
 			}catch(e){
 				callback(false, e.message);

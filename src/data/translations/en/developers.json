@@ -201,5 +201,13 @@
 			"fb" :"https://www.facebook.com/ryu.nagakawa",
 			"wk" :"http://kancolle.wikia.com/wiki/User:Arkayda"
 		}
+	},
+	{
+		"name": "RanFoxRun",
+		"avatar" : "https://avatars1.githubusercontent.com/u/13418956?v=3&s=40",
+		"desc" : "Translator (IT)",
+		"links" : {
+			"gh" :"https://github.com/RanFoxRun"
+		}
 	}  
 ]

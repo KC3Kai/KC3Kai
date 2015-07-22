@@ -63,5 +63,9 @@
 	"LevelText" : "Level",
 	"LevelShort" : "Lv.",
 	"LevelNext" : "Next",
-	"Screenshot" : "Screenshot"
+	"Screenshot" : "Screenshot",
+	
+	"PanelErrorStorage" : "Your Chrome's localStorage is disabled on your settings. KC3改 needs this feature. <a href=\"http://stackoverflow.com/a/26671889/483704\" target=\"_blank\">See how to enable this</a>.",
+	
+	"Dummy" : "Dummy"
 }

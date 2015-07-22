@@ -85,10 +85,15 @@ Provides access to data on built-in JSON files
 				
 			var fontFamily = null;
 			switch(ConfigManager.language){
+				
 				case "scn": fontFamily = '"HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,"Nimbus Sans L",Arial,"Lucida Grande","Liberation Sans","Microsoft YaHei UI","Microsoft YaHei","Hiragino Sans GB","Wenquanyi Micro Hei","WenQuanYi Zen Hei","ST Heiti",SimHei,"WenQuanYi Zen Hei Sharp",sans-serif'; break;
+				
+				case "jp": fontFamily = "\"ヒラギノ角ゴ Pro W3\", \"Hiragino Kaku Gothic Pro\",Osaka, \"メイリオ\", Meiryo, \"ＭＳ Ｐゴシック\", \"MS PGothic\", sans-serif"; break;
+				
 				default: break;
 			}
 			$("body").css("font-family", fontFamily);
+			$("html").attr("lang", lang);
 		},
 		
 		/* Data Access
