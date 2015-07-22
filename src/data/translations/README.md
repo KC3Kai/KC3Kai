@@ -42,7 +42,7 @@ Note that the tcn folder contain translations for Traditional Chinese (zh-hant)
 #### 22nd July 2015
 
 Everyone, please view:
-* 
+* https://github.com/dragonjet/KC3Kai/issues/355
 
 `developers.json`
 * No need to copy this on your localized files. Remove if exists.
