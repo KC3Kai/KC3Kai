@@ -9,50 +9,49 @@
 }
 
 .tab_lscs .legend {
-        width:700px;
-        margin:0px 0px 10px 0px;
-        background:#f0f5ff;
-        padding:5px 10px;
-        border-bottom:1px solid #369;
+	width:700px;
+	background:#f0f5ff;
+	padding:5px 10px;
+	border-bottom:1px solid #369;
 }
 .tab_lscs .legend_item {
-        width:120px;
-        height:20px;
-        float:left;
+	width:120px;
+	height:20px;
+	float:left;
 }
 .tab_lscs .legend_color {
-        width:14px;
-        height:14px;
-        margin:3px 5px 0px 3px;
-        float:left;
-        border:1px solid #555;
+	width:14px;
+	height:14px;
+	margin:3px 5px 0px 3px;
+	float:left;
+	border:1px solid #555;
 }
 .tab_lscs .color_fuel {
-        background:#AAFFAA;
+	background:#AAFFAA;
 }
 .tab_lscs .color_ammo {
-        background:#999900;
+	background:#999900;
 }
 .tab_lscs .color_steel {
-        background:#999999;
+	background:#999999;
 }
 .tab_lscs .color_baux {
-        background:#FF9933;
+	background:#FF9933;
 }
 .tab_lscs .legend_icon {
-        width:20px;
-        height:20px;
-        margin:0px 5px 0px 0px;
-        float:left;
+	width:20px;
+	height:20px;
+	margin:0px 5px 0px 0px;
+	float:left;
 }
 .tab_lscs .legend_icon img {
-        width:16px;
-        height:16px;
-        margin:2px;
+	width:16px;
+	height:16px;
+	margin:2px;
 }
 .tab_lscs .legend_label {
-        width:70px;
-        float:left;
+	width:70px;
+	float:left;
 }
 
 /* LIST
