@@ -6,36 +6,6 @@ Provides access to data on built-in JSON files
 (function(){
 	"use strict";
 	
-	$.getTranslationJSON = function(language, filename, callback){
-		var enJSON = {}, localJSON;
-		
-		$.ajax('/data/translations/en/' + filename + '.json', {
-			async: false,
-			dataType:	'json',
-			success:	function(response){
-				enJSON = response;
-			},
-			complete:	function(){
-				if( language == 'en' ){
-					console.log(enJSON);
-					callback(enJSON);
-				}else{
-					$.ajax('/data/translations/' +language+ '/' + filename + '.json', {
-						dataType:	'json',
-						success:	function(data){
-							localJSON = $.extend(true, enJSON, data);
-						},
-						complete:	function(){
-							localJSON = localJSON || enJSON;
-							console.log(localJSON);
-							callback(localJSON);
-						}
-					});
-				}
-			}
-		});
-	};
-	
 	window.KC3Meta = {
 		_cache:{},
 		_icons:{},
@@ -54,46 +24,20 @@ Provides access to data on built-in JSON files
 		/* Initialization
 		-------------------------------------------------------*/
 		init :function( repo ){
-			var self = this;
-			
 			// Load Common Meta
-			$.getJSON(repo+"icons.json", function(response){ self._icons = response; });
-			$.getJSON(repo+"experience.json", function(response){ self._exp = response; });
-			$.getJSON(repo+"gauges.json", function(response){ self._gauges = response; });
+			this._icons		= JSON.parse( $.ajax(repo+'icons.json', { async: false }).responseText );
+			this._exp		= JSON.parse( $.ajax(repo+'experience.json', { async: false }).responseText );
+			this._gauges	= JSON.parse( $.ajax(repo+'gauges.json', { async: false }).responseText );
 			
 			// Load Translations
-			var lang = ConfigManager.language || "en";
-			/*
-			$.getJSON(repo+"translations/"+lang+"/ships.json", function(response){ self._ship = response; });
-			$.getJSON(repo+"translations/"+lang+"/items.json", function(response){ self._slotitem = response; });
-			$.getJSON(repo+"translations/"+lang+"/quests.json", function(response){ self._quests = response; });
-			$.getJSON(repo+"translations/"+lang+"/ranks.json", function(response){ self._ranks = response; });
-			$.getJSON(repo+"translations/"+lang+"/stype.json", function(response){ self._stype = response; });
-			$.getJSON(repo+"translations/"+lang+"/servers.json", function(response){ self._servers = response; });
-			$.getJSON(repo+"translations/"+lang+"/battle.json", function(response){ self._battle = response; });
-			$.getJSON(repo+"translations/"+lang+"/record.json", function(response){ self._record = response; });
-			$.getJSON(repo+"translations/"+lang+"/terms.json", function(response){ self._terms = response; });
-			*/
-			$.getTranslationJSON(lang, 'ships', function(response){ self._ship = response; });
-			$.getTranslationJSON(lang, 'items', function(response){ self._slotitem = response; });
-			$.getTranslationJSON(lang, 'quests', function(response){ self._quests = response; });
-			$.getTranslationJSON(lang, 'ranks', function(response){ self._ranks = response; });
-			$.getTranslationJSON(lang, 'stype', function(response){ self._stype = response; });
-			$.getTranslationJSON(lang, 'servers', function(response){ self._servers = response; });
-			$.getTranslationJSON(lang, 'battle', function(response){ self._battle = response; });
-			$.getTranslationJSON(lang, 'terms', function(response){ self._terms = response; });
-				
-			var fontFamily = null;
-			switch(ConfigManager.language){
-				
-				case "scn": fontFamily = '"HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,"Nimbus Sans L",Arial,"Lucida Grande","Liberation Sans","Microsoft YaHei UI","Microsoft YaHei","Hiragino Sans GB","Wenquanyi Micro Hei","WenQuanYi Zen Hei","ST Heiti",SimHei,"WenQuanYi Zen Hei Sharp",sans-serif'; break;
-				
-				case "jp": fontFamily = "\"ヒラギノ角ゴ Pro W3\", \"Hiragino Kaku Gothic Pro\",Osaka, \"メイリオ\", Meiryo, \"ＭＳ Ｐゴシック\", \"MS PGothic\", sans-serif"; break;
-				
-				default: break;
-			}
-			$("body").css("font-family", fontFamily);
-			$("html").attr("lang", lang);
+			this._ship 		= KC3Translation.getJSON(repo, 'ships');
+			this._slotitem	= KC3Translation.getJSON(repo, 'items');
+			this._quests	= KC3Translation.getJSON(repo, 'quests');
+			this._ranks		= KC3Translation.getJSON(repo, 'ranks');
+			this._stype		= KC3Translation.getJSON(repo, 'stype');
+			this._servers	= KC3Translation.getJSON(repo, 'servers');
+			this._battle	= KC3Translation.getJSON(repo, 'battle');
+			this._terms		= KC3Translation.getJSON(repo, 'terms');
 		},
 		
 		/* Data Access

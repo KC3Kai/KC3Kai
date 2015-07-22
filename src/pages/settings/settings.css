@@ -68,16 +68,18 @@ body {
 	color:#0099FF;
 }
 .section a {
+	width:200px;
 	height:24px;
 	float:right;
-	margin:0px 0px 0px 0px;
+	margin:0px 10px 0px 0px;
 	text-decoration:none;
+	text-align:right;
 }
 .section .icon {
 	width:16px;
 	height:16px;
 	line-height:16px;
-	float:left;
+	float:right;
 	border-radius:10px;
 	margin:4px 5px 0px 0px;
 	background:#555;
@@ -88,11 +90,10 @@ body {
 	text-decoration:none;
 }
 .section .note {
-	width:100px;
 	height:24px;
+	float:right;
 	font-size:12px;
 	line-height:24px;
-	/*background:#ccf;*/
 }
 /* Settings Boxes */
 .settingBox {

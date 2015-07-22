@@ -169,10 +169,6 @@ module.exports = function(grunt) {
 				}]
 			}
 		},
-		'json-minify': {
-			manifest : { files: 'build/tmp/manifest.json' },
-			data : { files: 'build/tmp/data/**/*.json' }
-		},
 		jsonlint: {
 			all : {
 				options: {
@@ -183,6 +179,10 @@ module.exports = function(grunt) {
 					'build/tmp/data/**/*.json'
 				]
 			}
+		},
+		'json-minify': {
+			manifest : { files: 'build/tmp/manifest.json' },
+			data : { files: 'build/tmp/data/**/*.json' }
 		},
 		concat: {
 			global_css: {
@@ -237,8 +237,8 @@ module.exports = function(grunt) {
 		'string-replace:allhtml',
 		'htmlmin',
 		'string-replace:manifest',
-		'json-minify',
 		'jsonlint',
+		'json-minify',
 		'copy:processed',
 		'concat:global_css',
 		'concat:global_js',

@@ -1,11 +1,11 @@
 [
 	{
-		"section": "Global",
+		"section": "SettingsGlobal",
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Global",
 		"contents" : [
 			{
 				"id" : "language",
-				"name" : "Language",
+				"name" : "SettingsLanguage",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
@@ -16,79 +16,80 @@
 						[ "scn", "简体中文" ],
 						[ "vi", "Tiếng Việt" ],
 						[ "de", "Deutsch" ],
-						[ "fr", "Français" ]
+						[ "fr", "Français" ],
+						[ "it", "Italiano" ]
 					]
 				}
 			},
 			{
 				"id" : "elosFormula",
-				"name" : "Effective LoS Formula",
+				"name" : "SettingsELosFormula",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ 1, "Sum" ],
-						[ 2, "Old" ],
-						[ 3, "New" ]
+						[ 1, "SettingsELosSum" ],
+						[ 2, "SettingsELosOld" ],
+						[ 3, "SettingsELosNew" ]
 					]
 				}
 			}
 		]
 	},
 	{
-		"section": "Game Information",
+		"section": "SettingsGameInfo",
 		"help" : "",
 		"contents" : [
 			{
 				"id" : "info_face",
-				"name" : "Construction Faces",
+				"name" : "SettingsConstructionFaces",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "info_craft",
-				"name" : "Crafting Results",
+				"name" : "SettingsCraftBox",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "info_compass",
-				"name" : "Compass and Enemy",
+				"name" : "SettingsCompass",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "info_battle",
-				"name" : "Battle Environment",
+				"name" : "SettingsBattleData",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "info_boss",
-				"name" : "Boss Composition",
+				"name" : "SettingsBossComp",
 				"type" : "check",
 				"options" : {}
 			}
 		]
 	},
 	{
-		"section": "Screenshot",
+		"section": "SettingsScreenshot",
 		"help" : "",
 		"contents" : [
 			{
 				"id" : "ss_mode",
-				"name" : "Output Mode",
+				"name" : "SettingsSSOutput",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ 0, "Download" ],
-						[ 1, "Imgur" ],
-						[ 2, "New Tab" ]
+						[ 0, "SettingsSSDownload" ],
+						[ 1, "SettingsSSImgur" ],
+						[ 2, "SettingsSSNewTab" ]
 					]
 				}
 			},
 			{
 				"id" : "ss_type",
-				"name" : "Filetype",
+				"name" : "SettingsSSFileType",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
@@ -100,30 +101,30 @@
 		]
 	},
 	{
-		"section": "Alerts",
+		"section": "SettingsAlerts",
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Alerts",
 		"contents" : [
 			{
 				"id" : "alert_diff",
-				"name" : "Timer Allowance",
+				"name" : "SettingsTimeDiff",
 				"type" : "small_text",
-				"options" : { "label" : "seconds" }
+				"options" : { "label" : "SettingsSeconds" }
 			},
 			{
 				"id" : "alert_type",
-				"name" : "Sound Type",
+				"name" : "SettingsSoundType",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
 						[ 0, "None" ],
 						[ 1, "DING!" ],
-						[ 2, "Custom" ]
+						[ 2, "SettingsCustom" ]
 					]
 				}
 			},
 			{
 				"id" : "alert_custom",
-				"name" : "Custom Sound URL",
+				"name" : "SettingsCustomSound",
 				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
 			},
@@ -135,129 +136,129 @@
 			},
 			{
 				"id" : "alert_desktop",
-				"name" : "Desktop Notification",
+				"name" : "SettingsDesktopNotif",
 				"type" : "check",
 				"options" : {}
 			}
 		]
 	},
 	{
-		"section": "API Game Screen",
+		"section": "SettingsAPIGameScreen",
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Screen",
 		"contents" : [
 			{
 				"id" : "api_translation",
-				"name" : "Quest Translations",
+				"name" : "SettingsQuestOverlay",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "api_tracking",
-				"name" : "Quest Tracking",
+				"name" : "SettingsQuestTracking",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "api_askExit",
-				"name" : "Exit Confirmation",
+				"name" : "SettingsConfirmExit",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "api_margin",
-				"name" : "Top Margin",
+				"name" : "SettingsScreenMargin",
 				"type" : "small_text",
 				"options" : { "label" : "pixels" }
 			},
 			{
 				"id" : "api_bg_color",
-				"name" : "Background Color",
+				"name" : "SettingsBGColor",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-color property" }
+				"options" : { "placeholder" : "SettingsBGColorDesc" }
 			},
 			{
 				"id" : "api_bg_image",
-				"name" : "Background Image",
+				"name" : "SettingsBGImage",
 				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
 			},
 			{
 				"id" : "api_bg_size",
-				"name" : "Background Size",
+				"name" : "SettingsBGSize",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-size property" }
+				"options" : { "placeholder" : "SettingsBGSizeDesc" }
 			},
 			{
 				"id" : "api_bg_position",
-				"name" : "Background Position",
+				"name" : "SettingsBGPosition",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-position property" }
+				"options" : { "placeholder" : "SettingsBGPositionDesc" }
 			},
 			{
 				"id" : "api_gameScale",
-				"name" : "Game Player Scale",
+				"name" : "SettingsPlayerScale",
 				"type" : "small_text",
 				"options" : { "label" : "%" }
 			}
 		]
 	},
 	{
-		"section": "DMM Gameplay",
+		"section": "SettingsDMMGameplay",
 		"help" : "",
 		"contents" : [
 			{
 				"id" : "dmm_customize",
-				"name" : "Apply Customizations",
+				"name" : "SettingsDMMCustomize",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "dmm_translation",
-				"name" : "Quest Translations",
+				"name" : "SettingsQuestOverlay",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "dmm_tracking",
-				"name" : "Quest Tracking",
+				"name" : "SettingsQuestTracking",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "dmm_askExit",
-				"name" : "Exit Confirmation",
+				"name" : "SettingsConfirmExit",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "dmm_margin",
-				"name" : "Top Margin",
+				"name" : "SettingsScreenMargin",
 				"type" : "small_text",
 				"options" : { "label" : "pixels" }
 			},
 			{
 				"id" : "dmm_bg_color",
-				"name" : "Background Color",
+				"name" : "SettingsBGColor",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-color property" }
+				"options" : { "placeholder" : "SettingsBGColorDesc" }
 			},
 			{
 				"id" : "dmm_bg_image",
-				"name" : "Background Image",
+				"name" : "SettingsBGImage",
 				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
 			},
 			{
 				"id" : "dmm_bg_size",
-				"name" : "Background Size",
+				"name" : "SettingsBGSize",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-size property" }
+				"options" : { "placeholder" : "SettingsBGSizeDesc" }
 			},
 			{
 				"id" : "dmm_bg_position",
-				"name" : "Background Position",
+				"name" : "SettingsBGPosition",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-position property" }
+				"options" : { "placeholder" : "SettingsBGPositionDesc" }
 			}
 		]
 	},
@@ -271,14 +272,13 @@
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ "default", "Default" ],
-						[ "dark", "Dark" ]
+						[ "default", "Default" ]
 					]
 				}
 			},
 			{
 				"id" : "pan_size",
-				"name" : "Panel Size",
+				"name" : "SettingsPanelSize",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
@@ -289,31 +289,31 @@
 			},
 			{
 				"id" : "pan_bg_color",
-				"name" : "Background Color",
+				"name" : "SettingsBGColor",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-color property" }
+				"options" : { "placeholder" : "SettingsBGColorDesc" }
 			},
 			{
 				"id" : "pan_bg_image",
-				"name" : "Background Image",
+				"name" : "SettingsBGImage",
 				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
 			},
 			{
 				"id" : "pan_bg_size",
-				"name" : "Background Size",
+				"name" : "SettingsBGSize",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-size property" }
+				"options" : { "placeholder" : "SettingsBGSizeDesc" }
 			},
 			{
 				"id" : "pan_bg_position",
-				"name" : "Background Position",
+				"name" : "SettingsBGPosition",
 				"type" : "long_text",
-				"options" : { "placeholder" : "See CSS background-position property" }
+				"options" : { "placeholder" : "SettingsBGPositionDesc" }
 			},
 			{
 				"id" : "pan_opacity",
-				"name" : "Interface Opacity",
+				"name" : "SettingsPanelOpacity",
 				"type" : "small_text",
 				"options" : { "label" : "%" }
 			}

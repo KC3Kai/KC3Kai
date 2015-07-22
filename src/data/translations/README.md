@@ -7,35 +7,52 @@ This note file will be maintained so translators from forks can easily check bac
 ## Maintainers & Translators
 In case you want to assist the translations, you may contact related constributors by tagging them on an issue. If it is a new language, see the GitHub wiki link at the top about Localization.
 
-#### DE (German "Deutsch")
-* [Admiral Mikado](http://kancolle.wikia.com/wiki/User:Admiral_Mikado)
+##### DE (German "Deutsch")
+* [Admiral Mikado](http://kancolle.wikia.com/wiki/User:Admiral_Mikado) (via manual)
 
-#### EN (English)
+##### EN (English)
 * @dragonjet (via main repo)
 
-#### FR (French "Français")
-* (via manual text files)
+##### FR (French "Français")
+* @Arkayda963 (via manual)
 
-#### ID (Indonesian)
-* 
+##### ID (Indonesian)
+* @freezebear (via fork)
+* @hufuhufu (via fork)
+* @vrarara (via fork)
 
-#### JP (Japanese "日本語")
-* 
+##### JP (Japanese "日本語")
+* @nicky008 (via fork)
 
-#### SCN (Simplified Chinese "简体中文")
+##### SCN (Simplified Chinese "简体中文")
 Note that the scn folder contain translations for Simplified Chinese (zh-hans)
-* 
+* @Diablohu (via fork)
 
-#### TCN (Traditional Chinese "繁體中文")
+##### TCN (Traditional Chinese "繁體中文")
 Note that the tcn folder contain translations for Traditional Chinese (zh-hant)
-* 
+* @kololz (via fork)
 
-#### VI (Vietnamese "Tiếng Việt")
-* 
+##### VI (Vietnamese "Tiếng Việt")
+* @bamboo3250 (via fork)
 
 
 
 ## Translation Changelog
+
+#### 22nd July 2015
+
+Everyone, please view:
+* 
+
+`developers.json`
+* No need to copy this on your localized files. Remove if exists.
+
+`settings.json`
+* No need to copy this on your localized files. Remove if exists.
+
+`terms.json`
+* Words from `developers.json` and `settings.json` were transferred here.
+
 
 #### 21st July 2015
 

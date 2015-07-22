@@ -53,7 +53,77 @@
 	"AboutHelpCommunity" : "これから助けることができます。",
 	"AboutHelpLearnMore" : "コーディング必要がありません! それを行う方法の詳細はこちら。 ＞",
 	
+	"AboutCoders" : "Coders",
+	"AboutProjectHead" : "プロジェクトリーダ",
+	"AboutWikiWriter" : "Wiki作家",
+	"AboutDeveloper" : "開発者",
+	"AboutTranslators" : "Translators",
+	"AboutTranslator" : "翻訳者",
+	"AboutTesters" : "テスター",
+	"AboutDevTester" : "Dev Build",
+	"AboutWebTester" : "WebStore Build",
+	"AboutOther" : "Other Credits",
+	"AboutLogo" : "ロゴデザイン",
+	"AboutFairy" : "妖精デザイン",
+	
 	"SettingsTitle" : "KC3改の設定",
+	
+	"SettingsGlobal" : "グローバル",
+	"SettingsLanguage" : "言語",
+	"SettingsELosFormula" : "効果的なLoS式",
+	"SettingsELosSum" : "合計",
+	"SettingsELosOld" : "古い",
+	"SettingsELosNew" : "新",
+	
+	"SettingsGameInfo" : "ゲーム情報",
+	"SettingsConstructionFaces" : "建設顔",
+	"SettingsCraftBox" : "工芸結果",
+	"SettingsCompass" : "コンパスと敵",
+	"SettingsBattleData" : "バトル環境",
+	"SettingsBossComp" : "ボス組成",
+	
+	"SettingsScreenshot" : "スクリーンショット",
+	"SettingsSSOutput" : "出力モード",
+	"SettingsSSDownload" : "ダウンロード",
+	"SettingsSSImgur" : "Imgur",
+	"SettingsSSNewTab" : "新しいタブ",
+	"SettingsSSFileType" : "ファイルタイプ",
+	
+	"SettingsAlerts" : "Alerts",
+	"SettingsTimeDiff" : "Timer Allowance",
+	"SettingsSeconds" : "seconds",
+	"SettingsSoundType" : "Sound Type",
+	"SettingsDing" : "DING!",
+	"SettingsCustom" : "Custom",
+	"SettingsCustomSound" : "Custom Sound URL",
+	"SettingsDesktopNotif" : "Desktop Notification",
+	
+	"SettingsAPIGameScreen" : "API Game Screen",
+	"SettingsQuestOverlay" : "Quest Translations",
+	"SettingsQuestTracking" : "Quest Tracking",
+	"SettingsConfirmExit" : "Exit Confirmation",
+	"SettingsScreenMargin" : "Top Margin",
+	"SettingsBGColor" : "Background Color",
+	"SettingsBGColorDesc" : "See CSS background-color property",
+	"SettingsBGImage" : "Background Image",
+	"SettingsBGSize" : "Background Size",
+	"SettingsBGSizeDesc" : "See CSS background-size property",
+	"SettingsBGPosition" : "Background Position",
+	"SettingsBGPositionDesc" : "See CSS background-position property",
+	"SettingsPlayerScale" : "Game Player Scale",
+	
+	"SettingsDMMGameplay" : "DMM Gameplay",
+	"SettingsDMMCustomize" : "Apply Customizations",
+	
+	"SettingsPanelSize" : "Panel Size",
+	"SettingsPanelOpacity" : "Interface Opacity",
+	
+	"Small" : "Small",
+	"Big" : "Big",
+	"Theme" : "Theme",
+	"Panel" : "Panel",
+	"Volume" : "Volume",
+	"None" : "None",
 	"LearnMore" : "もっと詳しく",
 	"Saved" : "保存する！",
 	
@@ -64,5 +134,9 @@
 	"LevelText" : "レベル",
 	"LevelShort" : "Lv.",
 	"LevelNext" : "次",
-	"Screenshot" : "スクリーンショット"
+	"Screenshot" : "スクリーンショット",
+	
+	"PanelErrorStorage" : "Your Chrome's localStorage is disabled on your settings. KC3改 needs this feature. <a href=\"http://stackoverflow.com/a/26671889/483704\" target=\"_blank\">See how to enable this</a>.",
+	
+	"Dummy" : "Dummy"
 }
