@@ -53,12 +53,55 @@
 			$(".stat_pvp .stat_rate .stat_value").html(this.statistics.pvp.rate+"%");
 			$(".stat_pvp .stat_win .stat_value").html(this.statistics.pvp.win);
 			$(".stat_pvp .stat_lose .stat_value").html(this.statistics.pvp.lose);
-			// $(".stat_pvp .stat_atk .stat_value").html(this.statistics.pvp.attacked);
-			// $(".stat_pvp .stat_atkwin .stat_value").html(this.statistics.pvp.attacked_win);
 			
 			$(".stat_exped .stat_rate .stat_value").html(this.statistics.exped.rate+"%");
 			$(".stat_exped .stat_success .stat_value").html(this.statistics.exped.success);
 			$(".stat_exped .stat_total .stat_value").html(this.statistics.exped.total);
+			
+			// Export all data
+			$(".tab_profile .export_data").on("click", function(){
+				var blob = new Blob([JSON.stringify({
+					absoluteswf: localStorage.absoluteswf,
+					config: JSON.parse(localStorage.config),
+					fleets: JSON.parse(localStorage.fleets),
+					gears: JSON.parse(localStorage.gears),
+					lastResource:localStorage.lastResource,
+					lastUseitem: localStorage.lastUseitem,
+					maps: JSON.parse(localStorage.maps),
+					player: JSON.parse(localStorage.player),
+					quests: JSON.parse(localStorage.quests),
+					ships: JSON.parse(localStorage.ships),
+					statistics: JSON.parse(localStorage.statistics)
+					
+				})], {type: "application/json;charset=utf-8"});
+				
+				saveAs(blob, "["+PlayerManager.hq.name+"] "+((new Date()).format("yyyy-mm-dd"))+".kc3");
+			});
+			
+			// Import data file open dialog
+			$(".tab_profile .import_data").on("click", function(){
+				$(".tab_profile .import_file").trigger("click");
+			});
+			
+			// On-data has been read
+			var reader = new FileReader();
+			reader.onload = function(theFile){
+				var importedData = JSON.parse(this.result);
+				alert("Imported data for "+importedData.player.name+" from "+ KC3Meta.serverByNum(importedData.player.server).name+"!");
+				// console.log( importedData );
+				window.location.reload();
+			};
+			
+			// On-selected file to import
+			$(".tab_profile .import_file").on("change", function(event){
+				if( event.target.files.length > 0 ){
+					if(window.File && window.FileReader && window.FileList && window.Blob){
+						reader.readAsText( event.target.files[0] );
+					}else{
+						alert("Unfortunately, file reading is not available on your browser.");
+					}
+				}
+			});
 		}
 		
 	};
