@@ -168,7 +168,7 @@
 				"gh" :"https://github.com/RanFoxRun",
 				"wk" :"http://kancolle.wikia.com/wiki/User:RanFoxRun"
 			}
-		}  
+		},  
 		{
 			"name": "qunow",
 			"avatar" : "about:blank",
@@ -178,8 +178,7 @@
 				"wk" :"https://kancolle.wikia.com/wiki/User:Qunow"
 				"tw" :"https://twitter.com/c933103",
 			}
-		},
-
+		}
 	],
 	"AboutTesters" : [
 		{
