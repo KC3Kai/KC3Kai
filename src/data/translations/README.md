@@ -22,6 +22,7 @@ In case you want to assist the translations, you may contact related constributo
 * @vrarara (via fork)
 
 ##### JP (Japanese "日本語")
+Note that the jp folder contain translations for Japanese (ja)
 * @nicky008 (via fork)
 
 ##### SCN (Simplified Chinese "简体中文")
