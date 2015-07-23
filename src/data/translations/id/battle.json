@@ -10,19 +10,19 @@
 	],
 	
 	"airbattle" : [
-		["AP", "", "Air Parity"],
-		["AS+", "good", "Air Supremacy"],
-		["AS", "good", "Air Superiority"],
-		["AI", "bad", "Air Incapability"],
-		["AD", "bad", "Air Denial"]
+		["AP", "", "Proposional Udara"],
+		["AS+", "good", "Supremasi Udara"],
+		["AS", "good", "Superioritas Udara"],
+		["AI", "bad", "Ketidakcakapan Udara"],
+		["AD", "bad", "Resistansi Udara"]
 	],
 	
 	"engagement" : [
 		["", "", ""],
-		["Prll", "", "Parallel"],
-		["HdOn", "", "Head-on"],
-		["Gr-T", "good", "Green T"],
-		["Rd-T", "bad", "Red T"]
+		["Prll", "", "Paralel"],
+		["HdOn", "", "Berhadapan"],
+		["Gr-T", "good", "T Hijau"],
+		["Rd-T", "bad", "T Merah"]
 	]
 	
 }

@@ -31,6 +31,7 @@ Note that the scn folder contain translations for Simplified Chinese (zh-hans)
 ##### TCN (Traditional Chinese "繁體中文")
 Note that the tcn folder contain translations for Traditional Chinese (zh-hant)
 * @kololz (via fork)
+* @c933103 (via fork)
 
 ##### VI (Vietnamese "Tiếng Việt")
 * @bamboo3250 (via fork)
