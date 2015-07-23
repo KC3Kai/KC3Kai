@@ -25,6 +25,7 @@
     "ResourceSoftcapLimit": "資源自然回復上限",
     "MainScreenBGM": "母港背景音樂",
     "LevelUpNotice": "隨着艦隊司令部(提督)的等級上升，「資源自然回復上限」會被提升，可被開發的裝備數量也會增加。",
+    "ImprovementMaterial": "改修資材",
     "Experience": "提督經驗值",
     "Name": "提督名",
 	
@@ -49,6 +50,21 @@
 	"AboutSource" : "編碼來源",
 	"AboutWiki" : "使用指南(英文)",
 	"AboutReport" : "回報問題",
+	"AboutHelpCommunity" : "你也能幫忙！",
+	"AboutHelpLearnMore" : "不需要懂得寫程式！了解如何能幫忙》",
+	
+	"AboutCoders" : "程式編寫人員",
+	"AboutProjectHead" : "KC3 改領導人",
+	"AboutWikiWriter" : "使用指南製作人員",
+	"AboutDeveloper" : "開發人員",
+	"AboutTranslators" : "翻譯",
+	"AboutTranslator" : "翻譯",
+	"AboutTesters" : "測試者",
+	"AboutDevTester" : "開發版",
+	"AboutWebTester" : "Chrome線上商店版",
+	"AboutOther" : "其他鳴謝",
+	"AboutLogo" : "KC3 改標誌設計",
+	"AboutFairy" : "精靈設計者",
 	
 	"SettingsTitle" : "KC3改設定",
 	
