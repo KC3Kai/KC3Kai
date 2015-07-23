@@ -25,6 +25,7 @@
     "ResourceSoftcapLimit": "资源上限",
     "MainScreenBGM": "母港背景音乐",
     "LevelUpNotice": "随着司令部等级的提升，资源上限也会提升。",
+	"ImprovementMaterial": "改修资财",
     "Experience": "经验值",
     "Name": "提督名",
 	
@@ -52,7 +53,77 @@
 	"AboutHelpCommunity" : "你也可以帮忙",
 	"AboutHelpLearnMore" : "无需懂代码！点击了解如何贡献 >",
 	
+	"AboutCoders" : "开发人员",
+	"AboutProjectHead" : "项目带头人",
+	"AboutWikiWriter" : "百科编辑",
+	"AboutDeveloper" : "开发者",
+	"AboutTranslators" : "翻译人员",
+	"AboutTranslator" : "翻译",
+	"AboutTesters" : "测试人员",
+	"AboutDevTester" : "内部版本",
+	"AboutWebTester" : "正式版本",
+	"AboutOther" : "其他",
+	"AboutLogo" : "Logo设计",
+	"AboutFairy" : "妖精设计",
+	
 	"SettingsTitle" : "KC3改 - 设置",
+	
+	"SettingsGlobal" : "综合",
+	"SettingsLanguage" : "语言",
+	"SettingsELosFormula" : "索敌公式",
+	"SettingsELosSum" : "总和",
+	"SettingsELosOld" : "旧公式",
+	"SettingsELosNew" : "新公式",
+	
+	"SettingsGameInfo" : "游戏信息",
+	"SettingsConstructionFaces" : "剧透建造结果",
+	"SettingsCraftBox" : "剧透开发结果",
+	"SettingsCompass" : "剧透航向",
+	"SettingsBattleData" : "战斗模式",
+	"SettingsBossComp" : "Boss配置",
+	
+	"SettingsScreenshot" : "截图",
+	"SettingsSSOutput" : "输出方式",
+	"SettingsSSDownload" : "自动下载至下载目录",
+	"SettingsSSImgur" : "上传至Imgur",
+	"SettingsSSNewTab" : "打开新标签页",
+	"SettingsSSFileType" : "文件格式",
+	
+	"SettingsAlerts" : "提醒",
+	"SettingsTimeDiff" : "倒计时提前",
+	"SettingsSeconds" : "秒",
+	"SettingsSoundType" : "提示音",
+	"SettingsDing" : "DING!",
+	"SettingsCustom" : "自定义",
+	"SettingsCustomSound" : "自定义提示音",
+	"SettingsDesktopNotif" : "桌面通知",
+	
+	"SettingsAPIGameScreen" : "API模式",
+	"SettingsQuestOverlay" : "任务翻译",
+	"SettingsQuestTracking" : "任务追踪",
+	"SettingsConfirmExit" : "退出游戏时需确认",
+	"SettingsScreenMargin" : "上边边距",
+	"SettingsBGColor" : "背景颜色 (bg-color)",
+	"SettingsBGColorDesc" : "请查阅 CSS background-color 属性",
+	"SettingsBGImage" : "背景图片 (bg-image)",
+	"SettingsBGSize" : "背景尺寸 (bg-size)",
+	"SettingsBGSizeDesc" : "请查阅 CSS background-size 属性",
+	"SettingsBGPosition" : "背景位置 (bg-position)",
+	"SettingsBGPositionDesc" : "请查阅 CSS background-position 属性",
+	"SettingsPlayerScale" : "游戏窗口缩放",
+	
+	"SettingsDMMGameplay" : "DMM模式",
+	"SettingsDMMCustomize" : "允许自定义",
+	
+	"SettingsPanelSize" : "面板尺寸",
+	"SettingsPanelOpacity" : "界面不透明度 (opacity)",
+	
+	"Small" : "小",
+	"Big" : "大",
+	"Theme" : "主题",
+	"Panel" : "面板",
+	"Volume" : "音量",
+	"None" : "无",
 	"LearnMore" : "了解更多",
 	"Saved" : "已保存!",
 	
@@ -63,5 +134,9 @@
 	"LevelText" : "等级",
 	"LevelShort" : "Lv.",
 	"LevelNext" : "还需",
-	"Screenshot" : "截图"
+	"Screenshot" : "截图",
+	
+	"PanelErrorStorage" : "Your Chrome's localStorage is disabled on your settings. KC3改 needs this feature. <a href=\"http://stackoverflow.com/a/26671889/483704\" target=\"_blank\">See how to enable this</a>.",
+	
+	"Dummy" : "Dummy"
 }
