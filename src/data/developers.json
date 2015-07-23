@@ -171,12 +171,13 @@
 		},  
 		{
 			"name": "qunow",
-			"avatar" : "about:blank",
+			"avatar" : "https://avatars3.githubusercontent.com/u/1525293?v=3&s=40",
 			"desc" : "繁體中文",
 			"links" : {
 				"gh" :"https://github.com/c933103",
 				"wk" :"https://kancolle.wikia.com/wiki/User:Qunow",
-				"tw" :"https://twitter.com/c933103"
+				"tw" :"https://twitter.com/c933103",
+				"wb" :"http://zh.moegirl.org/wiki/User:C933103"
 			}
 		}
 	],
