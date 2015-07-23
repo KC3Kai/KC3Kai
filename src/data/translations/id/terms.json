@@ -25,6 +25,7 @@
     "ResourceSoftcapLimit": "Batas Sumber Daya(Softcap)",
     "MainScreenBGM": "BGM Tampilan Utama",
     "LevelUpNotice": "Setiap level HQmu bertambah, Batas Softcap juga bertambah, dan akan memungkinkan untuk membuat Equipment baru.",
+    "ImprovementMaterial": "Sekrup",
     "Experience": "Experience",
     "Name": "Nama",
 
@@ -43,7 +44,7 @@
 	"MenuChecking" : "Memeriksa pembaruan KC3改 berikutnya...",
 	"MenuOnLatest" : "Anda menggunakan versi terbaru!",
 
-
+        "AboutTitle" : "Tentang Pengembang KC3改",
         "Version" : "Versi",
         "AboutHome" : "Halaman Rumah",
         "AboutSource" : "Kode Sumber",
@@ -52,7 +53,77 @@
 	"AboutHelpCommunity" : "Anda juga bisa membantu",
 	"AboutHelpLearnMore" : "Tidak perlu menulis kode! Pelajari lebih lanjut >",
 
+        "AboutCoders" : "Penulis Kode",
+        "AboutProjectHead" : "Pemimpin proyek",
+        "AboutWikiWriter" : "Penulis Wiki",
+        "AboutDeveloper" : "Pengembang",
+        "AboutTranslators" : "Penerjemah",
+        "AboutTranslator" : "Penerjemah",
+        "AboutTesters" : "Penguji",
+        "AboutDevTester" : "Dev Build",
+        "AboutWebTester" : "WebStore Build",
+        "AboutOther" : "Lainnya",
+        "AboutLogo" : "Perancang Logo",
+        "AboutFairy" : "Perancang Fairy",
+
         "SettingsTitle" : "Pengaturan KC3改",
+
+        "SettingsGlobal" : "Global",
+        "SettingsLanguage" : "Bahasa",
+        "SettingsELosFormula" : "Efektivitas Formula LoS",
+        "SettingsELosSum" : "Jumlah",
+        "SettingsELosOld" : "Lama",
+        "SettingsELosNew" : "Baru",
+
+        "SettingsGameInfo" : "Informasi Game",
+        "SettingsConstructionFaces" : "Wajah Konstruksi",
+        "SettingsCraftBox" : "Hasil Crafting",
+        "SettingsCompass" : "Kompas dan Musuh",
+        "SettingsBattleData" : "Informasi Pertempuran",
+        "SettingsBossComp" : "Susunan Bos",
+
+        "SettingsScreenshot" : "Screenshot",
+        "SettingsSSOutput" : "Hasil Screenshot",
+        "SettingsSSDownload" : "Unduh",
+        "SettingsSSImgur" : "Imgur",
+        "SettingsSSNewTab" : "Tab Baru",
+        "SettingsSSFileType" : "Format File",
+
+        "SettingsAlerts" : "Peringatan",
+        "SettingsTimeDiff" : "Penyisihan Waktu",
+        "SettingsSeconds" : "detik",
+        "SettingsSoundType" : "Tipe Suara",
+        "SettingsDing" : "DING!",
+        "SettingsCustom" : "Pilihan Sendiri",
+        "SettingsCustomSound" : "URL Suara Pilihan Sendiri",
+        "SettingsDesktopNotif" : "Notifikasi Desktop",
+
+        "SettingsAPIGameScreen" : "Tampilan Game API",
+        "SettingsQuestOverlay" : "Terjemahan Quest",
+        "SettingsQuestTracking" : "Penanda Quest",
+        "SettingsConfirmExit" : "Konfirmasi Keluar",
+        "SettingsScreenMargin" : "Batas Atas",
+        "SettingsBGColor" : "Warna Latar Belakang",
+        "SettingsBGColorDesc" : "Lihat properti background-color CSS",
+        "SettingsBGImage" : "Gambar Latar Belakang",
+        "SettingsBGSize" : "Ukuran Latar Belakang",
+        "SettingsBGSizeDesc" : "Lihat properti background-size CSS",
+        "SettingsBGPosition" : "Posisi Latar Balakang",
+        "SettingsBGPositionDesc" : "Lihat properti background-position CSS",
+        "SettingsPlayerScale" : "Skala Tampilan Game",
+
+        "SettingsDMMGameplay" : "Gameplay DMM",
+        "SettingsDMMCustomize" : "Terapkan Pengaturan",
+
+        "SettingsPanelSize" : "Ukuran Panel",
+        "SettingsPanelOpacity" : "Transparansi Antarmuka",
+
+        "Small" : "Kecil",
+        "Big" : "Besar",
+        "Theme" : "Tema",
+        "Panel" : "Panel",
+        "Volume" : "Volume Suara",
+        "None" : "Tidak ada",
         "LearnMore" : "Pelajari Lebih lanjut",
         "Saved" : "Disimpan!",
 
@@ -63,5 +134,9 @@
         "LevelText" : "Level",
         "LevelShort" : "Lv.",
         "LevelNext" : "Berikutnya",
-        "Screenshot" : "Screenshot"
+        "Screenshot" : "Screenshot",
+
+        "PanelErrorStorage" : "Chrome localStorage dinonaktifkan di pengaturan anda. KC3改 memerlukan fitur tersebut. <a href=\"http://stackoverflow.com/a/26671889/483704\" target=\"_blank\">Bagaimana cara mengaktifkannya.</a>.",
+
+        "Dummy" : "Tiruan"
 }
