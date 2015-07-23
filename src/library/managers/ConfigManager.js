@@ -10,7 +10,7 @@ Retreives when needed to apply on components
 	
 	window.ConfigManager = {
 		
-		// Default values. As a fucntion to not include on JSON string
+		// Default values. As a function to not include on JSON string
 		defaults : function(){
 			return {
 				version				: 6,
@@ -93,8 +93,7 @@ Retreives when needed to apply on components
 		
 		// Toggle Equipment LoS
 		scrollElosMode :function(){
-			this.elosFormula++;
-			if(this.elosFormula > 3){ this.elosFormula=1; }
+			this.elosFormula = (this.elosFormula % 3) + 1;
 			this.save();
 		}
 		

@@ -270,20 +270,20 @@
 							FleetEquipment( $(".ship-gear-4", ShipBox), CurrentShip.equipment(3), CurrentShip.slots[3] );
 						}
 					});
-                                    
-                                    
-                                    try {
-                                        var expeditionAnalyzeResult = ExpeditionHelper.analyzeFleet( CurrentFleet );
-                                        if (expeditionAnalyzeResult) {
-                                            expeditionAnalyzeResult.e = expeditionAnalyzeResult.e.join(",");
-                                            $(".expedition-helper").text(JSON.stringify( expeditionAnalyzeResult ));
-                                        } else {
-                                            $(".expedition-helper").text( "no result" );
-                                        }
-                                    } catch (e) 
-                                    {
-                                        $(".expedition-helper").text("error: " + e);
-                                    }
+										
+										
+					try {
+							var expeditionAnalyzeResult = ExpeditionHelper.analyzeFleet( CurrentFleet );
+							if (expeditionAnalyzeResult) {
+									expeditionAnalyzeResult.e = expeditionAnalyzeResult.e.join(",");
+									$(".expedition-helper").text(JSON.stringify( expeditionAnalyzeResult ));
+							} else {
+									$(".expedition-helper").text( "no result" );
+							}
+					} catch (e) 
+					{
+							$(".expedition-helper").text("error: " + e);
+					}
 
 					// Expedition Timer Faces
 					KC3TimerManager._exped[0].face( PlayerManager.fleets[1].ship(0).masterId );
