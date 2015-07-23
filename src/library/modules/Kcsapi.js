@@ -194,10 +194,10 @@ Previously known as "Reactor"
 			for(var ctr in response.api_data){
 				thisItem = response.api_data[ctr];
 				switch(thisItem.api_id){
-					case 1: myResources[1] = thisItem.api_value; break;
-					case 2: myResources[2] = thisItem.api_value; break;
-					case 3: myResources[3] = thisItem.api_value; break;
-					case 4: myResources[4] = thisItem.api_value; break;
+					case 1: myResources[0] = thisItem.api_value; break;
+					case 2: myResources[1] = thisItem.api_value; break;
+					case 3: myResources[2] = thisItem.api_value; break;
+					case 4: myResources[3] = thisItem.api_value; break;
 					case 5: PlayerManager.consumables.torch = thisItem.api_value; break;
 					case 6: PlayerManager.consumables.buckets = thisItem.api_value; break;
 					case 7: PlayerManager.consumables.devmats = thisItem.api_value; break;
