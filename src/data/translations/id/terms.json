@@ -29,9 +29,9 @@
     "Experience": "Experience",
     "Name": "Nama",
 
-	"MenuPlayAPIName" : "Bermain Melalui Link API",
-	"MenuPlayAPIDesc" : "Bermain menggunakan link API yang disimpan atau masukan secara manual",
-	"MenuRefreshAPIName" : "Segarkan Link API",
+	"MenuPlayAPIName" : "Bermain Melalui API Link",
+	"MenuPlayAPIDesc" : "Bermain menggunakan API link yang disimpan atau masukan secara manual",
+	"MenuRefreshAPIName" : "Refresh API Link",
 	"MenuRefreshAPIDesc" : "Membuka halaman DMM dimana kami akan mengekstrak link API baru anda",
 	"MenuPlayDMMName" : "Bermain Melalui Website DMM",
 	"MenuPlayDMMDesc" : "Gameplay Portal DMM Netgame Alamiah, untuk kalian yang waspada. Sangat Aman.",
