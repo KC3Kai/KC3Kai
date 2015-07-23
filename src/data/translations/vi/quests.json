@@ -40,11 +40,11 @@
         "desc": "Có Myoukou (\u5999\u9ad8), Nachi (\u90a3\u667a), Ashigara (\u8db3\u67c4) và Haguro (\u7fbd\u9ed2) trong hạm đội chính."
     },
     "111": {
-        "name": "Thành lập the lớp Fusou!",
+        "name": "Thành lập lớp Fusou!",
         "desc": "Có Fusou (\u6276\u6851) và Yamashiro (\u5c71\u57ce) trong hạm đội chính."
     },
     "112": {
-        "name": "Thành lập the lớp Ise!",
+        "name": "Thành lập lớp Ise!",
         "desc": "Có Ise (\u4f0a\u52e2) và Hyuuga (\u65e5\u5411) trong hạm đội chính."
     },
     "113": {
@@ -104,32 +104,32 @@
         "desc": "Có 2 BBV và 2 CAV trong hạm đội chính."
     },
     "127": {
-        "name": "Thành lập 1 Medium-Sized Submarine Fleet!",
+        "name": "Thành lập 1 Hạm đội tàu ngầm cỡ Trung!",
         "desc": "Có 3 SS trong hạm đội chính."
     },
     "128": {
-        "name": "Thành lập the Cruiser Division 6!",
+        "name": "Thành lập Hạm đội Tuần dương số 6!",
         "desc": "Có Furutaka (\u53e4\u9df9), Kako(\u52a0\u53e4), Aoba (\u9752\u8449) và Kinugasa (\u8863\u7b20) trong hạm đội chính."
     },
     "129": {
-        "name": "Thành lập the 5th Fleet!",
-        "desc": "Có Nachi (\u90a3\u667a), Ashigara (\u8db3\u67c4), Tama (\u591a\u6469), và Kiso (\u6728\u66fe) in your fleet."
+        "name": "Thành lập Hạm đội số 5!",
+        "desc": "Có Nachi (\u90a3\u667a), Ashigara (\u8db3\u67c4), Tama (\u591a\u6469), và Kiso (\u6728\u66fe) trong hạm đội."
     },
     "130": {
-        "name": "Thành lập the Torpedo Squadron 1!",
-        "desc": "Có Abukuma (\u963f\u6b66\u9688), Akebono (\u66d9), Ushio (\u6f6e), Kasumi (\u971e) và Shiranui (\u4e0d\u77e5\u706b) in your fleet."
+        "name": "Thành lập Hạm đội ngư lôi số 1!",
+        "desc": "Có Abukuma (\u963f\u6b66\u9688), Akebono (\u66d9), Ushio (\u6f6e), Kasumi (\u971e) và Shiranui (\u4e0d\u77e5\u706b) trong hạm đội."
     },
     "131": {
         "name": "Thành lập the Destroyer Division 8!",
-        "desc": "Có Asashio (\u671d\u6f6e), Michishio (\u6e80\u6f6e), Ooshio (\u5927\u6f6e) và Arashio (\u8352\u6f6e) in your fleet."
+        "desc": "Có Asashio (\u671d\u6f6e), Michishio (\u6e80\u6f6e), Ooshio (\u5927\u6f6e) và Arashio (\u8352\u6f6e) trong hạm đội."
     },
     "132": {
         "name": "Thành lập the Destroyer Division 18!",
-        "desc": "Có ONLY Kasumi (\u971e), Arare (\u9730), Kagerou (\u967d\u708e) và Shiranui (\u4e0d\u77e5\u706b) in your fleet."
+        "desc": "Có ONLY Kasumi (\u971e), Arare (\u9730), Kagerou (\u967d\u708e) và Shiranui (\u4e0d\u77e5\u706b) trong hạm đội."
     },
     "133": {
         "name": "Thành lập the Destroyer Division 30 (Gen-1)!",
-        "desc": "Có ONLY Mutsuki (\u7766\u6708), Kisaragi (\u5982\u6708), Yayoi (\u5f25\u751f) và Mochizuki (\u671b\u6708) in your fleet."
+        "desc": "Có ONLY Mutsuki (\u7766\u6708), Kisaragi (\u5982\u6708), Yayoi (\u5f25\u751f) và Mochizuki (\u671b\u6708) trong hạm đội."
     },
     "134": {
         "name": "In Preparation of Love! (Part 3)",
@@ -141,19 +141,19 @@
     },
     "136": {
         "name": "Thành lập the 30th Destroyer Fleet (Gen.2)",
-        "desc": "Có only Mutsuki (\u7766\u6708), Yayoi (\u5f25\u751f), Uzuki (\u536f\u6708) và Mochizuki (\u671b\u6708) in your fleet."
+        "desc": "Có only Mutsuki (\u7766\u6708), Yayoi (\u5f25\u751f), Uzuki (\u536f\u6708) và Mochizuki (\u671b\u6708) trong hạm đội."
     },
     "137": {
         "name": "Thành lập the 5th Fleet",
-        "desc": "Có Myoukou (\u5999\u9ad8), Nachi (\u90a3\u667a) và Haguro (\u7fbd\u9ed2) in your fleet."
+        "desc": "Có Myoukou (\u5999\u9ad8), Nachi (\u90a3\u667a) và Haguro (\u7fbd\u9ed2) trong hạm đội."
     },
     "138": {
         "name": "Thành lập the new 2nd Carrier Division",
-        "desc": "Có Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c, as the flagship), Souryuu (\u84bc\u9f8d) và 2 destroyers in your fleet."
+        "desc": "Có Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c, as the flagship), Souryuu (\u84bc\u9f8d) và 2 destroyers trong hạm đội."
     },
     "139": {
         "name": "Thành lập the 6th Submarine Fleet",
-        "desc": "Có 1 submarine tender và 4 (or more) submarines in your fleet."
+        "desc": "Có 1 submarine tender và 4 (or more) submarines trong hạm đội."
     },
     "140": {
         "name": "Test the new RADAR!",
@@ -161,7 +161,7 @@
     },
     "141": {
         "name": "Reorganise the Strengthened 2nd Carrier Division",
-        "desc": "Có Souryuu Kai-2 (\u84bc\u9f8d\u6539\u4e8c) as flagship with Hiryuu Kai-2 (\u98db\u9f8d\u6539\u4e8c) và 2 destroyers in your fleet."
+        "desc": "Có Souryuu Kai-2 (\u84bc\u9f8d\u6539\u4e8c) as flagship with Hiryuu Kai-2 (\u98db\u9f8d\u6539\u4e8c) và 2 destroyers trong hạm đội."
     },
     "142": {
         "name": "Organise the Elite 3rd Battleship Division",
@@ -177,7 +177,7 @@
     },
     "145": {
         "name": "Organise the Main Battleship Force",
-        "desc": "Có three battleships of Nagato, Fusou, Ise or Yamato classes và 1 light cruiser in your fleet."
+        "desc": "Có three battleships of Nagato, Fusou, Ise or Yamato classes và 1 light cruiser trong hạm đội."
     },
     "146": {
         "name": "Prepare the Arsenal for Renovations",
@@ -209,15 +209,15 @@
     },
     "153": {
         "name": "Reorganize the 18th Squadron!",
-        "desc": "Có Tenryuu, Tatsuta và 2 or more other ships in your fleet"
+        "desc": "Có Tenryuu, Tatsuta và 2 or more other ships trong hạm đội"
     },
     "154": {
         "name": "Organize the surface attack fleet!",
-        "desc": "Có Hiei, Kirishima, Nagara, Akatsuki, Ikazuchi, Inazuma in your fleet"
+        "desc": "Có Hiei, Kirishima, Nagara, Akatsuki, Ikazuchi, Inazuma trong hạm đội"
     },
     "155": {
         "name": "Organize the new 6th Destroyer Division!",
-        "desc": "Có Akatsuki Kai2 as Flagship with Hibiki/Bep, Ikazuchi, Inazuma in your fleet"
+        "desc": "Có Akatsuki Kai2 as Flagship with Hibiki/Bep, Ikazuchi, Inazuma trong hạm đội"
     },
     "156": {
         "name": "1st Torpedo Squadron, Prepare for 1 Rush to the Northern Sea",
@@ -430,36 +430,56 @@
     
     
     "201": {
+    	"code": "Bd1",
         "name": "Xuất Kích mỗi ngày 1",
-        "desc": "Đánh bại một hạm đội Abyssal"
+        "desc": "Đánh bại một hạm đội Abyssal",
+        "unlock": [ 216, 211, 212 ],
+		"tracking": [ [0,1] ]
     },
     "216": {
+    	"code": "Bd2",
         "name": "Xuất Kích mỗi ngày 2",
-        "desc": "Đánh bại kì hạm của một hạm đội Abyssal"
+        "desc": "Đánh bại kì hạm của một hạm đội Abyssal",
+        "unlock": [ 210, 218, 214, 213 ],
+		"tracking": [ [0,1] ]
     },
     "210": {
+    	"code": "Bd3",
         "name": "Xuất Kích mỗi ngày 3",
-        "desc": "Đánh bại 10 hạm đội Abyssal (rank B trở lên)"
+        "desc": "Đánh bại 10 hạm đội Abyssal (rank B trở lên)",
+        "tracking": [ [0,10] ]
     },
     "211": {
+    	"code": "Bd4",
         "name": "Xuất Kích mỗi ngày 4",
-        "desc": "Đánh chìm 3 CV(L) của Abyssal"
+        "desc": "Đánh chìm 3 CV(L) của Abyssal",
+        "tracking": [ [0,3] ]
     },
     "218": {
+    	"code": "Bd5",
         "name": "Xuất Kích mỗi ngày 5",
-        "desc": "Đánh chìm 3 tàu vận chuyển của Abyssal"
+        "desc": "Đánh chìm 3 tàu vận chuyển của Abyssal",
+        "unlock": [ 226, 220 ],
+		"tracking": [ [0,3] ]
     },
     "212": {
+    	"code": "Bd6",
         "name": "Xuất Kích mỗi ngày 6",
-        "desc": "Đánh chìm 5 tàu vận chuyển của Abyssal"
+        "desc": "Đánh chìm 5 tàu vận chuyển của Abyssal",
+		"tracking": [ [0,5] ]
     },
     "226": {
+    	"code": "Bd7",
         "name": "Xuất Kích mỗi ngày 7",
-        "desc": "Đánh bại 5 boss ở World 2"
+        "desc": "Đánh bại 5 boss ở World 2",
+		"unlock": [ 230 ],
+		"tracking": [ [0,5] ]
     },
     "230": {
+    	"code": "Bd8",
         "name": "Xuất Kích mỗi ngày 8",
-        "desc": "Đánh chìm 6 tàu ngầm của Abyssal"
+        "desc": "Đánh chìm 6 tàu ngầm của Abyssal",
+		"tracking": [ [0,6] ]
     },
     
     
@@ -467,44 +487,70 @@
     
     
     "214": {
+    	"code": "Bw1",
         "name": "Xuất Kích mỗi tuần 1",
-        "desc": "Xuất kích 36 lần, Giao chiến 24 boss, Thắng 12 boss, đạt được 6 hạng S"
+        "desc": "Xuất kích 36 lần, Giao chiến 24 boss, Thắng 12 boss, đạt được 6 hạng S",
+		"unlock": [ 221 ],
+		"tracking": [ [0,36], [0,24], [0,12], [0,6] ]
     },
     "220": {
+    	"code": "Bw2",
         "name": "Xuất Kích mỗi tuần 2",
-        "desc": "Đánh chìm 20 CV(L) của Abyssal"
+        "desc": "Đánh chìm 20 CV(L) của Abyssal",
+        "unlock": [ 228 ],
+		"tracking": [ [0,20] ]
     },
     "213": {
+    	"code": "Bw3",
         "name": "Xuất Kích mỗi tuần 3",
-        "desc": "Đánh chìm 20 tàu chở hàng của Abyssal"
+        "desc": "Đánh chìm 20 tàu chở hàng của Abyssal",
+        "tracking": [ [0,20] ]
     },
     "221": {
+    	"code": "Bw4",
         "name": "Xuất Kích mỗi tuần 4",
-        "desc": "Đánh chìm 50 tàu chở hàng của Abyssal"
+        "desc": "Đánh chìm 50 tàu chở hàng của Abyssal",
+        "unlock": [ 261, 257, 264 ],
+		"tracking": [ [0,50] ]
     },
     "228": {
+    	"code": "Bw5",
         "name": "Xuất Kích mỗi tuần 5",
-        "desc": "Đánh chìm 15 tàu ngầm của Abyssal"
+        "desc": "Đánh chìm 15 tàu ngầm của Abyssal",
+        "unlock": [ 229, 241, 613 ],
+		"tracking": [ [0,15] ]
     },
     "229": {
+    	"code": "Bw6",
         "name": "Xuất Kích mỗi tuần 6",
-        "desc": "Đánh bại 12 boss ở World 4"
+        "desc": "Đánh bại 12 boss ở World 4",
+        "unlock": [ 242 ],
+		"tracking": [ [0,12] ]
     },
     "241": {
+    	"code": "Bw7",
         "name": "Xuất Kích mỗi tuần 7",
-        "desc": "Đánh bại 5 boss ở World [W3-3], [W3-4] hoặc [W3-5]"
+        "desc": "Đánh bại 5 boss ở World [W3-3], [W3-4] hoặc [W3-5]",
+        "tracking": [ [0,5] ]
     },
     "242": {
+        "code": "Bw8",
         "name": "Xuất Kích mỗi tuần 8",
-        "desc": "Đánh bại 1 boss ở World [W4-4]"
+        "desc": "Đánh bại 1 boss ở World [W4-4]",
+        "unlock": [ 243 ],
+		"tracking": [ [0,1] ]
     },
     "243": {
+    	"code": "Bw9",
         "name": "Xuất Kích mỗi tuần 9",
-        "desc": "Xuất Kích đến [W5-2] và giành hạng S khi đánh boss 2 lần"
+        "desc": "Xuất Kích đến [W5-2] và giành hạng S khi đánh boss 2 lần",
+        "tracking": [ [0,2] ]
     },
     "261": {
+    	"code": "Bw10",
         "name": "Xuất Kích mỗi tuần 10",
-        "desc": "Xuất Kích đến [W1-5] và giành hạng A trở lên khi đánh boss 3 lần"
+        "desc": "Xuất Kích đến [W1-5] và giành hạng A trở lên khi đánh boss 3 lần",
+        "tracking": [ [0,3] ]
     },
     
     
@@ -512,30 +558,41 @@
     
     
     "249": {
+    	"code": "Bm1",
         "name": "Triển khai Hạm đội số 5",
-        "desc": "Đưa Myoukou, Nachi, Haguro và +3 tàu khác đến [W2-5]. Giành hạng S ở Boss"
+        "desc": "Đưa Myoukou, Nachi, Haguro và +3 tàu khác đến [W2-5]. Giành hạng S ở Boss",
+        "unlock": [ 265 ]
     },
     "256": {
+    	"code": "Bm2",
         "name": "Triển khai 1 đội tàu ngầm đến World 6-1",
-        "desc": "Triển khai đến [W6-1] và giành hạng S ở Boss 3 lần"
+        "desc": "Triển khai đến [W6-1] và giành hạng S ở Boss 3 lần",
+        "tracking": [ [0,3] ]
     },
     "257": {
+    	"code": "Bm3",
         "name": "Triển khai 1 Hạm đội Ngư lôi",
         "desc": "1~3 CL (CL làm kì hạm) và 3~5 DD đến [W1-4]. Giành hạng S ở Boss"
     },
     "259": {
+    	"code": "Bm4",
         "name": "Triển khai 1 Hạm đội Tàu chiến",
         "desc": "Triển khai 3 BB(V) + 1 CL + 2 tàu khác đến [W5-1] và giành hạng S ở Boss"
     },
     "265": {
+    	"code": "Bm5",
         "name": "Hộ tống hằng tháng",
-        "desc": "Triển khai 1 đội đến [W1-5] và giành hạng A tại Boss 10 lần"
+        "desc": "Triển khai 1 đội đến [W1-5] và giành hạng A tại Boss 10 lần",
+        "tracking": [ [0,10] ]
     },
     "264": {
+    	"code": "Bm6",
         "name": "Triển khai Không mẫu Cơ động Bộ đội tới miền Tây",
-        "desc": "2 CV + 2 DD + 2 tàu khác tới [W4-2]. Giành hạng S ở Boss"
+        "desc": "2 CV + 2 DD + 2 tàu khác tới [W4-2]. Giành hạng S ở Boss",
+        "unlock": [ 266 ]
     },
     "266": {
+    	"code": "Bm7",
         "name": "Triển khai Hạm đội Phản công",
         "desc": "4 DD (DD làm kì hạm) + 1 CA (không được dùng CAV) + 1 CL tới [W2-5] và giành hạng S ở Boss"
     },
@@ -545,22 +602,31 @@
     
     
     "301": {
+    	"code": "C1",
         "name": "Luyện tập đầu tiên!",
         "desc": "Thách thức một hạm đội khác trong chế độ Luyện tập"
     },
      "303": {
+     	"code": "C2",
         "name": "Luyện tập mỗi ngày 1",
-        "desc": "Thách thức 3 hạm đội khác trong chế độ Luyện tập"
+        "desc": "Thách thức 3 hạm đội khác trong chế độ Luyện tập",
+        "unlock": [ 304, 302 ],
+		"tracking": [ [0,3] ]
     },
     "304": {
+    	"code": "C3",
         "name": "Luyện tập mỗi ngày 2",
-        "desc": "Giành được 5 chiến thắng trong chế độ Luyện tập trong cùng một ngày"
+        "desc": "Giành được 5 chiến thắng trong chế độ Luyện tập trong cùng một ngày",
+        "tracking": [ [0,5] ]
     },
     "302": {
+    	"code": "C4",
         "name": "Luyện tập mỗi tuần",
-        "desc": "Giành được 20 chiến thắng trong chế độ Luyện tập"
+        "desc": "Giành được 20 chiến thắng trong chế độ Luyện tập",
+        "tracking": [ [0,20] ]
     },
     "307": {
+    	"code": "C5",
         "name": "Tăng cường độ hiệu quả của hạm đội",
         "desc": "Giành được 3 chiến thắng trong chế độ Luyện tập"
     },
@@ -570,6 +636,7 @@
         "desc": "Giành được 4 chiến thắng trong chế độ Luyện tập"
     },
     "309": {
+    	"code": "C7",
         "name": "Strive to Increase the Level of Training in Preparation for Another Rush to the Northern Sea",
         "desc": "Giành được 4 chiến thắng trong chế độ Luyện tập trong cùng ngày"
     },
@@ -578,20 +645,28 @@
     
     
     "401": {
+    	"code": "D1",
         "name": "Viễn chinh đầu tiên",
         "desc": "Thực hiện một cuộc viễn chinh"
     },
     "402": {
+    	"code": "D2",
         "name": "Viễn chinh mỗi ngày 1",
-        "desc": "Thực hiện 3 cuộc viễn chinh thành công"
+        "desc": "Thực hiện 3 cuộc viễn chinh thành công",
+        "unlock": [ 403 ],
+		"tracking": [ [0,3] ]
     },
     "403": {
+    	"code": "D3",
         "name": "Viễn chinh mỗi ngày 2",
-        "desc": "Thực hiện 10 cuộc viễn chinh thành công"
+        "desc": "Thực hiện 10 cuộc viễn chinh thành công",
+        "tracking": [ [0,10] ]
     },
     "404": {
+    	"code": "D4",
         "name": "Viễn chinh mỗi tuần",
-        "desc": "Thực hiện 30 cuộc viễn chinh thành công"
+        "desc": "Thực hiện 30 cuộc viễn chinh thành công",
+        "tracking": [ [0,30] ]
     },
     "405": {
         "code": "D5",
@@ -614,8 +689,11 @@
         "desc": "Complete Expedition 31"
     },
     "410": {
+    	"code": "D9",
         "name": "Viễn chinh mỗi tuần 2",
-        "desc": "Hoàn thành Viễn chinh 37 hoặc 38"
+        "desc": "Hoàn thành Viễn chinh 37 hoặc 38",
+		"unlock": [ 411 ],
+		"tracking": [ [0,1] ]
     },
     "412": {
         "code": "D10",
@@ -625,7 +703,8 @@
     "411": {
         "code": "D11",
         "name": "Viễn chinh mỗi tuần 3",
-        "desc": "Hoàn thành Viễn chinh 37 hoặc 38 (hoàn thành một cái ít nhất 7 lần)"
+        "desc": "Hoàn thành Viễn chinh 37 hoặc 38 (hoàn thành một cái ít nhất 7 lần)",
+        "tracking": [ [0,7] ]
     },
     "413": {
         "code": "D12",
@@ -668,20 +747,27 @@
     
     
     "501": {
+    	"code": "E1",
         "name": "Tiếp tế đầu tiên",
         "desc": "Tiếp tế cho một tàu"
     },
     "502": {
+    	"code": "E2",
         "name": "Sửa chữa đầu tiên",
         "desc": "Sửa chữa một tàu"
     },
     "503": {
+    	"code": "E3",
         "name": "Sửa chữa mỗi ngày",
-        "desc": "Sửa chữa 5 tàu"
+        "desc": "Sửa chữa 5 tàu",
+        "unlock": [ 504 ],
+		"tracking": [ [0,5] ]
     },
     "504": {
+    	"code": "E4",
         "name": "Tiếp tế mỗi ngày",
-        "desc": "Tiếp tế cho nữ hạm của bạn 15 lần"
+        "desc": "Tiếp tế cho nữ hạm của bạn 15 lần",
+		"tracking": [ [0,15] ]
     },
     
     
@@ -689,49 +775,63 @@
     
     
     "605": {
+    	"code": "F1",
         "name": "Chế thiết bị mỗi ngày 1",
-        "desc": "Chế tạo 1 thiết bị (có thể thất bại)"
+        "desc": "Chế tạo 1 thiết bị (có thể thất bại)",
+        "unlock": [ 606 ],
+		"tracking": [ [0,1] ]
     },
     "606": {
+    	"code": "F2",
         "name": "Đóng tàu mỗi ngày 1",
-        "desc": "Đóng 1 tàu"
+        "desc": "Đóng 1 tàu",
+        "unlock": [ 607 ],
+		"tracking": [ [0,1] ]
     },
     "607": {
+    	"code": "F3",
         "name": "Chế thiết bị mỗi ngày 2",
-        "desc": "Chế tạo 3 thiết bị (có thể thất bại)"
+        "desc": "Chế tạo 3 thiết bị (có thể thất bại)",
+        "unlock": [ 608 ],
+		"tracking": [ [0,3] ]
     },
      "608": {
+    	"code": "F4",
         "name": "Đóng tàu mỗi ngày 2",
-        "desc": "Đóng 3 tàu"
+        "desc": "Đóng 3 tàu",
+        "unlock": [ 609, 619 ],
+		"tracking": [ [0,3] ]
     },
      "609": {
+     	"code": "F5",
         "name": "Dỡ bỏ mỗi ngày",
-        "desc": "Phá dỡ 2 tàu"
+        "desc": "Phá dỡ 2 tàu",
+        "tracking": [ [0,2] ]
     },
     "601": {
         "code": "F6",
-        "name": "First Construction",
-        "desc": "Craft 1 ship"
+        "name": "Đóng tàu lần đầu",
+        "desc": "Đóng 1 tàu"
     },
     "602": {
         "code": "F7",
-        "name": "First Development",
-        "desc": "Craft 1 piece of equipment"
+        "name": "Chế thiết bị lần đầu",
+        "desc": "Chế tạo một thiết bị"
     },
     "603": {
         "code": "F8",
-        "name": "First Dismantlement",
-        "desc": "Dismantle 1 ship"
+        "name": "Dỡ tàu lần đầu",
+        "desc": "Phá dỡ một tàu"
     },
     "604": {
         "code": "F9",
-        "name": "First Disposal",
-        "desc": "Scrap 1 piece of equipment"
+        "name": "Huỷ bỏ thiết bị lần đầu",
+        "desc": "Huỷ bỏ một thiết bị"
     },
     "610": {
         "code": "F10",
-        "name": "Preparation for LSC (Part 2)",
-        "desc": "Scrap equipment 4 times"
+        "name": "Chuẩn bị cho Đóng tàu cỡ lớn (Phần 2)",
+        "desc": "Huỷ bỏ 4 thiết bị"
     },
     "612": {
         "code": "F11",
@@ -740,8 +840,8 @@
     },
      "613": {
         "code": "F12",
-        "name": "Weekly Dismantlement",
-        "desc": "Scrap equipment 24 times",
+        "name": "Huỷ bỏ thiết bị hằng tuần",
+        "desc": "Huỷ bỏ 24 thiết bị",
         "tracking": [ [0,24] ]
     },
      "614": {
@@ -765,12 +865,15 @@
         "desc": "Scrap equipment 10 times"
     },
     "618": {
+    	"code": "F17",
         "name": "Hiện đại hóa Trang bị đầu tiên",
         "desc": "Thực hiện Hiện đại hóa Trang bị 1 lần"
     },
     "619": {
+    	"code": "F18",
         "name": "Hiện đại hóa Trang bị mỗi ngày",
-        "desc": "Thực hiện Hiện đại hóa Trang bị 1 lần"
+        "desc": "Thực hiện Hiện đại hóa Trang bị 1 lần",
+        "tracking": [ [0,1] ]
     },
     
     
@@ -778,19 +881,25 @@
     
     
     "701": {
+    	"code": "G1",
         "name": "Hiện đại hóa đầu tiên",
         "desc": "Thực hiện 1 lần Hiện đại hóa thành công"
     },
     "702": {
+    	"code": "G2",
         "name": "Hiện đại hóa mỗi ngày",
-        "desc": "Thực hiện 2 lần Hiện đại hóa thành công"
+        "desc": "Thực hiện 2 lần Hiện đại hóa thành công",
+        "unlock": [ 703 ],
+		"tracking": [ [0,2] ]
     },
     "703": {
+    	"code": "G3",
         "name": "Hiện đại hóa mỗi tuần",
         "desc": "Thực hiện 15 lần Hiện đại hóa thành công",
         "tracking": [ [0,15] ]
     },
     "704": {
+    	"code": "G4",
         "name": "Chuẩn bị cho Đóng tàu cỡ lớn (Phần 1)",
         "desc": "Thực hiện 4 lần Hiện đại hóa thành công"
     },
