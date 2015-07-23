@@ -23,7 +23,7 @@
 	
 	// Execute Chrome API to add panels to devtools
 	function createPanel( theme ){
-		chrome.devtools.panels.create("KanColle", //"KC3改",
+		chrome.devtools.panels.create("DevKC3Kai",
 			"../../assets/img/logo/16.png",
 			"pages/devtools/themes/"+theme+"/"+theme+".html",
 			function(panel){}

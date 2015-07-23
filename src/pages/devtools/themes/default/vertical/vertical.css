@@ -57,9 +57,15 @@
 }
 
 #v .hq_info .admiral {
+	position:relative;
 	width:120px;
 }
-
+#v .hq_info .name_censor {
+	position:absolute;
+	top:-5px;
+	left:-10px;
+	display:none;
+}
 #v .hq_info .admiral_name {
 	width:115px;
 	height:24px;
@@ -1123,6 +1129,7 @@
 
 /* HQ info box */
 #v.panel-size-300px .battle .battle_hq {
+	position:relative;
 	width:190px;
 	height:100px;
 	float:left;
@@ -1138,6 +1145,12 @@
 	position:absolute;
 	right:-610px;
 	z-index:1;
+}
+#v .battle .name_censor {
+	position:absolute;
+	top:-5px;
+	left:-5px;
+	display:none;
 }
 #v .battle .battle_admiral {
 	width:150px;

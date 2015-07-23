@@ -1,0 +1,28 @@
+{
+	"localizzazione" : [
+		["", ""],
+		["OK", "buona"],
+		["OK-", "buona"],
+		["-", "pessima"],
+		["NO", "pessima"],
+		["OK+", "buona"],
+		["NO+", "pessima"]
+	],
+	
+	"battaglia aerea" : [
+		["AP", "", "Parità Aerea"],
+		["AS+", "good", "Vittoria Aerea"],
+		["AS", "good", "Vantaggio Aereo"],
+		["AI", "bad", "Svantaggio Aereo"],
+		["AD", "bad", "Sconfitta Aerea"]
+	],
+	
+	"ingaggio" : [
+		["", "", ""],
+		["Prll", "", "Parallelo"],
+		["HdOn", "", "Frontale"],
+		["Gr-T", "good", "T Verde"],
+		["Rd-T", "bad", "T Rosso"]
+	]
+	
+}

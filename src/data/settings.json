@@ -1,0 +1,322 @@
+[
+	{
+		"section": "SettingsGlobal",
+		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Global",
+		"contents" : [
+			{
+				"id" : "language",
+				"name" : "SettingsLanguage",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "en", "English" ],
+						[ "jp", "日本語" ],
+						[ "id", "Indonesian" ],
+						[ "tcn", "繁體中文" ],
+						[ "scn", "简体中文" ],
+						[ "vi", "Tiếng Việt" ],
+						[ "de", "Deutsch" ],
+						[ "fr", "Français" ],
+						[ "it", "Italiano" ]
+					]
+				}
+			},
+			{
+				"id" : "elosFormula",
+				"name" : "SettingsELosFormula",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 1, "SettingsELosSum" ],
+						[ 2, "SettingsELosOld" ],
+						[ 3, "SettingsELosNew" ]
+					]
+				}
+			}
+		]
+	},
+	{
+		"section": "SettingsGameInfo",
+		"help" : "",
+		"contents" : [
+			{
+				"id" : "info_face",
+				"name" : "SettingsConstructionFaces",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_craft",
+				"name" : "SettingsCraftBox",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_compass",
+				"name" : "SettingsCompass",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_battle",
+				"name" : "SettingsBattleData",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_boss",
+				"name" : "SettingsBossComp",
+				"type" : "check",
+				"options" : {}
+			}
+		]
+	},
+	{
+		"section": "SettingsScreenshot",
+		"help" : "",
+		"contents" : [
+			{
+				"id" : "ss_mode",
+				"name" : "SettingsSSOutput",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "SettingsSSDownload" ],
+						[ 1, "SettingsSSImgur" ],
+						[ 2, "SettingsSSNewTab" ]
+					]
+				}
+			},
+			{
+				"id" : "ss_type",
+				"name" : "SettingsSSFileType",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "JPG", "JPG" ],
+						[ "PNG", "PNG" ]
+					]
+				}
+			}
+		]
+	},
+	{
+		"section": "SettingsAlerts",
+		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Alerts",
+		"contents" : [
+			{
+				"id" : "alert_diff",
+				"name" : "SettingsTimeDiff",
+				"type" : "small_text",
+				"options" : { "label" : "SettingsSeconds" }
+			},
+			{
+				"id" : "alert_type",
+				"name" : "SettingsSoundType",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "None" ],
+						[ 1, "DING!" ],
+						[ 2, "SettingsCustom" ]
+					]
+				}
+			},
+			{
+				"id" : "alert_custom",
+				"name" : "SettingsCustomSound",
+				"type" : "long_text",
+				"options" : { "placeholder" : "http://" }
+			},
+			{
+				"id" : "alert_volume",
+				"name" : "Volume",
+				"type" : "small_text",
+				"options" : { "label" : "%" }
+			},
+			{
+				"id" : "alert_desktop",
+				"name" : "SettingsDesktopNotif",
+				"type" : "check",
+				"options" : {}
+			}
+		]
+	},
+	{
+		"section": "SettingsAPIGameScreen",
+		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Screen",
+		"contents" : [
+			{
+				"id" : "api_translation",
+				"name" : "SettingsQuestOverlay",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "api_tracking",
+				"name" : "SettingsQuestTracking",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "api_askExit",
+				"name" : "SettingsConfirmExit",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "api_margin",
+				"name" : "SettingsScreenMargin",
+				"type" : "small_text",
+				"options" : { "label" : "pixels" }
+			},
+			{
+				"id" : "api_bg_color",
+				"name" : "SettingsBGColor",
+				"type" : "long_text",
+				"options" : { "placeholder" : "SettingsBGColorDesc" }
+			},
+			{
+				"id" : "api_bg_image",
+				"name" : "SettingsBGImage",
+				"type" : "long_text",
+				"options" : { "placeholder" : "http://" }
+			},
+			{
+				"id" : "api_bg_size",
+				"name" : "SettingsBGSize",
+				"type" : "long_text",
+				"options" : { "placeholder" : "SettingsBGSizeDesc" }
+			},
+			{
+				"id" : "api_bg_position",
+				"name" : "SettingsBGPosition",
+				"type" : "long_text",
+				"options" : { "placeholder" : "SettingsBGPositionDesc" }
+			},
+			{
+				"id" : "api_gameScale",
+				"name" : "SettingsPlayerScale",
+				"type" : "small_text",
+				"options" : { "label" : "%" }
+			}
+		]
+	},
+	{
+		"section": "SettingsDMMGameplay",
+		"help" : "",
+		"contents" : [
+			{
+				"id" : "dmm_customize",
+				"name" : "SettingsDMMCustomize",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "dmm_translation",
+				"name" : "SettingsQuestOverlay",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "dmm_tracking",
+				"name" : "SettingsQuestTracking",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "dmm_askExit",
+				"name" : "SettingsConfirmExit",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "dmm_margin",
+				"name" : "SettingsScreenMargin",
+				"type" : "small_text",
+				"options" : { "label" : "pixels" }
+			},
+			{
+				"id" : "dmm_bg_color",
+				"name" : "SettingsBGColor",
+				"type" : "long_text",
+				"options" : { "placeholder" : "SettingsBGColorDesc" }
+			},
+			{
+				"id" : "dmm_bg_image",
+				"name" : "SettingsBGImage",
+				"type" : "long_text",
+				"options" : { "placeholder" : "http://" }
+			},
+			{
+				"id" : "dmm_bg_size",
+				"name" : "SettingsBGSize",
+				"type" : "long_text",
+				"options" : { "placeholder" : "SettingsBGSizeDesc" }
+			},
+			{
+				"id" : "dmm_bg_position",
+				"name" : "SettingsBGPosition",
+				"type" : "long_text",
+				"options" : { "placeholder" : "SettingsBGPositionDesc" }
+			}
+		]
+	},
+	{
+		"section": "Panel",
+		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Panel",
+		"contents" : [
+			{
+				"id" : "pan_theme",
+				"name" : "Theme",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "default", "Default" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_size",
+				"name" : "SettingsPanelSize",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "small", "Small" ],
+						[ "big", "Big" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_bg_color",
+				"name" : "SettingsBGColor",
+				"type" : "long_text",
+				"options" : { "placeholder" : "SettingsBGColorDesc" }
+			},
+			{
+				"id" : "pan_bg_image",
+				"name" : "SettingsBGImage",
+				"type" : "long_text",
+				"options" : { "placeholder" : "http://" }
+			},
+			{
+				"id" : "pan_bg_size",
+				"name" : "SettingsBGSize",
+				"type" : "long_text",
+				"options" : { "placeholder" : "SettingsBGSizeDesc" }
+			},
+			{
+				"id" : "pan_bg_position",
+				"name" : "SettingsBGPosition",
+				"type" : "long_text",
+				"options" : { "placeholder" : "SettingsBGPositionDesc" }
+			},
+			{
+				"id" : "pan_opacity",
+				"name" : "SettingsPanelOpacity",
+				"type" : "small_text",
+				"options" : { "label" : "%" }
+			}
+		]
+	}
+]

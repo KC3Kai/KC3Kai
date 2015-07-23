@@ -6,35 +6,6 @@ Provides access to data on built-in JSON files
 (function(){
 	"use strict";
 	
-	$.getTranslationJSON = function(language, filename, callback){
-		var enJSON = {}, localJSON;
-		
-		$.ajax('/data/translations/en/' + filename + '.json', {
-			dataType:	'json',
-			success:	function(response){
-				enJSON = response;
-			},
-			complete:	function(){
-				if( language == 'en' ){
-					console.log(enJSON);
-					callback(enJSON);
-				}else{
-					$.ajax('/data/translations/' +language+ '/' + filename + '.json', {
-						dataType:	'json',
-						success:	function(data){
-							localJSON = $.extend(true, enJSON, data);
-						},
-						complete:	function(){
-							localJSON = localJSON || enJSON;
-							console.log(localJSON);
-							callback(localJSON);
-						}
-					});
-				}
-			}
-		});
-	};
-	
 	window.KC3Meta = {
 		_cache:{},
 		_icons:{},
@@ -47,42 +18,26 @@ Provides access to data on built-in JSON files
 		_stype:{},
 		_servers:{},
 		_battle:{},
-		_record:{},
 		_terms:{},
 		_defaultIcon:"",
 		
 		/* Initialization
 		-------------------------------------------------------*/
 		init :function( repo ){
-			var self = this;
-			
 			// Load Common Meta
-			$.getJSON(repo+"icons.json", function(response){ self._icons = response; });
-			$.getJSON(repo+"experience.json", function(response){ self._exp = response; });
-			$.getJSON(repo+"gauges.json", function(response){ self._gauges = response; });
+			this._icons		= JSON.parse( $.ajax(repo+'icons.json', { async: false }).responseText );
+			this._exp		= JSON.parse( $.ajax(repo+'experience.json', { async: false }).responseText );
+			this._gauges	= JSON.parse( $.ajax(repo+'gauges.json', { async: false }).responseText );
 			
 			// Load Translations
-			var lang = ConfigManager.language || "en";
-			/*
-			$.getJSON(repo+"translations/"+lang+"/ships.json", function(response){ self._ship = response; });
-			$.getJSON(repo+"translations/"+lang+"/items.json", function(response){ self._slotitem = response; });
-			$.getJSON(repo+"translations/"+lang+"/quests.json", function(response){ self._quests = response; });
-			$.getJSON(repo+"translations/"+lang+"/ranks.json", function(response){ self._ranks = response; });
-			$.getJSON(repo+"translations/"+lang+"/stype.json", function(response){ self._stype = response; });
-			$.getJSON(repo+"translations/"+lang+"/servers.json", function(response){ self._servers = response; });
-			$.getJSON(repo+"translations/"+lang+"/battle.json", function(response){ self._battle = response; });
-			$.getJSON(repo+"translations/"+lang+"/record.json", function(response){ self._record = response; });
-			$.getJSON(repo+"translations/"+lang+"/terms.json", function(response){ self._terms = response; });
-			*/
-			$.getTranslationJSON(lang, 'ships', function(response){ self._ship = response; });
-			$.getTranslationJSON(lang, 'items', function(response){ self._slotitem = response; });
-			$.getTranslationJSON(lang, 'quests', function(response){ self._quests = response; });
-			$.getTranslationJSON(lang, 'ranks', function(response){ self._ranks = response; });
-			$.getTranslationJSON(lang, 'stype', function(response){ self._stype = response; });
-			$.getTranslationJSON(lang, 'servers', function(response){ self._servers = response; });
-			$.getTranslationJSON(lang, 'battle', function(response){ self._battle = response; });
-			$.getTranslationJSON(lang, 'record', function(response){ self._record = response; });
-			$.getTranslationJSON(lang, 'terms', function(response){ self._terms = response; });
+			this._ship 		= KC3Translation.getJSON(repo, 'ships');
+			this._slotitem	= KC3Translation.getJSON(repo, 'items');
+			this._quests	= KC3Translation.getJSON(repo, 'quests');
+			this._ranks		= KC3Translation.getJSON(repo, 'ranks');
+			this._stype		= KC3Translation.getJSON(repo, 'stype');
+			this._servers	= KC3Translation.getJSON(repo, 'servers');
+			this._battle	= KC3Translation.getJSON(repo, 'battle');
+			this._terms		= KC3Translation.getJSON(repo, 'terms');
 		},
 		
 		/* Data Access
@@ -124,14 +79,14 @@ Provides access to data on built-in JSON files
 			if( jp_name.substr(jp_name.length-1, 1) == "改" ){
 				var bare1 = jp_name.substr(0, jp_name.length-1);
 				if(typeof this._ship[bare1] !== "undefined"){
-					this._cache[jp_name] = this._ship[bare1]+" Kai";
+					this._cache[jp_name] = this._ship[bare1] + " " + this._ship._Kai;
 					return this._cache[jp_name];
 				}
 			}
 			if( jp_name.substr(jp_name.length-2, 2) == "改二" ){
 				var bare2 = jp_name.substr(0, jp_name.length-2);
 				if(typeof this._ship[bare2] !== "undefined"){
-					this._cache[jp_name] = this._ship[bare2]+" Kai Ni";
+					this._cache[jp_name] = this._ship[bare2] + " " + this._ship._KaiNi;
 					return this._cache[jp_name];
 				}
 			}
@@ -189,10 +144,6 @@ Provides access to data on built-in JSON files
 		
 		engagement :function(index){
 			return this._battle.engagement[index] || ["",""];
-		},
-		
-		record: function(key) {
-			return this._record[key] || key;
 		},
 		
 		term: function(key) {
