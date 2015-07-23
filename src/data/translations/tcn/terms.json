@@ -137,7 +137,8 @@
 	"LevelNext" : "離下一等級只需",
 	"Screenshot" : "螢幕截圖",
 	
-	"PanelErrorStorage" : "閣下已在設定中關閉了Chrome的「允許網站儲存本機資料」功能。KC3改需要使用此功能才能正常運作。<a href=\"https://support.google.com/chrome/answer/95647?hl=zh-Hant" target=\"_blank\">參照此網頁中的指示</a>以開啟此功能（注意該網頁將此功能標示為cookie但並非實況）。", 
+ 
+	"PanelErrorStorage" : "閣下已在設定中關閉了Chrome的「允許網站儲存本機資料」功能。KC3改需要使用此功能才能正常運作。<a href=\"https://support.google.com/chrome/answer/95647?hl=zh-Hant\" target=\"_blank\">參照此網頁中的指示</a>以開啟此功能（注意該網頁將此功能標示為cookie但並非實況）。", 
 	
  	"Dummy" : "Dummy" 
 
