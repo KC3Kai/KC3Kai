@@ -297,10 +297,12 @@
 						$(".box-quests .quest-box-"+(index+1)+" .color", container).addClass( "type"+questType );
 						if(quest.meta){
 							$(".box-quests .quest-box-"+(index+1)+" .name", container).text( quest.meta().name );
+							$(".box-quests .quest-box-"+(index+1)+" .name", container).attr("title", quest.meta().desc );
 						}else{
 							$(".box-quests .quest-box-"+(index+1)+" .name", container).text("?");
 						}
 						$(".box-quests .quest-box-"+(index+1)+" .status", container).text( quest.outputShort() );
+						$(".box-quests .quest-box-"+(index+1)+" .status", container).attr("title", quest.outputShort(true) );
 						$(".box-quests .quest-box-"+(index+1), container).show();
 					});
 					
@@ -320,10 +322,12 @@
 						$(".battle_quests .quest-box-"+(index+1)+" .color", container).addClass( "type"+questType );
 						if(quest.meta){
 							$(".battle_quests .quest-box-"+(index+1)+" .name", container).text( quest.meta().name );
+							$(".battle_quests .quest-box-"+(index+1)+" .name", container).attr("title", quest.meta().desc );
 						}else{
 							$(".battle_quests .quest-box-"+(index+1)+" .name", container).text("?");
 						}
 						$(".battle_quests .quest-box-"+(index+1)+" .status", container).text( quest.outputShort() );
+						$(".battle_quests .quest-box-"+(index+1)+" .status", container).attr("title", quest.outputShort(true) );
 						$(".battle_quests .quest-box-"+(index+1), container).show();
 					});
 				}

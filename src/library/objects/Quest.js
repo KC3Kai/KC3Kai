@@ -56,16 +56,28 @@ Quest Type:
 	};
 	
 	/* OUTPUT SHORT
-	Return tracking text to be shown on Strategy Room
+	Return tracking text to be shown on Panel
 	------------------------------------------*/
-	KC3Quest.prototype.outputShort = function(){
+	KC3Quest.prototype.outputShort = function(showAll){
+		if (typeof showAll == "undefined") {
+			showAll = false;
+		}
 		if(this.tracking){
 			var trackingText = [];
 			var ctr;
+			var textToShow = "";
 			for(ctr in this.tracking){
-				trackingText.push(this.tracking[ctr][0]+"/"+this.tracking[ctr][1]);
+				textToShow = this.tracking[ctr][0]+"/"+this.tracking[ctr][1];
+				trackingText.push(textToShow);
+				if (!showAll && (this.tracking[ctr][0] < this.tracking[ctr][1])) {
+					return textToShow;
+				}
 			}
-			return trackingText.join(", ");
+			if (!showAll) {
+				return textToShow;
+			} else {
+				return trackingText.join(String.fromCharCode(13));
+			}
 		}
 		return "";
 	};
