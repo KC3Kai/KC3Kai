@@ -104,10 +104,10 @@ Used by SortieManager
 		this.battleDay = battleData;
 		
 		var enemyships = battleData.api_ship_ke;
-		enemyships.splice(0,1);
+		if(enemyships[0]==-1){ enemyships.splice(0,1); }
 		this.eships = enemyships;
 		this.eformation = battleData.api_formation[1];
-		KC3SortieManager.onEnemiesAvailable();
+		// KC3SortieManager.onEnemiesAvailable();
 		
 		this.supportFlag = (battleData.api_support_flag>0)?true:false;
 		this.yasenFlag = (battleData.api_midnight_flag>0)?true:false;

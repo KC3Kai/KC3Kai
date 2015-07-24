@@ -9,7 +9,8 @@
 		maps : {},
 		selectedWorld: 0,
 		selectedMap: 0,
-		
+		itemsPerPage: 20,
+		currentSorties: [],
 		
 		/* INIT
 		Prepares all data needed
@@ -88,6 +89,45 @@
 			
 			// Select default opened world
 			$(".tab_maps .world_box.active").trigger("click");
+			
+			// On-click pages
+			$(".tab_maps .page_list").on("click", ".page_box", function(){
+				$(".tab_maps .page_list .page_box").removeClass("active");
+				$(this).addClass("active");
+				self.pageNum = $(this).data("num");
+				self.showPage();
+			});
+			
+			// On-click sortie toggles
+			$(".tab_maps .sortie_list").on("click", ".sortie_box .sortie_toggles .sortie_toggle", function(){
+				var targetName = $(this).data("target");
+				var targetBox = $(this).parent().parent().parent().find("."+targetName);
+				
+				if( $(this).hasClass("active") ){
+					$(this).removeClass("active")
+				}else{
+					$(this).addClass("active")
+				}
+				
+				/*// Check if target box does not have data yet
+				if(!targetBox.data("filled")){
+					// If trying to view fleet
+					if(targetBox == "sortie_roster"){
+						
+						
+					// If trying to view nodes list
+					}else if(targetBox == "sortie_nodes"){
+						
+						
+					}
+					
+					// Mark as already having data
+					targetBox.data("filled", 1);
+				}*/
+				
+				// Show or hide the target box
+				targetBox.slideToggle();
+			});
 		},
 		
 		/* SHOW MAP
@@ -96,68 +136,84 @@
 		showMap :function(){
 			var self = this;
 			this.pageNum = 1;
-			
 			$(".tab_maps .sortie_list").html("");
 			
 			// Show all sorties
 			if(this.selectedWorld === 0){
-				KC3Database.count_normal_sorties(function(countPages){
-					self.showPagination(countPages);
+				KC3Database.count_normal_sorties(function(countSorties){
+					console.log("count_normal_sorties", countSorties);
+					self.showPagination(countSorties);
 				});
 				
 			// Selected specific world
 			}else{
 				// Show all on this world
 				if(this.selectedMap === 0){
-					KC3Database.count_world(this.selectedWorld, function(countPages){
-						self.showPagination(countPages);
+					KC3Database.count_world(this.selectedWorld, function(countSorties){
+						console.log("count_world", countSorties);
+						self.showPagination(countSorties);
 					});
 					
 				// Selected specifc map
 				}else{
-					KC3Database.count_map(this.selectedWorld, this.selectedMap, function(countPages){
-						self.showPagination(countPages);
+					KC3Database.count_map(this.selectedWorld, this.selectedMap, function(countSorties){
+						console.log("count_map", countSorties);
+						self.showPagination(countSorties);
 					});
 				}
 			}
-			
-			this.showPage();
 		},
 		
 		/* SHOW PAGINATION
 		Show list of clickable page boxes
 		---------------------------------*/
-		showPagination :function(countPages){
-			// $(".factory .page_box")
-					// page_list
+		showPagination :function(countSorties){
+			var countPages = Math.ceil( countSorties / this.itemsPerPage );
+			
+			// Remove past pagination
+			$(".tab_maps .page_list").html("");
+			
+			// Clone page boxes
+			var pageBox;
+			$.each(new Array(countPages), function(index){
+				pageBox = $(".tab_maps .factory .page_box").clone().appendTo(".tab_maps .page_list");
+				pageBox.html( index+1 );
+				pageBox.data("num", index+1);
+				if(index===0){ pageBox.addClass("active"); }
+			});
+			
+			// Clear CSS for floats
+			$("<div>").addClass("clear").appendTo(".tab_maps .page_list");
+			
+			// Click first page as initial selected
+			$(".tab_maps .page_list .page_box.active").trigger("click");
 		},
+		
 		
 		/* SHOW PAGE
 		Determines list type and gets data from IndexedDB
 		---------------------------------*/
 		showPage :function(){
-			// this.pageNum
-			// this.selectedWorld
-			// this.selectedMap
-			console.log("showing list", this.selectedWorld, this.selectedMap, this.pageNum );
+			var self = this;
+			
 			// Show all sorties
 			if(this.selectedWorld === 0){
-				KC3Database.count_normal_sorties(function(countPages){
-					self.showPagination(countPages);
+				KC3Database.get_normal_sorties(this.pageNum, this.itemsPerPage, function( sortieList ){
+					self.showList( sortieList );
 				});
 				
 			// Selected specific world
 			}else{
 				// Show all on this world
 				if(this.selectedMap === 0){
-					KC3Database.count_world(this.selectedWorld, function(countPages){
-						self.showPagination(countPages);
+					KC3Database.get_world(this.selectedWorld, this.pageNum, this.itemsPerPage, function( sortieList ){
+						self.showList( sortieList );
 					});
 					
 				// Selected specifc map
 				}else{
-					KC3Database.count_map(this.selectedWorld, this.selectedMap, function(countPages){
-						self.showPagination(countPages);
+					KC3Database.get_map(this.selectedWorld, this.selectedMap, this.pageNum, this.itemsPerPage, function( sortieList ){
+						self.showList( sortieList );
 					});
 				}
 			}
@@ -167,7 +223,168 @@
 		Shows sorties on interface using list of collected sortie objects
 		---------------------------------*/
 		showList :function( sortieList ){
+			// Remove past list
+			$(".tab_maps .sortie_list").html("");
 			
+			// Show sortie records on list
+			var sortieBox, mainFleet, isCombined, rshipBox, nodeBox, thisNode;
+			$.each(sortieList, function(id, sortie){
+				sortieBox = $(".tab_maps .factory .sortie_box").clone().appendTo(".tab_maps .sortie_list");
+				$(".sortie_id", sortieBox).html( sortie.id );
+				$(".sortie_date", sortieBox).html( new Date(sortie.time*1000).format("mmm d") );
+				$(".sortie_map", sortieBox).html( sortie.world + "-" + sortie.mapnum );
+				
+				// Show main fleet faces
+				mainFleet = sortie["fleet"+sortie.fleetnum];
+				$(".sortie_ship", sortieBox).hide();
+				$.each(mainFleet, function(index, ship){
+					$(".sortie_ship_"+(index+1)+" img", sortieBox).attr("src", KC3Meta.shipIcon(ship.mst_id));
+					$(".sortie_ship_"+(index+1), sortieBox).show();
+					
+					rshipBox = $(".tab_maps .factory .rfleet_ship").clone();
+					$(".rfleet_pic img", rshipBox).attr("src", KC3Meta.shipIcon(ship.mst_id) );
+					$(".rfleet_name", rshipBox).html( KC3Meta.shipName( KC3Master.ship(ship.mst_id).api_name ) );
+					$(".rfleet_level", rshipBox).html( KC3Meta.term("LevelText")+" "+ship.level);
+					$(".rfleet_main .rfleet_body", sortieBox).append( rshipBox );
+				});
+				$(".rfleet_main .rfleet_body", sortieBox).append( $("<div>").addClass("clear") );
+				
+				// Check if combined fleet
+				isCombined = false; 
+				if(typeof sortie.combined !== "undefined"){
+					if(sortie.combined > 0){
+						isCombined = true;
+					}
+				}
+				
+				// Escort Fleet  Expedition
+				if(isCombined){
+					$.each(sortie.fleet2, function(index, ship){
+						rshipBox = $(".tab_maps .factory .rfleet_ship").clone();
+						$(".rfleet_pic img", rshipBox).attr("src", KC3Meta.shipIcon(ship.mst_id) );
+						$(".rfleet_name", rshipBox).html( KC3Meta.shipName( KC3Master.ship(ship.mst_id).api_name ) );
+						$(".rfleet_level", rshipBox).html( KC3Meta.term("LevelText")+" "+ship.level);
+						$(".rfleet_escort .rfleet_body", sortieBox).append( rshipBox );
+					});
+					$(".rfleet_escort .rfleet_body", sortieBox).append( $("<div>").addClass("clear") );
+				}else{
+					$(".rfleet_escort", sortieBox).addClass("disabled");
+				}
+				
+				// Preboss Support
+				if(sortie.support1 > 0){
+					$.each(sortie["fleet"+sortie.support1], function(index, ship){
+						rshipBox = $(".tab_maps .factory .rfleet_ship").clone();
+						$(".rfleet_pic img", rshipBox).attr("src", KC3Meta.shipIcon(ship.mst_id) );
+						$(".rfleet_name", rshipBox).html( KC3Meta.shipName( KC3Master.ship(ship.mst_id).api_name ) );
+						$(".rfleet_level", rshipBox).html( KC3Meta.term("LevelText")+" "+ship.level);
+						$(".rfleet_preboss .rfleet_body", sortieBox).append( rshipBox );
+					});
+					$(".rfleet_preboss .rfleet_body", sortieBox).append( $("<div>").addClass("clear") );
+				}else{
+					$(".rfleet_preboss", sortieBox).addClass("disabled");
+				}
+				
+				// Boss support Expedition
+				if(sortie.support2 > 0){
+					$.each(sortie["fleet"+sortie.support2], function(index, ship){
+						rshipBox = $(".tab_maps .factory .rfleet_ship").clone();
+						$(".rfleet_pic img", rshipBox).attr("src", KC3Meta.shipIcon(ship.mst_id) );
+						$(".rfleet_name", rshipBox).html( KC3Meta.shipName( KC3Master.ship(ship.mst_id).api_name ) );
+						$(".rfleet_level", rshipBox).html( KC3Meta.term("LevelText")+" "+ship.level);
+						$(".rfleet_boss .rfleet_body", sortieBox).append( rshipBox );
+					});
+					$(".rfleet_boss .rfleet_body", sortieBox).append( $("<div>").addClass("clear") );
+				}else{
+					$(".rfleet_boss", sortieBox).addClass("disabled");
+				}
+				
+				// For each battle
+				$.each(sortie.battles, function(index, battle){
+					// console.log(battle);
+					
+					// Show on node list
+					$(".sortue_edge_"+(index+1), sortieBox).addClass("active");
+					$(".sortue_edge_"+(index+1), sortieBox).html( battle.node );
+					
+					// HTML elements
+					nodeBox = $(".tab_maps .factory .sortie_nodeinfo").clone();
+					$(".node_id", nodeBox).text( battle.node );
+					
+					// Result Icons
+					$(".node_formation img", nodeBox).attr("src", KC3Meta.formationIcon(battle.data.api_formation[0]) );
+					$(".node_formation", nodeBox).attr("title", KC3Meta.formationText(battle.data.api_formation[0]) );
+					
+					$(".node_rating img", nodeBox).attr("src", "../../assets/img/client/ratings/"+battle.rating+".png");
+					
+					if(battle.drop > 0){
+						$(".node_drop img", nodeBox).attr("src", KC3Meta.shipIcon( battle.drop ) );
+					}else{
+						$(".node_drop img", nodeBox).attr("src", "../../assets/img/ui/shipdrop-x.png");
+					}
+					
+					if(battle.data.api_support_flag > 0){
+						$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support.png");
+					}else{
+						$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support-x.png");
+					}
+					
+					// Enemies
+					$(".node_eformation img", nodeBox).attr("src", KC3Meta.formationIcon(battle.data.api_formation[1]) );
+					$(".node_eformation", nodeBox).attr("title", KC3Meta.formationText(battle.data.api_formation[1]) );
+					// battle.data.api_ship_ke.splice(0,1);
+					$.each(battle.data.api_ship_ke, function(index, eship){
+						$(".node_eship_"+(index+1)+" img", nodeBox).attr("src", KC3Meta.abyssIcon( eship ) );
+						$(".node_eship_"+(index+1), nodeBox).attr("title", KC3Master.ship( eship ).api_name + KC3Master.ship( eship ).api_yomi );
+						$(".node_eship_"+(index+1), nodeBox).show();
+					});
+					
+					// Process Battle
+					thisNode = (new KC3Node()).defineAsBattle();
+					thisNode.engage( battle.data );
+					
+					// Conditions
+					$(".node_detect", nodeBox).text( thisNode.detection[0] );
+					$(".node_detect", nodeBox).addClass( thisNode.detection[1] );
+					$(".node_engage", nodeBox).text( thisNode.engagement[2] );
+					$(".node_engage", nodeBox).addClass( thisNode.engagement[1] );
+					$(".node_contact", nodeBox).text(thisNode.fcontact +" vs "+thisNode.econtact);
+					$(".node_airbattle", nodeBox).text( thisNode.airbattle[0] );
+					$(".node_airbattle", nodeBox).addClass( thisNode.airbattle[1] );
+					
+					// Plane total counts
+					$(".node_FFT", nodeBox).text(thisNode.planeFighters.player[0]);
+					$(".node_FAT", nodeBox).text(thisNode.planeFighters.abyssal[0]);
+					$(".node_BFT", nodeBox).text(thisNode.planeBombers.player[0]);
+					$(".node_BAT", nodeBox).text(thisNode.planeBombers.abyssal[0]);
+					
+					// Plane losses
+					if(thisNode.planeFighters.player[1] > 0){
+						$(".node_FFL", nodeBox).text("-"+thisNode.planeFighters.player[1]);
+					}
+					if(thisNode.planeFighters.abyssal[1] > 0){
+						$(".node_FAL", nodeBox).text("-"+thisNode.planeFighters.abyssal[1]);
+					}
+					if(thisNode.planeBombers.player[1] > 0){
+						$(".node_BFL", nodeBox).text("-"+thisNode.planeBombers.player[1]);
+					}
+					if(thisNode.planeBombers.abyssal[1] > 0){
+						$(".node_BAL", nodeBox).text("-"+thisNode.planeBombers.abyssal[1]);
+					}
+					
+					// $(".xxx", nodeBox).xxx( xxxx );
+					// $(".xxx", nodeBox).xxx( xxxx );
+					// $(".xxx", nodeBox).xxx( xxxx );
+					// $(".xxx", nodeBox).xxx( xxxx );
+					// $(".xxx", nodeBox).xxx( xxxx );
+					// $(".xxx", nodeBox).xxx( xxxx );
+					$(".sortie_nodes", sortieBox).append( nodeBox );
+				});
+				$(".sortie_nodes", sortieBox).append( $("<div>").addClass("clear") );
+				
+				
+				// console.log( sortie );
+			});
 		}
 	};
 	
