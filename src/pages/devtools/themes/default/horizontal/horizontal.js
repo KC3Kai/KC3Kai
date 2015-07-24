@@ -574,8 +574,8 @@
 				
 				if(thisNode.drop > 0){
 					$(".battle .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop));
-					$(".count_ships", container).text( $(".count_ships", container).text()+1 ).each(function(){
-						(KC3ShipManager.max - $(".count_ships", container).text()) <= 5 ?
+					$(".count_ships", container).each(function(){
+						(KC3ShipManager.max - $(this).text(parseInt($(this).text())+1)) <= 5 ?
 							$(this).addClass("material_limit") :
 							$(this).removeClass("material_limit");
 					});
@@ -727,7 +727,17 @@
 				
 			},
 			PvPEnd: function(container, data, local){
-				
+				var expGained = data.api_get_exp;
+				// If EXP left exceeded by gained EXP on sortie
+				if(expGained >= PlayerManager.hq.exp[1]) {
+					expGained -= PlayerManager.hq.exp[1];
+					PlayerManager.hq.exp = [0,KC3Meta.exp(++PlayerManager.hq.level)[0],0];
+					this.HQ(container, {}, local);
+				}
+				$(".battle_hqexpgain", container).css({width: Math.floor((function(){
+					return (PlayerManager.hq.exp[2] + Math.min(PlayerManager.hq.exp[1],expGained)) / KC3Meta.exp(PlayerManager.hq.level)[0];
+				})()*60)+"px"});
+				$(".battle_hqlevel_next_gain", container).text(-expGained);
 			}
 		}
 	});
