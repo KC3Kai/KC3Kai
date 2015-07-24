@@ -379,19 +379,34 @@
 						}
 					});
 					
-
-                                    try {
-                                        var expeditionAnalyzeResult = ExpeditionHelper.analyzeFleet( CurrentFleet );
-                                        if (expeditionAnalyzeResult) {
-                                            expeditionAnalyzeResult.e = expeditionAnalyzeResult.e.join(",");
-                                            $(".expedition-helper").text(JSON.stringify( expeditionAnalyzeResult ));
-                                        } else {
-                                            $(".expedition-helper").text( "no result" );
-                                        }
-                                    } catch (e) 
-                                    {
-                                        $(".expedition-helper").text("error: " + e);
-                                    }
+                    // Expedition Helper
+					try {
+						var expeditionAnalyzeResult = ExpeditionHelper.analyzeFleet( CurrentFleet );
+						console.log(expeditionAnalyzeResult);
+						
+						if(expeditionAnalyzeResult){
+							$(".activityBox.expedHelp .expedNotes", container).html("");
+							$.each(expeditionAnalyzeResult.w, function(index, fleetNote){
+								$(".activityBox.expedHelp .expedNotes", container).append(
+									$("<div/>").addClass("expedNote").html(fleetNote)
+								);
+							});
+							$(".activityBox.expedHelp .expedNotes", container).append($("<div/>").addClass("clear"));
+							
+							$(".activityBox.expedHelp .expedIdList", container).html("");
+							$.each(expeditionAnalyzeResult.e, function(index, expedId){
+								$(".activityBox.expedHelp .expedIdList", container).append(
+									$("<div/>").addClass("expedId").html(expedId)
+								);
+							});
+							$(".activityBox.expedHelp .expedIdList", container).append($("<div/>").addClass("clear"));
+							
+							$(".activityBox", container).hide();
+							$(".activityBox.expedHelp", container).fadeIn();
+						}else{
+							$(".activityBox.expedHelp", container).text( "no result" );
+						}
+					}catch(e){}
 
 					// Expedition Timer Faces
 					KC3TimerManager._exped[0].face( PlayerManager.fleets[1].ship(0).masterId );
