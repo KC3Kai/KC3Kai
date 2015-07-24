@@ -40,11 +40,11 @@
 	"MenuStrategyName" : "戦略室",
 	"MenuStrategyDesc" : "様々なツールを使用して、分析し、戦略を立て助け、またはちょうどあなたの艦隊を管理します。",
 	"MenuSettingsDesc" : "次のゲームセッションに適用される様々な拡張機能の設定。",
-	"MenuAboutDesc" : "KC3に関する情報、および開発者、作家、テスターのそのチーム。",
+	"MenuAboutDesc" : "KC3改に関する情報、および開発者、作家、テスターのそのチーム。",
 	"MenuChecking" : "次のKC3改の更新をチェックします...",
 	"MenuOnLatest" : "あなたは最新バージョンを使用しています！",
 	
-	"AboutTitle" : "KC3の開発者に約",
+	"AboutTitle" : "KC3改の開発者に約",
 	"Version" : "バージョン",
 	"AboutHome" : "ホームページ",
 	"AboutSource" : "ソース",
