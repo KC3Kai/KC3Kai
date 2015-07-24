@@ -199,7 +199,7 @@
 				// IS TYPE-COLLECTION
 				}else{
 					// Merge each type on this list
-					var MergedList = [];
+					MergedList = [];
 					$.each(element.types, function(typeIndex, gearTypeId){
 						MergedList = MergedList.concat( self.gearCache["t"+gearTypeId] );
 					});
@@ -218,14 +218,14 @@
 				// console.log("TopGears for", element.name, TopGears);
 				
 				// Create gear-type box
-				GearTypeBox = $(".tab_showcase .factory .gtype_box").clone()
+				GearTypeBox = $(".tab_showcase .factory .gtype_box").clone();
 				$(".gtype_title", GearTypeBox).html(element.name);
 				
 				// Add gears on this gear-type
 				$.each(TopGears, function(gearIndex, ThisTopGear){
 					if(typeof ThisTopGear !== "undefined"){
 						GearBox = $(".tab_showcase .factory .show_gear").clone();
-						if(GearTypeIcon==0){ GearTypeIcon=ThisTopGear.type; }
+						if(GearTypeIcon===0){ GearTypeIcon=ThisTopGear.type; }
 						$(".gear_icon img", GearBox).attr("src", "../../assets/img/items/"+GearTypeIcon+".png");
 						GearTypeIcon = 0;
 						$(".gear_name", GearBox).html( ThisTopGear.name );
