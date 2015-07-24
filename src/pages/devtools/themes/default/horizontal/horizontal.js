@@ -139,13 +139,14 @@
 					$(".admiral_comm", container).text( PlayerManager.hq.desc );
 					$(".admiral_rank", container).text( PlayerManager.hq.rank );
 					$(".level_value", container).text( PlayerManager.hq.level );
-					$(".exp_bar", container).css({width: (PlayerManager.hq.exp[0]*90)+"px"});
+					$(".exp_bar", container).css({width: Math.floor(PlayerManager.hq.exp[0]*88)+"px"});
 					$(".exp_text", container).text( PlayerManager.hq.exp[1] );
 				}else if(KC3Panel.mode=="battle"){
 					$(".battle_admiral", container).text( PlayerManager.hq.name );
 					$(".battle_hqlevel_text", container).text( PlayerManager.hq.level );
-					$(".battle_hqexpval", container).css({width: (PlayerManager.hq.exp[0]*60)+"px"});
+					$(".battle_hqexpval,.battle_hqexpgain", container).css({width: Math.floor(PlayerManager.hq.exp[0]*60)+"px"});
 					$(".battle_hqlevel_next", container).text( PlayerManager.hq.exp[1] );
+					$(".battle_hqlevel_next_gain", container).text( "" );
 				}
 			},
 			Consumables: function(container, data, local){
@@ -155,11 +156,19 @@
 				$(".count_torch", container).text( PlayerManager.consumables.torch );
 			},
 			ShipSlots: function(container, data, local){
-				$(".count_ships", container).text( KC3ShipManager.count() );
+				$(".count_ships", container).text( KC3ShipManager.count() ).each(function(){
+					(KC3ShipManager.max - KC3ShipManager.count()) <= 5 ?
+						$(this).addClass("material_limit") :
+						$(this).removeClass("material_limit");
+				});
 				$(".max_ships", container).text( KC3ShipManager.max );
 			},
 			GearSlots: function(container, data, local){
-				$(".count_gear", container).text( KC3GearManager.count() );
+				$(".count_gear", container).text( KC3GearManager.count() ).each(function(){
+					(KC3GearManager.max - KC3GearManager.count()) <= 20 ?
+						$(this).addClass("material_limit") :
+						$(this).removeClass("material_limit");
+				});
 				$(".max_gear", container).text( KC3GearManager.max );
 			},
 			Timers: function(container, data, local){
@@ -270,8 +279,8 @@
 							FleetEquipment( $(".ship-gear-4", ShipBox), CurrentShip.equipment(3), CurrentShip.slots[3] );
 						}
 					});
-										
-										
+					
+					
 					try {
 							var expeditionAnalyzeResult = ExpeditionHelper.analyzeFleet( CurrentFleet );
 							if (expeditionAnalyzeResult) {
@@ -284,7 +293,7 @@
 					{
 							$(".expedition-helper").text("error: " + e);
 					}
-
+					
 					// Expedition Timer Faces
 					KC3TimerManager._exped[0].face( PlayerManager.fleets[1].ship(0).masterId );
 					KC3TimerManager._exped[1].face( PlayerManager.fleets[2].ship(0).masterId );
@@ -355,7 +364,14 @@
 				KC3Panel.mode = "battle";
 				
 				// Show world details
-				$(".battle .battle_world", container).text("World "+KC3SortieManager.map_world+" - "+KC3SortieManager.map_num);
+				$(".battle .battle_world", container).text("World "+KC3SortieManager.map_world+" - "+KC3SortieManager.map_num+(function(d){
+					switch(d) {
+						case 1: case 2: case 3:
+							return " " + ["Easy","Normal","Hard"][d-1];
+						default: // 0 -- no difficulty (print nothing)
+							return "";
+					}
+				})(KC3SortieManager.map_difficulty));
 				
 				// Show boss node
 				KC3SortieManager.onBossAvailable = function(){
@@ -518,7 +534,7 @@
 			},
 			BattleNight: function(container, data, local){
 				if(KC3SortieManager.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
-				$(".battle .battle_current", container).text([
+				var desperateText = [
 					"DESPERATE? :P",
 					"LOL SKRUB",
 					"ALL DA BONUSES",
@@ -533,7 +549,8 @@
 					"Let's all pray~",
 					"RNGesus bless him",
 					"I bless this run"
-				][Math.floor(Math.random()*5)]);
+				]; // events? extra operations? end of month? coming soon. (i guess by other)
+				$(".battle .battle_current", container).text(desperateText[Math.floor(Math.random()*5)]);
 				var thisNode = KC3SortieManager.currentNode();
 				
 			},
@@ -542,10 +559,29 @@
 				$(".battle .battle_current", container).text("RESULTS");
 				var thisNode = KC3SortieManager.currentNode();
 				
+				// If EXP left exceeded by gained EXP on sortie
+				if(KC3SortieManager.hqExpGained >= PlayerManager.hq.exp[1]) {
+					KC3SortieManager.hqExpGained -= PlayerManager.hq.exp[1];
+					PlayerManager.hq.exp = [0,KC3Meta.exp(++PlayerManager.hq.level)[0],0];
+					this.HQ(container, {}, local);
+				}
+				$(".battle_hqexpgain", container).css({width: Math.floor((function(){
+					return (PlayerManager.hq.exp[2] + Math.min(PlayerManager.hq.exp[1],KC3SortieManager.hqExpGained)) / KC3Meta.exp(PlayerManager.hq.level)[0];
+				})()*60)+"px"});
+				$(".battle_hqlevel_next_gain", container).text(-KC3SortieManager.hqExpGained);
+				
 				$(".battle .battle_rating img").attr("src", "../../../../assets/img/client/ratings/"+thisNode.rating+".png");
 				
 				if(thisNode.drop > 0){
 					$(".battle .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop));
+					$(".count_ships", container).text( $(".count_ships", container).text()+1 ).each(function(){
+						(KC3ShipManager.max - $(".count_ships", container).text()) <= 5 ?
+							$(this).addClass("material_limit") :
+							$(this).removeClass("material_limit");
+					});
+					//let the other implements this :P
+					//this.ShipSlots(container, {}, local);
+					//this.GearSlots(container, {}, local);
 				}else{
 					$(".battle .battle_drop img").attr("src", "../../../../assets/img/ui/shipdrop-x.png");
 				}
