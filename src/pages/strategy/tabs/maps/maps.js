@@ -232,6 +232,7 @@
 				sortieBox = $(".tab_maps .factory .sortie_box").clone().appendTo(".tab_maps .sortie_list");
 				$(".sortie_id", sortieBox).html( sortie.id );
 				$(".sortie_date", sortieBox).html( new Date(sortie.time*1000).format("mmm d") );
+				$(".sortie_date", sortieBox).attr("title", new Date(sortie.time*1000).format("mmm d, yyyy hh:MM:ss") );
 				$(".sortie_map", sortieBox).html( sortie.world + "-" + sortie.mapnum );
 				
 				// Show main fleet faces
