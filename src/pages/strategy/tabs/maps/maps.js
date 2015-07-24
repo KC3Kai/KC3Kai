@@ -104,9 +104,9 @@
 				var targetBox = $(this).parent().parent().parent().find("."+targetName);
 				
 				if( $(this).hasClass("active") ){
-					$(this).removeClass("active")
+					$(this).removeClass("active");
 				}else{
-					$(this).addClass("active")
+					$(this).addClass("active");
 				}
 				
 				/*// Check if target box does not have data yet
