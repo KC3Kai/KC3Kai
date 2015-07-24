@@ -940,7 +940,7 @@
 				
 			},
 			PvPEnd: function(container, data, local){
-				var expGained = data.api_get_exp;
+				var expGained = data.result.api_get_exp;
 				// If EXP left exceeded by gained EXP on sortie
 				if(expGained >= PlayerManager.hq.exp[1]) {
 					expGained -= PlayerManager.hq.exp[1];
