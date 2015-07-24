@@ -196,6 +196,10 @@
 					MergedList = self.gearCache[index];
 					GearTypeIcon = index.substr(1);
 					
+				// Check if he does have any of this gear type
+				}else if(typeof element.types == "undefined"){
+					return true;
+					
 				// IS TYPE-COLLECTION
 				}else{
 					// Merge each type on this list
