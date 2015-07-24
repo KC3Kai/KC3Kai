@@ -131,6 +131,7 @@ Xxxxxxx
 		resultScreen :function( resultData ){
 			if(this.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
 			this.currentNode().results( resultData );
+			PlayerManager.hq.updateLevel( resultData.api_member_lv, resultData.api_member_exp);
 		},
 		
 		endSortie :function(){
