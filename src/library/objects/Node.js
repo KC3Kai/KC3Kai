@@ -59,7 +59,7 @@ Used by SortieManager
 		this.item = nodeData.api_itemget.api_icon_id;
 		this.icon = function(folder){
 			return folder+(
-				["fuel","ammo","steel","bauxite","ibuild","bucket","devmat","compass"]
+				["fuel","ammo","steel","bauxite","ibuild","bucket","devmat","compass","","box1","box2","box3"]
 				[nodeData.api_itemget.api_icon_id-1]
 			)+".png";
 		};
