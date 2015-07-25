@@ -98,19 +98,29 @@ Xxxxxxx
 		advanceNode :function( nodeData, UTCTime ){
 			var thisNode;
 			
-			//  Battle Node (api_event_kind = 1 and (api_event_id = 4 (normal battle) or api_event_id = 5 (boss))
-			if((nodeData.api_event_kind||0) == 1) {
+			//  Battle Node
+			// api_event_kind = 1 (day battle)
+			// api_event_kind = 4 (aerial exchange)
+			// api_event_id = 4 (normal battle)
+			// api_event_id = 5 (boss)
+			if((nodeData.api_event_kind == 1) || (nodeData.api_event_kind == 4)) {
 				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsBattle(nodeData);
 			// Resource Node
+			// api_event_kind = 0
+			// api_event_id = 2
 			}else if (typeof nodeData.api_itemget != "undefined") {
 				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsResource(nodeData);
 			// Bounty Node
+			// api_event_kind = 0
+			// api_event_id = 8
 			} else if (typeof nodeData.api_itemget_eo_comment != "undefined") {
 				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsBounty(nodeData);
 			// Maelstrom Node
 			} else if (typeof nodeData.api_happening != "undefined") {
 				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsMaelstrom(nodeData);
-			// Empty Node (api_event_kind = 0 and api_event_id = 6)
+			// Empty Node 
+			// api_event_kind = 0 
+			// api_event_id = 6
 			}else{
 				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsDud(nodeData);
 			}
