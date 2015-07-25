@@ -179,6 +179,15 @@
 				"tw" :"https://twitter.com/c933103",
 				"wb" :"http://zh.moegirl.org/wiki/User:C933103"
 			}
+		},  
+		{
+			"name": "rephira",
+			"avatar" : "https://avatars3.githubusercontent.com/u/13478649?v=3&s=40",
+			"desc" : "한국어",
+			"links" : {
+				"gh" :"https://github.com/rephira",
+				"wk" :"http://kancolle.wikia.com/wiki/User:Rephira"
+			}
 		}
 	],
 	"AboutTesters" : [
