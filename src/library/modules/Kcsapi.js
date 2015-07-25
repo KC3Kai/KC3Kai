@@ -445,6 +445,7 @@ Previously known as "Reactor"
 			
 			KC3Network.trigger("SortieStart");
 			KC3Network.trigger("CompassResult");
+			KC3Network.trigger("Quests");
 		},
 		
 		/* Traverse Map
@@ -578,6 +579,7 @@ Previously known as "Reactor"
 			
 			KC3SortieManager.resultScreen( response.api_data );
 			KC3Network.trigger("BattleResult");
+			KC3Network.trigger("Quests");
 		},
 		
 		/* Combined Fleet Battle Results
@@ -585,6 +587,7 @@ Previously known as "Reactor"
 		"api_req_combined_battle/battleresult":function(params, response, headers){
 			KC3SortieManager.resultScreen( response.api_data );
 			KC3Network.trigger("BattleResult");
+			KC3Network.trigger("Quests");
 		},
 		
 		/*-------------------------------------------------------*/
