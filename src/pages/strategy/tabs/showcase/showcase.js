@@ -6,7 +6,7 @@
 	KC3StrategyTabs.showcase.definition = {
 		tabSelf: KC3StrategyTabs.showcase,
 		
-		shipCache: { bb:[], fbb:[], cv:[], cvl:[], ca:[], cav:[], cl:[], dd:[], ss:[], clt:[] },
+		shipCache: { bb:[], fbb:[], bbv:[], cv:[], cvl:[], ca:[], cav:[], cl:[], dd:[], ss:[], clt:[], ax:[] },
 		gearCache: {},
 		equipTypes: {
 			"t2": {
@@ -68,19 +68,19 @@
 			},
 			"t_x3": {
 				name: "Night Gear",
-				types: [ 24, 27 ]
+				types: [ 24, 27, 32 ]
 			},
 			"t_x4": {
 				name: "Other",
-				types: [ 26, 28, 29, 33 ]
+				types: [ 26, 28, 29, 23 ]
 			},
 			"t_x5": {
 				name: "Other",
-				types: [ 30, 31, 32 ]
+				types: [ 30, 31 ]
 			},
 			"t_x6": {
 				name: "Other",
-				types: [ 20, 21, 23 ]
+				types: [ 20, 21, 22, 33 ]
 			}
 		},
 		
@@ -105,7 +105,9 @@
 				ThisShip = TempShipList[ctr];
 				switch( ThisShip.master().api_stype ){
 					case 9: this.addToStypeList("bb", ThisShip); break;
+					case 10: this.addToStypeList("bbv", ThisShip); break;
 					case 8: this.addToStypeList("fbb", ThisShip); break;
+					case 18: this.addToStypeList("cv", ThisShip); break;
 					case 11: this.addToStypeList("cv", ThisShip); break;
 					case 7: this.addToStypeList("cvl", ThisShip); break;
 					case 5: this.addToStypeList("ca", ThisShip); break;
@@ -115,6 +117,11 @@
 					case 4: this.addToStypeList("clt", ThisShip); break;
 					case 13: this.addToStypeList("ss", ThisShip); break;
 					case 14: this.addToStypeList("ss", ThisShip); break;
+					case 20: this.addToStypeList("ax", ThisShip); break;
+					case 21: this.addToStypeList("ax", ThisShip); break;
+					case 17: this.addToStypeList("ax", ThisShip); break;
+					case 19: this.addToStypeList("ax", ThisShip); break;
+					case 16: this.addToStypeList("ax", ThisShip); break;
 					default: break;
 				}
 			}
