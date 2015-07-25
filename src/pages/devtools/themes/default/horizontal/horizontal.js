@@ -157,17 +157,21 @@
 			},
 			ShipSlots: function(container, data, local){
 				$(".count_ships", container).text( KC3ShipManager.count() ).each(function(){
-					(KC3ShipManager.max - KC3ShipManager.count()) <= 5 ?
-						$(this).addClass("material_limit") :
+					if((KC3ShipManager.max - KC3ShipManager.count()) <= 5){
+						$(this).addClass("material_limit");
+					}else{
 						$(this).removeClass("material_limit");
+					}
 				});
 				$(".max_ships", container).text( KC3ShipManager.max );
 			},
 			GearSlots: function(container, data, local){
 				$(".count_gear", container).text( KC3GearManager.count() ).each(function(){
-					(KC3GearManager.max - KC3GearManager.count()) <= 20 ?
-						$(this).addClass("material_limit") :
+					if((KC3GearManager.max - KC3GearManager.count()) <= 20){
+						$(this).addClass("material_limit");
+					}else{
 						$(this).removeClass("material_limit");
+					}
 				});
 				$(".max_gear", container).text( KC3GearManager.max );
 			},

@@ -55,8 +55,8 @@
 				try {
 				self.draw(0, 1,"hour",function(x){
 					var h = x.getHours();
-					if(h%12==0) {
-						return ((h == 0) ? 'M':'N') + 'N';
+					if(h%12===0) {
+						return ((h === 0) ? 'M':'N') + 'N';
 					} else { 
 						return (h % 12) + ((h > 12) ? 'P':'A');
 					}
@@ -98,7 +98,7 @@
 			// Check records beyond the first axis existed or not
 			var
 				self = this,
-				nearest = Object.keys(this[dataKey]).filter(function(x){return x.slice(1)<(self[reqKey]-backtracks)}).pop();
+				nearest = Object.keys(this[dataKey]).filter(function(x){return x.slice(1)<(self[reqKey]-backtracks);}).pop();
 			// Loop starting from past 24 hr, per hour, to current
 			var graphIndex=0, thisTime, thisDateObj;
 			for(; backtracks>=0; backtracks--){
@@ -106,19 +106,20 @@
 				thisDateObj = new Date(thisTime*hourMult*60*60*1000);
 				data.hours[graphIndex] = dateStrFunc(thisDateObj);
 				// If a resource for this hour exists
+				var j;
 				if(typeof this[dataKey][prefx+thisTime] != "undefined") {
-					for(var j=0;j<(Object.keys(itemData.name).length);j++) {
+					for(j=0;j<(Object.keys(itemData.name).length);j++) {
 						data[itemData.name[j]][graphIndex] = this[dataKey][prefx+thisTime][itemData.dbkey[j]];
 					}
 				} else {
-					for(var j=0;j<(Object.keys(itemData.name).length);j++) {
+					for(j=0;j<(Object.keys(itemData.name).length);j++) {
 						// Check if its not the first x-axis
 						if(graphIndex > 0) {
 							// Use the values from previous record
 								data[itemData.name[j]][graphIndex] = data[itemData.name[j]][graphIndex-1];
 						} else {
 							// First x-axis with no record, use zero :: if there's no data beyond the axis
-								data[itemData.name[j]][graphIndex] = (nearest!=undefined) ? this[dataKey][nearest][itemData.dbkey[j]] : 0;
+								data[itemData.name[j]][graphIndex] = (nearest!==undefined) ? this[dataKey][nearest][itemData.dbkey[j]] : 0;
 						}
 					}
 				}
