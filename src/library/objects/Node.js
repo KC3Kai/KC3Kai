@@ -35,9 +35,8 @@ Used by SortieManager
 				this.eships = nodeData.pvp_opponents;
 				KC3SortieManager.onEnemiesAvailable();
 			}
-
-			this.enemySunk = [false, false, false, false, false, false];
 		}
+		this.enemySunk = [false, false, false, false, false, false];
 		return this;
 	};
 	
