@@ -11,7 +11,9 @@ Xxxxxxx
 		fleetSent: 1,
 		map_world: 0,
 		map_num: 0,
+		map_difficulty: 0,
 		nextNodeCount: 0,
+		hqExpGained: 0,
 		nodes: [],
 		boss: {},
 		onBossAvailable: function(){},
@@ -25,6 +27,7 @@ Xxxxxxx
 			this.map_world = world;
 			this.map_num = mapnum;
 			this.nextNodeCount = 0;
+			this.hqExpGained = 0;
 			this.nodes = [];
 			this.boss = {
 				node: -1,
@@ -55,13 +58,20 @@ Xxxxxxx
 		
 		getSupportingFleet :function(bossSupport){
 			var expedNumbers;
+			/** Developer note:
+				X = Expedition ID
+				M,N = (X / 8),((X-1) % 8)
+					M : multiple  of 8,
+					N : remainder of 8.
+				Fulfilling condition: (M == 5 || M > 12) && (N == 0 + bossSupport)
+			**/
 			if(bossSupport){
-				expedNumbers = [34,110,118,126,150];
+				expedNumbers = [34,110,118,126,134,142,150];
 				return this.checkIfFleetIsSupporting(expedNumbers, 1)
 					|| this.checkIfFleetIsSupporting(expedNumbers, 2)
 					|| this.checkIfFleetIsSupporting(expedNumbers, 3);
 			}else{
-				expedNumbers = [33,109,117,125,149];
+				expedNumbers = [33,109,117,125,133,141,149];
 				return this.checkIfFleetIsSupporting(expedNumbers, 1)
 					|| this.checkIfFleetIsSupporting(expedNumbers, 2)
 					|| this.checkIfFleetIsSupporting(expedNumbers, 3);
@@ -140,6 +150,7 @@ Xxxxxxx
 		
 		resultScreen :function( resultData ){
 			if(this.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
+			this.hqExpGained += resultData.api_get_exp;
 			this.currentNode().results( resultData );
 		},
 		
@@ -148,7 +159,9 @@ Xxxxxxx
 			this.fleetSent = 1;
 			this.map_world = 0;
 			this.map_num = 0;
+			this.map_difficulty = 0;
 			this.nextNodeCount = 0;
+			this.hqExpGained = 0;
 			this.nodes = [];
 			this.boss = {
 				node: -1,

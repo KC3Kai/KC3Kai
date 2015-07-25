@@ -169,6 +169,9 @@
 	font-size:11px;
 	color:#888;
 }
+#v .material_limit {
+	color:#f00;
+}
 /* Timer boxes */
 #v .timer-img {
 	border-radius:25px;
@@ -1232,7 +1235,7 @@
 	/*background:#ff0;*/
 }
 #v .battle .battle_hqlevel {
-	width:150px;
+	width:180px;
 	height:20px;
 	line-height:20px;
 	/*background:#0f0;*/
@@ -1261,6 +1264,11 @@
 #v .battle .battle_hqexpval {
 	height:12px;
 	background:#ace;
+	float:left;
+}
+#v .battle .battle_hqexpgain {
+	height:12px;
+	background:#d34;
 }
 #v .battle .battle_hqlevel_next {
 	width:55px;
@@ -1268,6 +1276,17 @@
 	float:left;
 	font-size:10px;
 	text-align:center;
+	/*background:#fcc;*/
+}
+#v .battle .battle_hqlevel_next_gain {
+	position:relative;
+	left:-8px;
+	width:30px;
+	height:20px;
+	float:left;
+	font-size:10px;
+	text-align:center;
+	color:#f00;
 	/*background:#fcc;*/
 }
 #v.panel-size-300px .battle .battle_slots {
