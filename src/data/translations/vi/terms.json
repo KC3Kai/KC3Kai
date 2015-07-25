@@ -25,6 +25,7 @@
     "ResourceSoftcapLimit": "Giới hạn tài nguyên",
     "MainScreenBGM": "Nhạc nền chính",
     "LevelUpNotice": "As your HQ level increases, softcap limit increases, and crafting of new equipment becomes possible.",
+    "ImprovementMaterial": "Đinh ",
     "Experience": "Kinh nghiệm",
     "Name": "Tên",
 	
@@ -43,7 +44,7 @@
 	"MenuChecking" : "Checking for next KC3改 update...",
 	"MenuOnLatest" : "You are using the latest version!",
 	
-	"AboutTitle" : "About KC3改 Developers",
+	"AboutTitle" : "Về Đội ngũ Phát triển KC3改",
 	"Version" : "Phiên bản",
 	"AboutHome" : "Trang Chủ",
 	"AboutSource" : "Nguồn",
@@ -52,7 +53,77 @@
 	"AboutHelpCommunity" : "You can help out",
 	"AboutHelpLearnMore" : "No need to code! Learn more how to do it >",
 	
+	"AboutCoders" : "Coder",
+	"AboutProjectHead" : "Trưởng Dự án",
+	"AboutWikiWriter" : "Biên tập Wiki",
+	"AboutDeveloper" : "Developer",
+	"AboutTranslators" : "Các dịch thuật viên",
+	"AboutTranslator" : "Dịch thuật viên",
+	"AboutTesters" : "Tester",
+	"AboutDevTester" : "Dev Build",
+	"AboutWebTester" : "WebStore Build",
+	"AboutOther" : "Other Credits",
+	"AboutLogo" : "Thiết kế Logo",
+	"AboutFairy" : "Thiết kế Fairy",
+	
 	"SettingsTitle" : "Cài đặt KC3改",
+
+	"SettingsGlobal" : "Global",
+	"SettingsLanguage" : "Ngôn Ngữ",
+	"SettingsELosFormula" : "Công thức Tầm nhìn Hiệu quả",
+	"SettingsELosSum" : "Tổng",
+	"SettingsELosOld" : "Cũ",
+	"SettingsELosNew" : "Mới",
+	
+	"SettingsGameInfo" : "Thông tin Trò chơi",
+	"SettingsConstructionFaces" : "Kết quả Đóng tàu",
+	"SettingsCraftBox" : "Kết quả Chế tạo Thiết bị",
+	"SettingsCompass" : "La bàn và Kẻ tịch",
+	"SettingsBattleData" : "Môi trường Chiến đấu",
+	"SettingsBossComp" : "Đội hình Boss",
+	
+	"SettingsScreenshot" : "Chụp màn hình",
+	"SettingsSSOutput" : "Output Mode",
+	"SettingsSSDownload" : "Download",
+	"SettingsSSImgur" : "Imgur",
+	"SettingsSSNewTab" : "Tab Mới",
+	"SettingsSSFileType" : "Kiểu file",
+	
+	"SettingsAlerts" : "Thông báo",
+	"SettingsTimeDiff" : "Timer Allowance",
+	"SettingsSeconds" : "giây",
+	"SettingsSoundType" : "Tiếng chuông",
+	"SettingsDing" : "DING!",
+	"SettingsCustom" : "Tự chọn",
+	"SettingsCustomSound" : "Custom Sound URL",
+	"SettingsDesktopNotif" : "Desktop Notification",
+	
+	"SettingsAPIGameScreen" : "API Game Screen",
+	"SettingsQuestOverlay" : "Quest Translations",
+	"SettingsQuestTracking" : "Quest Tracking",
+	"SettingsConfirmExit" : "Xác nhận trước khi thoát",
+	"SettingsScreenMargin" : "Lề trên",
+	"SettingsBGColor" : "Màu nền",
+	"SettingsBGColorDesc" : "See CSS background-color property",
+	"SettingsBGImage" : "Ảnh nền",
+	"SettingsBGSize" : "Cỡ nền",
+	"SettingsBGSizeDesc" : "See CSS background-size property",
+	"SettingsBGPosition" : "Vị trí nền",
+	"SettingsBGPositionDesc" : "See CSS background-position property",
+	"SettingsPlayerScale" : "Game Player Scale",
+	
+	"SettingsDMMGameplay" : "DMM Gameplay",
+	"SettingsDMMCustomize" : "Apply Customizations",
+	
+	"SettingsPanelSize" : "Panel Size",
+	"SettingsPanelOpacity" : "Độ trong suốt của Giao diện",
+	
+	"Small" : "Nhỏ",
+	"Big" : "To",
+	"Theme" : "Theme",
+	"Panel" : "Panel",
+	"Volume" : "Âm lượng",
+	"None" : "Không gì",
 	"LearnMore" : "Tìm hiểu thêm",
 	"Saved" : "Đã lưu!",
 	
@@ -63,5 +134,9 @@
 	"LevelText" : "Cấp",
 	"LevelShort" : "Lv.",
 	"LevelNext" : "Tiếp theo",
-	"Screenshot" : "Screenshot"
+	"Screenshot" : "Chụp màn hình",
+
+	"PanelErrorStorage" : "Your Chrome's localStorage is disabled on your settings. KC3改 needs this feature. <a href=\"http://stackoverflow.com/a/26671889/483704\" target=\"_blank\">See how to enable this</a>.",
+	
+	"Dummy" : "Dummy"
 }
