@@ -784,9 +784,10 @@
 				
 				if(thisNode.drop > 0){
 					$(".battle .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop));
-					$(".count_ships", container).text( $(".count_ships", container).text()+1 ).each(function(){
-						(KC3ShipManager.max - $(this).text(parseInt($(this).text())+1)) <= 5 ?
-							$(this).addClass("material_limit") :
+					$(".count_ships", container).each(function(){
+						if (KC3ShipManager.max - $(this).text(parseInt($(this).text())+1)) <= 5
+							$(this).addClass("material_limit");
+						else
 							$(this).removeClass("material_limit");
 					});
 					//let the other implements this :P
