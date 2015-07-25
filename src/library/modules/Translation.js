@@ -48,11 +48,31 @@
 		/* GET JSON
 		Used by KC3Meta.js to load json files
 		-----------------------------------------*/
-		getJSON :function(repo, filename){
-			return JSON.parse($.ajax({
+		getJSON :function(repo, filename, extendEnglish){
+			// Check if desired to extend english files
+			if(typeof extendEnglish=="undefined"){ extendEnglish=false; }
+			
+			// Japanese special case where ships and items sources are already in JP
+			if(ConfigManager.language=="jp" && (filename=="ships" || filename=="items")){ extendEnglish=false; }
+			
+			console.log(filename, "extendEnglish", extendEnglish);
+			
+			var translationBase = {}, enJSON;
+			if(extendEnglish){
+				// Load english file
+				enJSON = JSON.parse($.ajax({
+					url : repo+'translations/en/' + filename + '.json',
+					async: false
+				}).responseText);
+				
+				// Make is as the translation base
+				translationBase = enJSON;
+			}
+			
+			return $.extend(translationBase, JSON.parse($.ajax({
 				url : repo+'translations/' +ConfigManager.language+ '/' + filename + '.json',
 				async: false
-			}).responseText);
+			}).responseText));
 		}
 		
 	};

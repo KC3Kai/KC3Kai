@@ -718,7 +718,41 @@
 
 /* Expedition Helper */
 #h .activity .expedHelp {
-	
+	width:310px;
+	height:60px;
+}
+#h .activity .expedHelp .expedNotes {
+	width:300px;
+	height:14px;
+	font-size:12px;
+	margin:1px 0px 2px 5px;
+}
+#h .activity .expedHelp .expedNote {
+	padding:0px 5px;
+	height:14px;
+	line-height:14px;
+	margin:0px 5px 0px 0px;
+	float:left;
+	font-size:11px;
+	border-radius:4px;
+	background:#faa;
+	color:#000;
+}
+#h .activity .expedHelp .expedIdList {
+	width:310px;
+	height:44px;
+}
+#h .activity .expedHelp .expedId {
+	width:18px;
+	height:18px;
+	line-height:18px;
+	margin:0px 0px 2px 2px;
+	float:left;
+	text-align:center;
+	font-size:11px;
+	border-radius:10px;
+	background:#369;
+	color:#fff;
 }
 
 /*--------------------------------------

@@ -1075,8 +1075,80 @@
 }
 
 /* Expedition Helper */
-#v .activity .expedHelp {
-	
+#v.panel-size-300px .expedHelp {
+	width:236px;
+	height:110px;
+}
+#v.panel-size-300px .expedHelp .expedNotes {
+	width:230px;
+	height:14px;
+	font-size:12px;
+	margin:1px 0px 2px 5px;
+}
+#v.panel-size-300px .expedNote {
+	padding:0px 5px;
+	height:14px;
+	line-height:14px;
+	margin:0px 5px 0px 0px;
+	float:left;
+	font-size:11px;
+	border-radius:4px;
+	background:#faa;
+	color:#000;
+}
+#v.panel-size-300px .expedIdList {
+	width:236px;
+	height:44px;
+}
+#v.panel-size-300px .expedId {
+	width:18px;
+	height:18px;
+	line-height:18px;
+	margin:0px 0px 2px 2px;
+	float:left;
+	text-align:center;
+	font-size:11px;
+	border-radius:10px;
+	background:#369;
+	color:#fff;
+}
+/* 420p */
+#v.panel-size-420px .expedHelp {
+	width:790px;
+	height:60px;
+}
+#v.panel-size-420px .expedHelp .expedNotes {
+	width:780px;
+	height:14px;
+	font-size:12px;
+	margin:1px 0px 2px 5px;
+}
+#v.panel-size-420px .expedNote {
+	padding:0px 5px;
+	height:14px;
+	line-height:14px;
+	margin:0px 5px 0px 0px;
+	float:left;
+	font-size:11px;
+	border-radius:4px;
+	background:#faa;
+	color:#000;
+}
+#v.panel-size-420px .expedIdList {
+	width:790px;
+	height:44px;
+}
+#v.panel-size-420px .expedId {
+	width:18px;
+	height:18px;
+	line-height:18px;
+	margin:0px 0px 2px 2px;
+	float:left;
+	text-align:center;
+	font-size:11px;
+	border-radius:10px;
+	background:#369;
+	color:#fff;
 }
 
 /*--------------------------------------

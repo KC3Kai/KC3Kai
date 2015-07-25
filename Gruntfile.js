@@ -23,7 +23,8 @@ module.exports = function(grunt) {
 					'assets/img/**',
 					'assets/snd/**',
 					'assets/js/Chart.min.js',
-					'assets/js/Dexie.min.js'
+					'assets/js/Dexie.min.js',
+					'assets/js/KanColleHelpers.js'
 				],
 				dest: 'build/release/'
 			},

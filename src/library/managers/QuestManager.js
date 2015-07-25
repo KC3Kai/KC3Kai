@@ -131,7 +131,7 @@ Uses KC3Quest objects to play around with
 			var remainingMinutes = Math.floor((remainingTime / (60*1000))%60);
 			var remainingSeconds = Math.floor((remainingTime / (1000))%60);
 			
-			console.log("Time until reset daily quests: " + remainingHours + ":" + remainingMinutes + ":" + remainingSeconds);
+			//console.log("Time until reset daily quests: " + remainingHours + ":" + remainingMinutes + ":" + remainingSeconds);
 			
 			/* RESET WEEKLY QUESTS
 			-----------------------------------------------------*/

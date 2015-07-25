@@ -21,10 +21,13 @@ Used by SortieManager
 		if(typeof nodeData != "undefined"){
 			
 			// If passed raw data from compass
-			if(typeof nodeData.api_enemy != "undefined"){
+			//"api_event_id":4,"api_event_kind":1
+			if(typeof nodeData.api_event_kind != "undefined"){
 				this.eships = [];
-				this.epattern = nodeData.api_enemy.api_enemy_id;
-				this.checkEnemy();
+				//this.epattern = nodeData.api_enemy.api_enemy_id;
+				//this.checkEnemy();
+				this.eventKind = nodeData.api_event_kind;
+				this.eventId = nodeData.api_event_id;
 			}
 			
 			// If passed formatted enemy list from PVP
@@ -101,10 +104,10 @@ Used by SortieManager
 		this.battleDay = battleData;
 		
 		var enemyships = battleData.api_ship_ke;
-		enemyships.splice(0,1);
+		if(enemyships[0]==-1){ enemyships.splice(0,1); }
 		this.eships = enemyships;
 		this.eformation = battleData.api_formation[1];
-		KC3SortieManager.onEnemiesAvailable();
+		// KC3SortieManager.onEnemiesAvailable();
 		
 		this.supportFlag = (battleData.api_support_flag>0)?true:false;
 		this.yasenFlag = (battleData.api_midnight_flag>0)?true:false;
@@ -180,7 +183,8 @@ Used by SortieManager
 	};
 	
 	KC3Node.prototype.isBoss = function(){
-		return this.id == KC3SortieManager.boss.node;
+		//console.log("Meet Boss: " + ((this.eventKind === 1) && (this.eventId === 5)));
+		return ((this.eventKind === 1) && (this.eventId === 5));
 	};
 	
 	KC3Node.prototype.saveBattleOnDB = function( resultData ){

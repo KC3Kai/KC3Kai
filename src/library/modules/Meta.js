@@ -30,13 +30,13 @@ Provides access to data on built-in JSON files
 			this._gauges	= JSON.parse( $.ajax(repo+'gauges.json', { async: false }).responseText );
 			
 			// Load Translations
-			this._ship 		= KC3Translation.getJSON(repo, 'ships');
-			this._slotitem	= KC3Translation.getJSON(repo, 'items');
-			this._quests	= KC3Translation.getJSON(repo, 'quests');
-			this._ranks		= KC3Translation.getJSON(repo, 'ranks');
-			this._stype		= KC3Translation.getJSON(repo, 'stype');
-			this._servers	= KC3Translation.getJSON(repo, 'servers');
-			this._battle	= KC3Translation.getJSON(repo, 'battle');
+			this._ship 		= KC3Translation.getJSON(repo, 'ships', true);
+			this._slotitem	= KC3Translation.getJSON(repo, 'items', true);
+			this._quests	= KC3Translation.getJSON(repo, 'quests', true);
+			this._ranks		= KC3Translation.getJSON(repo, 'ranks', true);
+			this._stype		= KC3Translation.getJSON(repo, 'stype', true);
+			this._servers	= KC3Translation.getJSON(repo, 'servers', true);
+			this._battle	= KC3Translation.getJSON(repo, 'battle', true);
 			this._terms		= KC3Translation.getJSON(repo, 'terms');
 		},
 		
@@ -67,7 +67,18 @@ Provides access to data on built-in JSON files
 		},
 		
 		formationIcon :function(formationId){
-			return "../../../../assets/img/formation/" + formationId + ".jpg";
+			return "../../../../assets/img/formation2/" + formationId + ".png";
+		},
+		
+		formationText :function(formationId){
+			return [
+				"",
+				"Line Ahead",
+				"Double Line",
+				"Diamond",
+				"Echelon",
+				"Line Abreast"
+			][formationId];
 		},
 		
 		shipName :function( jp_name ){
