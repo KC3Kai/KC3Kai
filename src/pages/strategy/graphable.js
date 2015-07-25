@@ -1,7 +1,7 @@
 (function(){
 	"use strict";
 	
-	/* KC3 Graphables
+	/* KC3 Graphable
 			Arguments:
 			callable -- database function
 			itemData -- object with 4 keys
@@ -11,7 +11,7 @@
 				colorhex : color in hex notation, (6 characters)
 				colorbyte: color in byte notation, (numeric, 0-255)
 	*/
-	window.KC3Graphables = function (callable,itemData){
+	window.KC3Graphable = function (callable,itemData){
 		this.tabSelf = KC3StrategyTabs.resources;
 		
 		this.hour = 0;
