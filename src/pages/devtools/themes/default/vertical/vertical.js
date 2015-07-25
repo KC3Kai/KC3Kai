@@ -234,6 +234,14 @@
 					$(".battle_admiral", container).text( PlayerManager.hq.name );
 					$(".battle_hqlevel_text", container).text( PlayerManager.hq.level );
 					$(".battle_hqexpval", container).css({width: (PlayerManager.hq.exp[0]*60)+"px"});
+
+					var oldExp = Number($(".battle_hqlevel_next", container).text());
+					if (oldExp != 0) {
+						var difference = oldExp - PlayerManager.hq.exp[1];
+						for (var i = 100; i >= 0; i--) {
+							$(".battle_hqlevel_next", container).text( difference*i/100 + PlayerManager.hq.exp[1] ).delay(10);
+						}
+					}
 					$(".battle_hqlevel_next", container).text( PlayerManager.hq.exp[1] );
 				}
 			},

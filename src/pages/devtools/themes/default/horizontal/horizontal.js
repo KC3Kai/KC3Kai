@@ -145,7 +145,31 @@
 					$(".battle_admiral", container).text( PlayerManager.hq.name );
 					$(".battle_hqlevel_text", container).text( PlayerManager.hq.level );
 					$(".battle_hqexpval", container).css({width: (PlayerManager.hq.exp[0]*60)+"px"});
-					$(".battle_hqlevel_next", container).text( PlayerManager.hq.exp[1] );
+
+					var oldExp = Number($(".battle_hqlevel_next", container).text());
+					if (oldExp != 0) {
+						var difference = oldExp - PlayerManager.hq.exp[1];
+						var expContainer = $(".battle_hqlevel_next", container);
+						
+						var funcArray = [];
+						var j = 101;
+						for (var i = 100; i >= 0; i--) {
+							funcArray.push(function(){
+								j--;
+								//console.log( j + " " + (Math.floor(difference*j/100) + PlayerManager.hq.exp[1]));
+								//expContainer.text( Math.floor(difference*j/100) + PlayerManager.hq.exp[1] ).dequeue();;
+
+								window.setTimeout(function(){
+									expContainer.text( Math.floor(difference*j/100) + PlayerManager.hq.exp[1] ).dequeue();
+								}, 10);
+
+							});
+							//$(".battle_hqlevel_next", container).text( difference*i/100 + PlayerManager.hq.exp[1] ).delay(50);
+						}
+						expContainer.queue(funcArray);
+					} else {
+						$(".battle_hqlevel_next", container).text( PlayerManager.hq.exp[1] );
+					}
 				}
 			},
 			Consumables: function(container, data, local){
