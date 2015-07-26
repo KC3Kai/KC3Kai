@@ -161,6 +161,14 @@
 			}
 		},
 		{
+			"name": "Juuryoushin ",
+			"avatar" : "https://pbs.twimg.com/profile_images/621037441508638721/Jm1Ap5_9.png",
+			"desc" : "Français",
+			"links" : {
+				"tw" :"https://twitter.com/YoungPreta"
+			}
+		},
+		{
 			"name": "RanFoxRun",
 			"avatar" : "https://avatars1.githubusercontent.com/u/13418956?v=3&s=40",
 			"desc" : "Italiano",
@@ -179,7 +187,7 @@
 				"tw" :"https://twitter.com/c933103",
 				"wb" :"http://zh.moegirl.org/wiki/User:C933103"
 			}
-		},  
+		},
 		{
 			"name": "rephira",
 			"avatar" : "https://avatars3.githubusercontent.com/u/13478649?v=3&s=40",
