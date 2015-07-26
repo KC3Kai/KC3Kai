@@ -67,7 +67,8 @@ $(document).on("ready", function(){
 	// Exit confirmation
 	window.onbeforeunload = function(){
 		ConfigManager.load();
-		if(ConfigManager.api_askExit==1 && !trustedExit){
+		// added waiting condition should be ignored
+		if(ConfigManager.api_askExit==1 && !trustedExit && !waiting){
 			trustedExit = true;
 			setTimeout(function(){ trustedExit = false; }, 100);
 			return "Ahhh! You are leaving your girls! Are you sure you want to leave them?";

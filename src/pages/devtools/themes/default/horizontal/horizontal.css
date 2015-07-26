@@ -154,6 +154,10 @@
 	font-size:11px;
 	color:#888;
 }
+/* for further warning, such as 5 ship slot, 20 equipment slot, etc. */
+#h .material_limit { 
+	color:#f00;
+}
 /* Timer boxes */
 #h .timer-img {
 	border-radius:25px;
@@ -812,6 +816,11 @@
 #h .battle .battle_hqexpval {
 	height:12px;
 	background:#ace;
+	float:left;
+}
+#h .battle .battle_hqexpgain {
+	height:12px;
+	background:#d34;
 }
 #h .battle .battle_hqlevel_next {
 	width:55px;
@@ -819,6 +828,18 @@
 	float:left;
 	font-size:10px;
 	text-align:center;
+	/*background:#fcc;*/
+}
+#h .battle .battle_hqlevel_next_gain {
+	position: absolute;
+	top: 36px;
+	left: 100px;
+	width:55px;
+	height:20px;
+	float:left;
+	font-size:10px;
+	text-align:center;
+	color:#f00;
 	/*background:#fcc;*/
 }
 #h .battle .battle_slots {
