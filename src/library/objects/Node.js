@@ -36,6 +36,7 @@ Used by SortieManager
 				KC3SortieManager.onEnemiesAvailable();
 			}
 		}
+		this.enemySunk = [false, false, false, false, false, false];
 		return this;
 	};
 	
@@ -58,7 +59,7 @@ Used by SortieManager
 		this.item = nodeData.api_itemget.api_icon_id;
 		this.icon = function(folder){
 			return folder+(
-				["fuel","ammo","steel","bauxite","ibuild","bucket","devmat","compass"]
+				["fuel","ammo","steel","bauxite","ibuild","bucket","devmat","compass","","box1","box2","box3"]
 				[nodeData.api_itemget.api_icon_id-1]
 			)+".png";
 		};
@@ -159,7 +160,19 @@ Used by SortieManager
 				this.planeBombers.abyssal[1] += battleData.api_kouku2.api_stage2.api_e_lostcount;
 			}
 		}
-		
+
+		var PS = window.PS;
+		var DA = PS["KanColle.DamageAnalysis"];
+		// for regular battles
+		var result = DA.analyzeRawBattleJS(battleData); 
+		console.log(result);
+		for (var i = 7; i < 13; i++) {
+			if ((result[i] !== null) && (result[i].currentHp <= 0)) {
+				this.enemySunk[i-7] = true;
+			}
+		}
+		// for night battles
+		//DA.analyzeRawNightBattleJS(svdata.api_data)
 	};
 	
 	KC3Node.prototype.night = function( nightData ){
@@ -168,6 +181,18 @@ Used by SortieManager
 		this.econtact = (nightData.api_touch_plane[1] > -1)?"YES":"NO";
 		this.flare = nightData.api_flare_pos[0]; //??
 		this.searchlight = nightData.api_flare_pos[1]; //??
+
+		var PS = window.PS;
+		var DA = PS["KanColle.DamageAnalysis"];
+		// for night battles
+		var result = DA.analyzeRawNightBattleJS(nightData);
+		console.log(result);
+		for (var i = 7; i < 13; i++) {
+			if ((result[i] !== null) && (result[i].currentHp <= 0)) {
+				this.enemySunk[i-7] = true;
+			}
+		}
+		
 	};
 	
 	KC3Node.prototype.results = function( resultData ){
@@ -179,6 +204,49 @@ Used by SortieManager
 			this.drop = 0;
 		}
 		
+		//var enemyCVL = [510, 523, 560];
+		//var enemyCV = [512, 525, 528, 565, 579];
+		//var enemySS = [530, 532, 534, 531, 533, 535, 570, 571, 572];
+		//var enemyAP = [513, 526, 558];
+
+		for(var i = 0; i < 6; i++) {
+			if (this.enemySunk[i]) {
+				var enemyShip = KC3Master.ship(this.eships[i]);
+				if (!enemyShip) {
+					console.log("Cannot find enemy " + this.eships[i]);
+				} else if (this.eships[i] < 500) {
+					console.log("Enemy ship is not Abyssal!");
+				} else {
+					if (enemyShip.api_stype === 7) {	// 7 = CVL
+						console.log("You sunk a CVL");
+						KC3QuestManager.get(217).increment();
+						KC3QuestManager.get(211).increment();
+						KC3QuestManager.get(220).increment();
+
+					}
+					if (enemyShip.api_stype === 11) {
+						console.log("You sunk a CV");	// 11 = CV
+						KC3QuestManager.get(217).increment();
+						KC3QuestManager.get(211).increment();
+						KC3QuestManager.get(220).increment();
+					}
+					if (enemyShip.api_stype === 13) {	// 13 = SS
+						console.log("You sunk a SS");
+						KC3QuestManager.get(230).increment();
+						KC3QuestManager.get(228).increment();
+					}
+					if (enemyShip.api_stype === 15) {	// 15 = AP
+						console.log("You sunk a AP");
+						KC3QuestManager.get(218).increment();
+						KC3QuestManager.get(212).increment();
+						KC3QuestManager.get(213).increment();
+						KC3QuestManager.get(221).increment();
+					}
+				}
+				
+			}
+		}
+
 		this.saveBattleOnDB();
 	};
 	
