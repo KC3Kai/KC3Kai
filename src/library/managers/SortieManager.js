@@ -67,20 +67,20 @@ Xxxxxxx
 			**/
 			if(bossSupport){
 				expedNumbers = [34,110,118,126,134,142,150];
-				return this.checkIfFleetIsSupporting(expedNumbers, 1)
-					|| this.checkIfFleetIsSupporting(expedNumbers, 2)
-					|| this.checkIfFleetIsSupporting(expedNumbers, 3);
+				return this.checkIfFleetIsSupporting(expedNumbers, 2)
+					|| this.checkIfFleetIsSupporting(expedNumbers, 3)
+					|| this.checkIfFleetIsSupporting(expedNumbers, 4);
 			}else{
 				expedNumbers = [33,109,117,125,133,141,149];
-				return this.checkIfFleetIsSupporting(expedNumbers, 1)
-					|| this.checkIfFleetIsSupporting(expedNumbers, 2)
-					|| this.checkIfFleetIsSupporting(expedNumbers, 3);
+				return this.checkIfFleetIsSupporting(expedNumbers, 2)
+					|| this.checkIfFleetIsSupporting(expedNumbers, 3)
+					|| this.checkIfFleetIsSupporting(expedNumbers, 4);
 			}
 		},
 		
 		checkIfFleetIsSupporting :function(expedNumbers, fleetNumber){
-			if(PlayerManager.fleets[fleetNumber].active){
-				var fleetExpedition = PlayerManager.fleets[fleetNumber].mission[1];
+			if(PlayerManager.fleets[fleetNumber-1].active){
+				var fleetExpedition = PlayerManager.fleets[fleetNumber-1].mission[1];
 				return (expedNumbers.indexOf(fleetExpedition)>-1)?fleetNumber:0;
 			}
 			return 0;
