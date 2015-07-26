@@ -10,7 +10,8 @@ Saves and loads list to and from localStorage
 	window.KC3ShipManager = {
 		list: {},
 		max: 100,
-		
+		pendingShipNum: 0,
+
 		// Get a specific ship by ID
 		get :function( rosterId ){
 			// console.log("getting ship", rosterId, this.list["x"+rosterId]);
@@ -19,7 +20,7 @@ Saves and loads list to and from localStorage
 		
 		// Count number of ships
 		count :function(){
-			return Object.size(this.list);
+			return Object.size(this.list) + this.pendingShipNum;
 		},
 		
 		// Add or replace a ship on the list

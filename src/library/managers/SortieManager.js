@@ -171,6 +171,8 @@ Xxxxxxx
 				formation: -1,
 				ships: [ -1, -1, -1, -1, -1, -1 ]
 			};
+			KC3ShipManager.pendingShipNum = 0;
+			KC3GearManager.pendingGearNum = 0;
 		}
 	};
 	

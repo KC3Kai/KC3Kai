@@ -144,35 +144,9 @@
 				}else if(KC3Panel.mode=="battle"){
 					$(".battle_admiral", container).text( PlayerManager.hq.name );
 					$(".battle_hqlevel_text", container).text( PlayerManager.hq.level );
-					//$(".battle_hqexpval", container).css({width: (PlayerManager.hq.exp[0]*60)+"px"});
-
-					var oldExp = Number($(".battle_hqlevel_next", container).text());
-					if (oldExp != 0) {
-						var difference = oldExp - PlayerManager.hq.exp[1];
-						var expContainer = $(".battle_hqlevel_next", container);
-						
-						var funcArray = [];
-						var j = 101;
-						for (var i = 100; i >= 0; i--) {
-							funcArray.push(function(){
-								j--;
-								//console.log( j + " " + (Math.floor(difference*j/100) + PlayerManager.hq.exp[1]));
-								//expContainer.text( Math.floor(difference*j/100) + PlayerManager.hq.exp[1] ).dequeue();;
-
-								window.setTimeout(function(){
-									expContainer.text( Math.floor(difference*j/100) + PlayerManager.hq.exp[1] ).dequeue();
-								}, 10);
-
-							});
-							//$(".battle_hqlevel_next", container).text( difference*i/100 + PlayerManager.hq.exp[1] ).delay(50);
-						}
-						expContainer.queue(funcArray);
-					} else {
-						$(".battle_hqlevel_next", container).text( PlayerManager.hq.exp[1] );
-					}
 					$(".battle_hqexpval,.battle_hqexpgain", container).css({width: Math.floor(PlayerManager.hq.exp[0]*60)+"px"});
-					//$(".battle_hqlevel_next", container).text( PlayerManager.hq.exp[1] );
-					$(".battle_hqlevel_next_gain", container).text( "" );
+					$(".battle_hqlevel_next", container).text( PlayerManager.hq.exp[1] );
+					//$(".battle_hqlevel_next_gain", container).text( "" );
 				}
 			},
 			Consumables: function(container, data, local){
@@ -617,21 +591,17 @@
 				$(".battle_hqexpgain", container).css({width: Math.floor((function(){
 					return (PlayerManager.hq.exp[2] + Math.min(PlayerManager.hq.exp[1],KC3SortieManager.hqExpGained)) / KC3Meta.exp(PlayerManager.hq.level)[0];
 				})()*60)+"px"});
+				console.log(KC3SortieManager.hqExpGained);
 				$(".battle_hqlevel_next_gain", container).text(-KC3SortieManager.hqExpGained);
 				
 				$(".battle .battle_rating img").attr("src", "../../../../assets/img/client/ratings/"+thisNode.rating+".png");
 				
 				if(thisNode.drop > 0){
 					$(".battle .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop));
-					$(".count_ships", container).each(function(){
-						if (KC3ShipManager.max - $(this).text(parseInt($(this).text())+1) <= 5)
-							$(this).addClass("material_limit");
-						else
-							$(this).removeClass("material_limit");
-					});
+					
 					//let the other implements this :P
-					//this.ShipSlots(container, {}, local);
-					//this.GearSlots(container, {}, local);
+					this.ShipSlots(container, {}, local);
+					this.GearSlots(container, {}, local);
 				}else{
 					$(".battle .battle_drop img").attr("src", "../../../../assets/img/ui/shipdrop-x.png");
 				}
