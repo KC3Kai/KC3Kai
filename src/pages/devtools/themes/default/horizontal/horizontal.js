@@ -132,6 +132,7 @@
 				KC3Panel.mode = "normal";
 				$(".normal", container).show();
 				$(".battle", container).hide();
+				$(".battle_hqlevel_next_gain", container).text( "" );
 			},
 			HQ: function(container, data, local){
 				if(KC3Panel.mode=="normal"){
@@ -146,7 +147,6 @@
 					$(".battle_hqlevel_text", container).text( PlayerManager.hq.level );
 					$(".battle_hqexpval,.battle_hqexpgain", container).css({width: Math.floor(PlayerManager.hq.exp[0]*60)+"px"});
 					$(".battle_hqlevel_next", container).text( PlayerManager.hq.exp[1] );
-					//$(".battle_hqlevel_next_gain", container).text( "" );
 				}
 			},
 			Consumables: function(container, data, local){
