@@ -14,7 +14,7 @@ Does not include Ships and Gears which are managed by other Managers
 		fleets: [],
 		fleetCount: 1,
 		repairSlots: 2,
-		repairShips: [],
+		repairShips: [-1,-1,-1,-1,-1],
 		buildSlots: 2,
 		combinedFleet: 0,
 		statistics: {},
@@ -61,7 +61,7 @@ Does not include Ships and Gears which are managed by other Managers
 			var self = this;
 			$.each(data, function(ctr, ndock){
 				if(ndock.api_state > 0){
-					self.repairShips.push( ndock.api_ship_id );
+					self.repairShips[ ndock.api_id ] = ndock.api_ship_id;
 					KC3TimerManager.repair( ndock.api_id ).activate(
 						ndock.api_complete_time,
 						KC3ShipManager.get( ndock.api_ship_id ).masterId
