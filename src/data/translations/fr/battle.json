@@ -1,28 +1,28 @@
 {
-	"détection" : [
+	"detection" : [
 		["", ""],
-		["OK", "Bonne"],
-		["OK-", "Bonne"],
-		["-", "Mauvais"],
-		["NO", "Mauvais"],
-		["OK+", "Bonne"],
-		["NO+", "mauvais"]
+		["OK", "good"],
+		["OK-", "good"],
+		["-", "bad"],
+		["NO", "bad"],
+		["OK+", "good"],
+		["NO+", "bad"]
 	],
 	
-	"Comba aérien" : [
-		["AP", "", "Air Parity"],
-		["AS+", "good", "Air Suprématie"],
-		["AS", "good", "Air Supérieur"],
-		["AI", "bad", "Air Impuissante"],
-		["AD", "bad", "Air Dénégation"]
+	"airbattle" : [
+		["AP", "", "Parité Aérienne"],
+		["AS+", "good", "Suprématie Aérienne"],
+		["AS", "good", "Supériorité Aérienne"],
+		["AI", "bad", "Incapacité Aérienne"],
+		["AD", "bad", "Déni Aérien"]
 	],
 	
 	"engagement" : [
-		["", "", ""],
-		["Prll", "", "Parallelle"],
-		["HdOn", "", "De front"],
-		["Gr-T", "good", "Vert T"],
-		["Rd-T", "bad", "Rouge T"]
+  		["", "", ""],
+		["Prll", "", "Parallèle"],
+ 		["HdOn", "", "De Front"],
+		["Gr-T", "good", "T Vert"],
+		["Rd-T", "bad", "T Rouge"]
 	]
 	
 }
