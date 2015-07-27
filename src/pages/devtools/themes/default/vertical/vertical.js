@@ -1046,6 +1046,7 @@
 		if(item.itemId > 0){
 			var folder = "../../../../../assets/img/items/";
 			$("img", element).attr("src", folder + item.master().api_type[3] + ".png");
+			$(element).attr("title", item.name());
 		}else{
 			$("img", element).hide();
 		}

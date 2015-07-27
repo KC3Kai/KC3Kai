@@ -589,6 +589,9 @@
 	height:20px;
 	float:left;
 }
+#h .fleet-ships .ship-gear:hover {
+	background-color: rgba(0, 0, 0, 0.25);
+}
 #h .fleet-ships .ship-gear img {
 	width:20px;
 	height:20px;
@@ -1221,6 +1224,9 @@
 	height:25px;
 	line-height:25px;
 	float:left;
+}
+#h .battle-ship .ship-gear:hover {
+	background-color: rgba(0, 0, 0, 0.25);
 }
 #h .battle-ship .ship-gear img {
 	width:20px;
