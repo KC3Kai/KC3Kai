@@ -409,12 +409,20 @@
         "desc": "Tenryuu, Tatsuta, and at least 2 other ships to [W2-3] and S-rank the boss node"
     },
 	"276": {
-        "name": "Sortie the surface attack fleet!",
-        "desc": "Sortie Hiei, Kirishima, Nagara, Akatsuki, Ikazuchi, Inazuma to 5-1 and clear the map with an S-rank"
+        "name": "海上突入部队进发！",
+        "desc": "比睿、雾岛、长良、晓、雷、电组成的舰队出击5-1，Boss战取得S胜"
     },
 	"277": {
         "name": "DesDiv6 Anti-Submarine Mission!",
         "desc": "Sortie Akatsuki Kai2 , Hibiki/Verniy, Ikazuchi, Inazuma to 1-5 and clear the map with at least A-rank"
+    },
+	"278": {
+        "name": "Rush the 1st Torpedo Squadron to Operation KE",
+        "desc": "Sortie Abukuma as flagship with Hibiki/Вер, Hatsushimo, Wakaba, Samidare and Shimakaze to 3-2 and B-Rank+ the boss"
+    },
+	"279": {
+        "name": "“第一水雷战队”北方KE号作战再突入！",
+        "desc": "新编“一水战”（阿武隈改二旗舰+响+夕云+长波+秋云+岛风）出击3-2，Boss战取得胜利（B+）"
     },
 	
 	
@@ -459,12 +467,12 @@
 	
 	
 	"214": {
-		"name": "[周常] A号作战",
-		"desc": "[A号作战] 出击36次，24次Boss战，12场Boss战胜利，6次S胜"
+		"name": "[周常] Ａ号作战",
+		"desc": "[Ａ号作战] 出击36次，24次Boss战，12场Boss战胜利，6次S胜"
 	},
 	"220": {
-        "name": "[周常] I号作战 (航母)",
-        "desc": "[I号作战] 击沉 20 艘敌航母"
+        "name": "[周常] Ｉ号作战 (航母)",
+        "desc": "[Ｉ号作战] 击沉 20 艘敌航母"
     },
 	"213": {
         "name": "[周常] 通商破坏 (补给)",
