@@ -579,6 +579,7 @@ Previously known as "Reactor"
 			
 			KC3SortieManager.resultScreen( response.api_data );
 			KC3Network.trigger("BattleResult");
+			KC3Network.trigger("HQ");
 			KC3Network.trigger("Quests");
 		},
 		
@@ -587,6 +588,7 @@ Previously known as "Reactor"
 		"api_req_combined_battle/battleresult":function(params, response, headers){
 			KC3SortieManager.resultScreen( response.api_data );
 			KC3Network.trigger("BattleResult");
+			KC3Network.trigger("HQ");
 			KC3Network.trigger("Quests");
 		},
 		

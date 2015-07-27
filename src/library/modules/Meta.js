@@ -12,6 +12,7 @@ Provides access to data on built-in JSON files
 		_exp:{},
 		_gauges:{},
 		_ship:{},
+		_defeq:{},
 		_slotitem:{},
 		_quests:{},
 		_ranks:{},
@@ -28,6 +29,7 @@ Provides access to data on built-in JSON files
 			this._icons		= JSON.parse( $.ajax(repo+'icons.json', { async: false }).responseText );
 			this._exp		= JSON.parse( $.ajax(repo+'experience.json', { async: false }).responseText );
 			this._gauges	= JSON.parse( $.ajax(repo+'gauges.json', { async: false }).responseText );
+			this._defeq		= JSON.parse( $.ajax(repo+'defeq.json', { async: false }).responseText );
 			
 			// Load Translations
 			this._ship 		= KC3Translation.getJSON(repo, 'ships', true);
@@ -145,6 +147,13 @@ Provides access to data on built-in JSON files
 			return this._gauges["m"+map_id] || false;
 		},
 		
+		defaultEquip :function(id){
+			if (typeof this._defeq["s" + id] == "undefined") {
+				console.log("No ship has master id " + id + " in defeq.json");
+			}
+			return this._defeq["s" + id] || 0;
+		},
+
 		detection :function(index){
 			return this._battle.detection[index] || ["",""];
 		},

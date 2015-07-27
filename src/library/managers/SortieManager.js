@@ -152,6 +152,7 @@ Xxxxxxx
 			if(this.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
 			this.hqExpGained += resultData.api_get_exp;
 			this.currentNode().results( resultData );
+			PlayerManager.hq.updateLevel( resultData.api_member_lv, resultData.api_member_exp);
 		},
 		
 		endSortie :function(){
@@ -170,6 +171,8 @@ Xxxxxxx
 				formation: -1,
 				ships: [ -1, -1, -1, -1, -1, -1 ]
 			};
+			KC3ShipManager.pendingShipNum = 0;
+			KC3GearManager.pendingGearNum = 0;
 		}
 	};
 	

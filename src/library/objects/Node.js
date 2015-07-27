@@ -199,7 +199,10 @@ Used by SortieManager
 		this.rating = resultData.api_win_rank;
 		
 		if(typeof resultData.api_get_ship != "undefined"){
-			this.drop = resultData.api_get_ship.api_ship_id; 
+			this.drop = resultData.api_get_ship.api_ship_id;
+			KC3ShipManager.pendingShipNum += 1;
+			KC3GearManager.pendingGearNum += KC3Meta.defaultEquip(this.drop);
+			console.log("Drop " + resultData.api_get_ship.api_ship_name + " (" + this.drop + ") Equip " + KC3Meta.defaultEquip(this.drop));
 		}else{
 			this.drop = 0;
 		}

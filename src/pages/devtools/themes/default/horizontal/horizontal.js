@@ -132,6 +132,7 @@
 				KC3Panel.mode = "normal";
 				$(".normal", container).show();
 				$(".battle", container).hide();
+				$(".battle_hqlevel_next_gain", container).text( "" );
 			},
 			HQ: function(container, data, local){
 				if(KC3Panel.mode=="normal"){
@@ -146,7 +147,6 @@
 					$(".battle_hqlevel_text", container).text( PlayerManager.hq.level );
 					$(".battle_hqexpval,.battle_hqexpgain", container).css({width: Math.floor(PlayerManager.hq.exp[0]*60)+"px"});
 					$(".battle_hqlevel_next", container).text( PlayerManager.hq.exp[1] );
-					$(".battle_hqlevel_next_gain", container).text( "" );
 				}
 			},
 			Consumables: function(container, data, local){
@@ -591,21 +591,17 @@
 				$(".battle_hqexpgain", container).css({width: Math.floor((function(){
 					return (PlayerManager.hq.exp[2] + Math.min(PlayerManager.hq.exp[1],KC3SortieManager.hqExpGained)) / KC3Meta.exp(PlayerManager.hq.level)[0];
 				})()*60)+"px"});
+				console.log(KC3SortieManager.hqExpGained);
 				$(".battle_hqlevel_next_gain", container).text(-KC3SortieManager.hqExpGained);
 				
 				$(".battle .battle_rating img").attr("src", "../../../../assets/img/client/ratings/"+thisNode.rating+".png");
 				
 				if(thisNode.drop > 0){
 					$(".battle .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop));
-					$(".count_ships", container).each(function(){
-						if (KC3ShipManager.max - $(this).text(parseInt($(this).text())+1) <= 5)
-							$(this).addClass("material_limit");
-						else
-							$(this).removeClass("material_limit");
-					});
+					
 					//let the other implements this :P
-					//this.ShipSlots(container, {}, local);
-					//this.GearSlots(container, {}, local);
+					this.ShipSlots(container, {}, local);
+					this.GearSlots(container, {}, local);
 				}else{
 					$(".battle .battle_drop img").attr("src", "../../../../assets/img/ui/shipdrop-x.png");
 				}

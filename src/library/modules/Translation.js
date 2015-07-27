@@ -69,7 +69,7 @@
 				translationBase = enJSON;
 			}
 			
-			return $.extend(translationBase, JSON.parse($.ajax({
+			return $.extend(true, translationBase, JSON.parse($.ajax({
 				url : repo+'translations/' +ConfigManager.language+ '/' + filename + '.json',
 				async: false
 			}).responseText));
