@@ -118,10 +118,11 @@ Xxxxxxx
 			
 			//  Battle Node
 			// api_event_kind = 1 (day battle)
+			// api_event_kind = 2 (start at night battle)
 			// api_event_kind = 4 (aerial exchange)
 			// api_event_id = 4 (normal battle)
 			// api_event_id = 5 (boss)
-			if((nodeData.api_event_kind == 1) || (nodeData.api_event_kind == 4)) {
+			if((nodeData.api_event_kind == 1) || (nodeData.api_event_kind == 2) || (nodeData.api_event_kind == 4)) {
 				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsBattle(nodeData);
 			// Resource Node
 			// api_event_kind = 0
@@ -149,6 +150,11 @@ Xxxxxxx
 		engageBattle :function( battleData, stime ){
 			if(this.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
 			this.currentNode().engage( battleData );
+		},
+		
+		engageBattleNight :function( nightData, stime ){
+			if(this.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
+			this.currentNode().engageNight( nightData );
 		},
 		
 		engageNight :function( nightData ){

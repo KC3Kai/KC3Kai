@@ -483,11 +483,11 @@ Previously known as "Reactor"
 		},
 		
 		"api_req_battle_midnight/sp_midnight":function(params, response, headers){
-			KC3SortieManager.engageBattle(
+			KC3SortieManager.engageBattleNight(
 				response.api_data,
 				Math.floor((new Date(headers.Date)).getTime()/1000)
 			);
-			KC3Network.trigger("BattleNight");
+			KC3Network.trigger("BattleStart");
 		},
 		
 		/* Yasen as second part of node battle
