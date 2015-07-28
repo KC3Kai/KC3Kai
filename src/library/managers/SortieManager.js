@@ -74,7 +74,7 @@ Xxxxxxx
 				w = (expedNum-1 / 8)+1;
 				n = (expedNum-1) % 8;
 				return (w == 5 || e) && (n == 0 + isBoss);
-			}
+			};
 			return this.checkIfFleetIsSupporting(supportFormula,bossSupport);
 		},
 		

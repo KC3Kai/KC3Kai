@@ -508,52 +508,58 @@ Previously known as "Reactor"
 				KC3QuestManager.get(216).increment(); // Bd2: Defeat the flagship of an enemy fleet
 			
 			// If victory for "defeat"-type quests
-			switch(getRank(response.api_data.api_win_rank)) {
-				case 6: // PERFECT S
-				case 5: // S
-					KC3QuestManager.get(214).increment(3); // Bw1: 4th requirement: 6 S ranks (index:3)
-					
-					if(KC3SortieManager.currentNode().isBoss()) {
-						switch(true) {
-							case KC3SortieManager.isSortieAt(5,2):
-								KC3QuestManager.get(243).increment(); // Bw9: Sortie to [W5-2] and S-rank the boss node 2 times
-								break;
-							case KC3SortieManager.isSortieAt(6,1):
-								KC3QuestManager.get(256).increment(); // Bm2: Deploy to [W6-1] and obtain an S-rank the boss node 3 times
-								break;
+			var rankPt = getRank(response.api_data.api_win_rank);
+			while(rankPt>=3) {
+				switch(rankPt) {
+					case 6: // PERFECT S
+					case 5: // S
+						KC3QuestManager.get(214).increment(3); // Bw1: 4th requirement: 6 S ranks (index:3)
+						
+						if(KC3SortieManager.currentNode().isBoss()) {
+							switch(true) {
+								case KC3SortieManager.isSortieAt(5,2):
+									KC3QuestManager.get(243).increment(); // Bw9: Sortie to [W5-2] and S-rank the boss node 2 times
+									break;
+								case KC3SortieManager.isSortieAt(6,1):
+									KC3QuestManager.get(256).increment(); // Bm2: Deploy to [W6-1] and obtain an S-rank the boss node 3 times
+									break;
+							}
 						}
-					}
-				case 4: // A
-					if( KC3SortieManager.isSortieAt(1,5) && KC3SortieManager.currentNode().isBoss() ){
-						KC3QuestManager.get(261).increment(); // Bw10: Sortie to [W1-5] and A-rank+ the boss node 3 times
-						KC3QuestManager.get(265).increment(); // Bm5: Deploy a fleet to [W1-5] and A-rank+ the boss node 10 times
-					}
-				case 3: // B
-					KC3QuestManager.get(201).increment(); // Bd1: Defeat an enemy fleet
-					KC3QuestManager.get(210).increment(); // Bd3: Defeat 10 abyssal fleets (B rank+)
-					
-					if(KC3SortieManager.currentNode().isBoss()) {
-						switch(true) {
-							case KC3SortieManager.isSortieAt( 2 ):
-								KC3QuestManager.get(226).increment(); // Bd7: Defeat 5 bosses in World 2
-								break;
-							case KC3SortieManager.isSortieAt(3,3):
-							case KC3SortieManager.isSortieAt(3,4):
-							case KC3SortieManager.isSortieAt(3,5):
-								KC3QuestManager.get(241).increment(); // Bw7: Defeat 5 bosses in Worlds [W3-3], [W3-4] or [W3-5]
-								break;
-							case KC3SortieManager.isSortieAt( 4 ):
-								KC3QuestManager.get(229).increment(); // Bw6: Defeat 12 bosses in horned nodes in World 4
-								break;
-							case(KC3SortieManager.isSortieAt(4,4)):
-								KC3QuestManager.get(242).increment(); // Bw8: Defeat a boss in World [W4-4]
-								break;
+						break;
+					case 4: // A
+						if( KC3SortieManager.isSortieAt(1,5) && KC3SortieManager.currentNode().isBoss() ){
+							KC3QuestManager.get(261).increment(); // Bw10: Sortie to [W1-5] and A-rank+ the boss node 3 times
+							KC3QuestManager.get(265).increment(); // Bm5: Deploy a fleet to [W1-5] and A-rank+ the boss node 10 times
 						}
-						KC3QuestManager.get(214).increment(2); // Bw1: 3rd requirement: Win vs 12 bosses (index:2)
-					}
-					break;
-				default: // DEFEAT
-					break;
+						break;
+					case 3: // B
+						KC3QuestManager.get(201).increment(); // Bd1: Defeat an enemy fleet
+						KC3QuestManager.get(210).increment(); // Bd3: Defeat 10 abyssal fleets (B rank+)
+						
+						if(KC3SortieManager.currentNode().isBoss()) {
+							switch(true) {
+								case KC3SortieManager.isSortieAt( 2 ):
+									KC3QuestManager.get(226).increment(); // Bd7: Defeat 5 bosses in World 2
+									break;
+								case KC3SortieManager.isSortieAt(3,3):
+								case KC3SortieManager.isSortieAt(3,4):
+								case KC3SortieManager.isSortieAt(3,5):
+									KC3QuestManager.get(241).increment(); // Bw7: Defeat 5 bosses in Worlds [W3-3], [W3-4] or [W3-5]
+									break;
+								case KC3SortieManager.isSortieAt( 4 ):
+									KC3QuestManager.get(229).increment(); // Bw6: Defeat 12 bosses in horned nodes in World 4
+									break;
+								case(KC3SortieManager.isSortieAt(4,4)):
+									KC3QuestManager.get(242).increment(); // Bw8: Defeat a boss in World [W4-4]
+									break;
+							}
+							KC3QuestManager.get(214).increment(2); // Bw1: 3rd requirement: Win vs 12 bosses (index:2)
+						}
+						break;
+					default: // DEFEAT
+						break;
+				}
+				rankPt--;
 			}
 			
 			
