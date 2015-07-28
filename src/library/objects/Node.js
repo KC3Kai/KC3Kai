@@ -16,6 +16,7 @@ Used by SortieManager
 	
 	KC3Node.prototype.defineAsBattle = function( nodeData ){
 		this.type = "battle";
+		this.startNight = false;
 		
 		// If passed initial values
 		if(typeof nodeData != "undefined"){
@@ -159,6 +160,7 @@ Used by SortieManager
 	
 	KC3Node.prototype.engageNight = function( nightData ){
 		this.battleNight = nightData;
+		this.startNight = true;
 		
 		var enemyships = nightData.api_ship_ke;
 		if(enemyships[0]==-1){ enemyships.splice(0,1); }

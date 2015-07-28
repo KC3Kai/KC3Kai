@@ -482,7 +482,7 @@
 				if(KC3SortieManager.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
 				$(".battle .battle_current", container).text("FIGHTING");
 				var thisNode = KC3SortieManager.currentNode();
-				var battleData = thisNode.battleDay;
+				var battleData = (thisNode.startNight)? thisNode.battleNight : thisNode.battleDay;
 				
 				if((typeof thisNode.eformation != "undefined") && (thisNode.eformation > -1)){
 					$(".battle .battle_formation img", container).attr("src", KC3Meta.formationIcon(thisNode.eformation));
@@ -501,49 +501,65 @@
 					}
 				});
 				
-				// If support expedition is triggered on this battle
-				if(thisNode.supportFlag){
-					$(".battle .battle_support img", container).attr("src", "../../../../assets/img/ui/support.png");
-				}else{
-					$(".battle .battle_support img", container).attr("src", "../../../../assets/img/ui/support-x.png");
-				}
-				
-				// If night battle will be asked after this battle
-				if(thisNode.yasenFlag){
-					$(".battle .battle_yasen img", container).attr("src", "../../../../assets/img/ui/yasen.png");
-				}else{
-					$(".battle .battle_yasen img", container).attr("src", "../../../../assets/img/ui/yasen-x.png");
-				}
-				
 				// Battle conditions
 				$(".battle .battle_cond_text", container).removeClass("good");
 				$(".battle .battle_cond_text", container).removeClass("bad");
-				
-				$(".battle .battle_cond_detect .battle_cond_text", container).text( thisNode.detection[0] );
-				$(".battle .battle_cond_detect .battle_cond_text", container).addClass( thisNode.detection[1] );
 				
 				$(".battle .battle_cond_engage .battle_cond_text", container).text( thisNode.engagement[2] );
 				$(".battle .battle_cond_engage .battle_cond_text", container).addClass( thisNode.engagement[1] );
 				
 				$(".battle .battle_cond_contact .battle_cond_text", container).text(thisNode.fcontact +" vs "+thisNode.econtact);
-				$(".battle .battle_cond_airbattle .battle_cond_text", container).text( thisNode.airbattle[0] );
-				$(".battle .battle_cond_airbattle .battle_cond_text", container).addClass( thisNode.airbattle[1] );
 				
-				// Fighter phase
-				$(".battle .battle_airfighter .battle_airally .battle_airbefore", container).text(thisNode.planeFighters.player[0]);
-				$(".battle .battle_airfighter .battle_airabyss .battle_airbefore", container).text(thisNode.planeFighters.abyssal[0]);
-				
-				// Bombing Phase
-				$(".battle .battle_airbomber", container).show();
-				$(".battle .battle_airbomber .battle_airally .battle_airbefore", container).text(thisNode.planeBombers.player[0]);
-				$(".battle .battle_airbomber .battle_airabyss .battle_airbefore", container).text(thisNode.planeBombers.abyssal[0]);
-				
-				// Plane losses
-				$(".battle .battle_airafter", container).text("");
-				if(thisNode.planeFighters.player[1] > 0){ $(".battle .battle_airfighter .battle_airally .battle_airafter", container).text("-"+thisNode.planeFighters.player[1]); }
-				if(thisNode.planeFighters.abyssal[1] > 0){ $(".battle .battle_airfighter .battle_airabyss .battle_airafter", container).text("-"+thisNode.planeFighters.abyssal[1]); }
-				if(thisNode.planeBombers.player[1] > 0){ $(".battle .battle_airbomber .battle_airally .battle_airafter", container).text("-"+thisNode.planeBombers.player[1]); }
-				if(thisNode.planeBombers.abyssal[1] > 0){ $(".battle .battle_airbomber .battle_airabyss .battle_airafter", container).text("-"+thisNode.planeBombers.abyssal[1]); }
+				// Day battle-only environment
+				if(!thisNode.startNight){
+					// If support expedition is triggered on this battle
+					if(thisNode.supportFlag){
+						$(".battle .battle_support img", container).attr("src", "../../../../assets/img/ui/support.png");
+					}else{
+						$(".battle .battle_support img", container).attr("src", "../../../../assets/img/ui/support-x.png");
+					}
+					
+					// If night battle will be asked after this battle
+					if(thisNode.yasenFlag){
+						$(".battle .battle_yasen img", container).attr("src", "../../../../assets/img/ui/yasen.png");
+					}else{
+						$(".battle .battle_yasen img", container).attr("src", "../../../../assets/img/ui/yasen-x.png");
+					}
+					
+					$(".battle .battle_cond_detect .battle_cond_text", container).text( thisNode.detection[0] );
+					$(".battle .battle_cond_detect .battle_cond_text", container).addClass( thisNode.detection[1] );
+					
+					$(".battle .battle_cond_airbattle .battle_cond_text", container).text( thisNode.airbattle[0] );
+					$(".battle .battle_cond_airbattle .battle_cond_text", container).addClass( thisNode.airbattle[1] );
+					
+					// Fighter phase
+					$(".battle .battle_airfighter .battle_airally .battle_airbefore", container).text(thisNode.planeFighters.player[0]);
+					$(".battle .battle_airfighter .battle_airabyss .battle_airbefore", container).text(thisNode.planeFighters.abyssal[0]);
+					
+					// Bombing Phase
+					$(".battle .battle_airbomber", container).show();
+					$(".battle .battle_airbomber .battle_airally .battle_airbefore", container).text(thisNode.planeBombers.player[0]);
+					$(".battle .battle_airbomber .battle_airabyss .battle_airbefore", container).text(thisNode.planeBombers.abyssal[0]);
+					
+					// Plane losses
+					$(".battle .battle_airafter", container).text("");
+					if(thisNode.planeFighters.player[1] > 0){
+						$(".battle .battle_airfighter .battle_airally .battle_airafter", container).text("-"+thisNode.planeFighters.player[1]);
+					}
+					if(thisNode.planeFighters.abyssal[1] > 0){
+						$(".battle .battle_airfighter .battle_airabyss .battle_airafter", container).text("-"+thisNode.planeFighters.abyssal[1]);
+					}
+					if(thisNode.planeBombers.player[1] > 0){
+						$(".battle .battle_airbomber .battle_airally .battle_airafter", container).text("-"+thisNode.planeBombers.player[1]);
+					}
+					if(thisNode.planeBombers.abyssal[1] > 0){
+						$(".battle .battle_airbomber .battle_airabyss .battle_airafter", container).text("-"+thisNode.planeBombers.abyssal[1]);
+					}
+				}else{
+					// Started on night battle
+					$(".battle .battle_support img", container).attr("src", "../../../../assets/img/ui/support-x.png");
+					$(".battle .battle_yasen img", container).attr("src", "../../../../assets/img/ui/yasen.png");
+				}
 				
 				// Revert rating and drop to default icons since we don't know results yet
 				$(".battle .battle_rating img").attr("src", "../../../../assets/img/ui/rating.png");
