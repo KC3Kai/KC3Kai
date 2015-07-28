@@ -229,12 +229,12 @@
 					$(".admiral_comm", container).text( PlayerManager.hq.desc );
 					$(".admiral_rank", container).text( PlayerManager.hq.rank );
 					$(".level_value", container).text( PlayerManager.hq.level );
-					$(".exp_bar", container).css({width: Math.floor(PlayerManager.hq.exp[0]*88)+"px"});
+					$(".exp_bar", container).css({width: Math.round(PlayerManager.hq.exp[0]*88)+"px"});
 					$(".exp_text", container).text( PlayerManager.hq.exp[1] );
 				}else if(KC3Panel.mode=="battle"){
 					$(".battle_admiral", container).text( PlayerManager.hq.name );
 					$(".battle_hqlevel_text", container).text( PlayerManager.hq.level );
-					$(".battle_hqexpval,.battle_hqexpgain", container).css({width: Math.floor(PlayerManager.hq.exp[0]*60)+"px"});
+					$(".battle_hqexpval,.battle_hqexpgain", container).css({width: Math.round(PlayerManager.hq.exp[0]*60)+"px"});
 					$(".battle_hqlevel_next", container).text( PlayerManager.hq.exp[1] );
 				}
 			},
@@ -608,12 +608,13 @@
 				this.Quests(container, {}, local);
 				
 				// Clear battle node
-				$(".battle .battle_node", container).removeClass("battle_color");
-				$(".battle .battle_node", container).removeClass("resource_color");
-				$(".battle .battle_node", container).removeClass("battle_avoided_color");
-				$(".battle .battle_node", container).removeClass("maelstrom_color");
-				$(".battle .battle_node", container).removeClass("now");
-				$(".battle .battle_node", container).text("");
+				$(".battle .battle_node", container)
+					.removeClass("battle_color")
+					.removeClass("resource_color")
+					.removeClass("battle_avoided_color")
+					.removeClass("maelstrom_color")
+					.removeClass("now")
+					.text("");
 				
 				// Change interface mode
 				$(".normal", container).hide();
@@ -627,11 +628,12 @@
 				$(".battle .battle_node_"+numNodes, container).addClass( "now" );
 				$(".battle .battle_node_"+numNodes, container).text( thisNode.id );
 				
-				$(".battle .battle_nodenum", container).removeClass("battle_color");
-				$(".battle .battle_nodenum", container).removeClass("resource_color");
-				$(".battle .battle_nodenum", container).removeClass("battle_avoided_color");
-				$(".battle .battle_nodenum", container).removeClass("maelstrom_color");
-				$(".battle .battle_nodenum", container).text( thisNode.id );
+				$(".battle .battle_nodenum", container)
+					.removeClass("battle_color")
+					.removeClass("resource_color")
+					.removeClass("battle_avoided_color")
+					.removeClass("maelstrom_color")
+					.text( thisNode.id );
 				
 				$(".battle .battle_current", container).text("NEXT NODE");
 				
@@ -793,7 +795,7 @@
 				var thisNode = KC3SortieManager.currentNode();
 
 				// If EXP left exceeded by gained EXP on sortie
-				if(KC3SortieManager.hqExpGained >= PlayerManager.hq.exp[1]) {
+				while(KC3SortieManager.hqExpGained >= PlayerManager.hq.exp[1]) {
 					KC3SortieManager.hqExpGained -= PlayerManager.hq.exp[1];
 					PlayerManager.hq.exp = [0,KC3Meta.exp(++PlayerManager.hq.level)[0],0];
 					this.HQ(container, {}, local);

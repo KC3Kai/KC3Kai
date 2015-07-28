@@ -220,30 +220,26 @@ Used by SortieManager
 				} else if (this.eships[i] < 500) {
 					console.log("Enemy ship is not Abyssal!");
 				} else {
-					if (enemyShip.api_stype === 7) {	// 7 = CVL
-						console.log("You sunk a CVL");
-						KC3QuestManager.get(217).increment();
-						KC3QuestManager.get(211).increment();
-						KC3QuestManager.get(220).increment();
-
-					}
-					if (enemyShip.api_stype === 11) {
-						console.log("You sunk a CV");	// 11 = CV
-						KC3QuestManager.get(217).increment();
-						KC3QuestManager.get(211).increment();
-						KC3QuestManager.get(220).increment();
-					}
-					if (enemyShip.api_stype === 13) {	// 13 = SS
-						console.log("You sunk a SS");
-						KC3QuestManager.get(230).increment();
-						KC3QuestManager.get(228).increment();
-					}
-					if (enemyShip.api_stype === 15) {	// 15 = AP
-						console.log("You sunk a AP");
-						KC3QuestManager.get(218).increment();
-						KC3QuestManager.get(212).increment();
-						KC3QuestManager.get(213).increment();
-						KC3QuestManager.get(221).increment();
+					switch(enemyShip.api_stype) {
+						case  7:	// 7 = CVL
+						case 11:	// 11 = CV
+							console.log("You sunk a CV"+((enemyShip.api_stype==7)?"L":""));
+							KC3QuestManager.get(217).increment();
+							KC3QuestManager.get(211).increment();
+							KC3QuestManager.get(220).increment();
+							break;
+						case 13:	// 13 = SS
+							console.log("You sunk a SS");
+							KC3QuestManager.get(230).increment();
+							KC3QuestManager.get(228).increment();
+							break;
+						case 15:	// 15 = AP
+							console.log("You sunk a AP");
+							KC3QuestManager.get(218).increment();
+							KC3QuestManager.get(212).increment();
+							KC3QuestManager.get(213).increment();
+							KC3QuestManager.get(221).increment();
+							break;
 					}
 				}
 				
