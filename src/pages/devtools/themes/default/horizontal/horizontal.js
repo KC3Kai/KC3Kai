@@ -140,12 +140,12 @@
 					$(".admiral_comm", container).text( PlayerManager.hq.desc );
 					$(".admiral_rank", container).text( PlayerManager.hq.rank );
 					$(".level_value", container).text( PlayerManager.hq.level );
-					$(".exp_bar", container).css({width: Math.floor(PlayerManager.hq.exp[0]*88)+"px"});
+					$(".exp_bar", container).css({width: Math.round(PlayerManager.hq.exp[0]*88)+"px"});
 					$(".exp_text", container).text( PlayerManager.hq.exp[1] );
 				}else if(KC3Panel.mode=="battle"){
 					$(".battle_admiral", container).text( PlayerManager.hq.name );
 					$(".battle_hqlevel_text", container).text( PlayerManager.hq.level );
-					$(".battle_hqexpval,.battle_hqexpgain", container).css({width: Math.floor(PlayerManager.hq.exp[0]*60)+"px"});
+					$(".battle_hqexpval,.battle_hqexpgain", container).css({width: Math.round(PlayerManager.hq.exp[0]*60)+"px"});
 					$(".battle_hqlevel_next", container).text( PlayerManager.hq.exp[1] );
 				}
 			},
@@ -415,9 +415,10 @@
 				this.Quests(container, {}, local);
 				
 				// Clear previous nodes
-				$(".battle .battle_node", container).removeClass("now");
-				$(".battle .battle_node", container).removeClass("active");
-				$(".battle .battle_node", container).text("");
+				$(".battle .battle_node", container)
+					.removeClass("now")
+					.removeClass("active")
+					.text("");
 				$(".battle .battle_nodenum", container).text("");
 				
 				// Change interface mode
@@ -573,7 +574,7 @@
 					"RNGesus bless him",
 					"I bless this run"
 				]; // events? extra operations? end of month? coming soon. (i guess by other)
-				$(".battle .battle_current", container).text(desperateText[Math.floor(Math.random()*5)]);
+				$(".battle .battle_current", container).text(desperateText[Math.floor(Math.random()*desperateText.length)]);
 				var thisNode = KC3SortieManager.currentNode();
 				
 			},
@@ -583,7 +584,7 @@
 				var thisNode = KC3SortieManager.currentNode();
 				
 				// If EXP left exceeded by gained EXP on sortie
-				if(KC3SortieManager.hqExpGained >= PlayerManager.hq.exp[1]) {
+				while(KC3SortieManager.hqExpGained >= PlayerManager.hq.exp[1]) {
 					KC3SortieManager.hqExpGained -= PlayerManager.hq.exp[1];
 					PlayerManager.hq.exp = [0,KC3Meta.exp(++PlayerManager.hq.level)[0],0];
 					this.HQ(container, {}, local);

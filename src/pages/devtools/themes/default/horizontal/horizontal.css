@@ -820,10 +820,12 @@
 	height:12px;
 	background:#ace;
 	float:left;
+	transition: width 0.5s;
 }
 #h .battle .battle_hqexpgain {
 	height:12px;
 	background:#d34;
+	transition: width 0.5s;
 }
 #h .battle .battle_hqlevel_next {
 	width:55px;
