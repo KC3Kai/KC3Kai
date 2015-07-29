@@ -196,6 +196,15 @@
 				"gh" :"https://github.com/rephira",
 				"wk" :"http://kancolle.wikia.com/wiki/User:Rephira"
 			}
+		},
+		{
+			"name": "Yuedasoldier",
+			"avatar" : "http://img4.wikia.nocookie.net/__cb1420715487/common/avatars/thumb/8/83/25548706.png/150px-25548706.png.jpg",
+			"desc" : "Tiếng Việt",
+			"links" : {
+				"fb" :"https://www.facebook.com/Raigun.da.soldier",
+				"wk" :"http://kancolle.wikia.com/wiki/User:Yuedasoldier"
+			}
 		}
 	],
 	"AboutTesters" : [
