@@ -81,6 +81,7 @@
 	"SettingsCompass" : "Compass and Enemy",
 	"SettingsBattleData" : "Battle Environment",
 	"SettingsBossComp" : "Boss Composition",
+	"SettingsHQDelta" : "HQ EXP Delta on Sortie",
 	
 	"SettingsScreenshot" : "Screenshot",
 	"SettingsSSOutput" : "Output Mode",

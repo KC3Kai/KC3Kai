@@ -503,8 +503,8 @@ Previously known as "Reactor"
 			var
 				getRank = function(r){ return ['E','D','C','B','A','S','SS'].indexOf(r); };
 			
-			// Vague quest that clears with no requirement
-			if(response.api_data.api_destsf > 0)
+			// Vague quest that clears with no rank requirement
+			if(response.api_data.api_destsf)
 				KC3QuestManager.get(216).increment(); // Bd2: Defeat the flagship of an enemy fleet
 			
 			// If victory for "defeat"-type quests
@@ -579,7 +579,8 @@ Previously known as "Reactor"
 			// KC3QuestManager.get(228).increment(); // Bw5: Sink 15 submarines
 			
 			KC3SortieManager.resultScreen( response.api_data );
-			KC3Network.trigger("HQ");
+			if(!ConfigManager.info_delta)
+				KC3Network.trigger("HQ");
 			KC3Network.trigger("BattleResult");
 			KC3Network.trigger("Quests");
 		},
@@ -588,7 +589,8 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_combined_battle/battleresult":function(params, response, headers){
 			KC3SortieManager.resultScreen( response.api_data );
-			KC3Network.trigger("HQ");
+			if(!ConfigManager.info_delta)
+				KC3Network.trigger("HQ");
 			KC3Network.trigger("BattleResult");
 			KC3Network.trigger("Quests");
 		},

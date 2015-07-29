@@ -22,6 +22,7 @@ Retreives when needed to apply on components
 				info_compass 		: true,
 				info_battle 		: true,
 				info_boss 			: true,
+				info_delta 			: false,
 				
 				ss_mode 			: 0,
 				ss_type 			: 'JPG',

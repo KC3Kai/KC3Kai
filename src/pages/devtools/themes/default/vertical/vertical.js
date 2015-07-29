@@ -794,15 +794,17 @@
 				$(".battle .battle_current", container).text("RESULTS");
 				var thisNode = KC3SortieManager.currentNode();
 
-				// If EXP left exceeded by gained EXP on sortie
-				while(KC3SortieManager.hqExpGained >= PlayerManager.hq.exp[1]) {
-					KC3SortieManager.hqExpGained -= PlayerManager.hq.exp[1];
-					PlayerManager.hq.exp = [0,KC3Meta.exp(++PlayerManager.hq.level)[0],0];
-					this.HQ(container, {}, local);
+				if(ConfigManager.info_delta) {
+					// If EXP left exceeded by gained EXP on sortie
+					while(KC3SortieManager.hqExpGained >= PlayerManager.hq.exp[1]) {
+						KC3SortieManager.hqExpGained -= PlayerManager.hq.exp[1];
+						PlayerManager.hq.exp = [0,KC3Meta.exp(++PlayerManager.hq.level)[0],0];
+						this.HQ(container, {}, local);
+					}
+					$(".battle_hqexpgain", container).css({width: Math.round((function(){
+						return (PlayerManager.hq.exp[2] + Math.min(PlayerManager.hq.exp[1],KC3SortieManager.hqExpGained)) / KC3Meta.exp(PlayerManager.hq.level)[0];
+					})()*60)+"px"});
 				}
-				$(".battle_hqexpgain", container).css({width: Math.floor((function(){
-					return (PlayerManager.hq.exp[2] + Math.min(PlayerManager.hq.exp[1],KC3SortieManager.hqExpGained)) / KC3Meta.exp(PlayerManager.hq.level)[0];
-				})()*60)+"px"});
 				$(".battle_hqlevel_next_gain", container).text(-KC3SortieManager.hqExpGained);
 				
 				$(".battle .battle_rating img").attr("src", "../../../../assets/img/client/ratings/"+thisNode.rating+".png");
@@ -962,15 +964,17 @@
 			},
 			PvPEnd: function(container, data, local){
 				var expGained = data.result.api_get_exp;
-				// If EXP left exceeded by gained EXP on sortie
-				if(expGained >= PlayerManager.hq.exp[1]) {
-					expGained -= PlayerManager.hq.exp[1];
-					PlayerManager.hq.exp = [0,KC3Meta.exp(++PlayerManager.hq.level)[0],0];
-					this.HQ(container, {}, local);
+				if(ConfigManager.info_delta) {
+					// If EXP left exceeded by gained EXP on sortie
+					if(expGained >= PlayerManager.hq.exp[1]) {
+						expGained -= PlayerManager.hq.exp[1];
+						PlayerManager.hq.exp = [0,KC3Meta.exp(++PlayerManager.hq.level)[0],0];
+						this.HQ(container, {}, local);
+					}
+					$(".battle_hqexpgain", container).css({width: Math.floor((function(){
+						return (PlayerManager.hq.exp[2] + Math.min(PlayerManager.hq.exp[1],expGained)) / KC3Meta.exp(PlayerManager.hq.level)[0];
+					})()*60)+"px"});
 				}
-				$(".battle_hqexpgain", container).css({width: Math.floor((function(){
-					return (PlayerManager.hq.exp[2] + Math.min(PlayerManager.hq.exp[1],expGained)) / KC3Meta.exp(PlayerManager.hq.level)[0];
-				})()*60)+"px"});
 				$(".battle_hqlevel_next_gain", container).text(-expGained);
 			}
 		}
