@@ -504,10 +504,8 @@
 				// Battle conditions
 				$(".battle .battle_cond_text", container).removeClass("good");
 				$(".battle .battle_cond_text", container).removeClass("bad");
-				
 				$(".battle .battle_cond_engage .battle_cond_text", container).text( thisNode.engagement[2] );
 				$(".battle .battle_cond_engage .battle_cond_text", container).addClass( thisNode.engagement[1] );
-				
 				$(".battle .battle_cond_contact .battle_cond_text", container).text(thisNode.fcontact +" vs "+thisNode.econtact);
 				
 				// Day battle-only environment
@@ -702,12 +700,23 @@
 				var thisPvP = (new KC3Node()).defineAsBattle();
 				thisPvP.engage( data.battle );
 				
+				// Formation
+				if((typeof thisNode.eformation != "undefined") && (thisNode.eformation > -1)){
+					$(".battle .battle_formation img", container).attr("src", KC3Meta.formationIcon(thisNode.eformation));
+					$(".battle .battle_formation", container).show();
+				} else {
+					$(".battle .battle_formation", container).hide();
+				}
+				
 				// Show opponent ships faces
+				console.log(thisPvP.eships);
 				$.each(thisPvP.eships, function(index, eshipId){
 					if(eshipId > -1){
+						console.log("eshipId", eshipId, "show");
 						$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).attr("src", KC3Meta.shipIcon(eshipId));
 						$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).show();
 					}else{
+						console.log("eshipId", eshipId, "hide");
 						$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).hide();
 					}
 				});
