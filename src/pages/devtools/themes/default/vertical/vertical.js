@@ -914,8 +914,8 @@
 				thisPvP.engage( data.battle );
 				
 				// Formation
-				if((typeof thisNode.eformation != "undefined") && (thisNode.eformation > -1)){
-					$(".battle .battle_formation img", container).attr("src", KC3Meta.formationIcon(thisNode.eformation));
+				if((typeof thisPvP.eformation != "undefined") && (thisPvP.eformation > -1)){
+					$(".battle .battle_formation img", container).attr("src", KC3Meta.formationIcon(thisPvP.eformation));
 					$(".battle .battle_formation", container).show();
 				} else {
 					$(".battle .battle_formation", container).hide();
