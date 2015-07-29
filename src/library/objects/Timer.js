@@ -55,17 +55,19 @@ Has functions for TimerManager to use
 		if(typeof faceId != "undefined"){ this.faceId = faceId; }
 		if(this.faceId > 0){
 			$(".timer-img img", this.element).attr("src", KC3Meta.shipIcon(this.faceId, "../../../../assets/img/ui/empty.png"));
+			$(".timer-img", this.element).attr("title", KC3Meta.shipName( KC3Master.ship(this.faceId).api_name ) );
 		}
 	};
 	
 	KC3Timer.prototype.updateElement = function(element){
 		this.element = element;
-	}
+	};
 	
 	KC3Timer.prototype.text = function(){
 		if(this.active){
 			var remaining = this.completion - (new Date()).getTime();
-			remaining = Math.ceil((remaining - (ConfigManager.alert_diff*1000))/1000);
+			var timerAllowance = (this.type == 2)?0:ConfigManager.alert_diff;
+			remaining = Math.ceil((remaining - (timerAllowance*1000))/1000);
 			if(remaining > 0){
 				this.alerted = false;
 				
@@ -108,6 +110,7 @@ Has functions for TimerManager to use
 		// Desktop notification
 		if(ConfigManager.alert_desktop){
 			var notifData = { type: "basic" };
+			var shipName;
 			
 			// Notification types show varying messages
 			switch(this.type){
@@ -118,15 +121,19 @@ Has functions for TimerManager to use
 					notifData.iconUrl = "../../assets/img/quests/expedition.jpg";
 					break;
 				case 1:
-					var shipName = KC3ShipManager.get( PlayerManager.repairShips[this.num] ).name();
+					shipName = KC3ShipManager.get( PlayerManager.repairShips[this.num+1] ).name();
 					notifData.title = "Repairs Complete!";
 					notifData.message = shipName+" is out of the repair dock!";
 					notifData.iconUrl = "../../assets/img/quests/supply.jpg";
 					break;
 				case 2:
-					var shipName = KC3Meta.shipName( KC3Master.ship( this.faceId ).api_name )
+					shipName = KC3Meta.shipName( KC3Master.ship( this.faceId ).api_name );
 					notifData.title = "Construction Complete!";
-					notifData.message = "New face "+shipName+" has been constructed!";
+					if(ConfigManager.info_face){
+						notifData.message = "New face "+shipName+" has been constructed!";
+					}else{
+						notifData.message = "A newface is ready to see you in the construction docks!";
+					}
 					notifData.iconUrl = "../../assets/img/quests/build.jpg";
 					break;
 				default:break;

@@ -21,7 +21,7 @@ Xxxxxxx
 		this.num = ServerInfo.num;
 		this.name = ServerInfo.name;
 		return this;
-	},
+	};
 	
 	KC3Server.prototype.setNum = function(num){
 		var ServerInfo = KC3Meta.serverByNum( num );

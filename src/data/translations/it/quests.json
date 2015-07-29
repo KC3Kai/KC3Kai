@@ -1,0 +1,919 @@
+{
+    "101": {
+        "name": "Prima Formazione!",
+        "desc": "Schiera 2 navi nella tua flotta principale."
+    },
+    "102": {
+        "name": "Organizza uno Squadrone Cacciatorpediniere!",
+        "desc": "Schiera 4 DD nella tua flotta principale."
+    },
+    "103": {
+        "name": "Organizza uno Squadrone Silurante!",
+        "desc": "Schiera un CL come ammiraglia e 5 DD nella tua flotta principale."
+    },
+    "104": {
+        "name": "Organizza una Flotta con sei navi!",
+        "desc": "Schiera 6 navi nella tua flotta principale."
+    },
+    "105": {
+        "name": "Organizza uno squadrone con due CL!",
+        "desc": "Schiera 2 CL nella tua flotta principale."
+    },
+    "106": {
+        "name": "Organizza uno squadrone Incrociatori Pesanti!",
+        "desc": "Schiera 2 CA nella tua flotta principale."
+    },
+    "107": {
+        "name": "Organizza una Task Force Portaerei!",
+        "desc": "Schiera una CV\/CVL come ammiraglia e 3 DD nella tua flotta principale."
+    },
+    "108": {
+        "name": "Schiera la classe Tenryuu!",
+        "desc": "Schiera Tenryuu (\u5929\u9f8d) e Tatsuta (\u9f8d\u7530) nella tua flotta principale."
+    },
+    "109": {
+        "name": "Schiera la classe Sendai!",
+        "desc": "Schiera Sendai (\u5ddd\u5185), Jintsuu (\u795e\u901a) e Naka (\u90a3\u73c2) nella tua flotta principale."
+    },
+    "110": {
+        "name": "Schiera la classe Myoukou!",
+        "desc": "Schiera Myoukou (\u5999\u9ad8), Nachi (\u90a3\u667a), Ashigara (\u8db3\u67c4) e Haguro (\u7fbd\u9ed2) nella tua flotta principale."
+    },
+    "111": {
+        "name": "Schiera la classe Fusou!",
+        "desc": "Schiera Fusou (\u6276\u6851) e Yamashiro (\u5c71\u57ce) nella tua flotta principale."
+    },
+    "112": {
+        "name": "Schiera la classe Ise!",
+        "desc": "Schiera Ise (\u4f0a\u52e2) e Hyuuga (\u65e5\u5411) nella tua flotta principale."
+    },
+    "113": {
+        "name": "Organizza la Flotta Principale con BB e CA!",
+        "desc": "Schiera una BB e 2 CA nella tua flotta principale."
+    },
+    "114": {
+        "name": "Organizza la Nagumo Task Force!",
+        "desc": "Schiera SOLO Akagi (\u8d64\u57ce), Kaga (\u52a0\u8cc0), Hiryuu (\u98db\u9f8d) e Souryuu (\u84bc\u9f8d) nella tua flotta principale."
+    },
+    "115": {
+        "name": "Organizza la Seconda Flotta!",
+        "desc": "Schiera un'ammiraglia nella Seconda Flotta."
+    },
+    "116": {
+        "name": "Preapara una Portaidrovolanti",
+        "desc": "Schiera una AV nella tua flotta principale."
+    },
+    "117": {
+        "name": "Organizza una Task Force Portaerei nella tua Seconda Flotta!",
+        "desc": "Schiera una CV\/CVL e 3 DD nella tua Seconda Flotta."
+    },
+    "118": {
+        "name": "Schiera la classe Kongou!",
+        "desc": "Schiera Kongou (\u91d1\u525b), Hiei (\u6bd4\u53e1), Haruna (\u699b\u540d) e Kirishima (\u9727\u5cf6) nella tua flotta principale."
+    },
+    "119": {
+        "name": "Organizza la Flotta Mikawa!",
+        "desc": "Schiera Choukai (\u9ce5\u6d77), Aoba (\u9752\u8449), Kako (\u52a0\u53e4), Furutaka (\u53e4\u9df9), Tenryuu (\u5929\u9f8d) e una nave VELOCE nella tua flotta principale."
+    },
+    "120": {
+        "name": "Organizza la 6° Divisione Cacciatorpediniere!",
+        "desc": "Schiera SOLO Akatsuki (\u6681), Hibiki (\u97ff), Inazuma (\u96f7) e Ikazuchi (\u96fb) nella tua flotta principale."
+    },
+    "121": {
+        "name": "Organizza la 4° Divisione Incrociatori!",
+        "desc": "Schiera Atago (\u611b\u5b95), Takao (\u9ad8\u96c4), Choukai (\u9ce5\u6d77) e Maya (\u6469\u8036) nella tua flotta principale."
+    },
+    "122": {
+        "name": "Organizza la Flotta Nishimura!",
+        "desc": "Schiera Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce), Mogami (\u6700\u4e0a) e Shigure (\u6642\u96e8) nella tua flotta principale."
+    },
+    "123": {
+        "name": "Organizza la 5° Divisione Portaerei!",
+        "desc": "Schiera Shoukaku (\u7fd4\u9db4), Zuikaku (\u745e\u9db4) e 2 DD nella tua flotta principale."
+    },
+    "124": {
+        "name": "Organizza la Nuova Flotta Mikawa!",
+        "desc": "Schiera Choukai (\u9ce5\u6d77), Aoba (\u9752\u8449), Kinugasa (\u8863\u7b20), Kako (\u52a0\u53e4), Furutaka (\u53e4\u9df9) e Tenryuu (\u5929\u9f8d) nella tua flotta principale."
+    },
+    "125": {
+        "name": "Organizza una Flotta Sottomarini!",
+        "desc": "Schiera 2 SS nella tua flotta principale."
+    },
+    "126": {
+        "name": "Organizza una Flotta di Attacco Aereo Navale!",
+        "desc": "Schiera 2 BBV e 2 CAV nella tua flotta principale."
+    },
+    "127": {
+        "name": "Organizza una Flotta Sottomarini di medie dimensioni!",
+        "desc": "Schiera 3 SS nella tua flotta principale."
+    },
+    "128": {
+        "name": "Organizza la 6° Divisione Incrociatori!",
+        "desc": "Schiera Furutaka (\u53e4\u9df9), Kako(\u52a0\u53e4), Aoba (\u9752\u8449) e Kinugasa (\u8863\u7b20) nella tua flotta principale."
+    },
+    "129": {
+        "name": "Organizza la Quinta Flotta!",
+        "desc": "Schiera Nachi (\u90a3\u667a), Ashigara (\u8db3\u67c4), Tama (\u591a\u6469), e Kiso (\u6728\u66fe) nella tua flotta."
+    },
+    "130": {
+        "name": "Organizza il Primo Squadrone Silurante!",
+        "desc": "Schiera Abukuma (\u963f\u6b66\u9688), Akebono (\u66d9), Ushio (\u6f6e), Kasumi (\u971e) e Shiranui (\u4e0d\u77e5\u706b) nella tua flotta."
+    },
+    "131": {
+        "name": "Organizza l'8° Divisione Cacciatorpediniere!",
+        "desc": "Schiera Asashio (\u671d\u6f6e), Michishio (\u6e80\u6f6e), Ooshio (\u5927\u6f6e) e Arashio (\u8352\u6f6e) nella tua flotta."
+    },
+    "132": {
+        "name": "Organizza la 18° Divisione Cacciatorpediniere!",
+        "desc": "Schiera SOLO Kasumi (\u971e), Arare (\u9730), Kagerou (\u967d\u708e) e Shiranui (\u4e0d\u77e5\u706b) nella tua flotta."
+    },
+    "133": {
+        "name": "Organizza la 30° Divisione Cacciatorpediniere (Gen.1)!",
+        "desc": "Schiera SOLO Mutsuki (\u7766\u6708), Kisaragi (\u5982\u6708), Yayoi (\u5f25\u751f) e Mochizuki (\u671b\u6708) nella tua flotta."
+    },
+    "134": {
+        "name": "Preparativi per l'Amore! (Parte 3)",
+        "desc": "Organizza i tuoi sentimenti e schiera la tua flotta con un'ammiraglia di alto livello (Lv.90~99)!"
+    },
+    "135": {
+        "name": "Di nuovo in viaggio!",
+        "desc": "Organizza una flotta di 6 navi con ammiraglia la nave con cui ti sei appena legato (livello 100 o più)!"
+    },
+    "136": {
+        "name": "Organizza 30° Divisione Cacciatorpediniere (Gen.2)",
+        "desc": "Schiera solo Mutsuki (\u7766\u6708), Yayoi (\u5f25\u751f), Uzuki (\u536f\u6708) e Mochizuki (\u671b\u6708) nella tua flotta."
+    },
+    "137": {
+        "name": "Organizza la Quinta Flotta",
+        "desc": "Schiera Myoukou (\u5999\u9ad8), Nachi (\u90a3\u667a) e Haguro (\u7fbd\u9ed2) nella tua flotta."
+    },
+    "138": {
+        "name": "Organizza la nuova Seconda Divisione Portaerei",
+        "desc": "Schiera Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c, come ammiraglia), Souryuu (\u84bc\u9f8d) e 2 cacciatorpediniere nella tua flotta."
+    },
+    "139": {
+        "name": "Organizza la Sesta Flotta Sottomarini",
+        "desc": "Schiera un tender e 4 (o più) sottomarini nella tua flotta."
+    },
+    "140": {
+        "name": "Testa il nuovo RADAR!",
+        "desc": "Schiera Myoukou Kai2 come ammiraglia della tua flotta."
+    },
+    "141": {
+        "name": "Riorganizza la Seconda Divisione Portaerei rafforzata",
+        "desc": "Schiera Souryuu Kai-2 (\u84bc\u9f8d\u6539\u4e8c) come ammiraglia con Hiryuu Kai-2 (\u98db\u9f8d\u6539\u4e8c) e 2 cacciatorpediniere nella tua flotta."
+    },
+    "142": {
+        "name": "Organizza la 3° Divisione Corazzata d'Elite",
+        "desc": "Schiera tutte e quattro le corazzate della classe Kongou Kai 2 nella tua flotta principale."
+    },
+    "143": {
+        "name": "Schiera una Portaerei di nuova generazione",
+        "desc": "Schiera Unryuu (\u96f2\u9f8d) come ammiraglia."
+    },
+    "144": {
+        "name": "Organizza la Flotta Principale Corazzata: il Secondo Squadrone",
+        "desc": "Schiera le corrazzate della classe Nagato e della classe Fusou (nessun'altra nave) nella tua flotta principale."
+    },
+    "145": {
+        "name": "Organizza la Flotta Principale Corazzata",
+        "desc": "Schiera tre corazzate di classe Nagato, Fusou, Ise o Yamato e un incrociatore leggero nella tua flotta."
+    },
+    "146": {
+        "name": "Prepara l'Arsenale per un rinnovo",
+        "desc": "Schiera Akashi (\u660e\u77f3) come ammiraglia nella tua flotta principale."
+    },
+    "147": {
+        "name": "Organizza la Flotta Nishimura",
+        "desc": "Schiera Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce), Mogami (\u6700\u4e0a), Shigure (\u6642\u96e8) e Michishio (\u6e80\u6f6e) nella tua flotta principale."
+    },
+    "148": {
+        "name": "Organizza lo Squadrone di Contrattacco",
+        "desc": "Schiera Kasumi (\u971e) come ammiraglia, Ashigara (\u8db3\u67c4), 1 CL e altre 3 DD nella tua flotta principale."
+    },
+    "149": {
+        "name": "Organizza l'11° Divisione Cacciatorpediniere",
+        "desc": "Schiera le quattro cacciatorpediniere 'Tipo speciale' Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea) e Murakumo(\u53e2\u96f2) nella tua flotta principale (di cui una come ammiraglia)."
+    },
+    "150": {
+        "name": "Organizza la 21° Divisione Cacciatorpediniere",
+        "desc": "Schiera solo Hatsuharu (\u521d\u6625), Nenohi (\u5b50\u65e5), Wakaba (\u82e5\u8449) e Hatsushimo (\u521d\u971c) nella tua flotta principale."
+    },
+    "151": {
+        "name": "Organizza la 22° Divisione Cacciatorpediniere",
+        "desc": "Schiera solo Satsuki (\u7690\u6708), Fumizuki (\u6587\u6708), Nagatsuki (\u9577\u6708) e un altro DD nella tua flotta principale."
+    },
+    "152": {
+        "name": "Organizza la nuova versione della Flotta Mikawa",
+        "desc": "Schiera Choukai Kai2 come ammiraglia e cinque tra Aoba, Kinugasa, Kako, Furutaka, Tenryuu, Yuubari nella tua flotta principale"
+    },
+    "153": {
+        "name": "Riorganizza il Diciottesimo Squadrone!",
+        "desc": "Schiera Tenryuu, Tatsuta e altre due navi nella tua flotta"
+    },
+    "154": {
+        "name": "Organizza una flotta d'attacco di superficie!",
+        "desc": "Schiera Hiei, Kirishima, Nagara, Akatsuki, Ikazuchi, Inazuma nella tua flotta"
+    },
+    "155": {
+        "name": "Organizza la nuova 6° Divisione Cacciatorpediniere!",
+        "desc": "Schiera Akatsuki Kai2 come ammiraglia con Hibiki/Bep, Ikazuchi, Inazuma nella tua flotta"
+    },
+    "156": {
+        "name": "1° Squadrone Silurante, assalto nel Mare del Nord",
+        "desc": "Schiera Abukuma come ammiraglia con Hibiki/Вер, Hatsushimo, Wakaba, Samidare e Shimakaze nella tua flotta principale"
+    },
+    "157": {
+        "name": "1° Squadrone Silurante, un altro assalto nel Mare del Nord",
+        "desc": "Schiera Abukuma Kai Ni come ammiraglia con Hibiki/Вер, Yuugumo, Naganami, Akigumo e Shimakaze nella tua flotta principale"
+    },
+
+
+
+    "202": {
+        "name": "Prima Sortita!",
+        "desc": "Manda la tua flotta principale in una missione di combattimento."
+    },
+    "203": {
+        "name": "Proteggi i Mari di Chinju-Fu!",
+        "desc": "Disloca nel mondo 1-1 e libera la zona."
+    },
+    "204": {
+        "name": "Sortita alla Costa delle Isole Nansei!",
+        "desc": "Disloca nel mondo 1-2 e libera la zona."
+    },
+    "205": {
+        "name": "Intercetta l'Avanguardia del nemico in avvicinamento!",
+        "desc": "Disloca nel mondo 1-2 dopo aver sconfitto il suo boss e libera la zona."
+    },
+    "206": {
+        "name": "Schiera lo Squadrone Silurante!",
+        "desc": "Disloca una flotta con un CL come ammiraglia e 3 DD come scorta."
+    },
+    "207": {
+        "name": "Schiera un Incrociatore Pesante!",
+        "desc": "Disloca una flotta con un CA come ammiraglia."
+    },
+    "208": {
+        "name": "Schiera una Corazzata!",
+        "desc": "Disloca una flotta con una BB come ammiraglia. Non contano le BBV."
+    },
+    "209": {
+        "name": "Schiera una Task Force Portaerei!",
+        "desc": "Disloca una flotta con una CV(L) come ammiraglia e 5 DD\/CL\/AV come scorte."
+    },
+    "215": {
+        "name": "Sortita della Seconda Flotta!",
+        "desc": "Disloca la tua Seconda Flotta in una missione di combattimento."
+    },
+    "217": {
+        "name": "Affonda una Portaerei nemica!",
+        "desc": "Affonda una portaerei nemica."
+    },
+    "219": {
+        "name": "Schiera la Flotta Mikawa!",
+        "desc": "Disloca una flotta con Choukai, Aoba, Kako, Furutaka, Tenryuu e una nave veloce."
+    },
+    "222": {
+        "name": "Schiera la 6° Divisione Cacciatorpedinieri!",
+        "desc": "Disloca una flotta con SOLO Akatsuki, Hibiki, Inazuma, e Ikazuchi."
+    },
+    "223": {
+        "name": "Schiera la 4° Divisione Incrociatori!",
+        "desc": "Disloca una flotta con Atago, Takao, Choukai, Maya e altre due navi. Vinci contro il Boss del mondo 2-2."
+    },
+    "224": {
+        "name": "Schiera la Flotta Nishimura!",
+        "desc": "Disloca una flotta con Fusou, Yamashiro, Mogami, Shigure e altre due navi. Vinci contro il Bodd del mondo 2-3."
+    },
+    "225": {
+        "name": "Schiera la Quinta Divisione Portaerei!",
+        "desc": "Disloca una flotta con Shoukaku, Zuikaku e altre 4 navi. Vinci contro il Boss del mondo 3-1."
+    },
+    "227": {
+        "name": "Schiera la Nuova Flotta Mikawa!",
+        "desc": "Disloca una flotta con Choukai, Aoba, Kinugasa, Kako, Furutaka e Tenryuu. Vinci contro il Boss del mondo 2-3."
+    },
+    "231": {
+        "name": "Schiera una Flotta Sottomarini!",
+        "desc": "Disloca una flotta con 2 SS e 4 navi addizionali. Vinci contro il Boss del mondo 2-3."
+    },
+    "232": {
+        "name": "Schiera una Flotta di Attacco Aereo Navale!",
+        "desc": "Disloca una flotta con 2 BBV, 2 CAV e 2 navi addizionali. Vinci contro il Boss del mondo 4-2."
+    },
+    "233": {
+        "name": "Schiera la 6° Divisione Incrociatori!",
+        "desc": "Disloca una flotta con Furutaka, Kako, Kinugasa, Aoba e 2 navi addizionali. Ottieni una vittoria di grado S contro il Boss del mondo 2-3."
+    },
+    "239": {
+        "name": "Schiera l'8° Divisione Cacciatorpediniere!",
+        "desc": "Disloca una flotta con Asashio, Michishio, Ooshio, Arashio e 2 navi addizionali. Vinci contro il boss del mondo 2-3."
+    },
+    "240": {
+        "name": "Schiera la 18° Divisione Cacciatorpediniere!",
+        "desc": "Disloca una flotta con Kasumi, Arare, Kagerou, Shiranui e 2 navi addizionali. Vinci contro il Boss del mondo 3-1."
+    },
+    "244": {
+        "name": "Disloca la 30° Divisione Cacciatorpediniere (Gen.1)",
+        "desc": "Disloca una flotta formata da Mutsuki (\u7766\u6708), Kisaragi (\u5982\u6708), Yayoi (\u5f25\u751f), Mochizuki (\u671b\u6708) e altre 2 DD nel mondo 3-2 e ottieni il rango C o superiore contro il Boss."
+    },
+    "245": {
+        "name": "Preparativi per l'Amore! (Finale)",
+        "desc": "Disloca una flotta con un'ammiraglia di alto livello (Lv.90~99) nel mondo 2-3 e ottieni una vittoria di rango S contro il Boss."
+    },
+    "246": {
+        "name": "La Vostra Prima Missione Insieme!",
+        "desc": "Disloca una flotta nel mondo 4-3 con una nave a cui ti sei legato di Lv.100 o più come ammiraglia e ottieni il rango S contro il Boss."
+    },
+    "247": {
+        "name": "Disloca una Flotta Corazzate Portaerei!",
+        "desc": "Schiera 2 BBV nella tua flotta principale e vinci contro il Boss del mondo 4-4."
+    },
+    "248": {
+        "name": "Pattugliamento Antisottomarino della 30° Divisione Cacciatorpediniere",
+        "desc": "Disloca Mutsuki, Yayoi, Uzuki e Mochizuki nel mondo 1-5 e ottieni almeno il rango C contro il Boss."
+    },
+    "250": {
+        "name": "Disloca la Seconda Divisione Portaerei",
+        "desc": "Disloca Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c) come ammiraglia, Souryuu (\u84bc\u9f8d) e 2 DD nel mondo 5-2. Puoi aggiungere 2 navi. Ottieni il grado S contro il Boss."
+    },
+    "251": {
+        "name": "Disloca la Seconda Divisione Portaerei d'Elite",
+        "desc": "Disloca Souryuu Kai Ni (\u84bc\u9f8d\u6539\u4e8c) come ammiraglia, Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c) e 2 DD nel mondo 4-3. Puoi aggiungere 2 navi. Ottieni il grado S contro il Boss."
+    },
+    "252": {
+        "name": "Disloca una Flotta guidata da Haruna",
+        "desc": "Disloca una flotta con Haruna Kai Ni (\u699b\u540d\u6539\u4e8c) come ammiraglia e altre 5 navi nel mondo 5-1 ottieni il grado S contro il Boss."
+    },
+    "253": {
+        "name": "Disloca il Gruppo Aviazione 601",
+        "desc": "Disloca una flotta con Unryuu Kai (\u96f2\u9f8d\u6539) come ammiraglia nel mondo 5-2 e ottieni il grado S contro il boss."
+    },
+    "254": {
+        "name": "Disloca uno Squadrone Portaerei Leggere",
+        "desc": "Schiera una flotta composta da 1-2 CVL, 1 CL e 3-4 DD nel mondo 2-1 e ottieni una vittoria di grado S contro il Boss."
+    },
+    "255": {
+        "name": "Disloca uno Squadrone Silurante alle Isole Bashi",
+        "desc": "Schiera una flotta composta da 1-2 CL (una di esse deve essere l'ammiraglia) e 4-5 DD nel mondo 2-2. Ottieni una vittoria contro il Boss e affonda l'ammiraglia nemica."
+    },
+    "258": {
+        "name": "Schiera il Secondo Squadrone",
+        "desc": "Disloca Nagato (\u9577\u9580), Mutsu (\u9678\u5965), Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce) e altre 2 navi nel mondo 4-2. Ottieni 2 vittorie di grado S contro il Boss."
+    },
+    "260": {
+        "name": "Disloca lo Squadrone Corazzate nelle acque del Nord",
+        "desc": "Disloca 2 Corazzate, 1 Portaerei Leggera e altre 3 navi nel mondo 3-5 e ottieni il grado S contro il Boss."
+    },
+    "262": {
+        "name": "Disloca la Flotta Nishimura nelle acque del Sud",
+        "desc": "Disloca Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce), Mogami (\u6700\u4e0a), Shigure (\u6642\u96e8) e Michishio (\u6e80\u6f6e) (puoi aggiungere un'altra nave) nel mondo 5-1 e ottieni il grado S contro il Boss."
+    },
+    "263": {
+        "name": "Disloca il Sesto Squadrone nelle acque Sudoccidentali",
+        "desc": "Disloca Furutaka (\u53e4\u9df9), Kako (\u52a0\u53e4), Aoba (\u9752\u8449), Kinugasa (\u8863\u7b20) e altre due navi nel mondo 2-5 e ottieni il grado S contro il Boss."
+    },
+    "267": {
+        "name": "Disloca l'11° Divisione Cacciatorpediniere",
+        "desc": "Disloca Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea), Murakumo(\u53e2\u96f2) e altre 2 navi nel mondo 2-3 e ottieni una vittoria contro il Boss."
+    },
+    "268": {
+        "name": "Pattugliamento Antisottomarino dell'11° Divisione Cacciatorpediniere",
+        "desc": "Disloca Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea) e Murakumo(\u53e2\u96f2) nel mondo 1-5 e ottieni il grado C o superiore contro il Boss."
+    },
+    "269": {
+        "name": "Disloca la 21° Divisione Cacciatorpediniere",
+        "desc": "Disloca Hatsuharu (\u521d\u6625), Nenohi (\u5b50\u65e5), Wakaba (\u82e5\u8449) e Hatsushimo (\u521d\u971c) e altre due navi nel mondo 3-1 e ottieni il grado S contro il Boss."
+    },
+    "270": {
+        "name": "Disloca la 22° Divisione Cacciatorpediniere",
+        "desc": "Disloca Satsuki (\u7690\u6708), Fumizuki (\u6587\u6708), Nagatsuki (\u9577\u6708), un altro DD e due navi aggiuntive nel mondo 1-4 e ottieni il grado S contro il Boss."
+    },
+    "271": {
+        "name": "Disloca lo Squadrone di Nachi",
+        "desc": "Schiera una flotta con Nachi (\u90a3\u667a) ammiraglia, Hatsushimo (\u521d\u971c), Kasumi (\u971e), Ushio (\u6f6e), Akebono (\u66d9) e una nave addizionale nel mondo 2-2 e ottieni il grado S contro il Boss."
+    },
+    "272": {
+        "name": "Disloca la nuova versione dell'Incrociatore Pesante Antiaereo",
+        "desc": "Schiera una flotta con Maya (\u6469\u8036) Kai o Kai2, 1 CL, 2 DD e altre due navi nel mondo 2-3 e ottieni il grado S contro il Boss."
+    },
+    "273": {
+        "name": "Disloca la Flotta Mikawa alle Isole Salomone",
+        "desc": "Schiera la flotta principale con Choukai Kai2 ammiraglia e cinque navi tra Aoba, Kinugasa, Kako, Furutaka, Tenryuu, Yuubari nel mondo 5-1 e ottieni il grado S contro il Boss."
+    },
+    "274": {
+        "name": "Pattugliamento Antisottomarino della 6° Divisione Cacciatorpediniere",
+        "desc": "Disloca Akatsuki, Hibiki (\u97ff or \u0412\u0435\u0440\u043d\u044b\u0439), Inazuma e Ikazuchi nel mondo 1-5. Ottieni almeno il grado C contro il Boss"
+    },
+    "275": {
+        "name": "Disloca il Diciottesimo Squadrone",
+        "desc": "Tenryuu, Tatsuta, e almeno altre due navi nel mondo 2-3 e ottieni una vittoria di grado S contro il Boss"
+    },
+    "276": {
+        "name": "Schiera la Flotta d'Attacco di Superficie!",
+        "desc": "Schiera Hiei, Kirishima, Nagara, Akatsuki, Ikazuchi, Inazuma nel mondo 5-1 e libera la mappa con grado S"
+    },
+    "277": {
+        "name": "Pattugliamento Antisottomarino della 6° Divisione!",
+        "desc": "Schiera Akatsuki Kai2 , Hibiki/Verniy, Ikazuchi, Inazuma nel mondo 1-5 e ottieni il grado A contro il Boss"
+    },
+    "278": {
+        "name": "Impiega nell'Operazione KE il 1° Squadrone Silurante",
+        "desc": "Schiera Abukuma come ammiraglia con Hibiki/Вер, Hatsushimo, Wakaba, Samidare e Shimakaze nel mondo 3-2 e ottieni almeno il grado B contro il Boss"
+    },
+    "279": {
+        "name": "Impiega di nuovo nell'Operazione KE il 1° Squadrone Silurante",
+        "desc": "Schiera Abukuma Kai-2 come ammiraglia con Hibiki/Вер, Yuugumo, Naganami, Akigumo e Shimakaze e ottieni almeno il rango B contro il Boss"
+    },
+
+
+
+    "201": {
+        "code": "Bd1",
+        "name": "Sortita Giornaliera 1",
+        "desc": "Sortita Giornaliera una flotta abissale",
+        "unlock": [ 216, 211, 212 ],
+        "tracking": [ [0,1] ]
+    },
+    "216": {
+        "code": "Bd2",
+        "name": "Sortita Giornaliera 2",
+        "desc": "Sconfiggi l'ammiraglia di una flotta abissale",
+        "unlock": [ 210, 218, 214, 213 ],
+        "tracking": [ [0,1] ]
+    },
+    "210": {
+        "code": "Bd3",
+        "name": "Sortita Giornaliera 3",
+        "desc": "Sconfiggi 10 flotte abissali (grado B+)",
+        "tracking": [ [0,10] ]
+    },
+    "211": {
+        "code": "Bd4",
+        "name": "Sortita Giornaliera 4",
+        "desc": "Affonda 3 CV(L) abissali",
+        "tracking": [ [0,3] ]
+    },
+    "218": {
+        "code": "Bd5",
+        "name": "Sortita Giornaliera 5",
+        "desc": "Affonda 3 navi trasporto abissali",
+        "unlock": [ 226, 220 ],
+        "tracking": [ [0,3] ]
+    },
+    "212": {
+        "code": "Bd6",
+        "name": "Sortita Giornaliera 6",
+        "desc": "Affonda 5 navi trasporto abissali",
+        "tracking": [ [0,5] ]
+    },
+    "226": {
+        "code": "Bd7",
+        "name": "Sortita Giornaliera 7",
+        "desc": "Sconfiggi 5 boss nei nodi con corna del Mondo 2",
+        "unlock": [ 230 ],
+        "tracking": [ [0,5] ]
+    },
+    "230": {
+        "code": "Bd8",
+        "name": "Sortita Giornaliera 8",
+        "desc": "Affonda 6 sottomarini abissali",
+        "tracking": [ [0,6] ]
+    },
+
+
+
+
+
+    "214": {
+        "code": "Bw1",
+        "name": "Sortita Settimanale 1",
+        "desc": "Schiera 36 volte la tua flotta, Incontra 24 boss, Vinci contro 12 bosses di cui 6 grado S",
+        "unlock": [ 221 ],
+        "tracking": [ [0,36], [0,24], [0,12], [0,6] ]
+    },
+    "220": {
+        "code": "Bw2",
+        "name": "Sortita Settimanale 2",
+        "desc": "Affonda 20 CV(L) abissali",
+        "unlock": [ 228 ],
+        "tracking": [ [0,20] ]
+    },
+    "213": {
+        "code": "Bw3",
+        "name": "Sortita Settimanale 3",
+        "desc": "Affonda 20 navi trasporto abissali",
+        "tracking": [ [0,20] ]
+    },
+    "221": {
+        "code": "Bw4",
+        "name": "Sortita Settimanale 4",
+        "desc": "Affonda 50 navi trasporto abissali",
+        "unlock": [ 261, 257, 264 ],
+        "tracking": [ [0,50] ]
+    },
+    "228": {
+        "code": "Bw5",
+        "name": "Sortita Settimanale 5",
+        "desc": "Affonda 15 sottomarini",
+        "unlock": [ 229, 241, 613 ],
+        "tracking": [ [0,15] ]
+    },
+    "229": {
+        "code": "Bw6",
+        "name": "Sortita Settimanale 6",
+        "desc": "Sconfiggi 12 boss nei nodi con corna nel mondo 4",
+        "unlock": [ 242 ],
+        "tracking": [ [0,12] ]
+    },
+    "241": {
+        "code": "Bw7",
+        "name": "Sortita Settimanale 7",
+        "desc": "Sconfiggi 5 boss nei mondi 3-3, 3-4 o W3-5",
+        "tracking": [ [0,5] ]
+    },
+    "242": {
+        "code": "Bw8",
+        "name": "Sortita Settimanale 8",
+        "desc": "Sconfiggi un boss nel mondo 4-4",
+        "unlock": [ 243 ],
+        "tracking": [ [0,1] ]
+    },
+    "243": {
+        "code": "Bw9",
+        "name": "Sortita Settimanale 9",
+        "desc": "Disloca nel mondo 5-2 e ottieni il grado S contro il boss 2 volte",
+        "tracking": [ [0,2] ]
+    },
+    "261": {
+        "code": "Bw10",
+        "name": "Sortita Settimanale 10",
+        "desc": "Disloca nel mondo 1-5 e ottieni il grado A contro il boss 3 volte",
+        "tracking": [ [0,3] ]
+    },
+
+
+
+
+
+    "249": {
+        "code": "Bm1",
+        "name": "Disloca il Quinto Squadrone",
+        "desc": "Disloca Myoukou, Nachi, Haguro, +3 navi nel mondo W2-5. Ottieni il grado S contro il Boss",
+        "unlock": [ 265 ]
+    },
+    "256": {
+        "code": "Bm2",
+        "name": "Disloca una Flotta Sottomarini nel mondo 6-1",
+        "desc": "Disloca nel mondo 6-1 e ottieni 3 volte il grado S contro il Boss",
+        "tracking": [ [0,3] ]
+    },
+    "257": {
+        "code": "Bm3",
+        "name": "Disloca uno Squadrone Silurante",
+        "desc": "1~3 CL (CL come ammiraglia) e 3~5 cacciatorpedinieri nel mondo 1-4 ottieni il grado S contro il Boss"
+    },
+    "259": {
+        "code": "Bm4",
+        "name": "Disloca uno Squadrone Corazzata",
+        "desc": "Disloca 3 BB(V) + 1 CL + 2 navi nel mondo 5-1 e ottieni il grado S contro il Boss"
+    },
+    "265": {
+        "code": "Bm5",
+        "name": "Servizio Mensile di Scorta",
+        "desc": "Disloca una flotta nel mondo 1-5 e ottieni il grado A+ contro il Boss 10 volte",
+        "tracking": [ [0,10] ]
+    },
+    "264": {
+        "code": "Bm6",
+        "name": "Schiera la Task Force Portaerei ad Ovest",
+        "desc": "2 CV + 2 DD + 2 navi nel mondo 4-2. Ottieni il grado S contro il Boss",
+        "unlock": [ 266 ]
+    },
+    "266": {
+        "code": "Bm7",
+        "name": "Disloca lo Squadrone di Contrattacco",
+        "desc": "4 DD (DD come ammiraglia) + 1 CA (Non CAV) + 1 CL nel mondo 2-5 e ottieni il grado S contro il Boss"
+    },
+
+
+
+
+
+    "301": {
+        "code": "C1",
+        "name": "Prima esercitazione!",
+        "desc": "Sfida un'altra flotta nella modalità pratica"
+    },
+     "303": {
+        "code": "C2",
+        "name": "Esercitazioni giornaliere 1",
+        "desc": "Sfida altre 3 flotte nella modalità pratica",
+        "unlock": [ 304, 302 ],
+        "tracking": [ [0,3] ]
+    },
+    "304": {
+        "code": "C3",
+        "name": "Esercitazioni giornaliere 2",
+        "desc": "Ottieni 5 vittorie nella stessa gioranta in modalità pratica",
+        "tracking": [ [0,5] ]
+    },
+    "302": {
+        "code": "C4",
+        "name": "Esercitazioni settimanali",
+        "desc": "(Settimanale) Ottieni 20 vittorie nella modalità pratica",
+        "tracking": [ [0,20] ]
+    },
+    "307": {
+        "code": "C5",
+        "name": "Migliora l'efficienza della Flotta",
+        "desc": "Ottieni 3 vittorie nella stessa giornata in modalità pratica"
+    },
+    "308": {
+        "code": "C6",
+        "name": "Migliora ancora una volta l'efficienza della Flotta",
+        "desc": "Get 4 victories in practice mode within the same day"
+    },
+    "309": {
+        "code": "C7",
+        "name": "Aumenta la qualità dell'allenamento per un altro assalto a Nord",
+        "desc": "Ottieni 4 vittorie nello stesso giorno nella modalità pratica"
+    },
+
+
+
+
+    "401": {
+        "code": "D1",
+        "name": "Prima spedizione",
+        "desc": "Porta a termine una spedizione"
+    },
+    "402": {
+        "code": "D2",
+        "name": "Spedizioni giornaliere 1",
+        "desc": "Porta a termine 3 spedizioni con successo",
+        "unlock": [ 403 ],
+        "tracking": [ [0,3] ]
+    },
+    "403": {
+        "code": "D3",
+        "name": "Spedizioni giornaliere 2",
+        "desc": "Porta a termine 10 spedizioni con successo",
+        "tracking": [ [0,10] ]
+    },
+    "404": {
+        "code": "D4",
+        "name": "Spedizioni settimanali",
+        "desc": "(Settimanale) Porta a termine 30 spedizioni con successo",
+        "tracking": [ [0,30] ]
+    },
+    "405": {
+        "code": "D5",
+        "name": "La Prima Operazione Sottomarino",
+        "desc": "Completa la Spedizione 30"
+    },
+    "406": {
+        "code": "D6",
+        "name": "La Seconda Operazione Sottomarino",
+        "desc": "Completa di nuovo la Spedizione 30"
+    },
+    "408": {
+        "code": "D7",
+        "name": "Prosecuzione delle Operazioni Sottomarino",
+        "desc": "Completa altre due volte la Spedizione 30"
+    },
+    "409": {
+        "code": "D8",
+        "name": "Incontro Strategico con la Spedizione Sottomarina estera!",
+        "desc": "Completa la Spedizione 31"
+    },
+    "410": {
+        "code": "D9",
+        "name": "Spedizione settimanale 2",
+        "desc": "(Settimanale) Completa la spedizione 37 o 38",
+        "unlock": [ 411 ],
+        "tracking": [ [0,1] ]
+    },
+    "412": {
+        "code": "D10",
+        "name": "Rinforza l'attività delle BBV",
+        "desc": "Completa la Spedizione 23"
+    },
+    "411": {
+        "code": "D11",
+        "name": "Spedizione settimanale 3",
+        "desc": "(Settimanale) Completa 7 volte la spedizione 37 o 38",
+        "tracking": [ [0,7] ]
+    },
+    "413": {
+        "code": "D12",
+        "name": "Rinforza l'attività delle BBV (Cont.)",
+        "desc": "Completa altre quattro volte la Spedizione 23"
+    },
+    "414": {
+        "code": "D13",
+        "name": "Operazione Sottomarino Acque Blu",
+        "desc": "Completa la Spedizione 39"
+    },
+    "415": {
+        "code": "D14",
+        "name": "Operazione Sottomarino Acque Blu estesa",
+        "desc": "Completa altre due volte la Spedizione 39"
+    },
+    "416": {
+        "code": "D15",
+        "name": "Esercitazioni di Difesa Aerea",
+        "desc": "Completa tre volte la Spedizione 6"
+    },
+    "417": {
+        "code": "D16",
+        "name": "Disloca la Task Force che fungerà da esca",
+        "desc": "Completa la Spedizione 15"
+    },
+    "418": {
+        "code": "D17",
+        "name": "Preparazioni per la Cerimonia Navale",
+        "desc": "Completa due volte la Spedizione 7"
+    },
+    "419": {
+        "code": "D18",
+        "name": "Cerimonia Navale",
+        "desc": "Completa la Spedizione 8"
+    },
+
+
+
+
+
+    "501": {
+        "code": "E1",
+        "name": "Primo rifornimento",
+        "desc": "Rifornisci una nave"
+    },
+    "502": {
+        "code": "E2",
+        "name": "Primo ormeggio",
+        "desc": "Ripara una nave"
+    },
+    "503": {
+        "code": "E3",
+        "name": "Riparazioni giornaliere",
+        "desc": "Ripara 5 navi",
+        "unlock": [ 504 ],
+        "tracking": [ [0,5] ]
+    },
+    "504": {
+        "code": "E4",
+        "name": "Rifornimenti giornalieri",
+        "desc": "Rifornisci 15 volte le tue navi",
+        "tracking": [ [0,15] ]
+    },
+
+
+
+
+
+    "605": {
+        "code": "F1",
+        "name": "Sviluppo giornaliero 1",
+        "desc": "Costruisci un pezzo di equipaggiamento (vanno bene anche i fallimenti)",
+        "unlock": [ 606 ],
+        "tracking": [ [0,1] ]
+    },
+    "606": {
+        "code": "F2",
+        "name": "Costruzione giornaliera 1",
+        "desc": "Costruisci una nave",
+        "unlock": [ 607 ],
+        "tracking": [ [0,1] ]
+    },
+    "607": {
+        "code": "F3",
+        "name": "Sviluppo giornaliero 2",
+        "desc": "Costruisci 3 pezzi di equipaggiamento (vanno bene anche i fallimenti)",
+        "unlock": [ 608 ],
+        "tracking": [ [0,3] ]
+    },
+     "608": {
+        "code": "F4",
+        "name": "Costruzione giornaliera 2",
+        "desc": "Costruisci 3 navi",
+        "unlock": [ 609, 619 ],
+        "tracking": [ [0,3] ]
+    },
+     "609": {
+        "code": "F5",
+        "name": "Smantellamento giornaliero",
+        "desc": "Rottama 2 navi",
+        "tracking": [ [0,2] ]
+    },
+    "601": {
+        "code": "F6",
+        "name": "Prima costruzione",
+        "desc": "Costruisci una nave"
+    },
+    "602": {
+        "code": "F7",
+        "name": "Primo sviluppo",
+        "desc": "Costruisci un pezzo di equipagiamento"
+    },
+    "603": {
+        "code": "F8",
+        "name": "Primo smantellamento",
+        "desc": "Rottama una nave"
+    },
+    "604": {
+        "code": "F9",
+        "name": "Primo smaltimento",
+        "desc": "Rottama un pezzo di equipaggiamento"
+    },
+    "610": {
+        "code": "F10",
+        "name": "Preparativi per LSC (Parte 2)",
+        "desc": "Rottama 4 volte un equipaggiamento"
+    },
+    "612": {
+        "code": "F11",
+        "name": "Prepara i fusti",
+        "desc": "Rottama 3 volte un equipaggiamento"
+    },
+     "613": {
+        "code": "F12",
+        "name": "Smantellamento settimanale",
+        "desc": "Rottama 24 volte un equipaggiamento",
+        "tracking": [ [0,24] ]
+    },
+     "614": {
+        "code": "F13",
+        "name": "Conversione modello (Tenzan)",
+        "desc": "Schiera un'ammiraglia equipaggiata con Aerosilutante Modello 97 (Squadrone Tomonaga), poi rottama 2 Tenzan"
+    },
+    "615": {
+        "code": "F14",
+        "name": "Conversione modello (Suisei)",
+        "desc": "Schiera un'ammiraglia equipaggiata con Bombardiere in Picchiata Modello 99 (Squadrone Egusa), poi rottama 2 Suisei"
+    },
+    "616": {
+        "code": "F15",
+        "name": "Conversione modello (Reppuu)",
+        "desc": "Schiera un'ammiraglia equipaggiata con Caccia Zero Modello 52-C (Gruppo Aviazione 601), poi rottama 2 Reppuu"
+    },
+    "617": {
+        "code": "F16",
+        "name": "Preparativi per Irako",
+        "desc": "Rottama 10 volte un equipaggiamento"
+    },
+    "618": {
+        "code": "F17",
+        "name": "Prima modernizzazione di un equipaggiamento",
+        "desc": "Porta a termine una modernizzazione di un equipaggiamento"
+    },
+    "619": {
+        "code": "F18",
+        "name": "Modernizzazione giornaliera di un equipaggiamento",
+        "desc": "Porta a termine una modernizzazione di un equipaggiamento",
+        "tracking": [ [0,1] ]
+    },
+
+
+
+
+
+    "701": {
+        "code": "G1",
+        "name": "Prima modernizzazione",
+        "desc": "Completa con successo una modernizzazione"
+    },
+    "702": {
+        "code": "G2",
+        "name": "Modernizzazione giornaliera",
+        "desc": "Completa con successo 2 modernizzazioni",
+        "unlock": [ 703 ],
+        "tracking": [ [0,2] ]
+    },
+    "703": {
+        "code": "G3",
+        "name": "Modernizzazione settimanale",
+        "desc": "(Settimanale) Completa con successo 15 modernizzazioni",
+        "tracking": [ [0,15] ]
+    },
+    "704": {
+        "code": "G4",
+        "name": "Preparativi per LSC (Parte 1)",
+        "desc": "Completa con successo 4 modernizzazioni"
+    },
+
+
+
+
+
+    "611": {
+        "name": "Preparativi per l'Amore! (Parte 1)",
+        "desc": "Rottama un equipaggiamento due volte per mostrare il tuo amore!"
+    },
+    "306": {
+        "name": "Preparativi per l'Amore (Parte 2)",
+        "desc": "Mostra il tuo amore ottenendo due vittorie in modalità esercitazione."
+    }
+}

@@ -28,7 +28,4 @@ node_modules
 
 # Custom KC3 Ignores
 $devFiles
-src/assets/img/ships
-tests
-2.0
 src.pem

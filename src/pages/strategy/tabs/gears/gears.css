@@ -29,11 +29,15 @@
 	width:680px;
 }
 .tab_gears .slotitem {
-	width:680px;
+	/*width:680px;*/
 	margin:0px 0px 10px 0px;
 	background:#def;
 	border-radius:10px;
-	padding:10px;
+	/*padding:10px;*/
+	
+	position: 	relative;
+	border: 	10px solid transparent;
+	overflow: 	hidden;
 }
 
 .tab_gears .slotitem .info {
@@ -95,6 +99,7 @@
 	font-size:12px;
 }
 
+/*
 .tab_gears .slotitem .holders {
 	width:400px;
 	float:left;
@@ -120,7 +125,7 @@
 .tab_gears .slotitem .holders .holder_field {
 	height:20px;
 	float:left;
-	/*background:#fcc;*/
+	background:#fcc;
 }
 
 .tab_gears .slotitem .holders .holder_pic {
@@ -162,4 +167,85 @@
 .tab_gears .slotitem .holders .holder_star span {
 	font-size:12px;
 	color:#45A9A5;
+}
+*/
+
+
+
+
+
+
+
+/* .slotitem .holders (new since 2015/07/13) */
+.tab_gears .slotitem .holders{
+	width: 		calc(100% - 260px);
+	min-height: 85px;
+	position: 	relative;
+	padding-bottom: 40px;
+	float: 		left;
+}
+.tab_gears .slotitem .holders dl{
+	overflow: 	hidden;
+	margin: 	0;
+	display: 	block;
+	width: 		100%;
+}
+.tab_gears .slotitem .holders dl ~ dl{
+	margin-top: 	10px;
+	padding-top: 	10px;
+	border-top: 	2px solid hsl(210, 50%, 85%);
+}
+.tab_gears .slotitem .holders dl:last-child{
+	position: 	absolute;
+	bottom: 	0;
+	font-size: 	14px;
+	font-weight:	bold;
+}
+.tab_gears .slotitem .holders dl dt span{
+	color: 		#45A9A5;
+}
+.tab_gears .slotitem .holders dl dt small{
+	font-weight:bold;
+	padding-left: 1em
+}
+.tab_gears .slotitem .holders dl dd{
+	overflow: 	hidden;
+	margin-right: -10px
+}
+.tab_gears .slotitem .holders dl dd .holder{
+	width: 		calc(50% - 10px);
+	float: 		left;
+	height: 	24px;
+	line-height:20px;
+	margin: 	5px 10px 0 0;
+	background: #fff;
+	border-radius: 12px 8px 8px 12px;
+	padding: 	2px 5px 2px 0;
+	overflow: 	hidden;
+	font-size: 	12px;
+	position: 	relative;
+}
+.tab_gears .slotitem .holders dl dd .holder img{
+	float: 		left;
+	display: 	block;
+	width: 		24px;
+	height: 	24px;
+	margin-top: -2px;
+}
+.tab_gears .slotitem .holders dl dd .holder font{
+	width: 		calc(100% - 24px - 40px - 16px);
+	position: 	relative;
+	display: 	block;
+	float: 		left;
+	padding: 	0 0 0 6px;
+}
+.tab_gears .slotitem .holders dl dd .holder span{
+	width: 		40px;
+	position: 	relative;
+	display: 	block;
+	float: 		left;
+	padding: 	0 0 0 2px;
+}
+.tab_gears .slotitem .holders dl dd .holder span + span{
+	width: 		16px;
 }

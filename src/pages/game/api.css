@@ -86,7 +86,6 @@ body {
 .box-wait .api_txt {
 	width:760px;
 	margin:0px 0px 15px 0px;
-	display:none;
 }
 .box-wait .api_txt textarea {
 	width:760px;
@@ -197,6 +196,7 @@ body {
 	text-align:center;
 	color:#555;
 	background:#E4D5C2;
+	opacity:0.80;
 }
 .ol_quest .tracking.small {
 	line-height:15px;

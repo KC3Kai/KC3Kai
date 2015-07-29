@@ -1,9 +1,14 @@
 (function(){
 	"use strict";
+	_gaq.push(['_trackPageview']);
 	
 	var myVersion = parseInt(chrome.runtime.getManifest().version, 10);
 
 	$(document).on("ready", function(){
+		// Load previously stored configs
+		ConfigManager.load();
+		KC3Meta.init("../../data/");
+		KC3Translation.execute();
 		
 		// Show next version
 		$(".schedule span.version").text(myVersion+1);
@@ -11,7 +16,7 @@
 		// Show estimated time until next update
 		$.ajax({
 			dataType: "json",
-			url: "https://raw.githubusercontent.com/dragonjet/KC3Kai/master/update",
+			url: "https://raw.githubusercontent.com/dragonjet/KC3Kai/master/update?v="+((new Date()).getTime()),
 			success: function(data, textStatus, request){
 				if(myVersion < parseInt(data.version, 10)){
 					version = data.version;
@@ -20,7 +25,7 @@
 						new Date(data.time)
 					);
 				}else{
-					$(".schedule").html("You are using the latest version!");
+					$(".schedule").html( KC3Meta.term("MenuOnLatest") );
 				}
 			}
 		});
@@ -34,6 +39,7 @@
 		
 		// Refresh API Link
 		$("#get_api").on('click', function(){
+			_gaq.push(['_trackEvent', "Refresh API", 'clicked']);
 			localStorage.extract_api = true;
 			localStorage.dmmplay = false;
 			window.open("http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/", "kc3kai_game");
@@ -48,6 +54,7 @@
 		
 		// Activate Cookies
 		$("#cookies").on('click', function(){
+			_gaq.push(['_trackEvent', "Region Cookies", 'clicked']);
 			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 				(new TMsg(tabs[0].id, "cookie", "", {}, function(response){
 					window.close();
@@ -63,6 +70,11 @@
 		// Settings
 		$("#settings").on('click', function(){
 			window.open("../settings/settings.html", "kc3kai_settings");
+		});
+		
+		// About
+		$("#about").on('click', function(){
+			window.open("../about/about.html", "kc3kai_about");
 		});
 		
 	});

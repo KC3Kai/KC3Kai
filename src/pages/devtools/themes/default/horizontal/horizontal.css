@@ -42,7 +42,14 @@
 }
 
 #h .hq_info .admiral {
+	position:relative;
 	width:120px;
+}
+#h .hq_info .name_censor {
+	position:absolute;
+	top:-5px;
+	left:-5px;
+	display:none;
 }
 #h .hq_info .admiral_name {
 	width:115px;
@@ -146,6 +153,10 @@
 #h .materials .material_max {
 	font-size:11px;
 	color:#888;
+}
+/* for further warning, such as 5 ship slot, 20 equipment slot, etc. */
+#h .material_limit { 
+	color:#f00;
 }
 /* Timer boxes */
 #h .timer-img {
@@ -333,7 +344,7 @@
 	background:#996600;
 }
 #h .box-quest .color.type7 {
-	background:#B7B7FF;
+	background:#AE76FA;
 }
 
 /* SHADOW PANEL
@@ -578,6 +589,9 @@
 	height:20px;
 	float:left;
 }
+#h .fleet-ships .ship-gear:hover {
+	background-color: rgba(0, 0, 0, 0.25);
+}
 #h .fleet-ships .ship-gear img {
 	width:20px;
 	height:20px;
@@ -629,6 +643,8 @@
 	font-size:14px;
 	font-weight:bold;
 	/*background:#cfc;*/
+	word-break: break-all;
+	overflow: hidden;
 }
 #h .activity .craftGear .equipNote {
 	width:220px;
@@ -705,7 +721,41 @@
 
 /* Expedition Helper */
 #h .activity .expedHelp {
-	
+	width:310px;
+	height:60px;
+}
+#h .activity .expedHelp .expedNotes {
+	width:300px;
+	height:14px;
+	font-size:12px;
+	margin:1px 0px 2px 5px;
+}
+#h .activity .expedHelp .expedNote {
+	padding:0px 5px;
+	height:14px;
+	line-height:14px;
+	margin:0px 5px 0px 0px;
+	float:left;
+	font-size:11px;
+	border-radius:4px;
+	background:#faa;
+	color:#000;
+}
+#h .activity .expedHelp .expedIdList {
+	width:310px;
+	height:44px;
+}
+#h .activity .expedHelp .expedId {
+	width:18px;
+	height:18px;
+	line-height:18px;
+	margin:0px 0px 2px 2px;
+	float:left;
+	text-align:center;
+	font-size:11px;
+	border-radius:10px;
+	background:#369;
+	color:#fff;
 }
 
 /*--------------------------------------
@@ -719,11 +769,18 @@
 
 /* HQ info box */
 #h .battle .battle_hq {
+	position:relative;
 	width:160px;
 	height:100px;
 	float:left;
 	/*background:#f00;*/
-	padding:0px 5px;
+	padding:0px 0px 0px 5px;
+}
+#h .battle .name_censor {
+	position:absolute;
+	top:-5px;
+	left:-5px;
+	display:none;
 }
 #h .battle .battle_admiral {
 	width:150px;
@@ -762,6 +819,13 @@
 #h .battle .battle_hqexpval {
 	height:12px;
 	background:#ace;
+	float:left;
+	transition: width 0.5s;
+}
+#h .battle .battle_hqexpgain {
+	height:12px;
+	background:#d34;
+	transition: width 0.5s;
 }
 #h .battle .battle_hqlevel_next {
 	width:55px;
@@ -771,14 +835,26 @@
 	text-align:center;
 	/*background:#fcc;*/
 }
+#h .battle .battle_hqlevel_next_gain {
+	position: absolute;
+	top: 36px;
+	left: 100px;
+	width:55px;
+	height:20px;
+	float:left;
+	font-size:10px;
+	text-align:center;
+	color:#f00;
+	/*background:#fcc;*/
+}
 #h .battle .battle_slots {
-	width:150px;
+	width:155px;
 	height:20px;
 	/*background:#0f0;
 	opacity:.5;*/
 }
 #h .battle .battle_slot {
-	width:75px;
+	/*width:75px;*/
 	height:20px;
 	line-height:20px;
 	float:left;
@@ -797,12 +873,13 @@
 	vertical-align:top;
 }
 #h .battle .battle_slot .current {
-	width:30px;
+	/*width:30px;*/
 	height:20px;
 	float:left;
 	font-weight:bold;
 	font-size:14px;
 	text-align:center;
+	margin:0px 2px 0px 0px;
 }
 #h .battle .battle_slot .max {
 	width:25px;
@@ -885,7 +962,7 @@
 	background:#996600;
 }
 #h .battle .battle_quest .color.type7 {
-	background:#B7B7FF;
+	background:#AE76FA;
 }
 
 /* Sortie World Info */
@@ -1150,6 +1227,9 @@
 	line-height:25px;
 	float:left;
 }
+#h .battle-ship .ship-gear:hover {
+	background-color: rgba(0, 0, 0, 0.25);
+}
 #h .battle-ship .ship-gear img {
 	width:20px;
 	height:20px;
@@ -1236,26 +1316,42 @@
 	border-radius:8px;
 	position:relative;
 }
+#h .battle .battle_formation {
+	width:30px;
+	height:30px;
+	position:absolute;
+	top:2px;
+	right:2px;
+	border-radius:15px;
+	overflow:hidden;
+	z-index:2;
+	background:#fff;
+}
+#h .battle .battle_formation img {
+	width:30px;
+	height:30px;
+}
 #h .battle .battle_nodenum {
 	width:30px;
 	height:30px;
 	line-height:30px;
 	font-size:14px;
 	font-weight:bold;
-	position:relative;
-	margin:-5px 0px 0px -5px;
+	position:absolute;
+	top:-5px;
+	left:-5px;
 	background:#7D0000;
 	border-radius:15px;
 	text-align:center;
 	color:#fff;
-	float:left;
+	z-index:1;
 }
 #h .battle .battle_current {
-	width:110px;
+	width:140px;
 	height:25px;
 	line-height:22px;
 	float:left;
-	margin:0px 0px 0px 5px;
+	margin:0px 0px 0px 30px;
 	color:#0099CC;
 	font-size:10px;
 	font-weight:bold;
@@ -1318,6 +1414,7 @@
 	width:140px;
 	height:65px;
 	margin:0px 0px 3px 0px;
+	position:relative;
 }
 #h .battle .battle_enemies .battle_abyss {
 	width:30px;

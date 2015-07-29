@@ -4,7 +4,10 @@
 		<!-- HQ Information -->
 		<div class="hq_info">
 			<div class="admiral box">
-				<div class="admiral_name"></div>
+				<div class="name_censor hover">
+					<img src="../../../../assets/img/ui/censor-light.png" />
+				</div>
+				<div class="admiral_name hover"></div>
 				<div class="admiral_comm"></div>
 				<div class="admiral_rank"></div>
 			</div>
@@ -220,10 +223,11 @@
 		<div class="fleet-ships">
 			
 		</div>
+        
 		<div class="activity">
 			
 			<!-- DEVELOPMENT -->
-			<div class="activityBox craftGear">
+			<div class="activityBox craftGear hover">
 				<div class="equipInfo">
 					<div class="equipIcon"><img src="../../../../assets/img/items/6.png" /></div>
 					<div class="equipName">Type 52 Zero Fighter</div>
@@ -264,7 +268,8 @@
 			
 			<!-- EXPEDITION QUALIFICATIONS -->
 			<div class="activityBox expedHelp">
-				
+				<div class="expedNotes"></div>
+				<div class="expedIdList"></div>
 			</div>
 		</div>
 	</div>
@@ -274,13 +279,20 @@
 <div class="battle">
 	
 	<div class="battle_hq">
-		<div class="battle_admiral"></div>
+		<div class="name_censor hover">
+			<img src="../../../../assets/img/ui/censor-light.png" />
+		</div>
+		<div class="battle_admiral hover"></div>
 		<div class="battle_hqlevel">
 			<div class="battle_hqlevel_text"></div>
 			<div class="battle_hqlevel_box">
-				<div class="battle_hqexpbar"><div class="battle_hqexpval"></div></div>
+				<div class="battle_hqexpbar">
+					<div class="battle_hqexpval"></div>
+					<div class="battle_hqexpgain"></div>
+				</div>
 			</div>
 			<div class="battle_hqlevel_next"></div>
+			<div class="battle_hqlevel_next_gain"></div>
 			<div class="clear"></div>
 		</div>
 		<div class="battle_slots">
@@ -412,6 +424,7 @@
 	<div class="battle_details">
 		<div class="battle_environment">
 			<div class="battle_space"></div>
+			<div class="battle_formation"><img/></div>
 			<div class="battle_nodenum"></div>
 			<div class="battle_current">NEXT NODE</div>
 			<div class="clear"></div>

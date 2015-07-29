@@ -105,3 +105,9 @@
 	height:24px;
 	float:left;
 }
+
+/* MANAGEMENT
+--------------------------------*/
+.tab_profile .import_file {
+	display:none;
+}
