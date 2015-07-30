@@ -33,7 +33,8 @@
 					
 					// Add settings boxes under this section
 					for(var cctr in response[sctr].contents){
-						new SettingsBox( response[sctr].contents[cctr] );
+						if ((response[sctr].contents[cctr].hide || 0) == 0) // hide "private/deprecated" settings
+						  new SettingsBox( response[sctr].contents[cctr] );
 					}
 				}
 			}

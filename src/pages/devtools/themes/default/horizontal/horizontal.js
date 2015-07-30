@@ -574,7 +574,10 @@
 					"RNGesus bless him",
 					"I bless this run"
 				]; // events? extra operations? end of month? coming soon. (i guess by other)
-				$(".battle .battle_current", container).text(desperateText[Math.floor(Math.random()*desperateText.length)]);
+				if(ConfigManager.info_troll)
+					$(".battle .battle_current", container).text(desperateText[Math.floor(Math.random()*desperateText.length)]);
+				else
+					$(".battle .battle_current", container).text("NIGHT BATTLE");
 				var thisNode = KC3SortieManager.currentNode();
 				
 			},
