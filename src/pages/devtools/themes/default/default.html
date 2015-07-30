@@ -2,7 +2,9 @@
 <html lang="en">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<!-- @nonbuildstart -->
 		<link href="../../../../assets/css/bootstrap.css" rel="stylesheet" type="text/css">
+		<!-- @nonbuildend -->
 		<link href="../../../../assets/css/global.css" rel="stylesheet" type="text/css">
 		<link href="default.css" rel="stylesheet" type="text/css">
 		<link href="horizontal/horizontal.css" rel="stylesheet" type="text/css">
@@ -32,10 +34,16 @@
 		<!-- VERTICAL -->
 		<div id="v"></div>
 		
-		<script type="text/javascript" src="../../../../assets/js/jquery-2.1.3.min.js"></script>
-		<script type="text/javascript" src="../../../../assets/js/Dexie.min.js"></script>
 		<script type="text/javascript" src="../../../../assets/js/global.js"></script>
+		<script type="text/javascript" src="../../../../assets/js/Dexie.min.js"></script>
+		<!-- @nonbuildstart -->
+		<script type="text/javascript" src="../../../../assets/js/jquery-2.1.3.min.js"></script>
+		<!-- @nonbuildend -->
 		
+		<!-- @buildimportjs ../../../../library/managers.js -->
+		<!-- @buildimportjs ../../../../library/objects.js -->
+		
+		<!-- @nonbuildstart -->
 		<script type="text/javascript" src="../../../../library/objects/Node.js"></script>
 		<script type="text/javascript" src="../../../../library/objects/Fleet.js"></script>
 		<script type="text/javascript" src="../../../../library/objects/Gear.js"></script>
@@ -49,7 +57,9 @@
 		<script type="text/javascript" src="../../../../library/objects/Ship.js"></script>
 		<script type="text/javascript" src="../../../../library/objects/Sortie.js"></script>
 		<script type="text/javascript" src="../../../../library/objects/Timer.js"></script>
+		<!-- @nonbuildend -->
 		
+		<!-- @nonbuildstart -->
 		<script type="text/javascript" src="../../../../library/managers/ConfigManager.js"></script>
 		<script type="text/javascript" src="../../../../library/managers/GearManager.js"></script>
 		<script type="text/javascript" src="../../../../library/managers/PlayerManager.js"></script>
@@ -57,14 +67,19 @@
 		<script type="text/javascript" src="../../../../library/managers/ShipManager.js"></script>
 		<script type="text/javascript" src="../../../../library/managers/SortieManager.js"></script>
 		<script type="text/javascript" src="../../../../library/managers/TimerManager.js"></script>
+		<!-- @nonbuildend -->
 		
 		<script type="text/javascript" src="../../../../library/modules/Dashboard.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/Database.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/Kcsapi.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/Network.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/Panel.js"></script>
+		<script type="text/javascript" src="../../../../library/modules/Translation.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/Master.js"></script>
+		<script type="text/javascript" src="../../../../library/modules/Translation.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/Meta.js"></script>
+
+		<script type="text/javascript" src="../../../../assets/js/KanColleHelpers.js"></script>
 		<script type="text/javascript" src="../../../../library/helpers/ExpeditionHelper.js"></script>
 		
 		<script type="text/javascript" src="horizontal/horizontal.js"></script>

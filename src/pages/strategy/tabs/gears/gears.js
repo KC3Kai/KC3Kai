@@ -188,7 +188,7 @@
 							}).append( $('<small/>').html(
 								'x' + (ThisSlotitem.arranged[i].heldCount + ThisSlotitem.arranged[i].extraCount)
 								+ ( ThisSlotitem.arranged[i].heldCount
-									? ' (' +ThisSlotitem.held.length+ ' Equipped, ' +ThisSlotitem.extras.length + ' Equippable)'
+									? ' (' +ThisSlotitem.arranged[i].heldCount+ ' Equipped, ' +ThisSlotitem.arranged[i].extraCount + ' Equippable)'
 									: ''
 								)
 							) )

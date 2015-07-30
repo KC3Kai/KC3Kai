@@ -130,8 +130,415 @@
 	margin:0px 0px 0px 0px;
 	background:#f0f5ff;
 	border-bottom:1px solid #369;
-	padding:5px 0px;
+	padding:5px 5px 0px;
+}
+.tab_maps .page_list .page_box {
+	width:30px;
+	height:20px;
+	line-height:20px;
+	float:left;
+	text-align:center;
+	margin:0px 3px 5px 0px;
+	border:1px solid #ace;
+	background:#def;
+	font-size:12px;
+}
+.tab_maps .page_list .page_box.active {
+	background:#58a;
+	color:#fff;
+	border:1px solid #def;
 }
 
 /* SORTIE LIST
 ---------------------------------*/
+.tab_maps .sortie_list {
+	width:700px;
+	padding:10px;
+}
+
+.tab_maps .sortie_list .sortie_box {
+	width:680px;
+	line-height:40px;
+	background:#def;
+	border-radius:10px;
+	margin:0px 0px 5px 0px;
+	padding:5px;
+}
+/* Sortie Info: RECORD */
+.tab_maps .sortie_list .sortie_info {
+	width:670px;
+	height:30px;
+	/*background:#ffc;*/
+}
+.tab_maps .sortie_list .sortie_column {
+	float:left;
+	height:30px;
+}
+.tab_maps .sortie_list .sortie_record {
+	width:50px;
+	margin:0px 10px 0px 0px;
+	/*background:#ffc;*/
+}
+.tab_maps .sortie_list .sortie_id {
+	width:50px;
+	height:16px;
+	line-height:16px;
+	font-size:14px;
+	font-weight:bold;
+	text-align:center;
+}
+.tab_maps .sortie_list .sortie_date {
+	width:50px;
+	height:14px;
+	line-height:14px;
+	font-size:12px;
+	text-align:center;
+	color:#3399cc;
+}
+
+/* Sortie Info: MAP */
+.tab_maps .sortie_list .sortie_map {
+	width:40px;
+	line-height:30px;
+	margin:0px 10px 0px 0px;
+	text-align:center;
+	font-size:16px;
+	font-weight:bold;
+	background:#ffc;
+	border-radius:8px;
+}
+
+/* Sortie Info: FLEET */
+.tab_maps .sortie_list .sortie_fleet {
+	width:210px;
+	/*background:#ffc;*/
+	margin:0px 10px 0px 0px;
+}
+.tab_maps .sortie_list .sortie_ship {
+	width:30px;
+	height:30px;
+	line-height:30px;
+	margin:0px 5px 0px 0px;
+	background:#fff;
+	border-radius:15px;
+	float:left;
+	overflow:hidden;
+}
+.tab_maps .sortie_list .sortie_ship img {
+	width:30px;
+	height:30px;
+	vertical-align:top;
+}
+
+/* Sortie Info: EDGES */
+.tab_maps .sortie_list .sortie_edges {
+	width:175px;
+	/*background:#ffc;*/
+	margin:0px 10px 0px 0px;
+}
+.tab_maps .sortie_list .sortie_edge {
+	width:30px;
+	height:30px;
+	line-height:30px;
+	float:left;
+	text-align:center;
+	margin:0px 5px 0px 0px;
+	background:#fff;
+	color:#fff;
+	border-radius:15px;
+	font-size:14px;
+	font-weight:bold;
+}
+.tab_maps .sortie_list .sortie_edge.active {
+	background:#B50000;
+}
+
+/* Sortie Info: TOGGLES */
+.tab_maps .sortie_list .sortie_toggles {
+	width:150px;
+	/*background:#ffc;*/
+}
+.tab_maps .sortie_list .sortie_toggle {
+	width:25px;
+	height:20px;
+	line-height:18px;
+	float:left;
+	text-align:center;
+	/*padding:0px 3px;*/
+	margin:5px 5px 0px 0px;
+	background:#ace;
+	color:#fff;
+	border-radius:5px;
+	font-size:12px;
+	border:1px outset #9bd;
+}
+.tab_maps .sortie_list .sortie_toggle.active {
+	line-height:16px;
+	border-width:2px;
+	border-style:inset;
+}
+.tab_maps .sortie_list .sortie_toggle_in {
+	background:#cde;
+	color:#000;
+}
+
+/* Sortie Roster */
+.tab_maps .sortie_list .sortie_roster {
+	width:670px;
+	margin:5px 0px 2px 0px;
+	display:none;
+}
+.tab_maps .sortie_list .sortie_rfleet {
+	width:163px;
+	height:92px;
+	margin:0px 2px 0px 2px;
+	background:#fff;
+	border-radius:8px;
+	float:left;
+	overflow:hidden;
+}
+.tab_maps .sortie_list .sortie_rfleet.disabled {
+	opacity:.3;
+	cursor:default;
+}
+.tab_maps .sortie_list .rfleet_title {
+	width:163px;
+	height:20px;
+	line-height:20px;
+	background:#ffc;
+	text-align:center;
+	font-size:11px;
+	font-weight:bold;
+	border-bottom:1px solid #def;
+}
+.tab_maps .sortie_list .rfleet_body {
+	width:163px;
+	height:72px;
+	/*background:#ffc;*/
+}
+
+.tab_maps .sortie_list .rfleet_ship {
+	width:80px;
+	height:20px;
+	margin:3px 1px 0px 0px;
+	float:left;
+	overflow:hidden;
+	/*background:#ccf;*/
+}
+.tab_maps .sortie_list .rfleet_pic {
+	width:20px;
+	height:20px;
+	line-height:20px;
+	border-radius:10px;
+	overflow:hidden;
+	/*background:#ccc;*/
+	float:left;
+	margin:0px 3px 0px 0px;
+}
+.tab_maps .sortie_list .rfleet_pic img {
+	width:20px;
+	height:20px;
+	vertical-align:top;
+}
+.tab_maps .sortie_list .rfleet_name {
+	width:55px;
+	height:10px;
+	line-height:10px;
+	float:left;
+	font-size:10px;
+	overflow:hidden;
+	/*background:#fcc;*/
+}
+.tab_maps .sortie_list .rfleet_level {
+	width:55px;
+	height:10px;
+	line-height:10px;
+	float:left;
+	font-size:10px;
+	overflow:hidden;
+	/*background:#cfc;*/
+}
+.tab_maps .sortie_list .rfleet_equips {
+	width:55px;
+	height:0px;
+	float:left;
+	background:#cff;
+}
+
+
+/* Sortie Nodes */
+.tab_maps .sortie_list .sortie_nodes {
+	width:670px;
+	margin:5px 0px 2px 0px;
+	display:none;
+}
+.tab_maps .sortie_list .sortie_nodeinfo {
+	width:130px;
+	/*height:207px;*/
+	line-height:20px;
+	margin:0px 3px 0px 2px;
+	background:#fff;
+	border-radius:8px;
+	float:left;
+	overflow:hidden;
+	padding:5px;
+}
+.tab_maps .sortie_list .node_id {
+	width:24px;
+	height:24px;
+	float:left;
+	line-height:24px;
+	text-align:center;
+	margin:0px 6px 0px 0px;
+	background:#B50000;
+	color:#fff;
+	border-radius:12px;
+	font-size:12px;
+	font-weight:bold;
+}
+
+.tab_maps .sortie_list .node_result {
+	width:90px;
+	height:24px;
+	float:left;
+	line-height:24px;
+	/*background:#fcc;*/
+}
+.tab_maps .sortie_list .node_result_box {
+	width:20px;
+	height:20px;
+	line-height:20px;
+	float:left;
+	margin:2px 1px;
+	/*background:#ccc;*/
+}
+.tab_maps .sortie_list .node_result_box img {
+	width:20px;
+	height:20px;
+	vertical-align:top;
+}
+
+.tab_maps .sortie_list .node_enemy {
+	width:120px;
+	height:40px;
+	margin:5px 0px 0px 0px;
+	float:left;
+}
+.tab_maps .sortie_list .node_eformation {
+	width:20px;
+	height:40px;
+	margin:0px 0px 0px 5px;
+	float:left;
+}
+.tab_maps .sortie_list .node_eformation img {
+	width:20px;
+	height:20px;
+	margin:10px 0px 0px 0px;
+}
+.tab_maps .sortie_list .node_eship {
+	width:20px;
+	height:20px;
+	float:left;
+	margin:0px 0px 0px 5px;
+	line-height:20px;
+	border-radius:10px;
+	overflow:hidden;
+	display:none;
+}
+.tab_maps .sortie_list .node_eship_4 {
+	margin:0px 0px 0px 20px;
+}
+.tab_maps .sortie_list .node_eship img {
+	width:20px;
+	height:20px;
+}
+
+.tab_maps .sortie_list .node_details {
+	width:120px;
+	margin:5px 0px 0px 0px;
+	float:left;
+}
+.tab_maps .sortie_list .node_conds {
+	width:120px;
+	height:64px;
+}
+.tab_maps .sortie_list .node_cond {
+	width:120px;
+	height:15px;
+	line-height:15px;
+	font-size:11px;
+	margin:0px 0px 1px 0px;
+}
+.tab_maps .sortie_list .node_cond_label {
+	width:50px;
+	height:15px;
+	
+	float:left;
+}
+.tab_maps .sortie_list .node_cond_value {
+	width:70px;
+	height:15px;
+	float:left;
+	font-weight:bold;
+}
+.tab_maps .sortie_list .node_cond_value.good {
+	color:#009900;
+}
+.tab_maps .sortie_list .node_cond_value.bad {
+	color:#f33;
+}
+
+.tab_maps .sortie_list .node_planes {
+	width:120px;
+	height:55px;
+	margin:5px 0px 0px 0px;
+	/*background:#cfc;*/
+}
+.tab_maps .sortie_list .node_airsides {
+	width:120px;
+	height:15px;
+	line-height:15px;
+	text-align:center;
+}
+.tab_maps .sortie_list .node_airside {
+	width:60px;
+	height:15px;
+	font-size:11px;
+	font-weight:bold;
+	float:left;
+}
+
+.tab_maps .sortie_list .node_airtype {
+	width:120px;
+	height:20px;
+	line-height:20px;
+}
+.tab_maps .sortie_list .node_planeside {
+	width:60px;
+	height:20px;
+	float:left;
+}
+.tab_maps .sortie_list .node_airicon {
+	width:20px;
+	height:20px;
+	line-height:20px;
+	float:left;
+	margin:0px 2px 0px 0px;
+	/*background:#ccf;*/
+}
+.tab_maps .sortie_list .node_airicon img {
+	width:18px;
+	height:18px;
+	vertical-align:top;
+	margin:1px;
+}
+.tab_maps .sortie_list .node_airtext {
+	width:38px;
+	height:20px;
+	float:left;
+	/*background:#fcc;*/
+	font-size:11px;
+}
+.tab_maps .sortie_list .node_airtext .node_loss {
+	color:#f00;
+}

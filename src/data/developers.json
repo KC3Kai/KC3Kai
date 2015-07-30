@@ -1,0 +1,328 @@
+{
+	"AboutCoders" : [
+		{
+			"name": "dragonjet",
+			"avatar" : "https://graph.facebook.com/dragonjetmkii/picture",
+			"desc" : "AboutProjectHead",
+			"links" : {
+				"fb" :"https://www.facebook.com/dragonjetmkii",
+				"tw" :"https://twitter.com/dragonjetmkii",
+				"th" :"http://www.twitch.tv/jetrico",
+				"wk" :"http://kancolle.wikia.com/wiki/User:Dragonjet",
+				"gh" :"https://github.com/dragonjet"
+			}
+		},
+		{
+			"name": "bamboo3250",
+			"avatar": "https://avatars3.githubusercontent.com/u/8078323?v=3&s=40",
+			"desc": ["AboutDeveloper", "Tiếng Việt"],
+			"links": {
+				"wk" :"http://kancolle.wikia.com/wiki/User:bamboo3250",
+				"gh" : "https://github.com/bamboo3250",
+				"tw" :"https://twitter.com/bamboo3250",
+				"px" : "http://www.pixiv.net/member.php?id=3875741",
+				"da" : "http://bamboo3250.deviantart.com/"
+			}
+		},
+		{
+			"name": "Diablohu",
+			"avatar": "https://avatars0.githubusercontent.com/u/1946774?v=3&s=40",
+			"desc": ["AboutDeveloper", "简体中文"],
+			"links": {
+				"wb" : "http://diablohu.com",
+				"gh" : "https://github.com/Diablohu",
+				"tw" : "https://twitter.com/Diablohu",
+				"we" : "http://weibo.com/diablohu"
+			}
+		},
+		{
+			"name": "McDohl",
+			"avatar": "https://avatars2.githubusercontent.com/u/13024936?v=3&s=40",
+			"desc": "AboutDeveloper",
+			"links": {
+				"gh" :"https://github.com/McDohl",
+				"wk" :"http://kancolle.wikia.com/wiki/User:McDohlJr",
+				"fb" :"https://www.facebook.com/endruhugen"
+			}
+		},
+		{
+			"name": "nicky008",
+			"avatar": "https://avatars0.githubusercontent.com/u/10517990?v=3&s=40",
+			"desc": ["AboutDeveloper", "日本語"],
+			"links": {
+				"gh" :"https://github.com/nicky008",
+				"tw" : "https://twitter.com/nicky_008",
+				"fb" : "https://www.facebook.com/jamesnicky008",
+				"wk" : "http://kancolle.wikia.com/wiki/User:Nicky008"
+			}
+		},
+		{
+			"name": "CrazyTeitoku",
+			"avatar": "https://avatars3.githubusercontent.com/u/12234182?v=3&s=40",
+			"desc": [ "AboutDeveloper", "AboutWikiWriter" ],
+			"links": {
+				"wk" :"http://kancolle.wikia.com/wiki/User:Crazy_teitoku"
+			}
+		},
+		{
+			"name": "Javran",
+			"avatar": "https://avatars3.githubusercontent.com/u/1096354?v=3&s=40",
+			"desc": "AboutDeveloper",
+			"links": {
+				"gh" : "https://github.com/Javran",
+				"tw" :"https://twitter.com/JavranC",
+				"wb" : "http://javran.github.io"
+			}
+		},
+		{
+			"name": "nevrending",
+			"avatar": "https://avatars3.githubusercontent.com/u/4745298?v=3&s=40",
+			"desc": "AboutDeveloper",
+			"links": {
+				"gh" : "https://github.com/nevrending",
+				"wk" :"http://kancolle.wikia.com/wiki/User:NevREnding",
+				"fb" :"https://www.facebook.com/y458m",
+				"tw" :"https://twitter.com/yefta458",
+				"wb" : "https://yefta.com"
+			}
+		},
+		{
+			"name": "ReiFan49",
+			"avatar" : "https://avatars2.githubusercontent.com/u/9847780?v=3&s=40",
+			"desc" : "AboutDeveloper",
+			"links" : {
+				"gh" :"https://github.com/ReiFan49"
+			}
+		},
+		{
+			"name": "tmerta",
+			"avatar" : "https://avatars0.githubusercontent.com/u/2845736?v=3&s=40",
+			"desc" : "AboutDeveloper",
+			"links" : {
+				"gh" :"https://github.com/tmerta"
+			}
+		}
+	],
+	"AboutTranslators" : [
+		{
+			"name": "kololz",
+			"avatar" : "https://avatars0.githubusercontent.com/u/12908497?v=3&s=40",
+			"desc" : "繁體中文",
+			"links" : {
+				"gh" :"https://github.com/kololz",
+				"fb" :"https://www.facebook.com/kololz",
+				"wk" :"https://kancolle.wikia.com/wiki/User:Kololz"
+			}
+		},
+		{
+			"name": "freezebear",
+			"avatar" : "https://avatars2.githubusercontent.com/u/12047229?v=3&s=40",
+			"desc" : "Indonesian",
+			"links" : {
+				"fb" :"https://www.facebook.com/freezebear17",
+				"tw" :"https://twitter.com/freezebear17",
+				"wk" :"kancolle.wikia.com/wiki/User:Freezebear"
+			}
+		},
+		{
+			"name": "hufuhufu",
+			"avatar" : "https://avatars3.githubusercontent.com/u/13282383?v=3&s=40",
+			"desc" : "Indonesian",
+			"links" : {
+				"fb" :"https://www.facebook.com/arifLV2",
+				"wk" :"kancolle.wikia.com/wiki/User:hufuhufu"
+			}
+		},
+		{
+			"name": "vrarara",
+			"avatar" : "https://avatars1.githubusercontent.com/u/13389407?v=3&s=40",
+			"desc" : "Indonesian",
+			"links" : {
+				"gh" :"https://github.com/vrarara",
+				"fb" :"https://www.facebook.com/bayuuyab.fu"
+			}
+		},
+		{
+			"name": "Admiral Mikado",
+			"avatar" : "http://img3.wikia.nocookie.net/__cb1400960581/common/avatars/thumb/5/56/24980562.png/150px-24980562.png.jpg",
+			"desc" : "Deutsch",
+			"links" : {
+				"wk" :"http://kancolle.wikia.com/wiki/User:Admiral_Mikado"
+			}
+		},
+		{
+			"name": "Arkayda",
+			"avatar" : "https://avatars1.githubusercontent.com/u/13376050?v=3&s=40",
+			"desc" : "Français",
+			"links" : {
+				"gh" :"https://github.com/Arkayda963",
+				"fb" :"https://www.facebook.com/ryu.nagakawa",
+				"wk" :"http://kancolle.wikia.com/wiki/User:Arkayda"
+			}
+		},
+		{
+			"name": "Juuryoushin ",
+			"avatar" : "https://pbs.twimg.com/profile_images/621037441508638721/Jm1Ap5_9.png",
+			"desc" : "Français",
+			"links" : {
+				"tw" :"https://twitter.com/YoungPreta"
+			}
+		},
+		{
+			"name": "RanFoxRun",
+			"avatar" : "https://avatars1.githubusercontent.com/u/13418956?v=3&s=40",
+			"desc" : "Italiano",
+			"links" : {
+				"gh" :"https://github.com/RanFoxRun",
+				"wk" :"http://kancolle.wikia.com/wiki/User:RanFoxRun"
+			}
+		},  
+		{
+			"name": "qunow",
+			"avatar" : "https://avatars3.githubusercontent.com/u/1525293?v=3&s=40",
+			"desc" : "繁體中文",
+			"links" : {
+				"gh" :"https://github.com/c933103",
+				"wk" :"https://kancolle.wikia.com/wiki/User:Qunow",
+				"tw" :"https://twitter.com/c933103",
+				"wb" :"http://zh.moegirl.org/wiki/User:C933103"
+			}
+		},
+		{
+			"name": "rephira",
+			"avatar" : "https://avatars3.githubusercontent.com/u/13478649?v=3&s=40",
+			"desc" : "한국어",
+			"links" : {
+				"gh" :"https://github.com/rephira",
+				"wk" :"http://kancolle.wikia.com/wiki/User:Rephira"
+			}
+		},
+		{
+			"name": "Yuedasoldier",
+			"avatar" : "http://img4.wikia.nocookie.net/__cb1420715487/common/avatars/thumb/8/83/25548706.png/150px-25548706.png.jpg",
+			"desc" : "Tiếng Việt",
+			"links" : {
+				"fb" :"https://www.facebook.com/Raigun.da.soldier",
+				"wk" :"http://kancolle.wikia.com/wiki/User:Yuedasoldier"
+			}
+		}
+	],
+	"AboutTesters" : [
+		{
+			"name": "Erupi",
+			"avatar": "https://avatars1.githubusercontent.com/u/12823927?v=3&s=40",
+			"desc": "AboutDevTester",
+			"links": {
+				"wk" :"http://kancolle.wikia.com/wiki/User:Erupi",
+				"gh" :"https://github.com/Erupi"
+			}
+		},
+		{
+			"name": "LostLogia4",
+			"avatar": "https://avatars3.githubusercontent.com/u/12930396?v=3&s=40",
+			"desc": "AboutDevTester",
+			"links": {
+				"gh" :"https://github.com/LostLogia4",
+				"wk" :"http://kancolle.wikia.com/wiki/User:Ar-cen-ciel"
+			}
+		},
+		{
+			"name": "AlanSchaeffer",
+			"avatar": "https://avatars1.githubusercontent.com/u/11778507?v=3&s=40",
+			"desc": "AboutDevTester",
+			"links": {
+				"gh" :"https://github.com/AlanSchaeffer"
+			}
+		},
+		{
+			"name": "Wikia Bot-chan",
+			"avatar": "http://img1.wikia.nocookie.net/__cb1426319944/common/avatars/thumb/1/1b/26202046.png/150px-26202046.png.jpg",
+			"desc": "AboutDevTester",
+			"links": {
+				"wk" :"http://kancolle.wikia.com/wiki/User:KancolleChatlogger"
+			}
+		}
+	],
+	"AboutOther" : [
+		{
+			"name": "JDKurotoshigami",
+			"avatar" : "https://graph.facebook.com/JDKurotoshigami.Artworks/picture",
+			"desc" : "AboutLogo",
+			"links" : {
+				"fb" :"https://www.facebook.com/JDKurotoshigami.Artworks",
+				"tw" :"https://twitter.com/JDKurotoshigami",
+				"px" :"http://www.pixiv.net/member.php?id=11090147",
+				"da" :"http://jd-kurotoshigami.deviantart.com"
+			}
+		},
+		{
+			"name": "tykez269",
+			"avatar" : "http://a.deviantart.net/avatars/t/y/tykez269.jpg",
+			"desc" : "AboutFairy",
+			"links" : {
+				"da" :"http://tykez269.deviantart.com"
+			}
+		}
+	],
+	"AboutReporters" : [
+		{
+			"name": "SanaNoHana",
+			"avatar" : "https://avatars0.githubusercontent.com/u/12227168?v=3&s=40",
+			"desc" : "AboutReporter",
+			"links" : {
+				"gh" :"https://github.com/SanaNoHana"
+			}
+		},
+		{
+			"name": "Ethrundr",
+			"avatar" : "https://avatars2.githubusercontent.com/u/13522800?v=3&s=40",
+			"desc" : "AboutReporter",
+			"links" : {
+				"gh" :"https://github.com/ethrundr",
+				"wk" :"http://kancolle.wikia.com/wiki/User:Ethrundr"
+			}
+		},
+		{
+			"name": "bcc32",
+			"avatar" : "https://avatars0.githubusercontent.com/u/1239097?v=3&s=40",
+			"desc" : "AboutReporter",
+			"links" : {
+				"gh" :"https://github.com/bcc32"
+			}
+		},
+		{
+			"name": "URSvAir14",
+			"avatar" : "https://avatars0.githubusercontent.com/u/12261357?v=3&s=40",
+			"desc" : "AboutReporter",
+			"links" : {
+				"gh" :"https://github.com/URSvAir14"
+			}
+		},
+		{
+			"name": "lott10",
+			"avatar" : "https://avatars1.githubusercontent.com/u/12295836?v=3&s=40",
+			"desc" : "AboutReporter",
+			"links" : {
+				"gh" :"https://github.com/lott10"
+			}
+		},
+		{
+			"name": "BWinkKeyShellDinkInc",
+			"avatar" : "https://avatars0.githubusercontent.com/u/12371701?v=3&s=40",
+			"desc" : "AboutReporter",
+			"links" : {
+				"gh" :"https://github.com/BWinkKeyShellDinkInc",
+				"wk" :"http://kancolle.wikia.com/wiki/User:BWinkKeyShellDinkInc"
+			}
+		},
+		{
+			"name": "dustfan",
+			"avatar" : "https://avatars0.githubusercontent.com/u/12269598?v=3&s=40",
+			"desc" : "AboutReporter",
+			"links" : {
+				"gh" :"https://github.com/dustfan",
+				"wk" :"http://kancolle.wikia.com/wiki/User:DustFan"
+			}
+		}
+	]
+}

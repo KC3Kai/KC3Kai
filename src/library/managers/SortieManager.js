@@ -11,7 +11,9 @@ Xxxxxxx
 		fleetSent: 1,
 		map_world: 0,
 		map_num: 0,
+		map_difficulty: 0,
 		nextNodeCount: 0,
+		hqExpGained: 0,
 		nodes: [],
 		boss: {},
 		onBossAvailable: function(){},
@@ -25,6 +27,7 @@ Xxxxxxx
 			this.map_world = world;
 			this.map_num = mapnum;
 			this.nextNodeCount = 0;
+			this.hqExpGained = 0;
 			this.nodes = [];
 			this.boss = {
 				node: -1,
@@ -54,26 +57,41 @@ Xxxxxxx
 		},
 		
 		getSupportingFleet :function(bossSupport){
-			var expedNumbers;
-			if(bossSupport){
-				expedNumbers = [34,110,118,126,150];
-				return this.checkIfFleetIsSupporting(expedNumbers, 1)
-					|| this.checkIfFleetIsSupporting(expedNumbers, 2)
-					|| this.checkIfFleetIsSupporting(expedNumbers, 3);
-			}else{
-				expedNumbers = [33,109,117,125,149];
-				return this.checkIfFleetIsSupporting(expedNumbers, 1)
-					|| this.checkIfFleetIsSupporting(expedNumbers, 2)
-					|| this.checkIfFleetIsSupporting(expedNumbers, 3);
-			}
+			var supportFormula;
+			/** Developer note:
+				E = X > 100, event flag
+					if E=true, X -= 100
+				X = Expedition ID
+				M,N = (X / 8),((X-1) % 8)
+					M : multiple  of 8,
+					N : remainder of 8.
+				Fulfilling condition: (M == 5 || E) && (N == 0 + bossSupport)
+			**/
+			supportFormula = function(expedNum,isBoss){
+				var e,w,n;
+				e = (expedNum > 100);
+				if(e) expedNum -= 100;
+				w = (expedNum-1 / 8)+1;
+				n = (expedNum-1) % 8;
+				return (w == 5 || e) && (n == 0 + isBoss);
+			};
+			return this.checkIfFleetIsSupporting(supportFormula,bossSupport);
 		},
 		
-		checkIfFleetIsSupporting :function(expedNumbers, fleetNumber){
-			if(PlayerManager.fleets[fleetNumber].active){
-				var fleetExpedition = PlayerManager.fleets[fleetNumber].mission[1];
-				return (expedNumbers.indexOf(fleetExpedition)>-1)?fleetNumber:0;
-			}
+		checkIfFleetIsSupporting :function(supportFunc,bossSupport){
+			for(var i=2;i<=4;i++)
+				if(PlayerManager.fleets[i-1].active){
+					var fleetExpedition = PlayerManager.fleets[i-1].mission[1];
+					return supportFunc(fleetExpedition,bossSupport)?i:0;
+				}
 			return 0;
+		},
+		
+		isSortieAt: function(world,map) {
+			// Always return false on event maps
+			// (speculated map_world for events > 10 as expedition format follows)
+			return (this.map_world == world && this.map_world <= 10) &&
+				(this.map_num == (map || this.map_num));
 		},
 		
 		setBoss :function( cellno, comp ){
@@ -99,18 +117,29 @@ Xxxxxxx
 			var thisNode;
 			
 			//  Battle Node
-			if((nodeData.api_event_kind||0) == 1) {
+			// api_event_kind = 1 (day battle)
+			// api_event_kind = 2 (start at night battle)
+			// api_event_kind = 4 (aerial exchange)
+			// api_event_id = 4 (normal battle)
+			// api_event_id = 5 (boss)
+			if((nodeData.api_event_kind == 1) || (nodeData.api_event_kind == 2) || (nodeData.api_event_kind == 4)) {
 				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsBattle(nodeData);
 			// Resource Node
+			// api_event_kind = 0
+			// api_event_id = 2
 			}else if (typeof nodeData.api_itemget != "undefined") {
 				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsResource(nodeData);
 			// Bounty Node
+			// api_event_kind = 0
+			// api_event_id = 8
 			} else if (typeof nodeData.api_itemget_eo_comment != "undefined") {
 				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsBounty(nodeData);
 			// Maelstrom Node
 			} else if (typeof nodeData.api_happening != "undefined") {
 				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsMaelstrom(nodeData);
-			// Empty Node
+			// Empty Node 
+			// api_event_kind = 0 
+			// api_event_id = 6
 			}else{
 				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsDud(nodeData);
 			}
@@ -123,6 +152,11 @@ Xxxxxxx
 			this.currentNode().engage( battleData );
 		},
 		
+		engageBattleNight :function( nightData, stime ){
+			if(this.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
+			this.currentNode().engageNight( nightData );
+		},
+		
 		engageNight :function( nightData ){
 			if(this.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
 			 this.currentNode().night( nightData );
@@ -130,7 +164,9 @@ Xxxxxxx
 		
 		resultScreen :function( resultData ){
 			if(this.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
+			this.hqExpGained += resultData.api_get_exp;
 			this.currentNode().results( resultData );
+			PlayerManager.hq.updateLevel( resultData.api_member_lv, resultData.api_member_exp);
 		},
 		
 		endSortie :function(){
@@ -138,7 +174,9 @@ Xxxxxxx
 			this.fleetSent = 1;
 			this.map_world = 0;
 			this.map_num = 0;
+			this.map_difficulty = 0;
 			this.nextNodeCount = 0;
+			this.hqExpGained = 0;
 			this.nodes = [];
 			this.boss = {
 				node: -1,
@@ -147,6 +185,8 @@ Xxxxxxx
 				formation: -1,
 				ships: [ -1, -1, -1, -1, -1, -1 ]
 			};
+			KC3ShipManager.pendingShipNum = 0;
+			KC3GearManager.pendingGearNum = 0;
 		}
 	};
 	

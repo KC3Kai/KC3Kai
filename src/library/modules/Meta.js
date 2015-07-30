@@ -6,41 +6,13 @@ Provides access to data on built-in JSON files
 (function(){
 	"use strict";
 	
-	$.getTranslationJSON = function(language, filename, callback){
-		var enJSON = {}, localJSON;
-		
-		$.ajax('/data/translations/en/' + filename + '.json', {
-			dataType:	'json',
-			success:	function(response){
-				enJSON = response;
-			},
-			complete:	function(){
-				if( language == 'en' ){
-					console.log(enJSON);
-					callback(enJSON);
-				}else{
-					$.ajax('/data/translations/' +language+ '/' + filename + '.json', {
-						dataType:	'json',
-						success:	function(data){
-							localJSON = $.extend(true, enJSON, data);
-						},
-						complete:	function(){
-							localJSON = localJSON || enJSON;
-							console.log(localJSON);
-							callback(localJSON);
-						}
-					});
-				}
-			}
-		});
-	};
-	
 	window.KC3Meta = {
 		_cache:{},
 		_icons:{},
 		_exp:{},
 		_gauges:{},
 		_ship:{},
+		_defeq:{},
 		_slotitem:{},
 		_quests:{},
 		_ranks:{},
@@ -53,34 +25,21 @@ Provides access to data on built-in JSON files
 		/* Initialization
 		-------------------------------------------------------*/
 		init :function( repo ){
-			var self = this;
-			
 			// Load Common Meta
-			$.getJSON(repo+"icons.json", function(response){ self._icons = response; });
-			$.getJSON(repo+"experience.json", function(response){ self._exp = response; });
-			$.getJSON(repo+"gauges.json", function(response){ self._gauges = response; });
+			this._icons		= JSON.parse( $.ajax(repo+'icons.json', { async: false }).responseText );
+			this._exp		= JSON.parse( $.ajax(repo+'experience.json', { async: false }).responseText );
+			this._gauges	= JSON.parse( $.ajax(repo+'gauges.json', { async: false }).responseText );
+			this._defeq		= JSON.parse( $.ajax(repo+'defeq.json', { async: false }).responseText );
 			
 			// Load Translations
-			var lang = ConfigManager.language || "en";
-			/*
-			$.getJSON(repo+"translations/"+lang+"/ships.json", function(response){ self._ship = response; });
-			$.getJSON(repo+"translations/"+lang+"/items.json", function(response){ self._slotitem = response; });
-			$.getJSON(repo+"translations/"+lang+"/quests.json", function(response){ self._quests = response; });
-			$.getJSON(repo+"translations/"+lang+"/ranks.json", function(response){ self._ranks = response; });
-			$.getJSON(repo+"translations/"+lang+"/stype.json", function(response){ self._stype = response; });
-			$.getJSON(repo+"translations/"+lang+"/servers.json", function(response){ self._servers = response; });
-			$.getJSON(repo+"translations/"+lang+"/battle.json", function(response){ self._battle = response; });
-			$.getJSON(repo+"translations/"+lang+"/record.json", function(response){ self._record = response; });
-			$.getJSON(repo+"translations/"+lang+"/terms.json", function(response){ self._terms = response; });
-			*/
-			$.getTranslationJSON(lang, 'ships', function(response){ self._ship = response; });
-			$.getTranslationJSON(lang, 'items', function(response){ self._slotitem = response; });
-			$.getTranslationJSON(lang, 'quests', function(response){ self._quests = response; });
-			$.getTranslationJSON(lang, 'ranks', function(response){ self._ranks = response; });
-			$.getTranslationJSON(lang, 'stype', function(response){ self._stype = response; });
-			$.getTranslationJSON(lang, 'servers', function(response){ self._servers = response; });
-			$.getTranslationJSON(lang, 'battle', function(response){ self._battle = response; });
-			$.getTranslationJSON(lang, 'terms', function(response){ self._terms = response; });
+			this._ship 		= KC3Translation.getJSON(repo, 'ships', true);
+			this._slotitem	= KC3Translation.getJSON(repo, 'items', true);
+			this._quests	= KC3Translation.getJSON(repo, 'quests', true);
+			this._ranks		= KC3Translation.getJSON(repo, 'ranks', true);
+			this._stype		= KC3Translation.getJSON(repo, 'stype', true);
+			this._servers	= KC3Translation.getJSON(repo, 'servers', true);
+			this._battle	= KC3Translation.getJSON(repo, 'battle', true);
+			this._terms		= KC3Translation.getJSON(repo, 'terms');
 		},
 		
 		/* Data Access
@@ -110,7 +69,18 @@ Provides access to data on built-in JSON files
 		},
 		
 		formationIcon :function(formationId){
-			return "../../../../assets/img/formation/" + formationId + ".jpg";
+			return "../../../../assets/img/formation2/" + formationId + ".png";
+		},
+		
+		formationText :function(formationId){
+			return [
+				"",
+				"Line Ahead",
+				"Double Line",
+				"Diamond",
+				"Echelon",
+				"Line Abreast"
+			][formationId];
 		},
 		
 		shipName :function( jp_name ){
@@ -122,14 +92,14 @@ Provides access to data on built-in JSON files
 			if( jp_name.substr(jp_name.length-1, 1) == "改" ){
 				var bare1 = jp_name.substr(0, jp_name.length-1);
 				if(typeof this._ship[bare1] !== "undefined"){
-					this._cache[jp_name] = this._ship[bare1]+" Kai";
+					this._cache[jp_name] = this._ship[bare1] + " " + this._ship._Kai;
 					return this._cache[jp_name];
 				}
 			}
 			if( jp_name.substr(jp_name.length-2, 2) == "改二" ){
 				var bare2 = jp_name.substr(0, jp_name.length-2);
 				if(typeof this._ship[bare2] !== "undefined"){
-					this._cache[jp_name] = this._ship[bare2]+" Kai Ni";
+					this._cache[jp_name] = this._ship[bare2] + " " + this._ship._KaiNi;
 					return this._cache[jp_name];
 				}
 			}
@@ -177,6 +147,13 @@ Provides access to data on built-in JSON files
 			return this._gauges["m"+map_id] || false;
 		},
 		
+		defaultEquip :function(id){
+			if (typeof this._defeq["s" + id] == "undefined") {
+				console.log("No ship has master id " + id + " in defeq.json");
+			}
+			return this._defeq["s" + id] || 0;
+		},
+
 		detection :function(index){
 			return this._battle.detection[index] || ["",""];
 		},

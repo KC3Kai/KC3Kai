@@ -33,13 +33,13 @@ body {
 	margin:0px 10px 0px 0px;
 }
 .kc3 .title {
-	width:100px;
+	width:130px;
 	height:64px;
 	float:left;
 	margin:0px 5px 0px 0px;
 }
 .kc3 .title .name {
-	width:100px;
+	width:130px;
 	height:22px;
 	line-height:22px;
 	font-size:22px;
@@ -47,16 +47,15 @@ body {
 	margin:15px 0px 3px 0px;
 }
 .kc3 .title .version {
-	width:100px;
+	width:130px;
 	height:13px;
 	line-height:13px;
 	font-size:13px;
 }
 .kc3 .links {
-	width:420px;
+	width:560px;
 	height:64px;
 	float:left;
-	margin:0px 10px 0px 0px;
 }
 .kc3 .links .link {
 	margin:20px 5px 0px 0px;
@@ -78,19 +77,30 @@ body {
 	height:20px;
 	float:left;
 }
-.kc3 .update {
-	width:160px;
-	height:64px;
-	float:left;
-	background:#eee;
-	display:none;
-}
 
 /* DEVELOPERS
 --------------------------*/
 .developers {
 	width:780px;
 }
+
+/* Section */
+.section {
+	width:780px;
+	height:24px;
+	padding:0px 0px 0px 10px;
+	margin:20px 0px 10px 0px;
+}
+.section .title {
+	height:24px;
+	float:left;
+	font-size:20px;
+	line-height:24px;
+	margin:0px 10px 0px 0px;
+	color:#0099FF;
+}
+
+/* DevBox */
 .devBox {
 	width:189px;
 	height:58px;

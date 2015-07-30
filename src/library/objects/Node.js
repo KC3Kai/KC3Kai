@@ -16,38 +16,26 @@ Used by SortieManager
 	
 	KC3Node.prototype.defineAsBattle = function( nodeData ){
 		this.type = "battle";
+		this.startNight = false;
 		
 		// If passed initial values
 		if(typeof nodeData != "undefined"){
 			
 			// If passed raw data from compass
-			if(typeof nodeData.api_enemy != "undefined"){
+			//"api_event_id":4,"api_event_kind":1
+			if(typeof nodeData.api_event_kind != "undefined"){
 				this.eships = [];
-				this.epattern = nodeData.api_enemy.api_enemy_id;
-				this.checkEnemy();
+				this.eventKind = nodeData.api_event_kind;
+				this.eventId = nodeData.api_event_id;
 			}
 			
 			// If passed formatted enemy list from PVP
 			if(typeof nodeData.pvp_opponents != "undefined"){
 				this.eships = nodeData.pvp_opponents;
-				KC3SortieManager.onEnemiesAvailable();
 			}
 		}
+		this.enemySunk = [false, false, false, false, false, false];
 		return this;
-	};
-	
-	KC3Node.prototype.checkEnemy = function( nodeData ){
-		var self = this;
-		KC3Database.get_enemy(this.epattern, function(response){
-			if(response){
-				self.eships = response.ids;
-				self.eformation = response.formation;
-			}else{
-				self.eships = [-1,-1,-1,-1,-1,-1];
-				self.eformation = -1;
-			}
-			KC3SortieManager.onEnemiesAvailable();
-		});
 	};
 	
 	KC3Node.prototype.defineAsResource = function( nodeData ){
@@ -55,7 +43,7 @@ Used by SortieManager
 		this.item = nodeData.api_itemget.api_icon_id;
 		this.icon = function(folder){
 			return folder+(
-				["fuel","ammo","steel","bauxite","ibuild","bucket","devmat","compass"]
+				["fuel","ammo","steel","bauxite","ibuild","bucket","devmat","compass","","box1","box2","box3"]
 				[nodeData.api_itemget.api_icon_id-1]
 			)+".png";
 		};
@@ -101,10 +89,9 @@ Used by SortieManager
 		this.battleDay = battleData;
 		
 		var enemyships = battleData.api_ship_ke;
-		enemyships.splice(0,1);
+		if(enemyships[0]==-1){ enemyships.splice(0,1); }
 		this.eships = enemyships;
 		this.eformation = battleData.api_formation[1];
-		KC3SortieManager.onEnemiesAvailable();
 		
 		this.supportFlag = (battleData.api_support_flag>0)?true:false;
 		this.yasenFlag = (battleData.api_midnight_flag>0)?true:false;
@@ -156,31 +143,123 @@ Used by SortieManager
 				this.planeBombers.abyssal[1] += battleData.api_kouku2.api_stage2.api_e_lostcount;
 			}
 		}
-		
+
+		var PS = window.PS;
+		var DA = PS["KanColle.DamageAnalysis"];
+		// for regular battles
+		var result = DA.analyzeRawBattleJS(battleData); 
+		console.log(result);
+		for (var i = 7; i < 13; i++) {
+			if ((result[i] !== null) && (result[i].currentHp <= 0)) {
+				this.enemySunk[i-7] = true;
+			}
+		}
+		// for night battles
+		//DA.analyzeRawNightBattleJS(svdata.api_data)
 	};
 	
-	KC3Node.prototype.night = function( nightData ){
+	KC3Node.prototype.engageNight = function( nightData ){
 		this.battleNight = nightData;
+		this.startNight = true;
+		
+		var enemyships = nightData.api_ship_ke;
+		if(enemyships[0]==-1){ enemyships.splice(0,1); }
+		this.eships = enemyships;
+		this.eformation = nightData.api_formation[1];
+		
+		this.engagement = KC3Meta.engagement( nightData.api_formation[2] );
 		this.fcontact = (nightData.api_touch_plane[0] > -1)?"YES":"NO";
 		this.econtact = (nightData.api_touch_plane[1] > -1)?"YES":"NO";
 		this.flare = nightData.api_flare_pos[0]; //??
 		this.searchlight = nightData.api_flare_pos[1]; //??
+		
+		var PS = window.PS;
+		var DA = PS["KanColle.DamageAnalysis"];
+		var result = DA.analyzeRawNightBattleJS( nightData ); 
+		// console.log(result);
+		for (var i = 7; i < 13; i++) {
+			if ((result[i] !== null) && (result[i].currentHp <= 0)) {
+				this.enemySunk[i-7] = true;
+			}
+		}
+	};
+	
+	KC3Node.prototype.night = function( nightData ){
+		this.battleNight = nightData;
+		
+		this.fcontact = (nightData.api_touch_plane[0] > -1)?"YES":"NO";
+		this.econtact = (nightData.api_touch_plane[1] > -1)?"YES":"NO";
+		this.flare = nightData.api_flare_pos[0]; //??
+		this.searchlight = nightData.api_flare_pos[1]; //??
+
+		var PS = window.PS;
+		var DA = PS["KanColle.DamageAnalysis"];
+		var result = DA.analyzeRawNightBattleJS(nightData);
+		// console.log(result);
+		for (var i = 7; i < 13; i++) {
+			if ((result[i] !== null) && (result[i].currentHp <= 0)) {
+				this.enemySunk[i-7] = true;
+			}
+		}
 	};
 	
 	KC3Node.prototype.results = function( resultData ){
 		this.rating = resultData.api_win_rank;
 		
 		if(typeof resultData.api_get_ship != "undefined"){
-			this.drop = resultData.api_get_ship.api_ship_id; 
+			this.drop = resultData.api_get_ship.api_ship_id;
+			KC3ShipManager.pendingShipNum += 1;
+			KC3GearManager.pendingGearNum += KC3Meta.defaultEquip(this.drop);
+			console.log("Drop " + resultData.api_get_ship.api_ship_name + " (" + this.drop + ") Equip " + KC3Meta.defaultEquip(this.drop));
 		}else{
 			this.drop = 0;
 		}
 		
+		//var enemyCVL = [510, 523, 560];
+		//var enemyCV = [512, 525, 528, 565, 579];
+		//var enemySS = [530, 532, 534, 531, 533, 535, 570, 571, 572];
+		//var enemyAP = [513, 526, 558];
+
+		for(var i = 0; i < 6; i++) {
+			if (this.enemySunk[i]) {
+				var enemyShip = KC3Master.ship(this.eships[i]);
+				if (!enemyShip) {
+					console.log("Cannot find enemy " + this.eships[i]);
+				} else if (this.eships[i] < 500) {
+					console.log("Enemy ship is not Abyssal!");
+				} else {
+					switch(enemyShip.api_stype) {
+						case  7:	// 7 = CVL
+						case 11:	// 11 = CV
+							console.log("You sunk a CV"+((enemyShip.api_stype==7)?"L":""));
+							KC3QuestManager.get(217).increment();
+							KC3QuestManager.get(211).increment();
+							KC3QuestManager.get(220).increment();
+							break;
+						case 13:	// 13 = SS
+							console.log("You sunk a SS");
+							KC3QuestManager.get(230).increment();
+							KC3QuestManager.get(228).increment();
+							break;
+						case 15:	// 15 = AP
+							console.log("You sunk a AP");
+							KC3QuestManager.get(218).increment();
+							KC3QuestManager.get(212).increment();
+							KC3QuestManager.get(213).increment();
+							KC3QuestManager.get(221).increment();
+							break;
+					}
+				}
+				
+			}
+		}
+
 		this.saveBattleOnDB();
 	};
 	
 	KC3Node.prototype.isBoss = function(){
-		return this.id == KC3SortieManager.boss.node;
+		//console.log("Meet Boss: " + ((this.eventKind === 1) && (this.eventId === 5)));
+		return ((this.eventKind === 1) && (this.eventId === 5));
 	};
 	
 	KC3Node.prototype.saveBattleOnDB = function( resultData ){

@@ -4,6 +4,8 @@
 		<a href="https://github.com/dragonjet/KC3Kai/wiki" target="_blank"><span>?</span> Help</a>
 	</div>
 </div>
+
+<!-- WORLD LIST -->
 <div class="world_list">
 	<div class="world_box hover active" data-world_num="0">
 		<div class="world_icon"></div>
@@ -35,17 +37,190 @@
 	</div>
 	<div class="clear"></div>
 </div>
+
+<!-- MAP LIST -->
 <div class="map_list">
 	
 </div>
+
+<!-- PAGINATION -->
 <div class="page_list">
-	&nbsp; yes still it's empty this version. it's just the menu. don't ask.
-</div>
-<div class="sortie_list page_padding">
 	
 </div>
 
+<!-- SORTIE RECORDS -->
+<div class="sortie_list">
+	
+</div>
+
+<!-- CLONABLES -->
 <div class="factory">
+	
+	<!-- SORTIE BOX -->
+	<div class="sortie_box">
+		<div class="sortie_info">
+			<div class="sortie_column sortie_record">
+				<div class="sortie_id"></div>
+				<div class="sortie_date"></div>
+			</div>
+			<div class="sortie_column sortie_map"></div>
+			<div class="sortie_column sortie_fleet">
+				<div class="sortie_ship sortie_ship_1"><img/></div>
+				<div class="sortie_ship sortie_ship_2"><img/></div>
+				<div class="sortie_ship sortie_ship_3"><img/></div>
+				<div class="sortie_ship sortie_ship_4"><img/></div>
+				<div class="sortie_ship sortie_ship_5"><img/></div>
+				<div class="sortie_ship sortie_ship_6"><img/></div>
+				<div class="clear"></div>
+			</div>
+			<div class="sortie_column sortie_edges">
+				<div class="sortie_edge sortue_edge_1"></div>
+				<div class="sortie_edge sortue_edge_2"></div>
+				<div class="sortie_edge sortue_edge_3"></div>
+				<div class="sortie_edge sortue_edge_4"></div>
+				<div class="sortie_edge sortue_edge_5"></div>
+				<div class="clear"></div>
+			</div>
+			<div class="sortie_column sortie_toggles">
+				<div class="sortie_toggle hover" data-target="sortie_roster" title="Fleet">F</div>
+				<div class="sortie_toggle hover" data-target="sortie_nodes" title="Nodes">N</div>
+				<div class="sortie_toggle sortie_toggle_in active hover" data-target="node_enemy"  title="Enemy">E</div>
+				<div class="sortie_toggle sortie_toggle_in active hover" data-target="node_conds"  title="Conditions">C</div>
+				<div class="sortie_toggle sortie_toggle_in active hover" data-target="node_planes"  title="Air Battle">A</div>
+				<div class="clear"></div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="sortie_roster">
+			<div class="sortie_rfleet rfleet_main">
+				<div class="rfleet_title">Main Fleet</div>
+				<div class="rfleet_body">
+					
+				</div>
+			</div>
+			<div class="sortie_rfleet rfleet_escort">
+				<div class="rfleet_title">Escort Fleet</div>
+				<div class="rfleet_body">
+					
+				</div>
+			</div>
+			<div class="sortie_rfleet rfleet_preboss">
+				<div class="rfleet_title">Pre-boss Support</div>
+				<div class="rfleet_body">
+					
+				</div>
+			</div>
+			<div class="sortie_rfleet rfleet_boss">
+				<div class="rfleet_title">Boss Support</div>
+				<div class="rfleet_body">
+					
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="sortie_nodes">
+			
+		</div>
+	</div>
+	
+	<!-- SORTIE NODE INFO -->
+	<div class="sortie_nodeinfo">
+		<div class="node_id"></div>
+		<div class="node_result">
+			<div class="node_result_box node_formation"><img/></div>
+			<div class="node_result_box node_rating"><img/></div>
+			<div class="node_result_box node_drop"><img/></div>
+			<div class="node_result_box node_support"><img/></div>
+		</div>
+		<div class="node_enemy">
+			<div class="node_eformation"><img/></div>
+			<div class="node_eship node_eship_1"><img/></div>
+			<div class="node_eship node_eship_2"><img/></div>
+			<div class="node_eship node_eship_3"><img/></div>
+			<div class="node_eship node_eship_4"><img/></div>
+			<div class="node_eship node_eship_5"><img/></div>
+			<div class="node_eship node_eship_6"><img/></div>
+		</div>
+		<div class="node_details">
+			<div class="node_conds">
+				<div class="node_cond">
+					<div class="node_cond_label">Detect</div>
+					<div class="node_cond_value node_detect">OK</div>
+				</div>
+				<div class="node_cond">
+					<div class="node_cond_label">Engage</div>
+					<div class="node_cond_value node_engage">Parallel</div>
+				</div>
+				<div class="node_cond">
+					<div class="node_cond_label">Contact</div>
+					<div class="node_cond_value node_contact">YES vs YES</div>
+				</div>
+				<div class="node_cond">
+					<div class="node_cond_label">Air Battle</div>
+					<div class="node_cond_value node_airbattle"></div>
+				</div>
+			</div>
+			<div class="node_planes">
+				<div class="node_airsides">
+					<div class="node_airside">Friendly</div>
+					<div class="node_airside">Abyssal</div>
+					<div class="clear"></div>
+				</div>
+				<div class="node_airtype">
+					<div class="node_planeside">
+						<div class="node_airicon"><img src="../../../../assets/img/items/6.png" /></div>
+						<div class="node_airtext">
+							<span class="node_FFT"></span>
+							<span class="node_FFL node_loss"></span>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="node_planeside">
+						<div class="node_airicon"><img src="../../../../assets/img/items/6.png" /></div>
+						<div class="node_airtext">
+							<span class="node_FAT"></span>
+							<span class="node_FAL node_loss"></span>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="node_airtype">
+					<div class="node_planeside">
+						<div class="node_airicon"><img src="../../../../assets/img/items/7.png" /></div>
+						<div class="node_airtext">
+							<span class="node_BFT"></span>
+							<span class="node_BFL node_loss"></span>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="node_planeside">
+						<div class="node_airicon"><img src="../../../../assets/img/items/7.png" /></div>
+						<div class="node_airtext">
+							<span class="node_BAT"></span>
+							<span class="node_BAL node_loss"></span>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- FLEET ROSTER SHIP BOX -->
+	<div class="rfleet_ship">
+		<div class="rfleet_pic"><img/></div>
+		<div class="rfleet_name"></div>
+		<div class="rfleet_level"></div>
+		<div class="rfleet_equips">
+			<div class="rfleet_equip rfleet_equip_1"><img/></div>
+			<div class="rfleet_equip rfleet_equip_2"><img/></div>
+			<div class="rfleet_equip rfleet_equip_3"><img/></div>
+			<div class="rfleet_equip rfleet_equip_4"><img/></div>
+		</div>
+		<div class="clear"></div>
+	</div>
 	
 	<!-- MAP BOX (up to 7 instances under a single world) -->
 	<div class="map_box hover">

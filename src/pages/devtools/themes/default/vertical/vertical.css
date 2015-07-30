@@ -169,6 +169,9 @@
 	font-size:11px;
 	color:#888;
 }
+#v .material_limit {
+	color:#f00;
+}
 /* Timer boxes */
 #v .timer-img {
 	border-radius:25px;
@@ -613,6 +616,9 @@
 	height:17px;
 	float:left;
 }
+#v.panel-size-300px .fleet-ships .ship-gear:hover {
+	background-color: rgba(0, 0, 0, 0.25);
+}
 #v.panel-size-300px .fleet-ships .ship-gear img {
 	width:17px;
 	height:17px;
@@ -774,6 +780,9 @@
 	width:25px;
 	height:25px;
 	float:left;
+}
+#v.panel-size-420px .fleet-ships .ship-gear:hover {
+	background-color: rgba(0, 0, 0, 0.25);
 }
 #v.panel-size-420px .fleet-ships .ship-gear img {
 	width:25px;
@@ -1072,8 +1081,80 @@
 }
 
 /* Expedition Helper */
-#v .activity .expedHelp {
-	
+#v.panel-size-300px .expedHelp {
+	width:236px;
+	height:110px;
+}
+#v.panel-size-300px .expedHelp .expedNotes {
+	width:230px;
+	height:14px;
+	font-size:12px;
+	margin:1px 0px 2px 5px;
+}
+#v.panel-size-300px .expedNote {
+	padding:0px 5px;
+	height:14px;
+	line-height:14px;
+	margin:0px 5px 0px 0px;
+	float:left;
+	font-size:11px;
+	border-radius:4px;
+	background:#faa;
+	color:#000;
+}
+#v.panel-size-300px .expedIdList {
+	width:236px;
+	height:44px;
+}
+#v.panel-size-300px .expedId {
+	width:18px;
+	height:18px;
+	line-height:18px;
+	margin:0px 0px 2px 2px;
+	float:left;
+	text-align:center;
+	font-size:11px;
+	border-radius:10px;
+	background:#369;
+	color:#fff;
+}
+/* 420p */
+#v.panel-size-420px .expedHelp {
+	width:790px;
+	height:60px;
+}
+#v.panel-size-420px .expedHelp .expedNotes {
+	width:780px;
+	height:14px;
+	font-size:12px;
+	margin:1px 0px 2px 5px;
+}
+#v.panel-size-420px .expedNote {
+	padding:0px 5px;
+	height:14px;
+	line-height:14px;
+	margin:0px 5px 0px 0px;
+	float:left;
+	font-size:11px;
+	border-radius:4px;
+	background:#faa;
+	color:#000;
+}
+#v.panel-size-420px .expedIdList {
+	width:790px;
+	height:44px;
+}
+#v.panel-size-420px .expedId {
+	width:18px;
+	height:18px;
+	line-height:18px;
+	margin:0px 0px 2px 2px;
+	float:left;
+	text-align:center;
+	font-size:11px;
+	border-radius:10px;
+	background:#369;
+	color:#fff;
 }
 
 /*--------------------------------------
@@ -1160,7 +1241,7 @@
 	/*background:#ff0;*/
 }
 #v .battle .battle_hqlevel {
-	width:150px;
+	width:180px;
 	height:20px;
 	line-height:20px;
 	/*background:#0f0;*/
@@ -1189,6 +1270,13 @@
 #v .battle .battle_hqexpval {
 	height:12px;
 	background:#ace;
+	float:left;
+	transition: width 0.5s;
+}
+#v .battle .battle_hqexpgain {
+	height:12px;
+	background:#d34;
+	transition: width 0.5s;
 }
 #v .battle .battle_hqlevel_next {
 	width:55px;
@@ -1196,6 +1284,17 @@
 	float:left;
 	font-size:10px;
 	text-align:center;
+	/*background:#fcc;*/
+}
+#v .battle .battle_hqlevel_next_gain {
+	position:relative;
+	left:-8px;
+	width:30px;
+	height:20px;
+	float:left;
+	font-size:10px;
+	text-align:center;
+	color:#f00;
 	/*background:#fcc;*/
 }
 #v.panel-size-300px .battle .battle_slots {
@@ -1771,6 +1870,9 @@
 	float:left;
 	margin:0px 10px 0px 0px;
 }
+#v.panel-size-300px .battle-ship .ship-gear:hover {
+	background-color: rgba(0, 0, 0, 0.25);
+}
 #v.panel-size-300px .battle-ship .ship-gear img {
 	width:30px;
 	height:30px;
@@ -1976,6 +2078,9 @@
 	line-height:25px;
 	float:left;
 	margin:12px 0px;
+}
+#v.panel-size-420px .battle-ship .ship-gear:hover {
+	background-color: rgba(0, 0, 0, 0.25);
 }
 #v.panel-size-420px .battle-ship .ship-gear img {
 	width:25px;
@@ -2302,6 +2407,9 @@
 	float:left;
 	margin:0px 0px 0px 0px;
 }
+#v.panel-size-300px .battle-mship .ship-gear:hover {
+	background-color: rgba(0, 0, 0, 0.25);
+}
 #v.panel-size-300px .battle-mship .ship-gear img {
 	width:17px;
 	height:17px;
@@ -2497,6 +2605,9 @@
 	height:25px;
 	line-height:25px;
 	float:left;
+}
+#v.panel-size-420px .battle-mship .ship-gear:hover {
+	background-color: rgba(0, 0, 0, 0.25);
 }
 #v.panel-size-420px .battle-mship .ship-gear img {
 	width:25px;
@@ -2823,6 +2934,9 @@
 	float:left;
 	margin:0px 0px 0px 0px;
 }
+#v.panel-size-300px .battle-eship .ship-gear:hover {
+	background-color: rgba(0, 0, 0, 0.25);
+}
 #v.panel-size-300px .battle-eship .ship-gear img {
 	width:17px;
 	height:17px;
@@ -3019,6 +3133,9 @@
 	height:25px;
 	line-height:25px;
 	float:left;
+}
+#v.panel-size-420px .battle-eship .ship-gear:hover {
+	background-color: rgba(0, 0, 0, 0.25);
 }
 #v.panel-size-420px .battle-eship .ship-gear img {
 	width:25px;
