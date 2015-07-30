@@ -76,7 +76,7 @@
 				"type" : "check",
 				"hide" : 1,
 				"options" : {}
-			}
+			},
 			{
 				"id" : "info_delta",
 				"name" : "SettingsHQDelta",
