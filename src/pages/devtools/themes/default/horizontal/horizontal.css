@@ -581,12 +581,13 @@
 #h .fleet-ships .ship-equip {
 	width:50px;
 	height:50px;
-	padding:5px;
 	float:left;
 }
 #h .fleet-ships .ship-gear {
+	position: relative;
 	width:20px;
 	height:20px;
+	margin: 2px 2px 0px 0px;
 	float:left;
 }
 #h .fleet-ships .ship-gear:hover {
@@ -595,8 +596,17 @@
 #h .fleet-ships .ship-gear img {
 	width:20px;
 	height:20px;
+	background:#333;
+	border-radius: 10px;
 }
-
+#h .fleet-ships .ship-equip-capacity {
+	position: absolute;
+	color: #ddd;
+	top:3px;
+	left:0px;
+	width: 20px;
+	text-align: center;
+}
 /* ACTIVITY
 -------------------------*/
 #h .activity {
@@ -1235,13 +1245,16 @@
 	height:20px;
 	vertical-align:top;
 	margin:2px 0px 0px 0px;
+	background:#333;
+	border-radius: 10px;
+	float:left;
 }
 #h .battle-ship .ship-equip-capacity {
-	width:19px;
+	width:20px;
 	height:25px;
-	float:right;
+	float:left;
 	font-size:12px;
-	text-align:left;
+	text-align:center;
 }
 #h .battle-ship .ship-supply {
 	width:50px;

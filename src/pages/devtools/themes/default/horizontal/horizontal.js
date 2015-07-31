@@ -281,10 +281,22 @@
 							
 							FleetHP(container, ShipBox, CurrentShip.hp, rosterId );
 							FleetMorale( $(".ship-morale-box", ShipBox), CurrentShip.morale );
-							FleetEquipment( $(".ship-gear-1", ShipBox), CurrentShip.equipment(0), CurrentShip.slots[0] );
+
+							for(var i = 1; i <= 4; i++) {
+								var gearBox = $(".ship-gear-" + i, ShipBox);
+								if (i <= CurrentShip.slotnum) {
+									FleetEquipment( gearBox, CurrentShip.equipment(i-1), CurrentShip.slots[i-1] );
+									if (CurrentShip.equipment(i-1).itemId > 0) {
+										$(".ship-equip-capacity", gearBox).hide();
+									}
+								} else {
+									FleetEquipment( gearBox, null, null );
+								}
+							}
+							/*FleetEquipment( $(".ship-gear-1", ShipBox), CurrentShip.equipment(0), CurrentShip.slots[0] );
 							FleetEquipment( $(".ship-gear-2", ShipBox), CurrentShip.equipment(1), CurrentShip.slots[1] );
 							FleetEquipment( $(".ship-gear-3", ShipBox), CurrentShip.equipment(2), CurrentShip.slots[2] );
-							FleetEquipment( $(".ship-gear-4", ShipBox), CurrentShip.equipment(3), CurrentShip.slots[3] );
+							FleetEquipment( $(".ship-gear-4", ShipBox), CurrentShip.equipment(3), CurrentShip.slots[3] );*/
 						}
 					});
 					
@@ -363,11 +375,20 @@
 								
 								FleetHP(container, ShipBox, CurrentShip.hp, rosterId );
 								FleetMorale( $(".ship-morale-box", ShipBox), CurrentShip.morale );
-								FleetEquipment( $(".ship-gear-1", ShipBox), CurrentShip.equipment(0), CurrentShip.slots[0] );
+								
+								for(var i = 1; i <= 4; i++) {
+									var gearBox = $(".ship-gear-" + i, ShipBox);
+									if (i <= CurrentShip.slotnum) {
+										FleetEquipment( gearBox, CurrentShip.equipment(i-1), CurrentShip.slots[i-1] );
+									} else {
+										FleetEquipment( gearBox, null, null );
+									}
+								}
+								/*FleetEquipment( $(".ship-gear-1", ShipBox), CurrentShip.equipment(0), CurrentShip.slots[0] );
 								FleetEquipment( $(".ship-gear-2", ShipBox), CurrentShip.equipment(1), CurrentShip.slots[1] );
 								FleetEquipment( $(".ship-gear-3", ShipBox), CurrentShip.equipment(2), CurrentShip.slots[2] );
 								FleetEquipment( $(".ship-gear-4", ShipBox), CurrentShip.equipment(3), CurrentShip.slots[3] );
-								
+								*/
 								var FuelPercent = CurrentShip.fuel / CurrentShip.master().api_fuel_max;
 								var AmmoPercent = CurrentShip.ammo / CurrentShip.master().api_bull_max;
 								$(".supply-fuel .supply-text", ShipBox).text(Math.floor(FuelPercent*100)+"%");
@@ -860,17 +881,24 @@
 	}
 	
 	function FleetEquipment(element, item, capacity){
-		if(item.itemId > 0){
-			var folder = "../../../../../assets/img/items/";
-			$("img", element).attr("src", folder + item.master().api_type[3] + ".png");
-			$(element).attr("title", item.name());
-		}else{
+		if (item === null) {
 			$("img", element).hide();
-		}
-		if(capacity > 0){
-			$(".ship-equip-capacity", element).text(capacity);
-		}else{
-		$(".ship-equip-capacity", element).text("");
+			$(".ship-equip-capacity", element).hide();
+		} else {
+			var folder = "../../../../../assets/img/items/";
+			if(item.itemId > 0){
+				$("img", element).attr("src", folder + item.master().api_type[3] + ".png");
+				$(element).attr("title", item.name());
+			}else{
+				$("img", element).attr("src", folder + "0.png");
+			}
+
+			if(capacity > 0){
+				$(".ship-equip-capacity", element).text(capacity);
+				$(".ship-equip-capacity", element).attr("title", "Plane Capacity");
+			}else{
+				$(".ship-equip-capacity", element).text("");
+			}
 		}
 	}
 	
