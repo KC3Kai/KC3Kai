@@ -612,16 +612,29 @@
 	float:left;
 }
 #v.panel-size-300px .fleet-ships .ship-gear {
-	width:17px;
-	height:17px;
+	position: relative;
+	width:16px;
+	height:16px;
+	margin: 1px 1px 0px 0px;
 	float:left;
 }
 #v.panel-size-300px .fleet-ships .ship-gear:hover {
 	background-color: rgba(0, 0, 0, 0.25);
 }
 #v.panel-size-300px .fleet-ships .ship-gear img {
-	width:17px;
-	height:17px;
+	width:16px;
+	height:16px;
+	background:#333;
+	border-radius: 8px;
+}
+#v.panel-size-300px .fleet-ships .ship-gear .ship-equip-capacity {
+	position: absolute;
+	color: #ddd;
+	top:2px;
+	left:0px;
+	width: 16px;
+	text-align: center;
+	font-size: 9px;
 }
 
 /* Big Ships in Normal Mode */
@@ -777,16 +790,29 @@
 	float:left;
 }
 #v.panel-size-420px .fleet-ships .ship-gear {
-	width:25px;
-	height:25px;
+	position: relative;
+	width:24px;
+	height:24px;
+	margin: 1px 1px 0px 0px;
 	float:left;
 }
 #v.panel-size-420px .fleet-ships .ship-gear:hover {
 	background-color: rgba(0, 0, 0, 0.25);
 }
 #v.panel-size-420px .fleet-ships .ship-gear img {
-	width:25px;
-	height:25px;
+	width:24px;
+	height:24px;
+	background:#333;
+	border-radius: 12px;
+}
+#v.panel-size-420px .fleet-ships .ship-gear .ship-equip-capacity {
+	position: absolute;
+	color: #ddd;
+	top:4px;
+	left:0px;
+	width: 24px;
+	text-align: center;
+	font-size: 12px;
 }
 #v.panel-size-420px .fleet-ships .ship-supply {
 	width:50px;
@@ -1876,6 +1902,8 @@
 #v.panel-size-300px .battle-ship .ship-gear img {
 	width:30px;
 	height:30px;
+	background:#333;
+	border-radius: 15px;
 	/*vertical-align:top;
 	margin:2px 0px 0px 0px;*/
 }
@@ -2074,17 +2102,19 @@
 }
 #v.panel-size-420px .battle-ship .ship-gear {
 	width:40px;
-	height:25px;
-	line-height:25px;
+	height:24px;
+	line-height:24px;
 	float:left;
-	margin:12px 0px;
+	margin:13px 0px;
 }
 #v.panel-size-420px .battle-ship .ship-gear:hover {
 	background-color: rgba(0, 0, 0, 0.25);
 }
 #v.panel-size-420px .battle-ship .ship-gear img {
-	width:25px;
-	height:25px;
+	width:24px;
+	height:24px;
+	background:#333;
+	border-radius: 12px;
 	vertical-align:top;
 	margin:0px 0px 0px 0px;
 }
@@ -2403,16 +2433,18 @@
 #v.panel-size-300px .battle-mship .ship-gear {
 	position:relative;
 	width:35px;
-	height:17px;
+	height:16px;
 	float:left;
-	margin:0px 0px 0px 0px;
+	margin:1px 0px 0px 0px;
 }
 #v.panel-size-300px .battle-mship .ship-gear:hover {
 	background-color: rgba(0, 0, 0, 0.25);
 }
 #v.panel-size-300px .battle-mship .ship-gear img {
-	width:17px;
-	height:17px;
+	width:16px;
+	height:16px;
+	background:#333;
+	border-radius: 8px;
 	/*vertical-align:top;
 	margin:2px 0px 0px 0px;*/
 }
@@ -2604,16 +2636,18 @@
 	width:40px;
 	height:25px;
 	line-height:25px;
+	margin: 1px 0px 0px 0px;
 	float:left;
 }
 #v.panel-size-420px .battle-mship .ship-gear:hover {
 	background-color: rgba(0, 0, 0, 0.25);
 }
 #v.panel-size-420px .battle-mship .ship-gear img {
-	width:25px;
-	height:25px;
+	width:24px;
+	height:24px;
 	vertical-align:top;
-	margin:0px 0px 0px 0px;
+	background:#333;
+	border-radius: 12px;
 }
 #v.panel-size-420px .battle-mship .ship-equip-capacity {
 	width:15px;
@@ -2930,16 +2964,18 @@
 #v.panel-size-300px .battle-eship .ship-gear {
 	position:relative;
 	width:35px;
-	height:17px;
+	height:16px;
 	float:left;
-	margin:0px 0px 0px 0px;
+	margin:1px 0px 0px 0px;
 }
 #v.panel-size-300px .battle-eship .ship-gear:hover {
 	background-color: rgba(0, 0, 0, 0.25);
 }
 #v.panel-size-300px .battle-eship .ship-gear img {
-	width:17px;
-	height:17px;
+	width:16px;
+	height:16px;
+	background:#333;
+	border-radius: 8px;
 	/*vertical-align:top;
 	margin:2px 0px 0px 0px;*/
 }
@@ -3130,18 +3166,20 @@
 }
 #v.panel-size-420px .battle-eship .ship-gear {
 	width:40px;
-	height:25px;
+	height:24px;
 	line-height:25px;
+	margin: 1px 0px 0px 0px;
 	float:left;
 }
 #v.panel-size-420px .battle-eship .ship-gear:hover {
 	background-color: rgba(0, 0, 0, 0.25);
 }
 #v.panel-size-420px .battle-eship .ship-gear img {
-	width:25px;
-	height:25px;
+	width:24px;
+	height:24px;
 	vertical-align:top;
-	margin:0px 0px 0px 0px;
+	background:#333;
+	border-radius: 12px;
 }
 #v.panel-size-420px .battle-eship .ship-equip-capacity {
 	width:15px;

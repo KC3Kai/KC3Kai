@@ -22,6 +22,7 @@ KC3改 Ship Object
 		this.range = 0;
 		this.items = [-1,-1,-1,-1];
 		this.slots = [0,0,0,0];
+		this.slotnum = 0;
 		this.mod = [0,0,0,0,0];
 		this.fuel = 0;
 		this.ammo = 0;
@@ -48,6 +49,7 @@ KC3改 Ship Object
 				this.lk = data.api_lucky;
 				this.range = data.api_leng;
 				this.items = data.api_slot;
+				this.slotnum = data.api_slotnum;
 				this.slots = data.api_onslot;
 				this.mod = data.api_kyouka;
 				this.fuel = data.api_fuel;
