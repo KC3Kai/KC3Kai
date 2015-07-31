@@ -10,7 +10,8 @@ Saves and loads list to and from localStorage
 	window.KC3ShipManager = {
 		list: {},
 		max: 100,
-		
+		pendingShipNum: 0,
+
 		// Get a specific ship by ID
 		get :function( rosterId ){
 			// console.log("getting ship", rosterId, this.list["x"+rosterId]);
@@ -19,7 +20,7 @@ Saves and loads list to and from localStorage
 		
 		// Count number of ships
 		count :function(){
-			return Object.size(this.list);
+			return Object.size(this.list) + this.pendingShipNum;
 		},
 		
 		// Add or replace a ship on the list
@@ -47,6 +48,20 @@ Saves and loads list to and from localStorage
 			console.log("removing ship", rosterId);
 			var thisShip = this.list["x"+rosterId];
 			if(thisShip != "undefined"){
+				// initializing for fleet sanitizing of zombie ships
+				var
+					flatShips  = PlayerManager.fleets
+						.map(function(x){ return x.ships; })
+						.reduce(function(x,y){ return x.concat(y); }),
+					shipTargetOnFleet = flatShips.indexOf(Number(rosterId)), // check from which fleet
+					shipTargetFleetID = Math.floor(shipTargetOnFleet/6);
+				console.log(rosterId,flatShips,shipTargetOnFleet,shipTargetFleetID);
+				// check whether the designated ship is on fleet or not
+				if(shipTargetOnFleet >= 0){
+					PlayerManager.fleets[shipTargetFleetID].ships.splice((shipTargetOnFleet % 6), 1);
+					PlayerManager.fleets[shipTargetFleetID].ships.push(-1);
+				}
+				// remove any equipments from her
 				for(var gctr in thisShip.items){
 					if(thisShip.items[gctr] > -1){
 						KC3GearManager.remove( thisShip.items[gctr] );

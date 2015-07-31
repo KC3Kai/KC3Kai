@@ -189,7 +189,11 @@
 					self.checkModStat(shipBox, "api_raig", "tp", 1, shipObj);
 					self.checkModStat(shipBox, "api_tyku", "aa", 2, shipObj);
 					self.checkModStat(shipBox, "api_souk", "ar", 3, shipObj);
-					self.checkModStat(shipBox, "api_luck", "lk", 4, shipObj);
+					// self.checkModStat(shipBox, "api_luck", "lk", 4, shipObj);
+					
+					$(".ship_mod_lk", shipBox).html( shipObj.lk[0] );
+					$(".ship_mod_lk", shipBox).addClass("max");
+					
 					$(".tab_showcase .stype_"+stype).append(shipBox);
 				});
 				

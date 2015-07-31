@@ -589,6 +589,9 @@
 	height:20px;
 	float:left;
 }
+#h .fleet-ships .ship-gear:hover {
+	background-color: rgba(0, 0, 0, 0.25);
+}
 #h .fleet-ships .ship-gear img {
 	width:20px;
 	height:20px;
@@ -817,10 +820,12 @@
 	height:12px;
 	background:#ace;
 	float:left;
+	transition: width 0.5s;
 }
 #h .battle .battle_hqexpgain {
 	height:12px;
 	background:#d34;
+	transition: width 0.5s;
 }
 #h .battle .battle_hqlevel_next {
 	width:55px;
@@ -1222,6 +1227,9 @@
 	line-height:25px;
 	float:left;
 }
+#h .battle-ship .ship-gear:hover {
+	background-color: rgba(0, 0, 0, 0.25);
+}
 #h .battle-ship .ship-gear img {
 	width:20px;
 	height:20px;
@@ -1312,11 +1320,12 @@
 	width:30px;
 	height:30px;
 	position:absolute;
-	top:-5px;
-	left:-5px;
+	top:2px;
+	right:2px;
 	border-radius:15px;
 	overflow:hidden;
 	z-index:2;
+	background:#fff;
 }
 #h .battle .battle_formation img {
 	width:30px;

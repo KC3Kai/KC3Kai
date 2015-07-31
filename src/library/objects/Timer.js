@@ -121,7 +121,7 @@ Has functions for TimerManager to use
 					notifData.iconUrl = "../../assets/img/quests/expedition.jpg";
 					break;
 				case 1:
-					shipName = KC3ShipManager.get( PlayerManager.repairShips[this.num] ).name();
+					shipName = KC3ShipManager.get( PlayerManager.repairShips[this.num+1] ).name();
 					notifData.title = "Repairs Complete!";
 					notifData.message = shipName+" is out of the repair dock!";
 					notifData.iconUrl = "../../assets/img/quests/supply.jpg";

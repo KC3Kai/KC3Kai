@@ -10,7 +10,8 @@ Saves and loads list to and from localStorage
 	window.KC3GearManager = {
 		list: {},
 		max: 400,
-		
+		pendingGearNum: 0,
+
 		// Get a specific item by ID
 		get :function( itemId ){
 			// console.log("getting ship", rosterId, this.list["x"+rosterId]);
@@ -19,7 +20,7 @@ Saves and loads list to and from localStorage
 		
 		// Count number of items
 		count :function(){
-			return Object.size(this.list);
+			return Object.size(this.list) + this.pendingGearNum;
 		},
 		
 		// Count number of equipment by master item

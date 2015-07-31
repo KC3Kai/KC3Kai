@@ -69,6 +69,20 @@
 				"name" : "SettingsBossComp",
 				"type" : "check",
 				"options" : {}
+			},
+			{
+				"id" : "info_troll",
+				"name" : "SettingsYasenTroll",
+				"type" : "check",
+				"hide" : 1,
+				"options" : {}
+			},
+			{
+				"id" : "info_delta",
+				"name" : "SettingsHQDelta",
+				"type" : "check",
+				"hide" : 1,
+				"options" : {}
 			}
 		]
 	},

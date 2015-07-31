@@ -65,6 +65,8 @@
 	"AboutOther" : "Other Credits",
 	"AboutLogo" : "Logo Design",
 	"AboutFairy" : "Fairy Designer",
+	"AboutReporters" : "Recurring Git Reporters",
+	"AboutReporter" : "Git Reporter",
 	
 	"SettingsTitle" : "KC3改 Settings",
 	
@@ -81,6 +83,8 @@
 	"SettingsCompass" : "Compass and Enemy",
 	"SettingsBattleData" : "Battle Environment",
 	"SettingsBossComp" : "Boss Composition",
+	"SettingsYasenTroll" : "Night Battle \u0022Extra Support\u0022",
+	"SettingsHQDelta" : "HQ EXP Delta on Sortie",
 	
 	"SettingsScreenshot" : "Screenshot",
 	"SettingsSSOutput" : "Output Mode",
