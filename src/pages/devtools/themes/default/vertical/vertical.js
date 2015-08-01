@@ -889,6 +889,9 @@
 				$(".craftGear .equipIcon img", container).attr("src", icon);
 				$(".craftGear .equipName", container).text( PlayerItem.name() );
 				
+				// Recall equipment count
+				this.GearSlots(container, {}, local);
+				
 				// Show extra item info
 				var countExisting = KC3GearManager.countByMasterId( data.itemMasterId );
 				if(countExisting === 0){
