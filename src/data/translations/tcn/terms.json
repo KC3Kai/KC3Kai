@@ -65,6 +65,8 @@
 	"AboutOther" : "其他鳴謝",
 	"AboutLogo" : "KC3 改標誌設計",
 	"AboutFairy" : "精靈設計者",
+	"AboutReporters" : "經常出現的Git回報者們",
+	"AboutReporter" : "Git回報員",
 	
 	"SettingsTitle" : "KC3改設定",
 	
@@ -81,6 +83,7 @@
 	"SettingsCompass" : "指南針、敵艦隊編排",
 	"SettingsBattleData" : "戰鬥資料",
 	"SettingsBossComp" : "敵主力艦隊編排",
+"SettingsHQDelta" : "出擊時司令部經驗值增加量",
 	
 	"SettingsScreenshot" : "螢幕截圖",
 	"SettingsSSOutput" : "輸出模式",
@@ -124,7 +127,7 @@
 	"Panel" : " F12 面板",
 	"Volume" : "音量",
 	"None" : "None",
-	"Pixel" : "像素",
+	"Pixels" : "像素",
  	"LearnMore" : "詳細介紹", 
  	"Saved" : "已儲存！",
 	
