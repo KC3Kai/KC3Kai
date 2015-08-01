@@ -54,8 +54,14 @@ Contains summary information about a fleet and its 6 ships
 		return KC3ShipManager.get( this.ships[slot] );
 	};
 	
-	KC3Fleet.prototype.countShips = function( slot ){
+	KC3Fleet.prototype.countShips = function(){
 		return $.grep(this.ships, function(shipId){ return shipId>-1; }).length;
+	};
+
+	KC3Fleet.prototype.resetAfterHp = function(){
+		for(var i = 0; i < this.countShips(); i++) {
+			this.ship(i).resetAfterHp();
+		}
 	};
 	
 	KC3Fleet.prototype.clearNonFlagShips = function(){

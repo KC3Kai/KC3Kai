@@ -37,6 +37,9 @@ Xxxxxxx
 				ships: [ -1, -1, -1, -1, -1, -1 ]
 			};
 			
+			var fleet = PlayerManager.fleets[this.fleetSent];
+			fleet.resetAfterHp();
+			
 			// Save on database and remember current sortieId
 			var self = this;
 			KC3Database.Sortie({

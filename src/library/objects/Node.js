@@ -154,6 +154,15 @@ Used by SortieManager
 				this.enemySunk[i-7] = true;
 			}
 		}
+		var fleetId = KC3SortieManager.fleetSent;
+		var fleet = PlayerManager.fleets[fleetId - 1];
+		var shipNum = fleet.countShips();
+		for(var i = 0; i < shipNum; i++) {
+			var ship = fleet.ship(i);
+			ship.afterHp[0] = result[i+1].currentHp;
+			ship.afterHp[1] = ship.hp[1];
+			console.log(ship);
+		}
 		// for night battles
 		//DA.analyzeRawNightBattleJS(svdata.api_data)
 	};
@@ -181,6 +190,14 @@ Used by SortieManager
 			if ((result[i] !== null) && (result[i].currentHp <= 0)) {
 				this.enemySunk[i-7] = true;
 			}
+		}
+		var fleetId = KC3SortieManager.fleetSent;
+		var fleet = PlayerManager.fleets[fleetId - 1];
+		var shipNum = fleet.countShips();
+		for(var i = 0; i < shipNum; i++) {
+			var ship = fleet.ship(i);
+			ship.afterHp[0] = result[i+1].currentHp;
+			ship.afterHp[1] = ship.hp[1];
 		}
 	};
 	
