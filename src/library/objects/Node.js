@@ -149,7 +149,8 @@ Used by SortieManager
 		// for regular battles
 		var result = DA.analyzeRawBattleJS(battleData); 
 		console.log(result);
-		for (var i = 7; i < 13; i++) {
+		var i = 0;
+		for (i = 7; i < 13; i++) {
 			if ((result[i] !== null) && (result[i].currentHp <= 0)) {
 				this.enemySunk[i-7] = true;
 			}
@@ -157,7 +158,7 @@ Used by SortieManager
 		var fleetId = KC3SortieManager.fleetSent;
 		var fleet = PlayerManager.fleets[fleetId - 1];
 		var shipNum = fleet.countShips();
-		for(var i = 0; i < shipNum; i++) {
+		for(i = 0; i < shipNum; i++) {
 			var ship = fleet.ship(i);
 			ship.afterHp[0] = result[i+1].currentHp;
 			ship.afterHp[1] = ship.hp[1];
@@ -186,7 +187,8 @@ Used by SortieManager
 		var DA = PS["KanColle.DamageAnalysis"];
 		var result = DA.analyzeRawNightBattleJS( nightData ); 
 		// console.log(result);
-		for (var i = 7; i < 13; i++) {
+		var i = 0;
+		for (i = 7; i < 13; i++) {
 			if ((result[i] !== null) && (result[i].currentHp <= 0)) {
 				this.enemySunk[i-7] = true;
 			}
@@ -194,7 +196,7 @@ Used by SortieManager
 		var fleetId = KC3SortieManager.fleetSent;
 		var fleet = PlayerManager.fleets[fleetId - 1];
 		var shipNum = fleet.countShips();
-		for(var i = 0; i < shipNum; i++) {
+		for(i = 0; i < shipNum; i++) {
 			var ship = fleet.ship(i);
 			ship.afterHp[0] = result[i+1].currentHp;
 			ship.afterHp[1] = ship.hp[1];
