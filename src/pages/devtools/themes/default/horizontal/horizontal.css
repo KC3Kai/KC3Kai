@@ -1339,6 +1339,7 @@
 	overflow:hidden;
 	z-index:2;
 	background:#fff;
+	-webkit-transform: rotate(-90deg);
 }
 #h .battle .battle_formation img {
 	width:30px;

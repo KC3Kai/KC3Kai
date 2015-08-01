@@ -3391,11 +3391,15 @@
 	padding:0px 0px 0px 50px;
 	margin:0px 0px 3px 0px;
 }
+#v.panel-size-300px .battle .battle_enemy_formation img {
+	-webkit-transform: rotate(-90deg);
+}
 #v.panel-size-420px .battle .battle_enemy_formation {
 	width:40px;
 	height:40px;
 	margin:15px 0px 3px 5px;
 	float:left;
+	-webkit-transform: rotate(-90deg);
 }
 #v.panel-size-300px .battle .battle_enemies {
 	width:140px;
