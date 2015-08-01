@@ -196,6 +196,15 @@
 				"gh" :"https://github.com/rephira",
 				"wk" :"http://kancolle.wikia.com/wiki/User:Rephira"
 			}
+		},
+		{
+			"name": "Yuedasoldier",
+			"avatar" : "http://img4.wikia.nocookie.net/__cb1420715487/common/avatars/thumb/8/83/25548706.png/150px-25548706.png.jpg",
+			"desc" : "Tiếng Việt",
+			"links" : {
+				"fb" :"https://www.facebook.com/Raigun.da.soldier",
+				"wk" :"http://kancolle.wikia.com/wiki/User:Yuedasoldier"
+			}
 		}
 	],
 	"AboutTesters" : [
@@ -224,6 +233,14 @@
 			"links": {
 				"gh" :"https://github.com/AlanSchaeffer"
 			}
+		},
+		{
+			"name": "Wikia Bot-chan",
+			"avatar": "http://img1.wikia.nocookie.net/__cb1426319944/common/avatars/thumb/1/1b/26202046.png/150px-26202046.png.jpg",
+			"desc": "AboutDevTester",
+			"links": {
+				"wk" :"http://kancolle.wikia.com/wiki/User:KancolleChatlogger"
+			}
 		}
 	],
 	"AboutOther" : [
@@ -244,6 +261,67 @@
 			"desc" : "AboutFairy",
 			"links" : {
 				"da" :"http://tykez269.deviantart.com"
+			}
+		}
+	],
+	"AboutReporters" : [
+		{
+			"name": "SanaNoHana",
+			"avatar" : "https://avatars0.githubusercontent.com/u/12227168?v=3&s=40",
+			"desc" : "AboutReporter",
+			"links" : {
+				"gh" :"https://github.com/SanaNoHana"
+			}
+		},
+		{
+			"name": "Ethrundr",
+			"avatar" : "https://avatars2.githubusercontent.com/u/13522800?v=3&s=40",
+			"desc" : "AboutReporter",
+			"links" : {
+				"gh" :"https://github.com/ethrundr",
+				"wk" :"http://kancolle.wikia.com/wiki/User:Ethrundr"
+			}
+		},
+		{
+			"name": "bcc32",
+			"avatar" : "https://avatars0.githubusercontent.com/u/1239097?v=3&s=40",
+			"desc" : "AboutReporter",
+			"links" : {
+				"gh" :"https://github.com/bcc32"
+			}
+		},
+		{
+			"name": "URSvAir14",
+			"avatar" : "https://avatars0.githubusercontent.com/u/12261357?v=3&s=40",
+			"desc" : "AboutReporter",
+			"links" : {
+				"gh" :"https://github.com/URSvAir14"
+			}
+		},
+		{
+			"name": "lott10",
+			"avatar" : "https://avatars1.githubusercontent.com/u/12295836?v=3&s=40",
+			"desc" : "AboutReporter",
+			"links" : {
+				"gh" :"https://github.com/lott10"
+			}
+		},
+		{
+			"name": "BWinkKeyShellDinkInc",
+			"avatar" : "https://avatars0.githubusercontent.com/u/12371701?v=3&s=40",
+			"desc" : "AboutReporter",
+			"links" : {
+				"gh" :"https://github.com/BWinkKeyShellDinkInc",
+				"wk" :"http://kancolle.wikia.com/wiki/User:BWinkKeyShellDinkInc"
+			}
+		},
+		{
+			"name": "dustfan",
+			"avatar" : "https://avatars0.githubusercontent.com/u/12269598?v=3&s=40",
+			"desc" : "AboutReporter",
+			"links" : {
+				"gh" :"https://github.com/dustfan",
+				"wk" :"http://kancolle.wikia.com/wiki/User:DustFan"
 			}
 		}
 	]

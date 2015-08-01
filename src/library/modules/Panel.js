@@ -33,6 +33,7 @@ Manages multiple instances of \library\modules\Dashboard.js
 				callback(true);
 			}catch(e){
 				callback(false, e.message);
+				console.error(e);
 			}
 		},
 		

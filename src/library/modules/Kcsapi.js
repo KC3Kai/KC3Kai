@@ -483,11 +483,11 @@ Previously known as "Reactor"
 		},
 		
 		"api_req_battle_midnight/sp_midnight":function(params, response, headers){
-			KC3SortieManager.engageBattle(
+			KC3SortieManager.engageBattleNight(
 				response.api_data,
 				Math.floor((new Date(headers.Date)).getTime()/1000)
 			);
-			KC3Network.trigger("BattleNight");
+			KC3Network.trigger("BattleStart");
 		},
 		
 		/* Yasen as second part of node battle
@@ -500,67 +500,68 @@ Previously known as "Reactor"
 		/* Battle Results
 		-------------------------------------------------------*/
 		"api_req_sortie/battleresult":function(params, response, headers){
-			// Vague quest that clears with no requirement
-			KC3QuestManager.get(216).increment(); // Bd2: Defeat the flagship of an enemy fleet
+			var
+				getRank = function(r){ return ['E','D','C','B','A','S','SS'].indexOf(r); };
+			
+			// Vague quest that clears with no rank requirement
+			if(response.api_data.api_destsf)
+				KC3QuestManager.get(216).increment(); // Bd2: Defeat the flagship of an enemy fleet
 			
 			// If victory for "defeat"-type quests
-			if(["A","B","S","SS"].indexOf(response.api_data.api_win_rank) > -1){
-				KC3QuestManager.get(201).increment(); // Bd1: Defeat an enemy fleet
-				KC3QuestManager.get(210).increment(); // Bd3: Defeat 10 abyssal fleets (B rank+)
-				
-				if( KC3SortieManager.map_world==2 && KC3SortieManager.currentNode().isBoss() ){
-					KC3QuestManager.get(226).increment(); // Bd7: Defeat 5 bosses in World 2
+			var rankPt = getRank(response.api_data.api_win_rank);
+			while(rankPt>=3) {
+				switch(rankPt) {
+					case 6: // PERFECT S
+					case 5: // S
+						KC3QuestManager.get(214).increment(3); // Bw1: 4th requirement: 6 S ranks (index:3)
+						
+						if(KC3SortieManager.currentNode().isBoss()) {
+							switch(true) {
+								case KC3SortieManager.isSortieAt(5,2):
+									KC3QuestManager.get(243).increment(); // Bw9: Sortie to [W5-2] and S-rank the boss node 2 times
+									break;
+								case KC3SortieManager.isSortieAt(6,1):
+									KC3QuestManager.get(256).increment(); // Bm2: Deploy to [W6-1] and obtain an S-rank the boss node 3 times
+									break;
+							}
+						}
+						break;
+					case 4: // A
+						if( KC3SortieManager.isSortieAt(1,5) && KC3SortieManager.currentNode().isBoss() ){
+							KC3QuestManager.get(261).increment(); // Bw10: Sortie to [W1-5] and A-rank+ the boss node 3 times
+							KC3QuestManager.get(265).increment(); // Bm5: Deploy a fleet to [W1-5] and A-rank+ the boss node 10 times
+						}
+						break;
+					case 3: // B
+						KC3QuestManager.get(201).increment(); // Bd1: Defeat an enemy fleet
+						KC3QuestManager.get(210).increment(); // Bd3: Defeat 10 abyssal fleets (B rank+)
+						
+						if(KC3SortieManager.currentNode().isBoss()) {
+							switch(true) {
+								case KC3SortieManager.isSortieAt( 2 ):
+									KC3QuestManager.get(226).increment(); // Bd7: Defeat 5 bosses in World 2
+									break;
+								case KC3SortieManager.isSortieAt(3,3):
+								case KC3SortieManager.isSortieAt(3,4):
+								case KC3SortieManager.isSortieAt(3,5):
+									KC3QuestManager.get(241).increment(); // Bw7: Defeat 5 bosses in Worlds [W3-3], [W3-4] or [W3-5]
+									break;
+								case KC3SortieManager.isSortieAt( 4 ):
+									KC3QuestManager.get(229).increment(); // Bw6: Defeat 12 bosses in horned nodes in World 4
+									break;
+								case(KC3SortieManager.isSortieAt(4,4)):
+									KC3QuestManager.get(242).increment(); // Bw8: Defeat a boss in World [W4-4]
+									break;
+							}
+							KC3QuestManager.get(214).increment(2); // Bw1: 3rd requirement: Win vs 12 bosses (index:2)
+						}
+						break;
+					default: // DEFEAT
+						break;
 				}
-				
-				if( KC3SortieManager.map_world==4 && KC3SortieManager.currentNode().isBoss() ){
-					KC3QuestManager.get(229).increment(); // Bw6: Defeat 12 bosses in horned nodes in World 4
-				}
-				
-				if( KC3SortieManager.map_world==4 && KC3SortieManager.map_num==4 && KC3SortieManager.currentNode().isBoss() ){
-					KC3QuestManager.get(242).increment(); // Bw8: Defeat a boss in World [W4-4]
-				}
-				
-				if( KC3SortieManager.map_world==3 && (
-					KC3SortieManager.map_num==3
-					|| KC3SortieManager.map_num==4
-					|| KC3SortieManager.map_num==5
-				) && KC3SortieManager.currentNode().isBoss() ){
-					KC3QuestManager.get(241).increment(); // Bw7: Defeat 5 bosses in Worlds [W3-3], [W3-4] or [W3-5]
-				}
-				
-				if( KC3SortieManager.currentNode().isBoss() ){
-					KC3QuestManager.get(214).increment(2); // Bw1: 3rd requirement: Win vs 12 bosses (index:2)
-				}
+				rankPt--;
 			}
 			
-			// Required to S rank the boss
-			if(["S","SS"].indexOf(response.api_data.api_win_rank) > -1){
-				
-				if( KC3SortieManager.map_world==5 && KC3SortieManager.map_num==2 && KC3SortieManager.currentNode().isBoss() ){
-					KC3QuestManager.get(243).increment(); // Bw9: Sortie to [W5-2] and S-rank the boss node 2 times
-				}
-				
-				KC3QuestManager.get(214).increment(3); // Bw1: 4th requirement: 6 S ranks (index:3)
-				
-				if( KC3SortieManager.map_world==6 && KC3SortieManager.map_num==1 && KC3SortieManager.currentNode().isBoss() ){
-					KC3QuestManager.get(256).increment(); // Bm2: Deploy to [W6-1] and obtain an S-rank the boss node 3 times
-				}
-				
-			}
-			
-			// Required to A+ rank the boss
-			if(["A","S","SS"].indexOf(response.api_data.api_win_rank) > -1){
-				
-				if( KC3SortieManager.map_world==1 && KC3SortieManager.map_num==5 && KC3SortieManager.currentNode().isBoss() ){
-					KC3QuestManager.get(261).increment(); // Bw10: Sortie to [W1-5] and A-rank+ the boss node 3 times
-				}
-				
-				if( KC3SortieManager.map_world==1 && KC3SortieManager.map_num==5 && KC3SortieManager.currentNode().isBoss() ){
-					KC3QuestManager.get(265).increment(); // Bm5: Deploy a fleet to [W1-5] and A-rank+ the boss node 10 times
-				}
-				
-				
-			}
 			
 			// If node is a boss
 			if( KC3SortieManager.currentNode().isBoss() ){
@@ -578,8 +579,9 @@ Previously known as "Reactor"
 			// KC3QuestManager.get(228).increment(); // Bw5: Sink 15 submarines
 			
 			KC3SortieManager.resultScreen( response.api_data );
+			if(!ConfigManager.info_delta)
+				KC3Network.trigger("HQ");
 			KC3Network.trigger("BattleResult");
-			KC3Network.trigger("HQ");
 			KC3Network.trigger("Quests");
 		},
 		
@@ -587,8 +589,9 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_combined_battle/battleresult":function(params, response, headers){
 			KC3SortieManager.resultScreen( response.api_data );
+			if(!ConfigManager.info_delta)
+				KC3Network.trigger("HQ");
 			KC3Network.trigger("BattleResult");
-			KC3Network.trigger("HQ");
 			KC3Network.trigger("Quests");
 		},
 		

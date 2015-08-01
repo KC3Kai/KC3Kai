@@ -211,25 +211,25 @@
         "name": "Reorganize the 18th Squadron!",
         "desc": "Have Tenryuu, Tatsuta and 2 or more other ships in your fleet"
     },
-	"154": {
+    "154": {
         "name": "Organize the surface attack fleet!",
         "desc": "Have Hiei, Kirishima, Nagara, Akatsuki, Ikazuchi, Inazuma in your fleet"
     },
-	"155": {
+    "155": {
         "name": "Organize the new 6th Destroyer Division!",
         "desc": "Have Akatsuki Kai2 as Flagship with Hibiki/Bep, Ikazuchi, Inazuma in your fleet"
     },
-	"156": {
+    "156": {
         "name": "1st Torpedo Squadron, Prepare for a Rush to the Northern Sea",
         "desc": "Have Abukuma as flagship with Hibiki/Вер, Hatsushimo, Wakaba, Samidare and Shimakaze in your main fleet"
     },
-	"157": {
+    "157": {
         "name": "1st Torpedo Squadron, Prepare for Another Rush to the Northern Sea",
         "desc": "Have Abukuma Kai Ni as flagship with Hibiki/Вер, Yuugumo, Naganami, Akigumo and Shimakaze in your main fleet"
     },
-	
-	
-	
+    
+    
+    
     "202": {
         "name": "First Sortie!",
         "desc": "Deploy your main fleet on a combat mission."
@@ -410,509 +410,509 @@
         "name": "Deploy the 18th Squadron",
         "desc": "Tenryuu, Tatsuta, and at least 2 other ships to [W2-3] and S-rank the boss node"
     },
-	"276": {
+    "276": {
         "name": "Sortie the surface attack fleet!",
         "desc": "Sortie Hiei, Kirishima, Nagara, Akatsuki, Ikazuchi, Inazuma to 5-1 and clear the map with an S-rank"
     },
-	"277": {
+    "277": {
         "name": "DesDiv6 Anti-Submarine Mission!",
         "desc": "Sortie Akatsuki Kai2 , Hibiki/Verniy, Ikazuchi, Inazuma to 1-5 and clear the map with at least A-rank"
     },
-	"278": {
+    "278": {
         "name": "Rush the 1st Torpedo Squadron to Operation KE",
         "desc": "Sortie Abukuma as flagship with Hibiki/Вер, Hatsushimo, Wakaba, Samidare and Shimakaze to 3-2 and B-Rank+ the boss"
     },
-	"279": {
+    "279": {
         "name": "Rush the 1st Torpedo Squadron to Operation KE Again",
         "desc": "Sortie Abukuma Kai-2 as flagship with Hibiki/Вер, Yuugumo, Naganami, Akigumo and Shimakaze to 3-2 and B-Rank+ the boss"
     },
-	
-	
-	
-	"201": {
+    
+    
+    
+    "201": {
         "code": "Bd1",
         "name": "Daily Sortie 1",
         "desc": "Defeat an abyssal fleet",
-		"unlock": [ 216, 211, 212 ],
-		"tracking": [ [0,1] ]
+        "unlock": [ 216, 211, 212 ],
+        "tracking": [ [0,1] ]
     },
-	"216": {
-		"code": "Bd2",
-		"name": "Daily Sortie 2",
-		"desc": "Defeat the flagship of an abyssal fleet",
-		"unlock": [ 210, 218, 214, 213 ],
-		"tracking": [ [0,1] ]
-	},
-	"210": {
-		"code": "Bd3",
-		"name": "Daily Sortie 3",
-		"desc": "Defeat 10 abyssal fleets (B rank+)",
-		"tracking": [ [0,10] ]
-	},
-	"211": {
-		"code": "Bd4",
-		"name": "Daily Sortie 4",
-		"desc": "Sink 3 abyssal CV(L)",
-		"tracking": [ [0,3] ]
-	},
-	"218": {
-		"code": "Bd5",
-		"name": "Daily Sortie 5",
-		"desc": "Sink 3 abyssal transport ships",
-		"unlock": [ 226, 220 ],
-		"tracking": [ [0,3] ]
-	},
-	"212": {
-		"code": "Bd6",
-		"name": "Daily Sortie 6",
-		"desc": "Sink 5 abyssal transport ships",
-		"tracking": [ [0,5] ]
-	},
-	"226": {
-		"code": "Bd7",
-		"name": "Daily Sortie 7",
-		"desc": "Defeat 5 bosses in horned nodes in World 2",
-		"unlock": [ 230 ],
-		"tracking": [ [0,5] ]
-	},
-	"230": {
-		"code": "Bd8",
+    "216": {
+        "code": "Bd2",
+        "name": "Daily Sortie 2",
+        "desc": "Defeat the flagship of an abyssal fleet",
+        "unlock": [ 210, 218, 214, 213 ],
+        "tracking": [ [0,1] ]
+    },
+    "210": {
+        "code": "Bd3",
+        "name": "Daily Sortie 3",
+        "desc": "Defeat 10 abyssal fleets (B rank+)",
+        "tracking": [ [0,10] ]
+    },
+    "211": {
+        "code": "Bd4",
+        "name": "Daily Sortie 4",
+        "desc": "Sink 3 abyssal CV(L)",
+        "tracking": [ [0,3] ]
+    },
+    "218": {
+        "code": "Bd5",
+        "name": "Daily Sortie 5",
+        "desc": "Sink 3 abyssal transport ships",
+        "unlock": [ 226, 220 ],
+        "tracking": [ [0,3] ]
+    },
+    "212": {
+        "code": "Bd6",
+        "name": "Daily Sortie 6",
+        "desc": "Sink 5 abyssal transport ships",
+        "tracking": [ [0,5] ]
+    },
+    "226": {
+        "code": "Bd7",
+        "name": "Daily Sortie 7",
+        "desc": "Defeat 5 bosses in horned nodes in World 2",
+        "unlock": [ 230 ],
+        "tracking": [ [0,5] ]
+    },
+    "230": {
+        "code": "Bd8",
         "name": "Daily Sortie 8",
         "desc": "Sink 6 abyssal submarines",
-		"tracking": [ [0,6] ]
+        "tracking": [ [0,6] ]
     },
-	
-	
-	
-	
-	
-	"214": {
-		"code": "Bw1",
-		"name": "Weekly Sortie 1",
-		"desc": "Sortie 36x, Encounter 24 bosses, Win vs 12 bosses, 6 S-ranks",
-		"unlock": [ 221 ],
-		"tracking": [ [0,36], [0,24], [0,12], [0,6] ]
-	},
-	"220": {
-		"code": "Bw2",
+    
+    
+    
+    
+    
+    "214": {
+        "code": "Bw1",
+        "name": "Weekly Sortie 1",
+        "desc": "Sortie 36x, Encounter 24 bosses, Win vs 12 bosses, 6 S-ranks",
+        "unlock": [ 221 ],
+        "tracking": [ [0,36], [0,24], [0,12], [0,6] ]
+    },
+    "220": {
+        "code": "Bw2",
         "name": "Weekly Sortie 2",
         "desc": "Sink 20 abyssal CV(L)",
-		"unlock": [ 228 ],
-		"tracking": [ [0,20] ]
+        "unlock": [ 228 ],
+        "tracking": [ [0,20] ]
     },
-	"213": {
-		"code": "Bw3",
-		"name": "Weekly Sortie 3",
-		"desc": "Sink 20 abyssal transport ships",
-		"tracking": [ [0,20] ]
-	},
-	"221": {
-		"code": "Bw4",
+    "213": {
+        "code": "Bw3",
+        "name": "Weekly Sortie 3",
+        "desc": "Sink 20 abyssal transport ships",
+        "tracking": [ [0,20] ]
+    },
+    "221": {
+        "code": "Bw4",
         "name": "Weekly Sortie 4",
         "desc": "Sink 50 abyssal transport ships",
-		"unlock": [ 261, 257, 264 ],
-		"tracking": [ [0,50] ]
+        "unlock": [ 261, 257, 264 ],
+        "tracking": [ [0,50] ]
     },
-	"228": {
-		"code": "Bw5",
+    "228": {
+        "code": "Bw5",
         "name": "Weekly Sortie 5",
         "desc": "Sink 15 submarines",
-		"unlock": [ 229, 241, 613 ],
-		"tracking": [ [0,15] ]
+        "unlock": [ 229, 241, 613 ],
+        "tracking": [ [0,15] ]
     },
-	"229": {
-		"code": "Bw6",
+    "229": {
+        "code": "Bw6",
         "name": "Weekly Sortie 6",
         "desc": "Defeat 12 bosses in horned nodes in World 4",
-		"unlock": [ 242 ],
-		"tracking": [ [0,12] ]
+        "unlock": [ 242 ],
+        "tracking": [ [0,12] ]
     },
-	"241": {
-		"code": "Bw7",
+    "241": {
+        "code": "Bw7",
         "name": "Weekly Sortie 7",
         "desc": "Defeat 5 bosses in Worlds [W3-3], [W3-4] or [W3-5]",
-		"tracking": [ [0,5] ]
+        "tracking": [ [0,5] ]
     },
     "242": {
-		"code": "Bw8",
+        "code": "Bw8",
         "name": "Weekly Sortie 8",
         "desc": "Defeat a boss in World [W4-4]",
-		"unlock": [ 243 ],
-		"tracking": [ [0,1] ]
+        "unlock": [ 243 ],
+        "tracking": [ [0,1] ]
     },
     "243": {
-		"code": "Bw9",
+        "code": "Bw9",
         "name": "Weekly Sortie 9",
         "desc": "Sortie to [W5-2] and S-rank the boss node 2 times",
-		"tracking": [ [0,2] ]
+        "tracking": [ [0,2] ]
     },
-	"261": {
-		"code": "Bw10",
+    "261": {
+        "code": "Bw10",
         "name": "Weekly Sortie 10",
         "desc": "Sortie to [W1-5] and A-rank+ the boss node 3 times",
-		"tracking": [ [0,3] ]
+        "tracking": [ [0,3] ]
     },
-	
-	
-	
-	
-	
-	"249": {
-		"code": "Bm1",
+    
+    
+    
+    
+    
+    "249": {
+        "code": "Bm1",
         "name": "Deploy the Fifth squadron",
         "desc": "Deploy Myoukou, Nachi, Haguro, +3 ships to [W2-5]. S-rank the boss node",
-		"unlock": [ 265 ]
+        "unlock": [ 265 ]
     },
-	"256": {
-		"code": "Bm2",
+    "256": {
+        "code": "Bm2",
         "name": "Deploy a Submarine Fleet to World 6-1",
         "desc": "Deploy to [W6-1] and obtain an S-rank the boss node 3 times",
-		"tracking": [ [0,3] ]
+        "tracking": [ [0,3] ]
     },
-	"257": {
-		"code": "Bm3",
+    "257": {
+        "code": "Bm3",
         "name": "Deploy a Torpedo Squadron",
         "desc": "1~3 CL (CL flagship) and 3~5 destroyers to [W1-4]. S-rank the boss node"
     },
-	"259": {
-		"code": "Bm4",
+    "259": {
+        "code": "Bm4",
         "name": "Deploy a Battleship Squadron",
         "desc": "Deploy 3 BB(V) + 1 CL + 2 ships to [W5-1] and S-rank the boss node"
     },
-	"265": {
-		"code": "Bm5",
+    "265": {
+        "code": "Bm5",
         "name": "Monthly Escort Duty",
         "desc": "Deploy a fleet to [W1-5] and A-rank+ the boss node 10 times",
-		"tracking": [ [0,10] ]
+        "tracking": [ [0,10] ]
     },
-	"264": {
-		"code": "Bm6",
+    "264": {
+        "code": "Bm6",
         "name": "Sortie the Aircraft Carrier Task Force to the West",
         "desc": "2 CV + 2 DD + 2 ships to [W4-2]. S-rank the boss node",
-		"unlock": [ 266 ]
+        "unlock": [ 266 ]
     },
-	"266": {
-		"code": "Bm7",
+    "266": {
+        "code": "Bm7",
         "name": "Deploy the Counterattack Squadron",
         "desc": "4 DD (DD flagship) + 1 CA (Not CAV) + 1 CL to [W2-5] and S-rank the boss node"
     },
-	
-	
-	
-	
-	
+    
+    
+    
+    
+    
     "301": {
-		"code": "C1",
+        "code": "C1",
         "name": "First Exercise!",
         "desc": "Challenge another fleet in practice mode"
     },
-	 "303": {
-		"code": "C2",
+     "303": {
+        "code": "C2",
         "name": "Daily Exercises 1",
         "desc": "Challenge 3 other fleets in practice mode",
-		"unlock": [ 304, 302 ],
-		"tracking": [ [0,3] ]
+        "unlock": [ 304, 302 ],
+        "tracking": [ [0,3] ]
     },
-	"304": {
-		"code": "C3",
+    "304": {
+        "code": "C3",
         "name": "Daily Exercises 2",
         "desc": "Get 5 victories in practice mode within the same day",
-		"tracking": [ [0,5] ]
+        "tracking": [ [0,5] ]
     },
     "302": {
-		"code": "C4",
+        "code": "C4",
         "name": "Weekly Exercises",
         "desc": "(Weekly) Get 20 victories in practice mode",
-		"tracking": [ [0,20] ]
+        "tracking": [ [0,20] ]
     },
     "307": {
-		"code": "C5",
+        "code": "C5",
         "name": "Improve the Efficiency of the Fleet",
         "desc": "Get 3 victories in practice mode within the same day"
     },
     "308": {
-		"code": "C6",
+        "code": "C6",
         "name": "Improve the Efficiency of the Fleet One More Time",
         "desc": "Get 4 victories in practice mode within the same day"
     },
-	"309": {
-		"code": "C7",
+    "309": {
+        "code": "C7",
         "name": "Strive to Increase the Level of Training in Preparation for Another Rush to the Northern Sea",
         "desc": "Get 4 victories in Exercises within the same day"
     },
-	
-	
-	
-	
+    
+    
+    
+    
     "401": {
-		"code": "D1",
+        "code": "D1",
         "name": "First Expedition",
         "desc": "Perform an expedition"
     },
     "402": {
-		"code": "D2",
+        "code": "D2",
         "name": "Daily Expeditions 1",
         "desc": "Perform 3 successful expeditions",
-		"unlock": [ 403 ],
-		"tracking": [ [0,3] ]
+        "unlock": [ 403 ],
+        "tracking": [ [0,3] ]
     },
     "403": {
-		"code": "D3",
+        "code": "D3",
         "name": "Daily Expeditions 2",
         "desc": "Perform 10 successful expeditions",
-		"tracking": [ [0,10] ]
+        "tracking": [ [0,10] ]
     },
     "404": {
-		"code": "D4",
+        "code": "D4",
         "name": "Weekly Expeditions",
         "desc": "(Weekly) Perform 30 successful expeditions",
-		"tracking": [ [0,30] ]
+        "tracking": [ [0,30] ]
     },
     "405": {
-		"code": "D5",
+        "code": "D5",
         "name": "The First Submarine Operation",
         "desc": "Complete Expedition 30"
     },
     "406": {
-		"code": "D6",
+        "code": "D6",
         "name": "The Second Submarine Operation",
         "desc": "Complete Expedition 30 one more time"
     },
     "408": {
-		"code": "D7",
+        "code": "D7",
         "name": "Continuation of Submarine Operations",
         "desc": "Complete Expedition 30 two more times"
     },
     "409": {
-		"code": "D8",
+        "code": "D8",
         "name": "Strategy Meeting with Overseas Submarine Dispatch!",
         "desc": "Complete Expedition 31"
     },
     "410": {
-		"code": "D9",
+        "code": "D9",
         "name": "Weekly Expedition 2",
         "desc": "(Weekly) Complete expedition 37 or 38",
-		"unlock": [ 411 ],
-		"tracking": [ [0,1] ]
+        "unlock": [ 411 ],
+        "tracking": [ [0,1] ]
     },
-	"412": {
-		"code": "D10",
+    "412": {
+        "code": "D10",
         "name": "Strengthen the Operation of the BBV",
         "desc": "Complete expedition 23"
     },
     "411": {
-		"code": "D11",
+        "code": "D11",
         "name": "Weekly Expedition 3",
         "desc": "(Weekly) Complete expedition 37 or 38 a total of 7 times",
-		"tracking": [ [0,7] ]
+        "tracking": [ [0,7] ]
     },
     "413": {
-		"code": "D12",
+        "code": "D12",
         "name": "Strengthen the Operation of the BBV (Cont.)",
         "desc": "Complete expedition 23 four more times"
     },
     "414": {
-		"code": "D13",
+        "code": "D13",
         "name": "Blue Waters Submarine Operation",
         "desc": "Complete expedition 39"
     },
     "415": {
-		"code": "D14",
+        "code": "D14",
         "name": "Blue Waters Extended Submarine Operation",
         "desc": "Complete expedition 39 two more times"
     },
     "416": {
-		"code": "D15",
+        "code": "D15",
         "name": "Air Defence Exercises",
         "desc": "Complete expedition 6 three times"
     },
     "417": {
-		"code": "D16",
+        "code": "D16",
         "name": "Deploy the Decoy Task Force",
         "desc": "Complete expedition 15"
     },
     "418": {
-		"code": "D17",
+        "code": "D17",
         "name": "Naval Ceremony Preparations",
         "desc": "Complete Expedition 7 twice"
     },
     "419": {
-		"code": "D18",
+        "code": "D18",
         "name": "Naval Ceremony",
         "desc": "Complete expedition 8"
     },
-	
-	
-	
-	
-	
+    
+    
+    
+    
+    
     "501": {
-		"code": "E1",
+        "code": "E1",
         "name": "First Supply",
         "desc": "Resupply a ship"
     },
     "502": {
-		"code": "E2",
+        "code": "E2",
         "name": "First Docking",
         "desc": "Repair a ship"
     },
     "503": {
-		"code": "E3",
+        "code": "E3",
         "name": "Daily Repairs",
         "desc": "Repair 5 ships",
-		"unlock": [ 504 ],
-		"tracking": [ [0,5] ]
+        "unlock": [ 504 ],
+        "tracking": [ [0,5] ]
     },
     "504": {
-		"code": "E4",
+        "code": "E4",
         "name": "Daily Resupplies",
         "desc": "Resupply your ships 15 times",
-		"tracking": [ [0,15] ]
+        "tracking": [ [0,15] ]
     },
-	
-	
-	
-	
-	
-	"605": {
-		"code": "F1",
+    
+    
+    
+    
+    
+    "605": {
+        "code": "F1",
         "name": "Daily Development 1",
         "desc": "Craft a piece of equipment (Failures are OK)",
-		"unlock": [ 606 ],
-		"tracking": [ [0,1] ]
+        "unlock": [ 606 ],
+        "tracking": [ [0,1] ]
     },
-	"606": {
-		"code": "F2",
+    "606": {
+        "code": "F2",
         "name": "Daily Construction 1",
         "desc": "Craft a ship",
-		"unlock": [ 607 ],
-		"tracking": [ [0,1] ]
+        "unlock": [ 607 ],
+        "tracking": [ [0,1] ]
     },
-	"607": {
-		"code": "F3",
+    "607": {
+        "code": "F3",
         "name": "Daily Development 2",
         "desc": "Craft 3 pieces of equipment (Failures are OK)",
-		"unlock": [ 608 ],
-		"tracking": [ [0,3] ]
+        "unlock": [ 608 ],
+        "tracking": [ [0,3] ]
     },
-	 "608": {
-		"code": "F4",
+     "608": {
+        "code": "F4",
         "name": "Daily Construction 2",
         "desc": "Craft 3 ships",
-		"unlock": [ 609, 619 ],
-		"tracking": [ [0,3] ]
+        "unlock": [ 609, 619 ],
+        "tracking": [ [0,3] ]
     },
-	 "609": {
-		"code": "F5",
+     "609": {
+        "code": "F5",
         "name": "Daily Dismantlement",
         "desc": "Scrap 2 ships",
-		"tracking": [ [0,2] ]
+        "tracking": [ [0,2] ]
     },
     "601": {
-		"code": "F6",
+        "code": "F6",
         "name": "First Construction",
         "desc": "Craft a ship"
     },
     "602": {
-		"code": "F7",
+        "code": "F7",
         "name": "First Development",
         "desc": "Craft a piece of equipment"
     },
     "603": {
-		"code": "F8",
+        "code": "F8",
         "name": "First Dismantlement",
         "desc": "Dismantle a ship"
     },
     "604": {
-		"code": "F9",
+        "code": "F9",
         "name": "First Disposal",
         "desc": "Scrap a piece of equipment"
     },
     "610": {
-		"code": "F10",
+        "code": "F10",
         "name": "Preparation for LSC (Part 2)",
         "desc": "Scrap equipment 4 times"
     },
-	"612": {
-		"code": "F11",
+    "612": {
+        "code": "F11",
         "name": "Prepare the Drum Canisters",
         "desc": "Scrap equipment 3 times"
     },
-	 "613": {
-		"code": "F12",
+     "613": {
+        "code": "F12",
         "name": "Weekly Dismantlement",
         "desc": "Scrap equipment 24 times",
-		"tracking": [ [0,24] ]
+        "tracking": [ [0,24] ]
     },
-	 "614": {
-		"code": "F13",
+     "614": {
+        "code": "F13",
         "name": "Model Conversion (to Tenzan)",
         "desc": "Have flagship equipped with Type 97 Torpedo Bomber (Tomonaga Squadron), then scrap 2 Tenzan"
     },
-	"615": {
-		"code": "F14",
+    "615": {
+        "code": "F14",
         "name": "Model Conversion (to Suisei)",
         "desc": "Have flagship equipped with Type 99 Dive Bomber (Egusa Squadron), then scrap 2 Suisei"
     },
     "616": {
-		"code": "F15",
+        "code": "F15",
         "name": "Model Conversion (to Reppuu)",
         "desc": "Have flagship equipped with Zero Fighter Type 52 Type C (601 Air Group), then scrap 2 Reppuu"
     },
-	"617": {
-		"code": "F16",
+    "617": {
+        "code": "F16",
         "name": "Preparing for Irako",
         "desc": "Scrap equipment 10 times"
     },
-	"618": {
-		"code": "F17",
+    "618": {
+        "code": "F17",
         "name": "First Equipment Modernisation",
         "desc": "Perform equipment modernisation once"
     },
     "619": {
-		"code": "F18",
+        "code": "F18",
         "name": "Daily Equipment Modernisation",
         "desc": "Perform equipment modernisation once",
-		"tracking": [ [0,1] ]
+        "tracking": [ [0,1] ]
     },
-	
-	
     
-	
-	
+    
+    
+    
+    
     "701": {
-		"code": "G1",
+        "code": "G1",
         "name": "First Modernization",
         "desc": "Perform a successful modernization"
     },
     "702": {
-		"code": "G2",
+        "code": "G2",
         "name": "Daily Modernization",
         "desc": "Perform 2 successful modernizations",
-		"unlock": [ 703 ],
-		"tracking": [ [0,2] ]
+        "unlock": [ 703 ],
+        "tracking": [ [0,2] ]
     },
     "703": {
-		"code": "G3",
+        "code": "G3",
         "name": "Weekly Modernization",
         "desc": "(Weekly) Perform 15 successful modernizations",
-		"tracking": [ [0,15] ]
+        "tracking": [ [0,15] ]
     },
     "704": {
-		"code": "G4",
+        "code": "G4",
         "name": "Preparation for LSC (Part 1)",
         "desc": "Perform 4 successful modernizations"
     },
-	
-	
-	
-	
-	
-	"611": {
+    
+    
+    
+    
+    
+    "611": {
         "name": "In Preparation of Love! (Part 1)",
         "desc": "Scrap equipment 2 times to show your love!"
     },
-	"306": {
+    "306": {
         "name": "In Preparation of Love (Part 2)",
         "desc": "Show your love by getting 2 victories in practice mode."
     }

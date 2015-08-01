@@ -93,6 +93,19 @@
 				})).execute();
 			});
 			
+			$(".screenshot-battle-button", this.domElement).on("click", function(){
+				$(this).hide();
+				
+				// Tell service to pass a message to gamescreen on inspected window to get a screenshot
+				(new RMsg("service", "screenshot", {
+					tabId: chrome.devtools.inspectedWindow.tabId,
+					playerName: PlayerManager.hq.name
+				}, function(response){
+					console.log(response);
+					$(".screenshot-battle-button", self.domElement).show();
+				})).execute();
+			});
+			
 			// Exit battle mode
 			$(".battle .battle_revert", this.domElement).on("click", function(){
 				KC3Panel.mode = "normal";
@@ -112,6 +125,7 @@
 				$(".battle .switch_fleet_type_button", this.domElement).text("Combined");
 				$(".battle .switch-ship-attribute-buttons", this.domElement).show();
 			} else {
+				$(".battle .screenshot-battle-button", this.domElement).text("Screenshot");
 				$(".battle .switch_fleet_type_button", this.domElement).text("Single");
 				$(".battle .switch-ship-attribute-buttons", this.domElement).hide();
 			}
@@ -229,12 +243,12 @@
 					$(".admiral_comm", container).text( PlayerManager.hq.desc );
 					$(".admiral_rank", container).text( PlayerManager.hq.rank );
 					$(".level_value", container).text( PlayerManager.hq.level );
-					$(".exp_bar", container).css({width: Math.floor(PlayerManager.hq.exp[0]*88)+"px"});
+					$(".exp_bar", container).css({width: Math.round(PlayerManager.hq.exp[0]*88)+"px"});
 					$(".exp_text", container).text( PlayerManager.hq.exp[1] );
 				}else if(KC3Panel.mode=="battle"){
 					$(".battle_admiral", container).text( PlayerManager.hq.name );
 					$(".battle_hqlevel_text", container).text( PlayerManager.hq.level );
-					$(".battle_hqexpval,.battle_hqexpgain", container).css({width: Math.floor(PlayerManager.hq.exp[0]*60)+"px"});
+					$(".battle_hqexpval,.battle_hqexpgain", container).css({width: Math.round(PlayerManager.hq.exp[0]*60)+"px"});
 					$(".battle_hqlevel_next", container).text( PlayerManager.hq.exp[1] );
 				}
 			},
@@ -375,11 +389,23 @@
 							
 							FleetHP(container, ShipBox, CurrentShip.hp, rosterId );
 							FleetMorale( $(".ship-morale-box", ShipBox), CurrentShip.morale );
-							FleetEquipment( $(".ship-gear-1", ShipBox), CurrentShip.equipment(0), CurrentShip.slots[0] );
+							
+							for(var i = 1; i <= 4; i++) {
+								var gearBox = $(".ship-gear-" + i, ShipBox);
+								if (i <= CurrentShip.slotnum) {
+									FleetEquipment( gearBox, CurrentShip.equipment(i-1), CurrentShip.slots[i-1] );
+									if (CurrentShip.equipment(i-1).itemId > 0) {
+										$(".ship-equip-capacity", gearBox).hide();
+									}
+								} else {
+									FleetEquipment( gearBox, null, null );
+								}
+							}
+							/*FleetEquipment( $(".ship-gear-1", ShipBox), CurrentShip.equipment(0), CurrentShip.slots[0] );
 							FleetEquipment( $(".ship-gear-2", ShipBox), CurrentShip.equipment(1), CurrentShip.slots[1] );
 							FleetEquipment( $(".ship-gear-3", ShipBox), CurrentShip.equipment(2), CurrentShip.slots[2] );
 							FleetEquipment( $(".ship-gear-4", ShipBox), CurrentShip.equipment(3), CurrentShip.slots[3] );
-							
+							*/
 							var FuelPercent = CurrentShip.fuel / CurrentShip.master().api_fuel_max;
 							var AmmoPercent = CurrentShip.ammo / CurrentShip.master().api_bull_max;
 							$(".supply-fuel .supply-text", ShipBox).text(Math.floor(FuelPercent*100)+"%");
@@ -462,11 +488,20 @@
 								
 								FleetHP(container, ShipBox, CurrentShip.hp, rosterId );
 								FleetMorale( $(".ship-morale-box", ShipBox), CurrentShip.morale );
-								FleetEquipment( $(".ship-gear-1", ShipBox), CurrentShip.equipment(0), CurrentShip.slots[0] );
+								
+								for(var i = 1; i <= 4; i++) {
+									var gearBox = $(".ship-gear-" + i, ShipBox);
+									if (i <= CurrentShip.slotnum) {
+										FleetEquipment( gearBox, CurrentShip.equipment(i-1), CurrentShip.slots[i-1] );
+									} else {
+										FleetEquipment( gearBox, null, null );
+									}
+								}
+								/*FleetEquipment( $(".ship-gear-1", ShipBox), CurrentShip.equipment(0), CurrentShip.slots[0] );
 								FleetEquipment( $(".ship-gear-2", ShipBox), CurrentShip.equipment(1), CurrentShip.slots[1] );
 								FleetEquipment( $(".ship-gear-3", ShipBox), CurrentShip.equipment(2), CurrentShip.slots[2] );
 								FleetEquipment( $(".ship-gear-4", ShipBox), CurrentShip.equipment(3), CurrentShip.slots[3] );
-								
+								*/
 								var FuelPercent = CurrentShip.fuel / CurrentShip.master().api_fuel_max;
 								var AmmoPercent = CurrentShip.ammo / CurrentShip.master().api_bull_max;
 								$(".supply-fuel .supply-text", ShipBox).text(Math.floor(FuelPercent*100)+"%");
@@ -504,11 +539,19 @@
 								
 								FleetHP(container, ShipBox, CurrentShip.hp, rosterId );
 								FleetMorale( $(".ship-morale-box", ShipBox), CurrentShip.morale );
-								FleetEquipment( $(".ship-gear-1", ShipBox), CurrentShip.equipment(0), CurrentShip.slots[0] );
+								for(var i = 1; i <= 4; i++) {
+									var gearBox = $(".ship-gear-" + i, ShipBox);
+									if (i <= CurrentShip.slotnum) {
+										FleetEquipment( gearBox, CurrentShip.equipment(i-1), CurrentShip.slots[i-1] );
+									} else {
+										FleetEquipment( gearBox, null, null );
+									}
+								}
+								/*FleetEquipment( $(".ship-gear-1", ShipBox), CurrentShip.equipment(0), CurrentShip.slots[0] );
 								FleetEquipment( $(".ship-gear-2", ShipBox), CurrentShip.equipment(1), CurrentShip.slots[1] );
 								FleetEquipment( $(".ship-gear-3", ShipBox), CurrentShip.equipment(2), CurrentShip.slots[2] );
 								FleetEquipment( $(".ship-gear-4", ShipBox), CurrentShip.equipment(3), CurrentShip.slots[3] );
-								
+								*/
 								var FuelPercent = CurrentShip.fuel / CurrentShip.master().api_fuel_max;
 								var AmmoPercent = CurrentShip.ammo / CurrentShip.master().api_bull_max;
 								$(".supply-fuel .supply-text", ShipBox).text(Math.floor(FuelPercent*100)+"%");
@@ -553,11 +596,20 @@
 								
 								FleetHP(container, ShipBox, CurrentShip.hp, rosterId );
 								FleetMorale( $(".ship-morale-box", ShipBox), CurrentShip.morale );
-								FleetEquipment( $(".ship-gear-1", ShipBox), CurrentShip.equipment(0), CurrentShip.slots[0] );
+								
+								for(var i = 1; i <= 4; i++) {
+									var gearBox = $(".ship-gear-" + i, ShipBox);
+									if (i <= CurrentShip.slotnum) {
+										FleetEquipment( gearBox, CurrentShip.equipment(i-1), CurrentShip.slots[i-1] );
+									} else {
+										FleetEquipment( gearBox, null, null );
+									}
+								}
+								/*FleetEquipment( $(".ship-gear-1", ShipBox), CurrentShip.equipment(0), CurrentShip.slots[0] );
 								FleetEquipment( $(".ship-gear-2", ShipBox), CurrentShip.equipment(1), CurrentShip.slots[1] );
 								FleetEquipment( $(".ship-gear-3", ShipBox), CurrentShip.equipment(2), CurrentShip.slots[2] );
 								FleetEquipment( $(".ship-gear-4", ShipBox), CurrentShip.equipment(3), CurrentShip.slots[3] );
-								
+								*/
 								var FuelPercent = CurrentShip.fuel / CurrentShip.master().api_fuel_max;
 								var AmmoPercent = CurrentShip.ammo / CurrentShip.master().api_bull_max;
 								$(".supply-fuel .supply-text", ShipBox).text(Math.floor(FuelPercent*100)+"%");
@@ -608,12 +660,13 @@
 				this.Quests(container, {}, local);
 				
 				// Clear battle node
-				$(".battle .battle_node", container).removeClass("battle_color");
-				$(".battle .battle_node", container).removeClass("resource_color");
-				$(".battle .battle_node", container).removeClass("battle_avoided_color");
-				$(".battle .battle_node", container).removeClass("maelstrom_color");
-				$(".battle .battle_node", container).removeClass("now");
-				$(".battle .battle_node", container).text("");
+				$(".battle .battle_node", container)
+					.removeClass("battle_color")
+					.removeClass("resource_color")
+					.removeClass("battle_avoided_color")
+					.removeClass("maelstrom_color")
+					.removeClass("now")
+					.text("");
 				
 				// Change interface mode
 				$(".normal", container).hide();
@@ -627,11 +680,12 @@
 				$(".battle .battle_node_"+numNodes, container).addClass( "now" );
 				$(".battle .battle_node_"+numNodes, container).text( thisNode.id );
 				
-				$(".battle .battle_nodenum", container).removeClass("battle_color");
-				$(".battle .battle_nodenum", container).removeClass("resource_color");
-				$(".battle .battle_nodenum", container).removeClass("battle_avoided_color");
-				$(".battle .battle_nodenum", container).removeClass("maelstrom_color");
-				$(".battle .battle_nodenum", container).text( thisNode.id );
+				$(".battle .battle_nodenum", container)
+					.removeClass("battle_color")
+					.removeClass("resource_color")
+					.removeClass("battle_avoided_color")
+					.removeClass("maelstrom_color")
+					.text( thisNode.id );
 				
 				$(".battle .battle_current", container).text("NEXT NODE");
 				
@@ -710,49 +764,63 @@
 					}
 				});
 				
-				// If support expedition is triggered on this battle
-				if(thisNode.supportFlag){
-					$(".battle .battle_support img", container).attr("src", "../../../../assets/img/ui/support.png");
-				}else{
-					$(".battle .battle_support img", container).attr("src", "../../../../assets/img/ui/support-x.png");
-				}
-				
-				// If night battle will be asked after this battle
-				if(thisNode.yasenFlag){
-					$(".battle .battle_yasen img", container).attr("src", "../../../../assets/img/ui/yasen.png");
-				}else{
-					$(".battle .battle_yasen img", container).attr("src", "../../../../assets/img/ui/yasen-x.png");
-				}
-				
 				// Battle conditions
 				$(".battle .battle_cond_text", container).removeClass( "good" );
 				$(".battle .battle_cond_text", container).removeClass( "bad" );
-				
-				$(".battle .battle_cond_detect .battle_cond_text", container).text( thisNode.detection[0] );
-				$(".battle .battle_cond_detect .battle_cond_text", container).addClass( thisNode.detection[1] );
-				
 				$(".battle .battle_cond_engage .battle_cond_text", container).text( thisNode.engagement[2] );
 				$(".battle .battle_cond_engage .battle_cond_text", container).addClass( thisNode.engagement[1] );
-				
 				$(".battle .battle_cond_contact .battle_cond_text", container).text(thisNode.fcontact +" vs "+thisNode.econtact);
-				$(".battle .battle_cond_airbattle .battle_cond_text", container).text( thisNode.airbattle[0] );
-				$(".battle .battle_cond_airbattle .battle_cond_text", container).addClass( thisNode.airbattle[1] );
 				
-				// Fighter phase
-				$(".battle .battle_airfighter .battle_airally .battle_airbefore", container).text(thisNode.planeFighters.player[0]);
-				$(".battle .battle_airfighter .battle_airabyss .battle_airbefore", container).text(thisNode.planeFighters.abyssal[0]);
+				// Day battle-only environment
+				if(!thisNode.startNight){
+					// If support expedition is triggered on this battle
+					if(thisNode.supportFlag){
+						$(".battle .battle_support img", container).attr("src", "../../../../assets/img/ui/support.png");
+					}else{
+						$(".battle .battle_support img", container).attr("src", "../../../../assets/img/ui/support-x.png");
+					}
+					
+					// If night battle will be asked after this battle
+					if(thisNode.yasenFlag){
+						$(".battle .battle_yasen img", container).attr("src", "../../../../assets/img/ui/yasen.png");
+					}else{
+						$(".battle .battle_yasen img", container).attr("src", "../../../../assets/img/ui/yasen-x.png");
+					}
 				
-				// Bombing Phase
-				$(".battle .battle_airbomber", container).show();
-				$(".battle .battle_airbomber .battle_airally .battle_airbefore", container).text(thisNode.planeBombers.player[0]);
-				$(".battle .battle_airbomber .battle_airabyss .battle_airbefore", container).text(thisNode.planeBombers.abyssal[0]);
-				
-				// Plane losses
-				$(".battle .battle_airafter", container).text("");
-				if(thisNode.planeFighters.player[1] > 0){ $(".battle .battle_airfighter .battle_airally .battle_airafter", container).text("-"+thisNode.planeFighters.player[1]); }
-				if(thisNode.planeFighters.abyssal[1] > 0){ $(".battle .battle_airfighter .battle_airabyss .battle_airafter", container).text("-"+thisNode.planeFighters.abyssal[1]); }
-				if(thisNode.planeBombers.player[1] > 0){ $(".battle .battle_airbomber .battle_airally .battle_airafter", container).text("-"+thisNode.planeBombers.player[1]); }
-				if(thisNode.planeBombers.abyssal[1] > 0){ $(".battle .battle_airbomber .battle_airabyss .battle_airafter", container).text("-"+thisNode.planeBombers.abyssal[1]); }
+					$(".battle .battle_cond_detect .battle_cond_text", container).text( thisNode.detection[0] );
+					$(".battle .battle_cond_detect .battle_cond_text", container).addClass( thisNode.detection[1] );
+					
+					$(".battle .battle_cond_airbattle .battle_cond_text", container).text( thisNode.airbattle[0] );
+					$(".battle .battle_cond_airbattle .battle_cond_text", container).addClass( thisNode.airbattle[1] );
+					
+					// Fighter phase
+					$(".battle .battle_airfighter .battle_airally .battle_airbefore", container).text(thisNode.planeFighters.player[0]);
+					$(".battle .battle_airfighter .battle_airabyss .battle_airbefore", container).text(thisNode.planeFighters.abyssal[0]);
+					
+					// Bombing Phase
+					$(".battle .battle_airbomber", container).show();
+					$(".battle .battle_airbomber .battle_airally .battle_airbefore", container).text(thisNode.planeBombers.player[0]);
+					$(".battle .battle_airbomber .battle_airabyss .battle_airbefore", container).text(thisNode.planeBombers.abyssal[0]);
+					
+					// Plane losses
+					$(".battle .battle_airafter", container).text("");
+					if(thisNode.planeFighters.player[1] > 0){
+						$(".battle .battle_airfighter .battle_airally .battle_airafter", container).text("-"+thisNode.planeFighters.player[1]);
+					}
+					if(thisNode.planeFighters.abyssal[1] > 0){
+						$(".battle .battle_airfighter .battle_airabyss .battle_airafter", container).text("-"+thisNode.planeFighters.abyssal[1]);
+					}
+					if(thisNode.planeBombers.player[1] > 0){
+						$(".battle .battle_airbomber .battle_airally .battle_airafter", container).text("-"+thisNode.planeBombers.player[1]);
+					}
+					if(thisNode.planeBombers.abyssal[1] > 0){
+						$(".battle .battle_airbomber .battle_airabyss .battle_airafter", container).text("-"+thisNode.planeBombers.abyssal[1]);
+					}
+				}else{
+					// Started on night battle
+					$(".battle .battle_support img", container).attr("src", "../../../../assets/img/ui/support-x.png");
+					$(".battle .battle_yasen img", container).attr("src", "../../../../assets/img/ui/yasen.png");
+				}
 				
 				// Revert rating and drop to default icons since we don't know results yet
 				$(".battle .battle_rating img").attr("src", "../../../../assets/img/ui/rating.png");
@@ -783,7 +851,10 @@
 					"RNGesus bless him",
 					"I bless this run"
 				]; // events? extra operations? end of month? coming soon. (i guess by other)
-				$(".battle .battle_current", container).text(desperateText[Math.floor(Math.random()*5)]);
+				if(ConfigManager.info_troll)
+					$(".battle .battle_current", container).text(desperateText[Math.floor(Math.random()*desperateText.length)]);
+				else
+					$(".battle .battle_current", container).text("NIGHT BATTLE");
 				var thisNode = KC3SortieManager.currentNode();
 				
 			},
@@ -792,21 +863,25 @@
 				$(".battle .battle_current", container).text("RESULTS");
 				var thisNode = KC3SortieManager.currentNode();
 
-				// If EXP left exceeded by gained EXP on sortie
-				if(KC3SortieManager.hqExpGained >= PlayerManager.hq.exp[1]) {
-					KC3SortieManager.hqExpGained -= PlayerManager.hq.exp[1];
-					PlayerManager.hq.exp = [0,KC3Meta.exp(++PlayerManager.hq.level)[0],0];
-					this.HQ(container, {}, local);
+				if(ConfigManager.info_delta) {
+					// If EXP left exceeded by gained EXP on sortie
+					while(KC3SortieManager.hqExpGained >= PlayerManager.hq.exp[1]) {
+						KC3SortieManager.hqExpGained -= PlayerManager.hq.exp[1];
+						PlayerManager.hq.exp = [0,KC3Meta.exp(++PlayerManager.hq.level)[0],0];
+						this.HQ(container, {}, local);
+					}
+					$(".battle_hqexpgain", container).css({width: Math.round((function(){
+						return (PlayerManager.hq.exp[2] + Math.min(PlayerManager.hq.exp[1],KC3SortieManager.hqExpGained)) / KC3Meta.exp(PlayerManager.hq.level)[0];
+					})()*60)+"px"});
 				}
-				$(".battle_hqexpgain", container).css({width: Math.floor((function(){
-					return (PlayerManager.hq.exp[2] + Math.min(PlayerManager.hq.exp[1],KC3SortieManager.hqExpGained)) / KC3Meta.exp(PlayerManager.hq.level)[0];
-				})()*60)+"px"});
 				$(".battle_hqlevel_next_gain", container).text(-KC3SortieManager.hqExpGained);
 				
 				$(".battle .battle_rating img").attr("src", "../../../../assets/img/client/ratings/"+thisNode.rating+".png");
 				
 				if(thisNode.drop > 0){
-					$(".battle .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop));
+					if(ConfigManager.info_drop){
+						$(".battle .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop));
+					}
 					
 					//let the other implements this :P
 					this.ShipSlots(container, {}, local);
@@ -829,6 +904,9 @@
 				var icon = "../../../../assets/img/items/"+MasterItem.api_type[3]+".png";
 				$(".craftGear .equipIcon img", container).attr("src", icon);
 				$(".craftGear .equipName", container).text( PlayerItem.name() );
+				
+				// Recall equipment count
+				this.GearSlots(container, {}, local);
 				
 				// Show extra item info
 				var countExisting = KC3GearManager.countByMasterId( data.itemMasterId );
@@ -897,6 +975,14 @@
 				var thisPvP = (new KC3Node()).defineAsBattle();
 				thisPvP.engage( data.battle );
 				
+				// Formation
+				if((typeof thisPvP.eformation != "undefined") && (thisPvP.eformation > -1)){
+					$(".battle .battle_formation img", container).attr("src", KC3Meta.formationIcon(thisPvP.eformation));
+					$(".battle .battle_formation", container).show();
+				} else {
+					$(".battle .battle_formation", container).hide();
+				}
+				
 				// Show opponent ships faces
 				$.each(thisPvP.eships, function(index, eshipId){
 					if(eshipId > -1){
@@ -960,15 +1046,17 @@
 			},
 			PvPEnd: function(container, data, local){
 				var expGained = data.result.api_get_exp;
-				// If EXP left exceeded by gained EXP on sortie
-				if(expGained >= PlayerManager.hq.exp[1]) {
-					expGained -= PlayerManager.hq.exp[1];
-					PlayerManager.hq.exp = [0,KC3Meta.exp(++PlayerManager.hq.level)[0],0];
-					this.HQ(container, {}, local);
+				if(ConfigManager.info_delta) {
+					// If EXP left exceeded by gained EXP on sortie
+					if(expGained >= PlayerManager.hq.exp[1]) {
+						expGained -= PlayerManager.hq.exp[1];
+						PlayerManager.hq.exp = [0,KC3Meta.exp(++PlayerManager.hq.level)[0],0];
+						this.HQ(container, {}, local);
+					}
+					$(".battle_hqexpgain", container).css({width: Math.floor((function(){
+						return (PlayerManager.hq.exp[2] + Math.min(PlayerManager.hq.exp[1],expGained)) / KC3Meta.exp(PlayerManager.hq.level)[0];
+					})()*60)+"px"});
 				}
-				$(".battle_hqexpgain", container).css({width: Math.floor((function(){
-					return (PlayerManager.hq.exp[2] + Math.min(PlayerManager.hq.exp[1],expGained)) / KC3Meta.exp(PlayerManager.hq.level)[0];
-				})()*60)+"px"});
 				$(".battle_hqlevel_next_gain", container).text(-expGained);
 			}
 		}
@@ -1043,16 +1131,24 @@
 	}
 	
 	function FleetEquipment(element, item, capacity){
-		if(item.itemId > 0){
-			var folder = "../../../../../assets/img/items/";
-			$("img", element).attr("src", folder + item.master().api_type[3] + ".png");
-		}else{
+		if (item === null) {
 			$("img", element).hide();
-		}
-		if(capacity > 0){
-			$(".ship-equip-capacity", element).text(capacity);
-		}else{
-		$(".ship-equip-capacity", element).text("");
+			$(".ship-equip-capacity", element).hide();
+		} else {
+			var folder = "../../../../../assets/img/items/";
+			if(item.itemId > 0){
+				$("img", element).attr("src", folder + item.master().api_type[3] + ".png");
+				$(element).attr("title", item.name());
+			}else{
+				$("img", element).attr("src", folder + "0.png");
+			}
+
+			if(capacity > 0){
+				$(".ship-equip-capacity", element).text(capacity);
+				$(".ship-equip-capacity", element).attr("title", "Plane Capacity");
+			}else{
+				$(".ship-equip-capacity", element).text("");
+			}
 		}
 	}
 	

@@ -281,15 +281,15 @@
     },
     "223": {
         "name": "出擊! 第四戰隊!",
-        "desc": "出動有「高雄」、「愛宕」、「摩耶」、「鳥海」及額外 2 艘艦的艦隊到 2-2 且戰勝敵頭目。"
+        "desc": "出動有「高雄」、「愛宕」、「摩耶」、「鳥海」及額外任何 2 艘艦的艦隊到 2-2 且戰勝敵頭目。"
     },
     "224": {
         "name": "出擊! 西村艦隊!",
-        "desc": "出動有「扶桑」、「山城」、「最上」、「時雨」及額外 2 艘艦的艦隊到 2-3 且戰勝敵頭目。"
+        "desc": "出動有「扶桑」、「山城」、「最上」、「時雨」及額外任何 2 艘艦的艦隊到 2-3 且戰勝敵頭目。"
     },
     "225": {
         "name": "出擊! 第五航空戰隊!",
-        "desc": "出動有「翔鶴」、「瑞鶴」及額外 4 艘艦的艦隊到 3-1 且戰勝敵頭目。"
+        "desc": "出動有「翔鶴」、「瑞鶴」及額外任何 4 艘艦的艦隊到 3-1 且戰勝敵頭目。"
     },
     "227": {
         "name": "出擊! 新三川艦隊!",
@@ -297,23 +297,23 @@
     },
     "231": {
         "name": "出擊! 潛水艦隊!",
-        "desc": "出動有 2 艘潛水艦及額外 4 艘艦的艦隊到 2-3 且戰勝敵頭目。"
+        "desc": "出動有 2 艘潛水艦及額外任何 4 艘艦的艦隊到 2-3 且戰勝敵頭目。"
     },
     "232": {
         "name": "出擊! 航空水上打撃艦隊!",
-        "desc": "出動有 2 艘航空戰艦、 2 艘及額外 2 艘艦的艦隊到 4-2 且戰勝敵頭目。"
+        "desc": "出動有 2 艘航空戰艦、 2 艘航空巡洋艦及額外任何 2 艘艦的艦隊到 4-2 且戰勝敵頭目。"
     },
     "233": {
         "name": "出擊! 第六戰隊!",
-        "desc": "出動有「青葉」、「古鷹」、「加古」、「衣笠」及額外 2 艘艦的艦隊到 2-3 且戰勝敵頭目。"
+        "desc": "出動有「青葉」、「古鷹」、「加古」、「衣笠」及額外任何 2 艘艦的艦隊到 2-3 且戰勝敵頭目。"
     },
     "239": {
         "name": "出擊! 第八驅逐隊!",
-        "desc": "出動有「荒潮」、「朝潮」、「滿朝」、「大朝」及額外 2 艘艦的艦隊到 2-3 且戰勝敵頭目。"
+        "desc": "出動有「荒潮」、「朝潮」、「滿朝」、「大朝」及額外任何 2 艘艦的艦隊到 2-3 且戰勝敵頭目。"
     },
     "240": {
         "name": "出擊! 第十八驅逐隊!",
-        "desc": "出動有「霰」、「霞」、「陽炎」、「不知火」及額外 2 艘艦的艦隊到 3-1 且戰勝敵頭目。"
+        "desc": "出動有「霰」、「霞」、「陽炎」、「不知火」及額外任何 2 艘艦的艦隊到 3-1 且戰勝敵頭目。"
     },
     "244": {
         "name": "出擊! 第三十驅逐隊(第一次)!",
@@ -336,94 +336,99 @@
         "desc": "出動有「睦月」、「望月」、「卯月」及「弥生」的艦隊到 1-5 且於敵頭目取得C 敗或以上成績。"
     },
     "250": {
-        "name": "Deploy the 2nd Carrier Division",
-        "desc": "Deploy Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c) as the flagship, Souryuu (\u84bc\u9f8d) and two destroyers to World 5-2. You may add 2 other ships. Score an S rank victory against the boss."
+        "name": "出擊! 新第二航空戰隊!",
+        "desc": "出動有「蒼龍」、2 艘驅逐艦，並以「飛龍改二」作旗艦的艦隊到 5-2 且於敵頭目取得S 勝。"
     },
     "251": {
-        "name": "Deploy the Elite 2nd Carrier Division",
-        "desc": "Deploy Souryuu Kai Ni (\u84bc\u9f8d\u6539\u4e8c) as the flagship, Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c) and two destroyers to World 4-3. You may add 2 other ships. Score an S rank victory against the boss."
+        "name": "出擊! 精鋭第二航空戰隊!",
+        "desc": "出動有「飛龍改二」、2 艘驅逐艦，並以「蒼龍改二」作旗艦的艦隊到 4-3 且於敵頭目取得S 勝。"
     },
     "252": {
-        "name": "Deploy a Haruna-led Fleet",
-        "desc": "Deploy a fleet with Haruna Kai Ni (\u699b\u540d\u6539\u4e8c) as the flagship and up to 5 additional ships to World 5-1 and score an S rank victory against the boss."
+        "name": "出擊! 戰艦「榛名」!",
+        "desc": "出動以「榛名改二」作旗艦的艦隊到 5-1 且於敵頭目取得S 勝。"
     },
     "253": {
-        "name": "Deploy the 601 Air Group",
-        "desc": "Deploy a fleet with Unryuu Kai (\u96f2\u9f8d\u6539) as the flagship to World 5-2 and score an S rank victory against the boss."
+        "name": "出擊! 第六〇一航空隊!",
+        "desc": "出動以「雲龍改」作旗艦的艦隊到 5-2 且於敵頭目取得S 勝。"
     },
     "254": {
-        "name": "Deploy a Light Carrier Squadron",
-        "desc": "Sortie a fleet of 1-2 light aircraft carriers, 1 light cruiser and 3-4 destroyers to World 2-1 and score an S rank victory against the boss."
+        "name": "出擊! 輕空母戰隊!",
+        "desc": "出動有 1-2 艘輕空母、 1 艘輕巡洋艦及 3-4 艘驅逐艦的艦隊到 2-1 且於敵頭目取得S 勝。."
     },
     "255": {
-        "name": "Deploy a Torpedo Squadron to Bashi Islands",
-        "desc": "Sortie a fleet of 1-2 light cruisers (with one of them as the flagship) and 4-5 destroyers to World 2-2. Score a victory at the boss and sink the enemy flagship."
+        "name": "出擊! 水雷戦隊! (2)",
+        "desc": "出動有 1-2 艘輕巡洋艦、 4-5 艘驅逐艦並以其中 1 艘輕巡洋艦作旗艦的艦隊到 2-2 且於敵頭目取得S 勝。"
     },
-    
-   
     "258": {
-        "name": "Sortie the 2nd Squadron",
-        "desc": "Deploy Nagato (\u9577\u9580), Mutsu (\u9678\u5965), Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce) and up to 2 additional ships to World 4-2. Score two S rank victories at the boss node."
+        "name": "出擊!  第二戰隊!",
+        "desc": "出動有「扶桑」、「陸奧」、「長門」、「山城」及額外任何 2 艘艦的艦隊到 4-2 且於敵頭目取得兩次S 勝。"
     },
    
     "260": {
-        "name": "Deploy the Battleship Squadron in the Northern Waters",
-        "desc": "Deploy two battleships, a light aircraft carrier and up to three additional ships to World 3-5 and score an S rank victory at the boss node."
+        "name": "出擊! 戰艦部隊!",
+        "desc": "出動有 2 艘戰艦(艦空戰艦不在計算內)、 1 艘輕空母及額外任何 3 艘艦的艦隊到 3-5 且於敵頭目取得S 勝。"
     },
     
     "262": {
-        "name": "Deploy the Nishimura Fleet in the Southern Waters",
-        "desc": "Deploy Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce), Mogami (\u6700\u4e0a), Shigure (\u6642\u96e8) and Michishio (\u6e80\u6f6e) (you may also add another ship) to World 5-1 and score an S rank victory at the boss node."
+        "name": "出擊! 西村艦隊! (2)",
+        "desc": "出動有「扶桑」、「山城」、「最上」、「時雨」、「滿潮」及額外任何 1 艘艦的艦隊到 5-1 且於敵頭目取得S 勝。"
     },
     "263": {
-        "name": "Deploy the Sixth Squadron to the Southwestern Waters",
-        "desc": "Deploy Furutaka (\u53e4\u9df9), Kako (\u52a0\u53e4), Aoba (\u9752\u8449), Kinugasa (\u8863\u7b20) and up to two additional ships to World 2-5 and score an S rank victory at the boss node."
+        "name": "出擊! 第六戰隊! (2)",
+        "desc": "出動有「青葉」、「古鷹」、「加古」、「衣笠」及額外任何 2 艘艦的艦隊到 2-5 且於敵頭目取得S 勝。"
     },
     "267": {
-        "name": "Deploy the 11th Destroyer Division",
-        "desc": "Deploy Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea), Murakumo(\u53e2\u96f2) and up to 2 additional ships to World 2-3 and score a victory at the boss node."
+        "name": "出擊! 第十一驅逐隊!",
+        "desc": "出動有「吹雪」、「白雪」、「初雪」、「叢雲」及額外任何 2 艘艦的艦隊到 2-3 且戰勝敵頭目。"
     },
     "268": {
-        "name": "11th Destroyer Division's Anti-Submarine Patrol",
-        "desc": "Deploy Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea) and Murakumo(\u53e2\u96f2) to World 1-5 and get a score of at least C at the boss node."
+        "name": "第十一驅逐隊對潛哨戒!",
+        "desc": "出動有「吹雪」、「白雪」、「初雪」及「叢雲」的艦隊到 1-5 且於敵頭目取得C 敗或以上成績。"
     },
     "269": {
-        "name": "Deploy the 21st Destroyer Division",
-        "desc": "Deploy Hatsuharu (\u521d\u6625), Nenohi (\u5b50\u65e5), Wakaba (\u82e5\u8449) and Hatsushimo (\u521d\u971c) and up to 2 additional ships to World 3-1 and score an S rank victory at the boss node."
+        "name": "出擊! 第二一驅逐隊!",
+        "desc": "出動有「初春」、「子日」、「若葉」、「初霜」及額外任何 2 艘艦的艦隊到 3-1 且於敵頭目取得S 勝。"
     },
     "270": {
-        "name": "Deploy the 22nd Destroyer Division",
-        "desc": "Deploy Satsuki (\u7690\u6708), Fumizuki (\u6587\u6708), Nagatsuki (\u9577\u6708), 1 more DD and up to two additional ships to World 1-4 and score an S rank victory at the boss node."
+        "name": "出擊! 第二二驅逐隊!",
+        "desc": "出動有「皐月」、「文月」、「長月」、另外 1 艘驅逐艦及額外任何 2 艘艦的艦隊到 1-4 且於敵頭目取得S 勝。"
     },
     "271": {
-        "name": "Deploy Nachi's Squadron",
-        "desc": "Sortie a fleet with Nachi (\u90a3\u667a) as flagship, Hatsushimo (\u521d\u971c), Kasumi (\u971e), Ushio (\u6f6e), Akebono (\u66d9) and one additional ship to world 2-2 and score an S rank victory at the boss node."
+        "name": "出擊! 那智戰隊!",
+        "desc": "出動有「初霜」、「霞」、「潮」、「曙」、額外任何 1 艘艦並以「那智」作旗艦的艦隊到 2-2 且於敵頭目取得S 勝。"
     },
     "272": {
-        "name": "Deploy the Remodelled Anti-Aircraft Heavy Cruiser",
-        "desc": "Sortie a fleet with Maya (\u6469\u8036) Kai or Kai2, 1 CL, 2 DD and up to two additional ships to World 2-3 and score an S rank victory at the boss node."
+        "name": "出擊! 改装防空重巡!",
+        "desc": "出動有「摩耶改/改二」、1 艘輕巡洋艦、2 艘驅逐艦及額外任何 1 艘艦的艦隊到 2-3 且於敵頭目取得S 勝。"
     },
     "273": {
-        "name": "Deploy the Mikawa Fleet to Solomon Islands",
-        "desc": "Sortie the main fleet with Choukai Kai2 (\u9ce5\u6d77\u6539\u30cb) as the flagship and any five of Aoba (\u9752\u8449), Kinugasa (\u8863\u7b20), Kako (\u52a0\u53e4), Furutaka (\u53e4\u9df9), Tenryuu (\u5929\u9f8d), Yuubari (\u5915\u5f35) to World 5-1 and score an S rank victory at the boss node."
+        "name": "出擊! 新編三川艦隊!",
+        "desc": "出動有「古鷹」、「加古」、「青葉」、「衣笠」、「夕張」或「天龍」並以「鳥海改二」作旗艦的艦隊到 5-1 且於敵頭目取得S 勝。"
     },
     "274": {
-        "name": "6th Destroyer Division's Anti-Submarine Patrol",
-        "desc": "Deploy Akatsuki (\u6681), Hibiki (\u97ff or \u0412\u0435\u0440\u043d\u044b\u0439), Inazuma (\u96f7) and Ikazuchi (\u96fb) to World 1-5. At least C rank is required at the boss node."
+        "name": "第六驅逐隊對潛哨戒!",
+        "desc": "出動有「曉」、「響/Верный」、「雷」及「電」的艦隊到 1-5 且於敵頭目取得C 敗或以上成績。"
     },
     "275": {
-        "name": "Deploy the 18th Squadron",
-        "desc": "Tenryuu, Tatsuta, and at least 2 other ships to [W2-3] and S-rank the boss node"
+        "name": "出擊! 第十八戰隊!",
+        "desc": "出動有「天龍」、「 龍田」及額外任何 2 艘艦的艦隊到 2-3 且於敵頭目取得S 勝。"
     },
 	"276": {
-        "name": "Sortie the surface attack fleet!",
-        "desc": "Sortie Hiei, Kirishima, Nagara, Akatsuki, Ikazuchi, Inazuma to 5-1 and clear the map with an S-rank"
+        "name": "出擊! 海上突入部隊!",
+        "desc": "出動有「比叡」、「 霧島」、「 長門」、「 曉」、「 雷」及「電」的艦隊到 5-1 且於敵頭目取得S 勝。"
     },
 	"277": {
-        "name": "DesDiv6 Anti-Submarine Mission!",
-        "desc": "Sortie Akatsuki Kai2 , Hibiki/Verniy, Ikazuchi, Inazuma to 1-5 and clear the map with at least A-rank"
+        "name": "第六驅逐隊徹底對潛哨戒!",
+        "desc": "出動有「曉改二」、「響/Верный」、「雷」及「電」的艦隊到 1-5 且於敵頭目取得A 勝或以上成績。"
     },
-	
+     "278": {
+        "name": "第一水雷戦隊，3-2 突入!",
+        "desc": "出動有「響/Верный」、「初霜」、「若葉」、「五月雨」、「島風」並以「阿武隈」作旗艦的艦隊到 3-2 且於敵頭目取得B 勝或以上成績。"
+    },
+    "279": {
+        "name": "第一水雷戦隊，3-2 再突入!",
+        "desc": "出動有「響/Верный」、「夕雲」、「長波」、「秋雲」、「島風」並以「阿武隈改二」作旗艦的艦隊到 3-2 且於敵頭目取得S 勝。"
+    },
 	
 	
 	
