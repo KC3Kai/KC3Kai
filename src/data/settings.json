@@ -47,6 +47,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "info_drop",
+				"name" : "SettingsDropFaces",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "info_craft",
 				"name" : "SettingsCraftBox",
 				"type" : "check",
@@ -287,7 +293,8 @@
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ "default", "Default" ]
+						[ "default", "Default" ],
+						[ "natsuiro", "Natsuiro" ]
 					]
 				}
 			},

@@ -637,7 +637,9 @@
 				$(".battle .battle_rating img").attr("src", "../../../../assets/img/client/ratings/"+thisNode.rating+".png");
 				
 				if(thisNode.drop > 0){
-					$(".battle .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop));
+					if(ConfigManager.info_drop){
+						$(".battle .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop));
+					}
 					
 					//let the other implements this :P
 					this.ShipSlots(container, {}, local);

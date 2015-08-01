@@ -18,6 +18,7 @@ Retreives when needed to apply on components
 				elosFormula 		: 3,
 				
 				info_face 			: true,
+				info_drop 			: true,
 				info_craft 			: true,
 				info_compass 		: true,
 				info_battle 		: true,
