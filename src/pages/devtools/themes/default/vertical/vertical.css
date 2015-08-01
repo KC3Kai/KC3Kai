@@ -1621,12 +1621,12 @@
 
 #v.panel-size-300px .battle .tools .switch_fleet_type_button {
 	width:80px;
-	height:25px;
-	margin: 5px 5px 5px 5px;
+	height:22px;
+	margin: 3px 5px 5px 5px;
 	padding: 5px 0px 5px 0px;
 	float:right;
 	font-weight:bold;
-	font-size:15px;
+	font-size:13px;
 	line-height:15px;
 	text-align:center;
 	background:#5c5;
@@ -1646,6 +1646,33 @@
 	border-radius:10px 10px 10px 10px;
 	position:absolute;
 	left:45px;
+	top:0px;
+}
+#v.panel-size-300px .battle .tools .screenshot-battle-button {
+	width:80px;
+	height:22px;
+	margin: 3px 5px 5px 5px;
+	padding: 5px 0px 5px 0px;
+	float:right;
+	font-weight:bold;
+	font-size:13px;
+	line-height:15px;
+	text-align:center;
+	background:#5c5;
+	border-radius:10px 10px 10px 10px;
+}
+#v.panel-size-420px .battle .tools .screenshot-battle-button {
+	width:100px;
+	height:25px;
+	margin: 5px 5px 5px 5px;
+	padding: 5px 0px 5px 0px;
+	float:right;
+	font-weight:bold;
+	font-size:15px;
+	line-height:15px;
+	text-align:center;
+	background:#5c5;
+	border-radius:10px 10px 10px 10px;
 	top:0px;
 }
 /* All Fleets */

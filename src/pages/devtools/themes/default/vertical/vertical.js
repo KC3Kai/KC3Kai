@@ -93,6 +93,19 @@
 				})).execute();
 			});
 			
+			$(".screenshot-battle-button", this.domElement).on("click", function(){
+				$(this).hide();
+				
+				// Tell service to pass a message to gamescreen on inspected window to get a screenshot
+				(new RMsg("service", "screenshot", {
+					tabId: chrome.devtools.inspectedWindow.tabId,
+					playerName: PlayerManager.hq.name
+				}, function(response){
+					console.log(response);
+					$(".screenshot-battle-button", self.domElement).show();
+				})).execute();
+			});
+			
 			// Exit battle mode
 			$(".battle .battle_revert", this.domElement).on("click", function(){
 				KC3Panel.mode = "normal";
@@ -112,6 +125,7 @@
 				$(".battle .switch_fleet_type_button", this.domElement).text("Combined");
 				$(".battle .switch-ship-attribute-buttons", this.domElement).show();
 			} else {
+				$(".battle .screenshot-battle-button", this.domElement).text("Screenshot");
 				$(".battle .switch_fleet_type_button", this.domElement).text("Single");
 				$(".battle .switch-ship-attribute-buttons", this.domElement).hide();
 			}
