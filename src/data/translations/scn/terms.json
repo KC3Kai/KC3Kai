@@ -65,6 +65,8 @@
 	"AboutOther" : "其他",
 	"AboutLogo" : "Logo设计",
 	"AboutFairy" : "妖精设计",
+	"AboutReporters" : "Recurring Git Reporters",
+	"AboutReporter" : "Git Reporter",
 	
 	"SettingsTitle" : "KC3改 - 设置",
 	
@@ -76,11 +78,14 @@
 	"SettingsELosNew" : "新公式",
 	
 	"SettingsGameInfo" : "游戏信息",
+	"SettingsDropFaces" : "剧透出击掉落",
 	"SettingsConstructionFaces" : "剧透建造结果",
 	"SettingsCraftBox" : "剧透开发结果",
 	"SettingsCompass" : "剧透航向",
 	"SettingsBattleData" : "战斗模式",
 	"SettingsBossComp" : "Boss配置",
+	"SettingsYasenTroll" : "夜战 \u0022额外支持\u0022",
+	"SettingsHQDelta" : "出击时司令部经验值变化",
 	
 	"SettingsScreenshot" : "截图",
 	"SettingsSSOutput" : "输出方式",
