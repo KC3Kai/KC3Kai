@@ -55,6 +55,12 @@
 				$(".eqlos-toggle img", self.domElement).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png");
 			});
 			
+			// Change HQ EXP Information
+			$(".exp_text, .battle_hqlevel_next",this.domElement).on("click",function(){
+				ConfigManager.scrollHQExpInfo();
+				KC3Network.trigger("HQ",{resetGain:false});
+			}).addClass("hover");
+			
 			// Initialize timer objects with bindings to their UI
 			KC3TimerManager.init([
 				$(".exped-box-1", this.domElement),
@@ -244,12 +250,14 @@
 					$(".admiral_rank", container).text( PlayerManager.hq.rank );
 					$(".level_value", container).text( PlayerManager.hq.level );
 					$(".exp_bar", container).css({width: Math.round(PlayerManager.hq.exp[0]*88)+"px"});
-					$(".exp_text", container).text( PlayerManager.hq.exp[1] );
+					$(".exp_text", container).text( PlayerManager.hq.exp[ConfigManager.hqExpDetail] );
 				}else if(KC3Panel.mode=="battle"){
 					$(".battle_admiral", container).text( PlayerManager.hq.name );
 					$(".battle_hqlevel_text", container).text( PlayerManager.hq.level );
-					$(".battle_hqexpval,.battle_hqexpgain", container).css({width: Math.round(PlayerManager.hq.exp[0]*60)+"px"});
-					$(".battle_hqlevel_next", container).text( PlayerManager.hq.exp[1] );
+					$(".battle_hqexpval", container).css({width: Math.round(PlayerManager.hq.exp[0]*60)+"px"});
+					if((data || {resetGain:true}).resetGain)
+						$(".battle_hqexpgain", container).css({width: Math.round(PlayerManager.hq.exp[0]*60)+"px"});
+					$(".battle_hqlevel_next", container).text( PlayerManager.hq.exp[ConfigManager.hqExpDetail] );
 				}
 			},
 			Consumables: function(container, data, local){
@@ -650,10 +658,14 @@
 							$(".battle .battle_boss .abyss_"+(index+1), container).hide();
 						}
 					});
+					if(ConfigManager.info_boss)
+						$(".battle .battle_boss", container).show();
+					else
+						$(".battle .battle_boss", container).hide();
 				};
 				
 				// Trigger other listeners
-				this.HQ(container, {}, local);
+				this.HQ(container, {resetGain:true}, local);
 				this.ShipSlots(container, {}, local);
 				this.GearSlots(container, {}, local);
 				this.Fleet(container, {}, local);
@@ -667,6 +679,7 @@
 					.removeClass("maelstrom_color")
 					.removeClass("now")
 					.text("");
+				$(".battle .battle_drop", container).show();
 				
 				// Change interface mode
 				$(".normal", container).hide();
@@ -898,7 +911,7 @@
 						return (PlayerManager.hq.exp[2] + Math.min(PlayerManager.hq.exp[1],KC3SortieManager.hqExpGained)) / KC3Meta.exp(PlayerManager.hq.level)[0];
 					})()*60)+"px"});
 				}
-				$(".battle_hqlevel_next_gain", container).text(-KC3SortieManager.hqExpGained);
+				$(".battle_hqlevel_next_gain", container).text(KC3SortieManager.hqExpGained * (ConfigManager.hqExpDetail==1 ? -1 : 1));
 				
 				$(".battle .battle_rating img").attr("src", "../../../../assets/img/client/ratings/"+thisNode.rating+".png");
 				
@@ -976,7 +989,7 @@
 				KC3SortieManager.fleetSent = data.fleetSent;
 				
 				// Trigger other listeners
-				this.HQ(container, {}, local);
+				this.HQ(container, {resetGain:true}, local);
 				this.ShipSlots(container, {}, local);
 				this.GearSlots(container, {}, local);
 				this.Fleet(container, {}, local);
@@ -990,6 +1003,10 @@
 				$(".battle .battle_node", container).removeClass("now");
 				$(".battle .battle_node", container).text("");
 				$(".battle .battle_nodenum", container).text("");
+				
+				// Hide useless information
+				$(".battle .battle_boss", container).hide();
+				$(".battle .battle_drop", container).hide();
 				
 				// Change interface mode
 				$(".normal", container).hide();
@@ -1087,7 +1104,7 @@
 						return (PlayerManager.hq.exp[2] + Math.min(PlayerManager.hq.exp[1],expGained)) / KC3Meta.exp(PlayerManager.hq.level)[0];
 					})()*60)+"px"});
 				}
-				$(".battle_hqlevel_next_gain", container).text(-expGained);
+				$(".battle_hqlevel_next_gain", container).text(expGained * (ConfigManager.hqExpDetail==1 ? -1 : 1));
 			}
 		}
 	});
