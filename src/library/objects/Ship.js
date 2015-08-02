@@ -11,6 +11,7 @@ KC3改 Ship Object
 		this.level = 0;
 		this.exp = [0,0,0];
 		this.hp = [0,0];
+		this.afterHp = [0,0];
 		this.fp = [0,0];
 		this.tp = [0,0];
 		this.aa = [0,0];
@@ -39,6 +40,7 @@ KC3改 Ship Object
 				this.level = data.api_lv;
 				this.exp = data.api_exp;
 				this.hp = [data.api_nowhp, data.api_maxhp];
+				this.afterHp = [data.api_nowhp, data.api_maxhp];
 				this.fp = data.api_karyoku;
 				this.tp = data.api_raisou;
 				this.aa = data.api_taiku;
@@ -71,7 +73,10 @@ KC3改 Ship Object
 	KC3Ship.prototype.equipment = function(slot){ return KC3GearManager.get( this.items[slot] ); };
 	KC3Ship.prototype.isFast = function(){ return this.master().api_soku>=10; };
 	KC3Ship.prototype.didFlee = function(){ return false; };
-	
+	KC3Ship.prototype.resetAfterHp = function(){
+		this.afterHp[0] = this.hp[0];
+		this.afterHp[1] = this.hp[1];
+	};
 	/* NAKED LOS
 	LoS without the equipment
 	--------------------------------------------------------------*/
