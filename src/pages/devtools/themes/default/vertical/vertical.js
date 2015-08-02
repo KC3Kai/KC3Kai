@@ -748,10 +748,10 @@
 				var battleData = thisNode.battleDay;
 				
 				if((typeof thisNode.eformation != "undefined") && (thisNode.eformation > -1)){
-					$(".battle .battle_enemy_formation img", container).attr("src", KC3Meta.formationIcon(thisNode.eformation));
-					$(".battle .battle_enemy_formation", container).show();
+					$(".battle .battle_formation img", container).attr("src", KC3Meta.formationIcon(thisNode.eformation));
+					$(".battle .battle_formation", container).show();
 				} else {
-					$(".battle .battle_enemies .battle_enemy_formation", container).hide();
+					$(".battle .battle_formation", container).hide();
 				}
 				
 				// Load enemy icons
@@ -1010,7 +1010,7 @@
 				// Show opponent ships faces
 				$.each(thisPvP.eships, function(index, eshipId){
 					if(eshipId > -1){
-						$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).attr("src", KC3Meta.shipIcon(eshipId));
+						$(".battle .battle_enemies .abyss_"+(index+1)+" .face-container img", container).attr("src", KC3Meta.shipIcon(eshipId));
 						$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).show();
 
 						if ((thisPvP.enemySunk[index]) && (ConfigManager.info_battle)) {
