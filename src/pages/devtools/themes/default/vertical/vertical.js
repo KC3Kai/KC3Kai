@@ -748,10 +748,10 @@
 				var battleData = thisNode.battleDay;
 				
 				if((typeof thisNode.eformation != "undefined") && (thisNode.eformation > -1)){
-					$(".battle .battle_enemy_formation img", container).attr("src", KC3Meta.formationIcon(thisNode.eformation));
-					$(".battle .battle_enemy_formation", container).show();
+					$(".battle .battle_formation img", container).attr("src", KC3Meta.formationIcon(thisNode.eformation));
+					$(".battle .battle_formation", container).show();
 				} else {
-					$(".battle .battle_enemies .battle_enemy_formation", container).hide();
+					$(".battle .battle_enemies .battle_formation", container).hide();
 				}
 				
 				// Load enemy icons
