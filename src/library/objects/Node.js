@@ -85,7 +85,7 @@ Used by SortieManager
 	
 	/* BATTLE FUNCTIONS
 	---------------------------------------------*/
-	KC3Node.prototype.engage = function( battleData ){
+	KC3Node.prototype.engage = function( battleData, fleetSent ){
 		this.battleDay = battleData;
 		
 		var enemyships = battleData.api_ship_ke;
@@ -148,27 +148,26 @@ Used by SortieManager
 		var DA = PS["KanColle.DamageAnalysis"];
 		// for regular battles
 		var result = DA.analyzeRawBattleJS(battleData); 
-		console.log(result);
 		var i = 0;
 		for (i = 7; i < 13; i++) {
 			if ((result[i] !== null) && (result[i].currentHp <= 0)) {
 				this.enemySunk[i-7] = true;
 			}
 		}
-		var fleetId = KC3SortieManager.fleetSent;
+		
+		var fleetId = (typeof fleetSent != "undefined")? fleetSent : KC3SortieManager.fleetSent;
 		var fleet = PlayerManager.fleets[fleetId - 1];
 		var shipNum = fleet.countShips();
 		for(i = 0; i < shipNum; i++) {
 			var ship = fleet.ship(i);
 			ship.afterHp[0] = result[i+1].currentHp;
 			ship.afterHp[1] = ship.hp[1];
-			console.log(ship);
 		}
 		// for night battles
 		//DA.analyzeRawNightBattleJS(svdata.api_data)
 	};
 	
-	KC3Node.prototype.engageNight = function( nightData ){
+	KC3Node.prototype.engageNight = function( nightData, fleetSent ){
 		this.battleNight = nightData;
 		this.startNight = true;
 		
@@ -186,14 +185,14 @@ Used by SortieManager
 		var PS = window.PS;
 		var DA = PS["KanColle.DamageAnalysis"];
 		var result = DA.analyzeRawNightBattleJS( nightData ); 
-		// console.log(result);
 		var i = 0;
 		for (i = 7; i < 13; i++) {
 			if ((result[i] !== null) && (result[i].currentHp <= 0)) {
 				this.enemySunk[i-7] = true;
 			}
 		}
-		var fleetId = KC3SortieManager.fleetSent;
+		
+		var fleetId = (typeof fleetSent != "undefined")? fleetSent : KC3SortieManager.fleetSent;
 		var fleet = PlayerManager.fleets[fleetId - 1];
 		var shipNum = fleet.countShips();
 		for(i = 0; i < shipNum; i++) {
