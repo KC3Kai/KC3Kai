@@ -751,7 +751,7 @@
 					$(".battle .battle_formation img", container).attr("src", KC3Meta.formationIcon(thisNode.eformation));
 					$(".battle .battle_formation", container).show();
 				} else {
-					$(".battle .battle_enemies .battle_formation", container).hide();
+					$(".battle .battle_formation", container).hide();
 				}
 				
 				// Load enemy icons
