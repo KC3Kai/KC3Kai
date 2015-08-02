@@ -1010,7 +1010,7 @@
 				// Show opponent ships faces
 				$.each(thisPvP.eships, function(index, eshipId){
 					if(eshipId > -1){
-						$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).attr("src", KC3Meta.shipIcon(eshipId));
+						$(".battle .battle_enemies .abyss_"+(index+1)+" .face-container img", container).attr("src", KC3Meta.shipIcon(eshipId));
 						$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).show();
 
 						if ((thisPvP.enemySunk[index]) && (ConfigManager.info_battle)) {
