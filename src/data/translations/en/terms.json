@@ -78,11 +78,14 @@
 	"SettingsELosNew" : "New",
 	
 	"SettingsGameInfo" : "Game Information",
+	"SettingsDropFaces" : "Sortie Drop Faces",
 	"SettingsConstructionFaces" : "Construction Faces",
 	"SettingsCraftBox" : "Crafting Results",
 	"SettingsCompass" : "Compass and Enemy",
-	"SettingsBattleData" : "Battle Environment",
+	"SettingsBattleData" : "Battle Prediction",
 	"SettingsBossComp" : "Boss Composition",
+	"SettingsYasenTroll" : "Night Battle \u0022Extra Support\u0022",
+	"SettingsHQDelta" : "HQ EXP Delta on Sortie",
 	
 	"SettingsScreenshot" : "Screenshot",
 	"SettingsSSOutput" : "Output Mode",

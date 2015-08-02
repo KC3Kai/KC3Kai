@@ -1,484 +1,484 @@
 {
     "101": {
-        "name": "Hạm đội đầu tiên!",
-        "desc": "Có 2 tàu trong hạm đội chính."
+        "name": "First Formation!",
+        "desc": "Have 2 ships in your main fleet."
     },
     "102": {
-        "name": "Thành lập hạm đội Khu trục!",
-        "desc": "Có 4 Khu trục hạm trong hạm đội chính."
+        "name": "Form a Destroyer Squadron!",
+        "desc": "Have 4 DD in your main fleet."
     },
     "103": {
-        "name": "Thành lập Thủy lôi chiến đội!",
-        "desc": "Có 1 CL làm kỳ hạm và 5 DD trong hạm đội chính."
+        "name": "Form a Torpedo Squadron!",
+        "desc": "Have a CL as a flagship and 5 DD in your main fleet."
     },
     "104": {
-        "name": "Thành lập hạm đội 6 tàu!",
-        "desc": "Có 6 tàu trong hạm đội chính."
+        "name": "Form a Six Ship Fleet!",
+        "desc": "Have 6 ships in your main fleet."
     },
     "105": {
-        "name": "Thành lập hạm đội 2 CL!",
-        "desc": "Có 2 CL trong hạm đội chính."
+        "name": "Form a Squadron with Two CL!",
+        "desc": "Have 2 CL in your main fleet."
     },
     "106": {
-        "name": "Thành lập hạm đội Tuần dương hạng nặng!",
-        "desc": "Có 2 CA trong hạm đội chính."
+        "name": "Form a Heavy Cruiser Squadron!",
+        "desc": "Have 2 CA in your main fleet."
     },
     "107": {
-        "name": "Thành lập Không mẫu Cơ động Bộ đội!",
-        "desc": "Có 1 CV/CVL làm kì hạm và 3 DD trong hạm đội chính."
+        "name": "Form a Carrier Task Force!",
+        "desc": "Have a CV\/CVL as a flagship and 3 DD in your main fleet."
     },
     "108": {
-        "name": "Thành lập lớp Tenryuu!",
-        "desc": "Có Tenryuu (\u5929\u9f8d) và Tatsuta (\u9f8d\u7530) trong hạm đội chính."
+        "name": "Form the Tenryuu-class!",
+        "desc": "Have Tenryuu (\u5929\u9f8d) and Tatsuta (\u9f8d\u7530) in your main fleet."
     },
     "109": {
-        "name": "Thành lập lớp Sendai!",
-        "desc": "Có Sendai (\u5ddd\u5185), Jintsuu (\u795e\u901a) và Naka (\u90a3\u73c2) trong hạm đội chính."
+        "name": "Form the Sendai-class!",
+        "desc": "Have Sendai (\u5ddd\u5185), Jintsuu (\u795e\u901a) and Naka (\u90a3\u73c2) in your main fleet."
     },
     "110": {
-        "name": "Thành lập lớp Myoukou!",
-        "desc": "Có Myoukou (\u5999\u9ad8), Nachi (\u90a3\u667a), Ashigara (\u8db3\u67c4) và Haguro (\u7fbd\u9ed2) trong hạm đội chính."
+        "name": "Form the Myoukou-class!",
+        "desc": "Have Myoukou (\u5999\u9ad8), Nachi (\u90a3\u667a), Ashigara (\u8db3\u67c4) and Haguro (\u7fbd\u9ed2) in your main fleet."
     },
     "111": {
-        "name": "Thành lập lớp Fusou!",
-        "desc": "Có Fusou (\u6276\u6851) và Yamashiro (\u5c71\u57ce) trong hạm đội chính."
+        "name": "Form the Fusou-class!",
+        "desc": "Have Fusou (\u6276\u6851) and Yamashiro (\u5c71\u57ce) in your main fleet."
     },
     "112": {
-        "name": "Thành lập lớp Ise!",
-        "desc": "Có Ise (\u4f0a\u52e2) và Hyuuga (\u65e5\u5411) trong hạm đội chính."
+        "name": "Form the Ise-class!",
+        "desc": "Have Ise (\u4f0a\u52e2) and Hyuuga (\u65e5\u5411) in your main fleet."
     },
     "113": {
-        "name": "Thành lập hạm đội Chính với BB và CA!",
-        "desc": "Có 1 BB và 2 CA trong hạm đội chính."
+        "name": "Form the Main Fleet with BB and CA!",
+        "desc": "Have a BB and 2 CA in your main fleet."
     },
     "114": {
-        "name": "Thành lập Nam Vân Cơ động Bộ đội!",
-        "desc": "Chỉ có Akagi (\u8d64\u57ce), Kaga (\u52a0\u8cc0), Hiryuu (\u98db\u9f8d) và Souryuu (\u84bc\u9f8d) trong hạm đội chính."
+        "name": "Form the Nagumo Task Force!",
+        "desc": "Have ONLY Akagi (\u8d64\u57ce), Kaga (\u52a0\u8cc0), Hiryuu (\u98db\u9f8d) and Souryuu (\u84bc\u9f8d) in your main fleet."
     },
     "115": {
-        "name": "Thành lập hạm đội thứ 2!",
-        "desc": "Có 1 mẫu hạm ở trong hạm đội thứ 2."
+        "name": "Form the Second Fleet!",
+        "desc": "Have a flagship in your second fleet."
     },
     "116": {
-        "name": "Có 1 Thuỷ phi cơ mẫu hạm",
-        "desc": "Có 1 AV trong hạm đội chính."
+        "name": "Ready a Seaplane Tender",
+        "desc": "Have an AV in your main fleet."
     },
     "117": {
-        "name": "Thành lập Không mẫu Cơ động Bộ đội ở hạm đội thứ 2!",
-        "desc": "Có 1 CV/CVL và 3 DD trong hạm đội thứ 2."
+        "name": "Form a Carrier Task Force in the Second Fleet!",
+        "desc": "Have a CV\/CVL and 3 DD in your second fleet."
     },
     "118": {
-        "name": "Thành lập lớp Kongou!",
-        "desc": "Có Kongou (\u91d1\u525b), Hiei (\u6bd4\u53e1), Haruna (\u699b\u540d) và Kirishima (\u9727\u5cf6) trong hạm đội chính."
+        "name": "Form the Kongou-class!",
+        "desc": "Have Kongou (\u91d1\u525b), Hiei (\u6bd4\u53e1), Haruna (\u699b\u540d) and Kirishima (\u9727\u5cf6) in your main fleet."
     },
     "119": {
-        "name": "Thành lập hạm đội Mikawa!",
-        "desc": "Có Choukai (\u9ce5\u6d77), Aoba (\u9752\u8449), Kako (\u52a0\u53e4), Furutaka (\u53e4\u9df9), Tenryuu (\u5929\u9f8d) và 1 tàu tốc độ cao trong hạm đội chính."
+        "name": "Form the Mikawa Fleet!",
+        "desc": "Have Choukai (\u9ce5\u6d77), Aoba (\u9752\u8449), Kako (\u52a0\u53e4), Furutaka (\u53e4\u9df9), Tenryuu (\u5929\u9f8d) and a FAST speed ship in your main fleet."
     },
     "120": {
-        "name": "Thành lập Hạm đội Khu trục số 6!",
-        "desc": "Chỉ có Akatsuki (\u6681), Hibiki (\u97ff), Inazuma (\u96f7) và Ikazuchi (\u96fb) trong hạm đội chính."
+        "name": "Form the Destroyer Division 6!",
+        "desc": "Have ONLY Akatsuki (\u6681), Hibiki (\u97ff), Inazuma (\u96f7) and Ikazuchi (\u96fb) in your main fleet."
     },
     "121": {
-        "name": "Thành lập Hạm đội Tuần dương số 4!",
-        "desc": "Có Atago (\u611b\u5b95), Takao (\u9ad8\u96c4), Choukai (\u9ce5\u6d77) và Maya (\u6469\u8036) trong hạm đội chính."
+        "name": "Form the Cruiser Division 4!",
+        "desc": "Have Atago (\u611b\u5b95), Takao (\u9ad8\u96c4), Choukai (\u9ce5\u6d77) and Maya (\u6469\u8036) in your main fleet."
     },
     "122": {
-        "name": "Thành lập Hạm đội Nishimura!",
-        "desc": "Có Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce), Mogami (\u6700\u4e0a) và Shigure (\u6642\u96e8) trong hạm đội chính."
+        "name": "Form the Nishimura Fleet!",
+        "desc": "Have Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce), Mogami (\u6700\u4e0a) and Shigure (\u6642\u96e8) in your main fleet."
     },
     "123": {
-        "name": "Thành lập Hạm đội Mẫu hạm đội 5!",
-        "desc": "Có Shoukaku (\u7fd4\u9db4), Zuikaku (\u745e\u9db4) và 2 DD trong hạm đội chính."
+        "name": "Form the Carrier Division 5!",
+        "desc": "Have Shoukaku (\u7fd4\u9db4), Zuikaku (\u745e\u9db4) and 2 DD in your main fleet."
     },
     "124": {
-        "name": "Thành lập Hạm đội Mikawa kiểu mới!",
-        "desc": "Có Choukai (\u9ce5\u6d77), Aoba (\u9752\u8449), Kinugasa (\u8863\u7b20), Kako (\u52a0\u53e4), Furutaka (\u53e4\u9df9) và Tenryuu (\u5929\u9f8d) trong hạm đội chính."
+        "name": "Form the New Mikawa Fleet!",
+        "desc": "Have Choukai (\u9ce5\u6d77), Aoba (\u9752\u8449), Kinugasa (\u8863\u7b20), Kako (\u52a0\u53e4), Furutaka (\u53e4\u9df9) and Tenryuu (\u5929\u9f8d) in your main fleet."
     },
     "125": {
-        "name": "Thành lập 1 hạm đội tàu ngầm!",
-        "desc": "Có 2 SS trong hạm đội chính."
+        "name": "Form a Submarine Fleet!",
+        "desc": "Have 2 SS in your main fleet."
     },
     "126": {
-        "name": "Thành lập 1 Hạm đội Không vận!",
-        "desc": "Có 2 BBV và 2 CAV trong hạm đội chính."
+        "name": "Form a Naval Aviation Strike Fleet!",
+        "desc": "Have 2 BBV and 2 CAV in your main fleet."
     },
     "127": {
-        "name": "Thành lập 1 Hạm đội tàu ngầm cỡ Trung!",
-        "desc": "Có 3 SS trong hạm đội chính."
+        "name": "Form a Medium-Sized Submarine Fleet!",
+        "desc": "Have 3 SS in your main fleet."
     },
     "128": {
-        "name": "Thành lập Hạm đội Tuần dương số 6!",
-        "desc": "Có Furutaka (\u53e4\u9df9), Kako(\u52a0\u53e4), Aoba (\u9752\u8449) và Kinugasa (\u8863\u7b20) trong hạm đội chính."
+        "name": "Form the Cruiser Division 6!",
+        "desc": "Have Furutaka (\u53e4\u9df9), Kako(\u52a0\u53e4), Aoba (\u9752\u8449) and Kinugasa (\u8863\u7b20) in your main fleet."
     },
     "129": {
-        "name": "Thành lập Hạm đội số 5!",
-        "desc": "Có Nachi (\u90a3\u667a), Ashigara (\u8db3\u67c4), Tama (\u591a\u6469), và Kiso (\u6728\u66fe) trong hạm đội."
+        "name": "Form the 5th Fleet!",
+        "desc": "Have Nachi (\u90a3\u667a), Ashigara (\u8db3\u67c4), Tama (\u591a\u6469), and Kiso (\u6728\u66fe) in your fleet."
     },
     "130": {
-        "name": "Thành lập Hạm đội ngư lôi số 1!",
-        "desc": "Có Abukuma (\u963f\u6b66\u9688), Akebono (\u66d9), Ushio (\u6f6e), Kasumi (\u971e) và Shiranui (\u4e0d\u77e5\u706b) trong hạm đội."
+        "name": "Form the Torpedo Squadron 1!",
+        "desc": "Have Abukuma (\u963f\u6b66\u9688), Akebono (\u66d9), Ushio (\u6f6e), Kasumi (\u971e) and Shiranui (\u4e0d\u77e5\u706b) in your fleet."
     },
     "131": {
-        "name": "Thành lập đội khu trục số 8!",
-        "desc": "Có Asashio (\u671d\u6f6e), Michishio (\u6e80\u6f6e), Ooshio (\u5927\u6f6e) và Arashio (\u8352\u6f6e) trong hạm đội."
+        "name": "Form the Destroyer Division 8!",
+        "desc": "Have Asashio (\u671d\u6f6e), Michishio (\u6e80\u6f6e), Ooshio (\u5927\u6f6e) and Arashio (\u8352\u6f6e) in your fleet."
     },
     "132": {
-        "name": "Thành lập đội khu trục số 18!",
-        "desc": "Có DUY NHẤT Kasumi (\u971e), Arare (\u9730), Kagerou (\u967d\u708e) và Shiranui (\u4e0d\u77e5\u706b) trong hạm đội."
+        "name": "Form the Destroyer Division 18!",
+        "desc": "Have ONLY Kasumi (\u971e), Arare (\u9730), Kagerou (\u967d\u708e) and Shiranui (\u4e0d\u77e5\u706b) in your fleet."
     },
     "133": {
-        "name": "Thành lập đội khu trục số 30 (Thế hệ thứ nhất)!",
-        "desc": "Có DUY NHẤT Mutsuki (\u7766\u6708), Kisaragi (\u5982\u6708), Yayoi (\u5f25\u751f) và Mochizuki (\u671b\u6708) trong hạm đội."
+        "name": "Form the Destroyer Division 30 (Gen-1)!",
+        "desc": "Have ONLY Mutsuki (\u7766\u6708), Kisaragi (\u5982\u6708), Yayoi (\u5f25\u751f) and Mochizuki (\u671b\u6708) in your fleet."
     },
     "134": {
-        "name": "Chuẩn bị cho tình yêu! (Phần 3)",
-        "desc": "Triển khai hạm đội với một tàu làm kì hạm có cấp độ cao (Lv.90~99)!"
+        "name": "In Preparation of Love! (Part 3)",
+        "desc": "Organize your feelings and deploy your fleet with a high level flagship (Lv.90~99)!"
     },
     "135": {
-        "name": "Một hành trình mới!",
-        "desc": "Tổ chức một hạm đội gồm 6 tàu trong đó có một tàu có cấp độ Lv.100 hoặc cao hơn làm kì hạm!"
+        "name": "Journey Anew!",
+        "desc": "Organize a fleet of 6 ships with your newly bonded ship of Lv.100 or more as flagship!"
     },
     "136": {
-        "name": "Thành lập đội khu trục số 30 (Thế hệ thứ 2)",
-        "desc": "Có duy nhất Mutsuki (\u7766\u6708), Yayoi (\u5f25\u751f), Uzuki (\u536f\u6708) và Mochizuki (\u671b\u6708) trong hạm đội."
+        "name": "Form the 30th Destroyer Fleet (Gen.2)",
+        "desc": "Have only Mutsuki (\u7766\u6708), Yayoi (\u5f25\u751f), Uzuki (\u536f\u6708) and Mochizuki (\u671b\u6708) in your fleet."
     },
     "137": {
-        "name": "Thành lập hạm đội số 5",
-        "desc": "Có Myoukou (\u5999\u9ad8), Nachi (\u90a3\u667a) và Haguro (\u7fbd\u9ed2) trong hạm đội."
+        "name": "Form the 5th Fleet",
+        "desc": "Have Myoukou (\u5999\u9ad8), Nachi (\u90a3\u667a) and Haguro (\u7fbd\u9ed2) in your fleet."
     },
     "138": {
-        "name": "Thành lập Không đội 2 mới",
-        "desc": "Có Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c, làm kì hạm), Souryuu (\u84bc\u9f8d) và 2 khu trục hạm trong hạm đội."
+        "name": "Form the new 2nd Carrier Division",
+        "desc": "Have Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c, as the flagship), Souryuu (\u84bc\u9f8d) and 2 destroyers in your fleet."
     },
     "139": {
-        "name": "Thành lập đội tàu ngầm số 6",
-        "desc": "Có 1 tàu tiếp liệu tàu ngầm và 4 (hoặc hơn) tàu ngầm trong hạm đội chính."
+        "name": "Form the 6th Submarine Fleet",
+        "desc": "Have a submarine tender and 4 (or more) submarines in your fleet."
     },
     "140": {
-        "name": "Thử RADAR mới!",
-        "desc": "Có Myoukou Kai2 làm kì hạm trong hạm đội chính."
+        "name": "Test the new RADAR!",
+        "desc": "Have Myoukou Kai2 as the flagship of your fleet."
     },
     "141": {
-        "name": "Tổ chức lại Không đội 2 được tăng cường",
-        "desc": "Có Souryuu Kai-2 (\u84bc\u9f8d\u6539\u4e8c) làm kì hạm cùng với Hiryuu Kai-2 (\u98db\u9f8d\u6539\u4e8c) và 2 khu trục hạm trong hạm đội."
+        "name": "Reorganise the Strengthened 2nd Carrier Division",
+        "desc": "Have Souryuu Kai-2 (\u84bc\u9f8d\u6539\u4e8c) as flagship with Hiryuu Kai-2 (\u98db\u9f8d\u6539\u4e8c) and 2 destroyers in your fleet."
     },
     "142": {
-        "name":" Thành lập Hải đoàn Thiết giáp hạm tinh nhuệ số 3",
-        "desc": "Có cả bốn thiết giáp hạm kai 2 thuộc lớp Kongou trong hạm đội chính."
+        "name": "Organise the Elite 3rd Battleship Division",
+        "desc": "Have all four Kongou-class Kai 2 battleships in your main fleet."
     },
     "143": {
-        "name": "Triển khai 1 Mẫu hạm tiêu chuẩn mới",
-        "desc": "Có Unryuu (\u96f2\u9f8d) làm kì hạm."
+        "name": "Deploy a New Standard Aircraft Carrier",
+        "desc": "Have Unryuu (\u96f2\u9f8d) as your flagship."
     },
     "144": {
-        "name": "Thành lập hạm đội Thiết giáp hạm chính quy: Hải đoàn số 2",
-        "desc": "Có  tất cả các thiết giáp hạm thuộc lớp Nagato và lớp Fusou (và không có tàu nào khác) trong hạm đội chính."
+        "name": "Organise the Main Battleship Fleet: the 2nd Squadron",
+        "desc": "Have both Nagato-class and both Fusou-class battleships (and no other ships) in your main fleet."
     },
     "145": {
-        "name": "Thành lập lực lượng Thiết giáp hạm chính quy",
-        "desc": "Có 3 Thiết giáp hạm trong lớp Nagato, Fusou, Ise hoặc Yamato và 1 Tuần dương hạm hạng nhẹ trong hạm đội."
+        "name": "Organise the Main Battleship Force",
+        "desc": "Have three battleships of Nagato, Fusou, Ise or Yamato classes and a light cruiser in your fleet."
     },
     "146": {
-        "name": "Chuẩn bị xưởng nâng cấp",
-        "desc": "Có Akashi (\u660e\u77f3) làm kì hạm trong hạm đội chính."
+        "name": "Prepare the Arsenal for Renovations",
+        "desc": "Have Akashi (\u660e\u77f3) as your flagship in your main fleet."
     },
     "147": {
-        "name": "Thành lập hạm đội Nishimura",
-        "desc": "Có Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce), Mogami (\u6700\u4e0a), Shigure (\u6642\u96e8) và Michishio (\u6e80\u6f6e) trong hạm đội chính."
+        "name": "Organise the Nishimura Fleet",
+        "desc": "Have Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce), Mogami (\u6700\u4e0a), Shigure (\u6642\u96e8) and Michishio (\u6e80\u6f6e) in your main fleet."
     },
     "148": {
-        "name": "Tổ chức hạm đội phản công",
-        "desc": "Có Kasumi (\u971e) làm kì hạm, Ashigara (\u8db3\u67c4), 1 CL và thêm 3 DD trong hạm đội chính."
+        "name": "Organise the Counterattack Squadron",
+        "desc": "Have Kasumi (\u971e) as the flagship, Ashigara (\u8db3\u67c4), 1 CL and 3 more DDs in your main fleet."
     },
     "149": {
-        "name": "Tổ chức hạm đội khu trục số 11",
-        "desc": "Có 4 Khu trục hạm loại đặc biệt: Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea) và Murakumo(\u53e2\u96f2) trong hạm đội chính. Một trong số đó phải là kì hạm."
+        "name": "Organise the 11th Destroyer Division",
+        "desc": "Have the 4 Special-type destroyers: Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea) and Murakumo(\u53e2\u96f2) in your main fleet. One of them should be the flagship."
     },
     "150": {
-        "name": "Thành lập đội khu trục số 21!",
-        "desc": "Có duy nhất Hatsuharu (\u521d\u6625), Nenohi (\u5b50\u65e5), Wakaba (\u82e5\u8449) và Hatsushimo (\u521d\u971c) trong hạm đội chính."
+        "name": "Organise the 21st Destroyer Division",
+        "desc": "Have only Hatsuharu (\u521d\u6625), Nenohi (\u5b50\u65e5), Wakaba (\u82e5\u8449) and Hatsushimo (\u521d\u971c) in your main fleet."
     },
     "151": {
-        "name": "Thành lập đội khu trục số 22",
-        "desc": "Có duy nhất Satsuki (\u7690\u6708), Fumizuki (\u6587\u6708), Nagatsuki (\u9577\u6708) và 1 khu trục hạm nữa trong hạm đội chính."
+        "name": "Organise the 22nd Destroyer Division",
+        "desc": "Have only Satsuki (\u7690\u6708), Fumizuki (\u6587\u6708), Nagatsuki (\u9577\u6708) and 1 more DD in your main fleet."
     },
     "152": {
-        "name": "Thành lập Hạm đội Mikawa kiểu mới",
-        "desc": "Có Choukai Kai2 làm kì hạm và 5 tàu bất kì trong số Aoba, Kinugasa, Kako, Furutaka, Tenryuu, Yuubari trong hạm đội chính"
+        "name": "Organise the New Edition of the Mikawa Fleet",
+        "desc": "Have Choukai Kai2 as the flagship and any five of Aoba, Kinugasa, Kako, Furutaka, Tenryuu, Yuubari in your main fleet"
     },
     "153": {
-        "name": "Tổ chức lại Hải đoàn số 18!",
-        "desc": "Có Tenryuu, Tatsuta và ít nhất 2 tàu khác trong hạm đội"
+        "name": "Reorganize the 18th Squadron!",
+        "desc": "Have Tenryuu, Tatsuta and 2 or more other ships in your fleet"
     },
     "154": {
-        "name": "Tổ chức hạm đội tấn công mặt nước!",
-        "desc": "Có Hiei, Kirishima, Nagara, Akatsuki, Ikazuchi, Inazuma trong hạm đội"
+        "name": "Organize the surface attack fleet!",
+        "desc": "Have Hiei, Kirishima, Nagara, Akatsuki, Ikazuchi, Inazuma in your fleet"
     },
     "155": {
-        "name": "Thành lập đội khu trục số 6 mới!",
-        "desc": "Có Akatsuki Kai2 làm kì hạm cùng với Hibiki/Bep, Ikazuchi, Inazuma trong hạm đội"
+        "name": "Organize the new 6th Destroyer Division!",
+        "desc": "Have Akatsuki Kai2 as Flagship with Hibiki/Bep, Ikazuchi, Inazuma in your fleet"
     },
     "156": {
-        "name": "Đệ nhất phóng lôi Hải đoàn, Chuẩn bị cho một cuộc tấn công lên vùng biển phía Bắc",
-        "desc": "Có Abukuma(Kai-2) làm kì hạm cùng với Hibiki/Вер, Hatsushimo, Wakaba, Samidare và Shimakaze trong hạm đội chính"
+        "name": "1st Torpedo Squadron, Prepare for a Rush to the Northern Sea",
+        "desc": "Have Abukuma as flagship with Hibiki/Вер, Hatsushimo, Wakaba, Samidare and Shimakaze in your main fleet"
     },
     "157": {
-        "name": "Đệ nhất phóng lôi Hải đoàn, chuẩn bị cho một cuộc tấn công nữa lên vùng biển phía Bắc!",
-        "desc": "Có Abukuma Kai Ni là kì hạm cùng với Hibiki/Вер, Yuugumo, Naganami, Akigumo và Shimakaze trong hạm đội chính"
+        "name": "1st Torpedo Squadron, Prepare for Another Rush to the Northern Sea",
+        "desc": "Have Abukuma Kai Ni as flagship with Hibiki/Вер, Yuugumo, Naganami, Akigumo and Shimakaze in your main fleet"
     },
     
     
     
     "202": {
-        "name": "Xuất kích lần đầu!",
-        "desc": "Triển khai hạm đội chính đi một map bất kì."
+        "name": "First Sortie!",
+        "desc": "Deploy your main fleet on a combat mission."
     },
     "203": {
-        "name": "Bảo vệ vùng nước quanh Quận Cảng!",
-        "desc": "Triển khai tới World 1-1 và hoàn thành map."
+        "name": "Protect the Seas of Chinju-Fu!",
+        "desc": "Deploy to World 1-1 and clear the stage."
     },
     "204": {
-        "name": "Xuất kích tới bờ biển quần đảo Nansei!",
-        "desc": "Triển khai tới 1-2 và hoàn thành map."
+        "name": "Sortie to the Coast of Nansei Islands!",
+        "desc": "Deploy to World 1-2 and clear the stage."
     },
     "205": {
-        "name": "Chặn đánh hạm đội tiên phong của địch!",
-        "desc": "Triển khai tới World 1-2 sau khi đã đánh bại boss và hoàn thành map."
+        "name": "Intercept Approaching Enemy Vanguard Fleet!",
+        "desc": "Deploy to World 1-2 after defeating its boss and clear the stage."
     },
     "206": {
-        "name": "Triển khai Phóng lôi Hải đoàn!",
-        "desc": "Triển khai 1 hạm đội có 1 CL làm kì hạm và 3 DD hộ tống."
+        "name": "Sortie the Torpedo Squadron!",
+        "desc": "Deploy a fleet with a CL as flagship and 3 DD as escorts."
     },
     "207": {
-        "name": "Triển khai 1 Tuần dương hạm hạng nặng!",
-        "desc": "Triển khai 1 hạm đội có 1 CA làm kì hạm."
+        "name": "Sortie a Heavy Cruiser!",
+        "desc": "Deploy a fleet with a CA as its flagship."
     },
     "208": {
-        "name": "Triển khai 1 Thiết giáp hạm!",
-        "desc": "Triển khai 1 hạm đội có 1 BB làm kì hạm. BBV không được tính."
+        "name": "Sortie a Battleship!",
+        "desc": "Deploy a fleet with a BB as its flagship. BBV don't count."
     },
     "209": {
-        "name": "Triển khai Không mẫu Cơ động Bộ đội!",
-        "desc": "Triển khai 1 hạm đội bao gồm 1 CV(L) làm kì hạm và 5 DD\/CL\/AV hộ tống."
+        "name": "Sortie a Carrier Task Force!",
+        "desc": "Deply a fleet with CV(L) as flagship and 5 DD\/CL\/AV for the escorts."
     },
     "215": {
-        "name": "Xuất kích hạm đội số 2!",
-        "desc": "Triển khai hạm đội số 2 đi một map bất kì"
+        "name": "Second Fleet Sortie!",
+        "desc": "Deploy your 2nd Fleet on a combat mission."
     },
     "217": {
-        "name": "Đánh chìm Không mẫu địch!",
-        "desc": "Đánh chìm một Hàng không Mẫu hạm của địch"
+        "name": "Sink Enemy Carrier!",
+        "desc": "Sink an enemy aircraft carrier."
     },
     "219": {
-        "name": "Triển khai hạm đội Mikawa!",
-        "desc": "Triển khai 1 hạm đội bao gồm Choukai, Aoba, Kako, Furutaka, Tenryuu và một tàu có tốc độ nhanh khác."
+        "name": "Sortie the Mikawa Fleet!",
+        "desc": "Deploy a fleet with Choukai, Aoba, Kako, Furutaka, Tenryuu and another fast ship."
     },
     "222": {
-        "name": "Triển khai đội khu trục số 6!",
-        "desc": "Triển khai 1 hạm đội gồm DUY NHẤT Akatsuki, Hibiki, Inazuma, và Ikazuchi."
+        "name": "Sortie the Destroyer Division 6!",
+        "desc": "Deploy a fleet with ONLY Akatsuki, Hibiki, Inazuma, and Ikazuchi."
     },
     "223": {
-        "name": "Triển khai đội tuần dương số 4!",
-        "desc": "Triển khai 1 hạm đội bao gồm Atago, Takao, Choukai, Maya và 2 tàu bất kì. Giành 1 chiến thắng trước boss 2-2 (B-rank trở lên)."
+        "name": "Sortie the Cruiser Division 4!",
+        "desc": "Deploy a fleet with Atago, Takao, Choukai, Maya and any 2 ships. Score a victory against World 2-2 Boss."
     },
     "224": {
-        "name": "Triển khai hạm đội Nishimura!",
-        "desc": "Triển khai 1 hạm đội bao gồm Fusou, Yamashiro, Mogami, Shigure và 2 tàu bất kì. Giành chiến thắng trước boss 2-3."
+        "name": "Sortie the Nishimura Fleet!",
+        "desc": "Deploy a fleet with Fusou, Yamashiro, Mogami, Shigure and any 2 ships. Score a victory against World 2-3 Boss."
     },
     "225": {
-        "name": "Triển khai Không đội 5!",
-        "desc": "Triển khai 1 hạm đội gồm Shoukaku, Zuikaku và 4 tàu bất kì. Giành lấy 1 chiến thắng trước boss 3-1 (B-rank trở lên)."
+        "name": "Sortie the Carrier Division 5!",
+        "desc": "Deploy a fleet with Shoukaku, Zuikaku and any 4 ships. Score a victory against World 3-1 Boss."
     },
     "227": {
-        "name": "Triển khai hạm đội Mikawa mới!",
-        "desc": "Triển khai 1 hạm đội bao gồm Choukai, Aoba, Kinugasa, Kako, Furutaka và Tenryuu. Đạt 1 chiến thắng ở boss 2-3 ( B-rank trở lên)."
+        "name": "Sortie the New Mikawa Fleet!",
+        "desc": "Deploy a fleet with Choukai, Aoba, Kinugasa, Kako, Furutaka and Tenryuu. Score a victory against World 2-3 Boss."
     },
     "231": {
-        "name": "Triển khai 1 hạm đội tàu ngầm!",
-        "desc": "Triển khai 1 hạm đội bao gồm 2 SS và 4 tàu tuỳ chọn. Giành 1 chiến thắng trước boss 2-3 ( B-rank trở lên)."
+        "name": "Sortie a Submarine Fleet!",
+        "desc": "Deploy a fleet with 2 SS and 4 additional ships. Score a victory against World 2-3 Boss."
     },
     "232": {
-        "name": " Triển khai 1 hạm đội không vận!",
-        "desc": "Triển khai 1 hạm đội gồm có 2 BBV, 2 CAV và 2 tàu khác.Giành 1 chiến thắng trước boss 4-2 (B-rank trở lên) ."
+        "name": "Sortie a Naval Aviation Strike Fleet!",
+        "desc": "Deploy a fleet with 2 BBV, 2 CAV and 2 additional ships. Score a victory against World 4-2 Boss."
     },
     "233": {
-        "name": "Xuất kích đội tuần dương hạm số 6!",
-        "desc": "Triển khai 1 hạm đội bao gồm  Furutaka, Kako, Kinugasa, Aoba và 2 tàu khác. Đạt 1 S rank ở boss 2-3."
+        "name": "Sortie the Cruiser Division 6!",
+        "desc": "Deploy a fleet with Furutaka, Kako, Kinugasa, Aoba and 2 additional ships. Score a S rank victory against World 2-3 Boss."
     },
     "239": {
-        "name": "Xuất kích đội khu trục số 8!",
-        "desc": "Triển khai 1 hạm đội gồm Asashio, Michishio, Ooshio, Arashio và 2 tàu tuỳ chọn.Giành chiến thắng trước boss 2-3."
+        "name": "Sortie the Destroyer Division 8!",
+        "desc": "Deploy a fleet with Asashio, Michishio, Ooshio, Arashio and 2 additional ships. Score a victory against World 2-3 Boss."
     },
     "240": {
-        "name": "Triển khai đội khu trục số 18!",
-        "desc": "Triển khai 1 hạm đội bao gồm Kasumi, Arare, Kagerou, Shiranui và 2 tàu tuỳ chọn. Giành 1 chiến thắng trước boss 3-1 (B-rank trở lên )."
+        "name": "Sortie the Destroyer Division 18!",
+        "desc": "Deploy a fleet with Kasumi, Arare, Kagerou, Shiranui and 2 additional ships. Score a victory against World 3-1 Boss."
     },
     "244": {
-        "name": "Triển khai đội khu trục số 30 (Thế hệ thứ nhất)",
-        "desc": "Triển khai 1 hạm đội bao gồm Mutsuki (\u7766\u6708), Kisaragi (\u5982\u6708), Yayoi (\u5f25\u751f), Mochizuki (\u671b\u6708) và thêm nhiều nhất DD khác tới 3-2 và gặp boss. Yêu cầu đạt từ C-rank trở lên."
+        "name": "Deploy the Destroyer Division 30 (Gen-1)",
+        "desc": "Deploy a fleet that consists of Mutsuki (\u7766\u6708), Kisaragi (\u5982\u6708), Yayoi (\u5f25\u751f), Mochizuki (\u671b\u6708) and up to 2 additional DDs to world 3-2 and encounter the boss. C rank or above is required."
     },
     "245": {
-        "name": "Chuẩn bị cho tình yêu! (Cuối cùng)",
-        "desc": "Triển khai 1 hạm đội với kì hạm có cấp độ cao (Lv.90~99) tới 2-3 giành chiến thắng S rank ở boss node."
+        "name": "In Preparation of Love! (Final)",
+        "desc": "Deploy a fleet with a high level (Lv.90~99) flagship to 2-3 obtain an S rank victory against the boss."
     },
     "246": {
-        "name": "Nhiệm vụ đầu tiên cùng nhau!",
-        "desc": "Triển khai hạm đội tới 4-3 với một tàu có Lv.100 hoặc cao hơn làm kì hạm và đạt chiến thắng S rank ở boss node."
+        "name": "Your First Mission Together!",
+        "desc": "Deploy a fleet to 4-3 with a bonded ship of Lv.100 or more as flagship and score an S rank victory against the boss."
     },
     "247": {
-        "name": "Xuất kích một hạm đội Hàng không Thiết giáp hạm!",
-        "desc": "Có 2 BBV trong hạm đội chính và giành chiến thắng boss World 4-4 một lần ( B-rank trở lên) "
+        "name": "Sortie an aviation battleship fleet!",
+        "desc": "Have 2 BBV ships in your main fleet and score a victory against World 4-4 Boss."
     },
     "248": {
-        "name": "Tuần tra chống ngầm của đội khu trục số 30",
-        "desc": "Triển khai Mutsuki, Yayoi, Uzuki và Mochizuki tới 1-5 và vào được boss, đạt ít nhât 1 C rank."
+        "name": "30th Destroyer Fleet's Anti-Submarine Patrol",
+        "desc": "Deploy Mutsuki, Yayoi, Uzuki and Mochizuki to World 1-5 and reach the boss, scoring at least a C rank."
     },
     "250": {
-        "name": "Triển khai Không đội 2",
-        "desc": "Triển khai Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c) làm kì hạm, Souryuu (\u84bc\u9f8d) và hai khu trục hạm tới 5-2. Có thể thêm hai tàu khác. Đạt chiến thắng S rank ở boss node."
+        "name": "Deploy the 2nd Carrier Division",
+        "desc": "Deploy Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c) as the flagship, Souryuu (\u84bc\u9f8d) and two destroyers to World 5-2. You may add 2 other ships. Score an S rank victory against the boss."
     },
     "251": {
-        "name": "Triển khai Không đội 2 tinh nhuệ",
-        "desc": "Triển khai Souryuu Kai Ni (\u84bc\u9f8d\u6539\u4e8c) làm kì hạm, Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c) và hai khu trục hạm tới 4-3. Bạn có thể thêm hai tàu khác. Đạt chiến thắng S rank ở boss node."
+        "name": "Deploy the Elite 2nd Carrier Division",
+        "desc": "Deploy Souryuu Kai Ni (\u84bc\u9f8d\u6539\u4e8c) as the flagship, Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c) and two destroyers to World 4-3. You may add 2 other ships. Score an S rank victory against the boss."
     },
     "252": {
-        "name": "Triển khai một hạm đội do Haruna dẫn đầu",
-        "desc": "Triển khai 1 hạm đội với Haruna Kai Ni (\u699b\u540d\u6539\u4e8c) làm kì hạm và thêm nhiều nhất 5 tàu khác tới World 5-1 và đạt S rank ở boss ."
+        "name": "Deploy a Haruna-led Fleet",
+        "desc": "Deploy a fleet with Haruna Kai Ni (\u699b\u540d\u6539\u4e8c) as the flagship and up to 5 additional ships to World 5-1 and score an S rank victory against the boss."
     },
     "253": {
-        "name": "Triển khai Không đoàn 601",
-        "desc": "Triển khai 1 hạm đội với Unryuu Kai (\u96f2\u9f8d\u6539) làm kì hạm tới 5-2 và đạt S rank ở boss."
+        "name": "Deploy the 601 Air Group",
+        "desc": "Deploy a fleet with Unryuu Kai (\u96f2\u9f8d\u6539) as the flagship to World 5-2 and score an S rank victory against the boss."
     },
     "254": {
-        "name": "Triển khai đội Không mẫu hạng nhẹ",
-        "desc": "Triển khai một hạm đội bao gồm 1-2 CVL, 1 CL và 3-4 DD tới 2-1 và đạt S rank ở boss node."
+        "name": "Deploy a Light Carrier Squadron",
+        "desc": "Sortie a fleet of 1-2 light aircraft carriers, 1 light cruiser and 3-4 destroyers to World 2-1 and score an S rank victory against the boss."
     },
     "255": {
-        "name": "Triển khai 1 hạm đội phóng lôi tới quần đảo Bashi",
-        "desc": "Triển khai 1 hạm đội bao gồm 1-2 CL (một trong số đó phải là kì hạm) và 4-5 DD tới 2-2. Đạt một chiến thắng ở boss ( B-rank trở lên) và đánh chìm kì hạm của địch."
+        "name": "Deploy a Torpedo Squadron to Bashi Islands",
+        "desc": "Sortie a fleet of 1-2 light cruisers (with one of them as the flagship) and 4-5 destroyers to World 2-2. Score a victory at the boss and sink the enemy flagship."
     },
     "258": {
-        "name": "Xuất kích Đệ nhị Hải đoàn",
-        "desc": "Triển khai Nagato (\u9577\u9580), Mutsu (\u9678\u5965), Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce) và thêm nhiều nhất hai tàu khác tới 4-2. Đạt S rank hai lần ở boss node."
+        "name": "Sortie the 2nd Squadron",
+        "desc": "Deploy Nagato (\u9577\u9580), Mutsu (\u9678\u5965), Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce) and up to 2 additional ships to World 4-2. Score two S rank victories at the boss node."
     },
     "260": {
-        "name": "Triển khai hải đoàn Thiết giáp hạm ở vùng biển phía Bắc",
-        "desc": "Triển khai 2 Thiết giáp hạm, 1 Không mẫu hạng nhẹ và thêm nhiều nhất 3 tàu khác tới 3-5 và đạt S rank  ở boss node."
+        "name": "Deploy the Battleship Squadron in the Northern Waters",
+        "desc": "Deploy two battleships, a light aircraft carrier and up to three additional ships to World 3-5 and score an S rank victory at the boss node."
     },
     "262": {
-        "name": "Triển khai Hạm đội Nishimura tới vùng biển phía Nam",
-        "desc": "Triển khai Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce), Mogami (\u6700\u4e0a), Shigure (\u6642\u96e8) và Michishio (\u6e80\u6f6e) (bạn cũng có thể thêm một tàu khác) tới 5-1 và đạt S rank ở boss node."
+        "name": "Deploy the Nishimura Fleet in the Southern Waters",
+        "desc": "Deploy Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce), Mogami (\u6700\u4e0a), Shigure (\u6642\u96e8) and Michishio (\u6e80\u6f6e) (you may also add another ship) to World 5-1 and score an S rank victory at the boss node."
     },
     "263": {
-        "name": "Triển khai hải đoàn số 6 tới vùng biển Tây Nam",
-        "desc": "Triển khai Furutaka (\u53e4\u9df9), Kako (\u52a0\u53e4), Aoba (\u9752\u8449), Kinugasa (\u8863\u7b20) và thêm tối đa 2 tàu khác tới 2-5 và đạt S rank ở boss node."
+        "name": "Deploy the Sixth Squadron to the Southwestern Waters",
+        "desc": "Deploy Furutaka (\u53e4\u9df9), Kako (\u52a0\u53e4), Aoba (\u9752\u8449), Kinugasa (\u8863\u7b20) and up to two additional ships to World 2-5 and score an S rank victory at the boss node."
     },
     "267": {
-        "name": "Triển khai đội khu trục số 11",
-        "desc": "Triển khai Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea), Murakumo(\u53e2\u96f2) và thêm tối đa 2 tàu nữa tới 2-3 và đạt 1 chiến thắng ở boss node (B-rank trở lên)."
+        "name": "Deploy the 11th Destroyer Division",
+        "desc": "Deploy Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea), Murakumo(\u53e2\u96f2) and up to 2 additional ships to World 2-3 and score a victory at the boss node."
     },
     "268": {
-        "name": "Tuần tra chống ngầm của đội khu trục số 11",
-        "desc": "Triển khai Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea) và Murakumo(\u53e2\u96f2) tới 1-5 và giành lấy ít nhất C-rank tại boss node."
+        "name": "11th Destroyer Division's Anti-Submarine Patrol",
+        "desc": "Deploy Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea) and Murakumo(\u53e2\u96f2) to World 1-5 and get a score of at least C at the boss node."
     },
     "269": {
-        "name": "Triển khai đội khu trục số 21",
-        "desc": "Triển khai Hatsuharu (\u521d\u6625), Nenohi (\u5b50\u65e5), Wakaba (\u82e5\u8449) và Hatsushimo (\u521d\u971c) và thêm nhiều nhất 2 tàu khác tới 3-1 và đạt S rank ở boss node."
+        "name": "Deploy the 21st Destroyer Division",
+        "desc": "Deploy Hatsuharu (\u521d\u6625), Nenohi (\u5b50\u65e5), Wakaba (\u82e5\u8449) and Hatsushimo (\u521d\u971c) and up to 2 additional ships to World 3-1 and score an S rank victory at the boss node."
     },
     "270": {
-        "name": "Triển khai đội khu trục số 22",
-        "desc": "Triển khai Satsuki (\u7690\u6708), Fumizuki (\u6587\u6708), Nagatsuki (\u9577\u6708), 1 DD bất kì và thêm tối đa 2 tàu khác tới 1-4 và đạt S rank ở boss node."
+        "name": "Deploy the 22nd Destroyer Division",
+        "desc": "Deploy Satsuki (\u7690\u6708), Fumizuki (\u6587\u6708), Nagatsuki (\u9577\u6708), 1 more DD and up to two additional ships to World 1-4 and score an S rank victory at the boss node."
     },
     "271": {
-        "name": "Triển khai Hạm đội của Nachi",
-        "desc": "Sortie 1 fleet with Nachi (\u90a3\u667a) as flagship, Hatsushimo (\u521d\u971c), Kasumi (\u971e), Ushio (\u6f6e), Akebono (\u66d9) và một tàu tuỳ chọn tới 2-2 và đạt S rank ở boss node."
+        "name": "Deploy Nachi's Squadron",
+        "desc": "Sortie a fleet with Nachi (\u90a3\u667a) as flagship, Hatsushimo (\u521d\u971c), Kasumi (\u971e), Ushio (\u6f6e), Akebono (\u66d9) and one additional ship to world 2-2 and score an S rank victory at the boss node."
     },
     "272": {
-        "name": "Triển khai Tuần dương hạm phòng không được cải tạo",
-        "desc": "Triển khai 1 hạm đội bao gồm Maya (\u6469\u8036) Kai hoặc Kai2, 1 CL, 2 DD và thêm nhiều nhất 2 tàu khác tới 2-3 và đạt S rank tại boss node."
+        "name": "Deploy the Remodelled Anti-Aircraft Heavy Cruiser",
+        "desc": "Sortie a fleet with Maya (\u6469\u8036) Kai or Kai2, 1 CL, 2 DD and up to two additional ships to World 2-3 and score an S rank victory at the boss node."
     },
     "273": {
-        "name": "Triển khai Hạm đội Mikawa tới quần đảo Solomon",
-        "desc": "Xuất kích hạm đội chính bao gồm Choukai Kai2 làm kì hạm và năm tàu bất kì trong số Aoba, Kinugasa, Kako, Furutaka, Tenryuu, Yuubari tới 5-1 và đạt S-Rank ở boss"
+        "name": "Deploy the Mikawa Fleet to Solomon Islands",
+        "desc": "Sortie the main fleet with Choukai Kai2 as the flagship and any five of Aoba, Kinugasa, Kako, Furutaka, Tenryuu, Yuubari to 5-1 and S-Rank the boss"
     },
     "274": {
-        "name": "Tuần tra chống ngầm của đội khu trục số 6",
-        "desc": "Triển khai Akatsuki, Hibiki (\u97ff or \u0412\u0435\u0440\u043d\u044b\u0439), Inazuma và Ikazuchi tới 1-5. Đạt ít nhất C-rank ở  boss"
+        "name": "6th Destroyer Division's Anti-Submarine Patrol",
+        "desc": "Deploy Akatsuki, Hibiki (\u97ff or \u0412\u0435\u0440\u043d\u044b\u0439), Inazuma and Ikazuchi to 1-5. C-Rank+ the boss"
     },
     "275": {
-        "name": "Triển khai hạm đội số 18",
-        "desc": "Tenryuu, Tatsuta, và ít nhất 2 tàu khác tới [W2-3] và Giành hạng S ở Boss"
+        "name": "Deploy the 18th Squadron",
+        "desc": "Tenryuu, Tatsuta, and at least 2 other ships to [W2-3] and S-rank the boss node"
     },
     "276": {
-        "name": "Xuất kích đội tấn công mặt nước!",
-        "desc": "Xuất kích Hiei, Kirishima, Nagara, Akatsuki, Ikazuchi, Inazuma tới 5-1 và đạt S-rank ở boss"
+        "name": "Sortie the surface attack fleet!",
+        "desc": "Sortie Hiei, Kirishima, Nagara, Akatsuki, Ikazuchi, Inazuma to 5-1 and clear the map with an S-rank"
     },
     "277": {
-        "name": "Nhiệm vụ chống ngầm đội khu trục số 6!",
-        "desc": "Xuất kích Akatsuki Kai2 , Hibiki/Verniy, Ikazuchi, Inazuma tới 1-5 và đạt ít nhất A-rank ở boss"
+        "name": "DesDiv6 Anti-Submarine Mission!",
+        "desc": "Sortie Akatsuki Kai2 , Hibiki/Verniy, Ikazuchi, Inazuma to 1-5 and clear the map with at least A-rank"
     },
     "278": {
-        "name": "Nhanh chóng gửi Đệ nhất phóng lôi Hải đoàn tới Chiến dịch KE",
-        "desc": "Xuất kích Abukuma(Kai-2) làm kì hạm cùng với Hibiki/Вер, Hatsushimo, Wakaba, Samidare và Shimakaze tới boss 3-2 và đạt B-rank trở lên"
+        "name": "Rush the 1st Torpedo Squadron to Operation KE",
+        "desc": "Sortie Abukuma as flagship with Hibiki/Вер, Hatsushimo, Wakaba, Samidare and Shimakaze to 3-2 and B-Rank+ the boss"
     },
     "279": {
-        "name": "Nhanh chóng gửi Đệ nhất phóng lôi Hải đoàn tới Chiến dịch KE một lần nữa",
-        "desc": "Xuất kích Abukuma Kai-2 làm kì hạm cùng với Hibiki/Вер, Yuugumo, Naganami, Akigumo và Shimakaze tới 3-2 và đạt ít nhất B-rank ở boss"
+        "name": "Rush the 1st Torpedo Squadron to Operation KE Again",
+        "desc": "Sortie Abukuma Kai-2 as flagship with Hibiki/Вер, Yuugumo, Naganami, Akigumo and Shimakaze to 3-2 and B-Rank+ the boss"
     },
     
     
     
     "201": {
         "code": "Bd1",
-        "name": "Xuất Kích mỗi ngày 1",
-        "desc": "Đánh bại một hạm đội Abyssal",
+        "name": "Daily Sortie 1",
+        "desc": "Defeat an abyssal fleet",
         "unlock": [ 216, 211, 212 ],
         "tracking": [ [0,1] ]
     },
     "216": {
         "code": "Bd2",
-        "name": "Xuất Kích mỗi ngày 2",
-        "desc": "Đánh bại kì hạm của một hạm đội Abyssal",
+        "name": "Daily Sortie 2",
+        "desc": "Defeat the flagship of an abyssal fleet",
         "unlock": [ 210, 218, 214, 213 ],
         "tracking": [ [0,1] ]
     },
     "210": {
         "code": "Bd3",
-        "name": "Xuất Kích mỗi ngày 3",
-        "desc": "Đánh bại 10 hạm đội Abyssal (rank B trở lên)",
+        "name": "Daily Sortie 3",
+        "desc": "Defeat 10 abyssal fleets (B rank+)",
         "tracking": [ [0,10] ]
     },
     "211": {
         "code": "Bd4",
-        "name": "Xuất Kích mỗi ngày 4",
-        "desc": "Đánh chìm 3 CV(L) của Abyssal",
+        "name": "Daily Sortie 4",
+        "desc": "Sink 3 abyssal CV(L)",
         "tracking": [ [0,3] ]
     },
     "218": {
         "code": "Bd5",
-        "name": "Xuất Kích mỗi ngày 5",
-        "desc": "Đánh chìm 3 tàu vận chuyển của Abyssal",
+        "name": "Daily Sortie 5",
+        "desc": "Sink 3 abyssal transport ships",
         "unlock": [ 226, 220 ],
         "tracking": [ [0,3] ]
     },
     "212": {
         "code": "Bd6",
-        "name": "Xuất Kích mỗi ngày 6",
-        "desc": "Đánh chìm 5 tàu vận chuyển của Abyssal",
+        "name": "Daily Sortie 6",
+        "desc": "Sink 5 abyssal transport ships",
         "tracking": [ [0,5] ]
     },
     "226": {
         "code": "Bd7",
-        "name": "Xuất Kích mỗi ngày 7",
-        "desc": "Đánh bại 5 boss ở World 2",
+        "name": "Daily Sortie 7",
+        "desc": "Defeat 5 bosses in horned nodes in World 2",
         "unlock": [ 230 ],
         "tracking": [ [0,5] ]
     },
     "230": {
         "code": "Bd8",
-        "name": "Xuất Kích mỗi ngày 8",
-        "desc": "Đánh chìm 6 tàu ngầm của Abyssal",
+        "name": "Daily Sortie 8",
+        "desc": "Sink 6 abyssal submarines",
         "tracking": [ [0,6] ]
     },
     
@@ -488,68 +488,68 @@
     
     "214": {
         "code": "Bw1",
-        "name": "Xuất Kích mỗi tuần 1",
-        "desc": "Xuất kích 36 lần, Giao chiến 24 boss, Thắng 12 boss, đạt được 6 hạng S",
+        "name": "Weekly Sortie 1",
+        "desc": "Sortie 36x, Encounter 24 bosses, Win vs 12 bosses, 6 S-ranks",
         "unlock": [ 221 ],
         "tracking": [ [0,36], [0,24], [0,12], [0,6] ]
     },
     "220": {
         "code": "Bw2",
-        "name": "Xuất Kích mỗi tuần 2",
-        "desc": "Đánh chìm 20 CV(L) của Abyssal",
+        "name": "Weekly Sortie 2",
+        "desc": "Sink 20 abyssal CV(L)",
         "unlock": [ 228 ],
         "tracking": [ [0,20] ]
     },
     "213": {
         "code": "Bw3",
-        "name": "Xuất Kích mỗi tuần 3",
-        "desc": "Đánh chìm 20 tàu chở hàng của Abyssal",
+        "name": "Weekly Sortie 3",
+        "desc": "Sink 20 abyssal transport ships",
         "tracking": [ [0,20] ]
     },
     "221": {
         "code": "Bw4",
-        "name": "Xuất Kích mỗi tuần 4",
-        "desc": "Đánh chìm 50 tàu chở hàng của Abyssal",
+        "name": "Weekly Sortie 4",
+        "desc": "Sink 50 abyssal transport ships",
         "unlock": [ 261, 257, 264 ],
         "tracking": [ [0,50] ]
     },
     "228": {
         "code": "Bw5",
-        "name": "Xuất Kích mỗi tuần 5",
-        "desc": "Đánh chìm 15 tàu ngầm của Abyssal",
+        "name": "Weekly Sortie 5",
+        "desc": "Sink 15 submarines",
         "unlock": [ 229, 241, 613 ],
         "tracking": [ [0,15] ]
     },
     "229": {
         "code": "Bw6",
-        "name": "Xuất Kích mỗi tuần 6",
-        "desc": "Đánh bại 12 boss ở World 4",
+        "name": "Weekly Sortie 6",
+        "desc": "Defeat 12 bosses in horned nodes in World 4",
         "unlock": [ 242 ],
         "tracking": [ [0,12] ]
     },
     "241": {
         "code": "Bw7",
-        "name": "Xuất Kích mỗi tuần 7",
-        "desc": "Đánh bại 5 boss ở World [W3-3], [W3-4] hoặc [W3-5]",
+        "name": "Weekly Sortie 7",
+        "desc": "Defeat 5 bosses in Worlds [W3-3], [W3-4] or [W3-5]",
         "tracking": [ [0,5] ]
     },
     "242": {
         "code": "Bw8",
-        "name": "Xuất Kích mỗi tuần 8",
-        "desc": "Đánh bại 1 boss ở World [W4-4]",
+        "name": "Weekly Sortie 8",
+        "desc": "Defeat a boss in World [W4-4]",
         "unlock": [ 243 ],
         "tracking": [ [0,1] ]
     },
     "243": {
         "code": "Bw9",
-        "name": "Xuất Kích mỗi tuần 9",
-        "desc": "Xuất Kích đến [W5-2] và giành hạng S khi đánh boss 2 lần",
+        "name": "Weekly Sortie 9",
+        "desc": "Sortie to [W5-2] and S-rank the boss node 2 times",
         "tracking": [ [0,2] ]
     },
     "261": {
         "code": "Bw10",
-        "name": "Xuất Kích mỗi tuần 10",
-        "desc": "Xuất Kích đến [W1-5] và giành hạng A trở lên khi đánh boss 3 lần",
+        "name": "Weekly Sortie 10",
+        "desc": "Sortie to [W1-5] and A-rank+ the boss node 3 times",
         "tracking": [ [0,3] ]
     },
     
@@ -559,42 +559,42 @@
     
     "249": {
         "code": "Bm1",
-        "name": "Triển khai Hạm đội số 5",
-        "desc": "Đưa Myoukou, Nachi, Haguro và +3 tàu khác đến [W2-5]. Giành hạng S ở Boss",
+        "name": "Deploy the Fifth squadron",
+        "desc": "Deploy Myoukou, Nachi, Haguro, +3 ships to [W2-5]. S-rank the boss node",
         "unlock": [ 265 ]
     },
     "256": {
         "code": "Bm2",
-        "name": "Triển khai 1 đội tàu ngầm đến World 6-1",
-        "desc": "Triển khai đến [W6-1] và giành hạng S ở Boss 3 lần",
+        "name": "Deploy a Submarine Fleet to World 6-1",
+        "desc": "Deploy to [W6-1] and obtain an S-rank the boss node 3 times",
         "tracking": [ [0,3] ]
     },
     "257": {
         "code": "Bm3",
-        "name": "Triển khai 1 Hạm đội Ngư lôi",
-        "desc": "1~3 CL (CL làm kì hạm) và 3~5 DD đến [W1-4]. Giành hạng S ở Boss"
+        "name": "Deploy a Torpedo Squadron",
+        "desc": "1~3 CL (CL flagship) and 3~5 destroyers to [W1-4]. S-rank the boss node"
     },
     "259": {
         "code": "Bm4",
-        "name": "Triển khai 1 Hạm đội Tàu chiến",
-        "desc": "Triển khai 3 BB(V) + 1 CL + 2 tàu khác đến [W5-1] và giành hạng S ở Boss"
+        "name": "Deploy a Battleship Squadron",
+        "desc": "Deploy 3 BB(V) + 1 CL + 2 ships to [W5-1] and S-rank the boss node"
     },
     "265": {
         "code": "Bm5",
-        "name": "Hộ tống hằng tháng",
-        "desc": "Triển khai 1 đội đến [W1-5] và giành hạng A tại Boss 10 lần",
+        "name": "Monthly Escort Duty",
+        "desc": "Deploy a fleet to [W1-5] and A-rank+ the boss node 10 times",
         "tracking": [ [0,10] ]
     },
     "264": {
         "code": "Bm6",
-        "name": "Triển khai Không mẫu Cơ động Bộ đội tới miền Tây",
-        "desc": "2 CV + 2 DD + 2 tàu khác tới [W4-2]. Giành hạng S ở Boss",
+        "name": "Sortie the Aircraft Carrier Task Force to the West",
+        "desc": "2 CV + 2 DD + 2 ships to [W4-2]. S-rank the boss node",
         "unlock": [ 266 ]
     },
     "266": {
         "code": "Bm7",
-        "name": "Triển khai Hạm đội Phản công",
-        "desc": "4 DD (DD làm kì hạm) + 1 CA (không được dùng CAV) + 1 CL tới [W2-5] và giành hạng S ở Boss"
+        "name": "Deploy the Counterattack Squadron",
+        "desc": "4 DD (DD flagship) + 1 CA (Not CAV) + 1 CL to [W2-5] and S-rank the boss node"
     },
     
     
@@ -603,42 +603,42 @@
     
     "301": {
         "code": "C1",
-        "name": "Luyện tập đầu tiên!",
-        "desc": "Thách thức một hạm đội khác trong chế độ Luyện tập"
+        "name": "First Exercise!",
+        "desc": "Challenge another fleet in practice mode"
     },
      "303": {
         "code": "C2",
-        "name": "Luyện tập mỗi ngày 1",
-        "desc": "Thách thức 3 hạm đội khác trong chế độ Luyện tập",
+        "name": "Daily Exercises 1",
+        "desc": "Challenge 3 other fleets in practice mode",
         "unlock": [ 304, 302 ],
         "tracking": [ [0,3] ]
     },
     "304": {
         "code": "C3",
-        "name": "Luyện tập mỗi ngày 2",
-        "desc": "Giành được 5 chiến thắng trong chế độ Luyện tập trong cùng một ngày",
+        "name": "Daily Exercises 2",
+        "desc": "Get 5 victories in practice mode within the same day",
         "tracking": [ [0,5] ]
     },
     "302": {
         "code": "C4",
-        "name": "Luyện tập mỗi tuần",
-        "desc": "Giành được 20 chiến thắng trong chế độ Luyện tập",
+        "name": "Weekly Exercises",
+        "desc": "(Weekly) Get 20 victories in practice mode",
         "tracking": [ [0,20] ]
     },
     "307": {
         "code": "C5",
-        "name": "Tăng cường độ hiệu quả của hạm đội",
-        "desc": "Giành được 3 chiến thắng trong chế độ Luyện tập"
+        "name": "Improve the Efficiency of the Fleet",
+        "desc": "Get 3 victories in practice mode within the same day"
     },
     "308": {
         "code": "C6",
-        "name": "Tăng cường độ hiệu quả của hạm đội thêm lần nữa",
-        "desc": "Giành được 4 chiến thắng trong chế độ Luyện tập"
+        "name": "Improve the Efficiency of the Fleet One More Time",
+        "desc": "Get 4 victories in practice mode within the same day"
     },
     "309": {
         "code": "C7",
-        "name": "Phấn đấu tăng cường rèn luyện để chuẩn bị một cuộc tấn công nữa lên vùng biển phía Bắc",
-        "desc": "Giành được 4 chiến thắng trong chế độ Luyện tập trong cùng ngày"
+        "name": "Strive to Increase the Level of Training in Preparation for Another Rush to the Northern Sea",
+        "desc": "Get 4 victories in Exercises within the same day"
     },
     
     
@@ -646,100 +646,100 @@
     
     "401": {
         "code": "D1",
-        "name": "Viễn chinh đầu tiên",
-        "desc": "Thực hiện một cuộc viễn chinh"
+        "name": "First Expedition",
+        "desc": "Perform an expedition"
     },
     "402": {
         "code": "D2",
-        "name": "Viễn chinh mỗi ngày 1",
-        "desc": "Thực hiện 3 cuộc viễn chinh thành công",
+        "name": "Daily Expeditions 1",
+        "desc": "Perform 3 successful expeditions",
         "unlock": [ 403 ],
         "tracking": [ [0,3] ]
     },
     "403": {
         "code": "D3",
-        "name": "Viễn chinh mỗi ngày 2",
-        "desc": "Thực hiện 10 cuộc viễn chinh thành công",
+        "name": "Daily Expeditions 2",
+        "desc": "Perform 10 successful expeditions",
         "tracking": [ [0,10] ]
     },
     "404": {
         "code": "D4",
-        "name": "Viễn chinh mỗi tuần",
-        "desc": "Thực hiện 30 cuộc viễn chinh thành công",
+        "name": "Weekly Expeditions",
+        "desc": "(Weekly) Perform 30 successful expeditions",
         "tracking": [ [0,30] ]
     },
     "405": {
         "code": "D5",
-        "name": "Chiến dịch tàu ngầm lần thứ nhất",
-        "desc": "Hoàn thành chuyến viễn chinh số 30"
+        "name": "The First Submarine Operation",
+        "desc": "Complete Expedition 30"
     },
     "406": {
         "code": "D6",
-        "name": "Chiến dịch tàu ngầm lần thứ hai",
-        "desc": "Hoàn thành chuyến viễn chinh số 30 thêm một lần nữa"
+        "name": "The Second Submarine Operation",
+        "desc": "Complete Expedition 30 one more time"
     },
     "408": {
         "code": "D7",
-        "name": "Tiếp tục chiến dịch tàu ngầm",
-        "desc": "Hoàn thành chuyến viễn chinh số 30 thêm hai lần nữa"
+        "name": "Continuation of Submarine Operations",
+        "desc": "Complete Expedition 30 two more times"
     },
     "409": {
         "code": "D8",
-        "name": "Cuộc hội ngộ chiến lược với hạm đội tàu ngầm bên kia đại dương, xuất kích!",
-        "desc": "Hoàn thành chuyến viễn chinh số 31"
+        "name": "Strategy Meeting with Overseas Submarine Dispatch!",
+        "desc": "Complete Expedition 31"
     },
     "410": {
         "code": "D9",
-        "name": "Viễn chinh mỗi tuần 2",
-        "desc": "Hoàn thành Viễn chinh 37 hoặc 38",
+        "name": "Weekly Expedition 2",
+        "desc": "(Weekly) Complete expedition 37 or 38",
         "unlock": [ 411 ],
         "tracking": [ [0,1] ]
     },
     "412": {
         "code": "D10",
-        "name": "Tăng cường hoạt động của Hàng không Thiết giáp hạm",
-        "desc": "Hoàn thành chuyến viễn chinh số 23"
+        "name": "Strengthen the Operation of the BBV",
+        "desc": "Complete expedition 23"
     },
     "411": {
         "code": "D11",
-        "name": "Viễn chinh mỗi tuần 3",
-        "desc": "Hoàn thành Viễn chinh 37 hoặc 38 (hoàn thành một cái ít nhất 7 lần)",
+        "name": "Weekly Expedition 3",
+        "desc": "(Weekly) Complete expedition 37 or 38 a total of 7 times",
         "tracking": [ [0,7] ]
     },
     "413": {
         "code": "D12",
-        "name": "Tăng cường hoạt động của Hàng không Thiết giáp hạm (Tiếp theo)",
-        "desc": "Hoàn thành chuyến viễn chinh số 23 thêm bốn lần nữa"
+        "name": "Strengthen the Operation of the BBV (Cont.)",
+        "desc": "Complete expedition 23 four more times"
     },
     "414": {
         "code": "D13",
-        "name": "Chiến dịch Tàu ngầm ở vùng biển Xanh",
-        "desc": "Hoàn thành chuyến viễn chinh số 39"
+        "name": "Blue Waters Submarine Operation",
+        "desc": "Complete expedition 39"
     },
     "415": {
         "code": "D14",
-        "name": "Chiến dịch tàu ngầm mở rộng ở vùng biển Xanh",
-        "desc": "Hoàn thành cuyến viễn chinh số 39 thêm 2 lần nữa"
+        "name": "Blue Waters Extended Submarine Operation",
+        "desc": "Complete expedition 39 two more times"
     },
     "416": {
         "code": "D15",
-        "name": "Diễn tập phòng không",
-        "desc": "Hoàn thành chuyến viễn chinh số 6 ba lần"
+        "name": "Air Defence Exercises",
+        "desc": "Complete expedition 6 three times"
     },
     "417": {
         "code": "D16",
-        "name": "Triển khai lực lượng nghi binh",
-        "desc": "Hoàn thành chuyến viễn chinh số 15"
+        "name": "Deploy the Decoy Task Force",
+        "desc": "Complete expedition 15"
     },
     "418": {
         "code": "D17",
-        "name": "Chuẩn bị cho nghi lễ Hải quân",
-        "desc": "Hoàn thành chuyến viễn chinh số 7 hai lần "
+        "name": "Naval Ceremony Preparations",
+        "desc": "Complete Expedition 7 twice"
     },
     "419": {
         "code": "D18",
-        "name": "Nghi lễ Hải quân",
-        "desc": "Hoàn thành chuyến viễn chinh số  8"
+        "name": "Naval Ceremony",
+        "desc": "Complete expedition 8"
     },
     
     
@@ -748,25 +748,25 @@
     
     "501": {
         "code": "E1",
-        "name": "Tiếp tế đầu tiên",
-        "desc": "Tiếp tế cho một tàu"
+        "name": "First Supply",
+        "desc": "Resupply a ship"
     },
     "502": {
         "code": "E2",
-        "name": "Sửa chữa đầu tiên",
-        "desc": "Sửa chữa một tàu"
+        "name": "First Docking",
+        "desc": "Repair a ship"
     },
     "503": {
         "code": "E3",
-        "name": "Sửa chữa mỗi ngày",
-        "desc": "Sửa chữa 5 tàu",
+        "name": "Daily Repairs",
+        "desc": "Repair 5 ships",
         "unlock": [ 504 ],
         "tracking": [ [0,5] ]
     },
     "504": {
         "code": "E4",
-        "name": "Tiếp tế mỗi ngày",
-        "desc": "Tiếp tế cho nữ hạm của bạn 15 lần",
+        "name": "Daily Resupplies",
+        "desc": "Resupply your ships 15 times",
         "tracking": [ [0,15] ]
     },
     
@@ -776,103 +776,103 @@
     
     "605": {
         "code": "F1",
-        "name": "Chế thiết bị mỗi ngày 1",
-        "desc": "Chế tạo 1 thiết bị (Thất bại cũng được)",
+        "name": "Daily Development 1",
+        "desc": "Craft a piece of equipment (Failures are OK)",
         "unlock": [ 606 ],
         "tracking": [ [0,1] ]
     },
     "606": {
         "code": "F2",
-        "name": "Đóng tàu mỗi ngày 1",
-        "desc": "Đóng 1 tàu",
+        "name": "Daily Construction 1",
+        "desc": "Craft a ship",
         "unlock": [ 607 ],
         "tracking": [ [0,1] ]
     },
     "607": {
         "code": "F3",
-        "name": "Chế thiết bị mỗi ngày 2",
-        "desc": "Chế tạo 3 thiết bị (có thể thất bại)",
+        "name": "Daily Development 2",
+        "desc": "Craft 3 pieces of equipment (Failures are OK)",
         "unlock": [ 608 ],
         "tracking": [ [0,3] ]
     },
      "608": {
         "code": "F4",
-        "name": "Đóng tàu mỗi ngày 2",
-        "desc": "Đóng 3 tàu",
+        "name": "Daily Construction 2",
+        "desc": "Craft 3 ships",
         "unlock": [ 609, 619 ],
         "tracking": [ [0,3] ]
     },
      "609": {
         "code": "F5",
-        "name": "Dỡ bỏ mỗi ngày",
-        "desc": "Phá dỡ 2 tàu",
+        "name": "Daily Dismantlement",
+        "desc": "Scrap 2 ships",
         "tracking": [ [0,2] ]
     },
     "601": {
         "code": "F6",
-        "name": "Đóng tàu lần đầu",
-        "desc": "Đóng 1 tàu"
+        "name": "First Construction",
+        "desc": "Craft a ship"
     },
     "602": {
         "code": "F7",
-        "name": "Chế thiết bị lần đầu",
-        "desc": "Chế tạo một thiết bị"
+        "name": "First Development",
+        "desc": "Craft a piece of equipment"
     },
     "603": {
         "code": "F8",
-        "name": "Dỡ tàu lần đầu",
-        "desc": "Phá dỡ một tàu"
+        "name": "First Dismantlement",
+        "desc": "Dismantle a ship"
     },
     "604": {
         "code": "F9",
-        "name": "Tháo dỡ thiết bị lần đầu",
-        "desc": "Tháo dỡ một thiết bị"
+        "name": "First Disposal",
+        "desc": "Scrap a piece of equipment"
     },
     "610": {
         "code": "F10",
-        "name": "Chuẩn bị cho Đóng tàu cỡ lớn (Phần 2)",
-        "desc": "Tháo dỡ 4 thiết bị"
+        "name": "Preparation for LSC (Part 2)",
+        "desc": "Scrap equipment 4 times"
     },
     "612": {
         "code": "F11",
-        "name": "Chuẩn bị thùng chuyên chở",
-        "desc": "Tháo dỡ thiết bị 3 lần"
+        "name": "Prepare the Drum Canisters",
+        "desc": "Scrap equipment 3 times"
     },
      "613": {
         "code": "F12",
-        "name": "Huỷ bỏ thiết bị hằng tuần",
-        "desc": "Huỷ bỏ 24 thiết bị",
+        "name": "Weekly Dismantlement",
+        "desc": "Scrap equipment 24 times",
         "tracking": [ [0,24] ]
     },
      "614": {
         "code": "F13",
-        "name": "Nâng cấp phiên bản (thành Tenzan)",
-        "desc": "Có kì hạm trang bị Type 97 Torpedo Bomber (Tomonaga Squadron), sau đó tháo dỡ 2 Tenzan"
+        "name": "Model Conversion (to Tenzan)",
+        "desc": "Have flagship equipped with Type 97 Torpedo Bomber (Tomonaga Squadron), then scrap 2 Tenzan"
     },
     "615": {
         "code": "F14",
-        "name": "Nâng cấp phiên bản (thành Suisei)",
-        "desc": "Có kì hạm trang bị Type 99 Dive Bomber (Egusa Squadron), sau đó tháo dỡ 2 Suisei"
+        "name": "Model Conversion (to Suisei)",
+        "desc": "Have flagship equipped with Type 99 Dive Bomber (Egusa Squadron), then scrap 2 Suisei"
     },
     "616": {
         "code": "F15",
-        "name": "Nâng cấp phiên bản (thành Reppuu)",
-        "desc": "Có kì hạm trang bị Zero Fighter Type 52 Type C (601 Air Group), sau đó tháo dỡ 2 Reppuu"
+        "name": "Model Conversion (to Reppuu)",
+        "desc": "Have flagship equipped with Zero Fighter Type 52 Type C (601 Air Group), then scrap 2 Reppuu"
     },
     "617": {
         "code": "F16",
-        "name": "Chuẩn bị cho Irako",
-        "desc": "Tháo dỡ thiết bị 10 lần"
+        "name": "Preparing for Irako",
+        "desc": "Scrap equipment 10 times"
     },
     "618": {
         "code": "F17",
-        "name": "Hiện đại hóa Trang bị đầu tiên",
-        "desc": "Thực hiện Hiện đại hóa Trang bị 1 lần"
+        "name": "First Equipment Modernisation",
+        "desc": "Perform equipment modernisation once"
     },
     "619": {
         "code": "F18",
-        "name": "Hiện đại hóa Trang bị mỗi ngày",
-        "desc": "Thực hiện Hiện đại hóa Trang bị 1 lần",
+        "name": "Daily Equipment Modernisation",
+        "desc": "Perform equipment modernisation once",
         "tracking": [ [0,1] ]
     },
     
@@ -882,26 +882,26 @@
     
     "701": {
         "code": "G1",
-        "name": "Hiện đại hóa đầu tiên",
-        "desc": "Thực hiện 1 lần Hiện đại hóa thành công"
+        "name": "First Modernization",
+        "desc": "Perform a successful modernization"
     },
     "702": {
         "code": "G2",
-        "name": "Hiện đại hóa mỗi ngày",
-        "desc": "Thực hiện 2 lần Hiện đại hóa thành công",
+        "name": "Daily Modernization",
+        "desc": "Perform 2 successful modernizations",
         "unlock": [ 703 ],
         "tracking": [ [0,2] ]
     },
     "703": {
         "code": "G3",
-        "name": "Hiện đại hóa mỗi tuần",
-        "desc": "Thực hiện 15 lần Hiện đại hóa thành công",
+        "name": "Weekly Modernization",
+        "desc": "(Weekly) Perform 15 successful modernizations",
         "tracking": [ [0,15] ]
     },
     "704": {
         "code": "G4",
-        "name": "Chuẩn bị cho Đóng tàu cỡ lớn (Phần 1)",
-        "desc": "Thực hiện 4 lần Hiện đại hóa thành công"
+        "name": "Preparation for LSC (Part 1)",
+        "desc": "Perform 4 successful modernizations"
     },
     
     
@@ -909,11 +909,11 @@
     
     
     "611": {
-        "name": "Chuẩn bị cho tình yêu! (Phần 1)",
-        "desc": "Tháo dỡ thiết bị 2 lần để thể hiện tình yêu!"
+        "name": "In Preparation of Love! (Part 1)",
+        "desc": "Scrap equipment 2 times to show your love!"
     },
     "306": {
-        "name": "Chuẩn bị cho tình yêu! (Phần 2)",
-        "desc": "Thể hiện tình yêu bằng cách chiến thắng hai trận trong chế độ Luyện tập."
+        "name": "In Preparation of Love (Part 2)",
+        "desc": "Show your love by getting 2 victories in practice mode."
     }
 }

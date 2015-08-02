@@ -47,7 +47,7 @@ Instantiatable class to represent one player
 		var ExpNextLevel = KC3Meta.exp( this.level+1 )[1];
 		var exp_percent = (exp - ExpCurrLevel) / (ExpNextLevel - ExpCurrLevel);
 		var exp_next = ExpNextLevel - exp;
-		this.exp = [ exp_percent, exp_next ];
+		this.exp = [ exp_percent, exp_next, (exp - ExpCurrLevel)];
 	};
 
 	KC3Player.prototype.logout = function(){

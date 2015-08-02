@@ -47,6 +47,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "info_drop",
+				"name" : "SettingsDropFaces",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "info_craft",
 				"name" : "SettingsCraftBox",
 				"type" : "check",
@@ -68,6 +74,20 @@
 				"id" : "info_boss",
 				"name" : "SettingsBossComp",
 				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_troll",
+				"name" : "SettingsYasenTroll",
+				"type" : "check",
+				"hide" : 1,
+				"options" : {}
+			},
+			{
+				"id" : "info_delta",
+				"name" : "SettingsHQDelta",
+				"type" : "check",
+				"hide" : 1,
 				"options" : {}
 			}
 		]
@@ -273,7 +293,8 @@
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ "default", "Default" ]
+						[ "default", "Default" ],
+						[ "natsuiro", "Natsuiro" ]
 					]
 				}
 			},

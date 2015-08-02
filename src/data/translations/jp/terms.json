@@ -65,6 +65,8 @@
 	"AboutOther" : "クレジット",
 	"AboutLogo" : "ロゴデザイン",
 	"AboutFairy" : "妖精デザイン",
+	"AboutReporters" : "定期的なGit記者",
+	"AboutReporter" : "Git記者",
 	
 	"SettingsTitle" : "KC3改の設定",
 	
@@ -76,11 +78,14 @@
 	"SettingsELosNew" : "新",
 	
 	"SettingsGameInfo" : "ゲーム情報",
+	"SettingsDropFaces" : "出撃ドロップ顔",
 	"SettingsConstructionFaces" : "建設顔",
 	"SettingsCraftBox" : "工芸結果",
 	"SettingsCompass" : "コンパスと敵",
-	"SettingsBattleData" : "バトル環境",
+	"SettingsBattleData" : "バトル予測",
 	"SettingsBossComp" : "ボス組成",
+	"SettingsYasenTroll" : "夜戦 \u0022特別な支援\u0022",
+	"SettingsHQDelta" : "出撃の提督経験値差分",
 	
 	"SettingsScreenshot" : "スクリーンショット",
 	"SettingsSSOutput" : "出力モード",
