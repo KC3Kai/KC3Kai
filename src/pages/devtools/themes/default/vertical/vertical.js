@@ -998,6 +998,12 @@
 					if(eshipId > -1){
 						$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).attr("src", KC3Meta.shipIcon(eshipId));
 						$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).show();
+
+						if ((thisPvP.enemySunk[index]) && (ConfigManager.info_battle)) {
+							$(".battle .battle_enemies .abyss_"+(index+1)+" .sunk-container", container).show();
+						} else {
+							$(".battle .battle_enemies .abyss_"+(index+1)+" .sunk-container", container).hide();
+						}
 					}else{
 						$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).hide();
 					}
