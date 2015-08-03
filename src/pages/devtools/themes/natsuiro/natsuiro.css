@@ -1,0 +1,525 @@
+/* GLOBAL
+------------------------------*/
+#factory {
+	display:none;
+}
+
+/* CATBOMB
+------------------------------*/
+#catBomb {
+	width:100%;
+	height:100%;
+	position:absolute;
+	top:0px;
+	left:0px;
+	display:none;
+}
+#catBomb .blackFilter {
+	width:100%;
+	height:100%;
+	position:fixed;
+	top:0px;
+	left:0px;
+	z-index:1;
+	background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(0,0,0,0.5)), color-stop(100%,rgba(0,0,0,0.85)));
+	background: -webkit-radial-gradient(center, ellipse cover,  rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.85) 100%);
+}
+#catBomb .content {
+	width:400px;
+	height:120px;
+	background-color: #fdd;
+	margin:-60px auto 0px -200px;
+	padding:10px;
+	border-radius:10px;
+	color:#c44;
+	top:50%;
+	left:50%;
+	position:absolute;
+	z-index:2;
+}
+#catBomb .image {
+	width:40px;
+	height:40px;
+	margin:0px 10px 0px 0px;
+	float:left;
+}
+#catBomb .image img {
+	width:40px;
+	height:40px;
+}
+#catBomb .title {
+	width:300px;
+	height:40px;
+	line-height:40px;
+	font-size:14px;
+	font-weight:bold;
+	float:left;
+}
+#catBomb .closebtn {
+	width:25px;
+	height:40px;
+	line-height:30px;
+	font-size:14px;
+	font-weight:bold;
+	float:left;
+	text-align:right;
+	font-size:30px;
+	margin:0px 0px 0px 5px;
+	color:#e88;
+}
+#catBomb .closebtn:hover {
+	color:#f55;
+}
+#catBomb .description {
+	width:380px;
+	margin:10px 0px 0px 0px;
+	font-size:12px;
+}
+
+/* MODULES
+------------------------------*/
+.wrapper {
+	overflow:hidden;
+	margin:0px auto;
+	display:none;
+	position:relative;
+}
+.module {
+	position:absolute;
+	/*background:rgba(255,0,0,.3);*/
+}
+
+/*------- HQ INFO -------*/
+.module.admiral {
+	width:190px;
+	height:56px;
+}
+.module.admiral .admiral_level {
+	width:60px;
+	height:56px;
+	float:right;
+}
+.module.admiral .admiral_lvtxt {
+	width:60px;
+	height:24px;
+	line-height:24px;
+	font-size:12px;
+	text-align:center;
+	overflow:hidden;
+}
+.module.admiral .admiral_lvval {
+	font-size:16px;
+}
+.module.admiral .admiral_lvbox {
+	width:60px;
+	height:14px;
+	border:1px solid #000;
+	background:#555;
+	margin:1px 0px;
+}
+.module.admiral .admiral_lvbar {
+	width:58px;
+	height:12px;
+	background:#0f0;
+}
+.module.admiral .admiral_lvnext {
+	width:60px;
+	height:16px;
+	line-height:16px;
+	font-size:11px;
+	text-align:center;
+}
+.module.admiral .admiral_name {
+	width:130px;
+	height:24px;
+	line-height:24px;
+	font-size:18px;
+	float:left;
+	white-space:nowrap; 
+	overflow:hidden;
+	text-overflow: ellipsis;
+	-webkit-user-select: none;
+}
+.module.admiral .admiral_name.censor {
+	color: transparent;
+	text-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+.module.admiral .admiral_comm {
+	width:130px;
+	height:16px;
+	line-height:16px;
+	font-size:12px;
+	float:left;
+	white-space:nowrap; 
+	overflow:hidden;
+	text-overflow: ellipsis;
+}
+.module.admiral .admiral_rank {
+	width:130px;
+	height:16px;
+	line-height:16px;
+	font-size:13px;
+	float:left;
+}
+
+/*------- ACTIVITY -------*/
+.module.activity {
+	width:190px;
+	height:255px;
+}
+.module.activity .activity_tabs {
+	width:190px;
+	height:20px;
+	padding:0px 0px 0px 8px
+}
+.module.activity .activity_tab {
+	width:55px;
+	height:20px;
+	line-height:20px;
+	font-size:11px;
+	margin:0px 2px 0px 0px;
+	background:#ace;
+	float:left;
+	text-align:center;
+	border-radius:5px 5px 0px 0px;
+}
+.module.activity .activity_tab.active {
+	background:#def;
+}
+.module.activity .activity_body {
+	width:190px;
+	height:235px;
+	background:#def;
+	/*background:rgba(200, 225, 255, 0.4);*/
+	border-radius:5px;
+	overflow:hidden;
+}
+.module.activity .activity_box {
+	width:190px;
+	height:235px;
+	display:none;
+	padding:5px;
+}
+
+/*------- ACTIVITY: BASIC -------*/
+.module.activity .activity_basic {
+	
+}
+/* Consumables */
+.module.activity .consumables {
+	width:180px;
+	height:60px;
+	margin:0px 0px 5px 0px;
+}
+.module.activity .consumable {
+	width:90px;
+	height:20px;
+	float:left;
+}
+.module.activity .consumable_icon {
+	width:20px;
+	height:20px;
+	float:left;
+}
+.module.activity .consumable_icon img {
+	width:14px;
+	height:14px;
+	margin:3px;
+	vertical-align:top;
+}
+.module.activity .consumable_text {
+	width:36px;
+	font-size:14px;
+	line-height:20px;
+	float:left;
+	color:#000;
+}
+.module.activity .consumable_ltext {
+	width:70px;
+	font-size:14px;
+	line-height:20px;
+	float:left;
+	color:#000;
+}
+.module.activity .consumable_text.danger {
+	color:#f00;
+}
+.module.activity .consumable_max {
+	width:34px;
+	font-size:11px;
+	float:left;
+	line-height:20px;
+}
+
+/* Expedition */
+.module.activity .expeditions {
+	width:180px;
+	height:45px;
+	margin:0px 0px 5px 0px;
+}
+.module.activity .expedition {
+	width:60px;
+	height:45px;
+	float:left;
+}
+.module.activity .expedition_face {
+	width:29px;
+	height:29px;
+	margin:0px 0px 3px 15px;
+	background:#006699;
+	border-radius:15px;
+}
+.module.activity .expedition_face img {
+	width:25px;
+	height:25px;
+	margin:2px;
+	display:none;
+}
+.module.activity .expedition_num {
+	
+}
+.module.activity .expedition_timer {
+	width:60px;
+	height:13px;
+	line-height:13px;
+	font-size:13px;
+	text-align:center;
+}
+
+/* Timers */
+.module.activity .timers {
+	width:180px;
+	height:108px;
+}
+.module.activity .timer_boxes {
+	width:90px;
+	height:108px;
+	float:left;
+}
+.module.activity .timer_box {
+	width:90px;
+	height:26px;
+	margin:0px 0px 1px 0px;
+}
+.module.activity .timer_face {
+	width:24px;
+	height:24px;
+	margin:1px 4px 0px 0px;
+	border-radius:13px;
+	float:left;
+}
+.module.activity .timer_face img {
+	width:20px;
+	height:20px;
+	margin:2px;
+	display:none;
+}
+.module.activity .timer_timer {
+	width:60px;
+	height:26px;
+	line-height:26px;
+	float:left;
+	font-size:13px;
+}
+
+.module.activity .repairs {}
+.module.activity .repairs .timer_face {
+	background:#EDD286;
+}
+
+.module.activity .builds {}
+.module.activity .builds .timer_face {
+	background:#996600;
+}
+
+/*------- ACTIVITY: BATTLE -------*/
+.module.activity .activity_battle {
+	
+}
+
+/*------- ACTIVITY: DETAILS -------*/
+.module.activity .activity_details"> {
+	
+}
+
+/*------- QUESTS -------*/
+.module.quests {
+	
+}
+.module.quests .quest {
+	height:20px;
+	line-height:20px;
+}
+.h .module.quests .quest {
+	width:190px;
+}
+.v .module.quests .quest {
+	width:240px;
+}
+
+.module.quests .quest_color {
+	width:14px;
+	height:14px;
+	margin:3px;
+	background:#555;
+	float:left;
+}
+
+.module.quests .quest_text {
+	width:130px;
+	height:20px;
+	/*background:#0f0;*/
+	float:left;
+	font-size:11px;
+	white-space:nowrap; 
+	overflow:hidden;
+	text-overflow: ellipsis;
+}
+.h .module.quests .quest_text {
+	width:130px;
+}
+.v .module.quests .quest_text {
+	width:170px;
+}
+
+.module.quests .quest_track {
+	width:40px;
+	height:18px;
+	margin:1px 0px;
+	background:#eee;
+	font-size:12px;
+	float:left;
+	text-align:center;
+}
+
+/*------- CONTROLS -------*/
+.module.controls {
+	
+}
+.module.controls .control {
+	height:30px;
+	float:left;
+}
+.module.controls .fleet_num {
+	width:30px;
+	line-height:30px;
+	border-radius:15px;
+	background:#def;
+	text-align:center;
+	margin:0px 5px 3px 0px;
+	font-size:16px;
+	font-weight:bold;
+	text-align:center;
+}
+.module.controls .fleet_rengo {
+	width:50px;
+	line-height:30px;
+	border-radius:10px;
+	background:#def;
+	text-align:center;
+	margin:0px 15px 3px 0px;
+	font-size:16px;
+	font-weight:bold;
+	text-align:center;
+}
+.module.controls .control_btn {
+	width:40px;
+	line-height:30px;
+	border-radius:15px;
+	background:#cfc;
+	text-align:center;
+	margin:0px 5px 0px 0px;
+	text-align:center;
+}
+
+/*------- SUMMARY -------*/
+.module.summary {
+	
+}
+
+/*------- FLEET -------*/
+.module.fleet {
+	width:340px;
+	height:320px;
+}
+
+/*------- STATUS -------*/
+.module.status {
+	
+}
+
+
+/* HORIZONTAL LAYOUT
+------------------------------*/
+.wrapper.h {
+	width:550px;
+	height:450px;
+	background:url(outline.png);
+	/*background:#fff;*/
+}
+.h .module.admiral {
+	left:5px; top:5px;
+}
+.h .module.activity {
+	left:5px; top:65px;
+}
+.h .module.quests {
+	width:190px;
+	height:120px;
+	left:5px; top:325px;
+}
+.h .module.controls {
+	width:340px;
+	height:30px;
+	left:205px; top:5px;
+}
+.h .module.summary {
+	width:340px;
+	height:20px;
+	left:205px; top:45px;
+}
+.h .module.fleet {
+	left:205px; top:75px;
+}
+.h .module.status {
+	width:340px;
+	height:45px;
+	left:205px; top:400px;
+}
+
+/* VERTICAL LAYOUT
+------------------------------*/
+.wrapper.v {
+	width:800px;
+	height:325px;
+	background:url(vertical.png);
+}
+.v .module.admiral {
+	left:5px; top:5px;
+}
+.v .module.activity {
+	left:5px; top:65px;
+}
+.v .module.fleet {
+	left:205px; top:5px;
+}
+.v .module.controls {
+	width:240px;
+	height:66px;
+	left:555px; top:5px;
+}
+.v .module.summary {
+	width:240px;
+	height:46px;
+	left:555px; top:75px;
+}
+.v .module.status {
+	width:240px;
+	height:69px;
+	left:555px; top:125px;
+}
+.v .module.quests {
+	width:240px;
+	height:120px;
+	left:555px; top:200px;
+}
