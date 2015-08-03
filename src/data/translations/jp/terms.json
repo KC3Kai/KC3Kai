@@ -76,6 +76,10 @@
 	"SettingsELosSum" : "合計",
 	"SettingsELosOld" : "古い",
 	"SettingsELosNew" : "新",
+	"SettingsHQExpDetail"  : "提督経験値の情報",
+	"SettingsHQExpLeft"    : "残り",
+	"SettingsHQExpCurrent" : "現在",
+	"SettingsHQExpTotal"   : "総獲得",
 	
 	"SettingsGameInfo" : "ゲーム情報",
 	"SettingsDropFaces" : "出撃ドロップ顔",
@@ -106,6 +110,7 @@
 	"SettingsAPIGameScreen" : "APIゲーム画面",
 	"SettingsQuestOverlay" : "クエスト翻訳",
 	"SettingsQuestTracking" : "クエスト追跡",
+	"SettingsPanelRequirement" : "ロードするためにパネルを待ちます。",
 	"SettingsConfirmExit" : "終了確認",
 	"SettingsScreenMargin" : "上余白",
 	"SettingsBGColor" : "背景の色",
