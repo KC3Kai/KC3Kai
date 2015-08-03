@@ -76,6 +76,10 @@
         "SettingsELosSum" : "Jumlah",
         "SettingsELosOld" : "Lama",
         "SettingsELosNew" : "Baru",
+        "SettingsHQExpDetail"  : "Informasi Exp HQ",
+	"SettingsHQExpLeft"    : "EXP Tersisa",
+	"SettingsHQExpCurrent" : "Level Sekarang",
+	"SettingsHQExpTotal"   : "Jumlah di Dapat",
 
         "SettingsGameInfo" : "Informasi Game",
         "SettingsDropFaces" : "Wajah Drop Sorti",
@@ -106,6 +110,7 @@
         "SettingsAPIGameScreen" : "Tampilan Game API",
         "SettingsQuestOverlay" : "Terjemahan Quest",
         "SettingsQuestTracking" : "Penanda Quest",
+        "SettingsPanelRequirement" : "Tunggu Panel Sedang Memuat",
         "SettingsConfirmExit" : "Konfirmasi Keluar",
         "SettingsScreenMargin" : "Batas Atas",
         "SettingsBGColor" : "Warna Latar Belakang",
