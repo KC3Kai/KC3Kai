@@ -145,7 +145,9 @@
         "LevelShort" : "Lv.",
         "LevelNext" : "Berikutnya",
         "Screenshot" : "Screenshot",
+        "UntranslatedQuest" : "Quest Tidak Diterjemahkan",
 
+        "PanelWaitActions" : "Menunggu Game Dimulai...",
         "PanelErrorStorage" : "Chrome localStorage dinonaktifkan di pengaturan anda. KC3改 memerlukan fitur tersebut. <a href=\"http://stackoverflow.com/a/26671889/483704\" target=\"_blank\">Bagaimana cara mengaktifkannya.</a>.",
 
         "Dummy" : "Tiruan"
