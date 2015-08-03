@@ -686,6 +686,9 @@
 				}
 			},
 			CraftGear: function(container, data, local){
+				// Recall equipment count
+				this.GearSlots(container, {}, local);
+				
 				if(!ConfigManager.info_craft){ return true; }
 				
 				// Hide any other activity box
@@ -699,9 +702,6 @@
 				var icon = "../../../../assets/img/items/"+MasterItem.api_type[3]+".png";
 				$(".craftGear .equipIcon img", container).attr("src", icon);
 				$(".craftGear .equipName", container).text( PlayerItem.name() );
-				
-				// Recall equipment count
-				this.GearSlots(container, {}, local);
 				
 				// Show extra item info
 				var countExisting = KC3GearManager.countByMasterId( data.itemMasterId );
