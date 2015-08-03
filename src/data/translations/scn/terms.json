@@ -76,6 +76,10 @@
 	"SettingsELosSum" : "总和",
 	"SettingsELosOld" : "旧公式",
 	"SettingsELosNew" : "新公式",
+	"SettingsHQExpDetail"  : "司令部经验值",
+	"SettingsHQExpLeft"    : "剩余经验",
+	"SettingsHQExpCurrent" : "当前等级",
+	"SettingsHQExpTotal"   : "总共获得",
 	
 	"SettingsGameInfo" : "游戏信息",
 	"SettingsDropFaces" : "剧透出击掉落",
@@ -106,6 +110,7 @@
 	"SettingsAPIGameScreen" : "API模式",
 	"SettingsQuestOverlay" : "任务翻译",
 	"SettingsQuestTracking" : "任务追踪",
+	"SettingsPanelRequirement" : "等待信息面板加载",
 	"SettingsConfirmExit" : "退出游戏时需确认",
 	"SettingsScreenMargin" : "上边边距",
 	"SettingsBGColor" : "背景颜色 (bg-color)",
