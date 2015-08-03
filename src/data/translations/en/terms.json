@@ -76,6 +76,10 @@
 	"SettingsELosSum" : "Sum",
 	"SettingsELosOld" : "Old",
 	"SettingsELosNew" : "New",
+	"SettingsHQExpDetail"  : "HQ Exp Info",
+	"SettingsHQExpLeft"    : "Remaining EXP",
+	"SettingsHQExpCurrent" : "Current Level",
+	"SettingsHQExpTotal"   : "Total Gained",
 	
 	"SettingsGameInfo" : "Game Information",
 	"SettingsDropFaces" : "Sortie Drop Faces",
@@ -106,6 +110,7 @@
 	"SettingsAPIGameScreen" : "API Game Screen",
 	"SettingsQuestOverlay" : "Quest Translations",
 	"SettingsQuestTracking" : "Quest Tracking",
+	"SettingsPanelRequirement" : "Wait Panel to Load",
 	"SettingsConfirmExit" : "Exit Confirmation",
 	"SettingsScreenMargin" : "Top Margin",
 	"SettingsBGColor" : "Background Color",

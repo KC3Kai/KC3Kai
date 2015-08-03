@@ -50,11 +50,12 @@
 					
 					var PS = window.PS;
 					var KE = PS["KanColle.Expedition"];
-					var fleet = KE.fromRawFleet( allShipsForLib );
+					var KER = PS["KanColle.Expedition.Requirement"];
+					var fleet = KER.fromRawFleet( allShipsForLib );
 					var availableExpeditions = KE.getAvailableExpeditions( fleet );
 				
 					// var demoResult = 
-					//    KE.explainRequirements( KE.unsatisfiedRequirements(38)(fleet) );
+					//    KER.explainRequirements( KER.unsatisfiedRequirements(38)(fleet) );
 					
 					// alert( JSON.stringify( demoResult ) );
 					
