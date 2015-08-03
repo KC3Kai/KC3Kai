@@ -71,6 +71,14 @@ Listens to network history and triggers callback if game events happen
 		Fired when we receive network entry
 		------------------------------------------*/
 		received :function( request ){
+			// Ask background service to clear overlays on inspected window
+			if(KC3Network.hasOverlay) {
+				KC3Network.hasOverlay = false;
+				(new RMsg("service", "clearOverlays", {
+					tabId: chrome.devtools.inspectedWindow.tabId
+				})).execute();
+			}
+
 			// If request is an API Call
 			if(request.request.url.indexOf("/kcsapi/") > -1){
 				KC3Network.lastUrl = request.request.url;
@@ -83,27 +91,6 @@ Listens to network history and triggers callback if game events happen
 							thisRequest.process();
 						}
 					});
-				}
-				
-				// Ask background service to clear overlays on inspected window
-				if(KC3Network.hasOverlay){
-					KC3Network.hasOverlay = false;
-					(new RMsg("service", "clearOverlays", {
-						tabId: chrome.devtools.inspectedWindow.tabId
-					})).execute();
-				}
-				return true;
-			}
-			
-			if(KC3Network.hasOverlay){
-				// If going to furniture rooom
-				if(request.request.url.indexOf("/kcs/resources/image/furniture/") >= -1){
-					KC3Network.hasOverlay = false;
-					// Ask background service to clear overlays on inspected window
-					(new RMsg("service", "clearOverlays", {
-						tabId: chrome.devtools.inspectedWindow.tabId
-					})).execute();
-					return true;
 				}
 			}
 		}
