@@ -198,4 +198,17 @@ Quest Type:
 		}
 	};
 	
+	KC3Quest.prototype.getColor = function(){
+		return [
+			"#555555", //0
+			"#33A459", //1
+			"#D75048", //2
+			"#98E75F", //3
+			"#AACCEE", //4
+			"#EDD286", //5
+			"#996600", //6
+			"#AE76FA", //7
+		][(this.id+"").substring(0,1)];
+	};
+	
 })();

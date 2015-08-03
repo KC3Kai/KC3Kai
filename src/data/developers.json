@@ -205,6 +205,15 @@
 				"fb" :"https://www.facebook.com/Raigun.da.soldier",
 				"wk" :"http://kancolle.wikia.com/wiki/User:Yuedasoldier"
 			}
+		},
+		{
+			"name": "Mizarox",
+			"avatar" : "http://img1.wikia.nocookie.net/__cb1435012889/common/avatars/thumb/a/a1/26522856.png/150px-26522856.png.jpg",
+			"desc" : "Português",
+			"links" : {
+				"wk" :"http://kancolle.wikia.com/wiki/User:Mizarox",
+				"fb" :"https://www.facebook.com/mizael.fer"
+			}
 		}
 	],
 	"AboutTesters" : [

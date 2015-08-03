@@ -86,7 +86,6 @@ $(document).on("ready", function(){
 });
 
 $(document).on("keydown", function(event){
-	console.log("keydown", event);
     if(event.keyCode == 120){
 		(new KCScreenshot()).start("Auto", $(".box-wrap"));
         return false;
