@@ -76,6 +76,10 @@
 	"SettingsELosSum" : "簡單加總",
 	"SettingsELosOld" : "2-5式(舊)",
 	"SettingsELosNew" : "2-5式(秋)",
+	"SettingsHQExpDetail"  : "司令部經驗值資訊",
+	"SettingsHQExpLeft"    : "剩餘經驗值",
+	"SettingsHQExpCurrent" : "當前經驗值",
+	"SettingsHQExpTotal"   : "經驗值總和",
 	
 	"SettingsGameInfo" : "遊戲資訊",
 "SettingsDropFaces" : "掉落預覽",
@@ -106,6 +110,7 @@
 	"SettingsAPIGameScreen" : "API遊戲視窗",
 	"SettingsQuestOverlay" : "翻譯任務",
 	"SettingsQuestTracking" : "追蹤任務",
+	"SettingsPanelRequirement" : "要求開啟面板",
 	"SettingsConfirmExit" : "離開前再確定",
 	"SettingsScreenMargin" : "遊戲視窗與和上方的距離",
 	"SettingsBGColor" : "背景顏色",
@@ -121,7 +126,7 @@
 	"SettingsDMMCustomize" : "套用自訂值",
 	
 	"SettingsPanelSize" : "面板界面大小",
-	"SettingsPanelOpacity" : "面板界面透明度",
+	"SettingsPanelOpacity" : "面板界面不透明度",
 	
 	"Small" : "小",
 	"Big" : "大",
