@@ -126,7 +126,8 @@ module.exports = function(grunt) {
 						{
 							pattern: /DevKC3Kai/ig,
 							replacement: function (match, p1) {
-								return "KC3改";
+								// return "KC3改";
+								return "KanColle";
 							}
 						}
 					]
