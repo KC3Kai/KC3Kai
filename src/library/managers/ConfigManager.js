@@ -59,6 +59,7 @@ Retreives when needed to apply on components
 				
 				pan_theme			: "default",
 				pan_size			: "big",
+				pan_gear_holder		: "black",
 				pan_bg_color		: "#def",
 				pan_bg_image		: "",
 				pan_bg_size			: "cover",

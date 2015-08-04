@@ -1210,8 +1210,48 @@
 				$("img", element).attr("src", folder + item.master().api_type[3] + ".png");
 				$(element).attr("title", item.name());
 			}else{
-				$("img", element).attr("src", folder + "0.png");
+				$("img", element).attr("src", folder + "empty.png");
 			}
+
+			var gearHolderColor;
+			var equipCapacityColor;
+			switch (ConfigManager.pan_gear_holder) {
+				case "black" :
+					gearHolderColor = "rgba(0, 0, 0, 1)";
+					equipCapacityColor = "#fff";
+					break;
+				case "white" :
+					gearHolderColor = "rgba(255, 255, 255, 1)";
+					equipCapacityColor = "#000";
+					break;
+				default:
+					gearHolderColor = "rgba(255, 255, 255, 0)";
+					equipCapacityColor = "#000";
+			}
+			$("img", element).css("background", gearHolderColor);
+
+			// Gear Holder toggle
+			$("img", element).on("click", function(){
+				switch (ConfigManager.pan_gear_holder) {
+					case "black" :
+						ConfigManager.pan_gear_holder = "white";
+						gearHolderColor = "rgba(255, 255, 255, 1)";
+						equipCapacityColor = "#000";
+						break;
+					case "white" :
+						ConfigManager.pan_gear_holder = "none";
+						gearHolderColor = "rgba(255, 255, 255, 0)";
+						equipCapacityColor = "#000";
+						break;
+					default:
+						ConfigManager.pan_gear_holder = "black";
+						gearHolderColor = "rgba(0, 0, 0, 1)";
+						equipCapacityColor = "#fff";
+				}
+				$(".ship-gear img", self.domElement).css("background", gearHolderColor);
+				$(".fleet-ships .ship-equip-capacity", self.domElement).css("color", equipCapacityColor);
+				ConfigManager.save();
+			});
 
 			if(capacity > 0){
 				$(".ship-equip-capacity", element).text(capacity);
@@ -1219,6 +1259,7 @@
 			}else{
 				$(".ship-equip-capacity", element).text("");
 			}
+			$(".fleet-ships .ship-equip-capacity", self.domElement).css("color", equipCapacityColor);
 		}
 	}
 	

@@ -328,6 +328,18 @@
 				}
 			},
 			{
+				"id" : "pan_gear_holder",
+				"name" : "SettingsGearHolder",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "black", "Black" ],
+						[ "white", "White" ],
+						[ "none", "None" ]
+					]
+				}
+			},
+			{
 				"id" : "pan_bg_color",
 				"name" : "SettingsBGColor",
 				"type" : "long_text",
