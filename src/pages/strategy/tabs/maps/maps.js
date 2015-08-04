@@ -239,6 +239,9 @@
 				mainFleet = sortie["fleet"+sortie.fleetnum];
 				$(".sortie_ship", sortieBox).hide();
 				$.each(mainFleet, function(index, ship){
+					// false recorded on older sorties. stop loop when encountered
+					if(ship===false){ return false; }
+					
 					$(".sortie_ship_"+(index+1)+" img", sortieBox).attr("src", KC3Meta.shipIcon(ship.mst_id));
 					$(".sortie_ship_"+(index+1), sortieBox).show();
 					
