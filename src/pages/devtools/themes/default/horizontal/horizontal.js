@@ -141,20 +141,28 @@
 				$(".battle_hqlevel_next_gain", container).text( "" );
 			},
 			HQ: function(container, data, local){
-				if(KC3Panel.mode=="normal"){
-					$(".admiral_name", container).text( PlayerManager.hq.name );
-					$(".admiral_comm", container).text( PlayerManager.hq.desc );
-					$(".admiral_rank", container).text( PlayerManager.hq.rank );
-					$(".level_value", container).text( PlayerManager.hq.level );
-					$(".exp_bar", container).css({width: Math.round(PlayerManager.hq.exp[0]*88)+"px"});
-					$(".exp_text", container).text( PlayerManager.hq.exp[ConfigManager.hqExpDetail] );
-				}else if(KC3Panel.mode=="battle"){
-					$(".battle_admiral", container).text( PlayerManager.hq.name );
-					$(".battle_hqlevel_text", container).text( PlayerManager.hq.level );
-					$(".battle_hqexpval", container).css({width: Math.round(PlayerManager.hq.exp[0]*60)+"px"});
-					if((data || {resetGain:true}).resetGain)
-						$(".battle_hqexpgain", container).css({width: Math.round(PlayerManager.hq.exp[0]*60)+"px"});
-					$(".battle_hqlevel_next", container).text( PlayerManager.hq.exp[ConfigManager.hqExpDetail] );
+				var hqt = KC3Meta.term("HQExpAbbrev" + (ConfigManager.hqExpDetail)) + " ";
+				switch(KC3Panel.mode){
+					case "normal":
+						$(".admiral_name", container).text( PlayerManager.hq.name );
+						$(".admiral_comm", container).text( PlayerManager.hq.desc );
+						$(".admiral_rank", container).text( PlayerManager.hq.rank );
+						$(".level_value", container).text( PlayerManager.hq.level );
+						$(".exp_bar", container).css({width: Math.round(PlayerManager.hq.exp[0]*88)+"px"});
+						$(".exp_text", container).text( hqt + PlayerManager.hq.exp[ConfigManager.hqExpDetail] );
+					break;
+					case "battle":
+						$(".battle_admiral", container).text( PlayerManager.hq.name );
+						$(".battle_hqlevel_text", container).text( PlayerManager.hq.level );
+						$(".battle_hqexpval", container).css({width: Math.round(PlayerManager.hq.exp[0]*60)+"px"});
+						if((data || {resetGain:true}).resetGain)
+							$(".battle_hqexpgain", container).css({width: Math.round(PlayerManager.hq.exp[0]*60)+"px"});
+						$(".battle_hqlevel_next", container)
+							.text( PlayerManager.hq.exp[ConfigManager.hqExpDetail] )
+							.attr("title",hqt);
+						if($(".battle_hqlevel_next_gain", container).text().length>0)
+							$(".battle_hqlevel_next_gain", container).text(expGained*(ConfigManager.hqExpDetail==1?-1:1));
+					break;
 				}
 			},
 			Consumables: function(container, data, local){

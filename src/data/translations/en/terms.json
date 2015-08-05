@@ -141,6 +141,10 @@
 	"SpeedSlow" : "Slow",
 	
 	"HQText" : "HQ",
+	"HQExpAbbrev1" : "Next",
+	"HQExpAbbrev2" : "Current",
+	"HQExpAbbrev3" : "Total",
+	
 	"LevelText" : "Level",
 	"LevelShort" : "Lv.",
 	"LevelNext" : "Next",
