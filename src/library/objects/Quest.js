@@ -100,8 +100,8 @@ Quest Type:
 	/* INCREMENT
 	Add one to tracking progress
 	------------------------------------------*/
-	KC3Quest.prototype.increment = function(reqNum, amount, isLinked){
-		if(this.tracking && (this.status==2 || isLinked)){    //2 = On progress
+	KC3Quest.prototype.increment = function(reqNum, amount){
+		if(this.tracking && this.status==2){    //2 = On progress
 			if(typeof reqNum == "undefined"){ reqNum=0; }
 			if(typeof amount == "undefined"){ amount=1; }
 			if (this.tracking[reqNum][0] + amount <= this.tracking[reqNum][1]) {
@@ -193,7 +193,7 @@ Quest Type:
 				console.log(currentCount);
 				console.log(maxCount);
 				console.log("Adjust: " + currentCount/maxCount + " " + progress + " " + Math.ceil(maxCount * progress));
-				this.tracking[0][0] = maxCount > 3 ? Math.ceil(maxCount * progress) : progress;
+				this.tracking[0][0] = Math.ceil(maxCount * progress);
 			}
 		}
 	};
