@@ -449,6 +449,7 @@
 	font-size:10px;
 	/*background:#ccc;*/
 	overflow:hidden;
+	position:relative;
 }
 
 #h .fleet-ships .ship-img {
@@ -847,7 +848,7 @@
 }
 #h .battle .battle_hqlevel_next_gain {
 	position: absolute;
-	top: 36px;
+	top: 16px;
 	left: 100px;
 	width:55px;
 	height:20px;
@@ -1095,6 +1096,7 @@
 #h .battle .battle_fleet_list {
 	width:390px;
 	height:312px;
+	position:relative;
 	/*background:#ffc;*/
 }
 #h .battle-ship {
@@ -1103,6 +1105,23 @@
 	margin:0px 0px 2px 0px;
 	font-size:10px;
 	overflow:hidden;
+}
+#h .battle-ship.ship-cond-stamp:after {
+	content: attr(title);
+	display: inline;
+	top: 4px;
+	left: 20%;
+	position: absolute;
+	font-size: 20pt;
+	color: red;
+	transform: rotate(-3deg);
+	text-shadow: 1px 1px 1px black;
+	border: 1px red solid;
+	text-align: center;
+	vertical-align: middle;
+	width: 160px;
+	background-color: rgba(255,0,0,0.5);
+	z-index: 1;
 }
 #h .battle-ship .ship-img {
 	width:46px;

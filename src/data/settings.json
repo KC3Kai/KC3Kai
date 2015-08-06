@@ -83,6 +83,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "info_btstamp",
+				"name" : "SettingsBattleStamp",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "info_boss",
 				"name" : "SettingsBossComp",
 				"type" : "check",

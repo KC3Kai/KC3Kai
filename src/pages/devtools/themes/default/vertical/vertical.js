@@ -5,7 +5,8 @@
 		container: "#v",
 		externalHtml: "vertical/vertical.html",
 		variables: {
-			selectedFleet: 1
+			selectedFleet: 1,
+			isSunkable: false // damecon user overrides this
 		},
 		ready: function(){
 			var self = this;
@@ -244,7 +245,9 @@
 				$(".battle_hqlevel_next_gain", container).text( "" );
 			},
 			HQ: function(container, data, local){
-				var hqt = KC3Meta.term("HQExpAbbrev" + (ConfigManager.hqExpDetail)) + " ";
+				var
+					hqt = KC3Meta.term("HQExpAbbrev" + (ConfigManager.hqExpDetail)) + " ",
+					hqexpd = $(".battle_hqlevel_next_gain", container).text();
 				switch(KC3Panel.mode){
 					case "normal":
 						$(".admiral_name", container).text( PlayerManager.hq.name );
@@ -263,8 +266,8 @@
 						$(".battle_hqlevel_next", container)
 							.text( PlayerManager.hq.exp[ConfigManager.hqExpDetail] )
 							.attr("title",hqt);
-						if($(".battle_hqlevel_next_gain", container).text().length>0)
-							$(".battle_hqlevel_next_gain", container).text(expGained*(ConfigManager.hqExpDetail==1?-1:1));
+						if(hqexpd.length>0)
+							$(".battle_hqlevel_next_gain", container).text(hqexpd*(ConfigManager.hqExpDetail==1?-1:1));
 					break;
 				}
 			},
@@ -646,6 +649,7 @@
 			},
 			SortieStart: function(container, data, local){
 				KC3Panel.mode = "battle";
+				KC3Panel.layout().data.isSunkable = true;
 				
 				// Show world details
 				$(".battle .battle_world", container).text("World "+KC3SortieManager.map_world+" - "+KC3SortieManager.map_num+(function(d){
@@ -802,6 +806,7 @@
 				$(".battle .battle_cond_engage .battle_cond_text", container).addClass( thisNode.engagement[1] );
 				$(".battle .battle_cond_contact .battle_cond_text", container).text(thisNode.fcontact +" vs "+thisNode.econtact);
 				
+				$(".battle .battle_support",container).show();
 				// Day battle-only environment
 				if(!thisNode.startNight){
 					// If support expedition is triggered on this battle
@@ -881,7 +886,7 @@
 					"Let's all pray~",
 					"RNGesus bless him",
 					"I bless this run"
-				]; // events? extra operations? end of month? coming soon. (i guess by other)
+				]; // this easter egg should ke kept, even with a hidden toggle (disabled by default) :D
 				if(ConfigManager.info_troll)
 					$(".battle .battle_current", container).text(desperateText[Math.floor(Math.random()*desperateText.length)]);
 				else
@@ -988,10 +993,13 @@
 				
 			},
 			ClearedMap: function(container, data, local){
+				KC3Panel.layout().data.isSunkable = false;
 				
 			},
 			PvPStart: function(container, data, local){
 				KC3Panel.mode = "battle";
+				KC3Panel.layout().data.isSunkable = false;
+				
 				$(".battle .battle_world", container).text("PvP Practice Battle");
 				$(".battle .battle_current", container).text("FIGHTING");
 				KC3SortieManager.fleetSent = data.fleetSent;
@@ -1014,6 +1022,7 @@
 				
 				// Hide useless information
 				$(".battle .battle_boss", container).hide();
+				$(".battle .battle_support",container).hide();
 				$(".battle .battle_drop", container).hide();
 				
 				// Change interface mode
@@ -1047,6 +1056,9 @@
 						$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).hide();
 					}
 				});
+				
+				// Load after-battle HP
+				this.Fleet(container, {}, local);
 				
 				// If night battle will be asked after this battle
 				if(thisPvP.yasenFlag){
@@ -1097,7 +1109,7 @@
 				$(".battle .battle_results", container).show();
 			},
 			PvPNight: function(container, data, local){
-				
+				this.Fleet(container, {}, local);
 			},
 			PvPEnd: function(container, data, local){
 				var expGained = data.result.api_get_exp;
@@ -1128,9 +1140,10 @@
 	}
 	
 	function FleetHP(container, ShipBox, hp, afterHp, rosterId){
-		if ((typeof afterHp === "undefined") || (afterHp === null) || (!ConfigManager.info_battle)) {
-			afterHp = [hp[0], hp[1]];
+		if (!ConfigManager.info_battle) {
+			afterHp = null;
 		}
+		afterHp = afterHp || [hp[0], hp[1]];
 		var hpPercent = hp[0] / hp[1];
 		var afterHpPercent = afterHp[0] / afterHp[1];
 
@@ -1166,7 +1179,10 @@
 				$(".ship-hp-val", ShipBox).css("background", "#00FF00");
 			}
 
-			if(afterHpPercent <= 0.25){
+			if(afterHpPercent <= 0.00 && ConfigManager.info_btstamp) { // Sunk or Knocked out
+				$(ShipBox).addClass("ship-cond-stamp");
+				$(ShipBox).attr("title",KC3Meta.term("PredictionStamp"+KC3Panel.layout().data.isSunkable ? "Sortie" : "PvP"));
+			} else if(afterHpPercent <= 0.25){
 				$(".ship-hp-after-val", ShipBox).css("background", "#FF0000");
 			} else if(afterHpPercent <= 0.50){
 				$(".ship-hp-after-val", ShipBox).css("background", "#FF9900");

@@ -87,6 +87,7 @@
 	"SettingsCraftBox" : "Crafting Results",
 	"SettingsCompass" : "Compass and Enemy",
 	"SettingsBattleData" : "Battle Prediction",
+	"SettingsBattleStamp" : "After-battle Condition Marker",
 	"SettingsBossComp" : "Boss Composition",
 	"SettingsYasenTroll" : "Night Battle \u0022Extra Support\u0022",
 	"SettingsHQDelta" : "HQ EXP Delta on Sortie",
@@ -144,6 +145,9 @@
 	"HQExpAbbrev1" : "Next",
 	"HQExpAbbrev2" : "Current",
 	"HQExpAbbrev3" : "Total",
+	
+	"PredictionStampSortie" : "Sunk",
+	"PredictionStampPvP" : "Knocked Out",
 	
 	"LevelText" : "Level",
 	"LevelShort" : "Lv.",
