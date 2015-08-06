@@ -52,16 +52,6 @@
 			window.open("../game/web.html", "kc3kai_game");
 		});
 		
-		// Activate Cookies
-		$("#cookies").on('click', function(){
-			_gaq.push(['_trackEvent', "Region Cookies", 'clicked']);
-			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-				(new TMsg(tabs[0].id, "cookie", "", {}, function(response){
-					window.close();
-				})).execute();
-			});
-		});
-		
 		// Strategy Room
 		$("#strategy").on('click', function(){
 			window.open("../strategy/strategy.html", "kc3kai_strategy");

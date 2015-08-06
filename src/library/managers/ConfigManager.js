@@ -48,6 +48,7 @@ Retreives when needed to apply on components
 				api_bg_position		: "top center",
 				api_gameScale		: 100,
 				
+				dmm_forcecookies	: false,
 				dmm_customize		: false,
 				dmm_translation		: true,
 				dmm_tracking		: true,
@@ -60,6 +61,7 @@ Retreives when needed to apply on components
 				
 				pan_theme			: "default",
 				pan_size			: "big",
+				pan_gear_holder		: "black",
 				pan_bg_color		: "#def",
 				pan_bg_image		: "",
 				pan_bg_size			: "cover",

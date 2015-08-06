@@ -624,17 +624,16 @@
 #v.panel-size-300px .fleet-ships .ship-gear img {
 	width:16px;
 	height:16px;
-	background:#333;
 	border-radius: 8px;
 }
 #v.panel-size-300px .fleet-ships .ship-gear .ship-equip-capacity {
 	position: absolute;
-	color: #ddd;
 	top:2px;
 	left:0px;
 	width: 16px;
 	text-align: center;
 	font-size: 9px;
+	pointer-events: none;
 }
 
 /* Big Ships in Normal Mode */
@@ -802,17 +801,16 @@
 #v.panel-size-420px .fleet-ships .ship-gear img {
 	width:24px;
 	height:24px;
-	background:#333;
 	border-radius: 12px;
 }
 #v.panel-size-420px .fleet-ships .ship-gear .ship-equip-capacity {
 	position: absolute;
-	color: #ddd;
 	top:4px;
 	left:0px;
 	width: 24px;
 	text-align: center;
 	font-size: 12px;
+	pointer-events: none;
 }
 #v.panel-size-420px .fleet-ships .ship-supply {
 	width:50px;
@@ -1977,10 +1975,7 @@
 #v.panel-size-300px .battle-ship .ship-gear img {
 	width:30px;
 	height:30px;
-	background:#333;
 	border-radius: 15px;
-	/*vertical-align:top;
-	margin:2px 0px 0px 0px;*/
 }
 #v.panel-size-300px .battle-ship .ship-equip-capacity {
 	position:absolute;
@@ -2200,10 +2195,8 @@
 #v.panel-size-420px .battle-ship .ship-gear img {
 	width:24px;
 	height:24px;
-	background:#333;
 	border-radius: 12px;
 	vertical-align:top;
-	margin:0px 0px 0px 0px;
 }
 #v.panel-size-420px .battle-ship .ship-equip-capacity {
 	width:15px;
@@ -2540,10 +2533,7 @@
 #v.panel-size-300px .battle-mship .ship-gear img {
 	width:16px;
 	height:16px;
-	background:#333;
 	border-radius: 8px;
-	/*vertical-align:top;
-	margin:2px 0px 0px 0px;*/
 }
 #v.panel-size-300px .battle-mship .ship-equip-capacity {
 	width:17px;
@@ -2755,7 +2745,6 @@
 	width:24px;
 	height:24px;
 	vertical-align:top;
-	background:#333;
 	border-radius: 12px;
 }
 #v.panel-size-420px .battle-mship .ship-equip-capacity {
@@ -3093,10 +3082,7 @@
 #v.panel-size-300px .battle-eship .ship-gear img {
 	width:16px;
 	height:16px;
-	background:#333;
 	border-radius: 8px;
-	/*vertical-align:top;
-	margin:2px 0px 0px 0px;*/
 }
 #v.panel-size-300px .battle-eship .ship-equip-capacity {
 	width:17px;
@@ -3308,7 +3294,6 @@
 	width:24px;
 	height:24px;
 	vertical-align:top;
-	background:#333;
 	border-radius: 12px;
 }
 #v.panel-size-420px .battle-eship .ship-equip-capacity {
