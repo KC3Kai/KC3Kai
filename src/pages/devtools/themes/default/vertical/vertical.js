@@ -247,7 +247,7 @@
 			HQ: function(container, data, local){
 				var
 					hqt = KC3Meta.term("HQExpAbbrev" + (ConfigManager.hqExpDetail)) + " ",
-					hqexpd = $(".battle_hqlevel_next_gain", container).text();
+					hqexpd = Math.abs($(".battle_hqlevel_next_gain", container).text());
 				switch(KC3Panel.mode){
 					case "normal":
 						$(".admiral_name", container).text( PlayerManager.hq.name );
