@@ -59,6 +59,10 @@ $(document).on("ready", function(){
 		window.location.reload();
 	});
 	
+	// Disable Quick Play (must panel
+	if(ConfigManager.api_mustPanel)
+		$(".play_btn").hide();
+	
 	// Quick Play
 	$(".play_btn").on('click', function(){
 		ActivateGame();
@@ -75,6 +79,17 @@ $(document).on("ready", function(){
 		}
 	};
 	
+	setInterval(function(){
+		window.focus();
+	}, 100);
+	
+});
+
+$(document).on("keydown", function(event){
+    if(event.keyCode == 120){
+		(new KCScreenshot()).start("Auto", $(".box-wrap"));
+        return false;
+    }
 });
 
 /* Invokable actions

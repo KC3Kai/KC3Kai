@@ -65,6 +65,8 @@
 	"AboutOther" : "クレジット",
 	"AboutLogo" : "ロゴデザイン",
 	"AboutFairy" : "妖精デザイン",
+	"AboutReporters" : "定期的なGit記者",
+	"AboutReporter" : "Git記者",
 	
 	"SettingsTitle" : "KC3改の設定",
 	
@@ -74,13 +76,20 @@
 	"SettingsELosSum" : "合計",
 	"SettingsELosOld" : "古い",
 	"SettingsELosNew" : "新",
+	"SettingsHQExpDetail"  : "提督経験値の情報",
+	"SettingsHQExpLeft"    : "残り",
+	"SettingsHQExpCurrent" : "現在",
+	"SettingsHQExpTotal"   : "総獲得",
 	
 	"SettingsGameInfo" : "ゲーム情報",
+	"SettingsDropFaces" : "出撃ドロップ顔",
 	"SettingsConstructionFaces" : "建設顔",
 	"SettingsCraftBox" : "工芸結果",
 	"SettingsCompass" : "コンパスと敵",
-	"SettingsBattleData" : "バトル環境",
+	"SettingsBattleData" : "バトル予測",
 	"SettingsBossComp" : "ボス組成",
+	"SettingsYasenTroll" : "夜戦 \u0022特別な支援\u0022",
+	"SettingsHQDelta" : "出撃の提督経験値差分",
 	
 	"SettingsScreenshot" : "スクリーンショット",
 	"SettingsSSOutput" : "出力モード",
@@ -101,6 +110,7 @@
 	"SettingsAPIGameScreen" : "APIゲーム画面",
 	"SettingsQuestOverlay" : "クエスト翻訳",
 	"SettingsQuestTracking" : "クエスト追跡",
+	"SettingsPanelRequirement" : "ロードするためにパネルを待ち",
 	"SettingsConfirmExit" : "終了確認",
 	"SettingsScreenMargin" : "上余白",
 	"SettingsBGColor" : "背景の色",
@@ -135,7 +145,9 @@
 	"LevelShort" : "Lv.",
 	"LevelNext" : "次",
 	"Screenshot" : "スクリーンショット",
+	"UntranslatedQuest" : "非翻訳クエスト",
 	
+	"PanelWaitActions" : "ゲームアクションを待っています...",
 	"PanelErrorStorage" : "あなたのChromeのlocalStorageは設定で無効になっています。KC3改はこの機能を必要とします。<a href=\"http://stackoverflow.com/a/26671889/483704\" target=\"_blank\">これを有効にする方法を参照してください。</a>.",
 	
 	"Dummy" : "ダミー"

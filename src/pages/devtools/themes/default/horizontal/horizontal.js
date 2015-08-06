@@ -26,6 +26,12 @@
 				$(".eqlos-toggle img", self.domElement).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png");
 			});
 			
+			// Change HQ EXP Information
+			$(".exp_text, .battle_hqlevel_next",this.domElement).on("click",function(){
+				ConfigManager.scrollHQExpInfo();
+				KC3Network.trigger("HQ",{resetGain:false});
+			}).addClass("hover");
+			
 			// Initialize timer objects with bindings to their UI
 			KC3TimerManager.init([
 				$(".exped-box-1", this.domElement),
@@ -141,12 +147,14 @@
 					$(".admiral_rank", container).text( PlayerManager.hq.rank );
 					$(".level_value", container).text( PlayerManager.hq.level );
 					$(".exp_bar", container).css({width: Math.round(PlayerManager.hq.exp[0]*88)+"px"});
-					$(".exp_text", container).text( PlayerManager.hq.exp[1] );
+					$(".exp_text", container).text( PlayerManager.hq.exp[ConfigManager.hqExpDetail] );
 				}else if(KC3Panel.mode=="battle"){
 					$(".battle_admiral", container).text( PlayerManager.hq.name );
 					$(".battle_hqlevel_text", container).text( PlayerManager.hq.level );
-					$(".battle_hqexpval,.battle_hqexpgain", container).css({width: Math.round(PlayerManager.hq.exp[0]*60)+"px"});
-					$(".battle_hqlevel_next", container).text( PlayerManager.hq.exp[1] );
+					$(".battle_hqexpval", container).css({width: Math.round(PlayerManager.hq.exp[0]*60)+"px"});
+					if((data || {resetGain:true}).resetGain)
+						$(".battle_hqexpgain", container).css({width: Math.round(PlayerManager.hq.exp[0]*60)+"px"});
+					$(".battle_hqlevel_next", container).text( PlayerManager.hq.exp[ConfigManager.hqExpDetail] );
 				}
 			},
 			Consumables: function(container, data, local){
@@ -279,7 +287,7 @@
 							$(".ship-lvl-next", ShipBox).text("-"+CurrentShip.exp[1]);
 							$(".ship-lvl-val", ShipBox).css("width", (60*(CurrentShip.exp[2]/100))+"px");
 							
-							FleetHP(container, ShipBox, CurrentShip.hp, rosterId );
+							FleetHP(container, ShipBox, CurrentShip.hp, null, rosterId );
 							FleetMorale( $(".ship-morale-box", ShipBox), CurrentShip.morale );
 
 							for(var i = 1; i <= 4; i++) {
@@ -373,7 +381,8 @@
 								$(".ship-lvl-next", ShipBox).text("-"+CurrentShip.exp[1]);
 								$(".ship-lvl-val", ShipBox).css("width", (60*(CurrentShip.exp[2]/100))+"px");
 								
-								FleetHP(container, ShipBox, CurrentShip.hp, rosterId );
+								console.log(CurrentShip);
+								FleetHP(container, ShipBox, CurrentShip.hp, CurrentShip.afterHp, rosterId );
 								FleetMorale( $(".ship-morale-box", ShipBox), CurrentShip.morale );
 								
 								for(var i = 1; i <= 4; i++) {
@@ -426,10 +435,14 @@
 							$(".battle .battle_boss .abyss_"+(index+1), container).hide();
 						}
 					});
+					if(ConfigManager.info_boss)
+						$(".battle .battle_boss", container).show();
+					else
+						$(".battle .battle_boss", container).hide();
 				};
 				
 				// Trigger other listeners
-				this.HQ(container, {}, local);
+				this.HQ(container, {resetGain:true}, local);
 				this.ShipSlots(container, {}, local);
 				this.GearSlots(container, {}, local);
 				this.Fleet(container, {}, local);
@@ -441,6 +454,7 @@
 					.removeClass("active")
 					.text("");
 				$(".battle .battle_nodenum", container).text("");
+				$(".battle .battle_drop", container).show();
 				
 				// Change interface mode
 				$(".normal", container).hide();
@@ -512,16 +526,26 @@
 					$(".battle .battle_formation", container).hide();
 				}
 				
-				$(".battle .battle_enemies .battle_abyss img", container).attr("src", KC3Meta.abyssIcon(-1));
+				// Load enemy icons
+				$(".battle .battle_enemies .battle_abyss .face-container img", container).attr("src", KC3Meta.abyssIcon(-1));
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > -1){
-						$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).attr("src", KC3Meta.abyssIcon(eshipId));
+						$(".battle .battle_enemies .abyss_"+(index+1)+" .face-container img", container).attr("src", KC3Meta.abyssIcon(eshipId));
 						$(".battle .battle_enemies .abyss_"+(index+1), container).show();
+
+						if ((thisNode.enemySunk[index]) && (ConfigManager.info_battle)) {
+							$(".battle .battle_enemies .abyss_"+(index+1)+" .sunk-container", container).show();
+						} else {
+							$(".battle .battle_enemies .abyss_"+(index+1)+" .sunk-container", container).hide();
+						}
 					}else{
 						$(".battle .battle_enemies .abyss_"+(index+1), container).hide();
 					}
 				});
 				
+				// Load after-battle HP
+				this.Fleet(container, {}, local);
+
 				// Battle conditions
 				$(".battle .battle_cond_text", container).removeClass("good");
 				$(".battle .battle_cond_text", container).removeClass("bad");
@@ -614,7 +638,20 @@
 				else
 					$(".battle .battle_current", container).text("NIGHT BATTLE");
 				var thisNode = KC3SortieManager.currentNode();
-				
+				// Load after-battle HP
+				KC3Network.trigger("Fleet");
+
+				$.each(thisNode.eships, function(index, eshipId){
+					if(eshipId > -1){
+						if ((thisNode.enemySunk[index]) && (ConfigManager.info_battle)) {
+							$(".battle .battle_enemies .abyss_"+(index+1)+" .sunk-container", container).show();
+						} else {
+							$(".battle .battle_enemies .abyss_"+(index+1)+" .sunk-container", container).hide();
+						}
+					} else {
+						$(".battle .battle_enemies .abyss_"+(index+1)+" .sunk-container", container).hide();
+					}
+				});
 			},
 			BattleResult: function(container, data, local){
 				if(KC3SortieManager.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
@@ -632,7 +669,7 @@
 						return (PlayerManager.hq.exp[2] + Math.min(PlayerManager.hq.exp[1],KC3SortieManager.hqExpGained)) / KC3Meta.exp(PlayerManager.hq.level)[0];
 					})()*60)+"px"});
 				}
-				$(".battle_hqlevel_next_gain", container).text(-KC3SortieManager.hqExpGained);
+				$(".battle_hqlevel_next_gain", container).text(KC3SortieManager.hqExpGained * (ConfigManager.hqExpDetail==1?-1:1));
 				
 				$(".battle .battle_rating img").attr("src", "../../../../assets/img/client/ratings/"+thisNode.rating+".png");
 				
@@ -710,7 +747,7 @@
 				KC3SortieManager.fleetSent = data.fleetSent;
 				
 				// Trigger other listeners
-				this.HQ(container, {}, local);
+				this.HQ(container, {resetGain:true}, local);
 				this.ShipSlots(container, {}, local);
 				this.GearSlots(container, {}, local);
 				this.Fleet(container, {}, local);
@@ -721,6 +758,10 @@
 				$(".battle .battle_node", container).removeClass("active");
 				$(".battle .battle_node", container).text("");
 				$(".battle .battle_nodenum", container).text("");
+				
+				// Hide useless information
+				$(".battle .battle_boss", container).hide();
+				$(".battle .battle_drop", container).hide();
 				
 				// Change interface mode
 				$(".normal", container).hide();
@@ -743,14 +784,23 @@
 				$.each(thisPvP.eships, function(index, eshipId){
 					if(eshipId > -1){
 						console.log("eshipId", eshipId, "show");
-						$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).attr("src", KC3Meta.shipIcon(eshipId));
-						$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).show();
+						$(".battle .battle_enemies .abyss_"+(index+1)+" .face-container img", container).attr("src", KC3Meta.shipIcon(eshipId));
+						$(".battle .battle_enemies .abyss_"+(index+1), container).show();
+
+						if ((thisPvP.enemySunk[index]) && (ConfigManager.info_battle)) {
+							$(".battle .battle_enemies .abyss_"+(index+1)+" .sunk-container", container).show();
+						} else {
+							$(".battle .battle_enemies .abyss_"+(index+1)+" .sunk-container", container).hide();
+						}
 					}else{
 						console.log("eshipId", eshipId, "hide");
-						$(".battle .battle_enemies .abyss_"+(index+1)+" img", container).hide();
+						$(".battle .battle_enemies .abyss_"+(index+1), container).hide();
 					}
 				});
 				
+				// Load after-battle HP
+				KC3Network.trigger("Fleet");
+
 				// If night battle will be asked after this battle
 				if(thisPvP.yasenFlag){
 					$(".battle .battle_yasen img", container).attr("src", "../../../../assets/img/ui/yasen.png");
@@ -815,7 +865,9 @@
 						return (PlayerManager.hq.exp[2] + Math.min(PlayerManager.hq.exp[1],expGained)) / KC3Meta.exp(PlayerManager.hq.level)[0];
 					})()*60)+"px"});
 				}
-				$(".battle_hqlevel_next_gain", container).text(-expGained);
+				$(".battle_hqlevel_next_gain", container).text(expGained*(ConfigManager.hqExpDetail==1?-1:1));
+				// giles bhunder
+				$(".battle .battle_rating img").attr("src", "../../../../assets/img/client/ratings/"+data.result.api_win_rank+".png");
 			}
 		}
 	});
@@ -828,30 +880,51 @@
 		}
 	}
 	
-	function FleetHP(container, ShipBox, hp, rosterId){
+	function FleetHP(container, ShipBox, hp, afterHp, rosterId){
+		if ((typeof afterHp === "undefined") || (afterHp === null) || (!ConfigManager.info_battle)) {
+			afterHp = [hp[0], hp[1]];
+		}
 		var hpPercent = hp[0] / hp[1];
+		var afterHpPercent = afterHp[0] / afterHp[1];
+
 		$(".ship-hp-text", ShipBox).text( hp[0] +" / "+ hp[1] );
 		$(".ship-hp-val", ShipBox).css("width", (100*hpPercent)+"px");
+		console.log("afterHp: " + afterHp);
+		$(".ship-hp-after-val", ShipBox).css("width", (100*afterHpPercent)+"px");
 		
 		if( PlayerManager.repairShips.indexOf(rosterId) > -1){
 			$(".ship-img", ShipBox).css("background", "#ACE");
 			$(".ship-hp-val", ShipBox).css("background", "#ACE");
-		}else if(hpPercent <= 0.25){
-			$(".ship-img", ShipBox).css("background", "#FF0000");
-			$(".ship-hp-val", ShipBox).css("background", "#FF0000");
-			ShipBox.css("background", "#FCC");
-			if( PlayerManager.repairShips.indexOf(rosterId) == -1 ){
-				container.css("box-shadow", "inset 0px 0px 50px rgba(255,0,0,0.6)");
+			$(".ship-hp-after-val", ShipBox).css("background", "#ACE");
+			
+		} else {
+			if(hpPercent <= 0.25){
+				$(".ship-img", ShipBox).css("background", "#FF0000");
+				$(".ship-hp-val", ShipBox).css("background", "#FF0000");
+				ShipBox.css("background", "#FCC");
+				if( PlayerManager.repairShips.indexOf(rosterId) == -1 ){
+					container.css("box-shadow", "inset 0px 0px 50px rgba(255,0,0,0.6)");
+				}
+			} else if(hpPercent <= 0.50){
+				$(".ship-img", ShipBox).css("background", "#FF9900");
+				$(".ship-hp-val", ShipBox).css("background", "#FF9900");
+			} else if(hpPercent <= 0.75){
+				$(".ship-img", ShipBox).css("background", "#FFFF00");
+				$(".ship-hp-val", ShipBox).css("background", "#FFFF00");
+			} else{
+				$(".ship-img", ShipBox).css("background", "#00FF00");
+				$(".ship-hp-val", ShipBox).css("background", "#00FF00");
 			}
-		}else if(hpPercent <= 0.50){
-			$(".ship-img", ShipBox).css("background", "#FF9900");
-			$(".ship-hp-val", ShipBox).css("background", "#FF9900");
-		}else if(hpPercent <= 0.75){
-			$(".ship-img", ShipBox).css("background", "#FFFF00");
-			$(".ship-hp-val", ShipBox).css("background", "#FFFF00");
-		}else{
-			$(".ship-img", ShipBox).css("background", "#00FF00");
-			$(".ship-hp-val", ShipBox).css("background", "#00FF00");
+
+			if(afterHpPercent <= 0.25){
+				$(".ship-hp-after-val", ShipBox).css("background", "#FF0000");
+			} else if(afterHpPercent <= 0.50){
+				$(".ship-hp-after-val", ShipBox).css("background", "#FF9900");
+			} else if(afterHpPercent <= 0.75){
+				$(".ship-hp-after-val", ShipBox).css("background", "#FFFF00");
+			} else{
+				$(".ship-hp-after-val", ShipBox).css("background", "#00FF00");
+			}
 		}
 	}
 	
@@ -895,8 +968,48 @@
 				$("img", element).attr("src", folder + item.master().api_type[3] + ".png");
 				$(element).attr("title", item.name());
 			}else{
-				$("img", element).attr("src", folder + "0.png");
+				$("img", element).attr("src", folder + "empty.png");
 			}
+
+			var gearHolderColor;
+			var equipCapacityColor;
+			switch (ConfigManager.pan_gear_holder) {
+				case "black" :
+					gearHolderColor = "rgba(0, 0, 0, 1)";
+					equipCapacityColor = "#fff";
+					break;
+				case "white" :
+					gearHolderColor = "rgba(255, 255, 255, 1)";
+					equipCapacityColor = "#000";
+					break;
+				default:
+					gearHolderColor = "rgba(255, 255, 255, 0)";
+					equipCapacityColor = "#000";
+			}
+			$("img", element).css("background", gearHolderColor);
+
+			// Gear Holder toggle
+			$("img", element).on("click", function(){
+				switch (ConfigManager.pan_gear_holder) {
+					case "black" :
+						ConfigManager.pan_gear_holder = "white";
+						gearHolderColor = "rgba(255, 255, 255, 1)";
+						equipCapacityColor = "#000";
+						break;
+					case "white" :
+						ConfigManager.pan_gear_holder = "none";
+						gearHolderColor = "rgba(255, 255, 255, 0)";
+						equipCapacityColor = "#000";
+						break;
+					default:
+						ConfigManager.pan_gear_holder = "black";
+						gearHolderColor = "rgba(0, 0, 0, 1)";
+						equipCapacityColor = "#fff";
+				}
+				$(".ship-gear img", self.domElement).css("background", gearHolderColor);
+				$(".fleet-ships .ship-equip-capacity", self.domElement).css("color", equipCapacityColor);
+				ConfigManager.save();
+			});
 
 			if(capacity > 0){
 				$(".ship-equip-capacity", element).text(capacity);
@@ -904,6 +1017,7 @@
 			}else{
 				$(".ship-equip-capacity", element).text("");
 			}
+			$(".fleet-ships .ship-equip-capacity", self.domElement).css("color", equipCapacityColor);
 		}
 	}
 	

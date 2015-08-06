@@ -16,6 +16,7 @@ Retreives when needed to apply on components
 				version				: 6,
 				language			: "en",
 				elosFormula 		: 3,
+				hqExpDetail 		: 1,
 				
 				info_face 			: true,
 				info_drop 			: true,
@@ -37,6 +38,7 @@ Retreives when needed to apply on components
 				
 				api_translation		: true,
 				api_tracking 		: true,
+				api_mustPanel 		: false,
 				api_askExit			: true,
 				api_margin			: 0,
 				api_bg_color		: "#def",
@@ -45,6 +47,7 @@ Retreives when needed to apply on components
 				api_bg_position		: "top center",
 				api_gameScale		: 100,
 				
+				dmm_forcecookies	: false,
 				dmm_customize		: false,
 				dmm_translation		: true,
 				dmm_tracking		: true,
@@ -57,6 +60,7 @@ Retreives when needed to apply on components
 				
 				pan_theme			: "default",
 				pan_size			: "big",
+				pan_gear_holder		: "black",
 				pan_bg_color		: "#def",
 				pan_bg_image		: "",
 				pan_bg_size			: "cover",
@@ -97,6 +101,12 @@ Retreives when needed to apply on components
 		// Toggle Equipment LoS
 		scrollElosMode :function(){
 			this.elosFormula = (this.elosFormula % 3) + 1;
+			this.save();
+		},
+		
+		// Toggle HQ Exp Information
+		scrollHQExpInfo :function(){
+			this.hqExpDetail = (this.hqExpDetail % 3) + 1;
 			this.save();
 		}
 		

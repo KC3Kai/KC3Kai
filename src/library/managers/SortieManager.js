@@ -23,7 +23,7 @@ Xxxxxxx
 			// If still on sortie, end previous one
 			if(this.onSortie > 0){ this.endSortie(); }
 			
-			this.fleetSent = fleetNum;
+			this.fleetSent = parseInt(fleetNum);
 			this.map_world = world;
 			this.map_num = mapnum;
 			this.nextNodeCount = 0;
@@ -36,6 +36,9 @@ Xxxxxxx
 				formation: -1,
 				ships: [ -1, -1, -1, -1, -1, -1 ]
 			};
+			
+			var fleet = PlayerManager.fleets[this.fleetSent-1];
+			fleet.resetAfterHp();
 			
 			// Save on database and remember current sortieId
 			var self = this;

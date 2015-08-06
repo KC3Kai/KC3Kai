@@ -76,13 +76,17 @@
 	"SettingsELosSum" : "Sum",
 	"SettingsELosOld" : "Old",
 	"SettingsELosNew" : "New",
+	"SettingsHQExpDetail"  : "HQ Exp Info",
+	"SettingsHQExpLeft"    : "Remaining EXP",
+	"SettingsHQExpCurrent" : "Current Level",
+	"SettingsHQExpTotal"   : "Total Gained",
 	
 	"SettingsGameInfo" : "Game Information",
 	"SettingsDropFaces" : "Sortie Drop Faces",
 	"SettingsConstructionFaces" : "Construction Faces",
 	"SettingsCraftBox" : "Crafting Results",
 	"SettingsCompass" : "Compass and Enemy",
-	"SettingsBattleData" : "Battle Environment",
+	"SettingsBattleData" : "Battle Prediction",
 	"SettingsBossComp" : "Boss Composition",
 	"SettingsYasenTroll" : "Night Battle \u0022Extra Support\u0022",
 	"SettingsHQDelta" : "HQ EXP Delta on Sortie",
@@ -106,6 +110,7 @@
 	"SettingsAPIGameScreen" : "API Game Screen",
 	"SettingsQuestOverlay" : "Quest Translations",
 	"SettingsQuestTracking" : "Quest Tracking",
+	"SettingsPanelRequirement" : "Wait Panel to Load",
 	"SettingsConfirmExit" : "Exit Confirmation",
 	"SettingsScreenMargin" : "Top Margin",
 	"SettingsBGColor" : "Background Color",
@@ -119,6 +124,7 @@
 	
 	"SettingsDMMGameplay" : "DMM Gameplay",
 	"SettingsDMMCustomize" : "Apply Customizations",
+	"SettingsDMMForceCookies" : "Force Cookie Hack",
 	
 	"SettingsPanelSize" : "Panel Size",
 	"SettingsPanelOpacity" : "Interface Opacity",
@@ -140,7 +146,9 @@
 	"LevelShort" : "Lv.",
 	"LevelNext" : "Next",
 	"Screenshot" : "Screenshot",
+	"UntranslatedQuest" : "Untranslated Quest",
 	
+	"PanelWaitActions" : "Waiting for game actions...",
 	"PanelErrorStorage" : "Your Chrome's localStorage is disabled on your settings. KC3改 needs this feature. <a href=\"http://stackoverflow.com/a/26671889/483704\" target=\"_blank\">See how to enable this</a>.",
 	
 	"Dummy" : "Dummy"

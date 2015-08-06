@@ -55,7 +55,7 @@
 			// Japanese special case where ships and items sources are already in JP
 			if(ConfigManager.language=="jp" && (filename=="ships" || filename=="items")){ extendEnglish=false; }
 			
-			console.log(filename, "extendEnglish", extendEnglish);
+			// console.log(filename, "extendEnglish", extendEnglish);
 			
 			var translationBase = {}, enJSON;
 			if(extendEnglish){

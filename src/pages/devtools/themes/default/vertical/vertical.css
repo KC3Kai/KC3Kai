@@ -624,17 +624,16 @@
 #v.panel-size-300px .fleet-ships .ship-gear img {
 	width:16px;
 	height:16px;
-	background:#333;
 	border-radius: 8px;
 }
 #v.panel-size-300px .fleet-ships .ship-gear .ship-equip-capacity {
 	position: absolute;
-	color: #ddd;
 	top:2px;
 	left:0px;
 	width: 16px;
 	text-align: center;
 	font-size: 9px;
+	pointer-events: none;
 }
 
 /* Big Ships in Normal Mode */
@@ -802,17 +801,16 @@
 #v.panel-size-420px .fleet-ships .ship-gear img {
 	width:24px;
 	height:24px;
-	background:#333;
 	border-radius: 12px;
 }
 #v.panel-size-420px .fleet-ships .ship-gear .ship-equip-capacity {
 	position: absolute;
-	color: #ddd;
 	top:4px;
 	left:0px;
 	width: 24px;
 	text-align: center;
 	font-size: 12px;
+	pointer-events: none;
 }
 #v.panel-size-420px .fleet-ships .ship-supply {
 	width:50px;
@@ -1833,11 +1831,22 @@
 	background:#555;
 }
 #v.panel-size-300px .battle-ship .ship-hp-bar .ship-hp-val {
+	position: absolute;
+	top: 0px;
+	left: 0px;
 	width:100px;
-	height:10px;
-	float:left;
+	height:5px;
 	background:#0f0;
 }
+#v.panel-size-300px .battle-ship .ship-hp-bar .ship-hp-after-val {
+	position: absolute;
+	top: 5px;
+	left: 0px;
+	width:100px;
+	height:5px;
+	background:#0f0;
+}
+
 #v.panel-size-300px .battle-ship .ship-level {
 	position:relative;
 	width:60px;
@@ -1929,10 +1938,7 @@
 #v.panel-size-300px .battle-ship .ship-gear img {
 	width:30px;
 	height:30px;
-	background:#333;
 	border-radius: 15px;
-	/*vertical-align:top;
-	margin:2px 0px 0px 0px;*/
 }
 #v.panel-size-300px .battle-ship .ship-equip-capacity {
 	position:absolute;
@@ -2047,17 +2053,29 @@
 	text-align:right;
 }
 #v.panel-size-420px .battle-ship .ship-hp-bar {
+	position: relative;
 	width:150px;
 	height:10px;
 	float:left;
 	background:#555;
 }
 #v.panel-size-420px .battle-ship .ship-hp-bar .ship-hp-val {
+	position: absolute;
+	top: 0px;
+	left: 0px;
 	width:150px;
-	height:10px;
-	float:left;
+	height:5px;
 	background:#0f0;
 }
+#v.panel-size-420px .battle-ship .ship-hp-bar .ship-hp-after-val {
+	position: absolute;
+	top: 5px;
+	left: 0px;
+	width:150px;
+	height:5px;
+	background:#0f0;
+}
+
 #v.panel-size-420px .battle-ship .ship-level {
 	width:60px;
 	height:50px;
@@ -2140,10 +2158,8 @@
 #v.panel-size-420px .battle-ship .ship-gear img {
 	width:24px;
 	height:24px;
-	background:#333;
 	border-radius: 12px;
 	vertical-align:top;
-	margin:0px 0px 0px 0px;
 }
 #v.panel-size-420px .battle-ship .ship-equip-capacity {
 	width:15px;
@@ -2374,9 +2390,19 @@
 	background:#555;
 }
 #v.panel-size-300px .battle-mship .ship-hp-bar .ship-hp-val {
+	position: absolute;
+	top: 0px;
+	left: 0px;
 	width:100px;
-	height:10px;
-	float:left;
+	height:5px;
+	background:#0f0;
+}
+#v.panel-size-300px .battle-mship .ship-hp-bar .ship-hp-after-val {
+	position: absolute;
+	top: 5px;
+	left: 0px;
+	width:100px;
+	height:5px;
 	background:#0f0;
 }
 #v.panel-size-300px .battle-mship .ship-level {
@@ -2470,10 +2496,7 @@
 #v.panel-size-300px .battle-mship .ship-gear img {
 	width:16px;
 	height:16px;
-	background:#333;
 	border-radius: 8px;
-	/*vertical-align:top;
-	margin:2px 0px 0px 0px;*/
 }
 #v.panel-size-300px .battle-mship .ship-equip-capacity {
 	width:17px;
@@ -2580,17 +2603,29 @@
 	text-align:right;
 }
 #v.panel-size-420px .battle-mship .ship-hp-bar {
+	position: relative;
 	width:150px;
 	height:10px;
 	float:left;
 	background:#555;
 }
 #v.panel-size-420px .battle-mship .ship-hp-bar .ship-hp-val {
+	position: absolute;
+	top: 0px;
+	left: 0px;
 	width:150px;
-	height:10px;
-	float:left;
+	height:5px;
 	background:#0f0;
 }
+#v.panel-size-420px .battle-mship .ship-hp-bar .ship-hp-after-val {
+	position: absolute;
+	top: 5px;
+	left: 0px;
+	width:150px;
+	height:5px;
+	background:#0f0;
+}
+
 #v.panel-size-420px .battle-mship .ship-level {
 	width:60px;
 	height:50px;
@@ -2673,7 +2708,6 @@
 	width:24px;
 	height:24px;
 	vertical-align:top;
-	background:#333;
 	border-radius: 12px;
 }
 #v.panel-size-420px .battle-mship .ship-equip-capacity {
@@ -2905,9 +2939,19 @@
 	background:#555;
 }
 #v.panel-size-300px .battle-eship .ship-hp-bar .ship-hp-val {
+	position: absolute;
+	top: 0px;
+	left: 0px;
 	width:100px;
-	height:10px;
-	float:left;
+	height:5px;
+	background:#0f0;
+}
+#v.panel-size-300px .battle-eship .ship-hp-bar .ship-hp-after-val {
+	position: absolute;
+	top: 5px;
+	left: 0px;
+	width:100px;
+	height:5px;
 	background:#0f0;
 }
 #v.panel-size-300px .battle-eship .ship-level {
@@ -3001,10 +3045,7 @@
 #v.panel-size-300px .battle-eship .ship-gear img {
 	width:16px;
 	height:16px;
-	background:#333;
 	border-radius: 8px;
-	/*vertical-align:top;
-	margin:2px 0px 0px 0px;*/
 }
 #v.panel-size-300px .battle-eship .ship-equip-capacity {
 	width:17px;
@@ -3112,15 +3153,26 @@
 	text-align:right;
 }
 #v.panel-size-420px .battle-eship .ship-hp-bar {
+	position: relative;
 	width:150px;
 	height:10px;
 	float:left;
 	background:#555;
 }
 #v.panel-size-420px .battle-eship .ship-hp-bar .ship-hp-val {
+	position: absolute;
+	top: 0px;
+	left: 0px;
 	width:150px;
-	height:10px;
-	float:left;
+	height:5px;
+	background:#0f0;
+}
+#v.panel-size-420px .battle-eship .ship-hp-bar .ship-hp-after-val {
+	position: absolute;
+	top: 5px;
+	left: 0px;
+	width:150px;
+	height:5px;
 	background:#0f0;
 }
 #v.panel-size-420px .battle-eship .ship-level {
@@ -3205,7 +3257,6 @@
 	width:24px;
 	height:24px;
 	vertical-align:top;
-	background:#333;
 	border-radius: 12px;
 }
 #v.panel-size-420px .battle-eship .ship-equip-capacity {
@@ -3412,20 +3463,19 @@
 	text-align:center;
 	font-size:12px;
 }
-#v.panel-size-300px .battle .battle_enemy_formation {
+#v.panel-size-300px .battle .battle_formation {
 	width:140px;
 	height:40px;
 	padding:0px 0px 0px 50px;
 	margin:0px 0px 3px 0px;
 }
-#v.panel-size-300px .battle .battle_enemy_formation img {
-	-webkit-transform: rotate(-90deg);
-}
-#v.panel-size-420px .battle .battle_enemy_formation {
+#v.panel-size-420px .battle .battle_formation {
 	width:40px;
 	height:40px;
 	margin:15px 0px 3px 5px;
 	float:left;
+}
+#v .battle .battle_formation img {
 	-webkit-transform: rotate(-90deg);
 }
 #v.panel-size-300px .battle .battle_enemies {
@@ -3440,6 +3490,7 @@
 	float:left;
 }
 #v .battle .battle_enemies .battle_abyss {
+	position: relative;
 	width:30px;
 	height:30px;
 	float:left;
@@ -3447,6 +3498,21 @@
 	background:#fff;
 	border-radius:15px;
 	overflow:hidden;
+}
+#v .battle .battle_enemies .battle_abyss .sunk-container {
+	position: absolute;
+	top:0px;
+	left:0px;
+	width: 30px;
+	height: 30px;
+	z-index: 1;
+}
+#v .battle .battle_enemies .battle_abyss .face-container {
+	position: absolute;
+	top:0px;
+	left:0px;
+	width: 30px;
+	height: 30px;
 }
 #v .battle .battle_enemies .battle_abyss img {
 	width:30px;
