@@ -1105,6 +1105,7 @@
 	margin:0px 0px 2px 0px;
 	font-size:10px;
 	overflow:hidden;
+	position:relative;
 }
 #h .battle-ship.ship-cond-stamp:after {
 	content: attr(title);
