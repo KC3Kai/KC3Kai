@@ -19,6 +19,11 @@ Uses KC3Quest objects to play around with
 		timeToResetWeeklyQuests: -1,
 		timeToResetMonthlyQuests: -1,
 		
+		linkedQuests: {
+			q218:{q212:[0,1]},
+			q212:{q218:[0,1]},
+		},
+		
 		/* GET
 		Get a specific quest object in the list using its ID
 		------------------------------------------*/
@@ -46,6 +51,15 @@ Uses KC3Quest objects to play around with
 				localStorage[timeType] = -1;
 			}
 			return result;
+		},
+		
+		// chained quest are incrementing the linked one, but not itself. 
+		linkcrement: function( questId,reqNum,amount ) {
+			this.get(questId).increment(reqNum,amount);
+			for(var qId in this.linkedQuests["q"+questId]){
+				var d = this.linkedQuests["q"+questId][qId];
+				this.get(qId).increment(d[0],d[1],true);
+			}
 		},
 		
 		checkAndResetQuests :function(serverJstTime){
