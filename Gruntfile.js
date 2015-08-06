@@ -151,6 +151,10 @@ module.exports = function(grunt) {
 							replacement: 'library/objects.js'
 						},
 						{
+							pattern: /library\/managers\/ConfigManager\.js/ig,
+							replacement: 'library/managers.js'
+						},
+						{
 							pattern: /assets\/img\/logo\/dev\.png/ig,
 							replacement: 'assets/img/logo/19.png'
 						}
