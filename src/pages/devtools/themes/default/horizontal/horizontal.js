@@ -937,7 +937,7 @@
 
 			if(afterHpPercent <= 0.00 && ConfigManager.info_btstamp) { // Sunk or Knocked out
 				$(ShipBox).addClass("ship-cond-stamp");
-				$(ShipBox).attr("title",KC3Meta.term("PredictionStamp"+KC3Panel.layout().data.isSunkable ? "Sortie" : "PvP"));
+				$(ShipBox).attr("title",KC3Meta.term("PredictionStamp"+(KC3Panel.layout().data.isSunkable ? "Sortie" : "PvP")));
 			} else if(afterHpPercent <= 0.25){
 				$(".ship-hp-after-val", ShipBox).css("background", "#FF0000");
 			} else if(afterHpPercent <= 0.50){
