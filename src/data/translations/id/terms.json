@@ -124,10 +124,11 @@
 
         "SettingsDMMGameplay" : "Gameplay DMM",
         "SettingsDMMCustomize" : "Terapkan Pengaturan",
+		"SettingsDMMForceCookies" : "Paksa Gunakan Cookies",
 
         "SettingsPanelSize" : "Ukuran Panel",
         "SettingsPanelOpacity" : "Transparansi Antarmuka",
-
+		
         "Small" : "Kecil",
         "Big" : "Besar",
         "Theme" : "Tema",
@@ -141,6 +142,13 @@
         "SpeedSlow" : "Pelan",
 
         "HQText" : "HQ",
+		"HQExpAbbrev1" : "Berikutnya",
+		"HQExpAbbrev2" : "Sekarang",
+		"HQExpAbbrev3" : "Jumlah",
+		
+		"PredictionStampSortie" : "Tenggelam",
+		"PredictionStampPvP" : "Knocked Out",
+
         "LevelText" : "Level",
         "LevelShort" : "Lv.",
         "LevelNext" : "Berikutnya",
