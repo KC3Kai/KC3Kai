@@ -31,13 +31,14 @@
 	"background": {
 		"scripts": [
 			"assets/js/jquery-2.1.3.min.js",
+			"library/managers/ConfigManager.js",
 			"library/objects/Messengers.js",
 			"library/modules/Service.js"
 		]
 	},
 	"content_scripts": [
 		{
-			"matches":["*://*.dmm.com/*"],
+			"matches":["*://www.dmm.com/*"],
 			"js": ["library/injections/cookie.js"],
 			"run_at": "document_end",
 			"all_frames": true

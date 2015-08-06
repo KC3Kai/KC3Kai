@@ -47,6 +47,7 @@ Retreives when needed to apply on components
 				api_bg_position		: "top center",
 				api_gameScale		: 100,
 				
+				dmm_forcecookies	: false,
 				dmm_customize		: false,
 				dmm_translation		: true,
 				dmm_tracking		: true,
