@@ -124,6 +124,7 @@
 	
 	"SettingsDMMGameplay" : "DMM 遊戲視窗",
 	"SettingsDMMCustomize" : "套用自訂值",
+"SettingsDMMForceCookies" : "強制修改cookie",
 	
 	"SettingsPanelSize" : "面板界面大小",
 	"SettingsPanelOpacity" : "面板界面不透明度",
