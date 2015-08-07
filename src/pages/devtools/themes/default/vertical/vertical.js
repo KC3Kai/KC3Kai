@@ -762,6 +762,7 @@
 				
 				if((typeof thisNode.eformation != "undefined") && (thisNode.eformation > -1)){
 					$(".battle .battle_formation img", container).attr("src", KC3Meta.formationIcon(thisNode.eformation));
+					$(".battle .battle_formation", container).attr("title", KC3Meta.formationText(thisNode.eformation));
 					$(".battle .battle_formation", container).show();
 				} else {
 					$(".battle .battle_formation", container).hide();
@@ -1019,6 +1020,7 @@
 				// Formation
 				if((typeof thisPvP.eformation != "undefined") && (thisPvP.eformation > -1)){
 					$(".battle .battle_formation img", container).attr("src", KC3Meta.formationIcon(thisPvP.eformation));
+					$(".battle .battle_formation", container).attr("title", KC3Meta.formationText(thisPvP.eformation));
 					$(".battle .battle_formation", container).show();
 				} else {
 					$(".battle .battle_formation", container).hide();
