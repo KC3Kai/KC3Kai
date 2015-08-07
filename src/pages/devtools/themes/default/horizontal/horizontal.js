@@ -56,7 +56,7 @@
 				KC3TimerManager.update();
 			}, 1000);
 			
-			// Screenshot button
+			// Screenshot buttons
 			$(".screenshot-button", this.domElement).on("click", function(){
 				$(this).hide();
 				
@@ -67,6 +67,20 @@
 				}, function(response){
 					console.log(response);
 					$(".screenshot-button", self.domElement).show();
+				})).execute();
+			});
+			
+			// Battle mode screenshot button
+			$(".battle .battle_screenshot", this.domElement).on("click", function(){
+				$(this).hide();
+				
+				// Tell service to pass a message to gamescreen on inspected window to get a screenshot
+				(new RMsg("service", "screenshot", {
+					tabId: chrome.devtools.inspectedWindow.tabId,
+					playerName: PlayerManager.hq.name
+				}, function(response){
+					console.log(response);
+					$(".battle .battle_screenshot", self.domElement).show();
 				})).execute();
 			});
 			
@@ -417,7 +431,7 @@
 				KC3Panel.mode = "battle";
 				
 				// Show world details
-				$(".battle .battle_world", container).text("World "+KC3SortieManager.map_world+" - "+KC3SortieManager.map_num+(function(d){
+				$(".battle .battle_world", container).text(KC3SortieManager.map_world+"-"+KC3SortieManager.map_num+(function(d){
 					switch(d) {
 						case 1: case 2: case 3:
 							return " " + ["Easy","Normal","Hard"][d-1];
