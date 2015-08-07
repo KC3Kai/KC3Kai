@@ -86,7 +86,8 @@
 	"SettingsConstructionFaces" : "剧透建造结果",
 	"SettingsCraftBox" : "剧透开发结果",
 	"SettingsCompass" : "剧透航向",
-	"SettingsBattleData" : "战斗模式",
+	"SettingsBattleData" : "战斗预测",
+	"SettingsBattleStamp" : "战斗后状态提示",
 	"SettingsBossComp" : "Boss配置",
 	"SettingsYasenTroll" : "夜战 \u0022额外支持\u0022",
 	"SettingsHQDelta" : "出击时司令部经验值变化",
@@ -124,6 +125,7 @@
 	
 	"SettingsDMMGameplay" : "DMM模式",
 	"SettingsDMMCustomize" : "允许自定义",
+	"SettingsDMMForceCookies" : "强制模拟地域Cookie",
 	
 	"SettingsPanelSize" : "面板尺寸",
 	"SettingsPanelOpacity" : "界面不透明度 (opacity)",
@@ -141,11 +143,20 @@
 	"SpeedSlow" : "低速",
 	
 	"HQText" : "司令部",
+	"HQExpAbbrev1" : "还需",
+	"HQExpAbbrev2" : "当前",
+	"HQExpAbbrev3" : "总计",
+	
+	"PredictionStampSortie" : "击沉",
+	"PredictionStampPvP" : "出局",
+
 	"LevelText" : "等级",
 	"LevelShort" : "Lv.",
 	"LevelNext" : "还需",
 	"Screenshot" : "截图",
+	"UntranslatedQuest" : "未翻译的任务",
 	
+	"PanelWaitActions" : "正在等待游戏响应……",
 	"PanelErrorStorage" : "Your Chrome's localStorage is disabled on your settings. KC3改 needs this feature. <a href=\"http://stackoverflow.com/a/26671889/483704\" target=\"_blank\">See how to enable this</a>.",
 	
 	"Dummy" : "Dummy"
