@@ -173,27 +173,30 @@ Quest Type:
 	};
 	
 	KC3Quest.prototype.autoAdjustCounter = function(){
-		if (this.isCompleted()) {
-			this.tracking[0][0] = this.tracking[0][1];
-			return;
-		}
-		if (this.tracking && (this.id != 214) && (this.id != 607)  && (this.id != 608)) {
-			var currentCount = this.tracking[0][0];
-			var maxCount = parseFloat(this.tracking[0][1]);
-			var progress = 0;
-			if (this.progress == 1) {
-				progress = 0.5;
-			} else if (this.progress == 2) {
-				progress = 0.8;
+		if(this.tracking){
+			if(this.isCompleted()) {
+				this.tracking[0][0] = this.tracking[0][1];
+				return;
 			}
-			if (currentCount/maxCount < progress) {
-				console.log(this.tracking);
-				console.log(this.tracking[0][0]);
-				console.log(this.tracking[0][1]);
-				console.log(currentCount);
-				console.log(maxCount);
-				console.log("Adjust: " + currentCount/maxCount + " " + progress + " " + Math.ceil(maxCount * progress));
-				this.tracking[0][0] = Math.ceil(maxCount * progress);
+			
+			if((this.id != 214) && (this.id != 607)  && (this.id != 608)){
+				var currentCount = this.tracking[0][0];
+				var maxCount = parseFloat(this.tracking[0][1]);
+				var progress = 0;
+				if (this.progress == 1) {
+					progress = 0.5;
+				} else if (this.progress == 2) {
+					progress = 0.8;
+				}
+				if (currentCount/maxCount < progress) {
+					console.log(this.tracking);
+					console.log(this.tracking[0][0]);
+					console.log(this.tracking[0][1]);
+					console.log(currentCount);
+					console.log(maxCount);
+					console.log("Adjust: " + currentCount/maxCount + " " + progress + " " + Math.ceil(maxCount * progress));
+					this.tracking[0][0] = Math.ceil(maxCount * progress);
+				}
 			}
 		}
 	};

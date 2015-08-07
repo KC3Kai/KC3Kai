@@ -9,7 +9,8 @@
 				"tw" :"https://twitter.com/dragonjetmkii",
 				"th" :"http://www.twitch.tv/jetrico",
 				"wk" :"http://kancolle.wikia.com/wiki/User:Dragonjet",
-				"gh" :"https://github.com/dragonjet"
+				"gh" :"https://github.com/dragonjet",
+				"hm" :"http://www.himeuta.net/members/78-dragonjet/"
 			}
 		},
 		{
@@ -271,6 +272,12 @@
 			"links" : {
 				"da" :"http://tykez269.deviantart.com"
 			}
+		},
+		{
+			"name": "Lord Falukorv",
+			"avatar" : "http://img3.wikia.nocookie.net/__cb20150807073959/kancolle/images/5/54/Falukorv.jpg",
+			"desc" : "Sausage supplier",
+			"links" : {}
 		}
 	],
 	"AboutReporters" : [
