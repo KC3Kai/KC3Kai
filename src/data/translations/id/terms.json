@@ -129,9 +129,12 @@
 
         "SettingsPanelSize" : "Ukuran Panel",
         "SettingsPanelOpacity" : "Transparansi Antarmuka",
+		"SettingsGearHolder" : "Warna Latar Belakang Equip",
 		
         "Small" : "Kecil",
         "Big" : "Besar",
+		"Black" : "Hitam",
+		"White" : "Putih",
         "Theme" : "Tema",
         "Panel" : "Panel",
         "Volume" : "Volume Suara",
