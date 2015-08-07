@@ -129,9 +129,12 @@
 	
 	"SettingsPanelSize" : "パネルのサイズ",
 	"SettingsPanelOpacity" : "インターフェイスの不透明度",
+	"SettingsGearHolder" : "装備の背景色",
 	
 	"Small" : "小",
 	"Big" : "大",
+	"Black" : "黒",
+	"White" : "白",
 	"Theme" : "テーマ",
 	"Panel" : "パネル",
 	"Volume" : "ボリューム",
