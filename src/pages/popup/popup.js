@@ -38,7 +38,7 @@
 				window.open("../game/api.html", "kc3kai_game");
 			}
 			if( typeof chrome.cookies == 'undefined' ){
-				go_play_via_api()
+				go_play_via_api();
 			}else{
 				chrome.cookies.set({
 					url: "http://www.dmm.com",
@@ -62,7 +62,7 @@
 				window.open("http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/", "kc3kai_game");
 			}
 			if( typeof chrome.cookies == 'undefined' ){
-				go_refresh_api()
+				go_refresh_api();
 			}else{
 				chrome.cookies.set({
 					url: "http://www.dmm.com",
