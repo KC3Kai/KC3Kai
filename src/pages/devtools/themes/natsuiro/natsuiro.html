@@ -11,6 +11,7 @@
 	<body>
 		<!-- MAIN LAYOUT -->
 		<div class="wrapper">
+			<div class="wrapper_bg"></div>
 			
 			<!-- Module: Admiral Info -->
 			<div class="module admiral">
@@ -32,7 +33,6 @@
 					<div class="activity_tab hover active" title="Basic" data-target="basic">Basic</div>
 					<div class="activity_tab hover" title="Battle" data-target="battle">Battle</div>
 					<div class="activity_tab hover" title="Activity" data-target="details">Activity</div>
-					<div class="clear"></div>
 				</div>
 				<div class="activity_body">
 					<!-- BASIC: Consumables and Timers -->
@@ -74,57 +74,57 @@
 						</div>
 						<div class="expeditions">
 							<div class="expedition expedition_1">
-								<div class="expedition_face"><img/></div>
-								<div class="expedition_num"></div>
-								<div class="expedition_timer">00:00:00</div>
+								<div class="timer-img"><img/></div>
+								<div class="timer-expnum"></div>
+								<div class="timer-time">00:00:00</div>
 							</div>
 							<div class="expedition expedition_2">
-								<div class="expedition_face"><img/></div>
-								<div class="expedition_num"></div>
-								<div class="expedition_timer">00:00:00</div>
+								<div class="timer-img"><img/></div>
+								<div class="timer-expnum"></div>
+								<div class="timer-time">00:00:00</div>
 							</div>
 							<div class="expedition expedition_3">
-								<div class="expedition_face"><img/></div>
-								<div class="expedition_num"></div>
-								<div class="expedition_timer">00:00:00</div>
+								<div class="timer-img"><img/></div>
+								<div class="timer-expnum"></div>
+								<div class="timer-time">00:00:00</div>
 							</div>
 							<div class="clear"></div>
 						</div>
 						<div class="timers">
 							<div class="timer_boxes repairs">
 								<div class="timer_box repair_1">
-									<div class="timer_face"><img/></div>
-									<div class="timer_timer">00:00:00</div>
+									<div class="timer-img"><img/></div>
+									<div class="timer-time">00:00:00</div>
 								</div>
 								<div class="timer_box repair_2">
-									<div class="timer_face"><img/></div>
-									<div class="timer_timer">00:00:00</div>
+									<div class="timer-img"><img/></div>
+									<div class="timer-time">00:00:00</div>
 								</div>
 								<div class="timer_box repair_3">
-									<div class="timer_face"><img/></div>
-									<div class="timer_timer">00:00:00</div>
+									<div class="timer-img"><img/></div>
+									<div class="timer-time">00:00:00</div>
 								</div>
 								<div class="timer_box repair_4">
-									<div class="timer_face"><img/></div>
-									<div class="timer_timer">00:00:00</div>
+									<div class="timer-img"><img/></div>
+									<div class="timer-time">00:00:00</div>
 								</div>
 							</div>
 							<div class="timer_boxes builds">
 								<div class="timer_box build_1">
-									<div class="timer_face"><img/></div>
-									<div class="timer_timer">00:00:00</div>
+									<div class="timer-img"><img/></div>
+									<div class="timer-time">00:00:00</div>
 								</div>
 								<div class="timer_box build_2">
-									<div class="timer_face"><img/></div>
-									<div class="timer_timer">00:00:00</div>
+									<div class="timer-img"><img/></div>
+									<div class="timer-time">00:00:00</div>
 								</div>
 								<div class="timer_box build_3">
-									<div class="timer_face"><img/></div>
-									<div class="timer_timer">00:00:00</div>
+									<div class="timer-img"><img/></div>
+									<div class="timer-time">00:00:00</div>
 								</div>
 								<div class="timer_box build_4">
-									<div class="timer_face"><img/></div>
-									<div class="timer_timer">00:00:00</div>
+									<div class="timer-img"><img/></div>
+									<div class="timer-time">00:00:00</div>
 								</div>
 							</div>
 							<div class="clear"></div>
@@ -148,15 +148,13 @@
 			
 			<!-- Module: Controls -->
 			<div class="module controls">
-				<div class="control fleet_num">1</div>
-				<div class="control fleet_num">2</div>
-				<div class="control fleet_num">3</div>
-				<div class="control fleet_num">4</div>
-				<div class="control fleet_rengo">連合</div>
+				<div class="control hover fleet_num active">1</div>
+				<div class="control hover fleet_num">2</div>
+				<div class="control hover fleet_num">3</div>
+				<div class="control hover fleet_num">4</div>
+				<div class="control hover fleet_rengo"><img src="img/rengo.png" /></div>
 				
-				<div class="control control_btn btn_ss1"></div>
-				<div class="control control_btn btn_ss2"></div>
-				<div class="control control_btn btn_strategy"></div>
+				<div class="control hover control_btn btn_ss1"><img src="img/cam1.png" /></div>
 			</div>
 			
 			<!-- Module: Fleet Summary -->
@@ -166,7 +164,12 @@
 			
 			<!-- Module: Ship List -->
 			<div class="module fleet">
-				
+				<div class="shiplist shiplist_single">
+					
+				</div>
+				<div class="shiplist shiplist_combined">
+					
+				</div>
 			</div>
 			
 			<!-- Module: Status Reminders -->
@@ -196,8 +199,22 @@
 			<!-- Clonable: Quest Record -->
 			<div class="quest">
 				<div class="quest_color"></div>
-				<div class="quest_text">Daily Equipment Modernization 1</div>
-				<div class="quest_track">00/00</div>
+				<div class="quest_text ttp">Daily Equipment Modernization 1</div>
+				<div class="quest_track ttp">00/00</div>
+			</div>
+			
+			<!-- Clonable: Long Ship -->
+			<div class="lship">
+				<div class="quest_color"></div>
+				<div class="quest_text ttp">Daily Equipment Modernization 1</div>
+				<div class="quest_track ttp">00/00</div>
+			</div>
+			
+			<!-- Clonable: Short Ship -->
+			<div class="sship">
+				<div class="quest_color"></div>
+				<div class="quest_text ttp">Daily Equipment Modernization 1</div>
+				<div class="quest_track ttp">00/00</div>
 			</div>
 			
 		</div>
