@@ -59,9 +59,10 @@ $(document).on("ready", function(){
 		window.location.reload();
 	});
 	
-	// Disable Quick Play (must panel
-	if(ConfigManager.api_mustPanel)
+	// Disable Quick Play (must panel)
+	if(ConfigManager.api_mustPanel){
 		$(".play_btn").hide();
+	}
 	
 	// Quick Play
 	$(".play_btn").on('click', function(){

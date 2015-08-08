@@ -872,7 +872,9 @@
 			},
 			BattleNight: function(container, data, local){
 				if(KC3SortieManager.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
+				
 				var desperateText = [
+					"NIGHT BATTLE",
 					"DESPERATE? :P",
 					"LOL SKRUB",
 					"ALL DA BONUSES",
@@ -886,12 +888,17 @@
 					"It's futile mang",
 					"Let's all pray~",
 					"RNGesus bless him",
-					"I bless this run"
-				]; // this easter egg should ke kept, even with a hidden toggle (disabled by default) :D
-				if(ConfigManager.info_troll)
-					$(".battle .battle_current", container).text(desperateText[Math.floor(Math.random()*desperateText.length)]);
-				else
+					"I bless this run",
+					"drops but no slot"
+				];
+				if(ConfigManager.info_troll){
+					$(".battle .battle_current", container).text(
+						desperateText[Math.floor(Math.random()*desperateText.length)]
+					);
+				}else{
 					$(".battle .battle_current", container).text("NIGHT BATTLE");
+				}
+				
 				var thisNode = KC3SortieManager.currentNode();
 
 				// Load after-battle HP
