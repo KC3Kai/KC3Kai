@@ -64,7 +64,7 @@ $(document).on("ready", function(){
 		ActivateGame();
 	});
 	
-	// Disable Quick Play (must panel
+	// Disable Quick Play (must panel)
 	if(ConfigManager.api_mustPanel) {
 		$(".play_btn")
 			.off('click')
