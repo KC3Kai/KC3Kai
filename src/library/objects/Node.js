@@ -93,8 +93,8 @@ Used by SortieManager
 		this.eships = enemyships;
 		this.eformation = battleData.api_formation[1];
 		
-		this.supportFlag = (battleData.api_support_flag>0)?true:false;
-		this.yasenFlag = (battleData.api_midnight_flag>0)?true:false;
+		this.supportFlag = (battleData.api_support_flag>0);
+		this.yasenFlag = (battleData.api_midnight_flag>0);
 		
 		this.detection = KC3Meta.detection( battleData.api_search[0] );
 		this.engagement = KC3Meta.engagement( battleData.api_formation[2] );
