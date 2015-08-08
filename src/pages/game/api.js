@@ -68,7 +68,7 @@ $(document).on("ready", function(){
 	if(ConfigManager.api_mustPanel) {
 		$(".play_btn")
 			.off('click')
-			.text("Please load the panel, as you requested")
+			.text(KC3Meta.term("APIWaitToggle"))
 			.css('color','#f00')
 			.css('width','40%');
 	}

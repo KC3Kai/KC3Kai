@@ -246,7 +246,8 @@
 			},
 			HQ: function(container, data, local){
 				var
-					hqt = KC3Meta.term("HQExpAbbrev" + (ConfigManager.hqExpDetail)) + " ",
+					maxHQ=Object.keys(KC3Meta._exp).map(function(a){return parseInt(a);}).reduce(function(a,b){return a>b?a:b;});
+					hqt = KC3Meta.term("HQExpAbbrev" + (PlayerManager.hq.level ConfigManager.hqExpDetail)) + " ",
 					hqexpd = Math.abs($(".battle_hqlevel_next_gain", container).text());
 				switch(KC3Panel.mode){
 					case "normal":
@@ -772,6 +773,15 @@
 				var thisNode = KC3SortieManager.currentNode();
 				var battleData = thisNode.battleDay;
 				
+				var enemies = thisNode.eships.filter(function(x){return x>=0;});
+				if(ConfigManager.info_troll) {
+					if(enemies.every(function(x){return KC3Master.ship(x).api_stype==13 && KC3Master.ship(x).api_yomi.length>1;})) {
+						$(".battle .battle_current",container).text(
+							(thisNode.eformation < 3) ? ((enemies.length == 1) ? "MORNING SNIPER!!!!!" : "TROLL NODE") : "SUB NODE"
+						);
+					}
+				}
+				
 				if((typeof thisNode.eformation != "undefined") && (thisNode.eformation > -1)){
 					$(".battle .battle_formation img", container).attr("src", KC3Meta.formationIcon(thisNode.eformation));
 					$(".battle .battle_formation", container).attr("title", KC3Meta.formationText(thisNode.eformation));
@@ -1149,7 +1159,7 @@
 		if (!ConfigManager.info_battle) {
 			afterHp = null;
 		}
-		afterHp = afterHp || [hp[0], hp[1]];
+		afterHp = afterHp || hp;
 		var hpPercent = hp[0] / hp[1];
 		var afterHpPercent = afterHp[0] / afterHp[1];
 
