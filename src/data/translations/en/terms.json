@@ -129,9 +129,12 @@
 	
 	"SettingsPanelSize" : "Panel Size",
 	"SettingsPanelOpacity" : "Interface Opacity",
+	"SettingsGearHolder" : "Gear Background Color",
 	
 	"Small" : "Small",
 	"Big" : "Big",
+	"Black" : "Black",
+	"White" : "White",
 	"Theme" : "Theme",
 	"Panel" : "Panel",
 	"Volume" : "Volume",
