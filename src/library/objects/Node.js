@@ -219,6 +219,15 @@ Used by SortieManager
 				this.enemySunk[i-7] = true;
 			}
 		}
+
+		var fleetId = (typeof fleetSent != "undefined")? fleetSent : KC3SortieManager.fleetSent;
+		var fleet = PlayerManager.fleets[fleetId - 1];
+		var shipNum = fleet.countShips();
+		for(i = 0; i < shipNum; i++) {
+			var ship = fleet.ship(i);
+			ship.afterHp[0] = result[i+1].currentHp;
+			ship.afterHp[1] = ship.hp[1];
+		}
 	};
 	
 	KC3Node.prototype.results = function( resultData ){

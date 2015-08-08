@@ -21,30 +21,6 @@
 						[ "kr", "한국어" ]
 					]
 				}
-			},
-			{
-				"id" : "elosFormula",
-				"name" : "SettingsELosFormula",
-				"type" : "radio",
-				"options" : {
-					"choices" : [
-						[ 1, "SettingsELosSum" ],
-						[ 2, "SettingsELosOld" ],
-						[ 3, "SettingsELosNew" ]
-					]
-				}
-			},
-			{
-				"id" : "hqExpDetail",
-				"name" : "SettingsHQExpDetail",
-				"type" : "radio",
-				"options" : {
-					"choices" : [
-						[ 1, "SettingsHQExpLeft" ],
-						[ 2, "SettingsHQExpCurrent" ],
-						[ 3, "SettingsHQExpTotal" ]
-					]
-				}
 			}
 		]
 	},
@@ -79,6 +55,12 @@
 			{
 				"id" : "info_battle",
 				"name" : "SettingsBattleData",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_btstamp",
+				"name" : "SettingsBattleStamp",
 				"type" : "check",
 				"options" : {}
 			},
@@ -246,6 +228,12 @@
 		"help" : "",
 		"contents" : [
 			{
+				"id" : "dmm_forcecookies",
+				"name" : "SettingsDMMForceCookies",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "dmm_customize",
 				"name" : "SettingsDMMCustomize",
 				"type" : "check",
@@ -306,6 +294,30 @@
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Panel",
 		"contents" : [
 			{
+				"id" : "elosFormula",
+				"name" : "SettingsELosFormula",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 1, "SettingsELosSum" ],
+						[ 2, "SettingsELosOld" ],
+						[ 3, "SettingsELosNew" ]
+					]
+				}
+			},
+			{
+				"id" : "hqExpDetail",
+				"name" : "SettingsHQExpDetail",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 1, "SettingsHQExpLeft" ],
+						[ 2, "SettingsHQExpCurrent" ],
+						[ 3, "SettingsHQExpTotal" ]
+					]
+				}
+			},
+			{
 				"id" : "pan_theme",
 				"name" : "Theme",
 				"type" : "radio",
@@ -324,6 +336,18 @@
 					"choices" : [
 						[ "small", "Small" ],
 						[ "big", "Big" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_gear_holder",
+				"name" : "SettingsGearHolder",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "black", "Black" ],
+						[ "white", "White" ],
+						[ "none", "None" ]
 					]
 				}
 			},

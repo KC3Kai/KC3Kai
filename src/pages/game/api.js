@@ -79,6 +79,17 @@ $(document).on("ready", function(){
 		}
 	};
 	
+	setInterval(function(){
+		window.focus();
+	}, 100);
+	
+});
+
+$(document).on("keydown", function(event){
+    if(event.keyCode == 120){
+		(new KCScreenshot()).start("Auto", $(".box-wrap"));
+        return false;
+    }
 });
 
 /* Invokable actions
