@@ -278,6 +278,14 @@
 			"avatar" : "http://img3.wikia.nocookie.net/__cb20150807073959/kancolle/images/5/54/Falukorv.jpg",
 			"desc" : "Sausage supplier",
 			"links" : {}
+		},
+		{
+			"name": "Lord Melon",
+			"avatar" : "http://img4.wikia.nocookie.net/__cb1438854831/common/avatars/thumb/6/65/25730832.png/150px-25730832.png.jpg",
+			"desc" : "Melon supplier",
+			"links" : {
+				"wk" :"http://kancolle.wikia.com/wiki/User:Zel-melon"
+			}
 		}
 	],
 	"AboutReporters" : [
@@ -296,7 +304,9 @@
 			"desc" : "AboutReporter",
 			"links" : {
 				"gh" :"https://github.com/ethrundr",
-				"wk" :"http://kancolle.wikia.com/wiki/User:Ethrundr"
+				"wk" :"http://kancolle.wikia.com/wiki/User:Ethrundr",
+				"fb" :"https://www.facebook.com/ethrundr",
+				"hm" :"http://www.himeuta.net/members/1056-ethrundr/"
 			}
 		},
 		{

@@ -32,18 +32,9 @@
 		
 		// Play via API Link
 		$("#play_cc").on('click', function(){
-			chrome.cookies.set({
-				url: "http://www.dmm.com",
-				name: "ckcy",
-				value: "1",
-				domain: ".dmm.com",
-				expirationDate: Math.ceil((new Date("Sun, 09 Feb 2019 09:00:09 GMT")).getTime()/1000),
-				path: '/netgame/',
-			}, function(cookie){
-				localStorage.extract_api = false;
-				localStorage.dmmplay = false;
-				window.open("../game/api.html", "kc3kai_game");
-			});
+			localStorage.extract_api = false;
+			localStorage.dmmplay = false;
+			window.open("../game/api.html", "kc3kai_game");
 		});
 		
 		// Refresh API Link

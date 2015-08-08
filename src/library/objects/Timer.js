@@ -36,7 +36,7 @@ Has functions for TimerManager to use
 		this.completion = 0;
 		this.faceId = 0;
 		this.expedNum = 0;
-		$(".timer-img img", this.element).attr("src", "../../../../assets/img/ui/empty.png");
+		$(".timer-img img", this.element).hide();
 		$(".timer-expnum", this.element).text("");
 		$(".timer-time", this.element).text("");
 	};
@@ -56,6 +56,10 @@ Has functions for TimerManager to use
 		if(this.faceId > 0){
 			$(".timer-img img", this.element).attr("src", KC3Meta.shipIcon(this.faceId, "../../../../assets/img/ui/empty.png"));
 			$(".timer-img", this.element).attr("title", KC3Meta.shipName( KC3Master.ship(this.faceId).api_name ) );
+			$(".timer-img img", this.element).show();
+		}else{
+			$(".timer-img", this.element).attr("title", "");
+			$(".timer-img img", this.element).hide();
 		}
 	};
 	

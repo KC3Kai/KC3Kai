@@ -7,6 +7,7 @@ Xxxxxxx
 	"use strict";
 	
 	window.KC3SortieManager = {
+		difficulty: 0,
 		onSortie: 0,
 		fleetSent: 1,
 		map_world: 0,
@@ -18,10 +19,17 @@ Xxxxxxx
 		boss: {},
 		onBossAvailable: function(){},
 		onEnemiesAvailable: function(node){},
+		fled: [],
+		
+		setDifficulty :function(raw){
+			this.difficulty = raw; // 1 easy, 2 medium, 3 hard
+		},
 		
 		startSortie :function(world, mapnum, fleetNum, stime){
 			// If still on sortie, end previous one
 			if(this.onSortie > 0){ this.endSortie(); }
+			
+			if(world < 10){ this.difficulty = 0; }
 			
 			this.fleetSent = parseInt(fleetNum);
 			this.map_world = world;
@@ -43,6 +51,7 @@ Xxxxxxx
 			// Save on database and remember current sortieId
 			var self = this;
 			KC3Database.Sortie({
+				diff: this.difficulty,
 				world: world,
 				mapnum: mapnum,
 				fleetnum: parseInt(fleetNum, 10),
@@ -169,8 +178,18 @@ Xxxxxxx
 			if(this.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
 			this.hqExpGained += resultData.api_get_exp;
 			this.currentNode().results( resultData );
+			this.checkFCF( resultData.api_escape );
 			if(!ConfigManager.info_delta)
 				PlayerManager.hq.updateLevel( resultData.api_member_lv, resultData.api_member_exp);
+		},
+		
+		checkFCF :function( escapeData ){
+			if(typeof escapeData != "undefined"){
+				KC3ShipManager.get( escapeData.api_escape_idx[0] ).didFlee = true;
+				KC3ShipManager.get( escapeData.api_tow_idx[0] ).didFlee = true;
+				this.fled.push( escapeData.api_escape_idx[0] );
+				this.fled.push( escapeData.api_tow_idx[0] );
+			}
 		},
 		
 		endSortie :function(){
@@ -189,6 +208,9 @@ Xxxxxxx
 				formation: -1,
 				ships: [ -1, -1, -1, -1, -1, -1 ]
 			};
+			for(var ctr in this.fled){
+				KC3ShipManager.get( this.fled[ctr] ).didFlee = false;
+			}
 			KC3ShipManager.pendingShipNum = 0;
 			KC3GearManager.pendingGearNum = 0;
 		}

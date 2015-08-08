@@ -4,7 +4,16 @@
 	
 	// Redirect to DMM play page when activated
 	function ActivateGame(){
-		window.location = "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/";
+		chrome.cookies.set({
+			url: "http://www.dmm.com",
+			name: "ckcy",
+			value: "1",
+			domain: ".dmm.com",
+			expirationDate: Math.ceil((new Date("Sun, 09 Feb 2019 09:00:09 GMT")).getTime()/1000),
+			path: '/netgame/',
+		}, function(cookie){
+			window.location = "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/";
+		});
 	}
 	
 	$(document).on("ready", function(){

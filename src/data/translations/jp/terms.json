@@ -88,6 +88,7 @@
 	"SettingsCompass" : "コンパスと敵",
 	"SettingsBattleData" : "バトル予測",
 	"SettingsBossComp" : "ボス組成",
+	"SettingsBattleStamp" : "戦いの後条件マーカー",
 	"SettingsYasenTroll" : "夜戦 \u0022特別な支援\u0022",
 	"SettingsHQDelta" : "出撃の提督経験値差分",
 	
@@ -128,9 +129,12 @@
 	
 	"SettingsPanelSize" : "パネルのサイズ",
 	"SettingsPanelOpacity" : "インターフェイスの不透明度",
+	"SettingsGearHolder" : "装備の背景色",
 	
 	"Small" : "小",
 	"Big" : "大",
+	"Black" : "黒",
+	"White" : "白",
 	"Theme" : "テーマ",
 	"Panel" : "パネル",
 	"Volume" : "ボリューム",
@@ -142,6 +146,13 @@
 	"SpeedSlow" : "低速",
 	
 	"HQText" : "司令部",
+	"HQExpAbbrev1" : "次",
+	"HQExpAbbrev2" : "現在",
+	"HQExpAbbrev3" : "総獲得",
+	
+	"PredictionStampSortie" : "撃沈",
+	"PredictionStampPvP" : "轟沈",
+	
 	"LevelText" : "レベル",
 	"LevelShort" : "Lv.",
 	"LevelNext" : "次",

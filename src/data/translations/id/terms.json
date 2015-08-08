@@ -88,6 +88,7 @@
         "SettingsCompass" : "Kompas dan Musuh",
         "SettingsBattleData" : "Prediksi Pertempuran",
         "SettingsBossComp" : "Susunan Bos",
+	"SettingsBattleStamp" : "Kondisi Pasca Tempur",
         "SettingsYasenTroll" : "Yasen, \u0022Dukungan Ekstra\u0022",
         "SettingsHQDelta" : "HQ EXP Delta saat Sorti",
         "SettingsScreenshot" : "Screenshot",
@@ -124,12 +125,16 @@
 
         "SettingsDMMGameplay" : "Gameplay DMM",
         "SettingsDMMCustomize" : "Terapkan Pengaturan",
+		"SettingsDMMForceCookies" : "Paksa Gunakan Cookies",
 
         "SettingsPanelSize" : "Ukuran Panel",
         "SettingsPanelOpacity" : "Transparansi Antarmuka",
-
+		"SettingsGearHolder" : "Warna Latar Belakang Equip",
+		
         "Small" : "Kecil",
         "Big" : "Besar",
+		"Black" : "Hitam",
+		"White" : "Putih",
         "Theme" : "Tema",
         "Panel" : "Panel",
         "Volume" : "Volume Suara",
@@ -141,6 +146,13 @@
         "SpeedSlow" : "Pelan",
 
         "HQText" : "HQ",
+		"HQExpAbbrev1" : "Berikutnya",
+		"HQExpAbbrev2" : "Sekarang",
+		"HQExpAbbrev3" : "Jumlah",
+		
+		"PredictionStampSortie" : "Tenggelam",
+		"PredictionStampPvP" : "Tersingkirkan",
+
         "LevelText" : "Level",
         "LevelShort" : "Lv.",
         "LevelNext" : "Berikutnya",

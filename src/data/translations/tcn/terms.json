@@ -86,6 +86,7 @@
 	"SettingsConstructionFaces" : "建造結果預覽",
 	"SettingsCraftBox" : "開發結果預覽",
 	"SettingsCompass" : "指南針、敵艦隊編排",
+"SettingsBattleStamp" : "戰鬥後狀態標記",
 	"SettingsBattleData" : "戰鬥結果預覽",
 	"SettingsBossComp" : "敵主力艦隊編排",
 	"SettingsYasenTroll" : "夜戰「打打氣」",
@@ -124,13 +125,16 @@
 	
 	"SettingsDMMGameplay" : "DMM 遊戲視窗",
 	"SettingsDMMCustomize" : "套用自訂值",
-"SettingsDMMForceCookies" : "強制修改cookie",
+"SettingsDMMForceCookies" : "強制修改區域cookie",
 	
 	"SettingsPanelSize" : "面板界面大小",
 	"SettingsPanelOpacity" : "面板界面不透明度",
-	
-	"Small" : "小",
-	"Big" : "大",
+	"SettingsGearHolder" : "裝備背景色",
+ 	
+ 	"Small" : "小",
+ 	"Big" : "大",
+	"Black" : "黑",
+	"White" : "白",
 	"Theme" : "主題",
 	"Panel" : " F12 面板",
 	"Volume" : "音量",
@@ -143,11 +147,20 @@
 	"SpeedSlow" : "低速",
 	
 	"HQText" : "提督等級",
+	"HQExpAbbrev1" : "還需",
+	"HQExpAbbrev2" : "現時",
+	"HQExpAbbrev3" : "共有",
+	
+	"PredictionStampSortie" : "轟沉",
+	"PredictionStampPvP" : "出局",
+
 	"LevelText" : "等級",
 	"LevelShort" : "Lv.",
 	"LevelNext" : "離下一等級只需",
 	"Screenshot" : "螢幕截圖",
-	
+"UntranslatedQuest" : "未翻譯的仼務",
+ 	
+	"PanelWaitActions" : "正在等待遊戲回應……",	
  
 	"PanelErrorStorage" : "閣下已在設定中關閉了Chrome的「允許網站儲存本機資料」功能。KC3改需要使用此功能才能正常運作。<a href=\"https://support.google.com/chrome/answer/95647?hl=zh-Hant\" target=\"_blank\">參照此網頁中的指示</a>以開啟此功能（注意該網頁將此功能標示為cookie但並非實況）。", 
 	

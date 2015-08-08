@@ -39,10 +39,7 @@
 		KC3Translation.execute();
 		
 		// Panel customizations: panel opacity
-		var oldBG = $(".wrapper").css("background-color");
-		var newBG = oldBG.insert( oldBG.length-1, ", "+(ConfigManager.pan_opacity/100) );
-		newBG = newBG.insert(3, "a");
-		$(".wrapper").css("background-color", newBG);
+		$(".wrapper_bg").css("opacity", ConfigManager.pan_opacity/100);
 		
 		// Panel customizations: bg image
 		if(ConfigManager.pan_bg_image === ""){
@@ -69,6 +66,19 @@
 			}
 		});
 		
+		// Screenshot buttons
+		$(".module.controls .btn_ss1").on("click", function(){
+			$(this).hide();
+			
+			// Tell service to pass a message to gamescreen on inspected window to get a screenshot
+			(new RMsg("service", "screenshot", {
+				tabId: chrome.devtools.inspectedWindow.tabId,
+				playerName: PlayerManager.hq.name
+			}, function(response){
+				$(".module.controls .btn_ss1").show();
+			})).execute();
+		});
+		
 		// Switching Activity Tabs
 		$(".module.activity .activity_tab").on("click", function(){
 			$(".module.activity .activity_tab").removeClass("active");
@@ -78,23 +88,52 @@
 		});
 		$(".module.activity .activity_tab.active").trigger("click");
 		
+		// Fleet selection
+		$(".module.controls .fleet_num").on("click", function(){
+			$(".module.controls .fleet_num").removeClass("active");
+			$(".module.controls .fleet_rengo").removeClass("active");
+			$(this).addClass("active");
+			selectedFleet = parseInt( $(this).text(), 10);
+			Listeners.Fleet();
+		});
+		
+		// Combined Fleet button
+		$(".module.controls .fleet_rengo").on("click", function(){
+			$(".module.controls .fleet_num").removeClass("active");
+			$(this).addClass("active");
+			selectedFleet = 5;
+			Listeners.Fleet();
+		});
+		
+		// Toggle mini-bars under combined fleet ship list
+		$(".module.fleet .shiplist_combined").on("click", ".sship .ship_bars", function(){
+			if($(this).css("opacity") == "0"){
+				$(".module.fleet .sship .ship_bars").css("opacity", "1");
+			}else{
+				$(".module.fleet .sship .ship_bars").css("opacity", "0");
+			}
+		});
+		
+		// Trigger initial selected fleet num
+		$(".module.controls .fleet_num.active").trigger("click");
+		
 		// Initialize timer objects with bindings to their UI
 		KC3TimerManager.init([
-			$("#wrapper .exped-box-1"),
-			$("#wrapper .exped-box-2"),
-			$("#wrapper .exped-box-3")
+			$(".module.activity .expedition_1"),
+			$(".module.activity .expedition_2"),
+			$(".module.activity .expedition_3")
 		],
 		[
-			$("#wrapper .repair-box-1"),
-			$("#wrapper .repair-box-2"),
-			$("#wrapper .repair-box-3"),
-			$("#wrapper .repair-box-4")
+			$(".module.activity .repair_1"),
+			$(".module.activity .repair_2"),
+			$(".module.activity .repair_3"),
+			$(".module.activity .repair_4")
 		],
 		[
-			$("#wrapper .build-box-1"),
-			$("#wrapper .build-box-2"),
-			$("#wrapper .build-box-3"),
-			$("#wrapper .build-box-4")
+			$(".module.activity .build_1"),
+			$(".module.activity .build_2"),
+			$(".module.activity .build_3"),
+			$(".module.activity .build_4")
 		]);
 		
 		// Update Timer UIs
@@ -108,7 +147,9 @@
 		// Start Network listener
 		KC3Network.addGlobalListener(function(event, data){
 			if(isRunning || event == "HomeScreen" || event == "GameStart"){
-				Listeners[event](data);
+				if(typeof Listeners[event] != "undefined"){
+					Listeners[event](data);
+				}
 			}
 		});
 		KC3Network.listen();
@@ -238,6 +279,7 @@
 			$(".module.quests").html("");
 			$.each(KC3QuestManager.getActives(), function(index, quest){
 				questBox = $("#factory .quest").clone().appendTo(".module.quests");
+				if(!quest.tracking){ questBox.addClass("untracked"); }
 				$(".quest_color", questBox).css("background", quest.getColor() );
 				if(quest.meta){
 					$(".quest_text", questBox).text( quest.meta().name );
@@ -252,52 +294,85 @@
 		},
 		
 		Fleet: function(data){
-			var CurrentFleet = PlayerManager.fleets[selectedFleet-1];
+			var FleetSummary;
+			
+			$(".shiplist_single").html("");
+			$(".shiplist_single").hide();
+			$(".shiplist_combined_fleet").html("");
+			$(".shiplist_combined").hide();
+			
+			// COMBINED
+			if(selectedFleet==5){
+				var MainFleet = PlayerManager.fleets[0];
+				var EscortFleet = PlayerManager.fleets[1];
+				
+				FleetSummary = {
+					lv: MainFleet.totalLevel() + EscortFleet.totalLevel(),
+					elos: Math.round( (MainFleet.eLoS()+EscortFleet.eLoS()) * 100) / 100,
+					air: MainFleet.fighterPower() + EscortFleet.fighterPower(),
+					speed:
+						(MainFleet.fastFleet && EscortFleet.fastFleet)
+						? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow")
+				};
+				
+				$.each(MainFleet.ships, function(index, rosterId){
+					if(rosterId > -1){
+						(new KC3NatsuiroShipbox(".sship", rosterId))
+							.commonElements()
+							.defineShort()
+							.appendTo(".module.fleet .shiplist_main");
+					}
+				});
+				
+				$.each(EscortFleet.ships, function(index, rosterId){
+					if(rosterId > -1){
+						(new KC3NatsuiroShipbox(".sship", rosterId))
+							.commonElements()
+							.defineShort()
+							.appendTo(".module.fleet .shiplist_escort");
+					}
+				});
+				
+				$(".shiplist_combined").show();
+				
+			// SINGLE
+			}else{
+				var CurrentFleet = PlayerManager.fleets[selectedFleet-1];
+				
+				FleetSummary = {
+					lv: CurrentFleet.totalLevel(),
+					elos: Math.round( CurrentFleet.eLoS() * 100) / 100,
+					air: CurrentFleet.fighterPower(),
+					speed: CurrentFleet.speed()
+				};
+				
+				$.each(CurrentFleet.ships, function(index, rosterId){
+					if(rosterId > -1){
+						(new KC3NatsuiroShipbox(".lship", rosterId))
+							.commonElements()
+							.defineLong()
+							.appendTo(".module.fleet .shiplist_single");
+					}
+				});
+				
+				$(".shiplist_single").show();
+			}
 			
 			// Fleet Summary Stats
-			$(".summary-level .summary-text").text( CurrentFleet.totalLevel() );
-			$(".summary-eqlos .summary-text").text( Math.round( CurrentFleet.eLoS() * 100) / 100 );
-			$(".summary-airfp .summary-text").text( CurrentFleet.fighterPower() );
-			$(".summary-speed .summary-text").text( CurrentFleet.speed() );
-			$(".wrapper").css("box-shadow", "none");
-			
-			// Fleet Ships
-			var FleetContainer = $(".fleet-ships");
-			FleetContainer.html("");
-			$.each(CurrentFleet.ships, function(index, rosterId){
-				if(rosterId > -1){
-					var CurrentShip = KC3ShipManager.get( rosterId );
-					if(CurrentShip.masterId === 0){ return true; }
-					var ShipBox = $(".factory .fleet-ship").clone().appendTo(FleetContainer);
-					
-					$(".ship-img img", ShipBox).attr("src", KC3Meta.shipIcon(CurrentShip.masterId));
-					$(".ship-name", ShipBox).text( CurrentShip.name() );
-					$(".ship-type", ShipBox).text( CurrentShip.stype() );
-					$(".ship-lvl-txt", ShipBox).text(CurrentShip.level);
-					$(".ship-lvl-next", ShipBox).text("-"+CurrentShip.exp[1]);
-					$(".ship-lvl-val", ShipBox).css("width", (60*(CurrentShip.exp[2]/100))+"px");
-					
-					// FleetHP($(".wrapper"), ShipBox, CurrentShip.hp, rosterId );
-					// FleetMorale( $(".ship-morale-box", ShipBox), CurrentShip.morale );
-
-					for(var i = 1; i <= 4; i++){
-						var gearBox = $(".ship-gear-" + i, ShipBox);
-						if (i <= CurrentShip.slotnum) {
-							// FleetEquipment( gearBox, CurrentShip.equipment(i-1), CurrentShip.slots[i-1] );
-							if (CurrentShip.equipment(i-1).itemId > 0) {
-								$(".ship-equip-capacity", gearBox).hide();
-							}
-						} else {
-							// FleetEquipment( gearBox, null, null );
-						}
-					}
-				}
-			});
+			$(".summary-level .summary_text").text( FleetSummary.lv );
+			$(".summary-eqlos .summary_text").text( FleetSummary.elos );
+			$(".summary-airfp .summary_text").text( FleetSummary.air );
+			$(".summary-speed .summary_text").text( FleetSummary.speed );
 			
 			// Expedition Timer Faces
-			KC3TimerManager._exped[0].face( PlayerManager.fleets[1].ship(0).masterId );
-			KC3TimerManager._exped[1].face( PlayerManager.fleets[2].ship(0).masterId );
-			KC3TimerManager._exped[2].face( PlayerManager.fleets[3].ship(0).masterId );
+			if(KC3TimerManager._exped.length > 0){
+				KC3TimerManager._exped[0].faceId = PlayerManager.fleets[1].ship(0).masterId;
+				KC3TimerManager._exped[1].faceId = PlayerManager.fleets[2].ship(0).masterId;
+				KC3TimerManager._exped[2].faceId = PlayerManager.fleets[3].ship(0).masterId;
+				KC3TimerManager._exped[0].face();
+				KC3TimerManager._exped[1].face();
+				KC3TimerManager._exped[2].face();
+			}
 		},
 		
 		dummy: {}

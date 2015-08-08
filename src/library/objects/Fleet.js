@@ -17,6 +17,7 @@ Contains summary information about a fleet and its 6 ships
 	
 	window.KC3Fleet = function( data ){
 		this.active = false;
+		this.fastFleet = true;
 		this.name = "";
 		this.ships = [ -1, -1, -1, -1, -1, -1 ];
 		this.mission = [ 0, 0, 0, 0 ];
@@ -115,14 +116,14 @@ Contains summary information about a fleet and its 6 ships
 	};
 	
 	KC3Fleet.prototype.speed = function(){
-		var FastFleet = true;
-		if(this.ships[0] > -1){ FastFleet = FastFleet && this.ship(0).isFast(); }
-		if(this.ships[1] > -1){ FastFleet = FastFleet && this.ship(1).isFast(); }
-		if(this.ships[2] > -1){ FastFleet = FastFleet && this.ship(2).isFast(); }
-		if(this.ships[3] > -1){ FastFleet = FastFleet && this.ship(3).isFast(); }
-		if(this.ships[4] > -1){ FastFleet = FastFleet && this.ship(4).isFast(); }
-		if(this.ships[5] > -1){ FastFleet = FastFleet && this.ship(5).isFast(); }
-		return (FastFleet) ? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow");
+		this.fastFleet = true;
+		if(this.ships[0] > -1){ this.fastFleet = this.fastFleet && this.ship(0).isFast(); }
+		if(this.ships[1] > -1){ this.fastFleet = this.fastFleet && this.ship(1).isFast(); }
+		if(this.ships[2] > -1){ this.fastFleet = this.fastFleet && this.ship(2).isFast(); }
+		if(this.ships[3] > -1){ this.fastFleet = this.fastFleet && this.ship(3).isFast(); }
+		if(this.ships[4] > -1){ this.fastFleet = this.fastFleet && this.ship(4).isFast(); }
+		if(this.ships[5] > -1){ this.fastFleet = this.fastFleet && this.ship(5).isFast(); }
+		return (this.fastFleet) ? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow");
 	};
 	
 	KC3Fleet.prototype.qualifyingExpeditions = function(){
@@ -208,7 +209,7 @@ Contains summary information about a fleet and its 6 ships
 		
 		function ConsiderShip(shipData){
 			if(shipData.rosterId === 0) return false;
-			if(shipData.didFlee()) return false;
+			if(shipData.didFlee) return false;
 			nakedLos += Math.sqrt( shipData.nakedLoS() );
 			if(shipData.items[0] > -1){ ConsiderEquipment( shipData.equipment(0) ); }
 			if(shipData.items[1] > -1){ ConsiderEquipment( shipData.equipment(1) ); }
