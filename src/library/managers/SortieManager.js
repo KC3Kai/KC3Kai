@@ -29,6 +29,8 @@ Xxxxxxx
 			// If still on sortie, end previous one
 			if(this.onSortie > 0){ this.endSortie(); }
 			
+			if(world < 10){ this.difficulty = 0; }
+			
 			this.fleetSent = parseInt(fleetNum);
 			this.map_world = world;
 			this.map_num = mapnum;

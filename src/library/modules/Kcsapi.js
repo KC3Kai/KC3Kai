@@ -423,6 +423,12 @@ Previously known as "Reactor"
 		/*----------------------[ BATTLES ]----------------------*/
 		/*-------------------------------------------------------*/
 		
+		/* Select difficulty
+		-------------------------------------------------------*/
+		"api_req_map/select_eventmap_rank":function(params, response, headers){
+			KC3SortieManager.setDifficulty( response.api_data.api_rank );
+		},
+		
 		/* Start Sortie
 		-------------------------------------------------------*/
 		"api_req_map/start":function(params, response, headers){
@@ -827,7 +833,7 @@ Previously known as "Reactor"
 	/* RESULT SCREEN QUEST FULFILLMENT
 	On a result screen, increment tracked quests that progressed
 	-------------------------------------------------------*/
-	function resultScreenQuestFulfillment(){
+	function resultScreenQuestFulfillment(params, response, headers){
 		var getRank = function(r){ return ['E','D','C','B','A','S','SS'].indexOf(r); };
 		
 		// Vague quest that clears with no rank requirement

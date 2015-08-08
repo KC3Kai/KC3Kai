@@ -209,7 +209,7 @@ Contains summary information about a fleet and its 6 ships
 		
 		function ConsiderShip(shipData){
 			if(shipData.rosterId === 0) return false;
-			if(shipData.didFlee()) return false;
+			if(shipData.didFlee) return false;
 			nakedLos += Math.sqrt( shipData.nakedLoS() );
 			if(shipData.items[0] > -1){ ConsiderEquipment( shipData.equipment(0) ); }
 			if(shipData.items[1] > -1){ ConsiderEquipment( shipData.equipment(1) ); }
