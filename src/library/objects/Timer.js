@@ -58,6 +58,7 @@ Has functions for TimerManager to use
 			$(".timer-img", this.element).attr("title", KC3Meta.shipName( KC3Master.ship(this.faceId).api_name ) );
 			$(".timer-img img", this.element).show();
 		}else{
+			$(".timer-img", this.element).attr("title", "");
 			$(".timer-img img", this.element).hide();
 		}
 	};
