@@ -129,9 +129,12 @@
 	
 	"SettingsPanelSize" : "面板界面大小",
 	"SettingsPanelOpacity" : "面板界面不透明度",
-	
-	"Small" : "小",
-	"Big" : "大",
+	"SettingsGearHolder" : "齒輪背景顏色",
+ 	
+ 	"Small" : "小",
+ 	"Big" : "大",
+	"Black" : "黑",
+	"White" : "白",
 	"Theme" : "主題",
 	"Panel" : " F12 面板",
 	"Volume" : "音量",
