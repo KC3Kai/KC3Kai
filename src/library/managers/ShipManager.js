@@ -55,7 +55,6 @@ Saves and loads list to and from localStorage
 						.reduce(function(x,y){ return x.concat(y); }),
 					shipTargetOnFleet = flatShips.indexOf(Number(rosterId)), // check from which fleet
 					shipTargetFleetID = Math.floor(shipTargetOnFleet/6);
-				console.log(rosterId,flatShips,shipTargetOnFleet,shipTargetFleetID);
 				// check whether the designated ship is on fleet or not
 				if(shipTargetOnFleet >= 0){
 					PlayerManager.fleets[shipTargetFleetID].ships.splice((shipTargetOnFleet % 6), 1);

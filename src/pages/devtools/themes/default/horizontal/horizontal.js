@@ -446,7 +446,7 @@
 				$(".battle .battle_world", container).text(KC3SortieManager.map_world+"-"+KC3SortieManager.map_num+(function(d){
 					switch(d) {
 						case 1: case 2: case 3:
-							return " " + ["Easy","Normal","Hard"][d-1];
+							return " " + ["E","N","H"][d-1];
 						default: // 0 -- no difficulty (print nothing)
 							return "";
 					}
@@ -688,7 +688,8 @@
 				
 				if(ConfigManager.info_delta) {
 					// If EXP left exceeded by gained EXP on sortie
-					while(KC3SortieManager.hqExpGained >= PlayerManager.hq.exp[1]) {
+					var maxHQ=Object.keys(KC3Meta._exp).map(function(a){return parseInt(a);}).reduce(function(a,b){return a>b?a:b;});
+					while(KC3SortieManager.hqExpGained >= PlayerManager.hq.exp[1] && PlayerManager.hq.level < maxHQ) {
 						KC3SortieManager.hqExpGained -= PlayerManager.hq.exp[1];
 						PlayerManager.hq.exp = [0,KC3Meta.exp(++PlayerManager.hq.level)[0],0];
 						this.HQ(container, {}, local);
@@ -773,7 +774,7 @@
 				KC3Panel.mode = "battle";
 				KC3Panel.layout().data.isSunkable = false;
 				
-				$(".battle .battle_world", container).text("PvP Practice Battle");
+				$(".battle .battle_world", container).text("PvP");
 				$(".battle .battle_current", container).text("FIGHTING");
 				KC3SortieManager.fleetSent = data.fleetSent;
 				
@@ -800,7 +801,9 @@
 				$(".battle", container).show();
 				
 				// Process PvP Battle
-				var thisPvP = (new KC3Node()).defineAsBattle();
+				KC3SortieManager.endSortie();
+				var thisPvP;
+				KC3SortieManager.nodes.push(thisPvP = (new KC3Node()).defineAsBattle());
 				thisPvP.engage( data.battle );
 				
 				// Formation
@@ -890,7 +893,8 @@
 				var expGained = data.result.api_get_exp;
 				if(ConfigManager.info_delta) {
 					// If EXP left exceeded by gained EXP on sortie
-					if(expGained >= PlayerManager.hq.exp[1]) {
+					var maxHQ=Object.keys(KC3Meta._exp).map(function(a){return parseInt(a);}).reduce(function(a,b){return a>b?a:b;});
+					while(expGained >= PlayerManager.hq.exp[1] && PlayerManager.hq.level < maxHQ) {
 						expGained -= PlayerManager.hq.exp[1];
 						PlayerManager.hq.exp = [0,KC3Meta.exp(++PlayerManager.hq.level)[0],0];
 						this.HQ(container, {}, local);

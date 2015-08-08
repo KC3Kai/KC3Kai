@@ -38,9 +38,13 @@ Instantiatable class to represent one player
 		// Computer level and experience values
 		var ExpCurrLevel = KC3Meta.exp( this.level )[1];
 		var ExpNextLevel = KC3Meta.exp( this.level+1 )[1];
-		var exp_current = exp - ExpCurrLevel;
-		var exp_next = ExpNextLevel - exp;
+		var exp_next    = Math.max(0,ExpNextLevel - exp);
+		var exp_current = Math.max(0,exp - ExpCurrLevel);
 		var exp_percent = (exp_current) / (ExpNextLevel - ExpCurrLevel);
+		if(exp_next <= 0) {
+			exp_next = 0;
+			exp_percent = 1.0;
+		}
 		this.exp = [ exp_percent, exp_next, exp_current, ExpCurrLevel + exp_current ];
 	};
 
