@@ -32,35 +32,49 @@
 		
 		// Play via API Link
 		$("#play_cc").on('click', function(){
-			chrome.cookies.set({
-				url: "http://www.dmm.com",
-				name: "ckcy",
-				value: "1",
-				domain: ".dmm.com",
-				expirationDate: Math.ceil((new Date("Sun, 09 Feb 2019 09:00:09 GMT")).getTime()/1000),
-				path: '/netgame/',
-			}, function(cookie){
+			function go_play_via_api(){
 				localStorage.extract_api = false;
 				localStorage.dmmplay = false;
 				window.open("../game/api.html", "kc3kai_game");
-			});
+			}
+			if( typeof chrome.cookies == 'undefined' ){
+				go_play_via_api();
+			}else{
+				chrome.cookies.set({
+					url: "http://www.dmm.com",
+					name: "ckcy",
+					value: "1",
+					domain: ".dmm.com",
+					expirationDate: Math.ceil((new Date("Sun, 09 Feb 2019 09:00:09 GMT")).getTime()/1000),
+					path: '/netgame/',
+				}, function(cookie){
+					go_play_via_api();
+				});
+			}
 		});
 		
 		// Refresh API Link
 		$("#get_api").on('click', function(){
 			_gaq.push(['_trackEvent', "Refresh API", 'clicked']);
-			chrome.cookies.set({
-				url: "http://www.dmm.com",
-				name: "ckcy",
-				value: "1",
-				domain: ".dmm.com",
-				expirationDate: Math.ceil((new Date("Sun, 09 Feb 2019 09:00:09 GMT")).getTime()/1000),
-				path: '/netgame/',
-			}, function(cookie){
+			function go_refresh_api(){
 				localStorage.extract_api = true;
 				localStorage.dmmplay = false;
 				window.open("http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/", "kc3kai_game");
-			});
+			}
+			if( typeof chrome.cookies == 'undefined' ){
+				go_refresh_api();
+			}else{
+				chrome.cookies.set({
+					url: "http://www.dmm.com",
+					name: "ckcy",
+					value: "1",
+					domain: ".dmm.com",
+					expirationDate: Math.ceil((new Date("Sun, 09 Feb 2019 09:00:09 GMT")).getTime()/1000),
+					path: '/netgame/',
+				}, function(cookie){
+					go_refresh_api();
+				});
+			}
 		});
 		
 		// Play DMM Website

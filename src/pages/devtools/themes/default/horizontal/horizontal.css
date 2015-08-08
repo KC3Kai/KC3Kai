@@ -449,6 +449,7 @@
 	font-size:10px;
 	/*background:#ccc;*/
 	overflow:hidden;
+	position:relative;
 }
 
 #h .fleet-ships .ship-img {
@@ -846,7 +847,7 @@
 }
 #h .battle .battle_hqlevel_next_gain {
 	position: absolute;
-	top: 36px;
+	top: 16px;
 	left: 100px;
 	width:55px;
 	height:20px;
@@ -980,36 +981,53 @@
 	height:100px;
 	float:left;
 }
+#h .battle .battle_ss_holder {
+	width: 200px;
+	height: 24px;
+}
+#h .battle .battle_screenshot {
+	width: 120px;
+	height: 24px;
+	line-height: 24px;
+	background: #5e5;
+	font-size: 16px;
+	font-weight: bold;
+	border-radius: 0px 0px 10px 10px;
+	margin: 0px 10px 5px 70px;
+	text-align: center;
+}
 #h .battle .battle_world {
-	width:200px;
-	height:28px;
+	width:50px;
+	height:26px;
 	line-height:26px;
-	/*background:#ffc;*/
+	float:left;
+	background:#def;
 	font-size:16px;
 	font-weight:bold;
-	padding:2px 0px 0px 10px;
+	text-align:center;
+	margin:0px 5px 0px 0px;
 }
 #h .battle .battle_gauge {
-	width:200px;
-	height:16px;
-	line-height:16px;
-	/*background:#cfc;*/
+	width:140px;
+	height:26px;
+	float:left;
 	padding:2px 0px;
 }
 #h .battle .battle_gauge_box {
-	width:190px;
-	height:12px;
+	width:130px;
+	height:10px;
+	border:1px solid #000;
+	margin:0px 0px 0px 5px;
 	background:#555;
 }
 #h .battle .battle_gauge_bar {
-	height:12px;
+	height:8px;
 	background:#0f0;
 }
 #h .battle .battle_gauge_hp {
-	width:190px;
-	height:16px;
-	line-height:16px;
-	/*background:#ccf;*/
+	width:140px;
+	height:14px;
+	line-height:14px;
 	font-size:12px;
 	text-align:center;
 }
@@ -1094,6 +1112,7 @@
 #h .battle .battle_fleet_list {
 	width:390px;
 	height:312px;
+	position:relative;
 	/*background:#ffc;*/
 }
 #h .battle-ship {
@@ -1102,6 +1121,24 @@
 	margin:0px 0px 2px 0px;
 	font-size:10px;
 	overflow:hidden;
+	position:relative;
+}
+#h .battle-ship.ship-cond-stamp:after {
+	content: attr(title);
+	display: inline;
+	top: 4px;
+	left: 20%;
+	position: absolute;
+	font-size: 20pt;
+	color: red;
+	transform: rotate(-3deg);
+	text-shadow: 1px 1px 1px black;
+	border: 1px red solid;
+	text-align: center;
+	vertical-align: middle;
+	width: 160px;
+	background-color: rgba(255,0,0,0.5);
+	z-index: 1;
 }
 #h .battle-ship .ship-img {
 	width:46px;

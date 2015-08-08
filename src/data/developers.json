@@ -9,7 +9,8 @@
 				"tw" :"https://twitter.com/dragonjetmkii",
 				"th" :"http://www.twitch.tv/jetrico",
 				"wk" :"http://kancolle.wikia.com/wiki/User:Dragonjet",
-				"gh" :"https://github.com/dragonjet"
+				"gh" :"https://github.com/dragonjet",
+				"hm" :"http://www.himeuta.net/members/78-dragonjet/"
 			}
 		},
 		{
@@ -162,7 +163,7 @@
 		},
 		{
 			"name": "Juuryoushin ",
-			"avatar" : "https://pbs.twimg.com/profile_images/621037441508638721/Jm1Ap5_9.png",
+			"avatar" : "https://pbs.twimg.com/profile_images/628915215095214080/XizjEI8b.png",
 			"desc" : "Français",
 			"links" : {
 				"tw" :"https://twitter.com/YoungPreta"
@@ -270,6 +271,20 @@
 			"desc" : "AboutFairy",
 			"links" : {
 				"da" :"http://tykez269.deviantart.com"
+			}
+		},
+		{
+			"name": "Lord Falukorv",
+			"avatar" : "http://img3.wikia.nocookie.net/__cb20150807073959/kancolle/images/5/54/Falukorv.jpg",
+			"desc" : "Sausage supplier",
+			"links" : {}
+		},
+		{
+			"name": "Lord Melon",
+			"avatar" : "http://img4.wikia.nocookie.net/__cb1438854831/common/avatars/thumb/6/65/25730832.png/150px-25730832.png.jpg",
+			"desc" : "Melon supplier",
+			"links" : {
+				"wk" :"http://kancolle.wikia.com/wiki/User:Zel-melon"
 			}
 		}
 	],

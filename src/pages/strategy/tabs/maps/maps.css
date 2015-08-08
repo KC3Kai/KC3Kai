@@ -404,6 +404,9 @@
 	line-height:24px;
 	/*background:#fcc;*/
 }
+.tab_maps .sortie_list .node_formation img {
+	-webkit-transform: rotate(-90deg);
+}
 .tab_maps .sortie_list .node_result_box {
 	width:20px;
 	height:20px;
@@ -434,6 +437,7 @@
 	width:20px;
 	height:20px;
 	margin:10px 0px 0px 0px;
+	-webkit-transform: rotate(-90deg);
 }
 .tab_maps .sortie_list .node_eship {
 	width:20px;

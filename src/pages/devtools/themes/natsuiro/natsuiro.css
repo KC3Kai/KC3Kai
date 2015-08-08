@@ -83,6 +83,15 @@
 	margin:0px auto;
 	display:none;
 	position:relative;
+	/*background:#FFFFE8;*/
+}
+.wrapper_bg {
+	position:absolute;
+	width:100%;
+	height:100%;
+	top:0px;
+	left:0px;
+	background:url(img/wrapper.png);
 }
 .module {
 	position:absolute;
@@ -98,6 +107,7 @@
 	width:60px;
 	height:56px;
 	float:right;
+	color:#eee;
 }
 .module.admiral .admiral_lvtxt {
 	width:60px;
@@ -113,7 +123,7 @@
 .module.admiral .admiral_lvbox {
 	width:60px;
 	height:14px;
-	border:1px solid #000;
+	border:1px solid #fff;
 	background:#555;
 	margin:1px 0px;
 }
@@ -139,10 +149,11 @@
 	overflow:hidden;
 	text-overflow: ellipsis;
 	-webkit-user-select: none;
+	color:#ffcc00;
 }
 .module.admiral .admiral_name.censor {
 	color: transparent;
-	text-shadow: 0 0 10px rgba(0,0,0,0.3);
+	text-shadow: 0 0 10px rgba(255,255,255,0.3);
 }
 .module.admiral .admiral_comm {
 	width:130px;
@@ -153,6 +164,7 @@
 	white-space:nowrap; 
 	overflow:hidden;
 	text-overflow: ellipsis;
+	color:#aaa;
 }
 .module.admiral .admiral_rank {
 	width:130px;
@@ -160,6 +172,7 @@
 	line-height:16px;
 	font-size:13px;
 	float:left;
+	color:#eee;
 }
 
 /*------- ACTIVITY -------*/
@@ -170,27 +183,28 @@
 .module.activity .activity_tabs {
 	width:190px;
 	height:20px;
-	padding:0px 0px 0px 8px
+	padding:0px 0px 0px 8px;
 }
 .module.activity .activity_tab {
-	width:55px;
+	width:53px;
 	height:20px;
 	line-height:20px;
 	font-size:11px;
 	margin:0px 2px 0px 0px;
-	background:#ace;
+	background:#222;
+	color:#888;
 	float:left;
 	text-align:center;
 	border-radius:5px 5px 0px 0px;
 }
 .module.activity .activity_tab.active {
-	background:#def;
+	background:rgba(100,100,100,0.85);
+	color:#fff;
 }
 .module.activity .activity_body {
 	width:190px;
 	height:235px;
-	background:#def;
-	/*background:rgba(200, 225, 255, 0.4);*/
+	background:rgba(100,100,100,0.85);
 	border-radius:5px;
 	overflow:hidden;
 }
@@ -232,23 +246,24 @@
 	font-size:14px;
 	line-height:20px;
 	float:left;
-	color:#000;
+	color:#ccc;
 }
 .module.activity .consumable_ltext {
 	width:70px;
 	font-size:14px;
 	line-height:20px;
 	float:left;
-	color:#000;
+	color:#ccc;
 }
 .module.activity .consumable_text.danger {
-	color:#f00;
+	color:#FF7979;
 }
 .module.activity .consumable_max {
 	width:34px;
 	font-size:11px;
 	float:left;
 	line-height:20px;
+	color:#aaa;
 }
 
 /* Expedition */
@@ -257,33 +272,40 @@
 	height:45px;
 	margin:0px 0px 5px 0px;
 }
-.module.activity .expedition {
+.module.activity .expeditions .expedition {
 	width:60px;
 	height:45px;
 	float:left;
+	position:relative;
 }
-.module.activity .expedition_face {
+.module.activity .expeditions .timer-img {
 	width:29px;
 	height:29px;
 	margin:0px 0px 3px 15px;
 	background:#006699;
 	border-radius:15px;
 }
-.module.activity .expedition_face img {
+.module.activity .expeditions .timer-img img {
 	width:25px;
 	height:25px;
 	margin:2px;
-	display:none;
 }
-.module.activity .expedition_num {
-	
+.module.activity .expeditions .timer-expnum {
+	height:14px;
+	line-height:14px;
+	font-size:12px;
+	position:absolute;
+	top:2px;
+	left:46px;
+	color:#ccc;
 }
-.module.activity .expedition_timer {
+.module.activity .timer-time {
 	width:60px;
 	height:13px;
 	line-height:13px;
-	font-size:13px;
+	font-size:12px;
 	text-align:center;
+	color:#eee;
 }
 
 /* Timers */
@@ -301,34 +323,36 @@
 	height:26px;
 	margin:0px 0px 1px 0px;
 }
-.module.activity .timer_face {
+.module.activity .timer_box .timer-img {
 	width:24px;
 	height:24px;
 	margin:1px 4px 0px 0px;
 	border-radius:13px;
 	float:left;
 }
-.module.activity .timer_face img {
+.module.activity .timer_box .timer-img img {
 	width:20px;
 	height:20px;
 	margin:2px;
 	display:none;
 }
-.module.activity .timer_timer {
+.module.activity .timer_box .timer-time {
 	width:60px;
 	height:26px;
 	line-height:26px;
 	float:left;
 	font-size:13px;
+	text-align:left;
+	color:#eee;
 }
 
 .module.activity .repairs {}
-.module.activity .repairs .timer_face {
+.module.activity .repairs .timer-img {
 	background:#EDD286;
 }
 
 .module.activity .builds {}
-.module.activity .builds .timer_face {
+.module.activity .builds .timer-img {
 	background:#996600;
 }
 
@@ -338,7 +362,7 @@
 }
 
 /*------- ACTIVITY: DETAILS -------*/
-.module.activity .activity_details"> {
+.module.activity .activity_details {
 	
 }
 
@@ -374,22 +398,33 @@
 	white-space:nowrap; 
 	overflow:hidden;
 	text-overflow: ellipsis;
+	color:#eee;
 }
 .h .module.quests .quest_text {
 	width:130px;
 }
+.h .module.quests .untracked .quest_text {
+	width:170px;
+}
 .v .module.quests .quest_text {
 	width:170px;
+}
+.v .module.quests .untracked .quest_text {
+	width:210px;
 }
 
 .module.quests .quest_track {
 	width:40px;
 	height:18px;
 	margin:1px 0px;
-	background:#eee;
+	background:rgba(60,60,60,0.7);
 	font-size:12px;
 	float:left;
 	text-align:center;
+	color:#eee;
+}
+.module.quests .untracked .quest_track {
+	display:none;
 }
 
 /*------- CONTROLS -------*/
@@ -399,53 +434,72 @@
 .module.controls .control {
 	height:30px;
 	float:left;
+	color:#fff;
 }
 .module.controls .fleet_num {
 	width:30px;
 	line-height:30px;
 	border-radius:15px;
-	background:#def;
+	background:#555;
 	text-align:center;
 	margin:0px 5px 3px 0px;
-	font-size:16px;
+	font-size:19px;
 	font-weight:bold;
 	text-align:center;
+	/*border:1px solid #ccc;*/
 }
 .module.controls .fleet_rengo {
 	width:50px;
-	line-height:30px;
 	border-radius:10px;
-	background:#def;
+	background:#555;
 	text-align:center;
 	margin:0px 15px 3px 0px;
 	font-size:16px;
 	font-weight:bold;
 	text-align:center;
+	/*border:1px solid #ccc;*/
+}
+.module.controls .fleet_rengo img {
+	width:48px;
+	height:28px;
 }
 .module.controls .control_btn {
 	width:40px;
-	line-height:30px;
 	border-radius:15px;
-	background:#cfc;
+	background:#ddd;
 	text-align:center;
 	margin:0px 5px 0px 0px;
 	text-align:center;
+	/*border:1px solid #ECBA24;*/
+	border:1px solid #ccc;
+}
+.h .module.controls .control_btn {
+	float:right;
+}
+.module.controls .control_btn img {
+	width:38px;
+	height:28px;
+}
+.module.controls .control.active {
+	background:#ffcc00;
+	color:#000;
 }
 
 /*------- SUMMARY -------*/
 .module.summary {
-	
+	background:rgba(80,80,80,0.5);
 }
 
 /*------- FLEET -------*/
 .module.fleet {
 	width:340px;
-	height:320px;
+	height:315px;
+	background:rgba(80,80,80,0.5);
 }
 
 /*------- STATUS -------*/
 .module.status {
-	
+	background:rgba(80,80,80,0.5);
 }
 
 
@@ -454,8 +508,7 @@
 .wrapper.h {
 	width:550px;
 	height:450px;
-	background:url(outline.png);
-	/*background:#fff;*/
+	/*background:url(outline.png);*/
 }
 .h .module.admiral {
 	left:5px; top:5px;
@@ -492,7 +545,7 @@
 .wrapper.v {
 	width:800px;
 	height:325px;
-	background:url(vertical.png);
+	/*background:url(vertical.png);*/
 }
 .v .module.admiral {
 	left:5px; top:5px;
