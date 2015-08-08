@@ -109,7 +109,7 @@ Contains summary information about a fleet and its 6 ships
 		this.fastFleet = true;
 		var i = 0;
 		while(this.fastFleet && i < 6) {
-			if(this.ships[0] > -1) {
+			if(this.ships[i] > -1) {
 				this.fastFleet = this.fastFleet && this.ship(i).isFast();
 			}
 		}
