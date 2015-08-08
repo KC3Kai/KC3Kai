@@ -246,8 +246,8 @@
 			},
 			HQ: function(container, data, local){
 				var
-					maxHQ=Object.keys(KC3Meta._exp).map(function(a){return parseInt(a);}).reduce(function(a,b){return a>b?a:b;});
-					hqt = KC3Meta.term("HQExpAbbrev" + (PlayerManager.hq.level ConfigManager.hqExpDetail)) + " ",
+					maxHQ=Object.keys(KC3Meta._exp).map(function(a){return parseInt(a);}).reduce(function(a,b){return a>b?a:b;}),
+					hqt = KC3Meta.term("HQExpAbbrev" + (PlayerManager.hq.level>=maxHQ ? 3 : ConfigManager.hqExpDetail)) + " ",
 					hqexpd = Math.abs($(".battle_hqlevel_next_gain", container).text());
 				switch(KC3Panel.mode){
 					case "normal":
@@ -1019,6 +1019,9 @@
 				KC3Panel.mode = "battle";
 				KC3Panel.layout().data.isSunkable = false;
 				
+				// Process PvP Battle
+				KC3SortieManager.endSortie();
+
 				$(".battle .battle_world", container).text("PvP Practice Battle");
 				$(".battle .battle_current", container).text("FIGHTING");
 				KC3SortieManager.fleetSent = data.fleetSent;
@@ -1048,11 +1051,9 @@
 				$(".normal", container).hide();
 				$(".battle", container).show();
 				
-				// Process PvP Battle
-				KC3SortieManager.endSortie();
 				var thisPvP;
 				KC3SortieManager.nodes.push(thisPvP = (new KC3Node()).defineAsBattle());
-				thisPvP.engage( data.battle );
+				thisPvP.engage( data.battle, data.fleetSent );
 				
 				// Formation
 				if((typeof thisPvP.eformation != "undefined") && (thisPvP.eformation > -1)){
