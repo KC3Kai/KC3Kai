@@ -768,9 +768,9 @@
 			},
 			BattleStart: function(container, data, local){
 				if(KC3SortieManager.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
-				$(".battle .battle_current", container).text("FIGHTING");
+				$(".battle .battle_current", container).text("DAY BATTLE");
 				var thisNode = KC3SortieManager.currentNode();
-				var battleData = thisNode.battleDay;
+				var battleData = (thisNode.startNight)? thisNode.battleNight : thisNode.battleDay;
 				
 				if((typeof thisNode.eformation != "undefined") && (thisNode.eformation > -1)){
 					$(".battle .battle_formation img", container).attr("src", KC3Meta.formationIcon(thisNode.eformation));

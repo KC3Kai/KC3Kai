@@ -541,7 +541,7 @@
 			},
 			BattleStart: function(container, data, local){
 				if(KC3SortieManager.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
-				$(".battle .battle_current", container).text("FIGHTING");
+				$(".battle .battle_current", container).text("DAY BATTLE");
 				var thisNode = KC3SortieManager.currentNode();
 				var battleData = (thisNode.startNight)? thisNode.battleNight : thisNode.battleDay;
 				
