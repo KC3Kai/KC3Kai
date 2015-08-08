@@ -112,6 +112,7 @@ Contains summary information about a fleet and its 6 ships
 			if(this.ships[i] > -1) {
 				this.fastFleet = this.fastFleet && this.ship(i).isFast();
 			}
+			i++;
 		}
 		return (this.fastFleet) ? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow");
 	};
