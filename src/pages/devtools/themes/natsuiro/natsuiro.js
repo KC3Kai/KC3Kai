@@ -66,6 +66,19 @@
 			}
 		});
 		
+		// Screenshot buttons
+		$(".module.controls .btn_ss1").on("click", function(){
+			$(this).hide();
+			
+			// Tell service to pass a message to gamescreen on inspected window to get a screenshot
+			(new RMsg("service", "screenshot", {
+				tabId: chrome.devtools.inspectedWindow.tabId,
+				playerName: PlayerManager.hq.name
+			}, function(response){
+				$(".module.controls .btn_ss1").show();
+			})).execute();
+		});
+		
 		// Switching Activity Tabs
 		$(".module.activity .activity_tab").on("click", function(){
 			$(".module.activity .activity_tab").removeClass("active");
@@ -90,6 +103,15 @@
 			$(this).addClass("active");
 			selectedFleet = 5;
 			Listeners.Fleet();
+		});
+		
+		// Toggle mini-bars under combined fleet ship list
+		$(".module.fleet .shiplist_combined").on("click", ".sship .ship_bars", function(){
+			if($(this).css("opacity") == "0"){
+				$(".module.fleet .sship .ship_bars").css("opacity", "1");
+			}else{
+				$(".module.fleet .sship .ship_bars").css("opacity", "0");
+			}
 		});
 		
 		// Trigger initial selected fleet num
@@ -125,7 +147,9 @@
 		// Start Network listener
 		KC3Network.addGlobalListener(function(event, data){
 			if(isRunning || event == "HomeScreen" || event == "GameStart"){
-				Listeners[event](data);
+				if(typeof Listeners[event] != "undefined"){
+					Listeners[event](data);
+				}
 			}
 		});
 		KC3Network.listen();
@@ -272,7 +296,10 @@
 		Fleet: function(data){
 			var FleetSummary;
 			
-			
+			$(".shiplist_single").html("");
+			$(".shiplist_single").hide();
+			$(".shiplist_combined_fleet").html("");
+			$(".shiplist_combined").hide();
 			
 			// COMBINED
 			if(selectedFleet==5){
@@ -281,22 +308,32 @@
 				
 				FleetSummary = {
 					lv: MainFleet.totalLevel() + EscortFleet.totalLevel(),
-					elos:
-						( Math.round( MainFleet.eLoS() * 100) / 100 )
-						+ ( Math.round( EscortFleet.eLoS() * 100) / 100 ),
+					elos: Math.round( (MainFleet.eLoS()+EscortFleet.eLoS()) * 100) / 100,
 					air: MainFleet.fighterPower() + EscortFleet.fighterPower(),
 					speed:
 						(MainFleet.fastFleet && EscortFleet.fastFleet)
 						? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow")
 				};
 				
-				var FleetContainer = $(".fleet-ships");
-				FleetContainer.html("");
-				$.each(CurrentFleet.ships, function(index, rosterId){
+				$.each(MainFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						AddShipShort(rosterId);
+						(new KC3NatsuiroShipbox(".sship", rosterId))
+							.commonElements()
+							.defineShort()
+							.appendTo(".module.fleet .shiplist_main");
 					}
 				});
+				
+				$.each(EscortFleet.ships, function(index, rosterId){
+					if(rosterId > -1){
+						(new KC3NatsuiroShipbox(".sship", rosterId))
+							.commonElements()
+							.defineShort()
+							.appendTo(".module.fleet .shiplist_escort");
+					}
+				});
+				
+				$(".shiplist_combined").show();
 				
 			// SINGLE
 			}else{
@@ -309,14 +346,23 @@
 					speed: CurrentFleet.speed()
 				};
 				
+				$.each(CurrentFleet.ships, function(index, rosterId){
+					if(rosterId > -1){
+						(new KC3NatsuiroShipbox(".lship", rosterId))
+							.commonElements()
+							.defineLong()
+							.appendTo(".module.fleet .shiplist_single");
+					}
+				});
 				
+				$(".shiplist_single").show();
 			}
 			
 			// Fleet Summary Stats
-			$(".summary-level .summary-text").text( FleetSummary.lv );
-			$(".summary-eqlos .summary-text").text( FleetSummary.elos );
-			$(".summary-airfp .summary-text").text( FleetSummary.air );
-			$(".summary-speed .summary-text").text( FleetSummary.speed );
+			$(".summary-level .summary_text").text( FleetSummary.lv );
+			$(".summary-eqlos .summary_text").text( FleetSummary.elos );
+			$(".summary-airfp .summary_text").text( FleetSummary.air );
+			$(".summary-speed .summary_text").text( FleetSummary.speed );
 			
 			// Expedition Timer Faces
 			if(KC3TimerManager._exped.length > 0){
@@ -331,37 +377,5 @@
 		
 		dummy: {}
 	};
-	
-	function FleetShipLong(){
-		var CurrentShip = KC3ShipManager.get( rosterId );
-		if(CurrentShip.masterId === 0){ return true; }
-		var ShipBox = $(".factory .fleet-ship").clone().appendTo(FleetContainer);
-		
-		$(".ship-img img", ShipBox).attr("src", KC3Meta.shipIcon(CurrentShip.masterId));
-		$(".ship-name", ShipBox).text( CurrentShip.name() );
-		$(".ship-type", ShipBox).text( CurrentShip.stype() );
-		$(".ship-lvl-txt", ShipBox).text(CurrentShip.level);
-		$(".ship-lvl-next", ShipBox).text("-"+CurrentShip.exp[1]);
-		$(".ship-lvl-val", ShipBox).css("width", (60*(CurrentShip.exp[2]/100))+"px");
-		
-		// FleetHP($(".wrapper"), ShipBox, CurrentShip.hp, rosterId );
-		// FleetMorale( $(".ship-morale-box", ShipBox), CurrentShip.morale );
-		
-		for(var i = 1; i <= 4; i++){
-			var gearBox = $(".ship-gear-" + i, ShipBox);
-			if (i <= CurrentShip.slotnum) {
-				// FleetEquipment( gearBox, CurrentShip.equipment(i-1), CurrentShip.slots[i-1] );
-				if (CurrentShip.equipment(i-1).itemId > 0) {
-					$(".ship-equip-capacity", gearBox).hide();
-				}
-			} else {
-				// FleetEquipment( gearBox, null, null );
-			}
-		}
-	}
-	
-	function FleetShipShort(){
-		
-	}
 	
 })();
