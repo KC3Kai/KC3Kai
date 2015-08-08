@@ -76,6 +76,10 @@
 	"SettingsELosSum" : "Tổng",
 	"SettingsELosOld" : "Cũ",
 	"SettingsELosNew" : "Mới",
+	"SettingsHQExpDetail"  : "HQ Exp Info",
+	"SettingsHQExpLeft"    : "Remaining EXP",
+	"SettingsHQExpCurrent" : "Current Level",
+	"SettingsHQExpTotal"   : "Total Gained",
 	
 	"SettingsGameInfo" : "Thông tin Trò chơi",
 	"SettingsDropFaces" : "Tàu vớt được khi Xuất kích",
@@ -83,6 +87,7 @@
 	"SettingsCraftBox" : "Kết quả Chế tạo Thiết bị",
 	"SettingsCompass" : "La bàn và Kẻ tịch",
 	"SettingsBattleData" : "Dự đoán trận đấu",
+	"SettingsBattleStamp" : "Ship Condition Stamps",
 	"SettingsBossComp" : "Đội hình Boss",
 	"SettingsYasenTroll" : "\u0022Hỗ trợ\u0022 Đánh đêm",
 	"SettingsHQDelta" : "HQ EXP Delta on Sortie",
@@ -106,6 +111,7 @@
 	"SettingsAPIGameScreen" : "API Game Screen",
 	"SettingsQuestOverlay" : "Quest Translations",
 	"SettingsQuestTracking" : "Quest Tracking",
+	"SettingsPanelRequirement" : "Require Panel to Play",
 	"SettingsConfirmExit" : "Xác nhận trước khi thoát",
 	"SettingsScreenMargin" : "Lề trên",
 	"SettingsBGColor" : "Màu nền",
@@ -119,12 +125,16 @@
 	
 	"SettingsDMMGameplay" : "DMM Gameplay",
 	"SettingsDMMCustomize" : "Apply Customizations",
+	"SettingsDMMForceCookies" : "Force Cookie Hack",
 	
 	"SettingsPanelSize" : "Kích cỡ Panel",
 	"SettingsPanelOpacity" : "Độ trong suốt của Giao diện",
+	"SettingsGearHolder" : "Màu nền Trang bị",
 	
 	"Small" : "Nhỏ",
 	"Big" : "To",
+	"Black" : "Đen",
+	"White" : "Trắng",
 	"Theme" : "Theme",
 	"Panel" : "Panel",
 	"Volume" : "Âm lượng",
@@ -136,11 +146,20 @@
 	"SpeedSlow" : "Chậm",
 	
 	"HQText" : "HQ",
+	"HQExpAbbrev1" : "Next",
+	"HQExpAbbrev2" : "Current",
+	"HQExpAbbrev3" : "Total",
+	
+	"PredictionStampSortie" : "Sunk",
+	"PredictionStampPvP" : "Knocked Out",
+	
 	"LevelText" : "Cấp",
 	"LevelShort" : "Lv.",
 	"LevelNext" : "Tiếp theo",
 	"Screenshot" : "Chụp màn hình",
-
+	"UntranslatedQuest" : "Untranslated Quest",
+	
+	"PanelWaitActions" : "Waiting for game actions...",
 	"PanelErrorStorage" : "Your Chrome's localStorage is disabled on your settings. KC3改 needs this feature. <a href=\"http://stackoverflow.com/a/26671889/483704\" target=\"_blank\">See how to enable this</a>.",
 	
 	"Dummy" : "Dummy"
