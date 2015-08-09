@@ -490,11 +490,15 @@
 			CompassResult: function(container, data, local){
 				var thisNode = KC3SortieManager.currentNode();
 				var numNodes = KC3SortieManager.nodes.length;
+				var world = KC3SortieManager.map_world;
+				var map = KC3SortieManager.map_num;
+				var nodeId = KC3Meta.nodeLetter(world, map, thisNode.id );
+
 				$(".battle .battle_node.active", container).removeClass("now");
 				$(".battle .battle_node_"+numNodes, container).addClass( "active" );
 				$(".battle .battle_node_"+numNodes, container).addClass( "now" );
-				$(".battle .battle_node_"+numNodes, container).text( thisNode.id );
-				$(".battle .battle_nodenum", container).text( thisNode.id );
+				$(".battle .battle_node_"+numNodes, container).html( nodeId );
+				$(".battle .battle_nodenum", container).text( nodeId );
 				$(".battle .battle_current", container).text("NEXT NODE");
 				$(".battle .battle_formation", container).hide();
 				
