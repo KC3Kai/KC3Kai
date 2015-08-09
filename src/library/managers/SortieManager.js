@@ -161,12 +161,12 @@ Xxxxxxx
 		
 		engageBattle :function( battleData, stime ){
 			if(this.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
-			this.currentNode().engage( battleData );
+			this.currentNode().engage( battleData, this.fleetSent );
 		},
 		
 		engageBattleNight :function( nightData, stime ){
 			if(this.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
-			this.currentNode().engageNight( nightData );
+			this.currentNode().engageNight( nightData, this.fleetSent );
 		},
 		
 		engageNight :function( nightData ){

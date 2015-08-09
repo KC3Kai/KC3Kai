@@ -769,7 +769,7 @@
 			},
 			BattleStart: function(container, data, local){
 				if(KC3SortieManager.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
-				$(".battle .battle_current", container).text("DAY BATTLE");
+				
 				var thisNode = KC3SortieManager.currentNode();
 				var battleData = (thisNode.startNight)? thisNode.battleNight : thisNode.battleDay;
 				
@@ -820,6 +820,8 @@
 				$(".battle .battle_support",container).show();
 				// Day battle-only environment
 				if(!thisNode.startNight){
+					$(".battle .battle_current", container).text("DAY BATTLE");
+
 					// If support expedition is triggered on this battle
 					if(thisNode.supportFlag){
 						$(".battle .battle_support img", container).attr("src", "../../../../assets/img/ui/support.png");
@@ -865,6 +867,8 @@
 					}
 				}else{
 					// Started on night battle
+					$(".battle .battle_current", container).text("NIGHT BATTLE");
+					
 					$(".battle .battle_support img", container).attr("src", "../../../../assets/img/ui/support-x.png");
 					$(".battle .battle_yasen img", container).attr("src", "../../../../assets/img/ui/yasen.png");
 				}
