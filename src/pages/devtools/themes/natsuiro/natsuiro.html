@@ -30,9 +30,9 @@
 			<!-- Module: Activity Box -->
 			<div class="module activity">
 				<div class="activity_tabs">
-					<div class="activity_tab hover" title="Basic" data-target="basic">Basic</div>
-					<div class="activity_tab hover active" title="Battle" data-target="battle">Battle</div>
-					<div class="activity_tab hover" title="Activity" data-target="details">Activity</div>
+					<div id="atab_basic" class="activity_tab hover" title="Basic" data-target="basic">Basic</div>
+					<div id="atab_battle" class="activity_tab hover active" title="Battle" data-target="battle">Battle</div>
+					<div id="atab_activity" class="activity_tab hover" title="Activity" data-target="details">Activity</div>
 				</div>
 				<div class="activity_body">
 					<!-- BASIC: Consumables and Timers -->
@@ -141,105 +141,114 @@
 							<div class="clear"></div>
 						</div>
 						<div class="sortie_nodes">
-							<div class="sortie_node">00</div>
-							<div class="sortie_node">00</div>
-							<div class="sortie_node">00</div>
-							<div class="sortie_node">00</div>
-							<div class="sortie_node">00</div>
-							<div class="sortie_node">00</div>
-							<div class="sortie_node">00</div>
-							<div class="sortie_node">00</div>
-							<div class="sortie_node">00</div>
+							<div class="sortie_node sortie_node_1">00</div>
+							<div class="sortie_node sortie_node_2">00</div>
+							<div class="sortie_node sortie_node_3">00</div>
+							<div class="sortie_node sortie_node_4">00</div>
+							<div class="sortie_node sortie_node_5">00</div>
+							<div class="sortie_node sortie_node_6">00</div>
+							<div class="sortie_node sortie_node_7">00</div>
+							<div class="sortie_node sortie_node_8">00</div>
+							<div class="sortie_node sortie_node_9">00</div>
 							<div class="clear"></div>
 						</div>
-						<div class="abyss_ships">
-							<div class="abyss_ship abyss_ship_1"><img/></div>
-							<div class="abyss_ship abyss_ship_2"><img/></div>
-							<div class="abyss_ship abyss_ship_3"><img/></div>
-							<div class="abyss_ship abyss_ship_4"><img/></div>
-							<div class="abyss_ship abyss_ship_5"><img/></div>
-							<div class="abyss_ship abyss_ship_6"><img/></div>
-							<div class="clear"></div>
-						</div>
-						<div class="abyss_hps">
-							<div class="abyss_hp"><div class="abyss_hp_bar abyss_hp_bar_1"></div></div>
-							<div class="abyss_hp"><div class="abyss_hp_bar abyss_hp_bar_2"></div></div>
-							<div class="abyss_hp"><div class="abyss_hp_bar abyss_hp_bar_3"></div></div>
-							<div class="abyss_hp"><div class="abyss_hp_bar abyss_hp_bar_4"></div></div>
-							<div class="abyss_hp"><div class="abyss_hp_bar abyss_hp_bar_5"></div></div>
-							<div class="abyss_hp"><div class="abyss_hp_bar abyss_hp_bar_6"></div></div>
-							<div class="clear"></div>
-						</div>
-						<div class="battle_flags">
-							<div class="battle_flag battle_eformation"><img/></div>
-							<div class="battle_flag battle_support"><img/></div>
-							<div class="battle_flag battle_night"><img /></div>
-							<div class="battle_flag battle_rating"><img/></div>
-							<div class="battle_flag battle_drop"><img/></div>
-							<div class="clear"></div>
-						</div>
-						<div class="battle_conditions">
-							<div class="battle_condition">
-								<div class="battle_cond_icon"><img src="../../../../assets/img/ui/empty.png" /></div>
-								<div class="battle_cond_label i18n">BattleDetection</div>
-								<div class="battle_cond_value battle_detection"></div>
+						<div class="node_types node_type_battle">
+							<div class="abyss_ships">
+								<div class="abyss_ship abyss_ship_1"><img/></div>
+								<div class="abyss_ship abyss_ship_2"><img/></div>
+								<div class="abyss_ship abyss_ship_3"><img/></div>
+								<div class="abyss_ship abyss_ship_4"><img/></div>
+								<div class="abyss_ship abyss_ship_5"><img/></div>
+								<div class="abyss_ship abyss_ship_6"><img/></div>
 								<div class="clear"></div>
 							</div>
-							<div class="battle_condition">
-								<div class="battle_cond_icon"><img src="../../../../assets/img/ui/empty.png" /></div>
-								<div class="battle_cond_label i18n">BattleEngangement</div>
-								<div class="battle_cond_value battle_engagement"></div>
+							<div class="abyss_hps">
+								<div class="abyss_hp"><div class="abyss_hp_bar abyss_hp_bar_1"></div></div>
+								<div class="abyss_hp"><div class="abyss_hp_bar abyss_hp_bar_2"></div></div>
+								<div class="abyss_hp"><div class="abyss_hp_bar abyss_hp_bar_3"></div></div>
+								<div class="abyss_hp"><div class="abyss_hp_bar abyss_hp_bar_4"></div></div>
+								<div class="abyss_hp"><div class="abyss_hp_bar abyss_hp_bar_5"></div></div>
+								<div class="abyss_hp"><div class="abyss_hp_bar abyss_hp_bar_6"></div></div>
 								<div class="clear"></div>
 							</div>
-							<div class="battle_condition">
-								<div class="battle_cond_icon"><img src="../../../../assets/img/ui/empty.png" /></div>
-								<div class="battle_cond_label i18n">BattleContact</div>
-								<div class="battle_cond_value battle_contact"></div>
+							<div class="battle_flags">
+								<div class="battle_flag battle_eformation"><img/></div>
+								<div class="battle_flag battle_support"><img/></div>
+								<div class="battle_flag battle_night"><img /></div>
+								<div class="battle_flag battle_rating"><img/></div>
+								<div class="battle_flag battle_drop"><img/></div>
 								<div class="clear"></div>
 							</div>
-							<div class="battle_condition">
-								<div class="battle_cond_icon"><img src="../../../../assets/img/ui/empty.png" /></div>
-								<div class="battle_cond_label i18n">BattleAirBattle</div>
-								<div class="battle_cond_value battle_airbattle"></div>
-								<div class="clear"></div>
+							<div class="battle_conditions">
+								<div class="battle_condition">
+									<div class="battle_cond_icon"><img src="../../../../assets/img/ui/empty.png" /></div>
+									<div class="battle_cond_label i18n">BattleDetection</div>
+									<div class="battle_cond_value battle_detection"></div>
+									<div class="clear"></div>
+								</div>
+								<div class="battle_condition">
+									<div class="battle_cond_icon"><img src="../../../../assets/img/ui/empty.png" /></div>
+									<div class="battle_cond_label i18n">BattleEngangement</div>
+									<div class="battle_cond_value battle_engagement"></div>
+									<div class="clear"></div>
+								</div>
+								<div class="battle_condition">
+									<div class="battle_cond_icon"><img src="../../../../assets/img/ui/empty.png" /></div>
+									<div class="battle_cond_label i18n">BattleContact</div>
+									<div class="battle_cond_value battle_contact"></div>
+									<div class="clear"></div>
+								</div>
+								<div class="battle_condition">
+									<div class="battle_cond_icon"><img src="../../../../assets/img/ui/empty.png" /></div>
+									<div class="battle_cond_label i18n">BattleAirBattle</div>
+									<div class="battle_cond_value battle_airbattle"></div>
+									<div class="clear"></div>
+								</div>
 							</div>
-						</div>
-						<div class="battle_planes">
-							<div class="plane_label i18n">BattleFriendly</div>
-							<div class="plane_label i18n">BattleEnemy</div>
-							<div class="plane_count fighter_ally">
-								<div class="plane_icon"><img src="../../../../assets/img/items/6.png" /></div>
-								<div class="plane_text">
-									<span class="plane_before">0000</span>
-									<span class="plane_after">-0000</span>
+							<div class="battle_planes">
+								<div class="plane_label i18n">BattleFriendly</div>
+								<div class="plane_label i18n">BattleEnemy</div>
+								<div class="plane_count fighter_ally">
+									<div class="plane_icon"><img src="../../../../assets/img/items/6.png" /></div>
+									<div class="plane_text">
+										<span class="plane_before">0000</span>
+										<span class="plane_after">-0000</span>
+									</div>
+									<div class="clear"></div>
+								</div>
+								<div class="plane_count fighter_enemy">
+									<div class="plane_icon"><img src="../../../../assets/img/items/6.png" /></div>
+									<div class="plane_text">
+										<span class="plane_before"></span>
+										<span class="plane_after"></span>
+									</div>
+									<div class="clear"></div>
+								</div>
+								<div class="plane_count bomber_ally">
+									<div class="plane_icon"><img src="../../../../assets/img/items/7.png" /></div>
+									<div class="plane_text">
+										<span class="plane_before"></span>
+										<span class="plane_after"></span>
+									</div>
+									<div class="clear"></div>
+								</div>
+								<div class="plane_count bomber_enemy">
+									<div class="plane_icon"><img src="../../../../assets/img/items/7.png" /></div>
+									<div class="plane_text">
+										<span class="plane_before"></span>
+										<span class="plane_after"></span>
+									</div>
+									<div class="clear"></div>
 								</div>
 								<div class="clear"></div>
 							</div>
-							<div class="plane_count fighter_enemy">
-								<div class="plane_icon"><img src="../../../../assets/img/items/6.png" /></div>
-								<div class="plane_text">
-									<span class="plane_before"></span>
-									<span class="plane_after"></span>
-								</div>
-								<div class="clear"></div>
-							</div>
-							<div class="plane_count bomber_ally">
-								<div class="plane_icon"><img src="../../../../assets/img/items/7.png" /></div>
-								<div class="plane_text">
-									<span class="plane_before"></span>
-									<span class="plane_after"></span>
-								</div>
-								<div class="clear"></div>
-							</div>
-							<div class="plane_count bomber_enemy">
-								<div class="plane_icon"><img src="../../../../assets/img/items/7.png" /></div>
-								<div class="plane_text">
-									<span class="plane_before"></span>
-									<span class="plane_after"></span>
-								</div>
-								<div class="clear"></div>
-							</div>
-							<div class="clear"></div>
+						</div>
+						<div class="node_types node_type_resource">
+							<div class="node_res_icon"></div>
+							<div class="node_res_text"></div>
+						</div>
+						<div class="node_types node_type_text">
+							
 						</div>
 					</div>
 					<!-- ACTIVITY: Crafting, etc -->
@@ -474,7 +483,6 @@
 		<script type="text/javascript" src="../../../../assets/js/KanColleHelpers.js"></script>
 		<script type="text/javascript" src="../../../../library/helpers/ExpeditionHelper.js"></script>
 		
-		<script type="text/javascript" src="js/Listeners.js"></script>
 		<script type="text/javascript" src="js/Shipbox.js"></script>
 		<script type="text/javascript" src="natsuiro.js"></script>
 	</body>

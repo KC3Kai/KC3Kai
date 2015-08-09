@@ -368,16 +368,17 @@
 	margin:0px 0px 5px 0px;
 }
 .module.activity .map_world {
-	width:40px;
+	width:45px;
 	height:20px;
 	float:left;
 	font-weight:bold;
 	color:#ffcc00;
 	font-size:14px;
 	text-align:center;
+	margin:0px 5px 0px 0px;
 }
 .module.activity .map_gauge {
-	width:70px;
+	width:60px;
 	height:12px;
 	float:left;
 	margin:4px 0px;
@@ -385,7 +386,6 @@
 	border:1px solid #fff;
 }
 .module.activity .map_gauge_bar {
-	width:50px;
 	height:10px;
 	background:#0f0;
 }
@@ -401,12 +401,12 @@
 .module.activity .sortie_nodes {
 	width:180px;
 	height:19px;
-	line-height:19px;
 	margin:0px 0px 5px 0px;
 }
 .module.activity .sortie_node {
 	width:19px;
 	height:19px;
+	line-height:17px;
 	margin:0px 1px 0px 0px;
 	float:left;
 	background:#000;
@@ -414,6 +414,7 @@
 	color:#fff;
 	font-size:10px;
 	text-align: center;
+	border:1px solid #aaa;
 }
 .module.activity .sortie_node.nc_battle {
 	background:#7D0000;
