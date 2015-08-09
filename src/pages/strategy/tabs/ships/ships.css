@@ -196,6 +196,23 @@
 .tab_ships .ship_item .ship_name {
 	width:92px;
 	overflow:hidden;
+	position:relative;
+}
+.tab_ships .ship_item .ship_name.ship_kekkon {
+	color: #E49F9C;
+}
+.tab_ships .ship_item .ship_name.ship_kekkon:after {
+	display: inline;
+	position: absolute;
+	width: 92px;
+	right: 0;
+	content: "x";
+	color: rgba(0,0,0,0);
+	background-position: 100%;
+	background-image: url('SEGASonicRing.png');
+	background-size: contain;
+	background-repeat: no-repeat;
+	text-align: right;
 }
 .tab_ships .ship_item .ship_type {
 	width:30px;

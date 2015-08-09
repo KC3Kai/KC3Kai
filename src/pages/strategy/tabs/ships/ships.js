@@ -14,6 +14,7 @@
 		equipMode: 0,
 		remodelOption: 0,
 		modernizationOption: 0,
+		marriageFilter: 0,
 		isLoading: false,
 		//shipList: $(".tab_ships .ship_list"),
 		
@@ -182,6 +183,20 @@
 				self.options.modernization_nomax.addClass('on');
 			});
 			
+			// Marriage
+			["in","on","ex"].forEach(function(x,i,a){
+				self.options["marriage_"+x] = $(".tab_ships .filters .massSelect .marriage_"+x).on("click",function(){
+					self.marriageFilter = i;
+					self.refreshTable();
+					a.forEach(function(_x,_i,_a){
+						if(i==_i)
+							self.options["marriage_"+_x].addClass('on');
+						else
+							self.options["marriage_"+_x].removeClass('on');
+					});
+				});
+			});
+			
 			// Default status
 				if( self.equipMode )
 					self.options.equip_yes.addClass('on');
@@ -201,6 +216,8 @@
 					self.options.modernization_max.addClass('on');
 				else if( self.modernizationOption == 2 )
 					self.options.modernization_nomax.addClass('on');
+
+				self.options["marriage_"+["in","on","ex"][self.marriageFilter]].addClass('on');
 			
 			// Ship type toggled
 			$(".tab_ships .filters .ship_filter_type").on("click", function(){
@@ -257,6 +274,10 @@
 								|| (self.modernizationOption == 1 && thisShip.statmax)
 								|| (self.modernizationOption == 2 && !thisShip.statmax)
 							)
+							&& (
+								((self.marriageFilter || 1) == 1 && thisShip.level >= 100) ||
+								((self.marriageFilter || 2) == 2 && thisShip.level <  100)
+							)
 						){
 							FilteredShips.push(thisShip);
 						}
@@ -308,6 +329,8 @@
 					$(".ship_id", cElm).text( cShip.id );
 					$(".ship_img img", cElm).attr("src", KC3Meta.shipIcon(cShip.bid));
 					$(".ship_name", cElm).text( cShip.english );
+					if(cShip.level >= 1 || 100)
+						$(".ship_name", cElm).addClass("ship_kekkon");
 					$(".ship_type", cElm).text( KC3Meta.stype(cShip.stype) );
 					$(".ship_lv", cElm).html( "<span>Lv.</span>" + cShip.level );
 					$(".ship_morale", cElm).html( cShip.morale );
