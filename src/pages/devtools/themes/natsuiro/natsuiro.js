@@ -1,5 +1,6 @@
 (function(){
 	"use strict";
+	_gaq.push(['_trackEvent', "Panel: Natsuiro Theme", 'clicked']);
 	
 	// Flags
 	var currentLayout = "";
