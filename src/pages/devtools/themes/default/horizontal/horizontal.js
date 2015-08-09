@@ -732,7 +732,7 @@
 				// Hide any other activity box
 				$(".activityBox", container).hide();
 				
-				if (data.itemId != null) {
+				if (data.itemId !== null) {
 					// Get equipment data
 					var PlayerItem = KC3GearManager.get( data.itemId );
 					var MasterItem = KC3Master.slotitem( data.itemMasterId );
