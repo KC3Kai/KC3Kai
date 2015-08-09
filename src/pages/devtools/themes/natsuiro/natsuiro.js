@@ -449,8 +449,11 @@
 			
 			var thisNode = KC3SortieManager.currentNode();
 			var numNodes = KC3SortieManager.nodes.length;
-			
-			$(".module.activity .sortie_node_"+numNodes).text( thisNode.id );
+			var world = KC3SortieManager.map_world;
+			var map = KC3SortieManager.map_num;
+			var nodeId = KC3Meta.nodeLetter(world, map, thisNode.id );
+
+			$(".module.activity .sortie_node_"+numNodes).text( nodeId );
 			$(".module.activity .node_types").hide();
 			
 			$(".module.activity .abyss_ship").hide();
