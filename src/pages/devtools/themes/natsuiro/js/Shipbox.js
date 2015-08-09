@@ -173,8 +173,27 @@ KC3改 Ship Box for Natsuiro theme
 		}
 	};
 	
+	/* SHOW EQUIPMENT
+	
+	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.showEquipment = function( slot ){
-		
+		var thisGear;
+		if(this.shipData.slotnum > slot){
+			if(this.shipData.items[slot] > -1){
+				thisGear = KC3GearManager.get( this.shipData.items[slot] );
+				$(".ship_gear_"+(slot+1)+" .ship_gear_icon img", this.element).attr("src",
+					"../../../../assets/img/items/"+thisGear.master().api_type[3]+".png");
+				$(".ship_gear_"+(slot+1), this.element).addClass("equipped");
+				$(".ship_gear_"+(slot+1), this.element).attr("title", thisGear.name());
+			}else{
+				$(".ship_gear_"+(slot+1)+" .ship_gear_icon img", this.element).hide();
+				$(".ship_gear_"+(slot+1), this.element).addClass("empty");
+			}
+			$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).text( this.shipData.slots[ slot ] );
+		}else{
+			$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element).hide();
+			$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).hide();
+		}
 	};
 	
 })();

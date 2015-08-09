@@ -360,7 +360,217 @@
 .module.activity .activity_battle {
 	
 }
-
+/* Map Info */
+.module.activity .map_info {
+	width:180px;
+	height:20px;
+	line-height:20px;
+	margin:0px 0px 5px 0px;
+}
+.module.activity .map_world {
+	width:40px;
+	height:20px;
+	float:left;
+	font-weight:bold;
+	color:#ffcc00;
+	font-size:14px;
+	text-align:center;
+}
+.module.activity .map_gauge {
+	width:70px;
+	height:12px;
+	float:left;
+	margin:4px 0px;
+	background:#222;
+	border:1px solid #fff;
+}
+.module.activity .map_gauge_bar {
+	width:50px;
+	height:10px;
+	background:#0f0;
+}
+.module.activity .map_hp {
+	width:70px;
+	height:20px;
+	float:left;
+	font-size:11px;
+	color:#eee;
+	padding:0px 0px 0px 5px;
+}
+/* Sortie Nodes */
+.module.activity .sortie_nodes {
+	width:180px;
+	height:19px;
+	line-height:19px;
+	margin:0px 0px 5px 0px;
+}
+.module.activity .sortie_node {
+	width:19px;
+	height:19px;
+	margin:0px 1px 0px 0px;
+	float:left;
+	background:#000;
+	border-radius:10px;
+	color:#fff;
+	font-size:10px;
+	text-align: center;
+}
+.module.activity .sortie_node.nc_battle {
+	background:#7D0000;
+}
+.module.activity .sortie_node.nc_resource {
+	background:#007A00;
+}
+.module.activity .sortie_node.nc_maelstrom {
+	background:#80007F;
+}
+.module.activity .sortie_node.nc_avoid {
+	background:#00B3B1;
+}
+/* Abyss Ships */
+.module.activity .abyss_ships {
+	width:180px;
+	height:26px;
+	margin:0px 0px 1px 0px;
+}
+.module.activity .abyss_ship {
+	width:26px;
+	height:26px;
+	float:left;
+	margin:0px 2px;
+	border-radius:13px;
+	border:1px solid #000;
+	overflow:hidden;
+	background:#888;
+}
+.module.activity .abyss_ship img {
+	width:26px;
+	height:26px;
+	position:relative;
+	top:-1px;
+	left:-1px;
+}
+/* Abyss HPs */
+.module.activity .abyss_hps {
+	width:180px;
+	height:4px;
+	margin:0px 0px 5px 0px;
+}
+.module.activity .abyss_hp {
+	width:28px;
+	height:4px;
+	margin:0px 1px;
+	background:#222;
+	float:left;
+}
+.module.activity .abyss_hp_bar {
+	width:20px;
+	height:4px;
+	background:#0f0;
+}
+/* Battle Flags */
+.module.activity .battle_flags {
+	width:180px;
+	height:30px;
+	margin:0px 0px 5px 0px;
+}
+.module.activity .battle_flag {
+	width:36px;
+	height:30px;
+	float:left;
+}
+.module.activity .battle_flag img {
+	width:24px;
+	height:24px;
+	margin:3px 6px;
+}
+/* Battle Conditions */
+.module.activity .battle_conditions {
+	width:180px;
+	height:56px;
+	margin:0px 0px 3px 0px;
+}
+.module.activity .battle_condition {
+	width:180px;
+	height:14px;
+}
+.module.activity .battle_cond_icon {
+	width:14px;
+	height:14px;
+	line-height:14px;
+	float:left;
+	margin:0px 5px 0px 0px;
+}
+.module.activity .battle_cond_icon img {
+	width:14px;
+	height:14px;
+	vertical-align:top;
+}
+.module.activity .battle_cond_label {
+	width:50px;
+	height:14px;
+	line-height:14px;
+	float:left;
+	font-size:11px;
+	margin:0px 5px 0px 0px;
+	color:#ccc;
+}
+.module.activity .battle_cond_value {
+	width:106px;
+	height:14px;
+	float:left;
+	color:#fff;
+}
+/* Battle Planes */
+.module.activity .battle_planes {
+	width:180px;
+	height:44px;
+}
+.module.activity .plane_label {
+	width:90px;
+	height:14px;
+	line-height:14px;
+	font-size:11px;
+	color:#ffcc00;
+	text-align:center;
+	font-weight:bold;
+	float:left;
+}
+.module.activity .plane_count {
+	width:90px;
+	height:15px;
+	line-height:15px;
+	float:left;
+	margin:0px 0px 1px 0px;
+}
+.module.activity .plane_icon {
+	width:14px;
+	height:14px;
+	margin:0px 5px 0px 0px;
+	float:left;
+	border-radius:7px;
+	background:#fff;
+}
+.module.activity .plane_icon img {
+	width:15px;
+	height:15px;
+	position:relative;
+	top:-1px;
+	left:-2px;
+	vertical-align:top;
+}
+.module.activity .plane_text {
+	width:70px;
+	height:15px;
+	font-size:11px;
+	float:left;
+}
+.module.activity .plane_before {
+	color:#eee;
+}
+.module.activity .plane_after {
+	color:#FF7979;
+}
 /*------- ACTIVITY: DETAILS -------*/
 .module.activity .activity_details {
 	
@@ -699,14 +909,15 @@
 	margin:1px 3px 0px 0px;
 }
 .module.fleet .lship .ship_gear.equipped .ship_gear_icon {
-	background:rgba(255,255,255,0.75);
+	background:#fff;
 }
 .module.fleet .lship .ship_gear.empty .ship_gear_icon {
 	background:rgba(150,150,150,0.4);
 }
 .module.fleet .lship .ship_gear_icon img {
-	width:18px;
-	height:18px;
+	width:16px;
+	height:16px;
+	margin:1px;
 	vertical-align:top;
 }
 .module.fleet .lship .ship_gear_slot {
