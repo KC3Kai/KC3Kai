@@ -228,7 +228,7 @@
 		GameStart: function(data){ Activate(); },
 		HomeScreen: function(data){
 			Activate();
-			clearBattleData()
+			clearBattleData();
 		},
 		
 		CatBomb: function(data){
