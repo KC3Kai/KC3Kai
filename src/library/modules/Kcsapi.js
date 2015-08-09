@@ -646,6 +646,7 @@ Previously known as "Reactor"
 		/* PVP Start
 		-------------------------------------------------------*/
 		"api_req_practice/midnight_battle":function(params, response, headers){
+			KC3SortieManager.engageNight( response.api_data );
 			KC3Network.trigger("PvPNight", { battle: response.api_data });
 		},
 		

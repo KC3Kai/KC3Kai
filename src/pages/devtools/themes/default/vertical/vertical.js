@@ -246,7 +246,8 @@
 			},
 			HQ: function(container, data, local){
 				var
-					hqt = KC3Meta.term("HQExpAbbrev" + (ConfigManager.hqExpDetail)) + " ",
+					maxHQ=Object.keys(KC3Meta._exp).map(function(a){return parseInt(a);}).reduce(function(a,b){return a>b?a:b;}),
+					hqt = KC3Meta.term("HQExpAbbrev" + (PlayerManager.hq.level>=maxHQ ? 3 : ConfigManager.hqExpDetail)) + " ",
 					hqexpd = Math.abs($(".battle_hqlevel_next_gain", container).text());
 				switch(KC3Panel.mode){
 					case "normal":
@@ -772,6 +773,15 @@
 				var thisNode = KC3SortieManager.currentNode();
 				var battleData = (thisNode.startNight)? thisNode.battleNight : thisNode.battleDay;
 				
+				var enemies = thisNode.eships.filter(function(x){return x>=0;});
+				if(ConfigManager.info_troll) {
+					if(enemies.every(function(x){return KC3Master.ship(x).api_stype==13 && KC3Master.ship(x).api_yomi.length>1;})) {
+						$(".battle .battle_current",container).text(
+							(thisNode.eformation < 3) ? ((enemies.length == 1) ? "MORNING SNIPER!!!!!" : "TROLL NODE") : "SUB NODE"
+						);
+					}
+				}
+				
 				if((typeof thisNode.eformation != "undefined") && (thisNode.eformation > -1)){
 					$(".battle .battle_formation img", container).attr("src", KC3Meta.formationIcon(thisNode.eformation));
 					$(".battle .battle_formation", container).attr("title", KC3Meta.formationText(thisNode.eformation));
@@ -923,7 +933,8 @@
 
 				if(ConfigManager.info_delta) {
 					// If EXP left exceeded by gained EXP on sortie
-					while(KC3SortieManager.hqExpGained >= PlayerManager.hq.exp[1]) {
+					var maxHQ=Object.keys(KC3Meta._exp).map(function(a){return parseInt(a);}).reduce(function(a,b){return a>b?a:b;});
+					while(KC3SortieManager.hqExpGained >= PlayerManager.hq.exp[1] && PlayerManager.hq.level < maxHQ) {
 						KC3SortieManager.hqExpGained -= PlayerManager.hq.exp[1];
 						PlayerManager.hq.exp = [0,KC3Meta.exp(++PlayerManager.hq.level)[0],0];
 						this.HQ(container, {}, local);
@@ -1008,6 +1019,9 @@
 				KC3Panel.mode = "battle";
 				KC3Panel.layout().data.isSunkable = false;
 				
+				// Process PvP Battle
+				KC3SortieManager.endSortie();
+
 				$(".battle .battle_world", container).text("PvP Practice Battle");
 				$(".battle .battle_current", container).text("FIGHTING");
 				KC3SortieManager.fleetSent = data.fleetSent;
@@ -1037,9 +1051,9 @@
 				$(".normal", container).hide();
 				$(".battle", container).show();
 				
-				// Process PvP Battle
-				var thisPvP = (new KC3Node()).defineAsBattle();
-				thisPvP.engage( data.battle );
+				var thisPvP;
+				KC3SortieManager.nodes.push(thisPvP = (new KC3Node()).defineAsBattle());
+				thisPvP.engage( data.battle, data.fleetSent );
 				
 				// Formation
 				if((typeof thisPvP.eformation != "undefined") && (thisPvP.eformation > -1)){
@@ -1124,7 +1138,8 @@
 				var expGained = data.result.api_get_exp;
 				if(ConfigManager.info_delta) {
 					// If EXP left exceeded by gained EXP on sortie
-					if(expGained >= PlayerManager.hq.exp[1]) {
+					var maxHQ=Object.keys(KC3Meta._exp).map(function(a){return parseInt(a);}).reduce(function(a,b){return a>b?a:b;});
+					while(expGained >= PlayerManager.hq.exp[1] && PlayerManager.hq.level < maxHQ) {
 						expGained -= PlayerManager.hq.exp[1];
 						PlayerManager.hq.exp = [0,KC3Meta.exp(++PlayerManager.hq.level)[0],0];
 						this.HQ(container, {}, local);
@@ -1152,7 +1167,7 @@
 		if (!ConfigManager.info_battle) {
 			afterHp = null;
 		}
-		afterHp = afterHp || [hp[0], hp[1]];
+		afterHp = afterHp || hp;
 		var hpPercent = hp[0] / hp[1];
 		var afterHpPercent = afterHp[0] / afterHp[1];
 
