@@ -142,7 +142,7 @@
 		}, 1000);
 		
 		// Devbuild: auto-activate dashboard while designing
-		Activate();
+		// Activate();
 		
 		// Start Network listener
 		KC3Network.addGlobalListener(function(event, data){
