@@ -729,6 +729,12 @@ Previously known as "Reactor"
 					itemMasterId: response.api_data.api_slot_item.api_slotitem_id,
 					resourceUsed: resourceUsed
 				});
+			} else {
+				KC3Network.trigger("CraftGear", {
+					itemId: null,
+					itemMasterId: null,
+					resourceUsed: resourceUsed
+				});
 			}
 			
 			KC3Network.trigger("Quests");

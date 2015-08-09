@@ -968,21 +968,43 @@
 				// Hide any other activity box
 				$(".activityBox", container).hide();
 				
-				// Get equipment data
-				var PlayerItem = KC3GearManager.get( data.itemId );
-				var MasterItem = KC3Master.slotitem( data.itemMasterId );
-				
-				// Show basic info of the item
-				var icon = "../../../../assets/img/items/"+MasterItem.api_type[3]+".png";
-				$(".craftGear .equipIcon img", container).attr("src", icon);
-				$(".craftGear .equipName", container).text( PlayerItem.name() );
-				
-				// Show extra item info
-				var countExisting = KC3GearManager.countByMasterId( data.itemMasterId );
-				if(countExisting === 0){
-					$(".craftGear .equipNote").html("This is your <strong>first</strong>!");
-				}else{
-					$(".craftGear .equipNote").html("You now have <strong>"+countExisting+"</strong> of this item!");
+				if (data.itemId != null) {
+					// Get equipment data
+					var PlayerItem = KC3GearManager.get( data.itemId );
+					var MasterItem = KC3Master.slotitem( data.itemMasterId );
+					
+					// Show basic info of the item
+					var icon = "../../../../assets/img/items/"+MasterItem.api_type[3]+".png";
+					$(".craftGear .equipIcon img", container).attr("src", icon);
+					$(".craftGear .equipName", container).text( PlayerItem.name() );
+					
+					// Show extra item info
+					var countExisting = KC3GearManager.countByMasterId( data.itemMasterId );
+					if(countExisting == 1){
+						$(".craftGear .equipNote", container).html("This is your <strong>first</strong>!");
+					}else{
+						$(".craftGear .equipNote", container).html("You now have <strong>"+countExisting+"</strong> of this item!");
+					}
+					
+					// Show item stats
+					$(".equipStats", container).html("");
+					CraftGearStats(container, MasterItem, "souk", "ar");
+					CraftGearStats(container, MasterItem, "houg", "fp");
+					CraftGearStats(container, MasterItem, "raig", "tp");
+					CraftGearStats(container, MasterItem, "soku", "sp");
+					CraftGearStats(container, MasterItem, "baku", "dv");
+					CraftGearStats(container, MasterItem, "tyku", "aa");
+					CraftGearStats(container, MasterItem, "tais", "as");
+					CraftGearStats(container, MasterItem, "houm", "ht");
+					CraftGearStats(container, MasterItem, "houk", "ev");
+					CraftGearStats(container, MasterItem, "saku", "ls");
+					CraftGearStats(container, MasterItem, "leng", "rn");
+				} else {
+					var icon = "../../../../assets/img/client/penguin.png";
+					$(".craftGear .equipIcon img", container).attr("src", icon);
+					$(".craftGear .equipName", container).text( "Equipment crafting failed" );
+					$(".craftGear .equipNote",container).html("");
+					$(".equipStats", container).html("");
 				}
 				
 				// Show resource used
@@ -990,21 +1012,7 @@
 				$(".craftGear .used2").text( data.resourceUsed[1] );
 				$(".craftGear .used3").text( data.resourceUsed[2] );
 				$(".craftGear .used4").text( data.resourceUsed[3] );
-				
-				// Show item stats
-				$(".equipStats", container).html("");
-				CraftGearStats(container, MasterItem, "souk", "ar");
-				CraftGearStats(container, MasterItem, "houg", "fp");
-				CraftGearStats(container, MasterItem, "raig", "tp");
-				CraftGearStats(container, MasterItem, "soku", "sp");
-				CraftGearStats(container, MasterItem, "baku", "dv");
-				CraftGearStats(container, MasterItem, "tyku", "aa");
-				CraftGearStats(container, MasterItem, "tais", "as");
-				CraftGearStats(container, MasterItem, "houm", "ht");
-				CraftGearStats(container, MasterItem, "houk", "ev");
-				CraftGearStats(container, MasterItem, "saku", "ls");
-				CraftGearStats(container, MasterItem, "leng", "rn");
-				
+
 				// Show the box
 				$(".craftGear", container).fadeIn(500);
 			},
