@@ -43,6 +43,7 @@ KC3改 Ship Box for Natsuiro theme
 		$(".ship_exp", this.element).css("width", (120 * this.expPercent)+"px");		
 		$(".ship_fuel", this.element).css("width", (120 * this.fuelPercent)+"px");
 		$(".ship_ammo", this.element).css("width", (120 * this.ammoPercent)+"px");
+		$(".ship_bars", this.element).attr("title", "Remaining Exp = " + this.shipData.exp[1] + ", Fuel = " + Math.ceil(this.fuelPercent*100) +"%" + ", Ammo = " + Math.ceil(this.ammoPercent*100)+"%");
 		
 		return this.element;
 	};
