@@ -200,7 +200,7 @@
 		}
 	}
 	
-	function clearBattleData(){
+	function clearSortieData(){
 		$(".module.activity .activity_battle").css("opacity", "0.25");
 		$(".module.activity .map_world").text("");
 		$(".module.activity .map_gauge_bar").css("width", "0px");
@@ -212,23 +212,28 @@
 			.removeClass("nc_maelstrom")
 			.removeClass("nc_avoid");
 		$(".module.activity .node_types").hide();
-		$(".module.activity .abyss_ship img").hide();
-		$(".module.activity .abyss_hp_bar").css("width", "0px");
+	}
+	
+	function clearBattleData(){
+		$(".module.activity .abyss_ship img").attr("src", KC3Meta.abyssIcon(-1));
+		$(".module.activity .abyss_ship").css("opacity", 1);
+		$(".module.activity .abyss_ship").hide();
+		$(".module.activity .abyss_hp").hide();
 		$(".module.activity .battle_eformation img").attr("src", "../../../../assets/img/ui/empty.png");
 		$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support.png");
 		$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
 		$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/ui/dark_rating.png");
 		$(".module.activity .battle_drop img").attr("src", "../../../../assets/img/ui/dark_shipdrop.png");
 		$(".module.activity .battle_cond_value").text("");
-		$(".module.activity .plane_text").text("");
-		$(".module.activity .plane_text").text("");
+		$(".module.activity .plane_text span").text("");
 	}
 	
 	var NatsuiroListeners = {
 		GameStart: function(data){ Activate(); },
 		HomeScreen: function(data){
 			Activate();
-			clearBattleData()
+			clearSortieData();
+			clearBattleData();
 		},
 		
 		CatBomb: function(data){
@@ -393,7 +398,7 @@
 		
 		SortieStart: function(data){
 			// Clear battle details box
-			clearBattleData();
+			clearSortieData();
 			
 			// Show world map and difficulty
 			$(".module.activity .map_world").text(
@@ -403,7 +408,35 @@
 				+["","E","N","H"][ KC3SortieManager.map_difficulty ]
 			);
 			
-			console.log(localStorage.maps);
+			// Map Gauge and status
+			var AllMaps = JSON.parse(localStorage.maps);
+			var thisMapId = "m"+KC3SortieManager.map_world+""+KC3SortieManager.map_num;
+			var thisMap = AllMaps[thisMapId];
+			
+			if(typeof thisMap != "undefined"){
+				if( thisMap.clear == 1){
+					$(".module.activity .map_hp").text("Cleared");
+				}else{
+					// If HP-based gauge
+					if(typeof thisMap.maxhp != "undefined"){
+						$(".module.activity .map_hp").text( data.curhp + " / " + data.maxhp );
+						$(".module.activity .map_gauge_bar").css("width", ((data.curhp/data.maxhp)*58)+"px");
+						
+					// If kill-based gauge
+					}else{
+						var totalKills = KC3Meta.gauge( thisMapId );
+						var killsLeft = totalKills - thisMap.kills;
+						if(totalKills){
+							$(".module.activity .map_hp").text( killsLeft+" / "+totalKills+" kills");
+							$(".module.activity .map_gauge_bar").css("width", ((killsLeft/totalKills)*58)+"px");
+						}else{
+							$(".module.activity .map_hp").text("Not cleared");
+						}
+					}
+				}
+			}else{
+				$(".module.activity .map_hp").text("No gauge");
+			}
 			
 			// Switch to battle tab
 			$(".module.activity .activity_battle").css("opacity", 1);
@@ -411,12 +444,17 @@
 		},
 		
 		CompassResult: function(data){
+			// Clear battle details box
+			clearBattleData();
+			
 			var thisNode = KC3SortieManager.currentNode();
 			var numNodes = KC3SortieManager.nodes.length;
-			console.log("CompassResult", thisNode, numNodes);
 			
 			$(".module.activity .sortie_node_"+numNodes).text( thisNode.id );
 			$(".module.activity .node_types").hide();
+			
+			$(".module.activity .abyss_ship").hide();
+			$(".module.activity .abyss_hp").hide();
 			
 			switch(thisNode.type){
 				// Battle node
@@ -463,12 +501,104 @@
 		},
 		
 		BattleStart: function(data){
+			// Clear battle details box just to make sure
+			clearBattleData();
 			
+			var thisNode = KC3SortieManager.currentNode();
+			var battleData = (thisNode.startNight)? thisNode.battleNight : thisNode.battleDay;
 			
+			// Load enemy icons
+			$.each(thisNode.eships, function(index, eshipId){
+				if(eshipId > -1){
+					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.abyssIcon(eshipId));
+					$(".module.activity .abyss_ship_"+(index+1)).show();
+				}
+			});
+			
+			// Enemy HP Predictions
+			if(ConfigManager.info_battle){
+				var newEnemyHP;
+				$.each(thisNode.eships, function(index, eshipId){
+					if(eshipId > -1){
+						newEnemyHP = thisNode.enemyHP[index].currentHp;
+						if(newEnemyHP < 0){ newEnemyHP = 0; }
+						
+						if(newEnemyHP === 0){
+							$(".module.activity .abyss_ship_"+(index+1)).css("opacity", "0.6");
+						}
+						
+						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width",
+							28*( newEnemyHP / thisNode.originalHPs[index+7] ));
+						$(".module.activity .abyss_hp_"+(index+1)).show();
+					}
+				});
+			}
+			
+			// Enemy formation
+			if((typeof thisNode.eformation != "undefined") && (thisNode.eformation > -1)){
+				$(".module.activity .battle_eformation img").attr("src", KC3Meta.formationIcon(thisNode.eformation));
+				$(".module.activity .battle_eformation").attr("title", KC3Meta.formationText(thisNode.eformation));
+			}
+			
+			// Battle conditions
+			$(".module.activity .battle_engagement").text( thisNode.engagement[2] );
+			$(".module.activity .battle_contact").text(thisNode.fcontact +" vs "+thisNode.econtact);
+			
+			// Day battle-only environment
+			if(!thisNode.startNight){
+				// If support expedition is triggered on this battle
+				if(thisNode.supportFlag){
+					$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support.png");
+				}else{
+					$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png");
+				}
+				
+				// If night battle will be asked after this battle
+				if(thisNode.yasenFlag){
+					$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
+				}else{
+					$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen-x.png");
+				}
+				
+				// Battle conditions
+				$(".module.activity .battle_detection").text( thisNode.detection[0] );
+				$(".module.activity .battle_airbattle").text( thisNode.airbattle[0] );
+				
+				// Fighter phase
+				$(".fighter_ally .plane_before").text(thisNode.planeFighters.player[0]);
+				$(".fighter_enemy .plane_before").text(thisNode.planeFighters.abyssal[0]);
+				
+				// Bombing Phase
+				$(".bomber_ally .plane_before").text(thisNode.planeBombers.player[0]);
+				$(".bomber_enemy .plane_before").text(thisNode.planeBombers.abyssal[0]);
+				
+				// Plane losses
+				if(thisNode.planeFighters.player[1] > 0){
+					$(".fighter_ally .plane_after").text("-"+thisNode.planeFighters.player[1]);
+				}
+				if(thisNode.planeFighters.abyssal[1] > 0){
+					$(".fighter_enemy .plane_after").text("-"+thisNode.planeFighters.abyssal[1]);
+				}
+				if(thisNode.planeBombers.player[1] > 0){
+					$(".bomber_ally .plane_after").text("-"+thisNode.planeBombers.player[1]);
+				}
+				if(thisNode.planeBombers.abyssal[1] > 0){
+					$(".bomber_enemy .plane_after").text("-"+thisNode.planeBombers.abyssal[1]);
+				}
+				
+			// Started on night battle
+			}else{
+				$(".module.activity .battle_support img", container).attr("src", "../../../../assets/img/ui/dark_support-x.png");
+				$(".module.activity .battle_night img", container).attr("src", "../../../../assets/img/ui/dark_yasen.png");
+			}
+			
+			this.Fleet();
 		},
 		
 		BattleNight: function(data){
+			var thisNode = KC3SortieManager.currentNode();
 			
+			this.Fleet();
 			
 		},
 		

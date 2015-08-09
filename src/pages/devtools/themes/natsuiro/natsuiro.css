@@ -485,6 +485,18 @@
 	height:24px;
 	margin:3px 6px;
 }
+.module.activity .battle_flag.battle_eformation {
+	width:30px;
+	height:30px;
+	margin:0px 3px;
+	border-radius:15px;
+	background:#fff;
+}
+.module.activity .battle_flag.battle_eformation img {
+	width:24px;
+	height:24px;
+	margin:3px;
+}
 /* Battle Conditions */
 .module.activity .battle_conditions {
 	width:180px;
@@ -519,6 +531,8 @@
 .module.activity .battle_cond_value {
 	width:106px;
 	height:14px;
+	line-height:14px;
+	font-size:11px;
 	float:left;
 	color:#fff;
 }

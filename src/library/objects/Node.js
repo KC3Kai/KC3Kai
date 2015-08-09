@@ -35,6 +35,8 @@ Used by SortieManager
 			}
 		}
 		this.enemySunk = [false, false, false, false, false, false];
+		this.enemyHP = [0,0,0,0,0,0];
+		this.originalHPs = [0,0,0,0,0,0,0,0,0,0,0,0,0];
 		return this;
 	};
 	
@@ -96,6 +98,8 @@ Used by SortieManager
 		this.supportFlag = (battleData.api_support_flag>0);
 		this.yasenFlag = (battleData.api_midnight_flag>0);
 		
+		this.originalHPs = battleData.api_nowhps;
+		
 		this.detection = KC3Meta.detection( battleData.api_search[0] );
 		this.engagement = KC3Meta.engagement( battleData.api_formation[2] );
 		this.fcontact = (battleData.api_kouku.api_stage1.api_touch_plane[0] > -1)?"YES":"NO";
@@ -148,8 +152,10 @@ Used by SortieManager
 		var DA = PS["KanColle.DamageAnalysis"];
 		// for regular battles
 		var result = DA.analyzeRawBattleJS(battleData); 
+		console.log("analysis result", result);
 		var i = 0;
 		for (i = 7; i < 13; i++) {
+			this.enemyHP[i-7] = result[i];
 			if ((result[i] || {currentHp:0}).currentHp <= 0) {
 				this.enemySunk[i-7] = true;
 			}
@@ -176,6 +182,8 @@ Used by SortieManager
 		this.eships = enemyships;
 		this.eformation = this.eformation || nightData.api_formation[1];
 		
+		this.originalHPs = nightData.api_nowhps;
+		
 		this.engagement = this.engagement || KC3Meta.engagement( nightData.api_formation[2] );
 		this.fcontact = (nightData.api_touch_plane[0] > -1)?"YES":"NO";
 		this.econtact = (nightData.api_touch_plane[1] > -1)?"YES":"NO";
@@ -187,6 +195,7 @@ Used by SortieManager
 		var result = DA.analyzeRawNightBattleJS( nightData ); 
 		var i = 0;
 		for (i = 7; i < 13; i++) {
+			this.enemyHP[i-7] = result[i];
 			if ((result[i] || {currentHp:0}).currentHp <= 0) {
 				this.enemySunk[i-7] = true;
 			}
