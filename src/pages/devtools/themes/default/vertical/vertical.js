@@ -701,17 +701,21 @@
 			CompassResult: function(container, data, local){
 				var thisNode = KC3SortieManager.currentNode();
 				var numNodes = KC3SortieManager.nodes.length;
+				var world = KC3SortieManager.map_world;
+				var map = KC3SortieManager.map_num;
+				var nodeId = KC3Meta.nodeLetter(world, map, thisNode.id );
+				
 				$(".battle .battle_node.now", container).removeClass("now");
 				//$(".battle .battle_node_"+numNodes, container).addClass( "active" );
 				$(".battle .battle_node_"+numNodes, container).addClass( "now" );
-				$(".battle .battle_node_"+numNodes, container).text( thisNode.id );
+				$(".battle .battle_node_"+numNodes, container).text( nodeId );
 				
 				$(".battle .battle_nodenum", container)
 					.removeClass("battle_color")
 					.removeClass("resource_color")
 					.removeClass("battle_avoided_color")
 					.removeClass("maelstrom_color")
-					.text( thisNode.id );
+					.text( nodeId );
 				
 				$(".battle .battle_current", container).text("NEXT NODE");
 				
