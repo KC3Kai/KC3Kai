@@ -968,13 +968,14 @@
 				// Hide any other activity box
 				$(".activityBox", container).hide();
 				
+				var icon = "../../../../assets/img/client/penguin.png";
 				if (data.itemId !== null) {
 					// Get equipment data
 					var PlayerItem = KC3GearManager.get( data.itemId );
 					var MasterItem = KC3Master.slotitem( data.itemMasterId );
 					
 					// Show basic info of the item
-					var icon = "../../../../assets/img/items/"+MasterItem.api_type[3]+".png";
+					icon = "../../../../assets/img/items/"+MasterItem.api_type[3]+".png";
 					$(".craftGear .equipIcon img", container).attr("src", icon);
 					$(".craftGear .equipName", container).text( PlayerItem.name() );
 					
@@ -1000,7 +1001,6 @@
 					CraftGearStats(container, MasterItem, "saku", "ls");
 					CraftGearStats(container, MasterItem, "leng", "rn");
 				} else {
-					var icon = "../../../../assets/img/client/penguin.png";
 					$(".craftGear .equipIcon img", container).attr("src", icon);
 					$(".craftGear .equipName", container).text( "Equipment crafting failed" );
 					$(".craftGear .equipNote",container).html("");
