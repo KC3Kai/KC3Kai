@@ -52,4 +52,36 @@ $(document).on("ready", function(){
 		CallAPI("api_get_member/questlist", {}, function(){});
 	});
 	
+	$("#mapInfo").on("click", function(){
+		CallAPI("api_get_member/mapinfo", {}, function(){});
+	});
+	
+	$("#sortieStart").on("click", function(){
+		CallAPI("api_get_member/mapcell", {}, function(){
+			CallAPI("api_req_map/start", {}, function(){
+				
+			});
+		});
+	});
+	
+	$("#sortieBattle").on("click", function(){
+		CallAPI("api_req_sortie/battle", {}, function(){});
+	});
+	
+	$("#sortieResult").on("click", function(){
+		CallAPI("api_req_sortie/battleresult", {}, function(){});
+	});
+	
+	$("#sortieEnd").on("click", function(){
+		CallAPI("api_get_member/slot_item", {}, function(){
+			CallAPI("api_get_member/unsetslot", {}, function(){
+				CallAPI("api_get_member/useitem", {}, function(){
+					CallAPI("api_port/port", {}, function(){
+						
+					});
+				});
+			});
+		});
+	});
+	
 });
