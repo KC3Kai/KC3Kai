@@ -152,6 +152,13 @@
 	"HQExpAbbrev2" : "Current",
 	"HQExpAbbrev3" : "Total",
 	
+	"BattleDetection" : "Detection",
+	"BattleEngangement" : "Engage",
+	"BattleContact" : "Contact",
+	"BattleAirBattle" : "Air Battle",
+	"BattleFriendly" : "Friendly",
+	"BattleEnemy" : "Enemies",
+	
 	"PredictionStampSortie" : "Sunk",
 	"PredictionStampPvP" : "Knocked Out",
 	
