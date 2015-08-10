@@ -30,14 +30,14 @@
     "Name": "Tên",
 	
 	"MenuPlayAPIName" : "Chơi qua link API",
-	"MenuPlayAPIDesc" : "Play using your last saved API link or manually input one if you have it",
+	"MenuPlayAPIDesc" : "Chơi bằng link API bạn đã lưu lại hoặc tự nhập vào nếu bạn có nó",
 	"MenuRefreshAPIName" : "Làm mới link API",
 	"MenuRefreshAPIDesc" : "Opens the DMM play page where we'll auto-extract your new API link",
-	"MenuPlayDMMName" : "Play on DMM Website",
+	"MenuPlayDMMName" : "Chơi trên DMM",
 	"MenuPlayDMMDesc" : "Natural DMM Netgame Portal gameplay, for our cautious friends. Absolute Safe.",
-	"MenuCookiesName" : "Activate Cookies",
+	"MenuCookiesName" : "Khởi tạo Cookies",
 	"MenuCookiesDesc" : "Use this anytime you encounter the \"Error Area\" screen on DMM.com",
-	"MenuStrategyName" : "Strategy Room",
+	"MenuStrategyName" : "Phòng chiến thuật",
 	"MenuStrategyDesc" : "Various tools to help you analyze and strategize, or just manage your fleet",
 	"MenuSettingsDesc" : "Various extension confguration which applies on the next game session",
 	"MenuAboutDesc" : "Information on KC3改, and its teams of developers, writers and testers",
@@ -65,6 +65,8 @@
 	"AboutOther" : "Other Credits",
 	"AboutLogo" : "Thiết kế Logo",
 	"AboutFairy" : "Thiết kế Fairy",
+	"AboutReporters" : "Recurring Git Reporters",
+	"AboutReporter" : "Git Reporter",
 	
 	"SettingsTitle" : "Cài đặt KC3改",
 
@@ -74,13 +76,21 @@
 	"SettingsELosSum" : "Tổng",
 	"SettingsELosOld" : "Cũ",
 	"SettingsELosNew" : "Mới",
+	"SettingsHQExpDetail"  : "HQ Exp Info",
+	"SettingsHQExpLeft"    : "Remaining EXP",
+	"SettingsHQExpCurrent" : "Current Level",
+	"SettingsHQExpTotal"   : "Total Gained",
 	
 	"SettingsGameInfo" : "Thông tin Trò chơi",
+	"SettingsDropFaces" : "Tàu vớt được khi Xuất kích",
 	"SettingsConstructionFaces" : "Kết quả Đóng tàu",
 	"SettingsCraftBox" : "Kết quả Chế tạo Thiết bị",
 	"SettingsCompass" : "La bàn và Kẻ tịch",
-	"SettingsBattleData" : "Môi trường Chiến đấu",
+	"SettingsBattleData" : "Dự đoán trận đấu",
+	"SettingsBattleStamp" : "Ship Condition Stamps",
 	"SettingsBossComp" : "Đội hình Boss",
+	"SettingsYasenTroll" : "\u0022Hỗ trợ\u0022 Đánh đêm",
+	"SettingsHQDelta" : "HQ EXP Delta on Sortie",
 	
 	"SettingsScreenshot" : "Chụp màn hình",
 	"SettingsSSOutput" : "Output Mode",
@@ -101,6 +111,7 @@
 	"SettingsAPIGameScreen" : "API Game Screen",
 	"SettingsQuestOverlay" : "Quest Translations",
 	"SettingsQuestTracking" : "Quest Tracking",
+	"SettingsPanelRequirement" : "Require Panel to Play",
 	"SettingsConfirmExit" : "Xác nhận trước khi thoát",
 	"SettingsScreenMargin" : "Lề trên",
 	"SettingsBGColor" : "Màu nền",
@@ -114,12 +125,16 @@
 	
 	"SettingsDMMGameplay" : "DMM Gameplay",
 	"SettingsDMMCustomize" : "Apply Customizations",
+	"SettingsDMMForceCookies" : "Force Cookie Hack",
 	
-	"SettingsPanelSize" : "Panel Size",
+	"SettingsPanelSize" : "Kích cỡ Panel",
 	"SettingsPanelOpacity" : "Độ trong suốt của Giao diện",
+	"SettingsGearHolder" : "Màu nền Trang bị",
 	
 	"Small" : "Nhỏ",
 	"Big" : "To",
+	"Black" : "Đen",
+	"White" : "Trắng",
 	"Theme" : "Theme",
 	"Panel" : "Panel",
 	"Volume" : "Âm lượng",
@@ -131,11 +146,20 @@
 	"SpeedSlow" : "Chậm",
 	
 	"HQText" : "HQ",
+	"HQExpAbbrev1" : "Next",
+	"HQExpAbbrev2" : "Current",
+	"HQExpAbbrev3" : "Total",
+	
+	"PredictionStampSortie" : "Sunk",
+	"PredictionStampPvP" : "Knocked Out",
+	
 	"LevelText" : "Cấp",
 	"LevelShort" : "Lv.",
 	"LevelNext" : "Tiếp theo",
 	"Screenshot" : "Chụp màn hình",
-
+	"UntranslatedQuest" : "Untranslated Quest",
+	
+	"PanelWaitActions" : "Waiting for game actions...",
 	"PanelErrorStorage" : "Your Chrome's localStorage is disabled on your settings. KC3改 needs this feature. <a href=\"http://stackoverflow.com/a/26671889/483704\" target=\"_blank\">See how to enable this</a>.",
 	
 	"Dummy" : "Dummy"

@@ -294,7 +294,7 @@
 				<div class="battle_hqlevel_box">
 					<div class="battle_hqexpbar">
 						<div class="battle_hqexpval"></div>
-						<div class="battle_hqexpgain"></div>
+						<div class="battle_hqexpgain" style="width:0px"></div>
 					</div>
 				</div>
 				<div class="battle_hqlevel_next"></div>
@@ -402,16 +402,34 @@
 				<div class="battle_nodebox battle_empty">
 					<em>Battle avoided!</em>
 				</div>
-				<div class="battle_nodebox battle_enemy_formation">
+				<div class="battle_nodebox battle_formation">
 					<img src=""/>
 				</div>
 				<div class="battle_nodebox battle_enemies">
-					<div class="battle_abyss abyss_1"><img src="../../../../assets/img/ui/empty.png" /></div>
-					<div class="battle_abyss abyss_2"><img src="../../../../assets/img/ui/empty.png" /></div>
-					<div class="battle_abyss abyss_3"><img src="../../../../assets/img/ui/empty.png" /></div>
-					<div class="battle_abyss abyss_4"><img src="../../../../assets/img/ui/empty.png" /></div>
-					<div class="battle_abyss abyss_5"><img src="../../../../assets/img/ui/empty.png" /></div>
-					<div class="battle_abyss abyss_6"><img src="../../../../assets/img/ui/empty.png" /></div>
+					<div class="battle_abyss abyss_1">
+						<div class="sunk-container"><img src="../../../../assets/img/ui/sunk.png" /></div>
+						<div class="face-container"><img src="../../../../assets/img/ui/empty.png" /></div>
+					</div>
+					<div class="battle_abyss abyss_2">
+						<div class="sunk-container"><img src="../../../../assets/img/ui/sunk.png" /></div>
+						<div class="face-container"><img src="../../../../assets/img/ui/empty.png" /></div>
+					</div>
+					<div class="battle_abyss abyss_3">
+						<div class="sunk-container"><img src="../../../../assets/img/ui/sunk.png" /></div>
+						<div class="face-container"><img src="../../../../assets/img/ui/empty.png" /></div>
+					</div>
+					<div class="battle_abyss abyss_4">
+						<div class="sunk-container"><img src="../../../../assets/img/ui/sunk.png" /></div>
+						<div class="face-container"><img src="../../../../assets/img/ui/empty.png" /></div>
+					</div>
+					<div class="battle_abyss abyss_5">
+						<div class="sunk-container"><img src="../../../../assets/img/ui/sunk.png" /></div>
+						<div class="face-container"><img src="../../../../assets/img/ui/empty.png" /></div>
+					</div>
+					<div class="battle_abyss abyss_6">
+						<div class="sunk-container"><img src="../../../../assets/img/ui/sunk.png" /></div>
+						<div class="face-container"><img src="../../../../assets/img/ui/empty.png" /></div>
+					</div>
 				</div>
 				<div class="battle_conditions">
 					<div class="battle_cond battle_cond_detect">
@@ -516,6 +534,8 @@
 				<div class="clear"></div>
 			</div>
 			<div class="switch_fleet_type_button hover"></div>
+			<div class="screenshot-battle-button hover" title="Screenshot"></div>
+			<div class="clear"></div>
 		</div>
 		
 		<div class="battle_fleet">
@@ -620,6 +640,7 @@
 			<div class="ship-hp-text">000 / 000</div>
 			<div class="ship-hp-bar">
 				<div class="ship-hp-val"></div>
+				<div class="ship-hp-after-val"></div>
 			</div>
 		</div>
 		<div class="ship-level">
@@ -665,6 +686,7 @@
 			<div class="ship-hp-text">000 / 000</div>
 			<div class="ship-hp-bar">
 				<div class="ship-hp-val"></div>
+				<div class="ship-hp-after-val"></div>
 			</div>
 		</div>
 		<div class="ship-level">
@@ -710,6 +732,7 @@
 			<div class="ship-hp-text">000 / 000</div>
 			<div class="ship-hp-bar">
 				<div class="ship-hp-val"></div>
+				<div class="ship-hp-after-val"></div>
 			</div>
 		</div>
 		<div class="ship-level">
@@ -767,10 +790,22 @@
 			<div class="ship-morale-box"></div>
 		</div>
 		<div class="ship-equip">
-			<div class="ship-gear-1 ship-gear"><img src="../../../../assets/img/ui/empty.png" /></div>
-			<div class="ship-gear-2 ship-gear"><img src="../../../../assets/img/ui/empty.png" /></div>
-			<div class="ship-gear-3 ship-gear"><img src="../../../../assets/img/ui/empty.png" /></div>
-			<div class="ship-gear-4 ship-gear"><img src="../../../../assets/img/ui/empty.png" /></div>
+			<div class="ship-gear-1 ship-gear">
+				<img src="../../../../assets/img/ui/empty.png" />
+				<div class="ship-equip-capacity">00</div>
+			</div>
+			<div class="ship-gear-2 ship-gear">
+				<img src="../../../../assets/img/ui/empty.png" />
+				<div class="ship-equip-capacity">00</div>
+			</div>
+			<div class="ship-gear-3 ship-gear">
+				<img src="../../../../assets/img/ui/empty.png" />
+				<div class="ship-equip-capacity">00</div>
+			</div>
+			<div class="ship-gear-4 ship-gear">
+				<img src="../../../../assets/img/ui/empty.png" />
+				<div class="ship-equip-capacity">00</div>
+			</div>
 		</div>
 		<div class="ship-supply">
 			<div class="supply-fuel"><div class="supply-text"></div><div class="supply-bar"></div></div>

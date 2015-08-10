@@ -33,6 +33,18 @@
 						[ 3, "SettingsELosNew" ]
 					]
 				}
+			},
+			{
+				"id" : "hqExpDetail",
+				"name" : "SettingsHQExpDetail",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 1, "SettingsHQExpLeft" ],
+						[ 2, "SettingsHQExpCurrent" ],
+						[ 3, "SettingsHQExpTotal" ]
+					]
+				}
 			}
 		]
 	},
@@ -43,6 +55,12 @@
 			{
 				"id" : "info_face",
 				"name" : "SettingsConstructionFaces",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_drop",
+				"name" : "SettingsDropFaces",
 				"type" : "check",
 				"options" : {}
 			},
@@ -65,8 +83,27 @@
 				"options" : {}
 			},
 			{
+				"id" : "info_btstamp",
+				"name" : "SettingsBattleStamp",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "info_boss",
 				"name" : "SettingsBossComp",
+				"type" : "check",
+				"hide" : 1,
+				"options" : {}
+			},
+			{
+				"id" : "info_troll",
+				"name" : "SettingsYasenTroll",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_delta",
+				"name" : "SettingsHQDelta",
 				"type" : "check",
 				"options" : {}
 			}
@@ -166,6 +203,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "api_mustPanel",
+				"name" : "SettingsPanelRequirement",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "api_margin",
 				"name" : "SettingsScreenMargin",
 				"type" : "small_text",
@@ -208,57 +251,72 @@
 		"help" : "",
 		"contents" : [
 			{
+				"id" : "dmm_forcecookies",
+				"name" : "SettingsDMMForceCookies",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "dmm_customize",
 				"name" : "SettingsDMMCustomize",
 				"type" : "check",
+				"hide" : 1,
 				"options" : {}
 			},
 			{
 				"id" : "dmm_translation",
 				"name" : "SettingsQuestOverlay",
 				"type" : "check",
+				"hide" : 1,
 				"options" : {}
 			},
 			{
 				"id" : "dmm_tracking",
 				"name" : "SettingsQuestTracking",
 				"type" : "check",
+				"hide" : 1,
 				"options" : {}
 			},
 			{
 				"id" : "dmm_askExit",
 				"name" : "SettingsConfirmExit",
 				"type" : "check",
+				"hide" : 1,
 				"options" : {}
 			},
 			{
 				"id" : "dmm_margin",
 				"name" : "SettingsScreenMargin",
 				"type" : "small_text",
+				"hide" : 1,
 				"options" : { "label" : "pixels" }
 			},
 			{
 				"id" : "dmm_bg_color",
 				"name" : "SettingsBGColor",
 				"type" : "long_text",
+				"hide" : 1,
 				"options" : { "placeholder" : "SettingsBGColorDesc" }
 			},
 			{
 				"id" : "dmm_bg_image",
 				"name" : "SettingsBGImage",
 				"type" : "long_text",
+				"hide" : 1,
 				"options" : { "placeholder" : "http://" }
 			},
 			{
 				"id" : "dmm_bg_size",
 				"name" : "SettingsBGSize",
 				"type" : "long_text",
+				"hide" : 1,
 				"options" : { "placeholder" : "SettingsBGSizeDesc" }
 			},
 			{
 				"id" : "dmm_bg_position",
 				"name" : "SettingsBGPosition",
 				"type" : "long_text",
+				"hide" : 1,
 				"options" : { "placeholder" : "SettingsBGPositionDesc" }
 			}
 		]
@@ -273,7 +331,8 @@
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ "default", "Default" ]
+						[ "default", "Default" ],
+						[ "natsuiro", "Natsuiro" ]
 					]
 				}
 			},
@@ -285,6 +344,18 @@
 					"choices" : [
 						[ "small", "Small" ],
 						[ "big", "Big" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_gear_holder",
+				"name" : "SettingsGearHolder",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "black", "Black" ],
+						[ "white", "White" ],
+						[ "none", "None" ]
 					]
 				}
 			},

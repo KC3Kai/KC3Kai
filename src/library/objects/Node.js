@@ -85,7 +85,7 @@ Used by SortieManager
 	
 	/* BATTLE FUNCTIONS
 	---------------------------------------------*/
-	KC3Node.prototype.engage = function( battleData ){
+	KC3Node.prototype.engage = function( battleData, fleetSent ){
 		this.battleDay = battleData;
 		
 		var enemyships = battleData.api_ship_ke;
@@ -93,8 +93,8 @@ Used by SortieManager
 		this.eships = enemyships;
 		this.eformation = battleData.api_formation[1];
 		
-		this.supportFlag = (battleData.api_support_flag>0)?true:false;
-		this.yasenFlag = (battleData.api_midnight_flag>0)?true:false;
+		this.supportFlag = (battleData.api_support_flag>0);
+		this.yasenFlag = (battleData.api_midnight_flag>0);
 		
 		this.detection = KC3Meta.detection( battleData.api_search[0] );
 		this.engagement = KC3Meta.engagement( battleData.api_formation[2] );
@@ -148,26 +148,35 @@ Used by SortieManager
 		var DA = PS["KanColle.DamageAnalysis"];
 		// for regular battles
 		var result = DA.analyzeRawBattleJS(battleData); 
-		console.log(result);
-		for (var i = 7; i < 13; i++) {
-			if ((result[i] !== null) && (result[i].currentHp <= 0)) {
+		var i = 0;
+		for (i = 7; i < 13; i++) {
+			if ((result[i] || {currentHp:0}).currentHp <= 0) {
 				this.enemySunk[i-7] = true;
 			}
+		}
+		
+		var fleetId = parseInt(fleetSent) || KC3SortieManager.fleetSent;
+		var fleet = PlayerManager.fleets[fleetId - 1];
+		var shipNum = fleet.countShips();
+		for(i = 0; i < shipNum; i++) {
+			var ship = fleet.ship(i);
+			ship.afterHp[0] = result[i+1].currentHp;
+			ship.afterHp[1] = ship.hp[1];
 		}
 		// for night battles
 		//DA.analyzeRawNightBattleJS(svdata.api_data)
 	};
 	
-	KC3Node.prototype.engageNight = function( nightData ){
+	KC3Node.prototype.engageNight = function( nightData, fleetSent ){
 		this.battleNight = nightData;
-		this.startNight = true;
+		this.startNight = (fleetSent !== undefined);
 		
 		var enemyships = nightData.api_ship_ke;
 		if(enemyships[0]==-1){ enemyships.splice(0,1); }
 		this.eships = enemyships;
-		this.eformation = nightData.api_formation[1];
+		this.eformation = this.eformation || nightData.api_formation[1];
 		
-		this.engagement = KC3Meta.engagement( nightData.api_formation[2] );
+		this.engagement = this.engagement || KC3Meta.engagement( nightData.api_formation[2] );
 		this.fcontact = (nightData.api_touch_plane[0] > -1)?"YES":"NO";
 		this.econtact = (nightData.api_touch_plane[1] > -1)?"YES":"NO";
 		this.flare = nightData.api_flare_pos[0]; //??
@@ -176,31 +185,27 @@ Used by SortieManager
 		var PS = window.PS;
 		var DA = PS["KanColle.DamageAnalysis"];
 		var result = DA.analyzeRawNightBattleJS( nightData ); 
-		// console.log(result);
-		for (var i = 7; i < 13; i++) {
-			if ((result[i] !== null) && (result[i].currentHp <= 0)) {
+		var i = 0;
+		for (i = 7; i < 13; i++) {
+			if ((result[i] || {currentHp:0}).currentHp <= 0) {
 				this.enemySunk[i-7] = true;
 			}
+		}
+		
+		var fleetId = parseInt(fleetSent) || KC3SortieManager.fleetSent;
+		var fleet = PlayerManager.fleets[fleetId - 1];
+		var shipNum = fleet.countShips();
+		for(i = 0; i < shipNum; i++) {
+			var ship = fleet.ship(i);
+			ship.hp = ship.afterHp;
+			ship.morale = Math.max(0,ship.morale+(fleetSent ? 1 : -3 ));
+			ship.afterHp[0] = result[i+1].currentHp;
+			ship.afterHp[1] = ship.hp[1];
 		}
 	};
 	
 	KC3Node.prototype.night = function( nightData ){
-		this.battleNight = nightData;
-		
-		this.fcontact = (nightData.api_touch_plane[0] > -1)?"YES":"NO";
-		this.econtact = (nightData.api_touch_plane[1] > -1)?"YES":"NO";
-		this.flare = nightData.api_flare_pos[0]; //??
-		this.searchlight = nightData.api_flare_pos[1]; //??
-
-		var PS = window.PS;
-		var DA = PS["KanColle.DamageAnalysis"];
-		var result = DA.analyzeRawNightBattleJS(nightData);
-		// console.log(result);
-		for (var i = 7; i < 13; i++) {
-			if ((result[i] !== null) && (result[i].currentHp <= 0)) {
-				this.enemySunk[i-7] = true;
-			}
-		}
+		this.engageNight(nightData);
 	};
 	
 	KC3Node.prototype.results = function( resultData ){

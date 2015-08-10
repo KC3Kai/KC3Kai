@@ -9,7 +9,8 @@
 				"tw" :"https://twitter.com/dragonjetmkii",
 				"th" :"http://www.twitch.tv/jetrico",
 				"wk" :"http://kancolle.wikia.com/wiki/User:Dragonjet",
-				"gh" :"https://github.com/dragonjet"
+				"gh" :"https://github.com/dragonjet",
+				"hm" :"http://www.himeuta.net/members/78-dragonjet/"
 			}
 		},
 		{
@@ -162,7 +163,7 @@
 		},
 		{
 			"name": "Juuryoushin ",
-			"avatar" : "https://pbs.twimg.com/profile_images/621037441508638721/Jm1Ap5_9.png",
+			"avatar" : "https://pbs.twimg.com/profile_images/628915215095214080/XizjEI8b.png",
 			"desc" : "Français",
 			"links" : {
 				"tw" :"https://twitter.com/YoungPreta"
@@ -196,6 +197,24 @@
 				"gh" :"https://github.com/rephira",
 				"wk" :"http://kancolle.wikia.com/wiki/User:Rephira"
 			}
+		},
+		{
+			"name": "Yuedasoldier",
+			"avatar" : "http://img4.wikia.nocookie.net/__cb1420715487/common/avatars/thumb/8/83/25548706.png/150px-25548706.png.jpg",
+			"desc" : "Tiếng Việt",
+			"links" : {
+				"fb" :"https://www.facebook.com/Raigun.da.soldier",
+				"wk" :"http://kancolle.wikia.com/wiki/User:Yuedasoldier"
+			}
+		},
+		{
+			"name": "Mizarox",
+			"avatar" : "http://img1.wikia.nocookie.net/__cb1435012889/common/avatars/thumb/a/a1/26522856.png/150px-26522856.png.jpg",
+			"desc" : "Português",
+			"links" : {
+				"wk" :"http://kancolle.wikia.com/wiki/User:Mizarox",
+				"fb" :"https://www.facebook.com/mizael.fer"
+			}
 		}
 	],
 	"AboutTesters" : [
@@ -226,11 +245,11 @@
 			}
 		},
 		{
-			"name": "Wikia Bot-chan",
-			"avatar": "http://img1.wikia.nocookie.net/__cb1426319944/common/avatars/thumb/1/1b/26202046.png/150px-26202046.png.jpg",
+			"name": "Nanamin",
+			"avatar": "http://img3.wikia.nocookie.net/__cb1431387090/common/avatars/thumb/3/30/26171095.png/150px-26171095.png.jpg",
 			"desc": "AboutDevTester",
 			"links": {
-				"wk" :"http://kancolle.wikia.com/wiki/User:KancolleChatlogger"
+				"wk" :"http://kancolle.wikia.com/wiki/User:Nanamin"
 			}
 		}
 	],
@@ -253,6 +272,20 @@
 			"links" : {
 				"da" :"http://tykez269.deviantart.com"
 			}
+		},
+		{
+			"name": "Lord Falukorv",
+			"avatar" : "http://img3.wikia.nocookie.net/__cb20150807073959/kancolle/images/5/54/Falukorv.jpg",
+			"desc" : "Sausage supplier",
+			"links" : {}
+		},
+		{
+			"name": "Lord Melon",
+			"avatar" : "http://img4.wikia.nocookie.net/__cb1438854831/common/avatars/thumb/6/65/25730832.png/150px-25730832.png.jpg",
+			"desc" : "Melon supplier",
+			"links" : {
+				"wk" :"http://kancolle.wikia.com/wiki/User:Zel-melon"
+			}
 		}
 	],
 	"AboutReporters" : [
@@ -261,7 +294,8 @@
 			"avatar" : "https://avatars0.githubusercontent.com/u/12227168?v=3&s=40",
 			"desc" : "AboutReporter",
 			"links" : {
-				"gh" :"https://github.com/SanaNoHana"
+				"gh" :"https://github.com/SanaNoHana",
+				"hm" :"http://www.himeuta.net/members/3906-sananohana/"
 			}
 		},
 		{
@@ -270,7 +304,9 @@
 			"desc" : "AboutReporter",
 			"links" : {
 				"gh" :"https://github.com/ethrundr",
-				"wk" :"http://kancolle.wikia.com/wiki/User:Ethrundr"
+				"wk" :"http://kancolle.wikia.com/wiki/User:Ethrundr",
+				"fb" :"https://www.facebook.com/ethrundr",
+				"hm" :"http://www.himeuta.net/members/1056-ethrundr/"
 			}
 		},
 		{

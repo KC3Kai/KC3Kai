@@ -11,6 +11,7 @@ KC3改 Ship Object
 		this.level = 0;
 		this.exp = [0,0,0];
 		this.hp = [0,0];
+		this.afterHp = [0,0];
 		this.fp = [0,0];
 		this.tp = [0,0];
 		this.aa = [0,0];
@@ -22,12 +23,14 @@ KC3改 Ship Object
 		this.range = 0;
 		this.items = [-1,-1,-1,-1];
 		this.slots = [0,0,0,0];
+		this.slotnum = 0;
 		this.mod = [0,0,0,0,0];
 		this.fuel = 0;
 		this.ammo = 0;
 		this.stars = 0;
 		this.morale = 0;
 		this.lock = 0;
+		this.didFlee = false;
 		
 		// If specified with data, fill this object
 		if(typeof data != "undefined"){
@@ -38,6 +41,7 @@ KC3改 Ship Object
 				this.level = data.api_lv;
 				this.exp = data.api_exp;
 				this.hp = [data.api_nowhp, data.api_maxhp];
+				this.afterHp = [data.api_nowhp, data.api_maxhp];
 				this.fp = data.api_karyoku;
 				this.tp = data.api_raisou;
 				this.aa = data.api_taiku;
@@ -48,6 +52,7 @@ KC3改 Ship Object
 				this.lk = data.api_lucky;
 				this.range = data.api_leng;
 				this.items = data.api_slot;
+				this.slotnum = data.api_slotnum;
 				this.slots = data.api_onslot;
 				this.mod = data.api_kyouka;
 				this.fuel = data.api_fuel;
@@ -68,8 +73,10 @@ KC3改 Ship Object
 	KC3Ship.prototype.stype = function(){ return KC3Meta.stype( this.master().api_stype ); };
 	KC3Ship.prototype.equipment = function(slot){ return KC3GearManager.get( this.items[slot] ); };
 	KC3Ship.prototype.isFast = function(){ return this.master().api_soku>=10; };
-	KC3Ship.prototype.didFlee = function(){ return false; };
-	
+	KC3Ship.prototype.resetAfterHp = function(){
+		this.afterHp[0] = this.hp[0];
+		this.afterHp[1] = this.hp[1];
+	};
 	/* NAKED LOS
 	LoS without the equipment
 	--------------------------------------------------------------*/

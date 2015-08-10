@@ -1,0 +1,907 @@
+{
+    "101": {
+        "name": "Primeira Formação!",
+        "desc": "Tenha 2 navios na sua frota principal."
+    },
+    "102": {
+        "name": "Forme um esquadrão de Destróiers!",
+        "desc": "Tenha 4 DD na sua frota principal."
+    },
+    "103": {
+        "name": "Forme um esquadra de Torpedeiras!",
+        "desc": "Tenha uma CL como flagship e 5 DD na sua frota principal."
+    },
+    "104": {
+        "name": "Forme uma frota com 6 navios!",
+        "desc": "Tenha 6 navios na sua frota principal."
+    },
+    "105": {
+        "name": "Forme uma esquadra com duas Cruzadoras Leves!",
+        "desc": "Tenha 2 CL na sua frota principal."
+    },
+    "106": {
+        "name": "Forme uma esquadra com duas Cruzadoras Pesadas!",
+        "desc": "Tenha 2 CA na sua frota principal."
+    },
+    "107": {
+        "name": "Forme um grupo de batalha de Porta-Aviões!",
+        "desc": "Tenha uma CV\/CVL como flagship e 3 DD na sua frota principal."
+    },
+    "108": {
+        "name": "Forme a classe Tenryuu!",
+        "desc": "Tenha Tenryuu (\u5929\u9f8d) e Tatsuta (\u9f8d\u7530) na sua frota principal."
+    },
+    "109": {
+        "name": "Forme a classe Sendai!",
+        "desc": "Tenha Sendai (\u5ddd\u5185), Jintsuu (\u795e\u901a) e Naka (\u90a3\u73c2) na sua frota principal."
+    },
+    "110": {
+        "name": "Forme a classe Myoukou!",
+        "desc": "Tenha Myoukou (\u5999\u9ad8), Nachi (\u90a3\u667a), Ashigara (\u8db3\u67c4) e Haguro (\u7fbd\u9ed2) na sua frota principal."
+    },
+    "111": {
+        "name": "Forme a classe Fusou!",
+        "desc": "Tenha Fusou (\u6276\u6851) e Yamashiro (\u5c71\u57ce) na sua frota principal."
+    },
+    "112": {
+        "name": "Forme a classe Ise!",
+        "desc": "Tenha Ise (\u4f0a\u52e2) e Hyuuga (\u65e5\u5411) na sua frota principal."
+    },
+    "113": {
+        "name": "Forme sua frota principal com Battleships e Cruzadoras Pesadas!",
+        "desc": "Tenha uma BB e 2 CA na sua frota principal."
+    },
+    "114": {
+        "name": "Forme o grupo de batalha de Nagumo!",
+        "desc": "Tenha somente Akagi (\u8d64\u57ce), Kaga (\u52a0\u8cc0), Hiryuu (\u98db\u9f8d) e Souryuu (\u84bc\u9f8d) na sua frota principal."
+    },
+    "115": {
+        "name": "Forme a segunda frota!",
+        "desc": "Tenha uma flagship na sua segunda frota."
+    },
+    "116": {
+        "name": "Prepare um Porta-Hidroaviões",
+        "desc": "Tenha uma AV na sua frota principal."
+    },
+    "117": {
+        "name": "Forme uma esquadra de Porta-Aviões na segunda frota!",
+        "desc": "Tenha uma CV\/CVL e 3 DD na sua segunda frota."
+    },
+    "118": {
+        "name": "Forme a classe Kongou!",
+        "desc": "Tenha Kongou (\u91d1\u525b), Hiei (\u6bd4\u53e1), Haruna (\u699b\u540d) e Kirishima (\u9727\u5cf6) na sua frota principal."
+    },
+    "119": {
+        "name": "Forme a frota Mikawa!",
+        "desc": "Tenha Choukai (\u9ce5\u6d77), Aoba (\u9752\u8449), Kako (\u52a0\u53e4), Furutaka (\u53e4\u9df9), Tenryuu (\u5929\u9f8d) e uma navio RÁPIDA na sua frota principal."
+    },
+    "120": {
+        "name": "Forme a sexta divisão de Destróiers!",
+        "desc": "Tenha SOMENTE Akatsuki (\u6681), Hibiki (\u97ff), Inazuma (\u96f7) e Ikazuchi (\u96fb) na sua frota principal"
+    },
+    "121": {
+        "name": "Forme a quarta divisão de Crusadores!",
+        "desc": "Tenha Atago (\u611b\u5b95), Takao (\u9ad8\u96c4), Choukai (\u9ce5\u6d77) e Maya (\u6469\u8036) na sua frota principal."
+    },
+    "122": {
+        "name": "Forme a frota Nishimura!",
+        "desc": "Tenha Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce), Mogami (\u6700\u4e0a) e Shigure (\u6642\u96e8) na sua frota principal."
+    },
+    "123": {
+        "name": "Forme a quinta divisão de Porta-Aviões!",
+        "desc": "Tenha Shoukaku (\u7fd4\u9db4), Zuikaku (\u745e\u9db4) e 2 DD na sua frota principal."
+    },
+    "124": {
+        "name": "Forme a nova frota Mikawa!",
+        "desc": "Tenha Choukai (\u9ce5\u6d77), Aoba (\u9752\u8449), Kinugasa (\u8863\u7b20), Kako (\u52a0\u53e4), Furutaka (\u53e4\u9df9) e Tenryuu (\u5929\u9f8d) na sua frota principal."
+    },
+    "125": {
+        "name": "Forme uma frota de Submarinos!",
+        "desc": "Tenha 2 SS na sua frota principal."
+    },
+    "126": {
+        "name": "Forme uma frota de ataque de Aviação Naval!",
+        "desc": "Tenha 2 BBV e 2 CAV na sua frota principal."
+    },
+    "127": {
+        "name": "Forme uma frota de porte-médio de Submarinos!",
+        "desc": "Tenha 3 SS na sua frota principal."
+    },
+    "128": {
+        "name": "Forme a sexta divisão de Crusadoras!",
+        "desc": "Tenha Furutaka (\u53e4\u9df9), Kako(\u52a0\u53e4), Aoba (\u9752\u8449) e Kinugasa (\u8863\u7b20) na sua frota principal."
+    },
+    "129": {
+        "name": "Forme a quinta frota!",
+        "desc": "Tenha Nachi (\u90a3\u667a), Ashigara (\u8db3\u67c4), Tama (\u591a\u6469) e Kiso (\u6728\u66fe) em sua frota."
+    },
+    "130": {
+        "name": "Forme a primeira Esquadra de Torpedo!",
+        "desc": "Tenha Abukuma (\u963f\u6b66\u9688), Akebono (\u66d9), Ushio (\u6f6e), Kasumi (\u971e) e Shiranui (\u4e0d\u77e5\u706b) em sua frota."
+    },
+    "131": {
+        "name": "Forme a oitava divisão de Destróiers!",
+        "desc": "Tenha Asashio (\u671d\u6f6e), Michishio (\u6e80\u6f6e), Ooshio (\u5927\u6f6e) e Arashio (\u8352\u6f6e) em sua frota."
+    },
+    "132": {
+        "name": "Forme décima oitava divisão de Destróiers!",
+        "desc": "Tenha SOMENTE Kasumi (\u971e), Arare (\u9730), Kagerou (\u967d\u708e) e Shiranui (\u4e0d\u77e5\u706b) em sua frota."
+    },
+    "133": {
+        "name": "Forme a trigésima divisão de Destróiers (Gen-1)!",
+        "desc": "Tenha SOMENTE Mutsuki (\u7766\u6708), Kisaragi (\u5982\u6708), Yayoi (\u5f25\u751f) e Mochizuki (\u671b\u6708) em sua frota."
+    },
+    "134": {
+        "name": "Em preparação para o Amor! (Parte 3)",
+        "desc": "Tenha uma navio de level 90 ao 99 como sua flagship"
+    },
+    "135": {
+        "name": "Uma nova jornada!",
+        "desc": "Organize uma frota com 6 navios contendo sua navio recém-casada de level 100 ou mais como flagship!"
+    },
+    "136": {
+        "name": "Forme a trigésima frota de Destróiers (Gen.2)",
+        "desc": "Tenha SOMENTE Mutsuki (\u7766\u6708), Yayoi (\u5f25\u751f), Uzuki (\u536f\u6708) e Mochizuki (\u671b\u6708) em sua frota."
+    },
+    "137": {
+        "name": "Forme a quinta frota",
+        "desc": "Tenha Myoukou (\u5999\u9ad8), Nachi (\u90a3\u667a) e Haguro (\u7fbd\u9ed2) em sua frota."
+    },
+    "138": {
+        "name": "Forme a nova segunda divisão de Porta-Aviões",
+        "desc": "Tenha Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c, como flagship), Souryuu (\u84bc\u9f8d) e 2 destróiers na sua frota."
+    },
+    "139": {
+        "name": "Forme a sexta frota de Submarinos",
+        "desc": "Tenha um portador de submarinos e 4 (ou mais) submarinos em sua frota."
+    },
+    "140": {
+        "name": "Teste o novo RADAR!",
+        "desc": "Tenha Myoukou Kai2 como flagship da sua frota."
+    },
+    "141": {
+        "name": "Reorganize a segunda divisão de Porta-Aviões reforçada",
+        "desc": "Tenha Souryuu Kai-2 (\u84bc\u9f8d\u6539\u4e8c) como flagship junto de Hiryuu Kai-2 (\u98db\u9f8d\u6539\u4e8c) e 2 destróiers em sua frota."
+    },
+    "142": {
+        "name": "Organize a terceira divisão elite de Navios de Batalha",
+        "desc": "Tenha todas as quatro Kongous Kai 2 em sua frota."
+    },
+    "143": {
+        "name": "Lance o novo tipo de Porta-Aviões",
+        "desc": "Tenha Unryuu (\u96f2\u9f8d) como flagship de sua frota."
+    },
+    "144": {
+        "name": "Organize a frota principal de Navios de Batalha: O segundo esquadrão",
+        "desc": "Tenha ambas Nagato-class e ambas Fusou-class battleships (e nenhum outro navio) em sua frota principal."
+    },
+    "145": {
+        "name": "Organize a força principal de Navios de Batalha",
+        "desc": "Tenha três battleships da classe Nagato, Fusou, Ise ou Yamato e uma light cruiser em sua frota."
+    },
+    "146": {
+        "name": "Prepare seu arsenal para renovações",
+        "desc": "Tenha Akashi (\u660e\u77f3) como flagship em sua frota principal."
+    },
+    "147": {
+        "name": "Organize a frota Nishimura",
+        "desc": "Tenha Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce), Mogami (\u6700\u4e0a), Shigure (\u6642\u96e8) e Michishio (\u6e80\u6f6e) em sua frota principal."
+    },
+    "148": {
+        "name": "Organize o esquadrão de contra-ataque",
+        "desc": "Tenha Kasumi (\u971e) como flagship, Ashigara (\u8db3\u67c4), 1 CL e mais 3 DDs em sua frota principal."
+    },
+    "149": {
+        "name": "Organize a décima primeira divisão de Destróiers",
+        "desc": "Tenha os 4 destróiers especiais: Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea) e Murakumo(\u53e2\u96f2) em sua frota principal. Uma delas como flagship."
+    },
+    "150": {
+        "name": "Organize a vigésima primeira divisão de Destróiers",
+        "desc": "Tenha SOMENTE Hatsuharu (\u521d\u6625), Nenohi (\u5b50\u65e5), Wakaba (\u82e5\u8449) e Hatsushimo (\u521d\u971c) em sua frota principal."
+    },
+    "151": {
+        "name": "Organize vigésima segunda divisão de Destróiers",
+        "desc": "Tenha SOMENTE Satsuki (\u7690\u6708), Fumizuki (\u6587\u6708), Nagatsuki (\u9577\u6708) e mais 1 DD em sua frota principal."
+    },
+    "152": {
+        "name": "Organize a nova edição da frota Mikawa",
+        "desc": "Tenha Choukai Kai2 como flagship, Aoba, Kinugasa, Kako, Furutaka, Tenryuu e Yuubari em sua frota principal"
+    },
+    "153": {
+        "name": "Reorganize o décimo oitavo esquadrão!",
+        "desc": "Tenha Tenryuu, Tatsuta e 2 ou mais navios em sua frota"
+    },
+	"154": {
+        "name": "Organize a frota de combate de superfície!",
+        "desc": "Tenha Hiei, Kirishima, Nagara, Akatsuki, Ikazuchi e Inazuma em sua frota"
+    },
+	"155": {
+        "name": "Organize a nova sexta divisão de Destróiers!",
+        "desc": "Tenha Akatsuki Kai2 como Flagship junto de Hibiki/Bep, Ikazuchi e Inazuma em sua frota"
+    },
+	
+	
+	
+	
+	
+    "202": {
+        "name": "Primeiro Despache!",
+        "desc": "Lance sua frota principal em uma missão de combate."
+    },
+    "203": {
+        "name": "Proteja os mares de Chinju-Fu!",
+        "desc": "Lance seus navios no Mundo 1-1 e limpe o estágio."
+    },
+    "204": {
+        "name": "Em direção a costa de Nansei Islands!",
+        "desc": "Lance no Mundo 1-1 até Mundo 1-2 e complete os estágios."
+    },
+    "205": {
+        "name": "Intercepte a frota da vanguarda inimiga!",
+        "desc": "Lance NOVAMENTE no Mundo 1-2 DEPOIS de ter derrotado o chefe e já ter completado o estágio."
+    },
+    "206": {
+        "name": "Despache a Esquadra de Torpedo!",
+        "desc": "Lance uma frota com um CL de flagship e mais 3 DD como escoltas."
+    },
+    "207": {
+        "name": "Despache uma Crusadora Pesada!",
+        "desc": "Lance uma frota com um CA como flagship."
+    },
+    "208": {
+        "name": "Despache uma Battleship!",
+        "desc": "Lance uma frota com uma BB como flagship. BBV não conta."
+    },
+    "209": {
+        "name": "Despache um Grupo de batalha de Porta-Aviões!",
+        "desc": "Lance uma frota com uma CV(L) como flagship e 5 DD\/CL\/AV como escoltas."
+    },
+    "215": {
+        "name": "Despache a segunda frota!",
+        "desc": "Lance sua segunda frota em uma missão de combate."
+    },
+    "217": {
+        "name": "Afunde uma Porta-Aviões inimigo!",
+        "desc": "Afunde uma aircraft carrier inimigo."
+    },
+    "219": {
+        "name": "Despache a frota Mikawa!",
+        "desc": "Lance uma frota com Choukai, Aoba, Kako, Furutaka, Tenryuu e outro navio rápido."
+    },
+    "222": {
+        "name": "Despache a sexta divisão de Destróiers!",
+        "desc": "Lance uma frota SOMENTE com Akatsuki, Hibiki, Inazuma, e Ikazuchi."
+    },
+    "223": {
+        "name": "Despache a quarta divisão de Crusadores!",
+        "desc": "Lance uma frota com Atago, Takao, Choukai, Maya e outros 2 navio. Conquiste uma vitória contra o Chefe dos Mundo 2-2."
+    },
+    "224": {
+        "name": "Despache a frota Nishimura!",
+        "desc": "Lance uma frota com Fusou, Yamashiro, Mogami, Shigure e outros dois navios. Conquiste uma vitória contra o Chefe do Mundo 2-3."
+    },
+    "225": {
+        "name": "Despache a quinta divisão de Porta-Aviões!",
+        "desc": "Lance uma frota com Shoukaku, Zuikaku e outros 4 navios. Conquiste uma vitória contra o Chefe do mundo 3-1."
+    },
+    "227": {
+        "name": "Despache a nova frota Mikawa!",
+        "desc": "Lance uma frota com Choukai, Aoba, Kinugasa, Kako, Furutaka e Tenryuu. Conquiste uma vitória contra o Chefe do Mundo 2-3."
+    },
+    "231": {
+        "name": "Despache uma frota de Submarinos!",
+        "desc": "Lance uma frota com 2 SS e 4 navios adicionais. Lance uma frota com 2 SS e 4 navios adicionais. Conquiste uma vitória contra o Chefe do Mundo 2-3."
+    },
+    "232": {
+        "name": "Despache uma frota de Aviadores Navais!",
+        "desc": "Lance uma frota com BBV, 2 CAV e 2 navios adicionais. Conquiste uma vitória contra o Chefe do Mundo 4-2."
+    },
+    "233": {
+        "name": "Despache a Divisão de Crusadores!",
+        "desc": "Lance uma frota com Furutaka, Kako, Kinugasa, Aoba e 2 navios adicionais. Conquiste um rank S contra o Chefe do Mundo 2-3."
+    },
+    "239": {
+        "name": "Despache a oitava Divisão de Destróiers!",
+        "desc": "Lance uma frota com Asashio, Michishio, Ooshio, Arashio e 2 navios adicionais. Conquiste uma vitória contra o Chefe do mundo 2-3."
+    },
+    "240": {
+        "name": "Despache a décima oitava Divisão de Destróiers!",
+        "desc": "Lance uma frota com Kasumi, Arare, Kagerou, Shiranui e 2 navios adicionais. Conquiste uma vitória contra o Chefe do Munto 3-1."
+    },
+    "244": {
+        "name": "Despache a trigésima Divisão de Destróiers (Gen-1)",
+        "desc": "Lance uma frota com Mutsuki (\u7766\u6708), Kisaragi (\u5982\u6708), Yayoi (\u5f25\u751f), Mochizuki (\u671b\u6708) e 2 DDs adicionais no Mundo 3-2 e encontre o Chefe. Rank C ou maior requerido."
+    },
+    "245": {
+        "name": "Em preparação para o amor! (Final)",
+        "desc": "Lance uma frota com um Flagship de Nível 90 ao 99 no Mundo 2-3 e obtenha um Rank S contra o Chefe."
+    },
+    "246": {
+        "name": "Sua primeira missão juntos!",
+        "desc": "Lance uma frota no Mundo 4-3 com sua navio recém-casado de nível 100 ou maior como flagship e conquiste um Rank S contra o Chefe."
+    },
+    "247": {
+        "name": "Despache uma frota com Aviation Battleship!",
+        "desc": "Tenha 2 BBV em sua frota principal e conquiste uma vitória contra o Chefe do Mundo 4-4."
+    },
+    "248": {
+        "name": "Trigésima frota Destróier Anti-Submarino",
+        "desc": "Lance Mutsuki, Yayoi, Uzuki e Mochizuki ao Mundo 1-5 e chegue ao Chefe, Rank C é requerido."
+    },
+    "250": {
+        "name": "Despache a segunda Divisão de Porta-Aviões",
+        "desc": "Lance Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c) como flagship, Souryuu (\u84bc\u9f8d) e dois destróiers ao Mundo 5-2. Você pode adicionar outros dois navios. Conquiste um Rank S contra o Chefe."
+    },
+    "251": {
+        "name": "Despache a segunda Divisão de Elite de Porta-Aviões",
+        "desc": "Lance Souryuu Kai Ni (\u84bc\u9f8d\u6539\u4e8c) como flagship, Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c) e dois destróiers ao Mundo 4-3. Você pode adicionar outras duas navios. Conquiste um Rank S contra o Chefe."
+    },
+    "252": {
+        "name": "Despache a frota da Haruna",
+        "desc": "Lance uma frota com Haruna Kai Ni (\u699b\u540d\u6539\u4e8c) como flagship e mais 5 navios adicionais ao Mundo 5-1 e conquiste Rank S contra o Chefe."
+    },
+    "253": {
+        "name": "Despache o Grupo Aéreo 601",
+        "desc": "Lance uma frota com Unryuu Kai (\u96f2\u9f8d\u6539) como flagship ao Mundo 5-2 e conquiste um Rank S contra o Chefe."
+    },
+    "254": {
+        "name": "Despache a esquadra de Crusadoras Leves.",
+        "desc": "Lance uma frota com 1-2 light aircraft carriers, 1 light cruiser e 3-4 destroyers ao Mundo 2-1 e conquiste um Rank S contra o Chefe."
+    },
+    "255": {
+        "name": "Despache uma Esquadra de Torpedo até às Ilhas Bashi",
+        "desc": "Lance uma frota com 1-2 light cruisers (uma deles sendo flagship) e 4-5 destroyers ao Mundo 2-2. Conquiste uma vitória contra o Chefe e afunde o flagship inimigo."
+    },
+    
+   
+    "258": {
+        "name": "Despache a Segundo Esquadra",
+        "desc": "Lance Nagato (\u9577\u9580), Mutsu (\u9678\u5965), Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce) e mais 2 navios adicionais ao Mundo 4-2. Conquiste DOIS rank S contra o Chefe."
+    },
+   
+    "260": {
+        "name": "Despache a Esquadra de Battleships nas Águas do Norte.",
+        "desc": "Lance duas battleships, uma light aircraft carrier e 3 navios adicionais ao Mundo 3-5 e conquiste um rank S contra o Chefe."
+    },
+    
+    "262": {
+        "name": "Despache a frota Nishimura nas Águas do Sul",
+        "desc": "Lance Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce), Mogami (\u6700\u4e0a), Shigure (\u6642\u96e8) e Michishio (\u6e80\u6f6e) (você pode adicionar outro navio) ao Mundo 5-1 e conquiste um rank S contra o Chefe."
+    },
+    "263": {
+        "name": "Despache o Sexta Esquadra nas Águas do Sul",
+        "desc": "Lance Furutaka (\u53e4\u9df9), Kako (\u52a0\u53e4), Aoba (\u9752\u8449), Kinugasa (\u8863\u7b20) e mais dois navios ao Mundo 2-5 e conquiste um Rank S contra o Chefe."
+    },
+    "267": {
+        "name": "Despache a décima primeira Divisão de Destróiers",
+        "desc": "Lance Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea), Murakumo(\u53e2\u96f2) e mais 2 navios adicionais ao Mundo 2-3 e conquiste a vitória contra o Chefe."
+    },
+    "268": {
+        "name": "Décima primeira divisão Anti-Submarino de Destróiers",
+        "desc": "Lance Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea) e Murakumo(\u53e2\u96f2) ao Mundo 1-5 e conquiste pelo menos Rank C contra o Chefe."
+    },
+    "269": {
+        "name": "Despache a Vigésima primeira Divisão de Destróiers",
+        "desc": "Lance Hatsuharu (\u521d\u6625), Nenohi (\u5b50\u65e5), Wakaba (\u82e5\u8449), Hatsushimo (\u521d\u971c) e mais 2 navios adicionais ao Mundo 3-1 e conquiste um Rank S contra o Chefe."
+    },
+    "270": {
+        "name": "Despache a Vigésima segunda Divisão de Destróiers",
+        "desc": "Lance Satsuki (\u7690\u6708), Fumizuki (\u6587\u6708), Nagatsuki (\u9577\u6708), 1 DD e até 2 navios adicionais ao Mundo 1-4 e conquiste Rank S contra o Chefe."
+    },
+    "271": {
+        "name": "Despache o Esquadrão Nachi",
+        "desc": "Lance uma frota com Nachi (\u90a3\u667a) como flagship, Hatsushimo (\u521d\u971c), Kasumi (\u971e), Ushio (\u6f6e), Akebono (\u66d9) e um navio adicional ao Mundo 2-2 e conquiste um Rank S contra o Chefe."
+    },
+    "272": {
+        "name": "Despache as Crusadoras Pesadas Antiaéreas Remodeladas",
+        "desc": "Lance uma frota com Maya (\u6469\u8036) Kai ou Kai2, 1 CL, 2 DD e mais dois navios adicionais ao Mundo 2-3 e conquiste um Rank S contra o boss."
+    },
+    "273": {
+        "name": "Despache a frota Mikawa nas Ilhas de Solomon",
+        "desc": "Lance sua frota principal com Choukai Kai2 (\u9ce5\u6d77\u6539\u30cb) como flagship e Aoba (\u9752\u8449), Kinugasa (\u8863\u7b20), Kako (\u52a0\u53e4), Furutaka (\u53e4\u9df9), Tenryuu (\u5929\u9f8d), Yuubari (\u5915\u5f35) ao Mundo 5-1 e conquiste um Rank S contra o Chefe."
+    },
+    "274": {
+        "name": "Sexta divisão Anti-Submarino de Destróiers",
+        "desc": "Lance Akatsuki (\u6681), Hibiki (\u97ff ou \u0412\u0435\u0440\u043d\u044b\u0439), Inazuma (\u96f7) e Ikazuchi (\u96fb) ao Mundo 1-5. Pelo menos Rank C é requerido.."
+    },
+    "275": {
+        "name": "Despache o Décimo oitavo Esquadrão",
+        "desc": "Lance Tenryuu, Tatsuta e mais 2 navios ao Mundo 2-3 e conquiste um Rank S contra o Chefe"
+    },
+	"276": {
+        "name": "Despache a frota de combate de superfície!",
+        "desc": "Lance Hiei, Kirishima, Nagara, Akatsuki, Ikazuchi e Inazuma ao Mundo 5-1 e complete o mapa com um Rank S"
+    },
+	"277": {
+        "name": "Sexta Divisão de Destróiers em missão Anti-Submarino!",
+        "desc": "Lance Akatsuki Kai2 , Hibiki/Verniy, Ikazuchi, Inazuma ao Mundo 1-5 e complete o mapa com pelo menos Rank A"
+    },
+	
+	
+	
+	
+	
+	"201": {
+        "code": "Bd1",
+        "name": "Primeira Missão Diária",
+        "desc": "Derrote uma frota Abissal",
+		"unlock": [ 216, 211, 212 ],
+		"tracking": [ [0,1] ]
+    },
+	"216": {
+		"code": "Bd2",
+		"name": "Segunda Missão Diária",
+		"desc": "Derrote o flagship de uma frota Abissal",
+		"unlock": [ 210, 218, 214, 213 ],
+		"tracking": [ [0,1] ]
+	},
+	"210": {
+		"code": "Bd3",
+		"name": "Terceira Missão Diária",
+		"desc": "Derrote 10 frotas abissais (Rank B+)",
+		"tracking": [ [0,10] ]
+	},
+	"211": {
+		"code": "Bd4",
+		"name": "Quarta Missão Diária",
+		"desc": "Afunde 3 Porta-aviões Abissais (CVL também conta)",
+		"tracking": [ [0,3] ]
+	},
+	"218": {
+		"code": "Bd5",
+		"name": "Quinta Missão Diária",
+		"desc": "Afunde 3 navios Abissais de Transporte",
+		"unlock": [ 226, 220 ],
+		"tracking": [ [0,3] ]
+	},
+	"212": {
+		"code": "Bd6",
+		"name": "Sexta Missão Diária",
+		"desc": "Afunde 5 navios Abissais de Transporte",
+		"tracking": [ [0,5] ]
+	},
+	"226": {
+		"code": "Bd7",
+		"name": "Sétima Missão Diária",
+		"desc": "Derrote 5 Chefes no Mundo 2",
+		"unlock": [ 230 ],
+		"tracking": [ [0,5] ]
+	},
+	"230": {
+		"code": "Bd8",
+        "name": "Oitava Missão Diária",
+        "desc": "Afunde 6 Submarinos Abissais",
+		"tracking": [ [0,6] ]
+    },
+	
+	
+	
+	
+	
+	"214": {
+		"code": "Bw1",
+		"name": "Primeira Missão Semanal",
+		"desc": "Despache 36 vezes, Encontre 24 Chefes, Ganhe contra 12 Chefes e Conquiste 6 Ranks S",
+		"unlock": [ 221 ],
+		"tracking": [ [0,36], [0,24], [0,12], [0,6] ]
+	},
+	"220": {
+		"code": "Bw2",
+        "name": "Segunda Missão Semanal",
+        "desc": "Afunde 20 Porta-aviões Abissais (CVL também conta)",
+		"unlock": [ 228 ],
+		"tracking": [ [0,20] ]
+    },
+	"213": {
+		"code": "Bw3",
+		"name": "Terceira Missão Semanal",
+		"desc": "Afunde 20 navios Abissais de Transporte",
+		"tracking": [ [0,20] ]
+	},
+	"221": {
+		"code": "Bw4",
+        "name": "Quarta Missão Semanal",
+        "desc": "Afunde 50 navios Abissais de Transporte",
+		"unlock": [ 261, 257, 264 ],
+		"tracking": [ [0,50] ]
+    },
+	"228": {
+		"code": "Bw5",
+        "name": "Quinta Missão Semanal",
+        "desc": "Afunde 15 Submarinos",
+		"unlock": [ 229, 241, 613 ],
+		"tracking": [ [0,15] ]
+    },
+	"229": {
+		"code": "Bw6",
+        "name": "Sexta Missão Semanal",
+        "desc": "Derrote 12 Chefes no Mundo 4",
+		"unlock": [ 242 ],
+		"tracking": [ [0,12] ]
+    },
+	"241": {
+		"code": "Bw7",
+        "name": "Sétima Missão Semanal",
+        "desc": "Derrote 5 Chefes nos Mundos 3-3, 3-4 ou 3-5",
+		"tracking": [ [0,5] ]
+    },
+    "242": {
+		"code": "Bw8",
+        "name": "Oitava Missão Semanal",
+        "desc": "Derrote o Chefe do Mundo 4-4",
+		"unlock": [ 243 ],
+		"tracking": [ [0,1] ]
+    },
+    "243": {
+		"code": "Bw9",
+        "name": "Nona Missão Semanal",
+        "desc": "Despache no Mundo 5-2 e conquiste Rank S contra o Chefe DUAS vezes",
+		"tracking": [ [0,2] ]
+    },
+	"261": {
+		"code": "Bw10",
+        "name": "Décima Missão Semanal",
+        "desc": "Despache no Mundo 1-5 e conquiste Rank A+ contra o Chefe TRÊS vezes",
+		"tracking": [ [0,3] ]
+    },
+	
+	
+	
+	
+	
+	"249": {
+		"code": "Bm1",
+        "name": "Despache a Quinta Esquadra",
+        "desc": "Lance Myoukou, Nachi, Haguro e mais +3 navios no Mundo 2-5 e conquiste Rank S contra o Chefe.",
+		"unlock": [ 265 ]
+    },
+	"256": {
+		"code": "Bm2",
+        "name": "Despache uma frota de Submarinos ao Mundo 6-1",
+        "desc": "Lance no Mundo 6-1 e obtenha um Rank S contra o Chefe TRÊS vezes",
+		"tracking": [ [0,3] ]
+    },
+	"257": {
+		"code": "Bm3",
+        "name": "Despache uma Esquadra de Torpedo",
+        "desc": "1 a 3 CL (1 CL como flagship) e 3 a 5 destróiers ao Mundo 1-4. Conquiste Rank S contra o Chefe"
+    },
+	"259": {
+		"code": "Bm4",
+        "name": "Despache uma Esquadra de Navios de Batalha",
+        "desc": "Lance 3 BB(V) + 1 CL + 2 navios no Mundo 5-1. Conquiste Rank S contra o Chefe"
+    },
+	"265": {
+		"code": "Bm5",
+        "name": "Dever Mensal de Escolta",
+        "desc": "Despache uma frota ao Mundo 1-5. Conquiste um Rank A+ contra o Chefe DEZ vezes",
+		"tracking": [ [0,10] ]
+    },
+	"264": {
+		"code": "Bm6",
+        "name": "Despache um grupo de batalha de Porta-Aviões para o Oeste!",
+        "desc": "2 CV + 2 DD + 2 navios ao Mundo 4-2. Conquiste um Rank S contra o Chefe",
+		"unlock": [ 266 ]
+    },
+	"266": {
+		"code": "Bm7",
+        "name": "Despache a Esquadra de Contra-Ataque",
+        "desc": "4 DD (DD como flagship) + 1 CA (não pode ser CAV) + 1 CL ao Mundo 2-5. Conquiste Rank S contra o Chefe"
+    },
+	
+	
+	
+	
+	
+    "301": {
+		"code": "C1",
+        "name": "Primeiro Exercício!",
+        "desc": "Desafie outra frota no modo de prática"
+    },
+	 "303": {
+		"code": "C2",
+        "name": "Primeiro Exercício Diário",
+        "desc": "Desafie 3 outras frotas no modo de prática",
+		"unlock": [ 304, 302 ],
+		"tracking": [ [0,3] ]
+    },
+	"304": {
+		"code": "C3",
+        "name": "Segundo Exercício Diário",
+        "desc": "Conquiste 5 vitórias no modo de prática no mesmo dia",
+		"tracking": [ [0,5] ]
+    },
+    "302": {
+		"code": "C4",
+        "name": "Exercícios Semanais",
+        "desc": "Conquiste 20 vitórias no modo de prática",
+		"tracking": [ [0,20] ]
+    },
+    "307": {
+		"code": "C5",
+        "name": "Melhore a eficiência da frota",
+        "desc": "Conquiste 3 vitórias no modo de prática"
+    },
+    "308": {
+		"code": "C6",
+        "name": "Melhore a eficiência da frota mais uma vez!",
+        "desc": "Conquiste 4 vitórias no modo de prática"
+    },
+	
+	
+	
+	
+	
+    "401": {
+		"code": "D1",
+        "name": "Primeira Expedição",
+        "desc": "Performe uma expedição"
+    },
+    "402": {
+		"code": "D2",
+        "name": "Primeira Expedição Diária",
+        "desc": "Performe 3 expedições bem-sucedidas",
+		"unlock": [ 403 ],
+		"tracking": [ [0,3] ]
+    },
+    "403": {
+		"code": "D3",
+        "name": "Segunda Expedição Diária",
+        "desc": "Performe 10 expedições bem-sucedidas",
+		"tracking": [ [0,10] ]
+    },
+    "404": {
+		"code": "D4",
+        "name": "Expedições Semanais",
+        "desc": "Performe 30 expedições bem-sucedidas",
+		"tracking": [ [0,30] ]
+    },
+    "405": {
+		"code": "D5",
+        "name": "A Primeira Operação de Submarinos",
+        "desc": "Complete a Expedição 30"
+    },
+    "406": {
+		"code": "D6",
+        "name": "A Segunda Operação de Submarinos",
+        "desc": "Complete a Expedição 30 mais UMA vez"
+    },
+    "408": {
+		"code": "D7",
+        "name": "Continuação das Operações de Submarinos",
+        "desc": "Complete a Expedição 30 mais DUAS vezes"
+    },
+    "409": {
+		"code": "D8",
+        "name": "Encontro Estratégico com os Submarinos Além-Mar!",
+        "desc": "Complete a Expedição 31"
+    },
+    "410": {
+		"code": "D9",
+        "name": "Segunda Expedições Semanais",
+        "desc": "Complete expedições 37 ou 38",
+		"unlock": [ 411 ],
+		"tracking": [ [0,1] ]
+    },
+	"412": {
+		"code": "D10",
+        "name": "Fortaleça a Operação de BBV's",
+        "desc": "Complete expedição 23"
+    },
+    "411": {
+		"code": "D11",
+        "name": "Terceira Expedições Semanais",
+        "desc": "Complete as expedições 37 ou 38 num total de 7 vezes",
+		"tracking": [ [0,7] ]
+    },
+    "413": {
+		"code": "D12",
+        "name": "Fortaleça a Operação de BBV's (Continuação)",
+        "desc": "Complete a expedição 23 mais QUATRO vezes"
+    },
+    "414": {
+		"code": "D13",
+        "name": "Comece a Operação de Submarinos nas Águas Profundas",
+        "desc": "Complete a expedição 39"
+    },
+    "415": {
+		"code": "D14",
+        "name": "Extensão da Operação de Submarinos nas Águas Profundas",
+        "desc": "Complete a expedição 39 mais DUAS vezes"
+    },
+    "416": {
+		"code": "D15",
+        "name": "Exercícios de Defesa Antiaérea",
+        "desc": "Complete a expedição 6 TRÊS vezes"
+    },
+    "417": {
+		"code": "D16",
+        "name": "Comece a Operação de Suporte da Força-Tarefa de Distração",
+        "desc": "Complete a expedição 15"
+    },
+    "418": {
+		"code": "D17",
+        "name": "Preparação da Cerimônia Naval",
+        "desc": "Complete a expedição 7 DUAS vezes"
+    },
+    "419": {
+		"code": "D18",
+        "name": "Cerimônia Naval",
+        "desc": "Complete a expedição 8"
+    },
+	
+	
+	
+	
+	
+    "501": {
+		"code": "E1",
+        "name": "Primeiro Reabastecimento",
+        "desc": "Reabasteça um navio"
+    },
+    "502": {
+		"code": "E2",
+        "name": "Primeiro Conserto",
+        "desc": "Repare um navio"
+    },
+    "503": {
+		"code": "E3",
+        "name": "Reparos Diários",
+        "desc": "Repare 5 navios",
+		"unlock": [ 504 ],
+		"tracking": [ [0,5] ]
+    },
+    "504": {
+		"code": "E4",
+        "name": "Reabastecimento Diário",
+        "desc": "Reabasteça seus navios 15 vezes",
+		"tracking": [ [0,15] ]
+    },
+	
+	
+	
+	
+	
+	"605": {
+		"code": "F1",
+        "name": "Desenvolvimento Diáro",
+        "desc": "Construa um equipamento (Falhas são OK)",
+		"unlock": [ 606 ],
+		"tracking": [ [0,1] ]
+    },
+	"606": {
+		"code": "F2",
+        "name": "Construção Diára",
+        "desc": "Construa uma navio",
+		"unlock": [ 607 ],
+		"tracking": [ [0,1] ]
+    },
+	"607": {
+		"code": "F3",
+        "name": "Segundo Desenvolvimento Diário",
+        "desc": "Construa 3 equipamentos (Falhas são OK)",
+		"unlock": [ 608 ],
+		"tracking": [ [0,3] ]
+    },
+	 "608": {
+		"code": "F4",
+        "name": "Segunda Construção Diária",
+        "desc": "Construa 3 navios",
+		"unlock": [ 609, 619 ],
+		"tracking": [ [0,3] ]
+    },
+	 "609": {
+		"code": "F5",
+        "name": "Desconstrução Diária",
+        "desc": "Desconstrua 2 navios",
+		"tracking": [ [0,2] ]
+    },
+    "601": {
+		"code": "F6",
+        "name": "Primeira Construção",
+        "desc": "Construa uma navio"
+    },
+    "602": {
+		"code": "F7",
+        "name": "Primeiro Desenvolvimento",
+        "desc": "Construa um equipamento"
+    },
+    "603": {
+		"code": "F8",
+        "name": "Primeira Desconstrução",
+        "desc": "Desconstrua uma navio"
+    },
+    "604": {
+		"code": "F9",
+        "name": "Primeiro Descarte",
+        "desc": "Destrua um equipamento"
+    },
+    "610": {
+		"code": "F10",
+        "name": "Preparação para LSC (Parte 2)",
+        "desc": "Destrua 4 equipamentos"
+    },
+	"612": {
+		"code": "F11",
+        "name": "Prepare os Drum Canisters",
+        "desc": "Destrua 3 equipamentos"
+    },
+	 "613": {
+		"code": "F12",
+        "name": "Desmantelamento Semanal",
+        "desc": "Destrua 24 equipamentos",
+		"tracking": [ [0,24] ]
+    },
+	 "614": {
+		"code": "F13",
+        "name": "Conversão de Modelo (para Tenzan)",
+        "desc": "Tenha a flagship equipada com Type 97 Torpedo Bomber (Tomonaga Squadron), então destrua 2 Tenzan (o type 97 não deve estar trancado (heartlocked) e desconstruir 1 Tenzan de cada vez)"
+    },
+	"615": {
+		"code": "F14",
+        "name": "Conversão de Modelo (para Suisei)",
+        "desc": "Tenha o flagship equipado com Type 99 Dive Bomber (Egusa Squadron), então destrua 2 Suisei (o type 99 não deve estar trancado (heartlocked) e descontruir 1 Tenzan de cada vez)"
+    },
+    "616": {
+		"code": "F15",
+        "name": "Conversão de Modelo (para Reppuu)",
+        "desc": "Tenha o flagship equipado com Zero Fighter Type 52 Type C (601 Air Group), então destrua 2 Reppuu"
+    },
+	"617": {
+		"code": "F16",
+        "name": "Preparação para Irako",
+        "desc": "Destrua 10 equipamentos"
+    },
+	"618": {
+		"code": "F17",
+        "name": "Primeira Modernização de Equipamentos",
+        "desc": "Performe uma modernização de equipamento uma vez"
+    },
+    "619": {
+		"code": "F18",
+        "name": "Modernização de Equipmentos",
+        "desc": "Performe uma modernização de equipamento",
+		"tracking": [ [0,1] ]
+    },
+	
+	
+    
+	
+	
+    "701": {
+		"code": "G1",
+        "name": "Primeira Modernização",
+        "desc": "Performe uma modernização bem-sucedida"
+    },
+    "702": {
+		"code": "G2",
+        "name": "Modernização Diária",
+        "desc": "Performe 2 modernizações bem-sucedidas",
+		"unlock": [ 703 ],
+		"tracking": [ [0,2] ]
+    },
+    "703": {
+		"code": "G3",
+        "name": "Modernização Semanal",
+        "desc": "Performe 15 modernizações bem-sucedidas",
+		"tracking": [ [0,15] ]
+    },
+    "704": {
+		"code": "G4",
+        "name": "Preparação para LSC (Parte 1)",
+        "desc": "Performe 4 modernizações bem-sucedidas"
+    },
+	
+	
+	
+	
+	
+	"611": {
+        "name": "Em preparação para o Amor! (Parte 1)",
+        "desc": "Destrua 2 equipamentos para mostrar seu amor!"
+    },
+	"306": {
+        "name": "Em preparação para o Amor! (Parte 2)",
+        "desc": "Mostre seu amor conquistando duas vitórias no modo de prática."
+    }
+}

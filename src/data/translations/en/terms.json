@@ -76,13 +76,21 @@
 	"SettingsELosSum" : "Sum",
 	"SettingsELosOld" : "Old",
 	"SettingsELosNew" : "New",
+	"SettingsHQExpDetail"  : "HQ Exp Info",
+	"SettingsHQExpLeft"    : "Remaining EXP",
+	"SettingsHQExpCurrent" : "Current Level",
+	"SettingsHQExpTotal"   : "Total Gained",
 	
 	"SettingsGameInfo" : "Game Information",
+	"SettingsDropFaces" : "Sortie Drop Faces",
 	"SettingsConstructionFaces" : "Construction Faces",
 	"SettingsCraftBox" : "Crafting Results",
 	"SettingsCompass" : "Compass and Enemy",
-	"SettingsBattleData" : "Battle Environment",
+	"SettingsBattleData" : "Battle Prediction",
+	"SettingsBattleStamp" : "Ship Condition Stamps",
 	"SettingsBossComp" : "Boss Composition",
+	"SettingsYasenTroll" : "KC3改 Troll Comments",
+	"SettingsHQDelta" : "HQ EXP Delta on Sortie",
 	
 	"SettingsScreenshot" : "Screenshot",
 	"SettingsSSOutput" : "Output Mode",
@@ -103,6 +111,7 @@
 	"SettingsAPIGameScreen" : "API Game Screen",
 	"SettingsQuestOverlay" : "Quest Translations",
 	"SettingsQuestTracking" : "Quest Tracking",
+	"SettingsPanelRequirement" : "Require Panel to Play",
 	"SettingsConfirmExit" : "Exit Confirmation",
 	"SettingsScreenMargin" : "Top Margin",
 	"SettingsBGColor" : "Background Color",
@@ -116,12 +125,16 @@
 	
 	"SettingsDMMGameplay" : "DMM Gameplay",
 	"SettingsDMMCustomize" : "Apply Customizations",
+	"SettingsDMMForceCookies" : "Force Cookie Hack",
 	
 	"SettingsPanelSize" : "Panel Size",
 	"SettingsPanelOpacity" : "Interface Opacity",
+	"SettingsGearHolder" : "Gear Background Color",
 	
 	"Small" : "Small",
 	"Big" : "Big",
+	"Black" : "Black",
+	"White" : "White",
 	"Theme" : "Theme",
 	"Panel" : "Panel",
 	"Volume" : "Volume",
@@ -129,15 +142,26 @@
 	"LearnMore" : "Learn more",
 	"Saved" : "Saved!",
 	
+	"APIWaitToggle" : "Please load KC3Kai panel first",
+	
 	"SpeedFast" : "Fast",
 	"SpeedSlow" : "Slow",
 	
 	"HQText" : "HQ",
+	"HQExpAbbrev1" : "Next",
+	"HQExpAbbrev2" : "Current",
+	"HQExpAbbrev3" : "Total",
+	
+	"PredictionStampSortie" : "Sunk",
+	"PredictionStampPvP" : "Knocked Out",
+	
 	"LevelText" : "Level",
 	"LevelShort" : "Lv.",
 	"LevelNext" : "Next",
 	"Screenshot" : "Screenshot",
+	"UntranslatedQuest" : "Untranslated Quest",
 	
+	"PanelWaitActions" : "Waiting for game actions...",
 	"PanelErrorStorage" : "Your Chrome's localStorage is disabled on your settings. KC3改 needs this feature. <a href=\"http://stackoverflow.com/a/26671889/483704\" target=\"_blank\">See how to enable this</a>.",
 	
 	"Dummy" : "Dummy"
