@@ -609,6 +609,7 @@
 			
 			// Enemy HP Predictions
 			if(ConfigManager.info_battle){
+				var thisNode = KC3SortieManager.currentNode();
 				var newEnemyHP;
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > -1){
