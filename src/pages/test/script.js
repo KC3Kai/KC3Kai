@@ -38,5 +38,18 @@ $(document).on("ready", function(){
 		CallAPI("api_port/port", {}, function(){});
 	});
 	
+	$("#doneExped").on("click", function(){
+		CallAPI("api_req_mission/result", {}, function(){
+			CallAPI("api_port/port", {}, function(){
+				CallAPI("api_get_member/useitem", {}, function(){
+					
+				});
+			});
+		});
+	});
+	
+	$("#questList").on("click", function(){
+		CallAPI("api_get_member/questlist", {}, function(){});
+	});
 	
 });
