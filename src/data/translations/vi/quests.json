@@ -866,13 +866,13 @@
     },
     "618": {
         "code": "F17",
-        "name": "Hiện đại hóa Trang bị đầu tiên",
-        "desc": "Thực hiện Hiện đại hóa Trang bị 1 lần"
+        "name": "Cải tiến Trang bị đầu tiên",
+        "desc": "Thực hiện Cải tiến Trang bị 1 lần"
     },
     "619": {
         "code": "F18",
-        "name": "Hiện đại hóa Trang bị mỗi ngày",
-        "desc": "Thực hiện Hiện đại hóa Trang bị 1 lần",
+        "name": "Cải tiến Trang bị mỗi ngày",
+        "desc": "Thực hiện Cải tiến Trang bị 1 lần",
         "tracking": [ [0,1] ]
     },
     
@@ -882,26 +882,26 @@
     
     "701": {
         "code": "G1",
-        "name": "Hiện đại hóa đầu tiên",
-        "desc": "Thực hiện 1 lần Hiện đại hóa thành công"
+        "name": "Cải tiến đầu tiên",
+        "desc": "Thực hiện 1 lần Cải tiến thành công"
     },
     "702": {
         "code": "G2",
-        "name": "Hiện đại hóa mỗi ngày",
-        "desc": "Thực hiện 2 lần Hiện đại hóa thành công",
+        "name": "Cải tiến mỗi ngày",
+        "desc": "Thực hiện 2 lần Cải tiến thành công",
         "unlock": [ 703 ],
         "tracking": [ [0,2] ]
     },
     "703": {
         "code": "G3",
-        "name": "Hiện đại hóa mỗi tuần",
-        "desc": "Thực hiện 15 lần Hiện đại hóa thành công",
+        "name": "Cải tiến mỗi tuần",
+        "desc": "Thực hiện 15 lần Cải tiến thành công",
         "tracking": [ [0,15] ]
     },
     "704": {
         "code": "G4",
         "name": "Chuẩn bị cho Đóng tàu cỡ lớn (Phần 1)",
-        "desc": "Thực hiện 4 lần Hiện đại hóa thành công"
+        "desc": "Thực hiện 4 lần Cải tiến thành công"
     },
     
     
