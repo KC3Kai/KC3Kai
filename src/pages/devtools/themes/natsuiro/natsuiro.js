@@ -237,6 +237,7 @@
 			Activate();
 			clearSortieData();
 			clearBattleData();
+			$("#atab_basic").trigger("click");
 		},
 		
 		CatBomb: function(data){
@@ -320,7 +321,7 @@
 					$(".quest_text", questBox).text( KC3Meta.term("UntranslatedQuest") );
 					$(".quest_text", questBox).attr("title", KC3Meta.term("UntranslatedQuest") );
 				}
-				$(".quest_track", questBox).text( quest.outputShort(true) );
+				$(".quest_track", questBox).text( quest.outputShort() );
 				$(".quest_track", questBox).attr("title", quest.outputShort(true) );
 			});
 		},
