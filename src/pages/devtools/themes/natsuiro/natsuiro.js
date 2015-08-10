@@ -221,6 +221,8 @@
 		$(".module.activity .abyss_ship").hide();
 		$(".module.activity .abyss_hp").hide();
 		$(".module.activity .battle_eformation img").attr("src", "../../../../assets/img/ui/empty.png");
+		$(".module.activity .battle_eformation").attr("title", "");
+		$(".module.activity .battle_eformation").css("-webkit-transform", "rotate(0deg)");
 		$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support.png");
 		$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
 		$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/ui/dark_rating.png");
@@ -541,6 +543,7 @@
 			// Enemy formation
 			if((typeof thisNode.eformation != "undefined") && (thisNode.eformation > -1)){
 				$(".module.activity .battle_eformation img").attr("src", KC3Meta.formationIcon(thisNode.eformation));
+				$(".module.activity .battle_eformation").css("-webkit-transform", "rotate(-90deg)");
 				$(".module.activity .battle_eformation").attr("title", KC3Meta.formationText(thisNode.eformation));
 			}
 			
