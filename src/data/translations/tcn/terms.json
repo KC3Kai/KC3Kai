@@ -86,7 +86,7 @@
 	"SettingsConstructionFaces" : "建造結果預覽",
 	"SettingsCraftBox" : "開發結果預覽",
 	"SettingsCompass" : "指南針、敵艦隊編排",
-"SettingsBattleStamp" : "戰鬥後狀態標記",
+"SettingsBattleStamp" : "艦娘狀態印記",
 	"SettingsBattleData" : "戰鬥結果預覽",
 	"SettingsBossComp" : "敵主力艦隊編排",
 	"SettingsYasenTroll" : "夜戰「打打氣」",
@@ -111,7 +111,7 @@
 	"SettingsAPIGameScreen" : "API遊戲視窗",
 	"SettingsQuestOverlay" : "翻譯任務",
 	"SettingsQuestTracking" : "追蹤任務",
-	"SettingsPanelRequirement" : "要求開啟面板",
+	"SettingsPanelRequirement" : "需要開啟面板",
 	"SettingsConfirmExit" : "離開前再確定",
 	"SettingsScreenMargin" : "遊戲視窗與和上方的距離",
 	"SettingsBGColor" : "背景顏色",
@@ -143,6 +143,8 @@
  	"LearnMore" : "詳細介紹", 
  	"Saved" : "已儲存！",
 	
+"APIWaitToggle" : "請先載入KC3改面版",
+
 	"SpeedFast" : "高速",
 	"SpeedSlow" : "低速",
 	
