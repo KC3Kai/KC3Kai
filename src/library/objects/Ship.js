@@ -30,6 +30,7 @@ KC3改 Ship Object
 		this.stars = 0;
 		this.morale = 0;
 		this.lock = 0;
+		this.didFlee = false;
 		
 		// If specified with data, fill this object
 		if(typeof data != "undefined"){
@@ -72,7 +73,6 @@ KC3改 Ship Object
 	KC3Ship.prototype.stype = function(){ return KC3Meta.stype( this.master().api_stype ); };
 	KC3Ship.prototype.equipment = function(slot){ return KC3GearManager.get( this.items[slot] ); };
 	KC3Ship.prototype.isFast = function(){ return this.master().api_soku>=10; };
-	KC3Ship.prototype.didFlee = function(){ return false; };
 	KC3Ship.prototype.resetAfterHp = function(){
 		this.afterHp[0] = this.hp[0];
 		this.afterHp[1] = this.hp[1];

@@ -20,6 +20,7 @@ Provides access to data on built-in JSON files
 		_servers:{},
 		_battle:{},
 		_terms:{},
+		_edges:{},
 		_defaultIcon:"",
 		
 		/* Initialization
@@ -30,7 +31,8 @@ Provides access to data on built-in JSON files
 			this._exp		= JSON.parse( $.ajax(repo+'experience.json', { async: false }).responseText );
 			this._gauges	= JSON.parse( $.ajax(repo+'gauges.json', { async: false }).responseText );
 			this._defeq		= JSON.parse( $.ajax(repo+'defeq.json', { async: false }).responseText );
-			
+			this._edges		= JSON.parse( $.ajax(repo+'edges.json', { async: false }).responseText );
+
 			// Load Translations
 			this._ship 		= KC3Translation.getJSON(repo, 'ships', true);
 			this._slotitem	= KC3Translation.getJSON(repo, 'items', true);
@@ -168,6 +170,17 @@ Provides access to data on built-in JSON files
 		
 		term: function(key) {
 			return this._terms[key] || key;
+		},
+
+		nodeLetter : function(worldId, mapId, edgeId) {
+			var map = this._edges["World " + worldId + "-" + mapId];
+			if (typeof map !== "undefined") {
+				var edge = map[edgeId];
+				if (typeof edge !== "undefined") {
+					return edge[1];	// return destination
+				}
+			}
+			return edgeId;
 		}
 	};
 	

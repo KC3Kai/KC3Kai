@@ -87,9 +87,9 @@
 	"SettingsCraftBox" : "Crafting Results",
 	"SettingsCompass" : "Compass and Enemy",
 	"SettingsBattleData" : "Battle Prediction",
-	"SettingsBattleStamp" : "After-battle Condition Marker",
+	"SettingsBattleStamp" : "Ship Condition Stamps",
 	"SettingsBossComp" : "Boss Composition",
-	"SettingsYasenTroll" : "Night Battle \u0022Extra Support\u0022",
+	"SettingsYasenTroll" : "KC3改 Troll Comments",
 	"SettingsHQDelta" : "HQ EXP Delta on Sortie",
 	
 	"SettingsScreenshot" : "Screenshot",
@@ -111,7 +111,7 @@
 	"SettingsAPIGameScreen" : "API Game Screen",
 	"SettingsQuestOverlay" : "Quest Translations",
 	"SettingsQuestTracking" : "Quest Tracking",
-	"SettingsPanelRequirement" : "Wait Panel to Load",
+	"SettingsPanelRequirement" : "Require Panel to Play",
 	"SettingsConfirmExit" : "Exit Confirmation",
 	"SettingsScreenMargin" : "Top Margin",
 	"SettingsBGColor" : "Background Color",
@@ -142,6 +142,8 @@
 	"LearnMore" : "Learn more",
 	"Saved" : "Saved!",
 	
+	"APIWaitToggle" : "Please load KC3Kai panel first",
+	
 	"SpeedFast" : "Fast",
 	"SpeedSlow" : "Slow",
 	
@@ -149,6 +151,13 @@
 	"HQExpAbbrev1" : "Next",
 	"HQExpAbbrev2" : "Current",
 	"HQExpAbbrev3" : "Total",
+	
+	"BattleDetection" : "Detection",
+	"BattleEngangement" : "Engage",
+	"BattleContact" : "Contact",
+	"BattleAirBattle" : "Air Battle",
+	"BattleFriendly" : "Friendly",
+	"BattleEnemy" : "Enemies",
 	
 	"PredictionStampSortie" : "Sunk",
 	"PredictionStampPvP" : "Knocked Out",

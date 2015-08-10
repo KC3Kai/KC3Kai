@@ -59,14 +59,19 @@ $(document).on("ready", function(){
 		window.location.reload();
 	});
 	
-	// Disable Quick Play (must panel
-	if(ConfigManager.api_mustPanel)
-		$(".play_btn").hide();
-	
 	// Quick Play
 	$(".play_btn").on('click', function(){
 		ActivateGame();
 	});
+	
+	// Disable Quick Play (must panel)
+	if(ConfigManager.api_mustPanel) {
+		$(".play_btn")
+			.off('click')
+			.text(KC3Meta.term("APIWaitToggle"))
+			.css('color','#f00')
+			.css('width','40%');
+	}
 	
 	// Exit confirmation
 	window.onbeforeunload = function(){

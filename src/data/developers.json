@@ -1,4 +1,4 @@
-{
+﻿{
 	"AboutCoders" : [
 		{
 			"name": "dragonjet",
@@ -215,6 +215,16 @@
 				"wk" :"http://kancolle.wikia.com/wiki/User:Mizarox",
 				"fb" :"https://www.facebook.com/mizael.fer"
 			}
+		},
+		{
+			"name": "YukiNyaa712",
+			"avatar" : "http://kitakami.tk/profile.png",
+			"desc" : "한국어",
+			"links" : {
+				"gh" :"https://github.com/YukiNyaa",
+				"wk" : "http://kancolle.wikia.com/wiki/User:YukiNyaa",
+				"fb" : "https://www.facebook.com/iTwilly.HJW"
+			}
 		}
 	],
 	"AboutTesters" : [
@@ -304,7 +314,9 @@
 			"desc" : "AboutReporter",
 			"links" : {
 				"gh" :"https://github.com/ethrundr",
-				"wk" :"http://kancolle.wikia.com/wiki/User:Ethrundr"
+				"wk" :"http://kancolle.wikia.com/wiki/User:Ethrundr",
+				"fb" :"https://www.facebook.com/ethrundr",
+				"hm" :"http://www.himeuta.net/members/1056-ethrundr/"
 			}
 		},
 		{
