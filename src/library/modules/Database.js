@@ -76,6 +76,19 @@ Uses Dexie.js third-party plugin on the assets directory
 				newsfeed: "++id,hq,type,message,time",
 			}).upgrade(function(t){});
 			
+			this.con.version(6).stores({
+				account: "++id,&hq,server,mid,name",
+				build: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time",
+				lsc: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,devmat,result,time",
+				sortie: "++id,hq,diff,world,mapnum,fleetnum,combined,fleet1,fleet2,fleet3,fleet4,support1,support2,time",
+				battle: "++id,hq,sortie_id,node,enemyId,data,yasen,rating,drop,time",
+				resource: "++id,hq,rsc1,rsc2,rsc3,rsc4,hour",
+				useitem: "++id,hq,torch,screw,bucket,devmat,hour",
+				screenshots: "++id,hq,imgur,ltime",
+				develop: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time",
+				newsfeed: "++id,hq,type,message,time",
+			}).upgrade(function(t){});
+			
 			this.con.open();
 		},
 		
@@ -95,7 +108,7 @@ Uses Dexie.js third-party plugin on the assets directory
 				.where("hq")
 				.equals(this.index)
 				.count(function(NumRecords){
-					if(NumRecords == 0){
+					if(NumRecords === 0){
 						// insert if not yet on db
 						self.con.account.add({
 							hq: self.index,
@@ -185,18 +198,17 @@ Uses Dexie.js third-party plugin on the assets directory
 		count_normal_sorties: function(callback){
 			this.con.sortie
 				.where("hq").equals(this.index)
-				.and(function(sortie){ return sortie.world < 10 && sortie.mapnum<5; })
+				.and(function(sortie){ return sortie.world < 10; })
 				.count(callback);
 		},
 		
-		get_normal_sorties :function(pageNumber, callback){
-			var itemsPerPage = 10;
+		get_normal_sorties :function(pageNumber, itemsPerPage, callback){
 			var self = this;
 			var sortieIds = [], bctr, sortieIndexed = {};
 			
 			this.con.sortie
 				.where("hq").equals(this.index)
-				.and(function(sortie){ return sortie.world < 10 && sortie.mapnum<5; })
+				.and(function(sortie){ return sortie.world < 10; })
 				.reverse()
 				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
 				.toArray(function(sortieList){
@@ -223,8 +235,14 @@ Uses Dexie.js third-party plugin on the assets directory
 				});
 		},
 		
-		get_world :function(world, pageNumber, callback){
-			var itemsPerPage = 10;
+		count_world :function(world, callback){
+			this.con.sortie
+				.where("hq").equals(this.index)
+				.and(function(sortie){ return sortie.world == world; })
+				.count(callback);
+		},
+		
+		get_world :function(world, pageNumber, itemsPerPage, callback){
 			var self = this;
 			var sortieIds = [], bctr, sortieIndexed = {};
 			
@@ -257,8 +275,14 @@ Uses Dexie.js third-party plugin on the assets directory
 				});
 		},
 		
-		get_map :function(world, map, pageNumber, callback){
-			var itemsPerPage = 10;
+		count_map :function(world, map, callback){
+			this.con.sortie
+				.where("hq").equals(this.index)
+				.and(function(sortie){ return sortie.world == world && sortie.mapnum==map; })
+				.count(callback);
+		},
+		
+		get_map :function(world, map, pageNumber, itemsPerPage, callback){
 			var self = this;
 			var sortieIds = [], bctr, sortieIndexed = {};
 			
@@ -411,7 +435,15 @@ Uses Dexie.js third-party plugin on the assets directory
 			this.con.develop
 				.where("hq").equals(this.index)
 				.count(callback);
-		}
+		},
+		
+		get_sortie_page :function( world, map, page, callback ){
+			
+		},
+		
+		request_export :function(callback){
+			callback("{}");
+		},
 		
 	};
 	

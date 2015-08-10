@@ -9,10 +9,9 @@ To be dynamically used on the settings page
 	window.SettingsBox = function( info ){
 		this.config = info.id;
 		this.element = $("#factory .settingBox").clone().appendTo("#wrapper .settings");
-		$(".category", this.element).text( info.category );
-		$(".title", this.element).text( info.name );
+		$(".title", this.element).text( KC3Meta.term( info.name ) );
 		this[info.type]( info.options );
-	}
+	};
 	
 	SettingsBox.prototype.check = function( options ){
 		var self = this;
@@ -42,7 +41,7 @@ To be dynamically used on the settings page
 				$(this).parent().siblings(".note").stop(true, true).show().fadeOut(2000);
 			})
 		);
-		$(".options", this.element).append( options.label );
+		$(".options", this.element).append( KC3Meta.term( options.label ) );
 	};
 	
 	
@@ -51,7 +50,7 @@ To be dynamically used on the settings page
 		$(".options", this.element).append(
 			$("<input/>")
 			.attr("type", "text")
-			.attr("placeholder", options.placeholder)
+			.attr("placeholder", KC3Meta.term( options.placeholder ) )
 			.addClass("long_text")
 			.val( ConfigManager[ this.config ] )
 			.on("change", function(){
@@ -74,20 +73,21 @@ To be dynamically used on the settings page
 				.addClass( (options.choices[ctr][0]==ConfigManager[ self.config ])?"active":"" )
 				.data("class", choiceClass )
 				.data("value", options.choices[ctr][0] )
-				.html( options.choices[ctr][1] )
-				.on("click", function(){
-					$("."+$(this).data("class")).removeClass("active");
-					$(this).addClass("active");
-					ConfigManager[ self.config ] = $(this).data("value");
-					ConfigManager.save();
-					$(this).parent().siblings(".note").stop(true, true).show().fadeOut(2000);
-					// Refresh page when a language option is clicked
-					if($(this).hasClass("choices_language")){
-						window.location.reload();
-					}
-				})
+				.html( KC3Meta.term( options.choices[ctr][1] ) )
 			);
 		}
+		
+		$("."+choiceClass, this.element).on("click", function(){
+			$("."+$(this).data("class")).removeClass("active");
+			$(this).addClass("active");
+			ConfigManager[ self.config ] = $(this).data("value");
+			ConfigManager.save();
+			$(this).parent().siblings(".note").stop(true, true).show().fadeOut(2000);
+			// Refresh page when a language option is clicked
+			if($(this).hasClass("choices_language")){
+				window.location.reload();
+			}
+		});
 	};
 	
 })();

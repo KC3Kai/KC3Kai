@@ -1,0 +1,198 @@
+.tab_showcase .factory {
+	display:none;
+}
+
+.tab_showcase .showcase_q {
+	width:680px;
+	height:16px;
+	line-height:16px;
+	font-size:12px;
+	font-weight:bold;
+	margin:5px 0px 0px 0px;
+	color:#0099cc;
+}
+.tab_showcase .showcase_a {
+	width:670px;
+	line-height:14px;
+	font-size:12px;
+	margin:0px 0px 0px 20px;
+}
+
+/* SHIPS
+-----------------------------*/
+.tab_showcase .stype_box {
+	width:335px;
+	height:134px;
+	float:left;
+	background:#def;
+	border-radius:10px;
+	margin:0px 0px 5px 5px;
+	overflow:hidden;
+}
+.tab_showcase .stype_title {
+	width:335px;
+	height:20px;
+	line-height:20px;
+	background:#B9DCFF;
+	text-align:center;
+	font-size:12px;
+	font-weight:bold;
+}
+.tab_showcase .stype_contents {
+	width:335px;
+	height:80px;
+	padding:5px;
+}
+
+.tab_showcase .show_ship {
+	width:105px;
+	height:50px;
+	float:left;
+	background:#fff;
+	margin:0px 0px 3px 3px;
+	border-radius:8px;
+}
+.tab_showcase .show_ship .ship_pic {
+	width:30px;
+	height:30px;
+	line-height:30px;
+	float:left;
+	margin:2px 5px 0px 2px;
+	background:#ccc;
+	border-radius:15px;
+	overflow:hidden;
+}
+.tab_showcase .show_ship .ship_pic img {
+	width:30px;
+	height:30px;
+	vertical-align:top;
+}
+.tab_showcase .show_ship .ship_name {
+	width:65px;
+	height:14px;
+	white-space:nowrap; 
+	overflow:hidden;
+	text-overflow: ellipsis;
+	line-height:14px;
+	font-size:12px;
+	float:left;
+	margin:3px 0px 0px 0px;
+}
+.tab_showcase .show_ship .ship_level {
+	width:65px;
+	height:12px;
+	line-height:12px;
+	font-size:11px;
+	float:left;
+	margin:1px 0px 0px 0px;
+}
+.tab_showcase .show_ship .ship_mods {
+	width:105px;
+	height:14px;
+	margin:2px 0px 0px 0px;
+}
+.tab_showcase .show_ship .ship_mod {
+	width:18px;
+	height:12px;
+	line-height:12px;
+	float:left;
+	font-size:10px;
+	text-align:center;
+	margin:1px 0px 0px 2px;
+	border-radius:5px;
+	background:#eee;
+}
+.tab_showcase .show_ship .ship_mod_fp.max {
+	background:#ff8888;
+}
+.tab_showcase .show_ship .ship_mod_tp.max {
+	background:#00CCFF;
+}
+.tab_showcase .show_ship .ship_mod_aa.max {
+	background:#FF9900;
+}
+.tab_showcase .show_ship .ship_mod_ar.max {
+	background:#ffcc00;
+}
+.tab_showcase .show_ship .ship_mod_lk.max {
+	background:#66FF66;
+}
+
+/* GEARS
+-----------------------------*/
+.tab_showcase .gtype_boxes {
+	padding:0px 0px 10px 0px;
+}
+.tab_showcase .gtype_box {
+	width:220px;
+	height:102px;
+	float:left;
+	background:#def;
+	border-radius:10px;
+	margin:0px 0px 5px 6px;
+	overflow:hidden;
+}
+.tab_showcase .gtype_title {
+	width:220px;
+	height:20px;
+	line-height:20px;
+	background:#B9DCFF;
+	text-align:center;
+	font-size:12px;
+	font-weight:bold;
+}
+.tab_showcase .gtype_contents {
+	width:220px;
+	height:80px;
+}
+
+.tab_showcase .show_gear {
+	width:210px;
+	height:18px;
+	line-height:18px;
+	margin:2px 0px 0px 5px;
+}
+.tab_showcase .show_gear .gear_icon {
+	width:18px;
+	height:18px;
+	float:left;
+	margin:0px 2px 0px 0px;
+}
+.tab_showcase .show_gear .gear_icon img {
+	width:18px;
+	height:18px;
+}
+.tab_showcase .show_gear .gear_name {
+	width:130px;
+	height:18px;
+	float:left;
+	font-size:11px;
+	white-space:nowrap; 
+	overflow:hidden;
+	text-overflow: ellipsis;
+}
+.tab_showcase .show_gear .gear_stat_icon {
+	width:20px;
+	height:18px;
+	float:left;
+}
+.tab_showcase .show_gear .gear_stat_icon img {
+	width:16px;
+	height:16px;
+	margin:1px;
+}
+.tab_showcase .show_gear .gear_stat_val {
+	width:20px;
+	height:18px;
+	float:left;
+	font-size:12px;
+}
+.tab_showcase .show_gear .gear_count {
+	width:20px;
+	height:18px;
+	float:left;
+	font-size:12px;
+	font-weight:bold;
+	text-align:center;
+	background:#fff;
+}

@@ -17,6 +17,7 @@ Contains summary information about a fleet and its 6 ships
 	
 	window.KC3Fleet = function( data ){
 		this.active = false;
+		this.fastFleet = true;
 		this.name = "";
 		this.ships = [ -1, -1, -1, -1, -1, -1 ];
 		this.mission = [ 0, 0, 0, 0 ];
@@ -54,45 +55,42 @@ Contains summary information about a fleet and its 6 ships
 		return KC3ShipManager.get( this.ships[slot] );
 	};
 	
-	KC3Fleet.prototype.countShips = function( slot ){
+	KC3Fleet.prototype.countShips = function(){
 		return $.grep(this.ships, function(shipId){ return shipId>-1; }).length;
+	};
+
+	KC3Fleet.prototype.resetAfterHp = function(){
+		for(var i = 0; i < this.countShips(); i++) {
+			this.ship(i).resetAfterHp();
+		}
 	};
 	
 	KC3Fleet.prototype.clearNonFlagShips = function(){
-		this.ships[1] = -1;
-		this.ships[2] = -1;
-		this.ships[3] = -1;
-		this.ships[4] = -1;
-		this.ships[5] = -1;
+		this.ships[1] = this.ships[2] = this.ships[3] = this.ships[4] = this.ships[5] = -1;
 	};
 	
 	KC3Fleet.prototype.totalLevel = function(){
-		return this.ship(0).level
-			+ this.ship(1).level
-			+ this.ship(2).level
-			+ this.ship(3).level
-			+ this.ship(4).level
-			+ this.ship(5).level;
+		var self = this;
+		return Array.apply(null, {length: 6})
+			.map(Number.call, Number)
+			.map(function(x){return self.ship(x).level;})
+			.reduce(function(x,y){return x+y;});
 	};
 	
 	KC3Fleet.prototype.countDrums = function(){
-		return this.ship(0).countDrums()
-			+ this.ship(1).countDrums()
-			+ this.ship(2).countDrums()
-			+ this.ship(3).countDrums()
-			+ this.ship(4).countDrums()
-			+ this.ship(5).countDrums();
+		var self = this;
+		return Array.apply(null, {length: 6})
+			.map(Number.call, Number)
+			.map(function(x){return self.ship(x).countDrums();})
+			.reduce(function(x,y){return x+y;});
 	};
 	
 	KC3Fleet.prototype.countShipsWithDrums = function(){
-		var shipsWithDrums = 0;
-		shipsWithDrums += (this.ship(0).countDrums() > 0)?1:0;
-		shipsWithDrums += (this.ship(1).countDrums() > 0)?1:0;
-		shipsWithDrums += (this.ship(2).countDrums() > 0)?1:0;
-		shipsWithDrums += (this.ship(3).countDrums() > 0)?1:0;
-		shipsWithDrums += (this.ship(4).countDrums() > 0)?1:0;
-		shipsWithDrums += (this.ship(5).countDrums() > 0)?1:0;
-		return shipsWithDrums;
+		var self = this;
+		return Array.apply(null, {length: 6})
+			.map(Number.call, Number)
+			.map(function(x){return self.ship(x).countDrums()>0;})
+			.reduce(function(x,y){return x+y;});
 	};
 	
 	KC3Fleet.prototype.averageLevel = function(){
@@ -100,23 +98,23 @@ Contains summary information about a fleet and its 6 ships
 	};
 	
 	KC3Fleet.prototype.fighterPower = function(){
-		return this.ship(0).fighterPower()
-			+ this.ship(1).fighterPower()
-			+ this.ship(2).fighterPower()
-			+ this.ship(3).fighterPower()
-			+ this.ship(4).fighterPower()
-			+ this.ship(5).fighterPower();
+		var self = this;
+		return Array.apply(null, {length: 6})
+			.map(Number.call, Number)
+			.map(function(x){return self.ship(x).fighterPower();})
+			.reduce(function(x,y){return x+y;});
 	};
 	
 	KC3Fleet.prototype.speed = function(){
-		var FastFleet = true;
-		if(this.ships[0] > -1){ FastFleet = FastFleet && this.ship(0).isFast(); }
-		if(this.ships[1] > -1){ FastFleet = FastFleet && this.ship(1).isFast(); }
-		if(this.ships[2] > -1){ FastFleet = FastFleet && this.ship(2).isFast(); }
-		if(this.ships[3] > -1){ FastFleet = FastFleet && this.ship(3).isFast(); }
-		if(this.ships[4] > -1){ FastFleet = FastFleet && this.ship(4).isFast(); }
-		if(this.ships[5] > -1){ FastFleet = FastFleet && this.ship(5).isFast(); }
-		return (FastFleet) ? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow");
+		this.fastFleet = true;
+		var i = 0;
+		while(this.fastFleet && i < 6) {
+			if(this.ships[i] > -1) {
+				this.fastFleet = this.fastFleet && this.ship(i).isFast();
+			}
+			i++;
+		}
+		return (this.fastFleet) ? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow");
 	};
 	
 	KC3Fleet.prototype.qualifyingExpeditions = function(){
@@ -141,9 +139,9 @@ Contains summary information about a fleet and its 6 ships
 	
 	KC3Fleet.prototype.eLoS = function(){
 		switch(ConfigManager.elosFormula){
-			case 1: return this.eLos1(); break;
-			case 2: return this.eLos2(); break;
-			default: return this.eLos3(); break;
+			case 1: return this.eLos1();
+			case 2: return this.eLos2();
+			default: return this.eLos3();
 		}
 	};
 	
@@ -151,12 +149,13 @@ Contains summary information about a fleet and its 6 ships
 	Sum of all Ship LoS in the fleet WITH their equipment
 	------------------------------------*/
 	KC3Fleet.prototype.eLos1 = function(){
-		return this.ship(0).ls[0]
-			+ this.ship(1).ls[0]
-			+ this.ship(2).ls[0]
-			+ this.ship(3).ls[0]
-			+ this.ship(4).ls[0]
-			+ this.ship(5).ls[0];
+		var self = this;
+		return Array.apply(null, {length: 6})
+			.map(Number.call, Number)
+			.map(function(x){
+				return (!self.ship(x).didFlee)? self.ship(x).ls[0] : 0;
+			})
+			.reduce(function(x,y){return x+y;});
 	};
 	
 	/* LoS : "Old Formula"
@@ -167,27 +166,25 @@ Contains summary information about a fleet and its 6 ships
 		var RadarLoS = 0;
 		
 		function ConsiderShip(shipData){
-			if(shipData.rosterId == 0) return false;
-			if(shipData.items[0] > -1){ ConsiderEquipment( shipData.equipment(0) ); }
-			if(shipData.items[1] > -1){ ConsiderEquipment( shipData.equipment(1) ); }
-			if(shipData.items[2] > -1){ ConsiderEquipment( shipData.equipment(2) ); }
-			if(shipData.items[3] > -1){ ConsiderEquipment( shipData.equipment(3) ); }
+			if(shipData.rosterId === 0) return false;
+			if(shipData.didFlee) return false;
+			Array.apply(null, {length: 4})
+				.map(Number.call, Number)
+				.forEach(function(x){ if(shipData.items[x]>-1) { ConsiderEquipment(shipData.equipment(x)); }});
 		}
 		
 		function ConsiderEquipment(itemData){
-			if(itemData.itemId == 0) return false;
+			if(itemData.itemId === 0) return false;
 			if( itemData.master().api_type[1] == 7){ PlaneLoS += itemData.master().api_saku; }
 			if( itemData.master().api_type[1] == 8){ RadarLoS += itemData.master().api_saku; }
 		}
 		
-		ConsiderShip( this.ship(0) );
-		ConsiderShip( this.ship(1) );
-		ConsiderShip( this.ship(2) );
-		ConsiderShip( this.ship(3) );
-		ConsiderShip( this.ship(4) );
-		ConsiderShip( this.ship(5) );
+		var self = this;
+		Array.apply(null, {length: 6})
+			.map(Number.call, Number)
+			.forEach(function(x){ConsiderShip(self.ship(x));});
 		
-		return (PlaneLoS*2) + RadarLoS + Math.sqrt( this.eLos1() -  PlaneLoS - RadarLoS )
+		return (PlaneLoS*2) + RadarLoS + Math.sqrt( this.eLos1() -  PlaneLoS - RadarLoS );
 	};
 	
 	/* LoS : "New Formula"
@@ -195,27 +192,19 @@ Contains summary information about a fleet and its 6 ships
 	------------------------------------*/
 	KC3Fleet.prototype.eLos3 = function(){
 		var dive = 0, torp = 0, cbrp = 0, rspl = 0, splb = 0, smrd = 0, lgrd = 0, srch = 0;
-		
-		var self = this;
-		function GetNakedLoS(){
-			return Math.sqrt(self.ship(0).nakedLoS())
-				+ Math.sqrt(self.ship(1).nakedLoS())
-				+ Math.sqrt(self.ship(2).nakedLoS())
-				+ Math.sqrt(self.ship(3).nakedLoS())
-				+ Math.sqrt(self.ship(4).nakedLoS())
-				+ Math.sqrt(self.ship(5).nakedLoS());
-		}
+		var nakedLos = 0;
 		
 		function ConsiderShip(shipData){
-			if(shipData.rosterId == 0) return false;
-			if(shipData.items[0] > -1){ ConsiderEquipment( shipData.equipment(0) ); }
-			if(shipData.items[1] > -1){ ConsiderEquipment( shipData.equipment(1) ); }
-			if(shipData.items[2] > -1){ ConsiderEquipment( shipData.equipment(2) ); }
-			if(shipData.items[3] > -1){ ConsiderEquipment( shipData.equipment(3) ); }
+			if(shipData.rosterId === 0) return false;
+			if(shipData.didFlee) return false;
+			nakedLos += Math.sqrt( shipData.nakedLoS() );
+			Array.apply(null, {length: 4})
+				.map(Number.call, Number)
+				.forEach(function(x){ if(shipData.items[x]>-1) { ConsiderEquipment(shipData.equipment(x)); }});
 		}
 		
 		function ConsiderEquipment(itemData){
-			if(itemData.itemId == 0) return false;
+			if(itemData.itemId === 0) return false;
 			switch( itemData.master().api_type[2] ){
 				case  7: dive += itemData.master().api_saku; break;
 				case  8: torp += itemData.master().api_saku; break;
@@ -229,23 +218,21 @@ Contains summary information about a fleet and its 6 ships
 			}
 		}
 		
-		ConsiderShip( this.ship(0) );
-		ConsiderShip( this.ship(1) );
-		ConsiderShip( this.ship(2) );
-		ConsiderShip( this.ship(3) );
-		ConsiderShip( this.ship(4) );
-		ConsiderShip( this.ship(5) );
+		var self = this;
+		Array.apply(null, {length: 6})
+			.map(Number.call, Number)
+			.forEach(function(x){ConsiderShip(self.ship(x));});
 		
-		var total = ( dive * 1.04 )
-			+ ( torp * 1.37 )
-			+ ( cbrp * 1.66 )
-			+ ( rspl * 2.00 )
-			+ ( splb * 1.78 )
-			+ ( smrd * 1.00 )
-			+ ( lgrd * 0.99 )
-			+ ( srch * 0.91 )
-			+ ( GetNakedLoS() * 1.69 )
-			+ ( (Math.floor(( PlayerManager.hq.level + 4) / 5) * 5) * -0.61 );
+		var total = ( dive * 1.0376255 )
+			+ ( torp * 1.3677954 )
+			+ ( cbrp * 1.6592780 )
+			+ ( rspl * 2.0000000 )
+			+ ( splb * 1.7787282 )
+			+ ( smrd * 1.0045358 )
+			+ ( lgrd * 0.9906638 )
+			+ ( srch * 0.9067950 )
+			+ ( nakedLos * 1.6841056 )
+			+ ( (Math.floor(( PlayerManager.hq.level + 4) / 5) * 5) * -0.6142467 );
 		return total;
 	};
 	

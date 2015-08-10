@@ -57,7 +57,7 @@
 					};
 				}
 				
-				var holder = this._holders["s"+ThisItem.itemId]
+				var holder = this._holders["s"+ThisItem.itemId];
 				
 				// Add this item to the instances
 				if(typeof this._holders["s"+ThisItem.itemId] != "undefined"){
@@ -74,16 +74,16 @@
 							holder: {},
 							extraCount: 0,
 							heldCount: 0
-						}
+						};
 					
 					if( !this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].arranged[ThisItem.stars].holder[holder.rosterId] )
 						this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].arranged[ThisItem.stars].holder[holder.rosterId] = {
 							holder: holder,
 							count: 0
-						}
+						};
 					
-					this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].arranged[ThisItem.stars].holder[holder.rosterId].count++
-					this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].arranged[ThisItem.stars].heldCount++
+					this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].arranged[ThisItem.stars].holder[holder.rosterId].count++;
+					this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].arranged[ThisItem.stars].heldCount++;
 				}else{
 					// It's an extra equip on inventory
 					this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].extras.push({
@@ -97,9 +97,9 @@
 							holder: {},
 							extraCount: 0,
 							heldCount: 0
-						}
+						};
 					
-					this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].arranged[ThisItem.stars].extraCount++
+					this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].arranged[ThisItem.stars].extraCount++;
 				}
 			}
 		},
@@ -132,6 +132,28 @@
 		showType :function(type_id){
 			$(".tab_gears .item_list").html("");
 			
+			function showEqList(arranged){
+				if( !arranged[i].heldCount )
+					return null;
+
+				var els = $();
+				for( var j in arranged[i].holder ){
+					els = els.add(
+						$('<div/>',{
+							'class':	'holder',
+							'html':		'<img src="'+KC3Meta.shipIcon(
+												arranged[i].holder[j].holder.masterId,
+												"../../assets/img/ui/empty.png"
+											)+'"/>'
+										+ '<font>'+arranged[i].holder[j].holder.name()+'</font>'
+										+ '<span>Lv'+arranged[i].holder[j].holder.level+'</span>'
+										+ '<span>x' +arranged[i].holder[j].count+ '</span>'
+						})
+					);
+				}
+				return els;
+			}
+			
 			var ctr, ThisType, ItemElem, ThisSlotitem;
 			for(ctr in this._items["t"+type_id]){
 				ThisSlotitem = this._items["t"+type_id][ctr];
@@ -154,43 +176,25 @@
 				this.slotitem_stat(ItemElem, ThisSlotitem.stats, "rn");
 				
 				var holderCtr, ThisHolder, HolderElem;
-				console.log(ThisSlotitem)
+				console.log(ThisSlotitem);
+				
+				
 				
 				for( var i in ThisSlotitem.arranged ){
 					$('<dl/>')
 						.append( $('<dt/>',{
-								'class':	i == 0 ? 'base' : '',
+								'class':	i === 0 ? 'base' : '',
 								'html':		'<img src="../../assets/img/client/eqstar.png"><span>+' + i + '</span>'
 							}).append( $('<small/>').html(
 								'x' + (ThisSlotitem.arranged[i].heldCount + ThisSlotitem.arranged[i].extraCount)
 								+ ( ThisSlotitem.arranged[i].heldCount
-									? ' (' +ThisSlotitem.held.length+ ' Equipped, ' +ThisSlotitem.extras.length + ' Equippable)'
+									? ' (' +ThisSlotitem.arranged[i].heldCount+ ' Equipped, ' +ThisSlotitem.arranged[i].extraCount + ' Equippable)'
 									: ''
 								)
 							) )
 						)
-						.append( $('<dd/>').append(function(){
-							if( !ThisSlotitem.arranged[i].heldCount )
-								return null
-
-							var els = $()
-							for( var j in ThisSlotitem.arranged[i].holder ){
-								els = els.add(
-									$('<div/>',{
-										'class':	'holder',
-										'html':		'<img src="'+KC3Meta.shipIcon(
-															ThisSlotitem.arranged[i].holder[j].holder.masterId,
-															"../../assets/img/ui/empty.png"
-														)+'"/>'
-													+ '<font>'+ThisSlotitem.arranged[i].holder[j].holder.name()+'</font>'
-													+ '<span>Lv'+ThisSlotitem.arranged[i].holder[j].holder.level+'</span>'
-													+ '<span>x' +ThisSlotitem.arranged[i].holder[j].count+ '</span>'
-									})
-								)
-							}
-							return els
-						}) )
-						.appendTo( ItemElem.children('.holders') )
+						.append( $('<dd/>').append(showEqList(ThisSlotitem.arranged)) )
+						.appendTo( ItemElem.children('.holders') );
 				}
 				
 				$('<dl/>')
@@ -201,7 +205,7 @@
 							: ''
 						)
 					) )
-					.appendTo( ItemElem.children('.holders') )
+					.appendTo( ItemElem.children('.holders') );
 				/*
 				for(holderCtr in ThisSlotitem.held){
 					ThisHolder = ThisSlotitem.held[holderCtr];
@@ -239,7 +243,7 @@
 		/* Determine if an item has a specific stat
 		--------------------------------------------*/
 		slotitem_stat :function(ItemElem, stats, stat_name){
-			if(stats[stat_name] != 0){
+			if(stats[stat_name] !== 0){
 				$(".stats .item_"+stat_name+" span", ItemElem).text(stats[stat_name]);
 			}else{
 				$(".stats .item_"+stat_name, ItemElem).hide();

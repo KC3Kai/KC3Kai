@@ -2,7 +2,9 @@
 <html lang="en">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<!-- @nonbuildstart -->
 		<link href="../../assets/css/bootstrap.css" rel="stylesheet" type="text/css">
+		<!-- @nonbuildend -->
 		<link href="../../assets/css/global.css" rel="stylesheet" type="text/css">
 		<link href="popup.css" rel="stylesheet" type="text/css">
 	</head>
@@ -26,12 +28,6 @@
 				<div class="desc i18n">MenuPlayDMMDesc</div>
 				<div class="clear"></div>
 			</div>
-			<div class="menu hover" id="cookies">
-				<div class="icon"><img src="img/cookies.png" /></div>
-				<div class="text i18n">MenuCookiesName</div>
-				<div class="desc i18n">MenuCookiesDesc</div>
-				<div class="clear"></div>
-			</div>
 			<div class="menu hover" id="strategy">
 				<div class="icon"><img src="img/strategy.png" /></div>
 				<div class="text i18n">MenuStrategyName</div>
@@ -52,10 +48,15 @@
 			</div>
 			<div class="schedule i18n">MenuChecking</div>
 		</div>
+		
 		<script type="text/javascript" src="../../assets/js/global.js"></script>
+		<!-- @buildimportjs ../../library/objects.js -->
+		<!-- @buildimportjs ../../library/managers.js -->
+		<!-- @nonbuildstart -->
 		<script type="text/javascript" src="../../assets/js/jquery-2.1.3.min.js"></script>
 		<script type="text/javascript" src="../../library/objects/Messengers.js"></script>
 		<script type="text/javascript" src="../../library/managers/ConfigManager.js"></script>
+		<!-- @nonbuildend -->
 		<script type="text/javascript" src="../../library/modules/Meta.js"></script>
 		<script type="text/javascript" src="../../library/modules/Translation.js"></script>
 		<script type="text/javascript" src="popup.js"></script>

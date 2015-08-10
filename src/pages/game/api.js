@@ -24,7 +24,7 @@ $(document).on("ready", function(){
 	
 	// Apply interface configs
 	$(".box-wrap").css("margin-top", ConfigManager.api_margin+"px");
-	if(ConfigManager.api_bg_image == ""){
+	if(ConfigManager.api_bg_image === ""){
 		$("body").css("background", ConfigManager.api_bg_color);
 	}else{
 		$("body").css("background-image", "url("+ConfigManager.api_bg_image+")");
@@ -64,16 +64,37 @@ $(document).on("ready", function(){
 		ActivateGame();
 	});
 	
+	// Disable Quick Play (must panel)
+	if(ConfigManager.api_mustPanel) {
+		$(".play_btn")
+			.off('click')
+			.text(KC3Meta.term("APIWaitToggle"))
+			.css('color','#f00')
+			.css('width','40%');
+	}
+	
 	// Exit confirmation
 	window.onbeforeunload = function(){
 		ConfigManager.load();
-		if(ConfigManager.api_askExit==1 && !trustedExit){
+		// added waiting condition should be ignored
+		if(ConfigManager.api_askExit==1 && !trustedExit && !waiting){
 			trustedExit = true;
 			setTimeout(function(){ trustedExit = false; }, 100);
 			return "Ahhh! You are leaving your girls! Are you sure you want to leave them?";
 		}
 	};
 	
+	setInterval(function(){
+		window.focus();
+	}, 100);
+	
+});
+
+$(document).on("keydown", function(event){
+    if(event.keyCode == 120){
+		(new KCScreenshot()).start("Auto", $(".box-wrap"));
+        return false;
+    }
 });
 
 /* Invokable actions
@@ -105,7 +126,7 @@ var interactions = {
 				var QuestData = KC3QuestManager.get( QuestRaw.api_no );
 				
 				// Show meta, title and description
-				if( QuestData.meta ){
+				if( typeof QuestData.meta().available != "undefined" ){
 					$(".name", QuestBox).text( QuestData.meta().name );
 					$(".desc", QuestBox).text( QuestData.meta().desc );
 					
@@ -166,7 +187,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, response){
 	// If request is for this script
 	if((request.identifier||"") == "kc3_gamescreen"){
 		// If action requested is supported
-		if(typeof interactions[request.action] != "undefined"){
+		if(typeof interactions[request.action] !== "undefined"){
 			// Execute the action
 			interactions[request.action](request, sender, response);
 			return true;

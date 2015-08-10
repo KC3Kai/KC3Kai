@@ -89,11 +89,12 @@ Uses KC3Quest objects to play around with
 				console.log("Passed 5AM JST");
 			}*/
 			
+			var timeFromLocalStorage;
 			
 			/* RESET DAILY QUESTS
 			-----------------------------------------------------*/
 			if (this.timeToResetDailyQuests === -1) {
-				var timeFromLocalStorage = this.getTimeToResetFromLocalStorage("timeToResetDailyQuests");
+				timeFromLocalStorage = this.getTimeToResetFromLocalStorage("timeToResetDailyQuests");
 				
 				// Nothing in localStorage
 				if (timeFromLocalStorage === -1) {
@@ -104,7 +105,7 @@ Uses KC3Quest objects to play around with
 					}
 					
 					// Update localStorage
-					localStorage.timeToResetDailyQuests = this.timeToResetDailyQuests
+					localStorage.timeToResetDailyQuests = this.timeToResetDailyQuests;
 				} else {
 					this.timeToResetDailyQuests = timeFromLocalStorage;
 				}
@@ -113,9 +114,16 @@ Uses KC3Quest objects to play around with
 			
 			if (this.timeToResetDailyQuests <= ServerJstClock.getTime()) {
 				this.resetDailies();
-				this.timeToResetDailyQuests = tomorrow8PmGmt.getTime();
+				if (this.timeToResetDailyQuests < today8PmGmt.getTime()) {
+					this.timeToResetDailyQuests = today8PmGmt.getTime();
+				} else {
+					this.timeToResetDailyQuests = tomorrow8PmGmt.getTime();
+				}
 				localStorage.timeToResetDailyQuests = this.timeToResetDailyQuests;
 				KC3Network.trigger("Quests");
+			} else if (this.timeToResetDailyQuests > ServerJstClock.getTime() + millisecondsInDay) {
+				this.timeToResetDailyQuests -= millisecondsInDay;
+				localStorage.timeToResetDailyQuests = this.timeToResetDailyQuests;
 			}
 			
 			var remainingTime = this.timeToResetDailyQuests - ServerJstClock.getTime();
@@ -123,12 +131,12 @@ Uses KC3Quest objects to play around with
 			var remainingMinutes = Math.floor((remainingTime / (60*1000))%60);
 			var remainingSeconds = Math.floor((remainingTime / (1000))%60);
 			
-			console.log("Time until reset daily quests: " + remainingHours + ":" + remainingMinutes + ":" + remainingSeconds);
+			//console.log("Time until reset daily quests: " + remainingHours + ":" + remainingMinutes + ":" + remainingSeconds);
 			
 			/* RESET WEEKLY QUESTS
 			-----------------------------------------------------*/
 			if (this.timeToResetWeeklyQuests === -1) {
-				var timeFromLocalStorage = this.getTimeToResetFromLocalStorage("timeToResetWeeklyQuests");
+				timeFromLocalStorage = this.getTimeToResetFromLocalStorage("timeToResetWeeklyQuests");
 				
 				// Nothing in localStorage
 				if (timeFromLocalStorage === -1) {
@@ -139,7 +147,7 @@ Uses KC3Quest objects to play around with
 					}
 					
 					// Update localStorage
-					localStorage.timeToResetWeeklyQuests = this.timeToResetWeeklyQuests
+					localStorage.timeToResetWeeklyQuests = this.timeToResetWeeklyQuests;
 				} else {
 					this.timeToResetWeeklyQuests = timeFromLocalStorage;
 				}
@@ -148,7 +156,11 @@ Uses KC3Quest objects to play around with
 			
 			if (this.timeToResetWeeklyQuests <= ServerJstClock.getTime()) {
 				this.resetWeeklies();
-				this.timeToResetWeeklyQuests = nextWeekSunday8PmGmt.getTime();
+				if (this.timeToResetWeeklyQuests < thisWeekSunday8PmGmt.getTime()) {
+					this.timeToResetWeeklyQuests = thisWeekSunday8PmGmt.getTime();
+				} else {
+					this.timeToResetWeeklyQuests = nextWeekSunday8PmGmt.getTime();
+				}
 				localStorage.timeToResetWeeklyQuests = this.timeToResetWeeklyQuests;
 				KC3Network.trigger("Quests");
 			}
@@ -156,7 +168,7 @@ Uses KC3Quest objects to play around with
 			/* RESET MONTHLY QUESTS
 			-----------------------------------------------------*/
 			if (this.timeToResetMonthlyQuests === -1) {
-				var timeFromLocalStorage = this.getTimeToResetFromLocalStorage("timeToResetMonthlyQuests");
+				timeFromLocalStorage = this.getTimeToResetFromLocalStorage("timeToResetMonthlyQuests");
 				
 				// Nothing in localStorage
 				if (timeFromLocalStorage === -1) {
@@ -167,7 +179,7 @@ Uses KC3Quest objects to play around with
 					}
 					
 					// Update localStorage
-					localStorage.timeToResetMonthlyQuests = this.timeToResetMonthlyQuests
+					localStorage.timeToResetMonthlyQuests = this.timeToResetMonthlyQuests;
 				} else {
 					this.timeToResetMonthlyQuests = timeFromLocalStorage;
 				}
@@ -176,8 +188,12 @@ Uses KC3Quest objects to play around with
 			
 			if (this.timeToResetMonthlyQuests <= ServerJstClock.getTime()) {
 				this.resetMonthlies();
-				this.timeToResetMonthlyQuests = nextMonthLastDay8PmGmt.getTime();
-				localStorage.timeToResetMonthlyQuests = this.timeToResetMonthlyQuests
+				if (this.timeToResetMonthlyQuests < thisMonthLastDay8PmGmt.getTime()) {
+					this.timeToResetMonthlyQuests = thisMonthLastDay8PmGmt.getTime();
+				} else {
+					this.timeToResetMonthlyQuests = nextMonthLastDay8PmGmt.getTime();
+				}
+				localStorage.timeToResetMonthlyQuests = this.timeToResetMonthlyQuests;
 				KC3Network.trigger("Quests");
 			}
 			

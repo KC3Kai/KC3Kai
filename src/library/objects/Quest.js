@@ -56,16 +56,28 @@ Quest Type:
 	};
 	
 	/* OUTPUT SHORT
-	Return tracking text to be shown on Strategy Room
+	Return tracking text to be shown on Panel
 	------------------------------------------*/
-	KC3Quest.prototype.outputShort = function(){
+	KC3Quest.prototype.outputShort = function(showAll){
+		if (typeof showAll == "undefined") {
+			showAll = false;
+		}
 		if(this.tracking){
 			var trackingText = [];
 			var ctr;
+			var textToShow = "";
 			for(ctr in this.tracking){
-				trackingText.push(this.tracking[ctr][0]+"/"+this.tracking[ctr][1]);
+				textToShow = this.tracking[ctr][0]+"/"+this.tracking[ctr][1];
+				trackingText.push(textToShow);
+				if (!showAll && (this.tracking[ctr][0] < this.tracking[ctr][1])) {
+					return textToShow;
+				}
 			}
-			return trackingText.join(", ");
+			if (!showAll) {
+				return textToShow;
+			} else {
+				return trackingText.join(String.fromCharCode(13));
+			}
 		}
 		return "";
 	};
@@ -114,14 +126,22 @@ Quest Type:
 			if(MyMeta){
 				// Attach meta info to this object 
 				this.meta = function(){ return {
+					available: true,
 					code : MyMeta.code,
 					name : MyMeta.name,
 					desc : MyMeta.desc
-				}};
+				}; };
 				// If tracking is empty and Meta is defined
 				if(this.tracking === false){
 					this.tracking = MyMeta.tracking;
 				}
+			}else{
+				// Attach meta info to this object 
+				this.meta = function(){ return {
+					code : "XX",
+					name : "Unidentified Quest",
+					desc : "This is an unidentified or untranslated quest. It cannot be shown here, so please visit the quest page in-game to view."
+				}; };
 			}
 		}
 	};
@@ -153,29 +173,45 @@ Quest Type:
 	};
 	
 	KC3Quest.prototype.autoAdjustCounter = function(){
-		if (this.isCompleted()) {
-			this.tracking[0][0] = this.tracking[0][1];
-			return;
-		}
-		if (this.tracking && (this.id != 214) && (this.id != 607)  && (this.id != 608)) {
-			var currentCount = this.tracking[0][0];
-			var maxCount = parseFloat(this.tracking[0][1]);
-			var progress = 0;
-			if (this.progress == 1) {
-				progress = 0.5;
-			} else if (this.progress == 2) {
-				progress = 0.8;
+		if(this.tracking){
+			if(this.isCompleted()) {
+				this.tracking[0][0] = this.tracking[0][1];
+				return;
 			}
-			if (currentCount/maxCount < progress) {
-				console.log(this.tracking);
-				console.log(this.tracking[0][0]);
-				console.log(this.tracking[0][1]);
-				console.log(currentCount);
-				console.log(maxCount);
-				console.log("Adjust: " + currentCount/maxCount + " " + progress + " " + Math.ceil(maxCount * progress));
-				this.tracking[0][0] = Math.ceil(maxCount * progress);
+			
+			if((this.id != 214) && (this.id != 607)  && (this.id != 608)){
+				var currentCount = this.tracking[0][0];
+				var maxCount = parseFloat(this.tracking[0][1]);
+				var progress = 0;
+				if (this.progress == 1) {
+					progress = 0.5;
+				} else if (this.progress == 2) {
+					progress = 0.8;
+				}
+				if (currentCount/maxCount < progress) {
+					console.log(this.tracking);
+					console.log(this.tracking[0][0]);
+					console.log(this.tracking[0][1]);
+					console.log(currentCount);
+					console.log(maxCount);
+					console.log("Adjust: " + currentCount/maxCount + " " + progress + " " + Math.ceil(maxCount * progress));
+					this.tracking[0][0] = Math.ceil(maxCount * progress);
+				}
 			}
 		}
+	};
+	
+	KC3Quest.prototype.getColor = function(){
+		return [
+			"#555555", //0
+			"#33A459", //1
+			"#D75048", //2
+			"#98E75F", //3
+			"#AACCEE", //4
+			"#EDD286", //5
+			"#996600", //6
+			"#AE76FA", //7
+		][(this.id+"").substring(0,1)];
 	};
 	
 })();
