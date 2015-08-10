@@ -63,6 +63,14 @@
 		(new RMsg("service", "activateGame", {
 			tabId: chrome.devtools.inspectedWindow.tabId
 		})).execute();
+		
+		// Remove translation when closing devtools
+		window.onbeforeunload = function(){
+			KC3Network.hasOverlay = false;
+			(new RMsg("service", "clearOverlays", {
+				tabId: chrome.devtools.inspectedWindow.tabId
+			})).execute();
+		};
 	}
 	
 	/* PAGE READY

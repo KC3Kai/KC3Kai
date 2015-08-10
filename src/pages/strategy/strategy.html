@@ -25,6 +25,7 @@
 							<li data-id="newsfeed" class="disabled">Newsfeed</li>
 							<li data-id="resources">Resources</li>
 							<li data-id="consumables">Consumables</li>
+							<li data-id="showcase">Showcase</li>
 						</ul>
 					</div>
 					<div class="submenu">
@@ -51,6 +52,7 @@
 						<div class="title">Fleet</div>
 						<ul class="menulist">
 							<li data-id="fleet">Current</li>
+							<li data-id="wikia">Export</li>
 							<li data-id="teams" class="disabled">Teams</li>
 						</ul>
 					</div>
@@ -66,8 +68,7 @@
 						<div class="title">Sortie</div>
 						<ul class="menulist">
 							<li data-id="maps">Maps</li>
-							<li data-id="exops" class="disabled">ExOps</li>
-							<li data-id="event" class="disabled">Event</li>
+							<li data-id="event">Events</li>
 						</ul>
 					</div>
 					<div class="submenu">
@@ -119,6 +120,7 @@
 		<script type="text/javascript" src="../../assets/js/Dexie.min.js"></script>
 		<script type="text/javascript" src="../../assets/js/Chart.min.js"></script>
 		<script type="text/javascript" src="../../assets/js/FileSaver.min.js"></script>
+		<script type="text/javascript" src="../../assets/js/KanColleHelpers.js"></script>
 		<script type="text/javascript" src="../../library/modules/StrategyTabs.js"></script>
 		<!-- @buildimportjs ../../library/managers.js -->
 		<!-- @buildimportjs ../../library/objects.js -->
@@ -136,6 +138,7 @@
 		<script type="text/javascript" src="../../library/managers/ConfigManager.js"></script>
 		<script type="text/javascript" src="../../library/managers/GearManager.js"></script>
 		<script type="text/javascript" src="../../library/managers/PlayerManager.js"></script>
+		<script type="text/javascript" src="../../library/managers/SortieManager.js"></script>
 		<script type="text/javascript" src="../../library/managers/QuestManager.js"></script>
 		<script type="text/javascript" src="../../library/managers/ShipManager.js"></script>
 		<!-- @nonbuildend -->
@@ -146,14 +149,19 @@
 		<script type="text/javascript" src="../../../../library/modules/Meta.js"></script>
 		
 		<script type="text/javascript" src="strategy.js"></script>
+		
+		<script type="text/javascript" src="graphable.js"></script>
 		<!-- @buildimportjs allstrategytabs.js -->
+		
 		<!-- @nonbuildstart -->
 		<script type="text/javascript" src="tabs/profile/profile.js"></script>
 		<script type="text/javascript" src="tabs/ships/ships.js"></script>
 		<script type="text/javascript" src="tabs/gears/gears.js"></script>
 		<script type="text/javascript" src="tabs/newsfeed/newsfeed.js"></script>
-		<script type="text/javascript" src="tabs/resources/resources.js"></script>
-		<script type="text/javascript" src="tabs/consumables/consumables.js"></script>
+		<!-- resources and consumables, implements graphable -->
+			
+			<script type="text/javascript" src="tabs/resources/resources.js"></script>
+			<script type="text/javascript" src="tabs/consumables/consumables.js"></script>
 		<script type="text/javascript" src="tabs/builds/builds.js"></script>
 		<script type="text/javascript" src="tabs/lscs/lscs.js"></script>
 		<script type="text/javascript" src="tabs/crafts/crafts.js"></script>
@@ -163,6 +171,9 @@
 		<script type="text/javascript" src="tabs/maps/maps.js"></script>
 		<script type="text/javascript" src="tabs/exops/exops.js"></script>
 		<script type="text/javascript" src="tabs/event/event.js"></script>
+		<script type="text/javascript" src="tabs/showcase/showcase.js"></script>
+    <script type="text/javascript" src="tabs/wikia/wikia.js"></script>
 		<!-- @nonbuildend -->
+		
 	</body>
 </html>

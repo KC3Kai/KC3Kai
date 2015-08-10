@@ -49,7 +49,13 @@
 		Used by KC3Meta.js to load json files
 		-----------------------------------------*/
 		getJSON :function(repo, filename, extendEnglish){
-			if(typeof extendEnglish === "undefined"){ extendEnglish=false; }
+			// Check if desired to extend english files
+			if(typeof extendEnglish=="undefined"){ extendEnglish=false; }
+			
+			// Japanese special case where ships and items sources are already in JP
+			if(ConfigManager.language=="jp" && (filename=="ships" || filename=="items")){ extendEnglish=false; }
+			
+			// console.log(filename, "extendEnglish", extendEnglish);
 			
 			var translationBase = {}, enJSON;
 			if(extendEnglish){
@@ -63,7 +69,7 @@
 				translationBase = enJSON;
 			}
 			
-			return $.extend(translationBase, JSON.parse($.ajax({
+			return $.extend(true, translationBase, JSON.parse($.ajax({
 				url : repo+'translations/' +ConfigManager.language+ '/' + filename + '.json',
 				async: false
 			}).responseText));

@@ -18,7 +18,7 @@
 			dataType: "json",
 			url: "https://raw.githubusercontent.com/dragonjet/KC3Kai/master/update?v="+((new Date()).getTime()),
 			success: function(data, textStatus, request){
-				if(myVersion < parseInt(data.version, 10)){
+				if(myVersion != Number(data.version)){
 					version = data.version;
 					setupUpdateTime(
 						new Date(request.getResponseHeader('Date')),
@@ -40,9 +40,18 @@
 		// Refresh API Link
 		$("#get_api").on('click', function(){
 			_gaq.push(['_trackEvent', "Refresh API", 'clicked']);
-			localStorage.extract_api = true;
-			localStorage.dmmplay = false;
-			window.open("http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/", "kc3kai_game");
+			chrome.cookies.set({
+				url: "http://www.dmm.com",
+				name: "ckcy",
+				value: "1",
+				domain: ".dmm.com",
+				expirationDate: Math.ceil((new Date("Sun, 09 Feb 2019 09:00:09 GMT")).getTime()/1000),
+				path: '/netgame/',
+			}, function(cookie){
+				localStorage.extract_api = true;
+				localStorage.dmmplay = false;
+				window.open("http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/", "kc3kai_game");
+			});
 		});
 		
 		// Play DMM Website
@@ -50,16 +59,6 @@
 			localStorage.extract_api = false;
 			localStorage.dmmplay = true;
 			window.open("../game/web.html", "kc3kai_game");
-		});
-		
-		// Activate Cookies
-		$("#cookies").on('click', function(){
-			_gaq.push(['_trackEvent', "Region Cookies", 'clicked']);
-			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-				(new TMsg(tabs[0].id, "cookie", "", {}, function(response){
-					window.close();
-				})).execute();
-			});
 		});
 		
 		// Strategy Room

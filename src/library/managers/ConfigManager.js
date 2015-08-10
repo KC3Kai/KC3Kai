@@ -10,18 +10,23 @@ Retreives when needed to apply on components
 	
 	window.ConfigManager = {
 		
-		// Default values. As a fucntion to not include on JSON string
+		// Default values. As a function to not include on JSON string
 		defaults : function(){
 			return {
 				version				: 6,
 				language			: "en",
 				elosFormula 		: 3,
+				hqExpDetail 		: 1,
 				
 				info_face 			: true,
+				info_drop 			: true,
 				info_craft 			: true,
 				info_compass 		: true,
 				info_battle 		: true,
+				info_btstamp 		: false,
 				info_boss 			: true,
+				info_troll 			: false, // hidden and false by default. { useful for NightBattle "support" }
+				info_delta 			: false, // hidden and false by default. { altering the default feature of HQ update }
 				
 				ss_mode 			: 0,
 				ss_type 			: 'JPG',
@@ -34,6 +39,7 @@ Retreives when needed to apply on components
 				
 				api_translation		: true,
 				api_tracking 		: true,
+				api_mustPanel 		: true,
 				api_askExit			: true,
 				api_margin			: 0,
 				api_bg_color		: "#def",
@@ -42,6 +48,7 @@ Retreives when needed to apply on components
 				api_bg_position		: "top center",
 				api_gameScale		: 100,
 				
+				dmm_forcecookies	: false,
 				dmm_customize		: false,
 				dmm_translation		: true,
 				dmm_tracking		: true,
@@ -54,6 +61,7 @@ Retreives when needed to apply on components
 				
 				pan_theme			: "default",
 				pan_size			: "big",
+				pan_gear_holder		: "black",
 				pan_bg_color		: "#def",
 				pan_bg_image		: "",
 				pan_bg_size			: "cover",
@@ -93,8 +101,13 @@ Retreives when needed to apply on components
 		
 		// Toggle Equipment LoS
 		scrollElosMode :function(){
-			this.elosFormula++;
-			if(this.elosFormula > 3){ this.elosFormula=1; }
+			this.elosFormula = (this.elosFormula % 3) + 1;
+			this.save();
+		},
+		
+		// Toggle HQ Exp Information
+		scrollHQExpInfo :function(){
+			this.hqExpDetail = (this.hqExpDetail % 3) + 1;
 			this.save();
 		}
 		

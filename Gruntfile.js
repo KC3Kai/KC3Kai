@@ -23,7 +23,9 @@ module.exports = function(grunt) {
 					'assets/img/**',
 					'assets/snd/**',
 					'assets/js/Chart.min.js',
-					'assets/js/Dexie.min.js'
+					'assets/js/Dexie.min.js',
+					'assets/js/KanColleHelpers.js',
+					'assets/js/FileSaver.min.js'
 				],
 				dest: 'build/release/'
 			},
@@ -124,7 +126,8 @@ module.exports = function(grunt) {
 						{
 							pattern: /DevKC3Kai/ig,
 							replacement: function (match, p1) {
-								return "KC3改";
+								// return "KC3改";
+								return "KanColle";
 							}
 						}
 					]
@@ -146,6 +149,10 @@ module.exports = function(grunt) {
 						{
 							pattern: /library\/objects\/Messengers\.js/ig,
 							replacement: 'library/objects.js'
+						},
+						{
+							pattern: /library\/managers\/ConfigManager\.js/ig,
+							replacement: 'library/managers.js'
 						},
 						{
 							pattern: /assets\/img\/logo\/dev\.png/ig,

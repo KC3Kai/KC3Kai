@@ -13,7 +13,7 @@ Instantiatable class to represent one player
 			this.desc = "";
 			this.rank = "";
 			this.level = 1;
-			this.exp = [0,0];
+			this.exp = [0,0,0];
 			this.server = 0;
 		}
 	};
@@ -28,16 +28,26 @@ Instantiatable class to represent one player
 		
 		this.desc = data.desc;
 		this.rank = KC3Meta.rank( data.rank );
-		this.level = data.level;
+		
+		this.updateLevel(data.level,data.exp);
+	};
+	
+	KC3Player.prototype.updateLevel = function( level, exp ){
+		this.level = level;
 		
 		// Computer level and experience values
 		var ExpCurrLevel = KC3Meta.exp( this.level )[1];
 		var ExpNextLevel = KC3Meta.exp( this.level+1 )[1];
-		var exp_percent = (data.exp - ExpCurrLevel) / (ExpNextLevel - ExpCurrLevel);
-		var exp_next = ExpNextLevel - data.exp;
-		this.exp = [ exp_percent, exp_next ];
+		var exp_next    = Math.max(0,ExpNextLevel - exp);
+		var exp_current = Math.max(0,exp - ExpCurrLevel);
+		var exp_percent = (exp_current) / (ExpNextLevel - ExpCurrLevel);
+		if(exp_next <= 0) {
+			exp_next = 0;
+			exp_percent = 1.0;
+		}
+		this.exp = [ exp_percent, exp_next, exp_current, ExpCurrLevel + exp_current ];
 	};
-	
+
 	KC3Player.prototype.logout = function(){
 		localStorage.removeItem("player");
 		// localStorage.removeItem("player_fleets");

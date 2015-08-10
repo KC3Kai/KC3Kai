@@ -33,7 +33,7 @@ KCScreenshot.prototype.start = function(playerName, element){
 };
 
 function chromeCapture(captureFormat, response){
-	chrome.tabs.captureVisibleTab(null, {format: captureFormat}, response);
+	chrome.tabs.captureVisibleTab(null, {format: captureFormat, quality: 70}, response);
 }
 
 KCScreenshot.prototype.generateScreenshotFilename = function() {

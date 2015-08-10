@@ -409,12 +409,20 @@
         "desc": "Tenryuu, Tatsuta, and at least 2 other ships to [W2-3] and S-rank the boss node"
     },
 	"276": {
-        "name": "Sortie the surface attack fleet!",
-        "desc": "Sortie Hiei, Kirishima, Nagara, Akatsuki, Ikazuchi, Inazuma to 5-1 and clear the map with an S-rank"
+        "name": "海上突入部队进发！",
+        "desc": "比睿、雾岛、长良、晓、雷、电组成的舰队出击5-1，Boss战取得S胜"
     },
 	"277": {
         "name": "DesDiv6 Anti-Submarine Mission!",
         "desc": "Sortie Akatsuki Kai2 , Hibiki/Verniy, Ikazuchi, Inazuma to 1-5 and clear the map with at least A-rank"
+    },
+	"278": {
+        "name": "Rush the 1st Torpedo Squadron to Operation KE",
+        "desc": "Sortie Abukuma as flagship with Hibiki/Вер, Hatsushimo, Wakaba, Samidare and Shimakaze to 3-2 and B-Rank+ the boss"
+    },
+	"279": {
+        "name": "“第一水雷战队”北方KE号作战再突入！",
+        "desc": "新编“一水战”（阿武隈改二旗舰+响+夕云+长波+秋云+岛风）出击3-2，Boss战取得胜利（B+）"
     },
 	
 	
@@ -422,56 +430,36 @@
 	
 	
 	"201": {
-        "code": "Bd1",
         "name": "[日常] 获胜1次",
-        "desc": "击败 1 支敌舰队",
-		"unlock": [ 216, 211, 212 ],
-		"tracking": [ [0,1] ]
+        "desc": "击败 1 支敌舰队"
     },
 	"216": {
-		"code": "Bd2",
 		"name": "[日常] 击沉旗舰",
-		"desc": "击沉 1 艘敌舰队旗舰",
-		"unlock": [ 210, 218, 214, 213 ],
-		"tracking": [ [0,1] ]
+		"desc": "击沉 1 艘敌舰队旗舰"
 	},
 	"210": {
-		"code": "Bd3",
 		"name": "[日常] 获胜10次",
-		"desc": "击败 10 支敌舰队",
-		"tracking": [ [0,10] ]
+		"desc": "击败 10 支敌舰队"
 	},
 	"211": {
-		"code": "Bd4",
 		"name": "[日常] 击沉航母",
-		"desc": "击沉 3 艘敌航母",
-		"tracking": [ [0,3] ]
+		"desc": "击沉 3 艘敌航母"
 	},
 	"218": {
-		"code": "Bd5",
 		"name": "[日常] 击沉补给舰",
-		"desc": "击沉 3 艘敌补给舰",
-		"unlock": [ 226, 220 ],
-		"tracking": [ [0,3] ]
+		"desc": "击沉 3 艘敌补给舰"
 	},
 	"212": {
-		"code": "Bd6",
 		"name": "[日常] 击沉补给舰",
-		"desc": "击沉 5 艘敌补给舰",
-		"tracking": [ [0,5] ]
+		"desc": "击沉 5 艘敌补给舰"
 	},
 	"226": {
-		"code": "Bd7",
 		"name": "[日常] 2图Boss获胜",
-		"desc": "在西南诸岛（2图）取得 5 场Boss战胜利",
-		"unlock": [ 230 ],
-		"tracking": [ [0,5] ]
+		"desc": "在西南诸岛（2图）取得 5 场Boss战胜利"
 	},
 	"230": {
-		"code": "Bd8",
         "name": "[日常] 击沉潜艇",
-        "desc": "击沉 6 艘敌潜艇",
-		"tracking": [ [0,6] ]
+        "desc": "击沉 6 艘敌潜艇"
     },
 	
 	
@@ -479,70 +467,44 @@
 	
 	
 	"214": {
-		"code": "Bw1",
-		"name": "[周常] A号作战",
-		"desc": "[A号作战] 出击36次，24次Boss战，12场Boss战胜利，6次S胜",
-		"unlock": [ 221 ],
-		"tracking": [ [0,36], [0,24], [0,12], [0,6] ]
+		"name": "[周常] Ａ号作战",
+		"desc": "[Ａ号作战] 出击36次，24次Boss战，12场Boss战胜利，6次S胜"
 	},
 	"220": {
-		"code": "Bw2",
-        "name": "[周常] I号作战 (航母)",
-        "desc": "[I号作战] 击沉 20 艘敌航母",
-		"unlock": [ 228 ],
-		"tracking": [ [0,20] ]
+        "name": "[周常] Ｉ号作战 (航母)",
+        "desc": "[Ｉ号作战] 击沉 20 艘敌航母"
     },
 	"213": {
-		"code": "Bw3",
         "name": "[周常] 通商破坏 (补给)",
-		"desc": "[海上通商破坏] 击沉 20 艘敌补给舰",
-		"tracking": [ [0,20] ]
+		"desc": "[海上通商破坏] 击沉 20 艘敌补给舰"
 	},
 	"221": {
-		"code": "Bw4",
         "name": "[周常] RO号作战 (补给)",
-        "desc": "[RO号作战] 击沉 50 艘敌补给舰",
-		"unlock": [ 261, 257, 264 ],
-		"tracking": [ [0,50] ]
+        "desc": "[RO号作战] 击沉 50 艘敌补给舰"
     },
 	"228": {
-		"code": "Bw5",
         "name": "[周常] 海上护卫 (潜艇)",
-        "desc": "[海上护卫战] 击沉 15 艘敌潜艇",
-		"unlock": [ 229, 241, 613 ],
-		"tracking": [ [0,15] ]
+        "desc": "[海上护卫战] 击沉 15 艘敌潜艇"
     },
 	"229": {
-		"code": "Bw6",
         "name": "[周常] 4图Boss获胜",
-		"desc": "在西方海域（4图）取得 12 场Boss战胜利",
-		"unlock": [ 242 ],
-		"tracking": [ [0,12] ]
+		"desc": "在西方海域（4图）取得 12 场Boss战胜利"
     },
 	"241": {
-		"code": "Bw7",
         "name": "[周常] 3图深部Boss获胜",
-		"desc": "在北方海域深部（3-3/3-4/3-5）取得 5 场Boss战胜利",
-		"tracking": [ [0,5] ]
+		"desc": "在北方海域深部（3-3/3-4/3-5）取得 5 场Boss战胜利"
     },
     "242": {
-		"code": "Bw8",
         "name": "[周常] 4-4 Boss战",
-        "desc": "4-4 Boss战获胜",
-		"unlock": [ 243 ],
-		"tracking": [ [0,1] ]
+        "desc": "4-4 Boss战获胜"
     },
     "243": {
-		"code": "Bw9",
         "name": "[周常] 5-2 Boss战S胜",
-        "desc": "5-2 Boss战S胜 2次",
-		"tracking": [ [0,2] ]
+        "desc": "5-2 Boss战S胜 2次"
     },
 	"261": {
-		"code": "Bw10",
         "name": "[周常] 1-5 Boss战A胜",
-        "desc": "1-5 Boss战A胜 3次",
-		"tracking": [ [0,3] ]
+        "desc": "1-5 Boss战A胜 3次"
     },
 	
 	
@@ -550,41 +512,30 @@
 	
 	
 	"249": {
-		"code": "Bm1",
         "name": "[月常] 第五战队2-5",
-        "desc": "包含妙高、那智和羽黑的舰队出击2-5，Boss战S胜",
-		"unlock": [ 265 ]
+        "desc": "包含妙高、那智和羽黑的舰队出击2-5，Boss战S胜"
     },
 	"256": {
-		"code": "Bm2",
         "name": "[月常] 潜艇舰队6-1",
-        "desc": "出击6-1，Boss战S胜3次",
-		"tracking": [ [0,3] ]
+        "desc": "出击6-1，Boss战S胜3次"
     },
 	"257": {
-		"code": "Bm3",
         "name": "[月常] 水雷战队1-4",
         "desc": "仅包含CL和DD的舰队（CL旗舰且最多3）出击1-4，Boss战S胜"
     },
 	"259": {
-		"code": "Bm4",
         "name": "[月常] 水上打击5-1",
         "desc": "3低速BB(V)+1CL+2其他的舰队出击5-1，Boss战S胜"
     },
 	"265": {
-		"code": "Bm5",
         "name": "[月常] 1-5",
-        "desc": "出击1-5，Boss战A胜10次",
-		"tracking": [ [0,10] ]
+        "desc": "出击1-5，Boss战A胜10次"
     },
 	"264": {
-		"code": "Bm6",
         "name": "[月常] 机动部队4-2",
-        "desc": "2CV(L)+2DD+2其他的舰队出击4-2，Boss战S胜",
-		"unlock": [ 266 ]
+        "desc": "2CV(L)+2DD+2其他的舰队出击4-2，Boss战S胜"
     },
 	"266": {
-		"code": "Bm7",
         "name": "[月常] 水上反击2-5",
         "desc": "4DD+1CA（非CAV）+1CL（DD旗舰）的舰队出击2-5，Boss战S胜"
     },
@@ -594,41 +545,30 @@
 	
 	
     "301": {
-		"code": "C1",
         "name": "初次演习！",
         "desc": "与其他提督进行 1 次演习"
     },
 	 "303": {
-		"code": "C2",
         "name": "[日常] 演习",
-        "desc": "与其他提督进行 3 次演习",
-		"unlock": [ 304, 302 ],
-		"tracking": [ [0,3] ]
+        "desc": "与其他提督进行 3 次演习"
     },
 	"304": {
-		"code": "C3",
         "name": "[日常] 演习获胜",
-        "desc": "演习取得 5 次胜利",
-		"tracking": [ [0,5] ]
+        "desc": "演习取得 5 次胜利"
     },
     "302": {
-		"code": "C4",
         "name": "[周常] 演习获胜",
-        "desc": "一周内演习取得 20 次胜利",
-		"tracking": [ [0,20] ]
+        "desc": "一周内演习取得 20 次胜利"
     },
     "307": {
-		"code": "C5",
         "name": "Improve the Efficiency of the Fleet",
         "desc": "演习取得 3 次胜利"
     },
     "308": {
-		"code": "C6",
         "name": "Improve the Efficiency of the Fleet One More Time",
         "desc": "演习取得 4 次胜利"
     },
 	"309": {
-		"code": "C7",
         "name": "Strive to Increase the Level of Training in Preparation for Another Rush to the Northern Sea",
         "desc": "一天内演习取得 4 次胜利"
     },
@@ -636,100 +576,76 @@
 	
 	
 	
+	
     "401": {
-		"code": "D1",
         "name": "初次远征！",
         "desc": "进行 1 次远征"
     },
     "402": {
-		"code": "D2",
         "name": "[日常] 远征成功",
-        "desc": "远征取得 3 次成功",
-		"unlock": [ 403 ],
-		"tracking": [ [0,3] ]
+        "desc": "远征取得 3 次成功"
     },
     "403": {
-		"code": "D3",
         "name": "[日常] 远征成功",
-        "desc": "远征取得 10 次成功",
-		"tracking": [ [0,10] ]
+        "desc": "远征取得 10 次成功"
     },
     "404": {
-		"code": "D4",
         "name": "[周常] 远征成功",
-        "desc": "一周内远征取得 30 次成功",
-		"tracking": [ [0,30] ]
+        "desc": "一周内远征取得 30 次成功"
     },
     "405": {
-		"code": "D5",
         "name": "The First Submarine Operation",
         "desc": "远征 #30 取得成功"
     },
     "406": {
-		"code": "D6",
         "name": "The Second Submarine Operation",
         "desc": "远征 #30 再取得 1 次成功"
     },
     "408": {
-		"code": "D7",
         "name": "Continuation of Submarine Operations",
         "desc": "远征 #30 再取得 2 次成功"
     },
     "409": {
-		"code": "D8",
         "name": "Strategy Meeting with Overseas Submarine Dispatch!",
         "desc": "远征 #31 取得成功"
     },
     "410": {
-		"code": "D9",
         "name": "[周常] 东京急行远征",
-        "desc": "一周内远征 #37 和 #38 共取得 1 次成功",
-		"unlock": [ 411 ],
-		"tracking": [ [0,1] ]
+        "desc": "一周内远征 #37 和 #38 共取得 1 次成功"
     },
 	"412": {
-		"code": "D10",
         "name": "Strengthen the Operation of the BBV",
         "desc": "远征 #23 取得成功"
     },
     "411": {
-		"code": "D11",
         "name": "[周常] 东京急行远征",
-        "desc": "一周内远征 #37 和 #38 共取得 7 次成功",
-		"tracking": [ [0,7] ]
+        "desc": "一周内远征 #37 和 #38 共取得 7 次成功"
     },
     "413": {
-		"code": "D12",
         "name": "Strengthen the Operation of the BBV (Cont.)",
         "desc": "远征 #23 再取得 4 次成功"
     },
     "414": {
-		"code": "D13",
         "name": "Blue Waters Submarine Operation",
         "desc": "远征 #39 取得成功"
     },
     "415": {
-		"code": "D14",
         "name": "Blue Waters Extended Submarine Operation",
         "desc": "远征 #39 再取得 2 次成功"
     },
     "416": {
-		"code": "D15",
         "name": "Air Defence Exercises",
         "desc": "远征 #6 取得 3 次成功"
     },
     "417": {
-		"code": "D16",
         "name": "Deploy the Decoy Task Force",
         "desc": "远征 #5 取得成功"
     },
     "418": {
-		"code": "D17",
         "name": "Naval Ceremony Preparations",
         "desc": "远征 #7 取得 2 次成功"
     },
     "419": {
-		"code": "D18",
         "name": "Naval Ceremony",
         "desc": "远征 #8 取得成功"
     },
@@ -739,27 +655,20 @@
 	
 	
     "501": {
-		"code": "E1",
         "name": "初次补给！",
         "desc": "进行 1 次补给"
     },
     "502": {
-		"code": "E2",
         "name": "初次入渠！",
         "desc": "进行 1 次入渠修理"
     },
     "503": {
-		"code": "E3",
         "name": "[日常] 入渠修理",
-        "desc": "进行 5 次入渠修理",
-		"unlock": [ 504 ],
-		"tracking": [ [0,5] ]
+        "desc": "进行 5 次入渠修理"
     },
     "504": {
-		"code": "E4",
         "name": "[日常] 补给",
-        "desc": "进行 15 次补给",
-		"tracking": [ [0,15] ]
+        "desc": "进行 15 次补给"
     },
 	
 	
@@ -767,105 +676,76 @@
 	
 	
 	"605": {
-		"code": "F1",
         "name": "[日常] 开发",
-        "desc": "进行 1 次装备开发（可失败）",
-		"unlock": [ 606 ],
-		"tracking": [ [0,1] ]
+        "desc": "进行 1 次装备开发（可失败）"
     },
 	"606": {
-		"code": "F2",
         "name": "[日常] 建造",
-        "desc": "进行 1 次建造",
-		"unlock": [ 607 ],
-		"tracking": [ [0,1] ]
+        "desc": "进行 1 次建造"
     },
 	"607": {
-		"code": "F3",
         "name": "[日常] 开发",
-        "desc": "进行 3 次装备开发（可失败）",
-		"unlock": [ 608 ],
-		"tracking": [ [0,3] ]
+        "desc": "进行 3 次装备开发（可失败）"
     },
 	 "608": {
-		"code": "F4",
         "name": "[日常] 建造",
-        "desc": "进行 3 次建造",
-		"unlock": [ 609, 619 ],
-		"tracking": [ [0,3] ]
+        "desc": "进行 3 次建造"
     },
 	 "609": {
-		"code": "F5",
         "name": "[日常] 解体",
-        "desc": "进行 2 次解体",
-		"tracking": [ [0,2] ]
+        "desc": "进行 2 次解体"
     },
     "601": {
-		"code": "F6",
         "name": "初次建造！",
         "desc": "进行 1 次舰娘建造"
     },
     "602": {
-		"code": "F7",
         "name": "初次开发！",
         "desc": "进行 1 次装备开发"
     },
     "603": {
-		"code": "F8",
         "name": "初次解体！",
         "desc": "进行 1 次解体"
     },
     "604": {
-		"code": "F9",
         "name": "初次废弃！",
         "desc": "进行 1 次装备废弃"
     },
     "610": {
-		"code": "F10",
         "name": "Preparation for LSC (Part 2)",
         "desc": "Scrap equipment 4 times"
     },
 	"612": {
-		"code": "F11",
         "name": "Prepare the Drum Canisters",
         "desc": "Scrap equipment 3 times"
     },
 	 "613": {
-		"code": "F12",
         "name": "[周常] 装备废弃",
-        "desc": "进行 24 次装备废弃",
-		"tracking": [ [0,24] ]
+        "desc": "进行 24 次装备废弃"
     },
 	 "614": {
-		"code": "F13",
         "name": "Model Conversion (to Tenzan)",
         "desc": "Have flagship equipped with Type 97 Torpedo Bomber (Tomonaga Squadron), then scrap 2 Tenzan"
     },
 	"615": {
-		"code": "F14",
         "name": "Model Conversion (to Suisei)",
         "desc": "Have flagship equipped with Type 99 Dive Bomber (Egusa Squadron), then scrap 2 Suisei"
     },
     "616": {
-		"code": "F15",
         "name": "Model Conversion (to Reppuu)",
         "desc": "Have flagship equipped with Zero Fighter Type 52 Type C (601 Air Group), then scrap 2 Reppuu"
     },
 	"617": {
-		"code": "F16",
         "name": "Preparing for Irako",
         "desc": "Scrap equipment 10 times"
     },
 	"618": {
-		"code": "F17",
         "name": "初次装备改修！",
         "desc": "进行 1 次装备改修"
     },
     "619": {
-		"code": "F18",
         "name": "[日常] 装备改修",
-        "desc": "进行 1 次装备改修（可失败）",
-		"tracking": [ [0,1] ]
+        "desc": "进行 1 次装备改修（可失败）"
     },
 	
 	
@@ -873,25 +753,18 @@
 	
 	
     "701": {
-		"code": "G1",
         "name": "初次近代化改修！",
         "desc": "进行 1 次近代化改修（合成）"
     },
     "702": {
-		"code": "G2",
         "name": "[日常] 近代化改修",
-        "desc": "进行 2 次近代化改修（合成）",
-		"unlock": [ 703 ],
-		"tracking": [ [0,2] ]
+        "desc": "进行 2 次近代化改修（合成）"
     },
     "703": {
-		"code": "G3",
         "name": "[周常] 近代化改修",
-        "desc": "一周内进行 15 次近代化改修（合成）",
-		"tracking": [ [0,15] ]
+        "desc": "一周内进行 15 次近代化改修（合成）"
     },
     "704": {
-		"code": "G4",
         "name": "Preparation for LSC (Part 1)",
         "desc": "进行 4 次近代化改修（合成）"
     },

@@ -92,6 +92,15 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		------------------------------------------*/
 		"clearOverlays" :function(request, sender, response){
 			(new TMsg(request.tabId, "gamescreen", "clearOverlays", {})).execute();
+		},
+		
+		/* GET CONFIG
+		For content scripts who doesnt have access to localStorage
+		Mainly used at the moment for DMM cookie injection
+		------------------------------------------*/
+		"getConfig" :function(request, sender, response){
+			ConfigManager.load();
+			response({value: ConfigManager[request.id]});
 		}
 		
 	};
@@ -119,5 +128,55 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		
 		}
 	});
+	
+	/* New cookie hack
+	Listen to change in cookies on the DMM website
+	Revert DMM cookies to ckcy=1 and cklg=welcome if changed
+	------------------------------------------*/
+	chrome.cookies.onChanged.addListener(function(changeInfo){
+		if(changeInfo.cookie.domain == ".dmm.com" && changeInfo.cause == "expired_overwrite"){
+			
+			// Check if forcing cookies is enabled, for efficiency, only do this for the two variables
+			if( changeInfo.cookie.name == "ckcy" || changeInfo.cookie.name == "cklg" ){
+				// Reload config, do always. If not, cookie settings will only take affect after browser restart
+				ConfigManager.load();
+				// Cancel all further actions if disabled
+				if(!ConfigManager.dmm_forcecookies){ return true; }
+			}
+			
+			// CKCY force 1
+			if( changeInfo.cookie.name == "ckcy" ){
+				// console.log("CKCY=", changeInfo.cookie.value, changeInfo);
+				chrome.cookies.set({
+					url: "http://www.dmm.com",
+					name: "ckcy",
+					value: "1",
+					domain: ".dmm.com",
+					expirationDate: Math.ceil((new Date("Sun, 09 Feb 2019 09:00:09 GMT")).getTime()/1000),
+					path: changeInfo.cookie.path,
+				}, function(cookie){
+					// console.log("ckcy cookie re-hacked", cookie);
+				});
+			}
+			
+			// CKLG force welcome
+			if( changeInfo.cookie.name == "cklg" ){
+				// console.log("CKLG=", changeInfo.cookie.value, changeInfo);
+				chrome.cookies.set({
+					url: "http://www.dmm.com",
+					name: "cklg",
+					value: "welcome",
+					domain: ".dmm.com",
+					expirationDate: Math.ceil((new Date("Sun, 09 Feb 2019 09:00:09 GMT")).getTime()/1000),
+					path: changeInfo.cookie.path,
+				}, function(cookie){
+					// console.log("cklg cookie re-hacked", cookie);
+				});
+				
+			}
+		}
+	});
+	
+	
 	
 })();

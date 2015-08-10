@@ -141,7 +141,6 @@
 			// Show all sorties
 			if(this.selectedWorld === 0){
 				KC3Database.count_normal_sorties(function(countSorties){
-					console.log("count_normal_sorties", countSorties);
 					self.showPagination(countSorties);
 				});
 				
@@ -229,15 +228,20 @@
 			// Show sortie records on list
 			var sortieBox, mainFleet, isCombined, rshipBox, nodeBox, thisNode;
 			$.each(sortieList, function(id, sortie){
+				// Create sortie box
 				sortieBox = $(".tab_maps .factory .sortie_box").clone().appendTo(".tab_maps .sortie_list");
 				$(".sortie_id", sortieBox).html( sortie.id );
 				$(".sortie_date", sortieBox).html( new Date(sortie.time*1000).format("mmm d") );
+				$(".sortie_date", sortieBox).attr("title", new Date(sortie.time*1000).format("mmm d, yyyy hh:MM:ss") );
 				$(".sortie_map", sortieBox).html( sortie.world + "-" + sortie.mapnum );
 				
 				// Show main fleet faces
 				mainFleet = sortie["fleet"+sortie.fleetnum];
 				$(".sortie_ship", sortieBox).hide();
 				$.each(mainFleet, function(index, ship){
+					// false recorded on older sorties. stop loop when encountered
+					if(ship===false){ return false; }
+					
 					$(".sortie_ship_"+(index+1)+" img", sortieBox).attr("src", KC3Meta.shipIcon(ship.mst_id));
 					$(".sortie_ship_"+(index+1), sortieBox).show();
 					
@@ -301,7 +305,17 @@
 				
 				// For each battle
 				$.each(sortie.battles, function(index, battle){
-					// console.log(battle);
+					var battleData, isDayBattle = true;
+					
+					// Determine if day or night battle node
+					if(typeof battle.data.api_dock_id != "undefined"){
+						battleData = battle.data;
+					}else if(typeof battle.yasen.api_deck_id != "undefined"){
+						battleData = battle.yasen;
+						isDayBattle = false;
+					}else{
+						return true;
+					}
 					
 					// Show on node list
 					$(".sortue_edge_"+(index+1), sortieBox).addClass("active");
@@ -312,17 +326,18 @@
 					$(".node_id", nodeBox).text( battle.node );
 					
 					// Result Icons
-					$(".node_formation img", nodeBox).attr("src", KC3Meta.formationIcon(battle.data.api_formation[0]) );
-					$(".node_formation", nodeBox).attr("title", KC3Meta.formationText(battle.data.api_formation[0]) );
-					
+					$(".node_formation img", nodeBox).attr("src", KC3Meta.formationIcon(battleData.api_formation[0]) );
+					$(".node_formation", nodeBox).attr("title", KC3Meta.formationText(battleData.api_formation[0]) );
 					$(".node_rating img", nodeBox).attr("src", "../../assets/img/client/ratings/"+battle.rating+".png");
 					
+					// Kanmusu Drop
 					if(battle.drop > 0){
 						$(".node_drop img", nodeBox).attr("src", KC3Meta.shipIcon( battle.drop ) );
 					}else{
 						$(".node_drop img", nodeBox).attr("src", "../../assets/img/ui/shipdrop-x.png");
 					}
 					
+					// Support Exped Triggered
 					if(battle.data.api_support_flag > 0){
 						$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support.png");
 					}else{
@@ -330,10 +345,9 @@
 					}
 					
 					// Enemies
-					$(".node_eformation img", nodeBox).attr("src", KC3Meta.formationIcon(battle.data.api_formation[1]) );
-					$(".node_eformation", nodeBox).attr("title", KC3Meta.formationText(battle.data.api_formation[1]) );
-					// battle.data.api_ship_ke.splice(0,1);
-					$.each(battle.data.api_ship_ke, function(index, eship){
+					$(".node_eformation img", nodeBox).attr("src", KC3Meta.formationIcon(battleData.api_formation[1]) );
+					$(".node_eformation", nodeBox).attr("title", KC3Meta.formationText(battleData.api_formation[1]) );
+					$.each(battleData.api_ship_ke, function(index, eship){
 						$(".node_eship_"+(index+1)+" img", nodeBox).attr("src", KC3Meta.abyssIcon( eship ) );
 						$(".node_eship_"+(index+1), nodeBox).attr("title", KC3Master.ship( eship ).api_name + KC3Master.ship( eship ).api_yomi );
 						$(".node_eship_"+(index+1), nodeBox).show();
@@ -341,44 +355,49 @@
 					
 					// Process Battle
 					thisNode = (new KC3Node()).defineAsBattle();
-					thisNode.engage( battle.data );
+					if(typeof battle.data.api_dock_id != "undefined"){
+						thisNode.engage( battleData, sortie.fleetnum );
+					}else if(typeof battle.yasen.api_deck_id != "undefined"){
+						thisNode.engageNight( battleData, sortie.fleetnum );
+					}
 					
 					// Conditions
-					$(".node_detect", nodeBox).text( thisNode.detection[0] );
-					$(".node_detect", nodeBox).addClass( thisNode.detection[1] );
 					$(".node_engage", nodeBox).text( thisNode.engagement[2] );
 					$(".node_engage", nodeBox).addClass( thisNode.engagement[1] );
 					$(".node_contact", nodeBox).text(thisNode.fcontact +" vs "+thisNode.econtact);
-					$(".node_airbattle", nodeBox).text( thisNode.airbattle[0] );
-					$(".node_airbattle", nodeBox).addClass( thisNode.airbattle[1] );
 					
-					// Plane total counts
-					$(".node_FFT", nodeBox).text(thisNode.planeFighters.player[0]);
-					$(".node_FAT", nodeBox).text(thisNode.planeFighters.abyssal[0]);
-					$(".node_BFT", nodeBox).text(thisNode.planeBombers.player[0]);
-					$(".node_BAT", nodeBox).text(thisNode.planeBombers.abyssal[0]);
+					// Day Battle-only data
+					if(isDayBattle){
+						$(".node_detect", nodeBox).text( thisNode.detection[0] );
+						$(".node_detect", nodeBox).addClass( thisNode.detection[1] );
+						
+						$(".node_airbattle", nodeBox).text( thisNode.airbattle[0] );
+						$(".node_airbattle", nodeBox).addClass( thisNode.airbattle[1] );
+						
+						// Plane total counts
+						$(".node_FFT", nodeBox).text(thisNode.planeFighters.player[0]);
+						$(".node_FAT", nodeBox).text(thisNode.planeFighters.abyssal[0]);
+						$(".node_BFT", nodeBox).text(thisNode.planeBombers.player[0]);
+						$(".node_BAT", nodeBox).text(thisNode.planeBombers.abyssal[0]);
+						
+						// Plane losses
+						if(thisNode.planeFighters.player[1] > 0){
+							$(".node_FFL", nodeBox).text("-"+thisNode.planeFighters.player[1]);
+						}
+						if(thisNode.planeFighters.abyssal[1] > 0){
+							$(".node_FAL", nodeBox).text("-"+thisNode.planeFighters.abyssal[1]);
+						}
+						if(thisNode.planeBombers.player[1] > 0){
+							$(".node_BFL", nodeBox).text("-"+thisNode.planeBombers.player[1]);
+						}
+						if(thisNode.planeBombers.abyssal[1] > 0){
+							$(".node_BAL", nodeBox).text("-"+thisNode.planeBombers.abyssal[1]);
+						}
+					}
 					
-					// Plane losses
-					if(thisNode.planeFighters.player[1] > 0){
-						$(".node_FFL", nodeBox).text("-"+thisNode.planeFighters.player[1]);
-					}
-					if(thisNode.planeFighters.abyssal[1] > 0){
-						$(".node_FAL", nodeBox).text("-"+thisNode.planeFighters.abyssal[1]);
-					}
-					if(thisNode.planeBombers.player[1] > 0){
-						$(".node_BFL", nodeBox).text("-"+thisNode.planeBombers.player[1]);
-					}
-					if(thisNode.planeBombers.abyssal[1] > 0){
-						$(".node_BAL", nodeBox).text("-"+thisNode.planeBombers.abyssal[1]);
-					}
-					
-					// $(".xxx", nodeBox).xxx( xxxx );
-					// $(".xxx", nodeBox).xxx( xxxx );
-					// $(".xxx", nodeBox).xxx( xxxx );
-					// $(".xxx", nodeBox).xxx( xxxx );
-					// $(".xxx", nodeBox).xxx( xxxx );
-					// $(".xxx", nodeBox).xxx( xxxx );
+					// Add box to UI
 					$(".sortie_nodes", sortieBox).append( nodeBox );
+					
 				});
 				$(".sortie_nodes", sortieBox).append( $("<div>").addClass("clear") );
 				
