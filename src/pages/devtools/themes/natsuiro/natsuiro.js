@@ -227,6 +227,7 @@
 		$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
 		$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/ui/dark_rating.png");
 		$(".module.activity .battle_drop img").attr("src", "../../../../assets/img/ui/dark_shipdrop.png");
+		$(".module.activity .battle_drop").attr("title", "");
 		$(".module.activity .battle_cond_value").text("");
 		$(".module.activity .plane_text span").text("");
 	}
@@ -604,40 +605,198 @@
 		},
 		
 		BattleNight: function(data){
-			var thisNode = KC3SortieManager.currentNode();
-			
 			this.Fleet();
-			
 		},
 		
 		BattleResult: function(data){
+			var thisNode = KC3SortieManager.currentNode();
 			
+			$(".module.activity .battle_rating img").attr("src",
+				"../../../../assets/img/client/ratings/"+thisNode.rating+".png");
 			
+			// If there is a ship drop
+			if(thisNode.drop > 0){
+				// If drop spoiler is enabled on settings
+				if(ConfigManager.info_drop){
+					$(".module.activity .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop));
+					$(".module.activity .battle_drop").attr("title", KC3Meta.shipName( KC3Master.ship(thisNode.drop).api_name ));
+				}
+				
+				// Update Counts
+				this.ShipSlots({});
+				this.GearSlots({});
+			}else{
+				$(".module.activity .battle_drop img").attr("src",
+					"../../../../assets/img/ui/dark_shipdrop-x.png");
+			}
 		},
 		
 		CraftGear: function(data){
+			// Recall equipment count
+			this.GearSlots({});
 			
+			// If craft spoiler is disabled on settings
+			if(!ConfigManager.info_craft){ return true; }
 			
+			var icon = "../../../../assets/img/client/penguin.png";
+			if (data.itemId !== null) {
+				// Get equipment data
+				var PlayerItem = KC3GearManager.get( data.itemId );
+				var MasterItem = KC3Master.slotitem( data.itemMasterId );
+				
+				// Show basic info of the item
+				icon = "../../../../assets/img/items/"+MasterItem.api_type[3]+".png";
+				// $(".craftGear .equipIcon img", container).attr("src", icon);
+				// $(".craftGear .equipName", container).text( PlayerItem.name() );
+				
+				// Show extra item info
+				var countExisting = KC3GearManager.countByMasterId( data.itemMasterId );
+				if(countExisting == 1){
+					// $(".craftGear .equipNote", container).html("This is your <strong>first</strong>!");
+				}else{
+					// $(".craftGear .equipNote", container).html("You now have <strong>"+countExisting+"</strong> of this item!");
+				}
+				
+				// Show item stats
+				/*$(".equipStats", container).html("");
+				CraftGearStats(container, MasterItem, "souk", "ar");
+				CraftGearStats(container, MasterItem, "houg", "fp");
+				CraftGearStats(container, MasterItem, "raig", "tp");
+				CraftGearStats(container, MasterItem, "soku", "sp");
+				CraftGearStats(container, MasterItem, "baku", "dv");
+				CraftGearStats(container, MasterItem, "tyku", "aa");
+				CraftGearStats(container, MasterItem, "tais", "as");
+				CraftGearStats(container, MasterItem, "houm", "ht");
+				CraftGearStats(container, MasterItem, "houk", "ev");
+				CraftGearStats(container, MasterItem, "saku", "ls");
+				CraftGearStats(container, MasterItem, "leng", "rn");*/
+			} else {
+				// $(".craftGear .equipIcon img", container).attr("src", icon);
+				// $(".craftGear .equipName", container).text( "Equipment crafting failed" );
+				// $(".craftGear .equipNote",container).html("");
+				// $(".equipStats", container).html("");
+			}
+			
+			// Show resource used
+			$(".craftGear .used1").text( data.resourceUsed[0] );
+			$(".craftGear .used2").text( data.resourceUsed[1] );
+			$(".craftGear .used3").text( data.resourceUsed[2] );
+			$(".craftGear .used4").text( data.resourceUsed[3] );
+
+			// Show the box
+			$(".craftGear", container).fadeIn(500);
 		},
 		
-		CraftShip: function(data){
-			
-			
-		},
+		CraftShip: function(data){},
+		
+		ClearedMap: function(data){},
 		
 		PvPStart: function(data){
+			// Clear battle details box just to make sure
+			clearBattleData();
+			$(".module.activity .map_world").text("PvP");
 			
+			// Process PvP Battle
+			KC3SortieManager.endSortie();
+			KC3SortieManager.fleetSent = data.fleetSent;
 			
+			var thisPvP;
+			KC3SortieManager.nodes.push(thisPvP = (new KC3Node()).defineAsBattle());
+			thisPvP.engage( data.battle,data.fleetSent );
+			
+			// Enemy Formation
+			if((typeof thisPvP.eformation != "undefined") && (thisPvP.eformation > -1)){
+				$(".module.activity .battle_eformation img").attr("src",
+					KC3Meta.formationIcon(thisPvP.eformation));
+				$(".module.activity .battle_eformation").attr("title",
+					KC3Meta.formationText(thisPvP.eformation));
+				$(".module.activity .battle_eformation").show();
+			} else {
+				$(".module.activity .battle_eformation").hide();
+			}
+			
+			// Show opponent ships faces
+			console.log(thisPvP.eships);
+			$.each(thisPvP.eships, function(index, eshipId){
+				if(eshipId > -1){
+					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.shipIcon(eshipId));
+					$(".module.activity .abyss_ship_"+(index+1)).show();
+				}
+			});
+			
+			// Enemy HP Predictions
+			if(ConfigManager.info_battle){
+				var newEnemyHP;
+				$.each(thisPvP.eships, function(index, eshipId){
+					if(eshipId > -1){
+						newEnemyHP = thisPvP.enemyHP[index].currentHp;
+						if(newEnemyHP < 0){ newEnemyHP = 0; }
+						
+						if(newEnemyHP === 0){
+							$(".module.activity .abyss_ship_"+(index+1)).css("opacity", "0.6");
+						}
+						
+						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width",
+							28*( newEnemyHP / thisPvP.originalHPs[index+7] ));
+						$(".module.activity .abyss_hp_"+(index+1)).show();
+					}
+				});
+			}
+			
+			// If night battle will be asked after this battle
+			if(thisPvP.yasenFlag){
+				$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
+			}else{
+				$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen-x.png");
+			}
+			
+			// Battle conditions
+			$(".module.activity .battle_detection").text( thisPvP.detection[0] );
+			$(".module.activity .battle_airbattle").text( thisPvP.airbattle[0] );
+			$(".module.activity .battle_engagement").text( thisPvP.engagement[2] );
+			$(".module.activity .battle_contact").text(thisPvP.fcontact +" vs "+thisPvP.econtact);
+			
+			// Fighter phase
+			$(".fighter_ally .plane_before").text(thisPvP.planeFighters.player[0]);
+			$(".fighter_enemy .plane_before").text(thisPvP.planeFighters.abyssal[0]);
+			
+			// Bombing Phase
+			$(".bomber_ally .plane_before").text(thisPvP.planeBombers.player[0]);
+			$(".bomber_enemy .plane_before").text(thisPvP.planeBombers.abyssal[0]);
+			
+			// Plane losses
+			if(thisPvP.planeFighters.player[1] > 0){
+				$(".fighter_ally .plane_after").text("-"+thisPvP.planeFighters.player[1]);
+			}
+			if(thisPvP.planeFighters.abyssal[1] > 0){
+				$(".fighter_enemy .plane_after").text("-"+thisPvP.planeFighters.abyssal[1]);
+			}
+			if(thisPvP.planeBombers.player[1] > 0){
+				$(".bomber_ally .plane_after").text("-"+thisPvP.planeBombers.player[1]);
+			}
+			if(thisPvP.planeBombers.abyssal[1] > 0){
+				$(".bomber_enemy .plane_after").text("-"+thisPvP.planeBombers.abyssal[1]);
+			}
+			
+			// Switch to battle tab
+			$(".module.activity .activity_battle").css("opacity", 1);
+			$(".module.activity .node_type_battle").show();
+			$("#atab_battle").trigger("click");
+			
+			// Trigger other listeners
+			this.HQ({});
+			this.ShipSlots({});
+			this.GearSlots({});
+			this.Fleet({});
+			this.Quests({});
 		},
 		
 		PvPNight: function(data){
-			
-			
+			this.Fleet();
 		},
 		
 		PvPEnd: function(data){
-			
-			
+			$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/client/ratings/"+data.result.api_win_rank+".png");
 		}
 	};
 	
