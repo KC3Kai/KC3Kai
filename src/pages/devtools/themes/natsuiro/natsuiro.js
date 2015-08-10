@@ -424,8 +424,8 @@
 				}else{
 					// If HP-based gauge
 					if(typeof thisMap.maxhp != "undefined"){
-						$(".module.activity .map_hp").text( data.curhp + " / " + data.maxhp );
-						$(".module.activity .map_gauge_bar").css("width", ((data.curhp/data.maxhp)*58)+"px");
+						$(".module.activity .map_hp").text( thisMap.curhp + " / " + thisMap.maxhp );
+						$(".module.activity .map_gauge_bar").css("width", ((thisMap.curhp/thisMap.maxhp)*58)+"px");
 						
 					// If kill-based gauge
 					}else{
@@ -606,6 +606,26 @@
 		
 		BattleNight: function(data){
 			this.Fleet();
+			
+			// Enemy HP Predictions
+			if(ConfigManager.info_battle){
+				var thisNode = KC3SortieManager.currentNode();
+				var newEnemyHP;
+				$.each(thisNode.eships, function(index, eshipId){
+					if(eshipId > -1){
+						newEnemyHP = thisNode.enemyHP[index].currentHp;
+						if(newEnemyHP < 0){ newEnemyHP = 0; }
+						
+						if(newEnemyHP === 0){
+							$(".module.activity .abyss_ship_"+(index+1)).css("opacity", "0.6");
+						}
+						
+						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width",
+							28*( newEnemyHP / thisNode.originalHPs[index+7] ));
+						$(".module.activity .abyss_hp_"+(index+1)).show();
+					}
+				});
+			}
 		},
 		
 		BattleResult: function(data){
