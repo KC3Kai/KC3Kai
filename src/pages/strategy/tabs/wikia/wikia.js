@@ -43,7 +43,7 @@
 
       // Special case because Chiyoda and Chitose have an "A" remodel which could be part of a name
       if(api_name.substr(0, 7) == 'Chiyoda' || api_name.substr(0, 7) == 'Chitose') {
-        base_name = base_name.replace(' A', '');
+        base_name = base_name.replace('-A', '');
       }
 
       var remodel = api_name.split(base_name + ' ')[1] || '';
