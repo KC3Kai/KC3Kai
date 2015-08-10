@@ -1,185 +1,41 @@
-.tab_fleet {
-	width:680px;
+.tab_wikia {
+	width: 680px;
 }
-.tab_fleet .controls {
-	width:680px;
-	height:30px;
-	background:#cfc;
-	margin:0px 0px 10px 0px;
+.tab_wikia .controls {
+	width: 680px;
+	height: 30px;
+	background: #CFC;
+	margin: 0px 0px 10px 0px;
 }
-.tab_fleet .fleet_list {
-	width:680px;
-	padding:10px 0px 0px;
+.tab_wikia .fleet_list {
+	width: 680px;
+	padding: 10px 0px 0px;
 }
-.tab_fleet .factory {
-	display:none;
-}
-
-/* FLEET BOX
---------------------------------*/
-.tab_fleet .fleet_box {
-	width:680px;
-	height:200px;
-	background:#def;
-	margin:0px 0px 5px 0px;
-	border-radius:12px;
-}
-/* Info */
-.tab_fleet .fleet_info {
-	width:680px;
-	height:35px;
-	/*background:#cfc;*/
-}
-.tab_fleet .fleet_name {
-	width:180px;
-	height:25px;
-	line-height:25px;
-	background:#fff;
-	border-radius:8px;
-	float:left;
-	margin:5px 0px 0px 5px;
-	padding:0px 0px 0px 5px;
-	font-weight:bold;
-}
-.tab_fleet .fleet_details {
-	width:450px;
-	height:25px;
-	line-height:25px;
-	float:left;
-	/*background:#fcf;*/
-	margin:5px 0px 0px 10px;
-}
-.tab_fleet .detail_icon {
-	width:25px;
-	height:25px;
-	float:left;
-	margin:0px 2px 0px 0px;
-}
-.tab_fleet .detail_icon img {
-	width:17px;
-	height:17px;
-	margin:4px;
-}
-.detail_field {
-	width:80px;
-	height:25px;
-	background:#fff;
-	border-radius:8px;
-	float:left;
-	margin:0px 8px 0px 0px;
-	padding:0px 0px 0px 5px;
-	font-weight:bold;
-}
-.detail_field.incomplete {
-	background:#fcc;
-}
-.tab_fleet .detail_value {
-	width:40px;
-	height:25px;
-	float:left;
-	/*background:#ffc;*/
-}
-/* Ships */
-.tab_fleet .fleet_ships {
-	width:672px;
-	height:160px;
-	margin:0px 4px;
-	/*background:#ffc;*/
+.tab_wikia .factory {
+	display: none;
 }
 
-/* SHIP BOX
+/* WIKIA BOX
 --------------------------------*/
-.tab_fleet .fleet_ship {
-	width:110px;
-	height:150px;
-	float:left;
-	background:#ffc;
-	border-radius:8px;
-	margin:10px 2px 0px 0px;
+.tab_wikia .wikia_box {
+	width: 680px;
+	background: #DEF;
+	margin: 0px 0px 5px 0px;
+	border-radius: 12px;
+  padding-bottom: 10px;
 }
-.tab_fleet .fleet_ship .ship_type {
-	width:50px;
-	height:21px;
-	line-height:21px;
-	position:relative;
-	margin:-10px auto 0px;
-	background:#79b;
-	border:1px solid #369;
-	font-weight:bold;
-	font-size:14px;
-	text-align:center;
-	border-radius:6px;
-	color:#fff;
+
+.tab_wikia .wikia_box:first-child {
+  margin-top: 10px;
 }
-.tab_fleet .fleet_ship .ship_pic {
-	width:40px;
-	height:40px;
-	float:left;
-	margin:3px 0px 0px 10px;
-	background:#ccc;
-	border-radius:20px;
+
+.tab_wikia .wikia_box .wikia_name {
+  padding: 6px 0 3px 20px;
+  font-weight: bold;
 }
-.tab_fleet .fleet_ship .ship_pic img {
-	width:40px;
-	height:40px;
-}
-.tab_fleet .fleet_ship .ship_lv {
-	width:50px;
-	height:40px;
-	float:left;
-	margin:3px 0px 0px 5px;
-}
-.tab_fleet .fleet_ship .ship_lv_lbl {
-	width:20px;
-	height:40px;
-	line-height:40px;
-	font-size:12px;
-	color:#777;
-	float:left;
-}
-.tab_fleet .fleet_ship .ship_lv_val {
-	width:30px;
-	height:40px;
-	line-height:40px;
-	font-size:16px;
-	font-weight:bold;
-	float:left;
-}
-.tab_fleet .fleet_ship .ship_name {
-	width:110px;
-	height:20px;
-	line-height:20px;
-	margin:0px 0px 2px 0px;
-	text-align:center;
-	font-size:12px;
-	font-weight:bold;
-	color:#00f;
-}
-.tab_fleet .fleet_ship .ship_gear {
-	width:110px;
-	height:17px;
-	line-height:17px;
-	margin:0px 0px 1px 0px;
-	/*background:#ccf;*/
-	font-size:12px;
-}
-.tab_fleet .fleet_ship .gear_icon {
-	width:17px;
-	height:17px;
-	margin:0px 3px 0px 0px;
-	/*background:#fcc;*/
-	float:left;
-}
-.tab_fleet .fleet_ship .gear_icon img {
-	width:17px;
-	height:17px;
-}
-.tab_fleet .fleet_ship .gear_name {
-	width:85px;
-	height:17px;
-	/*background:#cfc;*/
-	float:left;
-	font-size:10px;
-	white-space: nowrap;
-	overflow:hidden;
+
+.tab_wikia .wikia_box .wikia_code {
+  background: #FFC;
+  width: 95%;
+  margin: 0 auto;
 }
