@@ -184,7 +184,7 @@ Xxxxxxx
 		},
 		
 		checkFCF :function( escapeData ){
-			if(typeof escapeData != "undefined"){
+			if ((typeof escapeData !== "undefined") && (escapeData !== null)) {
 				KC3ShipManager.get( escapeData.api_escape_idx[0] ).didFlee = true;
 				KC3ShipManager.get( escapeData.api_tow_idx[0] ).didFlee = true;
 				this.fled.push( escapeData.api_escape_idx[0] );
