@@ -254,9 +254,12 @@
 			// Clear list
 			this.shipList.html("").hide();
 			
+			// Checks the configuration
+			var config = (new KekkonType()).values;
+			
 			// Wait until execute
 			setTimeout(function(){
-				var shipCtr, cElm, cShip;
+				var shipCtr, cElm, cShip, shipLevel;
 				var FilteredShips = [];
 				
 				// Filtering
@@ -323,16 +326,25 @@
 					}
 					
 					cShip = FilteredShips[shipCtr]; //console.log(cShip);
+					shipLevel = cShip.level + 50 * 0; // marry enforcement (debugging toggle)
 					cElm = $(".tab_ships .factory .ship_item").clone().appendTo(self.shipList);
 					if(shipCtr%2 === 0){ cElm.addClass("even"); }else{ cElm.addClass("odd"); }
 					
 					$(".ship_id", cElm).text( cShip.id );
-					$(".ship_img img", cElm).attr("src", KC3Meta.shipIcon(cShip.bid));
+					$(".ship_img .ship_icon", cElm).attr("src", KC3Meta.shipIcon(cShip.bid));
+					if(config.kanmusuPic && shipLevel >= 100)
+						$(".ship_img .ship_kekkon", cElm).attr("src","tabs/ships/SEGASonicRing.png").show();
 					$(".ship_name", cElm).text( cShip.english );
-					if(cShip.level >= 1 || 100)
-						$(".ship_name", cElm).addClass("ship_kekkon");
+					if(shipLevel >= 100) {
+						if(config.kanmusuName)
+							$(".ship_name", cElm).addClass("ship_kekkon");
+						$(".ship_name", cElm).addClass("ship_kekkon-color");
+					}
 					$(".ship_type", cElm).text( KC3Meta.stype(cShip.stype) );
-					$(".ship_lv", cElm).html( "<span>Lv.</span>" + cShip.level );
+					var shipLevelConv = shipLevel - (shipLevel>=100 && config.kanmusuLv ? (101 - ConfigManager.marryLevelFormat) : 0);
+					$(".ship_lv", cElm).html( "<span>Lv.</span>" + shipLevelConv);
+					if(config.kanmusuLv && shipLevel >= 100)
+						$(".ship_lv", cElm).addClass("ship_kekkon ship_kekkon-color");
 					$(".ship_morale", cElm).html( cShip.morale );
 					$(".ship_hp", cElm).text( cShip.hp );
 					$(".ship_lk", cElm).text( cShip.lk );
@@ -438,5 +450,25 @@
 			}
 		}
 	};
+	
+	// checks kekkon setting
+	function KekkonType(){
+		var checks = {
+			kanmusuName: [0],   // ring location: name
+			kanmusuLv  : [1,2], // ring location: level
+			kanmusuLv0 : [1],   // level convention, 0-index
+			kanmusuLv1 : [2],   // level convention, 1-index
+			kanmusuPic : [3],   // ring location: ship icon
+		};
+		if(!KekkonType.values) {
+			this.values = {};
+			KekkonType.instance = this;
+		}
+		for(var k in checks){
+			KekkonType.instance.values[k] = (function(x){return x.indexOf(ConfigManager.marryLevelFormat) >= 0;})(checks[k]);
+		}
+		return KekkonType.instance;
+	}
+	new KekkonType();
 	
 })();
