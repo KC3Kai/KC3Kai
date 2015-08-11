@@ -143,6 +143,7 @@
 	"Saved" : "Saved!",
 	
 	"APIWaitToggle" : "Please load KC3Kai panel first",
+	"APIConcealExpl" : "Hover to show your API Link",
 	
 	"SpeedFast" : "Fast",
 	"SpeedSlow" : "Slow",

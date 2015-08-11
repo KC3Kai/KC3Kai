@@ -34,6 +34,8 @@ $(document).on("ready", function(){
 		$("body").css("background-repeat", "no-repeat");
 	}
 	
+	$(".box-wait .api_txt").attr("title",KC3Meta.term("APIConcealExpl"));
+	
 	// API link determines which screen to show
 	if(localStorage.absoluteswf){
 		$(".api_txt textarea").text(localStorage.absoluteswf);
