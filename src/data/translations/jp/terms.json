@@ -152,6 +152,13 @@
 	"HQExpAbbrev2" : "現在",
 	"HQExpAbbrev3" : "総獲得",
 	
+	"BattleDetection" : "索敵",
+	"BattleEngangement" : "交戦形態",
+	"BattleContact" : "接触",
+	"BattleAirBattle" : "制空",
+	"BattleFriendly" : "友軍",
+	"BattleEnemy" : "敵",
+	
 	"PredictionStampSortie" : "撃沈",
 	"PredictionStampPvP" : "轟沈",
 	
