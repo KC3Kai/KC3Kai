@@ -2,7 +2,7 @@
 	"use strict";
 	_gaq.push(['_trackPageview']);
 	
-	var myVersion = parseInt(chrome.runtime.getManifest().version, 10);
+	var myVersion = Number(chrome.runtime.getManifest().version);
 
 	$(document).on("ready", function(){
 		// Load previously stored configs
@@ -18,7 +18,7 @@
 			dataType: "json",
 			url: "https://raw.githubusercontent.com/dragonjet/KC3Kai/master/update?v="+((new Date()).getTime()),
 			success: function(data, textStatus, request){
-				if(myVersion != Number(data.version)){
+				if( myVersion < Number(data.version) ){
 					version = data.version;
 					setupUpdateTime(
 						new Date(request.getResponseHeader('Date')),
