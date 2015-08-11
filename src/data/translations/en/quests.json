@@ -906,8 +906,6 @@
     
     
     
-    
-    
     "611": {
         "name": "In Preparation of Love! (Part 1)",
         "desc": "Scrap equipment 2 times to show your love!"
@@ -915,5 +913,13 @@
     "306": {
         "name": "In Preparation of Love (Part 2)",
         "desc": "Show your love by getting 2 victories in practice mode."
+    },
+    
+    // Temporary event quests
+    
+    "280": {
+        "name": "Second SN strategy, Initial Operations",
+        "desc": "Clear the Summer 2015 Event Map 2."
     }
+    
 }
