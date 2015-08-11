@@ -1,4 +1,4 @@
-{
+﻿{
 	"AboutCoders" : [
 		{
 			"name": "dragonjet",
@@ -214,6 +214,16 @@
 			"links" : {
 				"wk" :"http://kancolle.wikia.com/wiki/User:Mizarox",
 				"fb" :"https://www.facebook.com/mizael.fer"
+			}
+		},
+		{
+			"name": "YukiNyaa712",
+			"avatar" : "http://kitakami.tk/profile.png",
+			"desc" : "한국어",
+			"links" : {
+				"gh" :"https://github.com/YukiNyaa",
+				"wk" : "http://kancolle.wikia.com/wiki/User:YukiNyaa",
+				"fb" : "https://www.facebook.com/iTwilly.HJW"
 			}
 		}
 	],

@@ -180,6 +180,7 @@ KC3改 Ship Box for Natsuiro theme
 	KC3NatsuiroShipbox.prototype.showEquipment = function( slot ){
 		var thisGear;
 		if(this.shipData.slotnum > slot){
+			
 			if(this.shipData.items[slot] > -1){
 				thisGear = KC3GearManager.get( this.shipData.items[slot] );
 				$(".ship_gear_"+(slot+1)+" .ship_gear_icon img", this.element).attr("src",
@@ -190,7 +191,12 @@ KC3改 Ship Box for Natsuiro theme
 				$(".ship_gear_"+(slot+1)+" .ship_gear_icon img", this.element).hide();
 				$(".ship_gear_"+(slot+1), this.element).addClass("empty");
 			}
-			$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).text( this.shipData.slots[ slot ] );
+			
+			if(this.shipData.slots[ slot ] > 0){
+				$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).text( this.shipData.slots[ slot ] );
+			}else{
+				$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).text("");
+			}
 		}else{
 			$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element).hide();
 			$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).hide();

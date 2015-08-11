@@ -1,4 +1,4 @@
-{
+﻿{
         "available": true,
 
         "SortieWinCount": "Jumlah Menang Sorti",
@@ -76,7 +76,7 @@
         "SettingsELosSum" : "Jumlah",
         "SettingsELosOld" : "Lama",
         "SettingsELosNew" : "Baru",
-        "SettingsHQExpDetail"  : "Informasi Exp HQ",
+        "SettingsHQExpDetail"  : "Info Exp HQ",
 	"SettingsHQExpLeft"    : "EXP Tersisa",
 	"SettingsHQExpCurrent" : "Level Sekarang",
 	"SettingsHQExpTotal"   : "Jumlah EXP",
@@ -87,12 +87,12 @@
         "SettingsCraftBox" : "Hasil Crafting",
         "SettingsCompass" : "Kompas dan Musuh",
         "SettingsBattleData" : "Prediksi Pertempuran",
+	"SettingsBattleStamp" : "Marka Kondisi Kanmusu",
         "SettingsBossComp" : "Susunan Bos",
-	"SettingsBattleStamp" : "Kondisi Pasca Tempur",
-        "SettingsYasenTroll" : "Yasen, \u0022Dukungan Ekstra\u0022",
+        "SettingsYasenTroll" : "Komentar Troll KC3改",
         "SettingsHQDelta" : "HQ EXP Delta saat Sorti",
-        "SettingsScreenshot" : "Screenshot",
         
+	"SettingsScreenshot" : "Screenshot",
         "SettingsSSOutput" : "Hasil Screenshot",
         "SettingsSSDownload" : "Unduh",
         "SettingsSSImgur" : "Imgur",
@@ -125,16 +125,16 @@
 
         "SettingsDMMGameplay" : "Gameplay DMM",
         "SettingsDMMCustomize" : "Terapkan Pengaturan",
-		"SettingsDMMForceCookies" : "Paksa Gunakan Cookies",
+	"SettingsDMMForceCookies" : "Paksa Gunakan Cookies",
 
         "SettingsPanelSize" : "Ukuran Panel",
         "SettingsPanelOpacity" : "Transparansi Antarmuka",
-		"SettingsGearHolder" : "Warna Latar Belakang Equip",
+	"SettingsGearHolder" : "Warna Latar Belakang Equip",
 		
         "Small" : "Kecil",
         "Big" : "Besar",
-		"Black" : "Hitam",
-		"White" : "Putih",
+	"Black" : "Hitam",
+	"White" : "Putih",
         "Theme" : "Tema",
         "Panel" : "Panel",
         "Volume" : "Volume Suara",
@@ -142,16 +142,25 @@
         "LearnMore" : "Pelajari Lebih lanjut",
         "Saved" : "Disimpan!",
 
+	"APIWaitToggle" : "Harap buka panel KC3Kai terlebih dahulu",
+	
         "SpeedFast" : "Cepat",
         "SpeedSlow" : "Pelan",
 
         "HQText" : "HQ",
-		"HQExpAbbrev1" : "Berikutnya",
-		"HQExpAbbrev2" : "Sekarang",
-		"HQExpAbbrev3" : "Jumlah",
-		
-		"PredictionStampSortie" : "Tenggelam",
-		"PredictionStampPvP" : "Tersingkirkan",
+	"HQExpAbbrev1" : "Berikutnya",
+	"HQExpAbbrev2" : "Sekarang",
+	"HQExpAbbrev3" : "Jumlah",
+	
+	"BattleDetection" : "Deteksi",
+	"BattleEngangement" : "Pertempuran",
+	"BattleContact" : "Kontak",
+	"BattleAirBattle" : "Pertempuran Udara",
+	"BattleFriendly" : "Sekutu",
+	"BattleEnemy" : "Musuh",
+	
+	"PredictionStampSortie" : "Tenggelam",
+	"PredictionStampPvP" : "Tersingkirkan",
 
         "LevelText" : "Level",
         "LevelShort" : "Lv.",

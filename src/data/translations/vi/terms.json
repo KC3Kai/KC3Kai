@@ -142,6 +142,8 @@
 	"LearnMore" : "Tìm hiểu thêm",
 	"Saved" : "Đã lưu!",
 	
+	"APIWaitToggle" : "Please load KC3Kai panel first",
+
 	"SpeedFast" : "Nhanh",
 	"SpeedSlow" : "Chậm",
 	
@@ -150,12 +152,19 @@
 	"HQExpAbbrev2" : "Current",
 	"HQExpAbbrev3" : "Total",
 	
-	"PredictionStampSortie" : "Sunk",
-	"PredictionStampPvP" : "Knocked Out",
+	"BattleDetection" : "Detection",
+	"BattleEngangement" : "Engage",
+	"BattleContact" : "Contact",
+	"BattleAirBattle" : "Air Battle",
+	"BattleFriendly" : "Friendly",
+	"BattleEnemy" : "Enemies",
+
+	"PredictionStampSortie" : "Chìm",
+	"PredictionStampPvP" : "Đánh Bại",
 	
 	"LevelText" : "Cấp",
 	"LevelShort" : "Lv.",
-	"LevelNext" : "Tiếp theo",
+	"LevelNext" : "Next",
 	"Screenshot" : "Chụp màn hình",
 	"UntranslatedQuest" : "Untranslated Quest",
 	

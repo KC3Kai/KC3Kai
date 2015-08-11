@@ -646,6 +646,7 @@
 	float:left;
 	text-align:center;
 	color:#eee;
+	overflow:hidden;
 }
 .module.quests .untracked .quest_track {
 	display:none;
