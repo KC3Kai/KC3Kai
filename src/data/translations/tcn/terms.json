@@ -152,7 +152,14 @@
 	"HQExpAbbrev1" : "還需",
 	"HQExpAbbrev2" : "現時",
 	"HQExpAbbrev3" : "共有",
-	
+		
+	"BattleDetection" : "索敵",
+	"BattleEngangement" : "對陣",
+	"BattleContact" : "觸接",
+	"BattleAirBattle" : "航空戰",
+	"BattleFriendly" : "友方",
+	"BattleEnemy" : "敵方",
+
 	"PredictionStampSortie" : "轟沉",
 	"PredictionStampPvP" : "出局",
 
