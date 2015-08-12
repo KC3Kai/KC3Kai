@@ -22,6 +22,7 @@ KC3改 Ship Object
 		this.lk = [0,0];
 		this.range = 0;
 		this.items = [-1,-1,-1,-1];
+		this.ex_item = 0;
 		this.slots = [0,0,0,0];
 		this.slotnum = 0;
 		this.mod = [0,0,0,0,0];
@@ -52,6 +53,10 @@ KC3改 Ship Object
 				this.lk = data.api_lucky;
 				this.range = data.api_leng;
 				this.items = data.api_slot;
+				if(typeof data.api_slot_ex != "undefined"){
+					this.ex_item = data.api_slot_ex;
+				}
+				this.ex_item = 123123;
 				this.slotnum = data.api_slotnum;
 				this.slots = data.api_onslot;
 				this.mod = data.api_kyouka;
@@ -73,6 +78,7 @@ KC3改 Ship Object
 	KC3Ship.prototype.stype = function(){ return KC3Meta.stype( this.master().api_stype ); };
 	KC3Ship.prototype.equipment = function(slot){ return KC3GearManager.get( this.items[slot] ); };
 	KC3Ship.prototype.isFast = function(){ return this.master().api_soku>=10; };
+	KC3Ship.prototype.exItem = function(){ return (this.ex_item>0)?KC3GearManager.get(this.ex_item):false; };
 	KC3Ship.prototype.resetAfterHp = function(){
 		this.afterHp[0] = this.hp[0];
 		this.afterHp[1] = this.hp[1];

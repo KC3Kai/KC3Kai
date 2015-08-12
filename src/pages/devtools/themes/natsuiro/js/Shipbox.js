@@ -27,6 +27,14 @@ KC3改 Ship Box for Natsuiro theme
 			this.element.css("background", "rgba(255,200,0,0.4)");
 		}
 		
+		// Item on 5th slot
+		var myExItem = this.shipData.exItem();
+		if( myExItem && (myExItem.masterId > 0)){
+			$(".ex_item img", this.element).attr("src", "../../../../assets/img/items/"+myExItem.master().api_type[3]+".png");
+		}else{
+			$(".ex_item", this.element).hide();
+		}
+		
 		return this;
 	};
 	
