@@ -182,6 +182,7 @@ Used by SortieManager
 		if(enemyships[0]==-1){ enemyships.splice(0,1); }
 		this.eships = enemyships;
 		this.eformation = this.eformation || nightData.api_formation[1];
+		this.eParam = nightData.api_eParam;
 		
 		this.originalHPs = nightData.api_nowhps;
 		
