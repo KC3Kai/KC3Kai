@@ -148,7 +148,7 @@ Uses Dexie.js third-party plugin on the assets directory
 				} else {
 					dbVer.upgrade(dbCurr.up);
 				}
-			})
+			});
 			this.con.open();
 		},
 		
