@@ -798,7 +798,13 @@
 				$(".battle .battle_enemies .battle_abyss .face-container img", container).attr("src", KC3Meta.abyssIcon(-1));
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > -1){
+						var eParam = thisNode.eParam[index];
 						$(".battle .battle_enemies .abyss_"+(index+1)+" .face-container img", container).attr("src", KC3Meta.abyssIcon(eshipId));
+						var tooltip = "FP: " + eParam[0] + String.fromCharCode(13);
+						tooltip += "Torp: " + eParam[1] + String.fromCharCode(13);
+						tooltip += "AA: " + eParam[2] + String.fromCharCode(13);
+						tooltip += "Armor: " + eParam[3];
+						$(".battle .battle_enemies .abyss_"+(index+1)+" .face-container img", container).attr("title", tooltip);
 						$(".battle .battle_enemies .abyss_"+(index+1), container).show();
 
 						if ((thisNode.enemySunk[index]) && (ConfigManager.info_battle)) {
@@ -1083,7 +1089,13 @@
 				// Show opponent ships faces
 				$.each(thisPvP.eships, function(index, eshipId){
 					if(eshipId > -1){
+						var eParam = thisPvP.eParam[index];
 						$(".battle .battle_enemies .abyss_"+(index+1)+" .face-container img", container).attr("src", KC3Meta.shipIcon(eshipId));
+						var tooltip = "FP: " + eParam[0] + String.fromCharCode(13);
+						tooltip += "Torp: " + eParam[1] + String.fromCharCode(13);
+						tooltip += "AA: " + eParam[2] + String.fromCharCode(13);
+						tooltip += "Armor: " + eParam[3];
+						$(".battle .battle_enemies .abyss_"+(index+1)+" .face-container img", container).attr("tooltip", tooltip);
 						$(".battle .battle_enemies .abyss_"+(index+1), container).show();
 
 						if ((thisPvP.enemySunk[index]) && (ConfigManager.info_battle)) {
