@@ -56,7 +56,6 @@ KC3改 Ship Object
 				if(typeof data.api_slot_ex != "undefined"){
 					this.ex_item = data.api_slot_ex;
 				}
-				this.ex_item = 123123;
 				this.slotnum = data.api_slotnum;
 				this.slots = data.api_onslot;
 				this.mod = data.api_kyouka;
