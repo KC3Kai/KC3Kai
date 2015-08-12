@@ -31,6 +31,7 @@ KC3改 Ship Object
 		this.stars = 0;
 		this.morale = 0;
 		this.lock = 0;
+		this.sally = 0;
 		this.didFlee = false;
 		
 		// If specified with data, fill this object
@@ -55,6 +56,9 @@ KC3改 Ship Object
 				this.items = data.api_slot;
 				if(typeof data.api_slot_ex != "undefined"){
 					this.ex_item = data.api_slot_ex;
+				}
+				if(typeof data.api_sally_area != "undefined"){
+					this.sally = data.api_sally_area;
 				}
 				this.slotnum = data.api_slotnum;
 				this.slots = data.api_onslot;
