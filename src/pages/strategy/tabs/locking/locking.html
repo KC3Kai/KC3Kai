@@ -7,28 +7,82 @@
 
 <div class="page_padding planner_area">
 	
+	<!-- INSTRUCTIONS -->
+	<div class="instructions">
+		<div class="locking_q">How do I mark a ship for a color?</div>
+		<div class="locking_a">Drag her from the "reserved" list at the bottom, onto designated dropping boxes for each color.</div>
+		
+		<div class="locking_q">How do I remove a ship from a colored box?</div>
+		<div class="locking_a">Click on her face.</div>
+		
+		<div class="locking_q">I cannot remove a ship from a colored box?</div>
+		<div class="locking_a">You cannot removed ships already locked-in game, and are signified by the icon's transparency.</div>
+		
+		<div class="locking_q">When I click "Clear All", some ships remained</div>
+		<div class="locking_a">As I said, ships already locked-in game are also locked on the colored boxes here.</div>
+		
+		<div class="locking_q">The ships get re-arranged after refreshing</div>
+		<div class="locking_a">Do not mind the arrangements. This page's goal is to let you plan for the whole fleet's separation into different operations, not to arrange your compositions.</div>
+		
+		<div class="locking_q">Can you add ship-type filter or level sorting mechanism on the "reserved" list?</div>
+		<div class="locking_a">No. Find desired ships from the list yourself. You're not planning to let me play do you? As of writing I'm still on E-1.</div>
+		
+		<div class="locking_q">What's the 5th purple-ish box? There's no tag like that on the event.</div>
+		<div class="locking_a">So that I won't need to edit it again in case the future events do get five ship locking categories.</div>
+		
+		<div class="locking_q">Will you make a button that will divide my ship list for me?</div>
+		<div class="locking_a">wtf are you talking about? :v</div>
+	</div>
+	
+	<!-- CONTROL BUTTONS -->
+	<div class="controls">
+		<div class="control clearAllPlans hover">Clear all</div>
+	</div>
+	
 	<!-- LOCK MODES -->
 	<div class="lock_modes">
 		<!-- TAG 1 -->
 		<div class="lock_mode lock_mode_1">
+			<div class="map_area">
+				<div class="map">E1</div>
+				<div class="map">E2</div>
+				<div class="map">E7</div>
+				<div class="clear"></div>
+			</div>
 			<div class="ships_area"></div>
 			<div class="clear"></div>
 			<div class="drop_area" data-boxId="0">Drag & Drop Here</div>
 		</div>
 		<!-- TAG 2 -->
 		<div class="lock_mode lock_mode_2">
+			<div class="map_area">
+				<div class="map">E3</div>
+				<div class="map">E6</div>
+				<div class="map">E7</div>
+				<div class="clear"></div>
+			</div>
 			<div class="ships_area"></div>
 			<div class="clear"></div>
 			<div class="drop_area" data-boxId="1">Drag & Drop Here</div>
 		</div>
 		<!-- TAG 3 -->
 		<div class="lock_mode lock_mode_3">
+			<div class="map_area">
+				<div class="map">E4</div>
+				<div class="map">E7</div>
+				<div class="clear"></div>
+			</div>
 			<div class="ships_area"></div>
 			<div class="clear"></div>
 			<div class="drop_area" data-boxId="2">Drag & Drop Here</div>
 		</div>
 		<!-- TAG 4 -->
 		<div class="lock_mode lock_mode_4">
+			<div class="map_area">
+				<div class="map">E5</div>
+				<div class="map">E7</div>
+				<div class="clear"></div>
+			</div>
 			<div class="ships_area"></div>
 			<div class="clear"></div>
 			<div class="drop_area" data-boxId="3">Drag & Drop Here</div>
@@ -54,11 +108,11 @@
 <div class="factory">
 	
 	<!-- LOCKED SHIP RECORD -->
-	<div class="lship"><img/></div>
+	<div class="lship hover"><img/></div>
 	
 	
 	<!-- RESERVED SHIP RECORD -->
-	<div class="rship">
+	<div class="rship hover">
 		<div class="ship_img"><img/></div>
 		<div class="ship_type"></div>
 		<div class="ship_lv"></div>

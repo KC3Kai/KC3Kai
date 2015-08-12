@@ -1,6 +1,48 @@
 .tab_locking .factory {
 	display:none;
 }
+.tab_locking .planner_area {
+	-webkit-user-select: none;
+}
+
+/* INSTRUCTIONS
+------------------------------*/
+.tab_locking .instructions {
+	margin:0px 0px 10px 0px;
+}
+.tab_locking .instructions .locking_q {
+	width:680px;
+	height:16px;
+	line-height:16px;
+	font-size:12px;
+	font-weight:bold;
+	margin:5px 0px 0px 0px;
+	color:#0099cc;
+}
+.tab_locking .instructions  .locking_a {
+	width:670px;
+	line-height:14px;
+	font-size:12px;
+	margin:0px 0px 0px 20px;
+}
+
+/* CONTROLS
+------------------------------*/
+.tab_locking .controls {
+	width:680px;
+	height:20px;
+	margin:0px 0px 10px 0px;
+}
+.tab_locking .control {
+	height:20px;
+	line-height:20px;
+	padding:0px 10px;
+	float:right;
+	background:#def;
+	border-radius:5px;
+	font-size:12px;
+	font-weight:bold;
+}
 
 /* LOCKING MODES
 ------------------------------*/
@@ -19,6 +61,24 @@
 .tab_locking .lock_mode_3 { background:#CCC700; }
 .tab_locking .lock_mode_4 { background:#EB9528; }
 .tab_locking .lock_mode_5 { background:#B1A2C1; }
+
+.tab_locking .map_area {
+	width:130px;
+	margin:0px 0px 5px 0px;
+}
+.tab_locking .map_area .map {
+	width:30px;
+	height:30px;
+	line-height:30px;
+	float:left;
+	border-radius:20px;
+	margin:0px 5px 0px 0px;
+	text-align:center;
+	background:#fff;
+	color:#000;
+	font-size:14px;
+	font-weight:bold;
+}
 
 .tab_locking .lock_mode .lship {
 	width:28px;
@@ -46,13 +106,12 @@
 .tab_locking .lock_mode .drop_area {
 	background:rgba(255,255,255,0.2);
 	width:120px;
-	height:30px;
-	line-height:30px;
+	height:50px;
+	line-height:50px;
 	margin:5px 0px 0px 0px;
 	font-size:12px;
 	text-align:center;
 	color:#fff;
-	-webkit-user-select: none;
 	cursor:pointer;
 }
 
@@ -61,6 +120,7 @@
 .tab_locking .reserved_list {
 	width:674px;
 	margin:20px 0px 0px 0px;
+	padding:0px 0px 10px 0px;
 }
 .tab_locking .reserved_list .rship {
 	width:108px;

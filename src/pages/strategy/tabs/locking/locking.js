@@ -8,6 +8,8 @@
 		
 		lock_plan: [[],[],[],[],[]], // array of ship rosterIds planned earlier saved on localStorage
 		boxContents: [[],[],[],[],[],[]], // array of ship objects based on lock_plan
+		listReserved: [],
+		loading: false,
 		
 		/* INIT
 		Prepares all data needed
@@ -45,68 +47,131 @@
 		execute :function(){
 			var self = this;
 			
-			var shipBox;
 			$.each(this.boxContents, function(boxIndex, ShipList){
 				$.each(ShipList, function(shipIndex, ThiShip){
 					// If a normal colored box
 					if(boxIndex < 5){
-						shipBox = $(".tab_locking .factory .lship").clone().appendTo(".tab_locking .lock_mode_"+(boxIndex+1)+" .ships_area");
-						$("img", shipBox).attr("src", KC3Meta.shipIcon(ThiShip.masterId));
+						self.addShipToBox(boxIndex, ThiShip);
 						
-						// If ship is already lcoked in-game
-						if(ThiShip.isGameSallied()){
-							shipBox.addClass("gamelocked");
-						}
-						
-						
-					// If the reserved list
+					// If current boxIndex is the reserved list
 					}else{
-						shipBox = $(".tab_locking .factory .rship").clone().appendTo(".tab_locking .reserved_list");
-						$(".ship_img img", shipBox).attr("src", KC3Meta.shipIcon(ThiShip.masterId));
-						$(".ship_type", shipBox).text( ThiShip.stype() );
-						$(".ship_lv", shipBox).text("Lv."+ ThiShip.level );
-						shipBox.data("rosterId", ThiShip.rosterId );
-						shipBox.attr("title", ThiShip.name() );
+						self.listReserved.push( ThiShip );
 					}
 				});
-				$("<div>").addClass("clear").appendTo(".tab_locking .lock_mode_"+(boxIndex+1));
 			});
-			$("<div>").addClass("clear").appendTo(".tab_locking .reserved_list");
 			
-			$(".rship").draggable({
-				revert: "invalid",
-				containment: '.planner_area',
-				addClasses: false
-			});
+			this.refreshReserved();
 			
 			var droppedOnBoxId, draggedRosterId, draggedCurrentPlan;
 			$(".drop_area").droppable({
 				accept: ".rship",
 				addClasses: false,
 				drop: function(event, ui){
-					droppedOnBoxId = Number($(this).attr("data-boxId"));
-					draggedRosterId = Number(ui.draggable.data("rosterId"));
+					droppedOnBoxId = Number( $(this).attr("data-boxId") );
+					draggedRosterId = Number( ui.draggable.attr("data-rosterId") );
 					ui.draggable.remove();
 					
-					draggedCurrentPlan = self.findShipOnBoxes( draggedRosterId );
+					// Remove dragged ship from reserved list
+					$.each(self.listReserved, function(index, element){
+						if(element.rosterId == draggedRosterId){
+							self.listReserved.splice(index, 1 );
+							return false;
+						}
+					});
 					
-					// ship was previously on reseved list
-					if(draggedCurrentPlan == 5){
-						self.lock_plan[ droppedOnBoxId ].push( draggedRosterId );
-						shipBox = $(".tab_locking .factory .lship").clone().appendTo(".tab_locking .lock_mode_"+(droppedOnBoxId+1)+" .ships_area");
-						$("img", shipBox).attr("src", KC3Meta.shipIcon( KC3ShipManager.get(draggedRosterId).masterId) );
-						
-						localStorage.lock_plan = JSON.stringify(self.lock_plan);
-						
-					}else{
-						
-					}
+					// Save new plan data to storage
+					self.lock_plan[ droppedOnBoxId ].push( draggedRosterId );
+					localStorage.lock_plan = JSON.stringify(self.lock_plan);
+					
+					// Add icon to the colored list
+					self.addShipToBox( droppedOnBoxId, KC3ShipManager.get(draggedRosterId) );
 				}
+			});
+			
+			var removingRoster, removingFromBox, removingShip, removingIndex;
+			$(".tab_locking .ships_area").on("click", ".lship", function(event){
+				if(self.loading){ return false; }
+				
+				// Get details of clicked ship
+				removingRoster = Number( $(this).attr("data-rosterId") );
+				removingFromBox = Number( $(this).attr("data-boxColorId") );
+				removingShip = KC3ShipManager.get( removingRoster );
+				
+				// If not yet game locked
+				if(!removingShip.isGameSallied()){
+					// Remove icon and from data plan
+					$(this).remove();
+					removingIndex = self.lock_plan[ removingFromBox ].indexOf(removingRoster);
+					self.lock_plan[ removingFromBox ].splice( removingIndex, 1 );
+					localStorage.lock_plan = JSON.stringify(self.lock_plan);
+					
+					// Re-add ship to reserved list
+					self.listReserved.push( KC3ShipManager.get(removingRoster) );
+					
+					self.refreshReserved();
+				}
+			});
+			
+			$(".clearAllPlans").on("click", function(){
+				$(".lship").trigger("click");
 			});
 			
 		},
 		
+		addShipToBox :function(boxIndex, ThiShip){
+			var shipBox = $(".tab_locking .factory .lship").clone().appendTo(".tab_locking .lock_mode_"+(boxIndex+1)+" .ships_area");
+			$("img", shipBox).attr("src", KC3Meta.shipIcon(ThiShip.masterId));
+			shipBox.attr("data-rosterId", ThiShip.rosterId );
+			shipBox.attr("data-boxColorId", boxIndex);
+			shipBox.attr("title", ThiShip.name()+" Lv."+ThiShip.level+" ("+ThiShip.stype()+")" );
+			
+			// If ship is already lcoked in-game
+			if(ThiShip.isGameSallied()){
+				shipBox.addClass("gamelocked");
+			}
+		},
+		
+		refreshReserved :function(){
+			var self = this;
+			
+			$(".tab_locking .reserved_list").hide();
+			$(".tab_locking .reserved_list").html("");
+			
+			this.loading = true;
+			setTimeout(function(){
+				self.loading = false;
+				self.listReserved.sort(function(a,b){
+					return a.level - b.level;
+				});
+				
+				$.each(self.listReserved, function(index, element){
+					self.addShipToReserved( element );
+				});
+				
+				$("#reservedClear").remove();
+				$("<div>").addClass("clear").attr("id", "reservedClear").appendTo(".tab_locking .reserved_list");
+				$(".tab_locking .reserved_list").show();
+			}, 100);
+			
+		},
+		
+		addShipToReserved :function( ThiShip ){
+			var shipBox = $(".tab_locking .factory .rship").clone().prependTo(".tab_locking .reserved_list");
+			$(".ship_img img", shipBox).attr("src", KC3Meta.shipIcon(ThiShip.masterId));
+			$(".ship_type", shipBox).text( ThiShip.stype() );
+			$(".ship_lv", shipBox).text("Lv."+ ThiShip.level );
+			shipBox.attr("data-rosterId", ThiShip.rosterId );
+			shipBox.attr("title", ThiShip.name() );
+			shipBox.draggable({
+				revert: "invalid",
+				containment: '.planner_area',
+				addClasses: false,
+				cancel: null
+			});
+		},
+		
 		findShipOnBoxes :function( rosterId ){
+			rosterId = Number(rosterId);
 			for(var ctr in this.lock_plan){
 				if(this.lock_plan[ctr].indexOf( rosterId ) > -1){
 					return ctr;
