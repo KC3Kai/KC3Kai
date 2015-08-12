@@ -452,10 +452,11 @@ Previously known as "Reactor"
 				var thisMapId = "m"+response.api_data.api_maparea_id+""+response.api_data.api_mapinfo_no;
 				var thisMap = AllMaps[thisMapId];
 
-				thisMap.curhp = response.api_data.api_eventmap.api_now_maphp;
-				thisMap.maxhp = response.api_data.api_eventmap.api_max_maphp;
-
-				localStorage.maps = JSON.stringify(AllMaps);
+				if (thisMap.curhp === 9999) {
+					thisMap.curhp = response.api_data.api_eventmap.api_now_maphp;
+					thisMap.maxhp = response.api_data.api_eventmap.api_max_maphp;
+					localStorage.maps = JSON.stringify(AllMaps);
+				}
 			}
 
 			KC3SortieManager.advanceNode( response.api_data, UTCTime );

@@ -27,6 +27,14 @@ KC3改 Ship Box for Natsuiro theme
 			this.element.css("background", "rgba(255,200,0,0.4)");
 		}
 		
+		// Item on 5th slot
+		var myExItem = this.shipData.exItem();
+		if( myExItem && (myExItem.masterId > 0)){
+			$(".ex_item img", this.element).attr("src", "../../../../assets/img/items/"+myExItem.master().api_type[3]+".png");
+		}else{
+			$(".ex_item", this.element).hide();
+		}
+		
 		return this;
 	};
 	
@@ -131,8 +139,7 @@ KC3改 Ship Box for Natsuiro theme
 			// HP-based UI and colors
 			if(afterHpPercent <= 0.00 && ConfigManager.info_btstamp) { // Sunk or Knocked out
 				this.element.addClass("ship-stamp");
-				this.element.attr("title", KC3Meta.term("PredictionStamp"+
-					(KC3Panel.layout().data.isSunkable ? "Sortie" : "PvP")));
+				this.element.attr("title", KC3Meta.term("PredictionStampPvP"));
 			} else if(afterHpPercent <= 0.25){
 				$(".ship_hp_prediction", this.element).css("background", "#FF0000");
 			} else if(afterHpPercent <= 0.50){

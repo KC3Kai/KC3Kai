@@ -772,6 +772,7 @@
 	margin:0px 0px 3px 0px;
 	border-radius:5px;
 	padding:3px 0px 0px 0px;
+	position:relative;
 }
 .module.fleet .lship.ship-stamp:after {
 	content: attr(title);
@@ -789,6 +790,24 @@
 	width: 160px;
 	background-color: rgba(255,0,0,0.5);
 	z-index: 1;
+}
+.module.fleet .lship .ex_item {
+	width:18px;
+	height:18px;
+	line-height:18px;
+	position:absolute;
+	top:30px;
+	left:25px;
+	background:#fff;
+	border-radius:9px;
+	z-index:1;
+	overflow:hidden;
+}
+.module.fleet .lship .ex_item img {
+	width:18px;
+	height:18px;
+	line-height:18px;
+	vertical-align:top;
 }
 .module.fleet .lship .ship_img {
 	width:40px;
@@ -999,6 +1018,7 @@
 	height:50px;
 	margin:0px 0px 2px 0px;
 	border-radius:5px;
+	position:relative;
 }
 .module.fleet .sship.ship-stamp:after {
 	content: attr(title);
@@ -1016,6 +1036,24 @@
 	width: 160px;
 	background-color: rgba(255,0,0,0.5);
 	z-index: 1;
+}
+.module.fleet .sship .ex_item {
+	width:18px;
+	height:18px;
+	line-height:18px;
+	position:absolute;
+	top:30px;
+	left:25px;
+	background:#fff;
+	border-radius:9px;
+	z-index:1;
+	overflow:hidden;
+}
+.module.fleet .sship .ex_item img {
+	width:18px;
+	height:18px;
+	line-height:18px;
+	vertical-align:top;
 }
 .module.fleet .sship .ship_img {
 	width:40px;

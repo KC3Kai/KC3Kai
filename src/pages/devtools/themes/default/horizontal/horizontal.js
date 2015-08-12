@@ -370,7 +370,7 @@
 					
 				}else if(KC3Panel.mode=="battle"){
 					// Combined Fleet
-					if(PlayerManager.combinedFleet){
+					if(PlayerManager.combinedFleet && false){
 						var MainFleet = PlayerManager.fleets[0];
 						var EscortFleet = PlayerManager.fleets[1];
 						
