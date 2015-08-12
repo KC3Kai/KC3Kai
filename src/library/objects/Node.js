@@ -155,6 +155,7 @@ Used by SortieManager
 		var i = 0;
 		var fleet;
 		var shipNum;
+		var ship;
 
 		if (PlayerManager.combinedFleet === 0) { // single fleet
 			result = DA.analyzeRawBattleJS(battleData); 
@@ -174,7 +175,7 @@ Used by SortieManager
 			fleet = PlayerManager.fleets[fleetId - 1];
 			shipNum = fleet.countShips();
 			for(i = 0; i < shipNum; i++) {
-				var ship = fleet.ship(i);
+				ship = fleet.ship(i);
 				ship.afterHp[0] = result[i+1].currentHp;
 				ship.afterHp[1] = ship.hp[1];
 			}
@@ -204,7 +205,7 @@ Used by SortieManager
 			shipNum = fleet.countShips();
 			var mainFleet = result.main;
 			for(i = 0; i < shipNum; i++) {
-				var ship = fleet.ship(i);
+				ship = fleet.ship(i);
 				ship.afterHp[0] = mainFleet[i+1].currentHp;
 				ship.afterHp[1] = ship.hp[1];
 			}
@@ -214,7 +215,7 @@ Used by SortieManager
 			shipNum = fleet.countShips();
 			var escortFleet = result.escort;
 			for(i = 0; i < shipNum; i++) {
-				var ship = fleet.ship(i);
+				ship = fleet.ship(i);
 				ship.afterHp[0] = escortFleet[i+1].currentHp;
 				ship.afterHp[1] = ship.hp[1];
 			}
@@ -245,6 +246,7 @@ Used by SortieManager
 		var i = 0;
 		var fleet;
 		var shipNum;
+		var ship;
 
 		if (PlayerManager.combinedFleet === 0) {	// single fleet
 			result = DA.analyzeRawNightBattleJS( nightData ); 
@@ -259,7 +261,7 @@ Used by SortieManager
 			fleet = PlayerManager.fleets[fleetId - 1];
 			shipNum = fleet.countShips();
 			for(i = 0; i < shipNum; i++) {
-				var ship = fleet.ship(i);
+				ship = fleet.ship(i);
 				ship.hp = ship.afterHp;
 				ship.morale = Math.max(0,ship.morale+(fleetSent ? 1 : -3 ));
 				ship.afterHp[0] = result[i+1].currentHp;
@@ -277,7 +279,7 @@ Used by SortieManager
 			fleet = PlayerManager.fleets[1];
 			shipNum = fleet.countShips();
 			for(i = 0; i < shipNum; i++) {
-				var ship = fleet.ship(i);
+				ship = fleet.ship(i);
 				ship.hp = ship.afterHp;
 				//ship.morale = Math.max(0,ship.morale+(fleetSent ? 1 : -3 ));
 				ship.afterHp[0] = result[i+1].currentHp;
