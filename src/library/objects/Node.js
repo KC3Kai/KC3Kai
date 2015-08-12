@@ -94,7 +94,8 @@ Used by SortieManager
 		if(enemyships[0]==-1){ enemyships.splice(0,1); }
 		this.eships = enemyships;
 		this.eformation = battleData.api_formation[1];
-		
+		this.eParam = battleData.api_eParam;
+
 		this.supportFlag = (battleData.api_support_flag>0);
 		this.yasenFlag = (battleData.api_midnight_flag>0);
 		
