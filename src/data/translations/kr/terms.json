@@ -51,7 +51,7 @@
 	"AboutWiki" : "Wiki와 FAQ",
 	"AboutReport" : "버그 신고",
 	"AboutHelpCommunity" : "개선/개발에 참여하세요.",
-	"AboutHelpLearnMore" : "코딩 능력이 없어도 됩니다! 참여하실 수 있는 방법을 알려드립니다.",
+	"AboutHelpLearnMore" : "코딩 능력이 없어도 됩니다! 참여하실 수 있는 방법을 알려드립니다 > ",
 	
 	"AboutCoders" : "코더들",
 	"AboutProjectHead" : "프로젝트 리더",
@@ -89,7 +89,7 @@
 	"SettingsBattleData" : "전투예보",
 	"SettingsBattleStamp" : "건조 로그",
 	"SettingsBossComp" : "보스방 편성",
-	"SettingsYasenTroll" : "KC3改 트롤",
+	"SettingsYasenTroll" : "KC3改 트롤 코멘트",
 	"SettingsHQDelta" : "전투중 진수부 경험치 변화량",
 	
 	"SettingsScreenshot" : "스크린샷",
@@ -111,10 +111,11 @@
 	"SettingsAPIGameScreen" : "API 게임 화면",
 	"SettingsQuestOverlay" : "퀘스트 번역",
 	"SettingsQuestTracking" : "퀘스트 추적",
+	"SettingsPanelRequirement" : "플레이하기 위하여 패널이 필요",
 	"SettingsConfirmExit" : "종료 확인",
 	"SettingsScreenMargin" : "상단 여백",
 	"SettingsBGColor" : "배경색",
-  "SettingsBGColorDesc": "background-color의 CSS 속성을 참조해주세요. [Needs Clarification]",
+  "SettingsBGColorDesc": "background-color CSS 속성을 참조해주세요. [Needs Clarification]",
 	"SettingsBGImage" : "배경 그림",
 	"SettingsBGSize" : "배경 사이즈",
 	"SettingsBGSizeDesc" : "background-size의 CSS 속성을 참조해주세요. [Needs Clarification]",
@@ -139,15 +140,33 @@
 	"LearnMore" : "상세히",
 	"Saved" : "저장완료!",
 	
+	"APIWaitToggle" : "KC3改 패널을 먼저 로드해주세요.",
+	
 	"SpeedFast" : "고속",
 	"SpeedSlow" : "저속",
-	
+
 	"HQText" : "사령부",
+	"HQExpAbbrev1" : "다음",
+	"HQExpAbbrev2" : "현재",
+	"HQExpAbbrev3" : "총",
+
+	"BattleDetection" : "감지",
+	"BattleEngangement" : "전투 개시",
+	"BattleContact" : "조우",
+	"BattleAirBattle" : "항공전",
+	"BattleFriendly" : "아군",
+	"BattleEnemy" : "적",
+
+	"PredictionStampSortie" : "굉침",
+	"PredictionStampPvP" : "제압됨",
+	
 	"LevelText" : "레벨",
 	"LevelShort" : "Lv.",
 	"LevelNext" : "다음",
 	"Screenshot" : "스크린샷",
+	"UntranslatedQuest" : "번역되지 않은 퀘스트",
 	
+	"PanelWaitActions" : "게임 활동 대기중...",
 	"PanelErrorStorage" : "Chrome의 localstorage가 무효로 설정되어 있습니다. KC3改는 해당 기능을 필요로 합니다.<a href=\"http://stackoverflow.com/a/26671889/483704\" target=\"_blank\">이를 유효화하는 방법에 대해 참조하세요.</a>.",
 	
 	"Dummy" : "더미"
