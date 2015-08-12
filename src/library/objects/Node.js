@@ -151,27 +151,72 @@ Used by SortieManager
 
 		var PS = window.PS;
 		var DA = PS["KanColle.DamageAnalysis"];
-		// for regular battles
-		var result = DA.analyzeRawBattleJS(battleData); 
-		console.log("analysis result", result);
+		var result = null;
 		var i = 0;
-		for (i = 7; i < 13; i++) {
-			this.enemyHP[i-7] = result[i];
-			if ((result[i] || {currentHp:0}).currentHp <= 0) {
-				this.enemySunk[i-7] = true;
+
+		if (PlayerManager.combinedFleet == 0) { // single fleet
+			result = DA.analyzeRawBattleJS(battleData); 
+			console.log("Single Fleet");
+			console.log("analysis result", result);
+			
+			// Update enemy
+			for (i = 7; i < 13; i++) {
+				this.enemyHP[i-7] = result[i];
+				if ((result[i] || {currentHp:0}).currentHp <= 0) {
+					this.enemySunk[i-7] = true;
+				}
+			}
+			
+			// Update our fleet
+			var fleetId = parseInt(fleetSent) || KC3SortieManager.fleetSent;
+			var fleet = PlayerManager.fleets[fleetId - 1];
+			var shipNum = fleet.countShips();
+			for(i = 0; i < shipNum; i++) {
+				var ship = fleet.ship(i);
+				ship.afterHp[0] = result[i+1].currentHp;
+				ship.afterHp[1] = ship.hp[1];
+			}
+		} else {
+			if (PlayerManager.combinedFleet == 1) {
+				result = DA.analyzeRawCarrierTaskForceBattleJS(battleData); 
+				console.log("Carrier Task Force");
+			} else {
+				result = DA.analyzeRawSurfaceTaskForceBattleJS(battleData); 
+				console.log("Surface Task Force");
+			}
+			console.log("analysis result", result);
+
+			// Update enemy
+			for(i = 1; i <= 6; i++) {
+				var enemy = result.enemy[i];
+				if (enemy !== null) {
+					this.enemyHP[i-1] = enemy;
+					if (enemy.currentHp <= 0) {
+						this.enemySunk[i-1] = true;
+					}
+				}
+			}
+
+			// Update main fleet
+			var fleet = PlayerManager.fleets[0];
+			var shipNum = fleet.countShips();
+			var mainFleet = result.main;
+			for(i = 0; i < shipNum; i++) {
+				var ship = fleet.ship(i);
+				ship.afterHp[0] = mainFleet[i+1].currentHp;
+				ship.afterHp[1] = ship.hp[1];
+			}
+
+			// Update escort fleet
+			var fleet = PlayerManager.fleets[1];
+			var shipNum = fleet.countShips();
+			var escortFleet = result.escort;
+			for(i = 0; i < shipNum; i++) {
+				var ship = fleet.ship(i);
+				ship.afterHp[0] = escortFleet[i+1].currentHp;
+				ship.afterHp[1] = ship.hp[1];
 			}
 		}
-		
-		var fleetId = parseInt(fleetSent) || KC3SortieManager.fleetSent;
-		var fleet = PlayerManager.fleets[fleetId - 1];
-		var shipNum = fleet.countShips();
-		for(i = 0; i < shipNum; i++) {
-			var ship = fleet.ship(i);
-			ship.afterHp[0] = result[i+1].currentHp;
-			ship.afterHp[1] = ship.hp[1];
-		}
-		// for night battles
-		//DA.analyzeRawNightBattleJS(svdata.api_data)
 	};
 	
 	KC3Node.prototype.engageNight = function( nightData, fleetSent ){
@@ -194,25 +239,48 @@ Used by SortieManager
 		
 		var PS = window.PS;
 		var DA = PS["KanColle.DamageAnalysis"];
-		var result = DA.analyzeRawNightBattleJS( nightData ); 
+		var result = null;
 		var i = 0;
-		for (i = 7; i < 13; i++) {
-			this.enemyHP[i-7] = result[i];
-			if ((result[i] || {currentHp:0}).currentHp <= 0) {
-				this.enemySunk[i-7] = true;
+
+		if (PlayerManager.combinedFleet == 0) {	// single fleet
+			result = DA.analyzeRawNightBattleJS( nightData ); 
+			for (i = 7; i < 13; i++) {
+				this.enemyHP[i-7] = result[i];
+				if ((result[i] || {currentHp:0}).currentHp <= 0) {
+					this.enemySunk[i-7] = true;
+				}
+			}
+			
+			var fleetId = parseInt(fleetSent) || KC3SortieManager.fleetSent;
+			var fleet = PlayerManager.fleets[fleetId - 1];
+			var shipNum = fleet.countShips();
+			for(i = 0; i < shipNum; i++) {
+				var ship = fleet.ship(i);
+				ship.hp = ship.afterHp;
+				ship.morale = Math.max(0,ship.morale+(fleetSent ? 1 : -3 ));
+				ship.afterHp[0] = result[i+1].currentHp;
+				ship.afterHp[1] = ship.hp[1];
+			}
+		} else {	// Combined fleet
+			result = DA.analyzeRawNightBattleCombinedJS( nightData ); 
+			for (i = 7; i < 13; i++) {
+				this.enemyHP[i-7] = result[i];
+				if ((result[i] || {currentHp:0}).currentHp <= 0) {
+					this.enemySunk[i-7] = true;
+				}
+			}
+			
+			var fleet = PlayerManager.fleets[1];
+			var shipNum = fleet.countShips();
+			for(i = 0; i < shipNum; i++) {
+				var ship = fleet.ship(i);
+				ship.hp = ship.afterHp;
+				//ship.morale = Math.max(0,ship.morale+(fleetSent ? 1 : -3 ));
+				ship.afterHp[0] = result[i+1].currentHp;
+				ship.afterHp[1] = ship.hp[1];
 			}
 		}
 		
-		var fleetId = parseInt(fleetSent) || KC3SortieManager.fleetSent;
-		var fleet = PlayerManager.fleets[fleetId - 1];
-		var shipNum = fleet.countShips();
-		for(i = 0; i < shipNum; i++) {
-			var ship = fleet.ship(i);
-			ship.hp = ship.afterHp;
-			ship.morale = Math.max(0,ship.morale+(fleetSent ? 1 : -3 ));
-			ship.afterHp[0] = result[i+1].currentHp;
-			ship.afterHp[1] = ship.hp[1];
-		}
 	};
 	
 	KC3Node.prototype.night = function( nightData ){
