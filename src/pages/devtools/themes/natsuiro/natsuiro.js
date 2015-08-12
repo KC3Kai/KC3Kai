@@ -217,6 +217,7 @@
 	
 	function clearBattleData(){
 		$(".module.activity .abyss_ship img").attr("src", KC3Meta.abyssIcon(-1));
+		$(".module.activity .abyss_ship img").attr("title", "");
 		$(".module.activity .abyss_ship").css("opacity", 1);
 		$(".module.activity .abyss_ship").hide();
 		$(".module.activity .abyss_hp").hide();
@@ -517,8 +518,17 @@
 			
 			// Load enemy icons
 			$.each(thisNode.eships, function(index, eshipId){
+				var eParam = thisNode.eParam[index];
+				
 				if(eshipId > -1){
 					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.abyssIcon(eshipId));
+
+					var tooltip = "FP: " + eParam[0] + String.fromCharCode(13);
+					tooltip += "Torp: " + eParam[1] + String.fromCharCode(13);
+					tooltip += "AA: " + eParam[2] + String.fromCharCode(13);
+					tooltip += "Armor: " + eParam[3];
+					
+					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("title", tooltip);
 					$(".module.activity .abyss_ship_"+(index+1)).show();
 				}
 			});
@@ -738,8 +748,16 @@
 			// Show opponent ships faces
 			console.log(thisPvP.eships);
 			$.each(thisPvP.eships, function(index, eshipId){
+				var eParam = thisPvP.eParam[index];
+				
 				if(eshipId > -1){
 					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.shipIcon(eshipId));
+					var tooltip = "FP: " + eParam[0] + String.fromCharCode(13);
+					tooltip += "Torp: " + eParam[1] + String.fromCharCode(13);
+					tooltip += "AA: " + eParam[2] + String.fromCharCode(13);
+					tooltip += "Armor: " + eParam[3];
+					
+					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("title", tooltip);
 					$(".module.activity .abyss_ship_"+(index+1)).show();
 				}
 			});
