@@ -110,10 +110,6 @@ Retreives when needed to apply on components
 		scrollHQExpInfo :function(){
 			this.hqExpDetail = (this.hqExpDetail % 3) + 1;
 			this.save();
-		},
-		
-		scrollMarryConvention :function(){
-			this.marryFormat = (++this.marryFormat) % 3;
 		}
 		
 	};

@@ -214,7 +214,7 @@
 	content: "x";
 	color: rgba(0,0,0,0);
 	background-position: 100%;
-	background-image: url('SEGASonicRing.png');
+	background-image: url('../../assets/img/client/kekkon.png');
 	background-size: 10px;
 	background-repeat: no-repeat;
 	text-align: right;
@@ -253,7 +253,7 @@
 }
 /* Fields: Stats */
 .tab_ships .ship_item .ship_stat {
-	width:30px;
+	width:25px;
 	text-align:center;
 }
 .tab_ships .ship_item .ship_stat_mod {
@@ -297,11 +297,12 @@
 	width:20px;
 	height:20px;
 }
-/* Fields: HeartLock */
-.tab_ships .ship_item .ship_lock {
+/* Fields: HeartLock and Marriage Ring */
+.tab_ships .ship_item .ship_stat_icon {
 	width:20px;
 }
-.tab_ships .ship_item .ship_lock img {
+.tab_ships .ship_item .ship_stat_icon img {
 	width:20px;
 	display:none;
 }
+
