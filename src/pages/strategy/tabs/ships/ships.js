@@ -466,9 +466,9 @@
 			this.values = {};
 			KekkonType.instance = this;
 		}
-		for(var k in checks){
+		Object.keys(checks).forEach(function(k){
 			KekkonType.instance.values[k] = (function(x){return x.indexOf(ConfigManager.marryLevelFormat || -1) >= 0;})(checks[k]);
-		}
+		});
 		return KekkonType.instance;
 	}
 	new KekkonType();

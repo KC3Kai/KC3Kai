@@ -129,9 +129,9 @@ Uses Dexie.js third-party plugin on the assets directory
 				];
 				
 			// Process the queue
-			while(dbUpdates.length>0) {
-				var dbCurr,dbVer;
-				dbCurr = $.extend({ch:{},rm:[],up:dbNonFunc},dbUpdates.shift());
+			$.each(dbUpdates,function(dbCurr){
+				var dbVer;
+				dbCurr = $.extend({ch:{},rm:[],up:dbNonFunc},dbCurr);
 				// Replaces the proposed database table with the new one
 				Object.keys(dbCurr.ch).forEach(function(k){
 					dbProposed[k] = dbCurr.ch[k];
@@ -148,7 +148,7 @@ Uses Dexie.js third-party plugin on the assets directory
 				} else {
 					dbVer.upgrade(dbCurr.up);
 				}
-			}
+			})
 			this.con.open();
 		},
 		
