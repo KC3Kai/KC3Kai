@@ -91,8 +91,15 @@ $(document).on("ready", function(){
 });
 
 $(document).on("keydown", function(event){
+	// F9: Screenshot
     if(event.keyCode == 120){
 		(new KCScreenshot()).start("Auto", $(".box-wrap"));
+        return false;
+    }
+	
+	// F10: Clear overlays
+	if(event.keyCode == 121){
+		interactions.clearOverlays({}, {}, function(){});
         return false;
     }
 });
@@ -162,6 +169,7 @@ var interactions = {
 	
 	// Remove HTML overlays
 	clearOverlays :function(request, sender, response){
+		console.log("clearing overlays");
 		// app.Dom.clearOverlays();
 		$(".overlay_quests").html("");
 		$(".overlay_record").hide();

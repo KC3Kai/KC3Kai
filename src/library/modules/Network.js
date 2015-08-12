@@ -69,6 +69,8 @@ Listens to network history and triggers callback if game events happen
 		
 		/* RECEIVED
 		Fired when we receive network entry
+		Inside, use "KC3Network" instead of "this"
+		It's a callback so "this" is in the context of the chrome listener
 		------------------------------------------*/
 		received :function( request ){
 			// If request is an API Call
@@ -101,8 +103,8 @@ Listens to network history and triggers callback if game events happen
 		Requests to remove existing HTML on-screen overlays
 		------------------------------------------*/
 		clearOverlays :function(){
-			if(KC3Network.hasOverlay) {
-				KC3Network.hasOverlay = false;
+			if(this.hasOverlay) {
+				this.hasOverlay = false;
 				(new RMsg("service", "clearOverlays", {
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
