@@ -153,6 +153,8 @@ Used by SortieManager
 		var DA = PS["KanColle.DamageAnalysis"];
 		var result = null;
 		var i = 0;
+		var fleet;
+		var shipNum;
 
 		if (PlayerManager.combinedFleet === 0) { // single fleet
 			result = DA.analyzeRawBattleJS(battleData); 
@@ -169,8 +171,8 @@ Used by SortieManager
 			
 			// Update our fleet
 			var fleetId = parseInt(fleetSent) || KC3SortieManager.fleetSent;
-			var fleet = PlayerManager.fleets[fleetId - 1];
-			var shipNum = fleet.countShips();
+			fleet = PlayerManager.fleets[fleetId - 1];
+			shipNum = fleet.countShips();
 			for(i = 0; i < shipNum; i++) {
 				var ship = fleet.ship(i);
 				ship.afterHp[0] = result[i+1].currentHp;
@@ -198,8 +200,8 @@ Used by SortieManager
 			}
 
 			// Update main fleet
-			var fleet = PlayerManager.fleets[0];
-			var shipNum = fleet.countShips();
+			fleet = PlayerManager.fleets[0];
+			shipNum = fleet.countShips();
 			var mainFleet = result.main;
 			for(i = 0; i < shipNum; i++) {
 				var ship = fleet.ship(i);
@@ -241,6 +243,8 @@ Used by SortieManager
 		var DA = PS["KanColle.DamageAnalysis"];
 		var result = null;
 		var i = 0;
+		var fleet;
+		var shipNum;
 
 		if (PlayerManager.combinedFleet === 0) {	// single fleet
 			result = DA.analyzeRawNightBattleJS( nightData ); 
@@ -252,8 +256,8 @@ Used by SortieManager
 			}
 			
 			var fleetId = parseInt(fleetSent) || KC3SortieManager.fleetSent;
-			var fleet = PlayerManager.fleets[fleetId - 1];
-			var shipNum = fleet.countShips();
+			fleet = PlayerManager.fleets[fleetId - 1];
+			shipNum = fleet.countShips();
 			for(i = 0; i < shipNum; i++) {
 				var ship = fleet.ship(i);
 				ship.hp = ship.afterHp;
@@ -270,8 +274,8 @@ Used by SortieManager
 				}
 			}
 			
-			var   = PlayerManager.fleets[1];
-			var shipNum = fleet.countShips();
+			fleet = PlayerManager.fleets[1];
+			shipNum = fleet.countShips();
 			for(i = 0; i < shipNum; i++) {
 				var ship = fleet.ship(i);
 				ship.hp = ship.afterHp;
