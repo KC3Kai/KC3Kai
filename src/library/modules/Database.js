@@ -130,18 +130,20 @@ Uses Dexie.js third-party plugin on the assets directory
 				
 			// Process the queue
 			var self = this;
-			$.each(dbUpdates,function(dbCurr){
+			$.each(dbUpdates, function(index, dbCurr){
 				var dbVer;
 				dbCurr = $.extend({ch:{},rm:[],up:dbNonFunc},dbCurr);
+				
 				// Replaces the proposed database table with the new one
 				Object.keys(dbCurr.ch).forEach(function(k){
 					dbProposed[k] = dbCurr.ch[k];
 				});
+				
 				// Removes the unused database table
 				dbCurr.rm.forEach(function(k){
 					delete dbProposed[k];
 				});
-				console.log(dbProposed,dbCurr);
+				
 				// Apply Versioning
 				dbVer = self.con.version(dbCurr.vr).stores(dbProposed);
 				if(dbFirst) {
@@ -202,11 +204,13 @@ Uses Dexie.js third-party plugin on the assets directory
 		},
 		
 		Resource :function(data){
+			console.log("this.con", this.con);
 			data.hq = this.index;
 			this.con.resource.add(data);
 		},
 		
 		Useitem :function(data, stime){
+			console.log("this.con", this.con);
 			data.hq = this.index;
 			this.con.useitem.add(data);
 		},

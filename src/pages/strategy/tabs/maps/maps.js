@@ -16,7 +16,11 @@
 		Prepares all data needed
 		---------------------------------*/
 		init :function(){
-			this.maps = JSON.parse( localStorage.maps );
+			if(typeof localStorage.maps != "undefined"){
+				this.maps = JSON.parse( localStorage.maps );
+			}else{
+				return false;
+			}
 		},
 		
 		/* EXECUTE
