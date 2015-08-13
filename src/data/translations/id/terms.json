@@ -142,8 +142,10 @@
 	"LearnMore" : "Pelajari Lebih lanjut",
 	"Saved" : "Disimpan!",
 
+	"UnwantedExit" : "Ahhh! Kau meninggalkan kanmusumu! Apa kau yakin ingin meninggalkan mereka?",
 	"APIWaitToggle" : "Harap buka panel KC3Kai terlebih dahulu",
-	
+	"APIConcealExpl" : "Arahkan kursor untuk melihat API Link",
+
 	"SpeedFast" : "Cepat",
 	"SpeedSlow" : "Pelan",
 
@@ -161,6 +163,9 @@
 	
 	"PredictionStampSortie" : "Tenggelam",
 	"PredictionStampPvP" : "Tersingkirkan",
+	"PredictionStampEscort" : "Escort",
+	"PredictionStampMVPUseful" : "MVP",
+	"PredictionStampMVPUseless" : "kwkwkw",
 
 	"LevelText" : "Level",
 	"LevelShort" : "Lv.",

@@ -1,4 +1,4 @@
-{
+﻿{
     "101": {
         "name": "Formasi Pertama!",
         "desc": "Miliki 2 Kapal di Armada Utama."
@@ -180,7 +180,7 @@
         "desc": "Miliki 3 Kapal Tempur dari Kelas Nagato,Fusou,Ise atau Yamato and Penjelajah Ringan(CL) di Armada."
     },
     "146": {
-        "name": "Siapkan Pengembangan Arsenal",
+        "name": "Siapkan Pengembangan Gudang Persenjataan",
         "desc": "Miliki Akashi (\u660e\u77f3) Sebagai Kapal Pemimpin di Armada Utama."
     },
     "147": {
@@ -914,8 +914,6 @@
 	
 	
 	
-	
-	
 	"611": {
         "name": "Persiapan Cinta! (bagian 1)",
         "desc": "Hancurkan Persenjataan 2 kali demi Menunjukan Bukti Cinta Kepada Waifu-mu \u2665 !"
@@ -923,5 +921,32 @@
 	"306": {
         "name": "Persiapan Cinta (Bagian 2)",
         "desc": "Tunjukkan Cintamu Kepada Waifu-mu \u2665 dengan Mendapatkan 2 Kemenangan di Mode Latihan."
+    },
+    
+    "280": {
+        "code": "SN01",
+        "name": "Strategi SN kedua, Operasi Permulaan",
+        "desc": "Selesaikan Map 2 Summer 2015 Event."
+    },
+    "620": {
+        "code": "SN02",
+        "name": "Rapikan Gudang Persenjataan",
+        "desc": "Hancurkan Persenjataan 6 kali."
+    },
+    "281": {
+        "code": "SN03",
+        "name": "Lakukan Patroli pada Rute Pasukan Utama",
+        "desc": "Tenggelamkan 6 Kapal Selam abyssal."
+    },
+    "158": {
+        "code": "SN04",
+        "name": "Perintahkan Murata Squadron Torpedo Bomber ke Akagi",
+        "desc": "Jadikan Akagi sebagai kapal pemimpin dan berikan ia Type 97 Torpedo Bomber (Murata Squadron)."
+    },
+    "282": {
+        "code": "SN05",
+        "name": "Habiskan Superioritas Udara (AS+) pada Area Laut Solomon",
+        "desc": "Selesaikan Map 4 Summer 2015 Event."
     }
+    
 }
