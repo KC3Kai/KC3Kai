@@ -618,7 +618,7 @@
 			this.Fleet();
 		},
 		
-		BattleNight: function(data){
+		BattleNight: function(data,safeSunk){
 			// Enemy HP Predictions
 			if(ConfigManager.info_battle){
 				var thisNode = KC3SortieManager.currentNode();
@@ -630,7 +630,9 @@
 						
 						if(newEnemyHP === 0){
 							$(".module.activity .abyss_ship_"+(index+1)).css("opacity", "0.6");
-							$(".module.activity .sunk_"+(index+1)+" img").show();
+							$(".module.activity .sunk_"+(index+1)+" img")
+								.show()
+								.css("-webkit-filter",safeSunk ? "grayscale(100%)" : "");
 						}
 						
 						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width",
@@ -804,7 +806,7 @@
 		},
 		
 		PvPNight: function(data){
-			this.Fleet();
+			this.BattleNight({},true);
 		},
 		
 		PvPEnd: function(data){

@@ -104,27 +104,37 @@ Used by SortieManager
 		
 		this.detection = KC3Meta.detection( battleData.api_search[0] );
 		this.engagement = KC3Meta.engagement( battleData.api_formation[2] );
-		this.fcontact = (battleData.api_kouku.api_stage1.api_touch_plane[0] > -1)?"YES":"NO";
-		this.econtact = (battleData.api_kouku.api_stage1.api_touch_plane[1] > -1)?"YES":"NO";
 		
-		this.airbattle = KC3Meta.airbattle( battleData.api_kouku.api_stage1.api_disp_seiku );
+		var
+			planePhase  = battleData.api_kouku.api_stage1 || {
+				api_touch_plane:[-1,-1],
+				api_f_count    :0,
+				api_e_lostcount:0,
+				api_f_count    :0,
+				api_e_lostcount:0,
+			},
+			attackPhase = battleData.api_kouku.api_stage2;
+		this.fcontact = (planePhase.api_touch_plane[0] > -1)?"YES":"NO";
+		this.econtact = (planePhase.api_touch_plane[1] > -1)?"YES":"NO";
+		
+		this.airbattle = KC3Meta.airbattle( planePhase.api_disp_seiku || undefined );
 		
 		// Fighter phase 1
 		this.planeFighters = {
 			player:[
-				battleData.api_kouku.api_stage1.api_f_count,
-				battleData.api_kouku.api_stage1.api_f_lostcount
+				planePhase.api_f_count,
+				planePhase.api_f_lostcount
 			],
 			abyssal:[
-				battleData.api_kouku.api_stage1.api_e_count,
-				battleData.api_kouku.api_stage1.api_e_lostcount
+				planePhase.api_e_count,
+				planePhase.api_e_lostcount
 			]
 		};
 		
 		if(
 			this.planeFighters.player[0]===0
 			&& this.planeFighters.abyssal[0]===0
-			&& battleData.api_kouku.api_stage2===null
+			&& attackPhase===null
 		){
 			this.airbattle = ["None", "", "No Air Battle"];
 		}
