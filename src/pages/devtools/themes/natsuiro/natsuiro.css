@@ -926,7 +926,7 @@
 	color:#00FFFF;
 }
 .module.fleet .lship .ship_level {
-	width:35px;
+	width:40px;
 	height:15px;
 	line-height:15px;
 	float:left;
@@ -934,7 +934,7 @@
 	color:#ffffff;
 }
 .module.fleet .lship .ship_hp_text {
-	width:55px;
+	width:50px;
 	height:15px;
 	line-height:15px;
 	float:left;
