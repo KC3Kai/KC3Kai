@@ -27,19 +27,19 @@
     	"LevelUpNotice": "함대사령부(제독) level의 상승에 따라 '최대 비축가능 자재량'이 증가하고 '최신 장비아이템 개발'이 가능하게 됩니다.",
     	"ImprovementMaterial": "개수자재",
     	"Experience": "제독 경험치",
-    	"Name": "제독 이름",
+    	"Name": "제독명",
 	
 	"MenuPlayAPIName" : "API 링크(토큰)를 경유해 접속",
 	"MenuPlayAPIDesc" : "전에 저장해두었던 API 링크(토큰)을 통해서 접속하거나, 직접 입력하여 접속",
 	"MenuRefreshAPIName" : "API 링크(토큰)을/를 갱신",
 	"MenuRefreshAPIDesc" : "DMM 게임페이지를 열어 API링크를 자동으로 추출합니다.",
 	"MenuPlayDMMName" : "DMM 페이지에서 플레이",
-	"MenuPlayDMMDesc" : "절대안전을 중시하는 신중한 제독들을 위한 기존 DMM넷게임 포털을 통한 게임플레이입니다.",
+	"MenuPlayDMMDesc" : "절대안전을 중시하는 제독들을 위한 DMM넷게임 포털을 통한 게임플레이입니다.",
 	"MenuCookiesName" : "Cookie를 유효화",
 	"MenuCookiesDesc" : "DMM.com에서 \"Error Area\" 화면이 표시될 때 사용하시면 됩니다.",
 	"MenuStrategyName" : "전략실",
-	"MenuStrategyDesc" : "전황을 분석하고 전략을 세우거나 단순히 함대를 관리하는 데에 있어 유용한 다양한 도구모음입니다.",
-	"MenuSettingsDesc" : "다음 게임세션에 적용될 다양한 익스텐션을 설정합니다.",
+	"MenuStrategyDesc" : "분석, 전략, 함대관리를 위해 유용한 다양한 도구들입니다.",
+	"MenuSettingsDesc" : "다음 세션에 적용될 다양한 설정",
 	"MenuAboutDesc" : "KC3改에 관한 정보 및 개발팀에 관한 정보입니다.",
 	"MenuChecking" : "KC3改 업데이트 유무에 대해 확인합니다...",
 	"MenuOnLatest" : "현재 최신 버전을 사용중입니다.！",
@@ -115,7 +115,7 @@
 	"SettingsConfirmExit" : "종료 확인",
 	"SettingsScreenMargin" : "상단 여백",
 	"SettingsBGColor" : "배경색",
-  "SettingsBGColorDesc": "background-color CSS 속성을 참조해주세요. [Needs Clarification]",
+	"SettingsBGColorDesc": "background-color CSS 속성을 참조해주세요. [Needs Clarification]",
 	"SettingsBGImage" : "배경 그림",
 	"SettingsBGSize" : "배경 사이즈",
 	"SettingsBGSizeDesc" : "background-size의 CSS 속성을 참조해주세요. [Needs Clarification]",
@@ -133,15 +133,19 @@
 	
 	"Small" : "소",
 	"Big" : "대",
+	"Black" : "검정색",
+	"White" : "하얀색",
 	"Theme" : "테마",
 	"Panel" : "패널",
 	"Volume" : "음량",
 	"None" : "없음",
 	"LearnMore" : "상세히",
 	"Saved" : "저장완료!",
-	
+
+	"UnwantedExit" : "으아악! 칸무스들을 두고 떠나다니! 진짜요?",
 	"APIWaitToggle" : "KC3改 패널을 먼저 로드해주세요.",
-	
+	"APIConcealExpl" : "토큰을 보려면 마우스를 올려주세요",	
+
 	"SpeedFast" : "고속",
 	"SpeedSlow" : "저속",
 
@@ -159,6 +163,9 @@
 
 	"PredictionStampSortie" : "굉침",
 	"PredictionStampPvP" : "제압됨",
+	"PredictionStampEscort" : "호위",
+	"PredictionStampMVPUseful" : "MVP",
+	"PredictionStampMVPUseless" : "켁",
 	
 	"LevelText" : "레벨",
 	"LevelShort" : "Lv.",
