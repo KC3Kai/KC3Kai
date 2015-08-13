@@ -475,7 +475,8 @@
 				// Resource node
 				case "resource":
 					$(".module.activity .sortie_node_"+numNodes).addClass("nc_resource");
-					$(".module.activity .node_type_resource .node_res_icon").attr("src",
+					$(".module.activity .node_type_resource").removeClass("node_type_maelstrom");
+					$(".module.activity .node_type_resource .node_res_icon img").attr("src",
 						thisNode.icon("../../../../assets/img/client/"));
 					$(".module.activity .node_type_resource .node_res_text").text( thisNode.amount );
 					$(".module.activity .node_type_resource").show();
@@ -484,17 +485,18 @@
 				// Bounty node on 1-6
 				case "bounty":
 					$(".module.activity .sortie_node_"+numNodes).addClass("nc_resource");
-					$(".module.activity .node_type_resource .node_res_icon").attr("src",
+					$(".module.activity .node_type_resource").removeClass("node_type_maelstrom");
+					$(".module.activity .node_type_resource .node_res_icon img").attr("src",
 						thisNode.icon("../../../../assets/img/client/"));
 					$(".module.activity .node_type_resource .node_res_text").text( thisNode.amount );
 					$(".module.activity .node_type_resource").show();
 					break;
 				
-				// Maelstrom <node></node>
+				// Maelstrom node
 				case "maelstrom":
 					$(".module.activity .sortie_node_"+numNodes).addClass("nc_maelstrom");
-					$(".module.activity .sortie_node_"+numNodes).addClass("nc_resource");
-					$(".module.activity .node_type_resource .node_res_icon").attr("src",
+					$(".module.activity .node_type_resource").addClass("node_type_maelstrom");
+					$(".module.activity .node_type_resource .node_res_icon img").attr("src",
 						thisNode.icon("../../../../assets/img/client/"));
 					$(".module.activity .node_type_resource .node_res_text").text( -thisNode.amount );
 					$(".module.activity .node_type_resource").show();

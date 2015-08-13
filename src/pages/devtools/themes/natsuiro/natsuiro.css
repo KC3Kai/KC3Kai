@@ -423,7 +423,8 @@
 	background:#007A00;
 }
 .module.activity .sortie_node.nc_maelstrom {
-	background:#80007F;
+	background:#D2C6FF;
+	color:#000;
 }
 .module.activity .sortie_node.nc_avoid {
 	background:#00B3B1;
@@ -585,6 +586,54 @@
 .module.activity .plane_after {
 	color:#FF7979;
 }
+/* Resource Nodes */
+.module.activity .node_type_resource {
+	width:150px;
+	height:28px;
+	line-height:18px;
+	padding:4px;
+	background:#B1FF5E;
+	border:1px solid #70D800;
+	border-radius:7px;
+	margin: 10px auto;
+}
+.module.activity .node_res_icon {
+	width:18px;
+	height:18px;
+	float:left;
+	margin:0px 5px 0px 0px;
+	vertical-align:top;
+}
+.module.activity .node_res_icon img {
+	width:18px;
+	height:18px;
+	vertical-align:top;
+}
+.module.activity .node_res_text {
+	width:100px;
+	height:20px;
+	float:left;
+	font-weight:bold;
+	font-size:12px;
+}
+.module.activity .node_type_maelstrom {
+	background:#D2C6FF;
+	border:1px solid #AE87E9;
+}
+/* Resource Nodes */
+.module.activity .node_type_text {
+	width:150px;
+	height:28px;
+	line-height:18px;
+	padding:4px;
+	background:#79E7FF;
+	border:1px solid #1ABAEF;
+	border-radius:7px;
+	margin: 10px auto;
+	text-align:center;
+	font-size:12px;
+}
+
 /*------- ACTIVITY: DETAILS -------*/
 .module.activity .activity_details {
 	
