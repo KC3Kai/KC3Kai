@@ -861,6 +861,7 @@ Previously known as "Reactor"
 		
 		// If victory for "defeat"-type quests
 		var rankPt = getRank(response.api_data.api_win_rank);
+		if(rankPt==5 && KC3SortieManager.currentNode().allyNoDamage) rankPt++;
 		while(rankPt>=3) {
 			switch(rankPt) {
 				case 6: // PERFECT S
