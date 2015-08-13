@@ -10,6 +10,7 @@ KC3改 Equipment Object
 		this.masterId = 0;
 		this.stars = 0;
 		this.lock = 0;
+		this.ace = -1;
 		
 		// If specified with data, fill this object
 		if(typeof data != "undefined"){
@@ -19,6 +20,12 @@ KC3改 Equipment Object
 				this.masterId = data.api_slotitem_id;
 				this.stars = data.api_level;
 				this.lock = data.api_locked;
+				
+				// Plane Ace mechanism
+				if(typeof data.api_alv != "undefined"){
+					this.ace = data.api_alv;
+				}
+				
 			// Initialized with formatted data
 			}else{
 				$.extend(this, data);

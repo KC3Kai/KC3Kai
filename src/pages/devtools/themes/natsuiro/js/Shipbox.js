@@ -194,6 +194,14 @@ KC3改 Ship Box for Natsuiro theme
 					"../../../../assets/img/items/"+thisGear.master().api_type[3]+".png");
 				$(".ship_gear_"+(slot+1), this.element).addClass("equipped");
 				$(".ship_gear_"+(slot+1), this.element).attr("title", thisGear.name());
+				
+				if(typeof thisGear.ace != "undefined"){
+					if(thisGear.ace > -1){
+						$(".ship_gear_"+(slot+1)+" .ship_gear_ace", this.element).show();
+						$(".ship_gear_"+(slot+1)+" .ship_gear_ace", this.element).text(thisGear.ace);
+					}
+				}
+				
 			}else{
 				$(".ship_gear_"+(slot+1)+" .ship_gear_icon img", this.element).hide();
 				$(".ship_gear_"+(slot+1), this.element).addClass("empty");
