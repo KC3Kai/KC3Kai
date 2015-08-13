@@ -155,9 +155,9 @@
 	"HQExpAbbrev3" : "Total",
 	
 	"BattleDetection" : "Deteksi",
-	"BattleEngangement" : "Pertempuran",
+	"BattleEngangement" : "Engage",
 	"BattleContact" : "Kontak",
-	"BattleAirBattle" : "Pertempuran Udara",
+	"BattleAirBattle" : "Udara",
 	"BattleFriendly" : "Sekutu",
 	"BattleEnemy" : "Musuh",
 	
