@@ -222,7 +222,9 @@ Used by SortieManager
 		}
 	};
 	
-	KC3Node.prototype.engageNight = function( nightData, fleetSent ){
+	KC3Node.prototype.engageNight = function( nightData, fleetSent, setAsOriginalHP ){
+		if(typeof setAsOriginalHP == "undefined"){ setAsOriginalHP = true; }
+		
 		this.battleNight = nightData;
 		this.startNight = (fleetSent !== undefined);
 		
@@ -232,7 +234,9 @@ Used by SortieManager
 		this.eformation = this.eformation || nightData.api_formation[1];
 		this.eParam = nightData.api_eParam;
 		
-		this.originalHPs = nightData.api_nowhps;
+		if(setAsOriginalHP){
+			this.originalHPs = nightData.api_nowhps;
+		}
 		
 		this.engagement = this.engagement || KC3Meta.engagement( nightData.api_formation[2] );
 		this.fcontact = (nightData.api_touch_plane[0] > -1)?"YES":"NO";
@@ -247,8 +251,9 @@ Used by SortieManager
 		var fleet;
 		var shipNum;
 		var ship;
-
-		if (PlayerManager.combinedFleet === 0) {	// single fleet
+		
+		// SINGLE FLEET
+		if (PlayerManager.combinedFleet === 0) {	
 			result = DA.analyzeRawNightBattleJS( nightData ); 
 			for (i = 7; i < 13; i++) {
 				this.enemyHP[i-7] = result[i];
@@ -262,12 +267,14 @@ Used by SortieManager
 			shipNum = fleet.countShips();
 			for(i = 0; i < shipNum; i++) {
 				ship = fleet.ship(i);
-				ship.hp = ship.afterHp;
+				ship.hp = [ship.afterHp[0], ship.afterHp[1]];
 				ship.morale = Math.max(0,ship.morale+(fleetSent ? 1 : -3 ));
 				ship.afterHp[0] = result[i+1].currentHp;
 				ship.afterHp[1] = ship.hp[1];
 			}
-		} else {	// Combined fleet
+			
+		// COMBINED FLEET
+		} else {
 			result = DA.analyzeRawNightBattleCombinedJS( nightData ); 
 			for (i = 7; i < 13; i++) {
 				this.enemyHP[i-7] = result[i];
@@ -280,7 +287,7 @@ Used by SortieManager
 			shipNum = fleet.countShips();
 			for(i = 0; i < shipNum; i++) {
 				ship = fleet.ship(i);
-				ship.hp = ship.afterHp;
+				ship.hp = [ship.afterHp[0], ship.afterHp[1]];
 				//ship.morale = Math.max(0,ship.morale+(fleetSent ? 1 : -3 ));
 				ship.afterHp[0] = result[i+1].currentHp;
 				ship.afterHp[1] = ship.hp[1];
@@ -290,7 +297,7 @@ Used by SortieManager
 	};
 	
 	KC3Node.prototype.night = function( nightData ){
-		this.engageNight(nightData);
+		this.engageNight(nightData, null, false);
 	};
 	
 	KC3Node.prototype.results = function( resultData ){
