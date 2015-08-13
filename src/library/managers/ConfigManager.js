@@ -17,6 +17,7 @@ Retreives when needed to apply on components
 				language			: "en",
 				elosFormula 		: 3,
 				hqExpDetail 		: 1,
+				marryLevelFormat: 0,
 				
 				info_face 			: true,
 				info_drop 			: true,
@@ -39,7 +40,7 @@ Retreives when needed to apply on components
 				
 				api_translation		: true,
 				api_tracking 		: true,
-				api_mustPanel 		: true,
+				api_mustPanel 		: false,
 				api_askExit			: true,
 				api_margin			: 0,
 				api_bg_color		: "#def",

@@ -34,6 +34,8 @@ $(document).on("ready", function(){
 		$("body").css("background-repeat", "no-repeat");
 	}
 	
+	$(".box-wait .api_txt").attr("title",KC3Meta.term("APIConcealExpl"));
+	
 	// API link determines which screen to show
 	if(localStorage.absoluteswf){
 		$(".api_txt textarea").text(localStorage.absoluteswf);
@@ -80,7 +82,7 @@ $(document).on("ready", function(){
 		if(ConfigManager.api_askExit==1 && !trustedExit && !waiting){
 			trustedExit = true;
 			setTimeout(function(){ trustedExit = false; }, 100);
-			return "Ahhh! You are leaving your girls! Are you sure you want to leave them?";
+			return KC3Meta.term("UnwantedExit");
 		}
 	};
 	

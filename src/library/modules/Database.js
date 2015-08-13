@@ -18,77 +18,137 @@ Uses Dexie.js third-party plugin on the assets directory
 				this.index = defaultUser;
 			}
 			
-			this.con.version(1).stores({
-				account: "++id,&hq,server,mid,name",
-				build: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time",
-				lsc: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,devmat,result,time",
-				sortie: "++id,hq,world,mapnum,fleetnum,combined,fleet1,fleet2,time",
-				battle: "++id,hq,sortie_id,node,data,yasen,rating,drop,time",
-				resource: "++id,hq,rsc1,rsc2,rsc3,rsc4,hour",
-				useitem: "++id,hq,torch,screw,bucket,devmat,hour"
+			var
+				// No upgrade flag (used in iteration)
+				dbFirst = true,
+				// No update function reference
+				dbNonFunc = function(t){},
+				// Initial State of Proposed Database, modified by every element on dbUpdates, ch and rm key.
+				dbProposed = {},
+				// DB Changes put in queue
+				dbUpdates = [
+					{
+						ch: {
+							account: "++id,&hq,server,mid,name",
+							build: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time",
+							lsc: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,devmat,result,time",
+							sortie: "++id,hq,world,mapnum,fleetnum,combined,fleet1,fleet2,time",
+							battle: "++id,hq,sortie_id,node,data,yasen,rating,drop,time",
+							resource: "++id,hq,rsc1,rsc2,rsc3,rsc4,hour",
+							useitem: "++id,hq,torch,screw,bucket,devmat,hour",
+						},
+						vr: 1,
+					},
+					{
+						/* Actual Structure (compare with version 1)
+							account: "++id,&hq,server,mid,name",
+							build: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time",
+							lsc: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,devmat,result,time",
+							* sortie: "++id,hq,world,mapnum,fleetnum,combined,fleet1,fleet2,fleet3,fleet4,support1,support2,time",
+							battle: "++id,hq,sortie_id,node,data,yasen,rating,drop,time",
+							resource: "++id,hq,rsc1,rsc2,rsc3,rsc4,hour",
+							useitem: "++id,hq,torch,screw,bucket,devmat,hour",
+							* screenshots: "++id,hq,imgur,ltime",
+						*/
+						ch: {
+							sortie: "++id,hq,world,mapnum,fleetnum,combined,fleet1,fleet2,fleet3,fleet4,support1,support2,time",
+							screenshots: "++id,hq,imgur,ltime",
+						},
+						vr: 2,
+					},
+					{
+						/* Actual Structure (compare with version 2)
+							account: "++id,&hq,server,mid,name",
+							build: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time",
+							lsc: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,devmat,result,time",
+							sortie: "++id,hq,world,mapnum,fleetnum,combined,fleet1,fleet2,fleet3,fleet4,support1,support2,time",
+							battle: "++id,hq,sortie_id,node,data,yasen,rating,drop,time",
+							resource: "++id,hq,rsc1,rsc2,rsc3,rsc4,hour",
+							useitem: "++id,hq,torch,screw,bucket,devmat,hour",
+							screenshots: "++id,hq,imgur,ltime",
+							* develop: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time"
+						*/
+						ch: {
+							develop: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time",
+						},
+						vr: 3,
+					},
+					{
+						/* Actual Structure (compare with version 3)
+							account: "++id,&hq,server,mid,name",
+							build: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time",
+							lsc: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,devmat,result,time",
+							sortie: "++id,hq,world,mapnum,fleetnum,combined,fleet1,fleet2,fleet3,fleet4,support1,support2,time",
+							* battle: "++id,hq,sortie_id,node,enemyId,data,yasen,rating,drop,time",
+							resource: "++id,hq,rsc1,rsc2,rsc3,rsc4,hour",
+							useitem: "++id,hq,torch,screw,bucket,devmat,hour",
+							screenshots: "++id,hq,imgur,ltime",
+							develop: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time"
+						*/
+						ch: {
+							battle: "++id,hq,sortie_id,node,enemyId,data,yasen,rating,drop,time",
+						},
+						vr: 4,
+					},
+					{
+						/* Actual Structure (compare with version 4)
+							account: "++id,&hq,server,mid,name",
+							build: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time",
+							lsc: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,devmat,result,time",
+							sortie: "++id,hq,world,mapnum,fleetnum,combined,fleet1,fleet2,fleet3,fleet4,support1,support2,time",
+							battle: "++id,hq,sortie_id,node,enemyId,data,yasen,rating,drop,time",
+							resource: "++id,hq,rsc1,rsc2,rsc3,rsc4,hour",
+							useitem: "++id,hq,torch,screw,bucket,devmat,hour",
+							screenshots: "++id,hq,imgur,ltime",
+							develop: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time",
+							* newsfeed: "++id,hq,type,message,time",
+						*/
+						ch: {
+							newsfeed: "++id,hq,type,message,time",
+						},
+						vr: 5,
+					},
+					{
+						/* Actual Structure (compare with version 5)
+							account: "++id,&hq,server,mid,name",
+							build: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time",
+							lsc: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,devmat,result,time",
+							sortie: "++id,hq,diff,world,mapnum,fleetnum,combined,fleet1,fleet2,fleet3,fleet4,support1,support2,time",
+							battle: "++id,hq,sortie_id,node,enemyId,data,yasen,rating,drop,time",
+							resource: "++id,hq,rsc1,rsc2,rsc3,rsc4,hour",
+							useitem: "++id,hq,torch,screw,bucket,devmat,hour",
+							screenshots: "++id,hq,imgur,ltime",
+							develop: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time",
+							newsfeed: "++id,hq,type,message,time",
+						*/
+						ch: {
+							sortie: "++id,hq,diff,world,mapnum,fleetnum,combined,fleet1,fleet2,fleet3,fleet4,support1,support2,time",
+						},
+						vr: 6,
+					},
+				];
+				
+			// Process the queue
+			$.each(dbUpdates,function(dbCurr){
+				var dbVer;
+				dbCurr = $.extend({ch:{},rm:[],up:dbNonFunc},dbCurr);
+				// Replaces the proposed database table with the new one
+				Object.keys(dbCurr.ch).forEach(function(k){
+					dbProposed[k] = dbCurr.ch[k];
+				});
+				// Removes the unused database table
+				dbCurr.rm.forEach(function(k){
+					delete dbProposed[k];
+				});
+				console.log(dbProposed,dbCurr);
+				// Apply Versioning
+				dbVer = this.con.version(dbCurr.vr).stores(dbProposed);
+				if(dbFirst) {
+					dbFirst = false;
+				} else {
+					dbVer.upgrade(dbCurr.up);
+				}
 			});
-			
-			this.con.version(2).stores({
-				account: "++id,&hq,server,mid,name",
-				build: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time",
-				lsc: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,devmat,result,time",
-				sortie: "++id,hq,world,mapnum,fleetnum,combined,fleet1,fleet2,fleet3,fleet4,support1,support2,time",
-				battle: "++id,hq,sortie_id,node,data,yasen,rating,drop,time",
-				resource: "++id,hq,rsc1,rsc2,rsc3,rsc4,hour",
-				useitem: "++id,hq,torch,screw,bucket,devmat,hour",
-				screenshots: "++id,hq,imgur,ltime"
-			}).upgrade(function(t){});
-			
-			this.con.version(3).stores({
-				account: "++id,&hq,server,mid,name",
-				build: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time",
-				lsc: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,devmat,result,time",
-				sortie: "++id,hq,world,mapnum,fleetnum,combined,fleet1,fleet2,fleet3,fleet4,support1,support2,time",
-				battle: "++id,hq,sortie_id,node,data,yasen,rating,drop,time",
-				resource: "++id,hq,rsc1,rsc2,rsc3,rsc4,hour",
-				useitem: "++id,hq,torch,screw,bucket,devmat,hour",
-				screenshots: "++id,hq,imgur,ltime",
-				develop: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time"
-			}).upgrade(function(t){});
-			
-			this.con.version(4).stores({
-				account: "++id,&hq,server,mid,name",
-				build: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time",
-				lsc: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,devmat,result,time",
-				sortie: "++id,hq,world,mapnum,fleetnum,combined,fleet1,fleet2,fleet3,fleet4,support1,support2,time",
-				battle: "++id,hq,sortie_id,node,enemyId,data,yasen,rating,drop,time",
-				resource: "++id,hq,rsc1,rsc2,rsc3,rsc4,hour",
-				useitem: "++id,hq,torch,screw,bucket,devmat,hour",
-				screenshots: "++id,hq,imgur,ltime",
-				develop: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time"
-			}).upgrade(function(t){});
-			
-			this.con.version(5).stores({
-				account: "++id,&hq,server,mid,name",
-				build: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time",
-				lsc: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,devmat,result,time",
-				sortie: "++id,hq,world,mapnum,fleetnum,combined,fleet1,fleet2,fleet3,fleet4,support1,support2,time",
-				battle: "++id,hq,sortie_id,node,enemyId,data,yasen,rating,drop,time",
-				resource: "++id,hq,rsc1,rsc2,rsc3,rsc4,hour",
-				useitem: "++id,hq,torch,screw,bucket,devmat,hour",
-				screenshots: "++id,hq,imgur,ltime",
-				develop: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time",
-				newsfeed: "++id,hq,type,message,time",
-			}).upgrade(function(t){});
-			
-			this.con.version(6).stores({
-				account: "++id,&hq,server,mid,name",
-				build: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time",
-				lsc: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,devmat,result,time",
-				sortie: "++id,hq,diff,world,mapnum,fleetnum,combined,fleet1,fleet2,fleet3,fleet4,support1,support2,time",
-				battle: "++id,hq,sortie_id,node,enemyId,data,yasen,rating,drop,time",
-				resource: "++id,hq,rsc1,rsc2,rsc3,rsc4,hour",
-				useitem: "++id,hq,torch,screw,bucket,devmat,hour",
-				screenshots: "++id,hq,imgur,ltime",
-				develop: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time",
-				newsfeed: "++id,hq,type,message,time",
-			}).upgrade(function(t){});
-			
 			this.con.open();
 		},
 		

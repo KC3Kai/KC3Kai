@@ -187,15 +187,45 @@
 	text-align:center;
 }
 .tab_ships .ship_item .ship_img {
+	position:relative;
 	width:20px;
 }
-.tab_ships .ship_item .ship_img img {
+.tab_ships .ship_item .ship_img img.ship_icon {
 	width:20px;
 	height:20px;
+}
+.tab_ships .ship_item .ship_img img.ship_kekkon {
+	position:absolute;
+	right:0;
+	bottom:0;
+	width:50%;
+	height:50%;
+	display:none;
+}
+.tab_ships .ship_item .ship_kekkon-color {
+	color: #E49F9C;
+}
+.tab_ships .ship_item .ship_kekkon:after {
+	display: inline;
+	position: absolute;
+	width: 100%;
+	right: 0;
+	opacity:0.5;
+	content: "x";
+	color: rgba(0,0,0,0);
+	background-position: 100%;
+	background-image: url('../../assets/img/client/kekkon.png');
+	background-size: 10px;
+	background-repeat: no-repeat;
+	text-align: right;
 }
 .tab_ships .ship_item .ship_name {
 	width:92px;
 	overflow:hidden;
+	position:relative;
+}
+.tab_ships .ship_item .ship_name.ship_kekkon {
+	/*width:112px;*/
 }
 .tab_ships .ship_item .ship_type {
 	width:30px;
@@ -205,6 +235,10 @@
 	width:50px;
 	/*margin:0px 5px 0px 0px;*/
 	text-align:center;
+	position:relative;
+}
+.tab_ships .ship_item .ship_lv.ship_kekkon {
+	/*width:70px;*/
 }
 .tab_ships .ship_item .ship_morale {
 	width:20px;
@@ -219,7 +253,7 @@
 }
 /* Fields: Stats */
 .tab_ships .ship_item .ship_stat {
-	width:30px;
+	width:25px;
 	text-align:center;
 }
 .tab_ships .ship_item .ship_stat_mod {
@@ -263,11 +297,12 @@
 	width:20px;
 	height:20px;
 }
-/* Fields: HeartLock */
-.tab_ships .ship_item .ship_lock {
+/* Fields: HeartLock and Marriage Ring */
+.tab_ships .ship_item .ship_stat_icon {
 	width:20px;
 }
-.tab_ships .ship_item .ship_lock img {
+.tab_ships .ship_item .ship_stat_icon img {
 	width:20px;
 	display:none;
 }
+
