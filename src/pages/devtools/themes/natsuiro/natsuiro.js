@@ -546,7 +546,9 @@
 						
 						if(newEnemyHP === 0){
 							$(".module.activity .abyss_ship_"+(index+1)).css("opacity", "0.6");
-							$(".module.activity .sunk_"+(index+1)+" img").show();
+							$(".module.activity .sunk_"+(index+1)+" img")
+								.show()
+								.css("-webkit-filter","");
 						}
 						
 						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width",
@@ -618,7 +620,7 @@
 			this.Fleet();
 		},
 		
-		BattleNight: function(data,safeSunk){
+		BattleNight: function(data){
 			// Enemy HP Predictions
 			var thisNode = KC3SortieManager.currentNode();
 			if(ConfigManager.info_battle){
@@ -632,7 +634,7 @@
 							$(".module.activity .abyss_ship_"+(index+1)).css("opacity", "0.6");
 							$(".module.activity .sunk_"+(index+1)+" img")
 								.show()
-								.css("-webkit-filter",safeSunk ? "grayscale(100%)" : "");
+								.css("-webkit-filter",(data||{safeSunk:false}).safeSunk ? "grayscale(100%)" : "");
 						}
 						
 						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width",
@@ -749,7 +751,9 @@
 						
 						if(newEnemyHP === 0){
 							$(".module.activity .abyss_ship_"+(index+1)).css("opacity", "0.6");
-							$(".module.activity .sunk_"+(index+1)+" img").show();
+							$(".module.activity .sunk_"+(index+1)+" img")
+								.show()
+								.css("-webkit-filter","grayscale(100%)");
 						}
 						
 						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width",
@@ -808,7 +812,7 @@
 		},
 		
 		PvPNight: function(data){
-			this.BattleNight({},true);
+			this.BattleNight({safeSunk:true});
 		},
 		
 		PvPEnd: function(data){
