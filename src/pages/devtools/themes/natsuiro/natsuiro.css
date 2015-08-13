@@ -438,6 +438,7 @@
 	height:0px;
 	position: absolute;
 	z-index: 1;
+	pointer-events:none;
 }
 .module.activity .sink_icons .sunk {
 	width:16px;
