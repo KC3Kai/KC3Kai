@@ -109,8 +109,8 @@ Used by SortieManager
 			planePhase  = battleData.api_kouku.api_stage1 || {
 				api_touch_plane:[-1,-1],
 				api_f_count    :0,
-				api_e_lostcount:0,
-				api_f_count    :0,
+				api_f_lostcount:0,
+				api_e_count    :0,
 				api_e_lostcount:0,
 			},
 			attackPhase = battleData.api_kouku.api_stage2;

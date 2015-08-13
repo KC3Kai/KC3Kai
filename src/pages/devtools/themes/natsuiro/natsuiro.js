@@ -620,8 +620,8 @@
 		
 		BattleNight: function(data,safeSunk){
 			// Enemy HP Predictions
+			var thisNode = KC3SortieManager.currentNode();
 			if(ConfigManager.info_battle){
-				var thisNode = KC3SortieManager.currentNode();
 				var newEnemyHP;
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > -1){
