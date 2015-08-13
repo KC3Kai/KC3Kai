@@ -129,6 +129,7 @@ Uses Dexie.js third-party plugin on the assets directory
 				];
 				
 			// Process the queue
+			var self = this;
 			$.each(dbUpdates,function(dbCurr){
 				var dbVer;
 				dbCurr = $.extend({ch:{},rm:[],up:dbNonFunc},dbCurr);
@@ -142,7 +143,7 @@ Uses Dexie.js third-party plugin on the assets directory
 				});
 				console.log(dbProposed,dbCurr);
 				// Apply Versioning
-				dbVer = this.con.version(dbCurr.vr).stores(dbProposed);
+				dbVer = self.con.version(dbCurr.vr).stores(dbProposed);
 				if(dbFirst) {
 					dbFirst = false;
 				} else {
