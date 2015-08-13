@@ -231,6 +231,7 @@
 		$(".module.activity .battle_drop").attr("title", "");
 		$(".module.activity .battle_cond_value").text("");
 		$(".module.activity .plane_text span").text("");
+		$(".module.activity .sink_icons .sunk img").hide();
 	}
 	
 	var NatsuiroListeners = {
@@ -475,7 +476,8 @@
 				// Resource node
 				case "resource":
 					$(".module.activity .sortie_node_"+numNodes).addClass("nc_resource");
-					$(".module.activity .node_type_resource .node_res_icon").attr("src",
+					$(".module.activity .node_type_resource").removeClass("node_type_maelstrom");
+					$(".module.activity .node_type_resource .node_res_icon img").attr("src",
 						thisNode.icon("../../../../assets/img/client/"));
 					$(".module.activity .node_type_resource .node_res_text").text( thisNode.amount );
 					$(".module.activity .node_type_resource").show();
@@ -484,17 +486,18 @@
 				// Bounty node on 1-6
 				case "bounty":
 					$(".module.activity .sortie_node_"+numNodes).addClass("nc_resource");
-					$(".module.activity .node_type_resource .node_res_icon").attr("src",
+					$(".module.activity .node_type_resource").removeClass("node_type_maelstrom");
+					$(".module.activity .node_type_resource .node_res_icon img").attr("src",
 						thisNode.icon("../../../../assets/img/client/"));
 					$(".module.activity .node_type_resource .node_res_text").text( thisNode.amount );
 					$(".module.activity .node_type_resource").show();
 					break;
 				
-				// Maelstrom <node></node>
+				// Maelstrom node
 				case "maelstrom":
 					$(".module.activity .sortie_node_"+numNodes).addClass("nc_maelstrom");
-					$(".module.activity .sortie_node_"+numNodes).addClass("nc_resource");
-					$(".module.activity .node_type_resource .node_res_icon").attr("src",
+					$(".module.activity .node_type_resource").addClass("node_type_maelstrom");
+					$(".module.activity .node_type_resource .node_res_icon img").attr("src",
 						thisNode.icon("../../../../assets/img/client/"));
 					$(".module.activity .node_type_resource .node_res_text").text( -thisNode.amount );
 					$(".module.activity .node_type_resource").show();
@@ -543,6 +546,7 @@
 						
 						if(newEnemyHP === 0){
 							$(".module.activity .abyss_ship_"+(index+1)).css("opacity", "0.6");
+							$(".module.activity .sunk_"+(index+1)+" img").show();
 						}
 						
 						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width",
@@ -607,16 +611,14 @@
 				
 			// Started on night battle
 			}else{
-				$(".module.activity .battle_support img", container).attr("src", "../../../../assets/img/ui/dark_support-x.png");
-				$(".module.activity .battle_night img", container).attr("src", "../../../../assets/img/ui/dark_yasen.png");
+				$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png");
+				$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
 			}
 			
 			this.Fleet();
 		},
 		
 		BattleNight: function(data){
-			this.Fleet();
-			
 			// Enemy HP Predictions
 			if(ConfigManager.info_battle){
 				var thisNode = KC3SortieManager.currentNode();
@@ -628,6 +630,7 @@
 						
 						if(newEnemyHP === 0){
 							$(".module.activity .abyss_ship_"+(index+1)).css("opacity", "0.6");
+							$(".module.activity .sunk_"+(index+1)+" img").show();
 						}
 						
 						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width",
@@ -636,6 +639,8 @@
 					}
 				});
 			}
+			
+			this.Fleet();
 		},
 		
 		BattleResult: function(data){
@@ -669,52 +674,20 @@
 			if(!ConfigManager.info_craft){ return true; }
 			
 			var icon = "../../../../assets/img/client/penguin.png";
+			
+			// If success crafting
 			if (data.itemId !== null) {
 				// Get equipment data
 				var PlayerItem = KC3GearManager.get( data.itemId );
 				var MasterItem = KC3Master.slotitem( data.itemMasterId );
 				
-				// Show basic info of the item
-				icon = "../../../../assets/img/items/"+MasterItem.api_type[3]+".png";
-				// $(".craftGear .equipIcon img", container).attr("src", icon);
-				// $(".craftGear .equipName", container).text( PlayerItem.name() );
 				
-				// Show extra item info
-				var countExisting = KC3GearManager.countByMasterId( data.itemMasterId );
-				if(countExisting == 1){
-					// $(".craftGear .equipNote", container).html("This is your <strong>first</strong>!");
-				}else{
-					// $(".craftGear .equipNote", container).html("You now have <strong>"+countExisting+"</strong> of this item!");
-				}
-				
-				// Show item stats
-				/*$(".equipStats", container).html("");
-				CraftGearStats(container, MasterItem, "souk", "ar");
-				CraftGearStats(container, MasterItem, "houg", "fp");
-				CraftGearStats(container, MasterItem, "raig", "tp");
-				CraftGearStats(container, MasterItem, "soku", "sp");
-				CraftGearStats(container, MasterItem, "baku", "dv");
-				CraftGearStats(container, MasterItem, "tyku", "aa");
-				CraftGearStats(container, MasterItem, "tais", "as");
-				CraftGearStats(container, MasterItem, "houm", "ht");
-				CraftGearStats(container, MasterItem, "houk", "ev");
-				CraftGearStats(container, MasterItem, "saku", "ls");
-				CraftGearStats(container, MasterItem, "leng", "rn");*/
+			// If penguin
 			} else {
-				// $(".craftGear .equipIcon img", container).attr("src", icon);
-				// $(".craftGear .equipName", container).text( "Equipment crafting failed" );
-				// $(".craftGear .equipNote",container).html("");
-				// $(".equipStats", container).html("");
+				
+				
+				
 			}
-			
-			// Show resource used
-			$(".craftGear .used1").text( data.resourceUsed[0] );
-			$(".craftGear .used2").text( data.resourceUsed[1] );
-			$(".craftGear .used3").text( data.resourceUsed[2] );
-			$(".craftGear .used4").text( data.resourceUsed[3] );
-
-			// Show the box
-			$(".craftGear", container).fadeIn(500);
 		},
 		
 		CraftShip: function(data){},
@@ -772,6 +745,7 @@
 						
 						if(newEnemyHP === 0){
 							$(".module.activity .abyss_ship_"+(index+1)).css("opacity", "0.6");
+							$(".module.activity .sunk_"+(index+1)+" img").show();
 						}
 						
 						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width",

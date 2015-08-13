@@ -86,6 +86,7 @@ body {
 .box-wait .api_txt {
 	width:760px;
 	margin:0px 0px 15px 0px;
+	position:relative;
 }
 .box-wait .api_txt textarea {
 	width:760px;
@@ -101,6 +102,41 @@ body {
 	color:#039;
 	background:#ffc;
 	overflow:hidden;
+	position:relative;
+}
+.box-wait .api_txt textarea {
+	-webkit-filter: blur(3px);
+}
+
+.box-wait .api_txt textarea:focus,
+.box-wait .api_txt textarea:hover,
+.box-wait .api_txt textarea:active {
+	-webkit-filter: blur(0px);
+}
+.box-wait .api_txt:after {
+	content: attr(title);
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	color: red;
+	font-size: 14pt;
+	display: flex;
+	text-shadow: 1px 1px 1px black;
+	z-index: 1;
+	background-color: rgba(255,255,192,0.5);
+	border: black 1px solid;
+}
+
+.box-wait .api_txt:active:after ,
+.box-wait .api_txt:hover:after ,
+.box-wait .api_txt:focus:after {
+	opacity: 0;
+	transition: opacity 0.05s;
+	display: none;
 }
 .box-wait .play_now {
 	margin:5px 0px 0px 20px;

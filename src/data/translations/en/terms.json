@@ -142,7 +142,9 @@
 	"LearnMore" : "Learn more",
 	"Saved" : "Saved!",
 	
+	"UnwantedExit" : "Ahhh! You are leaving your girls! Are you sure you want to leave them?",
 	"APIWaitToggle" : "Please load KC3Kai panel first",
+	"APIConcealExpl" : "Hover to show your API Link",
 	
 	"SpeedFast" : "Fast",
 	"SpeedSlow" : "Slow",
@@ -161,6 +163,9 @@
 	
 	"PredictionStampSortie" : "Sunk",
 	"PredictionStampPvP" : "Knocked Out",
+	"PredictionStampEscort" : "Escort",
+	"PredictionStampMVPUseful" : "MVP",
+	"PredictionStampMVPUseless" : "kek",
 	
 	"LevelText" : "Level",
 	"LevelShort" : "Lv.",

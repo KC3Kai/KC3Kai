@@ -916,8 +916,29 @@
     },
     
     "280": {
+        "code": "SN01",
         "name": "Second SN strategy, Initial Operations",
         "desc": "Clear the Summer 2015 Event Map 2."
+    },
+    "620": {
+        "code": "SN02",
+        "name": "Tidying Up the Arsenal",
+        "desc": " Scrap Equipment 6 times."
+    },
+    "281": {
+        "code": "SN03",
+        "name": "Carry Out the Patrol for Main Force's Route",
+        "desc": "Sink 6 abyssal sumbarines."
+    },
+    "158": {
+        "code": "SN04",
+        "name": "Assign the Murata Squadron Torpedo Bomber to Akagi",
+        "desc": "Set Akagi as the Secretary Ship and equip her with Type 97 Torpedo Bomber (Murata Squadron). ."
+    },
+    "282": {
+        "code": "SN05",
+        "name": "Snatch Away the Air Superiority in the Solomon Sea Area",
+        "desc": "Clear the Summer 2015 Event Map 4."
     }
     
 }
