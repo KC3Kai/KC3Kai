@@ -231,6 +231,7 @@
 		$(".module.activity .battle_drop").attr("title", "");
 		$(".module.activity .battle_cond_value").text("");
 		$(".module.activity .plane_text span").text("");
+		$(".module.activity .sink_icons .sunk img").hide();
 	}
 	
 	var NatsuiroListeners = {
@@ -545,6 +546,7 @@
 						
 						if(newEnemyHP === 0){
 							$(".module.activity .abyss_ship_"+(index+1)).css("opacity", "0.6");
+							$(".module.activity .sunk_"+(index+1)+" img").show();
 						}
 						
 						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width",
@@ -617,8 +619,6 @@
 		},
 		
 		BattleNight: function(data){
-			this.Fleet();
-			
 			// Enemy HP Predictions
 			if(ConfigManager.info_battle){
 				var thisNode = KC3SortieManager.currentNode();
@@ -630,6 +630,7 @@
 						
 						if(newEnemyHP === 0){
 							$(".module.activity .abyss_ship_"+(index+1)).css("opacity", "0.6");
+							$(".module.activity .sunk_"+(index+1)+" img").show();
 						}
 						
 						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width",
@@ -638,6 +639,8 @@
 					}
 				});
 			}
+			
+			this.Fleet();
 		},
 		
 		BattleResult: function(data){
@@ -742,6 +745,7 @@
 						
 						if(newEnemyHP === 0){
 							$(".module.activity .abyss_ship_"+(index+1)).css("opacity", "0.6");
+							$(".module.activity .sunk_"+(index+1)+" img").show();
 						}
 						
 						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width",

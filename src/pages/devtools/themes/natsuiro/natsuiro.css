@@ -430,6 +430,29 @@
 	background:#00B3B1;
 }
 /* Abyss Ships */
+.module.activity .node_type_battle {
+	position: relative;
+}
+.module.activity .sink_icons {
+	width:180px;
+	height:0px;
+	position: absolute;
+	z-index: 1;
+}
+.module.activity .sink_icons .sunk {
+	width:16px;
+	height:16px;
+	line-height:16px;
+	float:left;
+	margin:8px 0px 0px 14px;
+}
+.module.activity .sink_icons .sunk img {
+	width:16px;
+	height:16px;
+	vertical-align:top;
+	display:none;
+}
+/* Abyss Ships */
 .module.activity .abyss_ships {
 	width:180px;
 	height:26px;
@@ -444,6 +467,7 @@
 	border:1px solid #000;
 	overflow:hidden;
 	background:#888;
+	position:relative;
 }
 .module.activity .abyss_ship img {
 	width:26px;
