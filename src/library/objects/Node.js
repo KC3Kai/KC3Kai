@@ -178,6 +178,7 @@ Used by SortieManager
 			for(i = 0; i < shipNum; i++) {
 				ship = fleet.ship(i);
 				ship.afterHp[0] = result[i+1].currentHp;
+				this.allyNoDamage &= ship.hp[0]==ship.afterHp[0];
 				ship.afterHp[1] = ship.hp[1];
 			}
 		} else {
