@@ -926,11 +926,11 @@
     "280": {
         "code": "SN01",
         "name": "Strategi SN kedua, Operasi Permulaan",
-        "desc": "Selesaikan Map 2 Summer 2015 Event."
+        "desc": "Selesaikan Map ke-2 Event Summer 2015."
     },
     "620": {
         "code": "SN02",
-        "name": "Rapikan Gudang Persenjataan",
+        "name": "Rapikan Gudang Senjata",
         "desc": "Hancurkan Persenjataan 6 kali."
     },
     "281": {
@@ -940,13 +940,13 @@
     },
     "158": {
         "code": "SN04",
-        "name": "Perintahkan Murata Squadron Torpedo Bomber ke Akagi",
-        "desc": "Jadikan Akagi sebagai kapal pemimpin dan berikan ia Type 97 Torpedo Bomber (Murata Squadron)."
+        "name": "Lengkapi Akagi dengan Murata Squadron Torpedo Bomber",
+        "desc": "Jadikan Akagi sebagai kapal pemimpin dan lengkapi dengan Type 97 Torpedo Bomber (Murata Squadron)."
     },
     "282": {
         "code": "SN05",
-        "name": "Habiskan Superioritas Udara (AS+) pada Area Laut Solomon",
-        "desc": "Selesaikan Map 4 Summer 2015 Event."
+        "name": "Rebut Superioritas Udara (AS) pada Area Laut Solomon",
+        "desc": "Selesaikan Map ke-4 Event Summer 2015."
     }
     
 }
