@@ -642,6 +642,8 @@
 				});
 			}
 			
+			$(".module.activity .battle_contact").text(thisNode.fcontact +" vs "+thisNode.econtact);
+			
 			this.Fleet();
 		},
 		
