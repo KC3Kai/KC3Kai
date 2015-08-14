@@ -36,54 +36,52 @@
 				$(this).addClass("active");
 				
 				$(".tab_event .map_list").html("");
+				$(".tab_event .page_list").html("");
+				$(".tab_event .sortie_list").html("");
 				
-				if(self.selectedWorld !== 0){
-					var mapBox;
+				var mapBox;
+				
+				// Check player's map list
+				$.each(self.maps, function(index, element){
+					var cWorld = (""+element.id).substr(0, (""+element.id).length-1);
+					var cMap = (""+element.id).substr((""+element.id).length-1);
 					
-					// Check player's map list
-					$.each(self.maps, function(index, element){
-						var cWorld = (""+element.id).substr(0, (""+element.id).length-1);
-						var cMap = (""+element.id).substr((""+element.id).length-1);
+					// If this map is part of selected world
+					if(cWorld == self.selectedWorld){
+						mapBox = $(".tab_event .factory .map_box").clone().appendTo(".tab_event .map_list");
+						mapBox.data("map_num", cMap);
+						$(".map_title", mapBox).text("E - "+cMap);
 						
-						// If this map is part of selected world
-						if(cWorld == self.selectedWorld){
-							mapBox = $(".tab_event .factory .map_box").clone().appendTo(".tab_event .map_list");
-							mapBox.data("map_num", cMap);
-							$(".map_title", mapBox).text("E - "+cMap);
-							
-							// If this map is already cleared
-							if(element.clear == 1){
-								$(".map_hp_txt", mapBox).text("Cleared!");
-								mapBox.addClass("cleared");
-							}else{
-								// If HP-based gauge
-								if(typeof element.maxhp != "undefined"){
-									$(".map_hp_txt", mapBox).text(  element.curhp + " / " + element.maxhp );
-									$(".map_bar", mapBox).css("width", ((element.curhp/element.maxhp)*80)+"px");
-									
-								// If kill-based gauge
-								}else{
-									var totalKills = KC3Meta.gauge( element.id );
-									var killsLeft = totalKills - element.kills;
-									if(totalKills){
-										$(".map_hp_txt", mapBox).text( killsLeft+" / "+totalKills+" kills left");
-										$(".map_bar", mapBox).css("width", ((killsLeft/totalKills)*80)+"px");
-									}else{
-										mapBox.addClass("noclearnogauge");
-										$(".map_hp_txt", mapBox).text("Not cleared");
-									}
-								}
+						// If this map is already cleared
+						if(element.clear == 1){
+							$(".map_hp_txt", mapBox).text("Cleared!");
+							mapBox.addClass("cleared");
+						}else{
+							// If HP-based gauge
+							if(typeof element.maxhp != "undefined"){
+								$(".map_hp_txt", mapBox).text(  element.curhp + " / " + element.maxhp );
+								$(".map_bar", mapBox).css("width", ((element.curhp/element.maxhp)*80)+"px");
 								
-								mapBox.addClass("notcleared");
+							// If kill-based gauge
+							}else{
+								var totalKills = KC3Meta.gauge( element.id );
+								var killsLeft = totalKills - element.kills;
+								if(totalKills){
+									$(".map_hp_txt", mapBox).text( killsLeft+" / "+totalKills+" kills left");
+									$(".map_bar", mapBox).css("width", ((killsLeft/totalKills)*80)+"px");
+								}else{
+									mapBox.addClass("noclearnogauge");
+									$(".map_hp_txt", mapBox).text("Not cleared");
+								}
 							}
+							
+							mapBox.addClass("notcleared");
 						}
-					});
-					
-					$("<div>").addClass("clear").appendTo(".tab_event .map_list");
-					$(".tab_event .map_list .map_box.active").trigger("click");
-				}else{
-					self.showMap();
-				}
+					}
+				});
+				
+				$("<div>").addClass("clear").appendTo(".tab_event .map_list");
+				$(".tab_event .map_list .map_box.active").trigger("click");
 			});
 			
 			// On-click map menus
@@ -329,11 +327,11 @@
 					
 					// Show on node list
 					$(".sortue_edge_"+(index+1), sortieBox).addClass("active");
-					$(".sortue_edge_"+(index+1), sortieBox).html( battle.node );
+					$(".sortue_edge_"+(index+1), sortieBox).html( KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node ) );
 					
 					// HTML elements
 					nodeBox = $(".tab_event .factory .sortie_nodeinfo").clone();
-					$(".node_id", nodeBox).text( battle.node );
+					$(".node_id", nodeBox).text( KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node ) );
 					
 					// Result Icons
 					$(".node_formation img", nodeBox).attr("src", KC3Meta.formationIcon(battleData.api_formation[0]) );
@@ -358,9 +356,11 @@
 					$(".node_eformation img", nodeBox).attr("src", KC3Meta.formationIcon(battleData.api_formation[1]) );
 					$(".node_eformation", nodeBox).attr("title", KC3Meta.formationText(battleData.api_formation[1]) );
 					$.each(battleData.api_ship_ke, function(index, eship){
-						$(".node_eship_"+(index+1)+" img", nodeBox).attr("src", KC3Meta.abyssIcon( eship ) );
-						$(".node_eship_"+(index+1), nodeBox).attr("title", KC3Master.ship( eship ).api_name + KC3Master.ship( eship ).api_yomi );
-						$(".node_eship_"+(index+1), nodeBox).show();
+						if(eship > -1){
+							$(".node_eship_"+(index+1)+" img", nodeBox).attr("src", KC3Meta.abyssIcon( eship ) );
+							$(".node_eship_"+(index+1), nodeBox).attr("title", KC3Master.ship( eship ).api_name + KC3Master.ship( eship ).api_yomi );
+							$(".node_eship_"+(index+1), nodeBox).show();
+						}
 					});
 					
 					// Process Battle
