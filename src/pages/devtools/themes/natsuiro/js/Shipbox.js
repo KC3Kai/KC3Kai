@@ -43,7 +43,7 @@ KC3改 Ship Box for Natsuiro theme
 	Short ship box for combined fleets
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.defineShort = function(){
-		this.hpBarLength = 90;
+		this.hpBarLength = 88;
 		this.showHP();
 		this.showPrediction();
 		
@@ -60,7 +60,7 @@ KC3改 Ship Box for Natsuiro theme
 	Long ship box for single-view fleets
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.defineLong = function(){
-		this.hpBarLength = 120;
+		this.hpBarLength = 118;
 		this.showHP();
 		this.showPrediction();
 		
