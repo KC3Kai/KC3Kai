@@ -364,6 +364,7 @@
 					});
 					
 					// Process Battle
+					PlayerManager.combinedFleet = sortie.combined;
 					thisNode = (new KC3Node()).defineAsBattle();
 					if(typeof battle.data.api_dock_id != "undefined"){
 						thisNode.engage( battleData, sortie.fleetnum );
