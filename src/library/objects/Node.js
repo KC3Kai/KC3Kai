@@ -170,8 +170,8 @@ Used by SortieManager
 
 		if (PlayerManager.combinedFleet === 0) { // single fleet
 			result = DA.analyzeRawBattleJS(battleData); 
-			console.log("Single Fleet");
-			console.log("analysis result", result);
+			// console.log("Single Fleet");
+			// console.log("analysis result", result);
 			
 			// Update enemy
 			for (i = 7; i < 13; i++) {

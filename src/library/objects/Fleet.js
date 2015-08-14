@@ -99,10 +99,10 @@ Contains summary information about a fleet and its 6 ships
 	
 	KC3Fleet.prototype.fighterPower = function(){
 		var self = this;
-		return Array.apply(null, {length: 6})
+		return Math.round(Array.apply(null, {length: 6})
 			.map(Number.call, Number)
 			.map(function(x){return self.ship(x).fighterPower();})
-			.reduce(function(x,y){return x+y;});
+			.reduce(function(x,y){return x+y;}) * 100)/100;
 	};
 	
 	KC3Fleet.prototype.speed = function(){

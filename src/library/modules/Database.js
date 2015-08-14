@@ -204,13 +204,11 @@ Uses Dexie.js third-party plugin on the assets directory
 		},
 		
 		Resource :function(data){
-			console.log("this.con", this.con);
 			data.hq = this.index;
 			this.con.resource.add(data);
 		},
 		
 		Useitem :function(data, stime){
-			console.log("this.con", this.con);
 			data.hq = this.index;
 			this.con.useitem.add(data);
 		},

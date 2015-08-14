@@ -43,7 +43,7 @@ KC3改 Ship Box for Natsuiro theme
 	Short ship box for combined fleets
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.defineShort = function(){
-		this.hpBarLength = 90;
+		this.hpBarLength = 88;
 		this.showHP();
 		this.showPrediction();
 		
@@ -60,7 +60,7 @@ KC3改 Ship Box for Natsuiro theme
 	Long ship box for single-view fleets
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.defineLong = function(){
-		this.hpBarLength = 120;
+		this.hpBarLength = 118;
 		this.showHP();
 		this.showPrediction();
 		
@@ -105,8 +105,12 @@ KC3改 Ship Box for Natsuiro theme
 		// If not being repaired
 		}else{
 			if(hpPercent <= 0.25){
-				$(".ship_hp_bar", this.element).css("background", "#FF0000");
-				if(!this.shipData.didFlee){
+				if(this.shipData.didFlee){
+					// if FCF, mark hp bar as blue
+					$(".ship_hp_bar", this.element).css("background", "#ace");
+				}else{
+					// mark hp bar and container box as red if taiha
+					$(".ship_hp_bar", this.element).css("background", "#FF0000");
 					this.element.css("background", "rgba(255,0,0,0.4)");
 				}
 			} else if(hpPercent <= 0.50){
