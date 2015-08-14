@@ -142,7 +142,9 @@
 	"LearnMore" : "Tìm hiểu thêm",
 	"Saved" : "Đã lưu!",
 	
+	"UnwantedExit" : "Ahhh! You are leaving your girls! Are you sure you want to leave them?",
 	"APIWaitToggle" : "Please load KC3Kai panel first",
+	"APIConcealExpl" : "Hover to show your API Link",
 
 	"SpeedFast" : "Nhanh",
 	"SpeedSlow" : "Chậm",
@@ -161,6 +163,9 @@
 
 	"PredictionStampSortie" : "Chìm",
 	"PredictionStampPvP" : "Đánh Bại",
+	"PredictionStampEscort" : "Escort",
+	"PredictionStampMVPUseful" : "MVP",
+	"PredictionStampMVPUseless" : "kek",
 	
 	"LevelText" : "Cấp",
 	"LevelShort" : "Lv.",
