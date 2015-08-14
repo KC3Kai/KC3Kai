@@ -343,7 +343,7 @@
 				FleetSummary = {
 					lv: MainFleet.totalLevel() + EscortFleet.totalLevel(),
 					elos: Math.round( (MainFleet.eLoS()+EscortFleet.eLoS()) * 100) / 100,
-					air: MainFleet.fighterPower() + EscortFleet.fighterPower(),
+					air: Math.round( (MainFleet.fighterPower() + EscortFleet.fighterPower())* 100) / 100,
 					speed:
 						(MainFleet.fastFleet && EscortFleet.fastFleet)
 						? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow")
@@ -432,6 +432,10 @@
 					// If kill-based gauge
 					}else{
 						var totalKills = KC3Meta.gauge( thisMapId );
+						console.log("wm", KC3SortieManager.map_world, KC3SortieManager.map_num);
+						console.log("thisMapId", thisMapId);
+						console.log("KC3Meta", KC3Meta._gauges);
+						console.log("totalKills", totalKills);
 						var killsLeft = totalKills - thisMap.kills;
 						if(totalKills){
 							$(".module.activity .map_hp").text( killsLeft+" / "+totalKills+" kills");
