@@ -9,6 +9,7 @@
 		squadNames: {},
 		_items: {},
 		_holders: {},
+		_slotNums: {},
 		
 		/* INIT
 		Prepares all data needed
@@ -86,6 +87,7 @@
 		checkShipSlotForItemHolder :function(slot, ThisShip){
 			if(ThisShip.items[slot] > -1){
 				this._holders["s"+ThisShip.items[slot]] = ThisShip;
+				this._slotNums["s"+ThisShip.items[slot]] = slot;
 			}
 		},
 		
@@ -134,7 +136,7 @@
 				this.slotitem_stat(ItemElem, ThisSlotitem.stats, "ht");
 				this.slotitem_stat(ItemElem, ThisSlotitem.stats, "rn");
 				
-				var PlaneCtr, ThisPlane, PlaneBox, rankLines;
+				var PlaneCtr, ThisPlane, PlaneBox, rankLines, ThisCapacity;
 				for(PlaneCtr in ThisSlotitem.instances){
 					ThisPlane = ThisSlotitem.instances[PlaneCtr];
 					
@@ -149,12 +151,6 @@
 						$(".instance_chev img", PlaneBox).hide();
 					}
 					
-					rankLines = "";
-					for(var rankCtr=0; rankCtr<ThisPlane.ace; rankCtr++){
-						rankLines+="<div class=\"instance_rankline\"></div>";
-					}
-					$(".instance_rank", PlaneBox).html( rankLines );
-					
 					$(".instance_name input", PlaneBox).attr("data-gearId", ThisPlane.itemId);
 					
 					if(typeof this.squadNames["p"+ThisPlane.itemId] != "undefined"){
@@ -165,10 +161,17 @@
 						$(".holder_pic img", PlaneBox).attr("src", KC3Meta.shipIcon(ThisPlane.MyHolder().masterId) );
 						$(".holder_name", PlaneBox).text( ThisPlane.MyHolder().name() );
 						$(".holder_level", PlaneBox).text("Lv."+ThisPlane.MyHolder().level);
+						
+						// Compute for veteranized fighter power
+						ThisCapacity = ThisPlane.MyHolder().slots[ this._slotNums["s"+ThisPlane.itemId] ]
+						$(".instance_aaval", PlaneBox).addClass("activeSquad");
+						$(".instance_aaval", PlaneBox).text( Math.floor(ThisPlane.fighterPower(ThisCapacity, true)) );
 					}else{
 						$(".holder_pic", PlaneBox).hide();
 						$(".holder_name", PlaneBox).hide();
 						$(".holder_level", PlaneBox).hide();
+						$(".instance_aaval", PlaneBox).addClass("reserveSquad");
+						$(".instance_aaval", PlaneBox).text( ThisSlotitem.stats.aa );
 					}
 				}
 				

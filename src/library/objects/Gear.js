@@ -36,20 +36,25 @@ KC3改 Equipment Object
 	KC3Gear.prototype.master = function(){ return KC3Master.slotitem( this.masterId ); };
 	KC3Gear.prototype.name = function(){ return KC3Meta.gearName( this.master().api_name ); };
 	
-	KC3Gear.prototype.fighterPower = function(capacity){
+	KC3Gear.prototype.fighterPower = function(capacity, applyVeterancy){
 		// Empty item means no fighter power
 		if(this.itemId===0){ return 0; }
+		
+		// Check if veterancy request is defined
+		if(typeof applyVeterancy == "undefined"){ applyVeterancy = false; }
 		
 		// Check if this object is a fighter plane
 		// if( [6,7,8,11].indexOf( this.master().api_type[2] ) > -1){
 		if( [6,7,8,11].indexOf( this.master().api_type[3] ) > -1){
 			// Formula for each equipment
 			var traditionalFP = this.master().api_tyku * Math.sqrt(capacity);
-			return traditionalFP;
 			
-			// var veteranPower = (this.ace>0?8:0) * Math.sqrt( this.master().api_tyku )
-			// console.log(this.ace, traditionalFP, veteranPower);
-			// return Math.floor(traditionalFP + veteranPower);
+			if(applyVeterancy){
+				var veteranPower = (this.ace==7?8:0) * Math.sqrt( this.master().api_tyku )
+				return Math.floor(traditionalFP + veteranPower);
+			}
+			
+			return traditionalFP;
 		}
 		
 		// Equipment did not return on plane check, no fighter power

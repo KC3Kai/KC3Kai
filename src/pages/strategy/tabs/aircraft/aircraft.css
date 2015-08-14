@@ -97,7 +97,7 @@
 }
 
 .tab_aircraft .slotitem .instance {
-	width:410px;
+	width:400px;
 	height:26px;
 	line-height:20px;
 	margin:0px 0px 3px 0px;
@@ -121,27 +121,40 @@
 	vertical-align:top;
 }
 .tab_aircraft .slotitem .instance_chev {
-	width:35px;
+	width:29px;
 	margin:0px 5px 0px 0px;
 	/*background:#cfc;*/
+	overflow:hidden;
 }
 .tab_aircraft .slotitem .instance_chev img {
 	width:35px;
 	height:20px;
 	vertical-align:top;
+	position:relative;
+	margin:0px 0px 0px -3px;
 }
-.tab_aircraft .slotitem .instance_rank {
-	width:35px;
-	line-height:18px;
+.tab_aircraft .slotitem .instance_aaicon {
+	width:16px;
+	height:16px;
+	margin:2px 2px 0px 0px;
+	/*background:#fcc;*/
+}
+.tab_aircraft .slotitem .instance_aaicon img {
+	width:16px;
+	height:16px;
+	vertical-align:top;
+}
+.tab_aircraft .slotitem .instance_aaval {
+	width:22px;
 	margin:0px 2px 0px 0px;
-	/*color:#00CCFF;*/
+	/*background:#fcc;*/
+	font-size:12px;
 }
-.tab_aircraft .slotitem .instance_rankline {
-	width:0px;
-	height:12px;
-	float:left;
-	margin:4px 4px 0px 0px;
-	border-left:1px solid #ccc;
+.tab_aircraft .slotitem .instance_aaval.activeSquad {
+	color:#00f;
+}
+.tab_aircraft .slotitem .instance_aaval.reserveSquad {
+	color:#aaa;
 }
 .tab_aircraft .slotitem .instance_name {
 	width:130px;
