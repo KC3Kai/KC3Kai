@@ -53,7 +53,12 @@
 			if(typeof extendEnglish=="undefined"){ extendEnglish=false; }
 			
 			// Japanese special case where ships and items sources are already in JP
-			if(ConfigManager.language=="jp" && (filename=="ships" || filename=="items")){ extendEnglish=false; }
+			if(
+				(["jp", "tcn"].indexOf(ConfigManager.language) > -1)
+				&& (filename=="ships" || filename=="items")
+			){
+				extendEnglish=false;
+			}
 			
 			// console.log(filename, "extendEnglish", extendEnglish);
 			

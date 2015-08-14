@@ -32,6 +32,9 @@
 			// Compile ships on Index
 			var thisType, thisSlotitem, thisGearInstance;
 			
+			function GetMyHolder(){ return self._holders["s"+this.itemId]; }
+			function NoHolder(){ return false; }
+			
 			for(ctr in KC3GearManager.list){
 				ThisItem = KC3GearManager.list[ctr];
 				MasterItem = ThisItem.master();
@@ -40,9 +43,9 @@
 				
 				// Add holder to the item object temporarily via function return
 				if(typeof this._holders["s"+ThisItem.itemId] != "undefined"){
-					ThisItem.MyHolder = function(){ return self._holders["s"+this.itemId]; };
+					ThisItem.MyHolder = GetMyHolder;
 				}else{
-					ThisItem.MyHolder = function(){ return false; };
+					ThisItem.MyHolder = NoHolder;
 				}
 				
 				// Check if slotitem_type is filled
