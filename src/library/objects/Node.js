@@ -37,6 +37,7 @@ Used by SortieManager
 		this.enemySunk = [false, false, false, false, false, false];
 		this.enemyHP = [0,0,0,0,0,0];
 		this.originalHPs = [0,0,0,0,0,0,0,0,0,0,0,0,0];
+		this.allyNoDamage = true;
 		return this;
 	};
 	
@@ -103,27 +104,37 @@ Used by SortieManager
 		
 		this.detection = KC3Meta.detection( battleData.api_search[0] );
 		this.engagement = KC3Meta.engagement( battleData.api_formation[2] );
-		this.fcontact = (battleData.api_kouku.api_stage1.api_touch_plane[0] > -1)?"YES":"NO";
-		this.econtact = (battleData.api_kouku.api_stage1.api_touch_plane[1] > -1)?"YES":"NO";
 		
-		this.airbattle = KC3Meta.airbattle( battleData.api_kouku.api_stage1.api_disp_seiku );
+		var
+			planePhase  = battleData.api_kouku.api_stage1 || {
+				api_touch_plane:[-1,-1],
+				api_f_count    :0,
+				api_f_lostcount:0,
+				api_e_count    :0,
+				api_e_lostcount:0,
+			},
+			attackPhase = battleData.api_kouku.api_stage2;
+		this.fcontact = (planePhase.api_touch_plane[0] > -1)?"YES":"NO";
+		this.econtact = (planePhase.api_touch_plane[1] > -1)?"YES":"NO";
+		
+		this.airbattle = KC3Meta.airbattle( planePhase.api_disp_seiku || undefined );
 		
 		// Fighter phase 1
 		this.planeFighters = {
 			player:[
-				battleData.api_kouku.api_stage1.api_f_count,
-				battleData.api_kouku.api_stage1.api_f_lostcount
+				planePhase.api_f_count,
+				planePhase.api_f_lostcount
 			],
 			abyssal:[
-				battleData.api_kouku.api_stage1.api_e_count,
-				battleData.api_kouku.api_stage1.api_e_lostcount
+				planePhase.api_e_count,
+				planePhase.api_e_lostcount
 			]
 		};
 		
 		if(
 			this.planeFighters.player[0]===0
 			&& this.planeFighters.abyssal[0]===0
-			&& battleData.api_kouku.api_stage2===null
+			&& attackPhase===null
 		){
 			this.airbattle = ["None", "", "No Air Battle"];
 		}
@@ -177,6 +188,7 @@ Used by SortieManager
 			for(i = 0; i < shipNum; i++) {
 				ship = fleet.ship(i);
 				ship.afterHp[0] = result[i+1].currentHp;
+				this.allyNoDamage &= ship.hp[0]==ship.afterHp[0];
 				ship.afterHp[1] = ship.hp[1];
 			}
 		} else {
@@ -194,9 +206,7 @@ Used by SortieManager
 				var enemy = result.enemy[i];
 				if (enemy !== null) {
 					this.enemyHP[i-1] = enemy;
-					if (enemy.currentHp <= 0) {
-						this.enemySunk[i-1] = true;
-					}
+					this.enemySunk[i-1] = (enemy.currentHp <= 0);
 				}
 			}
 
@@ -207,6 +217,7 @@ Used by SortieManager
 			for(i = 0; i < shipNum; i++) {
 				ship = fleet.ship(i);
 				ship.afterHp[0] = mainFleet[i+1].currentHp;
+				this.allyNoDamage &= ship.hp[0]==ship.afterHp[0];
 				ship.afterHp[1] = ship.hp[1];
 			}
 
@@ -217,6 +228,7 @@ Used by SortieManager
 			for(i = 0; i < shipNum; i++) {
 				ship = fleet.ship(i);
 				ship.afterHp[0] = escortFleet[i+1].currentHp;
+				this.allyNoDamage &= ship.hp[0]==ship.afterHp[0];
 				ship.afterHp[1] = ship.hp[1];
 			}
 		}
@@ -253,45 +265,31 @@ Used by SortieManager
 		var ship;
 		
 		// SINGLE FLEET
-		if (PlayerManager.combinedFleet === 0) {	
+		if (!PlayerManager.combinedFleet) {
 			result = DA.analyzeRawNightBattleJS( nightData ); 
-			for (i = 7; i < 13; i++) {
-				this.enemyHP[i-7] = result[i];
-				if ((result[i] || {currentHp:0}).currentHp <= 0) {
-					this.enemySunk[i-7] = true;
-				}
-			}
-			
 			var fleetId = parseInt(fleetSent) || KC3SortieManager.fleetSent;
 			fleet = PlayerManager.fleets[fleetId - 1];
-			shipNum = fleet.countShips();
-			for(i = 0; i < shipNum; i++) {
-				ship = fleet.ship(i);
-				ship.hp = [ship.afterHp[0], ship.afterHp[1]];
-				ship.morale = Math.max(0,ship.morale+(fleetSent ? 1 : -3 ));
-				ship.afterHp[0] = result[i+1].currentHp;
-				ship.afterHp[1] = ship.hp[1];
-			}
-			
 		// COMBINED FLEET
 		} else {
 			result = DA.analyzeRawNightBattleCombinedJS( nightData ); 
-			for (i = 7; i < 13; i++) {
-				this.enemyHP[i-7] = result[i];
-				if ((result[i] || {currentHp:0}).currentHp <= 0) {
-					this.enemySunk[i-7] = true;
-				}
-			}
-			
 			fleet = PlayerManager.fleets[1];
-			shipNum = fleet.countShips();
-			for(i = 0; i < shipNum; i++) {
-				ship = fleet.ship(i);
-				ship.hp = [ship.afterHp[0], ship.afterHp[1]];
-				//ship.morale = Math.max(0,ship.morale+(fleetSent ? 1 : -3 ));
-				ship.afterHp[0] = result[i+1].currentHp;
-				ship.afterHp[1] = ship.hp[1];
+		}
+		
+		for (i = 7; i < 13; i++) {
+			this.enemyHP[i-7] = result[i];
+			if ((result[i] || {currentHp:0}).currentHp <= 0) {
+				this.enemySunk[i-7] = true;
 			}
+		}
+		
+		shipNum = fleet.countShips();
+		for(i = 0; i < shipNum; i++) {
+			ship = fleet.ship(i);
+			ship.hp = [ship.afterHp[0], ship.afterHp[1]];
+			ship.morale = Math.max(0,Math.min(100,ship.morale+(fleetSent ? 1 : -3 )));
+			ship.afterHp[0] = result[i+1].currentHp;
+			this.allyNoDamage &= ship.hp[0]==ship.afterHp[0];
+			ship.afterHp[1] = ship.hp[1];
 		}
 		
 	};
@@ -302,6 +300,9 @@ Used by SortieManager
 	
 	KC3Node.prototype.results = function( resultData ){
 		this.rating = resultData.api_win_rank;
+		if(this.allyNoDamage && this.rating === "S")
+			this.rating = "SS";
+		console.log("This battle, have damaged the ally fleet",!this.allyNoDamage);
 		
 		if(typeof resultData.api_get_ship != "undefined"){
 			this.drop = resultData.api_get_ship.api_ship_id;
