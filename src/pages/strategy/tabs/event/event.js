@@ -56,16 +56,25 @@
 								$(".map_hp_txt", mapBox).text("Cleared!");
 								mapBox.addClass("cleared");
 							}else{
-								mapBox.addClass("notcleared");
-								var totalKills = KC3Meta.gauge(element.id);
-								var killsLeft = totalKills - element.kills;
-								if(totalKills){
-									$(".map_hp_txt", mapBox).text( killsLeft+" / "+totalKills+" kills left");
-									$(".map_bar", mapBox).css("width", ((killsLeft/totalKills)*80)+"px");
+								// If HP-based gauge
+								if(typeof element.maxhp != "undefined"){
+									$(".map_hp_txt", mapBox).text(  element.curhp + " / " + element.maxhp );
+									$(".map_bar", mapBox).css("width", ((element.curhp/element.maxhp)*80)+"px");
+									
+								// If kill-based gauge
 								}else{
-									mapBox.addClass("noclearnogauge");
-									$(".map_hp_txt", mapBox).text("Not cleared");
+									var totalKills = KC3Meta.gauge( element.id );
+									var killsLeft = totalKills - element.kills;
+									if(totalKills){
+										$(".map_hp_txt", mapBox).text( killsLeft+" / "+totalKills+" kills left");
+										$(".map_bar", mapBox).css("width", ((killsLeft/totalKills)*80)+"px");
+									}else{
+										mapBox.addClass("noclearnogauge");
+										$(".map_hp_txt", mapBox).text("Not cleared");
+									}
 								}
+								
+								mapBox.addClass("notcleared");
 							}
 						}
 					});
