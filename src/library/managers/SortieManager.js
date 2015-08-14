@@ -7,7 +7,6 @@ Xxxxxxx
 	"use strict";
 	
 	window.KC3SortieManager = {
-		difficulty: 0,
 		onSortie: 0,
 		fleetSent: 1,
 		map_world: 0,
@@ -21,19 +20,16 @@ Xxxxxxx
 		onEnemiesAvailable: function(node){},
 		fled: [],
 		
-		setDifficulty :function(raw){
-			this.difficulty = raw; // 1 easy, 2 medium, 3 hard
-		},
-		
 		startSortie :function(world, mapnum, fleetNum, stime){
 			// If still on sortie, end previous one
 			if(this.onSortie > 0){ this.endSortie(); }
 			
-			if(world < 10){ this.difficulty = 0; }
+			if(world < 10){ this.map_difficulty = 0; }
 			
 			this.fleetSent = parseInt(fleetNum);
 			this.map_world = world;
 			this.map_num = mapnum;
+			this.map_difficulty = JSON.parse(localStorage.maps)["m"+world+mapnum].difficulty;
 			this.nextNodeCount = 0;
 			this.hqExpGained = 0;
 			this.nodes = [];
@@ -51,7 +47,7 @@ Xxxxxxx
 			// Save on database and remember current sortieId
 			var self = this;
 			KC3Database.Sortie({
-				diff: this.difficulty,
+				diff: this.map_difficulty,
 				world: world,
 				mapnum: mapnum,
 				fleetnum: parseInt(fleetNum, 10),
