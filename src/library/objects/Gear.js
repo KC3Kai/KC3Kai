@@ -50,7 +50,7 @@ KC3改 Equipment Object
 			var traditionalFP = this.master().api_tyku * Math.sqrt(capacity);
 			
 			if(applyVeterancy){
-				var veteranPower = (this.ace==7?8:0) * Math.sqrt( this.master().api_tyku )
+				var veteranPower = (this.ace==7?8:0) * Math.sqrt( this.master().api_tyku );
 				return Math.floor(traditionalFP + veteranPower);
 			}
 			

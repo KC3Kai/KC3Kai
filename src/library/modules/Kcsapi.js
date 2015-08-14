@@ -427,7 +427,7 @@ Previously known as "Reactor"
 		/* Select difficulty
 		-------------------------------------------------------*/
 		"api_req_map/select_eventmap_rank":function(params, response, headers){
-			KC3SortieManager.setDifficulty( response.api_data.api_rank );
+			KC3SortieManager.setDifficulty( params.api_rank );
 		},
 		
 		/* Start Sortie

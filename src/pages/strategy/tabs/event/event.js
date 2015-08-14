@@ -230,7 +230,7 @@
 				$(".sortie_id", sortieBox).html( sortie.id );
 				$(".sortie_date", sortieBox).html( new Date(sortie.time*1000).format("mmm d") );
 				$(".sortie_date", sortieBox).attr("title", new Date(sortie.time*1000).format("mmm d, yyyy hh:MM:ss") );
-				$(".sortie_map", sortieBox).html( sortie.world + "-" + sortie.mapnum );
+				$(".sortie_map", sortieBox).html( "E-" + sortie.mapnum );
 				
 				// Show main fleet faces
 				mainFleet = sortie["fleet"+sortie.fleetnum];
@@ -300,12 +300,16 @@
 					$(".rfleet_boss", sortieBox).addClass("disabled");
 				}
 				
+				console.log("sortie.battles", sortie.battles);
+				
 				// For each battle
 				$.each(sortie.battles, function(index, battle){
 					var battleData, isDayBattle = true;
 					
 					// Determine if day or night battle node
 					if(typeof battle.data.api_dock_id != "undefined"){
+						battleData = battle.data;
+					}else if(typeof battle.data.api_deck_id != "undefined"){
 						battleData = battle.data;
 					}else if(typeof battle.yasen.api_deck_id != "undefined"){
 						battleData = battle.yasen;
@@ -354,6 +358,8 @@
 					thisNode = (new KC3Node()).defineAsBattle();
 					if(typeof battle.data.api_dock_id != "undefined"){
 						thisNode.engage( battleData, sortie.fleetnum );
+					}else if(typeof battle.data.api_deck_id != "undefined"){
+						thisNode.engage( battleData, sortie.fleetnum );
 					}else if(typeof battle.yasen.api_deck_id != "undefined"){
 						thisNode.engageNight( battleData, sortie.fleetnum );
 					}
@@ -394,7 +400,6 @@
 					
 					// Add box to UI
 					$(".sortie_nodes", sortieBox).append( nodeBox );
-					
 				});
 				$(".sortie_nodes", sortieBox).append( $("<div>").addClass("clear") );
 				

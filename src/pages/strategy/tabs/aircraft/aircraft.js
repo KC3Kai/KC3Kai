@@ -163,7 +163,7 @@
 						$(".holder_level", PlaneBox).text("Lv."+ThisPlane.MyHolder().level);
 						
 						// Compute for veteranized fighter power
-						ThisCapacity = ThisPlane.MyHolder().slots[ this._slotNums["s"+ThisPlane.itemId] ]
+						ThisCapacity = ThisPlane.MyHolder().slots[ this._slotNums["s"+ThisPlane.itemId] ];
 						$(".instance_aaval", PlaneBox).addClass("activeSquad");
 						$(".instance_aaval", PlaneBox).text( Math.floor(ThisPlane.fighterPower(ThisCapacity, true)) );
 					}else{
