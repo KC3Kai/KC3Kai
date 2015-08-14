@@ -606,7 +606,7 @@
         "name": "First Exercise!",
         "desc": "Challenge another fleet in practice mode"
     },
-     "303": {
+    "303": {
         "code": "C2",
         "name": "Daily Exercises 1",
         "desc": "Challenge 3 other fleets in practice mode",
@@ -933,12 +933,37 @@
     "158": {
         "code": "SN04",
         "name": "Assign the Murata Squadron Torpedo Bomber to Akagi",
-        "desc": "Set Akagi as the Secretary Ship and equip her with Type 97 Torpedo Bomber (Murata Squadron). ."
+        "desc": "Set Akagi as the Secretary Ship and equip her with Type 97 Torpedo Bomber (Murata Squadron)."
     },
     "282": {
         "code": "SN05",
         "name": "Snatch Away the Air Superiority in the Solomon Sea Area",
         "desc": "Clear the Summer 2015 Event Map 4."
+    },
+    "159": {
+        "code": "SN06",
+        "name": "Reassign the Murata Squadron Torpedo Bomber to Shoukaku",
+        "desc": "Set Shoukaku as the Secretary Ship and equip her with Type 97 Torpedo Bomber (Murata Squadron). "
+    },
+    "310": {
+        "code": "SN07",
+        "name": "Naval Practice in Preparation for Operation FS",
+        "desc": "Get 4 victories in practice mode"
+    },
+    "160": {
+        "code": "SN09",
+        "name": "Organize the Third Fleet of the Carrier Task Force",
+        "desc": "Create a Carrier Task Force (Combined Fleet) containing Shoukaku, Zuikaku and Zuihou in the first fleet."
+    },
+    "284": {
+        "code": "SN10",
+        "name": "Establish a Bridgehead to Operation FS",
+        "desc": "Sink 10 Abyssal CV(L)"
+    }
+    "283": {
+        "code": "SN11",
+        "name": "Eastern Area Dispatch Fleet, Sortie!",
+        "desc": "Clear the Summer 2015 Event Map 5"
     }
     
 }
