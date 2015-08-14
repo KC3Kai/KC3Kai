@@ -29,7 +29,7 @@ Xxxxxxx
 			this.fleetSent = parseInt(fleetNum);
 			this.map_world = world;
 			this.map_num = mapnum;
-			this.map_difficulty = JSON.parse(localStorage.maps)["m"+map_world+map_num].difficulty;
+			this.map_difficulty = JSON.parse(localStorage.maps)["m"+world+mapnum].difficulty;
 			this.nextNodeCount = 0;
 			this.hqExpGained = 0;
 			this.nodes = [];
