@@ -39,6 +39,7 @@ Previously known as "Reactor"
 			KC3ShipManager.clear();
 			KC3ShipManager.set(response.api_data.api_ship);
 			
+			KC3ShipManager.max = response.api_data.api_basic.api_max_chara;
 			KC3GearManager.max = response.api_data.api_basic.api_max_slotitem;
 			
 			PlayerManager.setFleets( response.api_data.api_deck_port );
@@ -853,7 +854,12 @@ Previously known as "Reactor"
 	On a result screen, increment tracked quests that progressed
 	-------------------------------------------------------*/
 	function resultScreenQuestFulfillment(params, response, headers){
-		var getRank = function(r){ return ['E','D','C','B','A','S','SS'].indexOf(r); };
+		var
+			getRank = function(r){ return ['E','D','C','B','A','S','SS'].indexOf(r); },
+			qLog = function(r){
+				var q = KC3QuestManager.get(r);
+				console.log("Quest ",r," progress ["+(q.tracking ? q.tracking[0] + '/' + q.tracking[1] : '-----')+"] ",q.status == 2);
+			};
 		
 		// Vague quest that clears with no rank requirement
 		if(response.api_data.api_destsf)
