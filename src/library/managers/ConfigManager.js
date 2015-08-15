@@ -23,7 +23,7 @@ Retreives when needed to apply on components
 				info_drop 			: true,
 				info_craft 			: true,
 				info_compass 		: true,
-				info_battle 		: true,
+				info_battle 		: false,
 				info_btstamp 		: false,
 				info_boss 			: true,
 				info_troll 			: false, // hidden and false by default. { useful for NightBattle "support" }
