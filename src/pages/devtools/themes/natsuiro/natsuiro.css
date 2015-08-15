@@ -942,6 +942,7 @@
 	float:left;
 	font-size:11px;
 	color:#ffffff;
+	white-space:nowrap;
 }
 .module.fleet .lship .ship_hp_text {
 	width:50px;
