@@ -211,6 +211,7 @@
 			.removeClass("nc_battle")
 			.removeClass("nc_resource")
 			.removeClass("nc_maelstrom")
+			.removeClass("nc_select")
 			.removeClass("nc_avoid");
 		$(".module.activity .node_types").hide();
 	}
@@ -472,6 +473,10 @@
 			$(".module.activity .abyss_ship").hide();
 			$(".module.activity .abyss_hp").hide();
 			
+			$(".module.activity .node_type_text").removeClass("dud");
+			$(".module.activity .node_type_text").removeClass("select");
+			
+			console.log("natsuiro process node", thisNode);
 			switch(thisNode.type){
 				// Battle node
 				case "battle":
@@ -509,10 +514,21 @@
 					$(".module.activity .node_type_resource").show();
 					break;
 					
+				// Selection node
+				case "select":
+					console.log("natsuiro should show selection node");
+					$(".module.activity .sortie_node_"+numNodes).addClass("nc_select");
+					$(".module.activity .node_type_text").text("Select: "+
+						thisNode.choices[0]+" or "+thisNode.choices[1]);
+					$(".module.activity .node_type_text").addClass("select");
+					$(".module.activity .node_type_text").show();
+					break;
+					
 				// Battle avoided node
 				default:
 					$(".module.activity .sortie_node_"+numNodes).addClass("nc_avoid");
 					$(".module.activity .node_type_text").text("~Battle Avoided~");
+					$(".module.activity .node_type_text").addClass("dud");
 					$(".module.activity .node_type_text").show();
 					break;
 			}

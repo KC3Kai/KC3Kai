@@ -80,6 +80,23 @@ Used by SortieManager
 		return this;
 	};
 	
+	KC3Node.prototype.defineAsSelector = function( nodeData ){
+		console.log("defining as selector", nodeData);
+		this.type = "select";
+		this.choices = [
+			KC3Meta.nodeLetter(
+				KC3SortieManager.map_world,
+				KC3SortieManager.map_num,
+				nodeData.api_select_route.api_select_cells[0] ),
+			KC3Meta.nodeLetter(
+				KC3SortieManager.map_world,
+				KC3SortieManager.map_num,
+				nodeData.api_select_route.api_select_cells[1] )
+		];
+		console.log("choices", this.choices);
+		return this;
+	};
+	
 	KC3Node.prototype.defineAsDud = function( nodeData ){
 		this.type = "";
 		

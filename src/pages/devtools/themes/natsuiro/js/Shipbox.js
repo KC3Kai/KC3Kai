@@ -23,10 +23,6 @@ KC3改 Ship Box for Natsuiro theme
 		
 		this.showMorale();
 		
-		if( this.shipData.didFlee ){
-			this.element.css("background", "rgba(255,200,0,0.4)");
-		}
-		
 		// Item on 5th slot
 		var myExItem = this.shipData.exItem();
 		if( myExItem && (myExItem.masterId > 0)){
@@ -104,21 +100,24 @@ KC3改 Ship Box for Natsuiro theme
 			this.element.css("background-color", "rgba(100,255,100,0.3)");
 		// If not being repaired
 		}else{
-			if(hpPercent <= 0.25){
-				if(this.shipData.didFlee){
-					// if FCF, mark hp bar as blue
-					$(".ship_hp_bar", this.element).css("background", "#ace");
-				}else{
+			console.log("Updating HP", this.shipData.name(), this.shipData.didFlee);
+			if(this.shipData.didFlee){
+				console.log( this.shipData.name(), "fled, setting backgrounds to white");
+				// if FCF, mark hp bar as blue
+				$(".ship_hp_bar", this.element).css("background", "#fff");
+				this.element.css("background", "rgba(255,255,255,0.4)");
+			}else{
+				if(hpPercent <= 0.25){
 					// mark hp bar and container box as red if taiha
 					$(".ship_hp_bar", this.element).css("background", "#FF0000");
 					this.element.css("background", "rgba(255,0,0,0.4)");
+				} else if(hpPercent <= 0.50){
+					$(".ship_hp_bar", this.element).css("background", "#FF9900");
+				} else if(hpPercent <= 0.75){
+					$(".ship_hp_bar", this.element).css("background", "#FFFF00");
+				} else{
+					$(".ship_hp_bar", this.element).css("background", "#00FF00");
 				}
-			} else if(hpPercent <= 0.50){
-				$(".ship_hp_bar", this.element).css("background", "#FF9900");
-			} else if(hpPercent <= 0.75){
-				$(".ship_hp_bar", this.element).css("background", "#FFFF00");
-			} else{
-				$(".ship_hp_bar", this.element).css("background", "#00FF00");
 			}
 		}
 	};

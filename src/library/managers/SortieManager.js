@@ -18,7 +18,8 @@ Xxxxxxx
 		boss: {},
 		onBossAvailable: function(){},
 		onEnemiesAvailable: function(node){},
-		fled: [],
+		fcfCheck: [],
+		escapedList: [],
 		
 		startSortie :function(world, mapnum, fleetNum, stime){
 			// If still on sortie, end previous one
@@ -65,32 +66,22 @@ Xxxxxxx
 		},
 		
 		getSupportingFleet :function(bossSupport){
-			var supportFormula;
-			/** Developer note:
-				E = X > 100, event flag
-					if E=true, X -= 100
-				X = Expedition ID
-				M,N = (X / 8),((X-1) % 8)
-					M : multiple  of 8,
-					N : remainder of 8.
-				Fulfilling condition: (M == 5 || E) && (N == 0 + bossSupport)
-			**/
-			supportFormula = function(expedNum,isBoss){
+			function supportFormula(expedNum, isBoss){
+				console.log("checking support", expedNum, "isboss", isBoss);
 				var e,w,n;
-				e = (expedNum > 100);
-				if(e) expedNum -= 100;
-				w = (expedNum-1 / 8)+1;
-				n = (expedNum-1) % 8;
+				e = (expedNum > 100); console.log(1);
+				if(e) expedNum -= 100; console.log(2);
+				w = (expedNum-1 / 8)+1; console.log(3);
+				n = (expedNum-1) % 8; console.log(4);
 				return (w == 5 || e) && (n == 0 + isBoss);
-			};
-			return this.checkIfFleetIsSupporting(supportFormula,bossSupport);
-		},
-		
-		checkIfFleetIsSupporting :function(supportFunc,bossSupport){
+			}
+			
 			for(var i=2;i<=4;i++)
 				if(PlayerManager.fleets[i-1].active){
 					var fleetExpedition = PlayerManager.fleets[i-1].mission[1];
-					return supportFunc(fleetExpedition,bossSupport)?i:0;
+					if(supportFormula(fleetExpedition, bossSupport)!==0){
+						return i;
+					}
 				}
 			return 0;
 		},
@@ -123,14 +114,20 @@ Xxxxxxx
 		
 		advanceNode :function( nodeData, UTCTime ){
 			var thisNode;
+			console.log("nodeData", nodeData);
 			
+			// Selection node
+			// api_event_id = 6
+			if (typeof nodeData.api_select_route != "undefined") {
+				console.log("nodeData.api_select_route found, defining as selector");
+				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsSelector(nodeData);
 			//  Battle Node
 			// api_event_kind = 1 (day battle)
 			// api_event_kind = 2 (start at night battle)
 			// api_event_kind = 4 (aerial exchange)
 			// api_event_id = 4 (normal battle)
 			// api_event_id = 5 (boss)
-			if((nodeData.api_event_kind == 1) || (nodeData.api_event_kind == 2) || (nodeData.api_event_kind == 4)) {
+			}else if((nodeData.api_event_kind == 1) || (nodeData.api_event_kind == 2) || (nodeData.api_event_kind == 4)) {
 				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsBattle(nodeData);
 			// Resource Node
 			// api_event_kind = 0
@@ -147,8 +144,7 @@ Xxxxxxx
 				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsMaelstrom(nodeData);
 			// Empty Node 
 			// api_event_kind = 0 
-			// api_event_id = 6
-			}else{
+			} else {
 				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsDud(nodeData);
 			}
 			
@@ -180,12 +176,43 @@ Xxxxxxx
 		},
 		
 		checkFCF :function( escapeData ){
+			console.log("checking FCF");
 			if ((typeof escapeData !== "undefined") && (escapeData !== null)) {
-				KC3ShipManager.get( escapeData.api_escape_idx[0] ).didFlee = true;
-				KC3ShipManager.get( escapeData.api_tow_idx[0] ).didFlee = true;
-				this.fled.push( escapeData.api_escape_idx[0] );
-				this.fled.push( escapeData.api_tow_idx[0] );
+				console.log("FCF triggered");
+				
+				var taihadIndex = escapeData.api_escape_idx[0];
+				var taihadShip;
+				var escortIndex = escapeData.api_tow_idx[0];
+				var escortShip;
+				
+				console.log("fcf fleet indexes", taihadIndex, escortIndex);
+				
+				if(taihadIndex < 7){
+					taihadShip = PlayerManager.fleets[0].ship(taihadIndex-1).rosterId;
+				}else{
+					taihadShip = PlayerManager.fleets[1].ship(taihadIndex-7).rosterId;
+				}
+				
+				if(escortIndex < 7){
+					escortShip = PlayerManager.fleets[0].ship(escortIndex-1).rosterId;
+				}else{
+					escortShip = PlayerManager.fleets[1].ship(escortIndex-7).rosterId;
+				}
+				
+				this.fcfCheck = [taihadShip, escortShip];
+				
+				console.log("has set fcfCheck to", this.fcfCheck);
 			}
+		},
+		
+		sendFCFHome :function(){
+			console.log("setting escape flag for fcfCheck", this.fcfCheck);
+			KC3ShipManager.get( this.fcfCheck[0] ).didFlee = true;
+			KC3ShipManager.get( this.fcfCheck[1] ).didFlee = true;
+			this.fcfCheck = [];
+			this.escapedList.push( this.fcfCheck[0] );
+			this.escapedList.push( this.fcfCheck[1] );
+			console.log( "new escapedList", this.escapedList );
 		},
 		
 		endSortie :function(){
@@ -204,9 +231,11 @@ Xxxxxxx
 				formation: -1,
 				ships: [ -1, -1, -1, -1, -1, -1 ]
 			};
-			for(var ctr in this.fled){
-				KC3ShipManager.get( this.fled[ctr] ).didFlee = false;
+			for(var ectr in this.escapedList){
+				KC3ShipManager.get( this.escapedList[ectr] ).didFlee = false;
 			}
+			this.fcfCheck = [];
+			this.escapedList = [];
 			KC3ShipManager.pendingShipNum = 0;
 			KC3GearManager.pendingGearNum = 0;
 		}

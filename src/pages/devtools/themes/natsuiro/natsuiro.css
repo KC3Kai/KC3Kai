@@ -426,6 +426,10 @@
 	background:#D2C6FF;
 	color:#000;
 }
+.module.activity .sortie_node.nc_select {
+	background:#FFF;
+	color:#000;
+}
 .module.activity .sortie_node.nc_avoid {
 	background:#00B3B1;
 }
@@ -645,18 +649,24 @@
 	background:#D2C6FF;
 	border:1px solid #AE87E9;
 }
-/* Resource Nodes */
+/* Text Nodes */
 .module.activity .node_type_text {
 	width:150px;
 	height:28px;
 	line-height:18px;
 	padding:4px;
-	background:#79E7FF;
-	border:1px solid #1ABAEF;
 	border-radius:7px;
 	margin: 10px auto;
 	text-align:center;
 	font-size:12px;
+}
+.module.activity .node_type_text.dud {
+	background:#79E7FF;
+	border:1px solid #1ABAEF;
+}
+.module.activity .node_type_text.select {
+	background:#FFF;
+	border:1px solid #CCC;
 }
 
 /*------- ACTIVITY: DETAILS -------*/
