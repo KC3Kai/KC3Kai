@@ -931,7 +931,7 @@
     "620": {
         "code": "SN02",
         "name": "Rapikan Gudang Senjata",
-        "desc": "Hancurkan Persenjataan 6 kali."
+        "desc": "Hancurkan Persenjataan 5 kali."
     },
     "281": {
         "code": "SN03",
@@ -941,12 +941,36 @@
     "158": {
         "code": "SN04",
         "name": "Lengkapi Akagi dengan Murata Squadron Torpedo Bomber",
-        "desc": "Jadikan Akagi sebagai kapal pemimpin dan lengkapi dengan Type 97 Torpedo Bomber (Murata Squadron)."
+        "desc": "Jadikan Akagi sebagai kapal sekertaris dan lengkapi dengan Type 97 Torpedo Bomber (Murata Squadron)."
     },
     "282": {
         "code": "SN05",
         "name": "Rebut Superioritas Udara (AS) pada Area Laut Solomon",
         "desc": "Selesaikan Map ke-4 Event Summer 2015."
-    }
-    
+    },
+     "159": {
+        "code": "SN06",
+        "name": "Gunakan Kembali  Murata Squadron Torpedo Bomber ke Shoukaku",
+        "desc": "Jadikan Shoukaku Kapal sekertaris dan lengkapi dengan  Type 97 Torpedo Bomber (Murata Squadron). "
+    },
+    "310": {
+        "code": "SN07",
+        "name": "Latihan untuk Operasi FS",
+        "desc": "Dapatkan 4 kemenangan di mode latihan"
+    },
+    "160": {
+        "code": "SN09",
+        "name": "Kelola Armada ketiga Gugus Utama Kapal induk",
+        "desc": "Bentuk Gugus Utama Kapal Induk (Carrier Task force/Combined Fleet) yang berisikan Shoukaku, Zuikaku dan Zuihou."
+    },
+    "284": {
+        "code": "SN10",
+        "name": "Dirikan sebuah pangkalan untuk operasi FS",
+        "desc": "Tenggelamkan 10 Abyssal CV(L)"
+    },
+    "283": {
+        "code": "SN11",
+        "name": "Sortie Sebuah Armada ke daerah timur!",
+        "desc": "Selesaikan Map ke-5 Event Summer 2015"
+     },
 }
