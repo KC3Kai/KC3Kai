@@ -25,10 +25,19 @@ Saves and loads list to and from localStorage
 		
 		// Add or replace a ship on the list
 		add :function(data){
+			var didFlee = false;
 			if(typeof data.api_id != "undefined"){
+				if (typeof this.list["x"+data.api_id] !== "undefined") {
+					didFlee = this.list["x"+data.api_id].didFlee;
+				}
 				this.list["x"+data.api_id] = new KC3Ship(data);
+				this.list["x"+data.api_id].didFlee = didFlee;
 			}else if(typeof data.rosterId != "undefined"){
+				if (typeof this.list["x"+data.rosterId] !== "undefined") {
+					didFlee = this.list["x"+data.rosterId].didFlee;
+				}
 				this.list["x"+data.rosterId] = new KC3Ship(data);
+				this.list["x"+data.rosterId].didFlee = didFlee;
 			}
 		},
 		
