@@ -412,7 +412,9 @@
 				KC3SortieManager.map_world
 				+"-"
 				+KC3SortieManager.map_num
-				+["","E","N","H"][ KC3SortieManager.map_difficulty ]
+				+((KC3SortieManager.map_world>10)
+					?["","E","N","H"][ KC3SortieManager.map_difficulty ]
+					:"")
 			);
 			
 			// Map Gauge and status
