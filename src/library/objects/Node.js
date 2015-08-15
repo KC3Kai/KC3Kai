@@ -167,8 +167,9 @@ Used by SortieManager
 		var fleet;
 		var shipNum;
 		var ship;
-
-		if (PlayerManager.combinedFleet === 0) { // single fleet
+		var fleetId = parseInt(fleetSent) || KC3SortieManager.fleetSent;
+		
+		if (PlayerManager.combinedFleet === 0 || fleetId>1){ // single fleet: not combined, or sent fleet is not first fleet
 			result = DA.analyzeRawBattleJS(battleData); 
 			// console.log("Single Fleet");
 			// console.log("analysis result", result);
@@ -182,7 +183,6 @@ Used by SortieManager
 			}
 			
 			// Update our fleet
-			var fleetId = parseInt(fleetSent) || KC3SortieManager.fleetSent;
 			fleet = PlayerManager.fleets[fleetId - 1];
 			shipNum = fleet.countShips();
 			for(i = 0; i < shipNum; i++) {
