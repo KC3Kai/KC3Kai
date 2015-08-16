@@ -54,7 +54,6 @@
 						mapBox.data("map_num", cMap);
 						$(".map_title", mapBox).text("E - "+cMap);
 						
-<<<<<<< HEAD
 						// If this map is part of selected world
 						if(cWorld == self.selectedWorld){
 							mapBox = $(".tab_event .factory .map_box").clone().appendTo(".tab_event .map_list");
@@ -98,6 +97,9 @@
 									if(totalKills){
 										$(".map_hp_txt", mapBox).text( killsLeft+" / "+totalKills+" kills left");
 										$(".map_bar", mapBox).css("width", ((killsLeft/totalKills)*80)+"px");
+									} else {
+										mapBox.addClass("noclearnogauge");
+										$(".map_hp_txt", mapBox).text("Not cleared");
 									}
 								}
 							}
