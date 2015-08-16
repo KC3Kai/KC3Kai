@@ -60,7 +60,7 @@
         "desc": "Miliki Kapal Pemimpin di Armada kedua."
     },
     "116": {
-        "name": "Siapkan sebuah Kapal Induk Pesawat Amfibi",
+        "name": "Siapkan sebuah Kapal Induk Aviasi",
         "desc": "Miliki AV di Armada Utama."
     },
     "117": {
@@ -157,10 +157,10 @@
     },
     "140": {
         "name": "Coba RADAR baru!",
-        "desc": "Miliki Myoukou Kai Ni Sebagai Kapal Pemimpin Armada."
+        "desc": "Miliki Myoukou Kai Ni Sebagai Kapal Pemimpin."
     },
     "141": {
-        "name": "Masukkan Kapal Induk Divisi Ke-2 yang Diperkuat",
+        "name": "Bentuk Kembali Kapal Induk Divisi Ke-2 yang Diperkuat",
         "desc": "Miliki Souryuu Kai Ni (\u84bc\u9f8d\u6539\u4e8c) Sebagai Kapal Pemimpin dan Hiryuu Kai Ni (\u98db\u9f8d\u6539\u4e8c) dan 2 DD di Armada."
     },
     "142": {
@@ -177,10 +177,10 @@
     },
     "145": {
         "name": "Bentuk Kapal Tempur penyerang utama",
-        "desc": "Miliki 3 Kapal Tempur dari Kelas Nagato,Fusou,Ise atau Yamato and Penjelajah Ringan(CL) di Armada."
+        "desc": "Miliki 3 Kapal Tempur dari Kelas Nagato,Fusou,Ise atau Yamato dan Penjelajah Ringan(CL) di Armada."
     },
     "146": {
-        "name": "Siapkan Pengembangan Gudang Persenjataan",
+        "name": "Siapkan Pengembangan Gudang Senjata",
         "desc": "Miliki Akashi (\u660e\u77f3) Sebagai Kapal Pemimpin di Armada Utama."
     },
     "147": {
@@ -193,7 +193,7 @@
     },
     "149": {
         "name": "Bentuk Kapal Perusak Divisi ke-11",
-        "desc": "Bentuk Armada Utama HANYA dengan 4 Kapal Perusak Khusus: Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea) dan Murakumo(\u53e2\u96f2)."
+        "desc": "Bentuk Armada Utama HANYA dengan 4 Kapal Perusak Tipe Khusus: Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea) dan Murakumo(\u53e2\u96f2)."
     },
     "150": {
         "name": "Bentuk Kapal Perusak  Divisi ke-21",
@@ -273,11 +273,11 @@
     },
     "219": {
         "name": "Sorti Armada Mikawa!",
-        "desc": "Sorti dengan Choukai, Aoba, Kako, Furutaka, Tenryuu dan Kapal dengan Kecepatan cepat lainnya."
+        "desc": "Sorti dengan Choukai, Aoba, Kako, Furutaka, Tenryuu dan Kapal cepat lainnya."
     },
     "222": {
         "name": "Sorti Kapal Perusak  Divisi ke-6!",
-        "desc": "Sorti HANYA dengan Akatsuki, Hibiki, Inazuma, and Ikazuchi."
+        "desc": "Sorti HANYA dengan Akatsuki, Hibiki, Inazuma, dan Ikazuchi."
     },
     "223": {
         "name": "Sorti Kapal Penjelajah Divisi ke-4!",
@@ -297,7 +297,7 @@
     },
     "231": {
         "name": "Sorti Armada Kapal Selam!",
-        "desc": "Sorti dengan 2 SS and 4 Kapal lainnya. Dapatkan Kemenangan pada Bos Node World 2-3."
+        "desc": "Sorti dengan 2 SS dan 4 Kapal lainnya. Dapatkan Kemenangan pada Bos Node World 2-3."
     },
     "232": {
         "name": "Sorti Armada penyerang penerbangan laut!",
@@ -352,7 +352,7 @@
         "desc": "Sorti dengan Unryuu Kai (\u96f2\u9f8d\u6539) Sebagai Kapal Pemimpin ke World 5-2. Dapatkan S-Rank pada Bos Node."
     },
     "254": {
-        "name": "Sorti Skuadron Kapal Induk Kecil",
+        "name": "Sorti Skuadron Kapal Induk Ringan",
         "desc": "Sorti Armada dengan 1-2 CVL, 1 CL dan 3-4 DD ke World 2-1. Dapatkan S-Rank pada Bos Node."
     },
     "255": {
@@ -384,15 +384,15 @@
         "desc": "Sorti Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea), Murakumo(\u53e2\u96f2) dan 2 Kapal apapun ke World 2-3. Dapatkan Kemenangan pada Bos Node."
     },
     "268": {
-        "name": "Patroli Anti Kapal Selam Kapal Perusak  Divisi ke-11",
+        "name": "Patroli Anti Kapal Selam Dengan Kapal Perusak  Divisi ke-11",
         "desc": "Sorti Fubuki (\u5439\u96ea), Shirayuki(\u767d\u96ea), Hatsuyuki (\u521d\u96ea) dan Murakumo(\u53e2\u96f2) ke World 1-5. Dapatkan ranking C keatas pada Bos Node."
     },
     "269": {
-        "name": "Sorti Kapal Perusak  Divisi ke-21",
+        "name": "Sorti Kapal Perusak Divisi ke-21",
         "desc": "Sorti Hatsuharu (\u521d\u6625), Nenohi (\u5b50\u65e5), Wakaba (\u82e5\u8449) dan Hatsushimo (\u521d\u971c) dan 2 Kapal apapun ke World 3-1. Dapatkan S-Rank pada Bos Node."
     },
     "270": {
-        "name": "Sorti Kapal Perusak  Divisi ke-22",
+        "name": "Sorti Kapal Perusak Divisi ke-22",
         "desc": "Sorti Satsuki (\u7690\u6708), Fumizuki (\u6587\u6708), Nagatsuki (\u9577\u6708), 1 lagi DD dan 2 Kapal apapun ke World 1-4. Dapatkan S-Rank pada Bos Node."
     },
     "271": {
@@ -623,7 +623,7 @@
 	"304": {
 		"code": "C3",
         "name": "Latihan Harian 2",
-        "desc": "Dapatkan 5 Kemenangan pada Mode Latihan pada Hari yang sama",
+        "desc": "Dapatkan 5 Kemenangan pada Mode Latihan Di Hari yang sama",
 		"tracking": [ [0,5] ]
     },
     "302": {
@@ -705,7 +705,7 @@
     },
 	"412": {
 		"code": "D10",
-        "name": "Kuatkan Operasi BBV",
+        "name": "Operasi Memperkuat BBV",
         "desc": "Selesaikan Ekspedisi 23"
     },
     "411": {
@@ -716,7 +716,7 @@
     },
     "413": {
 		"code": "D12",
-        "name": "Kuatkan Operasi BBV (Lanjutan.)",
+        "name": "Operasi Memperkuat BBV (Lanjutan.)",
         "desc": "Selesaikan Ekspedisi 23 Empat kali lagi"
     },
     "414": {
@@ -855,17 +855,17 @@
 	 "614": {
 		"code": "F13",
         "name": "Konversi model (ke Tenzan)",
-        "desc": "Miliki Kapal Pemimpin dilengkapi dengan Pesawat Type 97 Torpedo Bomber (Skuadron Tomonaga), Kemudian Hancurkan 2 Tenzan"
+        "desc": "Miliki Kapal Pemimpin yang dilengkapi dengan Pesawat Type 97 Torpedo Bomber (Skuadron Tomonaga), Kemudian Hancurkan 2 Tenzan"
     },
 	"615": {
 		"code": "F14",
         "name": "Konversi model (ke Suisei)",
-        "desc": "Miliki Kapal pemimpim dilengkapi dengan Pesawat Type 99 Dive Bomber (Skuadron Egusa), Kemudian Hancurkan 2 Suisei"
+        "desc": "Miliki Kapal pemimpim yang dilengkapi dengan Pesawat Type 99 Dive Bomber (Skuadron Egusa), Kemudian Hancurkan 2 Suisei"
     },
     "616": {
 		"code": "F15",
         "name": "Konversi model (ke Reppuu)",
-        "desc": "Miliki Kapal Pemimpin dilengkapi dengan Pesawat Zero Fighter Type 52 Type C (601 Air Group), Kemudian Hancurkan 2 Reppuu"
+        "desc": "Miliki Kapal Pemimpin yang dilengkapi dengan Pesawat Zero Fighter Type 52 Type C (601 Air Group), Kemudian Hancurkan 2 Reppuu"
     },
 	"617": {
 		"code": "F16",
@@ -935,13 +935,13 @@
     },
     "281": {
         "code": "SN03",
-        "name": "Lakukan Patroli pada Rute Pasukan Utama",
+        "name": "Lakukan Patroli di Rute Pasukan Utama",
         "desc": "Tenggelamkan 6 Kapal Selam abyssal."
     },
     "158": {
         "code": "SN04",
         "name": "Lengkapi Akagi dengan Murata Squadron Torpedo Bomber",
-        "desc": "Jadikan Akagi sebagai kapal sekertaris dan lengkapi dengan Type 97 Torpedo Bomber (Murata Squadron)."
+        "desc": "Jadikan Akagi sebagai kapal sekretaris dan lengkapi dengan Type 97 Torpedo Bomber (Murata Squadron)."
     },
     "282": {
         "code": "SN05",
@@ -951,7 +951,7 @@
      "159": {
         "code": "SN06",
         "name": "Gunakan Kembali  Murata Squadron Torpedo Bomber ke Shoukaku",
-        "desc": "Jadikan Shoukaku Kapal sekertaris dan lengkapi dengan  Type 97 Torpedo Bomber (Murata Squadron). "
+        "desc": "Jadikan Shoukaku Kapal sekretaris dan lengkapi dengan  Type 97 Torpedo Bomber (Murata Squadron). "
     },
     "310": {
         "code": "SN07",
