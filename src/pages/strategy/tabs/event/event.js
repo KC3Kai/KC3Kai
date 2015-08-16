@@ -52,55 +52,48 @@
 					if(cWorld == self.selectedWorld){
 						mapBox = $(".tab_event .factory .map_box").clone().appendTo(".tab_event .map_list");
 						mapBox.data("map_num", cMap);
-						$(".map_title", mapBox).text("E - "+cMap);
-						
-						// If this map is part of selected world
-						if(cWorld == self.selectedWorld){
-							mapBox = $(".tab_event .factory .map_box").clone().appendTo(".tab_event .map_list");
-							mapBox.data("map_num", cMap);
-							$(".map_title", mapBox).text("E - "+cMap+(function(x){
-								switch(x){
-									case 1: case 2: case 3:
-										return " " + diffStr[x-1];
-									default:
-										return "";
-								}
-							})(element.difficulty));
-							
-							// EASY MODO STRIKES BACK
-							if(ConfigManager.info_troll && element.difficulty==1) {
-								mapBox.addClass("easymodokimoi");
+						$(".map_title", mapBox).text("E - "+cMap+(function(x){
+							switch(x){
+								case 1: case 2: case 3:
+									return " " + diffStr[x-1];
+								default:
+									return "";
 							}
-							// If this map is already cleared
-							if(element.clear == 1){
-								$(".map_hp_txt", mapBox).text("Cleared!");
-								mapBox.addClass("cleared");
-							}else{
-								mapBox.addClass("notcleared");
-								// If HP-based gauge
-								if(typeof element.maxhp != "undefined"){
-									if(element.curhp>1){ // i want to approach last kill as JUST DO IT instead leaving 1HP only.
-										$(".map_hp_txt", mapBox).text( element.curhp+" / "+element.maxhp );
-										$(".map_bar", mapBox).css("width", ((element.curhp/element.maxhp)*80)+"px");
-									}else{
-										mapBox.addClass("noclearnogauge");
-										if(ConfigManager.info_troll)
-											mapBox
-												.addClass("justdoit")
-												.attr("title","just kill her already, yesterday you said tommorow! JUST DO IT!!!"); // placeholder class... 
-										$(".map_hp_txt", mapBox).text(ConfigManager.info_troll ? "#JustDoIt!" : KC3Meta.term("StrategyEvents1HP"));
-									}
-								// If kill-based gauge
+						})(element.difficulty));
+						
+						// EASY MODO STRIKES BACK
+						if(ConfigManager.info_troll && element.difficulty==1) {
+							mapBox.addClass("easymodokimoi");
+						}
+						// If this map is already cleared
+						if(element.clear == 1){
+							$(".map_hp_txt", mapBox).text("Cleared!");
+							mapBox.addClass("cleared");
+						}else{
+							mapBox.addClass("notcleared");
+							// If HP-based gauge
+							if(typeof element.maxhp != "undefined"){
+								if(element.curhp>1){ // i want to approach last kill as JUST DO IT instead leaving 1HP only.
+									$(".map_hp_txt", mapBox).text( element.curhp+" / "+element.maxhp );
+									$(".map_bar", mapBox).css("width", ((element.curhp/element.maxhp)*80)+"px");
 								}else{
-									var totalKills = KC3Meta.gauge( element.id );
-									var killsLeft = totalKills - element.kills;
-									if(totalKills){
-										$(".map_hp_txt", mapBox).text( killsLeft+" / "+totalKills+" kills left");
-										$(".map_bar", mapBox).css("width", ((killsLeft/totalKills)*80)+"px");
-									} else {
-										mapBox.addClass("noclearnogauge");
-										$(".map_hp_txt", mapBox).text("Not cleared");
-									}
+									mapBox.addClass("noclearnogauge");
+									if(ConfigManager.info_troll)
+										mapBox
+											.addClass("justdoit")
+											.attr("title","just kill her already, yesterday you said tommorow! JUST DO IT!!!"); // placeholder class... 
+									$(".map_hp_txt", mapBox).text(ConfigManager.info_troll ? "#JustDoIt!" : KC3Meta.term("StrategyEvents1HP"));
+								}
+							// If kill-based gauge
+							}else{
+								var totalKills = KC3Meta.gauge( element.id );
+								var killsLeft = totalKills - element.kills;
+								if(totalKills){
+									$(".map_hp_txt", mapBox).text( killsLeft+" / "+totalKills+" kills left");
+									$(".map_bar", mapBox).css("width", ((killsLeft/totalKills)*80)+"px");
+								} else {
+									mapBox.addClass("noclearnogauge");
+									$(".map_hp_txt", mapBox).text("Not cleared");
 								}
 							}
 						}
