@@ -211,6 +211,7 @@
 			.removeClass("nc_battle")
 			.removeClass("nc_resource")
 			.removeClass("nc_maelstrom")
+			.removeClass("nc_select")
 			.removeClass("nc_avoid");
 		$(".module.activity .node_types").hide();
 	}
@@ -343,7 +344,7 @@
 				FleetSummary = {
 					lv: MainFleet.totalLevel() + EscortFleet.totalLevel(),
 					elos: Math.round( (MainFleet.eLoS()+EscortFleet.eLoS()) * 100) / 100,
-					air: MainFleet.fighterPower() + EscortFleet.fighterPower(),
+					air: Math.round( (MainFleet.fighterPower() + EscortFleet.fighterPower())* 100) / 100,
 					speed:
 						(MainFleet.fastFleet && EscortFleet.fastFleet)
 						? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow")
@@ -412,7 +413,9 @@
 				KC3SortieManager.map_world
 				+"-"
 				+KC3SortieManager.map_num
-				+["","E","N","H"][ KC3SortieManager.map_difficulty ]
+				+((KC3SortieManager.map_world>10)
+					?["","E","N","H"][ KC3SortieManager.map_difficulty ]
+					:"")
 			);
 			
 			// Map Gauge and status
@@ -432,6 +435,10 @@
 					// If kill-based gauge
 					}else{
 						var totalKills = KC3Meta.gauge( thisMapId );
+						console.log("wm", KC3SortieManager.map_world, KC3SortieManager.map_num);
+						console.log("thisMapId", thisMapId);
+						console.log("KC3Meta", KC3Meta._gauges);
+						console.log("totalKills", totalKills);
 						var killsLeft = totalKills - thisMap.kills;
 						if(totalKills){
 							$(".module.activity .map_hp").text( killsLeft+" / "+totalKills+" kills");
@@ -466,6 +473,10 @@
 			$(".module.activity .abyss_ship").hide();
 			$(".module.activity .abyss_hp").hide();
 			
+			$(".module.activity .node_type_text").removeClass("dud");
+			$(".module.activity .node_type_text").removeClass("select");
+			
+			console.log("natsuiro process node", thisNode);
 			switch(thisNode.type){
 				// Battle node
 				case "battle":
@@ -503,10 +514,21 @@
 					$(".module.activity .node_type_resource").show();
 					break;
 					
+				// Selection node
+				case "select":
+					console.log("natsuiro should show selection node");
+					$(".module.activity .sortie_node_"+numNodes).addClass("nc_select");
+					$(".module.activity .node_type_text").text("Select: "+
+						thisNode.choices[0]+" or "+thisNode.choices[1]);
+					$(".module.activity .node_type_text").addClass("select");
+					$(".module.activity .node_type_text").show();
+					break;
+					
 				// Battle avoided node
 				default:
 					$(".module.activity .sortie_node_"+numNodes).addClass("nc_avoid");
 					$(".module.activity .node_type_text").text("~Battle Avoided~");
+					$(".module.activity .node_type_text").addClass("dud");
 					$(".module.activity .node_type_text").show();
 					break;
 			}

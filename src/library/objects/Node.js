@@ -80,6 +80,23 @@ Used by SortieManager
 		return this;
 	};
 	
+	KC3Node.prototype.defineAsSelector = function( nodeData ){
+		console.log("defining as selector", nodeData);
+		this.type = "select";
+		this.choices = [
+			KC3Meta.nodeLetter(
+				KC3SortieManager.map_world,
+				KC3SortieManager.map_num,
+				nodeData.api_select_route.api_select_cells[0] ),
+			KC3Meta.nodeLetter(
+				KC3SortieManager.map_world,
+				KC3SortieManager.map_num,
+				nodeData.api_select_route.api_select_cells[1] )
+		];
+		console.log("choices", this.choices);
+		return this;
+	};
+	
 	KC3Node.prototype.defineAsDud = function( nodeData ){
 		this.type = "";
 		
@@ -167,8 +184,9 @@ Used by SortieManager
 		var fleet;
 		var shipNum;
 		var ship;
-
-		if (PlayerManager.combinedFleet === 0) { // single fleet
+		var fleetId = parseInt(fleetSent) || KC3SortieManager.fleetSent;
+		
+		if (PlayerManager.combinedFleet === 0 || fleetId>1){ // single fleet: not combined, or sent fleet is not first fleet
 			result = DA.analyzeRawBattleJS(battleData); 
 			// console.log("Single Fleet");
 			// console.log("analysis result", result);
@@ -182,7 +200,6 @@ Used by SortieManager
 			}
 			
 			// Update our fleet
-			var fleetId = parseInt(fleetSent) || KC3SortieManager.fleetSent;
 			fleet = PlayerManager.fleets[fleetId - 1];
 			shipNum = fleet.countShips();
 			for(i = 0; i < shipNum; i++) {

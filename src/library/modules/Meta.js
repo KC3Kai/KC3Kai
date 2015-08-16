@@ -81,7 +81,17 @@ Provides access to data on built-in JSON files
 				"Double Line",
 				"Diamond",
 				"Echelon",
-				"Line Abreast"
+				"Line Abreast",
+				"","","","","",
+				"Cruising Formation 1 (anti-sub)",
+				"Cruising Formation 2 (forward)",
+				"Cruising Formation 1 (anti-sub)",
+				"Cruising Formation 1 (anti-sub)",
+				"","","","","","",
+				"Cruising Formation 1 (anti-sub)",
+				"Cruising Formation 2 (forward)",
+				"Cruising Formation 1 (anti-sub)",
+				"Cruising Formation 1 (anti-sub)"
 			][formationId];
 		},
 		

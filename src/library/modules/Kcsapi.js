@@ -573,6 +573,13 @@ Previously known as "Reactor"
 			KC3Network.trigger("Quests");
 		},
 		
+		/* FCF TRIGGER
+		-------------------------------------------------------*/
+		"api_req_combined_battle/goback_port":function(params, response, headers){
+			KC3SortieManager.sendFCFHome();
+			KC3Network.trigger("Fleet");
+		},
+		
 		/*-------------------------------------------------------*/
 		/*----------------------[ QUESTS ]-----------------------*/
 		/*-------------------------------------------------------*/

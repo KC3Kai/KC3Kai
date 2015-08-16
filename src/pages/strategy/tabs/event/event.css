@@ -82,7 +82,6 @@
 	width:80px;
 	height:10px;
 	background:#f00;
-	border-right:1px solid #ace;
 }
 
 /* Map without gauge (All maps) */
@@ -376,7 +375,7 @@
 	width:130px;
 	/*height:207px;*/
 	line-height:20px;
-	margin:0px 3px 0px 2px;
+	margin:0px 2px 0px 2px;
 	background:#fff;
 	border-radius:8px;
 	float:left;
