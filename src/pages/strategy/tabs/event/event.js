@@ -27,7 +27,9 @@
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
-			var self = this;
+			var
+				self = this,
+				diffStr = ["E","N","H"];
 			
 			// On-click world menus
 			$(".tab_event .world_box").on("click", function(){
@@ -49,22 +51,35 @@
 						if(cWorld == self.selectedWorld){
 							mapBox = $(".tab_event .factory .map_box").clone().appendTo(".tab_event .map_list");
 							mapBox.data("map_num", cMap);
-							$(".map_title", mapBox).text("E - "+cMap);
+							$(".map_title", mapBox).text("E - "+cMap+(function(x){
+								switch(x){
+									case 1: case 2: case 3:
+										return " " + diffStr[x-1];
+									default:
+										return "";
+								}
+							})(element.difficulty));
 							
+							// EASY MODO STRIKES BACK
+							if(ConfigManager.info_troll && element.difficulty==1) {
+								mapBox.addClass("easymodokimoi");
+							}
 							// If this map is already cleared
 							if(element.clear == 1){
 								$(".map_hp_txt", mapBox).text("Cleared!");
 								mapBox.addClass("cleared");
 							}else{
 								mapBox.addClass("notcleared");
-								var totalKills = KC3Meta.gauge(element.id);
-								var killsLeft = totalKills - element.kills;
-								if(totalKills){
-									$(".map_hp_txt", mapBox).text( killsLeft+" / "+totalKills+" kills left");
-									$(".map_bar", mapBox).css("width", ((killsLeft/totalKills)*80)+"px");
+								if(element.curhp>1){
+									$(".map_hp_txt", mapBox).text( element.curhp+" / "+element.maxhp );
+									$(".map_bar", mapBox).css("width", ((element.curhp/element.maxhp)*80)+"px");
 								}else{
 									mapBox.addClass("noclearnogauge");
-									$(".map_hp_txt", mapBox).text("Not cleared");
+									if(ConfigManager.info_troll)
+										mapBox
+											.addClass("justdoit")
+											.attr("title","just kill her already, yesterday you said tommorow! JUST DO IT!!!"); // placeholder class... 
+									$(".map_hp_txt", mapBox).text(ConfigManager.info_troll ? "#JustDoIt!" : KC3Meta.term("StrategyEvents1HP"));
 								}
 							}
 						}
@@ -227,6 +242,8 @@
 			$.each(sortieList, function(id, sortie){
 				// Create sortie box
 				sortieBox = $(".tab_event .factory .sortie_box").clone().appendTo(".tab_event .sortie_list");
+				if((sortie.diff || 0) > 0)
+					$(sortieBox).addClass("sortie_rank_"+sortie.diff);
 				$(".sortie_id", sortieBox).html( sortie.id );
 				$(".sortie_date", sortieBox).html( new Date(sortie.time*1000).format("mmm d") );
 				$(".sortie_date", sortieBox).attr("title", new Date(sortie.time*1000).format("mmm d, yyyy hh:MM:ss") );
