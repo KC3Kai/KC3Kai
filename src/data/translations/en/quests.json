@@ -846,17 +846,17 @@
     },
      "614": {
         "code": "F13",
-        "name": "Model Conversion (to Tenzan)",
+        "name": "Model Conversion (Tomonaga Squadron to Tenzan)",
         "desc": "Have flagship equipped with Type 97 Torpedo Bomber (Tomonaga Squadron), then scrap 2 Tenzan"
     },
     "615": {
         "code": "F14",
-        "name": "Model Conversion (to Suisei)",
+        "name": "Model Conversion (Egusa Squadron to Suisei)",
         "desc": "Have flagship equipped with Type 99 Dive Bomber (Egusa Squadron), then scrap 2 Suisei"
     },
     "616": {
         "code": "F15",
-        "name": "Model Conversion (to Reppuu)",
+        "name": "Model Conversion (601 Air Group to Reppuu)",
         "desc": "Have flagship equipped with Zero Fighter Type 52 Type C (601 Air Group), then scrap 2 Reppuu"
     },
     "617": {
@@ -949,6 +949,11 @@
         "code": "SN07",
         "name": "Naval Practice in Preparation for Operation FS",
         "desc": "Get 4 victories in practice mode"
+    },
+    "621": {
+        "code": "SN08",
+        "name": "Model Conversion (Murata Squadron to Tenzan)",
+        "desc": "Have Shoukaku as the Secretary Ship and equip her with Type 97 Torpedo Bomber (Murata Squadron), then scrap 2 Tenzan"
     },
     "160": {
         "code": "SN09",
