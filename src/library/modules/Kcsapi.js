@@ -240,8 +240,10 @@ Previously known as "Reactor"
 		/* Equipment list
 		-------------------------------------------------------*/
 		"api_get_member/slot_item": function(params, response, headers){
+			console.log(KC3GearManager.count(),KC3GearManager.pendingGearNum);
 			KC3GearManager.clear();
 			KC3GearManager.set( response.api_data );
+			console.log(KC3GearManager.count(),KC3GearManager.pendingGearNum);
 		},
 		
 		/* Fleet list

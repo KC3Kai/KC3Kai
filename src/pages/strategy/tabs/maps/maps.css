@@ -522,7 +522,7 @@
 	float:left;
 }
 .tab_maps .sortie_list .node_airicon {
-	width:20px;
+	width: 18px;
 	height:20px;
 	line-height:20px;
 	float:left;
@@ -536,11 +536,15 @@
 	margin:1px;
 }
 .tab_maps .sortie_list .node_airtext {
-	width:38px;
+	width: 40px;
 	height:20px;
 	float:left;
 	/*background:#fcc;*/
 	font-size:11px;
+}
+.tab_maps .sortie_list .node_airtext .node_FAT ,
+.tab_maps .sortie_list .node_airtext .node_BAT {
+	float: left;
 }
 .tab_maps .sortie_list .node_airtext .node_loss {
 	color:#f00;

@@ -165,13 +165,15 @@
 	"PredictionStampPvP" : "Knocked Out",
 	"PredictionStampEscort" : "Escort",
 	"PredictionStampMVPUseful" : "MVP",
-	"PredictionStampMVPUseless" : "kek",
+	"PredictionStampMVPUseless" : "Already maxed",
 	
 	"LevelText" : "Level",
 	"LevelShort" : "Lv.",
 	"LevelNext" : "Next",
 	"Screenshot" : "Screenshot",
 	"UntranslatedQuest" : "Untranslated Quest",
+	
+	"StrategyEvents1HP" : "Last Kill!",
 	
 	"PanelWaitActions" : "Waiting for game actions...",
 	"PanelErrorStorage" : "Your Chrome's localStorage is disabled on your settings. KC3改 needs this feature. <a href=\"http://stackoverflow.com/a/26671889/483704\" target=\"_blank\">See how to enable this</a>.",

@@ -9,7 +9,7 @@ Saves and loads list to and from localStorage
 	
 	window.KC3GearManager = {
 		list: {},
-		max: 400,
+		max: 497,
 		pendingGearNum: 0,
 
 		// Get a specific item by ID

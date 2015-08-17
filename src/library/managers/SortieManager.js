@@ -30,7 +30,7 @@ Xxxxxxx
 			this.fleetSent = parseInt(fleetNum);
 			this.map_world = world;
 			this.map_num = mapnum;
-			this.map_difficulty = JSON.parse(localStorage.maps)["m"+world+mapnum].difficulty;
+			this.map_difficulty = JSON.parse(localStorage.maps)["m"+world+mapnum].difficulty || 0;
 			this.nextNodeCount = 0;
 			this.hqExpGained = 0;
 			this.nodes = [];
@@ -69,17 +69,18 @@ Xxxxxxx
 			function supportFormula(expedNum, isBoss){
 				console.log("checking support", expedNum, "isboss", isBoss);
 				var e,w,n;
-				e = (expedNum > 100); console.log(1);
-				if(e) expedNum -= 100; console.log(2);
-				w = (expedNum-1 / 8)+1; console.log(3);
-				n = (expedNum-1) % 8; console.log(4);
+				e = (expedNum > 100);
+				if(e) expedNum -= 100;
+				w = (expedNum-1 / 8)+1;
+				n = (expedNum-1) % 8;
+				console.log(e,w,n,(w == 5 || e) && (n == 0 + isBoss));
 				return (w == 5 || e) && (n == 0 + isBoss);
 			}
 			
 			for(var i=2;i<=4;i++)
 				if(PlayerManager.fleets[i-1].active){
 					var fleetExpedition = PlayerManager.fleets[i-1].mission[1];
-					if(supportFormula(fleetExpedition, bossSupport)!==0){
+					if(supportFormula(fleetExpedition, bossSupport)){
 						return i;
 					}
 				}
