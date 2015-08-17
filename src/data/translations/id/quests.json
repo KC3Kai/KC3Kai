@@ -854,17 +854,17 @@
     },
 	 "614": {
 		"code": "F13",
-        "name": "Konversi model (ke Tenzan)",
+        "name": "Konversi model (Tomonaga Squadron ke Tenzan)",
         "desc": "Miliki Kapal Pemimpin yang dilengkapi dengan Pesawat Type 97 Torpedo Bomber (Skuadron Tomonaga), Kemudian Hancurkan 2 Tenzan"
     },
 	"615": {
 		"code": "F14",
-        "name": "Konversi model (ke Suisei)",
+        "name": "Konversi model (Egusa Squadron ke Suisei)",
         "desc": "Miliki Kapal pemimpim yang dilengkapi dengan Pesawat Type 99 Dive Bomber (Skuadron Egusa), Kemudian Hancurkan 2 Suisei"
     },
     "616": {
 		"code": "F15",
-        "name": "Konversi model (ke Reppuu)",
+        "name": "Konversi model (601 Air Group ke Reppuu)",
         "desc": "Miliki Kapal Pemimpin yang dilengkapi dengan Pesawat Zero Fighter Type 52 Type C (601 Air Group), Kemudian Hancurkan 2 Reppuu"
     },
 	"617": {
@@ -957,6 +957,11 @@
         "code": "SN07",
         "name": "Latihan untuk Operasi FS",
         "desc": "Dapatkan 4 kemenangan di mode latihan"
+    },
+    "621": {
+        "code": "SN08",
+        "name": "Konversi Model (Murata Squadron ke Tenzan)",
+        "desc": "Miliki Shoukaku Kapal sekretaris dan lengkapi dengan  Type 97 Torpedo Bomber (Murata Squadron), lalu hancurkan 2 Tenzan"
     },
     "160": {
         "code": "SN09",
