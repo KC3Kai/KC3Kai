@@ -162,6 +162,7 @@
 	border-radius:10px;
 	margin:0px 0px 5px 0px;
 	padding:5px;
+	position:relative;
 }
 /* Sortie Info: RECORD */
 .tab_event .sortie_list .sortie_info {
@@ -548,4 +549,47 @@
 }
 .tab_event .sortie_list .node_airtext .node_loss {
 	color:#f00;
+}
+/* Difficulty marker */
+.tab_event .sortie_list .sortie_box.sortie_rank_1 {
+	background-image: url('../../../../assets/img/client/difficulty/bg-1.png');
+	background-repeat: no-repeat;
+	background-position: 100% 100%;
+	/*position: absolute;*/
+	/*top: 0;*/
+	/*left: 0;*/
+	/*width: 100%;*/
+	/*height: 100%;*/
+	/*content: " ";*/
+	/*pointer-events: none;*/
+	/*opacity: 0.2;*/
+	/*border-radius: 10px;*/
+}
+.tab_event .sortie_list .sortie_box.sortie_rank_2 {
+	background-image: url('../../../../assets/img/client/difficulty/bg-2.png');
+	background-repeat: no-repeat;
+	background-position: 100% 100%;
+	/*position: absolute;*/
+	/*top: 0;*/
+	/*left: 0;*/
+	/*width: 100%;*/
+	/*height: 100%;*/
+	/*content: " ";*/
+	/*pointer-events: none;*/
+	/*opacity: 0.2;*/
+	/*border-radius: 10px;*/
+}
+.tab_event .sortie_list .sortie_box.sortie_rank_3 {
+	background-image: url('../../../../assets/img/client/difficulty/bg-3.png');
+	background-repeat: no-repeat;
+	background-position: 100% 100%;
+	/*position: absolute;*/
+	/*top: 0;*/
+	/*left: 0;*/
+	/*width: 100%;*/
+	/*height: 100%;*/
+	/*content: " ";*/
+	/*pointer-events: none;*/
+	/*opacity: 0.2;*/
+	/*border-radius: 10px;*/
 }

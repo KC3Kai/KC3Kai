@@ -27,11 +27,13 @@ Used by SortieManager
 				this.eships = [];
 				this.eventKind = nodeData.api_event_kind;
 				this.eventId = nodeData.api_event_id;
+				this.gaugeDamage = 0; // calculate this on result screen. make it fair :D
 			}
 			
 			// If passed formatted enemy list from PVP
 			if(typeof nodeData.pvp_opponents != "undefined"){
 				this.eships = nodeData.pvp_opponents;
+				this.gaugeDamage = -1;
 			}
 		}
 		this.enemySunk = [false, false, false, false, false, false];
@@ -249,6 +251,8 @@ Used by SortieManager
 				ship.afterHp[1] = ship.hp[1];
 			}
 		}
+		if(this.gaugeDamage > -1)
+			this.gaugeDamage = Math.min(this.originalHPs[7],this.originalHPs[7] - this.enemyHp[0].currentHp);
 	};
 	
 	KC3Node.prototype.engageNight = function( nightData, fleetSent, setAsOriginalHP ){
@@ -309,6 +313,8 @@ Used by SortieManager
 			ship.afterHp[1] = ship.hp[1];
 		}
 		
+		if(this.gaugeDamage > -1)
+			this.gaugeDamage = this.gaugeDamage + Math.min(this.originalHPs[7],this.originalHPs[7] - this.enemyHp[0].currentHp);
 	};
 	
 	KC3Node.prototype.night = function( nightData ){
@@ -320,6 +326,19 @@ Used by SortieManager
 		if(this.allyNoDamage && this.rating === "S")
 			this.rating = "SS";
 		console.log("This battle, have damaged the ally fleet",!this.allyNoDamage);
+		
+		if(this.isBoss()) {
+			var
+				maps = JSON.parse(localStorage.maps),
+				ckey = ["m",KC3SortieManager.map_world,KC3SortieManager.map_num].join("");
+			console.log("Damaged Flagship ",this.gaugeDamage,"/",maps[ckey].curhp || 0,"pts");
+			if((this.gaugeDamage >= 0) && (maps[ckey].curhp || 0) > 0) { // gauge-based not cleared / not gauge-based
+				maps[ckey].curhp -= this.gaugeDamage;
+				if(maps[ckey].curhp <= 0) // if last kill -- check whether flagship is killed or not -- flagship killed = map clear
+					maps[ckey].curhp = 1-(maps[ckey].clear = resultData.destsf);
+				localStorage.maps = JSON.stringify(maps);
+			}
+		}
 		
 		if(typeof resultData.api_get_ship != "undefined"){
 			this.drop = resultData.api_get_ship.api_ship_id;
