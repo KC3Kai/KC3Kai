@@ -587,6 +587,8 @@ Previously known as "Reactor"
 		/* Quest List
 		-------------------------------------------------------*/
 		"api_get_member/questlist":function(params, response, headers){
+			KC3QuestManager.load();
+			
 			// Update quest data for this page
 			KC3QuestManager.definePage(
 				response.api_data.api_list,
