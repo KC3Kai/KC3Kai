@@ -40,6 +40,11 @@
 					hp: ThisShip.hp[0],
 					fp: [MasterShip.api_houg[1], MasterShip.api_houg[0]+ThisShip.mod[0], ThisShip.fp[0] ],
 					tp: [MasterShip.api_raig[1], MasterShip.api_raig[0]+ThisShip.mod[1], ThisShip.tp[0] ],
+					yasen: [
+						MasterShip.api_houg[1] + MasterShip.api_raig[1],
+						MasterShip.api_houg[0]+ThisShip.mod[0] + MasterShip.api_raig[0]+ThisShip.mod[1],
+						ThisShip.fp[0] + ThisShip.tp[0]
+					],
 					aa: [MasterShip.api_tyku[1], MasterShip.api_tyku[0]+ThisShip.mod[2], ThisShip.aa[0] ],
 					ar: [MasterShip.api_souk[1], MasterShip.api_souk[0]+ThisShip.mod[3], ThisShip.ar[0] ],
 					as: [this.getDerivedStatNaked("tais", ThisShip.as[0], ThisShip.items), ThisShip.as[0] ],
@@ -305,6 +310,7 @@
 						case "hp": returnVal = b.hp  - a.hp; break;
 						case "fp": returnVal = b.fp[self.equipMode+1] - a.fp[self.equipMode+1]; break;
 						case "tp": returnVal = b.tp[self.equipMode+1] - a.tp[self.equipMode+1]; break;
+						case "yasen": returnVal = (b.fp[self.equipMode+1] + b.tp[self.equipMode+1]) - (a.fp[self.equipMode+1] + a.tp[self.equipMode+1]); break;
 						case "aa": returnVal = b.aa[self.equipMode+1] - a.aa[self.equipMode+1]; break;
 						case "ar": returnVal = b.ar[self.equipMode+1] - a.ar[self.equipMode+1]; break;
 						case "as": returnVal = b.as[self.equipMode] - a.as[self.equipMode]; break;
@@ -357,6 +363,7 @@
 					
 					self.modernizableStat("fp", cElm, cShip.fp);
 					self.modernizableStat("tp", cElm, cShip.tp);
+					self.modernizableStat("yasen", cElm, cShip.yasen);
 					self.modernizableStat("aa", cElm, cShip.aa);
 					self.modernizableStat("ar", cElm, cShip.ar);
 					
