@@ -180,7 +180,18 @@ body {
 .box-game .overlay_box {
 	position:absolute;
 }
-
+.box-game .game-refresh {
+	display:none;
+	align-items: center;
+	justify-content: center;
+		position:fixed;
+	top:0;
+	right:0;
+	width:32px;
+	height:32px;
+	border-radius:16px;
+	background-color:rgba(128,255,128,0.5);
+}
 /* OVERLAY: QUEST
 --------------------------*/
 .overlay_quests {

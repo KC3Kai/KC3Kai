@@ -126,13 +126,18 @@
 			// On-click sortie toggles
 			$(".tab_event .sortie_list").on("click", ".sortie_box .sortie_toggles .sortie_toggle", function(){
 				var targetName = $(this).data("target");
-				var targetBox = $(this).parent().parent().parent().find("."+targetName);
+				var targetParent = $(this).parent().parent().parent();
+				var targetBox = targetParent.find("."+targetName);
+				var expandedQualif = !$(this).hasClass("sortie_toggle_in");
+				var expandedBefore = $(".sortie_toggle.active:not(.sortie_toggle_in)",$(this).parent()).length;
 				
 				if( $(this).hasClass("active") ){
 					$(this).removeClass("active");
 				}else{
 					$(this).addClass("active");
 				}
+				
+				var expandedAfter = $(".sortie_toggle.active:not(.sortie_toggle_in)",$(this).parent()).length;
 				
 				/*// Check if target box does not have data yet
 				if(!targetBox.data("filled")){
@@ -151,7 +156,12 @@
 				}*/
 				
 				// Show or hide the target box
-				targetBox.slideToggle();
+				targetBox.slideToggle(undefined,function(){
+					if(expandedQualif && expandedBefore == 0)
+						targetParent.addClass("expanded");
+				});
+				if(expandedQualif && expandedAfter == 0)
+					targetParent.removeClass("expanded");
 			});
 		},
 		
@@ -255,7 +265,9 @@
 				// Create sortie box
 				sortieBox = $(".tab_event .factory .sortie_box").clone().appendTo(".tab_event .sortie_list");
 				if((sortie.diff || 0) > 0)
-					$(sortieBox).addClass("sortie_rank_"+sortie.diff);
+					$(sortieBox)
+						.addClass("sortie_rank_"+sortie.diff)
+						.attr("title",KC3Meta.term("EventHistoryRank"+sortie.diff+(ConfigManager.info_troll ? "X" : "")));
 				$(".sortie_id", sortieBox).html( sortie.id );
 				$(".sortie_date", sortieBox).html( new Date(sortie.time*1000).format("mmm d") );
 				$(".sortie_date", sortieBox).attr("title", new Date(sortie.time*1000).format("mmm d, yyyy hh:MM:ss") );

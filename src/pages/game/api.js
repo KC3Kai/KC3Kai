@@ -75,6 +75,23 @@ $(document).on("ready", function(){
 			.css('width','40%');
 	}
 	
+	// Configure Refresh Toggle (using $(".game-refresh").trigger("click") is possible)
+	$(".game-refresh").on("click",function(){
+		switch($(this).text()) {
+			case("01"):
+				$(".game-swf").attr("src","about:blank").attr("src",localStorage.absoluteswf);
+				$(this).text("05");
+				break;
+			default:
+				$(this).text("0" + ($(this).text()-1));
+				break;
+		}
+	});
+	// Enable Refresh Toggle
+	if(ConfigManager.api_directRefresh) {
+		$(".game-refresh").css("display","flex");
+	}
+	
 	// Exit confirmation
 	window.onbeforeunload = function(){
 		ConfigManager.load();
