@@ -261,6 +261,17 @@
 			"links": {
 				"wk" :"http://kancolle.wikia.com/wiki/User:Nanamin"
 			}
+		},
+		{
+			"name": "NicolaosGreene",
+			"avatar": "https://avatars1.githubusercontent.com/u/3627763?v=3&s=40",
+			"desc": "AboutDevTester",
+			"links": {
+				"gh" :"https://github.com/NicolaosGreene",
+				"st" :"http://steamcommunity.com/profiles/76561198023180048/",
+				"hm" :"http://www.himeuta.net/members/8927-nicolaos/",
+				"wk" :"http://kancolle.wikia.com/wiki/User:NicolaosGreene"
+			}
 		}
 	],
 	"AboutOther" : [

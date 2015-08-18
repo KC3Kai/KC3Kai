@@ -45,7 +45,7 @@ KC3改 Equipment Object
 		
 		// Check if this object is a fighter plane
 		// if( [6,7,8,11].indexOf( this.master().api_type[2] ) > -1){
-		if( [6,7,8,11].indexOf( this.master().api_type[3] ) > -1){
+		if( [6,7,8,11].indexOf( this.master().api_type[2] ) > -1){
 			// Formula for each equipment
 			var traditionalFP = this.master().api_tyku * Math.sqrt(capacity);
 			

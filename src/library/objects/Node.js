@@ -136,7 +136,11 @@ Used by SortieManager
 		this.fcontact = (planePhase.api_touch_plane[0] > -1)?"YES":"NO";
 		this.econtact = (planePhase.api_touch_plane[1] > -1)?"YES":"NO";
 		
-		this.airbattle = KC3Meta.airbattle( planePhase.api_disp_seiku || undefined );
+		if(typeof planePhase.api_disp_seiku != "undefined"){
+			this.airbattle = KC3Meta.airbattle( planePhase.api_disp_seiku );
+		}else{
+			this.airbattle = ["?", "", "Unknown"];
+		}
 		
 		// Fighter phase 1
 		this.planeFighters = {

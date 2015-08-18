@@ -168,6 +168,12 @@
 .tab_ships .ship_item.even .ship_field {
 	background:#e4e4e4;
 }
+.tab_ships .ship_item.odd .ship_field.ship_lk{
+	background:#66FF66;
+}
+.tab_ships .ship_item.even .ship_field.ship_lk {
+	background:#66FF66;
+}
 .tab_ships .ingame_page {
 	width:680px;
 	height:11px;
@@ -269,6 +275,10 @@
 }
 .tab_ships .ship_item .ship_tp.max {
 	background:#00CCFF;
+}
+.tab_ships .ship_item .ship_yasen.max {
+	background:#555555;
+	color:#FFFFFF;
 }
 .tab_ships .ship_item .ship_aa.max {
 	background:#FF9900;
