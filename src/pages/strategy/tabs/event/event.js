@@ -157,10 +157,10 @@
 				
 				// Show or hide the target box
 				targetBox.slideToggle(undefined,function(){
-					if(expandedQualif && expandedBefore == 0)
+					if(expandedQualif && expandedBefore < 1)
 						targetParent.addClass("expanded");
 				});
-				if(expandedQualif && expandedAfter == 0)
+				if(expandedQualif && expandedAfter < 1)
 					targetParent.removeClass("expanded");
 			});
 		},
