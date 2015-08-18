@@ -252,7 +252,7 @@ Used by SortieManager
 			}
 		}
 		if(this.gaugeDamage > -1)
-			this.gaugeDamage = Math.min(this.originalHPs[7],this.originalHPs[7] - this.enemyHp[0].currentHp);
+			this.gaugeDamage = Math.min(this.originalHPs[7],this.originalHPs[7] - this.enemyHP[0].currentHp);
 	};
 	
 	KC3Node.prototype.engageNight = function( nightData, fleetSent, setAsOriginalHP ){
@@ -314,7 +314,7 @@ Used by SortieManager
 		}
 		
 		if(this.gaugeDamage > -1)
-			this.gaugeDamage = this.gaugeDamage + Math.min(this.originalHPs[7],this.originalHPs[7] - this.enemyHp[0].currentHp);
+			this.gaugeDamage = this.gaugeDamage + Math.min(this.originalHPs[7],this.originalHPs[7] - this.enemyHP[0].currentHp);
 	};
 	
 	KC3Node.prototype.night = function( nightData ){
