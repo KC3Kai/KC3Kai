@@ -142,7 +142,9 @@
 	"LearnMore" : "もっと詳しく",
 	"Saved" : "保存する！",
 	
+	"UnwantedExit" : "ああ！　あなたの艦娘を残しています！　あなたはそれらを残してしてもよろしいですか？",
 	"APIWaitToggle" : "まず、「KC3改」パネルをロードしてください。",
+	"APIConcealExpl" : "あなたのAPIへのリンクを表示するにはホバー。",
 	
 	"SpeedFast" : "高速",
 	"SpeedSlow" : "低速",
@@ -161,12 +163,17 @@
 	
 	"PredictionStampSortie" : "撃沈",
 	"PredictionStampPvP" : "轟沈",
+	"PredictionStampEscort" : "護衛",
+	"PredictionStampMVPUseful" : "MVP",
+	"PredictionStampMVPUseless" : "最大限に達する！",
 	
 	"LevelText" : "レベル",
 	"LevelShort" : "Lv.",
 	"LevelNext" : "次",
 	"Screenshot" : "スクリーンショット",
 	"UntranslatedQuest" : "非翻訳クエスト",
+	
+	"StrategyEvents1HP" : "ラストダンス！",
 	
 	"PanelWaitActions" : "ゲームアクションを待っています...",
 	"PanelErrorStorage" : "あなたのChromeのlocalStorageは設定で無効になっています。KC3改はこの機能を必要とします。<a href=\"http://stackoverflow.com/a/26671889/483704\" target=\"_blank\">これを有効にする方法を参照してください。</a>.",
