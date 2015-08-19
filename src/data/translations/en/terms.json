@@ -188,6 +188,10 @@
 	"PanelGoodMorale" : "Morale good",
 	"PanelSupportPower" : "Support Expedition Shelling Power",
 	
+	"CombinedCarrier" : "Carrier TF",
+	"CombinedSurface" : "Surface TF",
+	"CombinedNone" : "Not combined",
+	
 	"LevelText" : "Level",
 	"LevelShort" : "Lv.",
 	"LevelNext" : "Next",
