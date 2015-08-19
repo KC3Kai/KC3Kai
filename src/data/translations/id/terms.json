@@ -184,9 +184,13 @@
 	"PanelHasTaiha" : "Kritis",
 	"PanelNoTaiha" : "HP baik",
 	"PanelSupplied" : "Suplai baik",
-	"PanelNotSupplied" : "Butuh Perbaikan",
+	"PanelNotSupplied" : "Perlu isi suplai",
 	"PanelGoodMorale" : "Moral baik",
 	"PanelSupportPower" : "Support Expedition Shelling Power",
+	
+	"CombinedCarrier" : "Carrier TF",
+	"CombinedSurface" : "Surface TF",
+	"CombinedNone" : "Tak digabung",
 
 	"LevelText" : "Level",
 	"LevelShort" : "Lv.",
