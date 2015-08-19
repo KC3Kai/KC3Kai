@@ -129,6 +129,8 @@ KC3改 Ship Object
 	Get fighter power of this ship
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.fighterPower = function(){
+		if(this.rosterId===0){ return 0; }
+		
 		var thisShipFighter = this.equipment(0).fighterPower( this.slots[0] )
 			+ this.equipment(1).fighterPower( this.slots[1] )
 			+ this.equipment(2).fighterPower( this.slots[2] )
@@ -140,13 +142,23 @@ KC3改 Ship Object
 	Get support expedition power of this ship
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.supportPower = function(){
-		var supportPower = 55;
-		supportPower += (1.5 * Number(this.fp[0]));
-		supportPower += (1.5 * Number(this.tp[0]));
-		supportPower += Number(this.equipment(0).supportPower());
-		supportPower += Number(this.equipment(1).supportPower());
-		supportPower += Number(this.equipment(2).supportPower());
-		supportPower += Number(this.equipment(3).supportPower());
+		if(this.rosterId===0){ return 0; }
+		
+		var supportPower;
+		if(this.master().api_stype==11 || this.master().api_stype==7){
+			// console.log( this.name(), "special support calculation for CV(L)" );
+			supportPower = 55;
+			supportPower += (1.5 * Number(this.fp[0]));
+			supportPower += (1.5 * Number(this.tp[0]));
+			supportPower += Number(this.equipment(0).supportPower());
+			supportPower += Number(this.equipment(1).supportPower());
+			supportPower += Number(this.equipment(2).supportPower());
+			supportPower += Number(this.equipment(3).supportPower());
+			
+		}else{
+			// console.log( this.name(), "normal firepower for support" );
+			supportPower = this.fp[0];
+		}
 		return supportPower;
 	};
 	
