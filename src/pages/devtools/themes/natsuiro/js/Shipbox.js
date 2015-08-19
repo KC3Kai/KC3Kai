@@ -95,28 +95,7 @@ KC3改 Ship Box for Natsuiro theme
 		this.element.css("background-color", "transparent");
 		
 		// Import repair time script by @Javran
-		var RepairCalc = PS['KanColle.RepairTime'];
-		var RepairData = [
-			this.shipData.stype(),
-			this.shipData.level,
-			this.shipData.hp[0],
-			this.shipData.hp[1]
-		];
-		
-		var RepairTimes = {
-			docking: RepairCalc.dockingInSecJS(
-				RepairData[0],
-				RepairData[1],
-				RepairData[2],
-				RepairData[3]
-			),
-			akashi: RepairCalc.facilityInSecJS(
-				RepairData[0],
-				RepairData[1],
-				RepairData[2],
-				RepairData[3]
-			)
-		};
+		var RepairTimes = this.shipData.repairTime();
 		
 		if(RepairTimes.docking > ContainingFleet.highestDocking){
 			ContainingFleet.highestDocking = RepairTimes.docking;
@@ -151,7 +130,6 @@ KC3改 Ship Box for Natsuiro theme
 					// mark hp bar and container box as red if taiha
 					$(".ship_hp_bar", this.element).css("background", "#FF0000");
 					this.element.css("background", "rgba(255,0,0,0.4)");
-					ContainingFleet.hasTaiha = true;
 				} else if(hpPercent <= 0.50){
 					$(".ship_hp_bar", this.element).css("background", "#FF9900");
 				} else if(hpPercent <= 0.75){

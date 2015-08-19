@@ -82,10 +82,25 @@ KC3改 Ship Object
 	KC3Ship.prototype.equipment = function(slot){ return KC3GearManager.get( this.items[slot] ); };
 	KC3Ship.prototype.isFast = function(){ return this.master().api_soku>=10; };
 	KC3Ship.prototype.exItem = function(){ return (this.ex_item>0)?KC3GearManager.get(this.ex_item):false; };
+	KC3Ship.prototype.isTaiha = function(){ return (this.hp[0]/this.hp[1] <= 0.25) && (this.hp[1]>0); };
 	KC3Ship.prototype.resetAfterHp = function(){
 		this.afterHp[0] = this.hp[0];
 		this.afterHp[1] = this.hp[1];
 	};
+	
+	
+	/* REPAIR TIME
+	Get ship's docking and Akashi times
+	--------------------------------------------------------------*/
+	KC3Ship.prototype.repairTime = function(){
+		var RepairCalc = PS['KanColle.RepairTime'];
+		return {
+			docking: RepairCalc.dockingInSecJS( this.stype(), this.level, this.hp[0], this.hp[1] ),
+			akashi: RepairCalc.facilityInSecJS( this.stype(), this.level, this.hp[0], this.hp[1] )
+		};
+	};
+	
+	
 	/* NAKED LOS
 	LoS without the equipment
 	--------------------------------------------------------------*/
@@ -119,6 +134,20 @@ KC3改 Ship Object
 			+ this.equipment(2).fighterPower( this.slots[2] )
 			+ this.equipment(3).fighterPower( this.slots[3] );
 		return thisShipFighter;
+	};
+	
+	/* SUPPORT POWER
+	Get support expedition power of this ship
+	--------------------------------------------------------------*/
+	KC3Ship.prototype.supportPower = function(){
+		var supportPower = 55;
+		supportPower += (1.5 * Number(this.fp[0]));
+		supportPower += (1.5 * Number(this.tp[0]));
+		supportPower += Number(this.equipment(0).supportPower());
+		supportPower += Number(this.equipment(1).supportPower());
+		supportPower += Number(this.equipment(2).supportPower());
+		supportPower += Number(this.equipment(3).supportPower());
+		return supportPower;
 	};
 	
 	/*

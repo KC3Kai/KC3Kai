@@ -61,4 +61,13 @@ KC3改 Equipment Object
 		return 0;
 	};
 	
+	KC3Gear.prototype.supportPower = function(){
+		// Empty item means no fighter power
+		if(this.itemId===0){ return 0; }
+		
+		// 1.5 TP + 2.0 DV
+		return (1.5 * Number(this.master().api_raig) )
+			+(2.0 * Number(this.master().api_baku) );
+	};
+	
 })();

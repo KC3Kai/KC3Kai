@@ -1312,6 +1312,15 @@
 	color:#afa;
 }
 
+.module.status .status_support {
+	display:none;
+}
+.module.status .status_support img {
+	width:14px;
+	height:14px;
+	margin:3px;
+}
+
 
 /* HORIZONTAL LAYOUT
 ------------------------------*/

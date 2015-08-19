@@ -356,8 +356,6 @@
 						? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow")
 				};
 				
-				MainFleet.hasTaiha = false;
-				EscortFleet.hasTaiha = false;
 				$.each(MainFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
 						(new KC3NatsuiroShipbox(".sship", rosterId))
@@ -388,7 +386,7 @@
 				$(".module.status .status_akashi .status_text").text(String(HighestForBothFleets[1]).toHHMMSS());
 				
 				// Taiha status reminder
-				if(MainFleet.hasTaiha || EscortFleet.hasTaiha){
+				if( MainFleet.hasTaiha() || EscortFleet.hasTaiha() ){
 					$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelHasTaiha") );
 					$(".module.status .status_repair .status_text").addClass("bad");
 				}else{
@@ -396,10 +394,12 @@
 					$(".module.status .status_repair .status_text").addClass("good");
 				}
 				
+				// Support power
+				$(".module.status .status_support .status_text").text("");
+				
 			// SINGLE
 			}else{
 				var CurrentFleet = PlayerManager.fleets[selectedFleet-1];
-				CurrentFleet.hasTaiha = false;
 				FleetSummary = {
 					lv: CurrentFleet.totalLevel(),
 					elos: Math.round( CurrentFleet.eLoS() * 100) / 100,
@@ -416,13 +416,12 @@
 				});
 				$(".shiplist_single").show();
 				
-				
 				FleetAnalysis = ExpeditionHelper.analyzeFleet( CurrentFleet );
 				$(".module.status .status_docking .status_text").text(String(CurrentFleet.highestDocking).toHHMMSS());
 				$(".module.status .status_akashi .status_text").text(String(CurrentFleet.highestAkashi).toHHMMSS());
 				
 				// Taiha status reminder
-				if(CurrentFleet.hasTaiha){
+				if( CurrentFleet.hasTaiha() ){
 					$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelHasTaiha") );
 					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/sunk.png");
 					$(".module.status .status_repair .status_text").addClass("bad");
@@ -432,12 +431,9 @@
 					$(".module.status .status_repair .status_text").addClass("good");
 				}
 				
-				// Taiha status reminder
-				/*if(CurrentFleet.hasTaiha){
-					ContainingFleet.lowestMorale
-				}else{
-					
-				}*/
+				// Support power
+				$(".module.status .status_support .status_text").text( CurrentFleet.supportPower() );
+				
 			}
 			
 			if(typeof FleetAnalysis.w != "undefined"){
@@ -466,7 +462,7 @@
 			}
 			
 			// Butai Capability
-			if(selectedFleet==1 || selectedFleet==2 || selectedFleet==5){
+			if(selectedFleet==1 || selectedFleet==5){
 				switch(Number(PlayerManager.combinedFleet)){
 					case 1:
 						$(".module.status .status_butai .status_text").text("Surface");
@@ -478,14 +474,17 @@
 						$(".module.status .status_butai .status_text").text("Not combined");
 						break;
 				}
-				$(".module.status .status_butai").css("visibility", "visible");
+				$(".module.status .status_butai").show();
+				$(".module.status .status_support").hide();
 			}else{
-				$(".module.status .status_butai").css("visibility", "hidden");
+				$(".module.status .status_butai").hide();
+				$(".module.status .status_support").show();
 			}
 			
 			// Repair description tooltips
 			$(".module.status .status_docking").attr("title", KC3Meta.term("PanelHighestDocking") );
 			$(".module.status .status_akashi").attr("title", KC3Meta.term("PanelHighestAkashi") );
+			$(".module.status .status_support").attr("title", KC3Meta.term("PanelSupportPower") );
 			
 			// Fleet Summary Stats
 			$(".summary-level .summary_text").text( FleetSummary.lv );

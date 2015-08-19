@@ -186,6 +186,7 @@
 	"PanelSupplied" : "Supply good",
 	"PanelNotSupplied" : "Need resupply",
 	"PanelGoodMorale" : "Morale good",
+	"PanelSupportPower" : "Support Expedition Shelling Power",
 	
 	"LevelText" : "Level",
 	"LevelShort" : "Lv.",
