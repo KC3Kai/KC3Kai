@@ -111,7 +111,8 @@
 	"SettingsAPIGameScreen" : "Tampilan Game API",
 	"SettingsQuestOverlay" : "Terjemahan Quest",
 	"SettingsQuestTracking" : "Penanda Quest",
-	"SettingsPanelRequirement" : "Tunggu Panel Memuat",
+	"SettingsPanelRequirement" : "Buka Panel untuk Bermain",
+	"SettingsDirectRefresh" : "Refresh Langsung (Bahaya)",
 	"SettingsConfirmExit" : "Konfirmasi Keluar",
 	"SettingsScreenMargin" : "Batas Atas",
 	"SettingsBGColor" : "Warna Latar Belakang",
@@ -165,7 +166,27 @@
 	"PredictionStampPvP" : "Tersingkirkan",
 	"PredictionStampEscort" : "Pengawal",
 	"PredictionStampMVPUseful" : "MVP",
-	"PredictionStampMVPUseless" : "kwkwkw",
+	"PredictionStampMVPUseless" : "Dimaksimalkan",
+	
+	"EventHistoryRank1"  : "MUDAH",
+	"EventHistoryRank2"  : "SEDANG",
+	"EventHistoryRank3"  : "SULIT",
+	"EventHistoryRank1X" : "BOCAH",
+	"EventHistoryRank2X" : "NERAKA",
+	"EventHistoryRank3X" : "MATI KMU NAK",
+	
+	"PanelDocking" : "Perbaikan",
+	"PanelAkashi" : "Akashi",
+	"PanelNoRepair" : "Tak butuh perbaikan",
+	"PanelHighestDocking" : "Waktu Perbaikan",
+	"PanelHighestAkashi" : "Waktu Perbaikan Akashi",
+	
+	"PanelHasTaiha" : "Kritis",
+	"PanelNoTaiha" : "HP baik",
+	"PanelSupplied" : "Suplai baik",
+	"PanelNotSupplied" : "Butuh Perbaikan",
+	"PanelGoodMorale" : "Moral baik",
+	"PanelSupportPower" : "Support Expedition Shelling Power",
 
 	"LevelText" : "Level",
 	"LevelShort" : "Lv.",
@@ -178,5 +199,5 @@
 	"PanelWaitActions" : "Menunggu Game Dimulai...",
 	"PanelErrorStorage" : "Chrome localStorage dinonaktifkan di pengaturan anda. KC3改 memerlukan fitur tersebut. <a href=\"http://stackoverflow.com/a/26671889/483704\" target=\"_blank\">Bagaimana cara mengaktifkannya.</a>.",
 
-	"Dummy" : "Tiruan"
+	"Dummy" : "Dummy"
 }
