@@ -210,6 +210,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "api_directRefresh",
+				"name" : "SettingsDirectRefresh",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "api_margin",
 				"name" : "SettingsScreenMargin",
 				"type" : "small_text",

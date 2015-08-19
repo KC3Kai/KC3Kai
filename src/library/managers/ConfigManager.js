@@ -26,8 +26,8 @@ Retreives when needed to apply on components
 				info_battle 		: false,
 				info_btstamp 		: false,
 				info_boss 			: true,
-				info_troll 			: false, // hidden and false by default. { useful for NightBattle "support" }
-				info_delta 			: false, // hidden and false by default. { altering the default feature of HQ update }
+				info_troll 			: false,
+				info_delta 			: false,
 				
 				ss_mode 			: 0,
 				ss_type 			: 'JPG',
@@ -42,6 +42,7 @@ Retreives when needed to apply on components
 				api_tracking 		: true,
 				api_mustPanel 		: false,
 				api_askExit			: true,
+				api_directRefresh	: false,
 				api_margin			: 0,
 				api_bg_color		: "#def",
 				api_bg_image		: "",

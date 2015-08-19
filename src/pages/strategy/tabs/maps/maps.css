@@ -542,7 +542,9 @@
 	/*background:#fcc;*/
 	font-size:11px;
 }
+.tab_maps .sortie_list .node_airtext .node_FFT ,
 .tab_maps .sortie_list .node_airtext .node_FAT ,
+.tab_maps .sortie_list .node_airtext .node_BFT ,
 .tab_maps .sortie_list .node_airtext .node_BAT {
 	float: left;
 }
