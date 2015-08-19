@@ -112,6 +112,7 @@
 	"SettingsQuestOverlay" : "クエスト翻訳",
 	"SettingsQuestTracking" : "クエスト追跡",
 	"SettingsPanelRequirement" : "ロードするためにパネルを待ち",
+	"SettingsDirectRefresh" : "In-pageリフレッシュ（警告）",
 	"SettingsConfirmExit" : "終了確認",
 	"SettingsScreenMargin" : "上余白",
 	"SettingsBGColor" : "背景の色",
@@ -166,6 +167,13 @@
 	"PredictionStampEscort" : "護衛",
 	"PredictionStampMVPUseful" : "MVP",
 	"PredictionStampMVPUseless" : "最大限に達する！",
+	
+	"EventHistoryRank1"  : "丙",
+	"EventHistoryRank2"  : "乙",
+	"EventHistoryRank3"  : "甲",
+	"EventHistoryRank1X" : "ワロタ",
+	"EventHistoryRank2X" : "やべー",
+	"EventHistoryRank3X" : "無理だ",
 	
 	"LevelText" : "レベル",
 	"LevelShort" : "Lv.",
