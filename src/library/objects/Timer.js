@@ -74,18 +74,7 @@ Has functions for TimerManager to use
 			remaining = Math.ceil((remaining - (timerAllowance*1000))/1000);
 			if(remaining > 0){
 				this.alerted = false;
-				
-				var hrs = Math.floor(remaining/3600);
-				remaining = remaining - (hrs * 3600);
-				if(hrs < 10){ hrs = "0"+hrs; }
-				
-				var min = Math.floor(remaining/60);
-				remaining = remaining - (min * 60);
-				if(min < 10){ min = "0"+min; }
-				
-				if(remaining < 10){ remaining = "0"+remaining; }
-				
-				return hrs+":"+min+":"+remaining;
+				return String(remaining).toHHMMSS();
 			}else{
 				this.completionAlert();
 				return "Complete!";

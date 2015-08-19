@@ -94,6 +94,43 @@ KC3改 Ship Box for Natsuiro theme
 		// Clear box colors
 		this.element.css("background-color", "transparent");
 		
+		// Import repair time script by @Javran
+		var RepairCalc = PS['KanColle.RepairTime'];
+		var RepairData = [
+			this.shipData.stype(),
+			this.shipData.level,
+			this.shipData.hp[0],
+			this.shipData.hp[1]
+		];
+		
+		console.log(RepairData);
+		
+		console.log(RepairCalc.dockingInSecJS(
+			RepairData[0],
+			RepairData[1],
+			RepairData[2],
+			RepairData[3]
+		));
+		
+		var RepairTimes = {
+			docking: String(RepairCalc.dockingInSecJS(
+				RepairData[0],
+				RepairData[1],
+				RepairData[2],
+				RepairData[3]
+			)).toHHMMSS(),
+			akashi: String(RepairCalc.facilityInSecJS(
+				RepairData[0],
+				RepairData[1],
+				RepairData[2],
+				RepairData[3]
+			)).toHHMMSS()
+		};
+		
+		$(".ship_hp_bar", this.element).attr("title", 
+			"Docks: "+RepairTimes.docking+"\n"
+			+"Akashi: "+RepairTimes.akashi);
+		
 		// If ship is being repaired
 		if( PlayerManager.repairShips.indexOf( this.shipData.rosterId ) > -1){
 			$(".ship_hp_bar", this.element).css("background", "#aaccee");
