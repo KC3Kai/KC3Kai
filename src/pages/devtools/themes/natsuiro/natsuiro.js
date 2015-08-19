@@ -465,13 +465,13 @@
 			if(selectedFleet==1 || selectedFleet==5){
 				switch(Number(PlayerManager.combinedFleet)){
 					case 1:
-						$(".module.status .status_butai .status_text").text("Surface");
+						$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedCarrier") );
 						break;
 					case 2:
-						$(".module.status .status_butai .status_text").text("Carrier");
+						$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedSurface") );
 						break;
 					default:
-						$(".module.status .status_butai .status_text").text("Not combined");
+						$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedNone") );
 						break;
 				}
 				$(".module.status .status_butai").show();
