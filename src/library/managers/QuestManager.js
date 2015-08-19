@@ -316,7 +316,6 @@ Uses KC3Quest objects to play around with
 		save :function(){
 			// Store only the list. The actives and opens will be redefined on load()
 			localStorage.quests = JSON.stringify(this.list);
-			console.error("---SAVE QUESTS---" + localStorage.quests);
 		},
 		
 		/* LOAD
@@ -327,8 +326,6 @@ Uses KC3Quest objects to play around with
 				var tempQuests = JSON.parse(localStorage.quests);
 				this.list = {};
 				var tempQuest;
-				
-				console.error("---LOAD QUESTS---", tempQuests);
 				
 				// Empty actives and opens since they will be re-added
 				this.active = [];
@@ -363,7 +360,6 @@ Uses KC3Quest objects to play around with
 					}
 					
 					// Add to manager's main list using Quest object
-					console.log("loading: ",tempQuest);
 					this.list["q"+tempQuest.id] = new KC3Quest();
 					this.list["q"+tempQuest.id].define( tempQuest );
 				}
