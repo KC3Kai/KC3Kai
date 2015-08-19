@@ -175,6 +175,18 @@
 	"EventHistoryRank2X" : "HELL AF",
 	"EventHistoryRank3X" : "GET REKT SON",
 	
+	"PanelDocking" : "Docking",
+	"PanelAkashi" : "Akashi",
+	"PanelNoRepair" : "No repairs needed",
+	"PanelHighestDocking" : "Highest Repair Docks Time",
+	"PanelHighestAkashi" : "Highest Akashi Repair Time",
+	
+	"PanelHasTaiha" : "Critical",
+	"PanelNoTaiha" : "HP good",
+	"PanelSupplied" : "Supply good",
+	"PanelNotSupplied" : "Need resupply",
+	"PanelGoodMorale" : "Morale good",
+	
 	"LevelText" : "Level",
 	"LevelShort" : "Lv.",
 	"LevelNext" : "Next",

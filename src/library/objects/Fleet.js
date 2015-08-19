@@ -21,6 +21,10 @@ Contains summary information about a fleet and its 6 ships
 		this.name = "";
 		this.ships = [ -1, -1, -1, -1, -1, -1 ];
 		this.mission = [ 0, 0, 0, 0 ];
+		this.highestDocking = 0;
+		this.highestAkashi = 0;
+		this.hasTaiha = false;
+		this.lowestMorale = 49;
 	};
 	
 	KC3Fleet.prototype.update = function( data ){
@@ -29,6 +33,11 @@ Contains summary information about a fleet and its 6 ships
 			this.name = data.api_name;
 			this.ships = data.api_ship;
 			this.mission = data.api_mission;
+			this.highestDocking = 0;
+			this.highestAkashi = 0;
+			this.hasTaiha = false;
+			this.lowestMorale = 49;
+			
 			if(data.api_id > 1){
 				if(this.mission[0] > 0){
 					KC3TimerManager.exped( data.api_id ).activate(

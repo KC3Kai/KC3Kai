@@ -1266,7 +1266,50 @@
 
 /*------- STATUS -------*/
 .module.status {
-	background:rgba(80,80,80,0.5);
+	/*background:rgba(255,80,80,0.4);*/
+}
+.module.status .status_box {
+	width:110px;
+	height:20px;
+	line-height:20px;
+	float:left;
+	margin:0px 3px 3px 0px;
+	/*background:#fcc;*/
+}
+.module.status .status_icon {
+	width:20px;
+	height:20px;
+	float:left;
+	margin:0px 4px 0px 1px;
+	/*background:#ccf;*/
+}
+.module.status .status_icon.enclose {
+	background:#fff;
+	border-radius:10px;
+}
+.module.status .status_icon img {
+	width:20px;
+	height:20px;
+	vertical-align:top;
+}
+.module.status .status_text {
+	width:85px;
+	height:20px;
+	float:left;
+	/*background:#cfc;*/
+	color:#fff;
+	text-shadow:0px 0px 5px #000;
+	font-size:13px;
+	white-space:nowrap; 
+	overflow:hidden;
+	text-overflow: ellipsis;
+	-webkit-user-select: none;
+}
+.module.status .status_text.bad {
+	color:#faa;
+}
+.module.status .status_text.good {
+	color:#afa;
 }
 
 

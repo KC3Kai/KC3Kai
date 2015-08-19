@@ -337,6 +337,12 @@
 			$(".shiplist_combined_fleet").html("");
 			$(".shiplist_combined").hide();
 			
+			// Clear status reminder coloring
+			$(".module.status .status_text").removeClass("good");
+			$(".module.status .status_text").removeClass("bad");
+			
+			var FleetAnalysis;
+			
 			// COMBINED
 			if(selectedFleet==5){
 				var MainFleet = PlayerManager.fleets[0];
@@ -349,11 +355,14 @@
 						(MainFleet.fastFleet && EscortFleet.fastFleet)
 						? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow")
 				};
+				
+				MainFleet.hasTaiha = false;
+				EscortFleet.hasTaiha = false;
 				$.each(MainFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
 						(new KC3NatsuiroShipbox(".sship", rosterId))
 							.commonElements()
-							.defineShort()
+							.defineShort( MainFleet )
 							.appendTo(".module.fleet .shiplist_main");
 					}
 				});
@@ -361,15 +370,36 @@
 					if(rosterId > -1){
 						(new KC3NatsuiroShipbox(".sship", rosterId))
 							.commonElements()
-							.defineShort()
+							.defineShort( EscortFleet )
 							.appendTo(".module.fleet .shiplist_escort");
 					}
 				});
 				$(".shiplist_combined").show();
 				
+				var MainFleetAnalysis = ExpeditionHelper.analyzeFleet( MainFleet );
+				var EscortFleetAnalysis = ExpeditionHelper.analyzeFleet( EscortFleet );
+				FleetAnalysis = $.extend(true, MainFleetAnalysis, EscortFleetAnalysis);
+				
+				var HighestForBothFleets = [
+					(MainFleet.highestDocking > EscortFleet.highestDocking)?MainFleet.highestDocking:EscortFleet.highestDocking,
+					(MainFleet.highestAkashi > EscortFleet.highestAkashi)?MainFleet.highestAkashi:EscortFleet.highestAkashi,
+				];
+				$(".module.status .status_docking .status_text").text(String(HighestForBothFleets[0]).toHHMMSS());
+				$(".module.status .status_akashi .status_text").text(String(HighestForBothFleets[1]).toHHMMSS());
+				
+				// Taiha status reminder
+				if(MainFleet.hasTaiha || EscortFleet.hasTaiha){
+					$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelHasTaiha") );
+					$(".module.status .status_repair .status_text").addClass("bad");
+				}else{
+					$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelNoTaiha") );
+					$(".module.status .status_repair .status_text").addClass("good");
+				}
+				
 			// SINGLE
 			}else{
 				var CurrentFleet = PlayerManager.fleets[selectedFleet-1];
+				CurrentFleet.hasTaiha = false;
 				FleetSummary = {
 					lv: CurrentFleet.totalLevel(),
 					elos: Math.round( CurrentFleet.eLoS() * 100) / 100,
@@ -380,12 +410,82 @@
 					if(rosterId > -1){
 						(new KC3NatsuiroShipbox(".lship", rosterId))
 							.commonElements()
-							.defineLong()
+							.defineLong( CurrentFleet )
 							.appendTo(".module.fleet .shiplist_single");
 					}
 				});
 				$(".shiplist_single").show();
+				
+				
+				FleetAnalysis = ExpeditionHelper.analyzeFleet( CurrentFleet );
+				$(".module.status .status_docking .status_text").text(String(CurrentFleet.highestDocking).toHHMMSS());
+				$(".module.status .status_akashi .status_text").text(String(CurrentFleet.highestAkashi).toHHMMSS());
+				
+				// Taiha status reminder
+				if(CurrentFleet.hasTaiha){
+					$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelHasTaiha") );
+					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/sunk.png");
+					$(".module.status .status_repair .status_text").addClass("bad");
+				}else{
+					$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelNoTaiha") );
+					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/check.png");
+					$(".module.status .status_repair .status_text").addClass("good");
+				}
+				
+				// Taiha status reminder
+				/*if(CurrentFleet.hasTaiha){
+					ContainingFleet.lowestMorale
+				}else{
+					
+				}*/
 			}
+			
+			if(typeof FleetAnalysis.w != "undefined"){
+				// Resupply status reminder
+				if(FleetAnalysis.w.indexOf("resupply") > -1){
+					$(".module.status .status_supply .status_text").text( KC3Meta.term("PanelNotSupplied") );
+					$(".module.status .status_supply img").attr("src", "../../../../assets/img/ui/sunk.png");
+					$(".module.status .status_supply .status_text").addClass("bad");
+				}else{
+					$(".module.status .status_supply .status_text").text( KC3Meta.term("PanelSupplied") );
+					$(".module.status .status_supply img").attr("src", "../../../../assets/img/ui/check.png");
+					$(".module.status .status_supply .status_text").addClass("good");
+				}
+				
+				// Morale status reminder
+				if(FleetAnalysis.w.indexOf("morale") > -1){
+					var MoraleTime = 0;
+					$(".module.status .status_morale .status_text").text(String(MoraleTime).toHHMMSS());
+					$(".module.status .status_morale img").attr("src", "../../../../assets/img/ui/sunk.png");
+					$(".module.status .status_morale .status_text").addClass("bad");
+				}else{
+					$(".module.status .status_morale .status_text").text( KC3Meta.term("PanelGoodMorale") );
+					$(".module.status .status_morale img").attr("src", "../../../../assets/img/ui/check.png");
+					$(".module.status .status_morale .status_text").addClass("good");
+				}
+			}
+			
+			// Butai Capability
+			if(selectedFleet==1 || selectedFleet==2 || selectedFleet==5){
+				switch(Number(PlayerManager.combinedFleet)){
+					case 1:
+						$(".module.status .status_butai .status_text").text("Surface");
+						break;
+					case 2:
+						$(".module.status .status_butai .status_text").text("Carrier");
+						break;
+					default:
+						$(".module.status .status_butai .status_text").text("Not combined");
+						break;
+				}
+				$(".module.status .status_butai").css("visibility", "visible");
+			}else{
+				$(".module.status .status_butai").css("visibility", "hidden");
+			}
+			
+			// Repair description tooltips
+			$(".module.status .status_docking").attr("title", KC3Meta.term("PanelHighestDocking") );
+			$(".module.status .status_akashi").attr("title", KC3Meta.term("PanelHighestAkashi") );
 			
 			// Fleet Summary Stats
 			$(".summary-level .summary_text").text( FleetSummary.lv );
@@ -402,6 +502,7 @@
 				KC3TimerManager._exped[1].face();
 				KC3TimerManager._exped[2].face();
 			}
+			
 		},
 		
 		SortieStart: function(data){
