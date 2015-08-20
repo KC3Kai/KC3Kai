@@ -67,6 +67,21 @@
 			}
 		});
 		
+		// HQ Exp Toggle
+		$(".admiral_lvnext").on("click",function(){
+			ConfigManager.scrollHQExpInfo();
+			NatsuiroListeners.HQ();
+		}).addClass("hover");
+		
+		// eLoS Toggle
+		$(".summary-eqlos").on("click",function(){
+			ConfigManager.scrollElosMode();
+			var fl = (selectedFleet < 5) ? [selectedFleet] : [0,1];
+			fl.forEach(function(x){
+				$(".summary-eqlos .summary_text").text( Math.round(PlayerManager.fleets[x].eLoS() * 100) / 100 );
+			});
+		}).addClass("hover");
+		
 		// Screenshot buttons
 		$(".module.controls .btn_ss1").on("click", function(){
 			$(this).hide();
@@ -252,12 +267,20 @@
 		},
 		
 		HQ: function(data){
+			var
+				maxHQ  = Object.keys(KC3Meta._exp).map(function(a){return parseInt(a);}).reduce(function(a,b){return a>b?a:b;}),
+				hqDt   = (PlayerManager.hq.level>=maxHQ ? 3 : ConfigManager.hqExpDetail),
+				hqt    = KC3Meta.term("HQExpAbbrev" + hqDt),
+				hqexpd = Math.abs($(".admiral_lvnext").attr("data-exp-gain"));
 			$(".admiral_name").text( PlayerManager.hq.name );
 			$(".admiral_comm").text( PlayerManager.hq.desc );
 			$(".admiral_rank").text( PlayerManager.hq.rank );
 			$(".admiral_lvval").text( PlayerManager.hq.level );
 			$(".admiral_lvbar").css({width: Math.round(PlayerManager.hq.exp[0]*58)+"px"});
-			$(".admiral_lvnext").text( "-"+PlayerManager.hq.exp[1] );
+			$(".admiral_lvnext")
+				.attr("data-exp",hqt)
+				.attr("data-exp-gain",((($(".admiral_lvnext").attr("data-exp-gain")||"").length > 0) ? (KC3SortieManager.hqExpGained * (hqDt == 1 ? -1 : 1)) : ""))
+				.text( PlayerManager.hq.exp[hqDt] * (hqDt == 1 ? -1 : 1) );
 		},
 		
 		Consumables: function(data){
