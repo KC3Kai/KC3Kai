@@ -155,6 +155,10 @@ Uses Dexie.js third-party plugin on the assets directory
 			this.con.open();
 		},
 		
+		clear :function(callback){
+			this.con.delete().then(callback);
+		},
+		
 		Newsfeed: function(data){
 			this.con.newsfeed.add({
 				hq: this.index,
@@ -381,18 +385,10 @@ Uses Dexie.js third-party plugin on the assets directory
 		get_sortie :function( sortie_id, callback ){
 			var self = this;
 			this.con.sortie
-				.where("id").equals(sortie_id)
+				.where("id").equals(Number(sortie_id))
 				.toArray(function(response){
 					if(response.length > 0){
-						
-						// Get all battles on this sortie
-						self.con.battle
-							.where("sortie_id").equals(sortie_id)
-							.toArray(function(battleList){
-								response[0].battles = battleList;
-								callback(response[0]);
-							});
-							
+						callback(response[0]);
 					}else{
 						callback(false);
 					}
@@ -430,6 +426,18 @@ Uses Dexie.js third-party plugin on the assets directory
 							
 							callback2(foundBattle);
 						});
+				});
+		},
+		
+		getBattleById : function(battleId, callback) {
+			this.con.battle
+				.where("id").equals(Number(battleId))
+				.toArray(function( ResultBattles ){
+					if(ResultBattles.length > 0){
+						callback( ResultBattles[0] );
+					}else{
+						callback(false);
+					}
 				});
 		},
 		
