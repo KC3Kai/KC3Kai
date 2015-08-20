@@ -671,7 +671,7 @@
 			
 			// Enemy HP Predictions
 			if(ConfigManager.info_battle){
-				var newEnemyHP;
+				var newEnemyHP, enemyHPPercent;
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > -1){
 						newEnemyHP = thisNode.enemyHP[index].currentHp;
@@ -684,8 +684,19 @@
 								.css("-webkit-filter","");
 						}
 						
-						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width",
-							28*( newEnemyHP / thisNode.originalHPs[index+7] ));
+						enemyHPPercent = ( newEnemyHP / thisNode.originalHPs[index+7] );
+						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width", 28*enemyHPPercent);
+						
+						if(enemyHPPercent <= 0.25){
+							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FF0000");
+						} else if(enemyHPPercent <= 0.50){
+							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FF9900");
+						} else if(enemyHPPercent <= 0.75){
+							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FFFF00");
+						} else{
+							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#00FF00");
+						}
+						
 						$(".module.activity .abyss_hp_"+(index+1)).show();
 					}
 				});
@@ -757,7 +768,7 @@
 			// Enemy HP Predictions
 			var thisNode = KC3SortieManager.currentNode();
 			if(ConfigManager.info_battle){
-				var newEnemyHP;
+				var newEnemyHP, enemyHPPercent;
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > -1){
 						newEnemyHP = thisNode.enemyHP[index].currentHp;
@@ -770,8 +781,19 @@
 								.css("-webkit-filter",(data||{safeSunk:false}).safeSunk ? "grayscale(100%)" : "");
 						}
 						
-						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width",
-							28*( newEnemyHP / thisNode.originalHPs[index+7] ));
+						enemyHPPercent = ( newEnemyHP / thisNode.originalHPs[index+7] );
+						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width", 28*enemyHPPercent);
+						
+						if(enemyHPPercent <= 0.25){
+							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FF0000");
+						} else if(enemyHPPercent <= 0.50){
+							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FF9900");
+						} else if(enemyHPPercent <= 0.75){
+							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FFFF00");
+						} else{
+							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#00FF00");
+						}
+						
 						$(".module.activity .abyss_hp_"+(index+1)).show();
 					}
 				});
@@ -876,7 +898,7 @@
 			
 			// Enemy HP Predictions
 			if(ConfigManager.info_battle){
-				var newEnemyHP;
+				var newEnemyHP, enemyHPPercent;
 				$.each(thisPvP.eships, function(index, eshipId){
 					if(eshipId > -1){
 						newEnemyHP = thisPvP.enemyHP[index].currentHp;
@@ -889,8 +911,19 @@
 								.css("-webkit-filter","grayscale(100%)");
 						}
 						
-						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width",
-							28*( newEnemyHP / thisPvP.originalHPs[index+7] ));
+						enemyHPPercent = ( newEnemyHP / thisPvP.originalHPs[index+7] );
+						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width", 28*enemyHPPercent);
+						
+						if(enemyHPPercent <= 0.25){
+							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FF0000");
+						} else if(enemyHPPercent <= 0.50){
+							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FF9900");
+						} else if(enemyHPPercent <= 0.75){
+							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FFFF00");
+						} else{
+							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#00FF00");
+						}
+						
 						$(".module.activity .abyss_hp_"+(index+1)).show();
 					}
 				});
