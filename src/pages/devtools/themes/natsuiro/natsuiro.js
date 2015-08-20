@@ -411,9 +411,11 @@
 				// Taiha status reminder
 				if( MainFleet.hasTaiha() || EscortFleet.hasTaiha() ){
 					$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelHasTaiha") );
+					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/sunk.png");
 					$(".module.status .status_repair .status_text").addClass("bad");
 				}else{
 					$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelNoTaiha") );
+					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/check.png");
 					$(".module.status .status_repair .status_text").addClass("good");
 				}
 				
