@@ -269,7 +269,7 @@
 		
 		ShipSlots: function(data){
 			$(".count_ships").text( KC3ShipManager.count() ).each(function(){
-				if((KC3ShipManager.max - KC3ShipManager.count()) <= 5){
+				if((KC3ShipManager.max - KC3ShipManager.count()) < 5){
 					$(this).addClass("danger");
 				}else{
 					$(this).removeClass("danger");
@@ -280,7 +280,7 @@
 		
 		GearSlots: function(data){
 			$(".count_gear").text( KC3GearManager.count() ).each(function(){
-				if((KC3GearManager.max - KC3GearManager.count()) <= 20){
+				if((KC3GearManager.max - KC3GearManager.count()) < 20){
 					$(this).addClass("danger");
 				}else{
 					$(this).removeClass("danger");
@@ -631,6 +631,17 @@
 					$(".module.activity .node_type_text").addClass("dud");
 					$(".module.activity .node_type_text").show();
 					break;
+			}
+			
+			// If compass setting disabled, hide node letters
+			if(ConfigManager.info_compass){
+				console.log("nodes enabled");
+				$(".module.activity .node_types").show();
+				$(".module.activity .sortie_node").show();
+			}else{
+				console.log("hide nodes");
+				$(".module.activity .node_types").hide();
+				$(".module.activity .sortie_node").hide();
 			}
 		},
 		

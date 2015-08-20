@@ -338,8 +338,8 @@
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ "default", "Default" ],
-						[ "natsuiro", "Natsuiro" ]
+						[ "natsuiro", "Natsuiro" ],
+						[ "default", "Legacy" ]
 					]
 				}
 			},

@@ -146,7 +146,7 @@ Does not include Ships and Gears which are managed by other Managers
 		setNewsfeed :function( data, stime ){
 			console.log("newsfeed", data);
 			$.each(data, function( index, element){
-				if(element.api_state=="1"){
+				if(parseInt(element.api_state, 10) !== 0){
 					console.log("saved news", element);
 					KC3Database.Newsfeed({
 						type: element.api_type,
