@@ -217,12 +217,12 @@ Used by SortieManager
 		} else {
 			if (PlayerManager.combinedFleet === 1) {
 				result = DA.analyzeRawCarrierTaskForceBattleJS(battleData); 
-				console.log("Carrier Task Force");
+				// console.log("Carrier Task Force");
 			} else {
 				result = DA.analyzeRawSurfaceTaskForceBattleJS(battleData); 
-				console.log("Surface Task Force");
+				// console.log("Surface Task Force");
 			}
-			console.log("analysis result", result);
+			// console.log("analysis result", result);
 
 			// Update enemy
 			for(i = 1; i <= 6; i++) {

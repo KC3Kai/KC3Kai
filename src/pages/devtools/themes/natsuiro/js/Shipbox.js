@@ -21,8 +21,6 @@ KC3改 Ship Box for Natsuiro theme
 		$(".ship_name", this.element).text( this.shipData.name() );
 		$(".ship_type", this.element).text( this.shipData.stype() );
 		
-		this.showMorale();
-		
 		// Item on 5th slot
 		var myExItem = this.shipData.exItem();
 		if( myExItem && (myExItem.masterId > 0)){
@@ -38,10 +36,11 @@ KC3改 Ship Box for Natsuiro theme
 	/* DEFINE SHORT
 	Short ship box for combined fleets
 	---------------------------------------------------*/
-	KC3NatsuiroShipbox.prototype.defineShort = function(){
+	KC3NatsuiroShipbox.prototype.defineShort = function( ContainingFleet ){
 		this.hpBarLength = 88;
-		this.showHP();
+		this.showHP( ContainingFleet );
 		this.showPrediction();
+		this.showMorale( ContainingFleet );
 		
 		// Thin bars below the ship box
 		$(".ship_exp", this.element).css("width", (120 * this.expPercent)+"px");		
@@ -55,10 +54,11 @@ KC3改 Ship Box for Natsuiro theme
 	/* DEFINE LONG
 	Long ship box for single-view fleets
 	---------------------------------------------------*/
-	KC3NatsuiroShipbox.prototype.defineLong = function(){
+	KC3NatsuiroShipbox.prototype.defineLong = function( ContainingFleet ){
 		this.hpBarLength = 118;
-		this.showHP();
+		this.showHP( ContainingFleet );
 		this.showPrediction();
+		this.showMorale( ContainingFleet);
 		
 		$(".ship_level span", this.element).text( this.shipData.level );		
 		$(".ship_exp_next", this.element).text( this.shipData.exp[1] );		
@@ -82,7 +82,7 @@ KC3改 Ship Box for Natsuiro theme
 	HP text, bars and its value-dependent colors
 	Includes highlighting for repair or damage states
 	---------------------------------------------------*/
-	KC3NatsuiroShipbox.prototype.showHP = function(){
+	KC3NatsuiroShipbox.prototype.showHP = function( ContainingFleet ){
 		// HP text
 		$(".ship_hp_cur", this.element).text( this.shipData.hp[0] );
 		$(".ship_hp_max", this.element).text( "/"+this.shipData.hp[1] );
@@ -94,13 +94,32 @@ KC3改 Ship Box for Natsuiro theme
 		// Clear box colors
 		this.element.css("background-color", "transparent");
 		
+		// Import repair time script by @Javran
+		var RepairTimes = this.shipData.repairTime();
+		
+		if(RepairTimes.docking > ContainingFleet.highestDocking){
+			ContainingFleet.highestDocking = RepairTimes.docking;
+		}
+		
+		if(RepairTimes.akashi > ContainingFleet.highestAkashi){
+			ContainingFleet.highestAkashi = RepairTimes.akashi;
+		}
+		
+		if(RepairTimes.docking > 0){
+			$(".ship_hp_box", this.element).attr("title", 
+				KC3Meta.term("PanelDocking")+": "+String(RepairTimes.docking).toHHMMSS()+"\n"
+				+KC3Meta.term("PanelAkashi")+": "+String(RepairTimes.akashi).toHHMMSS()
+			);
+		}else{
+			$(".ship_hp_box", this.element).attr("title", KC3Meta.term("PanelNoRepair"));
+		}
+		
 		// If ship is being repaired
 		if( PlayerManager.repairShips.indexOf( this.shipData.rosterId ) > -1){
 			$(".ship_hp_bar", this.element).css("background", "#aaccee");
 			this.element.css("background-color", "rgba(100,255,100,0.3)");
 		// If not being repaired
 		}else{
-			console.log("Updating HP", this.shipData.name(), this.shipData.didFlee);
 			if(this.shipData.didFlee){
 				console.log( this.shipData.name(), "fled, setting backgrounds to white");
 				// if FCF, mark hp bar as blue
@@ -159,7 +178,7 @@ KC3改 Ship Box for Natsuiro theme
 	Morale value on the circle, and its colors
 	Add special glow if more than 54
 	---------------------------------------------------*/
-	KC3NatsuiroShipbox.prototype.showMorale = function(){
+	KC3NatsuiroShipbox.prototype.showMorale = function( ContainingFleet ){
 		$(".ship_morale", this.element).text( this.shipData.morale );
 		switch(true){
 			case this.shipData.morale > 53:
@@ -181,6 +200,11 @@ KC3改 Ship Box for Natsuiro theme
 			default:
 				$(".ship_morale", this.element).css("background", "#FFA6A6");
 				break;
+		}
+		
+		// Check if this is the lowest morale on fleet, set if it is
+		if(this.shipData.morale < ContainingFleet.lowestMorale){
+			ContainingFleet.lowestMorale = this.shipData.morale;
 		}
 	};
 	

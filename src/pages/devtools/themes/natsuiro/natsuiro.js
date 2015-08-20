@@ -269,7 +269,7 @@
 		
 		ShipSlots: function(data){
 			$(".count_ships").text( KC3ShipManager.count() ).each(function(){
-				if((KC3ShipManager.max - KC3ShipManager.count()) <= 5){
+				if((KC3ShipManager.max - KC3ShipManager.count()) < 5){
 					$(this).addClass("danger");
 				}else{
 					$(this).removeClass("danger");
@@ -280,7 +280,7 @@
 		
 		GearSlots: function(data){
 			$(".count_gear").text( KC3GearManager.count() ).each(function(){
-				if((KC3GearManager.max - KC3GearManager.count()) <= 20){
+				if((KC3GearManager.max - KC3GearManager.count()) < 20){
 					$(this).addClass("danger");
 				}else{
 					$(this).removeClass("danger");
@@ -337,6 +337,12 @@
 			$(".shiplist_combined_fleet").html("");
 			$(".shiplist_combined").hide();
 			
+			// Clear status reminder coloring
+			$(".module.status .status_text").removeClass("good");
+			$(".module.status .status_text").removeClass("bad");
+			
+			var FleetAnalysis;
+			
 			// COMBINED
 			if(selectedFleet==5){
 				var MainFleet = PlayerManager.fleets[0];
@@ -349,11 +355,12 @@
 						(MainFleet.fastFleet && EscortFleet.fastFleet)
 						? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow")
 				};
+				
 				$.each(MainFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
 						(new KC3NatsuiroShipbox(".sship", rosterId))
 							.commonElements()
-							.defineShort()
+							.defineShort( MainFleet )
 							.appendTo(".module.fleet .shiplist_main");
 					}
 				});
@@ -361,11 +368,34 @@
 					if(rosterId > -1){
 						(new KC3NatsuiroShipbox(".sship", rosterId))
 							.commonElements()
-							.defineShort()
+							.defineShort( EscortFleet )
 							.appendTo(".module.fleet .shiplist_escort");
 					}
 				});
 				$(".shiplist_combined").show();
+				
+				var MainFleetAnalysis = ExpeditionHelper.analyzeFleet( MainFleet );
+				var EscortFleetAnalysis = ExpeditionHelper.analyzeFleet( EscortFleet );
+				FleetAnalysis = $.extend(true, MainFleetAnalysis, EscortFleetAnalysis);
+				
+				var HighestForBothFleets = [
+					(MainFleet.highestDocking > EscortFleet.highestDocking)?MainFleet.highestDocking:EscortFleet.highestDocking,
+					(MainFleet.highestAkashi > EscortFleet.highestAkashi)?MainFleet.highestAkashi:EscortFleet.highestAkashi,
+				];
+				$(".module.status .status_docking .status_text").text(String(HighestForBothFleets[0]).toHHMMSS());
+				$(".module.status .status_akashi .status_text").text(String(HighestForBothFleets[1]).toHHMMSS());
+				
+				// Taiha status reminder
+				if( MainFleet.hasTaiha() || EscortFleet.hasTaiha() ){
+					$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelHasTaiha") );
+					$(".module.status .status_repair .status_text").addClass("bad");
+				}else{
+					$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelNoTaiha") );
+					$(".module.status .status_repair .status_text").addClass("good");
+				}
+				
+				// Support power
+				$(".module.status .status_support .status_text").text("");
 				
 			// SINGLE
 			}else{
@@ -380,12 +410,81 @@
 					if(rosterId > -1){
 						(new KC3NatsuiroShipbox(".lship", rosterId))
 							.commonElements()
-							.defineLong()
+							.defineLong( CurrentFleet )
 							.appendTo(".module.fleet .shiplist_single");
 					}
 				});
 				$(".shiplist_single").show();
+				
+				FleetAnalysis = ExpeditionHelper.analyzeFleet( CurrentFleet );
+				$(".module.status .status_docking .status_text").text(String(CurrentFleet.highestDocking).toHHMMSS());
+				$(".module.status .status_akashi .status_text").text(String(CurrentFleet.highestAkashi).toHHMMSS());
+				
+				// Taiha status reminder
+				if( CurrentFleet.hasTaiha() ){
+					$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelHasTaiha") );
+					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/sunk.png");
+					$(".module.status .status_repair .status_text").addClass("bad");
+				}else{
+					$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelNoTaiha") );
+					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/check.png");
+					$(".module.status .status_repair .status_text").addClass("good");
+				}
+				
+				// Support power
+				$(".module.status .status_support .status_text").text( CurrentFleet.supportPower() );
+				
 			}
+			
+			if(typeof FleetAnalysis.w != "undefined"){
+				// Resupply status reminder
+				if(FleetAnalysis.w.indexOf("resupply") > -1){
+					$(".module.status .status_supply .status_text").text( KC3Meta.term("PanelNotSupplied") );
+					$(".module.status .status_supply img").attr("src", "../../../../assets/img/ui/sunk.png");
+					$(".module.status .status_supply .status_text").addClass("bad");
+				}else{
+					$(".module.status .status_supply .status_text").text( KC3Meta.term("PanelSupplied") );
+					$(".module.status .status_supply img").attr("src", "../../../../assets/img/ui/check.png");
+					$(".module.status .status_supply .status_text").addClass("good");
+				}
+				
+				// Morale status reminder
+				if(FleetAnalysis.w.indexOf("morale") > -1){
+					var MoraleTime = 0;
+					$(".module.status .status_morale .status_text").text(String(MoraleTime).toHHMMSS());
+					$(".module.status .status_morale img").attr("src", "../../../../assets/img/ui/sunk.png");
+					$(".module.status .status_morale .status_text").addClass("bad");
+				}else{
+					$(".module.status .status_morale .status_text").text( KC3Meta.term("PanelGoodMorale") );
+					$(".module.status .status_morale img").attr("src", "../../../../assets/img/ui/check.png");
+					$(".module.status .status_morale .status_text").addClass("good");
+				}
+			}
+			
+			// Butai Capability
+			if(selectedFleet==1 || selectedFleet==5){
+				switch(Number(PlayerManager.combinedFleet)){
+					case 1:
+						$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedCarrier") );
+						break;
+					case 2:
+						$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedSurface") );
+						break;
+					default:
+						$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedNone") );
+						break;
+				}
+				$(".module.status .status_butai").show();
+				$(".module.status .status_support").hide();
+			}else{
+				$(".module.status .status_butai").hide();
+				$(".module.status .status_support").show();
+			}
+			
+			// Repair description tooltips
+			$(".module.status .status_docking").attr("title", KC3Meta.term("PanelHighestDocking") );
+			$(".module.status .status_akashi").attr("title", KC3Meta.term("PanelHighestAkashi") );
+			$(".module.status .status_support").attr("title", KC3Meta.term("PanelSupportPower") );
 			
 			// Fleet Summary Stats
 			$(".summary-level .summary_text").text( FleetSummary.lv );
@@ -402,6 +501,7 @@
 				KC3TimerManager._exped[1].face();
 				KC3TimerManager._exped[2].face();
 			}
+			
 		},
 		
 		SortieStart: function(data){
@@ -532,6 +632,17 @@
 					$(".module.activity .node_type_text").show();
 					break;
 			}
+			
+			// If compass setting disabled, hide node letters
+			if(ConfigManager.info_compass){
+				console.log("nodes enabled");
+				$(".module.activity .node_types").show();
+				$(".module.activity .sortie_node").show();
+			}else{
+				console.log("hide nodes");
+				$(".module.activity .node_types").hide();
+				$(".module.activity .sortie_node").hide();
+			}
 		},
 		
 		BattleStart: function(data){
@@ -560,7 +671,7 @@
 			
 			// Enemy HP Predictions
 			if(ConfigManager.info_battle){
-				var newEnemyHP;
+				var newEnemyHP, enemyHPPercent;
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > -1){
 						newEnemyHP = thisNode.enemyHP[index].currentHp;
@@ -573,8 +684,19 @@
 								.css("-webkit-filter","");
 						}
 						
-						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width",
-							28*( newEnemyHP / thisNode.originalHPs[index+7] ));
+						enemyHPPercent = ( newEnemyHP / thisNode.originalHPs[index+7] );
+						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width", 28*enemyHPPercent);
+						
+						if(enemyHPPercent <= 0.25){
+							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FF0000");
+						} else if(enemyHPPercent <= 0.50){
+							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FF9900");
+						} else if(enemyHPPercent <= 0.75){
+							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FFFF00");
+						} else{
+							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#00FF00");
+						}
+						
 						$(".module.activity .abyss_hp_"+(index+1)).show();
 					}
 				});
@@ -646,7 +768,7 @@
 			// Enemy HP Predictions
 			var thisNode = KC3SortieManager.currentNode();
 			if(ConfigManager.info_battle){
-				var newEnemyHP;
+				var newEnemyHP, enemyHPPercent;
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > -1){
 						newEnemyHP = thisNode.enemyHP[index].currentHp;
@@ -659,8 +781,19 @@
 								.css("-webkit-filter",(data||{safeSunk:false}).safeSunk ? "grayscale(100%)" : "");
 						}
 						
-						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width",
-							28*( newEnemyHP / thisNode.originalHPs[index+7] ));
+						enemyHPPercent = ( newEnemyHP / thisNode.originalHPs[index+7] );
+						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width", 28*enemyHPPercent);
+						
+						if(enemyHPPercent <= 0.25){
+							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FF0000");
+						} else if(enemyHPPercent <= 0.50){
+							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FF9900");
+						} else if(enemyHPPercent <= 0.75){
+							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FFFF00");
+						} else{
+							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#00FF00");
+						}
+						
 						$(".module.activity .abyss_hp_"+(index+1)).show();
 					}
 				});
@@ -765,7 +898,7 @@
 			
 			// Enemy HP Predictions
 			if(ConfigManager.info_battle){
-				var newEnemyHP;
+				var newEnemyHP, enemyHPPercent;
 				$.each(thisPvP.eships, function(index, eshipId){
 					if(eshipId > -1){
 						newEnemyHP = thisPvP.enemyHP[index].currentHp;
@@ -778,8 +911,19 @@
 								.css("-webkit-filter","grayscale(100%)");
 						}
 						
-						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width",
-							28*( newEnemyHP / thisPvP.originalHPs[index+7] ));
+						enemyHPPercent = ( newEnemyHP / thisPvP.originalHPs[index+7] );
+						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width", 28*enemyHPPercent);
+						
+						if(enemyHPPercent <= 0.25){
+							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FF0000");
+						} else if(enemyHPPercent <= 0.50){
+							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FF9900");
+						} else if(enemyHPPercent <= 0.75){
+							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FFFF00");
+						} else{
+							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#00FF00");
+						}
+						
 						$(".module.activity .abyss_hp_"+(index+1)).show();
 					}
 				});

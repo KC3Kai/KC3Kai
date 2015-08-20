@@ -29,6 +29,10 @@ Contains summary information about a fleet and its 6 ships
 			this.name = data.api_name;
 			this.ships = data.api_ship;
 			this.mission = data.api_mission;
+			this.highestDocking = 0;
+			this.highestAkashi = 0;
+			this.lowestMorale = 49;
+			
 			if(data.api_id > 1){
 				if(this.mission[0] > 0){
 					KC3TimerManager.exped( data.api_id ).activate(
@@ -63,6 +67,15 @@ Contains summary information about a fleet and its 6 ships
 		for(var i = 0; i < this.countShips(); i++) {
 			this.ship(i).resetAfterHp();
 		}
+	};
+	
+	KC3Fleet.prototype.hasTaiha = function(){
+		return this.ship(0).isTaiha()
+			|| this.ship(1).isTaiha()
+			|| this.ship(2).isTaiha()
+			|| this.ship(3).isTaiha()
+			|| this.ship(4).isTaiha()
+			|| this.ship(5).isTaiha();
 	};
 	
 	KC3Fleet.prototype.clearNonFlagShips = function(){
@@ -105,6 +118,15 @@ Contains summary information about a fleet and its 6 ships
 			.reduce(function(x,y){return x+y;}) * 100)/100;
 	};
 	
+	KC3Fleet.prototype.supportPower = function(){
+		return this.ship(0).supportPower()
+			+this.ship(1).supportPower()
+			+this.ship(2).supportPower()
+			+this.ship(3).supportPower()
+			+this.ship(4).supportPower()
+			+this.ship(5).supportPower();
+	};
+	
 	KC3Fleet.prototype.speed = function(){
 		this.fastFleet = true;
 		var i = 0;
@@ -118,23 +140,7 @@ Contains summary information about a fleet and its 6 ships
 	};
 	
 	KC3Fleet.prototype.qualifyingExpeditions = function(){
-		
-	};
-	
-	KC3Fleet.prototype.compileStats = function(){
-		
-	};
-	
-	KC3Fleet.prototype.canCombineCarrier = function(){
-		
-	};
-	
-	KC3Fleet.prototype.canCombineSurface = function(){
-		
-	};
-	
-	KC3Fleet.prototype.supportPower = function(){
-		
+		return ExpeditionHelper.analyzeFleet(this).e;
 	};
 	
 	KC3Fleet.prototype.eLoS = function(){

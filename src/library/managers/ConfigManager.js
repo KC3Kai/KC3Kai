@@ -13,7 +13,7 @@ Retreives when needed to apply on components
 		// Default values. As a function to not include on JSON string
 		defaults : function(){
 			return {
-				version				: 6,
+				version				: 7,
 				language			: "en",
 				elosFormula 		: 3,
 				hqExpDetail 		: 1,
@@ -23,9 +23,9 @@ Retreives when needed to apply on components
 				info_drop 			: true,
 				info_craft 			: true,
 				info_compass 		: true,
-				info_battle 		: false,
+				info_battle 		: true,
 				info_btstamp 		: false,
-				info_boss 			: true,
+				info_boss 			: false,
 				info_troll 			: false,
 				info_delta 			: false,
 				
@@ -61,7 +61,7 @@ Retreives when needed to apply on components
 				dmm_bg_size			: "cover",
 				dmm_bg_position		: "top center",
 				
-				pan_theme			: "default",
+				pan_theme			: "natsuiro",
 				pan_size			: "big",
 				pan_gear_holder		: "black",
 				pan_bg_color		: "#def",

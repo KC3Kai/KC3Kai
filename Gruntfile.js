@@ -24,9 +24,10 @@ module.exports = function(grunt) {
 					'assets/snd/**',
 					'assets/js/Chart.min.js',
 					'assets/js/Dexie.min.js',
-					'assets/js/KanColleHelpers.js',
 					'assets/js/FileSaver.min.js',
-					'assets/js/jquery-ui.min.js'
+					'assets/js/jquery-ui.min.js',
+					'assets/js/KanColleHelpers.js',
+					'assets/js/twbsPagination.min.js'
 				],
 				dest: 'build/release/'
 			},

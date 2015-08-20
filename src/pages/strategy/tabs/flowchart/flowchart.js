@@ -61,6 +61,47 @@
 				KC3QuestManager.clear();
 				window.location.reload();
 			});
+			
+			// Manual quest count overrides
+			$(".tab_flowchart").on("click", ".questOverride", function(){
+				var editingQuest = KC3QuestManager.get($(this).data("id"));
+				if(typeof editingQuest.tracking != "undefined"){
+					// +1
+					if( $(this).hasClass("questAdd") ){
+						if(editingQuest.tracking[0][0] < editingQuest.tracking[0][1]){
+							editingQuest.tracking[0][0]++;
+						}
+					
+					// -1
+					}else if( $(this).hasClass("questMinus") ){
+						if(editingQuest.tracking[0][0] > 0){
+							editingQuest.tracking[0][0]--;
+						}
+					}
+					
+					KC3QuestManager.save();
+					$(this).parent().find(".questCount").text( editingQuest.outputShort() );
+				}
+			});
+			
+			// Manual override quest status
+			$(".tab_flowchart").on("click", ".questToggle", function(){
+				var editingQuest = KC3QuestManager.get($(this).data("id"));
+				console.log(editingQuest.status);
+				editingQuest.status++;
+				if(editingQuest.status>=4){ editingQuest.status=0; }
+				KC3QuestManager.save();
+				window.location.reload();
+			});
+			
+			// Manual remove quest
+			$(".tab_flowchart").on("click", ".questRemove", function(){
+				console.log(KC3QuestManager.list["q"+$(this).data("id")]);
+				delete KC3QuestManager.list["q"+$(this).data("id")];
+				KC3QuestManager.save();
+				window.location.reload();
+			});
+			
 		},
 		
 		/* Add a branch item to the flowchart
@@ -77,6 +118,9 @@
 			$(".questIcon", thisBox).text( thisQuest.code );
 			$(".questIcon", thisBox).addClass("type"+(String(quest_id).substring(0,1)));
 			$(".questDesc", thisBox).text( thisQuest.desc);
+			$(".questOverride", thisBox).data("id", quest_id);
+			$(".questToggle", thisBox).data("id", quest_id);
+			$(".questRemove", thisBox).data("id", quest_id);
 			
 			// If we have player data about the quest, not just meta data from json
 			if(typeof KC3QuestManager.list["q"+quest_id] != "undefined"){
@@ -117,8 +161,12 @@
 						break;
 				}
 				
-				$(".questTrack", thisBox).text( questRecord.outputShort() );
-			
+				$(".questCount", thisBox).text( questRecord.outputShort() );
+				
+				if(typeof questRecord.tracking != "undefined"){
+					$(".questTrack", thisBox).show();
+				}
+				
 			// If we don't have player data about the quest
 			}else{
 				$(".questInfo", thisBox).addClass("disabled");
