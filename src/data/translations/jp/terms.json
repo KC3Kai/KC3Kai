@@ -175,6 +175,23 @@
 	"EventHistoryRank2X" : "やべー",
 	"EventHistoryRank3X" : "無理だ",
 	
+	"PanelDocking" : "入渠",
+	"PanelAkashi" : "明石",
+	"PanelNoRepair" : "修理は必要ありません。",
+	"PanelHighestDocking" : "最高の入渠修理の時間",
+	"PanelHighestAkashi" : "最高の明石修理の時間",
+	
+	"PanelHasTaiha" : "臨界",
+	"PanelNoTaiha" : "良好",
+	"PanelSupplied" : "補給良い",
+	"PanelNotSupplied" : "補給が必要",
+	"PanelGoodMorale" : "士気良い",
+	"PanelSupportPower" : "支援射撃威力",
+	
+	"CombinedCarrier" : "機動部隊",
+	"CombinedSurface" : "水上部隊",
+	"CombinedNone" : "部隊なし",
+	
 	"LevelText" : "レベル",
 	"LevelShort" : "Lv.",
 	"LevelNext" : "次",
