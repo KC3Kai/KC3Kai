@@ -36,6 +36,8 @@
 				$(this).addClass("active");
 				
 				$(".tab_maps .map_list").html("");
+				$(".tab_maps .page_list").html("");
+				$(".tab_maps .sortie_list").html("");
 				
 				if(self.selectedWorld !== 0){
 					// Add all maps in this world selection
@@ -94,14 +96,6 @@
 			// Select default opened world
 			$(".tab_maps .world_box.active").trigger("click");
 			
-			// On-click pages
-			$(".tab_maps .page_list").on("click", ".page_box", function(){
-				$(".tab_maps .page_list .page_box").removeClass("active");
-				$(this).addClass("active");
-				self.pageNum = $(this).data("num");
-				self.showPage();
-			});
-			
 			// On-click sortie toggles
 			$(".tab_maps .sortie_list").on("click", ".sortie_box .sortie_toggles .sortie_toggle", function(){
 				var targetName = $(this).data("target");
@@ -112,22 +106,6 @@
 				}else{
 					$(this).addClass("active");
 				}
-				
-				/*// Check if target box does not have data yet
-				if(!targetBox.data("filled")){
-					// If trying to view fleet
-					if(targetBox == "sortie_roster"){
-						
-						
-					// If trying to view nodes list
-					}else if(targetBox == "sortie_nodes"){
-						
-						
-					}
-					
-					// Mark as already having data
-					targetBox.data("filled", 1);
-				}*/
 				
 				// Show or hide the target box
 				targetBox.slideToggle();
@@ -140,6 +118,7 @@
 		showMap :function(){
 			var self = this;
 			this.pageNum = 1;
+			$(".tab_maps .page_list").html("");
 			$(".tab_maps .sortie_list").html("");
 			
 			// Show all sorties
@@ -171,25 +150,24 @@
 		Show list of clickable page boxes
 		---------------------------------*/
 		showPagination :function(countSorties){
+			var self = this;
 			var countPages = Math.ceil( countSorties / this.itemsPerPage );
+			$(".tab_maps .page_list").html('<ul class="pagination pagination-sm"></ul>');
 			
-			// Remove past pagination
-			$(".tab_maps .page_list").html("");
-			
-			// Clone page boxes
-			var pageBox;
-			$.each(new Array(countPages), function(index){
-				pageBox = $(".tab_maps .factory .page_box").clone().appendTo(".tab_maps .page_list");
-				pageBox.html( index+1 );
-				pageBox.data("num", index+1);
-				if(index===0){ pageBox.addClass("active"); }
-			});
-			
-			// Clear CSS for floats
-			$("<div>").addClass("clear").appendTo(".tab_maps .page_list");
-			
-			// Click first page as initial selected
-			$(".tab_maps .page_list .page_box.active").trigger("click");
+			if(countPages > 0){
+				$(".tab_maps .pagination").twbsPagination({
+					totalPages: countPages,
+					visiblePages: 9,
+					onPageClick: function (event, page) {
+						self.pageNum = page;
+						self.showPage();
+					}
+				});
+				self.pageNum = 1;
+				self.showPage();
+			}else{
+				$(".tab_maps .pagination").hide();
+			}
 		},
 		
 		
@@ -198,6 +176,8 @@
 		---------------------------------*/
 		showPage :function(){
 			var self = this;
+			$(".tab_maps .pagination").hide();
+			$(".tab_maps .sortie_list").html("");
 			
 			// Show all sorties
 			if(this.selectedWorld === 0){
@@ -226,9 +206,6 @@
 		Shows sorties on interface using list of collected sortie objects
 		---------------------------------*/
 		showList :function( sortieList ){
-			// Remove past list
-			$(".tab_maps .sortie_list").html("");
-			
 			// Show sortie records on list
 			var sortieBox, mainFleet, isCombined, rshipBox, nodeBox, thisNode;
 			$.each(sortieList, function(id, sortie){
@@ -404,10 +381,9 @@
 					
 				});
 				$(".sortie_nodes", sortieBox).append( $("<div>").addClass("clear") );
-				
-				
-				// console.log( sortie );
 			});
+			
+			$(".tab_maps .pagination").show();
 		}
 	};
 	

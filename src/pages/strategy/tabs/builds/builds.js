@@ -23,20 +23,19 @@
 				var itemsPerPage = 30;
 				var numPages = Math.ceil(NumRecords/itemsPerPage);
 				
-				var pageCtr, pageBox;
-				for(pageCtr=0; pageCtr<numPages; pageCtr++){
-					pageBox = $(".tab_builds .factory .build_page").clone().appendTo(".tab_builds .build_pages");
-					pageBox.text(pageCtr+1);
+				if(numPages > 0){
+					$('.pagination').twbsPagination({
+						totalPages: numPages,
+						visiblePages: 9,
+						onPageClick: function (event, page) {
+							self.tabSelf.definition.showPage( page );
+						}
+					});
+				}else{
+					$('.pagination').hide();
 				}
-				$("<div>").addClass("clear").appendTo(".tab_builds .build_pages");
 				
-				$(".tab_builds .build_pages .build_page").on("click", function(){
-					$(".tab_builds .build_page").removeClass("active");
-					$(this).addClass("active");
-					self.tabSelf.definition.showPage( $(this).text() );
-				});
-				
-				$(".tab_builds .build_pages .build_page").first().trigger("click");
+				self.tabSelf.definition.showPage(1);
 			});
 		},
 		
