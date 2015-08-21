@@ -217,6 +217,9 @@
 	text-align:center;
 	border-radius:5px 5px 0px 0px;
 }
+#atab_activity {
+	cursor:default;
+}
 .module.activity .activity_tab.active {
 	background:rgba(100,100,100,0.85);
 	color:#fff;
@@ -233,6 +236,10 @@
 	height:235px;
 	display:none;
 	padding:5px;
+}
+.module.activity .activity_dismissable {
+	cursor:pointer;
+	-webkit-user-select:none;
 }
 
 /*------- ACTIVITY: BASIC -------*/
@@ -689,9 +696,110 @@
 	border:1px solid #CCC;
 }
 
-/*------- ACTIVITY: DETAILS -------*/
-.module.activity .activity_details {
+/*------- ACTIVITY: CRAFTING -------*/
+.module.activity .activity_crafting {
+	padding:10px;
+}
+.module.activity .activity_crafting .equipIcon {
+	width:30px;
+	height:30px;
+	line-height:16px;
+	float:left;
+	background:#fff;
+	border-radius:15px;
+	margin:0px 5px 5px 0px;
+}
+.module.activity .activity_crafting .equipIcon img {
+	width:24px;
+	height:24px;
+	margin:3px;
+	vertical-align:top;
+}
+.module.activity .activity_crafting .equipName {
+	width:135px;
+	/*height:30px;*/
+	line-height:15px;
+	float:left;
+	/*background:#fcc;*/
+	font-size:12px;
+	color:#fff;
+	font-weight:bold;
+	/*white-space:nowrap; */
+	overflow:hidden;
+	text-overflow: ellipsis;
+	margin:0px 0px 5px 0px;
+}
+.module.activity .activity_crafting .equipNote {
+	width:170px;
+	/*background:#cfc;*/
+	line-height:16px;
+	margin:0px 0px 5px 0px;
+	color:#ccc;
+	font-size:12px;
+}
+.module.activity .activity_crafting .equipStats {
+	width:170px;
+	/*background:#cfc;*/
+	line-height:20px;
+	margin:0px 0px 5px 0px;
+}
+.module.activity .activity_crafting .equipStat {
+	width:45px;
+	height:20px;
+	margin:0px 0px 3px 0px;
+	float:left;
+}
+.module.activity .activity_crafting .equipStatIcon {
+	width:20px;
+	height:20px;
+	float:left;
+	margin:0px 5px 0px 0px;
+	background:#fff;
+	border-radius:10px;
 	
+}
+.module.activity .activity_crafting .equipStatIcon img {
+	width:16px;
+	height:16px;
+	margin:2px;
+	vertical-align:top;
+}
+.module.activity .activity_crafting .equipStatText {
+	width:20px;
+	height:20px;
+	float:left;
+	font-size:12px;
+	color:#fff;
+}
+
+.module.activity .activity_crafting .equipResources {
+	width:170px;
+	/*background:#cfc;*/
+	height:36px;
+	line-height:16px;
+}
+.module.activity .activity_crafting .equipResource {
+	width:85px;
+	float:left;
+	/*background:#fcc;*/
+	height:16px;
+	line-height:16px;
+	margin:0px 0px 2px 0px;
+}
+.module.activity .activity_crafting .equipResoIcon {
+	width:16px;
+	height:16px;
+	float:left;
+	margin:0px 9px 0px 0px;
+	/*background:#fcf;*/
+}
+.module.activity .activity_crafting .equipResoAmt {
+	width:60px;
+	height:16px;
+	float:left;
+	/*background:#ccf;*/
+	font-size:12px;
+	color:#fff;
 }
 
 /*------- QUESTS -------*/

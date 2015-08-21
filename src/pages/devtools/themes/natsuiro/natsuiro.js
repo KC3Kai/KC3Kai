@@ -9,7 +9,6 @@
 	// Interface values
 	var selectedFleet = 1;
 	
-	
 	$(document).on("ready", function(){
 		// Check localStorage
 		if(!window.localStorage){
@@ -97,12 +96,18 @@
 		
 		// Switching Activity Tabs
 		$(".module.activity .activity_tab").on("click", function(){
+			if($(this).data("target")==""){ return false; }
 			$(".module.activity .activity_tab").removeClass("active");
 			$(this).addClass("active");
 			$(".module.activity .activity_box").hide();
 			$(".module.activity .activity_"+$(this).data("target")).show();
 		});
 		$(".module.activity .activity_tab.active").trigger("click");
+		
+		$(".module.activity .activity_dismissable").on("click", function(){
+			// $("#atab_basic").trigger("click");
+		});
+		
 		
 		// Fleet selection
 		$(".module.controls .fleet_num").on("click", function(){
@@ -511,12 +516,12 @@
 				$(".module.status .status_morale .status_text").text( KC3Meta.term("PanelGreatMorale") );
 				$(".module.status .status_morale img").attr("src", "../../../../assets/img/ui/check.png");
 				$(".module.status .status_morale .status_text").addClass("good");
-			}else if( FleetSummary.lowestMorale >= 40 ){
+			}else if( FleetSummary.lowestMorale >= ConfigManager.alert_morale_value ){
 				$(".module.status .status_morale .status_text").text( KC3Meta.term("PanelGoodMorale") );
 				$(".module.status .status_morale img").attr("src", "../../../../assets/img/ui/check.png");
 				$(".module.status .status_morale .status_text").addClass("good");
 			}else{
-				var MissingMorale = 40 - FleetSummary.lowestMorale;
+				var MissingMorale = ConfigManager.alert_morale_value - FleetSummary.lowestMorale;
 				var MoraleTime = (Math.ceil(MissingMorale/3)*3)*60;
 				$(".module.status .status_morale .status_text").text(String(MoraleTime).toHHMMSS());
 				$(".module.status .status_morale img").attr("src", "../../../../assets/img/ui/sunk.png");
@@ -898,14 +903,54 @@
 				// Get equipment data
 				var PlayerItem = KC3GearManager.get( data.itemId );
 				var MasterItem = KC3Master.slotitem( data.itemMasterId );
+				var countExisting = KC3GearManager.countByMasterId( data.itemMasterId );
 				
+				icon = "../../../../assets/img/items/"+MasterItem.api_type[3]+".png";
+				$(".activity_crafting .equipIcon img").attr("src", icon);
+				$(".activity_crafting .equipName").text( PlayerItem.name() );
+				
+				// Show extra item info
+				var countExisting = KC3GearManager.countByMasterId( data.itemMasterId );
+				if(countExisting == 1){
+					$(".activity_crafting .equipNote").html("This is your <strong>first</strong>!");
+				}else{
+					$(".activity_crafting .equipNote").html("You now have <strong>"+countExisting+"</strong> of this item!");
+				}
+				
+				$(".activity_crafting .equipStats").html("");
+				CraftGearStats(MasterItem, "souk", "ar");
+				CraftGearStats(MasterItem, "houg", "fp");
+				CraftGearStats(MasterItem, "raig", "tp");
+				CraftGearStats(MasterItem, "soku", "sp");
+				CraftGearStats(MasterItem, "baku", "dv");
+				CraftGearStats(MasterItem, "tyku", "aa");
+				CraftGearStats(MasterItem, "tais", "as");
+				CraftGearStats(MasterItem, "houm", "ht");
+				CraftGearStats(MasterItem, "houk", "ev");
+				CraftGearStats(MasterItem, "saku", "ls");
+				CraftGearStats(MasterItem, "leng", "rn");
+				$("<div />").addClass("clear").appendTo(".module.activity .activity_crafting .equipStats");
 				
 			// If penguin
 			} else {
-				
-				
-				
+				$(".activity_crafting .equipIcon img").attr("src", icon);
+				$(".activity_crafting .equipName").text( "Equipment crafting failed" );
+				$(".activity_crafting .equipNote").html("");
+				$(".activity_crafting .equipStats").html("");
 			}
+			
+			// Show resource used
+			console.log(data);
+			$(".activity_crafting .used1").text( data.resourceUsed[0] );
+			$(".activity_crafting .used2").text( data.resourceUsed[1] );
+			$(".activity_crafting .used3").text( data.resourceUsed[2] );
+			$(".activity_crafting .used4").text( data.resourceUsed[3] );
+
+			// Show the box
+			$(".module.activity .activity_tab").removeClass("active");
+			$("#atab_activity").addClass("active");
+			$(".module.activity .activity_box").hide();
+			$(".module.activity .activity_crafting").fadeIn(500);
 		},
 		
 		CraftShip: function(data){},
@@ -1042,5 +1087,14 @@
 			$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/client/ratings/"+data.result.api_win_rank+".png");
 		}
 	};
+	
+	function CraftGearStats(MasterItem, StatProperty, Code){
+		if(parseInt(MasterItem["api_"+StatProperty], 10) !== 0){
+			var thisStatBox = $("#factory .equipStat").clone().appendTo(".module.activity .activity_crafting .equipStats");
+			
+			$("img", thisStatBox).attr("src", "../../../../assets/img/stats/"+Code+".png");
+			$(".equipStatText", thisStatBox).text( MasterItem["api_"+StatProperty] );
+		}
+	}
 	
 })();

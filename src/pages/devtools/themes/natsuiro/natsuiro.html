@@ -30,9 +30,9 @@
 			<!-- Module: Activity Box -->
 			<div class="module activity">
 				<div class="activity_tabs">
-					<div id="atab_basic" class="activity_tab hover active" title="Basic" data-target="basic">Basic</div>
-					<div id="atab_battle" class="activity_tab hover" title="Battle" data-target="battle">Battle</div>
-					<div id="atab_activity" class="activity_tab hover" title="Activity" data-target="details">Activity</div>
+					<div id="atab_basic" class="activity_tab hover active i18n" data-target="basic">Basic</div>
+					<div id="atab_battle" class="activity_tab hover i18n" data-target="battle">Battle</div>
+					<div id="atab_activity" class="activity_tab i18n" data-target="">Activity</div>
 				</div>
 				<div class="activity_body">
 					<!-- BASIC: Consumables and Timers -->
@@ -261,8 +261,45 @@
 							
 						</div>
 					</div>
-					<!-- ACTIVITY: Crafting, etc -->
-					<div class="activity_box activity_details">
+					<!-- CRAFTING: New item result details -->
+					<div class="activity_box activity_crafting activity_dismissable">
+						<div class="equipIcon"><img/></div>
+						<div class="equipName"></div>
+						<div class="clear"></div>
+						<div class="equipNote">Sample note Sample note Sample note Sample note Sample noteSample note Sample note</div>
+						<div class="equipStats">
+							
+						</div>
+						<div class="equipResources">
+							<div class="equipResource">
+								<div class="equipResoIcon"><img src="../../../../assets/img/client/fuel.png" /></div>
+								<div class="equipResoAmt used1">000</div>
+								<div class="clear"></div>
+							</div>
+							<div class="equipResource">
+								<div class="equipResoIcon"><img src="../../../../assets/img/client/steel.png" /></div>
+								<div class="equipResoAmt used3">000</div>
+								<div class="clear"></div>
+							</div>
+							<div class="equipResource">
+								<div class="equipResoIcon"><img src="../../../../assets/img/client/ammo.png" /></div>
+								<div class="equipResoAmt used2">000</div>
+								<div class="clear"></div>
+							</div>
+							<div class="equipResource">
+								<div class="equipResoIcon"><img src="../../../../assets/img/client/bauxite.png" /></div>
+								<div class="equipResoAmt used4">000</div>
+								<div class="clear"></div>
+							</div>
+							<div class="clear"></div>
+						</div>
+					</div>
+					<!-- MODERNIZATION: Results -->
+					<div class="activity_box activity_modernization activity_dismissable">
+						
+					</div>
+					<!-- CONSTRUCTION: Ship -->
+					<div class="activity_box activity_construction activity_dismissable">
 						
 					</div>
 				</div>
@@ -495,6 +532,12 @@
 				</div>
 			</div>
 			
+			<!-- Equipment stats -->
+			<div class="equipStat">
+				<div class="equipStatIcon"><img/></div>
+				<div class="equipStatText"></div>
+				<div class="clear"></div>
+			</div>
 		</div>
 		
 		
