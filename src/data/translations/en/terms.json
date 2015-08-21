@@ -178,6 +178,7 @@
 	"PanelDocking" : "Docking",
 	"PanelAkashi" : "Akashi",
 	"PanelNoRepair" : "No repairs needed",
+	"PanelCantRepair" : "Cannot repair",
 	"PanelHighestDocking" : "Highest Repair Docks Time",
 	"PanelHighestAkashi" : "Highest Akashi Repair Time",
 	
@@ -185,7 +186,8 @@
 	"PanelNoTaiha" : "HP good",
 	"PanelSupplied" : "Supply good",
 	"PanelNotSupplied" : "Need resupply",
-	"PanelGoodMorale" : "Morale good",
+	"PanelGreatMorale" : "Great Morale",
+	"PanelGoodMorale" : "Morale Good",
 	"PanelSupportPower" : "Support Expedition Shelling Power",
 	"PanelPlanesFighter" : "Planes joining air-battle phase",
 	"PanelPlanesBomber" : "Planes joining bombing phase",
