@@ -96,7 +96,7 @@
 		
 		// Switching Activity Tabs
 		$(".module.activity .activity_tab").on("click", function(){
-			if($(this).data("target")==""){ return false; }
+			if($(this).data("target")===""){ return false; }
 			$(".module.activity .activity_tab").removeClass("active");
 			$(this).addClass("active");
 			$(".module.activity .activity_box").hide();
@@ -910,7 +910,6 @@
 				$(".activity_crafting .equipName").text( PlayerItem.name() );
 				
 				// Show extra item info
-				var countExisting = KC3GearManager.countByMasterId( data.itemMasterId );
 				if(countExisting == 1){
 					$(".activity_crafting .equipNote").html("This is your <strong>first</strong>!");
 				}else{
