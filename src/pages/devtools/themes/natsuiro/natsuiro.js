@@ -376,7 +376,7 @@
 		Triggered when fleet data is changed
 		---------------------------------------------*/
 		Fleet: function(data){
-			var FleetSummary;
+			var FleetSummary, MainRepairs;
 			$(".shiplist_single").html("");
 			$(".shiplist_single").hide();
 			$(".shiplist_combined_fleet").html("");
@@ -411,7 +411,7 @@
 				$(".shiplist_combined").show();
 				
 				// Calculate Highest Repair Times for status indicators
-				var MainRepairs = MainFleet.highestRepairTimes();
+				MainRepairs = MainFleet.highestRepairTimes();
 				var EscortRepairs = EscortFleet.highestRepairTimes();
 				
 				// Compile fleet attributes
@@ -442,7 +442,7 @@
 				var CurrentFleet = PlayerManager.fleets[selectedFleet-1];
 				
 				// Calculate Highest Repair Times for status indicators
-				var MainRepairs = CurrentFleet.highestRepairTimes();
+				MainRepairs = CurrentFleet.highestRepairTimes();
 				
 				// Show ships on selected fleet
 				$.each(CurrentFleet.ships, function(index, rosterId){
