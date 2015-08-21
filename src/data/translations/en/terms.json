@@ -101,6 +101,8 @@
 	
 	"SettingsAlerts" : "Alerts",
 	"SettingsTimeDiff" : "Timer Allowance",
+	"SettingsMoraleNotif" : "Morale Notification",
+	"SettingsMoraleValue" : "Morale Minimum",
 	"SettingsSeconds" : "seconds",
 	"SettingsSoundType" : "Sound Type",
 	"SettingsDing" : "DING!",

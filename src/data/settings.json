@@ -150,6 +150,18 @@
 				"options" : { "label" : "SettingsSeconds" }
 			},
 			{
+				"id" : "alert_morale_notif",
+				"name" : "SettingsMoraleNotif",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "alert_morale_value",
+				"name" : "SettingsMoraleValue",
+				"type" : "small_text",
+				"options" : { "label" : "" }
+			},
+			{
 				"id" : "alert_type",
 				"name" : "SettingsSoundType",
 				"type" : "radio",
