@@ -156,7 +156,7 @@
 				"options" : {
 					"choices" : [
 						[ 0, "None" ],
-						[ 1, "DING!" ],
+						[ 1, "POP!" ],
 						[ 2, "SettingsCustom" ]
 					]
 				}
