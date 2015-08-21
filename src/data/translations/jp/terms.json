@@ -190,7 +190,7 @@
 	"PanelGoodMorale" : "疲労良い",
 	"PanelSupportPower" : "支援射撃威力",
 	"PanelPlanesFighter" : "飛行機は制空戦相に参加する。",
-	"PanelPlanesBomber" : "飛行機は空気爆撃期に参加する。",
+	"PanelPlanesBomber" : "飛行機は空気爆撃相に参加する。",
 	
 	"CombinedCarrier" : "機動部隊",
 	"CombinedSurface" : "水上部隊",
