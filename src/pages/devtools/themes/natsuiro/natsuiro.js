@@ -517,7 +517,7 @@
 				$(".module.status .status_morale .status_text").addClass("good");
 			}else{
 				var MissingMorale = 40 - FleetSummary.lowestMorale;
-				var MoraleTime = Math.ceil(MissingMorale/3)*3;
+				var MoraleTime = (Math.ceil(MissingMorale/3)*3)*60;
 				$(".module.status .status_morale .status_text").text(String(MoraleTime).toHHMMSS());
 				$(".module.status .status_morale img").attr("src", "../../../../assets/img/ui/sunk.png");
 				$(".module.status .status_morale .status_text").addClass("bad");
