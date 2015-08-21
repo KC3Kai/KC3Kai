@@ -636,6 +636,7 @@
 			
 			$(".module.activity .node_type_text").removeClass("dud");
 			$(".module.activity .node_type_text").removeClass("select");
+			$(".module.activity .node_types").hide();
 			
 			console.log("natsuiro process node", thisNode);
 			switch(thisNode.type){
@@ -695,12 +696,7 @@
 			}
 			
 			// If compass setting disabled, hide node letters
-			if(ConfigManager.info_compass){
-				console.log("nodes enabled");
-				$(".module.activity .node_types").show();
-				$(".module.activity .sortie_node").show();
-			}else{
-				console.log("hide nodes");
+			if(!ConfigManager.info_compass){
 				$(".module.activity .node_types").hide();
 				$(".module.activity .sortie_node").hide();
 			}
