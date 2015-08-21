@@ -118,19 +118,6 @@
 	padding:5px 10px 0px;
 	border-bottom:1px solid #369;
 }
-.tab_lscs .build_pages .build_page {
-	width:30px;
-	height:20px;
-	line-height:20px;
-	float:left;
-	text-align:center;
-	margin:0px 3px 5px 0px;
-	border:1px solid #ace;
-	background:#def;
-	font-size:12px;
-}
-.tab_lscs .build_pages .build_page.active {
-	background:#58a;
-	color:#fff;
-	border:1px solid #def;
+.tab_lscs .build_pages .pagination {
+	margin:0px;
 }

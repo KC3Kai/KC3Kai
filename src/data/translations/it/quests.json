@@ -903,11 +903,11 @@
         "name": "Preparativi per LSC (Parte 1)",
         "desc": "Completa con successo 4 modernizzazioni"
     },
-
-
-
-
-
+	
+	
+	
+	
+	
     "611": {
         "name": "Preparativi per l'Amore! (Parte 1)",
         "desc": "Rottama un equipaggiamento due volte per mostrare il tuo amore!"
@@ -915,5 +915,61 @@
     "306": {
         "name": "Preparativi per l'Amore (Parte 2)",
         "desc": "Mostra il tuo amore ottenendo due vittorie in modalità esercitazione."
+    },
+	
+	"280": {
+        "code": "SN01",
+        "name": "Seconda strategia SN, Operazioni Preliminari",
+        "desc": "Completa la Mappa 2 dell'evento estivo 2015"
+    },
+    "620": {
+        "code": "SN02",
+        "name": "Ordinare l'Arsenale",
+        "desc": "Rottama 5 volte un equipaggiamento"
+    },
+    "281": {
+        "code": "SN03",
+        "name": "Disloca una Pattuglia sul percorso della Forza Principale",
+        "desc": "Affonda 6 sottomarini"
+    },
+    "158": {
+        "code": "SN04",
+        "name": "Assegna l'Aerosilurante Squadrone Murata ad Akagi",
+        "desc": "Setta Akagi come Segretaria ed equipaggiala con l'Aerosilurante Modello 97 (Squadrone Murata)"
+    },
+    "282": {
+        "code": "SN05",
+        "name": "Conquista la Superiorità Aerea nell'Area del Mare delle Salomone",
+        "desc": "Completa la Mappa 4 dell'evento estivo 2015"
+    },
+    "159": {
+        "code": "SN06",
+        "name": "Riassegna l'Aerosilurante Squadrone Murata a Shoukaku",
+        "desc": "Setta Shoukaku come Segretaria ed equipaggiala con l'Aerosilurante Modello 97 (Squadrone Murata)"
+    },
+    "310": {
+        "code": "SN07",
+        "name": "Allenamento Navale in vista dell'Operazione FS",
+        "desc": "Ottieni 4 vittorie nella modalità pratica"
+    },
+    "621": {
+        "code": "SN08",
+        "name": "Conversione Modello (Murata Squadron in Tenzan)",
+        "desc": "Setta Shoukaku come Segretaria ed equipaggiala con l'Aerosilurante Modello 97 (Squadrone Murata), poi rottama 2 Tenzan"
+    },
+    "160": {
+        "code": "SN09",
+        "name": "Organizza la Terza Flotta della Tast Force Portaerei",
+        "desc": "Crea una Task Force Portaerei (Flotta Combinata) con Shoukaku, Zuikaku e Zuihou nella prima flotta"
+    },
+    "284": {
+        "code": "SN10",
+        "name": "Stabilisci una testa di ponte per l'Operazione FS",
+        "desc": "Affonda 10 CV(L) Abissali"
+    },
+    "283": {
+        "code": "SN11",
+        "name": "Flotta Spedizione nell'Area Orientale, in missione!",
+        "desc": "Completa la mappa 5 dell'evento estivo 2015"
     }
 }

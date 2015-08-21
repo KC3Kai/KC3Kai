@@ -18,7 +18,8 @@
 						[ "de", "Deutsch" ],
 						[ "fr", "Français" ],
 						[ "it", "Italiano" ],
-						[ "kr", "한국어" ]
+						[ "kr", "한국어" ],
+						[ "pt", "Português" ]
 					]
 				}
 			},
@@ -209,6 +210,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "api_directRefresh",
+				"name" : "SettingsDirectRefresh",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "api_margin",
 				"name" : "SettingsScreenMargin",
 				"type" : "small_text",
@@ -331,8 +338,8 @@
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ "default", "Default" ],
-						[ "natsuiro", "Natsuiro" ]
+						[ "natsuiro", "Natsuiro" ],
+						[ "default", "Legacy" ]
 					]
 				}
 			},

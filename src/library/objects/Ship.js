@@ -22,6 +22,7 @@ KC3改 Ship Object
 		this.lk = [0,0];
 		this.range = 0;
 		this.items = [-1,-1,-1,-1];
+		this.ex_item = 0;
 		this.slots = [0,0,0,0];
 		this.slotnum = 0;
 		this.mod = [0,0,0,0,0];
@@ -30,6 +31,7 @@ KC3改 Ship Object
 		this.stars = 0;
 		this.morale = 0;
 		this.lock = 0;
+		this.sally = 0;
 		this.didFlee = false;
 		
 		// If specified with data, fill this object
@@ -52,6 +54,12 @@ KC3改 Ship Object
 				this.lk = data.api_lucky;
 				this.range = data.api_leng;
 				this.items = data.api_slot;
+				if(typeof data.api_slot_ex != "undefined"){
+					this.ex_item = data.api_slot_ex;
+				}
+				if(typeof data.api_sally_area != "undefined"){
+					this.sally = data.api_sally_area;
+				}
 				this.slotnum = data.api_slotnum;
 				this.slots = data.api_onslot;
 				this.mod = data.api_kyouka;
@@ -73,10 +81,36 @@ KC3改 Ship Object
 	KC3Ship.prototype.stype = function(){ return KC3Meta.stype( this.master().api_stype ); };
 	KC3Ship.prototype.equipment = function(slot){ return KC3GearManager.get( this.items[slot] ); };
 	KC3Ship.prototype.isFast = function(){ return this.master().api_soku>=10; };
+	KC3Ship.prototype.exItem = function(){ return (this.ex_item>0)?KC3GearManager.get(this.ex_item):false; };
+	KC3Ship.prototype.isTaiha = function(){ return (this.hp[0]/this.hp[1] <= 0.25) && (this.hp[1]>0); };
+	
+	KC3Ship.prototype.isSupplied = function(){
+		if(this.rosterId===0){ return true; }
+		return this.fuel == this.master().api_fuel_max
+			&& this.ammo == this.master().api_bull_max;
+	};
+	
 	KC3Ship.prototype.resetAfterHp = function(){
 		this.afterHp[0] = this.hp[0];
 		this.afterHp[1] = this.hp[1];
 	};
+	
+	
+	/* REPAIR TIME
+	Get ship's docking and Akashi times
+	--------------------------------------------------------------*/
+	KC3Ship.prototype.repairTime = function(){
+		var RepairCalc = PS['KanColle.RepairTime'];
+		return {
+			docking: RepairCalc.dockingInSecJS( this.stype(), this.level, this.hp[0], this.hp[1] ),
+			akashi:
+				( this.hp[0] / this.hp[1] > 0.50 )
+				?RepairCalc.facilityInSecJS( this.stype(), this.level, this.hp[0], this.hp[1] )
+				:0
+		};
+	};
+	
+	
 	/* NAKED LOS
 	LoS without the equipment
 	--------------------------------------------------------------*/
@@ -105,11 +139,37 @@ KC3改 Ship Object
 	Get fighter power of this ship
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.fighterPower = function(){
+		if(this.rosterId===0){ return 0; }
+		
 		var thisShipFighter = this.equipment(0).fighterPower( this.slots[0] )
 			+ this.equipment(1).fighterPower( this.slots[1] )
 			+ this.equipment(2).fighterPower( this.slots[2] )
 			+ this.equipment(3).fighterPower( this.slots[3] );
 		return thisShipFighter;
+	};
+	
+	/* SUPPORT POWER
+	Get support expedition power of this ship
+	--------------------------------------------------------------*/
+	KC3Ship.prototype.supportPower = function(){
+		if(this.rosterId===0){ return 0; }
+		
+		var supportPower;
+		if(this.master().api_stype==11 || this.master().api_stype==7){
+			// console.log( this.name(), "special support calculation for CV(L)" );
+			supportPower = 55;
+			supportPower += (1.5 * Number(this.fp[0]));
+			supportPower += (1.5 * Number(this.tp[0]));
+			supportPower += Number(this.equipment(0).supportPower());
+			supportPower += Number(this.equipment(1).supportPower());
+			supportPower += Number(this.equipment(2).supportPower());
+			supportPower += Number(this.equipment(3).supportPower());
+			
+		}else{
+			// console.log( this.name(), "normal firepower for support" );
+			supportPower = this.fp[0];
+		}
+		return supportPower;
 	};
 	
 	/*

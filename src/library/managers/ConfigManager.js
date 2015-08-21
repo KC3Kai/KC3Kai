@@ -13,10 +13,11 @@ Retreives when needed to apply on components
 		// Default values. As a function to not include on JSON string
 		defaults : function(){
 			return {
-				version				: 6,
+				version				: 7,
 				language			: "en",
 				elosFormula 		: 3,
 				hqExpDetail 		: 1,
+				marryLevelFormat: 0,
 				
 				info_face 			: true,
 				info_drop 			: true,
@@ -24,9 +25,9 @@ Retreives when needed to apply on components
 				info_compass 		: true,
 				info_battle 		: true,
 				info_btstamp 		: false,
-				info_boss 			: true,
-				info_troll 			: false, // hidden and false by default. { useful for NightBattle "support" }
-				info_delta 			: false, // hidden and false by default. { altering the default feature of HQ update }
+				info_boss 			: false,
+				info_troll 			: false,
+				info_delta 			: false,
 				
 				ss_mode 			: 0,
 				ss_type 			: 'JPG',
@@ -39,8 +40,9 @@ Retreives when needed to apply on components
 				
 				api_translation		: true,
 				api_tracking 		: true,
-				api_mustPanel 		: true,
+				api_mustPanel 		: false,
 				api_askExit			: true,
+				api_directRefresh	: false,
 				api_margin			: 0,
 				api_bg_color		: "#def",
 				api_bg_image		: "",
@@ -59,7 +61,7 @@ Retreives when needed to apply on components
 				dmm_bg_size			: "cover",
 				dmm_bg_position		: "top center",
 				
-				pan_theme			: "default",
+				pan_theme			: "natsuiro",
 				pan_size			: "big",
 				pan_gear_holder		: "black",
 				pan_bg_color		: "#def",

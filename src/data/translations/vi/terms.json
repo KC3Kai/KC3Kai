@@ -112,6 +112,7 @@
 	"SettingsQuestOverlay" : "Quest Translations",
 	"SettingsQuestTracking" : "Quest Tracking",
 	"SettingsPanelRequirement" : "Require Panel to Play",
+	"SettingsDirectRefresh" : "In-page Refresh (Danger)",
 	"SettingsConfirmExit" : "Xác nhận trước khi thoát",
 	"SettingsScreenMargin" : "Lề trên",
 	"SettingsBGColor" : "Màu nền",
@@ -142,7 +143,9 @@
 	"LearnMore" : "Tìm hiểu thêm",
 	"Saved" : "Đã lưu!",
 	
+	"UnwantedExit" : "Ahhh! You are leaving your girls! Are you sure you want to leave them?",
 	"APIWaitToggle" : "Please load KC3Kai panel first",
+	"APIConcealExpl" : "Hover to show your API Link",
 
 	"SpeedFast" : "Nhanh",
 	"SpeedSlow" : "Chậm",
@@ -161,12 +164,41 @@
 
 	"PredictionStampSortie" : "Chìm",
 	"PredictionStampPvP" : "Đánh Bại",
+	"PredictionStampEscort" : "Escort",
+	"PredictionStampMVPUseful" : "MVP",
+	"PredictionStampMVPUseless" : "kek",
 	
+	"EventHistoryRank1"  : "DỄ",
+	"EventHistoryRank2"  : "THƯỜNG",
+	"EventHistoryRank3"  : "KHÓ",
+	"EventHistoryRank1X" : "KIDS CHOICE",
+	"EventHistoryRank2X" : "HELL AF",
+	"EventHistoryRank3X" : "GET REKT SON",
+
+	"PanelDocking" : "Nhà tắm",
+	"PanelAkashi" : "Akashi",
+	"PanelNoRepair" : "No repairs needed",
+	"PanelHighestDocking" : "Highest Repair Docks Time",
+	"PanelHighestAkashi" : "Highest Akashi Repair Time",
+	
+	"PanelHasTaiha" : "Critical",
+	"PanelNoTaiha" : "HP good",
+	"PanelSupplied" : "Supply good",
+	"PanelNotSupplied" : "Need resupply",
+	"PanelGoodMorale" : "Morale good",
+	"PanelSupportPower" : "Support Expedition Shelling Power",
+	
+	"CombinedCarrier" : "Carrier TF",
+	"CombinedSurface" : "Surface TF",
+	"CombinedNone" : "Not combined",
+
 	"LevelText" : "Cấp",
 	"LevelShort" : "Lv.",
-	"LevelNext" : "",
+	"LevelNext" : "Next",
 	"Screenshot" : "Chụp màn hình",
 	"UntranslatedQuest" : "Untranslated Quest",
+	
+	"StrategyEvents1HP" : "Last Kill!",
 	
 	"PanelWaitActions" : "Waiting for game actions...",
 	"PanelErrorStorage" : "Your Chrome's localStorage is disabled on your settings. KC3改 needs this feature. <a href=\"http://stackoverflow.com/a/26671889/483704\" target=\"_blank\">See how to enable this</a>.",

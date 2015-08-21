@@ -2,15 +2,6 @@
 KC3改 Fleet Object
 
 Contains summary information about a fleet and its 6 ships
-{
-	"api_member_id":18066975,
-	"api_id":1,
-	"api_name":"111",
-	"api_name_id":"136558260",
-	"api_mission":[ 0, 0, 0, 0 ],
-	"api_flagship":"0",
-	"api_ship":[ 76, -1, -1, -1, -1, -1 ]
-}
 */
 (function(){
 	"use strict";
@@ -29,6 +20,7 @@ Contains summary information about a fleet and its 6 ships
 			this.name = data.api_name;
 			this.ships = data.api_ship;
 			this.mission = data.api_mission;
+			
 			if(data.api_id > 1){
 				if(this.mission[0] > 0){
 					KC3TimerManager.exped( data.api_id ).activate(
@@ -51,14 +43,20 @@ Contains summary information about a fleet and its 6 ships
 		return this;
 	};
 	
+	
+	/*--------------------------------------------------------*/
+	/*----------------------[ GETTERS ]-----------------------*/
+	/*--------------------------------------------------------*/
+	
 	KC3Fleet.prototype.ship = function( slot ){
 		return KC3ShipManager.get( this.ships[slot] );
 	};
 	
-	KC3Fleet.prototype.countShips = function(){
-		return $.grep(this.ships, function(shipId){ return shipId>-1; }).length;
-	};
-
+	
+	/*--------------------------------------------------------*/
+	/*-------------------[ FLEET ACTIONS ]--------------------*/
+	/*--------------------------------------------------------*/
+	
 	KC3Fleet.prototype.resetAfterHp = function(){
 		for(var i = 0; i < this.countShips(); i++) {
 			this.ship(i).resetAfterHp();
@@ -67,6 +65,15 @@ Contains summary information about a fleet and its 6 ships
 	
 	KC3Fleet.prototype.clearNonFlagShips = function(){
 		this.ships[1] = this.ships[2] = this.ships[3] = this.ships[4] = this.ships[5] = -1;
+	};
+	
+	
+	/*--------------------------------------------------------*/
+	/*------------------[ FLEET ATTRIBUTES ]------------------*/
+	/*--------------------------------------------------------*/
+	
+	KC3Fleet.prototype.countShips = function(){
+		return $.grep(this.ships, function(shipId){ return shipId>-1; }).length;
 	};
 	
 	KC3Fleet.prototype.totalLevel = function(){
@@ -99,10 +106,19 @@ Contains summary information about a fleet and its 6 ships
 	
 	KC3Fleet.prototype.fighterPower = function(){
 		var self = this;
-		return Array.apply(null, {length: 6})
+		return Math.round(Array.apply(null, {length: 6})
 			.map(Number.call, Number)
 			.map(function(x){return self.ship(x).fighterPower();})
-			.reduce(function(x,y){return x+y;});
+			.reduce(function(x,y){return x+y;}) * 100)/100;
+	};
+	
+	KC3Fleet.prototype.supportPower = function(){
+		return this.ship(0).supportPower()
+			+this.ship(1).supportPower()
+			+this.ship(2).supportPower()
+			+this.ship(3).supportPower()
+			+this.ship(4).supportPower()
+			+this.ship(5).supportPower();
 	};
 	
 	KC3Fleet.prototype.speed = function(){
@@ -117,26 +133,73 @@ Contains summary information about a fleet and its 6 ships
 		return (this.fastFleet) ? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow");
 	};
 	
-	KC3Fleet.prototype.qualifyingExpeditions = function(){
-		
+	
+	/*--------------------------------------------------------*/
+	/*-----------------[ STATUS INDICATORS ]------------------*/
+	/*--------------------------------------------------------*/
+	
+	KC3Fleet.prototype.hasTaiha = function(){
+		return this.ship(0).isTaiha()
+			|| this.ship(1).isTaiha()
+			|| this.ship(2).isTaiha()
+			|| this.ship(3).isTaiha()
+			|| this.ship(4).isTaiha()
+			|| this.ship(5).isTaiha();
 	};
 	
-	KC3Fleet.prototype.compileStats = function(){
-		
+	KC3Fleet.prototype.isSupplied = function(){
+		return this.ship(0).isSupplied()
+			&& this.ship(1).isSupplied()
+			&& this.ship(2).isSupplied()
+			&& this.ship(3).isSupplied()
+			&& this.ship(4).isSupplied()
+			&& this.ship(5).isSupplied();
 	};
 	
-	KC3Fleet.prototype.canCombineCarrier = function(){
-		
+	KC3Fleet.prototype.lowestMorale = function(){
+		var lowestMorale = 101;
+		if(this.ship(0).morale < lowestMorale && this.ship(0).rosterId>0){ lowestMorale = this.ship(0).morale; }
+		if(this.ship(1).morale < lowestMorale && this.ship(1).rosterId>0){ lowestMorale = this.ship(1).morale; }
+		if(this.ship(2).morale < lowestMorale && this.ship(2).rosterId>0){ lowestMorale = this.ship(2).morale; }
+		if(this.ship(3).morale < lowestMorale && this.ship(3).rosterId>0){ lowestMorale = this.ship(3).morale; }
+		if(this.ship(4).morale < lowestMorale && this.ship(4).rosterId>0){ lowestMorale = this.ship(4).morale; }
+		if(this.ship(5).morale < lowestMorale && this.ship(5).rosterId>0){ lowestMorale = this.ship(5).morale; }
+		return lowestMorale;
 	};
 	
-	KC3Fleet.prototype.canCombineSurface = function(){
+	KC3Fleet.prototype.highestRepairTimes = function(){
+		var highestDocking = 0;
+		var highestAkashi = 0;
+		var self = this;
 		
+		function checkShip(shipIndex){
+			if(self.ship(shipIndex).masterId===0){ return false; }
+			var myReapirTime = self.ship(shipIndex).repairTime();
+			if(myReapirTime.docking > highestDocking){ highestDocking = myReapirTime.docking; }
+			if(myReapirTime.akashi > highestAkashi){ highestAkashi = myReapirTime.akashi; }
+		}
+		
+		checkShip(0);
+		checkShip(1);
+		checkShip(2);
+		checkShip(3);
+		checkShip(4);
+		checkShip(5);
+		
+		return {
+			docking: highestDocking,
+			akashi: highestAkashi
+		};
 	};
 	
-	KC3Fleet.prototype.supportPower = function(){
-		
-	};
 	
+	/*--------------------------------------------------------*/
+	/*-------------------[ ELOS FUNCTIONS ]-------------------*/
+	/*--------------------------------------------------------*/
+	
+	/* eLoS
+	Get eLoS based on config
+	------------------------------------*/
 	KC3Fleet.prototype.eLoS = function(){
 		switch(ConfigManager.elosFormula){
 			case 1: return this.eLos1();

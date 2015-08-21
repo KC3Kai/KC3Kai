@@ -10,6 +10,7 @@ To be dynamically used on the settings page
 		this.config = info.id;
 		this.element = $("#factory .settingBox").clone().appendTo("#wrapper .settings");
 		$(".title", this.element).text( KC3Meta.term( info.name ) );
+		this.soundPreview = false;
 		this[info.type]( info.options );
 	};
 	
@@ -39,6 +40,22 @@ To be dynamically used on the settings page
 				ConfigManager[ self.config ] = $(this).val();
 				ConfigManager.save();
 				$(this).parent().siblings(".note").stop(true, true).show().fadeOut(2000);
+				
+				// If changed volume, test play the alert sound
+				if(self.config == "alert_volume"){
+					if(self.soundPreview){
+						self.soundPreview.pause();
+					}
+					switch(ConfigManager.alert_type){
+						case 1: self.soundPreview = new Audio("../../../../assets/snd/ding.mp3"); break;
+						case 2: self.soundPreview = new Audio(ConfigManager.alert_custom); break; 
+						default: self.soundPreview = false; break;
+					}
+					if(self.soundPreview){
+						self.soundPreview.volume = ConfigManager.alert_volume / 100;
+						self.soundPreview.play();
+					}
+				}
 			})
 		);
 		$(".options", this.element).append( KC3Meta.term( options.label ) );
@@ -83,8 +100,9 @@ To be dynamically used on the settings page
 			ConfigManager[ self.config ] = $(this).data("value");
 			ConfigManager.save();
 			$(this).parent().siblings(".note").stop(true, true).show().fadeOut(2000);
+			
 			// Refresh page when a language option is clicked
-			if($(this).hasClass("choices_language")){
+			if(self.config == "language"){
 				window.location.reload();
 			}
 		});

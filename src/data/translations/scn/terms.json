@@ -112,6 +112,7 @@
 	"SettingsQuestOverlay" : "任务翻译",
 	"SettingsQuestTracking" : "任务追踪",
 	"SettingsPanelRequirement" : "等待信息面板加载",
+	"SettingsDirectRefresh" : "页面内刷新（危险功能）",
 	"SettingsConfirmExit" : "退出游戏时需确认",
 	"SettingsScreenMargin" : "上边边距",
 	"SettingsBGColor" : "背景颜色 (bg-color)",
@@ -129,15 +130,22 @@
 	
 	"SettingsPanelSize" : "面板尺寸",
 	"SettingsPanelOpacity" : "界面不透明度 (opacity)",
+	"SettingsGearHolder" : "装备背景色",
 	
 	"Small" : "小",
 	"Big" : "大",
+	"Black" : "黑",
+	"White" : "白",
 	"Theme" : "主题",
 	"Panel" : "面板",
 	"Volume" : "音量",
 	"None" : "无",
 	"LearnMore" : "了解更多",
 	"Saved" : "已保存!",
+	
+	"UnwantedExit" : "提督君，确定要离我而去？",
+	"APIWaitToggle" : "请先打开“KC3改”面板",
+	"APIConcealExpl" : "鼠标指向这里可查询API链接地址",
 	
 	"SpeedFast" : "高速",
 	"SpeedSlow" : "低速",
@@ -147,14 +155,50 @@
 	"HQExpAbbrev2" : "当前",
 	"HQExpAbbrev3" : "总计",
 	
+	"BattleDetection" : "索敌",
+	"BattleEngangement" : "交战",
+	"BattleContact" : "接触",
+	"BattleAirBattle" : "航空战",
+	"BattleFriendly" : "友军",
+	"BattleEnemy" : "敌军",
+	
 	"PredictionStampSortie" : "击沉",
 	"PredictionStampPvP" : "出局",
+	"PredictionStampEscort" : "避退",
+	"PredictionStampMVPUseful" : "MVP",
+	"PredictionStampMVPUseless" : "已满级",
+	
+	"EventHistoryRank1"  : "简单",
+	"EventHistoryRank2"  : "普通",
+	"EventHistoryRank3"  : "困难",
+	"EventHistoryRank1X" : "小儿科",
+	"EventHistoryRank2X" : "地狱模式",
+	"EventHistoryRank3X" : "老子就是强",
+	
+	"PanelDocking" : "入渠",
+	"PanelAkashi" : "明石",
+	"PanelNoRepair" : "无需修理",
+	"PanelHighestDocking" : "最长的入渠修理时间",
+	"PanelHighestAkashi" : "最长的明石修理时间",
+	
+	"PanelHasTaiha" : "大破",
+	"PanelNoTaiha" : "耐久良好",
+	"PanelSupplied" : "补给良好",
+	"PanelNotSupplied" : "需要补给",
+	"PanelGoodMorale" : "士气良好",
+	"PanelSupportPower" : "支援舰队炮击威力",
+	
+	"CombinedCarrier" : "联合舰队 (机动)",
+	"CombinedSurface" : "联合舰队 (水打)",
+	"CombinedNone" : "非联合舰队",
 
 	"LevelText" : "等级",
 	"LevelShort" : "Lv.",
 	"LevelNext" : "还需",
 	"Screenshot" : "截图",
 	"UntranslatedQuest" : "未翻译的任务",
+	
+	"StrategyEvents1HP" : "斩杀！",
 	
 	"PanelWaitActions" : "正在等待游戏响应……",
 	"PanelErrorStorage" : "Your Chrome's localStorage is disabled on your settings. KC3改 needs this feature. <a href=\"http://stackoverflow.com/a/26671889/483704\" target=\"_blank\">See how to enable this</a>.",

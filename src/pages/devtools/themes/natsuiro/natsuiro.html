@@ -153,6 +153,15 @@
 							<div class="clear"></div>
 						</div>
 						<div class="node_types node_type_battle">
+							<div class="sink_icons">
+								<div class="sunk sunk_1"><img src="../../../../assets/img/client/sunk.png" /></div>
+								<div class="sunk sunk_2"><img src="../../../../assets/img/client/sunk.png" /></div>
+								<div class="sunk sunk_3"><img src="../../../../assets/img/client/sunk.png" /></div>
+								<div class="sunk sunk_4"><img src="../../../../assets/img/client/sunk.png" /></div>
+								<div class="sunk sunk_5"><img src="../../../../assets/img/client/sunk.png" /></div>
+								<div class="sunk sunk_6"><img src="../../../../assets/img/client/sunk.png" /></div>
+								<div class="clear"></div>
+							</div>
 							<div class="abyss_ships">
 								<div class="abyss_ship abyss_ship_1"><img/></div>
 								<div class="abyss_ship abyss_ship_2"><img/></div>
@@ -244,8 +253,9 @@
 							</div>
 						</div>
 						<div class="node_types node_type_resource">
-							<div class="node_res_icon"></div>
+							<div class="node_res_icon"><img/></div>
 							<div class="node_res_text"></div>
+							<div class="clear"></div>
 						</div>
 						<div class="node_types node_type_text">
 							
@@ -271,6 +281,7 @@
 				<div class="control hover fleet_num">4</div>
 				<div class="control hover fleet_rengo" title="Combined Fleet"><img src="img/rengo.png" /></div>
 				
+				<div class="control hover control_btn btn_resize" title="Fit Window"><img src="../../../../assets/img/ui/fit.png" /></div>
 				<div class="control hover control_btn btn_ss1" title="Screenshot"><img src="img/cam1.png" /></div>
 			</div>
 			
@@ -316,7 +327,49 @@
 			
 			<!-- Module: Status Reminders -->
 			<div class="module status">
-				
+				<!-- Resupply Status -->
+				<div class="status_box status_supply hover">
+					<div class="status_icon"><img/></div>
+					<div class="status_text"></div>
+					<div class="clear"></div>
+				</div>
+				<!-- Morale Status -->
+				<div class="status_box status_morale hover">
+					<div class="status_icon"><img/></div>
+					<div class="status_text"></div>
+					<div class="clear"></div>
+				</div>
+				<!-- Repair Status -->
+				<div class="status_box status_repair hover">
+					<div class="status_icon"><img/></div>
+					<div class="status_text"></div>
+					<div class="clear"></div>
+				</div>
+				<!-- Combine Capability -->
+				<div class="status_box status_butai hover">
+					<div class="status_icon"><img src="../../../../assets/img/ui/fleet.png" /></div>
+					<div class="status_text"></div>
+					<div class="clear"></div>
+				</div>
+				<!-- Support Power -->
+				<div class="status_box status_support hover">
+					<div class="status_icon enclose"><img src="../../../../assets/img/stats/dv.png" /></div>
+					<div class="status_text"></div>
+					<div class="clear"></div>
+				</div>
+				<!-- Docking Time -->
+				<div class="status_box status_docking hover">
+					<div class="status_icon"><img src="../../../../assets/img/ui/timer.png" /></div>
+					<div class="status_text"></div>
+					<div class="clear"></div>
+				</div>
+				<!-- Akashi Time -->
+				<div class="status_box status_akashi hover">
+					<div class="status_icon enclose"><img src="../../../../assets/img/items/26.png" /></div>
+					<div class="status_text"></div>
+					<div class="clear"></div>
+				</div>
+				<div class="clear"></div>
 			</div>
 			
 		</div>
@@ -347,6 +400,7 @@
 			
 			<!-- Clonable: Long Ship -->
 			<div class="lship">
+				<div class="ex_item"><img/></div>
 				<div class="ship_img"><img/></div>
 				<div class="ship_col1">
 					<div class="ship_name"></div>
@@ -370,21 +424,25 @@
 				</div>
 				<div class="ship_gears">
 					<div class="ship_gear ship_gear_1">
+						<div class="ship_gear_ace"></div>
 						<div class="ship_gear_icon"><img/></div>
 						<div class="ship_gear_slot">00</div>
 						<div class="clear"></div>
 					</div>
 					<div class="ship_gear ship_gear_2">
+						<div class="ship_gear_ace"></div>
 						<div class="ship_gear_icon"><img/></div>
 						<div class="ship_gear_slot">00</div>
 						<div class="clear"></div>
 					</div>
 					<div class="ship_gear ship_gear_3">
+						<div class="ship_gear_ace"></div>
 						<div class="ship_gear_icon"><img/></div>
 						<div class="ship_gear_slot">00</div>
 						<div class="clear"></div>
 					</div>
 					<div class="ship_gear ship_gear_4">
+						<div class="ship_gear_ace"></div>
 						<div class="ship_gear_icon"><img/></div>
 						<div class="ship_gear_slot">00</div>
 						<div class="clear"></div>
@@ -410,6 +468,7 @@
 			<!-- Clonable: Short Ship -->
 			<div class="sship">
 				<div class="ship_img"><img/></div>
+				<div class="ex_item"><img/></div>
 				<div class="ship_info">
 					<div class="ship_name"></div>
 					<div class="ship_hp">

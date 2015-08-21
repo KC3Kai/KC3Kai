@@ -74,18 +74,7 @@ Has functions for TimerManager to use
 			remaining = Math.ceil((remaining - (timerAllowance*1000))/1000);
 			if(remaining > 0){
 				this.alerted = false;
-				
-				var hrs = Math.floor(remaining/3600);
-				remaining = remaining - (hrs * 3600);
-				if(hrs < 10){ hrs = "0"+hrs; }
-				
-				var min = Math.floor(remaining/60);
-				remaining = remaining - (min * 60);
-				if(min < 10){ min = "0"+min; }
-				
-				if(remaining < 10){ remaining = "0"+remaining; }
-				
-				return hrs+":"+min+":"+remaining;
+				return String(remaining).toHHMMSS();
 			}else{
 				this.completionAlert();
 				return "Complete!";
@@ -134,9 +123,9 @@ Has functions for TimerManager to use
 					shipName = KC3Meta.shipName( KC3Master.ship( this.faceId ).api_name );
 					notifData.title = "Construction Complete!";
 					if(ConfigManager.info_face){
-						notifData.message = "New face "+shipName+" has been constructed!";
+						notifData.message = "New shipgirl "+shipName+" has been constructed!";
 					}else{
-						notifData.message = "A newface is ready to see you in the construction docks!";
+						notifData.message = "A new shipgirl is ready to see you in the construction docks!";
 					}
 					notifData.iconUrl = "../../assets/img/quests/build.jpg";
 					break;

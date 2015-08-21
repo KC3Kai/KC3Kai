@@ -25,6 +25,7 @@
     "ResourceSoftcapLimit": "Limite massimo delle Risorse Generate",
     "MainScreenBGM": "BGM Schermata Principale",
     "LevelUpNotice": "All'aumentare del livello del HQ, il limite delle risorse generate aumenta e si può costruire nuovi equipaggiamenti.",
+    "ImprovementMaterial": "Viti",
     "Experience": "Esperienza",
     "Name": "Nome",
 
@@ -64,6 +65,8 @@
     "AboutOther" : "Altri Crediti",
     "AboutLogo" : "Logo Design",
     "AboutFairy" : "Fairy Designer",
+    "AboutReporters" : "Git Reporter Frequenti",
+    "AboutReporter" : "Git Reporter",
 
     "SettingsTitle" : "KC3改 Impostazioni",
 
@@ -73,13 +76,21 @@
     "SettingsELosSum" : "Tot",
     "SettingsELosOld" : "Vec",
     "SettingsELosNew" : "Nuo",
+    "SettingsHQExpDetail"  : "Info Exp HQ",
+    "SettingsHQExpLeft"    : "Exp Rimanente",
+    "SettingsHQExpCurrent" : "Livello Attuale",
+    "SettingsHQExpTotal"   : "Guadagno Totale",
 
     "SettingsGameInfo" : "Informazioni Gioco",
+    "SettingsDropFaces" : "Icone Drop Sortite",
     "SettingsConstructionFaces" : "Icone Costruzione",
     "SettingsCraftBox" : "Risultati Produzioni",
     "SettingsCompass" : "Bussola e Nemici",
     "SettingsBattleData" : "Condizione Battaglia",
+    "SettingsBattleStamp" : "Etichette Condizione Navi",
     "SettingsBossComp" : "Composizione Boss",
+    "SettingsYasenTroll" : "KC3改 Commenti Troll",
+    "SettingsHQDelta" : "Delta Exp HQ nelle sortite",
 
     "SettingsScreenshot" : "Screenshot",
     "SettingsSSOutput" : "Tipo di Output",
@@ -100,6 +111,7 @@
     "SettingsAPIGameScreen" : "Schermata di Gioco API",
     "SettingsQuestOverlay" : "Traduzione Missioni",
     "SettingsQuestTracking" : "Monitoraggio Missioni",
+    "SettingsPanelRequirement" : "Richiesto Pannello per giocare",
     "SettingsConfirmExit" : "Conferma Uscita",
     "SettingsScreenMargin" : "Margine Superiore",
     "SettingsBGColor" : "Colore di Sfondo",
@@ -113,12 +125,16 @@
 
     "SettingsDMMGameplay" : "Gameplay DMM",
     "SettingsDMMCustomize" : "Applica Personalizzazioni",
+    "SettingsDMMForceCookies" : "Forza l'hack dei Cookie",
 
     "SettingsPanelSize" : "Dimensione Pannello",
     "SettingsPanelOpacity" : "Opacità Interfaccia",
+    "SettingsGearHolder" : "Colore sfondo atterezzi",
 
     "Small" : "Piccolo",
     "Big" : "Grande",
+    "Black" : "Nero",
+    "White" : "Bianco",
     "Theme" : "Tema",
     "Panel" : "Pannello di Controllo",
     "Volume" : "Volume",
@@ -126,12 +142,39 @@
     "LearnMore" : "Scopri di più",
     "Saved" : "Salvato!",
 
+    "UnwantedExit" : "Ahhh! Stai lasciando le tue ragazze! Sicuro di volerlo fare?",
+    "APIWaitToggle" : "Per favore, carica prima il pannello di KC3Kai",
+    "APIConcealExpl" : "Evita di mostrare il tuo API Link",
+
     "SpeedFast" : "Veloce",
     "SpeedSlow" : "Lenta",
 
     "HQText" : "HQ",
+    "HQExpAbbrev1" : "Prossimo",
+    "HQExpAbbrev2" : "Attuale",
+    "HQExpAbbrev3" : "Totale",
+
+    "BattleDetection" : "Rilevamento",
+    "BattleEngangement" : "Ingaggio",
+    "BattleContact" : "Contatto",
+    "BattleAirBattle" : "Battaglia Aerea",
+    "BattleFriendly" : "Alleati",
+    "BattleEnemy" : "Nemici",
+
+    "PredictionStampSortie" : "Affondata",
+    "PredictionStampPvP" : "Fuori Combattimento",
+    "PredictionStampEscort" : "Scorta",
+    "PredictionStampMVPUseful" : "MVP",
+    "PredictionStampMVPUseless" : "Maxata",
+
     "LevelText" : "Livello",
     "LevelShort" : "Lv.",
     "LevelNext" : "Prossimo",
-    "Screenshot" : "Screenshot"
+    "Screenshot" : "Screenshot",
+    "UntranslatedQuest" : "Quest non tradotta",
+
+    "StrategyEvents1HP" : "Ultima Kill!",
+
+    "PanelWaitActions" : "In attesa di azioni di gioco...",
+    "PanelErrorStorage" : "Nelle tue impostazioni localStorage è disabilitato. KC3改 ha bisogno di questa opzione. <a href=\"http://stackoverflow.com/a/26671889/483704\" target=\"_blank\">Guarda come abilitarla</a>."
 }

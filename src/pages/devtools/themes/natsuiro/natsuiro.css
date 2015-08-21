@@ -138,6 +138,26 @@
 	line-height:16px;
 	font-size:11px;
 	text-align:center;
+	position: relative;
+}
+.module.admiral .admiral_lvnext:before {
+	content: attr(data-exp);
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	text-align: right;
+	top: 0px;
+	left: -60px;
+}
+.module.admiral .admiral_lvnext:after {
+	content: attr(data-exp-gain);
+	color: red;
+	position: absolute;
+	top: -16px;
+	left: 0;
+	right: 0;
+	text-align: center;
+	text-shadow: 0px 0px 2px black;
 }
 .module.admiral .admiral_name {
 	width:130px;
@@ -423,10 +443,39 @@
 	background:#007A00;
 }
 .module.activity .sortie_node.nc_maelstrom {
-	background:#80007F;
+	background:#D2C6FF;
+	color:#000;
+}
+.module.activity .sortie_node.nc_select {
+	background:#FFF;
+	color:#000;
 }
 .module.activity .sortie_node.nc_avoid {
 	background:#00B3B1;
+}
+/* Abyss Ships */
+.module.activity .node_type_battle {
+	position: relative;
+}
+.module.activity .sink_icons {
+	width:180px;
+	height:0px;
+	position: absolute;
+	z-index: 1;
+	pointer-events:none;
+}
+.module.activity .sink_icons .sunk {
+	width:16px;
+	height:16px;
+	line-height:16px;
+	float:left;
+	margin:8px 0px 0px 14px;
+}
+.module.activity .sink_icons .sunk img {
+	width:16px;
+	height:16px;
+	vertical-align:top;
+	display:none;
 }
 /* Abyss Ships */
 .module.activity .abyss_ships {
@@ -443,6 +492,7 @@
 	border:1px solid #000;
 	overflow:hidden;
 	background:#888;
+	position:relative;
 }
 .module.activity .abyss_ship img {
 	width:26px;
@@ -585,6 +635,60 @@
 .module.activity .plane_after {
 	color:#FF7979;
 }
+/* Resource Nodes */
+.module.activity .node_type_resource {
+	width:150px;
+	height:28px;
+	line-height:18px;
+	padding:4px;
+	background:#B1FF5E;
+	border:1px solid #70D800;
+	border-radius:7px;
+	margin: 10px auto;
+}
+.module.activity .node_res_icon {
+	width:18px;
+	height:18px;
+	float:left;
+	margin:0px 5px 0px 0px;
+	vertical-align:top;
+}
+.module.activity .node_res_icon img {
+	width:18px;
+	height:18px;
+	vertical-align:top;
+}
+.module.activity .node_res_text {
+	width:100px;
+	height:20px;
+	float:left;
+	font-weight:bold;
+	font-size:12px;
+}
+.module.activity .node_type_maelstrom {
+	background:#D2C6FF;
+	border:1px solid #AE87E9;
+}
+/* Text Nodes */
+.module.activity .node_type_text {
+	width:150px;
+	height:28px;
+	line-height:18px;
+	padding:4px;
+	border-radius:7px;
+	margin: 10px auto;
+	text-align:center;
+	font-size:12px;
+}
+.module.activity .node_type_text.dud {
+	background:#79E7FF;
+	border:1px solid #1ABAEF;
+}
+.module.activity .node_type_text.select {
+	background:#FFF;
+	border:1px solid #CCC;
+}
+
 /*------- ACTIVITY: DETAILS -------*/
 .module.activity .activity_details {
 	
@@ -772,6 +876,7 @@
 	margin:0px 0px 3px 0px;
 	border-radius:5px;
 	padding:3px 0px 0px 0px;
+	position:relative;
 }
 .module.fleet .lship.ship-stamp:after {
 	content: attr(title);
@@ -789,6 +894,24 @@
 	width: 160px;
 	background-color: rgba(255,0,0,0.5);
 	z-index: 1;
+}
+.module.fleet .lship .ex_item {
+	width:18px;
+	height:18px;
+	line-height:18px;
+	position:absolute;
+	top:30px;
+	left:25px;
+	background:#fff;
+	border-radius:9px;
+	z-index:1;
+	overflow:hidden;
+}
+.module.fleet .lship .ex_item img {
+	width:18px;
+	height:18px;
+	line-height:18px;
+	vertical-align:top;
 }
 .module.fleet .lship .ship_img {
 	width:40px;
@@ -833,15 +956,16 @@
 	color:#00FFFF;
 }
 .module.fleet .lship .ship_level {
-	width:35px;
+	width:40px;
 	height:15px;
 	line-height:15px;
 	float:left;
 	font-size:11px;
 	color:#ffffff;
+	white-space:nowrap;
 }
 .module.fleet .lship .ship_hp_text {
-	width:55px;
+	width:50px;
 	height:15px;
 	line-height:15px;
 	float:left;
@@ -914,6 +1038,20 @@
 	width:40px;
 	height:20px;
 	float:left;
+}
+.module.fleet .lship .ship_gear_ace {
+	width: 12px;
+	position: absolute;
+	font-size: 8px;
+	color: #ff0;
+	margin: 8px 0px 0px -5px;
+	background: #555;
+	height: 12px;
+	overflow: hidden;
+	border-radius: 6px;
+	text-align: center;
+	line-height: 13px;
+	display:none;
 }
 .module.fleet .lship .ship_gear_icon {
 	width:18px;
@@ -999,6 +1137,7 @@
 	height:50px;
 	margin:0px 0px 2px 0px;
 	border-radius:5px;
+	position:relative;
 }
 .module.fleet .sship.ship-stamp:after {
 	content: attr(title);
@@ -1016,6 +1155,24 @@
 	width: 160px;
 	background-color: rgba(255,0,0,0.5);
 	z-index: 1;
+}
+.module.fleet .sship .ex_item {
+	width:18px;
+	height:18px;
+	line-height:18px;
+	position:absolute;
+	top:30px;
+	left:25px;
+	background:#fff;
+	border-radius:9px;
+	z-index:1;
+	overflow:hidden;
+}
+.module.fleet .sship .ex_item img {
+	width:18px;
+	height:18px;
+	line-height:18px;
+	vertical-align:top;
 }
 .module.fleet .sship .ship_img {
 	width:40px;
@@ -1129,7 +1286,59 @@
 
 /*------- STATUS -------*/
 .module.status {
-	background:rgba(80,80,80,0.5);
+	/*background:rgba(255,80,80,0.4);*/
+}
+.module.status .status_box {
+	width:110px;
+	height:20px;
+	line-height:20px;
+	float:left;
+	margin:0px 3px 3px 0px;
+	/*background:#fcc;*/
+}
+.module.status .status_icon {
+	width:20px;
+	height:20px;
+	float:left;
+	margin:0px 4px 0px 1px;
+	/*background:#ccf;*/
+}
+.module.status .status_icon.enclose {
+	background:#fff;
+	border-radius:10px;
+}
+.module.status .status_icon img {
+	width:20px;
+	height:20px;
+	vertical-align:top;
+}
+.module.status .status_text {
+	width:85px;
+	height:20px;
+	float:left;
+	/*background:#cfc;*/
+	color:#fff;
+	text-shadow:0px 0px 5px #000;
+	font-size:13px;
+	white-space:nowrap; 
+	overflow:hidden;
+	text-overflow: ellipsis;
+	-webkit-user-select: none;
+}
+.module.status .status_text.bad {
+	color:#faa;
+}
+.module.status .status_text.good {
+	color:#afa;
+}
+
+.module.status .status_support {
+	display:none;
+}
+.module.status .status_support img {
+	width:14px;
+	height:14px;
+	margin:3px;
 }
 
 
