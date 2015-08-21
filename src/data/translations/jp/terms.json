@@ -102,7 +102,7 @@
 	"SettingsAlerts" : "警報",
 	"SettingsTimeDiff" : "タイマー手当",
 	"SettingsMoraleNotif" : "疲労通知",
-+	"SettingsMoraleValue" : "疲労最小",
+	"SettingsMoraleValue" : "疲労最小",
 	"SettingsSeconds" : "秒",
 	"SettingsSoundType" : "音の種類",
 	"SettingsDing" : "チーン!",
