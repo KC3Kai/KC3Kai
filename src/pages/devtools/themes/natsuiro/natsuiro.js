@@ -130,6 +130,14 @@
 			}
 		});
 		
+		// Resize window to 800x480
+		$(".module.controls .btn_resize").on("click", function(){
+			// Send fit-screen request to service to be forwarded to gameplay page
+			(new RMsg("service", "fitScreen", {
+				tabId: chrome.devtools.inspectedWindow.tabId
+			})).execute();
+		});
+		
 		// Trigger initial selected fleet num
 		$(".module.controls .fleet_num.active").trigger("click");
 		

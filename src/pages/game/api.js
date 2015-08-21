@@ -202,6 +202,22 @@ var interactions = {
 		response({success:true});
 	},
 	
+	// Fit screen
+	fitScreen :function(request, sender, response){
+		var GameScale = ((ConfigManager.api_gameScale || 100) / 100);
+		
+		// Get browser zoon level for the page
+		chrome.tabs.getZoom(null, function(ZoomFactor){
+			// Resize the window
+			chrome.windows.getCurrent(function(wind){
+				chrome.windows.update(wind.id, {
+					width: Math.ceil(800*GameScale*ZoomFactor) + (wind.width- Math.ceil($(window).width()*ZoomFactor) ),
+					height: Math.ceil(480*GameScale*ZoomFactor) + (wind.height- Math.ceil($(window).height()*ZoomFactor) )
+				});
+			});
+		});
+	},
+	
 	// Dummy action
 	dummy :function(request, sender, response){
 		
