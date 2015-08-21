@@ -178,6 +178,7 @@
 	"PanelDocking" : "入渠",
 	"PanelAkashi" : "明石",
 	"PanelNoRepair" : "修理は必要ありません。",
+	"PanelCantRepair" : "修理はできません。",
 	"PanelHighestDocking" : "最高の入渠修理の時間",
 	"PanelHighestAkashi" : "最高の明石修理の時間",
 	
@@ -185,8 +186,11 @@
 	"PanelNoTaiha" : "良好",
 	"PanelSupplied" : "補給良い",
 	"PanelNotSupplied" : "補給が必要",
-	"PanelGoodMorale" : "士気良い",
+	"PanelGreatMorale" : "キラ疲労",
+	"PanelGoodMorale" : "疲労良い",
 	"PanelSupportPower" : "支援射撃威力",
+	"PanelPlanesFighter" : "飛行機は制空戦相に参加する。",
+	"PanelPlanesBomber" : "飛行機は空気爆撃相に参加する。",
 	
 	"CombinedCarrier" : "機動部隊",
 	"CombinedSurface" : "水上部隊",
