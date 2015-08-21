@@ -187,6 +187,8 @@
 	"PanelNotSupplied" : "Need resupply",
 	"PanelGoodMorale" : "Morale good",
 	"PanelSupportPower" : "Support Expedition Shelling Power",
+	"PanelPlanesFighter" : "Planes joining air-battle phase",
+	"PanelPlanesBomber" : "Planes joining bombing phase",
 	
 	"CombinedCarrier" : "Carrier TF",
 	"CombinedSurface" : "Surface TF",
