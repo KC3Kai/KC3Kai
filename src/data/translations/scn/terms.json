@@ -112,6 +112,7 @@
 	"SettingsQuestOverlay" : "任务翻译",
 	"SettingsQuestTracking" : "任务追踪",
 	"SettingsPanelRequirement" : "等待信息面板加载",
+	"SettingsDirectRefresh" : "页面内刷新（危险功能）",
 	"SettingsConfirmExit" : "退出游戏时需确认",
 	"SettingsScreenMargin" : "上边边距",
 	"SettingsBGColor" : "背景颜色 (bg-color)",
@@ -166,6 +167,30 @@
 	"PredictionStampEscort" : "避退",
 	"PredictionStampMVPUseful" : "MVP",
 	"PredictionStampMVPUseless" : "已满级",
+	
+	"EventHistoryRank1"  : "简单",
+	"EventHistoryRank2"  : "普通",
+	"EventHistoryRank3"  : "困难",
+	"EventHistoryRank1X" : "小儿科",
+	"EventHistoryRank2X" : "地狱模式",
+	"EventHistoryRank3X" : "老子就是强",
+	
+	"PanelDocking" : "入渠",
+	"PanelAkashi" : "明石",
+	"PanelNoRepair" : "无需修理",
+	"PanelHighestDocking" : "最长的入渠修理时间",
+	"PanelHighestAkashi" : "最长的明石修理时间",
+	
+	"PanelHasTaiha" : "大破",
+	"PanelNoTaiha" : "耐久良好",
+	"PanelSupplied" : "补给良好",
+	"PanelNotSupplied" : "需要补给",
+	"PanelGoodMorale" : "士气良好",
+	"PanelSupportPower" : "支援舰队炮击威力",
+	
+	"CombinedCarrier" : "联合舰队 (机动)",
+	"CombinedSurface" : "联合舰队 (水打)",
+	"CombinedNone" : "非联合舰队",
 
 	"LevelText" : "等级",
 	"LevelShort" : "Lv.",

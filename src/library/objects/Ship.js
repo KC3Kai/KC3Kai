@@ -83,6 +83,13 @@ KC3改 Ship Object
 	KC3Ship.prototype.isFast = function(){ return this.master().api_soku>=10; };
 	KC3Ship.prototype.exItem = function(){ return (this.ex_item>0)?KC3GearManager.get(this.ex_item):false; };
 	KC3Ship.prototype.isTaiha = function(){ return (this.hp[0]/this.hp[1] <= 0.25) && (this.hp[1]>0); };
+	
+	KC3Ship.prototype.isSupplied = function(){
+		if(this.rosterId===0){ return true; }
+		return this.fuel == this.master().api_fuel_max
+			&& this.ammo == this.master().api_bull_max;
+	};
+	
 	KC3Ship.prototype.resetAfterHp = function(){
 		this.afterHp[0] = this.hp[0];
 		this.afterHp[1] = this.hp[1];
@@ -96,7 +103,10 @@ KC3改 Ship Object
 		var RepairCalc = PS['KanColle.RepairTime'];
 		return {
 			docking: RepairCalc.dockingInSecJS( this.stype(), this.level, this.hp[0], this.hp[1] ),
-			akashi: RepairCalc.facilityInSecJS( this.stype(), this.level, this.hp[0], this.hp[1] )
+			akashi:
+				( this.hp[0] / this.hp[1] > 0.50 )
+				?RepairCalc.facilityInSecJS( this.stype(), this.level, this.hp[0], this.hp[1] )
+				:0
 		};
 	};
 	

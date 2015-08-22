@@ -47,7 +47,7 @@ To be dynamically used on the settings page
 						self.soundPreview.pause();
 					}
 					switch(ConfigManager.alert_type){
-						case 1: self.soundPreview = new Audio("../../../../assets/snd/ding.mp3"); break;
+						case 1: self.soundPreview = new Audio("../../../../assets/snd/pop.mp3"); break;
 						case 2: self.soundPreview = new Audio(ConfigManager.alert_custom); break; 
 						default: self.soundPreview = false; break;
 					}

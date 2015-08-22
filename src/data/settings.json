@@ -150,13 +150,25 @@
 				"options" : { "label" : "SettingsSeconds" }
 			},
 			{
+				"id" : "alert_morale_notif",
+				"name" : "SettingsMoraleNotif",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "alert_morale_value",
+				"name" : "SettingsMoraleValue",
+				"type" : "small_text",
+				"options" : { "label" : "" }
+			},
+			{
 				"id" : "alert_type",
 				"name" : "SettingsSoundType",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
 						[ 0, "None" ],
-						[ 1, "DING!" ],
+						[ 1, "POP!" ],
 						[ 2, "SettingsCustom" ]
 					]
 				}

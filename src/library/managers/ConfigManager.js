@@ -33,6 +33,8 @@ Retreives when needed to apply on components
 				ss_type 			: 'JPG',
 				
 				alert_diff 			: 59,
+				alert_morale_notif	: true,
+				alert_morale_value	: 40,
 				alert_type 			: 1,
 				alert_custom 		: "",
 				alert_volume 		: 60,
