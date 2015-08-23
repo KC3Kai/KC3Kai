@@ -166,9 +166,6 @@
 	
 	"PredictionStampSortie" : "Sunk",
 	"PredictionStampPvP" : "Knocked Out",
-	"PredictionStampEscort" : "Escort",
-	"PredictionStampMVPUseful" : "MVP",
-	"PredictionStampMVPUseless" : "Already maxed",
 	
 	"EventHistoryRank1"  : "EASY",
 	"EventHistoryRank2"  : "NORMAL",

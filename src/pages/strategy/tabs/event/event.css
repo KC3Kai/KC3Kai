@@ -347,9 +347,14 @@
 }
 .tab_event .sortie_list .rfleet_equips {
 	width:55px;
-	height:0px;
+	height:20px;
 	float:left;
-	background:#cff;
+}
+
+.tab_event .sortie_list .rfleet_equips img {
+	float:left;
+	line-height: auto;
+	width:12px;
 }
 
 
@@ -556,7 +561,7 @@
 	/*border-radius: 10px;*/
 }
 .tab_event .sortie_list .sortie_box.sortie_rank_1:after {
-	content: attr(title);
+	content: attr(data-diff);
 	position:absolute;
 	right:0; bottom:0;
 	opacity:0;
@@ -585,7 +590,7 @@
 	/*border-radius: 10px;*/
 }
 .tab_event .sortie_list .sortie_box.sortie_rank_2:after {
-	content: attr(title);
+	content: attr(data-diff);
 	position:absolute;
 	right:0; bottom:0;
 	opacity:0;
@@ -614,7 +619,7 @@
 	/*border-radius: 10px;*/
 }
 .tab_event .sortie_list .sortie_box.sortie_rank_3:after {
-	content: attr(title);
+	content: attr(data-diff);
 	position:absolute;
 	right:0; bottom:0;
 	opacity:0;
