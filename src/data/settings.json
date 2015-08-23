@@ -170,6 +170,7 @@
 					"choices" : [
 						[ 0, "None" ],
 						[ 1, "POP!" ],
+						[ 3, "DING!" ],
 						[ 2, "SettingsCustom" ]
 					]
 				}
