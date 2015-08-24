@@ -89,7 +89,7 @@
 	"SettingsBattleData" : "Prediksi Pertempuran",
 	"SettingsBattleStamp" : "Marka Kondisi Kanmusu",
 	"SettingsBossComp" : "Susunan Bos",
-	"SettingsYasenTroll" : "Komentar Troll KC3改",
+	"SettingsYasenTroll" : "Komentar Hiburan KC3改",
 	"SettingsHQDelta" : "HQ EXP Delta saat Sorti",
 	
 	"SettingsScreenshot" : "Screenshot",
@@ -101,6 +101,8 @@
 
 	"SettingsAlerts" : "Peringatan",
 	"SettingsTimeDiff" : "Penyisihan Waktu",
+	"SettingsMoraleNotif" : "Notifikasi Moral",
+	"SettingsMoraleValue" : "Moral Minimum",
 	"SettingsSeconds" : "detik",
 	"SettingsSoundType" : "Tipe Suara",
 	"SettingsDing" : "DING!",
@@ -164,9 +166,6 @@
 	
 	"PredictionStampSortie" : "Tenggelam",
 	"PredictionStampPvP" : "Tersingkirkan",
-	"PredictionStampEscort" : "Pengawal",
-	"PredictionStampMVPUseful" : "MVP",
-	"PredictionStampMVPUseless" : "Dimaksimalkan",
 	
 	"EventHistoryRank1"  : "MUDAH",
 	"EventHistoryRank2"  : "SEDANG",
@@ -178,6 +177,7 @@
 	"PanelDocking" : "Perbaikan",
 	"PanelAkashi" : "Akashi",
 	"PanelNoRepair" : "Tak butuh perbaikan",
+	"PanelCantRepair" : "Tak dapat diperbaiki",
 	"PanelHighestDocking" : "Waktu Perbaikan",
 	"PanelHighestAkashi" : "Waktu Perbaikan Akashi",
 	
@@ -185,12 +185,15 @@
 	"PanelNoTaiha" : "HP baik",
 	"PanelSupplied" : "Suplai baik",
 	"PanelNotSupplied" : "Perlu isi suplai",
+	"PanelGreatMorale" : "Moral mantap",
 	"PanelGoodMorale" : "Moral baik",
-	"PanelSupportPower" : "Support Expedition Shelling Power",
+	"PanelSupportPower" : "Damage support expedition",
+	"PanelPlanesFighter" : "Pesawat pada tahap pertempuran",
+	"PanelPlanesBomber" : "Pesawat pada tahap pengeboman",
 	
 	"CombinedCarrier" : "Carrier TF",
 	"CombinedSurface" : "Surface TF",
-	"CombinedNone" : "Tak digabung",
+	"CombinedNone" : "Tunggal",
 
 	"LevelText" : "Level",
 	"LevelShort" : "Lv.",
