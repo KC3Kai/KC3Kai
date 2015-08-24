@@ -75,13 +75,8 @@
 		// eLoS Toggle
 		$(".summary-eqlos").on("click",function(){
 			ConfigManager.scrollElosMode();
-			var img = 	(ConfigManager.elosFormula == 1) ? "lst" : 
-						(ConfigManager.elosFormula == 2) ? "lse" :
-														"ls" ;
-			$(".summary-eqlos .summary_icon img").attr("src", "../../../../assets/img/stats/"+img+".png");
-			var los = (selectedFleet < 5) ?	PlayerManager.fleets[selectedFleet-1].eLoS() : 
-											PlayerManager.fleets[0].eLoS() + PlayerManager.fleets[1].eLoS();
-			$(".summary-eqlos .summary_text").text( Math.round(los * 100) / 100 );
+			$(".summary-eqlos .summary_icon img").attr("src", "../../../../assets/img/stats/"+(ConfigManager.elosFormula == 1) ? "lst" : (ConfigManager.elosFormula == 2) ? "lse" : "ls"+".png");
+			$(".summary-eqlos .summary_text").text( Math.round(((selectedFleet < 5) ? PlayerManager.fleets[selectedFleet-1].eLoS() : PlayerManager.fleets[0].eLoS()+PlayerManager.fleets[1].eLoS() * 100) / 100 );
 		}).addClass("hover");
 		
 		// Screenshot buttons
