@@ -65,6 +65,8 @@
 	"AboutOther" : "Autres Crédits",
 	"AboutLogo" : "Concept du Logo",
 	"AboutFairy" : "Concept Art de la Fée",
+	"AboutReporters" : "Recurring Git Reporters",
+	"AboutReporter" : "Git Reporter",
 
 	"SettingsTitle" : "Options de KC3改",
 
@@ -74,19 +76,26 @@
 	"SettingsELosSum" : "Somme",
 	"SettingsELosOld" : "Ancienne",
 	"SettingsELosNew" : "Nouvelle",
+	"SettingsHQExpDetail"  : "HQ Exp Info",
+	"SettingsHQExpLeft"    : "EXP Restant",
+	"SettingsHQExpCurrent" : "Level Courant",
+	"SettingsHQExpTotal"   : "EXP total gagné",
 
 	"SettingsGameInfo" : "Info jeu",
 	"SettingsConstructionFaces" : "Aperçu du kanmusu",
 	"SettingsCraftBox" : "Résultat de Craft",
 	"SettingsCompass" : "Boussole et Ennemi",
-	"SettingsBattleData" : "Données de Combat",
+	"SettingsBattleData" : "Supposition HP Fin",
+	"SettingsBattleStamp" : "Kanmusu Condition Tampon",
 	"SettingsBossComp" : "Composition du Boss",
+	"SettingsYasenTroll" : "KC3改 Troll Commentaire",
+	"SettingsHQDelta" : "HQ EXP Delta en Sortie",
 
 	"SettingsScreenshot" : "Capture d'Écran",
 	"SettingsSSOutput" : "Méthode d'affichage",
 	"SettingsSSDownload" : "Téléchargement",
 	"SettingsSSImgur" : "Imgur",
-	"SettingsSSNewTab" : "Nouvel Onglet",
+	"SettingsSSNewTab" : "Nouvelle Onglet",
 	"SettingsSSFileType" : "Type de Fichier",
 
 	"SettingsAlerts" : "Alertes",
@@ -101,6 +110,8 @@
 	"SettingsAPIGameScreen" : "Écran API du jeu",
 	"SettingsQuestOverlay" : "Traductions de Quêtes",
 	"SettingsQuestTracking" : "Traçage des Quêtes",
+	"SettingsPanelRequirement" : "Besoin du Panneau pour jouer",
+	"SettingsDirectRefresh" : "Rafraichir la page (Danger)",
 	"SettingsConfirmExit" : "Confirmation de Fermeture",
 	"SettingsScreenMargin" : "Marge Supérieure",
 	"SettingsBGColor" : "Couleur de Fond",
@@ -114,29 +125,82 @@
 
 	"SettingsDMMGameplay" : "Gameplay DMM",
 	"SettingsDMMCustomize" : "Appliquer les Changements",
+	"SettingsDMMForceCookies" : "Forcer l'hack du Cookie ",
 
-	"SettingsPanelSize" : "Taille du Panel",
+	"SettingsPanelSize" : "Taille du Panneau",
 	"SettingsPanelOpacity" : "Opacité de l'Interface",
+	"SettingsGearHolder" : "Couleur du fond",
 
 	"Small" : "Petite",
 	"Big" : "grande",
 	"Theme" : "Thème",
-	"Panel" : "Panel",
+	"Panel" : "Panneau",
 	"Volume" : "Volume",
 	"None" : "Aucun",
 	"LearnMore" : "En savoir plus",
 	"Saved" : "Enregistré!",
 
+	"UnwantedExit" : "Ahhh! tu leurs a laissé tombé! Tu es sûr de vouloir faire ça?",
+	"APIWaitToggle" : "S'il vous plait, lancer le panneau de KC3Kai en premier",
+	"APIConcealExpl" : "Montrer ton lien API",
+
 	"SpeedFast" : "Rapide",
 	"SpeedSlow" : "Lente",
 
 	"HQText" : "HQ",
+	"HQExpAbbrev1" : "Suivant",
+	"HQExpAbbrev2" : "Courant",
+	"HQExpAbbrev3" : "Total",
+
+	"BattleDetection" : "Detection",
+	"BattleEngangement" : "Engage",
+	"BattleContact" : "Contact",
+	"BattleAirBattle" : "Air Battle",
+	"BattleFriendly" : "Alliés",
+	"BattleEnemy" : "Enemies",
+
+	"PredictionStampSortie" : "Couler",
+	"PredictionStampPvP" : "Foutu dehors",
+	"PredictionStampEscort" : "Escorte",
+	"PredictionStampMVPUseful" : "MVP",
+	"PredictionStampMVPUseless" : "Déjà maximisé",
+
+	"EventHistoryRank1"  : "FACILE",
+	"EventHistoryRank2"  : "NORMAL",
+	"EventHistoryRank3"  : "DUR",
+	"EventHistoryRank1X" : "CHOIX DE GAMIN",
+	"EventHistoryRank2X" : "ENFER AF",
+	"EventHistoryRank3X" : "GET REKT SON",
+
+	"PanelDocking" : "Port",
+	"PanelAkashi" : "Akashi",
+	"PanelNoRepair" : "Pas besoin de réparation",
+	"PanelCantRepair" : "Ne peut pas être réparé",
+	"PanelHighestDocking" : "Le plus haut temps de réparation",
+	"PanelHighestAkashi" : "le plus haut temps de réparation avec Akashi",
+
+	"PanelHasTaiha" : "Critique",
+	"PanelNoTaiha" : "HP Bonne",
+	"PanelSupplied" : "Kanmusu Ok!",
+	"PanelNotSupplied" : "Recharge !",
+	"PanelGreatMorale" : "Morale Parfait",
+	"PanelGoodMorale" : "Morale Bonne",
+	"PanelSupportPower" : "Bombardement du Support Expedition",
+	"PanelPlanesFighter" : "Avion qui rejoint la phase du combat aérienne",
+	"PanelPlanesBomber" : "Avion qui rejoint la phase de bombardement",
+
+	"CombinedCarrier" : "Porte-avion TF",
+	"CombinedSurface" : "Surface TF",
+	"CombinedNone" : "Pas Combinné",
+
 	"LevelText" : "Niveau",
 	"LevelShort" : "Nv.",
 	"LevelNext" : "Suivant",
 	"Screenshot" : "Capture d'écr.",
+	"UntranslatedQuest" : "Quête non traduite",
 
-	"PanelErrorStorage" : "Le stockage local de votre navigateur Chrome a été désactivé dans vos paramètres. KC3改 a besoin de cette option. <a href=\"http://stackoverflow.com/a/26671889/483704\" target=\"_blank\">See how to enable this</a>.",
+	"StrategyEvents1HP" : "La dernière qui tue!",
 
-	"Dummy" : "Dummy"
+	"PanelWaitActions" : "En attente de chargement du jeu...",
+	"PanelErrorStorage" : "Le stockage local de votre navigateur Chrome a été désactivé dans vos paramètres. KC3改 a besoin de cette option. <a href=\"http://stackoverflow.com/a/26671889/483704\" target=\"_blank\">See how to enable this</a>."
 }

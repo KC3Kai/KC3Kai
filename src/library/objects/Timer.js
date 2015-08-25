@@ -93,6 +93,7 @@ Has functions for TimerManager to use
 		switch(ConfigManager.alert_type){
 			case 1: notifSound = new Audio("../../../../assets/snd/pop.mp3"); break;
 			case 2: notifSound = new Audio(ConfigManager.alert_custom); break; 
+			case 3: notifSound = new Audio("../../../../assets/snd/ding.mp3"); break; 
 			default: notifSound = false; break;
 		}
 		if(notifSound){

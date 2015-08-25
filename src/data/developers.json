@@ -228,6 +228,14 @@
 				"wk" : "http://kancolle.wikia.com/wiki/User:YukiNyaa",
 				"fb" : "https://www.facebook.com/iTwilly.HJW"
 			}
+		},
+		{
+			"name": "RoyOzz",
+			"avatar" : "http://vignette2.wikia.nocookie.net/common/avatars/6/67/26454495.png/revision/latest/scale-to-width-down/150?cb=1440182984&format=jpg",
+			"desc" : "Русский",
+			"links" : {
+				"wk" : "http://ru.kancolle.wikia.com/wiki/%D0%A3%D1%87%D0%B0%D1%81%D1%82%D0%BD%D0%B8%D0%BA:RoyOzz"
+			}
 		}
 	],
 	"AboutTesters" : [

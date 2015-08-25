@@ -19,7 +19,8 @@
 						[ "fr", "Français" ],
 						[ "it", "Italiano" ],
 						[ "kr", "한국어" ],
-						[ "pt", "Português" ]
+						[ "pt", "Português" ],
+						[ "ru", "Русский" ]
 					]
 				}
 			},
@@ -169,6 +170,7 @@
 					"choices" : [
 						[ 0, "None" ],
 						[ 1, "POP!" ],
+						[ 3, "DING!" ],
 						[ 2, "SettingsCustom" ]
 					]
 				}

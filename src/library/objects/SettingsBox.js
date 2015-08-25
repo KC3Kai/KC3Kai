@@ -49,6 +49,7 @@ To be dynamically used on the settings page
 					switch(ConfigManager.alert_type){
 						case 1: self.soundPreview = new Audio("../../../../assets/snd/pop.mp3"); break;
 						case 2: self.soundPreview = new Audio(ConfigManager.alert_custom); break; 
+						case 3: self.soundPreview = new Audio("../../../../assets/snd/ding.mp3"); break;
 						default: self.soundPreview = false; break;
 					}
 					if(self.soundPreview){
@@ -100,6 +101,23 @@ To be dynamically used on the settings page
 			ConfigManager[ self.config ] = $(this).data("value");
 			ConfigManager.save();
 			$(this).parent().siblings(".note").stop(true, true).show().fadeOut(2000);
+			
+			// If changed sound type, test play the alert sound
+			if(self.config == "alert_type"){
+				if(self.soundPreview){
+					self.soundPreview.pause();
+				}
+				switch(ConfigManager.alert_type){
+					case 1: self.soundPreview = new Audio("../../../../assets/snd/pop.mp3"); break;
+					case 2: self.soundPreview = new Audio(ConfigManager.alert_custom); break; 
+					case 3: self.soundPreview = new Audio("../../../../assets/snd/ding.mp3"); break;
+					default: self.soundPreview = false; break;
+				}
+				if(self.soundPreview){
+					self.soundPreview.volume = ConfigManager.alert_volume / 100;
+					self.soundPreview.play();
+				}
+			}
 			
 			// Refresh page when a language option is clicked
 			if(self.config == "language"){

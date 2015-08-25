@@ -101,6 +101,8 @@
 	
 	"SettingsAlerts" : "提醒",
 	"SettingsTimeDiff" : "倒计时提前",
+	"SettingsMoraleNotif" : "士气提醒",
+	"SettingsMoraleValue" : "士气最低值",
 	"SettingsSeconds" : "秒",
 	"SettingsSoundType" : "提示音",
 	"SettingsDing" : "DING!",
@@ -156,7 +158,7 @@
 	"HQExpAbbrev3" : "总计",
 	
 	"BattleDetection" : "索敌",
-	"BattleEngangement" : "交战",
+	"BattleEngangement" : "航向",
 	"BattleContact" : "接触",
 	"BattleAirBattle" : "航空战",
 	"BattleFriendly" : "友军",
@@ -164,9 +166,6 @@
 	
 	"PredictionStampSortie" : "击沉",
 	"PredictionStampPvP" : "出局",
-	"PredictionStampEscort" : "避退",
-	"PredictionStampMVPUseful" : "MVP",
-	"PredictionStampMVPUseless" : "已满级",
 	
 	"EventHistoryRank1"  : "简单",
 	"EventHistoryRank2"  : "普通",
@@ -178,6 +177,7 @@
 	"PanelDocking" : "入渠",
 	"PanelAkashi" : "明石",
 	"PanelNoRepair" : "无需修理",
+	"PanelCantRepair" : "无法修理",
 	"PanelHighestDocking" : "最长的入渠修理时间",
 	"PanelHighestAkashi" : "最长的明石修理时间",
 	
@@ -185,8 +185,11 @@
 	"PanelNoTaiha" : "耐久良好",
 	"PanelSupplied" : "补给良好",
 	"PanelNotSupplied" : "需要补给",
+	"PanelGreatMorale" : "士气高昂",
 	"PanelGoodMorale" : "士气良好",
 	"PanelSupportPower" : "支援舰队炮击威力",
+	"PanelPlanesFighter" : "参与航空战的飞机",
+	"PanelPlanesBomber" : "参与轰炸的飞机",
 	
 	"CombinedCarrier" : "联合舰队 (机动)",
 	"CombinedSurface" : "联合舰队 (水打)",
