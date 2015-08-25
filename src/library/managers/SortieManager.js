@@ -12,6 +12,7 @@ Xxxxxxx
 		map_world: 0,
 		map_num: 0,
 		map_difficulty: 0,
+		fullSupplyMode: true,
 		nextNodeCount: 0,
 		hqExpGained: 0,
 		nodes: [],
@@ -41,6 +42,12 @@ Xxxxxxx
 				formation: -1,
 				ships: [ -1, -1, -1, -1, -1, -1 ]
 			};
+			
+			this.fullSupplyMode = ((PlayerManager.combinedFleet&&this.fleetSent===1) ? [0,1] : [this.fleetSent-1]).map(function(x){
+				return PlayerManager.fleets[x];
+			}).every(function(x){
+				return x.isSupplied();
+			});
 			
 			var fleet = PlayerManager.fleets[this.fleetSent-1];
 			fleet.resetAfterHp();
@@ -164,7 +171,7 @@ Xxxxxxx
 		
 		engageNight :function( nightData ){
 			if(this.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
-			 this.currentNode().night( nightData );
+			this.currentNode().night( nightData );
 		},
 		
 		resultScreen :function( resultData ){

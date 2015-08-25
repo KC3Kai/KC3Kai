@@ -227,6 +227,7 @@
 				"id" : "api_directRefresh",
 				"name" : "SettingsDirectRefresh",
 				"type" : "check",
+				"chui" : 1,
 				"options" : {}
 			},
 			{

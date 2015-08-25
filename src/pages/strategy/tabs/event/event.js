@@ -61,6 +61,12 @@
 							}
 						})(element.difficulty));
 						
+						// Check unselected difficulty
+						if(!element.difficulty) {
+							mapBox.addClass("noclearnogauge");
+							$(".map_hp_txt", mapBox).text("No difficulty");
+							return false;
+						}
 						// EASY MODO STRIKES BACK
 						if(ConfigManager.info_troll && element.difficulty==1) {
 							mapBox.addClass("easymodokimoi");
