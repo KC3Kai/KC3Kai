@@ -20,7 +20,7 @@
 			
 			// Add all expedition numbers on the list
 			var KE = PS["KanColle.Expedition"];
-			$('.tab_expedtable .expedNumbers').html("")
+			$('.tab_expedtable .expedNumbers').html("");
 			KE.allExpeditions.forEach( function(curVal, ind) {
 				var row = $('.tab_expedtable .factory .expedNum').clone();
 				$(".expedCheck input", row).attr("value", curVal.id.toString());
