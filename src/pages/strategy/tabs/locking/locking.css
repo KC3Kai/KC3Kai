@@ -2,28 +2,8 @@
 	display:none;
 }
 .tab_locking .planner_area {
+	padding-top:10px;
 	-webkit-user-select: none;
-}
-
-/* INSTRUCTIONS
-------------------------------*/
-.tab_locking .instructions {
-	margin:0px 0px 10px 0px;
-}
-.tab_locking .instructions .locking_q {
-	width:680px;
-	height:16px;
-	line-height:16px;
-	font-size:12px;
-	font-weight:bold;
-	margin:5px 0px 0px 0px;
-	color:#0099cc;
-}
-.tab_locking .instructions  .locking_a {
-	width:670px;
-	line-height:14px;
-	font-size:12px;
-	margin:0px 0px 0px 20px;
 }
 
 /* CONTROLS
