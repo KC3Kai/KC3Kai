@@ -12,6 +12,8 @@ To be dynamically used on the settings page
 		$(".title", this.element).text( KC3Meta.term( info.name ) );
 		this.soundPreview = false;
 		this[info.type]( info.options );
+		if(parseInt(info.chui) || 0 === 1)
+			$(this.element).addClass("dangerous");
 	};
 	
 	SettingsBox.prototype.check = function( options ){
@@ -22,6 +24,12 @@ To be dynamically used on the settings page
 			.addClass("checkbox")
 			.prop("checked", ConfigManager[ this.config ])
 			.on("change", function(){
+				// Dangerous Settings Change Attempt
+				if(isDangerous($(this).parent().parent(),self.config,$(this).prop("checked"))) {
+					$(this).prop("checked",ConfigManager[self.config]);
+					return false;
+				}
+				
 				ConfigManager[ self.config ] = $(this).prop("checked");
 				ConfigManager.save();
 				$(this).parent().siblings(".note").stop(true, true).show().fadeOut(2000);
@@ -37,6 +45,12 @@ To be dynamically used on the settings page
 			.addClass("small_text")
 			.val( ConfigManager[ this.config ] )
 			.on("change", function(){
+				// Dangerous Settings Change Attempt
+				if(isDangerous($(this).parent().parent(),self.config,$(this).val())) {
+					$(this).val(ConfigManager[self.config]);
+					return false;
+				}
+				
 				ConfigManager[ self.config ] = $(this).val();
 				ConfigManager.save();
 				$(this).parent().siblings(".note").stop(true, true).show().fadeOut(2000);
@@ -72,6 +86,12 @@ To be dynamically used on the settings page
 			.addClass("long_text")
 			.val( ConfigManager[ this.config ] )
 			.on("change", function(){
+				// Dangerous Settings Change Attempt
+				if(isDangerous($(this).parent().parent(),self.config,$(this).val())) {
+					$(this).val(ConfigManager[self.config]);
+					return false;
+				}
+				
 				ConfigManager[ self.config ] = $(this).val();
 				ConfigManager.save();
 				$(this).parent().siblings(".note").stop(true, true).show().fadeOut(2000);
@@ -96,6 +116,7 @@ To be dynamically used on the settings page
 		}
 		
 		$("."+choiceClass, this.element).on("click", function(){
+			console.log(this,arguments);
 			$("."+$(this).data("class")).removeClass("active");
 			$(this).addClass("active");
 			ConfigManager[ self.config ] = $(this).data("value");
@@ -125,5 +146,16 @@ To be dynamically used on the settings page
 			}
 		});
 	};
+	
+	function isDangerous(element,key,current) {
+		var 
+			isDG = $(element).hasClass("dangerous"),
+			isEqPrev = ConfigManager[key] === current,
+			isEqDef  = ConfigManager.defaults()[key] === current;
+		if(isDG&&!isEqPrev&&!isEqDef)
+			return !confirm(KC3Meta.term("SettingsChuuiWarningDangerousFeature")); // cancelling the prompt
+		else
+			return false;
+	}
 	
 })();
