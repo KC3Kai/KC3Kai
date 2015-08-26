@@ -288,11 +288,11 @@ Used by SortieManager
 		var fleet;
 		var shipNum;
 		var ship;
+		var fleetId = parseInt(fleetSent) || KC3SortieManager.fleetSent;
 		
 		// SINGLE FLEET
-		if (!PlayerManager.combinedFleet) {
+		if (PlayerManager.combinedFleet === 0 || fleetId>1){ // single fleet: not combined, or sent fleet is not first fleet
 			result = DA.analyzeRawNightBattleJS( nightData ); 
-			var fleetId = parseInt(fleetSent) || KC3SortieManager.fleetSent;
 			fleet = PlayerManager.fleets[fleetId - 1];
 		// COMBINED FLEET
 		} else {
