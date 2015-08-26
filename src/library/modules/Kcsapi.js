@@ -652,6 +652,11 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_nyukyo/speedchange":function(params, response, headers){
 			PlayerManager.consumables.buckets--;
+			// If ship is still is the list being repaired, remove Her
+			var ship_id = PlayerManager.repairShips[ params.api_ndock_id ];
+			PlayerManager.repairShips.splice(params.api_ndock_id, 1);
+			KC3ShipManager.get( ship_id ).hp[0] = KC3ShipManager.get( ship_id ).hp[1];
+			KC3TimerManager.repair( params.api_ndock_id ).deactivate();
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Timers");
 		},
