@@ -101,6 +101,8 @@
 	
 	"SettingsAlerts" : "建造、入渠及遠征提示",
 	"SettingsTimeDiff" : "時間提前",
+    "SettingsMoraleNotif" : "士氣通知",
+    "SettingsMoraleValue" : "士氣最低值",
 	"SettingsSeconds" : "秒",
 	"SettingsSoundType" : "提示音效",
 	"SettingsDing" : "叮！",
@@ -112,6 +114,7 @@
 	"SettingsQuestOverlay" : "翻譯任務",
 	"SettingsQuestTracking" : "追蹤任務",
 	"SettingsPanelRequirement" : "需要開啟面板",
+	"SettingsDirectRefresh" : "頁面內刷新(危險功能)",
 	"SettingsConfirmExit" : "離開前再確定",
 	"SettingsScreenMargin" : "遊戲視窗與和上方的距離",
 	"SettingsBGColor" : "背景顏色",
@@ -154,7 +157,7 @@
 	"HQExpAbbrev3" : "共有",
 		
 	"BattleDetection" : "索敵",
-	"BattleEngangement" : "對陣",
+	"BattleEngangement" : "航向",
 	"BattleContact" : "觸接",
 	"BattleAirBattle" : "航空戰",
 	"BattleFriendly" : "友方",
@@ -163,11 +166,43 @@
 	"PredictionStampSortie" : "轟沉",
 	"PredictionStampPvP" : "出局",
 
+    "EventHistoryRank1"  : "簡單",
+    "EventHistoryRank2"  : "普通",
+    "EventHistoryRank3"  : "困難",
+    "EventHistoryRank1X" : "小兒科",
+    "EventHistoryRank2X" : "地獄模式",
+    "EventHistoryRank3X" : "打爆你",
+
+    "PanelDocking" : "入渠",
+    "PanelAkashi" : "明石",
+    "PanelNoRepair" : "無需修理",
+    "PanelCantRepair" : "無法修理",
+    "PanelHighestDocking" : "最長的入渠修理時間",
+    "PanelHighestAkashi" : "最長的明石修理時間",
+
+    "PanelHasTaiha" : "大破",
+    "PanelNoTaiha" : "耐久良好",
+    "PanelSupplied" : "補給良好",
+    "PanelNotSupplied" : "需要補給",
+    "PanelGreatMorale" : "士氣高昂",
+    "PanelGoodMorale" : "士氣良好",
+    "PanelSupportPower" : "支援艦隊砲擊威力",
+    "PanelPlanesFighter" : "參與航空戰的飛機",
+    "PanelPlanesBomber" : "參與轟炸的飛機",
+
+    "CombinedCarrier" : "聯合艦隊 (機動)",
+    "CombinedSurface" : "聯合艦隊 (水上)",
+    "CombinedNone" : "非聯合艦隊",
+
+
+
 	"LevelText" : "等級",
 	"LevelShort" : "Lv.",
-	"LevelNext" : "離下一等級只需",
+	"LevelNext" : "下一等",
 	"Screenshot" : "螢幕截圖",
 "UntranslatedQuest" : "未翻譯的仼務",
+
+    "StrategyEvents1HP" : "斬殺！",
  	
 	"PanelWaitActions" : "正在等待遊戲回應……",	
  
