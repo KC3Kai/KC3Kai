@@ -135,6 +135,7 @@
 	"SettingsGearHolder" : "Gear Background Color",
 	
 	"SettingsChuuiWarningDangerousFeature" : "Are you sure that you really want to change this?\nAny risks that you're attempting is beyond KC3改's responsibility.\n\nMake sure you're know what to do before.",
+	"SettingsErrorNG" : "Saved!",
 	"SettingsErrorSuper" : "Invalid value!",
 	"SettingsErrorAbove" : "exceeds",
 	"SettingsErrorBelow" : "under",

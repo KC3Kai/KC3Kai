@@ -33,7 +33,7 @@ To be dynamically used on the settings page
 				
 				ConfigManager[ self.config ] = $(this).prop("checked");
 				ConfigManager.save();
-				$(this).parent().siblings(".note").stop(true, true).show().fadeOut(2000);
+				elementControl($(this).parent().siblings(".note"),'',KC3Meta.term("SettingsErrorNG"));
 			})
 		);
 	};
@@ -65,13 +65,14 @@ To be dynamically used on the settings page
 							.replace("%VAL",self.bound[((ERRCODE & 4) !== 0 ? "length_" : "") + ((ERRCODE & 2) == 2 ? "max" : "min")]);
 					}
 					console.error(errstr);
+					elementControl($(this).parent().siblings(".note"),'red',errstr);
 					$(this).val(ConfigManager[self.config]);
 					return false;
 				}
 				
 				ConfigManager[ self.config ] = $(this).val();
 				ConfigManager.save();
-				$(this).parent().siblings(".note").stop(true, true).show().fadeOut(2000);
+				elementControl($(this).parent().siblings(".note"),'',KC3Meta.term("SettingsErrorNG"));
 				
 				// If changed volume, test play the alert sound
 				if(self.config == "alert_volume"){
@@ -112,7 +113,7 @@ To be dynamically used on the settings page
 				
 				ConfigManager[ self.config ] = $(this).val();
 				ConfigManager.save();
-				$(this).parent().siblings(".note").stop(true, true).show().fadeOut(2000);
+				elementControl($(this).parent().siblings(".note"),'',KC3Meta.term("SettingsErrorNG"));
 			})
 		);
 		$(".options", this.element).append( options.label );
@@ -139,7 +140,7 @@ To be dynamically used on the settings page
 			$(this).addClass("active");
 			ConfigManager[ self.config ] = $(this).data("value");
 			ConfigManager.save();
-			$(this).parent().siblings(".note").stop(true, true).show().fadeOut(2000);
+			elementControl($(this).parent().siblings(".note"),'',KC3Meta.term("SettingsErrorNG"));
 			
 			// If changed sound type, test play the alert sound
 			if(self.config == "alert_type"){
@@ -164,6 +165,11 @@ To be dynamically used on the settings page
 			}
 		});
 	};
+	
+	function elementControl(ele,colorCSS,msg) {
+		ele.stop(true, true).css('color',colorCSS).text(msg).show().fadeOut(2000)
+		return ele;
+	}
 	
 	function isDangerous(element,key,current) {
 		var 
