@@ -167,8 +167,7 @@ To be dynamically used on the settings page
 	};
 	
 	function elementControl(ele,colorCSS,msg) {
-		ele.stop(true, true).css('color',colorCSS).text(msg).show().fadeOut(2000)
-		return ele;
+		return ele.stop(true, true).css('color',colorCSS).text(msg).show().fadeOut(2000);
 	}
 	
 	function isDangerous(element,key,current) {
