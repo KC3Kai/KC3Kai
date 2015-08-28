@@ -62,7 +62,7 @@ To be dynamically used on the settings page
 						errstr = errstr
 							.replace("%TYP",KC3Meta.term("SettingsError" + ((ERRCODE & 4) == 4 ? "Value" : "Length")))
 							.replace("%CMP",KC3Meta.term("SettingsError" + ((ERRCODE & 2) == 2 ? "Above" :  "Below")))
-							.replace("%VAL",self.bound[((ERRCODE & 4) == 0 ? "length_" : "") + ((ERRCODE & 2) == 2 ? "max" : "min")]);
+							.replace("%VAL",self.bound[((ERRCODE & 4) !== 0 ? "length_" : "") + ((ERRCODE & 2) == 2 ? "max" : "min")]);
 					}
 					console.error(errstr);
 					$(this).val(ConfigManager[self.config]);
