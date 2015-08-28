@@ -135,6 +135,7 @@ body {
 	position: absolute;
 	right: 16px;
 	top: 2px;
+	pointer-events:none;
 }
 /* Settings Options */
 .settingBox .options .checkbox {

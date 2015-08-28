@@ -80,7 +80,10 @@
 							// If HP-based gauge
 							if(typeof element.maxhp != "undefined"){
 								if(element.curhp>1){ // i want to approach last kill as JUST DO IT instead leaving 1HP only.
-									$(".map_hp_txt", mapBox).text( element.curhp+" / "+element.maxhp );
+									if((element.maxhp === 9999) || (element.curhp === 9999))
+										$(".map_hp_txt", mapBox).text( "???? / ????" );
+									else
+										$(".map_hp_txt", mapBox).text( element.curhp+" / "+element.maxhp );
 									$(".map_bar", mapBox).css("width", ((element.curhp/element.maxhp)*80)+"px");
 								}else{
 									mapBox.addClass("noclearnogauge");
