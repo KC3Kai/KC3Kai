@@ -11,6 +11,7 @@ To be dynamically used on the settings page
 		this.element = $("#factory .settingBox").clone().appendTo("#wrapper .settings");
 		$(".title", this.element).text( KC3Meta.term( info.name ) );
 		this.soundPreview = false;
+		this.bound = $.extend({min:-Infinity,max:Infinity,length_min:0,length_max:Infinity},info.bound || {});
 		this[info.type]( info.options );
 		if(parseInt(info.chui) || 0 === 1)
 			$(this.element).addClass("dangerous");
@@ -47,6 +48,23 @@ To be dynamically used on the settings page
 			.on("change", function(){
 				// Dangerous Settings Change Attempt
 				if(isDangerous($(this).parent().parent(),self.config,$(this).val())) {
+					$(this).val(ConfigManager[self.config]);
+					return false;
+				}
+				
+				// Invalid Value Attempt
+				var ERRCODE = isInvalid(self.bound,$(this).val());
+				if(!!ERRCODE) {
+					var errstr = KC3Meta.term("SettingsErrorOrder")
+					if(ERRCODE === -1) {
+						errstr = KC3Meta.term("SettingsErrorSuper");
+					} else {
+						errstr = errstr
+							.replace("%TYP",KC3Meta.term("SettingsError" + ((ERRCODE & 4) == 4 ? "Value" : "Length")))
+							.replace("%CMP",KC3Meta.term("SettingsError" + ((ERRCODE & 2) == 2 ? "Above" :  "Below")))
+							.replace("%VAL",self.bound[((ERRCODE & 4) == 0 ? "length_" : "") + ((ERRCODE & 2) == 2 ? "max" : "min")]);
+					}
+					console.error(errstr);
 					$(this).val(ConfigManager[self.config]);
 					return false;
 				}
@@ -156,6 +174,23 @@ To be dynamically used on the settings page
 			return !confirm(KC3Meta.term("SettingsChuuiWarningDangerousFeature")); // cancelling the prompt
 		else
 			return false;
+	}
+	function isInvalid(bound,value) {
+		// 00000
+		// lsb-0 : is error
+		// lsb-1 : greater if set, lesser if not
+		// lsb-2 : value check if set, length check if not
+		// having all bit is set means invalid value
+		// otherwise, having all bit is unset means valid value
+		console.log(bound);
+		switch(true) {
+			case((Number(value) === NaN) && ((value || null) === null) && (String(value).length === 0)): return -1;
+			case(String(value).length > (Number(bound.length_max) || Infinity)): return  3;
+			case(String(value).length < (Number(bound.length_min) ||        0)): return  1;
+			case(value > (Number(bound.max) ||  Infinity)): return  7;
+			case(value < (Number(bound.min) || -Infinity)): return  5;
+			default: return 0;
+		}
 	}
 	
 })();
