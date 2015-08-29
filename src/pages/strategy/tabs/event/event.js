@@ -261,7 +261,7 @@
 				fleetkey = ["main","escort","preboss","boss"];
 				fleets   = [
 					sortie.fleetnum,
-					(parseInt(sortie.combined) ? 2 : 0),
+					(((sortie.fleetnum==1)&&(parseInt(sortie.combined))) ? 2 : 0),
 					sortie.support1,
 					sortie.support2
 				];
