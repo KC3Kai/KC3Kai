@@ -289,14 +289,15 @@ Used by SortieManager
 		var shipNum;
 		var ship;
 		var fleetId = parseInt(fleetSent) || KC3SortieManager.fleetSent;
-		// SINGLE FLEET
-		if ((!!PlayerManager.combinedFleet) ^ (fleetId <= 1)) { // single fleet: not combined, or sent fleet is not first fleet
-			result = DA.analyzeRawNightBattleJS( nightData ); 
-			fleet = PlayerManager.fleets[fleetId - 1];
+		
 		// COMBINED FLEET
-		} else {
+		if (PlayerManager.combinedFleet && (fleetId <= 1)) { 
 			result = DA.analyzeRawNightBattleCombinedJS( nightData ); 
 			fleet = PlayerManager.fleets[1];
+		// SINGLE FLEET
+		} else { // single fleet: not combined, or sent fleet is not first fleet
+			result = DA.analyzeRawNightBattleJS( nightData ); 
+			fleet = PlayerManager.fleets[fleetId - 1];
 		}
 		
 		for (i = 7; i < 13; i++) {
