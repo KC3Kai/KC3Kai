@@ -644,6 +644,7 @@ Previously known as "Reactor"
 			}
 			
 			KC3QuestManager.get(503).increment(); // E3: Daily Repairs
+                        KC3Network.trigger("Consumables");
 			KC3Network.trigger("Quests");
 			KC3Network.trigger("Fleet");
 		},
@@ -659,6 +660,7 @@ Previously known as "Reactor"
 			KC3TimerManager.repair( params.api_ndock_id ).deactivate();
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Timers");
+                        KC3Network.trigger("Fleet");
 		},
 		
 		/*-------------------------------------------------------*/
