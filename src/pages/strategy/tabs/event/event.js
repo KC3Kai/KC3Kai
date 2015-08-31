@@ -438,6 +438,7 @@
 					// Kanmusu Drop
 					if(battle.drop > 0){
 						$(".node_drop img", nodeBox).attr("src", KC3Meta.shipIcon( battle.drop ) );
+						$(".node_drop img", nodeBox).attr("title", KC3Meta.shipName( KC3Master.ship(battle.drop ).api_name  ));
 					}else{
 						$(".node_drop img", nodeBox).attr("src", "../../assets/img/ui/shipdrop-x.png");
 					}
