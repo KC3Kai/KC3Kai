@@ -148,6 +148,10 @@
 				"id" : "alert_diff",
 				"name" : "SettingsTimeDiff",
 				"type" : "small_text",
+				"bound" : {
+					"min" : -300,
+					"max" :  300
+				},
 				"options" : { "label" : "SettingsSeconds" }
 			},
 			{
@@ -160,6 +164,10 @@
 				"id" : "alert_morale_value",
 				"name" : "SettingsMoraleValue",
 				"type" : "small_text",
+				"bound" : {
+					"min" :  1,
+					"max" : 49
+				},
 				"options" : { "label" : "" }
 			},
 			{
@@ -185,6 +193,10 @@
 				"id" : "alert_volume",
 				"name" : "Volume",
 				"type" : "small_text",
+				"bound" : {
+					"min" :   0.0,
+					"max" : 100.0
+				},
 				"options" : { "label" : "%" }
 			},
 			{
@@ -227,12 +239,16 @@
 				"id" : "api_directRefresh",
 				"name" : "SettingsDirectRefresh",
 				"type" : "check",
+				"chui" : 1,
 				"options" : {}
 			},
 			{
 				"id" : "api_margin",
 				"name" : "SettingsScreenMargin",
 				"type" : "small_text",
+				"bound" : {
+					"length_min": 1
+				},
 				"options" : { "label" : "pixels" }
 			},
 			{
@@ -263,6 +279,10 @@
 				"id" : "api_gameScale",
 				"name" : "SettingsPlayerScale",
 				"type" : "small_text",
+				"bound" : {
+					"min" :  0.0,
+					"max" : null
+				},
 				"options" : { "label" : "%" }
 			}
 		]
@@ -408,6 +428,11 @@
 				"id" : "pan_opacity",
 				"name" : "SettingsPanelOpacity",
 				"type" : "small_text",
+				"bound" : {
+					"min" :   0.0,
+					"max" : 100.0,
+					"length_min" : 1
+				},
 				"options" : { "label" : "%" }
 			}
 		]

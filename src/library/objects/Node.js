@@ -290,14 +290,14 @@ Used by SortieManager
 		var ship;
 		var fleetId = parseInt(fleetSent) || KC3SortieManager.fleetSent;
 		
-		// SINGLE FLEET
-		if (PlayerManager.combinedFleet === 0 || fleetId>1){ // single fleet: not combined, or sent fleet is not first fleet
-			result = DA.analyzeRawNightBattleJS( nightData ); 
-			fleet = PlayerManager.fleets[fleetId - 1];
 		// COMBINED FLEET
-		} else {
+		if (PlayerManager.combinedFleet && (fleetId <= 1)) { 
 			result = DA.analyzeRawNightBattleCombinedJS( nightData ); 
 			fleet = PlayerManager.fleets[1];
+		// SINGLE FLEET
+		} else { // single fleet: not combined, or sent fleet is not first fleet
+			result = DA.analyzeRawNightBattleJS( nightData ); 
+			fleet = PlayerManager.fleets[fleetId - 1];
 		}
 		
 		for (i = 7; i < 13; i++) {
@@ -318,7 +318,7 @@ Used by SortieManager
 		}
 		
 		if(this.gaugeDamage > -1)
-			this.gaugeDamage = this.gaugeDamage + Math.min(this.originalHPs[7],this.originalHPs[7] - this.enemyHP[0].currentHp);
+			this.gaugeDamage = this.gaugeDamage + Math.min(nightData.api_nowhps[7],nightData.api_nowhps[7] - this.enemyHP[0].currentHp);
 	};
 	
 	KC3Node.prototype.night = function( nightData ){

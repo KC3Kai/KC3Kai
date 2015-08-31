@@ -874,14 +874,19 @@ Previously known as "Reactor"
 	function resultScreenQuestFulfillment(params, response, headers){
 		var
 			getRank = function(r){ return ['E','D','C','B','A','S','SS'].indexOf(r); },
-			qLog = function(r){
+			qLog = function(r){ // this one is used to track things
 				var q = KC3QuestManager.get(r);
 				console.log("Quest ",r," progress ["+(q.tracking ? q.tracking[0] + '/' + q.tracking[1] : '-----')+"] ",q.status == 2);
+				return q;
 			};
 		
+		/** Mini Dailies */
+		if(response.api_data.api_dests > 0)
+			qLog(201).increment(); // Bd1: Defeat an enemy fleet
+		
 		// Vague quest that clears with no rank requirement
-		if(response.api_data.api_destsf)
-			KC3QuestManager.get(216).increment(); // Bd2: Defeat the flagship of an enemy fleet
+		qLog(216).increment(); // Bd2: Defeat the flagship of an enemy fleet
+		/** Mini Dailies */
 		
 		// If victory for "defeat"-type quests
 		var rankPt = getRank(response.api_data.api_win_rank);
@@ -910,7 +915,6 @@ Previously known as "Reactor"
 					}
 					break;
 				case 3: // B
-					KC3QuestManager.get(201).increment(); // Bd1: Defeat an enemy fleet
 					KC3QuestManager.get(210).increment(); // Bd3: Defeat 10 abyssal fleets (B rank+)
 					
 					if(KC3SortieManager.currentNode().isBoss()) {
@@ -942,7 +946,7 @@ Previously known as "Reactor"
 		
 		// If node is a boss
 		if( KC3SortieManager.currentNode().isBoss() ){
-			KC3QuestManager.get(214).increment(1); // Bw1: 2nd requirement: Encounter 24 bosses (index:1)
+			qLog(214).increment(1); // Bw1: 2nd requirement: Encounter 24 bosses (index:1)
 		}
 		
 		// hunt quests - requires "battle prediction" to know which enemies sunk
