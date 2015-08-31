@@ -75,8 +75,7 @@
 		// eLoS Toggle
 		$(".summary-eqlos").on("click",function(){
 			ConfigManager.scrollElosMode();
-			$(".summary-eqlos .summary_icon img").attr("src", "../../../../assets/img/stats/"+(ConfigManager.elosFormula == 1) ? "lst" : (ConfigManager.elosFormula == 2) ? "lse" : "ls"+".png");
-			$(".summary-eqlos .summary_text").text( Math.round(((selectedFleet < 5) ? PlayerManager.fleets[selectedFleet-1].eLoS() : PlayerManager.fleets[0].eLoS()+PlayerManager.fleets[1].eLoS()) * 100) / 100 );
+			$(".summary-eqlos .summary_icon img").attr("src", "../../../../assets/img/stats/"+["lsc","lst","lse","ls"][ConfigManager.elosFormula]+".png");			$(".summary-eqlos .summary_text").text( Math.round(((selectedFleet < 5) ? PlayerManager.fleets[selectedFleet-1].eLoS() : PlayerManager.fleets[0].eLoS()+PlayerManager.fleets[1].eLoS()) * 100) / 100 );
 		}).addClass("hover");
 		
 		// Screenshot buttons
@@ -246,6 +245,10 @@
 			.removeClass("nc_select")
 			.removeClass("nc_avoid");
 		$(".module.activity .node_types").hide();
+		$(".battle_support,.battle_drop",".module.activity").find('img')
+			.css("visibility","");
+		$(".admiral_lvnext")
+			.attr("data-exp-gain","");
 	}
 	
 	function clearBattleData(){
@@ -470,6 +473,7 @@
 					akashi: MainRepairs.akashi,
 					hasTaiha: CurrentFleet.hasTaiha(),
 					supplied: CurrentFleet.isSupplied(),
+					badlySupplied: false,
 					lowestMorale: CurrentFleet.lowestMorale(),
 					supportPower: CurrentFleet.supportPower()
 				};
@@ -499,7 +503,7 @@
 			$(".module.status .status_text").removeClass("bad");
 			
 			// STATUS: RESUPPLY
-			if( FleetSummary.supplied ){
+			if( (FleetSummary.supplied || (KC3SortieManager.onSortie && KC3SortieManager.fullSupplyMode)) && (!FleetSummary.badlySupplied) ){
 				$(".module.status .status_supply .status_text").text( KC3Meta.term("PanelSupplied") );
 				$(".module.status .status_supply img").attr("src", "../../../../assets/img/ui/check.png");
 				$(".module.status .status_supply .status_text").addClass("good");
@@ -776,18 +780,10 @@
 			// Day battle-only environment
 			if(!thisNode.startNight){
 				// If support expedition is triggered on this battle
-				if(thisNode.supportFlag){
-					$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support.png");
-				}else{
-					$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png");
-				}
+				$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support"+["-x",""][thisNode.supportFlag&1]+".png");
 				
 				// If night battle will be asked after this battle
-				if(thisNode.yasenFlag){
-					$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
-				}else{
-					$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen-x.png");
-				}
+				$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen"+["-x",""][thisNode.yasenFlag&1]+".png");
 				
 				// Battle conditions
 				$(".module.activity .battle_detection").text( thisNode.detection[0] );
@@ -866,6 +862,9 @@
 		
 		BattleResult: function(data){
 			var thisNode = KC3SortieManager.currentNode();
+			
+			$(".admiral_lvnext")
+				.attr("data-exp-gain",KC3SortieManager.hqExpGained);
 			
 			$(".module.activity .battle_rating img").attr("src",
 				"../../../../assets/img/client/ratings/"+thisNode.rating+".png");
@@ -966,6 +965,10 @@
 			var thisPvP;
 			KC3SortieManager.nodes.push(thisPvP = (new KC3Node()).defineAsBattle());
 			thisPvP.engage( data.battle,data.fleetSent );
+			
+			// Hide useless information
+			$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png").css("visibility","hidden");
+			$(".module.activity .battle_drop    img").attr("src", "../../../../assets/img/ui/dark_shipdrop-x.png").css("visibility","hidden");
 			
 			// Enemy Formation
 			if((typeof thisPvP.eformation != "undefined") && (thisPvP.eformation > -1)){
@@ -1082,6 +1085,8 @@
 		
 		PvPEnd: function(data){
 			$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/client/ratings/"+data.result.api_win_rank+".png");
+			$(".admiral_lvnext")
+				.attr("data-exp-gain",data.result.api_get_exp);
 		}
 	};
 	
