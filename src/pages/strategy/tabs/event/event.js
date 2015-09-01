@@ -90,7 +90,7 @@
 									if(ConfigManager.info_troll)
 										mapBox
 											.addClass("justdoit")
-											.attr("title","just kill her already, yesterday you said tommorow! JUST DO IT!!!"); // placeholder class... 
+											.attr("title","just kill her already, yesterday you said tomorrow! JUST DO IT!!!"); // placeholder class... 
 									$(".map_hp_txt", mapBox).text(ConfigManager.info_troll ? "#JustDoIt!" : KC3Meta.term("StrategyEvents1HP"));
 								}
 							// If kill-based gauge
