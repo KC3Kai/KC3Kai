@@ -75,9 +75,7 @@
 		// eLoS Toggle
 		$(".summary-eqlos").on("click",function(){
 			ConfigManager.scrollElosMode();
-			// don't mind the lsc.png ... trolling XD
-			$(".summary-eqlos .summary_icon img").attr("src", "../../../../assets/img/stats/"+["lsc","lst","lse","ls"][ConfigManager.elosFormula]+".png");
-			$(".summary-eqlos .summary_text").text( Math.round(((selectedFleet < 5) ? PlayerManager.fleets[selectedFleet-1].eLoS() : PlayerManager.fleets[0].eLoS()+PlayerManager.fleets[1].eLoS()) * 100) / 100 );
+			$(".summary-eqlos .summary_icon img").attr("src", "../../../../assets/img/stats/"+["lsc","lst","lse","ls"][ConfigManager.elosFormula]+".png");			$(".summary-eqlos .summary_text").text( Math.round(((selectedFleet < 5) ? PlayerManager.fleets[selectedFleet-1].eLoS() : PlayerManager.fleets[0].eLoS()+PlayerManager.fleets[1].eLoS()) * 100) / 100 );
 		}).addClass("hover");
 		
 		// Screenshot buttons
@@ -289,20 +287,12 @@
 		},
 		
 		HQ: function(data){
-			var
-				maxHQ  = Object.keys(KC3Meta._exp).map(function(a){return parseInt(a);}).reduce(function(a,b){return a>b?a:b;}),
-				hqDt   = (PlayerManager.hq.level>=maxHQ ? 3 : ConfigManager.hqExpDetail),
-				hqt    = KC3Meta.term("HQExpAbbrev" + hqDt),
-				hqexpd = Math.abs($(".admiral_lvnext").attr("data-exp-gain"));
 			$(".admiral_name").text( PlayerManager.hq.name );
 			$(".admiral_comm").text( PlayerManager.hq.desc );
 			$(".admiral_rank").text( PlayerManager.hq.rank );
 			$(".admiral_lvval").text( PlayerManager.hq.level );
 			$(".admiral_lvbar").css({width: Math.round(PlayerManager.hq.exp[0]*58)+"px"});
-			$(".admiral_lvnext")
-				.attr("data-exp",hqt)
-				.attr("data-exp-gain",((($(".admiral_lvnext").attr("data-exp-gain")||"").length > 0) ? (KC3SortieManager.hqExpGained * (hqDt == 1 ? -1 : 1)) : ""))
-				.text( PlayerManager.hq.exp[hqDt] * (hqDt == 1 ? -1 : 1) );
+			updateHQEXPGained($(".admiral_lvnext"));
 		},
 		
 		Consumables: function(data){
@@ -505,7 +495,12 @@
 			$(".module.status .status_text").removeClass("bad");
 			
 			// STATUS: RESUPPLY
-			if( (FleetSummary.supplied || (KC3SortieManager.onSortie && KC3SortieManager.fullSupplyMode)) && (!FleetSummary.badlySupplied) ){
+			if( (FleetSummary.supplied ||
+				(KC3SortieManager.onSortie &&
+					KC3SortieManager.fullSupplyMode &&
+					(KC3SortieManager.fleetSent == (PlayerManager.combinedFleet ? 1 : selectedFleet)))) &&
+				(!FleetSummary.badlySupplied)
+			){
 				$(".module.status .status_supply .status_text").text( KC3Meta.term("PanelSupplied") );
 				$(".module.status .status_supply img").attr("src", "../../../../assets/img/ui/check.png");
 				$(".module.status .status_supply .status_text").addClass("good");
@@ -865,8 +860,7 @@
 		BattleResult: function(data){
 			var thisNode = KC3SortieManager.currentNode();
 			
-			$(".admiral_lvnext")
-				.attr("data-exp-gain",KC3SortieManager.hqExpGained);
+			updateHQEXPGained($(".admiral_lvnext"),KC3SortieManager.hqExpGained);
 			
 			$(".module.activity .battle_rating img").attr("src",
 				"../../../../assets/img/client/ratings/"+thisNode.rating+".png");
@@ -1087,11 +1081,27 @@
 		
 		PvPEnd: function(data){
 			$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/client/ratings/"+data.result.api_win_rank+".png");
-			$(".admiral_lvnext")
-				.attr("data-exp-gain",data.result.api_get_exp);
+			updateHQEXPGained($(".admiral_lvnext"),data.result.api_get_exp);
 		}
 	};
 	
+	function updateHQEXPGained(ele,newDelta) {
+		var
+			maxHQ  = Object.keys(KC3Meta._exp).map(function(a){return parseInt(a);}).reduce(function(a,b){return a>b?a:b;}),
+			hqDt = (PlayerManager.hq.level>=maxHQ ? 3 : ConfigManager.hqExpDetail),
+			hqt  = KC3Meta.term("HQExpAbbrev" + hqDt);
+		return ele
+			.attr("data-exp",hqt)
+			.attr("data-exp-gain",(function(x){
+				if(newDelta !== undefined)
+					return newDelta * (hqDt == 1 ? -1 : 1);
+				else if ((ele.attr("data-exp-gain")||"").length > 0)
+					return KC3SortieManager.hqExpGained * (hqDt == 1 ? -1 : 1);
+				else
+					return "";
+			}()))
+			.text( PlayerManager.hq.exp[hqDt] * (hqDt == 1 ? -1 : 1) );
+	}
 	function CraftGearStats(MasterItem, StatProperty, Code){
 		if(parseInt(MasterItem["api_"+StatProperty], 10) !== 0){
 			var thisStatBox = $("#factory .equipStat").clone().appendTo(".module.activity .activity_crafting .equipStats");

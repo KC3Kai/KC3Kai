@@ -90,7 +90,7 @@
 									if(ConfigManager.info_troll)
 										mapBox
 											.addClass("justdoit")
-											.attr("title","just kill her already, yesterday you said tommorow! JUST DO IT!!!"); // placeholder class... 
+											.attr("title","just kill her already, yesterday you said tomorrow! JUST DO IT!!!"); // placeholder class... 
 									$(".map_hp_txt", mapBox).text(ConfigManager.info_troll ? "#JustDoIt!" : KC3Meta.term("StrategyEvents1HP"));
 								}
 							// If kill-based gauge
@@ -438,6 +438,7 @@
 					// Kanmusu Drop
 					if(battle.drop > 0){
 						$(".node_drop img", nodeBox).attr("src", KC3Meta.shipIcon( battle.drop ) );
+						$(".node_drop img", nodeBox).attr("title", KC3Meta.shipName( KC3Master.ship(battle.drop ).api_name  ));
 					}else{
 						$(".node_drop img", nodeBox).attr("src", "../../assets/img/ui/shipdrop-x.png");
 					}
