@@ -6,8 +6,8 @@
 			tabRefer -- StrategyTab object reference
 			callable -- database function
 	*/
-	window.KC3SortieLogs = function(tabRefer,tabCode) {
-		this.tabSelf        = tabRefer;
+	window.KC3SortieLogs = function(tabCode) {
+		this.tabSelf        = KC3StrategyTabs[tabCode];
 		
 		this.maps           = {};
 		this.selectedWorld  = 0;
@@ -30,26 +30,40 @@
 		Places data onto the interface
 		---------------------------------*/
 		this.execute = function(){
-			var self = this;
+			var
+				self = this,
+				diffStr = ["E","N","H"];
 			
 			// On-click world menus
 			$(".tab_"+tabCode+" .world_box").on("click", function(){
+				if(!$(".world_text",this).text().length) { return false; }
 				self.selectedWorld = $(this).data("world_num");
 				$(".tab_"+tabCode+" .world_box").removeClass("active");
 				$(this).addClass("active");
 				
-				$(".tab_"+tabCode+" .map_list").html("");
+				$(".tab_"+tabCode+" .map_list").html("").css("width","").css("margin-left","");
 				$(".tab_"+tabCode+" .page_list").html("");
 				$(".tab_"+tabCode+" .sortie_list").html("");
 				
 				if(self.selectedWorld !== 0){
 					// Add all maps in this world selection
-					var mapBox;
+					var mapBox,countMaps;
 					mapBox = $(".tab_"+tabCode+" .factory .map_box").clone().appendTo(".tab_"+tabCode+" .map_list");
+					$(".map_title", mapBox)
+						.text((function(x){
+							return (x>=10) ? KC3Meta.term("StrategyEventGo" + (ConfigManager.info_troll ? "P" : "")) : ("All W"+x);
+						})(self.selectedWorld));
+					
+					for(countMaps = 1;!!self.maps["m"+self.selectedWorld+countMaps];countMaps++){};
+					$(".tab_"+tabCode+" .map_list").css("width",Math.max(7,countMaps)*100);
+					
 					mapBox.data("map_num", 0);
+					$(window).data("map_off", (self.selectedWorld > 10 && countMaps >= 8) ? 1 : 0);
+					$(window).data("map_max", Math.max(0,countMaps-7));
 					mapBox.addClass("empty");
 					mapBox.addClass("active");
-					$(".map_title", mapBox).text("All W"+self.selectedWorld);
+					
+					updateScrollItem(tabCode);
 					
 					// Check player's map list
 					$.each(self.maps, function(index, element){
@@ -60,7 +74,7 @@
 						if(cWorld == self.selectedWorld){
 							mapBox = $(".tab_"+tabCode+" .factory .map_box").clone().appendTo(".tab_"+tabCode+" .map_list");
 							mapBox.data("map_num", cMap);
-							$(".map_title", mapBox).text((cWorld>=10 ? "E" : cWorld)" - "+cMap+(function(x){
+							$(".map_title", mapBox).text((cWorld>=10 ? "E" : cWorld)+" - "+cMap+(function(x){
 								switch(x){
 									case 1: case 2: case 3:
 										return " " + diffStr[x-1];
@@ -70,11 +84,10 @@
 							})(element.difficulty));
 							
 							// Check unselected difficulty
-							if(!element.difficulty) {
+							if(cWorld >= 10 && !element.difficulty) {
 								mapBox.addClass("noclearnogauge");
 								$(".map_hp_txt", mapBox).text("No difficulty");
-								return false;
-							}
+							} else {
 							// EASY MODO STRIKES BACK
 							if(ConfigManager.info_troll && element.difficulty==1) {
 								mapBox.addClass("easymodokimoi");
@@ -117,6 +130,8 @@
 									}
 								}
 							}
+							
+							}
 						}
 					});
 					
@@ -135,13 +150,35 @@
 				self.showMap();
 			});
 			
+			// Toggleable map scroll
+			$(".tab_"+tabCode+" .map_shift").on("click", function(){
+				var le,cr,re;
+				le = 0;
+				cr = $(window).data("map_off");
+				re = $(window).data("map_max");
+				$(window).data("map_off",cr = Math.max(le,Math.min(re,(function(e){
+					if(e.hasClass("disabled"))
+						return cr;
+					else if(e.hasClass("left"))
+						return cr-1;
+					else if(e.hasClass("right"))
+						return cr+1;
+					else
+						return cr;
+				})($(this)))));
+				updateScrollItem();
+			});
+			
 			// Select default opened world
 			$(".tab_"+tabCode+" .world_box.active").trigger("click");
 			
 			// On-click sortie toggles
 			$(".tab_"+tabCode+" .sortie_list").on("click", ".sortie_box .sortie_toggles .sortie_toggle", function(){
 				var targetName = $(this).data("target");
-				var targetBox = $(this).parent().parent().parent().find("."+targetName);
+				var targetParent = $(this).parent().parent().parent();
+				var targetBox = targetParent.find("."+targetName);
+				var expandedQualif = !$(this).hasClass("sortie_toggle_in");
+				var expandedBefore = $(".sortie_toggle.active:not(.sortie_toggle_in)",$(this).parent()).length;
 				
 				if( $(this).hasClass("active") ){
 					$(this).removeClass("active");
@@ -149,8 +186,15 @@
 					$(this).addClass("active");
 				}
 				
+				var expandedAfter = $(".sortie_toggle.active:not(.sortie_toggle_in)",$(this).parent()).length;
+				
 				// Show or hide the target box
-				targetBox.slideToggle();
+				targetBox.slideToggle(undefined,function(){
+					if(expandedQualif && expandedBefore < 1)
+						targetParent.addClass("expanded");
+				});
+				if(expandedQualif && expandedAfter < 1)
+					targetParent.removeClass("expanded");
 			});
 		};
 		
@@ -254,10 +298,14 @@
 				try {
 				// Create sortie box
 				sortieBox = $(".tab_"+tabCode+" .factory .sortie_box").clone().appendTo(".tab_"+tabCode+" .sortie_list");
+				if((sortie.diff || 0) > 0)
+					$(sortieBox)
+						.addClass("sortie_rank_"+sortie.diff)
+						.attr("data-diff",KC3Meta.term("EventHistoryRank"+sortie.diff+(ConfigManager.info_troll ? "X" : "")));
 				$(".sortie_id", sortieBox).html( sortie.id );
 				$(".sortie_date", sortieBox).html( new Date(sortie.time*1000).format("mmm d") );
 				$(".sortie_date", sortieBox).attr("title", new Date(sortie.time*1000).format("mmm d, yyyy hh:MM:ss") );
-				$(".sortie_map", sortieBox).html( sortie.world + "-" + sortie.mapnum );
+				$(".sortie_map", sortieBox).html( (sortie.world >= 10 ? "E" : sortie.world) + "-" + sortie.mapnum );
 				
 				fleetkey = ["main","escort","preboss","boss"];
 				fleets   = [
@@ -341,7 +389,6 @@
 					// HTML elements
 					nodeBox = $(".tab_"+tabCode+" .factory .sortie_nodeinfo").clone();
 					$(".node_id", nodeBox).text( KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node ) );
-					console.log(KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node ));
 					
 					// Result Icons
 					$(".node_formation img", nodeBox).attr("src", KC3Meta.formationIcon(battleData.api_formation[0]) );
@@ -418,6 +465,24 @@
 			
 			$(".tab_"+tabCode+" .pagination").show();
 		}
+		
+		function updateScrollItem() {
+			var
+				le = 0,
+				cr = $(window).data("map_off"),
+				re = $(window).data("map_max");
+			if(cr<=le)
+				$(".tab_"+tabCode+" .map_shift.left").addClass("disabled");
+			else
+				$(".tab_"+tabCode+" .map_shift.left").removeClass("disabled");
+				
+			if(cr>=re)
+				$(".tab_"+tabCode+" .map_shift.right").addClass("disabled");
+			else
+				$(".tab_"+tabCode+" .map_shift.right").removeClass("disabled");
+			
+			$(".tab_"+tabCode+" .map_list").css("margin-left",(cr * -97) + "px");
+		};
 	};
 	
 })();
