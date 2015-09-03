@@ -101,6 +101,13 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		"getConfig" :function(request, sender, response){
 			ConfigManager.load();
 			response({value: ConfigManager[request.id]});
+		},
+		
+		/* FIT SCREEN
+		Auto-resize browser window to fit the game screen
+		------------------------------------------*/
+		"fitScreen" :function(request, sender, response){
+			(new TMsg(request.tabId, "gamescreen", "fitScreen")).execute();
 		}
 		
 	};

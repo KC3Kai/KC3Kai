@@ -41,6 +41,14 @@
 			}
 		});
 		
+		$("#contentHtml").on("click", ".page_help_btn", function(){
+			if( $(".page_help").is(":visible") ){
+				$(".page_help").fadeOut();
+			}else{
+				$(".page_help").fadeIn();
+			}
+		});
+		
 		// If there is a hash tag on URL, set it as initial selected
 		KC3StrategyTabs.pageParams = window.location.hash.substring(1).split("-");
 		if(KC3StrategyTabs.pageParams[0] !== ""){

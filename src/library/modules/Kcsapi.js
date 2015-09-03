@@ -39,6 +39,7 @@ Previously known as "Reactor"
 			KC3ShipManager.clear();
 			KC3ShipManager.set(response.api_data.api_ship);
 			
+			KC3ShipManager.max = response.api_data.api_basic.api_max_chara;
 			KC3GearManager.max = response.api_data.api_basic.api_max_slotitem;
 			
 			PlayerManager.setFleets( response.api_data.api_deck_port );
@@ -239,8 +240,10 @@ Previously known as "Reactor"
 		/* Equipment list
 		-------------------------------------------------------*/
 		"api_get_member/slot_item": function(params, response, headers){
+			console.log(KC3GearManager.count(),KC3GearManager.pendingGearNum);
 			KC3GearManager.clear();
 			KC3GearManager.set( response.api_data );
+			console.log(KC3GearManager.count(),KC3GearManager.pendingGearNum);
 		},
 		
 		/* Fleet list
@@ -426,7 +429,9 @@ Previously known as "Reactor"
 		/* Select difficulty
 		-------------------------------------------------------*/
 		"api_req_map/select_eventmap_rank":function(params, response, headers){
-			KC3SortieManager.setDifficulty( response.api_data.api_rank );
+			var allMaps = JSON.parse(localStorage.maps);
+			allMaps["m" + params.api_maparea_id + params.api_map_no].difficulty = parseInt(params.api_rank);
+			localStorage.maps = JSON.stringify(allMaps);
 		},
 		
 		/* Start Sortie
@@ -447,6 +452,18 @@ Previously known as "Reactor"
 			
 			KC3QuestManager.get(214).increment(0); // Bw1: 1st requirement: Sortie 36 times (index:0)
 			
+			if (typeof response.api_data.api_eventmap !== "undefined") {
+				var AllMaps = JSON.parse(localStorage.maps);
+				var thisMapId = "m"+response.api_data.api_maparea_id+""+response.api_data.api_mapinfo_no;
+				var thisMap = AllMaps[thisMapId];
+
+				if (thisMap.curhp === 9999) {
+					thisMap.curhp = response.api_data.api_eventmap.api_now_maphp;
+					thisMap.maxhp = response.api_data.api_eventmap.api_max_maphp;
+					localStorage.maps = JSON.stringify(AllMaps);
+				}
+			}
+
 			KC3SortieManager.advanceNode( response.api_data, UTCTime );
 			
 			KC3Network.trigger("SortieStart");
@@ -556,6 +573,13 @@ Previously known as "Reactor"
 			KC3Network.trigger("Quests");
 		},
 		
+		/* FCF TRIGGER
+		-------------------------------------------------------*/
+		"api_req_combined_battle/goback_port":function(params, response, headers){
+			KC3SortieManager.sendFCFHome();
+			KC3Network.trigger("Fleet");
+		},
+		
 		/*-------------------------------------------------------*/
 		/*----------------------[ QUESTS ]-----------------------*/
 		/*-------------------------------------------------------*/
@@ -563,6 +587,8 @@ Previously known as "Reactor"
 		/* Quest List
 		-------------------------------------------------------*/
 		"api_get_member/questlist":function(params, response, headers){
+			KC3QuestManager.load();
+			
 			// Update quest data for this page
 			KC3QuestManager.definePage(
 				response.api_data.api_list,
@@ -618,6 +644,7 @@ Previously known as "Reactor"
 			}
 			
 			KC3QuestManager.get(503).increment(); // E3: Daily Repairs
+                        KC3Network.trigger("Consumables");
 			KC3Network.trigger("Quests");
 			KC3Network.trigger("Fleet");
 		},
@@ -626,8 +653,14 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_nyukyo/speedchange":function(params, response, headers){
 			PlayerManager.consumables.buckets--;
+			// If ship is still is the list being repaired, remove Her
+			var ship_id = PlayerManager.repairShips[ params.api_ndock_id ];
+			PlayerManager.repairShips.splice(params.api_ndock_id, 1);
+			KC3ShipManager.get( ship_id ).hp[0] = KC3ShipManager.get( ship_id ).hp[1];
+			KC3TimerManager.repair( params.api_ndock_id ).deactivate();
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Timers");
+                        KC3Network.trigger("Fleet");
 		},
 		
 		/*-------------------------------------------------------*/
@@ -841,14 +874,25 @@ Previously known as "Reactor"
 	On a result screen, increment tracked quests that progressed
 	-------------------------------------------------------*/
 	function resultScreenQuestFulfillment(params, response, headers){
-		var getRank = function(r){ return ['E','D','C','B','A','S','SS'].indexOf(r); };
+		var
+			getRank = function(r){ return ['E','D','C','B','A','S','SS'].indexOf(r); },
+			qLog = function(r){ // this one is used to track things
+				var q = KC3QuestManager.get(r);
+				console.log("Quest ",r," progress ["+(q.tracking ? q.tracking[0] + '/' + q.tracking[1] : '-----')+"] ",q.status == 2);
+				return q;
+			};
+		
+		/** Mini Dailies */
+		if(response.api_data.api_dests > 0)
+			qLog(201).increment(); // Bd1: Defeat an enemy fleet
 		
 		// Vague quest that clears with no rank requirement
-		if(response.api_data.api_destsf)
-			KC3QuestManager.get(216).increment(); // Bd2: Defeat the flagship of an enemy fleet
+		qLog(216).increment(); // Bd2: Defeat the flagship of an enemy fleet
+		/** Mini Dailies */
 		
 		// If victory for "defeat"-type quests
 		var rankPt = getRank(response.api_data.api_win_rank);
+		if(rankPt==5 && KC3SortieManager.currentNode().allyNoDamage) rankPt++;
 		while(rankPt>=3) {
 			switch(rankPt) {
 				case 6: // PERFECT S
@@ -873,7 +917,6 @@ Previously known as "Reactor"
 					}
 					break;
 				case 3: // B
-					KC3QuestManager.get(201).increment(); // Bd1: Defeat an enemy fleet
 					KC3QuestManager.get(210).increment(); // Bd3: Defeat 10 abyssal fleets (B rank+)
 					
 					if(KC3SortieManager.currentNode().isBoss()) {
@@ -905,7 +948,7 @@ Previously known as "Reactor"
 		
 		// If node is a boss
 		if( KC3SortieManager.currentNode().isBoss() ){
-			KC3QuestManager.get(214).increment(1); // Bw1: 2nd requirement: Encounter 24 bosses (index:1)
+			qLog(214).increment(1); // Bw1: 2nd requirement: Encounter 24 bosses (index:1)
 		}
 		
 		// hunt quests - requires "battle prediction" to know which enemies sunk

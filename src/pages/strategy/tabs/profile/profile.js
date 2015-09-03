@@ -114,6 +114,19 @@
 					}
 				}
 			});
+			
+			// Clear Quick Data
+			$(".tab_profile .clear_storage").on("click", function(event){
+				localStorage.clear();
+				window.location.reload();
+			});
+			
+			// Clear Histories
+			$(".tab_profile .clear_history").on("click", function(event){
+				KC3Database.clear(function(){
+					window.location.reload();
+				});
+			});
 		}
 		
 	};

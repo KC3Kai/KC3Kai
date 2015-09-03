@@ -606,7 +606,7 @@
         "name": "First Exercise!",
         "desc": "Challenge another fleet in practice mode"
     },
-     "303": {
+    "303": {
         "code": "C2",
         "name": "Daily Exercises 1",
         "desc": "Challenge 3 other fleets in practice mode",
@@ -846,17 +846,17 @@
     },
      "614": {
         "code": "F13",
-        "name": "Model Conversion (to Tenzan)",
+        "name": "Model Conversion (Tomonaga Squadron to Tenzan)",
         "desc": "Have flagship equipped with Type 97 Torpedo Bomber (Tomonaga Squadron), then scrap 2 Tenzan"
     },
     "615": {
         "code": "F14",
-        "name": "Model Conversion (to Suisei)",
+        "name": "Model Conversion (Egusa Squadron to Suisei)",
         "desc": "Have flagship equipped with Type 99 Dive Bomber (Egusa Squadron), then scrap 2 Suisei"
     },
     "616": {
         "code": "F15",
-        "name": "Model Conversion (to Reppuu)",
+        "name": "Model Conversion (601 Air Group to Reppuu)",
         "desc": "Have flagship equipped with Zero Fighter Type 52 Type C (601 Air Group), then scrap 2 Reppuu"
     },
     "617": {
@@ -906,8 +906,6 @@
     
     
     
-    
-    
     "611": {
         "name": "In Preparation of Love! (Part 1)",
         "desc": "Scrap equipment 2 times to show your love!"
@@ -915,5 +913,62 @@
     "306": {
         "name": "In Preparation of Love (Part 2)",
         "desc": "Show your love by getting 2 victories in practice mode."
+    },
+    
+    "280": {
+        "code": "SN01",
+        "name": "Second SN strategy, Initial Operations",
+        "desc": "Clear the Summer 2015 Event Map 2"
+    },
+    "620": {
+        "code": "SN02",
+        "name": "Tidying Up the Arsenal",
+        "desc": " Scrap Equipment 5 times"
+    },
+    "281": {
+        "code": "SN03",
+        "name": "Carry Out the Patrol for Main Force's Route",
+        "desc": "Sink 6 abyssal sumbarines"
+    },
+    "158": {
+        "code": "SN04",
+        "name": "Assign the Murata Squadron Torpedo Bomber to Akagi",
+        "desc": "Set Akagi as the Secretary Ship and equip her with Type 97 Torpedo Bomber (Murata Squadron)"
+    },
+    "282": {
+        "code": "SN05",
+        "name": "Snatch Away the Air Superiority in the Solomon Sea Area",
+        "desc": "Clear the Summer 2015 Event Map 4"
+    },
+    "159": {
+        "code": "SN06",
+        "name": "Reassign the Murata Squadron Torpedo Bomber to Shoukaku",
+        "desc": "Set Shoukaku as the Secretary Ship and equip her with Type 97 Torpedo Bomber (Murata Squadron)"
+    },
+    "310": {
+        "code": "SN07",
+        "name": "Naval Practice in Preparation for Operation FS",
+        "desc": "Get 4 victories in practice mode"
+    },
+    "621": {
+        "code": "SN08",
+        "name": "Model Conversion (Murata Squadron to Tenzan)",
+        "desc": "Have Shoukaku as the Secretary Ship and equip her with Type 97 Torpedo Bomber (Murata Squadron), then scrap 2 Tenzan"
+    },
+    "160": {
+        "code": "SN09",
+        "name": "Organize the Third Fleet of the Carrier Task Force",
+        "desc": "Create a Carrier Task Force (Combined Fleet) containing Shoukaku, Zuikaku and Zuihou in the first fleet"
+    },
+    "284": {
+        "code": "SN10",
+        "name": "Establish a Bridgehead to Operation FS",
+        "desc": "Sink 10 Abyssal CV(L)"
+    },
+    "283": {
+        "code": "SN11",
+        "name": "Eastern Area Dispatch Fleet, Sortie!",
+        "desc": "Clear the Summer 2015 Event Map 5"
     }
+    
 }

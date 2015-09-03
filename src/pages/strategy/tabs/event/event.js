@@ -16,14 +16,20 @@
 		Prepares all data needed
 		---------------------------------*/
 		init :function(){
-			this.maps = JSON.parse( localStorage.maps );
+			if(typeof localStorage.maps != "undefined"){
+				this.maps = JSON.parse( localStorage.maps );
+			}else{
+				return false;
+			}
 		},
 		
 		/* EXECUTE
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
-			var self = this;
+			var
+				self = this,
+				diffStr = ["E","N","H"];
 			
 			// On-click world menus
 			$(".tab_event .world_box").on("click", function(){
@@ -32,45 +38,79 @@
 				$(this).addClass("active");
 				
 				$(".tab_event .map_list").html("");
+				$(".tab_event .page_list").html("");
+				$(".tab_event .sortie_list").html("");
+			
+				var mapBox;
 				
-				if(self.selectedWorld !== 0){
-					var mapBox;
+				// Check player's map list
+				$.each(self.maps, function(index, element){
+					var cWorld = (""+element.id).substr(0, (""+element.id).length-1);
+					var cMap = (""+element.id).substr((""+element.id).length-1);
 					
-					// Check player's map list
-					$.each(self.maps, function(index, element){
-						var cWorld = (""+element.id).substr(0, (""+element.id).length-1);
-						var cMap = (""+element.id).substr((""+element.id).length-1);
+					// If this map is part of selected world
+					if(cWorld == self.selectedWorld){
+						mapBox = $(".tab_event .factory .map_box").clone().appendTo(".tab_event .map_list");
+						mapBox.data("map_num", cMap);
+						$(".map_title", mapBox).text("E - "+cMap+(function(x){
+							switch(x){
+								case 1: case 2: case 3:
+									return " " + diffStr[x-1];
+								default:
+									return "";
+							}
+						})(element.difficulty));
 						
-						// If this map is part of selected world
-						if(cWorld == self.selectedWorld){
-							mapBox = $(".tab_event .factory .map_box").clone().appendTo(".tab_event .map_list");
-							mapBox.data("map_num", cMap);
-							$(".map_title", mapBox).text("E - "+cMap);
-							
-							// If this map is already cleared
-							if(element.clear == 1){
-								$(".map_hp_txt", mapBox).text("Cleared!");
-								mapBox.addClass("cleared");
+						// Check unselected difficulty
+						if(!element.difficulty) {
+							mapBox.addClass("noclearnogauge");
+							$(".map_hp_txt", mapBox).text("No difficulty");
+							return false;
+						}
+						// EASY MODO STRIKES BACK
+						if(ConfigManager.info_troll && element.difficulty==1) {
+							mapBox.addClass("easymodokimoi");
+						}
+						// If this map is already cleared
+						if(element.clear == 1){
+							$(".map_hp_txt", mapBox).text("Cleared!");
+							mapBox.addClass("cleared");
+						}else{
+							mapBox.addClass("notcleared");
+							// If HP-based gauge
+							if(typeof element.maxhp != "undefined"){
+								if(element.curhp>1){ // i want to approach last kill as JUST DO IT instead leaving 1HP only.
+									if((element.maxhp === 9999) || (element.curhp === 9999))
+										$(".map_hp_txt", mapBox).text( "???? / ????" );
+									else
+										$(".map_hp_txt", mapBox).text( element.curhp+" / "+element.maxhp );
+									$(".map_bar", mapBox).css("width", ((element.curhp/element.maxhp)*80)+"px");
+								}else{
+									mapBox.addClass("noclearnogauge");
+									if(ConfigManager.info_troll)
+										mapBox
+											.addClass("justdoit")
+											.attr("title","just kill her already, yesterday you said tommorow! JUST DO IT!!!"); // placeholder class... 
+									$(".map_hp_txt", mapBox).text(ConfigManager.info_troll ? "#JustDoIt!" : KC3Meta.term("StrategyEvents1HP"));
+								}
+							// If kill-based gauge
 							}else{
-								mapBox.addClass("notcleared");
-								var totalKills = KC3Meta.gauge(element.id);
+								var totalKills = KC3Meta.gauge( element.id );
 								var killsLeft = totalKills - element.kills;
 								if(totalKills){
 									$(".map_hp_txt", mapBox).text( killsLeft+" / "+totalKills+" kills left");
 									$(".map_bar", mapBox).css("width", ((killsLeft/totalKills)*80)+"px");
-								}else{
+								} else {
 									mapBox.addClass("noclearnogauge");
 									$(".map_hp_txt", mapBox).text("Not cleared");
 								}
 							}
 						}
-					});
-					
-					$("<div>").addClass("clear").appendTo(".tab_event .map_list");
-					$(".tab_event .map_list .map_box.active").trigger("click");
-				}else{
-					self.showMap();
-				}
+					}
+				});
+				
+				$("<div>").addClass("clear").appendTo(".tab_event .map_list");
+				$(".tab_event .map_list .map_box.active").trigger("click");
 			});
 			
 			// On-click map menus
@@ -84,18 +124,13 @@
 			// Select default opened world
 			$(".tab_event .world_box.active").trigger("click");
 			
-			// On-click pages
-			$(".tab_event .page_list").on("click", ".page_box", function(){
-				$(".tab_event .page_list .page_box").removeClass("active");
-				$(this).addClass("active");
-				self.pageNum = $(this).data("num");
-				self.showPage();
-			});
-			
 			// On-click sortie toggles
 			$(".tab_event .sortie_list").on("click", ".sortie_box .sortie_toggles .sortie_toggle", function(){
 				var targetName = $(this).data("target");
-				var targetBox = $(this).parent().parent().parent().find("."+targetName);
+				var targetParent = $(this).parent().parent().parent();
+				var targetBox = targetParent.find("."+targetName);
+				var expandedQualif = !$(this).hasClass("sortie_toggle_in");
+				var expandedBefore = $(".sortie_toggle.active:not(.sortie_toggle_in)",$(this).parent()).length;
 				
 				if( $(this).hasClass("active") ){
 					$(this).removeClass("active");
@@ -103,24 +138,15 @@
 					$(this).addClass("active");
 				}
 				
-				/*// Check if target box does not have data yet
-				if(!targetBox.data("filled")){
-					// If trying to view fleet
-					if(targetBox == "sortie_roster"){
-						
-						
-					// If trying to view nodes list
-					}else if(targetBox == "sortie_nodes"){
-						
-						
-					}
-					
-					// Mark as already having data
-					targetBox.data("filled", 1);
-				}*/
+				var expandedAfter = $(".sortie_toggle.active:not(.sortie_toggle_in)",$(this).parent()).length;
 				
 				// Show or hide the target box
-				targetBox.slideToggle();
+				targetBox.slideToggle(undefined,function(){
+					if(expandedQualif && expandedBefore < 1)
+						targetParent.addClass("expanded");
+				});
+				if(expandedQualif && expandedAfter < 1)
+					targetParent.removeClass("expanded");
 			});
 		},
 		
@@ -130,6 +156,7 @@
 		showMap :function(){
 			var self = this;
 			this.pageNum = 1;
+			$(".tab_event .page_list").html("");
 			$(".tab_event .sortie_list").html("");
 			
 			// Show all sorties
@@ -161,25 +188,25 @@
 		Show list of clickable page boxes
 		---------------------------------*/
 		showPagination :function(countSorties){
+			var self = this;
 			var countPages = Math.ceil( countSorties / this.itemsPerPage );
+			$(".tab_event .page_list").html('<ul class="pagination pagination-sm"></ul>');
 			
-			// Remove past pagination
-			$(".tab_event .page_list").html("");
-			
-			// Clone page boxes
-			var pageBox;
-			$.each(new Array(countPages), function(index){
-				pageBox = $(".tab_event .factory .page_box").clone().appendTo(".tab_event .page_list");
-				pageBox.html( index+1 );
-				pageBox.data("num", index+1);
-				if(index===0){ pageBox.addClass("active"); }
-			});
-			
-			// Clear CSS for floats
-			$("<div>").addClass("clear").appendTo(".tab_event .page_list");
-			
-			// Click first page as initial selected
-			$(".tab_event .page_list .page_box.active").trigger("click");
+			console.log(countPages);
+			if(countPages > 0){
+				$(".tab_event .pagination").twbsPagination({
+					totalPages: countPages,
+					visiblePages: 9,
+					onPageClick: function (event, page) {
+						self.pageNum = page;
+						self.showPage();
+					}
+				});
+				self.pageNum = 1;
+				self.showPage();
+			}else{
+				$(".tab_event .pagination").hide();
+			}
 		},
 		
 		/* SHOW PAGE
@@ -187,6 +214,8 @@
 		---------------------------------*/
 		showPage :function(){
 			var self = this;
+			$(".tab_event .pagination").hide();
+			$(".tab_event .sortie_list").html("");
 			
 			// Show all sorties
 			if(this.selectedWorld === 0){
@@ -215,22 +244,77 @@
 		Shows sorties on interface using list of collected sortie objects
 		---------------------------------*/
 		showList :function( sortieList ){
-			// Remove past list
-			$(".tab_event .sortie_list").html("");
-			
 			// Show sortie records on list
-			var sortieBox, mainFleet, isCombined, rshipBox, nodeBox, thisNode;
+			var sortieBox, fleets, fleetkey, mainFleet, isCombined, rshipBox, nodeBox, thisNode;
 			$.each(sortieList, function(id, sortie){
 				// Create sortie box
 				sortieBox = $(".tab_event .factory .sortie_box").clone().appendTo(".tab_event .sortie_list");
+				if((sortie.diff || 0) > 0)
+					$(sortieBox)
+						.addClass("sortie_rank_"+sortie.diff)
+						.attr("data-diff",KC3Meta.term("EventHistoryRank"+sortie.diff+(ConfigManager.info_troll ? "X" : "")));
 				$(".sortie_id", sortieBox).html( sortie.id );
 				$(".sortie_date", sortieBox).html( new Date(sortie.time*1000).format("mmm d") );
 				$(".sortie_date", sortieBox).attr("title", new Date(sortie.time*1000).format("mmm d, yyyy hh:MM:ss") );
-				$(".sortie_map", sortieBox).html( sortie.world + "-" + sortie.mapnum );
+				$(".sortie_map", sortieBox).html( "E-" + sortie.mapnum );
 				
+				fleetkey = ["main","escort","preboss","boss"];
+				fleets   = [
+					sortie.fleetnum,
+					(parseInt(sortie.combined) ? 2 : 0),
+					sortie.support1,
+					sortie.support2
+				];
 				// Show main fleet faces
-				mainFleet = sortie["fleet"+sortie.fleetnum];
 				$(".sortie_ship", sortieBox).hide();
+				fleets.forEach(function(n,i){
+					if(!n) {
+						$(".rfleet_"+fleetkey[i], sortieBox).addClass("disabled");
+						return false;
+					}
+					var selFleet = sortie["fleet"+n];
+					$.each(selFleet, function(index, ship){
+						// false recorded on older sorties. stop loop when encountered
+						if(i===0) {
+							if(ship===false){ return false; }
+							
+							$(".sortie_ship_"+(index+1)+" img", sortieBox).attr("src", KC3Meta.shipIcon(ship.mst_id));
+							$(".sortie_ship_"+(index+1), sortieBox).show();
+						}
+						
+						rshipBox = $(".tab_event .factory .rfleet_ship").clone();
+						$(".rfleet_pic img", rshipBox)
+							.attr("src", KC3Meta.shipIcon(ship.mst_id) )
+							.click(function(){
+								var ref = $(this).parent().parent();
+								if($(".rfleet_detail",ref).css("display")=="none") {
+									$(".rfleet_detail",ref).show();
+									$(".rfleet_equips",ref).hide();
+								} else {
+									$(".rfleet_detail",ref).hide();
+									$(".rfleet_equips",ref).show();
+								}
+							});
+						$(".rfleet_name", rshipBox).html( KC3Meta.shipName( KC3Master.ship(ship.mst_id).api_name ) );
+						$(".rfleet_level", rshipBox).html( KC3Meta.term("LevelText")+" "+ship.level);
+						
+						ship.equip.filter(function(x){return x>0;})
+							.forEach(function(x,i){
+								var masterGear = KC3Master.slotitem(x);
+								$(".rfleet_equips .rfleet_equip.rfleet_equip_"+(i+1),rshipBox)
+									.find('img')
+									.attr("src","../../assets/img/items/" + masterGear.api_type[3] + ".png")
+									.attr("title",KC3Meta.gearName(masterGear.api_name));
+							});
+						$(".rfleet_detail", rshipBox).show();
+						$(".rfleet_equips", rshipBox).hide();
+						
+						$(".rfleet_"+fleetkey[i]+" .rfleet_body", sortieBox).append( rshipBox );
+					});
+					$(".rfleet_"+fleetkey[i]+" .rfleet_body", sortieBox).append( $("<div>").addClass("clear") 
+					);
+				});
+/*				mainFleet = sortie["fleet"+sortie.fleetnum];
 				$.each(mainFleet, function(index, ship){
 					// false recorded on older sorties. stop loop when encountered
 					if(ship===false){ return false; }
@@ -239,12 +323,36 @@
 					$(".sortie_ship_"+(index+1), sortieBox).show();
 					
 					rshipBox = $(".tab_event .factory .rfleet_ship").clone();
-					$(".rfleet_pic img", rshipBox).attr("src", KC3Meta.shipIcon(ship.mst_id) );
+					$(".rfleet_pic img", rshipBox)
+						.attr("src", KC3Meta.shipIcon(ship.mst_id) )
+						.click(function(){
+							var ref = $(this).parent().parent();
+							if($(".rfleet_detail",ref).css("display")=="none") {
+								$(".rfleet_detail",ref).show();
+								$(".rfleet_equips",ref).hide();
+							} else {
+								$(".rfleet_detail",ref).hide();
+								$(".rfleet_equips",ref).show();
+							}
+						});
 					$(".rfleet_name", rshipBox).html( KC3Meta.shipName( KC3Master.ship(ship.mst_id).api_name ) );
 					$(".rfleet_level", rshipBox).html( KC3Meta.term("LevelText")+" "+ship.level);
+					
+					ship.equip.filter(function(x){return x>0;})
+					  .forEach(function(x,i){
+							var masterGear = KC3Master.slotitem(x);
+							$(".rfleet_equips .rfleet_equip.rfleet_equip_"+(i+1),rshipBox)
+								.find('img')
+								.attr("src","../../assets/img/items/" + masterGear.api_type[3] + ".png")
+								.attr("title",KC3Meta.gearName(masterGear.api_name));
+						});
+					$(".rfleet_detail", rshipBox).show();
+					$(".rfleet_equips", rshipBox).hide();
+					
 					$(".rfleet_main .rfleet_body", sortieBox).append( rshipBox );
 				});
-				$(".rfleet_main .rfleet_body", sortieBox).append( $("<div>").addClass("clear") );
+				$(".rfleet_main .rfleet_body", sortieBox).append( $("<div>").addClass("clear") 
+				);
 				
 				// Check if combined fleet
 				isCombined = false; 
@@ -294,7 +402,9 @@
 					$(".rfleet_boss .rfleet_body", sortieBox).append( $("<div>").addClass("clear") );
 				}else{
 					$(".rfleet_boss", sortieBox).addClass("disabled");
-				}
+				}*/
+				
+				// console.log("sortie.battles", sortie.battles);
 				
 				// For each battle
 				$.each(sortie.battles, function(index, battle){
@@ -302,6 +412,8 @@
 					
 					// Determine if day or night battle node
 					if(typeof battle.data.api_dock_id != "undefined"){
+						battleData = battle.data;
+					}else if(typeof battle.data.api_deck_id != "undefined"){
 						battleData = battle.data;
 					}else if(typeof battle.yasen.api_deck_id != "undefined"){
 						battleData = battle.yasen;
@@ -312,11 +424,11 @@
 					
 					// Show on node list
 					$(".sortue_edge_"+(index+1), sortieBox).addClass("active");
-					$(".sortue_edge_"+(index+1), sortieBox).html( battle.node );
+					$(".sortue_edge_"+(index+1), sortieBox).html( KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node ) );
 					
 					// HTML elements
 					nodeBox = $(".tab_event .factory .sortie_nodeinfo").clone();
-					$(".node_id", nodeBox).text( battle.node );
+					$(".node_id", nodeBox).text( KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node ) );
 					
 					// Result Icons
 					$(".node_formation img", nodeBox).attr("src", KC3Meta.formationIcon(battleData.api_formation[0]) );
@@ -326,6 +438,7 @@
 					// Kanmusu Drop
 					if(battle.drop > 0){
 						$(".node_drop img", nodeBox).attr("src", KC3Meta.shipIcon( battle.drop ) );
+						$(".node_drop img", nodeBox).attr("title", KC3Meta.shipName( KC3Master.ship(battle.drop ).api_name  ));
 					}else{
 						$(".node_drop img", nodeBox).attr("src", "../../assets/img/ui/shipdrop-x.png");
 					}
@@ -341,14 +454,19 @@
 					$(".node_eformation img", nodeBox).attr("src", KC3Meta.formationIcon(battleData.api_formation[1]) );
 					$(".node_eformation", nodeBox).attr("title", KC3Meta.formationText(battleData.api_formation[1]) );
 					$.each(battleData.api_ship_ke, function(index, eship){
-						$(".node_eship_"+(index+1)+" img", nodeBox).attr("src", KC3Meta.abyssIcon( eship ) );
-						$(".node_eship_"+(index+1), nodeBox).attr("title", KC3Master.ship( eship ).api_name + KC3Master.ship( eship ).api_yomi );
-						$(".node_eship_"+(index+1), nodeBox).show();
+						if(eship > -1){
+							$(".node_eship_"+(index+1)+" img", nodeBox).attr("src", KC3Meta.abyssIcon( eship ) );
+							$(".node_eship_"+(index+1), nodeBox).attr("title", KC3Master.ship( eship ).api_name + KC3Master.ship( eship ).api_yomi );
+							$(".node_eship_"+(index+1), nodeBox).show();
+						}
 					});
 					
 					// Process Battle
+					PlayerManager.combinedFleet = sortie.combined;
 					thisNode = (new KC3Node()).defineAsBattle();
 					if(typeof battle.data.api_dock_id != "undefined"){
+						thisNode.engage( battleData, sortie.fleetnum );
+					}else if(typeof battle.data.api_deck_id != "undefined"){
 						thisNode.engage( battleData, sortie.fleetnum );
 					}else if(typeof battle.yasen.api_deck_id != "undefined"){
 						thisNode.engageNight( battleData, sortie.fleetnum );
@@ -390,13 +508,11 @@
 					
 					// Add box to UI
 					$(".sortie_nodes", sortieBox).append( nodeBox );
-					
 				});
 				$(".sortie_nodes", sortieBox).append( $("<div>").addClass("clear") );
-				
-				
-				// console.log( sortie );
 			});
+			
+			$(".tab_event .pagination").show();
 		}
 	};
 	

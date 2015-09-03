@@ -82,7 +82,6 @@
 	width:80px;
 	height:10px;
 	background:#f00;
-	border-right:1px solid #ace;
 }
 
 /* Map without gauge (All maps) */
@@ -132,21 +131,8 @@
 	border-bottom:1px solid #369;
 	padding:5px 5px 0px;
 }
-.tab_event .page_list .page_box {
-	width:30px;
-	height:20px;
-	line-height:20px;
-	float:left;
-	text-align:center;
-	margin:0px 3px 5px 0px;
-	border:1px solid #ace;
-	background:#def;
-	font-size:12px;
-}
-.tab_event .page_list .page_box.active {
-	background:#58a;
-	color:#fff;
-	border:1px solid #def;
+.tab_event .page_list .pagination {
+	margin:0px;
 }
 
 /* SORTIE LIST
@@ -163,6 +149,7 @@
 	border-radius:10px;
 	margin:0px 0px 5px 0px;
 	padding:5px;
+	position:relative;
 }
 /* Sortie Info: RECORD */
 .tab_event .sortie_list .sortie_info {
@@ -360,9 +347,14 @@
 }
 .tab_event .sortie_list .rfleet_equips {
 	width:55px;
-	height:0px;
+	height:20px;
 	float:left;
-	background:#cff;
+}
+
+.tab_event .sortie_list .rfleet_equips img {
+	float:left;
+	line-height: auto;
+	width:12px;
 }
 
 
@@ -376,7 +368,7 @@
 	width:130px;
 	/*height:207px;*/
 	line-height:20px;
-	margin:0px 3px 0px 2px;
+	margin:0px 2px 0px 2px;
 	background:#fff;
 	border-radius:8px;
 	float:left;
@@ -523,7 +515,7 @@
 	float:left;
 }
 .tab_event .sortie_list .node_airicon {
-	width:20px;
+	width:18px;
 	height:20px;
 	line-height:20px;
 	float:left;
@@ -537,12 +529,106 @@
 	margin:1px;
 }
 .tab_event .sortie_list .node_airtext {
-	width:38px;
+	width:40px;
 	height:20px;
 	float:left;
 	/*background:#fcc;*/
 	font-size:11px;
 }
+.tab_event .sortie_list .node_airtext .node_FFT ,
+.tab_event .sortie_list .node_airtext .node_FAT ,
+.tab_event .sortie_list .node_airtext .node_BFT ,
+.tab_event .sortie_list .node_airtext .node_BAT {
+	float: left;
+}
 .tab_event .sortie_list .node_airtext .node_loss {
 	color:#f00;
+}
+/* Difficulty marker */
+.tab_event .sortie_list .sortie_box.sortie_rank_1 {
+	border: rgb(64,64,255) solid 1px;
+	/*background-image: url('../../../../assets/img/client/difficulty/bg-1.png');*/
+	/*background-repeat: no-repeat;*/
+	/*background-position: 100% 100%;*/
+	/*position: absolute;*/
+	/*top: 0;*/
+	/*left: 0;*/
+	/*width: 100%;*/
+	/*height: 100%;*/
+	/*content: " ";*/
+	/*pointer-events: none;*/
+	/*opacity: 0.2;*/
+	/*border-radius: 10px;*/
+}
+.tab_event .sortie_list .sortie_box.sortie_rank_1:after {
+	content: attr(data-diff);
+	position:absolute;
+	right:0; bottom:0;
+	opacity:0;
+	color:rgb(0,0,128);
+	font-weight:bolder;
+	font-size:200%;
+	pointer-events:none;
+	transition: all 0.25s;
+}
+.tab_event .sortie_list .sortie_box.sortie_rank_1.expanded:after {
+	opacity:0.25;
+}
+.tab_event .sortie_list .sortie_box.sortie_rank_2 {
+	border: rgb(64,255,64) solid 1px;
+	/*background-image: url('../../../../assets/img/client/difficulty/bg-2.png');*/
+	/*background-repeat: no-repeat;*/
+	/*background-position: 100% 100%;*/
+	/*position: absolute;*/
+	/*top: 0;*/
+	/*left: 0;*/
+	/*width: 100%;*/
+	/*height: 100%;*/
+	/*content: " ";*/
+	/*pointer-events: none;*/
+	/*opacity: 0.2;*/
+	/*border-radius: 10px;*/
+}
+.tab_event .sortie_list .sortie_box.sortie_rank_2:after {
+	content: attr(data-diff);
+	position:absolute;
+	right:0; bottom:0;
+	opacity:0;
+	color:rgb(0,128,0);
+	font-weight:bolder;
+	font-size:200%;
+	pointer-events:none;
+	transition: all 0.25s;
+}
+.tab_event .sortie_list .sortie_box.sortie_rank_2.expanded:after {
+	opacity:0.25;
+}
+.tab_event .sortie_list .sortie_box.sortie_rank_3 {
+	border: rgb(255,64,64) solid 1px;
+	/*background-image: url('../../../../assets/img/client/difficulty/bg-3.png');*/
+	/*background-repeat: no-repeat;*/
+	/*background-position: 100% 100%;*/
+	/*position: absolute;*/
+	/*top: 0;*/
+	/*left: 0;*/
+	/*width: 100%;*/
+	/*height: 100%;*/
+	/*content: " ";*/
+	/*pointer-events: none;*/
+	/*opacity: 0.2;*/
+	/*border-radius: 10px;*/
+}
+.tab_event .sortie_list .sortie_box.sortie_rank_3:after {
+	content: attr(data-diff);
+	position:absolute;
+	right:0; bottom:0;
+	opacity:0;
+	color:rgb(128,0,0);
+	font-weight:bolder;
+	font-size:200%;
+	pointer-events:none;
+	transition: all 0.25s;
+}
+.tab_event .sortie_list .sortie_box.sortie_rank_3.expanded:after {
+	opacity:0.25;
 }

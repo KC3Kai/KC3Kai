@@ -21,10 +21,12 @@ KC3改 Ship Box for Natsuiro theme
 		$(".ship_name", this.element).text( this.shipData.name() );
 		$(".ship_type", this.element).text( this.shipData.stype() );
 		
-		this.showMorale();
-		
-		if( this.shipData.didFlee ){
-			this.element.css("background", "rgba(255,200,0,0.4)");
+		// Item on 5th slot
+		var myExItem = this.shipData.exItem();
+		if( myExItem && (myExItem.masterId > 0)){
+			$(".ex_item img", this.element).attr("src", "../../../../assets/img/items/"+myExItem.master().api_type[3]+".png");
+		}else{
+			$(".ex_item", this.element).hide();
 		}
 		
 		return this;
@@ -35,9 +37,10 @@ KC3改 Ship Box for Natsuiro theme
 	Short ship box for combined fleets
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.defineShort = function(){
-		this.hpBarLength = 90;
+		this.hpBarLength = 88;
 		this.showHP();
 		this.showPrediction();
+		this.showMorale();
 		
 		// Thin bars below the ship box
 		$(".ship_exp", this.element).css("width", (120 * this.expPercent)+"px");		
@@ -52,9 +55,10 @@ KC3改 Ship Box for Natsuiro theme
 	Long ship box for single-view fleets
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.defineLong = function(){
-		this.hpBarLength = 120;
+		this.hpBarLength = 118;
 		this.showHP();
 		this.showPrediction();
+		this.showMorale();
 		
 		$(".ship_level span", this.element).text( this.shipData.level );		
 		$(".ship_exp_next", this.element).text( this.shipData.exp[1] );		
@@ -90,23 +94,44 @@ KC3改 Ship Box for Natsuiro theme
 		// Clear box colors
 		this.element.css("background-color", "transparent");
 		
+		// Import repair time script by @Javran
+		var RepairTimes = this.shipData.repairTime();
+		
+		if(RepairTimes.docking > 0){
+			$(".ship_hp_box", this.element).attr("title", 
+				KC3Meta.term("PanelDocking")+": "+String(RepairTimes.docking).toHHMMSS()+"\n"
+				+KC3Meta.term("PanelAkashi")+": "+
+					((RepairTimes.akashi>0)
+						?String(RepairTimes.akashi).toHHMMSS()
+						:KC3Meta.term("PanelCantRepair"))
+			);
+		}else{
+			$(".ship_hp_box", this.element).attr("title", KC3Meta.term("PanelNoRepair"));
+		}
+		
 		// If ship is being repaired
 		if( PlayerManager.repairShips.indexOf( this.shipData.rosterId ) > -1){
 			$(".ship_hp_bar", this.element).css("background", "#aaccee");
 			this.element.css("background-color", "rgba(100,255,100,0.3)");
 		// If not being repaired
 		}else{
-			if(hpPercent <= 0.25){
-				$(".ship_hp_bar", this.element).css("background", "#FF0000");
-				if(!this.shipData.didFlee){
+			if(this.shipData.didFlee){
+				console.log( this.shipData.name(), "fled, setting backgrounds to white");
+				// if FCF, mark hp bar as blue
+				$(".ship_hp_bar", this.element).css("background", "#fff");
+				this.element.css("background", "rgba(255,255,255,0.4)");
+			}else{
+				if(hpPercent <= 0.25){
+					// mark hp bar and container box as red if taiha
+					$(".ship_hp_bar", this.element).css("background", "#FF0000");
 					this.element.css("background", "rgba(255,0,0,0.4)");
+				} else if(hpPercent <= 0.50){
+					$(".ship_hp_bar", this.element).css("background", "#FF9900");
+				} else if(hpPercent <= 0.75){
+					$(".ship_hp_bar", this.element).css("background", "#FFFF00");
+				} else{
+					$(".ship_hp_bar", this.element).css("background", "#00FF00");
 				}
-			} else if(hpPercent <= 0.50){
-				$(".ship_hp_bar", this.element).css("background", "#FF9900");
-			} else if(hpPercent <= 0.75){
-				$(".ship_hp_bar", this.element).css("background", "#FFFF00");
-			} else{
-				$(".ship_hp_bar", this.element).css("background", "#00FF00");
 			}
 		}
 	};
@@ -131,8 +156,7 @@ KC3改 Ship Box for Natsuiro theme
 			// HP-based UI and colors
 			if(afterHpPercent <= 0.00 && ConfigManager.info_btstamp) { // Sunk or Knocked out
 				this.element.addClass("ship-stamp");
-				this.element.attr("title", KC3Meta.term("PredictionStamp"+
-					(KC3Panel.layout().data.isSunkable ? "Sortie" : "PvP")));
+				this.element.attr("title", KC3Meta.term("PredictionStampPvP"));
 			} else if(afterHpPercent <= 0.25){
 				$(".ship_hp_prediction", this.element).css("background", "#FF0000");
 			} else if(afterHpPercent <= 0.50){
@@ -187,6 +211,14 @@ KC3改 Ship Box for Natsuiro theme
 					"../../../../assets/img/items/"+thisGear.master().api_type[3]+".png");
 				$(".ship_gear_"+(slot+1), this.element).addClass("equipped");
 				$(".ship_gear_"+(slot+1), this.element).attr("title", thisGear.name());
+				
+				if(typeof thisGear.ace != "undefined"){
+					if(thisGear.ace > -1){
+						$(".ship_gear_"+(slot+1)+" .ship_gear_ace", this.element).show();
+						$(".ship_gear_"+(slot+1)+" .ship_gear_ace", this.element).text(thisGear.ace);
+					}
+				}
+				
 			}else{
 				$(".ship_gear_"+(slot+1)+" .ship_gear_icon img", this.element).hide();
 				$(".ship_gear_"+(slot+1), this.element).addClass("empty");

@@ -18,7 +18,9 @@
 						[ "de", "Deutsch" ],
 						[ "fr", "Français" ],
 						[ "it", "Italiano" ],
-						[ "kr", "한국어" ]
+						[ "kr", "한국어" ],
+						[ "pt", "Português" ],
+						[ "ru", "Русский" ]
 					]
 				}
 			},
@@ -146,7 +148,27 @@
 				"id" : "alert_diff",
 				"name" : "SettingsTimeDiff",
 				"type" : "small_text",
+				"bound" : {
+					"min" : -300,
+					"max" :  300
+				},
 				"options" : { "label" : "SettingsSeconds" }
+			},
+			{
+				"id" : "alert_morale_notif",
+				"name" : "SettingsMoraleNotif",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "alert_morale_value",
+				"name" : "SettingsMoraleValue",
+				"type" : "small_text",
+				"bound" : {
+					"min" :  1,
+					"max" : 49
+				},
+				"options" : { "label" : "" }
 			},
 			{
 				"id" : "alert_type",
@@ -155,7 +177,8 @@
 				"options" : {
 					"choices" : [
 						[ 0, "None" ],
-						[ 1, "DING!" ],
+						[ 1, "POP!" ],
+						[ 3, "DING!" ],
 						[ 2, "SettingsCustom" ]
 					]
 				}
@@ -170,6 +193,10 @@
 				"id" : "alert_volume",
 				"name" : "Volume",
 				"type" : "small_text",
+				"bound" : {
+					"min" :   0.0,
+					"max" : 100.0
+				},
 				"options" : { "label" : "%" }
 			},
 			{
@@ -209,9 +236,19 @@
 				"options" : {}
 			},
 			{
+				"id" : "api_directRefresh",
+				"name" : "SettingsDirectRefresh",
+				"type" : "check",
+				"chui" : 1,
+				"options" : {}
+			},
+			{
 				"id" : "api_margin",
 				"name" : "SettingsScreenMargin",
 				"type" : "small_text",
+				"bound" : {
+					"length_min": 1
+				},
 				"options" : { "label" : "pixels" }
 			},
 			{
@@ -242,6 +279,10 @@
 				"id" : "api_gameScale",
 				"name" : "SettingsPlayerScale",
 				"type" : "small_text",
+				"bound" : {
+					"min" :  0.0,
+					"max" : null
+				},
 				"options" : { "label" : "%" }
 			}
 		]
@@ -331,8 +372,8 @@
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ "default", "Default" ],
-						[ "natsuiro", "Natsuiro" ]
+						[ "natsuiro", "Natsuiro" ],
+						[ "default", "Legacy" ]
 					]
 				}
 			},
@@ -387,6 +428,11 @@
 				"id" : "pan_opacity",
 				"name" : "SettingsPanelOpacity",
 				"type" : "small_text",
+				"bound" : {
+					"min" :   0.0,
+					"max" : 100.0,
+					"length_min" : 1
+				},
 				"options" : { "label" : "%" }
 			}
 		]

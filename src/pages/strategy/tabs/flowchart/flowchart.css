@@ -107,6 +107,57 @@
 	margin:2px 2px 0px 0px;
 	text-align:center;
 	color:#999;
+	display:none;
+}
+.tab_flowchart .questFlowItem .questOverride {
+	width:16px;
+	height:16px;
+	float:left;
+	border-radius:8px;
+	color:#fff;
+	text-align:center;
+	-webkit-user-select:none;
+}
+.tab_flowchart .questFlowItem .questMinus {
+	background:#c55;
+}
+.tab_flowchart .questFlowItem .questAdd {
+	background:#5c5;
+}
+.tab_flowchart .questFlowItem .questCount {
+	width:60px;
+	height:16px;
+	float:left;
+	margin:0px 2px 0px 2px;
+	/*background:#cfc;*/
+}
+.tab_flowchart .questFlowItem .questToggle {
+	width:16px;
+	height:16px;
+	float:left;
+	margin:0px 0px 0px 4px;
+	background:#fff;
+	border-radius:8px;
+}
+.tab_flowchart .questFlowItem .questToggle img {
+	width:12px;
+	height:12px;
+	margin:2px;
+	vertical-align:top;
+}
+.tab_flowchart .questFlowItem .questRemove {
+	width:16px;
+	height:16px;
+	float:left;
+	margin:0px 0px 0px 3px;
+	background:#fff;
+	border-radius:8px;
+}
+.tab_flowchart .questFlowItem .questRemove img {
+	width:12px;
+	height:12px;
+	margin:2px;
+	vertical-align:top;
 }
 
 /* Icon Colors */
@@ -144,10 +195,9 @@
 }
 
 .tab_flowchart .questInfo.active {
-	/* background:#FFDA46; */
 	background:#EE9;
 }
-.tab_flowchart .questInfo.active .questTrack {
+.tab_flowchart .questInfo.active .questCount {
 	background:#fff;
 	color:#00f;
 	font-weight:bold;

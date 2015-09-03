@@ -34,6 +34,8 @@ $(document).on("ready", function(){
 		$("body").css("background-repeat", "no-repeat");
 	}
 	
+	$(".box-wait .api_txt").attr("title",KC3Meta.term("APIConcealExpl"));
+	
 	// API link determines which screen to show
 	if(localStorage.absoluteswf){
 		$(".api_txt textarea").text(localStorage.absoluteswf);
@@ -73,6 +75,23 @@ $(document).on("ready", function(){
 			.css('width','40%');
 	}
 	
+	// Configure Refresh Toggle (using $(".game-refresh").trigger("click") is possible)
+	$(".game-refresh").on("click",function(){
+		switch($(this).text()) {
+			case("01"):
+				$(".game-swf").attr("src","about:blank").attr("src",localStorage.absoluteswf);
+				$(this).text("05");
+				break;
+			default:
+				$(this).text("0" + ($(this).text()-1));
+				break;
+		}
+	});
+	// Enable Refresh Toggle
+	if(ConfigManager.api_directRefresh) {
+		$(".game-refresh").css("display","flex");
+	}
+	
 	// Exit confirmation
 	window.onbeforeunload = function(){
 		ConfigManager.load();
@@ -80,7 +99,7 @@ $(document).on("ready", function(){
 		if(ConfigManager.api_askExit==1 && !trustedExit && !waiting){
 			trustedExit = true;
 			setTimeout(function(){ trustedExit = false; }, 100);
-			return "Ahhh! You are leaving your girls! Are you sure you want to leave them?";
+			return KC3Meta.term("UnwantedExit");
 		}
 	};
 	
@@ -91,8 +110,15 @@ $(document).on("ready", function(){
 });
 
 $(document).on("keydown", function(event){
+	// F9: Screenshot
     if(event.keyCode == 120){
 		(new KCScreenshot()).start("Auto", $(".box-wrap"));
+        return false;
+    }
+	
+	// F10: Clear overlays
+	if(event.keyCode == 121){
+		interactions.clearOverlays({}, {}, function(){});
         return false;
     }
 });
@@ -162,6 +188,7 @@ var interactions = {
 	
 	// Remove HTML overlays
 	clearOverlays :function(request, sender, response){
+		console.log("clearing overlays");
 		// app.Dom.clearOverlays();
 		$(".overlay_quests").html("");
 		$(".overlay_record").hide();
@@ -173,6 +200,22 @@ var interactions = {
 		// ~Please rewrite the screenshot script
 		(new KCScreenshot()).start(request.playerName, $(".box-wrap"));
 		response({success:true});
+	},
+	
+	// Fit screen
+	fitScreen :function(request, sender, response){
+		var GameScale = ((ConfigManager.api_gameScale || 100) / 100);
+		
+		// Get browser zoon level for the page
+		chrome.tabs.getZoom(null, function(ZoomFactor){
+			// Resize the window
+			chrome.windows.getCurrent(function(wind){
+				chrome.windows.update(wind.id, {
+					width: Math.ceil(800*GameScale*ZoomFactor) + (wind.width- Math.ceil($(window).width()*ZoomFactor) ),
+					height: Math.ceil(480*GameScale*ZoomFactor) + (wind.height- Math.ceil($(window).height()*ZoomFactor) )
+				});
+			});
+		});
 	},
 	
 	// Dummy action

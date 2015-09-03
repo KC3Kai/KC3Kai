@@ -50,19 +50,20 @@ Instantiatable class to represent one player
 
 	KC3Player.prototype.logout = function(){
 		localStorage.removeItem("player");
-		// localStorage.removeItem("player_fleets");
+		localStorage.removeItem("fleets");
 		localStorage.removeItem("ships");
 		localStorage.removeItem("gears");
-		// localStorage.removeItem("player_maps");
+		localStorage.removeItem("maps");
 		localStorage.removeItem("statistics");
 		localStorage.removeItem("quests");
-		// localStorage.removeItem("lastResource");
-		// localStorage.removeItem("lastUseitem");
+		localStorage.removeItem("lock_plan");
+		localStorage.removeItem("lastResource");
+		localStorage.removeItem("lastUseitem");
 		
 		KC3ShipManager.clear();
 		KC3GearManager.clear();
 		KC3QuestManager.clear();
-		// KC3SortieManager.clear();
+		KC3SortieManager.endSortie();
 	};
 	
 	KC3Player.prototype.save = function(){
