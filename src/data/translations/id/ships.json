@@ -33,7 +33,6 @@
 	"千代田":"Chiyoda",
 	"千代田甲":"Chiyoda-A",
 	"千代田航":"Chiyoda-Kou",
-	"あきつ":"Akitsumaru",
 	"古鷹":"Furutaka",
 	"加古":"Kako",
 	"青葉":"Aoba",
@@ -136,7 +135,6 @@
 	"酒匂":"Sakawa",
 	"天津風":"Amatsukaze",
 	"谷風":"Tanikaze",
-	"明石":"Akashi",
 	"浦風":"Urakaze",
 	"大鯨":"Taigei",
 	"龍鳳":"Ryuuhou",
@@ -245,16 +243,21 @@
 	"満月":"Michitsuki",
 	"花月":"Hanazuki",
 	
+	"明石":"Akashi",
+	"あきつ":"Akitsumaru",
 	"秋津洲":"Akitsushima",
+	"瑞穂":"Mizuho",
+	"速吸":"Hayasui",
 	
 	"Верный":"Verniy",
 	"Bismarck":"Bismarck",
 	"Z1":"Z1",
 	"Z3":"Z3",
+	"Prinz Eugen":"Prinz Eugen",
 	"U-511":"U-511",
 	"呂500":"RO-500",
 	"Roma":"Roma",
 	"Italia":"Italia",
 	"Littorio":"Littorio",
-	"Prinz Eugen":"Prinz Eugen"
+	"Libeccio":"Libeccio"
 }
