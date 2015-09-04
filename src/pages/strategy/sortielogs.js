@@ -298,6 +298,9 @@
 				try {
 				// Create sortie box
 				sortieBox = $(".tab_"+tabCode+" .factory .sortie_box").clone().appendTo(".tab_"+tabCode+" .sortie_list");
+				if(sortie.world >= 10) {
+					sortie.diff = sortie.diff || maps["m"+sortie.world+sortie.mapnum].difficulty || 0;
+				}
 				if((sortie.diff || 0) > 0)
 					$(sortieBox)
 						.addClass("sortie_rank_"+sortie.diff)
@@ -454,6 +457,13 @@
 									$(nodeName+"L",nodeBox).text("-"+thisNode["plane"+planeType][side][1]);
 							});
 						});
+					}
+					
+					// Node EXP
+					if(!!battle.baseEXP) {
+						$(".node_exp span",nodeBox).text(battle.baseEXP);
+					} else {
+						$(".node_exp",nodeBox).hide();
 					}
 					
 					// Add box to UI

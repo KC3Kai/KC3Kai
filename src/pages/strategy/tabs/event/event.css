@@ -656,3 +656,11 @@
 .tab_event .sortie_list .sortie_box.sortie_rank_3.expanded:after {
 	opacity:0.25;
 }
+.tab_event .sortie_list .node_exp {
+	text-align: right;
+	color: cornflowerblue;
+}
+.tab_event .sortie_list .node_exp span {
+	color: black;
+	font-weight: bolder;
+}

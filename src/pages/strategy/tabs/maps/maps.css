@@ -542,3 +542,11 @@
 .tab_maps .sortie_list .node_airtext .node_loss {
 	color:#f00;
 }
+.tab_maps .sortie_list .node_exp {
+	text-align: right;
+	color: cornflowerblue;
+}
+.tab_maps .sortie_list .node_exp span {
+	color: black;
+	font-weight: bolder;
+}
