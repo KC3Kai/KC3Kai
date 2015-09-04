@@ -31,12 +31,37 @@
 
 /* MAP LIST
 ---------------------------------*/
+.tab_event .map_scrollable {
+	position:relative;
+}
+.tab_event .map_shift {
+	position:absolute;
+	top: 0;
+	width: 10px;
+	height: 95%;
+	display: flex;
+	align-items: center;
+	background-color: #f0f8ff;
+	cursor: pointer;
+}
+.tab_event .map_shift.left {
+	left: 0;
+}
+.tab_event .map_shift.right {
+	right: 2px;
+}
+.tab_event .map_shift.disabled {
+	cursor:default;
+	color: #f0f8ff;
+}
 .tab_event .map_list {
-	width:700px;
-	margin:0px 0px 0px 0px;
-	background:#f0f8ff;
-	padding:5px 10px;
-	border-bottom:1px solid #369;
+	position: relative;
+	min-width: 800px;
+	margin: 0px 0px 0px 0px;
+	background: #f0f8ff;
+	padding: 5px 10px;
+	border-bottom: 1px solid #369;
+	margin-left: -97px;
 }
 .tab_event .map_box {
 	width:90px;
@@ -357,7 +382,6 @@
 	width:12px;
 }
 
-
 /* Sortie Nodes */
 .tab_event .sortie_list .sortie_nodes {
 	width:670px;
@@ -631,4 +655,12 @@
 }
 .tab_event .sortie_list .sortie_box.sortie_rank_3.expanded:after {
 	opacity:0.25;
+}
+.tab_event .sortie_list .node_exp {
+	text-align: right;
+	color: cornflowerblue;
+}
+.tab_event .sortie_list .node_exp span {
+	color: black;
+	font-weight: bolder;
 }

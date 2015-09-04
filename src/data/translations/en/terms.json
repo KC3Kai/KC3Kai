@@ -182,6 +182,8 @@
 	"EventHistoryRank1X" : "KIDS CHOICE",
 	"EventHistoryRank2X" : "HELL AF",
 	"EventHistoryRank3X" : "GET REKT SON",
+	"StrategyEventGo"    : "Event Run",
+	"StrategyEventGoP"   : "#Despair",
 	
 	"PanelDocking" : "Docking",
 	"PanelAkashi" : "Akashi",

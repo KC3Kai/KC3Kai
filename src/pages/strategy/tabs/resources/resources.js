@@ -4,6 +4,7 @@
 	KC3StrategyTabs.resources = new KC3StrategyTab("resources");
 	
 	KC3StrategyTabs.resources.definition = new KC3Graphable(
+		KC3StrategyTabs.resources,
 		KC3Database.get_resource,
 		{
 			name  :["fuel","ammo","steel","baux"],
