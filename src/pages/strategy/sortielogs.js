@@ -54,7 +54,7 @@
 							return (x>=10) ? KC3Meta.term("StrategyEventGo" + (ConfigManager.info_troll ? "P" : "")) : ("All W"+x);
 						})(self.selectedWorld));
 					
-					for(countMaps = 1;!!self.maps["m"+self.selectedWorld+countMaps];countMaps++){};
+					for(countMaps = 1;!!self.maps["m"+self.selectedWorld+countMaps];countMaps++){}
 					$(".tab_"+tabCode+" .map_list").css("width",Math.max(7,countMaps)*100);
 					
 					mapBox.data("map_num", 0);
@@ -298,6 +298,9 @@
 				try {
 				// Create sortie box
 				sortieBox = $(".tab_"+tabCode+" .factory .sortie_box").clone().appendTo(".tab_"+tabCode+" .sortie_list");
+				if(sortie.world >= 10) {
+					sortie.diff = sortie.diff || maps["m"+sortie.world+sortie.mapnum].difficulty || 0;
+				}
 				if((sortie.diff || 0) > 0)
 					$(sortieBox)
 						.addClass("sortie_rank_"+sortie.diff)
@@ -456,6 +459,13 @@
 						});
 					}
 					
+					// Node EXP
+					if(!!battle.baseEXP) {
+						$(".node_exp span",nodeBox).text(battle.baseEXP);
+					} else {
+						$(".node_exp",nodeBox).hide();
+					}
+					
 					// Add box to UI
 					$(".sortie_nodes", sortieBox).append( nodeBox );
 				});
@@ -464,7 +474,7 @@
 			});
 			
 			$(".tab_"+tabCode+" .pagination").show();
-		}
+		};
 		
 		function updateScrollItem() {
 			var
@@ -482,7 +492,7 @@
 				$(".tab_"+tabCode+" .map_shift.right").removeClass("disabled");
 			
 			$(".tab_"+tabCode+" .map_list").css("margin-left",(cr * -97) + "px");
-		};
+		}
 	};
 	
 })();
