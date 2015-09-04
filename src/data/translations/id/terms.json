@@ -134,6 +134,15 @@
 	"SettingsPanelOpacity" : "Transparansi Antarmuka",
 	"SettingsGearHolder" : "Warna Latar Belakang Equip",
 	
+	"SettingsChuuiWarningDangerousFeature" : "Anda yakin ingin menggunakan fitur ini?\nSemua resiko yang anda alami bukan tanggung jawab KC3改.\n\nPastikan anda tahu apa yang anda lakukan terlebih dahulu.",
+	"SettingsErrorNG" : "Disimpan!",
+	"SettingsErrorSuper" : "Nilai Salah!",
+	"SettingsErrorAbove" : "Melebihi",
+	"SettingsErrorBelow" : "Kurang",
+	"SettingsErrorLength" : "Ukuran Nilai",
+	"SettingsErrorValue" : "Nilai",
+	"SettingsErrorOrder" : "%TYP %CMP %VAL",
+
 	"Small" : "Kecil",
 	"Big" : "Besar",
 	"Black" : "Hitam",
