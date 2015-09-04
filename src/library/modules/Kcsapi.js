@@ -726,7 +726,9 @@ Previously known as "Reactor"
 			KC3Database.Expedition({
 				data     :response.api_data,
 				mission  :expedNum,
-				ships    :response.api_data.api_ship_id,
+				ships    :response.api_data.api_ship_id.map(function(shipID){
+					return [shipID,KC3ShipManager.get(shipID).level];
+				}),
 				shipXP   :response.api_data.api_get_ship_exp,
 				admiralXP:response.api_data.api_get_exp,
 				items    :[1,2].map(function(x){return response.api_data["api_get_item"+x] || null;}),
