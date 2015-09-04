@@ -126,6 +126,26 @@ Uses Dexie.js third-party plugin on the assets directory
 						},
 						vr: 6,
 					},
+					{
+						// Refresh the Database
+						ch: {
+							account: "++id,&hq,server,mid,name",
+							build: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time",
+							lsc: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,devmat,result,time",
+							sortie: "++id,hq,diff,world,mapnum,fleetnum,combined,fleet1,fleet2,fleet3,fleet4,support1,support2,time",
+							battle: "++id,hq,sortie_id,node,enemyId,data,yasen,rating,drop,time,baseEXP",
+							resource: "++id,hq,rsc1,rsc2,rsc3,rsc4,hour",
+							useitem: "++id,hq,torch,screw,bucket,devmat,hour",
+							screenshots: "++id,hq,imgur,ltime",
+							develop: "++id,hq,flag,rsc1,rsc2,rsc3,rsc4,result,time",
+							newsfeed: "++id,hq,type,message,time",
+							expedition: "++id,hq,data,mission,ships,shipXP,admiralXP,items,time",
+						},
+						up: function(t){
+							console.log("V6.4",t);
+						},
+						vr: 6.4,
+					}
 				];
 				
 			// Process the queue
@@ -146,6 +166,7 @@ Uses Dexie.js third-party plugin on the assets directory
 				
 				// Apply Versioning
 				dbVer = self.con.version(dbCurr.vr).stores(dbProposed);
+				console.log(dbCurr.vr,dbVer,Object.keys(dbProposed));
 				if(dbFirst) {
 					dbFirst = false;
 				} else {
@@ -228,6 +249,11 @@ Uses Dexie.js third-party plugin on the assets directory
 		Develop :function(data){
 			data.hq = this.index;
 			this.con.develop.add(data);
+		},
+		
+		Expedition :function(data){
+			data.hq = this.index;
+			this.con.expedition.add(data);
 		},
 		
 		/* [GET] Retrive logs from Local DB

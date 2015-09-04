@@ -705,6 +705,10 @@ Previously known as "Reactor"
 		/* Complete Expedition
 		-------------------------------------------------------*/
 		"api_req_mission/result":function(params, response, headers){
+			var
+				timerRef = KC3TimerManager._exped[ parseInt(params.api_deck_id, 10)-2 ],
+				expedNum = timerRef.expedNum;
+			expedNum = parseInt(expedNum, 10);
 			// If success or great success
 			if(response.api_data.api_clear_result > 0){
 				KC3QuestManager.get(402).increment(); // D2: Daily Expeditions 1
@@ -712,14 +716,26 @@ Previously known as "Reactor"
 				KC3QuestManager.get(404).increment(); // D4: Weekly Expeditions
 				
 				// If expedition 37 or 38
-				var expedNum = KC3TimerManager._exped[ parseInt(params.api_deck_id, 10)-2 ].expedNum;
-				expedNum = parseInt(expedNum, 10);
 				if(expedNum==37 || expedNum==38){
 					KC3QuestManager.get(410).increment(); // D9: Weekly Expedition 2
 					KC3QuestManager.get(411).increment(); // D11: Weekly Expedition 3
 				}
 				KC3Network.trigger("Quests");
 			}
+			KC3Network.trigger("ExpedResult",{params:params,response:response.api_data});
+			KC3Database.Expedition({
+				data     :response.api_data,
+				mission  :expedNum,
+				ships    :response.api_data.api_ship_id,
+				shipXP   :response.api_data.api_get_ship_exp,
+				admiralXP:response.api_data.api_get_exp,
+				items    :[1,2].map(function(x){return response.api_data["api_get_item"+x] || null;}),
+				time     :Math.floor((new Date(timerRef.completion)).getTime()/1000)
+			});
+		},
+		
+		"api_req_mission/return_instruction":function(params, response, headers){
+			KC3TimerManager._exped[parseInt(params.api_deck_id)-2].completion = response.api_data.api_mission[2];
 		},
 		
 		/*-------------------------------------------------------*/
