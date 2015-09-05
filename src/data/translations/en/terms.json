@@ -204,9 +204,10 @@
 	
 	"MissionLabelActivity" : "Status",
 	"MissionLabelAdmiral" : "HQ EXP",
-	"MissionActivity0" : "Failure",
-	"MissionActivity1" : "Success",
-	"MissionActivity2" : "Great Success",
+	"MissionActivity0" : "Cancelled",
+	"MissionActivity1" : "Failure",
+	"MissionActivity2" : "Success",
+	"MissionActivity3" : "Great Success",
 	
 	"CombinedCarrier" : "Carrier TF",
 	"CombinedSurface" : "Surface TF",

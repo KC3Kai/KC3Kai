@@ -1112,8 +1112,14 @@
 				11:"box2",
 				12:"box3"
 			};
+			if(!data.response.api_clear_result && !data.response.api_get_exp) {
+				data.response.api_clear_result = -1;
+			}
 			$(".activity_expedition .label_status").text( KC3Meta.term("MissionLabelActivity") );
-			$(".activity_expedition .exp_status").text( KC3Meta.term("MissionActivity"+data.response.api_clear_result) );
+			$(".activity_expedition .exp_status")
+				.text( KC3Meta.term("MissionActivity"+(data.response.api_clear_result+1)) )
+				.removeClass("exp_status0 exp_status1 exp_status2 exp_status3")
+				.addClass("exp_status"+(data.response.api_clear_result+1));
 			$(".activity_expedition .label_admiral").text( KC3Meta.term("MissionLabelAdmiral") );
 			$(".activity_expedition .exp_admiral span").text( data.response.api_get_exp );
 			$(".activity_expedition .exp_ships").find(".exp_ship").each(function(i,element){
@@ -1134,6 +1140,9 @@
 					$(element).hide()
 				}
 			});
+			if(data.response.api_get_material===-1){
+				data.response.api_get_material = [0,0,0,0];
+			}
 			$(".activity_expedition .exp_material").each(function(i,element){
 				$(element).text(data.response.api_get_material[i]);
 			});
@@ -1143,7 +1152,7 @@
 					$(element).show()
 						.find('img').attr('src',"../../../../assets/img/client/"+expedIcon[useItem.api_useitem_id]+".png").end()
 						.find('span').text(useItem.api_useitem_count).end();
-				} else {
+				} else {n
 					$(element).hide();
 				}
 			});

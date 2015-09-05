@@ -810,7 +810,7 @@
 .module.activity .activity_expedition .label_status,
 .module.activity .activity_expedition .label_admiral {
 	display: inline-block;
-	width: 66%;
+	width: 33%;
 }
 
 .module.activity .activity_expedition .label_status,
@@ -818,17 +818,14 @@
 	font-size: 1.25em;
 }
 
-.module.activity .activity_expedition .exp_status {
-	display: inline-block;
-	text-align: right;
-	width: 33%;
-}
-
-
+.module.activity .activity_expedition .exp_status,
 .module.activity .activity_expedition .exp_admiral {
 	display: inline-block;
-	width: 33%;
 	text-align: right;
+	width: 66%;
+}
+
+.module.activity .activity_expedition .exp_admiral {
 	color: aquamarine;
 }
 
@@ -836,6 +833,14 @@
 	font-weight: bold;
 	color: white;
 	font-size: 1.25em;
+}
+
+.module.activity .activity_expedition .exp_ships {
+	height:120px;
+}
+
+.module.activity .activity_expedition .exp_ship {
+	height:20px;
 }
 
 .module.activity .activity_expedition .exp_ship * {
