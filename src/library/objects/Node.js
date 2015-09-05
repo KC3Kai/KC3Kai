@@ -40,6 +40,8 @@ Used by SortieManager
 		this.enemyHP = [0,0,0,0,0,0];
 		this.originalHPs = [0,0,0,0,0,0,0,0,0,0,0,0,0];
 		this.allyNoDamage = true;
+		this.nodalXP = 0;
+		this.mvps = [];
 		return this;
 	};
 	
@@ -327,6 +329,7 @@ Used by SortieManager
 	
 	KC3Node.prototype.results = function( resultData ){
 		this.rating = resultData.api_win_rank;
+		this.nodalXP = resultData.api_get_base_exp;
 		if(this.allyNoDamage && this.rating === "S")
 			this.rating = "SS";
 		console.log("This battle, have damaged the ally fleet",!this.allyNoDamage);
@@ -341,6 +344,9 @@ Used by SortieManager
 				if(maps[ckey].curhp <= 0) // if last kill -- check whether flagship is killed or not -- flagship killed = map clear
 					maps[ckey].curhp = 1-(maps[ckey].clear = resultData.destsf);
 				localStorage.maps = JSON.stringify(maps);
+			}else if((KC3Meta.gauge(ckey.replace("m","")) - maps[ckey].kills) > 0) { // kill-based map not cleared
+				maps[ckey].kills += resultData.destsf;
+				maps[ckey].clear = resultData.api_first_clear;
 			}
 		}
 		
@@ -352,6 +358,8 @@ Used by SortieManager
 		}else{
 			this.drop = 0;
 		}
+		
+		this.mvps = [resultData.api_mvp || 0,resultData.api_mvp_combined || 0].filter(function(x){return !!x;});
 		
 		//var enemyCVL = [510, 523, 560];
 		//var enemyCV = [512, 525, 528, 565, 579];
@@ -409,7 +417,9 @@ Used by SortieManager
 			yasen: (this.battleNight || {}),
 			rating: this.rating,
 			drop: this.drop,
-			time: this.stime
+			time: this.stime,
+			baseEXP: this.nodalXP,
+			mvp: this.mvps
 		});
 	};
 	
