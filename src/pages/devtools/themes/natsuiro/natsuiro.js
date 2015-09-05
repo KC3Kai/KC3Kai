@@ -77,6 +77,36 @@
 			ConfigManager.scrollElosMode();
 			$(".summary-eqlos .summary_icon img").attr("src", "../../../../assets/img/stats/"+["lsc","lst","lse","ls"][ConfigManager.elosFormula]+".png");			$(".summary-eqlos .summary_text").text( Math.round(((selectedFleet < 5) ? PlayerManager.fleets[selectedFleet-1].eLoS() : PlayerManager.fleets[0].eLoS()+PlayerManager.fleets[1].eLoS()) * 100) / 100 );
 		}).addClass("hover");
+
+		// Timer Type Toggle
+		$(".status_docking").on("click",function(){
+			ConfigManager.scrollTimerType();
+			var docking, akashi;
+			if (selectedFleet < 5){
+			    docking = PlayerManager.fleets[selectedFleet - 1].highestRepairTimes().docking;
+			    akashi = PlayerManager.fleets[selectedFleet - 1].highestRepairTimes().akashi;
+			}else{
+			    var MainRepairs = PlayerManager.fleets[0].highestRepairTimes();
+			    var EscortRepairs = PlayerManager.fleets[1].highestRepairTimes();
+			    docking = (MainRepairs.docking > EscortRepairs.docking) ? MainRepairs.docking : EscortRepairs.docking;
+			    akashi = (MainRepairs.akashi > EscortRepairs.akashi) ? MainRepairs.akashi : EscortRepairs.akashi;
+			}
+			UpdateRepairTimerDisplays(docking, akashi);
+		}).addClass("hover");
+		$(".status_akashi").on("click",function(){
+			ConfigManager.scrollTimerType();
+			var docking, akashi;
+			if (selectedFleet < 5){
+			    docking = PlayerManager.fleets[selectedFleet - 1].highestRepairTimes().docking;
+			    akashi = PlayerManager.fleets[selectedFleet - 1].highestRepairTimes().akashi;
+			}else{
+			    var MainRepairs = PlayerManager.fleets[0].highestRepairTimes();
+			    var EscortRepairs = PlayerManager.fleets[1].highestRepairTimes();
+			    docking = (MainRepairs.docking > EscortRepairs.docking) ? MainRepairs.docking : EscortRepairs.docking;
+			    akashi = (MainRepairs.akashi > EscortRepairs.akashi) ? MainRepairs.akashi : EscortRepairs.akashi;
+			}
+			UpdateRepairTimerDisplays(docking, akashi);
+		}).addClass("hover");
 		
 		// Screenshot buttons
 		$(".module.controls .btn_ss1").on("click", function(){
@@ -562,8 +592,7 @@
 			$(".module.status .status_support .status_text").text( FleetSummary.supportPower );
 			
 			// STATUS: REPAIRS
-			$(".module.status .status_docking .status_text").text(String(FleetSummary.docking).toHHMMSS());
-			$(".module.status .status_akashi .status_text").text(String(FleetSummary.akashi).toHHMMSS());
+			UpdateRepairTimerDisplays(FleetSummary.docking, FleetSummary.akashi);
 			$(".module.status .status_docking").attr("title", KC3Meta.term("PanelHighestDocking") );
 			$(".module.status .status_akashi").attr("title", KC3Meta.term("PanelHighestAkashi") );
 			$(".module.status .status_support").attr("title", KC3Meta.term("PanelSupportPower") );
@@ -1108,6 +1137,18 @@
 			
 			$("img", thisStatBox).attr("src", "../../../../assets/img/stats/"+Code+".png");
 			$(".equipStatText", thisStatBox).text( MasterItem["api_"+StatProperty] );
+		}
+	}
+	function UpdateRepairTimerDisplays(docking, akashi){
+		switch (ConfigManager.timerDisplayType) {
+		case 1:
+			$(".module.status .status_docking .status_text").text("-" + String(docking).toHHMMSS());
+			$(".module.status .status_akashi .status_text").text("-" + String(akashi).toHHMMSS());
+			break;
+		case 2:
+			$(".module.status .status_docking .status_text").text(String(docking).plusCurrentTime());
+			$(".module.status .status_akashi .status_text").text(String(akashi).plusCurrentTime());
+			break;
 		}
 	}
 	
