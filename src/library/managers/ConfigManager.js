@@ -17,6 +17,7 @@ Retreives when needed to apply on components
 				language			: "en",
 				elosFormula 		: 3,
 				hqExpDetail 		: 1,
+				timerDisplayType	: 1,
 				marryLevelFormat: 0,
 				
 				info_face 			: true,
@@ -112,6 +113,12 @@ Retreives when needed to apply on components
 		// Toggle HQ Exp Information
 		scrollHQExpInfo :function(){
 			this.hqExpDetail = (this.hqExpDetail % 3) + 1;
+			this.save();
+		},
+		
+		// Toggle repair timer type
+		scrollTimerType :function(){
+			this.timerDisplayType = (this.timerDisplayType % 2) + 1;
 			this.save();
 		}
 		

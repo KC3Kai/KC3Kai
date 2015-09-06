@@ -47,6 +47,17 @@
 						[ 3, "SettingsHQExpTotal" ]
 					]
 				}
+			},
+			{
+				"id": "timerDisplayType",
+				"name": "SettingsTimerDisplayType",
+				"type": "radio",
+				"options" : {
+					"choices" : [
+						[ 1, "SettingsTimeRemaining" ],
+						[ 2, "SettingsTimeFinished" ]
+					]
+				}
 			}
 		]
 	},
