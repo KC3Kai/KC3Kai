@@ -1152,7 +1152,7 @@
 					$(element).show()
 						.find('img').attr('src',"../../../../assets/img/client/"+expedIcon[useItem.api_useitem_id]+".png").end()
 						.find('span').text(useItem.api_useitem_count).end();
-				} else {n
+				} else {
 					$(element).hide();
 				}
 			});
