@@ -169,7 +169,7 @@ String.prototype.plusCurrentTime = function() {
     var secondsRemaining = parseInt(this, 10);
     var timeFinished = secondsAfterMidnight + secondsRemaining;
     return String(timeFinished).toHHMMSS();
-}
+};
 
 
 /* GOOGLE ANALYTICS
