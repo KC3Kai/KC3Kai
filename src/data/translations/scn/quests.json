@@ -219,11 +219,17 @@
         "name": "Organize the new 6th Destroyer Division!",
         "desc": "Have Akatsuki Kai2 as Flagship with Hibiki/Bep, Ikazuchi, Inazuma in your fleet"
     },
-	
-	
-	
-	
-	
+    "156": {
+        "name": "1st Torpedo Squadron, Prepare for a Rush to the Northern Sea",
+        "desc": "Have Abukuma as flagship with Hibiki/Вер, Hatsushimo, Wakaba, Samidare and Shimakaze in your main fleet"
+    },
+    "157": {
+        "name": "1st Torpedo Squadron, Prepare for Another Rush to the Northern Sea",
+        "desc": "Have Abukuma Kai Ni as flagship with Hibiki/Вер, Yuugumo, Naganami, Akigumo and Shimakaze in your main fleet"
+    },
+    
+    
+    
     "202": {
         "name": "First Sortie!",
         "desc": "Deploy your main fleet on a combat mission."
@@ -352,18 +358,14 @@
         "name": "Deploy a Torpedo Squadron to Bashi Islands",
         "desc": "Sortie a fleet of 1-2 light cruisers (with one of them as the flagship) and 4-5 destroyers to World 2-2. Score a victory at the boss and sink the enemy flagship."
     },
-    
-   
     "258": {
         "name": "Sortie the 2nd Squadron",
         "desc": "Deploy Nagato (\u9577\u9580), Mutsu (\u9678\u5965), Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce) and up to 2 additional ships to World 4-2. Score two S rank victories at the boss node."
-    },
-   
+    },   
     "260": {
         "name": "Deploy the Battleship Squadron in the Northern Waters",
         "desc": "Deploy two battleships, a light aircraft carrier and up to three additional ships to World 3-5 and score an S rank victory at the boss node."
-    },
-    
+    },    
     "262": {
         "name": "Deploy the Nishimura Fleet in the Southern Waters",
         "desc": "Deploy Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce), Mogami (\u6700\u4e0a), Shigure (\u6642\u96e8) and Michishio (\u6e80\u6f6e) (you may also add another ship) to World 5-1 and score an S rank victory at the boss node."
@@ -423,9 +425,7 @@
 	"279": {
         "name": "“第一水雷战队”北方KE号作战再突入！",
         "desc": "新编“一水战”（阿武隈改二旗舰+响+夕云+长波+秋云+岛风）出击3-2，Boss战取得胜利（B+）"
-    },
-	
-	
+    },	
 	
 	
 	
@@ -780,5 +780,61 @@
 	"306": {
         "name": "In Preparation of Love (Part 2)",
         "desc": "Show your love by getting 2 victories in practice mode."
+    },
+    
+    "280": {
+        "code": "SN01",
+        "name": "Second SN strategy, Initial Operations",
+        "desc": "Clear the Summer 2015 Event Map 2"
+    },
+    "620": {
+        "code": "SN02",
+        "name": "Tidying Up the Arsenal",
+        "desc": " Scrap Equipment 5 times"
+    },
+    "281": {
+        "code": "SN03",
+        "name": "Carry Out the Patrol for Main Force's Route",
+        "desc": "Sink 6 abyssal sumbarines"
+    },
+    "158": {
+        "code": "SN04",
+        "name": "Assign the Murata Squadron Torpedo Bomber to Akagi",
+        "desc": "Set Akagi as the Secretary Ship and equip her with Type 97 Torpedo Bomber (Murata Squadron)"
+    },
+    "282": {
+        "code": "SN05",
+        "name": "Snatch Away the Air Superiority in the Solomon Sea Area",
+        "desc": "Clear the Summer 2015 Event Map 4"
+    },
+    "159": {
+        "code": "SN06",
+        "name": "Reassign the Murata Squadron Torpedo Bomber to Shoukaku",
+        "desc": "Set Shoukaku as the Secretary Ship and equip her with Type 97 Torpedo Bomber (Murata Squadron)"
+    },
+    "310": {
+        "code": "SN07",
+        "name": "Naval Practice in Preparation for Operation FS",
+        "desc": "Get 4 victories in practice mode"
+    },
+    "621": {
+        "code": "SN08",
+        "name": "Model Conversion (Murata Squadron to Tenzan)",
+        "desc": "Have Shoukaku as the Secretary Ship and equip her with Type 97 Torpedo Bomber (Murata Squadron), then scrap 2 Tenzan"
+    },
+    "160": {
+        "code": "SN09",
+        "name": "Organize the Third Fleet of the Carrier Task Force",
+        "desc": "Create a Carrier Task Force (Combined Fleet) containing Shoukaku, Zuikaku and Zuihou in the first fleet"
+    },
+    "284": {
+        "code": "SN10",
+        "name": "Establish a Bridgehead to Operation FS",
+        "desc": "Sink 10 Abyssal CV(L)"
+    },
+    "283": {
+        "code": "SN11",
+        "name": "Eastern Area Dispatch Fleet, Sortie!",
+        "desc": "Clear the Summer 2015 Event Map 5"
     }
 }
