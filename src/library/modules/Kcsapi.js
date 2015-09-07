@@ -81,7 +81,7 @@ Previously known as "Reactor"
 			
 			PlayerManager.setNewsfeed(response.api_data.api_log, UTCtime );
 			
-			PlayerManager.combinedFleet = response.api_data.api_combined_flag;
+			PlayerManager.combinedFleet = response.api_data.api_combined_flag || 0;
 			
 			KC3Network.trigger("HQ");
 			KC3Network.trigger("Consumables");
