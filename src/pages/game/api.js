@@ -11,8 +11,13 @@ function ActivateGame(){
 	waiting = false;
 	$(".box-wrap").css("background", "#fff");
 	$(".box-wait").hide();
-	$(".box-game .game-swf").attr("src", localStorage.absoluteswf);
-	$(".box-game").show();
+	$(".game-swf").remove();
+	$(".box-game")
+		.prepend("<iframe class=game-swf frameborder=0></iframe>")
+		.find(".game-swf")
+		.attr("src", localStorage.absoluteswf)
+		.end()
+		.show();
 	$(".box-wrap").css("zoom", ((ConfigManager.api_gameScale || 100) / 100));
 }
 

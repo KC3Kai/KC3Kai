@@ -660,7 +660,7 @@ Previously known as "Reactor"
 			KC3TimerManager.repair( params.api_ndock_id ).deactivate();
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Timers");
-                        KC3Network.trigger("Fleet");
+			KC3Network.trigger("Fleet");
 		},
 		
 		/*-------------------------------------------------------*/
@@ -686,6 +686,10 @@ Previously known as "Reactor"
 		/* PVP Result
 		-------------------------------------------------------*/
 		"api_req_practice/battle_result":function(params, response, headers){
+			var thisPvP = KC3SortieManager.currentNode();
+			if(thisPvP.allyNoDamage && response.api_data.api_win_rank == "S")
+				response.api_data.api_win_rank = "SS";
+			
 			KC3QuestManager.get(303).increment(); // C2: Daily Exercises 1
 			
 			// If victory
