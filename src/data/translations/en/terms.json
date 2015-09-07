@@ -202,6 +202,13 @@
 	"PanelPlanesFighter" : "Planes joining air-battle phase",
 	"PanelPlanesBomber" : "Planes joining bombing phase",
 	
+	"MissionLabelActivity" : "Status",
+	"MissionLabelAdmiral" : "HQ EXP",
+	"MissionActivity0" : "Cancelled",
+	"MissionActivity1" : "Failure",
+	"MissionActivity2" : "Success",
+	"MissionActivity3" : "Great Success",
+	
 	"CombinedCarrier" : "Carrier TF",
 	"CombinedSurface" : "Surface TF",
 	"CombinedNone" : "Not combined",

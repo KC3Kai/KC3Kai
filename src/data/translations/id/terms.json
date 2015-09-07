@@ -137,9 +137,9 @@
 	"SettingsChuuiWarningDangerousFeature" : "Anda yakin ingin menggunakan fitur ini?\nSemua resiko yang anda alami bukan tanggung jawab KC3改.\n\nPastikan anda tahu apa yang anda lakukan terlebih dahulu.",
 	"SettingsErrorNG" : "Disimpan!",
 	"SettingsErrorSuper" : "Nilai Salah!",
-	"SettingsErrorAbove" : "Melebihi",
-	"SettingsErrorBelow" : "Kurang",
-	"SettingsErrorLength" : "Ukuran Nilai",
+	"SettingsErrorAbove" : "lebih dari",
+	"SettingsErrorBelow" : "kurang dari",
+	"SettingsErrorLength" : "Panjang",
 	"SettingsErrorValue" : "Nilai",
 	"SettingsErrorOrder" : "%TYP %CMP %VAL",
 
@@ -181,7 +181,7 @@
 	"EventHistoryRank3"  : "SULIT",
 	"EventHistoryRank1X" : "BOCAH",
 	"EventHistoryRank2X" : "NERAKA",
-	"EventHistoryRank3X" : "MATI KMU NAK",
+	"EventHistoryRank3X" : "MPOS LW",
 	
 	"PanelDocking" : "Perbaikan",
 	"PanelAkashi" : "Akashi",
@@ -199,6 +199,13 @@
 	"PanelSupportPower" : "Damage support expedition",
 	"PanelPlanesFighter" : "Pesawat pada tahap pertempuran",
 	"PanelPlanesBomber" : "Pesawat pada tahap pengeboman",
+	
+	"MissionLabelActivity" : "Hasil",
+	"MissionLabelAdmiral" : "HQ EXP",
+	"MissionActivity0" : "Batal",
+	"MissionActivity1" : "Gagal",
+	"MissionActivity2" : "Berhasil",
+	"MissionActivity3" : "#DoraTheExplorer",
 	
 	"CombinedCarrier" : "Carrier TF",
 	"CombinedSurface" : "Surface TF",
