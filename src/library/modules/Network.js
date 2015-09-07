@@ -31,7 +31,8 @@ Listens to network history and triggers callback if game events happen
 			ClearedMap: [],
 			PvPStart: [],
 			PvPNight: [],
-			PvPEnd: []
+			PvPEnd: [],
+			ExpedResult: []
 		},
 		
 		/* ADD LISTENER

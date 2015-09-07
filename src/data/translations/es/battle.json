@@ -1,0 +1,28 @@
+{
+	"detection" : [
+		["", ""],
+		["OK", "bueno"],
+		["OK-", "bueno"],
+		["-", "malo"],
+		["NO", "malo"],
+		["OK+", "bueno"],
+		["NO+", "malo"]
+	],
+	
+	"airbattle" : [
+		["AP", "", "Paridad Aerea"],
+		["AS+", "bueno", "Supremacia Aerea"],
+		["AS", "bueno", "Superioridad Aerea"],
+		["AI", "malo", "Incapacidad Aerea"],
+		["AD", "malo", "Denegación Aerea"]
+	],
+	
+	"engagement" : [
+		["", "", ""],
+		["Prll", "", "Paralelo"],
+		["HdOn", "", "Frontal"],
+		["Gr-T", "bueno", "T Verde"],
+		["Rd-T", "malo", "T Roja"]
+	]
+	
+}

@@ -947,6 +947,8 @@
 				$(".battle_hqlevel_next_gain", container).text(expGained*(ConfigManager.hqExpDetail==1?-1:1));
 				// giles bhunder
 				$(".battle .battle_rating img").attr("src", "../../../../assets/img/client/ratings/"+data.result.api_win_rank+".png");
+			},
+			ExpedResult: function(container, data, local){
 			}
 		}
 	});

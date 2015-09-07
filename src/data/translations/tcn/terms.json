@@ -166,12 +166,12 @@
 	"PredictionStampSortie" : "轟沉",
 	"PredictionStampPvP" : "出局",
 
-    "EventHistoryRank1"  : "簡單",
-    "EventHistoryRank2"  : "普通",
-    "EventHistoryRank3"  : "困難",
-    "EventHistoryRank1X" : "KIDS CHOICE",
-    "EventHistoryRank2X" : "HELL AF",
-    "EventHistoryRank3X" : "GET REKT SON",
+    "EventHistoryRank1"  : "丙",
+    "EventHistoryRank2"  : "乙",
+    "EventHistoryRank3"  : "甲",
+    "EventHistoryRank1X" : "新米",
+    "EventHistoryRank2X" : "困難",
+    "EventHistoryRank3X" : "抖M",
 
     "PanelDocking" : "入渠",
     "PanelAkashi" : "明石",

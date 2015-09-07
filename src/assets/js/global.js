@@ -154,6 +154,23 @@ String.prototype.toHHMMSS = function () {
     return time;
 };
 
+/* SECONDS TO HH:MM:SS, ADDING CURRENT TIME
+ * TODO: Currently does not handle intervals greater than 24 hours well.
+ *       Possibly fix by prepending the date if secondsRemaining is big enough
+ *       to be confusing.
+-------------------------------*/
+String.prototype.plusCurrentTime = function() {
+    var currentTime = new Date();
+    var secondsAfterMidnight = 
+        3600 * currentTime.getHours() +
+        60   * currentTime.getMinutes() +
+               currentTime.getSeconds();
+
+    var secondsRemaining = parseInt(this, 10);
+    var timeFinished = secondsAfterMidnight + secondsRemaining;
+    return String(timeFinished).toHHMMSS();
+};
+
 
 /* GOOGLE ANALYTICS
 -------------------------------*/
