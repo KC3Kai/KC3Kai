@@ -1137,7 +1137,7 @@
 						.find(".ship_level").text(shipData.level).end()
 						.find(".ship_expgain span").text(data.response.api_get_ship_exp[i]).end();
 				} else {
-					$(element).hide()
+					$(element).hide();
 				}
 			});
 			if(data.response.api_get_material===-1){
