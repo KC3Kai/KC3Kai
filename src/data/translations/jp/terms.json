@@ -134,6 +134,15 @@
 	"SettingsPanelOpacity" : "インターフェイスの不透明度",
 	"SettingsGearHolder" : "装備の背景色",
 	
+	"SettingsChuuiWarningDangerousFeature" : "あなたが本当にこれを変更しますか？\nあなたがしようとしている任意のリスクはKC3改の責任を超えています。\n\nあなたが前に何をすべきかを知っていることを確認します。",
+	"SettingsErrorNG" : "保存する！",
+	"SettingsErrorSuper" : "値が無効！",
+	"SettingsErrorAbove" : "超え",
+	"SettingsErrorBelow" : "下に",
+	"SettingsErrorLength" : "値長",
+	"SettingsErrorValue" : "値",
+	"SettingsErrorOrder" : "%TYP %CMP %VAL",
+	
 	"Small" : "小",
 	"Big" : "大",
 	"Black" : "黒",
@@ -166,9 +175,6 @@
 	
 	"PredictionStampSortie" : "撃沈",
 	"PredictionStampPvP" : "轟沈",
-	"PredictionStampEscort" : "護衛",
-	"PredictionStampMVPUseful" : "MVP",
-	"PredictionStampMVPUseless" : "最大限に達する！",
 	
 	"EventHistoryRank1"  : "丙",
 	"EventHistoryRank2"  : "乙",
@@ -176,6 +182,8 @@
 	"EventHistoryRank1X" : "ワロタ",
 	"EventHistoryRank2X" : "やべー",
 	"EventHistoryRank3X" : "無理だ",
+	"StrategyEventGo"    : "イベント出撃",
+	"StrategyEventGoP"   : "#絶望",
 	
 	"PanelDocking" : "入渠",
 	"PanelAkashi" : "明石",
@@ -193,6 +201,13 @@
 	"PanelSupportPower" : "支援射撃威力",
 	"PanelPlanesFighter" : "飛行機は制空戦相に参加する。",
 	"PanelPlanesBomber" : "飛行機は空気爆撃相に参加する。",
+	
+	"MissionLabelActivity" : "遠征",
+	"MissionLabelAdmiral" : "提督経験値",
+	"MissionActivity0" : "中止",
+	"MissionActivity1" : "失敗",
+	"MissionActivity2" : "成功",
+	"MissionActivity3" : "大成功",
 	
 	"CombinedCarrier" : "機動部隊",
 	"CombinedSurface" : "水上部隊",

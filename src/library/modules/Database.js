@@ -126,6 +126,16 @@ Uses Dexie.js third-party plugin on the assets directory
 						},
 						vr: 6,
 					},
+					{
+						ch: {
+							battle: "++id,hq,sortie_id,node,enemyId,data,yasen,rating,drop,time,baseEXP,mvp",
+							expedition: "++id,hq,data,mission,ships,equip,shipXP,admiralXP,items,time",
+						},
+						up: function(t){
+							console.log("V6.5",t);
+						},
+						vr: 6.5,
+					},
 				];
 				
 			// Process the queue
@@ -146,6 +156,7 @@ Uses Dexie.js third-party plugin on the assets directory
 				
 				// Apply Versioning
 				dbVer = self.con.version(dbCurr.vr).stores(dbProposed);
+				//console.log(dbCurr.vr,dbVer,Object.keys(dbProposed));
 				if(dbFirst) {
 					dbFirst = false;
 				} else {
@@ -228,6 +239,11 @@ Uses Dexie.js third-party plugin on the assets directory
 		Develop :function(data){
 			data.hq = this.index;
 			this.con.develop.add(data);
+		},
+		
+		Expedition :function(data){
+			data.hq = this.index;
+			this.con.expedition.add(data);
 		},
 		
 		/* [GET] Retrive logs from Local DB
