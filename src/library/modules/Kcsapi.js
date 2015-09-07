@@ -670,9 +670,6 @@ Previously known as "Reactor"
 		/* PVP Start
 		-------------------------------------------------------*/
 		"api_req_practice/battle":function(params, response, headers){
-			var thisPvP = KC3SortieManager.currentNode();
-			if(thisPvP.allyNoDamage && response.api_data.api_win_rank == "S")
-				response.api_data.api_win_rank = "SS";
 			KC3Network.trigger("PvPStart", {
 				battle: response.api_data,
 				fleetSent: params.api_deck_id
@@ -689,6 +686,10 @@ Previously known as "Reactor"
 		/* PVP Result
 		-------------------------------------------------------*/
 		"api_req_practice/battle_result":function(params, response, headers){
+			var thisPvP = KC3SortieManager.currentNode();
+			if(thisPvP.allyNoDamage && response.api_data.api_win_rank == "S")
+				response.api_data.api_win_rank = "SS";
+			
 			KC3QuestManager.get(303).increment(); // C2: Daily Exercises 1
 			
 			// If victory
