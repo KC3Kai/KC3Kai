@@ -853,6 +853,19 @@
 	text-align: center;
 }
 
+.module.activity .activity_expedition .exp_materials .mat_fuel {
+	color:#AAFFAA;
+}
+.module.activity .activity_expedition .exp_materials .mat_ammo {
+	color:#999900;
+}
+.module.activity .activity_expedition .exp_materials .mat_stel {
+	color:#999999;
+}
+.module.activity .activity_expedition .exp_materials .mat_baux {
+	color:#FF9933;
+}
+
 .module.activity .activity_expedition .exp_materials {
 	display: flex;
 	justify-content: center;
@@ -861,6 +874,7 @@
 .module.activity .activity_expedition .exp_useitem {
 	display: inline-block;
 	width: 45%;
+	text-align: center;
 }
 
 .module.activity .activity_expedition .exp_ship .ship_level:before {
