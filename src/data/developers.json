@@ -270,6 +270,14 @@
 			}
 		},
 		{
+			"name": "bcc32",
+			"avatar" : "https://avatars0.githubusercontent.com/u/1239097?v=3&s=40",
+			"desc" : "AboutDevTester",
+			"links" : {
+				"gh" :"https://github.com/bcc32"
+			}
+		},
+		{
 			"name": "Erupi",
 			"avatar": "https://avatars1.githubusercontent.com/u/12823927?v=3&s=40",
 			"desc": "AboutDevTester",
@@ -331,14 +339,6 @@
 			"links" : {
 				"gh" :"https://github.com/SanaNoHana",
 				"hm" :"http://www.himeuta.net/members/3906-sananohana/"
-			}
-		},
-		{
-			"name": "bcc32",
-			"avatar" : "https://avatars0.githubusercontent.com/u/1239097?v=3&s=40",
-			"desc" : "AboutReporter",
-			"links" : {
-				"gh" :"https://github.com/bcc32"
 			}
 		},
 		{
