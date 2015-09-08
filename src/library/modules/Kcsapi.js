@@ -728,7 +728,13 @@ Previously known as "Reactor"
 				}
 				KC3Network.trigger("Quests");
 			}
-			KC3Network.trigger("ExpedResult",{params:params,response:response.api_data});
+			
+			KC3Network.trigger("ExpedResult",{
+				expedNum:expedNum,
+				params:params,
+				response:response.api_data
+			});
+			
 			console.log("Fleet #",params.api_deck_id,"has returned from Expedition #",expedNum,"with result",response.api_data);
 			KC3Database.Expedition({
 				data     :response.api_data,
