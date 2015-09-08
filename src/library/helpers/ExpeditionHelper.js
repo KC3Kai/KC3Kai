@@ -17,6 +17,11 @@
 			});
 
 			if (allShips.length > 0) {
+					var PS = window.PS;
+					var KE = PS["KanColle.Expedition"];
+					var KER = PS["KanColle.Expedition.Requirement"];
+					var ST = PS["KanColle.Generated.SType"];
+
 					// convert ships to required objects
 					// required fields:
 					// ammo, morale (not used for now)
@@ -27,7 +32,8 @@
 						var shipInst = CurrentShip;
 						var shipModel = CurrentShip.master();
 						
-						var stype = KC3Meta.stype(shipModel.api_stype);
+                                                var stypeId = shipModel.api_stype;
+						var stype = ST.showSType( ST.fromInt( stypeId ))
 						var level = shipInst.level;
 						var drumCount = 0;
 						$.each(shipInst.items, function(ind,gear_id) {
@@ -48,9 +54,6 @@
 						};
 					});
 					
-					var PS = window.PS;
-					var KE = PS["KanColle.Expedition"];
-					var KER = PS["KanColle.Expedition.Requirement"];
 					var fleet = KER.fromRawFleet( allShipsForLib );
 					var availableExpeditions = KE.getAvailableExpeditions( fleet );
 				
