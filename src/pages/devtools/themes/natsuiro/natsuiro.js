@@ -1188,7 +1188,8 @@
 					return "";
 			}()))
 			.text( PlayerManager.hq.exp[hqDt] * (hqDt == 1 ? -1 : 1) );
-	};
+	}
+	
 	function CraftGearStats(MasterItem, StatProperty, Code){
 		if(parseInt(MasterItem["api_"+StatProperty], 10) !== 0){
 			var thisStatBox = $("#factory .equipStat").clone().appendTo(".module.activity .activity_crafting .equipStats");
@@ -1219,7 +1220,6 @@
 			koskElm.text(String(-koskElm.data("value")).toHHMMSS());
 			break;
 		case 2:
-			console.log({dock:docking,kosk:akashi},{dock:dockElm.data("value"),kosk:koskElm.data("value")});
 			dockElm.text(String(dockElm.data("value") || NaN).plusCurrentTime());
 			koskElm.text(String(koskElm.data("value") || NaN).plusCurrentTime());
 			break;
