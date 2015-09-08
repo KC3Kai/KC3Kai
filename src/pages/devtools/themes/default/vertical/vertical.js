@@ -1181,7 +1181,7 @@
 				$(".battle .battle_rating img").attr("src", "../../../../assets/img/client/ratings/"+data.result.api_win_rank+".png");
 			},
 			ExpedResult: function(container, data, local){
-			}
+			},
 		}
 	});
 	

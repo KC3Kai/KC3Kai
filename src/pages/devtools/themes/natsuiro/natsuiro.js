@@ -78,37 +78,14 @@
 		// eLoS Toggle
 		$(".summary-eqlos").on("click",function(){
 			ConfigManager.scrollElosMode();
-			$(".summary-eqlos .summary_icon img").attr("src", "../../../../assets/img/stats/"+["lsc","lst","lse","ls"][ConfigManager.elosFormula]+".png");			$(".summary-eqlos .summary_text").text( Math.round(((selectedFleet < 5) ? PlayerManager.fleets[selectedFleet-1].eLoS() : PlayerManager.fleets[0].eLoS()+PlayerManager.fleets[1].eLoS()) * 100) / 100 );
+			$(".summary-eqlos .summary_icon img").attr("src", "../../../../assets/img/stats/"+["lsc","lst","lse","ls"][ConfigManager.elosFormula]+".png");
+			$(".summary-eqlos .summary_text").text( Math.round(((selectedFleet < 5) ? PlayerManager.fleets[selectedFleet-1].eLoS() : PlayerManager.fleets[0].eLoS()+PlayerManager.fleets[1].eLoS()) * 100) / 100 );
 		}).addClass("hover");
 
 		// Timer Type Toggle
-		$(".status_docking").on("click",function(){
+		$(".status_docking,.status_akashi").on("click",function(){
 			ConfigManager.scrollTimerType();
-			var docking, akashi;
-			if (selectedFleet < 5){
-			    docking = PlayerManager.fleets[selectedFleet - 1].highestRepairTimes().docking;
-			    akashi = PlayerManager.fleets[selectedFleet - 1].highestRepairTimes().akashi;
-			}else{
-			    var MainRepairs = PlayerManager.fleets[0].highestRepairTimes();
-			    var EscortRepairs = PlayerManager.fleets[1].highestRepairTimes();
-			    docking = (MainRepairs.docking > EscortRepairs.docking) ? MainRepairs.docking : EscortRepairs.docking;
-			    akashi = (MainRepairs.akashi > EscortRepairs.akashi) ? MainRepairs.akashi : EscortRepairs.akashi;
-			}
-			UpdateRepairTimerDisplays(docking, akashi);
-		}).addClass("hover");
-		$(".status_akashi").on("click",function(){
-			ConfigManager.scrollTimerType();
-			var docking, akashi;
-			if (selectedFleet < 5){
-			    docking = PlayerManager.fleets[selectedFleet - 1].highestRepairTimes().docking;
-			    akashi = PlayerManager.fleets[selectedFleet - 1].highestRepairTimes().akashi;
-			}else{
-			    var MainRepairs = PlayerManager.fleets[0].highestRepairTimes();
-			    var EscortRepairs = PlayerManager.fleets[1].highestRepairTimes();
-			    docking = (MainRepairs.docking > EscortRepairs.docking) ? MainRepairs.docking : EscortRepairs.docking;
-			    akashi = (MainRepairs.akashi > EscortRepairs.akashi) ? MainRepairs.akashi : EscortRepairs.akashi;
-			}
-			UpdateRepairTimerDisplays(docking, akashi);
+			NatsuiroListeners.TimerTick();
 		}).addClass("hover");
 		
 		// Screenshot buttons
@@ -198,6 +175,7 @@
 		// Update Timer UIs
 		setInterval(function(){
 			KC3TimerManager.update();
+			TimerTick();
 		}, 1000);
 		
 		// Devbuild: auto-activate dashboard while designing
@@ -1177,7 +1155,7 @@
 			});
 			$(".activity_expedition .exp_useitem").each(function(i,element){
 				var useItem = data.response["api_get_item"+(i+1)];
-				if(!!useItem) {
+				if(!!useItem && useItem.api_useitem_id > 0) {
 					$(element).show()
 						.find('img').attr('src',"../../../../assets/img/client/"+expedIcon[useItem.api_useitem_id]+".png").end()
 						.find('span').text(useItem.api_useitem_count).end();
@@ -1191,7 +1169,7 @@
 			$("#atab_activity").addClass("active");
 			$(".module.activity .activity_box").hide();
 			$(".module.activity .activity_expedition").fadeIn(500);
-		}
+		},
 	};
 	
 	function updateHQEXPGained(ele,newDelta) {
@@ -1210,7 +1188,7 @@
 					return "";
 			}()))
 			.text( PlayerManager.hq.exp[hqDt] * (hqDt == 1 ? -1 : 1) );
-	}
+	};
 	function CraftGearStats(MasterItem, StatProperty, Code){
 		if(parseInt(MasterItem["api_"+StatProperty], 10) !== 0){
 			var thisStatBox = $("#factory .equipStat").clone().appendTo(".module.activity .activity_crafting .equipStats");
@@ -1219,15 +1197,31 @@
 			$(".equipStatText", thisStatBox).text( MasterItem["api_"+StatProperty] );
 		}
 	}
+	
+	function TimerTick(){
+		var
+			context = $(".module.status"),
+			dockElm = $(".status_docking .status_text",context),
+			koskElm = $(".status_akashi  .status_text",context);
+		UpdateRepairTimerDisplays($(dockElm).data("value"),$(koskElm).data("value"));
+	}
+	
 	function UpdateRepairTimerDisplays(docking, akashi){
+		var
+			context = $(".module.status"),
+			dockElm = $(".status_docking .status_text",context),
+			koskElm = $(".status_akashi  .status_text",context); // kousaka-kan
+		if(docking!==undefined) dockElm.data("value",docking);
+		if( akashi!==undefined) koskElm.data("value", akashi);
 		switch (ConfigManager.timerDisplayType) {
 		case 1:
-			$(".module.status .status_docking .status_text").text("-" + String(docking).toHHMMSS());
-			$(".module.status .status_akashi .status_text").text("-" + String(akashi).toHHMMSS());
+			dockElm.text(String(-dockElm.data("value")).toHHMMSS());
+			koskElm.text(String(-koskElm.data("value")).toHHMMSS());
 			break;
 		case 2:
-			$(".module.status .status_docking .status_text").text(String(docking).plusCurrentTime());
-			$(".module.status .status_akashi .status_text").text(String(akashi).plusCurrentTime());
+			console.log({dock:docking,kosk:akashi},{dock:dockElm.data("value"),kosk:koskElm.data("value")});
+			dockElm.text(String(dockElm.data("value") || NaN).plusCurrentTime());
+			koskElm.text(String(koskElm.data("value") || NaN).plusCurrentTime());
 			break;
 		}
 	}

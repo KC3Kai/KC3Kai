@@ -729,6 +729,7 @@ Previously known as "Reactor"
 				KC3Network.trigger("Quests");
 			}
 			KC3Network.trigger("ExpedResult",{params:params,response:response.api_data});
+			console.log("Fleet #",params.api_deck_id,"has returned from Expedition #",expedNum,"with result",response.api_data);
 			KC3Database.Expedition({
 				data     :response.api_data,
 				mission  :expedNum,
@@ -826,7 +827,7 @@ Previously known as "Reactor"
 		/* View World Maps
 		-------------------------------------------------------*/
 		"api_get_member/mapinfo":function(params, response, headers){
-			var maps = {};
+			var maps = JSON.parse(localStorage.maps);
 			var ctr, thisMap;
 			for(ctr in response.api_data){
 				thisMap = response.api_data[ctr];
