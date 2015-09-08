@@ -31,9 +31,8 @@
 					var allShipsForLib = allShips.map( function(CurrentShip, ind) {
 						var shipInst = CurrentShip;
 						var shipModel = CurrentShip.master();
-						
-                                                var stypeId = shipModel.api_stype;
-						var stype = ST.showSType( ST.fromInt( stypeId ))
+						var stypeId = shipModel.api_stype;
+						var stype = ST.showSType( ST.fromInt( stypeId ));
 						var level = shipInst.level;
 						var drumCount = 0;
 						$.each(shipInst.items, function(ind,gear_id) {
