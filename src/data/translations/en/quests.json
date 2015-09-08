@@ -426,7 +426,14 @@
         "name": "Rush the 1st Torpedo Squadron to Operation KE Again",
         "desc": "Sortie Abukuma Kai-2 as flagship with Hibiki/Вер, Yuugumo, Naganami, Akigumo and Shimakaze to 3-2 and B-Rank+ the boss"
     },
-    
+    "285": {
+        "name": "\"Carrier Task Force\", advance to the Northern Sea!",
+        "desc": "Sortie a fleet with an aircraft carrier as flagship to 3-5 and S-Rank the boss"
+    },
+	"286": {
+        "name": "Strengthen the Anti-Submarine Patrol in Front of the Naval Base!",
+        "desc": "Sortie to 1-5 and obtain 4 A-ranks (or better) at the boss"
+    },
     
     
     "201": {
@@ -640,7 +647,12 @@
         "name": "Strive to Increase the Level of Training in Preparation for Another Rush to the Northern Sea",
         "desc": "Get 4 victories in Exercises within the same day"
     },
-    
+     "311": {
+        "code": "C8",
+        "name": "Elite Fleet Practice",
+        "desc": "Get 7 victories in Exercises within the same day",
+		"tracking": [ [0,7] ]
+    },
     
     
     

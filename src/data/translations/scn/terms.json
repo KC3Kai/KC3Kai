@@ -80,6 +80,9 @@
 	"SettingsHQExpLeft"    : "剩余经验",
 	"SettingsHQExpCurrent" : "当前等级",
 	"SettingsHQExpTotal"   : "总共获得",
+	"SettingsTimerDisplayType" : "计时器显示模式",
+	"SettingsTimeRemaining" : "剩余时间",
+	"SettingsTimeFinished" : "已经过时间",
 	
 	"SettingsGameInfo" : "游戏信息",
 	"SettingsDropFaces" : "剧透出击掉落",
@@ -134,6 +137,15 @@
 	"SettingsPanelOpacity" : "界面不透明度 (opacity)",
 	"SettingsGearHolder" : "装备背景色",
 	
+	"SettingsChuuiWarningDangerousFeature" : "确定更改？\n接下来你所做的一切“KC3改”概不负责。\n\n请确保知晓后果。",
+	"SettingsErrorNG" : "已保存",
+	"SettingsErrorSuper" : "格式错误",
+	"SettingsErrorAbove" : "大于",
+	"SettingsErrorBelow" : "小于",
+	"SettingsErrorLength" : "值长度",
+	"SettingsErrorValue" : "值",
+	"SettingsErrorOrder" : "%TYP %CMP %VAL",
+	
 	"Small" : "小",
 	"Big" : "大",
 	"Black" : "黑",
@@ -152,7 +164,7 @@
 	"SpeedFast" : "高速",
 	"SpeedSlow" : "低速",
 	
-	"HQText" : "司令部",
+	"HQText" : "提督",
 	"HQExpAbbrev1" : "还需",
 	"HQExpAbbrev2" : "当前",
 	"HQExpAbbrev3" : "总计",
@@ -161,8 +173,8 @@
 	"BattleEngangement" : "航向",
 	"BattleContact" : "接触",
 	"BattleAirBattle" : "航空战",
-	"BattleFriendly" : "友军",
-	"BattleEnemy" : "敌军",
+	"BattleFriendly" : "友方",
+	"BattleEnemy" : "敌方",
 	
 	"PredictionStampSortie" : "击沉",
 	"PredictionStampPvP" : "出局",
@@ -173,6 +185,8 @@
 	"EventHistoryRank1X" : "小儿科",
 	"EventHistoryRank2X" : "地狱模式",
 	"EventHistoryRank3X" : "老子就是强",
+	"StrategyEventGo"    : "活动图",
+	"StrategyEventGoP"   : "#绝望#",
 	
 	"PanelDocking" : "入渠",
 	"PanelAkashi" : "明石",
@@ -191,8 +205,15 @@
 	"PanelPlanesFighter" : "参与航空战的飞机",
 	"PanelPlanesBomber" : "参与轰炸的飞机",
 	
-	"CombinedCarrier" : "联合舰队 (机动)",
-	"CombinedSurface" : "联合舰队 (水打)",
+	"MissionLabelActivity" : "状态",
+	"MissionLabelAdmiral" : "提督经验",
+	"MissionActivity0" : "取消",
+	"MissionActivity1" : "失败",
+	"MissionActivity2" : "成功",
+	"MissionActivity3" : "大成功",
+	
+	"CombinedCarrier" : "联合舰队-机动",
+	"CombinedSurface" : "联合舰队-水打",
 	"CombinedNone" : "非联合舰队",
 
 	"LevelText" : "等级",

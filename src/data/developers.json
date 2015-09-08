@@ -258,6 +258,18 @@
 	],
 	"AboutTesters" : [
 		{
+			"name": "Ethrundr",
+			"avatar" : "https://avatars2.githubusercontent.com/u/13522800?v=3&s=40",
+			"desc" : "AboutDevTester",
+			"links" : {
+				"gh" :"https://github.com/ethrundr",
+				"wk" :"http://kancolle.wikia.com/wiki/User:Ethrundr",
+				"fb" :"https://www.facebook.com/ethrundr",
+				"hm" :"http://www.himeuta.net/members/1056-ethrundr/",
+				"kn" :"http://www.kaorinusantara.or.id/forum/index.php?members/ethrundr.18705/"
+			}
+		},
+		{
 			"name": "Erupi",
 			"avatar": "https://avatars1.githubusercontent.com/u/12823927?v=3&s=40",
 			"desc": "AboutDevTester",
@@ -301,6 +313,14 @@
 				"hm" :"http://www.himeuta.net/members/8927-nicolaos/",
 				"wk" :"http://kancolle.wikia.com/wiki/User:NicolaosGreene"
 			}
+		},
+		{
+			"name": "RredderR",
+			"avatar": "https://avatars2.githubusercontent.com/u/14126825?v=3&s=40",
+			"desc": "AboutDevTester",
+			"links": {
+				"gh" :"https://github.com/RredderR"
+			}
 		}
 	],
 	"AboutReporters" : [
@@ -311,18 +331,6 @@
 			"links" : {
 				"gh" :"https://github.com/SanaNoHana",
 				"hm" :"http://www.himeuta.net/members/3906-sananohana/"
-			}
-		},
-		{
-			"name": "Ethrundr",
-			"avatar" : "https://avatars2.githubusercontent.com/u/13522800?v=3&s=40",
-			"desc" : "AboutReporter",
-			"links" : {
-				"gh" :"https://github.com/ethrundr",
-				"wk" :"http://kancolle.wikia.com/wiki/User:Ethrundr",
-				"fb" :"https://www.facebook.com/ethrundr",
-				"hm" :"http://www.himeuta.net/members/1056-ethrundr/",
-				"kn" :"http://www.kaorinusantara.or.id/forum/index.php?members/ethrundr.18705/"
 			}
 		},
 		{

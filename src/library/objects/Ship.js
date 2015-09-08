@@ -102,10 +102,10 @@ KC3改 Ship Object
 	KC3Ship.prototype.repairTime = function(){
 		var RepairCalc = PS['KanColle.RepairTime'];
 		return {
-			docking: RepairCalc.dockingInSecJS( this.stype(), this.level, this.hp[0], this.hp[1] ),
+			docking: RepairCalc.dockingInSecJSNum( this.master().api_stype, this.level, this.hp[0], this.hp[1] ),
 			akashi:
 				( this.hp[0] / this.hp[1] > 0.50 )
-				?RepairCalc.facilityInSecJS( this.stype(), this.level, this.hp[0], this.hp[1] )
+				?RepairCalc.facilityInSecJSNum( this.master().api_stype, this.level, this.hp[0], this.hp[1] )
 				:0
 		};
 	};
