@@ -137,6 +137,8 @@
 	"SettingsPanelOpacity" : "インターフェイスの不透明度",
 	"SettingsGearHolder" : "装備背景色",
 	
+	"SettingsLegacyPanel" : "パネル：Legacyテーマ",
+	
 	"SettingsChuuiWarningDangerousFeature" : "あなたが本当にこれを変更しますか？\nあなたがしようとしている任意のリスクはKC3改の責任を超えています。\n\nあなたが前に何をすべきかを知っていることを確認します。",
 	"SettingsErrorNG" : "保存する！",
 	"SettingsErrorSuper" : "値が無効！",
@@ -198,7 +200,7 @@
 	"PanelHasTaiha" : "臨界",
 	"PanelNoTaiha" : "良好",
 	"PanelSupplied" : "補給良い",
-	"PanelNotSupplied" : "補給が必要",
+	"PanelNotSupplied" : "補給あり",
 	"PanelGreatMorale" : "キラ疲労",
 	"PanelGoodMorale" : "疲労良い",
 	"PanelSupportPower" : "支援射撃威力",
@@ -206,7 +208,7 @@
 	"PanelPlanesBomber" : "飛行機は空気爆撃相に参加する。",
 	
 	"MissionLabelActivity" : "遠征",
-	"MissionLabelAdmiral" : "提督経験値",
+	"MissionGetItems" : "アイテムを入手：",
 	"MissionActivity0" : "中止",
 	"MissionActivity1" : "失敗",
 	"MissionActivity2" : "成功",
@@ -220,6 +222,7 @@
 	"LevelShort" : "Lv.",
 	"LevelNext" : "次",
 	"Screenshot" : "スクリーンショット",
+	"Expedition" : "遠征",
 	"UntranslatedQuest" : "非翻訳クエスト",
 	
 	"StrategyEvents1HP" : "ラストダンス！",
