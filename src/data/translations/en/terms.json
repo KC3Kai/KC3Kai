@@ -137,6 +137,8 @@
 	"SettingsPanelOpacity" : "Interface Opacity",
 	"SettingsGearHolder" : "Gear Background Color",
 	
+	"SettingsLegacyPanel" : "Panel: Legacy Theme",
+	
 	"SettingsChuuiWarningDangerousFeature" : "Are you sure that you really want to change this?\nAny risks that you're attempting is beyond KC3改's responsibility.\n\nMake sure you're know what to do before.",
 	"SettingsErrorNG" : "Saved!",
 	"SettingsErrorSuper" : "Invalid value!",
@@ -198,7 +200,7 @@
 	"PanelHasTaiha" : "Critical",
 	"PanelNoTaiha" : "HP good",
 	"PanelSupplied" : "Supply good",
-	"PanelNotSupplied" : "Need resupply",
+	"PanelNotSupplied" : "<100% Supply",
 	"PanelGreatMorale" : "Great Morale",
 	"PanelGoodMorale" : "Morale Good",
 	"PanelSupportPower" : "Support Expedition Shelling Power",
@@ -206,7 +208,7 @@
 	"PanelPlanesBomber" : "Planes joining bombing phase",
 	
 	"MissionLabelActivity" : "Status",
-	"MissionLabelAdmiral" : "HQ EXP",
+	"MissionGetItems" : "Get Items:",
 	"MissionActivity0" : "Cancelled",
 	"MissionActivity1" : "Failure",
 	"MissionActivity2" : "Success",
@@ -220,6 +222,7 @@
 	"LevelShort" : "Lv.",
 	"LevelNext" : "Next",
 	"Screenshot" : "Screenshot",
+	"Expedition" : "Expedition",
 	"UntranslatedQuest" : "Untranslated Quest",
 	
 	"StrategyEvents1HP" : "Last Kill!",

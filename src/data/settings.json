@@ -389,29 +389,6 @@
 				}
 			},
 			{
-				"id" : "pan_size",
-				"name" : "SettingsPanelSize",
-				"type" : "radio",
-				"options" : {
-					"choices" : [
-						[ "small", "Small" ],
-						[ "big", "Big" ]
-					]
-				}
-			},
-			{
-				"id" : "pan_gear_holder",
-				"name" : "SettingsGearHolder",
-				"type" : "radio",
-				"options" : {
-					"choices" : [
-						[ "black", "Black" ],
-						[ "white", "White" ],
-						[ "none", "None" ]
-					]
-				}
-			},
-			{
 				"id" : "pan_bg_color",
 				"name" : "SettingsBGColor",
 				"type" : "long_text",
@@ -445,6 +422,35 @@
 					"length_min" : 1
 				},
 				"options" : { "label" : "%" }
+			}
+		]
+	},
+	{
+		"section": "SettingsLegacyPanel",
+		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Panel",
+		"contents" : [
+			{
+				"id" : "pan_size",
+				"name" : "SettingsPanelSize",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "small", "Small" ],
+						[ "big", "Big" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_gear_holder",
+				"name" : "SettingsGearHolder",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "black", "Black" ],
+						[ "white", "White" ],
+						[ "none", "None" ]
+					]
+				}
 			}
 		]
 	}
