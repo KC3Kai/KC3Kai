@@ -1163,7 +1163,7 @@
 				if(shipId > 0) {
 					var shipData = KC3ShipManager.get(shipId);
 					$(".expres_ship_img img", element).attr("src", KC3Meta.shipIcon(shipData.masterId));
-					$(".expres_ship_exp span", element).text(data.response.api_get_ship_exp[i])
+					$(".expres_ship_exp span", element).text(data.response.api_get_ship_exp[i]);
 					$(element).show();
 				} else {
 					$(element).hide();
