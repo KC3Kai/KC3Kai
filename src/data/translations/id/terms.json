@@ -81,8 +81,8 @@
 	"SettingsHQExpCurrent" : "Level Saat Ini",
 	"SettingsHQExpTotal"   : "Total EXP",
 	"SettingsTimerDisplayType" : "Tipe Tampilan Waktu",
-+	"SettingsTimeRemaining" : "Tersisa",
-+	"SettingsTimeFinished" : "Selesai",
+	"SettingsTimeRemaining" : "Tersisa",
+	"SettingsTimeFinished" : "Selesai",
 
 	"SettingsGameInfo" : "Informasi Game",
 	"SettingsDropFaces" : "Wajah Drop Sorti",
