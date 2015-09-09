@@ -276,17 +276,30 @@ Uses KC3Quest objects to play around with
 				this.isActive(questId, false);
 			}
 		},
+
+		resetQuestCounter: function( questId ){
+			if (typeof this.list["q"+questId] != "undefined"){
+				this.list["q"+questId].tracking[0][0] = 0;
+			}
+		},
 		
 		resetLoop: function( questIds ){
 			for(var ctr in questIds){
 				this.resetQuest( questIds[ctr] );
 			}
 		},
+
+		resetCounterLoop: function( questIds ){
+			for(var ctr in questIds){
+				this.resetQuestCounter( questIds[ctr] );
+			}
+		}
 		
 		resetDailies :function(){
 			this.load();
 			console.log("resetting dailies");
 			this.resetLoop([201, 216, 210, 211, 218, 212, 226, 230, 303, 304, 402, 403, 503, 504, 605, 606, 607, 608, 609, 619, 702]);
+			this.resetCounterLoop([311]);
 			this.save();
 		},
 		
@@ -300,7 +313,7 @@ Uses KC3Quest objects to play around with
 		resetMonthlies :function(){
 			this.load();
 			console.log("resetting monthlies");
-			this.resetLoop([249, 256, 257, 259, 265, 264, 266]);
+			this.resetLoop([249, 256, 257, 259, 265, 264, 266, 311]);
 			this.save();
 		},
 		clear :function(){
