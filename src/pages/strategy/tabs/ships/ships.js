@@ -327,7 +327,7 @@
 				// var totals = {lv:0, hp:0, fp:0, tp:0, aa:0, ar:0, as:0, ev:0, ls:0, lk:0 };
 				
 				// Fill up list
-				for(shipCtr in FilteredShips){
+				Object.keys(FilteredShips).forEach(function(shipCtr){
 					if(shipCtr%10 === 0){
 						$("<div>").addClass("ingame_page").html("Page "+Math.ceil((Number(shipCtr)+1)/10)).appendTo(self.shipList);
 					}
@@ -399,7 +399,7 @@
 							cElm.addClass('modernization-max');
 						else
 							cElm.addClass('modernization-able');
-				}
+				});
 				
 				// Show totals
 				/*$(".tab_ships .ship_totals .total_level").text(totals.lv);
