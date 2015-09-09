@@ -1140,13 +1140,25 @@
 			});
 			
 			// Extra item get
-			var gotItem = false;
+			var
+				gotItem = false,
+				useItemMap = { // guess useitem map
+					'-1':"bucket",
+					 1:"bucket", // if devs fixed it.
+					 2:"ibuild",
+					 3:"devmat",
+					 4:"screws",
+					10:"box1",
+					11:"box2",
+					12:"box3",
+				}; // for item array ["","bucket","ibuild","devmat","screws","5","6","7","8","9","box1","box2","box3"] (imo, array consumes more memory than hash/object xD)
+			
 			$(".module.activity .activity_expedition .expres_noget").hide();
 			$(".activity_expedition .expres_item").each(function(i,element){
 				var useItem = data.response["api_get_item"+(i+1)];
-				if(!!useItem && useItem.api_useitem_id > 0) {
-					gotItem = true;
-					$("img", element).attr("src", "../../../../assets/img/client/"+["bucket","ibuild","devmat","screws","","","","","","box1", "box2", "box3"][useItem.api_useitem_id]+".png");
+				if(!!useItem && !!useItem.api_useitem_id) {
+					gotItem |= true;
+					$("img", element).attr("src", "../../../../assets/img/client/"+useItemMap[useItem.api_useitem_id]+".png");
 					$("span", element).text( useItem.api_useitem_count );
 				}else{
 					$(element).hide();
