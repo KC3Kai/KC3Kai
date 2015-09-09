@@ -293,7 +293,7 @@ Uses KC3Quest objects to play around with
 			for(var ctr in questIds){
 				this.resetQuestCounter( questIds[ctr] );
 			}
-		}
+		},
 		
 		resetDailies :function(){
 			this.load();
