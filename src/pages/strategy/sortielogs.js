@@ -299,7 +299,7 @@
 				// Create sortie box
 				sortieBox = $(".tab_"+tabCode+" .factory .sortie_box").clone().appendTo(".tab_"+tabCode+" .sortie_list");
 				if(sortie.world >= 10) {
-					sortie.diff = sortie.diff || maps["m"+sortie.world+sortie.mapnum].difficulty || 0;
+					sortie.diff = sortie.diff || (maps["m"+sortie.world+sortie.mapnum] || {difficulty:0}).difficulty || 0;
 				}
 				if((sortie.diff || 0) > 0)
 					$(sortieBox)

@@ -642,6 +642,7 @@ Previously known as "Reactor"
 					PlayerManager.repairShips.splice(HerRepairIndex, 1);
 				}
 				KC3ShipManager.get( ship_id ).hp[0] = KC3ShipManager.get( ship_id ).hp[1];
+				KC3ShipManager.get( ship_id ).resetAfterHp();
 				KC3TimerManager.repair( nDockNum ).deactivate();
 			}
 			
@@ -659,6 +660,7 @@ Previously known as "Reactor"
 			var ship_id = PlayerManager.repairShips[ params.api_ndock_id ];
 			PlayerManager.repairShips.splice(params.api_ndock_id, 1);
 			KC3ShipManager.get( ship_id ).hp[0] = KC3ShipManager.get( ship_id ).hp[1];
+			KC3ShipManager.get( ship_id ).resetAfterHp();
 			KC3TimerManager.repair( params.api_ndock_id ).deactivate();
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Timers");
@@ -728,7 +730,14 @@ Previously known as "Reactor"
 				}
 				KC3Network.trigger("Quests");
 			}
-			KC3Network.trigger("ExpedResult",{params:params,response:response.api_data});
+			
+			KC3Network.trigger("ExpedResult",{
+				expedNum:expedNum,
+				params:params,
+				response:response.api_data
+			});
+			
+			console.log("Fleet #",params.api_deck_id,"has returned from Expedition #",expedNum,"with result",response.api_data);
 			KC3Database.Expedition({
 				data     :response.api_data,
 				mission  :expedNum,
@@ -826,7 +835,7 @@ Previously known as "Reactor"
 		/* View World Maps
 		-------------------------------------------------------*/
 		"api_get_member/mapinfo":function(params, response, headers){
-			var maps = {};
+			var maps = JSON.parse(localStorage.maps);
 			var ctr, thisMap;
 			for(ctr in response.api_data){
 				thisMap = response.api_data[ctr];
