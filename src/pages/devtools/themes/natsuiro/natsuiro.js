@@ -85,7 +85,7 @@
 		// Timer Type Toggle
 		$(".status_docking,.status_akashi").on("click",function(){
 			ConfigManager.scrollTimerType();
-			NatsuiroListeners.TimerTick();
+			UpdateRepairTimerDisplays();
 		}).addClass("hover");
 		
 		// Screenshot buttons
@@ -175,7 +175,7 @@
 		// Update Timer UIs
 		setInterval(function(){
 			KC3TimerManager.update();
-			TimerTick();
+			UpdateRepairTimerDisplays();
 		}, 1000);
 		
 		// Devbuild: auto-activate dashboard while designing
@@ -1203,14 +1203,6 @@
 			$("img", thisStatBox).attr("src", "../../../../assets/img/stats/"+Code+".png");
 			$(".equipStatText", thisStatBox).text( MasterItem["api_"+StatProperty] );
 		}
-	}
-	
-	function TimerTick(){
-		var
-			context = $(".module.status"),
-			dockElm = $(".status_docking .status_text",context),
-			koskElm = $(".status_akashi  .status_text",context);
-		UpdateRepairTimerDisplays($(dockElm).data("value"),$(koskElm).data("value"));
 	}
 	
 	function UpdateRepairTimerDisplays(docking, akashi){
