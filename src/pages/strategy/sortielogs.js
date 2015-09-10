@@ -51,7 +51,7 @@
 					mapBox = $(".tab_"+tabCode+" .factory .map_box").clone().appendTo(".tab_"+tabCode+" .map_list");
 					$(".map_title", mapBox)
 						.text((function(x){
-							return (x>=10) ? KC3Meta.term("StrategyEventGo" + (ConfigManager.info_troll ? "P" : "")) : ("All W"+x);
+							return (x>=10) ? KC3Meta.term("StrategyEventGo") : ("All W"+x);
 						})(self.selectedWorld));
 					
 					for(countMaps = 1;!!self.maps["m"+self.selectedWorld+countMaps];countMaps++){}
@@ -112,7 +112,7 @@
 											mapBox
 												.addClass("justdoit")
 												.attr("title","just kill her already, yesterday you said tommorow! JUST DO IT!!!"); // placeholder class... 
-										$(".map_hp_txt", mapBox).text(ConfigManager.info_troll ? "#JustDoIt!" : KC3Meta.term("StrategyEvents1HP"));
+										$(".map_hp_txt", mapBox).text(KC3Meta.term("StrategyEvents1HP"));
 									}
 								// If kill-based gauge
 								}else{
@@ -304,7 +304,7 @@
 				if((sortie.diff || 0) > 0)
 					$(sortieBox)
 						.addClass("sortie_rank_"+sortie.diff)
-						.attr("data-diff",KC3Meta.term("EventHistoryRank"+sortie.diff+(ConfigManager.info_troll ? "X" : "")));
+						.attr("data-diff",KC3Meta.term("EventHistoryRank"+sortie.diff));
 				$(".sortie_id", sortieBox).html( sortie.id );
 				$(".sortie_date", sortieBox).html( new Date(sortie.time*1000).format("mmm d") );
 				$(".sortie_date", sortieBox).attr("title", new Date(sortie.time*1000).format("mmm d, yyyy hh:MM:ss") );

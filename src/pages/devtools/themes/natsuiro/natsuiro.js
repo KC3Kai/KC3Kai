@@ -175,7 +175,17 @@
 		// Update Timer UIs
 		setInterval(function(){
 			KC3TimerManager.update();
-			UpdateRepairTimerDisplays();
+			var TotalFleet = selectedFleet == 5 ? [0,1] : [selectedFleet-1];
+			var data = TotalFleet.map(function(x){return PlayerManager.fleets[x].highestRepairTimes();})
+				.reduce(function(pre,cur){
+					var data = {};
+					$.extend(pre,data);
+					Object.keys(pre).forEach(function(k){
+						data[k] = Math.max(pre[k],cur[k]);
+					});
+					return data;
+				});
+			UpdateRepairTimerDisplays(data);
 		}, 1000);
 		
 		// Devbuild: auto-activate dashboard while designing
@@ -430,19 +440,23 @@
 				// Compile fleet attributes
 				FleetSummary = {
 					lv: MainFleet.totalLevel() + EscortFleet.totalLevel(),
-					elos: Math.round( (MainFleet.eLoS()+EscortFleet.eLoS()) * 100) / 100,
-					air: Math.round( (MainFleet.fighterPower() + EscortFleet.fighterPower())* 100) / 100,
+					elos: Math.qckInt(null,MainFleet.eLoS()+EscortFleet.eLoS(),2),
+					air: Math.qckInt(null,MainFleet.fighterPower() + EscortFleet.fighterPower(),2),
 					speed:
 						(MainFleet.fastFleet && EscortFleet.fastFleet)
 						? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow"),
 					docking:
-						(MainRepairs.docking > EscortRepairs.docking)
-						? MainRepairs.docking : EscortRepairs.docking,
+						Math.max(MainRepairs.docking,EscortRepairs.docking),
 					akashi:
-						(MainRepairs.akashi > EscortRepairs.akashi)
-						? MainRepairs.akashi : EscortRepairs.akashi,
+						Math.max(MainRepairs.akashi,EscortRepairs.akashi),
 					hasTaiha: MainFleet.hasTaiha() || EscortFleet.hasTaiha(),
 					supplied: MainFleet.isSupplied() && EscortFleet.isSupplied(),
+					badState: [
+						MainFleet.needsSupply()  || EscortFleet.needsSupply(),
+						MainFleet.cannotSortie() || EscortFleet.cannotSortie(),
+						MainFleet.ship(0).isTaiha(),
+						EscortFleet.ship(0).isStriped()
+					],
 					lowestMorale:
 						(MainFleet.lowestMorale() < EscortFleet.lowestMorale())
 						? MainFleet.lowestMorale() : EscortFleet.lowestMorale(),
@@ -480,7 +494,12 @@
 					akashi: MainRepairs.akashi,
 					hasTaiha: CurrentFleet.hasTaiha(),
 					supplied: CurrentFleet.isSupplied(),
-					badlySupplied: false,
+					badState: [
+						CurrentFleet.needsSupply(),
+						CurrentFleet.cannotSortie(),
+						CurrentFleet.ship(0).isTaiha(),
+						false
+					],
 					lowestMorale: CurrentFleet.lowestMorale(),
 					supportPower: CurrentFleet.supportPower()
 				};
@@ -514,13 +533,13 @@
 				(KC3SortieManager.onSortie &&
 					KC3SortieManager.fullSupplyMode &&
 					(KC3SortieManager.fleetSent == (PlayerManager.combinedFleet ? 1 : selectedFleet)))) &&
-				(!FleetSummary.badlySupplied)
+				(!FleetSummary.badState[0])
 			){
 				$(".module.status .status_supply .status_text").text( KC3Meta.term("PanelSupplied") );
 				$(".module.status .status_supply img").attr("src", "../../../../assets/img/ui/check.png");
 				$(".module.status .status_supply .status_text").addClass("good");
 			}else{
-				$(".module.status .status_supply .status_text").text( KC3Meta.term("PanelNotSupplied") );
+				$(".module.status .status_supply .status_text").text(KC3Meta.term(FleetSummary.badState[0] ? "PanelUnderSupplied" : "PanelNotSupplied"));
 				$(".module.status .status_supply img").attr("src", "../../../../assets/img/ui/sunk.png");
 				$(".module.status .status_supply .status_text").addClass("bad");
 			}
@@ -543,8 +562,10 @@
 			}
 			
 			// STATUS: TAIHA
-			if( FleetSummary.hasTaiha ){
-				$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelHasTaiha") );
+			if( FleetSummary.hasTaiha || FleetSummary.badState[2] || FleetSummary.badState[3] ){
+				$(".module.status .status_repair .status_text").text( KC3Meta.term(
+					(FleetSummary.badState[2] ? "PanelFSTaiha" : (FleetSummary.badState[3] ? "PanelEscortChuuha" : "PanelHasTaiha"))
+				) );
 				$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/sunk.png");
 				$(".module.status .status_repair .status_text").addClass("bad");
 			}else{
@@ -1140,13 +1161,26 @@
 			});
 			
 			// Extra item get
-			var gotItem = false;
+			var
+				gotItem = false,
+				useItemMap = { // guess useitem map
+					 1:"bucket",
+					 2:"ibuild",
+					 3:"devmat",
+					10:"box1",
+					11:"box2",
+					12:"box3",
+				}; // for item array ["","bucket","ibuild","devmat","screws","5","6","7","8","9","box1","box2","box3"] (imo, array consumes more memory than hash/object xD)
+			
 			$(".module.activity .activity_expedition .expres_noget").hide();
 			$(".activity_expedition .expres_item").each(function(i,element){
-				var useItem = data.response["api_get_item"+(i+1)];
-				if(!!useItem && useItem.api_useitem_id > 0) {
-					gotItem = true;
-					$("img", element).attr("src", "../../../../assets/img/client/"+["bucket","ibuild","devmat","screws","","","","","","box1", "box2", "box3"][useItem.api_useitem_id]+".png");
+				var
+					useCons = data.response.api_useitem_flag[i],
+					useItem = data.response["api_get_item"+(i+1)];
+				if(!!useCons && !!useItem) {
+					gotItem |= true;
+					$(element).show();
+					$("img", element).attr("src", "../../../../assets/img/client/"+useItemMap[useCons === 4 ? useItem.api_useitem_id : useCons]+".png");
 					$("span", element).text( useItem.api_useitem_count );
 				}else{
 					$(element).hide();
@@ -1210,18 +1244,26 @@
 			context = $(".module.status"),
 			dockElm = $(".status_docking .status_text",context),
 			koskElm = $(".status_akashi  .status_text",context); // kousaka-kan
-		if(docking!==undefined) dockElm.data("value",docking);
-		if( akashi!==undefined) koskElm.data("value", akashi);
-		switch (ConfigManager.timerDisplayType) {
-		case 1:
-			dockElm.text(String(-dockElm.data("value")).toHHMMSS());
-			koskElm.text(String(-koskElm.data("value")).toHHMMSS());
-			break;
-		case 2:
-			dockElm.text(String(dockElm.data("value") || NaN).plusCurrentTime());
-			koskElm.text(String(koskElm.data("value") || NaN).plusCurrentTime());
-			break;
+		if(typeof docking==="object") {
+			akashi  = docking.akashi;
+			docking = docking.docking;
 		}
+		if(typeof docking!=="undefined") dockElm.data("value",Math.ceil(docking));
+		if(typeof  akashi!=="undefined") koskElm.data("value",Math.ceil( akashi));
+		[dockElm,koskElm].forEach(function(elm){
+			elm.removeClass("bad").removeAttr("title");
+			switch (ConfigManager.timerDisplayType) {
+			case 1:
+				elm.text(String(-elm.data("value")).toHHMMSS());
+				break;
+			case 2:
+				elm.text(String(elm.data("value") || NaN).plusCurrentTime());
+				if((elm.data("value") || 0) > 86400) {
+					elm.addClass("bad").attr("title","More than 24 hours");
+				}
+				break;
+			}
+		});
 	}
 	
 })();

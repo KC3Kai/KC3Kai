@@ -642,12 +642,13 @@ Previously known as "Reactor"
 					PlayerManager.repairShips.splice(HerRepairIndex, 1);
 				}
 				KC3ShipManager.get( ship_id ).hp[0] = KC3ShipManager.get( ship_id ).hp[1];
+				KC3ShipManager.get( ship_id ).morale = Math.max(KC3ShipManager.get( ship_id ).morale,40);
 				KC3ShipManager.get( ship_id ).resetAfterHp();
 				KC3TimerManager.repair( nDockNum ).deactivate();
 			}
 			
 			KC3QuestManager.get(503).increment(); // E3: Daily Repairs
-                        KC3Network.trigger("Consumables");
+			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Quests");
 			KC3Network.trigger("Fleet");
 		},
@@ -660,6 +661,7 @@ Previously known as "Reactor"
 			var ship_id = PlayerManager.repairShips[ params.api_ndock_id ];
 			PlayerManager.repairShips.splice(params.api_ndock_id, 1);
 			KC3ShipManager.get( ship_id ).hp[0] = KC3ShipManager.get( ship_id ).hp[1];
+			KC3ShipManager.get( ship_id ).morale = Math.max(KC3ShipManager.get( ship_id ).morale,40);
 			KC3ShipManager.get( ship_id ).resetAfterHp();
 			KC3TimerManager.repair( params.api_ndock_id ).deactivate();
 			KC3Network.trigger("Consumables");

@@ -80,6 +80,9 @@
 	"SettingsHQExpLeft"    : "Remaining EXP",
 	"SettingsHQExpCurrent" : "Current Level",
 	"SettingsHQExpTotal"   : "Total Gained",
+	"SettingsTimerDisplayType" : "Timer Display Type",
+	"SettingsTimeRemaining" : "Remaining",
+	"SettingsTimeFinished" : "Finished",
 	
 	"SettingsGameInfo" : "Thông tin Trò chơi",
 	"SettingsDropFaces" : "Tàu vớt được khi Xuất kích",
@@ -101,6 +104,8 @@
 	
 	"SettingsAlerts" : "Thông báo",
 	"SettingsTimeDiff" : "Timer Allowance",
+	"SettingsMoraleNotif" : "Morale Notification",
+	"SettingsMoraleValue" : "Morale Minimum",
 	"SettingsSeconds" : "giây",
 	"SettingsSoundType" : "Tiếng chuông",
 	"SettingsDing" : "DING!",
@@ -131,6 +136,17 @@
 	"SettingsPanelSize" : "Kích cỡ Panel",
 	"SettingsPanelOpacity" : "Độ trong suốt của Giao diện",
 	"SettingsGearHolder" : "Màu nền Trang bị",
+	
+	"SettingsLegacyPanel" : "Panel: Legacy Theme",
+	
+	"SettingsChuuiWarningDangerousFeature" : "Are you sure that you really want to change this?\nAny risks that you're attempting is beyond KC3改's responsibility.\n\nMake sure you're know what to do before.",
+	"SettingsErrorNG" : "Saved!",
+	"SettingsErrorSuper" : "Invalid value!",
+	"SettingsErrorAbove" : "exceeds",
+	"SettingsErrorBelow" : "under",
+	"SettingsErrorLength" : "Value Length",
+	"SettingsErrorValue" : "Value",
+	"SettingsErrorOrder" : "%TYP %CMP %VAL",
 	
 	"Small" : "Nhỏ",
 	"Big" : "To",
@@ -164,9 +180,6 @@
 
 	"PredictionStampSortie" : "Chìm",
 	"PredictionStampPvP" : "Đánh Bại",
-	"PredictionStampEscort" : "Escort",
-	"PredictionStampMVPUseful" : "MVP",
-	"PredictionStampMVPUseless" : "kek",
 	
 	"EventHistoryRank1"  : "DỄ",
 	"EventHistoryRank2"  : "THƯỜNG",
@@ -174,19 +187,32 @@
 	"EventHistoryRank1X" : "KIDS CHOICE",
 	"EventHistoryRank2X" : "HELL AF",
 	"EventHistoryRank3X" : "GET REKT SON",
-
+	"StrategyEventGo"    : "Event Run",
+	"StrategyEventGoP"   : "#Despair",
+	
 	"PanelDocking" : "Nhà tắm",
 	"PanelAkashi" : "Akashi",
-	"PanelNoRepair" : "No repairs needed",
+	"PanelNoRepair" : "Không cần sửa chữa",
+	"PanelCantRepair" : "Không thể sửa chữa",
 	"PanelHighestDocking" : "Highest Repair Docks Time",
 	"PanelHighestAkashi" : "Highest Akashi Repair Time",
 	
 	"PanelHasTaiha" : "Critical",
 	"PanelNoTaiha" : "HP good",
 	"PanelSupplied" : "Supply good",
-	"PanelNotSupplied" : "Need resupply",
+	"PanelNotSupplied" : "Supply bad",
+	"PanelGreatMorale" : "Great Morale",
 	"PanelGoodMorale" : "Morale good",
 	"PanelSupportPower" : "Support Expedition Shelling Power",
+	"PanelPlanesFighter" : "Planes joining air-battle phase",
+	"PanelPlanesBomber" : "Planes joining bombing phase",
+	
+	"MissionLabelActivity" : "Trạng thái",
+	"MissionGetItems" : "Vật phẩm:",
+	"MissionActivity0" : "Huỷ bỏ",
+	"MissionActivity1" : "Thất bại",
+	"MissionActivity2" : "Thành công",
+	"MissionActivity3" : "Đại thành công",
 	
 	"CombinedCarrier" : "Carrier TF",
 	"CombinedSurface" : "Surface TF",
@@ -196,6 +222,7 @@
 	"LevelShort" : "Lv.",
 	"LevelNext" : "Next",
 	"Screenshot" : "Chụp màn hình",
+	"Expedition" : "Expedition",
 	"UntranslatedQuest" : "Untranslated Quest",
 	
 	"StrategyEvents1HP" : "Last Kill!",
