@@ -4,96 +4,96 @@
         "desc": "在第一舰队中编成入2个舰娘"
     },
     "102": {
-        "name": "Form a Destroyer Squadron!",
-        "desc": "Have 4 DD in your main fleet."
+        "name": "“驱逐队”编成！",
+        "desc": "以驱逐舰四艘编成“驱逐队”！"
     },
     "103": {
-        "name": "Form a Torpedo Squadron!",
-        "desc": "Have a CL as a flagship and 5 DD in your main fleet."
+        "name": "“水雷战队”编成！",
+        "desc": "编成以轻巡洋舰为旗舰，加上数艘驱逐舰构成的“水雷战队”！ "
     },
     "104": {
-        "name": "Form a Six Ship Fleet!",
-        "desc": "Have 6 ships in your main fleet."
+        "name": "编成6艘规模的舰队！",
+        "desc": "编成6艘规模的主力舰队"
     },
     "105": {
-        "name": "Form a Squadron with Two CL!",
-        "desc": "Have 2 CL in your main fleet."
+        "name": "编成拥有2艘轻巡的舰队！",
+        "desc": "编成拥有2艘轻巡洋舰的高速舰队"
     },
     "106": {
-        "name": "Form a Heavy Cruiser Squadron!",
-        "desc": "Have 2 CA in your main fleet."
+        "name": "“重巡战队”编成！",
+        "desc": "编成拥有2艘重巡的重巡舰队！"
     },
     "107": {
-        "name": "Form a Carrier Task Force!",
-        "desc": "Have a CV\/CVL as a flagship and 3 DD in your main fleet."
+        "name": "在第二舰队编成空母机动部队！",
+        "desc": "在第二舰队配备空母，编成空母机动部队！"
     },
     "108": {
-        "name": "Form the Tenryuu-class!",
-        "desc": "Have Tenryuu (\u5929\u9f8d) and Tatsuta (\u9f8d\u7530) in your main fleet."
+        "name": "“天龙”型轻巡姐妹全部2舰编成！",
+        "desc": "将天龙型轻巡洋舰“天龙”“龙田”配备在同一舰队！"
     },
     "109": {
-        "name": "Form the Sendai-class!",
-        "desc": "Have Sendai (\u5ddd\u5185), Jintsuu (\u795e\u901a) and Naka (\u90a3\u73c2) in your main fleet."
+        "name": "“川内”型轻巡姐妹全部3舰编成！",
+        "desc": "川内型轻巡洋舰，将“川内”“神通”“那珂”编成在同一舰队！"
     },
     "110": {
-        "name": "Form the Myoukou-class!",
-        "desc": "Have Myoukou (\u5999\u9ad8), Nachi (\u90a3\u667a), Ashigara (\u8db3\u67c4) and Haguro (\u7fbd\u9ed2) in your main fleet."
+        "name": "“妙高”型重巡姐妹全部4舰编成！",
+        "desc": "将妙高型重巡洋舰“妙高”“那智”“足柄”“羽黑”配属在同一舰队！"
     },
     "111": {
-        "name": "Form the Fusou-class!",
-        "desc": "Have Fusou (\u6276\u6851) and Yamashiro (\u5c71\u57ce) in your main fleet."
+        "name": "“扶桑”型战舰姐妹全部2舰编成！",
+        "desc": "将扶桑型战舰“扶桑”“山城”配属在同一舰队！"
     },
     "112": {
-        "name": "Form the Ise-class!",
-        "desc": "Have Ise (\u4f0a\u52e2) and Hyuuga (\u65e5\u5411) in your main fleet."
+        "name": "“伊势”型战舰姐妹全部2舰编成！",
+        "desc": "将伊势型战舰“伊势”“日向”配属在同一舰队！"
     },
     "113": {
-        "name": "Form the Main Fleet with BB and CA!",
-        "desc": "Have a BB and 2 CA in your main fleet."
+        "name": "使用战舰和重巡编成主力舰队！",
+        "desc": "以战舰1艘以上，重巡2艘以上作为主力编成水上打击舰队！"
     },
     "114": {
-        "name": "Form the Nagumo Task Force!",
-        "desc": "Have ONLY Akagi (\u8d64\u57ce), Kaga (\u52a0\u8cc0), Hiryuu (\u98db\u9f8d) and Souryuu (\u84bc\u9f8d) in your main fleet."
+        "name": "“南云机动部队”编成！",
+        "desc": "将一航战“赤城”“加贺”二航战“飞龙”“苍龙”编成第一机动部队！"
     },
     "115": {
-        "name": "Form the Second Fleet!",
-        "desc": "Have a flagship in your second fleet."
+        "name": "第二舰队编成！",
+        "desc": "在第2舰队指定旗舰"
     },
     "116": {
-        "name": "Ready a Seaplane Tender",
-        "desc": "Have an AV in your main fleet."
+        "name": "配备“水上机母舰”！",
+        "desc": "在舰队中配备能使用大量水上侦察机的“水上飞机母舰”！"
     },
     "117": {
-        "name": "Form a Carrier Task Force in the Second Fleet!",
-        "desc": "Have a CV\/CVL and 3 DD in your second fleet."
+        "name": "在第二舰队编成空母机动部队！",
+        "desc": "在第二舰队配备空母，编成空母机动部队！"
     },
     "118": {
-        "name": "Form the Kongou-class!",
-        "desc": "Have Kongou (\u91d1\u525b), Hiei (\u6bd4\u53e1), Haruna (\u699b\u540d) and Kirishima (\u9727\u5cf6) in your main fleet."
+        "name": "使用“金刚”型编成高速战舰部队！",
+        "desc": "将金刚型战舰“金刚”“比睿”“榛名”“雾岛”全部4艘集中配备！"
     },
     "119": {
-        "name": "Form the Mikawa Fleet!",
-        "desc": "Have Choukai (\u9ce5\u6d77), Aoba (\u9752\u8449), Kako (\u52a0\u53e4), Furutaka (\u53e4\u9df9), Tenryuu (\u5929\u9f8d) and a FAST speed ship in your main fleet."
+        "name": "“三川舰队”编成！",
+        "desc": "编成包含“鸟海”“青叶”“加古”“古鹰”“天龙”在内的高速舰队"
     },
     "120": {
-        "name": "Form the Destroyer Division 6!",
-        "desc": "Have ONLY Akatsuki (\u6681), Hibiki (\u97ff), Inazuma (\u96f7) and Ikazuchi (\u96fb) in your main fleet."
+        "name": "“第六驱逐队”编成！",
+        "desc": "以“晓”“响”“雷”“电”4艘编成第六驱逐队！"
     },
     "121": {
-        "name": "Form the Cruiser Division 4!",
-        "desc": "Have Atago (\u611b\u5b95), Takao (\u9ad8\u96c4), Choukai (\u9ce5\u6d77) and Maya (\u6469\u8036) in your main fleet."
+        "name": "“第四战队”编成！",
+        "desc": "以“爱宕”“高雄”“鸟海”“摩耶”为基干编成第四战队！"
     },
     "122": {
-        "name": "Form the Nishimura Fleet!",
-        "desc": "Have Fusou (\u6276\u6851), Yamashiro (\u5c71\u57ce), Mogami (\u6700\u4e0a) and Shigure (\u6642\u96e8) in your main fleet."
+        "name": "“西村舰队”编成！",
+        "desc": "以“扶桑”“山城”“最上”“时雨”为基干编成西村舰队！"
     },
     "123": {
-        "name": "Form the Carrier Division 5!",
-        "desc": "Have Shoukaku (\u7fd4\u9db4), Zuikaku (\u745e\u9db4) and 2 DD in your main fleet."
+        "name": "“第五航空战队”编成！",
+        "desc": "以“翔鹤”“瑞鹤”为基干，加上两只驱逐舰编成第五航空战队！"
     },
     "124": {
-        "name": "Form the New Mikawa Fleet!",
-        "desc": "Have Choukai (\u9ce5\u6d77), Aoba (\u9752\u8449), Kinugasa (\u8863\u7b20), Kako (\u52a0\u53e4), Furutaka (\u53e4\u9df9) and Tenryuu (\u5929\u9f8d) in your main fleet."
+        "name": "新“三川舰队”编成！",
+        "desc": "以“鸟海”“青叶”“衣笠”“加古”“古鹰”“天龙”编成三川舰队！"
     },
     "125": {
         "name": "Form a Submarine Fleet!",

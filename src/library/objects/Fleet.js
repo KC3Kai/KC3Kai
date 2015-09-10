@@ -12,6 +12,7 @@ Contains summary information about a fleet and its 6 ships
 		this.name = "";
 		this.ships = [ -1, -1, -1, -1, -1, -1 ];
 		this.mission = [ 0, 0, 0, 0 ];
+		this.akashi_tick = 0; // TODO: if not lazy _(:3
 	};
 	
 	KC3Fleet.prototype.update = function( data ){
@@ -154,6 +155,22 @@ Contains summary information about a fleet and its 6 ships
 			&& this.ship(3).isSupplied()
 			&& this.ship(4).isSupplied()
 			&& this.ship(5).isSupplied();
+	};
+	
+	KC3Fleet.prototype.needsSupply = function(){
+		var self = this;
+		return Array.apply(null, this.ships)
+			.map(Number.call, Number)
+			.map(function(x){return self.ship(x).isNeedSupply();})
+			.reduce(function(x,y){return x||y;});
+	};
+	
+	KC3Fleet.prototype.cannotSortie = function(){
+		var self = this;
+		return Array.apply(null, this.ships)
+			.map(Number.call, Number)
+			.map(function(x){return self.ship(x).cannotSortie();})
+			.reduce(function(x,y){return x||y;}) || this.ship(0).isTaiha();
 	};
 	
 	KC3Fleet.prototype.lowestMorale = function(){

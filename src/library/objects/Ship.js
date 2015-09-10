@@ -82,12 +82,45 @@ KC3改 Ship Object
 	KC3Ship.prototype.equipment = function(slot){ return KC3GearManager.get( this.items[slot] ); };
 	KC3Ship.prototype.isFast = function(){ return this.master().api_soku>=10; };
 	KC3Ship.prototype.exItem = function(){ return (this.ex_item>0)?KC3GearManager.get(this.ex_item):false; };
-	KC3Ship.prototype.isTaiha = function(){ return (this.hp[0]/this.hp[1] <= 0.25) && (this.hp[1]>0); };
+	KC3Ship.prototype.isStriped = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.5); };
+	KC3Ship.prototype.isTaiha   = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.25); };
 	
 	KC3Ship.prototype.isSupplied = function(){
 		if(this.rosterId===0){ return true; }
 		return this.fuel == this.master().api_fuel_max
 			&& this.ammo == this.master().api_bull_max;
+	};
+	
+	KC3Ship.prototype.cannotSortie = function(){
+		if(this.rosterId===0){ return false; }
+		return (this.fuel || this.ammo || 0) <= 0;
+	};
+	
+	KC3Ship.prototype.isNeedSupply = function(){
+		if(this.rosterId===0){ return false; }
+		var 
+			fpc  = function(x,y){return Math.qckInt("round",(x / y) * 10);},
+			fuel = fpc(this.fuel,this.master().api_fuel_max),
+			ammo = fpc(this.ammo,this.master().api_bull_max);
+		return Math.min(fuel,ammo) <= ConfigManager.alert_supply;
+	};
+	
+	KC3Ship.prototype.onFleet = function(){
+		var shipList = PlayerManager.fleets.map(function(x){return x.ships;}).reduce(function(x,y){return x.concat(y);});
+		return Math.qckInt("ceil",(shipList.indexOf(this.rosterId) + 1)/6,0);
+	};
+	
+	KC3Ship.prototype.isRepaired = function(){
+		return PlayerManager.repairShips.indexOf(this.rosterId)>=0;
+	};
+	
+	KC3Ship.prototype.isAway = function(){
+		return this.onFleet() > 1 /* ensures not in main fleet */
+			&& (KC3TimerManager.exped(this.onFleet()) || {active:false}).active; /* if there's a countdown on expedition, means away */
+	};
+	
+	KC3Ship.prototype.isFree = function(){
+		return !(this.isRepaired() || this.isAway());
 	};
 	
 	KC3Ship.prototype.resetAfterHp = function(){
@@ -100,13 +133,16 @@ KC3改 Ship Object
 	Get ship's docking and Akashi times
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.repairTime = function(){
-		var RepairCalc = PS['KanColle.RepairTime'];
+		var
+			RepairCalc = PS['KanColle.RepairTime'];
 		return {
-			docking: RepairCalc.dockingInSecJSNum( this.master().api_stype, this.level, this.hp[0], this.hp[1] ),
+			docking:
+				this.isRepaired() ?
+				Math.ceil(KC3TimerManager.repair(PlayerManager.repairShips.indexOf(this.rosterId)).remainingTime()) / 1000 :
+				RepairCalc.dockingInSecJSNum( this.master().api_stype, this.level, this.hp[0], this.hp[1] ),
 			akashi:
-				( this.hp[0] / this.hp[1] > 0.50 )
-				?RepairCalc.facilityInSecJSNum( this.master().api_stype, this.level, this.hp[0], this.hp[1] )
-				:0
+				( this.hp[0] / this.hp[1] > 0.50 && this.isFree()) ?
+				RepairCalc.facilityInSecJSNum( this.master().api_stype, this.level, this.hp[0], this.hp[1] ) : 0
 		};
 	};
 	

@@ -842,8 +842,12 @@
 	line-height:16px;
 	margin:0px 0px 5px 0px;
 }
-.module.activity .activity_expedition .expres_reso {
+.module.activity .activity_expedition .expres_divHF { /* divide half */
+	display:inline-block;
 	width:85px;
+	float:left;
+}
+.module.activity .activity_expedition .expres_reso {
 	float:left;
 	/*background:#fcc;*/
 	height:16px;

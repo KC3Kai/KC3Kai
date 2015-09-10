@@ -19,13 +19,19 @@ Provides access to data on built-in JSON files
 		_stype:{},
 		_servers:{},
 		_battle:{},
-		_terms:{},
+		_terms:{
+			troll:{},
+			lang:{},
+		},
 		_edges:{},
 		_defaultIcon:"",
 		
 		/* Initialization
 		-------------------------------------------------------*/
 		init :function( repo ){
+			/* to remove deprecated warning
+				http://stackoverflow.com/questions/22090764/alternative-to-async-false-ajax
+			*/
 			// Load Common Meta
 			this._icons		= JSON.parse( $.ajax(repo+'icons.json', { async: false }).responseText );
 			this._exp		= JSON.parse( $.ajax(repo+'experience.json', { async: false }).responseText );
@@ -41,7 +47,9 @@ Provides access to data on built-in JSON files
 			this._stype		= KC3Translation.getJSON(repo, 'stype', true);
 			this._servers	= KC3Translation.getJSON(repo, 'servers', true);
 			this._battle	= KC3Translation.getJSON(repo, 'battle', true);
-			this._terms		= KC3Translation.getJSON(repo, 'terms');
+			this._terms.troll		= JSON.parse( $.ajax(repo+'translations/troll/terms.json', { async: false }).responseText );
+			this._terms.lang		= KC3Translation.getJSON(repo, 'terms');
+			console.log(repo);
 		},
 		
 		/* Data Access
@@ -179,7 +187,7 @@ Provides access to data on built-in JSON files
 		},
 		
 		term: function(key) {
-			return this._terms[key] || key;
+			return (ConfigManager.info_troll && this._terms.troll[key]) || this._terms.lang[key] || key;
 		},
 
 		nodeLetter : function(worldId, mapId, edgeId) {
