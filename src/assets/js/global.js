@@ -187,7 +187,7 @@ Math.qckInt = function(command,value,rate) {
 	rate  |= 0;
 	var shift = Math.pow(10,rate);
 	return Math[command](value * shift) / shift;
-}
+};
 
 /* GOOGLE ANALYTICS
 -------------------------------*/
