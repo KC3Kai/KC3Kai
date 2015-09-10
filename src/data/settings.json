@@ -182,6 +182,16 @@
 				"options" : { "label" : "" }
 			},
 			{
+				"id" : "alert_supply",
+				"name" : "SettingsSupplyRate",
+				"type" : "small_text",
+				"bound" : {
+					"min" : 0,
+					"max" : 5
+				},
+				"options" : { "label" : "SettingsSupplyBarLabel" }
+			},
+			{
 				"id" : "alert_type",
 				"name" : "SettingsSoundType",
 				"type" : "radio",

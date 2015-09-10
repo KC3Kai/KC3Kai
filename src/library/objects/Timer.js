@@ -67,9 +67,13 @@ Has functions for TimerManager to use
 		this.element = element;
 	};
 	
+	KC3Timer.prototype.remainingTime = function(){
+		return this.active ? (this.completion - (new Date()).getTime()) : 0;
+	};
+	
 	KC3Timer.prototype.text = function(){
 		if(this.active){
-			var remaining = this.completion - (new Date()).getTime();
+			var remaining = this.remainingTime();
 			var timerAllowance = (this.type == 2)?0:ConfigManager.alert_diff;
 			remaining = Math.ceil((remaining - (timerAllowance*1000))/1000);
 			if(remaining > 0){
@@ -102,38 +106,41 @@ Has functions for TimerManager to use
 		}
 		
 		// Desktop notification
+		var notifData = { type: "basic" };
+		var shipName;
+			
+		// Notification types show varying messages
+		switch(this.type){
+			case 0:
+				var thisFleet = PlayerManager.fleets[this.num+1];
+				notifData.title = "Expedition Complete!";
+				notifData.message = "Fleet "+(this.num+2)+" just arrived from Expedition #"+thisFleet.mission[1];
+				notifData.iconUrl = "../../assets/img/quests/expedition.jpg";
+				break;
+			case 1:
+				var shipRef = KC3ShipManager.get(PlayerManager.repairShips[this.num+1]);
+				shipName = shipRef.name();
+				notifData.title = "Repairs Complete!";
+				notifData.message = shipName+" is out of the repair dock!";
+				notifData.iconUrl = "../../assets/img/quests/supply.jpg";
+				shipRef.hp[0] = shipRef.hp[1];
+				shipRef.morale = Math.max(40,shipRef.morale);
+				break;
+			case 2:
+				shipName = KC3Meta.shipName( KC3Master.ship( this.faceId ).api_name );
+				notifData.title = "Construction Complete!";
+				if(ConfigManager.info_face){
+					notifData.message = "New shipgirl "+shipName+" has been constructed!";
+				}else{
+					notifData.message = "A new shipgirl is ready to see you in the construction docks!";
+				}
+				notifData.iconUrl = "../../assets/img/quests/build.jpg";
+				break;
+			default:break;
+		}
+			
+		// Tell background page to show the notification, cant do it here
 		if(ConfigManager.alert_desktop){
-			var notifData = { type: "basic" };
-			var shipName;
-			
-			// Notification types show varying messages
-			switch(this.type){
-				case 0:
-					var thisFleet = PlayerManager.fleets[this.num+1];
-					notifData.title = "Expedition Complete!";
-					notifData.message = "Fleet "+(this.num+2)+" just arrived from Expedition #"+thisFleet.mission[1];
-					notifData.iconUrl = "../../assets/img/quests/expedition.jpg";
-					break;
-				case 1:
-					shipName = KC3ShipManager.get( PlayerManager.repairShips[this.num+1] ).name();
-					notifData.title = "Repairs Complete!";
-					notifData.message = shipName+" is out of the repair dock!";
-					notifData.iconUrl = "../../assets/img/quests/supply.jpg";
-					break;
-				case 2:
-					shipName = KC3Meta.shipName( KC3Master.ship( this.faceId ).api_name );
-					notifData.title = "Construction Complete!";
-					if(ConfigManager.info_face){
-						notifData.message = "New shipgirl "+shipName+" has been constructed!";
-					}else{
-						notifData.message = "A new shipgirl is ready to see you in the construction docks!";
-					}
-					notifData.iconUrl = "../../assets/img/quests/build.jpg";
-					break;
-				default:break;
-			}
-			
-			// Tell background page to show the notification, cant do it here
 			(new RMsg("service", "notify_desktop", {
 				notifId: this.type+"_"+this.num,
 				data: notifData
