@@ -51,6 +51,7 @@
 					ev: [this.getDerivedStatNaked("houk", ThisShip.ev[0], ThisShip.items), ThisShip.ev[0] ],
 					ls: [this.getDerivedStatNaked("saku", ThisShip.ls[0], ThisShip.items), ThisShip.ls[0] ],
 					lk: ThisShip.lk[0],
+					slots: ThisShip.slots,
 					
 					// Check whether remodel is max
 					remodel: (ThisShip.master().api_afterlv && ThisShip.master().api_aftershipid)
@@ -326,7 +327,7 @@
 				// var totals = {lv:0, hp:0, fp:0, tp:0, aa:0, ar:0, as:0, ev:0, ls:0, lk:0 };
 				
 				// Fill up list
-				for(shipCtr in FilteredShips){
+				Object.keys(FilteredShips).forEach(function(shipCtr){
 					if(shipCtr%10 === 0){
 						$("<div>").addClass("ingame_page").html("Page "+Math.ceil((Number(shipCtr)+1)/10)).appendTo(self.shipList);
 					}
@@ -380,10 +381,9 @@
 					// totals.ev += parseInt(cShip.ev[self.equipMode], 10);
 					// totals.ls += parseInt(cShip.ls[self.equipMode], 10);
 					
-					self.equipImg(cElm, 1, cShip.equip[0]);
-					self.equipImg(cElm, 2, cShip.equip[1]);
-					self.equipImg(cElm, 3, cShip.equip[2]);
-					self.equipImg(cElm, 4, cShip.equip[3]);
+					[1,2,3,4].forEach(function(x){
+						self.equipImg(cElm, x, cShip.slots[x-1], cShip.equip[x-1]);
+					});
 					
 					if(FilteredShips[shipCtr].locked){ $(".ship_lock img", cElm).show(); }
 					if(shipLevel >= 100 && config.kanmusuDT){ $(".ship_marry img",cElm).show(); } 
@@ -399,7 +399,7 @@
 							cElm.addClass('modernization-max');
 						else
 							cElm.addClass('modernization-able');
-				}
+				});
 				
 				// Show totals
 				/*$(".tab_ships .ship_totals .total_level").text(totals.lv);
@@ -443,18 +443,25 @@
 		
 		/* Show single equipment icon
 		--------------------------------------------*/
-		equipImg :function(cElm, equipNum, gear_id){
+		equipImg :function(cElm, equipNum, equipSlot, gear_id){
 			var element = $(".ship_equip_" + equipNum, cElm);
 			if(gear_id > -1){
 				var gear = KC3GearManager.get(gear_id);
-				if(gear.itemId===0){ element.hide(); return; }
+				if(gear.itemId<=0){ element.hide(); return; }
 
 				var masterGear = KC3Master.slotitem(gear.api_slotitem_id);
-				element.find("img")
+				$("img",element)
 					.attr("src", "../../assets/img/items/" + gear.master().api_type[3] + ".png")
 					.attr("title", gear.name());
+				$("span",element).css('visibility','hidden');
 			} else {
-				element.hide();
+				$("img",element).hide();
+				$("span",element).each(function(i,x){
+					if(equipSlot > 0)
+						$(x).text(equipSlot);
+					else
+						$(x).css('visibility','hidden');
+				});
 			}
 		}
 	};

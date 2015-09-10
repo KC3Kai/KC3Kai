@@ -427,11 +427,19 @@
         "name": "Penyerbuan Skuadron Torpedo Pertama ke Operasi 'KE'",
         "desc": "Sorti Abukuma Sebagai Kapal Pemimpin dengan Hibiki/Вер, Hatsushimo, Wakaba, Samidare dan Shimakaze ke World 3-2. Dapatkan B-Rank+ pada Bos Node."
     },
+    
 	"279": {
         "name": "Penyerbuan Skuadron Torpedo Pertama ke Operasi 'KE' Sekali Lagi!",
         "desc": "Sorti Abukuma Kai Ni Sebagai Kapal Pemimpin dengan Hibiki/Вер, Yuugumo, Naganami, Akigumo dan Shimakaze ke World 3-2. Dapatkan B-Rank+ pada Bos Node."
     },
-	
+	"285": {
+        "name": "\"Carrier Task Force\", Menuju Laut Utara!",
+        "desc": "Sortie Armada dengan Kapal Induk(CV) Sebagai kapal pemimpin ke 3-5 dan S-Rank di boss node"
+    },
+	"286": {
+        "name": "Perkuat Patroli anti kapal selam di depan pangkalan angkatan laut!",
+        "desc": "Sortie ke 1-5 dan dapatkan 4 A-ranks (Atau lebih) Pada Boss Node"
+    },
 	
 	
 	
@@ -647,7 +655,12 @@
         "name": "Upaya Meningkatkan Level Latihan Untuk Menanggulangi Operasi 'KE'",
         "desc": "Dapatkan 4 Kemenangan pada Mode Latihan pada Hari yang sama"
     },
-	
+	"311": {
+        "code": "C8",
+        "name": "Latihan Armada Elit",
+        "desc": "Dapatkan 7 Kemenangan pada mode latihan di hari yang sama",
+		"tracking": [ [0,7] ]
+    },
 	
 	
 	

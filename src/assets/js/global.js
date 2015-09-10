@@ -142,22 +142,28 @@ Date.prototype.format = function (mask, utc) {
 /* SECONDS TO HH:MM:SS
 -------------------------------*/
 String.prototype.toHHMMSS = function () {
-    var sec_num = parseInt(this, 10); // don't forget the second param
-    var hours   = Math.floor(sec_num / 3600);
-    var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
-    var seconds = sec_num - (hours * 3600) - (minutes * 60);
+	var sec_num = parseInt(this, 10); // don't forget the second param
+	var time;
+	if(isNaN(sec_num)) {
+		time = "--:--:--";
+	} else {
+		var isNeg   = sec_num < 0;
+		
+		if(isNeg) sec_num = -sec_num;
+		
+		var hours   = Math.floor(sec_num / 3600);
+		var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+		var seconds = sec_num - (hours * 3600) - (minutes * 60);
 
-    if (hours   < 10) {hours   = "0"+hours;}
-    if (minutes < 10) {minutes = "0"+minutes;}
-    if (seconds < 10) {seconds = "0"+seconds;}
-    var time    = hours+':'+minutes+':'+seconds;
-    return time;
+		if (hours   < 10) {hours   = "0"+hours;}
+		if (minutes < 10) {minutes = "0"+minutes;}
+		if (seconds < 10) {seconds = "0"+seconds;}
+		time    = (isNeg ? "-" : "")+hours+':'+minutes+':'+seconds;
+	}
+	return time;
 };
 
 /* SECONDS TO HH:MM:SS, ADDING CURRENT TIME
- * TODO: Currently does not handle intervals greater than 24 hours well.
- *       Possibly fix by prepending the date if secondsRemaining is big enough
- *       to be confusing.
 -------------------------------*/
 String.prototype.plusCurrentTime = function() {
     var currentTime = new Date();
@@ -167,10 +173,21 @@ String.prototype.plusCurrentTime = function() {
                currentTime.getSeconds();
 
     var secondsRemaining = parseInt(this, 10);
-    var timeFinished = secondsAfterMidnight + secondsRemaining;
+    var timeFinished = (secondsAfterMidnight + secondsRemaining) % 86400;
     return String(timeFinished).toHHMMSS();
 };
 
+/* LIMIT ROUNDING
+-------------------------------*/
+Math.qckInt = function(command,value,rate) {
+	if (["round","ceil","floor"].indexOf(command) < 0)
+		command = null;
+	command = command || "round";
+	value |= 0;
+	rate  |= 0;
+	var shift = Math.pow(10,rate);
+	return Math[command](value * shift) / shift;
+};
 
 /* GOOGLE ANALYTICS
 -------------------------------*/

@@ -144,8 +144,8 @@ var interactions = {
 	
 	// Quest page is opened, show overlays
 	questOverlay :function(request, sender, response){
-		// If translations enabled for API screen
-		if(!ConfigManager.api_translation){ response({success:false}); return true; }
+		//Only skip overlay generation if neither of the overlay features is enabled.
+		if(!ConfigManager.api_translation && !ConfigManager.api_tracking){ response({success:false}); return true; }
 		
 		KC3QuestManager.load();
 		$.each(request.questlist, function( index, QuestRaw ){
@@ -158,8 +158,13 @@ var interactions = {
 				
 				// Show meta, title and description
 				if( typeof QuestData.meta().available != "undefined" ){
-					$(".name", QuestBox).text( QuestData.meta().name );
-					$(".desc", QuestBox).text( QuestData.meta().desc );
+					
+					if (ConfigManager.api_translation){
+						$(".name", QuestBox).text( QuestData.meta().name );
+						$(".desc", QuestBox).text( QuestData.meta().desc );
+					}else{
+						$(".content", QuestBox).css({opacity: 0});
+					}
 					
 					if(ConfigManager.api_tracking){
 						$(".tracking", QuestBox).html( QuestData.outputHtml() );

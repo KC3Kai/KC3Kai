@@ -804,97 +804,174 @@
 
 /*------- EXPEDITION -------*/
 .module.activity .activity_expedition {
-	color: white;
+	padding:5px 10px;
 }
 
-.module.activity .activity_expedition .label_status,
-.module.activity .activity_expedition .label_admiral {
-	display: inline-block;
-	width: 33%;
+.module.activity .activity_expedition .expres_img {
+	width:170px;
+	height:30px;
+	line-height:30px;
+}
+.module.activity .activity_expedition .expres_img img {
+	width:170px;
+	height:30px;
+	vertical-align:top;
 }
 
-.module.activity .activity_expedition .label_status,
-.module.activity .activity_expedition .exp_status {
-	font-size: 1.25em;
+.module.activity .activity_expedition .expres_status {
+	width:170px;
+	font-size:14px;
+	color:#ffcc00;
+	font-weight:bold;
+	text-align:center;
+}
+.module.activity .activity_expedition .expres_num {
+	width:170px;
+	height:14px;
+	line-height:14px;
+	font-size:12px;
+	color:#ccc;
+	text-align:center;
+	margin:0px 0px 8px 0px;
 }
 
-.module.activity .activity_expedition .exp_status,
-.module.activity .activity_expedition .exp_admiral {
-	display: inline-block;
-	text-align: right;
-	width: 66%;
+.module.activity .activity_expedition .expres_resos {
+	width:170px;
+	/*background:#cfc;*/
+	height:36px;
+	line-height:16px;
+	margin:0px 0px 5px 0px;
+}
+.module.activity .activity_expedition .expres_divHF { /* divide half */
+	display:inline-block;
+	width:85px;
+	float:left;
+}
+.module.activity .activity_expedition .expres_reso {
+	float:left;
+	/*background:#fcc;*/
+	height:16px;
+	line-height:16px;
+	margin:0px 0px 2px 0px;
+}
+.module.activity .activity_expedition .expres_icon {
+	width:16px;
+	height:16px;
+	float:left;
+	margin:0px 9px 0px 0px;
+	/*background:#fcf;*/
+}
+.module.activity .activity_expedition .expres_amt {
+	width:60px;
+	height:16px;
+	float:left;
+	/*background:#ccf;*/
+	font-size:12px;
+	color:#fff;
 }
 
-.module.activity .activity_expedition .exp_admiral {
-	color: aquamarine;
-}
-
-.module.activity .activity_expedition .exp_admiral span {
-	font-weight: bold;
-	color: white;
-	font-size: 1.25em;
-}
-
-.module.activity .activity_expedition .exp_ships {
-	height:120px;
-}
-
-.module.activity .activity_expedition .exp_ship {
+.module.activity .activity_expedition .expres_items {
+	width:170px;
 	height:20px;
+	margin:0px 0px 3px 0px;
+}
+.module.activity .activity_expedition .expres_get {
+	max-width:100px;
+	height:20px;
+	line-height:20px;
+	font-size:12px;
+	color:#fff;
+	float:left;
+	margin:0px 5px 0px 0px;
+}
+.module.activity .activity_expedition .expres_noget {
+	height:20px;
+	line-height:20px;
+	font-size:12px;
+	color:#faa;
+	float:left;
+	display:none;
+}
+.module.activity .activity_expedition .expres_item {
+	width:35px;
+	height:20px;
+	line-height:20px;
+	float:left;
+	margin:0px 5px 0px 0px;
+}
+.module.activity .activity_expedition .expres_item_icon {
+	width:16px;
+	height:16px;
+	float:left;
+	margin:0px 2px 0px 0px;
+}
+.module.activity .activity_expedition .expres_item_icon img {
+	width:16px;
+	height:16px;
+	margin:2px 0px;
+	vertical-align:top;
+}
+.module.activity .activity_expedition .expres_item_text {
+	width:17px;
+	height:20px;
+	float:left;
+	font-size:12px;
+	color:#fff;
 }
 
-.module.activity .activity_expedition .exp_ship * {
-	display: inline-block;
+.module.activity .activity_expedition .expres_hqexp {
+	width:170px;
+	height:20px;
+	line-height:20px;
+	margin:0px 0px 5px 0px;
+	color:#fff;
+	font-size:14px;
+}
+.module.activity .activity_expedition .expres_hqexp_lbl {
+	font-size:14px;
+	font-weight:bold;
+}
+.module.activity .activity_expedition .expres_hqexp_amt {
+	font-size:12px;
+}
+.module.activity .activity_expedition .expres_hqexp_amt span {
+	color:#ffcc00;
+	font-size:14px;
+	font-weight:bold;
 }
 
-.module.activity .activity_expedition .exp_materials * {
-	display: inline-block;
-	width: 20%;
-	text-align: center;
+.module.activity .activity_expedition .expres_ships {
+	width:170px;
+	line-height:18px;
+	font-size:12px;
 }
-
-.module.activity .activity_expedition .exp_materials .mat_fuel {
-	color:#AAFFAA;
+.module.activity .activity_expedition .expres_ship {
+	width:85px;
+	height:18px;
+	float:left;
+	margin:0px 0px 2px 0px;
+	display:none;
 }
-.module.activity .activity_expedition .exp_materials .mat_ammo {
-	color:#999900;
+.module.activity .activity_expedition .expres_ship_img {
+	width:18px;
+	height:18px;
+	float:left;
+	margin:0px 2px 0px 0px;
 }
-.module.activity .activity_expedition .exp_materials .mat_stel {
-	color:#999999;
+.module.activity .activity_expedition .expres_ship_img img {
+	width:18px;
+	height:18px;
+	vertical-align:top;
 }
-.module.activity .activity_expedition .exp_materials .mat_baux {
-	color:#FF9933;
+.module.activity .activity_expedition .expres_ship_exp {
+	width:65px;
+	height:18px;
+	float:left;
+	color:#fff;
 }
-
-.module.activity .activity_expedition .exp_materials {
-	display: flex;
-	justify-content: center;
-}
-
-.module.activity .activity_expedition .exp_useitem {
-	display: inline-block;
-	width: 45%;
-	text-align: center;
-}
-
-.module.activity .activity_expedition .exp_ship .ship_level:before {
-	content: "Lv";
-}
-
-.module.activity .activity_expedition .exp_ship .ship_level {
-	width: 25%;
-	text-align: right;
-}
-
-.module.activity .activity_expedition .exp_ship .ship_expgain {
-	text-align: right;
-	width: 33%;
-	color: aquamarine;
-}
-
-.module.activity .activity_expedition .exp_ship .ship_expgain span {
-	font-weight: bold;
-	color: white;
+.module.activity .activity_expedition .expres_ship_exp span {
+	font-weight:bold;
+	color:#ffcc00;
 }
 
 /*------- QUESTS -------*/
