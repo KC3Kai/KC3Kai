@@ -426,7 +426,14 @@
         "name": "Nhanh chóng gửi Đệ nhất phóng lôi Hải đoàn tới Chiến dịch KE một lần nữa",
         "desc": "Xuất kích Abukuma Kai-2 làm kì hạm cùng với Hibiki/Вер, Yuugumo, Naganami, Akigumo và Shimakaze tới 3-2 và đạt ít nhất B-rank ở boss"
     },
-    
+    "285": {
+        "name": "\"Carrier Task Force\", advance to the Northern Sea!",
+        "desc": "Sortie a fleet with an aircraft carrier as flagship to 3-5 and S-Rank the boss"
+    },
+    "286": {
+        "name": "Strengthen the Anti-Submarine Patrol in Front of the Naval Base!",
+        "desc": "Sortie to 1-5 and obtain 4 A-ranks (or better) at the boss"
+    },
     
     
     "201": {
@@ -606,7 +613,7 @@
         "name": "Luyện tập đầu tiên!",
         "desc": "Thách thức một hạm đội khác trong chế độ Luyện tập"
     },
-     "303": {
+    "303": {
         "code": "C2",
         "name": "Luyện tập mỗi ngày 1",
         "desc": "Thách thức 3 hạm đội khác trong chế độ Luyện tập",
@@ -640,7 +647,12 @@
         "name": "Phấn đấu tăng cường rèn luyện để chuẩn bị một cuộc tấn công nữa lên vùng biển phía Bắc",
         "desc": "Giành được 4 chiến thắng trong chế độ Luyện tập trong cùng ngày"
     },
-    
+    "311": {
+        "code": "C8",
+        "name": "Elite Fleet Practice",
+        "desc": "Get 7 victories in Exercises within the same day",
+        "tracking": [ [0,7] ]
+    },
     
     
     
@@ -904,9 +916,7 @@
         "desc": "Thực hiện 4 lần Cải tiến thành công"
     },
     
-    
-    
-    
+
     
     "611": {
         "name": "Chuẩn bị cho tình yêu! (Phần 1)",
@@ -915,5 +925,62 @@
     "306": {
         "name": "Chuẩn bị cho tình yêu! (Phần 2)",
         "desc": "Thể hiện tình yêu bằng cách chiến thắng hai trận trong chế độ Luyện tập."
+    },
+
+    "280": {
+        "code": "SN01",
+        "name": "Second SN strategy, Initial Operations",
+        "desc": "Clear the Summer 2015 Event Map 2"
+    },
+    "620": {
+        "code": "SN02",
+        "name": "Tidying Up the Arsenal",
+        "desc": " Scrap Equipment 5 times"
+    },
+    "281": {
+        "code": "SN03",
+        "name": "Carry Out the Patrol for Main Force's Route",
+        "desc": "Sink 6 abyssal sumbarines"
+    },
+    "158": {
+        "code": "SN04",
+        "name": "Assign the Murata Squadron Torpedo Bomber to Akagi",
+        "desc": "Set Akagi as the Secretary Ship and equip her with Type 97 Torpedo Bomber (Murata Squadron)"
+    },
+    "282": {
+        "code": "SN05",
+        "name": "Snatch Away the Air Superiority in the Solomon Sea Area",
+        "desc": "Clear the Summer 2015 Event Map 4"
+    },
+    "159": {
+        "code": "SN06",
+        "name": "Reassign the Murata Squadron Torpedo Bomber to Shoukaku",
+        "desc": "Set Shoukaku as the Secretary Ship and equip her with Type 97 Torpedo Bomber (Murata Squadron)"
+    },
+    "310": {
+        "code": "SN07",
+        "name": "Naval Practice in Preparation for Operation FS",
+        "desc": "Get 4 victories in practice mode"
+    },
+    "621": {
+        "code": "SN08",
+        "name": "Model Conversion (Murata Squadron to Tenzan)",
+        "desc": "Have Shoukaku as the Secretary Ship and equip her with Type 97 Torpedo Bomber (Murata Squadron), then scrap 2 Tenzan"
+    },
+    "160": {
+        "code": "SN09",
+        "name": "Organize the Third Fleet of the Carrier Task Force",
+        "desc": "Create a Carrier Task Force (Combined Fleet) containing Shoukaku, Zuikaku and Zuihou in the first fleet"
+    },
+    "284": {
+        "code": "SN10",
+        "name": "Establish a Bridgehead to Operation FS",
+        "desc": "Sink 10 Abyssal CV(L)"
+    },
+    "283": {
+        "code": "SN11",
+        "name": "Eastern Area Dispatch Fleet, Sortie!",
+        "desc": "Clear the Summer 2015 Event Map 5"
     }
+
 }
