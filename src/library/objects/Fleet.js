@@ -163,7 +163,7 @@ Contains summary information about a fleet and its 6 ships
 			.map(Number.call, Number)
 			.map(function(x){return self.ship(x).isNeedSupply();})
 			.reduce(function(x,y){return x||y;});
-	}
+	};
 	
 	KC3Fleet.prototype.cannotSortie = function(){
 		var self = this;
@@ -171,7 +171,7 @@ Contains summary information about a fleet and its 6 ships
 			.map(Number.call, Number)
 			.map(function(x){return self.ship(x).cannotSortie();})
 			.reduce(function(x,y){return x||y;}) || this.ship(0).isTaiha();
-	}
+	};
 	
 	KC3Fleet.prototype.lowestMorale = function(){
 		var lowestMorale = 101;
