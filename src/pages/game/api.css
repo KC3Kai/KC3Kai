@@ -333,3 +333,22 @@ body {
 .ol_record_rank > p {
 	background-color: #F1EADD;
 }
+
+/* OVERLAY: SUBTITLES
+--------------------------*/
+.overlay_subtitles {
+	width:90%;
+	position:absolute;
+	bottom:5px;
+	left:5%;
+	text-align: center;
+	font-size: 22px;
+	color:#fff;
+	text-shadow:
+		0px 0px 2px #000,
+		1px 1px 2px #000,
+		1px -1px 2px #000,
+		-1px -1px 2px #000,
+		-1px 1px 2px #000,
+		0px 0px 2px #000;
+}

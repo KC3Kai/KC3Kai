@@ -7,6 +7,8 @@ Provides access to data on built-in JSON files
 	"use strict";
 	
 	window.KC3Meta = {
+		repo: "",
+		
 		_cache:{},
 		_icons:{},
 		_exp:{},
@@ -19,6 +21,7 @@ Provides access to data on built-in JSON files
 		_stype:{},
 		_servers:{},
 		_battle:{},
+		_quotes:{},
 		_terms:{
 			troll:{},
 			lang:{},
@@ -29,9 +32,11 @@ Provides access to data on built-in JSON files
 		/* Initialization
 		-------------------------------------------------------*/
 		init :function( repo ){
+			this.repo = repo;
 			/* to remove deprecated warning
 				http://stackoverflow.com/questions/22090764/alternative-to-async-false-ajax
 			*/
+			
 			// Load Common Meta
 			this._icons		= JSON.parse( $.ajax(repo+'icons.json', { async: false }).responseText );
 			this._exp		= JSON.parse( $.ajax(repo+'experience.json', { async: false }).responseText );
@@ -49,6 +54,10 @@ Provides access to data on built-in JSON files
 			this._battle	= KC3Translation.getJSON(repo, 'battle', true);
 			this._terms.troll		= JSON.parse( $.ajax(repo+'translations/troll/terms.json', { async: false }).responseText );
 			this._terms.lang		= KC3Translation.getJSON(repo, 'terms');
+		},
+		
+		loadQuotes :function(){
+			this._quotes = KC3Translation.getJSON(this.repo, 'quotes', true);
 		},
 		
 		/* Data Access
@@ -198,6 +207,22 @@ Provides access to data on built-in JSON files
 				}
 			}
 			return edgeId;
+		},
+		
+		quote :function(identifier, voiceNum){
+			if(identifier){
+				if(typeof this._quotes[identifier] != "undefined"){
+					if(typeof this._quotes[identifier][voiceNum] != "undefined"){
+						return this._quotes[identifier][voiceNum];
+					}else{
+						return false;
+					}
+				}else{
+					return false;
+				}
+			}else{
+				return false;
+			}
 		}
 	};
 	

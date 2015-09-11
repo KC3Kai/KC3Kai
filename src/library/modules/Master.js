@@ -13,6 +13,7 @@ Saves and loads significant data for future use
 		_ship: {},
 		_slotitem: {},
 		_stype: {},
+		_graph: {},
 	
 		init: function( raw ){
 			if(typeof raw != "undefined"){
@@ -33,6 +34,12 @@ Saves and loads significant data for future use
 				if(typeof tmpRecord.api_name != "undefined"){
 					this._ship[tmpRecord.api_id] = tmpRecord;
 				}
+			}
+			
+			// Get shipgraph filenames and point to their api_ids
+			for(i in raw.api_mst_shipgraph){
+				tmpRecord = raw.api_mst_shipgraph[i];
+				this._graph[tmpRecord.api_filename] = tmpRecord.api_id;
 			}
 			
 			// Organize master slotitem into indexes
@@ -66,6 +73,10 @@ Saves and loads significant data for future use
 			return this._ship[id] || false;
 		},
 		
+		graph :function(filename){
+			return this._graph[filename] || false;
+		},
+		
 		slotitem :function(id){
 			return this._slotitem[id] || false;
 		},
@@ -79,6 +90,7 @@ Saves and loads significant data for future use
 		save :function(){
 			localStorage.master = JSON.stringify({
 				ship		: this._ship,
+				graph		: this._graph,
 				slotitem	: this._slotitem,
 				stype		: this._stype
 			});
@@ -90,6 +102,7 @@ Saves and loads significant data for future use
 			if(typeof localStorage.master != "undefined"){
 				var tmpMaster = JSON.parse(localStorage.master);
 				this._ship = tmpMaster.ship;
+				this._graph = tmpMaster.graph || {};
 				this._slotitem = tmpMaster.slotitem;
 				this._stype = tmpMaster.stype;
 				this.available = true;

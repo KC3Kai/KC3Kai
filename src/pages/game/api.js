@@ -6,6 +6,9 @@ var waiting = false;
 // If trusted exit, for exit confirmation
 var trustedExit = false;
 
+// Used to fade out subtitles after calculated duration
+var subtitleVanishTimer = false;
+
 // Show game screens
 function ActivateGame(){
 	waiting = false;
@@ -24,7 +27,9 @@ function ActivateGame(){
 $(document).on("ready", function(){
 	// Initialize data managers
 	ConfigManager.load();
+	KC3Master.init();
 	KC3Meta.init("../../../../data/");
+	KC3Meta.loadQuotes();
 	KC3QuestManager.load();
 	
 	// Apply interface configs
@@ -226,6 +231,39 @@ var interactions = {
 				});
 			});
 		});
+	},
+	
+	// Show subtitles
+	subtitle :function(request, sender, response){
+		console.log("subtitle", request, sender, response);
+		
+		// Get subtitle text
+		var subtitleText = false;
+		switch(request.voicetype){
+			case "titlecall":
+				subtitleText = KC3Meta.quote( "titlecall_"+request.filename, request.voiceNum);
+				break;
+			default:
+				subtitleText = KC3Meta.quote( KC3Master.graph( request.filename ), request.voiceNum);
+				break;
+		}
+		
+		// If subtitle removal timer is ongoing, reset
+		if(subtitleVanishTimer && subtitleText){
+			clearTimeout(subtitleVanishTimer);
+		}
+		
+		// If subtitles available for the voice
+		if(subtitleText){
+			$(".overlay_subtitles").html(subtitleText);
+			$(".overlay_subtitles").fadeIn(500);
+			
+			subtitleVanishTimer = setTimeout(function(){
+				subtitleVanishTimer = false;
+				$(".overlay_subtitles").fadeOut(500);
+				
+			}, (2000+ ($(".overlay_subtitles").text().length*50)) );
+		}
 	},
 	
 	// Dummy action
