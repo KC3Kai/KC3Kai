@@ -329,7 +329,16 @@
 			"links": {
 				"gh" :"https://github.com/RredderR"
 			}
-		}
+		},
+		{
+			"name": "SerialConvort",
+			"avatar": "http://vignette3.wikia.nocookie.net/common/avatars/3/34/25505003.png/revision/latest/scale-to-width-down/150?cb=1428213460&format=jpg",
+			"desc": "AboutDevTester",
+			"links": {
+				"gh" :"https://github.com/SerialConvort",
+				"wk" :"http://kancolle.wikia.com/wiki/User:SerialConvort"
+			 }
+		 }
 	],
 	"AboutReporters" : [
 		{
