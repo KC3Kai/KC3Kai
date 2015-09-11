@@ -1,5 +1,5 @@
 module.exports = function(grunt) {
-	
+
 	grunt.initConfig({
 		clean: {
 			tmp: {
@@ -55,8 +55,7 @@ module.exports = function(grunt) {
 		jshint: {
 			all : {
 				options: {
-					newcap: false,
-					laxbreak: true,
+					jshintrc: true
 				},
 				src: [
 					'build/tmp/assets/js/global.js',
@@ -181,7 +180,7 @@ module.exports = function(grunt) {
 		jsonlint: {
 			all : {
 				options: {
-					
+
 				},
 				src: [
 					'build/tmp/manifest.json',
@@ -221,7 +220,7 @@ module.exports = function(grunt) {
 			}
 		}
 	});
-	
+
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -233,7 +232,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-jsonlint');
 	grunt.loadNpmTasks('grunt-string-replace');
 	grunt.loadNpmTasks("grunt-remove-logging");
-	
+
 	grunt.registerTask('default', [
 		'clean:release',
 		'copy:tmpsrc',
@@ -255,5 +254,5 @@ module.exports = function(grunt) {
 		'concat:strategy',
 		'clean:tmp'
 	]);
-	
+
 };

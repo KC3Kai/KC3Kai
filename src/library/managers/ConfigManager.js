@@ -41,6 +41,7 @@ Retreives when needed to apply on components
 				alert_volume 		: 60,
 				alert_desktop 		: true,
 				alert_supply 		: 3,
+				alert_supply_exped 		:true,
 				
 				api_translation		: true,
 				api_tracking 		: true,

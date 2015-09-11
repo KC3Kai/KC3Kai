@@ -157,20 +157,12 @@ Contains summary information about a fleet and its 6 ships
 			&& this.ship(5).isSupplied();
 	};
 	
-	KC3Fleet.prototype.needsSupply = function(){
+	KC3Fleet.prototype.needsSupply = function(isEmpty){
 		var self = this;
 		return Array.apply(null, this.ships)
 			.map(Number.call, Number)
-			.map(function(x){return self.ship(x).isNeedSupply();})
+			.map(function(x){return self.ship(x).isNeedSupply(isEmpty);})
 			.reduce(function(x,y){return x||y;});
-	};
-	
-	KC3Fleet.prototype.cannotSortie = function(){
-		var self = this;
-		return Array.apply(null, this.ships)
-			.map(Number.call, Number)
-			.map(function(x){return self.ship(x).cannotSortie();})
-			.reduce(function(x,y){return x||y;}) || this.ship(0).isTaiha();
 	};
 	
 	KC3Fleet.prototype.lowestMorale = function(){

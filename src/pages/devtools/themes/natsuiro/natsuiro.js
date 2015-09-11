@@ -81,7 +81,7 @@
 			$(".summary-eqlos .summary_icon img").attr("src", "../../../../assets/img/stats/"+["lsc","lst","lse","ls"][ConfigManager.elosFormula]+".png");
 			$(".summary-eqlos .summary_text").text( Math.round(((selectedFleet < 5) ? PlayerManager.fleets[selectedFleet-1].eLoS() : PlayerManager.fleets[0].eLoS()+PlayerManager.fleets[1].eLoS()) * 100) / 100 );
 		}).addClass("hover");
-
+		
 		// Timer Type Toggle
 		$(".status_docking,.status_akashi").on("click",function(){
 			ConfigManager.scrollTimerType();
@@ -114,7 +114,6 @@
 		$(".module.activity .activity_dismissable").on("click", function(){
 			$("#atab_basic").trigger("click");
 		});
-		
 		
 		// Fleet selection
 		$(".module.controls .fleet_num").on("click", function(){
@@ -226,11 +225,9 @@
 		$(".module.activity .plane_count.bomber_enemy").attr("title", KC3Meta.term("PanelPlanesBomber") );
 	});
 	
-	
 	$(window).on("resize", function(){
 		Orientation();
 	});
-	
 	
 	function Activate(){
 		isRunning = true;
@@ -238,7 +235,6 @@
 		$(".waitingForActions").hide();
 		$(".wrapper").show();
 	}
-	
 	
 	function Orientation(){
 		if(!isRunning){ return false; }
@@ -370,7 +366,6 @@
 			}
 		},
 		
-		
 		/* QUESTS
 		Triggered when quest list is updated
 		---------------------------------------------*/
@@ -393,7 +388,6 @@
 				$(".quest_track", questBox).attr("title", quest.outputShort(true) );
 			});
 		},
-		
 		
 		/* FLEET
 		Triggered when fleet data is changed
@@ -452,8 +446,8 @@
 					hasTaiha: MainFleet.hasTaiha() || EscortFleet.hasTaiha(),
 					supplied: MainFleet.isSupplied() && EscortFleet.isSupplied(),
 					badState: [
-						MainFleet.needsSupply()  || EscortFleet.needsSupply(),
-						MainFleet.cannotSortie() || EscortFleet.cannotSortie(),
+						MainFleet.needsSupply(false)|| EscortFleet.needsSupply(false),
+						MainFleet.needsSupply(true) || EscortFleet.needsSupply(true) ,
 						MainFleet.ship(0).isTaiha(),
 						EscortFleet.ship(0).isStriped()
 					],
@@ -495,8 +489,10 @@
 					hasTaiha: CurrentFleet.hasTaiha(),
 					supplied: CurrentFleet.isSupplied(),
 					badState: [
-						CurrentFleet.needsSupply(),
-						CurrentFleet.cannotSortie(),
+						CurrentFleet.needsSupply(false) ||
+						(!(KC3SortieManager.onSortie && KC3SortieManager.fleetSent == selectedFleet)
+						&& !CurrentFleet.isSupplied() && ConfigManager.alert_supply_exped && selectedFleet > 1 && selectedFleet < 5),
+						CurrentFleet.needsSupply(true),
 						CurrentFleet.ship(0).isTaiha(),
 						false
 					],
@@ -539,7 +535,10 @@
 				$(".module.status .status_supply img").attr("src", "../../../../assets/img/ui/check.png");
 				$(".module.status .status_supply .status_text").addClass("good");
 			}else{
-				$(".module.status .status_supply .status_text").text(KC3Meta.term(FleetSummary.badState[0] ? "PanelUnderSupplied" : "PanelNotSupplied"));
+				$(".module.status .status_supply .status_text").text(KC3Meta.term(
+					FleetSummary.badState[1] ? "PanelEmptySupply" : 
+						(FleetSummary.badState[0] ? "PanelUnderSupplied" : "PanelNotSupplied")
+					));
 				$(".module.status .status_supply img").attr("src", "../../../../assets/img/ui/sunk.png");
 				$(".module.status .status_supply .status_text").addClass("bad");
 			}
@@ -666,7 +665,7 @@
 			var world = KC3SortieManager.map_world;
 			var map = KC3SortieManager.map_num;
 			var nodeId = KC3Meta.nodeLetter(world, map, thisNode.id );
-
+			
 			$(".module.activity .sortie_node_"+numNodes).text( nodeId );
 			$(".module.activity .node_types").hide();
 			
@@ -684,7 +683,7 @@
 					$(".module.activity .sortie_node_"+numNodes).addClass("nc_battle");
 					$(".module.activity .node_type_battle").show();
 					break;
-				
+					
 				// Resource node
 				case "resource":
 					$(".module.activity .sortie_node_"+numNodes).addClass("nc_resource");
@@ -704,7 +703,7 @@
 					$(".module.activity .node_type_resource .node_res_text").text( thisNode.amount );
 					$(".module.activity .node_type_resource").show();
 					break;
-				
+					
 				// Maelstrom node
 				case "maelstrom":
 					$(".module.activity .sortie_node_"+numNodes).addClass("nc_maelstrom");
@@ -754,7 +753,7 @@
 				
 				if(eshipId > -1){
 					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.abyssIcon(eshipId));
-
+					
 					var tooltip = "FP: " + eParam[0] + String.fromCharCode(13);
 					tooltip += "Torp: " + eParam[1] + String.fromCharCode(13);
 					tooltip += "AA: " + eParam[2] + String.fromCharCode(13);
@@ -899,7 +898,7 @@
 			
 			$(".module.activity .battle_rating img").attr("src",
 				"../../../../assets/img/client/ratings/"+thisNode.rating+".png");
-			
+				
 			// If there is a ship drop
 			if(thisNode.drop > 0){
 				// If drop spoiler is enabled on settings
@@ -972,7 +971,7 @@
 			$(".activity_crafting .used2").text( data.resourceUsed[1] );
 			$(".activity_crafting .used3").text( data.resourceUsed[2] );
 			$(".activity_crafting .used4").text( data.resourceUsed[3] );
-
+			
 			// Show the box
 			$(".module.activity .activity_tab").removeClass("active");
 			$("#atab_activity").addClass("active");
@@ -1023,7 +1022,7 @@
 					tooltip += "Torp: " + eParam[1] + String.fromCharCode(13);
 					tooltip += "AA: " + eParam[2] + String.fromCharCode(13);
 					tooltip += "Armor: " + eParam[3];
-					
+
 					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("title", tooltip);
 					$(".module.activity .abyss_ship_"+(index+1)).show();
 				}
@@ -1123,7 +1122,7 @@
 			/* Data
 			{"api_ship_id":[-1,56,22,2,116,1,4],"api_clear_result":1,"api_get_exp":50,"api_member_lv":88,"api_member_exp":510662,"api_get_ship_exp":[210,140,140,140,140,140],"api_get_exp_lvup":[[272732,275000],[114146,117600],[89228,90300],[59817,63000],[162124,168100],[29155,30000]],"api_maparea_name":"\u5357\u65b9\u6d77\u57df","api_detail":"\u6c34\u96f7\u6226\u968a\u306b\u30c9\u30e9\u30e0\u7f36(\u8f38\u9001\u7528)\u3092\u53ef\u80fd\u306a\u9650\u308a\u6e80\u8f09\u3057\u3001\u5357\u65b9\u9f20\u8f38\u9001\u4f5c\u6226\u3092\u7d9a\u884c\u305b\u3088\uff01","api_quest_name":"\u6771\u4eac\u6025\u884c(\u5f10)","api_quest_level":8,"api_get_material":[420,0,200,0],"api_useitem_flag":[4,0],"api_get_item1":{"api_useitem_id":10,"api_useitem_name":"\u5bb6\u5177\u7bb1\uff08\u5c0f\uff09","api_useitem_count":1}}
 			
-			useitem -- 
+			useitem --
 				00 - nothing
 				01 - instant repair
 				02 - instant construct
@@ -1170,8 +1169,8 @@
 					10:"box1",
 					11:"box2",
 					12:"box3",
-				}; // for item array ["","bucket","ibuild","devmat","screws","5","6","7","8","9","box1","box2","box3"] (imo, array consumes more memory than hash/object xD)
-			
+				}; // for item array
+				
 			$(".module.activity .activity_expedition .expres_noget").hide();
 			$(".activity_expedition .expres_item").each(function(i,element){
 				var
@@ -1181,7 +1180,7 @@
 					gotItem |= true;
 					$(element).show();
 					$("img", element).attr("src", "../../../../assets/img/client/"+useItemMap[useCons === 4 ? useItem.api_useitem_id : useCons]+".png");
-					$("span", element).text( useItem.api_useitem_count );
+					$(".expres_item_text", element).text( useItem.api_useitem_count );
 				}else{
 					$(element).hide();
 				}
