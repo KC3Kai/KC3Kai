@@ -14,6 +14,15 @@
 		init: function(){
 			PlayerManager.loadFleets();
 			console.log(PlayerManager.fleets);
+			console.log("http://www.kancolle-calc.net/deckbuilder.html?predeck=".concat(encodeURI(
+						JSON.stringify({
+							"version":3,
+							"f1":this.generate_fleet_JSON(PlayerManager.fleets[0]),
+							"f2":this.generate_fleet_JSON(PlayerManager.fleets[1]),
+							"f3":this.generate_fleet_JSON(PlayerManager.fleets[2]),
+							"f4":this.generate_fleet_JSON(PlayerManager.fleets[3]),
+							})
+					)));
 		},
 		
 		/* EXECUTE
@@ -74,7 +83,6 @@
 
       $('.wikia_code', box).text(code);
       
-      console.log("http://www.kancolle-calc.net/deckbuilder.html?predeck=".concat(encodeURI(JSON.stringify({"version":3,"f1":this.generate_fleet_JSON(fleet)}))));
     },
 
 		/* Show wikia code for a single ship
@@ -105,37 +113,40 @@
         return '';
       }
     },
-	  generate_fleet_JSON: function(fleet) {
-		  var result = {};
-	      for(var i = 0; i < fleet.ships.length; i++) {
-	    	  if(fleet.ships[i] > -1){
-	    		result["s".concat(i+1)] = this.generate_ship_JSON(fleet.ships[i]);
-	    	  }
-	      }
-	      return result;
-	  },
-	  generate_ship_JSON: function(ship_ID) {
-		  var result = {};
-		  var ship = KC3ShipManager.get(ship_ID);
-		  result["id"] = ship.masterId;
-		  result["lv"] = ship.level;
-		  result["luck"] = -1;
-		  result["items"] = this.generate_equipment_JSON(ship);
-		  return result;
-	  },
-	  generate_equipment_JSON: function(shipObj) {
-		  var result = {};
-	      for(var i = 0; i < 4; i++) {
-	          if(shipObj.items[i]> -1){
-	        	  result["i".concat(i+1)] ={
-	        			  "id":KC3GearManager.get(shipObj.items[i]).masterId,
-	        			  "rf":KC3GearManager.get(shipObj.items[i]).stars
-	        			  };
-	            } else {
-	              break;
-	            }
-	      }
-		  return result;
-	  },
+    
+		/* Code for generating deckbuilder style JSON data.
+		--------------------------------------------*/
+    generate_fleet_JSON: function(fleet) {
+    	var result = {};
+    	for(var i = 0; i < fleet.ships.length; i++) {
+    		if(fleet.ships[i] > -1){
+    			result["s".concat(i+1)] = this.generate_ship_JSON(fleet.ships[i]);
+    		}
+    	}
+    	return result;
+    },
+    generate_ship_JSON: function(ship_ID) {
+    	var result = {};
+    	var ship = KC3ShipManager.get(ship_ID);
+    	result["id"] = ship.masterId;
+    	result["lv"] = ship.level;
+    	result["luck"] = ship.lk[0];
+    	result["items"] = this.generate_equipment_JSON(ship);
+    	return result;
+    },
+    generate_equipment_JSON: function(shipObj) {
+    	var result = {};
+    	for(var i = 0; i < 4; i++) {
+    		if(shipObj.items[i]> -1){
+    			result["i".concat(i+1)] ={
+    					"id":KC3GearManager.get(shipObj.items[i]).masterId,
+    					"rf":KC3GearManager.get(shipObj.items[i]).stars
+    			};
+    		} else {
+    			break;
+    		}
+    	}
+    	return result;
+    },
 	};
 })();
