@@ -66,7 +66,7 @@
 			if(extendEnglish){
 				// Load english file
 				enJSON = JSON.parse($.ajax({
-					url : repo+'translations/en/' + filename + '.json',
+					url : repo+'lang/data/en/' + filename + '.json',
 					async: false
 				}).responseText);
 				
