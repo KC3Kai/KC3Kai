@@ -135,7 +135,7 @@
     		}
     	}
     	return result;
-    };
+    }
     
     function generate_ship_JSON (ship_ID) {
     	var result = {};
@@ -145,7 +145,7 @@
     	result.luck = ship.lk[0];
     	result.items = generate_equipment_JSON(ship);
     	return result;
-    };
+    }
     
     function generate_equipment_JSON (shipObj) {
     	var result = {};
@@ -158,7 +158,7 @@
     		} else {break;}
     	}
     	return result;
-    };
+    }
 		
 		
 		// Switching Activity Tabs
