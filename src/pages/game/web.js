@@ -17,6 +17,10 @@
 	}
 	
 	$(document).on("ready", function(){
+		// Load previously stored configs
+		ConfigManager.load();
+		KC3Meta.init("../../data/");
+		KC3Translation.execute();
 		
 		// Quick Play
 		$(".play_btn").on('click', function(){
