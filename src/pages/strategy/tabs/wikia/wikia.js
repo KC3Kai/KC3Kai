@@ -82,7 +82,6 @@
       code += "}}";
 
       $('.wikia_code', box).text(code);
-      
     },
 
 		/* Show wikia code for a single ship
