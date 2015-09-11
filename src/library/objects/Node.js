@@ -344,7 +344,7 @@ Used by SortieManager
 				if(maps[ckey].curhp <= 0) // if last kill -- check whether flagship is killed or not -- flagship killed = map clear
 					maps[ckey].curhp = 1-(maps[ckey].clear = resultData.destsf);
 				localStorage.maps = JSON.stringify(maps);
-			}else if((KC3Meta.gauge(ckey.replace("m","")) - maps[ckey].kills) > 0) { // kill-based map not cleared
+			}else if((KC3Meta.gauge(ckey.replace("m","")) - (maps[ckey].kills || 0)) > 0) { // kill-based map not cleared
 				maps[ckey].kills += resultData.destsf;
 				maps[ckey].clear = resultData.api_first_clear;
 			}
