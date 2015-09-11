@@ -105,6 +105,15 @@
 			"links" : {
 				"gh" :"https://github.com/tmerta"
 			}
+		},
+		{
+			"name": "Nekoworkshop",
+			"avatar" : "https://avatars1.githubusercontent.com/u/1346257?v=3&s=40",
+			"desc" : ["AboutDeveloper", "日本語"],
+			"links" : {
+				"gh" :"https://github.com/nekoworkshop",
+				"tw" :"http://twitter.com/nekoworkshop"
+			}
 		}
 	],
 	"AboutTranslators" : [
