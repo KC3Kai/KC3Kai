@@ -491,7 +491,7 @@
 					badState: [
 						CurrentFleet.needsSupply(false) ||
 						(!(KC3SortieManager.onSortie && KC3SortieManager.fleetSent == selectedFleet)
-						&& !CurrentFleet.isSupplied() && ConfigManager.alert_supply_exped),
+						&& !CurrentFleet.isSupplied() && ConfigManager.alert_supply_exped && selectedFleet > 1 && selectedFleet < 5),
 						CurrentFleet.needsSupply(true),
 						CurrentFleet.ship(0).isTaiha(),
 						false
@@ -1220,13 +1220,13 @@
 			.attr("data-exp",hqt)
 			.attr("data-exp-gain",(function(x){
 				if(newDelta !== undefined)
-					return newDelta * (hqDt == 1 ? -1 : 1);
+					return newDelta;
 				else if ((ele.attr("data-exp-gain")||"").length > 0)
-					return KC3SortieManager.hqExpGained * (hqDt == 1 ? -1 : 1);
+					return KC3SortieManager.hqExpGained;
 				else
 					return "";
 			}()))
-			.text( PlayerManager.hq.exp[hqDt] * (hqDt == 1 ? -1 : 1) );
+			.text( PlayerManager.hq.exp[hqDt] );
 	}
 	
 	function CraftGearStats(MasterItem, StatProperty, Code){
@@ -1253,7 +1253,7 @@
 			elm.removeClass("bad").removeAttr("title");
 			switch (ConfigManager.timerDisplayType) {
 			case 1:
-				elm.text(String(-elm.data("value")).toHHMMSS());
+				elm.text(String(elm.data("value")).toHHMMSS());
 				break;
 			case 2:
 				elm.text(String(elm.data("value") || NaN).plusCurrentTime());
