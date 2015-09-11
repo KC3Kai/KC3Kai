@@ -7,4 +7,4 @@ Successor to KanColle Command Center, KC3改 is a Kantai Collection Game Viewer 
 [![Build Status](https://travis-ci.org/KC3Kai/KC3Kai.svg?branch=master)](https://travis-ci.org/KC3Kai/KC3Kai)
 
 
-##### Please visit the [GitHub wiki for Usage Documentation](https://github.com/dragonjet/KC3Kai/wiki)
+##### Please visit the [GitHub wiki for Usage Documentation](https://github.com/KC3Kai/KC3Kai/wiki)
