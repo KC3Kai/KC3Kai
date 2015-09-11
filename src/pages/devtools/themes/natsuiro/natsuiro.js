@@ -112,16 +112,6 @@
 						"f4":generate_fleet_JSON(PlayerManager.fleets[3]),
 						})
 				)));
-				
-			console.log("http://www.kancolle-calc.net/deckbuilder.html?predeck=".concat(encodeURI(
-					JSON.stringify({
-						"version":3,
-						"f1":generate_fleet_JSON(PlayerManager.fleets[0]),
-						"f2":generate_fleet_JSON(PlayerManager.fleets[1]),
-						"f3":generate_fleet_JSON(PlayerManager.fleets[2]),
-						"f4":generate_fleet_JSON(PlayerManager.fleets[3]),
-						})
-				)));
 		});
 		
     
