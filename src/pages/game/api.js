@@ -144,7 +144,7 @@ var interactions = {
 	
 	// Quest page is opened, show overlays
 	questOverlay :function(request, sender, response){
-		//Do not generate overlay if neither of the overlay features are enabled.
+		//Only skip overlay generation if neither of the overlay features is enabled.
 		if(!ConfigManager.api_translation && !ConfigManager.api_tracking){ response({success:false}); return true; }
 		
 		KC3QuestManager.load();
