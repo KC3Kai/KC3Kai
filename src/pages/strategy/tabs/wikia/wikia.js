@@ -127,10 +127,10 @@
     generate_ship_JSON: function(ship_ID) {
     	var result = {};
     	var ship = KC3ShipManager.get(ship_ID);
-    	result["id"] = ship.masterId;
-    	result["lv"] = ship.level;
-    	result["luck"] = ship.lk[0];
-    	result["items"] = this.generate_equipment_JSON(ship);
+    	result.id = ship.masterId;
+    	result.lv = ship.level;
+    	result.luck = ship.lk[0];
+    	result.items = this.generate_equipment_JSON(ship);
     	return result;
     },
     generate_equipment_JSON: function(shipObj) {
