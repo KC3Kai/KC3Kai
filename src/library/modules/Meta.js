@@ -47,7 +47,7 @@ Provides access to data on built-in JSON files
 			this._stype		= KC3Translation.getJSON(repo, 'stype', true);
 			this._servers	= KC3Translation.getJSON(repo, 'servers', true);
 			this._battle	= KC3Translation.getJSON(repo, 'battle', true);
-			this._terms.troll		= JSON.parse( $.ajax(repo+'translations/troll/terms.json', { async: false }).responseText );
+			this._terms.troll		= JSON.parse( $.ajax(repo+'lang/data/troll/terms.json', { async: false }).responseText );
 			this._terms.lang		= KC3Translation.getJSON(repo, 'terms');
 		},
 		
