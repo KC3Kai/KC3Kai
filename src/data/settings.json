@@ -10,17 +10,19 @@
 				"options" : {
 					"choices" : [
 						[ "en", "English" ],
-						[ "jp", "日本語" ],
-						[ "id", "Indonesian" ],
-						[ "tcn", "繁體中文" ],
-						[ "scn", "简体中文" ],
-						[ "vi", "Tiếng Việt" ],
 						[ "de", "Deutsch" ],
+						[ "es", "Español" ],
 						[ "fr", "Français" ],
+						[ "id", "Indonesian" ],
 						[ "it", "Italiano" ],
+						[ "jp", "日本語" ],
 						[ "kr", "한국어" ],
 						[ "pt", "Português" ],
-						[ "ru", "Русский" ]
+						[ "ru", "Русский" ],
+						[ "scn", "简体中文" ],
+						[ "tcn", "繁體中文" ],
+						[ "troll", "Troll" ],
+						[ "vi", "Tiếng Việt" ]
 					]
 				}
 			},

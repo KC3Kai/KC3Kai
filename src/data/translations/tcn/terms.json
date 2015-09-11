@@ -80,6 +80,9 @@
 	"SettingsHQExpLeft"    : "剩餘經驗值",
 	"SettingsHQExpCurrent" : "當前經驗值",
 	"SettingsHQExpTotal"   : "經驗值總和",
+    "SettingsTimerDisplayType" : "計時器表示方式",
+    "SettingsTimeRemaining" : "剩餘",
+    "SettingsTimeFinished" : "結束",
 	
 	"SettingsGameInfo" : "遊戲資訊",
 "SettingsDropFaces" : "掉落預覽",
@@ -133,6 +136,16 @@
 	"SettingsPanelSize" : "面板界面大小",
 	"SettingsPanelOpacity" : "面板界面不透明度",
 	"SettingsGearHolder" : "裝備背景色",
+    "SettingsLegacyPanel" : "Panel: Legacy Theme",
+
+    "SettingsChuuiWarningDangerousFeature" : "Are you sure that you really want to change this?\nAny risks that you're attempting is beyond KC3改's responsibility.\n\nMake sure you're know what to do before.",
+    "SettingsErrorNG" : "已儲存！",
+    "SettingsErrorSuper" : "無效值！",
+    "SettingsErrorAbove" : "超出",
+    "SettingsErrorBelow" : "過低",
+    "SettingsErrorLength" : "長度",
+    "SettingsErrorValue" : "值",
+    "SettingsErrorOrder" : "%TYP %CMP %VAL",
  	
  	"Small" : "小",
  	"Big" : "大",
@@ -172,6 +185,8 @@
     "EventHistoryRank1X" : "新米",
     "EventHistoryRank2X" : "困難",
     "EventHistoryRank3X" : "抖M",
+    "StrategyEventGo"    : "活動出撃",
+    "StrategyEventGoP"   : "#絶望",
 
     "PanelDocking" : "入渠",
     "PanelAkashi" : "明石",
@@ -190,6 +205,13 @@
     "PanelPlanesFighter" : "參與航空戰的飛機",
     "PanelPlanesBomber" : "參與轟炸的飛機",
 
+    "MissionLabelActivity" : "遠征",
+    "MissionGetItems" : "獲得物品：",
+    "MissionActivity0" : "中止",
+    "MissionActivity1" : "失敗",
+    "MissionActivity2" : "成功",
+    "MissionActivity3" : "大成功",
+
     "CombinedCarrier" : "聯合艦隊 (機動)",
     "CombinedSurface" : "聯合艦隊 (水上)",
     "CombinedNone" : "非聯合艦隊",
@@ -200,6 +222,7 @@
 	"LevelShort" : "Lv.",
 	"LevelNext" : "還需",
 	"Screenshot" : "螢幕截圖",
+    "Expedition" : "遠征",
 "UntranslatedQuest" : "未翻譯的仼務",
 
     "StrategyEvents1HP" : "斬殺！",

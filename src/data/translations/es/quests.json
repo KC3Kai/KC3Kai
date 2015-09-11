@@ -1,11 +1,11 @@
 {
     "101": {
-        "name": "First Formation!",
-        "desc": "Have 2 ships in your main fleet."
+        "name": "Primera Formación!",
+        "desc": "Ten 2 barquitas en tu flota principal."
     },
     "102": {
-        "name": "Form a Destroyer Squadron!",
-        "desc": "Have 4 DD in your main fleet."
+        "name": "Forma un Escuadrón de Destructores!",
+        "desc": "Ten 4 DD en tu flota principal."
     },
     "103": {
         "name": "Form a Torpedo Squadron!",
