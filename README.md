@@ -6,4 +6,8 @@
 
 Successor to KanColle Command Center, KC3改 is a Kantai Collection Game Viewer containing useful tools. It's an easy one-click installation from the Chrome Webstore, and its free!
 
-##### Please visit the [GitHub wiki for Usage Documentation](https://github.com/KC3Kai/KC3Kai/wiki)
+#### For Players
+Please visit the in-app Help section, or the [Usage Documentation repository](https://github.com/KC3Kai/kc3-docs).
+
+#### For Developers
+Please visit the [GitHub wiki for Development Documentation](https://github.com/KC3Kai/KC3Kai/wiki).
