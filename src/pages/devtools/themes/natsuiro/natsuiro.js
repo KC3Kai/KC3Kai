@@ -1180,7 +1180,7 @@
 					gotItem |= true;
 					$(element).show();
 					$("img", element).attr("src", "../../../../assets/img/client/"+useItemMap[useCons === 4 ? useItem.api_useitem_id : useCons]+".png");
-					$(".expres_amt", element).text( useItem.api_useitem_count );
+					$(".expres_item_text", element).text( useItem.api_useitem_count );
 				}else{
 					$(element).hide();
 				}
