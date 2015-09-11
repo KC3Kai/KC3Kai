@@ -49,7 +49,6 @@ Provides access to data on built-in JSON files
 			this._battle	= KC3Translation.getJSON(repo, 'battle', true);
 			this._terms.troll		= JSON.parse( $.ajax(repo+'translations/troll/terms.json', { async: false }).responseText );
 			this._terms.lang		= KC3Translation.getJSON(repo, 'terms');
-			console.log(repo);
 		},
 		
 		/* Data Access

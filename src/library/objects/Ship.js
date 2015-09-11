@@ -91,18 +91,13 @@ KC3改 Ship Object
 			&& this.ammo == this.master().api_bull_max;
 	};
 	
-	KC3Ship.prototype.cannotSortie = function(){
-		if(this.rosterId===0){ return false; }
-		return (this.fuel || this.ammo || 0) <= 0;
-	};
-	
-	KC3Ship.prototype.isNeedSupply = function(){
+	KC3Ship.prototype.isNeedSupply = function(isEmpty){
 		if(this.rosterId===0){ return false; }
 		var 
 			fpc  = function(x,y){return Math.qckInt("round",(x / y) * 10);},
 			fuel = fpc(this.fuel,this.master().api_fuel_max),
 			ammo = fpc(this.ammo,this.master().api_bull_max);
-		return Math.min(fuel,ammo) <= ConfigManager.alert_supply;
+		return Math.min(fuel,ammo) <= (ConfigManager.alert_supply) * (!isEmpty);
 	};
 	
 	KC3Ship.prototype.onFleet = function(){

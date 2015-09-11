@@ -194,6 +194,12 @@
 				"options" : { "label" : "SettingsSupplyBarLabel" }
 			},
 			{
+				"id" : "alert_supply_exped",
+				"name" : "SettingsSupplyExped",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "alert_type",
 				"name" : "SettingsSoundType",
 				"type" : "radio",

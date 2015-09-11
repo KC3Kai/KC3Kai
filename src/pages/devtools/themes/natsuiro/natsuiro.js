@@ -446,8 +446,8 @@
 					hasTaiha: MainFleet.hasTaiha() || EscortFleet.hasTaiha(),
 					supplied: MainFleet.isSupplied() && EscortFleet.isSupplied(),
 					badState: [
-						MainFleet.needsSupply()  || EscortFleet.needsSupply(),
-						MainFleet.cannotSortie() || EscortFleet.cannotSortie(),
+						MainFleet.needsSupply(false)|| EscortFleet.needsSupply(false),
+						MainFleet.needsSupply(true) || EscortFleet.needsSupply(true) ,
 						MainFleet.ship(0).isTaiha(),
 						EscortFleet.ship(0).isStriped()
 					],
@@ -489,8 +489,10 @@
 					hasTaiha: CurrentFleet.hasTaiha(),
 					supplied: CurrentFleet.isSupplied(),
 					badState: [
-						CurrentFleet.needsSupply(),
-						CurrentFleet.cannotSortie(),
+						CurrentFleet.needsSupply(false) ||
+						(!(KC3SortieManager.onSortie && KC3SortieManager.fleetSent == selectedFleet)
+						&& !CurrentFleet.isSupplied() && ConfigManager.alert_supply_exped),
+						CurrentFleet.needsSupply(true),
 						CurrentFleet.ship(0).isTaiha(),
 						false
 					],
@@ -533,7 +535,10 @@
 				$(".module.status .status_supply img").attr("src", "../../../../assets/img/ui/check.png");
 				$(".module.status .status_supply .status_text").addClass("good");
 			}else{
-				$(".module.status .status_supply .status_text").text(KC3Meta.term(FleetSummary.badState[0] ? "PanelUnderSupplied" : "PanelNotSupplied"));
+				$(".module.status .status_supply .status_text").text(KC3Meta.term(
+					FleetSummary.badState[1] ? "PanelEmptySupply" : 
+						(FleetSummary.badState[0] ? "PanelUnderSupplied" : "PanelNotSupplied")
+					));
 				$(".module.status .status_supply img").attr("src", "../../../../assets/img/ui/sunk.png");
 				$(".module.status .status_supply .status_text").addClass("bad");
 			}
