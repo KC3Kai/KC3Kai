@@ -497,7 +497,7 @@
 					badState: [
 						CurrentFleet.needsSupply(false) ||
 						(!(KC3SortieManager.onSortie && KC3SortieManager.fleetSent == selectedFleet)
-						&& !CurrentFleet.isSupplied() && ConfigManager.alert_supply_exped),
+						&& !CurrentFleet.isSupplied() && ConfigManager.alert_supply_exped && selectedFleet > 1 && selectedFleet < 5),
 						CurrentFleet.needsSupply(true),
 						CurrentFleet.ship(0).isTaiha(),
 						false
