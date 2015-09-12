@@ -44,8 +44,9 @@ $(document).on("ready", function(){
 			localStorage.absoluteswf = $(this).val();
 		} else {
 			$(this).val(localStorage.absoluteswf);
-			location.reload();
 		}
+		if(localStorage.absoluteswf.length <= 0)
+			location.reload();
 	});
 	
 	// API link determines which screen to show
