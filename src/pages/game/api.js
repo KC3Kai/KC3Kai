@@ -243,6 +243,9 @@ var interactions = {
 			case "titlecall":
 				subtitleText = KC3Meta.quote( "titlecall_"+request.filename, request.voiceNum);
 				break;
+			case "npc":
+				subtitleText = KC3Meta.quote( "npc", request.voiceNum);
+				break;
 			default:
 				subtitleText = KC3Meta.quote( KC3Master.graph( request.filename ), request.voiceNum);
 				break;
