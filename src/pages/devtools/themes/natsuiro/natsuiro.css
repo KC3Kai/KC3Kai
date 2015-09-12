@@ -988,8 +988,8 @@
 .v .module.quests .quest {
 	width:240px;
 }
-.module.quests.complete {
-	background:rgba(0,255,0,0.3);
+.module.quests  .quest.complete {
+	background:rgba(0,255,0,0.25);
 }
 
 .module.quests .quest_color {
