@@ -988,6 +988,9 @@
 .v .module.quests .quest {
 	width:240px;
 }
+.module.quests  .quest.complete {
+	background:rgba(0,255,0,0.25);
+}
 
 .module.quests .quest_color {
 	width:14px;
@@ -995,6 +998,21 @@
 	margin:3px;
 	background:#555;
 	float:left;
+	line-height:normal;
+	text-align:center;
+}
+.module.quests .quest.complete .quest_color {
+	width:16px;
+	height:16px;
+	line-height:12px;
+	font-size:10px;
+	margin:2px;
+	background:#555;
+	float:left;
+	line-height:normal;
+	text-align:center;
+	border:2px solid #0f0;
+	text-shadow:0px 0px 2px #fff, 0px 0px 2px #fff, 0px 0px 2px #fff;
 }
 
 .module.quests .quest_text {

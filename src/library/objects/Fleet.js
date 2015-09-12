@@ -308,6 +308,16 @@ Contains summary information about a fleet and its 6 ships
 		return total;
 	};
 	
+	/* DISCARD SHIP
+	------------------------------------*/
+	KC3Fleet.prototype.discard = function(shipId) {
+		var pos = this.ships.indexOf(shipId);
+		if(pos>=0){
+			this.ships.splice(pos,1);
+			this.ships.push(-1);
+		}
+	};
+	
 	/* SORTIE JSON
 	Used for recording sorties on indexedDB
 	Generate fleet summary object without referential data (all masterId)
