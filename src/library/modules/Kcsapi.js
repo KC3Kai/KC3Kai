@@ -477,6 +477,7 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_map/next":function(params, response, headers){
 			var UTCTime = Math.floor((new Date(headers.Date)).getTime()/1000);
+			KC3SortieManager.discardSunk();
 			KC3SortieManager.advanceNode( response.api_data, UTCTime );
 			KC3Network.trigger("CompassResult");
 		},
