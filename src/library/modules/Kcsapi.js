@@ -840,6 +840,12 @@ Previously known as "Reactor"
 		"api_get_member/mapinfo":function(params, response, headers){
 			var maps = JSON.parse(localStorage.maps || "{}");
 			var ctr, thisMap;
+			// Exclude gauge based map from being kept every time
+			for(ctr in KC3Meta._gauges) {
+				if(maps.keys.indexOf(ctr)>=0)
+					maps[ctr].clear = maps[ctr].api_defeat_count = false;
+			}
+			// Combine current storage and current available maps data
 			for(ctr in response.api_data){
 				thisMap = response.api_data[ctr];
 				
