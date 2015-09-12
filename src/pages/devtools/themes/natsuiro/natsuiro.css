@@ -1001,7 +1001,7 @@
 	line-height:normal;
 	text-align:center;
 }
-.module.quests.complete .quest_color {
+.module.quests .quest.complete .quest_color {
 	width:16px;
 	height:16px;
 	line-height:12px;

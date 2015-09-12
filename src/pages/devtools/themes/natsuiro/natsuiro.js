@@ -428,7 +428,7 @@
 				if(!quest.tracking){ questBox.addClass("untracked"); }
 				$(".quest_color", questBox).css("background", quest.getColor() );
 				if(quest.isComplete()){
-					$(".quest_color", questBox).addClass("complete");
+					questBox.addClass("complete");
 					// $(".quest_color", questBox).html("&#x2714;");
 				}
 				if(quest.meta){
