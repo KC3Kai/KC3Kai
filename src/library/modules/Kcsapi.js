@@ -322,6 +322,8 @@ Previously known as "Reactor"
 			}else{
 				PlayerManager.consumables.torch--;
 			}
+			KC3TimerManager.build(params.api_kdock_id).activate(
+				(new Date()).getTime());
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Timers");
 		},
