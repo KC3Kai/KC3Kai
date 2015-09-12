@@ -63,6 +63,24 @@
 		]
 	},
 	{
+		"section": "SettingsDBSubmission",
+		"help" : "",
+		"contents" :[
+			{
+				"id" : "info_DBSubmission",
+				"name" : "SettingsEnableDBSubmission",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_DBSubmission",
+				"name" : "SettingsDBSubmissionKey",
+				"type" : "long_text",
+				"options" : {"placeholder" : "API Key" }
+			}
+		]
+	},
+	{
 		"section": "SettingsGameInfo",
 		"help" : "",
 		"contents" : [
