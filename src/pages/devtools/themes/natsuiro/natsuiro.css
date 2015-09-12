@@ -995,6 +995,8 @@
 	margin:3px;
 	background:#555;
 	float:left;
+	line-height:normal;
+	text-align:center;
 }
 
 .module.quests .quest_text {
