@@ -837,7 +837,7 @@ Previously known as "Reactor"
 		/* View World Maps
 		-------------------------------------------------------*/
 		"api_get_member/mapinfo":function(params, response, headers){
-			var maps = JSON.parse(localStorage.maps);
+			var maps = JSON.parse(localStorage.maps || "{}");
 			var ctr, thisMap;
 			for(ctr in response.api_data){
 				thisMap = response.api_data[ctr];

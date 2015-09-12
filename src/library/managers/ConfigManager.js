@@ -98,6 +98,8 @@ Retreives when needed to apply on components
 				// Merge defaults, then old config values to ConfigManager
 				$.extend(this, this.defaults(), oldConfig);
 			}
+			if(this.language == "troll") // force reverting
+				this.language = "en";
 		},
 		
 		// Save current config onto localStorage
