@@ -436,7 +436,7 @@ Used by SortieManager
 			hqEXP: resultData.api_get_exp || 0,
 			shizunde: this.lostShips.map(function(fleetLost){
 				return fleetLost.map(function(shipSunk){
-					KC3ShipManager.get(shipSunk).masterId
+					KC3ShipManager.get(shipSunk).masterId;
 				});
 			}),
 			mvp: this.mvps
