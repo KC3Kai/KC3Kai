@@ -206,7 +206,8 @@
 				"type" : "small_text",
 				"bound" : {
 					"min" : 0,
-					"max" : 5
+					"length_min" : 1,
+					"length_max" : 1
 				},
 				"options" : { "label" : "SettingsSupplyBarLabel" }
 			},

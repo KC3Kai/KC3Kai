@@ -41,6 +41,7 @@ Used by SortieManager
 		this.originalHPs = [0,0,0,0,0,0,0,0,0,0,0,0,0];
 		this.allyNoDamage = true;
 		this.nodalXP = 0;
+		this.lostShips = [[],[]];
 		this.mvps = [];
 		return this;
 	};
@@ -346,8 +347,8 @@ Used by SortieManager
 				localStorage.maps = JSON.stringify(maps);
 			}else if((KC3Meta.gauge(ckey.replace("m","")) - (maps[ckey].kills || 0)) > 0) { // kill-based map not cleared
 				maps[ckey].kills += resultData.destsf;
-				maps[ckey].clear = resultData.api_first_clear;
 			}
+			maps[ckey].clear |= resultData.api_first_clear; // obtaining clear once
 		}
 		
 		if(typeof resultData.api_get_ship != "undefined"){
@@ -360,6 +361,19 @@ Used by SortieManager
 		}
 		
 		this.mvps = [resultData.api_mvp || 0,resultData.api_mvp_combined || 0].filter(function(x){return !!x;});
+		var fleetDesg = [KC3SortieManager.fleetSent - 1,1];
+		this.lostShips = [resultData.api_lost_flag,resultData.api_lost_flag_combined || [-1,0,0,0,0,0,0]]
+			.map(function(lostFlags,fleetNum){
+				return lostFlags.filter(function(x){return x>=0;}).map(function(checkSunk,rosterPos){
+					if(!!checkSunk) {
+						var rtv = PlayerManager.fleets[fleetDesg[fleetNum]].ships[rosterPos];
+						console.log("このクソ提督、深海に",KC3ShipManager.get(rtv).master().api_name,"が沈んだ (ID:",rtv,")");
+						return rtv;
+					} else {
+						return 0;
+					}
+				}).filter(function(shipId){return shipId;});
+			});
 		
 		//var enemyCVL = [510, 523, 560];
 		//var enemyCV = [512, 525, 528, 565, 579];
@@ -400,7 +414,7 @@ Used by SortieManager
 			}
 		}
 
-		this.saveBattleOnDB();
+		this.saveBattleOnDB(resultData);
 	};
 	
 	KC3Node.prototype.isBoss = function(){
@@ -419,6 +433,12 @@ Used by SortieManager
 			drop: this.drop,
 			time: this.stime,
 			baseEXP: this.nodalXP,
+			hqEXP: resultData.api_get_exp || 0,
+			shizunde: this.lostShips.map(function(fleetLost){
+				return fleetLost.map(function(shipSunk){
+					return KC3ShipManager.get(shipSunk).masterId;
+				});
+			}),
 			mvp: this.mvps
 		});
 	};

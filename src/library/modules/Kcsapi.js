@@ -322,6 +322,8 @@ Previously known as "Reactor"
 			}else{
 				PlayerManager.consumables.torch--;
 			}
+			KC3TimerManager.build(params.api_kdock_id).activate(
+				(new Date()).getTime());
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Timers");
 		},
@@ -477,6 +479,7 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_map/next":function(params, response, headers){
 			var UTCTime = Math.floor((new Date(headers.Date)).getTime()/1000);
+			KC3SortieManager.discardSunk();
 			KC3SortieManager.advanceNode( response.api_data, UTCTime );
 			KC3Network.trigger("CompassResult");
 		},
@@ -839,6 +842,12 @@ Previously known as "Reactor"
 		"api_get_member/mapinfo":function(params, response, headers){
 			var maps = JSON.parse(localStorage.maps || "{}");
 			var ctr, thisMap;
+			// Exclude gauge based map from being kept every time
+			for(ctr in KC3Meta._gauges) {
+				if(Object.keys(maps).indexOf(ctr)>=0)
+					maps[ctr].clear = maps[ctr].api_defeat_count = false;
+			}
+			// Combine current storage and current available maps data
 			for(ctr in response.api_data){
 				thisMap = response.api_data[ctr];
 				

@@ -293,7 +293,7 @@
 		---------------------------------*/
 		this.showList = function( sortieList ){
 			// Show sortie records on list
-			var sortieBox, fleets, fleetkey, mainFleet, isCombined, rshipBox, nodeBox, thisNode;
+			var sortieBox, fleets, fleetkey, mainFleet, isCombined, rshipBox, nodeBox, thisNode, sinkShips;
 			$.each(sortieList, function(id, sortie){
 				try {
 					// Create sortie box
@@ -317,6 +317,7 @@
 						sortie.support1,
 						sortie.support2
 					];
+					sinkShips = [[],[]];
 					// Show main fleet faces
 					$(".sortie_ship", sortieBox).hide();
 					fleets.forEach(function(n,i){
@@ -385,6 +386,8 @@
 							return true;
 						}
 						
+						battle.shizunde |= [[],[]];
+						
 						// Show on node list
 						$(".sortie_edge_"+(index+1), sortieBox).addClass("active");
 						$(".sortie_edge_"+(index+1), sortieBox).html( KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node ) );
@@ -418,7 +421,7 @@
 						$.each(battleData.api_ship_ke, function(index, eship){
 							if(eship > -1){
 								$(".node_eship_"+(index+1)+" img", nodeBox).attr("src", KC3Meta.abyssIcon( eship ) );
-								$(".node_eship_"+(index+1), nodeBox).attr("title", KC3Master.ship( eship ).api_name + KC3Master.ship( eship ).api_yomi );
+								$(".node_eship_"+(index+1), nodeBox).attr("title", [KC3Master.ship( eship ).api_name,KC3Master.ship( eship ).api_yomi].filter(function(x){return x.length>1;}).join("") );
 								$(".node_eship_"+(index+1), nodeBox).show();
 							}
 						});
@@ -433,6 +436,9 @@
 						}else if(typeof battle.yasen.api_deck_id != "undefined"){
 							thisNode.engageNight( battleData, sortie.fleetnum );
 						}
+						
+						sinkShips[0].concat(battle.shizunde[0]);
+						sinkShips[1].concat(battle.shizunde[1]);
 						
 						// Conditions
 						$(".node_engage", nodeBox).text( thisNode.engagement[2] );
