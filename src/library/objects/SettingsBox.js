@@ -189,7 +189,7 @@ To be dynamically used on the settings page
 		// otherwise, having all bit is unset means valid value
 		console.log(bound);
 		switch(true) {
-			case(isNaN(Number(value)) && ((value || null) === null) && (String(value).length === 0)): return -1;
+			case(isNaN(Number(value)) || ((value || null) === null)): return -1;
 			case(String(value).length > (Number(bound.length_max) || Infinity)): return  3;
 			case(String(value).length < (Number(bound.length_min) ||        0)): return  1;
 			case(value > (Number(bound.max) ||  Infinity)): return  7;

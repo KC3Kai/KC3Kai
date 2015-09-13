@@ -842,7 +842,7 @@ Previously known as "Reactor"
 			var ctr, thisMap;
 			// Exclude gauge based map from being kept every time
 			for(ctr in KC3Meta._gauges) {
-				if(maps.keys.indexOf(ctr)>=0)
+				if(Object.keys(maps).indexOf(ctr)>=0)
 					maps[ctr].clear = maps[ctr].api_defeat_count = false;
 			}
 			// Combine current storage and current available maps data
