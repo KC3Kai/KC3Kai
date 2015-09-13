@@ -433,8 +433,7 @@ Previously known as "Reactor"
 		"api_req_map/select_eventmap_rank":function(params, response, headers){
 			var allMaps = JSON.parse(localStorage.maps);
 			allMaps["m" + params.api_maparea_id + params.api_map_no].difficulty = parseInt(params.api_rank);
-			allMaps["m" + params.api_maparea_id + params.api_map_no].curhp = 9999;
-			allMaps["m" + params.api_maparea_id + params.api_map_no].maxhp = 9999;
+			allMaps["m" + params.api_maparea_id + params.api_map_no].curhp = allMaps["m" + params.api_maparea_id + params.api_map_no].maxhp = 9999;
 			localStorage.maps = JSON.stringify(allMaps);
 		},
 		

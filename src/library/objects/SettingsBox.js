@@ -11,7 +11,7 @@ To be dynamically used on the settings page
 		this.element = $("#factory .settingBox").clone().appendTo("#wrapper .settings");
 		$(".title", this.element).text( KC3Meta.term( info.name ) );
 		this.soundPreview = false;
-		this.bound = $.extend({min:-Infinity,max:Infinity,length_min:0,length_max:Infinity},info.bound || {});
+		this.bound = $.extend({min:-Infinity,max:Infinity,length_min:0,length_max:Infinity,type:"String"},info.bound || {});
 		this[info.type]( info.options );
 		if(parseInt(info.chui) || 0 === 1)
 			$(this.element).addClass("dangerous");
@@ -70,7 +70,7 @@ To be dynamically used on the settings page
 					return false;
 				}
 				
-				ConfigManager[ self.config ] = $(this).val();
+				ConfigManager[ self.config ] = window[self.bound.type]($(this).val());
 				ConfigManager.save();
 				elementControl($(this).parent().siblings(".note"),'',KC3Meta.term("SettingsErrorNG"));
 				
@@ -189,7 +189,7 @@ To be dynamically used on the settings page
 		// otherwise, having all bit is unset means valid value
 		console.log(bound);
 		switch(true) {
-			case(isNaN(Number(value)) || ((value || null) === null)): return -1;
+			case(bound.type === "Number" && (isNaN(Number(value)) || (value || null) === null)): return -1; // Number Expectation
 			case(String(value).length > (Number(bound.length_max) || Infinity)): return  3;
 			case(String(value).length < (Number(bound.length_min) ||        0)): return  1;
 			case(value > (Number(bound.max) ||  Infinity)): return  7;

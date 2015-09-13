@@ -162,7 +162,8 @@
 				"type" : "small_text",
 				"bound" : {
 					"min" : -300,
-					"max" :  300
+					"max" :  300,
+					"type": "Number"
 				},
 				"options" : { "label" : "SettingsSeconds" }
 			},
@@ -178,7 +179,8 @@
 				"type" : "small_text",
 				"bound" : {
 					"min" :  1,
-					"max" : 49
+					"max" : 49,
+					"type": "Number"
 				},
 				"options" : { "label" : "" }
 			},
@@ -189,7 +191,8 @@
 				"bound" : {
 					"min" : 0,
 					"length_min" : 1,
-					"length_max" : 1
+					"length_max" : 1,
+					"type": "Number"
 				},
 				"options" : { "label" : "SettingsSupplyBarLabel" }
 			},
@@ -224,7 +227,8 @@
 				"type" : "small_text",
 				"bound" : {
 					"min" :   0.0,
-					"max" : 100.0
+					"max" : 100.0,
+					"type": "Number"
 				},
 				"options" : { "label" : "%" }
 			},
@@ -276,7 +280,8 @@
 				"name" : "SettingsScreenMargin",
 				"type" : "small_text",
 				"bound" : {
-					"length_min": 1
+					"length_min": 1,
+					"type": "Number"
 				},
 				"options" : { "label" : "pixels" }
 			},
@@ -310,7 +315,8 @@
 				"type" : "small_text",
 				"bound" : {
 					"min" :  0.0,
-					"max" : null
+					"max" : null,
+					"type": "Number"
 				},
 				"options" : { "label" : "%" }
 			}
@@ -437,7 +443,8 @@
 				"bound" : {
 					"min" :   0.0,
 					"max" : 100.0,
-					"length_min" : 1
+					"length_min" : 1,
+					"type": "Number"
 				},
 				"options" : { "label" : "%" }
 			}
