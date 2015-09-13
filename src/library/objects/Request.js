@@ -132,9 +132,6 @@ Executes processing and relies on KC3Network for the triggers
 			// Execute by passing data
 			Kcsapi[this.call]( this.params, this.response, this.headers );
 		}
-		if (DBSubmission.checkIfWanted(this.call)){
-			DBSubmission.submitData(this.url,this.param,this.response);
-		}
 	};
 	
 })();
