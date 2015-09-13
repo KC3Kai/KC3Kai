@@ -8,7 +8,10 @@ Listens to network history and triggers callback if game events happen
 	"use strict";
 
 	window.DBSubmission = {
-
+			
+			/* Only send the following API data 
+			 * Up to date as for commit 92b0828f7b4d5f51616153839142755484df86b8
+			 */
 			checkIfDataNeeded :function (URL){
 				var KcsApiIndex = URL.indexOf("/kcsapi/");
 				var api_name = URL.substring( KcsApiIndex+8 );
@@ -40,7 +43,8 @@ Listens to network history and triggers callback if game events happen
 				                             'api_req_combined_battle/sp_midnight'])
 				                             >= 0);
 			},
-
+			
+			//For testing use
 			dumpData: function (APIurl,requestBody,responseBody){
 				console.log(encodeURIComponent(ConfigManager.DBSubmission_key));
 				console.log(encodeURIComponent('K2r3QgrKmBeNeDpzNey8'));
@@ -49,11 +53,17 @@ Listens to network history and triggers callback if game events happen
 				console.log(encodeURIComponent(responseBody));
 			},
 
+			/* Submit method
+			 * 
+			 * Note that the request body has to be pre-URL encoded. In this case request.request.postData has already
+			 * done the job for us.
+			 * 
+			 */ 
 			submitData: function (APIurl,requestBody,responseBody){
 				//Use the default contentType: application/x-www-form-urlencoded; charset=UTF-8.
 				var post = $.ajax({
 					url: "http://api.kancolle-db.net/2/",
-//					url: "http://httpbin.org/post",
+					//url: "http://httpbin.org/post",
 					method: "POST",
 					data: {
 						'token' : encodeURIComponent(ConfigManager.DBSubmission_key),

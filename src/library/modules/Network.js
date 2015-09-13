@@ -88,7 +88,7 @@ Listens to network history and triggers callback if game events happen
 						if(thisRequest.validateData()){
 							thisRequest.process();
 							console.log(request.request.url + ':' + DBSubmission.checkIfDataNeeded(request.request.url));
-							if (DBSubmission.checkIfDataNeeded(request.request.url)){
+							if (ConfigManager.DBSubmission_enabled && DBSubmission.checkIfDataNeeded(request.request.url)){
 								request.getContent(
 										function(content, encoding)
 										{
