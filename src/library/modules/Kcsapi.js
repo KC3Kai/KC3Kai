@@ -705,6 +705,7 @@ Previously known as "Reactor"
 			if(["A","B","S","SS"].indexOf(response.api_data.api_win_rank) > -1){
 				KC3QuestManager.get(304).increment(); // C3: Daily Exercises 2
 				KC3QuestManager.get(302).increment(); // C4: Weekly Exercises
+				KC3QuestManager.get(311).increment(); // C8: Elite Fleet Practice
 			}
 			
 			KC3Network.trigger("PvPEnd", { result: response.api_data });
