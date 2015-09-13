@@ -311,7 +311,7 @@ Contains summary information about a fleet and its 6 ships
 	/* DISCARD SHIP
 	------------------------------------*/
 	KC3Fleet.prototype.discard = function(shipId) {
-		var pos = this.ships.indexOf(shipId);
+		var pos = this.ships.indexOf(Number(shipId));
 		if(pos>=0){
 			this.ships.splice(pos,1);
 			this.ships.push(-1);
