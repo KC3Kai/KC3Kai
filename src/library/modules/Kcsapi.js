@@ -568,7 +568,7 @@ Previously known as "Reactor"
 			KC3Network.trigger("BattleResult");
 			KC3Network.trigger("Quests");
 			
-			KC3Network.delayedUpdate["Fleet"] = KC3Network.delayedUpdate["GearSlots"] = 1;
+			KC3Network.delay(1,"Fleet","GearSlots");
 		},
 		"api_req_combined_battle/battleresult":function(params, response, headers){
 			resultScreenQuestFulfillment(params, response, headers);
@@ -581,8 +581,8 @@ Previously known as "Reactor"
 			KC3Network.trigger("BattleResult");
 			KC3Network.trigger("Quests");
 			
-			KC3Network.delayedUpdate["Fleet"] = KC3Network.delayedUpdate["GearSlots"] = 1;
-			},
+			KC3Network.delay(1,"Fleet","GearSlots");
+		},
 		
 		/* FCF TRIGGER
 		-------------------------------------------------------*/
