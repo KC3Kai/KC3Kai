@@ -126,7 +126,7 @@
 		{
 			"name": "Travis-kun",
 			"avatar" : "https://cloud.githubusercontent.com/assets/557312/9787493/d922f80e-57f5-11e5-9eae-29e013e5c2b9.png",
-			"desc" : "I will be always watching",
+			"desc" : "I will always be watching",
 			"links" : {
 				"gh" :"https://github.com/travis-ci/travis.rb"
 			}
@@ -309,7 +309,9 @@
 			"desc": "AboutDevTester",
 			"links": {
 				"gh" :"https://github.com/LostLogia4",
-				"wk" :"http://kancolle.wikia.com/wiki/User:Ar-cen-ciel"
+				"wk" :"http://kancolle.wikia.com/wiki/User:Ar-cen-ciel",
+				"hm" :"http://www.himeuta.net/members/7572-lostlogia4",
+				"tw" :"https://twitter.com/LostLogia4" 
 			}
 		},
 		{
