@@ -658,6 +658,8 @@
 			
 			// FLEET BUTTONS RESUPPLY STATUSES
 			$(".module.controls .fleet_num").each(function(i, element){
+				$(element).removeClass("needsSupply");
+				$(element).removeClass("hasTaiha");
 				if(!$(element).hasClass("active")){
 					if(!PlayerManager.fleets[i].isSupplied()){
 						$(element).addClass("needsSupply");
