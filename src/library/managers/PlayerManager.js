@@ -122,7 +122,7 @@ Does not include Ships and Gears which are managed by other Managers
 		
 		setStatistics :function( data ){
 			var oldStatistics = JSON.parse(localStorage.statistics || "{\"exped\":{},\"pvp\":{},\"sortie\":{}}");
-			localStorage.statistics = JSON.stringify({
+			var newStatistics = {
 				exped: {
 					rate: data.exped.rate || oldStatistics.exped.rate || 0,
 					total: data.exped.total || oldStatistics.exped.total,
@@ -140,11 +140,22 @@ Does not include Ships and Gears which are managed by other Managers
 					win: data.sortie.win || oldStatistics.sortie.win,
 					lose: data.sortie.lose || oldStatistics.sortie.lose
 				}
-			});
+			};
+			if(newStatistics.sortie.rate===0){
+				newStatistics.sortie.rate = Math.round(newStatistics.sortie.win / (newStatistics.sortie.win + newStatistics.sortie.lose) * 10000)/100;
+			}
+			if(newStatistics.pvp.rate===0){
+				newStatistics.pvp.rate = Math.round(newStatistics.pvp.win / (newStatistics.pvp.win + newStatistics.pvp.lose) *10000)/100;
+			}
+			if(newStatistics.exped.rate===0){
+				newStatistics.exped.rate =  Math.round(newStatistics.exped.success / newStatistics.exped.total * 10000)/100;
+			}
+			// console.log("rates", newStatistics.sortie.rate, newStatistics.pvp.rate, newStatistics.exped.rate);
+			localStorage.statistics = JSON.stringify(newStatistics);
 		},
 		
 		setNewsfeed :function( data, stime ){
-			console.log("newsfeed", data);
+			//console.log("newsfeed", data);
 			$.each(data, function( index, element){
 				if(parseInt(element.api_state, 10) !== 0){
 					console.log("saved news", element);

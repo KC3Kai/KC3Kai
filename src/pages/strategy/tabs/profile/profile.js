@@ -47,7 +47,7 @@
 			
 			// Show statistics
 			if(this.statistics){
-				$(".stat_sortie .stat_rate .stat_value").html((this.statistics.sortie.rate*100)+"%");
+				$(".stat_sortie .stat_rate .stat_value").html(this.statistics.sortie.rate+"%");
 				$(".stat_sortie .stat_win .stat_value").html(this.statistics.sortie.win);
 				$(".stat_sortie .stat_lose .stat_value").html(this.statistics.sortie.lose);
 				
