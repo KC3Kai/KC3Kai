@@ -1075,6 +1075,13 @@
 	text-align:center;
 	/*border:1px solid #ccc;*/
 }
+.module.controls .fleet_num.needsSupply {
+	border:2px solid #f00;
+	line-height:26px;
+}
+.module.controls .fleet_num.hasTaiha {
+	background:#faa;
+}
 .module.controls .fleet_rengo {
 	width:50px;
 	border-radius:10px;
