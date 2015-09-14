@@ -602,18 +602,26 @@
 				// STATUS: MORALE
 				if( FleetSummary.lowestMorale > 54 ){
 					$(".module.status .status_morale .status_text").text( KC3Meta.term("PanelGreatMorale") );
-					$(".module.status .status_morale img").attr("src", "../../../../assets/img/ui/check.png");
 					$(".module.status .status_morale .status_text").addClass("good");
 				}else if( FleetSummary.lowestMorale >= ConfigManager.alert_morale_value ){
 					$(".module.status .status_morale .status_text").text( KC3Meta.term("PanelGoodMorale") );
-					$(".module.status .status_morale img").attr("src", "../../../../assets/img/ui/check.png");
 					$(".module.status .status_morale .status_text").addClass("good");
 				}else{
 					var MissingMorale = ConfigManager.alert_morale_value - FleetSummary.lowestMorale;
 					var MoraleTime = (Math.ceil(MissingMorale/3)*3)*60;
 					$(".module.status .status_morale .status_text").text(String(MoraleTime).toHHMMSS());
-					$(".module.status .status_morale img").attr("src", "../../../../assets/img/ui/sunk.png");
 					$(".module.status .status_morale .status_text").addClass("bad");
+				}
+				
+				// STATUS: MORALE ICON (independent from notification status)
+				if( FleetSummary.lowestMorale > 49 ){
+					$(".module.status .status_morale img").attr("src", "../../../../assets/img/client/morale/4.png");
+				}else if( FleetSummary.lowestMorale > 39 ){
+					$(".module.status .status_morale img").attr("src", "../../../../assets/img/client/morale/3.png");
+				}else if( FleetSummary.lowestMorale > 19 ){
+					$(".module.status .status_morale img").attr("src", "../../../../assets/img/client/morale/2.png");
+				}else{
+					$(".module.status .status_morale img").attr("src", "../../../../assets/img/client/morale/1.png");
 				}
 				
 				// STATUS: TAIHA
