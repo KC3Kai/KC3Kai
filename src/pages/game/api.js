@@ -39,7 +39,15 @@ $(document).on("ready", function(){
 		$("body").css("background-repeat", "no-repeat");
 	}
 	
-	$(".box-wait .api_txt").attr("title",KC3Meta.term("APIConcealExpl"));
+	$(".box-wait .api_txt").attr("title",KC3Meta.term("APIConcealExpl")).on('change','textarea',function(){
+		if(($(this).val().length > 0) || confirm("APIDataManualClear")) {
+			localStorage.absoluteswf = $(this).val();
+		} else {
+			$(this).val(localStorage.absoluteswf);
+		}
+		if(localStorage.absoluteswf.length <= 0)
+			location.reload();
+	});
 	
 	// API link determines which screen to show
 	if(localStorage.absoluteswf){

@@ -169,7 +169,7 @@ Previously known as "Reactor"
 					lose: response.api_data.api_practice.api_lose,
 				},
 				sortie: {
-					rate: response.api_data.api_war.api_rate,
+					rate: response.api_data.api_war.api_rate*100,
 					win: response.api_data.api_war.api_win,
 					lose: response.api_data.api_war.api_lose
 				}
@@ -220,6 +220,7 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_get_member/ship_deck":function(params, response, headers){
 			KC3ShipManager.set(response.api_data.api_ship_data);
+			KC3Network.delay.amount(0,"Fleet");
 			KC3Network.trigger("Fleet");
 		},
 		
@@ -240,10 +241,12 @@ Previously known as "Reactor"
 		/* Equipment list
 		-------------------------------------------------------*/
 		"api_get_member/slot_item": function(params, response, headers){
-			console.log(KC3GearManager.count(),KC3GearManager.pendingGearNum);
+			console.log("Pre call",KC3GearManager.count(),KC3GearManager.pendingGearNum);
 			KC3GearManager.clear();
 			KC3GearManager.set( response.api_data );
-			console.log(KC3GearManager.count(),KC3GearManager.pendingGearNum);
+			console.log("Post call",KC3GearManager.count(),KC3GearManager.pendingGearNum);
+			KC3Network.trigger("GearSlots");
+			KC3Network.trigger("Fleet");
 		},
 		
 		/* Fleet list
@@ -322,6 +325,8 @@ Previously known as "Reactor"
 			}else{
 				PlayerManager.consumables.torch--;
 			}
+			KC3TimerManager.build(params.api_kdock_id).activate(
+				(new Date()).getTime());
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Timers");
 		},
@@ -431,8 +436,7 @@ Previously known as "Reactor"
 		"api_req_map/select_eventmap_rank":function(params, response, headers){
 			var allMaps = JSON.parse(localStorage.maps);
 			allMaps["m" + params.api_maparea_id + params.api_map_no].difficulty = parseInt(params.api_rank);
-			allMaps["m" + params.api_maparea_id + params.api_map_no].curhp = 9999;
-			allMaps["m" + params.api_maparea_id + params.api_map_no].maxhp = 9999;
+			allMaps["m" + params.api_maparea_id + params.api_map_no].curhp = allMaps["m" + params.api_maparea_id + params.api_map_no].maxhp = 9999;
 			localStorage.maps = JSON.stringify(allMaps);
 		},
 		
@@ -563,6 +567,8 @@ Previously known as "Reactor"
 			
 			KC3Network.trigger("BattleResult");
 			KC3Network.trigger("Quests");
+			
+			KC3Network.delay(1,"Fleet","GearSlots");
 		},
 		"api_req_combined_battle/battleresult":function(params, response, headers){
 			resultScreenQuestFulfillment(params, response, headers);
@@ -574,6 +580,8 @@ Previously known as "Reactor"
 			
 			KC3Network.trigger("BattleResult");
 			KC3Network.trigger("Quests");
+			
+			KC3Network.delay(1,"Fleet","GearSlots");
 		},
 		
 		/* FCF TRIGGER
@@ -703,6 +711,7 @@ Previously known as "Reactor"
 			if(["A","B","S","SS"].indexOf(response.api_data.api_win_rank) > -1){
 				KC3QuestManager.get(304).increment(); // C3: Daily Exercises 2
 				KC3QuestManager.get(302).increment(); // C4: Weekly Exercises
+				KC3QuestManager.get(311).increment(); // C8: Elite Fleet Practice
 			}
 			
 			KC3Network.trigger("PvPEnd", { result: response.api_data });
@@ -840,6 +849,12 @@ Previously known as "Reactor"
 		"api_get_member/mapinfo":function(params, response, headers){
 			var maps = JSON.parse(localStorage.maps || "{}");
 			var ctr, thisMap;
+			// Exclude gauge based map from being kept every time
+			for(ctr in KC3Meta._gauges) {
+				if(Object.keys(maps).indexOf(ctr)>=0)
+					maps[ctr].clear = maps[ctr].api_defeat_count = false;
+			}
+			// Combine current storage and current available maps data
 			for(ctr in response.api_data){
 				thisMap = response.api_data[ctr];
 				

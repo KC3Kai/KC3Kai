@@ -34,6 +34,7 @@ Listens to network history and triggers callback if game events happen
 			PvPEnd: [],
 			ExpedResult: [],
 		},
+		delayedUpdate: {},
 		
 		/* ADD LISTENER
 		All callback to an event
@@ -55,8 +56,26 @@ Listens to network history and triggers callback if game events happen
 		Execute subscribed callbacks to an event
 		------------------------------------------*/
 		trigger : function( eventName, data ){
-			$.each(this.eventTypes[eventName], function( index, callback ){
-				callback( eventName, data||{});
+			if((this.delayedUpdate[eventName] || 0) <= 0) {
+				$.each(this.eventTypes[eventName], function( index, callback ){
+					callback( eventName, data||{});
+				});
+				this.delayedUpdate[eventName] = 0;
+			} else {
+				console.log("Prevented call to ",eventName);
+				this.delayedUpdate[eventName] -= 1;
+			}
+		},
+		
+		/* DELAY
+		Prevents event performing
+		------------------------------------------*/
+		delay : function(){
+			var
+				self = this,
+				amount = arguments.shift();
+			$.each(arguments, function( i,eventName ){
+				self.delayedUpdate[eventName] = amount;
 			});
 		},
 		

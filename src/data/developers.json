@@ -1,4 +1,4 @@
-﻿{
+{
 	"AboutCoders" : [
 		{
 			"name": "dragonjet",
@@ -113,6 +113,22 @@
 			"links" : {
 				"gh" :"https://github.com/nekoworkshop",
 				"tw" :"http://twitter.com/nekoworkshop"
+			}
+		},
+		{
+			"name": "bcc32",
+			"avatar" : "https://avatars0.githubusercontent.com/u/1239097?v=3&s=40",
+			"desc" : "Developer",
+			"links" : {
+				"gh" :"https://github.com/bcc32"
+			}
+		},
+		{
+			"name": "Travis-kun",
+			"avatar" : "https://cloud.githubusercontent.com/assets/557312/9787493/d922f80e-57f5-11e5-9eae-29e013e5c2b9.png",
+			"desc" : "I will be always watching",
+			"links" : {
+				"gh" :"https://github.com/travis-ci/travis.rb"
 			}
 		}
 	],
@@ -276,14 +292,6 @@
 				"fb" :"https://www.facebook.com/ethrundr",
 				"hm" :"http://www.himeuta.net/members/1056-ethrundr/",
 				"kn" :"http://www.kaorinusantara.or.id/forum/index.php?members/ethrundr.18705/"
-			}
-		},
-		{
-			"name": "bcc32",
-			"avatar" : "https://avatars0.githubusercontent.com/u/1239097?v=3&s=40",
-			"desc" : "AboutDevTester",
-			"links" : {
-				"gh" :"https://github.com/bcc32"
 			}
 		},
 		{
