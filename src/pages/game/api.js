@@ -26,6 +26,7 @@ $(document).on("ready", function(){
 	ConfigManager.load();
 	KC3Meta.init("../../../../data/");
 	KC3QuestManager.load();
+	KC3Database.init();
 	
 	// Apply interface configs
 	$(".box-wrap").css("margin-top", ConfigManager.api_margin+"px");

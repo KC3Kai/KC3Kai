@@ -153,7 +153,7 @@ KCScreenshot.prototype.saveImgur = function(){
 						type: 'base64'
 					},
 					success: function(response){
-						KC3Database.Screenshot(response.data.link, self.playerIndex);
+						KC3Database.Screenshot(response.data.link);
 					}
 				});
 			}else{
