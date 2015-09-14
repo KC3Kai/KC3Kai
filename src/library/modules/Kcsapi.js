@@ -220,6 +220,7 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_get_member/ship_deck":function(params, response, headers){
 			KC3ShipManager.set(response.api_data.api_ship_data);
+			KC3Network.delayedUpdate["Fleet"] = 0;
 			KC3Network.trigger("Fleet");
 		},
 		
@@ -240,10 +241,12 @@ Previously known as "Reactor"
 		/* Equipment list
 		-------------------------------------------------------*/
 		"api_get_member/slot_item": function(params, response, headers){
-			console.log(KC3GearManager.count(),KC3GearManager.pendingGearNum);
+			console.log("Pre call",KC3GearManager.count(),KC3GearManager.pendingGearNum);
 			KC3GearManager.clear();
 			KC3GearManager.set( response.api_data );
-			console.log(KC3GearManager.count(),KC3GearManager.pendingGearNum);
+			console.log("Post call",KC3GearManager.count(),KC3GearManager.pendingGearNum);
+			KC3Network.trigger("GearSlots");
+			KC3Network.trigger("Fleet");
 		},
 		
 		/* Fleet list
@@ -564,6 +567,8 @@ Previously known as "Reactor"
 			
 			KC3Network.trigger("BattleResult");
 			KC3Network.trigger("Quests");
+			
+			KC3Network.delayedUpdate["Fleet"] = KC3Network.delayedUpdate["GearSlots"] = 1;
 		},
 		"api_req_combined_battle/battleresult":function(params, response, headers){
 			resultScreenQuestFulfillment(params, response, headers);
@@ -575,7 +580,9 @@ Previously known as "Reactor"
 			
 			KC3Network.trigger("BattleResult");
 			KC3Network.trigger("Quests");
-		},
+			
+			KC3Network.delayedUpdate["Fleet"] = KC3Network.delayedUpdate["GearSlots"] = 1;
+			},
 		
 		/* FCF TRIGGER
 		-------------------------------------------------------*/
