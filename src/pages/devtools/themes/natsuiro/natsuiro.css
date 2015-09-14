@@ -1075,6 +1075,14 @@
 	text-align:center;
 	/*border:1px solid #ccc;*/
 }
+.module.controls .fleet_num.needsSupply {
+	border:2px solid #f00;
+	line-height:26px;
+}
+.module.controls .fleet_num.hasTaiha {
+	background:#faa;
+	color:#000;
+}
 .module.controls .fleet_rengo {
 	width:50px;
 	border-radius:10px;
@@ -1337,19 +1345,25 @@
 	height:20px;
 	float:left;
 }
-.module.fleet .lship .ship_gear_ace {
+.module.fleet .lship .ship_gear_lvl {
 	width: 12px;
 	position: absolute;
 	font-size: 8px;
-	color: #ff0;
 	margin: 8px 0px 0px -5px;
-	background: #555;
 	height: 12px;
 	overflow: hidden;
 	border-radius: 6px;
 	text-align: center;
 	line-height: 13px;
 	display:none;
+}
+.module.fleet .lship .ship_gear_lvl.ship_gear_ace {
+	color: #ff0;
+	background: #555;
+}
+.module.fleet .lship .ship_gear_lvl.ship_gear_mod {
+	color: #fff;
+	background: #45A9A5;
 }
 .module.fleet .lship .ship_gear_icon {
 	width:18px;

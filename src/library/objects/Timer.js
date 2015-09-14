@@ -93,16 +93,18 @@ Has functions for TimerManager to use
 		this.alerted = true;
 		
 		// Sound Alerts
-		var notifSound;
-		switch(ConfigManager.alert_type){
-			case 1: notifSound = new Audio("../../../../assets/snd/pop.mp3"); break;
-			case 2: notifSound = new Audio(ConfigManager.alert_custom); break; 
-			case 3: notifSound = new Audio("../../../../assets/snd/ding.mp3"); break; 
-			default: notifSound = false; break;
+		if(KC3TimerManager.notifSound){
+			KC3TimerManager.notifSound.pause();
 		}
-		if(notifSound){
-			notifSound.volume = ConfigManager.alert_volume / 100;
-			notifSound.play();
+		switch(ConfigManager.alert_type){
+			case 1: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/pop.mp3"); break;
+			case 2: KC3TimerManager.notifSound = new Audio(ConfigManager.alert_custom); break; 
+			case 3: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/ding.mp3"); break; 
+			default: KC3TimerManager.notifSound = false; break;
+		}
+		if(KC3TimerManager.notifSound){
+			KC3TimerManager.notifSound.volume = ConfigManager.alert_volume / 100;
+			KC3TimerManager.notifSound.play();
 		}
 		
 		// Desktop notification

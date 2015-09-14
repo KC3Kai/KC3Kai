@@ -230,7 +230,7 @@ Uses Dexie.js third-party plugin on the assets directory
 		
 		Screenshot :function(imgur){
 			this.con.screenshots.add({
-				hq : this.index,
+				hq : 0,
 				imgur : imgur,
 				ltime : Math.floor((new Date()).getTime()/1000),
 			});
@@ -530,6 +530,18 @@ Uses Dexie.js third-party plugin on the assets directory
 		
 		request_export :function(callback){
 			callback("{}");
+		},
+		
+		count_screenshots: function(callback){
+			this.con.screenshots.count(callback);
+		},
+		
+		get_screenshots :function(pageNumber, callback){
+			var itemsPerPage = 20;
+			this.con.screenshots
+				.reverse()
+				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
+				.toArray(callback);
 		},
 		
 	};

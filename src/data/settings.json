@@ -120,6 +120,12 @@
 				"name" : "SettingsHQDelta",
 				"type" : "check",
 				"options" : {}
+			},
+			{
+				"id" : "info_fleetstat",
+				"name" : "SettingsFleetStatus",
+				"type" : "check",
+				"options" : {}
 			}
 		]
 	},
@@ -149,6 +155,12 @@
 						[ "PNG", "PNG" ]
 					]
 				}
+			},
+			{
+				"id" : "ss_directory",
+				"name" : "SettingsSSDirectory",
+				"type" : "long_text",
+				"options" : { "placeholder" : "Specify subfolder of /Downloads/" }
 			}
 		]
 	},
