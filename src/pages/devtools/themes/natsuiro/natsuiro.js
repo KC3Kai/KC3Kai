@@ -578,83 +578,88 @@
 			$(".module.status .status_text").removeClass("good");
 			$(".module.status .status_text").removeClass("bad");
 			
-			// STATUS: RESUPPLY
-			if( (FleetSummary.supplied ||
-				(KC3SortieManager.onSortie &&
-					KC3SortieManager.fullSupplyMode &&
-					(KC3SortieManager.fleetSent == (PlayerManager.combinedFleet ? 1 : selectedFleet)))) &&
-				(!FleetSummary.badState[0])
-			){
-				$(".module.status .status_supply .status_text").text( KC3Meta.term("PanelSupplied") );
-				$(".module.status .status_supply img").attr("src", "../../../../assets/img/ui/check.png");
-				$(".module.status .status_supply .status_text").addClass("good");
-			}else{
-				$(".module.status .status_supply .status_text").text(KC3Meta.term(
-					FleetSummary.badState[1] ? "PanelEmptySupply" : 
-						(FleetSummary.badState[0] ? "PanelUnderSupplied" : "PanelNotSupplied")
-					));
-				$(".module.status .status_supply img").attr("src", "../../../../assets/img/ui/sunk.png");
-				$(".module.status .status_supply .status_text").addClass("bad");
-			}
-			
-			// STATUS: MORALE
-			if( FleetSummary.lowestMorale > 54 ){
-				$(".module.status .status_morale .status_text").text( KC3Meta.term("PanelGreatMorale") );
-				$(".module.status .status_morale img").attr("src", "../../../../assets/img/ui/check.png");
-				$(".module.status .status_morale .status_text").addClass("good");
-			}else if( FleetSummary.lowestMorale >= ConfigManager.alert_morale_value ){
-				$(".module.status .status_morale .status_text").text( KC3Meta.term("PanelGoodMorale") );
-				$(".module.status .status_morale img").attr("src", "../../../../assets/img/ui/check.png");
-				$(".module.status .status_morale .status_text").addClass("good");
-			}else{
-				var MissingMorale = ConfigManager.alert_morale_value - FleetSummary.lowestMorale;
-				var MoraleTime = (Math.ceil(MissingMorale/3)*3)*60;
-				$(".module.status .status_morale .status_text").text(String(MoraleTime).toHHMMSS());
-				$(".module.status .status_morale img").attr("src", "../../../../assets/img/ui/sunk.png");
-				$(".module.status .status_morale .status_text").addClass("bad");
-			}
-			
-			// STATUS: TAIHA
-			if( FleetSummary.hasTaiha || FleetSummary.badState[2] || FleetSummary.badState[3] ){
-				$(".module.status .status_repair .status_text").text( KC3Meta.term(
-					(FleetSummary.badState[2] ? "PanelFSTaiha" : (FleetSummary.badState[3] ? "PanelEscortChuuha" : "PanelHasTaiha"))
-				) );
-				$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/sunk.png");
-				$(".module.status .status_repair .status_text").addClass("bad");
-			}else{
-				$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelNoTaiha") );
-				$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/check.png");
-				$(".module.status .status_repair .status_text").addClass("good");
-			}
-			
-			// STATUS: COMBINED
-			if(selectedFleet==1 || selectedFleet==5){
-				switch(Number(PlayerManager.combinedFleet)){
-					case 1:
-						$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedCarrier") );
-						break;
-					case 2:
-						$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedSurface") );
-						break;
-					default:
-						$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedNone") );
-						break;
+			// If fleet status summary is enabled on settings
+			if(ConfigManager.info_fleetstat){
+				// STATUS: RESUPPLY
+				if( (FleetSummary.supplied ||
+					(KC3SortieManager.onSortie &&
+						KC3SortieManager.fullSupplyMode &&
+						(KC3SortieManager.fleetSent == (PlayerManager.combinedFleet ? 1 : selectedFleet)))) &&
+					(!FleetSummary.badState[0])
+				){
+					$(".module.status .status_supply .status_text").text( KC3Meta.term("PanelSupplied") );
+					$(".module.status .status_supply img").attr("src", "../../../../assets/img/ui/check.png");
+					$(".module.status .status_supply .status_text").addClass("good");
+				}else{
+					$(".module.status .status_supply .status_text").text(KC3Meta.term(
+						FleetSummary.badState[1] ? "PanelEmptySupply" : 
+							(FleetSummary.badState[0] ? "PanelUnderSupplied" : "PanelNotSupplied")
+						));
+					$(".module.status .status_supply img").attr("src", "../../../../assets/img/ui/sunk.png");
+					$(".module.status .status_supply .status_text").addClass("bad");
 				}
-				$(".module.status .status_butai").show();
-				$(".module.status .status_support").hide();
+				
+				// STATUS: MORALE
+				if( FleetSummary.lowestMorale > 54 ){
+					$(".module.status .status_morale .status_text").text( KC3Meta.term("PanelGreatMorale") );
+					$(".module.status .status_morale img").attr("src", "../../../../assets/img/ui/check.png");
+					$(".module.status .status_morale .status_text").addClass("good");
+				}else if( FleetSummary.lowestMorale >= ConfigManager.alert_morale_value ){
+					$(".module.status .status_morale .status_text").text( KC3Meta.term("PanelGoodMorale") );
+					$(".module.status .status_morale img").attr("src", "../../../../assets/img/ui/check.png");
+					$(".module.status .status_morale .status_text").addClass("good");
+				}else{
+					var MissingMorale = ConfigManager.alert_morale_value - FleetSummary.lowestMorale;
+					var MoraleTime = (Math.ceil(MissingMorale/3)*3)*60;
+					$(".module.status .status_morale .status_text").text(String(MoraleTime).toHHMMSS());
+					$(".module.status .status_morale img").attr("src", "../../../../assets/img/ui/sunk.png");
+					$(".module.status .status_morale .status_text").addClass("bad");
+				}
+				
+				// STATUS: TAIHA
+				if( FleetSummary.hasTaiha || FleetSummary.badState[2] || FleetSummary.badState[3] ){
+					$(".module.status .status_repair .status_text").text( KC3Meta.term(
+						(FleetSummary.badState[2] ? "PanelFSTaiha" : (FleetSummary.badState[3] ? "PanelEscortChuuha" : "PanelHasTaiha"))
+					) );
+					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/sunk.png");
+					$(".module.status .status_repair .status_text").addClass("bad");
+				}else{
+					$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelNoTaiha") );
+					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/check.png");
+					$(".module.status .status_repair .status_text").addClass("good");
+				}
+				
+				// STATUS: COMBINED
+				if(selectedFleet==1 || selectedFleet==5){
+					switch(Number(PlayerManager.combinedFleet)){
+						case 1:
+							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedCarrier") );
+							break;
+						case 2:
+							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedSurface") );
+							break;
+						default:
+							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedNone") );
+							break;
+					}
+					$(".module.status .status_butai").show();
+					$(".module.status .status_support").hide();
+				}else{
+					$(".module.status .status_butai").hide();
+					$(".module.status .status_support").show();
+				}
+				
+				// STATUS: SUPPORT
+				$(".module.status .status_support .status_text").text( FleetSummary.supportPower );
+				
+				// STATUS: REPAIRS
+				UpdateRepairTimerDisplays(FleetSummary.docking, FleetSummary.akashi);
+				$(".module.status .status_docking").attr("title", KC3Meta.term("PanelHighestDocking") );
+				$(".module.status .status_akashi").attr("title", KC3Meta.term("PanelHighestAkashi") );
+				$(".module.status .status_support").attr("title", KC3Meta.term("PanelSupportPower") );
 			}else{
-				$(".module.status .status_butai").hide();
-				$(".module.status .status_support").show();
+				$(".module.status").hide();
 			}
-			
-			// STATUS: SUPPORT
-			$(".module.status .status_support .status_text").text( FleetSummary.supportPower );
-			
-			// STATUS: REPAIRS
-			UpdateRepairTimerDisplays(FleetSummary.docking, FleetSummary.akashi);
-			$(".module.status .status_docking").attr("title", KC3Meta.term("PanelHighestDocking") );
-			$(".module.status .status_akashi").attr("title", KC3Meta.term("PanelHighestAkashi") );
-			$(".module.status .status_support").attr("title", KC3Meta.term("PanelSupportPower") );
 			
 			// FLEET BUTTONS RESUPPLY STATUSES
 			$(".module.controls .fleet_num").each(function(i, element){

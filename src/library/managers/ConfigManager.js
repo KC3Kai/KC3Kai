@@ -18,7 +18,7 @@ Retreives when needed to apply on components
 				elosFormula 		: 3,
 				hqExpDetail 		: 1,
 				timerDisplayType	: 1,
-				marryLevelFormat: 0,
+				marryLevelFormat	: 0,
 				
 				info_face 			: true,
 				info_drop 			: true,
@@ -29,6 +29,7 @@ Retreives when needed to apply on components
 				info_boss 			: false,
 				info_troll 			: false,
 				info_delta 			: false,
+				info_fleetstat 		: true,
 				
 				ss_mode 			: 0,
 				ss_type 			: 'JPG',

@@ -120,6 +120,12 @@
 				"name" : "SettingsHQDelta",
 				"type" : "check",
 				"options" : {}
+			},
+			{
+				"id" : "info_fleetstat",
+				"name" : "SettingsFleetStatus",
+				"type" : "check",
+				"options" : {}
 			}
 		]
 	},
