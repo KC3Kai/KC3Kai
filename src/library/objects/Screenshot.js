@@ -112,7 +112,7 @@ KCScreenshot.prototype.saveDownload = function(){
 	chrome.downloads.setShelfEnabled(false);
 	chrome.downloads.download({
 		url: this.base64img,
-		filename: 'KanColle/'+this.screenshotFilename+"."+this.format[1],
+		filename: ConfigManager.ss_directory+'/'+this.screenshotFilename+"."+this.format[1],
 		conflictAction: "uniquify"
 	}, function(downloadId){
 		setTimeout(function(){

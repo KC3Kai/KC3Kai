@@ -33,6 +33,7 @@ Retreives when needed to apply on components
 				
 				ss_mode 			: 0,
 				ss_type 			: 'JPG',
+				ss_directory 		: 'KanColle',
 				
 				alert_diff 			: 59,
 				alert_morale_notif	: true,

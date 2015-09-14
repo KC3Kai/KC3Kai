@@ -155,6 +155,12 @@
 						[ "PNG", "PNG" ]
 					]
 				}
+			},
+			{
+				"id" : "ss_directory",
+				"name" : "SettingsSSDirectory",
+				"type" : "long_text",
+				"options" : { "placeholder" : "Specify subfolder of /Downloads/" }
 			}
 		]
 	},
