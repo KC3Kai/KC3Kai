@@ -94,30 +94,45 @@ Listens to network history and triggers callback if game events happen
 			
 			// Overlay subtitles
 			// http://125.6.189.247/kcs/sound/kckavryopoywwx/4.mp3?version=2
+			
 			if(request.request.url.indexOf("/kcs/sound/") > -1){
+				// request.getContent(function( responseBody ){
+				// 	console.log("kcssound", responseBody);
+				// });
+				
+				console.log(request);
 				var soundPaths = request.request.url.split("/");
+				
+				// Game Start Voices
 				if(soundPaths[5]=="titlecall"){
 					console.log("DETECTED titlecall sound");
 					(new RMsg("service", "subtitle", {
 						voicetype: "titlecall",
 						filename: soundPaths[6],
 						voiceNum: soundPaths[7].split(".")[0],
+						url: request.request.url,
 						tabId: chrome.devtools.inspectedWindow.tabId
 					})).execute();
+					
+				// NPC Voices
 				}else if(soundPaths[5]=="kc9999"){
 					console.log("DETECTED NPC sound");
 					(new RMsg("service", "subtitle", {
 						voicetype: "npc",
 						filename: soundPaths[6],
 						voiceNum: soundPaths[7].split(".")[0],
+						url: request.request.url,
 						tabId: chrome.devtools.inspectedWindow.tabId
 					})).execute();
+					
+				// Shipgirl Voices
 				}else{
 					console.log("DETECTED shipgirl sound");
 					(new RMsg("service", "subtitle", {
 						voicetype: "shipgirl",
 						filename: soundPaths[5].substring(2),
 						voiceNum: soundPaths[6].split(".")[0],
+						url: request.request.url,
 						tabId: chrome.devtools.inspectedWindow.tabId
 					})).execute();
 				}

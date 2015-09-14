@@ -118,7 +118,8 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			(new TMsg(request.tabId, "gamescreen", "subtitle", {
 				voicetype: request.voicetype,
 				filename: request.filename,
-				voiceNum: request.voiceNum
+				voiceNum: request.voiceNum,
+				url: request.url
 			})).execute();
 		}
 		

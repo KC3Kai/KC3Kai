@@ -9,6 +9,9 @@ var trustedExit = false;
 // Used to fade out subtitles after calculated duration
 var subtitleVanishTimer = false;
 
+// Holder object for audio files to test mp3 duration
+var subtitleMp3;
+
 // Show game screens
 function ActivateGame(){
 	waiting = false;
@@ -235,7 +238,7 @@ var interactions = {
 	
 	// Show subtitles
 	subtitle :function(request, sender, response){
-		console.log("subtitle", request, sender, response);
+		console.log("subtitle", request);
 		
 		// Get subtitle text
 		var subtitleText = false;
@@ -247,7 +250,7 @@ var interactions = {
 				subtitleText = KC3Meta.quote( "npc", request.voiceNum);
 				break;
 			default:
-				subtitleText = KC3Meta.quote( KC3Master.graph( request.filename ), request.voiceNum);
+				subtitleText = KC3Meta.quote( KC3Master.graph( request.filename ), request.voiceNum );
 				break;
 		}
 		
@@ -259,12 +262,23 @@ var interactions = {
 		// If subtitles available for the voice
 		if(subtitleText){
 			$(".overlay_subtitles").html(subtitleText);
-			$(".overlay_subtitles").fadeIn(500);
+			$(".overlay_subtitles").show();
+			
+			/*subtitleMp3 = new Audio();
+			subtitleMp3.canplaythrough = function() { 
+				console.log("DURATION: "+subtitleMp3.duration);
+			};
+			subtitleMp3.src = request.url;*/
+			
+			/*subtitleMp3 = document.createElement("audio");
+			subtitleMp3.addEventListener('canplaythrough', function() { 
+				console.log("DURATION: "+subtitleMp3.duration);
+			}, false);
+			subtitleMp3.src = request.url;*/
 			
 			subtitleVanishTimer = setTimeout(function(){
 				subtitleVanishTimer = false;
 				$(".overlay_subtitles").fadeOut(500);
-				
 			}, (2000+ ($(".overlay_subtitles").text().length*50)) );
 		}
 	},
