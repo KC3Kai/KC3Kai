@@ -94,7 +94,7 @@ Listens to network history and triggers callback if game events happen
 					if (XHRObject.readyState == 4) {
 						console.log("KDB Response Received:" + XHRObject.status);
 					}
-				}
+				};
 				
 				XHRObject.open("POST","http://api.kancolle-db.net/2/",true);
 				XHRObject.setRequestHeader("Content-type","application/x-www-form-urlencoded");
