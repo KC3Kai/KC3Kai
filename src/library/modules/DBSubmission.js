@@ -66,8 +66,8 @@ Listens to network history and triggers callback if game events happen
 					//url: "http://httpbin.org/post",
 					method: "POST",
 					data: {
-						'token' : encodeURIComponent(ConfigManager.DBSubmission_key),
-						'agent' : encodeURIComponent('K2r3QgrKmBeNeDpzNey8'),
+						'token' : ConfigManager.DBSubmission_key,
+						'agent' : 'K2r3QgrKmBeNeDpzNey8',
 						'url' : APIurl,
 						'requestbody' : requestBody.text.replace(/&api(_|%5F)token=[0-9a-f]+|api(_|%5F)token=[0-9a-f]+&?/,''),
 						'responsebody' : responseBody
@@ -83,6 +83,30 @@ Listens to network history and triggers callback if game events happen
 					console.log('DB Submission failed: Status ' + textStatus);
 					console.log(jqXHR);
 				});
+			},
+			
+			submitDataXHR: function (APIurl,requestBody,responseBody){
+				var XHRObject = new XMLHttpRequest();
+				
+				XHRObject.onreadystatechange=function() {
+					console.log("XHR statechanged:" + XHRObject.readyState);
+					console.log("XHR statuschanged:" + XHRObject.status);
+					if (XHRObject.readyState == 4) {
+						console.log("KDB Response Received:" + XHRObject.status);
+					}
+				}
+				
+				XHRObject.open("POST","http://api.kancolle-db.net/2/",true);
+				XHRObject.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+				XHRObject.send($.param({
+					'token':ConfigManager.DBSubmission_key,
+					'agent':'K2r3QgrKmBeNeDpzNey8',
+					'url':'http://api.kancolle-db.net/2/',
+					'requestbody':requestBody.text.replace(/&api(_|%5F)token=[0-9a-f]+|api(_|%5F)token=[0-9a-f]+&?/,''),
+					'responsebody':responseBody,
+				}));
+				
+
 			}
 
 	};

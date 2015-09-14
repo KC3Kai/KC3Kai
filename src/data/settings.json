@@ -63,24 +63,6 @@
 		]
 	},
 	{
-		"section": "SettingsDBSubmission",
-		"help" : "",
-		"contents" :[
-			{
-				"id" : "DBSubmission_enabled",
-				"name" : "SettingsEnableDBSubmission",
-				"type" : "check",
-				"options" : {}
-			},
-			{
-				"id" : "DBSubmission_key",
-				"name" : "SettingsDBSubmissionKey",
-				"type" : "long_text",
-				"options" : {"placeholder" : "API Key" }
-			}
-		]
-	},
-	{
 		"section": "SettingsGameInfo",
 		"help" : "",
 		"contents" : [
@@ -406,6 +388,28 @@
 				"type" : "long_text",
 				"hide" : 1,
 				"options" : { "placeholder" : "SettingsBGPositionDesc" }
+			}
+		]
+	},
+	{
+		"section": "SettingsDBSubmission",
+		"help" : "",
+		"contents" :[
+			{
+				"id" : "DBSubmission_enabled",
+				"name" : "SettingsEnableDBSubmission",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "DBSubmission_key",
+				"name" : "SettingsDBSubmissionKey",
+				"type" : "long_text",
+				"options" : {"placeholder" : "API Key" },
+				"bound" : {
+					"length_min" : 27,
+					"length_max" : 27
+				}
 			}
 		]
 	},
