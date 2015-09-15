@@ -220,7 +220,7 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_get_member/ship_deck":function(params, response, headers){
 			KC3ShipManager.set(response.api_data.api_ship_data);
-			KC3Network.delay.amount(0,"Fleet");
+			KC3Network.delay(0, "Fleet");
 			KC3Network.trigger("Fleet");
 		},
 		
