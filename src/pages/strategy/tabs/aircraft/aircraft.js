@@ -103,7 +103,7 @@
 				return b.stats[attr] - a.stats[attr];
 			};
 			var sortSlotItem = function(a,b){
-				return b.ace - a.ace
+				return b.ace - a.ace;
 			};
 			for( var i in this._items ){
 
