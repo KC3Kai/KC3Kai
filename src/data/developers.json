@@ -279,6 +279,25 @@
 			"links" : {
 				"gh" : "https://github.com/FluffyPanzer"
 			}
+		},
+		{
+			"name": "Kvazikvark",
+			"avatar" : "https://avatars2.githubusercontent.com/u/14229931?v=3&s=40",
+			"desc" : "Русский",
+			"links" : {
+				"gh" : "https://github.com/Kvazikvark",
+				"wk" : "http://kancolle.wikia.com/wiki/User:Kvazikvark",
+				"ma" : "http://myanimelist.net/profile/Kvazikvark",
+				"sk" : "skype:wesker487?chat"
+			}
+		},
+		{
+			"name": "Konstantillo",
+			"avatar" : "http://vignette3.wikia.nocookie.net/common/avatars/5/5c/26028877.png/revision/latest/scale-to-width-down/150?cb=1422400487&format=jpg",
+			"desc" : "Русский",
+			"links" : {
+				"wk" : "http://kancolle.wikia.com/wiki/User:Konstantillo"
+			}
 		}
 	],
 	"AboutTesters" : [
