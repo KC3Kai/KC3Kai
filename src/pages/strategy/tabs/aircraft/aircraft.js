@@ -89,7 +89,7 @@
 					// sort item by ace
 					this._items[i][j].instances.sort(function(a,b){
 						return b.ace - a.ace;
-					})
+					});
 					this._items[i].push( this._items[i][j] );
 					delete this._items[i][j];
 				}
@@ -114,7 +114,7 @@
 					if( b.stats[attr] == a.stats[attr] )
 						return b.stats.ht - a.stats.ht;
 					return b.stats[attr] - a.stats[attr];
-				})
+				});
 			}
 		},
 		
