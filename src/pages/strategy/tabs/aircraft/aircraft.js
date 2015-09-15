@@ -88,15 +88,15 @@
 				for( var j in this._items[i] ){
 					// sort item by ace
 					this._items[i][j].instances.sort(function(a,b){
-						return b.ace - a.ace
+						return b.ace - a.ace;
 					})
-					this._items[i].push( this._items[i][j] )
-					delete this._items[i][j]
+					this._items[i].push( this._items[i][j] );
+					delete this._items[i][j];
 				}
 				
 				// sort MasterItem by stat
 				this._items[i].sort(function(a, b){
-					var attr
+					var attr;
 					switch( i ){
 						case 't6': case 6:
 							attr = 'aa'; break;
@@ -112,8 +112,8 @@
 							attr = 'aa'; break;
 					}
 					if( b.stats[attr] == a.stats[attr] )
-						return b.stats.ht - a.stats.ht
-					return b.stats[attr] - a.stats[attr]
+						return b.stats.ht - a.stats.ht;
+					return b.stats[attr] - a.stats[attr];
 				})
 			}
 		},
