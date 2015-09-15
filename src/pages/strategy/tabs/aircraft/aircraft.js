@@ -80,6 +80,44 @@
 				
 				thisSlotitem.instances.push(ThisItem);
 			}
+			
+			// sort this_items
+			var sortMasterItem = function(a, b){
+				var attr;
+				switch( i ){
+					case 't6': case 6:
+						attr = 'aa'; break;
+					case 't7': case 7:
+						attr = 'dv'; break;
+					case 't8': case 8:
+						attr = 'tp'; break;
+					case 't9': case 9:
+						attr = 'ls'; break;
+					case 't10': case 10:
+						attr = 'dv'; break;
+					default:
+						attr = 'aa'; break;
+				}
+				if( b.stats[attr] == a.stats[attr] )
+					return b.stats.ht - a.stats.ht;
+				return b.stats[attr] - a.stats[attr];
+			};
+			var sortSlotItem = function(a,b){
+				return b.ace - a.ace;
+			};
+			for( var i in this._items ){
+
+				// make elements in this._items true Array
+				for( var j in this._items[i] ){
+					// sort item by ace
+					this._items[i][j].instances.sort(sortSlotItem);
+					this._items[i].push( this._items[i][j] );
+					delete this._items[i][j];
+				}
+				
+				// sort MasterItem by stat
+				this._items[i].sort(sortMasterItem);
+			}
 		},
 		
 		/* Check a ship's equipment slot of an item is equipped
