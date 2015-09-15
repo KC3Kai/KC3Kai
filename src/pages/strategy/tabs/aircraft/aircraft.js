@@ -104,7 +104,7 @@
 			};
 			var sortSlotItem = function(a,b){
 				return b.ace - a.ace
-			}
+			};
 			for( var i in this._items ){
 
 				// make elements in this._items true Array
