@@ -71,9 +71,8 @@ Listens to network history and triggers callback if game events happen
 		Prevents event performing
 		------------------------------------------*/
 		delay : function(){
-			var
-				self = this,
-				amount = arguments.shift();
+			var self = this;
+			var amount = Array.prototype.shift.apply(arguments);
 			$.each(arguments, function( i,eventName ){
 				self.delayedUpdate[eventName] = amount;
 			});
