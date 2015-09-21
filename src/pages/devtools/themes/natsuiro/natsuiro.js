@@ -1086,6 +1086,7 @@
 			if((typeof thisPvP.eformation != "undefined") && (thisPvP.eformation > -1)){
 				$(".module.activity .battle_eformation img").attr("src",
 					KC3Meta.formationIcon(thisPvP.eformation));
+				$(".module.activity .battle_eformation").css("-webkit-transform", "rotate(-90deg)");
 				$(".module.activity .battle_eformation").attr("title",
 					KC3Meta.formationText(thisPvP.eformation));
 				$(".module.activity .battle_eformation").show();
