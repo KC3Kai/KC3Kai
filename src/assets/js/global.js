@@ -183,8 +183,8 @@ Math.qckInt = function(command,value,rate) {
 	if (["round","ceil","floor"].indexOf(command) < 0)
 		command = null;
 	command = command || "round";
-	value |= 0;
-	rate  |= 0;
+	value   = value   || 0;
+	rate    = rate    || 0;
 	var shift = Math.pow(10,rate);
 	return Math[command](value * shift) / shift;
 };
