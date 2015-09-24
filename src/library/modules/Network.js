@@ -87,13 +87,11 @@ Listens to network history and triggers callback if game events happen
 					thisRequest.readResponse(request, function(){
 						if(thisRequest.validateData()){
 							thisRequest.process();
-							//console.log(request.request.url + ':' + DBSubmission.checkIfDataNeeded(request.request.url));
 							//---Kancolle DB Submission 
 							if (ConfigManager.DBSubmission_enabled && DBSubmission.checkIfDataNeeded(request.request.url)){
 								request.getContent(
 										function(content, encoding)
 										{
-											//DBSubmission.dumpData(request.request.url,request.request.postData, content);
 											DBSubmission.submitData(request.request.url,request.request.postData, content);
 										});
 							}

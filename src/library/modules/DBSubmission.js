@@ -1,7 +1,6 @@
 /* DBSubmission.js
 KC3Kai Kancolle-DB submission library
 
-Must only be imported on devtools pages!
 Listens to network history and triggers callback if game events happen
  */
 (function(){
@@ -10,7 +9,8 @@ Listens to network history and triggers callback if game events happen
 	window.DBSubmission = {
 			
 			/* Only send the following API data 
-			 * Up to date as for commit 92b0828f7b4d5f51616153839142755484df86b8
+			 * Up to date for the following commit: 
+			 * https://github.com/about518/kanColleDbPost/commit/92b0828f7b4d5f51616153839142755484df86b8 
 			 */
 			checkIfDataNeeded :function (URL){
 				var KcsApiIndex = URL.indexOf("/kcsapi/");
@@ -63,7 +63,6 @@ Listens to network history and triggers callback if game events happen
 				//Use the default contentType: application/x-www-form-urlencoded; charset=UTF-8.
 				var post = $.ajax({
 					url: "http://api.kancolle-db.net/2/",
-					//url: "http://httpbin.org/post",
 					method: "POST",
 					data: {
 						'token' : ConfigManager.DBSubmission_key,
@@ -83,8 +82,8 @@ Listens to network history and triggers callback if game events happen
 					console.log('DB Submission failed: Status ' + textStatus);
 					console.log(jqXHR);
 				});
-			},
-			
+			}
+		/*	
 			submitDataXHR: function (APIurl,requestBody,responseBody){
 				var XHRObject = new XMLHttpRequest();
 				
@@ -108,6 +107,7 @@ Listens to network history and triggers callback if game events happen
 				
 
 			}
+		*/
 
 	};
 
