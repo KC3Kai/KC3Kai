@@ -105,6 +105,15 @@ Listens to network history and triggers callback if game events happen
 					thisRequest.readResponse(request, function(){
 						if(thisRequest.validateData()){
 							thisRequest.process();
+							//---Kancolle DB Submission 
+							if (ConfigManager.DBSubmission_enabled && DBSubmission.checkIfDataNeeded(request.request.url)){
+								request.getContent(
+										function(content, encoding)
+										{
+											DBSubmission.submitData(request.request.url,request.request.postData, content);
+										});
+							}
+							//---
 						}
 					});
 				}
