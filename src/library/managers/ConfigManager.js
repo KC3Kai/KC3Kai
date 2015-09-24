@@ -20,6 +20,9 @@ Retreives when needed to apply on components
 				timerDisplayType	: 1,
 				marryLevelFormat	: 0,
 				
+				DBSubmission_enabled: 0,
+				DBSubmission_key : '',
+				
 				info_face 			: true,
 				info_drop 			: true,
 				info_craft 			: true,
