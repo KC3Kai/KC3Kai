@@ -160,8 +160,8 @@ Uses Dexie.js third-party plugin on the assets directory
 							self.expedition.toCollection().modify(function(mission){
 								mission.fleet = [];
 								mission.ships.shift();
-								mission.equip = mission.equip || Array.apply(null,mission.ships)                      /** check expedition equipment, or */
-									.map(function(x){return Array.apply(null,{length:5}).map(function(){return -1;})}); /*  generate empty equipment list */
+								mission.equip = mission.equip || Array.apply(null,mission.ships)                       /** check expedition equipment, or */
+									.map(function(x){return Array.apply(null,{length:5}).map(function(){return -1;});}); /*  generate empty equipment list */
 								mission.equip.shift();
 								mission.ships.forEach(function(x,i){
 									/** data migrating process
