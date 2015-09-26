@@ -298,6 +298,22 @@
 			"links" : {
 				"wk" : "http://kancolle.wikia.com/wiki/User:Konstantillo"
 			}
+		},
+		{
+			"name": "arialypse",
+			"avatar" : "https://avatars0.githubusercontent.com/u/13535817?v=3&s=40",
+			"desc" : "ภาษาไทย",
+			"links" : {
+				"gh" : "https://github.com/arialypse"
+			}
+		},
+		{
+			"name": "Anime-Thai",
+			"avatar" : "https://avatars3.githubusercontent.com/u/14352605?v=3&s=40",
+			"desc" : "ภาษาไทย",
+			"links" : {
+				"gh" : "https://github.com/Anime-Thai"
+			}
 		}
 	],
 	"AboutTesters" : [
