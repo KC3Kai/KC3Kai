@@ -110,33 +110,34 @@ Provides access to data on built-in JSON files
 				this._cache[jp_name] = this._ship[jp_name];
 				return this._cache[jp_name];
 			}
-			if( jp_name.substr(jp_name.length-1, 1) == "改" ){
-				var bare1 = jp_name.substr(0, jp_name.length-1);
-				if(typeof this._ship[bare1] !== "undefined"){
-					this._cache[jp_name] = this._ship[bare1] + " " + this._ship._Kai;
-					return this._cache[jp_name];
-				}
+			var
+				bare = jp_name,
+				combin = [],
+				repTab = {
+					"甲"   : '_A',
+					"改二" : '_KaiNi',
+					"改"   : '_Kai',
+				},
+				repRes = null,
+				replaced = false;
+			// in here, the regular expression will read which one comes first (which mean, to be in the end of the name
+			// and then, the bare string will be chopped by how long the pattern match...
+			// the matched one, added to the combination stack (which is FILO order)
+			// removing from the replacement table in order to prevent infinite loop ^^;
+			// if there's no match, it'll instantly stop and return the actual value
+			while( repRes = (new RegExp(".+("+(Object.keys(repTab).join("|"))+")$",'gi')).exec(bare) ){
+				bare = bare.substr(0, bare.length-repRes[1].length);
+				combin.unshift(this._ship[repTab[repRes[1]]]);
+				delete repTab[repRes[1]];
+				replaced = true;
 			}
-			if( jp_name.substr(jp_name.length-2, 2) == "改二" ){
-				var bare2 = jp_name.substr(0, jp_name.length-2);
-				if(typeof this._ship[bare2] !== "undefined"){
-					this._cache[jp_name] = this._ship[bare2] + " " + this._ship._KaiNi;
-					return this._cache[jp_name];
+			console.log("Remaining",bare,"with combination",combin.join(" "));
+			if(replaced) {
+				combin.unshift("");
+				if(typeof this._ship[bare] !== "undefined"){
+					this._cache[jp_name] = this._ship[bare] + (combin.length > 0 ? combin.join(" ") : "");
 				}
-			}
-			if( jp_name.substr(jp_name.length-1, 1) == "甲" ){
-				var bare3 = jp_name.substr(0, jp_name.length-1);
-				if(typeof this._ship[bare3] !== "undefined"){
-					this._cache[jp_name] = this._ship[bare3] + this._ship._A;
-					return this._cache[jp_name];
-				}
-			}
-			if( jp_name.substr(jp_name.length-3, 3) == "改二甲" ){
-				var bare4 = jp_name.substr(0, jp_name.length-3);
-				if(typeof this._ship[bare4] !== "undefined"){
-					this._cache[jp_name] = this._ship[bare4] + " " + this._ship._KaiNiA;
-					return this._cache[jp_name];
-				}
+				return this._cache[jp_name];
 			}
 			return jp_name;
 		},
