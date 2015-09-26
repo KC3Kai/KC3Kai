@@ -124,6 +124,20 @@ Provides access to data on built-in JSON files
 					return this._cache[jp_name];
 				}
 			}
+			if( jp_name.substr(jp_name.length-1, 1) == "甲" ){
+				var bare3 = jp_name.substr(0, jp_name.length-1);
+				if(typeof this._ship[bare3] !== "undefined"){
+					this._cache[jp_name] = this._ship[bare3] + this._ship._A;
+					return this._cache[jp_name];
+				}
+			}
+			if( jp_name.substr(jp_name.length-3, 3) == "改二甲" ){
+				var bare4 = jp_name.substr(0, jp_name.length-3);
+				if(typeof this._ship[bare4] !== "undefined"){
+					this._cache[jp_name] = this._ship[bare4] + " " + this._ship._KaiNiA;
+					return this._cache[jp_name];
+				}
+			}
 			return jp_name;
 		},
 		
