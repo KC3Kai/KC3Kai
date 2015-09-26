@@ -125,8 +125,7 @@ Has functions for TimerManager to use
 				notifData.title = "Repairs Complete!";
 				notifData.message = shipName+" is out of the repair dock!";
 				notifData.iconUrl = "../../assets/img/quests/supply.jpg";
-				shipRef.hp[0] = shipRef.hp[1];
-				shipRef.morale = Math.max(40,shipRef.morale);
+				shipRef.applyRepair();
 				break;
 			case 2:
 				shipName = KC3Meta.shipName( KC3Master.ship( this.faceId ).api_name );

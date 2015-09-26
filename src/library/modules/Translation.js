@@ -17,7 +17,7 @@
 		applyWords :function(){
 			// Interchange element contents with translations
 			$(".i18n").each(function(){
-				$(this).text( KC3Meta.term( $(this).text() ) );
+				$(this).html( KC3Meta.term( $(this).text() ) );
 				$(this).css("visibility", "visible");
 			});
 		},

@@ -123,6 +123,10 @@ KC3改 Ship Object
 		this.afterHp[1] = this.hp[1];
 	};
 	
+	KC3Ship.prototype.applyRepair = function(){
+		this.hp[0]  = this.hp[1];
+		this.morale = Math.max(40,this.morale);
+	}
 	
 	/* REPAIR TIME
 	Get ship's docking and Akashi times
