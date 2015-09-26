@@ -183,9 +183,9 @@ Contains summary information about a fleet and its 6 ships
 		
 		function checkShip(shipIndex){
 			if(self.ship(shipIndex).masterId===0){ return false; }
-			var myReapirTime = self.ship(shipIndex).repairTime();
-			if(myReapirTime.docking > highestDocking){ highestDocking = myReapirTime.docking; }
-			if(myReapirTime.akashi > highestAkashi){ highestAkashi = myReapirTime.akashi; }
+			var myRepairTime = self.ship(shipIndex).repairTime();
+			if(myRepairTime.docking > highestDocking){ highestDocking = myRepairTime.docking; }
+			if(myRepairTime.akashi > highestAkashi){ highestAkashi = myRepairTime.akashi; }
 		}
 		
 		checkShip(0);

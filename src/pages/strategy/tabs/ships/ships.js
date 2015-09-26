@@ -15,6 +15,7 @@
 		remodelOption: 0,
 		modernizationOption: 0,
 		marriageFilter: 0,
+		withFleet: true,
 		isLoading: false,
 		//shipList: $(".tab_ships .ship_list"),
 		
@@ -23,6 +24,7 @@
 		---------------------------------*/
 		init :function(){
 			// Cache ship info
+			PlayerManager.loadFleets();
 			var ctr, ThisShip, MasterShip, ThisShipData;
 			for(ctr in KC3ShipManager.list){
 				ThisShip = KC3ShipManager.list[ctr];
@@ -53,13 +55,10 @@
 					lk: ThisShip.lk[0],
 					slots: ThisShip.slots,
 					
+					fleet: ThisShip.onFleet(),
+					
 					// Check whether remodel is max
-					remodel: (ThisShip.master().api_afterlv && ThisShip.master().api_aftershipid)
-								? {
-									'level':	ThisShip.master().api_afterlv,
-									'bid':		ThisShip.master().api_aftershipid
-								}
-								: false
+					remodel: MasterShip.kc3_maxed,
 				};
 				
 				// Check whether modernization is max
@@ -203,6 +202,20 @@
 				});
 			});
 			
+			// Fleet Inclusion
+			["no","yes"].forEach(function(x,i,a){
+				self.options["fleet_"+x] = $(".tab_ships .filters .massSelect .fleet_"+x).on("click",function(){
+					self.withFleet = !!i;
+					self.refreshTable();
+					a.forEach(function(_x,_i,_a){
+						if(i==_i)
+							self.options["fleet_"+_x].addClass('on');
+						else
+							self.options["fleet_"+_x].removeClass('on');
+					});
+				});
+			});
+			
 			// Default status
 				if( self.equipMode )
 					self.options.equip_yes.addClass('on');
@@ -224,6 +237,7 @@
 					self.options.modernization_nomax.addClass('on');
 
 				self.options["marriage_"+["in","on","ex"][self.marriageFilter]].addClass('on');
+				self.options["fleet_"+["no","yes"][self.withFleet & 1]].addClass('on');
 			
 			// Ship type toggled
 			$(".tab_ships .filters .ship_filter_type").on("click", function(){
@@ -287,6 +301,7 @@
 								((self.marriageFilter || 1) == 1 && thisShip.level >= 100) ||
 								((self.marriageFilter || 2) == 2 && thisShip.level <  100)
 							)
+							&& (self.withFleet || (!self.withFleet && !thisShip.fleet))
 						){
 							FilteredShips.push(thisShip);
 						}

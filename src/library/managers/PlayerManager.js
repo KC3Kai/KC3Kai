@@ -57,9 +57,14 @@ Does not include Ships and Gears which are managed by other Managers
 		},
 		
 		setRepairDocks :function( data ){
+			var lastRepair = this.repairShips.map(function(x){return x;}); // clone
 			this.repairShips = [];
 			var self = this;
 			$.each(data, function(ctr, ndock){
+				if(lastRepair[ndock.api_id] != ndock.api_ship_id) { // check if not in the list (repaired)
+					KC3ShipManager.get(lastRepair[ndock.api_id]).applyRepair();
+				}
+				
 				if(ndock.api_state > 0){
 					self.repairShips[ ndock.api_id ] = ndock.api_ship_id;
 					KC3TimerManager.repair( ndock.api_id ).activate(
