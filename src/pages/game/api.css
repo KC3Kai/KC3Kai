@@ -333,3 +333,66 @@ body {
 .ol_record_rank > p {
 	background-color: #F1EADD;
 }
+
+/* OVERLAY: SOCIAL
+--------------------------*/
+.overlay_social {
+	pointer-events: auto;
+	/*display:none;*/
+	width:800px;
+	height:480px;
+	overflow:hidden;
+	top:0px;
+	left:0px;
+	background:rgba(0,0,0,0.7);
+	padding:20px;
+}
+.overlay_social .social_box {
+	background:rgba(50,50,50,0.92);
+}
+/* Social: Account */
+.overlay_social .social_account {
+	width:200px;
+	height:440px;
+	float:left;
+	margin:0px 10px 0px 0px;
+}
+.overlay_social .social_profile {
+	width:200px;
+	height:50px;
+	margin:0px 0px 5px 0px;
+}
+.overlay_social .social_status {
+	width:200px;
+	height:20px;
+	margin:0px 0px 5px 0px;
+	
+}
+.overlay_social .social_badges {
+	width:200px;
+	height:200px;
+	margin:0px 0px 5px 0px;
+}
+.overlay_social .social_friends {
+	width:200px;
+	height:155px;
+}
+
+/* Social: Feed */
+.overlay_social .social_feed {
+	width:290px;
+	height:440px;
+	float:left;
+	margin:0px 10px 0px 0px;
+}
+
+/* Social: Chat */
+.overlay_social .social_chat {
+	width:250px;
+	height:440px;
+	float:left;
+}
+.overlay_social .social_chat iframe {
+	width:250px;
+	height:440px;
+}

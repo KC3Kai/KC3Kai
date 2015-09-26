@@ -6,6 +6,9 @@ var waiting = false;
 // If trusted exit, for exit confirmation
 var trustedExit = false;
 
+// If user is holding down tab key
+var tabHeld = false;
+
 // Show game screens
 function ActivateGame(){
 	waiting = false;
@@ -13,10 +16,10 @@ function ActivateGame(){
 	$(".box-wait").hide();
 	$(".game-swf").remove();
 	$(".box-game")
-		.prepend("<iframe class=game-swf frameborder=0></iframe>")
-		.find(".game-swf")
-		.attr("src", localStorage.absoluteswf)
-		.end()
+		// .prepend("<iframe class=game-swf frameborder=0></iframe>")
+		// .find(".game-swf")
+		// .attr("src", localStorage.absoluteswf)
+		// .end()
 		.show();
 	$(".box-wrap").css("zoom", ((ConfigManager.api_gameScale || 100) / 100));
 }
@@ -120,20 +123,64 @@ $(document).on("ready", function(){
 	setInterval(function(){
 		window.focus();
 	}, 100);
-	
+	trustedExit = true;
+	ActivateGame();
 });
 
 $(document).on("keydown", function(event){
+	// Cancel other keypress actions if tab is being held
+	if(tabHeld){
+		event.preventDefault();
+		event.stopPropagation();
+		return false;
+	}
+	
 	// F9: Screenshot
     if(event.keyCode == 120){
 		(new KCScreenshot()).start("Auto", $(".box-wrap"));
-        return false;
+		event.preventDefault();
+		event.stopPropagation();
+		return false;
     }
 	
 	// F10: Clear overlays
 	if(event.keyCode == 121){
 		interactions.clearOverlays({}, {}, function(){});
-        return false;
+		event.preventDefault();
+		event.stopPropagation();
+		return false;
+    }
+	
+	// Home Key: Social Features
+	if(event.keyCode == 36){
+		if($(".overlay_social").is(":visible")){
+			$(".overlay_social").hide();
+		}else{
+			$(".overlay_social").show();
+		}
+		event.preventDefault();
+		event.stopPropagation();
+		return false;
+    }
+	
+	// Tab Key: Social Features
+	if(event.keyCode == 9){
+		$(".overlay_social").show();
+		tabHeld = true;
+		event.preventDefault();
+		event.stopPropagation();
+		return false;
+    }
+});
+
+$(document).on("keyup", function(event){
+	// Home Key: Social Features
+	if(event.keyCode == 9){
+		$(".overlay_social").hide();
+		tabHeld = false;
+		event.preventDefault();
+		event.stopPropagation();
+		return false;
     }
 });
 
