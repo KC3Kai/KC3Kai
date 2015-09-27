@@ -122,10 +122,10 @@ Provides access to data on built-in JSON files
 				replaced = false;
 			// in here, the regular expression will read which one comes first (which mean, to be in the end of the name
 			// and then, the bare string will be chopped by how long the pattern match...
-			// the matched one, added to the combination stack (which is FILO order)
+			// the matched one, added to the combination stack (FILO)
 			// removing from the replacement table in order to prevent infinite loop ^^;
 			// if there's no match, it'll instantly stop and return the actual value
-			while( repRes = (new RegExp(".+("+(Object.keys(repTab).join("|"))+")$",'gi')).exec(bare) ){
+			while( !!(repRes = (new RegExp(".+("+(Object.keys(repTab).join("|"))+")$",'gi')).exec(bare)) ){
 				bare = bare.substr(0, bare.length-repRes[1].length);
 				combin.unshift(this._ship[repTab[repRes[1]]]);
 				delete repTab[repRes[1]];

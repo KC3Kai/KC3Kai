@@ -107,7 +107,8 @@ Saves and loads significant data for future use
 				cShip = this._ship[ship_id];
 				if(!cShip) { /* invalid API */ continue; }
 				if(!cShip.api_buildtime) { /* unbuildable by API */ continue; }
-				delete cShip.kc3_maxed, cShip.kc3_model;
+				delete cShip.kc3_maxed;
+				delete cShip.kc3_model;
 			}
 		},
 		updateRemodelTable :function(){
