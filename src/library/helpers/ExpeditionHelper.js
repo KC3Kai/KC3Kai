@@ -20,6 +20,7 @@
 					var PS = window.PS;
 					var KE = PS["KanColle.Expedition"];
 					var KER = PS["KanColle.Expedition.Requirement"];
+					var KERO = PS["KanColle.Expedition.RequirementObject"];
 					var ST = PS["KanColle.Generated.SType"];
 
 					// convert ships to required objects
@@ -55,7 +56,16 @@
 					
 					var fleet = KER.fromRawFleet( allShipsForLib );
 					var availableExpeditions = KE.getAvailableExpeditions( fleet );
-				
+
+                            // some working examples
+                            // retrieve requirement
+                            var exped37 = KERO.getExpeditionRequirementPack(37);
+                            // check result
+                            var result1 = KERO.checkWithRequirementPack(exped37)(fleet);
+                            // convert to JS-friendly structure
+                            var result2 = KERO.resultPackToObject(result1);
+                            console.log(result2);
+
 					// var demoResult = 
 					//    KER.explainRequirements( KER.unsatisfiedRequirements(38)(fleet) );
 					
