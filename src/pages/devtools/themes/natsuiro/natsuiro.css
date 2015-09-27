@@ -206,7 +206,7 @@
 	padding:0px 0px 0px 8px;
 }
 .module.activity .activity_tab {
-	width:53px;
+	width:43px;
 	height:20px;
 	line-height:20px;
 	font-size:11px;
@@ -973,6 +973,217 @@
 	font-weight:bold;
 	color:#ffcc00;
 }
+/*-------Activity Expedition Planner------*/
+
+.module.activity .activity_expeditionPlanner {
+    text-align:center;
+}
+
+.module.activity .activity_expeditionPlanner .expPlan_dropdown_menu {
+    width: 100%;
+    height: 28px;
+}
+
+.module.activity .activity_expeditionPlanner .expPlan_dropdown_title {
+  width:100%;
+  list-style: none;
+  position: relative;
+  float: left;
+  margin: 0;
+  padding: 0;
+  	background: #bfbfbf;
+	text-align: center;
+	text-decoration: none;
+	border-style:solid;
+	border-width:3px;
+}
+
+.module.activity li {
+  background: #bfbfbf;
+  border-style:solid;
+  border-width:1px;
+}
+
+.module.activity li:hover {
+  background: gray;
+}
+
+.module.activity  li ul {
+list-style: none;
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  padding:0;
+  width:30%;
+}
+
+.module.activity li ui li{
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  width:50px;
+}
+
+
+.module.activity li ul ul {
+	top:0%;
+	left:100%;
+	cursor:pointer;
+	width:150%;
+}
+
+
+.module.activity .activity_expeditionPlanner .expPlan_dropdown_topEntry {
+	display: none;
+}
+
+
+.module.activity .activity_expeditionPlanner li:hover >ul {
+	display: block;
+}
+
+.module.activity .activity_expedition .expres_resos {
+	width:170px;
+	/*background:#cfc;*/
+	height:36px;
+	line-height:16px;
+	margin:0px 0px 5px 0px;
+}
+.module.activity .activity_expeditionPlanner .expres_divHF {/* divide half */
+	display:inline-block;
+	/* width:85px; */
+	float:left;
+	/* text-align: center; */
+}
+.module.activity .activity_expeditionPlanner .expres_reso {
+	float:left;
+	/*background:#fcc;*/
+	height:16px;
+	line-height:16px;
+	margin: 0px 20px 6px 0px;
+}
+.module.activity .activity_expeditionPlanner .expres_icon {
+	width:16px;
+	height:16px;
+	float:left;
+	margin:0px 9px 0px 0px;
+	/*background:#fcf;*/
+}
+.module.activity .activity_expeditionPlanner .expres_amt {
+	width: 30px;
+	height:16px;
+	float:left;
+	/* background:#ccf; */
+	font-size:12px;
+	color:#fff;
+	padding-top: 3px;
+}
+
+.module.activity .activity_expeditionPlanner .expres_items {
+	width:170px;
+	height:20px;
+	margin:0px 0px 3px 0px;
+}
+.module.activity .activity_expeditionPlanner .expres_get {
+	max-width:100px;
+	height:20px;
+	line-height:20px;
+	font-size:12px;
+	color:#fff;
+	float:left;
+	margin:0px 5px 0px 0px;
+}
+.module.activity .activity_expeditionPlanner .expres_noget {
+	height:20px;
+	line-height:20px;
+	font-size:12px;
+	color:#faa;
+	float:left;
+	display:none;
+}
+.module.activity .activity_expeditionPlanner .expres_item {
+	width:35px;
+	height:20px;
+	line-height:20px;
+	float:left;
+	margin:0px 5px 0px 0px;
+}
+.module.activity .activity_expeditionPlanner .expres_item_icon {
+	width:16px;
+	height:16px;
+	float:left;
+	margin:0px 2px 0px 0px;
+}
+.module.activity .activity_expeditionPlanner .expres_item_icon img {
+	width:16px;
+	height:16px;
+	margin:2px 0px;
+	vertical-align:top;
+}
+.module.activity .activity_expeditionPlanner .expres_item_text {
+	width:17px;
+	height:20px;
+	float:left;
+	font-size:12px;
+	color:#fff;
+}
+
+.expPlanner_timer{
+	margin-bottom:4px;
+}
+
+.expPlanner_timer_description {
+    float: left;
+    margin-right: 3px;
+}
+
+.expPlanner_resos_title {
+    text-align: center;
+    height: 20px;
+    margin-bottom: 2px;
+    display:none;
+}
+
+.expres_resos {
+    height: 40px;
+    margin-bottom:3px;
+    display:inline-block;
+    width: 150px;
+}
+
+.expPlanner_requirements {
+    margin-bottom:4px;
+}
+
+.expPlanner_checker_criterias {
+	margin-bottom:3px;
+}
+
+
+
+.module.activity .activity_expeditionPlanner .requirements_textbox{
+	display:inline-block;	
+}
+
+.module.activity .activity_expeditionPlanner .expPlanner_text{	
+	font-size: 14px;
+	color:#ccc
+}
+
+.module.activity .activity_expeditionPlanner .expPlanner_text_passed{	
+	font-size: 14px;
+	color:#00CC00
+}
+
+.module.activity .activity_expeditionPlanner .expPlanner_text_failed{	
+	font-size: 14px;
+	color:#FF5555
+}
+
 
 /*------- QUESTS -------*/
 .module.quests {
