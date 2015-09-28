@@ -8,6 +8,7 @@
 	
 	// Interface values
 	var selectedFleet = 1;
+	var selectedExpedition = 1;
 	
 	// Auto Focus Overriding
 	var overrideFocus = false;
@@ -161,8 +162,18 @@
 		});
 		$(".module.activity .activity_tab.active").trigger("click");
 		
+		
 		$(".module.activity .activity_dismissable").on("click", function(){
 			$("#atab_basic").trigger("click");
+		});
+		
+		// Expedition Planner
+		$(".expedition_entry").on("click",function(){
+			//The keys are converted to lowercase. 
+			$(".dropdown_title").text("Expedition #"+$(this).data("expid"));
+			selectedExpedition = $(this).data("expid");
+			//console.log("selected Exped "+selectedExpedition);
+			NatsuiroListeners.UpdateExpeditionPlanner();
 		});
 		
 		// Fleet selection
@@ -170,8 +181,11 @@
 			$(".module.controls .fleet_num").removeClass("active");
 			$(".module.controls .fleet_rengo").removeClass("active");
 			$(this).addClass("active");
+			console.log($(this).text());
 			selectedFleet = parseInt( $(this).text(), 10);
+			console.log(selectedFleet);
 			NatsuiroListeners.Fleet();
+			NatsuiroListeners.UpdateExpeditionPlanner();
 		});
 		
 		// Combined Fleet button
@@ -683,6 +697,7 @@
 				}
 			});
 			
+			NatsuiroListeners.UpdateExpeditionPlanner();
 		},
 		
 		SortieStart: function(data){
@@ -1292,6 +1307,171 @@
 			$(".module.activity .activity_box").hide();
 			$(".module.activity .activity_expedition").fadeIn(500);
 		},
+
+		UpdateExpeditionPlanner: function (data) {
+			console.log(data);
+
+			var allShips = [];
+			//fleets' subsripts start from 0 !
+			$.each(PlayerManager.fleets[selectedFleet-1].ships, function(index, rosterId) {
+				if (rosterId > -1) {
+					var CurrentShip = KC3ShipManager.get(rosterId);
+					if (CurrentShip.masterId > 0) {
+						allShips.push(CurrentShip);
+
+					}
+				}
+			});
+			if (allShips.length > 0) {
+				var PS = window.PS;
+				var KE = PS["KanColle.Expedition"];
+				var KER = PS["KanColle.Expedition.Requirement"];
+				var KERO = PS["KanColle.Expedition.RequirementObject"];
+				var ST = PS["KanColle.Generated.SType"];
+
+				var allShipsForLib = allShips.map(function(CurrentShip, ind) {
+					var shipInst = CurrentShip;
+					var shipModel = CurrentShip.master();
+					var stypeId = shipModel.api_stype;
+					var stype = ST.showSType(ST.fromInt(stypeId));
+					var level = shipInst.level;
+					var drumCount = 0;
+					$.each(shipInst.items, function(ind, gear_id) {
+						var thisItem = KC3GearManager.get(gear_id);
+						if (thisItem) {
+							var model = KC3Master.slotitem(thisItem.masterId);
+							if (model.api_id == 75)
+								++drumCount;
+						}
+					});
+					return {
+						ammo : 0,
+						morale : 0,
+						stype : stype,
+						level : level,
+						drumCount : drumCount
+					};
+				});
+
+				var fleet = KER.fromRawFleet(allShipsForLib);
+				//var availableExpeditions = KE.getAvailableExpeditions(fleet);
+
+				//Don't forget to use KERO.*ToObject to convert raw data to JS friendly objs
+				var rawExpdReqPack = KERO.getExpeditionRequirementPack(selectedExpedition);
+				
+				var ExpdReqPack = KERO.requirementPackToObj(rawExpdReqPack);
+				console.log(JSON.stringify(ExpdReqPack));
+				var ExpdCheckerResult = KERO.resultPackToObject(KERO.checkWithRequirementPack(rawExpdReqPack)(fleet));
+				console.log(JSON.stringify(ExpdCheckerResult));
+				
+				$(".module.activity .activity_expeditionPlanner .flagshipLv").text(ExpdReqPack["flagShipLevel"]);
+				if (ExpdCheckerResult["flagShipLevel"]===false){
+					$(".module.activity .activity_expeditionPlanner .flagshipLv").addClass("expPlanner_text_failed").removeClass("expPlanner_text_passed");
+				}else{
+					$(".module.activity .activity_expeditionPlanner .flagshipLv").removeClass("expPlanner_text_failed").addClass("expPlanner_text_passed");
+				}
+				
+				if (ExpdReqPack["flagShipTypeOf"] === null){
+					$(".module.activity .activity_expeditionPlanner .flagshipType").hide();
+				}else{
+					$(".module.activity .activity_expeditionPlanner .flagshipType").show();
+					$(".module.activity .activity_expeditionPlanner .flagshipType").text(ExpdReqPack["flagShipTypeOf"]);
+					if (ExpdCheckerResult["flagShipTypeOf"]===false){
+						$(".module.activity .activity_expeditionPlanner .flagshipType").addClass("expPlanner_text_failed").removeClass("expPlanner_text_passed");
+					}else{
+						$(".module.activity .activity_expeditionPlanner .flagshipType").removeClass("expPlanner_text_failed").addClass("expPlanner_text_passed");
+					}
+				}
+				
+				$(".module.activity .activity_expeditionPlanner .shipNum").text(ExpdReqPack["shipCount"]);
+				if (ExpdCheckerResult["shipCount"]===false){
+					$(".module.activity .activity_expeditionPlanner .shipNum").addClass("expPlanner_text_failed").removeClass("expPlanner_text_passed");
+				}else{
+					$(".module.activity .activity_expeditionPlanner .shipNum").removeClass("expPlanner_text_failed").addClass("expPlanner_text_passed");
+				}
+				
+				if (ExpdReqPack["levelCount"] === null){
+					$(".module.activity .activity_expeditionPlanner .fleetLv").hide();
+				}else{
+					$(".module.activity .activity_expeditionPlanner .fleetLv").show();
+					$(".module.activity .activity_expeditionPlanner .fleetLv").text(ExpdReqPack["flagShipTypeOf"]);
+					if (ExpdCheckerResult["levelCount"]===false){
+						$(".module.activity .activity_expeditionPlanner .fleetLv").addClass("expPlanner_text_failed").removeClass("expPlanner_text_passed");
+					}else{
+						$(".module.activity .activity_expeditionPlanner .fleetLv").removeClass("expPlanner_text_failed").addClass("expPlanner_text_passed");
+					}
+				}
+				
+				if (ExpdReqPack["fleetSType"] === null){
+					$(".module.activity .activity_expeditionPlanner .expPlanner_req_fleetComposition").hide();
+				}else{
+					var shipReqBox;
+					$(".module.activity .activity_expeditionPlanner .expPlanner_req_fleetComposition").html("");
+					$.each(ExpdReqPack["fleetSType"], function(index, value){
+						shipReqBox = $("#factory .expPlanner_shipReqBox").clone().appendTo(".module.activity .activity_expeditionPlanner .expPlanner_req_fleetComposition");
+						shipReqBox.text(ExpdReqPack["fleetSType"][index]["stypeOneOf"]+":"+ExpdReqPack["fleetSType"][index]["stypeReqCount"]);
+						if (ExpdCheckerResult["fleetSType"][index]===false){
+						shipReqBox.addClass("expPlanner_text_failed").removeClass("expPlanner_text_passed");
+					}else{
+						shipReqBox.removeClass("expPlanner_text_failed").addClass("expPlanner_text_passed");
+					}
+					}
+					);
+				}
+				
+				/*
+				 *
+				 * Sample result for ExpdReqPack and ExpdCheckerResult on expedition 21#
+				 *
+				 * {  
+					  "flagShipLevel":15,
+					  "shipCount":5,
+					  "flagShipTypeOf":null,
+					  "levelCount":30,
+					  "drumCount":null,
+					  "drumCarrierCount":3,
+					  "fleetSType":[  
+					    {  
+					      "stypeReqCount":1,
+					      "stypeOneOf":[  
+					        "CL"
+					      ]
+					    },
+					    {  
+					      "stypeReqCount":4,
+					      "stypeOneOf":[  
+					        "DD"
+					      ]
+					    }
+					  ]
+					}
+					---------------------
+					{  
+					  "flagShipLevel":true,
+					  "shipCount":false,
+					  "flagShipTypeOf":null,
+					  "levelCount":true,
+					  "drumCount":null,
+					  "drumCarrierCount":false,
+					  "fleetSType":[  
+					    true,
+					    false
+					  ]
+					}					
+				 */
+				
+				// var demoResult =
+				//    KER.explainRequirements( KER.unsatisfiedRequirements(38)(fleet) );
+				// alert( JSON.stringify( demoResult ) );
+				
+				
+				
+			} else {
+				return "No ship";
+			}
+
+		}
+,
 	};
 	
 	function updateHQEXPGained(ele,newDelta) {
@@ -1347,5 +1527,4 @@
 			}
 		});
 	}
-	
 })();

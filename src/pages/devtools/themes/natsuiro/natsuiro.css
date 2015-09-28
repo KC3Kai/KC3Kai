@@ -1163,7 +1163,9 @@ list-style: none;
 	margin-bottom:3px;
 }
 
-
+.expPlanner_shipReqBox{
+	margin-right:10px;
+}
 
 .module.activity .activity_expeditionPlanner .requirements_textbox{
 	display:inline-block;	
