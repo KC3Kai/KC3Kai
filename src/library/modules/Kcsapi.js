@@ -981,7 +981,7 @@ Previously known as "Reactor"
 				}
 			} else {
 				KC3QuestManager.get(303).increment(); // C2: Daily Exercises 1
-				if(rankPt >= 3) {
+				if(rankPt == 3) {
 					KC3QuestManager.get(304).increment(); // C3: Daily Exercises 2
 					KC3QuestManager.get(302).increment(); // C4: Weekly Exercises
 					KC3QuestManager.get(311).increment(); // C8: Elite Fleet Practice
