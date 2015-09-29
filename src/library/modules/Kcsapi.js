@@ -928,8 +928,8 @@ Previously known as "Reactor"
 		// If victory for "defeat"-type quests
 		var rankPt = getRank(data.api_win_rank);
 		if(rankPt==5 && KC3SortieManager.currentNode().allyNoDamage) rankPt++;
-		while(rankPt>=3) {
-			if(!isPvP) {
+		if(!isPvP) {
+			while(rankPt>=3) {
 				switch(rankPt) {
 					case 6: // PERFECT S
 					case 5: // S
@@ -979,15 +979,15 @@ Previously known as "Reactor"
 					default: // DEFEAT
 						break;
 				}
-			} else {
-				KC3QuestManager.get(303).increment(); // C2: Daily Exercises 1
-				if(rankPt >= 3) {
-					KC3QuestManager.get(304).increment(); // C3: Daily Exercises 2
-					KC3QuestManager.get(302).increment(); // C4: Weekly Exercises
-					KC3QuestManager.get(311).increment(); // C8: Elite Fleet Practice
-				}
+				rankPt--;
 			}
-			rankPt--;
+		} else {
+			KC3QuestManager.get(303).increment(); // C2: Daily Exercises 1
+			if(rankPt >= 3) {
+				KC3QuestManager.get(304).increment(); // C3: Daily Exercises 2
+				KC3QuestManager.get(302).increment(); // C4: Weekly Exercises
+				KC3QuestManager.get(311).increment(); // C8: Elite Fleet Practice
+			}
 		}
 		
 		
