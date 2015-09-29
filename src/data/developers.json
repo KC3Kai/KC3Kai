@@ -10,7 +10,7 @@
 				"th" :"http://www.twitch.tv/jetrico",
 				"wk" :"http://kancolle.wikia.com/wiki/User:Dragonjet",
 				"gh" :"https://github.com/dragonjet",
-				"hm" :"http://www.himeuta.net/members/78-dragonjet/"
+				"yt" :"https://www.youtube.com/user/dragonjet"
 			}
 		},
 		{
@@ -304,7 +304,11 @@
 			"avatar" : "https://avatars0.githubusercontent.com/u/13535817?v=3&s=40",
 			"desc" : "ภาษาไทย",
 			"links" : {
-				"gh" : "https://github.com/arialypse"
+				"gh" : "https://github.com/arialypse",
+				"fb" : "https://www.facebook.com/Arialypse",
+				"wk" : "http://kancolle.wikia.com/wiki/User:Arialypse",
+				"yt" : "https://www.youtube.com/Arialypse",
+				"wb" : "http://www.zeitvier.com/"
 			}
 		},
 		{
@@ -312,7 +316,9 @@
 			"avatar" : "https://avatars3.githubusercontent.com/u/14352605?v=3&s=40",
 			"desc" : "ภาษาไทย",
 			"links" : {
-				"gh" : "https://github.com/Anime-Thai"
+				"gh" : "https://github.com/Anime-Thai",
+				"fb" : "https://www.facebook.com/profile.php?id=100009261752211",
+				"wb" : "http://www.anime-thai.net"
 			}
 		}
 	],
