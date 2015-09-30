@@ -27,6 +27,7 @@ $(document).on("ready", function(){
 	KC3Meta.init("../../../../data/");
 	KC3QuestManager.load();
 	KC3Database.init();
+	KC3Translation.execute();
 	
 	// Apply interface configs
 	$(".box-wrap").css("margin-top", ConfigManager.api_margin+"px");
