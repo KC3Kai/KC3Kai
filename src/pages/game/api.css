@@ -350,6 +350,12 @@ body {
 .overlay_social .social_box {
 	background:rgba(50,50,50,0.92);
 }
+.overlay_social .social_title {
+	color:#999;
+	font-size:12px;
+	margin:0px 0px 3px 0px;
+}
+
 /* Social: Account */
 .overlay_social .social_account {
 	width:200px;
@@ -357,29 +363,102 @@ body {
 	float:left;
 	margin:0px 10px 0px 0px;
 }
+
 .overlay_social .social_profile {
 	width:200px;
 	height:50px;
 	margin:0px 0px 5px 0px;
+	padding:5px;
 }
+.overlay_social .social_picture {
+	width:40px;
+	height:40px;
+	float:left;
+	margin:0px 10px 0px 0px;
+}
+.overlay_social .social_picture img {
+	width:40px;
+	height:40px;
+}
+.overlay_social .social_name {
+	width:140px;
+	height:22px;
+	line-height:22px;
+	font-size:14px;
+	float:left;
+	color:#fff;
+}
+.overlay_social .social_manage {
+	width:140px;
+	height:18px;
+	line-height:18px;
+	font-size:14px;
+	float:left;
+	color:#999;
+	font-size:11px;
+}
+
 .overlay_social .social_status {
 	width:200px;
-	height:20px;
+	height:36px;
 	margin:0px 0px 5px 0px;
-	
+	padding:3px 5px 2px;
 }
+.overlay_social .social_status_color {
+	width:14px;
+	height:14px;
+	float:left;
+	margin:1px 5px 1px 1px;
+	background:#ace;
+}
+.overlay_social .social_status_desc {
+	width:170px;
+	height:32px;
+	line-height:15px;
+	float:left;
+	color:#999;
+	font-size:11px;
+	overflow:hidden;
+	text-overflow: ellipsis;
+}
+
 .overlay_social .social_badges {
 	width:200px;
-	height:200px;
+	height:184px;
 	margin:0px 0px 5px 0px;
+	padding:5px 10px;
 }
+.overlay_social .social_badge {
+	width:30px;
+	height:30px;
+	float:left;
+	margin:3px;
+	background:#000;
+}
+.overlay_social .social_badge img {
+	width:30px;
+	height:30px;
+}
+
 .overlay_social .social_friends {
 	width:200px;
 	height:155px;
+	padding:5px 10px;
+}
+.overlay_social .social_friend {
+	width:34px;
+	height:34px;
+	float:left;
+	margin:1px;
+	background:#000;
+}
+.overlay_social .social_friend img {
+	width:34px;
+	height:34px;
 }
 
 /* Social: Feed */
-.overlay_social .social_feed {
+.overlay_social .social_feeds {
 	width:290px;
 	height:440px;
 	float:left;
