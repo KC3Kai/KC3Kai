@@ -289,8 +289,8 @@
 						if(self.filters[ thisShip.stype ]
 							&& (
 								self.remodelOption === 0
-								|| (self.remodelOption == 1 && !thisShip.remodel)
-								|| (self.remodelOption == 2 && thisShip.remodel)
+								|| (self.remodelOption == 1 && thisShip.remodel)
+								|| (self.remodelOption == 2 && !thisShip.remodel)
 							)
 							&& (
 								self.modernizationOption === 0
