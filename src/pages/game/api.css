@@ -13,6 +13,13 @@ body {
 #factory {
 	display:none;
 }
+.no-select {
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-o-user-select: none;
+	cursor: default;
+}
 
 /* NOTES
 --------------------------*/
@@ -180,18 +187,57 @@ body {
 .box-game .overlay_box {
 	position:absolute;
 }
+/* Refresh Toggle : default view */
 .box-game .game-refresh {
 	display:none;
 	align-items: center;
-	justify-content: center;
-		position:fixed;
+	justify-content: flex-end;
+	position:fixed;
 	top:0;
-	right:0;
-	width:32px;
-	height:32px;
-	border-radius:16px;
+	right:-32px;
+	padding: 4px;
+	font-weight: bold;
+	width: 32px;
+	height:24px;
 	background-color:rgba(128,255,128,0.5);
+	border-radius: 16px 0px 0px 16px;
+	transition: all 0.2s;
 }
+/* Refresh Toggle : default view / hover state */
+.box-game .game-refresh:hover {
+	right:0;
+}
+/* Refresh Toggle : default view / hoverable item */
+.box-game .game-refresh:before {
+	display: block;
+	width: 32px;
+	height: 24px;
+	content: " ";
+	position: fixed;
+	top:0;
+	right: 0;
+}
+/* Refresh Toggle : default view / hoverable item / hover state */
+.box-game .game-refresh:hover:before {
+	right: 32px;
+}
+/* Refresh Toggle : widescreen (>=832px) */
+@media only screen and (min-width: 832px) {
+	/* Refresh Toggle : widescreen / default state */
+	.box-game .game-refresh {
+		padding: 0;
+		right: 0px;
+		width:32px;
+		height:32px;
+		justify-content: center;
+		border-radius:16px;
+	}
+	/* Refresh Toggle : widescreen / disabled hoverable item */
+	.box-game .game-refresh:before {
+		display:none;
+	}
+}
+
 /* OVERLAY: QUEST
 --------------------------*/
 .overlay_quests {
