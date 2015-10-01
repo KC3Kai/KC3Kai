@@ -839,7 +839,7 @@ Previously known as "Reactor"
 			// Exclude gauge based map from being kept every time
 			for(ctr in KC3Meta._gauges) {
 				if(Object.keys(maps).indexOf(ctr)>=0)
-					maps[ctr].clear = maps[ctr].api_defeat_count = false;
+					maps[ctr].clear = maps[ctr].kills = false;
 			}
 			// Combine current storage and current available maps data
 			for(ctr in response.api_data){
