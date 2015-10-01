@@ -920,11 +920,6 @@ Previously known as "Reactor"
 				return q;
 			};
 		
-		/** Mini Dailies */
-		// Vague quest that clears with no rank requirement
-		qLog(216).increment(); // Bd2: Defeat the flagship of an enemy fleet
-		/** Mini Dailies */
-		
 		// If victory for "defeat"-type quests
 		var rankPt = getRank(data.api_win_rank);
 		if(rankPt==5 && KC3SortieManager.currentNode().allyNoDamage) rankPt++;
@@ -981,6 +976,13 @@ Previously known as "Reactor"
 				}
 				rankPt--;
 			}
+			// Vague quest that clears with no rank requirement
+			qLog(216).increment(); // Bd2: Defeat the flagship of an enemy fleet
+			
+			// If node is a boss
+			if( KC3SortieManager.currentNode().isBoss() ){
+				qLog(214).increment(1); // Bw1: 2nd requirement: Encounter 24 bosses (index:1)
+			}
 		} else {
 			KC3QuestManager.get(303).increment(); // C2: Daily Exercises 1
 			if(rankPt >= 3) {
@@ -988,12 +990,6 @@ Previously known as "Reactor"
 				KC3QuestManager.get(302).increment(); // C4: Weekly Exercises
 				KC3QuestManager.get(311).increment(); // C8: Elite Fleet Practice
 			}
-		}
-		
-		
-		// If node is a boss
-		if( KC3SortieManager.currentNode().isBoss() ){
-			qLog(214).increment(1); // Bw1: 2nd requirement: Encounter 24 bosses (index:1)
 		}
 		
 		// hunt quests - requires "battle prediction" to know which enemies sunk
