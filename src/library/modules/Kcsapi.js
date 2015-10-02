@@ -924,66 +924,46 @@ Previously known as "Reactor"
 		var rankPt = getRank(data.api_win_rank);
 		if(rankPt==5 && KC3SortieManager.currentNode().allyNoDamage) rankPt++;
 		if(!isPvP) {
-			while(rankPt>=3) {
-				switch(rankPt) {
-					case 6: // PERFECT S
-					case 5: // S
-						KC3QuestManager.get(214).increment(3); // Bw1: 4th requirement: 6 S ranks (index:3)
-						
-						if(KC3SortieManager.currentNode().isBoss()) {
-							switch(true) {
-								case KC3SortieManager.isSortieAt(5,2):
-									KC3QuestManager.get(243).increment(); // Bw9: Sortie to [W5-2] and S-rank the boss node 2 times
-									break;
-								case KC3SortieManager.isSortieAt(6,1):
-									KC3QuestManager.get(256).increment(); // Bm2: Deploy to [W6-1] and obtain an S-rank the boss node 3 times
-									break;
-							}
-						}
-						break;
-					case 4: // A
-						if( KC3SortieManager.isSortieAt(1,5) && KC3SortieManager.currentNode().isBoss() ){
-							KC3QuestManager.get(261).increment(); // Bw10: Sortie to [W1-5] and A-rank+ the boss node 3 times
-							KC3QuestManager.get(265).increment(); // Bm5: Deploy a fleet to [W1-5] and A-rank+ the boss node 10 times
-						}
-						break;
-					case 3: // B
-						qLog(201).increment(); // Bd1: Defeat an enemy fleet
-						KC3QuestManager.get(210).increment(); // Bd3: Defeat 10 abyssal fleets (B rank+)
-						
-						if(KC3SortieManager.currentNode().isBoss()) {
-							switch(true) {
-								case KC3SortieManager.isSortieAt( 2 ):
-									KC3QuestManager.get(226).increment(); // Bd7: Defeat 5 bosses in World 2
-									break;
-								case KC3SortieManager.isSortieAt(3,3):
-								case KC3SortieManager.isSortieAt(3,4):
-								case KC3SortieManager.isSortieAt(3,5):
-									KC3QuestManager.get(241).increment(); // Bw7: Defeat 5 bosses in Worlds [W3-3], [W3-4] or [W3-5]
-									break;
-								case KC3SortieManager.isSortieAt( 4 ):
-									KC3QuestManager.get(229).increment(); // Bw6: Defeat 12 bosses in horned nodes in World 4
-									break;
-								case(KC3SortieManager.isSortieAt(4,4)):
-									KC3QuestManager.get(242).increment(); // Bw8: Defeat a boss in World [W4-4]
-									break;
-							}
-							KC3QuestManager.get(214).increment(2); // Bw1: 3rd requirement: Win vs 12 bosses (index:2)
-						}
-						break;
-					default: // DEFEAT
-						break;
-				}
-				rankPt--;
-			}
-			// Vague quest that clears with no rank requirement
-			qLog(216).increment(); // Bd2: Defeat the flagship of an enemy fleet
-			
-			// If node is a boss
-			if( KC3SortieManager.currentNode().isBoss() ){
-				qLog(214).increment(1); // Bw1: 2nd requirement: Encounter 24 bosses (index:1)
-			}
-		} else {
+			[ /* Rank Requirement Table */
+				[ /* E RANK / It does not matter */
+					[216,0,false,false], // Bd2: Defeat the flagship of an enemy fleet
+					[214,1,false, true]  // Bw1: 2nd requirement: Encounter 24 bosses (index:1)
+				],
+				[ /* D RANK */ ],
+				[ /* C RANK */ ],
+				[ /* B RANK */
+					[201,0,false,false], // Bd1: Defeat an enemy fleet
+					[210,0,false,false], // Bd3: Defeat 10 abyssal fleets (B rank+)
+					[226,0,[ 2 ], true], // Bd7: Defeat 5 bosses in World 2
+					[241,0,[3,3], true], // Bw7: Defeat 5 bosses in W3-3,3-4,3-5
+					[241,0,[3,4], true],
+					[241,0,[3,5], true],
+					[229,0,[ 4 ], true], // Bw6: Defeat 12 bosses in horned nodes in World 4
+					[242,0,[4,4], true], // Bw8: Defeat a boss in World [W4-4]
+					[214,2,false, true], // Bw1: 3rd requirement: Win vs 12 bosses (index:2)
+				],
+				[ /* A RANK */
+					[261,0,[1,5], true], // Bw10: Sortie to [W1-5] and A-rank+ the boss node 3 times
+					[265,0,[1,5], true]  // Bm5: Deploy a fleet to [W1-5] and A-rank+ the boss node 10 times
+				],
+				[ /* S RANK */
+					[214,3,false,false], // Bw1: 4th requirement: 6 S ranks (index:3)
+					[243,0,[5,2], true], // Bw9: Sortie to [W5-2] and S-rank the boss node 2 times
+					[256,0,[6,1], true]  // Bm2: Deploy to [W6-1] and obtain an S-rank the boss node 3 times
+				],
+				[ /* KANZEN */ ],
+			].reverse().splice(rankPt)
+				.reduce((x,y)=>x.concat(y))
+				.filter(function(x){
+					return (
+						(!x[2] || KC3SortieManager.isSortieAt.apply(undefined,x[2])) && /* Is sortie at */
+						(!x[3] || KC3SortieManager.currentNode().isBoss())             /* Is on boss node */
+					);
+				})
+				.forEach((x)=>{
+						qLog(x[0]).increment(x[1]);
+				});
+			} else {
 			KC3QuestManager.get(303).increment(); // C2: Daily Exercises 1
 			if(rankPt >= 3) {
 				KC3QuestManager.get(304).increment(); // C3: Daily Exercises 2
