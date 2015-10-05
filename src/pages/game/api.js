@@ -16,10 +16,10 @@ function ActivateGame(){
 	$(".box-wait").hide();
 	$(".game-swf").remove();
 	$(".box-game")
-		// .prepend("<iframe class=game-swf frameborder=0></iframe>")
-		// .find(".game-swf")
-		// .attr("src", localStorage.absoluteswf)
-		// .end()
+		.prepend("<iframe class=game-swf frameborder=0></iframe>")
+		.find(".game-swf")
+		.attr("src", localStorage.absoluteswf)
+		.end()
 		.show();
 	$(".box-wrap").css("zoom", ((ConfigManager.api_gameScale || 100) / 100));
 }

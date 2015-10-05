@@ -459,14 +459,67 @@ body {
 
 /* Social: Feed */
 .overlay_social .social_feeds {
-	width:290px;
+	width:550px;
 	height:440px;
 	float:left;
+	/*margin:0px 10px 0px 0px;*/
+}
+.overlay_social .social_feed {
+	width:550px;
+	min-height:50px;
+	background:rgba(50,50,50,0.5);
+	margin:0px 0px 5px 0px;
+	padding:5px 10px;
+}
+.overlay_social .social_feed_pic {
+	width:40px;
+	height:40px;
+	float:left;
 	margin:0px 10px 0px 0px;
+	border:2px solid;
+}
+.overlay_social .social_feed_pic.t2 {
+	border-color:#D75048;
+}
+.overlay_social .social_feed_pic.t4 {
+	border-color:#AACCEE;
+}
+.overlay_social .social_feed_pic.t6 {
+	border-color:#996600;
+}
+.overlay_social .social_feed_pic.t7 {
+	border-color:#AE76FA;
+}
+.overlay_social .social_feed_pic img {
+	width:36px;
+	height:36px;
+}
+.overlay_social .social_feed_text {
+	width:390px;
+	height:40px;
+	line-height:20px;
+	font-size:12px;
+	float:left;
+	overflow:hidden;
+}
+.overlay_social .social_feed_text a {
+	color:#ace;
+}
+.overlay_social .social_feed_text span {
+	color:#fff;
+}
+.overlay_social .social_feed_date {
+	width:90px;
+	height:40px;
+	float:left;
+	text-align:center;
+	color:#aaa;
+	font-size:11px;
+	padding:5px 0px 0px 0px;
 }
 
 /* Social: Chat */
-.overlay_social .social_chat {
+/*.overlay_social .social_chat {
 	width:250px;
 	height:440px;
 	float:left;
@@ -474,4 +527,4 @@ body {
 .overlay_social .social_chat iframe {
 	width:250px;
 	height:440px;
-}
+}*/
