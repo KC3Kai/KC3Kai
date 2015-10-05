@@ -117,6 +117,15 @@
 				}
 				self.refreshTable();
 			});
+
+			// Select: Invert
+			self.options.none = $(".tab_ships .filters .massSelect .invert").on("click", function(){
+				$(".tab_ships .ship_filter_type .filter_check").toggle();
+				for(sCtr in KC3Meta._stype){
+					self.filters[sCtr] = !self.filters[sCtr];
+				}
+				self.refreshTable();
+			});
 			
 			// Equip Stats: Yes
 			self.options.equip_yes = $(".tab_ships .filters .massSelect .equip_yes").on("click", function(){
