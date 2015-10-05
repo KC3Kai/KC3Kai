@@ -318,11 +318,11 @@
 								((self.marriageFilter || 2) == 2 && thisShip.level <  100)
 							)
 							&& (self.withFleet || (!self.withFleet && !thisShip.fleet)
-                               )
-                            && (self.heartlockFilter === 0
-                                || (self.heartlockFilter === 1 && thisShip.locked === 1)
-                                || (self.heartlockFilter === 2 && thisShip.locked === 0)
-                               )
+							   )
+							&& (self.heartlockFilter === 0
+								|| (self.heartlockFilter === 1 && thisShip.locked === 1)
+								|| (self.heartlockFilter === 2 && thisShip.locked === 0)
+							   )
 						){
 							FilteredShips.push(thisShip);
 						}
