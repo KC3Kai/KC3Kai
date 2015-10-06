@@ -181,10 +181,10 @@
 					} else {
 						$(".ship_repair_docking", cElm).text( String(cShip.repairDocking).toHHMMSS() );
 						$(".ship_repair_akashi", cElm).text( "-" );
-						if (cShip.stripped) {
-							$(".ship_status", cElm).addClass("ship_stripped");
-						} else if (cShip.taiha) {
+						if (cShip.taiha) {
 							$(".ship_status", cElm).addClass("ship_taiha");
+						} else if (cShip.stripped) {
+							$(".ship_status", cElm).addClass("ship_stripped");
 						} else {
 							$(".ship_repair_akashi", cElm).text( String(cShip.repairAkashi).toHHMMSS() );
 						}
