@@ -176,6 +176,7 @@
 					var hpStatus = cShip.hp.toString() + " / " + cShip.maxhp.toString();
 					$(".ship_status", cElm).text( hpStatus );
 					if (cShip.hp === cShip.maxhp) {
+					    $(".ship_status", cElm).text( cShip.hp.toString() );
 						$(".ship_repair_docking", cElm).text( "-" );
 						$(".ship_repair_akashi", cElm).text( "-" );
 					} else {
