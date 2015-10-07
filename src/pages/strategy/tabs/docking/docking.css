@@ -11,39 +11,6 @@
 	padding:5px 10px;
 	border-bottom:1px solid #369;
 }
-.tab_docking .massSelect {
-	/*
-	width:680px;
-	height:20px;
-	*/
-	line-height:20px;
-	margin:0px 0px 5px 0px;
-	font-size:12px;
-}
-.tab_docking .massSelect dl{
-	display: 	inline-block;
-	vertical-align: top;
-	margin: 	0 6px 0 0;
-	overflow: 	hidden;
-}
-.tab_docking .massSelect dl dt,
-.tab_docking .massSelect dl dd{
-	float: 		left;
-	line-height:inherit;
-}
-.tab_docking .massSelect .massLabel {
-	font-weight:bold;
-}
-.tab_docking .massSelect .hover {
-	margin:0px 0px 0px 4px;
-	padding: 0 3px;
-	border-radius: 4px;
-	color:#00f
-}
-.tab_docking .massSelect .hover.on {
-	color:#fff;
-	background: hsl(220, 100%, 60%);
-}
 .tab_docking .filters .ship_types {
 	width:680px;
 	height:60px;
@@ -250,12 +217,20 @@
 	position:relative;
 }
 
-.tab_docking .ship_stripped {
-    color:orange;
+.tab_docking .ship_item .ship_status.ship_normal {
+	background: #66FF66;
 }
 
-.tab_docking .ship_taiha {
-    color:red;
+.tab_docking .ship_item .ship_status.ship_shouha {
+	background: #FFFF66;
+}
+
+.tab_docking .ship_item .ship_status.ship_chuuha {
+	background: #FFC266;
+}
+
+.tab_docking .ship_item	 .ship_status.ship_taiha {
+	background: #FF8080;
 }
 
 .tab_docking .ship_item .ship_repair_docking {
@@ -359,4 +334,3 @@
 	width:20px;
 	display:none;
 }
-

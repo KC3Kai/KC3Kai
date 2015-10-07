@@ -1,11 +1,11 @@
 (function(){
 	"use strict";
-	
+
 	KC3StrategyTabs.docking = new KC3StrategyTab("docking");
-	
+
 	KC3StrategyTabs.docking.definition = {
 		tabSelf: KC3StrategyTabs.docking,
-		
+
 		shipCache:[],
 		filters: [],
 		options: [],
@@ -18,7 +18,7 @@
 		withFleet: true,
 		isLoading: false,
 		//shipList: $(".tab_docking .ship_list"),
-		
+
 		/* INIT
 		   Prepares all data needed
 		   ---------------------------------*/
@@ -45,38 +45,14 @@
 					repairAkashi: RepairTime.akashi,
 					stripped: ThisShip.isStriped(),
 					taiha: ThisShip.isTaiha(),
-					fp: [MasterShip.api_houg[1], MasterShip.api_houg[0]+ThisShip.mod[0], ThisShip.fp[0] ],
-					tp: [MasterShip.api_raig[1], MasterShip.api_raig[0]+ThisShip.mod[1], ThisShip.tp[0] ],
-					yasen: [
-						MasterShip.api_houg[1] + MasterShip.api_raig[1],
-						MasterShip.api_houg[0]+ThisShip.mod[0] + MasterShip.api_raig[0]+ThisShip.mod[1],
-						ThisShip.fp[0] + ThisShip.tp[0]
-					],
-					aa: [MasterShip.api_tyku[1], MasterShip.api_tyku[0]+ThisShip.mod[2], ThisShip.aa[0] ],
-					ar: [MasterShip.api_souk[1], MasterShip.api_souk[0]+ThisShip.mod[3], ThisShip.ar[0] ],
-					lk: ThisShip.lk[0],
 					slots: ThisShip.slots,
-					
 					fleet: ThisShip.onFleet(),
-					
-					// Check whether remodel is max
-					remodel: MasterShip.kc3_maxed,
 				};
-				
-				// Check whether modernization is max
-				if( ThisShipData.fp[0] == ThisShipData.fp[1]
-					&& ThisShipData.tp[0] == ThisShipData.tp[1]
-					&& ThisShipData.aa[0] == ThisShipData.aa[1]
-					&& ThisShipData.ar[0] == ThisShipData.ar[1]
-				  )
-					ThisShipData.statmax = 1;
-				else
-					ThisShipData.statmax = 0;
-				
+
 				this.shipCache.push(ThisShipData);
 			}
 		},
-		
+
 		/* EXECUTE
 		   Places data onto the interface
 		   ---------------------------------*/
@@ -84,7 +60,7 @@
 			this.shipList = $(".tab_docking .ship_list");
 			this.showFilters();
 		},
-		
+
 		/* FILTERS
 		   Ship types, and other toggles
 		   ---------------------------------*/
@@ -100,26 +76,26 @@
 				self.sortBy = $(this).data('type');
 				self.refreshTable();
 			});
-			
+
 			this.refreshTable();
 		},
-		
+
 		/* REFRESH TABLE
 		   Reload ship list based on filters
 		   ---------------------------------*/
 		refreshTable :function(){
 			if(this.isLoading){ return false; }
 			this.isLoading = true;
-			
+
 			var self = this;
 			this.startTime = (new Date()).getTime();
-			
+
 			// Clear list
 			this.shipList.html("").hide();
-			
+
 			// Checks the configuration
 			var config = (new KekkonType()).values;
-			
+
 			// Wait until execute
 			setTimeout(function(){
 				var shipCtr, cElm, cShip, shipLevel;
@@ -128,6 +104,24 @@
 				};
 				var FilteredShips = self.shipCache.filter(needsRepair);
 
+
+				var testShips = [
+					{"id":143,"bid":408,"stype":7,"english":"隼鹰 改二",
+					 "level":81,"morale":53,"equip":[-1,-1,-1,-1,-1],"locked":1,"hp":1,"maxhp":55,"repairDocking":11265,"repairAkashi":12000,
+					 "stripped":false,"taiha":true,"slots":[22,17,18,4,0],"fleet":0},
+					{"id":143,"bid":408,"stype":7,"english":"隼鹰 改二",
+					 "level":81,"morale":53,"equip":[-1,-1,-1,-1,-1],"locked":1,"hp":54,"maxhp":55,"repairDocking":11265,"repairAkashi":12000,
+					 "stripped":false,"taiha":true,"slots":[22,17,18,4,0],"fleet":0},
+					{"id":143,"bid":408,"stype":7,"english":"隼鹰 改二",
+					 "level":81,"morale":53,"equip":[-1,-1,-1,-1,-1],"locked":1,"hp":41,"maxhp":55,"repairDocking":11265,"repairAkashi":12000,
+					 "stripped":true,"taiha":false,"slots":[22,17,18,4,0],"fleet":0},
+					{"id":143,"bid":408,"stype":7,"english":"隼鹰 改二",
+					 "level":81,"morale":53,"equip":[-1,-1,-1,-1,-1],"locked":1,"hp":23,"maxhp":55,"repairDocking":11265,"repairAkashi":12000,
+					 "stripped":true,"taiha":false,"slots":[22,17,18,4,0],"fleet":0},
+				];
+
+
+				// FilteredShips = testShips;
 				// Sorting
 				FilteredShips.sort(function(a,b){
 					var returnVal = 0;
@@ -152,18 +146,18 @@
 					if(!self.sortAsc){ returnVal =- returnVal; }
 					return returnVal;
 				});
-				
+
 				// Fill up list
 				Object.keys(FilteredShips).forEach(function(shipCtr){
 					if(shipCtr%10 === 0){
 						$("<div>").addClass("ingame_page").html("Page "+Math.ceil((Number(shipCtr)+1)/10)).appendTo(self.shipList);
 					}
-					
+
 					cShip = FilteredShips[shipCtr]; //console.log(cShip);
 					shipLevel = cShip.level + 50 * 0; // marry enforcement (debugging toggle)
 					cElm = $(".tab_docking .factory .ship_item").clone().appendTo(self.shipList);
 					if(shipCtr%2 === 0){ cElm.addClass("even"); }else{ cElm.addClass("odd"); }
-					
+
 					$(".ship_id", cElm).text( cShip.id );
 					$(".ship_img .ship_icon", cElm).attr("src", KC3Meta.shipIcon(cShip.bid));
 					if(config.kanmusuPic && shipLevel >= 100)
@@ -178,34 +172,44 @@
 
 					var hpStatus = cShip.hp.toString() + " / " + cShip.maxhp.toString();
 					$(".ship_status", cElm).text( hpStatus );
-					if (cShip.hp === cShip.maxhp) {
-					    $(".ship_status", cElm).text( cShip.hp.toString() );
-						$(".ship_repair_docking", cElm).text( "-" );
-						$(".ship_repair_akashi", cElm).text( "-" );
+
+					// KC3Ship.prototype.isStriped = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.5); };
+					// KC3Ship.prototype.isTaiha   = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.25); };
+
+					$(".ship_repair_docking", cElm).text( String(cShip.repairDocking).toHHMMSS() );
+					var akashiText = String(cShip.repairAkashi).toHHMMSS();
+
+					var hpPercent = cShip.hp / cShip.maxhp;
+					if (hpPercent <= 0.25) {
+						// taiha
+						$(".ship_status", cElm).addClass("ship_taiha");
+						akashiText = "-";
+					} else if (hpPercent <= 0.5) {
+						// chuuha
+						$(".ship_status", cElm).addClass("ship_chuuha");
+						akashiText = "-";
+					} else if (hpPercent <= 0.75) {
+						// shouha
+						$(".ship_status", cElm).addClass("ship_shouha");
 					} else {
-						$(".ship_repair_docking", cElm).text( String(cShip.repairDocking).toHHMMSS() );
-						$(".ship_repair_akashi", cElm).text( "-" );
-						if (cShip.taiha) {
-							$(".ship_status", cElm).addClass("ship_taiha");
-						} else if (cShip.stripped) {
-							$(".ship_status", cElm).addClass("ship_stripped");
-						} else {
-							$(".ship_repair_akashi", cElm).text( String(cShip.repairAkashi).toHHMMSS() );
-						}
+						// 80% ~ 100% hp
+						$(".ship_status", cElm).addClass("ship_normal");
 					}
-					
+
+					$(".ship_repair_akashi", cElm).text( akashiText );
+
 					[1,2,3,4].forEach(function(x){
 						self.equipImg(cElm, x, cShip.slots[x-1], cShip.equip[x-1]);
 					});
-					
+
 				});
-				
+
 				self.shipList.show();
 				self.isLoading = false;
 				console.log("Showing this list took", ((new Date()).getTime() - self.startTime)-100 , "milliseconds");
 			},100);
 		},
-		
+
 		/* Show single equipment icon
 		   --------------------------------------------*/
 		equipImg :function(cElm, equipNum, equipSlot, gear_id){
@@ -230,7 +234,7 @@
 			}
 		}
 	};
-	
+
 	// checks kekkon setting
 	function KekkonType(){
 		var checks = {
@@ -251,5 +255,5 @@
 		return KekkonType.instance;
 	}
 	new KekkonType();
-	
+
 })();
