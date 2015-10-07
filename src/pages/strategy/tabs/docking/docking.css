@@ -217,6 +217,10 @@
 	position:relative;
 }
 
+.tab_docking .ship_item.ship_docking .ship_field {
+	background: #CCFFFF;
+}
+
 .tab_docking .ship_item .ship_status.ship_normal {
 	background: #66FF66;
 }

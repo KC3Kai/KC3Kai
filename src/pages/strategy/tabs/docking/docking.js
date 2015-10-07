@@ -103,25 +103,13 @@
 					return ship.hp !== ship.maxhp;
 				};
 				var FilteredShips = self.shipCache.filter(needsRepair);
+				var dockingShips;
+				if (typeof localStorage.dockingShips !== "undefined") {
+					dockingShips = JSON.parse( localStorage.dockingShips );
+				} else {
+					dockingShips = [];
+				}
 
-
-				var testShips = [
-					{"id":143,"bid":408,"stype":7,"english":"隼鹰 改二",
-					 "level":81,"morale":53,"equip":[-1,-1,-1,-1,-1],"locked":1,"hp":1,"maxhp":55,"repairDocking":11265,"repairAkashi":12000,
-					 "stripped":false,"taiha":true,"slots":[22,17,18,4,0],"fleet":0},
-					{"id":143,"bid":408,"stype":7,"english":"隼鹰 改二",
-					 "level":81,"morale":53,"equip":[-1,-1,-1,-1,-1],"locked":1,"hp":54,"maxhp":55,"repairDocking":11265,"repairAkashi":12000,
-					 "stripped":false,"taiha":true,"slots":[22,17,18,4,0],"fleet":0},
-					{"id":143,"bid":408,"stype":7,"english":"隼鹰 改二",
-					 "level":81,"morale":53,"equip":[-1,-1,-1,-1,-1],"locked":1,"hp":41,"maxhp":55,"repairDocking":11265,"repairAkashi":12000,
-					 "stripped":true,"taiha":false,"slots":[22,17,18,4,0],"fleet":0},
-					{"id":143,"bid":408,"stype":7,"english":"隼鹰 改二",
-					 "level":81,"morale":53,"equip":[-1,-1,-1,-1,-1],"locked":1,"hp":23,"maxhp":55,"repairDocking":11265,"repairAkashi":12000,
-					 "stripped":true,"taiha":false,"slots":[22,17,18,4,0],"fleet":0},
-				];
-
-
-				// FilteredShips = testShips;
 				// Sorting
 				FilteredShips.sort(function(a,b){
 					var returnVal = 0;
@@ -197,6 +185,11 @@
 					}
 
 					$(".ship_repair_akashi", cElm).text( akashiText );
+
+					// adding docking indicator
+					if (dockingShips.indexOf(cShip.id) !== -1) {
+						cElm.addClass("ship_docking");
+					}
 
 					[1,2,3,4].forEach(function(x){
 						self.equipImg(cElm, x, cShip.slots[x-1], cShip.equip[x-1]);
