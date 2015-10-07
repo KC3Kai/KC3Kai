@@ -123,7 +123,10 @@
 			// Wait until execute
 			setTimeout(function(){
 				var shipCtr, cElm, cShip, shipLevel;
-				var FilteredShips = self.shipCache.slice(0);
+				var needsRepair = function(ship,i,a) {
+					return ship.hp !== ship.maxhp;
+				};
+				var FilteredShips = self.shipCache.filter(needsRepair);
 
 				// Sorting
 				FilteredShips.sort(function(a,b){
