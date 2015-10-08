@@ -103,11 +103,19 @@
 					return ship.hp !== ship.maxhp;
 				};
 				var FilteredShips = self.shipCache.filter(needsRepair);
-				var dockingShips;
+				// dockingShips[ "x" + <ship_id> ] = <complete time>
+				var dockingShips = {};
 				if (typeof localStorage.dockingShips !== "undefined") {
-					dockingShips = JSON.parse( localStorage.dockingShips );
-				} else {
-					dockingShips = [];
+					try {
+						var ndockData = JSON.parse( localStorage.dockingShips );
+						$.each(ndockData, function (i, v) {
+							var key = "x" + v.id.toString();
+							dockingShips[key] = v.completeTime;
+						});
+					} catch (err) {
+						console.log( "Error while converting ndock data" );
+						console.log(err);
+					}
 				}
 
 				// Sorting
@@ -187,8 +195,19 @@
 					$(".ship_repair_akashi", cElm).text( akashiText );
 
 					// adding docking indicator
-					if (dockingShips.indexOf(cShip.id) !== -1) {
+					var completeTime = dockingShips["x" + cShip.id.toString()];
+					if (typeof completeTime !== "undefined") {
 						cElm.addClass("ship_docking");
+						// if we are repairing the ship, show remaining time instead
+						try {
+							var completeDate = new Date(completeTime);
+							var secToComplete = Math.floor( (new Date(completeTime) - new Date()) / 1000 );
+							secToComplete = Math.max(0, secToComplete);
+							$(".ship_repair_docking", cElm).text( String(secToComplete).toHHMMSS() );
+						} catch (err) {
+							console.log("Error while calculating remaining docking time");
+							console.log(err);
+						}
 					}
 
 					[1,2,3,4].forEach(function(x){

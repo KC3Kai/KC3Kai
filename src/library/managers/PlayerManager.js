@@ -68,7 +68,11 @@ Does not include Ships and Gears which are managed by other Managers
 				
 				if(ndock.api_state > 0){
 					self.repairShips[ ndock.api_id ] = ndock.api_ship_id;
-					dockingShips.push( ndock.api_ship_id );
+					var repairInfo = 
+						{ id: ndock.api_ship_id,
+						  completeTime: ndock.api_complete_time
+						};
+					dockingShips.push( repairInfo );
 					KC3TimerManager.repair( ndock.api_id ).activate(
 						ndock.api_complete_time,
 						KC3ShipManager.get( ndock.api_ship_id ).masterId
