@@ -59,6 +59,7 @@ Does not include Ships and Gears which are managed by other Managers
 		setRepairDocks :function( data ){
 			var lastRepair = this.repairShips.map(function(x){return x;}); // clone
 			this.repairShips = [];
+			var dockingShips = [];
 			var self = this;
 			$.each(data, function(ctr, ndock){
 				if(lastRepair[ndock.api_id] != ndock.api_ship_id) { // check if not in the list (repaired)
@@ -67,6 +68,11 @@ Does not include Ships and Gears which are managed by other Managers
 				
 				if(ndock.api_state > 0){
 					self.repairShips[ ndock.api_id ] = ndock.api_ship_id;
+					var repairInfo = 
+						{ id: ndock.api_ship_id,
+						  completeTime: ndock.api_complete_time
+						};
+					dockingShips.push( repairInfo );
 					KC3TimerManager.repair( ndock.api_id ).activate(
 						ndock.api_complete_time,
 						KC3ShipManager.get( ndock.api_ship_id ).masterId
@@ -75,6 +81,11 @@ Does not include Ships and Gears which are managed by other Managers
 					KC3TimerManager.repair( ndock.api_id ).deactivate();
 				}
 			});
+			// "localStorage.dockingShips" is not supposed
+			// to be modified,
+			// it record the most recent docking ships
+			// whenever a docking event comes
+			localStorage.dockingShips = JSON.stringify(dockingShips);
 		},
 		
 		setBuildDocks :function( data ){
