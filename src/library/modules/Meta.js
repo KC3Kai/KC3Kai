@@ -105,6 +105,7 @@ Provides access to data on built-in JSON files
 		},
 		
 		shipName :function( jp_name ){
+			if(typeof jp_name == "undefined"){ return "Unknown ship"; }
 			if(typeof this._cache[jp_name] !== "undefined"){ return this._cache[jp_name]; }
 			if(typeof this._ship[jp_name] !== "undefined"){
 				this._cache[jp_name] = this._ship[jp_name];
