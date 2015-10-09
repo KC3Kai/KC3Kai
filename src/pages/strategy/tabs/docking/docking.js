@@ -112,6 +112,23 @@
 							var key = "x" + v.id.toString();
 							dockingShips[key] = v.completeTime;
 						});
+
+						// update docking time here
+						$.each(FilteredShips, function (i, cShip) {
+							var completeTime = dockingShips["x" + cShip.id.toString()];
+							if (typeof completeTime !== "undefined") {
+								// if we are repairing the ship, show remaining time instead
+								try {
+									var completeDate = new Date(completeTime);
+									var secToComplete = Math.floor( (new Date(completeTime) - new Date()) / 1000 );
+									secToComplete = Math.max(0, secToComplete);
+									cShip.repairDocking = secToComplete;
+								} catch (err) {
+									console.log("Error while calculating remaining docking time");
+									console.log(err);
+								}
+							}
+						});
 					} catch (err) {
 						console.log( "Error while converting ndock data" );
 						console.log(err);
@@ -198,16 +215,6 @@
 					var completeTime = dockingShips["x" + cShip.id.toString()];
 					if (typeof completeTime !== "undefined") {
 						cElm.addClass("ship_docking");
-						// if we are repairing the ship, show remaining time instead
-						try {
-							var completeDate = new Date(completeTime);
-							var secToComplete = Math.floor( (new Date(completeTime) - new Date()) / 1000 );
-							secToComplete = Math.max(0, secToComplete);
-							$(".ship_repair_docking", cElm).text( String(secToComplete).toHHMMSS() );
-						} catch (err) {
-							console.log("Error while calculating remaining docking time");
-							console.log(err);
-						}
 					}
 
 					[1,2,3,4].forEach(function(x){
