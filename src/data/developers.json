@@ -180,6 +180,14 @@
 			}
 		},
 		{
+			"name": "Arebs",
+			"avatar" : "https://avatars0.githubusercontent.com/u/6851819?v=3&s=40",
+			"desc" : "Deutsch",
+			"links" : {
+				"gh" :"https://github.com/Arebs"
+			}
+		},
+		{
 			"name": "Arkayda",
 			"avatar" : "https://avatars1.githubusercontent.com/u/13376050?v=3&s=40",
 			"desc" : "Français",
