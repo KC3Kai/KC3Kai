@@ -1,7 +1,7 @@
 [
 	{
 		"section": "SettingsGlobal",
-		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Global",
+		"help" : "https://github.com/KC3Kai/KC3Kai/wiki/Settings%3A-Global",
 		"contents" : [
 			{
 				"id" : "language",
@@ -250,6 +250,18 @@
 				"name" : "SettingsDesktopNotif",
 				"type" : "check",
 				"options" : {}
+			},
+			{
+				"id" : "alert_idle_counter",
+				"name" : "SettingsIdleWarning",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "None"],
+						[ 1, "SettingsHideCounter"],
+						[ 2, "SettingsShowCounter"]
+					]
+				}
 			}
 		]
 	},

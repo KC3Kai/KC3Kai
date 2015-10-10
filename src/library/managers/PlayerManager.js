@@ -18,6 +18,7 @@ Does not include Ships and Gears which are managed by other Managers
 		buildSlots: 2,
 		combinedFleet: 0,
 		statistics: {},
+		lastRefresh: null,
 		
 		init :function(){
 			this.hq = new KC3Player();
@@ -182,6 +183,9 @@ Does not include Ships and Gears which are managed by other Managers
 					});
 				}
 			});
+		},
+		
+		portRefresh :function( data ){
 		},
 		
 		loadFleets :function(){
