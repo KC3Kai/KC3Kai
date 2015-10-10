@@ -579,7 +579,7 @@ Previously known as "Reactor"
 			if(!ConfigManager.info_delta)
 				KC3Network.trigger("HQ");
 			
-			KC3Network.trigger("BattleResult");
+			KC3Network.trigger("BattleResult", response.api_data);
 			KC3Network.trigger("Quests");
 			
 			KC3Network.delay(1,"Fleet","GearSlots");
