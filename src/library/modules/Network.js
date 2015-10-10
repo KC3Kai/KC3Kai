@@ -100,29 +100,41 @@ Listens to network history and triggers callback if game events happen
 				KC3Network.clearOverlays();
 				
 				// Create new request and process it
-				var thisRequest = new KC3Request( request );
+				console.log(request);
+				console.log(request.request);
+				var
+					thisRequest = new KC3Request( request ),
+					message = {
+						tabId: chrome.devtools.inspectedWindow.tabId,
+						message_id: "goodResponses",
+						tcp_status: request.response.status,
+						api_status: undefined,
+						api_result: "他のリクエストが成功！",
+					};
 				if(thisRequest.validateHeaders()){
 					thisRequest.readResponse(request, function(){
 						if(thisRequest.validateData()){
 							thisRequest.process();
 							//---Kancolle DB Submission 
 							if (ConfigManager.DBSubmission_enabled && DBSubmission.checkIfDataNeeded(request.request.url)){
-								request.getContent(
-										function(content, encoding)
-										{
-											DBSubmission.submitData(request.request.url,request.request.postData, content);
-										});
+								request.getContent(function(content, encoding){
+									DBSubmission.submitData(request.request.url,request.request.postData, content);
+								});
 							}
 							//---
 						}
-						(new RMsg("service", "gameScreenChg", {
-							tabId: chrome.devtools.inspectedWindow.tabId,
-							message_id: "goodResponses",
-							tcp_status: Number(thisRequest.statusCode),
-							api_status: Number(thisRequest.gameStatus),
-							api_result: String(thisRequest.response.api_result_msg),
-						})).execute();
 					});
+					request.getContent(function(x){
+						var data = JSON.parse(/svdata=(.+)$/.exec(x)[1]);
+						console.log(data);
+						message.api_status = data.api_result;
+						message.api_result = data.api_result_msg;
+						(new RMsg("service", "gameScreenChg", message)).execute();
+					});
+				}else{
+					message.api_status = false;
+					message.api_result = "";
+					(new RMsg("service", "gameScreenChg", message)).execute();
 				}
 			}
 			

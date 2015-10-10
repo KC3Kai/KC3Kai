@@ -16,7 +16,7 @@ var trustedExit = false;
 */
 localStorage.longestIdleTime = Math.max(localStorage.longestIdleTime || 0,1800000);
 var
-	lastRequestMark = Date.now(),
+	lastRequestMark,
 	idleTimer,
 	idleTimeout,
 	idleFunction;
@@ -32,12 +32,9 @@ function ActivateGame(){
 		.find(".game-swf")
 		.attr("src", localStorage.absoluteswf)
 		.end()
+		.trigger('initialize-idle')
 		.show();
 	$(".box-wrap").css("zoom", ((ConfigManager.api_gameScale || 100) / 100));
-	idleTimer = setInterval(idleFunction,1000);
-	if(ConfigManager.alert_idle_counter) {
-		$(".game-idle-timer").trigger("refresh-tick");
-	}
 }
 
 $(document).on("ready", function(){
@@ -70,6 +67,14 @@ $(document).on("ready", function(){
 			location.reload();
 	});
 	
+	$(".box-game").on('initialize-idle',function(){
+		lastRequestMark = Date.now();
+		idleTimer = setInterval(idleFunction,1000);
+		if(ConfigManager.alert_idle_counter) {
+			$(".game-idle-timer").trigger("refresh-tick");
+		}
+	});
+	
 	// API link determines which screen to show
 	if(localStorage.absoluteswf){
 		$(".api_txt textarea").text(localStorage.absoluteswf);
@@ -98,6 +103,7 @@ $(document).on("ready", function(){
 	// Quick Play
 	$(".play_btn").on('click', function(){
 		ActivateGame();
+		ResetIdleStat();
 	});
 	
 	// Disable Quick Play (must panel)
@@ -114,6 +120,7 @@ $(document).on("ready", function(){
 		switch($(this).text()) {
 			case("01"):
 				$(".game-swf").attr("src","about:blank").attr("src",localStorage.absoluteswf);
+				$(".box-game").trigger('initialize-idle');
 				$(this).text("05");
 				break;
 			default:
@@ -218,16 +225,17 @@ var interactions = {
 					$(".game-refresh").text((0).toDigits(2)).trigger('bomb-exploded');
 					break;
 			}
-			response({success:true});
+			return true;
 		}catch(e){
 			console.error(e);
 		}finally{
-			response({success:false});
+			return false;
 		}
 	},
 	
 	// Request OK Marker
 	goodResponses :function(request, sender, response){
+		console.log(request);
 		if(request.tcp_status === 200 && request.api_status === 1) {
 			localStorage.longestIdleTime = Math.max(localStorage.longestIdleTime,Date.now() - lastRequestMark);
 			lastRequestMark = Date.now();
@@ -238,8 +246,11 @@ var interactions = {
 		} else {
 			clearInterval(idleTimer);
 			clearTimeout(idleTimeout);
-			$(".game-idle-timer").trigger("unsafe-tick");
-			console.error("API Link cease to functioning anymore after",String(Math.floor((Date.now() - lastRequestMark)/1000)).toHHMMSS(),"idle time");
+			$(".game-idle-timer").trigger("unsafe-tick").html([
+				String(Math.floor((Date.now() - lastRequestMark)/1000)).toHHMMSS(),
+				"%/%/%".replace("%",request.tcp_status).replace("%",request.api_status).replace("%",request.api_result)
+			].join('<br>')).css("height","40px").css("width","480px");
+			interactions.catBomb(request,sender,response);
 		}
 	},
 	
