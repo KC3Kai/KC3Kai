@@ -121,6 +121,17 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		------------------------------------------*/
 		"fitScreen" :function(request, sender, response){
 			(new TMsg(request.tabId, "gamescreen", "fitScreen")).execute();
+		},
+		
+		/* DMM FRMAE INJECTION
+		Responds if content script should inject DMM Frame customizations
+		------------------------------------------*/
+		"dmmFrameInject" :function(request, sender, response){
+			if(sender.tab.url.indexOf("/pages/game/dmm.html") > -1){
+				response({value:true});
+			}else{
+				response({value:false});
+			}
 		}
 		
 	};

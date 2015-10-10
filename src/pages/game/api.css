@@ -20,6 +20,14 @@ body {
 	-o-user-select: none;
 	cursor: default;
 }
+.notice {
+	margin:0px 0px 15px 0px;
+	text-align:center;
+	padding:10px 0px;
+	font-weight:bold;
+	background:#def;
+	border:1px solid #ace;
+}
 
 /* NOTES
 --------------------------*/
