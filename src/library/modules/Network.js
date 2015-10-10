@@ -91,7 +91,7 @@ Listens to network history and triggers callback if game events happen
 		Inside, use "KC3Network" instead of "this"
 		It's a callback so "this" is in the context of the chrome listener
 		------------------------------------------*/
-		received :function( request ){
+		received : function( request ){
 			// If request is an API Call
 			if(request.request.url.indexOf("/kcsapi/") > -1){
 				KC3Network.lastUrl = request.request.url;
@@ -115,6 +115,13 @@ Listens to network history and triggers callback if game events happen
 							}
 							//---
 						}
+						(new RMsg("service", "gameScreenChg", {
+							tabId: chrome.devtools.inspectedWindow.tabId,
+							message_id: "goodResponses",
+							tcp_status: Number(thisRequest.statusCode),
+							api_status: Number(thisRequest.gameStatus),
+							api_result: String(thisRequest.response.api_result_msg),
+						})).execute();
 					});
 				}
 			}
