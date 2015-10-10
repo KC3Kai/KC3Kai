@@ -119,14 +119,18 @@ $(document).on("ready", function(){
 	$(".game-refresh").on("click",function(){
 		switch($(this).text()) {
 			case("01"):
-				$(".game-swf").attr("src","about:blank").attr("src",localStorage.absoluteswf);
+				// TODO: BOMB EXPLODED
+				// $(".game-swf").attr("src","about:blank").attr("src",localStorage.absoluteswf);
 				$(".box-game").trigger('initialize-idle');
+				$(this).trigger('bomb-exploded');
 				$(this).text("05");
 				break;
 			default:
 				$(this).text(($(this).text()-1).toDigits(2));
 				break;
 		}
+	}).on("bomb-exploded",function(){
+		console.error("TODO: dragonjet help me >_<)/");
 	});
 	
 	// Configure Idle Timer
