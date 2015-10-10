@@ -995,8 +995,8 @@
 			
 			// If there is a FISH drop
 			$(".module.activity .battle_support").hide();
-			if(typeof thisNode.api_get_useitem != "undefined"){
-				if(thisNode.api_get_useitem.api_useitem_id == 68){
+			if(typeof data.api_get_useitem != "undefined"){
+				if(data.api_get_useitem.api_useitem_id == 68){
 					$(".module.activity .battle_fish img").attr("src", "./../../../assets/img/client/pike.png");
 				}
 			}
