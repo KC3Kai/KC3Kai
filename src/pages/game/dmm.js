@@ -33,7 +33,6 @@ function ActivateGame(){
 		.attr("src", "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/")
 		.end()
 		.show();
-	$(".box-wrap").css("zoom", ((ConfigManager.api_gameScale || 100) / 100));
 	idleTimer = setInterval(idleFunction,1000);
 	if(ConfigManager.alert_idle_counter) {
 		$(".game-idle-timer").trigger("refresh-tick");
@@ -283,15 +282,13 @@ var interactions = {
 	
 	// Fit screen
 	fitScreen :function(request, sender, response){
-		var GameScale = ((ConfigManager.api_gameScale || 100) / 100);
-		
 		// Get browser zoon level for the page
 		chrome.tabs.getZoom(null, function(ZoomFactor){
 			// Resize the window
 			chrome.windows.getCurrent(function(wind){
 				chrome.windows.update(wind.id, {
-					width: Math.ceil(800*GameScale*ZoomFactor) + (wind.width- Math.ceil($(window).width()*ZoomFactor) ),
-					height: Math.ceil(480*GameScale*ZoomFactor) + (wind.height- Math.ceil($(window).height()*ZoomFactor) )
+					width: Math.ceil(800*ZoomFactor) + (wind.width- Math.ceil($(window).width()*ZoomFactor) ),
+					height: Math.ceil(480*ZoomFactor) + (wind.height- Math.ceil($(window).height()*ZoomFactor) )
 				});
 			});
 		});
