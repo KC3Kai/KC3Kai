@@ -349,9 +349,9 @@ Used by SortieManager
 			if((this.gaugeDamage >= 0) && (maps[ckey].curhp || 0) > 0) { // gauge-based not cleared / not gauge-based
 				maps[ckey].curhp -= this.gaugeDamage;
 				if(maps[ckey].curhp <= 0) // if last kill -- check whether flagship is killed or not -- flagship killed = map clear
-					maps[ckey].curhp = 1-(maps[ckey].clear = resultData.destsf);
+					maps[ckey].curhp = 1-(maps[ckey].clear = resultData.api_destsf);
 			}else if((KC3Meta.gauge(ckey.replace("m","")) - (maps[ckey].kills || 0)) > 0) { // kill-based map not cleared
-				maps[ckey].kills += resultData.destsf;
+				maps[ckey].kills += resultData.api_destsf;
 			}
 			maps[ckey].clear |= resultData.api_first_clear; // obtaining clear once
 			localStorage.maps = JSON.stringify(maps);

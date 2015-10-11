@@ -126,14 +126,13 @@ Listens to network history and triggers callback if game events happen
 					});
 					request.getContent(function(x){
 						var data = JSON.parse(/svdata=(.+)$/.exec(x)[1]);
-						console.log(data);
 						message.api_status = data.api_result;
 						message.api_result = data.api_result_msg;
 						(new RMsg("service", "gameScreenChg", message)).execute();
 					});
 				}else{
 					message.api_status = false;
-					message.api_result = "";
+					message.api_result = request.response.statusText;
 					(new RMsg("service", "gameScreenChg", message)).execute();
 				}
 			}

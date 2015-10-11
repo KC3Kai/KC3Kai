@@ -1,5 +1,8 @@
 /* GLOBAL
 --------------------------*/
+html {
+	height: 100%;
+}
 body {
 	background-color:#def;
 }

@@ -119,14 +119,18 @@ $(document).on("ready", function(){
 	$(".game-refresh").on("click",function(){
 		switch($(this).text()) {
 			case("01"):
-				$(".game-swf").attr("src","about:blank").attr("src",localStorage.absoluteswf);
+				// TODO: BOMB EXPLODED
+				// $(".game-swf").attr("src","about:blank").attr("src",localStorage.absoluteswf);
 				$(".box-game").trigger('initialize-idle');
+				$(this).trigger('bomb-exploded');
 				$(this).text("05");
 				break;
 			default:
 				$(this).text(($(this).text()-1).toDigits(2));
 				break;
 		}
+	}).on("bomb-exploded",function(){
+		console.error("TODO: dragonjet help me >_<)/");
 	});
 	
 	// Configure Idle Timer
@@ -235,7 +239,6 @@ var interactions = {
 	
 	// Request OK Marker
 	goodResponses :function(request, sender, response){
-		console.log(request);
 		if(request.tcp_status === 200 && request.api_status === 1) {
 			localStorage.longestIdleTime = Math.max(localStorage.longestIdleTime,Date.now() - lastRequestMark);
 			lastRequestMark = Date.now();
@@ -248,9 +251,10 @@ var interactions = {
 			clearTimeout(idleTimeout);
 			$(".game-idle-timer").trigger("unsafe-tick").html([
 				String(Math.floor((Date.now() - lastRequestMark)/1000)).toHHMMSS(),
-				"%/%/%".replace("%",request.tcp_status).replace("%",request.api_status).replace("%",request.api_result)
+				[request.tcp_status,request.api_status,request.api_result].filter(function(x){return !!x;}).join('/')
 			].join('<br>')).css("height","40px").css("width","480px");
 			interactions.catBomb(request,sender,response);
+			interactions.goodResponses = function(){};
 		}
 	},
 	
