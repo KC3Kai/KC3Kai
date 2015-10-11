@@ -239,7 +239,6 @@ var interactions = {
 	
 	// Request OK Marker
 	goodResponses :function(request, sender, response){
-		console.log(request);
 		if(request.tcp_status === 200 && request.api_status === 1) {
 			localStorage.longestIdleTime = Math.max(localStorage.longestIdleTime,Date.now() - lastRequestMark);
 			lastRequestMark = Date.now();
@@ -252,9 +251,10 @@ var interactions = {
 			clearTimeout(idleTimeout);
 			$(".game-idle-timer").trigger("unsafe-tick").html([
 				String(Math.floor((Date.now() - lastRequestMark)/1000)).toHHMMSS(),
-				"%/%/%".replace("%",request.tcp_status).replace("%",request.api_status).replace("%",request.api_result)
+				[request.tcp_status,request.api_status,request.api_result].filter(function(x){return !!x;}).join('/')
 			].join('<br>')).css("height","40px").css("width","480px");
 			interactions.catBomb(request,sender,response);
+			interactions.goodResponses = function(){};
 		}
 	},
 	
