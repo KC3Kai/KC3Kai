@@ -218,8 +218,8 @@
 					}
 
 					// adding expedition indicator
-					if (cShip.fleet != 0 &&
-						expeditionFleets.indexOf( cShip.fleet-1 ) != -1) {
+					if (cShip.fleet !== 0 &&
+						expeditionFleets.indexOf( cShip.fleet-1 ) !== -1) {
 						cElm.addClass("ship_expedition");
 					}
 
