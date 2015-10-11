@@ -9,7 +9,7 @@
 		shipCache:[],
 		filters: [],
 		options: [],
-		sortBy: "status",
+		sortBy: "repair_docking",
 		sortAsc: true,
 		equipMode: 0,
 		remodelOption: 0,
