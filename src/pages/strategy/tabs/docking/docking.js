@@ -41,6 +41,7 @@
 					locked: ThisShip.lock,
 					hp: ThisShip.hp[0],
 					maxhp: ThisShip.hp[1],
+					damageStatus: ThisShip.damageStatus(),
 					repairDocking: RepairTime.docking,
 					repairAkashi: RepairTime.akashi,
 					stripped: ThisShip.isStriped(),
@@ -103,37 +104,24 @@
 					return ship.hp !== ship.maxhp;
 				};
 				var FilteredShips = self.shipCache.filter(needsRepair);
-				// dockingShips[ "x" + <ship_id> ] = <complete time>
-				var dockingShips = {};
-				if (typeof localStorage.dockingShips !== "undefined") {
-					try {
-						var ndockData = JSON.parse( localStorage.dockingShips );
-						$.each(ndockData, function (i, v) {
-							var key = "x" + v.id.toString();
-							dockingShips[key] = v.completeTime;
-						});
+				var dockingShips = PlayerManager.getCachedDockingShips();
 
-						// update docking time here
-						$.each(FilteredShips, function (i, cShip) {
-							var completeTime = dockingShips["x" + cShip.id.toString()];
-							if (typeof completeTime !== "undefined") {
-								// if we are repairing the ship, show remaining time instead
-								try {
-									var completeDate = new Date(completeTime);
-									var secToComplete = Math.floor( (new Date(completeTime) - new Date()) / 1000 );
-									secToComplete = Math.max(0, secToComplete);
-									cShip.repairDocking = secToComplete;
-								} catch (err) {
-									console.log("Error while calculating remaining docking time");
-									console.log(err);
-								}
-							}
-						});
-					} catch (err) {
-						console.log( "Error while converting ndock data" );
-						console.log(err);
+				// update docking time here
+				$.each(FilteredShips, function (i, cShip) {
+					var completeTime = dockingShips["x" + cShip.id.toString()];
+					if (typeof completeTime !== "undefined") {
+						// if we are repairing the ship, show remaining time instead
+						try {
+							var completeDate = new Date(completeTime);
+							var secToComplete = Math.floor( (new Date(completeTime) - new Date()) / 1000 );
+							secToComplete = Math.max(0, secToComplete);
+							cShip.repairDocking = secToComplete;
+						} catch (err) {
+							console.log("Error while calculating remaining docking time");
+							console.log(err);
+						}
 					}
-				}
+				});
 
 				// Sorting
 				FilteredShips.sort(function(a,b){
@@ -186,22 +174,17 @@
 					var hpStatus = cShip.hp.toString() + " / " + cShip.maxhp.toString();
 					$(".ship_status", cElm).text( hpStatus );
 
-					// KC3Ship.prototype.isStriped = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.5); };
-					// KC3Ship.prototype.isTaiha   = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.25); };
-
 					$(".ship_repair_docking", cElm).text( String(cShip.repairDocking).toHHMMSS() );
 					var akashiText = String(cShip.repairAkashi).toHHMMSS();
 
-					var hpPercent = cShip.hp / cShip.maxhp;
-					if (hpPercent <= 0.25) {
-						// taiha
+					if (cShip.damageStatus == "taiha") {
 						$(".ship_status", cElm).addClass("ship_taiha");
 						akashiText = "-";
-					} else if (hpPercent <= 0.5) {
+					} else if (cShip.damageStatus == "chuuha") {
 						// chuuha
 						$(".ship_status", cElm).addClass("ship_chuuha");
 						akashiText = "-";
-					} else if (hpPercent <= 0.75) {
+					} else if (cShip.damageStatus == "shouha") {
 						// shouha
 						$(".ship_status", cElm).addClass("ship_shouha");
 					} else {
