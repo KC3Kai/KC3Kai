@@ -218,7 +218,11 @@
 }
 
 .tab_docking .ship_item.ship_docking .ship_field {
-	background: #CCFFFF;
+	background: #C0EEEE;
+}
+
+.tab_docking .ship_item.ship_expedition .ship_field {
+	background: #D7D6ED;
 }
 
 .tab_docking .ship_item .ship_status.ship_normal {

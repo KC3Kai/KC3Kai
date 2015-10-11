@@ -105,6 +105,23 @@
 				var FilteredShips = self.shipCache.filter(needsRepair);
 				var dockingShips = PlayerManager.getCachedDockingShips();
 
+				var currentFleets = PlayerManager.fleets;
+				var expeditionFleets = [];
+				$.each(currentFleets, function (i,fleet) {
+					try {
+						var missionState = fleet.mission[0];
+						// this fleet is either on expedition or being force back
+						// thus cannot be repaired for now
+						if (missionState == 1 ||
+							missionState == 3) {
+							expeditionFleets.push( i );
+						}
+					} catch (err) {
+						console.log("error while processing fleet info");
+						console.log(err);
+					}
+				});
+
 				// update real-time info
 				$.each(FilteredShips, function (i, cShip) {
 					// update docking time
@@ -162,7 +179,7 @@
 						$("<div>").addClass("ingame_page").html("Page "+Math.ceil((Number(shipCtr)+1)/10)).appendTo(self.shipList);
 					}
 
-					cShip = FilteredShips[shipCtr]; //console.log(cShip);
+					cShip = FilteredShips[shipCtr];
 					shipLevel = cShip.level + 50 * 0; // marry enforcement (debugging toggle)
 					cElm = $(".tab_docking .factory .ship_item").clone().appendTo(self.shipList);
 					if(shipCtr%2 === 0){ cElm.addClass("even"); }else{ cElm.addClass("odd"); }
@@ -198,6 +215,12 @@
 					var completeTime = dockingShips["x" + cShip.id.toString()];
 					if (typeof completeTime !== "undefined") {
 						cElm.addClass("ship_docking");
+					}
+
+					// adding expedition indicator
+					if (cShip.fleet != 0 &&
+						expeditionFleets.indexOf( cShip.fleet-1 ) != -1) {
+						cElm.addClass("ship_expedition");
 					}
 
 					[1,2,3,4].forEach(function(x){
