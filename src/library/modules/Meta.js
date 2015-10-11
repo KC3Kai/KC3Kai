@@ -105,7 +105,8 @@ Provides access to data on built-in JSON files
 		},
 		
 		shipName :function( jp_name ){
-			if(typeof jp_name == "undefined"){ return "Unknown ship"; }
+			// console.log( "---------request to TL---------", jp_name );
+			//if(typeof jp_name == "undefined"){ return "Unknown ship"; }
 			if(typeof this._cache[jp_name] !== "undefined"){ return this._cache[jp_name]; }
 			if(typeof this._ship[jp_name] !== "undefined"){
 				this._cache[jp_name] = this._ship[jp_name];
@@ -132,14 +133,18 @@ Provides access to data on built-in JSON files
 				delete repTab[repRes[1]];
 				replaced = true;
 			}
-			console.log("Remaining",bare,"with combination",combin.join(" "));
+			// console.log("Remaining", bare, "with combination", combin.join(" "));
 			if(replaced) {
 				combin.unshift("");
+				// console.log("this._ship", this._ship);
+				// console.log("this._ship[bare]", this._ship[bare]);
 				if(typeof this._ship[bare] !== "undefined"){
 					this._cache[jp_name] = this._ship[bare] + (combin.length > 0 ? combin.join(" ") : "");
 				}
-				return this._cache[jp_name];
+				// console.log("this._cache[jp_name]", this._cache[jp_name]);
+				// return this._cache[jp_name]; // being here means the jp_name is not cached. there's already a cache checker at the start of this function
 			}
+			// console.log("returning original:", jp_name);
 			return jp_name;
 		},
 		
