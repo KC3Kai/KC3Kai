@@ -49,7 +49,6 @@
 					slots: ThisShip.slots,
 					fleet: ThisShip.onFleet(),
 				};
-
 				this.shipCache.push(ThisShipData);
 			}
 		},
@@ -106,8 +105,9 @@
 				var FilteredShips = self.shipCache.filter(needsRepair);
 				var dockingShips = PlayerManager.getCachedDockingShips();
 
-				// update docking time here
+				// update real-time info
 				$.each(FilteredShips, function (i, cShip) {
+					// update docking time
 					var completeTime = dockingShips["x" + cShip.id.toString()];
 					if (typeof completeTime !== "undefined") {
 						// if we are repairing the ship, show remaining time instead
@@ -116,10 +116,18 @@
 							var secToComplete = Math.floor( (new Date(completeTime) - new Date()) / 1000 );
 							secToComplete = Math.max(0, secToComplete);
 							cShip.repairDocking = secToComplete;
+							// for docking ship, facility cannot be used
+							cShip.repairAkashi = Infinity;
 						} catch (err) {
 							console.log("Error while calculating remaining docking time");
 							console.log(err);
 						}
+					}
+
+					// facility cannot repair chuuha / taiha 'd ships
+					if (cShip.damageStatus == "chuuha" ||
+						cShip.damageStatus == "taiha") {
+						cShip.repairAkashi = Infinity;
 					}
 				});
 
@@ -175,24 +183,16 @@
 					$(".ship_status", cElm).text( hpStatus );
 
 					$(".ship_repair_docking", cElm).text( String(cShip.repairDocking).toHHMMSS() );
-					var akashiText = String(cShip.repairAkashi).toHHMMSS();
+					var akashiText =
+						Number.isFinite(cShip.repairAkashi) ? String(cShip.repairAkashi).toHHMMSS() : "-";
+					$(".ship_repair_akashi", cElm).text( akashiText );
 
-					if (cShip.damageStatus == "taiha") {
-						$(".ship_status", cElm).addClass("ship_taiha");
-						akashiText = "-";
-					} else if (cShip.damageStatus == "chuuha") {
-						// chuuha
-						$(".ship_status", cElm).addClass("ship_chuuha");
-						akashiText = "-";
-					} else if (cShip.damageStatus == "shouha") {
-						// shouha
-						$(".ship_status", cElm).addClass("ship_shouha");
-					} else {
-						// 80% ~ 100% hp
-						$(".ship_status", cElm).addClass("ship_normal");
+					if (cShip.damageStatus == "full" ||
+						cShip.damageStatus == "dummy") {
+						console.warn("damage status shouldn't be full / dummy in this docking page");
 					}
 
-					$(".ship_repair_akashi", cElm).text( akashiText );
+					$(".ship_status", cElm).addClass("ship_" + cShip.damageStatus);
 
 					// adding docking indicator
 					var completeTime = dockingShips["x" + cShip.id.toString()];
