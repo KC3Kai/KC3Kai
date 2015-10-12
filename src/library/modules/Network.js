@@ -100,8 +100,8 @@ Listens to network history and triggers callback if game events happen
 				KC3Network.clearOverlays();
 				
 				// Create new request and process it
-				console.log(request);
-				console.log(request.request);
+				// console.log(request);
+				// console.log(request.request);
 				var
 					thisRequest = new KC3Request( request ),
 					message = {
