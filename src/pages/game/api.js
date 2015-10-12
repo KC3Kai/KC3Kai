@@ -16,7 +16,7 @@ var trustedExit = false;
 */
 localStorage.longestIdleTime = Math.max(localStorage.longestIdleTime || 0,1800000);
 var
-	lastRequestMark = Date.now(),
+	lastRequestMark,
 	idleTimer,
 	idleTimeout,
 	idleFunction;
@@ -32,12 +32,9 @@ function ActivateGame(){
 		.find(".game-swf")
 		.attr("src", localStorage.absoluteswf)
 		.end()
+		.trigger('initialize-idle')
 		.show();
 	$(".box-wrap").css("zoom", ((ConfigManager.api_gameScale || 100) / 100));
-	idleTimer = setInterval(idleFunction,1000);
-	if(ConfigManager.alert_idle_counter) {
-		$(".game-idle-timer").trigger("refresh-tick");
-	}
 }
 
 $(document).on("ready", function(){
@@ -70,6 +67,14 @@ $(document).on("ready", function(){
 			location.reload();
 	});
 	
+	$(".box-game").on('initialize-idle',function(){
+		lastRequestMark = Date.now();
+		idleTimer = setInterval(idleFunction,1000);
+		if(ConfigManager.alert_idle_counter) {
+			$(".game-idle-timer").trigger("refresh-tick");
+		}
+	});
+	
 	// API link determines which screen to show
 	if(localStorage.absoluteswf){
 		$(".api_txt textarea").text(localStorage.absoluteswf);
@@ -98,6 +103,7 @@ $(document).on("ready", function(){
 	// Quick Play
 	$(".play_btn").on('click', function(){
 		ActivateGame();
+		ResetIdleStat();
 	});
 	
 	// Disable Quick Play (must panel)
@@ -113,13 +119,18 @@ $(document).on("ready", function(){
 	$(".game-refresh").on("click",function(){
 		switch($(this).text()) {
 			case("01"):
-				$(".game-swf").attr("src","about:blank").attr("src",localStorage.absoluteswf);
+				// TODO: BOMB EXPLODED
+				// $(".game-swf").attr("src","about:blank").attr("src",localStorage.absoluteswf);
+				$(".box-game").trigger('initialize-idle');
+				$(this).trigger('bomb-exploded');
 				$(this).text("05");
 				break;
 			default:
 				$(this).text(($(this).text()-1).toDigits(2));
 				break;
 		}
+	}).on("bomb-exploded",function(){
+		console.error("TODO: dragonjet help me >_<)/");
 	});
 	
 	// Configure Idle Timer
@@ -218,11 +229,11 @@ var interactions = {
 					$(".game-refresh").text((0).toDigits(2)).trigger('bomb-exploded');
 					break;
 			}
-			response({success:true});
+			return true;
 		}catch(e){
 			console.error(e);
 		}finally{
-			response({success:false});
+			return false;
 		}
 	},
 	
@@ -238,8 +249,12 @@ var interactions = {
 		} else {
 			clearInterval(idleTimer);
 			clearTimeout(idleTimeout);
-			$(".game-idle-timer").trigger("unsafe-tick");
-			console.error("API Link cease to functioning anymore after",String(Math.floor((Date.now() - lastRequestMark)/1000)).toHHMMSS(),"idle time");
+			$(".game-idle-timer").trigger("unsafe-tick").html([
+				String(Math.floor((Date.now() - lastRequestMark)/1000)).toHHMMSS(),
+				[request.tcp_status,request.api_status,request.api_result].filter(function(x){return !!x;}).join('/')
+			].join('<br>')).css("height","40px").css("width","480px");
+			interactions.catBomb(request,sender,response);
+			interactions.goodResponses = function(){};
 		}
 	},
 	

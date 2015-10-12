@@ -997,7 +997,7 @@
 			$(".module.activity .battle_support").hide();
 			if(typeof data.api_get_useitem != "undefined"){
 				if(data.api_get_useitem.api_useitem_id == 68){
-					$(".module.activity .battle_fish img").attr("src", "./../../../assets/img/client/pike.png");
+					$(".module.activity .battle_fish img").attr("src", "../../../../assets/img/client/pike.png");
 				}
 			}
 			$(".module.activity .battle_fish").show();
