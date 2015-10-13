@@ -88,7 +88,27 @@ Does not include Ships and Gears which are managed by other Managers
 			// whenever a docking event comes
 			localStorage.dockingShips = JSON.stringify(dockingShips);
 		},
-		
+
+		// cached docking ships' status
+		// the return value is an object whose properties are "x{ship_id}"
+		// with value set to the completeTime
+		getCachedDockingShips: function() {
+			var dockingShips = {};
+			if (typeof localStorage.dockingShips !== "undefined") {
+				try {
+					var ndockData = JSON.parse( localStorage.dockingShips );
+					$.each(ndockData, function (i, v) {
+						var key = "x" + v.id.toString();
+						dockingShips[key] = v.completeTime;
+					});
+				} catch (err) {
+					console.log( "Error while processing cached docking ship" );
+					console.log(err);
+				}
+			}
+			return dockingShips;
+		},
+
 		setBuildDocks :function( data ){
 			$.each(data, function(ctr, kdock){
 				if(kdock.api_state > 0){

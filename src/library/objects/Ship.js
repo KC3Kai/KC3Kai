@@ -84,6 +84,35 @@ KC3改 Ship Object
 	KC3Ship.prototype.exItem = function(){ return (this.ex_item>0)?KC3GearManager.get(this.ex_item):false; };
 	KC3Ship.prototype.isStriped = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.5); };
 	KC3Ship.prototype.isTaiha   = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.25); };
+
+	/* DAMAGE STATUS
+	Get damage status of the ship, return one of the following string:
+	  * "dummy" if this is a dummy ship
+	  * "taiha" (HP <= 25%)
+	  * "chuuha" (25% < HP <= 50%)
+	  * "shouha" (50% < HP <= 75%)
+	  * "normal" (75% < HP < 100%)
+	  * "full" (100% HP)
+	--------------------------------------------------------------*/
+	KC3Ship.prototype.damageStatus = function() {
+		if (this.hp[1] > 0) {
+			if (this.hp[0] === this.hp[1]) {
+				return "full";
+			}
+			var hpPercent = this.hp[0] / this.hp[1];
+			if (hpPercent <= 0.25) {
+				return "taiha";
+			} else if (hpPercent <= 0.5) {
+				return "chuuha";
+			} else if (hpPercent <= 0.75) {
+				return "shouha";
+			} else {
+				return "normal";
+			}
+		} else {
+			return "dummy";
+		}
+	};
 	
 	KC3Ship.prototype.isSupplied = function(){
 		if(this.rosterId===0){ return true; }
