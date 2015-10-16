@@ -1435,37 +1435,37 @@
 						postActions = postActions || setJQText;
 						postActions( dataReq, dataResult, jq );
 					}
-				}
-
+				};
+                
 				setupJQObject(
-					ExpdReqPack["flagShipLevel"],
-					ExpdCheckerResult["flagShipLevel"],
+					ExpdReqPack.flagShipLevel,
+					ExpdCheckerResult.flagShipLevel,
 					$(".module.activity .activity_expeditionPlanner .flagshipLv"));
 
 				
 				setupJQObject(
-					ExpdReqPack["flagShipTypeOf"],
-					ExpdCheckerResult["flagShipTypeOf"],
+					ExpdReqPack.flagShipTypeOf,
+					ExpdCheckerResult.flagShipTypeOf,
 					$(".module.activity .activity_expeditionPlanner .flagshipType"));
 
 				setupJQObject(
-					ExpdReqPack["shipCount"],
-					ExpdCheckerResult["shipCount"],
+					ExpdReqPack.shipCount,
+					ExpdCheckerResult.shipCount,
 					$(".module.activity .activity_expeditionPlanner .shipNum"));
 
 				setupJQObject(
-					ExpdReqPack["levelCount"],
-					ExpdCheckerResult["levelCount"],
+					ExpdReqPack.levelCount,
+					ExpdCheckerResult.levelCount,
 					$(".module.activity .activity_expeditionPlanner .fleetLv"));
-				if (ExpdReqPack["levelCount"] === null) {
+				if (ExpdReqPack.levelCount === null) {
 					$(".module.activity .activity_expeditionPlanner .hasTotalLv").hide();
 				} else {
 					$(".module.activity .activity_expeditionPlanner .hasTotalLv").show();
 				}
 
 				setupJQObject(
-					ExpdReqPack["fleetSType"],
-					ExpdCheckerResult["fleetSType"],
+					ExpdReqPack.fleetSType,
+					ExpdCheckerResult.fleetSType,
 					$( ".module.activity .activity_expeditionPlanner .expPlanner_req_fleetComposition" ),
 					function ( dataReq, dataResult, jq ) {
 						jq.html( "" );
@@ -1473,26 +1473,26 @@
 							var shipReqBox = $("#factory .expPlanner_shipReqBox")
 								.clone()
 								.appendTo( jq );
-							shipReqBox.text(dataReq[index]["stypeOneOf"]+":"+dataReq[index]["stypeReqCount"]);
+							shipReqBox.text(dataReq[index].stypeOneOf+":"+dataReq[index].stypeReqCount);
 							if (dataResult[index] === false) {
 								markFailed( shipReqBox );
 							} else if (dataResult[index] === true) {
 								markPassed( shipReqBox );
 							}
-						})
-							});
+						});
+					});
 
 				setupJQObject(
-					ExpdReqPack["drumCount"],
-					ExpdCheckerResult["drumCount"],
+					ExpdReqPack.drumCount,
+					ExpdCheckerResult.drumCount,
 					$( ".module.activity .activity_expeditionPlanner .canisterNum" ));
 
 				setupJQObject(
-					ExpdReqPack["drumCarrierCount"],
-					ExpdCheckerResult["drumCarrierCount"],
+					ExpdReqPack.drumCarrierCount,
+					ExpdCheckerResult.drumCarrierCount,
 					$( ".module.activity .activity_expeditionPlanner .canisterShipNum" ));
-				if (ExpdReqPack["drumCount"] === null &&
-					ExpdReqPack["drumCarrierCount"] === null) {
+				if (ExpdReqPack.drumCount === null &&
+					ExpdReqPack.drumCarrierCount === null) {
 					$( ".module.activity .activity_expeditionPlanner .canister_criterias" ).hide();
 				} else {
 					$( ".module.activity .activity_expeditionPlanner .canister_criterias" ).show();
@@ -1543,13 +1543,10 @@
 				// alert( JSON.stringify( demoResult ) );
 				
 				
-				
 			} else {
 				return "No ship";
 			}
-
-		}
-,
+		},
 	};
 	
 	function updateHQEXPGained(ele,newDelta) {
