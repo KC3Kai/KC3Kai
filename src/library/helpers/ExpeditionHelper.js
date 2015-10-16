@@ -34,16 +34,7 @@
 					var stypeId = shipModel.api_stype;
 					var stype = ST.showSType( ST.fromInt( stypeId ));
 					var level = shipInst.level;
-					var drumCount = 0;
-					$.each(shipInst.items, function(ind,gear_id) {
-						var thisItem = KC3GearManager.get(gear_id);
-						if (thisItem) {
-							var model = KC3Master.slotitem(thisItem.masterId);
-							if (model.api_id == 75)
-								++ drumCount;
-						}
-					});
-					
+					var drumCount = CurrentShip.countDrums();
 					return {
 						ammo: 0,
 						morale: 0, 
