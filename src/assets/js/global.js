@@ -5,6 +5,36 @@ String.prototype.insert = function (index, string) {
     return string + this;
 };
 
+/* String Splitting
+ * Supplied Argument:
+ * <Nothing>
+ * Returned value:
+ * Array of characters
+-----------------------------------------------*/
+String.prototype.toArray = function() {
+	return this.split("");
+};
+
+/* Number Padding
+ * Supplied Argument:
+ * <Optional> Digits (any invalid value / less than 1, forced to 1)
+-----------------------------------------------*/
+Number.prototype.toDigits = Number.prototype.toArray = function(digits) {
+	var ret = this.toString();
+	try{
+		if(isNaN(this)||!isFinite(this)){throw new Error("Cannot convert constants to padded array");}
+		if(ret == this.toExponential()){throw new Error("Cannot convert number in exponential form");}
+		if (!isFinite(digits)) { digits = undefined; }
+		digits = Math.max(digits || 1,1);
+		// Pad the array until
+		ret = ("0").repeat(Math.max(digits - ret.length,0)) + ret; // O(1) complexity XD
+	}catch(e){
+		console.error(e);
+	}finally{
+		return ret;
+	}
+};
+
 Object.size = function(obj) {
     var size = 0, key;
     for (key in obj) {
@@ -151,13 +181,10 @@ String.prototype.toHHMMSS = function () {
 		
 		if(isNeg) sec_num = -sec_num;
 		
-		var hours   = Math.floor(sec_num / 3600);
-		var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
-		var seconds = sec_num - (hours * 3600) - (minutes * 60);
-
-		if (hours   < 10) {hours   = "0"+hours;}
-		if (minutes < 10) {minutes = "0"+minutes;}
-		if (seconds < 10) {seconds = "0"+seconds;}
+		var hours   = (Math.floor(sec_num / 3600)).toDigits(2);
+		var minutes = (Math.floor((sec_num - (hours * 3600)) / 60)).toDigits(2);
+		var seconds = (sec_num - (hours * 3600) - (minutes * 60)).toDigits(2);
+		
 		time    = (isNeg ? "-" : "")+hours+':'+minutes+':'+seconds;
 	}
 	return time;

@@ -16,34 +16,26 @@
 			
 			<!-- NO API LINK -->
 			<div class="box-nolink">
-				<div class="notice">You have do not have any recorded API Link</div>
-				<div class="faq_title">To get a new API link</div>
+				<div class="notice i18n">GameAPINoExist</div>
+				<div class="faq_title i18n">GameAPIGetTitle</div>
+				<div class="faq_content i18n">GameAPIGetDesc</div>
+				<div class="faq_title i18n">GameAPIExistTitle</div>
 				<div class="faq_content">
-					Use the <img src="../popup/img/refresh.png" /> <strong>Refresh API Link</strong> from the <img src="../../assets/img/logo/16.png" /> <strong>KC3改 menu</strong> at the top-right of your  browser.
-				</div>
-				<div class="faq_title">To use Existing API links</div>
-				<div class="faq_content">
-					If you already have an API Link on hand, you may input it here:
+					<div class="i18n">GameAPIExistDesc</div>
 					<div class="field">
 						<input type="text" class="api_text" />
 					</div>
 					<div class="field">
-						<button class="api_submit">Use API Link</button>
+						<button class="api_submit i18n">GameAPIExistBtn</button>
 					</div>
 					<div class="clear"></div>
 				</div>
-				<div class="faq_title">What is an API Link?</div>
-				<div class="faq_content">
-					These are direct URLs to your game, <em>recognized as</em> or <em>associated with</em> your account. As long as you carry this link, you are automatically "logged-in" and can then bypass login via DMM, therefore eliminating the need to go through VPN each time you open the game.
-				</div>
-				<div class="faq_title">Reminder for New Players</div>
-				<div class="faq_content">
-					Do not use KC3改 while you have not yet passed through the lottery process. This viewer assumes that the account being logged-in while extracting API Links is already playable. Once you have joined a server, you will also need to input your admiral name while not in API link.
-				</div>
-				<div class="faq_title">Alternatives</div>
-				<div class="faq_content">
-					If you do not prefer API links and desire to play KanColle naturally on DMM portal, the <img src="../popup/img/dmm.png" /> <strong>Play on DMM Website</strong> from the <img src="../../assets/img/logo/16.png" /> <strong>KC3改 menu</strong> also supports the <kbd class="light">F12</kbd> panel with the same startup mechanics as this.
-				</div>
+				<div class="faq_title i18n">GameAPIWhatTitle</div>
+				<div class="faq_content i18n">GameAPIWhatDesc</div>
+				<div class="faq_title i18n">GameAPIRemindTitle</div>
+				<div class="faq_content i18n">GameAPIRemindDesc</div>
+				<div class="faq_title i18n">GameAPIAltTitle</div>
+				<div class="faq_content i18n">GameAPIAltDesc</div>
 			</div>
 			
 			<!-- WAIT ACTIVATION -->
@@ -51,35 +43,34 @@
 				<div class="api_txt">
 					<textarea readonly></textarea>
 				</div>
-				<div class="faq_title">To Start the Game with Admiral Dashboard</div>
+				<div class="faq_title i18n">GameStartDashTitle</div>
 				<div class="faq_content">
-					To start your game and get critical information on your HQ and fleet statuses, you can open the Admiral Dashboard. This will show you information such as HQ Rank, Ship slots, Equipment LoS, Air Fighter Power, Fleet Speed, Morale, etc. You may activate this via:
+					<span class="i18n">GameStartDashDesc</span>
 					<ul>
-						<li>For Windows / Linux: <kbd class="light">F12</kbd></li>
-						<li>or <kbd class="light">Ctrl</kbd> + <kbd class="light">Shift</kbd> + <kbd class="light">J</kbd></li>
-						<li>While on Mac: <kbd class="light">Cmd</kbd> + <kbd class="light">Opt</kbd> + <kbd class="light">I</kbd></li>
+						<li><span class="i18n">GameStartDashWin</span> <kbd class="light">F12</kbd></li>
+						<li><span class="i18n">GameStartDashOr</span> <kbd class="light">Ctrl</kbd> + <kbd class="light">Shift</kbd> + <kbd class="light">J</kbd></li>
+						<li><span class="i18n">GameStartDashMac</span> <kbd class="light">Cmd</kbd> + <kbd class="light">Opt</kbd> + <kbd class="light">I</kbd></li>
 					</ul>
-					When the Chrome panel opens, there will be a tab "<strong>KanColle</strong>"
+					<span class="i18n">GameStartDashChrome</span>
 				</div>
-				<div class="faq_title"><em>Just Let Me Play Now</em></div>
+				<div class="faq_title"><em class="i18n">GameStartNowTitle</em></div>
 				<div class="faq_content">
-					If you want to opt out of all those features and just want to start the game now...
+					<div class="i18n">GameStartNowDesc</div>
 					<div class="play_now">
-						<button class="play_btn">Start the game anyway</button>
+						<button class="play_btn i18n">GameStartNowBtn</button>
 					</div>
 				</div>
-				<div class="faq_title">Remove API link</div>
+				<div class="faq_title i18n">GameAPIRemoveTitle</div>
 				<div class="faq_content">
-					If in any case you want to remove the saved API Link from this extension:
+					<span class="i18n">GameAPIRemoveDesc</span>
 					<div class="forget">
-						<button class="forget_btn">Forget the API Link</button>
+						<button class="forget_btn i18n">GameAPIRemoveBtn</button>
 					</div>
 				</div>
 			</div>
 			
 			<!-- PLAY GAME -->
 			<div class="box-game">
-				<div class="game-refresh" title="Keep clicking this counter to zero and the game refreshes.">05</div>
 				<div class="overlays">
 					<!-- Quest Overlay -->
 					<div class="overlay_box overlay_quests">
@@ -100,6 +91,8 @@
 						<div class="overlay ol_record_rank"></div>
 					</div>
 				</div>
+				<div class="game-refresh no-select" title="Keep clicking this counter to zero and the game refreshes.">05</div>
+				<div class="game-idle-timer no-select">--:--:--</div>
 			</div>
 			
 		</div>

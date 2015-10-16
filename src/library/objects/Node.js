@@ -60,6 +60,9 @@ Used by SortieManager
 	};
 	
 	KC3Node.prototype.defineAsBounty = function( nodeData ){
+		var
+			maps = JSON.parse(localStorage.maps),
+			ckey = ["m",KC3SortieManager.map_world,KC3SortieManager.map_num].join("");
 		this.type = "bounty";
 		this.item = nodeData.api_itemget_eo_comment.api_id;
 		this.icon = function(folder){
@@ -69,6 +72,9 @@ Used by SortieManager
 			)+".png";
 		};
 		this.amount = nodeData.api_itemget_eo_comment.api_getcount;
+		
+		maps[ckey].clear |= (++maps[ckey].kills) >= KC3Meta.gauge(ckey.replace("m",""));
+		localStorage.maps = JSON.stringify(maps);
 		return this;
 	};
 	
@@ -343,12 +349,12 @@ Used by SortieManager
 			if((this.gaugeDamage >= 0) && (maps[ckey].curhp || 0) > 0) { // gauge-based not cleared / not gauge-based
 				maps[ckey].curhp -= this.gaugeDamage;
 				if(maps[ckey].curhp <= 0) // if last kill -- check whether flagship is killed or not -- flagship killed = map clear
-					maps[ckey].curhp = 1-(maps[ckey].clear = resultData.destsf);
-				localStorage.maps = JSON.stringify(maps);
+					maps[ckey].curhp = 1-(maps[ckey].clear = resultData.api_destsf);
 			}else if((KC3Meta.gauge(ckey.replace("m","")) - (maps[ckey].kills || 0)) > 0) { // kill-based map not cleared
-				maps[ckey].kills += resultData.destsf;
+				maps[ckey].kills += resultData.api_destsf;
 			}
 			maps[ckey].clear |= resultData.api_first_clear; // obtaining clear once
+			localStorage.maps = JSON.stringify(maps);
 		}
 		
 		if(typeof resultData.api_get_ship != "undefined"){

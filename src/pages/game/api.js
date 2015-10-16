@@ -6,6 +6,21 @@ var waiting = false;
 // If trusted exit, for exit confirmation
 var trustedExit = false;
 
+// Idle time check
+/*
+  variables explanation:
+  longestIdleTime - high score of idle time
+  idleTimer       - timer ID for interval function of idleFunction
+  idleTimeout     - timer ID for unsafe idle time marker
+  idleFunction    - function that indicates the way of the idle counter
+*/
+localStorage.longestIdleTime = Math.max(localStorage.longestIdleTime || 0,1800000);
+var
+	lastRequestMark,
+	idleTimer,
+	idleTimeout,
+	idleFunction;
+
 // Show game screens
 function ActivateGame(){
 	waiting = false;
@@ -17,6 +32,7 @@ function ActivateGame(){
 		.find(".game-swf")
 		.attr("src", localStorage.absoluteswf)
 		.end()
+		.trigger('initialize-idle')
 		.show();
 	$(".box-wrap").css("zoom", ((ConfigManager.api_gameScale || 100) / 100));
 }
@@ -27,6 +43,7 @@ $(document).on("ready", function(){
 	KC3Meta.init("../../../../data/");
 	KC3QuestManager.load();
 	KC3Database.init();
+	KC3Translation.execute();
 	
 	// Apply interface configs
 	$(".box-wrap").css("margin-top", ConfigManager.api_margin+"px");
@@ -48,6 +65,14 @@ $(document).on("ready", function(){
 		}
 		if(localStorage.absoluteswf.length <= 0)
 			location.reload();
+	});
+	
+	$(".box-game").on('initialize-idle',function(){
+		lastRequestMark = Date.now();
+		idleTimer = setInterval(idleFunction,1000);
+		if(ConfigManager.alert_idle_counter) {
+			$(".game-idle-timer").trigger("refresh-tick");
+		}
 	});
 	
 	// API link determines which screen to show
@@ -78,6 +103,7 @@ $(document).on("ready", function(){
 	// Quick Play
 	$(".play_btn").on('click', function(){
 		ActivateGame();
+		ResetIdleStat();
 	});
 	
 	// Disable Quick Play (must panel)
@@ -93,18 +119,52 @@ $(document).on("ready", function(){
 	$(".game-refresh").on("click",function(){
 		switch($(this).text()) {
 			case("01"):
-				$(".game-swf").attr("src","about:blank").attr("src",localStorage.absoluteswf);
+				// TODO: BOMB EXPLODED
+				// $(".game-swf").attr("src","about:blank").attr("src",localStorage.absoluteswf);
+				$(".box-game").trigger('initialize-idle');
+				$(this).trigger('bomb-exploded');
 				$(this).text("05");
 				break;
 			default:
-				$(this).text("0" + ($(this).text()-1));
+				$(this).text(($(this).text()-1).toDigits(2));
 				break;
 		}
+	}).on("bomb-exploded",function(){
+		console.error("TODO: dragonjet help me >_<)/");
 	});
+	
+	// Configure Idle Timer
+	/*
+	  unsafe-tick  : remove the safe marker of API idle time
+	  refresh-tick : reset the timer and set the idle time as safe zone
+	*/
+	$(".game-idle-timer").on("unsafe-tick",function(){
+		$(".game-idle-timer").removeClass("safe-timer");
+	}).on("refresh-tick",function(){
+		clearTimeout(idleTimeout);
+		$(".game-idle-timer").addClass("safe-timer");
+		idleTimeout = setTimeout(function(){
+			$(".game-idle-timer").trigger("unsafe-tick");
+		},localStorage.longestIdleTime);
+	});
+	idleFunction = function(){
+		if(ConfigManager.alert_idle_counter) {
+			$(".game-idle-timer").text(String(Math.floor((Date.now() - lastRequestMark) / 1000)).toHHMMSS());
+		} else {
+			$(".game-idle-timer").text(String(NaN).toHHMMSS());
+			clearInterval(idleTimer);
+		}
+	};
+	
 	// Enable Refresh Toggle
 	if(ConfigManager.api_directRefresh) {
 		$(".game-refresh").css("display","flex");
 	}
+	// Show Idle Counter
+	if(ConfigManager.alert_idle_counter > 1) {
+		$(".game-idle-timer").show();
+	}
+	
 	
 	// Exit confirmation
 	window.onbeforeunload = function(){
@@ -124,17 +184,21 @@ $(document).on("ready", function(){
 });
 
 $(document).on("keydown", function(event){
-	// F9: Screenshot
-    if(event.keyCode == 120){
-		(new KCScreenshot()).start("Auto", $(".box-wrap"));
-        return false;
-    }
-	
-	// F10: Clear overlays
-	if(event.keyCode == 121){
-		interactions.clearOverlays({}, {}, function(){});
-        return false;
-    }
+	switch(event.keyCode) {
+		// F9: Screenshot
+		case(120):
+			(new KCScreenshot()).start("Auto", $(".box-wrap"));
+			return false;
+		
+		// F10: Clear overlays
+		case(121):
+			interactions.clearOverlays({}, {}, function(){});
+			return false;
+		
+		// Other else
+		default:
+		break;
+	}
 });
 
 /* Invokable actions
@@ -148,6 +212,49 @@ var interactions = {
 			response({success:true});
 		}else{
 			response({success:false});
+		}
+	},
+	
+	// Cat Bomb Detection -> Enforced
+	catBomb :function(request, sender, response){
+		try{
+			switch(ConfigManager.api_directRefresh) {
+				case 0:
+					throw new Error("");
+				case 1:
+					$(".game-refresh").text((0).toDigits(2)).css('right','0px');
+					break;
+				default:
+					// TODO : Forced API Link Refresh
+					$(".game-refresh").text((0).toDigits(2)).trigger('bomb-exploded');
+					break;
+			}
+			return true;
+		}catch(e){
+			console.error(e);
+		}finally{
+			return false;
+		}
+	},
+	
+	// Request OK Marker
+	goodResponses :function(request, sender, response){
+		if(request.tcp_status === 200 && request.api_status === 1) {
+			localStorage.longestIdleTime = Math.max(localStorage.longestIdleTime,Date.now() - lastRequestMark);
+			lastRequestMark = Date.now();
+			$(".game-idle-timer").trigger("refresh-tick");
+			clearInterval(idleTimer);
+			idleTimer = setInterval(idleFunction,1000);
+			idleFunction();
+		} else {
+			clearInterval(idleTimer);
+			clearTimeout(idleTimeout);
+			$(".game-idle-timer").trigger("unsafe-tick").html([
+				String(Math.floor((Date.now() - lastRequestMark)/1000)).toHHMMSS(),
+				[request.tcp_status,request.api_status,request.api_result].filter(function(x){return !!x;}).join('/')
+			].join('<br>')).css("height","40px").css("width","480px");
+			interactions.catBomb(request,sender,response);
+			interactions.goodResponses = function(){};
 		}
 	},
 	

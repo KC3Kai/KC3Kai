@@ -91,7 +91,7 @@ Listens to network history and triggers callback if game events happen
 		Inside, use "KC3Network" instead of "this"
 		It's a callback so "this" is in the context of the chrome listener
 		------------------------------------------*/
-		received :function( request ){
+		received : function( request ){
 			// If request is an API Call
 			if(request.request.url.indexOf("/kcsapi/") > -1){
 				KC3Network.lastUrl = request.request.url;
@@ -100,22 +100,40 @@ Listens to network history and triggers callback if game events happen
 				KC3Network.clearOverlays();
 				
 				// Create new request and process it
-				var thisRequest = new KC3Request( request );
+				console.log(request);
+				console.log(request.request);
+				var
+					thisRequest = new KC3Request( request ),
+					message = {
+						tabId: chrome.devtools.inspectedWindow.tabId,
+						message_id: "goodResponses",
+						tcp_status: request.response.status,
+						api_status: undefined,
+						api_result: "他のリクエストが成功！",
+					};
 				if(thisRequest.validateHeaders()){
 					thisRequest.readResponse(request, function(){
 						if(thisRequest.validateData()){
 							thisRequest.process();
 							//---Kancolle DB Submission 
 							if (ConfigManager.DBSubmission_enabled && DBSubmission.checkIfDataNeeded(request.request.url)){
-								request.getContent(
-										function(content, encoding)
-										{
-											DBSubmission.submitData(request.request.url,request.request.postData, content);
-										});
+								request.getContent(function(content, encoding){
+									DBSubmission.submitData(request.request.url,request.request.postData, content);
+								});
 							}
 							//---
 						}
 					});
+					request.getContent(function(x){
+						var data = JSON.parse(/svdata=(.+)$/.exec(x)[1]);
+						message.api_status = data.api_result;
+						message.api_result = data.api_result_msg;
+						(new RMsg("service", "gameScreenChg", message)).execute();
+					});
+				}else{
+					message.api_status = false;
+					message.api_result = request.response.statusText;
+					(new RMsg("service", "gameScreenChg", message)).execute();
 				}
 			}
 			

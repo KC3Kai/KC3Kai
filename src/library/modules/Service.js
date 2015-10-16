@@ -72,6 +72,19 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			(new TMsg(request.tabId, "gamescreen", "activateGame", {})).execute();
 		},
 		
+		/* Game Screen Change
+		A specific game screen manipulation. Such as idle timer, catbombing, and others. That marks
+		the guy who make this function is lazier than making another key for such purpose XD
+		(PS: self-insulting)
+		------------------------------------------*/
+		"gameScreenChg" :function(request, sender, response){
+			(new TMsg(request.tabId, "gamescreen", request.message_id || "goodResponses", {
+				tcp_status: request.tcp_status,
+				api_status: request.api_status,
+				api_result: request.api_result,
+			})).execute();
+		},
+		
 		/* QUEST OVERLAYS
 		Request from devTools to show quest overlays on its inspected window
 		DevTools does not have access to chrome.tabs API thus cannot send this message on its own
@@ -108,6 +121,17 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		------------------------------------------*/
 		"fitScreen" :function(request, sender, response){
 			(new TMsg(request.tabId, "gamescreen", "fitScreen")).execute();
+		},
+		
+		/* DMM FRMAE INJECTION
+		Responds if content script should inject DMM Frame customizations
+		------------------------------------------*/
+		"dmmFrameInject" :function(request, sender, response){
+			if(sender.tab.url.indexOf("/pages/game/dmm.html") > -1){
+				response({value:true});
+			}else{
+				response({value:false});
+			}
 		}
 		
 	};
