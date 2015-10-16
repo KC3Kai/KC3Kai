@@ -1351,6 +1351,7 @@
 				var PS = window.PS;
 				var KE = PS["KanColle.Expedition"];
 				var KER = PS["KanColle.Expedition.Requirement"];
+				var KEC = PS["KanColle.Expedition.Cost"];
 				var KERO = PS["KanColle.Expedition.RequirementObject"];
 				var ST = PS["KanColle.Generated.SType"];
 
@@ -1388,62 +1389,114 @@
 				console.log(JSON.stringify(ExpdReqPack));
 				var ExpdCheckerResult = KERO.resultPackToObject(KERO.checkWithRequirementPack(rawExpdReqPack)(fleet));
 				console.log(JSON.stringify(ExpdCheckerResult));
-				
-				$(".module.activity .activity_expeditionPlanner .flagshipLv").text(ExpdReqPack["flagShipLevel"]);
-				if (ExpdCheckerResult["flagShipLevel"]===false){
-					$(".module.activity .activity_expeditionPlanner .flagshipLv").addClass("expPlanner_text_failed").removeClass("expPlanner_text_passed");
-				}else{
-					$(".module.activity .activity_expeditionPlanner .flagshipLv").removeClass("expPlanner_text_failed").addClass("expPlanner_text_passed");
-				}
-				
-				if (ExpdReqPack["flagShipTypeOf"] === null){
-					$(".module.activity .activity_expeditionPlanner .flagshipType").hide();
-				}else{
-					$(".module.activity .activity_expeditionPlanner .flagshipType").show();
-					$(".module.activity .activity_expeditionPlanner .flagshipType").text(ExpdReqPack["flagShipTypeOf"]);
-					if (ExpdCheckerResult["flagShipTypeOf"]===false){
-						$(".module.activity .activity_expeditionPlanner .flagshipType").addClass("expPlanner_text_failed").removeClass("expPlanner_text_passed");
-					}else{
-						$(".module.activity .activity_expeditionPlanner .flagshipType").removeClass("expPlanner_text_failed").addClass("expPlanner_text_passed");
+				var ExpdCost = KEC.getExpeditionCost(selectedExpedition);
+				var KEIB = PS["KanColle.Expedition.IncomeBase"];
+				var ExpdIncome = KEIB.getExpeditionIncomeBase(selectedExpedition);
+
+				$(".module.activity .activity_expeditionPlanner .estimated_time").text( String( 60*ExpdCost.time ).toHHMMSS() );
+				// TODO: calculate accurate net income?
+				var resourceRoot = $(".module.activity .activity_expeditionPlanner .expres_resos");
+				$.each(["fuel","ammo","steel","bauxite"], function(i,v) {
+					$( "."+v, resourceRoot ).text( ExpdIncome[v] );
+				});
+
+				var markFailed = function (jq) {
+					jq.addClass("expPlanner_text_failed").removeClass("expPlanner_text_passed");
+					return jq;
+				};
+				var markPassed = function (jq) {
+					jq.removeClass("expPlanner_text_failed").addClass("expPlanner_text_passed");
+					return jq;
+				};
+
+				// dataReq: like dataResult
+				// dataResult: dataResult of ExpdCheckerResult fields, where
+				//		 null: should hide jq obj
+				//		 false: check failed
+				//		 true: check passed
+				//		 <other values>: no effect
+				// jq: the jq object
+				// postActions: (optional) call postActions(dataReq,dataResult,jq) perform actions after jq object is properly set.
+				//				note that postActions is only called if the requirement is not null
+				//				the default action is setting the requirement to jq text
+				var setupJQObject = function( dataReq, dataResult, jq, postActions ) {
+					if (dataReq === null) {
+						jq.hide();
+					} else {
+						jq.show();
+						if (dataResult === false) {
+							// when this condition is not met
+							markFailed( jq );
+						} else if (dataResult === true) {
+							// when this condition is met
+							markPassed( jq );
+						}
+						var setJQText = function( dataReq, dataResult, jq ) { jq.text( dataReq ); };										
+						postActions = postActions || setJQText;
+						postActions( dataReq, dataResult, jq );
 					}
 				}
+
+				setupJQObject(
+					ExpdReqPack["flagShipLevel"],
+					ExpdCheckerResult["flagShipLevel"],
+					$(".module.activity .activity_expeditionPlanner .flagshipLv"));
+
 				
-				$(".module.activity .activity_expeditionPlanner .shipNum").text(ExpdReqPack["shipCount"]);
-				if (ExpdCheckerResult["shipCount"]===false){
-					$(".module.activity .activity_expeditionPlanner .shipNum").addClass("expPlanner_text_failed").removeClass("expPlanner_text_passed");
-				}else{
-					$(".module.activity .activity_expeditionPlanner .shipNum").removeClass("expPlanner_text_failed").addClass("expPlanner_text_passed");
+				setupJQObject(
+					ExpdReqPack["flagShipTypeOf"],
+					ExpdCheckerResult["flagShipTypeOf"],
+					$(".module.activity .activity_expeditionPlanner .flagshipType"));
+
+				setupJQObject(
+					ExpdReqPack["shipCount"],
+					ExpdCheckerResult["shipCount"],
+					$(".module.activity .activity_expeditionPlanner .shipNum"));
+
+				setupJQObject(
+					ExpdReqPack["levelCount"],
+					ExpdCheckerResult["levelCount"],
+					$(".module.activity .activity_expeditionPlanner .fleetLv"));
+				if (ExpdReqPack["levelCount"] === null) {
+					$(".module.activity .activity_expeditionPlanner .hasTotalLv").hide();
+				} else {
+					$(".module.activity .activity_expeditionPlanner .hasTotalLv").show();
 				}
-				
-				if (ExpdReqPack["levelCount"] === null){
-					$(".module.activity .activity_expeditionPlanner .fleetLv").hide();
-				}else{
-					$(".module.activity .activity_expeditionPlanner .fleetLv").show();
-					$(".module.activity .activity_expeditionPlanner .fleetLv").text(ExpdReqPack["flagShipTypeOf"]);
-					if (ExpdCheckerResult["levelCount"]===false){
-						$(".module.activity .activity_expeditionPlanner .fleetLv").addClass("expPlanner_text_failed").removeClass("expPlanner_text_passed");
-					}else{
-						$(".module.activity .activity_expeditionPlanner .fleetLv").removeClass("expPlanner_text_failed").addClass("expPlanner_text_passed");
-					}
+
+				setupJQObject(
+					ExpdReqPack["fleetSType"],
+					ExpdCheckerResult["fleetSType"],
+					$( ".module.activity .activity_expeditionPlanner .expPlanner_req_fleetComposition" ),
+					function ( dataReq, dataResult, jq ) {
+						jq.html( "" );
+						$.each( dataReq, function(index, value){
+							var shipReqBox = $("#factory .expPlanner_shipReqBox")
+								.clone()
+								.appendTo( jq );
+							shipReqBox.text(dataReq[index]["stypeOneOf"]+":"+dataReq[index]["stypeReqCount"]);
+							if (dataResult[index] === false) {
+								markFailed( shipReqBox );
+							} else if (dataResult[index] === true) {
+								markPassed( shipReqBox );
+							}
+						})
+							});
+
+				setupJQObject(
+					ExpdReqPack["drumCount"],
+					ExpdCheckerResult["drumCount"],
+					$( ".module.activity .activity_expeditionPlanner .canisterNum" ));
+
+				setupJQObject(
+					ExpdReqPack["drumCarrierCount"],
+					ExpdCheckerResult["drumCarrierCount"],
+					$( ".module.activity .activity_expeditionPlanner .canisterShipNum" ));
+				if (ExpdReqPack["drumCount"] === null &&
+					ExpdReqPack["drumCarrierCount"] === null) {
+					$( ".module.activity .activity_expeditionPlanner .canister_criterias" ).hide();
+				} else {
+					$( ".module.activity .activity_expeditionPlanner .canister_criterias" ).show();
 				}
-				
-				if (ExpdReqPack["fleetSType"] === null){
-					$(".module.activity .activity_expeditionPlanner .expPlanner_req_fleetComposition").hide();
-				}else{
-					var shipReqBox;
-					$(".module.activity .activity_expeditionPlanner .expPlanner_req_fleetComposition").html("");
-					$.each(ExpdReqPack["fleetSType"], function(index, value){
-						shipReqBox = $("#factory .expPlanner_shipReqBox").clone().appendTo(".module.activity .activity_expeditionPlanner .expPlanner_req_fleetComposition");
-						shipReqBox.text(ExpdReqPack["fleetSType"][index]["stypeOneOf"]+":"+ExpdReqPack["fleetSType"][index]["stypeReqCount"]);
-						if (ExpdCheckerResult["fleetSType"][index]===false){
-						shipReqBox.addClass("expPlanner_text_failed").removeClass("expPlanner_text_passed");
-					}else{
-						shipReqBox.removeClass("expPlanner_text_failed").addClass("expPlanner_text_passed");
-					}
-					}
-					);
-				}
-				
 				/*
 				 *
 				 * Sample result for ExpdReqPack and ExpdCheckerResult on expedition 21#
