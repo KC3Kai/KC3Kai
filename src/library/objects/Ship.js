@@ -204,12 +204,42 @@ KC3改 Ship Object
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.fighterPower = function(){
 		if(this.rosterId===0){ return 0; }
-		
-		var thisShipFighter = this.equipment(0).fighterPower( this.slots[0] )
+		return this.equipment(0).fighterPower( this.slots[0] )
 			+ this.equipment(1).fighterPower( this.slots[1] )
 			+ this.equipment(2).fighterPower( this.slots[2] )
 			+ this.equipment(3).fighterPower( this.slots[3] );
-		return thisShipFighter;
+	};
+	
+	/* FIGHTER POWER with WHOLE NUMBER BONUS
+	Get fighter power of this ship as an array
+	with consideration to whole number proficiency bonus
+	--------------------------------------------------------------*/
+	KC3Ship.prototype.fighterVeteran = function(){
+		if(this.rosterId===0){ return 0; }
+		return this.equipment(0).fighterVeteran( this.slots[0] )
+			+ this.equipment(1).fighterVeteran( this.slots[1] )
+			+ this.equipment(2).fighterVeteran( this.slots[2] )
+			+ this.equipment(3).fighterVeteran( this.slots[3] );
+	};
+	
+	/* FIGHTER POWER with LOWER AND UPPER BOUNDS
+	Get fighter power of this ship as an array
+	with consideration to min-max bonus
+	--------------------------------------------------------------*/
+	KC3Ship.prototype.fighterBounds = function(){
+		if(this.rosterId===0){ return 0; }
+		
+		var GearPowers = [
+			this.equipment(0).fighterBounds( this.slots[0] ),
+			this.equipment(1).fighterBounds( this.slots[1] ),
+			this.equipment(2).fighterBounds( this.slots[2] ),
+			this.equipment(3).fighterBounds( this.slots[3] )
+		];
+		console.log("GearPowers", GearPowers);
+		return [
+			GearPowers[0][0]+GearPowers[1][0]+GearPowers[2][0]+GearPowers[3][0],
+			GearPowers[0][1]+GearPowers[1][1]+GearPowers[2][1]+GearPowers[3][1],
+		];
 	};
 	
 	/* SUPPORT POWER
