@@ -445,6 +445,18 @@
 		]
 	},
 	{
+		"section": "SettingsPoiDBSubmission",
+		"help" : "",
+		"contents" :[
+			{
+				"id" : "PoiDBSubmission_enabled",
+				"name" : "SettingsEnablePoiDBSubmission",
+				"type" : "check",
+				"options" : {}
+			}
+		]
+	},
+	{
 		"section": "Panel",
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Panel",
 		"contents" : [
