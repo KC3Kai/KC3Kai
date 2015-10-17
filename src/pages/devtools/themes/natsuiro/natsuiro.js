@@ -73,7 +73,21 @@
 		$(".admiral_lvnext").on("click",function(){
 			ConfigManager.scrollHQExpInfo();
 			NatsuiroListeners.HQ();
-		}).addClass("hover");
+		});
+		
+		// Switch Rank Title vs Rank Points Counter
+		$(".admiral_rank").on("click",function(){
+			// If title, switch to points
+			if($(this).data("mode")==1){
+				$(this).text(PlayerManager.hq.getRankPoints()+" pts");
+				$(this).data("mode", 0);
+				
+			// If points, switch to title
+			}else{
+				$(this).text(PlayerManager.hq.rank);
+				$(this).data("mode", 1);
+			}
+		});
 		
 		// eLoS Toggle
 		$(".summary-eqlos").on("click",function(){
@@ -362,6 +376,11 @@
 			$(".admiral_name").text( PlayerManager.hq.name );
 			$(".admiral_comm").text( PlayerManager.hq.desc );
 			$(".admiral_rank").text( PlayerManager.hq.rank );
+			if($(".admiral_rank").data("mode")==1){
+				$(".admiral_rank").text(PlayerManager.hq.rank);
+			}else{
+				$(".admiral_rank").text(PlayerManager.hq.getRankPoints()+" pts");
+			}
 			$(".admiral_lvval").text( PlayerManager.hq.level );
 			$(".admiral_lvbar").css({width: Math.round(PlayerManager.hq.exp[0]*58)+"px"});
 			updateHQEXPGained($(".admiral_lvnext"));
