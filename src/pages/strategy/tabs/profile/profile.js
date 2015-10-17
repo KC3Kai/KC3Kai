@@ -45,6 +45,9 @@
 			$(".hq_rank .hq_content").html(PlayerManager.hq.rank);
 			$(".hq_level .hq_content").html(PlayerManager.hq.level);
 			
+			$(".rank_current .rank_cutval").html(PlayerManager.hq.rankPtCutoff);
+			$(".rank_current .rank_content").html(PlayerManager.hq.getRankPoints());
+			
 			// Show statistics
 			if(this.statistics){
 				if(typeof this.statistics.sortie.rate == "string"){
