@@ -22,6 +22,8 @@ Retreives when needed to apply on components
 				
 				DBSubmission_enabled: 0,
 				DBSubmission_key : '',
+
+				PoiDBSubmission_enabled: false,
 				
 				info_face 			: true,
 				info_drop 			: true,
