@@ -41,7 +41,7 @@
 		'api_req_sortie/battle': this.processBattle,
 		'api_req_sortie/airbattle': this.processBattle,
 		'api_req_sortie/night_to_day': this.processBattle,
-		'api_req_battle_midnight/battle': this.processBattle,
+		// 'api_req_battle_midnight/battle': this.processBattle,
 		'api_req_battle_midnight/sp_midnight': this.processBattle,
 		'api_req_combined_battle/airbattle': this.processBattle,
 		'api_req_combined_battle/battle': this.processBattle,
