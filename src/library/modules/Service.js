@@ -132,6 +132,20 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			}else{
 				response({value:false});
 			}
+		},
+		
+		/* TAIHA ALERT START
+		Start bloody taiha indicator on-screen
+		------------------------------------------*/
+		"taihaAlertStart" :function(request, sender, response){
+			(new TMsg(request.tabId, "gamescreen", "taihaAlertStart")).execute();
+		},
+		
+		/* TAIHA ALERT STOP
+		Stop bloody taiha indicator on-screen
+		------------------------------------------*/
+		"taihaAlertStop" :function(request, sender, response){
+			(new TMsg(request.tabId, "gamescreen", "taihaAlertStop")).execute();
 		}
 		
 	};

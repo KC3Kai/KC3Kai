@@ -9,6 +9,9 @@ var trustedExit = false;
 // If auto-focus on window to capture key events or not
 var autoFocus = 0;
 
+// Critical Animation
+var critAnim = false;
+
 // Idle time check
 /*
   variables explanation:
@@ -357,6 +360,18 @@ var interactions = {
 				});
 			});
 		});
+	},
+	
+	// Taiha Alert Start
+	taihaAlertStart :function(request, sender, response){
+		console.log("taihaAlertStart");
+		$(".box-wrap").addClass("critical");
+	},
+	
+	// Taiha Alert Stop
+	taihaAlertStop :function(request, sender, response){
+		console.log("taihaAlertStop");
+		$(".box-wrap").removeClass("critical");
 	},
 	
 	// Dummy action
