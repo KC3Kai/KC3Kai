@@ -200,12 +200,12 @@
 	    this.dropShipData = null;
 	},
 	sendData: function(target, payload) {
-	    // var server = "http://poi.0u0.moe" ;
-	    var server = "http://127.0.0.1:9123";
+	    var server = "http://poi.0u0.moe" ;
 	    var url = server + "/api/report/v2/" + target;
 	    var myVersion = chrome.runtime.getManifest().version;
 	    var client = "KC3Kai " + myVersion;
-            // TODO: origin / user-agent
+	    payload.origin = client;
+	    // console.log( JSON.stringify( payload ) );
 	    $.ajax({
 		url: url,
 		method: "POST",
