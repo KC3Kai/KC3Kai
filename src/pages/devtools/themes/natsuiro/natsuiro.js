@@ -12,6 +12,11 @@
 	// Auto Focus Overriding
 	var overrideFocus = false;
 	
+	// Critical Animation and Sound Effect
+	var critAnim = false;
+	var critSound = new Audio("../../../../assets/snd/heart.mp3");
+	critSound.loop = true;
+	
 	$(document).on("ready", function(){
 		// Check localStorage
 		if(!window.localStorage){
@@ -654,10 +659,33 @@
 					) );
 					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/sunk.png");
 					$(".module.status .status_repair .status_text").addClass("bad");
+					
+					// Annoying Critical alert
+					if(ConfigManager.alert_taiha){
+						$("#critical").show();
+						if(critAnim){ clearInterval(critAnim); }
+						critAnim = setInterval(function() {
+							$("#critical").toggleClass("anim2");
+						}, 500);
+						critSound.play();
+						
+						(new RMsg("service", "taihaAlertStart", {
+							tabId: chrome.devtools.inspectedWindow.tabId
+						})).execute();
+					}
+					
 				}else{
 					$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelNoTaiha") );
 					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/check.png");
 					$(".module.status .status_repair .status_text").addClass("good");
+					
+					if(critAnim){ clearInterval(critAnim); }
+					$("#critical").hide();
+					critSound.pause();
+					
+					(new RMsg("service", "taihaAlertStop", {
+						tabId: chrome.devtools.inspectedWindow.tabId
+					})).execute();
 				}
 				
 				// STATUS: COMBINED
