@@ -6,6 +6,9 @@ var waiting = false;
 // If trusted exit, for exit confirmation
 var trustedExit = false;
 
+// If auto-focus on window to capture key events or not
+var autoFocus = 0;
+
 // Idle time check
 /*
   variables explanation:
@@ -103,7 +106,7 @@ $(document).on("ready", function(){
 	// Quick Play
 	$(".play_btn").on('click', function(){
 		ActivateGame();
-		ResetIdleStat();
+		// ResetIdleStat();
 	});
 	
 	// Disable Quick Play (must panel)
@@ -178,13 +181,25 @@ $(document).on("ready", function(){
 	};
 	
 	setInterval(function(){
-		window.focus();
-	}, 100);
+		if(autoFocus===0){
+			window.focus();
+			$(".focus_regain").hide();
+		}else{
+			$(".focus_regain").show();
+			$(".focus_val").css("width", (800*(autoFocus/20))+"px");
+			autoFocus--;
+		}
+	}, 1000);
 	
 });
 
 $(document).on("keydown", function(event){
 	switch(event.keyCode) {
+		// F7: Toggle keyboard focus
+		case(118):
+			autoFocus = 20;
+			return false;
+			
 		// F9: Screenshot
 		case(120):
 			(new KCScreenshot()).start("Auto", $(".box-wrap"));

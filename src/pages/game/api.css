@@ -436,3 +436,21 @@ body {
 .ol_record_rank > p {
 	background-color: #F1EADD;
 }
+
+/* OVERLAY: FOCUS REGAIN
+--------------------------*/
+.focus_regain {
+	width:800px;
+	height:2px;
+	top:478px;
+	left:0px;
+	background:#ccc;
+	display:none;
+}
+.focus_val {
+	width:800px;
+	height:2px;
+	background:#f00;
+	box-shadow:0px 0px 3px #f00,
+		0px 0px 3px #f00;
+}
