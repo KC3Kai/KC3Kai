@@ -113,6 +113,44 @@ Contains summary information about a fleet and its 6 ships
 			.reduce(function(x,y){return x+y;}) * 100)/100;
 	};
 	
+	KC3Fleet.prototype.fighterVeteran = function(){
+		var self = this;
+		return Math.round(Array.apply(null, {length: 6})
+			.map(Number.call, Number)
+			.map(function(x){return self.ship(x).fighterVeteran();})
+			.reduce(function(x,y){return x+y;}) * 100)/100;
+	};
+	
+	KC3Fleet.prototype.fighterBounds = function(){
+		var self = this;
+		var TotalPower = [0,0];
+		
+		var ShipPower;
+		for(var ShipCtr in this.ships){
+			if(this.ships[ShipCtr] > -1){
+				ShipPower = this.ship(ShipCtr).fighterBounds();
+				if(typeof ShipPower == "object"){
+					TotalPower[0] += Math.floor(ShipPower[0]);
+					TotalPower[1] += Math.floor(ShipPower[1]);
+					// floor it just in case
+				}
+			}
+		}
+		
+		return TotalPower;
+	};
+	
+	KC3Fleet.prototype.fighterPowerText = function(){
+		switch(ConfigManager.air_formula){
+			case 2: return "~"+this.fighterVeteran();
+			case 3:
+				var fighterBounds = this.fighterBounds();
+				return fighterBounds[0]+"~"+fighterBounds[1];
+			default:
+				return this.fighterPower();
+		}
+	};
+	
 	KC3Fleet.prototype.supportPower = function(){
 		return this.ship(0).supportPower()
 			+this.ship(1).supportPower()

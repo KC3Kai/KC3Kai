@@ -83,27 +83,27 @@
 	font-weight:bold;
 }
 
-/* NEWSFEED
+/* RANK COUNTERS
 --------------------------------*/
-.tab_profile .newsfeed {
+.tab_profile .rank_field {
 	width:680px;
-}
-.tab_profile .feed_item {
-	width:680px;
-	height:24px;
-	line-height:24px;
+	height:20px;
+	line-height:20px;
 	margin:0px 0px 3px 0px;
 }
-.tab_profile .feed_item .colorbox {
-	width:24px;
-	height:24px;
+.tab_profile .rank_label {
+	width:250px;
+	height:20px;
 	float:left;
 	margin:0px 5px 0px 0px;
+	background:#f5f5f5;
 }
-.tab_profile .feed_item .feed_text {
-	width:600px;
-	height:24px;
+.tab_profile .rank_content {
+	width:420px;
+	height:20px;
 	float:left;
+	background:#fafafa;
+	font-weight:bold;
 }
 
 /* MANAGEMENT

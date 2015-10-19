@@ -6,6 +6,12 @@ var waiting = true;
 // If trusted exit, for exit confirmation
 var trustedExit = false;
 
+// If auto-focus on window to capture key events or not
+var autoFocus = 0;
+
+// Critical Animation
+var critAnim = false;
+
 // Idle time check
 /*
   variables explanation:
@@ -134,13 +140,25 @@ $(document).on("ready", function(){
 	};
 	
 	setInterval(function(){
-		window.focus();
-	}, 100);
+		if(autoFocus===0){
+			window.focus();
+			$(".focus_regain").hide();
+		}else{
+			$(".focus_regain").show();
+			$(".focus_val").css("width", (800*(autoFocus/20))+"px");
+			autoFocus--;
+		}
+	}, 1000);
 	
 });
 
 $(document).on("keydown", function(event){
 	switch(event.keyCode) {
+		// F7: Toggle keyboard focus
+		case(118):
+			autoFocus = 20;
+			return false;
+			
 		// F9: Screenshot
 		case(120):
 			(new KCScreenshot()).start("Auto", $(".box-wrap"));
@@ -293,6 +311,28 @@ var interactions = {
 			});
 		});
 	},
+	
+	// Taiha Alert Start
+	taihaAlertStart :function(request, sender, response){
+		$(".box-wrap").addClass("critical");
+		
+		if(critAnim){ clearInterval(critAnim); }
+		critAnim = setInterval(function() {
+			$(".taiha_red").toggleClass("anim2");
+		}, 500);
+		
+		$(".taiha_blood").show();
+		$(".taiha_red").show();
+	},
+	
+	// Taiha Alert Stop
+	taihaAlertStop :function(request, sender, response){
+		$(".box-wrap").removeClass("critical");
+		if(critAnim){ clearInterval(critAnim); }
+		$(".taiha_blood").hide();
+		$(".taiha_red").hide();
+	},
+	
 	
 	// Dummy action
 	dummy :function(request, sender, response){

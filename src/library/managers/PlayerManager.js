@@ -192,8 +192,9 @@ Does not include Ships and Gears which are managed by other Managers
 		},
 		
 		setNewsfeed :function( data, stime ){
-			//console.log("newsfeed", data);
+			console.log("newsfeed", data);
 			$.each(data, function( index, element){
+				console.log("checking newsfeed item", element);
 				if(parseInt(element.api_state, 10) !== 0){
 					console.log("saved news", element);
 					KC3Database.Newsfeed({
@@ -206,6 +207,7 @@ Does not include Ships and Gears which are managed by other Managers
 		},
 		
 		portRefresh :function( data ){
+			
 		},
 		
 		loadFleets :function(){

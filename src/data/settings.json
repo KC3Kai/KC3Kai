@@ -262,6 +262,12 @@
 						[ 2, "SettingsShowCounter"]
 					]
 				}
+			},
+			{
+				"id" : "alert_taiha",
+				"name" : "SettingsTaihaAlert",
+				"type" : "check",
+				"options" : {}
 			}
 		]
 	},
@@ -441,6 +447,18 @@
 					"length_min" : 27,
 					"length_max" : 27
 				}
+			}
+		]
+	},
+	{
+		"section": "SettingsPoiDBSubmission",
+		"help" : "",
+		"contents" :[
+			{
+				"id" : "PoiDBSubmission_enabled",
+				"name" : "SettingsEnablePoiDBSubmission",
+				"type" : "check",
+				"options" : {}
 			}
 		]
 	},

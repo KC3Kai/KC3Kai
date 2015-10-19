@@ -3,6 +3,26 @@
 #factory {
 	display:none;
 }
+html,body {
+	height:100%;
+}
+#critical {
+	width:100%;
+	height:100%;
+	position:absolute;
+	top:0px;
+	left:0px;
+	z-index:90;
+	pointer-events: none;
+	display:none;
+}
+#critical.anim1 {
+	box-shadow:inset 0px 0px 20px rgba(255,0,0,0.5);
+	transition: all 0.4s;
+}
+#critical.anim2 {
+	box-shadow:inset 0px 0px 60px rgba(255,0,0,0.8); 
+}
 
 /* CATBOMB
 ------------------------------*/
@@ -13,6 +33,7 @@
 	top:0px;
 	left:0px;
 	display:none;
+	z-index:100;
 }
 #catBomb .blackFilter {
 	width:100%;

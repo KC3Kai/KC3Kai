@@ -13,6 +13,11 @@
 	// Auto Focus Overriding
 	var overrideFocus = false;
 	
+	// Critical Animation and Sound Effect
+	var critAnim = false;
+	var critSound = new Audio("../../../../assets/snd/heart.mp3");
+	critSound.loop = true;
+	
 	$(document).on("ready", function(){
 		// Check localStorage
 		if(!window.localStorage){
@@ -74,7 +79,21 @@
 		$(".admiral_lvnext").on("click",function(){
 			ConfigManager.scrollHQExpInfo();
 			NatsuiroListeners.HQ();
-		}).addClass("hover");
+		});
+		
+		// Switch Rank Title vs Rank Points Counter
+		$(".admiral_rank").on("click",function(){
+			// If title, switch to points
+			if($(this).data("mode")==1){
+				$(this).text(PlayerManager.hq.getRankPoints()+" pts");
+				$(this).data("mode", 0);
+				
+			// If points, switch to title
+			}else{
+				$(this).text(PlayerManager.hq.rank);
+				$(this).data("mode", 1);
+			}
+		});
 		
 		// eLoS Toggle
 		$(".summary-eqlos").on("click",function(){
@@ -376,6 +395,11 @@
 			$(".admiral_name").text( PlayerManager.hq.name );
 			$(".admiral_comm").text( PlayerManager.hq.desc );
 			$(".admiral_rank").text( PlayerManager.hq.rank );
+			if($(".admiral_rank").data("mode")==1){
+				$(".admiral_rank").text(PlayerManager.hq.rank);
+			}else{
+				$(".admiral_rank").text(PlayerManager.hq.getRankPoints()+" pts");
+			}
 			$(".admiral_lvval").text( PlayerManager.hq.level );
 			$(".admiral_lvbar").css({width: Math.round(PlayerManager.hq.exp[0]*58)+"px"});
 			updateHQEXPGained($(".admiral_lvnext"));
@@ -554,7 +578,7 @@
 				FleetSummary = {
 					lv: CurrentFleet.totalLevel(),
 					elos: Math.round( CurrentFleet.eLoS() * 100) / 100,
-					air: CurrentFleet.fighterPower(),
+					air: CurrentFleet.fighterPowerText(),
 					speed: CurrentFleet.speed(),
 					docking: MainRepairs.docking,
 					akashi: MainRepairs.akashi,
@@ -649,10 +673,33 @@
 					) );
 					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/sunk.png");
 					$(".module.status .status_repair .status_text").addClass("bad");
+					
+					// Annoying Critical alert
+					if(ConfigManager.alert_taiha){
+						$("#critical").show();
+						if(critAnim){ clearInterval(critAnim); }
+						critAnim = setInterval(function() {
+							$("#critical").toggleClass("anim2");
+						}, 500);
+						critSound.play();
+						
+						(new RMsg("service", "taihaAlertStart", {
+							tabId: chrome.devtools.inspectedWindow.tabId
+						})).execute();
+					}
+					
 				}else{
 					$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelNoTaiha") );
 					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/check.png");
 					$(".module.status .status_repair .status_text").addClass("good");
+					
+					if(critAnim){ clearInterval(critAnim); }
+					$("#critical").hide();
+					critSound.pause();
+					
+					(new RMsg("service", "taihaAlertStop", {
+						tabId: chrome.devtools.inspectedWindow.tabId
+					})).execute();
 				}
 				
 				// STATUS: COMBINED

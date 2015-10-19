@@ -198,6 +198,8 @@
 
 					var hpStatus = cShip.hp.toString() + " / " + cShip.maxhp.toString();
 					$(".ship_status", cElm).text( hpStatus );
+					
+					$(".ship_hp_val", cElm).css("width", parseInt(cShip.hp/cShip.maxhp*100, 10)+"px");
 
 					$(".ship_repair_docking", cElm).text( String(cShip.repairDocking).toHHMMSS() );
 					var akashiText =
@@ -210,6 +212,7 @@
 					}
 
 					$(".ship_status", cElm).addClass("ship_" + cShip.damageStatus);
+					$(".ship_hp_val", cElm).addClass("ship_" + cShip.damageStatus);
 
 					// adding docking indicator
 					var completeTime = dockingShips["x" + cShip.id.toString()];

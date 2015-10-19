@@ -22,6 +22,8 @@ Retreives when needed to apply on components
 				
 				DBSubmission_enabled: 0,
 				DBSubmission_key : '',
+
+				PoiDBSubmission_enabled: false,
 				
 				info_face 			: true,
 				info_drop 			: true,
@@ -33,6 +35,20 @@ Retreives when needed to apply on components
 				info_troll 			: false,
 				info_delta 			: false,
 				info_fleetstat 		: true,
+				
+				// AIR PROFICIENCY BONUSES (Configurable by user)
+				air_formula			: 3, // 1=no veteran 2=veteran average 3=veteran bounds
+				air_average			: [0, 1.35, 3.5, 7.1, 11.4, 16.8, 17, 25],
+				air_bounds			: [
+					[0.026, 0.845],
+					[1, 1.715],
+					[3.212, 3.984],
+					[6.845, 7.504],
+					[11.205, 11.786],
+					[16.639, 17],
+					[16.999, 17.205],
+					[24.679, 25.411]
+				],
 				
 				ss_mode 			: 0,
 				ss_type 			: 'JPG',
@@ -46,8 +62,9 @@ Retreives when needed to apply on components
 				alert_volume 		: 60,
 				alert_desktop 		: true,
 				alert_supply 		: 3,
-				alert_supply_exped 		:true,
+				alert_supply_exped 	:true,
 				alert_idle_counter	: 1,
+				alert_taiha			: false,
 				
 				api_translation		: true,
 				api_tracking 		: true,
