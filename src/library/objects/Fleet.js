@@ -92,6 +92,14 @@ Contains summary information about a fleet and its 6 ships
 			.map(function(x){return self.ship(x).countDrums();})
 			.reduce(function(x,y){return x+y;});
 	};
+
+	KC3Fleet.prototype.countLandingCrafts = function() {
+		var self = this;
+		return Array.apply(null, {length: 6})
+			.map(Number.call, Number)
+			.map(function(x){return self.ship(x).countLandingCrafts();})
+			.reduce(function(x,y){return x+y;});
+	};
 	
 	KC3Fleet.prototype.countShipsWithDrums = function(){
 		var self = this;
