@@ -9,6 +9,7 @@
 	// Interface values
 	var selectedFleet = 1;
 	var selectedExpedition = 1;
+	var plannerIsGreatSuccess = false;
 	
 	// Auto Focus Overriding
 	var overrideFocus = false;
@@ -134,7 +135,13 @@
 				)));
 		});
 		
-    
+		// toggle expedition planner "great success" flag
+		$( ".module.activity .activity_expeditionPlanner .expPlanner_greatSuccess .greatSuccess" )
+			.on("click",function() {
+				plannerIsGreatSuccess = $(this).is(":checked");
+				NatsuiroListeners.UpdateExpeditionPlanner();
+			} );
+
 		/* Code for generating deckbuilder style JSON data.
 		--------------------------------------------*/
 		function generate_fleet_JSON(fleet) {
@@ -1381,8 +1388,6 @@
 		},
 
 		UpdateExpeditionPlanner: function (data) {
-			console.log(data);
-
 			var allShips = [];
 			var fleetObj = PlayerManager.fleets[selectedFleet-1];
 			//fleets' subsripts start from 0 !
@@ -1442,18 +1447,34 @@
 				var ExpdIncome = KEIB.getExpeditionIncomeBase(selectedExpedition);
 				var ExpdFleetCost = fleetObj.calcExpeditionCost( selectedExpedition );
 
+				var numLandingCrafts = fleetObj.countLandingCrafts();
+				if (numLandingCrafts > 4)
+					numLandingCrafts = 4;
+				var landingCraftFactor = 0.05*numLandingCrafts + 1;
+				var greatSuccessFactor = plannerIsGreatSuccess ? 1.5 : 1;
+
 				$(".module.activity .activity_expeditionPlanner .estimated_time").text( String( 60*ExpdCost.time ).toHHMMSS() );
-				// TODO: calculate accurate net income?
+
 				var resourceRoot = $(".module.activity .activity_expeditionPlanner .expres_resos");
 				$.each(["fuel","ammo","steel","bauxite"], function(i,v) {
+					var incomeVal = Math.floor( ExpdIncome[v] * landingCraftFactor * greatSuccessFactor );
 					var jqObj = $( "."+v, resourceRoot );
+					var netResourceIncome = incomeVal;
 					if (v === "fuel" || v === "ammo") {
-						var netResourceIncome = ExpdIncome[v] - ExpdFleetCost[v];
-						jqObj.text( netResourceIncome )
-							.attr( 'title', String(ExpdIncome[v]) + " - " + String(ExpdFleetCost[v]));
-					} else {
-						jqObj.text( ExpdIncome[v] );
+						netResourceIncome -= ExpdFleetCost[v];
 					}
+
+					var tooltipText = String(ExpdIncome[v]);
+					if (landingCraftFactor > 1)
+						tooltipText += "*" + String(landingCraftFactor);
+					if (greatSuccessFactor > 1)
+						tooltipText += "*" + String(greatSuccessFactor);
+					if (v === "fuel" || v === "ammo") {
+						tooltipText += "-" + String(ExpdFleetCost[v]);
+					}
+
+					jqObj.text( netResourceIncome );
+					jqObj.attr( 'title', tooltipText );
 				});
 
 				var markFailed = function (jq) {
