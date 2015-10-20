@@ -266,6 +266,22 @@ KC3改 Ship Object
 		return supportPower;
 	};
 	
+	/* Calculate resupply cost
+	   ----------------------------------
+	   0 <= fuelPercent <= 1
+	   0 <= ammoPercent <= 1
+	   returns an object: {fuel: <fuelCost>, ammo: <ammoCost>}
+	 */
+	KC3Ship.prototype.calcResupplyCost = function(fuelPercent, ammoPercent) {
+		var master = this.master();
+		var fullFuel = master.api_fuel_max;
+		var fullAmmo = master.api_bull_max;
+		var mulRounded = function (a, percent) {
+			return Math.floor( a * percent );
+		};
+		return { fuel: mulRounded( fullFuel, fuelPercent ),
+				 ammo: mulRounded( fullAmmo, ammoPercent ) };
+	};
 	/*
 	.removeEquip( slotIndex )
 	*/

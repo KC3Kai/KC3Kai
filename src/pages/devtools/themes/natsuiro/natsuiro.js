@@ -1384,6 +1384,7 @@
 			console.log(data);
 
 			var allShips = [];
+			var fleetObj = PlayerManager.fleets[selectedFleet-1];
 			//fleets' subsripts start from 0 !
 			$.each(PlayerManager.fleets[selectedFleet-1].ships, function(index, rosterId) {
 				if (rosterId > -1) {
@@ -1439,12 +1440,20 @@
 				var ExpdCost = KEC.getExpeditionCost(selectedExpedition);
 				var KEIB = PS["KanColle.Expedition.IncomeBase"];
 				var ExpdIncome = KEIB.getExpeditionIncomeBase(selectedExpedition);
+				var ExpdFleetCost = fleetObj.calcExpeditionCost( selectedExpedition );
 
 				$(".module.activity .activity_expeditionPlanner .estimated_time").text( String( 60*ExpdCost.time ).toHHMMSS() );
 				// TODO: calculate accurate net income?
 				var resourceRoot = $(".module.activity .activity_expeditionPlanner .expres_resos");
 				$.each(["fuel","ammo","steel","bauxite"], function(i,v) {
-					$( "."+v, resourceRoot ).text( ExpdIncome[v] );
+					var jqObj = $( "."+v, resourceRoot );
+					if (v === "fuel" || v === "ammo") {
+						var netResourceIncome = ExpdIncome[v] - ExpdFleetCost[v];
+						jqObj.text( netResourceIncome )
+							.attr( 'title', String(ExpdIncome[v]) + " - " + String(ExpdFleetCost[v]));
+					} else {
+						jqObj.text( ExpdIncome[v] );
+					}
 				});
 
 				var markFailed = function (jq) {

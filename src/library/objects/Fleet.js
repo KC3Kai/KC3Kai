@@ -171,8 +171,28 @@ Contains summary information about a fleet and its 6 ships
 		}
 		return (this.fastFleet) ? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow");
 	};
-	
-	
+
+	/* Calculate expedition cost of a fleet
+	   -------------------------------------
+	   1 <= expeditionId <= 40
+	 */ 
+	KC3Fleet.prototype.calcExpeditionCost = function(expeditionId) {
+		var KEC = PS["KanColle.Expedition.Cost"];
+		var costPercent = KEC.getExpeditionCost( expeditionId );
+		var totalFuel = 0;
+		var totalAmmo = 0;
+		var self = this;
+		$.each( this.ships, function(i, shipId) {
+			if (shipId !== -1) {
+				var shipObj = self.ship(i);
+				var cost = shipObj.calcResupplyCost( costPercent.fuel, costPercent.ammo );
+				totalFuel += cost.fuel;
+				totalAmmo += cost.ammo;
+			}
+		});
+		return {fuel: totalFuel, ammo: totalAmmo};
+	};
+
 	/*--------------------------------------------------------*/
 	/*-----------------[ STATUS INDICATORS ]------------------*/
 	/*--------------------------------------------------------*/
