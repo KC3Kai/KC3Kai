@@ -1428,15 +1428,15 @@
 				});
 
 				var fleet = KER.fromRawFleet(allShipsForLib);
-				//var availableExpeditions = KE.getAvailableExpeditions(fleet);
+				var unsatRequirements = KER.unsatisfiedRequirements(selectedExpedition)(fleet);
 
 				//Don't forget to use KERO.*ToObject to convert raw data to JS friendly objs
 				var rawExpdReqPack = KERO.getExpeditionRequirementPack(selectedExpedition);
 				
 				var ExpdReqPack = KERO.requirementPackToObj(rawExpdReqPack);
-				console.log(JSON.stringify(ExpdReqPack));
+				// console.log(JSON.stringify(ExpdReqPack));
 				var ExpdCheckerResult = KERO.resultPackToObject(KERO.checkWithRequirementPack(rawExpdReqPack)(fleet));
-				console.log(JSON.stringify(ExpdCheckerResult));
+				// console.log(JSON.stringify(ExpdCheckerResult));
 				var ExpdCost = KEC.getExpeditionCost(selectedExpedition);
 				var KEIB = PS["KanColle.Expedition.IncomeBase"];
 				var ExpdIncome = KEIB.getExpeditionIncomeBase(selectedExpedition);
@@ -1553,6 +1553,17 @@
 				} else {
 					$( ".module.activity .activity_expeditionPlanner .canister_criterias" ).show();
 				}
+
+				if (unsatRequirements.length === 0) {
+					// all requirements are satisfied
+					$( ".module.activity .activity_expeditionPlanner .icon.allReq" ).show();
+
+					markPassed( $(".module.activity .activity_expeditionPlanner .text.allReq") );
+				} else {
+					$( ".module.activity .activity_expeditionPlanner .icon.allReq" ).hide();
+					markFailed( $(".module.activity .activity_expeditionPlanner .text.allReq") );
+				}
+
 				/*
 				 *
 				 * Sample result for ExpdReqPack and ExpdCheckerResult on expedition 21#
