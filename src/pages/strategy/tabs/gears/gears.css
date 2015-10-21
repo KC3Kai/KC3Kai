@@ -17,6 +17,13 @@
 	background:#fff;
 	border-radius:5px;
 }
+.tab_gears .item_types .item_type.text {
+	text-align: center;
+	line-height: 24px;
+}
+.tab_gears .item_types .item_type.text.active {
+	color: white;
+}
 .tab_gears .item_types .item_type img {
 	width:24px;
 	height:24px;
@@ -24,7 +31,6 @@
 .tab_gears .item_types .item_type.active {
 	background:#2C3A3B;
 }
-
 .tab_gears .item_list {
 	width:680px;
 }
