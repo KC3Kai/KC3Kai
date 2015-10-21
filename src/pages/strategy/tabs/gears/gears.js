@@ -145,6 +145,7 @@
 				if(typeof this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id] == "undefined"){
 					this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id] = {
 						id: ThisItem.masterId,
+						type_id: MasterItem.api_type[3],
 						english: ThisItem.name(),
 						japanese: MasterItem.api_name,
 						stats: {
@@ -253,6 +254,19 @@
 			$(".tab_gears .item_type").first().trigger("click");
 		},
 
+		/*
+		 * get all available type ids from _items
+		 */
+		getAllAvailableTypes: function() {
+			var allTypeIds = [];
+			for (var ty in this._items) {
+				if (this._items.hasOwnProperty(ty) && ty.startsWith('t')) {
+					allTypeIds.push( parseInt(ty.slice(1)) );
+				}
+			}
+			allTypeIds.sort(function(a,b){return a-b;});
+			return allTypeIds;
+		},
 		/* check available items and show or hide sorters accordingly
 		  ------------------------------------------*/
 		updateSorters: function(type_id) {
@@ -268,19 +282,30 @@
                 return function(p,i) {
 					statSets[p].push( ThisSlotitem.stats[p] );                    
                 };
-            }
-			for (var item in self._items["t"+type_id]) {
-				var ThisSlotitem = self._items["t"+type_id][item];
-                allProperties.forEach(accumulateStats(statSets, ThisSlotitem));
-
-                // well, if jshlint is trying to be smart and makes code harder
-                // to read, then that's not my fault
-                // the equivalent code:
-                /*
-				allProperties.forEach(function(p,i) {
-					statSets[p].push( ThisSlotitem.stats[p] );
+			}
+			
+			if (type_id === "all") {
+				$.each(this.getAllAvailableTypes(), function (i,typeId) {
+					var tyInd = "t" + typeId;
+					for (var item in self._items[tyInd]) {
+					var ThisSlotitem = self._items[tyInd][item];
+						allProperties.forEach(accumulateStats(statSets, ThisSlotitem));
+					}
 				});
-                */
+			} else {
+				for (var item in self._items["t"+type_id]) {
+					var ThisSlotitem = self._items["t"+type_id][item];
+					allProperties.forEach(accumulateStats(statSets, ThisSlotitem));
+
+					// well, if jshlint is trying to be smart and makes code harder
+					// to read, then that's not my fault.
+					// the equivalent code:
+					/*
+					  allProperties.forEach(function(p,i) {
+					  statSets[p].push( ThisSlotitem.stats[p] );
+					  });
+					*/
+				}
 			}
 
 			var removeDuplicates = function(xs) {
@@ -342,17 +367,26 @@
 
 			var ctr, ThisType, ItemElem, ThisSlotitem;
 			var SlotItems = [];
-			for (var slotItem in this._items["t"+type_id]) {
-				SlotItems.push( this._items["t"+type_id][slotItem] );
+			var self = this;
+			if (type_id === "all") {
+				$.each(this.getAllAvailableTypes(), function(i,typeId) {
+					var tyInd = "t"+typeId;
+					for (var slotItem in self._items[tyInd]) {
+						SlotItems.push( self._items[tyInd][slotItem] );
+					}
+				});
+			} else {
+				for (var slotItem in this._items["t"+type_id]) {
+					SlotItems.push( this._items["t"+type_id][slotItem] );
+				}
 			}
 
 			SlotItems.sort( comparator );
 
-			var self = this;
 			var allProperties = this._allProperties;
 			$.each(SlotItems, function(index,ThisSlotitem) {
 				ItemElem = $(".tab_gears .factory .slotitem").clone().appendTo(".tab_gears .item_list");
-				$(".icon img", ItemElem).attr("src", "../../assets/img/items/"+type_id+".png");
+				$(".icon img", ItemElem).attr("src", "../../assets/img/items/"+ThisSlotitem.type_id+".png");
 				$(".english", ItemElem).text(ThisSlotitem.english);
 				$(".japanese", ItemElem).text(ThisSlotitem.japanese);
 				//$(".counts", ItemElem).html("You have <strong>"+(ThisSlotitem.held.length+ThisSlotitem.extras.length)+"</strong> (<strong>"+ThisSlotitem.held.length+"</strong> worn, <strong>"+ThisSlotitem.extras.length+"</strong> extras)");
