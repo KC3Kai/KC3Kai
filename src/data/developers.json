@@ -328,6 +328,26 @@
 				"fb" : "https://www.facebook.com/profile.php?id=100009261752211",
 				"wb" : "http://www.anime-thai.net"
 			}
+		},
+		{
+			"name": "omekeki",
+			"avatar" : "https://avatars1.githubusercontent.com/u/15091910?v=3&s=40",
+			"desc" : "Dutch",
+			"links" : {
+				"gh" : "https://github.com/omekeki",
+				"tw" : "https://twitter.com/omekeki",
+				"wk" : "http://kancolle.wikia.com/wiki/User:Omekeki"
+			}
+		},
+		{
+			"name": "ForteBX",
+			"avatar" : "http://vignette4.wikia.nocookie.net/common/avatars/d/df/24333579.png",
+			"desc" : "Español",
+			"links" : {
+				"wk" : "http://kancolle.wikia.com/wiki/User:ForteBX",
+				"fb" : "https://www.facebook.com/ForteBXBassBX",
+				"tw" : "https://twitter.com/ForteBX"
+			}
 		}
 	],
 	"AboutTesters" : [

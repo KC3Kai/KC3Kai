@@ -11,6 +11,7 @@
 					"choices" : [
 						[ "en", "English" ],
 						[ "de", "Deutsch" ],
+						[ "nl", "Dutch" ],
 						[ "es", "Español" ],
 						[ "fr", "Français" ],
 						[ "id", "Indonesian" ],
