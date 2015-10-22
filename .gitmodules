@@ -1,3 +1,3 @@
 [submodule "src/data/lang"]
 	path = src/data/lang
-	url = git@github.com:KC3Kai/kc3-translations.git
+	url = https://github.com/KC3Kai/kc3-translations.git

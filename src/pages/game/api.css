@@ -226,8 +226,8 @@ body {
 /* Refresh Toggle : default view / hoverable item */
 .box-game .game-refresh:before {
 	display: block;
-	width: 32px;
-	height: 24px;
+	width: 25%;
+	height: 100%;
 	content: " ";
 	position: absolute;
 	top:0;
@@ -281,7 +281,7 @@ body {
 	content: " ";
 	position: absolute;
 	width: 100%;
-	height: 100%;
+	height: 25%;
 	left: 0;
 	right: 0;
 	bottom: 24px;

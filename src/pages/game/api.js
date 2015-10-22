@@ -124,6 +124,7 @@ $(document).on("ready", function(){
 	// Configure Refresh Toggle (using $(".game-refresh").trigger("click") is possible)
 	$(".game-refresh").on("click",function(){
 		switch($(this).text()) {
+			case("00"):
 			case("01"):
 				// TODO: BOMB EXPLODED
 				// $(".game-swf").attr("src","about:blank").attr("src",localStorage.absoluteswf);
@@ -132,7 +133,7 @@ $(document).on("ready", function(){
 				$(this).text("05");
 				break;
 			default:
-				$(this).text(($(this).text()-1).toDigits(2));
+				$(this).text(Math.max(0,$(this).text()-1).toDigits(2));
 				break;
 		}
 	}).on("bomb-exploded",function(){
@@ -176,7 +177,7 @@ $(document).on("ready", function(){
 	window.onbeforeunload = function(){
 		ConfigManager.load();
 		// added waiting condition should be ignored
-		if(ConfigManager.api_askExit==1 && !trustedExit && !waiting){
+		if(ConfigManager.api_askExit==1 && !trustedExit && !waiting && !localStorage.extract_api){
 			trustedExit = true;
 			setTimeout(function(){ trustedExit = false; }, 100);
 			return KC3Meta.term("UnwantedExit");
