@@ -12,6 +12,7 @@ Contains summary information about a fleet and its 6 ships
 		this.name = "";
 		this.ships = [ -1, -1, -1, -1, -1, -1 ];
 		this.mission = [ 0, 0, 0, 0 ];
+		this.akashi_tick = 0; // TODO: if not lazy _(:3
 	};
 	
 	KC3Fleet.prototype.update = function( data ){
@@ -112,6 +113,44 @@ Contains summary information about a fleet and its 6 ships
 			.reduce(function(x,y){return x+y;}) * 100)/100;
 	};
 	
+	KC3Fleet.prototype.fighterVeteran = function(){
+		var self = this;
+		return Math.round(Array.apply(null, {length: 6})
+			.map(Number.call, Number)
+			.map(function(x){return self.ship(x).fighterVeteran();})
+			.reduce(function(x,y){return x+y;}) * 100)/100;
+	};
+	
+	KC3Fleet.prototype.fighterBounds = function(){
+		var self = this;
+		var TotalPower = [0,0];
+		
+		var ShipPower;
+		for(var ShipCtr in this.ships){
+			if(this.ships[ShipCtr] > -1){
+				ShipPower = this.ship(ShipCtr).fighterBounds();
+				if(typeof ShipPower == "object"){
+					TotalPower[0] += Math.floor(ShipPower[0]);
+					TotalPower[1] += Math.floor(ShipPower[1]);
+					// floor it just in case
+				}
+			}
+		}
+		
+		return TotalPower;
+	};
+	
+	KC3Fleet.prototype.fighterPowerText = function(){
+		switch(ConfigManager.air_formula){
+			case 2: return "~"+this.fighterVeteran();
+			case 3:
+				var fighterBounds = this.fighterBounds();
+				return fighterBounds[0]+"~"+fighterBounds[1];
+			default:
+				return this.fighterPower();
+		}
+	};
+	
 	KC3Fleet.prototype.supportPower = function(){
 		return this.ship(0).supportPower()
 			+this.ship(1).supportPower()
@@ -156,6 +195,14 @@ Contains summary information about a fleet and its 6 ships
 			&& this.ship(5).isSupplied();
 	};
 	
+	KC3Fleet.prototype.needsSupply = function(isEmpty){
+		var self = this;
+		return Array.apply(null, this.ships)
+			.map(Number.call, Number)
+			.map(function(x){return self.ship(x).isNeedSupply(isEmpty);})
+			.reduce(function(x,y){return x||y;});
+	};
+	
 	KC3Fleet.prototype.lowestMorale = function(){
 		var lowestMorale = 101;
 		if(this.ship(0).morale < lowestMorale && this.ship(0).rosterId>0){ lowestMorale = this.ship(0).morale; }
@@ -174,9 +221,9 @@ Contains summary information about a fleet and its 6 ships
 		
 		function checkShip(shipIndex){
 			if(self.ship(shipIndex).masterId===0){ return false; }
-			var myReapirTime = self.ship(shipIndex).repairTime();
-			if(myReapirTime.docking > highestDocking){ highestDocking = myReapirTime.docking; }
-			if(myReapirTime.akashi > highestAkashi){ highestAkashi = myReapirTime.akashi; }
+			var myRepairTime = self.ship(shipIndex).repairTime();
+			if(myRepairTime.docking > highestDocking){ highestDocking = myRepairTime.docking; }
+			if(myRepairTime.akashi > highestAkashi){ highestAkashi = myRepairTime.akashi; }
 		}
 		
 		checkShip(0);
@@ -297,6 +344,16 @@ Contains summary information about a fleet and its 6 ships
 			+ ( nakedLos * 1.6841056 )
 			+ ( (Math.floor(( PlayerManager.hq.level + 4) / 5) * 5) * -0.6142467 );
 		return total;
+	};
+	
+	/* DISCARD SHIP
+	------------------------------------*/
+	KC3Fleet.prototype.discard = function(shipId) {
+		var pos = this.ships.indexOf(Number(shipId));
+		if(pos>=0){
+			this.ships.splice(pos,1);
+			this.ships.push(-1);
+		}
 	};
 	
 	/* SORTIE JSON

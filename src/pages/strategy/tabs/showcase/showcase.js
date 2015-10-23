@@ -6,7 +6,7 @@
 	KC3StrategyTabs.showcase.definition = {
 		tabSelf: KC3StrategyTabs.showcase,
 		
-		shipCache: { bb:[], fbb:[], bbv:[], cv:[], cvl:[], ca:[], cav:[], cl:[], dd:[], ss:[], clt:[], ax:[] },
+		shipCache: { bb:[], fbb:[], bbv:[], cv:[], cvl:[], ca:[], cav:[], cl:[], dd:[], ss:[], clt:[], ax:[], ao:[] },
 		gearCache: {},
 		equipTypes: {
 			"t2": {
@@ -122,6 +122,7 @@
 					case 17: this.addToStypeList("ax", ThisShip); break;
 					case 19: this.addToStypeList("ax", ThisShip); break;
 					case 16: this.addToStypeList("ax", ThisShip); break;
+					case 22: this.addToStypeList("ax", ThisShip); break;
 					default: break;
 				}
 			}
@@ -244,6 +245,7 @@
 						$(".gear_icon img", GearBox).attr("src", "../../assets/img/items/"+GearTypeIcon+".png");
 						GearTypeIcon = 0;
 						$(".gear_name", GearBox).html( ThisTopGear.name );
+						$(".gear_name", GearBox).attr("title", ThisTopGear.name );
 						
 						if(typeof element.order !== "undefined"){
 							$(".gear_stat_icon img", GearBox).attr("src", "../../assets/img/stats/"+element.order+".png");

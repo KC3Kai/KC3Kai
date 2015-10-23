@@ -45,9 +45,16 @@
 			$(".hq_rank .hq_content").html(PlayerManager.hq.rank);
 			$(".hq_level .hq_content").html(PlayerManager.hq.level);
 			
+			$(".rank_current .rank_cutval").html(PlayerManager.hq.rankPtCutoff);
+			$(".rank_current .rank_content").html(PlayerManager.hq.getRankPoints());
+			
 			// Show statistics
 			if(this.statistics){
-				$(".stat_sortie .stat_rate .stat_value").html((this.statistics.sortie.rate*100)+"%");
+				if(typeof this.statistics.sortie.rate == "string"){
+					$(".stat_sortie .stat_rate .stat_value").html((Number(this.statistics.sortie.rate)*100)+"%");
+				}else {
+					$(".stat_sortie .stat_rate .stat_value").html(this.statistics.sortie.rate+"%");
+				}
 				$(".stat_sortie .stat_win .stat_value").html(this.statistics.sortie.win);
 				$(".stat_sortie .stat_lose .stat_value").html(this.statistics.sortie.lose);
 				

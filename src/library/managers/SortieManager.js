@@ -12,6 +12,7 @@ Xxxxxxx
 		map_world: 0,
 		map_num: 0,
 		map_difficulty: 0,
+		fullSupplyMode: true,
 		nextNodeCount: 0,
 		hqExpGained: 0,
 		nodes: [],
@@ -20,6 +21,7 @@ Xxxxxxx
 		onEnemiesAvailable: function(node){},
 		fcfCheck: [],
 		escapedList: [],
+		sinkList:{main:[],escr:[]},
 		
 		startSortie :function(world, mapnum, fleetNum, stime){
 			// If still on sortie, end previous one
@@ -41,6 +43,12 @@ Xxxxxxx
 				formation: -1,
 				ships: [ -1, -1, -1, -1, -1, -1 ]
 			};
+			
+			this.fullSupplyMode = ((PlayerManager.combinedFleet&&this.fleetSent===1) ? [0,1] : [this.fleetSent-1]).map(function(x){
+				return PlayerManager.fleets[x];
+			}).every(function(x){
+				return x.isSupplied();
+			});
 			
 			var fleet = PlayerManager.fleets[this.fleetSent-1];
 			fleet.resetAfterHp();
@@ -164,13 +172,14 @@ Xxxxxxx
 		
 		engageNight :function( nightData ){
 			if(this.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
-			 this.currentNode().night( nightData );
+			this.currentNode().night( nightData );
 		},
 		
 		resultScreen :function( resultData ){
 			if(this.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
 			this.hqExpGained += resultData.api_get_exp;
 			this.currentNode().results( resultData );
+			this.addSunk(this.currentNode().lostShips);
 			this.checkFCF( resultData.api_escape );
 			if(!ConfigManager.info_delta)
 				PlayerManager.hq.updateLevel( resultData.api_member_lv, resultData.api_member_exp);
@@ -216,6 +225,26 @@ Xxxxxxx
 			console.log( "new escapedList", this.escapedList );
 		},
 		
+		addSunk :function(shizuList){
+			console.log(shizuList);
+			this.sinkList.main = this.sinkList.main.concat(shizuList[0]);
+			this.sinkList.escr = this.sinkList.escr.concat(shizuList[1]);
+		},
+		
+		discardSunk :function(){
+			var
+				fleetDesg = [this.fleetSent-1,1],
+				self = this;
+			Object.keys(this.sinkList).forEach(function(fleetType,fleetId){
+				console.log("Fleet",fleetDesg[fleetId]+1,"consisting of",PlayerManager.fleets[fleetDesg[fleetId]].ships);
+				console.log("\t","losses",self.sinkList[fleetType]);
+				self.sinkList[fleetType].map(function(x){
+					KC3ShipManager.remove(x);
+					return x;
+				}).filter(function(x){return false;});
+			});
+		},
+		
 		endSortie :function(){
 			this.onSortie = 0;
 			this.fleetSent = 1;
@@ -237,6 +266,8 @@ Xxxxxxx
 			}
 			this.fcfCheck = [];
 			this.escapedList = [];
+			this.sinkList.main = [];
+			this.sinkList.escr = [];
 			KC3ShipManager.pendingShipNum = 0;
 			KC3GearManager.pendingGearNum = 0;
 		}

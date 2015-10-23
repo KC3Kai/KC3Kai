@@ -346,11 +346,15 @@
 }
 .tab_maps .sortie_list .rfleet_equips {
 	width:55px;
-	height:0px;
+	height:20px;
 	float:left;
-	background:#cff;
 }
 
+.tab_maps .sortie_list .rfleet_equips img {
+	float:left;
+	line-height: auto;
+	width:12px;
+}
 
 /* Sortie Nodes */
 .tab_maps .sortie_list .sortie_nodes {
@@ -537,4 +541,12 @@
 }
 .tab_maps .sortie_list .node_airtext .node_loss {
 	color:#f00;
+}
+.tab_maps .sortie_list .node_exp {
+	text-align: right;
+	color: cornflowerblue;
+}
+.tab_maps .sortie_list .node_exp span {
+	color: black;
+	font-weight: bolder;
 }

@@ -66,8 +66,7 @@ Saves and loads list to and from localStorage
 					shipTargetFleetID = Math.floor(shipTargetOnFleet/6);
 				// check whether the designated ship is on fleet or not
 				if(shipTargetOnFleet >= 0){
-					PlayerManager.fleets[shipTargetFleetID].ships.splice((shipTargetOnFleet % 6), 1);
-					PlayerManager.fleets[shipTargetFleetID].ships.push(-1);
+					PlayerManager.fleets[shipTargetFleetID].discard(rosterId);
 				}
 				// remove any equipments from her
 				for(var gctr in thisShip.items){

@@ -18,6 +18,7 @@ Does not include Ships and Gears which are managed by other Managers
 		buildSlots: 2,
 		combinedFleet: 0,
 		statistics: {},
+		lastRefresh: null,
 		
 		init :function(){
 			this.hq = new KC3Player();
@@ -57,11 +58,22 @@ Does not include Ships and Gears which are managed by other Managers
 		},
 		
 		setRepairDocks :function( data ){
+			var lastRepair = this.repairShips.map(function(x){return x;}); // clone
 			this.repairShips = [];
+			var dockingShips = [];
 			var self = this;
 			$.each(data, function(ctr, ndock){
+				if(lastRepair[ndock.api_id] != ndock.api_ship_id) { // check if not in the list (repaired)
+					KC3ShipManager.get(lastRepair[ndock.api_id]).applyRepair();
+				}
+				
 				if(ndock.api_state > 0){
 					self.repairShips[ ndock.api_id ] = ndock.api_ship_id;
+					var repairInfo = 
+						{ id: ndock.api_ship_id,
+						  completeTime: ndock.api_complete_time
+						};
+					dockingShips.push( repairInfo );
 					KC3TimerManager.repair( ndock.api_id ).activate(
 						ndock.api_complete_time,
 						KC3ShipManager.get( ndock.api_ship_id ).masterId
@@ -70,8 +82,33 @@ Does not include Ships and Gears which are managed by other Managers
 					KC3TimerManager.repair( ndock.api_id ).deactivate();
 				}
 			});
+			// "localStorage.dockingShips" is not supposed
+			// to be modified,
+			// it record the most recent docking ships
+			// whenever a docking event comes
+			localStorage.dockingShips = JSON.stringify(dockingShips);
 		},
-		
+
+		// cached docking ships' status
+		// the return value is an object whose properties are "x{ship_id}"
+		// with value set to the completeTime
+		getCachedDockingShips: function() {
+			var dockingShips = {};
+			if (typeof localStorage.dockingShips !== "undefined") {
+				try {
+					var ndockData = JSON.parse( localStorage.dockingShips );
+					$.each(ndockData, function (i, v) {
+						var key = "x" + v.id.toString();
+						dockingShips[key] = v.completeTime;
+					});
+				} catch (err) {
+					console.log( "Error while processing cached docking ship" );
+					console.log(err);
+				}
+			}
+			return dockingShips;
+		},
+
 		setBuildDocks :function( data ){
 			$.each(data, function(ctr, kdock){
 				if(kdock.api_state > 0){
@@ -122,7 +159,7 @@ Does not include Ships and Gears which are managed by other Managers
 		
 		setStatistics :function( data ){
 			var oldStatistics = JSON.parse(localStorage.statistics || "{\"exped\":{},\"pvp\":{},\"sortie\":{}}");
-			localStorage.statistics = JSON.stringify({
+			var newStatistics = {
 				exped: {
 					rate: data.exped.rate || oldStatistics.exped.rate || 0,
 					total: data.exped.total || oldStatistics.exped.total,
@@ -140,12 +177,24 @@ Does not include Ships and Gears which are managed by other Managers
 					win: data.sortie.win || oldStatistics.sortie.win,
 					lose: data.sortie.lose || oldStatistics.sortie.lose
 				}
-			});
+			};
+			if(newStatistics.sortie.rate===0){
+				newStatistics.sortie.rate = Math.round(newStatistics.sortie.win / (newStatistics.sortie.win + newStatistics.sortie.lose) * 10000)/100;
+			}
+			if(newStatistics.pvp.rate===0){
+				newStatistics.pvp.rate = Math.round(newStatistics.pvp.win / (newStatistics.pvp.win + newStatistics.pvp.lose) *10000)/100;
+			}
+			if(newStatistics.exped.rate===0){
+				newStatistics.exped.rate =  Math.round(newStatistics.exped.success / newStatistics.exped.total * 10000)/100;
+			}
+			// console.log("rates", newStatistics.sortie.rate, newStatistics.pvp.rate, newStatistics.exped.rate);
+			localStorage.statistics = JSON.stringify(newStatistics);
 		},
 		
 		setNewsfeed :function( data, stime ){
 			console.log("newsfeed", data);
 			$.each(data, function( index, element){
+				console.log("checking newsfeed item", element);
 				if(parseInt(element.api_state, 10) !== 0){
 					console.log("saved news", element);
 					KC3Database.Newsfeed({
@@ -155,6 +204,10 @@ Does not include Ships and Gears which are managed by other Managers
 					});
 				}
 			});
+		},
+		
+		portRefresh :function( data ){
+			
 		},
 		
 		loadFleets :function(){

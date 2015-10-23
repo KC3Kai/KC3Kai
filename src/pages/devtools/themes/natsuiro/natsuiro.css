@@ -3,6 +3,26 @@
 #factory {
 	display:none;
 }
+html,body {
+	height:100%;
+}
+#critical {
+	width:100%;
+	height:100%;
+	position:absolute;
+	top:0px;
+	left:0px;
+	z-index:90;
+	pointer-events: none;
+	display:none;
+}
+#critical.anim1 {
+	box-shadow:inset 0px 0px 20px rgba(255,0,0,0.5);
+	transition: all 0.4s;
+}
+#critical.anim2 {
+	box-shadow:inset 0px 0px 60px rgba(255,0,0,0.8); 
+}
 
 /* CATBOMB
 ------------------------------*/
@@ -13,6 +33,7 @@
 	top:0px;
 	left:0px;
 	display:none;
+	z-index:100;
 }
 #catBomb .blackFilter {
 	width:100%;
@@ -802,6 +823,178 @@
 	color:#fff;
 }
 
+/*------- EXPEDITION -------*/
+.module.activity .activity_expedition {
+	padding:5px 10px;
+}
+
+.module.activity .activity_expedition .expres_img {
+	width:170px;
+	height:30px;
+	line-height:30px;
+}
+.module.activity .activity_expedition .expres_img img {
+	width:170px;
+	height:30px;
+	vertical-align:top;
+}
+
+.module.activity .activity_expedition .expres_status {
+	width:170px;
+	font-size:14px;
+	color:#ffcc00;
+	font-weight:bold;
+	text-align:center;
+}
+.module.activity .activity_expedition .expres_num {
+	width:170px;
+	height:14px;
+	line-height:14px;
+	font-size:12px;
+	color:#ccc;
+	text-align:center;
+	margin:0px 0px 8px 0px;
+}
+
+.module.activity .activity_expedition .expres_resos {
+	width:170px;
+	/*background:#cfc;*/
+	height:36px;
+	line-height:16px;
+	margin:0px 0px 5px 0px;
+}
+.module.activity .activity_expedition .expres_divHF { /* divide half */
+	display:inline-block;
+	width:85px;
+	float:left;
+}
+.module.activity .activity_expedition .expres_reso {
+	float:left;
+	/*background:#fcc;*/
+	height:16px;
+	line-height:16px;
+	margin:0px 0px 2px 0px;
+}
+.module.activity .activity_expedition .expres_icon {
+	width:16px;
+	height:16px;
+	float:left;
+	margin:0px 9px 0px 0px;
+	/*background:#fcf;*/
+}
+.module.activity .activity_expedition .expres_amt {
+	width:60px;
+	height:16px;
+	float:left;
+	/*background:#ccf;*/
+	font-size:12px;
+	color:#fff;
+}
+
+.module.activity .activity_expedition .expres_items {
+	width:170px;
+	height:20px;
+	margin:0px 0px 3px 0px;
+}
+.module.activity .activity_expedition .expres_get {
+	max-width:100px;
+	height:20px;
+	line-height:20px;
+	font-size:12px;
+	color:#fff;
+	float:left;
+	margin:0px 5px 0px 0px;
+}
+.module.activity .activity_expedition .expres_noget {
+	height:20px;
+	line-height:20px;
+	font-size:12px;
+	color:#faa;
+	float:left;
+	display:none;
+}
+.module.activity .activity_expedition .expres_item {
+	width:35px;
+	height:20px;
+	line-height:20px;
+	float:left;
+	margin:0px 5px 0px 0px;
+}
+.module.activity .activity_expedition .expres_item_icon {
+	width:16px;
+	height:16px;
+	float:left;
+	margin:0px 2px 0px 0px;
+}
+.module.activity .activity_expedition .expres_item_icon img {
+	width:16px;
+	height:16px;
+	margin:2px 0px;
+	vertical-align:top;
+}
+.module.activity .activity_expedition .expres_item_text {
+	width:17px;
+	height:20px;
+	float:left;
+	font-size:12px;
+	color:#fff;
+}
+
+.module.activity .activity_expedition .expres_hqexp {
+	width:170px;
+	height:20px;
+	line-height:20px;
+	margin:0px 0px 5px 0px;
+	color:#fff;
+	font-size:14px;
+}
+.module.activity .activity_expedition .expres_hqexp_lbl {
+	font-size:14px;
+	font-weight:bold;
+}
+.module.activity .activity_expedition .expres_hqexp_amt {
+	font-size:12px;
+}
+.module.activity .activity_expedition .expres_hqexp_amt span {
+	color:#ffcc00;
+	font-size:14px;
+	font-weight:bold;
+}
+
+.module.activity .activity_expedition .expres_ships {
+	width:170px;
+	line-height:18px;
+	font-size:12px;
+}
+.module.activity .activity_expedition .expres_ship {
+	width:85px;
+	height:18px;
+	float:left;
+	margin:0px 0px 2px 0px;
+	display:none;
+}
+.module.activity .activity_expedition .expres_ship_img {
+	width:18px;
+	height:18px;
+	float:left;
+	margin:0px 2px 0px 0px;
+}
+.module.activity .activity_expedition .expres_ship_img img {
+	width:18px;
+	height:18px;
+	vertical-align:top;
+}
+.module.activity .activity_expedition .expres_ship_exp {
+	width:65px;
+	height:18px;
+	float:left;
+	color:#fff;
+}
+.module.activity .activity_expedition .expres_ship_exp span {
+	font-weight:bold;
+	color:#ffcc00;
+}
+
 /*------- QUESTS -------*/
 .module.quests {
 	
@@ -816,6 +1009,9 @@
 .v .module.quests .quest {
 	width:240px;
 }
+.module.quests  .quest.complete {
+	background:rgba(0,255,0,0.25);
+}
 
 .module.quests .quest_color {
 	width:14px;
@@ -823,6 +1019,21 @@
 	margin:3px;
 	background:#555;
 	float:left;
+	line-height:normal;
+	text-align:center;
+}
+.module.quests .quest.complete .quest_color {
+	width:16px;
+	height:16px;
+	line-height:12px;
+	font-size:10px;
+	margin:2px;
+	background:#555;
+	float:left;
+	line-height:normal;
+	text-align:center;
+	border:2px solid #0f0;
+	text-shadow:0px 0px 2px #fff, 0px 0px 2px #fff, 0px 0px 2px #fff;
 }
 
 .module.quests .quest_text {
@@ -884,6 +1095,14 @@
 	font-weight:bold;
 	text-align:center;
 	/*border:1px solid #ccc;*/
+}
+.module.controls .fleet_num.needsSupply {
+	border:2px solid #f00;
+	line-height:26px;
+}
+.module.controls .fleet_num.hasTaiha {
+	background:#faa;
+	color:#000;
 }
 .module.controls .fleet_rengo {
 	width:50px;
@@ -1147,19 +1366,25 @@
 	height:20px;
 	float:left;
 }
-.module.fleet .lship .ship_gear_ace {
+.module.fleet .lship .ship_gear_lvl {
 	width: 12px;
 	position: absolute;
 	font-size: 8px;
-	color: #ff0;
 	margin: 8px 0px 0px -5px;
-	background: #555;
 	height: 12px;
 	overflow: hidden;
 	border-radius: 6px;
 	text-align: center;
 	line-height: 13px;
 	display:none;
+}
+.module.fleet .lship .ship_gear_lvl.ship_gear_ace {
+	color: #ff0;
+	background: #555;
+}
+.module.fleet .lship .ship_gear_lvl.ship_gear_mod {
+	color: #ff0;
+	background: #45A9A5;
 }
 .module.fleet .lship .ship_gear_icon {
 	width:18px;

@@ -5,6 +5,36 @@ String.prototype.insert = function (index, string) {
     return string + this;
 };
 
+/* String Splitting
+ * Supplied Argument:
+ * <Nothing>
+ * Returned value:
+ * Array of characters
+-----------------------------------------------*/
+String.prototype.toArray = function() {
+	return this.split("");
+};
+
+/* Number Padding
+ * Supplied Argument:
+ * <Optional> Digits (any invalid value / less than 1, forced to 1)
+-----------------------------------------------*/
+Number.prototype.toDigits = Number.prototype.toArray = function(digits) {
+	var ret = this.toString();
+	try{
+		if(isNaN(this)||!isFinite(this)){throw new Error("Cannot convert constants to padded array");}
+		if(ret == this.toExponential()){throw new Error("Cannot convert number in exponential form");}
+		if (!isFinite(digits)) { digits = undefined; }
+		digits = Math.max(digits || 1,1);
+		// Pad the array until
+		ret = ("0").repeat(Math.max(digits - ret.length,0)) + ret; // O(1) complexity XD
+	}catch(e){
+		console.error(e);
+	}finally{
+		return ret;
+	}
+};
+
 Object.size = function(obj) {
     var size = 0, key;
     for (key in obj) {
@@ -142,18 +172,49 @@ Date.prototype.format = function (mask, utc) {
 /* SECONDS TO HH:MM:SS
 -------------------------------*/
 String.prototype.toHHMMSS = function () {
-    var sec_num = parseInt(this, 10); // don't forget the second param
-    var hours   = Math.floor(sec_num / 3600);
-    var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
-    var seconds = sec_num - (hours * 3600) - (minutes * 60);
-
-    if (hours   < 10) {hours   = "0"+hours;}
-    if (minutes < 10) {minutes = "0"+minutes;}
-    if (seconds < 10) {seconds = "0"+seconds;}
-    var time    = hours+':'+minutes+':'+seconds;
-    return time;
+	var sec_num = parseInt(this, 10); // don't forget the second param
+	var time;
+	if(isNaN(sec_num)) {
+		time = "--:--:--";
+	} else {
+		var isNeg   = sec_num < 0;
+		
+		if(isNeg) sec_num = -sec_num;
+		
+		var hours   = (Math.floor(sec_num / 3600)).toDigits(2);
+		var minutes = (Math.floor((sec_num - (hours * 3600)) / 60)).toDigits(2);
+		var seconds = (sec_num - (hours * 3600) - (minutes * 60)).toDigits(2);
+		
+		time    = (isNeg ? "-" : "")+hours+':'+minutes+':'+seconds;
+	}
+	return time;
 };
 
+/* SECONDS TO HH:MM:SS, ADDING CURRENT TIME
+-------------------------------*/
+String.prototype.plusCurrentTime = function() {
+    var currentTime = new Date();
+    var secondsAfterMidnight = 
+        3600 * currentTime.getHours() +
+        60   * currentTime.getMinutes() +
+               currentTime.getSeconds();
+
+    var secondsRemaining = parseInt(this, 10);
+    var timeFinished = (secondsAfterMidnight + secondsRemaining) % 86400;
+    return String(timeFinished).toHHMMSS();
+};
+
+/* LIMIT ROUNDING
+-------------------------------*/
+Math.qckInt = function(command,value,rate) {
+	if (["round","ceil","floor"].indexOf(command) < 0)
+		command = null;
+	command = command || "round";
+	value   = value   || 0;
+	rate    = rate    || 0;
+	var shift = Math.pow(10,rate);
+	return Math[command](value * shift) / shift;
+};
 
 /* GOOGLE ANALYTICS
 -------------------------------*/
@@ -164,3 +225,20 @@ _gaq.push(['_setAccount', 'UA-9789944-12']);
   ga.src = 'https://ssl.google-analytics.com/ga.js';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 })();
+
+/* GET DATE IN JP
+http://stackoverflow.com/a/10088053/483704
+-------------------------------*/
+function getJPDate(){
+    // create Date object for current location
+    d = new Date();
+    
+    // convert to msec
+    // add local time zone offset
+    // get UTC time in msec
+    utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+
+    // create new Date object for different city
+    // using supplied offset
+    return new Date(utc + (3600000*9));
+}

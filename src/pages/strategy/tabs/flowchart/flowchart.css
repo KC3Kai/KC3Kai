@@ -245,9 +245,23 @@
 	float:left;
 }
 .tab_flowchart .questExtraItem .questDesc {
-	width:640px;
+	width:620px;
 	height:20px;
 	float:left;
 	overflow:hidden;
 	font-size:11px;
+}
+.tab_flowchart .questExtraItem .questRemove {
+	width:16px;
+	height:16px;
+	float:left;
+	margin:0px 0px 0px 9px;
+	background:#fff;
+	border-radius:8px;
+}
+.tab_flowchart .questExtraItem .questRemove img {
+	width:12px;
+	height:12px;
+	margin:2px;
+	vertical-align:top;
 }

@@ -9,6 +9,8 @@
 		<link href="natsuiro.css" rel="stylesheet" type="text/css">
 	</head>
 	<body>
+		<div id="critical" class="anim1"></div>
+		
 		<!-- MAIN LAYOUT -->
 		<div class="wrapper">
 			<div class="wrapper_bg"></div>
@@ -20,11 +22,11 @@
 					<div class="admiral_lvbox">
 						<div class="admiral_lvbar"></div>
 					</div>
-					<div class="admiral_lvnext"></div>
+					<div class="admiral_lvnext hover"></div>
 				</div>
 				<div class="admiral_name hover"></div>
 				<div class="admiral_comm"></div>
-				<div class="admiral_rank"></div>
+				<div class="admiral_rank hover" data-mode="1"></div>
 			</div>
 			
 			<!-- Module: Activity Box -->
@@ -49,9 +51,14 @@
 								<div class="consumable_max max_ships">/000</div>
 								<div class="clear"></div>
 							</div>
-							<div class="consumable">
+							<!-- <div class="consumable">
 								<div class="consumable_icon"><img src="../../../../assets/img/client/ibuild.png" /></div>
 								<div class="consumable_ltext count_torch">3000</div>
+								<div class="clear"></div>
+							</div> -->
+							<div class="consumable">
+								<div class="consumable_icon"><img src="../../../../assets/img/client/screws.png" /></div>
+								<div class="consumable_ltext count_screws">3000</div>
 								<div class="clear"></div>
 							</div>
 							<div class="consumable">
@@ -61,15 +68,20 @@
 								<div class="clear"></div>
 							</div>
 							<div class="consumable">
-								<div class="consumable_icon"><img src="../../../../assets/img/client/screws.png" /></div>
-								<div class="consumable_ltext count_screws">3000</div>
+								<div class="consumable_icon"><img src="../../../../assets/img/client/pike.png" /></div>
+								<div class="consumable_ltext count_pike">?</div>
 								<div class="clear"></div>
 							</div>
 							<div class="consumable">
+								<div class="consumable_icon"><img src="../../../../assets/img/client/saury.png" /></div>
+								<div class="consumable_ltext count_saury">?</div>
+								<div class="clear"></div>
+							</div>
+							<!-- <div class="consumable">
 								<div class="consumable_icon"><img src="../../../../assets/img/client/coin.png" /></div>
 								<div class="consumable_ltext count_fcoin">3000</div>
 								<div class="clear"></div>
-							</div>
+							</div> -->
 							<div class="clear"></div>
 						</div>
 						<div class="expeditions">
@@ -183,6 +195,7 @@
 							<div class="battle_flags">
 								<div class="battle_flag battle_eformation"><img/></div>
 								<div class="battle_flag battle_support" title="Support expedition triggered?"><img/></div>
+								<div class="battle_flag battle_fish" title="Mackerel drop?"><img/></div>
 								<div class="battle_flag battle_night" title="Night battle needed?"><img/></div>
 								<div class="battle_flag battle_rating" title="Battle Rating"><img/></div>
 								<div class="battle_flag battle_drop"><img/></div>
@@ -302,6 +315,79 @@
 					<div class="activity_box activity_construction activity_dismissable">
 						
 					</div>
+					<!-- EXPEDITION: Results -->
+					<div class="activity_box activity_expedition activity_dismissable">
+						<div class="expres_img"><img/></div>
+						<div class="expres_status"></div>
+						<div class="expres_num"></div>
+						<div class="expres_resos">
+							<div class="expres_divHF">
+								<div class="expres_reso">
+									<div class="expres_icon"><img src="../../../../assets/img/client/fuel.png" /></div>
+									<div class="expres_amt"></div>
+								</div>
+								<div class="expres_reso">
+									<div class="expres_icon"><img src="../../../../assets/img/client/ammo.png" /></div>
+									<div class="expres_amt"></div>
+								</div>
+								<div class=clear></div>
+							</div>
+							<div class="expres_divHF">
+								<div class="expres_reso">
+									<div class="expres_icon"><img src="../../../../assets/img/client/steel.png" /></div>
+									<div class="expres_amt"></div>
+								</div>
+								<div class="expres_reso">
+									<div class="expres_icon"><img src="../../../../assets/img/client/bauxite.png" /></div>
+									<div class="expres_amt"></div>
+								</div>
+								<div class=clear></div>
+							</div>
+						</div>
+						<div class="expres_items">
+							<div class="expres_get i18n">MissionGetItems</div>
+							<div class="expres_noget i18n">None</div>
+							<div class="expres_item">
+								<div class="expres_item_icon"><img src="../../../../assets/img/client/bucket.png"/></div>
+								<div class="expres_item_text"></div>
+							</div>
+							<div class="expres_item">
+								<div class="expres_item_icon"><img src="../../../../assets/img/client/box1.png"/></div>
+								<div class="expres_item_text"></div>
+							</div>
+						</div>
+						<div class="expres_hqexp">
+							<span class="expres_hqexp_lbl i18n">HQText</span>
+							<span class="expres_hqexp_amt">+ <span></span> exp</span>
+						</div>
+						<div class="expres_ships">
+							<div class="expres_ship">
+								<div class="expres_ship_img"><img/></div>
+								<div class="expres_ship_exp">+ <span></span> exp</div>
+							</div>
+							<div class="expres_ship">
+								<div class="expres_ship_img"><img/></div>
+								<div class="expres_ship_exp">+ <span></span> exp</div>
+							</div>
+							<div class="expres_ship">
+								<div class="expres_ship_img"><img/></div>
+								<div class="expres_ship_exp">+ <span></span> exp</div>
+							</div>
+							<div class="expres_ship">
+								<div class="expres_ship_img"><img/></div>
+								<div class="expres_ship_exp">+ <span></span> exp</div>
+							</div>
+							<div class="expres_ship">
+								<div class="expres_ship_img"><img/></div>
+								<div class="expres_ship_exp">+ <span></span> exp</div>
+							</div>
+							<div class="expres_ship">
+								<div class="expres_ship_img"><img/></div>
+								<div class="expres_ship_exp">+ <span></span> exp</div>
+							</div>
+							<div class="clear"></div>
+						</div>
+					</div>
 				</div>
 			</div>
 			
@@ -320,6 +406,7 @@
 				
 				<div class="control hover control_btn btn_resize" title="Fit Window"><img src="../../../../assets/img/ui/fit.png" /></div>
 				<div class="control hover control_btn btn_ss1" title="Screenshot"><img src="img/cam1.png" /></div>
+				<div class="control hover control_btn btn_export" title="Export to Kancolle-calc DeckBuilder"><img src="img/exportdeck.png" /></div>
 			</div>
 			
 			<!-- Module: Fleet Summary -->
@@ -330,7 +417,7 @@
 					<div class="clear"></div>
 				</div>
 				<div class="summary_box summary-eqlos">
-					<div class="summary_icon"><img src="../../../../assets/img/stats/ls.png" /></div>
+					<div class="summary_icon"><img src="../../../../assets/img/stats/los3.png" /></div>
 					<div class="summary_text">000.00</div>
 					<div class="clear"></div>
 				</div>
@@ -461,25 +548,25 @@
 				</div>
 				<div class="ship_gears">
 					<div class="ship_gear ship_gear_1">
-						<div class="ship_gear_ace"></div>
+						<div class="ship_gear_lvl"></div>
 						<div class="ship_gear_icon"><img/></div>
 						<div class="ship_gear_slot">00</div>
 						<div class="clear"></div>
 					</div>
 					<div class="ship_gear ship_gear_2">
-						<div class="ship_gear_ace"></div>
+						<div class="ship_gear_lvl"></div>
 						<div class="ship_gear_icon"><img/></div>
 						<div class="ship_gear_slot">00</div>
 						<div class="clear"></div>
 					</div>
 					<div class="ship_gear ship_gear_3">
-						<div class="ship_gear_ace"></div>
+						<div class="ship_gear_lvl"></div>
 						<div class="ship_gear_icon"><img/></div>
 						<div class="ship_gear_slot">00</div>
 						<div class="clear"></div>
 					</div>
 					<div class="ship_gear ship_gear_4">
-						<div class="ship_gear_ace"></div>
+						<div class="ship_gear_lvl"></div>
 						<div class="ship_gear_icon"><img/></div>
 						<div class="ship_gear_slot">00</div>
 						<div class="clear"></div>
@@ -575,6 +662,9 @@
 		<script type="text/javascript" src="../../../../library/managers/SortieManager.js"></script>
 		<script type="text/javascript" src="../../../../library/managers/TimerManager.js"></script>
 		<!-- @nonbuildend -->
+		
+		<script type="text/javascript" src="../../../../library/modules/DBSubmission.js"></script>
+		<script type="text/javascript" src="../../../../library/modules/PoiDBSubmission.js"></script>
 		
 		<script type="text/javascript" src="../../../../library/modules/Database.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/Kcsapi.js"></script>

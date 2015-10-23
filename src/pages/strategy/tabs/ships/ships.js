@@ -15,6 +15,8 @@
 		remodelOption: 0,
 		modernizationOption: 0,
 		marriageFilter: 0,
+		heartlockFilter: 0,
+		withFleet: true,
 		isLoading: false,
 		//shipList: $(".tab_ships .ship_list"),
 		
@@ -23,6 +25,7 @@
 		---------------------------------*/
 		init :function(){
 			// Cache ship info
+			PlayerManager.loadFleets();
 			var ctr, ThisShip, MasterShip, ThisShipData;
 			for(ctr in KC3ShipManager.list){
 				ThisShip = KC3ShipManager.list[ctr];
@@ -51,14 +54,12 @@
 					ev: [this.getDerivedStatNaked("houk", ThisShip.ev[0], ThisShip.items), ThisShip.ev[0] ],
 					ls: [this.getDerivedStatNaked("saku", ThisShip.ls[0], ThisShip.items), ThisShip.ls[0] ],
 					lk: ThisShip.lk[0],
+					slots: ThisShip.slots,
+					
+					fleet: ThisShip.onFleet(),
 					
 					// Check whether remodel is max
-					remodel: (ThisShip.master().api_afterlv && ThisShip.master().api_aftershipid)
-								? {
-									'level':	ThisShip.master().api_afterlv,
-									'bid':		ThisShip.master().api_aftershipid
-								}
-								: false
+					remodel: MasterShip.kc3_maxed,
 				};
 				
 				// Check whether modernization is max
@@ -114,6 +115,15 @@
 				$(".tab_ships .ship_filter_type .filter_check").hide();
 				for(sCtr in KC3Meta._stype){
 					self.filters[sCtr] = false;
+				}
+				self.refreshTable();
+			});
+
+			// Select: Invert
+			self.options.none = $(".tab_ships .filters .massSelect .invert").on("click", function(){
+				$(".tab_ships .ship_filter_type .filter_check").toggle();
+				for(sCtr in KC3Meta._stype){
+					self.filters[sCtr] = !self.filters[sCtr];
 				}
 				self.refreshTable();
 			});
@@ -202,27 +212,57 @@
 				});
 			});
 			
+			// Fleet Inclusion
+			["no","yes"].forEach(function(x,i,a){
+				self.options["fleet_"+x] = $(".tab_ships .filters .massSelect .fleet_"+x).on("click",function(){
+					self.withFleet = !!i;
+					self.refreshTable();
+					a.forEach(function(_x,_i,_a){
+						if(i==_i)
+							self.options["fleet_"+_x].addClass('on');
+						else
+							self.options["fleet_"+_x].removeClass('on');
+					});
+ 				});
+			});
+
+			["all","yes","no"].forEach(function(x,i,a){
+				self.options["heartlock_"+x] = $(".tab_ships .filters .massSelect .heartlock_"+x).on("click",function(){
+					self.heartlockFilter = i;
+					self.refreshTable();
+					a.forEach(function(_x,_i,_a){
+						if(i==_i)
+							self.options["heartlock_"+_x].addClass('on');
+						else
+							self.options["heartlock_"+_x].removeClass('on');
+					});
+				});
+
+			});
+
 			// Default status
-				if( self.equipMode )
-					self.options.equip_yes.addClass('on');
-				else
-					self.options.equip_no.addClass('on');
+			if( self.equipMode )
+				self.options.equip_yes.addClass('on');
+			else
+				self.options.equip_no.addClass('on');
 
-				if( self.remodelOption === 0 )
-					self.options.remodel_all.addClass('on');
-				else if( self.remodelOption == 1 )
-					self.options.remodel_max.addClass('on');
-				else if( self.remodelOption == 2 )
-					self.options.remodel_nomax.addClass('on');
+			if( self.remodelOption === 0 )
+				self.options.remodel_all.addClass('on');
+			else if( self.remodelOption == 1 )
+				self.options.remodel_max.addClass('on');
+			else if( self.remodelOption == 2 )
+				self.options.remodel_nomax.addClass('on');
 
-				if( self.modernizationOption === 0 )
-					self.options.modernization_all.addClass('on');
-				else if( self.modernizationOption == 1 )
-					self.options.modernization_max.addClass('on');
-				else if( self.modernizationOption == 2 )
-					self.options.modernization_nomax.addClass('on');
+			if( self.modernizationOption === 0 )
+				self.options.modernization_all.addClass('on');
+			else if( self.modernizationOption == 1 )
+				self.options.modernization_max.addClass('on');
+			else if( self.modernizationOption == 2 )
+				self.options.modernization_nomax.addClass('on');
 
-				self.options["marriage_"+["in","on","ex"][self.marriageFilter]].addClass('on');
+			self.options["heartlock_"+["all","yes","no"][self.heartlockFilter]].addClass('on');
+			self.options["marriage_"+["in","on","ex"][self.marriageFilter]].addClass('on');
+			self.options["fleet_"+["no","yes"][self.withFleet & 1]].addClass('on');
 			
 			// Ship type toggled
 			$(".tab_ships .filters .ship_filter_type").on("click", function(){
@@ -271,11 +311,11 @@
 				for(shipCtr in self.shipCache){
 					var thisShip = self.shipCache[shipCtr];
 					if(typeof self.filters[ thisShip.stype ] != "undefined"){
-						if(self.filters[ thisShip.stype ]
+						if( self.filters[ thisShip.stype ]
 							&& (
 								self.remodelOption === 0
-								|| (self.remodelOption == 1 && !thisShip.remodel)
-								|| (self.remodelOption == 2 && thisShip.remodel)
+								|| (self.remodelOption == 1 && thisShip.remodel)
+								|| (self.remodelOption == 2 && !thisShip.remodel)
 							)
 							&& (
 								self.modernizationOption === 0
@@ -286,6 +326,12 @@
 								((self.marriageFilter || 1) == 1 && thisShip.level >= 100) ||
 								((self.marriageFilter || 2) == 2 && thisShip.level <  100)
 							)
+							&& (self.withFleet || (!self.withFleet && !thisShip.fleet)
+							   )
+							&& (self.heartlockFilter === 0
+								|| (self.heartlockFilter === 1 && thisShip.locked === 1)
+								|| (self.heartlockFilter === 2 && thisShip.locked === 0)
+							   )
 						){
 							FilteredShips.push(thisShip);
 						}
@@ -326,7 +372,7 @@
 				// var totals = {lv:0, hp:0, fp:0, tp:0, aa:0, ar:0, as:0, ev:0, ls:0, lk:0 };
 				
 				// Fill up list
-				for(shipCtr in FilteredShips){
+				Object.keys(FilteredShips).forEach(function(shipCtr){
 					if(shipCtr%10 === 0){
 						$("<div>").addClass("ingame_page").html("Page "+Math.ceil((Number(shipCtr)+1)/10)).appendTo(self.shipList);
 					}
@@ -380,10 +426,9 @@
 					// totals.ev += parseInt(cShip.ev[self.equipMode], 10);
 					// totals.ls += parseInt(cShip.ls[self.equipMode], 10);
 					
-					self.equipImg(cElm, 1, cShip.equip[0]);
-					self.equipImg(cElm, 2, cShip.equip[1]);
-					self.equipImg(cElm, 3, cShip.equip[2]);
-					self.equipImg(cElm, 4, cShip.equip[3]);
+					[1,2,3,4].forEach(function(x){
+						self.equipImg(cElm, x, cShip.slots[x-1], cShip.equip[x-1]);
+					});
 					
 					if(FilteredShips[shipCtr].locked){ $(".ship_lock img", cElm).show(); }
 					if(shipLevel >= 100 && config.kanmusuDT){ $(".ship_marry img",cElm).show(); } 
@@ -399,7 +444,7 @@
 							cElm.addClass('modernization-max');
 						else
 							cElm.addClass('modernization-able');
-				}
+				});
 				
 				// Show totals
 				/*$(".tab_ships .ship_totals .total_level").text(totals.lv);
@@ -443,18 +488,25 @@
 		
 		/* Show single equipment icon
 		--------------------------------------------*/
-		equipImg :function(cElm, equipNum, gear_id){
+		equipImg :function(cElm, equipNum, equipSlot, gear_id){
 			var element = $(".ship_equip_" + equipNum, cElm);
 			if(gear_id > -1){
 				var gear = KC3GearManager.get(gear_id);
-				if(gear.itemId===0){ element.hide(); return; }
+				if(gear.itemId<=0){ element.hide(); return; }
 
 				var masterGear = KC3Master.slotitem(gear.api_slotitem_id);
-				element.find("img")
+				$("img",element)
 					.attr("src", "../../assets/img/items/" + gear.master().api_type[3] + ".png")
 					.attr("title", gear.name());
+				$("span",element).css('visibility','hidden');
 			} else {
-				element.hide();
+				$("img",element).hide();
+				$("span",element).each(function(i,x){
+					if(equipSlot > 0)
+						$(x).text(equipSlot);
+					else
+						$(x).css('visibility','hidden');
+				});
 			}
 		}
 	};

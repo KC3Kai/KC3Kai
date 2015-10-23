@@ -19,13 +19,19 @@ Provides access to data on built-in JSON files
 		_stype:{},
 		_servers:{},
 		_battle:{},
-		_terms:{},
+		_terms:{
+			troll:{},
+			lang:{},
+		},
 		_edges:{},
 		_defaultIcon:"",
 		
 		/* Initialization
 		-------------------------------------------------------*/
 		init :function( repo ){
+			/* to remove deprecated warning
+				http://stackoverflow.com/questions/22090764/alternative-to-async-false-ajax
+			*/
 			// Load Common Meta
 			this._icons		= JSON.parse( $.ajax(repo+'icons.json', { async: false }).responseText );
 			this._exp		= JSON.parse( $.ajax(repo+'experience.json', { async: false }).responseText );
@@ -41,7 +47,10 @@ Provides access to data on built-in JSON files
 			this._stype		= KC3Translation.getJSON(repo, 'stype', true);
 			this._servers	= KC3Translation.getJSON(repo, 'servers', true);
 			this._battle	= KC3Translation.getJSON(repo, 'battle', true);
-			this._terms		= KC3Translation.getJSON(repo, 'terms');
+			// troll language always loaded
+			this._terms.troll		= JSON.parse( $.ajax(repo+'lang/data/troll/terms.json', { async: false }).responseText );
+			// other language loaded here
+			this._terms.lang		= KC3Translation.getJSON(repo, 'terms');
 		},
 		
 		/* Data Access
@@ -96,25 +105,47 @@ Provides access to data on built-in JSON files
 		},
 		
 		shipName :function( jp_name ){
+			// console.log( "---------request to TL---------", jp_name );
+			//if(typeof jp_name == "undefined"){ return "Unknown ship"; }
 			if(typeof this._cache[jp_name] !== "undefined"){ return this._cache[jp_name]; }
 			if(typeof this._ship[jp_name] !== "undefined"){
 				this._cache[jp_name] = this._ship[jp_name];
 				return this._cache[jp_name];
 			}
-			if( jp_name.substr(jp_name.length-1, 1) == "改" ){
-				var bare1 = jp_name.substr(0, jp_name.length-1);
-				if(typeof this._ship[bare1] !== "undefined"){
-					this._cache[jp_name] = this._ship[bare1] + " " + this._ship._Kai;
-					return this._cache[jp_name];
-				}
+			var
+				bare = jp_name,
+				combin = [],
+				repTab = {
+					"甲"   : '_A',
+					"改二" : '_KaiNi',
+					"改"   : '_Kai',
+				},
+				repRes = null,
+				replaced = false;
+			// in here, the regular expression will read which one comes first (which mean, to be in the end of the name
+			// and then, the bare string will be chopped by how long the pattern match...
+			// the matched one, added to the combination stack (FILO)
+			// removing from the replacement table in order to prevent infinite loop ^^;
+			// if there's no match, it'll instantly stop and return the actual value
+			while( !!(repRes = (new RegExp(".+("+(Object.keys(repTab).join("|"))+")$",'gi')).exec(bare)) ){
+				bare = bare.substr(0, bare.length-repRes[1].length);
+				combin.unshift(this._ship[repTab[repRes[1]]]);
+				delete repTab[repRes[1]];
+				replaced = true;
 			}
-			if( jp_name.substr(jp_name.length-2, 2) == "改二" ){
-				var bare2 = jp_name.substr(0, jp_name.length-2);
-				if(typeof this._ship[bare2] !== "undefined"){
-					this._cache[jp_name] = this._ship[bare2] + " " + this._ship._KaiNi;
-					return this._cache[jp_name];
+			// console.log("Remaining", bare, "with combination", combin.join(" "));
+			if(replaced) {
+				combin.unshift("");
+				// console.log("this._ship", this._ship);
+				// console.log("this._ship[bare]", this._ship[bare]);
+				if(typeof this._ship[bare] !== "undefined"){
+					this._cache[jp_name] = this._ship[bare] + (combin.length > 0 ? combin.join(" ") : "");
+					return this._cache[jp_name] ;
 				}
+				// console.log("this._cache[jp_name]", this._cache[jp_name]);
+				// return this._cache[jp_name]; // being here means the jp_name is not cached. there's already a cache checker at the start of this function
 			}
+			// console.log("returning original:", jp_name);
 			return jp_name;
 		},
 		
@@ -179,7 +210,7 @@ Provides access to data on built-in JSON files
 		},
 		
 		term: function(key) {
-			return this._terms[key] || key;
+			return (ConfigManager.info_troll && this._terms.troll[key]) || this._terms.lang[key] || key;
 		},
 
 		nodeLetter : function(worldId, mapId, edgeId) {
