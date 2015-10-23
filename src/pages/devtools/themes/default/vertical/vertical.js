@@ -433,8 +433,8 @@
 							
 							var SupplyBarMaxWidth = $(".supply-fuel", ShipBox).css("width");
 							SupplyBarMaxWidth = Number(SupplyBarMaxWidth.substring(0, SupplyBarMaxWidth.length-2));
-							$(".supply-fuel .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*FuelPercent)+"px");
-							$(".supply-ammo .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*AmmoPercent)+"px");
+							$(".supply-fuel .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*Math.min(FuelPercent,1))+"px");
+							$(".supply-ammo .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*Math.min(AmmoPercent,1))+"px");
 						}
 					});
 					
