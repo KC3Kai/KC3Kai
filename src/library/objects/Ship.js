@@ -116,8 +116,8 @@ KC3改 Ship Object
 	
 	KC3Ship.prototype.isSupplied = function(){
 		if(this.rosterId===0){ return true; }
-		return this.fuel == this.master().api_fuel_max
-			&& this.ammo == this.master().api_bull_max;
+		return this.fuel >= this.master().api_fuel_max
+			&& this.ammo >= this.master().api_bull_max;
 	};
 	
 	KC3Ship.prototype.isNeedSupply = function(isEmpty){
