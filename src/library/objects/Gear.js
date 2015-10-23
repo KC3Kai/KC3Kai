@@ -62,11 +62,18 @@ KC3改 Equipment Object
 		
 		// Check if this object is a fighter plane
 		if( [6,7,8,11].indexOf( this.master().api_type[2] ) > -1){
+			var typInd = String( this.master().api_type[2] );
+
+			if (typeof ConfigManager.air_average[typInd] == 'undefined') {
+				ConfigManager.resetValueOf('air_average');
+			}
+			var airAverageTable = ConfigManager.air_average[typInd];
+
 			var veteranBonus;
 			if(this.ace==-1){
-			 	veteranBonus = ConfigManager.air_average[ 0 ];
+				veteranBonus = airAverageTable[ 0 ];
 			}else{
-				veteranBonus = ConfigManager.air_average[ this.ace ];
+				veteranBonus = airAverageTable[ this.ace ];
 			}
 			return Math.floor( Math.sqrt(capacity) * this.master().api_tyku + veteranBonus );
 		}
@@ -87,11 +94,16 @@ KC3改 Equipment Object
 		if( [6,7,8,11].indexOf( this.master().api_type[2] ) > -1){
 			console.log("this.ace", this.ace);
 			
+			var typInd = String( this.master().api_type[2] );
+			if (typeof ConfigManager.air_bounds[typInd] == 'undefined') {
+				ConfigManager.resetValueOf('air_bounds');
+			}
+			var airBoundTable = ConfigManager.air_bounds[typInd];
 			var veteranBounds;
 			if(this.ace==-1){
-				veteranBounds = ConfigManager.air_bounds[ 0 ];
+				veteranBounds = airBoundTable[ 0 ];
 			}else{
-				veteranBounds = ConfigManager.air_bounds[ this.ace ];
+				veteranBounds = airBoundTable[ this.ace ];
 			}
 			
 			console.log("ConfigManager.air_bounds",ConfigManager.air_bounds);
