@@ -122,7 +122,8 @@
 					// Number and HQ exp
 					$(".exped_number", ExpedBox).text( ThisExped.mission );
 					$(".exped_exp", ExpedBox).text( ThisExped.admiralXP );
-					
+
+					drumCount = 0;
 					// Ship List
 					for(sctr in ThisExped.fleet){
 						ThisShip = ThisExped.fleet[sctr];
@@ -131,17 +132,15 @@
 						$(".exped_ship_exp", ShipBox).text( ThisExped.shipXP[sctr] );
 						if(ThisShip.morale > 49){ $(".exped_ship_img", ShipBox).addClass("sparkled"); }
 						$(".exped_ships", ExpedBox).append( ShipBox );
+						for (var eId in ThisShip.equip) {
+							if (ThisShip.equip[eId] === 75)
+								++drumCount;
+						}
 					}
-					
-					// Dum count
-					$(".exped_drums", ExpedBox).text( drumCount = ThisExped.fleet[0].equip
-						.concat(ThisExped.fleet[1].equip)
-						.concat(ThisExped.fleet[2].equip)
-						.concat(ThisExped.fleet[3].equip)
-						.filter(function(x){
-							return x===75;
-						}).length );
-					
+
+					// Drum count
+					$(".exped_drums", ExpedBox).text( drumCount );
+
 					// Resource gains
 					for(rctr in ThisExped.data.api_get_material){
 						rctr = parseInt(rctr, 10);
