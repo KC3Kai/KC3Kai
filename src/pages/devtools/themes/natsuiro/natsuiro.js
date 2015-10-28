@@ -175,7 +175,7 @@
 								type: "basic",
 								title: "Fleet Morale Recovered!",
 								message: "Everyone on the \"currently selected fleet\" has recovered from fatigue.",
-								iconUrl: "../../assets/img/ui/morale.jpg"
+								iconUrl: "../../assets/img/ui/morale.png"
 							}
 						})).execute();
 					}
