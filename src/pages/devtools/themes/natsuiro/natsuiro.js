@@ -142,9 +142,12 @@
 
 		/* Expedition Planner
 		--------------------------------------------*/
-		$( ".module.activity .activity_expeditionPlanner .expPlanner_greatSuccess .greatSuccess" )
+		$( ".module.activity .activity_expeditionPlanner .expres_greatbtn" )
 			.on("click",function() {
-				plannerIsGreatSuccess = $(this).is(":checked");
+				plannerIsGreatSuccess = !plannerIsGreatSuccess;
+				
+				$("img", this).attr("src", "../../../../assets/img/ui/btn-"+(plannerIsGreatSuccess?"":"x")+"gs.png");
+				
 				NatsuiroListeners.UpdateExpeditionPlanner();
 			} );
 		

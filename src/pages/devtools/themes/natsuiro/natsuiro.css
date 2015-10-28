@@ -994,8 +994,10 @@ html,body {
 	font-weight:bold;
 	color:#ffcc00;
 }
-/*-------Activity Expedition Planner------*/
 
+
+/* ACTIVITY: Expedition Planner
+------------------------*/
 .module.activity .activity_expeditionPlanner {
     text-align:center;
 }
@@ -1019,17 +1021,17 @@ html,body {
 	border-width:3px;
 }
 
-.module.activity li {
+.module.activity .activity_expeditionPlanner li {
   background: #bfbfbf;
   border-style:solid;
   border-width:1px;
 }
 
-.module.activity li:hover {
+.module.activity .activity_expeditionPlanner li:hover {
   background: gray;
 }
 
-.module.activity  li ul {
+.module.activity .activity_expeditionPlanner  li ul {
 list-style: none;
   display: none;
   position: absolute;
@@ -1040,7 +1042,7 @@ list-style: none;
   width:30%;
 }
 
-.module.activity li ui li{
+.module.activity .activity_expeditionPlanner li ui li{
   display: none;
   position: absolute;
   top: 100%;
@@ -1050,7 +1052,7 @@ list-style: none;
 }
 
 
-.module.activity li ul ul {
+.module.activity .activity_expeditionPlanner li ul ul {
 	top:0%;
 	left:100%;
 	cursor:pointer;
@@ -1067,25 +1069,55 @@ list-style: none;
 	display: block;
 }
 
-.module.activity .activity_expedition .expres_resos {
+.module.activity .activity_expeditionPlanner .expPlanner_timer {
+	margin-bottom:4px;
+}
+
+.module.activity .activity_expeditionPlanner .expPlanner_timer_description {
+    float: left;
+    margin-right: 3px;
+}
+
+
+.module.activity .activity_expeditionPlanner .expPlanner_resos_title {
+    text-align: center;
+    height: 20px;
+    margin-bottom: 2px;
+    display:none;
+}
+.module.activity .activity_expeditionPlanner .expres_resos {
 	width:170px;
-	/*background:#cfc;*/
-	height:36px;
-	line-height:16px;
-	margin:0px 0px 5px 0px;
+    height: 40px;
+    margin-bottom:3px;
+    display:inline-block;
 }
 .module.activity .activity_expeditionPlanner .expres_divHF {/* divide half */
 	display:inline-block;
-	/* width:85px; */
+	width:65px;
+	height:40px;
 	float:left;
 	/* text-align: center; */
+	/*background:#fcc;*/
+}
+.module.activity .activity_expeditionPlanner .expres_greatbtn {
+	width:40px;
+	/*background:#cfc;*/
+	float:left;
+	height:40px;
+	line-height:40px;
+}
+.module.activity .activity_expeditionPlanner .expres_greatbtn img {
+	width:40px;
+	height:40px;
+	/*margin:2px;
+	vertical-align:top;*/
 }
 .module.activity .activity_expeditionPlanner .expres_reso {
 	float:left;
 	/*background:#fcc;*/
 	height:16px;
 	line-height:16px;
-	margin: 0px 20px 6px 0px;
+	margin: 0px 0px 6px 0px;
 }
 .module.activity .activity_expeditionPlanner .expres_icon {
 	width:16px;
@@ -1094,114 +1126,40 @@ list-style: none;
 	margin:0px 9px 0px 0px;
 	/*background:#fcf;*/
 }
+.module.activity .activity_expeditionPlanner .expres_icon img {
+	width:16px;
+	height:16px;
+	vertical-align: top;
+}
 .module.activity .activity_expeditionPlanner .expres_amt {
 	width: 30px;
 	height:16px;
 	float:left;
-	/* background:#ccf; */
 	font-size:12px;
 	color:#fff;
-	padding-top: 3px;
+	text-align:left;
 }
 
-.module.activity .activity_expeditionPlanner .expres_items {
-	width:170px;
-	height:20px;
-	margin:0px 0px 3px 0px;
-}
-.module.activity .activity_expeditionPlanner .expres_get {
-	max-width:100px;
-	height:20px;
-	line-height:20px;
-	font-size:12px;
-	color:#fff;
-	float:left;
-	margin:0px 5px 0px 0px;
-}
-.module.activity .activity_expeditionPlanner .expres_noget {
-	height:20px;
-	line-height:20px;
-	font-size:12px;
-	color:#faa;
-	float:left;
-	display:none;
-}
-.module.activity .activity_expeditionPlanner .expres_item {
-	width:35px;
-	height:20px;
-	line-height:20px;
-	float:left;
-	margin:0px 5px 0px 0px;
-}
-.module.activity .activity_expeditionPlanner .expres_item_icon {
-	width:16px;
-	height:16px;
-	float:left;
-	margin:0px 2px 0px 0px;
-}
-.module.activity .activity_expeditionPlanner .expres_item_icon img {
-	width:16px;
-	height:16px;
-	margin:2px 0px;
-	vertical-align:top;
-}
-.module.activity .activity_expeditionPlanner .expres_item_text {
-	width:17px;
-	height:20px;
-	float:left;
-	font-size:12px;
-	color:#fff;
-}
-
-.expPlanner_timer{
-	margin-bottom:4px;
-}
-
-.expPlanner_timer_description {
-    float: left;
-    margin-right: 3px;
-}
-
-.expPlanner_resos_title {
-    text-align: center;
-    height: 20px;
-    margin-bottom: 2px;
-    display:none;
-}
-
-.expres_resos {
-    height: 40px;
-    margin-bottom:3px;
-    display:inline-block;
-    width: 150px;
-}
-
-.expPlanner_requirements {
+.module.activity .activity_expeditionPlanner .expPlanner_requirements {
     margin-bottom:4px;
 }
-
-.expPlanner_checker_criterias {
+.module.activity .activity_expeditionPlanner .expPlanner_checker_criterias {
 	margin-bottom:3px;
 }
-
-.expPlanner_shipReqBox{
+.module.activity .activity_expeditionPlanner .expPlanner_shipReqBox {
 	margin-right:10px;
 }
-
 .module.activity .activity_expeditionPlanner .requirements_textbox{
 	display:inline-block;	
 }
-
 .module.activity .activity_expeditionPlanner .expPlanner_text{	
 	font-size: 14px;
 	color:#ccc
 }
-
 .module.activity .activity_expeditionPlanner .expPlanner_text_passed{	
 	font-size: 14px;
 	color:#00CC00
 }
-
 .module.activity .activity_expeditionPlanner .expPlanner_text_failed{	
 	font-size: 14px;
 	color:#FF5555
