@@ -8,6 +8,8 @@
 	
 	// Interface values
 	var selectedFleet = 1;
+	var selectedExpedition = 1;
+	var plannerIsGreatSuccess = false;
 	
 	// Auto Focus Overriding
 	var overrideFocus = false;
@@ -133,7 +135,13 @@
 				)));
 		});
 		
-    
+		// toggle expedition planner "great success" flag
+		$( ".module.activity .activity_expeditionPlanner .expPlanner_greatSuccess .greatSuccess" )
+			.on("click",function() {
+				plannerIsGreatSuccess = $(this).is(":checked");
+				NatsuiroListeners.UpdateExpeditionPlanner();
+			} );
+
 		/* Code for generating deckbuilder style JSON data.
 		--------------------------------------------*/
 		function generate_fleet_JSON(fleet) {
@@ -180,8 +188,18 @@
 		});
 		$(".module.activity .activity_tab.active").trigger("click");
 		
+		
 		$(".module.activity .activity_dismissable").on("click", function(){
 			$("#atab_basic").trigger("click");
+		});
+		
+		// Expedition Planner
+		$(".expedition_entry").on("click",function(){
+			//The keys are converted to lowercase. 
+			$(".dropdown_title").text("Expedition #"+$(this).data("expid"));
+			selectedExpedition = $(this).data("expid");
+			//console.log("selected Exped "+selectedExpedition);
+			NatsuiroListeners.UpdateExpeditionPlanner();
 		});
 		
 		// Fleet selection
@@ -189,8 +207,11 @@
 			$(".module.controls .fleet_num").removeClass("active");
 			$(".module.controls .fleet_rengo").removeClass("active");
 			$(this).addClass("active");
+			console.log($(this).text());
 			selectedFleet = parseInt( $(this).text(), 10);
+			console.log(selectedFleet);
 			NatsuiroListeners.Fleet();
+			NatsuiroListeners.UpdateExpeditionPlanner();
 		});
 		
 		// Combined Fleet button
@@ -738,6 +759,7 @@
 				}
 			});
 			
+			NatsuiroListeners.UpdateExpeditionPlanner();
 		},
 		
 		SortieStart: function(data){
@@ -1368,6 +1390,255 @@
 			$(".module.activity .activity_box").hide();
 			$(".module.activity .activity_expedition").fadeIn(500);
 		},
+
+		UpdateExpeditionPlanner: function (data) {
+			var allShips = [];
+			var fleetObj = PlayerManager.fleets[selectedFleet-1];
+			//fleets' subsripts start from 0 !
+			$.each(PlayerManager.fleets[selectedFleet-1].ships, function(index, rosterId) {
+				if (rosterId > -1) {
+					var CurrentShip = KC3ShipManager.get(rosterId);
+					if (CurrentShip.masterId > 0) {
+						allShips.push(CurrentShip);
+
+					}
+				}
+			});
+			if (allShips.length > 0) {
+				var PS = window.PS;
+				var KE = PS["KanColle.Expedition"];
+				var KER = PS["KanColle.Expedition.Requirement"];
+				var KEC = PS["KanColle.Expedition.Cost"];
+				var KERO = PS["KanColle.Expedition.RequirementObject"];
+				var ST = PS["KanColle.Generated.SType"];
+
+				var allShipsForLib = allShips.map(function(CurrentShip, ind) {
+					var shipInst = CurrentShip;
+					var shipModel = CurrentShip.master();
+					var stypeId = shipModel.api_stype;
+					var stype = ST.showSType(ST.fromInt(stypeId));
+					var level = shipInst.level;
+					var drumCount = 0;
+					$.each(shipInst.items, function(ind, gear_id) {
+						var thisItem = KC3GearManager.get(gear_id);
+						if (thisItem) {
+							var model = KC3Master.slotitem(thisItem.masterId);
+							if (model.api_id == 75)
+								++drumCount;
+						}
+					});
+					return {
+						ammo : 0,
+						morale : 0,
+						stype : stype,
+						level : level,
+						drumCount : drumCount
+					};
+				});
+
+				var fleet = KER.fromRawFleet(allShipsForLib);
+				var unsatRequirements = KER.unsatisfiedRequirements(selectedExpedition)(fleet);
+
+				//Don't forget to use KERO.*ToObject to convert raw data to JS friendly objs
+				var rawExpdReqPack = KERO.getExpeditionRequirementPack(selectedExpedition);
+				
+				var ExpdReqPack = KERO.requirementPackToObj(rawExpdReqPack);
+				// console.log(JSON.stringify(ExpdReqPack));
+				var ExpdCheckerResult = KERO.resultPackToObject(KERO.checkWithRequirementPack(rawExpdReqPack)(fleet));
+				// console.log(JSON.stringify(ExpdCheckerResult));
+				var ExpdCost = KEC.getExpeditionCost(selectedExpedition);
+				var KEIB = PS["KanColle.Expedition.IncomeBase"];
+				var ExpdIncome = KEIB.getExpeditionIncomeBase(selectedExpedition);
+				var ExpdFleetCost = fleetObj.calcExpeditionCost( selectedExpedition );
+
+				var numLandingCrafts = fleetObj.countLandingCrafts();
+				if (numLandingCrafts > 4)
+					numLandingCrafts = 4;
+				var landingCraftFactor = 0.05*numLandingCrafts + 1;
+				var greatSuccessFactor = plannerIsGreatSuccess ? 1.5 : 1;
+
+				$(".module.activity .activity_expeditionPlanner .estimated_time").text( String( 60*ExpdCost.time ).toHHMMSS() );
+
+				var resourceRoot = $(".module.activity .activity_expeditionPlanner .expres_resos");
+				$.each(["fuel","ammo","steel","bauxite"], function(i,v) {
+					var incomeVal = Math.floor( ExpdIncome[v] * landingCraftFactor * greatSuccessFactor );
+					var jqObj = $( "."+v, resourceRoot );
+					var netResourceIncome = incomeVal;
+					if (v === "fuel" || v === "ammo") {
+						netResourceIncome -= ExpdFleetCost[v];
+					}
+
+					var tooltipText = String(ExpdIncome[v]);
+					if (landingCraftFactor > 1)
+						tooltipText += "*" + String(landingCraftFactor);
+					if (greatSuccessFactor > 1)
+						tooltipText += "*" + String(greatSuccessFactor);
+					if (v === "fuel" || v === "ammo") {
+						tooltipText += "-" + String(ExpdFleetCost[v]);
+					}
+
+					jqObj.text( netResourceIncome );
+					jqObj.attr( 'title', tooltipText );
+				});
+
+				var markFailed = function (jq) {
+					jq.addClass("expPlanner_text_failed").removeClass("expPlanner_text_passed");
+					return jq;
+				};
+				var markPassed = function (jq) {
+					jq.removeClass("expPlanner_text_failed").addClass("expPlanner_text_passed");
+					return jq;
+				};
+
+				// dataReq: like dataResult
+				// dataResult: dataResult of ExpdCheckerResult fields, where
+				//		 null: should hide jq obj
+				//		 false: check failed
+				//		 true: check passed
+				//		 <other values>: no effect
+				// jq: the jq object
+				// postActions: (optional) call postActions(dataReq,dataResult,jq) perform actions after jq object is properly set.
+				//				note that postActions is only called if the requirement is not null
+				//				the default action is setting the requirement to jq text
+				var setupJQObject = function( dataReq, dataResult, jq, postActions ) {
+					if (dataReq === null) {
+						jq.hide();
+					} else {
+						jq.show();
+						if (dataResult === false) {
+							// when this condition is not met
+							markFailed( jq );
+						} else if (dataResult === true) {
+							// when this condition is met
+							markPassed( jq );
+						}
+						var setJQText = function( dataReq, dataResult, jq ) { jq.text( dataReq ); };										
+						postActions = postActions || setJQText;
+						postActions( dataReq, dataResult, jq );
+					}
+				};
+                
+				setupJQObject(
+					ExpdReqPack.flagShipLevel,
+					ExpdCheckerResult.flagShipLevel,
+					$(".module.activity .activity_expeditionPlanner .flagshipLv"));
+
+				
+				setupJQObject(
+					ExpdReqPack.flagShipTypeOf,
+					ExpdCheckerResult.flagShipTypeOf,
+					$(".module.activity .activity_expeditionPlanner .flagshipType"));
+
+				setupJQObject(
+					ExpdReqPack.shipCount,
+					ExpdCheckerResult.shipCount,
+					$(".module.activity .activity_expeditionPlanner .shipNum"));
+
+				setupJQObject(
+					ExpdReqPack.levelCount,
+					ExpdCheckerResult.levelCount,
+					$(".module.activity .activity_expeditionPlanner .fleetLv"));
+				if (ExpdReqPack.levelCount === null) {
+					$(".module.activity .activity_expeditionPlanner .hasTotalLv").hide();
+				} else {
+					$(".module.activity .activity_expeditionPlanner .hasTotalLv").show();
+				}
+
+				setupJQObject(
+					ExpdReqPack.fleetSType,
+					ExpdCheckerResult.fleetSType,
+					$( ".module.activity .activity_expeditionPlanner .expPlanner_req_fleetComposition" ),
+					function ( dataReq, dataResult, jq ) {
+						jq.html( "" );
+						$.each( dataReq, function(index, value){
+							var shipReqBox = $("#factory .expPlanner_shipReqBox")
+								.clone()
+								.appendTo( jq );
+							shipReqBox.text(dataReq[index].stypeOneOf+":"+dataReq[index].stypeReqCount);
+							if (dataResult[index] === false) {
+								markFailed( shipReqBox );
+							} else if (dataResult[index] === true) {
+								markPassed( shipReqBox );
+							}
+						});
+					});
+
+				setupJQObject(
+					ExpdReqPack.drumCount,
+					ExpdCheckerResult.drumCount,
+					$( ".module.activity .activity_expeditionPlanner .canisterNum" ));
+
+				setupJQObject(
+					ExpdReqPack.drumCarrierCount,
+					ExpdCheckerResult.drumCarrierCount,
+					$( ".module.activity .activity_expeditionPlanner .canisterShipNum" ));
+				if (ExpdReqPack.drumCount === null &&
+					ExpdReqPack.drumCarrierCount === null) {
+					$( ".module.activity .activity_expeditionPlanner .canister_criterias" ).hide();
+				} else {
+					$( ".module.activity .activity_expeditionPlanner .canister_criterias" ).show();
+				}
+
+				if (unsatRequirements.length === 0) {
+					// all requirements are satisfied
+					$( ".module.activity .activity_expeditionPlanner .icon.allReq" ).show();
+
+					markPassed( $(".module.activity .activity_expeditionPlanner .text.allReq") );
+				} else {
+					$( ".module.activity .activity_expeditionPlanner .icon.allReq" ).hide();
+					markFailed( $(".module.activity .activity_expeditionPlanner .text.allReq") );
+				}
+
+				/*
+				 *
+				 * Sample result for ExpdReqPack and ExpdCheckerResult on expedition 21#
+				 *
+				 * {  
+					  "flagShipLevel":15,
+					  "shipCount":5,
+					  "flagShipTypeOf":null,
+					  "levelCount":30,
+					  "drumCount":null,
+					  "drumCarrierCount":3,
+					  "fleetSType":[  
+					    {  
+					      "stypeReqCount":1,
+					      "stypeOneOf":[  
+					        "CL"
+					      ]
+					    },
+					    {  
+					      "stypeReqCount":4,
+					      "stypeOneOf":[  
+					        "DD"
+					      ]
+					    }
+					  ]
+					}
+					---------------------
+					{  
+					  "flagShipLevel":true,
+					  "shipCount":false,
+					  "flagShipTypeOf":null,
+					  "levelCount":true,
+					  "drumCount":null,
+					  "drumCarrierCount":false,
+					  "fleetSType":[  
+					    true,
+					    false
+					  ]
+					}					
+				 */
+				
+				// var demoResult =
+				//    KER.explainRequirements( KER.unsatisfiedRequirements(38)(fleet) );
+				// alert( JSON.stringify( demoResult ) );
+				
+				
+			} else {
+				return "No ship";
+			}
+		},
 	};
 	
 	function updateHQEXPGained(ele,newDelta) {
@@ -1423,5 +1694,4 @@
 			}
 		});
 	}
-	
 })();

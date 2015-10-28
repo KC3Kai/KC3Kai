@@ -34,9 +34,142 @@
 				<div class="activity_tabs">
 					<div id="atab_basic" class="activity_tab hover active i18n" data-target="basic">Basic</div>
 					<div id="atab_battle" class="activity_tab hover i18n" data-target="battle">Battle</div>
+					<div id="atab_expeditionPlanner" class="activity_tab hover i18n" data-target="expeditionPlanner">Exped</div>
 					<div id="atab_activity" class="activity_tab i18n" data-target="">Activity</div>
 				</div>
 				<div class="activity_body">
+					<div class="activity_box activity_expeditionPlanner">
+						<div class="expPlan_dropdown_menu">
+							<li class="expPlan_dropdown_title">
+								<div class="dropdown_title">Expedition #1</div>
+								<ul class="expPlan_dropdown_topEntry">
+									<li>1-8
+										<ul>
+											<li class="expedition_entry" data-expId = 1>1</li>
+											<li class="expedition_entry" data-expId = 2>2</li>
+											<li class="expedition_entry" data-expId = 3>3</li>
+											<li class="expedition_entry" data-expId = 4>4</li>
+											<li class="expedition_entry" data-expId = 5>5</li>
+											<li class="expedition_entry" data-expId = 6>6</li>
+											<li class="expedition_entry" data-expId = 7>7</li>
+											<li class="expedition_entry" data-expId = 8>8</li>
+										</ul>	
+									</li>
+									<li>9-16
+										<ul>
+											<li class="expedition_entry" data-expId = 9>9</li>
+											<li class="expedition_entry" data-expId = 10>10</li>
+											<li class="expedition_entry" data-expId = 11>11</li>
+											<li class="expedition_entry" data-expId = 12>12</li>
+											<li class="expedition_entry" data-expId = 13>13</li>
+											<li class="expedition_entry" data-expId = 14>14</li>
+											<li class="expedition_entry" data-expId = 15>15</li>
+											<li class="expedition_entry" data-expId = 16>16</li>
+										</ul>	
+									</li>
+									<li>17-24
+										<ul>
+											<li class="expedition_entry" data-expId = 17>17</li>
+											<li class="expedition_entry" data-expId = 18>18</li>
+											<li class="expedition_entry" data-expId = 19>19</li>
+											<li class="expedition_entry" data-expId = 20>20</li>
+											<li class="expedition_entry" data-expId = 21>21</li>
+											<li class="expedition_entry" data-expId = 22>22</li>
+											<li class="expedition_entry" data-expId = 23>23</li>
+											<li class="expedition_entry" data-expId = 24>24</li>
+										</ul>	
+									</li>
+									<li>25-32
+										<ul>
+											<li class="expedition_entry" data-expId = 25>25</li>
+											<li class="expedition_entry" data-expId = 26>26</li>
+											<li class="expedition_entry" data-expId = 27>27</li>
+											<li class="expedition_entry" data-expId = 28>28</li>
+											<li class="expedition_entry" data-expId = 29>29</li>
+											<li class="expedition_entry" data-expId = 30>30</li>
+											<li class="expedition_entry" data-expId = 31>31</li>
+											<li class="expedition_entry" data-expId = 32>32</li>
+										</ul>	
+									</li>
+									<li>35-40
+										<ul>
+											<li class="expedition_entry" data-expId = 35>35</li>
+											<li class="expedition_entry" data-expId = 36>36</li>
+											<li class="expedition_entry" data-expId = 37>37</li>
+											<li class="expedition_entry" data-expId = 38>38</li>
+											<li class="expedition_entry" data-expId = 39>39</li>
+											<li class="expedition_entry" data-expId = 40>40</li>
+										</ul>	
+									</li>
+								</ul>
+							</li>
+						</div>
+						<div class="expPlanner_timer">
+							<div class="expPlanner_timer_description expPlanner_text">Estimated Time</div>
+							<div class="expPlanner_text estimated_time">99:99:99</div>
+						</div>
+                                                <!--
+						<div class="expPlanner_greatSuccess">
+                                                  <label>
+						    <input type="checkbox" class="expPlanner_text greatSuccess"> Great Success
+                                                  </label>
+						</div>
+                                                -->
+						<div class="expPlanner_resos_title expPlanner_text">Net Income</div>
+						<div class="expres_resos">
+							<div class="expres_divHF">
+								<div class="expres_reso">
+									<div class="expres_icon"><img src="../../../../assets/img/client/fuel.png"></div>
+									<div class="expres_amt fuel">123</div>
+								</div>
+								<div class="expres_reso">
+									<div class="expres_icon"><img src="../../../../assets/img/client/steel.png"></div>
+									<div class="expres_amt steel">456</div>
+								</div>
+								<div class="clear"></div>
+							</div>
+							<div class="expres_divHF">
+								<div class="expres_reso">
+									<div class="expres_icon"><img src="../../../../assets/img/client/ammo.png"></div>
+									<div class="expres_amt ammo">789</div>
+								</div>
+								<div class="expres_reso">
+									<div class="expres_icon"><img src="../../../../assets/img/client/bauxite.png"></div>
+									<div class="expres_amt bauxite">lol</div>
+								</div>
+								<div class="clear"></div>
+							</div>
+						</div>
+						<div class="expPlanner_requirements">
+							<div class="expPlanner_checker_criterias">
+								<div class="requirements_textbox expPlanner_text">Flagship:level</div>
+								<div class="requirements_textbox expPlanner_text_passed flagshipLv">65</div>
+								<div class="requirements_textbox expPlanner_text_passed flagshipType">DD</div>
+							</div>
+							<div class="expPlanner_checker_criterias">
+								<div class="expPlanner_text requirements_textbox">Fleet:</div>
+								<div class="shipNum requirements_textbox expPlanner_text_passed">6</div>
+								<div class="expPlanner_text requirements_textbox ">ships</div>
+                                                                <div class="expPlanner_text requirements_textbox hasTotalLv">, total lv </div>
+								<div class="fleetLv requirements_textbox expPlanner_text_passed hasTotalLv">65</div>
+								<div class="expPlanner_req_fleetComposition">
+									<div class="requirements_textbox expPlanner_text_passed">1CV/CVL/AV</div>
+									<div class="requirements_textbox expPlanner_text_failed">1CA</div>
+									<div class="requirements_textbox expPlanner_text_passed">2DD</div>
+								</div>
+							</div>
+							<div class="expPlanner_checker_criterias canister_criterias">
+								<div class="canisterNum expPlanner_text_passed requirements_textbox">6</div>
+								<div class="expPlanner_text requirements_textbox">canisters on </div>
+								<div class="canisterShipNum expPlanner_text_failed requirements_textbox">4</div>
+								<div class="expPlanner_text requirements_textbox">ships</div>
+							</div>
+						</div>
+						<div class="expPlanner_checker">
+							<div class="requirements_textbox icon allReq"><img src="../../../../assets/img/ui/check.png"></div>
+							<div class="requirements_textbox expPlanner_text_failed text allReq">Check requirements</div>
+						</div>
+					</div>
 					<!-- BASIC: Consumables and Timers -->
 					<div class="activity_box activity_basic">
 						<div class="consumables">
@@ -618,13 +751,16 @@
 					<div class="ship_bar ship_ammo"></div>
 				</div>
 			</div>
-			
 			<!-- Equipment stats -->
 			<div class="equipStat">
 				<div class="equipStatIcon"><img/></div>
 				<div class="equipStatText"></div>
 				<div class="clear"></div>
 			</div>
+			
+			<!-- Ship requirement for expedition checker -->
+			<div class="expPlanner_shipReqBox requirements_textbox expPlanner_text_passed"></div>
+			
 		</div>
 		
 		
