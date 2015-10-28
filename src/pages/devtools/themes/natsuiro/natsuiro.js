@@ -347,7 +347,7 @@
 		$(".module.activity .battle_eformation").attr("title", "");
 		$(".module.activity .battle_eformation").css("-webkit-transform", "rotate(0deg)");
 		$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support.png");
-		$(".module.activity .battle_fish img").attr("src", "../../../../assets/img/client/pike-x.png");
+		// $(".module.activity .battle_fish img").attr("src", "../../../../assets/img/client/pike-x.png");
 		$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
 		$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/ui/dark_rating.png");
 		$(".module.activity .battle_drop img").attr("src", "../../../../assets/img/ui/dark_shipdrop.png");
@@ -392,13 +392,12 @@
 		},
 		
 		Consumables: function(data){
-			// $(".count_fcoin").text( PlayerManager.consumables.fcoin );
+			$(".count_fcoin").text( PlayerManager.consumables.fcoin );
 			$(".count_buckets").text( PlayerManager.consumables.buckets );
 			$(".count_screws").text( PlayerManager.consumables.screws );
-			// $(".count_torch").text( PlayerManager.consumables.torch );
-			
-			$(".count_pike").text( PlayerManager.consumables.pike || "?" );
-			$(".count_saury").text( PlayerManager.consumables.saury || "?" );
+			$(".count_torch").text( PlayerManager.consumables.torch );
+			// $(".count_pike").text( PlayerManager.consumables.pike || "?" );
+			// $(".count_saury").text( PlayerManager.consumables.saury || "?" );
 		},
 		
 		ShipSlots: function(data){
@@ -815,8 +814,8 @@
 			$(".module.activity .node_types").hide();
 			
 			// Swap fish and support icons
-			$(".module.activity .battle_fish").hide();
-			$(".module.activity .battle_support").show();
+			// $(".module.activity .battle_fish").hide();
+			// $(".module.activity .battle_support").show();
 			
 			console.log("natsuiro process node", thisNode);
 			switch(thisNode.type){
@@ -951,8 +950,8 @@
 			$(".module.activity .battle_contact").text(thisNode.fcontact +" vs "+thisNode.econtact);
 			
 			// Swap fish and support icons
-			$(".module.activity .battle_fish").hide();
-			$(".module.activity .battle_support").show();
+			// $(".module.activity .battle_fish").hide();
+			// $(".module.activity .battle_support").show();
 			
 			// Day battle-only environment
 			if(!thisNode.startNight){
@@ -1046,13 +1045,13 @@
 				"../../../../assets/img/client/ratings/"+thisNode.rating+".png");
 			
 			// If there is a FISH drop
-			$(".module.activity .battle_support").hide();
+			/*$(".module.activity .battle_support").hide();
 			if(typeof data.api_get_useitem != "undefined"){
 				if(data.api_get_useitem.api_useitem_id == 68){
 					$(".module.activity .battle_fish img").attr("src", "../../../../assets/img/client/pike.png");
 				}
 			}
-			$(".module.activity .battle_fish").show();
+			$(".module.activity .battle_fish").show();*/
 			
 			// If there is a ship drop
 			if(thisNode.drop > 0){
@@ -1156,8 +1155,8 @@
 			$(".module.activity .battle_drop    img").attr("src", "../../../../assets/img/ui/dark_shipdrop-x.png").css("visibility","hidden");
 			
 			// Swap fish and support icons
-			$(".module.activity .battle_fish").hide();
-			$(".module.activity .battle_support").show();
+			// $(".module.activity .battle_fish").hide();
+			// $(".module.activity .battle_support").show();
 			
 			// Enemy Formation
 			if((typeof thisPvP.eformation != "undefined") && (thisPvP.eformation > -1)){
