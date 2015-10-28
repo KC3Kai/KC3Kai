@@ -19,6 +19,11 @@
 	var critSound = new Audio("../../../../assets/snd/heart.mp3");
 	critSound.loop = true;
 	
+	// Morale Timer
+	var moraleClockValue = 100;
+	var moraleClockEnd = 0;
+	var moraleClockRemain = 0;
+	
 	$(document).on("ready", function(){
 		// Check localStorage
 		if(!window.localStorage){
@@ -134,14 +139,62 @@
 						})
 				)));
 		});
-		
-		// toggle expedition planner "great success" flag
+
+		/* Expedition Planner
+		--------------------------------------------*/
 		$( ".module.activity .activity_expeditionPlanner .expPlanner_greatSuccess .greatSuccess" )
 			.on("click",function() {
 				plannerIsGreatSuccess = $(this).is(":checked");
 				NatsuiroListeners.UpdateExpeditionPlanner();
 			} );
-
+		
+		
+		/* Morale timers
+		- use end time difference not remaining decrements for accuracy against lag
+		--------------------------------------------*/
+		setInterval(function(){
+			// console.log(moraleClockValue, moraleClockEnd, moraleClockRemain);
+			if(moraleClockEnd > 0){
+				moraleClockRemain = Math.ceil( (moraleClockEnd - (new Date()).getTime())/1000);
+				if(moraleClockRemain > 0){
+					$(".module.status .status_morale .status_text").text("~"+(moraleClockRemain+"").toHHMMSS());
+					
+				}else{
+					moraleClockValue = 100;
+					moraleClockEnd = 0;
+					moraleClockRemain = 0;
+					$(".module.status .status_morale .status_text").text("Recovered");
+					
+					// Morale Notification
+					if(ConfigManager.alert_morale_notif){
+						// Play sound
+						if(KC3TimerManager.notifSound){ KC3TimerManager.notifSound.pause(); }
+						switch(ConfigManager.alert_type){
+							case 1: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/pop.mp3"); break;
+							case 2: KC3TimerManager.notifSound = new Audio(ConfigManager.alert_custom); break; 
+							case 3: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/ding.mp3"); break; 
+							default: KC3TimerManager.notifSound = false; break;
+						}
+						if(KC3TimerManager.notifSound){
+							KC3TimerManager.notifSound.volume = ConfigManager.alert_volume / 100;
+							KC3TimerManager.notifSound.play();
+						}
+						// Desktop notif regardless of settings, we consider Morale Notif as "yes"
+						(new RMsg("service", "notify_desktop", {
+							notifId: "morale",
+							data: {
+								type: "basic",
+								title: "Fleet Morale Recovered!",
+								message: "Everyone on the \"currently selected fleet\" has recovered from fatigue.",
+								iconUrl: "../../assets/img/ui/morale.png"
+							}
+						})).execute();
+					}
+				}
+			}
+		}, 1000);
+		
+		
 		/* Code for generating deckbuilder style JSON data.
 		--------------------------------------------*/
 		function generate_fleet_JSON(fleet) {
@@ -653,14 +706,24 @@
 				if( FleetSummary.lowestMorale > 54 ){
 					$(".module.status .status_morale .status_text").text( KC3Meta.term("PanelGreatMorale") );
 					$(".module.status .status_morale .status_text").addClass("good");
+					moraleClockValue = 100;
+					moraleClockEnd = 0;
 				}else if( FleetSummary.lowestMorale >= ConfigManager.alert_morale_value ){
 					$(".module.status .status_morale .status_text").text( KC3Meta.term("PanelGoodMorale") );
 					$(".module.status .status_morale .status_text").addClass("good");
+					moraleClockValue = 100;
+					moraleClockEnd = 0;
 				}else{
 					var MissingMorale = ConfigManager.alert_morale_value - FleetSummary.lowestMorale;
 					var MoraleTime = (Math.ceil(MissingMorale/3)*3)*60;
-					$(".module.status .status_morale .status_text").text(String(MoraleTime).toHHMMSS());
 					$(".module.status .status_morale .status_text").addClass("bad");
+					
+					if(FleetSummary.lowestMorale != moraleClockValue){
+						// console.log("new morale time", FleetSummary.lowestMorale, MoraleTime);
+						moraleClockValue = FleetSummary.lowestMorale;
+						moraleClockEnd = (new Date()).getTime() + (MoraleTime*1000);
+					}
+					
 				}
 				
 				// STATUS: MORALE ICON (independent from notification status)
