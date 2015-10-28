@@ -155,16 +155,29 @@
 					$(".module.status .status_morale .status_text").text("Recovered");
 					
 					// Morale Notification
-					if(KC3TimerManager.notifSound){ KC3TimerManager.notifSound.pause(); }
-					switch(ConfigManager.alert_type){
-						case 1: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/pop.mp3"); break;
-						case 2: KC3TimerManager.notifSound = new Audio(ConfigManager.alert_custom); break; 
-						case 3: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/ding.mp3"); break; 
-						default: KC3TimerManager.notifSound = false; break;
-					}
-					if(KC3TimerManager.notifSound){
-						KC3TimerManager.notifSound.volume = ConfigManager.alert_volume / 100;
-						KC3TimerManager.notifSound.play();
+					if(ConfigManager.alert_morale_notif){
+						// Play sound
+						if(KC3TimerManager.notifSound){ KC3TimerManager.notifSound.pause(); }
+						switch(ConfigManager.alert_type){
+							case 1: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/pop.mp3"); break;
+							case 2: KC3TimerManager.notifSound = new Audio(ConfigManager.alert_custom); break; 
+							case 3: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/ding.mp3"); break; 
+							default: KC3TimerManager.notifSound = false; break;
+						}
+						if(KC3TimerManager.notifSound){
+							KC3TimerManager.notifSound.volume = ConfigManager.alert_volume / 100;
+							KC3TimerManager.notifSound.play();
+						}
+						// Desktop notif regardless of settings, we consider Morale Notif as "yes"
+						(new RMsg("service", "notify_desktop", {
+							notifId: "morale",
+							data: {
+								type: "basic",
+								title: "Fleet Morale Recovered!",
+								message: "Everyone on the \"currently selected fleet\" has recovered from fatigue.",
+								iconUrl: "../../assets/img/ui/morale.jpg"
+							}
+						})).execute();
 					}
 				}
 			}
