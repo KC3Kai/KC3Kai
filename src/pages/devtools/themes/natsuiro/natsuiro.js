@@ -526,6 +526,7 @@
 					akashi:
 						Math.max(MainRepairs.akashi,EscortRepairs.akashi),
 					hasTaiha: MainFleet.hasTaiha() || EscortFleet.hasTaiha(),
+					taihaIndexes: MainFleet.getTaihas().concat( EscortFleet.getTaihas() ),
 					supplied: MainFleet.isSupplied() && EscortFleet.isSupplied(),
 					badState: [
 						MainFleet.needsSupply(false)|| EscortFleet.needsSupply(false),
@@ -569,14 +570,15 @@
 					docking: MainRepairs.docking,
 					akashi: MainRepairs.akashi,
 					hasTaiha: CurrentFleet.hasTaiha(),
+					taihaIndexes: CurrentFleet.getTaihas(),
 					supplied: CurrentFleet.isSupplied(),
 					badState: [
 						CurrentFleet.needsSupply(false) ||
 						(!(KC3SortieManager.onSortie && KC3SortieManager.fleetSent == selectedFleet)
-						&& !CurrentFleet.isSupplied() && ConfigManager.alert_supply_exped && selectedFleet > 1 && selectedFleet < 5),
-						CurrentFleet.needsSupply(true),
-						CurrentFleet.ship(0).isTaiha(),
-						false
+						&& !CurrentFleet.isSupplied() && ConfigManager.alert_supply_exped && selectedFleet > 1 && selectedFleet < 5),//0
+						CurrentFleet.needsSupply(true),//1
+						CurrentFleet.ship(0).isTaiha(),//2
+						false//3
 					],
 					lowestMorale: CurrentFleet.lowestMorale(),
 					supportPower: CurrentFleet.supportPower()
@@ -653,7 +655,10 @@
 				}
 				
 				// STATUS: TAIHA
-				if( FleetSummary.hasTaiha || FleetSummary.badState[2] || FleetSummary.badState[3] ){
+				if( (FleetSummary.hasTaiha || FleetSummary.badState[2] || FleetSummary.badState[3])
+					&& !FleetSummary.taihaIndexes.equals([0]) // if not flagship only
+					&& !FleetSummary.taihaIndexes.equals([0,0]) // if not flagship only for combined
+				){
 					$(".module.status .status_repair .status_text").text( KC3Meta.term(
 						(FleetSummary.badState[2] ? "PanelFSTaiha" : (FleetSummary.badState[3] ? "PanelEscortChuuha" : "PanelHasTaiha"))
 					) );

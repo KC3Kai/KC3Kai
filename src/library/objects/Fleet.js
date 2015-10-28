@@ -186,6 +186,16 @@ Contains summary information about a fleet and its 6 ships
 			|| this.ship(5).isTaiha();
 	};
 	
+	KC3Fleet.prototype.getTaihas = function(){
+		var taihaIndexes = [];
+		for(var sctr in this.ships){
+			if(this.ship(sctr).isTaiha()){
+				taihaIndexes.push(sctr);
+			}
+		}
+		return taihaIndexes;
+	};
+	
 	KC3Fleet.prototype.isSupplied = function(){
 		return this.ship(0).isSupplied()
 			&& this.ship(1).isSupplied()
