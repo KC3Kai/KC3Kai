@@ -186,17 +186,32 @@ KC3改 Ship Object
 		if(this.items[3] > -1){ MyNakedLos -= this.equipment(3).master().api_saku; }
 		return MyNakedLos;
 	};
+
+	/* COUNT EQUIPMENT
+	Get number of equipments of a specific masterId
+	--------------------------------------------------------------*/
+	KC3Ship.prototype.countEquipment = function(masterId) {
+		var self = this;
+		var getEquip = function(slotInd) {
+			var eId = self.equipment(slotInd);
+			return (eId.masterId === masterId) ? 1 : 0;
+		};
+		return [0,1,2,3].map( getEquip ).reduce(
+			function(a,b) { return a + b; }, 0 );
+	};
 	
 	/* COUNT DRUMS
 	Get number of drums held
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.countDrums = function(){
-		var DrumCount = 0;
-		DrumCount += (this.equipment(0).masterId == 75)?1:0;
-		DrumCount += (this.equipment(1).masterId == 75)?1:0;
-		DrumCount += (this.equipment(2).masterId == 75)?1:0;
-		DrumCount += (this.equipment(3).masterId == 75)?1:0;
-		return DrumCount;
+		return this.countEquipment( 75 );
+	};
+
+	/* COUNT LANDING CRAFT
+	   Get number of landing crafts held
+	   ----------------------------------------- */
+	KC3Ship.prototype.countLandingCrafts = function(){
+		return this.countEquipment( 68 );
 	};
 	
 	/* FIGHTER POWER
@@ -266,6 +281,22 @@ KC3改 Ship Object
 		return supportPower;
 	};
 	
+	/* Calculate resupply cost
+	   ----------------------------------
+	   0 <= fuelPercent <= 1
+	   0 <= ammoPercent <= 1
+	   returns an object: {fuel: <fuelCost>, ammo: <ammoCost>}
+	 */
+	KC3Ship.prototype.calcResupplyCost = function(fuelPercent, ammoPercent) {
+		var master = this.master();
+		var fullFuel = master.api_fuel_max;
+		var fullAmmo = master.api_bull_max;
+		var mulRounded = function (a, percent) {
+			return Math.floor( a * percent );
+		};
+		return { fuel: mulRounded( fullFuel, fuelPercent ),
+				 ammo: mulRounded( fullAmmo, ammoPercent ) };
+	};
 	/*
 	.removeEquip( slotIndex )
 	*/
