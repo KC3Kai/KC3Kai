@@ -32,6 +32,8 @@ Listens to network history and triggers callback if game events happen
 			PvPStart: [],
 			PvPNight: [],
 			PvPEnd: [],
+			ExpeditionSelection: [],
+			ExpeditionStart: [],
 			ExpedResult: [],
 		},
 		delayedUpdate: {},
