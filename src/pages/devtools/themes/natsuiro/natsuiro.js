@@ -238,37 +238,37 @@
 		/* Code for generating deckbuilder style JSON data.
 		--------------------------------------------*/
 		function generate_fleet_JSON(fleet) {
-	    	var result = {};
-	    	for(var i = 0; i < fleet.ships.length; i++) {
-	    		if(fleet.ships[i] > -1){
-	    			result["s".concat(i+1)] = generate_ship_JSON(fleet.ships[i]);
-	    		}
-	    	}
-	    	return result;
-	    }
-	    
-	    function generate_ship_JSON (ship_ID) {
-	    	var result = {};
-	    	var ship = KC3ShipManager.get(ship_ID);
-	    	result.id = ship.masterId;
-	    	result.lv = ship.level;
-	    	result.luck = ship.lk[0];
-	    	result.items = generate_equipment_JSON(ship);
-	    	return result;
-	    }
-	    
-	    function generate_equipment_JSON (shipObj) {
-	    	var result = {};
-	    	for(var i = 0; i < 4; i++) {
-	    		if(shipObj.items[i]> -1){
-	    			result["i".concat(i+1)] ={
-	    					"id":KC3GearManager.get(shipObj.items[i]).masterId,
-	    					"rf":KC3GearManager.get(shipObj.items[i]).stars
-	    			};
-	    		} else {break;}
-	    	}
-	    	return result;
-	    }
+			var result = {};
+			for(var i = 0; i < fleet.ships.length; i++) {
+				if(fleet.ships[i] > -1){
+					result["s".concat(i+1)] = generate_ship_JSON(fleet.ships[i]);
+				}
+			}
+			return result;
+		}
+		
+		function generate_ship_JSON (ship_ID) {
+			var result = {};
+			var ship = KC3ShipManager.get(ship_ID);
+			result.id = ship.masterId;
+			result.lv = ship.level;
+			result.luck = ship.lk[0];
+			result.items = generate_equipment_JSON(ship);
+			return result;
+		}
+		
+		function generate_equipment_JSON (shipObj) {
+			var result = {};
+			for(var i = 0; i < 4; i++) {
+				if(shipObj.items[i]> -1){
+					result["i".concat(i+1)] ={
+							"id":KC3GearManager.get(shipObj.items[i]).masterId,
+							"rf":KC3GearManager.get(shipObj.items[i]).stars
+					};
+				} else {break;}
+			}
+			return result;
+		}
 		
 		
 		// Switching Activity Tabs
