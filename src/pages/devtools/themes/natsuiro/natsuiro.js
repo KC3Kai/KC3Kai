@@ -868,7 +868,7 @@
 			});
 
 			// whether this update is triggered because of sending expeditions
-			if (expeditionStarted) {
+			if (expeditionStarted && ConfigManager.info_auto_exped_tab) {
 				// clear flag
 				expeditionStarted = false;
 
@@ -1447,6 +1447,9 @@
 			updateHQEXPGained($(".admiral_lvnext"),data.result.api_get_exp);
 		},
 		ExpeditionSelection: function (data) {
+			if (! ConfigManager.info_auto_exped_tab)
+				return;
+
 			// on expedition selection page
 			// choose one available fleet if any, setup variables properly
 			var fleets = PlayerManager.fleets;
@@ -1483,6 +1486,8 @@
             }
 		},
 		ExpeditionStart: function (data) {
+			if (! ConfigManager.info_auto_exped_tab)
+				return;
 			// this part is triggered when a fleet is sent to some expedition
 			// but at this moment fleet info is not yet updated
 			expeditionStarted = true;
