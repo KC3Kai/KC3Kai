@@ -142,15 +142,52 @@
 
 		/* Expedition Planner
 		--------------------------------------------*/
+
+		// make sure localStorage.expedTabLastPick is available
+		// and is in correct format
+		function TouchExpeditionTabConfig() {
+			if (! localStorage.expedTabLastPick) {
+				var data = {
+					1: { selectedExpedition: 1, isGreatSuccess: false },
+					2: { selectedExpedition: 1, isGreatSuccess: false },
+					3: { selectedExpedition: 1, isGreatSuccess: false },
+					4: { selectedExpedition: 1, isGreatSuccess: false },
+				};
+				localStorage.expedTabLastPick = JSON.stringify( data );
+				return data;
+			} else {
+				var data = JSON.parse( localStorage.expedTabLastPick );
+				return data;
+			}
+		}
+		
+		function UpdateExpeditionTabConfig() {
+			// update user last pick
+			var userConf = TouchExpeditionTabConfig();
+			userConf[selectedFleet].selectedExpedition = selectedExpedition;
+			userConf[selectedFleet].isGreatSuccess = plannerIsGreatSuccess;
+			localStorage.expedTabLastPick = JSON.stringify( userConf );
+		}
+
+		// apply stored user settings, note that this function
+		// is not responsible for updating UI, so UpdateExpeditionPlanner() should be called after
+		// this to reflect the change
+		function ApplyExpeditionTabConfig() {
+			var expedTabLastPick = TouchExpeditionTabConfig()[selectedFleet];
+			selectedExpedition = expedTabLastPick.selectedExpedition;
+			plannerIsGreatSuccess = expedTabLastPick.isGreatSuccess;
+		}
+
 		$( ".module.activity .activity_expeditionPlanner .expres_greatbtn" )
 			.on("click",function() {
 				plannerIsGreatSuccess = !plannerIsGreatSuccess;
 				
 				$("img", this).attr("src", "../../../../assets/img/ui/btn-"+(plannerIsGreatSuccess?"":"x")+"gs.png");
-				
+				UpdateExpeditionTabConfig();
 				NatsuiroListeners.UpdateExpeditionPlanner();
 			} );
-		
+
+
 		
 		/* Morale timers
 		- use end time difference not remaining decrements for accuracy against lag
@@ -251,11 +288,10 @@
 		
 		// Expedition Planner
 		$(".expedition_entry").on("click",function(){
-			//The keys are converted to lowercase. 
-			$(".dropdown_title").text("Expedition #"+$(this).data("expid"));
-            // TODO: is this vaild syntax?
+			// TODO: is this vaild syntax?
 			selectedExpedition = $(this).data("expid");
 			//console.log("selected Exped "+selectedExpedition);
+			UpdateExpeditionTabConfig();
 			NatsuiroListeners.UpdateExpeditionPlanner();
 		});
 		
@@ -268,6 +304,7 @@
 			selectedFleet = parseInt( $(this).text(), 10);
 			console.log(selectedFleet);
 			NatsuiroListeners.Fleet();
+			ApplyExpeditionTabConfig();
 			NatsuiroListeners.UpdateExpeditionPlanner();
 		});
 		
@@ -1459,6 +1496,9 @@
 		},
 
 		UpdateExpeditionPlanner: function (data) {
+			//The keys are converted to lowercase. 
+			$(".dropdown_title").text("Expedition #"+String(selectedExpedition));
+
 			var allShips = [];
 			var fleetObj = PlayerManager.fleets[selectedFleet-1];
 			//fleets' subsripts start from 0 !
@@ -1526,15 +1566,12 @@
             $( ".activity_expeditionPlanner .expedition_entry" ).each( function(i,v) {
                 // TODO: standard way is set data-exp-id = ???, and use expId here.
                 var expeditionId = parseInt( $(this).data("expid") );
-                console.log( "on explore ", expeditionId);
                 if (availableExpeditions.indexOf(expeditionId) !== -1) {
                     $(this).addClass("cond_passed").removeClass("cond_failed");
-                    console.log( "passed");
                     // this expedition is available
                 } else {
                     // mark not available
                     $(this).addClass("cond_failed").removeClass("cond_passed");
-                    console.log( "failed" );
                 }
             });
 
