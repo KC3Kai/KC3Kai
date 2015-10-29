@@ -293,8 +293,7 @@
 		
 		// Expedition Planner
 		$(".expedition_entry").on("click",function(){
-			// TODO: is this vaild syntax?
-			selectedExpedition = $(this).data("expid");
+			selectedExpedition = parseInt( $(this).data("expId") );
 			//console.log("selected Exped "+selectedExpedition);
 			UpdateExpeditionTabConfig();
 			NatsuiroListeners.UpdateExpeditionPlanner();
@@ -868,7 +867,6 @@
 				}
 			});
 
-			// TODO: this part is not yet tested
 			// whether this update is triggered because of sending expeditions
 			if (expeditionStarted) {
 				// clear flag
@@ -1632,18 +1630,17 @@
 
 			$(".module.activity .activity_expeditionPlanner .estimated_time").text( String( 60*ExpdCost.time ).toHHMMSS() );
 
-            // setup expedition item colors
-            $( ".activity_expeditionPlanner .expedition_entry" ).each( function(i,v) {
-                // TODO: standard way is set data-exp-id = ???, and use expId here.
-                var expeditionId = parseInt( $(this).data("expid") );
-                if (availableExpeditions.indexOf(expeditionId) !== -1) {
-                    $(this).addClass("cond_passed").removeClass("cond_failed");
-                    // this expedition is available
-                } else {
-                    // mark not available
-                    $(this).addClass("cond_failed").removeClass("cond_passed");
-                }
-            });
+			// setup expedition item colors
+			$( ".activity_expeditionPlanner .expedition_entry" ).each( function(i,v) {
+				var expeditionId = parseInt( $(this).data("expId") );
+				if (availableExpeditions.indexOf(expeditionId) !== -1) {
+					$(this).addClass("cond_passed").removeClass("cond_failed");
+					// this expedition is available
+				} else {
+					// mark not available
+					$(this).addClass("cond_failed").removeClass("cond_passed");
+				}
+			});
 
 			var resourceRoot = $(".module.activity .activity_expeditionPlanner .expres_resos");
 			$.each(["fuel","ammo","steel","bauxite"], function(i,v) {
