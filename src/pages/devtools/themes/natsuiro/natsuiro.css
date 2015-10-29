@@ -1164,6 +1164,12 @@ list-style: none;
 	font-size: 14px;
 	color:#FF5555
 }
+.module.activity .activity_expeditionPlanner .expedition_entry.cond_passed {	
+	color:green
+}
+.module.activity .activity_expeditionPlanner .expedition_entry.cond_failed {	
+	color:red
+}
 
 
 /*------- QUESTS -------*/

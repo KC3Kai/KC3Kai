@@ -253,6 +253,7 @@
 		$(".expedition_entry").on("click",function(){
 			//The keys are converted to lowercase. 
 			$(".dropdown_title").text("Expedition #"+$(this).data("expid"));
+            // TODO: is this vaild syntax?
 			selectedExpedition = $(this).data("expid");
 			//console.log("selected Exped "+selectedExpedition);
 			NatsuiroListeners.UpdateExpeditionPlanner();
@@ -1497,6 +1498,8 @@
 			});
 
 			var fleet = KER.fromRawFleet(allShipsForLib);
+			var availableExpeditions = KE.getAvailableExpeditions( fleet );
+
 			var unsatRequirements = KER.unsatisfiedRequirements(selectedExpedition)(fleet);
 
 			//Don't forget to use KERO.*ToObject to convert raw data to JS friendly objs
@@ -1518,6 +1521,22 @@
 			var greatSuccessFactor = plannerIsGreatSuccess ? 1.5 : 1;
 
 			$(".module.activity .activity_expeditionPlanner .estimated_time").text( String( 60*ExpdCost.time ).toHHMMSS() );
+
+            // setup expedition item colors
+            $( ".activity_expeditionPlanner .expedition_entry" ).each( function(i,v) {
+                // TODO: standard way is set data-exp-id = ???, and use expId here.
+                var expeditionId = parseInt( $(this).data("expid") );
+                console.log( "on explore ", expeditionId);
+                if (availableExpeditions.indexOf(expeditionId) !== -1) {
+                    $(this).addClass("cond_passed").removeClass("cond_failed");
+                    console.log( "passed");
+                    // this expedition is available
+                } else {
+                    // mark not available
+                    $(this).addClass("cond_failed").removeClass("cond_passed");
+                    console.log( "failed" );
+                }
+            });
 
 			var resourceRoot = $(".module.activity .activity_expeditionPlanner .expres_resos");
 			$.each(["fuel","ammo","steel","bauxite"], function(i,v) {
