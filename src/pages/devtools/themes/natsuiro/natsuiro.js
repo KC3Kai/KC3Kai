@@ -896,9 +896,17 @@
 							$(this).trigger("click");
 						}
 					});
-				}
+				} else {
+                    // knowing fleet #2, #3 and #4 are all unavailable,
+                    // we can return focus to the main fleet.
+				    $(".module.controls .fleet_num").each( function(i,v) {
+					    var thisFleet = parseInt( $(this).text(), 10);
+					    if (thisFleet === 1) {
+						    $(this).trigger("click");
+					    }
+				    });
+                } 
 			}
-
 			NatsuiroListeners.UpdateExpeditionPlanner();
 		},
 		
@@ -1463,7 +1471,16 @@
 						$(this).trigger("click");
 					}
 				});
-			}
+			} else {
+                // knowing fleet #2, #3 and #4 are all unavailable,
+                // we can return focus to the main fleet.
+				$(".module.controls .fleet_num").each( function(i,v) {
+					var thisFleet = parseInt( $(this).text(), 10);
+					if (thisFleet === 1) {
+						$(this).trigger("click");
+					}
+				});
+            }
 		},
 		ExpeditionStart: function (data) {
 			// this part is triggered when a fleet is sent to some expedition
