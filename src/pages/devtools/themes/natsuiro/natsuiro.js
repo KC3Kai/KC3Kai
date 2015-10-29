@@ -10,6 +10,11 @@
 	var selectedFleet = 1;
 	var selectedExpedition = 1;
 	var plannerIsGreatSuccess = false;
+
+	// a flag used by Fleet & ExpeditionStart to indicate
+	// whether a fleet info update is triggered because of
+	// sending out fleets.
+	var expeditionStarted = false;
 	
 	// Auto Focus Overriding
 	var overrideFocus = false;
@@ -23,6 +28,41 @@
 	var moraleClockValue = 100;
 	var moraleClockEnd = 0;
 	var moraleClockRemain = 0;
+
+	// make sure localStorage.expedTabLastPick is available
+	// and is in correct format
+	function TouchExpeditionTabConfig() {
+		var data;
+		if (! localStorage.expedTabLastPick) {
+			data = {
+				1: { selectedExpedition: 1, isGreatSuccess: false },
+				2: { selectedExpedition: 1, isGreatSuccess: false },
+				3: { selectedExpedition: 1, isGreatSuccess: false },
+				4: { selectedExpedition: 1, isGreatSuccess: false },
+			};
+			localStorage.expedTabLastPick = JSON.stringify( data );
+		} else {
+			data = JSON.parse( localStorage.expedTabLastPick );
+		}
+		return data;
+	}
+	
+	function UpdateExpeditionTabConfig() {
+		// update user last pick
+		var userConf = TouchExpeditionTabConfig();
+		userConf[selectedFleet].selectedExpedition = selectedExpedition;
+		userConf[selectedFleet].isGreatSuccess = plannerIsGreatSuccess;
+		localStorage.expedTabLastPick = JSON.stringify( userConf );
+	}
+
+	// apply stored user settings, note that this function
+	// is not responsible for updating UI, so UpdateExpeditionPlanner() should be called after
+	// this to reflect the change
+	function ApplyExpeditionTabConfig() {
+		var expedTabLastPick = TouchExpeditionTabConfig()[selectedFleet];
+		selectedExpedition = expedTabLastPick.selectedExpedition;
+		plannerIsGreatSuccess = expedTabLastPick.isGreatSuccess;
+	}
 	
 	$(document).on("ready", function(){
 		// Check localStorage
@@ -142,41 +182,6 @@
 
 		/* Expedition Planner
 		--------------------------------------------*/
-
-		// make sure localStorage.expedTabLastPick is available
-		// and is in correct format
-		function TouchExpeditionTabConfig() {
-			if (! localStorage.expedTabLastPick) {
-				var data = {
-					1: { selectedExpedition: 1, isGreatSuccess: false },
-					2: { selectedExpedition: 1, isGreatSuccess: false },
-					3: { selectedExpedition: 1, isGreatSuccess: false },
-					4: { selectedExpedition: 1, isGreatSuccess: false },
-				};
-				localStorage.expedTabLastPick = JSON.stringify( data );
-				return data;
-			} else {
-				var data = JSON.parse( localStorage.expedTabLastPick );
-				return data;
-			}
-		}
-		
-		function UpdateExpeditionTabConfig() {
-			// update user last pick
-			var userConf = TouchExpeditionTabConfig();
-			userConf[selectedFleet].selectedExpedition = selectedExpedition;
-			userConf[selectedFleet].isGreatSuccess = plannerIsGreatSuccess;
-			localStorage.expedTabLastPick = JSON.stringify( userConf );
-		}
-
-		// apply stored user settings, note that this function
-		// is not responsible for updating UI, so UpdateExpeditionPlanner() should be called after
-		// this to reflect the change
-		function ApplyExpeditionTabConfig() {
-			var expedTabLastPick = TouchExpeditionTabConfig()[selectedFleet];
-			selectedExpedition = expedTabLastPick.selectedExpedition;
-			plannerIsGreatSuccess = expedTabLastPick.isGreatSuccess;
-		}
 
 		$( ".module.activity .activity_expeditionPlanner .expres_greatbtn" )
 			.on("click",function() {
@@ -862,7 +867,40 @@
 					}
 				}
 			});
-			
+
+			// TODO: this part is not yet tested
+			// whether this update is triggered because of sending expeditions
+			if (expeditionStarted) {
+				// clear flag
+				expeditionStarted = false;
+
+				// TODO: duplication (with ExpeditionSelection)
+				// we'll try switching to the next available fleet if any
+				var fleets = PlayerManager.fleets;
+				var availableFleetInd = -1;
+				// start from the 2nd fleet
+				for (var i = 1; i < 4; ++i) {
+					// find one available fleet
+					if (fleets[i].mission[0] === 0) {
+						availableFleetInd = i;
+						break;
+					}
+				}
+				console.log( "one fleet is sent, try to find next available fleet" );
+				if (availableFleetInd !== -1) {
+					selectedFleet = availableFleetInd + 1;
+					console.log("Find available fleet: " + String(selectedFleet));
+					// this time we don't have to switch tab
+					// $("#atab_expeditionPlanner").trigger("click");
+					$(".module.controls .fleet_num").each( function(i,v) {
+						var thisFleet = parseInt( $(this).text(), 10);
+						if (thisFleet === availableFleetInd + 1) {
+							$(this).trigger("click");
+						}
+					});
+				}
+			}
+
 			NatsuiroListeners.UpdateExpeditionPlanner();
 		},
 		
@@ -1401,6 +1439,38 @@
 		PvPEnd: function(data){
 			$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/client/ratings/"+data.result.api_win_rank+".png");
 			updateHQEXPGained($(".admiral_lvnext"),data.result.api_get_exp);
+		},
+		ExpeditionSelection: function (data) {
+			// on expedition selection page
+			// choose one available fleet if any, setup variables properly
+			var fleets = PlayerManager.fleets;
+			var availableFleetInd = -1;
+			// start from the 2nd fleet
+			for (var i = 1; i < 4; ++i) {
+				// find one available fleet
+				if (fleets[i].mission[0] === 0) {
+					availableFleetInd = i;
+					break;
+				}
+			}
+
+			if (availableFleetInd !== -1) {
+				selectedFleet = availableFleetInd + 1;
+				console.log("Find available fleet: " + String(selectedFleet));
+
+				$("#atab_expeditionPlanner").trigger("click");
+				$(".module.controls .fleet_num").each( function(i,v) {
+					var thisFleet = parseInt( $(this).text(), 10);
+					if (thisFleet === availableFleetInd + 1) {
+						$(this).trigger("click");
+					}
+				});
+			}
+		},
+		ExpeditionStart: function (data) {
+			// this part is triggered when a fleet is sent to some expedition
+			// but at this moment fleet info is not yet updated
+			expeditionStarted = true;
 		},
 		ExpedResult: function(data){
 			overrideFocus = true;
