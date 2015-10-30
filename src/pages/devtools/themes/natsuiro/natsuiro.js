@@ -293,8 +293,7 @@
 		
 		// Expedition Planner
 		$(".expedition_entry").on("click",function(){
-			// TODO: is this vaild syntax?
-			selectedExpedition = $(this).data("expid");
+			selectedExpedition = parseInt( $(this).data("expId") );
 			//console.log("selected Exped "+selectedExpedition);
 			UpdateExpeditionTabConfig();
 			NatsuiroListeners.UpdateExpeditionPlanner();
@@ -868,9 +867,8 @@
 				}
 			});
 
-			// TODO: this part is not yet tested
 			// whether this update is triggered because of sending expeditions
-			if (expeditionStarted) {
+			if (expeditionStarted && ConfigManager.info_auto_exped_tab) {
 				// clear flag
 				expeditionStarted = false;
 
@@ -898,9 +896,19 @@
 							$(this).trigger("click");
 						}
 					});
-				}
+				} else {
+                    // knowing fleet #2, #3 and #4 are all unavailable,
+                    // we can return focus to the main fleet.
+				    $(".module.controls .fleet_num").each( function(i,v) {
+					    var thisFleet = parseInt( $(this).text(), 10);
+					    if (thisFleet === 1) {
+						    $(this).trigger("click");
+						}
+					});
+					// also return focus to basic tab
+					$("#atab_basic").trigger("click");
+                } 
 			}
-
 			NatsuiroListeners.UpdateExpeditionPlanner();
 		},
 		
@@ -1441,6 +1449,9 @@
 			updateHQEXPGained($(".admiral_lvnext"),data.result.api_get_exp);
 		},
 		ExpeditionSelection: function (data) {
+			if (! ConfigManager.info_auto_exped_tab)
+				return;
+
 			// on expedition selection page
 			// choose one available fleet if any, setup variables properly
 			var fleets = PlayerManager.fleets;
@@ -1465,9 +1476,22 @@
 						$(this).trigger("click");
 					}
 				});
-			}
+			} else {
+                // knowing fleet #2, #3 and #4 are all unavailable,
+                // we can return focus to the main fleet.
+				$(".module.controls .fleet_num").each( function(i,v) {
+					var thisFleet = parseInt( $(this).text(), 10);
+					if (thisFleet === 1) {
+						$(this).trigger("click");
+					}
+				});
+				// also return focus to basic tab
+				$("#atab_basic").trigger("click");
+            }
 		},
 		ExpeditionStart: function (data) {
+			if (! ConfigManager.info_auto_exped_tab)
+				return;
 			// this part is triggered when a fleet is sent to some expedition
 			// but at this moment fleet info is not yet updated
 			expeditionStarted = true;
@@ -1632,18 +1656,17 @@
 
 			$(".module.activity .activity_expeditionPlanner .estimated_time").text( String( 60*ExpdCost.time ).toHHMMSS() );
 
-            // setup expedition item colors
-            $( ".activity_expeditionPlanner .expedition_entry" ).each( function(i,v) {
-                // TODO: standard way is set data-exp-id = ???, and use expId here.
-                var expeditionId = parseInt( $(this).data("expid") );
-                if (availableExpeditions.indexOf(expeditionId) !== -1) {
-                    $(this).addClass("cond_passed").removeClass("cond_failed");
-                    // this expedition is available
-                } else {
-                    // mark not available
-                    $(this).addClass("cond_failed").removeClass("cond_passed");
-                }
-            });
+			// setup expedition item colors
+			$( ".activity_expeditionPlanner .expedition_entry" ).each( function(i,v) {
+				var expeditionId = parseInt( $(this).data("expId") );
+				if (availableExpeditions.indexOf(expeditionId) !== -1) {
+					$(this).addClass("cond_passed").removeClass("cond_failed");
+					// this expedition is available
+				} else {
+					// mark not available
+					$(this).addClass("cond_failed").removeClass("cond_passed");
+				}
+			});
 
 			var resourceRoot = $(".module.activity .activity_expeditionPlanner .expres_resos");
 			$.each(["fuel","ammo","steel","bauxite"], function(i,v) {

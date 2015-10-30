@@ -35,7 +35,8 @@ Retreives when needed to apply on components
 				info_troll 			: false,
 				info_delta 			: false,
 				info_fleetstat 		: true,
-				
+				info_auto_exped_tab : true,
+
 				// AIR PROFICIENCY BONUSES (Configurable by user)
 				air_formula			: 3, // 1=no veteran 2=veteran average 3=veteran bounds
 				air_average			: {
