@@ -8,9 +8,61 @@
 	
 	// Interface values
 	var selectedFleet = 1;
+	var selectedExpedition = 1;
+	var plannerIsGreatSuccess = false;
+
+	// a flag used by Fleet & ExpeditionStart to indicate
+	// whether a fleet info update is triggered because of
+	// sending out fleets.
+	var expeditionStarted = false;
 	
 	// Auto Focus Overriding
 	var overrideFocus = false;
+	
+	// Critical Animation and Sound Effect
+	var critAnim = false;
+	var critSound = new Audio("../../../../assets/snd/heart.mp3");
+	critSound.loop = true;
+	
+	// Morale Timer
+	var moraleClockValue = 100;
+	var moraleClockEnd = 0;
+	var moraleClockRemain = 0;
+
+	// make sure localStorage.expedTabLastPick is available
+	// and is in correct format
+	function TouchExpeditionTabConfig() {
+		var data;
+		if (! localStorage.expedTabLastPick) {
+			data = {
+				1: { selectedExpedition: 1, isGreatSuccess: false },
+				2: { selectedExpedition: 1, isGreatSuccess: false },
+				3: { selectedExpedition: 1, isGreatSuccess: false },
+				4: { selectedExpedition: 1, isGreatSuccess: false },
+			};
+			localStorage.expedTabLastPick = JSON.stringify( data );
+		} else {
+			data = JSON.parse( localStorage.expedTabLastPick );
+		}
+		return data;
+	}
+	
+	function UpdateExpeditionTabConfig() {
+		// update user last pick
+		var userConf = TouchExpeditionTabConfig();
+		userConf[selectedFleet].selectedExpedition = selectedExpedition;
+		userConf[selectedFleet].isGreatSuccess = plannerIsGreatSuccess;
+		localStorage.expedTabLastPick = JSON.stringify( userConf );
+	}
+
+	// apply stored user settings, note that this function
+	// is not responsible for updating UI, so UpdateExpeditionPlanner() should be called after
+	// this to reflect the change
+	function ApplyExpeditionTabConfig() {
+		var expedTabLastPick = TouchExpeditionTabConfig()[selectedFleet];
+		selectedExpedition = expedTabLastPick.selectedExpedition;
+		plannerIsGreatSuccess = expedTabLastPick.isGreatSuccess;
+	}
 	
 	$(document).on("ready", function(){
 		// Check localStorage
@@ -73,7 +125,21 @@
 		$(".admiral_lvnext").on("click",function(){
 			ConfigManager.scrollHQExpInfo();
 			NatsuiroListeners.HQ();
-		}).addClass("hover");
+		});
+		
+		// Switch Rank Title vs Rank Points Counter
+		$(".admiral_rank").on("click",function(){
+			// If title, switch to points
+			if($(this).data("mode")==1){
+				$(this).text(PlayerManager.hq.getRankPoints()+" pts");
+				$(this).data("mode", 0);
+				
+			// If points, switch to title
+			}else{
+				$(this).text(PlayerManager.hq.rank);
+				$(this).data("mode", 1);
+			}
+		});
 		
 		// eLoS Toggle
 		$(".summary-eqlos").on("click",function(){
@@ -113,42 +179,101 @@
 						})
 				)));
 		});
+
+		/* Expedition Planner
+		--------------------------------------------*/
+
+		$( ".module.activity .activity_expeditionPlanner .expres_greatbtn" )
+			.on("click",function() {
+				plannerIsGreatSuccess = !plannerIsGreatSuccess;
+				
+				$("img", this).attr("src", "../../../../assets/img/ui/btn-"+(plannerIsGreatSuccess?"":"x")+"gs.png");
+				UpdateExpeditionTabConfig();
+				NatsuiroListeners.UpdateExpeditionPlanner();
+			} );
+
+
 		
-    
+		/* Morale timers
+		- use end time difference not remaining decrements for accuracy against lag
+		--------------------------------------------*/
+		setInterval(function(){
+			// console.log(moraleClockValue, moraleClockEnd, moraleClockRemain);
+			if(moraleClockEnd > 0){
+				moraleClockRemain = Math.ceil( (moraleClockEnd - (new Date()).getTime())/1000);
+				if(moraleClockRemain > 0){
+					$(".module.status .status_morale .status_text").text("~"+(moraleClockRemain+"").toHHMMSS());
+					
+				}else{
+					moraleClockValue = 100;
+					moraleClockEnd = 0;
+					moraleClockRemain = 0;
+					$(".module.status .status_morale .status_text").text("Recovered");
+					
+					// Morale Notification
+					if(ConfigManager.alert_morale_notif){
+						// Play sound
+						if(KC3TimerManager.notifSound){ KC3TimerManager.notifSound.pause(); }
+						switch(ConfigManager.alert_type){
+							case 1: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/pop.mp3"); break;
+							case 2: KC3TimerManager.notifSound = new Audio(ConfigManager.alert_custom); break; 
+							case 3: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/ding.mp3"); break; 
+							default: KC3TimerManager.notifSound = false; break;
+						}
+						if(KC3TimerManager.notifSound){
+							KC3TimerManager.notifSound.volume = ConfigManager.alert_volume / 100;
+							KC3TimerManager.notifSound.play();
+						}
+						// Desktop notif regardless of settings, we consider Morale Notif as "yes"
+						(new RMsg("service", "notify_desktop", {
+							notifId: "morale",
+							data: {
+								type: "basic",
+								title: "Fleet Morale Recovered!",
+								message: "Everyone on the \"currently selected fleet\" has recovered from fatigue.",
+								iconUrl: "../../assets/img/ui/morale.png"
+							}
+						})).execute();
+					}
+				}
+			}
+		}, 1000);
+		
+		
 		/* Code for generating deckbuilder style JSON data.
 		--------------------------------------------*/
 		function generate_fleet_JSON(fleet) {
-	    	var result = {};
-	    	for(var i = 0; i < fleet.ships.length; i++) {
-	    		if(fleet.ships[i] > -1){
-	    			result["s".concat(i+1)] = generate_ship_JSON(fleet.ships[i]);
-	    		}
-	    	}
-	    	return result;
-	    }
-	    
-	    function generate_ship_JSON (ship_ID) {
-	    	var result = {};
-	    	var ship = KC3ShipManager.get(ship_ID);
-	    	result.id = ship.masterId;
-	    	result.lv = ship.level;
-	    	result.luck = ship.lk[0];
-	    	result.items = generate_equipment_JSON(ship);
-	    	return result;
-	    }
-	    
-	    function generate_equipment_JSON (shipObj) {
-	    	var result = {};
-	    	for(var i = 0; i < 4; i++) {
-	    		if(shipObj.items[i]> -1){
-	    			result["i".concat(i+1)] ={
-	    					"id":KC3GearManager.get(shipObj.items[i]).masterId,
-	    					"rf":KC3GearManager.get(shipObj.items[i]).stars
-	    			};
-	    		} else {break;}
-	    	}
-	    	return result;
-	    }
+			var result = {};
+			for(var i = 0; i < fleet.ships.length; i++) {
+				if(fleet.ships[i] > -1){
+					result["s".concat(i+1)] = generate_ship_JSON(fleet.ships[i]);
+				}
+			}
+			return result;
+		}
+		
+		function generate_ship_JSON (ship_ID) {
+			var result = {};
+			var ship = KC3ShipManager.get(ship_ID);
+			result.id = ship.masterId;
+			result.lv = ship.level;
+			result.luck = ship.lk[0];
+			result.items = generate_equipment_JSON(ship);
+			return result;
+		}
+		
+		function generate_equipment_JSON (shipObj) {
+			var result = {};
+			for(var i = 0; i < 4; i++) {
+				if(shipObj.items[i]> -1){
+					result["i".concat(i+1)] ={
+							"id":KC3GearManager.get(shipObj.items[i]).masterId,
+							"rf":KC3GearManager.get(shipObj.items[i]).stars
+					};
+				} else {break;}
+			}
+			return result;
+		}
 		
 		
 		// Switching Activity Tabs
@@ -161,8 +286,17 @@
 		});
 		$(".module.activity .activity_tab.active").trigger("click");
 		
+		
 		$(".module.activity .activity_dismissable").on("click", function(){
 			$("#atab_basic").trigger("click");
+		});
+		
+		// Expedition Planner
+		$(".expedition_entry").on("click",function(){
+			selectedExpedition = parseInt( $(this).data("expId") );
+			//console.log("selected Exped "+selectedExpedition);
+			UpdateExpeditionTabConfig();
+			NatsuiroListeners.UpdateExpeditionPlanner();
 		});
 		
 		// Fleet selection
@@ -170,8 +304,12 @@
 			$(".module.controls .fleet_num").removeClass("active");
 			$(".module.controls .fleet_rengo").removeClass("active");
 			$(this).addClass("active");
+			console.log($(this).text());
 			selectedFleet = parseInt( $(this).text(), 10);
+			console.log(selectedFleet);
 			NatsuiroListeners.Fleet();
+			ApplyExpeditionTabConfig();
+			NatsuiroListeners.UpdateExpeditionPlanner();
 		});
 		
 		// Combined Fleet button
@@ -328,7 +466,7 @@
 		$(".module.activity .battle_eformation").attr("title", "");
 		$(".module.activity .battle_eformation").css("-webkit-transform", "rotate(0deg)");
 		$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support.png");
-		$(".module.activity .battle_fish img").attr("src", "../../../../assets/img/client/pike-x.png");
+		// $(".module.activity .battle_fish img").attr("src", "../../../../assets/img/client/pike-x.png");
 		$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
 		$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/ui/dark_rating.png");
 		$(".module.activity .battle_drop img").attr("src", "../../../../assets/img/ui/dark_shipdrop.png");
@@ -362,19 +500,23 @@
 			$(".admiral_name").text( PlayerManager.hq.name );
 			$(".admiral_comm").text( PlayerManager.hq.desc );
 			$(".admiral_rank").text( PlayerManager.hq.rank );
+			if($(".admiral_rank").data("mode")==1){
+				$(".admiral_rank").text(PlayerManager.hq.rank);
+			}else{
+				$(".admiral_rank").text(PlayerManager.hq.getRankPoints()+" pts");
+			}
 			$(".admiral_lvval").text( PlayerManager.hq.level );
 			$(".admiral_lvbar").css({width: Math.round(PlayerManager.hq.exp[0]*58)+"px"});
 			updateHQEXPGained($(".admiral_lvnext"));
 		},
 		
 		Consumables: function(data){
-			// $(".count_fcoin").text( PlayerManager.consumables.fcoin );
+			$(".count_fcoin").text( PlayerManager.consumables.fcoin );
 			$(".count_buckets").text( PlayerManager.consumables.buckets );
 			$(".count_screws").text( PlayerManager.consumables.screws );
-			// $(".count_torch").text( PlayerManager.consumables.torch );
-			
-			$(".count_pike").text( PlayerManager.consumables.pike || "?" );
-			$(".count_saury").text( PlayerManager.consumables.saury || "?" );
+			$(".count_torch").text( PlayerManager.consumables.torch );
+			// $(".count_pike").text( PlayerManager.consumables.pike || "?" );
+			// $(".count_saury").text( PlayerManager.consumables.saury || "?" );
 		},
 		
 		ShipSlots: function(data){
@@ -502,6 +644,7 @@
 					akashi:
 						Math.max(MainRepairs.akashi,EscortRepairs.akashi),
 					hasTaiha: MainFleet.hasTaiha() || EscortFleet.hasTaiha(),
+					taihaIndexes: MainFleet.getTaihas().concat( EscortFleet.getTaihas() ),
 					supplied: MainFleet.isSupplied() && EscortFleet.isSupplied(),
 					badState: [
 						MainFleet.needsSupply(false)|| EscortFleet.needsSupply(false),
@@ -540,19 +683,20 @@
 				FleetSummary = {
 					lv: CurrentFleet.totalLevel(),
 					elos: Math.round( CurrentFleet.eLoS() * 100) / 100,
-					air: CurrentFleet.fighterPower(),
+					air: CurrentFleet.fighterPowerText(),
 					speed: CurrentFleet.speed(),
 					docking: MainRepairs.docking,
 					akashi: MainRepairs.akashi,
 					hasTaiha: CurrentFleet.hasTaiha(),
+					taihaIndexes: CurrentFleet.getTaihas(),
 					supplied: CurrentFleet.isSupplied(),
 					badState: [
 						CurrentFleet.needsSupply(false) ||
 						(!(KC3SortieManager.onSortie && KC3SortieManager.fleetSent == selectedFleet)
-						&& !CurrentFleet.isSupplied() && ConfigManager.alert_supply_exped && selectedFleet > 1 && selectedFleet < 5),
-						CurrentFleet.needsSupply(true),
-						CurrentFleet.ship(0).isTaiha(),
-						false
+						&& !CurrentFleet.isSupplied() && ConfigManager.alert_supply_exped && selectedFleet > 1 && selectedFleet < 5),//0
+						CurrentFleet.needsSupply(true),//1
+						CurrentFleet.ship(0).isTaiha(),//2
+						false//3
 					],
 					lowestMorale: CurrentFleet.lowestMorale(),
 					supportPower: CurrentFleet.supportPower()
@@ -607,14 +751,24 @@
 				if( FleetSummary.lowestMorale > 54 ){
 					$(".module.status .status_morale .status_text").text( KC3Meta.term("PanelGreatMorale") );
 					$(".module.status .status_morale .status_text").addClass("good");
+					moraleClockValue = 100;
+					moraleClockEnd = 0;
 				}else if( FleetSummary.lowestMorale >= ConfigManager.alert_morale_value ){
 					$(".module.status .status_morale .status_text").text( KC3Meta.term("PanelGoodMorale") );
 					$(".module.status .status_morale .status_text").addClass("good");
+					moraleClockValue = 100;
+					moraleClockEnd = 0;
 				}else{
 					var MissingMorale = ConfigManager.alert_morale_value - FleetSummary.lowestMorale;
 					var MoraleTime = (Math.ceil(MissingMorale/3)*3)*60;
-					$(".module.status .status_morale .status_text").text(String(MoraleTime).toHHMMSS());
 					$(".module.status .status_morale .status_text").addClass("bad");
+					
+					if(FleetSummary.lowestMorale != moraleClockValue){
+						// console.log("new morale time", FleetSummary.lowestMorale, MoraleTime);
+						moraleClockValue = FleetSummary.lowestMorale;
+						moraleClockEnd = (new Date()).getTime() + (MoraleTime*1000);
+					}
+					
 				}
 				
 				// STATUS: MORALE ICON (independent from notification status)
@@ -629,16 +783,42 @@
 				}
 				
 				// STATUS: TAIHA
-				if( FleetSummary.hasTaiha || FleetSummary.badState[2] || FleetSummary.badState[3] ){
+				if( (FleetSummary.hasTaiha || FleetSummary.badState[2] || FleetSummary.badState[3])
+					&& !FleetSummary.taihaIndexes.equals([0]) // if not flagship only
+					&& !FleetSummary.taihaIndexes.equals([0,0]) // if not flagship only for combined
+				){
 					$(".module.status .status_repair .status_text").text( KC3Meta.term(
 						(FleetSummary.badState[2] ? "PanelFSTaiha" : (FleetSummary.badState[3] ? "PanelEscortChuuha" : "PanelHasTaiha"))
 					) );
 					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/sunk.png");
 					$(".module.status .status_repair .status_text").addClass("bad");
+					
+					// Annoying Critical alert
+					if(ConfigManager.alert_taiha){
+						$("#critical").show();
+						if(critAnim){ clearInterval(critAnim); }
+						critAnim = setInterval(function() {
+							$("#critical").toggleClass("anim2");
+						}, 500);
+						critSound.play();
+						
+						(new RMsg("service", "taihaAlertStart", {
+							tabId: chrome.devtools.inspectedWindow.tabId
+						})).execute();
+					}
+					
 				}else{
 					$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelNoTaiha") );
 					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/check.png");
 					$(".module.status .status_repair .status_text").addClass("good");
+					
+					if(critAnim){ clearInterval(critAnim); }
+					$("#critical").hide();
+					critSound.pause();
+					
+					(new RMsg("service", "taihaAlertStop", {
+						tabId: chrome.devtools.inspectedWindow.tabId
+					})).execute();
 				}
 				
 				// STATUS: COMBINED
@@ -686,7 +866,50 @@
 					}
 				}
 			});
-			
+
+			// whether this update is triggered because of sending expeditions
+			if (expeditionStarted && ConfigManager.info_auto_exped_tab) {
+				// clear flag
+				expeditionStarted = false;
+
+				// TODO: duplication (with ExpeditionSelection)
+				// we'll try switching to the next available fleet if any
+				var fleets = PlayerManager.fleets;
+				var availableFleetInd = -1;
+				// start from the 2nd fleet
+				for (var i = 1; i < 4; ++i) {
+					// find one available fleet
+					if (fleets[i].mission[0] === 0) {
+						availableFleetInd = i;
+						break;
+					}
+				}
+				console.log( "one fleet is sent, try to find next available fleet" );
+				if (availableFleetInd !== -1) {
+					selectedFleet = availableFleetInd + 1;
+					console.log("Find available fleet: " + String(selectedFleet));
+					// this time we don't have to switch tab
+					// $("#atab_expeditionPlanner").trigger("click");
+					$(".module.controls .fleet_num").each( function(i,v) {
+						var thisFleet = parseInt( $(this).text(), 10);
+						if (thisFleet === availableFleetInd + 1) {
+							$(this).trigger("click");
+						}
+					});
+				} else {
+                    // knowing fleet #2, #3 and #4 are all unavailable,
+                    // we can return focus to the main fleet.
+				    $(".module.controls .fleet_num").each( function(i,v) {
+					    var thisFleet = parseInt( $(this).text(), 10);
+					    if (thisFleet === 1) {
+						    $(this).trigger("click");
+						}
+					});
+					// also return focus to basic tab
+					$("#atab_basic").trigger("click");
+                } 
+			}
+			NatsuiroListeners.UpdateExpeditionPlanner();
 		},
 		
 		SortieStart: function(data){
@@ -763,8 +986,8 @@
 			$(".module.activity .node_types").hide();
 			
 			// Swap fish and support icons
-			$(".module.activity .battle_fish").hide();
-			$(".module.activity .battle_support").show();
+			// $(".module.activity .battle_fish").hide();
+			// $(".module.activity .battle_support").show();
 			
 			console.log("natsuiro process node", thisNode);
 			switch(thisNode.type){
@@ -899,8 +1122,8 @@
 			$(".module.activity .battle_contact").text(thisNode.fcontact +" vs "+thisNode.econtact);
 			
 			// Swap fish and support icons
-			$(".module.activity .battle_fish").hide();
-			$(".module.activity .battle_support").show();
+			// $(".module.activity .battle_fish").hide();
+			// $(".module.activity .battle_support").show();
 			
 			// Day battle-only environment
 			if(!thisNode.startNight){
@@ -994,13 +1217,13 @@
 				"../../../../assets/img/client/ratings/"+thisNode.rating+".png");
 			
 			// If there is a FISH drop
-			$(".module.activity .battle_support").hide();
+			/*$(".module.activity .battle_support").hide();
 			if(typeof data.api_get_useitem != "undefined"){
 				if(data.api_get_useitem.api_useitem_id == 68){
 					$(".module.activity .battle_fish img").attr("src", "../../../../assets/img/client/pike.png");
 				}
 			}
-			$(".module.activity .battle_fish").show();
+			$(".module.activity .battle_fish").show();*/
 			
 			// If there is a ship drop
 			if(thisNode.drop > 0){
@@ -1104,8 +1327,8 @@
 			$(".module.activity .battle_drop    img").attr("src", "../../../../assets/img/ui/dark_shipdrop-x.png").css("visibility","hidden");
 			
 			// Swap fish and support icons
-			$(".module.activity .battle_fish").hide();
-			$(".module.activity .battle_support").show();
+			// $(".module.activity .battle_fish").hide();
+			// $(".module.activity .battle_support").show();
 			
 			// Enemy Formation
 			if((typeof thisPvP.eformation != "undefined") && (thisPvP.eformation > -1)){
@@ -1225,6 +1448,54 @@
 			$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/client/ratings/"+data.result.api_win_rank+".png");
 			updateHQEXPGained($(".admiral_lvnext"),data.result.api_get_exp);
 		},
+		ExpeditionSelection: function (data) {
+			if (! ConfigManager.info_auto_exped_tab)
+				return;
+
+			// on expedition selection page
+			// choose one available fleet if any, setup variables properly
+			var fleets = PlayerManager.fleets;
+			var availableFleetInd = -1;
+			// start from the 2nd fleet
+			for (var i = 1; i < 4; ++i) {
+				// find one available fleet
+				if (fleets[i].mission[0] === 0) {
+					availableFleetInd = i;
+					break;
+				}
+			}
+
+			if (availableFleetInd !== -1) {
+				selectedFleet = availableFleetInd + 1;
+				console.log("Find available fleet: " + String(selectedFleet));
+
+				$("#atab_expeditionPlanner").trigger("click");
+				$(".module.controls .fleet_num").each( function(i,v) {
+					var thisFleet = parseInt( $(this).text(), 10);
+					if (thisFleet === availableFleetInd + 1) {
+						$(this).trigger("click");
+					}
+				});
+			} else {
+                // knowing fleet #2, #3 and #4 are all unavailable,
+                // we can return focus to the main fleet.
+				$(".module.controls .fleet_num").each( function(i,v) {
+					var thisFleet = parseInt( $(this).text(), 10);
+					if (thisFleet === 1) {
+						$(this).trigger("click");
+					}
+				});
+				// also return focus to basic tab
+				$("#atab_basic").trigger("click");
+            }
+		},
+		ExpeditionStart: function (data) {
+			if (! ConfigManager.info_auto_exped_tab)
+				return;
+			// this part is triggered when a fleet is sent to some expedition
+			// but at this moment fleet info is not yet updated
+			expeditionStarted = true;
+		},
 		ExpedResult: function(data){
 			overrideFocus = true;
 			/* Data
@@ -1317,6 +1588,260 @@
 			$(".module.activity .activity_box").hide();
 			$(".module.activity .activity_expedition").fadeIn(500);
 		},
+
+		UpdateExpeditionPlanner: function (data) {
+			//The keys are converted to lowercase. 
+			$(".dropdown_title").text("Expedition #"+String(selectedExpedition));
+
+			var allShips = [];
+			var fleetObj = PlayerManager.fleets[selectedFleet-1];
+			//fleets' subsripts start from 0 !
+			$.each(PlayerManager.fleets[selectedFleet-1].ships, function(index, rosterId) {
+				if (rosterId > -1) {
+					var CurrentShip = KC3ShipManager.get(rosterId);
+					if (CurrentShip.masterId > 0) {
+						allShips.push(CurrentShip);
+
+					}
+				}
+			});
+			if (allShips.length <= 0)
+				return;
+
+			var PS = window.PS;
+			var KE = PS["KanColle.Expedition"];
+			var KER = PS["KanColle.Expedition.Requirement"];
+			var KEC = PS["KanColle.Expedition.Cost"];
+			var KERO = PS["KanColle.Expedition.RequirementObject"];
+			var ST = PS["KanColle.Generated.SType"];
+
+			var allShipsForLib = allShips.map(function(CurrentShip, ind) {
+				var shipInst = CurrentShip;
+				var shipModel = CurrentShip.master();
+				var stypeId = shipModel.api_stype;
+				var stype = ST.showSType(ST.fromInt(stypeId));
+				var level = shipInst.level;
+				var drumCount = CurrentShip.countDrums();
+				return {
+					ammo : 0,
+					morale : 0,
+					stype : stype,
+					level : level,
+					drumCount : drumCount
+				};
+			});
+
+			var fleet = KER.fromRawFleet(allShipsForLib);
+			var availableExpeditions = KE.getAvailableExpeditions( fleet );
+
+			var unsatRequirements = KER.unsatisfiedRequirements(selectedExpedition)(fleet);
+
+			//Don't forget to use KERO.*ToObject to convert raw data to JS friendly objs
+			var rawExpdReqPack = KERO.getExpeditionRequirementPack(selectedExpedition);
+			
+			var ExpdReqPack = KERO.requirementPackToObj(rawExpdReqPack);
+			// console.log(JSON.stringify(ExpdReqPack));
+			var ExpdCheckerResult = KERO.resultPackToObject(KERO.checkWithRequirementPack(rawExpdReqPack)(fleet));
+			// console.log(JSON.stringify(ExpdCheckerResult));
+			var ExpdCost = KEC.getExpeditionCost(selectedExpedition);
+			var KEIB = PS["KanColle.Expedition.IncomeBase"];
+			var ExpdIncome = KEIB.getExpeditionIncomeBase(selectedExpedition);
+			var ExpdFleetCost = fleetObj.calcExpeditionCost( selectedExpedition );
+
+			var numLandingCrafts = fleetObj.countLandingCrafts();
+			if (numLandingCrafts > 4)
+				numLandingCrafts = 4;
+			var landingCraftFactor = 0.05*numLandingCrafts + 1;
+			var greatSuccessFactor = plannerIsGreatSuccess ? 1.5 : 1;
+
+			$(".module.activity .activity_expeditionPlanner .estimated_time").text( String( 60*ExpdCost.time ).toHHMMSS() );
+
+			// setup expedition item colors
+			$( ".activity_expeditionPlanner .expedition_entry" ).each( function(i,v) {
+				var expeditionId = parseInt( $(this).data("expId") );
+				if (availableExpeditions.indexOf(expeditionId) !== -1) {
+					$(this).addClass("cond_passed").removeClass("cond_failed");
+					// this expedition is available
+				} else {
+					// mark not available
+					$(this).addClass("cond_failed").removeClass("cond_passed");
+				}
+			});
+
+			var resourceRoot = $(".module.activity .activity_expeditionPlanner .expres_resos");
+			$.each(["fuel","ammo","steel","bauxite"], function(i,v) {
+				var incomeVal = Math.floor( ExpdIncome[v] * landingCraftFactor * greatSuccessFactor );
+				var jqObj = $( "."+v, resourceRoot );
+				var netResourceIncome = incomeVal;
+				if (v === "fuel" || v === "ammo") {
+					netResourceIncome -= ExpdFleetCost[v];
+				}
+
+				var tooltipText = String(ExpdIncome[v]);
+				if (landingCraftFactor > 1)
+					tooltipText += "*" + String(landingCraftFactor);
+				if (greatSuccessFactor > 1)
+					tooltipText += "*" + String(greatSuccessFactor);
+				if (v === "fuel" || v === "ammo") {
+					tooltipText += "-" + String(ExpdFleetCost[v]);
+				}
+
+				jqObj.text( netResourceIncome );
+				jqObj.attr( 'title', tooltipText );
+			});
+
+			var markFailed = function (jq) {
+				jq.addClass("expPlanner_text_failed").removeClass("expPlanner_text_passed");
+				return jq;
+			};
+			var markPassed = function (jq) {
+				jq.removeClass("expPlanner_text_failed").addClass("expPlanner_text_passed");
+				return jq;
+			};
+
+			// dataReq: like dataResult
+			// dataResult: dataResult of ExpdCheckerResult fields, where
+			//		 null: should hide jq obj
+			//		 false: check failed
+			//		 true: check passed
+			//		 <other values>: no effect
+			// jq: the jq object
+			// postActions: (optional) call postActions(dataReq,dataResult,jq) perform actions after jq object is properly set.
+			//				note that postActions is only called if the requirement is not null
+			//				the default action is setting the requirement to jq text
+			var setupJQObject = function( dataReq, dataResult, jq, postActions ) {
+				if (dataReq === null) {
+					jq.hide();
+				} else {
+					jq.show();
+					if (dataResult === false) {
+						// when this condition is not met
+						markFailed( jq );
+					} else if (dataResult === true) {
+						// when this condition is met
+						markPassed( jq );
+					}
+					var setJQText = function( dataReq, dataResult, jq ) { jq.text( dataReq ); };										
+					postActions = postActions || setJQText;
+					postActions( dataReq, dataResult, jq );
+				}
+			};
+			
+			setupJQObject(
+				ExpdReqPack.flagShipLevel,
+				ExpdCheckerResult.flagShipLevel,
+				$(".module.activity .activity_expeditionPlanner .flagshipLv"));
+
+			
+			setupJQObject(
+				ExpdReqPack.flagShipTypeOf,
+				ExpdCheckerResult.flagShipTypeOf,
+				$(".module.activity .activity_expeditionPlanner .flagshipType"));
+
+			setupJQObject(
+				ExpdReqPack.shipCount,
+				ExpdCheckerResult.shipCount,
+				$(".module.activity .activity_expeditionPlanner .shipNum"));
+
+			setupJQObject(
+				ExpdReqPack.levelCount,
+				ExpdCheckerResult.levelCount,
+				$(".module.activity .activity_expeditionPlanner .fleetLv"));
+			if (ExpdReqPack.levelCount === null) {
+				$(".module.activity .activity_expeditionPlanner .hasTotalLv").hide();
+			} else {
+				$(".module.activity .activity_expeditionPlanner .hasTotalLv").show();
+			}
+
+			setupJQObject(
+				ExpdReqPack.fleetSType,
+				ExpdCheckerResult.fleetSType,
+				$( ".module.activity .activity_expeditionPlanner .expPlanner_req_fleetComposition" ),
+				function ( dataReq, dataResult, jq ) {
+					jq.html( "" );
+					$.each( dataReq, function(index, value){
+						var shipReqBox = $("#factory .expPlanner_shipReqBox")
+							.clone()
+							.appendTo( jq );
+						shipReqBox.text(dataReq[index].stypeOneOf+":"+dataReq[index].stypeReqCount);
+						if (dataResult[index] === false) {
+							markFailed( shipReqBox );
+						} else if (dataResult[index] === true) {
+							markPassed( shipReqBox );
+						}
+					});
+				});
+
+			setupJQObject(
+				ExpdReqPack.drumCount,
+				ExpdCheckerResult.drumCount,
+				$( ".module.activity .activity_expeditionPlanner .canisterNum" ));
+
+			setupJQObject(
+				ExpdReqPack.drumCarrierCount,
+				ExpdCheckerResult.drumCarrierCount,
+				$( ".module.activity .activity_expeditionPlanner .canisterShipNum" ));
+			if (ExpdReqPack.drumCount === null &&
+				ExpdReqPack.drumCarrierCount === null) {
+				$( ".module.activity .activity_expeditionPlanner .canister_criterias" ).hide();
+			} else {
+				$( ".module.activity .activity_expeditionPlanner .canister_criterias" ).show();
+			}
+
+			if (unsatRequirements.length === 0) {
+				// all requirements are satisfied
+				$( ".module.activity .activity_expeditionPlanner .icon.allReq" ).show();
+
+				markPassed( $(".module.activity .activity_expeditionPlanner .text.allReq") );
+			} else {
+				$( ".module.activity .activity_expeditionPlanner .icon.allReq" ).hide();
+				markFailed( $(".module.activity .activity_expeditionPlanner .text.allReq") );
+			}
+
+			return;
+
+				/*
+				 *
+				 * Sample result for ExpdReqPack and ExpdCheckerResult on expedition 21#
+				 *
+				 * {  
+					  "flagShipLevel":15,
+					  "shipCount":5,
+					  "flagShipTypeOf":null,
+					  "levelCount":30,
+					  "drumCount":null,
+					  "drumCarrierCount":3,
+					  "fleetSType":[  
+					    {  
+					      "stypeReqCount":1,
+					      "stypeOneOf":[  
+					        "CL"
+					      ]
+					    },
+					    {  
+					      "stypeReqCount":4,
+					      "stypeOneOf":[  
+					        "DD"
+					      ]
+					    }
+					  ]
+					}
+					---------------------
+					{  
+					  "flagShipLevel":true,
+					  "shipCount":false,
+					  "flagShipTypeOf":null,
+					  "levelCount":true,
+					  "drumCount":null,
+					  "drumCarrierCount":false,
+					  "fleetSType":[  
+					    true,
+					    false
+					  ]
+					}					
+				 */
+				
+		},
 	};
 	
 	function updateHQEXPGained(ele,newDelta) {
@@ -1372,5 +1897,4 @@
 			}
 		});
 	}
-	
 })();

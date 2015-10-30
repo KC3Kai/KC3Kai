@@ -6,6 +6,12 @@ var waiting = false;
 // If trusted exit, for exit confirmation
 var trustedExit = false;
 
+// If auto-focus on window to capture key events or not
+var autoFocus = 0;
+
+// Critical Animation
+var critAnim = false;
+
 // Idle time check
 /*
   variables explanation:
@@ -103,7 +109,7 @@ $(document).on("ready", function(){
 	// Quick Play
 	$(".play_btn").on('click', function(){
 		ActivateGame();
-		ResetIdleStat();
+		// ResetIdleStat();
 	});
 	
 	// Disable Quick Play (must panel)
@@ -118,6 +124,7 @@ $(document).on("ready", function(){
 	// Configure Refresh Toggle (using $(".game-refresh").trigger("click") is possible)
 	$(".game-refresh").on("click",function(){
 		switch($(this).text()) {
+			case("00"):
 			case("01"):
 				// TODO: BOMB EXPLODED
 				// $(".game-swf").attr("src","about:blank").attr("src",localStorage.absoluteswf);
@@ -126,7 +133,7 @@ $(document).on("ready", function(){
 				$(this).text("05");
 				break;
 			default:
-				$(this).text(($(this).text()-1).toDigits(2));
+				$(this).text(Math.max(0,$(this).text()-1).toDigits(2));
 				break;
 		}
 	}).on("bomb-exploded",function(){
@@ -170,7 +177,7 @@ $(document).on("ready", function(){
 	window.onbeforeunload = function(){
 		ConfigManager.load();
 		// added waiting condition should be ignored
-		if(ConfigManager.api_askExit==1 && !trustedExit && !waiting){
+		if(ConfigManager.api_askExit==1 && !trustedExit && !waiting && !localStorage.extract_api){
 			trustedExit = true;
 			setTimeout(function(){ trustedExit = false; }, 100);
 			return KC3Meta.term("UnwantedExit");
@@ -178,13 +185,25 @@ $(document).on("ready", function(){
 	};
 	
 	setInterval(function(){
-		window.focus();
-	}, 100);
+		if(autoFocus===0){
+			window.focus();
+			$(".focus_regain").hide();
+		}else{
+			$(".focus_regain").show();
+			$(".focus_val").css("width", (800*(autoFocus/20))+"px");
+			autoFocus--;
+		}
+	}, 1000);
 	
 });
 
 $(document).on("keydown", function(event){
 	switch(event.keyCode) {
+		// F7: Toggle keyboard focus
+		case(118):
+			autoFocus = 20;
+			return false;
+			
 		// F9: Screenshot
 		case(120):
 			(new KCScreenshot()).start("Auto", $(".box-wrap"));
@@ -342,6 +361,18 @@ var interactions = {
 				});
 			});
 		});
+	},
+	
+	// Taiha Alert Start
+	taihaAlertStart :function(request, sender, response){
+		console.log("taihaAlertStart");
+		$(".box-wrap").addClass("critical");
+	},
+	
+	// Taiha Alert Stop
+	taihaAlertStop :function(request, sender, response){
+		console.log("taihaAlertStop");
+		$(".box-wrap").removeClass("critical");
 	},
 	
 	// Dummy action

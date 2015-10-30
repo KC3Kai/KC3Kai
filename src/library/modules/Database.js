@@ -326,6 +326,24 @@ Uses Dexie.js third-party plugin on the assets directory
 				.count(callback);
 		},
 		
+		get_expeds :function(pageNumber, expeds, fleets, callback){
+			 console.log("expeds", expeds);
+			var itemsPerPage = 20;
+			this.con.expedition
+				.where("hq").equals(this.index)
+				.and(function(exped){ return expeds.indexOf(exped.mission) > -1; })
+				.reverse()
+				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
+				.toArray(callback);
+		},
+		
+		count_expeds: function(expeds, fleets, callback){
+			this.con.expedition
+				.where("hq").equals(this.index)
+				.and(function(exped){ return expeds.indexOf(exped.mission) > -1; })
+				.count(callback);
+		},
+		
 		count_normal_sorties: function(callback){
 			this.con.sortie
 				.where("hq").equals(this.index)

@@ -217,23 +217,49 @@
 	position:relative;
 }
 
-.tab_docking .ship_item.ship_docking .ship_field {
-	background: #CCFFFF;
+.tab_docking .ship_item .ship_bar {
+	width:106px;
+	position:relative;
+}
+.tab_docking .ship_item .ship_hp_box {
+	width:100px;
+	height:12px;
+	margin:4px 3px 0px;
+	background:#777;
+	border:1px solid #333;
+	border-radius:4px;
+	overflow:hidden;
+}
+.tab_docking .ship_item .ship_hp_val {
+	width:0px;
+	height:10px;
 }
 
-.tab_docking .ship_item .ship_status.ship_normal {
+.tab_docking .ship_item.ship_docking .ship_field {
+	background: #C0EEEE;
+}
+
+.tab_docking .ship_item.ship_expedition .ship_field {
+	background: #D7D6ED;
+}
+
+.tab_docking .ship_item .ship_status.ship_normal,
+.tab_docking .ship_item .ship_hp_val.ship_normal {
 	background: #66FF66;
 }
 
-.tab_docking .ship_item .ship_status.ship_shouha {
+.tab_docking .ship_item .ship_status.ship_shouha,
+.tab_docking .ship_item .ship_hp_val.ship_shouha {
 	background: #FFFF66;
 }
 
-.tab_docking .ship_item .ship_status.ship_chuuha {
+.tab_docking .ship_item .ship_status.ship_chuuha,
+.tab_docking .ship_item .ship_hp_val.ship_chuuha {
 	background: #FFC266;
 }
 
-.tab_docking .ship_item	 .ship_status.ship_taiha {
+.tab_docking .ship_item	 .ship_status.ship_taiha,
+.tab_docking .ship_item	 .ship_hp_val.ship_taiha {
 	background: #FF8080;
 }
 

@@ -44,8 +44,8 @@ KC3改 Ship Box for Natsuiro theme
 		
 		// Thin bars below the ship box
 		$(".ship_exp", this.element).css("width", (120 * this.expPercent)+"px");		
-		$(".ship_fuel", this.element).css("width", (120 * this.fuelPercent)+"px");
-		$(".ship_ammo", this.element).css("width", (120 * this.ammoPercent)+"px");
+		$(".ship_fuel", this.element).css("width", (120 * Math.min(this.fuelPercent, 1))+"px");
+		$(".ship_ammo", this.element).css("width", (120 * Math.min(this.ammoPercent, 1))+"px");
 		$(".ship_bars", this.element).attr("title", "Remaining Exp = " + this.shipData.exp[1] + ", Fuel = " + Math.ceil(this.fuelPercent*100) +"%" + ", Ammo = " + Math.ceil(this.ammoPercent*100)+"%");
 		
 		return this.element;
@@ -67,8 +67,8 @@ KC3改 Ship Box for Natsuiro theme
 		$(".ship_fuel .ship_supply_text", this.element).text(Math.ceil(this.fuelPercent*100)+"%");
 		$(".ship_ammo .ship_supply_text", this.element).text(Math.ceil(this.ammoPercent*100)+"%");
 		
-		$(".ship_fuel .ship_supply_bar", this.element).css("width", (38 * this.fuelPercent)+"px");
-		$(".ship_ammo .ship_supply_bar", this.element).css("width", (38 * this.ammoPercent)+"px");
+		$(".ship_fuel .ship_supply_bar", this.element).css("width", (38 * Math.min(this.fuelPercent, 1))+"px");
+		$(".ship_ammo .ship_supply_bar", this.element).css("width", (38 * Math.min(this.ammoPercent, 1))+"px");
 		
 		this.showEquipment(0);
 		this.showEquipment(1);

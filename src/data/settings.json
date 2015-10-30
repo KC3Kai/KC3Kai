@@ -11,6 +11,7 @@
 					"choices" : [
 						[ "en", "English" ],
 						[ "de", "Deutsch" ],
+						[ "nl", "Dutch" ],
 						[ "es", "Español" ],
 						[ "fr", "Français" ],
 						[ "id", "Indonesian" ],
@@ -125,6 +126,12 @@
 			{
 				"id" : "info_fleetstat",
 				"name" : "SettingsFleetStatus",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_auto_exped_tab",
+				"name" : "SettingsAutoExpedTab",
 				"type" : "check",
 				"options" : {}
 			}
@@ -262,6 +269,12 @@
 						[ 2, "SettingsShowCounter"]
 					]
 				}
+			},
+			{
+				"id" : "alert_taiha",
+				"name" : "SettingsTaihaAlert",
+				"type" : "check",
+				"options" : {}
 			}
 		]
 	},
@@ -441,6 +454,18 @@
 					"length_min" : 27,
 					"length_max" : 27
 				}
+			}
+		]
+	},
+	{
+		"section": "SettingsPoiDBSubmission",
+		"help" : "",
+		"contents" :[
+			{
+				"id" : "PoiDBSubmission_enabled",
+				"name" : "SettingsEnablePoiDBSubmission",
+				"type" : "check",
+				"options" : {}
 			}
 		]
 	},

@@ -27,9 +27,9 @@
 				if( myVersion < Number(data.version) ){
 					var UpdateDiff = (new Date(data.time)).getTime() - (new Date()).getTime();
 					if(UpdateDiff > 0){
-						$(".nextVersion").html( data.version+" - <span class=\"timer\">"+String(UpdateDiff/1000).toHHMMSS()+"</span>");
+						$(".nextVersion").html( "v"+data.version+" in <span class=\"timer\">"+String(UpdateDiff/1000).toHHMMSS()+"</span>");
 					}else{
-						$(".nextVersion").html( data.version+" "+KC3Meta.term("MenuScheduledNow"));
+						$(".nextVersion").html( "v"+data.version+" "+KC3Meta.term("MenuScheduledNow"));
 					}
 				// Installed version is the same or greater than latest
 				}else{

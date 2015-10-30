@@ -9,7 +9,7 @@
 		shipCache:[],
 		filters: [],
 		options: [],
-		sortBy: "status",
+		sortBy: "repair_docking",
 		sortAsc: true,
 		equipMode: 0,
 		remodelOption: 0,
@@ -41,6 +41,7 @@
 					locked: ThisShip.lock,
 					hp: ThisShip.hp[0],
 					maxhp: ThisShip.hp[1],
+					damageStatus: ThisShip.damageStatus(),
 					repairDocking: RepairTime.docking,
 					repairAkashi: RepairTime.akashi,
 					stripped: ThisShip.isStriped(),
@@ -48,7 +49,6 @@
 					slots: ThisShip.slots,
 					fleet: ThisShip.onFleet(),
 				};
-
 				this.shipCache.push(ThisShipData);
 			}
 		},
@@ -103,37 +103,50 @@
 					return ship.hp !== ship.maxhp;
 				};
 				var FilteredShips = self.shipCache.filter(needsRepair);
-				// dockingShips[ "x" + <ship_id> ] = <complete time>
-				var dockingShips = {};
-				if (typeof localStorage.dockingShips !== "undefined") {
-					try {
-						var ndockData = JSON.parse( localStorage.dockingShips );
-						$.each(ndockData, function (i, v) {
-							var key = "x" + v.id.toString();
-							dockingShips[key] = v.completeTime;
-						});
+				var dockingShips = PlayerManager.getCachedDockingShips();
 
-						// update docking time here
-						$.each(FilteredShips, function (i, cShip) {
-							var completeTime = dockingShips["x" + cShip.id.toString()];
-							if (typeof completeTime !== "undefined") {
-								// if we are repairing the ship, show remaining time instead
-								try {
-									var completeDate = new Date(completeTime);
-									var secToComplete = Math.floor( (new Date(completeTime) - new Date()) / 1000 );
-									secToComplete = Math.max(0, secToComplete);
-									cShip.repairDocking = secToComplete;
-								} catch (err) {
-									console.log("Error while calculating remaining docking time");
-									console.log(err);
-								}
-							}
-						});
+				var currentFleets = PlayerManager.fleets;
+				var expeditionFleets = [];
+				$.each(currentFleets, function (i,fleet) {
+					try {
+						var missionState = fleet.mission[0];
+						// this fleet is either on expedition or being force back
+						// thus cannot be repaired for now
+						if (missionState == 1 ||
+							missionState == 3) {
+							expeditionFleets.push( i );
+						}
 					} catch (err) {
-						console.log( "Error while converting ndock data" );
+						console.log("error while processing fleet info");
 						console.log(err);
 					}
-				}
+				});
+
+				// update real-time info
+				$.each(FilteredShips, function (i, cShip) {
+					// update docking time
+					var completeTime = dockingShips["x" + cShip.id.toString()];
+					if (typeof completeTime !== "undefined") {
+						// if we are repairing the ship, show remaining time instead
+						try {
+							var completeDate = new Date(completeTime);
+							var secToComplete = Math.floor( (new Date(completeTime) - new Date()) / 1000 );
+							secToComplete = Math.max(0, secToComplete);
+							cShip.repairDocking = secToComplete;
+							// for docking ship, facility cannot be used
+							cShip.repairAkashi = Infinity;
+						} catch (err) {
+							console.log("Error while calculating remaining docking time");
+							console.log(err);
+						}
+					}
+
+					// facility cannot repair chuuha / taiha 'd ships
+					if (cShip.damageStatus == "chuuha" ||
+						cShip.damageStatus == "taiha") {
+						cShip.repairAkashi = Infinity;
+					}
+				});
 
 				// Sorting
 				FilteredShips.sort(function(a,b){
@@ -166,7 +179,7 @@
 						$("<div>").addClass("ingame_page").html("Page "+Math.ceil((Number(shipCtr)+1)/10)).appendTo(self.shipList);
 					}
 
-					cShip = FilteredShips[shipCtr]; //console.log(cShip);
+					cShip = FilteredShips[shipCtr];
 					shipLevel = cShip.level + 50 * 0; // marry enforcement (debugging toggle)
 					cElm = $(".tab_docking .factory .ship_item").clone().appendTo(self.shipList);
 					if(shipCtr%2 === 0){ cElm.addClass("even"); }else{ cElm.addClass("odd"); }
@@ -185,36 +198,32 @@
 
 					var hpStatus = cShip.hp.toString() + " / " + cShip.maxhp.toString();
 					$(".ship_status", cElm).text( hpStatus );
-
-					// KC3Ship.prototype.isStriped = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.5); };
-					// KC3Ship.prototype.isTaiha   = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.25); };
+					
+					$(".ship_hp_val", cElm).css("width", parseInt(cShip.hp/cShip.maxhp*100, 10)+"px");
 
 					$(".ship_repair_docking", cElm).text( String(cShip.repairDocking).toHHMMSS() );
-					var akashiText = String(cShip.repairAkashi).toHHMMSS();
+					var akashiText =
+						Number.isFinite(cShip.repairAkashi) ? String(cShip.repairAkashi).toHHMMSS() : "-";
+					$(".ship_repair_akashi", cElm).text( akashiText );
 
-					var hpPercent = cShip.hp / cShip.maxhp;
-					if (hpPercent <= 0.25) {
-						// taiha
-						$(".ship_status", cElm).addClass("ship_taiha");
-						akashiText = "-";
-					} else if (hpPercent <= 0.5) {
-						// chuuha
-						$(".ship_status", cElm).addClass("ship_chuuha");
-						akashiText = "-";
-					} else if (hpPercent <= 0.75) {
-						// shouha
-						$(".ship_status", cElm).addClass("ship_shouha");
-					} else {
-						// 80% ~ 100% hp
-						$(".ship_status", cElm).addClass("ship_normal");
+					if (cShip.damageStatus == "full" ||
+						cShip.damageStatus == "dummy") {
+						console.warn("damage status shouldn't be full / dummy in this docking page");
 					}
 
-					$(".ship_repair_akashi", cElm).text( akashiText );
+					$(".ship_status", cElm).addClass("ship_" + cShip.damageStatus);
+					$(".ship_hp_val", cElm).addClass("ship_" + cShip.damageStatus);
 
 					// adding docking indicator
 					var completeTime = dockingShips["x" + cShip.id.toString()];
 					if (typeof completeTime !== "undefined") {
 						cElm.addClass("ship_docking");
+					}
+
+					// adding expedition indicator
+					if (cShip.fleet !== 0 &&
+						expeditionFleets.indexOf( cShip.fleet-1 ) !== -1) {
+						cElm.addClass("ship_expedition");
 					}
 
 					[1,2,3,4].forEach(function(x){

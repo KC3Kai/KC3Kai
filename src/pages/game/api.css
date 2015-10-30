@@ -6,6 +6,7 @@ html {
 body {
 	background-color:#def;
 }
+
 .box-wrap {
 	width:800px;
 	height:480px;
@@ -13,6 +14,10 @@ body {
 	overflow:hidden;
 	background:url(../../assets/img/client/base.jpg);
 }
+.box-wrap.critical {
+	-webkit-filter: blur(1px);
+}
+
 #factory {
 	display:none;
 }
@@ -221,8 +226,8 @@ body {
 /* Refresh Toggle : default view / hoverable item */
 .box-game .game-refresh:before {
 	display: block;
-	width: 32px;
-	height: 24px;
+	width: 25%;
+	height: 100%;
 	content: " ";
 	position: absolute;
 	top:0;
@@ -276,7 +281,7 @@ body {
 	content: " ";
 	position: absolute;
 	width: 100%;
-	height: 100%;
+	height: 25%;
 	left: 0;
 	right: 0;
 	bottom: 24px;
@@ -435,4 +440,48 @@ body {
 }
 .ol_record_rank > p {
 	background-color: #F1EADD;
+}
+
+/* OVERLAY: FOCUS REGAIN
+--------------------------*/
+.focus_regain {
+	width:800px;
+	height:2px;
+	top:478px;
+	left:0px;
+	background:#ccc;
+	display:none;
+}
+.focus_val {
+	width:800px;
+	height:2px;
+	background:#f00;
+	box-shadow:0px 0px 3px #f00,
+		0px 0px 3px #f00;
+}
+
+/* OVERLAY: TAIHA ALERT
+--------------------------*/
+.taiha_blood {
+	width:800px;
+	height:480px;
+	top:0px;
+	left:0px;
+	background:url("../../assets/img/ui/blood.png");
+	display:none;
+	opacity:0.5;
+}
+.taiha_red {
+	width:800px;
+	height:480px;
+	top:0px;
+	left:0px;
+	display:none;
+}
+.taiha_red.anim1 {
+	box-shadow:inset 0px 0px 20px rgba(255,0,0,0.3);
+	transition: all 0.4s;
+}
+.taiha_red.anim2 {
+	box-shadow:inset 0px 0px 100px rgba(255,0,0,0.6);
 }

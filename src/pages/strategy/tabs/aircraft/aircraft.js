@@ -203,7 +203,15 @@
 						// Compute for veteranized fighter power
 						ThisCapacity = ThisPlane.MyHolder().slots[ this._slotNums["s"+ThisPlane.itemId] ];
 						$(".instance_aaval", PlaneBox).addClass("activeSquad");
-						$(".instance_aaval", PlaneBox).text( Math.floor(ThisPlane.fighterPower(ThisCapacity)) );
+						
+						var MyFighterPowerText = "";
+						if(ConfigManager.air_formula == 1){
+							MyFighterPowerText = ThisPlane.fighterPower(ThisCapacity);
+						}else{
+							MyFighterPowerText = "~"+ThisPlane.fighterVeteran(ThisCapacity);
+						}
+						$(".instance_aaval", PlaneBox).text( MyFighterPowerText );
+						
 					}else{
 						$(".holder_pic", PlaneBox).hide();
 						$(".holder_name", PlaneBox).hide();
