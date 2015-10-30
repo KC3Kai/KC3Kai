@@ -903,8 +903,10 @@
 					    var thisFleet = parseInt( $(this).text(), 10);
 					    if (thisFleet === 1) {
 						    $(this).trigger("click");
-					    }
-				    });
+						}
+					});
+					// also return focus to basic tab
+					$("#atab_basic").trigger("click");
                 } 
 			}
 			NatsuiroListeners.UpdateExpeditionPlanner();
@@ -1483,6 +1485,8 @@
 						$(this).trigger("click");
 					}
 				});
+				// also return focus to basic tab
+				$("#atab_basic").trigger("click");
             }
 		},
 		ExpeditionStart: function (data) {
