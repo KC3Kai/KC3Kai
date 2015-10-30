@@ -32,8 +32,8 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			localStorage.absoluteswf = request.swfsrc;
 			
 			// If refreshing API link, close source tabs and re-open game frame
-			if( localStorage.extract_api === "true"){ // localStorage has problems with native boolean
-				localStorage.extract_api = "false";
+			if(localStorage.getObject("extract_api")){ // localStorage has problems with native boolean
+				localStorage.extract_api = false;
 				// #137 open window first before closing source tab
 				window.open("../pages/game/api.html", "kc3kai_game");
 				chrome.tabs.remove([sender.tab.id], function(){});

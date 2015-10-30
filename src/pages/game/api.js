@@ -177,7 +177,7 @@ $(document).on("ready", function(){
 	window.onbeforeunload = function(){
 		ConfigManager.load();
 		// added waiting condition should be ignored
-		if(ConfigManager.api_askExit==1 && !trustedExit && !waiting && !localStorage.extract_api){
+		if(ConfigManager.api_askExit==1 && !trustedExit && !waiting && !localStorage.getObject("extract_api")){
 			trustedExit = true;
 			setTimeout(function(){ trustedExit = false; }, 100);
 			return KC3Meta.term("UnwantedExit");
