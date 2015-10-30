@@ -187,7 +187,6 @@
 			.on("click",function() {
 				plannerIsGreatSuccess = !plannerIsGreatSuccess;
 				
-				$("img", this).attr("src", "../../../../assets/img/ui/btn-"+(plannerIsGreatSuccess?"":"x")+"gs.png");
 				UpdateExpeditionTabConfig();
 				NatsuiroListeners.UpdateExpeditionPlanner();
 			} );
@@ -1590,7 +1589,9 @@
 		},
 
 		UpdateExpeditionPlanner: function (data) {
-			//The keys are converted to lowercase. 
+
+		    $( ".module.activity .activity_expeditionPlanner .expres_greatbtn img" )
+                .attr("src", "../../../../assets/img/ui/btn-"+(plannerIsGreatSuccess?"":"x")+"gs.png");
 			$(".dropdown_title").text("Expedition #"+String(selectedExpedition));
 
 			var allShips = [];
