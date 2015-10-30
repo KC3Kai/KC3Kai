@@ -291,6 +291,13 @@ KC3改 Ship Object
 		var master = this.master();
 		var fullFuel = master.api_fuel_max;
 		var fullAmmo = master.api_bull_max;
+
+		// TODO: to be verified
+		if (this.level >= 100) {
+			fullFuel = Math.ceil(fullFuel * 0.85);
+			fullAmmo = Math.ceil(fullAmmo * 0.85);
+		}
+
 		var mulRounded = function (a, percent) {
 			return Math.floor( a * percent );
 		};
