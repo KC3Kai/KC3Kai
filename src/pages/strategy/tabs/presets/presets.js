@@ -12,7 +12,10 @@
 		Prepares all data needed
 		---------------------------------*/
 		init :function(){
-			this.presets = JSON.parse(localStorage.presets);
+			if(typeof localStorage.presets != "undefined"){
+				this.presets = JSON.parse(localStorage.presets);
+			}
+			
 			console.log(this.presets);
 		},
 		
