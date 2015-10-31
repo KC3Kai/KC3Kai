@@ -61,7 +61,8 @@ Provides access to data on built-in JSON files
 		
 		shipIcon :function(id, empty){
 			if(typeof this._icons[id] !== "undefined"){
-				return "http://i708.photobucket.com/albums/ww87/dragonjet25/KC3%20Ship%20Icons/"+this._icons[id];
+				// return "http://i708.photobucket.com/albums/ww87/dragonjet25/KC3%20Ship%20Icons/"+this._icons[id];
+				return "chrome-extension://"+chrome.runtime.id+"/assets/img/ships/"+id+".png";
 			}
 			if(typeof empty == "undefined"){
 				return this._defaultIcon;
@@ -71,7 +72,8 @@ Provides access to data on built-in JSON files
 		
 		abyssIcon :function(id, empty){
 			if(typeof this._icons[id] !== "undefined"){
-				return "http://i708.photobucket.com/albums/ww87/dragonjet25/KC3%20Abyss%20Icons/"+this._icons[id];
+				// return "http://i708.photobucket.com/albums/ww87/dragonjet25/KC3%20Abyss%20Icons/"+this._icons[id];
+				return "chrome-extension://"+chrome.runtime.id+"/assets/img/abyss/"+id+".png";
 			}
 			if(typeof empty == "undefined"){
 				return this._defaultIcon;
