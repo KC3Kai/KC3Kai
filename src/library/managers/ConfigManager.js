@@ -13,7 +13,7 @@ Retreives when needed to apply on components
 		// Default values. As a function to not include on JSON string
 		defaults : function(){
 			return {
-				version				: 7,
+				version				: 8,
 				language			: "en",
 				elosFormula 		: 3,
 				hqExpDetail 		: 1,
