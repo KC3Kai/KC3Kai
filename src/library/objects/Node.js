@@ -12,6 +12,7 @@ Used by SortieManager
 		this.id = (id || 0);
 		this.type = "";
 		this.stime = UTCTime;
+		this.isPvP = false;
 	};
 	
 	KC3Node.prototype.defineAsBattle = function( nodeData ){

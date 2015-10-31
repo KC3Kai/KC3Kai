@@ -785,6 +785,7 @@
 				if( (FleetSummary.hasTaiha || FleetSummary.badState[2] || FleetSummary.badState[3])
 					&& !FleetSummary.taihaIndexes.equals([0]) // if not flagship only
 					&& !FleetSummary.taihaIndexes.equals([0,0]) // if not flagship only for combined
+					&& !KC3SortieManager.currentNode().isPvP // if PvP taiha is alright
 				){
 					$(".module.status .status_repair .status_text").text( KC3Meta.term(
 						(FleetSummary.badState[2] ? "PanelFSTaiha" : (FleetSummary.badState[3] ? "PanelEscortChuuha" : "PanelHasTaiha"))
@@ -1319,6 +1320,7 @@
 			
 			var thisPvP;
 			KC3SortieManager.nodes.push(thisPvP = (new KC3Node()).defineAsBattle());
+			thisPvP.isPvP = true;
 			thisPvP.engage( data.battle,data.fleetSent );
 			
 			// Hide useless information
