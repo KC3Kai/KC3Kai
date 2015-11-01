@@ -1588,6 +1588,22 @@
 			$("#atab_activity").addClass("active");
 			$(".module.activity .activity_box").hide();
 			$(".module.activity .activity_expedition").fadeIn(500);
+
+			// after getting the result, we assume user will just resupply & resend to the same expedition
+			// it makes sense to update expedition planner with current fleet-expedition relation.
+			var expedTabConf = TouchExpeditionTabConfig();
+			var resultFleetNum = data.params.api_deck_id; // string
+			var expedSetting = expedTabConf[resultFleetNum];
+
+			if (expedSetting.selectedExpedition === data.expedNum ) {
+				// same expedition, no need to do anything ... for now
+			} else {
+				console.log( "updating expedition planner according to the current result" );
+				// if it's different, update config
+				expedSetting.selectedExpedition = data.expedNum;
+				expedSetting.isGreatSuccess = (data.response.api_clear_result === 2);
+				localStorage.expedTabLastPick = JSON.stringify( expedTabConf );
+			}
 		},
 
 		UpdateExpeditionPlanner: function (data) {
