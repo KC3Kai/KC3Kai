@@ -111,6 +111,11 @@
 			window.open("../about/about.html", "kc3kai_about");
 		});
 		
+		// About
+		$("#facebook").on('click', function(){
+			window.open("https://www.facebook.com/kc3kai", "_blank");
+		});
+		
 		// Calculate reset countdowns
 		var TimeNow = new Date();
 		
