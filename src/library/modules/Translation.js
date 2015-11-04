@@ -17,7 +17,7 @@
 		applyWords :function(){
 			// Interchange element contents with translations
 			$(".i18n").each(function(){
-				$(this).text( KC3Meta.term( $(this).text() ) );
+				$(this).html( KC3Meta.term( $(this).text() ) );
 				$(this).css("visibility", "visible");
 			});
 		},
@@ -53,7 +53,12 @@
 			if(typeof extendEnglish=="undefined"){ extendEnglish=false; }
 			
 			// Japanese special case where ships and items sources are already in JP
-			if(ConfigManager.language=="jp" && (filename=="ships" || filename=="items")){ extendEnglish=false; }
+			if(
+				(["jp", "tcn"].indexOf(ConfigManager.language) > -1)
+				&& (filename=="ships" || filename=="items")
+			){
+				extendEnglish=false;
+			}
 			
 			// console.log(filename, "extendEnglish", extendEnglish);
 			
@@ -61,7 +66,7 @@
 			if(extendEnglish){
 				// Load english file
 				enJSON = JSON.parse($.ajax({
-					url : repo+'translations/en/' + filename + '.json',
+					url : repo+'lang/data/en/' + filename + '.json',
 					async: false
 				}).responseText);
 				
@@ -70,7 +75,7 @@
 			}
 			
 			return $.extend(true, translationBase, JSON.parse($.ajax({
-				url : repo+'translations/' +ConfigManager.language+ '/' + filename + '.json',
+				url : repo+'lang/data/' +ConfigManager.language+ '/' + filename + '.json',
 				async: false
 			}).responseText));
 		}

@@ -105,6 +105,7 @@ body {
 	margin:0px 0px 5px 20px;
 	padding:0 0 5px 0;
 	overflow:hidden;
+	position: relative;
 }
 .settingBox .title {
 	width:200px;
@@ -122,15 +123,19 @@ body {
 	margin:0px 5px 0px 0px;
 }
 .settingBox .note {
-	width:70px;
+	width: 192px;
 	height:40px;
 	line-height:40px;
 	float:left;
-	text-align:center;
+	text-align: right;
 	/*font-size:16px;*/
 	font-weight:bold;
 	color:#009900;
 	display:none;
+	position: absolute;
+	right: 16px;
+	top: 2px;
+	pointer-events:none;
 }
 /* Settings Options */
 .settingBox .options .checkbox {
@@ -190,4 +195,8 @@ body {
 	background:#7ad;
 	border:1px solid #369;
 	color:#fff;
+}
+.settingBox.dangerous {
+	color: red;
+	background:#f68383;
 }

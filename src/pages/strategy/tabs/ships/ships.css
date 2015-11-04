@@ -168,6 +168,12 @@
 .tab_ships .ship_item.even .ship_field {
 	background:#e4e4e4;
 }
+.tab_ships .ship_item.odd .ship_field.ship_lk{
+	background:#66FF66;
+}
+.tab_ships .ship_item.even .ship_field.ship_lk {
+	background:#66FF66;
+}
 .tab_ships .ingame_page {
 	width:680px;
 	height:11px;
@@ -187,15 +193,45 @@
 	text-align:center;
 }
 .tab_ships .ship_item .ship_img {
+	position:relative;
 	width:20px;
 }
-.tab_ships .ship_item .ship_img img {
+.tab_ships .ship_item .ship_img img.ship_icon {
 	width:20px;
 	height:20px;
+}
+.tab_ships .ship_item .ship_img img.ship_kekkon {
+	position:absolute;
+	right:0;
+	bottom:0;
+	width:50%;
+	height:50%;
+	display:none;
+}
+.tab_ships .ship_item .ship_kekkon-color {
+	color: #E49F9C;
+}
+.tab_ships .ship_item .ship_kekkon:after {
+	display: inline;
+	position: absolute;
+	width: 100%;
+	right: 0;
+	opacity:0.5;
+	content: "x";
+	color: rgba(0,0,0,0);
+	background-position: 100%;
+	background-image: url('../../assets/img/client/kekkon.png');
+	background-size: 10px;
+	background-repeat: no-repeat;
+	text-align: right;
 }
 .tab_ships .ship_item .ship_name {
 	width:92px;
 	overflow:hidden;
+	position:relative;
+}
+.tab_ships .ship_item .ship_name.ship_kekkon {
+	/*width:112px;*/
 }
 .tab_ships .ship_item .ship_type {
 	width:30px;
@@ -205,6 +241,10 @@
 	width:50px;
 	/*margin:0px 5px 0px 0px;*/
 	text-align:center;
+	position:relative;
+}
+.tab_ships .ship_item .ship_lv.ship_kekkon {
+	/*width:70px;*/
 }
 .tab_ships .ship_item .ship_morale {
 	width:20px;
@@ -219,7 +259,7 @@
 }
 /* Fields: Stats */
 .tab_ships .ship_item .ship_stat {
-	width:30px;
+	width:25px;
 	text-align:center;
 }
 .tab_ships .ship_item .ship_stat_mod {
@@ -235,6 +275,10 @@
 }
 .tab_ships .ship_item .ship_tp.max {
 	background:#00CCFF;
+}
+.tab_ships .ship_item .ship_yasen.max {
+	background:#555555;
+	color:#FFFFFF;
 }
 .tab_ships .ship_item .ship_aa.max {
 	background:#FF9900;
@@ -258,16 +302,34 @@
 	height:20px;
 	float:left;
 	overflow:hidden;
+	position:relative;
 }
 .tab_ships .ship_item .ship_equip img {
 	width:20px;
 	height:20px;
 }
-/* Fields: HeartLock */
-.tab_ships .ship_item .ship_lock {
+.tab_ships .ship_item .ship_equip span {
+	position: absolute;
+	display: flex;
+	right: 0;
+	bottom: 0;
+	font-size: 1.0em;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.25);
+	border-radius: 16px;
+	color: white;
+	text-align: center;
+	align-items: center;
+	justify-content: center;
+	font-weight: bold;
+}
+/* Fields: HeartLock and Marriage Ring */
+.tab_ships .ship_item .ship_stat_icon {
 	width:20px;
 }
-.tab_ships .ship_item .ship_lock img {
+.tab_ships .ship_item .ship_stat_icon img {
 	width:20px;
 	display:none;
 }
+

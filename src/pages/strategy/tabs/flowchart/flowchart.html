@@ -1,8 +1,12 @@
 <div class="page_title">
 	Quest Flowchart
-	<div class="page_wiki">
-		<a href="https://github.com/dragonjet/KC3Kai/wiki" target="_blank"><span>?</span> Help</a>
-	</div>
+	<div class="page_help_btn hover"><span>?</span> Help Topics</div>
+</div>
+
+<!-- HELP TOPICS -->
+<div class="page_help">
+	<div class="help_q"></div>
+	<div class="help_a"></div>
 </div>
 
 <!-- CONTROLS -->
@@ -39,7 +43,13 @@
 			<div class="questTrunk"></div>
 			<div class="questIcon"></div>
 			<div class="questDesc"></div>
-			<div class="questTrack"><em>No data</em></div>
+			<div class="questTrack">
+				<div class="questOverride questMinus hover">-</div>
+				<div class="questCount"></div>
+				<div class="questOverride questAdd hover">+</div>
+				<div class="questToggle hover"><img src="../../assets/img/ui/arrow.png" /></div>
+				<div class="questRemove hover"><img src="../../assets/img/ui/sunk.png" /></div>
+			</div>
 			<div class="clear"></div>
 		</div>
 		<ul class="questChildren">
@@ -53,6 +63,7 @@
 	<div class="questExtraItem">
 		<div class="questIcon"></div>
 		<div class="questDesc"></div>
+		<div class="questRemove hover"><img src="../../assets/img/ui/sunk.png" /></div>
 		<div class="clear"></div>
 	</div>
 	

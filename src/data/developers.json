@@ -10,7 +10,7 @@
 				"th" :"http://www.twitch.tv/jetrico",
 				"wk" :"http://kancolle.wikia.com/wiki/User:Dragonjet",
 				"gh" :"https://github.com/dragonjet",
-				"hm" :"http://www.himeuta.net/members/78-dragonjet/"
+				"yt" :"https://www.youtube.com/user/dragonjet"
 			}
 		},
 		{
@@ -72,7 +72,8 @@
 			"links": {
 				"gh" : "https://github.com/Javran",
 				"tw" :"https://twitter.com/JavranC",
-				"wb" : "http://javran.github.io"
+				"wb" : "http://javran.github.io",
+				"we" : "http://weibo.com/JavranC"
 			}
 		},
 		{
@@ -92,6 +93,8 @@
 			"avatar" : "https://avatars2.githubusercontent.com/u/9847780?v=3&s=40",
 			"desc" : "AboutDeveloper",
 			"links" : {
+				"fb" :"http://facebook.com/ReiHakurei",
+				"tw" :"http://twitter.com/Rei_Fan39",
 				"gh" :"https://github.com/ReiFan49"
 			}
 		},
@@ -101,6 +104,32 @@
 			"desc" : "AboutDeveloper",
 			"links" : {
 				"gh" :"https://github.com/tmerta"
+			}
+		},
+		{
+			"name": "Nekoworkshop",
+			"avatar" : "https://avatars1.githubusercontent.com/u/1346257?v=3&s=40",
+			"desc" : ["AboutDeveloper", "日本語"],
+			"links" : {
+				"gh" :"https://github.com/nekoworkshop",
+				"tw" :"http://twitter.com/nekoworkshop"
+			}
+		},
+		{
+			"name": "bcc32",
+			"avatar" : "https://avatars0.githubusercontent.com/u/1239097?v=3&s=40",
+			"desc" : "Developer",
+			"links" : {
+				"gh" :"https://github.com/bcc32",
+                                "fb" :"https://www.facebook.com/sezvar"
+			}
+		},
+		{
+			"name": "Travis-kun",
+			"avatar" : "https://cloud.githubusercontent.com/assets/557312/9787493/d922f80e-57f5-11e5-9eae-29e013e5c2b9.png",
+			"desc" : "I will always be watching",
+			"links" : {
+				"gh" :"https://github.com/travis-ci/travis.rb"
 			}
 		}
 	],
@@ -152,6 +181,14 @@
 			}
 		},
 		{
+			"name": "Arebs",
+			"avatar" : "https://avatars0.githubusercontent.com/u/6851819?v=3&s=40",
+			"desc" : "Deutsch",
+			"links" : {
+				"gh" :"https://github.com/Arebs"
+			}
+		},
+		{
 			"name": "Arkayda",
 			"avatar" : "https://avatars1.githubusercontent.com/u/13376050?v=3&s=40",
 			"desc" : "Français",
@@ -163,7 +200,7 @@
 		},
 		{
 			"name": "Juuryoushin ",
-			"avatar" : "https://pbs.twimg.com/profile_images/628915215095214080/XizjEI8b.png",
+			"avatar" : "http://vignette3.wikia.nocookie.net/common/avatars/3/30/25863825.png/revision/latest/scale-to-width-down/150?cb=1441191412&format=jpg",
 			"desc" : "Français",
 			"links" : {
 				"tw" :"https://twitter.com/YoungPreta"
@@ -215,9 +252,118 @@
 				"wk" :"http://kancolle.wikia.com/wiki/User:Mizarox",
 				"fb" :"https://www.facebook.com/mizael.fer"
 			}
+		},
+		{
+			"name": "YukiNyaa712",
+			"avatar" : "http://kitakami.tk/profile.png",
+			"desc" : "한국어",
+			"links" : {
+				"gh" :"https://github.com/YukiNyaa",
+				"wk" : "http://kancolle.wikia.com/wiki/User:YukiNyaa",
+				"fb" : "https://www.facebook.com/iTwilly.HJW"
+			}
+		},
+		{
+			"name": "RoyOzz",
+			"avatar" : "http://vignette2.wikia.nocookie.net/common/avatars/6/67/26454495.png/revision/latest/scale-to-width-down/150?cb=1440182984&format=jpg",
+			"desc" : "Русский",
+			"links" : {
+				"wk" : "http://ru.kancolle.wikia.com/wiki/%D0%A3%D1%87%D0%B0%D1%81%D1%82%D0%BD%D0%B8%D0%BA:RoyOzz",
+				"tw" : "https://twitter.com/Roy_Ozz"
+			}
+		},
+		{
+			"name": "Agc0de6",
+			"avatar" : "http://vignette1.wikia.nocookie.net/common/avatars/2/23/26256457.png/revision/latest/scale-to-width-down/150?cb=1440181807&format=jpg",
+			"desc" : "Русский",
+			"links" : {
+				"wk" : "http://kancolle.wikia.com/wiki/Message_Wall:Agc0de6",
+				"tw" : "https://twitter.com/c0de_6"
+			}
+		},
+		{
+			"name": "FluffyPanzer",
+			"avatar" : "https://avatars2.githubusercontent.com/u/10162193?v=3&s=40",
+			"desc" : "Español",
+			"links" : {
+				"gh" : "https://github.com/FluffyPanzer"
+			}
+		},
+		{
+			"name": "Kvazikvark",
+			"avatar" : "https://avatars2.githubusercontent.com/u/14229931?v=3&s=40",
+			"desc" : "Русский",
+			"links" : {
+				"gh" : "https://github.com/Kvazikvark",
+				"wk" : "http://kancolle.wikia.com/wiki/User:Kvazikvark",
+				"ma" : "http://myanimelist.net/profile/Kvazikvark",
+				"sk" : "skype:wesker487?chat"
+			}
+		},
+		{
+			"name": "Konstantillo",
+			"avatar" : "http://vignette3.wikia.nocookie.net/common/avatars/5/5c/26028877.png/revision/latest/scale-to-width-down/150?cb=1422400487&format=jpg",
+			"desc" : "Русский",
+			"links" : {
+				"wk" : "http://kancolle.wikia.com/wiki/User:Konstantillo"
+			}
+		},
+		{
+			"name": "arialypse",
+			"avatar" : "https://avatars0.githubusercontent.com/u/13535817?v=3&s=40",
+			"desc" : "ภาษาไทย",
+			"links" : {
+				"gh" : "https://github.com/arialypse",
+				"fb" : "https://www.facebook.com/Arialypse",
+				"wk" : "http://kancolle.wikia.com/wiki/User:Arialypse",
+				"yt" : "https://www.youtube.com/Arialypse",
+				"wb" : "http://www.zeitvier.com/"
+			}
+		},
+		{
+			"name": "Anime-Thai",
+			"avatar" : "https://avatars3.githubusercontent.com/u/14352605?v=3&s=40",
+			"desc" : "ภาษาไทย",
+			"links" : {
+				"gh" : "https://github.com/Anime-Thai",
+				"fb" : "https://www.facebook.com/profile.php?id=100009261752211",
+				"wb" : "http://www.anime-thai.net"
+			}
+		},
+		{
+			"name": "omekeki",
+			"avatar" : "https://avatars1.githubusercontent.com/u/15091910?v=3&s=40",
+			"desc" : "Dutch",
+			"links" : {
+				"gh" : "https://github.com/omekeki",
+				"tw" : "https://twitter.com/omekeki",
+				"wk" : "http://kancolle.wikia.com/wiki/User:Omekeki"
+			}
+		},
+		{
+			"name": "ForteBX",
+			"avatar" : "http://vignette4.wikia.nocookie.net/common/avatars/d/df/24333579.png",
+			"desc" : "Español",
+			"links" : {
+				"wk" : "http://kancolle.wikia.com/wiki/User:ForteBX",
+				"fb" : "https://www.facebook.com/ForteBXBassBX",
+				"tw" : "https://twitter.com/ForteBX"
+			}
 		}
 	],
 	"AboutTesters" : [
+		{
+			"name": "Ethrundr",
+			"avatar" : "https://avatars2.githubusercontent.com/u/13522800?v=3&s=40",
+			"desc" : "AboutDevTester",
+			"links" : {
+				"gh" :"https://github.com/ethrundr",
+				"wk" :"http://kancolle.wikia.com/wiki/User:Ethrundr",
+				"fb" :"https://www.facebook.com/ethrundr",
+				"hm" :"http://www.himeuta.net/members/1056-ethrundr/",
+				"kn" :"http://www.kaorinusantara.or.id/forum/index.php?members/ethrundr.18705/"
+			}
+		},
 		{
 			"name": "Erupi",
 			"avatar": "https://avatars1.githubusercontent.com/u/12823927?v=3&s=40",
@@ -233,7 +379,9 @@
 			"desc": "AboutDevTester",
 			"links": {
 				"gh" :"https://github.com/LostLogia4",
-				"wk" :"http://kancolle.wikia.com/wiki/User:Ar-cen-ciel"
+				"wk" :"http://kancolle.wikia.com/wiki/User:Ar-cen-ciel",
+				"hm" :"http://www.himeuta.net/members/7572-lostlogia4",
+				"tw" :"https://twitter.com/LostLogia4" 
 			}
 		},
 		{
@@ -251,42 +399,35 @@
 			"links": {
 				"wk" :"http://kancolle.wikia.com/wiki/User:Nanamin"
 			}
-		}
-	],
-	"AboutOther" : [
+		},
 		{
-			"name": "JDKurotoshigami",
-			"avatar" : "https://graph.facebook.com/JDKurotoshigami.Artworks/picture",
-			"desc" : "AboutLogo",
-			"links" : {
-				"fb" :"https://www.facebook.com/JDKurotoshigami.Artworks",
-				"tw" :"https://twitter.com/JDKurotoshigami",
-				"px" :"http://www.pixiv.net/member.php?id=11090147",
-				"da" :"http://jd-kurotoshigami.deviantart.com"
+			"name": "NicolaosGreene",
+			"avatar": "https://avatars1.githubusercontent.com/u/3627763?v=3&s=40",
+			"desc": "AboutDevTester",
+			"links": {
+				"gh" :"https://github.com/NicolaosGreene",
+				"st" :"http://steamcommunity.com/profiles/76561198023180048/",
+				"hm" :"http://www.himeuta.net/members/8927-nicolaos/",
+				"wk" :"http://kancolle.wikia.com/wiki/User:NicolaosGreene"
 			}
 		},
 		{
-			"name": "tykez269",
-			"avatar" : "http://a.deviantart.net/avatars/t/y/tykez269.jpg",
-			"desc" : "AboutFairy",
-			"links" : {
-				"da" :"http://tykez269.deviantart.com"
+			"name": "RredderR",
+			"avatar": "https://avatars2.githubusercontent.com/u/14126825?v=3&s=40",
+			"desc": "AboutDevTester",
+			"links": {
+				"gh" :"https://github.com/RredderR"
 			}
 		},
 		{
-			"name": "Lord Falukorv",
-			"avatar" : "http://img3.wikia.nocookie.net/__cb20150807073959/kancolle/images/5/54/Falukorv.jpg",
-			"desc" : "Sausage supplier",
-			"links" : {}
-		},
-		{
-			"name": "Lord Melon",
-			"avatar" : "http://img4.wikia.nocookie.net/__cb1438854831/common/avatars/thumb/6/65/25730832.png/150px-25730832.png.jpg",
-			"desc" : "Melon supplier",
-			"links" : {
-				"wk" :"http://kancolle.wikia.com/wiki/User:Zel-melon"
-			}
-		}
+			"name": "SerialConvort",
+			"avatar": "http://vignette3.wikia.nocookie.net/common/avatars/3/34/25505003.png/revision/latest/scale-to-width-down/150?cb=1428213460&format=jpg",
+			"desc": "AboutDevTester",
+			"links": {
+				"gh" :"https://github.com/SerialConvort",
+				"wk" :"http://kancolle.wikia.com/wiki/User:SerialConvort"
+			 }
+		 }
 	],
 	"AboutReporters" : [
 		{
@@ -296,23 +437,6 @@
 			"links" : {
 				"gh" :"https://github.com/SanaNoHana",
 				"hm" :"http://www.himeuta.net/members/3906-sananohana/"
-			}
-		},
-		{
-			"name": "Ethrundr",
-			"avatar" : "https://avatars2.githubusercontent.com/u/13522800?v=3&s=40",
-			"desc" : "AboutReporter",
-			"links" : {
-				"gh" :"https://github.com/ethrundr",
-				"wk" :"http://kancolle.wikia.com/wiki/User:Ethrundr"
-			}
-		},
-		{
-			"name": "bcc32",
-			"avatar" : "https://avatars0.githubusercontent.com/u/1239097?v=3&s=40",
-			"desc" : "AboutReporter",
-			"links" : {
-				"gh" :"https://github.com/bcc32"
 			}
 		},
 		{
@@ -347,6 +471,27 @@
 			"links" : {
 				"gh" :"https://github.com/dustfan",
 				"wk" :"http://kancolle.wikia.com/wiki/User:DustFan"
+			}
+		}
+	],
+	"AboutOther" : [
+		{
+			"name": "JDKurotoshigami",
+			"avatar" : "https://graph.facebook.com/JDKurotoshigami.Artworks/picture",
+			"desc" : "AboutLogo",
+			"links" : {
+				"fb" :"https://www.facebook.com/JDKurotoshigami.Artworks",
+				"tw" :"https://twitter.com/JDKurotoshigami",
+				"px" :"http://www.pixiv.net/member.php?id=11090147",
+				"da" :"http://jd-kurotoshigami.deviantart.com"
+			}
+		},
+		{
+			"name": "tykez269",
+			"avatar" : "http://a.deviantart.net/avatars/t/y/tykez269.jpg",
+			"desc" : "AboutFairy",
+			"links" : {
+				"da" :"http://tykez269.deviantart.com"
 			}
 		}
 	]

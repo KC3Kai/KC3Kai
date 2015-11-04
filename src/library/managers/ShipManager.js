@@ -25,10 +25,19 @@ Saves and loads list to and from localStorage
 		
 		// Add or replace a ship on the list
 		add :function(data){
+			var didFlee = false;
 			if(typeof data.api_id != "undefined"){
+				if (typeof this.list["x"+data.api_id] !== "undefined") {
+					didFlee = this.list["x"+data.api_id].didFlee;
+				}
 				this.list["x"+data.api_id] = new KC3Ship(data);
+				this.list["x"+data.api_id].didFlee = didFlee;
 			}else if(typeof data.rosterId != "undefined"){
+				if (typeof this.list["x"+data.rosterId] !== "undefined") {
+					didFlee = this.list["x"+data.rosterId].didFlee;
+				}
 				this.list["x"+data.rosterId] = new KC3Ship(data);
+				this.list["x"+data.rosterId].didFlee = didFlee;
 			}
 		},
 		
@@ -55,11 +64,9 @@ Saves and loads list to and from localStorage
 						.reduce(function(x,y){ return x.concat(y); }),
 					shipTargetOnFleet = flatShips.indexOf(Number(rosterId)), // check from which fleet
 					shipTargetFleetID = Math.floor(shipTargetOnFleet/6);
-				console.log(rosterId,flatShips,shipTargetOnFleet,shipTargetFleetID);
 				// check whether the designated ship is on fleet or not
 				if(shipTargetOnFleet >= 0){
-					PlayerManager.fleets[shipTargetFleetID].ships.splice((shipTargetOnFleet % 6), 1);
-					PlayerManager.fleets[shipTargetFleetID].ships.push(-1);
+					PlayerManager.fleets[shipTargetFleetID].discard(rosterId);
 				}
 				// remove any equipments from her
 				for(var gctr in thisShip.items){

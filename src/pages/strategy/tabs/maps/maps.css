@@ -82,7 +82,6 @@
 	width:80px;
 	height:10px;
 	background:#f00;
-	border-right:1px solid #ace;
 }
 
 /* Map without gauge (All maps) */
@@ -132,21 +131,8 @@
 	border-bottom:1px solid #369;
 	padding:5px 5px 0px;
 }
-.tab_maps .page_list .page_box {
-	width:30px;
-	height:20px;
-	line-height:20px;
-	float:left;
-	text-align:center;
-	margin:0px 3px 5px 0px;
-	border:1px solid #ace;
-	background:#def;
-	font-size:12px;
-}
-.tab_maps .page_list .page_box.active {
-	background:#58a;
-	color:#fff;
-	border:1px solid #def;
+.tab_maps .page_list .pagination {
+	margin:0px;
 }
 
 /* SORTIE LIST
@@ -360,11 +346,15 @@
 }
 .tab_maps .sortie_list .rfleet_equips {
 	width:55px;
-	height:0px;
+	height:20px;
 	float:left;
-	background:#cff;
 }
 
+.tab_maps .sortie_list .rfleet_equips img {
+	float:left;
+	line-height: auto;
+	width:12px;
+}
 
 /* Sortie Nodes */
 .tab_maps .sortie_list .sortie_nodes {
@@ -523,7 +513,7 @@
 	float:left;
 }
 .tab_maps .sortie_list .node_airicon {
-	width:20px;
+	width: 18px;
 	height:20px;
 	line-height:20px;
 	float:left;
@@ -537,12 +527,26 @@
 	margin:1px;
 }
 .tab_maps .sortie_list .node_airtext {
-	width:38px;
+	width: 40px;
 	height:20px;
 	float:left;
 	/*background:#fcc;*/
 	font-size:11px;
 }
+.tab_maps .sortie_list .node_airtext .node_FFT ,
+.tab_maps .sortie_list .node_airtext .node_FAT ,
+.tab_maps .sortie_list .node_airtext .node_BFT ,
+.tab_maps .sortie_list .node_airtext .node_BAT {
+	float: left;
+}
 .tab_maps .sortie_list .node_airtext .node_loss {
 	color:#f00;
+}
+.tab_maps .sortie_list .node_exp {
+	text-align: right;
+	color: cornflowerblue;
+}
+.tab_maps .sortie_list .node_exp span {
+	color: black;
+	font-weight: bolder;
 }

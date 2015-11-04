@@ -32,8 +32,8 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			localStorage.absoluteswf = request.swfsrc;
 			
 			// If refreshing API link, close source tabs and re-open game frame
-			if( localStorage.extract_api === "true"){ // localStorage has problems with native boolean
-				localStorage.extract_api = "false";
+			if(JSON.parse(localStorage.extract_api)){ // localStorage has problems with native boolean
+				localStorage.extract_api = false;
 				// #137 open window first before closing source tab
 				window.open("../pages/game/api.html", "kc3kai_game");
 				chrome.tabs.remove([sender.tab.id], function(){});
@@ -72,6 +72,19 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			(new TMsg(request.tabId, "gamescreen", "activateGame", {})).execute();
 		},
 		
+		/* Game Screen Change
+		A specific game screen manipulation. Such as idle timer, catbombing, and others. That marks
+		the guy who make this function is lazier than making another key for such purpose XD
+		(PS: self-insulting)
+		------------------------------------------*/
+		"gameScreenChg" :function(request, sender, response){
+			(new TMsg(request.tabId, "gamescreen", request.message_id || "goodResponses", {
+				tcp_status: request.tcp_status,
+				api_status: request.api_status,
+				api_result: request.api_result,
+			})).execute();
+		},
+		
 		/* QUEST OVERLAYS
 		Request from devTools to show quest overlays on its inspected window
 		DevTools does not have access to chrome.tabs API thus cannot send this message on its own
@@ -101,6 +114,38 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		"getConfig" :function(request, sender, response){
 			ConfigManager.load();
 			response({value: ConfigManager[request.id]});
+		},
+		
+		/* FIT SCREEN
+		Auto-resize browser window to fit the game screen
+		------------------------------------------*/
+		"fitScreen" :function(request, sender, response){
+			(new TMsg(request.tabId, "gamescreen", "fitScreen")).execute();
+		},
+		
+		/* DMM FRMAE INJECTION
+		Responds if content script should inject DMM Frame customizations
+		------------------------------------------*/
+		"dmmFrameInject" :function(request, sender, response){
+			if(sender.tab.url.indexOf("/pages/game/dmm.html") > -1){
+				response({value:true});
+			}else{
+				response({value:false});
+			}
+		},
+		
+		/* TAIHA ALERT START
+		Start bloody taiha indicator on-screen
+		------------------------------------------*/
+		"taihaAlertStart" :function(request, sender, response){
+			(new TMsg(request.tabId, "gamescreen", "taihaAlertStart")).execute();
+		},
+		
+		/* TAIHA ALERT STOP
+		Stop bloody taiha indicator on-screen
+		------------------------------------------*/
+		"taihaAlertStop" :function(request, sender, response){
+			(new TMsg(request.tabId, "gamescreen", "taihaAlertStop")).execute();
 		}
 		
 	};

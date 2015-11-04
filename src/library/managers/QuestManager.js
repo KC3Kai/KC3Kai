@@ -50,9 +50,10 @@ Uses KC3Quest objects to play around with
 		
 		checkAndResetQuests :function(serverJstTime){
 			//console.log($.isEmptyObject(this.list));
-			if ($.isEmptyObject(this.list)) {
+			/*if ($.isEmptyObject(this.list)) {
 				this.load();
-			}
+			}*/
+			this.load();
 			
 			// 5AM JST = 8PM GMT (previous day)
 			var millisecondsInDay = 24*60*60*1000;
@@ -270,9 +271,15 @@ Uses KC3Quest objects to play around with
 		------------------------------------------*/
 		resetQuest :function(questId){
 			if(typeof this.list["q"+questId] != "undefined"){
-				this.list["q"+questId] = new KC3Quest(questId);
+				delete this.list["q"+questId];
 				this.isOpen(questId, false);
 				this.isActive(questId, false);
+			}
+		},
+
+		resetQuestCounter: function( questId ){
+			if (typeof this.list["q"+questId] != "undefined"){
+				this.list["q"+questId].tracking[0][0] = 0;
 			}
 		},
 		
@@ -281,11 +288,18 @@ Uses KC3Quest objects to play around with
 				this.resetQuest( questIds[ctr] );
 			}
 		},
+
+		resetCounterLoop: function( questIds ){
+			for(var ctr in questIds){
+				this.resetQuestCounter( questIds[ctr] );
+			}
+		},
 		
 		resetDailies :function(){
 			this.load();
 			console.log("resetting dailies");
 			this.resetLoop([201, 216, 210, 211, 218, 212, 226, 230, 303, 304, 402, 403, 503, 504, 605, 606, 607, 608, 609, 619, 702]);
+			this.resetCounterLoop([311]);
 			this.save();
 		},
 		
@@ -299,7 +313,7 @@ Uses KC3Quest objects to play around with
 		resetMonthlies :function(){
 			this.load();
 			console.log("resetting monthlies");
-			this.resetLoop([249, 256, 257, 259, 265, 264, 266]);
+			this.resetLoop([249, 256, 257, 259, 265, 264, 266, 311]);
 			this.save();
 		},
 		clear :function(){
@@ -315,7 +329,6 @@ Uses KC3Quest objects to play around with
 		save :function(){
 			// Store only the list. The actives and opens will be redefined on load()
 			localStorage.quests = JSON.stringify(this.list);
-			//console.log("saved " + localStorage.quests);
 		},
 		
 		/* LOAD
@@ -324,6 +337,7 @@ Uses KC3Quest objects to play around with
 		load :function(){
 			if(typeof localStorage.quests != "undefined"){
 				var tempQuests = JSON.parse(localStorage.quests);
+				this.list = {};
 				var tempQuest;
 				
 				// Empty actives and opens since they will be re-added
