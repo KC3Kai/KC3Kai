@@ -526,6 +526,7 @@
 			}else{
 				overrideFocus = false;
 			}
+			KC3SortieManager.onPvP = false;
 		},
 		
 		CatBomb: function(data){
@@ -825,7 +826,7 @@
 				if( (FleetSummary.hasTaiha || FleetSummary.badState[2] || FleetSummary.badState[3])
 					&& !FleetSummary.taihaIndexes.equals([0]) // if not flagship only
 					&& !FleetSummary.taihaIndexes.equals([0,0]) // if not flagship only for combined
-					&& ((KC3SortieManager.onSortie>0)?!KC3SortieManager.currentNode().isPvP:true) // if PvP, no taiha alert
+					&& !KC3SortieManager.onPvP // if PvP, no taiha alert
 				){
 					$(".module.status .status_repair .status_text").text( KC3Meta.term(
 						(FleetSummary.badState[2] ? "PanelFSTaiha" : (FleetSummary.badState[3] ? "PanelEscortChuuha" : "PanelHasTaiha"))
@@ -1357,6 +1358,7 @@
 			// Process PvP Battle
 			KC3SortieManager.endSortie();
 			KC3SortieManager.fleetSent = data.fleetSent;
+			KC3SortieManager.onPvP = true;
 			
 			var thisPvP;
 			KC3SortieManager.nodes.push(thisPvP = (new KC3Node()).defineAsBattle());
@@ -1486,6 +1488,8 @@
 		},
 		
 		PvPEnd: function(data){
+			KC3SortieManager.onPvP = false;
+			
 			$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/client/ratings/"+data.result.api_win_rank+".png");
 			updateHQEXPGained($(".admiral_lvnext"),data.result.api_get_exp);
 		},
