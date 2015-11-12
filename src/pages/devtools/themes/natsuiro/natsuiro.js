@@ -152,6 +152,11 @@
 			$("#catBomb").fadeOut(300);
 		});
 		
+		// Close CatBomb modal
+		$("#gameUpdate .closebtn").on("click", function(){
+			$("#gameUpdate").fadeOut(300);
+		});
+		
 		// HQ name censoring
 		$(".admiral_name").on("click", function(){
 			if($(this).hasClass("censor")){
@@ -534,6 +539,21 @@
 			$("#catBomb .title").html( data.title );
 			$("#catBomb .description").html( data.message );
 			$("#catBomb").fadeIn(300);
+		},
+		
+		GameUpdate: function(data){
+			console.log("GameUpdate triggered");
+			$("#gameUpdate").hide();
+			
+			if(data[0] > 0 && data[1]>0){
+				$("#gameUpdate .description a").html("There is(are) <strong>"+data[0]+" new ship(s)</strong> and <strong>"+data[1]+" new equipment</strong>! Click here to learn more about them in the Strategy Room!");
+			}else if(data[0] > 0){
+				$("#gameUpdate .description a").html("There is(are) <strong>"+data[0]+" new ship(s)</strong>! Click here to learn more about them in the Strategy Room!");
+			}else{
+				$("#gameUpdate .description a").html("There is(are) <strong>"+data[1]+" new equipment</strong>! Click here to learn more about them in the Strategy Room!");
+			}
+			
+			$("#gameUpdate").fadeIn(300);
 		},
 		
 		HQ: function(data){

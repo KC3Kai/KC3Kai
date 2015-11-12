@@ -79,6 +79,10 @@ Provides access to data on built-in JSON files
 			return empty;
 		},
 		
+		knownEnemy :function(id){
+			return this._icons.indexOf(id) > -1;
+		},
+		
 		formationIcon :function(formationId){
 			return "../../../../assets/img/formation2/" + formationId + ".png";
 		},

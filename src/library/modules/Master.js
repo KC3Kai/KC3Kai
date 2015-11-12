@@ -13,33 +13,56 @@ Saves and loads significant data for future use
 		_ship: {},
 		_slotitem: {},
 		_stype: {},
+		_graph: {},
+		
+		_newShips: {},
+		_newItems: {},
 		
 		init: function( raw ){
+			this.load();
+			
 			if(typeof raw != "undefined"){
-				this.processRaw( raw );
-			}else{
-				this.load();
+				return this.processRaw( raw );
 			}
+			
 			this.updateRemodelTable();
+			return false;
 		},
 		
 		/* Process raw data, fresh from API
 		-------------------------------------*/
 		processRaw :function(raw){
 			var tmpRecord, i;
+			var timeNow = (new Date()).getTime();
+			var beforeCounts = [ this._ship.length, this._slotitem.length ];
+			var newCounts = [0/*ships*/,  0/*items*/];
 			
 			// Organize master ship into indexes
 			for(i in raw.api_mst_ship){
 				tmpRecord = raw.api_mst_ship[i];
 				if(typeof tmpRecord.api_name != "undefined"){
+					if(typeof this._ship[tmpRecord.api_id] == "undefined" && beforeCounts[0]>0){
+						this._newShips[tmpRecord.api_id] = timeNow;
+						newCounts[0]++;
+					}
 					this._ship[tmpRecord.api_id] = tmpRecord;
 				}
+			}
+			
+			// Get shipgraph filenames and point to their api_ids
+			for(i in raw.api_mst_shipgraph){
+				tmpRecord = raw.api_mst_shipgraph[i];
+				this._graph[tmpRecord.api_filename] = tmpRecord.api_id;
 			}
 			
 			// Organize master slotitem into indexes
 			for(i in raw.api_mst_slotitem){
 				tmpRecord = raw.api_mst_slotitem[i];
 				if(typeof tmpRecord.api_name != "undefined"){
+					if(typeof this._slotitem[tmpRecord.api_id] == "undefined" && beforeCounts[1]>0){
+						this._newItems[tmpRecord.api_id] = timeNow;
+						newCounts[1]++;
+					}
 					this._slotitem[tmpRecord.api_id] = tmpRecord;
 				}
 			}
@@ -52,19 +75,28 @@ Saves and loads significant data for future use
 				}
 			}
 			
-			console.log("processed raw",{
-				ship		: this._ship,
-				slotitem	: this._slotitem,
-				stype		: this._stype
-			});
 			this.save();
 			this.available = true;
+			console.log("newCounts", newCounts);
+			return newCounts;
 		},
 		
 		/* Data Access
 		-------------------------------------*/
 		ship :function(id){
 			return this._ship[id] || false;
+		},
+		
+		graph :function(filename){
+			return this._graph[filename] || false;
+		},
+		
+		graph_id :function(ship_id){
+			var self = this;
+			return Object.keys(this._graph).filter(function(key){
+				return self._graph[key] === ship_id;
+			})[0];
+			// return this._graph.valueKey(ship_id);
 		},
 		
 		slotitem :function(id){
@@ -80,8 +112,11 @@ Saves and loads significant data for future use
 		save :function(){
 			localStorage.master = JSON.stringify({
 				ship		: this._ship,
+				graph		: this._graph,
 				slotitem	: this._slotitem,
-				stype		: this._stype
+				stype		: this._stype,
+				newShips		: this._newShips,
+				newItems		: this._newItems
 			});
 		},
 		
@@ -91,8 +126,11 @@ Saves and loads significant data for future use
 			if(typeof localStorage.master != "undefined"){
 				var tmpMaster = JSON.parse(localStorage.master);
 				this._ship = tmpMaster.ship;
+				this._graph = tmpMaster.graph || {};
 				this._slotitem = tmpMaster.slotitem;
 				this._stype = tmpMaster.stype;
+				this._newShips = tmpMaster.newShips || {};
+				this._newItems = tmpMaster.newItems || {};
 				this.available = true;
 			}else{
 				this.available = false;
