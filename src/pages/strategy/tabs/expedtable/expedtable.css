@@ -13,14 +13,15 @@
 }
 .tab_expedtable .expedNumBox {
 	width:110px;
-	height:135px;
+	height:152px;
 	float:left;
 	margin:0px 3px 0px 0px;
 	background:#def;
 	border-radius:8px;
 	padding:3px 5px;
 }
-.tab_expedtable .expedNumBox .expedNum {
+.tab_expedpast .expedNumBox .expedNum,
+.tab_expedpast .expedNumBox .expedWhole {
 	width:100px;
 	height:15px;
 	line-height:15px;
@@ -44,6 +45,10 @@
 	text-align:center;
 	margin:0px 5px 0px 0px;
 	font-size:12px;
+}
+.tab_expedtable .expedNumBox .expedWhole .expedText {
+	width:70px;
+	margin:0px;
 }
 .tab_expedtable .expedNumBox .expedTime {
 	width:40px;

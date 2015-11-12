@@ -31,6 +31,52 @@
 				$(".tab_expedtable .expedNumBox_"+boxNum).append( row );
 			});
 			
+			// Add world toggle
+			$(".tab_expedtable .expedNumBox")
+				.filter(function(i,x){return $(x).hasClass("expedNumBox_"+(i+1));})
+				.each(function(i,x){
+					var
+						row = $('.tab_expedtable .factory .expedNum').clone().addClass("expedWhole").removeClass("expedNum"),
+						val = true;
+					$("input",".expedNumBox_"+(i+1)).each(function(id,elm){
+						val&= $(elm).prop("checked");
+					});
+					$(row)
+						.find(".expedCheck input")
+							.attr("value", i+1)
+							.prop("checked", val)
+						.end()
+						.find(".expedText")
+							.text( "World " + (i+1) )
+						.end()
+						.find(".expedTime")
+							.remove()
+						.end();
+					
+					$(x).prepend(row);
+				}).on("click", '.expedNum input', function(){
+					var
+						worldNum     = Math.qckInt("ceil",($(this).attr("value")) / 8),
+						context      = ".tab_expedtable .expedNumBox_"+worldNum,
+						parentCheck  = true;
+					self.exped_filters = [];
+					$(".expedNum   input",context).each(function(i,x){ parentCheck &= $(x).prop("checked"); });
+					$(".expedWhole input",context).prop("checked",parentCheck);
+				}).on("click", ".expedWhole input", function() {
+					var
+						worldNum = $(this).val(),
+						state    = $(this).prop("checked"),
+						expeds   = $(".tab_expedtable .expedNumBox_"+worldNum+" .expedNum input");
+					expeds.each(function(i,x){
+						var
+							elmState = $(x).prop("checked"),
+							expedNum = parseInt($(x).val());
+						if(elmState ^ state) { // check different state
+							$(x).prop("checked",state);
+						}
+					});
+				});
+			
 			// Calculate
 			var resultTable = $('.tab_expedtable .results tbody');
 			$('.tab_expedtable .calculate_btn').click(function(){
