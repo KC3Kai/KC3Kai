@@ -93,7 +93,7 @@
 .tab_mstship .shipInfo .cgswf embed {
 	width:218px;
 	height:300px;
-	pointer-events: none;
+	/*pointer-events: none;*/
 }
 .tab_mstship .shipInfo .name {
 	width:245px;

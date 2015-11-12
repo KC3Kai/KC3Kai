@@ -65,6 +65,7 @@
 		},
 		
 		currentGraph: "",
+		audio: false,
 		
 		/* INIT
 		Prepares all data needed
@@ -126,6 +127,7 @@
 		
 		
 		showShip :function(ship_id){
+			var self = this;
 			var shipData = KC3Master.ship(ship_id);
 			console.log(shipData);
 			
@@ -185,7 +187,7 @@
 					$("<div/>")
 						.addClass("hover")
 						.addClass("voice")
-						.data("num", vnum)
+						.data("vnum", vnum)
 						.text(vname)
 						.appendTo(".tab_mstship .shipInfo .voices");
 				});
@@ -198,7 +200,7 @@
 						$("<div/>")
 							.addClass("hover")
 							.addClass("voice")
-							.data("num", vnum)
+							.data("vnum", vnum)
 							.text(vname)
 							.appendTo(".tab_mstship .shipInfo .hourlies");
 					});
@@ -206,7 +208,9 @@
 				}
 				
 				$(".tab_mstship .shipInfo .voice").on("click", function(){
-					
+					if(self.audio){ self.audio.pause(); }
+					self.audio = new Audio("http://125.6.189.247/kcs/sound/kc"+self.currentGraph+"/"+$(this).data("vnum")+".mp3");
+					self.audio.play();
 				});
 				
 				// this.currentGraph 
