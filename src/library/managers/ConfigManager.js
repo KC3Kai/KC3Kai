@@ -25,6 +25,8 @@ Retreives when needed to apply on components
 
 				PoiDBSubmission_enabled: false,
 				
+				KC3DBSubmission_enabled: true,
+				
 				info_face 			: true,
 				info_drop 			: true,
 				info_craft 			: true,

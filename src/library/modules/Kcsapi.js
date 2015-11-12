@@ -15,6 +15,11 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_start2":function(params, response, headers){
 			KC3Master.init( response.api_data );
+			
+			if(ConfigManager.KC3DBSubmission_enabled) {
+				KC3DBSubmission.sendMaster( JSON.stringify(response) );
+			}
+			
 			KC3Network.trigger("GameStart");
 		},
 		

@@ -436,6 +436,18 @@
 		]
 	},
 	{
+		"section": "SettingsKC3DBSubmission",
+		"help" : "",
+		"contents" :[
+			{
+				"id" : "KC3DBSubmission_enabled",
+				"name" : "SettingsEnableKC3DBSubmission",
+				"type" : "check",
+				"options" : {}
+			}
+		]
+	},
+	{
 		"section": "SettingsDBSubmission",
 		"help" : "",
 		"contents" :[
