@@ -1,11 +1,18 @@
 (function(){
 	"use strict";
 	
+	const
+		BATTLE_INVALID = 0,
+		BATTLE_BASIC   = 1,
+		BATTLE_NIGHT   = 2,
+		BATTLE_AERIAL  = 4;
+	
 	/* KC3 Sortie Logs
 			Arguments:
 			tabRefer -- StrategyTab object reference
 			callable -- database function
 	*/
+	
 	window.KC3SortieLogs = function(tabCode) {
 		this.tabSelf        = KC3StrategyTabs[tabCode];
 		
@@ -372,17 +379,20 @@
 					
 					// For each battle
 					$.each(sortie.battles, function(index, battle){
-						var battleData, isDayBattle = true;
+						var battleData, battleType;
 						
 						// Determine if day or night battle node
 						if(typeof battle.data.api_dock_id != "undefined"){
 							battleData = battle.data;
+							battleType = BATTLE_BASIC;
 						}else if(typeof battle.data.api_deck_id != "undefined"){
 							battleData = battle.data;
+							battleType = BATTLE_BASIC;
 						}else if(typeof battle.yasen.api_deck_id != "undefined"){
 							battleData = battle.yasen;
-							isDayBattle = false;
+							battleType = BATTLE_NIGHT;
 						}else{
+							battleType = BATTLE_INVALID;
 							return true;
 						}
 						
@@ -446,7 +456,7 @@
 						$(".node_contact", nodeBox).text(thisNode.fcontact +" vs "+thisNode.econtact);
 						
 						// Day Battle-only data
-						if(isDayBattle){
+						if((battleType & BATTLE_NIGHT) == 0){
 							$(".node_detect", nodeBox).text( thisNode.detection[0] );
 							$(".node_detect", nodeBox).addClass( thisNode.detection[1] );
 							
@@ -466,11 +476,13 @@
 						}
 						
 						// Node EXP
-						if(!!battle.baseEXP) {
-							$(".node_exp span",nodeBox).text(battle.baseEXP);
-						} else {
-							$(".node_exp",nodeBox).hide();
-						}
+						[["base","nodal"],["hq","hq"]].forEach(function(x){
+							if(!!battle[x[0]+"EXP"]) {
+								$(".node_exp."+x[1]+" span",nodeBox).text(battle[x[0]+"EXP"]);
+							} else {
+								$(".node_exp."+x[1],nodeBox).css("visibility",'hidden');
+							}
+						});
 						
 						// Add box to UI
 						$(".sortie_nodes", sortieBox).append( nodeBox );
