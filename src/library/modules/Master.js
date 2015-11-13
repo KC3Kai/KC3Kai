@@ -34,8 +34,9 @@ Saves and loads significant data for future use
 		processRaw :function(raw){
 			var tmpRecord, i;
 			var timeNow = (new Date()).getTime();
-			var beforeCounts = [ this._ship.length, this._slotitem.length ];
+			var beforeCounts = [ Object.size(this._ship), Object.size(this._slotitem) ];
 			var newCounts = [0/*ships*/,  0/*items*/];
+			console.log("beforeCounts", beforeCounts);
 			
 			// Organize master ship into indexes
 			for(i in raw.api_mst_ship){
