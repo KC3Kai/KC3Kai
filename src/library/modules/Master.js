@@ -126,13 +126,17 @@ Saves and loads significant data for future use
 		load :function(){
 			if(typeof localStorage.master != "undefined"){
 				var tmpMaster = JSON.parse(localStorage.master);
-				this._ship = tmpMaster.ship;
-				this._graph = tmpMaster.graph || {};
-				this._slotitem = tmpMaster.slotitem;
-				this._stype = tmpMaster.stype;
-				this._newShips = tmpMaster.newShips || {};
-				this._newItems = tmpMaster.newItems || {};
-				this.available = true;
+				if(tmpMaster.ship[0]!==null){
+					this._ship = tmpMaster.ship;
+					this._graph = tmpMaster.graph || {};
+					this._slotitem = tmpMaster.slotitem;
+					this._stype = tmpMaster.stype;
+					this._newShips = tmpMaster.newShips || {};
+					this._newItems = tmpMaster.newItems || {};
+					this.available = true;
+				}else{
+					this.available = false;
+				}
 			}else{
 				this.available = false;
 			}

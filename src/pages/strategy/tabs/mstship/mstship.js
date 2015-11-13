@@ -98,18 +98,20 @@
 			// List all ships
 			var shipBox;
 			$.each(KC3Master._ship, function(index, ShipData){
-				shipBox = $(".tab_mstship .factory .shipRecord").clone();
-				shipBox.data("id", ShipData.api_id);
-				
-				if(ShipData.api_id<=500){
-					$("img", shipBox).attr("src", KC3Meta.shipIcon(ShipData.api_id) );
-				}else{
-					$("img", shipBox).attr("src", KC3Meta.abyssIcon(ShipData.api_id) );
-				}
-				
-				$(".shipName", shipBox).text( KC3Meta.shipName(ShipData.api_name) );
+				if(ShipData!==null){
+					shipBox = $(".tab_mstship .factory .shipRecord").clone();
+					shipBox.data("id", ShipData.api_id);
 					
-				shipBox.appendTo(".tab_mstship .shipRecords");
+					if(ShipData.api_id<=500){
+						$("img", shipBox).attr("src", KC3Meta.shipIcon(ShipData.api_id) );
+					}else{
+						$("img", shipBox).attr("src", KC3Meta.abyssIcon(ShipData.api_id) );
+					}
+					
+					$(".shipName", shipBox).text( KC3Meta.shipName(ShipData.api_name) );
+						
+					shipBox.appendTo(".tab_mstship .shipRecords");
+				}
 			});
 			
 			// Select ship
