@@ -22,6 +22,7 @@ module.exports = function(grunt) {
 				src: [
 					'assets/img/**',
 					'assets/snd/**',
+					'assets/swf/**',
 					'assets/js/Chart.min.js',
 					'assets/js/Dexie.min.js',
 					'assets/js/FileSaver.min.js',

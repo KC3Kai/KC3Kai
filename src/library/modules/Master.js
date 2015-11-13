@@ -34,8 +34,9 @@ Saves and loads significant data for future use
 		processRaw :function(raw){
 			var tmpRecord, i;
 			var timeNow = (new Date()).getTime();
-			var beforeCounts = [ this._ship.length, this._slotitem.length ];
+			var beforeCounts = [ Object.size(this._ship), Object.size(this._slotitem) ];
 			var newCounts = [0/*ships*/,  0/*items*/];
+			console.log("beforeCounts", beforeCounts);
 			
 			// Organize master ship into indexes
 			for(i in raw.api_mst_ship){
@@ -125,13 +126,17 @@ Saves and loads significant data for future use
 		load :function(){
 			if(typeof localStorage.master != "undefined"){
 				var tmpMaster = JSON.parse(localStorage.master);
-				this._ship = tmpMaster.ship;
-				this._graph = tmpMaster.graph || {};
-				this._slotitem = tmpMaster.slotitem;
-				this._stype = tmpMaster.stype;
-				this._newShips = tmpMaster.newShips || {};
-				this._newItems = tmpMaster.newItems || {};
-				this.available = true;
+				if(tmpMaster.ship[0]!==null){
+					this._ship = tmpMaster.ship;
+					this._graph = tmpMaster.graph || {};
+					this._slotitem = tmpMaster.slotitem;
+					this._stype = tmpMaster.stype;
+					this._newShips = tmpMaster.newShips || {};
+					this._newItems = tmpMaster.newItems || {};
+					this.available = true;
+				}else{
+					this.available = false;
+				}
 			}else{
 				this.available = false;
 			}

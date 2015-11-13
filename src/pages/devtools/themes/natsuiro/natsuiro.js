@@ -137,10 +137,15 @@
 			$.ajax({
 				dataType: "JSON",
 				url: "https://raw.githubusercontent.com/KC3Kai/kc3-translations/master/data/"+ConfigManager.language+"/quests.json?v="+((new Date()).getTime()),
-				success: function(rawJsonText){
-					if(JSON.stringify(rawJsonText) != JSON.stringify(KC3Meta._quests)){
+				success: function(newQuestTLs){
+					if(JSON.stringify(newQuestTLs) != JSON.stringify(KC3Meta._quests)){
 						console.log("new quests detected, updating quest list from live");
-						KC3Meta._quests = rawJsonText;
+						var enQuests = JSON.parse($.ajax({
+							url : '../../../../data/lang/data/en/quests.json',
+							async: false
+						}).responseText);
+							
+						KC3Meta._quests = $.extend(true, enQuests, newQuestTLs);
 						console.log(KC3Meta._quests);
 					}else{
 						console.log("no new quests...");
