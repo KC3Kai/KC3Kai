@@ -50,7 +50,7 @@ Provides access to data on built-in JSON files
 			// troll language always loaded
 			this._terms.troll		= JSON.parse( $.ajax(repo+'lang/data/troll/terms.json', { async: false }).responseText );
 			// other language loaded here
-			this._terms.lang		= KC3Translation.getJSON(repo, 'terms');
+			this._terms.lang		= KC3Translation.getJSON(repo, 'terms', true);
 		},
 		
 		/* Data Access
