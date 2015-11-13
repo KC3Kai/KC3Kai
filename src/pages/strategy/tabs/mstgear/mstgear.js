@@ -48,13 +48,19 @@
 			var gearData = KC3Master.slotitem( gear_id );
 			console.log(gearData);
 			
-			var gearHost = "http://125.6.189.71/kcs/resources/image/slotitem/";
-			var paddedId = (gear_id<10?"00":gear_id<100?"0":"")+gear_id;
-			$(".tab_mstgear .gearInfo .gearAsset img").attr("src", "");
-			$(".tab_mstgear .gearInfo .ga_1 img").attr("src", gearHost+"card/"+paddedId+".png");
-			$(".tab_mstgear .gearInfo .ga_2 img").attr("src", gearHost+"item_character/"+paddedId+".png");
-			$(".tab_mstgear .gearInfo .ga_3 img").attr("src", gearHost+"item_up/"+paddedId+".png");
-			$(".tab_mstgear .gearInfo .ga_4 img").attr("src", gearHost+"item_on/"+paddedId+".png");
+			if(gear_id<=500){
+				var gearHost = "http://125.6.189.71/kcs/resources/image/slotitem/";
+				var paddedId = (gear_id<10?"00":gear_id<100?"0":"")+gear_id;
+				$(".tab_mstgear .gearInfo .gearAsset img").attr("src", "");
+				$(".tab_mstgear .gearInfo .ga_1 img").attr("src", gearHost+"card/"+paddedId+".png");
+				$(".tab_mstgear .gearInfo .ga_2 img").attr("src", gearHost+"item_character/"+paddedId+".png");
+				$(".tab_mstgear .gearInfo .ga_3 img").attr("src", gearHost+"item_up/"+paddedId+".png");
+				$(".tab_mstgear .gearInfo .ga_4 img").attr("src", gearHost+"item_on/"+paddedId+".png");
+				
+				$(".tab_mstgear .gearInfo .gearAssets").show();
+			}else{
+				$(".tab_mstgear .gearInfo .gearAssets").hide();
+			}
 			
 			$(".tab_mstgear .gearInfo .rarity").html("");
 			for(var bctr=0; bctr<gearData.api_rare; bctr++){

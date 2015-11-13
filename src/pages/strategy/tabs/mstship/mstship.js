@@ -184,6 +184,11 @@
 				// EQUIPMENT
 				$(".tab_mstship .equipments .equipment").each(function(index){
 					$(".capacity", this).text( shipData.api_maxeq[index] );
+					if(index >= shipData.api_slot_num){
+						$(this).hide();
+					}else{
+						$(this).show();
+					}
 				});
 				
 				// MORE INFO
