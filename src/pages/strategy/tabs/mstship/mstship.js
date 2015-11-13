@@ -181,6 +181,30 @@
 					statBox.appendTo(".tab_mstship .shipInfo .stats");
 				});
 				
+				// EQUIPMENT
+				$(".tab_mstship .equipments .equipment").each(function(index){
+					$(".capacity", this).text( shipData.api_maxeq[index] );
+				});
+				
+				// MORE INFO
+				if(shipData.api_aftershipid>0){
+					$(".tab_mstship .shipInfo .remodel_name").text( KC3Meta.shipName(KC3Master.ship(shipData.api_aftershipid).api_name) );
+					$(".tab_mstship .shipInfo .remodel_level span").text( shipData.api_afterlv );
+					$(".tab_mstship .shipInfo .remodel_ammo .rsc_value").text( shipData.api_afterfuel );
+					$(".tab_mstship .shipInfo .remodel_steel .rsc_value").text( shipData.api_afterbull );
+					$(".tab_mstship .shipInfo .remodel").show();
+				}else{
+					$(".tab_mstship .shipInfo .remodel").hide();
+				}
+				$(".tab_mstship .scrap .rsc").each(function(index){
+					$(".rsc_value", this).text( shipData.api_broken[index] );
+				});
+				$(".tab_mstship .modfods .rsc").each(function(index){
+					$(".rsc_value", this).text( shipData.api_powup[index] );
+				});
+				$(".tab_mstship .shipInfo .consume_fuel .rsc_value").text( shipData.api_fuel_max );
+				$(".tab_mstship .shipInfo .consume_ammo .rsc_value").text( shipData.api_bull_max );
+				
 				// VOICE LINES
 				$(".tab_mstship .shipInfo .voices").html("");
 				$.each(this.lines, function(vname, vnum){
@@ -213,19 +237,19 @@
 					self.audio.play();
 				});
 				
-				// this.currentGraph 
-				
 				$(".tab_mstship .shipInfo .stats").show();
-				$(".tab_mstship .shipInfo .other").show();
+				$(".tab_mstship .shipInfo .equipments").show();
 				$(".tab_mstship .shipInfo .intro").show();
+				$(".tab_mstship .shipInfo .more").show();
 				$(".tab_mstship .shipInfo .json").hide();
 			}else{
-				// abyssals
+				// abyssals, just show json
 				$(".tab_mstship .shipInfo .json").text(JSON.stringify(shipData));
 				
 				$(".tab_mstship .shipInfo .stats").hide();
-				$(".tab_mstship .shipInfo .other").hide();
+				$(".tab_mstship .shipInfo .equipments").hide();
 				$(".tab_mstship .shipInfo .intro").hide();
+				$(".tab_mstship .shipInfo .more").hide();
 				$(".tab_mstship .shipInfo .json").show();
 			}
 			
