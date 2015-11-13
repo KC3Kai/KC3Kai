@@ -10,6 +10,9 @@
 .tab_mstupdate .new_ships_note a {
 	color:#00f;
 }
+.tab_mstupdate .new_ships_note em {
+	font-size:12px;
+}
 
 /* SHIP
 --------------------------------*/
