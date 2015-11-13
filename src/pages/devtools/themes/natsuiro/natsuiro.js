@@ -133,6 +133,22 @@
 		KC3Database.init();
 		KC3Translation.execute();
 		
+		if(ConfigManager.checkLiveQuests){
+			$.ajax({
+				dataType: "JSON",
+				url: "https://raw.githubusercontent.com/KC3Kai/kc3-translations/master/data/"+ConfigManager.language+"/quests.json?v="+((new Date()).getTime()),
+				success: function(rawJsonText){
+					if(JSON.stringify(rawJsonText) != JSON.stringify(KC3Meta._quests)){
+						console.log("new quests detected, updating quest list from live");
+						KC3Meta._quests = rawJsonText;
+						console.log(KC3Meta._quests);
+					}else{
+						console.log("no new quests...");
+					}
+				}
+			});
+		}
+		
 		// Panel customizations: panel opacity
 		$(".wrapper_bg").css("opacity", ConfigManager.pan_opacity/100);
 		

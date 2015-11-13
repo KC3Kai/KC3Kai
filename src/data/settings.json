@@ -61,6 +61,11 @@
 						[ 2, "SettingsTimeFinished" ]
 					]
 				}
+			},
+			{
+				"id": "checkLiveQuests",
+				"name": "SettingsCheckLiveQuests",
+				"type": "check"
 			}
 		]
 	},

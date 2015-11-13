@@ -248,6 +248,7 @@ Uses KC3Quest objects to play around with
 				}
 			}
 			
+			// submit untranslated quests to kc3kai website
 			if(ConfigManager.KC3DBSubmission_enabled){
 				if(untranslated.length > 0){
 					KC3DBSubmission.sendQuests( JSON.stringify(untranslated) );
