@@ -456,7 +456,7 @@
 						$(".node_contact", nodeBox).text(thisNode.fcontact +" vs "+thisNode.econtact);
 						
 						// Day Battle-only data
-						if((battleType & BATTLE_NIGHT) == 0){
+						if((battleType & BATTLE_NIGHT) === 0){
 							$(".node_detect", nodeBox).text( thisNode.detection[0] );
 							$(".node_detect", nodeBox).addClass( thisNode.detection[1] );
 							

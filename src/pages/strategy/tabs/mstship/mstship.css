@@ -327,10 +327,6 @@
 }
 
 /* Hourlies */
-.tab_mstship .shipInfo .hourly_note {
-	font-size:12px;
-	margin:0px 0px 10px 0px;
-}
 .tab_mstship .shipInfo .hourlies {
 	width:470px;
 	margin:0px 0px 10px 0px;
