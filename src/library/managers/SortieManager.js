@@ -8,6 +8,7 @@ Xxxxxxx
 	
 	window.KC3SortieManager = {
 		onSortie: 0,
+		onPvP: false,
 		fleetSent: 1,
 		map_world: 0,
 		map_num: 0,

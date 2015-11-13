@@ -45,13 +45,64 @@
 				$(".tab_expedpast .expedNumBox_"+boxNum).append( row );
 			});
 			
+			// Add world toggle
+			$(".tab_expedpast .expedNumBox")
+				.filter(function(i,x){return $(x).hasClass("expedNumBox_"+(i+1));})
+				.each(function(i,x){
+					var
+						row = $('.tab_expedpast .factory .expedNum').clone().addClass("expedWhole").removeClass("expedNum"),
+						val = true;
+					$("input",".expedNumBox_"+(i+1)).each(function(id,elm){
+						val&= $(elm).prop("checked");
+					});
+					$(row)
+						.find(".expedCheck input")
+							.attr("value", i+1)
+							.prop("checked", val)
+						.end()
+						.find(".expedText")
+							.text( "World " + (i+1) )
+						.end()
+						.find(".expedTime")
+							.remove()
+						.end();
+					
+					$(x).prepend(row);
+				});
+			
 			// Expedition Number Filter
 			$(".tab_expedpast .expedNumBox").on("click", '.expedNum input', function(){
-				var filterExpeds = $('.tab_expedpast .expedNumBox .expedNum input:checked');
+				var
+					filterExpeds = $('.tab_expedpast .expedNumBox .expedNum input:checked'),
+					worldNum     = Math.qckInt("ceil",($(this).attr("value")) / 8),
+					context      = ".tab_expedpast .expedNumBox_"+worldNum,
+					parentCheck  = true;
 				self.exped_filters = [];
+				$(".expedNum   input",context).each(function(i,x){ parentCheck &= $(x).prop("checked"); });
+				$(".expedWhole input",context).prop("checked",parentCheck);
 				filterExpeds.each( function() {
 					self.exped_filters.push( parseInt( $(this).attr("value"),10) );
 				});
+				self.tabSelf.definition.refreshList();
+			}).on("click", ".expedWhole input", function() {
+				var
+					worldNum = $(this).val(),
+					state    = $(this).prop("checked"),
+					expeds   = $(".tab_expedpast .expedNumBox_"+worldNum+" .expedNum input");
+				expeds.each(function(i,x){
+					var
+						elmState = $(x).prop("checked"),
+						expedNum = parseInt($(x).val());
+					if(elmState ^ state) { // check different state
+						if(elmState) { // set -> unset
+							self.exped_filters.splice(self.exped_filters.indexOf(expedNum),1);
+						} else { // unset -> set
+							self.exped_filters.push(expedNum);
+						}
+						$(x).prop("checked",state);
+					}
+				});
+				self.exped_filters.sort(function(a,b){return a-b;});
 				self.tabSelf.definition.refreshList();
 			});
 			
@@ -110,7 +161,7 @@
 					
 				for(ctr in response){
 					ThisExped = response[ctr];
-					console.log(ThisExped);
+					//console.log(ThisExped);
 					
 					ExpedBox = $(".tab_expedpast .factory .exped_item").clone().appendTo(".tab_expedpast .exped_list");
 					

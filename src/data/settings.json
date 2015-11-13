@@ -61,6 +61,11 @@
 						[ 2, "SettingsTimeFinished" ]
 					]
 				}
+			},
+			{
+				"id": "checkLiveQuests",
+				"name": "SettingsCheckLiveQuests",
+				"type": "check"
 			}
 		]
 	},
@@ -432,6 +437,18 @@
 				"type" : "long_text",
 				"hide" : 1,
 				"options" : { "placeholder" : "SettingsBGPositionDesc" }
+			}
+		]
+	},
+	{
+		"section": "SettingsKC3DBSubmission",
+		"help" : "",
+		"contents" :[
+			{
+				"id" : "KC3DBSubmission_enabled",
+				"name" : "SettingsEnableKC3DBSubmission",
+				"type" : "check",
+				"options" : {}
 			}
 		]
 	},

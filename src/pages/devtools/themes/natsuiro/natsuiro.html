@@ -32,16 +32,16 @@
 			<!-- Module: Activity Box -->
 			<div class="module activity">
 				<div class="activity_tabs">
-					<div id="atab_basic" class="activity_tab hover active i18n" data-target="basic">Basic</div>
-					<div id="atab_battle" class="activity_tab hover i18n" data-target="battle">Battle</div>
-					<div id="atab_expeditionPlanner" class="activity_tab hover i18n" data-target="expeditionPlanner">Exped</div>
-					<div id="atab_activity" class="activity_tab i18n" data-target="">Activity</div>
+					<div id="atab_basic" class="activity_tab hover active i18n" data-target="basic">NatsuiroBasic</div>
+					<div id="atab_battle" class="activity_tab hover i18n" data-target="battle">NatsuiroBattle</div>
+					<div id="atab_expeditionPlanner" class="activity_tab hover i18n" data-target="expeditionPlanner">NatsuiroExped</div>
+					<div id="atab_activity" class="activity_tab i18n" data-target="">NatsuiroActivity</div>
 				</div>
 				<div class="activity_body">
 					<div class="activity_box activity_expeditionPlanner">
 						<div class="expPlan_dropdown_menu">
 							<li class="expPlan_dropdown_title">
-								<div class="dropdown_title">Expedition #1</div>
+								<div class="dropdown_title i18n">Expedition #1</div>
 								<ul class="expPlan_dropdown_topEntry">
 									<li>1-8
 										<ul>
@@ -105,10 +105,10 @@
 							</li>
 						</div>
 						<div class="expPlanner_timer">
-							<div class="expPlanner_timer_description expPlanner_text">Estimated Time</div>
+							<div class="expPlanner_timer_description expPlanner_text i18n">ExpedEstmTime</div>
 							<div class="expPlanner_text estimated_time">99:99:99</div>
 						</div>
-						<div class="expPlanner_resos_title expPlanner_text">Net Income</div>
+						<div class="expPlanner_resos_title expPlanner_text i18n">ExpedIncome</div>
 						<div class="expres_resos">
 							<div class="expres_divHF">
 								<div class="expres_reso">
@@ -136,15 +136,15 @@
 						</div>
 						<div class="expPlanner_requirements">
 							<div class="expPlanner_checker_criterias">
-								<div class="requirements_textbox expPlanner_text">Flagship:level</div>
+								<div class="requirements_textbox expPlanner_text i18n">ExpedFSLv</div>
 								<div class="requirements_textbox expPlanner_text_passed flagshipLv">65</div>
 								<div class="requirements_textbox expPlanner_text_passed flagshipType">DD</div>
 							</div>
 							<div class="expPlanner_checker_criterias">
-								<div class="expPlanner_text requirements_textbox">Fleet:</div>
+								<div class="expPlanner_text requirements_textbox i18n">ExpedFleet</div>
 								<div class="shipNum requirements_textbox expPlanner_text_passed">6</div>
-								<div class="expPlanner_text requirements_textbox ">ships</div>
-                                                                <div class="expPlanner_text requirements_textbox hasTotalLv">, total lv </div>
+								<div class="expPlanner_text requirements_textbox i18n">ExpedShips</div>
+                                                                <div class="expPlanner_text requirements_textbox hasTotalLv i18n">ExpedTotalLv</div> 
 								<div class="fleetLv requirements_textbox expPlanner_text_passed hasTotalLv">65</div>
 								<div class="expPlanner_req_fleetComposition">
 									<div class="requirements_textbox expPlanner_text_passed">1CV/CVL/AV</div>
@@ -154,14 +154,14 @@
 							</div>
 							<div class="expPlanner_checker_criterias canister_criterias">
 								<div class="canisterNum expPlanner_text_passed requirements_textbox">6</div>
-								<div class="expPlanner_text requirements_textbox">canisters on </div>
+								<div class="expPlanner_text requirements_textbox i18n">ExpedCanister</div> 
 								<div class="canisterShipNum expPlanner_text_failed requirements_textbox">4</div>
-								<div class="expPlanner_text requirements_textbox">ships</div>
+								<div class="expPlanner_text requirements_textbox i18n">ExpedShips</div>
 							</div>
 						</div>
 						<div class="expPlanner_checker">
 							<div class="requirements_textbox icon allReq"><img src="../../../../assets/img/ui/check.png"></div>
-							<div class="requirements_textbox expPlanner_text_failed text allReq">Check requirements</div>
+							<div class="requirements_textbox expPlanner_text_failed text allReq i18n">ExpedCheckReq</div>
 						</div>
 					</div>
 					<!-- BASIC: Consumables and Timers -->
@@ -627,7 +627,7 @@
 		
 		
 		<!-- CAT BOMB MODAL -->
-		<div id="catBomb">
+		<div id="catBomb" class="modalBox">
 			<div class="blackFilter"></div>
 			<div class="content">
 				<div class="image"><img src="../../../../assets/img/ui/catbomb.png" /></div>
@@ -635,6 +635,19 @@
 				<div class="closebtn hover">x</div>
 				<div class="clear"></div>
 				<div class="description"></div>
+			</div>
+		</div>
+		
+		
+		<!-- GAME UPDATE MODAL -->
+		<div id="gameUpdate" class="modalBox">
+			<div class="blackFilter"></div>
+			<div class="content">
+				<div class="image"><img src="../../../../assets/img/ui/update.png" /></div>
+				<div class="title">We have detected a game update!</div>
+				<div class="closebtn hover">x</div>
+				<div class="clear"></div>
+				<div class="description"><a target="kc3kai_strategy" href="/pages/strategy/strategy.html#mstupdate"></a></div>
 			</div>
 		</div>
 		
@@ -795,6 +808,7 @@
 		
 		<script type="text/javascript" src="../../../../library/modules/DBSubmission.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/PoiDBSubmission.js"></script>
+		<script type="text/javascript" src="../../../../library/modules/KC3DBSubmission.js"></script>
 		
 		<script type="text/javascript" src="../../../../library/modules/Database.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/Kcsapi.js"></script>

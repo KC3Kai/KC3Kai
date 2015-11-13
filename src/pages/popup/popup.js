@@ -111,47 +111,40 @@
 			window.open("../about/about.html", "kc3kai_about");
 		});
 		
+		// About
+		$("#facebook").on('click', function(){
+			window.open("https://www.facebook.com/kc3kai", "_blank");
+		});
+		
 		// Calculate reset countdowns
-		var TimeNow = new Date();
+		var now = Date.now();
 		
-		var UTC8PMToday = (new Date());
-		UTC8PMToday.setUTCHours(20);
-		UTC8PMToday.setUTCMinutes(0);
-		UTC8PMToday.setUTCSeconds(0);
-		UTC8PMToday.setUTCMilliseconds(0);
+		var UTC8PM = new Date();
+		UTC8PM.setUTCHours(20, 0, 0, 0);
 		
-		var UTC8PMTomorrow = new Date(UTC8PMToday.getTime() + (24*60*60*1000));
-		
-		var remaining = 0;
-		if(TimeNow.getUTCHours() > 20){
-			remaining = UTC8PMTomorrow.getTime() - TimeNow.getTime();
-		}else{
-			remaining = UTC8PMToday.getTime() - TimeNow.getTime();
+		while (UTC8PM.getTime() < now) {
+			UTC8PM.setUTCDate(UTC8PM.getUTCDate() + 1);
 		}
+		var remaining = UTC8PM.getTime() - now;
+
 		$(".timeQuest").text( String(remaining/1000).toHHMMSS() );
 		
 		// PVP Reset Counter
-		var UTC6AMToday = (new Date());
-		UTC6AMToday.setUTCHours(6);
-		UTC6AMToday.setUTCMinutes(0);
-		UTC6AMToday.setUTCSeconds(0);
-		UTC6AMToday.setUTCMilliseconds(0);
-		
-		var UTC6PMToday = (new Date());
-		UTC6PMToday.setUTCHours(18);
-		UTC6PMToday.setUTCMinutes(0);
-		UTC6PMToday.setUTCSeconds(0);
-		UTC6PMToday.setUTCMilliseconds(0);
-		
-		var UTC6AMTomorrow = new Date(UTC6AMToday.getTime() + (24*60*60*1000));
-		
-		if(TimeNow.getUTCHours() < 6){
-			remaining = UTC6AMToday.getTime() - TimeNow.getTime();
-		}else if(TimeNow.getUTCHours() < 18){
-			remaining = UTC6PMToday.getTime() - TimeNow.getTime();
-		}else{
-			remaining = UTC6AMTomorrow.getTime() - TimeNow.getTime();
+		var UTC6AM = new Date();
+		UTC6AM.setUTCHours(6, 0, 0, 0);
+
+		var UTC6PM = new Date();
+		UTC6PM.setUTCHours(18, 0, 0, 0);
+
+		while (UTC6AM.getTime() < now) {
+			UTC6AM.setUTCDate(UTC6AM.getUTCDate() + 1);
 		}
+		while (UTC6PM.getTime() < now) {
+			UTC6PM.setUTCDate(UTC6PM.getUTCDate() + 1);
+		}
+		remaining = Math.min(
+			UTC6AM.getTime() - now,
+			UTC6PM.getTime() - now);
 		$(".timePvP").text( String(remaining/1000).toHHMMSS() );
 	});
 	

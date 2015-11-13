@@ -19,11 +19,14 @@ Retreives when needed to apply on components
 				hqExpDetail 		: 1,
 				timerDisplayType	: 1,
 				marryLevelFormat	: 0,
+				checkLiveQuests		: true,
 				
 				DBSubmission_enabled: 0,
 				DBSubmission_key : '',
 
 				PoiDBSubmission_enabled: false,
+				
+				KC3DBSubmission_enabled: true,
 				
 				info_face 			: true,
 				info_drop 			: true,

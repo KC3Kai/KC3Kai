@@ -14,8 +14,20 @@ Previously known as "Reactor"
 		/* Master Data
 		-------------------------------------------------------*/
 		"api_start2":function(params, response, headers){
-			KC3Master.init( response.api_data );
+			var newCounts = KC3Master.init( response.api_data );
+			
+			if(ConfigManager.KC3DBSubmission_enabled) {
+				KC3DBSubmission.sendMaster( JSON.stringify(response) );
+			}
+			
 			KC3Network.trigger("GameStart");
+			
+			// if there is either new ship(s) or new item(s)
+			console.log("api_start2 newCounts", newCounts);
+			if(newCounts[0]>0 || newCounts[1]>0){
+				console.log("triggering GameUpdate");
+				KC3Network.trigger("GameUpdate", newCounts);
+			}
 		},
 		
 		/* Home Port Screen

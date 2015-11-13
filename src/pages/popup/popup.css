@@ -5,7 +5,7 @@ body {
 }
 .wrapper {
 	width:240px;
-	height:458px;
+	height:521px;
 	overflow:hidden;
 }
 .separator {
@@ -56,6 +56,39 @@ body {
 	float:left;
 	/*color:#aaa;*/
 	color:#999;
+}
+
+/* FACEBOOK
+--------------------------*/
+.footFb {
+	width:240px;
+	height:44px;
+	padding:7px 5px 7px 5px;
+	border-top:1px solid #fff;
+	margin:0px 0px 1px 0px;
+}
+.footFb:hover {
+	background:#cfc;
+}
+.footFb .icon {
+	width:30px;
+	height:30px;
+	margin:0px 5px 0px 0px;
+	float:left;
+}
+.footFb .icon img {
+	width:30px;
+	height:30px;
+	margin:0px 0px 0px 0px;
+}
+.footFb .text {
+	width:195px;
+	height:30px;
+	line-height:30px;
+	overflow:hidden;
+	font-size:14px;
+	font-weight:bold;
+	float:left;
 }
 
 /* FOOTER DATA

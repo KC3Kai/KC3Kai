@@ -29,39 +29,79 @@
 	var moraleClockEnd = 0;
 	var moraleClockRemain = 0;
 
-	// make sure localStorage.expedTabLastPick is available
-	// and is in correct format
-	function TouchExpeditionTabConfig() {
+	// make sure localStorage.expedTab is available
+	// and is in correct format.
+	// returns the configuration for expedTab
+	// (previously called localStorage.expedTabLastPick)
+	function ExpedTabValidateConfig() {
+		// data format for expedTab:
+		// data.fleetConf: an object
+		// data.fleetConf[fleetNum]:
+		// * fleetNum: 1,2,3,4
+		// * fleetNum could be either number or string
+		//	 they will all be implicitly converted
+		//	 to string (for indexing object) anyway
+		// data.fleetConf[fleetNum].expedition: a number
+		// data.expedConf: an object
+		// data.expedConf[expedNum]:
+		// * expedNum: 1..40
+		// * expedNum is number or string, just like fleetNum
+		// data.expedConf[expedNum].greatSuccess: boolean
+
 		var data;
-		if (! localStorage.expedTabLastPick) {
-			data = {
-				1: { selectedExpedition: 1, isGreatSuccess: false },
-				2: { selectedExpedition: 1, isGreatSuccess: false },
-				3: { selectedExpedition: 1, isGreatSuccess: false },
-				4: { selectedExpedition: 1, isGreatSuccess: false },
-			};
-			localStorage.expedTabLastPick = JSON.stringify( data );
+		if (! localStorage.expedTab) {
+			data = {};
+			data.fleetConf = {};
+			var i;
+			for (i=1; i<=4; ++i) {
+				data.fleetConf[i] = { expedition: 1 };
+			}
+			data.expedConf = {};
+			for (i=1; i<=40; ++i) {
+				data.expedConf[i] = { greatSuccess: false };
+			}
+
+			// TODO: the following part immigrates old data, so can be removed in next version
+			if (localStorage.expedTabLastPick) {
+				try {
+					var oldData = JSON.parse( localStorage.expedTabLastPick );
+					for (var fleetNum = 1; fleetNum <= 4; ++fleetNum) {
+						var oldRecord = oldData[fleetNum];
+						data.fleetConf[fleetNum].expedition = 
+							oldRecord.selectedExpedition;
+						data.expedConf[oldRecord.selectedExpedition].greatSuccess = 
+							oldRecord.isGreatSuccess;
+					}
+				} catch (err) {
+					console.log( "error when immigrating old data:", err);
+				} finally {
+					localStorage.removeItem("expedTabLastPick");
+				}
+			}
+
+			localStorage.expedTab = JSON.stringify( data );
 		} else {
-			data = JSON.parse( localStorage.expedTabLastPick );
+			data = JSON.parse( localStorage.expedTab );
 		}
 		return data;
 	}
-	
-	function UpdateExpeditionTabConfig() {
-		// update user last pick
-		var userConf = TouchExpeditionTabConfig();
-		userConf[selectedFleet].selectedExpedition = selectedExpedition;
-		userConf[selectedFleet].isGreatSuccess = plannerIsGreatSuccess;
-		localStorage.expedTabLastPick = JSON.stringify( userConf );
+
+	// selectedExpedition, plannerIsGreatSuccess + selectedFleet => storage
+	function ExpedTabUpdateConfig() {
+		var conf = ExpedTabValidateConfig();
+		conf.fleetConf[ selectedFleet ].expedition = selectedExpedition;
+		conf.expedConf[ selectedExpedition ].greatSuccess = plannerIsGreatSuccess;
+		localStorage.expedTab = JSON.stringify( conf );
 	}
 
 	// apply stored user settings, note that this function
 	// is not responsible for updating UI, so UpdateExpeditionPlanner() should be called after
 	// this to reflect the change
-	function ApplyExpeditionTabConfig() {
-		var expedTabLastPick = TouchExpeditionTabConfig()[selectedFleet];
-		selectedExpedition = expedTabLastPick.selectedExpedition;
-		plannerIsGreatSuccess = expedTabLastPick.isGreatSuccess;
+	// storage + selectedFleet => selectedExpedition, plannerIsGreatSuccess
+	function ExpedTabApplyConfig() {
+		var conf = ExpedTabValidateConfig();
+		selectedExpedition = conf.fleetConf[selectedFleet].expedition;
+		plannerIsGreatSuccess = conf.expedConf[ selectedExpedition ].greatSuccess;
 	}
 	
 	$(document).on("ready", function(){
@@ -93,6 +133,22 @@
 		KC3Database.init();
 		KC3Translation.execute();
 		
+		if(ConfigManager.checkLiveQuests){
+			$.ajax({
+				dataType: "JSON",
+				url: "https://raw.githubusercontent.com/KC3Kai/kc3-translations/master/data/"+ConfigManager.language+"/quests.json?v="+((new Date()).getTime()),
+				success: function(rawJsonText){
+					if(JSON.stringify(rawJsonText) != JSON.stringify(KC3Meta._quests)){
+						console.log("new quests detected, updating quest list from live");
+						KC3Meta._quests = rawJsonText;
+						console.log(KC3Meta._quests);
+					}else{
+						console.log("no new quests...");
+					}
+				}
+			});
+		}
+		
 		// Panel customizations: panel opacity
 		$(".wrapper_bg").css("opacity", ConfigManager.pan_opacity/100);
 		
@@ -110,6 +166,11 @@
 		// Close CatBomb modal
 		$("#catBomb .closebtn").on("click", function(){
 			$("#catBomb").fadeOut(300);
+		});
+		
+		// Close CatBomb modal
+		$("#gameUpdate .closebtn").on("click", function(){
+			$("#gameUpdate").fadeOut(300);
 		});
 		
 		// HQ name censoring
@@ -186,11 +247,9 @@
 		$( ".module.activity .activity_expeditionPlanner .expres_greatbtn" )
 			.on("click",function() {
 				plannerIsGreatSuccess = !plannerIsGreatSuccess;
-				
-				UpdateExpeditionTabConfig();
+				ExpedTabUpdateConfig();
 				NatsuiroListeners.UpdateExpeditionPlanner();
 			} );
-
 
 		
 		/* Morale timers
@@ -294,7 +353,9 @@
 		$(".expedition_entry").on("click",function(){
 			selectedExpedition = parseInt( $(this).data("expId") );
 			//console.log("selected Exped "+selectedExpedition);
-			UpdateExpeditionTabConfig();
+			var conf = ExpedTabValidateConfig();
+			plannerIsGreatSuccess = conf.expedConf[ selectedExpedition ].greatSuccess;
+			ExpedTabUpdateConfig();
 			NatsuiroListeners.UpdateExpeditionPlanner();
 		});
 		
@@ -307,7 +368,7 @@
 			selectedFleet = parseInt( $(this).text(), 10);
 			console.log(selectedFleet);
 			NatsuiroListeners.Fleet();
-			ApplyExpeditionTabConfig();
+			ExpedTabApplyConfig();
 			NatsuiroListeners.UpdateExpeditionPlanner();
 		});
 		
@@ -486,6 +547,7 @@
 			}else{
 				overrideFocus = false;
 			}
+			KC3SortieManager.onPvP = false;
 		},
 		
 		CatBomb: function(data){
@@ -493,6 +555,21 @@
 			$("#catBomb .title").html( data.title );
 			$("#catBomb .description").html( data.message );
 			$("#catBomb").fadeIn(300);
+		},
+		
+		GameUpdate: function(data){
+			console.log("GameUpdate triggered");
+			$("#gameUpdate").hide();
+			
+			if(data[0] > 0 && data[1]>0){
+				$("#gameUpdate .description a").html("There is(are) <strong>"+data[0]+" new ship(s)</strong> and <strong>"+data[1]+" new equipment</strong>! Click here to learn more about them in the Strategy Room!");
+			}else if(data[0] > 0){
+				$("#gameUpdate .description a").html("There is(are) <strong>"+data[0]+" new ship(s)</strong>! Click here to learn more about them in the Strategy Room!");
+			}else{
+				$("#gameUpdate .description a").html("There is(are) <strong>"+data[1]+" new equipment</strong>! Click here to learn more about them in the Strategy Room!");
+			}
+			
+			$("#gameUpdate").fadeIn(300);
 		},
 		
 		HQ: function(data){
@@ -785,7 +862,7 @@
 				if( (FleetSummary.hasTaiha || FleetSummary.badState[2] || FleetSummary.badState[3])
 					&& !FleetSummary.taihaIndexes.equals([0]) // if not flagship only
 					&& !FleetSummary.taihaIndexes.equals([0,0]) // if not flagship only for combined
-					&& ((KC3SortieManager.onSortie>0)?!KC3SortieManager.currentNode().isPvP:true) // if PvP, no taiha alert
+					&& !KC3SortieManager.onPvP // if PvP, no taiha alert
 				){
 					$(".module.status .status_repair .status_text").text( KC3Meta.term(
 						(FleetSummary.badState[2] ? "PanelFSTaiha" : (FleetSummary.badState[3] ? "PanelEscortChuuha" : "PanelHasTaiha"))
@@ -1317,6 +1394,7 @@
 			// Process PvP Battle
 			KC3SortieManager.endSortie();
 			KC3SortieManager.fleetSent = data.fleetSent;
+			KC3SortieManager.onPvP = true;
 			
 			var thisPvP;
 			KC3SortieManager.nodes.push(thisPvP = (new KC3Node()).defineAsBattle());
@@ -1446,6 +1524,8 @@
 		},
 		
 		PvPEnd: function(data){
+			KC3SortieManager.onPvP = false;
+			
 			$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/client/ratings/"+data.result.api_win_rank+".png");
 			updateHQEXPGained($(".admiral_lvnext"),data.result.api_get_exp);
 		},
@@ -1588,6 +1668,13 @@
 			$("#atab_activity").addClass("active");
 			$(".module.activity .activity_box").hide();
 			$(".module.activity .activity_expedition").fadeIn(500);
+
+			// after getting the result, we assume user will just resupply & resend to the same expedition
+			// it makes sense to update expedition planner with current fleet-expedition relation.
+			var expedTabConf = ExpedTabValidateConfig();
+			var resultFleetNum = data.params.api_deck_id; // string
+			expedTabConf.fleetConf[ resultFleetNum ].expedition = data.expedNum;
+			localStorage.expedTab = JSON.stringify( expedTabConf );
 		},
 
 		UpdateExpeditionPlanner: function (data) {
@@ -1766,7 +1853,7 @@
 						var shipReqBox = $("#factory .expPlanner_shipReqBox")
 							.clone()
 							.appendTo( jq );
-						shipReqBox.text(dataReq[index].stypeOneOf+":"+dataReq[index].stypeReqCount);
+						shipReqBox.text(dataReq[index].stypeOneOf.join("/")+":"+dataReq[index].stypeReqCount);
 						if (dataResult[index] === false) {
 							markFailed( shipReqBox );
 						} else if (dataResult[index] === true) {

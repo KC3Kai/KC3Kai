@@ -1,0 +1,337 @@
+.tab_mstship {
+	width:680px;
+}
+.tab_mstship .factory {
+	display:none;
+}
+.tab_mstship .cg_notes {
+	margin:0px 0px 10px 0px;
+}
+.tab_mstship .cg_notes em {
+	font-size:12px;
+}
+
+/* FILTERS
+--------------------------------*/
+.tab_mstship .filters {
+	width:700px;
+	margin:0px 0px 10px 0px;
+	background:#f0f5ff;
+	padding:5px 10px;
+	border-bottom:1px solid #369;
+}
+.tab_mstship .filters .stype {
+	padding:0px 8px;
+	height:20px;
+	line-height: 20px;
+	margin:0px 6px 4px 0px;
+	float:left;
+	background:#09c;
+	color:#fff;
+	border-radius: 5px;
+	font-weight:bold;
+}
+.tab_mstship .filters .stype.active {
+	background:#fff;
+	color:#000;
+	font-weight:bold;
+}
+
+/* SHIP RECORDS
+--------------------------------*/
+.tab_mstship .shipRecords {
+	width:200px;
+	height:760px;
+	float:left;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	padding:5px;
+	border:1px solid #ccc;
+	background:#ffc;
+	border-radius: 8px 0px 0px 8px;
+}
+.tab_mstship .shipRecord {
+	width:170px;
+	height:20px;
+	line-height:20px;
+	margin:0px 0px 2px 0px;
+	border-radius: 5px;
+}
+.tab_mstship .shipRecord:hover {
+	background:#cfc;
+}
+.tab_mstship .shipRecord .shipIcon {
+	width:20px;
+	height:20px;
+	float:left;
+}
+.tab_mstship .shipRecord .shipIcon img {
+	width:20px;
+	height:20px;
+}
+.tab_mstship .shipRecord .shipName {
+	width:150px;
+	height:20px;
+	float:left;
+	padding:0px 0px 0px 5px;
+}
+
+/* SHIP INFO
+--------------------------------*/
+.tab_mstship .shipInfo {
+	width:480px;
+	height:760px;
+	float:left;
+	background:#eee;
+	border:1px solid #ccc;
+	border-radius: 0px 8px 8px 0px;
+	padding:5px 5px 0px 5px;
+}
+
+
+/* BASIC
+--------------------------------*/
+/* CG Vuewer */
+.tab_mstship .shipInfo .cgswf {
+	width:218px;
+	height:300px;
+	float:left;
+	margin:0px 5px 0px 0px;
+}
+.tab_mstship .shipInfo .cgswf embed {
+	width:218px;
+	height:300px;
+	pointer-events: none;
+}
+
+/* Ship Name*/
+.tab_mstship .shipInfo .name {
+	width:245px;
+	height:30px;
+	line-height:30px;
+	float:left;
+	font-size:20px;
+	text-align:left;
+	margin:0px 0px 5px 0px;
+}
+
+/* Ship stats */
+.tab_mstship .shipInfo .stats {
+	width:245px;
+	height:92px;
+	float:left;
+	margin:0px 0px 5px 0px;
+}
+.tab_mstship .shipInfo .ship_stat {
+	width:115px;
+	height:20px;
+	line-height:20px;
+	float:left;
+	margin:0px 5px 3px 0px;
+}
+.tab_mstship .shipInfo .ship_stat_icon {
+	width:20px;
+	height:20px;
+	float:left;
+	line-height:16px;
+}
+.tab_mstship .shipInfo .ship_stat_icon img {
+	width:16px;
+	height:16px;
+	margin:2px;
+}
+.tab_mstship .shipInfo .ship_stat_name {
+	width:30px;
+	height:20px;
+	float:left;
+	font-weight:bold;
+	font-size:11px;
+}
+.tab_mstship .shipInfo .ship_stat_text {
+	width:65px;
+	height:20px;
+	float:left;
+	display:none;
+	font-size:12px;
+	padding:0px 0px 0px 5px;
+}
+.tab_mstship .shipInfo .ship_stat_value {
+	width:30px;
+	height:20px;
+	font-size:12px;
+	float:left;
+	text-align:center;
+}
+
+/* Equipment */
+.tab_mstship .shipInfo .equipments {
+	width:245px;
+	height:94px;
+	float:left;
+	margin:0px 0px 5px 0px;
+	padding:2px 0px 0px 0px;
+}
+.tab_mstship .shipInfo .equipment {
+	width:245px;
+	height:20px;
+	margin:0px 0px 3px 0px;
+}
+.tab_mstship .shipInfo .equipment .capacity {
+	width:30px;
+	height:20px;
+	float:left;
+	margin:0px 5px 0px 0px;
+	text-align:center;
+	font-size:14px;
+	font-weight:bold;
+}
+.tab_mstship .shipInfo .equipment .sloticon {
+	width:20px;
+	height:20px;
+	float:left;
+	position:relative;
+	z-index:2;
+	background:#444;
+	border:1px solid #888;	border-radius:10px;
+}
+.tab_mstship .shipInfo .equipment .slotitem {
+	width:150px;
+	height:16px;
+	float:left;
+	position:relative;
+	margin:2px 0px 0px -10px;
+	z-index:1;
+	background:#444;
+	border-radius:0px 3px 3px 0px;
+}
+
+/* Abyssal JSON */
+.tab_mstship .shipInfo .json {
+	width:245px;
+	height:260px;
+	float:left;
+	word-wrap: break-word;
+	word-break: break-all;
+	overflow:auto;
+	border:2px inset #555;
+	background:#ffc;
+	padding:5px;
+}
+
+/* Intro message */
+.tab_mstship .shipInfo .intro {
+	width:245px;
+	height:69px;
+	float:left;
+	font-size:12px;
+	text-align:left;
+	overflow:auto;
+}
+
+
+/* MORE INFORMATION
+--------------------------------*/
+.tab_mstship .shipInfo .more {
+	/*padding:10px 0px 0px 0px;*/
+	margin:10px 0px 10px 0px;
+}
+.tab_mstship .shipInfo .more .moreinfo_box {
+	width:470px;
+	height:20px;
+	line-height:20px;
+	margin:0px 0px 5px 0px;
+	overflow:hidden;
+}
+.tab_mstship .shipInfo .more .ship_label {
+	float:left;
+	width:90px;
+	height:20px;
+	font-size:12px;
+	color:#888;
+	font-weight:bold;
+	margin:0px 5px 0px 0px;
+}
+
+.tab_mstship .shipInfo .more .rsc {
+	width:70px;
+	height:20px;
+	float:left;
+	margin:0px 5px 0px 0px;
+}
+.tab_mstship .shipInfo .more .rsc_icon {
+	width:20px;
+	height:20px;
+	line-height:16px;
+	float:left;
+}
+.tab_mstship .shipInfo .more .rsc_icon img {
+	width:16px;
+	height:16px;
+	margin:2px;
+}
+.tab_mstship .shipInfo .more .rsc_value {
+	width:50px;
+	height:20px;
+	padding:0px 0px 0px 5px;
+	float:left;
+}
+/* Remodel */
+.tab_mstship .shipInfo .more .remodel_name {
+	width:130px;
+	height:20px;
+	float:left;
+	margin:0px 5px 0px 0px;
+	overflow:hidden;
+	font-weight:bold;
+	font-size:14px;
+	color:#039;
+}
+.tab_mstship .shipInfo .more .remodel_level {
+	width:70px;
+	height:20px;
+	float:left;
+	margin:0px 5px 0px 0px;
+	font-size:12px;
+}
+.tab_mstship .shipInfo .more .remodel_level span {
+	font-weight:bold;
+}
+/* Scrap Value */
+
+/* Modernization Value */
+
+/* Consumption */
+
+
+/* VOICES and HOURLIES
+--------------------------------*/
+.tab_mstship .shipInfo .voice {
+	height:20px;
+	float:left;
+	line-height:18px;
+	border:1px solid #039;
+	background:#def;
+	border-radius:3px;
+	font-size:12px;
+	text-align:center;
+}
+
+/* Regular Voices */
+.tab_mstship .shipInfo .voices {
+	width:470px;
+	margin:10px 0px 20px 0px;
+}
+.tab_mstship .shipInfo .voices .voice {
+	width:90px;
+	margin:0px 2px 2px 2px;
+}
+
+/* Hourlies */
+.tab_mstship .shipInfo .hourlies {
+	width:470px;
+	margin:0px 0px 10px 0px;
+}
+.tab_mstship .shipInfo .hourlies .voice {
+	width:60px;
+	margin:0px 3px 2px 3px;
+}

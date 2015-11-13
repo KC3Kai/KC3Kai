@@ -7,6 +7,7 @@
 		$("#game_frame").css("position", "fixed");
 		$("#game_frame").css("left", "-50px");
 		$("#game_frame").css("top", "-16px");
-		$("#game_frame").css("z-index", "1");
+		$("#game_frame").css("z-index", "999");
+		$("#dmm-ntgnavi-renew").css("display", "none");
 	}
 })).execute();
