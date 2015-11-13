@@ -102,7 +102,7 @@
 						$(x).prop("checked",state);
 					}
 				});
-				self.exped_filters.sort(function(a,b){return a-b;})
+				self.exped_filters.sort(function(a,b){return a-b;});
 				self.tabSelf.definition.refreshList();
 			});
 			

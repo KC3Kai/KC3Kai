@@ -1,7 +1,7 @@
 (function(){
 	"use strict";
 	
-	const
+	var
 		BATTLE_INVALID = 0,
 		BATTLE_BASIC   = 1,
 		BATTLE_NIGHT   = 2,
