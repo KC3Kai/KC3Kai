@@ -223,8 +223,8 @@
 				$("<div/>").addClass("clear").appendTo(".tab_mstship .shipInfo .voices");
 				
 				// HOURLIES
+				$(".tab_mstship .shipInfo .hourlies").html("");
 				if(shipData.api_voicef>1){
-					$(".tab_mstship .shipInfo .hourlies").html("");
 					$.each(this.hourlies, function(vname, vnum){
 						$("<div/>")
 							.addClass("hover")
