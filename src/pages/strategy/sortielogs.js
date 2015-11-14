@@ -21,6 +21,8 @@
 		this.selectedMap    = 0;
 		this.itemsPerPage   = 20;
 		this.currentSorties = [];
+		this.stegcover64 = "";
+		this.exportingReplay = false;
 		
 		/* INIT
 		Prepares all data needed
@@ -174,6 +176,11 @@
 						return cr;
 				})($(this)))));
 				updateScrollItem();
+			});
+			
+			// On-click sortie ID export battle
+			$(".sortie_list").on("click", ".sortie_id", function(){
+				self.exportBattleImg(parseInt($(this).text()));
 			});
 			
 			// Select default opened world
@@ -339,6 +346,7 @@
 								if(ship===false){ return false; }
 								
 								$(".sortie_ship_"+(index+1)+" img", sortieBox).attr("src", KC3Meta.shipIcon(ship.mst_id));
+								$(".sortie_ship_"+(index+1), sortieBox).addClass("simg-"+ship.mst_id);
 								$(".sortie_ship_"+(index+1), sortieBox).show();
 							}
 							
@@ -511,6 +519,73 @@
 			
 			$(".tab_"+tabCode+" .map_list").css("margin-left",(cr * -97) + "px");
 		}
+		
+		/* EXPORT REPLAY IMAGE
+		-------------------------------*/
+		this.exportBattleImg = function(sortieId){
+			if(this.exportingReplay) return false;
+			this.exportingReplay = true;
+			
+			var self = this;
+			
+			$("body").css("opacity", "0.5");
+			
+			if(this.stegcover64===""){
+				this.stegcover64 = $.ajax({
+					async: false,
+					url: "../../../../assets/img/stegcover.b64"
+				}).responseText;
+			}
+			
+			var withDataCover64 = this.stegcover64;
+			
+			var rcanvas = document.createElement("canvas");
+			rcanvas.width = 400;
+			rcanvas.height = 400;
+			var rcontext = rcanvas.getContext("2d");
+			
+			
+			var domImg = new Image();
+			domImg.onload = function(){
+				rcontext.drawImage( domImg, 0, 0, 400, 400, 0, 0, 400, 400 );
+				
+				KC3Database.get_sortie_data( sortieId, function(sortieData){
+					
+					console.log(sortieData);
+					rcontext.font = "26pt Calibri";
+					rcontext.fillStyle = '#ffffff';
+					rcontext.fillText(sortieData.world+"-"+sortieData.mapnum, 20, 215);
+					
+					rcontext.font = "20pt Calibri";
+					rcontext.fillText(PlayerManager.hq.name, 100, 210);
+					
+					var fleetUsed = sortieData["fleet"+sortieData.fleetnum];
+					var shipIconImage;
+					$.each(fleetUsed, function(ShipIndex, ShipData){
+						shipIconImage = $(".simg-"+ShipData.mst_id+" img")[0];
+						rcontext.drawImage(shipIconImage,0,0,70,70,25+(60*ShipIndex),233,50,50);
+					});
+					
+					withDataCover64 = rcanvas.toDataURL("image/png");
+					// window.open(withDataCover64);
+					
+					var newImg = steganography.encode(JSON.stringify(sortieData), withDataCover64);
+					
+					chrome.downloads.download({
+						url: newImg,
+						filename: ConfigManager.ss_directory+'/replay/'+PlayerManager.hq.name+"_"+sortieId+'.png',
+						conflictAction: "uniquify"
+					}, function(downloadId){
+						self.exportingReplay = false;
+						$("body").css("opacity", "1");
+					});
+				});
+				
+			};
+			domImg.src = this.stegcover64;
+			
+		};
+		
 	};
 	
 })();
