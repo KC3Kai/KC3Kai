@@ -77,6 +77,9 @@
 				
 				var paddedId = (GearData.api_id<10?"00":GearData.api_id<100?"0":"")+GearData.api_id;
 				
+				//Placeholder for server link
+				//$(".gear_cg img", gearBox).attr("src", "http://" + serverIPaddress + "/kcs/resources/image/slotitem/card/"+paddedId+".png");
+
 				$(".gear_cg img", gearBox).attr("src", "http://125.6.189.71/kcs/resources/image/slotitem/card/"+paddedId+".png");
 				
 				$("a", gearBox).attr("href", "?#mstgear-"+GearData.api_id);
