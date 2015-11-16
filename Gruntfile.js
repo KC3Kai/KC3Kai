@@ -43,7 +43,8 @@ module.exports = function(grunt) {
 					'pages/**/*',
 					'!pages/strategy/tabs/**/*.js',
 					'manifest.json',
-					'data/**/*.json'
+					'data/*.json',
+					'data/lang/data/**/*.json'
 				],
 				dest: 'build/release/'
 			}
@@ -185,13 +186,15 @@ module.exports = function(grunt) {
 				},
 				src: [
 					'build/tmp/manifest.json',
-					'build/tmp/data/**/*.json'
+					'build/tmp/data/*.json',
+					'build/tmp/data/lang/data/**/*.json'
 				]
 			}
 		},
 		'json-minify': {
 			manifest : { files: 'build/tmp/manifest.json' },
-			data : { files: 'build/tmp/data/**/*.json' }
+			data1 : { files: 'build/tmp/data/*.json' },
+			data2 : { files: 'build/tmp/data/lang/data/**/*.json' }
 		},
 		concat: {
 			global_css: {
