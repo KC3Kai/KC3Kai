@@ -66,12 +66,14 @@
 		
 		currentGraph: "",
 		audio: false,
+		server_ip: "",
 		
 		/* INIT
 		Prepares all data needed
 		---------------------------------*/
 		init :function(){
-			
+			var MyServer = (new KC3Server()).setNum( PlayerManager.hq.server );
+			this.server_ip = MyServer.ip;
 		},
 		
 		/* EXECUTE
@@ -141,7 +143,7 @@
 			$(".tab_mstship .shipInfo .cgswf embed").remove();
 			
 			$("<embed/>")
-				.attr("src", "../../../../assets/swf/card.swf?shipFile="+shipFile+"&abyss="+(ship_id>500?1:0))
+				.attr("src", "../../../../assets/swf/card.swf?sip="+this.server_ip+"&shipFile="+shipFile+"&abyss="+(ship_id>500?1:0))
 				.appendTo(".tab_mstship .shipInfo .cgswf");
 			
 			if(ship_id<=500){
@@ -240,7 +242,7 @@
 				
 				$(".tab_mstship .shipInfo .voice").on("click", function(){
 					if(self.audio){ self.audio.pause(); }
-					self.audio = new Audio("http://125.6.189.247/kcs/sound/kc"+self.currentGraph+"/"+$(this).data("vnum")+".mp3");
+					self.audio = new Audio("http://"+this.server_ip+"/kcs/sound/kc"+self.currentGraph+"/"+$(this).data("vnum")+".mp3");
 					self.audio.play();
 				});
 				
