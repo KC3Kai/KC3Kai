@@ -1686,7 +1686,7 @@
 
 		    $( ".module.activity .activity_expeditionPlanner .expres_greatbtn img" )
                 .attr("src", "../../../../assets/img/ui/btn-"+(plannerIsGreatSuccess?"":"x")+"gs.png");
-			$(".dropdown_title").text("Expedition #"+String(selectedExpedition));
+			$(".dropdown_title").text(KC3Meta.term("ExpedNumLabel")+String(selectedExpedition));
 
 			var allShips = [];
 			var fleetObj = PlayerManager.fleets[selectedFleet-1];
@@ -1882,16 +1882,30 @@
 			} else {
 				$( ".module.activity .activity_expeditionPlanner .canister_criterias" ).show();
 			}
-
-			if (unsatRequirements.length === 0) {
+			
+			if(fleetObj.isSupplied()){
+				$( ".module.activity .activity_expeditionPlanner .icon.allReq" ).show();
+				$( ".module.activity .activity_expeditionPlanner .text.allReq" ).text(KC3Meta.term("PanelSupplied"));
+				$( ".module.activity .activity_expeditionPlanner .text.allReq" ).removeClass("expPlanner_text_failed").addClass("expPlanner_text_passed");
+			}else{
+				$( ".module.activity .activity_expeditionPlanner .icon.allReq" ).hide();
+				$( ".module.activity .activity_expeditionPlanner .text.allReq" ).text(KC3Meta.term("PanelUnderSupplied"));
+				$( ".module.activity .activity_expeditionPlanner .text.allReq" ).addClass("expPlanner_text_failed").removeClass("expPlanner_text_passed");
+			}
+			console.log(ExpdCheckerResult);
+			// PanelSupplied
+			// PanelUnderSupplied
+			/*if (unsatRequirements.length === 0) {
+				
 				// all requirements are satisfied
 				$( ".module.activity .activity_expeditionPlanner .icon.allReq" ).show();
+				$( ".module.activity .activity_expeditionPlanner .text.allReq" ).text(KC3Meta.);
 
 				markPassed( $(".module.activity .activity_expeditionPlanner .text.allReq") );
 			} else {
 				$( ".module.activity .activity_expeditionPlanner .icon.allReq" ).hide();
 				markFailed( $(".module.activity .activity_expeditionPlanner .text.allReq") );
-			}
+			}*/
 
 			return;
 
