@@ -8,6 +8,7 @@
 		goals: {},
 		mapexp: [],
 		maplist: {},
+		shipexp: {},
 		
 		rankNames: ["F", "E", "D", "C", "B", "A", "S", "SS" ],
 		rankFactors: [0, 0.5, 0.7, 0.8, 1, 1, 1.2],
@@ -57,10 +58,6 @@
 			$(".tab_expcalc .box_goals").on("click", ".ship_edit", function(){
 				editingBox = $(this).parent();
 				var grindData = self.goals[ "s"+editingBox.data("id") ];
-				
-				if(parseInt($(".ship_target input", editingBox).val(), 10) > 99){
-					$(".ship_target input", editingBox).val(99);
-				}
 				
 				$(".ship_target input", editingBox).val( grindData[0] );
 				$(".ship_map select", editingBox).val( grindData[1]+"-"+grindData[2] );
@@ -176,7 +173,11 @@
 				}
 				
 				// If this is the last remodel stage, add to others
-				$(".ship_target .ship_value", goalBox).text( 99 );
+				if(ThisShip.level<99){
+					$(".ship_target .ship_value", goalBox).text( 99 );
+				}else{
+					$(".ship_target .ship_value", goalBox).text( 150 );
+				}
 				goalBox.appendTo(".tab_expcalc .box_other");
 			});
 			
@@ -199,7 +200,7 @@
 			if(grindData.length === 0){
 				// As much as possible use arrays nowadays to shrink JSON size, we might run out of the 5MB localStorage allocated for our app
 				grindData = [
-					/*0*/ ThisShip.master().api_afterlv || 99, // target level
+					/*0*/ (ThisShip.master().api_aftershipid > 0 && ThisShip.level<ThisShip.master().api_afterlv)?ThisShip.master().api_afterlv:(ThisShip.level<99)?99:150, // target level
 					/*1*/ 1, // world
 					/*2*/ 1, // map
 					/*3*/ 1, // node
@@ -214,7 +215,7 @@
 			$(".ship_target .ship_value", goalBox).text( grindData[0] );
 			
 			// Experience Left
-			var expLeft = KC3Meta.exp(grindData[0])[1] - ThisShip.exp[0];
+			var expLeft = KC3Meta.expShip(grindData[0])[1] - ThisShip.exp[0];
 			$(".ship_exp .ship_value", goalBox).text( expLeft );
 			
 			// Base Experience: MAP
