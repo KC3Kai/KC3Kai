@@ -242,18 +242,21 @@ var interactions = {
 		
 		// Get subtitle text
 		var subtitleText = false;
+		var quoteIdentifier = "";
+		var quoteVoiceNum = request.voiceNum;
 		switch(request.voicetype){
 			case "titlecall":
-				subtitleText = KC3Meta.quote( "titlecall_"+request.filename, request.voiceNum);
+				quoteIdentifier = "titlecall_"+request.filename;
 				break;
 			case "npc":
-				subtitleText = KC3Meta.quote( "npc", request.voiceNum);
+				quoteIdentifier = "npc";
 				break;
 			default:
-				subtitleText = KC3Meta.quote( KC3Master.graph( request.filename ), request.voiceNum );
+				quoteIdentifier = KC3Master.graph( request.filename );
 				break;
 		}
-		
+		subtitleText = KC3Meta.quote( quoteIdentifier, quoteVoiceNum );
+
 		// If subtitle removal timer is ongoing, reset
 		if(subtitleVanishTimer && subtitleText){
 			clearTimeout(subtitleVanishTimer);
@@ -276,6 +279,13 @@ var interactions = {
 			}, false);
 			subtitleMp3.src = request.url;*/
 			
+			subtitleVanishTimer = setTimeout(function(){
+				subtitleVanishTimer = false;
+				$(".overlay_subtitles").fadeOut(500);
+			}, (2000+ ($(".overlay_subtitles").text().length*50)) );
+		} else {
+			$(".overlay_subtitles").html("Missing quote #" + quoteIdentifier + "-" + quoteVoiceNum);
+			$(".overlay_subtitles").show();
 			subtitleVanishTimer = setTimeout(function(){
 				subtitleVanishTimer = false;
 				$(".overlay_subtitles").fadeOut(500);
