@@ -197,7 +197,8 @@
 				
 				// MORE INFO
 				if(shipData.api_aftershipid>0){
-					$(".tab_mstship .shipInfo .remodel_name").text( KC3Meta.shipName(KC3Master.ship(shipData.api_aftershipid).api_name) );
+					$(".tab_mstship .shipInfo .remodel_name a").text( KC3Meta.shipName(KC3Master.ship(shipData.api_aftershipid).api_name) );
+					$(".tab_mstship .shipInfo .remodel_name a").data("sid", shipData.api_aftershipid);
 					$(".tab_mstship .shipInfo .remodel_level span").text( shipData.api_afterlv );
 					$(".tab_mstship .shipInfo .remodel_ammo .rsc_value").text( shipData.api_afterfuel );
 					$(".tab_mstship .shipInfo .remodel_steel .rsc_value").text( shipData.api_afterbull );
@@ -240,10 +241,18 @@
 					$("<div/>").addClass("clear").appendTo(".tab_mstship .shipInfo .hourlies");
 				}
 				
+				// Play voice
 				$(".tab_mstship .shipInfo .voice").on("click", function(){
 					if(self.audio){ self.audio.pause(); }
 					self.audio = new Audio("http://"+self.server_ip+"/kcs/sound/kc"+self.currentGraph+"/"+$(this).data("vnum")+".mp3");
 					self.audio.play();
+				});
+				
+				// On-click remodels
+				$(".tab_mstship .shipInfo").on("click", ".remodel_name a", function(){
+					self.showShip( $(this).data("sid") );
+					e.preventDefault();
+					return false;
 				});
 				
 				$(".tab_mstship .shipInfo .stats").show();
