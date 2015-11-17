@@ -136,7 +136,7 @@
 		if(ConfigManager.checkLiveQuests){
 			$.ajax({
 				dataType: "JSON",
-				url: "https://raw.githubusercontent.com/KC3Kai/kc3-translations/master/data/"+ConfigManager.language+"/quests.json?v="+((new Date()).getTime()),
+				url: "https://cdn.rawgit.com/KC3Kai/kc3-translations/master/data/"+ConfigManager.language+"/quests.json?v="+((new Date()).getTime()),
 				success: function(newQuestTLs){
 					if(JSON.stringify(newQuestTLs) != JSON.stringify(KC3Meta._quests)){
 						console.log("new quests detected, updating quest list from live");
