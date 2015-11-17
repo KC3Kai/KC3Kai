@@ -110,7 +110,7 @@
 						$("img", shipBox).attr("src", KC3Meta.abyssIcon(ShipData.api_id) );
 					}
 					
-					$(".shipName", shipBox).text( KC3Meta.shipName(ShipData.api_name) );
+					$(".shipName", shipBox).text( "["+ShipData.api_id+"] "+KC3Meta.shipName(ShipData.api_name) );
 						
 					shipBox.appendTo(".tab_mstship .shipRecords");
 				}
