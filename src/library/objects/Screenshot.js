@@ -12,13 +12,15 @@ function KCScreenshot(){
 	this.format = (ConfigManager.ss_type=="JPG")
 		?["jpeg", "jpg", "image/jpeg"]
 		:["png", "png", "image/png"];
+	this.jsonData = "";
 }
 
-KCScreenshot.prototype.start = function(playerName, element){
+KCScreenshot.prototype.start = function(playerName, element, data){
 	var self = this;
 	this.playerName = playerName;
 	this.gamebox = element;
 	this.generateScreenshotFilename();
+	this.jsonData = JSON.stringify(data || {});
 	
 	// Initialize HTML5 Canvas
 	this.canvas = document.createElement("canvas");
@@ -94,6 +96,13 @@ KCScreenshot.prototype.crop = function(){
 		
 		// Convert image to base64
 		self.base64img = self.canvas.toDataURL(self.format[2]);
+		
+		console.log("typeof steganography", typeof steganography);
+		console.log("self.jsonData", self.jsonData);
+		if(typeof steganography != "undefined" && self.jsonData != "{}"){
+			console.log("steganography!");
+			self.base64img = steganography.encode(self.jsonData, self.base64img);
+		}
 		
 		// Call output function on what to do with the base64 image
 		self.output();

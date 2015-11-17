@@ -28,6 +28,9 @@
 	var moraleClockValue = 100;
 	var moraleClockEnd = 0;
 	var moraleClockRemain = 0;
+	
+	// Screenshot data attachments
+	var ssdata_mode = 0;
 
 	// make sure localStorage.expedTab is available
 	// and is in correct format.
@@ -224,10 +227,29 @@
 		$(".module.controls .btn_ss1").on("click", function(){
 			$(this).hide();
 			
+			// Check for data attachments to screenshot
+			var ss_data = {};
+			switch(ssdata_mode){
+				case 1:
+					ss_data = {
+						player: JSON.parse(localStorage.player),
+						ships: KC3ShipManager.export(),
+						gears: KC3GearManager.export(),
+						stats: JSON.parse(localStorage.statistics)
+					};
+					break;
+				case 2:
+					ss_data = KC3SortieManager.getSortieObject();
+					ss_data.battles = KC3SortieManager.currentNode().getBattleObject();
+					break;
+				default: break;
+			}
+			
 			// Tell service to pass a message to gamescreen on inspected window to get a screenshot
 			(new RMsg("service", "screenshot", {
 				tabId: chrome.devtools.inspectedWindow.tabId,
-				playerName: PlayerManager.hq.name
+				playerName: PlayerManager.hq.name,
+				ssdata: ss_data
 			}, function(response){
 				$(".module.controls .btn_ss1").show();
 			})).execute();
@@ -542,7 +564,10 @@
 	}
 	
 	var NatsuiroListeners = {
-		GameStart: function(data){ Activate(); },
+		GameStart: function(data){
+			Activate();
+			ssdata_mode = 1;
+		},
 		HomeScreen: function(data){
 			Activate();
 			clearSortieData();
@@ -553,6 +578,7 @@
 				overrideFocus = false;
 			}
 			KC3SortieManager.onPvP = false;
+			ssdata_mode = 1;
 		},
 		
 		CatBomb: function(data){
@@ -560,6 +586,7 @@
 			$("#catBomb .title").html( data.title );
 			$("#catBomb .description").html( data.message );
 			$("#catBomb").fadeIn(300);
+			ssdata_mode = 0;
 		},
 		
 		GameUpdate: function(data){
@@ -1138,7 +1165,7 @@
 		BattleStart: function(data){
 			// Clear battle details box just to make sure
 			clearBattleData();
-			
+			ssdata_mode = 2;
 			var thisNode = KC3SortieManager.currentNode();
 			var battleData = (thisNode.startNight)? thisNode.battleNight : thisNode.battleDay;
 			

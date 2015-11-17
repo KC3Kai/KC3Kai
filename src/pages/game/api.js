@@ -343,7 +343,7 @@ var interactions = {
 	// Screenshot triggered, capture the visible tab
 	screenshot :function(request, sender, response){
 		// ~Please rewrite the screenshot script
-		(new KCScreenshot()).start(request.playerName, $(".box-wrap"));
+		(new KCScreenshot()).start(request.playerName, $(".box-wrap"), request.ssdata);
 		response({success:true});
 	},
 	

@@ -308,4 +308,13 @@ KC3改 Ship Object
 	.removeEquip( slotIndex )
 	*/
 	
+	KC3Ship.prototype.export = function() {
+		return [
+			this.masterId,
+			this.level,
+			this.exp,
+			this.morale
+		];
+	};
+	
 })();
