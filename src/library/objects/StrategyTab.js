@@ -49,6 +49,7 @@
 		$("#contentHtml").removeClass();
 		$("#contentHtml").addClass("tab_"+this.name);
 		$("#contentHtml").html(this.htmlContents);
+		KC3Translation.execute();
 	};
 	
 	KC3StrategyTab.prototype.apply = function(){

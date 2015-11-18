@@ -1,6 +1,15 @@
 .tab_maps .factory {
 	display:none;
 }
+.tab_maps .replay_notice {
+	width:660px;
+	border:1px solid #3c3;
+	background:#dfd;
+	margin:10px auto 0px;
+	padding:5px 10px;
+	text-align:center;
+	font-size:12px;
+}
 
 /* WORLD LIST
 ---------------------------------*/
@@ -572,4 +581,3 @@
 .tab_maps .sortie_list .node_exp.nodal:before {
 	content: "Node EXP";
 }
-

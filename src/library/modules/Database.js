@@ -477,6 +477,26 @@ Uses Dexie.js third-party plugin on the assets directory
 				});
 		},
 		
+		get_sortie_data :function(sortie_id, callback){
+			var self = this;
+			var sortie_data = {};
+			console.log("firing");
+			this.con.sortie
+				.where("id").equals(sortie_id)
+				.toArray(function(sortieList){
+					console.log(sortieList);
+					sortie_data = sortieList[0];
+					
+					self.con.battle
+						.where("sortie_id").anyOf(sortie_id)
+						.toArray(function(battleList){
+							console.log(battleList);
+							sortie_data.battles = battleList;
+							callback(sortie_data);
+						});
+				});
+		},
+		
 		get_battle : function(mapArea, mapNo, battleNode, enemyId, callback) {
 			var sortieIds = [];
 			var bctr;

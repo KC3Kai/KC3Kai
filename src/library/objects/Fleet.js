@@ -414,7 +414,8 @@ Contains summary information about a fleet and its 6 ships
 							self.ship(index).equipment(0).masterId,
 							self.ship(index).equipment(1).masterId,
 							self.ship(index).equipment(2).masterId,
-							self.ship(index).equipment(3).masterId
+							self.ship(index).equipment(3).masterId,
+							self.ship(index).exItem().masterId
 						],
 					});
 				}

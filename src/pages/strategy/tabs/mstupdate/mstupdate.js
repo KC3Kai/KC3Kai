@@ -7,11 +7,15 @@
 		tabSelf: KC3StrategyTabs.mstupdate,
 		newShips: [],
 		newGears: [],
+		server_ip: "",
 		
 		/* INIT
 		Prepares all data needed
 		---------------------------------*/
 		init :function(){
+			var MyServer = (new KC3Server()).setNum( PlayerManager.hq.server );
+			this.server_ip = MyServer.ip;
+			
 			var timeNow = (new Date()).getTime();
 			var self = this;
 			var MasterChanged = false;
@@ -60,7 +64,7 @@
 				shipBox = $(".tab_mstupdate .factory .mstship").clone();
 				shipFile = KC3Master.graph_id(ShipData.api_id);
 				
-				$(".ship_cg embed", shipBox).attr("src", "../../../../assets/swf/card.swf?shipFile="+shipFile+"&abyss="+(ShipData.api_id>500?1:0));
+				$(".ship_cg embed", shipBox).attr("src", "../../../../assets/swf/card.swf?sip="+this.server_ip+"&shipFile="+shipFile+"&abyss="+(ShipData.api_id>500?1:0));
 				
 				// $("a", shipBox).attr("href", "?#mstship-"+ShipData.api_id);
 				
@@ -77,7 +81,7 @@
 				
 				var paddedId = (GearData.api_id<10?"00":GearData.api_id<100?"0":"")+GearData.api_id;
 				
-				$(".gear_cg img", gearBox).attr("src", "http://125.6.189.71/kcs/resources/image/slotitem/card/"+paddedId+".png");
+				$(".gear_cg img", gearBox).attr("src", "http://"+this.server_ip+"/kcs/resources/image/slotitem/card/"+paddedId+".png");
 				
 				$("a", gearBox).attr("href", "?#mstgear-"+GearData.api_id);
 				

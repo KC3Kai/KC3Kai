@@ -14,6 +14,62 @@
 			}
 		},
 		{
+			"name": "Javran",
+			"avatar": "https://avatars3.githubusercontent.com/u/1096354?v=3&s=40",
+			"desc": "AboutDeveloper",
+			"links": {
+				"gh" : "https://github.com/Javran",
+				"tw" :"https://twitter.com/JavranC",
+				"wb" : "http://javran.github.io",
+				"we" : "http://weibo.com/JavranC"
+			}
+		},
+		{
+			"name": "ReiFan49",
+			"avatar" : "https://avatars2.githubusercontent.com/u/9847780?v=3&s=40",
+			"desc" : "AboutDeveloper",
+			"links" : {
+				"fb" :"http://facebook.com/ReiHakurei",
+				"tw" :"http://twitter.com/Rei_Fan39",
+				"gh" :"https://github.com/ReiFan49"
+			}
+		},
+		{
+			"name": "fourinone41",
+			"avatar": "https://avatars0.githubusercontent.com/u/15643445?v=3&s=40",
+			"desc": [ "AboutDeveloper" ],
+			"links": {
+				"gh" :"https://github.com/fourinone41"
+			}
+		},
+		{
+			"name": "CrazyTeitoku",
+			"avatar": "https://avatars3.githubusercontent.com/u/12234182?v=3&s=40",
+			"desc": [ "AboutDeveloper", "AboutWikiWriter" ],
+			"links": {
+				"wk" :"http://kancolle.wikia.com/wiki/User:Crazy_teitoku"
+			}
+		},
+		{
+			"name": "McDohl",
+			"avatar": "https://avatars2.githubusercontent.com/u/13024936?v=3&s=40",
+			"desc": "AboutDeveloper",
+			"links": {
+				"gh" :"https://github.com/McDohl",
+				"wk" :"http://kancolle.wikia.com/wiki/User:McDohlJr",
+				"fb" :"https://www.facebook.com/endruhugen"
+			}
+		},
+		{
+			"name": "bcc32",
+			"avatar" : "https://avatars0.githubusercontent.com/u/1239097?v=3&s=40",
+			"desc" : "Developer",
+			"links" : {
+				"gh" :"https://github.com/bcc32",
+                                "fb" :"https://www.facebook.com/sezvar"
+			}
+		},
+		{
 			"name": "bamboo3250",
 			"avatar": "https://avatars3.githubusercontent.com/u/8078323?v=3&s=40",
 			"desc": ["AboutDeveloper", "Tiếng Việt"],
@@ -26,24 +82,12 @@
 			}
 		},
 		{
-			"name": "Diablohu",
-			"avatar": "https://avatars0.githubusercontent.com/u/1946774?v=3&s=40",
-			"desc": ["AboutDeveloper", "简体中文"],
-			"links": {
-				"wb" : "http://diablohu.com",
-				"gh" : "https://github.com/Diablohu",
-				"tw" : "https://twitter.com/Diablohu",
-				"we" : "http://weibo.com/diablohu"
-			}
-		},
-		{
-			"name": "McDohl",
-			"avatar": "https://avatars2.githubusercontent.com/u/13024936?v=3&s=40",
-			"desc": "AboutDeveloper",
-			"links": {
-				"gh" :"https://github.com/McDohl",
-				"wk" :"http://kancolle.wikia.com/wiki/User:McDohlJr",
-				"fb" :"https://www.facebook.com/endruhugen"
+			"name": "Nekoworkshop",
+			"avatar" : "https://avatars1.githubusercontent.com/u/1346257?v=3&s=40",
+			"desc" : ["AboutDeveloper", "日本語"],
+			"links" : {
+				"gh" :"https://github.com/nekoworkshop",
+				"tw" :"http://twitter.com/nekoworkshop"
 			}
 		},
 		{
@@ -58,22 +102,22 @@
 			}
 		},
 		{
-			"name": "CrazyTeitoku",
-			"avatar": "https://avatars3.githubusercontent.com/u/12234182?v=3&s=40",
-			"desc": [ "AboutDeveloper", "AboutWikiWriter" ],
+			"name": "Diablohu",
+			"avatar": "https://avatars0.githubusercontent.com/u/1946774?v=3&s=40",
+			"desc": ["AboutDeveloper", "简体中文"],
 			"links": {
-				"wk" :"http://kancolle.wikia.com/wiki/User:Crazy_teitoku"
+				"wb" : "http://diablohu.com",
+				"gh" : "https://github.com/Diablohu",
+				"tw" : "https://twitter.com/Diablohu",
+				"we" : "http://weibo.com/diablohu"
 			}
 		},
 		{
-			"name": "Javran",
-			"avatar": "https://avatars3.githubusercontent.com/u/1096354?v=3&s=40",
-			"desc": "AboutDeveloper",
-			"links": {
-				"gh" : "https://github.com/Javran",
-				"tw" :"https://twitter.com/JavranC",
-				"wb" : "http://javran.github.io",
-				"we" : "http://weibo.com/JavranC"
+			"name": "tmerta",
+			"avatar" : "https://avatars0.githubusercontent.com/u/2845736?v=3&s=40",
+			"desc" : "AboutDeveloper",
+			"links" : {
+				"gh" :"https://github.com/tmerta"
 			}
 		},
 		{
@@ -86,42 +130,6 @@
 				"fb" :"https://www.facebook.com/y458m",
 				"tw" :"https://twitter.com/yefta458",
 				"wb" : "https://yefta.com"
-			}
-		},
-		{
-			"name": "ReiFan49",
-			"avatar" : "https://avatars2.githubusercontent.com/u/9847780?v=3&s=40",
-			"desc" : "AboutDeveloper",
-			"links" : {
-				"fb" :"http://facebook.com/ReiHakurei",
-				"tw" :"http://twitter.com/Rei_Fan39",
-				"gh" :"https://github.com/ReiFan49"
-			}
-		},
-		{
-			"name": "tmerta",
-			"avatar" : "https://avatars0.githubusercontent.com/u/2845736?v=3&s=40",
-			"desc" : "AboutDeveloper",
-			"links" : {
-				"gh" :"https://github.com/tmerta"
-			}
-		},
-		{
-			"name": "Nekoworkshop",
-			"avatar" : "https://avatars1.githubusercontent.com/u/1346257?v=3&s=40",
-			"desc" : ["AboutDeveloper", "日本語"],
-			"links" : {
-				"gh" :"https://github.com/nekoworkshop",
-				"tw" :"http://twitter.com/nekoworkshop"
-			}
-		},
-		{
-			"name": "bcc32",
-			"avatar" : "https://avatars0.githubusercontent.com/u/1239097?v=3&s=40",
-			"desc" : "Developer",
-			"links" : {
-				"gh" :"https://github.com/bcc32",
-                                "fb" :"https://www.facebook.com/sezvar"
 			}
 		},
 		{

@@ -10,6 +10,7 @@ Provides access to data on built-in JSON files
 		_cache:{},
 		_icons:{},
 		_exp:{},
+		_exp_ship:{},
 		_gauges:{},
 		_ship:{},
 		_defeq:{},
@@ -34,11 +35,12 @@ Provides access to data on built-in JSON files
 			*/
 			// Load Common Meta
 			this._icons		= JSON.parse( $.ajax(repo+'icons.json', { async: false }).responseText );
-			this._exp		= JSON.parse( $.ajax(repo+'experience.json', { async: false }).responseText );
+			this._exp		= JSON.parse( $.ajax(repo+'exp_hq.json', { async: false }).responseText );
+			this._exp_ship	= JSON.parse( $.ajax(repo+'exp_ship.json', { async: false }).responseText );
 			this._gauges	= JSON.parse( $.ajax(repo+'gauges.json', { async: false }).responseText );
 			this._defeq		= JSON.parse( $.ajax(repo+'defeq.json', { async: false }).responseText );
 			this._edges		= JSON.parse( $.ajax(repo+'edges.json', { async: false }).responseText );
-
+			
 			// Load Translations
 			this._ship 		= KC3Translation.getJSON(repo, 'ships', true);
 			this._slotitem	= KC3Translation.getJSON(repo, 'items', true);
@@ -162,6 +164,10 @@ Provides access to data on built-in JSON files
 		
 		exp :function(level){
 			return this._exp[level] || [0,0];
+		},
+		
+		expShip :function(level){
+			return this._exp_ship[level] || [0,0];
 		},
 		
 		quest :function(id){
