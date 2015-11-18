@@ -240,7 +240,8 @@
 					break;
 				case 2:
 					ss_data = KC3SortieManager.getSortieObject();
-					ss_data.battles = KC3SortieManager.currentNode().getBattleObject();
+					ss_data.battles = [];
+					ss_data.battles[0] = KC3SortieManager.currentNode().getBattleObject();
 					break;
 				default: break;
 			}

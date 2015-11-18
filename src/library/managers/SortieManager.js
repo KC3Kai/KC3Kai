@@ -29,7 +29,7 @@ Xxxxxxx
 			return {
 				diff: this.map_difficulty || 0,
 				world: this.map_world || 0,
-				mapnum: map_num || 0,
+				mapnum: this.map_num || 0,
 				fleetnum: this.fleetSent || 1,
 				combined: PlayerManager.combinedFleet,
 				fleet1: PlayerManager.fleets[0].sortieJson(),
