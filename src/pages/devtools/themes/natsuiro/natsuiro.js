@@ -28,6 +28,10 @@
 	var moraleClockValue = 100;
 	var moraleClockEnd = 0;
 	var moraleClockRemain = 0;
+	
+	// Experience Calculation
+	var mapexp = [], maplist = {}, rankFactors = [0, 0.5, 0.7, 0.8, 1, 1, 1.2],
+		newGoals, grindData, expLeft, expPerSortie;
 
 	// make sure localStorage.expedTab is available
 	// and is in correct format.
@@ -133,7 +137,8 @@
 		KC3Database.init();
 		KC3Translation.execute();
 		
-		if(ConfigManager.checkLiveQuests){
+		// Live translations
+		if(ConfigManager.checkLiveQuests && ConfigManager.language=="en"){
 			$.ajax({
 				dataType: "JSON",
 				url: "https://cdn.rawgit.com/KC3Kai/kc3-translations/master/data/"+ConfigManager.language+"/quests.json?v="+((new Date()).getTime()),
@@ -153,6 +158,20 @@
 				}
 			});
 		}
+		
+		// Get map exp rewards
+		mapexp = JSON.parse($.ajax({
+			url : '../../../../data/exp_map.json',
+			async: false
+		}).responseText);
+		
+		$.each(mapexp, function(worldNum, mapNums){
+			$.each(mapNums, function(mapNum, mapExp){
+				if(mapExp > 0){
+					maplist[worldNum+"-"+(mapNum+1)] = mapExp;
+				}
+			});
+		});
 		
 		// Panel customizations: panel opacity
 		$(".wrapper_bg").css("opacity", ConfigManager.pan_opacity/100);
@@ -1322,6 +1341,28 @@
 				$(".module.activity .battle_drop img").attr("src",
 					"../../../../assets/img/ui/dark_shipdrop-x.png");
 			}
+			
+			// Show experience calculation
+			if(selectedFleet<5){
+				var CurrentFleet = PlayerManager.fleets[selectedFleet-1];
+				var ThisShip;
+				newGoals = JSON.parse(localStorage.goals || "{}");
+				$.each(CurrentFleet.ships, function(index, rosterId){
+					if(typeof newGoals["s"+rosterId] != "undefined"){
+						grindData = newGoals["s"+rosterId];
+						if(grindData.length===0){ return true; }
+						ThisShip = KC3ShipManager.get( rosterId );
+						expLeft = KC3Meta.expShip(grindData[0])[1] - ThisShip.exp[0];
+						expPerSortie = maplist[ grindData[1]+"-"+grindData[2] ];
+						if(grindData[6]===1){ expPerSortie = expPerSortie * 2; }
+						if(grindData[5]===1){ expPerSortie = expPerSortie * 1.5; }
+						expPerSortie = expPerSortie * rankFactors[grindData[4]];
+						
+						$("<div />").addClass("expNotice").text( Math.ceil(expLeft / expPerSortie) ).appendTo("#ShipBox"+rosterId+" .ship_exp_label").delay( 5000 ).fadeOut(1000, function(){ $(this).remove(); } );
+					}
+				});
+				
+			}
 		},
 		
 		CraftGear: function(data){
@@ -1683,7 +1724,9 @@
 		},
 
 		UpdateExpeditionPlanner: function (data) {
-
+			// if combined fleet, cancel action
+			if(selectedFleet===5){ return false; }
+			
 		    $( ".module.activity .activity_expeditionPlanner .expres_greatbtn img" )
                 .attr("src", "../../../../assets/img/ui/btn-"+(plannerIsGreatSuccess?"":"x")+"gs.png");
 			$(".dropdown_title").text(KC3Meta.term("ExpedNumLabel")+String(selectedExpedition));

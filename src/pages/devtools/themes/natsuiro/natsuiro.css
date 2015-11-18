@@ -1581,6 +1581,22 @@ list-style: none;
 	font-size:11px;
 	text-align:center;
 	color:#aaa;
+	position:relative;
+}
+.module.fleet .lship .ship_exp_label .expNotice {
+	width:40px;
+	height:22px;
+	line-height:22px;
+	position:absolute;
+	top:0px;
+	left:0px;
+	font-size:14px;
+	text-shadow:
+		0px 0px 4px #000,
+		0px 0px 4px #000,
+		0px 0px 4px #000;
+	text-align:center;
+	color:#ffcc00;
 }
 .module.fleet .lship .ship_exp_next {
 	width:40px;

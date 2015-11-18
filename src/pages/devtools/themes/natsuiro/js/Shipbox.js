@@ -6,6 +6,7 @@ KC3改 Ship Box for Natsuiro theme
 	
 	window.KC3NatsuiroShipbox = function( base, rosterId ){
 		this.element = $("#factory "+base).clone();
+		this.element.attr("id", "ShipBox"+rosterId);
 		this.shipData = KC3ShipManager.get( rosterId );
 		
 		this.expPercent = this.shipData.exp[2] / 100;
