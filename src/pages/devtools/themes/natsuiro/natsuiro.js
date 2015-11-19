@@ -931,6 +931,9 @@
 						case 2:
 							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedSurface") );
 							break;
+						case 3:
+							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedTransport") );
+							break;
 						default:
 							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedNone") );
 							break;
