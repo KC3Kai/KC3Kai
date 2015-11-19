@@ -21,7 +21,7 @@
 		// Show estimated time until next update
 		$.ajax({
 			dataType: "json",
-			url: "https://cdn.rawgit.com/KC3Kai/KC3Kai/master/update?v="+((new Date()).getTime()),
+			url: "https://raw.githubusercontent.com/KC3Kai/KC3Kai/master/update?v="+((new Date()).getTime()),
 			success: function(data, textStatus, request){
 				// If current installed version less than latest
 				if( myVersion < Number(data.version) ){
