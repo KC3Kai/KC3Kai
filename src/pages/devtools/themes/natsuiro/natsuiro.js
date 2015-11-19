@@ -348,9 +348,11 @@
 			var result = {};
 			for(var i = 0; i < 4; i++) {
 				if(shipObj.items[i]> -1){
+					var item = KC3GearManager.get(shipObj.items[i]);
+					var rank = (item.ace === -1) ? item.stars : item.ace ;
 					result["i".concat(i+1)] ={
-							"id":KC3GearManager.get(shipObj.items[i]).masterId,
-							"rf":KC3GearManager.get(shipObj.items[i]).stars
+							"id":item.masterId,
+							"rf":rank
 					};
 				} else {break;}
 			}
