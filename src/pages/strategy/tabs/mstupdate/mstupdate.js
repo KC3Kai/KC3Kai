@@ -79,10 +79,14 @@
 			$.each(this.newGears, function(index, GearData){
 				gearBox = $(".tab_mstupdate .factory .mstgear").clone();
 				
-				var paddedId = (GearData.api_id<10?"00":GearData.api_id<100?"0":"")+GearData.api_id;
-				$(".gear_cg img", gearBox).attr("src", "http://"+self.server_ip+"/kcs/resources/image/slotitem/card/"+paddedId+".png");
+				if(GearData.api_id<501){
+					var paddedId = (GearData.api_id<10?"00":GearData.api_id<100?"0":"")+GearData.api_id;
+					$(".gear_cg img", gearBox).attr("src", "http://"+self.server_ip+"/kcs/resources/image/slotitem/card/"+paddedId+".png");
+				}else{
+					$(".gear_cg img", gearBox).hide();
+				}
 				
-				$("a", gearBox).attr("href", "?#mstgear-"+GearData.api_id);
+				// $("a", gearBox).attr("href", "?#mstgear-"+GearData.api_id);
 				
 				$(".gear_name", gearBox).text( KC3Meta.gearName( GearData.api_name ) );
 				
