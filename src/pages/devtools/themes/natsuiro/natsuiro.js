@@ -964,8 +964,11 @@
 				// we'll try switching to the next available fleet if any
 				var fleets = PlayerManager.fleets;
 				var availableFleetInd = -1;
+				// if combined fleet is in use, the second fleet is not available
+				// so we can skip it
+				var fleetStartInd = (PlayerManager.combinedFleet !== 0) ? 2 : 1;
 				// start from the 2nd fleet
-				for (var i = 1; i < 4; ++i) {
+				for (var i = fleetStartInd; i < 4; ++i) {
 					// find one available fleet
 					if (fleets[i].mission[0] === 0) {
 						availableFleetInd = i;
@@ -1570,8 +1573,11 @@
 			// choose one available fleet if any, setup variables properly
 			var fleets = PlayerManager.fleets;
 			var availableFleetInd = -1;
+			// if combined fleet is in use, the second fleet is not available
+			// so we can skip it
+			var fleetStartInd = (PlayerManager.combinedFleet !== 0) ? 2 : 1;
 			// start from the 2nd fleet
-			for (var i = 1; i < 4; ++i) {
+			for (var i = fleetStartInd; i < 4; ++i) {
 				// find one available fleet
 				if (fleets[i].mission[0] === 0) {
 					availableFleetInd = i;
