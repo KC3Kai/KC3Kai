@@ -230,9 +230,7 @@
 				// HOURLIES
 				$(".tab_mstship .shipInfo .hourlies").html("");
 				if(shipData.api_voicef>1){
-					// console.log( Object.keys(this.hourlies) );
 					var vnames = Object.keys(this.hourlies);
-					var self = this;
 					vnames.sort();
 					$.each(vnames, function(i,vname){
 						var vnum = self.hourlies[vname];
