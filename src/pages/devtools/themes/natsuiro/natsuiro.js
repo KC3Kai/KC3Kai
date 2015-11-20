@@ -65,24 +65,6 @@
 				data.expedConf[i] = { greatSuccess: false };
 			}
 
-			// TODO: the following part immigrates old data, so can be removed in next version
-			if (localStorage.expedTabLastPick) {
-				try {
-					var oldData = JSON.parse( localStorage.expedTabLastPick );
-					for (var fleetNum = 1; fleetNum <= 4; ++fleetNum) {
-						var oldRecord = oldData[fleetNum];
-						data.fleetConf[fleetNum].expedition = 
-							oldRecord.selectedExpedition;
-						data.expedConf[oldRecord.selectedExpedition].greatSuccess = 
-							oldRecord.isGreatSuccess;
-					}
-				} catch (err) {
-					console.log( "error when immigrating old data:", err);
-				} finally {
-					localStorage.removeItem("expedTabLastPick");
-				}
-			}
-
 			localStorage.expedTab = JSON.stringify( data );
 		} else {
 			data = JSON.parse( localStorage.expedTab );
