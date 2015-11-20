@@ -58,13 +58,14 @@
 			$(".tab_mstupdate .runtime_id").text(chrome.runtime.id);
 			
 			var shipBox, gearBox, shipFile;
-			
+			var self = this;
+
 			// New Ship list
 			$.each(this.newShips, function(index, ShipData){
 				shipBox = $(".tab_mstupdate .factory .mstship").clone();
 				shipFile = KC3Master.graph_id(ShipData.api_id);
 				
-				$(".ship_cg embed", shipBox).attr("src", "../../../../assets/swf/card.swf?sip="+this.server_ip+"&shipFile="+shipFile+"&abyss="+(ShipData.api_id>500?1:0));
+				$(".ship_cg embed", shipBox).attr("src", "../../../../assets/swf/card.swf?sip="+self.server_ip+"&shipFile="+shipFile+"&abyss="+(ShipData.api_id>500?1:0));
 				
 				// $("a", shipBox).attr("href", "?#mstship-"+ShipData.api_id);
 				
@@ -73,15 +74,13 @@
 				shipBox.appendTo(".tab_mstupdate .mstships");
 			});
 			$("<div/>").addClass("clear").appendTo(".tab_mstupdate .mstships");
-			
-			
+
 			// New Equipment List
 			$.each(this.newGears, function(index, GearData){
 				gearBox = $(".tab_mstupdate .factory .mstgear").clone();
 				
 				var paddedId = (GearData.api_id<10?"00":GearData.api_id<100?"0":"")+GearData.api_id;
-				
-				$(".gear_cg img", gearBox).attr("src", "http://"+this.server_ip+"/kcs/resources/image/slotitem/card/"+paddedId+".png");
+				$(".gear_cg img", gearBox).attr("src", "http://"+self.server_ip+"/kcs/resources/image/slotitem/card/"+paddedId+".png");
 				
 				$("a", gearBox).attr("href", "?#mstgear-"+GearData.api_id);
 				
