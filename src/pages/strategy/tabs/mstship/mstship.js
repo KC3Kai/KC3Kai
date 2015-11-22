@@ -104,11 +104,16 @@
 				
 				shipBox = $(".tab_mstship .factory .shipRecord").clone();
 				shipBox.data("id", ShipData.api_id);
+				shipBox.data("bs", ShipData.kc3_bship);
 				
 				if(ShipData.api_id<=500){
 					$("img", shipBox).attr("src", KC3Meta.shipIcon(ShipData.api_id) );
 				}else{
 					$("img", shipBox).attr("src", KC3Meta.abyssIcon(ShipData.api_id) );
+				}
+				
+				if(ConfigManager.salt_list.indexOf(ShipData.kc3_bship)>=0) {
+					shipBox.addClass('salted');
 				}
 				
 				$(".shipName", shipBox).text( "["+ShipData.api_id+"] "+KC3Meta.shipName(ShipData.api_name) );
@@ -145,8 +150,15 @@
 			$("<embed/>")
 				.attr("src", "../../../../assets/swf/card.swf?sip="+this.server_ip+"&shipFile="+shipFile+"&abyss="+(ship_id>500?1:0))
 				.appendTo(".tab_mstship .shipInfo .cgswf");
+			$(".tab_mstship .shipInfo").off('click',".salty-zone");
+			$(".tab_mstship .shipInfo").removeClass('salted');
 			
 			if(ship_id<=500){
+				// Check saltiness
+				if(ConfigManager.salt_list.indexOf(shipData.kc3_bship)>=0) {
+					$(".tab_mstship .shipInfo").addClass('salted');
+				}
+				
 				// Ship-only, non abyssal
 				
 				$(".tab_mstship .shipInfo .stats").html("");
@@ -257,11 +269,37 @@
 					return false;
 				});
 				
+				// Salt-toggle
+				$(".tab_mstship .shipInfo").on("click", ".salty-zone", function(e){
+					var
+						saltList = ConfigManager.salt_list,
+						saltPos  = saltList.indexOf(shipData.kc3_bship),
+						shipBox  = $(".shipRecord").filter(function(i,x){
+							return shipData.kc3_bship == $(x).data('bs');
+						});
+					if(saltPos >= 0) {
+						saltList.splice(saltPos,1);
+						shipBox.removeClass('salted');
+					} else {
+						saltList.push(shipData.kc3_bship);
+						shipBox.addClass('salted');
+					}
+					ConfigManager.save();
+					e.preventDefault();
+					self.showShip( shipData.api_id );
+					return false;
+				});
+				
 				$(".tab_mstship .shipInfo .stats").show();
 				$(".tab_mstship .shipInfo .equipments").show();
 				$(".tab_mstship .shipInfo .intro").show();
 				$(".tab_mstship .shipInfo .more").show();
 				$(".tab_mstship .shipInfo .json").hide();
+				$(".tab_mstship .shipInfo .tokubest").show();
+				if(ConfigManager.info_salt)
+					$(".tab_mstship .shipInfo .tokubest .salty-zone").show();
+				else
+					$(".tab_mstship .shipInfo .tokubest .salty-zone").hide();
 			}else{
 				// abyssals, just show json
 				$(".tab_mstship .shipInfo .json").text(JSON.stringify(shipData));
@@ -271,6 +309,7 @@
 				$(".tab_mstship .shipInfo .intro").hide();
 				$(".tab_mstship .shipInfo .more").hide();
 				$(".tab_mstship .shipInfo .json").show();
+				$(".tab_mstship .shipInfo .tokubest").hide();
 			}
 			
 		}
