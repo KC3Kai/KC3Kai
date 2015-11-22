@@ -38,30 +38,30 @@
 			"Repair" : 6
 		},
 		hourlies: {
-			"0000" : 30,
-			"0100" : 31,
-			"0200" : 32,
-			"0300" : 33,
-			"0400" : 34,
-			"0500" : 35,
-			"0600" : 36,
-			"0700" : 37,
-			"0800" : 38,
-			"0900" : 39,
-			"1000" : 40,
-			"1100" : 41,
-			"1200" : 42,
-			"1300" : 43,
-			"1400" : 44,
-			"1500" : 45,
-			"1600" : 46,
-			"1700" : 47,
-			"1800" : 48,
-			"1900" : 49,
-			"2000" : 50,
-			"2100" : 51,
-			"2200" : 52,
-			"2300" : 53
+			30: "0000",
+			31: "0100",
+			32: "0200",
+			33: "0300",
+			34: "0400",
+			35: "0500",
+			36: "0600",
+			37: "0700",
+			38: "0800",
+			39: "0900",
+			40: "1000",
+			41: "1100",
+			42: "1200",
+			43: "1300",
+			44: "1400",
+			45: "1500",
+			46: "1600",
+			47: "1700",
+			48: "1800",
+			49: "1900",
+			50: "2000",
+			51: "2100",
+			52: "2200",
+			53: "2300"
 		},
 		
 		currentGraph: "",
@@ -100,20 +100,20 @@
 			// List all ships
 			var shipBox;
 			$.each(KC3Master._ship, function(index, ShipData){
-				if(ShipData!==null){
-					shipBox = $(".tab_mstship .factory .shipRecord").clone();
-					shipBox.data("id", ShipData.api_id);
-					
-					if(ShipData.api_id<=500){
-						$("img", shipBox).attr("src", KC3Meta.shipIcon(ShipData.api_id) );
-					}else{
-						$("img", shipBox).attr("src", KC3Meta.abyssIcon(ShipData.api_id) );
-					}
-					
-					$(".shipName", shipBox).text( "["+ShipData.api_id+"] "+KC3Meta.shipName(ShipData.api_name) );
-						
-					shipBox.appendTo(".tab_mstship .shipRecords");
+				if(!ShipData) { return true; }
+				
+				shipBox = $(".tab_mstship .factory .shipRecord").clone();
+				shipBox.data("id", ShipData.api_id);
+				
+				if(ShipData.api_id<=500){
+					$("img", shipBox).attr("src", KC3Meta.shipIcon(ShipData.api_id) );
+				}else{
+					$("img", shipBox).attr("src", KC3Meta.abyssIcon(ShipData.api_id) );
 				}
+				
+				$(".shipName", shipBox).text( "["+ShipData.api_id+"] "+KC3Meta.shipName(ShipData.api_name) );
+					
+				shipBox.appendTo(".tab_mstship .shipRecords");
 			});
 			
 			// Select ship
@@ -230,10 +230,7 @@
 				// HOURLIES
 				$(".tab_mstship .shipInfo .hourlies").html("");
 				if(shipData.api_voicef>1){
-					var vnames = Object.keys(this.hourlies);
-					vnames.sort();
-					$.each(vnames, function(i,vname){
-						var vnum = self.hourlies[vname];
+					$.each(this.hourlies, function(vnum, vname){
 						var hhStr = vname.substring(0,2);
 						var mmStr = vname.substring(2);
 						$("<div/>")

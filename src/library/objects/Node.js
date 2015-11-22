@@ -57,11 +57,14 @@ Used by SortieManager
 			)+".png";
 		};
 		this.amount = nodeData.api_itemget.api_getcount;
+		if(this.item < 8)
+			KC3SortieManager.materialGain[this.item-1] += this.amount;
 		return this;
 	};
 	
 	KC3Node.prototype.defineAsBounty = function( nodeData ){
 		var
+			self = this,
 			maps = JSON.parse(localStorage.maps),
 			ckey = ["m",KC3SortieManager.map_world,KC3SortieManager.map_num].join("");
 		this.type = "bounty";
@@ -69,10 +72,11 @@ Used by SortieManager
 		this.icon = function(folder){
 			return folder+(
 				["fuel","ammo","steel","bauxite","ibuild","bucket","devmat","compass"]
-				[nodeData.api_itemget_eo_comment.api_id-1]
+				[self.item-1]
 			)+".png";
 		};
 		this.amount = nodeData.api_itemget_eo_comment.api_getcount;
+		KC3SortieManager.materialGain[this.item-1] += this.amount;
 		
 		maps[ckey].clear |= (++maps[ckey].kills) >= KC3Meta.gauge(ckey.replace("m",""));
 		localStorage.maps = JSON.stringify(maps);
@@ -344,8 +348,37 @@ Used by SortieManager
 		
 		if(this.isBoss()) {
 			var
-				maps = JSON.parse(localStorage.maps),
-				ckey = ["m",KC3SortieManager.map_world,KC3SortieManager.map_num].join("");
+				maps = localStorage.getObject('maps'),
+				ckey = ["m",KC3SortieManager.map_world,KC3SortieManager.map_num].join(""),
+				stat = maps[ckey].stat,
+				srid = KC3SortieManager.onSortie;
+			/* DESPAIR STATISTICS ==> */
+			if(stat) {
+				var
+					fs = [this.gaugeDamage,this.originalHPs[7]],
+					pt = 'dummy',
+					sb = stat.onBoss,
+					oc = 0;
+				fs.push(fs[0]/fs[1]);
+				fs.push(fs[1]-fs[0]);
+				switch(true){
+					case (fs[0] ===   0): pt = 'fresh'; break;
+					case (fs[2] <  0.25): pt = 'graze'; break;
+					case (fs[2] <  0.50): pt = 'light'; break;
+					case (fs[2] <  0.75): pt = 'modrt'; break;
+					case (fs[3] >     9): pt = 'heavy'; break;
+					case (fs[3] >     1): pt = 'despe'; break;
+					case (fs[3] ==    1): pt = 'endur'; break;
+					case (fs[3] <     1): pt = 'destr'; break;
+				}
+				sb[pt].push(srid);
+				oc = sb[pt].length;
+				console.info('Current sortie recorded as',pt,'.');
+				console.info('You\'ve done this',oc,'time'+(oc != 1 ? 's' : '')+'.','Good luck, see you next time!');
+			}
+			/* ==> DESPAIR STATISTICS */
+			
+			/* FLAGSHIP ATTACKING ==> */
 			console.log("Damaged Flagship ",this.gaugeDamage,"/",maps[ckey].curhp || 0,"pts");
 			if((this.gaugeDamage >= 0) && (maps[ckey].curhp || 0) > 0) { // gauge-based not cleared / not gauge-based
 				maps[ckey].curhp -= this.gaugeDamage;
@@ -355,7 +388,15 @@ Used by SortieManager
 				maps[ckey].kills += resultData.api_destsf;
 			}
 			maps[ckey].clear |= resultData.api_first_clear; // obtaining clear once
-			localStorage.maps = JSON.stringify(maps);
+			if(stat) {
+				stat.onBoss.hpDat[srid] = [maps[ckey].curhp,maps[ckey].maxhp];
+				if(resultData.api_first_clear)
+					stat.onClear = srid; // retrieve sortie ID for first clear mark
+			}
+			
+			/* ==> FLAGSHIP ATTACKING */
+			
+			localStorage.setObject('maps',maps);
 		}
 		
 		if(typeof resultData.api_get_ship != "undefined"){

@@ -150,7 +150,7 @@ Uses Dexie.js third-party plugin on the assets directory
 							ID          PRIMARY-AUTOINC 
 							HQ          char[8]         Describes the HQ ID of the admiral
 							Hour        integer         Describes the UTC time, as standard of resources and consumables
-							Type        char[10]        Representing the material/useitem change method
+							Type        char[*]         Representing the material/useitem change method
 							Data        integer[8]      Changes that describes the current action
 							------------------------------------- **/
 							navaloverall: "++id,hq,hour,type,data",
@@ -289,9 +289,27 @@ Uses Dexie.js third-party plugin on the assets directory
 			this.con.develop.add(data);
 		},
 		
-		Expedition :function(data){
+		Expedition :function(data,callback){
 			data.hq = this.index;
-			this.con.expedition.add(data);
+			this.con.expedition.add(data).then(callback);
+		},
+		
+		Naverall :function(data,type,force){
+			data.hq = this.index;
+			data.data = data.data.map(function(x){return parseInt(x);});
+			if(data.data.every(function(x){return !x;}) && !force)
+				return false;
+			if(!type) {
+				this.con.navaloverall.add(data);
+			} else {
+				this.con.navaloverall
+					.where("type").equals(type)
+					.reverse().limit(1)
+					.modify(function(old){
+						old.data = old.data.map(function(x,i){return x + data.data[i];});
+				});
+			}
+			return true;
 		},
 		
 		/* [GET] Retrive logs from Local DB

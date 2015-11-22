@@ -700,3 +700,22 @@
 .tab_event .sortie_list .node_exp.nodal:before {
 	content: "Node EXP";
 }
+.tab_event .sortie_list .sortie_end_text {
+	display: inline-block;
+	width: 40%;
+}
+.tab_event .sortie_list .sortie_end_hp {
+	display: inline-block;
+	width: 60%;
+}
+.tab_event .sortie_list .sortie_end_hp.boss {
+	font-weight: bolder;
+	font-size: 1.1em;
+}
+.tab_event .sortie_list .sortie_end_hp.boss.nowhp {
+	color: green;
+}
+.tab_event .sortie_list .sortie_end_hp.boss.maxhp {
+	color: red;
+	font-size: 1.2em;
+}

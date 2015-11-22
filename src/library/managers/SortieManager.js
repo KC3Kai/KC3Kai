@@ -6,14 +6,18 @@ Xxxxxxx
 (function(){
 	"use strict";
 	
+	var 
+		focusedFleet = [],
+		preSortieFleet = [];
+	
 	window.KC3SortieManager = {
 		onSortie: 0,
 		onPvP: false,
+		onCat: false,
 		fleetSent: 1,
 		map_world: 0,
 		map_num: 0,
 		map_difficulty: 0,
-		fullSupplyMode: true,
 		nextNodeCount: 0,
 		hqExpGained: 0,
 		nodes: [],
@@ -22,7 +26,9 @@ Xxxxxxx
 		onEnemiesAvailable: function(node){},
 		fcfCheck: [],
 		escapedList: [],
+		materialGain: Array.apply(null,{length:8}).map(function(){return 0;}),
 		sinkList:{main:[],escr:[]},
+		sortieTime: 0,
 		
 		startSortie :function(world, mapnum, fleetNum, stime){
 			// If still on sortie, end previous one
@@ -45,11 +51,10 @@ Xxxxxxx
 				ships: [ -1, -1, -1, -1, -1, -1 ]
 			};
 			
-			this.fullSupplyMode = ((PlayerManager.combinedFleet&&this.fleetSent===1) ? [0,1] : [this.fleetSent-1]).map(function(x){
-				return PlayerManager.fleets[x];
-			}).every(function(x){
-				return x.isSupplied();
-			});
+			PlayerManager.hq.lastSortie = PlayerManager.fleets_backup();
+			
+			focusedFleet = (PlayerManager.combinedFleet&&this.fleetSent===1) ? [0,1] : [this.fleetSent-1];
+			PlayerManager.hq.save();
 			
 			var fleet = PlayerManager.fleets[this.fleetSent-1];
 			fleet.resetAfterHp();
@@ -71,6 +76,8 @@ Xxxxxxx
 				time: stime
 			}, function(id){
 				self.onSortie = id;
+				self.sortieTime = stime;
+				self.save();
 			});
 		},
 		
@@ -96,11 +103,25 @@ Xxxxxxx
 			return 0;
 		},
 		
+		isFullySupplied: function() {
+			return focusedFleet.map(function(x){
+				return PlayerManager.hq.lastSortie[x];
+			}).every(function(ships){
+				return ships.every(function(ship){
+					return ship.isSupplied();
+				});
+			});
+		},
+		
 		isSortieAt: function(world,map) {
 			// Always return false on event maps
 			// (speculated map_world for events > 10 as expedition format follows)
 			return (this.map_world == world && this.map_world <= 10) &&
 				(this.map_num == (map || this.map_num));
+		},
+		
+		isPvP: function(){
+			return this.isSortieAt(-1) || this.onPvP;
 		},
 		
 		setBoss :function( cellno, comp ){
@@ -159,6 +180,7 @@ Xxxxxxx
 			}
 			
 			this.nodes.push(thisNode);
+			this.save();
 		},
 		
 		engageBattle :function( battleData, stime ){
@@ -246,9 +268,70 @@ Xxxxxxx
 			});
 		},
 		
+		load :function(){
+			if(localStorage.sortie) {
+				$.extend(this,localStorage.getObject('sortie'));
+			}
+		},
+		
+		save :function(){
+			localStorage.setObject('sortie',this);
+		},
+		
 		endSortie :function(){
-			this.onSortie = 0;
+			var
+				pvpData = JSON.parse(localStorage.statistics).pvp,
+				self = this;
 			this.fleetSent = 1;
+			console.log("Pre-sortie State",PlayerManager.hq.lastSortie);
+			// Calculate sortie difference with buffer
+			(PlayerManager.hq.lastSortie || []).forEach(function(fleet,fleet_id){
+				fleet.forEach(function(ship,ship_fleet){
+					var
+						rosterId = ship.rosterId,
+						actual   = KC3ShipManager.get(rosterId),
+						supply   = [
+							/*
+								[Fuel Difference] [Ammo Difference] [All Slots Difference]
+							*/
+							function(a,b){return a.fuel - b.fuel;},
+							function(a,b){return a.ammo - b.ammo;},
+							function(a,b){
+								return Array.apply(null,{length:a.slots.length}).map(function(x,i){return (a.slots[i] - b.slots[i]);})
+									.reduce(function(x,y){return x+y;});
+							}
+						].map(function(f){return f(ship,actual);}),
+						/*
+							RepairLength = 3, third entry always zero.
+							if PvP => RepairLength = 0, all zero entry.
+						*/
+						rl       = ship.repair.length * !self.isPvP(),
+						repair   = [1,2,3].map(function(x){
+							return (x<rl) ? (ship.repair[x] - actual.repair[x]) : 0;
+						});
+					if(!(supply.every(function(x){return !x;}) && repair.every(function(x){return !x;})))
+						actual.pendingConsumption[self.isPvP() ? ("pvp" + (pvp.win + pvp.lose)) : ("sortie" + self.onSortie)] = [supply,repair];
+				});
+			});
+			// Ignore every resource gain if disconnected during sortie
+			if(this.onCat)
+				this.materialGain.fill(0);
+			// Fill the resource gain to the current material checkout
+			this.materialGain.forEach(function(x,i){
+				if(i<PlayerManager.hq.lastMaterial.length)
+					PlayerManager.hq.lastMaterial[i] += x;
+			});
+			// To detect whether invalid sortie ID or not
+			if(this.onSortie)
+				KC3Database.Naverall({
+					hour: Math.hrdInt('floor',this.sortieTime,3.6,1),
+					type: "sortie" + this.onSortie,
+					data: this.materialGain.slice(0)
+				},null,true);
+			// Remove sortie comparison buffer
+			PlayerManager.hq.lastSortie = null;
+			
+			// Reset sortie statistics
 			this.map_world = 0;
 			this.map_num = 0;
 			this.map_difficulty = 0;
@@ -265,12 +348,18 @@ Xxxxxxx
 			for(var ectr in this.escapedList){
 				KC3ShipManager.get( this.escapedList[ectr] ).didFlee = false;
 			}
+			
 			this.fcfCheck = [];
 			this.escapedList = [];
-			this.sinkList.main = [];
-			this.sinkList.escr = [];
+			this.materialGain.fill(0);
+			this.sinkList.main.splice(0);
+			this.sinkList.escr.splice(0);
 			KC3ShipManager.pendingShipNum = 0;
 			KC3GearManager.pendingGearNum = 0;
+			this.onSortie = 0; // clear sortie ID last
+			this.onCat = false;
+			this.sortieTime = 0;
+			this.save();
 		}
 	};
 	

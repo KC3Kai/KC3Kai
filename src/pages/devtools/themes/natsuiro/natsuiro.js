@@ -815,7 +815,7 @@
 				// STATUS: RESUPPLY
 				if( (FleetSummary.supplied ||
 					(KC3SortieManager.onSortie &&
-						KC3SortieManager.fullSupplyMode &&
+						KC3SortieManager.isFullySupplied() &&
 						(KC3SortieManager.fleetSent == (PlayerManager.combinedFleet ? 1 : selectedFleet)))) &&
 					(!FleetSummary.badState[0])
 				){
@@ -867,13 +867,13 @@
 				}
 				
 				// STATUS: TAIHA
-				if( (FleetSummary.hasTaiha || FleetSummary.badState[2] || FleetSummary.badState[3])
+				if( (FleetSummary.hasTaiha || FleetSummary.badState[2])
 					&& !FleetSummary.taihaIndexes.equals([0]) // if not flagship only
 					&& !FleetSummary.taihaIndexes.equals([0,0]) // if not flagship only for combined
-					&& !KC3SortieManager.onPvP // if PvP, no taiha alert
+					&& !KC3SortieManager.isPvP() // if PvP, no taiha alert
 				){
 					$(".module.status .status_repair .status_text").text( KC3Meta.term(
-						(FleetSummary.badState[2] ? "PanelFSTaiha" : (FleetSummary.badState[3] ? "PanelEscortChuuha" : "PanelHasTaiha"))
+						(FleetSummary.badState[2] ? "PanelFSTaiha" : "PanelHasTaiha")
 					) );
 					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/sunk.png");
 					$(".module.status .status_repair .status_text").addClass("bad");
@@ -891,7 +891,11 @@
 							tabId: chrome.devtools.inspectedWindow.tabId
 						})).execute();
 					}
-					
+				// Escort Chuuha
+				}else if (FleetSummary.badState[3]) {
+					$(".module.status .status_repair .status_text").text( "PanelEscortChuuha" );
+					$(".module.status .status_repair .status_text").addClass("bad");
+					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/sunk.png");
 				}else{
 					$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelNoTaiha") );
 					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/check.png");
@@ -1428,7 +1432,6 @@
 			$(".module.activity .map_world").text("PvP");
 			
 			// Process PvP Battle
-			KC3SortieManager.endSortie();
 			KC3SortieManager.fleetSent = data.fleetSent;
 			KC3SortieManager.onPvP = true;
 			
@@ -1597,8 +1600,8 @@
 					}
 				});
 			} else {
-                // knowing fleet #2, #3 and #4 are all unavailable,
-                // we can return focus to the main fleet.
+				// knowing fleet #2, #3 and #4 are all unavailable,
+				// we can return focus to the main fleet.
 				$(".module.controls .fleet_num").each( function(i,v) {
 					var thisFleet = parseInt( $(this).text(), 10);
 					if (thisFleet === 1) {
@@ -1607,7 +1610,7 @@
 				});
 				// also return focus to basic tab
 				$("#atab_basic").trigger("click");
-            }
+			}
 		},
 		ExpeditionStart: function (data) {
 			if (! ConfigManager.info_auto_exped_tab)
@@ -1724,18 +1727,17 @@
                 .attr("src", "../../../../assets/img/ui/btn-"+(plannerIsGreatSuccess?"":"x")+"gs.png");
 			$(".dropdown_title").text(KC3Meta.term("ExpedNumLabel")+String(selectedExpedition));
 
-			var allShips = [];
-			var fleetObj = PlayerManager.fleets[selectedFleet-1];
+			var
+				allShips,
+				fleetObj = PlayerManager.fleets[selectedFleet-1];
+				
 			//fleets' subsripts start from 0 !
-			$.each(PlayerManager.fleets[selectedFleet-1].ships, function(index, rosterId) {
-				if (rosterId > -1) {
-					var CurrentShip = KC3ShipManager.get(rosterId);
-					if (CurrentShip.masterId > 0) {
-						allShips.push(CurrentShip);
-
-					}
-				}
+			allShips = fleetObj.ships.map(function(rosterId, index) {
+				return KC3ShipManager.get(rosterId);
+			}).filter(function (rosterData, index){
+				return (rosterData.masterId > 0);
 			});
+			
 			if (allShips.length <= 0)
 				return;
 

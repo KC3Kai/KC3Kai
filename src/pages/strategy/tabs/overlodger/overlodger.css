@@ -1,17 +1,17 @@
-.tab_expedpast {
+.tab_overlodger {
 	width:680px;
 }
 
-.tab_expedpast .factory {
+.tab_overlodger .factory {
 	display:none;
 }
 
 /* NUMBERS
 -----------------------------*/
-.tab_expedpast .expedNumBoxes {
+.tab_overlodger .expedNumBoxes {
 	
 }
-.tab_expedpast .expedNumBox {
+.tab_overlodger .expedNumBox {
 	width:110px;
 	height:152px;
 	float:left;
@@ -20,25 +20,25 @@
 	border-radius:8px;
 	padding:3px 5px;
 }
-.tab_expedpast .expedNumBox .expedNum,
-.tab_expedpast .expedNumBox .expedWhole {
+.tab_overlodger .expedNumBox .expedNum,
+.tab_overlodger .expedNumBox .expedWhole {
 	width:100px;
 	height:15px;
 	line-height:15px;
 	margin:0px 0px 1px 0px;
 }
-.tab_expedpast .expedNumBox .expedCheck {
+.tab_overlodger .expedNumBox .expedCheck {
 	width:15px;
 	height:15px;
 	float:left;
 	margin:0px 5px 0px 5px;
 }
-.tab_expedpast .expedNumBox .expedCheck input {
+.tab_overlodger .expedNumBox .expedCheck input {
 	width:13px;
 	height:13px;
 	margin:1px;
 }
-.tab_expedpast .expedNumBox .expedText {
+.tab_overlodger .expedNumBox .expedText {
 	width:25px;
 	height:15px;
 	float:left;
@@ -46,33 +46,33 @@
 	margin:0px 5px 0px 0px;
 	font-size:12px;
 }
-.tab_expedpast .expedNumBox .expedWhole .expedText {
+.tab_overlodger .expedNumBox .expedWhole .expedText {
 	width:70px;
 	margin:0px;
 }
-.tab_expedpast .expedNumBox .expedTime {
+.tab_overlodger .expedNumBox .expedTime {
 	width:40px;
 	height:15px;
 	float:left;
 	font-size:11px;
 	color:#999;
 }
-.tab_expedpast .fleetCounts .fleetCount {
+.tab_overlodger .fleetCounts .fleetCount {
 	width:100px;
 	height:20px;
 	line-height:20px;
 }
-.tab_expedpast .fleetCounts .fleetRadio {
+.tab_overlodger .fleetCounts .fleetRadio {
 	width:20px;
 	height:20px;
 	float:left;
 }
-.tab_expedpast .fleetCounts .fleetRadio input {
+.tab_overlodger .fleetCounts .fleetRadio input {
 	width:14px;
 	height:14px;
 	margin:3px;
 }
-.tab_expedpast .fleetCounts .fleetText {
+.tab_overlodger .fleetCounts .fleetText {
 	width:50px;
 	height:15px;
 	float:left;
@@ -80,20 +80,20 @@
 
 /* PAGINATION
 --------------------------------*/
-.tab_expedpast .exped_pages {
+.tab_overlodger .exped_pages {
 	width:700px;
 	margin:0px 0px 10px 0px;
 	background:#f0f5ff;
 	padding:5px 10px 0px;
 	border-bottom:1px solid #369;
 }
-.tab_expedpast .exped_pages .pagination {
+.tab_overlodger .exped_pages .pagination {
 	margin:0px;
 }
 
 /* RECORDS
 --------------------------------*/
-.tab_expedpast .exped_item {
+.tab_overlodger .exped_item {
 	width:680px;
 	height:34px;
 	margin:0px 0px 5px 0px;
@@ -101,28 +101,28 @@
 	border-radius:8px;
 	padding:2px 5px;
 }
-.tab_expedpast .exped_col {
+.tab_overlodger .exped_col {
 	float:left;
 	min-width:10px;
 	height:30px;
 	line-height:30px;
 }
 /* Columns */
-.tab_expedpast .exped_info {
+.tab_overlodger .exped_info {
 	width:70px;
 	line-height:15px;
 	text-align:center;
 	margin:0px 5px 0px 0px;
 	color:#888;
 }
-.tab_expedpast .exped_date {
+.tab_overlodger .exped_date {
 	font-size:12px;
 }
-.tab_expedpast .exped_time {
+.tab_overlodger .exped_time {
 	font-weight:bold;
 	font-size:13px;
 }
-.tab_expedpast .exped_number {
+.tab_overlodger .exped_number {
 	width:35px;
 	margin:0px 5px 0px 0px;
 	text-align:center;
@@ -131,7 +131,7 @@
 	border-radius:5px;
 	background:#fff;
 }
-.tab_expedpast .exped_exp {
+.tab_overlodger .exped_exp {
 	width:35px;
 	margin:0px 5px 0px 0px;
 	text-align:center;
@@ -140,19 +140,19 @@
 	font-weight:bold;
 }
 
-.tab_expedpast .exped_ships {
+.tab_overlodger .exped_ships {
 	width:200px;
 	margin:0px 5px 0px 0px;
 	/*background:#cfc;*/
 }
-.tab_expedpast .exped_ship {
+.tab_overlodger .exped_ship {
 	width:30px;
 	height:30px;
 	float:left;
 	margin:0px 3px 0px 0px;
 	position:relative;
 }
-.tab_expedpast .exped_ship_img {
+.tab_overlodger .exped_ship_img {
 	width:30px;
 	height:30px;
 	line-height:26px;
@@ -160,18 +160,18 @@
 	overflow:hidden;
 	border:2px solid #777;
 }
-.tab_expedpast .exped_ship_img.sparkled {
+.tab_overlodger .exped_ship_img.sparkled {
 	border:2px solid #ffcc00;
 	box-shadow: 0px 0px 5px 0px #ff0;
 }
-.tab_expedpast .exped_ship img {
+.tab_overlodger .exped_ship img {
 	width:28px;
 	height:28px;
 	position:relative;
 	margin:-1px 0px 0px -1px;
 	vertical-align:top;
 }
-.tab_expedpast .exped_ship_exp {
+.tab_overlodger .exped_ship_exp {
 	width:30px;
 	height:12px;
 	line-height:12px;
@@ -185,7 +185,7 @@
 	font-size:12px;
 }
 
-.tab_expedpast .exped_drums {
+.tab_overlodger .exped_drums {
 	width:30px;
 	height:26px;
 	line-height:26px;
@@ -196,7 +196,7 @@
 	font-size:14px;
 	border-radius:7px;
 }
-.tab_expedpast .exped_rsc {
+.tab_overlodger .exped_rsc {
 	width:30px;
 	height:22px;
 	line-height:22px;
@@ -205,38 +205,38 @@
 	font-size:12px;
 	border-radius:5px;
 }
-.tab_expedpast .exped_rsc.empty {
+.tab_overlodger .exped_rsc.empty {
 	opacity:0.4;
 }
-.tab_expedpast .exped_rsc1 {
+.tab_overlodger .exped_rsc1 {
 	background:#C1FFC1;
 }
-.tab_expedpast .exped_rsc2 {
+.tab_overlodger .exped_rsc2 {
 	background:#DFD7B3;
 }
-.tab_expedpast .exped_rsc3 {
+.tab_overlodger .exped_rsc3 {
 	background:#ccc;
 }
-.tab_expedpast .exped_rsc4 {
+.tab_overlodger .exped_rsc4 {
 	background:#FFDCA8;
 }
-.tab_expedpast .exped_result {
+.tab_overlodger .exped_result {
 	width:70px;
 	margin:0px 5px 0px 5px;
 	overflow:hidden;
 }
-.tab_expedpast .exped_result img {
+.tab_overlodger .exped_result img {
 	width:170px;
 	height:30px;
 	margin:0px 0px 0px -50px;
 	position:relative;
 }
-.tab_expedpast .exped_item1 {
+.tab_overlodger .exped_item1 {
 	width:30px;
 	margin:0px 3px 0px 0px;
 	/*background:#fcf;*/
 }
-.tab_expedpast .exped_item2 {
+.tab_overlodger .exped_item2 {
 	width:30px;
 	/*background:#ffc;*/
 }
