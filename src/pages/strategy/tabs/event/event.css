@@ -700,6 +700,9 @@
 .tab_event .sortie_list .node_exp.nodal:before {
 	content: "Node EXP";
 }
+.tab_event .sortie_list .sortie_stat {
+	display: none;
+}
 .tab_event .sortie_list .sortie_end_text {
 	display: inline-block;
 	width: 40%;
