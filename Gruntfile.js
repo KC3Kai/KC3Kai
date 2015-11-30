@@ -1,5 +1,5 @@
 module.exports = function(grunt) {
-	
+
 	grunt.initConfig({
 		clean: {
 			tmp: {
@@ -22,9 +22,11 @@ module.exports = function(grunt) {
 				src: [
 					'assets/img/**',
 					'assets/snd/**',
+					'assets/swf/**',
 					'assets/js/Chart.min.js',
 					'assets/js/Dexie.min.js',
 					'assets/js/FileSaver.min.js',
+					'assets/js/steganography.js',
 					'assets/js/jquery-ui.min.js',
 					'assets/js/KanColleHelpers.js',
 					'assets/js/twbsPagination.min.js'
@@ -42,7 +44,8 @@ module.exports = function(grunt) {
 					'pages/**/*',
 					'!pages/strategy/tabs/**/*.js',
 					'manifest.json',
-					'data/**/*.json'
+					'data/*.json',
+					'data/lang/data/**/*.json'
 				],
 				dest: 'build/release/'
 			}
@@ -55,8 +58,7 @@ module.exports = function(grunt) {
 		jshint: {
 			all : {
 				options: {
-					newcap: false,
-					laxbreak: true,
+					jshintrc: true
 				},
 				src: [
 					'build/tmp/assets/js/global.js',
@@ -181,17 +183,19 @@ module.exports = function(grunt) {
 		jsonlint: {
 			all : {
 				options: {
-					
+
 				},
 				src: [
 					'build/tmp/manifest.json',
-					'build/tmp/data/**/*.json'
+					'build/tmp/data/*.json',
+					'build/tmp/data/lang/data/**/*.json'
 				]
 			}
 		},
 		'json-minify': {
 			manifest : { files: 'build/tmp/manifest.json' },
-			data : { files: 'build/tmp/data/**/*.json' }
+			data1 : { files: 'build/tmp/data/*.json' },
+			data2 : { files: 'build/tmp/data/lang/data/**/*.json' }
 		},
 		concat: {
 			global_css: {
@@ -221,7 +225,7 @@ module.exports = function(grunt) {
 			}
 		}
 	});
-	
+
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -233,7 +237,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-jsonlint');
 	grunt.loadNpmTasks('grunt-string-replace');
 	grunt.loadNpmTasks("grunt-remove-logging");
-	
+
 	grunt.registerTask('default', [
 		'clean:release',
 		'copy:tmpsrc',
@@ -255,5 +259,5 @@ module.exports = function(grunt) {
 		'concat:strategy',
 		'clean:tmp'
 	]);
-	
+
 };

@@ -207,11 +207,25 @@ Uses KC3Quest objects to play around with
 		definePage :function( questList, questPage ){
 			// For each element in quest List
 			//console.log("=================PAGE " + questPage + "===================");
+			var untranslated = [];
 			for(var ctr in questList){
+				if(questList[ctr]===-1) continue;
+				
 				var questId = questList[ctr].api_no;
 				var oldQuest = this.get( questId );
 				oldQuest.defineRaw( questList[ctr] );
 				oldQuest.autoAdjustCounter();
+				
+				// Check for untranslated quests
+				if( typeof oldQuest.meta().available == "undefined" ){
+					var repotedQuests = JSON.parse(localStorage.repotedQuests||"[]");
+					if(repotedQuests.indexOf(questId)===-1){
+						untranslated.push(questList[ctr]);
+						// remember reported quest so wont send data twice
+						repotedQuests.push(questId);
+						localStorage.repotedQuests = JSON.stringify(repotedQuests);
+					}
+				}
 				
 				// Add to actives or opens depeding on status
 				switch( questList[ctr].api_state ){
@@ -233,6 +247,14 @@ Uses KC3Quest objects to play around with
 						break;
 				}
 			}
+			
+			// submit untranslated quests to kc3kai website
+			if(ConfigManager.KC3DBSubmission_enabled){
+				if(untranslated.length > 0){
+					KC3DBSubmission.sendQuests( JSON.stringify(untranslated) );
+				}
+			}
+			
 			this.save();
 		},
 		

@@ -12,6 +12,11 @@ Contains summary information about a fleet and its 6 ships
 		this.name = "";
 		this.ships = [ -1, -1, -1, -1, -1, -1 ];
 		this.mission = [ 0, 0, 0, 0 ];
+		this.akashi_tick = 0;
+		
+		if(!!data) {
+			$.extend(this,data);
+		}
 	};
 	
 	KC3Fleet.prototype.update = function( data ){
@@ -73,7 +78,8 @@ Contains summary information about a fleet and its 6 ships
 	/*--------------------------------------------------------*/
 	
 	KC3Fleet.prototype.countShips = function(){
-		return $.grep(this.ships, function(shipId){ return shipId>-1; }).length;
+		return (this.ships.indexOf(-1)+1 || 7)-1;
+		//return $.grep(this.ships, function(shipId){ return shipId>-1; }).length;
 	};
 	
 	KC3Fleet.prototype.totalLevel = function(){
@@ -89,6 +95,14 @@ Contains summary information about a fleet and its 6 ships
 		return Array.apply(null, {length: 6})
 			.map(Number.call, Number)
 			.map(function(x){return self.ship(x).countDrums();})
+			.reduce(function(x,y){return x+y;});
+	};
+
+	KC3Fleet.prototype.countLandingCrafts = function() {
+		var self = this;
+		return Array.apply(null, {length: 6})
+			.map(Number.call, Number)
+			.map(function(x){return self.ship(x).countLandingCrafts();})
 			.reduce(function(x,y){return x+y;});
 	};
 	
@@ -112,6 +126,44 @@ Contains summary information about a fleet and its 6 ships
 			.reduce(function(x,y){return x+y;}) * 100)/100;
 	};
 	
+	KC3Fleet.prototype.fighterVeteran = function(){
+		var self = this;
+		return Math.round(Array.apply(null, {length: 6})
+			.map(Number.call, Number)
+			.map(function(x){return self.ship(x).fighterVeteran();})
+			.reduce(function(x,y){return x+y;}) * 100)/100;
+	};
+	
+	KC3Fleet.prototype.fighterBounds = function(){
+		var self = this;
+		var TotalPower = [0,0];
+		
+		var ShipPower;
+		for(var ShipCtr in this.ships){
+			if(this.ships[ShipCtr] > -1){
+				ShipPower = this.ship(ShipCtr).fighterBounds();
+				if(typeof ShipPower == "object"){
+					TotalPower[0] += Math.floor(ShipPower[0]);
+					TotalPower[1] += Math.floor(ShipPower[1]);
+					// floor it just in case
+				}
+			}
+		}
+		
+		return TotalPower;
+	};
+	
+	KC3Fleet.prototype.fighterPowerText = function(){
+		switch(ConfigManager.air_formula){
+			case 2: return "~"+this.fighterVeteran();
+			case 3:
+				var fighterBounds = this.fighterBounds();
+				return fighterBounds[0]+"~"+fighterBounds[1];
+			default:
+				return this.fighterPower();
+		}
+	};
+	
 	KC3Fleet.prototype.supportPower = function(){
 		return this.ship(0).supportPower()
 			+this.ship(1).supportPower()
@@ -132,8 +184,28 @@ Contains summary information about a fleet and its 6 ships
 		}
 		return (this.fastFleet) ? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow");
 	};
-	
-	
+
+	/* Calculate expedition cost of a fleet
+	   -------------------------------------
+	   1 <= expeditionId <= 40
+	 */ 
+	KC3Fleet.prototype.calcExpeditionCost = function(expeditionId) {
+		var KEC = PS["KanColle.Expedition.Cost"];
+		var costPercent = KEC.getExpeditionCost( expeditionId );
+		var totalFuel = 0;
+		var totalAmmo = 0;
+		var self = this;
+		$.each( this.ships, function(i, shipId) {
+			if (shipId !== -1) {
+				var shipObj = self.ship(i);
+				var cost = shipObj.calcResupplyCost( costPercent.fuel, costPercent.ammo );
+				totalFuel += cost.fuel;
+				totalAmmo += cost.ammo;
+			}
+		});
+		return {fuel: totalFuel, ammo: totalAmmo};
+	};
+
 	/*--------------------------------------------------------*/
 	/*-----------------[ STATUS INDICATORS ]------------------*/
 	/*--------------------------------------------------------*/
@@ -147,6 +219,16 @@ Contains summary information about a fleet and its 6 ships
 			|| this.ship(5).isTaiha();
 	};
 	
+	KC3Fleet.prototype.getTaihas = function(){
+		var taihaIndexes = [];
+		for(var sctr in this.ships){
+			if(this.ship(sctr).isTaiha()){
+				taihaIndexes.push(sctr);
+			}
+		}
+		return taihaIndexes;
+	};
+	
 	KC3Fleet.prototype.isSupplied = function(){
 		return this.ship(0).isSupplied()
 			&& this.ship(1).isSupplied()
@@ -154,6 +236,18 @@ Contains summary information about a fleet and its 6 ships
 			&& this.ship(3).isSupplied()
 			&& this.ship(4).isSupplied()
 			&& this.ship(5).isSupplied();
+	};
+	
+	KC3Fleet.prototype.needsSupply = function(isEmpty){
+		var self = this;
+		return Array.apply(null, this.ships)
+			.map(Number.call, Number)
+			.map(function(x){return self.ship(x).isNeedSupply(isEmpty);})
+			.reduce(function(x,y){return x||y;});
+	};
+	
+	KC3Fleet.prototype.missionOK = function(){
+		return this.countShips() >= 2 && this.mission[0] === 0;
 	};
 	
 	KC3Fleet.prototype.lowestMorale = function(){
@@ -174,9 +268,9 @@ Contains summary information about a fleet and its 6 ships
 		
 		function checkShip(shipIndex){
 			if(self.ship(shipIndex).masterId===0){ return false; }
-			var myReapirTime = self.ship(shipIndex).repairTime();
-			if(myReapirTime.docking > highestDocking){ highestDocking = myReapirTime.docking; }
-			if(myReapirTime.akashi > highestAkashi){ highestAkashi = myReapirTime.akashi; }
+			var myRepairTime = self.ship(shipIndex).repairTime();
+			if(myRepairTime.docking > highestDocking){ highestDocking = myRepairTime.docking; }
+			if(myRepairTime.akashi > highestAkashi){ highestAkashi = myRepairTime.akashi; }
 		}
 		
 		checkShip(0);
@@ -299,6 +393,16 @@ Contains summary information about a fleet and its 6 ships
 		return total;
 	};
 	
+	/* DISCARD SHIP
+	------------------------------------*/
+	KC3Fleet.prototype.discard = function(shipId) {
+		var pos = this.ships.indexOf(Number(shipId));
+		if(pos>=0){
+			this.ships.splice(pos,1);
+			this.ships.push(-1);
+		}
+	};
+	
 	/* SORTIE JSON
 	Used for recording sorties on indexedDB
 	Generate fleet summary object without referential data (all masterId)
@@ -310,16 +414,18 @@ Contains summary information about a fleet and its 6 ships
 			var self = this;
 			$.each(this.ships, function(index, rosterId){
 				if(rosterId > -1){
+					var ship = self.ship(index);
 					ReturnObj.push({
-						mst_id: self.ship(index).masterId,
-						level: self.ship(index).level,
-						kyouka: self.ship(index).mod,
-						morale: self.ship(index).morale,
+						mst_id: ship.masterId,
+						level: ship.level,
+						kyouka: ship.mod,
+						morale: ship.morale,
 						equip: [
-							self.ship(index).equipment(0).masterId,
-							self.ship(index).equipment(1).masterId,
-							self.ship(index).equipment(2).masterId,
-							self.ship(index).equipment(3).masterId
+							ship.equipment(0).masterId,
+							ship.equipment(1).masterId,
+							ship.equipment(2).masterId,
+							ship.equipment(3).masterId,
+							ship.exItem().masterId
 						],
 					});
 				}

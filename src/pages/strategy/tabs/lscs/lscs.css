@@ -88,7 +88,7 @@
 	margin:0px 5px 0px 0px;
 }
 .tab_lscs .build_item .build_rsc {
-	width:50px;
+	width:45px;
 	margin:0px 5px 0px 0px;
 	text-align:center;
 }
@@ -104,8 +104,13 @@
 .tab_lscs .build_item .build_rsc4 {
 	background:#FFDCA8;
 }
+.tab_lscs .build_item .build_devmat {
+	width:35px;
+	background:#009999;
+	color:#fff;
+}
 .tab_lscs .build_item .build_time {
-	width:130px;
+	width:120px;
 	font-size:11px;
 }
 

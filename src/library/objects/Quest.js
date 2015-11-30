@@ -110,6 +110,21 @@ Quest Type:
 			KC3QuestManager.save();
 		}
 	};
+
+	/* ISCOMPLETE
+	Return true iff all of the counters are complete
+	------------------------------------------*/
+	KC3Quest.prototype.isComplete = function() {
+		if (this.tracking) {
+			for (var ctr in this.tracking) {
+				if (this.tracking[ctr][0] <
+				    this.tracking[ctr][1])
+					return false;
+			}
+			return true;
+		}
+		return false;
+	};
 	
 	/* ATTACH META
 	Add reference to its Meta data from the built-in JSON files

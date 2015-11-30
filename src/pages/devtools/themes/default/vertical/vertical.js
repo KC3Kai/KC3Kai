@@ -268,7 +268,7 @@
 							.text( PlayerManager.hq.exp[ConfigManager.hqExpDetail] )
 							.attr("title",hqt);
 						if(hqexpd.length>0)
-							$(".battle_hqlevel_next_gain", container).text(hqexpd*(ConfigManager.hqExpDetail==1?-1:1));
+							$(".battle_hqlevel_next_gain", container).text(hqexpd);
 					break;
 				}
 			},
@@ -433,8 +433,8 @@
 							
 							var SupplyBarMaxWidth = $(".supply-fuel", ShipBox).css("width");
 							SupplyBarMaxWidth = Number(SupplyBarMaxWidth.substring(0, SupplyBarMaxWidth.length-2));
-							$(".supply-fuel .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*FuelPercent)+"px");
-							$(".supply-ammo .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*AmmoPercent)+"px");
+							$(".supply-fuel .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*Math.min(FuelPercent,1))+"px");
+							$(".supply-ammo .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*Math.min(AmmoPercent,1))+"px");
 						}
 					});
 					
@@ -957,7 +957,7 @@
 						return (PlayerManager.hq.exp[2] + Math.min(PlayerManager.hq.exp[1],KC3SortieManager.hqExpGained)) / KC3Meta.exp(PlayerManager.hq.level)[0];
 					})()*60)+"px"});
 				}
-				$(".battle_hqlevel_next_gain", container).text(KC3SortieManager.hqExpGained * (ConfigManager.hqExpDetail==1 ? -1 : 1));
+				$(".battle_hqlevel_next_gain", container).text(KC3SortieManager.hqExpGained);
 				
 				$(".battle .battle_rating img").attr("src", "../../../../assets/img/client/ratings/"+thisNode.rating+".png");
 				
@@ -1176,7 +1176,7 @@
 						return (PlayerManager.hq.exp[2] + Math.min(PlayerManager.hq.exp[1],expGained)) / KC3Meta.exp(PlayerManager.hq.level)[0];
 					})()*60)+"px"});
 				}
-				$(".battle_hqlevel_next_gain", container).text(expGained * (ConfigManager.hqExpDetail==1 ? -1 : 1));
+				$(".battle_hqlevel_next_gain", container).text(expGained);
 				// giles bhunder
 				$(".battle .battle_rating img").attr("src", "../../../../assets/img/client/ratings/"+data.result.api_win_rank+".png");
 			},

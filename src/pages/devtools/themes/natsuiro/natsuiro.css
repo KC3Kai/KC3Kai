@@ -3,10 +3,30 @@
 #factory {
 	display:none;
 }
+html,body {
+	height:100%;
+}
+#critical {
+	width:100%;
+	height:100%;
+	position:fixed;
+	top:0px;
+	left:0px;
+	z-index:90;
+	pointer-events: none;
+	display:none;
+}
+#critical.anim1 {
+	box-shadow:inset 0px 0px 20px rgba(255,0,0,0.5);
+	transition: all 0.4s;
+}
+#critical.anim2 {
+	box-shadow:inset 0px 0px 60px rgba(255,0,0,0.8); 
+}
 
-/* CATBOMB
+/* MODALS
 ------------------------------*/
-#catBomb {
+.modalBox {
 	width:100%;
 	height:100%;
 	position:absolute;
@@ -14,7 +34,7 @@
 	left:0px;
 	display:none;
 }
-#catBomb .blackFilter {
+.modalBox .blackFilter {
 	width:100%;
 	height:100%;
 	position:fixed;
@@ -24,18 +44,26 @@
 	background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(0,0,0,0.5)), color-stop(100%,rgba(0,0,0,0.85)));
 	background: -webkit-radial-gradient(center, ellipse cover,  rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.85) 100%);
 }
+.modalBox .content {
+	padding:10px;
+	border-radius:10px;
+	top:50%;
+	left:50%;
+	position:absolute;
+	z-index:2;
+}
+
+/* CATBOMB MODAL
+------------------------------*/
+#catBomb {
+	z-index:102;
+}
 #catBomb .content {
 	width:400px;
 	height:120px;
 	background-color: #fdd;
 	margin:-60px auto 0px -200px;
-	padding:10px;
-	border-radius:10px;
 	color:#c44;
-	top:50%;
-	left:50%;
-	position:absolute;
-	z-index:2;
 }
 #catBomb .image {
 	width:40px;
@@ -71,6 +99,57 @@
 	color:#f55;
 }
 #catBomb .description {
+	width:380px;
+	margin:10px 0px 0px 0px;
+	font-size:12px;
+}
+
+/* GAME UPDATE MODAL
+------------------------------*/
+#gameUpdate {
+	z-index:101;
+}
+#gameUpdate .content {
+	width:400px;
+	height:120px;
+	background-color: #dfd;
+	margin:-60px auto 0px -200px;
+	color:#0c0;
+}
+#gameUpdate .image {
+	width:40px;
+	height:40px;
+	margin:0px 10px 0px 0px;
+	float:left;
+}
+#gameUpdate .image img {
+	width:40px;
+	height:40px;
+}
+#gameUpdate .title {
+	width:300px;
+	height:40px;
+	line-height:40px;
+	font-size:14px;
+	font-weight:bold;
+	float:left;
+}
+#gameUpdate .closebtn {
+	width:25px;
+	height:40px;
+	line-height:30px;
+	font-size:14px;
+	font-weight:bold;
+	float:left;
+	text-align:right;
+	font-size:30px;
+	margin:0px 0px 0px 5px;
+	color:#8e8;
+}
+#gameUpdate .closebtn:hover {
+	color:#5f5;
+}
+#gameUpdate .description {
 	width:380px;
 	margin:10px 0px 0px 0px;
 	font-size:12px;
@@ -206,7 +285,7 @@
 	padding:0px 0px 0px 8px;
 }
 .module.activity .activity_tab {
-	width:53px;
+	width:43px;
 	height:20px;
 	line-height:20px;
 	font-size:11px;
@@ -974,6 +1053,183 @@
 	color:#ffcc00;
 }
 
+
+/* ACTIVITY: Expedition Planner
+------------------------*/
+.module.activity .activity_expeditionPlanner {
+    text-align:center;
+}
+
+.module.activity .activity_expeditionPlanner .expPlan_dropdown_menu {
+    width: 100%;
+    height: 28px;
+}
+
+.module.activity .activity_expeditionPlanner .expPlan_dropdown_title {
+  width:100%;
+  list-style: none;
+  position: relative;
+  float: left;
+  margin: 0;
+  padding: 0;
+  	background: #bfbfbf;
+	text-align: center;
+	text-decoration: none;
+	border-style:solid;
+	border-width:3px;
+}
+
+.module.activity .activity_expeditionPlanner li {
+  background: #bfbfbf;
+  border-style:solid;
+  border-width:1px;
+}
+
+.module.activity .activity_expeditionPlanner li:hover {
+  background: gray;
+}
+
+.module.activity .activity_expeditionPlanner  li ul {
+list-style: none;
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  padding:0;
+  width:30%;
+}
+
+.module.activity .activity_expeditionPlanner li ui li{
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  width:50px;
+}
+
+
+.module.activity .activity_expeditionPlanner li ul ul {
+	top:0%;
+	left:100%;
+	cursor:pointer;
+	width:150%;
+}
+
+
+.module.activity .activity_expeditionPlanner .expPlan_dropdown_topEntry {
+	display: none;
+}
+
+
+.module.activity .activity_expeditionPlanner li:hover >ul {
+	display: block;
+}
+
+.module.activity .activity_expeditionPlanner .expPlanner_timer {
+	margin-bottom:4px;
+}
+
+.module.activity .activity_expeditionPlanner .expPlanner_timer_description {
+    float: left;
+    margin-right: 3px;
+}
+
+
+.module.activity .activity_expeditionPlanner .expPlanner_resos_title {
+    text-align: center;
+    height: 20px;
+    margin-bottom: 2px;
+    display:none;
+}
+.module.activity .activity_expeditionPlanner .expres_resos {
+	width:170px;
+    height: 40px;
+    margin-bottom:3px;
+    display:inline-block;
+}
+.module.activity .activity_expeditionPlanner .expres_divHF {/* divide half */
+	display:inline-block;
+	width:65px;
+	height:40px;
+	float:left;
+	/* text-align: center; */
+	/*background:#fcc;*/
+}
+.module.activity .activity_expeditionPlanner .expres_greatbtn {
+	width:40px;
+	/*background:#cfc;*/
+	float:left;
+	height:40px;
+	line-height:40px;
+}
+.module.activity .activity_expeditionPlanner .expres_greatbtn img {
+	width:40px;
+	height:40px;
+	/*margin:2px;
+	vertical-align:top;*/
+}
+.module.activity .activity_expeditionPlanner .expres_reso {
+	float:left;
+	/*background:#fcc;*/
+	height:16px;
+	line-height:16px;
+	margin: 0px 0px 6px 0px;
+}
+.module.activity .activity_expeditionPlanner .expres_icon {
+	width:16px;
+	height:16px;
+	float:left;
+	margin:0px 9px 0px 0px;
+	/*background:#fcf;*/
+}
+.module.activity .activity_expeditionPlanner .expres_icon img {
+	width:16px;
+	height:16px;
+	vertical-align: top;
+}
+.module.activity .activity_expeditionPlanner .expres_amt {
+	width: 30px;
+	height:16px;
+	float:left;
+	font-size:12px;
+	color:#fff;
+	text-align:left;
+}
+
+.module.activity .activity_expeditionPlanner .expPlanner_requirements {
+    margin-bottom:4px;
+}
+.module.activity .activity_expeditionPlanner .expPlanner_checker_criterias {
+	margin-bottom:3px;
+}
+.module.activity .activity_expeditionPlanner .expPlanner_shipReqBox {
+	margin-right:10px;
+}
+.module.activity .activity_expeditionPlanner .requirements_textbox{
+	display:inline-block;	
+}
+.module.activity .activity_expeditionPlanner .expPlanner_text{	
+	font-size: 14px;
+	color:#ccc
+}
+.module.activity .activity_expeditionPlanner .expPlanner_text_passed{	
+	font-size: 14px;
+	color:#00CC00
+}
+.module.activity .activity_expeditionPlanner .expPlanner_text_failed{	
+	font-size: 14px;
+	color:#FF5555
+}
+.module.activity .activity_expeditionPlanner .expedition_entry.cond_passed {	
+	color:green
+}
+.module.activity .activity_expeditionPlanner .expedition_entry.cond_failed {	
+	color:red
+}
+
+
 /*------- QUESTS -------*/
 .module.quests {
 	
@@ -988,6 +1244,9 @@
 .v .module.quests .quest {
 	width:240px;
 }
+.module.quests  .quest.complete {
+	background:rgba(0,255,0,0.25);
+}
 
 .module.quests .quest_color {
 	width:14px;
@@ -995,6 +1254,21 @@
 	margin:3px;
 	background:#555;
 	float:left;
+	line-height:normal;
+	text-align:center;
+}
+.module.quests .quest.complete .quest_color {
+	width:16px;
+	height:16px;
+	line-height:12px;
+	font-size:10px;
+	margin:2px;
+	background:#555;
+	float:left;
+	line-height:normal;
+	text-align:center;
+	border:2px solid #0f0;
+	text-shadow:0px 0px 2px #fff, 0px 0px 2px #fff, 0px 0px 2px #fff;
 }
 
 .module.quests .quest_text {
@@ -1056,6 +1330,14 @@
 	font-weight:bold;
 	text-align:center;
 	/*border:1px solid #ccc;*/
+}
+.module.controls .fleet_num.needsSupply {
+	border:2px solid #f00;
+	line-height:26px;
+}
+.module.controls .fleet_num.hasTaiha {
+	background:#faa;
+	color:#000;
 }
 .module.controls .fleet_rengo {
 	width:50px;
@@ -1299,6 +1581,22 @@
 	font-size:11px;
 	text-align:center;
 	color:#aaa;
+	position:relative;
+}
+.module.fleet .lship .ship_exp_label .expNotice {
+	width:40px;
+	height:22px;
+	line-height:22px;
+	position:absolute;
+	top:0px;
+	left:0px;
+	font-size:14px;
+	text-shadow:
+		0px 0px 4px #000,
+		0px 0px 4px #000,
+		0px 0px 4px #000;
+	text-align:center;
+	color:#ffcc00;
 }
 .module.fleet .lship .ship_exp_next {
 	width:40px;
@@ -1319,19 +1617,25 @@
 	height:20px;
 	float:left;
 }
-.module.fleet .lship .ship_gear_ace {
+.module.fleet .lship .ship_gear_lvl {
 	width: 12px;
 	position: absolute;
 	font-size: 8px;
-	color: #ff0;
 	margin: 8px 0px 0px -5px;
-	background: #555;
 	height: 12px;
 	overflow: hidden;
 	border-radius: 6px;
 	text-align: center;
 	line-height: 13px;
 	display:none;
+}
+.module.fleet .lship .ship_gear_lvl.ship_gear_ace {
+	color: #ff0;
+	background: #555;
+}
+.module.fleet .lship .ship_gear_lvl.ship_gear_mod {
+	color: #ff0;
+	background: #45A9A5;
 }
 .module.fleet .lship .ship_gear_icon {
 	width:18px;

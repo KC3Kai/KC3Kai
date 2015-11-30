@@ -12,6 +12,9 @@ body {
 #factory {
 	display:none;
 }
+.static_credits {
+	
+}
 
 /* ABOUT
 --------------------------*/
@@ -189,4 +192,28 @@ body {
 	font-size:11px;
 	line-height:13px;
 	color:#8ac;
+}
+
+/* OTHER SOURCES
+--------------------------*/
+.other_sources {
+	margin:0px 0px 30px 0px;
+}
+
+/* LICENSE
+--------------------------*/
+.license_box {
+	width:780px;
+	padding:0px 0px 0px 10px;
+}
+.license_disclaimer {
+	font-size:12px;
+	margin:0px 0px 10px 0px;
+}
+.license_text {
+	width:680px;
+}
+.license_text pre {
+	width:600px;
+	margin:0px;
 }

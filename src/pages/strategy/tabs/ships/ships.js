@@ -15,6 +15,8 @@
 		remodelOption: 0,
 		modernizationOption: 0,
 		marriageFilter: 0,
+		heartlockFilter: 0,
+		withFleet: true,
 		isLoading: false,
 		//shipList: $(".tab_ships .ship_list"),
 		
@@ -23,6 +25,7 @@
 		---------------------------------*/
 		init :function(){
 			// Cache ship info
+			PlayerManager.loadFleets();
 			var ctr, ThisShip, MasterShip, ThisShipData;
 			for(ctr in KC3ShipManager.list){
 				ThisShip = KC3ShipManager.list[ctr];
@@ -53,13 +56,10 @@
 					lk: ThisShip.lk[0],
 					slots: ThisShip.slots,
 					
+					fleet: ThisShip.onFleet(),
+					
 					// Check whether remodel is max
-					remodel: (ThisShip.master().api_afterlv && ThisShip.master().api_aftershipid)
-								? {
-									'level':	ThisShip.master().api_afterlv,
-									'bid':		ThisShip.master().api_aftershipid
-								}
-								: false
+					remodel: MasterShip.kc3_maxed,
 				};
 				
 				// Check whether modernization is max
@@ -115,6 +115,15 @@
 				$(".tab_ships .ship_filter_type .filter_check").hide();
 				for(sCtr in KC3Meta._stype){
 					self.filters[sCtr] = false;
+				}
+				self.refreshTable();
+			});
+
+			// Select: Invert
+			self.options.none = $(".tab_ships .filters .massSelect .invert").on("click", function(){
+				$(".tab_ships .ship_filter_type .filter_check").toggle();
+				for(sCtr in KC3Meta._stype){
+					self.filters[sCtr] = !self.filters[sCtr];
 				}
 				self.refreshTable();
 			});
@@ -203,27 +212,57 @@
 				});
 			});
 			
+			// Fleet Inclusion
+			["no","yes"].forEach(function(x,i,a){
+				self.options["fleet_"+x] = $(".tab_ships .filters .massSelect .fleet_"+x).on("click",function(){
+					self.withFleet = !!i;
+					self.refreshTable();
+					a.forEach(function(_x,_i,_a){
+						if(i==_i)
+							self.options["fleet_"+_x].addClass('on');
+						else
+							self.options["fleet_"+_x].removeClass('on');
+					});
+ 				});
+			});
+
+			["all","yes","no"].forEach(function(x,i,a){
+				self.options["heartlock_"+x] = $(".tab_ships .filters .massSelect .heartlock_"+x).on("click",function(){
+					self.heartlockFilter = i;
+					self.refreshTable();
+					a.forEach(function(_x,_i,_a){
+						if(i==_i)
+							self.options["heartlock_"+_x].addClass('on');
+						else
+							self.options["heartlock_"+_x].removeClass('on');
+					});
+				});
+
+			});
+
 			// Default status
-				if( self.equipMode )
-					self.options.equip_yes.addClass('on');
-				else
-					self.options.equip_no.addClass('on');
+			if( self.equipMode )
+				self.options.equip_yes.addClass('on');
+			else
+				self.options.equip_no.addClass('on');
 
-				if( self.remodelOption === 0 )
-					self.options.remodel_all.addClass('on');
-				else if( self.remodelOption == 1 )
-					self.options.remodel_max.addClass('on');
-				else if( self.remodelOption == 2 )
-					self.options.remodel_nomax.addClass('on');
+			if( self.remodelOption === 0 )
+				self.options.remodel_all.addClass('on');
+			else if( self.remodelOption == 1 )
+				self.options.remodel_max.addClass('on');
+			else if( self.remodelOption == 2 )
+				self.options.remodel_nomax.addClass('on');
 
-				if( self.modernizationOption === 0 )
-					self.options.modernization_all.addClass('on');
-				else if( self.modernizationOption == 1 )
-					self.options.modernization_max.addClass('on');
-				else if( self.modernizationOption == 2 )
-					self.options.modernization_nomax.addClass('on');
+			if( self.modernizationOption === 0 )
+				self.options.modernization_all.addClass('on');
+			else if( self.modernizationOption == 1 )
+				self.options.modernization_max.addClass('on');
+			else if( self.modernizationOption == 2 )
+				self.options.modernization_nomax.addClass('on');
 
-				self.options["marriage_"+["in","on","ex"][self.marriageFilter]].addClass('on');
+			self.options["heartlock_"+["all","yes","no"][self.heartlockFilter]].addClass('on');
+			self.options["marriage_"+["in","on","ex"][self.marriageFilter]].addClass('on');
+			self.options["fleet_"+["no","yes"][self.withFleet & 1]].addClass('on');
 			
 			// Ship type toggled
 			$(".tab_ships .filters .ship_filter_type").on("click", function(){
@@ -272,11 +311,11 @@
 				for(shipCtr in self.shipCache){
 					var thisShip = self.shipCache[shipCtr];
 					if(typeof self.filters[ thisShip.stype ] != "undefined"){
-						if(self.filters[ thisShip.stype ]
+						if( self.filters[ thisShip.stype ]
 							&& (
 								self.remodelOption === 0
-								|| (self.remodelOption == 1 && !thisShip.remodel)
-								|| (self.remodelOption == 2 && thisShip.remodel)
+								|| (self.remodelOption == 1 && thisShip.remodel)
+								|| (self.remodelOption == 2 && !thisShip.remodel)
 							)
 							&& (
 								self.modernizationOption === 0
@@ -287,6 +326,12 @@
 								((self.marriageFilter || 1) == 1 && thisShip.level >= 100) ||
 								((self.marriageFilter || 2) == 2 && thisShip.level <  100)
 							)
+							&& (self.withFleet || (!self.withFleet && !thisShip.fleet)
+							   )
+							&& (self.heartlockFilter === 0
+								|| (self.heartlockFilter === 1 && thisShip.locked === 1)
+								|| (self.heartlockFilter === 2 && thisShip.locked === 0)
+							   )
 						){
 							FilteredShips.push(thisShip);
 						}
