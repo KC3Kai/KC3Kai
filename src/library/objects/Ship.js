@@ -415,7 +415,7 @@ KC3改 Ship Object
 		if(args.noAmmo) delete mapping['1'];
 		
 		/* clear pending consumption, by iterating each keys */
-		Object.keys(this.pendingConsumption).forEach(function(shipConsumption,iterant){
+		Object.keys(this.pendingConsumption).forEach(function(shipConsumption,index){
 			var
 				dat = self.pendingConsumption[shipConsumption],
 				rsc = [0,0,0,0,0,0,0,0];
@@ -423,7 +423,7 @@ KC3改 Ship Object
 			Object.keys(mapping).forEach(function(key){
 				rsc[mapping[key]] += dat[index][key] * mult * (1 + (mapping[key]===3 && 4));
 				// Checks whether current iteration is last N pending item
-				if(iterant < lastN)
+				if(index < lastN)
 					dat[index][key] = 0;
 			});
 			console.log.apply(console,["Ship",self.rosterId,"Material"].concat(rsc.map(function(x){return -x;})));

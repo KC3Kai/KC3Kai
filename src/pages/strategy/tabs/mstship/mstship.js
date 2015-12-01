@@ -251,7 +251,7 @@
 				});
 				
 				// On-click remodels
-				$(".tab_mstship .shipInfo").on("click", ".remodel_name a", function(e){
+				$(".tab_mstship .shipInfo").on("click", ".remodel_name a", function(){
 					self.showShip( $(this).data("sid") );
 					e.preventDefault();
 					return false;

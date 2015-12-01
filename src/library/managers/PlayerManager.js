@@ -236,9 +236,9 @@ Does not include Ships and Gears which are managed by other Managers
 			console.log(this.hq.lastPortTime,regenTime,ctime);
 			// Check whether a server time is supplied, or keep the last refresh time.
 			this.hq.lastPortTime = (data.time && ctime) || (this.hq.lastPortTime);
-			//console.log("before",this.hq.lastMaterial);
+			console.log("before",this.hq.lastMaterial);
 			console.log("regen" ,regenVal);
-			//console.log("after" ,this.hq.lastMaterial.map(function(x,i){return (x + regenVal[i]);}));
+			console.log("after" ,this.hq.lastMaterial.map(function(x,i){return x + regenVal[i];}));
 			KC3Database.Naverall({
 				hour:Math.hrdInt('floor',ctime/3.6,3,1),
 				type:'regen',
