@@ -33,6 +33,3 @@ src.pem
 # Mac swap files and DS_Store
 *.DS_Store
 *.swp
-
-# Linux
-*~

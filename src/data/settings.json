@@ -117,13 +117,6 @@
 				"options" : {}
 			},
 			{
-				"id" : "info_salt",
-				"name" : "SettingsSaltyShip",
-				"type" : "check",
-				"hide" : 1,
-				"options" : {}
-			},
-			{
 				"id" : "info_troll",
 				"name" : "SettingsYasenTroll",
 				"type" : "check",

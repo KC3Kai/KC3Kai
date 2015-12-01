@@ -7,11 +7,6 @@ Saves and loads list to and from localStorage
 (function(){
 	"use strict";
 	
-	/* this variable will keep the kc3-specific variables */
-	var
-		defaults = (new KC3Ship()),
-		devVariables = ['didFlee','preExpedCond','pendingConsumption','repair'];
-	
 	window.KC3ShipManager = {
 		list: {},
 		max: 100,
@@ -30,102 +25,30 @@ Saves and loads list to and from localStorage
 		
 		// Add or replace a ship on the list
 		add :function(data){
-			var
-				self = this,
-				tempData = {},
-				cky = "";
+			var didFlee = false;
 			if(typeof data.api_id != "undefined"){
-				cky = "x"+data.api_id;
+				if (typeof this.list["x"+data.api_id] !== "undefined") {
+					didFlee = this.list["x"+data.api_id].didFlee;
+				}
+				this.list["x"+data.api_id] = new KC3Ship(data);
+				this.list["x"+data.api_id].didFlee = didFlee;
 			}else if(typeof data.rosterId != "undefined"){
-				cky = "x"+data.rosterId;
-			}else{
-				return false;
+				if (typeof this.list["x"+data.rosterId] !== "undefined") {
+					didFlee = this.list["x"+data.rosterId].didFlee;
+				}
+				this.list["x"+data.rosterId] = new KC3Ship(data);
+				this.list["x"+data.rosterId].didFlee = didFlee;
 			}
-			
-			devVariables.forEach(function(key){
-				var
-					val = (self.list[cky] || defaults)[key];
-				tempData[key] = (typeof val === 'object' &&
-					(val instanceof Array ? Array.apply(null,val) : Object.create(val))
-				) || val;
-			});
-			
-			// i smell this one is an example for keeping dev variable
-			//if (typeof this.list[cky] !== "undefined") {
-			//	didFlee = this.list[cky].didFlee;
-			//}
-			this.list[cky] = new KC3Ship(data);
-			//this.list[cky].didFlee = didFlee;
-			
-			// Check previous repair state
-			// If there's a change detected (without applying applyRepair proc)
-			// It'll be treated as akashi effect
-			if(tempData.repair[0] > this.list[cky].repair[0]) {
-				// Calculate Difference
-				var
-					sp = this.list[cky],
-					pc = sp.pendingConsumption,
-					rs = Array.apply(null,{length:8}).map(function(){return 0;}),
-					df = tempData.repair.map(function(x,i){return x - sp.repair[i];});
-				rs[0] = -df[1];
-				rs[2] = -df[2];
-				// Store Difference to Database
-				KC3Database.Naverall({
-					hour: Math.hrdInt('floor', (new Date()).getTime()/3.6 ,6,1),
-					type: 'akashi' + sp.masterId,
-					data: rs
-				});
-				// Reduce Consumption Counter
-				df.shift(); df.unshift(0);
-				Object.keys(pc).reverse().forEach(function(d){
-					// if the difference is not all-zero, keep going
-					if(df.every(function(x){return !x;}))
-						return;
-					var
-						rp = pc[d][1],
-						dt = rp.map(function(x,i){return Math.min(x,df[i]);});
-					// if the delta is not all-zero, keep going
-					if(dt.every(function(x){return !x;}))
-						return;
-					rp.forEach(function(x,i){
-						rp[i] += dt[i]; // Reduce the source of supply reduction
-						df[i] -= dt[i]; // Reduce the required supply to repair
-					});
-				});
-			}
-			
-			$(devVariables).each(function(i,key){
-				self.list[cky][key] = tempData[key];
-			});
-			
-			// if there's still pending exped condition on queue
-			// don't remove async wait false, after that, remove port load wait
-			if(!this.list[cky].preExpedCond[0])
-				this.list[cky].getDefer()[1].resolve(); // removes async wait
-			this.list[cky].getDefer()[2].resolve(); // mark resolve wait for port
-
 		},
 		
 		// Mass set multiple ships
-		// [repl] -> replace flag (replace whole list, replacing clear functionality)
-		set :function(data,repl){
-			var ctr,cky,rem,kid,slf;
-			slf = this;
-			rem = Object.keys(this.list);
+		set :function(data){
+			var ctr;
 			for(ctr in data){
 				if(!!data[ctr]){
-					cky = 'x' + data[ctr].api_id;
-					kid = rem.indexOf(cky);
 					this.add(data[ctr]);
-					if(kid>=0)
-						rem.splice(kid,1);
 				}
 			}
-			if(!repl)
-				rem.splice(0);
-			rem.forEach(function(rosterId){
-				slf.remove(rosterId);
-			});
 			this.save();
 		},
 		

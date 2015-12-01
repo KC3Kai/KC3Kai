@@ -284,18 +284,14 @@ Date.prototype.format = function (mask, utc) {
 \*******************************/
 /* LIMIT ROUNDING
 -------------------------------*/
-Math.qckInt = function(command,value,rate,rev) {
+Math.qckInt = function(command,value,rate) {
 	if (["round","ceil","floor"].indexOf(command) < 0)
 		command = null;
 	command = command || "round";
 	value   = value   || 0;
 	rate    = rate    || 0;
-	rev     = !rev;
 	var shift = Math.pow(10,rate);
-	return Math[command](value * shift) / (rev ? shift : 1);
-};
-Math.hrdInt = function(command,value,rate,rev) {
-	return Math.qckInt(command,value,-rate,rev);
+	return Math[command](value * shift) / shift;
 };
 
 /*******************************\

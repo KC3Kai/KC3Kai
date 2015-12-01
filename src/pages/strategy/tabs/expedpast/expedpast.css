@@ -1,7 +1,9 @@
 .tab_expedpast {
 	width:680px;
 }
-
+.tab_expedpast .exped_list {
+	width:680px;
+}
 .tab_expedpast .factory {
 	display:none;
 }
