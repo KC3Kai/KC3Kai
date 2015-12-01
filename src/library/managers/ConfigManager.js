@@ -72,7 +72,7 @@ Retreives when needed to apply on components
 					]
 				},
 				
-				salt_list 		: [],
+				salt_list 		: "",
 
 				ss_mode				: 0,
 				ss_type				: 'JPG',
@@ -153,12 +153,8 @@ Retreives when needed to apply on components
 				// Merge defaults, then old config values to ConfigManager
 				$.extend(this, this.defaults(), oldConfig);
 			}
-			
-			/* Force Revert */
-			if(this.language == "troll")
-				this.resetValueOf('language');
-			if(!(this.salt_list instanceof Array))
-				this.resetValueOf('salt_list');
+			if(this.language == "troll") // force reverting
+				this.language = "en";
 		},
 		
 		// Save current config onto localStorage

@@ -318,7 +318,7 @@ Xxxxxxx
 				this.materialGain.fill(0);
 			// Fill the resource gain to the current material checkout
 			this.materialGain.forEach(function(x,i){
-				if(i<(PlayerManager.hq.lastMaterial || []).length)
+				if(i<PlayerManager.hq.lastMaterial.length)
 					PlayerManager.hq.lastMaterial[i] += x;
 			});
 			// To detect whether invalid sortie ID or not

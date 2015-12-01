@@ -152,17 +152,16 @@ Saves and loads significant data for future use
 				if(!cShip.api_buildtime) { /* unbuildable by API */ continue; }
 				delete cShip.kc3_maxed;
 				delete cShip.kc3_model;
-				delete cShip.kc3_bship;
 			}
 		},
 		updateRemodelTable :function(){
-			var cShip,ccShip,remodList,ship_id,shipAry,modelLv,bship_id;
+			var cShip,ccShip,remodList,ship_id,shipAry,modelLv;
 			this.removeRemodelTable();
 			shipAry = Object.keys(this._ship);
 			remodList = [];
 			modelLv = 1;
 			while(shipAry.length) {
-				ship_id = parseInt(shipAry.shift());
+				ship_id = shipAry.shift();
 				cShip = this._ship[ship_id];
 				// Pre-checks of the remodel table
 				if(!cShip)               { /* invalid API */ continue; }
@@ -171,18 +170,15 @@ Saves and loads significant data for future use
 				  kc3 prefix variable -> to prevent overwriting what devs gonna say later on
 					maxed flag -> is it the end of the cycle? is it returns to a cyclic model?
 					model level -> mark the current model is already marked.
-					base id -> base form of the ship
 				*/
 				cShip.api_aftershipid = Number(cShip.api_aftershipid);
 				if(!!cShip.kc3_model)    { /* already checked ship */ modelLv = 1; continue; }
 				if(cShip.api_name.indexOf("改") >= 0 && modelLv <= 1) { /* delays enumeration of the remodelled ship in normal state */ continue; }
 				cShip.kc3_maxed = false;
 				cShip.kc3_model = modelLv++; // 1 stands for base model
-				cShip.kc3_bship = cShip.kc3_bship || ship_id;
 				if(!!cShip.api_afterlv) {
 					shipAry.unshift(cShip.api_aftershipid);
 					ccShip = this._ship[cShip.api_aftershipid];
-					ccShip.kc3_bship = cShip.kc3_bship;
 					cShip.kc3_maxed = !!ccShip.kc3_model;
 					continue;
 				}
