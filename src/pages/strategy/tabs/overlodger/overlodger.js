@@ -17,7 +17,7 @@
 				8 - year
 			*/
 			/*jshint esnext: true */
-			duration: 2,
+			duration: 0b0010,
 			/*
 				true  - looks 1 time scale behind
 				false - looks around current time scale
