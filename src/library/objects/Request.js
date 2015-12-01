@@ -130,11 +130,7 @@ Executes processing and relies on KC3Network for the triggers
 		// If API call is supported
 		if(typeof Kcsapi[this.call] != "undefined"){
 			// Execute by passing data
-			try {
-				Kcsapi[this.call]( this.params, this.response, this.headers );
-			} catch (e) {
-				throw e;
-			}
+			Kcsapi[this.call]( this.params, this.response, this.headers );
 		}
 	};
 	

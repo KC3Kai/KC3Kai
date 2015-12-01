@@ -299,13 +299,13 @@ Previously known as "Reactor"
 		"api_req_kaisou/remodeling":function(params, response, headers){
 			var
 				ctime    = (new Date(headers.Date)).getTime(),
-				ship     = KC3ShipManager.get(params.api_id),
-				master   = ship.master(),
-				material = [-master.api_afterfuel,-master.api_afterbull,0,0,0,0,0,0];
+				shipId   = KC3ShipManager.get(params.api_id),
+				masterId = shipId.master(),
+				material = [-masterId.api_afterfuel,-masterId.api_afterbull,0,0,0,0,0,0];
 			
 			KC3Database.Naverall({
 				hour: Math.hrdInt("floor",ctime/3.6,6,1),
-				type: "remodel" + master.api_id,
+				type: "remodel" + masterId.api_id,
 				data: material
 			});
 			
@@ -808,7 +808,9 @@ Previously known as "Reactor"
 				ship_id    = parseInt( params.api_ship_id , 10),
 				bucket     = parseInt( params.api_highspeed , 10),
 				nDockNum   = parseInt( params.api_ndock_id , 10),
-				shipData   = KC3ShipManager.get( ship_id );
+				shipData   = KC3ShipManager.get( ship_id ),
+				lastSortie = Object.keys(shipData.pendingConsumption).reverse()
+					.find(function(x){return x.indexOf("sortie")>=0;}) || "sortie0";
 			
 			if(bucket==1){
 				PlayerManager.consumables.buckets--;
@@ -818,16 +820,14 @@ Previously known as "Reactor"
 				if(HerRepairIndex  > -1){
 					PlayerManager.repairShips.splice(HerRepairIndex, 1);
 				}
-				
-				KC3Database.Naverall({
-					data:[0,0,0,0,0,-1,0,0]
-				},shipData.lastSortie || 'sortie0');
-				
 				shipData.applyRepair();
 				shipData.resetAfterHp();
 				KC3TimerManager.repair( nDockNum ).deactivate();
 			}
 			
+			shipData.pendingConsumption[lastSortie] = shipData.pendingConsumption[lastSortie] || [[0,0,0],[0,0,0]];
+			shipData.pendingConsumption[lastSortie][1][2] = -bucket;
+			shipData.perform('repair');
 			KC3ShipManager.save();
 			
 			KC3QuestManager.get(503).increment(); // E3: Daily Repairs
@@ -846,9 +846,9 @@ Previously known as "Reactor"
 				shipData = KC3ShipManager.get(ship_id);
 			PlayerManager.repairShips.splice(params.api_ndock_id, 1);
 			
-			KC3Database.Naverall({
-				data:[0,0,0,0,0,-1,0,0]
-			},shipData.lastSortie || 'sortie0');
+			shipData.pendingConsumption[lastSortie][1].fill(0);
+			shipData.pendingConsumption[lastSortie][1][2] = -1;
+			shipData.perform('repair');
 			shipData.applyRepair();
 			shipData.resetAfterHp();
 			KC3ShipManager.save();
@@ -1136,7 +1136,7 @@ Previously known as "Reactor"
 				rsc   = [0,0,0,0,0,0,0,0],
 				ctime = (new Date(headers.Date)).getTime();
 			$.each(params.api_slotitem_ids.split("%2C"), function(index, itemId){
-				KC3GearManager.get(itemId).master().api_broken.forEach(function(x,i){
+				KC3GearManager.get(itemId).master.api_broken.forEach(function(x,i){
 					rsc[i] += x;
 				});
 				KC3GearManager.remove( itemId );

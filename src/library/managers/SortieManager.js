@@ -333,7 +333,7 @@ Xxxxxxx
 			});
 			// Control Consumption of the Current Sortie
 			cons.resc.forEach(function(matr,indx){
-				self.materialGain[indx] += matr;
+				this.materialGain[indx] += matr;
 			});
 			// To detect whether invalid sortie ID or not
 			if(this.onSortie)
