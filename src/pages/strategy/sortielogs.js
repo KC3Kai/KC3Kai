@@ -530,8 +530,6 @@
 						mstat.onBoss.hpdat[sortie.id].forEach(function(v,i){
 							$([".boss.",kstat[i],"hp"].join(''),sstat).text(v);
 						});
-					} else {
-						sstat.hide();
 					}
 				}catch(e){console.error(e);console.error(e.stack);}
 			});

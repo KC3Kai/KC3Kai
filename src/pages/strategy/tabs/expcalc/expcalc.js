@@ -195,13 +195,12 @@
 			var goalBox = $("#goalBox"+rosterId);
 			var grindData = this.goals["s"+rosterId];
 			var ThisShip = KC3ShipManager.get( rosterId );
-			var MasterShip = ThisShip.master();
 			
 			// This has just been added, no grinding data yet, initialize defaults
 			if(grindData.length === 0){
 				// As much as possible use arrays nowadays to shrink JSON size, we might run out of the 5MB localStorage allocated for our app
 				grindData = [
-					/*0*/ (MasterShip.api_aftershipid > 0 && ThisShip.level<MasterShip.api_afterlv)?MasterShip.api_afterlv:(ThisShip.level<99)?99:150, // target level
+					/*0*/ (ThisShip.master().api_aftershipid > 0 && ThisShip.level<ThisShip.master().api_afterlv)?ThisShip.master().api_afterlv:(ThisShip.level<99)?99:150, // target level
 					/*1*/ 1, // world
 					/*2*/ 1, // map
 					/*3*/ 1, // node
@@ -210,8 +209,6 @@
 					/*6*/ 0 // mvp
 				];
 				this.goals["s"+ThisShip.rosterId] = grindData;
-			}else{
-				
 			}
 			
 			// Target level

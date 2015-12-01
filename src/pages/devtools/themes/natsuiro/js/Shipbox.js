@@ -61,15 +61,8 @@ KC3改 Ship Box for Natsuiro theme
 		this.showPrediction();
 		this.showMorale();
 		
-		$(".ship_level span", this.element)
-			.text( this.shipData.level )
-			.prop( 'title', (function(shipData){
-				var mst = shipData.master();
-				return (shipData.level >= (mst.api_afterlv || Infinity)) ?
-					['Possible Remodel'] :
-					(mst.api_afterlv && ['Next Remodel',mst.api_afterlv].join(' ') || '');
-			})(this.shipData) );
-		$(".ship_exp_next", this.element).text( this.shipData.exp[1] );
+		$(".ship_level span", this.element).text( this.shipData.level );		
+		$(".ship_exp_next", this.element).text( this.shipData.exp[1] );		
 		$(".ship_exp_bar", this.element).css("width", (290*this.expPercent)+"px");
 		
 		$(".ship_fuel .ship_supply_text", this.element).text(Math.ceil(this.fuelPercent*100)+"%");

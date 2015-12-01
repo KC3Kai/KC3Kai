@@ -112,7 +112,6 @@ Saves and loads list to and from localStorage
 			var ctr,cky,rem,kid,slf;
 			slf = this;
 			rem = Object.keys(this.list);
-			// console.log.apply(console,["Current list"].concat(rem.map(function(x){return x.slice(1);})));
 			for(ctr in data){
 				if(!!data[ctr]){
 					cky = 'x' + data[ctr].api_id;
@@ -124,9 +123,8 @@ Saves and loads list to and from localStorage
 			}
 			if(!repl)
 				rem.splice(0);
-			// console.log.apply(console,["Removed ship"].concat(rem.map(function(x){return x.slice(1);})));
 			rem.forEach(function(rosterId){
-				slf.remove(parseInt(rosterId.slice(1)));
+				slf.remove(rosterId);
 			});
 			this.save();
 		},

@@ -57,7 +57,6 @@ KC3改 Ship Object
 				For every action will be recorded before the sortie.
 			*/
 		};
-		this.lastSortie = ['sortie0'];
 		
 		// If specified with data, fill this object
 		if(typeof data != "undefined"){
@@ -103,15 +102,6 @@ KC3改 Ship Object
 		}
 	};
 	
-	Object.defineProperties(KC3Ship.prototype,{
-		bull: {
-			get: function(){return this.ammo;},
-			set: function(newAmmo){this.ammo = newAmmo;},
-			configurable:false,
-			enumerable  :true
-		}
-	});
-	
 	KC3Ship.prototype.master = function(){ return KC3Master.ship( this.masterId ); };
 	KC3Ship.prototype.name = function(){ return KC3Meta.shipName( this.master().api_name ); };
 	KC3Ship.prototype.stype = function(){ return KC3Meta.stype( this.master().api_stype ); };
@@ -133,9 +123,10 @@ KC3改 Ship Object
 		if(ca && cd && cd.state() == "pending")
 			return ca;
 		
-		//console.log("replacing",this.rosterId,"cause",!cd ? typeof cd : cd.state());
+		console.log("replacing",this.rosterId,"cause",!cd ? typeof cd : cd.state());
 		ca = deferList[this.rosterId] = Array.apply(null,{length:2}).map(function(){return $.Deferred();});
 		cd = $.when.apply(null,ca);
+		cd.then(function(){KC3ShipManager.get(self.rosterId).expedConsume();});
 		ca.unshift(cd);
 		return ca;
 	};

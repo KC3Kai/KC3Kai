@@ -281,46 +281,36 @@ Xxxxxxx
 		endSortie :function(){
 			var
 				pvpData = JSON.parse(localStorage.statistics).pvp,
-				self = this,
-				cons = {};
+				self = this;
 			this.fleetSent = 1;
 			console.log("Pre-sortie State",PlayerManager.hq.lastSortie);
-			cons.name = self.isPvP() ? ("pvp" + (pvp.win + pvp.lose)) : ("sortie" + self.onSortie);
-			cons.resc = Array.apply(null,{length:8}).map(function(){return 0;});
 			// Calculate sortie difference with buffer
 			(PlayerManager.hq.lastSortie || []).forEach(function(fleet,fleet_id){
-				fleet.forEach(function(after,ship_fleet){
+				fleet.forEach(function(ship,ship_fleet){
 					var
-						rosterId = after.rosterId,
-						before   = KC3ShipManager.get(rosterId),
+						rosterId = ship.rosterId,
+						actual   = KC3ShipManager.get(rosterId),
 						supply   = [
 							/*
 								[Fuel Difference] [Ammo Difference] [All Slots Difference]
 							*/
 							function(a,b){return a.fuel - b.fuel;},
 							function(a,b){return a.ammo - b.ammo;},
-							0,
 							function(a,b){
-								return Array.apply(null,{length:a.slots.length}).map(function(x,i){return (a.slots[i] - b.slots[i])*5;})
+								return Array.apply(null,{length:a.slots.length}).map(function(x,i){return (a.slots[i] - b.slots[i]);})
 									.reduce(function(x,y){return x+y;});
 							}
-						].map(function(f){return f(before,after);}),
+						].map(function(f){return f(ship,actual);}),
 						/*
 							RepairLength = 3, third entry always zero.
 							if PvP => RepairLength = 0, all zero entry.
 						*/
-						rl       = before.repair.length * !self.isPvP(),
-						repair   = [1,9,2,9].map(function(x){
-							return (x<rl) ? (after.repair[x] - before.repair[x]) : 0;
+						rl       = ship.repair.length * !self.isPvP(),
+						repair   = [1,2,3].map(function(x){
+							return (x<rl) ? (ship.repair[x] - actual.repair[x]) : 0;
 						});
-					if(!self.isPvP())
-						before.lastSortie.push(cons.name);
 					if(!(supply.every(function(x){return !x;}) && repair.every(function(x){return !x;})))
-						[supply.repair].forEach(function(cost){
-							cost.forEach(function(matr,indx){
-								cons.resc[indx] -= matr;
-							})
-						});
+						actual.pendingConsumption[self.isPvP() ? ("pvp" + (pvp.win + pvp.lose)) : ("sortie" + self.onSortie)] = [supply,repair];
 				});
 			});
 			// Ignore every resource gain if disconnected during sortie
@@ -330,10 +320,6 @@ Xxxxxxx
 			this.materialGain.forEach(function(x,i){
 				if(i<(PlayerManager.hq.lastMaterial || []).length)
 					PlayerManager.hq.lastMaterial[i] += x;
-			});
-			// Control Consumption of the Current Sortie
-			cons.resc.forEach(function(matr,indx){
-				this.materialGain[indx] += matr;
 			});
 			// To detect whether invalid sortie ID or not
 			if(this.onSortie)

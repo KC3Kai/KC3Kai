@@ -878,6 +878,19 @@
 					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/sunk.png");
 					$(".module.status .status_repair .status_text").addClass("bad");
 					
+					// Annoying Critical alert
+					if(ConfigManager.alert_taiha){
+						$("#critical").show();
+						if(critAnim){ clearInterval(critAnim); }
+						critAnim = setInterval(function() {
+							$("#critical").toggleClass("anim2");
+						}, 500);
+						critSound.play();
+						
+						(new RMsg("service", "taihaAlertStart", {
+							tabId: chrome.devtools.inspectedWindow.tabId
+						})).execute();
+					}
 				// Escort Chuuha
 				}else if (FleetSummary.badState[3]) {
 					$(".module.status .status_repair .status_text").text( "PanelEscortChuuha" );
@@ -887,6 +900,14 @@
 					$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelNoTaiha") );
 					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/check.png");
 					$(".module.status .status_repair .status_text").addClass("good");
+					
+					if(critAnim){ clearInterval(critAnim); }
+					$("#critical").hide();
+					critSound.pause();
+					
+					(new RMsg("service", "taihaAlertStop", {
+						tabId: chrome.devtools.inspectedWindow.tabId
+					})).execute();
 				}
 				
 				// STATUS: COMBINED
@@ -924,46 +945,6 @@
 				$(".module.status").hide();
 			}
 			
-			// TAIHA ALERT CHECK
-			if (
-				PlayerManager.fleets
-					.filter (function(  x,  i) {
-						var
-							cf = PlayerManager.combinedFleet,
-							fs = KC3SortieManager.fleetSent;
-						return (cf&&fs===1) ? (i <= 1) : (i == fs-1)
-					})
-					.map    (function(  fldat) { return fldat.ships; })
-					.reduce (function(  x,  y) { return x.concat(y); })
-					.filter (function( shipId) { return shipId >= 0; })
-					.map    (function( shipId) { return KC3ShipManager.get(shipId); })
-					.some   (function( shpDat) {
-						return shpDat.isTaiha();
-					})
-			) {
-				if(ConfigManager.alert_taiha){
-					$("#critical").show();
-					if(critAnim){ clearInterval(critAnim); }
-					critAnim = setInterval(function() {
-						$("#critical").toggleClass("anim2");
-					}, 500);
-					critSound.play();
-					
-					(new RMsg("service", "taihaAlertStart", {
-						tabId: chrome.devtools.inspectedWindow.tabId
-					})).execute();
-				}
-			} else {
-				if(critAnim){ clearInterval(critAnim); }
-				$("#critical").hide();
-				critSound.pause();
-				
-				(new RMsg("service", "taihaAlertStop", {
-					tabId: chrome.devtools.inspectedWindow.tabId
-				})).execute();
-			}
-			
-			
 			// FLEET BUTTONS RESUPPLY STATUSES
 			$(".module.controls .fleet_num").each(function(i, element){
 				$(element).removeClass("needsSupply");
@@ -993,15 +974,15 @@
 				// start from the 2nd fleet
 				for (var i = fleetStartInd; i < 4; ++i) {
 					// find one available fleet
-					if (fleets[i].missionOK()) {
+					if (fleets[i].mission[0] === 0) {
 						availableFleetInd = i;
 						break;
 					}
 				}
-				//console.log( "one fleet is sent, try to find next available fleet" );
+				console.log( "one fleet is sent, try to find next available fleet" );
 				if (availableFleetInd !== -1) {
 					selectedFleet = availableFleetInd + 1;
-					//console.log("Find available fleet: " + String(selectedFleet));
+					console.log("Find available fleet: " + String(selectedFleet));
 					// this time we don't have to switch tab
 					// $("#atab_expeditionPlanner").trigger("click");
 					$(".module.controls .fleet_num").each( function(i,v) {
@@ -1366,7 +1347,6 @@
 						if(grindData.length===0){ return true; }
 						ThisShip = KC3ShipManager.get( rosterId );
 						expLeft = KC3Meta.expShip(grindData[0])[1] - ThisShip.exp[0];
-						if(expLeft < 0){ return true; } // if the ship has reached the goal, skip it
 						expPerSortie = maplist[ grindData[1]+"-"+grindData[2] ];
 						if(grindData[6]===1){ expPerSortie = expPerSortie * 2; }
 						if(grindData[5]===1){ expPerSortie = expPerSortie * 1.5; }
@@ -1601,8 +1581,8 @@
 			var fleetStartInd = (PlayerManager.combinedFleet !== 0) ? 2 : 1;
 			// start from the 2nd fleet
 			for (var i = fleetStartInd; i < 4; ++i) {
-				// find one available fleet, that consists at least two ships
-				if (fleets[i].missionOK()) {
+				// find one available fleet
+				if (fleets[i].mission[0] === 0) {
 					availableFleetInd = i;
 					break;
 				}

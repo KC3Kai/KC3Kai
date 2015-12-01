@@ -78,8 +78,7 @@ Contains summary information about a fleet and its 6 ships
 	/*--------------------------------------------------------*/
 	
 	KC3Fleet.prototype.countShips = function(){
-		return (this.ships.indexOf(-1)+1 || 7)-1;
-		//return $.grep(this.ships, function(shipId){ return shipId>-1; }).length;
+		return $.grep(this.ships, function(shipId){ return shipId>-1; }).length;
 	};
 	
 	KC3Fleet.prototype.totalLevel = function(){
@@ -244,10 +243,6 @@ Contains summary information about a fleet and its 6 ships
 			.map(Number.call, Number)
 			.map(function(x){return self.ship(x).isNeedSupply(isEmpty);})
 			.reduce(function(x,y){return x||y;});
-	};
-	
-	KC3Fleet.prototype.missionOK = function(){
-		return this.countShips() >= 2 && this.mission[0] === 0;
 	};
 	
 	KC3Fleet.prototype.lowestMorale = function(){
