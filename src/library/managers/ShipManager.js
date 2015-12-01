@@ -10,7 +10,10 @@ Saves and loads list to and from localStorage
 	/* this variable will keep the kc3-specific variables */
 	var
 		defaults = (new KC3Ship()),
-		devVariables = ['didFlee','preExpedCond','pendingConsumption','repair'];
+		devVariables = {
+			capture: ['didFlee','preExpedCond','pendingConsumption','lastSortie','repair'],
+			norepl : ['repair']
+		};
 	
 	window.KC3ShipManager = {
 		list: {},
@@ -31,9 +34,10 @@ Saves and loads list to and from localStorage
 		// Add or replace a ship on the list
 		add :function(data){
 			var
-				self = this,
+				self     = this,
 				tempData = {},
-				cky = "";
+				cky      = "",
+				newData  = false;
 			if(typeof data.api_id != "undefined"){
 				cky = "x"+data.api_id;
 			}else if(typeof data.rosterId != "undefined"){
@@ -42,7 +46,9 @@ Saves and loads list to and from localStorage
 				return false;
 			}
 			
-			devVariables.forEach(function(key){
+			newData = !self.list[cky];
+			
+			devVariables.capture.forEach(function(key){
 				var
 					val = (self.list[cky] || defaults)[key];
 				tempData[key] = (typeof val === 'object' &&
@@ -94,14 +100,18 @@ Saves and loads list to and from localStorage
 				});
 			}
 			
-			$(devVariables).each(function(i,key){
-				self.list[cky][key] = tempData[key];
-			});
+			// prevent the fresh data always overwrites the current loaded state
+			if(!newData)
+				$(devVariables.capture).each(function(i,key){
+					if(devVariables.norepl.indexOf(key)<0)
+						self.list[cky][key] = tempData[key];
+				});
 			
 			// if there's still pending exped condition on queue
 			// don't remove async wait false, after that, remove port load wait
-			if(!this.list[cky].preExpedCond[0])
-				this.list[cky].getDefer()[1].resolve(); // removes async wait
+			if(!this.list[cky].preExpedCond[0]) {
+				this.list[cky].getDefer()[1].resolve(null); // removes async wait
+			}
 			this.list[cky].getDefer()[2].resolve(); // mark resolve wait for port
 
 		},

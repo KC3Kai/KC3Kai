@@ -303,14 +303,32 @@ Previously known as "Reactor"
 				master   = ship.master(),
 				material = [-master.api_afterfuel,-master.api_afterbull,0,0,0,0,0,0];
 			
+			// For every pending supply and repair, it'll be counted towards this
+			/*
+			var
+				hk = (function(is,ms){ // hokyuu -- repair
+					return ['fuel','bull'].map(function(rsc){
+						return ms[['api',rsc,'max'].join('_')] - is[rsc];
+					}).concat([0,0]);
+				})(ship,master),
+				nd = [ship.repair[1],0,ship.repair[2],0];
+			
+			[hk,nd].forEach(function(pending){
+				pending.forEach(function(matr,indx){
+					material[indx] += matr;
+				});
+			});
+			*/
+			
+			for(var pendingData in ship.pendingConsumption) {
+				delete ship.pendingConsumption[pendingData];
+			}
+			
 			KC3Database.Naverall({
 				hour: Math.hrdInt("floor",ctime/3.6,6,1),
 				type: "remodel" + master.api_id,
 				data: material
 			});
-			
-			// Always clear pending consumption for the remodelled ship
-			shipId.pendingConsumption = {};
 		},
 		
 		/* Fleet Presets
@@ -542,7 +560,6 @@ Previously known as "Reactor"
 					shipToSupply = KC3ShipManager.get(shipId),
 					shipDf = shipToSupply.getDefer()[0] || $.when({}),
 					shipFn = function(){
-						console.log("Ship",shipId,"querying supply",sParam);
 						KC3ShipManager.get(shipId).perform('supply',sParam);
 					};
 				
@@ -576,9 +593,13 @@ Previously known as "Reactor"
 		/* Select difficulty
 		-------------------------------------------------------*/
 		"api_req_map/select_eventmap_rank":function(params, response, headers){
-			var allMaps = JSON.parse(localStorage.maps);
-			allMaps["m" + params.api_maparea_id + params.api_map_no].difficulty = parseInt(params.api_rank);
-			allMaps["m" + params.api_maparea_id + params.api_map_no].curhp = allMaps["m" + params.api_maparea_id + params.api_map_no].maxhp = 9999;
+			var
+				allMaps = JSON.parse(localStorage.maps),
+				mkey    = "m" + params.api_maparea_id + params.api_map_no;
+			allMaps[mkey].difficulty = parseInt(params.api_rank);
+			allMaps[mkey].curhp = allMaps[mkey].maxhp = parseInt(response.api_data.api_max_maphp || 9999);
+			allMaps[mkey].kind  = allMaps[mkey].dkind; // reset the current map gauge kind
+			
 			localStorage.maps = JSON.stringify(allMaps);
 		},
 		
@@ -821,7 +842,7 @@ Previously known as "Reactor"
 				
 				KC3Database.Naverall({
 					data:[0,0,0,0,0,-1,0,0]
-				},shipData.lastSortie || 'sortie0');
+				},shipData.lastSortie[0]);
 				
 				shipData.applyRepair();
 				shipData.resetAfterHp();
@@ -848,7 +869,7 @@ Previously known as "Reactor"
 			
 			KC3Database.Naverall({
 				data:[0,0,0,0,0,-1,0,0]
-			},shipData.lastSortie || 'sortie0');
+			},shipData.lastSortie[0]);
 			shipData.applyRepair();
 			shipData.resetAfterHp();
 			KC3ShipManager.save();
@@ -916,6 +937,7 @@ Previously known as "Reactor"
 				ctime    = (new Date(headers.Date)).getTime(),
 				deck     = parseInt(params.api_deck_id, 10),
 				timerRef = KC3TimerManager._exped[ deck-2 ],
+				shipList = PlayerManager.fleets[deck - 1].ships.slice(0),
 				expedNum = timerRef.expedNum;
 			expedNum = parseInt(expedNum, 10);
 			
@@ -927,18 +949,30 @@ Previously known as "Reactor"
 			
 			console.log("Fleet #",deck,"has returned from Expedition #",expedNum,"with result",response.api_data);
 			
-			PlayerManager.fleets[deck - 1].ships.forEach(function(rosterId){
+			shipList.forEach(function(rosterId){
 				var shipData = KC3ShipManager.get(rosterId);
 				if(shipData.masterId > 0) {
+					shipData.getDefer()[1].reject();
+					shipData.getDefer()[2].reject();
 					shipData.preExpedCond.push("costnull",
 						shipData.fuel,
 						shipData.ammo,
 						shipData.slots.reduce(function(x,y){return x+y;})
 					);
-					console.log.apply(console,["Offering a preparation of async to",shipData.name()]);
-					shipData.getDefer()[1].reject();
-					shipData.getDefer()[2].reject();
-					shipData.checkDefer();
+					console.log.apply(console,["Offering a preparation of async to",shipData.name()].concat(shipData.preExpedCond));
+					var df = shipData.checkDefer();
+					df[0].then(function(expedId,supplyData){
+						if(typeof expedId !== 'undefined' && expedId !== null) {
+							var
+								kan = KC3ShipManager.get(rosterId),
+								key = ["exped",expedId].join('');
+							kan.preExpedCond[0] = key;
+							kan.expedConsume();
+							console.info.apply(console,["",rosterId].concat(key && kan.pendingConsumption[key]));
+						} else {
+							console.info("Ignoring Signal for",rosterId,"detected");
+						}
+					});
 				}
 			});
 			
@@ -973,7 +1007,7 @@ Previously known as "Reactor"
 					var
 						rsc = response.api_data.api_get_material,
 						csm = [0,0,0,0],
-						csmap = {0:0,1:2,2:1,3:3},
+						csmap = [0,2,1,3],
 						uniqId = "exped" + dbId;
 					
 					// Record expedition gain
@@ -999,23 +1033,23 @@ Previously known as "Reactor"
 						data: rsc
 					},null,true);
 					
-					PlayerManager.fleets[deck - 1].ships.forEach(function(rosterId,shipIndex){
+					shipList.forEach(function(rosterId,shipIndex){
 						var
 							shipData = KC3ShipManager.get(rosterId),
 							preCond  = shipData.preExpedCond,
 							dataInd  = preCond.indexOf('costnull'),
 							consDat  = [shipData.fuel,shipData.ammo,shipData.slots.reduce(function(x,y){return x+y;})];
 						if(shipData.masterId > 0) {
-							/* assume always exists */
-							preCond[dataInd] = uniqId;
 							// if there's a change in ship supply
 							if(dataInd >= 0) {
+								/* assume always exists */
+								preCond[dataInd] = uniqId;
 								if (consDat.some(function(x,i){return preCond[dataInd+i+1] > x;})) {
-									console.log.apply(console,["Resolving async wait",shipData.name()]);
+									console.log.apply(console,["Resolving async wait",shipData.name()].concat(preCond));
 								} else {
 									console.log.apply(console,['Comparing',shipData.name(),[consDat,preCond.slice(dataInd,dataInt+4)]]);
 								}
-								shipData.getDefer()[1].resolve();
+								shipData.getDefer()[1].resolve(dbId);
 							}
 						}
 					});
@@ -1175,41 +1209,60 @@ Previously known as "Reactor"
 					despe: [], /*    1 ~ Desperate of Single-Digit */
 					endur: [], /*    1   Desperate of Single-HP */
 					destr: [], /*    0   Sunk */
-					hpdat: {}  /* sortieId:remainingHP */
+					hpdat: {}  /* sortieId:[remainingHP,maximumHP]*/
 				}
 			};
 			
 			// Exclude gauge based map from being kept every time
 			for(ctr in KC3Meta._gauges) {
-				if(Object.keys(maps).indexOf(ctr)>=0) {
+				if(Object.keys(maps).indexOf(ctr)>=0)
 					maps[ctr].clear = maps[ctr].kills = false;
-					// checks whether the targeted data is event map or not
-					if(typeof maps[ctr].curhp !== 'undefined')
-						etcStat[ctr] = $.extend(true,{},defStat,maps[ctr].stat);
-				}
 			}
+			
 			// Combine current storage and current available maps data
 			for(ctr in response.api_data){
 				thisMap = response.api_data[ctr];
 				var key = "m"+thisMap.api_id;
 				
+				if(typeof (maps[key]||{}).curhp !== 'undefined')
+					etcStat[key] = $.extend(true,{},defStat,maps[key].stat);
+				
 				// Create map object
 				localMap = maps[ key ] = {
 					id: thisMap.api_id,
-					clear: thisMap.api_cleared
+					clear: thisMap.api_cleared,
+					kind: 'single'
 				};
 				
 				// Check for boss gauge kills
 				if(typeof thisMap.api_defeat_count != "undefined"){
 					localMap.kills = thisMap.api_defeat_count;
+					localMap.kind  = 'multiple';
 				}
 				
 				// Check for event map info
 				if(typeof thisMap.api_eventmap != "undefined"){
-					localMap.curhp      = thisMap.api_eventmap.api_now_maphp;
-					localMap.maxhp      = thisMap.api_eventmap.api_max_maphp;
-					localMap.difficulty = thisMap.api_eventmap.api_selected_rank;
+					var eventData = thisMap.api_eventmap;
+					localMap.curhp      = eventData.api_now_maphp;
+					localMap.maxhp      = eventData.api_max_maphp;
+					localMap.difficulty = eventData.api_selected_rank;
 					localMap.stat       = $.extend(true,{},defStat,etcStat[ key ]);
+					switch(eventData.api_gauge_type || 0) {
+						case 0:
+							localMap.kind   = 'gauge-hp';
+							break;
+						case 3:
+							localMap.kind   = 'gauge-tp';
+							break;
+						default:
+							localMap.kind   = 'gauge-hp';
+							console.info('Reported new API Gauge Type',eventData.api_gauge_type);
+					}
+				}
+				
+				// Check default gauge info
+				if(typeof maps[key].dkind === 'undefined') {
+					maps[key].dkind = maps[key].kind;
 				}
 			}
 			localStorage.maps = JSON.stringify(maps);
