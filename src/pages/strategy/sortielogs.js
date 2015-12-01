@@ -7,6 +7,7 @@
 		BATTLE_NIGHT   = 2,
 		BATTLE_AERIAL  = 4,
 		
+		// test string
 		SORTIE_STRING  = {
 			fresh : "Not even a single scratch",
 			graze : "RNG is too good for me",
@@ -317,11 +318,12 @@
 		Shows sorties on interface using list of collected sortie objects
 		---------------------------------*/
 		this.showList = function( sortieList ){
+			var self = this;
 			// Show sortie records on list
 			var sortieBox, fleets, fleetkey, mainFleet, isCombined, rshipBox, nodeBox, thisNode, sinkShips;
 			$.each(sortieList, function(id, sortie){
 				try {
-					var skey = "m"+sortie.world+sortie.mapnum;
+					var skey = ["m",sortie.world,sortie.mapnum].join('');
 					// Create sortie box
 					sortieBox = $(".tab_"+tabCode+" .factory .sortie_box").clone().appendTo(".tab_"+tabCode+" .sortie_list");
 					if(sortie.world >= 10) {
@@ -519,17 +521,19 @@
 					$(".sortie_nodes", sortieBox).append( $("<div>").addClass("clear") );
 					
 					var
-						mstat = this.maps[skey].stat,
+						mstat = self.maps[skey].stat,
 						sstat = $(".sortie_stat", sortieBox),
 						kstat = ["now","max"];
 					if(mstat && sstat.length) {
 						var stateKey = Object.keys(SORTIE_STRING).filter(function(statKey){
 							return mstat.onBoss[statKey].indexOf(sortie.id) >= 0;
-						}).unshift();
+						}).shift();
 						$(".sortie_end_text",sstat).text(SORTIE_STRING[stateKey]);
 						mstat.onBoss.hpdat[sortie.id].forEach(function(v,i){
 							$([".boss.",kstat[i],"hp"].join(''),sstat).text(v);
 						});
+						if(false) // only toggle this on dev builds
+							sstat.show();
 					} else {
 						sstat.hide();
 					}

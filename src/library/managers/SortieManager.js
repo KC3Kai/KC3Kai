@@ -268,6 +268,11 @@ Xxxxxxx
 			});
 		},
 		
+		getCurrentMapData: function(){
+			// return empty object if not found
+			return ((localStorage.getObject('maps')||{})[['m',this.map_world,this.map_num].join('')])||{};
+		},
+		
 		load :function(){
 			if(localStorage.sortie) {
 				$.extend(this,localStorage.getObject('sortie'));
@@ -297,30 +302,33 @@ Xxxxxxx
 							/*
 								[Fuel Difference] [Ammo Difference] [All Slots Difference]
 							*/
-							function(a,b){return a.fuel - b.fuel;},
-							function(a,b){return a.ammo - b.ammo;},
-							0,
-							function(a,b){
-								return Array.apply(null,{length:a.slots.length}).map(function(x,i){return (a.slots[i] - b.slots[i])*5;})
+							function(ship1,ship2){return ship1.fuel - ship2.fuel;},
+							function(ship1,ship2){return ship1.ammo - ship2.ammo;},
+							function(ship1,ship2){
+								return Array.apply(null,{length:ship1.slots.length}).map(function(x,i){return (ship1.slots[i] - ship2.slots[i])*1;})
 									.reduce(function(x,y){return x+y;});
 							}
-						].map(function(f){return f(before,after);}),
+						].map(function(supplyFunc){return supplyFunc(before,after);}),
 						/*
 							RepairLength = 3, third entry always zero.
 							if PvP => RepairLength = 0, all zero entry.
 						*/
-						rl       = before.repair.length * !self.isPvP(),
-						repair   = [1,9,2,9].map(function(x){
-							return (x<rl) ? (after.repair[x] - before.repair[x]) : 0;
+						repLen   = before.repair.length * !self.isPvP(),
+						repair   = [1,2,9].map(function(x){
+							return (x<repLen) ? (after.repair[x] - before.repair[x]) : 0;
 						});
 					if(!self.isPvP())
 						before.lastSortie.push(cons.name);
-					if(!(supply.every(function(x){return !x;}) && repair.every(function(x){return !x;})))
-						[supply.repair].forEach(function(cost){
-							cost.forEach(function(matr,indx){
-								cons.resc[indx] -= matr;
+					if(!(supply.every(function(matr){return !matr;}) && repair.every(function(matr){return !matr;})))
+						if(true) {
+							console.log(rosterId,repair);
+							before.pendingConsumption[cons.name] = [supply,repair];
+						} else
+							[supply.repair].forEach(function(cost){
+								cost.forEach(function(matr,indx){
+									cons.resc[indx] -= matr;
+								});
 							});
-						});
 				});
 			});
 			// Ignore every resource gain if disconnected during sortie

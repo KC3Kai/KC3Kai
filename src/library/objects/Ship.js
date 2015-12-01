@@ -128,8 +128,8 @@ KC3改 Ship Object
 		// reset defer if it does not in normal state
 		var
 			self= this,
-			ca  = this.getDefer(),
-			cd  = ca[0];
+			ca  = this.getDefer(), // get defer array
+			cd  = ca[0]; // current collection of deferreds
 		if(ca && cd && cd.state() == "pending")
 			return ca;
 		
@@ -306,7 +306,7 @@ KC3改 Ship Object
 			this.equipment(2).fighterBounds( this.slots[2] ),
 			this.equipment(3).fighterBounds( this.slots[3] )
 		];
-		console.log.apply(console,["GearPowers"].concat(GearPowers));
+		//console.log.apply(console,["GearPowers"].concat(GearPowers));
 		return [
 			GearPowers[0][0]+GearPowers[1][0]+GearPowers[2][0]+GearPowers[3][0],
 			GearPowers[0][1]+GearPowers[1][1]+GearPowers[2][1]+GearPowers[3][1],
@@ -366,33 +366,36 @@ KC3改 Ship Object
 	
 	/* Expedition Supply Change Check */
 	KC3Ship.prototype.expedConsume = function(){
-		var pushLater = [];
+		var
+			ary = this.preExpedCond,
+			con = this.pendingConsumption,
+			pushLater = [];
 		while(this.preExpedCond[0]) {
 			var
-				ary = this.preExpedCond,
-				con = this.pendingConsumption,
 				key = ary.shift(),
 				sup = ary.splice(0,3),
 				nxt = ary.slice(1,4);
 			// never accept costnull
 			if(key === 'costnull') {
 				Array.prototype.push.apply(pushLater,[key].concat(sup));
+				console.log("Pushing Later",pushLater);
 				break;
 			} else {
 				if(nxt.length < 3)
 					nxt = [this.fuel,this.ammo,this.slots.reduce(function(x,y){return x+y;})];
 				for(var dataIndex in nxt) {
-					sup[dataIndex] = sup[dataIndex] - nxt[dataIndex];
+					sup[dataIndex] = nxt[dataIndex] - sup[dataIndex];
 				}
 				con[key] = con[key] || [[0,0,0],[0,0,0]];
 				con[key][0] = sup;
 			}
 		}
-		Array.prototype.push.apply(this.preExpedCond,pushLater);
+		Array.prototype.push.apply(ary,pushLater);
+		console.info("PreCondition",ary);
 	};
 	KC3Ship.prototype.perform = function(command,args) {
 		try {
-			args = $({noFuel:0,noAmmo:0},args);
+			args = $.extend({noFuel:0,noAmmo:0},args);
 			command = command.slice(0,1).toUpperCase() + command.slice(1).toLowerCase();
 			this["perform"+command].call(this,args);
 		} catch (e) {
@@ -403,10 +406,10 @@ KC3改 Ship Object
 		}
 	};
 	KC3Ship.prototype.performSupply = function(args) {
-		consumePending.call(this,0,{0:0,1:1,2:3,c:-1,i: 0},[0,1,2],args);
+		consumePending.call(this,0,{0:0,1:1,2:3,c: 1,i: 0},[0,1,2],args);
 	};
 	KC3Ship.prototype.performRepair = function(args) {
-		consumePending.call(this,1,{0:0,1:2,2:6,c: 1,i: 1},[0,1],args);
+		consumePending.call(this,1,{0:0,1:2,2:6,c: 1,i: 0},[0,1,2],args);
 	};
 	function consumePending(index,mapping,clear,args) {
 		/*jshint validthis: true */
@@ -435,7 +438,7 @@ KC3改 Ship Object
 				if(iterant < lastN)
 					dat[index][key] = 0;
 			});
-			console.log.apply(console,["Ship",self.rosterId,"Material"].concat(rsc.map(function(x){return -x;})));
+			console.log.apply(console,["Ship",self.rosterId,"Consume",[iterant,lastN].join('/')].concat(rsc.map(function(x){return -x;})));
 			
 			// Store supplied resource count to database by updating the source
 			KC3Database.Naverall({
