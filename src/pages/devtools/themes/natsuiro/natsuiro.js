@@ -931,7 +931,7 @@
 						var
 							cf = PlayerManager.combinedFleet,
 							fs = KC3SortieManager.fleetSent;
-						return (cf&&fs===1) ? (i <= 1) : (i == fs-1);
+						return (cf&&fs===1) ? (i <= 1) : (i == fs-1)
 					})
 					.map    (function(  fldat) { return fldat.ships; })
 					.reduce (function(  x,  y) { return x.concat(y); })

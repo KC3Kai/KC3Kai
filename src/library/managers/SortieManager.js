@@ -319,7 +319,7 @@ Xxxxxxx
 						[supply.repair].forEach(function(cost){
 							cost.forEach(function(matr,indx){
 								cons.resc[indx] -= matr;
-							});
+							})
 						});
 				});
 			});
