@@ -365,34 +365,6 @@ KC3改 Ship Object
 	*/
 	
 	/* Expedition Supply Change Check */
-	KC3Ship.prototype.expedConsume = function(){
-		var
-			ary = this.preExpedCond,
-			con = this.pendingConsumption,
-			pushLater = [];
-		while(this.preExpedCond[0]) {
-			var
-				key = ary.shift(),
-				sup = ary.splice(0,3),
-				nxt = ary.slice(1,4);
-			// never accept costnull
-			if(key === 'costnull') {
-				Array.prototype.push.apply(pushLater,[key].concat(sup));
-				console.log("Pushing Later",pushLater);
-				break;
-			} else {
-				if(nxt.length < 3)
-					nxt = [this.fuel,this.ammo,this.slots.reduce(function(x,y){return x+y;})];
-				for(var dataIndex in nxt) {
-					sup[dataIndex] = nxt[dataIndex] - sup[dataIndex];
-				}
-				con[key] = con[key] || [[0,0,0],[0,0,0]];
-				con[key][0] = sup;
-			}
-		}
-		Array.prototype.push.apply(ary,pushLater);
-		console.info("PreCondition",ary);
-	};
 	KC3Ship.prototype.perform = function(command,args) {
 		try {
 			args = $.extend({noFuel:0,noAmmo:0},args);
@@ -435,10 +407,10 @@ KC3改 Ship Object
 			Object.keys(mapping).forEach(function(key){
 				rsc[mapping[key]] += dat[index][key] * mult * (1 + (mapping[key]===3 && 4));
 				// Checks whether current iteration is last N pending item
-				if(iterant < lastN)
+				if((iterant < lastN) && (clear.indexOf(parseInt(key))>=0))
 					dat[index][key] = 0;
 			});
-			console.log.apply(console,["Ship",self.rosterId,"Consume",[iterant,lastN].join('/')].concat(rsc.map(function(x){return -x;})));
+			console.log.apply(console,["Ship",self.rosterId,"Consume",shipConsumption,index,[iterant,lastN].join('/')].concat(rsc.map(function(x){return -x;})).concat(dat[index]));
 			
 			// Store supplied resource count to database by updating the source
 			KC3Database.Naverall({
@@ -454,5 +426,7 @@ KC3改 Ship Object
 			}
 			/* Comment Stopper */
 		});
+		
+		KC3ShipManager.save();
 	}
 })();

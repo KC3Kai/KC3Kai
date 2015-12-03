@@ -11,7 +11,7 @@ Saves and loads list to and from localStorage
 	var
 		defaults = (new KC3Ship()),
 		devVariables = {
-			capture: ['didFlee','preExpedCond','pendingConsumption','lastSortie','repair'],
+			capture: ['didFlee','pendingConsumption','lastSortie','repair'],
 			norepl : ['repair']
 		};
 	
@@ -37,7 +37,8 @@ Saves and loads list to and from localStorage
 				self     = this,
 				tempData = {},
 				cky      = "",
-				newData  = false;
+				newData  = false,
+				cShip;
 			if(typeof data.api_id != "undefined"){
 				cky = "x"+data.api_id;
 			}else if(typeof data.rosterId != "undefined"){
@@ -52,7 +53,7 @@ Saves and loads list to and from localStorage
 				var
 					val = (self.list[cky] || defaults)[key];
 				tempData[key] = (typeof val === 'object' &&
-					(val instanceof Array ? Array.apply(null,val) : Object.create(val))
+					(val instanceof Array ? Array.apply(null,val) : $.extend({},val))
 				) || val;
 			});
 			
@@ -60,16 +61,25 @@ Saves and loads list to and from localStorage
 			//if (typeof this.list[cky] !== "undefined") {
 			//	didFlee = this.list[cky].didFlee;
 			//}
-			this.list[cky] = new KC3Ship(data);
+			cShip = this.list[cky] = new KC3Ship(data);
 			//this.list[cky].didFlee = didFlee;
+			
+			// prevent the fresh data always overwrites the current loaded state
+			if(!newData)
+				devVariables.capture.forEach(function(key){
+					if(devVariables.norepl.indexOf(key)<0)
+						cShip[key] = tempData[key];
+				});
 			
 			// Check previous repair state
 			// If there's a change detected (without applying applyRepair proc)
 			// It'll be treated as akashi effect
-			if(tempData.repair[0] > this.list[cky].repair[0]) {
+			if(tempData.repair[0] > cShip.repair[0]) {
+				/* Disabling this --
+					the problem is, pending consumption variable stacks up for expedition, */
 				// Calculate Difference
 				var
-					sp = this.list[cky],
+					sp = cShip,
 					pc = sp.pendingConsumption,
 					rs = Array.apply(null,{length:8}).map(function(){return 0;}),
 					df = tempData.repair.map(function(x,i){return x - sp.repair[i];});
@@ -98,21 +108,15 @@ Saves and loads list to and from localStorage
 						df[i] -= dt[i]; // Reduce the required supply to repair
 					});
 				});
+				/* COMMENT STOPPER */
 			}
-			
-			// prevent the fresh data always overwrites the current loaded state
-			if(!newData)
-				$(devVariables.capture).each(function(i,key){
-					if(devVariables.norepl.indexOf(key)<0)
-						self.list[cky][key] = tempData[key];
-				});
 			
 			// if there's still pending exped condition on queue
 			// don't remove async wait false, after that, remove port load wait
-			if(!this.list[cky].preExpedCond[0]) {
-				this.list[cky].getDefer()[1].resolve(null); // removes async wait
+			if(!cShip.pendingConsumption.costnull) {
+				cShip.getDefer()[1].resolve(null); // removes async wait
 			}
-			this.list[cky].getDefer()[2].resolve(); // mark resolve wait for port
+			cShip.getDefer()[2].resolve(cShip.fuel,cShip.bull,cShip.slots.reduce(function(x,y){return x+y;})); // mark resolve wait for port
 
 		},
 		

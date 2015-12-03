@@ -954,21 +954,26 @@ Previously known as "Reactor"
 				if(shipData.masterId > 0) {
 					shipData.getDefer()[1].reject();
 					shipData.getDefer()[2].reject();
-					shipData.preExpedCond.push("costnull",
-						shipData.fuel,
-						shipData.ammo,
-						shipData.slots.reduce(function(x,y){return x+y;})
-					);
-					console.log.apply(console,["Offering a preparation of async to",shipData.name()].concat(shipData.preExpedCond));
+					shipData.pendingConsumption.costnull=[[
+						-shipData.fuel,
+						-shipData.ammo,
+						-shipData.slots.reduce(function(x,y){return x+y;})
+					],[0,0,0]];
+					console.log.apply(console,["Offering a preparation of async to",shipData.name()]);
 					var df = shipData.checkDefer();
 					df[0].then(function(expedId,supplyData){
 						if(typeof expedId !== 'undefined' && expedId !== null) {
 							var
-								kan = KC3ShipManager.get(rosterId),
+								kan = KC3ShipManager.get(rosterId), // retrieve latest ship data
 								key = ["exped",expedId].join('');
-							kan.preExpedCond[0] = key;
-							kan.expedConsume();
+							kan.pendingConsumption[key] = kan.pendingConsumption.costnull.map(function(rscdat,rscind){
+								return rscind===0 ? rscdat.map(function(rscval,datind){
+									return rscval + supplyData[datind];
+								}) : rscdat;
+							});
+							delete kan.pendingConsumption.costnull;
 							console.info.apply(console,["",rosterId].concat(key && kan.pendingConsumption[key]));
+							KC3ShipManager.save();
 						} else {
 							console.info("Ignoring Signal for",rosterId,"detected");
 						}
@@ -1036,19 +1041,12 @@ Previously known as "Reactor"
 					shipList.forEach(function(rosterId,shipIndex){
 						var
 							shipData = KC3ShipManager.get(rosterId),
-							preCond  = shipData.preExpedCond,
-							dataInd  = preCond.indexOf('costnull'),
+							pendCond = shipData.pendingConsumption,
+							dataInd  = Object.keys(pendCond).indexOf('costnull'),
 							consDat  = [shipData.fuel,shipData.ammo,shipData.slots.reduce(function(x,y){return x+y;})];
 						if(shipData.masterId > 0) {
 							// if there's a change in ship supply
 							if(dataInd >= 0) {
-								/* assume always exists */
-								preCond[dataInd] = uniqId;
-								if (consDat.some(function(x,i){return preCond[dataInd+i+1] > x;})) {
-									console.log.apply(console,["Resolving async wait",shipData.name()].concat(preCond));
-								} else {
-									console.log.apply(console,['Comparing',shipData.name(),[consDat,preCond.slice(dataInd,dataInt+4)]]);
-								}
 								shipData.getDefer()[1].resolve(dbId);
 							}
 						}
