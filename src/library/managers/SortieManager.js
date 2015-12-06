@@ -318,7 +318,7 @@ Xxxxxxx
 							return (x<repLen) ? (after.repair[x] - before.repair[x]) : 0;
 						});
 					if(!self.isPvP())
-						before.lastSortie.push(cons.name);
+						before.lastSortie.unshift(cons.name);
 					if(!(supply.every(function(matr){return !matr;}) && repair.every(function(matr){return !matr;})))
 						if(true) {
 							console.log(rosterId,repair);
@@ -370,6 +370,7 @@ Xxxxxxx
 			for(var ectr in this.escapedList){
 				KC3ShipManager.get( this.escapedList[ectr] ).didFlee = false;
 			}
+			KC3ShipManager.save();
 			
 			this.fcfCheck = [];
 			this.escapedList = [];

@@ -37,6 +37,8 @@ Contains summary information about a fleet and its 6 ships
 					KC3TimerManager.exped( data.api_id ).deactivate();
 				}
 			}
+			
+			this.checkAkashi();
 		}
 	};
 	
@@ -45,6 +47,7 @@ Contains summary information about a fleet and its 6 ships
 		this.name = data.name;
 		this.ships = data.ships;
 		this.mission = data.mission;
+		this.checkAkashi();
 		return this;
 	};
 	
@@ -54,7 +57,23 @@ Contains summary information about a fleet and its 6 ships
 	/*--------------------------------------------------------*/
 	
 	KC3Fleet.prototype.ship = function( slot ){
-		return KC3ShipManager.get( this.ships[slot] );
+		var self = this;
+		switch(typeof slot) {
+			case 'number':
+			case 'string':
+				/* Number/String => converted as fleet slot key */
+				return KC3ShipManager.get( this.ships[slot] );
+			case 'undefined':
+				/* Undefined => returns whole fleet as ship object */
+				return Array.apply(null, {length: this.countShips()})
+					.map(Number.call, Number)
+					.map(function(i){ return self.ship(i); });
+			case 'function':
+				/* Function => iterates over given callback for every ships */
+				this.ship().forEach(function(ship,index){
+					slot.call(null,ship.rosterId,index,ship);
+				});
+		}
 	};
 	
 	
@@ -69,9 +88,28 @@ Contains summary information about a fleet and its 6 ships
 	};
 	
 	KC3Fleet.prototype.clearNonFlagShips = function(){
-		this.ships[1] = this.ships[2] = this.ships[3] = this.ships[4] = this.ships[5] = -1;
+		this.ships.fill(-1,1,6);
+		this.checkAkashi();
 	};
 	
+	KC3Fleet.prototype.checkAkashi = function(){
+		var flagship = this.ship(0);
+		if(flagship.master().api_stype == 19) { // only applies to AR
+			this.akashi_tick = (new Date()).getTime();
+			var akashiRange = flagship.countEquipment(86) + 1;
+			
+			this.ship().forEach(function(ship,index){
+				ship.akashiMark = (index <= akashiRange) && ship.isFree() && !ship.isStriped();
+			});
+			return true;
+		} else {
+			this.akashi_tick = 0;
+			this.ship().forEach(function(ship){
+				ship.akashiMark = false;
+			});
+			return false;
+		}
+	};
 	
 	/*--------------------------------------------------------*/
 	/*------------------[ FLEET ATTRIBUTES ]------------------*/
@@ -401,6 +439,7 @@ Contains summary information about a fleet and its 6 ships
 			this.ships.splice(pos,1);
 			this.ships.push(-1);
 		}
+		this.akashi_tick();
 	};
 	
 	/* SORTIE JSON

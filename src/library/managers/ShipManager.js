@@ -11,7 +11,7 @@ Saves and loads list to and from localStorage
 	var
 		defaults = (new KC3Ship()),
 		devVariables = {
-			capture: ['didFlee','pendingConsumption','lastSortie','repair'],
+			capture: ['didFlee','pendingConsumption','lastSortie','repair','akashiMark'],
 			norepl : ['repair']
 		};
 	
@@ -74,7 +74,7 @@ Saves and loads list to and from localStorage
 			// Check previous repair state
 			// If there's a change detected (without applying applyRepair proc)
 			// It'll be treated as akashi effect
-			if(tempData.repair[0] > cShip.repair[0]) {
+			if(tempData.repair[0] > cShip.repair[0] && cShip.akashiMark) {
 				/* Disabling this --
 					the problem is, pending consumption variable stacks up for expedition, */
 				// Calculate Difference
@@ -92,20 +92,22 @@ Saves and loads list to and from localStorage
 					data: rs
 				});
 				// Reduce Consumption Counter
-				df.shift(); df.unshift(0);
+				// df (delta)      = [0,5,20]
+				df.shift(); df.push(0);
+				console.info("Akashi repaired",cShip.name(),cShip.rosterId,df);
 				Object.keys(pc).reverse().forEach(function(d){
 					// if the difference is not all-zero, keep going
 					if(df.every(function(x){return !x;}))
 						return;
 					var
 						rp = pc[d][1],
-						dt = rp.map(function(x,i){return Math.min(x,df[i]);});
+						dt = rp.map(function(x,i){return Math.max(x,-df[i]);});
 					// if the delta is not all-zero, keep going
 					if(dt.every(function(x){return !x;}))
 						return;
 					rp.forEach(function(x,i){
-						rp[i] += dt[i]; // Reduce the source of supply reduction
-						df[i] -= dt[i]; // Reduce the required supply to repair
+						rp[i] -= dt[i]; // Reduce the source of supply reduction
+						df[i] += dt[i]; // Reduce the required supply to repair
 					});
 				});
 				/* COMMENT STOPPER */

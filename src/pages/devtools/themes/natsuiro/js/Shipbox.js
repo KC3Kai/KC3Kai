@@ -141,6 +141,10 @@ KC3改 Ship Box for Natsuiro theme
 					$(".ship_hp_bar", this.element).css("background", "#00FF00");
 				}
 			}
+			
+			if(this.shipData.akashiMark) {
+				this.element.css("background-color", "rgba(191,255,100,0.15)");
+			}
 		}
 	};
 	

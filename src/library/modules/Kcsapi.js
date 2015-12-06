@@ -524,6 +524,7 @@ Previously known as "Reactor"
 				PlayerManager.fleets[FleetIndex-1].ships.splice(ChangedIndex, 1);
 				PlayerManager.fleets[FleetIndex-1].ships.push(-1);
 			}
+			PlayerManager.fleets[FleetIndex-1].checkAkashi();
 			KC3Network.trigger("Fleet");
 		},
 		
@@ -566,9 +567,6 @@ Previously known as "Reactor"
 				shipToSupply.fuel  = ship.api_fuel;
 				shipToSupply.ammo  = ship.api_bull;
 				shipToSupply.slots = ship.api_onslot;
-				
-				if(!shipToSupply.preExpedCond.length)
-					[1,2].forEach(function(i){shipToSupply.getDefer()[i].resolve();});
 				
 				shipDf.then(shipFn);
 			});
@@ -728,7 +726,13 @@ Previously known as "Reactor"
 			if(!ConfigManager.info_delta)
 				KC3Network.trigger("HQ");
 			
+			PlayerManager.fleets.forEach(function(fleet){
+				fleet.ship(function(rosterId,slotId,shipData){
+					shipData.hp[0] = shipData.afterHp[0];
+				});
+			});
 			KC3Network.trigger("BattleResult", response.api_data);
+			KC3Network.trigger("Fleet");
 			KC3Network.trigger("Quests");
 			
 			KC3Network.delay(1,"Fleet","GearSlots");
@@ -741,7 +745,13 @@ Previously known as "Reactor"
 			if(!ConfigManager.info_delta)
 				KC3Network.trigger("HQ");
 			
+			PlayerManager.fleets.forEach(function(fleet){
+				fleet.ship(function(rosterId,slotId,shipData){
+					shipData.hp[0] = shipData.afterHp[0];
+				});
+			});
 			KC3Network.trigger("BattleResult");
+			KC3Network.trigger("Fleet");
 			KC3Network.trigger("Quests");
 			
 			KC3Network.delay(1,"Fleet","GearSlots");
@@ -849,6 +859,7 @@ Previously known as "Reactor"
 				KC3TimerManager.repair( nDockNum ).deactivate();
 			}
 			
+			shipData.perform('repair');
 			KC3ShipManager.save();
 			
 			KC3QuestManager.get(503).increment(); // E3: Daily Repairs
@@ -874,7 +885,7 @@ Previously known as "Reactor"
 			shipData.resetAfterHp();
 			KC3ShipManager.save();
 			
-			
+			shipData.perform('repair');
 			KC3TimerManager.repair( params.api_ndock_id ).deactivate();
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Timers");

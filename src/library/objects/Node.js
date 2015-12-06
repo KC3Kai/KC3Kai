@@ -464,7 +464,7 @@ Used by SortieManager
 				}
 			}
 		} catch (e) {
-			console.error(e,'\n',e.stack);
+			console.error("Captured an exception ==>", e,"\n==> proceeds safely");
 		} finally {
 			this.saveBattleOnDB(resultData);
 		}

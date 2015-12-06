@@ -37,6 +37,7 @@ KC3改 Ship Object
 		this.lock = 0;
 		this.sally = 0;
 		this.didFlee = false;
+		this.akashiMark = false;
 		this.preExpedCond = [
 			/* Data Example
 			["exped300",12,20, 0], // fully supplied
@@ -115,7 +116,25 @@ KC3改 Ship Object
 	KC3Ship.prototype.master = function(){ return KC3Master.ship( this.masterId ); };
 	KC3Ship.prototype.name = function(){ return KC3Meta.shipName( this.master().api_name ); };
 	KC3Ship.prototype.stype = function(){ return KC3Meta.stype( this.master().api_stype ); };
-	KC3Ship.prototype.equipment = function(slot){ return KC3GearManager.get( this.items[slot] ); };
+	KC3Ship.prototype.equipment = function(slot){
+		var self = this;
+		switch(typeof slot) {
+			case 'number':
+			case 'string':
+				/* Number/String => converted as equipment slot key */
+				return KC3GearManager.get( this.items[slot] );
+			case 'undefined':
+				/* Undefined => returns whole equipment as equip object */
+				return Array.apply(null, this.items)
+					.map(Number.call, Number)
+					.map(function(i){ return self.equipment(i); });
+			case 'function':
+				/* Function => iterates over given callback for every equipment */
+				return this.equipment().forEach(function(item,index){
+					slot.call(null,item.rosterId,index,item);
+				});
+		}
+	};
 	KC3Ship.prototype.isFast = function(){ return this.master().api_soku>=10; };
 	KC3Ship.prototype.exItem = function(){ return KC3GearManager.get(this.ex_item); };
 	KC3Ship.prototype.isStriped = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.5); };
