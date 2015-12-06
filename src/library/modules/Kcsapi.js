@@ -514,10 +514,12 @@ Previously known as "Reactor"
 			var ChangingShip = parseInt(params.api_ship_id);
 			var OldSwaperSlot = flatShips.indexOf(ChangingShip); // move to slot
 			var OldSwapeeSlot = flatShips[ (FleetIndex-1) * 6 + ChangedIndex ]; // swap from slot
+			var oldFleet = Math.floor(OldSwaperSlot / 6);
 			if(ChangingShip > -1){
 				// If swapping on same fleet
 				if(OldSwaperSlot >= 0){
-					PlayerManager.fleets[Math.floor(OldSwaperSlot / 6)].ships[OldSwaperSlot % 6] = OldSwapeeSlot;
+					PlayerManager.fleets[oldFleet].ships[OldSwaperSlot % 6] = OldSwapeeSlot;
+					PlayerManager.fleets[oldFleet].checkAkashi();
 				}
 				PlayerManager.fleets[FleetIndex-1].ships[ChangedIndex] = ChangingShip;
 			}else{
