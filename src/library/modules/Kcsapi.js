@@ -901,6 +901,9 @@ Previously known as "Reactor"
 		/* PVP Start
 		-------------------------------------------------------*/
 		"api_req_practice/battle":function(params, response, headers){
+			KC3SortieManager.sortieTime = Math.hrdInt('floor',(new Date(headers.Date)).getTime(),3,1);
+			KC3SortieManager.map_world  = -1;
+			KC3SortieManager.snapshotFleetState();
 			KC3Network.trigger("PvPStart", {
 				battle: response.api_data,
 				fleetSent: params.api_deck_id

@@ -51,10 +51,7 @@ Xxxxxxx
 				ships: [ -1, -1, -1, -1, -1, -1 ]
 			};
 			
-			PlayerManager.hq.lastSortie = PlayerManager.fleets_backup();
-			
-			focusedFleet = (PlayerManager.combinedFleet&&this.fleetSent===1) ? [0,1] : [this.fleetSent-1];
-			PlayerManager.hq.save();
+			this.snapshotFleetState();
 			
 			var fleet = PlayerManager.fleets[this.fleetSent-1];
 			fleet.resetAfterHp();
@@ -79,6 +76,12 @@ Xxxxxxx
 				self.sortieTime = stime;
 				self.save();
 			});
+		},
+		
+		snapshotFleetState :function(){
+			PlayerManager.hq.lastSortie = PlayerManager.fleets_backup();
+			focusedFleet = (PlayerManager.combinedFleet&&this.fleetSent===1) ? [0,1] : [this.fleetSent-1];
+			PlayerManager.hq.save();
 		},
 		
 		getSupportingFleet :function(bossSupport){
@@ -290,7 +293,7 @@ Xxxxxxx
 				cons = {};
 			this.fleetSent = 1;
 			console.log("Pre-sortie State",PlayerManager.hq.lastSortie);
-			cons.name = self.isPvP() ? ("pvp" + (pvp.win + pvp.lose)) : ("sortie" + self.onSortie);
+			cons.name = self.isPvP() ? ("pvp" + (self.onSortie = (pvpData.win + pvpData.lose))) : ("sortie" + self.onSortie);
 			cons.resc = Array.apply(null,{length:8}).map(function(){return 0;});
 			// Calculate sortie difference with buffer
 			(PlayerManager.hq.lastSortie || []).forEach(function(fleet,fleet_id){
@@ -346,7 +349,7 @@ Xxxxxxx
 			// To detect whether invalid sortie ID or not
 			if(this.onSortie)
 				KC3Database.Naverall({
-					hour: Math.hrdInt('floor',this.sortieTime,3.6,1),
+					hour: Math.hrdInt('floor',this.sortieTime/3.6,3,1),
 					type: "sortie" + this.onSortie,
 					data: this.materialGain.slice(0)
 				},null,true);
