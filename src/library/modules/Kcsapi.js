@@ -320,9 +320,21 @@ Previously known as "Reactor"
 			});
 			*/
 			
-			for(var pendingData in ship.pendingConsumption) {
-				delete ship.pendingConsumption[pendingData];
-			}
+			Object.keys(ship.pendingConsumption).forEach(function(pendingData){
+				ship.pendingConsumption[pendingData].forEach(function(arrayData,consumeIndex){
+					switch(consumeIndex) {
+						case 0:
+							arrayData.fill(0,0,2);
+						break;
+						case 1:
+							arrayData.fill(0,0,3);
+						break;
+						default:
+							console.error("Expected array of length 2 on",pendingData,"consumption data");
+						break;
+					}
+				});
+			});
 			
 			KC3Database.Naverall({
 				hour: Math.hrdInt("floor",ctime/3.6,6,1),
@@ -752,7 +764,7 @@ Previously known as "Reactor"
 					shipData.hp[0] = shipData.afterHp[0];
 				});
 			});
-			KC3Network.trigger("BattleResult");
+			KC3Network.trigger("BattleResult", response.api_data);
 			KC3Network.trigger("Fleet");
 			KC3Network.trigger("Quests");
 			
