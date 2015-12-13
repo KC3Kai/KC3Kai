@@ -746,6 +746,7 @@ Previously known as "Reactor"
 				});
 			});
 			KC3Network.trigger("Fleet");
+			KC3Network.trigger("BattleResult", response.api_data);
 			KC3Network.trigger("Quests");
 			
 			KC3Network.delay(1,"Fleet","GearSlots");
@@ -764,6 +765,7 @@ Previously known as "Reactor"
 				});
 			});
 			KC3Network.trigger("Fleet");
+			KC3Network.trigger("BattleResult", response.api_data);
 			KC3Network.trigger("Quests");
 			
 			KC3Network.delay(1,"Fleet","GearSlots");
@@ -893,6 +895,7 @@ Previously known as "Reactor"
 			KC3Database.Naverall({
 				data:[0,0,0,0,0,-1,0,0]
 			},shipData.lastSortie[0]);
+			shipData.perform('repair');
 			shipData.applyRepair();
 			shipData.resetAfterHp();
 			KC3ShipManager.save();
