@@ -745,7 +745,6 @@ Previously known as "Reactor"
 					shipData.hp[0] = shipData.afterHp[0];
 				});
 			});
-			KC3Network.trigger("BattleResult", response.api_data);
 			KC3Network.trigger("Fleet");
 			KC3Network.trigger("Quests");
 			
@@ -764,7 +763,6 @@ Previously known as "Reactor"
 					shipData.hp[0] = shipData.afterHp[0];
 				});
 			});
-			KC3Network.trigger("BattleResult", response.api_data);
 			KC3Network.trigger("Fleet");
 			KC3Network.trigger("Quests");
 			
@@ -899,7 +897,6 @@ Previously known as "Reactor"
 			shipData.resetAfterHp();
 			KC3ShipManager.save();
 			
-			shipData.perform('repair');
 			KC3TimerManager.repair( params.api_ndock_id ).deactivate();
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Timers");
