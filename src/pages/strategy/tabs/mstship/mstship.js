@@ -230,12 +230,17 @@
 				// HOURLIES
 				$(".tab_mstship .shipInfo .hourlies").html("");
 				if(shipData.api_voicef>1){
-					$.each(this.hourlies, function(vname, vnum){
+					var vnames = Object.keys(this.hourlies);
+					vnames.sort();
+					$.each(vnames, function(i,vname){
+						var vnum = self.hourlies[vname];
+						var hhStr = vname.substring(0,2);
+						var mmStr = vname.substring(2);
 						$("<div/>")
 							.addClass("hover")
 							.addClass("voice")
 							.data("vnum", vnum)
-							.text(vname)
+							.text(hhStr + ":" + mmStr)
 							.appendTo(".tab_mstship .shipInfo .hourlies");
 					});
 					$("<div/>").addClass("clear").appendTo(".tab_mstship .shipInfo .hourlies");

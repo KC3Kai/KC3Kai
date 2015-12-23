@@ -225,7 +225,7 @@ Used by SortieManager
 				ship.afterHp[1] = ship.hp[1];
 			}
 		} else {
-			if (PlayerManager.combinedFleet === 1) {
+			if (PlayerManager.combinedFleet === 1 || PlayerManager.combinedFleet === 3) {
 				result = DA.analyzeRawCarrierTaskForceBattleJS(battleData); 
 				// console.log("Carrier Task Force");
 			} else {
@@ -369,8 +369,9 @@ Used by SortieManager
 		
 		this.mvps = [resultData.api_mvp || 0,resultData.api_mvp_combined || 0].filter(function(x){return !!x;});
 		var fleetDesg = [KC3SortieManager.fleetSent - 1,1];
-		this.lostShips = [resultData.api_lost_flag,resultData.api_lost_flag_combined || [-1,0,0,0,0,0,0]]
+		this.lostShips = [resultData.api_lost_flag  || [-1,0,0,0,0,0,0], resultData.api_lost_flag_combined || [-1,0,0,0,0,0,0]]
 			.map(function(lostFlags,fleetNum){
+				console.log("lostFlags", lostFlags);
 				return lostFlags.filter(function(x){return x>=0;}).map(function(checkSunk,rosterPos){
 					if(!!checkSunk) {
 						var rtv = PlayerManager.fleets[fleetDesg[fleetNum]].ships[rosterPos];

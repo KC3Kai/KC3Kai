@@ -231,6 +231,11 @@
 	/*background:#ffc;*/
 	margin:0px 10px 0px 0px;
 }
+.tab_maps .sortie_list .nonodes {
+	height:30px;
+	line-height:30px;
+	font-size:12px;
+}
 .tab_maps .sortie_list .sortie_edge {
 	width:30px;
 	height:30px;

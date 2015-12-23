@@ -65,24 +65,6 @@
 				data.expedConf[i] = { greatSuccess: false };
 			}
 
-			// TODO: the following part immigrates old data, so can be removed in next version
-			if (localStorage.expedTabLastPick) {
-				try {
-					var oldData = JSON.parse( localStorage.expedTabLastPick );
-					for (var fleetNum = 1; fleetNum <= 4; ++fleetNum) {
-						var oldRecord = oldData[fleetNum];
-						data.fleetConf[fleetNum].expedition = 
-							oldRecord.selectedExpedition;
-						data.expedConf[oldRecord.selectedExpedition].greatSuccess = 
-							oldRecord.isGreatSuccess;
-					}
-				} catch (err) {
-					console.log( "error when immigrating old data:", err);
-				} finally {
-					localStorage.removeItem("expedTabLastPick");
-				}
-			}
-
 			localStorage.expedTab = JSON.stringify( data );
 		} else {
 			data = JSON.parse( localStorage.expedTab );
@@ -141,7 +123,7 @@
 		if(ConfigManager.checkLiveQuests && ConfigManager.language=="en"){
 			$.ajax({
 				dataType: "JSON",
-				url: "https://cdn.rawgit.com/KC3Kai/kc3-translations/master/data/"+ConfigManager.language+"/quests.json?v="+((new Date()).getTime()),
+				url: "https://raw.githubusercontent.com/KC3Kai/kc3-translations/master/data/"+ConfigManager.language+"/quests.json?v="+((new Date()).getTime()),
 				success: function(newQuestTLs){
 					if(JSON.stringify(newQuestTLs) != JSON.stringify(KC3Meta._quests)){
 						console.log("new quests detected, updating quest list from live");
@@ -348,9 +330,11 @@
 			var result = {};
 			for(var i = 0; i < 4; i++) {
 				if(shipObj.items[i]> -1){
+					var item = KC3GearManager.get(shipObj.items[i]);
+					var rank = (item.ace === -1) ? item.stars : item.ace ;
 					result["i".concat(i+1)] ={
-							"id":KC3GearManager.get(shipObj.items[i]).masterId,
-							"rf":KC3GearManager.get(shipObj.items[i]).stars
+							"id":item.masterId,
+							"rf":rank
 					};
 				} else {break;}
 			}
@@ -931,6 +915,9 @@
 						case 2:
 							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedSurface") );
 							break;
+						case 3:
+							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedTransport") );
+							break;
 						default:
 							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedNone") );
 							break;
@@ -977,8 +964,11 @@
 				// we'll try switching to the next available fleet if any
 				var fleets = PlayerManager.fleets;
 				var availableFleetInd = -1;
+				// if combined fleet is in use, the second fleet is not available
+				// so we can skip it
+				var fleetStartInd = (PlayerManager.combinedFleet !== 0) ? 2 : 1;
 				// start from the 2nd fleet
-				for (var i = 1; i < 4; ++i) {
+				for (var i = fleetStartInd; i < 4; ++i) {
 					// find one available fleet
 					if (fleets[i].mission[0] === 0) {
 						availableFleetInd = i;
@@ -1583,8 +1573,11 @@
 			// choose one available fleet if any, setup variables properly
 			var fleets = PlayerManager.fleets;
 			var availableFleetInd = -1;
+			// if combined fleet is in use, the second fleet is not available
+			// so we can skip it
+			var fleetStartInd = (PlayerManager.combinedFleet !== 0) ? 2 : 1;
 			// start from the 2nd fleet
-			for (var i = 1; i < 4; ++i) {
+			for (var i = fleetStartInd; i < 4; ++i) {
 				// find one available fleet
 				if (fleets[i].mission[0] === 0) {
 					availableFleetInd = i;
