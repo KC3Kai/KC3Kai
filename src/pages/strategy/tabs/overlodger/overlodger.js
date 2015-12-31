@@ -260,8 +260,8 @@
 					rating.val = 5;
 					rating.NG = rating.OK = 0;
 				} else {
-					rating.NG = 100*(CONST.ratingOffset - Math.min(CONST.ratingOffset,rating.val))/CONST.ratingMagnitude,
-					rating.OK = 100*(Math.max(CONST.ratingOffset,rating.val) - CONST.ratingOffset)/CONST.ratingMagnitude
+					rating.NG = 100*(CONST.ratingOffset - Math.min(CONST.ratingOffset,rating.val))/CONST.ratingMagnitude;
+					rating.OK = 100*(Math.max(CONST.ratingOffset,rating.val) - CONST.ratingOffset)/CONST.ratingMagnitude;
 				}
 				
 				rating.excess = Math.max(rating.NG,rating.OK)>100;
@@ -475,6 +475,11 @@
 	----------------------------------------------- */
 	
 	function refreshCurrentBuffer(){
+		// This is a private function for the lodger tab itself though.
+		/*jshint validthis: true*/
+		if(this !== activeTab.definition) {
+			return false;
+		}
 		var self = this;
 		allBuffer = Object.keys(this.dataBuffer)
 			.filter(function(x){return self.filter[x];})
@@ -482,6 +487,8 @@
 			.reduce(function(x,y){return x.concat(y);});
 		this.flatBuffer = Object.freeze(allBuffer.slice(0));
 		this.dataRating = calculateRating.apply(null,[lookupDays()].concat(allBuffer));
+		
+		return true;
 	}
 	
 	function calculateMaximumBacklookup(timeRange,givenDate){
