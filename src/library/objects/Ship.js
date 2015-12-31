@@ -242,7 +242,8 @@ KC3改 Ship Object
 			docking:
 				this.isRepaired() ?
 				Math.ceil(KC3TimerManager.repair(PlayerManager.repairShips.indexOf(this.rosterId)).remainingTime()) / 1000 :
-				RepairCalc.dockingInSecJSNum( this.master().api_stype, this.level, this.hp[0], this.hp[1] ),
+				/* RepairCalc.dockingInSecJSNum( this.master().api_stype, this.level, this.hp[0], this.hp[1] ) */
+				Math.hrdInt('floor',this.repair[0],3,1),
 			akashi:
 				( this.hp[0] / this.hp[1] > 0.50 && this.isFree()) ?
 				RepairCalc.facilityInSecJSNum( this.master().api_stype, this.level, this.hp[0], this.hp[1] ) : 0
@@ -418,10 +419,13 @@ KC3改 Ship Object
 		if(args.noAmmo) delete mapping['1'];
 		
 		/* clear pending consumption, by iterating each keys */
+		var lsFirst = this.lastSortie[0];
+		
 		Object.keys(this.pendingConsumption).forEach(function(shipConsumption,iterant){
 			var
 				dat = self.pendingConsumption[shipConsumption],
-				rsc = [0,0,0,0,0,0,0,0];
+				rsc = [0,0,0,0,0,0,0,0],
+				sid = self.lastSortie.indexOf(shipConsumption);
 			// Iterate supplied ship part
 			Object.keys(mapping).forEach(function(key){
 				rsc[mapping[key]] += dat[index][key] * mult * (1 + (mapping[key]===3 && 4));
@@ -437,14 +441,18 @@ KC3改 Ship Object
 			},shipConsumption);
 			
 			if(dat.every(function(consumptionData){
-				return consumptionData.every(function(resource){
-					return !resource;
-				});
+				return consumptionData.every(function(resource){ return !resource; });
 			})) {
+				if(sid>=0)
+					self.lastSortie.splice( sid ,1);
 				delete self.pendingConsumption[shipConsumption];
 			}
 			/* Comment Stopper */
 		});
+		
+		if(this.lastSortie.indexOf(lsFirst) < 0) {
+			this.lastSortie.unshift(lsFirst);
+		}
 		
 		KC3ShipManager.save();
 	}

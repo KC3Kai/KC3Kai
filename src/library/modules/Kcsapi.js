@@ -401,6 +401,19 @@ Previously known as "Reactor"
 			KC3Network.trigger("Fleet");
 		},
 		
+		/* Mamiya
+		-------------------------------------------------------*/
+		"api_req_member/itemuse_cond":function(params, response, headers){
+			var
+				fleetId = parseInt(params.api_deck_id,10)-1,
+				useFlag = parseInt(params.api_use_type,10),
+				fMamiya = !!(useFlag & 1),
+				fIrako  = !!(useFlag & 2);
+			
+			// there's nothing to do, for now
+			// feel free to check out this listener if you want.
+		},
+		
 		/*-------------------------------------------------------*/
 		/*-------------------[ CONSTRUCTION ]--------------------*/
 		/*-------------------------------------------------------*/
@@ -484,7 +497,7 @@ Previously known as "Reactor"
 				data: [0,0,0,0,-delta,0,0,0]
 			},"crship"+params.api_kdock_id);
 			KC3TimerManager.build(params.api_kdock_id).activate(
-				(new Date()).getTime());
+				Date.now());
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Timers");
 		},
@@ -531,14 +544,14 @@ Previously known as "Reactor"
 				// If swapping on same fleet
 				if(OldSwaperSlot >= 0){
 					PlayerManager.fleets[oldFleet].ships[OldSwaperSlot % 6] = OldSwapeeSlot;
-					PlayerManager.fleets[oldFleet].checkAkashi();
+					PlayerManager.fleets[oldFleet].checkAkashi(true);
 				}
 				PlayerManager.fleets[FleetIndex-1].ships[ChangedIndex] = ChangingShip;
 			}else{
 				PlayerManager.fleets[FleetIndex-1].ships.splice(ChangedIndex, 1);
 				PlayerManager.fleets[FleetIndex-1].ships.push(-1);
 			}
-			PlayerManager.fleets[FleetIndex-1].checkAkashi();
+			PlayerManager.fleets[FleetIndex-1].checkAkashi(true);
 			KC3Network.trigger("Fleet");
 		},
 		
@@ -1311,6 +1324,35 @@ Previously known as "Reactor"
 				KC3Network.trigger("Quests");
 			}
 			KC3Network.trigger("Fleet");
+		},
+		
+		/* Item Consumption
+		-------------------------------------------------------*/
+		"api_req_member/itemuse":function(params, response, headers){
+			var
+				ctime  = (new Date(headers.Date)).getTime(),
+				itemId = parseInt(params.api_useitem_id,10),
+				fForce = parseInt(params.api_force_flag,10),
+				fExchg = parseInt(params.api_exchange_type,10), // pops out from present box
+				aData  = response.api_data,
+				fChuui = aData.api_caution_flag,
+				flags  = aData.api_flag;
+			
+			switch(flags){
+				case 1:
+					// Obtained Item
+					var dItem  = aData.api_getitem; // Use Master, Master ID, Get Count "api_getitem":{"api_usemst":5,"api_mst_id":44,"api_getcount":5000} (from furni box)
+					break;
+				case 2:
+					// Obtained Material
+					var dMatr  = aData.api_material;
+					KC3Database.Naverall({
+						hour: Math.hrdInt("floor",ctime/3.6,6,1),
+						type: "useitem" + itemId,
+						data: dMatr
+					});
+					break;
+			}
 		},
 		
 		/* Arsenal Item List

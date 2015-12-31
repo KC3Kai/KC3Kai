@@ -59,23 +59,19 @@ Uses KC3Quest objects to play around with
 			var millisecondsInDay = 24*60*60*1000;
 			var ServerJstClock = new Date( serverJstTime );
 			var today8PmGmt = new Date(ServerJstClock.getTime());
-			today8PmGmt.setUTCHours(20);
-			today8PmGmt.setUTCMinutes(0);
-			today8PmGmt.setUTCSeconds(0);
-			today8PmGmt.setUTCMilliseconds(0);
-			var tomorrow8PmGmt = new Date(today8PmGmt.getTime() + millisecondsInDay);
+			today8PmGmt.shiftDate(0,true,{Hours:20});
 			
-			var thisWeekSunday8PmGmt = new Date(today8PmGmt.getTime() - today8PmGmt.getUTCDay()*millisecondsInDay);
-			var nextWeekSunday8PmGmt = new Date(thisWeekSunday8PmGmt.getTime() + 7*millisecondsInDay);
+			var tomorrow8PmGmt = (new Date(today8PmGmt)).shiftDate(1);
 			
-			var thisMonthFirstDay8PmGmt = new Date(today8PmGmt.getTime() - (today8PmGmt.getUTCDate()-1)*millisecondsInDay);
-			var nextMonthFirstDay8PmGmt = new Date(thisMonthFirstDay8PmGmt.getTime());
-			nextMonthFirstDay8PmGmt.setUTCMonth(thisMonthFirstDay8PmGmt.getUTCMonth() + 1);
-			var thisMonthLastDay8PmGmt = new Date(nextMonthFirstDay8PmGmt.getTime() - millisecondsInDay);
+			var thisWeekSunday8PmGmt = (new Date(today8PmGmt)).shiftWeek(0,-1,0);
+			var nextWeekSunday8PmGmt = (new Date(thisWeekSunday8PmGmt)).shiftWeek(null,null,1);
 			
-			var nextNextMonthFirstDay8PmGmt = new Date(nextMonthFirstDay8PmGmt.getTime());
-			nextNextMonthFirstDay8PmGmt.setUTCMonth(nextMonthFirstDay8PmGmt.getUTCMonth() + 1);
-			var nextMonthLastDay8PmGmt = new Date(nextNextMonthFirstDay8PmGmt.getTime() - millisecondsInDay);
+			var thisMonthFirstDay8PmGmt = (new Date(today8PmGmt)).shiftMonth(0);
+			var nextMonthFirstDay8PmGmt = (new Date(thisMonthFirstDay8PmGmt)).shiftMonth(1);
+			var thisMonthLastDay8PmGmt = (new Date(nextMonthFirstDay8PmGmt)).shiftDate(-1);
+			
+			var nextNextMonthFirstDay8PmGmt = (new Date(nextMonthFirstDay8PmGmt)).shiftMonth(1);
+			var nextMonthLastDay8PmGmt = (new Date(nextNextMonthFirstDay8PmGmt)).shiftDate(-1);
 			
 			//console.log("============================================");
 			//console.log( ServerJstClock );

@@ -7,8 +7,9 @@ Uses Dexie.js third-party plugin on the assets directory
 (function(){
 	"use strict";
 	
+	var dbIndex = 0;
+	
 	window.KC3Database = {
-		index: 0,
 		con:{},
 		
 		init :function( defaultUser ){
@@ -280,7 +281,7 @@ Uses Dexie.js third-party plugin on the assets directory
 			this.con.screenshots.add({
 				hq : 0,
 				imgur : imgur,
-				ltime : Math.floor((new Date()).getTime()/1000),
+				ltime : Math.floor(Date.now()/1000),
 			});
 		},
 		
@@ -646,6 +647,81 @@ Uses Dexie.js third-party plugin on the assets directory
 				.toArray(callback);
 		},
 		
+		get_lodger_bound :function(callback){
+			this.con.navaloverall
+				.where("hq").equals(this.index)
+				.limit(1)
+				.toArray(function(data){
+					switch(data.length){
+						case 0:
+							callback(null);
+						break;
+						default:
+							callback(data.shift().hour * 3600000);
+						break;
+					}
+				});
+		},
+		
+		get_lodger_data :function(hFilters, callback){
+			/*
+				DataHead  Param1
+				sortie    SortieDBID
+				pvp       PvPID
+				exped     ExpedDBID
+				quest     QuestID
+				crship    ShipSlot
+				critem    ------
+				dsship    ShipMaster
+				dsitem    ItemMaster
+				akashi    ShipMaster
+				rmditem   ItemMaster
+				remodel   ShipMaster
+				regen     ------
+			*/
+			// hour filter
+			hFilters = (
+				(
+					typeof hFilters == 'object' && (hFilters instanceof Array) &&
+					hFilters.length >= 2 && hFilters
+				) || [NaN,NaN]
+			).slice(0,2)
+				.map(function(hourVal,index){
+					hourVal = parseInt(hourVal);
+					hourVal = (isFinite(hourVal) && !isNaN(hourVal) && hourVal);
+					switch(index) {
+						case 0:
+							return hourVal || -Infinity;
+						case 1:
+							return hourVal || +Infinity;
+						default:
+							throw new RangeError("Invalid array range");
+					}
+				});
+			this.con.navaloverall
+				.where("hq").equals(this.index)
+				.and(function(data){
+					// hFilter Condition Definition:
+					// false: if specified hour outside the boundary
+					// prec : undefined condition is towards infinite of its polar
+					return hFilters[0] <= data.hour && data.hour <= hFilters[1];
+				})
+				.reverse()
+				.toArray(callback);
+		},
+		
 	};
+	
+	// Prevent the user ID stored as non-string
+	Object.defineProperty(window.KC3Database,'index',{
+		get:function(){return String(dbIndex);},
+		set:function(value){dbIndex = String(value);},
+		enumerable:true
+	});
+	
+	// probably keep this to save memory
+	function processLodgerKey(k) {
+		return /([a-z]+)/.exec(k)[1];
+	}
 	
 })();

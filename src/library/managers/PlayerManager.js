@@ -49,16 +49,16 @@ Does not include Ships and Gears which are managed by other Managers
 		},
 		
 		setFleets :function( data ){
-			this.fleets[0].update( data[0] || {} );
-			this.fleets[1].update( data[1] || {} );
-			this.fleets[2].update( data[2] || {} );
-			this.fleets[3].update( data[3] || {} );
+			var self = this;
+			[0,1,2,3].forEach(function(i){
+				self.fleets[i].update( data[i] || {} );
+			});
 			localStorage.fleets = JSON.stringify(this.fleets);
 		},
 		
 		setRepairDocks :function( data ){
 			var lastRepair = this.repairShips.map(function(x){return x;}); // clone
-			this.repairShips = [];
+			this.repairShips.splice(0);
 			var dockingShips = [];
 			var self = this;
 			$.each(data, function(ctr, ndock){
@@ -101,8 +101,8 @@ Does not include Ships and Gears which are managed by other Managers
 						dockingShips[key] = v.completeTime;
 					});
 				} catch (err) {
-					console.log( "Error while processing cached docking ship" );
-					console.log(err);
+					console.error( "Error while processing cached docking ship" );
+					console.error(err);
 				}
 			}
 			return dockingShips;
@@ -129,6 +129,7 @@ Does not include Ships and Gears which are managed by other Managers
 		setResources :function( data, stime ){
 			if(typeof localStorage.lastResource == "undefined"){ localStorage.lastResource = 0; }
 			var ResourceHour = Math.floor(stime/3600);
+			this.hq.lastMaterial = data;
 			if(ResourceHour == localStorage.lastResource){ return false; }
 			localStorage.lastResource = ResourceHour;
 			KC3Database.Resource({
@@ -210,6 +211,7 @@ Does not include Ships and Gears which are managed by other Managers
 				self      = this,
 				// get server time (as usual)
 				ctime     = Math.hrdInt("floor",(new Date(data.time)).getTime(),3,1);
+			
 			if(!(this.hq.lastPortTime && this.hq.lastMaterial)) {
 				if(!this.hq.lastPortTime)
 					this.hq.lastPortTime = ctime;
@@ -217,6 +219,9 @@ Does not include Ships and Gears which are managed by other Managers
 					this.hq.lastMaterial = data.matAbs;
 				return false;
 			}
+			
+			this.fleets.forEach(function(fleet){ fleet.checkAkashi(true); });
+			
 			var
 				// get current player regen cap
 				regenCap  = this.hq.getRegenCap(),
@@ -245,6 +250,8 @@ Does not include Ships and Gears which are managed by other Managers
 				data:regenVal.concat([0,0,0,0])
 			});
 			this.hq.lastMaterial = data.matAbs || this.hq.lastMaterial;
+			
+			this.hq.save();
 		},
 		
 		loadFleets :function(){

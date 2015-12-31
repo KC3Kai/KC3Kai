@@ -18,7 +18,8 @@ KC3改 Ship Box for Natsuiro theme
 	Short ship box for combined fleets
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.commonElements = function( rosterId ){
-		$(".ship_img img", this.element).attr("src", KC3Meta.shipIcon(this.shipData.masterId));
+		$(".ship_img img", this.element).attr("src", KC3Meta.shipIcon(this.shipData.masterId)).attr("title",
+		JSON.stringify(this.shipData.pendingConsumption));
 		$(".ship_name", this.element).text( this.shipData.name() );
 		$(".ship_type", this.element).text( this.shipData.stype() );
 		
@@ -146,6 +147,20 @@ KC3改 Ship Box for Natsuiro theme
 				this.element.css("background-color", "rgba(191,255,100,0.15)");
 			}
 		}
+		
+		this.hideAkashi();
+	};
+	
+	/* HIDE AKASHI TIMER
+	(If enabled?) Show the timer whenever hover akashi's shipbox.
+	This element will be removed if it does not meet the required condition.
+	[Being repaired/Repairing]
+	---------------------------------------------------*/
+	KC3NatsuiroShipbox.prototype.hideAkashi = function(){
+		if(!this.shipData.akashiMark)
+			$(".ship_repair_data",this.element).remove();
+		else
+			$(".ship_repair_data",this.element).data('sid',this.shipData.rosterId);
 	};
 	
 	/* SHOW PREDICTION

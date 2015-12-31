@@ -5,49 +5,86 @@
 
 <!-- HELP TOPICS -->
 <div class="page_help">
-	<div class="help_q">Not finished yet</div>
-	<div class="help_a">Still thinking the idea -- Rei_Fan49</div>
+	<div class="help_q">Range Scoping? I don't get it..</div>
+	<div class="help_a"><p>It determines on how you want to look onto the lodger itself.</p><p><strong>[Look back]</strong> attempts to collect every data up to the specified interval on the past. (3 days look back from 24th Dec yields 21st Dec, and so on)</p><p><strong>[Look around]</strong> attempts to collect every data from initial of the interval to next possible time from given interval.<br>Example given date is <strong>Wednesday 23 December 2015</strong>. Configured Interval is about <strong>2 weeks</strong>. It will yield the boundary between <strong>Sunday 13 December 2015</strong> and <strong>Sunday 27 December 2015</strong>.</p></div>
 </div>
 
 <!-- FILTERS -->
-<div class="expedNumBoxes page_panel">
-	 <div class="expedNumBox expedNumBox_1">
-		
-	 </div>
-	 <div class="expedNumBox expedNumBox_2">
-		
-	 </div>
-	 <div class="expedNumBox expedNumBox_3">
-		
-	 </div>
-	 <div class="expedNumBox expedNumBox_4">
-		
-	 </div>
-	 <div class="expedNumBox expedNumBox_5">
-		
-	 </div>
-	 <div class="expedNumBox fleetCounts">
-	 </div>
-	 <div class="clear"></div>
+<div class="filterBoxes page_panel">
+	<div class="filterBox filter_range">
+		<span>Time Range</span>
+		<div class=filterRangeLen>
+			<span>Length</span>
+			<input type="number" name="range-scale" value="1" min="1" max="364" placeholder="X" required />
+		</div>
+	</div>
+	<div class="filterBox filter_dataDB">
+	</div>
+	<div class="filterBox filter_dataMS">
+	</div>
+	<div class="filterBox filter_base">
+		<div class=filterScopes>
+			<span>Range Scoping</span>
+			<div class=filterScope>
+				<input type="radio" name="range-scope" value=true  checked />
+				<div class=filterText>Look back</div>
+				<div class=clear></div>
+			</div>
+			<div class=filterScope>
+				<input type="radio" name="range-scope" value=false         />
+				<div class=filterText>Look around</div>
+				<div class=clear></div>
+			</div>
+		</div>
+		<div class=filterDate>
+			<span>Date Time Base</span>
+			<input type="datetime-local" name="range-source" max="now" />
+		</div>
+		<div class=filterDate>
+			<span>Date Travel Back Limit</span>
+			<input type="datetime-local" name="range-maximum" readonly disabled />
+		</div>
+	</div>
+	<div class="clear"></div>
 </div>
 
-<!-- PAGINATION -->
-<div class="exped_pages">
-	 <ul class="pagination pagination-sm"></ul>
-</div>
-
+<!-- INCOME-EXPENSE DATA -->
 <div class="page_padding">
-	<div class="exped_list"></div>
+	<div class="lodger-statistics">
+		<div class="lodger-data empty-data">
+			Test
+		</div>
+	</div>
 </div>
 
 <!-- FACTORY -->
 <div class="factory">
+	<!-- Time Range Filter -->
+	<div class=filterType>
+		<input type="radio" name="range-type"/>
+		<div class=filterText></div>
+		<div class=clear></div>
+	</div>
 	
-	<!-- Expedition checkboxes for candidates -->
-	<div class="expedNum">
-		<div class="expedCheck"><input type="checkbox" CHECKED /></div>
-		<div class="expedText"></div>
-		<div class="expedTime"></div>
+	<!-- Data Type Filter -->
+	<div class=filterData>
+		<input type="checkbox" checked />
+		<div class=filterText></div>
+		<div class=clear></div>
+	</div>
+	
+	<!-- Data Rating Filter -->
+	<div class="lodger-data">
+		<div class="bar INV">
+			<div class="bar NG"></div>
+		</div>
+		<div class="info">
+			<div class="rating"></div>
+			<div class="type"></div>
+		</div>
+		<div class="bar NM">
+			<div class="bar OK"></div>
+		</div>
 		<div class="clear"></div>
 	</div>
 	

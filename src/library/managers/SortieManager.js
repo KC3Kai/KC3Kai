@@ -292,9 +292,14 @@ Xxxxxxx
 				self = this,
 				cons = {};
 			this.fleetSent = 1;
-			console.log("Pre-sortie State",PlayerManager.hq.lastSortie);
-			cons.name = self.isPvP() ? ("pvp" + (self.onSortie = (pvpData.win + pvpData.lose))) : ("sortie" + self.onSortie);
+			cons.name = self.isPvP() ? (
+				/* There's a possibility to encounter String bug
+				   -- if either win/lose counter is zero
+				*/
+				"pvp" + (self.onSortie = (Number(pvpData.win) + Number(pvpData.lose) + 1))
+			) : ("sortie" + self.onSortie);
 			cons.resc = Array.apply(null,{length:8}).map(function(){return 0;});
+			console.log("Pre-%s State",cons.name,PlayerManager.hq.lastSortie);
 			// Calculate sortie difference with buffer
 			(PlayerManager.hq.lastSortie || []).forEach(function(fleet,fleet_id){
 				fleet.forEach(function(after,ship_fleet){
@@ -350,7 +355,7 @@ Xxxxxxx
 			if(this.onSortie)
 				KC3Database.Naverall({
 					hour: Math.hrdInt('floor',this.sortieTime/3.6,3,1),
-					type: "sortie" + this.onSortie,
+					type: cons.name,
 					data: this.materialGain.slice(0)
 				},null,true);
 			// Remove sortie comparison buffer

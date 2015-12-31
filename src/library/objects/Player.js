@@ -57,7 +57,7 @@ Instantiatable class to represent one player
 	};
 	
 	KC3Player.prototype.checkRankPoints = function(){
-		var TimestampNow = (new Date()).getTime();
+		var TimestampNow = Date.now();
 		
 		var PvPResetTime;
 		

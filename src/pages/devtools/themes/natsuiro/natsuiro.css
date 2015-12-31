@@ -1556,6 +1556,37 @@ list-style: none;
 	height:8px;
 }
 
+/* ==> Akashi Timer <== */
+.module.fleet .lship:not(:hover) .ship_repair_data {
+	display:none;
+}
+.module.fleet .lship:hover .ship_repair_data {
+	display:block;
+}
+.module.fleet .lship .ship_repair_data {
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	font-size:10px;
+	width:100%;
+	height:100%;
+}
+
+.module.fleet .lship .ship_repair_tick:before {
+	content:"x" attr(data-tick);
+}
+
+.module.fleet .lship .ship_repair_tick,
+.module.fleet .lship .ship_repair_timer {
+	width:50%;
+	float:left;
+	text-align:center;
+	background-color:white;
+	color:red;
+}
+/* ==> Akashi Timer <== */
+
 .module.fleet .lship .ship_col2 {
 	width:40px;
 	height:40px;
@@ -1826,6 +1857,7 @@ list-style: none;
 	float:left;
 	border:1px solid #000;
 	background:#555;
+	position:relative;
 }
 .module.fleet .sship .ship_hp_bar {
 	height:6px;

@@ -275,13 +275,201 @@ Object.defineProperty(Array.prototype, "equals", {enumerable: false});
 /*******************************\
 |*** Date                       |
 \*******************************/
-Date.prototype.format = function (mask, utc) {
-		return dateFormat(this, mask, utc);
-};
+(function(){
+	var
+		WeekStrings   = dateFormat.i18n.dayNames.reduce(function(ary,val){
+			ary[ (val.length != 3)+0 ].push(val);
+			return ary;
+		},[[],[]]),
+		ResetableKeys = ['Seconds','Minutes','Hours','Date','Month'],
+		ShiftableKeys = ResetableKeys.concat(['FullYear']);
+	
+	function shiftTime(key,step,clear,offset) {
+		var self = this;
+		
+		if(ShiftableKeys.indexOf(key) < 0) {
+			console.log(arguments);
+			throw new Error("Cannot shift invalid time key ("+key+")");
+		}
+		
+		clear  = !!clear;
+		step   = parseInt(step,10);
+		step   = (!isNaN(step) && isFinite(step)) ? step+clear : 1;
+		offset = $.extend({},offset);
+		
+		var ki = ShiftableKeys.indexOf(key);
+		
+		if(clear) {
+			this.resetTime(ResetableKeys.filter(function(k,i){return i < ki;}));
+		}
+		
+		Object.keys(offset).forEach(function(k){
+			if(ResetableKeys.indexOf(k) < ki &&
+				['number','string'].some(function(desiredType){
+					return typeof offset[k] == desiredType;
+				})
+			) {
+				offset[k] = parseInt(offset[k],10);
+				if(isNaN(offset[k]) || !isFinite(offset[k]))
+					return false;
+				
+				self['setUTC'+k](self['getUTC'+k]()+(offset[k]));
+			} else {
+				delete offset.k;
+			}
+		});
+		
+		this['setUTC'+key](this['getUTC'+key]()+(step));
+		return this;
+	}
+	
+	Object.defineProperties(Date.prototype,{
+		format: { value: function format(mask, utc) {
+			return dateFormat(this, mask, utc);
+		}},
+		shiftHour : { get: function () { return shiftTime.bind(this,'Hours'); } },
+		shiftDate : { get: function () { return shiftTime.bind(this,'Date' ); } },
+		shiftWeek : { get: function () {
+			return (function shiftWeek (target,lookType,step,clear,offset) {
+				/* Test Object: Monday, 4 January 2016
+					shiftWeek('Sun',0,false,null) => Sunday, 3 January 2016
+					shiftWeek(0, +1,false,null) => Sunday, 10 January 2016
+					shiftWeek('Tuesday',-1,false,null) => Tuesday, 28 December 2015
+				*/
+				var calibr;
+				var args = Array.apply(null,arguments);
+				lookType = parseInt(lookType,10);
+				lookType = isFinite(lookType) && lookType || 0;
+				
+				switch(typeof target){
+					case 'number':
+						var check = WeekStrings.map(function(array){return array[target];})
+							.filter(function(value){return typeof value == 'string';}).pop();
+						if(typeof check !== 'undefined') {
+							// Correct index detection
+							
+						} else {
+							// Invalid index detection
+							throw new RangeError(["Invalid range (",String(target),")"].join(''));
+						}
+					break;
+					case 'undefined':
+						// "Empty" argument treated as current day
+						args[0] = this.getDay();
+						return this.shiftWeek.apply(this,args);
+					default:
+						if(target === null) {
+							// Nullity check
+							args[0] = undefined;
+							return this.shiftWeek.apply(this,args);
+						}
+						
+						var checkKey = parseInt(target,10);
+						if(!isNaN(checkKey)) {
+							// Number (on string) detection
+							args[0] = checkKey;
+							return this.shiftWeek.apply(this,args);
+						}
+						
+						// Any type detection
+						checkKey = WeekStrings.filter(function(array){return array.indexOf(target)>=0;}).pop();
+						if(typeof checkKey === 'undefined') {
+							// Bad string conversion variable detection
+							throw new ReferenceError(["Bad week name reference (",String(target),")"].join(''));
+						} else {
+							target = checkKey.indexOf(target);
+						}
+					break;
+				}
+				
+				calibr = (target - this.getDay());
+				// Adjust calibrator boundary
+				while(calibr >  3 && lookType <= 0) calibr -= 7;
+				while(calibr < -3 && lookType >= 0) calibr += 7;
+				calibr -= parseInt(calibr / 7,10) * 7 * Math.sign(lookType);
+				
+				args.splice(0,2);
+				
+				step = parseInt(step,10);
+				if(isNaN(step) || !isFinite(step))
+					step = 0;
+				
+				args[0] = 7 * step + calibr - !!clear;
+				return this.shiftDate.apply(this,args);
+			}).bind(this);
+		}},
+		shiftMonth: { get: function () { return shiftTime.bind(this,'Month'); } },
+		shiftYear : { get: function () { return shiftTime.bind(this,'FullYear'); } },
+		resetTime : { value: function(clearTable) {
+			var
+				self = this,
+				cFunc = function(){return false;};
+			
+			switch(typeof clearTable) {
+				case 'number':
+				case 'string':
+					// Pick nth+1 element from ResetableKeys
+					// Invalid >> pick all elements
+					clearTable = parseInt(clearTable,10);
+					clearTable = ((clearTable >= 0) && !isNaN(clearTable) && isFinite(clearTable) || ResetableKeys.length) && clearTable;
+					
+					// Provided String or Number ->
+					// Pick nth+1 elements from start
+					cFunc = function(x,i){
+						return i <= clearTable;
+					};
+					break;
+				default:
+					// Pick any matching element from Resetable Array
+					// Invalid >> pick all elements
+					clearTable = ((typeof clearTable === 'object' && clearTable instanceof Array && clearTable) || ResetableKeys);
+					
+					// Provided Anything else
+					// Pick any element that match the clearTable data (either value or index)
+					// ['Seconds',2,3] => ['Seconds','Hours','Date']
+					cFunc = function(key,ind){
+						return [key,ind].some(function(val){ return clearTable.indexOf(val) >= 0; });
+					};
+					break;
+			}
+			
+			clearTable = ResetableKeys.filter(cFunc);
+			
+			clearTable.forEach(function(k){
+				self['setUTC' + k](k === 'Date' ? 1 : 0);
+			});
+			return this;
+		}},
+	});
+})(Date);
 
 /*******************************\
 |*** Math                       |
 \*******************************/
+/* STATISTICS (STANDARD DEVIATION)
+ - Sample based deviation (default)
+ - Population based deviation
+-------------------------------*/
+Math.stdev  = function(p1f /*, data*/){
+	var args = [].map.call(arguments,function(val){
+		return Number(val);
+	});
+	if(typeof p1f !== 'boolean') {
+		p1f = false;
+	} else {
+		args.splice(0,1);
+	}
+	
+	var avg;
+	avg = args.reduce(function(cAve,nVal,nInd){
+		return ((cAve * nInd) + nVal) / (nInd + 1);
+	},0);
+	
+	return Math.sqrt(args.reduce(function(tDev,nVal,nInd){
+		return tDev + Math.pow(nVal - avg,2);
+	},0)/(args.length - !p1f));
+};
+
 /* LIMIT ROUNDING
 -------------------------------*/
 Math.qckInt = function(command,value,rate,rev) {
@@ -292,7 +480,7 @@ Math.qckInt = function(command,value,rate,rev) {
 	rate    = rate    || 0;
 	rev     = !rev;
 	var shift = Math.pow(10,rate);
-	return Math[command](value * shift) / (rev ? shift : 1);
+	return Math.sign(value) * Math[command](Math.abs(value) * shift) / (rev ? shift : 1);
 };
 Math.hrdInt = function(command,value,rate,rev) {
 	return Math.qckInt(command,value,-rate,rev);

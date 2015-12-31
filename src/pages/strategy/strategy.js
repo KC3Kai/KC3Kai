@@ -2,6 +2,19 @@
 	"use strict";
 	_gaq.push(['_trackPageview']);
 	
+	var activeTab;
+	
+	Object.defineProperties(window,{
+		activeTab:{
+			get:function(){return activeTab;},
+			set:function(newTab){
+				if(newTab instanceof KC3StrategyTab){
+					activeTab = newTab;
+				}
+			}
+		}
+	});
+	
 	$(document).on("ready", function(){
 		// Initialize data managers
 		ConfigManager.load();
@@ -34,6 +47,7 @@
 			var thisTab = KC3StrategyTabs[ KC3StrategyTabs.loading ];
 			if(typeof thisTab != "undefined"){
 				// Execute Tab with callback
+				window.activeTab = thisTab;
 				thisTab.apply();
 				window.scrollTo(0,0);
 			}else{

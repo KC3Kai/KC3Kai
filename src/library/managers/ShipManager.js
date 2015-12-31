@@ -87,7 +87,7 @@ Saves and loads list to and from localStorage
 				rs[2] = -df[2];
 				// Store Difference to Database
 				KC3Database.Naverall({
-					hour: Math.hrdInt('floor', (new Date()).getTime()/3.6 ,6,1),
+					hour: Math.hrdInt('floor', Date.now()/3.6 ,6,1),
 					type: 'akashi' + sp.masterId,
 					data: rs
 				});

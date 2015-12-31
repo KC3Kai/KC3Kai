@@ -24,7 +24,7 @@ Has functions for TimerManager to use
 		if(typeof faceId != "undefined"){ if(faceId>0){ this.faceId = faceId; } }
 		if(typeof expedNum != "undefined"){ this.expedNum = expedNum; }
 		
-		var remaining = this.completion - (new Date()).getTime();
+		var remaining = this.completion - Date.now();
 		remaining = Math.ceil((remaining - (ConfigManager.alert_diff*1000))/1000);
 		if(remaining <= 0){
 			this.alerted = true;
@@ -68,7 +68,7 @@ Has functions for TimerManager to use
 	};
 	
 	KC3Timer.prototype.remainingTime = function(){
-		return this.active ? (this.completion - (new Date()).getTime()) : 0;
+		return this.active ? (this.completion - Date.now()) : 0;
 	};
 	
 	KC3Timer.prototype.text = function(){

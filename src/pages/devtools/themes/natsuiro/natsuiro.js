@@ -123,7 +123,7 @@
 		if(ConfigManager.checkLiveQuests && ConfigManager.language=="en"){
 			$.ajax({
 				dataType: "JSON",
-				url: "https://raw.githubusercontent.com/KC3Kai/kc3-translations/master/data/"+ConfigManager.language+"/quests.json?v="+((new Date()).getTime()),
+				url: "https://raw.githubusercontent.com/KC3Kai/kc3-translations/master/data/"+ConfigManager.language+"/quests.json?v="+(Date.now()),
 				success: function(newQuestTLs){
 					if(JSON.stringify(newQuestTLs) != JSON.stringify(KC3Meta._quests)){
 						console.log("new quests detected, updating quest list from live");
@@ -170,13 +170,8 @@
 		}
 		
 		// Close CatBomb modal
-		$("#catBomb .closebtn").on("click", function(){
-			$("#catBomb").fadeOut(300);
-		});
-		
-		// Close CatBomb modal
-		$("#gameUpdate .closebtn").on("click", function(){
-			$("#gameUpdate").fadeOut(300);
+		$(".modalBox").on("click", ".closebtn", function(){
+			$(this).parent().parent().fadeOut(300);
 		});
 		
 		// HQ name censoring
@@ -237,13 +232,13 @@
 		// Export button
 		$(".module.controls .btn_export").on("click", function(){
 			window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck=".concat(encodeURI(
-					JSON.stringify({
-						"version":3,
-						"f1":generate_fleet_JSON(PlayerManager.fleets[0]),
-						"f2":generate_fleet_JSON(PlayerManager.fleets[1]),
-						"f3":generate_fleet_JSON(PlayerManager.fleets[2]),
-						"f4":generate_fleet_JSON(PlayerManager.fleets[3]),
-						})
+				JSON.stringify({
+					"version":3,
+					"f1":generate_fleet_JSON(PlayerManager.fleets[0]),
+					"f2":generate_fleet_JSON(PlayerManager.fleets[1]),
+					"f3":generate_fleet_JSON(PlayerManager.fleets[2]),
+					"f4":generate_fleet_JSON(PlayerManager.fleets[3]),
+					})
 				)));
 		});
 
@@ -429,9 +424,13 @@
 		
 		// Update Timer UIs
 		setInterval(function(){
+			// Basic Timer Stat
 			KC3TimerManager.update();
+			
+			// Docking ~ Akashi Timer Stat
 			var TotalFleet = selectedFleet == 5 ? [0,1] : [selectedFleet-1];
-			var data = TotalFleet.map(function(x){return PlayerManager.fleets[x].highestRepairTimes();})
+			var data = TotalFleet
+				.map(function(x){return PlayerManager.fleets[x].highestRepairTimes(true);})
 				.reduce(function(pre,cur){
 					var data = {};
 					$.extend(pre,data);
@@ -441,6 +440,32 @@
 					return data;
 				});
 			UpdateRepairTimerDisplays(data);
+			
+			// Akashi current
+			var baseElement = (TotalFleet.length > 1) ? ['main','escort'] : ['single'];
+			var ctime = Date.now();
+			baseElement.forEach(function(baseKey,index){
+				var FleetData = PlayerManager.fleets[TotalFleet[index]];
+				
+				var baseContainer = $([".shiplist",baseKey].join('_'));
+				var akashiDuration = (function(){
+					return Math.min(359999,Math.hrdInt('floor',ctime - this.akashi_tick,3,1));
+				}).call(FleetData);
+				
+				$(".sship,.lship",baseContainer).each(function(index,shipBox){
+					var repairBox = $('.ship_repair_data',shipBox);
+					if(!repairBox.length) { return true; }
+					
+					var shipData   = KC3ShipManager.get(repairBox.data('sid'));
+					var hpLoss     = shipData.hp[1] - shipData.hp[0];
+					var repairTime = Math.max(0,Math.hrdInt('floor',shipData.repair[0],3,1) - 30);
+					
+					$('.ship_repair_tick' ,shipBox).attr('data-tick',
+						FleetData.checkAkashiExpire() ? Math.floor(hpLoss*Math.min(1,Math.max(akashiDuration-30,0) / repairTime)) : 0
+					);
+					$('.ship_repair_timer',shipBox).text( akashiDuration.toString().toHHMMSS() );
+				});
+			});
 		}, 1000);
 		
 		// Devbuild: auto-activate dashboard while designing
@@ -712,8 +737,8 @@
 				$(".shiplist_combined").show();
 				
 				// Calculate Highest Repair Times for status indicators
-				MainRepairs = MainFleet.highestRepairTimes();
-				var EscortRepairs = EscortFleet.highestRepairTimes();
+				MainRepairs = MainFleet.highestRepairTimes(true);
+				var EscortRepairs = EscortFleet.highestRepairTimes(true);
 				
 				// Compile fleet attributes
 				FleetSummary = {
@@ -748,7 +773,7 @@
 				var CurrentFleet = PlayerManager.fleets[selectedFleet-1];
 				
 				// Calculate Highest Repair Times for status indicators
-				MainRepairs = CurrentFleet.highestRepairTimes();
+				MainRepairs = CurrentFleet.highestRepairTimes(true);
 				
 				// Show ships on selected fleet
 				$.each(CurrentFleet.ships, function(index, rosterId){
@@ -2040,17 +2065,21 @@
 	
 	function UpdateRepairTimerDisplays(docking, akashi){
 		var
+			akashiTick = [false,false],
+			
 			context = $(".module.status"),
 			dockElm = $(".status_docking .status_text",context),
 			koskElm = $(".status_akashi  .status_text",context); // kousaka-kan
 		if(typeof docking==="object") {
-			akashi  = docking.akashi;
-			docking = docking.docking;
+			akashi     = docking.akashi;
+			akashiTick = docking.akashiCheck;
+			docking    = docking.docking;
 		}
 		if(typeof docking!=="undefined") dockElm.data("value",Math.ceil(docking));
 		if(typeof  akashi!=="undefined") koskElm.data("value",Math.ceil( akashi));
+		koskElm.data("tick",akashiTick);
 		[dockElm,koskElm].forEach(function(elm){
-			elm.removeClass("bad").removeAttr("title");
+			elm.removeClass("good bad").removeAttr("title");
 			switch (ConfigManager.timerDisplayType) {
 			case 1:
 				elm.text(String(elm.data("value")).toHHMMSS());
@@ -2061,6 +2090,9 @@
 					elm.addClass("bad").attr("title","More than 24 hours");
 				}
 				break;
+			}
+			if((elm.data("tick") || [false]).every(function(x){return x;})) {
+				elm.removeClass('bad').addClass("good").attr("title","Repairing...");
 			}
 		});
 	}
