@@ -21,7 +21,7 @@
 			},
 		},
 		
-		iconData       = ["fuel","ammo","steel","bauxite","ibuild","bucket","devmat","screw"],
+		iconData       = ["fuel","ammo","steel","bauxite","ibuild","bucket","devmat","screws"],
 		tDurEnum       = {
 			0:['Time' ,1,'Whole'  ],
 			1:['Date' ,1,'Daily'  ],
@@ -32,15 +32,16 @@
 		dataType       = [
 			// Apply grouping
 			['sortie','pvp'   ,'exped' ,'quest' ,'akashi' ,'regen'  ,'useitem'],
-			['crship','critem','dsship','dsitem','remodel','rmditem']
+			['crship','critem','dsship','dsitem','remodel','rmditem','overall']
 		],
 		dataScale      = [
 			1.0, 4.0, 2.5, 2.0, 2.5,25.0, 3.0,
-			1.0, 2.0, 4.0, 4.0, 4.0, 2.0
+			1.0, 2.0, 4.0, 4.0, 4.0, 2.0, 1.0,
 		],
 		
 		allBuffer = [],
 		lookupBound = [-Infinity,+Infinity],
+		polarityRating = [0,0],
 		
 		dateFormatYMDH = "yyyy-mm-dd'T'HH:00:00",
 		bufferCancel = false,
@@ -69,6 +70,11 @@
 			*/
 			scope: true,
 			rate: 1,
+			/* Convention (defined later)
+				0 - Standard Convention : 0 AM start of a day, Sunday start of a week
+				1 - Tanaka Convention   : 5 AM start of a quest day, Monday start of a quest week
+			*/
+			convention: null,
 		},
 		
 		filter: {},
@@ -90,6 +96,13 @@
 				self.dataBuffer[filterKey] = null;
 			});
 			
+			Object.defineProperties(this.timeRange,{
+				convention:{
+					get: function(){ ConfigManager.load(); return Number(ConfigManager.lodger_convention) || 0; },
+					set: function(value){ ConfigManager.lodger_convention = isFinite(value) && value || 0; ConfigManager.save(); }
+				},
+			});
+			
 			refreshCurrentBuffer.call(self);
 		},
 		
@@ -104,34 +117,49 @@
 				var fTypeBox = $(".factory .filterType",baseContext).clone();
 				
 				$("input",fTypeBox).val(parseInt(k,10));
-				$(".filterText",fTypeBox).text(v[2]);
+				$(".filterText",fTypeBox).text(KC3Meta.term('LodgerTime' + v[2]));
 				
 				fTypeBox.insertBefore(".filterRangeLen");
 			});
 			
-			$.each(self.filter,function(k,v){
-				// Filter Checklist
+			$.each(iconData,function(k,v){
 				var
-					fDataBox = $(".factory .filterData",baseContext).clone(),
-					tgElm    = [".filter_data",['DB','MS'][
-						dataType
-							.map(function(filterKey,index){ return (filterKey.indexOf(k) >= 0) ? index : undefined; })
-							.filter(function(udfFlag){ return typeof udfFlag == 'number'; })
-							.pop()
-					]].join('');
+					targetBox = $(".factory .lodger-data .materials",baseContext),
+					mDataBox  = $(".factory .material.base-material",baseContext).clone();
 				
-				$('input',fDataBox).prop('checked',v).data('ref',k);
-				$('.filterText',fDataBox).text(KC3Meta.term('Lodger' + (function trickProperCase(str){
-					return str.slice(0,1).toUpperCase() + str.slice(1).toLowerCase();
-				})(k)));
+				$("img",mDataBox).attr('src',['../../../../assets/img/client/',v,'.png'].join(''));
+				mDataBox
+					.addClass(v)
+					.removeClass('base-material')
+					.insertBefore($(".clear",targetBox));
+			});
+			
+			$.each(self.filter,function(k,v){
+				var notWholeItem = (k!=='overall');
 				
-				fDataBox.appendTo(tgElm);
+				// Filter Checklist
+				if(notWholeItem) {
+					var
+						fDataBox = $(".factory .filterData",baseContext).clone(),
+						tgElm    = [".filter_data",['DB','MS'][
+							dataType
+								.map(function(filterKey,index){ return (filterKey.indexOf(k) >= 0) ? index : undefined; })
+								.filter(function(udfFlag){ return typeof udfFlag == 'number'; })
+								.pop()
+						]].join('');
+					
+					$('input',fDataBox).prop('checked',v).data('ref',k);
+					$('.filterText',fDataBox).text(KC3Meta.term('Lodger' + (function trickProperCase(str){
+						return str.slice(0,1).toUpperCase() + str.slice(1).toLowerCase();
+					})(k)));
+					
+					fDataBox.appendTo(tgElm);
+				}
 				
 				// Rating Data
 				var
 					ratingBox = $(".factory .lodger-data",baseContext).clone();
-				ratingBox.addClass(k).hide();
-				ratingBox.appendTo($(".lodger-statistics",baseContext));
+				ratingBox.addClass(k).appendTo($(".lodger-statistics",baseContext)).hide();
 			});
 			
 			// Reinitialize input
@@ -175,6 +203,9 @@
 						.attr('step',3600);
 					if(x.name == 'range-source'){
 						$(x).prop('disabled',false).val((new Date()).format(dateFormatYMDH)).trigger('change');
+						$(".filterRefresh",baseContext).trigger('click');
+					} else {
+						$(x).data('disable-lock',true);
 					}
 				});
 			});
@@ -186,9 +217,6 @@
 						$('input[name=range-maximum]',baseContext).val(
 							calculateMaximumBacklookup(self.timeRange,this.valueAsNumber).format(dateFormatYMDH,true)
 						);
-						
-						if(!bufferCancel)
-							self.resetBuffer();
 					}
 				});
 			
@@ -215,6 +243,9 @@
 						.val(Math.min($(".filterRangeLen input").prop('max'),$(".filterRangeLen input").val()))
 						.trigger('change');
 					$(".filterDate input",baseContext).trigger('change');
+					$(".filterNavigate",baseContext).data('disable-lock',!self.timeRange.duration)
+						.prop('disabled',!self.timeRange.duration);
+					$(".filterRefresh",baseContext).trigger('click');
 				});
 			$(".filterRangeLen input[type=number]",baseContext)
 				.on('click',function(){
@@ -233,36 +264,99 @@
 			$(".filterData input[type=checkbox]",baseContext)
 				.on('click',function(){
 					self.filter[$(this).data('ref')] = $(this).prop('checked');
-					self.refreshList();
 					refreshCurrentBuffer.call(self);
+					self.refreshList();
+				});
+			
+			// Time Step / Button Handler
+			$(".filterNavigate",baseContext)
+				.on('click',function(){
+					var
+						targetItem = $("input[name=range-source][type=datetime-local]",baseContext),
+						valBound   = ['min','max'].map(function(prop){ return new Date(targetItem.prop(prop)); });
+					var nextStep;
+					
+					if(self.timeRange.scope) {
+						var stepLength = parseInt($(this).data('step')) * targetItem.prop('step') * 1000;
+						nextStep   = targetItem.prop('valueAsNumber') + stepLength;
+					} else {
+						var
+							durDat= tDurEnum[self.timeRange.duration],
+							cDate = new Date(targetItem.prop('valueAsNumber')),
+							args  = [parseInt($(this).data('step')),false,null];
+						if(durDat[0] == 'Week') {
+							args.unshift('Sunday',0);
+						}
+						cDate[['shift',durDat[0]].join('')].apply(cDate,args);
+						nextStep = cDate.shiftDate(0,1,{Hours:-1}).getTime();
+					}
+					
+					nextStep = Math.max(valBound[0],Math.min(valBound[1],nextStep));
+					
+					var newVal = dateFormat(nextStep,dateFormatYMDH,true);
+					
+					if(newVal !== targetItem.val()) {
+						targetItem.val(newVal).trigger('change');
+						$(".filterRefresh",baseContext).trigger('click');
+					}
+				});
+			
+			// Data Refresh Handler
+			$(".filterRefresh",baseContext)
+				.on('click',function(){
+					self.resetBuffer();
+					$('button,input',baseContext).prop('disabled',true);
 				});
 		},
 		
 		refreshList :function(){
-			var self = this;
+			var
+				self = this,
+				timeRangeAry = [lookupDays()];
+			
+			$(".lodger-header",baseContext).text(
+				[1,2].reduce(function(str,key,ind){
+					return str.replace('%DATE' + key,dateFormat(lookupBound[ind] * 3600000,'ddd yyyy-mm-dd HH:' + ['00','59'][ind]));
+				},KC3Meta.term('LodgerLabel'))
+			);
 			
 			$.each(self.dataBuffer,function(k,v){
-				if(!self.filter[k]) {
-					$(".lodger-data." + k,".lodger-statistics").hide();
+				var wholeData = (k==='overall');
+				
+				if(!self.filter[k] && !wholeData) {
+					$(".lodger-data." + k,$(".lodger-statistics",baseContext)).hide();
 					return true;
 				}
 				
 				var
 					baseName  = $(".filterData",baseContext).filter(function(i,x){
 						return $("input",x).data('ref') == k;
-					}).find(".filterText").text(),
+					}).find(".filterText").text() || KC3Meta.term('Lodger'+k),
+					matrSum   = [0,0,0,0,0,0,0,0],
 					rating    = {
 						box : $(".lodger-data." + k,".lodger-statistics"),
-						val : v.length ? calculateRating.apply(null,[lookupDays()].concat(v)) : CONST.ratingOffset
+						val : v.length ? calculateRating.apply(null,timeRangeAry.concat(v)) : NaN
 					};
 				
-				if(isNaN(rating.val)){
-					rating.val = 5;
-					rating.NG = rating.OK = 0;
+				
+				if(wholeData){
+					matrSum = self.flatBuffer.reduce(function(pre,cur){
+						return pre.map(function(cval,cind){ return cval + Number(cur.matr[cind]); });
+					},matrSum);
+					rating.val = self.dataRating;
+				} else if(isNaN(rating.val)){
+					rating.val = CONST.ratingOffset;
 				} else {
-					rating.NG = 100*(CONST.ratingOffset - Math.min(CONST.ratingOffset,rating.val))/CONST.ratingMagnitude;
-					rating.OK = 100*(Math.max(CONST.ratingOffset,rating.val) - CONST.ratingOffset)/CONST.ratingMagnitude;
+					matrSum = v.reduce(function(pre,cur){
+						return pre.map(function(cval,cind){ return cval + cur.matr[cind]; });
+					},matrSum);
 				}
+				
+				rating.OK  = rating.val / 2;
+				rating.NG  = CONST.ratingMagnitude - rating.OK;
+				
+				rating.NG *= 100/CONST.ratingMagnitude;
+				rating.OK *= 100/CONST.ratingMagnitude;
 				
 				rating.excess = Math.max(rating.NG,rating.OK)>100;
 				
@@ -270,7 +364,7 @@
 					normalizedMagnitude = Math.max(-CONST.ratingMagnitude,
 						Math.min(CONST.ratingMagnitude,rating.val - CONST.ratingOffset)
 					),
-					normalizedRating = Math.qckInt('ceil',normalizedMagnitude,2),
+					normalizedRating = Math.qckInt('ceil',normalizedMagnitude,2,false,true),
 					ratingCond = (rating.val < CONST.ratingOffset) ? 'NG' : 'OK',
 					texifyRating = Math.qckInt('ceil',Math.abs(normalizedMagnitude),0);
 				
@@ -289,10 +383,14 @@
 							.removeClass('NG OK over')
 							.addClass((rating.val != CONST.ratingOffset) ? (ratingCond) : '')
 							.addClass(rating.excess ? 'over' : '')
+							.data('val',normalizedMagnitude + CONST.ratingOffset)
 							.text((normalizedRating + CONST.ratingOffset).toFixed(2))
 						.end()
 						.find('.type').text(baseName).end()
 					.end()
+					.find('.materials .material').each(function(idx,elm){
+						$("span",elm).text(matrSum[idx]);
+					}).end()
 					.show();
 			});
 		},
@@ -316,7 +414,6 @@
 				}
 			});
 			allBuffer.splice(0);
-			
 			bufferCancel = true;
 			
 			switch(true){
@@ -325,9 +422,16 @@
 					lookupBound[1] = +Infinity;
 				break;
 				case(!this.timeRange.scope):
-					lookupBound[1] = (new Date(lookupBound[0]))
-						[['shift',tDurEnum[this.timeRange.duration][0]].join('')](this.timeRange.rate)
-						.getTime();
+					var
+						args = [this.timeRange.rate],
+						next = new Date(lookupBound[0]);
+					
+					if(this.timeRange.duration & 2)
+						args.unshift(null,1);
+					
+					lookupBound[1] = next[['shift',tDurEnum[this.timeRange.duration][0]].join('')]
+						.apply(next,args)
+						.getTime() - 1;
 				break;
 				default:
 				break;
@@ -340,7 +444,6 @@
 					.map(function(x,i){ return Math.hrdInt('floor',(x + GMT)/3.6,6,1); }
 				)
 			);
-			console.log(lookupBound);
 			// Fetch new buffer
 			KC3Database.get_lodger_data(
 				lookupBound,
@@ -354,9 +457,8 @@
 								newItem   = new KC3LodgerBuffer(
 									newData.id,
 									newData.hour,
-									newData.data.map(function(matr){
-										return matr * dataScale[Object.keys(self.dataBuffer).indexOf(givenType[1])];
-									}),
+									newData.data,
+									dataScale[Object.keys(self.dataBuffer).indexOf(givenType[1])],
 									givenType[2]
 								);
 							if(givenAry.every(function(buffer){
@@ -386,6 +488,9 @@
 						console.error(e.stack);
 					} finally {
 						bufferCancel = false;
+						$("button,input",baseContext).each(function(idx,elm){
+							$(elm).prop('disabled',$(elm).data('disable-lock') || false);
+						});
 					}
 				}
 			);
@@ -397,16 +502,19 @@
 	----------------------------------------------- */
 	
 	var KC3LodgerBuffer = (function(){
-		function KC3LodgerBuffer(id,hour,material,optional) {
+		function KC3LodgerBuffer(id,hour,matr,mult,optional) {
 			/*jshint: validthis true*/
 			if(this instanceof KC3LodgerBuffer){
-				if([3,4].indexOf(arguments.length) < 0){
-					throw new RangeError('Constructor parameter only able to take between 3 and 4 inclusive.');
+				if([3,5].indexOf(arguments.length) < 0){
+					throw new RangeError('Constructor parameter only able to take between 3 and 5 inclusive.');
 				}else{
+					mult = Math.max(0,(!parseInt(mult) || isNaN(mult) || !isFinite(mult) || Math.sign(mult) < 0) ? 1 : mult);
+					
 					Object.defineProperties(this,{
 						id  :{value:id      },
 						hour:{value:hour    },
-						matr:{value:material},
+						matr:{value:matr    },
+						mult:{value:mult    },
 						opt :{value:optional},
 						
 						toString:{value:this.toString.bind(this,this)},
@@ -451,10 +559,11 @@
 			}) },
 			bRating : { value: Function.prototype.apply.bind(function(){
 				var
+					self     = this,
 					halfRate = 1 / Math.log2(1/CONST.ratingHScore),
 					aRating  = this.matr.reduce(function(tRate,cMat,mInd){
 						return tRate + Math.min(2,
-							Math.pow( Math.abs(cMat/ CONST.resourcePeak(mInd) ), halfRate )
+							Math.pow( Math.abs(cMat * self.mult / CONST.resourcePeak(mInd) ), halfRate )
 						)*Math.sign(cMat);
 					},0)/8;
 				return aRating;
@@ -464,7 +573,7 @@
 			}) }
 		});
 		
-		KC3LodgerBuffer.toString = Function.prototype.apply.bind(function(){ return "function KC3Buffer(id,hour,material[,optional])";},null);
+		KC3LodgerBuffer.toString = String.prototype.toString.bind("function KC3Buffer(id,hour,material[,optional])",function(){ return ;});
 		
 		Object.defineProperty(KC3LodgerBuffer,'toString',{});
 		
@@ -529,7 +638,7 @@
 		if(timeRange.duration) { /* Not applying WHOLE-Scoped */
 			var args = [-timeRange.rate * rCoef,!timeRange.scope,null];
 			
-			if(timeRange.duration & 2) {
+			if(durKey == 'Week') {
 				args.unshift(!timeRange.scope ? 'Sunday' : undefined,-1,args.shift() + !timeRange.scope /* */);
 			}
 			
@@ -563,28 +672,34 @@
 				throw new TypeError(["Given item is not a KC3Buffer class! (",String(bufferData),")"].join(''));
 		});
 		
-		var dataSum = [].map.call(args,function(bufferData,index,array){
-			return bufferData.matr;
+		var dcCoef, dataSum, dataAvg, aRating, sRatio, dRating, pRatio, bResult;
+		
+		dcCoef  = CONST.dayScaleCoef(days);
+		dataSum = [].map.call(args,function(bufferData,index,array){
+			return bufferData.matr.map(function(rsc){
+				return rsc * bufferData.mult;
+			});
 		}).reduce(function(pre,cur,ary){
 			return pre.map(function(matr,indx){
-				return matr + cur[indx] / CONST.dayScaleCoef(days);
+				return matr + cur[indx] / dcCoef;
 			});
 		},Array.apply(null,{length:8}).map(function(){return 0;}));
 		
-		var dataAvg = [].map.call(args,function(bufferData,index,array){
+		dataAvg = [].map.call(args,function(bufferData,index,array){
 			return bufferData.bRating;
 		});
 		
-		var aRating = dataAvg.reduce(function(avg,val,num){
+		aRating = dataAvg.reduce(function(avg,val,num){
 			return (avg * num + val)/(num + 1);
 		},0);
 		
-		aRating = (aRating * 1 + (new KC3LodgerBuffer(null,null,dataSum,null)).bRating * 2)/ 3;
+		sRatio  = Math.pow(dcCoef,-0.2);
+		aRating = (aRating * (1-sRatio) + (new KC3LodgerBuffer(null,null,dataSum)).bRating * sRatio);
 		
-		var dRating = dataAvg.length > 1 ? Math.stdev.apply(null,dataAvg) : 0;
-		var pRatio  = Math.pow(Math.max(0,1 - Math.abs(aRating)),1.5) * Math.sign(aRating);
+		dRating = dataAvg.length > 1 ? Math.stdev.apply(null,dataAvg) : 0;
+		pRatio  = Math.pow(Math.max(0,1 - Math.abs(aRating)),1.5) * Math.sign(aRating);
 		
-		var bResult = {bRating: aRating + dRating * pRatio};
+		bResult = {bRating: aRating + dRating * pRatio};
 		return KC3LodgerBuffer.prototype.rating.bind(bResult,bResult).call();
 	}
 	
