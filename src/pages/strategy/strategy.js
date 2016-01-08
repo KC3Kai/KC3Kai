@@ -8,10 +8,11 @@
 		activeTab:{
 			get:function(){return activeTab;},
 			set:function(newTab){
-				if(newTab instanceof KC3StrategyTab){
-					activeTab = newTab;
-				}
+				if(newTab instanceof KC3StrategyTab){ activeTab = newTab; }
 			}
+		},
+		activeSelf: {
+			get:function(){return activeTab.definition;}
 		}
 	});
 	

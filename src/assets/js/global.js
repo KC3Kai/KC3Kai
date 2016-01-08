@@ -149,6 +149,7 @@ function getJPDate() {
 	return new Date(utc + (3600000*9));
 }
 
+/* BASE */
 /*******************************\
 |*** Object                     |
 \*******************************/
@@ -160,6 +161,7 @@ Object.size = function(obj) {
 	return size;
 };
 
+/* PRIMITIVE */
 /*******************************\
 |*** String                     |
 \*******************************/
@@ -240,6 +242,7 @@ Number.prototype.toDigits = Number.prototype.toArray = function(digits) {
 	}
 };
 
+/* JS NATIVE CLASS */
 /*******************************\
 |*** Array                      |
 \*******************************/
@@ -281,7 +284,7 @@ Object.defineProperty(Array.prototype, "equals", {enumerable: false});
 			ary[ (val.length != 3)+0 ].push(val);
 			return ary;
 		},[[],[]]),
-		ResetableKeys = ['Seconds','Minutes','Hours','Date','Month'],
+		ResetableKeys = ['Milliseconds', 'Seconds','Minutes','Hours','Date','Month'],
 		ShiftableKeys = ResetableKeys.concat(['FullYear']);
 	
 	function shiftTime(key,step,clear,offset) {
@@ -294,7 +297,7 @@ Object.defineProperty(Array.prototype, "equals", {enumerable: false});
 		
 		clear  = !!clear;
 		step   = parseInt(step,10);
-		step   = (!isNaN(step) && isFinite(step)) ? step+clear : 1;
+		step   = (!isNaN(step) && isFinite(step)) ? (step+clear) : 1;
 		offset = $.extend({},offset);
 		
 		var ki = ShiftableKeys.indexOf(key);
@@ -394,7 +397,7 @@ Object.defineProperty(Array.prototype, "equals", {enumerable: false});
 				if(isNaN(step) || !isFinite(step))
 					step = 0;
 				
-				args[0] = 7 * step + calibr - !!clear;
+				args[0] = 7 * step + calibr - (!!clear + this.getUTCDate() - this.getDate());
 				return this.shiftDate.apply(this,args);
 			}).bind(this);
 		}},
@@ -443,6 +446,7 @@ Object.defineProperty(Array.prototype, "equals", {enumerable: false});
 	});
 })(Date);
 
+/* JS NATIVE MODULE */
 /*******************************\
 |*** Math                       |
 \*******************************/
@@ -460,6 +464,9 @@ Math.stdev  = function(p1f /*, data*/){
 		args.splice(0,1);
 	}
 	
+	if(args.length <= 0)
+		return 0;
+	
 	var avg;
 	avg = args.reduce(function(cAve,nVal,nInd){
 		return ((cAve * nInd) + nVal) / (nInd + 1);
@@ -472,20 +479,24 @@ Math.stdev  = function(p1f /*, data*/){
 
 /* LIMIT ROUNDING
 -------------------------------*/
-Math.qckInt = function(command,value,rate,rev) {
+Math.qckInt = function(command,value,rate,rev,magn) {
 	if (["round","ceil","floor"].indexOf(command) < 0)
 		command = null;
 	command = command || "round";
 	value   = value   || 0;
 	rate    = rate    || 0;
 	rev     = !rev;
+	magn    = !!magn;
+	
 	var shift = Math.pow(10,rate);
-	return Math.sign(value) * Math[command](Math.abs(value) * shift) / (rev ? shift : 1);
+	return (magn ? Math.sign(value) : 1) *
+		Math[command]((magn ? Math.abs(value) : value) * shift) / (rev ? shift : 1);
 };
 Math.hrdInt = function(command,value,rate,rev) {
 	return Math.qckInt(command,value,-rate,rev);
 };
 
+/* CHROME NATIVE CLASS */
 /*******************************\
 |*** Storage                    |
 \*******************************/
@@ -500,3 +511,27 @@ Storage.prototype.setObject = function(key, value) {
 Storage.prototype.getObject = function(key) {
 	return JSON.parse(this.getItem(key));
 };
+
+/*******************************\
+|*** Element                    |
+\*******************************/
+(function(){
+	/*jshint: validthis true*/
+	Object.defineProperties(this.prototype,{
+		/* ELEMENT OVERFLOW CHECK 
+		------------------------------------ */
+		overflow:{
+			get:function(){ return this.overflowHorz || this.overflowVert; },
+			configurable: true
+		},
+		overflowHorz:{
+			get:function(){ return this.scrollWidth  > this.clientWidth ; },
+			configurable: true
+		},
+		overflowVert:{
+			get:function(){ return this.scrollHeight > this.clientHeight; },
+			configurable: true
+		},
+	});
+}).call(Element);
+

@@ -27,7 +27,7 @@
 	padding:3px 5px;
 }
 .tab_overlodger .filterBox.filter_base {
-	width:222px;
+	width:217px;
 }
 .tab_overlodger .filterBox .filterRangeLen {
 	position: relative;
@@ -77,17 +77,13 @@
 	float:left;
 }
 
-/* PAGINATION
---------------------------------*/
-.tab_overlodger .exped_pages {
-	width:700px;
-	margin:0px 0px 10px 0px;
-	background:#f0f5ff;
-	padding:5px 10px 0px;
-	border-bottom:1px solid #369;
+.tab_overlodger .filterBox.filter_reset button {
+	width:100%;
+	margin-top: 4px;
 }
-.tab_overlodger .exped_pages .pagination {
-	margin:0px;
+
+.tab_overlodger .filterBox.filter_reset button[disabled] {
+	color:#ccc;
 }
 
 /* RATING
@@ -97,6 +93,12 @@
 	margin: 16px 4px;
 	padding: 4px;
 	background-color: #def;
+}
+
+.tab_overlodger .lodger-header {
+	font-size: 1.1em;
+	text-align:center;
+	font-weight: bold;
 }
 
 /* No data template */
@@ -113,6 +115,12 @@
 }
 
 /* Factory data template */
+.tab_overlodger .lodger-data {
+	background-color:#cde;
+	border-radius: 6px;
+	margin: 4px 1px;
+	padding: 2px 8px;
+}
 .tab_overlodger .lodger-data .bar {
 	height: 20px;
 	float: left;
@@ -167,152 +175,18 @@
 .tab_overlodger .lodger-data .info .rating.over {
 	font-weight: bold;
 }
-/* RECORDS
---------------------------------*/
-.tab_overlodger .exped_item {
-	width:680px;
-	height:34px;
-	margin:0px 0px 5px 0px;
-	background:#f3f3f3;
-	border-radius:8px;
-	padding:2px 5px;
-}
-.tab_overlodger .exped_col {
+
+.tab_overlodger .lodger-data .materials .material {
+	margin: 0 0.25%;
+	width:12%;
 	float:left;
-	min-width:10px;
-	height:30px;
-	line-height:30px;
-}
-/* Columns */
-.tab_overlodger .exped_info {
-	width:70px;
-	line-height:15px;
-	text-align:center;
-	margin:0px 5px 0px 0px;
-	color:#888;
-}
-.tab_overlodger .exped_date {
-	font-size:12px;
-}
-.tab_overlodger .exped_time {
-	font-weight:bold;
-	font-size:13px;
-}
-.tab_overlodger .exped_number {
-	width:35px;
-	margin:0px 5px 0px 0px;
-	text-align:center;
-	font-size:16px;
-	font-weight:bold;
-	border-radius:5px;
-	background:#fff;
-}
-.tab_overlodger .exped_exp {
-	width:35px;
-	margin:0px 5px 0px 0px;
-	text-align:center;
-	font-size:14px;
-	color:#bbb;
-	font-weight:bold;
 }
 
-.tab_overlodger .exped_ships {
-	width:200px;
-	margin:0px 5px 0px 0px;
-	/*background:#cfc;*/
+.tab_overlodger .lodger-data .materials .material img {
+	margin:1px;
 }
-.tab_overlodger .exped_ship {
-	width:30px;
-	height:30px;
-	float:left;
-	margin:0px 3px 0px 0px;
-	position:relative;
-}
-.tab_overlodger .exped_ship_img {
-	width:30px;
-	height:30px;
-	line-height:26px;
-	border-radius:15px;
-	overflow:hidden;
-	border:2px solid #777;
-}
-.tab_overlodger .exped_ship_img.sparkled {
-	border:2px solid #ffcc00;
-	box-shadow: 0px 0px 5px 0px #ff0;
-}
-.tab_overlodger .exped_ship img {
-	width:28px;
-	height:28px;
-	position:relative;
-	margin:-1px 0px 0px -1px;
-	vertical-align:top;
-}
-.tab_overlodger .exped_ship_exp {
-	width:30px;
-	height:12px;
-	line-height:12px;
-	position:absolute;
-	top:20px;
-	text-shadow:0px 0px 2px #000,
-		0px 0px 2px #000,
-		0px 0px 5px #555;
-	color:#fff;
-	text-align:center;
-	font-size:12px;
-}
-
-.tab_overlodger .exped_drums {
-	width:30px;
-	height:26px;
-	line-height:26px;
-	margin:2px 5px 0px 0px;
-	background:#777;
-	color:#fff;
-	text-align:center;
-	font-size:14px;
-	border-radius:7px;
-}
-.tab_overlodger .exped_rsc {
-	width:30px;
-	height:22px;
-	line-height:22px;
-	margin:4px 3px 0px 0px;
-	text-align:center;
-	font-size:12px;
-	border-radius:5px;
-}
-.tab_overlodger .exped_rsc.empty {
-	opacity:0.4;
-}
-.tab_overlodger .exped_rsc1 {
-	background:#C1FFC1;
-}
-.tab_overlodger .exped_rsc2 {
-	background:#DFD7B3;
-}
-.tab_overlodger .exped_rsc3 {
-	background:#ccc;
-}
-.tab_overlodger .exped_rsc4 {
-	background:#FFDCA8;
-}
-.tab_overlodger .exped_result {
-	width:70px;
-	margin:0px 5px 0px 5px;
-	overflow:hidden;
-}
-.tab_overlodger .exped_result img {
-	width:170px;
-	height:30px;
-	margin:0px 0px 0px -50px;
-	position:relative;
-}
-.tab_overlodger .exped_item1 {
-	width:30px;
-	margin:0px 3px 0px 0px;
-	/*background:#fcf;*/
-}
-.tab_overlodger .exped_item2 {
-	width:30px;
-	/*background:#ffc;*/
+.tab_overlodger .lodger-data .materials .material span {
+	display:inline-block;
+	width:calc(100% - 24px);
+	text-align:right;
 }

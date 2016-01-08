@@ -456,14 +456,24 @@
 					var repairBox = $('.ship_repair_data',shipBox);
 					if(!repairBox.length) { return true; }
 					
-					var shipData   = KC3ShipManager.get(repairBox.data('sid'));
-					var hpLoss     = shipData.hp[1] - shipData.hp[0];
-					var repairTime = Math.max(0,Math.hrdInt('floor',shipData.repair[0],3,1) - 30);
+					var
+						shipData   = KC3ShipManager.get(repairBox.data('sid')),
+						hpLoss     = shipData.hp[1] - shipData.hp[0],
+						repairTime = Math.max(0,Math.hrdInt('floor',shipData.repair[0],3,1) - 30),
+						repairTick = Math.max(1,(hpLoss > 0) ? (repairTime/hpLoss) : 1),
+						repairHP   = Math.min(hpLoss,
+							FleetData.checkAkashiExpire() ?
+								Math.floor(hpLoss*Math.min(1,Math.max(akashiDuration-30,0) / repairTime)) :
+								0
+						);
 					
-					$('.ship_repair_tick' ,shipBox).attr('data-tick',
-						FleetData.checkAkashiExpire() ? Math.floor(hpLoss*Math.min(1,Math.max(akashiDuration-30,0) / repairTime)) : 0
-					);
-					$('.ship_repair_timer',shipBox).text( akashiDuration.toString().toHHMMSS() );
+					$('.ship_repair_tick' ,shipBox).attr('data-tick',repairHP);
+					$('.ship_repair_timer',shipBox).text((
+						(repairHP < hpLoss) ? (
+							!FleetData.checkAkashiExpire() ? (1200-akashiDuration) : 
+								(repairTick - Math.min(repairTime,akashiDuration - 30) % repairTick)
+						) : NaN
+					).toString().toHHMMSS() );
 				});
 			});
 		}, 1000);
