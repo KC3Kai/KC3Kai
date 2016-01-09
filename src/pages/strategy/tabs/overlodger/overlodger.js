@@ -23,11 +23,11 @@
 		
 		iconData       = ["fuel","ammo","steel","bauxite","ibuild","bucket","devmat","screws"],
 		tDurEnum       = {
-			0:['Time' ,1,'Whole'  ],
-			1:['Date' ,1,'Daily'  ],
-			2:['Week' ,1,'Weekly' ],
-			4:['Month',1,'Monthly'],
-			8:['Year' ,1,'Yearly' ]
+			0:['Time' ,1,'Whole'  ,  0],
+			1:['Date' ,1,'Daily'  ,  2],
+			2:['Week' ,1,'Weekly' , 14],
+			4:['Month',1,'Monthly', 70],
+			8:['Year' ,1,'Yearly' ,280]
 		},
 		dataType       = [
 			// Apply grouping
@@ -39,6 +39,7 @@
 			1.0, 2.0, 4.0, 4.0, 4.0, 2.0, 1.0,
 		],
 		
+		sortieBuffer = [],
 		allBuffer = [],
 		lookupBound = [-Infinity,+Infinity],
 		polarityRating = [0,0],
@@ -188,27 +189,48 @@
 				return valid;
 			});
 			
-			var dateTimeInputs = $("input[type=datetime-local]",baseContext);
-			dateTimeInputs.prop('disabled',true);
-			KC3Database.get_lodger_bound(function(furthestBound){
-				var minDate = new (Date.bind.apply(Date,[null].concat([furthestBound].filter(function(data){
-					return (
-						(typeof data == 'number' || (typeof data == 'object' && data instanceof Number && Number(data))) &&
-						isFinite(data) && !isNaN(data)
-					);
-				}))))();
-				dateTimeInputs.each(function(i,x){
-					$(x)
-						.attr('min',minDate.format(dateFormatYMDH))
-						.attr('step',3600);
-					if(x.name == 'range-source'){
-						$(x).prop('disabled',false).val((new Date()).format(dateFormatYMDH)).trigger('change');
-						$(".filterRefresh",baseContext).trigger('click');
-					} else {
-						$(x).data('disable-lock',true);
-					}
+			// Specify Boundary
+			(function(){
+				var
+					maximumLookout  = Date.now(),
+					dateTimeInputs  = $("input[type=datetime-local]",baseContext),
+					scaleRadioInput = $(".filterType input[type=radio]",baseContext);
+				dateTimeInputs.prop('disabled',true);
+				scaleRadioInput
+					.parent().css('visibility','hidden').end()
+					.prop('disabled',true);
+				KC3Database.get_lodger_bound(function(furthestBound){
+					var minDate = new (Date.bind.apply(Date,[null].concat([furthestBound].filter(function(data){
+						return (
+							(typeof data == 'number' || (typeof data == 'object' && data instanceof Number && Number(data))) &&
+							isFinite(data) && !isNaN(data)
+						);
+					}))))();
+					
+					dateTimeInputs.each(function(idx,elm){
+						$(elm)
+							.attr('min',minDate.format(dateFormatYMDH))
+							.attr('step',3600);
+						if(elm.name == 'range-source'){
+							$(elm).prop('disabled',false).val(dateFormat(maximumLookout,dateFormatYMDH)).trigger('change');
+							$(".filterRefresh",baseContext).trigger('click');
+						} else {
+							$(elm).data('disable-lock',true);
+						}
+					});
+					
+					var totalDays = Math.hrdInt('floor',(maximumLookout - minDate)/86.4,6,1);
+					scaleRadioInput.each(function(idx,elm){
+						var
+							requiredDays = tDurEnum[parseInt($(this).val(),10)][3],
+							satisfied    = totalDays >= requiredDays;
+						$(elm)
+							.data('disable-lock',!satisfied)
+							.parent().css('visibility',satisfied ? 'visible' : 'hidden').end();
+					});
 				});
-			});
+			})();
+			
 			// Initialize Maximum on Date Input Fields
 			$("input[type=datetime-local]",baseContext)
 				.attr('max',(new Date()).format(dateFormatYMDH))

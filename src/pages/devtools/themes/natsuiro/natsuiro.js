@@ -367,9 +367,7 @@
 			$(".module.controls .fleet_num").removeClass("active");
 			$(".module.controls .fleet_rengo").removeClass("active");
 			$(this).addClass("active");
-			console.log($(this).text());
 			selectedFleet = parseInt( $(this).text(), 10);
-			console.log(selectedFleet);
 			NatsuiroListeners.Fleet();
 			ExpedTabApplyConfig();
 			NatsuiroListeners.UpdateExpeditionPlanner();

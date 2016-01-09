@@ -296,6 +296,15 @@ Previously known as "Reactor"
 			KC3Network.trigger("Fleet");
 		},
 		
+		"api_req_kaisou/open_exslot":function(params, response, headers){
+			var
+				sid  = parseInt(params.api_id,10),
+				ship = KC3ShipManager.get(sid),
+				mast = ship.master();
+			
+			console.log("Extra Slot Unlock for",sid,ship.name());
+		},
+		
 		"api_req_kaisou/remodeling":function(params, response, headers){
 			var
 				ctime    = (new Date(headers.Date)).getTime(),
@@ -578,6 +587,7 @@ Previously known as "Reactor"
 		"api_req_hokyu/charge":function(params, response, headers){
 			KC3QuestManager.get(504).increment(); // E4: Daily Resupplies
 			var
+				ctime    = Math.hrdInt('floor',(new Date(headers.Date)).getTime(),3,1),
 				shipList = response.api_data.api_ship,
 				charge   = parseInt(params.api_kind),
 				sParam   = {noFuel:!(charge & 1),noAmmo:!(charge & 2)};
@@ -599,6 +609,8 @@ Previously known as "Reactor"
 			});
 			
 			KC3ShipManager.save();
+			
+			PlayerManager.setResources( response.api_data.api_material , ctime);
 			
 			KC3Network.trigger("Quests");
 			KC3Network.trigger("Fleet");
