@@ -246,34 +246,108 @@ Number.prototype.toDigits = Number.prototype.toArray = function(digits) {
 /*******************************\
 |*** Array                      |
 \*******************************/
-/*
-Comparing arrays
-http://stackoverflow.com/a/14853974/483704
-*/
-Array.prototype.equals = function (array) {
-	// if the other array is a falsy value, return
-	if (!array)
-		return false;
+(function(){
+	var
+		nop  = function(){},
+		over = {
+			equals: [
+				function(){
+					console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
+				},
+				nop
+			],
+			fill: [
+				function(){ delete meth.fill; },
+				function(){
+					console.warn("It seems that your chrome doesn't support Array.prototype.fill method.");
+				}
+			]
+		},
+		meth = {
+			/*
+				Comparing arrays
+				http://stackoverflow.com/a/14853974/483704
+			*/
+			equals: {
+				value: function (array) {
+					// if the other array is a falsy value, return
+					if (!array)
+						return false;
 
-	// compare lengths - can save a lot of time 
-	if (this.length != array.length)
-		return false;
+					// compare lengths - can save a lot of time 
+					if (this.length != array.length)
+						return false;
 
-	for (var i = 0, l=this.length; i < l; i++) {
-		// Check if we have nested arrays
-		if (this[i] instanceof Array && array[i] instanceof Array) {
-			// recurse into the nested arrays
-			if (!this[i].equals(array[i]))
-				return false;
-		} else if (this[i] != array[i]) {
-			// Warning - two different object instances will never be equal: {x:20} != {x:20}
-			return false;
-		}
-	}
-	return true;
-};
-// Hide method from for-in loops
-Object.defineProperty(Array.prototype, "equals", {enumerable: false});
+					for (var i = 0, l=this.length; i < l; i++) {
+						// Check if we have nested arrays
+						if (this[i] instanceof Array && array[i] instanceof Array) {
+							// recurse into the nested arrays
+							if (!this[i].equals(array[i]))
+								return false;
+						} else if (this[i] != array[i]) {
+							// Warning - two different object instances will never be equal: {x:20} != {x:20}
+							return false;
+						}
+					}
+					return true;
+				},
+				configurable:true
+			},
+			
+			/*
+				Fill method polyfill
+				https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/fill
+			*/
+			fill:{
+				value: function(value) {
+					// Steps 1-2.
+					if (this === null) {
+						throw new TypeError('this is null or not defined');
+					}
+					
+					var O = Object(this);
+					
+					// Steps 3-5.
+					var len = O.length >>> 0;
+					
+					// Steps 6-7.
+					var start = arguments[1];
+					var relativeStart = start >> 0;
+					
+					// Step 8.
+					var k = relativeStart < 0 ?
+						Math.max(len + relativeStart, 0) :
+						Math.min(relativeStart, len);
+					
+					// Steps 9-10.
+					var end = arguments[2];
+					var relativeEnd = end === undefined ?
+						len : end >> 0;
+
+					// Step 11.
+					var last = relativeEnd < 0 ?
+						Math.max(len + relativeEnd, 0) :
+						Math.min(relativeEnd, len);
+
+					// Step 12.
+					while (k < last) {
+						O[k] = value;
+						k++;
+					}
+
+					// Step 13.
+					return O;
+				},
+				configurable:true
+			},
+		};
+	
+	Object.keys(over).forEach((function(method){
+		over[method][(!this.prototype[method])>>0].call(this);
+	}).bind(this));
+	/*jshint: validthis true*/
+	Object.defineProperties(this.prototype,meth);
+}).call(Array);
 
 /*******************************\
 |*** Date                       |
@@ -358,7 +432,7 @@ Object.defineProperty(Array.prototype, "equals", {enumerable: false});
 					break;
 					case 'undefined':
 						// "Empty" argument treated as current day
-						args[0] = this.getDay();
+						args[0] = this.getUTCDay();
 						return this.shiftWeek.apply(this,args);
 					default:
 						if(target === null) {
