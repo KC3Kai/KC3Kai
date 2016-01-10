@@ -358,7 +358,7 @@ Object.defineProperty(Array.prototype, "equals", {enumerable: false});
 					break;
 					case 'undefined':
 						// "Empty" argument treated as current day
-						args[0] = this.getDay();
+						args[0] = this.getUTCDay();
 						return this.shiftWeek.apply(this,args);
 					default:
 						if(target === null) {

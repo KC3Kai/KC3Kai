@@ -58,15 +58,15 @@ Uses KC3Quest objects to play around with
 			// 5AM JST = 8PM GMT (previous day)
 			var millisecondsInDay = 24*60*60*1000;
 			var ServerJstClock = new Date( serverJstTime );
-			var today8PmGmt = new Date(ServerJstClock.getTime());
-			today8PmGmt.shiftDate(0,true,{Hours:20});
+			var today8PmGmt = new Date(ServerJstClock); // perform copy constructor
+			today8PmGmt.shiftDate(-2,true,{Hours:20});
 			
 			var tomorrow8PmGmt = (new Date(today8PmGmt)).shiftDate(1);
 			
 			var thisWeekSunday8PmGmt = (new Date(today8PmGmt)).shiftWeek(0,-1,0);
 			var nextWeekSunday8PmGmt = (new Date(thisWeekSunday8PmGmt)).shiftWeek(null,null,1);
 			
-			var thisMonthFirstDay8PmGmt = (new Date(today8PmGmt)).shiftMonth(0);
+			var thisMonthFirstDay8PmGmt = (new Date(today8PmGmt)).shiftMonth(-1,true,{Hours:20});
 			var nextMonthFirstDay8PmGmt = (new Date(thisMonthFirstDay8PmGmt)).shiftMonth(1);
 			var thisMonthLastDay8PmGmt = (new Date(nextMonthFirstDay8PmGmt)).shiftDate(-1);
 			
@@ -74,13 +74,13 @@ Uses KC3Quest objects to play around with
 			var nextMonthLastDay8PmGmt = (new Date(nextNextMonthFirstDay8PmGmt)).shiftDate(-1);
 			
 			//console.log("============================================");
-			//console.log( ServerJstClock );
-			//console.log( today8PmGmt );
-			//console.log( tomorrow8PmGmt );
-			//console.log( thisWeekSunday8PmGmt );
-			//console.log( nextWeekSunday8PmGmt );
-			//console.log( thisMonthLastDay8PmGmt );
-			//console.log( nextMonthLastDay8PmGmt );
+			//console.log( 'Time', ServerJstClock );
+			//console.log( 'Prev day', today8PmGmt );
+			//console.log( 'Next day', tomorrow8PmGmt );
+			//console.log( 'Prev week', thisWeekSunday8PmGmt );
+			//console.log( 'Next week', nextWeekSunday8PmGmt );
+			//console.log( 'Prev month', thisMonthLastDay8PmGmt );
+			//console.log( 'Next month', nextMonthLastDay8PmGmt );
 			
 			/*if ( ServerJstClock.getTime() > today8PmGmt.getTime()) {
 				console.log("Passed 5AM JST");
