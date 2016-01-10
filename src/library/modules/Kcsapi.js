@@ -1322,6 +1322,7 @@ Previously known as "Reactor"
 		/* Ship Modernize
 		-------------------------------------------------------*/
 		"api_req_kaisou/powerup":function(params, response, headers){
+			// Remove consumed ships and their equipment
 			var consumed_ids = params.api_id_items;
 			$.each(consumed_ids.split("%2C"), function(index, element){
 				KC3ShipManager.remove(element);
@@ -1334,7 +1335,46 @@ Previously known as "Reactor"
 				KC3QuestManager.get(702).increment(); // G2: Daily Modernization
 				KC3QuestManager.get(703).increment(); // G3: Weekly Modernization
 				KC3Network.trigger("Quests");
+				
+				// Modernization notification
+				var MainShip = KC3ShipManager.get( response.api_data.api_ship.api_id );
+				
+				var baseStats = [
+					MainShip.master().api_houg,
+					MainShip.master().api_raig,
+					MainShip.master().api_tyku,
+					MainShip.master().api_souk,
+					MainShip.master().api_luck,
+				];
+				
+				var newMod = response.api_data.api_ship.api_kyouka;
+				
+				KC3Network.trigger("Modernize", {
+					rosterId: response.api_data.api_ship.api_id,
+					oldStats: [
+						baseStats[0][0] + MainShip.mod[0],
+						baseStats[1][0] + MainShip.mod[1],
+						baseStats[2][0] + MainShip.mod[2],
+						baseStats[3][0] + MainShip.mod[3],
+						baseStats[4][0] + MainShip.mod[4]
+					],
+					increase: [
+						newMod[0] - MainShip.mod[0],
+						newMod[1] - MainShip.mod[1],
+						newMod[2] - MainShip.mod[2],
+						newMod[3] - MainShip.mod[3],
+						newMod[4] - MainShip.mod[4]
+					],
+					left: [
+						baseStats[0][1] - (baseStats[0][0] + newMod[0]),
+						baseStats[1][1] - (baseStats[1][0] + newMod[1]),
+						baseStats[2][1] - (baseStats[2][0] + newMod[2]),
+						baseStats[3][1] - (baseStats[3][0] + newMod[3]),
+						baseStats[4][1] - (baseStats[4][0] + newMod[4])
+					]
+				});
 			}
+			
 			KC3Network.trigger("Fleet");
 		},
 		

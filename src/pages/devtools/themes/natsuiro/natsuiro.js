@@ -1473,6 +1473,41 @@
 		
 		CraftShip: function(data){},
 		
+		Modernize: function(data){
+			console.log("MODERNIZE TRIGGER", data);
+			
+			var ModShip = KC3ShipManager.get(data.rosterId);
+			
+			$(".activity_modernization .mod_ship_pic img").attr("src", KC3Meta.shipIcon(ModShip.masterId) );
+			$(".activity_modernization .mod_ship_name").text( ModShip.name() );
+			$(".activity_modernization .mod_ship_level span").text( ModShip.level );
+			
+			
+			$(".activity_modernization .mod_result_tp .mod_result_old").text( data.oldStats[1] );
+			$(".activity_modernization .mod_result_aa .mod_result_old").text( data.oldStats[2] );
+			$(".activity_modernization .mod_result_ar .mod_result_old").text( data.oldStats[3] );
+			$(".activity_modernization .mod_result_lk .mod_result_old").text( data.oldStats[4] );
+			
+			$.each(["fp","tp","aa","ar","lk"], function(i, statName){
+				$(".activity_modernization .mod_result_"+statName+" .mod_result_old").text( data.oldStats[i] );
+				
+				if(data.increase[i] > 0){
+					$(".activity_modernization .mod_result_"+statName+" .mod_result_plus span").text( data.increase[i] );
+					$(".activity_modernization .mod_result_"+statName+" .mod_result_plus").css("visibility", "visible");
+				}else{
+					$(".activity_modernization .mod_result_"+statName+" .mod_result_plus").css("visibility", "hidden");
+				}
+				
+				$(".activity_modernization .mod_result_"+statName+" .mod_result_left span").text( data.left[i] );
+			});
+			
+			// Show the box
+			$(".module.activity .activity_tab").removeClass("active");
+			$("#atab_activity").addClass("active");
+			$(".module.activity .activity_box").hide();
+			$(".module.activity .activity_modernization").fadeIn(500);
+		},
+		
 		ClearedMap: function(data){},
 		
 		PvPStart: function(data){
