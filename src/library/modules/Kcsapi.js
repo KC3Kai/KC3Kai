@@ -310,7 +310,7 @@ Previously known as "Reactor"
 				ctime    = (new Date(headers.Date)).getTime(),
 				ship     = KC3ShipManager.get(params.api_id),
 				master   = ship.master(),
-				material = [-master.api_afterfuel,-master.api_afterbull,0,0,0,0,0,0];
+				material = [0,-master.api_afterbull,-master.api_afterfuel,0,0,0,0,0];
 			
 			// For every pending supply and repair, it'll be counted towards this
 			/*
