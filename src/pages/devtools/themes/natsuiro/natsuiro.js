@@ -452,7 +452,6 @@
 				
 				$(".sship,.lship",baseContainer).each(function(index,shipBox){
 					var repairBox = $('.ship_repair_data',shipBox);
-					if(!repairBox.length) { return true; }
 					
 					var
 						shipData   = KC3ShipManager.get(repairBox.data('sid')),

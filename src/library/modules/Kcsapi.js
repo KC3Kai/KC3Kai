@@ -53,6 +53,8 @@ Previously known as "Reactor"
 				console.log("triggering GameUpdate");
 				KC3Network.trigger("GameUpdate", newCounts);
 			}
+			
+			localStorage.apiUsage = null;
 		},
 		
 		/* Home Port Screen
