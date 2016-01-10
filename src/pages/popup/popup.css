@@ -5,7 +5,8 @@ body {
 }
 .wrapper {
 	width:240px;
-	height:521px;
+	/*height:521px;*/
+	height:458px;
 	overflow:hidden;
 }
 .separator {
