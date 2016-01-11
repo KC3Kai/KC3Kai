@@ -503,8 +503,7 @@
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ "natsuiro", "Natsuiro" ],
-						[ "default", "Legacy" ]
+						[ "natsuiro", "Natsuiro" ]
 					]
 				}
 			},
