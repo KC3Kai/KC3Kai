@@ -1053,6 +1053,100 @@ html,body {
 	color:#ffcc00;
 }
 
+/*------- MODERNIZE -------*/
+.module.activity .activity_modernization {
+	padding:5px 10px;
+}
+.module.activity .activity_modernization .mod_ship {
+	height:50px;
+	padding:5px 0px;
+	margin:0px 0px 5px 0px;
+}
+.module.activity .activity_modernization .mod_ship_pic {
+	width:40px;
+	height:40px;
+	float:left;
+	border-radius:20px;
+	border:1px solid #000;
+	overflow: hidden;
+	margin:0px 5px 0px 0px;
+}
+.module.activity .activity_modernization .mod_ship_pic img {
+	width:42px;
+	height:42px;
+	position:relative;
+	margin:-1px 0px 0px -1px;
+}
+.module.activity .activity_modernization .mod_ship_name {
+	width:125px;
+	height:22px;
+	line-height:22px;
+	float:left;
+	/*background:#fcc;*/
+	font-size:13px;
+	font-weight:bold;
+	color:#ffcc00;
+	overflow:hidden;
+}
+.module.activity .activity_modernization .mod_ship_level {
+	width:125px;
+	height:14px;
+	line-height:14px;
+	float:left;
+	/*background:#cfc;*/
+	font-size:12px;
+	color:#ccc;
+}
+.module.activity .activity_modernization .mod_result_stats {
+	width:170px;
+	height:125px;
+}
+.module.activity .activity_modernization .mod_result_stat {
+	width:170px;
+	height:20px;
+	line-height:20px;
+	margin:0px 0px 5px 0px;
+}
+.module.activity .activity_modernization .mod_result_icon {
+	width:20px;
+	height:20px;
+	margin:0px 5px 0px 0px;
+	float:left;
+}
+.module.activity .activity_modernization .mod_result_icon img {
+	width:20px;
+	height:20px;
+	display:block;
+}
+.module.activity .activity_modernization .mod_result_old {
+	width:35px;
+	height:20px;
+	float:left;
+	color:#aaa;
+	font-size:14px;
+}
+.module.activity .activity_modernization .mod_result_plus {
+	width:40px;
+	height:20px;
+	float:left;
+	font-weight:bold;
+	color:#0f0;
+	font-size:16px;
+}
+.module.activity .activity_modernization .mod_result_left {
+	width:70px;
+	height:20px;
+	float:left;
+	color:#aaa;
+	font-size:12px;
+}
+.module.activity .activity_modernization .mod_result_note {
+	width:170px;
+	height:20px;
+	color:#aaa;
+	font-size:12px;
+	text-align:center;
+}
 
 /* ACTIVITY: Expedition Planner
 ------------------------*/
