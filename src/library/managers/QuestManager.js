@@ -57,30 +57,32 @@ Uses KC3Quest objects to play around with
 			
 			// 5AM JST = 8PM GMT (previous day)
 			var millisecondsInDay = 24*60*60*1000;
-			var ServerJstClock = new Date( serverJstTime );
+			var ServerJstClock = new Date( serverJstTime ).shiftHour(4);
 			var today8PmGmt = new Date(ServerJstClock); // perform copy constructor
-			today8PmGmt.shiftDate(-2,true,{Hours:20});
+			today8PmGmt.shiftDate(-2,true).shiftHour(20);
 			
 			var tomorrow8PmGmt = (new Date(today8PmGmt)).shiftDate(1);
 			
 			var thisWeekSunday8PmGmt = (new Date(today8PmGmt)).shiftWeek(0,-1,0);
 			var nextWeekSunday8PmGmt = (new Date(thisWeekSunday8PmGmt)).shiftWeek(null,null,1);
 			
-			var thisMonthFirstDay8PmGmt = (new Date(today8PmGmt)).shiftMonth(-1,true,{Hours:20});
+			var thisMonthFirstDay8PmGmt = (new Date(today8PmGmt)).resetTime(4).shiftHour(20);
 			var nextMonthFirstDay8PmGmt = (new Date(thisMonthFirstDay8PmGmt)).shiftMonth(1);
 			var thisMonthLastDay8PmGmt = (new Date(nextMonthFirstDay8PmGmt)).shiftDate(-1);
 			
-			var nextNextMonthFirstDay8PmGmt = (new Date(nextMonthFirstDay8PmGmt)).shiftMonth(1);
+			var nextNextMonthFirstDay8PmGmt = (new Date(thisMonthFirstDay8PmGmt)).shiftMonth(2);
 			var nextMonthLastDay8PmGmt = (new Date(nextNextMonthFirstDay8PmGmt)).shiftDate(-1);
 			
+			ServerJstClock.shiftHour(-4);
+			
 			//console.log("============================================");
-			//console.log( 'Time', ServerJstClock );
-			//console.log( 'Prev day', today8PmGmt );
-			//console.log( 'Next day', tomorrow8PmGmt );
-			//console.log( 'Prev week', thisWeekSunday8PmGmt );
-			//console.log( 'Next week', nextWeekSunday8PmGmt );
-			//console.log( 'Prev month', thisMonthLastDay8PmGmt );
-			//console.log( 'Next month', nextMonthLastDay8PmGmt );
+			//console.log( 'Time      ', ServerJstClock.format(undefined,true) );
+			//console.log( 'Curr day  ', today8PmGmt.format(undefined,true) );
+			//console.log( 'Next day  ', tomorrow8PmGmt.format(undefined,true) );
+			//console.log( 'Curr week ', thisWeekSunday8PmGmt.format(undefined,true) );
+			//console.log( 'Next week ', nextWeekSunday8PmGmt.format(undefined,true) );
+			//console.log( 'Curr month', thisMonthFirstDay8PmGmt.format(undefined,true), thisMonthLastDay8PmGmt.format(undefined,true) );
+			//console.log( 'Next month', nextMonthFirstDay8PmGmt.format(undefined,true), nextMonthLastDay8PmGmt.format(undefined,true) );
 			
 			/*if ( ServerJstClock.getTime() > today8PmGmt.getTime()) {
 				console.log("Passed 5AM JST");

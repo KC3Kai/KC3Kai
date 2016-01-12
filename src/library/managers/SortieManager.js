@@ -86,14 +86,14 @@ Xxxxxxx
 		
 		getSupportingFleet :function(bossSupport){
 			function supportFormula(expedNum, isBoss){
-				console.log("checking support", expedNum, "isboss", isBoss);
+				//console.log("checking support", expedNum, "isboss", isBoss);
 				var e,w,n;
 				e = (expedNum > 100);
 				if(e) expedNum -= 100;
-				w = (expedNum-1 / 8)+1;
+				w = ((expedNum-1) / 8)+1;
 				n = (expedNum-1) % 8;
-				console.log(e,w,n,(w == 5 || e) && (n == 0 + isBoss));
-				return (w == 5 || e) && (n == 0 + isBoss);
+				//console.log(e,w,n,(w == 5 || e) && (n == 0 + isBoss));
+				return (w == 5 || e) && (n == isBoss);
 			}
 			
 			for(var i=2;i<=4;i++)
@@ -323,7 +323,7 @@ Xxxxxxx
 						*/
 						repLen   = before.repair.length * !self.isPvP(),
 						repair   = [1,2,9].map(function(x){
-							return (x<repLen) ? (after.repair[x] - before.repair[x]) : 0;
+							return (x<repLen) ? Math.min(0,after.repair[x] - before.repair[x]) : 0;
 						});
 					if(!self.isPvP())
 						before.lastSortie.unshift(cons.name);
