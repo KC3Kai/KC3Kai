@@ -1480,7 +1480,7 @@ Previously known as "Reactor"
 			});
 			// Update equipment on local data
 			KC3GearManager.set([ response.api_data.api_after_slot ]);
-			response.api_data.api_use_slot_id.forEach(function(gearId){ KC3GearManager.remove(gearId); });
+			(response.api_data.api_use_slot_id || []).forEach(function(gearId){ KC3GearManager.remove(gearId); });
 			
 			PlayerManager.consumables.buckets = response.api_data.api_after_material[5];
 			PlayerManager.consumables.devmats = response.api_data.api_after_material[6];
