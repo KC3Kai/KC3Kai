@@ -24,10 +24,10 @@
 		iconData       = ["fuel","ammo","steel","bauxite","ibuild","bucket","devmat","screws"],
 		tDurEnum       = {
 			0:['Time' ,1,'Whole'  ,  0],
-			1:['Date' ,1,'Daily'  ,  2],
-			2:['Week' ,1,'Weekly' , 14],
-			4:['Month',1,'Monthly', 70],
-			8:['Year' ,1,'Yearly' ,280]
+			1:['Date' ,1,'Daily'  ,  1],
+			2:['Week' ,1,'Weekly' ,  3],
+			4:['Month',1,'Monthly', 15],
+			8:['Year' ,1,'Yearly' , 60]
 		},
 		dataType       = [
 			// Apply grouping
@@ -246,7 +246,6 @@
 			$(".filterType input[type=radio]",baseContext)
 				.on('click',function(){
 					self.timeRange.duration = JSON.parse($(this).val());
-					$($("input",".filterRangeLen,.filterScope"),baseContext).prop('disabled',!self.timeRange.duration);
 					switch(self.timeRange.duration) {
 						case 1:
 							$(".filterRangeLen input").prop('max',364);
@@ -267,6 +266,7 @@
 					$(".filterDate input",baseContext).trigger('change');
 					$(".filterNavigate",baseContext).data('disable-lock',!self.timeRange.duration)
 						.prop('disabled',!self.timeRange.duration);
+					$($("input",".filterRangeLen,.filterScope"),baseContext).data('disabled-lock',!self.timeRange.duration);
 					$(".filterRefresh",baseContext).trigger('click');
 				});
 			$(".filterRangeLen input[type=number]",baseContext)

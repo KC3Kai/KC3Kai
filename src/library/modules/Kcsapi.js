@@ -317,6 +317,17 @@ Previously known as "Reactor"
 			console.log("Extra Slot Unlock for",sid,ship.name());
 		},
 		
+		"api_req_kaisou/marriage":function(params, response, headers){
+			var
+				sid      = parseInt(params.api_id,10),
+				ship     = KC3ShipManager.get(sid),
+				mast     = ship.master(),
+				
+				ship_obj = response.api_data;
+			
+			console.log("Perform Marriage ",sid,ship.name());
+		},
+		
 		"api_req_kaisou/remodeling":function(params, response, headers){
 			var
 				ctime    = (new Date(headers.Date)).getTime(),
@@ -665,7 +676,8 @@ Previously known as "Reactor"
 				response.api_data.api_maparea_id,
 				response.api_data.api_mapinfo_no,
 				params.api_deck_id,
-				UTCTime
+				UTCTime,
+				response.api_data.api_eventmap
 			);
 			
 			KC3SortieManager.setBoss(

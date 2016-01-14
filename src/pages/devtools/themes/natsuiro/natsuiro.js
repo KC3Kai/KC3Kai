@@ -616,7 +616,7 @@
 	function clearSortieData(){
 		$(".module.activity .activity_battle").css("opacity", "0.25");
 		$(".module.activity .map_world").text("");
-		$(".module.activity .map_gauge_bar").css("width", "0px");
+		$(".module.activity .map_gauge *:not(.clear)").css("width", "0%");
 		$(".module.activity .map_hp").text("");
 		$(".module.activity .sortie_node").text("");
 		$(".module.activity .sortie_node")
@@ -676,12 +676,16 @@
 			console.log("GameUpdate triggered");
 			$("#gameUpdate").hide();
 			
-			if(data[0] > 0 && data[1]>0){
-				$("#gameUpdate .description a").html("There is(are) <strong>"+data[0]+" new ship(s)</strong> and <strong>"+data[1]+" new equipment</strong>! Click here to learn more about them in the Strategy Room!");
-			}else if(data[0] > 0){
-				$("#gameUpdate .description a").html("There is(are) <strong>"+data[0]+" new ship(s)</strong>! Click here to learn more about them in the Strategy Room!");
-			}else{
-				$("#gameUpdate .description a").html("There is(are) <strong>"+data[1]+" new equipment</strong>! Click here to learn more about them in the Strategy Room!");
+			if(data[0] > 0 || data[1]>0){
+				$("#gameUpdate .description a").html(
+					[
+						"There is(are) ",
+						['ship','equipment'].map(function(key,index){
+							return "<strong>"+data[index]+" new "+(key + (data[index] != 1 ? "s" : ""))+"</strong>";
+						}).join(' and '),
+						"! Click here to learn more about them in the Strategy Room!"
+					].join('')
+				);
 			}
 			
 			$("#gameUpdate").fadeIn(300);
@@ -883,8 +887,12 @@
 					supplied: CurrentFleet.isSupplied(),
 					badState: [
 						CurrentFleet.needsSupply(false) ||
-						(!(KC3SortieManager.onSortie && KC3SortieManager.fleetSent == selectedFleet)
-						&& !CurrentFleet.isSupplied() && ConfigManager.alert_supply_exped && selectedFleet > 1 && selectedFleet < 5),//0
+						(
+							!(KC3SortieManager.onSortie && KC3SortieManager.fleetSent == selectedFleet) &&
+							!CurrentFleet.isSupplied() &&
+							ConfigManager.alert_supply_exped &&
+							selectedFleet > (1+(!!PlayerManager.combinedFleet)) && selectedFleet < 5
+						),//0
 						CurrentFleet.needsSupply(true),//1
 						CurrentFleet.ship(0).isTaiha(),//2
 						false//3
@@ -1036,9 +1044,10 @@
 				PlayerManager.fleets
 					.filter (function(  x,  i) {
 						var
-							cf = PlayerManager.combinedFleet,
-							fs = KC3SortieManager.fleetSent;
-						return (cf&&fs===1) ? (i <= 1) : (i == fs-1);
+							cf = PlayerManager.combinedFleet, // Marks combined flag
+							fs = KC3SortieManager.fleetSent,  // Which fleet that requires to focus out
+							so = KC3SortieManager.onSortie;   // Is it on sortie or not? if not, focus all fleets.
+						return !so || ((cf&&fs===1) ? (i <= 1) : (i == fs-1));
 					})
 					.map    (function(  fldat) { return fldat.ships; })
 					.reduce (function(  x,  y) { return x.concat(y); })
@@ -1047,6 +1056,7 @@
 					.some   (function( shpDat) {
 						return shpDat.isTaiha();
 					})
+				&& !KC3SortieManager.isPvP() // if PvP, no taiha alert
 			) {
 				if(ConfigManager.alert_taiha){
 					$("#critical").show();
@@ -1111,38 +1121,7 @@
 			);
 			
 			// Map Gauge and status
-			var AllMaps = JSON.parse(localStorage.maps);
-			var thisMapId = "m"+KC3SortieManager.map_world+""+KC3SortieManager.map_num;
-			var thisMap = AllMaps[thisMapId];
-			
-			if(typeof thisMap != "undefined"){
-				if( thisMap.clear == 1){
-					$(".module.activity .map_hp").text("Cleared");
-				}else{
-					// If HP-based gauge
-					if(typeof thisMap.maxhp != "undefined"){
-						$(".module.activity .map_hp").text( thisMap.curhp + " / " + thisMap.maxhp );
-						$(".module.activity .map_gauge_bar").css("width", ((thisMap.curhp/thisMap.maxhp)*58)+"px");
-						
-					// If kill-based gauge
-					}else{
-						var totalKills = KC3Meta.gauge( thisMapId );
-						console.log("wm", KC3SortieManager.map_world, KC3SortieManager.map_num);
-						console.log("thisMapId", thisMapId);
-						console.log("KC3Meta", KC3Meta._gauges);
-						console.log("totalKills", totalKills);
-						var killsLeft = totalKills - thisMap.kills;
-						if(totalKills){
-							$(".module.activity .map_hp").text( killsLeft+" / "+totalKills+" kills");
-							$(".module.activity .map_gauge_bar").css("width", ((killsLeft/totalKills)*58)+"px");
-						}else{
-							$(".module.activity .map_hp").text("Not cleared");
-						}
-					}
-				}
-			}else{
-				$(".module.activity .map_hp").text("No gauge");
-			}
+			updateMapGauge(null);
 			
 			// Switch to battle tab
 			$(".module.activity .activity_battle").css("opacity", 1);
@@ -1266,8 +1245,12 @@
 				var newEnemyHP, enemyHPPercent;
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > -1){
-						newEnemyHP = thisNode.enemyHP[index].currentHp;
-						if(newEnemyHP < 0){ newEnemyHP = 0; }
+						newEnemyHP = Math.max(0,thisNode.enemyHP[index].currentHp);
+						
+						if(!index &&
+							['multiple','gauge-hp'].indexOf(KC3SortieManager.getCurrentMapData().kind)>=0 /* Flagship */
+						)
+							updateMapGauge(KC3SortieManager.currentNode().gaugeDamage,!newEnemyHP);
 						
 						if(newEnemyHP === 0){
 							$(".module.activity .abyss_ship_"+(index+1)).css("opacity", "0.6");
@@ -1359,8 +1342,12 @@
 				var newEnemyHP, enemyHPPercent;
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > -1){
-						newEnemyHP = thisNode.enemyHP[index].currentHp;
-						if(newEnemyHP < 0){ newEnemyHP = 0; }
+						newEnemyHP = Math.max(0,thisNode.enemyHP[index].currentHp);
+						
+						if(!index &&
+							['multiple','gauge-hp'].indexOf(KC3SortieManager.getCurrentMapData().kind)>=0 /* Flagship */
+						)
+							updateMapGauge(KC3SortieManager.currentNode().gaugeDamage,!newEnemyHP);
 						
 						if(newEnemyHP === 0){
 							$(".module.activity .abyss_ship_"+(index+1)).css("opacity", "0.6");
@@ -1420,6 +1407,14 @@
 			}else{
 				$(".module.activity .battle_drop img").attr("src",
 					"../../../../assets/img/ui/dark_shipdrop-x.png");
+			}
+			
+			// Show TP deduction
+			if(KC3SortieManager.getCurrentMapData().kind=='gauge-tp') {
+				updateMapGauge(
+					thisNode.gaugeDamage,
+					true /* does not matter flagship status */
+				);
 			}
 			
 			// Show experience calculation
@@ -2096,6 +2091,65 @@
 			
 			$("img", thisStatBox).attr("src", "../../../../assets/img/stats/"+Code+".png");
 			$(".equipStatText", thisStatBox).text( MasterItem["api_"+StatProperty] );
+		}
+	}
+	
+	function updateMapGauge(gaugeDmg,fsKill) {
+		// Map Gauge and status
+		var
+			AllMaps   = localStorage.getObject('maps'),
+			thisMapId = "m"+KC3SortieManager.map_world+KC3SortieManager.map_num,
+			thisMap   = AllMaps[thisMapId],
+			mapHP     = 0,
+			depleteOK = KC3SortieManager.currentNode().isBoss();
+		
+		// Normalize Parameters
+		fsKill = !!fsKill;
+		gaugeDmg = (gaugeDmg || 0) * -(depleteOK);
+		
+		if(typeof thisMap != "undefined"){
+			if( thisMap.clear == 1){
+				$(".module.activity .map_hp").text("Cleared");
+				$(".module.activity .map_gauge .curhp").css('width','0%');
+			}else{
+				// If HP-based gauge
+				if(typeof thisMap.maxhp != "undefined"){
+					// Reduce current map HP with known gauge damage given
+					mapHP = thisMap.curhp - gaugeDmg;
+					// Normalize the gauge until flagship sinking flag
+					mapHP = Math.max(mapHP,!fsKill);
+					
+					var rate = [mapHP,thisMap.curhp].sort().map(function(x){
+						return (x/thisMap.maxhp)*100;
+					});
+					
+					$(".module.activity .map_hp").text( thisMap.curhp + " / " + thisMap.maxhp );
+					$(".module.activity .map_gauge")
+						.find('.curhp').css("width", (rate[0])+"%").end()
+						.find('.nowhp').css("width", (rate[1])+"%").end();
+					
+				// If kill-based gauge
+				}else{
+					var totalKills = KC3Meta.gauge( thisMapId.slice(1) );
+					console.log("wm", KC3SortieManager.map_world, KC3SortieManager.map_num);
+					console.log("thisMapId", thisMapId);
+					console.log("KC3Meta", KC3Meta._gauges);
+					console.log("totalKills", totalKills);
+					var
+						killsLeft  = totalKills - thisMap.kills,
+						postBounty = killsLeft - (depleteOK && fsKill);
+					if(totalKills){
+						$(".module.activity .map_hp").text( killsLeft+" / "+totalKills+" kills");
+						$(".module.activity .map_gauge")
+							.find('.curhp').css("width", ((postBounty/totalKills)*100)+"%").end()
+							.find('.nowhp').css("width", ( (killsLeft/totalKills)*100)+"%").end();
+					}else{
+						$(".module.activity .map_hp").text("Not cleared");
+					}
+				}
+			}
+		}else{
+			$(".module.activity .map_hp").text("No gauge");
 		}
 	}
 	

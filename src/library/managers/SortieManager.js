@@ -30,7 +30,7 @@ Xxxxxxx
 		sinkList:{main:[],escr:[]},
 		sortieTime: 0,
 		
-		startSortie :function(world, mapnum, fleetNum, stime){
+		startSortie :function(world, mapnum, fleetNum, stime, eventData){
 			// If still on sortie, end previous one
 			if(this.onSortie > 0){ this.endSortie(); }
 			
@@ -75,6 +75,22 @@ Xxxxxxx
 				self.onSortie = id;
 				self.sortieTime = stime;
 				self.save();
+				
+				var
+					mapData = localStorage.getObject('maps'),
+					cMap    = mapData[['m',world,mapnum].join('')];
+				if(eventData && cMap.stat) {
+					var
+						hpData     = cMap.stat.onBoss.hpdat,
+						sorties    = Object.keys(hpData).reverse(),
+						lastSortie = sorties[0];
+					
+					if(lastSortie)
+						hpData[id] = hpData[lastSortie];
+					else
+						hpData[id] = [eventData.api_now_maphp,eventData.api_max_maphp];
+				}
+				localStorage.setObject('maps',mapData);
 			});
 		},
 		

@@ -484,6 +484,7 @@ html,body {
 	margin:0px 5px 0px 0px;
 }
 .module.activity .map_gauge {
+	position:relative;
 	width:60px;
 	height:12px;
 	float:left;
@@ -491,9 +492,16 @@ html,body {
 	background:#222;
 	border:1px solid #fff;
 }
-.module.activity .map_gauge_bar {
+.module.activity .map_gauge * {
+	position:absolute;
 	height:10px;
+	float:left;
+}
+.module.activity .map_gauge .curhp {
 	background:#0f0;
+}
+.module.activity .map_gauge .nowhp {
+	background:#f00;
 }
 .module.activity .map_hp {
 	width:70px;
@@ -1648,6 +1656,7 @@ html,body {
 	float:left;
 	border:1px solid #000;
 	background:#555;
+	position:relative;
 }
 .module.fleet .lship .ship_hp_bar {
 	height:8px;
