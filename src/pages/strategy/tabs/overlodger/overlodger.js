@@ -264,13 +264,12 @@
 						.val(Math.min($(".filterRangeLen input").prop('max'),$(".filterRangeLen input").val()))
 						.trigger('change');
 					$(".filterDate input",baseContext).trigger('change');
-					$(".filterNavigate",baseContext).data('disable-lock',!self.timeRange.duration)
-						.prop('disabled',!self.timeRange.duration);
-					$($("input",".filterRangeLen,.filterScope"),baseContext).data('disabled-lock',!self.timeRange.duration);
+					$("input:not([readonly]),button",$(".filter_base,.filter_reset",baseContext))
+						.data('disable-lock',!self.timeRange.duration);
 					$(".filterRefresh",baseContext).trigger('click');
 				});
 			$(".filterRangeLen input[type=number]",baseContext)
-				.on('click',function(){
+				.on('input keyup',function(){
 					$(this).trigger('change');
 				});
 			$(".filterRangeLen input[type=number]",baseContext)
@@ -283,6 +282,7 @@
 				.on('click',function(){
 					self.timeRange.scope = JSON.parse($(this).val());
 					$(".filterDate input",baseContext).trigger('change');
+					$(".filterRefresh",baseContext).trigger('click');
 				});
 			
 			// Data Filter Handler
@@ -530,10 +530,31 @@
 		function KC3LodgerBuffer(id,hour,matr,mult,optional) {
 			/*jshint: validthis true*/
 			if(this instanceof KC3LodgerBuffer){
-				if([3,5].indexOf(arguments.length) < 0){
-					throw new RangeError('Constructor parameter only able to take between 3 and 5 inclusive.');
+				if([3,4,5].indexOf(arguments.length) < 0){
+					var
+						kn = ['id','hour','matr','mult','optional','overflow'],
+						at = [].map.call(arguments,function(v,i){
+							var type = typeof(v);
+							switch(type){
+								case('number'):
+									type = (parseInt(v,10) == v) ? 'int' : 'float';
+								break;
+								case('string'):
+									type = (v.length != 1) ? 'string' : 'char';
+								break;
+								case('object'):
+									type = v.constructor.name || "(anonymous function)";
+								break;
+							}
+							return [type,kn[i>5 ? 5 : i]].join(' ');
+						}).slice(0,6);
+					throw new RangeError([
+						"Constructor form:\t KC3LodgerBuffer(int id,int hour,int[8] matr[,float mult=1[,variant optional]])",
+						"Requested form:\t KC3LodgerBuffer("+at+")"
+					].join('\n'));
 				}else{
-					mult = Math.max(0,(!parseInt(mult) || isNaN(mult) || !isFinite(mult) || Math.sign(mult) < 0) ? 1 : mult);
+					matr = matr.map(function(x){return parseInt(x,10) || 0;});
+					mult = Math.max(0,(!parseFloat(mult) || isNaN(mult) || !isFinite(mult) || Math.sign(mult) <= 0) ? 1 : mult);
 					
 					Object.defineProperties(this,{
 						id  :{value:id      },
@@ -598,7 +619,7 @@
 			}) }
 		});
 		
-		KC3LodgerBuffer.toString = String.prototype.toString.bind("function KC3Buffer(id,hour,material[,optional])",function(){ return ;});
+		KC3LodgerBuffer.toString = String.prototype.toString.bind("function KC3Buffer(id,hour,material[,coefficient[,optional]])");
 		
 		Object.defineProperty(KC3LodgerBuffer,'toString',{});
 		
