@@ -237,16 +237,19 @@ KC3改 Ship Object
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.repairTime = function(){
 		var
+			HPPercent  = this.hp[0] / this.hp[1],
+			RepairTSec = Math.hrdInt('floor',this.repair[0],3,1),
 			RepairCalc = PS['KanColle.RepairTime'];
 		return {
 			docking:
 				this.isRepaired() ?
 				Math.ceil(KC3TimerManager.repair(PlayerManager.repairShips.indexOf(this.rosterId)).remainingTime()) / 1000 :
-				/* RepairCalc.dockingInSecJSNum( this.master().api_stype, this.level, this.hp[0], this.hp[1] ) */
-				Math.hrdInt('floor',this.repair[0],3,1),
+				/* RepairCalc. dockingInSecJSNum( this.master().api_stype, this.level, this.hp[0], this.hp[1] ) */
+				RepairTSec,
 			akashi:
-				( this.hp[0] / this.hp[1] > 0.50 && this.isFree()) ?
-				RepairCalc.facilityInSecJSNum( this.master().api_stype, this.level, this.hp[0], this.hp[1] ) : 0
+				( HPPercent > 0.50 && HPPercent < 1.00 && this.isFree()) ?
+				/* RepairCalc.facilityInSecJSNum( this.master().api_stype, this.level, this.hp[0], this.hp[1] ) */
+				Math.max(RepairTSec,1200) : 0
 		};
 	};
 	
