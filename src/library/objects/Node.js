@@ -381,14 +381,33 @@ Used by SortieManager
 				
 				/* FLAGSHIP ATTACKING ==> */
 				console.log("Damaged Flagship ",this.gaugeDamage,"/",maps[ckey].curhp || 0,"pts");
-				if((this.gaugeDamage >= 0) && (maps[ckey].curhp || 0) > 0) { // gauge-based not cleared / not gauge-based
-					maps[ckey].curhp -= this.gaugeDamage;
-					if(maps[ckey].curhp <= 0) // if last kill -- check whether flagship is killed or not -- flagship killed = map clear
-						maps[ckey].curhp = 1-(maps[ckey].clear = resultData.api_destsf);
-				}else if((KC3Meta.gauge(ckey.replace("m","")) - (maps[ckey].kills || 0)) > 0) { // kill-based map not cleared
-					maps[ckey].kills += resultData.api_destsf;
+				switch(maps[ckey].kind) {
+					case 'single':   /* Single Victory */
+						break;
+					case 'multiple': /* Kill-based */
+						if((KC3Meta.gauge(ckey.replace("m","")) - (maps[ckey].kills || 0)) > 0)
+							maps[ckey].kills += resultData.api_destsf;
+						break;
+					case 'gauge-hp': /* HP-Gauge */
+						if((this.gaugeDamage >= 0) && (maps[ckey].curhp || 0) > 0) {
+							maps[ckey].curhp -= this.gaugeDamage;
+							if(maps[ckey].curhp <= 0) // if last kill -- check whether flagship is killed or not -- flagship killed = map clear
+								maps[ckey].curhp = 1-(maps[ckey].clear = resultData.api_destsf);
+						}
+						break;
+					case 'gauge-tp': /* TP-Gauge */
+						/* TP Gauge */
+						var TPdata = resultData.api_landing_hp;
+						this.gaugeDamage = Math.min(TPdata.api_now_hp,TPdata.api_sub_value);
+						maps[ckey].curhp = TPdata.api_now_hp - this.gaugeDamage;
+						maps[ckey].maxhp = TPdata.api_max_hp - 0;
+						break;
+					default:         /* Undefined */
+						break;
 				}
+				
 				maps[ckey].clear |= resultData.api_first_clear; // obtaining clear once
+				
 				if(stat) {
 					stat.onBoss.hpdat[srid] = [maps[ckey].curhp,maps[ckey].maxhp];
 					if(resultData.api_first_clear)
@@ -410,20 +429,51 @@ Used by SortieManager
 			}
 			
 			this.mvps = [resultData.api_mvp || 0,resultData.api_mvp_combined || 0].filter(function(x){return !!x;});
-			var fleetDesg = [KC3SortieManager.fleetSent - 1,1];
-			this.lostShips = [resultData.api_lost_flag  || [-1,0,0,0,0,0,0], resultData.api_lost_flag_combined || [-1,0,0,0,0,0,0]]
-				.map(function(lostFlags,fleetNum){
-					console.log("lostFlags", lostFlags);
-					return lostFlags.filter(function(x){return x>=0;}).map(function(checkSunk,rosterPos){
-						if(!!checkSunk) {
-							var rtv = PlayerManager.fleets[fleetDesg[fleetNum]].ships[rosterPos];
-							console.log("このクソ提督、深海に",KC3ShipManager.get(rtv).master().api_name,"が沈んだ (ID:",rtv,")");
-							return rtv;
-						} else {
-							return 0;
-						}
-					}).filter(function(shipId){return shipId;});
-				});
+			var
+				lostCheck = (resultData.api_lost_flag) ?
+					[resultData.api_lost_flag,null] : /* if api_lost_flag is explicitly specified */
+					[resultData.api_get_ship_exp,resultData.api_get_ship_exp_combined].map(function(expData,fleetId){
+						return expData ? expData.slice(1) : []; // filter out first dummy element, be aware for undefined item
+					}).map(function(expData,fleetId){
+						/* Example data:
+							"api_get_ship_exp":[-1,420,140,140,140,-1,-1],
+							"api_get_exp_lvup":[[177,300,600],[236,300,600],[118,300],[118,300]],
+							
+							"api_get_ship_exp_combined":[-1,420,140,140,-1,-1,-1],
+							"api_get_exp_lvup_combined":[[177,300,600],[236,300,600],[118,300],[118,300]]
+							
+							Logic :
+							- for ship_exp indices, start from 1.
+							- compare ship_exp data, check it if -1
+							- (fail condition) ignore, set as non-sink and skip to next one
+							- compare the current index with the neighboring array (exp_lvup),
+							  check if an array exists on that index
+							- if it exists, mark as sunk
+							
+							Source: https://gitter.im/KC3Kai/Public?at=5662e448c15bca7e3c96376f
+						*/
+						return expData.map(function(data,slotId){
+							return (data == -1) && resultData[['api_get','exp_lvup','combined'].slice(0,fleetId+2).join('_')][slotId];
+						});
+					}),
+				fleetDesg = [KC3SortieManager.fleetSent - 1,1]; // designated fleet (fleet mapping)
+			this.lostShips = lostCheck.map(function(lostFlags,fleetNum){
+				console.log("lostFlags",fleetNum, lostFlags);
+				return (lostFlags || []).filter(function(x){return x>=0;}).map(function(checkSunk,rosterPos){
+					if(!!checkSunk) {
+						var rtv = PlayerManager.fleets[fleetDesg[fleetNum]].ships[rosterPos];
+						console.log("このクソ提督、深海に%c%s%cが沈んだ (ID:%d)",
+							'color:red,font-weight:bold',
+							KC3ShipManager.get(rtv).master().api_name,
+							'color:initial,font-weight:initial',
+							rtv
+						);
+						return rtv;
+					} else {
+						return 0;
+					}
+				}).filter(function(shipId){return shipId;});
+			});
 			
 			//var enemyCVL = [510, 523, 560];
 			//var enemyCV = [512, 525, 528, 565, 579];

@@ -123,14 +123,24 @@ Executes processing and relies on KC3Network for the triggers
 	
 	------------------------------------------*/
 	KC3Request.prototype.process = function(){
-		// check clock and clear quests at 5AM JST
-		var serverJstTime = new Date( this.headers.Date ).getTime();
-		KC3QuestManager.checkAndResetQuests(serverJstTime);
-		
 		// If API call is supported
 		if(typeof Kcsapi[this.call] != "undefined"){
 			// Execute by passing data
 			try {
+				// check availability of the header
+				if(!this.headers.Date) {
+					KC3Network.trigger("CatBomb",{
+						title: "Unable to Retrieve Server Date",
+						message: "Somehow there's something wrong with the communication between the server along the proxy. It's not matter of the connection, but it might break some of the functionalities."
+					});
+					
+					this.headers.Date = undefined;
+				}
+				
+				// check clock and clear quests at 5AM JST
+				var serverJstTime = new Date( this.headers.Date ).getTime();
+				KC3QuestManager.checkAndResetQuests(serverJstTime);
+				
 				Kcsapi[this.call]( this.params, this.response, this.headers );
 			} catch (e) {
 				throw e;
