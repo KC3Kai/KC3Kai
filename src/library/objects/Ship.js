@@ -467,7 +467,7 @@ KC3改 Ship Object
 		var
 			lsi = 1,
 			lsk = "";
-		while(this.lastSortie[lsi] != 'sortie0') {
+		while(lsi < this.lastSortie.length && this.lastSortie[lsi] != 'sortie0') {
 			lsk = this.lastSortie[lsi];
 			if(this.pendingConsumption[ lsk ]){
 				lsi++;

@@ -15,6 +15,14 @@ Previously known as "Reactor"
 			slotCur :{},
 			slotId  :0
 		},
+		serverOffset: 0,
+		moraleRefresh: $.extend(new Date(),{
+			calibrate:function(t){
+				t = Date.parse(t);
+				this.setTime(t);
+				return Date.now() - t;
+			}
+		}),
 		
 		/* Master Data
 		-------------------------------------------------------*/
@@ -65,6 +73,7 @@ Previously known as "Reactor"
 			
 			//KC3ShipManager.clear();
 			KC3ShipManager.set(response.api_data.api_ship,true);
+			this.serverOffset = this.moraleRefresh.calibrate( headers.Date );
 			
 			KC3SortieManager.endSortie(response);
 			
@@ -289,6 +298,8 @@ Previously known as "Reactor"
 		/* Ship lists
 		-------------------------------------------------------*/
 		"api_get_member/ship_deck":function(params, response, headers){
+			this.serverOffset = this.moraleRefresh.calibrate( headers.Date );
+			
 			KC3ShipManager.set(response.api_data.api_ship_data);
 			KC3Network.delay(0, "Fleet");
 			KC3Network.trigger("Fleet");

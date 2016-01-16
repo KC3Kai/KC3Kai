@@ -2,6 +2,10 @@
 	"use strict";
 	_gaq.push(['_trackEvent', "Panel: Natsuiro Theme", 'clicked']);
 	
+	// Mathematical Constants
+	var
+		LOG3  = Math.log10(3);
+	
 	// Flags
 	var currentLayout = "";
 	var isRunning = false;
@@ -312,7 +316,7 @@
 		setInterval(function(){
 			// console.log(moraleClockValue, moraleClockEnd, moraleClockRemain);
 			if(moraleClockEnd > 0){
-				moraleClockRemain = Math.ceil( (moraleClockEnd - (new Date()).getTime())/1000);
+				moraleClockRemain = Math.ceil( (moraleClockEnd - Date.now())/1000);
 				if(moraleClockRemain > 0){
 					$(".module.status .status_morale .status_text").text("~"+(moraleClockRemain+"").toHHMMSS());
 					
@@ -959,13 +963,13 @@
 					moraleClockEnd = 0;
 				}else{
 					var MissingMorale = ConfigManager.alert_morale_value - FleetSummary.lowestMorale;
-					var MoraleTime = (Math.ceil(MissingMorale/3)*3)*60;
+					var MoraleTime = Math.hrdInt('ceil',MissingMorale,LOG3)*60;
 					$(".module.status .status_morale .status_text").addClass("bad");
 					
 					if(FleetSummary.lowestMorale != moraleClockValue){
 						// console.log("new morale time", FleetSummary.lowestMorale, MoraleTime);
 						moraleClockValue = FleetSummary.lowestMorale;
-						moraleClockEnd = (new Date()).getTime() + (MoraleTime*1000);
+						moraleClockEnd = Math.round(Math.hrdInt('floor',Kcsapi.moraleRefresh/180,3)*180) + (MoraleTime*1000) + (30000 - Kcsapi.serverOffset);
 					}
 					
 				}
