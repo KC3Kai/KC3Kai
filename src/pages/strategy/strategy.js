@@ -2,6 +2,20 @@
 	"use strict";
 	_gaq.push(['_trackPageview']);
 	
+	var activeTab;
+	
+	Object.defineProperties(window,{
+		activeTab:{
+			get:function(){return activeTab;},
+			set:function(newTab){
+				if(newTab instanceof KC3StrategyTab){ activeTab = newTab; }
+			}
+		},
+		activeSelf: {
+			get:function(){return activeTab.definition;}
+		}
+	});
+	
 	$(document).on("ready", function(){
 		// Initialize data managers
 		ConfigManager.load();
@@ -11,6 +25,7 @@
 		KC3ShipManager.load();
 		KC3GearManager.load();
 		KC3Database.init( PlayerManager.hq.id );
+		KC3Translation.execute();
 		
 		// Click a menu item
 		$("#menu .submenu ul.menulist li").on("click", function(){
@@ -33,11 +48,20 @@
 			var thisTab = KC3StrategyTabs[ KC3StrategyTabs.loading ];
 			if(typeof thisTab != "undefined"){
 				// Execute Tab with callback
+				window.activeTab = thisTab;
 				thisTab.apply();
 				window.scrollTo(0,0);
 			}else{
 				KC3StrategyTabs.loading = false;
 				console.log("Clicked "+$(this).data("id")+" menu with no bound actions");
+			}
+		});
+		
+		$("#contentHtml").on("click", ".page_help_btn", function(){
+			if( $(".page_help").is(":visible") ){
+				$(".page_help").fadeOut();
+			}else{
+				$(".page_help").fadeIn();
 			}
 		});
 		

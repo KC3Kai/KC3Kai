@@ -36,29 +36,86 @@ KC3改 Equipment Object
 	KC3Gear.prototype.master = function(){ return KC3Master.slotitem( this.masterId ); };
 	KC3Gear.prototype.name = function(){ return KC3Meta.gearName( this.master().api_name ); };
 	
-	KC3Gear.prototype.fighterPower = function(capacity, applyVeterancy){
+	/* FIGHTER POWER
+	Get fighter power of this equipment on a slot
+	--------------------------------------------------------------*/
+	KC3Gear.prototype.fighterPower = function(capacity){
 		// Empty item means no fighter power
 		if(this.itemId===0){ return 0; }
 		
-		// Check if veterancy request is defined
-		if(typeof applyVeterancy == "undefined"){ applyVeterancy = false; }
-		
 		// Check if this object is a fighter plane
-		// if( [6,7,8,11].indexOf( this.master().api_type[2] ) > -1){
 		if( [6,7,8,11].indexOf( this.master().api_type[2] ) > -1){
-			// Formula for each equipment
-			var traditionalFP = this.master().api_tyku * Math.sqrt(capacity);
-			
-			if(applyVeterancy){
-				var veteranPower = (this.ace==7?8:0) * Math.sqrt( this.master().api_tyku );
-				return Math.floor(traditionalFP + veteranPower);
-			}
-			
-			return traditionalFP;
+			return Math.floor( Math.sqrt(capacity) * this.master().api_tyku );
 		}
 		
 		// Equipment did not return on plane check, no fighter power
 		return 0;
+	};
+	
+	/* FIGHTER POWER: VETERAN
+	Get fighter power of this equipment
+	with added whole number proficiency bonus
+	--------------------------------------------------------------*/
+	KC3Gear.prototype.fighterVeteran = function(capacity){
+		// Empty item means no fighter power
+		if(this.itemId===0){ return 0; }
+		
+		// Check if this object is a fighter plane
+		if( [6,7,8,11].indexOf( this.master().api_type[2] ) > -1){
+			var typInd = String( this.master().api_type[2] );
+
+			if (typeof ConfigManager.air_average[typInd] == 'undefined') {
+				ConfigManager.resetValueOf('air_average');
+			}
+			var airAverageTable = ConfigManager.air_average[typInd];
+
+			var veteranBonus;
+			if(this.ace==-1){
+				veteranBonus = airAverageTable[ 0 ];
+			}else{
+				veteranBonus = airAverageTable[ this.ace ];
+			}
+			return Math.floor( Math.sqrt(capacity) * this.master().api_tyku + veteranBonus );
+		}
+		
+		// Equipment did not return on plane check, no fighter power
+		return 0;
+	};
+	
+	/* FIGHTER POWER: VETERAN withBOUNDS
+	Get fighter power of this equipment
+	as an array with lower and upper bound bonuses
+	--------------------------------------------------------------*/
+	KC3Gear.prototype.fighterBounds = function(capacity){
+		// Empty item means no fighter power
+		if(this.itemId===0){ return [0,0]; }
+		
+		// Check if this object is a fighter plane
+		if( [6,7,8,11].indexOf( this.master().api_type[2] ) > -1){
+			console.log("this.ace", this.ace);
+			
+			var typInd = String( this.master().api_type[2] );
+			if (typeof ConfigManager.air_bounds[typInd] == 'undefined') {
+				ConfigManager.resetValueOf('air_bounds');
+			}
+			var airBoundTable = ConfigManager.air_bounds[typInd];
+			var veteranBounds;
+			if(this.ace==-1){
+				veteranBounds = airBoundTable[ 0 ];
+			}else{
+				veteranBounds = airBoundTable[ this.ace ];
+			}
+			
+			console.log("ConfigManager.air_bounds",ConfigManager.air_bounds);
+			console.log("veteranBounds", veteranBounds);
+			return [
+				Math.floor( Math.sqrt(capacity) * this.master().api_tyku + veteranBounds[0] ),
+				Math.floor( Math.sqrt(capacity) * this.master().api_tyku + veteranBounds[1] ),
+			];
+		}
+		
+		// Equipment did not return on plane check, no fighter power
+		return [0,0];
 	};
 	
 	KC3Gear.prototype.supportPower = function(){

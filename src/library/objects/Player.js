@@ -13,8 +13,14 @@ Instantiatable class to represent one player
 			this.desc = "";
 			this.rank = "";
 			this.level = 1;
-			this.exp = [0,0,0];
+			this.exp = [0,0,0,0];
 			this.server = 0;
+			this.rankPtLastCount = 0;
+			this.rankPtCutoff = 0;
+			this.rankPtLastCheck = 0;
+			this.lastMaterial = null;
+			this.lastPortTime = null;
+			this.lastSortie   = null;
 		}
 	};
 	
@@ -46,6 +52,46 @@ Instantiatable class to represent one player
 			exp_percent = 1.0;
 		}
 		this.exp = [ exp_percent, exp_next, exp_current, ExpCurrLevel + exp_current ];
+		
+		this.checkRankPoints();
+	};
+	
+	KC3Player.prototype.checkRankPoints = function(){
+		var TimestampNow = Date.now();
+		
+		var PvPResetTime;
+		
+		var PvPReset = (new Date());
+		PvPReset.setUTCMinutes(0);
+		PvPReset.setUTCSeconds(0);
+		PvPReset.setUTCMilliseconds(0);
+		
+		PvPReset.setUTCHours(6);
+		PvPResetTime = PvPReset.getTime();
+		if(this.rankPtLastCheck < PvPResetTime && PvPResetTime < TimestampNow){
+			this.rankCutOff();
+		}else{
+			PvPReset.setUTCHours(18);
+			PvPResetTime = PvPReset.getTime();
+			if(this.rankPtLastCheck < PvPResetTime && PvPResetTime < TimestampNow){
+				this.rankCutOff();
+			}
+		}
+		
+		this.rankPtLastCheck = TimestampNow;
+	};
+	
+	KC3Player.prototype.rankCutOff = function(){
+		this.rankPtLastCount = this.getRankPoints();
+		this.rankPtCutoff = this.exp[3];
+	};
+	
+	KC3Player.prototype.getRankPoints = function(){
+		return Math.floor((this.exp[3] - this.rankPtCutoff)/1400);
+	};
+	
+	KC3Player.prototype.getRegenCap = function(){
+		return (3 + this.level) * 250;
 	};
 
 	KC3Player.prototype.logout = function(){
@@ -80,6 +126,12 @@ Instantiatable class to represent one player
 			this.level = playerInfo.level;
 			this.exp = playerInfo.exp;
 			this.server = playerInfo.server;
+			this.rankPtLastCount = (playerInfo.rankPtLastCount || 0);
+			this.rankPtCutoff = (playerInfo.rankPtCutoff || 0);
+			this.rankPtLastCheck = (playerInfo.rankPtLastCheck || 0);
+			this.lastMaterial = playerInfo.lastMaterial || null;
+			this.lastPortTime = playerInfo.lastPortTime || null;
+			this.lastSortie   = playerInfo.lastSortie || null;
 			return true;
 		}
 		return false;

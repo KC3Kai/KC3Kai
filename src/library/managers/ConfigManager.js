@@ -13,11 +13,20 @@ Retreives when needed to apply on components
 		// Default values. As a function to not include on JSON string
 		defaults : function(){
 			return {
-				version				: 7,
+				version				: 8,
 				language			: "en",
 				elosFormula 		: 3,
 				hqExpDetail 		: 1,
-				marryLevelFormat: 0,
+				timerDisplayType	: 1,
+				marryLevelFormat	: 0,
+				checkLiveQuests		: true,
+				
+				DBSubmission_enabled: 0,
+				DBSubmission_key : '',
+
+				PoiDBSubmission_enabled: false,
+				
+				KC3DBSubmission_enabled: true,
 				
 				info_face 			: true,
 				info_drop 			: true,
@@ -26,11 +35,48 @@ Retreives when needed to apply on components
 				info_battle 		: true,
 				info_btstamp 		: false,
 				info_boss 			: false,
+				info_salt 			: false,
 				info_troll 			: false,
 				info_delta 			: false,
+				info_fleetstat 		: true,
+				info_auto_exped_tab : true,
+
+				// AIR PROFICIENCY BONUSES (Configurable by user)
+				air_formula			: 3, // 1=no veteran 2=veteran average 3=veteran bounds
+				air_average			: {
+					"6":  [0, 1.35, 3.5, 7.1, 11.4, 16.8, 17, 25],
+					"7":  [0,    1,	  1,   1,    2,	   2,  2,  3],
+					"8":  [0,    1,	  1,   1,    2,	   2,  2,  3],
+					"11": [0,    1,	  1,   3,    3,	   7,  7,  9]
+				},
+				air_bounds			: {
+					"6": [
+						[0.026, 0.845], // 0
+						[1, 1.715], [3.212, 3.984], [6.845, 7.504], // 3
+						[11.205, 11.786], [16.639, 17], [16.999, 17.205], [24.679, 25.411] // 7
+					],
+					"7": [
+						[0,0], // 0
+						[0,1], [0,1], [0,1], // 3
+						[1,2], [1,2], [1,2], [1,3]	// 7
+					],
+					"8": [
+						[0,0], // 0
+						[0,1], [0,1], [0,1], // 3
+						[1,2], [1,2], [1,2], [1,3]	// 7
+					],
+					"11": [
+						[0,0], // 0
+						[0,1], [0,1], [1,3], // 3
+						[1,3], [3,7], [3,7], [7,9]	// 7
+					]
+				},
 				
-				ss_mode 			: 0,
-				ss_type 			: 'JPG',
+				salt_list 		: [],
+
+				ss_mode				: 0,
+				ss_type				: 'JPG',
+				ss_directory 		: 'KanColle',
 				
 				alert_diff 			: 59,
 				alert_morale_notif	: true,
@@ -39,6 +85,10 @@ Retreives when needed to apply on components
 				alert_custom 		: "",
 				alert_volume 		: 60,
 				alert_desktop 		: true,
+				alert_supply 		: 3,
+				alert_supply_exped 	:true,
+				alert_idle_counter	: 1,
+				alert_taiha			: false,
 				
 				api_translation		: true,
 				api_tracking 		: true,
@@ -73,13 +123,21 @@ Retreives when needed to apply on components
 				pan_opacity 		: 100
 			};
 		},
+        
+		// Reset value of a specific key to the current default value
+		resetValueOf: function(key) {
+			this[key] = this.defaults()[key];
+			console.log( "key is " + key);
+			console.log( "new value is " + JSON.stringify( this[key] ));
+			this.save();
+		},
 		
 		// Reset to default values
 		clear : function(){
 			$.extend(this, this.defaults());
 			this.save();
 		},
-		
+
 		// Load previously saved config
 		load : function(){
 			// Get old config or create dummy if none
@@ -95,6 +153,12 @@ Retreives when needed to apply on components
 				// Merge defaults, then old config values to ConfigManager
 				$.extend(this, this.defaults(), oldConfig);
 			}
+			
+			/* Force Revert */
+			if(this.language == "troll")
+				this.resetValueOf('language');
+			if(!(this.salt_list instanceof Array))
+				this.resetValueOf('salt_list');
 		},
 		
 		// Save current config onto localStorage
@@ -112,6 +176,12 @@ Retreives when needed to apply on components
 		// Toggle HQ Exp Information
 		scrollHQExpInfo :function(){
 			this.hqExpDetail = (this.hqExpDetail % 3) + 1;
+			this.save();
+		},
+		
+		// Toggle repair timer type
+		scrollTimerType :function(){
+			this.timerDisplayType = (this.timerDisplayType % 2) + 1;
 			this.save();
 		}
 		

@@ -6,6 +6,7 @@ KC3改 Ship Box for Natsuiro theme
 	
 	window.KC3NatsuiroShipbox = function( base, rosterId ){
 		this.element = $("#factory "+base).clone();
+		this.element.attr("id", "ShipBox"+rosterId);
 		this.shipData = KC3ShipManager.get( rosterId );
 		
 		this.expPercent = this.shipData.exp[2] / 100;
@@ -17,7 +18,8 @@ KC3改 Ship Box for Natsuiro theme
 	Short ship box for combined fleets
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.commonElements = function( rosterId ){
-		$(".ship_img img", this.element).attr("src", KC3Meta.shipIcon(this.shipData.masterId));
+		$(".ship_img img", this.element).attr("src", KC3Meta.shipIcon(this.shipData.masterId)).attr("title",
+		JSON.stringify(this.shipData.pendingConsumption));
 		$(".ship_name", this.element).text( this.shipData.name() );
 		$(".ship_type", this.element).text( this.shipData.stype() );
 		
@@ -44,8 +46,8 @@ KC3改 Ship Box for Natsuiro theme
 		
 		// Thin bars below the ship box
 		$(".ship_exp", this.element).css("width", (120 * this.expPercent)+"px");		
-		$(".ship_fuel", this.element).css("width", (120 * this.fuelPercent)+"px");
-		$(".ship_ammo", this.element).css("width", (120 * this.ammoPercent)+"px");
+		$(".ship_fuel", this.element).css("width", (120 * Math.min(this.fuelPercent, 1))+"px");
+		$(".ship_ammo", this.element).css("width", (120 * Math.min(this.ammoPercent, 1))+"px");
 		$(".ship_bars", this.element).attr("title", "Remaining Exp = " + this.shipData.exp[1] + ", Fuel = " + Math.ceil(this.fuelPercent*100) +"%" + ", Ammo = " + Math.ceil(this.ammoPercent*100)+"%");
 		
 		return this.element;
@@ -60,15 +62,22 @@ KC3改 Ship Box for Natsuiro theme
 		this.showPrediction();
 		this.showMorale();
 		
-		$(".ship_level span", this.element).text( this.shipData.level );		
-		$(".ship_exp_next", this.element).text( this.shipData.exp[1] );		
+		$(".ship_level span", this.element)
+			.text( this.shipData.level )
+			.prop( 'title', (function(shipData){
+				var mst = shipData.master();
+				return (shipData.level >= (mst.api_afterlv || Infinity)) ?
+					['Possible Remodel'] :
+					(mst.api_afterlv && ['Next Remodel',mst.api_afterlv].join(' ') || '');
+			})(this.shipData) );
+		$(".ship_exp_next", this.element).text( this.shipData.exp[1] );
 		$(".ship_exp_bar", this.element).css("width", (290*this.expPercent)+"px");
 		
 		$(".ship_fuel .ship_supply_text", this.element).text(Math.ceil(this.fuelPercent*100)+"%");
 		$(".ship_ammo .ship_supply_text", this.element).text(Math.ceil(this.ammoPercent*100)+"%");
 		
-		$(".ship_fuel .ship_supply_bar", this.element).css("width", (38 * this.fuelPercent)+"px");
-		$(".ship_ammo .ship_supply_bar", this.element).css("width", (38 * this.ammoPercent)+"px");
+		$(".ship_fuel .ship_supply_bar", this.element).css("width", (38 * Math.min(this.fuelPercent, 1))+"px");
+		$(".ship_ammo .ship_supply_bar", this.element).css("width", (38 * Math.min(this.ammoPercent, 1))+"px");
 		
 		this.showEquipment(0);
 		this.showEquipment(1);
@@ -133,7 +142,25 @@ KC3改 Ship Box for Natsuiro theme
 					$(".ship_hp_bar", this.element).css("background", "#00FF00");
 				}
 			}
+			
+			if(this.shipData.akashiMark) {
+				this.element.css("background-color", "rgba(191,255,100,0.15)");
+			}
 		}
+		
+		this.hideAkashi();
+	};
+	
+	/* HIDE AKASHI TIMER
+	(If enabled?) Show the timer whenever hover akashi's shipbox.
+	This element will be removed if it does not meet the required condition.
+	[Being repaired/Repairing]
+	---------------------------------------------------*/
+	KC3NatsuiroShipbox.prototype.hideAkashi = function(){
+		if(!this.shipData.akashiMark)
+			$(".ship_repair_data",this.element).remove();
+		else
+			$(".ship_repair_data",this.element).data('sid',this.shipData.rosterId);
 	};
 	
 	/* SHOW PREDICTION
@@ -214,8 +241,17 @@ KC3改 Ship Box for Natsuiro theme
 				
 				if(typeof thisGear.ace != "undefined"){
 					if(thisGear.ace > -1){
-						$(".ship_gear_"+(slot+1)+" .ship_gear_ace", this.element).show();
-						$(".ship_gear_"+(slot+1)+" .ship_gear_ace", this.element).text(thisGear.ace);
+						// Is a plane with veterancy
+						$(".ship_gear_"+(slot+1)+" .ship_gear_lvl", this.element).addClass("ship_gear_ace");
+						$(".ship_gear_"+(slot+1)+" .ship_gear_lvl", this.element).show();
+						$(".ship_gear_"+(slot+1)+" .ship_gear_lvl", this.element).text(thisGear.ace);
+					}else{
+						// Is a normal equipment that can be upgraded
+						$(".ship_gear_"+(slot+1)+" .ship_gear_lvl", this.element).addClass("ship_gear_mod");
+						if(thisGear.stars > 0){
+							$(".ship_gear_"+(slot+1)+" .ship_gear_lvl", this.element).show();
+							$(".ship_gear_"+(slot+1)+" .ship_gear_lvl", this.element).text(thisGear.stars);
+						}
 					}
 				}
 				

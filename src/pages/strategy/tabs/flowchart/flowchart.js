@@ -193,6 +193,8 @@
 			$(".questIcon", thisBox).text( thisQuest.id );
 			$(".questIcon", thisBox).addClass("type"+(String(thisQuest.id).substring(0,1)));
 			$(".questDesc", thisBox).text( thisQuest.meta().desc );
+			$(".questToggle", thisBox).data("id", thisQuest.id);
+			$(".questRemove", thisBox).data("id", thisQuest.id);
 			
 			// Status-based actions
 			switch(thisQuest.status){

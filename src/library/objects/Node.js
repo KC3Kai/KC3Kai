@@ -12,6 +12,7 @@ Used by SortieManager
 		this.id = (id || 0);
 		this.type = "";
 		this.stime = UTCTime;
+		this.isPvP = false;
 	};
 	
 	KC3Node.prototype.defineAsBattle = function( nodeData ){
@@ -40,6 +41,9 @@ Used by SortieManager
 		this.enemyHP = [0,0,0,0,0,0];
 		this.originalHPs = [0,0,0,0,0,0,0,0,0,0,0,0,0];
 		this.allyNoDamage = true;
+		this.nodalXP = 0;
+		this.lostShips = [[],[]];
+		this.mvps = [];
 		return this;
 	};
 	
@@ -53,19 +57,29 @@ Used by SortieManager
 			)+".png";
 		};
 		this.amount = nodeData.api_itemget.api_getcount;
+		if(this.item < 8)
+			KC3SortieManager.materialGain[this.item-1] += this.amount;
 		return this;
 	};
 	
 	KC3Node.prototype.defineAsBounty = function( nodeData ){
+		var
+			self = this,
+			maps = JSON.parse(localStorage.maps),
+			ckey = ["m",KC3SortieManager.map_world,KC3SortieManager.map_num].join("");
 		this.type = "bounty";
 		this.item = nodeData.api_itemget_eo_comment.api_id;
 		this.icon = function(folder){
 			return folder+(
 				["fuel","ammo","steel","bauxite","ibuild","bucket","devmat","compass"]
-				[nodeData.api_itemget_eo_comment.api_id-1]
+				[self.item-1]
 			)+".png";
 		};
 		this.amount = nodeData.api_itemget_eo_comment.api_getcount;
+		KC3SortieManager.materialGain[this.item-1] += this.amount;
+		
+		maps[ckey].clear |= (++maps[ckey].kills) >= KC3Meta.gauge(ckey.replace("m",""));
+		localStorage.maps = JSON.stringify(maps);
 		return this;
 	};
 	
@@ -192,7 +206,7 @@ Used by SortieManager
 		var ship;
 		var fleetId = parseInt(fleetSent) || KC3SortieManager.fleetSent;
 		
-		if (PlayerManager.combinedFleet === 0 || fleetId>1){ // single fleet: not combined, or sent fleet is not first fleet
+		if ((typeof PlayerManager.combinedFleet === "undefined") || (PlayerManager.combinedFleet === 0) || fleetId>1){ // single fleet: not combined, or sent fleet is not first fleet
 			result = DA.analyzeRawBattleJS(battleData); 
 			// console.log("Single Fleet");
 			// console.log("analysis result", result);
@@ -215,7 +229,7 @@ Used by SortieManager
 				ship.afterHp[1] = ship.hp[1];
 			}
 		} else {
-			if (PlayerManager.combinedFleet === 1) {
+			if (PlayerManager.combinedFleet === 1 || PlayerManager.combinedFleet === 3) {
 				result = DA.analyzeRawCarrierTaskForceBattleJS(battleData); 
 				// console.log("Carrier Task Force");
 			} else {
@@ -288,16 +302,16 @@ Used by SortieManager
 		var fleet;
 		var shipNum;
 		var ship;
+		var fleetId = parseInt(fleetSent) || KC3SortieManager.fleetSent;
 		
-		// SINGLE FLEET
-		if (!PlayerManager.combinedFleet) {
-			result = DA.analyzeRawNightBattleJS( nightData ); 
-			var fleetId = parseInt(fleetSent) || KC3SortieManager.fleetSent;
-			fleet = PlayerManager.fleets[fleetId - 1];
 		// COMBINED FLEET
-		} else {
+		if (PlayerManager.combinedFleet && (fleetId <= 1)) { 
 			result = DA.analyzeRawNightBattleCombinedJS( nightData ); 
 			fleet = PlayerManager.fleets[1];
+		// SINGLE FLEET
+		} else { // single fleet: not combined, or sent fleet is not first fleet
+			result = DA.analyzeRawNightBattleJS( nightData ); 
+			fleet = PlayerManager.fleets[fleetId - 1];
 		}
 		
 		for (i = 7; i < 13; i++) {
@@ -318,7 +332,7 @@ Used by SortieManager
 		}
 		
 		if(this.gaugeDamage > -1)
-			this.gaugeDamage = this.gaugeDamage + Math.min(this.originalHPs[7],this.originalHPs[7] - this.enemyHP[0].currentHp);
+			this.gaugeDamage = this.gaugeDamage + Math.min(nightData.api_nowhps[7],nightData.api_nowhps[7] - this.enemyHP[0].currentHp);
 	};
 	
 	KC3Node.prototype.night = function( nightData ){
@@ -326,73 +340,134 @@ Used by SortieManager
 	};
 	
 	KC3Node.prototype.results = function( resultData ){
-		this.rating = resultData.api_win_rank;
-		if(this.allyNoDamage && this.rating === "S")
-			this.rating = "SS";
-		console.log("This battle, have damaged the ally fleet",!this.allyNoDamage);
-		
-		if(this.isBoss()) {
-			var
-				maps = JSON.parse(localStorage.maps),
-				ckey = ["m",KC3SortieManager.map_world,KC3SortieManager.map_num].join("");
-			console.log("Damaged Flagship ",this.gaugeDamage,"/",maps[ckey].curhp || 0,"pts");
-			if((this.gaugeDamage >= 0) && (maps[ckey].curhp || 0) > 0) { // gauge-based not cleared / not gauge-based
-				maps[ckey].curhp -= this.gaugeDamage;
-				if(maps[ckey].curhp <= 0) // if last kill -- check whether flagship is killed or not -- flagship killed = map clear
-					maps[ckey].curhp = 1-(maps[ckey].clear = resultData.destsf);
-				localStorage.maps = JSON.stringify(maps);
-			}
-		}
-		
-		if(typeof resultData.api_get_ship != "undefined"){
-			this.drop = resultData.api_get_ship.api_ship_id;
-			KC3ShipManager.pendingShipNum += 1;
-			KC3GearManager.pendingGearNum += KC3Meta.defaultEquip(this.drop);
-			console.log("Drop " + resultData.api_get_ship.api_ship_name + " (" + this.drop + ") Equip " + KC3Meta.defaultEquip(this.drop));
-		}else{
-			this.drop = 0;
-		}
-		
-		//var enemyCVL = [510, 523, 560];
-		//var enemyCV = [512, 525, 528, 565, 579];
-		//var enemySS = [530, 532, 534, 531, 533, 535, 570, 571, 572];
-		//var enemyAP = [513, 526, 558];
-
-		for(var i = 0; i < 6; i++) {
-			if (this.enemySunk[i]) {
-				var enemyShip = KC3Master.ship(this.eships[i]);
-				if (!enemyShip) {
-					console.log("Cannot find enemy " + this.eships[i]);
-				} else if (this.eships[i] < 500) {
-					console.log("Enemy ship is not Abyssal!");
-				} else {
-					switch(enemyShip.api_stype) {
-						case  7:	// 7 = CVL
-						case 11:	// 11 = CV
-							console.log("You sunk a CV"+((enemyShip.api_stype==7)?"L":""));
-							KC3QuestManager.get(217).increment();
-							KC3QuestManager.get(211).increment();
-							KC3QuestManager.get(220).increment();
-							break;
-						case 13:	// 13 = SS
-							console.log("You sunk a SS");
-							KC3QuestManager.get(230).increment();
-							KC3QuestManager.get(228).increment();
-							break;
-						case 15:	// 15 = AP
-							console.log("You sunk a AP");
-							KC3QuestManager.get(218).increment();
-							KC3QuestManager.get(212).increment();
-							KC3QuestManager.get(213).increment();
-							KC3QuestManager.get(221).increment();
-							break;
+		try {
+			this.rating = resultData.api_win_rank;
+			this.nodalXP = resultData.api_get_base_exp;
+			if(this.allyNoDamage && this.rating === "S")
+				this.rating = "SS";
+			console.log("This battle, have damaged the ally fleet",!this.allyNoDamage);
+			
+			if(this.isBoss()) {
+				var
+					maps = localStorage.getObject('maps'),
+					ckey = ["m",KC3SortieManager.map_world,KC3SortieManager.map_num].join(""),
+					stat = maps[ckey].stat,
+					srid = KC3SortieManager.onSortie;
+				/* DESPAIR STATISTICS ==> */
+				if(stat) {
+					var
+						fs = [this.gaugeDamage,this.originalHPs[7]],
+						pt = 'dummy',
+						sb = stat.onBoss,
+						oc = 0;
+					fs.push(fs[0]/fs[1]);
+					fs.push(fs[1]-fs[0]);
+					switch(true){
+						case (fs[0] ===   0): pt = 'fresh'; break;
+						case (fs[2] <  0.25): pt = 'graze'; break;
+						case (fs[2] <  0.50): pt = 'light'; break;
+						case (fs[2] <  0.75): pt = 'modrt'; break;
+						case (fs[3] >     9): pt = 'heavy'; break;
+						case (fs[3] >     1): pt = 'despe'; break;
+						case (fs[3] ==    1): pt = 'endur'; break;
+						case (fs[3] <     1): pt = 'destr'; break;
 					}
+					sb[pt].push(srid);
+					oc = sb[pt].length;
+					console.info('Current sortie recorded as',pt,'.');
+					console.info('You\'ve done this',oc,'time'+(oc != 1 ? 's' : '')+'.','Good luck, see you next time!');
+				}
+				/* ==> DESPAIR STATISTICS */
+				
+				/* FLAGSHIP ATTACKING ==> */
+				console.log("Damaged Flagship ",this.gaugeDamage,"/",maps[ckey].curhp || 0,"pts");
+				if((this.gaugeDamage >= 0) && (maps[ckey].curhp || 0) > 0) { // gauge-based not cleared / not gauge-based
+					maps[ckey].curhp -= this.gaugeDamage;
+					if(maps[ckey].curhp <= 0) // if last kill -- check whether flagship is killed or not -- flagship killed = map clear
+						maps[ckey].curhp = 1-(maps[ckey].clear = resultData.api_destsf);
+				}else if((KC3Meta.gauge(ckey.replace("m","")) - (maps[ckey].kills || 0)) > 0) { // kill-based map not cleared
+					maps[ckey].kills += resultData.api_destsf;
+				}
+				maps[ckey].clear |= resultData.api_first_clear; // obtaining clear once
+				if(stat) {
+					stat.onBoss.hpdat[srid] = [maps[ckey].curhp,maps[ckey].maxhp];
+					if(resultData.api_first_clear)
+						stat.onClear = srid; // retrieve sortie ID for first clear mark
 				}
 				
+				/* ==> FLAGSHIP ATTACKING */
+				
+				localStorage.setObject('maps',maps);
 			}
-		}
+			
+			if(typeof resultData.api_get_ship != "undefined"){
+				this.drop = resultData.api_get_ship.api_ship_id;
+				KC3ShipManager.pendingShipNum += 1;
+				KC3GearManager.pendingGearNum += KC3Meta.defaultEquip(this.drop);
+				console.log("Drop " + resultData.api_get_ship.api_ship_name + " (" + this.drop + ") Equip " + KC3Meta.defaultEquip(this.drop));
+			}else{
+				this.drop = 0;
+			}
+			
+			this.mvps = [resultData.api_mvp || 0,resultData.api_mvp_combined || 0].filter(function(x){return !!x;});
+			var fleetDesg = [KC3SortieManager.fleetSent - 1,1];
+			this.lostShips = [resultData.api_lost_flag  || [-1,0,0,0,0,0,0], resultData.api_lost_flag_combined || [-1,0,0,0,0,0,0]]
+				.map(function(lostFlags,fleetNum){
+					console.log("lostFlags", lostFlags);
+					return lostFlags.filter(function(x){return x>=0;}).map(function(checkSunk,rosterPos){
+						if(!!checkSunk) {
+							var rtv = PlayerManager.fleets[fleetDesg[fleetNum]].ships[rosterPos];
+							console.log("このクソ提督、深海に",KC3ShipManager.get(rtv).master().api_name,"が沈んだ (ID:",rtv,")");
+							return rtv;
+						} else {
+							return 0;
+						}
+					}).filter(function(shipId){return shipId;});
+				});
+			
+			//var enemyCVL = [510, 523, 560];
+			//var enemyCV = [512, 525, 528, 565, 579];
+			//var enemySS = [530, 532, 534, 531, 533, 535, 570, 571, 572];
+			//var enemyAP = [513, 526, 558];
 
-		this.saveBattleOnDB();
+			for(var i = 0; i < 6; i++) {
+				if (this.enemySunk[i]) {
+					var enemyShip = KC3Master.ship(this.eships[i]);
+					if (!enemyShip) {
+						console.log("Cannot find enemy " + this.eships[i]);
+					} else if (this.eships[i] < 500) {
+						console.log("Enemy ship is not Abyssal!");
+					} else {
+						switch(enemyShip.api_stype) {
+							case  7:	// 7 = CVL
+							case 11:	// 11 = CV
+								console.log("You sunk a CV"+((enemyShip.api_stype==7)?"L":""));
+								KC3QuestManager.get(217).increment();
+								KC3QuestManager.get(211).increment();
+								KC3QuestManager.get(220).increment();
+								break;
+							case 13:	// 13 = SS
+								console.log("You sunk a SS");
+								KC3QuestManager.get(230).increment();
+								KC3QuestManager.get(228).increment();
+								break;
+							case 15:	// 15 = AP
+								console.log("You sunk a AP");
+								KC3QuestManager.get(218).increment();
+								KC3QuestManager.get(212).increment();
+								KC3QuestManager.get(213).increment();
+								KC3QuestManager.get(221).increment();
+								break;
+						}
+					}
+					
+				}
+			}
+		} catch (e) {
+			console.error("Captured an exception ==>", e,"\n==> proceeds safely");
+		} finally {
+			this.saveBattleOnDB(resultData);
+		}
 	};
 	
 	KC3Node.prototype.isBoss = function(){
@@ -409,7 +484,15 @@ Used by SortieManager
 			yasen: (this.battleNight || {}),
 			rating: this.rating,
 			drop: this.drop,
-			time: this.stime
+			time: this.stime,
+			baseEXP: this.nodalXP,
+			hqEXP: resultData.api_get_exp || 0,
+			shizunde: this.lostShips.map(function(fleetLost){
+				return fleetLost.map(function(shipSunk){
+					return KC3ShipManager.get(shipSunk).masterId;
+				});
+			}),
+			mvp: this.mvps
 		});
 	};
 	

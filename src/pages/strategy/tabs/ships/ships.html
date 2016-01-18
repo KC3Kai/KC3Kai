@@ -1,8 +1,12 @@
 <div class="page_title">
 	Ship List
-	<div class="page_wiki">
-		<a href="https://github.com/dragonjet/KC3Kai/wiki/Strategy-Room:-Ships" target="_blank"><span>?</span> Help</a>
-	</div>
+	<div class="page_help_btn hover"><span>?</span> Help Topics</div>
+</div>
+
+<!-- HELP TOPICS -->
+<div class="page_help">
+	<div class="help_q">Where is the heartlock column?</div>
+	<div class="help_a">It is currently disabled in favor of the night battle capability column in black. There are plans to enhance this table in the future.</div>
 </div>
 
 <!-- TOGGLE FILTERS -->
@@ -12,6 +16,7 @@
 			<dt class="massLabel">Select:</dt>
 			<dd class="hover all">All</dd>
 			<dd class="hover none">None</dd>
+			<dd class="hover invert">Invert</dd>
 		</dl>
 		<dl>
 			<dt class="massLabel">Equip Stats:</dt>
@@ -36,12 +41,18 @@
 			<dd class="hover marriage_on">Only</dd>
 			<dd class="hover marriage_ex">Exclude</dd>
 		</dl>
-		<!--
 		<dl>
 			<dt class="massLabel">Include Fleet</dt>
 			<dd class="hover fleet_yes">Yes</dd>
 			<dd class="hover fleet_no">No</dd>
 		</dl>
+		<dl>
+			<dt class="massLabel">Heartlock:</dt>
+			<dd class="hover heartlock_all">All</dd>
+			<dd class="hover heartlock_yes">Yes</dd>
+			<dd class="hover heartlock_no">No</dd>
+		</dl>
+		<!--
 		<dl>
 			<dt class="massLabel">Show pages</dt>
 			<dd class="hover pages_yes">Yes</dd>
@@ -77,8 +88,8 @@
 			<div class="ship_field hover ship_stat ship_lk" data-type="lk"><img src="../../assets/img/stats/lk.png" /></div>
 			<div class="ship_field hover ship_stat ship_stat_mod ship_yasen" data-type="yasen"><img src="../../assets/img/stats/yasen.png" /></div>
 			
-			<div class="ship_field ship_equip">Equipment</div> 		
-			<div class="ship_field ship_lock"></div>			
+			<div class="ship_field ship_equip">Equipment</div>
+			<div class="ship_field ship_lock"></div>
 			<div class="clear"></div>
 		</div>
 		<!-- <div class="ship_totals">
@@ -126,10 +137,10 @@
 			<div class="ship_field ship_stat ship_stat_mod ship_yasen"></div>
 			
 			<div class="ship_field ship_equip">
-				<div class="ship_equip_icon ship_equip_1"><img/></div>
-				<div class="ship_equip_icon ship_equip_2"><img/></div>
-				<div class="ship_equip_icon ship_equip_3"><img/></div>
-				<div class="ship_equip_icon ship_equip_4"><img/></div>
+				<div class="ship_equip_icon ship_equip_1"><img/><span></span></div>
+				<div class="ship_equip_icon ship_equip_2"><img/><span></span></div>
+				<div class="ship_equip_icon ship_equip_3"><img/><span></span></div>
+				<div class="ship_equip_icon ship_equip_4"><img/><span></span></div>
 				<div class="clear"></div>
 			</div> 			
 			

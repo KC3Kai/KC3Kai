@@ -1,0 +1,190 @@
+.tab_expcalc {
+	width:680px;
+}
+.tab_expcalc .factory {
+	display:none;
+}
+
+.tab_expcalc .box_goals {
+	margin:0px 0px 20px 0px;
+}
+.tab_expcalc .box_recommend {
+	margin:0px 0px 20px 0px;
+}
+.tab_expcalc .box_other {
+	margin:0px 0px 10px 0px;
+}
+
+/* RECORD
+--------------------------------*/
+.tab_expcalc .ship_goal {
+	width:680px;
+	height:40px;
+	background:#def;
+	border-radius: 8px;
+	margin:0px 0px 3px 0px;
+	padding:2px 4px;
+	line-height:34px;
+	border:1px solid #ace;
+}
+.tab_expcalc .ship_goal .ship_col {
+	height:34px;
+	float:left;
+	/*background:#fff;*/
+	overflow:hidden;
+}
+.tab_expcalc .ship_goal .ship_label {
+	height:14px;
+	line-height:14px;
+	font-size:12px;
+	text-align:center;
+}
+.tab_expcalc .ship_goal .ship_value {
+	height:20px;
+	line-height:20px;
+	text-align:center;
+	font-size:16px;
+	font-weight:bold;
+	color:#039;
+}
+.tab_expcalc .ship_goal .ship_input {
+	height:20px;
+	line-height:20px;
+	text-align:center;
+}
+
+/* COLUMNS
+--------------------------------*/
+.tab_expcalc .ship_goal .ship_icon {
+	width:34px;
+	height:34px;
+	line-height:36px;
+	margin:0px 3px 0px 0px;
+	border-radius:17px;
+	overflow:hidden;
+	padding:0px;
+}
+.tab_expcalc .ship_goal .ship_icon img {
+	width:36px;
+	height:36px;
+	margin:-1px 0px 0px -1px;
+	position:relative;
+	vertical-align: top;
+}
+
+.tab_expcalc .ship_goal .ship_info {
+	width:110px;
+	padding:3px 0px 0px 0px;
+	margin:0px 2px 0px 0px;
+}
+.tab_expcalc .ship_goal .ship_name {
+	width:110px;
+	height:16px;
+	line-height:16px;
+	color:#039;
+	font-size:12px;
+	overflow:hidden;
+	font-weight:bold;
+}
+.tab_expcalc .ship_goal .ship_type {
+	width:110px;
+	height:12px;
+	line-height:12px;
+	color:#8ac;
+	font-size:12px;
+}
+
+.tab_expcalc .ship_goal .ship_lv {
+	width:50px;
+	margin:0px 2px 0px 0px;
+}
+.tab_expcalc .ship_goal .ship_target {
+	width:50px;
+	margin:0px 2px 0px 0px;
+}
+.tab_expcalc .ship_goal .ship_exp {
+	width:70px;
+	margin:0px 2px 0px 0px;
+}
+.tab_expcalc .ship_goal .ship_exp .ship_value {
+	font-size:13px;
+}
+.tab_expcalc .ship_goal .ship_result {
+	width:60px;
+	margin:0px 2px 0px 0px;
+}
+.tab_expcalc .ship_goal .ship_result .ship_value {
+	color:#e33;
+}
+.tab_expcalc .ship_goal .ship_map {
+	width:70px;
+	margin:0px 2px 0px 0px;
+}
+.tab_expcalc .ship_goal .ship_rank {
+	width:50px;
+	margin:0px 2px 0px 0px;
+}
+.tab_expcalc .ship_goal .ship_fs {
+	width:50px;
+	margin:0px 2px 0px 0px;
+}
+.tab_expcalc .ship_goal .ship_mvp {
+	width:50px;
+	margin:0px 2px 0px 0px;
+}
+
+.tab_expcalc .ship_goal .ship_btn {
+	width:24px;
+	height:24px;
+	line-height:24px;
+	border-radius: 17px;
+	margin:5px 0px 3px 0px;
+	text-align:center;
+	font-size:20px;
+	color:#fff;
+	float:right;
+	padding:0px;
+	display:none;
+}
+.tab_expcalc .ship_goal .ship_add {
+	background:#3c9;
+}
+.tab_expcalc .ship_goal .ship_rem {
+	background:#c77;
+	font-size:14px;
+	font-weight:bold;
+}
+.tab_expcalc .ship_goal .ship_edit {
+	background:#58b;
+	font-size:14px;
+	font-weight:bold;
+	margin-right:3px;
+}
+.tab_expcalc .ship_goal .ship_save {
+	background:#3c9;
+	font-size:14px;
+	font-weight:bold;
+	margin-right:3px;
+}
+
+/* INACTIVE OVERRIDES
+--------------------------------*/
+.tab_expcalc .ship_goal.inactive {
+	width:160px;
+	float:left;
+	margin:0px 5px 3px 0px;
+}
+.tab_expcalc .ship_goal.inactive .ship_lv {
+	width:40px;
+	margin:0px 2px 0px 0px;
+}
+.tab_expcalc .ship_goal.inactive .ship_target {
+	width:40px;
+	margin:0px 2px 0px 0px;
+}
+.tab_expcalc .ship_goal.inactive .ship_add {
+	display:block;
+}
+.tab_expcalc .ship_goal.inactive .ship_activeOnly {
+	display:none;
+}

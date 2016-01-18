@@ -3,7 +3,7 @@
 	"name": "KC3改 Development",
 	"short_name": "KC3改",
 	"description": "Kantai Collection Game Viewer and Helper",
-	"version": "18.2",
+	"version": "26.0",
 	"devtools_page": "pages/devtools/init.html",
 	"options_page": "pages/settings/settings.html",
 	"icons": {
@@ -40,6 +40,16 @@
 		{
 			"matches":["*://www.dmm.com/*"],
 			"js": ["library/injections/cookie.js"],
+			"run_at": "document_end",
+			"all_frames": true
+		},
+		{
+			"matches":["*://www.dmm.com/netgame/*/app_id=854854*"],
+			"js": [
+				"assets/js/jquery-2.1.3.min.js",
+				"library/objects/Messengers.js",
+				"library/injections/dmm.js"
+			],
 			"run_at": "document_end",
 			"all_frames": true
 		},

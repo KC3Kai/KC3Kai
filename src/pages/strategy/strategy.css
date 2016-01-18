@@ -11,7 +11,8 @@ body {
 	margin:10px 0px 10px 0px;
 }
 
-/* MENU */
+/* MENU TABS
+-------------------------------*/
 #menu {
 	width:100px;
 	float:left;
@@ -75,10 +76,11 @@ body {
 	line-height:10px;
 }
 
-/* CONTENT */
+/* CONTENT
+-------------------------------*/
 #content {
 	width:700px;
-	min-height:1030px;
+	min-height:1300px;
 	float:left;
 	background:#fff;
 	border-radius:10px;
@@ -90,7 +92,8 @@ body {
 	width:700px;
 }
 
-/* COMMONS */
+/* COMMONS
+-------------------------------*/
 .page_title {
 	width:700px;
 	font-size:18px;
@@ -101,47 +104,25 @@ body {
 	border-bottom:1px solid #369;
 	color:#0066CC;
 }
-.page_padding {
-	width:700px;
-	padding:0px 10px 0px;
-}
-.page_section {
+
+.page_help_btn {
 	height:24px;
 	line-height:24px;
-	font-size:18px;
-	border-bottom:1px solid #ccc;
-	margin:20px 0px 5px 0px;
-}
-.page_help {
-	width:680px;
-	height:24px;
-	line-height:24px;
-	margin:10px 0px 10px 0px;
-	padding:0px 0px 0px 0px;
-	clear:both;
-	font-size:12px;
-	font-style:italic;
-	background:#cfc;
-	border-radius:12px;
-}
-.page_help_icon {
-	
-}
-.page_wiki {
-	height:30px;
 	text-align:right;
 	float:right;
-	margin:0px 10px 0px 0px;
+	margin:3px 5px 0px 0px;
 	font-size:12px;
+	padding:0px 10px 0px 5px;
+	border-radius:8px;
 }
-.page_wiki a {
-	height:30px;
+.page_help_btn:hover {
+	background:#ffc;
 }
-.page_wiki a span {
+.page_help_btn span {
 	width:14px;
 	height:14px;
 	line-height:14px;
-	margin:7px 3px 3px 3px;
+	margin:4px 3px 3px 3px;
 	float:left;
 	background:#69c;
 	border-radius:9px;
@@ -151,4 +132,53 @@ body {
 	color:#fff;
 	font-style:normal;
 	display:block;
+}
+
+.page_help {
+	width:700px;
+	min-height:200px;
+	background:url(../../assets/img/ui/fairy.png) #e6ffe6;
+	background-position:bottom right;
+	background-repeat:no-repeat;
+	padding:5px 10px;
+	border-bottom:1px solid #369;
+	display:none;
+}
+.page_help .help_q {
+	height:16px;
+	line-height:16px;
+	font-size:12px;
+	font-weight:bold;
+	margin:0px 0px 0px 0px;
+	color:#0099cc;
+	text-shadow:1px 1px 2px #ccc;
+}
+.page_help .help_a {
+	line-height:14px;
+	font-size:12px;
+	margin:0px 0px 5px 20px;
+	text-shadow:0px 0px 1px #fff;
+}
+
+.page_panel {
+	width:700px;
+	background:#f0f5ff;
+	padding:5px 10px;
+	border-bottom:1px solid #369;
+}
+
+.page_padding {
+	width:700px;
+	padding:0px 10px 0px;
+}
+
+.page_section {
+	height:26px;
+	line-height:24px;
+	font-size:20px;
+	border-bottom:1px solid #ddd;
+	margin:10px 0px 10px 0px;
+}
+.page_body {
+	margin:0px 0px 20px 0px;
 }
