@@ -176,12 +176,38 @@
 	font-weight: bold;
 }
 
-.tab_overlodger .lodger-data .materials .material {
-	margin: 0 0.25%;
-	width:12%;
+.tab_overlodger .lodger-data .materials .material,
+.tab_overlodger .lodger-data .materials .material.over:before {
+	position:relative;
+	background-color: #bcd;
+	border-radius: 4px;
+	padding: 0 2px;
 	float:left;
+	vertical-align: middle;
+}
+.tab_overlodger .lodger-data .materials .material {
+	margin: 0 1.4px 0 0;
+	width:12.3%;
+}
+.tab_overlodger .lodger-data .materials .material.rsc {
+}
+.tab_overlodger .lodger-data .materials .material.csm {
+}
+.tab_overlodger .lodger-data .materials .material.over:before {
+	position:absolute;
+	right:0;
+	
+	content:attr(data-actual-value);
+	opacity: 0;
+	transition: all 0.1s;
+}
+.tab_overlodger .lodger-data .materials .material.over:hover:before {
+	opacity: 1;
 }
 
+.tab_overlodger .lodger-data .materials .material:nth-of-type(8) {
+	margin: 0;
+}
 .tab_overlodger .lodger-data .materials .material img {
 	margin:1px;
 }

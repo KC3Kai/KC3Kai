@@ -1,5 +1,6 @@
 (function(){
 	"use strict";
+	/*jshint: validthis true*/
 	
 	KC3StrategyTabs.overlodger = new KC3StrategyTab("overlodger");
 	
@@ -7,6 +8,8 @@
 	------------------------------------------------ */
 	
 	var
+		ctx = this,
+		
 		CONST          = {
 			ratingMagnitude:      5, /* Maximum magnitude */
 			ratingOffset   :     +5, /* Base offset magnitude */
@@ -48,7 +51,7 @@
 		bufferCancel = false,
 		baseContext;
 	
-	Object.freeze(CONST);
+	$.extend(this,Object.freeze(CONST));
 	
 	/* Page definition
 	------------------------------------------------ */
@@ -74,6 +77,8 @@
 			/* Convention (defined later)
 				0 - Standard Convention : 0 AM start of a day, Sunday start of a week
 				1 - Tanaka Convention   : 5 AM start of a quest day, Monday start of a quest week
+				
+				TODO: not sure to put this or not.
 			*/
 			convention: null,
 		},
@@ -99,8 +104,8 @@
 			
 			Object.defineProperties(this.timeRange,{
 				convention:{
-					get: function(){ ConfigManager.load(); return Number(ConfigManager.lodger_convention) || 0; },
-					set: function(value){ ConfigManager.lodger_convention = isFinite(value) && value || 0; ConfigManager.save(); }
+					get: function(){ ConfigManager.load(); return Number(ConfigManager.ledger_convention) || 0; },
+					set: function(value){ ConfigManager.ledger_convention = isFinite(value) && value || 0; ConfigManager.save(); }
 				},
 			});
 			
@@ -115,7 +120,8 @@
 			
 			// Factory cloning
 			$.each(tDurEnum,function(k,v){
-				var fTypeBox = $(".factory .filterType",baseContext).clone();
+				var fTypeBox = $(".factory .base-radio",baseContext).clone()
+					.removeClass('base-radio').addClass('filterType');
 				
 				$("input",fTypeBox).val(parseInt(k,10));
 				$(".filterText",fTypeBox).text(KC3Meta.term('LodgerTime' + v[2]));
@@ -130,7 +136,7 @@
 				
 				$("img",mDataBox).attr('src',['../../../../assets/img/client/',v,'.png'].join(''));
 				mDataBox
-					.addClass(v)
+					.addClass([v,k < 4 ? 'rsc' : 'csm'].join(' '))
 					.removeClass('base-material')
 					.insertBefore($(".clear",targetBox));
 			});
@@ -411,10 +417,20 @@
 						.find('.type').text(baseName).end()
 					.end()
 					.find('.materials .material').each(function(idx,elm){
-						$("span",elm).text(matrSum[idx]);
+						var
+							matrVal = matrSum[idx],
+							matrScl = (dataScale[Object.keys(self.dataBuffer).indexOf( k )] || 0) / (ctx.dayScaleCoef( timeRangeAry[0] )),
+							matrOvr = Math.abs(matrVal) > 99999,
+							matrExc = Math.abs(matrVal * matrScl && !matrOvr) > ctx.resourcePeak(idx),
+							matrHlf = Math.abs(matrVal * matrScl && !(matrOvr || matrExc)) > (ctx.resourcePeak(idx) * ctx.ratingHScore);
+						$(elm).removeClass('half full over OK NG')
+							.addClass((matrOvr && 'over') || (matrExc && 'full') || (matrHlf && 'half') || "")
+							.addClass(Math.abs(parseInt(matrVal,10)) > 0 ? (Math.sign(matrVal) >= 0 ? 'OK' : 'NG') : '')
+							.attr('data-actual-value',matrVal);
+						$("span",elm).text(matrOvr ? matrVal.shorten() : matrVal);
 					}).end()
 					.show();
-			});
+			}.bind(ctx));
 		},
 		
 		resetBuffer :function(){
@@ -551,7 +567,7 @@
 					].join('\n'));
 				}else{
 					matr = matr.map(function(x){return parseInt(x,10) || 0;});
-					mult = Math.max(0,(!parseFloat(mult) || isNaN(mult) || !isFinite(mult) || Math.sign(mult) <= 0) ? 1 : mult);
+					mult = Math.max(0,(!parseFloat(mult) || isNaN(mult) || !isFinite(mult) || Math.sign(mult) < 0) ? 1 : mult);
 					
 					Object.defineProperties(this,{
 						id  :{value:id      },
@@ -746,4 +762,4 @@
 		return KC3LodgerBuffer.prototype.rating.bind(bResult,bResult).call();
 	}
 	
-})();
+}).call({});

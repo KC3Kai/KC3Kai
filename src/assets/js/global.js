@@ -222,25 +222,68 @@ String.prototype.plusCurrentTime = function() {
 /*******************************\
 |*** Number                     |
 \*******************************/
-/* Number Padding
- * Supplied Argument:
- * <Optional> Digits (any invalid value / less than 1, forced to 1)
------------------------------------------------*/
-Number.prototype.toDigits = Number.prototype.toArray = function(digits) {
-	var ret = this.toString();
-	try{
-		if(isNaN(this)||!isFinite(this)){throw new Error("Cannot convert constants to padded array");}
-		if(ret == this.toExponential()){throw new Error("Cannot convert number in exponential form");}
-		if (!isFinite(digits)) { digits = undefined; }
-		digits = Math.max(digits || 1,1);
-		// Pad the array until
-		ret = ("0").repeat(Math.max(digits - ret.length,0)) + ret; // O(1) complexity XD
-	}catch(e){
-		console.error(e);
-	}finally{
-		return ret;
-	}
-};
+(function(){
+	/* Number Padding
+	 * Supplied Argument:
+	 * <Optional> Digits (any invalid value / less than 1, forced to 1)
+	-----------------------------------------------*/
+	Number.prototype.toDigits = Number.prototype.toArray = function(digits) {
+		var ret = this.toString();
+		try{
+			if(isNaN(this)||!isFinite(this)){throw new Error("Cannot convert constants to padded array");}
+			if(ret == this.toExponential()){throw new Error("Cannot convert number in exponential form");}
+			if (!isFinite(digits)) { digits = undefined; }
+			digits = Math.max(digits || 1,1);
+			// Pad the array until
+			ret = ("0").repeat(Math.max(digits - ret.length,0)) + ret; // O(1) complexity XD
+		}catch(e){
+			console.error(e);
+		}finally{
+			return ret;
+		}
+	};
+	/* Number Shortener
+	 * shortens the number up to 3 digits
+	 * Supplied Argument:
+	 * < Nothing >
+	-----------------------------------------------*/
+	var shorten = {
+		expRegex : /([\+\-]?)(.+)e(.)(\d+)/,
+		sgnArray : ['-','','+'],
+		metPrefx : ['','k','M','G','T','P','E','Z','Y']
+	};
+	
+	Number.prototype.shorten = function(decimals) {
+		var ret = this.toString();
+		try{
+			if(isNaN(this)||!isFinite(this)){ throw ret; }
+			if(Math.abs(this) < 1) {
+				console.error("Cannot shorten any magnitude from negative log10");
+				throw 0;
+			} else if (Math.abs(this) < 1000) {
+				throw this;
+			} else {
+				var
+					sgof = shorten.expRegex.exec(this.toExponential()),
+					sgch = shorten.sgnArray.indexOf(sgof[1]) - 1,
+					udfg = sgof[3] == '-';
+				
+				if (!isFinite(decimals)) { decimals = undefined; }
+				decimals = Math.min(Math.max(decimals || 1,1),3);
+				
+				if(ret == this.toExponential()){
+					throw [sgch < 0 ? "Ng" : "Ps",(udfg ? 'Under' : 'Over') + 'flow'].join(' ');
+				} else {
+					ret = [Math.qckInt('floor',(sgof[1] + sgof[2]) * (1 + ("0").repeat(sgof[4] % 3)),decimals,false,true),shorten.metPrefx[ parseInt(sgof[4] / 3,10) ]].join('');
+				}
+			}
+		}catch(errval){
+			return errval;
+		}finally{
+			return ret;
+		}
+	};
+}).call(Number);
 
 /* JS NATIVE CLASS */
 /*******************************\
