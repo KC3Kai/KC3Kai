@@ -5,33 +5,55 @@
 	
 	KC3StrategyTabs.savedata.definition = {
 		tabSelf: KC3StrategyTabs.savedata,
-	  tableCollection:"tmp",//tmp data to write
-		
+		text:"",
 		/* INIT
 		Prepares all data needed
 		---------------------------------*/
 		init :function(){
 
 		},
+		tmptext:"",
+		db2arr : function(){
+		    var text=null;
+		    window.KC3Database.con.tables.forEach( //access all tables
+            function(table){
+                  var wait=true;
+                  table.toArray(function(all) { //add table data tmptext
+                   $(".tab_savedata .tmptextbox").append(
+                          "\""+table.name+"\":"+
+                          JSON.stringify(all)+
+                          ","
+                        ).then(function(){
+                          wait=false;
+                        });
+                  });
+                  while(wait){}
+            }
+        )
+        text = $(".tab_savedata .tmptextbox").text().substring(0,-1);
+        $(".tab_savedata .tmptextbox").empty();
+        return text;
+        while ( text === null ) {}
+        
+        return text;
+    },
 		/* EXECUTE
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
-		    $(".tab_savedata .page_padding .datapanel").show();
-		    
-		   
-        $(".tab_savedata .page_padding .datapanel").append("Whole DB : <br />");
+        //save stuffs
+       
         
-        window.KC3Database.con.tables.forEach(
-          function(table){
-                      table.toArray(function(all) {
-                                    $(".tab_savedata .page_padding .datapanel")
-                                      .append(JSON.stringify(all));
-                                });
-                          }
-        );
+        $(".tab_savedata .export_data").on("click", function(){
+  				var blob = new Blob([this.db2arr()], {type: "application/json;charset=utf-8"});
+  				saveAs(blob, "["+PlayerManager.hq.name+"] "+((new Date()).format("yyyy-mm-dd"))+".kc3db");
+  			});
+  			var text;
+  			this.db2arr();
+        alert(this.text);
+       
           
-		},
+		}
 
     
 		
