@@ -14,7 +14,8 @@
 		},
 		tmptext:"",
 		db2arr : function(){
-		    var text=null;
+		    var text="";
+		    $(".tab_savedata .tmptextbox").empty();
 		    window.KC3Database.con.tables.forEach( //access all tables
             function(table){
                   var wait=true;
@@ -29,12 +30,11 @@
                   });
                   while(wait){}
             }
-        )
-        text = $(".tab_savedata .tmptextbox").text().substring(0,-1);
+        );
+        while ( text === "" ) {
+          text = $(".tab_savedata .tmptextbox").text().substring(0,-1);
+        }
         $(".tab_savedata .tmptextbox").empty();
-        return text;
-        while ( text === null ) {}
-        
         return text;
     },
 		/* EXECUTE
