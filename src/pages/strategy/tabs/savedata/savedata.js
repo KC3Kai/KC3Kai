@@ -37,8 +37,8 @@
 
 
         };
-       	var data2blob = function(){//Save All Data to blob
-          var fullDBData=Object;
+       	var saveData = function(){//Save All Data to blob
+          var fullDBData={};
           var fullStorageData="";
           var zip = new JSZip();
           var trz;
@@ -51,7 +51,7 @@
                     });
               });//foreach
           }).then(function(){
-            alert(JSON.stringify(fullDBData));
+            //alert(JSON.stringify(fullDBData));
           });//transaction
           fullStorageData = getFullstorageData(); 
 
@@ -68,7 +68,7 @@
         
         $(".tab_savedata .export_data").on("click", function(){//the data will be saved here
   				  //saveDataToDisk();
-            data2blob();
+            saveData();
   				//saveAs(blob, "["+PlayerManager.hq.name+"] "+((new Date()).format("yyyy-mm-dd"))+".kc3db");
   			});
 
