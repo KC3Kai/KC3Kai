@@ -17,24 +17,11 @@
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
-        //save stuffs
-       	var data2blob = function(){//Save All Data to blob
-          var fullDBData=[];
-          var fullStorageData="";
-          var zip = new JSZip();
-          var trz;
-          window.KC3Database.con.transaction("r!", window.KC3Database.con.tables ,function(){
-              trz = Dexie.currentTransaction;
-      		    window.KC3Database.con.tables.forEach( //access all tables
-                  function(table){
-                    table.toArray(function(tablearray) { //add table data tmptext
-                        fullDBData[table.name] = tablearray;
-                    });
-              
-          }).then(function(){
-            alert(JSON.stringify(fullDBData));
-          });//transaction
-           fullStorageData =  JSON.stringify({
+        
+        var getFullstorageData = function()
+        {
+
+          return JSON.stringify({
               absoluteswf: localStorage.absoluteswf,
               config: JSON.parse(localStorage.config),
               fleets: JSON.parse(localStorage.fleets),
@@ -48,7 +35,25 @@
               statistics: JSON.parse(localStorage.statistics)
           });//fullStorageData
 
-         
+
+        };
+       	var data2blob = function(){//Save All Data to blob
+          var fullDBData=Object;
+          var fullStorageData="";
+          var zip = new JSZip();
+          var trz;
+          window.KC3Database.con.transaction("r!", window.KC3Database.con.tables ,function(){
+              trz = Dexie.currentTransaction;
+      		    window.KC3Database.con.tables.forEach( //access all tables
+                  function(table){
+                    table.toArray(function(tablearray) { //add table data tmptext
+                        fullDBData[table.name] = tablearray;
+                    });
+              });//foreach
+          }).then(function(){
+            alert(JSON.stringify(fullDBData));
+          });//transaction
+          fullStorageData = getFullstorageData(); 
 
           setTimeout(function() {
               while(trz.active){}
@@ -59,11 +64,7 @@
                 , "["+PlayerManager.hq.name+"] "+((new Date()).format("yyyy-mm-dd"))+".kc3data");
           }, 3000);//setTimeout
 
-       	}//data2blob
-
-        var saveDataToDisk = function() {
-         
-        }
+       	};//data2blob
         
         $(".tab_savedata .export_data").on("click", function(){//the data will be saved here
   				  //saveDataToDisk();
