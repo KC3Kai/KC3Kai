@@ -11,38 +11,77 @@
 		init :function(){
 
 		},
-		tmptext:"",
+		
 	
 		/* EXECUTE
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
         //save stuffs
-       	var db2arr = function(){
-  		    var text=new StringBuilder();
-  		    $(".tab_savedata .tmptextbox").empty();
-  		    window.KC3Database.con.tables.forEach( //access all tables
-              function(table){
-                    table.toArray(function(all) { //add table data tmptext
-                     //$(".tab_savedata .tmptextbox").append(
-                          text.Append(
-                            "\""+table.name+"\":"+
-                            JSON.stringify(all)+
-                            ","
-                          );
+       	var data2blob = function(){//Save All Data to blob
+          var fullDBData=[];
+          var fullStorageData="";
+          var zip = new JSZip();
+          var trz;
+          window.KC3Database.con.transaction("r!", window.KC3Database.con.tables ,function(){
+              trz = Dexie.currentTransaction;
+      		    window.KC3Database.con.tables.forEach( //access all tables
+                  function(table){
+                    table.toArray(function(tablearray) { //add table data tmptext
+                        fullDBData[table.name] = tablearray;
                     });
-              }
-          );
-          //text = $(".tab_savedata .tmptextbox").text().substring(0,-1);
-          //$(".tab_savedata .tmptextbox").empty();
-          return text.ToString().substring(0,-1);
-       	}
+              
+          }).then(function(){
+            alert(JSON.stringify(fullDBData));
+          });//transaction
+           fullStorageData =  JSON.stringify({
+              absoluteswf: localStorage.absoluteswf,
+              config: JSON.parse(localStorage.config),
+              fleets: JSON.parse(localStorage.fleets),
+              gears: JSON.parse(localStorage.gears),
+              lastResource:localStorage.lastResource,
+              lastUseitem: localStorage.lastUseitem,
+              maps: JSON.parse(localStorage.maps),
+              player: JSON.parse(localStorage.player),
+              quests: JSON.parse(localStorage.quests),
+              ships: JSON.parse(localStorage.ships),
+              statistics: JSON.parse(localStorage.statistics)
+          });//fullStorageData
+
+         
+
+          setTimeout(function() {
+              while(trz.active){}
+              zip.file("db.json",JSON.stringify(fullDBData));
+              zip.file("storage.json",fullStorageData);
+              saveAs(
+                zip.generate({type:"blob"})
+                , "["+PlayerManager.hq.name+"] "+((new Date()).format("yyyy-mm-dd"))+".kc3data");
+          }, 3000);//setTimeout
+
+       	}//data2blob
+
+        var saveDataToDisk = function() {
+         
+        }
         
-        $(".tab_savedata .export_data").on("click", function(){
-  				alert( db2arr() );
-  				var blob = new Blob([db2arr()], {type: "application/json;charset=utf-8"});
+        $(".tab_savedata .export_data").on("click", function(){//the data will be saved here
+  				  //saveDataToDisk();
+            data2blob();
   				//saveAs(blob, "["+PlayerManager.hq.name+"] "+((new Date()).format("yyyy-mm-dd"))+".kc3db");
   			});
+
+
+        $(".tab_savedata .import_file").on("change", function(event){
+            if( event.target.files.length > 0 ){
+
+              if(window.File && window.FileReader && window.FileList && window.Blob){
+                reader.readAsText( event.target.files[0] );
+              }else{
+                alert("Unfortunately, file reading is not available on your browser.");
+            }
+          }
+        });
        
           
 		}
