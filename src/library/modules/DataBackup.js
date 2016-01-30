@@ -29,7 +29,7 @@
 					player: JSON.parse(localStorage.player),
 					quests: JSON.parse(localStorage.quests),
 					ships: JSON.parse(localStorage.ships),
-						statistics: JSON.parse(localStorage.statistics)
+					statistics: JSON.parse(localStorage.statistics)
 				});//fullStorageData
 
 				setTimeout(function() {
@@ -40,18 +40,16 @@
 								zip.generate({type:"blob"}),
 								"["+PlayerManager.hq.name+"] "+
 								dateFormat("yyyy-mm-dd")+".kc3data"
-							);
+							);//saveas
 				}, 3000);//setTimeout
 
-			}//savedata
-			,loadData : function(data){
-				if(window.File && window.FileReader && window.FileList && window.Blob){
-					var zip = new JSZip(data);
-				}else{
-					alert("Unfortunately, file reading is not available on your browser.");
-				}
-			}
+			},//savedata
+			loadData : function(data){
+				
+			}//loaddata
 
 
 	}
+
+
 })();
