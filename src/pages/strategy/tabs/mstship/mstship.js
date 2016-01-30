@@ -126,6 +126,41 @@
 				self.showShip( $(this).data("id") );
 			});
 			
+			// Play voice
+			$(".tab_mstship .shipInfo .voice").on("click", function(){
+				if(self.audio){ self.audio.pause(); }
+				self.audio = new Audio("http://"+self.server_ip+"/kcs/sound/kc"+self.currentGraph+"/"+$(this).data("vnum")+".mp3");
+				self.audio.play();
+			});
+			
+			// On-click remodels
+			$(".tab_mstship .shipInfo").on("click", ".remodel_name a", function(e){
+				//console.log("clicked remodel");
+				self.showShip( $(this).data("sid") );
+				e.preventDefault();
+				return false;
+			});
+			
+			// Salt-toggle
+			$(".tab_mstship .shipInfo").on("click", ".salty-zone", function(e){
+				var
+					saltList = ConfigManager.salt_list,
+					saltPos  = saltList.indexOf(shipData.kc3_bship),
+					shipBox  = $(".shipRecord").filter(function(i,x){
+						return shipData.kc3_bship == $(x).data('bs');
+					});
+				if(saltPos >= 0) {
+					saltList.splice(saltPos,1);
+					shipBox.removeClass('salted');
+				} else {
+					saltList.push(shipData.kc3_bship);
+					shipBox.addClass('salted');
+				}
+				ConfigManager.save();
+				e.preventDefault();
+				self.showShip( shipData.api_id );
+				return false;
+			});
 			
 			if(!!KC3StrategyTabs.pageParams[1]){
 				this.showShip(KC3StrategyTabs.pageParams[1]);
@@ -154,15 +189,14 @@
 			$(".tab_mstship .shipInfo").removeClass('salted');
 			
 			if(ship_id<=500){
+				// Ship-only, non abyssal
+				$(".tab_mstship .shipInfo .stats").html("");
+				$(".tab_mstship .shipInfo .intro").html( shipData.api_getmes );
+				
 				// Check saltiness
 				if(ConfigManager.salt_list.indexOf(shipData.kc3_bship)>=0) {
 					$(".tab_mstship .shipInfo").addClass('salted');
 				}
-				
-				// Ship-only, non abyssal
-				
-				$(".tab_mstship .shipInfo .stats").html("");
-				$(".tab_mstship .shipInfo .intro").html( shipData.api_getmes );
 				
 				// STATS
 				var statBox;
@@ -254,41 +288,6 @@
 					});
 					$("<div/>").addClass("clear").appendTo(".tab_mstship .shipInfo .hourlies");
 				}
-				
-				// Play voice
-				$(".tab_mstship .shipInfo .voice").on("click", function(){
-					if(self.audio){ self.audio.pause(); }
-					self.audio = new Audio("http://"+self.server_ip+"/kcs/sound/kc"+self.currentGraph+"/"+$(this).data("vnum")+".mp3");
-					self.audio.play();
-				});
-				
-				// On-click remodels
-				$(".tab_mstship .shipInfo").on("click", ".remodel_name a", function(e){
-					self.showShip( $(this).data("sid") );
-					e.preventDefault();
-					return false;
-				});
-				
-				// Salt-toggle
-				$(".tab_mstship .shipInfo").on("click", ".salty-zone", function(e){
-					var
-						saltList = ConfigManager.salt_list,
-						saltPos  = saltList.indexOf(shipData.kc3_bship),
-						shipBox  = $(".shipRecord").filter(function(i,x){
-							return shipData.kc3_bship == $(x).data('bs');
-						});
-					if(saltPos >= 0) {
-						saltList.splice(saltPos,1);
-						shipBox.removeClass('salted');
-					} else {
-						saltList.push(shipData.kc3_bship);
-						shipBox.addClass('salted');
-					}
-					ConfigManager.save();
-					e.preventDefault();
-					self.showShip( shipData.api_id );
-					return false;
-				});
 				
 				$(".tab_mstship .shipInfo .stats").show();
 				$(".tab_mstship .shipInfo .equipments").show();
