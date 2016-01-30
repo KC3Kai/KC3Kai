@@ -1,0 +1,13 @@
+.tab_savedata {
+	width:680px;
+}
+
+/* HEAD
+--------------------------------*/
+.tab_savedata .page_padding .datapanel{
+  margin : 10px 10px 10px 10px;
+}
+
+.tab_savedata .tmptextbox{
+  height : 0px;
+}
