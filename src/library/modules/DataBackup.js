@@ -37,14 +37,16 @@
 						zip.file("db.json",JSON.stringify(fullDBData));
 						zip.file("storage.json",fullStorageData);
 						saveAs(
-							zip.generate({type:"blob"})
-							, "["+PlayerManager.hq.name+"] "+((new Date()).format("yyyy-mm-dd"))+".kc3data");
+								zip.generate({type:"blob"}),
+								"["+PlayerManager.hq.name+"] "+
+								dateFormat("yyyy-mm-dd")+".kc3data"
+							);
 				}, 3000);//setTimeout
 
 			}//savedata
-			,loadData : function(){
+			,loadData : function(data){
 				if(window.File && window.FileReader && window.FileList && window.Blob){
-					var zip = new JSZip(data);event.target.files[0]
+					var zip = new JSZip(data);
 				}else{
 					alert("Unfortunately, file reading is not available on your browser.");
 				}
