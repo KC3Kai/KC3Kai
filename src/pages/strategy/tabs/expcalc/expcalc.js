@@ -112,6 +112,12 @@
 				editingBox.appendTo(".tab_expcalc .box_goals");
 				self.recompute( editingBox.data("id") );
 			});
+
+            // TODO
+            {
+                var goalBox = $(".tab_expcalc .factory .goal_template").clone();
+                goalBox.appendTo(".tab_expcalc .box_goal_templates");
+            }
 			
 			// Remove from Goals Button
 			$(".tab_expcalc").on("click", ".ship_rem", function(){
