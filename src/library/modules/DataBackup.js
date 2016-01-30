@@ -1,6 +1,6 @@
 (function(){
 	"use strict";
-			
+
 	window.KC3DataBackup = {
 			saveData : function(){//Save All Data to blob
 				var fullDBData={};
@@ -9,6 +9,7 @@
 				var trz;
 				window.KC3Database.con.transaction("r!", window.KC3Database.con.tables ,function(){
 					trz = Dexie.currentTransaction;
+					alert("Acessing db...this might take few seconds.");
 					window.KC3Database.con.tables.forEach( //access all tables
 						function(table){
 							table.toArray(function(tablearray) { //add table data tmptext
@@ -44,12 +45,45 @@
 				}, 3000);//setTimeout
 
 			},//savedata
-			loadData : function(data){
-				
+
+			loadData : function(file){
+				var reader = new FileReader();
+
+				// Closure to capture the file information.
+				reader.onload = (function(theFile) {
+					return function(e) {
+						try {
+							// read the content of the file with JSZip
+							var zip = new JSZip(e.target.result);
+							// that, or a good ol' for(var entryName in zip.files)
+							zip.files.foreach(function (zipEntry) {
+								switch (zipEntry.name) {
+									case "db.json":
+										alert("db detected!");
+										break;
+									case "storage.json":
+										alert("storage detected!");
+										break;
+									default:
+										alert("could be wrong file");
+								}
+								// the content is here : zipEntry.asText()
+							});
+							// end of the magic !
+						} catch(e) {
+							alert(JSON.stringify({
+								"class" : "alert alert-danger",
+								text : "Error reading " + theFile.name + " : " + e.message
+							})
+							);//alert
+					 	}//try/catch
+						$result.append($fileContent);
+					}
+				});//reader.onload
+
 			}//loaddata
 
 
 	};
-
 
 })();
