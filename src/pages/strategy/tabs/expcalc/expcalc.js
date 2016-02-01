@@ -9,6 +9,7 @@
 		mapexp: [],
 		maplist: {},
 		shipexp: {},
+        goalTemplates: [], // to be initialized in "init"
 		
 		rankNames: ["F", "E", "D", "C", "B", "A", "S", "SS" ],
 		rankFactors: [0, 0.5, 0.7, 0.8, 1, 1, 1.2],
@@ -37,7 +38,7 @@
 				});
 			});
 			
-			
+            this.goalTemplates = GoalTemplateManager.load();
 			console.log(this.maplist);
 		},
 		
@@ -46,7 +47,6 @@
 		---------------------------------*/
 		execute :function(){
 			var self = this;
-			
 			// Add map list into the factory drop-downs
 			$.each(this.maplist, function(MapName, MapExp){
 				$(".tab_expcalc .factory .ship_map select").append("<option>"+MapName+"</option>");
@@ -113,11 +113,49 @@
 				self.recompute( editingBox.data("id") );
 			});
 
+            console.log(this.goalTemplates);
+
+
             // TODO
-            {
+            $.each(this.goalTemplates, function(i,x) {
+                // TODO show UI
+                console.log(x);
+            });
+            $(".tab_expcalc a.new_template").on("click", function () {
                 var goalBox = $(".tab_expcalc .factory .goal_template").clone();
+                var dat = GoalTemplateManager.newTemplate();
+
+                function setupTemplate(t) {
+                    function doEdit() {
+                        $(".ship_edit",t).hide();
+                        $(".ship_save",t).show();
+
+                        $(".ship_col .ship_value",t).hide();
+                        $(".ship_col .ship_input",t).show();
+                        $(".manage_buttons",t).hide();
+                    }
+
+                    function doShow() {
+                        $(".ship_edit",t).show();
+                        $(".ship_save",t).hide();
+
+                        $(".ship_col .ship_value",t).show();
+                        $(".ship_col .ship_input",t).hide();
+                        $(".manage_buttons",t).show();
+                    }
+
+                    $(".ship_save",t).on("click", doShow);
+                    $(".ship_edit",t).on("click", doEdit);
+
+                    doShow();
+                }
+
+                setupTemplate(goalBox);
+
                 goalBox.appendTo(".tab_expcalc .box_goal_templates");
-            }
+                self.goalTemplates.push(dat);
+                GoalTemplateManager.save( self.goalTemplates );
+            });
 			
 			// Remove from Goals Button
 			$(".tab_expcalc").on("click", ".ship_rem", function(){

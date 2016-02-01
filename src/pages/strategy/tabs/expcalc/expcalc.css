@@ -189,71 +189,144 @@
 	display:none;
 }
 
+/* Goal Template */
 .tab_expcalc .goal_template {
-	width:680px;
-	height:200px;
-	background:#def;
-	border-radius: 8px;
-	margin:0px 0px 3px 0px;
-	padding:2px 4px;
-	line-height:34px;
-	border:1px solid #ace;
+  width: 680px;
+  height: 100px;
+  background: #def;
+  border-radius: 8px;
+  margin: 0px 0px 3px 0px;
+  padding: 2px 4px;
+  line-height: 34px;
+  border: 1px solid #ace;
 }
+
+.tab_expcalc .goal_template .line1 {
+  width: 680px;
+  display: block;
+  overflow: auto;
+}
+
+.tab_expcalc .goal_template .manage_buttons {
+  width: 680px;
+  display: block;
+  overflow: auto;
+}
+
 .tab_expcalc .goal_template .ship_col {
-	float:left;
-	/*background:#fff;*/
-	overflow:hidden;
+  float: left;
+  /*background:#fff;*/
+  overflow: hidden;
 }
+
 .tab_expcalc .goal_template .ship_label {
-	height:14px;
-	line-height:14px;
-	font-size:12px;
-	text-align:center;
+  height: 14px;
+  line-height: 14px;
+  font-size: 12px;
+  text-align: center;
 }
+
 .tab_expcalc .goal_template .ship_value {
-	height:20px;
-	line-height:20px;
-	text-align:center;
-	font-size:16px;
-	font-weight:bold;
-	color:#039;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: #039;
 }
+
 .tab_expcalc .goal_template .ship_input {
-	height:20px;
-	line-height:20px;
-	text-align:center;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
 }
 
 .tab_expcalc .goal_template .ship_up {
-	background:#070;
-	font-size:14px;
-	font-weight:bold;
+  background: #070;
+  font-size: 14px;
+  font-weight: bold;
 }
+
 .tab_expcalc .goal_template .ship_down {
-	background:#0A0;
-	font-size:14px;
-	font-weight:bold;
+  background: #0A0;
+  font-size: 14px;
+  font-weight: bold;
 }
+
 .tab_expcalc .goal_template .ship_rem {
-	background:#c77;
-	font-size:14px;
-	font-weight:bold;
+  background: #c77;
+  font-size: 14px;
+  font-weight: bold;
 }
+
 .tab_expcalc .goal_template .ship_edit {
-	background:#58b;
-	font-size:14px;
-	font-weight:bold;
-	margin-right:3px;
+  background: #58b;
+  font-size: 14px;
+  font-weight: bold;
+  margin-right: 3px;
 }
+
+.tab_expcalc .goal_template .ship_btn.ship_filter {
+  background: #58b;
+  width: 90px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.tab_expcalc .goal_template .ship_btn.ship_onoff {
+  background: #58b;
+  width: 100px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.tab_expcalc .goal_template .ship_btn.ship_apply {
+  background: #58b;
+  width: 190px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
 .tab_expcalc .goal_template .ship_btn {
-	width:30px;
-	height:24px;
-	line-height:24px;
-	border-radius: 17px;
-	margin:5px 0px 3px 0px;
-	text-align:center;
-	font-size:20px;
-	color:#fff;
-	//float:right;
-	padding:0px;
+  width: 30px;
+  height: 24px;
+  line-height: 24px;
+  border-radius: 17px;
+  margin: 5px 0px 3px 0px;
+  text-align: center;
+  font-size: 20px;
+  color: #fff;
+  //float:right;
+  padding: 0px;
+}
+
+.tab_expcalc .goal_template .ship_save {
+  background: #3c9;
+  font-weight: bold;
+  margin-right: 3px;
+}
+
+.tab_expcalc .goal_template .ship_type {
+	width:200px;
+	margin:0px 2px 0px 0px;
+}
+
+.tab_expcalc .goal_template .ship_map {
+	width:70px;
+	margin:0px 2px 0px 0px;
+}
+
+.tab_expcalc .goal_template .ship_rank {
+	width:50px;
+	margin:0px 2px 0px 0px;
+}
+
+.tab_expcalc .goal_template .ship_fs {
+	width:50px;
+	margin:0px 2px 0px 0px;
+}
+
+.tab_expcalc .goal_template .ship_mvp {
+	width:50px;
+	margin:0px 2px 0px 0px;
 }
