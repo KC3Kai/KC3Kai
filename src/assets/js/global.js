@@ -223,6 +223,31 @@ String.prototype.plusCurrentTime = function() {
 |*** Number                     |
 \*******************************/
 (function(){
+	/* Number Inclusion
+	 * Supplied Argument:
+	 * -- Pattern 1
+	 *   <Optional x2> Boundary  (defaults: -Inf ~ Inf)
+	 *   <Optional ~2> Inclusion (defaults: true, true)
+	 * -- Pattern 2
+	 *   <Optional>    RangeObject
+	-----------------------------------------------*/
+	Number.prototype.inside = function(bLeft,bRight,iLeft,iRight){
+		if(bLeft instanceof Range) { return this.inside.apply(this,bLeft); }
+		bLeft  = parseInt(bLeft,10);
+		bRight = parseInt(bRight,10);
+		iLeft  = typeof iLeft  == 'undefined' ? true : !!iLeft;
+		iRight = typeof iRight == 'undefined' ? true : !!iRight;
+		
+		bLeft  = isNaN(bLeft)  ? -Infinity : bLeft ;
+		bRight = isNaN(bRight) ? +Infinity : bRight;
+		
+		if(bLeft > bRight) { return this.inside(bRight,bLeft,iRight,iLeft); }
+		return (
+			(iLeft  ? this >= bLeft  : this > bLeft ) &&
+			(iRight ? this <= bRight : this < bRight)
+		);
+	};
+	
 	/* Number Padding
 	 * Supplied Argument:
 	 * <Optional> Digits (any invalid value / less than 1, forced to 1)
@@ -514,7 +539,15 @@ String.prototype.plusCurrentTime = function() {
 				if(isNaN(step) || !isFinite(step))
 					step = 0;
 				
-				args[0] = 7 * step + calibr - (!!clear + this.getUTCDate() - this.getDate());
+				/*
+				  UTCD DATE CALB
+					 20   21   -1 
+					  2    1   +1 
+					  1   30  -29? => +1
+					 31    1  +30? => -1
+				*/
+				var utcDayCalib = this.getUTCDate() - this.getDate();
+				args[0] = 7 * step + calibr - (!!clear + (Math.abs(utcDayCalib) <= 1 ? utcDayCalib : -Math.sign(utcDayCalib)));
 				return this.shiftDate.apply(this,args);
 			}).bind(this);
 		}},
@@ -652,3 +685,92 @@ Storage.prototype.getObject = function(key) {
 	});
 }).call(Element);
 
+/* USER-DEFINED CLASS */
+/*******************************\
+|*** Range                      |
+\*******************************/
+(function(){
+	var base = Object.freeze([-Infinity,+Infinity,true,true]);
+	
+	function exclusiveClamp(rangeObj){
+		if(rangeObj instanceof Range) {
+			if(
+				Math.abs(rangeObj.end - rangeObj.begin) < Number.EPSILON &&
+				rangeObj.exclusive()
+			) {
+				rangeObj.inFirst = rangeObj.inLast = false;
+			}
+		} else {
+			return false;
+		}
+	}
+	
+	window.Range = function Range(b1,b2,i1,i2){
+		/*jshint: validthis true*/
+		if(!(this instanceof Range)){ return new Range(b1,b2,i1,i2); } else {
+			// Single Range Object
+			if((b1 instanceof Range) || (typeof b1 == 'object' && b1.length == 4)){
+				i2 = b1[3]; i1 = b1[2];
+				b2 = b1[1]; b1 = b1[0];
+			// Two Pair of Values
+			} else if ([b1,b2].every(function(pair){ return typeof pair == 'object' && pair.length == 2;})) {
+				i2 = b2[1]; i1 = b2[0];
+				b2 = b1[1]; b1 = b1[0];
+			}
+			
+			b1 = parseInt(b1,10);
+			b2 = parseInt(b2,10);
+			i1 = typeof i1 == 'undefined' ? base[2] : !!i1;
+			i2 = typeof i2 == 'undefined' ? base[3] : !!i2;
+			
+			b1 = isNaN(b1) ? base[0] : b1;
+			b2 = isNaN(b2) ? base[1] : b2;
+			
+			if(b1 > b2){
+			// Swap bad ranges
+				var tp;
+				tp = b2; b2 = b1; b1 = tp;
+				tp = i2; i2 = i1; i1 = tp;
+			}
+			
+			Object.defineProperties(this,{
+				begin  :{get:function(){return b1;},set:function(v){v = parseInt(v,10); b1 = isNaN(v) ? base[0] : v;}},
+				end    :{get:function(){return b2;},set:function(v){v = parseInt(v,10); b2 = isNaN(v) ? base[1] : v;}},
+				inFirst:{get:function(){return i1;},set:function(v){v = !!v; i1 = v;}},
+				inLast :{get:function(){return i2;},set:function(v){v = !!v; i2 = v;}},
+				
+				first  :{get:function(){return this.begin;},set:function(v){this.begin=v;exclusiveClamp(this);}},
+				last   :{get:function(){return this.end  ;},set:function(v){this.end  =v;exclusiveClamp(this);}},
+			});
+		}
+	}
+	
+	Object.defineProperties(Range.prototype,{
+		begin    :{get:function(){return base[0];}},
+		first    :{get:function(){return base[0];}},
+		
+		last     :{get:function(){return base[1];}},
+		end      :{get:function(){return base[1];}},
+		
+		inFirst  :{get:function(){return !!base[2];}},
+		inLast   :{get:function(){return !!base[3];}},
+		
+		inside   :{value:function(x){return Number(x).inside(this);}},
+		exclusive:{value:function( ){return this.inFirst || this.inLast;}},
+		
+		0        :{get:function(){return this.begin;}  ,set:function(v){this.begin=v}  },
+		1        :{get:function(){return this.end;}    ,set:function(v){this.end=v}    },
+		2        :{get:function(){return this.inFirst;},set:function(v){this.inFirst=v}},
+		3        :{get:function(){return this.inLast;} ,set:function(v){this.inLast=v} },
+		
+		toJSON   :{value:function(){ return Array.apply(null,this); }},
+		toString :{value:function(){
+			return ("%L%B,%E%R")
+				.replace("%L",this.inFirst ? '[' : '(').replace("%R",this.inLast  ? ']' : ')')
+				.replace("%B",this.begin).replace("%E",this.end);
+		}},
+		valueOf  :{value:function(){return [this.begin,this.end,this.inFirst,this.inLast];}},
+		length   :{value:4}, // for array operation
+	});
+	
+})();

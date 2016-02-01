@@ -21,11 +21,11 @@
 		// Show estimated time until next update
 		$.ajax({
 			dataType: "json",
-			url: "https://raw.githubusercontent.com/KC3Kai/KC3Kai/master/update?v="+((new Date()).getTime()),
+			url: "https://raw.githubusercontent.com/KC3Kai/KC3Kai/master/update?v="+(Date.now()),
 			success: function(data, textStatus, request){
 				// If current installed version less than latest
 				if( myVersion < Number(data.version) ){
-					var UpdateDiff = (new Date(data.time)).getTime() - (new Date()).getTime();
+					var UpdateDiff = (new Date(data.time)).getTime() - Date.now();
 					if(UpdateDiff > 0){
 						$(".nextVersion").html( "v"+data.version+" in <span class=\"timer\">"+String(UpdateDiff/1000).toHHMMSS()+"</span>");
 					}else{

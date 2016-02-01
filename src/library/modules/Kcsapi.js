@@ -20,7 +20,7 @@ Previously known as "Reactor"
 			calibrate:function(t){
 				t = Date.parse(t);
 				this.setTime(t);
-				return Date.now() - t;
+				return Math.hrdInt('floor',Date.now() - t,3,0,1);
 			}
 		}),
 		

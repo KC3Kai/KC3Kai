@@ -145,9 +145,15 @@ Provides access to data on built-in JSON files
 				// console.log("this._ship", this._ship);
 				// console.log("this._ship[bare]", this._ship[bare]);
 				if(typeof this._ship[bare] !== "undefined"){
-					this._cache[jp_name] = this._ship[bare] + (combin.length > 0 ? combin.join(" ") : "");
-					return this._cache[jp_name] ;
+				} else {
+					if (typeof this._cache[bare] !== "undefined") {
+						this._cache[bare] = bare;
+					}
 				}
+					
+				this._cache[jp_name] = (this._ship[bare] || this._cache[bare] || bare) +
+					(combin.length > 0 ? combin.join(" ") : "");
+				return this._cache[jp_name] ;
 				// console.log("this._cache[jp_name]", this._cache[jp_name]);
 				// return this._cache[jp_name]; // being here means the jp_name is not cached. there's already a cache checker at the start of this function
 			}

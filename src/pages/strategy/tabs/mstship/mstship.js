@@ -1,6 +1,8 @@
 (function(){
 	"use strict";
 	
+	var loadedShipId = 0;
+	
 	KC3StrategyTabs.mstship = new KC3StrategyTab("mstship");
 	
 	KC3StrategyTabs.mstship.definition = {
@@ -123,7 +125,8 @@
 			
 			// Select ship
 			$(".tab_mstship .shipRecords .shipRecord").on("click", function(){
-				self.showShip( $(this).data("id") );
+				if( $(this).data("id") != loadedShipId )
+					self.showShip( $(this).data("id") );
 			});
 			
 			
@@ -136,9 +139,25 @@
 		
 		
 		showShip :function(ship_id){
-			var self = this;
-			var shipData = KC3Master.ship(ship_id);
+			var
+				self = this,
+				shipData = KC3Master.ship(ship_id),
+				saltState = function(){
+					return ConfigManager.info_salt && shipData.kc3_bship && ConfigManager.salt_list.indexOf(shipData.kc3_bship)>=0;
+				},
+				denyTerm = function(){
+					return ["MasterShipSalt","Un","Check"].filter(function(str,i){
+						return 	((i==1) && !saltState()) ? "" : str;
+					}).join('');
+				},
+				saltClassUpdate = function(){
+					if(saltState())
+						$(".tab_mstship .shipInfo").addClass('salted');
+					else
+						$(".tab_mstship .shipInfo").removeClass('salted');
+				};
 			console.log(shipData);
+			loadedShipId = ship_id;
 			
 			$(".tab_mstship .shipInfo .name").text( KC3Meta.shipName( shipData.api_name ) );
 			
@@ -150,15 +169,12 @@
 			$("<embed/>")
 				.attr("src", "../../../../assets/swf/card.swf?sip="+this.server_ip+"&shipFile="+shipFile+"&abyss="+(ship_id>500?1:0))
 				.appendTo(".tab_mstship .shipInfo .cgswf");
-			$(".tab_mstship .shipInfo").off('click',".salty-zone");
-			$(".tab_mstship .shipInfo").removeClass('salted');
+			$(".tab_mstship .shipInfo").off('click','.remodel_name a').off('click','.salty-zone');
+			$(".tab_mstship .shipInfo .salty-zone").text(KC3Meta.term(denyTerm()));
+			$(".tab_mstship .shipInfo .hourlies").html("");
 			
+			saltClassUpdate();
 			if(ship_id<=500){
-				// Check saltiness
-				if(ConfigManager.salt_list.indexOf(shipData.kc3_bship)>=0) {
-					$(".tab_mstship .shipInfo").addClass('salted');
-				}
-				
 				// Ship-only, non abyssal
 				
 				$(".tab_mstship .shipInfo .stats").html("");
@@ -240,7 +256,6 @@
 				$("<div/>").addClass("clear").appendTo(".tab_mstship .shipInfo .voices");
 				
 				// HOURLIES
-				$(".tab_mstship .shipInfo .hourlies").html("");
 				if(shipData.api_voicef>1){
 					$.each(this.hourlies, function(vnum, vname){
 						var hhStr = vname.substring(0,2);
@@ -264,8 +279,9 @@
 				
 				// On-click remodels
 				$(".tab_mstship .shipInfo").on("click", ".remodel_name a", function(e){
-					self.showShip( $(this).data("sid") );
+					console.log( "Move to ship", $(this).data("sid") );
 					e.preventDefault();
+					self.showShip( $(this).data("sid") );
 					return false;
 				});
 				
@@ -284,9 +300,9 @@
 						saltList.push(shipData.kc3_bship);
 						shipBox.addClass('salted');
 					}
+					$(".tab_mstship .shipInfo .salty-zone").text(KC3Meta.term(denyTerm()));
+					saltClassUpdate();
 					ConfigManager.save();
-					e.preventDefault();
-					self.showShip( shipData.api_id );
 					return false;
 				});
 				
