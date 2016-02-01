@@ -86,6 +86,71 @@
 	color:#ccc;
 }
 
+.tab_overlodger .filterBox .filterGroup {
+	display:none;
+}
+.tab_overlodger .filterBox .filterMapTypes .filterSType {
+	position:relative;
+	float:left;
+	width:25%;
+	line-height:12px;
+	margin:5px 0px;
+}
+.tab_overlodger .filterBox .filterMapTypes .filterSType input {
+	display:block;
+	width:12px;
+	height:12px;
+	margin:0px 5px;
+	float:left;
+}
+.tab_overlodger .filterBox .filterMapOption select {
+	width:40px;
+}
+.tab_overlodger .filterBox .filterMapOption select[disabled] {
+	background-color:#eee;
+}
+.tab_overlodger .filterBox .filterGroup.rqev .filterMapOption .filterMapNum .sortieMap.map-clear,
+.tab_overlodger .filterBox .filterGroup.rqev .filterMapOption .filterMapNum select.map-clear {
+	color:black;
+}
+.tab_overlodger .filterBox .filterGroup.rqev .filterMapOption .filterMapNum .sortieMap:not(.map-clear),
+.tab_overlodger .filterBox .filterGroup.rqev .filterMapOption .filterMapNum select:not(.map-clear) {
+	color:red;
+}
+.tab_overlodger .filterBox .filterMapOption div {
+	float:left;
+	width:22.5%
+}
+.tab_overlodger .filterBox .filterMapOption .filterMapPeriod {
+	width:55%;
+}
+.tab_overlodger .filterBox .filterMapPeriod select {
+	width:100%;
+}
+
+/* SORTIE GROUPING CSS RULE
+--------------------------------*/
+.tab_overlodger .filterBox > .filterGroup[data-duration0="true"] > .filterMapOption > div > select > option[value="0"] {
+	display:block !important;
+}
+.tab_overlodger .filterBox > .filterGroup.rqex .sortieWorld.no-extra,
+
+.tab_overlodger .filterBox > .filterGroup:not(.rqev) .sortieWorld.event,
+.tab_overlodger .filterBox > .filterGroup.rqev .sortieWorld:not(.event),
+
+.tab_overlodger .filterBox > .filterGroup.rqbs .sortieMap.extra,
+.tab_overlodger .filterBox > .filterGroup.rqex .sortieMap.basic,
+
+.tab_overlodger .filterBox > .filterGroup:not(.rqex) .periodExtra,
+.tab_overlodger .filterBox > .filterGroup:not(.rqev) .periodEvent,
+.tab_overlodger .filterBox > .filterGroup.rqbs .filterMapPeriod ,
+.tab_overlodger .filterBox > .filterGroup.norq .filterMapPeriod ,
+
+.tab_overlodger .filterBox > .filterGroup.rqev.crng .filterMapPeriod .sortieMoment.requireClear,
+.tab_overlodger .filterBox > .filterGroup.rqev.acng .filterMapPeriod .sortieMoment.requireAllClear {
+	display:none !important;
+}
+
 /* RATING
 --------------------------------*/
 .tab_overlodger .lodger-statistics {

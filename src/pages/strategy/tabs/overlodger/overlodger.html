@@ -31,26 +31,45 @@
 	<div class="filterBox filter_dataMS">
 	</div>
 	<div class="filterBox filter_base">
-		<div class=filterScopes>
-			<span>Range Scoping</span>
-			<div class=filterScope>
-				<input type="radio" name="range-scope" value=true  checked />
-				<div class=filterText>Look back</div>
-				<div class=clear></div>
+		<div class="filterGroup" data-duration0="false">
+			<div class=filterScopes>
+				<span>Range Scoping</span>
+				<div class=filterScope>
+					<input type="radio" name="range-scope" value=true  checked />
+					<div class=filterText>Look back</div>
+					<div class=clear></div>
+				</div>
+				<div class=filterScope>
+					<input type="radio" name="range-scope" value=false         />
+					<div class=filterText>Look around</div>
+					<div class=clear></div>
+				</div>
 			</div>
-			<div class=filterScope>
-				<input type="radio" name="range-scope" value=false         />
-				<div class=filterText>Look around</div>
-				<div class=clear></div>
+			<div class=filterDate>
+				<span>Date Time Base</span>
+				<input type="datetime-local" name="range-source" max="now" />
+			</div>
+			<div class=filterDate>
+				<span>Date Travel Back Limit</span>
+				<input type="datetime-local" name="range-maximum" readonly disabled />
 			</div>
 		</div>
-		<div class=filterDate>
-			<span>Date Time Base</span>
-			<input type="datetime-local" name="range-source" max="now" />
-		</div>
-		<div class=filterDate>
-			<span>Date Travel Back Limit</span>
-			<input type="datetime-local" name="range-maximum" readonly disabled />
+		<div class="filterGroup norq" data-duration0="true">
+			<div class="filterMapTypes">
+				<div class="clear"></div>
+			</div>
+			<div class="filterMapOption">
+				<div class="filterMapWorld"><span>World</span><br/>
+					<select></select>
+				</div>
+				<div class="filterMapNum"><span>Num</span><br/>
+					<select class=map-clear>
+					</select>
+				</div>
+				<div class="filterMapPeriod"><span>Period</span><br/>
+				</div>
+				<div class="clear"></div>
+			</div>
 		</div>
 	</div>
 	<div class="filterBox filter_reset">
@@ -72,7 +91,7 @@
 <div class="factory">
 	<!-- Time Range Filter -->
 	<div class="base-radio">
-		<input type="radio" name="range-type"/>
+		<input type="radio"/>
 		<div class=filterText></div>
 		<div class=clear></div>
 	</div>

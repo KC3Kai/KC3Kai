@@ -1,6 +1,8 @@
 (function(){
 	"use strict";
 	
+	var loadedShipId = 0;
+	
 	KC3StrategyTabs.mstship = new KC3StrategyTab("mstship");
 	
 	KC3StrategyTabs.mstship.definition = {
@@ -123,7 +125,8 @@
 			
 			// Select ship
 			$(".tab_mstship .shipRecords .shipRecord").on("click", function(){
-				self.showShip( $(this).data("id") );
+				if( $(this).data("id") != loadedShipId )
+					self.showShip( $(this).data("id") );
 			});
 			
 			// Play voice
@@ -178,10 +181,31 @@
 		
 		
 		showShip :function(ship_id){
+<<<<<<< 315522958fcee202623a406719bed483542bba8f
 			var self = this;
 			var shipData = KC3Master.ship(ship_id);
 			this.currentShipId = ship_id;
+=======
+			var
+				self = this,
+				shipData = KC3Master.ship(ship_id),
+				saltState = function(){
+					return ConfigManager.info_salt && shipData.kc3_bship && ConfigManager.salt_list.indexOf(shipData.kc3_bship)>=0;
+				},
+				denyTerm = function(){
+					return ["MasterShipSalt","Un","Check"].filter(function(str,i){
+						return 	((i==1) && !saltState()) ? "" : str;
+					}).join('');
+				},
+				saltClassUpdate = function(){
+					if(saltState())
+						$(".tab_mstship .shipInfo").addClass('salted');
+					else
+						$(".tab_mstship .shipInfo").removeClass('salted');
+				};
+>>>>>>> Major Ledger and Bug Fix
 			console.log(shipData);
+			loadedShipId = ship_id;
 			
 			$(".tab_mstship .shipInfo .name").text( KC3Meta.shipName( shipData.api_name ) );
 			
@@ -193,9 +217,11 @@
 			$("<embed/>")
 				.attr("src", "../../../../assets/swf/card.swf?sip="+this.server_ip+"&shipFile="+shipFile+"&abyss="+(ship_id>500?1:0))
 				.appendTo(".tab_mstship .shipInfo .cgswf");
-			$(".tab_mstship .shipInfo").off('click',".salty-zone");
-			$(".tab_mstship .shipInfo").removeClass('salted');
+			$(".tab_mstship .shipInfo").off('click','.remodel_name a').off('click','.salty-zone');
+			$(".tab_mstship .shipInfo .salty-zone").text(KC3Meta.term(denyTerm()));
+			$(".tab_mstship .shipInfo .hourlies").html("");
 			
+<<<<<<< 315522958fcee202623a406719bed483542bba8f
 			var statBox;
 			
 			if(ship_id<=500){
@@ -208,6 +234,15 @@
 					$(".tab_mstship .shipInfo").addClass('salted');
 				}
 				
+=======
+			saltClassUpdate();
+			if(ship_id<=500){
+				// Ship-only, non abyssal
+				
+				$(".tab_mstship .shipInfo .stats").html("");
+				$(".tab_mstship .shipInfo .intro").html( shipData.api_getmes );
+				
+>>>>>>> Major Ledger and Bug Fix
 				// STATS
 				$.each([
 					["hp", "taik"],
@@ -328,8 +363,11 @@
 				$("<div/>").addClass("clear").appendTo(".tab_mstship .shipInfo .voices");
 				
 				// HOURLIES
+<<<<<<< 315522958fcee202623a406719bed483542bba8f
 				$(".tab_mstship .shipInfo .hourlies").show();
 				$(".tab_mstship .shipInfo .hourlies").html("");
+=======
+>>>>>>> Major Ledger and Bug Fix
 				if(shipData.api_voicef>1){
 					$.each(this.hourlies, function(vnum, vname){
 						var hhStr = vname.substring(0,2);
@@ -344,6 +382,45 @@
 					$("<div/>").addClass("clear").appendTo(".tab_mstship .shipInfo .hourlies");
 				}
 				
+<<<<<<< 315522958fcee202623a406719bed483542bba8f
+=======
+				// Play voice
+				$(".tab_mstship .shipInfo .voice").on("click", function(){
+					if(self.audio){ self.audio.pause(); }
+					self.audio = new Audio("http://"+self.server_ip+"/kcs/sound/kc"+self.currentGraph+"/"+$(this).data("vnum")+".mp3");
+					self.audio.play();
+				});
+				
+				// On-click remodels
+				$(".tab_mstship .shipInfo").on("click", ".remodel_name a", function(e){
+					console.log( "Move to ship", $(this).data("sid") );
+					e.preventDefault();
+					self.showShip( $(this).data("sid") );
+					return false;
+				});
+				
+				// Salt-toggle
+				$(".tab_mstship .shipInfo").on("click", ".salty-zone", function(e){
+					var
+						saltList = ConfigManager.salt_list,
+						saltPos  = saltList.indexOf(shipData.kc3_bship),
+						shipBox  = $(".shipRecord").filter(function(i,x){
+							return shipData.kc3_bship == $(x).data('bs');
+						});
+					if(saltPos >= 0) {
+						saltList.splice(saltPos,1);
+						shipBox.removeClass('salted');
+					} else {
+						saltList.push(shipData.kc3_bship);
+						shipBox.addClass('salted');
+					}
+					$(".tab_mstship .shipInfo .salty-zone").text(KC3Meta.term(denyTerm()));
+					saltClassUpdate();
+					ConfigManager.save();
+					return false;
+				});
+				
+>>>>>>> Major Ledger and Bug Fix
 				$(".tab_mstship .shipInfo .stats").show();
 				$(".tab_mstship .shipInfo .equipments").show();
 				$(".tab_mstship .shipInfo .intro").show();

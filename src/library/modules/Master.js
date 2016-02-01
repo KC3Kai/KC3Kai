@@ -149,9 +149,11 @@ Saves and loads significant data for future use
 			while(shipAry.length) {
 				ship_id = parseInt(shipAry.shift());
 				cShip = this._ship[ship_id];
+				
 				// Pre-checks of the remodel table
 				if(!cShip)               { /* invalid API */ continue; }
 				if(!cShip.api_buildtime) { /* unbuildable by API */ continue; }
+				
 				/* proposed variable:
 				  kc3 prefix variable -> to prevent overwriting what devs gonna say later on
 					maxed flag -> is it the end of the cycle? is it returns to a cyclic model?
@@ -161,9 +163,23 @@ Saves and loads significant data for future use
 				cShip.api_aftershipid = Number(cShip.api_aftershipid);
 				if(!!cShip.kc3_model)    { /* already checked ship */ modelLv = 1; continue; }
 				if(cShip.api_name.indexOf("改") >= 0 && modelLv <= 1) { /* delays enumeration of the remodelled ship in normal state */ continue; }
+				
+				// Prepare remodel flag
 				cShip.kc3_maxed = false;
 				cShip.kc3_model = modelLv++; // 1 stands for base model
 				cShip.kc3_bship = cShip.kc3_bship || ship_id;
+				
+				// Prepare salt list for every base ship that is not even a remodel
+				// Only for enabled salt check
+				if(
+					(ConfigManager.info_salt) &&
+					!(ConfigManager.salt_list.indexOf(cShip.kc3_bship)+1) &&
+					(this._newShips[cShip.kc3_bship])
+				){
+					ConfigManager.salt_list.push(cShip.kc3_bship);
+				}
+				
+				// Check whether remodel is available and skip further processing
 				if(!!cShip.api_afterlv) {
 					shipAry.unshift(cShip.api_aftershipid);
 					ccShip = this._ship[cShip.api_aftershipid];
@@ -171,6 +187,7 @@ Saves and loads significant data for future use
 					cShip.kc3_maxed = !!ccShip.kc3_model;
 					continue;
 				}
+				// Finalize model data
 				cShip.kc3_maxed = true;
 				modelLv = 1;
 			}
