@@ -743,7 +743,7 @@ Storage.prototype.getObject = function(key) {
 				last   :{get:function(){return this.end  ;},set:function(v){this.end  =v;exclusiveClamp(this);}},
 			});
 		}
-	}
+	};
 	
 	Object.defineProperties(Range.prototype,{
 		begin    :{get:function(){return base[0];}},
@@ -758,10 +758,10 @@ Storage.prototype.getObject = function(key) {
 		inside   :{value:function(x){return Number(x).inside(this);}},
 		exclusive:{value:function( ){return this.inFirst || this.inLast;}},
 		
-		0        :{get:function(){return this.begin;}  ,set:function(v){this.begin=v}  },
-		1        :{get:function(){return this.end;}    ,set:function(v){this.end=v}    },
-		2        :{get:function(){return this.inFirst;},set:function(v){this.inFirst=v}},
-		3        :{get:function(){return this.inLast;} ,set:function(v){this.inLast=v} },
+		0        :{get:function(){return this.begin;}  ,set:function(v){this.begin=v;}  },
+		1        :{get:function(){return this.end;}    ,set:function(v){this.end=v;}    },
+		2        :{get:function(){return this.inFirst;},set:function(v){this.inFirst=v;}},
+		3        :{get:function(){return this.inLast;} ,set:function(v){this.inLast=v;} },
 		
 		toJSON   :{value:function(){ return Array.apply(null,this); }},
 		toString :{value:function(){

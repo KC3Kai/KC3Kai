@@ -86,8 +86,14 @@
 		
 		mapBuffer = {},
 		allBuffer = [],
-		sortieCache = new (function KC3SortieCacheMapInfo(){})(),
-		ledgerCache = new (function KC3LedgerCacheMapInfo(){})(),
+		sortieCache = (function(){
+			function KC3SortieCacheMapInfo(){}
+			return new KC3SortieCacheMapInfo();
+		})(),
+		ledgerCache = (function(){
+			function KC3LedgerCacheMapInfo(){}
+			return new KC3LedgerCacheMapInfo();
+		})(),
 		lookupBound = [-Infinity,+Infinity],
 		polarityRating = [0,0],
 		
@@ -129,31 +135,34 @@
 			convention: null,
 		},
 		
-		sortie: new (function KC3LodgerSortieConfig(){
-			/*
-				1 - Basic Sortie
-				2 - Extra Sortie
-				3 - Event Sortie
-			*/
-			var f,w,m,p;
-			Object.defineProperties(this,{
-				Filter: {
-					get: function( ){return f || 0;},
-					set: function(x){f = Math.max(0,Math.min( 3,Number(x) || 0)); this.World = null;}
-				},
-				World : {
-					get: function( ){return w || 0;},
-					set: function(x){w = Math.max(0,Math.min(99,Number(x) || 0)); this.Map   = null;}
-				},
-				Map   : {
-					get: function( ){return m || 0;},
-					set: function(x){m = Math.max(0,Math.min( 9,Number(x) || 0)); this.Period= null;}
-				},
-				Period: {
-					get: function( ){return p || 0;},
-					set: function(x){p = (isFinite(x) && !isNaN(x) && Number(x) || 0);}
-				}
-			});
+		sortie: (function(){
+			function KC3LodgerSortieConfig(){
+				/*
+					1 - Basic Sortie
+					2 - Extra Sortie
+					3 - Event Sortie
+				*/
+				var f,w,m,p;
+				Object.defineProperties(this,{
+					Filter: {
+						get: function( ){return f || 0;},
+						set: function(x){f = Math.max(0,Math.min( 3,Number(x) || 0)); this.World = null;}
+					},
+					World : {
+						get: function( ){return w || 0;},
+						set: function(x){w = Math.max(0,Math.min(99,Number(x) || 0)); this.Map   = null;}
+					},
+					Map   : {
+						get: function( ){return m || 0;},
+						set: function(x){m = Math.max(0,Math.min( 9,Number(x) || 0)); this.Period= null;}
+					},
+					Period: {
+						get: function( ){return p || 0;},
+						set: function(x){p = (isFinite(x) && !isNaN(x) && Number(x) || 0);}
+					}
+				});
+			}
+			return new KC3LodgerSortieConfig();
 		})(),
 		
 		filter: {},
@@ -175,7 +184,7 @@
 				// m - map id
 				// p - period code
 				// r - result
-				var k = [x,f,w,m,p].map(Number).join('-')
+				var k = [x,f,w,m,p].map(Number).join('-');
 				return (typeof funcac[k] !== 'boolean') ? (
 					(typeof r == 'boolean') ? (funcac[k] = r) : (undefined)
 				) : (funcac[k]);
@@ -252,7 +261,7 @@
 							rqMapBound[0]= [10,99];
 							rqMapBound[1]= [ 0, 9];
 							
-							rqMapMatch   = !(this.sortie.Period % 3);
+							rqMapMatch   = (this.sortie.Period % 3 === 0);
 							rqBoundMatch = true;
 							rqEventMatch = true;
 							break;
@@ -305,7 +314,7 @@
 								try {
 									if(lt > 0) {
 										return (fi.w ? [fi.w] : Object.keys(ledgerCache)).some(function(wr){
-											var sw = ledgerCache[wr];
+											var sw = ledgerCache[wr],sc;
 											er = [sw.first,sw.clear,sw.last,0].map(function(dt,id){
 												return dt || er[id]; });
 											cacheKeyMD[2] = Number(wr);
@@ -331,7 +340,7 @@
 														cacheD = cache.apply(null,cacheKeyMD);
 														if(typeof cacheD == 'boolean') { return cacheD; }
 														
-														var sc = sw[nm];
+														sc = sw[nm];
 														sr = [sc.first,sc.clear,sc.last,0].map(function(dt,id){
 															return dt || sr[id]; });
 														return cache.apply(null, cacheKeyMD.concat( (0).inside.apply(data.id,sr.filter(rg)) ) );
@@ -341,7 +350,7 @@
 													cacheD = cache.apply(null,cacheKeyMD);
 													if(typeof cacheD == 'boolean') { return cacheD; }
 													
-													var sc = sw[fi.m];
+													sc = sw[fi.m];
 													sr = [sc.first,sw.clear,sw.last,0].map(function(dt,id){
 														return dt || sr[id]; });
 													return cache.apply(null, cacheKeyMD.concat( (0).inside.apply(data.id,sr.filter(rg)) ) );
@@ -350,7 +359,7 @@
 													cacheD = cache.apply(null,cacheKeyMD);
 													if(typeof cacheD == 'boolean') { return cacheD; }
 													
-													var sc = sortieCache[wr][fi.m];
+													sc = sortieCache[wr][fi.m];
 													sr = [sc.sortieFirst,sw.sortieClear,sw.sortieLast,0].map(function(dt,id){
 														return dt || sr[id]; });
 													return cache.apply(null, cacheKeyMD.concat( (0).inside.apply(data.opt,sr.filter(rg)) ) );
@@ -450,7 +459,7 @@
 								var self = this;
 								return (activeSelf.dataBuffer.sortie.slice().reverse().find(function(x){
 									return Number(x.opt).inside(self.sortieFirst,self.sortieLast);
-								})||{id:null}).id
+								})||{id:null}).id;
 							} },
 							ledgerClear: { get: function(){
 								return (activeSelf.dataBuffer.sortie.slice().reverse().find(function(x){ return wmapData.clear == x.opt;
@@ -458,7 +467,7 @@
 							} },
 							ledgerLast : { get: function(){
 								var self = this;
-								return (activeSelf.dataBuffer.sortie.slice().reverse().find(function(x){return self.sortieLast && (Number(x.opt) >= self.sortieLast);})||{id:null}).id
+								return (activeSelf.dataBuffer.sortie.slice().reverse().find(function(x){return self.sortieLast && (Number(x.opt) >= self.sortieLast);})||{id:null}).id;
 							} },
 						});
 						Object.defineProperties(worldData,{
@@ -612,13 +621,13 @@
 						clear : { get: function(){
 							return Object.keys(mapDataBuffer)
 								.filter(function(MapCode){ return (/m(\d+)(\d)/.exec(MapCode) || "0")[1] == k; })
-								.map(function(MapCode){ return mapDataBuffer[MapCode].clear })
-								.filter(function(MapState){ return MapState }).length;
+								.map(function(MapCode){ return mapDataBuffer[MapCode].clear; })
+								.filter(function(MapState){ return MapState; }).length;
 						} },
 						total : { get: function(){
 							return Object.keys(KC3Meta._edges).filter(function(MapCode){
 								return MapCode.indexOf("World "+k+"-")+1;
-							}).length
+							}).length;
 						} },
 						AC    : { get: function(){ return is.eventMap && this.clear >= this.total; } }
 					});
@@ -1103,7 +1112,7 @@
 						$(".filterMapPeriod select",baseContext)
 							.prop('disabled',self.sortie.Filter<=1).data('disable-lock',self.sortie.Filter<=1)
 							.each(function(i,elm){
-								$(elm).val(self.sortie.Period)
+								$(elm).val(self.sortie.Period);
 								$(elm).prop('selectedIndex',$(elm).prop('selectedIndex')>-1 ? $(elm).prop('selectedIndex') : 0);
 							});
 					})
