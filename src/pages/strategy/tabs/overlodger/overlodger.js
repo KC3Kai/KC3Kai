@@ -272,9 +272,9 @@
 			$(".filterRangeLen input[type=number]",baseContext)
 				.on('click',function(){
 					$(this).trigger('change');
-        });
+				});
 			$(".filterRangeLen input[type=number]",baseContext)
-        .on('change',function(){
+				.on('change',function(){
 					self.timeRange.rate = JSON.parse($(this).val());
 					$(".filterDate input",baseContext).trigger('change');
 				});
