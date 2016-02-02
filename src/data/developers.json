@@ -133,6 +133,14 @@
 			}
 		},
 		{
+			"name": "reynn",
+			"avatar": "https://avatars2.githubusercontent.com/u/224374?v=3&s=40",
+			"desc": "AboutDeveloper",
+			"links": {
+				"gh" : "https://github.com/reynn"
+			}
+		},
+		{
 			"name": "Travis-kun",
 			"avatar" : "https://cloud.githubusercontent.com/assets/557312/9787493/d922f80e-57f5-11e5-9eae-29e013e5c2b9.png",
 			"desc" : "I will always be watching",
@@ -186,6 +194,14 @@
 			"desc" : "Deutsch",
 			"links" : {
 				"wk" :"http://kancolle.wikia.com/wiki/User:Admiral_Mikado"
+			}
+		},
+		{
+			"name": "Nutzer",
+			"avatar" : "https://avatars1.githubusercontent.com/u/8533682?v=3&s=40",
+			"desc" : "Deutsch",
+			"links" : {
+				"gh" :"https://github.com/Nutzer"
 			}
 		},
 		{
