@@ -84,6 +84,24 @@
         },
         showInputSType: function(stypes) {
             return stypes.join(",");
+        },
+        applyTemplate: function(grindData, template) {
+            var result = grindData.slice();
+            result[1] = template.map[0];
+            result[2] = template.map[1];
+            result[4] = template.rank;
+            result[5] = template.flagship?1:0;
+            result[6] = template.mvp?1:0;
+            return result;
+        },
+        checkShipType: function(stypeId, template) {
+            if (template.stype.indexOf("*") != -1)
+                return true;
+            var KGS = PS["KanColle.Generated.SType"];
+            var stypeIds = template.stype.map( function(x) {
+                return KGS.toInt(KGS.readSType(x));
+            });
+            return stypeIds.indexOf(stypeId) != -1;
         }
     };
 

@@ -393,6 +393,7 @@
 		},
 		
 		recompute: function( rosterId ){
+            var self = this;
 			var goalBox = $("#goalBox"+rosterId);
 			var grindData = this.goals["s"+rosterId];
 			var ThisShip = KC3ShipManager.get( rosterId );
@@ -410,6 +411,17 @@
 					/*5*/ 0, // flagship
 					/*6*/ 0 // mvp
 				];
+
+                var i;
+                for (i=0; i<self.goalTemplates.length; ++i) {
+                    var template = self.goalTemplates[i];
+                    if (template.enable && 
+                        GoalTemplateManager.checkShipType(MasterShip.api_stype,template)) {
+                        grindData = GoalTemplateManager.applyTemplate(grindData, template);
+                        break;
+                    }
+                }
+
 				this.goals["s"+ThisShip.rosterId] = grindData;
 			}else{
 				
