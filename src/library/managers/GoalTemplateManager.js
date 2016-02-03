@@ -28,6 +28,8 @@
      */
 
     window.GoalTemplateManager = {
+        validSTypes: [],
+
         load: function() {
             return JSON.parse(localStorage.goalTemplates || "[]");
         },
@@ -53,14 +55,25 @@
         },
         // parse ship type query
         parseSType: function(raw) {
+            var self = this;
             var parsed = raw
                 .split(",")
                 .map(function(x) { return x.trim(); } )
                 .filter( function(x) { return x.length > 0; } )
                 .map( function(x) { return x.toUpperCase(); } );
             // TODO: remove invalid & duplicate
+            var shipTypes = [];
+
+            if (parsed.indexOf("*") != -1)
+                shipTypes.push("*");
+
+            $.each(self.validSTypes , function(i,stype) {
+                if (parsed.indexOf(stype) != -1)
+                    shipTypes.push(stype);
+            });
+
             // TODO: make sure "*" is handled properly
-            return parsed;
+            return shipTypes;
         },
         // return a string represetation of stype query
         showSType: function(stypes) {
@@ -68,6 +81,22 @@
                 return x === "*"? "Any":x;
             }
             return stypes.length === 0 ? "<Empty>" : stypes.map(translate).join(",");
+        },
+        showInputSType: function(stypes) {
+            return stypes.join(",");
         }
     };
+
+    // initialize valid stypes
+    var stypeRaw = 
+        "DDE DD  CL  CLT " +
+        "CA  CAV CVL FBB " +
+        "BB  BBV CV  XBB " +
+        "SS  SSV AP  AV  " +
+        "LHA CVB AR  AS  " +
+        "CT  AO";
+    window.GoalTemplateManager.validSTypes = 
+        stypeRaw
+          .split(" ")
+          .filter( function(x) { return x.length > 0; });
 })();
