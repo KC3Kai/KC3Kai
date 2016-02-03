@@ -117,7 +117,6 @@
             function goalTemplateSetupUI(tdata, goalBox) {
                 var mapStr = tdata.map.join("-");
 
-                console.log("setup", GoalTemplateManager.showSType(tdata.stype));
                 // "show" mode
                 $(".goal_type .goal_value",goalBox)
                     .text( GoalTemplateManager.showSType(tdata.stype) );
@@ -133,6 +132,14 @@
                 $(".goal_rank select",goalBox).val( tdata.rank );
 	            $(".goal_fs input", goalBox).prop("checked", tdata.flagship);
 	            $(".goal_mvp input", goalBox).prop("checked", tdata.mvp);
+
+                // enable / disable
+                if (! tdata.enable) {
+                    goalBox.addClass("disabled");
+                } else {
+                    goalBox.removeClass("disabled");
+                }
+                $(".goal_onoff", goalBox).text( tdata.enable? "Enabled":"Disabled");
             }
 
             function goalTemplateEdit(t) {
@@ -192,14 +199,24 @@
                 var flagship = $(".goal_fs input", t).prop("checked");
                 var mvp = $(".goal_mvp input", t).prop("checked");
 
+                var obj = self.goalTemplates[t.index()];
                 var result = {
                     stype: stype,
                     map: map,
                     rank: rankNum,
                     flagship: flagship,
                     mvp: mvp };
-                self.goalTemplates[t.index()] = result;
+                // use extend to make sure "enable" field is properly kept
+                self.goalTemplates[t.index()] = $.extend(obj, result);
                 GoalTemplateManager.save( self.goalTemplates );
+            }
+
+            function goalTemplateToggle(t) {
+                var ind = t.index();
+                var obj = self.goalTemplates[ind];
+                obj.enable = ! obj.enable;
+                GoalTemplateManager.save( self.goalTemplates );
+                goalTemplateSetupUI( self.goalTemplates[ind], t);
             }
 
             // Goal Template Edit & Save button events
@@ -233,6 +250,11 @@
                 goalTemplateSwap(ind, ind+1);
             });
 
+            $(".tab_expcalc").on("click", ".goal_template .goal_onoff", function() {
+                var goalBox = $(this).parent().parent();
+                goalTemplateToggle(goalBox);
+            });
+
             // inserting existing templates
             $.each(this.goalTemplates, function(i,x) {
                 var goalBox = $(".tab_expcalc .factory .goal_template").clone();
@@ -249,11 +271,11 @@
                 GoalTemplateManager.save( self.goalTemplates );
                 goalTemplateSetupUI(dat, goalBox);
                 goalTemplateShow(goalBox);
+                goalBox.addClass("disabled");
                 goalBox.appendTo(".tab_expcalc .box_goal_templates");
             });
 
             // TODO: filter feature (turn on / clear)
-            // TODO: enable/disable
             // TODO: apply to goals
 
 			// Remove from Goals Button

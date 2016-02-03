@@ -22,6 +22,7 @@
       , rank: <E,D,C,B,A,S,SS> = <1,2,3,4,5,6,7>
       , flagship: true / false
       , mvp: true / false
+      , enable: true / false
       }
 
      */
@@ -46,7 +47,8 @@
                 map: [3,2],
                 rank: 6,
                 flagship: true,
-                mvp: true
+                mvp: true,
+                enable: true
             };
         },
         // parse ship type query

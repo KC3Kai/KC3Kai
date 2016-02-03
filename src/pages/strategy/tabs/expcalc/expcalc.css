@@ -201,6 +201,11 @@
   border: 1px solid #ace;
 }
 
+.tab_expcalc .goal_template.disabled {
+  background: #bbb;
+  border: 1px solid #555;
+}
+
 .tab_expcalc .goal_template .setting_group {
   width: 680px;
   display: block;
