@@ -82,7 +82,13 @@
 			}, function(cookie){
 				localStorage.extract_api = true;
 				localStorage.dmmplay = false;
-				window.open("http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/", "kc3kai_game");
+				if(false) {
+					// Conventional Way
+					window.open("http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/", "kc3kai_game");
+				} else {
+					// Altered Way
+					window.open("../game/api.html", "kc3kai_game");
+				}
 			});
 		});
 		
