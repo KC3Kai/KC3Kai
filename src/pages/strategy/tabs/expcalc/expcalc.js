@@ -216,6 +216,11 @@
                 goalBox.appendTo(".tab_expcalc .box_goal_templates");
             });
 			
+            // TODO: filter feature
+            // TODO: enable/disable
+            // TODO: move up / down
+            // TODO: apply to goals
+
 			// Remove from Goals Button
 			$(".tab_expcalc").on("click", ".ship_rem", function(){
 				editingBox = $(this).parent();
