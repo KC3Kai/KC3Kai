@@ -113,44 +113,59 @@
 				self.recompute( editingBox.data("id") );
 			});
 
-            console.log(this.goalTemplates);
+            function goalTemplateEdit(t) {
+                $(".goal_edit",t).hide();
+                $(".goal_save",t).show();
+                
+                $(".goal_col .goal_value",t).hide();
+                $(".goal_col .goal_input",t).show();
+                $(".manage_buttons",t).hide();
+            }
 
+            function goalTemplateShow(t) {
+                $(".goal_edit",t).show();
+                $(".goal_save",t).hide();
+                
+                $(".goal_col .goal_value",t).show();
+                $(".goal_col .goal_input",t).hide();
+                $(".manage_buttons",t).show();
+            }
 
-            // TODO
-            $.each(this.goalTemplates, function(i,x) {
-                // TODO show UI
-                console.log(x);
+            function goalTemplateRemove(t) {
+                var ind = t.index();
+                self.goalTemplates.splice(ind,1);
+                GoalTemplateManager.save( self.goalTemplates );
+                t.remove();
+            }
+
+            // TODO            
+            // Goal Template Edit & Save button events
+            $(".tab_expcalc").on("click", ".goal_template .goal_edit", function() {
+                var goalBox = $(this).parent().parent();
+                goalTemplateEdit(goalBox);
             });
+
+            $(".tab_expcalc").on("click", ".goal_template .goal_save", function() {
+                var goalBox = $(this).parent().parent();
+                goalTemplateShow(goalBox);
+            });
+
+            $(".tab_expcalc").on("click", ".goal_template .goal_rem", function() {
+                var goalBox = $(this).parent().parent();
+                goalTemplateRemove(goalBox);
+            });
+
+            $.each(this.goalTemplates, function(i,x) {
+                var goalBox = $(".tab_expcalc .factory .goal_template").clone();
+                goalTemplateShow(goalBox);
+
+                goalBox.appendTo(".tab_expcalc .box_goal_templates");
+            });
+
             $(".tab_expcalc a.new_template").on("click", function () {
                 var goalBox = $(".tab_expcalc .factory .goal_template").clone();
                 var dat = GoalTemplateManager.newTemplate();
-
-                function setupTemplate(t) {
-                    function doEdit() {
-                        $(".ship_edit",t).hide();
-                        $(".ship_save",t).show();
-
-                        $(".ship_col .ship_value",t).hide();
-                        $(".ship_col .ship_input",t).show();
-                        $(".manage_buttons",t).hide();
-                    }
-
-                    function doShow() {
-                        $(".ship_edit",t).show();
-                        $(".ship_save",t).hide();
-
-                        $(".ship_col .ship_value",t).show();
-                        $(".ship_col .ship_input",t).hide();
-                        $(".manage_buttons",t).show();
-                    }
-
-                    $(".ship_save",t).on("click", doShow);
-                    $(".ship_edit",t).on("click", doEdit);
-
-                    doShow();
-                }
-
-                setupTemplate(goalBox);
+                goalTemplateShow(goalBox);
 
                 goalBox.appendTo(".tab_expcalc .box_goal_templates");
                 self.goalTemplates.push(dat);
