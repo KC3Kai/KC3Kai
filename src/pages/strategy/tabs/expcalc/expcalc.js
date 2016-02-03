@@ -284,6 +284,40 @@
                 });
             });
 
+            $(".tab_expcalc").on("click", ".goal_template .goal_apply", function() {
+                var goalBox = $(this).parent().parent();
+                var template = self.goalTemplates[goalBox.index()];
+
+                var targetShips = [];
+                $(".tab_expcalc .box_goals .ship_goal").each( function(i,x) {
+                    var jqObj = $(x);
+                    var rosterId = $(x).data("id");
+                  	var ThisShip = KC3ShipManager.get( rosterId );
+			        var MasterShip = ThisShip.master();
+                    var stypeId = MasterShip.api_stype;
+
+                    if (GoalTemplateManager.checkShipType(stypeId, template))
+                        targetShips.push( { 
+                            rosterId: rosterId,
+                            shipDesc: ThisShip.name() + " Lv." + ThisShip.level +  " (" + rosterId + ")"
+                        }  )
+                });
+
+                // build a dialog for confirmation
+                var shipsStr = targetShips.map( function(x) { return x.shipDesc; }).join("\n");
+                if (! confirm( "Applying template to following ship(s): \n" + shipsStr + "\nConfirm ?"))
+                    return true;
+
+                $.each( targetShips, function(i,x) {
+                    console.log( JSON.stringify(x) );
+                    var grindData = self.goals["s" + x.rosterId];
+                    self.goals["s" + x.rosterId] = 
+                        GoalTemplateManager.applyTemplate(grindData, template);
+                    self.save();
+                    self.recompute( x.rosterId );
+                });
+            });
+
             // inserting into existing templates
             $.each(this.goalTemplates, function(i,x) {
                 var goalBox = $(".tab_expcalc .factory .goal_template").clone();
@@ -312,7 +346,6 @@
             });
 
             // TODO: prevent double click text selection?
-            // TODO: apply to goals
 
 			// Remove from Goals Button
 			$(".tab_expcalc").on("click", ".ship_rem", function(){
