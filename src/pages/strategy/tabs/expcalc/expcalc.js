@@ -255,7 +255,36 @@
                 goalTemplateToggle(goalBox);
             });
 
-            // inserting existing templates
+            $(".tab_expcalc").on("click", ".goal_template .goal_filter", function() {
+                var goalBox = $(this).parent().parent();
+                var stypes = self.goalTemplates[goalBox.index()].stype;
+                // if there's an "Any" filter, don't proceed because
+                // we will end up highlighting everything
+                if (stypes.indexOf("*") != -1)
+                    return true;
+                
+                var KGS = PS["KanColle.Generated.SType"];
+                var stypeIds = stypes.map( function(x) {
+                    return KGS.toInt(KGS.readSType(x));
+                })
+
+                // traverse all ships, toggle "highlight" flag
+                $(".section_body .ship_goal").each( function(i,x) {
+                    var jqObj = $(x);
+                    var rosterId = jqObj.data("id");
+                  	var ThisShip = KC3ShipManager.get( rosterId );
+			        var MasterShip = ThisShip.master();
+                    var stypeId = MasterShip.api_stype;
+
+                    if (stypeIds.indexOf(stypeId) != -1) {
+                        jqObj.addClass("highlight");
+                    } else {
+                        jqObj.removeClass("highlight");
+                    }
+                });
+            });
+
+            // inserting into existing templates
             $.each(this.goalTemplates, function(i,x) {
                 var goalBox = $(".tab_expcalc .factory .goal_template").clone();
                 goalTemplateSetupUI(self.goalTemplates[i], goalBox);
@@ -275,8 +304,14 @@
                 goalBox.appendTo(".tab_expcalc .box_goal_templates");
             });
 
+            $(".tab_expcalc a.clear_highlight").on("click", function () {
+                $(".section_body .ship_goal").each( function(i,x) {
+                    var jqObj = $(x);
+                    jqObj.removeClass("highlight");
+                });
+            });
+
             // TODO: prevent double click text selection?
-            // TODO: filter feature (turn on / clear)
             // TODO: apply to goals
 
 			// Remove from Goals Button
