@@ -127,7 +127,7 @@
 
                 // "edit" mode
                 $(".goal_type input",goalBox)
-                    .val( GoalTemplateManager.showSType(tdata.stype) );
+                    .val( GoalTemplateManager.showInputSType(tdata.stype) );
                 $(".goal_map select",goalBox).val( mapStr );
                 $(".goal_rank select",goalBox).val( tdata.rank );
 	            $(".goal_fs input", goalBox).prop("checked", tdata.flagship);
@@ -180,10 +180,10 @@
                         // setup UI
                         var cs = $(".box_goal_templates").children();
                         goalTemplateSetupUI(self.goalTemplates[index1],
-                                            cs[index1]);
+                                            $(cs[index1]) );
                         goalTemplateShow(cs[index1]);
                         goalTemplateSetupUI(self.goalTemplates[index2],
-                                            cs[index2]);
+                                            $(cs[index2]));
                         goalTemplateShow(cs[index2]);
                     }
                 }
@@ -275,6 +275,7 @@
                 goalBox.appendTo(".tab_expcalc .box_goal_templates");
             });
 
+            // TODO: prevent double click text selection?
             // TODO: filter feature (turn on / clear)
             // TODO: apply to goals
 
@@ -300,7 +301,7 @@
 					$("<div />").addClass("clear").appendTo(".tab_expcalc .box_other");
 				}
 			});
-			
+
 			// Show all ship_save
 			var goalBox;
 			$.each(KC3ShipManager.list, function(index, ThisShip){
@@ -317,7 +318,7 @@
 				$(".ship_name", goalBox).text( ThisShip.name() );
 				$(".ship_type", goalBox).text( ThisShip.stype() );
 				$(".ship_lv .ship_value", goalBox).text( ThisShip.level );
-				
+
 				// If ship already on the current goals
 				if(typeof self.goals["s"+ThisShip.rosterId] != "undefined"){
 					$(".ship_edit", goalBox).show();
