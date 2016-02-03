@@ -12,9 +12,7 @@
       Data Format: 
       
       localStorage.goalTemplates
-      { templates: <array of templates>
-      , version: 1
-      }
+      array of templates
 
       template:
       { stype: <array of ship types> (e.g. ["DD","CL"..])
@@ -50,6 +48,24 @@
                 flagship: true,
                 mvp: true
             };
+        },
+        // parse ship type query
+        parseSType: function(raw) {
+            var parsed = raw
+                .split(",")
+                .map(function(x) { return x.trim(); } )
+                .filter( function(x) { return x.length > 0; } )
+                .map( function(x) { return x.toUpperCase(); } );
+            // TODO: remove invalid & duplicate
+            // TODO: make sure "*" is handled properly
+            return parsed;
+        },
+        // return a string represetation of stype query
+        showSType: function(stypes) {
+            function translate(x) {
+                return x === "*"? "Any":x;
+            }
+            return stypes.length === 0 ? "<Empty>" : stypes.map(translate).join(",");
         }
     };
 })();

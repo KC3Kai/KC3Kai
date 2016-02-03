@@ -50,6 +50,7 @@
 			// Add map list into the factory drop-downs
 			$.each(this.maplist, function(MapName, MapExp){
 				$(".tab_expcalc .factory .ship_map select").append("<option>"+MapName+"</option>");
+				$(".tab_expcalc .factory .goal_map select").append("<option>"+MapName+"</option>");
 			});
 			
 			var editingBox, mapSplit;
@@ -113,6 +114,27 @@
 				self.recompute( editingBox.data("id") );
 			});
 
+            function goalTemplateSetupUI(tdata, goalBox) {
+                var mapStr = tdata.map.join("-");
+
+                console.log("setup", GoalTemplateManager.showSType(tdata.stype));
+                // "show" mode
+                $(".goal_type .goal_value",goalBox)
+                    .text( GoalTemplateManager.showSType(tdata.stype) );
+                $(".goal_map .goal_value",goalBox).text( mapStr );
+                $(".goal_rank .goal_value",goalBox).text( self.rankNames[tdata.rank] );
+                $(".goal_fs .goal_value",goalBox).text( tdata.flagship? "Yes":"No" );
+                $(".goal_mvp .goal_value",goalBox).text( tdata.mvp? "Yes":"No" );
+
+                // "edit" mode
+                $(".goal_type input",goalBox)
+                    .val( GoalTemplateManager.showSType(tdata.stype) );
+                $(".goal_map select",goalBox).val( mapStr );
+                $(".goal_rank select",goalBox).val( tdata.rank );
+	            $(".goal_fs input", goalBox).prop("checked", tdata.flagship);
+	            $(".goal_mvp input", goalBox).prop("checked", tdata.mvp);
+            }
+
             function goalTemplateEdit(t) {
                 $(".goal_edit",t).hide();
                 $(".goal_save",t).show();
@@ -138,7 +160,26 @@
                 t.remove();
             }
 
-            // TODO            
+            // for saving modification
+            function goalTemplateSave(t) {
+                var stypeRaw = $(".goal_type input",t).val();
+                var stype = GoalTemplateManager.parseSType( stypeRaw );
+                var mapRaw = $(".goal_map select",t).val();
+                var map = mapRaw.split("-").map(function (x) { return parseInt(x,10); });
+                var rankNum = parseInt($(".goal_rank select", t).val(), 10);
+                var flagship = $(".goal_fs input", t).prop("checked");
+                var mvp = $(".goal_mvp input", t).prop("checked");
+
+                var result = {
+                    stype: stype,
+                    map: map,
+                    rank: rankNum,
+                    flagship: flagship,
+                    mvp: mvp };
+                self.goalTemplates[t.index()] = result;
+                GoalTemplateManager.save( self.goalTemplates );
+            }
+
             // Goal Template Edit & Save button events
             $(".tab_expcalc").on("click", ".goal_template .goal_edit", function() {
                 var goalBox = $(this).parent().parent();
@@ -147,6 +188,8 @@
 
             $(".tab_expcalc").on("click", ".goal_template .goal_save", function() {
                 var goalBox = $(this).parent().parent();
+                goalTemplateSave(goalBox);
+                goalTemplateSetupUI(self.goalTemplates[ goalBox.index() ], goalBox);
                 goalTemplateShow(goalBox);
             });
 
@@ -157,6 +200,7 @@
 
             $.each(this.goalTemplates, function(i,x) {
                 var goalBox = $(".tab_expcalc .factory .goal_template").clone();
+                goalTemplateSetupUI(self.goalTemplates[i], goalBox);
                 goalTemplateShow(goalBox);
 
                 goalBox.appendTo(".tab_expcalc .box_goal_templates");
@@ -165,11 +209,11 @@
             $(".tab_expcalc a.new_template").on("click", function () {
                 var goalBox = $(".tab_expcalc .factory .goal_template").clone();
                 var dat = GoalTemplateManager.newTemplate();
-                goalTemplateShow(goalBox);
-
-                goalBox.appendTo(".tab_expcalc .box_goal_templates");
                 self.goalTemplates.push(dat);
                 GoalTemplateManager.save( self.goalTemplates );
+                goalTemplateSetupUI(dat, goalBox);
+                goalTemplateShow(goalBox);
+                goalBox.appendTo(".tab_expcalc .box_goal_templates");
             });
 			
 			// Remove from Goals Button
