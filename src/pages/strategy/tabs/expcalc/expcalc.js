@@ -266,7 +266,7 @@
 				var KGS = PS["KanColle.Generated.SType"];
 				var stypeIds = stypes.map( function(x) {
 					return KGS.toInt(KGS.readSType(x));
-				})
+				});
 
 				// traverse all ships, toggle "highlight" flag
 				$(".section_body .ship_goal").each( function(i,x) {
@@ -299,8 +299,10 @@
 					if (GoalTemplateManager.checkShipType(stypeId, template))
 						targetShips.push( {
 							rosterId: rosterId,
-							shipDesc: ThisShip.name() + " Lv." + ThisShip.level +  " (" + rosterId + ")"
-						}  )
+							shipDesc: 
+                              ThisShip.name() + " Lv." + ThisShip.level +
+                                " (" + rosterId + ")"
+						}  );
 				});
 
 				// build a dialog for confirmation
