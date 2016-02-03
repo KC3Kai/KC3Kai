@@ -160,6 +160,28 @@
                 t.remove();
             }
 
+            // swap two templates, make sure abs(index1 - index2) == 1
+            // and index1 is a valid index (index2 doesn't have to be)
+            function goalTemplateSwap(index1,index2) {
+                if (Math.abs(index1 - index2) == 1) {
+                    if (index2 >= 0 && index2 < self.goalTemplates.length) {
+                        // swap data
+                        var tmp = self.goalTemplates[index1];
+                        self.goalTemplates[index1] = self.goalTemplates[index2];
+                        self.goalTemplates[index2] = tmp;
+                        GoalTemplateManager.save( self.goalTemplates );
+                        // setup UI
+                        var cs = $(".box_goal_templates").children();
+                        goalTemplateSetupUI(self.goalTemplates[index1],
+                                            cs[index1]);
+                        goalTemplateShow(cs[index1]);
+                        goalTemplateSetupUI(self.goalTemplates[index2],
+                                            cs[index2]);
+                        goalTemplateShow(cs[index2]);
+                    }
+                }
+            }
+
             // for saving modification
             function goalTemplateSave(t) {
                 var stypeRaw = $(".goal_type input",t).val();
@@ -198,6 +220,20 @@
                 goalTemplateRemove(goalBox);
             });
 
+
+            $(".tab_expcalc").on("click", ".goal_template .goal_up", function() {
+                var goalBox = $(this).parent().parent();
+                var ind = goalBox.index();
+                goalTemplateSwap(ind, ind-1);
+            });
+
+            $(".tab_expcalc").on("click", ".goal_template .goal_down", function() {
+                var goalBox = $(this).parent().parent();
+                var ind = goalBox.index();
+                goalTemplateSwap(ind, ind+1);
+            });
+
+            // inserting existing templates
             $.each(this.goalTemplates, function(i,x) {
                 var goalBox = $(".tab_expcalc .factory .goal_template").clone();
                 goalTemplateSetupUI(self.goalTemplates[i], goalBox);
@@ -215,10 +251,9 @@
                 goalTemplateShow(goalBox);
                 goalBox.appendTo(".tab_expcalc .box_goal_templates");
             });
-			
-            // TODO: filter feature
+
+            // TODO: filter feature (turn on / clear)
             // TODO: enable/disable
-            // TODO: move up / down
             // TODO: apply to goals
 
 			// Remove from Goals Button
