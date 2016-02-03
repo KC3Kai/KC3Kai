@@ -79,10 +79,12 @@ Saves and loads list to and from localStorage
 					the problem is, pending consumption variable stacks up for expedition, */
 				// Calculate Difference
 				var
-					sp = cShip,
-					pc = sp.pendingConsumption,
-					rs = Array.apply(null,{length:8}).map(function(){return 0;}),
-					df = tempData.repair.map(function(x,i){return x - sp.repair[i];});
+					sp  = cShip,
+					pc  = sp.pendingConsumption,
+					rs  = Array.apply(null,{length:8}).map(function(){return 0;}),
+					df  = tempData.repair.map(function(x,i){return x - sp.repair[i];}),
+					plt = ((cShip.hp[1] - cShip.hp[0]) > 0 ? 0.075 : 0.000 );
+				
 				rs[0] = -df[1];
 				rs[2] = -df[2];
 				// Store Difference to Database
@@ -94,7 +96,9 @@ Saves and loads list to and from localStorage
 				// Reduce Consumption Counter
 				// df (delta)      = [0,5,20]
 				df.shift(); df.push(0);
-				console.info("Akashi repaired",cShip.name(),cShip.rosterId,df);
+				console.info("Akashi repaired",cShip.name(),cShip.hp.reduceRight(function(hi,lo){return hi-lo;}),
+					df,df.map(function(rsc){ return Math.floor(rsc * plt); })
+				);
 				Object.keys(pc).reverse().forEach(function(d){
 					// if the difference is not all-zero, keep going
 					if(df.every(function(x){return !x;}))

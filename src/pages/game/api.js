@@ -20,7 +20,7 @@ var critAnim = false;
   idleTimeout     - timer ID for unsafe idle time marker
   idleFunction    - function that indicates the way of the idle counter
 */
-localStorage.longestIdleTime = Math.max(localStorage.longestIdleTime || 0,1800000);
+localStorage.longestIdleTime = Math.max(parseInt(localStorage.longestIdleTime) || 0,1800000);
 var
 	lastRequestMark,
 	idleTimer,
@@ -29,6 +29,10 @@ var
 
 // Show game screens
 function ActivateGame(){
+	if(!localStorage.getObject('apiUsage')) {
+		alert("APIExpiredAlert");
+		return false;
+	}
 	waiting = false;
 	$(".box-wrap").css("background", "#fff");
 	$(".box-wait").hide();
@@ -41,6 +45,7 @@ function ActivateGame(){
 		.trigger('initialize-idle')
 		.show();
 	$(".box-wrap").css("zoom", ((ConfigManager.api_gameScale || 100) / 100));
+	return true;
 }
 
 $(document).on("ready", function(){
@@ -70,74 +75,65 @@ $(document).on("ready", function(){
 			$(this).val(localStorage.absoluteswf);
 		}
 		if(localStorage.absoluteswf.length <= 0)
-			location.reload();
+			$(document).trigger('state-check');
 	});
 	
 	$(".box-game").on('initialize-idle',function(){
 		lastRequestMark = Date.now();
+		clearInterval(idleTimer);
 		idleTimer = setInterval(idleFunction,1000);
 		if(ConfigManager.alert_idle_counter) {
 			$(".game-idle-timer").trigger("refresh-tick");
 		}
 	});
 	
-	// API link determines which screen to show
-	if(localStorage.absoluteswf){
-		$(".api_txt textarea").text(localStorage.absoluteswf);
-		$(".box-wait").show();
-		waiting = true;
-	}else{
-		$(".box-nolink").show();
-	}
-	
 	// Update API Link
 	$(".api_submit").on('click', function(){
 		if($(".api_text").val().indexOf("mainD2.swf") > -1){
 			localStorage.absoluteswf = $(".api_text").val();
-			trustedExit = true;
-			window.location.reload();
+			$(document).trigger('state-check');
 		}
 	});
 	
 	// Forget API Link
 	$(".forget_btn").on('click', function(){
 		localStorage.absoluteswf = "";
-		trustedExit = true;
-		window.location.reload();
+		$(document).trigger('state-check');
 	});
 	
 	// Quick Play
 	$(".play_btn").on('click', function(){
-		ActivateGame();
+		if($(this).data('play'))
+			ActivateGame();
 		// ResetIdleStat();
 	});
 	
-	// Disable Quick Play (must panel)
-	if(ConfigManager.api_mustPanel) {
-		$(".play_btn")
-			.off('click')
-			.text(KC3Meta.term("APIWaitToggle"))
-			.css('color','#f00')
-			.css('width','40%');
-	}
+	$(".play_btn").data('play',!ConfigManager.api_mustPanel);
 	
 	// Configure Refresh Toggle (using $(".game-refresh").trigger("click") is possible)
 	$(".game-refresh").on("click",function(){
-		switch($(this).text()) {
-			case("00"):
-			case("01"):
+		switch(Math.sign($(this).text()-1)) {
+			case(-1):
+			case( 0):
 				// TODO: BOMB EXPLODED
 				// $(".game-swf").attr("src","about:blank").attr("src",localStorage.absoluteswf);
-				$(".box-game").trigger('initialize-idle');
 				$(this).trigger('bomb-exploded');
-				$(this).text("05");
+				$(this).text(99);
 				break;
 			default:
 				$(this).text(Math.max(0,$(this).text()-1).toDigits(2));
 				break;
 		}
 	}).on("bomb-exploded",function(){
-		console.error("TODO: dragonjet help me >_<)/");
+		$(this).css('right','');
+		localStorage.extract_api = true;
+		$(document).trigger('state-check');
+		console.warn("Refresh warning");
+		localStorage.apiUsage = null;
+	});
+	
+	$(".api_refresh").on('click',function(){
+		$(".game-refresh").trigger('bomb-exploded');
 	});
 	
 	// Configure Idle Timer
@@ -172,12 +168,17 @@ $(document).on("ready", function(){
 		$(".game-idle-timer").show();
 	}
 	
-	
 	// Exit confirmation
 	window.onbeforeunload = function(){
 		ConfigManager.load();
 		// added waiting condition should be ignored
-		if(ConfigManager.api_askExit==1 && !trustedExit && !waiting && !localStorage.getObject("extract_api")){
+		if(
+			ConfigManager.api_askExit==1 &&
+			!trustedExit &&
+			!waiting &&
+			$(".box-game").is(":visible") &&
+			$(".game-refresh").text() > 0
+		){
 			trustedExit = true;
 			setTimeout(function(){ trustedExit = false; }, 100);
 			return KC3Meta.term("UnwantedExit");
@@ -195,6 +196,9 @@ $(document).on("ready", function(){
 		}
 	}, 1000);
 	
+	// Automatically check current API state
+	$(this).data('playCount',0);
+	$(this).trigger('state-check');
 });
 
 $(document).on("keydown", function(event){
@@ -220,6 +224,120 @@ $(document).on("keydown", function(event){
 	}
 });
 
+$(document).on("api-refresh",function(){
+	// Initialize Visiblity (Refresh API)
+	$(".box-nolink").hide();
+		$(".box-noapi").hide();
+		$(".box-expired").hide();
+	$(".box-wait").show();
+		$(".box-refresh").show();
+		$(".box-ready").hide();
+	
+	// Initialize State
+	localStorage.extract_api = true;
+	$(".game-swf").remove();
+	$(".box-refresh")
+		.prepend("<iframe class=refresh-box frameborder=0></iframe>")
+		.find('.refresh-box')
+		.attr('src','http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/');
+});
+
+$(document).on("api-valid",function(){
+	// Initialize Visiblity (Valid API)
+	$(".box-nolink").hide();
+		$(".box-noapi").hide();
+		$(".box-expired").hide();
+	$(".box-wait").show();
+		$(".box-refresh").hide();
+		$(".box-ready").show();
+	
+	// Initialize State
+	$(".api_txt textarea").text(localStorage.absoluteswf);
+	waiting = true;
+	
+	// Reset Styles
+	$(".game-idle-timer").css("height","").css("width","");
+	$(".game-refresh").css('right','').text((5 + Math.ceil(Math.random() * ($(this).data('playCount') + 1))).toDigits(2));
+	$(".play_btn").data('play',$(".play_btn").data('play') || $(this).data('playCount'));
+	
+	
+	// Set expiry API time
+	if(localStorage.getObject('apiUsage')) {
+		var timeOut = localStorage.getObject('apiUsage') - Date.now();
+		console.warn("Existing API will expire in",timeOut,'milliseconds');
+		setTimeout(function(){
+			localStorage.apiUsage = null;
+			if(waiting) {
+				$(document).trigger('api-invalid');
+			}
+		},timeOut);
+	}
+	
+	// Check panel requirement
+	if($(".play_btn").data('play')) {
+		$(".play_btn")
+			.text(KC3Meta.term("GameStartNowBtn"))
+			.css('color','')
+			.css('width','');
+	} else {
+		// Disable Quick Play (must panel)
+		$(".play_btn")
+			.text(KC3Meta.term("APIWaitToggle"))
+			.css('color','#f00')
+			.css('width','40%');
+	}
+	
+	$(this).data('playCount',$(this).data('playCount')+1);
+});
+
+$(document).on("api-invalid",function(){
+	// Initialize Visiblity (Invalid API)
+	$(".box-nolink").show();
+		$(".box-noapi").hide();
+		$(".box-expired").show();
+	$(".box-wait").hide();
+		$(".box-refresh").hide();
+		$(".box-ready").hide();
+	
+});
+
+$(document).on("api-inexists",function(){
+	// Initialize Visiblity (No API)
+	$(".box-nolink").show();
+		$(".box-noapi").show();
+		$(".box-expired").hide();
+	$(".box-wait").hide();
+		$(".box-refresh").hide();
+		$(".box-ready").hide();
+	
+});
+
+$(document).on("state-check",function(){
+	var
+		eventName = "",
+		nowDate   = Date.now();
+	if(JSON.parse(localStorage.extract_api))
+		// Extract API Flag
+		eventName = "api-refresh";
+	else
+		if(!localStorage.absoluteswf)
+			// No API Detected
+			eventName = "api-inexists";
+		else if(nowDate < (localStorage.getObject('apiUsage') || nowDate))
+			// Valid API
+			eventName = "api-valid";
+		else
+			// Invalid API
+			eventName = "api-invalid";
+	
+	$(".box-game").hide();
+	
+	if(eventName) {
+		console.info("Call state",eventName);
+		$(this).trigger(eventName);
+	}
+});
+
 /* Invokable actions
 -----------------------------------*/
 var interactions = {
@@ -227,8 +345,7 @@ var interactions = {
 	// Panel is opened, activate the game
 	activateGame :function(request, sender, response){
 		if(waiting){
-			ActivateGame();
-			response({success:true});
+			response({success:ActivateGame()});
 		}else{
 			response({success:false});
 		}
@@ -237,7 +354,7 @@ var interactions = {
 	// Cat Bomb Detection -> Enforced
 	catBomb :function(request, sender, response){
 		try{
-			switch(ConfigManager.api_directRefresh) {
+			switch(Number(ConfigManager.api_directRefresh)) {
 				case 0:
 					throw new Error("");
 				case 1:
@@ -258,8 +375,8 @@ var interactions = {
 	
 	// Request OK Marker
 	goodResponses :function(request, sender, response){
-		if(request.tcp_status === 200 && request.api_status === 1) {
-			localStorage.longestIdleTime = Math.max(localStorage.longestIdleTime,Date.now() - lastRequestMark);
+		if(request.tcp_status === 200 && request.api_status === 1 && Math.sign($('.game-refresh').text())>0) {
+			localStorage.longestIdleTime = Math.max(Number(localStorage.longestIdleTime) || 0,Date.now() - lastRequestMark);
 			lastRequestMark = Date.now();
 			$(".game-idle-timer").trigger("refresh-tick");
 			clearInterval(idleTimer);
@@ -268,12 +385,12 @@ var interactions = {
 		} else {
 			clearInterval(idleTimer);
 			clearTimeout(idleTimeout);
+			
 			$(".game-idle-timer").trigger("unsafe-tick").html([
 				String(Math.floor((Date.now() - lastRequestMark)/1000)).toHHMMSS(),
 				[request.tcp_status,request.api_status,request.api_result].filter(function(x){return !!x;}).join('/')
 			].join('<br>')).css("height","40px").css("width","480px");
 			interactions.catBomb(request,sender,response);
-			interactions.goodResponses = function(){};
 		}
 	},
 	
@@ -382,6 +499,13 @@ var interactions = {
 		if(critAnim){ clearInterval(critAnim); }
 		$(".taiha_blood").hide();
 		$(".taiha_red").hide();
+	},
+	
+	api_refresh :function(request, sender, response){
+		console.log("Refresh Call");
+		localStorage.extract_api = false;
+		$('.refresh-box').remove();
+		$(document).trigger('state-check');
 	},
 	
 	// Dummy action
