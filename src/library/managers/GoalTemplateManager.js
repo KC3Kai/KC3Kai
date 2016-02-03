@@ -9,8 +9,8 @@
 
     /*
 
-      Data Format: 
-      
+      Data Format:
+
       localStorage.goalTemplates
       array of templates
 
@@ -44,7 +44,7 @@
             }
         },
         newTemplate: function() {
-            return { 
+            return {
                 stype: ["*"],
                 map: [3,2],
                 rank: 6,
@@ -106,14 +106,14 @@
     };
 
     // initialize valid stypes
-    var stypeRaw = 
+    var stypeRaw =
         "DDE DD  CL  CLT " +
         "CA  CAV CVL FBB " +
         "BB  BBV CV  XBB " +
         "SS  SSV AP  AV  " +
         "LHA CVB AR  AS  " +
         "CT  AO";
-    window.GoalTemplateManager.validSTypes = 
+    window.GoalTemplateManager.validSTypes =
         stypeRaw
           .split(" ")
           .filter( function(x) { return x.length > 0; });
