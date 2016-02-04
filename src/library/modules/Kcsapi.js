@@ -1528,7 +1528,9 @@ Previously known as "Reactor"
 					case 3: // B
 						qLog(201).increment(); // Bd1: Defeat an enemy fleet
 						KC3QuestManager.get(210).increment(); // Bd3: Defeat 10 abyssal fleets (B rank+)
-						
+
+						// Note: please make sure to place "isSortieAt(x,y)" earlier than any "isSortieAt(x)"
+						// otherwise when "isSortieAt(x)" is satisfied, "isSortieAt(x,y)" will be shortcut-ed.
 						if(KC3SortieManager.currentNode().isBoss()) {
 							switch(true) {
 								case KC3SortieManager.isSortieAt( 2 ):
@@ -1539,11 +1541,11 @@ Previously known as "Reactor"
 								case KC3SortieManager.isSortieAt(3,5):
 									KC3QuestManager.get(241).increment(); // Bw7: Defeat 5 bosses in Worlds [W3-3], [W3-4] or [W3-5]
 									break;
-								case KC3SortieManager.isSortieAt( 4 ):
-									KC3QuestManager.get(229).increment(); // Bw6: Defeat 12 bosses in horned nodes in World 4
-									break;
 								case(KC3SortieManager.isSortieAt(4,4)):
 									KC3QuestManager.get(242).increment(); // Bw8: Defeat a boss in World [W4-4]
+									break;
+								case KC3SortieManager.isSortieAt( 4 ):
+									KC3QuestManager.get(229).increment(); // Bw6: Defeat 12 bosses in horned nodes in World 4
 									break;
 							}
 							KC3QuestManager.get(214).increment(2); // Bw1: 3rd requirement: Win vs 12 bosses (index:2)
