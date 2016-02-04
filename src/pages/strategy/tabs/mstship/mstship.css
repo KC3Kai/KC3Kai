@@ -190,7 +190,7 @@
 	font-size:14px;
 	font-weight:bold;
 }
-.tab_mstship .shipInfo .equipment .sloticon {
+.tab_mstship .shipInfo .equipment .sloticon img {
 	width:20px;
 	height:20px;
 	float:left;
@@ -205,7 +205,9 @@
 	float:left;
 	position:relative;
 	margin:2px 0px 0px -10px;
+	padding-left: 12px;
 	z-index:1;
+	color: white;
 	background:#444;
 	border-radius:0px 3px 3px 0px;
 }

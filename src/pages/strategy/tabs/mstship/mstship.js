@@ -231,6 +231,8 @@
 					statBox.appendTo(".tab_mstship .shipInfo .stats");
 				});
 				
+				var stockEquipments = WhoCallsTheFleetDb.getStockEquipment( ship_id );
+
 				// EQUIPMENT
 				$(".tab_mstship .equipments .equipment").each(function(index){
 					$(".capacity", this).text( shipData.api_maxeq[index] );
@@ -238,6 +240,17 @@
 						$(this).hide();
 					}else{
 						$(this).show();
+					}
+
+					if (stockEquipments) {
+						var equipId = stockEquipments[index];
+						if (equipId) {
+							var equipment = KC3Master.slotitem( equipId );
+							$(".slotitem", this).text(KC3Meta.gearName( equipment.api_name ) );
+							$(".sloticon img", this)
+								.attr("src","../../../../assets/img/items/"+equipment.api_type[3]+".png");
+							console.log( equipment.api_type[3] );
+						}
 					}
 				});
 				
