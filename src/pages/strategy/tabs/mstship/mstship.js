@@ -249,7 +249,9 @@
 							$(".slotitem", this).text(KC3Meta.gearName( equipment.api_name ) );
 							$(".sloticon img", this)
 								.attr("src","../../../../assets/img/items/"+equipment.api_type[3]+".png");
-							console.log( equipment.api_type[3] );
+						} else {
+							$(".slotitem", this).text( "" );
+							$(".sloticon img", this).attr("src","");
 						}
 					}
 				});
