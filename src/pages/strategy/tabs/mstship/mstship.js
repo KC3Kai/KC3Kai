@@ -127,7 +127,7 @@
 			});
 			
 			// Play voice
-			$(".tab_mstship .shipInfo .voice").on("click", function(){
+			$(".tab_mstship .shipInfo .voices").on("click", ".voice", function(){
 				if(self.audio){ self.audio.pause(); }
 				self.audio = new Audio("http://"+self.server_ip+"/kcs/sound/kc"+self.currentGraph+"/"+$(this).data("vnum")+".mp3");
 				self.audio.play();
