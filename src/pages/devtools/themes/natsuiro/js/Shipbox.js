@@ -18,7 +18,8 @@ KC3改 Ship Box for Natsuiro theme
 	Short ship box for combined fleets
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.commonElements = function( rosterId ){
-		$(".ship_img img", this.element).attr("src", KC3Meta.shipIcon(this.shipData.masterId));
+		$(".ship_img img", this.element).attr("src", KC3Meta.shipIcon(this.shipData.masterId)).attr("title",
+		JSON.stringify(this.shipData.pendingConsumption));
 		$(".ship_name", this.element).text( this.shipData.name() );
 		$(".ship_type", this.element).text( this.shipData.stype() );
 		
@@ -61,8 +62,15 @@ KC3改 Ship Box for Natsuiro theme
 		this.showPrediction();
 		this.showMorale();
 		
-		$(".ship_level span", this.element).text( this.shipData.level );		
-		$(".ship_exp_next", this.element).text( this.shipData.exp[1] );		
+		$(".ship_level span", this.element)
+			.text( this.shipData.level )
+			.prop( 'title', (function(shipData){
+				var mst = shipData.master();
+				return (shipData.level >= (mst.api_afterlv || Infinity)) ?
+					['Possible Remodel'] :
+					(mst.api_afterlv && ['Next Remodel',mst.api_afterlv].join(' ') || '');
+			})(this.shipData) );
+		$(".ship_exp_next", this.element).text( this.shipData.exp[1] );
 		$(".ship_exp_bar", this.element).css("width", (290*this.expPercent)+"px");
 		
 		$(".ship_fuel .ship_supply_text", this.element).text(Math.ceil(this.fuelPercent*100)+"%");
@@ -134,7 +142,25 @@ KC3改 Ship Box for Natsuiro theme
 					$(".ship_hp_bar", this.element).css("background", "#00FF00");
 				}
 			}
+			
+			if(this.shipData.akashiMark) {
+				this.element.css("background-color", "rgba(191,255,100,0.15)");
+			}
 		}
+		
+		this.hideAkashi();
+	};
+	
+	/* HIDE AKASHI TIMER
+	(If enabled?) Show the timer whenever hover akashi's shipbox.
+	This element will be removed if it does not meet the required condition.
+	[Being repaired/Repairing]
+	---------------------------------------------------*/
+	KC3NatsuiroShipbox.prototype.hideAkashi = function(){
+		if(!this.shipData.akashiMark)
+			$(".ship_repair_data",this.element).remove();
+		else
+			$(".ship_repair_data",this.element).data('sid',this.shipData.rosterId);
 	};
 	
 	/* SHOW PREDICTION

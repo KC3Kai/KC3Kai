@@ -123,7 +123,7 @@
 		if(ConfigManager.checkLiveQuests && ConfigManager.language=="en"){
 			$.ajax({
 				dataType: "JSON",
-				url: "https://raw.githubusercontent.com/KC3Kai/kc3-translations/master/data/"+ConfigManager.language+"/quests.json?v="+((new Date()).getTime()),
+				url: "https://raw.githubusercontent.com/KC3Kai/kc3-translations/master/data/"+ConfigManager.language+"/quests.json?v="+(Date.now()),
 				success: function(newQuestTLs){
 					if(JSON.stringify(newQuestTLs) != JSON.stringify(KC3Meta._quests)){
 						console.log("new quests detected, updating quest list from live");
@@ -170,13 +170,8 @@
 		}
 		
 		// Close CatBomb modal
-		$("#catBomb .closebtn").on("click", function(){
-			$("#catBomb").fadeOut(300);
-		});
-		
-		// Close CatBomb modal
-		$("#gameUpdate .closebtn").on("click", function(){
-			$("#gameUpdate").fadeOut(300);
+		$(".modalBox").on("click", ".closebtn", function(){
+			$(this).parent().parent().fadeOut(300);
 		});
 		
 		// HQ name censoring
@@ -237,13 +232,13 @@
 		// Export button
 		$(".module.controls .btn_export").on("click", function(){
 			window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck=".concat(encodeURI(
-					JSON.stringify({
-						"version":3,
-						"f1":generate_fleet_JSON(PlayerManager.fleets[0]),
-						"f2":generate_fleet_JSON(PlayerManager.fleets[1]),
-						"f3":generate_fleet_JSON(PlayerManager.fleets[2]),
-						"f4":generate_fleet_JSON(PlayerManager.fleets[3]),
-						})
+				JSON.stringify({
+					"version":3,
+					"f1":generate_fleet_JSON(PlayerManager.fleets[0]),
+					"f2":generate_fleet_JSON(PlayerManager.fleets[1]),
+					"f3":generate_fleet_JSON(PlayerManager.fleets[2]),
+					"f4":generate_fleet_JSON(PlayerManager.fleets[3]),
+					})
 				)));
 		});
 
@@ -372,9 +367,7 @@
 			$(".module.controls .fleet_num").removeClass("active");
 			$(".module.controls .fleet_rengo").removeClass("active");
 			$(this).addClass("active");
-			console.log($(this).text());
 			selectedFleet = parseInt( $(this).text(), 10);
-			console.log(selectedFleet);
 			NatsuiroListeners.Fleet();
 			ExpedTabApplyConfig();
 			NatsuiroListeners.UpdateExpeditionPlanner();
@@ -429,9 +422,13 @@
 		
 		// Update Timer UIs
 		setInterval(function(){
+			// Basic Timer Stat
 			KC3TimerManager.update();
+			
+			// Docking ~ Akashi Timer Stat
 			var TotalFleet = selectedFleet == 5 ? [0,1] : [selectedFleet-1];
-			var data = TotalFleet.map(function(x){return PlayerManager.fleets[x].highestRepairTimes();})
+			var data = TotalFleet
+				.map(function(x){return PlayerManager.fleets[x].highestRepairTimes(true);})
 				.reduce(function(pre,cur){
 					var data = {};
 					$.extend(pre,data);
@@ -441,6 +438,41 @@
 					return data;
 				});
 			UpdateRepairTimerDisplays(data);
+			
+			// Akashi current
+			var baseElement = (TotalFleet.length > 1) ? ['main','escort'] : ['single'];
+			var ctime = Date.now();
+			baseElement.forEach(function(baseKey,index){
+				var FleetData = PlayerManager.fleets[TotalFleet[index]];
+				
+				var baseContainer = $([".shiplist",baseKey].join('_'));
+				var akashiDuration = (function(){
+					return Math.min(359999,Math.hrdInt('floor',ctime - this.akashi_tick,3,1));
+				}).call(FleetData);
+				
+				$(".sship,.lship",baseContainer).each(function(index,shipBox){
+					var repairBox = $('.ship_repair_data',shipBox);
+					
+					var
+						shipData   = KC3ShipManager.get(repairBox.data('sid')),
+						hpLoss     = shipData.hp[1] - shipData.hp[0],
+						repairTime = Math.max(0,Math.hrdInt('floor',shipData.repair[0],3,1) - 30),
+						repairTick = Math.max(1,(hpLoss > 0) ? (repairTime/hpLoss) : 1),
+						repairHP   = Math.min(hpLoss,
+							FleetData.checkAkashiExpire() ?
+								Math.floor(hpLoss*Math.min(1,Math.max(akashiDuration-30,0) / repairTime)) :
+								0
+						);
+					
+					$('.ship_repair_tick' ,shipBox).attr('data-tick',repairHP);
+					$('.ship_repair_timer',shipBox).text((
+						(repairHP < hpLoss) ? (
+							!FleetData.checkAkashiExpire() ? (1200-akashiDuration) : 
+								(repairTick - Math.min(repairTime,akashiDuration - 30) % repairTick)
+						) : NaN
+					).toString().toHHMMSS() );
+				});
+			});
 		}, 1000);
 		
 		// Devbuild: auto-activate dashboard while designing
@@ -534,7 +566,6 @@
 		$(".module.activity .battle_eformation").attr("title", "");
 		$(".module.activity .battle_eformation").css("-webkit-transform", "rotate(0deg)");
 		$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support.png");
-		// $(".module.activity .battle_fish img").attr("src", "../../../../assets/img/client/pike-x.png");
 		$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
 		$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/ui/dark_rating.png");
 		$(".module.activity .battle_drop img").attr("src", "../../../../assets/img/ui/dark_shipdrop.png");
@@ -712,8 +743,8 @@
 				$(".shiplist_combined").show();
 				
 				// Calculate Highest Repair Times for status indicators
-				MainRepairs = MainFleet.highestRepairTimes();
-				var EscortRepairs = EscortFleet.highestRepairTimes();
+				MainRepairs = MainFleet.highestRepairTimes(true);
+				var EscortRepairs = EscortFleet.highestRepairTimes(true);
 				
 				// Compile fleet attributes
 				FleetSummary = {
@@ -748,7 +779,7 @@
 				var CurrentFleet = PlayerManager.fleets[selectedFleet-1];
 				
 				// Calculate Highest Repair Times for status indicators
-				MainRepairs = CurrentFleet.highestRepairTimes();
+				MainRepairs = CurrentFleet.highestRepairTimes(true);
 				
 				// Show ships on selected fleet
 				$.each(CurrentFleet.ships, function(index, rosterId){
@@ -815,7 +846,7 @@
 				// STATUS: RESUPPLY
 				if( (FleetSummary.supplied ||
 					(KC3SortieManager.onSortie &&
-						KC3SortieManager.fullSupplyMode &&
+						KC3SortieManager.isFullySupplied() &&
 						(KC3SortieManager.fleetSent == (PlayerManager.combinedFleet ? 1 : selectedFleet)))) &&
 					(!FleetSummary.badState[0])
 				){
@@ -867,43 +898,26 @@
 				}
 				
 				// STATUS: TAIHA
-				if( (FleetSummary.hasTaiha || FleetSummary.badState[2] || FleetSummary.badState[3])
+				if( (FleetSummary.hasTaiha || FleetSummary.badState[2])
 					&& !FleetSummary.taihaIndexes.equals([0]) // if not flagship only
 					&& !FleetSummary.taihaIndexes.equals([0,0]) // if not flagship only for combined
-					&& !KC3SortieManager.onPvP // if PvP, no taiha alert
+					&& !KC3SortieManager.isPvP() // if PvP, no taiha alert
 				){
 					$(".module.status .status_repair .status_text").text( KC3Meta.term(
-						(FleetSummary.badState[2] ? "PanelFSTaiha" : (FleetSummary.badState[3] ? "PanelEscortChuuha" : "PanelHasTaiha"))
+						(FleetSummary.badState[2] ? "PanelFSTaiha" : "PanelHasTaiha")
 					) );
 					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/sunk.png");
 					$(".module.status .status_repair .status_text").addClass("bad");
 					
-					// Annoying Critical alert
-					if(ConfigManager.alert_taiha){
-						$("#critical").show();
-						if(critAnim){ clearInterval(critAnim); }
-						critAnim = setInterval(function() {
-							$("#critical").toggleClass("anim2");
-						}, 500);
-						critSound.play();
-						
-						(new RMsg("service", "taihaAlertStart", {
-							tabId: chrome.devtools.inspectedWindow.tabId
-						})).execute();
-					}
-					
+				// Escort Chuuha
+				}else if (FleetSummary.badState[3]) {
+					$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelEscortChuuha") );
+					$(".module.status .status_repair .status_text").addClass("bad");
+					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/sunk.png");
 				}else{
 					$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelNoTaiha") );
 					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/check.png");
 					$(".module.status .status_repair .status_text").addClass("good");
-					
-					if(critAnim){ clearInterval(critAnim); }
-					$("#critical").hide();
-					critSound.pause();
-					
-					(new RMsg("service", "taihaAlertStop", {
-						tabId: chrome.devtools.inspectedWindow.tabId
-					})).execute();
 				}
 				
 				// STATUS: COMBINED
@@ -941,6 +955,46 @@
 				$(".module.status").hide();
 			}
 			
+			// TAIHA ALERT CHECK
+			if (
+				PlayerManager.fleets
+					.filter (function(  x,  i) {
+						var
+							cf = PlayerManager.combinedFleet,
+							fs = KC3SortieManager.fleetSent;
+						return (cf&&fs===1) ? (i <= 1) : (i == fs-1);
+					})
+					.map    (function(  fldat) { return fldat.ships; })
+					.reduce (function(  x,  y) { return x.concat(y); })
+					.filter (function( shipId) { return shipId >= 0; })
+					.map    (function( shipId) { return KC3ShipManager.get(shipId); })
+					.some   (function( shpDat) {
+						return shpDat.isTaiha();
+					})
+			) {
+				if(ConfigManager.alert_taiha){
+					$("#critical").show();
+					if(critAnim){ clearInterval(critAnim); }
+					critAnim = setInterval(function() {
+						$("#critical").toggleClass("anim2");
+					}, 500);
+					critSound.play();
+					
+					(new RMsg("service", "taihaAlertStart", {
+						tabId: chrome.devtools.inspectedWindow.tabId
+					})).execute();
+				}
+			} else {
+				if(critAnim){ clearInterval(critAnim); }
+				$("#critical").hide();
+				critSound.pause();
+				
+				(new RMsg("service", "taihaAlertStop", {
+					tabId: chrome.devtools.inspectedWindow.tabId
+				})).execute();
+			}
+			
+			
 			// FLEET BUTTONS RESUPPLY STATUSES
 			$(".module.controls .fleet_num").each(function(i, element){
 				$(element).removeClass("needsSupply");
@@ -970,15 +1024,15 @@
 				// start from the 2nd fleet
 				for (var i = fleetStartInd; i < 4; ++i) {
 					// find one available fleet
-					if (fleets[i].mission[0] === 0) {
+					if (fleets[i].missionOK()) {
 						availableFleetInd = i;
 						break;
 					}
 				}
-				console.log( "one fleet is sent, try to find next available fleet" );
+				//console.log( "one fleet is sent, try to find next available fleet" );
 				if (availableFleetInd !== -1) {
 					selectedFleet = availableFleetInd + 1;
-					console.log("Find available fleet: " + String(selectedFleet));
+					//console.log("Find available fleet: " + String(selectedFleet));
 					// this time we don't have to switch tab
 					// $("#atab_expeditionPlanner").trigger("click");
 					$(".module.controls .fleet_num").each( function(i,v) {
@@ -1077,8 +1131,8 @@
 			$(".module.activity .node_types").hide();
 			
 			// Swap fish and support icons
-			// $(".module.activity .battle_fish").hide();
-			// $(".module.activity .battle_support").show();
+			$(".module.activity .battle_fish").hide();
+			$(".module.activity .battle_support").show();
 			
 			console.log("natsuiro process node", thisNode);
 			switch(thisNode.type){
@@ -1213,8 +1267,8 @@
 			$(".module.activity .battle_contact").text(thisNode.fcontact +" vs "+thisNode.econtact);
 			
 			// Swap fish and support icons
-			// $(".module.activity .battle_fish").hide();
-			// $(".module.activity .battle_support").show();
+			$(".module.activity .battle_fish").hide();
+			$(".module.activity .battle_support").show();
 			
 			// Day battle-only environment
 			if(!thisNode.startNight){
@@ -1307,14 +1361,11 @@
 			$(".module.activity .battle_rating img").attr("src",
 				"../../../../assets/img/client/ratings/"+thisNode.rating+".png");
 			
-			// If there is a FISH drop
-			/*$(".module.activity .battle_support").hide();
+			// If there is any special item drop
 			if(typeof data.api_get_useitem != "undefined"){
-				if(data.api_get_useitem.api_useitem_id == 68){
-					$(".module.activity .battle_fish img").attr("src", "../../../../assets/img/client/pike.png");
-				}
+				$(".module.activity .battle_support").hide();
+				$(".module.activity .battle_fish").show();
 			}
-			$(".module.activity .battle_fish").show();*/
 			
 			// If there is a ship drop
 			if(thisNode.drop > 0){
@@ -1343,6 +1394,7 @@
 						if(grindData.length===0){ return true; }
 						ThisShip = KC3ShipManager.get( rosterId );
 						expLeft = KC3Meta.expShip(grindData[0])[1] - ThisShip.exp[0];
+						if(expLeft < 0){ return true; } // if the ship has reached the goal, skip it
 						expPerSortie = maplist[ grindData[1]+"-"+grindData[2] ];
 						if(grindData[6]===1){ expPerSortie = expPerSortie * 2; }
 						if(grindData[5]===1){ expPerSortie = expPerSortie * 1.5; }
@@ -1420,6 +1472,41 @@
 		
 		CraftShip: function(data){},
 		
+		Modernize: function(data){
+			console.log("MODERNIZE TRIGGER", data);
+			
+			var ModShip = KC3ShipManager.get(data.rosterId);
+			
+			$(".activity_modernization .mod_ship_pic img").attr("src", KC3Meta.shipIcon(ModShip.masterId) );
+			$(".activity_modernization .mod_ship_name").text( ModShip.name() );
+			$(".activity_modernization .mod_ship_level span").text( ModShip.level );
+			
+			
+			$(".activity_modernization .mod_result_tp .mod_result_old").text( data.oldStats[1] );
+			$(".activity_modernization .mod_result_aa .mod_result_old").text( data.oldStats[2] );
+			$(".activity_modernization .mod_result_ar .mod_result_old").text( data.oldStats[3] );
+			$(".activity_modernization .mod_result_lk .mod_result_old").text( data.oldStats[4] );
+			
+			$.each(["fp","tp","aa","ar","lk"], function(i, statName){
+				$(".activity_modernization .mod_result_"+statName+" .mod_result_old").text( data.oldStats[i] );
+				
+				if(data.increase[i] > 0){
+					$(".activity_modernization .mod_result_"+statName+" .mod_result_plus span").text( data.increase[i] );
+					$(".activity_modernization .mod_result_"+statName+" .mod_result_plus").css("visibility", "visible");
+				}else{
+					$(".activity_modernization .mod_result_"+statName+" .mod_result_plus").css("visibility", "hidden");
+				}
+				
+				$(".activity_modernization .mod_result_"+statName+" .mod_result_left span").text( data.left[i] );
+			});
+			
+			// Show the box
+			$(".module.activity .activity_tab").removeClass("active");
+			$("#atab_activity").addClass("active");
+			$(".module.activity .activity_box").hide();
+			$(".module.activity .activity_modernization").fadeIn(500);
+		},
+		
 		ClearedMap: function(data){},
 		
 		PvPStart: function(data){
@@ -1428,7 +1515,6 @@
 			$(".module.activity .map_world").text("PvP");
 			
 			// Process PvP Battle
-			KC3SortieManager.endSortie();
 			KC3SortieManager.fleetSent = data.fleetSent;
 			KC3SortieManager.onPvP = true;
 			
@@ -1442,8 +1528,8 @@
 			$(".module.activity .battle_drop    img").attr("src", "../../../../assets/img/ui/dark_shipdrop-x.png").css("visibility","hidden");
 			
 			// Swap fish and support icons
-			// $(".module.activity .battle_fish").hide();
-			// $(".module.activity .battle_support").show();
+			$(".module.activity .battle_fish").hide();
+			$(".module.activity .battle_support").show();
 			
 			// Enemy Formation
 			if((typeof thisPvP.eformation != "undefined") && (thisPvP.eformation > -1)){
@@ -1578,8 +1664,8 @@
 			var fleetStartInd = (PlayerManager.combinedFleet !== 0) ? 2 : 1;
 			// start from the 2nd fleet
 			for (var i = fleetStartInd; i < 4; ++i) {
-				// find one available fleet
-				if (fleets[i].mission[0] === 0) {
+				// find one available fleet, that consists at least two ships
+				if (fleets[i].missionOK()) {
 					availableFleetInd = i;
 					break;
 				}
@@ -1597,8 +1683,8 @@
 					}
 				});
 			} else {
-                // knowing fleet #2, #3 and #4 are all unavailable,
-                // we can return focus to the main fleet.
+				// knowing fleet #2, #3 and #4 are all unavailable,
+				// we can return focus to the main fleet.
 				$(".module.controls .fleet_num").each( function(i,v) {
 					var thisFleet = parseInt( $(this).text(), 10);
 					if (thisFleet === 1) {
@@ -1607,7 +1693,7 @@
 				});
 				// also return focus to basic tab
 				$("#atab_basic").trigger("click");
-            }
+			}
 		},
 		ExpeditionStart: function (data) {
 			if (! ConfigManager.info_auto_exped_tab)
@@ -1724,18 +1810,17 @@
                 .attr("src", "../../../../assets/img/ui/btn-"+(plannerIsGreatSuccess?"":"x")+"gs.png");
 			$(".dropdown_title").text(KC3Meta.term("ExpedNumLabel")+String(selectedExpedition));
 
-			var allShips = [];
-			var fleetObj = PlayerManager.fleets[selectedFleet-1];
+			var
+				allShips,
+				fleetObj = PlayerManager.fleets[selectedFleet-1];
+			
 			//fleets' subsripts start from 0 !
-			$.each(PlayerManager.fleets[selectedFleet-1].ships, function(index, rosterId) {
-				if (rosterId > -1) {
-					var CurrentShip = KC3ShipManager.get(rosterId);
-					if (CurrentShip.masterId > 0) {
-						allShips.push(CurrentShip);
-
-					}
-				}
+			allShips = fleetObj.ships.map(function(rosterId, index) {
+				return KC3ShipManager.get(rosterId);
+			}).filter(function (rosterData, index){
+				return (rosterData.masterId > 0);
 			});
+			
 			if (allShips.length <= 0)
 				return;
 
@@ -2018,17 +2103,21 @@
 	
 	function UpdateRepairTimerDisplays(docking, akashi){
 		var
+			akashiTick = [false,false],
+			
 			context = $(".module.status"),
 			dockElm = $(".status_docking .status_text",context),
 			koskElm = $(".status_akashi  .status_text",context); // kousaka-kan
 		if(typeof docking==="object") {
-			akashi  = docking.akashi;
-			docking = docking.docking;
+			akashi     = docking.akashi;
+			akashiTick = docking.akashiCheck;
+			docking    = docking.docking;
 		}
 		if(typeof docking!=="undefined") dockElm.data("value",Math.ceil(docking));
 		if(typeof  akashi!=="undefined") koskElm.data("value",Math.ceil( akashi));
+		koskElm.data("tick",akashiTick);
 		[dockElm,koskElm].forEach(function(elm){
-			elm.removeClass("bad").removeAttr("title");
+			elm.removeClass("good bad").removeAttr("title");
 			switch (ConfigManager.timerDisplayType) {
 			case 1:
 				elm.text(String(elm.data("value")).toHHMMSS());
@@ -2039,6 +2128,9 @@
 					elm.addClass("bad").attr("title","More than 24 hours");
 				}
 				break;
+			}
+			if((elm.data("tick") || [false]).every(function(x){return x;})) {
+				elm.removeClass('bad').addClass("good").attr("title","Repairing...");
 			}
 		});
 	}

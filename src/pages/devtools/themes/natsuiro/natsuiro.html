@@ -322,7 +322,7 @@
 							<div class="battle_flags">
 								<div class="battle_flag battle_eformation"><img/></div>
 								<div class="battle_flag battle_support" title="Support expedition triggered?"><img/></div>
-								<!-- <div class="battle_flag battle_fish" title="Mackerel drop?"><img/></div> -->
+								<div class="battle_flag battle_fish" title="Special item drop"><img src="../../../../assets/img/ui/map_drop.png" /></div>
 								<div class="battle_flag battle_night" title="Night battle needed?"><img/></div>
 								<div class="battle_flag battle_rating" title="Battle Rating"><img/></div>
 								<div class="battle_flag battle_drop"><img/></div>
@@ -436,7 +436,50 @@
 					</div>
 					<!-- MODERNIZATION: Results -->
 					<div class="activity_box activity_modernization activity_dismissable">
-						
+						<div class="mod_ship">
+							<div class="mod_ship_pic"><img/></div>
+							<div class="mod_ship_name">Kashima</div>
+							<div class="mod_ship_level">Level <span></span></div>
+							<div class="clear"></div>
+						</div>
+						<div class="mod_result_stats">
+							<div class="mod_result_stat mod_result_fp">
+								<div class="mod_result_icon"><img src="../../../../assets/img/client/mod_fp.png"/></div>
+								<div class="mod_result_old"></div>
+								<div class="mod_result_plus">+<span></span></div>
+								<div class="mod_result_left"><span></span> left</div>
+								<div class="clear"></div>
+							</div>
+							<div class="mod_result_stat mod_result_tp">
+								<div class="mod_result_icon"><img src="../../../../assets/img/client/mod_tp.png"/></div>
+								<div class="mod_result_old"></div>
+								<div class="mod_result_plus">+<span></span></div>
+								<div class="mod_result_left"><span></span> left</div>
+								<div class="clear"></div>
+							</div>
+							<div class="mod_result_stat mod_result_aa">
+								<div class="mod_result_icon"><img src="../../../../assets/img/client/mod_aa.png"/></div>
+								<div class="mod_result_old"></div>
+								<div class="mod_result_plus">+<span></span></div>
+								<div class="mod_result_left"><span></span> left</div>
+								<div class="clear"></div>
+							</div>
+							<div class="mod_result_stat mod_result_ar">
+								<div class="mod_result_icon"><img src="../../../../assets/img/client/mod_ar.png"/></div>
+								<div class="mod_result_old"></div>
+								<div class="mod_result_plus">+<span></span></div>
+								<div class="mod_result_left"><span></span> left</div>
+								<div class="clear"></div>
+							</div>
+							<div class="mod_result_stat mod_result_lk">
+								<div class="mod_result_icon"><img src="../../../../assets/img/client/mod_lk.png"/></div>
+								<div class="mod_result_old"></div>
+								<div class="mod_result_plus">+<span></span></div>
+								<div class="mod_result_left"><span></span> left</div>
+								<div class="clear"></div>
+							</div>
+						</div>
+						<div class="mod_result_note i18n">Stats indicated are values without equipment</div>
 					</div>
 					<!-- CONSTRUCTION: Ship -->
 					<div class="activity_box activity_construction activity_dismissable">
@@ -678,6 +721,11 @@
 						<div class="ship_hp_bar">
 							<div class="ship_hp_prediction"></div>
 						</div>
+						<div class="ship_repair_data">
+							<div class="ship_repair_tick" data-tick="0"> </div>
+							<div class="ship_repair_timer">--:--:--</div>
+							<div class="clear"></div>
+						</div>
 					</div>
 					<div class="clear"></div>
 				</div>
@@ -777,8 +825,8 @@
 		<script type="text/javascript" src="../../../../assets/js/jquery-2.1.3.min.js"></script>
 		<!-- @nonbuildend -->
 		
-		<!-- @buildimportjs ../../../../library/managers.js -->
 		<!-- @buildimportjs ../../../../library/objects.js -->
+		<!-- @buildimportjs ../../../../library/managers.js -->
 		
 		<!-- @nonbuildstart -->
 		<script type="text/javascript" src="../../../../library/objects/Node.js"></script>

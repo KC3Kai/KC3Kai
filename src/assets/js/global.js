@@ -149,6 +149,7 @@ function getJPDate() {
 	return new Date(utc + (3600000*9));
 }
 
+/* BASE */
 /*******************************\
 |*** Object                     |
 \*******************************/
@@ -160,6 +161,7 @@ Object.size = function(obj) {
 	return size;
 };
 
+/* PRIMITIVE */
 /*******************************\
 |*** String                     |
 \*******************************/
@@ -240,60 +242,335 @@ Number.prototype.toDigits = Number.prototype.toArray = function(digits) {
 	}
 };
 
+/* JS NATIVE CLASS */
 /*******************************\
 |*** Array                      |
 \*******************************/
-/*
-Comparing arrays
-http://stackoverflow.com/a/14853974/483704
-*/
-Array.prototype.equals = function (array) {
-	// if the other array is a falsy value, return
-	if (!array)
-		return false;
+(function(){
+	var
+		nop  = function(){},
+		over = {
+			equals: [
+				function(){
+					console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
+				},
+				nop
+			],
+			fill: [
+				function(){ delete meth.fill; },
+				function(){
+					console.warn("It seems that your chrome doesn't support Array.prototype.fill method.");
+				}
+			]
+		},
+		meth = {
+			/*
+				Comparing arrays
+				http://stackoverflow.com/a/14853974/483704
+			*/
+			equals: {
+				value: function (array) {
+					// if the other array is a falsy value, return
+					if (!array)
+						return false;
 
-	// compare lengths - can save a lot of time 
-	if (this.length != array.length)
-		return false;
+					// compare lengths - can save a lot of time 
+					if (this.length != array.length)
+						return false;
 
-	for (var i = 0, l=this.length; i < l; i++) {
-		// Check if we have nested arrays
-		if (this[i] instanceof Array && array[i] instanceof Array) {
-			// recurse into the nested arrays
-			if (!this[i].equals(array[i]))
-				return false;
-		} else if (this[i] != array[i]) {
-			// Warning - two different object instances will never be equal: {x:20} != {x:20}
-			return false;
-		}
-	}
-	return true;
-};
-// Hide method from for-in loops
-Object.defineProperty(Array.prototype, "equals", {enumerable: false});
+					for (var i = 0, l=this.length; i < l; i++) {
+						// Check if we have nested arrays
+						if (this[i] instanceof Array && array[i] instanceof Array) {
+							// recurse into the nested arrays
+							if (!this[i].equals(array[i]))
+								return false;
+						} else if (this[i] != array[i]) {
+							// Warning - two different object instances will never be equal: {x:20} != {x:20}
+							return false;
+						}
+					}
+					return true;
+				},
+				configurable:true
+			},
+			
+			/*
+				Fill method polyfill
+				https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/fill
+			*/
+			fill:{
+				value: function(value) {
+					// Steps 1-2.
+					if (this === null) {
+						throw new TypeError('this is null or not defined');
+					}
+					
+					var O = Object(this);
+					
+					// Steps 3-5.
+					var len = O.length >>> 0;
+					
+					// Steps 6-7.
+					var start = arguments[1];
+					var relativeStart = start >> 0;
+					
+					// Step 8.
+					var k = relativeStart < 0 ?
+						Math.max(len + relativeStart, 0) :
+						Math.min(relativeStart, len);
+					
+					// Steps 9-10.
+					var end = arguments[2];
+					var relativeEnd = end === undefined ?
+						len : end >> 0;
+
+					// Step 11.
+					var last = relativeEnd < 0 ?
+						Math.max(len + relativeEnd, 0) :
+						Math.min(relativeEnd, len);
+
+					// Step 12.
+					while (k < last) {
+						O[k] = value;
+						k++;
+					}
+
+					// Step 13.
+					return O;
+				},
+				configurable:true
+			},
+		};
+	
+	Object.keys(over).forEach((function(method){
+		over[method][(!this.prototype[method])>>0].call(this);
+	}).bind(this));
+	/*jshint: validthis true*/
+	Object.defineProperties(this.prototype,meth);
+}).call(Array);
 
 /*******************************\
 |*** Date                       |
 \*******************************/
-Date.prototype.format = function (mask, utc) {
-		return dateFormat(this, mask, utc);
-};
+(function(){
+	var
+		WeekStrings   = dateFormat.i18n.dayNames.reduce(function(ary,val){
+			ary[ (val.length != 3)+0 ].push(val);
+			return ary;
+		},[[],[]]),
+		ResetableKeys = ['Milliseconds', 'Seconds','Minutes','Hours','Date','Month'],
+		ShiftableKeys = ResetableKeys.concat(['FullYear']);
+	
+	function shiftTime(key,step,clear,offset) {
+		var self = this;
+		
+		if(ShiftableKeys.indexOf(key) < 0) {
+			console.log(arguments);
+			throw new Error("Cannot shift invalid time key ("+key+")");
+		}
+		
+		clear  = !!clear;
+		step   = parseInt(step,10);
+		step   = (!isNaN(step) && isFinite(step)) ? (step+clear) : 1;
+		offset = $.extend({},offset);
+		
+		var ki = ShiftableKeys.indexOf(key);
+		
+		if(clear) {
+			this.resetTime(ResetableKeys.filter(function(k,i){return i < ki;}));
+		}
+		
+		Object.keys(offset).forEach(function(k){
+			if(ResetableKeys.indexOf(k) < ki &&
+				['number','string'].some(function(desiredType){
+					return typeof offset[k] == desiredType;
+				})
+			) {
+				offset[k] = parseInt(offset[k],10);
+				if(isNaN(offset[k]) || !isFinite(offset[k]))
+					return false;
+				
+				self['setUTC'+k](self['getUTC'+k]()+(offset[k]));
+			} else {
+				delete offset.k;
+			}
+		});
+		
+		this['setUTC'+key](this['getUTC'+key]()+(step));
+		return this;
+	}
+	
+	Object.defineProperties(Date.prototype,{
+		format: { value: function format(mask, utc) {
+			return dateFormat(this, mask, utc);
+		}},
+		shiftHour : { get: function () { return shiftTime.bind(this,'Hours'); } },
+		shiftDate : { get: function () { return shiftTime.bind(this,'Date' ); } },
+		shiftWeek : { get: function () {
+			return (function shiftWeek (target,lookType,step,clear,offset) {
+				/* Test Object: Monday, 4 January 2016
+					shiftWeek('Sun',0,false,null) => Sunday, 3 January 2016
+					shiftWeek(0, +1,false,null) => Sunday, 10 January 2016
+					shiftWeek('Tuesday',-1,false,null) => Tuesday, 28 December 2015
+				*/
+				var calibr;
+				var args = Array.apply(null,arguments);
+				lookType = parseInt(lookType,10);
+				lookType = isFinite(lookType) && lookType || 0;
+				
+				switch(typeof target){
+					case 'number':
+						var check = WeekStrings.map(function(array){return array[target];})
+							.filter(function(value){return typeof value == 'string';}).pop();
+						if(typeof check !== 'undefined') {
+							// Correct index detection
+							
+						} else {
+							// Invalid index detection
+							throw new RangeError(["Invalid range (",String(target),")"].join(''));
+						}
+					break;
+					case 'undefined':
+						// "Empty" argument treated as current day
+						args[0] = this.getUTCDay();
+						return this.shiftWeek.apply(this,args);
+					default:
+						if(target === null) {
+							// Nullity check
+							args[0] = undefined;
+							return this.shiftWeek.apply(this,args);
+						}
+						
+						var checkKey = parseInt(target,10);
+						if(!isNaN(checkKey)) {
+							// Number (on string) detection
+							args[0] = checkKey;
+							return this.shiftWeek.apply(this,args);
+						}
+						
+						// Any type detection
+						checkKey = WeekStrings.filter(function(array){return array.indexOf(target)>=0;}).pop();
+						if(typeof checkKey === 'undefined') {
+							// Bad string conversion variable detection
+							throw new ReferenceError(["Bad week name reference (",String(target),")"].join(''));
+						} else {
+							target = checkKey.indexOf(target);
+						}
+					break;
+				}
+				
+				calibr = (target - this.getDay());
+				// Adjust calibrator boundary
+				while(calibr >  3 && lookType <= 0) calibr -= 7;
+				while(calibr < -3 && lookType >= 0) calibr += 7;
+				calibr -= parseInt(calibr / 7,10) * 7 * Math.sign(lookType);
+				
+				args.splice(0,2);
+				
+				step = parseInt(step,10);
+				if(isNaN(step) || !isFinite(step))
+					step = 0;
+				
+				args[0] = 7 * step + calibr - (!!clear + this.getUTCDate() - this.getDate());
+				return this.shiftDate.apply(this,args);
+			}).bind(this);
+		}},
+		shiftMonth: { get: function () { return shiftTime.bind(this,'Month'); } },
+		shiftYear : { get: function () { return shiftTime.bind(this,'FullYear'); } },
+		resetTime : { value: function(clearTable) {
+			var
+				self = this,
+				cFunc = function(){return false;};
+			
+			switch(typeof clearTable) {
+				case 'number':
+				case 'string':
+					// Pick nth+1 element from ResetableKeys
+					// Invalid >> pick all elements
+					clearTable = parseInt(clearTable,10);
+					clearTable = ((clearTable >= 0) && !isNaN(clearTable) && isFinite(clearTable) || ResetableKeys.length) && clearTable;
+					
+					// Provided String or Number ->
+					// Pick nth+1 elements from start
+					cFunc = function(x,i){
+						return i <= clearTable;
+					};
+					break;
+				default:
+					// Pick any matching element from Resetable Array
+					// Invalid >> pick all elements
+					clearTable = ((typeof clearTable === 'object' && clearTable instanceof Array && clearTable) || ResetableKeys);
+					
+					// Provided Anything else
+					// Pick any element that match the clearTable data (either value or index)
+					// ['Seconds',2,3] => ['Seconds','Hours','Date']
+					cFunc = function(key,ind){
+						return [key,ind].some(function(val){ return clearTable.indexOf(val) >= 0; });
+					};
+					break;
+			}
+			
+			clearTable = ResetableKeys.filter(cFunc);
+			
+			clearTable.forEach(function(k){
+				self['setUTC' + k](k === 'Date' ? 1 : 0);
+			});
+			return this;
+		}},
+	});
+})(Date);
 
+/* JS NATIVE MODULE */
 /*******************************\
 |*** Math                       |
 \*******************************/
+/* STATISTICS (STANDARD DEVIATION)
+ - Sample based deviation (default)
+ - Population based deviation
+-------------------------------*/
+Math.stdev  = function(p1f /*, data*/){
+	var args = [].map.call(arguments,function(val){
+		return Number(val);
+	});
+	if(typeof p1f !== 'boolean') {
+		p1f = false;
+	} else {
+		args.splice(0,1);
+	}
+	
+	if(args.length <= 0)
+		return 0;
+	
+	var avg;
+	avg = args.reduce(function(cAve,nVal,nInd){
+		return ((cAve * nInd) + nVal) / (nInd + 1);
+	},0);
+	
+	return Math.sqrt(args.reduce(function(tDev,nVal,nInd){
+		return tDev + Math.pow(nVal - avg,2);
+	},0)/(args.length - !p1f));
+};
+
 /* LIMIT ROUNDING
 -------------------------------*/
-Math.qckInt = function(command,value,rate) {
+Math.qckInt = function(command,value,rate,rev,magn) {
 	if (["round","ceil","floor"].indexOf(command) < 0)
 		command = null;
 	command = command || "round";
 	value   = value   || 0;
 	rate    = rate    || 0;
+	rev     = !rev;
+	magn    = !!magn;
+	
 	var shift = Math.pow(10,rate);
-	return Math[command](value * shift) / shift;
+	return (magn ? Math.sign(value) : 1) *
+		Math[command]((magn ? Math.abs(value) : value) * shift) / (rev ? shift : 1);
+};
+Math.hrdInt = function(command,value,rate,rev) {
+	return Math.qckInt(command,value,-rate,rev);
 };
 
+/* CHROME NATIVE CLASS */
 /*******************************\
 |*** Storage                    |
 \*******************************/
@@ -308,3 +585,27 @@ Storage.prototype.setObject = function(key, value) {
 Storage.prototype.getObject = function(key) {
 	return JSON.parse(this.getItem(key));
 };
+
+/*******************************\
+|*** Element                    |
+\*******************************/
+(function(){
+	/*jshint: validthis true*/
+	Object.defineProperties(this.prototype,{
+		/* ELEMENT OVERFLOW CHECK 
+		------------------------------------ */
+		overflow:{
+			get:function(){ return this.overflowHorz || this.overflowVert; },
+			configurable: true
+		},
+		overflowHorz:{
+			get:function(){ return this.scrollWidth  > this.clientWidth ; },
+			configurable: true
+		},
+		overflowVert:{
+			get:function(){ return this.scrollHeight > this.clientHeight; },
+			configurable: true
+		},
+	});
+}).call(Element);
+

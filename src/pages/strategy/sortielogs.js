@@ -5,7 +5,19 @@
 		BATTLE_INVALID = 0,
 		BATTLE_BASIC   = 1,
 		BATTLE_NIGHT   = 2,
-		BATTLE_AERIAL  = 4;
+		BATTLE_AERIAL  = 4,
+		
+		// test string
+		SORTIE_STRING  = {
+			fresh : "Not even a single scratch",
+			graze : "RNG is too good for me",
+			light : "Scratch 'em for good!",
+			modrt : "It still faraway, but it's ok!",
+			heavy : "I hope the drop is better than this",
+			despe : "I don't even have anything to say",
+			endur : "BEST RANDOM NUMBER GENERATOR EVER",
+			destr : "I OWE YOU"
+		};
 	
 	/* KC3 Sortie Logs
 			Arguments:
@@ -306,14 +318,16 @@
 		Shows sorties on interface using list of collected sortie objects
 		---------------------------------*/
 		this.showList = function( sortieList ){
+			var self = this;
 			// Show sortie records on list
 			var sortieBox, fleets, fleetkey, mainFleet, isCombined, rshipBox, nodeBox, thisNode, sinkShips;
 			$.each(sortieList, function(id, sortie){
 				try {
+					var skey = ["m",sortie.world,sortie.mapnum].join('');
 					// Create sortie box
 					sortieBox = $(".tab_"+tabCode+" .factory .sortie_box").clone().appendTo(".tab_"+tabCode+" .sortie_list");
 					if(sortie.world >= 10) {
-						sortie.diff = sortie.diff || (maps["m"+sortie.world+sortie.mapnum] || {difficulty:0}).difficulty || 0;
+						sortie.diff = sortie.diff || (maps[skey] || {difficulty:0}).difficulty || 0;
 					}
 					if((sortie.diff || 0) > 0)
 						$(sortieBox)
@@ -506,6 +520,23 @@
 					
 					$(".sortie_nodes", sortieBox).append( $("<div>").addClass("clear") );
 					
+					var
+						mstat = self.maps[skey].stat,
+						sstat = $(".sortie_stat", sortieBox),
+						kstat = ["now","max"];
+					if(mstat && sstat.length) {
+						var stateKey = Object.keys(SORTIE_STRING).filter(function(statKey){
+							return mstat.onBoss[statKey].indexOf(sortie.id) >= 0;
+						}).shift();
+						$(".sortie_end_text",sstat).text(SORTIE_STRING[stateKey]);
+						mstat.onBoss.hpdat[sortie.id].forEach(function(v,i){
+							$([".boss.",kstat[i],"hp"].join(''),sstat).text(v);
+						});
+						if(false) // only toggle this on dev builds
+							sstat.show();
+					} else {
+						sstat.hide();
+					}
 				}catch(e){console.error(e);console.error(e.stack);}
 			});
 			
@@ -566,12 +597,13 @@
 						return false;
 					}
 					
-					console.log(sortieData);
+					console.log(rcontext,sortieData);
 					rcontext.font = "26pt Calibri";
 					rcontext.fillStyle = '#ffffff';
 					rcontext.fillText(sortieData.world+"-"+sortieData.mapnum, 20, 215);
 					
 					rcontext.font = "20pt Calibri";
+					rcontext.fillStyle = '#ffffff';
 					rcontext.fillText(PlayerManager.hq.name, 100, 210);
 					
 					var fleetUsed = sortieData["fleet"+sortieData.fleetnum];

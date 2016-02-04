@@ -2,7 +2,7 @@
 
 ![KC3改 Logo](http://puu.sh/h4Gbb.png)
 
-[![Build Status](https://travis-ci.org/KC3Kai/KC3Kai.svg?branch=master)](https://travis-ci.org/KC3Kai/KC3Kai) [![Issue Stats](http://issuestats.com/github/KC3Kai/KC3Kai/badge/pr)](http://issuestats.com/github/KC3Kai/KC3Kai) [![Issue Stats](http://issuestats.com/github/KC3Kai/KC3Kai/badge/issue)](http://issuestats.com/github/KC3Kai/KC3Kai)
+[![Build Status](https://travis-ci.org/KC3Kai/KC3Kai.svg?branch=master)](https://travis-ci.org/KC3Kai/KC3Kai) [![Issue Stats](http://issuestats.com/github/KC3Kai/KC3Kai/badge/pr?style=flat)](http://issuestats.com/github/KC3Kai/KC3Kai) [![Issue Stats](http://issuestats.com/github/KC3Kai/KC3Kai/badge/issue?style=flat)](http://issuestats.com/github/KC3Kai/KC3Kai)
 
 [![Gitter chat](https://badges.gitter.im/Chat with us.svg)](https://gitter.im/KC3Kai/Public)
 
