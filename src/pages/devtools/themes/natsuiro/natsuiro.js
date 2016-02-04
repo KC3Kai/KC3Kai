@@ -1808,7 +1808,8 @@
 			
 		    $( ".module.activity .activity_expeditionPlanner .expres_greatbtn img" )
                 .attr("src", "../../../../assets/img/ui/btn-"+(plannerIsGreatSuccess?"":"x")+"gs.png");
-			$(".dropdown_title").text(KC3Meta.term("ExpedNumLabel")+String(selectedExpedition));
+			$(".module.activity .activity_expeditionPlanner .dropdown_title")
+                .text(KC3Meta.term("ExpedNumLabel")+String(selectedExpedition));
 
 			var
 				allShips,
@@ -2004,29 +2005,23 @@
 				$( ".module.activity .activity_expeditionPlanner .canister_criterias" ).show();
 			}
 			
-			if(fleetObj.isSupplied()){
-				$( ".module.activity .activity_expeditionPlanner .icon.allReq" ).show();
-				$( ".module.activity .activity_expeditionPlanner .text.allReq" ).text(KC3Meta.term("PanelSupplied"));
-				$( ".module.activity .activity_expeditionPlanner .text.allReq" ).removeClass("expPlanner_text_failed").addClass("expPlanner_text_passed");
-			}else{
-				$( ".module.activity .activity_expeditionPlanner .icon.allReq" ).hide();
-				$( ".module.activity .activity_expeditionPlanner .text.allReq" ).text(KC3Meta.term("PanelUnderSupplied"));
-				$( ".module.activity .activity_expeditionPlanner .text.allReq" ).addClass("expPlanner_text_failed").removeClass("expPlanner_text_passed");
-			}
-			console.log(ExpdCheckerResult);
-			// PanelSupplied
-			// PanelUnderSupplied
-			/*if (unsatRequirements.length === 0) {
-				
-				// all requirements are satisfied
-				$( ".module.activity .activity_expeditionPlanner .icon.allReq" ).show();
-				$( ".module.activity .activity_expeditionPlanner .text.allReq" ).text(KC3Meta.);
+			if (fleetObj.isSupplied()) {
+				$( ".module.activity .activity_expeditionPlanner .icon.supplyCheck" ).show();
+				$( ".module.activity .activity_expeditionPlanner .text.supplyCheck" ).text(KC3Meta.term("PanelSupplied"));
 
-				markPassed( $(".module.activity .activity_expeditionPlanner .text.allReq") );
+                markPassed( $( ".module.activity .activity_expeditionPlanner .text.supplyCheck") );
 			} else {
-				$( ".module.activity .activity_expeditionPlanner .icon.allReq" ).hide();
-				markFailed( $(".module.activity .activity_expeditionPlanner .text.allReq") );
-			}*/
+				$( ".module.activity .activity_expeditionPlanner .icon.supplyCheck" ).hide();
+				$( ".module.activity .activity_expeditionPlanner .text.supplyCheck" ).text(KC3Meta.term("PanelUnderSupplied"));
+                
+                markFailed( $( ".module.activity .activity_expeditionPlanner .text.supplyCheck" ) );
+			}
+
+			if (unsatRequirements.length === 0 && fleetObj.isSupplied()) {
+                markPassed( $(".module.activity .activity_expeditionPlanner .dropdown_title") );
+			} else {
+                markFailed( $(".module.activity .activity_expeditionPlanner .dropdown_title") );
+			}
 
 			return;
 
