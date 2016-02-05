@@ -1184,6 +1184,10 @@
 						thisNode.icon("../../../../assets/img/client/"));
 					$(".module.activity .node_type_resource .node_res_text").text( thisNode.amount );
 					$(".module.activity .node_type_resource").show();
+					
+					if(KC3SortieManager.getCurrentMapData().kind=='multiple') {
+						updateMapGauge(true,true,true);
+					}
 					break;
 					
 				// Maelstrom node
@@ -2101,14 +2105,14 @@
 		}
 	}
 	
-	function updateMapGauge(gaugeDmg,fsKill) {
+	function updateMapGauge(gaugeDmg,fsKill,noBoss) {
 		// Map Gauge and status
 		var
 			AllMaps   = localStorage.getObject('maps'),
 			thisMapId = "m"+KC3SortieManager.map_world+KC3SortieManager.map_num,
 			thisMap   = AllMaps[thisMapId],
 			mapHP     = 0,
-			depleteOK = KC3SortieManager.currentNode().isBoss();
+			depleteOK = KC3SortieManager.currentNode().isBoss() || !!noBoss;
 		
 		// Normalize Parameters
 		fsKill = !!fsKill;
