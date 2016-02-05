@@ -50,7 +50,9 @@
 					buildbox = $(".tab_lscs .factory .build_item").clone().appendTo(".tab_lscs .build_list");
 					
 					$(".build_id", buildbox).text( thisBuild.id );
-					$(".build_ficon img", buildbox).attr("src", KC3Meta.shipIcon(thisBuild.flag) );
+					IconManager.setIconAsync(
+						$(".build_ficon img", buildbox),
+						thisBuild.flag);
 					$(".build_flag", buildbox).text( KC3Meta.shipName( KC3Master.ship(thisBuild.flag).api_name ) );
 					
 					$(".build_rsc1", buildbox).text( thisBuild.rsc1 );
@@ -59,7 +61,9 @@
 					$(".build_rsc4", buildbox).text( thisBuild.rsc4 );
 					$(".build_devmat", buildbox).text( thisBuild.devmat );
 					
-					$(".build_ricon img", buildbox).attr("src", KC3Meta.shipIcon(thisBuild.result) );
+					IconManager.setIconAsync(
+						$(".build_ricon img", buildbox),
+						thisBuild.result);
 					$(".build_result", buildbox).text( KC3Meta.shipName( KC3Master.ship(thisBuild.result).api_name ) );
 					$(".build_time", buildbox).text( (new Date(thisBuild.time*1000)).format("mmm dd, yy - hh:MM tt") );
 				}

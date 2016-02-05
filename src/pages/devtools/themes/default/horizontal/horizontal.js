@@ -461,7 +461,9 @@
 				KC3SortieManager.onBossAvailable = function(){
 					$.each(KC3SortieManager.boss.ships, function(index, eshipId){
 						if(eshipId > -1){
-							$(".battle .battle_boss .abyss_"+(index+1)+" img", container).attr("src", KC3Meta.abyssIcon(eshipId));
+							IconManager.setIconAsync(
+								$(".battle .battle_boss .abyss_"+(index+1)+" img", container),
+								eshipId);
 						}else{
 							$(".battle .battle_boss .abyss_"+(index+1), container).hide();
 						}
@@ -563,12 +565,16 @@
 				}
 				
 				// Load enemy icons
-				$(".battle .battle_enemies .battle_abyss .face-container img", container).attr("src", KC3Meta.abyssIcon(-1));
+				IconManager.setIconAsync(
+					$(".battle .battle_enemies .battle_abyss .face-container img", container),
+					-1);
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > -1){
 						var eParam = thisNode.eParam[index];
 
-						$(".battle .battle_enemies .abyss_"+(index+1)+" .face-container img", container).attr("src", KC3Meta.abyssIcon(eshipId));
+						IconManager.setIconAsync(
+							$(".battle .battle_enemies .abyss_"+(index+1)+" .face-container img", container),
+							eshipId);
 						
 						var tooltip = "FP: " + eParam[0] + String.fromCharCode(13);
 						tooltip += "Torp: " + eParam[1] + String.fromCharCode(13);
