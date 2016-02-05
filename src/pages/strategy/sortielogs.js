@@ -359,14 +359,17 @@
 							if(i===0) {
 								if(ship===false){ return false; }
 								
-								$(".sortie_ship_"+(index+1)+" img", sortieBox).attr("src", KC3Meta.shipIcon(ship.mst_id));
+								IconManager.setIconAsync(
+									$(".sortie_ship_"+(index+1)+" img", sortieBox),
+									ship.mst_id);
 								$(".sortie_ship_"+(index+1), sortieBox).addClass("simg-"+ship.mst_id);
 								$(".sortie_ship_"+(index+1), sortieBox).show();
 							}
 							
 							rshipBox = $(".tab_"+tabCode+" .factory .rfleet_ship").clone();
-							$(".rfleet_pic img", rshipBox)
-								.attr("src", KC3Meta.shipIcon(ship.mst_id) )
+
+							IconManager
+								.setIconAsync($(".rfleet_pic img", rshipBox), ship.mst_id)
 								.click(function(){
 									var ref = $(this).parent().parent();
 									if($(".rfleet_detail",ref).css("display")=="none") {
@@ -441,7 +444,9 @@
 							
 							// Kanmusu Drop
 							if(battle.drop > 0){
-								$(".node_drop img", nodeBox).attr("src", KC3Meta.shipIcon( battle.drop ) );
+								IconManager.setIconAsync(
+									$(".node_drop img", nodeBox),
+									battle.drop );
 							}else{
 								$(".node_drop img", nodeBox).attr("src", "../../assets/img/ui/shipdrop-x.png");
 							}
@@ -458,7 +463,9 @@
 							$(".node_eformation", nodeBox).attr("title", KC3Meta.formationText(battleData.api_formation[1]) );
 							$.each(battleData.api_ship_ke, function(index, eship){
 								if(eship > -1){
-									$(".node_eship_"+(index+1)+" img", nodeBox).attr("src", KC3Meta.abyssIcon( eship ) );
+									IconManager.setIconAsync(
+										$(".node_eship_"+(index+1)+" img", nodeBox),
+										eship);
 									$(".node_eship_"+(index+1), nodeBox).attr("title", [KC3Master.ship( eship ).api_name,KC3Master.ship( eship ).api_yomi].filter(function(x){return x.length>1;}).join("") );
 									$(".node_eship_"+(index+1), nodeBox).show();
 								}

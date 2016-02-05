@@ -70,9 +70,11 @@
                     callback(x?x:false);
                 });
         },
-        setIconAsync: function (jqObj, shipId) {
+        setIconAsync: function (jqObj, shipId, empty) {
             var self = this;
-            jqObj.attr('src', KC3Meta._defaultIcon);
+            if (typeof empty === 'undefined')
+                empty = KC3Meta._defaultIcon;
+            jqObj.attr('src', empty);
             this.getAsync(
                 shipId,
                 function(x) {
@@ -81,7 +83,6 @@
                         jqObj.attr('src', x.dataURL);
                     } else {
                         // try to fetch data
-
                         self.forceFetchAndStore(
                             shipId,
                             function(dataURL) {
@@ -90,6 +91,7 @@
                             });
                     }
                 });
+            return jqObj;
         }
     };
 })();

@@ -112,6 +112,7 @@
 		ConfigManager.load();
 		KC3Meta.init("../../../../data/");
 		KC3Meta.defaultIcon("../../../../assets/img/ui/empty.png");
+		IconManager.init();
 		KC3Master.init();
 		PlayerManager.init();
 		KC3ShipManager.load();
@@ -557,7 +558,9 @@
 	}
 	
 	function clearBattleData(){
-		$(".module.activity .abyss_ship img").attr("src", KC3Meta.abyssIcon(-1));
+		IconManager.setIconAsync(
+			$(".module.activity .abyss_ship img"),
+			-1);
 		$(".module.activity .abyss_ship img").attr("title", "");
 		$(".module.activity .abyss_ship").css("opacity", 1);
 		$(".module.activity .abyss_ship").hide();
@@ -1210,7 +1213,9 @@
 				var eParam = thisNode.eParam[index];
 				
 				if(eshipId > -1){
-					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.abyssIcon(eshipId));
+					IconManager.setIconAsync(
+						$(".module.activity .abyss_ship_"+(index+1)+" img"),
+						eshipId);
 					
 					var tooltip = "FP: " + eParam[0] + String.fromCharCode(13);
 					tooltip += "Torp: " + eParam[1] + String.fromCharCode(13);
@@ -1371,7 +1376,9 @@
 			if(thisNode.drop > 0){
 				// If drop spoiler is enabled on settings
 				if(ConfigManager.info_drop){
-					$(".module.activity .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop));
+					IconManager.setIconAsync(
+						$(".module.activity .battle_drop img"),
+						thisNode.drop);
 					$(".module.activity .battle_drop").attr("title", KC3Meta.shipName( KC3Master.ship(thisNode.drop).api_name ));
 				}
 				
@@ -1476,8 +1483,9 @@
 			console.log("MODERNIZE TRIGGER", data);
 			
 			var ModShip = KC3ShipManager.get(data.rosterId);
-			
-			$(".activity_modernization .mod_ship_pic img").attr("src", KC3Meta.shipIcon(ModShip.masterId) );
+ 			IconManager.setIconAsync(
+				$(".activity_modernization .mod_ship_pic img"),
+				ModShip.masterId);
 			$(".activity_modernization .mod_ship_name").text( ModShip.name() );
 			$(".activity_modernization .mod_ship_level span").text( ModShip.level );
 			
@@ -1549,7 +1557,9 @@
 				var eParam = thisPvP.eParam[index];
 				
 				if(eshipId > -1){
-					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.shipIcon(eshipId));
+					IconManager.setIconAsync(
+						$(".module.activity .abyss_ship_"+(index+1)+" img"),
+						eshipId);
 					var tooltip = "FP: " + eParam[0] + String.fromCharCode(13);
 					tooltip += "Torp: " + eParam[1] + String.fromCharCode(13);
 					tooltip += "AA: " + eParam[2] + String.fromCharCode(13);
@@ -1780,7 +1790,9 @@
 				var shipId = data.response.api_ship_id[i+1];
 				if(shipId > 0) {
 					var shipData = KC3ShipManager.get(shipId);
-					$(".expres_ship_img img", element).attr("src", KC3Meta.shipIcon(shipData.masterId));
+					IconManager.setIconAsync(
+						$(".expres_ship_img img", element),
+						shipData.masterId);
 					$(".expres_ship_exp span", element).text(data.response.api_get_ship_exp[i]);
 					$(element).show();
 				} else {

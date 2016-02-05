@@ -106,11 +106,7 @@
 				shipBox.data("id", ShipData.api_id);
 				shipBox.data("bs", ShipData.kc3_bship);
 				
-				if(ShipData.api_id<=500){
-					$("img", shipBox).attr("src", KC3Meta.shipIcon(ShipData.api_id) );
-				}else{
-					$("img", shipBox).attr("src", KC3Meta.abyssIcon(ShipData.api_id) );
-				}
+				IconManager.setIconAsync($("img", shipBox),ShipData.api_id);
 				
 				if(ConfigManager.salt_list.indexOf(ShipData.kc3_bship)>=0) {
 					shipBox.addClass('salted');

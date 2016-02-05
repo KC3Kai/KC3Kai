@@ -76,6 +76,7 @@
 	/* PAGE READY
 	-----------------------------------*/
 	$(document).on("ready", function(){
+		IconManager.init();
 		// Validate storage and initialize data managers
 		KC3Panel.init(function(success, message){
 			if(success){

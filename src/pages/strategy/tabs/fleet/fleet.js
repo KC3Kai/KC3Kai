@@ -66,7 +66,7 @@
 				
 				var shipBox = $(".tab_fleet .factory .fleet_ship").clone().appendTo("#"+fleetBox.attr("id")+" .fleet_ships");
 				$(".ship_type", shipBox).text( thisShip.stype() );
-				$(".ship_pic img", shipBox).attr("src", KC3Meta.shipIcon( thisShip.masterId ) );
+				IconManager.setIconAsync($(".ship_pic img", shipBox), thisShip.masterId);
 				$(".ship_lv_val", shipBox).text( thisShip.level );
 				$(".ship_name", shipBox).text( thisShip.name() );
 				

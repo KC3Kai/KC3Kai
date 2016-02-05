@@ -183,7 +183,9 @@
 				
 				$.each(stypeList, function(index, shipObj){
 					shipBox = $(".tab_showcase .factory .show_ship").clone();
-					$(".ship_pic img", shipBox).attr("src", KC3Meta.shipIcon( shipObj.masterId ) );
+					IconManager.setIconAsync(
+						$(".ship_pic img", shipBox),
+						shipObj.masterId);
 					$(".ship_name", shipBox).html( shipObj.name() );
 					$(".ship_level", shipBox).html( KC3Meta.term("LevelText")+" "+ shipObj.level );
 					self.checkModStat(shipBox, "api_houg", "fp", 0, shipObj);

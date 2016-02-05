@@ -18,8 +18,9 @@ KC3改 Ship Box for Natsuiro theme
 	Short ship box for combined fleets
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.commonElements = function( rosterId ){
-		$(".ship_img img", this.element).attr("src", KC3Meta.shipIcon(this.shipData.masterId)).attr("title",
-		JSON.stringify(this.shipData.pendingConsumption));
+		IconManager
+            .setIconAsync($(".ship_img img", this.element), this.shipData.masterId)
+            .attr("title", JSON.stringify(this.shipData.pendingConsumption));
 		$(".ship_name", this.element).text( this.shipData.name() );
 		$(".ship_type", this.element).text( this.shipData.stype() );
 		

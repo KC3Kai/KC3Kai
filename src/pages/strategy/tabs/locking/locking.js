@@ -126,7 +126,7 @@
 		
 		addShipToBox :function(boxIndex, ThiShip){
 			var shipBox = $(".tab_locking .factory .lship").clone().appendTo(".tab_locking .lock_mode_"+(boxIndex+1)+" .ships_area");
-			$("img", shipBox).attr("src", KC3Meta.shipIcon(ThiShip.masterId));
+			IconManager.setIconAsync($("img", shipBox),ThiShip.masterId);
 			shipBox.attr("data-rosterId", ThiShip.rosterId );
 			shipBox.attr("data-boxColorId", boxIndex);
 			shipBox.attr("title", ThiShip.name()+" Lv."+ThiShip.level+" ("+ThiShip.stype()+")" );

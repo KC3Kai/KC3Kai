@@ -50,7 +50,7 @@
 					buildbox = $(".tab_crafts .factory .build_item").clone().appendTo(".tab_crafts .build_list");
 					
 					$(".build_id", buildbox).text( thisBuild.id );
-					$(".build_ficon img", buildbox).attr("src", KC3Meta.shipIcon(thisBuild.flag) );
+					IconManager.setIconAsync($(".build_ficon img", buildbox), thisBuild.flag);
 					$(".build_flag", buildbox).text( KC3Meta.shipName( KC3Master.ship(thisBuild.flag).api_name ) );
 					
 					$(".build_rsc1", buildbox).text( thisBuild.rsc1 );

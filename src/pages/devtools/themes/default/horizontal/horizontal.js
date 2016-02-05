@@ -306,7 +306,9 @@
 							if(CurrentShip.masterId === 0){ return true; }
 							var ShipBox = $(".factory .fleet-ship", container).clone().appendTo(FleetContainer);
 							
-							$(".ship-img img", ShipBox).attr("src", KC3Meta.shipIcon(CurrentShip.masterId));
+							IconManager.setIconAsync(
+								$(".ship-img img", ShipBox),
+								CurrentShip.masterId);
 							$(".ship-name", ShipBox).text( CurrentShip.name() );
 							$(".ship-type", ShipBox).text( CurrentShip.stype() );
 							$(".ship-lvl-txt", ShipBox).text(CurrentShip.level);
@@ -400,7 +402,9 @@
 								var CurrentShip = KC3ShipManager.get( rosterId );
 								var ShipBox = $(".factory .battle-ship", container).clone().appendTo(FleetContainer);
 								
-								$(".ship-img img", ShipBox).attr("src", KC3Meta.shipIcon(CurrentShip.masterId));
+								IconManager.setIconAsync(
+									$(".ship-img img", ShipBox),
+									CurrentShip.masterId);
 								$(".ship-name", ShipBox).text( CurrentShip.name() );
 								$(".ship-type", ShipBox).text( CurrentShip.stype() );
 								$(".ship-lvl-txt", ShipBox).text(CurrentShip.level);
@@ -729,7 +733,9 @@
 				
 				if(thisNode.drop > 0){
 					if(ConfigManager.info_drop){
-						$(".battle .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop));
+						IconManager.setIconAsync(
+							$(".battle .battle_drop img"),
+							KC3Meta.shipIcon(thisNode.drop));
 					}
 					
 					//let the other implements this :P

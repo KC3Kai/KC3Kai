@@ -185,7 +185,9 @@
 					if(shipCtr%2 === 0){ cElm.addClass("even"); }else{ cElm.addClass("odd"); }
 
 					$(".ship_id", cElm).text( cShip.id );
-					$(".ship_img .ship_icon", cElm).attr("src", KC3Meta.shipIcon(cShip.bid));
+					IconManager.setIconAsync(
+						$(".ship_img .ship_icon", cElm),
+						cShip.bid);
 					if(config.kanmusuPic && shipLevel >= 100)
 						$(".ship_img .ship_kekkon", cElm).attr("src","tabs/ships/SEGASonicRing.png").show();
 					$(".ship_name", cElm).text( cShip.english );

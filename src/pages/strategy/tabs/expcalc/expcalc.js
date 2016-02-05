@@ -147,7 +147,7 @@
 				goalBox.data("id", ThisShip.rosterId);
 				
 				// Icon and level, common for all categories
-				$(".ship_icon img", goalBox).attr("src", KC3Meta.shipIcon(ThisShip.masterId) );
+				IconManager.setIconAsync( $(".ship_icon img", goalBox), ThisShip.masterId);
 				$(".ship_icon img", goalBox).attr("title", ThisShip.name() + ' (' + ThisShip.rosterId + ')' );
 				$(".ship_name", goalBox).text( ThisShip.name() );
 				$(".ship_type", goalBox).text( ThisShip.stype() );
