@@ -438,7 +438,7 @@
 			if(grindData.length === 0){
 				// As much as possible use arrays nowadays to shrink JSON size, we might run out of the 5MB localStorage allocated for our app
 				grindData = [
-					/*0*/ (MasterShip.api_aftershipid > 0 && ThisShip.level<MasterShip.api_afterlv)?MasterShip.api_afterlv:(ThisShip.level<99)?99:150, // target level
+					/*0*/ (MasterShip.api_aftershipid > 0 && ThisShip.level<MasterShip.api_afterlv)?MasterShip.api_afterlv:(ThisShip.level<99)?99:155, // target level
 					/*1*/ 1, // world
 					/*2*/ 1, // map
 					/*3*/ 1, // node
