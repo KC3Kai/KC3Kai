@@ -72,9 +72,20 @@
         },
         setIconAsync: function (jqObj, shipId, empty) {
             var self = this;
+
+            /*
+            // recover old behavior
+            if (shipId > 500) {
+                jqObj.attr('src', KC3Meta.abyssIcon(shipId));
+            } else {
+                jqObj.attr('src', KC3Meta.shipIcon(shipId));
+            }
+
+            return jqObj; */
+            
             if (typeof empty === 'undefined')
                 empty = KC3Meta._defaultIcon;
-            jqObj.attr('src', empty);
+
             this.getAsync(
                 shipId,
                 function(x) {
@@ -83,6 +94,8 @@
                         jqObj.attr('src', x.dataURL);
                     } else {
                         // try to fetch data
+                        // meanwhile put a default icon instead
+                        jqObj.attr('src', empty);
                         self.forceFetchAndStore(
                             shipId,
                             function(dataURL) {
