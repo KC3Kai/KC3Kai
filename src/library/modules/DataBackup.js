@@ -46,17 +46,16 @@
 
 			},//savedata
 
-			loadData : function(file){
+			loadData : function(file_){
+				var zip;
 				var reader = new FileReader();
 
 				// Closure to capture the file information.
-				reader.onload = (function(theFile) {
-					return function(e) {
-						try {
+				reader.onload = (function(e) {
 							// read the content of the file with JSZip
-							var zip = new JSZip(e.target.result);
-							// that, or a good ol' for(var entryName in zip.files)
-							zip.files.foreach(function (zipEntry) {
+							zip = new JSZip(e.target.result);
+							alert(zip);
+							$.each(zip.files, function (index, zipEntry) {
 								switch (zipEntry.name) {
 									case "db.json":
 										alert("db detected!");
@@ -66,21 +65,15 @@
 										break;
 									default:
 										alert("could be wrong file");
-								}
-								// the content is here : zipEntry.asText()
-							});
-							// end of the magic !
-						} catch(e) {
-							alert(JSON.stringify({
-								"class" : "alert alert-danger",
-								text : "Error reading " + theFile.name + " : " + e.message
-							})
-							);//alert
-					 	}//try/catch
-						$result.append($fileContent);
-					}
-				});//reader.onload
 
+									}//swich for zip name
+								});//file acces foreach
+							// end of the magic
+
+				});//reader.onload
+				try{
+					reader.readAsArrayBuffer(file_);
+				}catch(e){alert(e);}
 			}//loaddata
 
 
