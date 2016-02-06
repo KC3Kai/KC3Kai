@@ -128,7 +128,11 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		------------------------------------------*/
 		"isMuted" :function(request, sender, response){
 			chrome.tabs.get(request.tabId, function(tabInfo){
-				response(tabInfo.mutedInfo.muted);
+				try {
+					response(tabInfo.mutedInfo.muted);
+				}catch(e){
+					response(false);
+				}
 			});
 			return true;
 		},
@@ -138,10 +142,14 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		------------------------------------------*/
 		"toggleSounds" :function(request, sender, response){
 			chrome.tabs.get(request.tabId, function(tabInfo){
-				chrome.tabs.update(request.tabId, {
-					muted: tabInfo.mutedInfo.muted?false:true,
-				});
-				response(!tabInfo.mutedInfo.muted);
+				try {
+					chrome.tabs.update(request.tabId, {
+						muted: tabInfo.mutedInfo.muted?false:true,
+					});
+					response(!tabInfo.mutedInfo.muted);
+				}catch(e){
+					response(false);
+				}
 				return true;
 			});
 			return true;
