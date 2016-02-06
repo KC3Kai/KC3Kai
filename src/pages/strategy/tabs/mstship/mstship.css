@@ -190,7 +190,7 @@
 	font-size:14px;
 	font-weight:bold;
 }
-.tab_mstship .shipInfo .equipment .sloticon {
+.tab_mstship .shipInfo .equipment .sloticon img {
 	width:20px;
 	height:20px;
 	float:left;
@@ -200,14 +200,21 @@
 	border:1px solid #888;	border-radius:10px;
 }
 .tab_mstship .shipInfo .equipment .slotitem {
-	width:150px;
+	width:200px;
 	height:16px;
+	line-height:16px;
 	float:left;
 	position:relative;
 	margin:2px 0px 0px -10px;
+	padding-left: 12px;
 	z-index:1;
+	color: white;
 	background:#444;
 	border-radius:0px 3px 3px 0px;
+	font-size:12px;
+	text-overflow: ellipsis;
+	overflow:hidden;
+	white-space: nowrap; 
 }
 
 /* Abyssal JSON */
