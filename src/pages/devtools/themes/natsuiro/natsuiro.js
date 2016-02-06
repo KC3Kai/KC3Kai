@@ -446,6 +446,20 @@
 			})).execute();
 		});
 		
+		// Mute button
+		$(".module.controls .btn_mute").on("click", function(){
+			// Send toggle sound request to service to be forwarded to gameplay page
+			(new RMsg("service", "toggleSounds", {
+				tabId: chrome.devtools.inspectedWindow.tabId
+			},function(isMuted){
+				if(isMuted){
+					$(".module.controls .btn_mute img").attr("src", "img/mute-x.png");
+				}else{
+					$(".module.controls .btn_mute img").attr("src", "img/mute.png");
+				}
+			})).execute();
+		});
+		
 		// Trigger initial selected fleet num
 		$(".module.controls .fleet_num.active").trigger("click");
 		
@@ -535,6 +549,15 @@
 			}
 		});
 		KC3Network.listen();
+		
+		// Get if inspected tab is muted, and update the mute icon
+		(new RMsg("service", "isMuted", {
+			tabId: chrome.devtools.inspectedWindow.tabId
+		}, function(isMuted){
+			if(isMuted){
+				$(".module.controls .btn_mute img").attr("src", "img/mute-x.png");
+			}
+		})).execute();
 		
 		// Attempt to activate game on inspected window
 		(new RMsg("service", "activateGame", {

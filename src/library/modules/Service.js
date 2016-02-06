@@ -123,6 +123,30 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			(new TMsg(request.tabId, "gamescreen", "fitScreen")).execute();
 		},
 		
+		/* IS MUTED
+		Returns boolean if the tab is muted or not
+		------------------------------------------*/
+		"isMuted" :function(request, sender, response){
+			chrome.tabs.get(request.tabId, function(tabInfo){
+				response(tabInfo.mutedInfo.muted);
+			});
+			return true;
+		},
+		
+		/* TOGGLE SOUNDS
+		Mute or unmute the tab
+		------------------------------------------*/
+		"toggleSounds" :function(request, sender, response){
+			chrome.tabs.get(request.tabId, function(tabInfo){
+				chrome.tabs.update(request.tabId, {
+					muted: tabInfo.mutedInfo.muted?false:true,
+				});
+				response(!tabInfo.mutedInfo.muted);
+				return true;
+			});
+			return true;
+		},
+		
 		/* DMM FRMAE INJECTION
 		Responds if content script should inject DMM Frame customizations
 		------------------------------------------*/
