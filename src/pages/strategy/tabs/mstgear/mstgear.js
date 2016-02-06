@@ -28,7 +28,7 @@
 				gearBox = $(".tab_mstgear .factory .gearRecord").clone();
 				gearBox.data("id", GearData.api_id);
 				$(".gearIcon img", gearBox).attr("src", "../../../../assets/img/items/"+GearData.api_type[3]+".png" );
-				$(".gearName", gearBox).text( KC3Meta.gearName(GearData.api_name) );
+				$(".gearName", gearBox).text( "[" + GearData.api_id + "] " + KC3Meta.gearName(GearData.api_name) );
 				gearBox.appendTo(".tab_mstgear .gearRecords");
 			});
 			
