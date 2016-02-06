@@ -314,10 +314,14 @@
 								try {
 									if(lt > 0) {
 										return (fi.w ? [fi.w] : Object.keys(ledgerCache)).some(function(wr){
-											var sw = ledgerCache[wr],sc;
+											var
+												sw = ledgerCache[wr] || ['first','clear','last'].reduce(function(objk,itky){
+													objk[itky] = NaN; return objk;
+												},{}),
+												sc;
+											cacheKeyMD[2] = Number(wr);
 											er = [sw.first,sw.clear,sw.last,0].map(function(dt,id){
 												return dt || er[id]; });
-											cacheKeyMD[2] = Number(wr);
 											
 											switch(lt % 3) {
 													// logic :
