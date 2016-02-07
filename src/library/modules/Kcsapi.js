@@ -20,6 +20,7 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_start2":function(params, response, headers){
 			var newCounts = KC3Master.init( response.api_data );
+			RemodelDb.init( response.api_data );
 			
 			if(ConfigManager.KC3DBSubmission_enabled) {
 				KC3DBSubmission.sendMaster( JSON.stringify(response) );
