@@ -758,7 +758,7 @@
 									var oldBufferLen = this.sortieBuffer.length || 0;
 									console.log("Extending map buffer from",oldBufferLen,"by",newBuffer.length);
 									$.extend(this.sortieBuffer,newBuffer);
-									$.each(this.sortieRange,function(k,v){ (sortieRange[k] = sortieRange[k] || []).splice(0); });
+									$.each(this.sortieRange,function(k,v){ (self.sortieRange[k] = self.sortieRange[k] || []).splice(0); });
 									
 									Object.keys(this.sortieBuffer).forEach(function(sortieID){
 										var
@@ -1144,7 +1144,7 @@
 				var wholeData = (k==='overall');
 				
 				if(!self.filter[k] && !wholeData) {
-					$(".lodger-data." + k,$(".lodger-statistics",baseContext)).hide();
+					$(".lodger-data." + k,$(".lodger-statistics",baseContext)).hide(100);
 					return true;
 				}
 				
@@ -1222,7 +1222,7 @@
 							.attr('data-actual-value',matrVal);
 						$("span",elm).text(matrOvr ? matrVal.shorten() : matrVal);
 					}).end()
-					.show();
+					.show(100);
 			}.bind(ctx));
 			
 			$(".filterRefresh",baseContext).trigger('enable-flag');
@@ -1414,6 +1414,8 @@
 			self = this,
 			fun  = self.wholeSortieFilter;
 		allBuffer = (this.totalBuffer)
+			.filter(function(d,i,a){
+				return self.filter[d.kind]; })
 			.filter(function(d,i,a){
 				return (typeof fun === 'function') ? fun.call(self,d.kind,d,i,a) : true; })
 			.filter(function(d,i,a){
