@@ -279,7 +279,7 @@
 					.remodelGroup(shipData.api_id)
 					.filter( function(x) {
 						return x !== shipData.api_id &&
-							x !== shipData.api_aftershipid
+							x !== shipData.api_aftershipid;
 					});
 				
 				if (otherFormIds.length > 0) {

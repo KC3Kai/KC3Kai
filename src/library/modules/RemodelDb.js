@@ -83,7 +83,7 @@
                       catapult: 0,
                       blueprint: 0,
                       devmat: 0
-                    }
+                    };
                 remodelInfo[x.api_id] = remodel;
 
             });
@@ -157,7 +157,7 @@
                     { origin: x,
                       group: group,
                       final_forms: final_forms,
-                    }
+                    };
 
                 $.each(group, function(j,y) {
                     originOf[y] = x;
@@ -198,5 +198,5 @@
             var ff = this.finalForms(shipId);
             return ff ? ff.indexOf(shipId) !== -1 : false;
         }
-    }
+    };
 })();
