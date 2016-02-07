@@ -28,6 +28,7 @@
 		KC3Database.init( PlayerManager.hq.id );
 		KC3Translation.execute();
 		WhoCallsTheFleetDb.init("../../");
+		RemodelDb.init();
 		
 		// Click a menu item
 		$("#menu .submenu ul.menulist li").on("click", function(){

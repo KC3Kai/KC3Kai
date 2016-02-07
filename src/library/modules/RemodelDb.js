@@ -172,6 +172,31 @@
                      shipCount: masterData.api_mst_ship.length,
                      upgradeCount: masterData.api_mst_shipupgrade.length
                    };
+        },
+        // return root ship in this ships's remodel chain
+        originOf: function(shipId) {
+            return this._db.originOf[shipId];
+        },
+        // return remodel info, including cost and required level
+        remodelInfo: function(shipId) {
+            return this._db.remodelInfo[shipId];
+        },
+        // return all ships in ship's remodel chain
+        // in other words, all ships that considered "same" kanmusu
+        remodelGroup: function(shipId) {
+            var oid = this.originOf(shipId);
+            return oid?this._db.remodelGroups[oid].group:false;
+        },
+        // get final forms / remodels of one ship,
+        // cyclic remodels are all considered final
+        finalForms: function(shipId) {
+            var oid = this.originOf(shipId);
+            return oid?this._db.remodelGroups[oid].final_forms:false;
+        },
+        // check if one ship is in her final form
+        isFinalForm: function(shipId) {
+            var ff = this.finalForms(shipId);
+            return ff ? ff.indexOf(shipId) !== -1 : false;
         }
     }
 })();
