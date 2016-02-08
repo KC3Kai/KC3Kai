@@ -58,7 +58,10 @@
 							$.each(zip.files, function (index, zipEntry) {
 								switch (zipEntry.name) {
 									case "db.json":
-										alert("db detected!");
+										//asnyc db sync function.
+										//table.clear()
+										//db.table.add({name: "Josephine", age: 21});
+										//db.table(storeName)
 										break;
 									case "storage.json":
 										alert("storage detected!");
