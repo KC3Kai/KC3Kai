@@ -7,14 +7,14 @@
 		tabSelf: KC3StrategyTabs.badge,
 
 		/* INIT
-		Prepares all data needed
-		---------------------------------*/
+		   Prepares all data needed
+		   ---------------------------------*/
 		init :function(){
 		},
 
 		/* EXECUTE
-		Places data onto the interface
-		---------------------------------*/
+		   Places data onto the interface
+		   ---------------------------------*/
 		execute :function(){
             var self = this;
             $(".tab_badge .export_method input").change( function() {
@@ -68,7 +68,10 @@
                     : v === 'picturebook'
                     ? self.exportFromPictureBook()
                     : {};
-                result = $.extend(result, self.exportOtherInfo() );
+                result = $.extend(
+                    result, 
+                    self.exportTtkInfo(),
+                    self.exportFleetInfo());
 
                 $.each(result, function(k,v) {
                     mkText(String(k) + "=" + v);
@@ -133,7 +136,50 @@
             });
             return this.exportFromIdList(ids);
         },
-        exportOtherInfo: function() {
+        exportFleetInfo: function() {
+            PlayerManager.loadFleets();
+            
+            var allFleetInfo = [];
+            var i,j;
+            for (i=0; i<4;++i) {
+                var fleetInfo = [];
+                var fleet = PlayerManager.fleets[i];
+                for (j=0;j<6;++j) {
+                    if (fleet && fleet.ships[j] !== -1) {
+                        var ship = KC3ShipManager.get(fleet.ships[j]);
+                        fleetInfo.push( {lvl: ship.level, 
+                                         str: "icon"+K2Badge.mstId2FleetIdTable[ship.masterId]
+                                        } );
+
+                    } else {
+                        fleetInfo.push( {lvl:1, 
+                                         str:""} );
+                    }
+                }
+                allFleetInfo.push( fleetInfo );
+                
+            }
+            var levelStr = allFleetInfo
+                .map( function(fleet) {
+                    return fleet
+                        .map( function(s) { 
+                            return s.lvl; })
+                        .join(",");
+                }).join("|");
+            var fleetStr = allFleetInfo
+                .map( function(fleet) {
+                    return fleet
+                        .map( function(s) { 
+                            return s.str; })
+                        .join(",");
+                }).join("|");
+
+            return {
+                fleet: btoa(fleetStr),
+                fleetLvl: btoa(levelStr)
+            };
+        },
+        exportTtkInfo: function() {
             var result = {};
             result.ttkLvl = PlayerManager.hq.level;
             result.ttkName = PlayerManager.hq.name;
