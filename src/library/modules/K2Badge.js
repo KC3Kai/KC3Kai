@@ -1,22 +1,68 @@
 /* K2Badge.js
 
-   KanColle Badge Generator Support
+   Mapping master ids to KanColle Badge Generator(KBG) ids
+
+   terms:
+
+   * Master Id: used in api_start2
+   * Colle Id & Unique Id: used in "Poster Collection" of KBG
+   * Kaini Id: used in "Kai Ni + BP" of KBG
+   * Fleet Id: used in "Fleets" of KBG
+   * Origin ship: ships that does not have previous model,
+       in other words, they are "root"s of ship remodel chains.
+
+   * K2Badge.mstId2ColleTable & K2Badge.colle2MstIdTable
+       Every non-abyssal ship can backtrack to exactly one origin ship,
+       which is what "Poster Collection" records.
+       Master Id and Colle Id has 1-1 correpondence.
+       (There is one special case: "hiryuu2" (Hiryuu Kai 2) is a colle id / unique id
+       while the origin ship "hiryuu1" is not used)
+
+   * K2Badge.mstId2KainiTable & K2Badge.kaini2MstIdTable
+       Ships that has kai ni remodel or consumes blueprints for remodeling.
+       1-1 correpondence.
+
+   * K2Badge.mstId2FleetIdTable
+       Many-to-one correpondence between master id and fleet id.
+       because some ships share pictures with her previous remodels.
+       (K2Badge.fleetId2MstIdTable is left out on purpose because of this)
+
+   * K2Badge.k2Template
+       a template of "k2" field. Do not modify.
+       (use deep copy or traverse it to build your own)
+
+   Note:
+   * jquery required (for $.extend)
+   * think this module as a set of constant tables, don't modify
+
 */
 (function() {
     "use strict";
 
-    function reverseTable(xs){
-        var obj = {};
-        $.each(xs, function(k,v) {
-            obj[v] = k;
-        });
-        return obj;
-    }
-
     window.K2Badge = {
         init: function () {
-            this.mstId2KanniTable = reverseTable(this.kaini2MstIdTable);
+            function reverseTable(xs){
+                var obj = {};
+                $.each(xs, function(k,v) {
+                    obj[v] = k;
+                });
+                return obj;
+            }
+
+            this.mstId2KainiTable = reverseTable(this.kaini2MstIdTable);
             this.mstId2ColleTable = reverseTable(this.colle2MstIdTable);
+
+            var fleetId2MstIdTable = 
+                $.extend({},
+                         this.colle2MstIdTable,
+                         this.kaini2MstIdTable,
+                         this.fidToMidPatch);
+
+            var mstId2FleetIdTable = reverseTable(fleetId2MstIdTable);
+            mstId2FleetIdTable = $.extend(
+                mstId2FleetIdTable,
+                this.mstId2FleetIdTable_missing);
+            this.mstId2FleetIdTable = mstId2FleetIdTable;
         },
         kaini2MstIdTable: {
             "fubuki2":426,
@@ -318,6 +364,186 @@
             "ss":{
                 "ro5001":false
             }
+        },
+        // fleet id -> master id patch
+        // cases where remodels have their own pictures
+        fidToMidPatch: {
+            "akashi2":187,
+            "akitsumaru2":166,
+            "akitsushima2":450,
+            "amatsukaze2":316,
+            "asagumo2":327,
+            "asashimo2":344,
+            "bismarck2":172,
+            "chitose2":104,
+            "chitose3":106,
+            "chitosecvl1":108,
+            "chiyoda2":105,
+            "chiyoda3":107,
+            "chiyodacvl1":109,
+            "fusou2":286,
+            "graf2":353,
+            "harusame2":323,
+            "hayasui2":352,
+            "hiryuu1":91,
+            "hiyou2":283,
+            "hyuuga2":88,
+            "ise2":82,
+            "isokaze2":320,
+            "kasumi3":470,
+            "kitakami2":58,
+            "kumano2":130,
+            "mikuma2":121,
+            "mogami2":73,
+            "murasame2":244,
+            "musashi2":148,
+            "nagara2":218,
+            "natori2":221,
+            "oboro4":230,
+            "ooi2":57,
+            "ooyodo2":321,
+            "prinzeugen2":177,
+            "ryuuhou1":185,
+            "ryuujou2":281,
+            "shiratsuyu2":242,
+            "shouhou3":282,
+            "shoukaku3":466,
+            "suzuya2":129,
+            "taihou2":156,
+            "takanami2":345,
+            "uzuki2":309,
+            "yamagumo2":328,
+            "yamashiro2":287,
+            "yamato2":136,
+            "zuihou2":117,
+            "zuikaku2":112,
+            "zuikaku4":467
+        },
+        // master id -> fleet id
+        // cases where remodels use the picture of their previous model
+        mstId2FleetIdTable_missing: {
+            "201":"fubuki1",
+            "202":"shirayuki1",
+            "203":"hatsuyuki1",
+            "204":"miyuki1",
+            "205":"murakumo1",
+            "206":"isonami1",
+            "207":"ayanami1",
+            "208":"shikinami1",
+            "209":"kongou1",
+            "210":"hiei1",
+            "211":"haruna1",
+            "212":"kirishima1",
+            "213":"tenryuu1",
+            "214":"tatsuta1",
+            "215":"kuma1",
+            "216":"tama1",
+            "217":"kiso1",
+            "219":"isuzu1",
+            "220":"yura1",
+            "222":"sendai1",
+            "223":"jintsuu1",
+            "224":"naka1",
+            "225":"kagerou1",
+            "226":"shiranui1",
+            "227":"kuroshio1",
+            "228":"yukikaze1",
+            "229":"shimakaze1",
+            "231":"akebono1",
+            "232":"sazanami1",
+            "233":"ushio1",
+            "234":"akatsuki1",
+            "235":"hibiki1",
+            "236":"ikazuchi1",
+            "237":"inazuma1",
+            "238":"hatsuharu1",
+            "239":"nenohi1",
+            "240":"wakaba1",
+            "241":"hatsushimo1",
+            "243":"shigure1",
+            "245":"yuudachi1",
+            "246":"samidare1",
+            "247":"suzukaze1",
+            "248":"asashio1",
+            "249":"ooshio1",
+            "250":"michishio1",
+            "251":"arashio1",
+            "252":"arare1",
+            "253":"kasumi1",
+            "254":"mutsuki1",
+            "255":"kisaragi1",
+            "256":"satsuki1",
+            "257":"fumizuki1",
+            "258":"nagatsuki1",
+            "259":"kikuzuki1",
+            "260":"mikazuki1",
+            "261":"mochizuki1",
+            "262":"furutaka1",
+            "263":"kako1",
+            "264":"aoba1",
+            "265":"myoukou1",
+            "266":"nachi1",
+            "267":"ashigara1",
+            "268":"haguro1",
+            "269":"takao1",
+            "270":"atago1",
+            "271":"maya1",
+            "272":"choukai1",
+            "273":"tone1",
+            "274":"chikuma1",
+            "275":"nagato1",
+            "276":"mutsu1",
+            "277":"akagi1",
+            "278":"kaga1",
+            "279":"souryuu1",
+            "280":"hiryuu1",
+            "284":"junyou1",
+            "285":"houshou1",
+            "288":"shoukaku1",
+            "289":"kinu1",
+            "290":"abukuma1",
+            "291":"chitosecvl1",
+            "292":"chiyodacvl1",
+            "293":"yuubari1",
+            "294":"maikaze1",
+            "295":"kinugasa1",
+            "300":"hatsukaze1",
+            "301":"akigumo1",
+            "302":"yuugumo1",
+            "303":"makigumo1",
+            "304":"naganami1",
+            "305":"agano1",
+            "306":"noshiro1",
+            "307":"yahagi1",
+            "308":"yayoi1",
+            "310":"z11",
+            "311":"z31",
+            "312":"hamakaze1",
+            "313":"tanikaze1",
+            "314":"sakawa1",
+            "317":"urakaze1",
+            "322":"tokitsukaze1",
+            "324":"hayashimo1",
+            "325":"kiyoshimo1",
+            "329":"nowaki1",
+            "330":"akizuki1",
+            "334":"u5111",
+            "343":"katori1",
+            "346":"teruzuki1",
+            "347":"libeccio1",
+            "348":"mizuho1",
+            "349":"kazagumo1",
+            "350":"umikaze1",
+            "351":"kawakaze1",
+            "354":"arashi1",
+            "355":"hagikaze1",
+            "356":"kashima1",
+            "398":"i1681",
+            "399":"i581",
+            "400":"i81",
+            "401":"i191",
+            "402":"maruyu1",
+            "403":"i4011"
         }
     };
 })();
