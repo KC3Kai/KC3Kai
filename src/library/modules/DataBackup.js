@@ -49,7 +49,7 @@
 				var dbdata = JSON.parse(dbstring);
 				$.each(dbdata, function (index, tabledata) {
 					//alert(index+"="+JSON.stringify(tabledata));
-					var table = window.KC3Database.con.(index);
+					var table = window.KC3Database.con.table(index);
 					window.KC3Database.con.transaction("r!", table ,function(){
 						//asnyc db sync function.
 						if(overwrite)
