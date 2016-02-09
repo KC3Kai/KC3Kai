@@ -60,16 +60,16 @@
 						else
 							switch(index)
 							{
-								"account":
-								"newsfeed":
-								"navaloverall":
+								case "account":
+								case "newsfeed":
+								case "navaloverall":
 									break;
 								default:
 									table.add(tabledata);
 							}
-						}).finally{
+						}).then(function(){
 							table.orderBy("hour");
-						};//transaction, finally
+						});//transaction, finally
 				});
 
 			},//processDB
@@ -104,7 +104,7 @@
 										break;
 									case "storage.json":
 										if(overwrite)
-											processStorage(zipEntry.asText());
+											window.KC3DataBackup.processStorage(zipEntry.asText());
 										break;
 									default:
 										alert("could be wrong file");
