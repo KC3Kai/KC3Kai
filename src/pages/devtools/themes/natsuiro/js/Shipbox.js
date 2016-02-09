@@ -11,17 +11,21 @@ KC3改 Ship Box for Natsuiro theme
 		
 		this.expPercent = this.shipData.exp[2] / 100;
 		this.fuelPercent = this.shipData.fuel / this.shipData.master().api_fuel_max;
-		this.ammoPercent = this.shipData.ammo / this.shipData.master().api_bull_max;	
+		this.ammoPercent = this.shipData.ammo / this.shipData.master().api_bull_max;
 	};
 	
 	/* SET SHIP
 	Short ship box for combined fleets
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.commonElements = function( rosterId ){
-		$(".ship_img img", this.element).attr("src", KC3Meta.shipIcon(this.shipData.masterId)).attr("title",
-		JSON.stringify(this.shipData.pendingConsumption));
+		$(".ship_img img", this.element).attr("src", KC3Meta.shipIcon(this.shipData.masterId));
 		$(".ship_name", this.element).text( this.shipData.name() );
 		$(".ship_type", this.element).text( this.shipData.stype() );
+		
+		$(this.element)
+			.addClass((this.shipData.level >= 100) && 'sWife')
+			.addClass( (ConfigManager.salt_list.indexOf(KC3ShipManager.get(327).master().kc3_bship)+1) && 'sSalt' )
+			.end();
 		
 		// Item on 5th slot
 		var myExItem = this.shipData.exItem();

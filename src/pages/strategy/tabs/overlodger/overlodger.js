@@ -176,7 +176,7 @@
 			var
 				cacheKeyFX  = [0,0,0,0,0],
 				cacheKeyMD  = [0,0,0,0,0],
-				funcac = {},cx;
+				funcac = {},lctx;
 			function cache(x,f,w,m,p,r) {
 				// x - ledger id
 				// f - filter
@@ -191,7 +191,7 @@
 			}
 			var retfun = function(key,data,index,array){
 				var self = this;
-				if(self != cx){cx = self;}
+				if(self != lctx){lctx = self;}
 				if(this.timeRange.duration){
 					return true;
 				} else {
@@ -272,17 +272,17 @@
 					var
 						chkBound = (
 							rqBoundMatch ? (
-								(sortieD || []).every(function(mapCode,bIdx){ return mapCode ? (0).inside.apply(mapCode,rqMapBound[bIdx]) : true; })) : true
+								sortieD.every(function(mapCode,bIdx){ return mapCode ? (0).inside.apply(mapCode,rqMapBound[bIdx]) : true; })) : true
 						),
 						chkWorld = (
 							rqMapMatch ? (
-								(!this.sortie.World || !sortieD || sortieD[0] == this.sortie.World) &&
-								(!this.sortie.Map   || !sortieD || sortieD[1] == this.sortie.Map  )
+								(!this.sortie.World || sortieD[0] == this.sortie.World) &&
+								(!this.sortie.Map   || sortieD[1] == this.sortie.Map  )
 							) : true
 						),
 						chkMonth = (
 							rqMonthMatch ? (
-								!this.sortie.Period || !sortieD || (function(cDate,mnhour){
+								!this.sortie.Period || (function(cDate,mnhour){
 									var mxhour = Math.hrdInt('floor',(new Date(mnhour * 3600000)).shiftMonth(0,true)/3.6,6,1);
 									return Math.hrdInt('floor',cDate/3.6,3,1).inside(mnhour,mxhour);
 								}).call(null,sortieD.time,this.sortie.Period)
@@ -301,9 +301,9 @@
 									cx = gs <= 0,
 									fi = {w:self.sortie.World,m:self.sortie.Map},
 									
-									rg = function(x,i){switch(lt){
+									rg = function(x,i){switch(Math.sign(ledger_type % 3)){
 										case  1: return (i <= 1);           // F C
-										case  2: return (i >= 1);           //   C L X
+										case -1: return (i >= 1);           //   C L X
 										default: return (i %  2 == lt %  2); // F   L
 									}};
 								
@@ -345,8 +345,9 @@
 														if(typeof cacheD == 'boolean') { return cacheD; }
 														
 														sc = sw[nm];
-														sr = [sc.first,sc.clear,sc.last,0].map(function(dt,id){
+														sr = [sc.first,sc.clear || sc.last,sc.last,0].map(function(dt,id){
 															return dt || sr[id]; });
+													if((0).inside.invoke % 88888 > 88777) console.log(sr,lt,sr.filter(rg));
 														return cache.apply(null, cacheKeyMD.concat( (0).inside.apply(data.id,sr.filter(rg)) ) );
 													});
 												case 2:
@@ -355,8 +356,9 @@
 													if(typeof cacheD == 'boolean') { return cacheD; }
 													
 													sc = sw[fi.m];
-													sr = [sc.first,sw.clear,sw.last,0].map(function(dt,id){
+													sr = [sc.first,sw.clear || sw.last,sw.last,0].map(function(dt,id){
 														return dt || sr[id]; });
+													if((0).inside.invoke % 88888 > 88777) console.log(sr,lt,sr.filter(rg));
 													return cache.apply(null, cacheKeyMD.concat( (0).inside.apply(data.id,sr.filter(rg)) ) );
 												default:
 													cacheKeyMD[3] = Number(fi.m);
@@ -364,7 +366,7 @@
 													if(typeof cacheD == 'boolean') { return cacheD; }
 													
 													sc = sortieCache[wr][fi.m];
-													sr = [sc.sortieFirst,sw.sortieClear,sw.sortieLast,0].map(function(dt,id){
+													sr = [sc.sortieFirst,sw.sortieClear || sw.sortieLast,sw.sortieLast,0].map(function(dt,id){
 														return dt || sr[id]; });
 													return cache.apply(null, cacheKeyMD.concat( (0).inside.apply(data.opt,sr.filter(rg)) ) );
 											}
