@@ -2003,6 +2003,13 @@ list-style: none;
 	background:#999900;
 }
 
+/* Ship Misc Marker */
+.module.fleet .sSalt {
+	-webkit-filter: blur(1.5px);
+}
+.module.fleet .sWife .ship_name {
+	color:#fbb;
+}
 /*------- STATUS -------*/
 .module.status {
 	/*background:rgba(255,80,80,0.4);*/
