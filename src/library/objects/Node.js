@@ -14,6 +14,114 @@ Used by SortieManager
 		this.stime = UTCTime;
 		this.isPvP = false;
 	};
+
+	// static function. predicts battle rank,
+	// arguments are beginHPs, endHPs in following structure:
+	// { ally: [array of hps]
+	// , enemy: [array of hps]
+	// }
+	// arrays are all begins at 0
+	KC3Node.predictRank = function(beginHPs, endHPs) {
+		console.assert( 
+			beginHPs.ally.length === endHPs.ally.length,
+			"ally data length mismatched");
+		console.assert(
+			beginHPs.enemy.length === endHPs.enemy.length,
+			"enemy data length mismatched");
+
+		// removes "-1"s in begin HPs
+		// also removes data from same position
+		// in end HPs
+		// in addition, negative end HP values are set to 0
+		function normalizeHP(begins, ends) {
+			var nBegins = [];
+			var nEnds = [];
+			for (var i=0; i<begins.length; ++i) {
+				if (begins[i] !== -1) {
+					console.assert(
+						begins[i] > 0,
+						"wrong begin HP");
+					nBegins.push(begins[i]);
+					nEnds.push( ends[i]<0 ? 0 : ends[i] );
+				}
+			}
+			return [nBegins,nEnds];
+		}
+
+		// perform normalization
+		var result1, result2;
+		result1 = normalizeHP(beginHPs.ally, endHPs.ally);
+		result2 = normalizeHP(beginHPs.enemy, endHPs.enemy);
+
+		// create new objs leaving old data intact
+		beginHPs = {
+			ally: result1[0],
+			enemy: result2[0]
+		};
+
+		endHPs = {
+			ally:  result1[1],
+			enemy: result2[1]
+		};
+
+		var allySunkCount = endHPs.ally.filter(function(x){return x===0;}).length;
+		var allyCount = endHPs.ally.length;
+		var enemySunkCount = endHPs.enemy.filter(function(x){return x===0;}).length;
+		var enemyCount = endHPs.enemy.length;
+
+		var requiredSunk = enemyCount === 6 ? 4 : Math.ceil( enemyCount / 2);
+		
+		var i;
+		// damage taken by ally
+		var allyGauge = 0;
+		var allyBeginHP = 0;
+		for (i=0; i<allyCount; ++i) {
+			allyGauge += beginHPs.ally[i] - endHPs.ally[i];
+			allyBeginHP += beginHPs.ally[i];
+		}
+		var enemyGauge = 0;
+		var enemyBeginHP = 0;
+		for (i=0; i<enemyCount; ++i) {
+			enemyGauge += beginHPs.enemy[i] - endHPs.enemy[i];
+			enemyBeginHP += beginHPs.enemy[i];
+		}
+
+		var allyGaugeRate = Math.floor(allyGauge / allyBeginHP * 100);
+		var enemyGaugeRate = Math.floor(enemyGauge / enemyBeginHP * 100);
+		var equalOrMore = enemyGaugeRate > (0.9 * allyGaugeRate);
+		var superior = enemyGaugeRate > 0 && enemyGaugeRate > (2.5 * allyGaugeRate);
+
+		if (allySunkCount === 0) {
+			if (enemySunkCount === enemyCount) {
+				return allyGauge === 0 ? "SS" : "S";
+			}
+			if (enemySunkCount >= requiredSunk)
+				return "A";
+
+			if (endHPs.enemy[0] === 0)
+				return "B";
+			
+			if (superior)
+				return "B";
+		} else {
+			if (enemySunkCount === enemyCount)
+				return "B";
+			if (endHPs.enemy[0] === 0 && allySunkCount < enemySunkCount)
+				return "B";
+						
+			if (superior)
+				return "B";
+
+			if (endHPs.enemy[0] === 0)
+				return "C";
+		}
+
+		if (enemyGauge > 0 && equalOrMore)
+			return "C";
+		if (allySunkCount > 0 && allyCount === 1)
+			return "E";
+		return "D";
+	};
 	
 	KC3Node.prototype.defineAsBattle = function( nodeData ){
 		this.type = "battle";
@@ -148,6 +256,11 @@ Used by SortieManager
 		this.yasenFlag = (battleData.api_midnight_flag>0);
 		
 		this.originalHPs = battleData.api_nowhps;
+		var beginHPs = {
+			ally: battleData.api_nowhps.slice(1,7),
+			enemy: battleData.api_nowhps.slice(7,13)
+		};
+		this.dayBeginHPs = beginHPs;
 		
 		this.detection = KC3Meta.detection( battleData.api_search[0] );
 		this.engagement = KC3Meta.engagement( battleData.api_formation[2] );
@@ -221,10 +334,16 @@ Used by SortieManager
 			result = DA.analyzeRawBattleJS(battleData); 
 			// console.log("Single Fleet");
 			// console.log("analysis result", result);
+
+			var endHPs = {
+				ally: beginHPs.ally.slice(),
+				enemy: beginHPs.enemy.slice()
+			};
 			
 			// Update enemy
 			for (i = 7; i < 13; i++) {
 				this.enemyHP[i-7] = result[i];
+				endHPs.enemy[i-7] = result[i] ? result[i].currentHp : -1;
 				if ((result[i] || {currentHp:0}).currentHp <= 0) {
 					this.enemySunk[i-7] = true;
 				}
@@ -238,7 +357,10 @@ Used by SortieManager
 				ship.afterHp[0] = result[i+1].currentHp;
 				this.allyNoDamage &= ship.hp[0]==ship.afterHp[0];
 				ship.afterHp[1] = ship.hp[1];
+				endHPs.ally[i] = result[i+1].currentHp;
 			}
+
+			console.log( "Rank Predict: " + KC3Node.predictRank( beginHPs, endHPs ) );
 		} else {
 			if (PlayerManager.combinedFleet === 1 || PlayerManager.combinedFleet === 3) {
 				result = DA.analyzeRawCarrierTaskForceBattleJS(battleData); 
@@ -346,6 +468,18 @@ Used by SortieManager
 		this.eParam = nightData.api_eParam;
 		this.eSlot = nightData.api_eSlot;
 		
+		// if we did not started at night, at this point dayBeginHPs should be available
+		var beginHPs = {
+			ally: [],
+			enemy: []
+		};
+		if (this.dayBeginHPs) {
+			beginHPs = this.dayBeginHPs;
+		} else {
+			beginHPs.ally = nightData.api_nowhps.slice(1,7);
+			beginHPs.enemy = nightData.api_nowhps.slice(7,13);
+		}
+
 		if(setAsOriginalHP){
 			this.originalHPs = nightData.api_nowhps;
 		}
@@ -374,14 +508,20 @@ Used by SortieManager
 			result = DA.analyzeRawNightBattleJS( nightData ); 
 			fleet = PlayerManager.fleets[fleetId - 1];
 		}
-		
+		var endHPs = {
+			ally: beginHPs.ally.slice(),
+			enemy: beginHPs.enemy.slice()
+		};
+			
 		for (i = 7; i < 13; i++) {
 			this.enemyHP[i-7] = result[i];
+			endHPs.enemy[i-7] = result[i] ? result[i].currentHp : -1;
+
 			if ((result[i] || {currentHp:0}).currentHp <= 0) {
 				this.enemySunk[i-7] = true;
 			}
 		}
-		
+
 		shipNum = fleet.countShips();
 		for(i = 0; i < shipNum; i++) {
 			ship = fleet.ship(i);
@@ -390,8 +530,9 @@ Used by SortieManager
 			ship.afterHp[0] = result[i+1].currentHp;
 			this.allyNoDamage &= ship.hp[0]==ship.afterHp[0];
 			ship.afterHp[1] = ship.hp[1];
+			endHPs.ally[i] = result[i+1].currentHp;
 		}
-		
+		console.log( "Rank Predict (Night): " + KC3Node.predictRank( beginHPs, endHPs ) );
 		if(this.gaugeDamage > -1)
 			this.gaugeDamage = this.gaugeDamage + Math.min(nightData.api_nowhps[7],nightData.api_nowhps[7] - this.enemyHP[0].currentHp);
 	};
