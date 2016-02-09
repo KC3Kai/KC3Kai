@@ -23,18 +23,26 @@
 				window.KC3DataBackup.saveData();
 			});
 
+			$(".tab_savedata .merge_data").on("click", function(){
+				if(filename===""){
+					alert("no file selected");
+					return;
+				}
+				if(confirm("are you sure?"))
+					window.KC3DataBackup.loadData(filename,false);
+			});
 			$(".tab_savedata .overwrite_data").on("click", function(){
 				if(confirm("You will overwrite all your kc3 data! are you sure?"))
-					if(sav|confirm("You didn't backup your data! are you sure?"))
-						window.KC3DataBackup.saveData();
-			});
-			$(".tab_savedata .merge_data").on("click", function(){
-				if(confirm("You will overwrite all your kc3 data! are you sure?"))
-					if(sav|confirm("You didn't backup your data! are you sure?"))
-						window.KC3DataBackup.saveData();
+				{
+					if(filename==="")
+						alert("no file selected");
+					else
+						if(sav|confirm("You didn't backup your data! are you sure?"))
+							window.KC3DataBackup.loadData(filename,true);
+				}
 			});
 
-			var filename;
+			var filename="";
 			//window.KC3DataBackup.loadData(event.target.files[0]);
 			$(".tab_savedata .import_file").on("change", function(event){
 				filename = event.target.files[0];

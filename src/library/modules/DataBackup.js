@@ -9,7 +9,7 @@
 				var trz;
 				window.KC3Database.con.transaction("r!", window.KC3Database.con.tables ,function(){
 					trz = Dexie.currentTransaction;
-					alert("Acessing db...this might take few seconds.");
+					alert("Saving data...this might take few seconds to finish.");
 					window.KC3Database.con.tables.forEach( //access all tables
 						function(table){
 							table.toArray(function(tablearray) { //add table data tmptext
@@ -45,8 +45,50 @@
 				}, 3000);//setTimeout
 
 			},//savedata
+			processDB : function(dbstring,overwrite){
+				var dbdata = JSON.parse(dbstring);
+				$.each(dbdata, function (index, tabledata) {
+					//alert(index+"="+JSON.stringify(tabledata));
+					var table = window.KC3Database.con.(index);
+					window.KC3Database.con.transaction("r!", table ,function(){
+						//asnyc db sync function.
+						if(overwrite)
+							{
+								table.clear();
+								table.add(tabledata);
+							}
+						else
+							switch(index)
+							{
+								"account":
+								"newsfeed":
+								"navaloverall":
+									break;
+								default:
+									table.add(tabledata);
+							}
+						}).finally{
+							table.orderBy("hour");
+						};//transaction, finally
+				});
 
-			loadData : function(file_){
+			},//processDB
+			processStorage(importedDataString){
+				var importedData = JSON.parse(importedDataString);
+				localStorage.absoluteswf = importedData.absoluteswf;
+				localStorage.config = JSON.stringify(importedData.config);
+				localStorage.fleets = JSON.stringify(importedData.fleets);
+				localStorage.gears = JSON.stringify(importedData.gears);
+				localStorage.lastResource = importedData.lastResource;
+				localStorage.lastUseitem = importedData.lastUseitem;
+				localStorage.maps = JSON.stringify(importedData.maps);
+				localStorage.player = JSON.stringify(importedData.player);
+				localStorage.quests = JSON.stringify(importedData.quests);
+				localStorage.ships = JSON.stringify(importedData.ships);
+				localStorage.statistics = JSON.stringify(importedData.statistics);
+			},
+
+			loadData : function(file_,overwrite){
 				var zip;
 				var reader = new FileReader();
 
@@ -58,25 +100,21 @@
 							$.each(zip.files, function (index, zipEntry) {
 								switch (zipEntry.name) {
 									case "db.json":
-										//asnyc db sync function.
-										//table.clear()
-										//db.table.add({name: "Josephine", age: 21});
-										//db.table(storeName)
+										window.KC3DataBackup.processDB(zipEntry.asText(),overwrite);
 										break;
 									case "storage.json":
-										alert("storage detected!");
+										if(overwrite)
+											processStorage(zipEntry.asText());
 										break;
 									default:
 										alert("could be wrong file");
 
-									}//swich for zip name
+									}//swich: zip name
 								});//file acces foreach
 							// end of the magic
 
 				});//reader.onload
-				try{
-					reader.readAsArrayBuffer(file_);
-				}catch(e){alert(e);}
+				reader.readAsArrayBuffer(file_);
 			}//loaddata
 
 
