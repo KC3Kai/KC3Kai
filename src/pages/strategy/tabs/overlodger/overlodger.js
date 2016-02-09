@@ -347,7 +347,6 @@
 														sc = sw[nm];
 														sr = [sc.first,sc.clear || sc.last,sc.last,0].map(function(dt,id){
 															return dt || sr[id]; });
-													if((0).inside.invoke % 88888 > 88777) console.log(sr,lt,sr.filter(rg));
 														return cache.apply(null, cacheKeyMD.concat( (0).inside.apply(data.id,sr.filter(rg)) ) );
 													});
 												case 2:
@@ -358,7 +357,6 @@
 													sc = sw[fi.m];
 													sr = [sc.first,sw.clear || sw.last,sw.last,0].map(function(dt,id){
 														return dt || sr[id]; });
-													if((0).inside.invoke % 88888 > 88777) console.log(sr,lt,sr.filter(rg));
 													return cache.apply(null, cacheKeyMD.concat( (0).inside.apply(data.id,sr.filter(rg)) ) );
 												default:
 													cacheKeyMD[3] = Number(fi.m);
