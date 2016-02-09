@@ -1,14 +1,14 @@
 (function(){
 	"use strict";
-	
+
 	KC3StrategyTabs.profile = new KC3StrategyTab("profile");
-	
+
 	KC3StrategyTabs.profile.definition = {
 		tabSelf: KC3StrategyTabs.profile,
-		
+
 		player: {},
 		statistics: false,
-		
+
 		/* INIT
 		Prepares all data needed
 		---------------------------------*/
@@ -20,7 +20,7 @@
 				// this.tabSelf.showError("Player information not available");
 				// return false;
 			}
-			
+
 			// Check for player statstics
 			if(typeof localStorage.statistics != "undefined"){
 				this.statistics = JSON.parse(localStorage.statistics);
@@ -29,7 +29,7 @@
 				// return false;
 			}
 		},
-		
+
 		/* EXECUTE
 		Places data onto the interface
 		---------------------------------*/
@@ -38,16 +38,16 @@
 			$(".hq_id .hq_content").html(PlayerManager.hq.id);
 			$(".hq_name .hq_content").html(PlayerManager.hq.name);
 			$(".hq_desc .hq_content").html(PlayerManager.hq.desc);
-			
+
 			var MyServer = (new KC3Server()).setNum( PlayerManager.hq.server );
 			$(".hq_server .hq_content").html( MyServer.name );
-			
+
 			$(".hq_rank .hq_content").html(PlayerManager.hq.rank);
 			$(".hq_level .hq_content").html(PlayerManager.hq.level);
-			
+
 			$(".rank_current .rank_cutval").html(PlayerManager.hq.rankPtCutoff);
 			$(".rank_current .rank_content").html(PlayerManager.hq.getRankPoints());
-			
+
 			// Show statistics
 			if(this.statistics){
 				if(typeof this.statistics.sortie.rate == "string"){
@@ -57,16 +57,16 @@
 				}
 				$(".stat_sortie .stat_win .stat_value").html(this.statistics.sortie.win);
 				$(".stat_sortie .stat_lose .stat_value").html(this.statistics.sortie.lose);
-				
+
 				$(".stat_pvp .stat_rate .stat_value").html(this.statistics.pvp.rate+"%");
 				$(".stat_pvp .stat_win .stat_value").html(this.statistics.pvp.win);
 				$(".stat_pvp .stat_lose .stat_value").html(this.statistics.pvp.lose);
-				
+
 				$(".stat_exped .stat_rate .stat_value").html(this.statistics.exped.rate+"%");
 				$(".stat_exped .stat_success .stat_value").html(this.statistics.exped.success);
 				$(".stat_exped .stat_total .stat_value").html(this.statistics.exped.total);
 			}
-			
+
 			// Export all data
 			$(".tab_profile .export_data").on("click", function(){
 				var blob = new Blob([JSON.stringify({
@@ -81,17 +81,17 @@
 					quests: JSON.parse(localStorage.quests),
 					ships: JSON.parse(localStorage.ships),
 					statistics: JSON.parse(localStorage.statistics)
-					
+
 				})], {type: "application/json;charset=utf-8"});
-				
+
 				saveAs(blob, "["+PlayerManager.hq.name+"] "+((new Date()).format("yyyy-mm-dd"))+".kc3");
 			});
-			
+
 			// Import data file open dialog
 			$(".tab_profile .import_data").on("click", function(){
 				$(".tab_profile .import_file").trigger("click");
 			});
-			
+
 			// On-data has been read
 			var reader = new FileReader();
 			reader.onload = function(theFile){
@@ -110,7 +110,7 @@
 				alert("Imported data for "+importedData.player.name+" from "+ KC3Meta.serverByNum(importedData.player.server).name+"!");
 				window.location.reload();
 			};
-			
+
 			// On-selected file to import
 			$(".tab_profile .import_file").on("change", function(event){
 				if( event.target.files.length > 0 ){
@@ -121,13 +121,13 @@
 					}
 				}
 			});
-			
+
 			// Clear Quick Data
 			$(".tab_profile .clear_storage").on("click", function(event){
 				localStorage.clear();
 				window.location.reload();
 			});
-			
+
 			// Clear Histories
 			$(".tab_profile .clear_history").on("click", function(event){
 				KC3Database.clear(function(){
@@ -135,7 +135,7 @@
 				});
 			});
 		}
-		
+
 	};
-	
+
 })();

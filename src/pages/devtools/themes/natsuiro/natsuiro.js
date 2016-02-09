@@ -89,6 +89,54 @@
 		selectedExpedition = conf.fleetConf[selectedFleet].expedition;
 		plannerIsGreatSuccess = conf.expedConf[ selectedExpedition ].greatSuccess;
 	}
+
+	function ExpedTabAutoFleetSwitch(needTabSwith) {
+		// set "needTabSwith" to true
+		// for switching to expedition tab when a candicate fleet is found
+		var fleets = PlayerManager.fleets;
+		var availableFleetInd = -1;
+
+		// if combined fleet is in use, the second fleet is not available
+		// so we can skip it
+
+		// start from the 2nd fleet (or 3rd if we have a combined fleet)
+		var fleetStartInd = (PlayerManager.combinedFleet !== 0) ? 2 : 1;
+
+		for (var i = fleetStartInd; i < 4; ++i) {
+			// find one available fleet
+			if (fleets[i].missionOK()) {
+				availableFleetInd = i;
+				break;
+			}
+		}
+
+		function switchToFleet(targetFleet) {
+			var fleetControls = $(".module.controls .fleet_num").toArray();
+			for (var i=0; i<fleetControls.length; ++i) {
+				var thisFleet = parseInt( $(fleetControls[i]).text(), 10);
+				if (thisFleet === targetFleet) {
+					$( fleetControls[i] ).trigger("click");
+					break;
+				}
+			}
+		}
+
+		if (availableFleetInd !== -1) {
+			selectedFleet = availableFleetInd + 1;
+			console.log("Find available fleet: " + String(selectedFleet));
+
+			if (needTabSwith)
+				$("#atab_expeditionPlanner").trigger("click");
+			
+			switchToFleet(availableFleetInd+1);
+		} else {
+			// knowing fleets are all unavailable
+			// we can return focus to the main fleet.
+			switchToFleet(1);
+			// also return focus to basic tab
+			$("#atab_basic").trigger("click");
+		}
+	}
 	
 	$(document).on("ready", function(){
 		// Check localStorage
@@ -398,6 +446,20 @@
 			})).execute();
 		});
 		
+		// Mute button
+		$(".module.controls .btn_mute").on("click", function(){
+			// Send toggle sound request to service to be forwarded to gameplay page
+			(new RMsg("service", "toggleSounds", {
+				tabId: chrome.devtools.inspectedWindow.tabId
+			},function(isMuted){
+				if(isMuted){
+					$(".module.controls .btn_mute img").attr("src", "img/mute-x.png");
+				}else{
+					$(".module.controls .btn_mute img").attr("src", "img/mute.png");
+				}
+			})).execute();
+		});
+		
 		// Trigger initial selected fleet num
 		$(".module.controls .fleet_num.active").trigger("click");
 		
@@ -487,6 +549,15 @@
 			}
 		});
 		KC3Network.listen();
+		
+		// Get if inspected tab is muted, and update the mute icon
+		(new RMsg("service", "isMuted", {
+			tabId: chrome.devtools.inspectedWindow.tabId
+		}, function(isMuted){
+			if(isMuted){
+				$(".module.controls .btn_mute img").attr("src", "img/mute-x.png");
+			}
+		})).execute();
 		
 		// Attempt to activate game on inspected window
 		(new RMsg("service", "activateGame", {
@@ -1014,45 +1085,8 @@
 				// clear flag
 				expeditionStarted = false;
 
-				// TODO: duplication (with ExpeditionSelection)
 				// we'll try switching to the next available fleet if any
-				var fleets = PlayerManager.fleets;
-				var availableFleetInd = -1;
-				// if combined fleet is in use, the second fleet is not available
-				// so we can skip it
-				var fleetStartInd = (PlayerManager.combinedFleet !== 0) ? 2 : 1;
-				// start from the 2nd fleet
-				for (var i = fleetStartInd; i < 4; ++i) {
-					// find one available fleet
-					if (fleets[i].missionOK()) {
-						availableFleetInd = i;
-						break;
-					}
-				}
-				//console.log( "one fleet is sent, try to find next available fleet" );
-				if (availableFleetInd !== -1) {
-					selectedFleet = availableFleetInd + 1;
-					//console.log("Find available fleet: " + String(selectedFleet));
-					// this time we don't have to switch tab
-					// $("#atab_expeditionPlanner").trigger("click");
-					$(".module.controls .fleet_num").each( function(i,v) {
-						var thisFleet = parseInt( $(this).text(), 10);
-						if (thisFleet === availableFleetInd + 1) {
-							$(this).trigger("click");
-						}
-					});
-				} else {
-                    // knowing fleet #2, #3 and #4 are all unavailable,
-                    // we can return focus to the main fleet.
-				    $(".module.controls .fleet_num").each( function(i,v) {
-					    var thisFleet = parseInt( $(this).text(), 10);
-					    if (thisFleet === 1) {
-						    $(this).trigger("click");
-						}
-					});
-					// also return focus to basic tab
-					$("#atab_basic").trigger("click");
-                } 
+				ExpedTabAutoFleetSwitch(false);
 			}
 			NatsuiroListeners.UpdateExpeditionPlanner();
 		},
@@ -1657,43 +1691,7 @@
 
 			// on expedition selection page
 			// choose one available fleet if any, setup variables properly
-			var fleets = PlayerManager.fleets;
-			var availableFleetInd = -1;
-			// if combined fleet is in use, the second fleet is not available
-			// so we can skip it
-			var fleetStartInd = (PlayerManager.combinedFleet !== 0) ? 2 : 1;
-			// start from the 2nd fleet
-			for (var i = fleetStartInd; i < 4; ++i) {
-				// find one available fleet, that consists at least two ships
-				if (fleets[i].missionOK()) {
-					availableFleetInd = i;
-					break;
-				}
-			}
-
-			if (availableFleetInd !== -1) {
-				selectedFleet = availableFleetInd + 1;
-				console.log("Find available fleet: " + String(selectedFleet));
-
-				$("#atab_expeditionPlanner").trigger("click");
-				$(".module.controls .fleet_num").each( function(i,v) {
-					var thisFleet = parseInt( $(this).text(), 10);
-					if (thisFleet === availableFleetInd + 1) {
-						$(this).trigger("click");
-					}
-				});
-			} else {
-				// knowing fleet #2, #3 and #4 are all unavailable,
-				// we can return focus to the main fleet.
-				$(".module.controls .fleet_num").each( function(i,v) {
-					var thisFleet = parseInt( $(this).text(), 10);
-					if (thisFleet === 1) {
-						$(this).trigger("click");
-					}
-				});
-				// also return focus to basic tab
-				$("#atab_basic").trigger("click");
-			}
+			ExpedTabAutoFleetSwitch(true);
 		},
 		ExpeditionStart: function (data) {
 			if (! ConfigManager.info_auto_exped_tab)
@@ -1806,9 +1804,10 @@
 			// if combined fleet, cancel action
 			if(selectedFleet===5){ return false; }
 			
-		    $( ".module.activity .activity_expeditionPlanner .expres_greatbtn img" )
-                .attr("src", "../../../../assets/img/ui/btn-"+(plannerIsGreatSuccess?"":"x")+"gs.png");
-			$(".dropdown_title").text(KC3Meta.term("ExpedNumLabel")+String(selectedExpedition));
+			$( ".module.activity .activity_expeditionPlanner .expres_greatbtn img" )
+				.attr("src", "../../../../assets/img/ui/btn-"+(plannerIsGreatSuccess?"":"x")+"gs.png");
+			$(".module.activity .activity_expeditionPlanner .dropdown_title")
+				.text(KC3Meta.term("ExpedNumLabel")+String(selectedExpedition));
 
 			var
 				allShips,
@@ -2004,29 +2003,23 @@
 				$( ".module.activity .activity_expeditionPlanner .canister_criterias" ).show();
 			}
 			
-			if(fleetObj.isSupplied()){
-				$( ".module.activity .activity_expeditionPlanner .icon.allReq" ).show();
-				$( ".module.activity .activity_expeditionPlanner .text.allReq" ).text(KC3Meta.term("PanelSupplied"));
-				$( ".module.activity .activity_expeditionPlanner .text.allReq" ).removeClass("expPlanner_text_failed").addClass("expPlanner_text_passed");
-			}else{
-				$( ".module.activity .activity_expeditionPlanner .icon.allReq" ).hide();
-				$( ".module.activity .activity_expeditionPlanner .text.allReq" ).text(KC3Meta.term("PanelUnderSupplied"));
-				$( ".module.activity .activity_expeditionPlanner .text.allReq" ).addClass("expPlanner_text_failed").removeClass("expPlanner_text_passed");
-			}
-			console.log(ExpdCheckerResult);
-			// PanelSupplied
-			// PanelUnderSupplied
-			/*if (unsatRequirements.length === 0) {
-				
-				// all requirements are satisfied
-				$( ".module.activity .activity_expeditionPlanner .icon.allReq" ).show();
-				$( ".module.activity .activity_expeditionPlanner .text.allReq" ).text(KC3Meta.);
+			if (fleetObj.isSupplied()) {
+				$( ".module.activity .activity_expeditionPlanner .icon.supplyCheck" ).show();
+				$( ".module.activity .activity_expeditionPlanner .text.supplyCheck" ).text(KC3Meta.term("PanelSupplied"));
 
-				markPassed( $(".module.activity .activity_expeditionPlanner .text.allReq") );
+				markPassed( $( ".module.activity .activity_expeditionPlanner .text.supplyCheck") );
 			} else {
-				$( ".module.activity .activity_expeditionPlanner .icon.allReq" ).hide();
-				markFailed( $(".module.activity .activity_expeditionPlanner .text.allReq") );
-			}*/
+				$( ".module.activity .activity_expeditionPlanner .icon.supplyCheck" ).hide();
+				$( ".module.activity .activity_expeditionPlanner .text.supplyCheck" ).text(KC3Meta.term("PanelUnderSupplied"));
+				
+				markFailed( $( ".module.activity .activity_expeditionPlanner .text.supplyCheck" ) );
+			}
+
+			if (unsatRequirements.length === 0 && fleetObj.isSupplied()) {
+				markPassed( $(".module.activity .activity_expeditionPlanner .dropdown_title") );
+			} else {
+				markFailed( $(".module.activity .activity_expeditionPlanner .dropdown_title") );
+			}
 
 			return;
 
