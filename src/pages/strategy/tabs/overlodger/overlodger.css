@@ -117,11 +117,18 @@
 .tab_overlodger .filterBox .filterGroup.rqev .filterMapOption .filterMapNum select:not(.map-clear) {
 	color:red;
 }
-.tab_overlodger .filterBox .filterMapOption div {
+.tab_overlodger .filterBox .filterMapOption div:not(.clear) {
 	float:left;
 	width:22.5%
 }
-.tab_overlodger .filterBox .filterMapOption .filterMapPeriod {
+.tab_overlodger .filterBox .notice_box {
+	background: #fdd;
+	border: 1px solid red;
+	margin-top: 4px;
+	font-size: 0.85em;
+	text-align: center;
+}
+.tab_overlodger .filterBox .filterMapOption div.filterMapPeriod {
 	width:55%;
 }
 .tab_overlodger .filterBox .filterMapPeriod select {
