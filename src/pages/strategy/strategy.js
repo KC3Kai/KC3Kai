@@ -26,6 +26,7 @@
 		KC3GearManager.load();
 		KC3Database.init( PlayerManager.hq.id );
 		KC3Translation.execute();
+		WhoCallsTheFleetDb.init("../../");
 		
 		// Click a menu item
 		$("#menu .submenu ul.menulist li").on("click", function(){

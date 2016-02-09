@@ -1161,6 +1161,12 @@ html,body {
 .module.activity .activity_expeditionPlanner {
     text-align:center;
 }
+.module.activity .activity_expeditionPlanner .dropdown_title.expPlanner_text_passed{	
+	color:#006600;
+}
+.module.activity .activity_expeditionPlanner .dropdown_title.expPlanner_text_failed{	
+	color:#cc0000;
+}
 
 .module.activity .activity_expeditionPlanner .expPlan_dropdown_menu {
     width: 100%;
@@ -1174,7 +1180,7 @@ html,body {
   float: left;
   margin: 0;
   padding: 0;
-  	background: #bfbfbf;
+  	background: #dddddd;
 	text-align: center;
 	text-decoration: none;
 	border-style:solid;
@@ -1182,17 +1188,17 @@ html,body {
 }
 
 .module.activity .activity_expeditionPlanner li {
-  background: #bfbfbf;
+  background: #dddddd;
   border-style:solid;
   border-width:1px;
 }
 
 .module.activity .activity_expeditionPlanner li:hover {
-  background: gray;
+  background: #ffffff;
 }
 
 .module.activity .activity_expeditionPlanner  li ul {
-list-style: none;
+  list-style: none;
   display: none;
   position: absolute;
   top: 100%;

@@ -29,7 +29,8 @@ module.exports = function(grunt) {
 					'assets/js/steganography.js',
 					'assets/js/jquery-ui.min.js',
 					'assets/js/KanColleHelpers.js',
-					'assets/js/twbsPagination.min.js'
+					'assets/js/twbsPagination.min.js',
+					'assets/js/WhoCallsTheFleetShipDb.json'
 				],
 				dest: 'build/release/'
 			},
