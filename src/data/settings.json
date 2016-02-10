@@ -146,6 +146,12 @@
 				"name" : "SettingsAutoExpedTab",
 				"type" : "check",
 				"options" : {}
+			},
+			{
+				"id" : "info_eng_stype",
+				"name" : "SettingsEnglishShipType",
+				"type" : "check",
+				"options" : {}
 			}
 		]
 	},

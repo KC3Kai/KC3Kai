@@ -60,7 +60,9 @@
 				extendEnglish=false;
 			}
 			
-			// console.log(filename, "extendEnglish", extendEnglish);
+			var language = ConfigManager.language;
+			if (filename === "stype" && ConfigManager.info_eng_stype)
+				language = "en";
 			
 			var translationBase = {}, enJSON;
 			if(extendEnglish){
@@ -75,7 +77,7 @@
 			}
 			
 			return $.extend(true, translationBase, JSON.parse($.ajax({
-				url : repo+'lang/data/' +ConfigManager.language+ '/' + filename + '.json',
+				url : repo+'lang/data/' +language+ '/' + filename + '.json',
 				async: false
 			}).responseText));
 		}
