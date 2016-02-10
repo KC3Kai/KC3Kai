@@ -17,11 +17,13 @@
 		KC3Translation.execute();
 		
 		$(".myVersion").text(myVersion);
+
+		$(".timeServerMaintenance").text( KC3Meta.term("MenuTimeUnknown") );
 		
 		// Show estimated time until next update
 		$.ajax({
 			dataType: "json",
-			url: "https://raw.githubusercontent.com/KC3Kai/KC3Kai/master/update?v="+((new Date()).getTime()),
+			url: "https://raw.githubusercontent.com/KC3Kai/KC3Kai/dev-server-mt-reminder/update?v="+((new Date()).getTime()),
 			success: function(data, textStatus, request){
 				// If current installed version less than latest
 				if( myVersion < Number(data.version) ){
@@ -34,6 +36,13 @@
 				// Installed version is the same or greater than latest
 				}else{
 					$(".nextVersion").html( KC3Meta.term("MenuOnLatest") );
+				}
+				if (data.maintenance) {
+					var nextMtDate = new Date(data.maintenance);
+					var remaining = nextMtDate - new Date();
+					if (remaining >= 0) {
+						$(".timeServerMaintenance").text( String(remaining/1000).toHHMMSS() );
+					} 
 				}
 			}
 		});
