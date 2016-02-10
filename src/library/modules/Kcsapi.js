@@ -704,6 +704,13 @@ Previously known as "Reactor"
 			);
 			KC3Network.trigger("BattleStart");
 		},
+		"api_req_sortie/ld_airbattle":function(params, response, headers){
+			KC3SortieManager.engageBattle(
+				response.api_data,
+				Math.floor((new Date(headers.Date)).getTime()/1000)
+			);
+			KC3Network.trigger("BattleStart");
+		},
 		
 		/* COMBINED FLEET: BATTLE STARTS
 		-------------------------------------------------------*/
