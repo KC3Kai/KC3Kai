@@ -42,7 +42,16 @@
                 return true;
             return false;
         },
+        // according to the following doc:
+        // https://github.com/andanteyk/ElectronicObserver/blob/d28e1d904521ea60b25c15010d06f130ae36dc62/ElectronicObserver/Other/Information/kcmemo.md#%E6%94%B9%E8%A3%85%E6%99%82%E3%81%AB%E5%BF%85%E8%A6%81%E3%81%AA%E9%96%8B%E7%99%BA%E8%B3%87%E6%9D%90
+        calcDevMat: function(steel) {
+            return (steel < 4500) ? 0
+                : ( steel < 5500) ? 10
+                : ( steel < 6500) ? 15
+                : 20;
+        },
         mkDb: function(masterData) {
+            var self = this;
             // step 1: collect remodel info
             /*
                remodelInfo[ shipId  ] =
@@ -84,6 +93,8 @@
                       blueprint: 0,
                       devmat: 0
                     };
+
+                remodel.devmat = self.calcDevMat(remodel.steel);
                 remodelInfo[x.api_id] = remodel;
 
             });
@@ -104,15 +115,19 @@
                 remodelInfo[x.api_current_ship_id] = remodel;
             });
 
-            // patch devmat info, can't find it in api_start2
-            console.assert( remodelInfo[461].ship_id_to === 466 );
-            remodelInfo[461].devmat = 15;
-            console.assert( remodelInfo[462].ship_id_to === 467 );
-            remodelInfo[462].devmat = 15;
-            console.assert( remodelInfo[466].ship_id_to === 461 );
-            remodelInfo[461].devmat = 10;
-            console.assert( remodelInfo[461].ship_id_to === 466 );
-            remodelInfo[462].devmat = 10;
+            
+            // TODO: verify devmat info
+            function verifyDevMat() {
+                console.assert( remodelInfo[461].ship_id_to === 466 );
+                console.assert( remodelInfo[461].devmat === 15 );
+                console.assert( remodelInfo[462].ship_id_to === 467 );
+                console.assert( remodelInfo[462].devmat === 15 );
+                console.assert( remodelInfo[466].ship_id_to === 461 );
+                console.assert( remodelInfo[461].devmat === 10 );
+                console.assert( remodelInfo[461].ship_id_to === 466 );
+                console.assert( remodelInfo[462].devmat === 10 );
+            }
+            verifyDevMat();
 
             // step 2: get all original ship ids
             // an original ship can only remodel into other ships
