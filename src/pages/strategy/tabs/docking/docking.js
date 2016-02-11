@@ -22,8 +22,12 @@
 		   Places data onto the interface
 		   ---------------------------------*/
 		execute :function(){
-			// Cache ship info
 			PlayerManager.loadFleets();
+
+			// in order to get more up-to-date info
+			// we need to refresh the Ship Manager
+			KC3ShipManager.load();
+			
 			var ctr, ThisShip, MasterShip, ThisShipData;
 			this.shipCache = [];
 			for(ctr in KC3ShipManager.list){
@@ -101,7 +105,7 @@
 				$.each(currentFleets, function (i,fleet) {
 					try {
 						var missionState = fleet.mission[0];
-						// this fleet is either on expedition or being force back
+						// this fleet is either on expedition or being forced back
 						// thus cannot be repaired for now
 						if (missionState == 1 ||
 							missionState == 3) {
