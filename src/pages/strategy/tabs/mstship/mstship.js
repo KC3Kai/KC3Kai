@@ -243,6 +243,11 @@
 						$(this).show();
 					}
 
+					// in case when the data isn't available,
+					// slots should still be getting cleaned up
+					$(".slotitem", this).text( "" );
+					$(".sloticon img", this).attr("src","");
+
 					if (stockEquipments) {
 						var equipId = stockEquipments[index];
 						if (equipId) {
@@ -250,10 +255,7 @@
 							$(".slotitem", this).text(KC3Meta.gearName( equipment.api_name ) );
 							$(".sloticon img", this)
 								.attr("src","../../../../assets/img/items/"+equipment.api_type[3]+".png");
-						} else {
-							$(".slotitem", this).text( "" );
-							$(".sloticon img", this).attr("src","");
-						}
+						} 
 					}
 				});
 				
