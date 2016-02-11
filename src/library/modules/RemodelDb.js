@@ -115,20 +115,6 @@
                 remodelInfo[x.api_current_ship_id] = remodel;
             });
 
-            
-            // TODO: verify devmat info
-            function verifyDevMat() {
-                console.assert( remodelInfo[461].ship_id_to === 466 );
-                console.assert( remodelInfo[461].devmat === 15 );
-                console.assert( remodelInfo[462].ship_id_to === 467 );
-                console.assert( remodelInfo[462].devmat === 15 );
-                console.assert( remodelInfo[466].ship_id_to === 461 );
-                console.assert( remodelInfo[461].devmat === 10 );
-                console.assert( remodelInfo[461].ship_id_to === 466 );
-                console.assert( remodelInfo[462].devmat === 10 );
-            }
-            verifyDevMat();
-
             // step 2: get all original ship ids
             // an original ship can only remodel into other ships
             // but is never a remodel target
