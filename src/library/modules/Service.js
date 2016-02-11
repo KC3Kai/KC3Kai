@@ -155,6 +155,15 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			return true;
 		},
 		
+		/* OPEN COOKIE SETTINGS
+		DevTools can't use chrome.tabs by itself, so service will open the page for them
+		------------------------------------------*/
+		"openCookieSettings" :function(request, sender, response){
+			chrome.tabs.create({
+				url:'chrome://settings/content'
+			});
+		},
+		
 		/* DMM FRMAE INJECTION
 		Responds if content script should inject DMM Frame customizations
 		------------------------------------------*/

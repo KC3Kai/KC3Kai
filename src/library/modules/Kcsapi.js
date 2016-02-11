@@ -553,8 +553,8 @@ Previously known as "Reactor"
 			var flatShips  = PlayerManager.fleets
 				.map(function(x){ return x.ships; })
 				.reduce(function(x,y){ return x.concat(y); });
-			var ChangedIndex = parseInt(params.api_ship_idx);
-			var ChangingShip = parseInt(params.api_ship_id);
+			var ChangedIndex = parseInt(params.api_ship_idx,10);
+			var ChangingShip = parseInt(params.api_ship_id,10);
 			var OldSwaperSlot = flatShips.indexOf(ChangingShip); // move to slot
 			var OldSwapeeSlot = flatShips[ (FleetIndex-1) * 6 + ChangedIndex ]; // swap from slot
 			var oldFleet = Math.floor(OldSwaperSlot / 6);
@@ -643,7 +643,12 @@ Previously known as "Reactor"
 				allMaps = JSON.parse(localStorage.maps),
 				mkey    = "m" + params.api_maparea_id + params.api_map_no;
 			allMaps[mkey].difficulty = parseInt(params.api_rank);
-			allMaps[mkey].curhp = allMaps[mkey].maxhp = parseInt(response.api_data.api_max_maphp || 9999);
+			try{
+				allMaps[mkey].curhp = allMaps[mkey].maxhp = parseInt(response.api_data.api_max_maphp,10);
+			}catch(e){
+				console.warn("Map HP data is not given, leaving 9999HP as placeholder");
+				allMaps[mkey].curhp = allMaps[mkey].maxhp = 9999;
+			}
 			allMaps[mkey].kind  = allMaps[mkey].dkind; // reset the current map gauge kind
 			
 			localStorage.maps = JSON.stringify(allMaps);
@@ -705,6 +710,13 @@ Previously known as "Reactor"
 			KC3Network.trigger("BattleStart");
 		},
 		"api_req_sortie/airbattle":function(params, response, headers){
+			KC3SortieManager.engageBattle(
+				response.api_data,
+				Math.floor((new Date(headers.Date)).getTime()/1000)
+			);
+			KC3Network.trigger("BattleStart");
+		},
+		"api_req_sortie/ld_airbattle":function(params, response, headers){
 			KC3SortieManager.engageBattle(
 				response.api_data,
 				Math.floor((new Date(headers.Date)).getTime()/1000)
