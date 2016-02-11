@@ -7,25 +7,25 @@
 		tabSelf: KC3StrategyTabs.docking,
 
 		shipCache:[],
-		filters: [],
 		options: [],
 		sortBy: "repair_docking",
 		sortAsc: true,
-		equipMode: 0,
-		remodelOption: 0,
-		modernizationOption: 0,
-		marriageFilter: 0,
-		withFleet: true,
 		isLoading: false,
-		//shipList: $(".tab_docking .ship_list"),
 
 		/* INIT
 		   Prepares all data needed
 		   ---------------------------------*/
 		init :function(){
+		},
+
+		/* EXECUTE
+		   Places data onto the interface
+		   ---------------------------------*/
+		execute :function(){
 			// Cache ship info
 			PlayerManager.loadFleets();
 			var ctr, ThisShip, MasterShip, ThisShipData;
+			this.shipCache = [];
 			for(ctr in KC3ShipManager.list){
 				ThisShip = KC3ShipManager.list[ctr];
 				MasterShip = ThisShip.master();
@@ -51,12 +51,6 @@
 				};
 				this.shipCache.push(ThisShipData);
 			}
-		},
-
-		/* EXECUTE
-		   Places data onto the interface
-		   ---------------------------------*/
-		execute :function(){
 			this.shipList = $(".tab_docking .ship_list");
 			this.showFilters();
 		},
@@ -92,9 +86,6 @@
 
 			// Clear list
 			this.shipList.html("").hide();
-
-			// Checks the configuration
-			var config = (new KekkonType()).values;
 
 			// Wait until execute
 			setTimeout(function(){
@@ -186,14 +177,10 @@
 
 					$(".ship_id", cElm).text( cShip.id );
 					$(".ship_img .ship_icon", cElm).attr("src", KC3Meta.shipIcon(cShip.bid));
-					if(config.kanmusuPic && shipLevel >= 100)
-						$(".ship_img .ship_kekkon", cElm).attr("src","tabs/ships/SEGASonicRing.png").show();
 					$(".ship_name", cElm).text( cShip.english );
 					$(".ship_type", cElm).text( KC3Meta.stype(cShip.stype) );
-					var shipLevelConv = shipLevel - (shipLevel>=100 && config.kanmusuLv ? (102 - ConfigManager.marryLevelFormat) : 0);
+					var shipLevelConv = shipLevel;
 					$(".ship_lv", cElm).html( "<span>Lv.</span>" + shipLevelConv);
-					if(config.kanmusuLv && shipLevel >= 100)
-						$(".ship_lv", cElm).addClass("ship_kekkon ship_kekkon-color");
 					$(".ship_morale", cElm).html( cShip.morale );
 
 					var hpStatus = cShip.hp.toString() + " / " + cShip.maxhp.toString();
@@ -262,26 +249,4 @@
 			}
 		}
 	};
-
-	// checks kekkon setting
-	function KekkonType(){
-		var checks = {
-			kanmusuDT  : [0],	// ONLY show this
-			kanmusuName: [1],	// ring location: name
-			kanmusuLv  : [2,3], // ring location: level
-			kanmusuLv0 : [2],	// level convention, 0-index
-			kanmusuLv1 : [3],	// level convention, 1-index
-			kanmusuPic : [4],	// ring location: ship icon
-		};
-		if(!KekkonType.values) {
-			this.values = {};
-			KekkonType.instance = this;
-		}
-		Object.keys(checks).forEach(function(k){
-			KekkonType.instance.values[k] = (function(x){return x.indexOf(ConfigManager.marryLevelFormat || -1) >= 0;})(checks[k]);
-		});
-		return KekkonType.instance;
-	}
-	new KekkonType();
-
 })();
