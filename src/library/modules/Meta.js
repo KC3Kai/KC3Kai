@@ -60,27 +60,16 @@ Provides access to data on built-in JSON files
 		defaultIcon :function(iconSrc){
 			this._defaultIcon = iconSrc;
 		},
-		
-		shipIcon :function(id, empty){
+		getIcon: function(id, empty) {
 			if(this._icons.indexOf(id) > -1){
-				return "chrome-extension://"+chrome.runtime.id+"/assets/img/ships/"+id+".png";
+				var path = id >= 500 ? "abyss/" : "ships/"
+				return "chrome-extension://"+chrome.runtime.id+"/assets/img/"+path+id+".png";
 			}
 			if(typeof empty == "undefined"){
 				return this._defaultIcon;
 			}
 			return empty;
 		},
-		
-		abyssIcon :function(id, empty){
-			if(this._icons.indexOf(id) > -1){
-				return "chrome-extension://"+chrome.runtime.id+"/assets/img/abyss/"+id+".png";
-			}
-			if(typeof empty == "undefined"){
-				return this._defaultIcon;
-			}
-			return empty;
-		},
-		
 		knownEnemy :function(id){
 			return this._icons.indexOf(id) > -1;
 		},
@@ -235,4 +224,7 @@ Provides access to data on built-in JSON files
 		}
 	};
 	
+	window.KC3Meta.shipIcon = KC3Meta.getIcon;
+	window.KC3Meta.abyssIcon = KC3Meta.getIcon;
+
 })();
