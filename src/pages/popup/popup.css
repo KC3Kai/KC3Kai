@@ -6,7 +6,7 @@ body {
 .wrapper {
 	width:240px;
 	/*height:521px;*/
-	height:458px;
+	height:478px;
 	overflow:hidden;
 }
 .separator {
@@ -111,4 +111,38 @@ body {
 .resetTime {
 	color:#00f;
 	font-weight:bold;
+}
+
+/* FOOTER LINKS
+--------------------------*/
+.footLinks {
+	height:20px;
+	padding:2px;
+	font-size:11px;
+}
+.footLinks .footLink {
+	height:16px;
+	line-height:16px;
+	float:left;
+	margin:0px 5px 0px 0px;
+}
+#foot-support {
+	width:40px;
+}
+.footLinks .footSocial {
+	width:16px;
+}
+.footLinks .footLink img {
+	width:16px;
+	height:16px;
+}
+#btn-donate {
+	width:56px;
+}
+#btn-donate input[type=image] {
+	width:56px;
+	height:16px;
+}
+#foot-servers {
+	width:80px;
 }

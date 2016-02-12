@@ -177,7 +177,11 @@ Xxxxxxx
 			// api_event_kind = 4 (aerial exchange)
 			// api_event_id = 4 (normal battle)
 			// api_event_id = 5 (boss)
-			}else if((nodeData.api_event_kind == 1) || (nodeData.api_event_kind == 2) || (nodeData.api_event_kind == 4)) {
+			// api_event_id = 6 (long distance aerial battle)
+			}else if((nodeData.api_event_kind == 1) || 
+					 (nodeData.api_event_kind == 2) ||
+					 (nodeData.api_event_kind == 4) ||
+					 (nodeData.api_event_kind == 6)) {
 				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsBattle(nodeData);
 			// Resource Node
 			// api_event_kind = 0
