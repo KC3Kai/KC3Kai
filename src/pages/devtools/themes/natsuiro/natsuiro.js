@@ -2111,7 +2111,7 @@
 		
 		// Normalize Parameters
 		fsKill = !!fsKill;
-		gaugeDmg = (gaugeDmg || 0) * -(depleteOK);
+		gaugeDmg = (gaugeDmg || 0) * (depleteOK);
 		
 		if(typeof thisMap != "undefined"){
 			if( thisMap.clear == 1){
@@ -2129,10 +2129,11 @@
 						return (x/thisMap.maxhp)*100;
 					});
 					
+					console.log.apply(console,rate);
 					$(".module.activity .map_hp").text( thisMap.curhp + " / " + thisMap.maxhp );
 					$(".module.activity .map_gauge")
-						.find('.curhp').css("width", (rate[0])+"%").end()
-						.find('.nowhp').css("width", (rate[1])+"%").end();
+						.find('.nowhp').css("width", (rate.pop())+"%").end()
+						.find('.curhp').css("width", (rate.pop())+"%").end();
 					
 				// If kill-based gauge
 				}else{

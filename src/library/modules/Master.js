@@ -76,6 +76,7 @@ Saves and loads significant data for future use
 				}
 			}
 			
+			this.updateRemodelTable();
 			this.save();
 			this.available = true;
 			console.log("newCounts", newCounts);
@@ -188,7 +189,7 @@ Saves and loads significant data for future use
 				// Only for enabled salt check
 				if(
 					(ConfigManager.info_salt) &&
-					(ConfigManager.salt_list.indexOf(cShip.kc3_bship) >= 0) &&
+					(ConfigManager.salt_list.indexOf(cShip.kc3_bship) < 0) &&
 					(this._newShips[cShip.kc3_bship])
 				){
 					ConfigManager.salt_list.push(cShip.kc3_bship);
