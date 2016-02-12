@@ -62,7 +62,7 @@ Provides access to data on built-in JSON files
 		},
 		getIcon: function(id, empty) {
 			if(this._icons.indexOf(id) > -1){
-				var path = id >= 500 ? "abyss/" : "ships/"
+				var path = id >= 500 ? "abyss/" : "ships/";
 				return "chrome-extension://"+chrome.runtime.id+"/assets/img/"+path+id+".png";
 			}
 			if(typeof empty == "undefined"){
