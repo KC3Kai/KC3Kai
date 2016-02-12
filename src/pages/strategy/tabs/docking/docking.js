@@ -77,6 +77,27 @@
 
 			this.refreshTable();
 		},
+		// assuming PlayerManager.fleets is up-to-date
+		// return akashi coverage. (an array of ship ids)
+		getAnchoredShips: function() {
+			var results = [];
+			$.each( PlayerManager.fleets, function(k,fleet) {
+				var fs = KC3ShipManager.get(fleet.ships[0]);
+				// check if current fleet's flagship is akashi
+				if ([182,187].indexOf( fs.masterId ) === -1)
+					return;
+
+				var facCount = fs.items.filter( function(x) {
+					return KC3GearManager.get(x).masterId === 86;
+				}).length;
+				// max num of ships this akashi can repair
+				var repairCap = 2+facCount;
+				var coveredShipIds = fleet.ships.filter( function(x) {
+					return x !== -1; }).slice(0,repairCap);
+				results = results.concat( coveredShipIds );
+			});
+			return results;
+		},
 
 		/* REFRESH TABLE
 		   Reload ship list based on filters
@@ -99,7 +120,7 @@
 				};
 				var FilteredShips = self.shipCache.filter(needsRepair);
 				var dockingShips = PlayerManager.getCachedDockingShips();
-
+				var anchoredShips = self.getAnchoredShips();
 				var currentFleets = PlayerManager.fleets;
 				var expeditionFleets = [];
 				$.each(currentFleets, function (i,fleet) {
@@ -205,16 +226,18 @@
 					$(".ship_status", cElm).addClass("ship_" + cShip.damageStatus);
 					$(".ship_hp_val", cElm).addClass("ship_" + cShip.damageStatus);
 
-					// adding docking indicator
+					// mutually exclusive indicators
 					var completeTime = dockingShips["x" + cShip.id.toString()];
 					if (typeof completeTime !== "undefined") {
+						// adding docking indicator
 						cElm.addClass("ship_docking");
-					}
-
-					// adding expedition indicator
-					if (cShip.fleet !== 0 &&
+					} else if (cShip.fleet !== 0 &&
 						expeditionFleets.indexOf( cShip.fleet-1 ) !== -1) {
+						// adding expedition indicator
 						cElm.addClass("ship_expedition");
+					} else if (anchoredShips.indexOf(cShip.id) !== -1) {
+						// adding akashi repairing indicator
+						cElm.addClass("ship_akashi_repairing");
 					}
 
 					[1,2,3,4].forEach(function(x){
