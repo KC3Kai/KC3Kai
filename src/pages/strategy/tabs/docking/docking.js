@@ -235,7 +235,9 @@
 						expeditionFleets.indexOf( cShip.fleet-1 ) !== -1) {
 						// adding expedition indicator
 						cElm.addClass("ship_expedition");
-					} else if (anchoredShips.indexOf(cShip.id) !== -1) {
+					} else if (anchoredShips.indexOf(cShip.id) !== -1 &&
+							   (cShip.damageStatus === "normal" ||
+								cShip.damageStatus === "shouha")) {
 						// adding akashi repairing indicator
 						cElm.addClass("ship_akashi_repairing");
 					}
