@@ -24,7 +24,7 @@ KC3改 Ship Box for Natsuiro theme
 		
 		$(this.element)
 			.addClass((this.shipData.level >= 100) && 'sWife')
-			.addClass( (ConfigManager.salt_list.indexOf(KC3ShipManager.get(327).master().kc3_bship)+1) && 'sSalt' )
+			.addClass( (ConfigManager.salt_list.indexOf(this.shipData.master().kc3_bship)+1) && 'sSalt' )
 			.end();
 		
 		// Item on 5th slot

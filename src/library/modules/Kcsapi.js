@@ -317,6 +317,25 @@ Previously known as "Reactor"
 			PlayerManager.setFleets( response.api_data.api_deck_data );
 			KC3Network.trigger("Timers");
 			KC3Network.trigger("Fleet");
+			/*
+				"api_data":{
+					"api_ship_data":[
+						{"api_id":130,"api_sortno":150,"api_ship_id":150,"api_lv":75,"api_exp":[319098,11902,0],"api_nowhp":83,"api_maxhp":83,"api_leng":3,"api_slot":[6032,6033,6034,-1,-1],"api_onslot":[3,3,3,3,0],"api_slot_ex":0,"api_kyouka":[7,0,16,7,0],"api_backs":7,"api_fuel":100,"api_bull":125,"api_slotnum":4,"api_ndock_time":0,"api_ndock_item":[0,0],"api_srate":1,"api_cond":40,"api_karyoku":[103,98],"api_raisou":[0,0],"api_taiku":[59,82],"api_soukou":[79,95],"api_kaihi":[63,72],"api_taisen":[0,0],"api_sakuteki":[45,49],"api_lucky":[13,79],"api_locked":1,"api_locked_equip":0}
+					],
+					"api_deck_data":[
+						{"api_member_id":16015130,"api_id":1,"api_name":"\u30e1\u30a4\u30f3\u8266\u968a","api_name_id":"123990924","api_mission":[0,0,0,0],"api_flagship":"0","api_ship":[130,403,223,1723,141,3349]},
+						{"api_member_id":16015130,"api_id":2,"api_name":"\u5bfe\u6f5c\u8266\u968a","api_name_id":"129857413","api_mission":[1,38,1454999143020,0],"api_flagship":"0","api_ship":[1,2,22,2112,1122,249]},
+						{"api_member_id":16015130,"api_id":3,"api_name":"\u99c6\u9010\u8266\u968a","api_name_id":"129857436","api_mission":[1,37,1454998550795,0],"api_flagship":"0","api_ship":[232,1439,247,1119,9,28]},
+						{"api_member_id":16015130,"api_id":4,"api_name":"\u7b2c4\u8266\u968a","api_name_id":"","api_mission":[1,6,1454993446222,0],"api_flagship":"0","api_ship":[137,807,2576,2564,-1,-1]}
+					],
+					"api_slot_data":{
+							"api_slottype1":[120,1635,1639,1982,2002,3741,2177,2032,5030,4206,4291],
+							"api_slottype2":[205,443,2509,2833,323,602,3848,57,161,163,165,303,428,491,848,1127,4326,4595,5273,524,810,1032,5954,4407,5068],
+							"api_slottype3":[559,619,663,678,826,5275,103,390,448,474,475,691,2508,2832,3099,3102,4123],
+							"api_slottype4":[75,142,407,915,1011,73,186,207,532,620,629,900,1058,2466,3040,3383,449,692,3983,3997,2464,3122,3896,3849],"api_slottype5":[26,82,119,146,174,179,232,290,298,388,519,958,1469,3049,3733,3782,917,1013,2131,1870],"api_slottype6":[1159,1192,1196,1530,1573,2780,3277,3298,3601,3749,5943,3251,3305],"api_slottype7":[487,646,1574,2195,3240,3246,3252,3264,3268,3308,3687,3750,5829,1572,1610],"api_slottype8":[3226,3244,3269,3303,3310,3356,1158,3217,3243,3245,3249,3302,3602,1531,3241,3304,2498,3023],"api_slottype9":[3399],"api_slottype10":[43,1156,1935,2510,2837,2840,3278,3684,3688,3697,3850,3944,4058,4287,4341,4459],"api_slottype11":[1316,2280,2779,3239,3263,3267,3307,3991,4057],"api_slottype12":[5608],"api_slottype13":[916,1033,1871,2132,5205,6013],"api_slottype14":[683,4241,4286,3904,5387],"api_slottype15":[391,705,744,825,1066,1097,1721,1724,3887,4409,5071,5656,395,3893,4221],"api_slottype16":-1,"api_slottype17":-1,"api_slottype18":[3045,3046,3459],"api_slottype19":[162],"api_slottype20":-1,"api_slottype21":[2440,2674,2966,3090,3895,741,922,2967,3036,3088,3203,3460,4047,4108,5830,2118],"api_slottype22":[189,2283],"api_slottype23":[1,2,215,1108,1613,2041,2499,3025,5564,5602,5613,4371,5048],"api_slottype24":-1,"api_slottype25":-1,"api_slottype26":-1,"api_slottype27":-1,"api_slottype28":[3024],"api_slottype29":[5069],"api_slottype30":[1792,2473,2788,5039,5293,5295,5614,5805],"api_slottype31":-1,"api_slottype32":-1,"api_slottype33":-1,"api_slottype34":[5607],"api_slottype35":-1,"api_slottype36":[2106,4142,5363],"api_slottype37":[2568],"api_slottype38":-1,"api_slottype39":[5366],"api_slottype40":-1,"api_slottype41":-1,"api_slottype42":-1,"api_slottype43":[3371,3372,3373,4372,4373,4871,5072,5910],"api_slottype44":-1
+						}
+					}
+			*/
 		},
 		
 		"api_req_kaisou/open_exslot":function(params, response, headers){
@@ -736,18 +755,10 @@ Previously known as "Reactor"
 			KC3Network.trigger("BattleStart");
 		},
 		"api_req_sortie/airbattle":function(params, response, headers){
-			KC3SortieManager.engageBattle(
-				response.api_data,
-				Math.floor((new Date(headers.Date)).getTime()/1000)
-			);
-			KC3Network.trigger("BattleStart");
+			this["api_req_sortie/battle"].apply(this,arguments);
 		},
 		"api_req_sortie/ld_airbattle":function(params, response, headers){
-			KC3SortieManager.engageBattle(
-				response.api_data,
-				Math.floor((new Date(headers.Date)).getTime()/1000)
-			);
-			KC3Network.trigger("BattleStart");
+			this["api_req_sortie/battle"].apply(this,arguments);
 		},
 		
 		/* COMBINED FLEET: BATTLE STARTS
@@ -760,18 +771,13 @@ Previously known as "Reactor"
 			KC3Network.trigger("BattleStart");
 		},
 		"api_req_combined_battle/airbattle":function(params, response, headers){
-			KC3SortieManager.engageBattle(
-				response.api_data,
-				Math.floor((new Date(headers.Date)).getTime()/1000)
-			);
-			KC3Network.trigger("BattleStart");
+			this["api_req_combined_battle/battle"].apply(this,arguments);
 		},
 		"api_req_combined_battle/battle_water":function(params, response, headers){
-			KC3SortieManager.engageBattle(
-				response.api_data,
-				Math.floor((new Date(headers.Date)).getTime()/1000)
-			);
-			KC3Network.trigger("BattleStart");
+			this["api_req_combined_battle/battle"].apply(this,arguments);
+		},
+		"api_req_combined_battle/ld_airbattle":function(params, response, headers){
+			this["api_req_combined_battle/battle"].apply(this,arguments);
 		},
 		"api_req_combined_battle/ld_airbattle":function(params, response, headers){
 			KC3SortieManager.engageBattle(

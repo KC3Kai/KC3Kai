@@ -458,14 +458,56 @@ Used by SortieManager
 				localStorage.setObject('maps',maps);
 			}
 			
+			var
+				ship_get = [];
+			
 			if(typeof resultData.api_get_ship != "undefined"){
 				this.drop = resultData.api_get_ship.api_ship_id;
 				KC3ShipManager.pendingShipNum += 1;
 				KC3GearManager.pendingGearNum += KC3Meta.defaultEquip(this.drop);
 				console.log("Drop " + resultData.api_get_ship.api_ship_name + " (" + this.drop + ") Equip " + KC3Meta.defaultEquip(this.drop));
+				
+				ship_get.push(this.drop);
 			}else{
 				this.drop = 0;
 			}
+			
+			/*
+			api_get_eventitem		：海域攻略報酬　イベント海域突破時のみ存在
+				api_type			：報酬種別 1=アイテム, 2=艦娘, 3=装備
+				api_id				：ID
+				api_value			：個数？
+			*/
+			(function(resultEventItems){
+				console.log("event result",resultEventItems);
+				(resultEventItems || []).forEach(function(eventItem){
+					switch(eventItem.api_type){
+						case 1: // Item
+							if(eventItem.api_id.inside(1,4)) {
+								KC3SortieManager.materialGain[eventItem.api_id+3] += eventItem.api_value;
+							}
+						break;
+						case 2: // Ship
+							ship_get.push(eventItem.api_id);
+						break;
+						case 3: // Equip
+						break;
+						default:
+							console.log("unknown type",eventItem);
+						break;
+					}
+				});
+			}).call(this,resultData.api_get_eventitem);
+			
+			ConfigManager.load();
+			ship_get.forEach(function(newShipId){
+				var salt_id = ConfigManager.salt_list.indexOf(newShipId)+1;
+				if(salt_id){
+					ConfigManager.salt_list.splice(salt_id-1,1);
+					console.warn("Removed",KC3Meta.shipName(KC3Master.ship(newShipId).api_name),"from salt list");
+				}
+			});
+			ConfigManager.save();
 			
 			this.mvps = [resultData.api_mvp || 0,resultData.api_mvp_combined || 0].filter(function(x){return !!x;});
 			var
