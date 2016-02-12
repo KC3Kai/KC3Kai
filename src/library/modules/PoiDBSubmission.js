@@ -42,13 +42,14 @@
 		        'api_req_sortie/battle': this.processBattle,
 		        'api_req_sortie/airbattle': this.processBattle,
 		        'api_req_sortie/night_to_day': this.processBattle,
+		        "api_req_sortie/ld_airbattle": this.processBattle,
 		        // 'api_req_battle_midnight/battle': this.processBattle,
 		        'api_req_battle_midnight/sp_midnight': this.processBattle,
-                // TODO: ld battle's handling?
 		        'api_req_combined_battle/airbattle': this.processBattle,
 		        'api_req_combined_battle/battle': this.processBattle,
 		        'api_req_combined_battle/sp_midnight': this.processBattle,
 		        'api_req_combined_battle/battle_water': this.processBattle,
+		        "api_req_combined_battle/ld_airbattle": this.processBattle,
 		        // detect ship id
 		        'api_req_sortie/battleresult': this.processBattleResult,
 		        'api_req_combined_battle/battleresult': this.processBattleResult,
@@ -192,6 +193,7 @@
             this.state = null;
 
             if (response.api_get_eventitem) {
+                // TODO: verify
                 console.log( response.api_get_eventitem );
                 // having this field means the player has completed this event map.
                 var passEventData = {
