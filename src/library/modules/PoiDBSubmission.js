@@ -56,11 +56,18 @@
 
 	    },
         processSelectEventMapRank: function (requestObj) {
-            var params = requestObj.params
+            var params = requestObj.params;
             // I know they are strings, just being 100% sure.
             var mapId = String(params.api_maparea_id) + String(params.api_map_no);
             var rank = parseInt(params.api_rank, 10);
             this.mapInfo[mapId] = rank;
+            var selectRankData = {
+                teitokuLv: PlayerManager.hq.level,
+                teitokuId: PlayerManager.hq.nameId,
+                mapareaId: mapId,
+                rank: rank 
+            };
+            this.sendData("select_rank", selectRankData);
         },
 	    processCreateShip: function ( requestObj ) {
 	        this.cleanup();
@@ -161,8 +168,6 @@
 		            self.mapInfo[entry.api_id] = entry.api_eventmap.api_selected_rank;
 		        }
 	        });
-
-            // todo: do select_rank by the way?
 	    },
 	    processBattleResult: function( requestObj ) {
 	        if (this.state !== 'drop_ship_2') {
@@ -184,8 +189,24 @@
 	        dropShipData.enemyShips = response.api_ship_id.slice(1);
 	        console.log( "[dropship] prepared: " + JSON.stringify( dropShipData ) );
 	        this.sendData( "drop_ship", dropShipData );
-	        this.state = null;
-	    },
+            this.state = null;
+
+            if (response.api_get_eventitem) {
+                console.log( response.api_get_eventitem );
+                // having this field means the player has completed this event map.
+                var passEventData = {
+                    teitokuId: PlayerManager.hq.nameId,
+                    teitokuLv: PlayerManager.hq.level,
+                    teitoku: PlayerManager.hq.name,
+                    mapId: dropShipData.mapId,
+                    mapLv: dropShipData.mapLv
+                };
+                // TOOD: verify
+                console.log( "Passing an event map!" );
+                console.log( JSON.stringify( passEventData ) );
+                this.sendData("pass_event", passEventData);
+            }
+        },
 	    getApiName: function(url) {
 	        var KcsApiIndex = url.indexOf("/kcsapi/");
 	        return url.substring( KcsApiIndex+8 );
@@ -238,16 +259,3 @@
     };
     window.PoiDBSubmission._initialize();
 })();
-
-/*
-
-  TODO:
-
-  * event-related stuff is yet to be verified
-
-  * reports for
-
-  "http://#{SERVER_HOSTNAME}/api/report/v2/select_rank"
-  "http://#{SERVER_HOSTNAME}/api/report/v2/pass_event"
-
-*/
