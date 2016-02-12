@@ -17,7 +17,6 @@
 	createShipData: null,
 	dropShipData: null,
 
-
 	// api handler
 	handlers: {},
 	// <map id> => <event rank>
@@ -34,6 +33,7 @@
 		'api_req_kousyou/createship': this.processCreateShip,
 		'api_get_member/kdock': this.processKDock,
 		'api_req_kousyou/createitem': this.processCreateItem,
+       'api_req_map/select_eventmap_rank': this.processSelectEventMapRank,
 		// start or next
 		'api_req_map/start': this.processStartNext,
 		'api_req_map/next': this.processStartNext,
@@ -43,6 +43,7 @@
 		'api_req_sortie/night_to_day': this.processBattle,
 		// 'api_req_battle_midnight/battle': this.processBattle,
 		'api_req_battle_midnight/sp_midnight': this.processBattle,
+            // TODO: ld battle's handling?
 		'api_req_combined_battle/airbattle': this.processBattle,
 		'api_req_combined_battle/battle': this.processBattle,
 		'api_req_combined_battle/sp_midnight': this.processBattle,
@@ -53,6 +54,13 @@
 	    };
 
 	},
+    processSelectEventMapRank: function (requestObj) {
+        var params = requestObj.params
+        // I know they are strings, just being 100% sure.
+        var mapId = String(params.api_maparea_id) + String(params.api_map_no);
+        var rank = parseInt(params.api_rank, 10);
+        this.mapInfo[mapId] = rank;
+    },
 	processCreateShip: function ( requestObj ) {
 	    this.cleanup();
 	    var params = requestObj.params;
@@ -146,11 +154,14 @@
 	    this.state = 'drop_ship_2';
 	},
 	processMapInfo: function( requestObj ) {
+        var self = this;
 	    $.each( requestObj.response.api_data, function(i, entry) {
-		if (entry.api_eventmap) {
-		    this.mapInfo[entry.api_id] = entry.api_eventmap.api_selected_rank;
-		}
+		    if (entry.api_eventmap) {
+		        self.mapInfo[entry.api_id] = entry.api_eventmap.api_selected_rank;
+		    }
 	    });
+
+        // todo: do select_rank by the way?
 	},
 	processBattleResult: function( requestObj ) {
 	    if (this.state !== 'drop_ship_2') {
@@ -165,11 +176,12 @@
 	    dropShipData.quest = response.api_quest_name;
 	    dropShipData.enemy = response.api_enemy_info.api_deck_name;
 	    dropShipData.mapLv = this.mapInfo[dropShipData.mapId] || 0;
+        // TODO: verify
+        console.log( "PoiDBSubmission: mapInfo debug:", dropShipData.mapLv );
 	    dropShipData.rank = response.api_win_rank;
 	    dropShipData.teitokuLv = PlayerManager.hq.level;
 	    dropShipData.enemyShips = response.api_ship_id.slice(1);
-
-	    // console.log( "[dropship] prepared: " + JSON.stringify( dropShipData ) );
+	    console.log( "[dropship] prepared: " + JSON.stringify( dropShipData ) );
 	    this.sendData( "drop_ship", dropShipData );
 	    this.state = null;
 	},
