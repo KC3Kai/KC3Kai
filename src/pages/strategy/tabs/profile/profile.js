@@ -134,6 +134,33 @@
 					window.location.reload();
 				});
 			});
+			
+			// Clear Histories
+			$(".tab_profile .clear_fcf").on("click", function(event){
+				var ctr, ThisShip;
+				for(ctr in KC3ShipManager.list){
+					ThisShip = KC3ShipManager.list[ctr];
+					ThisShip.didFlee = false;
+				}
+				KC3ShipManager.save();
+				alert("Done!");
+			});
+			
+			// Clear Histories
+			$(".tab_profile .clear_encounters").on("click", function(event){
+				KC3Database.con.encounters.where("world").equals(0).toArray(function(encounterList){
+					$.each(encounterList, function(index, encounterData){
+						KC3Database.con.encounters.delete(encounterData.uniqid);
+					});
+					alert("Done 1/2~");
+					KC3Database.con.encounters.where("world").equals(-1).toArray(function(encounterList){
+						$.each(encounterList, function(index, encounterData){
+							KC3Database.con.encounters.delete(encounterData.uniqid);
+						});
+						alert("Done 2/2!");
+					});
+				});
+			});
 		}
 		
 	};

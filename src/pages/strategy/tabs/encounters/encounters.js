@@ -28,6 +28,8 @@
 				self.list = response;
 				
 				$.each(self.list, function(index, encounter){
+					if(encounter.world < 1) return true;
+					
 					// Check map box
 					if( $("#encounter-"+encounter.world+"-"+encounter.map).length === 0){
 						curBox = $(".tab_encounters .factory .encounter_map").clone();
