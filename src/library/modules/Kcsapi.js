@@ -1362,6 +1362,8 @@ Previously known as "Reactor"
 				KC3Network.trigger("Quests");
 				
 				// Modernization notification
+				KC3ShipManager.set(response.api_data.api_ship);
+				KC3ShipManager.save();
 				var MainShip = KC3ShipManager.get( response.api_data.api_ship.api_id );
 				
 				var baseStats = [
