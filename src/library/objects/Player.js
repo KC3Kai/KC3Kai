@@ -10,6 +10,7 @@ Instantiatable class to represent one player
 		if(!this.load()){
 			this.id =  0;
 			this.name = "Unknown";
+			this.nameId = "-1";
 			this.desc = "";
 			this.rank = "";
 			this.level = 1;
@@ -27,6 +28,7 @@ Instantiatable class to represent one player
 	KC3Player.prototype.update = function( data ){
 		this.id =  data.mid;
 		this.name = data.name;
+		this.nameId = data.nameId;
 		KC3Database.index = this.id;
 		
 		var MyServer = (new KC3Server()).setUrl( KC3Network.lastUrl );

@@ -130,6 +130,47 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			(new TMsg(request.tabId, "gamescreen", "fitScreen")).execute();
 		},
 		
+		/* IS MUTED
+		Returns boolean if the tab is muted or not
+		------------------------------------------*/
+		"isMuted" :function(request, sender, response){
+			chrome.tabs.get(request.tabId, function(tabInfo){
+				try {
+					response(tabInfo.mutedInfo.muted);
+				}catch(e){
+					response(false);
+				}
+			});
+			return true;
+		},
+		
+		/* TOGGLE SOUNDS
+		Mute or unmute the tab
+		------------------------------------------*/
+		"toggleSounds" :function(request, sender, response){
+			chrome.tabs.get(request.tabId, function(tabInfo){
+				try {
+					chrome.tabs.update(request.tabId, {
+						muted: tabInfo.mutedInfo.muted?false:true,
+					});
+					response(!tabInfo.mutedInfo.muted);
+				}catch(e){
+					response(false);
+				}
+				return true;
+			});
+			return true;
+		},
+		
+		/* OPEN COOKIE SETTINGS
+		DevTools can't use chrome.tabs by itself, so service will open the page for them
+		------------------------------------------*/
+		"openCookieSettings" :function(request, sender, response){
+			chrome.tabs.create({
+				url:'chrome://settings/content'
+			});
+		},
+		
 		/* DMM FRMAE INJECTION
 		Responds if content script should inject DMM Frame customizations
 		------------------------------------------*/

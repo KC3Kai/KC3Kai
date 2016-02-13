@@ -185,6 +185,16 @@ Uses Dexie.js third-party plugin on the assets directory
 						},
 						vr: 6.6,
 					},
+					{
+						ch: {
+							enemy: "&id,hp,fp,tp,aa,ar,eq1,eq2,eq3,eq4",
+							encounters: "&uniqid,world,map,node,form,ke"
+						},
+						up: function(t){
+							console.log("V7",t);
+						},
+						vr: 7,
+					}
 				];
 				
 			// Process the queue
@@ -311,6 +321,23 @@ Uses Dexie.js third-party plugin on the assets directory
 				});
 			}
 			return true;
+		},
+		
+		Enemy :function(data,callback){
+			try {
+				this.con.enemy.add(data);
+			} catch (e) {
+				console.log("Enemy data already exists.");
+			}
+		},
+		
+		Encounter :function(data,callback){
+			try {
+				this.con.encounters.add(data);
+			} catch (e) {
+				console.log("Enemy composition already exists.");
+			}
+			
 		},
 		
 		/* [GET] Retrive logs from Local DB
@@ -601,6 +628,25 @@ Uses Dexie.js third-party plugin on the assets directory
 				});
 		},
 		
+		get_enemyInfo :function(shipId, callback){
+			console.log("get_enemyInfo", shipId, this.con.enemy);
+			try {
+				this.con.enemy
+					.where("id").equals(shipId)
+					.toArray(function(matchList){
+						console.log("matchList", matchList);
+						if(matchList.length > 0){
+							callback(matchList[0]);
+						}else{
+							callback(false);
+						}
+					});
+				return true;
+			} catch (e) {
+				console.error(e);
+			}
+		},
+		
 		get_resource :function(HourNow, callback){
 			var self = this;
 			this.con.resource
@@ -685,7 +731,7 @@ Uses Dexie.js third-party plugin on the assets directory
 				});
 		},
 		
-		get_lodger_data :function(hFilters, callback){
+		get_lodger_data :function(hFilters, callbackSucc, callbackFail){
 			/*
 				DataHead  Param1
 				sortie    SortieDBID
@@ -718,7 +764,9 @@ Uses Dexie.js third-party plugin on the assets directory
 					return (0).inside.apply(data.hour,hFilters);
 				})
 				.reverse()
-				.toArray(callback);
+				.toArray()
+				.then (callbackSucc || $.nop())
+				.catch(callbackFail || function(e){console.error(e);});
 		},
 		
 	};

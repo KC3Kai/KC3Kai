@@ -271,40 +271,40 @@
 					
 					var
 						chkBound = (
-							rqBoundMatch ? (
-								sortieD.every(function(mapCode,bIdx){ return mapCode ? (0).inside.apply(mapCode,rqMapBound[bIdx]) : true; })) : true
+							!rqBoundMatch || (
+								sortieD.every(function(mapCode,bIdx){ return mapCode ? (0).inside.apply(mapCode,rqMapBound[bIdx]) : true; })
+							)
 						),
 						chkWorld = (
-							rqMapMatch ? (
+							!rqMapMatch || (
 								(!this.sortie.World || sortieD[0] == this.sortie.World) &&
 								(!this.sortie.Map   || sortieD[1] == this.sortie.Map  )
-							) : true
+							)
 						),
 						chkMonth = (
-							rqMonthMatch ? (
+							!rqMonthMatch || (
 								!this.sortie.Period || (function(cDate,mnhour){
 									var mxhour = Math.hrdInt('floor',(new Date(mnhour * 3600000)).shiftMonth(0,true)/3.6,6,1);
 									return Math.hrdInt('floor',cDate/3.6,3,1).inside(mnhour,mxhour);
 								}).call(null,sortieD.time,this.sortie.Period)
-							) : true
+							)
 						),
 						chkEvent = (
-							rqEventMatch ? (function(ledger_type){
+							!rqEventMatch || (function(ledger_type){
 								var
 									rs = false,
+									cr = [0,Infinity,Infinity,0],
 									sr = [0,Infinity,Infinity,0],
 									er = [0,Infinity,Infinity,0],
 									
 									lt = parseInt(Math.abs (ledger_type),10),
 									gs = Math.sign(ledger_type),
-									fc = gs >= 0,
-									cx = gs <= 0,
 									fi = {w:self.sortie.World,m:self.sortie.Map},
 									
-									rg = function(x,i){switch(Math.sign(ledger_type % 3)){
-										case  1: return (i <= 1);           // F C
-										case -1: return (i >= 1);           //   C L X
-										default: return (i %  2 == lt %  2); // F   L
+									rg = function(x,i){switch(Math.sign(ledger_type)){
+										case  1: return (i <= 1);       // F C     //
+										case -1: return (i >= 1);       //   C L X //
+										default: return (i %  2 === 0); // F   L   //
 									}};
 								
 								cacheKeyMD[0] = cacheKeyFX[0];
@@ -312,71 +312,69 @@
 								cacheKeyMD[4] = cacheKeyFX[4];
 								
 								try {
-									if(lt > 0) {
-										return (fi.w ? [fi.w] : Object.keys(ledgerCache)).some(function(wr){
-											var
-												sw = ledgerCache[wr] || ['first','clear','last'].reduce(function(objk,itky){
-													objk[itky] = NaN; return objk;
-												},{}),
-												sc;
-											cacheKeyMD[2] = Number(wr);
-											er = [sw.first,sw.clear,sw.last,0].map(function(dt,id){
-												return dt || er[id]; });
-											
-											switch(lt % 3) {
-													// logic :
-													// 1 - 
-													//   0-0 => World Num iteration (n^2)
-													//     31-1,31-2,...,31-7,32-1,32-2,...,32-5,etc.
-													//   M-0 => Fixed World iteration (n)
-													//     31-1,31-2,...,31-7.
-													//   M-N => Single-range iteration (1)
-													// 2 - 
-													//   0-0 => World Num iteration (n)
-													//     31-0,32-0,...,etc.
-													//   M-0 => Single-range iteration (1)
-													//     31-0
-													//   M-N => Reduced Scope iteration (1)
-													// 3 - only allow sortie ID inside specified range (FC/CLX ranges)
-												case 1:
-													return ((fi.w && fi.m) ? [fi.m] : Object.keys(sw)).some(function(nm){
-														cacheKeyMD[3] = Number(nm);
-														cacheD = cache.apply(null,cacheKeyMD);
-														if(typeof cacheD == 'boolean') { return cacheD; }
-														
-														sc = sw[nm];
-														sr = [sc.first,sc.clear || sc.last,sc.last,0].map(function(dt,id){
-															return dt || sr[id]; });
-														return cache.apply(null, cacheKeyMD.concat( (0).inside.apply(data.id,sr.filter(rg)) ) );
-													});
-												case 2:
-													cacheKeyMD[3] = Number(fi.m);
+									var ret = !lt || (fi.w ? [fi.w] : Object.keys(ledgerCache)).some(function(wr){
+										var
+											sw = ledgerCache[wr] || ['first','clear','last'].reduce(function(objk,itky){
+												objk[itky] = NaN; return objk;
+											},{}),
+											sc;
+										cacheKeyMD[2] = Number(wr);
+										er = [sw.first,sw.clear,sw.last,0].map(function(dt,id){
+											return dt || cr[id]; });
+										
+										switch(lt % 3) {
+											/* logic :
+											// 1 - 
+											//   0-0 => World Num iteration (n^2)
+											//     31-1,31-2,...,31-7,32-1,32-2,...,32-5,etc.
+											//   M-0 => Fixed World iteration (n)
+											//     31-1,31-2,...,31-7.
+											//   M-N => Single-range iteration (1)
+											// 2 - 
+											//   0-0 => World Num iteration (n)
+											//     31-0,32-0,...,etc.
+											//   M-0 => Single-range iteration (1)
+											//     31-0
+											//   M-N => Reduced Scope iteration (1)
+											// 3 - only allow sortie ID inside specified range (FC/CLX ranges)
+											*/
+											case 1:
+												return ((fi.w && fi.m) ? [fi.m] : Object.keys(sw)).some(function(nm){
+													cacheKeyMD[3] = Number(nm);
 													cacheD = cache.apply(null,cacheKeyMD);
 													if(typeof cacheD == 'boolean') { return cacheD; }
 													
-													sc = sw[fi.m];
-													sr = [sc.first,sw.clear || sw.last,sw.last,0].map(function(dt,id){
-														return dt || sr[id]; });
+													sc = sw[nm];
+													sr = [sc.first,sc.clear || sc.last,sc.last,0].map(function(dt,id){
+														return dt || cr[id]; });
 													return cache.apply(null, cacheKeyMD.concat( (0).inside.apply(data.id,sr.filter(rg)) ) );
-												default:
-													cacheKeyMD[3] = Number(fi.m);
-													cacheD = cache.apply(null,cacheKeyMD);
-													if(typeof cacheD == 'boolean') { return cacheD; }
-													
-													sc = sortieCache[wr][fi.m];
-													sr = [sc.sortieFirst,sw.sortieClear || sw.sortieLast,sw.sortieLast,0].map(function(dt,id){
-														return dt || sr[id]; });
-													return cache.apply(null, cacheKeyMD.concat( (0).inside.apply(data.opt,sr.filter(rg)) ) );
-											}
-										});
-									}
+												});
+											case 2:
+												cacheKeyMD[3] = Number(fi.m);
+												cacheD = cache.apply(null,cacheKeyMD);
+												if(typeof cacheD == 'boolean') { return cacheD; }
+												
+												sc = sw[fi.m];
+												sr = [sc.first,sw.clear || sw.last,sw.last,0].map(function(dt,id){
+													return dt || cr[id]; });
+												return cache.apply(null, cacheKeyMD.concat( (0).inside.apply(data.id,sr.filter(rg)) ) );
+											default:
+												cacheKeyMD[3] = Number(fi.m);
+												cacheD = cache.apply(null,cacheKeyMD);
+												if(typeof cacheD == 'boolean') { return cacheD; }
+												
+												sc = sortieCache[wr][fi.m];
+												sr = [sc.sortieFirst,sw.sortieClear || sw.sortieLast,sw.sortieLast,0].map(function(dt,id){
+													return dt || cr[id]; });
+												return cache.apply(null, cacheKeyMD.concat( (0).inside.apply(data.opt,sr.filter(rg)) ) );
+										}
+									});
+									return ret;
 								} catch (e) {
 									console.error(e); // Accessing non exists ledger data
 									return false;
-								} finally {
-									return true;
 								}
-							})(this.sortie.Period) : true
+							})(this.sortie.Period)
 						);
 					
 					return chkBound && chkWorld　&& chkMonth && chkEvent;
@@ -475,22 +473,23 @@
 							} },
 						});
 						Object.defineProperties(worldData,{
-							sortieFirst: { get: function(){ return worldData[1].sortieFirst; } },
+							sortieFirst: { get: function(){ return this[1].sortieFirst; } },
 							sortieLast : { get: function(){
 								var nonEmptySortie = 0;
-								while( worldData[++nonEmptySortie].sortieLast ) {}
-								try { return worldData[--nonEmptySortie].sortieLast; } catch (e) { return 0; }
+								
+								try { while( this[++nonEmptySortie].sortieLast ) {} } catch (e) {}
+								try { return this[--nonEmptySortie].sortieLast; } catch (e) { return 0; }
 							} },
-							ledgerFirst: { get: function(){ return worldData[1].ledgerFirst; } },
+							ledgerFirst: { get: function(){ return this[1].ledgerFirst; } },
 							ledgerClear: { get: function(){
 								var nonClearLedger = 0;
-								while( worldData[++nonClearLedger].ledgerClear ) {}
-								try { return worldData[nonClearLedger].ledgerClear; } catch (e) { return null; }
+								try { while( this[++nonClearLedger].ledgerClear ) {} } catch (e) { --nonClearLedger; }
+								try { return this[nonClearLedger].ledgerClear; } catch (e) { return null; }
 							} },
 							ledgerLast : { get: function(){
 								var nonEmptyLedger = 0;
-								while( worldData[++nonEmptyLedger].ledgerLast ) {}
-								try { return worldData[--nonEmptyLedger].ledgerLast; } catch (e) { return null; }
+								try { while( this[++nonEmptyLedger].ledgerLast ) {} } catch (e) {}
+								try { return this[--nonEmptyLedger].ledgerLast; } catch (e) { return null; }
 							} },
 							0          : { get: function(){ return this; } },
 						});
@@ -498,9 +497,9 @@
 						Object.defineProperties(lmd,{
 							range : {value:function( t ){
 								return [this.first,this.clear,this.last,0].filter(function(x,i){switch(Number(t)){
-									case  1: return (i <= 1);           // F C
-									case  2: return (i >= 1);           //   C L X
-									default: return (i %  2 == t %  2); // F   L
+									case  1: return (i <= 1);       // F C     //
+									case  2: return (i >= 1);       //   C L X //
+									default: return (i %  2 === 0); // F   L   //
 								}});
 							}},
 							inside: {value:function(a,b){ return Number(a) && (0).inside.apply(Number(a),this.range(b));}},
@@ -1143,7 +1142,9 @@
 			$.each(self.dataBuffer,function(k,v){
 				var wholeData = (k==='overall');
 				
-				if(!self.filter[k] && !wholeData) {
+				if((!self.filter[k] && !wholeData) || (
+					(Range(1,2).inside(self.sortie.Filter) || (self.sortie.Filter == 3 && self.sortie.Period % 3 === 0)) && (k!=='sortie')
+				)) {
 					$(".lodger-data." + k,$(".lodger-statistics",baseContext)).hide(100);
 					return true;
 				}
@@ -1415,11 +1416,9 @@
 			fun  = self.wholeSortieFilter;
 		allBuffer = (this.totalBuffer)
 			.filter(function(d,i,a){
-				return self.filter[d.kind]; })
-			.filter(function(d,i,a){
-				return (typeof fun === 'function') ? fun.call(self,d.kind,d,i,a) : true; })
-			.filter(function(d,i,a){
-				return Range.apply(null,lookupBound).inside(d.hour);
+				return self.filter[d.kind] &&
+					Range.apply(null,lookupBound).inside(d.hour) &&
+					((typeof fun !== 'function') || fun.call(self,d.kind,d,i,a));
 			});
 		this.flatBuffer = Object.freeze(allBuffer.slice(0));
 		this.dataRating = calculateRating.apply(null,[lookupDays()].concat(allBuffer));

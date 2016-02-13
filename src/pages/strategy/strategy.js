@@ -20,6 +20,7 @@
 		// Initialize data managers
 		ConfigManager.load();
 		KC3Meta.init("../../data/");
+		KC3Meta.defaultIcon("../../assets/img/ui/empty.png");
 		KC3Master.init();
 		PlayerManager.init();
 		KC3ShipManager.load();
@@ -27,6 +28,7 @@
 		KC3Database.init( PlayerManager.hq.id );
 		KC3Translation.execute();
 		WhoCallsTheFleetDb.init("../../");
+		RemodelDb.init();
 		
 		// Click a menu item
 		$("#menu .submenu ul.menulist li").on("click", function(){
