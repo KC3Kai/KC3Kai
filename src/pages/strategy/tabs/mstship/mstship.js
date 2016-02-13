@@ -143,6 +143,12 @@
 				e.preventDefault();
 				return false;
 			});
+
+			$(".tab_mstship .shipInfo").on("click", ".more .other_forms a", function(e){
+				self.showShip( $(this).data("sid") );
+				e.preventDefault();
+				return false;
+			});
 			
 			// Salt-toggle
 			$(".tab_mstship .shipInfo").on("click", ".salty-zone", function(e){
@@ -286,6 +292,30 @@
 				}else{
 					$(".tab_mstship .shipInfo .remodel").hide();
 				}
+
+				// other forms
+				var otherFormIds = RemodelDb
+					.remodelGroup(shipData.api_id)
+					.filter( function(x) {
+						return x !== shipData.api_id &&
+							x !== shipData.api_aftershipid;
+					});
+				
+				if (otherFormIds.length > 0) {
+					$(".tab_mstship .shipInfo .more .other_forms a").remove();
+
+					$.each(otherFormIds, function(i,x) {
+						$("<a/>")
+							.text( KC3Meta.shipName(KC3Master.ship(x).api_name) )
+							.data("sid",x)
+							.appendTo( ".tab_mstship .shipInfo .more .other_forms" );
+					});
+					
+					$(".tab_mstship .shipInfo .more .other_forms").show();
+				} else {
+					$(".tab_mstship .shipInfo .more .other_forms").hide();
+				}
+
 				$(".tab_mstship .scrap .rsc").each(function(index){
 					$(".rsc_value", this).text( shipData.api_broken[index] );
 				});

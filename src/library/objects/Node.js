@@ -273,33 +273,41 @@ Used by SortieManager
 		if(this.gaugeDamage > -1)
 			this.gaugeDamage = Math.min(this.originalHPs[7],this.originalHPs[7] - this.enemyHP[0].currentHp);
 		
-		// Save the enemy encounter
-		var ed = {
-			world: KC3SortieManager.map_world,
-			map: KC3SortieManager.map_num,
-			node: this.id,
-			form: this.eformation,
-			ke: JSON.stringify(this.eships)
-		};
-		ed.uniqid = ed.world+"/"+ed.map+"/"+ed.node+"/"+ed.form+"/"+ed.ke;
-		KC3Database.Encounter(ed);
-		
-		// Save enemy info
-		for(i = 0; i < 6; i++) {
-			var enemyId = this.eships[i] || -1;
-			if (enemyId > -1) {
-				KC3Database.Enemy({
-					id: enemyId,
-					hp: this.battleDay.api_maxhps[i+7],
-					fp: this.battleDay.api_eParam[i][0],
-					tp: this.battleDay.api_eParam[i][1],
-					aa: this.battleDay.api_eParam[i][2],
-					ar: this.battleDay.api_eParam[i][3],
-					eq1: this.battleDay.api_eSlot[i][0],
-					eq2: this.battleDay.api_eSlot[i][1],
-					eq3: this.battleDay.api_eSlot[i][2],
-					eq4: this.battleDay.api_eSlot[i][3]
-				});
+		// Record encoutners only if on sortie
+		if(KC3SortieManager.onSortie > 0) {
+			// Validate values
+			if(KC3SortieManager.map_world < 1){ return true; }
+			if(KC3SortieManager.map_num < 1){ return true; }
+			
+			// Save the enemy encounter
+			var ed = {
+				world: KC3SortieManager.map_world,
+				map: KC3SortieManager.map_num,
+				node: this.id,
+				form: this.eformation,
+				ke: JSON.stringify(this.eships)
+			};
+			ed.uniqid = ed.world+"/"+ed.map+"/"+ed.node+"/"+ed.form+"/"+ed.ke;
+			KC3Database.Encounter(ed);
+			
+			// Save enemy info
+			for(i = 0; i < 6; i++) {
+				var enemyId = this.eships[i] || -1;
+				// Only record ships with ID more than 500 coz abyss only
+				if (enemyId > 500) {
+					KC3Database.Enemy({
+						id: enemyId,
+						hp: this.battleDay.api_maxhps[i+7],
+						fp: this.battleDay.api_eParam[i][0],
+						tp: this.battleDay.api_eParam[i][1],
+						aa: this.battleDay.api_eParam[i][2],
+						ar: this.battleDay.api_eParam[i][3],
+						eq1: this.battleDay.api_eSlot[i][0],
+						eq2: this.battleDay.api_eSlot[i][1],
+						eq3: this.battleDay.api_eSlot[i][2],
+						eq4: this.battleDay.api_eSlot[i][3]
+					});
+				}
 			}
 		}
 	};
