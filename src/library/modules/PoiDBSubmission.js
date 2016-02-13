@@ -183,8 +183,6 @@
 	        dropShipData.quest = response.api_quest_name;
 	        dropShipData.enemy = response.api_enemy_info.api_deck_name;
 	        dropShipData.mapLv = this.mapInfo[dropShipData.mapId] || 0;
-            // TODO: verify
-            console.log( "PoiDBSubmission: mapInfo debug:", dropShipData.mapLv );
 	        dropShipData.rank = response.api_win_rank;
 	        dropShipData.teitokuLv = PlayerManager.hq.level;
 	        dropShipData.enemyShips = response.api_ship_id.slice(1);
@@ -193,8 +191,6 @@
             this.state = null;
 
             if (response.api_get_eventitem) {
-                // TODO: verify
-                console.log( response.api_get_eventitem );
                 // having this field means the player has completed this event map.
                 var passEventData = {
                     teitokuId: PlayerManager.hq.nameId,
@@ -203,7 +199,6 @@
                     mapId: dropShipData.mapId,
                     mapLv: dropShipData.mapLv
                 };
-                // TOOD: verify
                 console.log( "Passing an event map!" );
                 console.log( JSON.stringify( passEventData ) );
                 this.sendData("pass_event", passEventData);
