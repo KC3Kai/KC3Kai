@@ -1060,7 +1060,7 @@
 					.filter (function( shipId) { return shipId >= 0; })
 					.map    (function( shipId) { return KC3ShipManager.get(shipId); })
 					.some   (function( shpDat) {
-						return shpDat.isTaiha();
+						return !shpDat.didFlee && shpDat.isTaiha();
 					})
 				&& !KC3SortieManager.isPvP() // if PvP, no taiha alert
 			) {

@@ -89,13 +89,13 @@ Provides access to data on built-in JSON files
 				"","","","","",
 				"Cruising Formation 1 (anti-sub)",
 				"Cruising Formation 2 (forward)",
-				"Cruising Formation 1 (anti-sub)",
-				"Cruising Formation 1 (anti-sub)",
+				"Cruising Formation 3 (anti-air)",
+				"Cruising Formation 4 (full-power)",
 				"","","","","","",
 				"Cruising Formation 1 (anti-sub)",
 				"Cruising Formation 2 (forward)",
-				"Cruising Formation 1 (anti-sub)",
-				"Cruising Formation 1 (anti-sub)"
+				"Cruising Formation 3 (anti-air)",
+				"Cruising Formation 4 (full-power)"
 			][formationId];
 		},
 		
