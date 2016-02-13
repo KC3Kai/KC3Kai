@@ -70,6 +70,7 @@ Previously known as "Reactor"
 			PlayerManager.setHQ({
 				mid: response.api_data.api_basic.api_member_id,
 				name: response.api_data.api_basic.api_nickname,
+				nameId: response.api_data.api_basic.api_nickname_id,
 				desc: response.api_data.api_basic.api_comment,
 				rank: response.api_data.api_basic.api_rank,
 				level: response.api_data.api_basic.api_level,
@@ -146,6 +147,7 @@ Previously known as "Reactor"
 			PlayerManager.setHQ({
 				mid: response.api_data.api_member_id,
 				name: response.api_data.api_nickname,
+				nameId: response.api_data.api_nickname_id,
 				desc: response.api_data.api_comment,
 				rank: response.api_data.api_rank,
 				level: response.api_data.api_level,
@@ -188,6 +190,7 @@ Previously known as "Reactor"
 			PlayerManager.setHQ({
 				mid: response.api_data.api_member_id,
 				name: response.api_data.api_nickname,
+				nameId: response.api_data.api_nickname_id,
 				desc: response.api_data.api_cmt,
 				rank: response.api_data.api_rank,
 				level: response.api_data.api_level,
