@@ -72,7 +72,9 @@ Retreives when needed to apply on components
 					]
 				},
 				
-				salt_list 		: [],
+				salt_list 		: new KC3ShipMasterList(),
+				wish_list 		: new KC3ShipMasterList(),
+				lock_list 		: new KC3ShipRosterList(),
 
 				ss_mode				: 0,
 				ss_type				: 'JPG',
@@ -140,8 +142,14 @@ Retreives when needed to apply on components
 
 		// Load previously saved config
 		load : function(){
+			var self = this;
 			// Get old config or create dummy if none
 			var oldConfig = JSON.parse(localStorage.config || "{}");
+			
+			['salt','wish','lock'].forEach(function(shipListType){
+				var k = [shipListType,'list'].join('_');
+				oldConfig[k] = self.defaults()[k].concat(oldConfig[k] || []);
+			});
 			
 			// Check if old config has versioning and if its lower version
 			if( !oldConfig.version || (oldConfig.version < this.defaults().version) ){
@@ -157,8 +165,6 @@ Retreives when needed to apply on components
 			/* Force Revert */
 			if(this.language == "troll")
 				this.resetValueOf('language');
-			if(!(this.salt_list instanceof Array))
-				this.resetValueOf('salt_list');
 		},
 		
 		// Save current config onto localStorage
@@ -186,5 +192,88 @@ Retreives when needed to apply on components
 		}
 		
 	};
+	
+	var
+		IntFilterArray = function(filterFun){
+			function LocalArray(){}
+			LocalArray.prototype = [];
+			
+			// http://stackoverflow.com/questions/1960473/unique-values-in-an-array
+			function arrayUniquefy(x,i,a){ return a.indexOf(x) === i; }
+			
+			// http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/
+			function KC3ShipList(){
+				if(this instanceof KC3ShipList){
+					if (arguments.length === 1) {
+						this.length = arguments[0];
+					} else if (arguments.length) {
+						this.push.apply(this,arguments);
+					}
+				}else{
+					throw new Error("Cannot invoke constructor without `new` keyword");
+				}
+			}
+			
+			KC3ShipList.prototype = new LocalArray();
+			KC3ShipList.prototype.constructor = KC3ShipList;
+			
+			Object.defineProperties(KC3ShipList.prototype,{
+				push:{value:function push(){
+					var _push,_args,nAry,nLen;
+					_args = Array.prototype.slice.apply(arguments);
+					_push = Function.prototype.apply.bind(Array.prototype.push,this);
+					nAry  = _args.filter(arrayUniquefy).filter(filterFun.bind(this));
+					nLen  = nAry.length;
+					_push(nAry);
+					return nLen;
+				}},
+				unshift:{value:function unshift(){
+					var _ushf,_args,nLen;
+					_args = Array.prototype.slice.apply(arguments);
+					_ushf = Function.prototype.apply.bind(Array.prototype.unshift,this);
+					nAry  = _args.filter(arrayUniquefy).filter(filterFun.bind(this));
+					nLen  = nAry.length;
+					_ushf(nAry);
+					return nLen;
+				}},
+				
+				concat:{value:function concat(){
+					var _slic,_args;
+					_slic = Function.prototype.apply.bind(Array.prototype.slice);
+					_args = _slic(arguments);
+					return new (KC3ShipList.bind.apply(KC3ShipList,[null].concat([].concat.apply([],[this].concat(_args).map(function(shiplist){
+						return _slic(shiplist);
+					})))))();
+				}},
+				slice:{value:function slice(){
+					var _slic,_args,ary;
+					_slic = Function.prototype.apply.bind(Array.prototype.slice);
+					_args = _slic(arguments);
+					ary   = _slic(this,_args);
+					return new (KC3ShipList.bind.apply(KC3ShipList,[null].concat(ary)))();
+				}},
+				
+				exists:{value:function exists(){
+					var _slic,_args,self;
+					_slic = Function.prototype.apply.bind(Array.prototype.slice);
+					_args = _slic(arguments).map(Number);
+					self  = this;
+					return _args.some(function(requestInt){
+						return self.indexOf(requestInt)>=0;
+					});
+				}},
+				
+				toJSON:{value:function toJSON(){return [].slice.apply(a);}},
+			});
+			return KC3ShipList;
+		},
+		KC3ShipMasterList = IntFilterArray(function(x){
+			return (!isNaN(x) && isFinite(x) && typeof x === 'number' &&
+				!this.exists(x) && KC3Master.ship(x).kc3_model == 1);
+		}),
+		KC3ShipRosterList = IntFilterArray(function(x){
+			return (!isNaN(x) && isFinite(x) && typeof x === 'number' &&
+				!this.exists(x) && KC3ShipManager.get(x).rosterId == x);
+		});
 	
 })();

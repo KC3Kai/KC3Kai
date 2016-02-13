@@ -731,7 +731,7 @@ Uses Dexie.js third-party plugin on the assets directory
 				});
 		},
 		
-		get_lodger_data :function(hFilters, callback){
+		get_lodger_data :function(hFilters, callbackSucc, callbackFail){
 			/*
 				DataHead  Param1
 				sortie    SortieDBID
@@ -764,7 +764,9 @@ Uses Dexie.js third-party plugin on the assets directory
 					return (0).inside.apply(data.hour,hFilters);
 				})
 				.reverse()
-				.toArray(callback);
+				.toArray()
+				.then (callbackSucc || $.nop())
+				.catch(callbackFail || function(e){console.error(e);});
 		},
 		
 	};
