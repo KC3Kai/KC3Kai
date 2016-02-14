@@ -190,14 +190,20 @@
 	font-size:14px;
 	font-weight:bold;
 }
-.tab_mstship .shipInfo .equipment .sloticon img {
+.tab_mstship .shipInfo .equipment .sloticon {
 	width:20px;
 	height:20px;
+	line-height:20px;
 	float:left;
 	position:relative;
 	z-index:2;
 	background:#444;
-	border:1px solid #888;	border-radius:10px;
+	border-radius:10px;
+}
+.tab_mstship .shipInfo .equipment .sloticon img {
+	width:20px;
+	height:20px;
+	display:block;
 }
 .tab_mstship .shipInfo .equipment .slotitem {
 	width:200px;
@@ -263,7 +269,6 @@
 	font-weight:bold;
 	margin:0px 5px 0px 0px;
 }
-
 .tab_mstship .shipInfo .more .rsc {
 	width:70px;
 	height:20px;
@@ -307,6 +312,19 @@
 }
 .tab_mstship .shipInfo .more .remodel_level span {
 	font-weight:bold;
+}
+/* Other forms */
+.tab_mstship .shipInfo .more .other_forms_list {
+	float:left;
+	width:370px;
+	height:20px;
+	font-size:12px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+.tab_mstship .shipInfo .more .other_forms_list a {
+	margin:0px 10px 0px 0px;
 }
 /* Scrap Value */
 
