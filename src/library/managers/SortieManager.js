@@ -122,6 +122,10 @@ Xxxxxxx
 			return 0;
 		},
 		
+		getSortieFleet: function() {
+			return focusedFleet.slice(0);
+		},
+		
 		isFullySupplied: function() {
 			return focusedFleet.map(function(x){
 				return PlayerManager.hq.lastSortie[x];
@@ -163,14 +167,15 @@ Xxxxxxx
 		},
 		
 		advanceNode :function( nodeData, UTCTime ){
-			var thisNode;
+			var thisNode, nodeKind;
 			console.log("nodeData", nodeData);
 			
+			nodeKind = "Dud";
 			// Selection node
 			// api_event_id = 6
 			if (typeof nodeData.api_select_route != "undefined") {
 				console.log("nodeData.api_select_route found, defining as selector");
-				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsSelector(nodeData);
+				nodeKind = "Selector";
 			//  Battle Node
 			// api_event_kind = 1 (day battle)
 			// api_event_kind = 2 (start at night battle)
@@ -180,26 +185,32 @@ Xxxxxxx
 			// api_event_id = 5 (boss)
 			// api_event_id = 6 (long distance aerial battle)
 			}else if([1,2,4,6].indexOf(nodeData.api_event_kind)>=0) {
-				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsBattle(nodeData);
+				nodeKind = "Battle";
 			// Resource Node
 			// api_event_kind = 0
 			// api_event_id = 2
 			}else if (typeof nodeData.api_itemget != "undefined") {
-				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsResource(nodeData);
+				nodeKind = "Resource";
 			// Bounty Node
 			// api_event_kind = 0
 			// api_event_id = 8
 			} else if (typeof nodeData.api_itemget_eo_comment != "undefined") {
-				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsBounty(nodeData);
+				nodeKind = "Bounty";
+			// Transport Node 
+			// api_event_kind = 0
+			// api_event_id = 9
+			} else if (nodeData.api_event_id == 9){
+				nodeKind = "Transport";
 			// Maelstrom Node
 			} else if (typeof nodeData.api_happening != "undefined") {
-				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsMaelstrom(nodeData);
+				nodeKind = "Maelstrom";
 			// Empty Node 
 			// api_event_kind = 0 
 			} else {
-				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsDud(nodeData);
+				
 			}
 			
+			thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime ))['defineAs' + nodeKind](nodeData);
 			this.nodes.push(thisNode);
 			this.save();
 		},
