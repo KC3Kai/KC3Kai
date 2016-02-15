@@ -290,7 +290,10 @@
             "taigei1":184,
             "akitsushima1":445,
             "mizuho1":451,
-            "hayasui1":460
+            "hayasui1":460,
+            "hatsuzuki1":423,
+            "okinami1":452,
+            "zara1":448
         },
         k2Template: {
             "dd":{
@@ -538,6 +541,9 @@
             "354":"arashi1",
             "355":"hagikaze1",
             "356":"kashima1",
+            "357":"hatsuzuki1",
+            "358":"okinami1",
+            "359":"zara1",
             "398":"i1681",
             "399":"i581",
             "400":"i81",
