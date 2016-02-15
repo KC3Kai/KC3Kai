@@ -91,8 +91,14 @@
                 setInsert(originIds, RemodelDb.originOf(x));
             });
 
-            var colleIds = originIds.map( function(mid) {
-                return K2Badge.mstId2ColleTable[mid];
+            var colleIds = [];
+            $.each( originIds, function(i,mid) {
+                var result = K2Badge.mstId2ColleTable[mid];
+                if (result) {
+                    colleIds.push( result );
+                } else {
+                    console.warn("error looking up mstId:", mid);
+                }
             });
 
             var colle = {};
