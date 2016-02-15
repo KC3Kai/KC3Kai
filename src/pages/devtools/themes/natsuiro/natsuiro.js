@@ -111,12 +111,16 @@
 		}
 
 		function switchToFleet(targetFleet) {
-			var fleetControls = $(".module.controls .fleet_num").toArray();
-			for (var i=0; i<fleetControls.length; ++i) {
-				var thisFleet = parseInt( $(fleetControls[i]).text(), 10);
-				if (thisFleet === targetFleet) {
-					$( fleetControls[i] ).trigger("click");
-					break;
+			if (targetFleet === "combined") {
+				$(".module.controls .fleet_rengo").trigger("click");
+			} else {
+				var fleetControls = $(".module.controls .fleet_num").toArray();
+				for (var i=0; i<fleetControls.length; ++i) {
+					var thisFleet = parseInt( $(fleetControls[i]).text(), 10);
+					if (thisFleet === targetFleet) {
+						$( fleetControls[i] ).trigger("click");
+						break;
+					}
 				}
 			}
 		}
@@ -132,7 +136,8 @@
 		} else {
 			// knowing fleets are all unavailable
 			// we can return focus to the main fleet.
-			switchToFleet(1);
+			// or if combined fleet is in used, we go to combined fleet tab
+			switchToFleet(PlayerManager.combinedFleet !== 0 ? "combined" : 1);
 			// also return focus to basic tab
 			$("#atab_basic").trigger("click");
 		}
