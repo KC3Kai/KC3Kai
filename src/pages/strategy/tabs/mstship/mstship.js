@@ -65,8 +65,8 @@
 			52: "2200",
 			53: "2300"
 		},
-		
 		currentGraph: "",
+		currentShipId: 0,
 		audio: false,
 		server_ip: "",
 		
@@ -130,9 +130,10 @@
 			});
 			
 			// Play voice
-			$(".tab_mstship .shipInfo .voices").on("click", ".voice", function(){
+			$(".tab_mstship .shipInfo .voices, .tab_mstship .shipInfo .hourlies").on("click", ".voice", function(){
 				if(self.audio){ self.audio.pause(); }
-				self.audio = new Audio("http://"+self.server_ip+"/kcs/sound/kc"+self.currentGraph+"/"+$(this).data("vnum")+".mp3");
+				var voiceFile = self.getVoiceLineFileName(self.currentShipId, parseInt($(this).data("vnum"), 10));
+				self.audio = new Audio("http://"+self.server_ip+"/kcs/sound/kc"+self.currentGraph+"/"+voiceFile+".mp3");
 				self.audio.play();
 			});
 			
@@ -175,7 +176,7 @@
 			if(!!KC3StrategyTabs.pageParams[1]){
 				this.showShip(KC3StrategyTabs.pageParams[1]);
 			}else{
-				this.showShip(405);
+				this.showShip(102);
 			}
 		},
 		
@@ -198,6 +199,7 @@
 					else
 						$(".tab_mstship .shipInfo").removeClass('salted');
 				};
+			this.currentShipId = ship_id;
 			console.log(shipData);
 			loadedShipId = ship_id;
 			
@@ -272,12 +274,15 @@
 
 					if (stockEquipments) {
 						var equipId = stockEquipments[index];
-						if (equipId) {
+						if (equipId > 0) {
 							var equipment = KC3Master.slotitem( equipId );
 							$(".slotitem", this).text(KC3Meta.gearName( equipment.api_name ) );
 							$(".sloticon img", this)
 								.attr("src","../../../../assets/img/items/"+equipment.api_type[3]+".png");
-						} 
+							$(".sloticon img", this).show();
+						} else {
+							$(".sloticon img", this).hide();
+						}
 					}
 				});
 				
@@ -308,7 +313,7 @@
 						$("<a/>")
 							.text( KC3Meta.shipName(KC3Master.ship(x).api_name) )
 							.data("sid",x)
-							.appendTo( ".tab_mstship .shipInfo .more .other_forms" );
+							.appendTo( ".tab_mstship .shipInfo .more .other_forms .other_forms_list" );
 					});
 					
 					$(".tab_mstship .shipInfo .more .other_forms").show();
@@ -326,6 +331,7 @@
 				$(".tab_mstship .shipInfo .consume_ammo .rsc_value").text( shipData.api_bull_max );
 				
 				// VOICE LINES
+				$(".tab_mstship .shipInfo .voices").show();
 				$(".tab_mstship .shipInfo .voices").html("");
 				$.each(this.lines, function(vname, vnum){
 					$("<div/>")
@@ -338,6 +344,9 @@
 				$("<div/>").addClass("clear").appendTo(".tab_mstship .shipInfo .voices");
 				
 				// HOURLIES
+				$(".tab_mstship .shipInfo .hourlies").show();
+				$(".tab_mstship .shipInfo .hourlies").html("");
+				
 				if(shipData.api_voicef>1){
 					$.each(this.hourlies, function(vnum, vname){
 						var hhStr = vname.substring(0,2);
@@ -419,6 +428,23 @@
 				$(".tab_mstship .shipInfo .tokubest").hide();
 			}
 			
+		},
+		
+		/*
+		Getting new filename for ship voices
+		Source: がか
+		http://kancolle.wikia.com/wiki/Thread:388946#30
+		*/
+		voiceLineKeys: [
+			608614, 611089, 612644, 615991, 624682, 632529, 636124, 637891, 641202, 643709,
+			653360, 658681, 663154, 670271, 676218, 685707, 688376, 697117, 703266, 704567,
+			711864, 714839, 721252, 729643, 739348, 741591, 743682, 747913, 751020, 760519,
+			764724, 770737, 774130, 780531, 787516, 791199, 800646, 803933, 809114, 816701,
+			826054, 828189, 833136, 838541, 843764, 853221, 858988, 868253, 876444, 880371,
+			883432, 886237, 889510, 896841
+		],
+		getVoiceLineFileName: function(ship_api_id, voice_line_id) {
+			return 100000 + 17 * (ship_api_id + 7) * (this.voiceLineKeys[voice_line_id] - this.voiceLineKeys[voice_line_id - 1]) % 99173;
 		}
 		
 	};
