@@ -60,7 +60,9 @@
 				extendEnglish=false;
 			}
 			
-			// console.log(filename, "extendEnglish", extendEnglish);
+			var language = ConfigManager.language;
+			if (filename === "stype" && ConfigManager.info_eng_stype)
+				language = "en";
 			
 			var translationBase = {}, enJSON;
 			if(extendEnglish){
@@ -73,11 +75,23 @@
 				// Make is as the translation base
 				translationBase = enJSON;
 			}
-			
-			return $.extend(true, translationBase, JSON.parse($.ajax({
-				url : repo+'lang/data/' +ConfigManager.language+ '/' + filename + '.json',
-				async: false
-			}).responseText));
+
+			// make "stype.json" an option:
+			// if we can't fetch this file, the English
+			// version will be used instead
+			var translation;
+			try {
+				translation = JSON.parse($.ajax({
+					url : repo+'lang/data/' +language+ '/' + filename + '.json',
+					async: false
+				}).responseText);
+			} catch (e) {
+				if (e instanceof SyntaxError && filename === "stype")
+					translation = null;
+				else
+					throw e;
+			}
+			return $.extend(true, translationBase, translation);
 		}
 		
 	};
