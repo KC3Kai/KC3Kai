@@ -44,7 +44,7 @@ function ActivateGame(){
 		.end()
 		.trigger('initialize-idle')
 		.show();
-	$(".box-wrap").css("zoom", ((ConfigManager.api_gameScale || 100) / 100));
+	$(".box-wrap").css("zoom", (ConfigManager.api_gameScale || 100) + "%");
 	return true;
 }
 
@@ -235,10 +235,15 @@ $(document).on("api-refresh",function(){
 	
 	// Initialize State
 	localStorage.extract_api = true;
+	$(".box-wrap").css("background", "");
 	$(".game-swf").remove();
+	$(".refresh-box").remove();
 	$(".box-refresh")
 		.prepend("<iframe class=refresh-box frameborder=0></iframe>")
 		.find('.refresh-box')
+		.on('error',function(e){
+			$(document).trigger('api-invalid');
+		})
 		.attr('src','http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/');
 });
 
