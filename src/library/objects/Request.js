@@ -118,15 +118,15 @@ Executes processing and relies on KC3Network for the triggers
 		} else {
 			// Check availability of the headers.Date
 			if(!this.headers.Date) {
-				if(!!KC3Request.headerReminder) {
+				if(!KC3Request.headerReminder) {
 					KC3Network.trigger("CatBomb", {
 						title: "Unable to Retrieve Server Time",
-						message: "There's something wrong with the communication with server (or via the proxy). It's not matter of the connection, but it might break some of the functionalities. It's fine if make sure your local machine clock is correct."
+						message: "There's something wrong with the communication with server (or via the proxy). It's fine if make sure your local machine clock is correct, otherwise it might break some of the functionalities."
 					});
-					KC3Request.headerReminder = false;
+					KC3Request.headerReminder = true;
 				}
 				// Fallback to use local machine time
-				this.headers.Date = new Date(new Date().toUTCString()).getTime();
+				this.headers.Date = new Date().toUTCString();
 			}
 		}
 		return true;
