@@ -731,7 +731,7 @@ Uses Dexie.js third-party plugin on the assets directory
 				});
 		},
 		
-		get_lodger_data :function(hFilters, callbackSucc, callbackFail){
+		get_lodger_data :function(iFilters, callbackSucc, callbackFail){
 			/*
 				DataHead  Param1
 				sortie    SortieDBID
@@ -748,20 +748,19 @@ Uses Dexie.js third-party plugin on the assets directory
 				regen     ------
 			*/
 			// hour filter
-			hFilters = (
+			iFilters = (
 				(
-					typeof hFilters == 'object' && (typeof hFilters.length == 'number') &&
-					hFilters.length >= 2 && hFilters
+					typeof iFilters == 'object' && (typeof iFilters.length == 'number') &&
+					iFilters.length >= 2 && iFilters
 				) || Range(0,Infinity,0,1)
 			);
-			
 			this.con.navaloverall
 				.where("hq").equals(this.index)
 				.and(function(data){
 					// hFilter Condition Definition:
-					// false: if specified hour outside the boundary
+					// false: if specified id outside the boundary
 					// prec : undefined condition is towards infinite of its polar
-					return (0).inside.apply(data.hour,hFilters);
+					return (0).inside.apply(data.id,iFilters);
 				})
 				.reverse()
 				.toArray()

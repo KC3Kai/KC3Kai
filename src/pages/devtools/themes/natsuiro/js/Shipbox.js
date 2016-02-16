@@ -25,7 +25,10 @@ KC3改 Ship Box for Natsuiro theme
 		$(this.element)
 			.addClass((this.shipData.level >= 100) && 'sWife')
 			.addClass( (ConfigManager.salt_list.indexOf(this.shipData.master().kc3_bship)+1) && 'sSalt' )
+			.addClass( (ConfigManager.lock_list.indexOf(this.shipData.rosterId)+1) && (!this.shipData.lock) && 'sLock' )
 			.end();
+		
+		$(".ship_no_lock",this.element).text(KC3Meta.term("PanelRequireShipLockInFleet"));
 		
 		// Item on 5th slot
 		var myExItem = this.shipData.exItem();

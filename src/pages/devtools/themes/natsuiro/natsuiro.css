@@ -2016,6 +2016,20 @@ html,body {
 .module.fleet .sWife .ship_name {
 	color:#fbb;
 }
+.module.fleet .ship_no_lock {
+	visibility:hidden;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	text-align: center;
+	background-color: pink;
+	color: red;
+}
+.module.fleet .sLock .ship_no_lock {
+	animation: lock-warning 0.5s steps(5,start) infinite;
+	visibility:visible;
+}
 /*------- STATUS -------*/
 .module.status {
 	/*background:rgba(255,80,80,0.4);*/
@@ -2146,4 +2160,12 @@ html,body {
 	width:240px;
 	height:120px;
 	left:555px; top:200px;
+}
+
+/* ANIMATIONS
+----------------------------------- */
+@-webkit-keyframes lock-warning {
+  to {
+  	visibility:hidden;
+  }
 }

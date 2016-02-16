@@ -53,7 +53,7 @@ Saves and loads list to and from localStorage
 				var
 					val = (self.list[cky] || defaults)[key];
 				tempData[key] = (typeof val === 'object' &&
-					(val instanceof Array ? Array.apply(null,val) : $.extend({},val))
+					(val instanceof Array ? [].slice.apply(val) : $.extend({},val))
 				) || val;
 			});
 			
@@ -65,11 +65,21 @@ Saves and loads list to and from localStorage
 			//this.list[cky].didFlee = didFlee;
 			
 			// prevent the fresh data always overwrites the current loaded state
-			if(!newData)
+			if(!newData) {
 				devVariables.capture.forEach(function(key){
 					if(devVariables.norepl.indexOf(key)<0)
 						cShip[key] = tempData[key];
 				});
+				
+				// check ship master in lock_prep before lock request it
+				if(ConfigManager.lock_prep[0] == cShip.rosterId) {
+					ConfigManager.lock_prep.shift();
+					if(!cShip.lock)
+						ConfigManager.lock_list.push(cShip.rosterId);
+					
+					ConfigManager.save();
+				}
+			}
 			
 			// Check previous repair state
 			// If there's a change detected (without applying applyRepair proc)

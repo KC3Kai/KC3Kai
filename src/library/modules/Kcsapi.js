@@ -611,6 +611,30 @@ Previously known as "Reactor"
 			KC3Network.trigger("Fleet");
 		},
 		
+		/* Lock a ship
+		-------------------------------------------------------*/
+		"api_req_hensei/lock":function(params, response, headers){
+			var shipID    = parseInt(params.api_ship_id,10);
+			var lockState = response.api_data.api_locked;
+			var shipData  = KC3ShipManager.get(shipID);
+			
+			if(shipData.lock) {
+				console.warn("Unlocked",shipData.rosterId,shipData.name());
+			} else {
+				var lockID = ConfigManager.lock_list.indexOf(shipID);
+				if(lockID+1) {
+					ConfigManager.lock_list.splice(lockID,1);
+					ConfigManager.save();
+				} else {
+					console.info("Locked (~)",shipData.rosterId,shipData.name());
+				}
+			}
+			
+			shipData.lock = lockState;
+			KC3ShipManager.save();
+			KC3Network.trigger("Fleet");
+		},
+		
 		/* Change equipment of a ship
 		-------------------------------------------------------*/
 		"api_req_kaisou/slotset":function(params, response, headers){
@@ -772,13 +796,6 @@ Previously known as "Reactor"
 		},
 		"api_req_combined_battle/ld_airbattle":function(params, response, headers){
 			this["api_req_combined_battle/battle"].apply(this,arguments);
-		},
-		"api_req_combined_battle/ld_airbattle":function(params, response, headers){
-			KC3SortieManager.engageBattle(
-				response.api_data,
-				Math.floor((new Date(headers.Date)).getTime()/1000)
-			);
-			KC3Network.trigger("BattleStart");
 		},
 		
 		/* BATTLE STARTS as NIGHT
@@ -1450,45 +1467,40 @@ Previously known as "Reactor"
 				KC3QuestManager.get(702).increment(); // G2: Daily Modernization
 				KC3QuestManager.get(703).increment(); // G3: Weekly Modernization
 				KC3Network.trigger("Quests");
-				
-				// Modernization notification
-				var MainShip = KC3ShipManager.get( response.api_data.api_ship.api_id );
-				
-				var baseStats = [
-					MainShip.master().api_houg,
-					MainShip.master().api_raig,
-					MainShip.master().api_tyku,
-					MainShip.master().api_souk,
-					MainShip.master().api_luck,
-				];
-				
-				var newMod = response.api_data.api_ship.api_kyouka;
-				
-				KC3Network.trigger("Modernize", {
-					rosterId: response.api_data.api_ship.api_id,
-					oldStats: [
-						baseStats[0][0] + MainShip.mod[0],
-						baseStats[1][0] + MainShip.mod[1],
-						baseStats[2][0] + MainShip.mod[2],
-						baseStats[3][0] + MainShip.mod[3],
-						baseStats[4][0] + MainShip.mod[4]
-					],
-					increase: [
-						newMod[0] - MainShip.mod[0],
-						newMod[1] - MainShip.mod[1],
-						newMod[2] - MainShip.mod[2],
-						newMod[3] - MainShip.mod[3],
-						newMod[4] - MainShip.mod[4]
-					],
-					left: [
-						baseStats[0][1] - (baseStats[0][0] + newMod[0]),
-						baseStats[1][1] - (baseStats[1][0] + newMod[1]),
-						baseStats[2][1] - (baseStats[2][0] + newMod[2]),
-						baseStats[3][1] - (baseStats[3][0] + newMod[3]),
-						baseStats[4][1] - (baseStats[4][0] + newMod[4])
-					]
-				});
 			}
+			
+			// Activity Notification
+			var NewShipRaw = response.api_data.api_ship;
+			var OldShipObj = KC3ShipManager.get( NewShipRaw.api_id );
+			var MasterShip = KC3Master.ship( NewShipRaw.api_ship_id );
+			
+			KC3Network.trigger("Modernize", {
+				rosterId: response.api_data.api_ship.api_id,
+				oldStats: [
+					MasterShip.api_houg[0] + OldShipObj.mod[0],
+					MasterShip.api_raig[0] + OldShipObj.mod[1],
+					MasterShip.api_tyku[0] + OldShipObj.mod[2],
+					MasterShip.api_souk[0] + OldShipObj.mod[3],
+					MasterShip.api_luck[0] + OldShipObj.mod[4]
+				],
+				increase: [
+					NewShipRaw.api_kyouka[0] - OldShipObj.mod[0],
+					NewShipRaw.api_kyouka[1] - OldShipObj.mod[1],
+					NewShipRaw.api_kyouka[2] - OldShipObj.mod[2],
+					NewShipRaw.api_kyouka[3] - OldShipObj.mod[3],
+					NewShipRaw.api_kyouka[4] - OldShipObj.mod[4]
+				],
+				left: [
+					MasterShip.api_houg[1] - (MasterShip.api_houg[0] + NewShipRaw.api_kyouka[0]),
+					MasterShip.api_raig[1] - (MasterShip.api_raig[0] + NewShipRaw.api_kyouka[1]),
+					MasterShip.api_tyku[1] - (MasterShip.api_tyku[0] + NewShipRaw.api_kyouka[2]),
+					MasterShip.api_souk[1] - (MasterShip.api_souk[0] + NewShipRaw.api_kyouka[3]),
+					MasterShip.api_luck[1] - (MasterShip.api_luck[0] + NewShipRaw.api_kyouka[4])
+				]
+			});
+			
+			KC3ShipManager.set([NewShipRaw]);
+			KC3ShipManager.save();
 			
 			KC3Network.trigger("Fleet");
 		},

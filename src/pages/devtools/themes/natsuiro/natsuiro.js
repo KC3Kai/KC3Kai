@@ -115,12 +115,16 @@
 		}
 
 		function switchToFleet(targetFleet) {
-			var fleetControls = $(".module.controls .fleet_num").toArray();
-			for (var i=0; i<fleetControls.length; ++i) {
-				var thisFleet = parseInt( $(fleetControls[i]).text(), 10);
-				if (thisFleet === targetFleet) {
-					$( fleetControls[i] ).trigger("click");
-					break;
+			if (targetFleet === "combined") {
+				$(".module.controls .fleet_rengo").trigger("click");
+			} else {
+				var fleetControls = $(".module.controls .fleet_num").toArray();
+				for (var i=0; i<fleetControls.length; ++i) {
+					var thisFleet = parseInt( $(fleetControls[i]).text(), 10);
+					if (thisFleet === targetFleet) {
+						$( fleetControls[i] ).trigger("click");
+						break;
+					}
 				}
 			}
 		}
@@ -136,7 +140,8 @@
 		} else {
 			// knowing fleets are all unavailable
 			// we can return focus to the main fleet.
-			switchToFleet(1);
+			// or if combined fleet is in used, we go to combined fleet tab
+			switchToFleet(PlayerManager.combinedFleet !== 0 ? "combined" : 1);
 			// also return focus to basic tab
 			$("#atab_basic").trigger("click");
 		}
@@ -546,9 +551,11 @@
 		
 		// Start Network listener
 		KC3Network.addGlobalListener(function(event, data){
-			if(isRunning || event == "HomeScreen" || event == "GameStart"){
+			if(isRunning || (["GameStart","HomeScreen","CatBomb"].indexOf(event)+1)){
 				if(typeof NatsuiroListeners[event] != "undefined"){
 					NatsuiroListeners[event](data);
+				} else {
+					console.warn("No event found for keyword",event);
 				}
 			}
 		});
@@ -1204,7 +1211,17 @@
 					$(".module.activity .node_type_text").addClass("select");
 					$(".module.activity .node_type_text").show();
 					break;
-					
+				
+				// Transport node
+				case "transport":
+					$(".module.activity .sortie_node_"+numNodes).addClass("nc_resource");
+					$(".module.activity .node_type_resource").removeClass("node_type_maelstrom");
+					$(".module.activity .node_type_resource .node_res_icon img").attr("src",
+						"../../../../assets/img/items/25.png");
+					$(".module.activity .node_type_resource .node_res_text").text( thisNode.amount + " drum carried" );
+					$(".module.activity .node_type_resource").show();
+					break;
+				
 				// Battle avoided node
 				default:
 					$(".module.activity .sortie_node_"+numNodes).addClass("nc_avoid");
@@ -1417,7 +1434,7 @@
 			// Show TP deduction
 			if(KC3SortieManager.getCurrentMapData().kind=='gauge-tp') {
 				updateMapGauge(
-					thisNode.gaugeDamage,
+					-thisNode.gaugeDamage,
 					true /* does not matter flagship status */
 				);
 			}
@@ -2125,15 +2142,17 @@
 					// Normalize the gauge until flagship sinking flag
 					mapHP = Math.max(mapHP,!fsKill);
 					
-					var rate = [mapHP,thisMap.curhp].sort().map(function(x){
+					var rate = [mapHP,thisMap.curhp].sort(function(a,b){
+						return b-a;
+					}).map(function(x){
 						return (x/thisMap.maxhp)*100;
 					});
 					
 					console.log.apply(console,rate);
 					$(".module.activity .map_hp").text( thisMap.curhp + " / " + thisMap.maxhp );
 					$(".module.activity .map_gauge")
-						.find('.nowhp').css("width", (rate.pop())+"%").end()
-						.find('.curhp').css("width", (rate.pop())+"%").end();
+						.find('.nowhp').css("width", (rate.shift())+"%").end()
+						.find('.curhp').css("width", (rate.shift())+"%").end();
 					
 				// If kill-based gauge
 				}else{
