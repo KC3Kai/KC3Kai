@@ -76,6 +76,7 @@ Retreives when needed to apply on components
 				salt_list 		: new KC3ShipMasterList(),
 				wish_list 		: new KC3ShipMasterList(),
 				lock_list 		: new KC3ShipRosterList(),
+				lock_prep 		: [],
 
 				ss_mode				: 0,
 				ss_type				: 'JPG',
@@ -264,17 +265,17 @@ Retreives when needed to apply on components
 					});
 				}},
 				
-				toJSON:{value:function toJSON(){return [].slice.apply(a);}},
+				toJSON:{value:function toJSON(){return [].slice.apply(this);}},
 			});
 			return KC3ShipList;
 		},
 		KC3ShipMasterList = IntFilterArray(function(x){
-			return (!isNaN(x) && isFinite(x) && typeof x === 'number' &&
-				!this.exists(x) && KC3Master.ship(x).kc3_model == 1);
+			var ret = !isNaN(x) && isFinite(x) && typeof x === 'number' && !this.exists(x);
+			try { ret &= KC3Master.ship(x).kc3_model == 1; } catch (e) {} finally { return ret; }
 		}),
 		KC3ShipRosterList = IntFilterArray(function(x){
-			return (!isNaN(x) && isFinite(x) && typeof x === 'number' &&
-				!this.exists(x) && KC3ShipManager.get(x).rosterId == x);
+			var ret = !isNaN(x) && isFinite(x) && typeof x === 'number' && !this.exists(x);
+			try { ret &= KC3ShipManager.get(x).rosterId == x; } catch (e) {} finally { return ret; }
 		});
 	
 })();

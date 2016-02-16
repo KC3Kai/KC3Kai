@@ -113,6 +113,19 @@ Used by SortieManager
 		return this;
 	};
 	
+	KC3Node.prototype.defineAsTransport = function( nodeData ){
+		this.type = "transport";
+		this.amount = KC3SortieManager.getSortieFleet().map(function(fleetId){
+			return PlayerManager.fleets[fleetId].ship().filter(function(ship){
+				return !(ship.didFlee);
+			}).map(function(ship){
+				return ship.countDrums();
+			}).reduce(function(pre,cur){ return pre+cur; },0);
+		}).reduce(function(pre,cur){ return pre+cur; },0);
+		
+		return this;
+	};
+	
 	KC3Node.prototype.defineAsDud = function( nodeData ){
 		this.type = "";
 		
@@ -501,11 +514,22 @@ Used by SortieManager
 			
 			ConfigManager.load();
 			ship_get.forEach(function(newShipId){
-				var salt_id = ConfigManager.salt_list.indexOf(newShipId)+1;
-				if(salt_id){
-					ConfigManager.salt_list.splice(salt_id-1,1);
-					console.warn("Removed",KC3Meta.shipName(KC3Master.ship(newShipId).api_name),"from salt list");
-				}
+				var wish_kind = ["salt","wish"];
+				
+				wish_kind.some(function(wishType){
+					var
+						wish_key = [wishType,'list'].join('_'),
+						wish_id = ConfigManager[wish_key].indexOf(newShipId)+1;
+					if(wish_id){
+						ConfigManager[wish_key].splice(wish_id-1,1);
+						console.warn("Removed",KC3Meta.shipName(KC3Master.ship(newShipId).api_name),"from",wishType,"list");
+						
+						ConfigManager.lock_prep.push(newShipId);
+						return true;
+					} else {
+						return false;
+					}
+				});
 			});
 			ConfigManager.save();
 			
