@@ -6,7 +6,7 @@ Has functions for TimerManager to use
 */
 (function(){
 	"use strict";
-	
+
 	window.KC3Timer = function(element, type, num){
 		this.alerted = false;
 		this.type = type;
@@ -14,23 +14,23 @@ Has functions for TimerManager to use
 		this.element = element;
 		this.deactivate();
 	};
-	
+
 	KC3Timer.prototype.show = function(element){ this.element.show(); };
 	KC3Timer.prototype.hide = function(element){ this.element.hide(); };
-	
+
 	KC3Timer.prototype.activate = function(completion, faceId, expedNum){
 		this.active = true;
 		this.completion = completion;
 		if(typeof faceId != "undefined"){ if(faceId>0){ this.faceId = faceId; } }
 		if(typeof expedNum != "undefined"){ this.expedNum = expedNum; }
-		
+
 		var remaining = this.completion - Date.now();
 		remaining = Math.ceil((remaining - (ConfigManager.alert_diff*1000))/1000);
 		if(remaining <= 0){
 			this.alerted = true;
 		}
 	};
-	
+
 	KC3Timer.prototype.deactivate = function(){
 		this.active = false;
 		this.completion = 0;
@@ -40,17 +40,17 @@ Has functions for TimerManager to use
 		$(".timer-expnum", this.element).text("");
 		$(".timer-time", this.element).text("");
 	};
-	
+
 	KC3Timer.prototype.time = function(){
 		$(".timer-time", this.element).text( this.text() );
 	};
-	
+
 	KC3Timer.prototype.expnum = function(){
 		if(this.expedNum > 0){
 			$(".timer-expnum", this.element).text( this.expedNum );
 		}
 	};
-	
+
 	KC3Timer.prototype.face = function( faceId){
 		if(typeof faceId != "undefined"){ this.faceId = faceId; }
 		if(this.faceId > 0){
@@ -62,15 +62,15 @@ Has functions for TimerManager to use
 			$(".timer-img img", this.element).hide();
 		}
 	};
-	
+
 	KC3Timer.prototype.updateElement = function(element){
 		this.element = element;
 	};
-	
+
 	KC3Timer.prototype.remainingTime = function(){
 		return this.active ? (this.completion - Date.now()) : 0;
 	};
-	
+
 	KC3Timer.prototype.text = function(){
 		if(this.active){
 			var remaining = this.remainingTime();
@@ -81,36 +81,36 @@ Has functions for TimerManager to use
 				return String(remaining).toHHMMSS();
 			}else{
 				this.completionAlert();
-				return "Complete!";
+				return KC3Meta.term("TimerComplete");
 			}
 		}else{
 			return "";
 		}
 	};
-	
+
 	KC3Timer.prototype.completionAlert = function(){
 		if(this.alerted){ return false; }
 		this.alerted = true;
-		
+
 		// Sound Alerts
 		if(KC3TimerManager.notifSound){
 			KC3TimerManager.notifSound.pause();
 		}
 		switch(ConfigManager.alert_type){
 			case 1: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/pop.mp3"); break;
-			case 2: KC3TimerManager.notifSound = new Audio(ConfigManager.alert_custom); break; 
-			case 3: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/ding.mp3"); break; 
+			case 2: KC3TimerManager.notifSound = new Audio(ConfigManager.alert_custom); break;
+			case 3: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/ding.mp3"); break;
 			default: KC3TimerManager.notifSound = false; break;
 		}
 		if(KC3TimerManager.notifSound){
 			KC3TimerManager.notifSound.volume = ConfigManager.alert_volume / 100;
 			KC3TimerManager.notifSound.play();
 		}
-		
+
 		// Desktop notification
 		var notifData = { type: "basic" };
 		var shipName;
-			
+
 		// Notification types show varying messages
 		switch(this.type){
 			case 0:
@@ -139,7 +139,7 @@ Has functions for TimerManager to use
 				break;
 			default:break;
 		}
-			
+
 		// Tell background page to show the notification, cant do it here
 		if(ConfigManager.alert_desktop){
 			(new RMsg("service", "notify_desktop", {
@@ -147,7 +147,7 @@ Has functions for TimerManager to use
 				data: notifData
 			})).execute();
 		}
-		
+
 	};
-	
+
 })();
