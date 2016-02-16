@@ -797,13 +797,6 @@ Previously known as "Reactor"
 		"api_req_combined_battle/ld_airbattle":function(params, response, headers){
 			this["api_req_combined_battle/battle"].apply(this,arguments);
 		},
-		"api_req_combined_battle/ld_airbattle":function(params, response, headers){
-			KC3SortieManager.engageBattle(
-				response.api_data,
-				Math.floor((new Date(headers.Date)).getTime()/1000)
-			);
-			KC3Network.trigger("BattleStart");
-		},
 		
 		/* BATTLE STARTS as NIGHT
 		-------------------------------------------------------*/
