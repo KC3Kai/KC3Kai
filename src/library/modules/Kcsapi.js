@@ -611,6 +611,30 @@ Previously known as "Reactor"
 			KC3Network.trigger("Fleet");
 		},
 		
+		/* Lock a ship
+		-------------------------------------------------------*/
+		"api_req_hensei/lock":function(params, response, headers){
+			var shipID    = parseInt(params.api_ship_id,10);
+			var lockState = response.api_data.api_locked;
+			var shipData  = KC3ShipManager.get(shipID);
+			
+			if(shipData.lock) {
+				console.warn("Unlocked",shipData.rosterId,shipData.name());
+			} else {
+				var lockID = ConfigManager.lock_list.indexOf(shipID);
+				if(lockID+1) {
+					ConfigManager.lock_list.splice(lockID,1);
+					ConfigManager.save();
+				} else {
+					console.info("Locked (~)",shipData.rosterId,shipData.name());
+				}
+			}
+			
+			shipData.lock = lockState;
+			KC3ShipManager.save();
+			KC3Network.trigger("Fleet");
+		},
+		
 		/* Change equipment of a ship
 		-------------------------------------------------------*/
 		"api_req_kaisou/slotset":function(params, response, headers){

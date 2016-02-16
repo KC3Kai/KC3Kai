@@ -249,7 +249,7 @@ KC3改 Ship Object
 			akashi:
 				( HPPercent > 0.50 && HPPercent < 1.00 && this.isFree()) ?
 				/* RepairCalc.facilityInSecJSNum( this.master().api_stype, this.level, this.hp[0], this.hp[1] ) */
-				Math.max(RepairTSec,1200) : 0
+				Math.max(Math.min((1200000 * (this.hp[1] - this.hp[0]))+30000,RepairTSec),1200) : 0
 		};
 	};
 	

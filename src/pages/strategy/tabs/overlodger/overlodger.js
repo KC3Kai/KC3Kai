@@ -136,7 +136,7 @@
 		},
 		
 		sortie: (function(){
-			function KC3LodgerSortieConfig(){
+			function KC3LedgerSortieConfig(){
 				/*
 					1 - Basic Sortie
 					2 - Extra Sortie
@@ -162,7 +162,7 @@
 					}
 				});
 			}
-			return new KC3LodgerSortieConfig();
+			return new KC3LedgerSortieConfig();
 		})(),
 		
 		filter: {},
@@ -177,6 +177,13 @@
 				cacheKeyFX  = [0,0,0,0,0],
 				cacheKeyMD  = [0,0,0,0,0],
 				funcac = {},lctx;
+			
+			var
+				emptyLedger = ['first','clear','last'].reduce(function(objk,itky){
+					objk[itky] = NaN; return objk;
+				},{}),
+				rangeNullFil = function(dt,id){
+					return dt || cr[id]; };
 			function cache(x,f,w,m,p,r) {
 				// x - ledger id
 				// f - filter
@@ -301,26 +308,52 @@
 									gs = Math.sign(ledger_type),
 									fi = {w:self.sortie.World,m:self.sortie.Map},
 									
+									qf = function filter(ary,fun){
+										switch(Math.sign(ledger_type)){
+											case  1:
+												return ary.slice(0,2);
+											case -1:
+												return ary.slice(1,3);
+											default:
+												return [ary[0],ary[2]];
+										}
+									},
 									rg = function(x,i){switch(Math.sign(ledger_type)){
 										case  1: return (i <= 1);       // F C     //
 										case -1: return (i >= 1);       //   C L X //
 										default: return (i %  2 === 0); // F   L   //
-									}};
+									}},
+									sortieFil = function(x,i){
+										switch(Math.sign(ledger_type)){
+											case  1: return x <= this[1]
+											case -1: return x >  this[1]
+											default: return true;
+										}
+									};
 								
 								cacheKeyMD[0] = cacheKeyFX[0];
 								cacheKeyMD[1] = cacheKeyFX[1];
 								cacheKeyMD[4] = cacheKeyFX[4];
 								
 								try {
-									var ret = !lt || (fi.w ? [fi.w] : Object.keys(ledgerCache)).some(function(wr){
+									var
+										wa = (fi.w ? [fi.w] : Object.keys(ledgerCache)),
+										ret = !lt,
+										wr;
+									
+									while(!ret && wa.length) {
+										wr = wa.shift();
+										
 										var
-											sw = ledgerCache[wr] || ['first','clear','last'].reduce(function(objk,itky){
-												objk[itky] = NaN; return objk;
-											},{}),
-											sc;
+											sw = ledgerCache[wr] || emptyLedger,
+											cret = false,
+											sc,rgrt;
 										cacheKeyMD[2] = Number(wr);
-										er = [sw.first,sw.clear,sw.last,0].map(function(dt,id){
-											return dt || cr[id]; });
+											er[0] = sw.first || cr[0];
+											er[1] = sw.clear || cr[1];
+											er[2] = sw.last  || cr[2];
+										
+										if(data.id < er[0] || data.id > er[2]) { ret = false; continue; }
 										
 										switch(lt % 3) {
 											/* logic :
@@ -339,36 +372,74 @@
 											// 3 - only allow sortie ID inside specified range (FC/CLX ranges)
 											*/
 											case 1:
-												return ((fi.w && fi.m) ? [fi.m] : Object.keys(sw)).some(function(nm){
+												var
+													ma = ((fi.w && fi.m) ? [fi.m] : Object.keys(sw)),
+													nm;
+												
+												while(!cret && ma.length) {
+													nm = ma.shift();
+													
 													cacheKeyMD[3] = Number(nm);
 													cacheD = cache.apply(null,cacheKeyMD);
-													if(typeof cacheD == 'boolean') { return cacheD; }
+													if(typeof cacheD == 'boolean') { cret |= cacheD; continue; }
 													
 													sc = sw[nm];
-													sr = [sc.first,sc.clear || sc.last,sc.last,0].map(function(dt,id){
-														return dt || cr[id]; });
-													return cache.apply(null, cacheKeyMD.concat( (0).inside.apply(data.id,sr.filter(rg)) ) );
-												});
+														sr[0] = sc.first || cr[0];
+														sr[1] = sc.clear || sc.last || cr[1];
+														sr[2] = sc.last  || cr[2];
+													switch(Math.sign(ledger_type)){
+														case  1:
+															rgrt = (0).inside.apply(data.id,sr.slice(0,2));
+															break;
+														case -1:
+															rgrt = (0).inside.apply(data.id,sr.slice(1,3));
+															break;
+														default:
+															rgrt = (0).inside.call (data.id,sr[0],sr[2]);
+															break;
+													}
+													cret |= cache.apply(null, cacheKeyMD.concat( rgrt ) );
+												}
+												break;
 											case 2:
 												cacheKeyMD[3] = Number(fi.m);
 												cacheD = cache.apply(null,cacheKeyMD);
-												if(typeof cacheD == 'boolean') { return cacheD; }
+												if(typeof cacheD == 'boolean') { cret |= cacheD; continue; }
 												
 												sc = sw[fi.m];
-												sr = [sc.first,sw.clear || sw.last,sw.last,0].map(function(dt,id){
-													return dt || cr[id]; });
-												return cache.apply(null, cacheKeyMD.concat( (0).inside.apply(data.id,sr.filter(rg)) ) );
+													sr[0] = sc.first || cr[0];
+													sr[1] = sw.clear || sw.last || cr[1];
+													sr[2] = sw.last  || cr[2];
+												switch(Math.sign(ledger_type)){
+													case  1:
+														rgrt = (0).inside.apply(data.id,sr.slice(0,2));
+														break;
+													case -1:
+														rgrt = (0).inside.apply(data.id,sr.slice(1,3));
+														break;
+													default:
+														rgrt = (0).inside.call (data.id,sr[0],sr[2]);
+														break;
+												}
+												cret |= cache.apply(null, cacheKeyMD.concat( rgrt ) );
+												break;
 											default:
 												cacheKeyMD[3] = Number(fi.m);
 												cacheD = cache.apply(null,cacheKeyMD);
-												if(typeof cacheD == 'boolean') { return cacheD; }
+												if(typeof cacheD == 'boolean') { cret |= cacheD; continue; }
 												
 												sc = sortieCache[wr][fi.m];
-												sr = [sc.sortieFirst,sw.sortieClear || sw.sortieLast,sw.sortieLast,0].map(function(dt,id){
-													return dt || cr[id]; });
-												return cache.apply(null, cacheKeyMD.concat( (0).inside.apply(data.opt,sr.filter(rg)) ) );
+												sr = sortieCache[wr].rangeE(Math.sign(ledger_type),fi.m);
+												var sf;
+												sf = activeSelf.sortieRange[wr+fi.m];
+												sf = sf.filter(sortieFil,sr[1]);
+												rgrt  = sf.indexOf(data.opt)>=0;
+												cret |= cache.apply(null, cacheKeyMD.concat( rgrt ) );
+												break;
 										}
-									});
+										
+										ret |= cret;
+									};
 									return ret;
 								} catch (e) {
 									console.error(e); // Accessing non exists ledger data
@@ -471,6 +542,10 @@
 								var self = this;
 								return (activeSelf.dataBuffer.sortie.slice().reverse().find(function(x){return self.sortieLast && (Number(x.opt) >= self.sortieLast);})||{id:null}).id;
 							} },
+							
+							rangeSFCF  : { get: function(){return Range(this.sortieFirst || 0,this.sortieClear ||   this.sortieLast || 0,1,1); } },
+							rangeSCLX  : { get: function(){return Range(this.sortieClear ||   this.sortieLast  || 0,this.sortieLast || 0,0,1); } },
+							rangeSFLF  : { get: function(){return Range(this.sortieFirst || 0,this.sortieLast  || 0,0,1); } },
 						});
 						Object.defineProperties(worldData,{
 							sortieFirst: { get: function(){ return this[1].sortieFirst; } },
@@ -492,15 +567,39 @@
 								try { return this[--nonEmptyLedger].ledgerLast; } catch (e) { return null; }
 							} },
 							0          : { get: function(){ return this; } },
+							
+							rangeSFCF  : { get: function(){return Range(this.sortieFirst || 0,this.sortieClear ||   this.sortieLast || 0,1,1); } },
+							rangeSCLX  : { get: function(){return Range(this.sortieClear ||   this.sortieLast  || 0,this.sortieLast || 0,0,1); } },
+							rangeSFLF  : { get: function(){return Range(this.sortieFirst || 0,this.sortieLast  || 0,0,1); } },
+							rangeE     : { value: function(tp,nm){switch(tp){
+								case  1: return this.rangeEFCF(nm);
+								case -1: return this.rangeECLX(nm);
+								default: return this.rangeEFLF(nm);
+							}} },
+							rangeEFCF  : { value: function(nm){return Range(this[nm].sortieFirst || 0,this.sortieClear ||   this.sortieLast || 0,1,1); } },
+							rangeECLX  : { value: function(nm){return Range(this.sortieClear ||   this.sortieLast  || 0,this.sortieLast || 0,0,1); } },
+							rangeEFLF  : { value: function(nm){return Range(this[nm].sortieFirst || 0,this.sortieLast  || 0,0,1); } },
+							
+							langeSFCF  : { get: function(){return Range(this.ledgerFirst || 0,this.ledgerClear ||   this.ledgerLast || 0,1,1); } },
+							langeSCLX  : { get: function(){return Range(this.ledgerClear ||   this.ledgerLast  || 0,this.ledgerLast || 0,0,1); } },
+							langeSFLF  : { get: function(){return Range(this.ledgerFirst || 0,this.ledgerLast  || 0,0,1); } },
+							langeE     : { value: function(tp,nm){switch(tp){
+								case  1: return this.langeEFCF(nm);
+								case -1: return this.langeECLX(nm);
+								default: return this.langeEFLF(nm);
+							}} },
+							langeEFCF  : { value: function(nm){return Range(this[nm].ledgerFirst || 0,this.ledgerClear ||   this.ledgerLast || 0,1,1); } },
+							langeECLX  : { value: function(nm){return Range(this.ledgerClear ||   this.ledgerLast  || 0,this.ledgerLast || 0,0,1); } },
+							langeEFLF  : { value: function(nm){return Range(this[nm].ledgerFirst || 0,this.ledgerLast  || 0,0,1); } },
 						});
 						
 						Object.defineProperties(lmd,{
 							range : {value:function( t ){
-								return [this.first,this.clear,this.last,0].filter(function(x,i){switch(Number(t)){
+								return Range.apply(null,[this.first,this.clear || this.last,this.last,0].filter(function(x,i){switch(Number(t)){
 									case  1: return (i <= 1);       // F C     //
 									case  2: return (i >= 1);       //   C L X //
 									default: return (i %  2 === 0); // F   L   //
-								}});
+								}}));
 							}},
 							inside: {value:function(a,b){ return Number(a) && (0).inside.apply(Number(a),this.range(b));}},
 							
@@ -730,6 +829,8 @@
 								console.log('Execution',name,'Completed in ',time,'ms');
 							}).fail(function(){
 								console.error('Execution',name,'Failed after',time,'ms');
+							}).progress(function(x){
+								console.info('Execution',name,'still ongoing after',Date.now() - time,'ms on milestone:',x);
 							});
 							this.push(ctr);
 							return ctr;
@@ -757,7 +858,9 @@
 									var oldBufferLen = this.sortieBuffer.length || 0;
 									console.log("Extending map buffer from",oldBufferLen,"by",newBuffer.length);
 									$.extend(this.sortieBuffer,newBuffer);
-									$.each(this.sortieRange,function(k,v){ (self.sortieRange[k] = self.sortieRange[k] || []).splice(0); });
+									$.each(this.sortieRange,function(k,v){
+										(self.sortieRange[k] = self.sortieRange[k] || []).splice(0);
+									});
 									
 									Object.keys(this.sortieBuffer).forEach(function(sortieID){
 										var
@@ -767,6 +870,41 @@
 										sortieAry.push(sortieID);
 									});
 									
+									$.each(this.sortieRange,function(k,v){
+										var wr = /(\d+)(\d)/.exec(k)[1];
+										if(!self.sortieRange[wr+'0']){
+											Object.defineProperty(self.sortieRange,wr+'0',{
+												get: (function(){
+													var cache={len:[],data:[]};
+													function getlength(){
+														var c = 0;
+														for(var kk in self.sortieRange){ c += /(\d+)(\d)/.exec(kk)[1] == wr; }
+														return c;
+													}
+													function getwhole(){
+														if(
+															cache.len.length == getlength() &&
+															cache.len.every(function(itmlen,idx){return itmlen == self.sortieRange[wr+(idx+1)].length;})
+														) {
+														} else {
+															cache.len.splice(0);
+															cache.data.splice(0);
+															
+															for(var kk in self.sortieRange){
+																var rg = /(\d+)(\d)/.exec(kk);
+																var ii = rg[2] - 1;
+																if(rg[1] == wr)
+																	cache.len[ii] = [].push.apply(cache.data,self.sortieRange[kk]);
+															}
+														}
+														return cache.data;
+													}
+													$.extend(getwhole,{cache:cache});
+													return getwhole;
+												}).call(self.sortieRange),
+											});
+										}
+									});
 									
 									thr.resolve(newBuffer.length);
 								} catch (e) {
@@ -855,11 +993,13 @@
 							function(newBuffer){
 								// Process here
 								try {
-									newBuffer.forEach(function(newData,index){
+									for(var index in newBuffer) { // tested and faster than those forEach :joy:
 										var
+											newData   = newBuffer[index],
+											
 											givenType = /([a-z]+)(\d*)/.exec(newData.type),
 											givenAry  = self.dataBuffer[givenType[1]],
-											newItem   = new KC3LodgerBuffer(
+											newItem   = new KC3LedgerBuffer(
 												newData.id,
 												newData.hour,
 												newData.data,
@@ -867,13 +1007,15 @@
 												dataScale[Object.keys(self.dataBuffer).indexOf(givenType[1])],
 												givenType[2]
 											);
-										[givenAry,self.totalBuffer].forEach(function(bufferArray){
-											if(bufferArray.every(function(buffer){
-												return !buffer.equals(newItem);
-											}))
-												bufferArray.push(newItem);
-										});
-									});
+										//[givenAry,self.totalBuffer].forEach(function(bufferArray){
+										//	if(bufferArray.every(function(buffer){
+										//		return !buffer.equals(newItem);
+										//	}))
+										//		bufferArray.push(newItem);
+										//});
+										givenAry.push(newItem);
+										(self.totalBuffer).push(newItem);
+									};
 								} catch (e) {
 									console.error(e.stack);
 								} finally {
@@ -1122,9 +1264,12 @@
 					.on('click',function(){
 						$('button,input,select,option',baseContext).prop('disabled',true);
 						
+						var time = Date.now();
 						self.resetBuffer();
 						$(".filterGroup",baseContext).trigger('refresh');
 						$(this).trigger('refresh');
+						time = Date.now() - time;
+						console.info("Refresh done in",time,"msec");
 					});
 		},
 		
@@ -1283,10 +1428,10 @@
 	----------------------------------------------- */
 	
 	var
-		KC3LodgerBuffer = (function(){
-			function KC3LodgerBuffer(id,hour,matr,kind,mult,optional) {
+		KC3LedgerBuffer = (function(){
+			function KC3LedgerBuffer(id,hour,matr,kind,mult,optional) {
 				/*jshint: validthis true*/
-				if(this instanceof KC3LodgerBuffer){
+				if(this instanceof KC3LedgerBuffer){
 					if(!Range(4,6).inside(arguments.length)){
 						var
 							kn = ['id','hour','matr','kind','mult','optional','overflow'],
@@ -1335,7 +1480,7 @@
 				}
 			}
 			
-			Object.defineProperties(KC3LodgerBuffer.prototype,{
+			Object.defineProperties(KC3LedgerBuffer.prototype,{
 				toString: { value: Function.prototype.apply.bind(function(){
 					var self = this;
 					if(typeof self == 'undefined' || self == KC3LodgerBuffer.prototype) {
@@ -1379,11 +1524,11 @@
 				}) }
 			});
 			
-			KC3LodgerBuffer.toString = String.prototype.toString.bind("function KC3Buffer(id,hour,material[,coefficient[,optional]])");
+			KC3LedgerBuffer.toString = String.prototype.toString.bind("function KC3Buffer(id,hour,material[,coefficient[,optional]])");
 			
-			Object.defineProperty(KC3LodgerBuffer,'toString',{});
+			Object.defineProperty(KC3LedgerBuffer,'toString',{});
 			
-			return KC3LodgerBuffer;
+			return KC3LedgerBuffer;
 		})(),
 		
 		KC3PrimitiveWrapper = (function(){
@@ -1414,12 +1559,27 @@
 		var
 			self = this,
 			fun  = self.wholeSortieFilter;
-		allBuffer = (this.totalBuffer)
-			.filter(function(d,i,a){
-				return self.filter[d.kind] &&
+		
+		var d,i,a,t,pr;
+		allBuffer.splice(0);
+		t = Date.now();
+		pr = (self.sortie.Filter == 3 && self.sortie.World != 0) ? sortieCache[self.sortie.World].langeE(Math.sign(self.sortie.Period),self.sortie.Map) : Range();
+		for(i=0,a=this.totalBuffer;i<a.length;i++){
+			//if((Date.now() - t) > 10000) {
+			//	console.error("Operation timeout after executing",i+1,"data");
+			//	break;
+			//}
+			d = a[i];
+			if( self.filter[d.kind] &&
 					Range.apply(null,lookupBound).inside(d.hour) &&
-					((typeof fun !== 'function') || fun.call(self,d.kind,d,i,a));
-			});
+					(self.sortie.World <= 10 || pr.inside(d.id)) &&
+					((typeof fun !== 'function') || fun.call(self,d.kind,d,i,a))
+				)
+				allBuffer.push(d);
+			if(i%500==499 && (Date.now - t > 300)) {
+				console.info("Milestone",i+1,"check after",Date.now() - t,"msec");
+			}
+		}
 		this.flatBuffer = Object.freeze(allBuffer.slice(0));
 		this.dataRating = calculateRating.apply(null,[lookupDays()].concat(allBuffer));
 		
@@ -1494,7 +1654,7 @@
 			return 5;
 		// Validate Parameters
 		[].forEach.call(args,function(bufferData){
-			if(!(bufferData instanceof KC3LodgerBuffer))
+			if(!(bufferData instanceof KC3LedgerBuffer))
 				throw new TypeError(["Given item is not a KC3Buffer class! (",String(bufferData),")"].join(''));
 		});
 		
@@ -1519,14 +1679,14 @@
 			return (avg * num + val)/(num + 1);
 		},0);
 		
-		sRatio  = Math.pow(dcCoef,-0.5);
-		aRating = (aRating * (1-sRatio) + (new KC3LodgerBuffer(null,null,dataSum,"overall")).bRating * sRatio);
+		sRatio  = Math.pow(dcCoef,-0.4);
+		aRating = (aRating * (1-sRatio) + (new KC3LedgerBuffer(null,null,dataSum,"overall")).bRating * sRatio);
 		
 		dRating = dataAvg.length > 1 ? Math.stdev.apply(null,dataAvg) : 0;
 		pRatio  = Math.pow(Math.max(0,1 - Math.abs(aRating)),1.5) * Math.sign(aRating);
 		
 		bResult = {bRating: aRating + dRating * pRatio};
-		return KC3LodgerBuffer.prototype.rating.bind(bResult,bResult).call();
+		return KC3LedgerBuffer.prototype.rating.bind(bResult,bResult).call();
 	}
 	
 }).call({});
