@@ -795,7 +795,10 @@
 				}
 				if(quest.meta){
 					$(".quest_text", questBox).text( quest.meta().name );
-					$(".quest_text", questBox).attr("title", quest.meta().desc );
+					$(".quest_text", questBox).attr("title", quest.meta().code + " " + quest.meta().name + "\n" + quest.meta().desc );
+					if(!!quest.meta().memo) {
+						$(".quest_text", questBox).attr("title", $(".quest_text", questBox).attr("title") + "\n" + quest.meta().memo );
+					}
 				}else{
 					$(".quest_text", questBox).text( KC3Meta.term("UntranslatedQuest") );
 					$(".quest_text", questBox).attr("title", KC3Meta.term("UntranslatedQuest") );
