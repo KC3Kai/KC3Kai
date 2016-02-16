@@ -325,8 +325,8 @@
 									}},
 									sortieFil = function(x,i){
 										switch(Math.sign(ledger_type)){
-											case  1: return x <= this[1]
-											case -1: return x >  this[1]
+											case  1: return x <= this[1];
+											case -1: return x >  this[1];
 											default: return true;
 										}
 									};
@@ -439,7 +439,7 @@
 										}
 										
 										ret |= cret;
-									};
+									}
 									return ret;
 								} catch (e) {
 									console.error(e); // Accessing non exists ledger data
@@ -1015,7 +1015,7 @@
 										//});
 										givenAry.push(newItem);
 										(self.totalBuffer).push(newItem);
-									};
+									}
 								} catch (e) {
 									console.error(e.stack);
 								} finally {
@@ -1563,7 +1563,7 @@
 		var d,i,a,t,pr;
 		allBuffer.splice(0);
 		t = Date.now();
-		pr = (self.sortie.Filter == 3 && self.sortie.World != 0) ? sortieCache[self.sortie.World].langeE(Math.sign(self.sortie.Period),self.sortie.Map) : Range();
+		pr = (self.sortie.Filter == 3 && self.sortie.World) ? sortieCache[self.sortie.World].langeE(Math.sign(self.sortie.Period),self.sortie.Map) : Range();
 		for(i=0,a=this.totalBuffer;i<a.length;i++){
 			//if((Date.now() - t) > 10000) {
 			//	console.error("Operation timeout after executing",i+1,"data");
