@@ -110,17 +110,30 @@
             
             var k2 = {};
 
+            var k2Ids = [];
+            $.each( ids, function(i,id) {
+                var k2Id = K2Badge.mstId2KainiTable[id];
+                // TODO: Bismarck
+                if (k2Id) {
+                    k2Ids.push(k2Id);
+                    
+                    // the user can only get Bismarck drei (178)
+                    // by remodeling Bismarck zwei (173)
+                    // so if it turns out that the player has 178, we add 173
+                    // into the list no matter the player has it or not.
+                    if (id === 178) {
+                        k2Ids.push( K2Badge.mstId2KainiTable[173] );
+                    }
+                }
+            });
             $.each( K2Badge.k2Template, function(stype, v1) {
                 var obj = {};
                 $.each(v1, function(bid,v2) {
-                    var mid = K2Badge.kaini2MstIdTable[bid];
-                    obj[bid] = (ids.indexOf(mid) !== -1);
+                    obj[bid] = (k2Ids.indexOf(bid) !== -1);
                 });
                 k2[stype] = obj;
             });
-
             var k2Encoded = btoa( JSON.stringify(k2));
-
             return {
                 colle: colleEncoded,
                 k2: k2Encoded
