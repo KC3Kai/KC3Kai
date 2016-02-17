@@ -122,10 +122,11 @@
             "447":"roma2",
             "461":"shoukaku2",
             "462":"zuikaku3",
-            "464":"kasumi2"
-            "466":"shoukaku3",
-            "467":"zuikaku4",
-            "470":"kasumi3"
+            "464":"kasumi2",
+            // NOTE: the following 3 should only be used in k2
+            "466":"shoukaku2",
+            "467":"zuikaku3",
+            "470":"kasumi2"
         },
         colle2MstIdTable: {
             "shimakaze1":50,
@@ -397,6 +398,8 @@
             "hyuuga2":88,
             "ise2":82,
             "isokaze2":320,
+            "kasumi2":464,
+            "kasumi3":470,
             "kitakami2":58,
             "kumano2":130,
             "mikuma2":121,
@@ -413,6 +416,8 @@
             "ryuujou2":281,
             "shiratsuyu2":242,
             "shouhou3":282,
+            "shoukaku2":461,
+            "shoukaku3":466,
             "suzuya2":129,
             "taihou2":156,
             "takanami2":345,
@@ -422,6 +427,8 @@
             "yamato2":136,
             "zuihou2":117,
             "zuikaku2":112,
+            "zuikaku3":462,
+            "zuikaku4":467
         },
         // master id -> fleet id
         // cases where remodels use the picture of their previous model
