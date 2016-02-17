@@ -18,9 +18,12 @@
        (There is one special case: "hiryuu2" (Hiryuu Kai 2) is a colle id / unique id
        while the origin ship "hiryuu1" is not used)
 
-   * K2Badge.mstId2KainiTable (deprecated: K2Badge.kaini2MstIdTable)
+   * K2Badge.mstId2KainiTable
        Ships that has kai ni remodel or consumes blueprints for remodeling.
-       1-1 correpondence. (TODO: not true for kasumi, shoukaku and zuikaku)
+       Every master id can be mapped uniquely to one kaini id, but note that
+       when a kanmusu has more than one kai2 forms, all share the same kai2 id
+       (e.g. kasumi, shoukaku and zuikaku)
+       Therefore the reverse mapping might not be correct.
 
    * K2Badge.mstId2FleetIdTable
        Many-to-one correpondence between master id and fleet id.
@@ -34,6 +37,9 @@
    Note:
    * jquery required (for $.extend)
    * think this module as a set of constant tables, don't modify
+   * Bismarck drei (178) is remodelled from Bismarck zwei (173)
+     so if user has Bismarck drei, you might want to make a special case
+     to include Bismarck zwei as well.
 
 */
 (function() {
@@ -48,12 +54,10 @@
                 });
                 return obj;
             }
-            // TODO: make special cases for Bismarck?
-
             var kaini2MstIdTable = reverseTable(this.mstId2KainiTable);
             this.mstId2ColleTable = reverseTable(this.colle2MstIdTable);
 
-            var fleetId2MstIdTable = 
+            var fleetId2MstIdTable =
                 $.extend({},
                          this.colle2MstIdTable,
                          kaini2MstIdTable,

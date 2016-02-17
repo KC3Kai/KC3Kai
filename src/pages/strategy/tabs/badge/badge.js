@@ -22,7 +22,7 @@
                 var v = $(this).val();
 
                 $(".export_method .desc").empty();
-                
+
                 function mkText(text) {
                     $("<div />")
                         .text(text)
@@ -62,21 +62,21 @@
                         .appendTo(".tab_badge .export_result");
                 }
 
-                var result = 
+                var result =
                     v === 'shiplist'
-                    ? self.exportFromShipList() 
+                    ? self.exportFromShipList()
                     : v === 'picturebook'
                     ? self.exportFromPictureBook()
                     : {};
                 result = $.extend(
-                    result, 
+                    result,
                     self.exportTtkInfo(),
                     self.exportFleetInfo());
 
                 $.each(result, function(k,v) {
                     mkText(String(k) + "=" + v);
                 });
-                
+
             });
 		},
         exportFromIdList: function(ids) {
@@ -105,18 +105,17 @@
             $.each(colleIds, function(i,x) {
                 colle[x] = true;
             });
-            
+
             var colleEncoded = btoa(JSON.stringify(colle));
-            
+
             var k2 = {};
 
             var k2Ids = [];
             $.each( ids, function(i,id) {
                 var k2Id = K2Badge.mstId2KainiTable[id];
-                // TODO: Bismarck
                 if (k2Id) {
                     k2Ids.push(k2Id);
-                    
+
                     // the user can only get Bismarck drei (178)
                     // by remodeling Bismarck zwei (173)
                     // so if it turns out that the player has 178, we add 173
@@ -157,7 +156,7 @@
         },
         exportFleetInfo: function() {
             PlayerManager.loadFleets();
-            
+
             var allFleetInfo = [];
             var i,j;
             for (i=0; i<4;++i) {
@@ -166,29 +165,29 @@
                 for (j=0;j<6;++j) {
                     if (fleet && fleet.ships[j] !== -1) {
                         var ship = KC3ShipManager.get(fleet.ships[j]);
-                        fleetInfo.push( {lvl: ship.level, 
+                        fleetInfo.push( {lvl: ship.level,
                                          str: "icon"+K2Badge.mstId2FleetIdTable[ship.masterId]
                                         } );
 
                     } else {
-                        fleetInfo.push( {lvl:1, 
+                        fleetInfo.push( {lvl:1,
                                          str:""} );
                     }
                 }
                 allFleetInfo.push( fleetInfo );
-                
+
             }
             var levelStr = allFleetInfo
                 .map( function(fleet) {
                     return fleet
-                        .map( function(s) { 
+                        .map( function(s) {
                             return s.lvl; })
                         .join(",");
                 }).join("|");
             var fleetStr = allFleetInfo
                 .map( function(fleet) {
                     return fleet
-                        .map( function(s) { 
+                        .map( function(s) {
                             return s.str; })
                         .join(",");
                 }).join("|");
