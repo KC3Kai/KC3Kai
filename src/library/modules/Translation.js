@@ -20,6 +20,10 @@
 				$(this).html( KC3Meta.term( $(this).text() ) );
 				$(this).css("visibility", "visible");
 			});
+			// Update title attribute with translations
+			$(".i18n_title").each(function(){
+				$(this).attr("title", KC3Meta.term( $(this).attr("title") ) );
+			});
 		},
 		
 		

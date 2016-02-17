@@ -1166,14 +1166,14 @@
 
 					// If kill-based gauge
 					}else{
-						var totalKills = KC3Meta.gauge( thisMapId );
+						var totalKills = KC3Meta.gauge( thisMapId.replace("m","") );
 						console.log("wm", KC3SortieManager.map_world, KC3SortieManager.map_num);
 						console.log("thisMapId", thisMapId);
 						console.log("KC3Meta", KC3Meta._gauges);
 						console.log("totalKills", totalKills);
 						var killsLeft = totalKills - thisMap.kills;
 						if(totalKills){
-							$(".module.activity .map_hp").text( killsLeft+" / "+totalKills+" kills");
+							$(".module.activity .map_hp").text( killsLeft + " / "+ totalKills + KC3Meta.term("BattleMapKills"));
 							$(".module.activity .map_gauge_bar").css("width", ((killsLeft/totalKills)*58)+"px");
 						}else{
 							$(".module.activity .map_hp").text( KC3Meta.term("BattleMapNotClear") );
@@ -1181,7 +1181,7 @@
 					}
 				}
 			}else{
-				$(".module.activity .map_hp").text("No gauge");
+				$(".module.activity .map_hp").text( KC3Meta.term("BattleMapNoHpGauge") );
 			}
 
 >>>>>>> [WIP] Update files for more i18n messages
@@ -1260,7 +1260,7 @@
 				case "select":
 					console.log("natsuiro should show selection node");
 					$(".module.activity .sortie_node_"+numNodes).addClass("nc_select");
-					$(".module.activity .node_type_text").text("Select: "+
+					$(".module.activity .node_type_text").text( KC3Meta.term("BattleSelect") +
 						thisNode.choices[0]+" or "+thisNode.choices[1]);
 					$(".module.activity .node_type_text").addClass("select");
 					$(".module.activity .node_type_text").show();
@@ -1283,7 +1283,7 @@
 				// Battle avoided node
 				default:
 					$(".module.activity .sortie_node_"+numNodes).addClass("nc_avoid");
-					$(".module.activity .node_type_text").text("~Battle Avoided~");
+					$(".module.activity .node_type_text").text( KC3Meta.term("BattleAvoided") );
 					$(".module.activity .node_type_text").addClass("dud");
 					$(".module.activity .node_type_text").show();
 					break;
@@ -1310,10 +1310,10 @@
 				if(eshipId > -1){
 					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.abyssIcon(eshipId));
 
-					var tooltip = "FP: " + eParam[0] + String.fromCharCode(13);
-					tooltip += "Torp: " + eParam[1] + String.fromCharCode(13);
-					tooltip += "AA: " + eParam[2] + String.fromCharCode(13);
-					tooltip += "Armor: " + eParam[3];
+					var tooltip = KC3Meta.term("ShipFire") + eParam[0] + String.fromCharCode(13);
+					tooltip += KC3Meta.term("ShipTorpedo") + eParam[1] + String.fromCharCode(13);
+					tooltip += KC3Meta.term("ShipAntiAir") + eParam[2] + String.fromCharCode(13);
+					tooltip += KC3Meta.term("ShipArmor") + eParam[3];
 
 					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("title", tooltip);
 					$(".module.activity .abyss_ship_"+(index+1)).show();
@@ -1681,10 +1681,10 @@
 
 				if(eshipId > -1){
 					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.shipIcon(eshipId));
-					var tooltip = "FP: " + eParam[0] + String.fromCharCode(13);
-					tooltip += "Torp: " + eParam[1] + String.fromCharCode(13);
-					tooltip += "AA: " + eParam[2] + String.fromCharCode(13);
-					tooltip += "Armor: " + eParam[3];
+					var tooltip = KC3Meta.term("ShipFire") + eParam[0] + String.fromCharCode(13);
+					tooltip += KC3Meta.term("ShipTorpedo") + eParam[1] + String.fromCharCode(13);
+					tooltip += KC3Meta.term("ShipAntiAir") + eParam[2] + String.fromCharCode(13);
+					tooltip += KC3Meta.term("ShipArmor") + eParam[3];
 
 					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("title", tooltip);
 					$(".module.activity .abyss_ship_"+(index+1)).show();
@@ -2288,12 +2288,12 @@
 			case 2:
 				elm.text(String(elm.data("value") || NaN).plusCurrentTime());
 				if((elm.data("value") || 0) > 86400) {
-					elm.addClass("bad").attr("title","More than 24 hours");
+					elm.addClass("bad").attr("title", KC3Meta.term("PanelRepairMoreDays") );
 				}
 				break;
 			}
 			if((elm.data("tick") || [false]).every(function(x){return x;})) {
-				elm.removeClass('bad').addClass("good").attr("title","Repairing...");
+				elm.removeClass('bad').addClass("good").attr("title", KC3Meta.term("PanelRepairing") );
 			}
 		});
 	}

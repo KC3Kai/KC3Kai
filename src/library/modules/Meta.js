@@ -79,6 +79,9 @@ Provides access to data on built-in JSON files
 		},
 		
 		formationText :function(formationId){
+			return this._battle.formation[formationId] || "";
+			// Moved to battle.json, 'formation' array.
+			/*
 			return [
 				"",
 				"Line Ahead",
@@ -97,6 +100,7 @@ Provides access to data on built-in JSON files
 				"Cruising Formation 3 (anti-air)",
 				"Cruising Formation 4 (full-power)"
 			][formationId];
+			*/
 		},
 		
 		shipName :function( jp_name ){
