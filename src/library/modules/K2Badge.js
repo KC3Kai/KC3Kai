@@ -18,9 +18,9 @@
        (There is one special case: "hiryuu2" (Hiryuu Kai 2) is a colle id / unique id
        while the origin ship "hiryuu1" is not used)
 
-   * K2Badge.mstId2KainiTable & K2Badge.kaini2MstIdTable
+   * K2Badge.mstId2KainiTable (deprecated: K2Badge.kaini2MstIdTable)
        Ships that has kai ni remodel or consumes blueprints for remodeling.
-       1-1 correpondence.
+       1-1 correpondence. (TODO: not true for kasumi, shoukaku and zuikaku)
 
    * K2Badge.mstId2FleetIdTable
        Many-to-one correpondence between master id and fleet id.
@@ -48,14 +48,15 @@
                 });
                 return obj;
             }
+            // TODO: make special cases for Bismarck?
 
-            this.mstId2KainiTable = reverseTable(this.kaini2MstIdTable);
+            var kaini2MstIdTable = reverseTable(this.mstId2KainiTable);
             this.mstId2ColleTable = reverseTable(this.colle2MstIdTable);
 
             var fleetId2MstIdTable = 
                 $.extend({},
                          this.colle2MstIdTable,
-                         this.kaini2MstIdTable,
+                         kaini2MstIdTable,
                          this.fidToMidPatch);
 
             var mstId2FleetIdTable = reverseTable(fleetId2MstIdTable);
@@ -64,64 +65,67 @@
                 this.mstId2FleetIdTable_missing);
             this.mstId2FleetIdTable = mstId2FleetIdTable;
         },
-        kaini2MstIdTable: {
-            "fubuki2":426,
-            "murakumo3":420,
-            "ayanami2":195,
-            "mutsuki3":434,
-            "kisaragi3":435,
-            "ushio2":407,
-            "akatsuki2":437,
-            "verniy1":147,
-            "hatsuharu2":326,
-            "hatsushimo2":419,
-            "yuudachi2":144,
-            "shigure2":145,
-            "kasumi2":464,
-            "z12":179,
-            "z32":180,
-            "kitakami3":119,
-            "ooi3":118,
-            "kiso2":146,
-            "abukuma2":200,
-            "isuzu2":141,
-            "sendai2":158,
-            "jintsuu2":159,
-            "naka2":160,
-            "furutaka2":416,
-            "kako2":417,
-            "kinugasa2":142,
-            "myoukou2":319,
-            "nachi2":192,
-            "haguro2":194,
-            "ashigara2":193,
-            "maya2":428,
-            "choukai2":427,
-            "tone2":188,
-            "chikuma2":189,
-            "kongou2":149,
-            "hiei2":150,
-            "haruna2":151,
-            "kirishima2":152,
-            "fusou3":411,
-            "yamashiro3":412,
-            "bismarck3":173,
-            "bismarck4":178,
-            "italia1":446,
-            "roma2":447,
-            "ryuujou3":157,
-            "junyou2":408,
-            "chitosecvl2":296,
-            "chiyodacvl2":297,
-            "ryuuhou2":318,
-            "souryuu2":197,
-            "hiryuu2":196,
-            "shoukaku2":461,
-            "zuikaku3":462,
-            "unryuu2":406,
-            "amagi2":429,
-            "katsuragi2":430,
-            "ro5001":436
+        mstId2KainiTable: {
+            "118":"ooi3",
+            "119":"kitakami3",
+            "141":"isuzu2",
+            "142":"kinugasa2",
+            "144":"yuudachi2",
+            "145":"shigure2",
+            "146":"kiso2",
+            "147":"verniy1",
+            "149":"kongou2",
+            "150":"hiei2",
+            "151":"haruna2",
+            "152":"kirishima2",
+            "157":"ryuujou3",
+            "158":"sendai2",
+            "159":"jintsuu2",
+            "160":"naka2",
+            "173":"bismarck3",
+            "178":"bismarck4",
+            "179":"z12",
+            "180":"z32",
+            "188":"tone2",
+            "189":"chikuma2",
+            "192":"nachi2",
+            "193":"ashigara2",
+            "194":"haguro2",
+            "195":"ayanami2",
+            "196":"hiryuu2",
+            "197":"souryuu2",
+            "200":"abukuma2",
+            "296":"chitosecvl2",
+            "297":"chiyodacvl2",
+            "318":"ryuuhou2",
+            "319":"myoukou2",
+            "326":"hatsuharu2",
+            "406":"unryuu2",
+            "407":"ushio2",
+            "408":"junyou2",
+            "411":"fusou3",
+            "412":"yamashiro3",
+            "416":"furutaka2",
+            "417":"kako2",
+            "419":"hatsushimo2",
+            "420":"murakumo3",
+            "426":"fubuki2",
+            "427":"choukai2",
+            "428":"maya2",
+            "429":"amagi2",
+            "430":"katsuragi2",
+            "434":"mutsuki3",
+            "435":"kisaragi3",
+            "436":"ro5001",
+            "437":"akatsuki2",
+            "446":"italia1",
+            "447":"roma2",
+            "461":"shoukaku2",
+            "462":"zuikaku3",
+            "464":"kasumi2"
+            "466":"shoukaku3",
+            "467":"zuikaku4",
+            "470":"kasumi3"
         },
         colle2MstIdTable: {
             "shimakaze1":50,
@@ -393,7 +397,6 @@
             "hyuuga2":88,
             "ise2":82,
             "isokaze2":320,
-            "kasumi3":470,
             "kitakami2":58,
             "kumano2":130,
             "mikuma2":121,
@@ -410,7 +413,6 @@
             "ryuujou2":281,
             "shiratsuyu2":242,
             "shouhou3":282,
-            "shoukaku3":466,
             "suzuya2":129,
             "taihou2":156,
             "takanami2":345,
@@ -420,7 +422,6 @@
             "yamato2":136,
             "zuihou2":117,
             "zuikaku2":112,
-            "zuikaku4":467
         },
         // master id -> fleet id
         // cases where remodels use the picture of their previous model
