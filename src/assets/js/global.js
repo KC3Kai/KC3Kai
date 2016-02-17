@@ -147,7 +147,22 @@ function getJPDate() {
 	// create new Date object for different city
 	// using supplied offset
 	return new Date(utc + (3600000*9));
-}
+};
+
+/**
+ * Convert any String to UTC timestamp.
+ * return Date.now() on any exception.
+ */
+Date.safeToUtcTime = function(date) {
+	var ts = new Date(date).getTime();
+	return isNaN(ts) ? Date.now() : ts;
+};
+/**
+ * Convert String to UTC timestamp/1000.
+ */
+Date.toUTCseconds = function(dateStr) {
+	return Math.floor(Date.safeToUtcTime(dateStr)/1000);
+};
 
 /* BASE */
 /*******************************\
@@ -182,6 +197,28 @@ String.prototype.insert = function (index, string) {
 -----------------------------------------------*/
 String.prototype.toArray = function() {
 	return this.split("");
+};
+
+/** String.format("msg {0} is {1}", args)
+ * from http://jqueryvalidation.org/jQuery.validator.format/
+------------------------------------------------------------ */
+String.prototype.format = function(params) {
+	var source = this;
+	if (arguments.length < 1) {
+		return source;
+	}
+	if (arguments.length > 1 && params.constructor !== Array) {
+		params = $.makeArray(arguments);
+	}
+	if (params.constructor !== Array) {
+		params = [ params ];
+	}
+	$.each(params, function( i, n ) {
+		source = source.replace( new RegExp("\\{" + i + "\\}", "g"), function() {
+			return n;
+		});
+	});
+	return source;
 };
 
 /* SECONDS TO HH:MM:SS

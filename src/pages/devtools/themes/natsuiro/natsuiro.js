@@ -254,7 +254,7 @@
 		$(".admiral_rank").on("click",function(){
 			// If title, switch to points
 			if($(this).data("mode")==1){
-				$(this).text(PlayerManager.hq.getRankPoints()+" pts");
+				$(this).text(PlayerManager.hq.getRankPoints() + KC3Meta.term("HQRankPoints"));
 				$(this).data("mode", 0);
 
 			// If points, switch to title
@@ -349,8 +349,8 @@
 							notifId: "morale",
 							data: {
 								type: "basic",
-								title: "Fleet Morale Recovered!",
-								message: "Everyone on the \"currently selected fleet\" has recovered from fatigue.",
+								title: KC3Meta.term("DesktopNotifyMoraleTitle"),
+								message: KC3Meta.term("DesktopNotifyMoraleMessage"),
 								iconUrl: "../../assets/img/ui/morale.png"
 							}
 						})).execute();
@@ -719,7 +719,7 @@
 			if($(".admiral_rank").data("mode")==1){
 				$(".admiral_rank").text(PlayerManager.hq.rank);
 			}else{
-				$(".admiral_rank").text(PlayerManager.hq.getRankPoints()+" pts");
+				$(".admiral_rank").text(PlayerManager.hq.getRankPoints() + KC3Meta.term("HQRankPoints"));
 			}
 			$(".admiral_lvval").text( PlayerManager.hq.level );
 			$(".admiral_lvbar").css({width: Math.round(PlayerManager.hq.exp[0]*58)+"px"});
@@ -1142,7 +1142,11 @@
 				+"-"
 				+KC3SortieManager.map_num
 				+((KC3SortieManager.map_world>10)
-					?["","E","N","H"][ KC3SortieManager.map_difficulty ]
+					?["",
+					  KC3Meta.term("EventRankEasyAbbr"),
+					  KC3Meta.term("EventRankNormalAbbr"),
+					  KC3Meta.term("EventRankHardAbbr")]
+					[ KC3SortieManager.map_difficulty ]
 					:"")
 			);
 
@@ -1560,9 +1564,9 @@
 
 				// Show extra item info
 				if(countExisting == 1){
-					$(".activity_crafting .equipNote").html("This is your <strong>first</strong>!");
+					$(".activity_crafting .equipNote").html( KC3Meta.term("CraftEquipNoteFirst") );
 				}else{
-					$(".activity_crafting .equipNote").html("You now have <strong>"+countExisting+"</strong> of this item!");
+					$(".activity_crafting .equipNote").html( KC3Meta.term("CraftEquipNoteExists").format(countExisting) );
 				}
 
 				$(".activity_crafting .equipStats").html("");
@@ -1582,7 +1586,7 @@
 			// If penguin
 			} else {
 				$(".activity_crafting .equipIcon img").attr("src", icon);
-				$(".activity_crafting .equipName").text( "Equipment crafting failed" );
+				$(".activity_crafting .equipName").text( KC3Meta.term("CraftEquipNotePenguin") );
 				$(".activity_crafting .equipNote").html("");
 				$(".activity_crafting .equipStats").html("");
 			}
