@@ -161,14 +161,10 @@ Used by SortieManager
 				api_e_lostcount:0,
 			},
 			attackPhase = battleData.api_kouku.api_stage2;
-		this.fcontact = (planePhase.api_touch_plane[0] > -1)?"YES":"NO";
-		this.econtact = (planePhase.api_touch_plane[1] > -1)?"YES":"NO";
+		this.fcontact = (planePhase.api_touch_plane[0] > -1)? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
+		this.econtact = (planePhase.api_touch_plane[1] > -1)? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
 		
-		if(typeof planePhase.api_disp_seiku != "undefined"){
-			this.airbattle = KC3Meta.airbattle( planePhase.api_disp_seiku );
-		}else{
-			this.airbattle = ["?", "", "Unknown"];
-		}
+		this.airbattle = KC3Meta.airbattle( planePhase.api_disp_seiku + 1 );
 		
 		// Fighter phase 1
 		this.planeFighters = {
@@ -187,7 +183,7 @@ Used by SortieManager
 			&& this.planeFighters.abyssal[0]===0
 			&& attackPhase===null
 		){
-			this.airbattle = ["None", "", "No Air Battle"];
+			this.airbattle = KC3Meta.airbattle(0);
 		}
 		
 		// Bombing phase 1
@@ -353,8 +349,8 @@ Used by SortieManager
 		}
 		
 		this.engagement = this.engagement || KC3Meta.engagement( nightData.api_formation[2] );
-		this.fcontact = (nightData.api_touch_plane[0] > -1)?"YES":"NO";
-		this.econtact = (nightData.api_touch_plane[1] > -1)?"YES":"NO";
+		this.fcontact = (nightData.api_touch_plane[0] > -1)? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
+		this.econtact = (nightData.api_touch_plane[1] > -1)? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
 		this.flare = nightData.api_flare_pos[0]; //??
 		this.searchlight = nightData.api_flare_pos[1]; //??
 		

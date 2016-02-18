@@ -1376,7 +1376,7 @@
 
 			// Battle conditions
 			$(".module.activity .battle_engagement").text( thisNode.engagement[2] );
-			$(".module.activity .battle_contact").text(thisNode.fcontact +" vs "+thisNode.econtact);
+			$(".module.activity .battle_contact").text(thisNode.fcontact + KC3Meta.term("BattleContactVs") + thisNode.econtact);
 
 			// Swap fish and support icons
 			$(".module.activity .battle_fish").hide();
@@ -1614,7 +1614,7 @@
 
 			$(".activity_modernization .mod_ship_pic img").attr("src", KC3Meta.shipIcon(ModShip.masterId) );
 			$(".activity_modernization .mod_ship_name").text( ModShip.name() );
-			$(".activity_modernization .mod_ship_level span").text( ModShip.level );
+			$(".activity_modernization .mod_ship_level span.value").text( ModShip.level );
 
 
 			$(".activity_modernization .mod_result_tp .mod_result_old").text( data.oldStats[1] );
@@ -1632,7 +1632,7 @@
 					$(".activity_modernization .mod_result_"+statName+" .mod_result_plus").css("visibility", "hidden");
 				}
 
-				$(".activity_modernization .mod_result_"+statName+" .mod_result_left span").text( data.left[i] );
+				$(".activity_modernization .mod_result_"+statName+" .mod_result_left span").text( KC3Meta.term("ModernizationResultLeft").format(data.left[i]) );
 			});
 
 			// Show the box
@@ -1648,6 +1648,7 @@
 			// Clear battle details box just to make sure
 			clearBattleData();
 			$(".module.activity .map_world").text("PvP");
+			$(".module.activity .map_hp").text( KC3Meta.term("BattleMapNoHpGauge") );
 
 			// Process PvP Battle
 			KC3SortieManager.fleetSent = data.fleetSent;
@@ -1872,7 +1873,7 @@
 			if(!gotItem){ $(".module.activity .activity_expedition .expres_noget").show(); }
 
 			// HQ Exp
-			$(".activity_expedition .expres_hqexp_amt span").text( data.response.api_get_exp );
+			$(".activity_expedition .expres_hqexp_amt span.value").text( data.response.api_get_exp );
 
 			// Ship Exp
 			$(".activity_expedition .expres_ships .expres_ship").each(function(i,element){
@@ -1880,7 +1881,7 @@
 				if(shipId > 0) {
 					var shipData = KC3ShipManager.get(shipId);
 					$(".expres_ship_img img", element).attr("src", KC3Meta.shipIcon(shipData.masterId));
-					$(".expres_ship_exp span", element).text(data.response.api_get_ship_exp[i]);
+					$(".expres_ship_exp span.value", element).text(data.response.api_get_ship_exp[i]);
 					$(element).show();
 				} else {
 					$(element).hide();

@@ -207,15 +207,15 @@ Provides access to data on built-in JSON files
 		},
 
 		detection :function(index){
-			return this._battle.detection[index] || ["",""];
+			return this._battle.detection[index] || ["","",""];
 		},
 		
 		airbattle :function(index){
-			return this._battle.airbattle[index] || ["",""];
+			return this._battle.airbattle[index] || ["","","Unknown"];
 		},
 		
 		engagement :function(index){
-			return this._battle.engagement[index] || ["",""];
+			return this._battle.engagement[index] || ["","",""];
 		},
 		
 		term: function(key) {
