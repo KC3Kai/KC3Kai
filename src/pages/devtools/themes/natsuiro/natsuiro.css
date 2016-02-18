@@ -1063,7 +1063,7 @@ html,body {
 	float:left;
 	color:#fff;
 }
-.module.activity .activity_expedition .expres_ship_exp span {
+.module.activity .activity_expedition .expres_ship_exp span.value {
 	font-weight:bold;
 	color:#ffcc00;
 }
