@@ -465,6 +465,7 @@
 	width:120px;
 	margin:5px 0px 0px 0px;
 	float:left;
+	white-space:nowrap;
 }
 .tab_maps .sortie_list .node_conds {
 	width:120px;
