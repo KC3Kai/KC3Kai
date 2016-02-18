@@ -118,6 +118,11 @@
 			$(".questIcon", thisBox).text( thisQuest.code );
 			$(".questIcon", thisBox).addClass("type"+(String(quest_id).substring(0,1)));
 			$(".questDesc", thisBox).text( thisQuest.desc);
+			var title = quest_id+": ["+thisQuest.code+"] "+thisQuest.name;
+			if(!!thisQuest.memo) {
+				title += "\n" + thisQuest.memo;
+			}
+			$(".questDesc", thisBox).attr("title", title);
 			$(".questOverride", thisBox).data("id", quest_id);
 			$(".questToggle", thisBox).data("id", quest_id);
 			$(".questRemove", thisBox).data("id", quest_id);
@@ -190,9 +195,14 @@
 			// console.log(masterQuest, thisQuest);
 			
 			var thisBox = $(".tab_flowchart .factory .questExtraItem").clone().appendTo(".tab_flowchart .extralist");
-			$(".questIcon", thisBox).text( thisQuest.id );
+			$(".questIcon", thisBox).text( thisQuest.meta().code || thisQuest.id );
 			$(".questIcon", thisBox).addClass("type"+(String(thisQuest.id).substring(0,1)));
 			$(".questDesc", thisBox).text( thisQuest.meta().desc );
+			var title = thisQuest.id+": ["+(thisQuest.meta().code||"N/A")+"] "+thisQuest.meta().name;
+			if(!!thisQuest.meta().memo) {
+				title += "\n" + thisQuest.meta().memo;
+			}
+			$(".questDesc", thisBox).attr("title", title);
 			$(".questToggle", thisBox).data("id", thisQuest.id);
 			$(".questRemove", thisBox).data("id", thisQuest.id);
 			

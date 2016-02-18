@@ -62,6 +62,7 @@
 	line-height:24px;
 	margin:0px 0px 2px 0px;
 	background:#eee;
+	white-space:nowrap;
 }
 .tab_builds .build_item .build_field {
 	float:left;
@@ -105,7 +106,7 @@
 	background:#FFDCA8;
 }
 .tab_builds .build_item .build_time {
-	width:130px;
+	width:140px;
 	font-size:11px;
 }
 
