@@ -37,7 +37,7 @@
 				
 				case "scn": fontFamily = '"HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,"Nimbus Sans L",Arial,"Lucida Grande","Liberation Sans","Microsoft YaHei UI","Microsoft YaHei","Hiragino Sans GB","Wenquanyi Micro Hei","WenQuanYi Zen Hei","ST Heiti",SimHei,"WenQuanYi Zen Hei Sharp",sans-serif'; break;
 				
-				case "jp": fontFamily = '"Helvetica Neue",Helvetica,"ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro",Osaka, "游ゴシック", "Yu Gothic", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "MS PGothic", sans-serif'; break;
+				case "jp": fontFamily = '"Helvetica Neue", "Tahoma", Helvetica, Arial, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", Osaka, "メイリオ", "Meiryo", "Yu Gothic UI Semibold", "ＭＳ Ｐゴシック", "MS PGothic", sans-serif'; break;
 				
 				default: break;
 			}
