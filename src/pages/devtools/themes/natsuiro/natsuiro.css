@@ -162,6 +162,7 @@ html,body {
 	margin:0px auto;
 	display:none;
 	position:relative;
+	white-space:nowrap;
 	/*background:#FFFFE8;*/
 }
 .wrapper_bg {
@@ -309,6 +310,7 @@ html,body {
 	background:rgba(100,100,100,0.85);
 	border-radius:5px;
 	overflow:hidden;
+	white-space:initial;
 }
 .module.activity .activity_box {
 	width:190px;
@@ -1028,7 +1030,7 @@ html,body {
 .module.activity .activity_expedition .expres_hqexp_amt {
 	font-size:12px;
 }
-.module.activity .activity_expedition .expres_hqexp_amt span {
+.module.activity .activity_expedition .expres_hqexp_amt span.value {
 	color:#ffcc00;
 	font-size:14px;
 	font-weight:bold;
@@ -1038,6 +1040,7 @@ html,body {
 	width:170px;
 	line-height:18px;
 	font-size:12px;
+	white-space:nowrap;
 }
 .module.activity .activity_expedition .expres_ship {
 	width:85px;
