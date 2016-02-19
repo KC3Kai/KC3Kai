@@ -55,7 +55,7 @@ KC3改 Ship Box for Natsuiro theme
 		$(".ship_exp", this.element).css("width", (120 * this.expPercent)+"px");		
 		$(".ship_fuel", this.element).css("width", (120 * Math.min(this.fuelPercent, 1))+"px");
 		$(".ship_ammo", this.element).css("width", (120 * Math.min(this.ammoPercent, 1))+"px");
-		$(".ship_bars", this.element).attr("title", "Remaining Exp = " + this.shipData.exp[1] + ", Fuel = " + Math.ceil(this.fuelPercent*100) +"%" + ", Ammo = " + Math.ceil(this.ammoPercent*100)+"%");
+		$(".ship_bars", this.element).attr("title", KC3Meta.term("PanelCombinedShipBarsHint").format(this.shipData.exp[1], Math.ceil(this.fuelPercent*100), Math.ceil(this.ammoPercent*100)) );
 		
 		return this.element;
 	};
@@ -74,8 +74,8 @@ KC3改 Ship Box for Natsuiro theme
 			.prop( 'title', (function(shipData){
 				var mst = shipData.master();
 				return (shipData.level >= (mst.api_afterlv || Infinity)) ?
-					['Possible Remodel'] :
-					(mst.api_afterlv && ['Next Remodel',mst.api_afterlv].join(' ') || '');
+					[KC3Meta.term("PanelPossibleRemodel")] :
+					(mst.api_afterlv && [KC3Meta.term("PanelNextRemodelLv"),mst.api_afterlv].join(' ') || '');
 			})(this.shipData) );
 		$(".ship_exp_next", this.element).text( this.shipData.exp[1] );
 		$(".ship_exp_bar", this.element).css("width", (290*this.expPercent)+"px");

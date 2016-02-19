@@ -1673,7 +1673,7 @@
 		PvPStart: function(data){
 			// Clear battle details box just to make sure
 			clearBattleData();
-			$(".module.activity .map_world").text("PvP");
+			$(".module.activity .map_world").text( KC3Meta.term("BattleMapWorldPvP") );
 			$(".module.activity .map_hp").text( KC3Meta.term("BattleMapNoHpGauge") );
 			
 			// Process PvP Battle
