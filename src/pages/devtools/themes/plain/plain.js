@@ -241,7 +241,7 @@
 		$(".admiral_rank").on("click",function(){
 			// If title, switch to points
 			if($(this).data("mode")==1){
-				$(this).text(PlayerManager.hq.getRankPoints()+" pts");
+				$(this).text(PlayerManager.hq.getRankPoints()+KC3Meta.term("HQRankPoints"));
 				$(this).data("mode", 0);
 				
 			// If points, switch to title
@@ -304,7 +304,7 @@
 					moraleClockValue = 100;
 					moraleClockEnd = 0;
 					moraleClockRemain = 0;
-					$(".module.status .status_morale .status_text").text("Recovered");
+					$(".module.status .status_morale .status_text").text(KC3Meta.term("PanelRecoveredMorale"));
 					
 					// Morale Notification
 					if(ConfigManager.alert_morale_notif){
@@ -325,8 +325,8 @@
 							notifId: "morale",
 							data: {
 								type: "basic",
-								title: "Fleet Morale Recovered!",
-								message: "Everyone on the \"currently selected fleet\" has recovered from fatigue.",
+								title: KC3Meta.term("DesktopNotifyMoraleTitle"),
+								message: KC3Meta.term("DesktopNotifyMoraleMessage"),
 								iconUrl: "../../assets/img/ui/morale.png"
 							}
 						})).execute();
@@ -635,11 +635,11 @@
 			$("#gameUpdate").hide();
 			
 			if(data[0] > 0 && data[1]>0){
-				$("#gameUpdate .description a").html("There is(are) <strong>"+data[0]+" new ship(s)</strong> and <strong>"+data[1]+" new equipment</strong>! Click here to learn more about them in the Strategy Room!");
+				$("#gameUpdate .description a").html(KC3Meta.term("GameUpdateBoth").format(data[0], data[1]));
 			}else if(data[0] > 0){
-				$("#gameUpdate .description a").html("There is(are) <strong>"+data[0]+" new ship(s)</strong>! Click here to learn more about them in the Strategy Room!");
+				$("#gameUpdate .description a").html(KC3Meta.term("GameUpdateShips").format(data[0]));
 			}else{
-				$("#gameUpdate .description a").html("There is(are) <strong>"+data[1]+" new equipment</strong>! Click here to learn more about them in the Strategy Room!");
+				$("#gameUpdate .description a").html(KC3Meta.term("GameUpdateEquips").format(data[1]));
 			}
 			
 			$("#gameUpdate").fadeIn(300);
@@ -652,7 +652,7 @@
 			if($(".admiral_rank").data("mode")==1){
 				$(".admiral_rank").text(PlayerManager.hq.rank);
 			}else{
-				$(".admiral_rank").text(PlayerManager.hq.getRankPoints()+" pts");
+				$(".admiral_rank").text(PlayerManager.hq.getRankPoints()+KC3Meta.term("HQRankPoints"));
 			}
 			$(".admiral_lvval").text( PlayerManager.hq.level );
 			$(".admiral_lvbar").css({width: Math.round(PlayerManager.hq.exp[0]*58)+"px"});
@@ -1064,7 +1064,11 @@
 				+"-"
 				+KC3SortieManager.map_num
 				+((KC3SortieManager.map_world>10)
-					?["","E","N","H"][ KC3SortieManager.map_difficulty ]
+					?["",
+					  KC3Meta.term("EventRankEasyAbbr"),
+					  KC3Meta.term("EventRankNormalAbbr"),
+					  KC3Meta.term("EventRankHardAbbr")]
+					[ KC3SortieManager.map_difficulty ]
 					:"")
 			);
 			
@@ -1075,7 +1079,7 @@
 			
 			if(typeof thisMap != "undefined"){
 				if( thisMap.clear == 1){
-					$(".module.activity .map_hp").text("Cleared");
+					$(".module.activity .map_hp").text(KC3Meta.term("BattleMapCleared"));
 				}else{
 					// If HP-based gauge
 					if(typeof thisMap.maxhp != "undefined"){
@@ -1084,7 +1088,7 @@
 						
 					// If kill-based gauge
 					}else{
-						var totalKills = KC3Meta.gauge( thisMapId );
+						var totalKills = KC3Meta.gauge( thisMapId.replace("m","") );
 						console.log("wm", KC3SortieManager.map_world, KC3SortieManager.map_num);
 						console.log("thisMapId", thisMapId);
 						console.log("KC3Meta", KC3Meta._gauges);
@@ -1094,12 +1098,12 @@
 							$(".module.activity .map_hp").text( killsLeft+" / "+totalKills+" kills");
 							$(".module.activity .map_gauge_bar").css("width", ((killsLeft/totalKills)*58)+"px");
 						}else{
-							$(".module.activity .map_hp").text("Not cleared");
+							$(".module.activity .map_hp").text(KC3Meta.term("BattleMapNotClear"));
 						}
 					}
 				}
 			}else{
-				$(".module.activity .map_hp").text("No gauge");
+				$(".module.activity .map_hp").text(KC3Meta.term("BattleMapNoHpGauge"));
 			}
 			
 			// Switch to battle tab
@@ -1173,8 +1177,8 @@
 				case "select":
 					console.log("natsuiro should show selection node");
 					$(".module.activity .sortie_node_"+numNodes).addClass("nc_select");
-					$(".module.activity .node_type_text").text("Select: "+
-						thisNode.choices[0]+" or "+thisNode.choices[1]);
+					$(".module.activity .node_type_text").text(KC3Meta.term("BattleSelect")+
+						KC3Meta.term("BattleSelectNodes").format(thisNode.choices[0], thisNode.choices[1]));
 					$(".module.activity .node_type_text").addClass("select");
 					$(".module.activity .node_type_text").show();
 					break;
@@ -1182,7 +1186,7 @@
 				// Battle avoided node
 				default:
 					$(".module.activity .sortie_node_"+numNodes).addClass("nc_avoid");
-					$(".module.activity .node_type_text").text("~Battle Avoided~");
+					$(".module.activity .node_type_text").text(KC3Meta.term("BattleAvoided"));
 					$(".module.activity .node_type_text").addClass("dud");
 					$(".module.activity .node_type_text").show();
 					break;
@@ -1209,10 +1213,10 @@
 				if(eshipId > -1){
 					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.abyssIcon(eshipId));
 					
-					var tooltip = "FP: " + eParam[0] + String.fromCharCode(13);
-					tooltip += "Torp: " + eParam[1] + String.fromCharCode(13);
-					tooltip += "AA: " + eParam[2] + String.fromCharCode(13);
-					tooltip += "Armor: " + eParam[3];
+					var tooltip = KC3Meta.term("ShipFire") + eParam[0] + String.fromCharCode(13);
+					tooltip += KC3Meta.term("ShipTorpedo") + eParam[1] + String.fromCharCode(13);
+					tooltip += KC3Meta.term("ShipAntiAir") + eParam[2] + String.fromCharCode(13);
+					tooltip += KC3Meta.term("ShipArmor") + eParam[3];
 					
 					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("title", tooltip);
 					$(".module.activity .abyss_ship_"+(index+1)).show();
@@ -1261,7 +1265,7 @@
 			
 			// Battle conditions
 			$(".module.activity .battle_engagement").text( thisNode.engagement[2] );
-			$(".module.activity .battle_contact").text(thisNode.fcontact +" vs "+thisNode.econtact);
+			$(".module.activity .battle_contact").text(thisNode.fcontact+KC3Meta.term("BattleContactVs")+thisNode.econtact);
 			
 			// Swap fish and support icons
 			$(".module.activity .battle_fish").hide();
@@ -1345,7 +1349,7 @@
 				});
 			}
 			
-			$(".module.activity .battle_contact").text(thisNode.fcontact +" vs "+thisNode.econtact);
+			$(".module.activity .battle_contact").text(thisNode.fcontact+KC3Meta.term("BattleContactVs")+thisNode.econtact);
 			
 			this.Fleet();
 		},
@@ -1426,9 +1430,9 @@
 				
 				// Show extra item info
 				if(countExisting == 1){
-					$(".activity_crafting .equipNote").html("This is your <strong>first</strong>!");
+					$(".activity_crafting .equipNote").html(KC3Meta.term("CraftEquipNoteFirst"));
 				}else{
-					$(".activity_crafting .equipNote").html("You now have <strong>"+countExisting+"</strong> of this item!");
+					$(".activity_crafting .equipNote").html(KC3Meta.term("CraftEquipNoteExists").format(countExisting));
 				}
 				
 				$(".activity_crafting .equipStats").html("");
@@ -1448,7 +1452,7 @@
 			// If penguin
 			} else {
 				$(".activity_crafting .equipIcon img").attr("src", icon);
-				$(".activity_crafting .equipName").text( "Equipment crafting failed" );
+				$(".activity_crafting .equipName").text(KC3Meta.term("CraftEquipNotePenguin"));
 				$(".activity_crafting .equipNote").html("");
 				$(".activity_crafting .equipStats").html("");
 			}
@@ -1601,7 +1605,7 @@
 			$(".module.activity .battle_detection").text( thisPvP.detection[0] );
 			$(".module.activity .battle_airbattle").text( thisPvP.airbattle[0] );
 			$(".module.activity .battle_engagement").text( thisPvP.engagement[2] );
-			$(".module.activity .battle_contact").text(thisPvP.fcontact +" vs "+thisPvP.econtact);
+			$(".module.activity .battle_contact").text(thisPvP.fcontact+KC3Meta.term("BattleContactVs")+thisPvP.econtact);
 			
 			// Fighter phase
 			$(".fighter_ally .plane_before").text(thisPvP.planeFighters.player[0]);
@@ -2081,12 +2085,12 @@
 			case 2:
 				elm.text(String(elm.data("value") || NaN).plusCurrentTime());
 				if((elm.data("value") || 0) > 86400) {
-					elm.addClass("bad").attr("title","More than 24 hours");
+					elm.addClass("bad").attr("title",KC3Meta.term("PanelRepairMoreDays"));
 				}
 				break;
 			}
 			if((elm.data("tick") || [false]).every(function(x){return x;})) {
-				elm.removeClass('bad').addClass("good").attr("title","Repairing...");
+				elm.removeClass('bad').addClass("good").attr("title",KC3Meta.term("PanelRepairing"));
 			}
 		});
 	}

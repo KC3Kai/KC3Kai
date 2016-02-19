@@ -23,7 +23,7 @@ Has functions for TimerManager to use
 		this.completion = completion;
 		if(typeof faceId != "undefined"){ if(faceId>0){ this.faceId = faceId; } }
 		if(typeof expedNum != "undefined"){ this.expedNum = expedNum; }
-	
+		
 		var remaining = this.completion - Date.now();
 		remaining = Math.ceil((remaining - (ConfigManager.alert_diff*1000))/1000);
 		if(remaining <= 0){
@@ -91,7 +91,7 @@ Has functions for TimerManager to use
 	KC3Timer.prototype.completionAlert = function(){
 		if(this.alerted){ return false; }
 		this.alerted = true;
-	
+		
 		// Sound Alerts
 		if(KC3TimerManager.notifSound){
 			KC3TimerManager.notifSound.pause();

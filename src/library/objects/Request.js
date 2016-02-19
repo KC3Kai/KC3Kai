@@ -96,7 +96,7 @@ Executes processing and relies on KC3Network for the triggers
 						title: "Wrong Computer Clock!",
 						message: "Please correct your computer clock. You do not need to be on Japan timezone, but it needs to be the correct local time for your local timezone! Your clock is off by "+Math.ceil(timeDiff/60000)+" minutes."
 					});
-				
+					
 				// Something else other than clock is wrong
 				}else{
 					KC3Network.trigger("CatBomb", {
@@ -147,5 +147,5 @@ Executes processing and relies on KC3Network for the triggers
 			}
 		}
 	};
-
+	
 })();
