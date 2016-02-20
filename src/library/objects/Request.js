@@ -27,8 +27,8 @@ Executes processing and relies on KC3Network for the triggers
 		// If response header statusCode is not 200, means non-in-game error
 		if(this.statusCode != 200){
 			KC3Network.trigger("CatBomb", {
-				title: "Server Communication Error",
-				message: "["+this.call+"] failed to communicate with the server. It is not a matter of API link, but somewhat on your connectivity or environment"
+				title: KC3Meta.term("CatBombServerCommErrorTitle"),
+				message: KC3Meta.term("CatBombServerCommErrorMsg").format([this.call])
 			});
 			return false;
 		}
@@ -77,8 +77,8 @@ Executes processing and relies on KC3Network for the triggers
 			// If it fails on "api_start2" which is the first API call
 			if(this.call == "api_start2"){
 				KC3Network.trigger( "CatBomb", {
-					title: "Hard API Error",
-					message: "The server responded with an error for your API calls. You might be using an expired API link, or it's probably maintenance! You may want to <a href=\"http://kancolle.wikia.com/wiki/Recent_Updates#Future_updates\" target=\"_blank\">check the wikia for notices</a>, or refresh your API link."
+					title: KC3Meta.term("CatBombHardAPIErrorTitle"),
+					message: KC3Meta.term("CatBombHardAPIErrorMsg")
 				});
 				return false;
 			}
@@ -93,15 +93,15 @@ Executes processing and relies on KC3Network for the triggers
 				var timeDiff = Math.abs(computerClock - serverClock);
 				if(timeDiff > 300000){
 					KC3Network.trigger("CatBomb", {
-						title: "Wrong Computer Clock!",
-						message: "Please correct your computer clock. You do not need to be on Japan timezone, but it needs to be the correct local time for your local timezone! Your clock is off by "+Math.ceil(timeDiff/60000)+" minutes."
+						title: KC3Meta.term("CatBombWrongComputerClockTitle"),
+						message: KC3Meta.term("CatBombWrongComputerClockMsg").format(Math.ceil(timeDiff/60000))
 					});
 					
 				// Something else other than clock is wrong
 				}else{
 					KC3Network.trigger("CatBomb", {
-						title: "Error when entering Home Port screen",
-						message: "Please reload the game."
+						title: KC3Meta.term("CatBombErrorOnHomePortTitle"),
+						message: KC3Meta.term("CatBombErrorOnHomePortMsg")
 					});
 				}
 				return false;
@@ -109,8 +109,8 @@ Executes processing and relies on KC3Network for the triggers
 			
 			// Some other API Call failed
 			KC3Network.trigger("CatBomb", {
-				title: "API Data Error",
-				message: "The most recent action completed the network communication with server but returned an error. Check if it's now maintenance, or if your API link is still working."
+				title: KC3Meta.term("CatBombAPIDataErrorTitle"),
+				message: KC3Meta.term("CatBombAPIDataErrorMsg")
 			});
 			
 			return false;
@@ -119,8 +119,8 @@ Executes processing and relies on KC3Network for the triggers
 			if(!this.headers.Date) {
 				if(!KC3Request.headerReminder) {
 					KC3Network.trigger("CatBomb", {
-						title: "Unable to Retrieve Server Time",
-						message: "There's something wrong with the communication with server (or via the proxy). It's fine if make sure your local machine clock is correct, otherwise it might break some of the functionalities."
+						title: KC3Meta.term("CatBombMissingServerTimeTitle"),
+						message: KC3Meta.term("CatBombMissingServerTimeMsg")
 					});
 					KC3Request.headerReminder = true;
 				}
@@ -135,12 +135,18 @@ Executes processing and relies on KC3Network for the triggers
 	
 	------------------------------------------*/
 	KC3Request.prototype.process = function(){
-		// check clock and clear quests at 5AM JST
-		var serverTime = Date.safeToUtcTime( this.headers.Date );
-		KC3QuestManager.checkAndResetQuests(serverTime);
-		
 		// If API call is supported
 		if(typeof Kcsapi[this.call] != "undefined"){
+			// check clock and clear quests at 5AM JST
+			var serverTime = Date.safeToUtcTime( this.headers.Date );
+			try {
+				KC3QuestManager.checkAndResetQuests(serverTime);
+			} catch (e) {
+				console.error(e.stack);
+			}
+			
+			// Execute by passing data
+			try {
 				Kcsapi[this.call]( this.params, this.response, this.headers );
 			} catch (e) {
 				throw e;
