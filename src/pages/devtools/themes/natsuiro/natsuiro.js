@@ -654,6 +654,9 @@
 		$(".module.activity .battle_drop img").attr("src", "../../../../assets/img/ui/dark_shipdrop.png");
 		$(".module.activity .battle_drop").attr("title", "");
 		$(".module.activity .battle_cond_value").text("");
+		$(".module.activity .battle_engagement").attr("title", "");
+		$(".module.activity .battle_detection").attr("title", "");
+		$(".module.activity .battle_airbattle").attr("title", "");
 		$(".module.activity .plane_text span").text("");
 		$(".module.activity .sink_icons .sunk img").hide();
 	}
@@ -1393,7 +1396,8 @@
 			}
 			
 			// Battle conditions
-			$(".module.activity .battle_engagement").text( thisNode.engagement[2] );
+			$(".module.activity .battle_engagement").text( thisNode.engagement[2] || thisNode.engagement[0] );
+			$(".module.activity .battle_engagement").attr("title", thisNode.engagement[0] );
 			$(".module.activity .battle_contact").text(thisNode.fcontact + KC3Meta.term("BattleContactVs") + thisNode.econtact);
 			
 			// Swap fish and support icons
@@ -1410,7 +1414,9 @@
 				
 				// Battle conditions
 				$(".module.activity .battle_detection").text( thisNode.detection[0] );
+				$(".module.activity .battle_detection").attr("title", thisNode.detection[2] || "" );
 				$(".module.activity .battle_airbattle").text( thisNode.airbattle[0] );
+				$(".module.activity .battle_airbattle").attr("title", thisNode.airbattle[2] || "" );
 				
 				// Fighter phase
 				$(".fighter_ally .plane_before").text(thisNode.planeFighters.player[0]);
@@ -1764,9 +1770,11 @@
 			
 			// Battle conditions
 			$(".module.activity .battle_detection").text( thisPvP.detection[0] );
+			$(".module.activity .battle_detection").attr("title", thisPvP.detection[2] || "" );
 			$(".module.activity .battle_airbattle").text( thisPvP.airbattle[0] );
-			$(".module.activity .battle_engagement").text( thisPvP.engagement[2] );
-			$(".module.activity .battle_contact").text(thisPvP.fcontact +" vs "+thisPvP.econtact);
+			$(".module.activity .battle_airbattle").attr("title", thisPvP.airbattle[2] || "" );
+			$(".module.activity .battle_engagement").text( thisPvP.engagement[2] || thisNode.engagement[0] );
+			$(".module.activity .battle_contact").text(thisPvP.fcontact + KC3Meta.term("BattleContactVs") + thisPvP.econtact);
 			
 			// Fighter phase
 			$(".fighter_ally .plane_before").text(thisPvP.planeFighters.player[0]);

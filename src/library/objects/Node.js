@@ -164,7 +164,7 @@ Used by SortieManager
 		this.fcontact = (planePhase.api_touch_plane[0] > -1)? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
 		this.econtact = (planePhase.api_touch_plane[1] > -1)? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
 		
-		this.airbattle = KC3Meta.airbattle( planePhase.api_disp_seiku + 1 );
+		this.airbattle = KC3Meta.airbattle( planePhase.api_disp_seiku );
 		
 		// Fighter phase 1
 		this.planeFighters = {
@@ -183,7 +183,7 @@ Used by SortieManager
 			&& this.planeFighters.abyssal[0]===0
 			&& attackPhase===null
 		){
-			this.airbattle = KC3Meta.airbattle(0);
+			this.airbattle = KC3Meta.airbattle(5);
 		}
 		
 		// Bombing phase 1
