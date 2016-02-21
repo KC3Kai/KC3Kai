@@ -69,7 +69,7 @@ KC3改 Ship Box for Natsuiro theme
 		this.showPrediction();
 		this.showMorale();
 		
-		$(".ship_level span", this.element)
+		$(".ship_level span.value", this.element)
 			.text( this.shipData.level )
 			.prop( 'title', (function(shipData){
 				var mst = shipData.master();
