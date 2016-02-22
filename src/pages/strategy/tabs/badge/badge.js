@@ -19,6 +19,12 @@
             var self = this;
             $(".tab_badge .factory").hide();
 
+            $(".tab_badge .export_parts input").on("click", function () {
+                // on every option change we clear exported results
+                // in case the exported data has or don't have some intended fields
+                $(".tab_badge .export_result").empty();
+            });
+
             $(".tab_badge .export_method input").change( function() {
                 // adjust text accordingly
                 var v = $(this).val();
@@ -75,14 +81,43 @@
                     self.exportTtkInfo(),
                     self.exportFleetInfo());
 
-                var resultPost = {};
+
                 var submitBtn = $(".tab_badge .factory .submit_form").clone();
                 var formPart = $("form", submitBtn);
                 function encodeVal(d) {
                     return typeof(d) === "object"?JSON.stringify(d):d;
                 }
-                $.each(result, function(k,v) {
-                    mkText(String(k) + "=" + JSON.stringify(v) );
+
+                var resultPost = {};
+                function checkLabel(sel) {
+                    return $(sel).is(":checked");
+                }
+
+                if (checkLabel("#ep_name")) {
+                    resultPost.ttkName = result.ttkName;
+                }
+                if (checkLabel("#ep_level")) {
+                    resultPost.ttkLvl = result.ttkLvl;
+                }
+                if (checkLabel("#ep_server")) {
+                    resultPost.ttkServer = result.ttkServer;
+                }
+                if (checkLabel("#ep_current_fleet")) {
+                    resultPost.fleet = result.fleet;
+                }
+                if (checkLabel("#ep_k2") || checkLabel("#ep_colle")) {
+                    resultPost.ships = result.ships;
+                }
+                if (checkLabel("#ep_k2")) {
+                    resultPost.k2Flag = "on";
+                }
+                if (checkLabel("#ep_colle")) {
+                    resultPost.colleFlag = "on";
+                }
+                // console.log(resultPost);
+                
+                $.each(resultPost, function(k,v) {
+                    // mkText(String(k) + "=" + JSON.stringify(v) );
                     resultPost[k] = encodeVal(v);
                     $("<input type='hidden' />")
                         .attr("name", k)
@@ -90,13 +125,15 @@
                         .appendTo( formPart );
                 });
 
+                formPart.submit();
+
                 // console.log($.isPlainObject(resultPost));
                 // $.post("http://threebards.com/kaini/api.php", resultPost,
                 //        function(data,status) {
                 //            console.log(data);
                 //        });
 
-                submitBtn.appendTo(".tab_badge .export_result");
+                // submitBtn.appendTo(".tab_badge .export_result");
 
             });
 		},
@@ -107,6 +144,7 @@
                 return xs;
             }
 
+            console.log(ids);
             var originIds = [];
             $.each(ids, function(i,x) {
                 setInsert(originIds, RemodelDb.originOf(x));
@@ -165,6 +203,7 @@
             var pb = PictureBook.load();
             var i;
             var ids = [];
+            console.log(pb);
             $.each(pb, function(vol,x) {
                 ids = ids.concat( x.ids );
             });
