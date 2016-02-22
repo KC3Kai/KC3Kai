@@ -142,6 +142,7 @@ Used by SortieManager
 		this.eships = enemyships;
 		this.eformation = battleData.api_formation[1];
 		this.eParam = battleData.api_eParam;
+		this.eSlot = battleData.api_eSlot;
 
 		this.supportFlag = (battleData.api_support_flag>0);
 		this.yasenFlag = (battleData.api_midnight_flag>0);
@@ -343,6 +344,7 @@ Used by SortieManager
 		this.eships = enemyships;
 		this.eformation = this.eformation || nightData.api_formation[1];
 		this.eParam = nightData.api_eParam;
+		this.eSlot = nightData.api_eSlot;
 		
 		if(setAsOriginalHP){
 			this.originalHPs = nightData.api_nowhps;

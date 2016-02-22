@@ -466,7 +466,7 @@ html,body {
 
 /*------- ACTIVITY: BATTLE -------*/
 .module.activity .activity_battle {
-	
+	white-space:nowrap;
 }
 /* Map Info */
 .module.activity .map_info {
@@ -901,6 +901,7 @@ html,body {
 /*------- EXPEDITION -------*/
 .module.activity .activity_expedition {
 	padding:5px 10px;
+	white-space:nowrap;
 }
 
 .module.activity .activity_expedition .expres_img {
@@ -1040,7 +1041,6 @@ html,body {
 	width:170px;
 	line-height:18px;
 	font-size:12px;
-	white-space:nowrap;
 }
 .module.activity .activity_expedition .expres_ship {
 	width:85px;
@@ -1170,6 +1170,7 @@ html,body {
 ------------------------*/
 .module.activity .activity_expeditionPlanner {
     text-align:center;
+    white-space:nowrap;
 }
 .module.activity .activity_expeditionPlanner .dropdown_title.expPlanner_text_passed{	
 	color:#006600;

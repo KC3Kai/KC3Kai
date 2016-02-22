@@ -1336,6 +1336,13 @@
 					tooltip += KC3Meta.term("ShipAntiAir") + eParam[2] + String.fromCharCode(13);
 					tooltip += KC3Meta.term("ShipArmor") + eParam[3];
 					
+					var eSlot = thisNode.eSlot[index];
+					if (!!eSlot && eSlot.length > 0) {
+						for(var slotIdx=0; slotIdx<Math.min(eSlot.length,4); slotIdx++) {
+							if(eSlot[slotIdx] > -1) tooltip += String.fromCharCode(13) + KC3Meta.gearName(KC3Master.slotitem(eSlot[slotIdx]).api_name);
+						}
+					}
+					
 					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("title", tooltip);
 					$(".module.activity .abyss_ship_"+(index+1)).show();
 				}
@@ -1722,6 +1729,13 @@
 					tooltip += KC3Meta.term("ShipTorpedo") + eParam[1] + String.fromCharCode(13);
 					tooltip += KC3Meta.term("ShipAntiAir") + eParam[2] + String.fromCharCode(13);
 					tooltip += KC3Meta.term("ShipArmor") + eParam[3];
+					
+					var eSlot = thisPvP.eSlot[index];
+					if (!!eSlot && eSlot.length > 0) {
+						for(var slotIdx=0; slotIdx<Math.min(eSlot.length,4); slotIdx++) {
+							if(eSlot[slotIdx] > -1) tooltip += String.fromCharCode(13) + KC3Meta.gearName(KC3Master.slotitem(eSlot[slotIdx]).api_name);
+						}
+					}
 					
 					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("title", tooltip);
 					$(".module.activity .abyss_ship_"+(index+1)).show();
