@@ -56,17 +56,24 @@
 			// Check if desired to extend english files
 			if(typeof extendEnglish=="undefined"){ extendEnglish=false; }
 			
+			var language = ConfigManager.language;
 			// Japanese special case where ships and items sources are already in JP
 			if(
-				(["jp", "tcn"].indexOf(ConfigManager.language) > -1)
-				&& (filename=="ships" || filename=="items")
+				(["jp", "tcn"].indexOf(language) > -1)
+				&& (filename==="ships" || filename==="items")
 			){
 				extendEnglish=false;
 			}
-			
-			var language = ConfigManager.language;
-			if (filename === "stype" && ConfigManager.info_eng_stype)
+			// make ships.json and items.json an option to be always in Japanese
+			if (ConfigManager.info_jp_ship_item
+				&& (filename==="ships" || filename==="items")){
+				extendEnglish=false;
+				language = "jp";
+			}
+			// make "stype.json" an option:
+			if (filename === "stype" && ConfigManager.info_eng_stype){
 				language = "en";
+			}
 			
 			var translationBase = {}, enJSON;
 			if(extendEnglish && ConfigManager.language!="en"){
@@ -80,7 +87,6 @@
 				translationBase = enJSON;
 			}
 
-			// make "stype.json" an option:
 			// if we can't fetch this file, the English
 			// version will be used instead
 			var translation;

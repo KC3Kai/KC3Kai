@@ -152,6 +152,12 @@
 				"name" : "SettingsEnglishShipType",
 				"type" : "check",
 				"options" : {}
+			},
+			{
+				"id" : "info_jp_ship_item",
+				"name" : "SettingsJapaneseShipItem",
+				"type" : "check",
+				"options" : {}
 			}
 		]
 	},

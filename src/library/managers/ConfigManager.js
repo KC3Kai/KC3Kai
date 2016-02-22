@@ -41,6 +41,7 @@ Retreives when needed to apply on components
 				info_fleetstat 		: true,
 				info_auto_exped_tab : true,
 				info_eng_stype		: false,
+				info_jp_ship_item	: false,
 
 				// AIR PROFICIENCY BONUSES (Configurable by user)
 				air_formula			: 3, // 1=no veteran 2=veteran average 3=veteran bounds
