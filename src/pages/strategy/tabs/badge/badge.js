@@ -17,6 +17,8 @@
 		   ---------------------------------*/
 		execute :function(){
             var self = this;
+            $(".tab_badge .factory").hide();
+
             $(".tab_badge .export_method input").change( function() {
                 // adjust text accordingly
                 var v = $(this).val();
@@ -73,9 +75,28 @@
                     self.exportTtkInfo(),
                     self.exportFleetInfo());
 
+                var resultPost = {};
+                var submitBtn = $(".tab_badge .factory .submit_form").clone();
+                var formPart = $("form", submitBtn);
+                function encodeVal(d) {
+                    return typeof(d) === "object"?JSON.stringify(d):d;
+                }
                 $.each(result, function(k,v) {
-                    mkText(String(k) + "=" + v);
+                    mkText(String(k) + "=" + JSON.stringify(v) );
+                    resultPost[k] = encodeVal(v);
+                    $("<input type='hidden' />")
+                        .attr("name", k)
+                        .attr("value", encodeVal(v))
+                        .appendTo( formPart );
                 });
+
+                // console.log($.isPlainObject(resultPost));
+                // $.post("http://threebards.com/kaini/api.php", resultPost,
+                //        function(data,status) {
+                //            console.log(data);
+                //        });
+
+                submitBtn.appendTo(".tab_badge .export_result");
 
             });
 		},
@@ -91,30 +112,16 @@
                 setInsert(originIds, RemodelDb.originOf(x));
             });
 
-            var colleIds = [];
-            $.each( originIds, function(i,mid) {
-                var result = K2Badge.mstId2ColleTable[mid];
-                if (result) {
-                    colleIds.push( result );
-                } else {
-                    console.warn("error looking up mstId:", mid);
-                }
-            });
-
-            var colle = {};
-            $.each(colleIds, function(i,x) {
-                colle[x] = true;
-            });
-
-            var colleEncoded = btoa(JSON.stringify(colle));
-
             var k2 = {};
+            var k2Mst = {};
 
             var k2Ids = [];
+            var k2MstIds = [];
             $.each( ids, function(i,id) {
                 var k2Id = K2Badge.mstId2KainiTable[id];
                 if (k2Id) {
                     k2Ids.push(k2Id);
+                    k2MstIds.push(id);
 
                     // the user can only get Bismarck drei (178)
                     // by remodeling Bismarck zwei (173)
@@ -122,20 +129,29 @@
                     // into the list no matter the player has it or not.
                     if (id === 178) {
                         k2Ids.push( K2Badge.mstId2KainiTable[173] );
+                        k2MstIds.push( 173 );
                     }
                 }
             });
+            console.assert( k2Ids.length === k2MstIds.length);
+
             $.each( K2Badge.k2Template, function(stype, v1) {
                 var obj = {};
+                var ar = [];
                 $.each(v1, function(bid,v2) {
                     obj[bid] = (k2Ids.indexOf(bid) !== -1);
+                    var offset = k2Ids.indexOf(bid);
+                    if (offset !== -1) {
+                        ar.push(k2MstIds[offset]);
+                    }
                 });
                 k2[stype] = obj;
+                k2Mst[stype] = ar;
             });
-            var k2Encoded = btoa( JSON.stringify(k2));
             return {
-                colle: colleEncoded,
-                k2: k2Encoded
+                ships: ids,
+                k2Flag: "on",
+                colleFlag: "on"
             };
         },
         exportFromShipList: function() {
@@ -166,35 +182,37 @@
                     if (fleet && fleet.ships[j] !== -1) {
                         var ship = KC3ShipManager.get(fleet.ships[j]);
                         fleetInfo.push( {lvl: ship.level,
-                                         str: "icon"+K2Badge.mstId2FleetIdTable[ship.masterId]
+                                         id: ship.masterId
+                                         // str: "icon"+K2Badge.mstId2FleetIdTable[ship.masterId]
                                         } );
 
                     } else {
-                        fleetInfo.push( {lvl:1,
-                                         str:""} );
+                        fleetInfo.push( null );
                     }
                 }
                 allFleetInfo.push( fleetInfo );
-
             }
-            var levelStr = allFleetInfo
-                .map( function(fleet) {
-                    return fleet
-                        .map( function(s) {
-                            return s.lvl; })
-                        .join(",");
-                }).join("|");
-            var fleetStr = allFleetInfo
-                .map( function(fleet) {
-                    return fleet
-                        .map( function(s) {
-                            return s.str; })
-                        .join(",");
-                }).join("|");
+
+            console.log( allFleetInfo );
+
+
+            // var levelStr = allFleetInfo
+            //     .map( function(fleet) {
+            //         return fleet
+            //             .map( function(s) {
+            //                 return s.lvl; })
+            //             .join(",");
+            //     }).join("|");
+            // var fleetStr = allFleetInfo
+            //     .map( function(fleet) {
+            //         return fleet
+            //             .map( function(s) {
+            //                 return s.str; })
+            //             .join(",");
+            //     }).join("|");
 
             return {
-                fleet: btoa(fleetStr),
-                fleetLvl: btoa(levelStr)
+                fleet: allFleetInfo
             };
         },
         exportTtkInfo: function() {
