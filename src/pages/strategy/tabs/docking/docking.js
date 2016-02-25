@@ -210,6 +210,10 @@
 
 					$(".ship_id", cElm).text( cShip.id );
 					$(".ship_img .ship_icon", cElm).attr("src", KC3Meta.shipIcon(cShip.bid));
+					$(".ship_img .ship_icon", cElm).attr("alt", cShip.bid);
+					$(".ship_img .ship_icon", cElm).click(function(e){
+						window.location.hash = "mstship-" + $(this).attr("alt");
+					});
 					$(".ship_name", cElm).text( cShip.english );
 					$(".ship_type", cElm).text( KC3Meta.stype(cShip.stype) );
 					var shipLevelConv = shipLevel;
@@ -270,10 +274,13 @@
 				var gear = KC3GearManager.get(gear_id);
 				if(gear.itemId<=0){ element.hide(); return; }
 
-				var masterGear = KC3Master.slotitem(gear.api_slotitem_id);
 				$("img",element)
 					.attr("src", "../../assets/img/items/" + gear.master().api_type[3] + ".png")
-					.attr("title", gear.name());
+					.attr("title", gear.name())
+					.attr("alt", gear.master().api_id);
+				$("img",element).click(function(){
+					window.location.hash = "mstgear-" + $(this).attr("alt");
+				});
 				$("span",element).css('visibility','hidden');
 			} else {
 				$("img",element).hide();

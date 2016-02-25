@@ -95,8 +95,11 @@
 			
 			// Select ship
 			$(".tab_mstship .shipRecords .shipRecord").on("click", function(){
-				if( $(this).data("id") != loadedShipId )
-					self.showShip( $(this).data("id") );
+				if( $(this).data("id") != loadedShipId ){
+					var sid = $(this).data("id");
+					window.location.hash = KC3StrategyTabs.pageParams[0]+"-"+sid;
+					self.showShip( sid );
+				}
 			});
 			
 			// Play voice
@@ -125,13 +128,17 @@
 			// On-click remodels
 			$(".tab_mstship .shipInfo").on("click", ".remodel_name a", function(e){
 				//console.log("clicked remodel");
-				self.showShip( $(this).data("sid") );
+				var sid = $(this).data("sid");
+				window.location.hash = KC3StrategyTabs.pageParams[0]+"-"+sid;
+				self.showShip( sid );
 				e.preventDefault();
 				return false;
 			});
-
+			// On-click other forms
 			$(".tab_mstship .shipInfo").on("click", ".more .other_forms a", function(e){
-				self.showShip( $(this).data("sid") );
+				var sid = $(this).data("sid");
+				window.location.hash = KC3StrategyTabs.pageParams[0]+"-"+sid;
+				self.showShip( sid );
 				e.preventDefault();
 				return false;
 			});
@@ -288,6 +295,10 @@
 							$(".slotitem", this).text(KC3Meta.gearName( equipment.api_name ) );
 							$(".sloticon img", this)
 								.attr("src","../../../../assets/img/items/"+equipment.api_type[3]+".png");
+							$(".sloticon img", this).attr("alt", equipId);
+							$(".sloticon img", this).click(function(){
+								window.location.hash = "mstgear-" + $(this).attr("alt");
+							});
 							$(".sloticon img", this).show();
 						} else {
 							$(".sloticon img", this).hide();

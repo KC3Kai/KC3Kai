@@ -44,32 +44,11 @@
 
 		// Click a menu item
 		$("#menu .submenu ul.menulist li").on("click", function(){
-			// If loading another page, stop
-			if($(this).hasClass("disabled")){ return false; }
-			if(KC3StrategyTabs.loading){ return false; }
-			KC3StrategyTabs.loading = $(this).data("id");
-			
-			// Google Analytics
-			_gaq.push(['_trackEvent', "Strategy Room: "+KC3StrategyTabs.loading, 'clicked']);
-			
-			// Interface
-			$("#menu .submenu ul.menulist li").removeClass("active");
-			$(this).addClass("active");
-			$("#contentHtml").hide();
-			$("#contentHtml").html("");
-			window.location.hash = KC3StrategyTabs.loading;
-			
-			// Tab definition execution
-			var thisTab = KC3StrategyTabs[ KC3StrategyTabs.loading ];
-			if(typeof thisTab != "undefined"){
-				// Execute Tab with callback
-				window.activeTab = thisTab;
-				thisTab.apply();
-				window.scrollTo(0,0);
-			}else{
-				KC3StrategyTabs.loading = false;
-				console.log("Clicked "+$(this).data("id")+" menu with no bound actions");
-			}
+			KC3StrategyTabs.reloadTab(this);
+		});
+
+		$(".logo img").on("click", function(){
+			KC3StrategyTabs.reloadTab();
 		});
 		
 		$("#contentHtml").on("click", ".page_help_btn", function(){
@@ -80,6 +59,9 @@
 			}
 		});
 		
+		// Add listener to react on URL hash changed
+		window.addEventListener('popstate', KC3StrategyTabs.onpopstate);
+
 		// If there is a hash tag on URL, set it as initial selected
 		KC3StrategyTabs.pageParams = window.location.hash.substring(1).split("-");
 		if(KC3StrategyTabs.pageParams[0] !== ""){
@@ -92,4 +74,51 @@
 		
 	});
 	
+	KC3StrategyTabs.reloadTab = function(tab) {
+		var tabElement = typeof tab;
+		KC3StrategyTabs.pageParams = (tabElement=="string" ? tab : window.location.hash).substring(1).split("-");
+		if(tabElement != "object") {
+			var tabId = KC3StrategyTabs.pageParams[0] || "profile";
+			tab = $("#menu .submenu ul.menulist li[data-id="+tabId+"]");
+		}
+		// If loading another page, stop
+		if($(tab).hasClass("disabled")){ return false; }
+		if(KC3StrategyTabs.loading){ return false; }
+		KC3StrategyTabs.loading = $(tab).data("id");
+
+		// Google Analytics
+		_gaq.push(['_trackEvent', "Strategy Room: "+KC3StrategyTabs.loading, 'clicked']);
+
+		// Interface
+		$("#menu .submenu ul.menulist li").removeClass("active");
+		$(tab).addClass("active");
+		$("#contentHtml").hide();
+		$("#contentHtml").html("");
+		if(KC3StrategyTabs.loading != KC3StrategyTabs.pageParams[0]) {
+			window.location.hash = KC3StrategyTabs.loading;
+			KC3StrategyTabs.pageParams = [KC3StrategyTabs.loading];
+		}
+		KC3StrategyTabs.currentTab = KC3StrategyTabs.loading;
+
+		// Tab definition execution
+		var thisTab = KC3StrategyTabs[ KC3StrategyTabs.loading ];
+		if(typeof thisTab != "undefined"){
+			// Execute Tab with callback
+			window.activeTab = thisTab;
+			thisTab.apply();
+			window.scrollTo(0,0);
+		}else{
+			console.info("Clicked ", KC3StrategyTabs.loading, "menu with no bound actions");
+			KC3StrategyTabs.loading = false;
+		}
+	};
+
+	KC3StrategyTabs.onpopstate = function(event){
+		var hashParams = window.location.hash.substring(1).split("-");
+		if(!!hashParams[0] && !KC3StrategyTabs.loading && KC3StrategyTabs.currentTab !== hashParams[0]){
+			console.debug("Auto reloading from currentTab:", KC3StrategyTabs.currentTab, "to hash:", hashParams);
+			KC3StrategyTabs.reloadTab();
+		}
+	};
+
 })();

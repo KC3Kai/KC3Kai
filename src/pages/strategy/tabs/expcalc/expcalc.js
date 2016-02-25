@@ -386,6 +386,10 @@
 
 				// Icon and level, common for all categories
 				$(".ship_icon img", goalBox).attr("src", KC3Meta.shipIcon(ThisShip.masterId) );
+				$(".ship_icon img", goalBox).attr("alt", ThisShip.masterId );
+				$(".ship_icon img", goalBox).click(function(){
+					window.location.hash = "mstship-" + $(this).attr("alt");
+				});
 				$(".ship_icon img", goalBox).attr("title", ThisShip.name() + ' (' + ThisShip.rosterId + ')' );
 				$(".ship_name", goalBox).text( ThisShip.name() );
 				$(".ship_type", goalBox).text( ThisShip.stype() );

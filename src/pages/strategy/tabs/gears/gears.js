@@ -398,6 +398,10 @@
 			$.each(SlotItems, function(index,ThisSlotitem) {
 				ItemElem = $(".tab_gears .factory .slotitem").clone().appendTo(".tab_gears .item_list");
 				$(".icon img", ItemElem).attr("src", "../../assets/img/items/"+ThisSlotitem.type_id+".png");
+				$(".icon img", ItemElem).attr("alt", ThisSlotitem.id);
+				$(".icon img", ItemElem).on("click", function(){
+					window.location.hash = "mstgear-" + $(this).attr("alt");
+				});
 				$(".english", ItemElem).text(ThisSlotitem.english);
 				$(".japanese", ItemElem).text(ThisSlotitem.japanese);
 				//$(".counts", ItemElem).html("You have <strong>"+(ThisSlotitem.held.length+ThisSlotitem.extras.length)+"</strong> (<strong>"+ThisSlotitem.held.length+"</strong> worn, <strong>"+ThisSlotitem.extras.length+"</strong> extras)");

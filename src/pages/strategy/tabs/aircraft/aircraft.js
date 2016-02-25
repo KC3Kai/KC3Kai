@@ -160,6 +160,10 @@
 				
 				ItemElem = $(".tab_aircraft .factory .slotitem").clone().appendTo(".tab_aircraft .item_list");
 				$(".icon img", ItemElem).attr("src", "../../assets/img/items/"+type_id+".png");
+				$(".icon img", ItemElem).attr("alt", ThisSlotitem.id);
+				$(".icon img", ItemElem).click(function(){
+					window.location.hash = "mstgear-" + $(this).attr("alt");
+				});
 				$(".english", ItemElem).text(ThisSlotitem.english);
 				$(".japanese", ItemElem).text(ThisSlotitem.japanese);
 				

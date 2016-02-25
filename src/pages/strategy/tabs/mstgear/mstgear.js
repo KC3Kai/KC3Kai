@@ -39,7 +39,7 @@
 			
 			// Default selected if not direct linked
 			if(!!KC3StrategyTabs.pageParams[1]){
-				this.showGear(KC3StrategyTabs.pageParams[1]);
+				this.showGear(1*KC3StrategyTabs.pageParams[1]);
 			}else{
 				this.showGear(124);
 			}
