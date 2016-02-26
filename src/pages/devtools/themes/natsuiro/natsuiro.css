@@ -511,6 +511,13 @@ html,body {
 	color:#eee;
 	padding:0px 0px 0px 5px;
 }
+
+.module.activity .map_info.map_finisher .map_gauge {
+	animation: gauge-finish-her 0.25s infinite ease alternate;
+}
+.module.activity .map_info.map_finisher .map_hp {
+	color:#e66;
+}
 /* Sortie Nodes */
 .module.activity .sortie_nodes {
 	width:180px;
@@ -2165,7 +2172,16 @@ html,body {
 /* ANIMATIONS
 ----------------------------------- */
 @-webkit-keyframes lock-warning {
-  to {
-  	visibility:hidden;
-  }
+	to {
+		visibility:hidden;
+	}
+}
+
+@-webkit-keyframes gauge-finish-her {
+	0% {
+		background:#222;
+	}
+	100% {
+		background:#d22;
+	}
 }

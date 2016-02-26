@@ -23,9 +23,12 @@ var critAnim = false;
 localStorage.longestIdleTime = Math.max(parseInt(localStorage.longestIdleTime) || 0,1800000);
 var
 	lastRequestMark,
+	refreshTimeout,  // refresh cancellation time
 	idleTimer,
 	idleTimeout,
-	idleFunction;
+	idleFunction,
+	expiryFunction,
+	refreshFunction;
 
 // Show game screens
 function ActivateGame(){
@@ -151,10 +154,34 @@ $(document).on("ready", function(){
 		},localStorage.longestIdleTime);
 	});
 	idleFunction = function(){
+		$(".game-idle-timer").css('bottom','');
 		if(ConfigManager.alert_idle_counter) {
 			$(".game-idle-timer").text(String(Math.floor((Date.now() - lastRequestMark) / 1000)).toHHMMSS());
 		} else {
 			$(".game-idle-timer").text(String(NaN).toHHMMSS());
+			clearInterval(idleTimer);
+		}
+	};
+	
+	expiryFunction = function(){
+		var timeLeft = Math.floor(((localStorage.getObject('apiUsage') || Date.now()) - Date.now()) / 1000);
+		$(".game-idle-timer").css('bottom',0);
+		if(timeLeft > 0) {
+			$(".game-idle-timer").text(String(timeLeft).toHHMMSS());
+		} else {
+			localStorage.apiUsage = null;
+			$(document).trigger('api-invalid');
+			clearInterval(idleTimer);
+		}
+	};
+	
+	refreshFunction = function(){
+		var timeLeft = Math.floor((refreshTimeout - Date.now()) / 1000);
+		$(".game-idle-timer").css('bottom',0);
+		if(timeLeft > 0) {
+			$(".game-idle-timer").text(String(timeLeft).toHHMMSS());
+		} else {
+			$(document).trigger('api-invalid');
 			clearInterval(idleTimer);
 		}
 	};
@@ -235,6 +262,10 @@ $(document).on("api-refresh",function(){
 	
 	// Initialize State
 	localStorage.extract_api = true;
+	refreshTimeout = Date.now() + 60000;
+	clearInterval(idleTimer);
+	idleTimer = setInterval(refreshFunction,1000);
+	
 	$(".box-wrap").css("background", "");
 	$(".game-swf").remove();
 	$(".refresh-box").remove();
@@ -270,12 +301,9 @@ $(document).on("api-valid",function(){
 	if(localStorage.getObject('apiUsage')) {
 		var timeOut = localStorage.getObject('apiUsage') - Date.now();
 		console.warn("Existing API will expire in",timeOut,'milliseconds');
-		setTimeout(function(){
-			localStorage.apiUsage = null;
-			if(waiting) {
-				$(document).trigger('api-invalid');
-			}
-		},timeOut);
+		
+		clearInterval(idleTimer);
+		idleTimer = setInterval(expiryFunction,1000);
 	}
 	
 	// Check panel requirement

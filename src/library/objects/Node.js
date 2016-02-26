@@ -283,8 +283,19 @@ Used by SortieManager
 				ship.afterHp[1] = ship.hp[1];
 			}
 		}
-		if(this.gaugeDamage > -1)
+		if(this.gaugeDamage > -1) {
 			this.gaugeDamage = Math.min(this.originalHPs[7],this.originalHPs[7] - this.enemyHP[0].currentHp);
+			
+			(function(sortieData){
+				var
+					maps = localStorage.getObject('maps'),
+					desg = ['m',sortieData.map_world,sortieData.map_num].join('');
+				if(this.isBoss() && maps[desg].kind == 'gauge-hp') {
+					maps[desg].baseHp = maps[desg].baseHp || this.originalHPs[7];
+				}
+				localStorage.setObject('maps',maps);
+			}).call(this,KC3SortieManager);
+		}
 		
 		// Record encoutners only if on sortie
 		if(KC3SortieManager.onSortie > 0) {
@@ -558,7 +569,7 @@ Used by SortieManager
 							Source: https://gitter.im/KC3Kai/Public?at=5662e448c15bca7e3c96376f
 						*/
 						return expData.map(function(data,slotId){
-							return (data == -1) && resultData[['api_get','exp_lvup','combined'].slice(0,fleetId+2).join('_')][slotId];
+							return (data == -1) && !!resultData[['api_get','exp_lvup','combined'].slice(0,fleetId+2).join('_')][slotId];
 						});
 					}),
 				fleetDesg = [KC3SortieManager.fleetSent - 1,1]; // designated fleet (fleet mapping)
@@ -567,6 +578,8 @@ Used by SortieManager
 				return (lostFlags || []).filter(function(x){return x>=0;}).map(function(checkSunk,rosterPos){
 					if(!!checkSunk) {
 						var rtv = PlayerManager.fleets[fleetDesg[fleetNum]].ships[rosterPos];
+						if(KC3ShipManager.get(rtv).didFlee) return 0;
+						
 						console.log("このクソ提督、深海に%c%s%cが沈んだ (ID:%d)",
 							'color:red,font-weight:bold',
 							KC3ShipManager.get(rtv).master().api_name,

@@ -622,6 +622,7 @@
 	function clearSortieData(){
 		$(".module.activity .activity_battle").css("opacity", "0.25");
 		$(".module.activity .map_world").text("");
+		$(".module.activity .map_info").removeClass("map_finisher");
 		$(".module.activity .map_gauge *:not(.clear)").css("width", "0%");
 		$(".module.activity .map_hp").text("");
 		$(".module.activity .sortie_node").text("");
@@ -2131,10 +2132,13 @@
 		gaugeDmg = (gaugeDmg || 0) * (depleteOK);
 		
 		if(typeof thisMap != "undefined"){
+			$(".module.activity .map_info").removeClass("map_finisher");
 			if( thisMap.clear == 1){
 				$(".module.activity .map_hp").text("Cleared");
 				$(".module.activity .map_gauge .curhp").css('width','0%');
 			}else{
+				var requireFinisher = false;
+				
 				// If HP-based gauge
 				if(typeof thisMap.maxhp != "undefined"){
 					// Reduce current map HP with known gauge damage given
@@ -2148,12 +2152,13 @@
 						return (x/thisMap.maxhp)*100;
 					});
 					
-					console.log.apply(console,rate);
+					console.log(thisMap.curhp,thisMap.baseHp,rate[0],rate[1]);
 					$(".module.activity .map_hp").text( thisMap.curhp + " / " + thisMap.maxhp );
 					$(".module.activity .map_gauge")
-						.find('.nowhp').css("width", (rate.shift())+"%").end()
-						.find('.curhp').css("width", (rate.shift())+"%").end();
+						.find('.nowhp').css("width", (rate[0])+"%").end()
+						.find('.curhp').css("width", (rate[1])+"%").end();
 					
+					requireFinisher = (thisMap.curhp <= thisMap.baseHp);
 				// If kill-based gauge
 				}else{
 					var totalKills = KC3Meta.gauge( thisMapId.slice(1) );
@@ -2169,9 +2174,16 @@
 						$(".module.activity .map_gauge")
 							.find('.curhp').css("width", ((postBounty/totalKills)*100)+"%").end()
 							.find('.nowhp').css("width", ( (killsLeft/totalKills)*100)+"%").end();
+						
+						requireFinisher = (killsLeft <= 1);
 					}else{
 						$(".module.activity .map_hp").text("Not cleared");
 					}
+				}
+				
+				if(requireFinisher){
+					$(".module.activity .map_info").addClass("map_finisher");
+					$(".module.activity .map_hp").text(KC3Meta.term("StrategyEvents1HP"));
 				}
 			}
 		}else{

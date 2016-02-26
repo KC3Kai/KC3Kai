@@ -85,10 +85,7 @@ Xxxxxxx
 						sorties    = Object.keys(hpData).reverse(),
 						lastSortie = sorties[0];
 					
-					if(lastSortie)
-						hpData[id] = hpData[lastSortie];
-					else
-						hpData[id] = [eventData.api_now_maphp,eventData.api_max_maphp];
+					hpData[id] = [eventData.api_now_maphp,eventData.api_max_maphp];
 				}
 				localStorage.setObject('maps',mapData);
 			});

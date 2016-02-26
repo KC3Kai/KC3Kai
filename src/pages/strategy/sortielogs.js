@@ -123,7 +123,7 @@
 									mapBox.addClass("notcleared");
 									// If HP-based gauge
 									if(typeof element.maxhp != "undefined"){
-										if(element.curhp>1){ // i want to approach last kill as JUST DO IT instead leaving 1HP only.
+										if(element.curhp>(element.baseHp || 1)){ // i want to approach last kill as JUST DO IT instead leaving 1HP only.
 											if((element.maxhp === 9999) || (element.curhp === 9999))
 												$(".map_hp_txt", mapBox).text( "???? / ????" );
 											else
