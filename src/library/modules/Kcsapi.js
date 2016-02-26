@@ -740,7 +740,7 @@ Previously known as "Reactor"
 				var thisMapId = "m"+response.api_data.api_maparea_id+""+response.api_data.api_mapinfo_no;
 				var thisMap = AllMaps[thisMapId];
 
-				if (thisMap.curhp === 9999) {
+				if (thisMap.curhp || 9999 === 9999) {
 					thisMap.curhp = response.api_data.api_eventmap.api_now_maphp;
 					thisMap.maxhp = response.api_data.api_eventmap.api_max_maphp;
 					localStorage.maps = JSON.stringify(AllMaps);
@@ -752,6 +752,7 @@ Previously known as "Reactor"
 			KC3Network.trigger("SortieStart");
 			KC3Network.trigger("CompassResult");
 			KC3Network.trigger("Quests");
+			KC3Network.trigger("Fleet");
 		},
 		
 		/* Traverse Map
@@ -871,6 +872,7 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_combined_battle/goback_port":function(params, response, headers){
 			KC3SortieManager.sendFCFHome();
+			KC3Network.delay(0, "Fleet");
 			KC3Network.trigger("Fleet");
 		},
 		
@@ -1411,7 +1413,7 @@ Previously known as "Reactor"
 					etcStat[key] = $.extend(true,{},defStat,maps[key].stat);
 				
 				// Create map object
-				localMap = maps[ key ] = {
+				localMap = {
 					id: thisMap.api_id,
 					clear: thisMap.api_cleared,
 					kind: 'single'
@@ -1429,9 +1431,12 @@ Previously known as "Reactor"
 					localMap.curhp      = eventData.api_now_maphp;
 					localMap.maxhp      = eventData.api_max_maphp;
 					localMap.difficulty = eventData.api_selected_rank;
+					
+					if(typeof (maps[key]||{}).baseHp !== 'undefined')
+						localMap.baseHp     = maps[key].baseHp;
 					localMap.stat       = $.extend(true,{},defStat,etcStat[ key ]);
 					switch(eventData.api_gauge_type || 0) {
-						case 0:
+						case 2:
 							localMap.kind   = 'gauge-hp';
 							break;
 						case 3:
@@ -1447,6 +1452,8 @@ Previously known as "Reactor"
 				if(typeof maps[key].dkind === 'undefined') {
 					maps[key].dkind = maps[key].kind;
 				}
+				
+				maps[ key ] = localMap;
 			}
 			localStorage.maps = JSON.stringify(maps);
 		},

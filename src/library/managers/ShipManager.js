@@ -84,6 +84,8 @@ Saves and loads list to and from localStorage
 			// Check previous repair state
 			// If there's a change detected (without applying applyRepair proc)
 			// It'll be treated as akashi effect
+			
+			cShip.akashiMark &= !!cShip.onFleet();
 			if(tempData.repair[0] > cShip.repair[0] && cShip.akashiMark) {
 				/* Disabling this --
 					the problem is, pending consumption variable stacks up for expedition, */
