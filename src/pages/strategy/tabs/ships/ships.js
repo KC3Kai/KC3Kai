@@ -16,6 +16,7 @@
 		modernizationOption: 0,
 		marriageFilter: 0,
 		heartlockFilter: 0,
+		speedFilter: 0,
 		withFleet: true,
 		isLoading: false,
 		//shipList: $(".tab_ships .ship_list"),
@@ -54,6 +55,7 @@
 					ev: [this.getDerivedStatNaked("houk", ThisShip.ev[0], ThisShip.items), ThisShip.ev[0] ],
 					ls: [this.getDerivedStatNaked("saku", ThisShip.ls[0], ThisShip.items), ThisShip.ls[0] ],
 					lk: ThisShip.lk[0],
+					sp: MasterShip.api_soku,
 					slots: ThisShip.slots,
 					
 					fleet: ThisShip.onFleet(),
@@ -238,7 +240,19 @@
 							self.options["heartlock_"+_x].removeClass('on');
 					});
 				});
+			});
 
+			["all","fast","slow"].forEach(function(x,i,a){
+				self.options["speed_"+x] = $(".tab_ships .filters .massSelect .speed_"+x).on("click",function(){
+					self.speedFilter = i;
+					self.refreshTable();
+					a.forEach(function(_x,_i,_a){
+						if(i==_i)
+							self.options["speed_"+_x].addClass('on');
+						else
+							self.options["speed_"+_x].removeClass('on');
+					});
+				});
 			});
 
 			// Default status
@@ -264,6 +278,7 @@
 			self.options["heartlock_"+["all","yes","no"][self.heartlockFilter]].addClass('on');
 			self.options["marriage_"+["in","on","ex"][self.marriageFilter]].addClass('on');
 			self.options["fleet_"+["no","yes"][self.withFleet & 1]].addClass('on');
+			self.options["speed_"+["all","fast","slow"][self.speedFilter]].addClass('on');
 			
 			// Ship type toggled
 			$(".tab_ships .filters .ship_filter_type").on("click", function(){
@@ -332,6 +347,10 @@
 							&& (self.heartlockFilter === 0
 								|| (self.heartlockFilter === 1 && thisShip.locked === 1)
 								|| (self.heartlockFilter === 2 && thisShip.locked === 0)
+							   )
+							&& (self.speedFilter === 0
+								|| (self.speedFilter === 1 && thisShip.sp >= 10)
+								|| (self.speedFilter === 2 && thisShip.sp < 10)
 							   )
 						){
 							FilteredShips.push(thisShip);
