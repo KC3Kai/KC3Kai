@@ -1,5 +1,5 @@
 <div class="page_title">
-  Export to KanColle Badge Generator
+    KanColle Badge Generator
 	<div class="page_help_btn hover"><span>?</span> Help Topics</div>
 </div>
 
@@ -11,41 +11,89 @@
 
 <!-- CONTENT -->
 <div class="page_padding">
-  <div class="export_parts">
-    <form>
-      <label><input type="checkbox" id="ep_name" checked>Admiral Name</label><br>
-      <label><input type="checkbox" id="ep_level" checked>Admiral Level</label><br>
-      <label><input type="checkbox" id="ep_server" checked>Server</label><br>
-      <label><input type="checkbox" id="ep_current_fleet" checked>Current Fleet</label><br>
-      <label><input type="checkbox" id="ep_k2" checked>Kai Ni Ships</label><br>
-      <label><input type="checkbox" id="ep_colle" checked>Ship Collection</label><br>
-    </form>
-  </div>
-
-  <div class="export_method">
-    <form>
-      <div id="radio">
-        <input type="radio" id="radio_sl" name="emethod" value="shiplist">
-        <label for="radio_sl">From Current Ship List</label>
-        <input type="radio" id="radio_pb" name="emethod" value="picturebook">
-        <label for="radio_pb">From In-Game Picture Book</label>
-      </div>
-      <div class="desc" />
-    </form>
-  </div>
-
-  <div class="export_control">
-    <a class="do_export">Export</a>
-  </div>
-  <div class="export_result">
-  </div>
-
-  <div class="factory">
-    <div class="submit_form">
-      <form action="http://threebards.com/kaini/api.php" method="post" target="_blank">
-        <!-- <input type="submit" value="test" /> -->
-      </form>
+    <div class="page_section">Introduction</div>
+    <div class="section_body">
+        This page will export your data to <a href="http://threebards.com/kaini" target="_blank">Kai Ni Badge Generator</a> so you won't need to input the data yourself. We <a href="https://github.com/KC3Kai/KC3Kai/issues/1028" target="_blank">worked with the developers</a> of the tool for this integration.
     </div>
-  </div>
+    
+    <div class="page_section">Data to include</div>
+    <div class="export_box section_body export_parts">
+        <form>
+            <div class="export_field">
+                <div class="export_col export_check"><input type="checkbox" id="ep_name" checked></div>
+                <div class="export_col export_name"><label for="ep_name">Admiral Name</label></div>
+                <div class="export_col export_value"></div>
+                <div class="clear"></div>
+            </div>
+            <div class="export_field">
+                <div class="export_col export_check"><input type="checkbox" id="ep_level" checked></div>
+                <div class="export_col export_name"><label for="ep_level">Admiral Level</label></div>
+                <div class="export_col export_value"></div>
+                <div class="clear"></div>
+            </div>
+            <div class="export_field">
+                <div class="export_col export_check"><input type="checkbox" id="ep_server" checked></div>
+                <div class="export_col export_name"><label for="ep_server">Server</label></div>
+                <div class="export_col export_value"></div>
+                <div class="clear"></div>
+            </div>
+            <div class="export_field">
+                <div class="export_col export_check"><input type="checkbox" id="ep_current_fleet" checked></div>
+                <div class="export_col export_name"><label for="ep_current_fleet">Current Fleet</label></div>
+                <div class="export_col export_value"></div>
+                <div class="clear"></div>
+            </div>
+            <div class="export_field">
+                <div class="export_col export_check"><input type="checkbox" id="ep_k2" checked></div>
+                <div class="export_col export_name"><label for="ep_k2">Kai Ni Ships</label></div>
+                <div class="export_col export_value"></div>
+                <div class="clear"></div>
+            </div>
+            <div class="export_field">
+                <div class="export_col export_check"><input type="checkbox" id="ep_colle" checked></div>
+                <div class="export_col export_name"><label for="ep_colle">Ship Collection</label></div>
+                <div class="export_col export_value"></div>
+                <div class="clear"></div>
+            </div>
+        </form>
+    </div>
+    
+    <div class="page_section">Data source</div>
+    <div class="export_box section_body export_method">
+        <form>
+            <div id="radio">
+                <div class="method_choice">
+                    <div><input type="radio" id="radio_sl" class="hover" name="emethod" value="shiplist"></div>
+                    <div><label class="hover" for="radio_sl">From Current Ship List</label></div>
+                </div>
+                <div class="method_choice">
+                    <div><input type="radio" id="radio_pb" class="hover" name="emethod" value="picturebook"></div>
+                    <div><label class="hover" for="radio_pb">From In-Game Picture Book</label></div>
+                </div>
+            </div>
+            <div class="clear"></div>
+            <div class="desc">
+                
+            </div>
+        </form>
+    </div>
+    
+    <div class="page_section">Confirm</div>
+    <div class="export_box section_body export_control">
+        <a class="do_export hover">Export</a>
+    </div>
+
+    <div class="page_section">Result</div>
+    <div class="export_box section_body export_result">
+        
+    </div>
+    
+    <div class="factory">
+        <div class="submit_form">
+            <form action="http://threebards.com/kaini/api.php" method="post" target="_blank">
+            <!-- <input type="submit" value="test" /> -->
+            </form>
+        </div>
+    </div>
 
 </div>

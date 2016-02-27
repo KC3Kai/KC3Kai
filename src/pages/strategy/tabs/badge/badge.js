@@ -18,7 +18,14 @@
 		execute :function(){
             var self = this;
             $(".tab_badge .factory").hide();
-
+			
+			$(".export_value", $("#ep_name").parent().parent()).html(PlayerManager.hq.name);
+			$(".export_value", $("#ep_level").parent().parent()).html(PlayerManager.hq.level);
+			$(".export_value", $("#ep_server").parent().parent()).html(PlayerManager.hq.server);
+			$(".export_value", $("#ep_current_fleet").parent().parent()).html(localStorage.fleets);
+			$(".export_value", $("#ep_k2").parent().parent()).html("[dynamically generated]");
+			$(".export_value", $("#ep_colle").parent().parent()).html(localStorage.ships);
+			
             $(".tab_badge .export_parts input").on("click", function () {
                 // on every option change we clear exported results
                 // in case the exported data has or don't have some intended fields
@@ -39,10 +46,9 @@
 
                 var pb,i;
                 if (v === 'shiplist') {
-                    mkText("Export Data from Current Ship List");
+                    mkText("Use data from the current ship list. Please note that ships that you had before but somehow scrapped, modfodded, or sunk in favor of more ship slots will not show up. If you want to show everything that you had so far, even in the past, use the Picture Book option.");
                 } else {
-                    mkText("Export Data from Picture Book," +
-                           "require sync-ing in-game picture book");
+                    mkText("Use data from the in-game picture book / album / kandex / library. This will export ships you had even in the past which had been lost, probably in favor of more ship slots. This however, will require you to visit the MAIN pages on the IN-GAME picture book for us to collect data. You just need to visit the FIVE MAIN pages (not the sub-pages). Also, you DO NOT need to wait for all images to load.");
 
                     mkText("Status:");
                     pb = PictureBook.load();
@@ -55,6 +61,7 @@
                         }
                         mkText(t);
                     }
+					mkText("Refresh (F5) this strategy room to update the states. And No, we will not add the feature to re-select the previous choice when you refresh.");
                 }
 
             });
