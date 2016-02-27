@@ -17,6 +17,8 @@
 		KC3Translation.execute();
 		
 		$(".myVersion").text(myVersion);
+
+		$(".timeServerMaintenance").text( KC3Meta.term("MenuTimeUnknown") );
 		
 		// Show estimated time until next update
 		$.ajax({
@@ -34,6 +36,13 @@
 				// Installed version is the same or greater than latest
 				}else{
 					$(".nextVersion").html( KC3Meta.term("MenuOnLatest") );
+				}
+				if (data.maintenance) {
+					var nextMtDate = new Date(data.maintenance);
+					var remaining = nextMtDate - new Date();
+					if (remaining >= 0) {
+						$(".timeServerMaintenance").text( String(remaining/1000).toHHMMSS() );
+					} 
 				}
 			}
 		});
