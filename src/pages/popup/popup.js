@@ -36,7 +36,7 @@
 					$(".nextVersion").html( KC3Meta.term("MenuOnLatest") );
 				}
 				// Next Maintenance time
-				if (data.maintenance) {
+				if (data.maintenance_start) {
 					var nextMtDate = new Date(data.maintenance_start);
 					var remaining = nextMtDate - new Date();
 					if (remaining >= 0) {
