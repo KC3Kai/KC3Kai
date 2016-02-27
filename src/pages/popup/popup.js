@@ -17,33 +17,43 @@
 		KC3Translation.execute();
 		
 		$(".myVersion").text(myVersion);
-
-		$(".timeServerMaintenance").text( KC3Meta.term("MenuTimeUnknown") );
 		
 		// Show estimated time until next update
 		$.ajax({
 			dataType: "json",
 			url: "https://raw.githubusercontent.com/KC3Kai/KC3Kai/master/update?v="+((new Date()).getTime()),
 			success: function(data, textStatus, request){
-				// If current installed version less than latest
 				if( myVersion < Number(data.version) ){
+					// If current installed version less than latest
 					var UpdateDiff = (new Date(data.time)).getTime() - (new Date()).getTime();
 					if(UpdateDiff > 0){
 						$(".nextVersion").html( "v"+data.version+" in <span class=\"timer\">"+String(UpdateDiff/1000).toHHMMSS()+"</span>");
 					}else{
 						$(".nextVersion").html( "v"+data.version+" "+KC3Meta.term("MenuScheduledNow"));
 					}
-				// Installed version is the same or greater than latest
 				}else{
+					// Installed version is the same or greater than latest
 					$(".nextVersion").html( KC3Meta.term("MenuOnLatest") );
 				}
+				// Next Maintenance time
 				if (data.maintenance) {
-					var nextMtDate = new Date(data.maintenance);
+					var nextMtDate = new Date(data.maintenance_start);
 					var remaining = nextMtDate - new Date();
 					if (remaining >= 0) {
 						$(".timeServerMaintenance").text( String(remaining/1000).toHHMMSS() );
-					} 
+					}  else {
+						var MtEnd = new Date(data.maintenance_end);
+						remaining = MtEnd - new Date();
+						if (remaining >= 0) {
+							$(".timeServerMaintenance").text( String(remaining/1000).toHHMMSS() );
+						} else {
+							$(".timeServerMaintenance").text(KC3Meta.term("MaintenanceComplete"));
+						}
+					}
+				} else {
+					$(".timeServerMaintenance").text(KC3Meta.term("MenuTimeUnknown"));
 				}
+				
 			}
 		});
 		
