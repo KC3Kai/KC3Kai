@@ -148,58 +148,8 @@
             $("#radio_"+lang, ".export_lang #lang").click();
 		},
         exportFromIdList: function(ids) {
-            function setInsert(xs,v) {
-                if (xs.indexOf(v) === -1)
-                    xs.push(v);
-                return xs;
-            }
-
-            console.log(ids);
-            var originIds = [];
-            $.each(ids, function(i,x) {
-                setInsert(originIds, RemodelDb.originOf(x));
-            });
-
-            var k2 = {};
-            var k2Mst = {};
-
-            var k2Ids = [];
-            var k2MstIds = [];
-            $.each( ids, function(i,id) {
-                var k2Id = K2Badge.mstId2KainiTable[id];
-                if (k2Id) {
-                    k2Ids.push(k2Id);
-                    k2MstIds.push(id);
-
-                    // the user can only get Bismarck drei (178)
-                    // by remodeling Bismarck zwei (173)
-                    // so if it turns out that the player has 178, we add 173
-                    // into the list no matter the player has it or not.
-                    if (id === 178) {
-                        k2Ids.push( K2Badge.mstId2KainiTable[173] );
-                        k2MstIds.push( 173 );
-                    }
-                }
-            });
-            console.assert( k2Ids.length === k2MstIds.length);
-
-            $.each( K2Badge.k2Template, function(stype, v1) {
-                var obj = {};
-                var ar = [];
-                $.each(v1, function(bid,v2) {
-                    obj[bid] = (k2Ids.indexOf(bid) !== -1);
-                    var offset = k2Ids.indexOf(bid);
-                    if (offset !== -1) {
-                        ar.push(k2MstIds[offset]);
-                    }
-                });
-                k2[stype] = obj;
-                k2Mst[stype] = ar;
-            });
             return {
-                ships: ids,
-                k2Flag: "on",
-                colleFlag: "on"
+                ships: ids
             };
         },
         exportFromShipList: function() {
