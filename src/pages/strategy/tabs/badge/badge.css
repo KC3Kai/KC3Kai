@@ -65,6 +65,13 @@
     margin:0px 0px 10px 0px;
 }
 
+/* LANGUAGE
+------------------------------*/
+.tab_badge .export_lang .lang_choice {
+    float: left;
+    margin:0px 20px 0px 0px;
+}
+
 /* RESULT
 ------------------------------*/
 .export_result div {

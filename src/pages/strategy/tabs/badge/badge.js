@@ -91,7 +91,6 @@
 
                 var submitBtn = $(".tab_badge .factory .submit_form").clone();
                 var formPart = $("form", submitBtn);
-                console.log( formPart.attr("action") );
                 function encodeVal(d) {
                     return typeof(d) === "object"?JSON.stringify(d):d;
                 }
@@ -131,6 +130,10 @@
                         .appendTo( formPart );
                 });
 
+                var actionPath = $('input[name=lang]:checked', "#lang").val();
+                if (!actionPath)
+                    actionPath = $('#radio_en', "#lang").val();
+                formPart.attr("action",  "http://threebards.com/kaini/"+actionPath);
                 formPart.submit();
             });
 		},
