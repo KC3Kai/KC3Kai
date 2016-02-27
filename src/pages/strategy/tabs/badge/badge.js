@@ -136,6 +136,16 @@
                 formPart.attr("action",  "http://threebards.com/kaini/"+actionPath);
                 formPart.submit();
             });
+
+            // select language based on user preference
+            var kcLang = ConfigManager.language;
+            var lang =
+                kcLang === "en" ? "en"
+                : kcLang === "jp" ? "jp"
+                : kcLang === "scn" ? "cn"
+                : kcLang === "tcn" ? "cn"
+            : "en";
+            $("#radio_"+lang, ".export_lang #lang").click();
 		},
         exportFromIdList: function(ids) {
             function setInsert(xs,v) {
