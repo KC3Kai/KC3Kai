@@ -91,6 +91,7 @@
 
                 var submitBtn = $(".tab_badge .factory .submit_form").clone();
                 var formPart = $("form", submitBtn);
+                console.log( formPart.attr("action") );
                 function encodeVal(d) {
                     return typeof(d) === "object"?JSON.stringify(d):d;
                 }
@@ -121,10 +122,8 @@
                 if (checkLabel("#ep_colle")) {
                     resultPost.colleFlag = "on";
                 }
-                // console.log(resultPost);
                 
                 $.each(resultPost, function(k,v) {
-                    // mkText(String(k) + "=" + JSON.stringify(v) );
                     resultPost[k] = encodeVal(v);
                     $("<input type='hidden' />")
                         .attr("name", k)
@@ -133,15 +132,6 @@
                 });
 
                 formPart.submit();
-
-                // console.log($.isPlainObject(resultPost));
-                // $.post("http://threebards.com/kaini/api.php", resultPost,
-                //        function(data,status) {
-                //            console.log(data);
-                //        });
-
-                // submitBtn.appendTo(".tab_badge .export_result");
-
             });
 		},
         exportFromIdList: function(ids) {
@@ -239,24 +229,7 @@
                 allFleetInfo.push( fleetInfo );
             }
 
-            console.log( allFleetInfo );
-
-
-            // var levelStr = allFleetInfo
-            //     .map( function(fleet) {
-            //         return fleet
-            //             .map( function(s) {
-            //                 return s.lvl; })
-            //             .join(",");
-            //     }).join("|");
-            // var fleetStr = allFleetInfo
-            //     .map( function(fleet) {
-            //         return fleet
-            //             .map( function(s) {
-            //                 return s.str; })
-            //             .join(",");
-            //     }).join("|");
-
+            // console.log( allFleetInfo );
             return {
                 fleet: allFleetInfo
             };
