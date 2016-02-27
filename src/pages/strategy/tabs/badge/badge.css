@@ -67,9 +67,14 @@
 
 /* LANGUAGE
 ------------------------------*/
-.tab_badge .export_lang .lang_choice {
-    float: left;
-    margin:0px 20px 0px 0px;
+.tab_badge .export_lang .lang_choice  {
+    background:#f0f5fa;
+    padding:2px 5px;
+    height:24px;
+    float:left;
+    width:150px;
+    margin:0px 20px 10px 0px;
+    border-radius:7px;
 }
 
 /* RESULT
