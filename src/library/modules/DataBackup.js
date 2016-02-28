@@ -8,6 +8,17 @@
 				var fullStorageData="";
 				var zip = new JSZip();
 
+				fullStorageData = JSON.stringify({
+					config: JSON.parse(localStorage.config || "{}"),
+					fleets: JSON.parse(localStorage.fleets || "{}"),
+					gears: JSON.parse(localStorage.gears || "{}"),
+					//maps: JSON.parse(localStorage.maps || "{}"),
+					player: JSON.parse(localStorage.player || "{}"),
+					//quests: JSON.parse(localStorage.quests || "{}"),
+					ships: JSON.parse(localStorage.ships || "{}"),
+					//statistics: JSON.parse(localStorage.statistics || "{}")
+				});//fullStorageData
+
 				window.KC3Database.con.transaction("r", window.KC3Database.con.tables, function(){
 					console.info("transaction started");
 					window.KC3Database.con.tables.forEach( //access all tables
@@ -20,10 +31,12 @@
 							});
 					});//foreach
 				}).then(function(){//for transaction
+					console.info("end of transaction");
 					zip.file("db.json",JSON.stringify(fullDBData));
-					console.info("fulldbdata to string to zip");
 					zip.file("storage.json",fullStorageData);
+					console.info("data all on zip class");
 					var href= "data:application/zip;base64," + zip.generate({type:"base64"});
+					console.info("downloading file to "+ConfigManager.ss_directory+'/Backup/');
 					chrome.downloads.download({
 						url: href,
 						filename: ConfigManager.ss_directory+'/Backup/'+
@@ -34,19 +47,8 @@
 					});
 				});//transaction
 
-				fullStorageData = JSON.stringify({
-					config: JSON.parse(localStorage.config || "{}"),
-					fleets: JSON.parse(localStorage.fleets || "{}"),
-					gears: JSON.parse(localStorage.gears || "{}"),
-					//maps: JSON.parse(localStorage.maps || "{}"),
-					player: JSON.parse(localStorage.player || "{}"),
-					//quests: JSON.parse(localStorage.quests || "{}"),
-					ships: JSON.parse(localStorage.ships || "{}"),
-					//statistics: JSON.parse(localStorage.statistics || "{}")
-				});//fullStorageData
-
 			},//savedata
-			
+
 			processDB : function(dbstring,overwrite){
 				var dbdata = JSON.parse(dbstring);
 				$.each(dbdata, function (index, tabledata) {
