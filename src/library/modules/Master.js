@@ -34,7 +34,12 @@ Saves and loads significant data for future use
 		/* Process raw data, fresh from API
 		-------------------------------------*/
 		processRaw :function(raw){
-			var newCounts = [0/*ships*/,  0/*items*/];			
+			var beforeCounts = false;
+			if( Object.size(this._raw) > 0) {
+				beforeCounts = [ Object.size(this._raw.ship), Object.size(this._raw.slotitem) ];
+			}
+			
+			var newCounts = [0, 0];
 			var self = this;
 			
 			// Loops through each api_mst_
@@ -60,15 +65,24 @@ Saves and loads significant data for future use
 				}
 			});
 			
-			console.log(this._raw);
-			
 			this.save();
 			this.available = true;
-			return [0,0];		},
+			
+			// If there was a count before this update, calculate how many new
+			if (beforeCounts) {
+				return [
+					Object.size(this._raw.ship) - beforeCounts[0],
+					Object.size(this._raw.slotitem) - beforeCounts[1]
+				];
+			} else {
+				return [0,0];
+			}
+		},
 		
 		/* Data Access
 		-------------------------------------*/
 		ship :function(id){
+			console.log(this._raw.ship[id]);
 			return this._raw.ship[id] || false;
 		},
 		
@@ -84,11 +98,11 @@ Saves and loads significant data for future use
 		},
 		
 		slotitem :function(id){
-			return this._slotitem[id] || false;
+			return this._raw.slotitem[id] || false;
 		},
 		
 		stype :function(id){
-			return this._stype[id] || false;
+			return this._raw.stype[id] || false;
 		},
 		
 		/* Save to localStorage
@@ -102,8 +116,9 @@ Saves and loads significant data for future use
 		load :function(){
 			if(typeof localStorage.raw != "undefined"){
 				var tmpMaster = JSON.parse(localStorage.raw);
-				if(tmpMaster.ship[0] !== null){
+				if(tmpMaster.ship[1] !== null){
 					this._raw = tmpMaster;
+					this.available = true;
 				}else{
 					this.available = false;
 				}
