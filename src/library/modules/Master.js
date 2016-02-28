@@ -83,7 +83,6 @@ Saves and loads significant data for future use
 		/* Data Access
 		-------------------------------------*/
 		ship :function(id){
-			console.log(this._raw.ship[id]);
 			return this._raw.ship[id] || false;
 		},
 		
