@@ -8,8 +8,7 @@
 				var fullStorageData="";
 				var zip = new JSZip();
 
-				window.KC3Database.con.transaction("r", window.KC3Database.con.tables
-				,function(){
+				window.KC3Database.con.transaction("r", window.KC3Database.con.tables, function(){
 					console.info("transaction started");
 					window.KC3Database.con.tables.forEach( //access all tables
 						function(table){
@@ -47,6 +46,7 @@
 				});//fullStorageData
 
 			},//savedata
+			
 			processDB : function(dbstring,overwrite){
 				var dbdata = JSON.parse(dbstring);
 				$.each(dbdata, function (index, tabledata) {
@@ -75,14 +75,14 @@
 				});
 			},//processDB
 
-			processStorage(importedDataString){
+			processStorage: function(importedDataString){
 				var importedData = JSON.parse(importedDataString);
 				localStorage.config = JSON.stringify(importedData.config);
 				localStorage.fleets = JSON.stringify(importedData.fleets);
 				localStorage.gears = JSON.stringify(importedData.gears);
 				localStorage.player = JSON.stringify(importedData.player);
 				localStorage.ships = JSON.stringify(importedData.ships);
-			},
+			},//processStorage
 
 			loadData : function(file_,overwrite){
 				var zip;
@@ -107,7 +107,6 @@
 								});//file acces foreach
 				});//reader.onload
 				reader.readAsArrayBuffer(file_);
-			}
-	}
-
+			}//loadData
+	};
 })();
