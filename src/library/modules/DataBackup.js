@@ -8,7 +8,6 @@
 				var fullStorageData="";
 				var zip = new JSZip();
 
-
 				window.KC3Database.con.transaction("r", window.KC3Database.con.tables
 				,function(){
 					console.info("transaction started");
@@ -21,14 +20,7 @@
 									locked = false;
 							});
 					});//foreach
-				}).then(function(){
-					var count=0;
-					//while(!trzfinished){
-						window.KC3DataBackup.sleep(100);
-						count++;
-					//}
-					console.info((count/10.0)+" sec. to finish data transaction");
-					console.info("fulldbdata to string to zip");
+				}).then(function(){//for transaction
 					zip.file("db.json",JSON.stringify(fullDBData));
 					console.info("fulldbdata to string to zip");
 					zip.file("storage.json",fullStorageData);
@@ -43,7 +35,6 @@
 					});
 				});//transaction
 
-
 				fullStorageData = JSON.stringify({
 					config: JSON.parse(localStorage.config || "{}"),
 					fleets: JSON.parse(localStorage.fleets || "{}"),
@@ -55,7 +46,6 @@
 					//statistics: JSON.parse(localStorage.statistics || "{}")
 				});//fullStorageData
 
-				console.info("EOF");
 			},//savedata
 			processDB : function(dbstring,overwrite){
 				var dbdata = JSON.parse(dbstring);
@@ -83,8 +73,8 @@
 							table.orderBy("hour");
 						});//transaction, finally
 				});
-
 			},//processDB
+
 			processStorage(importedDataString){
 				var importedData = JSON.parse(importedDataString);
 				localStorage.config = JSON.stringify(importedData.config);
@@ -97,8 +87,6 @@
 			loadData : function(file_,overwrite){
 				var zip;
 				var reader = new FileReader();
-
-				// Closure to capture the file information.
 				reader.onload = (function(e) {
 							// read the content of the file with JSZip
 							zip = new JSZip(e.target.result);
@@ -110,28 +98,16 @@
 										break;
 									case "storage.json":
 										if(overwrite)
-											window.KC3DataBackup.processStorage(zipEntry.asText());
+												window.KC3DataBackup.processStorage(zipEntry.asText());
 										break;
 									default:
 										alert("could be wrong file");
 
 									}//swich: zip name
 								});//file acces foreach
-							// end of the magic
-
 				});//reader.onload
 				reader.readAsArrayBuffer(file_);
-			},//loaddata
-				sleep : function(milliseconds) {
-					var start = new Date().getTime();
-				  for (var i = 0; i < 1e7; i++) {
-				    if ((new Date().getTime() - start) > milliseconds){
-				      break;
-				    }
-				  }
 			}
-
-
 	}
 
 })();
