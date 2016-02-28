@@ -1,6 +1,6 @@
 {
   "name": "KC3Kai",
-  "version": "26.0.0",
+  "version": "26.3.0",
   "description": "Kantai Collection Game Viewer and Tools",
   "repository": {
     "type": "git",
@@ -20,14 +20,17 @@
     "grunt-contrib-cssmin": "~0.13.0",
     "grunt-contrib-htmlmin": "~0.4.0",
     "grunt-contrib-jshint": "~0.11.3",
+    "grunt-contrib-qunit": "^1.0.1",
     "grunt-contrib-uglify": "~0.9.2",
     "grunt-json-minify": "~0.4.0",
     "grunt-jsonlint": "~1.0.4",
     "grunt-remove-logging": "~0.2.0",
     "grunt-string-replace": "~1.2.0",
-    "grunt-usemin": "~3.1.1"
+    "grunt-usemin": "~3.1.1",
+    "jquery": "^2.2.1",
+    "qunitjs": "^1.22.0"
   },
   "scripts": {
-    "test": "grunt"
+    "test": "grunt test"
   }
 }

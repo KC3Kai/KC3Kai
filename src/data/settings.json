@@ -146,6 +146,12 @@
 				"name" : "SettingsAutoExpedTab",
 				"type" : "check",
 				"options" : {}
+			},
+			{
+				"id" : "info_eng_stype",
+				"name" : "SettingsEnglishShipType",
+				"type" : "check",
+				"options" : {}
 			}
 		]
 	},
@@ -503,7 +509,8 @@
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ "natsuiro", "Natsuiro" ]
+						[ "natsuiro", "Natsuiro" ],
+						[ "plain", "Plain" ]
 					]
 				}
 			},

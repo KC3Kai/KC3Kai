@@ -36,7 +36,6 @@ Saves and loads significant data for future use
 			var timeNow = Date.now();
 			var beforeCounts = [ Object.size(this._ship), Object.size(this._slotitem) ];
 			var newCounts = [0/*ships*/,  0/*items*/];
-			console.log("beforeCounts", beforeCounts);
 			
 			// Organize master ship into indexes
 			for(i in raw.api_mst_ship){
@@ -78,7 +77,6 @@ Saves and loads significant data for future use
 			
 			this.save();
 			this.available = true;
-			console.log("newCounts", newCounts);
 			return newCounts;
 		},
 		
