@@ -7,7 +7,6 @@
 				var locked=false;
 				var fullStorageData="";
 				var zip = new JSZip();
-				var trzfinished=false;
 
 
 				window.KC3Database.con.transaction("r", window.KC3Database.con.tables
@@ -23,11 +22,28 @@
 							});
 					});//foreach
 				}).then(function(){
-					trzfinished = true;
+					var count=0;
+					//while(!trzfinished){
+						window.KC3DataBackup.sleep(100);
+						count++;
+					//}
+					console.info((count/10.0)+" sec. to finish data transaction");
+					console.info("fulldbdata to string to zip");
+					zip.file("db.json",JSON.stringify(fullDBData));
+					console.info("fulldbdata to string to zip");
+					zip.file("storage.json",fullStorageData);
+					var href= "data:application/zip;base64," + zip.generate({type:"base64"});
+					chrome.downloads.download({
+						url: href,
+						filename: ConfigManager.ss_directory+'/Backup/'+
+						"["+PlayerManager.hq.name+"] "+
+						dateFormat("yyyy-mm-dd")+".kc3data",
+						conflictAction: "uniquify"
+					}, function(downloadId){
+					});
 				});//transaction
 
 
-				console.info("with");
 				fullStorageData = JSON.stringify({
 					config: JSON.parse(localStorage.config || "{}"),
 					fleets: JSON.parse(localStorage.fleets || "{}"),
@@ -39,29 +55,6 @@
 					//statistics: JSON.parse(localStorage.statistics || "{}")
 				});//fullStorageData
 
-				setTimeout(function() {
-						var count=0;
-						console.info("you");
-						while(!trzfinished){
-							window.KC3DataBackup.sleep(100);
-							count++;
-						}
-						console.info((count/10.0)+" sec. to finish data transaction");
-						console.info("fulldbdata to string to zip");
-						zip.file("db.json",JSON.stringify(fullDBData));
-						console.info("fulldbdata to string to zip");
-						zip.file("storage.json",fullStorageData);
-					  var href= "data:application/zip;base64," + zip.generate({type:"base64"});
-						chrome.downloads.download({
-							url: href,
-							filename: ConfigManager.ss_directory+'/Backup/'+
-							"["+PlayerManager.hq.name+"] "+
-							dateFormat("yyyy-mm-dd")+".kc3data",
-							conflictAction: "uniquify"
-						}, function(downloadId){
-						});
-
-				}, 1);//setTimeout
 				console.info("EOF");
 			},//savedata
 			processDB : function(dbstring,overwrite){
