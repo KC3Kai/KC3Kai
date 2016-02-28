@@ -22,17 +22,14 @@
 					//alert(JSON.stringify(fullDBData));
 				});//transaction
 				fullStorageData = JSON.stringify({
-					absoluteswf: localStorage.absoluteswf,
-					config: JSON.parse(localStorage.config),
-					fleets: JSON.parse(localStorage.fleets),
-					gears: JSON.parse(localStorage.gears),
-					lastResource:localStorage.lastResource,
-					lastUseitem: localStorage.lastUseitem,
-					maps: JSON.parse(localStorage.maps),
-					player: JSON.parse(localStorage.player),
-					quests: JSON.parse(localStorage.quests),
-					ships: JSON.parse(localStorage.ships),
-					statistics: JSON.parse(localStorage.statistics)
+					config: JSON.parse(localStorage.config || "{}"),
+					fleets: JSON.parse(localStorage.fleets || "{}"),
+					gears: JSON.parse(localStorage.gears || "{}"),
+					//maps: JSON.parse(localStorage.maps || "{}"),
+					player: JSON.parse(localStorage.player || "{}"),
+					//quests: JSON.parse(localStorage.quests || "{}"),
+					ships: JSON.parse(localStorage.ships || "{}"),
+					//statistics: JSON.parse(localStorage.statistics || "{}")
 				});//fullStorageData
 
 				setTimeout(function() {
@@ -89,17 +86,11 @@
 			},//processDB
 			processStorage(importedDataString){
 				var importedData = JSON.parse(importedDataString);
-				localStorage.absoluteswf = importedData.absoluteswf;
 				localStorage.config = JSON.stringify(importedData.config);
 				localStorage.fleets = JSON.stringify(importedData.fleets);
 				localStorage.gears = JSON.stringify(importedData.gears);
-				localStorage.lastResource = importedData.lastResource;
-				localStorage.lastUseitem = importedData.lastUseitem;
-				localStorage.maps = JSON.stringify(importedData.maps);
 				localStorage.player = JSON.stringify(importedData.player);
-				localStorage.quests = JSON.stringify(importedData.quests);
 				localStorage.ships = JSON.stringify(importedData.ships);
-				localStorage.statistics = JSON.stringify(importedData.statistics);
 			},
 
 			loadData : function(file_,overwrite){
