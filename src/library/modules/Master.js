@@ -34,10 +34,7 @@ Saves and loads significant data for future use
 		/* Process raw data, fresh from API
 		-------------------------------------*/
 		processRaw :function(raw){
-			//var tmpRecord, i;
-			//var timeNow = Date.now();
-			var beforeCounts = [ Object.size(this._raw.ship), Object.size(this._raw.slotitem) ];
-			
+			var newCounts = [0/*ships*/,  0/*items*/];			
 			var self = this;
 			
 			// Loops through each api_mst_
@@ -67,8 +64,7 @@ Saves and loads significant data for future use
 			
 			this.save();
 			this.available = true;
-			return [0,0];
-		},
+			return [0,0];		},
 		
 		/* Data Access
 		-------------------------------------*/
