@@ -36,9 +36,15 @@
 				});//fullStorageData
 
 				setTimeout(function() {
-						while(trz.active){}
+						var count=0;
+						while(trz.active){
+							count++;
+							window.KC3DataBackup.sleep(100);
+						}
+						console.info((count/10.0)+" sec. to finish data transaction");
 						console.info("fulldbdata to string to zip");
 						zip.file("db.json",JSON.stringify(fullDBData));
+						console.info("fulldbdata to string to zip");
 						zip.file("storage.json",fullStorageData);
 					  var href= "data:application/zip;base64," + zip.generate({type:"base64"});
 						chrome.downloads.download({
@@ -48,11 +54,9 @@
 							dateFormat("yyyy-mm-dd")+".kc3data",
 							conflictAction: "uniquify"
 						}, function(downloadId){
-							self.exportingReplay = false;
-							$("body").css("opacity", "1");
 						});
 
-				}, 3000);//setTimeout
+				}, 1);//setTimeout
 
 			},//savedata
 			processDB : function(dbstring,overwrite){
@@ -126,15 +130,14 @@
 				});//reader.onload
 				reader.readAsArrayBuffer(file_);
 			},//loaddata
-				sleep : (function(milliseconds) {
-				var req = new XMLHttpRequest();
-				req.open("GET", "http://192.0.2.0/", false);
-				req.timeout = milliseconds;
-				try {
-					req.send();
-				} catch (ex) {
-				}
-			})
+				sleep : function(milliseconds) {
+					var start = new Date().getTime();
+				  for (var i = 0; i < 1e7; i++) {
+				    if ((new Date().getTime() - start) > milliseconds){
+				      break;
+				    }
+				  }
+			}
 
 
 	}
