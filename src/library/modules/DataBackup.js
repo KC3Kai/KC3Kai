@@ -5,19 +5,14 @@
 			saveData : function(){//Save All Data to file
 				var fullDBData={};
 				var locked=false;
-				var fullStorageData="";
+				var fullStorageData={};
 				var zip = new JSZip();
 
-				fullStorageData = JSON.stringify({
-					config: JSON.parse(localStorage.config || "{}"),
-					fleets: JSON.parse(localStorage.fleets || "{}"),
-					gears: JSON.parse(localStorage.gears || "{}"),
-					//maps: JSON.parse(localStorage.maps || "{}"),
-					player: JSON.parse(localStorage.player || "{}"),
-					//quests: JSON.parse(localStorage.quests || "{}"),
-					ships: JSON.parse(localStorage.ships || "{}"),
-					//statistics: JSON.parse(localStorage.statistics || "{}")
-				});//fullStorageData
+				for(var i=0;i<localStorage.length;i++)
+				{
+					var name = localStorage.key(i);
+					fullStorageData[name] = localStorage.getItem(name);
+				}
 
 				window.KC3Database.con.transaction("r", window.KC3Database.con.tables, function(){
 					console.info("transaction started");
@@ -33,7 +28,7 @@
 				}).then(function(){//for transaction
 					console.info("end of transaction");
 					zip.file("db.json",JSON.stringify(fullDBData));
-					zip.file("storage.json",fullStorageData);
+					zip.file("storage.json",JSON.stringify(fullStorageData));
 					console.info("data all on zip class");
 
 					var objurl= URL.createObjectURL(zip.generate({type:"blob"}));
@@ -54,11 +49,14 @@
 
 			processDB : function(dbstring,overwrite){
 				var dbdata = JSON.parse(dbstring);
+				var tablecnt=0, tableprocessed=0;
+				$.each(dbdata, function (index, tabledata)
+					{tablecnt++;})
 				$.each(dbdata, function (index, tabledata) {
 					//alert(index+"="+JSON.stringify(tabledata));
 					var table = window.KC3Database.con.table(index);
-					window.KC3Database.con.transaction("r!", table ,function(){
-						//asnyc db sync function.
+					window.KC3Database.con.transaction("rw!", table ,function(){
+						tableprocessed+=1;
 						if(overwrite)
 							{
 								table.clear();
@@ -74,19 +72,17 @@
 								default:
 									table.add(tabledata);
 							}
-						}).then(function(){
-							table.orderBy("hour");
-						});//transaction, finally
-				});
+						});//transaction
+						console.info("processing "+table.name + " " + tableprocessed + "/" + tablecnt );
+				});//each
 			},//processDB
 
 			processStorage: function(importedDataString){
-				var importedData = JSON.parse(importedDataString);
-				localStorage.config = JSON.stringify(importedData.config);
-				localStorage.fleets = JSON.stringify(importedData.fleets);
-				localStorage.gears = JSON.stringify(importedData.gears);
-				localStorage.player = JSON.stringify(importedData.player);
-				localStorage.ships = JSON.stringify(importedData.ships);
+				var data = JSON.parse(importedDataString);
+				$.each(data, function(index,access){
+					console.log("local "+index+JSON.stringify(access));
+					localStorage[index]=JSON.stringify(access);
+				});
 			},//processStorage
 
 			loadData : function(file_,overwrite){
@@ -95,10 +91,10 @@
 				reader.onload = (function(e) {
 							// read the content of the file with JSZip
 							zip = new JSZip(e.target.result);
-							alert(zip);
 							$.each(zip.files, function (index, zipEntry) {
 								switch (zipEntry.name) {
 									case "db.json":
+										console.info("db.json detected.");
 										window.KC3DataBackup.processDB(zipEntry.asText(),overwrite);
 										break;
 									case "storage.json":
@@ -110,6 +106,7 @@
 
 									}//swich: zip name
 								});//file acces foreach
+								alert("finished!");
 				});//reader.onload
 				reader.readAsArrayBuffer(file_);
 			}//loadData
