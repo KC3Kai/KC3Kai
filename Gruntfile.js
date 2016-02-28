@@ -224,6 +224,11 @@ module.exports = function(grunt) {
 					'build/release/pages/strategy/allstrategytabs.js' : ['build/tmp/pages/strategy/tabs/*/*.js'],
 				}
 			}
+		},
+		qunit: {
+			all: [
+				'tests/**/*.html'
+			]
 		}
 	});
 
@@ -238,8 +243,9 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-jsonlint');
 	grunt.loadNpmTasks('grunt-string-replace');
 	grunt.loadNpmTasks("grunt-remove-logging");
+	grunt.loadNpmTasks("grunt-contrib-qunit");
 
-	grunt.registerTask('default', [
+	grunt.registerTask('build', [
 		'clean:release',
 		'copy:tmpsrc',
 		'copy:statics',
@@ -259,6 +265,10 @@ module.exports = function(grunt) {
 		'concat:library',
 		'concat:strategy',
 		'clean:tmp'
+	]);
+	
+	grunt.registerTask('test', [
+		'qunit'
 	]);
 
 };
