@@ -80,8 +80,8 @@
 			processStorage: function(importedDataString){
 				var data = JSON.parse(importedDataString);
 				$.each(data, function(index,access){
-					console.log("local "+index+JSON.stringify(access));
-					localStorage[index]=JSON.stringify(access);
+					console.log("local "+index);
+					localStorage[index]=access;
 				});
 			},//processStorage
 
