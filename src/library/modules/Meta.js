@@ -111,7 +111,7 @@ Provides access to data on built-in JSON files
 				this._cache[jp_name] = this._ship[jp_name];
 				return this._cache[jp_name];
 			}
-			if(Object.keys(this._ship).length==0){
+			if(Object.keys(this._ship).length === 0){
 				return jp_name;
 			}
 			var
