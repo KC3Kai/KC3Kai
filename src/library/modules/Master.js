@@ -87,19 +87,27 @@ Saves and loads significant data for future use
 			return this._raw.ship[id] || false;
 		},
 		
+		all_ships :function(){
+			return this._raw.ship;
+		},
+		
 		graph :function(id){
 			return this._raw.shipgraph[id] || false;
 		},
 		
 		graph_file :function(filename){
 			var self = this;
-			return Object.keys(this._graph).filter(function(key){
+			return Object.keys(this._raw.shipgraph).filter(function(key){
 				return self._raw.shipgraph[key] === filename;
 			})[0];
 		},
 		
 		slotitem :function(id){
 			return this._raw.slotitem[id] || false;
+		},
+		
+		all_slotitems :function(){
+			return this._raw.slotitem;
 		},
 		
 		stype :function(id){
@@ -132,8 +140,8 @@ Saves and loads significant data for future use
 		-------------------------------------*/
 		removeRemodelTable :function(){
 			var cShip,ship_id;
-			for(ship_id in this._ship) {
-				cShip = this._ship[ship_id];
+			for(ship_id in this._raw.ship) {
+				cShip = this._raw.ship[ship_id];
 				if(!cShip) { /* invalid API */ continue; }
 				if(!cShip.api_buildtime) { /* unbuildable by API */ continue; }
 				delete cShip.kc3_maxed;
@@ -144,12 +152,12 @@ Saves and loads significant data for future use
 		updateRemodelTable :function(){
 			var cShip,ccShip,remodList,ship_id,shipAry,modelLv,bship_id;
 			this.removeRemodelTable();
-			shipAry = Object.keys(this._ship);
+			shipAry = Object.keys(this._raw.ship);
 			remodList = [];
 			modelLv = 1;
 			while(shipAry.length) {
 				ship_id = parseInt(shipAry.shift());
-				cShip = this._ship[ship_id];
+				cShip = this._raw.ship[ship_id];
 				
 				// Pre-checks of the remodel table
 				if(!cShip)               { /* invalid API */ continue; }
@@ -183,7 +191,7 @@ Saves and loads significant data for future use
 				// Check whether remodel is available and skip further processing
 				if(!!cShip.api_afterlv) {
 					shipAry.unshift(cShip.api_aftershipid);
-					ccShip = this._ship[cShip.api_aftershipid];
+					ccShip = this._raw.ship[cShip.api_aftershipid];
 					ccShip.kc3_bship = cShip.kc3_bship;
 					cShip.kc3_maxed = !!ccShip.kc3_model;
 					continue;

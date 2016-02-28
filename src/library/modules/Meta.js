@@ -111,6 +111,9 @@ Provides access to data on built-in JSON files
 				this._cache[jp_name] = this._ship[jp_name];
 				return this._cache[jp_name];
 			}
+			if(Object.keys(this._ship).length==0){
+				return jp_name;
+			}
 			var
 				bare = jp_name,
 				combin = [],
@@ -143,7 +146,6 @@ Provides access to data on built-in JSON files
 						this._cache[bare] = bare;
 					}
 				}
-					
 				this._cache[jp_name] = (this._ship[bare] || this._cache[bare] || bare) +
 					(combin.length > 0 ? combin.join(" ") : "");
 				return this._cache[jp_name] ;
