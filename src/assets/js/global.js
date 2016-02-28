@@ -732,8 +732,6 @@ Storage.prototype.getObject = function(key) {
 		},
 	});
 }).call(Element);
-<<<<<<< 315522958fcee202623a406719bed483542bba8f
-=======
 
 /* USER-DEFINED CLASS */
 /*******************************\
@@ -824,4 +822,3 @@ Storage.prototype.getObject = function(key) {
 	});
 	
 })();
->>>>>>> Major Ledger and Bug Fix

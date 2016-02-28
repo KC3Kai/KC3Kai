@@ -63,7 +63,7 @@
 			// New Ship list
 			$.each(this.newShips, function(index, ShipData){
 				shipBox = $(".tab_mstupdate .factory .mstship").clone();
-				shipFile = KC3Master.graph_id(ShipData.api_id);
+				shipFile = KC3Master.graph_file(ShipData.api_id);
 				
 				$(".ship_cg embed", shipBox).attr("src", "../../../../assets/swf/card.swf?sip="+self.server_ip+"&shipFile="+shipFile+"&abyss="+(ShipData.api_id>500?1:0));
 				

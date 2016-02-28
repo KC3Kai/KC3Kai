@@ -24,12 +24,7 @@
 			url: "https://raw.githubusercontent.com/KC3Kai/KC3Kai/master/update?v="+(Date.now()),
 			success: function(data, textStatus, request){
 				if( myVersion < Number(data.version) ){
-<<<<<<< 315522958fcee202623a406719bed483542bba8f
-					// If current installed version less than latest
-					var UpdateDiff = (new Date(data.time)).getTime() - (new Date()).getTime();
-=======
 					var UpdateDiff = (new Date(data.time)).getTime() - Date.now();
->>>>>>> Major Ledger and Bug Fix
 					if(UpdateDiff > 0){
 						$(".nextVersion").html( "v"+data.version+" in <span class=\"timer\">"+String(UpdateDiff/1000).toHHMMSS()+"</span>");
 					}else{

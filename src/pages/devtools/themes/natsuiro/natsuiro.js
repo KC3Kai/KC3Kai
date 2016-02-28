@@ -685,37 +685,13 @@
 		GameUpdate: function(data){
 			console.log("GameUpdate triggered");
 			$("#gameUpdate").hide();
-<<<<<<< e336001689af40a72df069cb3d55f03ccf41739d
-<<<<<<< a4860c445b4ce9f527f2397cd3faebdf571803fb
-			
-			if(data[0] > 0 || data[1]>0){
-				$("#gameUpdate .description a").html(
-					[
-						"There is(are) ",
-						['ship','equipment'].map(function(key,index){
-							return "<strong>"+data[index]+" new "+(key + (data[index] != 1 ? "s" : ""))+"</strong>";
-						}).join(' and '),
-						"! Click here to learn more about them in the Strategy Room!"
-					].join('')
-				);
-=======
-
-			if(data[0] > 0 && data[1]>0){
-				$("#gameUpdate .description a").html("There is(are) <strong>"+data[0]+" new ship(s)</strong> and <strong>"+data[1]+" new equipment</strong>! Click here to learn more about them in the Strategy Room!");
-=======
 			
 			if(data[0] > 0 && data[1] > 0){
 				$("#gameUpdate .description a").html( KC3Meta.term("GameUpdateBoth").format(data[0], data[1]) );
->>>>>>> Update natsuiro & plain theme
 			}else if(data[0] > 0){
 				$("#gameUpdate .description a").html( KC3Meta.term("GameUpdateShips").format(data[0]) );
 			}else{
-<<<<<<< e336001689af40a72df069cb3d55f03ccf41739d
-				$("#gameUpdate .description a").html("There is(are) <strong>"+data[1]+" new equipment</strong>! Click here to learn more about them in the Strategy Room!");
->>>>>>> [WIP] Update files for more i18n messages
-=======
 				$("#gameUpdate .description a").html( KC3Meta.term("GameUpdateEquips").format(data[1]) );
->>>>>>> Update natsuiro & plain theme
 			}
 			
 			$("#gameUpdate").fadeIn(300);
@@ -1160,48 +1136,8 @@
 			);
 			
 			// Map Gauge and status
-<<<<<<< a4860c445b4ce9f527f2397cd3faebdf571803fb
 			updateMapGauge(null);
 			
-=======
-			var AllMaps = JSON.parse(localStorage.maps);
-			var thisMapId = "m"+KC3SortieManager.map_world+""+KC3SortieManager.map_num;
-			var thisMap = AllMaps[thisMapId];
-			
-			if(typeof thisMap != "undefined"){
-				if( thisMap.clear == 1){
-					$(".module.activity .map_hp").text( KC3Meta.term("BattleMapCleared") );
-				}else{
-					// If HP-based gauge
-					if(typeof thisMap.maxhp != "undefined"){
-						$(".module.activity .map_hp").text( thisMap.curhp + " / " + thisMap.maxhp );
-						$(".module.activity .map_gauge_bar").css("width", ((thisMap.curhp/thisMap.maxhp)*58)+"px");
-						
-					// If kill-based gauge
-					}else{
-						var totalKills = KC3Meta.gauge( thisMapId.replace("m","") );
-						console.log("wm", KC3SortieManager.map_world, KC3SortieManager.map_num);
-						console.log("thisMapId", thisMapId);
-						console.log("KC3Meta", KC3Meta._gauges);
-						console.log("totalKills", totalKills);
-						var killsLeft = totalKills - thisMap.kills;
-						if(totalKills){
-							$(".module.activity .map_hp").text( killsLeft + " / "+ totalKills + KC3Meta.term("BattleMapKills"));
-							$(".module.activity .map_gauge_bar").css("width", ((killsLeft/totalKills)*58)+"px");
-						}else{
-							$(".module.activity .map_hp").text( KC3Meta.term("BattleMapNotClear") );
-						}
-					}
-				}
-			}else{
-				$(".module.activity .map_hp").text( KC3Meta.term("BattleMapNoHpGauge") );
-			}
-<<<<<<< e336001689af40a72df069cb3d55f03ccf41739d
-
->>>>>>> [WIP] Update files for more i18n messages
-=======
-			
->>>>>>> Update natsuiro & plain theme
 			// Switch to battle tab
 			$(".module.activity .activity_battle").css("opacity", 1);
 			$("#atab_battle").trigger("click");
@@ -1282,8 +1218,6 @@
 					$(".module.activity .node_type_text").addClass("select");
 					$(".module.activity .node_type_text").show();
 					break;
-<<<<<<< e336001689af40a72df069cb3d55f03ccf41739d
-<<<<<<< a4860c445b4ce9f527f2397cd3faebdf571803fb
 				
 				// Transport node
 				case "transport":
@@ -1295,12 +1229,6 @@
 					$(".module.activity .node_type_resource").show();
 					break;
 				
-=======
-
->>>>>>> [WIP] Update files for more i18n messages
-=======
-					
->>>>>>> Update natsuiro & plain theme
 				// Battle avoided node
 				default:
 					$(".module.activity .sortie_node_"+numNodes).addClass("nc_avoid");
@@ -1353,7 +1281,6 @@
 				var newEnemyHP, enemyHPPercent;
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > -1){
-<<<<<<< a4860c445b4ce9f527f2397cd3faebdf571803fb
 						newEnemyHP = Math.max(0,thisNode.enemyHP[index].currentHp);
 						
 						if(!index &&
@@ -1361,15 +1288,6 @@
 						)
 							updateMapGauge(KC3SortieManager.currentNode().gaugeDamage,!newEnemyHP);
 						
-=======
-						newEnemyHP = thisNode.enemyHP[index].currentHp;
-						if(newEnemyHP < 0){ newEnemyHP = 0; }
-<<<<<<< e336001689af40a72df069cb3d55f03ccf41739d
-
->>>>>>> [WIP] Update files for more i18n messages
-=======
-						
->>>>>>> Update natsuiro & plain theme
 						if(newEnemyHP === 0){
 							$(".module.activity .abyss_ship_"+(index+1)).css("opacity", "0.6");
 							$(".module.activity .sunk_"+(index+1)+" img")
@@ -1463,7 +1381,6 @@
 				var newEnemyHP, enemyHPPercent;
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > -1){
-<<<<<<< a4860c445b4ce9f527f2397cd3faebdf571803fb
 						newEnemyHP = Math.max(0,thisNode.enemyHP[index].currentHp);
 						
 						if(!index &&
@@ -1471,15 +1388,6 @@
 						)
 							updateMapGauge(KC3SortieManager.currentNode().gaugeDamage,!newEnemyHP);
 						
-=======
-						newEnemyHP = thisNode.enemyHP[index].currentHp;
-						if(newEnemyHP < 0){ newEnemyHP = 0; }
-<<<<<<< e336001689af40a72df069cb3d55f03ccf41739d
-
->>>>>>> [WIP] Update files for more i18n messages
-=======
-						
->>>>>>> Update natsuiro & plain theme
 						if(newEnemyHP === 0){
 							$(".module.activity .abyss_ship_"+(index+1)).css("opacity", "0.6");
 							$(".module.activity .sunk_"+(index+1)+" img")
@@ -1539,8 +1447,6 @@
 				$(".module.activity .battle_drop img").attr("src",
 					"../../../../assets/img/ui/dark_shipdrop-x.png");
 			}
-<<<<<<< e336001689af40a72df069cb3d55f03ccf41739d
-<<<<<<< a4860c445b4ce9f527f2397cd3faebdf571803fb
 			
 			// Show TP deduction
 			if(KC3SortieManager.getCurrentMapData().kind=='gauge-tp') {
@@ -1550,12 +1456,6 @@
 				);
 			}
 			
-=======
-
->>>>>>> [WIP] Update files for more i18n messages
-=======
-			
->>>>>>> Update natsuiro & plain theme
 			// Show experience calculation
 			if(selectedFleet<5){
 				var CurrentFleet = PlayerManager.fleets[selectedFleet-1];
@@ -2260,7 +2160,7 @@
 		if(typeof thisMap != "undefined"){
 			$(".module.activity .map_info").removeClass("map_finisher");
 			if( thisMap.clear == 1){
-				$(".module.activity .map_hp").text("Cleared");
+				$(".module.activity .map_hp").text( KC3Meta.term("BattleMapCleared") );
 				$(".module.activity .map_gauge .curhp").css('width','0%');
 			}else{
 				var requireFinisher = false;
@@ -2296,14 +2196,14 @@
 						killsLeft  = totalKills - thisMap.kills,
 						postBounty = killsLeft - (depleteOK && fsKill);
 					if(totalKills){
-						$(".module.activity .map_hp").text( killsLeft+" / "+totalKills+" kills");
+						$(".module.activity .map_hp").text( killsLeft + " / " + totalKills + KC3Meta.term("BattleMapKills"));
 						$(".module.activity .map_gauge")
 							.find('.curhp').css("width", ((postBounty/totalKills)*100)+"%").end()
 							.find('.nowhp').css("width", ( (killsLeft/totalKills)*100)+"%").end();
 						
 						requireFinisher = (killsLeft <= 1);
 					}else{
-						$(".module.activity .map_hp").text("Not cleared");
+						$(".module.activity .map_hp").text( KC3Meta.term("BattleMapNotClear") );
 					}
 				}
 				
@@ -2313,7 +2213,7 @@
 				}
 			}
 		}else{
-			$(".module.activity .map_hp").text("No gauge");
+			$(".module.activity .map_hp").text( KC3Meta.term("BattleMapNoHpGauge") );
 		}
 	}
 	

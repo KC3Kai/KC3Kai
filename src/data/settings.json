@@ -120,7 +120,7 @@
 				"id" : "info_salt",
 				"name" : "SettingsSaltyShip",
 				"type" : "check",
-				"hide" : 1,
+				"hide" : 0,
 				"options" : {}
 			},
 			{
