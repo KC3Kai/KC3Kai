@@ -2,25 +2,32 @@
 	"use strict";
 
 	window.KC3DataBackup = {
-			saveData : function(){//Save All Data to blob
+			saveData : function(){//Save All Data to file
 				var fullDBData={};
+				var locked=false;
 				var fullStorageData="";
 				var zip = new JSZip();
-				var trz;
-				window.KC3Database.con.transaction("r!", window.KC3Database.con.tables ,function(){
-					trz = Dexie.currentTransaction;
-					alert("Saving data...this might take few seconds to finish.");
+				var trzfinished=false;
+
+
+				window.KC3Database.con.transaction("r", window.KC3Database.con.tables
+				,function(){
+					console.info("transaction started");
 					window.KC3Database.con.tables.forEach( //access all tables
 						function(table){
 							table.toArray(function(tablearray) { //add table data tmptext
-									console.info("loading "+table.name);
+									while(locked){}
+									locked = true;
 									fullDBData[table.name] = tablearray;
-									console.info("done loading "+table.name);
+									locked = false;
 							});
 					});//foreach
 				}).then(function(){
-					//alert(JSON.stringify(fullDBData));
+					trzfinished = true;
 				});//transaction
+
+
+				console.info("with");
 				fullStorageData = JSON.stringify({
 					config: JSON.parse(localStorage.config || "{}"),
 					fleets: JSON.parse(localStorage.fleets || "{}"),
@@ -34,9 +41,10 @@
 
 				setTimeout(function() {
 						var count=0;
-						while(trz.active){
-							count++;
+						console.info("you");
+						while(!trzfinished){
 							window.KC3DataBackup.sleep(100);
+							count++;
 						}
 						console.info((count/10.0)+" sec. to finish data transaction");
 						console.info("fulldbdata to string to zip");
@@ -54,7 +62,7 @@
 						});
 
 				}, 1);//setTimeout
-
+				console.info("EOF");
 			},//savedata
 			processDB : function(dbstring,overwrite){
 				var dbdata = JSON.parse(dbstring);
