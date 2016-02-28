@@ -13,6 +13,7 @@
 					window.KC3Database.con.tables.forEach( //access all tables
 						function(table){
 							table.toArray(function(tablearray) { //add table data tmptext
+									console.info("loading "+table.name);
 									fullDBData[table.name] = tablearray;
 									console.info("done loading "+table.name);
 							});
@@ -116,7 +117,17 @@
 
 				});//reader.onload
 				reader.readAsArrayBuffer(file_);
-			}//loaddata
+			},//loaddata
+				sleep : (function(milliseconds) {
+				var req = new XMLHttpRequest();
+				req.open("GET", "http://192.0.2.0/", false);
+				req.timeout = milliseconds;
+				try {
+					req.send();
+				} catch (ex) {
+				}
+			})
+		}
 
 
 	};
