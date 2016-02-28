@@ -99,7 +99,7 @@
 			
 			// List all ships
 			var shipBox;
-			$.each(KC3Master._ship, function(index, ShipData){
+			$.each(KC3Master._raw.ship, function(index, ShipData){
 				if(!ShipData) { return true; }
 				
 				shipBox = $(".tab_mstship .factory .shipRecord").clone();
@@ -186,7 +186,7 @@
 			$(".tab_mstship .shipInfo .name").text( KC3Meta.shipName( shipData.api_name ) );
 			
 			// CG VIEWER
-			var shipFile = KC3Master.graph_id(ship_id);
+			var shipFile = KC3Master.graph(ship_id).api_filename;
 			this.currentGraph = shipFile;
 			$(".tab_mstship .shipInfo .cgswf embed").remove();
 			
