@@ -4,7 +4,3 @@ node_js:
 git:
     submodules: false
 before_install: npm install -g grunt-cli
-install: npm install
-script:
-  - grunt test-src
-  - grunt test-unit
