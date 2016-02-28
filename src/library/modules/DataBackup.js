@@ -35,10 +35,13 @@
 					zip.file("db.json",JSON.stringify(fullDBData));
 					zip.file("storage.json",fullStorageData);
 					console.info("data all on zip class");
-					var href= "data:application/zip;base64," + zip.generate({type:"base64"});
+
+					var objurl= URL.createObjectURL(zip.generate({type:"blob"}));
+
 					console.info("downloading file to "+ConfigManager.ss_directory+'/Backup/');
+
 					chrome.downloads.download({
-						url: href,
+						url: objurl,
 						filename: ConfigManager.ss_directory+'/Backup/'+
 						"["+PlayerManager.hq.name+"] "+
 						dateFormat("yyyy-mm-dd")+".kc3data",
