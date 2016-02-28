@@ -18,6 +18,8 @@ Saves and loads significant data for future use
 		_newShips: {},
 		_newItems: {},
 		
+		_raw: {},
+		
 		init: function( raw ){
 			this.load();
 			
@@ -32,105 +34,90 @@ Saves and loads significant data for future use
 		/* Process raw data, fresh from API
 		-------------------------------------*/
 		processRaw :function(raw){
-			var tmpRecord, i;
-			var timeNow = Date.now();
-			var beforeCounts = [ Object.size(this._ship), Object.size(this._slotitem) ];
-			var newCounts = [0/*ships*/,  0/*items*/];
+			var beforeCounts = false;
+			if( Object.size(this._raw) > 0) {
+				beforeCounts = [ Object.size(this._raw.ship), Object.size(this._raw.slotitem) ];
+			}
 			
-			// Organize master ship into indexes
-			for(i in raw.api_mst_ship){
-				tmpRecord = raw.api_mst_ship[i];
-				if(typeof tmpRecord.api_name != "undefined"){
-					if(typeof this._ship[tmpRecord.api_id] == "undefined" && beforeCounts[0]>0){
-						this._newShips[tmpRecord.api_id] = timeNow;
-						newCounts[0]++;
-					}
-					this._ship[tmpRecord.api_id] = tmpRecord;
+			var newCounts = [0, 0];
+			var self = this;
+			
+			// Loops through each api_mst_
+			Object.keys(raw).forEach(function(mst_name) {
+				var mst_data = raw[mst_name];
+				var short_mst_name = mst_name.replace("api_mst_", "");
+				
+				// If the current master item is an array
+				if (Object.prototype.toString.call(mst_data) === '[object Array]') {
+					// Add the master item to local raw, as empty object
+					self._raw[short_mst_name] = {};
+					
+					// Store the contents into the new local raw object
+					mst_data.map(function(elem, i){
+						if (typeof elem.api_id != "undefined") {
+							// Add elements to local raw, with their IDs as indexes
+							self._raw[short_mst_name][elem.api_id] = elem;
+						}else {
+							// Elements have no IDs, store them with their original indexes
+							self._raw[short_mst_name][i] = elem;
+						}
+					});
 				}
-			}
-			
-			// Get shipgraph filenames and point to their api_ids
-			for(i in raw.api_mst_shipgraph){
-				tmpRecord = raw.api_mst_shipgraph[i];
-				this._graph[tmpRecord.api_filename] = tmpRecord.api_id;
-			}
-			
-			// Organize master slotitem into indexes
-			for(i in raw.api_mst_slotitem){
-				tmpRecord = raw.api_mst_slotitem[i];
-				if(typeof tmpRecord.api_name != "undefined"){
-					if(typeof this._slotitem[tmpRecord.api_id] == "undefined" && beforeCounts[1]>0){
-						this._newItems[tmpRecord.api_id] = timeNow;
-						newCounts[1]++;
-					}
-					this._slotitem[tmpRecord.api_id] = tmpRecord;
-				}
-			}
-			
-			// Organize master stype into indexes
-			for(i in raw.api_mst_stype){
-				tmpRecord = raw.api_mst_stype[i];
-				if(typeof tmpRecord.api_name != "undefined"){
-					this._stype[tmpRecord.api_id] = tmpRecord;
-				}
-			}
+			});
 			
 			this.save();
 			this.available = true;
-			return newCounts;
+			
+			// If there was a count before this update, calculate how many new
+			if (beforeCounts) {
+				return [
+					Object.size(this._raw.ship) - beforeCounts[0],
+					Object.size(this._raw.slotitem) - beforeCounts[1]
+				];
+			} else {
+				return [0,0];
+			}
 		},
 		
 		/* Data Access
 		-------------------------------------*/
 		ship :function(id){
-			return this._ship[id] || false;
+			console.log(this._raw.ship[id]);
+			return this._raw.ship[id] || false;
 		},
 		
-		graph :function(filename){
-			return this._graph[filename] || false;
+		graph :function(id){
+			return this._raw.shipgraph[id] || false;
 		},
 		
-		graph_id :function(ship_id){
+		graph_file :function(filename){
 			var self = this;
 			return Object.keys(this._graph).filter(function(key){
-				return self._graph[key] === ship_id;
+				return self._raw.shipgraph[key] === filename;
 			})[0];
-			// return this._graph.valueKey(ship_id);
 		},
 		
 		slotitem :function(id){
-			return this._slotitem[id] || false;
+			return this._raw.slotitem[id] || false;
 		},
 		
 		stype :function(id){
-			return this._stype[id] || false;
+			return this._raw.stype[id] || false;
 		},
 		
 		/* Save to localStorage
 		-------------------------------------*/
 		save :function(){
-			localStorage.master = JSON.stringify({
-				ship		: this._ship,
-				graph		: this._graph,
-				slotitem	: this._slotitem,
-				stype		: this._stype,
-				newShips		: this._newShips,
-				newItems		: this._newItems
-			});
+			localStorage.raw = JSON.stringify(this._raw);
 		},
 		
 		/* Load from localStorage
 		-------------------------------------*/
 		load :function(){
-			if(typeof localStorage.master != "undefined"){
-				var tmpMaster = JSON.parse(localStorage.master);
-				if(tmpMaster.ship[0]!==null){
-					this._ship = tmpMaster.ship;
-					this._graph = tmpMaster.graph || {};
-					this._slotitem = tmpMaster.slotitem;
-					this._stype = tmpMaster.stype;
-					this._newShips = tmpMaster.newShips || {};
-					this._newItems = tmpMaster.newItems || {};
+			if(typeof localStorage.raw != "undefined"){
+				var tmpMaster = JSON.parse(localStorage.raw);
+				if(tmpMaster.ship[1] !== null){
+					this._raw = tmpMaster;
 					this.available = true;
 				}else{
 					this.available = false;
