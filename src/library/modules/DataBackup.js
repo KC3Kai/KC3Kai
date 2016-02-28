@@ -37,13 +37,21 @@
 
 				setTimeout(function() {
 						while(trz.active){}
+						console.info("fulldbdata to string to zip");
 						zip.file("db.json",JSON.stringify(fullDBData));
 						zip.file("storage.json",fullStorageData);
-						saveAs(
-								zip.generate({type:"blob"}),
-								"["+PlayerManager.hq.name+"] "+
-								dateFormat("yyyy-mm-dd")+".kc3data"
-							);//saveas
+					  var href= "data:application/zip;base64," + zip.generate({type:"base64"});
+						chrome.downloads.download({
+							url: href,
+							filename: ConfigManager.ss_directory+'/Backup/'+
+							"["+PlayerManager.hq.name+"] "+
+							dateFormat("yyyy-mm-dd")+".kc3data",
+							conflictAction: "uniquify"
+						}, function(downloadId){
+							self.exportingReplay = false;
+							$("body").css("opacity", "1");
+						});
+
 				}, 3000);//setTimeout
 
 			},//savedata
@@ -127,7 +135,6 @@
 				} catch (ex) {
 				}
 			})
-		}
 
 
 	}
