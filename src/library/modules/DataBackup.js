@@ -14,6 +14,7 @@
 						function(table){
 							table.toArray(function(tablearray) { //add table data tmptext
 									fullDBData[table.name] = tablearray;
+									console.info("done loading "+table.name);
 							});
 					});//foreach
 				}).then(function(){
