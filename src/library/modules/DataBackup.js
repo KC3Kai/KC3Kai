@@ -47,42 +47,48 @@
 
 			},//savedata
 
+
 			processDB : function(dbstring,overwrite){
+
 				var dbdata = JSON.parse(dbstring);
-				var tablecnt=0, tableprocessed=0;
-				$.each(dbdata, function (index, tabledata)
-					{tablecnt++;})
-				$.each(dbdata, function (index, tabledata) {
-					//alert(index+"="+JSON.stringify(tabledata));
-					var table = window.KC3Database.con.table(index);
-					window.KC3Database.con.transaction("rw!", table ,function(){
-						tableprocessed+=1;
-						if(overwrite)
-							{
-								table.clear();
-								table.add(tabledata);
-							}
-						else
-							switch(index)
-							{
-								case "account":
-								case "newsfeed":
-								case "navaloverall":
-									break;
-								default:
-									table.add(tabledata);
-							}
-						});//transaction
-						console.info("processing "+table.name + " " + tableprocessed + "/" + tablecnt );
-				});//each
+
+				var processTables = function(dbdata_){
+							console.log("processing tables...");
+							$.each(dbdata_,function(index,tabledata) {
+								console.log("processing "+index);
+								var table = window.KC3Database.con[index];
+								if(overwrite)
+									{
+										table.add(tabledata).catch(e)(console.log(e));
+										console.log("processed " + index);
+										console.log(tabledata);
+									}
+								else{
+									switch(index)
+									{
+										case "account": case "newsfeed": case "navaloverall":
+											break;
+										default:
+											table.add(tabledata);
+											console.log("processed " + index);
+									}
+								}
+							});//each
+							console.log("processed tables");
+				};//processTables
+				if(overwrite)
+				window.KC3Database.con.delete().then(function(){
+					processTables(dbdata);
+				});//delete callback
+				else processTables(dbdata);
 			},//processDB
 
 			processStorage: function(importedDataString){
 				var data = JSON.parse(importedDataString);
 				$.each(data, function(index,access){
-					console.log("local "+index);
 					localStorage[index]=access;
 				});
+				console.info("done processing storage");
 			},//processStorage
 
 			loadData : function(file_,overwrite){
@@ -98,15 +104,17 @@
 										window.KC3DataBackup.processDB(zipEntry.asText(),overwrite);
 										break;
 									case "storage.json":
+										console.info("storage.json detected.");
 										if(overwrite)
-												window.KC3DataBackup.processStorage(zipEntry.asText());
+												setTimeout(function()
+												{window.KC3DataBackup.processStorage(zipEntry.asText());}
+												,10);
 										break;
 									default:
 										alert("could be wrong file");
 
 									}//swich: zip name
 								});//file acces foreach
-								alert("finished!");
 				});//reader.onload
 				reader.readAsArrayBuffer(file_);
 			}//loadData
