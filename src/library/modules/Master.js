@@ -9,7 +9,8 @@ Saves and loads significant data for future use
 	"use strict";
 	
 	window.KC3Master = {
-		isAvailable: false,
+		available: false,
+		// should not be used any more
 		_ship: {},
 		_slotitem: {},
 		_stype: {},
@@ -87,7 +88,7 @@ Saves and loads significant data for future use
 		},
 		
 		all_ships :function(){
-			return this._raw.ship;
+			return this._raw.ship || {};
 		},
 		
 		graph :function(id){
@@ -106,7 +107,7 @@ Saves and loads significant data for future use
 		},
 		
 		all_slotitems :function(){
-			return this._raw.slotitem;
+			return this._raw.slotitem || {};
 		},
 		
 		stype :function(id){
@@ -151,7 +152,7 @@ Saves and loads significant data for future use
 		updateRemodelTable :function(){
 			var cShip,ccShip,remodList,ship_id,shipAry,modelLv,bship_id;
 			this.removeRemodelTable();
-			shipAry = Object.keys(this._raw.ship);
+			shipAry = Object.keys(this.all_ships());
 			remodList = [];
 			modelLv = 1;
 			while(shipAry.length) {
