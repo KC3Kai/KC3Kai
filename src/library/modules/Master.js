@@ -10,12 +10,12 @@ Saves and loads significant data for future use
 	
 	window.KC3Master = {
 		available: false,
-		// should not be used any more
+		// FIXME should not be used any more
 		_ship: {},
 		_slotitem: {},
 		_stype: {},
 		_graph: {},
-		
+		// FIXME not avail as no `id:timestamp` built and not saved
 		_newShips: {},
 		_newItems: {},
 		
@@ -84,7 +84,7 @@ Saves and loads significant data for future use
 		/* Data Access
 		-------------------------------------*/
 		ship :function(id){
-			return this._raw.ship[id] || false;
+			return !this.available ? false : this._raw.ship[id] || false;
 		},
 		
 		all_ships :function(){
@@ -92,18 +92,18 @@ Saves and loads significant data for future use
 		},
 		
 		graph :function(id){
-			return this._raw.shipgraph[id] || false;
+			return !this.available ? false : this._raw.shipgraph[id] || false;
 		},
 		
 		graph_file :function(filename){
 			var self = this;
-			return Object.keys(this._raw.shipgraph).filter(function(key){
+			return !this.available ? false : Object.keys(this._raw.shipgraph).filter(function(key){
 				return self._raw.shipgraph[key] === filename;
 			})[0];
 		},
 		
 		slotitem :function(id){
-			return this._raw.slotitem[id] || false;
+			return !this.available ? false : this._raw.slotitem[id] || false;
 		},
 		
 		all_slotitems :function(){
@@ -111,7 +111,7 @@ Saves and loads significant data for future use
 		},
 		
 		stype :function(id){
-			return this._raw.stype[id] || false;
+			return !this.available ? false : this._raw.stype[id] || false;
 		},
 		
 		/* Save to localStorage

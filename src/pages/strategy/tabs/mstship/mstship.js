@@ -202,6 +202,7 @@
 				};
 			this.currentShipId = ship_id;
 			console.log(shipData);
+			if(!shipData) { return; }
 			loadedShipId = ship_id;
 			
 			$(".tab_mstship .shipInfo .name").text( KC3Meta.shipName( shipData.api_name ) );
