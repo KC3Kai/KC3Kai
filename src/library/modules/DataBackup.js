@@ -14,9 +14,9 @@
 					fullStorageData[name] = localStorage.getItem(name);
 				}
 
-				window.KC3Database.con.transaction("r", window.KC3Database.con.tables, function(){
+				KC3Database.con.transaction("r", KC3Database.con.tables, function(){
 					console.info("transaction started");
-					window.KC3Database.con.tables.forEach( //access all tables
+					KC3Database.con.tables.forEach( //access all tables
 						function(table){
 							table.toArray(function(tablearray) { //add table data tmptext
 									while(locked){}
@@ -53,40 +53,65 @@
 				var dbdata = JSON.parse(dbstring);
 
 				var processTables = function(dbdata_){
-							console.log("processing tables...");
-							$.each(dbdata_,function(index,tabledata) {
-								console.log("processing "+index);
-								var table = window.KC3Database.con[index];
-								if(overwrite)
-									{
-										table.add(tabledata).catch(e)(console.log(e));
-										console.log("processed " + index);
-										console.log(tabledata);
-									}
-								else{
-									switch(index)
-									{
-										case "account": case "newsfeed": case "navaloverall":
-											break;
-										default:
-											table.add(tabledata);
+
+							var dothing = function(){
+								console.log("processing tables...");
+								KC3Database.con.open();
+								$.each(dbdata_,function(index,tabledata) {
+									var table = KC3Database.con[index];
+									if(overwrite)
+										{
+											KC3Database.con.transaction("rw!",table,function(){
+												console.log("processing "+index);
+												table.clear();
+												if(typeof tabledata[0] != 'undefined')
+												tabledata.forEach(function(record)
+													{
+														delete record.id;
+														table.add(record);
+													});
+												//console.log("processed " + index);
+											}).then(function(){
+													console.log("processed " + index);
+											}).catch(alert);
+										}
+									else{
+										switch(index)
+										{
+											case "account": case "newsfeed": case "navaloverall":
+												break;
+											default:
+											console.log("processing "+index);
+											tabledata.forEach(function(record)
+												{
+													delete record.id;
+													table.add(record);
+												});
 											console.log("processed " + index);
+										}
 									}
-								}
-							});//each
-							console.log("processed tables");
+								});//each
+							};//do
+
+							if(overwrite){
+								//KC3Database.clear(function() {
+										console.log("Database successfully deleted and reinitialized");
+										dothing();
+								//});
+							}
+							else dothing();
+
 				};//processTables
 				if(overwrite)
-				window.KC3Database.con.delete().then(function(){
 					processTables(dbdata);
-				});//delete callback
+
 				else processTables(dbdata);
 			},//processDB
 
 			processStorage: function(importedDataString){
 				var data = JSON.parse(importedDataString);
 				$.each(data, function(index,access){
-					localStorage[index]=JSON.stringify(access);
+					localStorage[index]=access;
 				});
 				console.info("done processing storage");
 			},//processStorage
@@ -101,7 +126,7 @@
 								switch (zipEntry.name) {
 									case "db.json":
 										console.info("db.json detected.");
-										window.KC3DataBackup.processDB(zipEntry.asText(),overwrite);
+										KC3DataBackup.processDB(zipEntry.asText(),overwrite);
 										break;
 									case "storage.json":
 										console.info("storage.json detected.");
