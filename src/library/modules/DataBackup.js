@@ -86,7 +86,7 @@
 			processStorage: function(importedDataString){
 				var data = JSON.parse(importedDataString);
 				$.each(data, function(index,access){
-					localStorage[index]=access;
+					localStorage[index]=JSON.stringify(access);
 				});
 				console.info("done processing storage");
 			},//processStorage
