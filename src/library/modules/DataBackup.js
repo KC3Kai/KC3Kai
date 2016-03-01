@@ -53,53 +53,39 @@
 				var dbdata = JSON.parse(dbstring);
 
 				var processTables = function(dbdata_){
+					var dothing = function(){
+						var tableCount = -1;
+						console.log("processing tables...");
+						KC3Database.con.open();
+						var alertwhenfinished = function() {
+								setTimeout(function()
+								{
+									if(tableCount==0)alert("finished!");
+									else alertwhenfinished();
+								}
+						,1000)};
+						alertwhenfinished();
 
-							var dothing = function(){
-								console.log("processing tables...");
-								KC3Database.con.open();
-								$.each(dbdata_,function(index,tabledata) {
-									var table = KC3Database.con[index];
-									if(overwrite)
-										{
-											KC3Database.con.transaction("rw!",table,function(){
-												console.log("processing "+index);
-												table.clear();
-												if(typeof tabledata[0] != 'undefined')
-												tabledata.forEach(function(record)
-													{
-														delete record.id;
-														table.add(record);
-													});
-												//console.log("processed " + index);
-											}).then(function(){
-													console.log("processed " + index);
-											}).catch(alert);
-										}
-									else{
-										switch(index)
-										{
-											case "account": case "newsfeed": case "navaloverall":
-												break;
-											default:
-											console.log("processing "+index);
-											tabledata.forEach(function(record)
-												{
-													delete record.id;
-													table.add(record);
-												});
-											console.log("processed " + index);
-										}
-									}
-								});//each
-							};//do
-
-							if(overwrite){
-								//KC3Database.clear(function() {
-										console.log("Database successfully deleted and reinitialized");
-										dothing();
-								//});
-							}
-							else dothing();
+						$.each(dbdata_,function(index,tabledata) {
+							var table = KC3Database.con[index];
+							KC3Database.con.transaction("rw!",table,function(){
+								console.log("processing "+index);
+								if(tableCount == -1)tableCount=1;
+								else tableCount++;
+								table.clear();
+								tabledata.forEach(function(record)
+								{
+									var id = record.id;
+									delete record.id;
+									table.add(record,id);
+								});
+								//console.log("processed " + index);
+							}).then(function(){
+								console.log("processed " + index);
+							}).catch(alert).finally(function(){tableCount--;});
+						});//each
+					};//dothinh
+				  dothing();
 
 				};//processTables
 				if(overwrite)
