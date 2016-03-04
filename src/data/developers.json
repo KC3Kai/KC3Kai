@@ -13,6 +13,16 @@
 			}
 		},
 		{
+			"name": "ReiFan49",
+			"avatar" : "https://avatars2.githubusercontent.com/u/9847780?v=3&s=40",
+			"desc" : "AboutDeveloper",
+			"links" : {
+				"fb" :"http://facebook.com/ReiHakurei",
+				"tw" :"http://twitter.com/Rei_Fan39",
+				"gh" :"https://github.com/ReiFan49"
+			}
+		},
+		{
 			"name": "Javran",
 			"avatar": "https://avatars3.githubusercontent.com/u/1096354?v=3&s=40",
 			"desc": "AboutDeveloper",
@@ -24,41 +34,11 @@
 			}
 		},
 		{
-			"name": "ReiFan49",
-			"avatar" : "https://avatars2.githubusercontent.com/u/9847780?v=3&s=40",
-			"desc" : "AboutDeveloper",
-			"links" : {
-				"fb" :"http://facebook.com/ReiHakurei",
-				"tw" :"http://twitter.com/Rei_Fan39",
-				"gh" :"https://github.com/ReiFan49"
-			}
-		},
-		{
 			"name": "fourinone41",
 			"avatar": "https://avatars0.githubusercontent.com/u/15643445?v=3&s=40",
-			"desc": [ "AboutDeveloper" ],
+			"desc": [ "AboutDevBattleReplay" ],
 			"links": {
 				"gh" :"https://github.com/fourinone41"
-			}
-		},
-		
-		{
-			"name": "McDohl",
-			"avatar": "https://avatars2.githubusercontent.com/u/13024936?v=3&s=40",
-			"desc": "AboutDeveloper",
-			"links": {
-				"gh" :"https://github.com/McDohl",
-				"wk" :"http://kancolle.wikia.com/wiki/User:McDohlJr",
-				"fb" :"https://www.facebook.com/endruhugen"
-			}
-		},
-		{
-			"name": "bcc32",
-			"avatar" : "https://avatars0.githubusercontent.com/u/1239097?v=3&s=40",
-			"desc" : "Developer",
-			"links" : {
-				"gh" :"https://github.com/bcc32",
-				"fb" :"https://www.facebook.com/sezvar"
 			}
 		},
 		{
@@ -74,12 +54,13 @@
 			}
 		},
 		{
-			"name": "Nekoworkshop",
-			"avatar" : "https://avatars1.githubusercontent.com/u/1346257?v=3&s=40",
-			"desc" : ["AboutDeveloper", "日本語"],
-			"links" : {
-				"gh" :"https://github.com/nekoworkshop",
-				"tw" :"http://twitter.com/nekoworkshop"
+			"name": "McDohl",
+			"avatar": "https://avatars2.githubusercontent.com/u/13024936?v=3&s=40",
+			"desc": "AboutDeveloper",
+			"links": {
+				"gh" :"https://github.com/McDohl",
+				"wk" :"http://kancolle.wikia.com/wiki/User:McDohlJr",
+				"fb" :"https://www.facebook.com/endruhugen"
 			}
 		},
 		{
@@ -94,6 +75,35 @@
 			}
 		},
 		{
+			"name": "Diablohu",
+			"avatar": "https://avatars0.githubusercontent.com/u/1946774?v=3&s=40",
+			"desc": ["AboutDeveloper", "简体中文"],
+			"links": {
+				"wb" : "http://diablohu.com",
+				"gh" : "https://github.com/Diablohu",
+				"tw" : "https://twitter.com/Diablohu",
+				"we" : "http://weibo.com/diablohu"
+			}
+		},
+		{
+			"name": "Nekoworkshop",
+			"avatar" : "https://avatars1.githubusercontent.com/u/1346257?v=3&s=40",
+			"desc" : ["AboutDeveloper", "日本語"],
+			"links" : {
+				"gh" :"https://github.com/nekoworkshop",
+				"tw" :"http://twitter.com/nekoworkshop"
+			}
+		},
+		{
+			"name": "bcc32",
+			"avatar" : "https://avatars0.githubusercontent.com/u/1239097?v=3&s=40",
+			"desc" : "Developer",
+			"links" : {
+				"gh" :"https://github.com/bcc32",
+				"fb" :"https://www.facebook.com/sezvar"
+			}
+		},
+		{
 			"name": "YukiNyaa712",
 			"avatar" : "http://kitakami.tk/profile.png",
 			"desc" : ["AboutDeveloper", "한국어"],
@@ -104,14 +114,11 @@
 			}
 		},
 		{
-			"name": "Diablohu",
-			"avatar": "https://avatars0.githubusercontent.com/u/1946774?v=3&s=40",
-			"desc": ["AboutDeveloper", "简体中文"],
+			"name": "sinsinpub",
+			"avatar": "https://avatars3.githubusercontent.com/u/160240?v=3&s=40",
+			"desc": ["AboutDeveloper", "日本語"],
 			"links": {
-				"wb" : "http://diablohu.com",
-				"gh" : "https://github.com/Diablohu",
-				"tw" : "https://twitter.com/Diablohu",
-				"we" : "http://weibo.com/diablohu"
+				"gh" : "https://github.com/sinsinpub"
 			}
 		},
 		{
@@ -528,6 +535,15 @@
 				"gh" :"https://github.com/Mikenzb",
 				"wk" :"http://kancolle.wikia.com/wiki/User:Mikenzb",
 				"st" :"http://steamcommunity.com/id/mikenzb"
+			}
+		},
+		{
+			"name": "cyrismustang",
+			"avatar": "https://avatars0.githubusercontent.com/u/2325537?v=3&s=40",
+			"desc": [ "AboutDevBadgeGen" ],
+			"links": {
+				"gh" :"https://github.com/cyrismustang",
+				"hm" :"http://himeuta.org/member.php?525-Ryuuhou-Kagiyama"
 			}
 		}
 	]

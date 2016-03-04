@@ -24,7 +24,7 @@
 			
 			// List all equipment
 			var gearBox;
-			$.each(KC3Master._slotitem, function(index, GearData){
+			$.each(KC3Master._raw.slotitem, function(index, GearData){
 				gearBox = $(".tab_mstgear .factory .gearRecord").clone();
 				gearBox.data("id", GearData.api_id);
 				$(".gearIcon img", gearBox).attr("src", "../../../../assets/img/items/"+GearData.api_type[3]+".png" );
