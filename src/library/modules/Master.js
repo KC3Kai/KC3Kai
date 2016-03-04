@@ -9,12 +9,13 @@ Saves and loads significant data for future use
 	"use strict";
 	
 	window.KC3Master = {
-		isAvailable: false,
+		available: false,
+		// FIXME should not be used any more
 		_ship: {},
 		_slotitem: {},
 		_stype: {},
 		_graph: {},
-		
+		// FIXME not avail as no `id:timestamp` built and not saved
 		_newShips: {},
 		_newItems: {},
 		
@@ -39,8 +40,12 @@ Saves and loads significant data for future use
 				beforeCounts = [ Object.size(this._raw.ship), Object.size(this._raw.slotitem) ];
 			}
 			
-			var newCounts = [0, 0];
-			var self = this;
+			var
+				self = this,
+				diff = {ship:"_newShips",slotitem:"_newItems"}
+				oraw = $.extend({},self._raw),
+				newCounts = [0, 0],
+				ctime = Date.now();
 			
 			// Loops through each api_mst_
 			Object.keys(raw).forEach(function(mst_name) {
@@ -54,12 +59,17 @@ Saves and loads significant data for future use
 					
 					// Store the contents into the new local raw object
 					mst_data.map(function(elem, i){
-						if (typeof elem.api_id != "undefined") {
-							// Add elements to local raw, with their IDs as indexes
-							self._raw[short_mst_name][elem.api_id] = elem;
-						}else {
-							// Elements have no IDs, store them with their original indexes
-							self._raw[short_mst_name][i] = elem;
+						var elem_key = elem.api_id || i;
+						// Add elements to local raw, with their IDs as indexes
+						// Elements have no IDs, store them with their original indexes
+						self._raw[short_mst_name][elem_key] = elem;
+						
+						if(diff[short_mst_name]) {
+							if(!oraw[short_mst_name][elem_key]) {
+								self[diff[short_mst_name]][elem_key] = ctime;
+							} else {
+								delete self[diff[short_mst_name]][elem_key];
+							}
 						}
 					});
 				}
@@ -83,27 +93,34 @@ Saves and loads significant data for future use
 		/* Data Access
 		-------------------------------------*/
 		ship :function(id){
-			console.log(this._raw.ship[id]);
-			return this._raw.ship[id] || false;
+			return !this.available ? false : this._raw.ship[id] || false;
+		},
+		
+		all_ships :function(){
+			return this._raw.ship || {};
 		},
 		
 		graph :function(id){
-			return this._raw.shipgraph[id] || false;
+			return !this.available ? false : this._raw.shipgraph[id] || false;
 		},
 		
 		graph_file :function(filename){
 			var self = this;
-			return Object.keys(this._graph).filter(function(key){
+			return !this.available ? false : Object.keys(this._raw.shipgraph).filter(function(key){
 				return self._raw.shipgraph[key] === filename;
 			})[0];
 		},
 		
 		slotitem :function(id){
-			return this._raw.slotitem[id] || false;
+			return !this.available ? false : this._raw.slotitem[id] || false;
+		},
+		
+		all_slotitems :function(){
+			return this._raw.slotitem || {};
 		},
 		
 		stype :function(id){
-			return this._raw.stype[id] || false;
+			return !this.available ? false : this._raw.stype[id] || false;
 		},
 		
 		/* Save to localStorage
@@ -115,16 +132,25 @@ Saves and loads significant data for future use
 		/* Load from localStorage
 		-------------------------------------*/
 		load :function(){
+			this.available = false;
 			if(typeof localStorage.raw != "undefined"){
 				var tmpMaster = JSON.parse(localStorage.raw);
 				if(tmpMaster.ship[1] !== null){
 					this._raw = tmpMaster;
-					this.available = true;
-				}else{
-					this.available = false;
+					return this.available = true;
 				}
-			}else{
-				this.available = false;
+			} else if(typeof localStorage.master != "undefined"){
+				// Compatibility table for OCD people
+				var tmpMaster = JSON.parse(localStorage.master);
+				if(tmpMaster.ship[0]!==null){
+					this._raw.ship = tmpMaster.ship;
+					this._raw.shipgraph = tmpMaster.graph || {};
+					this._raw.slotitem = tmpMaster.slotitem;
+					this._raw.stype = tmpMaster.stype;
+					this._newShips = tmpMaster.newShips || {};
+					this._newItems = tmpMaster.newItems || {};
+					return this.available = true;
+				}
 			}
 		},
 		
@@ -132,8 +158,8 @@ Saves and loads significant data for future use
 		-------------------------------------*/
 		removeRemodelTable :function(){
 			var cShip,ship_id;
-			for(ship_id in this._ship) {
-				cShip = this._ship[ship_id];
+			for(ship_id in this._raw.ship) {
+				cShip = this._raw.ship[ship_id];
 				if(!cShip) { /* invalid API */ continue; }
 				if(!cShip.api_buildtime) { /* unbuildable by API */ continue; }
 				delete cShip.kc3_maxed;
@@ -144,12 +170,12 @@ Saves and loads significant data for future use
 		updateRemodelTable :function(){
 			var cShip,ccShip,remodList,ship_id,shipAry,modelLv,bship_id;
 			this.removeRemodelTable();
-			shipAry = Object.keys(this._ship);
+			shipAry = Object.keys(this.all_ships());
 			remodList = [];
 			modelLv = 1;
 			while(shipAry.length) {
 				ship_id = parseInt(shipAry.shift());
-				cShip = this._ship[ship_id];
+				cShip = this._raw.ship[ship_id];
 				
 				// Pre-checks of the remodel table
 				if(!cShip)               { /* invalid API */ continue; }
@@ -183,7 +209,7 @@ Saves and loads significant data for future use
 				// Check whether remodel is available and skip further processing
 				if(!!cShip.api_afterlv) {
 					shipAry.unshift(cShip.api_aftershipid);
-					ccShip = this._ship[cShip.api_aftershipid];
+					ccShip = this._raw.ship[cShip.api_aftershipid];
 					ccShip.kc3_bship = cShip.kc3_bship;
 					cShip.kc3_maxed = !!ccShip.kc3_model;
 					continue;
