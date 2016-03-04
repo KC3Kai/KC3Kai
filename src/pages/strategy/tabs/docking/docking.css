@@ -243,6 +243,10 @@
 	background: #D7D6ED;
 }
 
+.tab_docking .ship_item.ship_akashi_repairing .ship_field {
+	background: #FFE6F7;
+}
+
 .tab_docking .ship_item .ship_status.ship_normal,
 .tab_docking .ship_item .ship_hp_val.ship_normal {
 	background: #66FF66;

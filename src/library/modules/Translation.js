@@ -65,7 +65,7 @@
 				language = "en";
 			
 			var translationBase = {}, enJSON;
-			if(extendEnglish){
+			if(extendEnglish && ConfigManager.language!="en"){
 				// Load english file
 				enJSON = JSON.parse($.ajax({
 					url : repo+'lang/data/en/' + filename + '.json',

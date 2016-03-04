@@ -234,28 +234,35 @@ KC3改 Ship Object
 	
 	/* REPAIR TIME
 	Get ship's docking and Akashi times
+	when optAfterHp is true, return repair time based on afterHp
 	--------------------------------------------------------------*/
-	KC3Ship.prototype.repairTime = function(){
+	KC3Ship.prototype.repairTime = function(optAfterHp){
 		var
 			HPPercent  = this.hp[0] / this.hp[1],
 			RepairTSec = Math.hrdInt('floor',this.repair[0],3,1),
-			RepairCalc = PS['KanColle.RepairTime'];
-		return {
-			docking:
-				this.isRepaired() ?
+			RepairCalc = PS['KanColle.RepairTime'],
+			
+			hpArr = optAfterHp ? this.afterHp : this.hp;
+
+		var result = {};
+
+		result.akashi = ( HPPercent > 0.50 && HPPercent < 1.00 && this.isFree()) ?
+			/* RepairCalc.facilityInSecJSNum( this.master().api_stype, this.level, this.hp[0], this.hp[1] ) */
+			Math.max(Math.min((1200 * (this.hp[1] - this.hp[0])),RepairTSec),1200) : 0;
+
+		if (optAfterHp) {
+			result.docking = RepairCalc.dockingInSecJSNum( this.master().api_stype, this.level, hpArr[0], hpArr[1] );
+		} else {
+			result.docking = this.isRepaired() ?
 				Math.ceil(KC3TimerManager.repair(PlayerManager.repairShips.indexOf(this.rosterId)).remainingTime()) / 1000 :
 				/* RepairCalc. dockingInSecJSNum( this.master().api_stype, this.level, this.hp[0], this.hp[1] ) */
-				RepairTSec,
-			akashi:
-				( HPPercent > 0.50 && HPPercent < 1.00 && this.isFree()) ?
-				/* RepairCalc.facilityInSecJSNum( this.master().api_stype, this.level, this.hp[0], this.hp[1] ) */
-				Math.max(Math.min((1200000 * (this.hp[1] - this.hp[0]))+30000,RepairTSec),1200) : 0
-		};
+				RepairTSec;
+		}
+		return result;
 	};
 	
-	
 	/* NAKED LOS
-	LoS without the equipment
+	   LoS without the equipment
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.nakedLoS = function(){
 		var MyNakedLos = this.ls[0];
