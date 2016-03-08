@@ -1,5 +1,5 @@
 module.exports = function(grunt) {
-	
+
 	grunt.initConfig({
 		clean: {
 			tmp: {
@@ -22,10 +22,15 @@ module.exports = function(grunt) {
 				src: [
 					'assets/img/**',
 					'assets/snd/**',
+					'assets/swf/**',
 					'assets/js/Chart.min.js',
 					'assets/js/Dexie.min.js',
+					'assets/js/FileSaver.min.js',
+					'assets/js/steganography.js',
+					'assets/js/jquery-ui.min.js',
 					'assets/js/KanColleHelpers.js',
-					'assets/js/FileSaver.min.js'
+					'assets/js/twbsPagination.min.js',
+					'assets/js/WhoCallsTheFleetShipDb.json'
 				],
 				dest: 'build/release/'
 			},
@@ -40,7 +45,8 @@ module.exports = function(grunt) {
 					'pages/**/*',
 					'!pages/strategy/tabs/**/*.js',
 					'manifest.json',
-					'data/**/*.json'
+					'data/*.json',
+					'data/lang/data/**/*.json'
 				],
 				dest: 'build/release/'
 			}
@@ -51,15 +57,24 @@ module.exports = function(grunt) {
 			}
 		},
 		jshint: {
-			all : {
+			build : {
 				options: {
-					newcap: false,
-					laxbreak: true,
+					jshintrc: true
 				},
 				src: [
 					'build/tmp/assets/js/global.js',
 					'build/tmp/library/**/*.js',
 					'build/tmp/pages/**/*.js'
+				]
+			},
+			src : {
+				options: {
+					jshintrc: true
+				},
+				src: [
+					'src/assets/js/global.js',
+					'src/library/**/*.js',
+					'src/pages/**/*.js'
 				]
 			}
 		},
@@ -177,19 +192,31 @@ module.exports = function(grunt) {
 			}
 		},
 		jsonlint: {
-			all : {
+			build : {
 				options: {
-					
+
 				},
 				src: [
 					'build/tmp/manifest.json',
-					'build/tmp/data/**/*.json'
+					'build/tmp/data/*.json',
+					'build/tmp/data/lang/data/**/*.json'
+				]
+			},
+			src :{
+				options: {
+
+				},
+				src: [
+					'src/manifest.json',
+					'src/data/*.json',
+					'src/data/lang/data/**/*.json'
 				]
 			}
 		},
 		'json-minify': {
 			manifest : { files: 'build/tmp/manifest.json' },
-			data : { files: 'build/tmp/data/**/*.json' }
+			data1 : { files: 'build/tmp/data/*.json' },
+			data2 : { files: 'build/tmp/data/lang/data/**/*.json' }
 		},
 		concat: {
 			global_css: {
@@ -217,9 +244,14 @@ module.exports = function(grunt) {
 					'build/release/pages/strategy/allstrategytabs.js' : ['build/tmp/pages/strategy/tabs/*/*.js'],
 				}
 			}
+		},
+		qunit: {
+			all: [
+				'tests/**/*.html'
+			]
 		}
 	});
-	
+
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -231,20 +263,21 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-jsonlint');
 	grunt.loadNpmTasks('grunt-string-replace');
 	grunt.loadNpmTasks("grunt-remove-logging");
-	
-	grunt.registerTask('default', [
+	grunt.loadNpmTasks("grunt-contrib-qunit");
+
+	grunt.registerTask('build', [
 		'clean:release',
 		'copy:tmpsrc',
 		'copy:statics',
 		'removelogging',
 		'string-replace:devtooltitle',
-		'jshint',
+		'jshint:build',
 		'cssmin',
 		'uglify',
 		'string-replace:allhtml',
 		'htmlmin',
 		'string-replace:manifest',
-		'jsonlint',
+		'jsonlint:build',
 		'json-minify',
 		'copy:processed',
 		'concat:global_css',
@@ -254,4 +287,13 @@ module.exports = function(grunt) {
 		'clean:tmp'
 	]);
 	
+	grunt.registerTask('test-src', [
+		'jshint:src',
+		'jsonlint:src'
+	]);
+	
+	grunt.registerTask('test-unit', [
+		'qunit'
+	]);
+
 };

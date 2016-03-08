@@ -1,47 +1,64 @@
 <div class="page_title">
 	Event History
-	<div class="page_wiki">
-		<a href="https://github.com/dragonjet/KC3Kai/wiki" target="_blank"><span>?</span> Help</a>
-	</div>
+	<div class="page_help_btn hover"><span>?</span> Help Topics</div>
+</div>
+
+<!-- HELP TOPICS -->
+<div class="page_help">
+	<div class="help_q"></div>
+	<div class="help_a"></div>
 </div>
 
 <!-- WORLD LIST -->
 <div class="world_list">
-	<div class="world_box hover" data-world_num="2">
+	<div class="world_box hover" data-world_num="30">
 		<div class="world_icon"></div>
 		<div class="world_text">Spring 2015</div>
 	</div>
-	<div class="world_box hover active" data-world_num="31">
+	<div class="world_box hover" data-world_num="31">
 		<div class="world_icon"></div>
 		<div class="world_text">Summer 2015</div>
 	</div>
-	<div class="world_box hover" data-world_num="0">
+	<div class="world_box hover" data-world_num="32">
 		<div class="world_icon"></div>
-		<div class="world_text"></div>
+		<div class="world_text">Fall 2015</div>
 	</div>
-	<div class="world_box hover" data-world_num="0">
+	<div class="world_box hover active" data-world_num="33">
 		<div class="world_icon"></div>
-		<div class="world_text"></div>
+		<div class="world_text">Winter 2016</div>
 	</div>
-	<div class="world_box hover" data-world_num="0">
+	<div class="world_box hover" data-world_num="34">
 		<div class="world_icon"></div>
-		<div class="world_text"></div>
+		<div class="world_text">Spring 2016</div>
 	</div>
-	<div class="world_box hover" data-world_num="0">
+	<div class="world_box hover" data-world_num="35">
 		<div class="world_icon"></div>
-		<div class="world_text"></div>
+		<div class="world_text">Summer 2016</div>
 	</div>
 	<div class="clear"></div>
 </div>
 
 <!-- MAP LIST -->
-<div class="map_list">
-	
+<div class="map_scrollable">
+	<div class="map_list">
+		
+	</div>
+	<div class="map_shift left">&lt;</div>
+	<div class="map_shift right">&gt;</div>
 </div>
 
 <!-- PAGINATION -->
 <div class="page_list">
 	
+</div>
+
+<!-- REPLAY NOTICE -->
+<div class="replay_notice">
+	<strong>REPLAY FEATURE</strong>: Click on a specifc Sortie ID to download sortie card images. You may watch it at the <strong><a href="http://kc3kai.github.io/kancolle-replay/battleplayer.html" target="_blank"
+	>REPLAY WEBSITE</a></strong>. You can also share this to your friends so they can watch it too. Be careful though, do not upload directly to Facebook or other websites that resize or change the quality of the picture. Try using imgur, puush, Twitter, etc.
+</div>
+<div class="replay_notice">
+	<strong>REPLAY FEATURE</strong>: There are incoming features such as the ability to use normal in-game screenshots for replay. This is in our <code>dev-ssdata</code> branch in our GitHub repository, but needs further testing.
 </div>
 
 <!-- SORTIE RECORDS -->
@@ -56,7 +73,7 @@
 	<div class="sortie_box">
 		<div class="sortie_info">
 			<div class="sortie_column sortie_record">
-				<div class="sortie_id"></div>
+				<div class="sortie_id hover"></div>
 				<div class="sortie_date"></div>
 			</div>
 			<div class="sortie_column sortie_map"></div>
@@ -70,11 +87,11 @@
 				<div class="clear"></div>
 			</div>
 			<div class="sortie_column sortie_edges">
-				<div class="sortie_edge sortue_edge_1"></div>
-				<div class="sortie_edge sortue_edge_2"></div>
-				<div class="sortie_edge sortue_edge_3"></div>
-				<div class="sortie_edge sortue_edge_4"></div>
-				<div class="sortie_edge sortue_edge_5"></div>
+				<div class="sortie_edge sortie_edge_1"></div>
+				<div class="sortie_edge sortie_edge_2"></div>
+				<div class="sortie_edge sortie_edge_3"></div>
+				<div class="sortie_edge sortie_edge_4"></div>
+				<div class="sortie_edge sortie_edge_5"></div>
 				<div class="clear"></div>
 			</div>
 			<div class="sortie_column sortie_toggles">
@@ -116,6 +133,12 @@
 		</div>
 		<div class="sortie_nodes">
 			
+		</div>
+		<div class="sortie_stat">
+			<div class="sortie_end_text"></div>
+			<div class="sortie_end_hp">
+				<span class="boss nowhp">999</span>/<span class="boss maxhp">999</span>
+			</div>
 		</div>
 	</div>
 	
@@ -201,14 +224,18 @@
 					<div class="clear"></div>
 				</div>
 			</div>
+			<div class="node_exp hq"><span></span> exp</div>
+			<div class="node_exp nodal"><span></span> exp</div>
 		</div>
 	</div>
 	
 	<!-- FLEET ROSTER SHIP BOX -->
 	<div class="rfleet_ship">
 		<div class="rfleet_pic"><img/></div>
-		<div class="rfleet_name"></div>
-		<div class="rfleet_level"></div>
+		<div class="rfleet_detail">
+			<div class="rfleet_name"></div>
+			<div class="rfleet_level"></div>
+		</div>
 		<div class="rfleet_equips">
 			<div class="rfleet_equip rfleet_equip_1"><img/></div>
 			<div class="rfleet_equip rfleet_equip_2"><img/></div>
@@ -225,8 +252,5 @@
 		<div class="map_gauge"><div class="map_bar"></div></div>
 		<div class="clear"></div>
 	</div>
-	
-	<!-- PAGINATION BOXES -->
-	<div class="page_box"></div>
 	
 </div>

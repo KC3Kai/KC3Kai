@@ -5,7 +5,8 @@ body {
 }
 .wrapper {
 	width:240px;
-	height:400px;
+	/*height:521px;*/
+	height:498px;
 	overflow:hidden;
 }
 .separator {
@@ -58,15 +59,90 @@ body {
 	color:#999;
 }
 
-.schedule {
+/* FACEBOOK
+--------------------------*/
+.footFb {
 	width:240px;
-	height:23px;
-	line-height:23px;
-	text-align:center;
+	height:44px;
+	padding:7px 5px 7px 5px;
 	border-top:1px solid #fff;
-	font-size:12px;
+	margin:0px 0px 1px 0px;
 }
-.schedule span.timer {
+.footFb:hover {
+	background:#cfc;
+}
+.footFb .icon {
+	width:30px;
+	height:30px;
+	margin:0px 5px 0px 0px;
+	float:left;
+}
+.footFb .icon img {
+	width:30px;
+	height:30px;
+	margin:0px 0px 0px 0px;
+}
+.footFb .text {
+	width:195px;
+	height:30px;
+	line-height:30px;
+	overflow:hidden;
+	font-size:14px;
+	font-weight:bold;
+	float:left;
+}
+
+/* FOOTER DATA
+--------------------------*/
+.footData {
+	width:240px;
+	height:20px;
+	line-height:18px;
+	border-top:1px solid #fff;
+	border-bottom:1px solid #ace;
+	font-size:12px;
+	padding:0px 0px 0px 5px;
+	background:#def;
+}
+.updateTime {
 	color:#f00;
 	font-weight:bold;
+}
+.resetTime {
+	color:#00f;
+	font-weight:bold;
+}
+
+/* FOOTER LINKS
+--------------------------*/
+.footLinks {
+	height:20px;
+	padding:2px;
+	font-size:11px;
+}
+.footLinks .footLink {
+	height:16px;
+	line-height:16px;
+	float:left;
+	margin:0px 5px 0px 0px;
+}
+#foot-support {
+	width:40px;
+}
+.footLinks .footSocial {
+	width:16px;
+}
+.footLinks .footLink img {
+	width:16px;
+	height:16px;
+}
+#btn-donate {
+	width:56px;
+}
+#btn-donate input[type=image] {
+	width:56px;
+	height:16px;
+}
+#foot-servers {
+	width:80px;
 }

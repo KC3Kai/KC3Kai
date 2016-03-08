@@ -1,6 +1,15 @@
 .tab_event .factory {
 	display:none;
 }
+.tab_event .replay_notice {
+	width:660px;
+	border:1px solid #3c3;
+	background:#dfd;
+	margin:10px auto 0px;
+	padding:5px 10px;
+	text-align:center;
+	font-size:12px;
+}
 
 /* WORLD LIST
 ---------------------------------*/
@@ -31,12 +40,37 @@
 
 /* MAP LIST
 ---------------------------------*/
+.tab_event .map_scrollable {
+	position:relative;
+}
+.tab_event .map_shift {
+	position:absolute;
+	top: 0;
+	width: 10px;
+	height: 95%;
+	display: flex;
+	align-items: center;
+	background-color: #f0f8ff;
+	cursor: pointer;
+}
+.tab_event .map_shift.left {
+	left: 0;
+}
+.tab_event .map_shift.right {
+	right: 2px;
+}
+.tab_event .map_shift.disabled {
+	cursor:default;
+	color: #f0f8ff;
+}
 .tab_event .map_list {
-	width:700px;
-	margin:0px 0px 0px 0px;
-	background:#f0f8ff;
-	padding:5px 10px;
-	border-bottom:1px solid #369;
+	position: relative;
+	min-width: 800px;
+	margin: 0px 0px 0px 0px;
+	background: #f0f8ff;
+	padding: 5px 10px;
+	border-bottom: 1px solid #369;
+	margin-left: -97px;
 }
 .tab_event .map_box {
 	width:90px;
@@ -82,7 +116,6 @@
 	width:80px;
 	height:10px;
 	background:#f00;
-	border-right:1px solid #ace;
 }
 
 /* Map without gauge (All maps) */
@@ -132,21 +165,8 @@
 	border-bottom:1px solid #369;
 	padding:5px 5px 0px;
 }
-.tab_event .page_list .page_box {
-	width:30px;
-	height:20px;
-	line-height:20px;
-	float:left;
-	text-align:center;
-	margin:0px 3px 5px 0px;
-	border:1px solid #ace;
-	background:#def;
-	font-size:12px;
-}
-.tab_event .page_list .page_box.active {
-	background:#58a;
-	color:#fff;
-	border:1px solid #def;
+.tab_event .page_list .pagination {
+	margin:0px;
 }
 
 /* SORTIE LIST
@@ -163,6 +183,7 @@
 	border-radius:10px;
 	margin:0px 0px 5px 0px;
 	padding:5px;
+	position:relative;
 }
 /* Sortie Info: RECORD */
 .tab_event .sortie_list .sortie_info {
@@ -235,6 +256,11 @@
 	width:175px;
 	/*background:#ffc;*/
 	margin:0px 10px 0px 0px;
+}
+.tab_event .sortie_list .nonodes {
+	height:30px;
+	line-height:30px;
+	font-size:12px;
 }
 .tab_event .sortie_list .sortie_edge {
 	width:30px;
@@ -360,11 +386,15 @@
 }
 .tab_event .sortie_list .rfleet_equips {
 	width:55px;
-	height:0px;
+	height:20px;
 	float:left;
-	background:#cff;
 }
 
+.tab_event .sortie_list .rfleet_equips img {
+	float:left;
+	line-height: auto;
+	width:12px;
+}
 
 /* Sortie Nodes */
 .tab_event .sortie_list .sortie_nodes {
@@ -376,7 +406,7 @@
 	width:130px;
 	/*height:207px;*/
 	line-height:20px;
-	margin:0px 3px 0px 2px;
+	margin:0px 2px 0px 2px;
 	background:#fff;
 	border-radius:8px;
 	float:left;
@@ -523,7 +553,7 @@
 	float:left;
 }
 .tab_event .sortie_list .node_airicon {
-	width:20px;
+	width:18px;
 	height:20px;
 	line-height:20px;
 	float:left;
@@ -537,12 +567,158 @@
 	margin:1px;
 }
 .tab_event .sortie_list .node_airtext {
-	width:38px;
+	width:40px;
 	height:20px;
 	float:left;
 	/*background:#fcc;*/
 	font-size:11px;
 }
+.tab_event .sortie_list .node_airtext .node_FFT ,
+.tab_event .sortie_list .node_airtext .node_FAT ,
+.tab_event .sortie_list .node_airtext .node_BFT ,
+.tab_event .sortie_list .node_airtext .node_BAT {
+	float: left;
+}
 .tab_event .sortie_list .node_airtext .node_loss {
 	color:#f00;
+}
+/* Difficulty marker */
+.tab_event .sortie_list .sortie_box.sortie_rank_1 {
+	border: rgb(64,64,255) solid 1px;
+	/*background-image: url('../../../../assets/img/client/difficulty/bg-1.png');*/
+	/*background-repeat: no-repeat;*/
+	/*background-position: 100% 100%;*/
+	/*position: absolute;*/
+	/*top: 0;*/
+	/*left: 0;*/
+	/*width: 100%;*/
+	/*height: 100%;*/
+	/*content: " ";*/
+	/*pointer-events: none;*/
+	/*opacity: 0.2;*/
+	/*border-radius: 10px;*/
+}
+.tab_event .sortie_list .sortie_box.sortie_rank_1:after {
+	content: attr(data-diff);
+	position:absolute;
+	right:0; bottom:0;
+	opacity:0;
+	color:rgb(0,0,128);
+	font-weight:bolder;
+	font-size:200%;
+	pointer-events:none;
+	transition: all 0.25s;
+}
+.tab_event .sortie_list .sortie_box.sortie_rank_1.expanded:after {
+	opacity:0.25;
+}
+.tab_event .sortie_list .sortie_box.sortie_rank_2 {
+	border: rgb(64,255,64) solid 1px;
+	/*background-image: url('../../../../assets/img/client/difficulty/bg-2.png');*/
+	/*background-repeat: no-repeat;*/
+	/*background-position: 100% 100%;*/
+	/*position: absolute;*/
+	/*top: 0;*/
+	/*left: 0;*/
+	/*width: 100%;*/
+	/*height: 100%;*/
+	/*content: " ";*/
+	/*pointer-events: none;*/
+	/*opacity: 0.2;*/
+	/*border-radius: 10px;*/
+}
+.tab_event .sortie_list .sortie_box.sortie_rank_2:after {
+	content: attr(data-diff);
+	position:absolute;
+	right:0; bottom:0;
+	opacity:0;
+	color:rgb(0,128,0);
+	font-weight:bolder;
+	font-size:200%;
+	pointer-events:none;
+	transition: all 0.25s;
+}
+.tab_event .sortie_list .sortie_box.sortie_rank_2.expanded:after {
+	opacity:0.25;
+}
+.tab_event .sortie_list .sortie_box.sortie_rank_3 {
+	border: rgb(255,64,64) solid 1px;
+	/*background-image: url('../../../../assets/img/client/difficulty/bg-3.png');*/
+	/*background-repeat: no-repeat;*/
+	/*background-position: 100% 100%;*/
+	/*position: absolute;*/
+	/*top: 0;*/
+	/*left: 0;*/
+	/*width: 100%;*/
+	/*height: 100%;*/
+	/*content: " ";*/
+	/*pointer-events: none;*/
+	/*opacity: 0.2;*/
+	/*border-radius: 10px;*/
+}
+.tab_event .sortie_list .sortie_box.sortie_rank_3:after {
+	content: attr(data-diff);
+	position:absolute;
+	right:0; bottom:0;
+	opacity:0;
+	color:rgb(128,0,0);
+	font-weight:bolder;
+	font-size:200%;
+	pointer-events:none;
+	transition: all 0.25s;
+}
+.tab_event .sortie_list .sortie_box.sortie_rank_3.expanded:after {
+	opacity:0.25;
+}
+.tab_event .sortie_list .node_exp {
+	display: inline-block;
+	color: cornflowerblue;
+	text-align: right;
+	width: 48%;
+	font-size: 0.8em;
+	padding-top: 12px;
+	position:relative;
+}
+.tab_event .sortie_list .node_exp span {
+	color: black;
+	font-weight: bolder;
+	font-size: 1.25em;
+}
+.tab_event .sortie_list .node_exp:before {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	display: block;
+	font-size: 0.8em;
+	text-align: center;
+	color: black;
+}
+.tab_event .sortie_list .node_exp.hq:before {
+	content: "HQ EXP";
+}
+.tab_event .sortie_list .node_exp.nodal:before {
+	content: "Node EXP";
+}
+.tab_event .sortie_list .sortie_stat {
+	display: none;
+}
+.tab_event .sortie_list .sortie_end_text {
+	display: inline-block;
+	width: 40%;
+}
+.tab_event .sortie_list .sortie_end_hp {
+	display: inline-block;
+	width: 60%;
+}
+.tab_event .sortie_list .sortie_end_hp.boss {
+	font-weight: bolder;
+	font-size: 1.1em;
+}
+.tab_event .sortie_list .sortie_end_hp.boss.nowhp {
+	color: green;
+}
+.tab_event .sortie_list .sortie_end_hp.boss.maxhp {
+	color: red;
+	font-size: 1.2em;
 }

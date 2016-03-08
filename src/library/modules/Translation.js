@@ -17,7 +17,7 @@
 		applyWords :function(){
 			// Interchange element contents with translations
 			$(".i18n").each(function(){
-				$(this).text( KC3Meta.term( $(this).text() ) );
+				$(this).html( KC3Meta.term( $(this).text() ) );
 				$(this).css("visibility", "visible");
 			});
 		},
@@ -53,26 +53,45 @@
 			if(typeof extendEnglish=="undefined"){ extendEnglish=false; }
 			
 			// Japanese special case where ships and items sources are already in JP
-			if(ConfigManager.language=="jp" && (filename=="ships" || filename=="items")){ extendEnglish=false; }
+			if(
+				(["jp", "tcn"].indexOf(ConfigManager.language) > -1)
+				&& (filename=="ships" || filename=="items")
+			){
+				extendEnglish=false;
+			}
 			
-			// console.log(filename, "extendEnglish", extendEnglish);
+			var language = ConfigManager.language;
+			if (filename === "stype" && ConfigManager.info_eng_stype)
+				language = "en";
 			
 			var translationBase = {}, enJSON;
-			if(extendEnglish){
+			if(extendEnglish && ConfigManager.language!="en"){
 				// Load english file
 				enJSON = JSON.parse($.ajax({
-					url : repo+'translations/en/' + filename + '.json',
+					url : repo+'lang/data/en/' + filename + '.json',
 					async: false
 				}).responseText);
 				
 				// Make is as the translation base
 				translationBase = enJSON;
 			}
-			
-			return $.extend(true, translationBase, JSON.parse($.ajax({
-				url : repo+'translations/' +ConfigManager.language+ '/' + filename + '.json',
-				async: false
-			}).responseText));
+
+			// make "stype.json" an option:
+			// if we can't fetch this file, the English
+			// version will be used instead
+			var translation;
+			try {
+				translation = JSON.parse($.ajax({
+					url : repo+'lang/data/' +language+ '/' + filename + '.json',
+					async: false
+				}).responseText);
+			} catch (e) {
+				if (e instanceof SyntaxError && filename === "stype")
+					translation = null;
+				else
+					throw e;
+			}
+			return $.extend(true, translationBase, translation);
 		}
 		
 	};

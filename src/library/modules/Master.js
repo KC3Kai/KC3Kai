@@ -13,88 +13,166 @@ Saves and loads significant data for future use
 		_ship: {},
 		_slotitem: {},
 		_stype: {},
-	
+		_graph: {},
+		
+		_newShips: {},
+		_newItems: {},
+		
+		_raw: {},
+		
 		init: function( raw ){
+			this.load();
+			
 			if(typeof raw != "undefined"){
-				this.processRaw( raw );
-			}else{
-				this.load();
+				return this.processRaw( raw );
 			}
+			
+			this.updateRemodelTable();
+			return false;
 		},
 		
 		/* Process raw data, fresh from API
 		-------------------------------------*/
 		processRaw :function(raw){
-			var tmpRecord, i;
-			
-			// Organize master ship into indexes
-			for(i in raw.api_mst_ship){
-				tmpRecord = raw.api_mst_ship[i];
-				if(typeof tmpRecord.api_name != "undefined"){
-					this._ship[tmpRecord.api_id] = tmpRecord;
-				}
+			var beforeCounts = false;
+			if( Object.size(this._raw) > 0) {
+				beforeCounts = [ Object.size(this._raw.ship), Object.size(this._raw.slotitem) ];
 			}
 			
-			// Organize master slotitem into indexes
-			for(i in raw.api_mst_slotitem){
-				tmpRecord = raw.api_mst_slotitem[i];
-				if(typeof tmpRecord.api_name != "undefined"){
-					this._slotitem[tmpRecord.api_id] = tmpRecord;
-				}
-			}
+			var newCounts = [0, 0];
+			var self = this;
 			
-			// Organize master stype into indexes
-			for(i in raw.api_mst_stype){
-				tmpRecord = raw.api_mst_stype[i];
-				if(typeof tmpRecord.api_name != "undefined"){
-					this._stype[tmpRecord.api_id] = tmpRecord;
+			// Loops through each api_mst_
+			Object.keys(raw).forEach(function(mst_name) {
+				var mst_data = raw[mst_name];
+				var short_mst_name = mst_name.replace("api_mst_", "");
+				
+				// If the current master item is an array
+				if (Object.prototype.toString.call(mst_data) === '[object Array]') {
+					// Add the master item to local raw, as empty object
+					self._raw[short_mst_name] = {};
+					
+					// Store the contents into the new local raw object
+					mst_data.map(function(elem, i){
+						if (typeof elem.api_id != "undefined") {
+							// Add elements to local raw, with their IDs as indexes
+							self._raw[short_mst_name][elem.api_id] = elem;
+						}else {
+							// Elements have no IDs, store them with their original indexes
+							self._raw[short_mst_name][i] = elem;
+						}
+					});
 				}
-			}
-			
-			console.log("processed raw",{
-				ship		: this._ship,
-				slotitem	: this._slotitem,
-				stype		: this._stype
 			});
+			
 			this.save();
 			this.available = true;
+			
+			// If there was a count before this update, calculate how many new
+			if (beforeCounts) {
+				return [
+					Object.size(this._raw.ship) - beforeCounts[0],
+					Object.size(this._raw.slotitem) - beforeCounts[1]
+				];
+			} else {
+				return [0,0];
+			}
 		},
 		
 		/* Data Access
 		-------------------------------------*/
 		ship :function(id){
-			return this._ship[id] || false;
+			console.log(this._raw.ship[id]);
+			return this._raw.ship[id] || false;
+		},
+		
+		graph :function(id){
+			return this._raw.shipgraph[id] || false;
+		},
+		
+		graph_file :function(filename){
+			var self = this;
+			return Object.keys(this._graph).filter(function(key){
+				return self._raw.shipgraph[key] === filename;
+			})[0];
 		},
 		
 		slotitem :function(id){
-			return this._slotitem[id] || false;
+			return this._raw.slotitem[id] || false;
 		},
 		
 		stype :function(id){
-			return this._stype[id] || false;
+			return this._raw.stype[id] || false;
 		},
 		
 		/* Save to localStorage
 		-------------------------------------*/
 		save :function(){
-			localStorage.master = JSON.stringify({
-				ship		: this._ship,
-				slotitem	: this._slotitem,
-				stype		: this._stype
-			});
+			localStorage.raw = JSON.stringify(this._raw);
 		},
 		
 		/* Load from localStorage
 		-------------------------------------*/
 		load :function(){
-			if(typeof localStorage.master != "undefined"){
-				var tmpMaster = JSON.parse(localStorage.master);
-				this._ship = tmpMaster.ship;
-				this._slotitem = tmpMaster.slotitem;
-				this._stype = tmpMaster.stype;
-				this.available = true;
+			if(typeof localStorage.raw != "undefined"){
+				var tmpMaster = JSON.parse(localStorage.raw);
+				if(tmpMaster.ship[1] !== null){
+					this._raw = tmpMaster;
+					this.available = true;
+				}else{
+					this.available = false;
+				}
 			}else{
 				this.available = false;
+			}
+		},
+		
+		/* Remodel Table Storage
+		-------------------------------------*/
+		removeRemodelTable :function(){
+			var cShip,ship_id;
+			for(ship_id in this._ship) {
+				cShip = this._ship[ship_id];
+				if(!cShip) { /* invalid API */ continue; }
+				if(!cShip.api_buildtime) { /* unbuildable by API */ continue; }
+				delete cShip.kc3_maxed;
+				delete cShip.kc3_model;
+				delete cShip.kc3_bship;
+			}
+		},
+		updateRemodelTable :function(){
+			var cShip,ccShip,remodList,ship_id,shipAry,modelLv,bship_id;
+			this.removeRemodelTable();
+			shipAry = Object.keys(this._ship);
+			remodList = [];
+			modelLv = 1;
+			while(shipAry.length) {
+				ship_id = parseInt(shipAry.shift());
+				cShip = this._ship[ship_id];
+				// Pre-checks of the remodel table
+				if(!cShip)               { /* invalid API */ continue; }
+				if(!cShip.api_buildtime) { /* unbuildable by API */ continue; }
+				/* proposed variable:
+				  kc3 prefix variable -> to prevent overwriting what devs gonna say later on
+					maxed flag -> is it the end of the cycle? is it returns to a cyclic model?
+					model level -> mark the current model is already marked.
+					base id -> base form of the ship
+				*/
+				cShip.api_aftershipid = Number(cShip.api_aftershipid);
+				if(!!cShip.kc3_model)    { /* already checked ship */ modelLv = 1; continue; }
+				if(cShip.api_name.indexOf("改") >= 0 && modelLv <= 1) { /* delays enumeration of the remodelled ship in normal state */ continue; }
+				cShip.kc3_maxed = false;
+				cShip.kc3_model = modelLv++; // 1 stands for base model
+				cShip.kc3_bship = cShip.kc3_bship || ship_id;
+				if(!!cShip.api_afterlv) {
+					shipAry.unshift(cShip.api_aftershipid);
+					ccShip = this._ship[cShip.api_aftershipid];
+					ccShip.kc3_bship = cShip.kc3_bship;
+					cShip.kc3_maxed = !!ccShip.kc3_model;
+					continue;
+				}
+				cShip.kc3_maxed = true;
+				modelLv = 1;
 			}
 		}
 		
