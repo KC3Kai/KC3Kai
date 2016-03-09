@@ -3,6 +3,7 @@
 
 	window.WhoCallsTheFleetDb = {
 		db: {},
+		expectedShipCount: 405,
 		init: function(repo) {
 			var rawDb = $.ajax({
 				url : repo + 'assets/js/WhoCallsTheFleetShipDb.json',
@@ -19,9 +20,14 @@
 					}
 				})
 				.filter( function(x) {return x;});
-			if (content.length != 398) {
+			if (content.length < this.expectedShipCount) {
 				console.warn("Unexpected entity number, "+
 							 "WhoCallsTheFleetShipDb.json might has been changed.");
+			} else if(content.length > this.expectedShipCount) {
+				console.info("WhoCallsTheFleetShipDb.json has been updated, " +
+							 "commit `expectedShipCount: " + content.length + 
+							 ",` instead of `" + this.expectedShipCount + "` plz.");
+				this.expectedShipCount = content.length;
 			}
 
 			var db = {};
