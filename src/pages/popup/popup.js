@@ -24,7 +24,9 @@
 			url: "https://raw.githubusercontent.com/KC3Kai/KC3Kai/master/update?v="+(Date.now()),
 			success: function(data, textStatus, request){
 				if( myVersion < Number(data.version) ){
+					// If current installed version less than latest
 					var UpdateDiff = (new Date(data.time)).getTime() - Date.now();
+					
 					if(UpdateDiff > 0){
 						$(".nextVersion").html( "v"+data.version+" in <span class=\"timer\">"+String(UpdateDiff/1000).toHHMMSS()+"</span>");
 					}else{

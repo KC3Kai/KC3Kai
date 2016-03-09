@@ -146,6 +146,7 @@ Provides access to data on built-in JSON files
 						this._cache[bare] = bare;
 					}
 				}
+				
 				this._cache[jp_name] = (this._ship[bare] || this._cache[bare] || bare) +
 					(combin.length > 0 ? combin.join(" ") : "");
 				return this._cache[jp_name] ;

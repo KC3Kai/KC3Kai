@@ -237,23 +237,26 @@ KC3改 Ship Object
 	when optAfterHp is true, return repair time based on afterHp
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.repairTime = function(optAfterHp){
-		var RepairCalc = PS['KanColle.RepairTime'];
-		var hpArr = optAfterHp ? this.afterHp : this.hp;
+		var
+			HPPercent  = this.hp[0] / this.hp[1],
+			RepairTSec = Math.hrdInt('floor',this.repair[0],3,1),
+			RepairCalc = PS['KanColle.RepairTime'],
+			
+			hpArr = optAfterHp ? this.afterHp : this.hp;
 
 		var result = {};
 
-		result.akashi = ( hpArr[0] / hpArr[1] > 0.50 && this.isFree()) ?
-			RepairCalc.facilityInSecJSNum( this.master().api_stype, this.level, hpArr[0], hpArr[1] ) :
-			0;
+		result.akashi = ( HPPercent > 0.50 && HPPercent < 1.00 && this.isFree()) ?
+			/* RepairCalc.facilityInSecJSNum( this.master().api_stype, this.level, this.hp[0], this.hp[1] ) */
+			Math.max(Math.min((1200 * (this.hp[1] - this.hp[0])),RepairTSec),1200) : 0;
 
 		if (optAfterHp) {
 			result.docking = RepairCalc.dockingInSecJSNum( this.master().api_stype, this.level, hpArr[0], hpArr[1] );
 		} else {
 			result.docking = this.isRepaired() ?
-				// if is being repaired
 				Math.ceil(KC3TimerManager.repair(PlayerManager.repairShips.indexOf(this.rosterId)).remainingTime()) / 1000 :
-				// else get data from api_ndock_time
-				Math.hrdInt('floor',this.repair[0],3,1);
+				/* RepairCalc. dockingInSecJSNum( this.master().api_stype, this.level, this.hp[0], this.hp[1] ) */
+				RepairTSec;
 		}
 		return result;
 	};

@@ -822,3 +822,4 @@ Storage.prototype.getObject = function(key) {
 	});
 	
 })();
+

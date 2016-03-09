@@ -40,8 +40,12 @@ Saves and loads significant data for future use
 				beforeCounts = [ Object.size(this._raw.ship), Object.size(this._raw.slotitem) ];
 			}
 			
-			var newCounts = [0, 0];
-			var self = this;
+			var
+				self = this,
+				diff = {ship:"_newShips",slotitem:"_newItems"}
+				oraw = $.extend({},self._raw),
+				newCounts = [0, 0],
+				ctime = Date.now();
 			
 			// Loops through each api_mst_
 			Object.keys(raw).forEach(function(mst_name) {
@@ -55,12 +59,17 @@ Saves and loads significant data for future use
 					
 					// Store the contents into the new local raw object
 					mst_data.map(function(elem, i){
-						if (typeof elem.api_id != "undefined") {
-							// Add elements to local raw, with their IDs as indexes
-							self._raw[short_mst_name][elem.api_id] = elem;
-						}else {
-							// Elements have no IDs, store them with their original indexes
-							self._raw[short_mst_name][i] = elem;
+						var elem_key = elem.api_id || i;
+						// Add elements to local raw, with their IDs as indexes
+						// Elements have no IDs, store them with their original indexes
+						self._raw[short_mst_name][elem_key] = elem;
+						
+						if(diff[short_mst_name]) {
+							if(!oraw[short_mst_name][elem_key]) {
+								self[diff[short_mst_name]][elem_key] = ctime;
+							} else {
+								delete self[diff[short_mst_name]][elem_key];
+							}
 						}
 					});
 				}
@@ -123,16 +132,25 @@ Saves and loads significant data for future use
 		/* Load from localStorage
 		-------------------------------------*/
 		load :function(){
+			this.available = false;
 			if(typeof localStorage.raw != "undefined"){
 				var tmpMaster = JSON.parse(localStorage.raw);
 				if(tmpMaster.ship[1] !== null){
 					this._raw = tmpMaster;
-					this.available = true;
-				}else{
-					this.available = false;
+					return this.available = true;
 				}
-			}else{
-				this.available = false;
+			} else if(typeof localStorage.master != "undefined"){
+				// Compatibility table for OCD people
+				var tmpMaster = JSON.parse(localStorage.master);
+				if(tmpMaster.ship[0]!==null){
+					this._raw.ship = tmpMaster.ship;
+					this._raw.shipgraph = tmpMaster.graph || {};
+					this._raw.slotitem = tmpMaster.slotitem;
+					this._raw.stype = tmpMaster.stype;
+					this._newShips = tmpMaster.newShips || {};
+					this._newItems = tmpMaster.newItems || {};
+					return this.available = true;
+				}
 			}
 		},
 		
