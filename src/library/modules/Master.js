@@ -15,7 +15,7 @@ Saves and loads significant data for future use
 		_slotitem: {},
 		_stype: {},
 		_graph: {},
-		// FIXME not avail as no `id:timestamp` built and not saved
+		
 		_newShips: {},
 		_newItems: {},
 		
@@ -42,7 +42,7 @@ Saves and loads significant data for future use
 			
 			var
 				self = this,
-				diff = {ship:"_newShips",slotitem:"_newItems"}
+				diff = {ship:"_newShips",slotitem:"_newItems"},
 				oraw = $.extend({},self._raw),
 				newCounts = [0, 0],
 				ctime = Date.now();
@@ -134,24 +134,25 @@ Saves and loads significant data for future use
 		load :function(){
 			this.available = false;
 			if(typeof localStorage.raw != "undefined"){
-				var tmpMaster = JSON.parse(localStorage.raw);
-				if(tmpMaster.ship[1] !== null){
-					this._raw = tmpMaster;
-					return this.available = true;
+				var tmpRaw = JSON.parse(localStorage.raw);
+				if(!!tmpRaw.ship[1]){
+					this._raw = tmpRaw;
+					this.available = true;
 				}
 			} else if(typeof localStorage.master != "undefined"){
 				// Compatibility table for OCD people
 				var tmpMaster = JSON.parse(localStorage.master);
-				if(tmpMaster.ship[0]!==null){
+				if(!!tmpMaster.ship[0]){
 					this._raw.ship = tmpMaster.ship;
 					this._raw.shipgraph = tmpMaster.graph || {};
 					this._raw.slotitem = tmpMaster.slotitem;
 					this._raw.stype = tmpMaster.stype;
 					this._newShips = tmpMaster.newShips || {};
 					this._newItems = tmpMaster.newItems || {};
-					return this.available = true;
+					this.available = true;
 				}
 			}
+			return this.available;
 		},
 		
 		/* Remodel Table Storage
