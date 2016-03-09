@@ -42,8 +42,8 @@ Saves and loads significant data for future use
 			
 			var
 				self = this,
-				diff = {ship:"_newShips",slotitem:"_newItems"},
-				oraw = $.extend({},self._raw),
+				diff = {ship:"_newShips", slotitem:"_newItems"},
+				oraw = $.extend({}, this._raw),
 				newCounts = [0, 0],
 				ctime = Date.now();
 			
@@ -64,7 +64,7 @@ Saves and loads significant data for future use
 						// Elements have no IDs, store them with their original indexes
 						self._raw[short_mst_name][elem_key] = elem;
 						
-						if(diff[short_mst_name]) {
+						if(!!diff[short_mst_name] && !!oraw[short_mst_name]) {
 							if(!oraw[short_mst_name][elem_key]) {
 								self[diff[short_mst_name]][elem_key] = ctime;
 							} else {
