@@ -483,7 +483,7 @@ var interactions = {
 	
 	// Remove HTML overlays
 	clearOverlays :function(request, sender, response){
-		console.log("clearing overlays");
+		// console.log("clearing overlays");
 		// app.Dom.clearOverlays();
 		$(".overlay_quests").html("");
 		$(".overlay_record").hide();
