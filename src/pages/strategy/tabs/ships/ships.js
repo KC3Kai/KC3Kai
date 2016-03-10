@@ -59,7 +59,8 @@
 					fleet: ThisShip.onFleet(),
 					
 					// Check whether remodel is max
-					remodel: MasterShip.kc3_maxed,
+					remodel: !MasterShip.api_afterlv
+                                || (KC3Master._raw.ship[MasterShip.api_aftershipid] && (KC3Master._raw.ship[MasterShip.api_aftershipid].api_aftershipid || 0) == MasterShip.api_id)
 				};
 				
 				// Check whether modernization is max
