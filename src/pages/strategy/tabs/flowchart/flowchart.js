@@ -199,8 +199,10 @@
 			var thisBox = $(".tab_flowchart .factory .questExtraItem").clone().appendTo(".tab_flowchart .extralist");
 			$(".questIcon", thisBox).text( masterQuest.code || thisQuest.id );
 			$(".questIcon", thisBox).addClass("type"+(String(thisQuest.id).substring(0,1)));
-			$(".questDesc", thisBox).text( masterQuest.desc );
-			var title = thisQuest.id+": ["+(masterQuest.code||"N/A")+"] "+masterQuest.name+"\n"+masterQuest.desc;
+			$(".questDesc", thisBox).text( masterQuest.desc || KC3Meta.term("UntranslatedQuest") );
+			var title = thisQuest.id+": ["+(masterQuest.code||"N/A")+"] "
+				+ (masterQuest.name || KC3Meta.term("UntranslatedQuest"))
+				+ "\n"+(masterQuest.desc || KC3Meta.term("UntranslatedQuestTip"));
 			if(!!masterQuest.memo) {
 				title += "\n" + masterQuest.memo;
 			}

@@ -154,9 +154,9 @@ Quest Type:
 			}else{
 				// Attach meta info to this object 
 				this.meta = function(){ return {
-					code : "XX",
-					name : "Unidentified Quest",
-					desc : "This is an unidentified or untranslated quest. It cannot be shown here, so please visit the quest page in-game to view."
+					code : "N/A",
+					name : KC3Meta.term("UntranslatedQuest"),
+					desc : KC3Meta.term("UntranslatedQuestTip")
 				}; };
 			}
 		}
