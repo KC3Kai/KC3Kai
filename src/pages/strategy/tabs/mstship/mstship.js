@@ -136,6 +136,16 @@
 				return false;
 			});
 			
+			// CG Notice can be dismissed
+			if(!ConfigManager.dismissed_cg_notice){
+				$(".cg_notes").show();
+				$(".cg_notes").on("click", function(e){
+					ConfigManager["dismissed_cg_notice"] = true;
+					ConfigManager.save();
+					$(".cg_notes").fadeOut();
+				});
+			}
+
 			// Salt-toggle
 			$(".tab_mstship .shipInfo").on("click", ".salty-zone", function(e){
 				var
