@@ -295,7 +295,7 @@
 			this.isLoading = true;
 			
 			var self = this;
-			this.startTime = (new Date()).getTime();
+			this.startTime = Date.now();
 			
 			// Clear list
 			this.shipList.html("").hide();
@@ -461,7 +461,7 @@
 				
 				self.shipList.show();
 				self.isLoading = false;
-				console.log("Showing this list took", ((new Date()).getTime() - self.startTime)-100 , "milliseconds");
+				console.log("Showing this list took", (Date.now() - self.startTime)-100 , "milliseconds");
 			},100);
 		},
 		

@@ -1,6 +1,8 @@
 (function(){
 	"use strict";
 	
+	var loadedShipId = 0;
+	
 	KC3StrategyTabs.mstship = new KC3StrategyTab("mstship");
 	
 	KC3StrategyTabs.mstship.definition = {
@@ -99,7 +101,7 @@
 			
 			// List all ships
 			var shipBox;
-			$.each(KC3Master._raw.ship, function(index, ShipData){
+			$.each(KC3Master.all_ships(), function(index, ShipData){
 				if(!ShipData) { return true; }
 				
 				shipBox = $(".tab_mstship .factory .shipRecord").clone();
@@ -123,7 +125,8 @@
 			
 			// Select ship
 			$(".tab_mstship .shipRecords .shipRecord").on("click", function(){
-				self.showShip( $(this).data("id") );
+				if( $(this).data("id") != loadedShipId )
+					self.showShip( $(this).data("id") );
 			});
 			
 			// Play voice
@@ -152,6 +155,7 @@
 			$(".tab_mstship .shipInfo").on("click", ".salty-zone", function(e){
 				var
 					saltList = ConfigManager.salt_list,
+					shipData = KC3Master.ship(loadedShipId),
 					saltPos  = saltList.indexOf(shipData.kc3_bship),
 					shipBox  = $(".shipRecord").filter(function(i,x){
 						return shipData.kc3_bship == $(x).data('bs');
@@ -172,16 +176,34 @@
 			if(!!KC3StrategyTabs.pageParams[1]){
 				this.showShip(KC3StrategyTabs.pageParams[1]);
 			}else{
-				this.showShip(102);
+				this.showShip(405);
 			}
 		},
 		
 		
 		showShip :function(ship_id){
-			var self = this;
-			var shipData = KC3Master.ship(ship_id);
+			ship_id = 1*(ship_id||"323");
+			var
+				self = this,
+				shipData = KC3Master.ship(ship_id),
+				saltState = function(){
+					return ConfigManager.info_salt && shipData.kc3_bship && ConfigManager.salt_list.indexOf(shipData.kc3_bship)>=0;
+				},
+				denyTerm = function(){
+					return ["MasterShipSalt","Un","Check"].filter(function(str,i){
+						return 	((i==1) && !saltState()) ? "" : str;
+					}).join('');
+				},
+				saltClassUpdate = function(){
+					if(saltState())
+						$(".tab_mstship .shipInfo").addClass('salted');
+					else
+						$(".tab_mstship .shipInfo").removeClass('salted');
+				};
 			this.currentShipId = ship_id;
 			console.log(shipData);
+			if(!shipData) { return; }
+			loadedShipId = ship_id;
 			
 			$(".tab_mstship .shipInfo .name").text( KC3Meta.shipName( shipData.api_name ) );
 			
@@ -193,20 +215,16 @@
 			$("<embed/>")
 				.attr("src", "../../../../assets/swf/card.swf?sip="+this.server_ip+"&shipFile="+shipFile+"&abyss="+(ship_id>500?1:0))
 				.appendTo(".tab_mstship .shipInfo .cgswf");
-			$(".tab_mstship .shipInfo").off('click',".salty-zone");
-			$(".tab_mstship .shipInfo").removeClass('salted');
+			$(".tab_mstship .shipInfo .salty-zone").text(KC3Meta.term(denyTerm()));
+			$(".tab_mstship .shipInfo .hourlies").html("");
+			
+			saltClassUpdate();
 			
 			var statBox;
-			
 			if(ship_id<=500){
 				// Ship-only, non abyssal
 				$(".tab_mstship .shipInfo .stats").html("");
 				$(".tab_mstship .shipInfo .intro").html( shipData.api_getmes );
-				
-				// Check saltiness
-				if(ConfigManager.salt_list.indexOf(shipData.kc3_bship)>=0) {
-					$(".tab_mstship .shipInfo").addClass('salted');
-				}
 				
 				// STATS
 				$.each([
@@ -330,6 +348,7 @@
 				// HOURLIES
 				$(".tab_mstship .shipInfo .hourlies").show();
 				$(".tab_mstship .shipInfo .hourlies").html("");
+				
 				if(shipData.api_voicef>1){
 					$.each(this.hourlies, function(vnum, vname){
 						var hhStr = vname.substring(0,2);

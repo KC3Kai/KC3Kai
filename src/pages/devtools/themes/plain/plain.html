@@ -15,7 +15,7 @@
 			<!-- Module: Admiral Info -->
 			<div class="module admiral">
 				<div class="admiral_level">
-					<div class="admiral_lvtxt"><span class="i18n">HQText</span> <span class="admiral_lvval"></span></div>
+					<div class="admiral_lvtxt"><span class="i18n">HQAdmiralLv</span> <span class="admiral_lvval"></span></div>
 					<div class="admiral_lvbox">
 						<div class="admiral_lvbar"></div>
 					</div>
@@ -134,10 +134,10 @@
 				<div class="control hover fleet_num">3</div>
 				<div class="control hover fleet_num">4</div>
 				
-				<div class="control hover control_btn btn_mute" title="Toggle Sounds"><img src="img/mute.png" /></div>
-				<div class="control hover control_btn btn_resize" title="Fit Window"><img src="../../../../assets/img/ui/fit.png" /></div>
-				<div class="control hover control_btn btn_ss1" title="Screenshot"><img src="img/cam1.png" /></div>
-				<div class="control hover control_btn btn_export" title="Export to Kancolle-calc DeckBuilder"><img src="img/exportdeck.png" /></div>
+				<div class="control hover control_btn btn_mute i18n_title" title="PanelToggleSounds"><img src="img/mute.png" /></div>
+				<div class="control hover control_btn btn_resize i18n_title" title="PanelFitWindow"><img src="../../../../assets/img/ui/fit.png" /></div>
+				<div class="control hover control_btn btn_ss1 i18n_title" title="Screenshot"><img src="img/cam1.png" /></div>
+				<div class="control hover control_btn btn_export i18n_title" title="PanelExportToKCDB"><img src="img/exportdeck.png" /></div>
 			</div>
 			
 			<!-- Module: Fleet Summary -->
@@ -248,7 +248,7 @@
 			<div class="blackFilter"></div>
 			<div class="content">
 				<div class="image"><img src="../../../../assets/img/ui/update.png" /></div>
-				<div class="title">We have detected a game update!</div>
+				<div class="title i18n">GameUpdateDetected</div>
 				<div class="closebtn hover">x</div>
 				<div class="clear"></div>
 				<div class="description"><a target="kc3kai_strategy" href="/pages/strategy/strategy.html#mstupdate"></a></div>
@@ -404,6 +404,7 @@
 		<script type="text/javascript" src="../../../../library/modules/PoiDBSubmission.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/KC3DBSubmission.js"></script>
 		
+		<script type="text/javascript" src="../../../../library/modules/RemodelDb.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/Database.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/Kcsapi.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/Network.js"></script>

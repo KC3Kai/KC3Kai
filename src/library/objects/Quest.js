@@ -144,7 +144,8 @@ Quest Type:
 					available: true,
 					code : MyMeta.code,
 					name : MyMeta.name,
-					desc : MyMeta.desc
+					desc : MyMeta.desc,
+					memo : MyMeta.memo
 				}; };
 				// If tracking is empty and Meta is defined
 				if(this.tracking === false){

@@ -21,11 +21,12 @@
 		// Show estimated time until next update
 		$.ajax({
 			dataType: "json",
-			url: "https://raw.githubusercontent.com/KC3Kai/KC3Kai/master/update?v="+((new Date()).getTime()),
+			url: "https://raw.githubusercontent.com/KC3Kai/KC3Kai/master/update?v="+(Date.now()),
 			success: function(data, textStatus, request){
 				if( myVersion < Number(data.version) ){
 					// If current installed version less than latest
-					var UpdateDiff = (new Date(data.time)).getTime() - (new Date()).getTime();
+					var UpdateDiff = (new Date(data.time)).getTime() - Date.now();
+					
 					if(UpdateDiff > 0){
 						$(".nextVersion").html( "v"+data.version+" in <span class=\"timer\">"+String(UpdateDiff/1000).toHHMMSS()+"</span>");
 					}else{
@@ -78,7 +79,13 @@
 			}, function(cookie){
 				localStorage.extract_api = true;
 				localStorage.dmmplay = false;
-				window.open("http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/", "kc3kai_game");
+				if(false) {
+					// Conventional Way
+					window.open("http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/", "kc3kai_game");
+				} else {
+					// Altered Way
+					window.open("../game/api.html", "kc3kai_game");
+				}
 			});
 		});
 		

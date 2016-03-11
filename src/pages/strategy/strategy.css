@@ -46,6 +46,7 @@ body {
 	padding:0px;
 	font-size:12px;
 	font-weight:bold;
+	white-space:nowrap;
 }
 #menu .submenu ul.menulist li {
 	width:100px;

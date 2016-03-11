@@ -7,16 +7,18 @@
 		BATTLE_NIGHT   = 2,
 		BATTLE_AERIAL  = 4,
 		
-		// test string
+		// Sortie Boss Node Indicator
+		// FIXME: this is not for translation. to test sortie status
 		SORTIE_STRING  = {
-			fresh : "Not even a single scratch",
-			graze : "RNG is too good for me",
-			light : "Scratch 'em for good!",
-			modrt : "It still faraway, but it's ok!",
-			heavy : "I hope the drop is better than this",
-			despe : "I don't even have anything to say",
-			endur : "BEST RANDOM NUMBER GENERATOR EVER",
-			destr : "I OWE YOU"
+			faild : "Did not reach boss",
+			fresh : "Did not able to hurt",
+			graze : "Hurt the boss a little",
+			light : "Lightly Damages the Boss",
+			modrt : "Moderately Damages the Boss",
+			heavy : "Heavily Damages the Boss",
+			despe : "Leaves the boss below 10HP",
+			endur : "Leaves the boss below 2HP",
+			destr : "Completely destroys"
 		};
 	
 	/* KC3 Sortie Logs
@@ -121,7 +123,7 @@
 									mapBox.addClass("notcleared");
 									// If HP-based gauge
 									if(typeof element.maxhp != "undefined"){
-										if(element.curhp>1){ // i want to approach last kill as JUST DO IT instead leaving 1HP only.
+										if(element.curhp>(element.baseHp || 1)){ // i want to approach last kill as JUST DO IT instead leaving 1HP only.
 											if((element.maxhp === 9999) || (element.curhp === 9999))
 												$(".map_hp_txt", mapBox).text( "???? / ????" );
 											else
@@ -525,19 +527,29 @@
 						sstat = $(".sortie_stat", sortieBox),
 						kstat = ["now","max"];
 					if(mstat && sstat.length) {
-						var stateKey = Object.keys(SORTIE_STRING).filter(function(statKey){
-							return mstat.onBoss[statKey].indexOf(sortie.id) >= 0;
-						}).shift();
-						$(".sortie_end_text",sstat).text(SORTIE_STRING[stateKey]);
-						mstat.onBoss.hpdat[sortie.id].forEach(function(v,i){
-							$([".boss.",kstat[i],"hp"].join(''),sstat).text(v);
-						});
-						if(false) // only toggle this on dev builds
-							sstat.show();
-					} else {
-						sstat.hide();
+						var
+							isHClear = mstat.onClear == sortie.id,
+							isCtBomb = mstat.onError.indexOf(sortie.id) >= 0,
+							stateKey = Object.keys(SORTIE_STRING).filter(function(statKey){
+								return (mstat.onBoss[statKey] || []).indexOf(sortie.id) >= 0;
+							}).shift();
+						try {
+							mstat.onBoss.hpdat[sortie.id].forEach(function(v,i){
+								$([".boss.",kstat[i],"hp"].join(''),sstat).text(v);
+							});
+							$(".sortie_end_clear",sstat).css('visibility',isHClear ? 'visible' : '');
+							$(".sortie_end_error",sstat).css('visibility',isCtBomb ? 'visible' : '');
+							$(".sortie_end_final",sstat)
+								.attr('title',SORTIE_STRING[stateKey || 'faild'])
+								.attr("src",
+									["../../../../assets/img/ui/estat_boss",stateKey || 'fresh',".png"].join('')
+								)
+								.css('opacity',1 / (1 + !stateKey));
+						} catch (e) {
+							throw e;
+						}
 					}
-				}catch(e){console.error(e);console.error(e.stack);}
+				}catch(e){console.error(e.stack);}
 			});
 			
 			$(".tab_"+tabCode+" .pagination").show();

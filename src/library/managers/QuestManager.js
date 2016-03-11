@@ -333,7 +333,7 @@ Uses KC3Quest objects to play around with
 		resetMonthlies :function(){
 			this.load();
 			console.log("resetting monthlies");
-			this.resetLoop([249, 256, 257, 259, 265, 264, 266, 311]);
+			this.resetLoop([249, 256, 257, 259, 265, 264, 266, 311, 626, 628]);
 			this.save();
 		},
 		clear :function(){

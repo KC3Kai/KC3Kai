@@ -430,6 +430,28 @@ Uses Dexie.js third-party plugin on the assets directory
 				});
 		},
 		
+		get_sortie_maps :function(sortieRange, callback) {
+			// Clamp Range Input
+			sortieRange = ((sortieRange && (sortieRange.length >= 2) && sortieRange) || [null,null])
+				.splice(0,2)
+				.map(function(x,i){ return x || [0,Infinity][i];})
+				.sort();
+			
+			this.con.sortie
+				.where("hq").equals(this.index)
+				.offset(sortieRange[0]).limit( sortieRange.reduceRight(function(x,y){return x-y+1;}) )
+				.toArray(function(sortieList){
+					var wmHash = {}, sortieObj, cnt = 0;
+					for(var ctr in sortieList){
+						sortieObj = sortieList[ctr];
+						wmHash[ sortieObj.id ] = {0:sortieObj.world,1:sortieObj.mapnum,time:sortieObj.time};
+						cnt++;
+					}
+					Object.defineProperty(wmHash,'length',{value:cnt});
+					callback(wmHash);
+				});
+		},
+		
 		count_world :function(world, callback){
 			this.con.sortie
 				.where("hq").equals(this.index)
@@ -709,7 +731,7 @@ Uses Dexie.js third-party plugin on the assets directory
 				});
 		},
 		
-		get_lodger_data :function(hFilters, callback){
+		get_lodger_data :function(iFilters, callbackSucc, callbackFail){
 			/*
 				DataHead  Param1
 				sortie    SortieDBID
@@ -726,34 +748,24 @@ Uses Dexie.js third-party plugin on the assets directory
 				regen     ------
 			*/
 			// hour filter
-			hFilters = (
+			iFilters = (
 				(
-					typeof hFilters == 'object' && (hFilters instanceof Array) &&
-					hFilters.length >= 2 && hFilters
-				) || [NaN,NaN]
-			).slice(0,2)
-				.map(function(hourVal,index){
-					hourVal = parseInt(hourVal);
-					hourVal = (isFinite(hourVal) && !isNaN(hourVal) && hourVal);
-					switch(index) {
-						case 0:
-							return hourVal || -Infinity;
-						case 1:
-							return hourVal || +Infinity;
-						default:
-							throw new RangeError("Invalid array range");
-					}
-				});
+					typeof iFilters == 'object' && (typeof iFilters.length == 'number') &&
+					iFilters.length >= 2 && iFilters
+				) || Range(0,Infinity,0,1)
+			);
 			this.con.navaloverall
 				.where("hq").equals(this.index)
 				.and(function(data){
 					// hFilter Condition Definition:
-					// false: if specified hour outside the boundary
+					// false: if specified id outside the boundary
 					// prec : undefined condition is towards infinite of its polar
-					return hFilters[0] <= data.hour && data.hour <= hFilters[1];
+					return (0).inside.apply(data.id,iFilters);
 				})
 				.reverse()
-				.toArray(callback);
+				.toArray()
+				.then (callbackSucc || $.nop())
+				.catch(callbackFail || function(e){console.error(e);});
 		},
 		
 	};
