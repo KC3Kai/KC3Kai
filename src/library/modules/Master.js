@@ -10,14 +10,6 @@ Saves and loads significant data for future use
 	
 	window.KC3Master = {
 		available: false,
-		// FIXME should not be used any more
-		_ship: {},
-		_slotitem: {},
-		_stype: {},
-		_graph: {},
-		
-		_newShips: {},
-		_newItems: {},
 		
 		_raw: {},
 		
@@ -39,10 +31,12 @@ Saves and loads significant data for future use
 			if( Object.size(this._raw) > 0) {
 				beforeCounts = [ Object.size(this._raw.ship), Object.size(this._raw.slotitem) ];
 			}
+			this._raw.newShips = this._raw.newShips || {};
+			this._raw.newItems = this._raw.newItems || {};
 			
 			var
 				self = this,
-				diff = {ship:"_newShips", slotitem:"_newItems"},
+				diff = {"ship":"newShips", "slotitem":"newItems"},
 				oraw = $.extend({}, this._raw),
 				newCounts = [0, 0],
 				ctime = Date.now();
@@ -66,9 +60,9 @@ Saves and loads significant data for future use
 						
 						if(!!diff[short_mst_name] && !!oraw[short_mst_name]) {
 							if(!oraw[short_mst_name][elem_key]) {
-								self[diff[short_mst_name]][elem_key] = ctime;
+								self._raw[diff[short_mst_name]][elem_key] = ctime;
 							} else {
-								delete self[diff[short_mst_name]][elem_key];
+								delete self._raw[diff[short_mst_name]][elem_key];
 							}
 						}
 					});
@@ -100,6 +94,14 @@ Saves and loads significant data for future use
 			return this._raw.ship || {};
 		},
 		
+		new_ships :function(){
+			return this._raw.newShips || {};
+		},
+		
+		remove_new_ship :function(id){
+			delete this._raw.newShips[id];
+		},
+		
 		graph :function(id){
 			return !this.available ? false : this._raw.shipgraph[id] || false;
 		},
@@ -117,6 +119,14 @@ Saves and loads significant data for future use
 		
 		all_slotitems :function(){
 			return this._raw.slotitem || {};
+		},
+		
+		new_slotitems :function(){
+			return this._raw.newItems || {};
+		},
+		
+		remove_new_slotitem :function(id){
+			delete this._raw.newItems[id];
 		},
 		
 		stype :function(id){
@@ -147,8 +157,8 @@ Saves and loads significant data for future use
 					this._raw.shipgraph = tmpMaster.graph || {};
 					this._raw.slotitem = tmpMaster.slotitem;
 					this._raw.stype = tmpMaster.stype;
-					this._newShips = tmpMaster.newShips || {};
-					this._newItems = tmpMaster.newItems || {};
+					this._raw.newShips = tmpMaster.newShips || {};
+					this._raw.newItems = tmpMaster.newItems || {};
 					this.available = true;
 				}
 			}
@@ -202,7 +212,7 @@ Saves and loads significant data for future use
 				if(
 					(ConfigManager.info_salt) &&
 					(ConfigManager.salt_list.indexOf(cShip.kc3_bship) < 0) &&
-					(this._newShips[cShip.kc3_bship])
+					(this._raw.newShips[cShip.kc3_bship])
 				){
 					ConfigManager.salt_list.push(cShip.kc3_bship);
 				}
