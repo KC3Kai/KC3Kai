@@ -30,23 +30,9 @@ Xxxxxxx
 		sinkList:{main:[],escr:[]},
 		sortieTime: 0,
 		stime: 0,
-		getSortieObject :function(){
-			return {
-				diff: this.map_difficulty || 0,
-				world: this.map_world || 0,
-				mapnum: this.map_num || 0,
-				fleetnum: this.fleetSent || 1,
-				combined: PlayerManager.combinedFleet,
-				fleet1: PlayerManager.fleets[0].sortieJson(),
-				fleet2: PlayerManager.fleets[1].sortieJson(),
-				fleet3: PlayerManager.fleets[2].sortieJson(),
-				fleet4: PlayerManager.fleets[3].sortieJson(),
-				support1: this.getSupportingFleet(false),
-				support2: this.getSupportingFleet(true),
-				time: this.stime || (new Date()).getTime()
-			};
-		},		
-		startSortie :function(world, mapnum, fleetNum, stime){			// If still on sortie, end previous one
+		
+		startSortie :function(world, mapnum, fleetNum, stime){
+			// If still on sortie, end previous one
 			if(this.onSortie > 0){ this.endSortie(); }
 			
 			if(world < 10){ this.map_difficulty = 0; }
@@ -420,6 +406,23 @@ Xxxxxxx
 			this.onCat = false;
 			this.sortieTime = 0;
 			this.save();
+		},
+		
+		getSortieObject :function(){
+			return {
+				diff: this.map_difficulty || 0,
+				world: this.map_world || 0,
+				mapnum: this.map_num || 0,
+				fleetnum: this.fleetSent || 1,
+				combined: PlayerManager.combinedFleet,
+				fleet1: PlayerManager.fleets[0].sortieJson(),
+				fleet2: PlayerManager.fleets[1].sortieJson(),
+				fleet3: PlayerManager.fleets[2].sortieJson(),
+				fleet4: PlayerManager.fleets[3].sortieJson(),
+				support1: this.getSupportingFleet(false),
+				support2: this.getSupportingFleet(true),
+				time: this.stime || (new Date()).getTime()
+			};
 		}
 	};
 	
