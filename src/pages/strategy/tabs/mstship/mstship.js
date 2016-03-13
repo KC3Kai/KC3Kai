@@ -205,16 +205,32 @@
 			if(!shipData) { return; }
 			loadedShipId = ship_id;
 			
-			$(".tab_mstship .shipInfo .name").text( KC3Meta.shipName( shipData.api_name ) );
+			$(".tab_mstship .shipInfo .name").text( "[{0}] {1}".format(ship_id, KC3Meta.shipName( shipData.api_name )) );
 			
 			// CG VIEWER
 			var shipFile = KC3Master.graph(ship_id).api_filename;
+			var shipVersion = KC3Master.graph(ship_id).api_version;
 			this.currentGraph = shipFile;
 			$(".tab_mstship .shipInfo .cgswf embed").remove();
+			$(".tab_mstship .shipInfo .cgswf object").remove();
 			
-			$("<embed/>")
-				.attr("src", "../../../../assets/swf/card.swf?sip="+this.server_ip+"&shipFile="+shipFile+"&abyss="+(ship_id>500?1:0))
+			var shipSrc = "../../../../assets/swf/card.swf?sip="+this.server_ip
+					+"&shipFile="+shipFile
+					+"&abyss="+(ship_id>500?1:0)
+					+(!shipVersion?"":"&ver="+shipVersion);
+			var shipObj = $("<object/>")
+				.attr("data", shipSrc)
+				.attr("width", "218")
+				.attr("height", "300")
+				.attr("menu", "false")
+				.attr("wmode", "transparent")
+				.attr("type", "application/x-shockwave-flash")
 				.appendTo(".tab_mstship .shipInfo .cgswf");
+			$("<embed/>")
+				.attr("src", shipSrc)
+				.attr("wmode", "transparent")
+				.attr("menu", "false")
+				.appendTo(shipObj);
 			$(".tab_mstship .shipInfo .salty-zone").text(KC3Meta.term(denyTerm()));
 			$(".tab_mstship .shipInfo .hourlies").html("");
 			
