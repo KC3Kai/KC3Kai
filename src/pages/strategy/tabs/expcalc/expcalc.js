@@ -8,6 +8,7 @@
 		goals: {},
 		mapexp: [],
 		maplist: {},
+		shipexp: {},
 		
 		rankNames: ["F", "E", "D", "C", "B", "A", "S", "SS" ],
 		rankFactors: [0, 0.5, 0.7, 0.8, 1, 1, 1.2],
@@ -57,10 +58,6 @@
 			$(".tab_expcalc .box_goals").on("click", ".ship_edit", function(){
 				editingBox = $(this).parent();
 				var grindData = self.goals[ "s"+editingBox.data("id") ];
-				
-				if(parseInt($(".ship_target input", editingBox).val(), 10) > 99){
-					$(".ship_target input", editingBox).val(99);
-				}
 				
 				$(".ship_target input", editingBox).val( grindData[0] );
 				$(".ship_map select", editingBox).val( grindData[1]+"-"+grindData[2] );
@@ -151,7 +148,7 @@
 				
 				// Icon and level, common for all categories
 				$(".ship_icon img", goalBox).attr("src", KC3Meta.shipIcon(ThisShip.masterId) );
-				$(".ship_icon img", goalBox).attr("title", ThisShip.rosterId );
+				$(".ship_icon img", goalBox).attr("title", ThisShip.name() + ' (' + ThisShip.rosterId + ')' );
 				$(".ship_name", goalBox).text( ThisShip.name() );
 				$(".ship_type", goalBox).text( ThisShip.stype() );
 				$(".ship_lv .ship_value", goalBox).text( ThisShip.level );
@@ -176,7 +173,11 @@
 				}
 				
 				// If this is the last remodel stage, add to others
-				$(".ship_target .ship_value", goalBox).text( 99 );
+				if(ThisShip.level<99){
+					$(".ship_target .ship_value", goalBox).text( 99 );
+				}else{
+					$(".ship_target .ship_value", goalBox).text( 155 );
+				}
 				goalBox.appendTo(".tab_expcalc .box_other");
 			});
 			
@@ -194,12 +195,13 @@
 			var goalBox = $("#goalBox"+rosterId);
 			var grindData = this.goals["s"+rosterId];
 			var ThisShip = KC3ShipManager.get( rosterId );
+			var MasterShip = ThisShip.master();
 			
 			// This has just been added, no grinding data yet, initialize defaults
 			if(grindData.length === 0){
 				// As much as possible use arrays nowadays to shrink JSON size, we might run out of the 5MB localStorage allocated for our app
 				grindData = [
-					/*0*/ ThisShip.master().api_afterlv || 99, // target level
+					/*0*/ (MasterShip.api_aftershipid > 0 && ThisShip.level<MasterShip.api_afterlv)?MasterShip.api_afterlv:(ThisShip.level<99)?99:150, // target level
 					/*1*/ 1, // world
 					/*2*/ 1, // map
 					/*3*/ 1, // node
@@ -208,13 +210,15 @@
 					/*6*/ 0 // mvp
 				];
 				this.goals["s"+ThisShip.rosterId] = grindData;
+			}else{
+				
 			}
 			
 			// Target level
 			$(".ship_target .ship_value", goalBox).text( grindData[0] );
 			
 			// Experience Left
-			var expLeft = KC3Meta.exp(grindData[0])[1] - ThisShip.exp[0];
+			var expLeft = KC3Meta.expShip(grindData[0])[1] - ThisShip.exp[0];
 			$(".ship_exp .ship_value", goalBox).text( expLeft );
 			
 			// Base Experience: MAP
@@ -223,10 +227,12 @@
 			
 			// Exp Modifier: MVP
 			$(".ship_mvp .ship_value", goalBox).text( grindData[6]?"Yes":"No" );
+			$(".ship_mvp .ship_value", goalBox).css('color',(grindData[6]? "#e33" : "#039")); //yes : light red, no : deep blue
 			if(grindData[6]===1){ expPerSortie = expPerSortie * 2; }
 			
 			// Exp Modifier: FLAGSHIP
 			$(".ship_fs .ship_value", goalBox).text( grindData[5]?"Yes":"No" );
+			$(".ship_mvp .ship_value", goalBox).css('color',(grindData[6]? "#e33" : "#039")); 
 			if(grindData[5]===1){ expPerSortie = expPerSortie * 1.5; }
 			
 			// Exp Modifier: RANK

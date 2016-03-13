@@ -10,6 +10,7 @@ Instantiatable class to represent one player
 		if(!this.load()){
 			this.id =  0;
 			this.name = "Unknown";
+			this.nameId = "-1";
 			this.desc = "";
 			this.rank = "";
 			this.level = 1;
@@ -18,12 +19,16 @@ Instantiatable class to represent one player
 			this.rankPtLastCount = 0;
 			this.rankPtCutoff = 0;
 			this.rankPtLastCheck = 0;
+			this.lastMaterial = null;
+			this.lastPortTime = null;
+			this.lastSortie   = null;
 		}
 	};
 	
 	KC3Player.prototype.update = function( data ){
 		this.id =  data.mid;
 		this.name = data.name;
+		this.nameId = data.nameId;
 		KC3Database.index = this.id;
 		
 		var MyServer = (new KC3Server()).setUrl( KC3Network.lastUrl );
@@ -54,7 +59,7 @@ Instantiatable class to represent one player
 	};
 	
 	KC3Player.prototype.checkRankPoints = function(){
-		var TimestampNow = (new Date()).getTime();
+		var TimestampNow = Date.now();
 		
 		var PvPResetTime;
 		
@@ -85,6 +90,10 @@ Instantiatable class to represent one player
 	
 	KC3Player.prototype.getRankPoints = function(){
 		return Math.floor((this.exp[3] - this.rankPtCutoff)/1400);
+	};
+	
+	KC3Player.prototype.getRegenCap = function(){
+		return (3 + this.level) * 250;
 	};
 
 	KC3Player.prototype.logout = function(){
@@ -122,6 +131,9 @@ Instantiatable class to represent one player
 			this.rankPtLastCount = (playerInfo.rankPtLastCount || 0);
 			this.rankPtCutoff = (playerInfo.rankPtCutoff || 0);
 			this.rankPtLastCheck = (playerInfo.rankPtLastCheck || 0);
+			this.lastMaterial = playerInfo.lastMaterial || null;
+			this.lastPortTime = playerInfo.lastPortTime || null;
+			this.lastSortie   = playerInfo.lastSortie || null;
 			return true;
 		}
 		return false;

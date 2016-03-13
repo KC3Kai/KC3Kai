@@ -24,7 +24,7 @@ Has functions for TimerManager to use
 		if(typeof faceId != "undefined"){ if(faceId>0){ this.faceId = faceId; } }
 		if(typeof expedNum != "undefined"){ this.expedNum = expedNum; }
 		
-		var remaining = this.completion - (new Date()).getTime();
+		var remaining = this.completion - Date.now();
 		remaining = Math.ceil((remaining - (ConfigManager.alert_diff*1000))/1000);
 		if(remaining <= 0){
 			this.alerted = true;
@@ -68,7 +68,7 @@ Has functions for TimerManager to use
 	};
 	
 	KC3Timer.prototype.remainingTime = function(){
-		return this.active ? (this.completion - (new Date()).getTime()) : 0;
+		return this.active ? (this.completion - Date.now()) : 0;
 	};
 	
 	KC3Timer.prototype.text = function(){
@@ -81,7 +81,7 @@ Has functions for TimerManager to use
 				return String(remaining).toHHMMSS();
 			}else{
 				this.completionAlert();
-				return "Complete!";
+				return KC3Meta.term("TimerComplete");
 			}
 		}else{
 			return "";
@@ -98,8 +98,8 @@ Has functions for TimerManager to use
 		}
 		switch(ConfigManager.alert_type){
 			case 1: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/pop.mp3"); break;
-			case 2: KC3TimerManager.notifSound = new Audio(ConfigManager.alert_custom); break; 
-			case 3: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/ding.mp3"); break; 
+			case 2: KC3TimerManager.notifSound = new Audio(ConfigManager.alert_custom); break;
+			case 3: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/ding.mp3"); break;
 			default: KC3TimerManager.notifSound = false; break;
 		}
 		if(KC3TimerManager.notifSound){
@@ -110,36 +110,36 @@ Has functions for TimerManager to use
 		// Desktop notification
 		var notifData = { type: "basic" };
 		var shipName;
-			
+		
 		// Notification types show varying messages
 		switch(this.type){
 			case 0:
 				var thisFleet = PlayerManager.fleets[this.num+1];
-				notifData.title = "Expedition Complete!";
-				notifData.message = "Fleet "+(this.num+2)+" just arrived from Expedition #"+thisFleet.mission[1];
+				notifData.title = KC3Meta.term("DesktopNotifyExpedCompleteTitle");
+				notifData.message = KC3Meta.term("DesktopNotifyExpedCompleteMessage").format(this.num+2, thisFleet.mission[1]);
 				notifData.iconUrl = "../../assets/img/quests/expedition.jpg";
 				break;
 			case 1:
 				var shipRef = KC3ShipManager.get(PlayerManager.repairShips[this.num+1]);
 				shipName = shipRef.name();
-				notifData.title = "Repairs Complete!";
-				notifData.message = shipName+" is out of the repair dock!";
+				notifData.title = KC3Meta.term("DesktopNotifyRepairCompleteTitle");
+				notifData.message = KC3Meta.term("DesktopNotifyRepairCompleteMessage").format(shipName);
 				notifData.iconUrl = "../../assets/img/quests/supply.jpg";
 				shipRef.applyRepair();
 				break;
 			case 2:
 				shipName = KC3Meta.shipName( KC3Master.ship( this.faceId ).api_name );
-				notifData.title = "Construction Complete!";
+				notifData.title = KC3Meta.term("DesktopNotifyConstrCompleteTitle");
 				if(ConfigManager.info_face){
-					notifData.message = "New shipgirl "+shipName+" has been constructed!";
+					notifData.message = KC3Meta.term("DesktopNotifyConstrCompleteMessageFaced").format(shipName);
 				}else{
-					notifData.message = "A new shipgirl is ready to see you in the construction docks!";
+					notifData.message = KC3Meta.term("DesktopNotifyConstrCompleteMessageUnknown");
 				}
 				notifData.iconUrl = "../../assets/img/quests/build.jpg";
 				break;
 			default:break;
 		}
-			
+		
 		// Tell background page to show the notification, cant do it here
 		if(ConfigManager.alert_desktop){
 			(new RMsg("service", "notify_desktop", {
@@ -147,7 +147,7 @@ Has functions for TimerManager to use
 				data: notifData
 			})).execute();
 		}
-		
-	};
 	
+	};
+
 })();

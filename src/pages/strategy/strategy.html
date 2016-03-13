@@ -22,11 +22,12 @@
 						<div class="title">Player</div>
 						<ul class="menulist">
 							<li data-id="profile" class="active">Profile</li>
-							<li data-id="newsfeed">Newsfeed</li>
+							<!-- <li data-id="newsfeed">Newsfeed</li> -->
 							<li data-id="screenshots">Screenshots</li>
 							<li data-id="resources">Resources</li>
 							<li data-id="consumables">Consumables</li>
 							<li data-id="showcase">Showcase</li>
+							<li data-id="overlodger">Ledger</li>
 						</ul>
 					</div>
 					<div class="submenu">
@@ -37,10 +38,7 @@
 							<li data-id="lscs">LSC</li>
 							<li data-id="docking">Docking</li>
 							<li data-id="expcalc">Leveling</li>
-							<li data-id="drops" class="disabled">Drop</li>
-							<li data-id="memorial" class="disabled">Memorial</li>
-							<li data-id="shipmods" class="disabled">Modernization</li>
-							<li data-id="remodels" class="disabled">Remodel</li>
+							<li data-id="badge">Badge</li>
 						</ul>
 					</div>
 					<div class="submenu">
@@ -50,7 +48,6 @@
 							<li data-id="crafts">Crafting</li>
 							<li data-id="aircraft">Aircraft</li>
 							<li data-id="akashi">Akashi</li>
-							<li data-id="gearmods" class="disabled">Modernization</li>
 						</ul>
 					</div>
 					<div class="submenu">
@@ -59,16 +56,14 @@
 							<li data-id="fleet">Current</li>
 							<li data-id="wikia">Export</li>
 							<li data-id="locking">Locking</li>
-							<li data-id="aircalc">AirCalc</li>
+							<!-- <li data-id="aircalc">AirCalc</li> -->
 							<li data-id="presets">Presets</li>
 						</ul>
 					</div>
 					<div class="submenu">
 						<div class="title">Quests</div>
 						<ul class="menulist">
-							<li data-id="questlist" class="disabled">List Mode</li>
 							<li data-id="flowchart">Flowchart</li>
-							<li data-id="questlog" class="disabled">History</li>
 						</ul>
 					</div>
 					<div class="submenu">
@@ -79,26 +74,10 @@
 						</ul>
 					</div>
 					<div class="submenu">
-						<div class="title">PvP</div>
-						<ul class="menulist">
-							<li data-id="pvps" class="disabled">History</li>
-							<li data-id="attackers" class="disabled">Attackers</li>
-						</ul>
-					</div>
-					<div class="submenu">
 						<div class="title">Expeditions</div>
 						<ul class="menulist">
 							<li data-id="expedpast">History</li>
 							<li data-id="expedtable">Scorer</li>
-						</ul>
-					</div>
-					<div class="submenu">
-						<div class="title">Goals</div>
-						<ul class="menulist">
-							<li data-id="goalrsc" class="disabled">Resource</li>
-							<li data-id="goallevel" class="disabled">Leveling</li>
-							<li data-id="goalsparkle" class="disabled">Sparkling</li>
-							<li data-id="goalremodel" class="disabled">Remodel</li>
 						</ul>
 					</div>
 					<div class="submenu">
@@ -107,6 +86,7 @@
 							<li data-id="mstupdate">Updates</li>
 							<li data-id="mstship">Ships</li>
 							<li data-id="mstgear">Equipment</li>
+							<li data-id="encounters">Encounters</li>
 						</ul>
 					</div>
 				</div>
@@ -132,8 +112,8 @@
 		<script type="text/javascript" src="../../assets/js/FileSaver.min.js"></script>
 		<script type="text/javascript" src="../../assets/js/KanColleHelpers.js"></script>
 		<script type="text/javascript" src="../../library/modules/StrategyTabs.js"></script>
-		<!-- @buildimportjs ../../library/managers.js -->
 		<!-- @buildimportjs ../../library/objects.js -->
+		<!-- @buildimportjs ../../library/managers.js -->
 		<!-- @nonbuildstart -->
 		<script type="text/javascript" src="../../library/objects/StrategyTab.js"></script>
 		<script type="text/javascript" src="../../library/objects/Node.js"></script>
@@ -154,10 +134,16 @@
 		<script type="text/javascript" src="../../library/managers/ShipManager.js"></script>
 		<!-- @nonbuildend -->
 		
+		<script type="text/javascript" src="../../../../library/modules/RemodelDb.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/Database.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/Master.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/Translation.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/Meta.js"></script>
+		<script type="text/javascript" src="../../../../library/modules/WhoCallsTheFleetDb.js">
+		</script>
+		<script type="text/javascript" src="../../library/modules/PictureBook.js"></script>
+		<script type="text/javascript" src="../../library/modules/RemodelDb.js"></script> 
+		<script type="text/javascript" src="../../library/modules/K2Badge.js"></script>
 		
 		<script type="text/javascript" src="strategy.js"></script>
 		
@@ -175,6 +161,7 @@
 		<!-- resources and consumables, implements graphable -->
 		<script type="text/javascript" src="tabs/resources/resources.js"></script>
 		<script type="text/javascript" src="tabs/consumables/consumables.js"></script>
+		<script type="text/javascript" src="tabs/overlodger/overlodger.js"></script>
 		<script type="text/javascript" src="tabs/builds/builds.js"></script>
 		<script type="text/javascript" src="tabs/lscs/lscs.js"></script>
 		<script type="text/javascript" src="tabs/crafts/crafts.js"></script>
@@ -191,13 +178,15 @@
 		<script type="text/javascript" src="tabs/expedtable/expedtable.js"></script>
 		<script type="text/javascript" src="tabs/screenshots/screenshots.js"></script>
 		<script type="text/javascript" src="tabs/akashi/akashi.js"></script>
-		<script type="text/javascript" src="tabs/aircalc/aircalc.js"></script>
+		<!--<script type="text/javascript" src="tabs/aircalc/aircalc.js"></script>-->
 		<script type="text/javascript" src="tabs/expedpast/expedpast.js"></script>
 		<script type="text/javascript" src="tabs/presets/presets.js"></script>
 		<script type="text/javascript" src="tabs/mstupdate/mstupdate.js"></script>
 		<script type="text/javascript" src="tabs/mstship/mstship.js"></script>
 		<script type="text/javascript" src="tabs/mstgear/mstgear.js"></script>
 		<script type="text/javascript" src="tabs/expcalc/expcalc.js"></script>
+		<script type="text/javascript" src="tabs/badge/badge.js"></script>
+		<script type="text/javascript" src="tabs/encounters/encounters.js"></script>
 		<!-- @nonbuildend -->
 		
 	</body>

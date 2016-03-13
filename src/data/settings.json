@@ -117,6 +117,13 @@
 				"options" : {}
 			},
 			{
+				"id" : "info_salt",
+				"name" : "SettingsSaltyShip",
+				"type" : "check",
+				"hide" : 0,
+				"options" : {}
+			},
+			{
 				"id" : "info_troll",
 				"name" : "SettingsYasenTroll",
 				"type" : "check",
@@ -137,6 +144,18 @@
 			{
 				"id" : "info_auto_exped_tab",
 				"name" : "SettingsAutoExpedTab",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_eng_stype",
+				"name" : "SettingsEnglishShipType",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_jp_ship_item",
+				"name" : "SettingsJapaneseShipItem",
 				"type" : "check",
 				"options" : {}
 			}
@@ -497,7 +516,7 @@
 				"options" : {
 					"choices" : [
 						[ "natsuiro", "Natsuiro" ],
-						[ "default", "Legacy" ]
+						[ "plain", "Plain" ]
 					]
 				}
 			},

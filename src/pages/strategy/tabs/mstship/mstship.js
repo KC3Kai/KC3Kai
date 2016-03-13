@@ -1,6 +1,8 @@
 (function(){
 	"use strict";
 	
+	var loadedShipId = 0;
+	
 	KC3StrategyTabs.mstship = new KC3StrategyTab("mstship");
 	
 	KC3StrategyTabs.mstship.definition = {
@@ -38,40 +40,42 @@
 			"Repair" : 6
 		},
 		hourlies: {
-			"0000" : 30,
-			"0100" : 31,
-			"0200" : 32,
-			"0300" : 33,
-			"0400" : 34,
-			"0500" : 35,
-			"0600" : 36,
-			"0700" : 37,
-			"0800" : 38,
-			"0900" : 39,
-			"1000" : 40,
-			"1100" : 41,
-			"1200" : 42,
-			"1300" : 43,
-			"1400" : 44,
-			"1500" : 45,
-			"1600" : 46,
-			"1700" : 47,
-			"1800" : 48,
-			"1900" : 49,
-			"2000" : 50,
-			"2100" : 51,
-			"2200" : 52,
-			"2300" : 53
+			30: "0000",
+			31: "0100",
+			32: "0200",
+			33: "0300",
+			34: "0400",
+			35: "0500",
+			36: "0600",
+			37: "0700",
+			38: "0800",
+			39: "0900",
+			40: "1000",
+			41: "1100",
+			42: "1200",
+			43: "1300",
+			44: "1400",
+			45: "1500",
+			46: "1600",
+			47: "1700",
+			48: "1800",
+			49: "1900",
+			50: "2000",
+			51: "2100",
+			52: "2200",
+			53: "2300"
 		},
-		
 		currentGraph: "",
+		currentShipId: 0,
 		audio: false,
+		server_ip: "",
 		
 		/* INIT
 		Prepares all data needed
 		---------------------------------*/
 		init :function(){
-			
+			var MyServer = (new KC3Server()).setNum( PlayerManager.hq.server );
+			this.server_ip = MyServer.ip;
 		},
 		
 		/* EXECUTE
@@ -97,28 +101,77 @@
 			
 			// List all ships
 			var shipBox;
-			$.each(KC3Master._ship, function(index, ShipData){
-				if(ShipData!==null){
-					shipBox = $(".tab_mstship .factory .shipRecord").clone();
-					shipBox.data("id", ShipData.api_id);
-					
-					if(ShipData.api_id<=500){
-						$("img", shipBox).attr("src", KC3Meta.shipIcon(ShipData.api_id) );
-					}else{
-						$("img", shipBox).attr("src", KC3Meta.abyssIcon(ShipData.api_id) );
-					}
-					
-					$(".shipName", shipBox).text( KC3Meta.shipName(ShipData.api_name) );
-						
-					shipBox.appendTo(".tab_mstship .shipRecords");
+			$.each(KC3Master.all_ships(), function(index, ShipData){
+				if(!ShipData) { return true; }
+				
+				shipBox = $(".tab_mstship .factory .shipRecord").clone();
+				shipBox.data("id", ShipData.api_id);
+				shipBox.data("bs", ShipData.kc3_bship);
+				
+				if(ShipData.api_id<=500){
+					$("img", shipBox).attr("src", KC3Meta.shipIcon(ShipData.api_id) );
+				}else{
+					$("img", shipBox).attr("src", KC3Meta.abyssIcon(ShipData.api_id) );
 				}
+				
+				if(ConfigManager.salt_list.indexOf(ShipData.kc3_bship)>=0) {
+					shipBox.addClass('salted');
+				}
+				
+				$(".shipName", shipBox).text( "["+ShipData.api_id+"] "+KC3Meta.shipName(ShipData.api_name) );
+					
+				shipBox.appendTo(".tab_mstship .shipRecords");
 			});
 			
 			// Select ship
 			$(".tab_mstship .shipRecords .shipRecord").on("click", function(){
-				self.showShip( $(this).data("id") );
+				if( $(this).data("id") != loadedShipId )
+					self.showShip( $(this).data("id") );
 			});
 			
+			// Play voice
+			$(".tab_mstship .shipInfo .voices, .tab_mstship .shipInfo .hourlies").on("click", ".voice", function(){
+				if(self.audio){ self.audio.pause(); }
+				var voiceFile = self.getVoiceLineFileName(self.currentShipId, parseInt($(this).data("vnum"), 10));
+				self.audio = new Audio("http://"+self.server_ip+"/kcs/sound/kc"+self.currentGraph+"/"+voiceFile+".mp3");
+				self.audio.play();
+			});
+			
+			// On-click remodels
+			$(".tab_mstship .shipInfo").on("click", ".remodel_name a", function(e){
+				//console.log("clicked remodel");
+				self.showShip( $(this).data("sid") );
+				e.preventDefault();
+				return false;
+			});
+
+			$(".tab_mstship .shipInfo").on("click", ".more .other_forms a", function(e){
+				self.showShip( $(this).data("sid") );
+				e.preventDefault();
+				return false;
+			});
+			
+			// Salt-toggle
+			$(".tab_mstship .shipInfo").on("click", ".salty-zone", function(e){
+				var
+					saltList = ConfigManager.salt_list,
+					shipData = KC3Master.ship(loadedShipId),
+					saltPos  = saltList.indexOf(shipData.kc3_bship),
+					shipBox  = $(".shipRecord").filter(function(i,x){
+						return shipData.kc3_bship == $(x).data('bs');
+					});
+				if(saltPos >= 0) {
+					saltList.splice(saltPos,1);
+					shipBox.removeClass('salted');
+				} else {
+					saltList.push(shipData.kc3_bship);
+					shipBox.addClass('salted');
+				}
+				ConfigManager.save();
+				e.preventDefault();
+				self.showShip( shipData.api_id );
+				return false;
+			});
 			
 			if(!!KC3StrategyTabs.pageParams[1]){
 				this.showShip(KC3StrategyTabs.pageParams[1]);
@@ -129,29 +182,51 @@
 		
 		
 		showShip :function(ship_id){
-			var self = this;
-			var shipData = KC3Master.ship(ship_id);
+			ship_id = 1*(ship_id||"323");
+			var
+				self = this,
+				shipData = KC3Master.ship(ship_id),
+				saltState = function(){
+					return ConfigManager.info_salt && shipData.kc3_bship && ConfigManager.salt_list.indexOf(shipData.kc3_bship)>=0;
+				},
+				denyTerm = function(){
+					return ["MasterShipSalt","Un","Check"].filter(function(str,i){
+						return 	((i==1) && !saltState()) ? "" : str;
+					}).join('');
+				},
+				saltClassUpdate = function(){
+					if(saltState())
+						$(".tab_mstship .shipInfo").addClass('salted');
+					else
+						$(".tab_mstship .shipInfo").removeClass('salted');
+				};
+			this.currentShipId = ship_id;
 			console.log(shipData);
+			if(!shipData) { return; }
+			loadedShipId = ship_id;
 			
 			$(".tab_mstship .shipInfo .name").text( KC3Meta.shipName( shipData.api_name ) );
 			
 			// CG VIEWER
-			var shipFile = KC3Master.graph_id(ship_id);
+			var shipFile = KC3Master.graph(ship_id).api_filename;
 			this.currentGraph = shipFile;
 			$(".tab_mstship .shipInfo .cgswf embed").remove();
 			
 			$("<embed/>")
-				.attr("src", "../../../../assets/swf/card.swf?shipFile="+shipFile+"&abyss="+(ship_id>500?1:0))
+				.attr("src", "../../../../assets/swf/card.swf?sip="+this.server_ip+"&shipFile="+shipFile+"&abyss="+(ship_id>500?1:0))
 				.appendTo(".tab_mstship .shipInfo .cgswf");
+			$(".tab_mstship .shipInfo .salty-zone").text(KC3Meta.term(denyTerm()));
+			$(".tab_mstship .shipInfo .hourlies").html("");
 			
+			saltClassUpdate();
+			
+			var statBox;
 			if(ship_id<=500){
 				// Ship-only, non abyssal
-				
 				$(".tab_mstship .shipInfo .stats").html("");
 				$(".tab_mstship .shipInfo .intro").html( shipData.api_getmes );
 				
 				// STATS
-				var statBox;
 				$.each([
 					["hp", "taik"],
 					["fp", "houg"],
@@ -183,6 +258,8 @@
 					statBox.appendTo(".tab_mstship .shipInfo .stats");
 				});
 				
+				var stockEquipments = WhoCallsTheFleetDb.getStockEquipment( ship_id );
+
 				// EQUIPMENT
 				$(".tab_mstship .equipments .equipment").each(function(index){
 					$(".capacity", this).text( shipData.api_maxeq[index] );
@@ -191,11 +268,30 @@
 					}else{
 						$(this).show();
 					}
+
+					// in case when the data isn't available,
+					// slots should still be getting cleaned up
+					$(".slotitem", this).text( "" );
+					$(".sloticon img", this).attr("src","");
+
+					if (stockEquipments) {
+						var equipId = stockEquipments[index];
+						if (equipId > 0) {
+							var equipment = KC3Master.slotitem( equipId );
+							$(".slotitem", this).text(KC3Meta.gearName( equipment.api_name ) );
+							$(".sloticon img", this)
+								.attr("src","../../../../assets/img/items/"+equipment.api_type[3]+".png");
+							$(".sloticon img", this).show();
+						} else {
+							$(".sloticon img", this).hide();
+						}
+					}
 				});
 				
 				// MORE INFO
 				if(shipData.api_aftershipid>0){
-					$(".tab_mstship .shipInfo .remodel_name").text( KC3Meta.shipName(KC3Master.ship(shipData.api_aftershipid).api_name) );
+					$(".tab_mstship .shipInfo .remodel_name a").text( KC3Meta.shipName(KC3Master.ship(shipData.api_aftershipid).api_name) );
+					$(".tab_mstship .shipInfo .remodel_name a").data("sid", shipData.api_aftershipid);
 					$(".tab_mstship .shipInfo .remodel_level span").text( shipData.api_afterlv );
 					$(".tab_mstship .shipInfo .remodel_ammo .rsc_value").text( shipData.api_afterfuel );
 					$(".tab_mstship .shipInfo .remodel_steel .rsc_value").text( shipData.api_afterbull );
@@ -203,6 +299,30 @@
 				}else{
 					$(".tab_mstship .shipInfo .remodel").hide();
 				}
+
+				// other forms
+				var otherFormIds = RemodelDb
+					.remodelGroup(shipData.api_id)
+					.filter( function(x) {
+						return x !== shipData.api_id &&
+							x !== shipData.api_aftershipid;
+					});
+				
+				if (otherFormIds.length > 0) {
+					$(".tab_mstship .shipInfo .more .other_forms a").remove();
+
+					$.each(otherFormIds, function(i,x) {
+						$("<a/>")
+							.text( KC3Meta.shipName(KC3Master.ship(x).api_name) )
+							.data("sid",x)
+							.appendTo( ".tab_mstship .shipInfo .more .other_forms .other_forms_list" );
+					});
+					
+					$(".tab_mstship .shipInfo .more .other_forms").show();
+				} else {
+					$(".tab_mstship .shipInfo .more .other_forms").hide();
+				}
+
 				$(".tab_mstship .scrap .rsc").each(function(index){
 					$(".rsc_value", this).text( shipData.api_broken[index] );
 				});
@@ -213,6 +333,7 @@
 				$(".tab_mstship .shipInfo .consume_ammo .rsc_value").text( shipData.api_bull_max );
 				
 				// VOICE LINES
+				$(".tab_mstship .shipInfo .voices").show();
 				$(".tab_mstship .shipInfo .voices").html("");
 				$.each(this.lines, function(vname, vnum){
 					$("<div/>")
@@ -225,41 +346,109 @@
 				$("<div/>").addClass("clear").appendTo(".tab_mstship .shipInfo .voices");
 				
 				// HOURLIES
+				$(".tab_mstship .shipInfo .hourlies").show();
 				$(".tab_mstship .shipInfo .hourlies").html("");
+				
 				if(shipData.api_voicef>1){
-					$.each(this.hourlies, function(vname, vnum){
+					$.each(this.hourlies, function(vnum, vname){
+						var hhStr = vname.substring(0,2);
+						var mmStr = vname.substring(2);
 						$("<div/>")
 							.addClass("hover")
 							.addClass("voice")
 							.data("vnum", vnum)
-							.text(vname)
+							.text(hhStr + ":" + mmStr)
 							.appendTo(".tab_mstship .shipInfo .hourlies");
 					});
 					$("<div/>").addClass("clear").appendTo(".tab_mstship .shipInfo .hourlies");
 				}
-				
-				$(".tab_mstship .shipInfo .voice").on("click", function(){
-					if(self.audio){ self.audio.pause(); }
-					self.audio = new Audio("http://125.6.189.247/kcs/sound/kc"+self.currentGraph+"/"+$(this).data("vnum")+".mp3");
-					self.audio.play();
-				});
 				
 				$(".tab_mstship .shipInfo .stats").show();
 				$(".tab_mstship .shipInfo .equipments").show();
 				$(".tab_mstship .shipInfo .intro").show();
 				$(".tab_mstship .shipInfo .more").show();
 				$(".tab_mstship .shipInfo .json").hide();
+				$(".tab_mstship .shipInfo .tokubest").show();
+				if(ConfigManager.info_salt)
+					$(".tab_mstship .shipInfo .tokubest .salty-zone").show();
+				else
+					$(".tab_mstship .shipInfo .tokubest .salty-zone").hide();
 			}else{
 				// abyssals, just show json
-				$(".tab_mstship .shipInfo .json").text(JSON.stringify(shipData));
-				
+				//$(".tab_mstship .shipInfo .json").text(JSON.stringify(shipData));
 				$(".tab_mstship .shipInfo .stats").hide();
 				$(".tab_mstship .shipInfo .equipments").hide();
+				
+				// STATS
+				KC3Database.get_enemyInfo(ship_id, function(enemyInfo){
+					console.log("enemyInfo", enemyInfo);
+					if(enemyInfo){
+						// ENEMY STATS
+						$(".tab_mstship .shipInfo .stats").html("");
+						$.each([
+							["hp", "taik"],
+							["fp", "houg"],
+							["ar", "souk"],
+							["tp", "raig"],
+							["aa", "tyku"],
+						], function(index, stat){
+							statBox = $(".tab_mstship .factory .ship_stat").clone();
+							$("img", statBox).attr("src", "../../../../assets/img/stats/"+stat[0]+".png");
+							$(".ship_stat_name", statBox).text(stat[1]);
+							
+							$(".ship_stat_min", statBox).text(enemyInfo[stat[0]]);
+							
+							statBox.appendTo(".tab_mstship .shipInfo .stats");
+						});
+						
+						// ENEMY EQUIPMENT
+						$(".tab_mstship .equipments .equipment").each(function(index){
+							$(".capacity", this).text("?");
+							
+							var equipId = enemyInfo["eq"+(index+1)];
+							if (equipId > 0) {
+								var equipment = KC3Master.slotitem( equipId );
+								$(".slotitem", this).text(KC3Meta.gearName( equipment.api_name ) );
+								$(".sloticon img", this)
+									.attr("src","../../../../assets/img/items/"+equipment.api_type[3]+".png");
+							} else {
+								$(".slotitem", this).text( "" );
+								$(".sloticon img", this).attr("src","");
+							}
+						});
+						
+						$(".tab_mstship .shipInfo .stats").show();
+						$(".tab_mstship .shipInfo .equipments").show();
+					}
+				});
+				
+				$(".tab_mstship .shipInfo .voices").hide();
+				$(".tab_mstship .shipInfo .hourlies").hide();
 				$(".tab_mstship .shipInfo .intro").hide();
 				$(".tab_mstship .shipInfo .more").hide();
 				$(".tab_mstship .shipInfo .json").show();
+				$(".tab_mstship .shipInfo .tokubest").hide();
 			}
 			
+		},
+		
+		/*
+		Getting new filename for ship voices
+		Source: がか
+		http://kancolle.wikia.com/wiki/Thread:388946#30
+		*/
+		voiceLineKeys: [
+			604825, 607300, 613847, 615318, 624009, 631856, 635451, 637218, 640529,
+			643036, 652687, 658008, 662481, 669598, 675545, 685034, 687703, 696444,
+			702593, 703894, 711191, 714166, 720579, 728970, 738675, 740918, 743009,
+			747240, 750347, 759846, 764051, 770064, 773457, 779858, 786843, 790526,
+			799973, 803260, 808441, 816028, 825381, 827516, 832463, 837868, 843091,
+			852548, 858315, 867580, 875771, 879698, 882759, 885564, 888837, 896168
+		],
+		
+		
+		getVoiceLineFileName: function(ship_api_id, voice_line_id) {
+			return 100000 + 17 * (ship_api_id + 7) * (this.voiceLineKeys[voice_line_id] - this.voiceLineKeys[voice_line_id - 1]) % 99173;
 		}
 		
 	};

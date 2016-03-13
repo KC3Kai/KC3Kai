@@ -9,7 +9,7 @@ html,body {
 #critical {
 	width:100%;
 	height:100%;
-	position:absolute;
+	position:fixed;
 	top:0px;
 	left:0px;
 	z-index:90;
@@ -162,6 +162,7 @@ html,body {
 	margin:0px auto;
 	display:none;
 	position:relative;
+	white-space:nowrap;
 	/*background:#FFFFE8;*/
 }
 .wrapper_bg {
@@ -309,6 +310,7 @@ html,body {
 	background:rgba(100,100,100,0.85);
 	border-radius:5px;
 	overflow:hidden;
+	white-space:initial;
 }
 .module.activity .activity_box {
 	width:190px;
@@ -464,7 +466,7 @@ html,body {
 
 /*------- ACTIVITY: BATTLE -------*/
 .module.activity .activity_battle {
-	
+	white-space:nowrap;
 }
 /* Map Info */
 .module.activity .map_info {
@@ -484,6 +486,7 @@ html,body {
 	margin:0px 5px 0px 0px;
 }
 .module.activity .map_gauge {
+	position:relative;
 	width:60px;
 	height:12px;
 	float:left;
@@ -491,9 +494,16 @@ html,body {
 	background:#222;
 	border:1px solid #fff;
 }
-.module.activity .map_gauge_bar {
+.module.activity .map_gauge * {
+	position:absolute;
 	height:10px;
+	float:left;
+}
+.module.activity .map_gauge .curhp {
 	background:#0f0;
+}
+.module.activity .map_gauge .nowhp {
+	background:#f00;
 }
 .module.activity .map_hp {
 	width:70px;
@@ -502,6 +512,13 @@ html,body {
 	font-size:11px;
 	color:#eee;
 	padding:0px 0px 0px 5px;
+}
+
+.module.activity .map_info.map_finisher .map_gauge {
+	animation: gauge-finish-her 0.25s infinite ease alternate;
+}
+.module.activity .map_info.map_finisher .map_hp {
+	color:#e66;
 }
 /* Sortie Nodes */
 .module.activity .sortie_nodes {
@@ -884,6 +901,7 @@ html,body {
 /*------- EXPEDITION -------*/
 .module.activity .activity_expedition {
 	padding:5px 10px;
+	white-space:nowrap;
 }
 
 .module.activity .activity_expedition .expres_img {
@@ -1013,7 +1031,7 @@ html,body {
 .module.activity .activity_expedition .expres_hqexp_amt {
 	font-size:12px;
 }
-.module.activity .activity_expedition .expres_hqexp_amt span {
+.module.activity .activity_expedition .expres_hqexp_amt span.value {
 	color:#ffcc00;
 	font-size:14px;
 	font-weight:bold;
@@ -1048,16 +1066,117 @@ html,body {
 	float:left;
 	color:#fff;
 }
-.module.activity .activity_expedition .expres_ship_exp span {
+.module.activity .activity_expedition .expres_ship_exp span.value {
 	font-weight:bold;
 	color:#ffcc00;
 }
 
+/*------- MODERNIZE -------*/
+.module.activity .activity_modernization {
+	padding:5px 10px;
+}
+.module.activity .activity_modernization .mod_ship {
+	height:50px;
+	padding:5px 0px;
+	margin:0px 0px 5px 0px;
+}
+.module.activity .activity_modernization .mod_ship_pic {
+	width:40px;
+	height:40px;
+	float:left;
+	border-radius:20px;
+	border:1px solid #000;
+	overflow: hidden;
+	margin:0px 5px 0px 0px;
+}
+.module.activity .activity_modernization .mod_ship_pic img {
+	width:42px;
+	height:42px;
+	position:relative;
+	margin:-1px 0px 0px -1px;
+}
+.module.activity .activity_modernization .mod_ship_name {
+	width:125px;
+	height:22px;
+	line-height:22px;
+	float:left;
+	/*background:#fcc;*/
+	font-size:13px;
+	font-weight:bold;
+	color:#ffcc00;
+	overflow:hidden;
+}
+.module.activity .activity_modernization .mod_ship_level {
+	width:125px;
+	height:14px;
+	line-height:14px;
+	float:left;
+	/*background:#cfc;*/
+	font-size:12px;
+	color:#ccc;
+}
+.module.activity .activity_modernization .mod_result_stats {
+	width:170px;
+	height:125px;
+}
+.module.activity .activity_modernization .mod_result_stat {
+	width:170px;
+	height:20px;
+	line-height:20px;
+	margin:0px 0px 5px 0px;
+}
+.module.activity .activity_modernization .mod_result_icon {
+	width:20px;
+	height:20px;
+	margin:0px 5px 0px 0px;
+	float:left;
+}
+.module.activity .activity_modernization .mod_result_icon img {
+	width:20px;
+	height:20px;
+	display:block;
+}
+.module.activity .activity_modernization .mod_result_old {
+	width:35px;
+	height:20px;
+	float:left;
+	color:#aaa;
+	font-size:14px;
+}
+.module.activity .activity_modernization .mod_result_plus {
+	width:40px;
+	height:20px;
+	float:left;
+	font-weight:bold;
+	color:#0f0;
+	font-size:16px;
+}
+.module.activity .activity_modernization .mod_result_left {
+	width:70px;
+	height:20px;
+	float:left;
+	color:#aaa;
+	font-size:12px;
+}
+.module.activity .activity_modernization .mod_result_note {
+	width:170px;
+	height:20px;
+	color:#aaa;
+	font-size:12px;
+	text-align:center;
+}
 
 /* ACTIVITY: Expedition Planner
 ------------------------*/
 .module.activity .activity_expeditionPlanner {
     text-align:center;
+    white-space:nowrap;
+}
+.module.activity .activity_expeditionPlanner .dropdown_title.expPlanner_text_passed{	
+	color:#006600;
+}
+.module.activity .activity_expeditionPlanner .dropdown_title.expPlanner_text_failed{	
+	color:#cc0000;
 }
 
 .module.activity .activity_expeditionPlanner .expPlan_dropdown_menu {
@@ -1072,7 +1191,7 @@ html,body {
   float: left;
   margin: 0;
   padding: 0;
-  	background: #bfbfbf;
+  	background: #dddddd;
 	text-align: center;
 	text-decoration: none;
 	border-style:solid;
@@ -1080,17 +1199,17 @@ html,body {
 }
 
 .module.activity .activity_expeditionPlanner li {
-  background: #bfbfbf;
+  background: #dddddd;
   border-style:solid;
   border-width:1px;
 }
 
 .module.activity .activity_expeditionPlanner li:hover {
-  background: gray;
+  background: #ffffff;
 }
 
 .module.activity .activity_expeditionPlanner  li ul {
-list-style: none;
+  list-style: none;
   display: none;
   position: absolute;
   top: 100%;
@@ -1548,6 +1667,7 @@ list-style: none;
 	float:left;
 	border:1px solid #000;
 	background:#555;
+	position:relative;
 }
 .module.fleet .lship .ship_hp_bar {
 	height:8px;
@@ -1555,6 +1675,37 @@ list-style: none;
 .module.fleet .lship .ship_hp_prediction {
 	height:8px;
 }
+
+/* ==> Akashi Timer <== */
+.module.fleet .lship:not(:hover) .ship_repair_data {
+	display:none;
+}
+.module.fleet .lship:hover .ship_repair_data {
+	display:block;
+}
+.module.fleet .lship .ship_repair_data {
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	font-size:10px;
+	width:100%;
+	height:100%;
+}
+
+.module.fleet .lship .ship_repair_tick:before {
+	content:"x" attr(data-tick);
+}
+
+.module.fleet .lship .ship_repair_tick,
+.module.fleet .lship .ship_repair_timer {
+	width:50%;
+	float:left;
+	text-align:center;
+	background-color:white;
+	color:red;
+}
+/* ==> Akashi Timer <== */
 
 .module.fleet .lship .ship_col2 {
 	width:40px;
@@ -1581,6 +1732,22 @@ list-style: none;
 	font-size:11px;
 	text-align:center;
 	color:#aaa;
+	position:relative;
+}
+.module.fleet .lship .ship_exp_label .expNotice {
+	width:40px;
+	height:22px;
+	line-height:22px;
+	position:absolute;
+	top:0px;
+	left:0px;
+	font-size:14px;
+	text-shadow:
+		0px 0px 4px #000,
+		0px 0px 4px #000,
+		0px 0px 4px #000;
+	text-align:center;
+	color:#ffcc00;
 }
 .module.fleet .lship .ship_exp_next {
 	width:40px;
@@ -1810,6 +1977,7 @@ list-style: none;
 	float:left;
 	border:1px solid #000;
 	background:#555;
+	position:relative;
 }
 .module.fleet .sship .ship_hp_bar {
 	height:6px;
@@ -1852,6 +2020,27 @@ list-style: none;
 	background:#999900;
 }
 
+/* Ship Misc Marker */
+.module.fleet .sSalt {
+	-webkit-filter: blur(1.5px);
+}
+.module.fleet .sWife .ship_name {
+	color:#fbb;
+}
+.module.fleet .ship_no_lock {
+	visibility:hidden;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	text-align: center;
+	background-color: pink;
+	color: red;
+}
+.module.fleet .sLock .ship_no_lock {
+	animation: lock-warning 0.5s steps(5,start) infinite;
+	visibility:visible;
+}
 /*------- STATUS -------*/
 .module.status {
 	/*background:rgba(255,80,80,0.4);*/
@@ -1982,4 +2171,21 @@ list-style: none;
 	width:240px;
 	height:120px;
 	left:555px; top:200px;
+}
+
+/* ANIMATIONS
+----------------------------------- */
+@-webkit-keyframes lock-warning {
+	to {
+		visibility:hidden;
+	}
+}
+
+@-webkit-keyframes gauge-finish-her {
+	0% {
+		background:#222;
+	}
+	100% {
+		background:#d22;
+	}
 }

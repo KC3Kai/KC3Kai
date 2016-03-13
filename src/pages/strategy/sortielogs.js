@@ -5,7 +5,21 @@
 		BATTLE_INVALID = 0,
 		BATTLE_BASIC   = 1,
 		BATTLE_NIGHT   = 2,
-		BATTLE_AERIAL  = 4;
+		BATTLE_AERIAL  = 4,
+		
+		// Sortie Boss Node Indicator
+		// FIXME: this is not for translation. to test sortie status
+		SORTIE_STRING  = {
+			faild : "Did not reach boss",
+			fresh : "Did not able to hurt",
+			graze : "Hurt the boss a little",
+			light : "Lightly Damages the Boss",
+			modrt : "Moderately Damages the Boss",
+			heavy : "Heavily Damages the Boss",
+			despe : "Leaves the boss below 10HP",
+			endur : "Leaves the boss below 2HP",
+			destr : "Completely destroys"
+		};
 	
 	/* KC3 Sortie Logs
 			Arguments:
@@ -109,7 +123,7 @@
 									mapBox.addClass("notcleared");
 									// If HP-based gauge
 									if(typeof element.maxhp != "undefined"){
-										if(element.curhp>1){ // i want to approach last kill as JUST DO IT instead leaving 1HP only.
+										if(element.curhp>(element.baseHp || 1)){ // i want to approach last kill as JUST DO IT instead leaving 1HP only.
 											if((element.maxhp === 9999) || (element.curhp === 9999))
 												$(".map_hp_txt", mapBox).text( "???? / ????" );
 											else
@@ -306,14 +320,16 @@
 		Shows sorties on interface using list of collected sortie objects
 		---------------------------------*/
 		this.showList = function( sortieList ){
+			var self = this;
 			// Show sortie records on list
 			var sortieBox, fleets, fleetkey, mainFleet, isCombined, rshipBox, nodeBox, thisNode, sinkShips;
 			$.each(sortieList, function(id, sortie){
 				try {
+					var skey = ["m",sortie.world,sortie.mapnum].join('');
 					// Create sortie box
 					sortieBox = $(".tab_"+tabCode+" .factory .sortie_box").clone().appendTo(".tab_"+tabCode+" .sortie_list");
 					if(sortie.world >= 10) {
-						sortie.diff = sortie.diff || (maps["m"+sortie.world+sortie.mapnum] || {difficulty:0}).difficulty || 0;
+						sortie.diff = sortie.diff || (maps[skey] || {difficulty:0}).difficulty || 0;
 					}
 					if((sortie.diff || 0) > 0)
 						$(sortieBox)
@@ -386,117 +402,154 @@
 					// console.log("sortie.battles", sortie.battles);
 					
 					// For each battle
-					$.each(sortie.battles, function(index, battle){
-						var battleData, battleType;
+					if(sortie.battles.length===0){
+						$(".sortie_edges", sortieBox).append("<div class=\"nonodes\">Unable to record nodes</div>");
+						$(".sortie_edge ", sortieBox).hide();
 						
-						// Determine if day or night battle node
-						if(typeof battle.data.api_dock_id != "undefined"){
-							battleData = battle.data;
-							battleType = BATTLE_BASIC;
-						}else if(typeof battle.data.api_deck_id != "undefined"){
-							battleData = battle.data;
-							battleType = BATTLE_BASIC;
-						}else if(typeof battle.yasen.api_deck_id != "undefined"){
-							battleData = battle.yasen;
-							battleType = BATTLE_NIGHT;
-						}else{
-							battleType = BATTLE_INVALID;
-							return true;
-						}
 						
-						battle.shizunde |= [[],[]];
-						
-						// Show on node list
-						$(".sortie_edge_"+(index+1), sortieBox).addClass("active");
-						$(".sortie_edge_"+(index+1), sortieBox).html( KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node ) );
-						
-						// HTML elements
-						nodeBox = $(".tab_"+tabCode+" .factory .sortie_nodeinfo").clone();
-						$(".node_id", nodeBox).text( KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node ) );
-						
-						// Result Icons
-						$(".node_formation img", nodeBox).attr("src", KC3Meta.formationIcon(battleData.api_formation[0]) );
-						$(".node_formation", nodeBox).attr("title", KC3Meta.formationText(battleData.api_formation[0]) );
-						$(".node_rating img", nodeBox).attr("src", "../../assets/img/client/ratings/"+battle.rating+".png");
-						
-						// Kanmusu Drop
-						if(battle.drop > 0){
-							$(".node_drop img", nodeBox).attr("src", KC3Meta.shipIcon( battle.drop ) );
-						}else{
-							$(".node_drop img", nodeBox).attr("src", "../../assets/img/ui/shipdrop-x.png");
-						}
-						
-						// Support Exped Triggered
-						if(battle.data.api_support_flag > 0){
-							$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support.png");
-						}else{
-							$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support-x.png");
-						}
-						
-						// Enemies
-						$(".node_eformation img", nodeBox).attr("src", KC3Meta.formationIcon(battleData.api_formation[1]) );
-						$(".node_eformation", nodeBox).attr("title", KC3Meta.formationText(battleData.api_formation[1]) );
-						$.each(battleData.api_ship_ke, function(index, eship){
-							if(eship > -1){
-								$(".node_eship_"+(index+1)+" img", nodeBox).attr("src", KC3Meta.abyssIcon( eship ) );
-								$(".node_eship_"+(index+1), nodeBox).attr("title", [KC3Master.ship( eship ).api_name,KC3Master.ship( eship ).api_yomi].filter(function(x){return x.length>1;}).join("") );
-								$(".node_eship_"+(index+1), nodeBox).show();
+					}else{
+						$.each(sortie.battles, function(index, battle){
+							var battleData, battleType;
+							
+							// Determine if day or night battle node
+							if(typeof battle.data.api_dock_id != "undefined"){
+								battleData = battle.data;
+								battleType = BATTLE_BASIC;
+							}else if(typeof battle.data.api_deck_id != "undefined"){
+								battleData = battle.data;
+								battleType = BATTLE_BASIC;
+							}else if(typeof battle.yasen.api_deck_id != "undefined"){
+								battleData = battle.yasen;
+								battleType = BATTLE_NIGHT;
+							}else{
+								battleType = BATTLE_INVALID;
+								return true;
 							}
-						});
-						
-						// Process Battle
-						PlayerManager.combinedFleet = sortie.combined;
-						thisNode = (new KC3Node()).defineAsBattle();
-						if(typeof battle.data.api_dock_id != "undefined"){
-							thisNode.engage( battleData, sortie.fleetnum );
-						}else if(typeof battle.data.api_deck_id != "undefined"){
-							thisNode.engage( battleData, sortie.fleetnum );
-						}else if(typeof battle.yasen.api_deck_id != "undefined"){
-							thisNode.engageNight( battleData, sortie.fleetnum );
-						}
-						
-						sinkShips[0].concat(battle.shizunde[0]);
-						sinkShips[1].concat(battle.shizunde[1]);
-						
-						// Conditions
-						$(".node_engage", nodeBox).text( thisNode.engagement[2] );
-						$(".node_engage", nodeBox).addClass( thisNode.engagement[1] );
-						$(".node_contact", nodeBox).text(thisNode.fcontact +" vs "+thisNode.econtact);
-						
-						// Day Battle-only data
-						if((battleType & BATTLE_NIGHT) === 0){
-							$(".node_detect", nodeBox).text( thisNode.detection[0] );
-							$(".node_detect", nodeBox).addClass( thisNode.detection[1] );
 							
-							$(".node_airbattle", nodeBox).text( thisNode.airbattle[0] );
-							$(".node_airbattle", nodeBox).addClass( thisNode.airbattle[1] );
+							battle.shizunde |= [[],[]];
 							
-							["Fighters","Bombers"].forEach(function(planeType){
-								["player","abyssal"].forEach(function(side,jndex){
-									var nodeName = ".node_"+(planeType[0])+(side[0]=='p' ? 'F' : 'A');
-									// Plane total counts
-									$(nodeName+"T",nodeBox).text(thisNode["plane"+planeType][side][0]);
-									// Plane losses
-									if(thisNode["plane"+planeType][side][1] > 0)
-										$(nodeName+"L",nodeBox).text("-"+thisNode["plane"+planeType][side][1]);
-								});
+							// Show on node list
+							$(".sortie_edge_"+(index+1), sortieBox).addClass("active");
+							$(".sortie_edge_"+(index+1), sortieBox).html( KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node ) );
+							
+							// HTML elements
+							nodeBox = $(".tab_"+tabCode+" .factory .sortie_nodeinfo").clone();
+							$(".node_id", nodeBox).text( KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node ) );
+							
+							// Result Icons
+							$(".node_formation img", nodeBox).attr("src", KC3Meta.formationIcon(battleData.api_formation[0]) );
+							$(".node_formation", nodeBox).attr("title", KC3Meta.formationText(battleData.api_formation[0]) );
+							$(".node_rating img", nodeBox).attr("src", "../../assets/img/client/ratings/"+battle.rating+".png");
+							
+							// Kanmusu Drop
+							if(battle.drop > 0){
+								$(".node_drop img", nodeBox).attr("src", KC3Meta.shipIcon( battle.drop ) );
+							}else{
+								$(".node_drop img", nodeBox).attr("src", "../../assets/img/ui/shipdrop-x.png");
+							}
+							
+							// Support Exped Triggered
+							if(battle.data.api_support_flag > 0){
+								$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support.png");
+							}else{
+								$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support-x.png");
+							}
+							
+							// Enemies
+							$(".node_eformation img", nodeBox).attr("src", KC3Meta.formationIcon(battleData.api_formation[1]) );
+							$(".node_eformation", nodeBox).attr("title", KC3Meta.formationText(battleData.api_formation[1]) );
+							$.each(battleData.api_ship_ke, function(index, eship){
+								if(eship > -1){
+									$(".node_eship_"+(index+1)+" img", nodeBox).attr("src", KC3Meta.abyssIcon( eship ) );
+									$(".node_eship_"+(index+1), nodeBox).attr("title", [KC3Master.ship( eship ).api_name,KC3Master.ship( eship ).api_yomi].filter(function(x){return x.length>1;}).join("") );
+									$(".node_eship_"+(index+1), nodeBox).show();
+								}
 							});
-						}
-						
-						// Node EXP
-						[["base","nodal"],["hq","hq"]].forEach(function(x){
-							if(!!battle[x[0]+"EXP"]) {
-								$(".node_exp."+x[1]+" span",nodeBox).text(battle[x[0]+"EXP"]);
-							} else {
-								$(".node_exp."+x[1],nodeBox).css("visibility",'hidden');
+							
+							// Process Battle
+							PlayerManager.combinedFleet = sortie.combined;
+							thisNode = (new KC3Node()).defineAsBattle();
+							if(typeof battle.data.api_dock_id != "undefined"){
+								thisNode.engage( battleData, sortie.fleetnum );
+							}else if(typeof battle.data.api_deck_id != "undefined"){
+								thisNode.engage( battleData, sortie.fleetnum );
+							}else if(typeof battle.yasen.api_deck_id != "undefined"){
+								thisNode.engageNight( battleData, sortie.fleetnum );
 							}
+							
+							sinkShips[0].concat(battle.shizunde[0]);
+							sinkShips[1].concat(battle.shizunde[1]);
+							
+							// Conditions
+							$(".node_engage", nodeBox).text( thisNode.engagement[2] );
+							$(".node_engage", nodeBox).addClass( thisNode.engagement[1] );
+							$(".node_contact", nodeBox).text(thisNode.fcontact +" vs "+thisNode.econtact);
+							
+							// Day Battle-only data
+							if((battleType & BATTLE_NIGHT) === 0){
+								$(".node_detect", nodeBox).text( thisNode.detection[0] );
+								$(".node_detect", nodeBox).addClass( thisNode.detection[1] );
+								
+								$(".node_airbattle", nodeBox).text( thisNode.airbattle[0] );
+								$(".node_airbattle", nodeBox).addClass( thisNode.airbattle[1] );
+								
+								["Fighters","Bombers"].forEach(function(planeType){
+									["player","abyssal"].forEach(function(side,jndex){
+										var nodeName = ".node_"+(planeType[0])+(side[0]=='p' ? 'F' : 'A');
+										// Plane total counts
+										$(nodeName+"T",nodeBox).text(thisNode["plane"+planeType][side][0]);
+										// Plane losses
+										if(thisNode["plane"+planeType][side][1] > 0)
+											$(nodeName+"L",nodeBox).text("-"+thisNode["plane"+planeType][side][1]);
+									});
+								});
+							}
+							
+							// Node EXP
+							[["base","nodal"],["hq","hq"]].forEach(function(x){
+								if(!!battle[x[0]+"EXP"]) {
+									$(".node_exp."+x[1]+" span",nodeBox).text(battle[x[0]+"EXP"]);
+								} else {
+									$(".node_exp."+x[1],nodeBox).css("visibility",'hidden');
+								}
+							});
+							
+							// Add box to UI
+							$(".sortie_nodes", sortieBox).append( nodeBox );
 						});
 						
-						// Add box to UI
-						$(".sortie_nodes", sortieBox).append( nodeBox );
-					});
+					}
+					
 					$(".sortie_nodes", sortieBox).append( $("<div>").addClass("clear") );
-				}catch(e){console.error(e);console.error(e.stack);}
+					
+					var
+						mstat = self.maps[skey].stat,
+						sstat = $(".sortie_stat", sortieBox),
+						kstat = ["now","max"];
+					if(mstat && sstat.length) {
+						var
+							isHClear = mstat.onClear == sortie.id,
+							isCtBomb = mstat.onError.indexOf(sortie.id) >= 0,
+							stateKey = Object.keys(SORTIE_STRING).filter(function(statKey){
+								return (mstat.onBoss[statKey] || []).indexOf(sortie.id) >= 0;
+							}).shift();
+						try {
+							mstat.onBoss.hpdat[sortie.id].forEach(function(v,i){
+								$([".boss.",kstat[i],"hp"].join(''),sstat).text(v);
+							});
+							$(".sortie_end_clear",sstat).css('visibility',isHClear ? 'visible' : '');
+							$(".sortie_end_error",sstat).css('visibility',isCtBomb ? 'visible' : '');
+							$(".sortie_end_final",sstat)
+								.attr('title',SORTIE_STRING[stateKey || 'faild'])
+								.attr("src",
+									["../../../../assets/img/ui/estat_boss",stateKey || 'fresh',".png"].join('')
+								)
+								.css('opacity',1 / (1 + !stateKey));
+						} catch (e) {
+							throw e;
+						}
+					}
+				}catch(e){console.error(e.stack);}
 			});
 			
 			$(".tab_"+tabCode+" .pagination").show();
@@ -550,13 +603,19 @@
 				rcontext.drawImage( domImg, 0, 0, 400, 400, 0, 0, 400, 400 );
 				
 				KC3Database.get_sortie_data( sortieId, function(sortieData){
+					if(sortieData.battles.length===0){
+						self.exportingReplay = false;
+						$("body").css("opacity", "1");
+						return false;
+					}
 					
-					console.log(sortieData);
+					console.log(rcontext,sortieData);
 					rcontext.font = "26pt Calibri";
 					rcontext.fillStyle = '#ffffff';
 					rcontext.fillText(sortieData.world+"-"+sortieData.mapnum, 20, 215);
 					
 					rcontext.font = "20pt Calibri";
+					rcontext.fillStyle = '#ffffff';
 					rcontext.fillText(PlayerManager.hq.name, 100, 210);
 					
 					var fleetUsed = sortieData["fleet"+sortieData.fleetnum];

@@ -7,25 +7,29 @@
 		tabSelf: KC3StrategyTabs.docking,
 
 		shipCache:[],
-		filters: [],
 		options: [],
 		sortBy: "repair_docking",
 		sortAsc: true,
-		equipMode: 0,
-		remodelOption: 0,
-		modernizationOption: 0,
-		marriageFilter: 0,
-		withFleet: true,
 		isLoading: false,
-		//shipList: $(".tab_docking .ship_list"),
 
 		/* INIT
 		   Prepares all data needed
 		   ---------------------------------*/
 		init :function(){
-			// Cache ship info
+		},
+
+		/* EXECUTE
+		   Places data onto the interface
+		   ---------------------------------*/
+		execute :function(){
 			PlayerManager.loadFleets();
+
+			// in order to get more up-to-date info
+			// we need to refresh the Ship Manager
+			KC3ShipManager.load();
+			
 			var ctr, ThisShip, MasterShip, ThisShipData;
+			this.shipCache = [];
 			for(ctr in KC3ShipManager.list){
 				ThisShip = KC3ShipManager.list[ctr];
 				MasterShip = ThisShip.master();
@@ -51,12 +55,6 @@
 				};
 				this.shipCache.push(ThisShipData);
 			}
-		},
-
-		/* EXECUTE
-		   Places data onto the interface
-		   ---------------------------------*/
-		execute :function(){
 			this.shipList = $(".tab_docking .ship_list");
 			this.showFilters();
 		},
@@ -79,6 +77,27 @@
 
 			this.refreshTable();
 		},
+		// assuming PlayerManager.fleets is up-to-date
+		// return akashi coverage. (an array of ship ids)
+		getAnchoredShips: function() {
+			var results = [];
+			$.each( PlayerManager.fleets, function(k,fleet) {
+				var fs = KC3ShipManager.get(fleet.ships[0]);
+				// check if current fleet's flagship is akashi
+				if ([182,187].indexOf( fs.masterId ) === -1)
+					return;
+
+				var facCount = fs.items.filter( function(x) {
+					return KC3GearManager.get(x).masterId === 86;
+				}).length;
+				// max num of ships this akashi can repair
+				var repairCap = 2+facCount;
+				var coveredShipIds = fleet.ships.filter( function(x) {
+					return x !== -1; }).slice(0,repairCap);
+				results = results.concat( coveredShipIds );
+			});
+			return results;
+		},
 
 		/* REFRESH TABLE
 		   Reload ship list based on filters
@@ -93,9 +112,6 @@
 			// Clear list
 			this.shipList.html("").hide();
 
-			// Checks the configuration
-			var config = (new KekkonType()).values;
-
 			// Wait until execute
 			setTimeout(function(){
 				var shipCtr, cElm, cShip, shipLevel;
@@ -104,13 +120,13 @@
 				};
 				var FilteredShips = self.shipCache.filter(needsRepair);
 				var dockingShips = PlayerManager.getCachedDockingShips();
-
+				var anchoredShips = self.getAnchoredShips();
 				var currentFleets = PlayerManager.fleets;
 				var expeditionFleets = [];
 				$.each(currentFleets, function (i,fleet) {
 					try {
 						var missionState = fleet.mission[0];
-						// this fleet is either on expedition or being force back
+						// this fleet is either on expedition or being forced back
 						// thus cannot be repaired for now
 						if (missionState == 1 ||
 							missionState == 3) {
@@ -165,8 +181,16 @@
 					case "morale": returnVal = b.morale	 - a.morale; break;
 					case "hp": returnVal = b.hp	 - a.hp; break;
 					case "status": returnVal = a.hp / a.maxhp  - b.hp / b.maxhp; break;
-					case "repair_docking": returnVal = b.repairDocking - a.repairDocking; break;
-					case "repair_akashi": returnVal = b.repairAkashi - a.repairAkashi; break;
+					case "repair_docking":
+						returnVal = b.repairDocking - a.repairDocking; 
+						if (returnVal === 0 || (!isFinite(a.repairDocking) && !isFinite(b.repairDocking)))
+							returnVal = b.repairAkashi - a.repairAkashi;
+						break;
+					case "repair_akashi": 
+						returnVal = b.repairAkashi - a.repairAkashi;
+						if (returnVal === 0 || (!isFinite(a.repairAkashi) && !isFinite(b.repairAkashi)))
+							returnVal = b.repairDocking - a.repairDocking;
+						break;
 					default: returnVal = 0; break;
 					}
 					if(!self.sortAsc){ returnVal =- returnVal; }
@@ -186,14 +210,10 @@
 
 					$(".ship_id", cElm).text( cShip.id );
 					$(".ship_img .ship_icon", cElm).attr("src", KC3Meta.shipIcon(cShip.bid));
-					if(config.kanmusuPic && shipLevel >= 100)
-						$(".ship_img .ship_kekkon", cElm).attr("src","tabs/ships/SEGASonicRing.png").show();
 					$(".ship_name", cElm).text( cShip.english );
 					$(".ship_type", cElm).text( KC3Meta.stype(cShip.stype) );
-					var shipLevelConv = shipLevel - (shipLevel>=100 && config.kanmusuLv ? (102 - ConfigManager.marryLevelFormat) : 0);
+					var shipLevelConv = shipLevel;
 					$(".ship_lv", cElm).html( "<span>Lv.</span>" + shipLevelConv);
-					if(config.kanmusuLv && shipLevel >= 100)
-						$(".ship_lv", cElm).addClass("ship_kekkon ship_kekkon-color");
 					$(".ship_morale", cElm).html( cShip.morale );
 
 					var hpStatus = cShip.hp.toString() + " / " + cShip.maxhp.toString();
@@ -214,16 +234,20 @@
 					$(".ship_status", cElm).addClass("ship_" + cShip.damageStatus);
 					$(".ship_hp_val", cElm).addClass("ship_" + cShip.damageStatus);
 
-					// adding docking indicator
+					// mutually exclusive indicators
 					var completeTime = dockingShips["x" + cShip.id.toString()];
 					if (typeof completeTime !== "undefined") {
+						// adding docking indicator
 						cElm.addClass("ship_docking");
-					}
-
-					// adding expedition indicator
-					if (cShip.fleet !== 0 &&
+					} else if (cShip.fleet !== 0 &&
 						expeditionFleets.indexOf( cShip.fleet-1 ) !== -1) {
+						// adding expedition indicator
 						cElm.addClass("ship_expedition");
+					} else if (anchoredShips.indexOf(cShip.id) !== -1 &&
+							   (cShip.damageStatus === "normal" ||
+								cShip.damageStatus === "shouha")) {
+						// adding akashi repairing indicator
+						cElm.addClass("ship_akashi_repairing");
 					}
 
 					[1,2,3,4].forEach(function(x){
@@ -262,26 +286,4 @@
 			}
 		}
 	};
-
-	// checks kekkon setting
-	function KekkonType(){
-		var checks = {
-			kanmusuDT  : [0],	// ONLY show this
-			kanmusuName: [1],	// ring location: name
-			kanmusuLv  : [2,3], // ring location: level
-			kanmusuLv0 : [2],	// level convention, 0-index
-			kanmusuLv1 : [3],	// level convention, 1-index
-			kanmusuPic : [4],	// ring location: ship icon
-		};
-		if(!KekkonType.values) {
-			this.values = {};
-			KekkonType.instance = this;
-		}
-		Object.keys(checks).forEach(function(k){
-			KekkonType.instance.values[k] = (function(x){return x.indexOf(ConfigManager.marryLevelFormat || -1) >= 0;})(checks[k]);
-		});
-		return KekkonType.instance;
-	}
-	new KekkonType();
-
 })();

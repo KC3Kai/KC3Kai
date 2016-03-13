@@ -6,11 +6,14 @@
 	KC3StrategyTabs.mstgear.definition = {
 		tabSelf: KC3StrategyTabs.mstgear,
 		
+		server_ip: "",
+		
 		/* INIT
 		Prepares all data needed
 		---------------------------------*/
 		init :function(){
-			
+			var MyServer = (new KC3Server()).setNum( PlayerManager.hq.server );
+			this.server_ip = MyServer.ip;
 		},
 		
 		/* EXECUTE
@@ -21,11 +24,11 @@
 			
 			// List all equipment
 			var gearBox;
-			$.each(KC3Master._slotitem, function(index, GearData){
+			$.each(KC3Master.all_slotitems(), function(index, GearData){
 				gearBox = $(".tab_mstgear .factory .gearRecord").clone();
 				gearBox.data("id", GearData.api_id);
 				$(".gearIcon img", gearBox).attr("src", "../../../../assets/img/items/"+GearData.api_type[3]+".png" );
-				$(".gearName", gearBox).text( KC3Meta.gearName(GearData.api_name) );
+				$(".gearName", gearBox).text( "[" + GearData.api_id + "] " + KC3Meta.gearName(GearData.api_name) );
 				gearBox.appendTo(".tab_mstgear .gearRecords");
 			});
 			
@@ -49,7 +52,7 @@
 			console.log(gearData);
 			
 			if(gear_id<=500){
-				var gearHost = "http://125.6.189.71/kcs/resources/image/slotitem/";
+				var gearHost = "http://"+this.server_ip+"/kcs/resources/image/slotitem/";
 				var paddedId = (gear_id<10?"00":gear_id<100?"0":"")+gear_id;
 				$(".tab_mstgear .gearInfo .gearAsset img").attr("src", "");
 				$(".tab_mstgear .gearInfo .ga_1 img").attr("src", gearHost+"card/"+paddedId+".png");

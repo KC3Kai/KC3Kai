@@ -18,8 +18,7 @@ Does not include Ships and Gears which are managed by other Managers
 		buildSlots: 2,
 		combinedFleet: 0,
 		statistics: {},
-		lastRefresh: null,
-		
+	
 		init :function(){
 			this.hq = new KC3Player();
 			this.consumables = {
@@ -50,16 +49,16 @@ Does not include Ships and Gears which are managed by other Managers
 		},
 		
 		setFleets :function( data ){
-			this.fleets[0].update( data[0] || {} );
-			this.fleets[1].update( data[1] || {} );
-			this.fleets[2].update( data[2] || {} );
-			this.fleets[3].update( data[3] || {} );
+			var self = this;
+			[0,1,2,3].forEach(function(i){
+				self.fleets[i].update( data[i] || {} );
+			});
 			localStorage.fleets = JSON.stringify(this.fleets);
 		},
 		
 		setRepairDocks :function( data ){
 			var lastRepair = this.repairShips.map(function(x){return x;}); // clone
-			this.repairShips = [];
+			this.repairShips.splice(0);
 			var dockingShips = [];
 			var self = this;
 			$.each(data, function(ctr, ndock){
@@ -102,8 +101,8 @@ Does not include Ships and Gears which are managed by other Managers
 						dockingShips[key] = v.completeTime;
 					});
 				} catch (err) {
-					console.log( "Error while processing cached docking ship" );
-					console.log(err);
+					console.error( "Error while processing cached docking ship" );
+					console.error(err);
 				}
 			}
 			return dockingShips;
@@ -130,6 +129,7 @@ Does not include Ships and Gears which are managed by other Managers
 		setResources :function( data, stime ){
 			if(typeof localStorage.lastResource == "undefined"){ localStorage.lastResource = 0; }
 			var ResourceHour = Math.floor(stime/3600);
+			this.hq.lastMaterial = data;
 			if(ResourceHour == localStorage.lastResource){ return false; }
 			localStorage.lastResource = ResourceHour;
 			KC3Database.Resource({
@@ -192,11 +192,11 @@ Does not include Ships and Gears which are managed by other Managers
 		},
 		
 		setNewsfeed :function( data, stime ){
-			console.log("newsfeed", data);
+			//console.log("newsfeed", data);
 			$.each(data, function( index, element){
-				console.log("checking newsfeed item", element);
+				//console.log("checking newsfeed item", element);
 				if(parseInt(element.api_state, 10) !== 0){
-					console.log("saved news", element);
+					//console.log("saved news", element);
 					KC3Database.Newsfeed({
 						type: element.api_type,
 						message: element.api_message,
@@ -207,21 +207,72 @@ Does not include Ships and Gears which are managed by other Managers
 		},
 		
 		portRefresh :function( data ){
+			var
+				self      = this,
+				// get server time (as usual)
+				ctime     = Math.hrdInt("floor",(new Date(data.time)).getTime(),3,1);
 			
+			if(!(this.hq.lastPortTime && this.hq.lastMaterial)) {
+				if(!this.hq.lastPortTime)
+					this.hq.lastPortTime = ctime;
+				if(!this.hq.lastMaterial)
+					this.hq.lastMaterial = data.matAbs;
+				return false;
+			}
+			
+			this.fleets.forEach(function(fleet){ fleet.checkAkashi(true); });
+			
+			var
+				// get current player regen cap
+				regenCap  = this.hq.getRegenCap(),
+				// get regen time
+				regenTime = {
+					// find next multiplier of 3 from last time
+					start: Math.hrdInt("ceil" ,this.hq.lastPortTime,Math.log10(3 * 60),1),
+					// find last multiplier of 3 that does not exceeds the current time
+					end  : Math.hrdInt("floor",ctime,Math.log10(3 * 60),1),
+				},
+				// get regeneration ticks
+				regenRate = Math.max(0,regenTime.end - regenTime.start + 1),
+				// set regeneration amount
+				regenVal  = [3,3,3,1]
+					.map(function(x){return regenRate * x;})
+					.map(function(x,i){return Math.max(0,Math.min(x,regenCap - self.hq.lastMaterial[i]));});
+			console.log(this.hq.lastPortTime,regenTime,ctime);
+			// Check whether a server time is supplied, or keep the last refresh time.
+			this.hq.lastPortTime = (data.time && ctime) || (this.hq.lastPortTime);
+			console.info("regen" ,regenVal);
+			console.info.apply(console,["pRegenMat"].concat(this.hq.lastMaterial));
+			console.info.apply(console,["actualMat"].concat((this.hq.lastMaterial || []).map(function(x,i){
+				return (x || 0) + regenVal[i];
+			})));
+			KC3Database.Naverall({
+				hour:Math.hrdInt('floor',ctime/3.6,3,1),
+				type:'regen',
+				data:regenVal.concat([0,0,0,0])
+			});
+			this.hq.lastMaterial = data.matAbs || this.hq.lastMaterial;
+			
+			this.hq.save();
 		},
 		
 		loadFleets :function(){
 			if(typeof localStorage.fleets != "undefined"){
 				var oldFleets =JSON.parse( localStorage.fleets );
-				this.fleets = [
-					(new KC3Fleet()).defineFormatted(oldFleets[0]),
-					(new KC3Fleet()).defineFormatted(oldFleets[1]),
-					(new KC3Fleet()).defineFormatted(oldFleets[2]),
-					(new KC3Fleet()).defineFormatted(oldFleets[3])
-				];
+				this.fleets = this.fleets.map(function(x,i){
+					return (new KC3Fleet()).defineFormatted(oldFleets[i]);
+				});
 			}
 		}
 		
+	};
+	
+	PlayerManager.fleets_backup = function(){
+		return this.fleets.map(function(x,i){
+			return x.ships.map(function(s){
+				return new KC3Ship(KC3ShipManager.get(s));
+			});
+		});
 	};
 	
 })();

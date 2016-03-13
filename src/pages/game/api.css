@@ -9,13 +9,13 @@ body {
 
 .box-wrap {
 	width:800px;
-	height:480px;
+	height:100%;
 	margin:0px auto;
 	overflow:hidden;
 	background:url(../../assets/img/client/base.jpg);
 }
 .box-wrap.critical {
-	-webkit-filter: blur(1px);
+	/*-webkit-filter: blur(1px);*/
 }
 
 #factory {
@@ -99,12 +99,23 @@ body {
 --------------------------*/
 .box-wait {
 	width:800px;
-	height:480px;
+	height:100%;
 	padding:20px;
 	margin:0px auto;
 	border:1px inset #ccc;
 	background:rgba(255,255,255,.85);
 	display:none;
+}
+.box-wait .box-refresh,
+.box-wait .box-expired,
+.box-wait .box-ready {
+	display:none;
+}
+.box-refresh .refresh-box {
+	position:fixed;
+	top:0; left:0;
+	width:100%;
+	height:100%;
 }
 .box-wait .api_txt {
 	width:760px;
@@ -255,7 +266,7 @@ body {
 	}
 }
 /* Idle Timer */
-.box-game .game-idle-timer {
+.box-wrap .game-idle-timer {
 	display:none;
 	position: fixed;
 	left: 0;
@@ -271,13 +282,13 @@ body {
 	color: maroon;
 	transition: all 0.2s;
 }
-.box-game .game-idle-timer.safe-timer {
+.box-wrap .game-idle-timer.safe-timer {
 	color: olive;
 }
-.box-game .game-idle-timer:hover {
+.box-wrap .game-idle-timer:hover {
 	bottom: 0;
 }
-.box-game .game-idle-timer:before {
+.box-wrap .game-idle-timer:before {
 	content: " ";
 	position: absolute;
 	width: 100%;
@@ -287,15 +298,15 @@ body {
 	bottom: 24px;
 	transition: height 0.2s;
 }
-.box-game .game-idle-timer:hover:before {
+.box-wrap .game-idle-timer:hover:before {
 	height: 0px;
 }
 /* Refresh Toggle : Horizontal Panels (height >= 504px) */
 @media only screen and (min-height: 504px) {
-	.box-game .game-idle-timer {
+	.box-wrap .game-idle-timer {
 		bottom: 0;
 	}
-	.box-game .game-idle-timer:before {
+	.box-wrap .game-idle-timer:before {
 		display:none;
 	}
 }

@@ -11,6 +11,10 @@
 	font-size:12px;
 }
 
+.tab_mstship div {
+	position:relative;
+}
+
 /* FILTERS
 --------------------------------*/
 .tab_mstship .filters {
@@ -86,6 +90,7 @@
 	border:1px solid #ccc;
 	border-radius: 0px 8px 8px 0px;
 	padding:5px 5px 0px 5px;
+	position:relative;
 }
 
 
@@ -188,27 +193,40 @@
 .tab_mstship .shipInfo .equipment .sloticon {
 	width:20px;
 	height:20px;
+	line-height:20px;
 	float:left;
 	position:relative;
 	z-index:2;
 	background:#444;
-	border:1px solid #888;	border-radius:10px;
+	border-radius:10px;
+}
+.tab_mstship .shipInfo .equipment .sloticon img {
+	width:20px;
+	height:20px;
+	display:block;
 }
 .tab_mstship .shipInfo .equipment .slotitem {
-	width:150px;
+	width:200px;
 	height:16px;
+	line-height:16px;
 	float:left;
 	position:relative;
 	margin:2px 0px 0px -10px;
+	padding-left: 12px;
 	z-index:1;
+	color: white;
 	background:#444;
 	border-radius:0px 3px 3px 0px;
+	font-size:12px;
+	text-overflow: ellipsis;
+	overflow:hidden;
+	white-space: nowrap; 
 }
 
 /* Abyssal JSON */
 .tab_mstship .shipInfo .json {
 	width:245px;
-	height:260px;
+	height:69px;
 	float:left;
 	word-wrap: break-word;
 	word-break: break-all;
@@ -251,7 +269,6 @@
 	font-weight:bold;
 	margin:0px 5px 0px 0px;
 }
-
 .tab_mstship .shipInfo .more .rsc {
 	width:70px;
 	height:20px;
@@ -296,6 +313,19 @@
 .tab_mstship .shipInfo .more .remodel_level span {
 	font-weight:bold;
 }
+/* Other forms */
+.tab_mstship .shipInfo .more .other_forms_list {
+	float:left;
+	width:370px;
+	height:20px;
+	font-size:12px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+.tab_mstship .shipInfo .more .other_forms_list a {
+	margin:0px 10px 0px 0px;
+}
 /* Scrap Value */
 
 /* Modernization Value */
@@ -335,3 +365,44 @@
 	width:60px;
 	margin:0px 3px 2px 3px;
 }
+
+/* SPECIAL (Salt Check)
+-------------------------------*/
+.tab_mstship .shipInfo .tokubest {
+	position:absolute;
+	bottom:0;
+	right:0;
+	padding:4px;
+}
+
+.tab_mstship .shipInfo .tokubest .salty-zone {
+	display:none;
+	width : 120px;
+	height: 20px;
+	line-height: 18px;
+	border-radius: 3px;
+	font-size: 12px;
+	text-align: center;
+	padding: 1px;
+}
+
+.tab_mstship .shipInfo:not(.salted) .tokubest .salty-zone {
+	border: 1px solid #242;
+	background: #8c8;
+}
+
+.tab_mstship .shipInfo.salted .tokubest .salty-zone {
+	border: 1px solid #422;
+	background: #c88;
+}
+
+/* salt check */
+.tab_mstship .shipInfo.salted #saltable {
+	/* blur salt */
+	-webkit-filter: blur(24px);
+}
+.tab_mstship .shipRecord.salted {
+	/* trans salt */
+	opacity: 0;
+}
+/* salt check */
