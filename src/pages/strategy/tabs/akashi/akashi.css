@@ -1,0 +1,131 @@
+.tab_akashi {
+	width:680px;
+}
+.tab_akashi .factory {
+	display:none;
+}
+.tab_akashi .notice {
+	padding:5px 20px;
+	border:1px solid #e88;
+	background:#fee;
+	margin:5px 0px;
+	font-size:13px;
+	text-align:center;
+}
+
+/* WEEKDAYS
+--------------------------------*/
+.tab_akashi .weekdays {
+	width:680px;
+	height:34px;
+	line-height:24px;
+	padding:5px 0px;
+	margin:0px 0px 5px 0px;
+	font-weight:bold;
+}
+.tab_akashi .weekday {
+	width:90px;
+	height:24px;
+	margin:0px 5px 0px 0px;
+	background:#def;
+	float:left;
+	text-align:center;
+	color:#0033CC;
+}
+.tab_akashi .weekday.active {
+	color:#def;
+	background:#0033CC;
+}
+
+/* EQUIPMENT
+--------------------------------*/
+.tab_akashi .equipment_list {
+	width:680px;
+}
+.tab_akashi .equipment {
+	width:680px;
+	line-height:24px;
+	background:#def;
+	margin:0px 0px 5px 0px;
+	border-radius:8px;
+	padding:5px;
+}
+
+.tab_akashi .equipment.disabled {
+	opacity:0.4;
+	background:#fcc;
+}
+
+.tab_akashi .equipment .eq_icon {
+	width:24px;
+	height:24px;
+	float:left;
+	margin:0px 1px;
+}
+.tab_akashi .equipment .eq_icon img {
+	width:24px;
+	height:24px;
+}
+.tab_akashi .equipment .eq_name {
+	width:180px;
+	height:24px;
+	font-size:12px;
+	float:left;
+	overflow:hidden;
+	margin:0px 5px 0px 0px;
+}
+.tab_akashi .equipment .eq_ships {
+	width:150px;
+	float:left;
+	padding:3px 0px;
+	min-height:24px;
+}
+.tab_akashi .equipment .eq_have {
+	height:24px;
+	float:left;
+}
+.tab_akashi .equipment .eq_next {
+	height:24px;
+	float:left;
+}
+
+
+.tab_akashi .eq_ship {
+	width:150px;
+	height:24px;
+}
+.tab_akashi .eq_ship .eq_ship_icon {
+	width:24px;
+	height:24px;
+	float:left;
+}
+.tab_akashi .eq_ship .eq_ship_icon img {
+	width:20px;
+	height:20px;
+	margin:2px;
+}
+.tab_akashi .eq_ship .eq_ship_name {
+	float:left;
+}
+
+
+.tab_akashi .eq_inst {
+	width:40px;
+	height:22px;
+	margin:0px 2px 2px 0px;
+	border-radius:7px;
+	background:#def;
+}
+.tab_akashi .eq_inst .eq_inst_icon {
+	width:24px;
+	height:24px;
+	float:left;
+}
+.tab_akashi .eq_inst .eq_inst_upgrade img {
+	width:20px;
+	height:20px;
+	margin:2px;
+}
+.tab_akashi .eq_inst .eq_ship_name {
+	float:left;
+}

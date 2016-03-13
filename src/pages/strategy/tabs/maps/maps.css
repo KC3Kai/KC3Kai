@@ -1,6 +1,15 @@
 .tab_maps .factory {
 	display:none;
 }
+.tab_maps .replay_notice {
+	width:660px;
+	border:1px solid #3c3;
+	background:#dfd;
+	margin:10px auto 0px;
+	padding:5px 10px;
+	text-align:center;
+	font-size:12px;
+}
 
 /* WORLD LIST
 ---------------------------------*/
@@ -221,6 +230,11 @@
 	width:175px;
 	/*background:#ffc;*/
 	margin:0px 10px 0px 0px;
+}
+.tab_maps .sortie_list .nonodes {
+	height:30px;
+	line-height:30px;
+	font-size:12px;
 }
 .tab_maps .sortie_list .sortie_edge {
 	width:30px;
@@ -451,6 +465,7 @@
 	width:120px;
 	margin:5px 0px 0px 0px;
 	float:left;
+	white-space:nowrap;
 }
 .tab_maps .sortie_list .node_conds {
 	width:120px;
@@ -543,10 +558,32 @@
 	color:#f00;
 }
 .tab_maps .sortie_list .node_exp {
-	text-align: right;
+	display: inline-block;
 	color: cornflowerblue;
+	text-align: right;
+	width: 48%;
+	font-size: 0.8em;
+	padding-top: 12px;
+	position:relative;
 }
 .tab_maps .sortie_list .node_exp span {
 	color: black;
 	font-weight: bolder;
+	font-size: 1.25em;
+}
+.tab_maps .sortie_list .node_exp:before {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	display: block;
+	font-size: 0.8em;
+	text-align: center;
+	color: black;
+}
+.tab_maps .sortie_list .node_exp.hq:before {
+	content: "HQ EXP";
+}
+.tab_maps .sortie_list .node_exp.nodal:before {
+	content: "Node EXP";
 }

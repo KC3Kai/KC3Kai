@@ -12,6 +12,7 @@ Provides access to data on built-in JSON files
 		_cache:{},
 		_icons:{},
 		_exp:{},
+		_exp_ship:{},
 		_gauges:{},
 		_ship:{},
 		_defeq:{},
@@ -39,11 +40,12 @@ Provides access to data on built-in JSON files
 			
 			// Load Common Meta
 			this._icons		= JSON.parse( $.ajax(repo+'icons.json', { async: false }).responseText );
-			this._exp		= JSON.parse( $.ajax(repo+'experience.json', { async: false }).responseText );
+			this._exp		= JSON.parse( $.ajax(repo+'exp_hq.json', { async: false }).responseText );
+			this._exp_ship	= JSON.parse( $.ajax(repo+'exp_ship.json', { async: false }).responseText );
 			this._gauges	= JSON.parse( $.ajax(repo+'gauges.json', { async: false }).responseText );
 			this._defeq		= JSON.parse( $.ajax(repo+'defeq.json', { async: false }).responseText );
 			this._edges		= JSON.parse( $.ajax(repo+'edges.json', { async: false }).responseText );
-
+			
 			// Load Translations
 			this._ship 		= KC3Translation.getJSON(repo, 'ships', true);
 			this._slotitem	= KC3Translation.getJSON(repo, 'items', true);
@@ -52,8 +54,10 @@ Provides access to data on built-in JSON files
 			this._stype		= KC3Translation.getJSON(repo, 'stype', true);
 			this._servers	= KC3Translation.getJSON(repo, 'servers', true);
 			this._battle	= KC3Translation.getJSON(repo, 'battle', true);
-			this._terms.troll		= JSON.parse( $.ajax(repo+'translations/troll/terms.json', { async: false }).responseText );
-			this._terms.lang		= KC3Translation.getJSON(repo, 'terms');
+			// troll language always loaded
+			this._terms.troll		= JSON.parse( $.ajax(repo+'lang/data/troll/terms.json', { async: false }).responseText );
+			// other language loaded here
+			this._terms.lang		= KC3Translation.getJSON(repo, 'terms', true);
 		},
 		
 		loadQuotes :function(){
@@ -65,25 +69,18 @@ Provides access to data on built-in JSON files
 		defaultIcon :function(iconSrc){
 			this._defaultIcon = iconSrc;
 		},
-		
-		shipIcon :function(id, empty){
-			if(typeof this._icons[id] !== "undefined"){
-				return "http://i708.photobucket.com/albums/ww87/dragonjet25/KC3%20Ship%20Icons/"+this._icons[id];
+		getIcon: function(id, empty) {
+			if(this._icons.indexOf(id) > -1){
+				var path = id >= 500 ? "abyss/" : "ships/";
+				return "chrome-extension://"+chrome.runtime.id+"/assets/img/"+path+id+".png";
 			}
 			if(typeof empty == "undefined"){
 				return this._defaultIcon;
 			}
 			return empty;
 		},
-		
-		abyssIcon :function(id, empty){
-			if(typeof this._icons[id] !== "undefined"){
-				return "http://i708.photobucket.com/albums/ww87/dragonjet25/KC3%20Abyss%20Icons/"+this._icons[id];
-			}
-			if(typeof empty == "undefined"){
-				return this._defaultIcon;
-			}
-			return empty;
+		knownEnemy :function(id){
+			return this._icons.indexOf(id) > -1;
 		},
 		
 		formationIcon :function(formationId){
@@ -91,6 +88,9 @@ Provides access to data on built-in JSON files
 		},
 		
 		formationText :function(formationId){
+			return this._battle.formation[formationId] || "";
+			// Moved to battle.json, 'formation' array.
+			/*
 			return [
 				"",
 				"Line Ahead",
@@ -101,36 +101,68 @@ Provides access to data on built-in JSON files
 				"","","","","",
 				"Cruising Formation 1 (anti-sub)",
 				"Cruising Formation 2 (forward)",
-				"Cruising Formation 1 (anti-sub)",
-				"Cruising Formation 1 (anti-sub)",
+				"Cruising Formation 3 (anti-air)",
+				"Cruising Formation 4 (full-power)",
 				"","","","","","",
 				"Cruising Formation 1 (anti-sub)",
 				"Cruising Formation 2 (forward)",
-				"Cruising Formation 1 (anti-sub)",
-				"Cruising Formation 1 (anti-sub)"
+				"Cruising Formation 3 (anti-air)",
+				"Cruising Formation 4 (full-power)"
 			][formationId];
+			*/
 		},
 		
 		shipName :function( jp_name ){
+			// console.log( "---------request to TL---------", jp_name );
+			//if(typeof jp_name == "undefined"){ return "Unknown ship"; }
 			if(typeof this._cache[jp_name] !== "undefined"){ return this._cache[jp_name]; }
 			if(typeof this._ship[jp_name] !== "undefined"){
 				this._cache[jp_name] = this._ship[jp_name];
 				return this._cache[jp_name];
 			}
-			if( jp_name.substr(jp_name.length-1, 1) == "改" ){
-				var bare1 = jp_name.substr(0, jp_name.length-1);
-				if(typeof this._ship[bare1] !== "undefined"){
-					this._cache[jp_name] = this._ship[bare1] + " " + this._ship._Kai;
-					return this._cache[jp_name];
-				}
+			if(Object.keys(this._ship).length === 0){
+				return jp_name;
 			}
-			if( jp_name.substr(jp_name.length-2, 2) == "改二" ){
-				var bare2 = jp_name.substr(0, jp_name.length-2);
-				if(typeof this._ship[bare2] !== "undefined"){
-					this._cache[jp_name] = this._ship[bare2] + " " + this._ship._KaiNi;
-					return this._cache[jp_name];
-				}
+			var
+				bare = jp_name,
+				combin = [],
+				repTab = {
+					"甲"   : '_A',
+					"改二" : '_KaiNi',
+					"改"   : '_Kai',
+				},
+				repRes = null,
+				replaced = false;
+			// in here, the regular expression will read which one comes first (which mean, to be in the end of the name
+			// and then, the bare string will be chopped by how long the pattern match...
+			// the matched one, added to the combination stack (FILO)
+			// removing from the replacement table in order to prevent infinite loop ^^;
+			// if there's no match, it'll instantly stop and return the actual value
+			while( !!(repRes = (new RegExp(".+("+(Object.keys(repTab).join("|"))+")$",'gi')).exec(bare)) ){
+				bare = bare.substr(0, bare.length-repRes[1].length);
+				combin.unshift(this._ship[repTab[repRes[1]]]);
+				delete repTab[repRes[1]];
+				replaced = true;
 			}
+			// console.log("Remaining", bare, "with combination", combin.join(" "));
+			if(replaced) {
+				combin.unshift("");
+				// console.log("this._ship", this._ship);
+				// console.log("this._ship[bare]", this._ship[bare]);
+				if(typeof this._ship[bare] !== "undefined"){
+				} else {
+					if (typeof this._cache[bare] !== "undefined") {
+						this._cache[bare] = bare;
+					}
+				}
+				
+				this._cache[jp_name] = (this._ship[bare] || this._cache[bare] || bare) +
+					(combin.length > 0 ? combin.join(" ") : "");
+				return this._cache[jp_name] ;
+				// console.log("this._cache[jp_name]", this._cache[jp_name]);
+				// return this._cache[jp_name]; // being here means the jp_name is not cached. there's already a cache checker at the start of this function
+			}
+			// console.log("returning original:", jp_name);
 			return jp_name;
 		},
 		
@@ -143,6 +175,10 @@ Provides access to data on built-in JSON files
 		
 		exp :function(level){
 			return this._exp[level] || [0,0];
+		},
+		
+		expShip :function(level){
+			return this._exp_ship[level] || [0,0];
 		},
 		
 		quest :function(id){
@@ -183,15 +219,15 @@ Provides access to data on built-in JSON files
 		},
 
 		detection :function(index){
-			return this._battle.detection[index] || ["",""];
+			return this._battle.detection[index] || ["","",""];
 		},
 		
 		airbattle :function(index){
-			return this._battle.airbattle[index] || ["",""];
+			return this._battle.airbattle[index] || ["","","Unknown"];
 		},
 		
 		engagement :function(index){
-			return this._battle.engagement[index] || ["",""];
+			return this._battle.engagement[index] || ["","",""];
 		},
 		
 		term: function(key) {
@@ -226,4 +262,7 @@ Provides access to data on built-in JSON files
 		}
 	};
 	
+	window.KC3Meta.shipIcon = KC3Meta.getIcon;
+	window.KC3Meta.abyssIcon = KC3Meta.getIcon;
+
 })();

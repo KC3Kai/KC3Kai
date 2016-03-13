@@ -1,6 +1,15 @@
 .tab_event .factory {
 	display:none;
 }
+.tab_event .replay_notice {
+	width:660px;
+	border:1px solid #3c3;
+	background:#dfd;
+	margin:10px auto 0px;
+	padding:5px 10px;
+	text-align:center;
+	font-size:12px;
+}
 
 /* WORLD LIST
 ---------------------------------*/
@@ -248,6 +257,11 @@
 	/*background:#ffc;*/
 	margin:0px 10px 0px 0px;
 }
+.tab_event .sortie_list .nonodes {
+	height:30px;
+	line-height:30px;
+	font-size:12px;
+}
 .tab_event .sortie_list .sortie_edge {
 	width:30px;
 	height:30px;
@@ -271,7 +285,7 @@
 	/*background:#ffc;*/
 }
 .tab_event .sortie_list .sortie_toggle {
-	width:25px;
+	width:20px;
 	height:20px;
 	line-height:18px;
 	float:left;
@@ -281,7 +295,7 @@
 	background:#ace;
 	color:#fff;
 	border-radius:5px;
-	font-size:12px;
+	font-size:10px;
 	border:1px outset #9bd;
 }
 .tab_event .sortie_list .sortie_toggle.active {
@@ -477,6 +491,7 @@
 	width:120px;
 	margin:5px 0px 0px 0px;
 	float:left;
+	white-space:nowrap;
 }
 .tab_event .sortie_list .node_conds {
 	width:120px;
@@ -657,10 +672,66 @@
 	opacity:0.25;
 }
 .tab_event .sortie_list .node_exp {
-	text-align: right;
+	display: inline-block;
 	color: cornflowerblue;
+	text-align: right;
+	width: 48%;
+	font-size: 0.8em;
+	padding-top: 12px;
+	position:relative;
 }
 .tab_event .sortie_list .node_exp span {
 	color: black;
 	font-weight: bolder;
+	font-size: 1.25em;
+}
+.tab_event .sortie_list .node_exp:before {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	display: block;
+	font-size: 0.8em;
+	text-align: center;
+	color: black;
+}
+.tab_event .sortie_list .node_exp.hq:before {
+	content: "HQ EXP";
+}
+.tab_event .sortie_list .node_exp.nodal:before {
+	content: "Node EXP";
+}
+.tab_event .sortie_list .sortie_stat {
+	display: none;
+	position:relative;
+}
+.tab_event .sortie_list .sortie_end_hp {
+	display: inline-block;
+	width: 12%;
+	text-align: right;
+}
+.tab_event .sortie_list .sortie_end_hp .boss {
+	font-weight: bolder;
+	font-size: 1.1em;
+}
+.tab_event .sortie_list .sortie_end_hp .boss.nowhp {
+	color: green;
+}
+.tab_event .sortie_list .sortie_end_hp .boss.maxhp {
+	color: red;
+	font-size: 1.2em;
+}
+.tab_event .sortie_list .sortie_end_icon {
+	display: inline-block;
+	width: 85%;
+	margin-left:4px;
+}
+.tab_event .sortie_list .sortie_end_icon img {
+	width:32px;
+	height:32px;
+	visibility:hidden;
+}
+.tab_event .sortie_list .sortie_end_icon img.sortie_end_final {
+	visibility:visible;
+	opacity:1;
 }

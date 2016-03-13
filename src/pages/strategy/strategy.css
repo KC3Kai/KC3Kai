@@ -46,6 +46,7 @@ body {
 	padding:0px;
 	font-size:12px;
 	font-weight:bold;
+	white-space:nowrap;
 }
 #menu .submenu ul.menulist li {
 	width:100px;
@@ -80,7 +81,7 @@ body {
 -------------------------------*/
 #content {
 	width:700px;
-	min-height:1030px;
+	min-height:1300px;
 	float:left;
 	background:#fff;
 	border-radius:10px;

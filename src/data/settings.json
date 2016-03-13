@@ -1,7 +1,7 @@
 [
 	{
 		"section": "SettingsGlobal",
-		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Global",
+		"help" : "https://github.com/KC3Kai/KC3Kai/wiki/Settings%3A-Global",
 		"contents" : [
 			{
 				"id" : "language",
@@ -11,6 +11,7 @@
 					"choices" : [
 						[ "en", "English" ],
 						[ "de", "Deutsch" ],
+						[ "nl", "Dutch" ],
 						[ "es", "Español" ],
 						[ "fr", "Français" ],
 						[ "id", "Indonesian" ],
@@ -21,7 +22,7 @@
 						[ "ru", "Русский" ],
 						[ "scn", "简体中文" ],
 						[ "tcn", "繁體中文" ],
-						[ "troll", "Troll" ],
+						[ "th", "ภาษาไทย" ],
 						[ "vi", "Tiếng Việt" ]
 					]
 				}
@@ -60,6 +61,11 @@
 						[ 2, "SettingsTimeFinished" ]
 					]
 				}
+			},
+			{
+				"id": "checkLiveQuests",
+				"name": "SettingsCheckLiveQuests",
+				"type": "check"
 			}
 		]
 	},
@@ -111,6 +117,13 @@
 				"options" : {}
 			},
 			{
+				"id" : "info_salt",
+				"name" : "SettingsSaltyShip",
+				"type" : "check",
+				"hide" : 0,
+				"options" : {}
+			},
+			{
 				"id" : "info_troll",
 				"name" : "SettingsYasenTroll",
 				"type" : "check",
@@ -119,6 +132,30 @@
 			{
 				"id" : "info_delta",
 				"name" : "SettingsHQDelta",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_fleetstat",
+				"name" : "SettingsFleetStatus",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_auto_exped_tab",
+				"name" : "SettingsAutoExpedTab",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_eng_stype",
+				"name" : "SettingsEnglishShipType",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_jp_ship_item",
+				"name" : "SettingsJapaneseShipItem",
 				"type" : "check",
 				"options" : {}
 			}
@@ -150,6 +187,12 @@
 						[ "PNG", "PNG" ]
 					]
 				}
+			},
+			{
+				"id" : "ss_directory",
+				"name" : "SettingsSSDirectory",
+				"type" : "long_text",
+				"options" : { "placeholder" : "Specify subfolder of /Downloads/" }
 			}
 		]
 	},
@@ -163,7 +206,8 @@
 				"type" : "small_text",
 				"bound" : {
 					"min" : -300,
-					"max" :  300
+					"max" :  300,
+					"type": "Number"
 				},
 				"options" : { "label" : "SettingsSeconds" }
 			},
@@ -179,7 +223,8 @@
 				"type" : "small_text",
 				"bound" : {
 					"min" :  1,
-					"max" : 49
+					"max" : 49,
+					"type": "Number"
 				},
 				"options" : { "label" : "" }
 			},
@@ -189,7 +234,9 @@
 				"type" : "small_text",
 				"bound" : {
 					"min" : 0,
-					"max" : 5
+					"length_min" : 1,
+					"length_max" : 1,
+					"type": "Number"
 				},
 				"options" : { "label" : "SettingsSupplyBarLabel" }
 			},
@@ -224,13 +271,32 @@
 				"type" : "small_text",
 				"bound" : {
 					"min" :   0.0,
-					"max" : 100.0
+					"max" : 100.0,
+					"type": "Number"
 				},
 				"options" : { "label" : "%" }
 			},
 			{
 				"id" : "alert_desktop",
 				"name" : "SettingsDesktopNotif",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "alert_idle_counter",
+				"name" : "SettingsIdleWarning",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "None"],
+						[ 1, "SettingsHideCounter"],
+						[ 2, "SettingsShowCounter"]
+					]
+				}
+			},
+			{
+				"id" : "alert_taiha",
+				"name" : "SettingsTaihaAlert",
 				"type" : "check",
 				"options" : {}
 			}
@@ -276,7 +342,8 @@
 				"name" : "SettingsScreenMargin",
 				"type" : "small_text",
 				"bound" : {
-					"length_min": 1
+					"length_min": 1,
+					"type": "Number"
 				},
 				"options" : { "label" : "pixels" }
 			},
@@ -310,7 +377,8 @@
 				"type" : "small_text",
 				"bound" : {
 					"min" :  0.0,
-					"max" : null
+					"max" : null,
+					"type": "Number"
 				},
 				"options" : { "label" : "%" }
 			}
@@ -392,6 +460,52 @@
 		]
 	},
 	{
+		"section": "SettingsKC3DBSubmission",
+		"help" : "",
+		"contents" :[
+			{
+				"id" : "KC3DBSubmission_enabled",
+				"name" : "SettingsEnableKC3DBSubmission",
+				"type" : "check",
+				"options" : {}
+			}
+		]
+	},
+	{
+		"section": "SettingsDBSubmission",
+		"help" : "",
+		"contents" :[
+			{
+				"id" : "DBSubmission_enabled",
+				"name" : "SettingsEnableDBSubmission",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "DBSubmission_key",
+				"name" : "SettingsDBSubmissionKey",
+				"type" : "long_text",
+				"options" : {"placeholder" : "API Key" },
+				"bound" : {
+					"length_min" : 27,
+					"length_max" : 27
+				}
+			}
+		]
+	},
+	{
+		"section": "SettingsPoiDBSubmission",
+		"help" : "",
+		"contents" :[
+			{
+				"id" : "PoiDBSubmission_enabled",
+				"name" : "SettingsEnablePoiDBSubmission",
+				"type" : "check",
+				"options" : {}
+			}
+		]
+	},
+	{
 		"section": "Panel",
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Panel",
 		"contents" : [
@@ -402,7 +516,7 @@
 				"options" : {
 					"choices" : [
 						[ "natsuiro", "Natsuiro" ],
-						[ "default", "Legacy" ]
+						[ "plain", "Plain" ]
 					]
 				}
 			},
@@ -437,7 +551,8 @@
 				"bound" : {
 					"min" :   0.0,
 					"max" : 100.0,
-					"length_min" : 1
+					"length_min" : 1,
+					"type": "Number"
 				},
 				"options" : { "label" : "%" }
 			}

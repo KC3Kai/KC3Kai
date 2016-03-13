@@ -32,11 +32,18 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			localStorage.absoluteswf = request.swfsrc;
 			
 			// If refreshing API link, close source tabs and re-open game frame
-			if( localStorage.extract_api === "true"){ // localStorage has problems with native boolean
-				localStorage.extract_api = "false";
-				// #137 open window first before closing source tab
-				window.open("../pages/game/api.html", "kc3kai_game");
-				chrome.tabs.remove([sender.tab.id], function(){});
+			if(JSON.parse(localStorage.extract_api)){ // localStorage has problems with native boolean
+				localStorage.extract_api = false;
+				localStorage.apiUsage = Date.now() + 20 * 60 * 1000;
+				if(false) {
+					// #137 open window first before closing source tab
+					/* Conventional way API Refresh */
+					window.open("../pages/game/api.html", "kc3kai_game");
+					chrome.tabs.remove([sender.tab.id], function(){});
+				} else {
+					/* On-site API Refresh */
+					(new TMsg(sender.tab.id, "gamescreen", "api_refresh", {}, callback)).execute();
+				}
 			}
 		},
 		
@@ -70,6 +77,19 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		------------------------------------------*/
 		"activateGame" :function(request, sender, response){
 			(new TMsg(request.tabId, "gamescreen", "activateGame", {})).execute();
+		},
+		
+		/* Game Screen Change
+		A specific game screen manipulation. Such as idle timer, catbombing, and others. That marks
+		the guy who make this function is lazier than making another key for such purpose XD
+		(PS: self-insulting)
+		------------------------------------------*/
+		"gameScreenChg" :function(request, sender, response){
+			(new TMsg(request.tabId, "gamescreen", request.message_id || "goodResponses", {
+				tcp_status: request.tcp_status,
+				api_status: request.api_status,
+				api_result: request.api_result,
+			})).execute();
 		},
 		
 		/* QUEST OVERLAYS
@@ -110,6 +130,72 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			(new TMsg(request.tabId, "gamescreen", "fitScreen")).execute();
 		},
 		
+		/* IS MUTED
+		Returns boolean if the tab is muted or not
+		------------------------------------------*/
+		"isMuted" :function(request, sender, response){
+			chrome.tabs.get(request.tabId, function(tabInfo){
+				try {
+					response(tabInfo.mutedInfo.muted);
+				}catch(e){
+					response(false);
+				}
+			});
+			return true;
+		},
+		
+		/* TOGGLE SOUNDS
+		Mute or unmute the tab
+		------------------------------------------*/
+		"toggleSounds" :function(request, sender, response){
+			chrome.tabs.get(request.tabId, function(tabInfo){
+				try {
+					chrome.tabs.update(request.tabId, {
+						muted: tabInfo.mutedInfo.muted?false:true,
+					});
+					response(!tabInfo.mutedInfo.muted);
+				}catch(e){
+					response(false);
+				}
+				return true;
+			});
+			return true;
+		},
+		
+		/* OPEN COOKIE SETTINGS
+		DevTools can't use chrome.tabs by itself, so service will open the page for them
+		------------------------------------------*/
+		"openCookieSettings" :function(request, sender, response){
+			chrome.tabs.create({
+				url:'chrome://settings/content'
+			});
+		},
+		
+		/* DMM FRMAE INJECTION
+		Responds if content script should inject DMM Frame customizations
+		------------------------------------------*/
+		"dmmFrameInject" :function(request, sender, response){
+			if(sender.tab.url.indexOf("/pages/game/dmm.html") > -1){
+				response({value:true});
+			}else{
+				response({value:false});
+			}
+		},
+		
+		/* TAIHA ALERT START
+		Start bloody taiha indicator on-screen
+		------------------------------------------*/
+		"taihaAlertStart" :function(request, sender, response){
+			(new TMsg(request.tabId, "gamescreen", "taihaAlertStart")).execute();
+		},
+		
+		/* TAIHA ALERT STOP
+		Stop bloody taiha indicator on-screen
+		------------------------------------------*/
+		"taihaAlertStop" :function(request, sender, response){
+			(new TMsg(request.tabId, "gamescreen", "taihaAlertStop")).execute();
+		},
+
 		/* SUBTITLES
 		When a ship speaks, show subtitles
 		------------------------------------------*/
@@ -121,7 +207,6 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				voiceNum: request.voiceNum,
 				url: request.url
 			})).execute();
-		}
 		
 	};
 	

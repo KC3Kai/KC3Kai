@@ -7,8 +7,9 @@ Uses Dexie.js third-party plugin on the assets directory
 (function(){
 	"use strict";
 	
+	var dbIndex = 0;
+	
 	window.KC3Database = {
-		index: 0,
 		con:{},
 		
 		init :function( defaultUser ){
@@ -136,6 +137,64 @@ Uses Dexie.js third-party plugin on the assets directory
 						},
 						vr: 6.5,
 					},
+					{
+						ch: {
+							/** Expedition Alter Proposal
+							Keys        DataType        Description
+							(+)Fleet    Ships[6]        (Add) data that represents the current fleet (use sortie style, adaptable result)
+							(-)Ships    integer[2][7]   (Rem) data that represents ship-level meaning
+							(-)Equip    integer[5][7]   (Rem) data that represents ship equipment
+							------------------------------------- **/
+							expedition: "++id,hq,data,mission,fleet,shipXP,admiralXP,items,time",
+							/** Naval Overall Proposal
+							Keys        DataType        Description
+							ID          PRIMARY-AUTOINC 
+							HQ          char[8]         Describes the HQ ID of the admiral
+							Hour        integer         Describes the UTC time, as standard of resources and consumables
+							Type        char[*]         Representing the material/useitem change method
+							Data        integer[8]      Changes that describes the current action
+							------------------------------------- **/
+							navaloverall: "++id,hq,hour,type,data",
+						},
+						up: function(self){
+							// Upgrade Expedition Table
+							self.expedition.toCollection().modify(function(mission){
+								mission.fleet = [];
+								mission.ships.shift();
+								mission.equip = mission.equip || Array.apply(null,mission.ships)                       /** check expedition equipment, or */
+									.map(function(x){return Array.apply(null,{length:5}).map(function(){return -1;});}); /*  generate empty equipment list */
+								mission.equip.shift();
+								mission.ships.forEach(function(x,i){
+									/** data migrating process
+									    ship master id, level, and equipment (if available)
+									  will be transferred to the standard sortie json format.
+									  any other data that remain unknown, are kept it's
+									  unknownness.
+									--------------------------------------------------------- */
+									mission.fleet.push({
+										mst_id: KC3ShipManager.get(x[0]).masterId,
+										level: x[1],
+										kyouka: Array.apply(null,{length:5}).map(function(){return '??';}),
+										morale: '??',
+										equip: mission.equip.shift()
+									});
+								});
+								delete mission.equip;
+								delete mission.ships;
+							});
+						},
+						vr: 6.6,
+					},
+					{
+						ch: {
+							enemy: "&id,hp,fp,tp,aa,ar,eq1,eq2,eq3,eq4",
+							encounters: "&uniqid,world,map,node,form,ke"
+						},
+						up: function(t){
+							console.log("V7",t);
+						},
+						vr: 7,
+					}
 				];
 				
 			// Process the queue
@@ -230,9 +289,9 @@ Uses Dexie.js third-party plugin on the assets directory
 		
 		Screenshot :function(imgur){
 			this.con.screenshots.add({
-				hq : this.index,
+				hq : 0,
 				imgur : imgur,
-				ltime : Math.floor((new Date()).getTime()/1000),
+				ltime : Math.floor(Date.now()/1000),
 			});
 		},
 		
@@ -241,9 +300,44 @@ Uses Dexie.js third-party plugin on the assets directory
 			this.con.develop.add(data);
 		},
 		
-		Expedition :function(data){
+		Expedition :function(data,callback){
 			data.hq = this.index;
-			this.con.expedition.add(data);
+			this.con.expedition.add(data).then(callback);
+		},
+		
+		Naverall :function(data,type,force){
+			data.hq = this.index;
+			data.data = data.data.map(function(x){return parseInt(x);});
+			if(data.data.every(function(x){return !x;}) && !force)
+				return false;
+			if(!type) {
+				this.con.navaloverall.add(data);
+			} else {
+				this.con.navaloverall
+					.where("type").equals(type)
+					.reverse().limit(1)
+					.modify(function(old){
+						old.data = old.data.map(function(x,i){return x + data.data[i];});
+				});
+			}
+			return true;
+		},
+		
+		Enemy :function(data,callback){
+			try {
+				this.con.enemy.add(data);
+			} catch (e) {
+				console.log("Enemy data already exists.");
+			}
+		},
+		
+		Encounter :function(data,callback){
+			try {
+				this.con.encounters.add(data);
+			} catch (e) {
+				console.log("Enemy composition already exists.");
+			}
+			
 		},
 		
 		/* [GET] Retrive logs from Local DB
@@ -275,6 +369,24 @@ Uses Dexie.js third-party plugin on the assets directory
 		count_lscs: function(callback){
 			this.con.lsc
 				.where("hq").equals(this.index)
+				.count(callback);
+		},
+		
+		get_expeds :function(pageNumber, expeds, fleets, callback){
+			 console.log("expeds", expeds);
+			var itemsPerPage = 20;
+			this.con.expedition
+				.where("hq").equals(this.index)
+				.and(function(exped){ return expeds.indexOf(exped.mission) > -1; })
+				.reverse()
+				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
+				.toArray(callback);
+		},
+		
+		count_expeds: function(expeds, fleets, callback){
+			this.con.expedition
+				.where("hq").equals(this.index)
+				.and(function(exped){ return expeds.indexOf(exped.mission) > -1; })
 				.count(callback);
 		},
 		
@@ -315,6 +427,28 @@ Uses Dexie.js third-party plugin on the assets directory
 							}
 							callback(sortieIndexed);
 						});
+				});
+		},
+		
+		get_sortie_maps :function(sortieRange, callback) {
+			// Clamp Range Input
+			sortieRange = ((sortieRange && (sortieRange.length >= 2) && sortieRange) || [null,null])
+				.splice(0,2)
+				.map(function(x,i){ return x || [0,Infinity][i];})
+				.sort();
+			
+			this.con.sortie
+				.where("hq").equals(this.index)
+				.offset(sortieRange[0]).limit( sortieRange.reduceRight(function(x,y){return x-y+1;}) )
+				.toArray(function(sortieList){
+					var wmHash = {}, sortieObj, cnt = 0;
+					for(var ctr in sortieList){
+						sortieObj = sortieList[ctr];
+						wmHash[ sortieObj.id ] = {0:sortieObj.world,1:sortieObj.mapnum,time:sortieObj.time};
+						cnt++;
+					}
+					Object.defineProperty(wmHash,'length',{value:cnt});
+					callback(wmHash);
 				});
 		},
 		
@@ -411,6 +545,26 @@ Uses Dexie.js third-party plugin on the assets directory
 				});
 		},
 		
+		get_sortie_data :function(sortie_id, callback){
+			var self = this;
+			var sortie_data = {};
+			console.log("firing");
+			this.con.sortie
+				.where("id").equals(sortie_id)
+				.toArray(function(sortieList){
+					console.log(sortieList);
+					sortie_data = sortieList[0];
+					
+					self.con.battle
+						.where("sortie_id").anyOf(sortie_id)
+						.toArray(function(battleList){
+							console.log(battleList);
+							sortie_data.battles = battleList;
+							callback(sortie_data);
+						});
+				});
+		},
+		
 		get_battle : function(mapArea, mapNo, battleNode, enemyId, callback) {
 			var sortieIds = [];
 			var bctr;
@@ -474,10 +628,28 @@ Uses Dexie.js third-party plugin on the assets directory
 				});
 		},
 		
+		get_enemyInfo :function(shipId, callback){
+			console.log("get_enemyInfo", shipId, this.con.enemy);
+			try {
+				this.con.enemy
+					.where("id").equals(shipId)
+					.toArray(function(matchList){
+						console.log("matchList", matchList);
+						if(matchList.length > 0){
+							callback(matchList[0]);
+						}else{
+							callback(false);
+						}
+					});
+				return true;
+			} catch (e) {
+				console.error(e);
+			}
+		},
+		
 		get_resource :function(HourNow, callback){
 			var self = this;
 			this.con.resource
-				.where("hour").above(HourNow-720)
 				.toArray(function(response){
 					var callbackResponse = [];
 					
@@ -494,7 +666,6 @@ Uses Dexie.js third-party plugin on the assets directory
 		get_useitem :function(HourNow, callback){
 			var self = this;
 			this.con.useitem
-				.where("hour").above(HourNow-720)
 				.toArray(function(response){
 					var callbackResponse = [];
 					
@@ -532,6 +703,83 @@ Uses Dexie.js third-party plugin on the assets directory
 			callback("{}");
 		},
 		
+		count_screenshots: function(callback){
+			this.con.screenshots.count(callback);
+		},
+		
+		get_screenshots :function(pageNumber, callback){
+			var itemsPerPage = 20;
+			this.con.screenshots
+				.reverse()
+				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
+				.toArray(callback);
+		},
+		
+		get_lodger_bound :function(callback){
+			this.con.navaloverall
+				.where("hq").equals(this.index)
+				.limit(1)
+				.toArray(function(data){
+					switch(data.length){
+						case 0:
+							callback(null);
+						break;
+						default:
+							callback(data.shift().hour * 3600000);
+						break;
+					}
+				});
+		},
+		
+		get_lodger_data :function(iFilters, callbackSucc, callbackFail){
+			/*
+				DataHead  Param1
+				sortie    SortieDBID
+				pvp       PvPID
+				exped     ExpedDBID
+				quest     QuestID
+				crship    ShipSlot
+				critem    ------
+				dsship    ShipMaster
+				dsitem    ItemMaster
+				akashi    ShipMaster
+				rmditem   ItemMaster
+				remodel   ShipMaster
+				regen     ------
+			*/
+			// hour filter
+			iFilters = (
+				(
+					typeof iFilters == 'object' && (typeof iFilters.length == 'number') &&
+					iFilters.length >= 2 && iFilters
+				) || Range(0,Infinity,0,1)
+			);
+			this.con.navaloverall
+				.where("hq").equals(this.index)
+				.and(function(data){
+					// hFilter Condition Definition:
+					// false: if specified id outside the boundary
+					// prec : undefined condition is towards infinite of its polar
+					return (0).inside.apply(data.id,iFilters);
+				})
+				.reverse()
+				.toArray()
+				.then (callbackSucc || $.nop())
+				.catch(callbackFail || function(e){console.error(e);});
+		},
+		
 	};
+	
+	// Prevent the user ID stored as non-string
+	Object.defineProperty(window.KC3Database,'index',{
+		get:function(){return String(dbIndex);},
+		set:function(value){dbIndex = String(value);},
+		enumerable:true
+	});
+	
+	// probably keep this to save memory
+	function processLodgerKey(k) {
+		return /([a-z]+)/.exec(k)[1];
+	}
 	
 })();

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<!-- @nonbuildstart -->
+		<link href="../../assets/css/bootstrap.css" rel="stylesheet" type="text/css">
+		<!-- @nonbuildend -->
+		<link href="../../assets/css/global.css" rel="stylesheet" type="text/css">
+		<link href="../../assets/css/keys.css" rel="stylesheet" type="text/css">
+		<link href="api.css" rel="stylesheet" type="text/css">
+		<title>KC3改</title>
+		<link rel="shortcut icon" href="../../assets/img/logo/48.png" type="image/x-icon" />
+	</head>
+	<body>
+		<div id="critical" class="anim1"></div>
+		
+		<div class="box-wrap">
+			
+			<!-- WAIT ACTIVATION -->
+			<div class="box-wait">
+				<div class="notice i18n">GameDMMFrame</div>
+				<div class="faq_title i18n">GameStartDashTitle</div>
+				<div class="faq_content">
+					<span class="i18n">GameStartDashDesc</span>
+					<ul>
+						<li><span class="i18n">GameStartDashWin</span> <kbd class="light">F12</kbd></li>
+						<li><span class="i18n">GameStartDashOr</span> <kbd class="light">Ctrl</kbd> + <kbd class="light">Shift</kbd> + <kbd class="light">J</kbd></li>
+						<li><span class="i18n">GameStartDashMac</span> <kbd class="light">Cmd</kbd> + <kbd class="light">Opt</kbd> + <kbd class="light">I</kbd></li>
+					</ul>
+					<span class="i18n">GameStartDashChrome</span>
+				</div>
+				<div class="faq_title"><em class="i18n">GameStartNowTitle</em></div>
+				<div class="faq_content">
+					<div class="i18n">GameStartNowDesc</div>
+					<div class="play_now">
+						<button class="play_btn i18n">GameStartNowBtn</button>
+					</div>
+				</div>
+			</div>
+			
+			<!-- PLAY GAME -->
+			<div class="box-game">
+				<div class="overlays">
+					<!-- Quest Overlay -->
+					<div class="overlay_box overlay_quests">
+						
+					</div>
+					
+					<!-- Record Overlays -->
+					<div class="overlay_box overlay_record">
+						<div class="overlay ol_record_sorties"></div>
+						<div class="overlay ol_record_expeditions"></div>
+						<div class="overlay ol_record_pvp"></div>
+						<div class="overlay ol_record_ownership"></div>
+						<div class="overlay ol_record_maxstats"></div>
+						<div class="overlay ol_record_levelup"></div>
+						<div class="overlay ol_record_bgm"></div>
+						<div class="overlay ol_record_experience"></div>
+						<div class="overlay ol_record_name"></div>
+						<div class="overlay ol_record_rank"></div>
+					</div>
+					
+					<!-- AutoFocus Regain Bar -->
+					<div class="overlay_box focus_regain">
+						<div class="focus_val"></div>
+					</div>
+					
+					<!-- Blood on Taiha -->
+					<div class="overlay_box taiha_blood"></div>
+					<div class="overlay_box taiha_red anim1"></div>
+					
+				</div>
+				
+				<!-- Refresh Button -->
+				<div class="game-refresh no-select" title="Keep clicking this counter to zero and the game refreshes.">05</div>
+				
+				<!-- Idle Timer -->
+				<div class="game-idle-timer no-select">--:--:--</div>
+				
+			</div>
+			
+		</div>
+		
+		<!-- FACTORY -->
+		<div id="factory">
+			
+			<!-- Quest Overlay -->
+			<div class="overlay ol_quest ol_quest_exist">
+				<div class="icon"></div>
+				<div class="content">
+					<div class="name"></div>
+					<div class="desc"></div>
+				</div>
+				<div class="tracking"></div>
+			</div>
+			
+			<div class="overlay ol_quest ol_quest_empty"></div>
+			
+		</div>
+		
+		<script type="text/javascript" src="../../assets/js/global.js"></script>
+		<script type="text/javascript" src="../../../../assets/js/Dexie.min.js"></script>
+		<!-- @buildimportjs ../../library/objects.js -->
+		<!-- @buildimportjs ../../library/managers.js -->
+		<!-- @nonbuildstart -->
+		<script type="text/javascript" src="../../assets/js/jquery-2.1.3.min.js"></script>
+		<script type="text/javascript" src="../../library/managers/ConfigManager.js"></script>
+		<script type="text/javascript" src="../../library/managers/QuestManager.js"></script>
+		<script type="text/javascript" src="../../library/objects/Quest.js"></script>
+		<script type="text/javascript" src="../../library/objects/Screenshot.js"></script>
+		<!-- @nonbuildend -->
+		<script type="text/javascript" src="../../library/modules/Translation.js"></script>
+		<script type="text/javascript" src="../../library/modules/Database.js"></script>
+		<script type="text/javascript" src="../../library/modules/Meta.js"></script>
+		<script type="text/javascript" src="dmm.js"></script>
+	</body>
+</html>

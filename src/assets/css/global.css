@@ -3,7 +3,7 @@
 	cursor:pointer;
 }
 .clear {
-	clear:both;
+	clear:both !important;
 }
 .i18n {
 	visibility:hidden;

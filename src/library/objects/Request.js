@@ -20,7 +20,6 @@ Executes processing and relies on KC3Network for the triggers
 		this.response = {};
 	};
 	
-	
 	/* VALIDATE HEADERS
 	
 	------------------------------------------*/
@@ -28,8 +27,8 @@ Executes processing and relies on KC3Network for the triggers
 		// If response header statusCode is not 200, means non-in-game error
 		if(this.statusCode != 200){
 			KC3Network.trigger("CatBomb", {
-				title: "Server Communication Error",
-				message: "["+this.call+"] failed to communicate with the server. It is not a matter of API link, but somewhat on your connectivity or environment"
+				title: KC3Meta.term("CatBombServerCommErrorTitle"),
+				message: KC3Meta.term("CatBombServerCommErrorMsg").format([this.call])
 			});
 			return false;
 		}
@@ -78,8 +77,8 @@ Executes processing and relies on KC3Network for the triggers
 			// If it fails on "api_start2" which is the first API call
 			if(this.call == "api_start2"){
 				KC3Network.trigger( "CatBomb", {
-					title: "Hard API Error",
-					message: "The server responded with an error for your API calls. You might be using an expired API link, or it's probably maintenance! You may want to <a href=\"http://kancolle.wikia.com/wiki/Recent_Updates#Future_updates\" target=\"_blank\">check the wikia for notices</a>, or refresh your API link."
+					title: KC3Meta.term("CatBombHardAPIErrorTitle"),
+					message: KC3Meta.term("CatBombHardAPIErrorMsg")
 				});
 				return false;
 			}
@@ -87,22 +86,22 @@ Executes processing and relies on KC3Network for the triggers
 			// If it fails on "api_port" which is usually caused by system clock
 			if(this.call == "api_port/port"){
 				// Check if user's clock is correct
-				var ComputerClock = new Date().getTime();
-				var ServerClock = new Date( app.Util.findParam(this.headers, "Date") ).getTime();
+				var computerClock = new Date().getTime();
+				var serverClock = new Date( this.headers.Date ).getTime();
 				
 				// If clock difference is greater than 5 minutes
-				var timeDiff = Math.abs(ComputerClock - ServerClock);
+				var timeDiff = Math.abs(computerClock - serverClock);
 				if(timeDiff > 300000){
 					KC3Network.trigger("CatBomb", {
-						title: "Wrong Computer Clock!",
-						message: "Please correct your computer clock. You do not need to be on Japan timezone, but it needs to be the correct local time for your local timezone! Your clock is off by "+Math.ceil(timeDiff/60000)+" minutes."
+						title: KC3Meta.term("CatBombWrongComputerClockTitle"),
+						message: KC3Meta.term("CatBombWrongComputerClockMsg").format(Math.ceil(timeDiff/60000))
 					});
 					
 				// Something else other than clock is wrong
 				}else{
 					KC3Network.trigger("CatBomb", {
-						title: "Error when entering Home Port screen",
-						message: "Please reload the game."
+						title: KC3Meta.term("CatBombErrorOnHomePortTitle"),
+						message: KC3Meta.term("CatBombErrorOnHomePortMsg")
 					});
 				}
 				return false;
@@ -110,11 +109,24 @@ Executes processing and relies on KC3Network for the triggers
 			
 			// Some other API Call failed
 			KC3Network.trigger("CatBomb", {
-				title: "API Data Error",
-				message: "The most recent action completed the network communication with server but returned an error. Check if it's now maintenance, or if your API link is still working."
+				title: KC3Meta.term("CatBombAPIDataErrorTitle"),
+				message: KC3Meta.term("CatBombAPIDataErrorMsg")
 			});
 			
 			return false;
+		} else {
+			// Check availability of the headers.Date
+			if(!this.headers.Date) {
+				if(!KC3Request.headerReminder) {
+					KC3Network.trigger("CatBomb", {
+						title: KC3Meta.term("CatBombMissingServerTimeTitle"),
+						message: KC3Meta.term("CatBombMissingServerTimeMsg")
+					});
+					KC3Request.headerReminder = true;
+				}
+				// Fallback to use local machine time
+				this.headers.Date = new Date().toUTCString();
+			}
 		}
 		return true;
 	};
@@ -123,14 +135,22 @@ Executes processing and relies on KC3Network for the triggers
 	
 	------------------------------------------*/
 	KC3Request.prototype.process = function(){
-		// check clock and clear quests at 5AM JST
-		var serverJstTime = new Date( this.headers.Date ).getTime();
-		KC3QuestManager.checkAndResetQuests(serverJstTime);
-		
 		// If API call is supported
 		if(typeof Kcsapi[this.call] != "undefined"){
+			// check clock and clear quests at 5AM JST
+			var serverTime = Date.safeToUtcTime( this.headers.Date );
+			try {
+				KC3QuestManager.checkAndResetQuests(serverTime);
+			} catch (e) {
+				console.error(e.stack);
+			}
+			
 			// Execute by passing data
-			Kcsapi[this.call]( this.params, this.response, this.headers );
+			try {
+				Kcsapi[this.call]( this.params, this.response, this.headers );
+			} catch (e) {
+				throw e;
+			}
 		}
 	};
 	

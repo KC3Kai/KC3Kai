@@ -16,6 +16,7 @@
 	line-height:24px;
 	margin:0px 0px 2px 0px;
 	background:#eee;
+	white-space:nowrap;
 }
 .tab_crafts .build_item .build_field {
 	float:left;
@@ -73,7 +74,7 @@
 	margin:2px;
 }
 .tab_crafts .build_item .build_result {
-	width:140px;
+	width:130px;
 	overflow:hidden;
 	margin:0px 5px 0px 0px;
 	font-size:12px;
@@ -81,7 +82,7 @@
 	overflow:hidden;
 }
 .tab_crafts .build_item .build_time {
-	width:130px;
+	width:140px;
 	font-size:11px;
 	color:#999;
 }

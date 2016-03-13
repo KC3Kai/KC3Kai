@@ -13,12 +13,20 @@ Retreives when needed to apply on components
 		// Default values. As a function to not include on JSON string
 		defaults : function(){
 			return {
-				version				: 7,
+				version				: 8,
 				language			: "en",
 				elosFormula 		: 3,
 				hqExpDetail 		: 1,
 				timerDisplayType	: 1,
-				marryLevelFormat: 0,
+				marryLevelFormat	: 0,
+				checkLiveQuests		: true,
+				
+				DBSubmission_enabled: 0,
+				DBSubmission_key : '',
+
+				PoiDBSubmission_enabled: false,
+				
+				KC3DBSubmission_enabled: true,
 				
 				info_face 			: true,
 				info_drop 			: true,
@@ -27,11 +35,53 @@ Retreives when needed to apply on components
 				info_battle 		: true,
 				info_btstamp 		: false,
 				info_boss 			: false,
+				info_salt 			: false,
 				info_troll 			: false,
 				info_delta 			: false,
+				info_fleetstat 		: true,
+				info_auto_exped_tab : true,
+				info_eng_stype		: false,
+				info_jp_ship_item	: false,
+
+				// AIR PROFICIENCY BONUSES (Configurable by user)
+				air_formula			: 3, // 1=no veteran 2=veteran average 3=veteran bounds
+				air_average			: {
+					"6":  [0, 1.35, 3.5, 7.1, 11.4, 16.8, 17, 25],
+					"7":  [0,    1,	  1,   1,    2,	   2,  2,  3],
+					"8":  [0,    1,	  1,   1,    2,	   2,  2,  3],
+					"11": [0,    1,	  1,   3,    3,	   7,  7,  9]
+				},
+				air_bounds			: {
+					"6": [
+						[0.026, 0.845], // 0
+						[1, 1.715], [3.212, 3.984], [6.845, 7.504], // 3
+						[11.205, 11.786], [16.639, 17], [16.999, 17.205], [24.679, 25.411] // 7
+					],
+					"7": [
+						[0,0], // 0
+						[0,1], [0,1], [0,1], // 3
+						[1,2], [1,2], [1,2], [1,3]	// 7
+					],
+					"8": [
+						[0,0], // 0
+						[0,1], [0,1], [0,1], // 3
+						[1,2], [1,2], [1,2], [1,3]	// 7
+					],
+					"11": [
+						[0,0], // 0
+						[0,1], [0,1], [1,3], // 3
+						[1,3], [3,7], [3,7], [7,9]	// 7
+					]
+				},
 				
-				ss_mode 			: 0,
-				ss_type 			: 'JPG',
+				salt_list 		: new KC3ShipMasterList(),
+				wish_list 		: new KC3ShipMasterList(),
+				lock_list 		: new KC3ShipRosterList(),
+				lock_prep 		: [],
+
+				ss_mode				: 0,
+				ss_type				: 'JPG',
+				ss_directory 		: 'KanColle',
 				
 				alert_diff 			: 59,
 				alert_morale_notif	: true,
@@ -41,7 +91,9 @@ Retreives when needed to apply on components
 				alert_volume 		: 60,
 				alert_desktop 		: true,
 				alert_supply 		: 3,
-				alert_supply_exped 		:true,
+				alert_supply_exped 	:true,
+				alert_idle_counter	: 1,
+				alert_taiha			: false,
 				
 				api_translation		: true,
 				api_tracking 		: true,
@@ -76,17 +128,31 @@ Retreives when needed to apply on components
 				pan_opacity 		: 100
 			};
 		},
+        
+		// Reset value of a specific key to the current default value
+		resetValueOf: function(key) {
+			this[key] = this.defaults()[key];
+			console.log( "key is " + key);
+			console.log( "new value is " + JSON.stringify( this[key] ));
+			this.save();
+		},
 		
 		// Reset to default values
 		clear : function(){
 			$.extend(this, this.defaults());
 			this.save();
 		},
-		
+
 		// Load previously saved config
 		load : function(){
+			var self = this;
 			// Get old config or create dummy if none
 			var oldConfig = JSON.parse(localStorage.config || "{}");
+			
+			['salt','wish','lock'].forEach(function(shipListType){
+				var k = [shipListType,'list'].join('_');
+				oldConfig[k] = self.defaults()[k].concat(oldConfig[k] || []);
+			});
 			
 			// Check if old config has versioning and if its lower version
 			if( !oldConfig.version || (oldConfig.version < this.defaults().version) ){
@@ -98,6 +164,10 @@ Retreives when needed to apply on components
 				// Merge defaults, then old config values to ConfigManager
 				$.extend(this, this.defaults(), oldConfig);
 			}
+			
+			/* Force Revert */
+			if(this.language == "troll")
+				this.resetValueOf('language');
 		},
 		
 		// Save current config onto localStorage
@@ -125,5 +195,88 @@ Retreives when needed to apply on components
 		}
 		
 	};
+	
+	var
+		IntFilterArray = function(filterFun){
+			function LocalArray(){}
+			LocalArray.prototype = [];
+			
+			// http://stackoverflow.com/questions/1960473/unique-values-in-an-array
+			function arrayUniquefy(x,i,a){ return a.indexOf(x) === i; }
+			
+			// http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/
+			function KC3ShipList(){
+				if(this instanceof KC3ShipList){
+					if (arguments.length === 1) {
+						this.length = arguments[0];
+					} else if (arguments.length) {
+						this.push.apply(this,arguments);
+					}
+				}else{
+					throw new Error("Cannot invoke constructor without `new` keyword");
+				}
+			}
+			
+			KC3ShipList.prototype = new LocalArray();
+			KC3ShipList.prototype.constructor = KC3ShipList;
+			
+			Object.defineProperties(KC3ShipList.prototype,{
+				push:{value:function push(){
+					var _push,_args,nAry,nLen;
+					_args = Array.prototype.slice.apply(arguments);
+					_push = Function.prototype.apply.bind(Array.prototype.push,this);
+					nAry  = _args.filter(arrayUniquefy).filter(filterFun.bind(this));
+					nLen  = nAry.length;
+					_push(nAry);
+					return nLen;
+				}},
+				unshift:{value:function unshift(){
+					var _ushf,_args,nLen;
+					_args = Array.prototype.slice.apply(arguments);
+					_ushf = Function.prototype.apply.bind(Array.prototype.unshift,this);
+					nAry  = _args.filter(arrayUniquefy).filter(filterFun.bind(this));
+					nLen  = nAry.length;
+					_ushf(nAry);
+					return nLen;
+				}},
+				
+				concat:{value:function concat(){
+					var _slic,_args;
+					_slic = Function.prototype.apply.bind(Array.prototype.slice);
+					_args = _slic(arguments);
+					return new (KC3ShipList.bind.apply(KC3ShipList,[null].concat([].concat.apply([],[this].concat(_args).map(function(shiplist){
+						return _slic(shiplist);
+					})))))();
+				}},
+				slice:{value:function slice(){
+					var _slic,_args,ary;
+					_slic = Function.prototype.apply.bind(Array.prototype.slice);
+					_args = _slic(arguments);
+					ary   = _slic(this,_args);
+					return new (KC3ShipList.bind.apply(KC3ShipList,[null].concat(ary)))();
+				}},
+				
+				exists:{value:function exists(){
+					var _slic,_args,self;
+					_slic = Function.prototype.apply.bind(Array.prototype.slice);
+					_args = _slic(arguments).map(Number);
+					self  = this;
+					return _args.some(function(requestInt){
+						return self.indexOf(requestInt)>=0;
+					});
+				}},
+				
+				toJSON:{value:function toJSON(){return [].slice.apply(this);}},
+			});
+			return KC3ShipList;
+		},
+		KC3ShipMasterList = IntFilterArray(function(x){
+			var ret = !isNaN(x) && isFinite(x) && typeof x === 'number' && !this.exists(x);
+			try { ret &= KC3Master.ship(x).kc3_model == 1; } catch (e) {} finally { return ret; }
+		}),
+		KC3ShipRosterList = IntFilterArray(function(x){
+			var ret = !isNaN(x) && isFinite(x) && typeof x === 'number' && !this.exists(x);
+			try { ret &= KC3ShipManager.get(x).rosterId == x; } catch (e) {} finally { return ret; }
+		});
 	
 })();

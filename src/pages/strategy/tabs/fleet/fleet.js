@@ -52,7 +52,7 @@
 			$(".detail_level .detail_value", fleetBox).text( fleetObj.totalLevel() );
 			$(".detail_los2 .detail_value", fleetBox).text( Math.round( fleetObj.eLos2() * 100) / 100 );
 			$(".detail_los3 .detail_value", fleetBox).text( Math.round( fleetObj.eLos3() * 100) / 100 );
-			$(".detail_air .detail_value", fleetBox).text( fleetObj.fighterPower() );
+			$(".detail_air .detail_value", fleetBox).text( fleetObj.fighterPowerText() );
 			$(".detail_speed .detail_value", fleetBox).text( fleetObj.speed() );
 		},
 		
