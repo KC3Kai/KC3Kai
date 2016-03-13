@@ -1,6 +1,8 @@
 language: node_js
 node_js:
-  - "0.12"
+- '0.12'
 git:
-    submodules: false
+  submodules: false
 before_install: npm install -g grunt-cli
+env:
+  secure: TEDP/Lkc1ucbfU5Mtj56NvzhQM6OrUr6ramOHrdaWUu20/IZZvcjLlA1tbGljWCu4FdGTsMEwioTYys372kEzD3+ApCIf4AaUjqcvw97mjR8JVshqJGEBRkedeZPxeHRZ5OfgRnf976JSWYuDXNHavh7ynSuyzMDWO3MQ2vZ8OQ=

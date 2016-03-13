@@ -249,9 +249,31 @@ module.exports = function(grunt) {
 			all: [
 				'tests/**/*.html'
 			]
+		},
+		webstore_upload: {
+			"accounts": {
+				"dragonjet": {
+					publish: true,
+					client_id: process.env.client_id,
+					client_secret: process.env.client_secret,
+					refresh_token: process.env.refresh_token
+				}
+			},
+			"extensions": {
+				"extension1": {
+					account: "dragonjet",
+					publish: true, 
+					appID: "hkgmldnainaglpjngpajnnjfhpdjkohh",
+					zip: "test/files/test1.zip"      
+				}
+			}
 		}
 	});
-
+	
+	console.log("WEBSTORE_CLIENT_ID", process.env.client_id);
+	console.log("WEBSTORE_CLIENT_SECRET", process.env.client_secret);
+	console.log("WEBSTORE_REFRESH_TOKEN", process.env.refresh_token);
+	
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -264,7 +286,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-string-replace');
 	grunt.loadNpmTasks("grunt-remove-logging");
 	grunt.loadNpmTasks("grunt-contrib-qunit");
-
+	grunt.loadNpmTasks('grunt-webstore-upload');
+	
 	grunt.registerTask('build', [
 		'clean:release',
 		'copy:tmpsrc',
@@ -295,5 +318,28 @@ module.exports = function(grunt) {
 	grunt.registerTask('test-unit', [
 		'qunit'
 	]);
-
+	
+	grunt.registerTask('publish-webstore', [
+		'clean:release',
+		'copy:tmpsrc',
+		'copy:statics',
+		'removelogging',
+		'string-replace:devtooltitle',
+		'jshint:build',
+		'cssmin',
+		'uglify',
+		'string-replace:allhtml',
+		'htmlmin',
+		'string-replace:manifest',
+		'jsonlint:build',
+		'json-minify',
+		'copy:processed',
+		'concat:global_css',
+		'concat:global_js',
+		'concat:library',
+		'concat:strategy',
+		// create zip file of /build/release here
+		//'webstore_upload'
+		'clean:tmp'
+	]);
 };
