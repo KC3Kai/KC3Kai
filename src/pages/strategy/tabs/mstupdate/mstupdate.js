@@ -71,7 +71,7 @@
 						+"&abyss="+(shipData.api_id>500?1:0)
 						+(!shipVersion?"":"&ver="+shipVersion);
 						
-				$(".ship_cg embed", shipBox).attr("src", shipSrc);
+				$(".ship_cg embed", shipBox).attr("src", shipSrc).attr("menu", "false");
 				
 				$(".ship_name", shipBox).text( KC3Meta.shipName( shipData.api_name ) );
 				
