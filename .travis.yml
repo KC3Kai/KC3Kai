@@ -5,4 +5,7 @@ git:
   submodules: false
 before_install: npm install -g grunt-cli
 env:
-  secure: TEDP/Lkc1ucbfU5Mtj56NvzhQM6OrUr6ramOHrdaWUu20/IZZvcjLlA1tbGljWCu4FdGTsMEwioTYys372kEzD3+ApCIf4AaUjqcvw97mjR8JVshqJGEBRkedeZPxeHRZ5OfgRnf976JSWYuDXNHavh7ynSuyzMDWO3MQ2vZ8OQ=
+  global:
+  - secure: c2hiOILA0TstO0LvdDUkKjUHY9hjkEmBN4BXl/JtgdWfzhQKk7/xokBhzAzmfO9bJNR9kzBrETY2SXEVtBkwXZREHLL9EJSlT8bOWMXU9+B0tSoqwf2aJrH4H48YGoCpbUsI3AztuzVAggNbP9lUhKamnKzK1mtF0C0lae62N3U=
+  - secure: D1WKUA9v2qXfunYISsXSjDUaX9yh5PoYlMUj3Xdp/kFQBsyj/2oeXsQcEEnE2XvP7LJuoZukU9bwoOZTmIn/KrMBCitymOrBpXn+hHEra+OPgKvr49YSrBB3EnX+U4RvAMNXNd9/V14JRNxMqmS4IqLnUgt3D2uCElZT8igU5I0=
+  - secure: TEDP/Lkc1ucbfU5Mtj56NvzhQM6OrUr6ramOHrdaWUu20/IZZvcjLlA1tbGljWCu4FdGTsMEwioTYys372kEzD3+ApCIf4AaUjqcvw97mjR8JVshqJGEBRkedeZPxeHRZ5OfgRnf976JSWYuDXNHavh7ynSuyzMDWO3MQ2vZ8OQ=
