@@ -67,6 +67,7 @@
 		},
 		currentGraph: "",
 		currentShipId: 0,
+		currentVersion: "",
 		audio: false,
 		server_ip: "",
 		
@@ -133,7 +134,10 @@
 			$(".tab_mstship .shipInfo .voices, .tab_mstship .shipInfo .hourlies").on("click", ".voice", function(){
 				if(self.audio){ self.audio.pause(); }
 				var voiceFile = self.getVoiceLineFileName(self.currentShipId, parseInt($(this).data("vnum"), 10));
-				self.audio = new Audio("http://"+self.server_ip+"/kcs/sound/kc"+self.currentGraph+"/"+voiceFile+".mp3");
+				var voiceSrc = "http://"+self.server_ip
+							+ "/kcs/sound/kc"+self.currentGraph+"/"+voiceFile+".mp3"
+							+ (!self.currentVersion?"":"?version="+self.currentVersion);
+				self.audio = new Audio(voiceSrc);
 				self.audio.play();
 			});
 			
@@ -211,12 +215,13 @@
 			var shipFile = KC3Master.graph(ship_id).api_filename;
 			var shipVersion = KC3Master.graph(ship_id).api_version;
 			this.currentGraph = shipFile;
-			$(".tab_mstship .shipInfo .cgswf embed").remove();
-			
+			this.currentVersion = shipVersion;
 			var shipSrc = "../../../../assets/swf/card.swf?sip="+this.server_ip
 					+"&shipFile="+shipFile
 					+"&abyss="+(ship_id>500?1:0)
 					+(!shipVersion?"":"&ver="+shipVersion);
+			
+			$(".tab_mstship .shipInfo .cgswf embed").remove();
 			$("<embed/>")
 				.attr("src", shipSrc)
 				.attr("wmode", "transparent")
