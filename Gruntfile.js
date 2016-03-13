@@ -270,9 +270,9 @@ module.exports = function(grunt) {
 		}
 	});
 	
-	console.log("WEBSTORE_CLIENT_ID", process.env.client_id);
-	console.log("WEBSTORE_CLIENT_SECRET", process.env.client_secret);
-	console.log("WEBSTORE_REFRESH_TOKEN", process.env.refresh_token);
+	console.log("WEBSTORE_CLIENT_ID", process.env.WEBSTORE_CLIENT_ID);
+	console.log("WEBSTORE_CLIENT_SECRET", process.env.WEBSTORE_CLIENT_SECRET);
+	console.log("WEBSTORE_REFRESH_TOKEN", process.env.WEBSTORE_REFRESH_TOKEN);
 	
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-concat');
