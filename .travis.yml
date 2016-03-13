@@ -1,11 +1,12 @@
 language: node_js
 node_js:
 - '0.12'
-git:
-  submodules: false
 before_install: npm install -g grunt-cli
 env:
   global:
-  - secure: c2hiOILA0TstO0LvdDUkKjUHY9hjkEmBN4BXl/JtgdWfzhQKk7/xokBhzAzmfO9bJNR9kzBrETY2SXEVtBkwXZREHLL9EJSlT8bOWMXU9+B0tSoqwf2aJrH4H48YGoCpbUsI3AztuzVAggNbP9lUhKamnKzK1mtF0C0lae62N3U=
-  - secure: D1WKUA9v2qXfunYISsXSjDUaX9yh5PoYlMUj3Xdp/kFQBsyj/2oeXsQcEEnE2XvP7LJuoZukU9bwoOZTmIn/KrMBCitymOrBpXn+hHEra+OPgKvr49YSrBB3EnX+U4RvAMNXNd9/V14JRNxMqmS4IqLnUgt3D2uCElZT8igU5I0=
-  - secure: TEDP/Lkc1ucbfU5Mtj56NvzhQM6OrUr6ramOHrdaWUu20/IZZvcjLlA1tbGljWCu4FdGTsMEwioTYys372kEzD3+ApCIf4AaUjqcvw97mjR8JVshqJGEBRkedeZPxeHRZ5OfgRnf976JSWYuDXNHavh7ynSuyzMDWO3MQ2vZ8OQ=
+  - secure: VweZFMRKS2vmkhSqGD+lmh5T1mTIgUHThyBSs4GrbvmqDXSfJsd072TZOQJNgfct15ldwH02v1civeNWJie7qBT3u//uKUDJo6BZ9ydUIUUs/4FYdm/fJY3k9nV4eoPMUWJHfcMSLnpcnD3eOpRVAzIYt9zVfGpo8yIemF0HNio=
+  - secure: iNlrBA5NB+DtY3wuFA34ThiZayswnXBdf/4vCQyAz6NJYT7IUx8CjVwAb1UOmb9UfFppcnZOSLpzboMuaWsVeKSsPuppGgiWDSU0whoBvpNC9ImD4YO7ZRpeZ25WsAOCp6lz/ypbicu0lSwvmCguVSus8F9EPQUWuEp0oHw+ZMs=
+  - secure: ccwwpdxdUpufkFqQUWGdCQAF1TI+Nx1TDVHCIaRM8IdoBU0wc6XD7HEEqq9gNeB3GG5tvPYzwLfj9ARpEiO+KZObLCcaEI5ZKSXPNADzL05fmL8uUDQENR7q+K1iSe5lpE+iBWH1/SHUxUbIzIY1qlaA9+qoKZzzai6JQXEKdzE=
+deploy:
+  on:
+    branch: webstore
