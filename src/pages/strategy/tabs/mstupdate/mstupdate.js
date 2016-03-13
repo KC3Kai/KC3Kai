@@ -57,17 +57,21 @@
 		execute :function(){
 			$(".tab_mstupdate .runtime_id").text(chrome.runtime.id);
 			
-			var shipBox, gearBox, shipFile;
+			var shipBox, gearBox, shipFile, shipVersion, shipSrc;
 			var self = this;
 
 			// New Ship list
 			$.each(this.newShips, function(index, shipData){
 				shipBox = $(".tab_mstupdate .factory .mstship").clone();
 				shipFile = KC3Master.graph(shipData.api_id).api_filename;
+				shipVersion = KC3Master.graph(shipData.api_id).api_version;
 				
-				$(".ship_cg embed", shipBox).attr("src", "../../../../assets/swf/card.swf?sip="+self.server_ip+"&shipFile="+shipFile+"&abyss="+(shipData.api_id>500?1:0));
-				
-				// $("a", shipBox).attr("href", "?#mstship-"+shipData.api_id);
+				shipSrc = "../../../../assets/swf/card.swf?sip="+self.server_ip
+						+"&shipFile="+shipFile
+						+"&abyss="+(shipData.api_id>500?1:0)
+						+(!shipVersion?"":"&ver="+shipVersion);
+						
+				$(".ship_cg embed", shipBox).attr("src", shipSrc);
 				
 				$(".ship_name", shipBox).text( KC3Meta.shipName( shipData.api_name ) );
 				

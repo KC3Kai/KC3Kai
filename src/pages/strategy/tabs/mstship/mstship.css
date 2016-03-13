@@ -107,7 +107,6 @@
 .tab_mstship .shipInfo .cgswf embed {
 	width:218px;
 	height:300px;
-	pointer-events: none;
 }
 
 /* Ship Name*/
