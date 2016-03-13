@@ -207,6 +207,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				voiceNum: request.voiceNum,
 				url: request.url
 			})).execute();
+		}
 		
 	};
 	
