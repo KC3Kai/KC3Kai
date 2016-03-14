@@ -61,7 +61,7 @@
 						console.log("processing tables...");
 						KC3Database.init();
 						KC3Database.con.open();
-                        $(elementkey).append("<div class =\"datatransaction\">-DB Transaction Started-</div>");
+            $(elementkey).append("<div class =\"datatransaction\">-DB Transaction Started-</div>");
 						var alertwhenfinished = function() {
 								setTimeout(function()
 								{

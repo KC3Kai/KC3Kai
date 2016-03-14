@@ -19,10 +19,16 @@
 		execute :function(){
 			var sav=false;
             $(".tab_savedata .processDisplay").hide();
-            
+
 			$(".tab_savedata .export_data").on("click", function(){
 				sav = true;
-				window.KC3DataBackup.saveData();
+				$(".tab_savedata .dataselect").hide();
+				$(".tab_savedata .processDisplay").show();
+				window.KC3DataBackup.saveData(".tab_savedata .processDisplay .processText",function(){
+				alert("finished!");
+				$(".tab_savedata .dataselect").show();
+				$(".tab_savedata .processDisplay").hide();
+				});
 			});
 
 			$(".tab_savedata .merge_data").on("click", function(){
