@@ -140,7 +140,8 @@
 			if(!ConfigManager.dismissed_cg_notice){
 				$(".cg_notes").show();
 				$(".cg_notes").on("click", function(e){
-					ConfigManager["dismissed_cg_notice"] = true;
+					var cgNoticeProp = "dismissed_cg_notice";
+					ConfigManager[cgNoticeProp] = true;
 					ConfigManager.save();
 					$(".cg_notes").fadeOut();
 				});
