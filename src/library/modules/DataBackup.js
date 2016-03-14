@@ -2,12 +2,13 @@
 	"use strict";
 
 	window.KC3DataBackup = {
-			saveData : function(){//Save All Data to file
+			saveData : function(elementkey,callback){//Save All Data to file
 				var fullDBData={};
 				var locked=false;
 				var fullStorageData={};
 				var zip = new JSZip();
 
+				$(elementkey).append("Exporting Data...(0/3)");
 				for(var i=0;i<localStorage.length;i++)
 				{
 					var name = localStorage.key(i);
@@ -15,7 +16,7 @@
 				}
 
 				KC3Database.con.transaction("r", KC3Database.con.tables, function(){
-					console.info("transaction started");
+					$(elementkey).append("<div>Loading Data to array...(1/4)<div/>");
 					KC3Database.con.tables.forEach( //access all tables
 						function(table){
 							table.toArray(function(tablearray) { //add table data tmptext
@@ -26,13 +27,14 @@
 							});
 					});//foreach
 				}).then(function(){//for transaction
-					console.info("end of transaction");
+					$(elementkey).append("<div>Loading Data to zip...(2/4)<div/>");
 					zip.file("db.json",JSON.stringify(fullDBData));
 					zip.file("storage.json",JSON.stringify(fullStorageData));
-					console.info("data all on zip class");
 
-					var objurl= URL.createObjectURL(zip.generate({type:"blob"}));
+					$(elementkey).append("<div>compressing zip....(3/4)<div/>");
+					var objurl= URL.createObjectURL(zip.generate({type:"blob", compression: "DEFLATE"}));
 
+					$(elementkey).append("<div>downloading zip....(4/4)<div/>");
 					console.info("downloading file to "+ConfigManager.ss_directory+'/Backup/');
 
 					chrome.downloads.download({
@@ -43,6 +45,7 @@
 						conflictAction: "uniquify"
 					}, function(downloadId){
 					});
+					callback();
 				});//transaction
 
 			},//savedata
@@ -56,15 +59,13 @@
 					var dothing = function(){
 						var tableCount = -1;
 						console.log("processing tables...");
+						KC3Database.init();
 						KC3Database.con.open();
-                        $(elementkey).append("<div class =\"datatrasaction\">-DB Transaction Started-</div>");
+                        $(elementkey).append("<div class =\"datatransaction\">-DB Transaction Started-</div>");
 						var alertwhenfinished = function() {
 								setTimeout(function()
 								{
-									if(tableCount==0)
-                                    {
-                                        callback();
-                                    }
+									if(tableCount==0)  callback();
 									else alertwhenfinished();
 								}
 						,1000)};
@@ -72,12 +73,17 @@
 
 						$.each(dbdata_,function(index,tabledata) {
 							var table = KC3Database.con[index];
-                            console.log(">queued "+index+"『size : "+tabledata.length+"』");
-                            $(elementkey).append("<div class = \""+index+"\">queued "+index+"『size : "+tabledata.length+"』</div>");
-							KC3Database.con.transaction("rw!",table,function(){
+                console.log(">queued "+index+"『size : "+tabledata.length+"』");
+                $(elementkey).append("<div class = \""+index+"\">queued "+index+" 『size : "+tabledata.length+"』</div>");
+								KC3Database.con.transaction("rw!",table,function(){
+								console.log("processing "+index+" 『size : "+tabledata.length+"』");
+								$(elementkey+" ."+index).text("processing "+index+" 『size : "+tabledata.length+"』");
+
 								if(tableCount == -1)tableCount=1;
 								else tableCount++;
+
 								table.clear();
+
 								tabledata.forEach(function(record)
 								{
 									var id = record.id;
@@ -86,11 +92,11 @@
 								});
 								//console.log("processed " + index);
 							}).then(function(){
-                                //console.log("processed " + index);
-								$(elementkey+" ."+index).text("processed "+index);  
-							}).catch(alert).finally(function(){tableCount--;});
+                //console.log("processed " + index);
+								$(elementkey+" ."+index).text("processed "+index);
+							}).catch($(elementkey+" ."+index).text).finally(function(){tableCount--;});
 						});//each
-                        $(elementkey+" .datatransaction").text("=DB transaction all queued=");  
+                        $(elementkey+" .datatransaction").text("=DB transaction all queued=");
 					};//dothinh
 				  dothing();
 
@@ -130,7 +136,7 @@
 												{
                                                      $(elementkey).append("<div class =\"localstorageprocess\">-storage processing-</div>");
                                                     window.KC3DataBackup.processStorage(zipEntry.asText());
-                                                     $(elementkey+" .localstorageprocess").text("=storage processed=");  
+                                                     $(elementkey+" .localstorageprocess").text("=storage processed=");
                                                 },10);
 										break;
 									default:
