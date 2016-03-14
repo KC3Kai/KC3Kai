@@ -67,6 +67,7 @@
 		},
 		currentGraph: "",
 		currentShipId: 0,
+		currentVersion: "",
 		audio: false,
 		server_ip: "",
 		
@@ -133,7 +134,10 @@
 			$(".tab_mstship .shipInfo .voices, .tab_mstship .shipInfo .hourlies").on("click", ".voice", function(){
 				if(self.audio){ self.audio.pause(); }
 				var voiceFile = self.getVoiceLineFileName(self.currentShipId, parseInt($(this).data("vnum"), 10));
-				self.audio = new Audio("http://"+self.server_ip+"/kcs/sound/kc"+self.currentGraph+"/"+voiceFile+".mp3");
+				var voiceSrc = "http://"+self.server_ip
+							+ "/kcs/sound/kc"+self.currentGraph+"/"+voiceFile+".mp3"
+							+ (!self.currentVersion?"":"?version="+self.currentVersion);
+				self.audio = new Audio(voiceSrc);
 				self.audio.play();
 			});
 			
@@ -211,26 +215,18 @@
 			var shipFile = KC3Master.graph(ship_id).api_filename;
 			var shipVersion = KC3Master.graph(ship_id).api_version;
 			this.currentGraph = shipFile;
-			$(".tab_mstship .shipInfo .cgswf embed").remove();
-			$(".tab_mstship .shipInfo .cgswf object").remove();
-			
+			this.currentVersion = shipVersion;
 			var shipSrc = "../../../../assets/swf/card.swf?sip="+this.server_ip
 					+"&shipFile="+shipFile
 					+"&abyss="+(ship_id>500?1:0)
 					+(!shipVersion?"":"&ver="+shipVersion);
-			var shipObj = $("<object/>")
-				.attr("data", shipSrc)
-				.attr("width", "218")
-				.attr("height", "300")
-				.attr("menu", "false")
-				.attr("wmode", "transparent")
-				.attr("type", "application/x-shockwave-flash")
-				.appendTo(".tab_mstship .shipInfo .cgswf");
+			
+			$(".tab_mstship .shipInfo .cgswf embed").remove();
 			$("<embed/>")
 				.attr("src", shipSrc)
 				.attr("wmode", "transparent")
 				.attr("menu", "false")
-				.appendTo(shipObj);
+				.appendTo(".tab_mstship .shipInfo .cgswf");
 			$(".tab_mstship .shipInfo .salty-zone").text(KC3Meta.term(denyTerm()));
 			$(".tab_mstship .shipInfo .hourlies").html("");
 			
