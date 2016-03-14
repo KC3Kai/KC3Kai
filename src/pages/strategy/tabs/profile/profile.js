@@ -1,14 +1,14 @@
 (function(){
 	"use strict";
-
+	
 	KC3StrategyTabs.profile = new KC3StrategyTab("profile");
-
+	
 	KC3StrategyTabs.profile.definition = {
 		tabSelf: KC3StrategyTabs.profile,
-
+		
 		player: {},
 		statistics: false,
-
+		
 		/* INIT
 		Prepares all data needed
 		---------------------------------*/
@@ -20,7 +20,7 @@
 				// this.tabSelf.showError("Player information not available");
 				// return false;
 			}
-
+			
 			// Check for player statstics
 			if(typeof localStorage.statistics != "undefined"){
 				this.statistics = JSON.parse(localStorage.statistics);
@@ -29,27 +29,27 @@
 				// return false;
 			}
 		},
-
+		
 		/* EXECUTE
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
 			var self = this;
-
+			
 			// Show player information
 			$(".hq_id .hq_content").html(PlayerManager.hq.id);
 			$(".hq_name .hq_content").html(PlayerManager.hq.name);
 			$(".hq_desc .hq_content").html(PlayerManager.hq.desc);
-
+			
 			var MyServer = (new KC3Server()).setNum( PlayerManager.hq.server );
 			$(".hq_server .hq_content").html( MyServer.name );
-
+			
 			$(".hq_rank .hq_content").html(PlayerManager.hq.rank);
 			$(".hq_level .hq_content").html(PlayerManager.hq.level);
-
+			
 			$(".rank_current .rank_cutval").html(PlayerManager.hq.rankPtCutoff);
 			$(".rank_current .rank_content").html(PlayerManager.hq.getRankPoints());
-
+			
 			// Show statistics
 			if(this.statistics){
 				if(typeof this.statistics.sortie.rate == "string"){
@@ -59,16 +59,16 @@
 				}
 				$(".stat_sortie .stat_win .stat_value").html(this.statistics.sortie.win);
 				$(".stat_sortie .stat_lose .stat_value").html(this.statistics.sortie.lose);
-
+				
 				$(".stat_pvp .stat_rate .stat_value").html(this.statistics.pvp.rate+"%");
 				$(".stat_pvp .stat_win .stat_value").html(this.statistics.pvp.win);
 				$(".stat_pvp .stat_lose .stat_value").html(this.statistics.pvp.lose);
-
+				
 				$(".stat_exped .stat_rate .stat_value").html(this.statistics.exped.rate+"%");
 				$(".stat_exped .stat_success .stat_value").html(this.statistics.exped.success);
 				$(".stat_exped .stat_total .stat_value").html(this.statistics.exped.total);
 			}
-
+			
 			// Export all data
 			$(".tab_profile .export_data").on("click", function(){
 				var exportObject = {
@@ -84,17 +84,17 @@
 				var exportString = JSON.stringify(exportObject);
 				exportObject.hash = exportString.hashCode();
 				exportString = JSON.stringify(exportObject);
-
+				
 				var blob = new Blob([exportString], {type: "application/json;charset=utf-8"});
-
+				
 				saveAs(blob, "["+PlayerManager.hq.name+"] Profile "+((new Date()).format("yyyy-mm-dd"))+".kc3");
 			});
-
+			
 			// Import data file open dialog
 			$(".tab_profile .import_data").on("click", function(){
 				$(".tab_profile .import_file").trigger("click");
 			});
-
+			
 			// On-data has been read
 			var reader = new FileReader();
 			reader.onload = function(theFile){
@@ -106,7 +106,7 @@
 				} else {
 					alert("Invalid KC3 File. Might have been edited, or from an old KC3 version.");
 				}
-
+				
 				/*localStorage.config = JSON.stringify(importedData.config);
 				localStorage.fleets = JSON.stringify(importedData.fleets);
 				localStorage.gears = JSON.stringify(importedData.gears);
@@ -118,7 +118,7 @@
 				alert("Imported data for "+importedData.player.name+" from "+ KC3Meta.serverByNum(importedData.player.server).name+"!");
 				window.location.reload();*/
 			};
-
+			
 			// On-selected file to import
 			$(".tab_profile .import_file").on("change", function(event){
 				if( event.target.files.length > 0 ){
@@ -129,14 +129,14 @@
 					}
 				}
 			});
-
+			
 			// Export CSV: Sortie
 			/*$(".tab_profile .export_csv_sortie").on("click", function(event){
 				// CSV Headers
 				var exportData = [
 					"Secretary", "Fuel", "Ammo", "Steel", "Bauxite", "Result", "Date"
 				].join(",")+String.fromCharCode(13);
-
+				
 				// Get data from local DB
 				KC3Database.con.develop
 					.where("hq").equals(PlayerManager.hq.id)
@@ -151,12 +151,12 @@
 								"\""+(new Date(buildInfo.time*1000)).format("mmm dd, yyyy hh:MM tt")+"\"",
 							].join(",")+String.fromCharCode(13);
 						});
-
+						
 						var filename = self.makeFilename("LSC", ".csv");
 						self.saveFile(filename, exportData, "text/csv");
 					});
 			});*/
-
+			
 			// Export CSV: Expedition
 			$(".tab_profile .export_csv_exped").on("click", function(event){
 				// CSV Headers
@@ -165,7 +165,7 @@
 					"Fuel", "Ammo", "Steel", "Bauxite",
 					"Reward 1", "Reward 2", "Result", "Date"
 				].join(",")+String.fromCharCode(13);
-
+				
 				// Get data from local DB
 				KC3Database.con.expedition
 					.where("hq").equals(PlayerManager.hq.id)
@@ -184,19 +184,19 @@
 								"\""+(new Date(expedInfo.time*1000)).format("mmm dd, yyyy hh:MM tt")+"\"",
 							].join(",")+String.fromCharCode(13);
 						});
-
+						
 						var filename = self.makeFilename("Expeditions", ".csv");
 						self.saveFile(filename, exportData, "text/csv");
 					});
 			});
-
+			
 			// Export CSV: Construction
 			$(".tab_profile .export_csv_build").on("click", function(event){
 				// CSV Headers
 				var exportData = [
 					"Secretary", "Fuel", "Ammo", "Steel", "Bauxite", "Result", "Date"
 				].join(",")+String.fromCharCode(13);
-
+				
 				// Get data from local DB
 				KC3Database.con.build
 					.where("hq").equals(PlayerManager.hq.id)
@@ -211,19 +211,19 @@
 								"\""+(new Date(buildInfo.time*1000)).format("mmm dd, yyyy hh:MM tt")+"\"",
 							].join(",")+String.fromCharCode(13);
 						});
-
+						
 						var filename = self.makeFilename("Constructions", ".csv");
 						self.saveFile(filename, exportData, "text/csv");
 					});
 			});
-
+			
 			// Export CSV: Crafting
 			$(".tab_profile .export_csv_craft").on("click", function(event){
 				// CSV Headers
 				var exportData = [
 					"Secretary", "Fuel", "Ammo", "Steel", "Bauxite", "Result", "Date"
 				].join(",")+String.fromCharCode(13);
-
+				
 				// Get data from local DB
 				KC3Database.con.develop
 					.where("hq").equals(PlayerManager.hq.id)
@@ -238,19 +238,19 @@
 								"\""+(new Date(buildInfo.time*1000)).format("mmm dd, yyyy hh:MM tt")+"\"",
 							].join(",")+String.fromCharCode(13);
 						});
-
+						
 						var filename = self.makeFilename("LSC", ".csv");
 						self.saveFile(filename, exportData, "text/csv");
 					});
 			});
-
+			
 			// Export CSV: LSC
 			$(".tab_profile .export_csv_lsc").on("click", function(event){
 				// CSV Headers
 				var exportData = [
 					"Secretary", "Fuel", "Ammo", "Steel", "Bauxite", "Dev Mat", "Result", "Date"
 				].join(",")+String.fromCharCode(13);
-
+				
 				// Get data from local DB
 				KC3Database.con.lsc
 					.where("hq").equals(PlayerManager.hq.id)
@@ -266,26 +266,26 @@
 								"\""+(new Date(buildInfo.time*1000)).format("mmm dd, yyyy hh:MM tt")+"\"",
 							].join(",")+String.fromCharCode(13);
 						});
-
+						
 						var filename = self.makeFilename("LSC", ".csv");
 						self.saveFile(filename, exportData, "text/csv");
 					});
 			});
-
-
+			
+			
 			// Clear Quick Data
 			$(".tab_profile .clear_storage").on("click", function(event){
 				localStorage.clear();
 				window.location.reload();
 			});
-
+			
 			// Clear Histories
 			$(".tab_profile .clear_history").on("click", function(event){
 				KC3Database.clear(function(){
 					window.location.reload();
 				});
 			});
-
+			
 			// Clear Histories
 			$(".tab_profile .clear_fcf").on("click", function(event){
 				var ctr, ThisShip;
@@ -296,7 +296,7 @@
 				KC3ShipManager.save();
 				alert("Done!");
 			});
-
+			
 			// Clear Histories
 			$(".tab_profile .clear_encounters").on("click", function(event){
 				KC3Database.con.encounters.where("world").equals(0).toArray(function(encounterList){
@@ -313,16 +313,16 @@
 				});
 			});
 		},
-
+		
 		makeFilename: function(type, ext){
 			return "["+PlayerManager.hq.name+"] "+type+" "+((new Date()).format("yyyy-mm-dd"))+"."+ext;
 		},
-
+		
 		saveFile: function(filename, data, type){
 			var blob = new Blob([data], {type: type+";charset=utf-8"});
 			saveAs(blob, filename);
 		}
-
+		
 	};
-
+	
 })();

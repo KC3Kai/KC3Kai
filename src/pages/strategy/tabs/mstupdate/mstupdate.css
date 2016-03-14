@@ -32,7 +32,6 @@
 .tab_mstupdate .mstship .ship_cg embed {
 	width:218px;
 	height:300px;
-	pointer-events: none;
 }
 .tab_mstupdate .mstship .ship_name {
 	width:218px;

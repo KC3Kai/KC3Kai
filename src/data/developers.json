@@ -97,7 +97,7 @@
 		{
 			"name": "bcc32",
 			"avatar" : "https://avatars0.githubusercontent.com/u/1239097?v=3&s=40",
-			"desc" : "Developer",
+			"desc" : "AboutDeveloper",
 			"links" : {
 				"gh" :"https://github.com/bcc32",
 				"fb" :"https://www.facebook.com/sezvar"
@@ -118,7 +118,8 @@
 			"avatar": "https://avatars3.githubusercontent.com/u/160240?v=3&s=40",
 			"desc": ["AboutDeveloper", "日本語"],
 			"links": {
-				"gh" : "https://github.com/sinsinpub"
+				"gh" : "https://github.com/sinsinpub",
+				"tw" : "http://twitter.com/sinsinpub"
 			}
 		},
 		{

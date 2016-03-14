@@ -7,7 +7,7 @@ QUnit.test("Module > Master > Saving", function( assert ) {
 	assert.strictEqual( x.slotitem(1).api_name, "12cm単装砲", "Testing Equipment 1: 12cm Gun" );
 	assert.strictEqual( x.stype(2).api_name, "駆逐艦", "Testing Stype 2: Destroyer" );
 	
-	assert.ok( localStorage.master, "Checking if saved on localStorage" );
+	assert.ok( localStorage.raw, "Checking if saved on localStorage" );
 });
 
 QUnit.test("Module > Master > Loading", function( assert ) {

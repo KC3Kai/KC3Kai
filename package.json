@@ -31,6 +31,6 @@
     "qunitjs": "^1.22.0"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test-src && grunt test-unit"
   }
 }

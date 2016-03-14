@@ -181,8 +181,16 @@
 					case "morale": returnVal = b.morale	 - a.morale; break;
 					case "hp": returnVal = b.hp	 - a.hp; break;
 					case "status": returnVal = a.hp / a.maxhp  - b.hp / b.maxhp; break;
-					case "repair_docking": returnVal = b.repairDocking - a.repairDocking; break;
-					case "repair_akashi": returnVal = b.repairAkashi - a.repairAkashi; break;
+					case "repair_docking":
+						returnVal = b.repairDocking - a.repairDocking; 
+						if (returnVal === 0 || (!isFinite(a.repairDocking) && !isFinite(b.repairDocking)))
+							returnVal = b.repairAkashi - a.repairAkashi;
+						break;
+					case "repair_akashi": 
+						returnVal = b.repairAkashi - a.repairAkashi;
+						if (returnVal === 0 || (!isFinite(a.repairAkashi) && !isFinite(b.repairAkashi)))
+							returnVal = b.repairDocking - a.repairDocking;
+						break;
 					default: returnVal = 0; break;
 					}
 					if(!self.sortAsc){ returnVal =- returnVal; }

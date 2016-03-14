@@ -111,6 +111,7 @@
             "412":"yamashiro3",
             "416":"furutaka2",
             "417":"kako2",
+            "418":"satsuki2",
             "419":"hatsushimo2",
             "420":"murakumo3",
             "426":"fubuki2",
@@ -320,7 +321,8 @@
                 "shigure2":false,
                 "kasumi2":false,
                 "z12":false,
-                "z32":false
+                "z32":false,
+                "satsuki2":false
             },
             "cl":{
                 "kitakami3":false,

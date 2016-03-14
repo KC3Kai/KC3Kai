@@ -78,6 +78,7 @@
 	height:20px;
 	float:left;
 	padding:0px 0px 0px 5px;
+	white-space:nowrap;
 }
 
 /* SHIP INFO
@@ -106,7 +107,6 @@
 .tab_mstship .shipInfo .cgswf embed {
 	width:218px;
 	height:300px;
-	pointer-events: none;
 }
 
 /* Ship Name*/
@@ -369,20 +369,21 @@
 /* SPECIAL (Salt Check)
 -------------------------------*/
 .tab_mstship .shipInfo .tokubest {
-	width:100%;
-	height:180px;
+	position:absolute;
+	bottom:0;
+	right:0;
+	padding:4px;
 }
 
 .tab_mstship .shipInfo .tokubest .salty-zone {
 	display:none;
-	position:absolute;
-	right:0;
-	bottom:0;
+	width : 120px;
 	height: 20px;
 	line-height: 18px;
 	border-radius: 3px;
 	font-size: 12px;
 	text-align: center;
+	padding: 1px;
 }
 
 .tab_mstship .shipInfo:not(.salted) .tokubest .salty-zone {
@@ -396,10 +397,12 @@
 }
 
 /* salt check */
-.tab_mstship .shipInfo.salted .name,
-.tab_mstship .shipInfo.salted .cgswf,
-.tab_mstship .shipInfo.salted .remodel,
-.tab_mstship .shipRecord.salted {
+.tab_mstship .shipInfo.salted #saltable {
+	/* blur salt */
 	-webkit-filter: blur(24px);
+}
+.tab_mstship .shipRecord.salted {
+	/* trans salt */
+	opacity: 0;
 }
 /* salt check */
