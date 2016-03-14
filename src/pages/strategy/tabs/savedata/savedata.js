@@ -18,6 +18,8 @@
 		---------------------------------*/
 		execute :function(){
 			var sav=false;
+            $(".tab_savedata .processDisplay").hide();
+            
 			$(".tab_savedata .export_data").on("click", function(){
 				sav = true;
 				window.KC3DataBackup.saveData();
@@ -37,8 +39,16 @@
 					if(filename==="")
 						alert("no file selected");
 					else
-						if(sav|confirm("You didn't backup your data! are you sure?"))
-							window.KC3DataBackup.loadData(filename,true);
+						if(sav||confirm("You didn't backup your data! are you sure?"))
+                        {
+                            $(".tab_savedata .dataselect").hide();
+                            $(".tab_savedata .processDisplay").show();
+                                window.KC3DataBackup.loadData(filename,true,".tab_savedata .processDisplay .processText",function(){
+                                alert("finished!");
+                                $(".tab_savedata .dataselect").show();
+                                $(".tab_savedata .processDisplay").hide();
+                            });
+                        }
 				}
 			});
 

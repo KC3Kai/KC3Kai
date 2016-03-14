@@ -48,19 +48,23 @@
 			},//savedata
 
 
-			processDB : function(dbstring,overwrite){
+			processDB : function(dbstring,overwrite,elementkey,callback){//load data from DB string
 
 				var dbdata = JSON.parse(dbstring);
-
+                $(elementkey).text("");
 				var processTables = function(dbdata_){
 					var dothing = function(){
 						var tableCount = -1;
 						console.log("processing tables...");
 						KC3Database.con.open();
+                        $(elementkey).append("<div class =\"datatrasaction\">-DB Transaction Started-</div>");
 						var alertwhenfinished = function() {
 								setTimeout(function()
 								{
-									if(tableCount==0)alert("finished!");
+									if(tableCount==0)
+                                    {
+                                        callback();
+                                    }
 									else alertwhenfinished();
 								}
 						,1000)};
@@ -68,8 +72,9 @@
 
 						$.each(dbdata_,function(index,tabledata) {
 							var table = KC3Database.con[index];
+                            console.log(">queued "+index+"『size : "+tabledata.length+"』");
+                            $(elementkey).append("<div class = \""+index+"\">queued "+index+"『size : "+tabledata.length+"』</div>");
 							KC3Database.con.transaction("rw!",table,function(){
-								console.log("processing "+index);
 								if(tableCount == -1)tableCount=1;
 								else tableCount++;
 								table.clear();
@@ -77,13 +82,15 @@
 								{
 									var id = record.id;
 									delete record.id;
-									table.add(record,id);
+									table.add(record);
 								});
 								//console.log("processed " + index);
 							}).then(function(){
-								console.log("processed " + index);
+                                //console.log("processed " + index);
+								$(elementkey+" ."+index).text("processed "+index);  
 							}).catch(alert).finally(function(){tableCount--;});
 						});//each
+                        $(elementkey+" .datatransaction").text("=DB transaction all queued=");  
 					};//dothinh
 				  dothing();
 
@@ -102,7 +109,7 @@
 				console.info("done processing storage");
 			},//processStorage
 
-			loadData : function(file_,overwrite){
+			loadData : function(file_,overwrite,elementkey,callback){
 				var zip;
 				var reader = new FileReader();
 				reader.onload = (function(e) {
@@ -112,14 +119,19 @@
 								switch (zipEntry.name) {
 									case "db.json":
 										console.info("db.json detected.");
-										KC3DataBackup.processDB(zipEntry.asText(),overwrite);
+										setTimeout(function(){
+                                            KC3DataBackup.processDB(zipEntry.asText(),overwrite,elementkey,callback);
+                                        },0);
 										break;
 									case "storage.json":
 										console.info("storage.json detected.");
 										if(overwrite)
 												setTimeout(function()
-												{window.KC3DataBackup.processStorage(zipEntry.asText());}
-												,10);
+												{
+                                                     $(elementkey).append("<div class =\"localstorageprocess\">-storage processing-</div>");
+                                                    window.KC3DataBackup.processStorage(zipEntry.asText());
+                                                     $(elementkey+" .localstorageprocess").text("=storage processed=");  
+                                                },10);
 										break;
 									default:
 										alert("could be wrong file");
