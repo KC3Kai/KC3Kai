@@ -72,10 +72,13 @@
 						alertwhenfinished();
 
 						$.each(dbdata_,function(index,tabledata) {
+							$(elementkey).append("<div class = \""+index+"\">queued "+index+" 『size : "+tabledata.length+"』</div>");
+						});
+						var arrEach = function(tableobj){
+							var index = Object.keys(tableobj)[0];
+							var tabledata = tableobj[index];
 							var table = KC3Database.con[index];
-                console.log(">queued "+index+"『size : "+tabledata.length+"』");
-                $(elementkey).append("<div class = \""+index+"\">queued "+index+" 『size : "+tabledata.length+"』</div>");
-								KC3Database.con.transaction("rw!",table,function(){
+							KC3Database.con.transaction("rw!",table,function(){
 								console.log("processing "+index+" 『size : "+tabledata.length+"』");
 								$(elementkey+" ."+index).text("processing "+index+" 『size : "+tabledata.length+"』");
 
@@ -94,8 +97,9 @@
 							}).then(function(){
                 //console.log("processed " + index);
 								$(elementkey+" ."+index).text("processed "+index);
-							}).catch($(elementkey+" ."+index).text).finally(function(){tableCount--;});
-						});//each
+							}).catch($(elementkey+" ."+index).text).finally(function(){tableCount--;delete tableobj[index];arrEach(tableobj);});
+						}//arreach
+						arrEach(dbdata_);
                         $(elementkey+" .datatransaction").text("=DB transaction all queued=");
 					};//dothinh
 				  dothing();
