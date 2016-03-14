@@ -18,7 +18,7 @@
 		---------------------------------*/
 		execute :function(){
 			var sav=false;
-            $(".tab_savedata .processDisplay").hide();
+      //$(".tab_savedata .processDisplay").hide();
 
 			$(".tab_savedata .export_data").on("click", function(){
 				sav = true;

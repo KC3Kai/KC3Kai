@@ -11,3 +11,11 @@
 .tab_savedata .tmptextbox{
   height : 0px;
 }
+
+.tab_savedata table{
+	padding : 5px;
+}
+.tab_savedata th, .tab_savedata td {
+    padding: 15px;
+    text-align: left;
+}
