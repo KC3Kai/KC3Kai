@@ -109,6 +109,10 @@
 			var self = this;
 			this.startTime = (new Date()).getTime();
 
+			var shipClickFunc = function(e){
+				window.location.hash = "mstship-" + $(this).attr("alt");
+			};
+
 			// Clear list
 			this.shipList.html("").hide();
 
@@ -211,9 +215,7 @@
 					$(".ship_id", cElm).text( cShip.id );
 					$(".ship_img .ship_icon", cElm).attr("src", KC3Meta.shipIcon(cShip.bid));
 					$(".ship_img .ship_icon", cElm).attr("alt", cShip.bid);
-					$(".ship_img .ship_icon", cElm).click(function(e){
-						window.location.hash = "mstship-" + $(this).attr("alt");
-					});
+					$(".ship_img .ship_icon", cElm).click(shipClickFunc);
 					$(".ship_name", cElm).text( cShip.english );
 					$(".ship_type", cElm).text( KC3Meta.stype(cShip.stype) );
 					var shipLevelConv = shipLevel;
@@ -273,14 +275,15 @@
 			if(gear_id > -1){
 				var gear = KC3GearManager.get(gear_id);
 				if(gear.itemId<=0){ element.hide(); return; }
+				var gearClickFunc = function(e){
+					window.location.hash = "mstgear-" + $(this).attr("alt");
+				};
 
 				$("img",element)
 					.attr("src", "../../assets/img/items/" + gear.master().api_type[3] + ".png")
 					.attr("title", gear.name())
 					.attr("alt", gear.master().api_id);
-				$("img",element).click(function(){
-					window.location.hash = "mstgear-" + $(this).attr("alt");
-				});
+				$("img",element).click(gearClickFunc);
 				$("span",element).css('visibility','hidden');
 			} else {
 				$("img",element).hide();

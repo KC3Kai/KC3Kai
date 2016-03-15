@@ -71,6 +71,12 @@
 			var ThisBox, MasterItem, ItemName;
 			var hasShip, hasGear, ctr;
 			var ShipBox, ShipId;
+			var shipClickFunc = function(e){
+				window.location.hash = "mstship-" + $(this).attr("alt");
+			};
+			var gearClickFunc = function(e){
+				window.location.hash = "mstgear-" + $(this).attr("alt");
+			};
 			
 			$.each(this.today, function(itemId, shipList){
 				MasterItem = KC3Master.slotitem(itemId);
@@ -80,9 +86,7 @@
 				
 				$(".eq_icon img", ThisBox).attr("src", "../../assets/img/items/"+MasterItem.api_type[3]+".png");
 				$(".eq_icon img", ThisBox).attr("alt", MasterItem.api_id);
-				$(".eq_icon img", ThisBox).click(function(){
-					window.location.hash = "mstgear-" + $(this).attr("alt");
-				});
+				$(".eq_icon img", ThisBox).click(gearClickFunc);
 				
 				$(".eq_icon", ThisBox).attr("title", ItemName );
 				$(".eq_name", ThisBox).text( ItemName );
@@ -101,9 +105,7 @@
 					ShipBox = $(".tab_akashi .factory .eq_ship").clone();
 					$(".eq_ship_icon img", ShipBox).attr("src", KC3Meta.shipIcon(ShipId) );
 					$(".eq_ship_icon img", ShipBox).attr("alt", ShipId );
-					$(".eq_ship_icon img", ShipBox).click(function(){
-						window.location.hash = "mstship-" + $(this).attr("alt");
-					});
+					$(".eq_ship_icon img", ShipBox).click(shipClickFunc);
 					$(".eq_ship_name", ShipBox).text( KC3Meta.shipName( KC3Master.ship(ShipId).api_name ) );
 					$(".eq_ships", ThisBox).append(ShipBox);
 				}

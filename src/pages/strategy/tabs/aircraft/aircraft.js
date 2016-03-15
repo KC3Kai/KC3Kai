@@ -155,15 +155,16 @@
 			$(".tab_aircraft .item_list").html("");
 			
 			var ctr, ThisType, ItemElem, ThisSlotitem;
+			var gearClickFunc = function(e){
+				window.location.hash = "mstgear-" + $(this).attr("alt");
+			};
 			for(ctr in this._items["t"+type_id]){
 				ThisSlotitem = this._items["t"+type_id][ctr];
 				
 				ItemElem = $(".tab_aircraft .factory .slotitem").clone().appendTo(".tab_aircraft .item_list");
 				$(".icon img", ItemElem).attr("src", "../../assets/img/items/"+type_id+".png");
 				$(".icon img", ItemElem).attr("alt", ThisSlotitem.id);
-				$(".icon img", ItemElem).click(function(){
-					window.location.hash = "mstgear-" + $(this).attr("alt");
-				});
+				$(".icon img", ItemElem).click(gearClickFunc);
 				$(".english", ItemElem).text(ThisSlotitem.english);
 				$(".japanese", ItemElem).text(ThisSlotitem.japanese);
 				

@@ -44,6 +44,12 @@
 				$(".tab_crafts .build_list").html("");
 				
 				var ctr, thisBuild, buildbox, MasterItem;
+				var shipClickFunc = function(e){
+					window.location.hash = "mstship-" + $(this).attr("alt");
+				};
+				var gearClickFunc = function(e){
+					window.location.hash = "mstgear-" + $(this).attr("alt");
+				};
 				for(ctr in response){
 					thisBuild = response[ctr];
 					
@@ -52,11 +58,9 @@
 					$(".build_id", buildbox).text( thisBuild.id );
 					$(".build_ficon img", buildbox).attr("src", KC3Meta.shipIcon(thisBuild.flag) );
 					$(".build_ficon img", buildbox).attr("alt", thisBuild.flag);
-					$(".build_ficon img", buildbox).click(function(){
-						window.location.hash = "mstship-" + $(this).attr("alt");
-					});
+					$(".build_ficon img", buildbox).click(shipClickFunc);
 					$(".build_flag", buildbox).text( KC3Meta.shipName( KC3Master.ship(thisBuild.flag).api_name ) );
-					
+
 					$(".build_rsc1", buildbox).text( thisBuild.rsc1 );
 					$(".build_rsc2", buildbox).text( thisBuild.rsc2 );
 					$(".build_rsc3", buildbox).text( thisBuild.rsc3 );
@@ -66,9 +70,7 @@
 						MasterItem = KC3Master.slotitem(thisBuild.result);
 						$(".build_ricon img", buildbox).attr("src", "../../assets/img/items/"+MasterItem.api_type[3]+".png");
 						$(".build_ricon img", buildbox).attr("alt", thisBuild.result);
-						$(".build_ricon img", buildbox).click(function(){
-							window.location.hash = "mstgear-" + $(this).attr("alt");
-						});
+						$(".build_ricon img", buildbox).click(gearClickFunc);
 						$(".build_result", buildbox).text( KC3Meta.gearName( MasterItem.api_name ) );
 					}else{
 						$(".build_ricon img", buildbox).attr("src", "../../assets/img/client/penguin.png");
