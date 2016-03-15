@@ -65,14 +65,14 @@
 						var alertwhenfinished = function() {
 								setTimeout(function()
 								{
-									if(tableCount===0)  callback();
+									if(tableCount==0)  callback();
 									else alertwhenfinished();
-								},1000);
-							};
+								}
+						,1000)};
 						alertwhenfinished();
 
 						$.each(dbdata_,function(index,tabledata) {
-							$(elementkey).append("<div class = \""+index+"\">table queued : "+index+" 『size : "+tabledata.length+"』</div>");
+							$(elementkey).append("<div class = \""+index+"\">queued "+index+" 『size : "+tabledata.length+"』</div>");
 						});
 						var arrEach = function(tableobj){
 							var index = Object.keys(tableobj)[0];
@@ -98,7 +98,7 @@
                 //console.log("processed " + index);
 								$(elementkey+" ."+index).text("processed "+index);
 							}).catch($(elementkey+" ."+index).text).finally(function(){tableCount--;delete tableobj[index];arrEach(tableobj);});
-						};//arreach
+						}//arreach
 						arrEach(dbdata_);
                         $(elementkey+" .datatransaction").text("=DB transaction all queued=");
 					};//dothinh

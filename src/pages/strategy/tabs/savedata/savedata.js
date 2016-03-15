@@ -25,9 +25,9 @@
 				$(".tab_savedata .dataselect").hide();
 				$(".tab_savedata .processDisplay").show();
 				window.KC3DataBackup.saveData(".tab_savedata .processDisplay .processText",function(){
-						alert("finished!");
-						$(".tab_savedata .dataselect").show();
-						$(".tab_savedata .processDisplay").hide();
+				alert("finished!");
+				$(".tab_savedata .dataselect").show();
+				$(".tab_savedata .processDisplay").hide();
 				});
 			});
 
@@ -49,7 +49,7 @@
                         {
                             $(".tab_savedata .dataselect").hide();
                             $(".tab_savedata .processDisplay").show();
-                            window.KC3DataBackup.loadData(filename,true,".tab_savedata .processDisplay .processText",function(){
+                                window.KC3DataBackup.loadData(filename,true,".tab_savedata .processDisplay .processText",function(){
                                 alert("finished!");
                                 $(".tab_savedata .dataselect").show();
                                 $(".tab_savedata .processDisplay").hide();
