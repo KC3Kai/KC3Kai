@@ -288,6 +288,8 @@
 			
 			// Clear Histories
 			$(".tab_profile .clear_fcf").on("click", function(event){
+				if(!confirm("Have you closed the game? This fix won't work if you haven't closed the game."))
+					return false;
 				var ctr, ThisShip;
 				for(ctr in KC3ShipManager.list){
 					ThisShip = KC3ShipManager.list[ctr];
