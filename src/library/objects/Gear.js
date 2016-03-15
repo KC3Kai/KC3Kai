@@ -127,4 +127,12 @@ KC3改 Equipment Object
 			+(2.0 * Number(this.master().api_baku) );
 	};
 	
+	KC3Gear.prototype.export = function() {
+		return [
+			this.masterId,
+			this.stars,
+			this.ace
+		];
+	};
+	
 })();

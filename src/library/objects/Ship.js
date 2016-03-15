@@ -393,7 +393,7 @@ KC3改 Ship Object
 	/*
 	.removeEquip( slotIndex )
 	*/
-	
+
 	/* Expedition Supply Change Check */
 	KC3Ship.prototype.perform = function(command,args) {
 		try {
@@ -485,4 +485,14 @@ KC3改 Ship Object
 		
 		KC3ShipManager.save();
 	}
+
+	KC3Ship.prototype.export = function() {
+		return [
+			this.masterId,
+			this.level,
+			this.exp,
+			this.morale
+		];
+	};
+	
 })();

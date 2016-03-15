@@ -641,25 +641,29 @@ Used by SortieManager
 		return ((this.eventKind === 1) && (this.eventId === 5));
 	};
 	
-	KC3Node.prototype.saveBattleOnDB = function( resultData ){
-		KC3Database.Battle({
-			sortie_id: (this.sortie || KC3SortieManager.onSortie || 0),
+	KC3Node.prototype.getBattleObject = function( resultData ){
+		return {
+			sortie_id: this.sortie || KC3SortieManager.onSortie || 0,
 			node: this.id,
 			enemyId: (this.epattern || 0),
-			data: (this.battleDay || {}),
-			yasen: (this.battleNight || {}),
-			rating: this.rating,
-			drop: this.drop,
+			data: this.battleDay || {},
+			yasen: this.battleNight || {},
+			rating: this.rating || "S",
+			drop: this.drop || 0,
 			time: this.stime,
-			baseEXP: this.nodalXP,
-			hqEXP: resultData.api_get_exp || 0,
+			baseEXP: this.nodalXP || 0,
+			hqEXP: !!resultData?resultData.api_get_exp:0,
 			shizunde: this.lostShips.map(function(fleetLost){
 				return fleetLost.map(function(shipSunk){
 					return KC3ShipManager.get(shipSunk).masterId;
 				});
 			}),
-			mvp: this.mvps
-		});
+			mvp: this.mvps || []
+		};
+	};
+	
+	KC3Node.prototype.saveBattleOnDB = function( resultData ){
+		KC3Database.Battle(this.getBattleObject( resultData ));
 	};
 	
 })();

@@ -218,6 +218,15 @@ Saves and loads list to and from localStorage
 				return true;
 			}
 			return false;
+		},
+		
+		// Export no-reference list
+		export: function(){
+			var exportList = [];
+			for(var sctr in this.list){
+				exportList.push( this.list[sctr].export() );
+			}
+			return exportList;
 		}
 		
 	};
