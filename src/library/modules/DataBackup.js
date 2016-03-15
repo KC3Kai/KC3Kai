@@ -65,14 +65,14 @@
 						var alertwhenfinished = function() {
 								setTimeout(function()
 								{
-									if(tableCount==0)  callback();
+									if(tableCount===0)  callback();
 									else alertwhenfinished();
-								}
-						,1000)};
+								},1000);
+							};
 						alertwhenfinished();
 
 						$.each(dbdata_,function(index,tabledata) {
-							$(elementkey).append("<div class = \""+index+"\">queued "+index+" 『size : "+tabledata.length+"』</div>");
+							$(elementkey).append("<div class = \""+index+"\">table queued : "+index+" 『size : "+tabledata.length+"』</div>");
 						});
 						var arrEach = function(tableobj){
 							var index = Object.keys(tableobj)[0];
@@ -86,19 +86,33 @@
 								else tableCount++;
 
 								table.clear();
+								var finished=false;
+								var loopdata = function(dataarr,reccnt){
+									var record=dataarr[reccnt];
+									if(reccnt>=tabledata.length)
+									{
+										finished=true;
+										return;
+									}
+									KC3Database.con.transaction("rw!",table,function(){
+										var id = record.id;
+										delete record.id;
+										table.add(record);
+									}).then(function(){
+										$(elementkey+" ."+index).text("processing "+index+" 『"+tabledata.length+"/"+reccnt+"』");
+										loopdata(dataarr,reccnt++);
+									});
 
-								tabledata.forEach(function(record)
-								{
-									var id = record.id;
-									delete record.id;
-									table.add(record);
-								});
+								};
+								while(!finished){}
+								loopdata(tabledata,0);
+
 								//console.log("processed " + index);
 							}).then(function(){
                 //console.log("processed " + index);
 								$(elementkey+" ."+index).text("processed "+index);
 							}).catch($(elementkey+" ."+index).text).finally(function(){tableCount--;delete tableobj[index];arrEach(tableobj);});
-						}//arreach
+						};//arreach
 						arrEach(dbdata_);
                         $(elementkey+" .datatransaction").text("=DB transaction all queued=");
 					};//dothinh
