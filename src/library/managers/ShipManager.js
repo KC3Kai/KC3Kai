@@ -53,7 +53,7 @@ Saves and loads list to and from localStorage
 				var
 					val = (self.list[cky] || defaults)[key];
 				tempData[key] = (typeof val === 'object' &&
-					(val instanceof Array ? Array.apply(null,val) : $.extend({},val))
+					(val instanceof Array ? [].slice.apply(val) : $.extend({},val))
 				) || val;
 			});
 			
@@ -65,24 +65,38 @@ Saves and loads list to and from localStorage
 			//this.list[cky].didFlee = didFlee;
 			
 			// prevent the fresh data always overwrites the current loaded state
-			if(!newData)
+			if(!newData) {
 				devVariables.capture.forEach(function(key){
 					if(devVariables.norepl.indexOf(key)<0)
 						cShip[key] = tempData[key];
 				});
+				
+				// check ship master in lock_prep before lock request it
+				if(ConfigManager.lock_prep[0] == cShip.rosterId) {
+					ConfigManager.lock_prep.shift();
+					if(!cShip.lock)
+						ConfigManager.lock_list.push(cShip.rosterId);
+					
+					ConfigManager.save();
+				}
+			}
 			
 			// Check previous repair state
 			// If there's a change detected (without applying applyRepair proc)
 			// It'll be treated as akashi effect
+			
+			cShip.akashiMark &= !!cShip.onFleet();
 			if(tempData.repair[0] > cShip.repair[0] && cShip.akashiMark) {
 				/* Disabling this --
 					the problem is, pending consumption variable stacks up for expedition, */
 				// Calculate Difference
 				var
-					sp = cShip,
-					pc = sp.pendingConsumption,
-					rs = Array.apply(null,{length:8}).map(function(){return 0;}),
-					df = tempData.repair.map(function(x,i){return x - sp.repair[i];});
+					sp  = cShip,
+					pc  = sp.pendingConsumption,
+					rs  = Array.apply(null,{length:8}).map(function(){return 0;}),
+					df  = tempData.repair.map(function(x,i){return x - sp.repair[i];}),
+					plt = ((cShip.hp[1] - cShip.hp[0]) > 0 ? 0.075 : 0.000 );
+				
 				rs[0] = -df[1];
 				rs[2] = -df[2];
 				// Store Difference to Database
@@ -94,7 +108,9 @@ Saves and loads list to and from localStorage
 				// Reduce Consumption Counter
 				// df (delta)      = [0,5,20]
 				df.shift(); df.push(0);
-				console.info("Akashi repaired",cShip.name(),cShip.rosterId,df);
+				console.info("Akashi repaired",cShip.name(),cShip.hp.reduceRight(function(hi,lo){return hi-lo;}),
+					df,df.map(function(rsc){ return Math.floor(rsc * plt); })
+				);
 				Object.keys(pc).reverse().forEach(function(d){
 					// if the difference is not all-zero, keep going
 					if(df.every(function(x){return !x;}))

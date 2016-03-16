@@ -19,6 +19,11 @@ Uses KC3Quest objects to play around with
 		timeToResetWeeklyQuests: -1,
 		timeToResetMonthlyQuests: -1,
 		
+		// Internal constants for time period quests
+		_dailyIds: [201, 216, 210, 211, 218, 212, 226, 230, 303, 304, 402, 403, 503, 504, 605, 606, 607, 608, 609, 619, 702],
+		_weeklyIds: [214, 220, 213, 221, 228, 229, 241, 242, 243, 261, 302, 404, 410, 411, 613, 703],
+		_monthlyIds: [249, 256, 257, 259, 265, 264, 266, 311, 626, 628],
+		
 		/* GET
 		Get a specific quest object in the list using its ID
 		------------------------------------------*/
@@ -286,6 +291,16 @@ Uses KC3Quest objects to play around with
 			}
 		},
 		
+		/* IS PERIOD
+		Indicates if a questId is belong to time-period type quest.
+		------------------------------------------*/
+		isPeriod :function(questId){
+			var period = this._dailyIds.indexOf(questId)>-1;
+			period |= this._weeklyIds.indexOf(questId)>-1;
+			period |= this._monthlyIds.indexOf(questId)>-1;
+			return !!period;
+		},
+		
 		/* RESETTING FUNCTIONS
 		Allows resetting quest state and counting
 		------------------------------------------*/
@@ -318,7 +333,7 @@ Uses KC3Quest objects to play around with
 		resetDailies :function(){
 			this.load();
 			console.log("resetting dailies");
-			this.resetLoop([201, 216, 210, 211, 218, 212, 226, 230, 303, 304, 402, 403, 503, 504, 605, 606, 607, 608, 609, 619, 702]);
+			this.resetLoop(this._dailyIds);
 			this.resetCounterLoop([311]);
 			this.save();
 		},
@@ -326,14 +341,14 @@ Uses KC3Quest objects to play around with
 		resetWeeklies :function(){
 			this.load();
 			console.log("resetting weeklies");
-			this.resetLoop([214, 220, 213, 221, 228, 229, 241, 242, 243, 261, 302, 404, 410, 411, 613, 703]);
+			this.resetLoop(this._weeklyIds);
 			this.save();
 		},
 		
 		resetMonthlies :function(){
 			this.load();
 			console.log("resetting monthlies");
-			this.resetLoop([249, 256, 257, 259, 265, 264, 266, 311]);
+			this.resetLoop(this._monthlyIds);
 			this.save();
 		},
 		clear :function(){

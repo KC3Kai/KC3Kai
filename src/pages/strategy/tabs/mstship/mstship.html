@@ -8,6 +8,9 @@
 	<div class="help_q">The CG viewer just says "Loading..." and Voice buttons don't work!</div>
 	<div class="help_a">Have you played the game since you updated to v23? If not, go play first and refresh the whole thing it if it has been open.</div>
 	
+	<div class="help_q">The CG viewer supports:</div>
+	<div class="help_a">Use mouse to drag image moving around; Use mousewheel to zoom in or out; Use LEFT and RIGHT keys to switch image frames; Use SPACE key to go back to card image, and default size.</div>
+
 	<div class="help_q">The hourlies are in the wrong order</div>
 	<div class="help_a">I can see that. Kuma with it</div>
 	
@@ -50,37 +53,38 @@
 	</div>
 	
 	<div class="shipInfo">
-		<div class="basic">
-			<div class="cgswf"><embed /></div>
-			<div class="name"></div>
-			<div class="stats"></div>
-			<div class="equipments">
-				<div class="equipment">
-					<div class="capacity"></div>
-					<div class="sloticon"><img/></div>
-					<div class="slotitem"></div>
-					<div class="clear"></div>
+		<div id="saltable">
+			<div class="basic">
+				<div class="cgswf"><embed /></div>
+				<div class="name"></div>
+				<div class="stats"></div>
+				<div class="equipments">
+					<div class="equipment">
+						<div class="capacity"></div>
+						<div class="sloticon"><img/></div>
+						<div class="slotitem"></div>
+						<div class="clear"></div>
+					</div>
+					<div class="equipment">
+						<div class="capacity"></div>
+						<div class="sloticon"><img/></div>
+						<div class="slotitem"></div>
+						<div class="clear"></div>
+					</div>
+					<div class="equipment">
+						<div class="capacity"></div>
+						<div class="sloticon"><img/></div>
+						<div class="slotitem"></div>
+						<div class="clear"></div>
+					</div>
+					<div class="equipment">
+						<div class="capacity"></div>
+						<div class="sloticon"><img/></div>
+						<div class="slotitem"></div>
+						<div class="clear"></div>
+					</div>
 				</div>
-				<div class="equipment">
-					<div class="capacity"></div>
-					<div class="sloticon"><img/></div>
-					<div class="slotitem"></div>
-					<div class="clear"></div>
-				</div>
-				<div class="equipment">
-					<div class="capacity"></div>
-					<div class="sloticon"><img/></div>
-					<div class="slotitem"></div>
-					<div class="clear"></div>
-				</div>
-				<div class="equipment">
-					<div class="capacity"></div>
-					<div class="sloticon"><img/></div>
-					<div class="slotitem"></div>
-					<div class="clear"></div>
-				</div>
-			</div>
-				
+					
 			<div class="intro"></div>
 			<div class="json"></div>
 		</div>
@@ -105,74 +109,81 @@
 				<div class="clear"></div>
 			</div>
 			
-			<!-- Scrap Value -->
-			<div class="scrap moreinfo_box">
-				<div class="ship_label">Scrap value</div>
-				<div class="rsc">
-					<div class="rsc_icon"><img src="../../../../assets/img/client/fuel.png" /></div>
-					<div class="rsc_value"></div>
-					<div class="clear"></div>
-				</div>
-				<div class="rsc">
-					<div class="rsc_icon"><img src="../../../../assets/img/client/ammo.png" /></div>
-					<div class="rsc_value"></div>
-					<div class="clear"></div>
-				</div>
-				<div class="rsc">
-					<div class="rsc_icon"><img src="../../../../assets/img/client/steel.png" /></div>
-					<div class="rsc_value"></div>
-					<div class="clear"></div>
-				</div>
-				<div class="rsc">
-					<div class="rsc_icon"><img src="../../../../assets/img/client/bauxite.png" /></div>
-					<div class="rsc_value"></div>
-					<div class="clear"></div>
-				</div>
-				<div class="clear"></div>
+			<!-- Other forms -->
+			<div class="other_forms moreinfo_box"> 
+				<div class="ship_label">Other forms</div>
+				<div class="other_forms_list"></div>
 			</div>
 			
-			<!-- Modernization Value -->
-			<div class="modfods moreinfo_box">
-				<div class="ship_label">Modernization</div>
-				<div class="rsc">
-					<div class="rsc_icon"><img src="../../../../assets/img/client/mod_fp.png" /></div>
-					<div class="rsc_value"></div>
+				<!-- Scrap Value -->
+				<div class="scrap moreinfo_box">
+					<div class="ship_label">Scrap value</div>
+					<div class="rsc">
+						<div class="rsc_icon"><img src="../../../../assets/img/client/fuel.png" /></div>
+						<div class="rsc_value"></div>
+						<div class="clear"></div>
+					</div>
+					<div class="rsc">
+						<div class="rsc_icon"><img src="../../../../assets/img/client/ammo.png" /></div>
+						<div class="rsc_value"></div>
+						<div class="clear"></div>
+					</div>
+					<div class="rsc">
+						<div class="rsc_icon"><img src="../../../../assets/img/client/steel.png" /></div>
+						<div class="rsc_value"></div>
+						<div class="clear"></div>
+					</div>
+					<div class="rsc">
+						<div class="rsc_icon"><img src="../../../../assets/img/client/bauxite.png" /></div>
+						<div class="rsc_value"></div>
+						<div class="clear"></div>
+					</div>
 					<div class="clear"></div>
 				</div>
-				<div class="rsc">
-					<div class="rsc_icon"><img src="../../../../assets/img/client/mod_tp.png" /></div>
-					<div class="rsc_value"></div>
+				
+				<!-- Modernization Value -->
+				<div class="modfods moreinfo_box">
+					<div class="ship_label">Modernization</div>
+					<div class="rsc">
+						<div class="rsc_icon"><img src="../../../../assets/img/client/mod_fp.png" /></div>
+						<div class="rsc_value"></div>
+						<div class="clear"></div>
+					</div>
+					<div class="rsc">
+						<div class="rsc_icon"><img src="../../../../assets/img/client/mod_tp.png" /></div>
+						<div class="rsc_value"></div>
+						<div class="clear"></div>
+					</div>
+					<div class="rsc">
+						<div class="rsc_icon"><img src="../../../../assets/img/client/mod_aa.png" /></div>
+						<div class="rsc_value"></div>
+						<div class="clear"></div>
+					</div>
+					<div class="rsc">
+						<div class="rsc_icon"><img src="../../../../assets/img/client/mod_ar.png" /></div>
+						<div class="rsc_value"></div>
+						<div class="clear"></div>
+					</div>
 					<div class="clear"></div>
 				</div>
-				<div class="rsc">
-					<div class="rsc_icon"><img src="../../../../assets/img/client/mod_aa.png" /></div>
-					<div class="rsc_value"></div>
+				
+				<!-- Consumption -->
+				<div class="consumption moreinfo_box">
+					<div class="ship_label">Consumption</div>
+					<div class="rsc consume_fuel">
+						<div class="rsc_icon"><img src="../../../../assets/img/client/fuel.png" /></div>
+						<div class="rsc_value"></div>
+					</div>
+					<div class="rsc consume_ammo">
+						<div class="rsc_icon"><img src="../../../../assets/img/client/ammo.png" /></div>
+						<div class="rsc_value"></div>
+					</div>
 					<div class="clear"></div>
 				</div>
-				<div class="rsc">
-					<div class="rsc_icon"><img src="../../../../assets/img/client/mod_ar.png" /></div>
-					<div class="rsc_value"></div>
-					<div class="clear"></div>
-				</div>
-				<div class="clear"></div>
+				
 			</div>
-			
-			<!-- Consumption -->
-			<div class="consumption moreinfo_box">
-				<div class="ship_label">Consumption</div>
-				<div class="rsc consume_fuel">
-					<div class="rsc_icon"><img src="../../../../assets/img/client/fuel.png" /></div>
-					<div class="rsc_value"></div>
-				</div>
-				<div class="rsc consume_ammo">
-					<div class="rsc_icon"><img src="../../../../assets/img/client/ammo.png" /></div>
-					<div class="rsc_value"></div>
-				</div>
-				<div class="clear"></div>
-			</div>
-			
+			<div class="clear"></div>
 		</div>
-		<div class="clear"></div>
 		<div class="voices">
 			
 			
@@ -184,7 +195,7 @@
 		</div>
 		<div class=clear></div>
 		<div class="tokubest">
-			<div class="salty-zone hover i18n">StrategyMasterShipSaltCheck</div>
+			<div class="salty-zone hover i18n">MasterShipSaltCheck</div>
 		</div>
 	</div>
 	

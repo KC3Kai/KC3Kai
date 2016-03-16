@@ -285,7 +285,7 @@
 	/*background:#ffc;*/
 }
 .tab_event .sortie_list .sortie_toggle {
-	width:25px;
+	width:20px;
 	height:20px;
 	line-height:18px;
 	float:left;
@@ -295,7 +295,7 @@
 	background:#ace;
 	color:#fff;
 	border-radius:5px;
-	font-size:12px;
+	font-size:10px;
 	border:1px outset #9bd;
 }
 .tab_event .sortie_list .sortie_toggle.active {
@@ -491,6 +491,7 @@
 	width:120px;
 	margin:5px 0px 0px 0px;
 	float:left;
+	white-space:nowrap;
 }
 .tab_event .sortie_list .node_conds {
 	width:120px;
@@ -702,23 +703,35 @@
 }
 .tab_event .sortie_list .sortie_stat {
 	display: none;
-}
-.tab_event .sortie_list .sortie_end_text {
-	display: inline-block;
-	width: 40%;
+	position:relative;
 }
 .tab_event .sortie_list .sortie_end_hp {
 	display: inline-block;
-	width: 60%;
+	width: 12%;
+	text-align: right;
 }
-.tab_event .sortie_list .sortie_end_hp.boss {
+.tab_event .sortie_list .sortie_end_hp .boss {
 	font-weight: bolder;
 	font-size: 1.1em;
 }
-.tab_event .sortie_list .sortie_end_hp.boss.nowhp {
+.tab_event .sortie_list .sortie_end_hp .boss.nowhp {
 	color: green;
 }
-.tab_event .sortie_list .sortie_end_hp.boss.maxhp {
+.tab_event .sortie_list .sortie_end_hp .boss.maxhp {
 	color: red;
 	font-size: 1.2em;
+}
+.tab_event .sortie_list .sortie_end_icon {
+	display: inline-block;
+	width: 85%;
+	margin-left:4px;
+}
+.tab_event .sortie_list .sortie_end_icon img {
+	width:32px;
+	height:32px;
+	visibility:hidden;
+}
+.tab_event .sortie_list .sortie_end_icon img.sortie_end_final {
+	visibility:visible;
+	opacity:1;
 }

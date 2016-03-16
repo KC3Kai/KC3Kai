@@ -137,6 +137,7 @@ Contains summary information about a fleet and its 6 ships
 	};
 	
 	KC3Fleet.prototype.clearNonFlagShips = function(){
+		this.ship(function(x,i,s){s.akashiMark = false;});
 		this.ships.fill(-1,1,6);
 		this.checkAkashi();
 	};
@@ -311,14 +312,15 @@ Contains summary information about a fleet and its 6 ships
 	
 	KC3Fleet.prototype.hasTaiha = function(){
 		return this.ship().some(function(ship){
-			return ship.isTaiha();
+			return ship.isTaiha() && !ship.didFlee;
 		});
 	};
 	
 	KC3Fleet.prototype.getTaihas = function(){
 		var taihaIndexes = [];
 		for(var sctr in this.ships){
-			if(this.ship(sctr).isTaiha()){
+			var ship = this.ship(sctr);
+			if(ship.isTaiha() && !ship.didFlee){
 				taihaIndexes.push(sctr);
 			}
 		}
@@ -327,13 +329,13 @@ Contains summary information about a fleet and its 6 ships
 	
 	KC3Fleet.prototype.isSupplied = function(){
 		return this.ship().every(function(ship){
-			return ship.isSupplied();
+			return !ship.didFlee && ship.isSupplied();
 		});
 	};
 	
 	KC3Fleet.prototype.needsSupply = function(isEmpty){
 		return this.ship().some(function(ship){
-			return ship.isNeedSupply(isEmpty);
+			return !ship.didFlee && ship.isNeedSupply(isEmpty);
 		});
 	};
 	
@@ -343,7 +345,7 @@ Contains summary information about a fleet and its 6 ships
 	
 	KC3Fleet.prototype.lowestMorale = function(){
 		return this.ship().reduce(function(moralePre,shipData,moraleInd){
-			return Math.min(moralePre,shipData.morale);
+			return Math.min(moralePre,shipData.didFlee ? 100 : shipData.morale);
 		},100);
 	};
 	
@@ -355,6 +357,7 @@ Contains summary information about a fleet and its 6 ships
 			ctime = Date.now();
 		
 		this.ship(function(rosterId,index,shipData){
+			if(shipData.didFlee) { return false; }
 			var myRepairTime = shipData.repairTime();
 			myRepairTime.akashi -= Math.max(
 				0,

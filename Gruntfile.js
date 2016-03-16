@@ -57,7 +57,7 @@ module.exports = function(grunt) {
 			}
 		},
 		jshint: {
-			all : {
+			build : {
 				options: {
 					jshintrc: true
 				},
@@ -65,6 +65,16 @@ module.exports = function(grunt) {
 					'build/tmp/assets/js/global.js',
 					'build/tmp/library/**/*.js',
 					'build/tmp/pages/**/*.js'
+				]
+			},
+			src : {
+				options: {
+					jshintrc: true
+				},
+				src: [
+					'src/assets/js/global.js',
+					'src/library/**/*.js',
+					'src/pages/**/*.js'
 				]
 			}
 		},
@@ -182,7 +192,7 @@ module.exports = function(grunt) {
 			}
 		},
 		jsonlint: {
-			all : {
+			build : {
 				options: {
 
 				},
@@ -190,6 +200,16 @@ module.exports = function(grunt) {
 					'build/tmp/manifest.json',
 					'build/tmp/data/*.json',
 					'build/tmp/data/lang/data/**/*.json'
+				]
+			},
+			src :{
+				options: {
+
+				},
+				src: [
+					'src/manifest.json',
+					'src/data/*.json',
+					'src/data/lang/data/**/*.json'
 				]
 			}
 		},
@@ -224,6 +244,11 @@ module.exports = function(grunt) {
 					'build/release/pages/strategy/allstrategytabs.js' : ['build/tmp/pages/strategy/tabs/*/*.js'],
 				}
 			}
+		},
+		qunit: {
+			all: [
+				'tests/**/*.html'
+			]
 		}
 	});
 
@@ -238,20 +263,21 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-jsonlint');
 	grunt.loadNpmTasks('grunt-string-replace');
 	grunt.loadNpmTasks("grunt-remove-logging");
+	grunt.loadNpmTasks("grunt-contrib-qunit");
 
-	grunt.registerTask('default', [
+	grunt.registerTask('build', [
 		'clean:release',
 		'copy:tmpsrc',
 		'copy:statics',
 		'removelogging',
 		'string-replace:devtooltitle',
-		'jshint',
+		'jshint:build',
 		'cssmin',
 		'uglify',
 		'string-replace:allhtml',
 		'htmlmin',
 		'string-replace:manifest',
-		'jsonlint',
+		'jsonlint:build',
 		'json-minify',
 		'copy:processed',
 		'concat:global_css',
@@ -259,6 +285,15 @@ module.exports = function(grunt) {
 		'concat:library',
 		'concat:strategy',
 		'clean:tmp'
+	]);
+	
+	grunt.registerTask('test-src', [
+		'jshint:src',
+		'jsonlint:src'
+	]);
+	
+	grunt.registerTask('test-unit', [
+		'qunit'
 	]);
 
 };

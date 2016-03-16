@@ -1,0 +1,85 @@
+.tab_badge .export_box {
+    border-radius: 8px;
+    background:#def;
+    padding:10px;
+    margin:10px 0px 0px 0px;
+}
+
+/* DATA TO INCLUDE
+------------------------------*/
+.tab_badge .export_parts {
+    
+}
+.tab_badge .export_parts .export_field {
+    width:660px;
+    height:20px;
+    margin:0px 0px 3px 0px;
+}
+.tab_badge .export_parts .export_col {
+    float:left;
+    height:20px;
+    margin:0px 4px 0px 0px;
+}
+.tab_badge .export_parts .export_check {
+    width:20px;
+    text-align:center;
+}
+.tab_badge .export_parts .export_name {
+    width:120px;
+}
+.tab_badge .export_parts .export_value {
+    width:500px;
+    background:#f0f5fa;
+    line-height:20px;
+    font-size:12px;
+    font-weight:bold;
+    padding:0px 0px 0px 10px;
+    overflow:hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* DATA SOURCE
+------------------------------*/
+.tab_badge .export_method {
+    
+}
+.tab_badge .export_method .method_choice  {
+    background:#f0f5fa;
+    padding:2px 5px;
+    height:24px;
+    float:left;
+    width:240px;
+    margin:0px 20px 10px 0px;
+    border-radius:7px;
+}
+.tab_badge .export_method .method_choice div {
+    line-height:20px;
+    float:left;
+    margin:0px 6px 0px 0px;
+}
+.tab_badge .export_method .desc {
+    font-size:12px;
+}
+.tab_badge .export_method .desc div {
+    margin:0px 0px 10px 0px;
+}
+
+/* LANGUAGE
+------------------------------*/
+.tab_badge .export_lang .lang_choice  {
+    background:#f0f5fa;
+    padding:2px 5px;
+    height:24px;
+    float:left;
+    width:150px;
+    margin:0px 20px 10px 0px;
+    border-radius:7px;
+}
+
+/* RESULT
+------------------------------*/
+.export_result div {
+    width:600px;
+    word-break:break-all;
+}

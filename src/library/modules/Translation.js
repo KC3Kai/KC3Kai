@@ -20,6 +20,10 @@
 				$(this).html( KC3Meta.term( $(this).text() ) );
 				$(this).css("visibility", "visible");
 			});
+			// Update title attribute with translations
+			$(".i18n_title").each(function(){
+				$(this).attr("title", KC3Meta.term( $(this).attr("title") ) );
+			});
 		},
 		
 		
@@ -33,7 +37,7 @@
 				
 				case "scn": fontFamily = '"HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,"Nimbus Sans L",Arial,"Lucida Grande","Liberation Sans","Microsoft YaHei UI","Microsoft YaHei","Hiragino Sans GB","Wenquanyi Micro Hei","WenQuanYi Zen Hei","ST Heiti",SimHei,"WenQuanYi Zen Hei Sharp",sans-serif'; break;
 				
-				case "jp": fontFamily = "\"ヒラギノ角ゴ Pro W3\", \"Hiragino Kaku Gothic Pro\",Osaka, \"メイリオ\", Meiryo, \"ＭＳ Ｐゴシック\", \"MS PGothic\", sans-serif"; break;
+				case "jp": fontFamily = '"Helvetica Neue", "Tahoma", Helvetica, Arial, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", Osaka, "メイリオ", "Meiryo", "Yu Gothic UI Semibold", "ＭＳ Ｐゴシック", "MS PGothic", sans-serif'; break;
 				
 				default: break;
 			}
@@ -52,18 +56,27 @@
 			// Check if desired to extend english files
 			if(typeof extendEnglish=="undefined"){ extendEnglish=false; }
 			
+			var language = ConfigManager.language;
 			// Japanese special case where ships and items sources are already in JP
 			if(
-				(["jp", "tcn"].indexOf(ConfigManager.language) > -1)
-				&& (filename=="ships" || filename=="items")
+				(["jp", "tcn"].indexOf(language) > -1)
+				&& (filename==="ships" || filename==="items")
 			){
 				extendEnglish=false;
 			}
-			
-			// console.log(filename, "extendEnglish", extendEnglish);
+			// make ships.json and items.json an option to be always in Japanese
+			if (ConfigManager.info_jp_ship_item
+				&& (filename==="ships" || filename==="items")){
+				extendEnglish=false;
+				language = "jp";
+			}
+			// make "stype.json" an option:
+			if (filename === "stype" && ConfigManager.info_eng_stype){
+				language = "en";
+			}
 			
 			var translationBase = {}, enJSON;
-			if(extendEnglish){
+			if(extendEnglish && language!="en"){
 				// Load english file
 				enJSON = JSON.parse($.ajax({
 					url : repo+'lang/data/en/' + filename + '.json',
@@ -73,11 +86,22 @@
 				// Make is as the translation base
 				translationBase = enJSON;
 			}
-			
-			return $.extend(true, translationBase, JSON.parse($.ajax({
-				url : repo+'lang/data/' +ConfigManager.language+ '/' + filename + '.json',
-				async: false
-			}).responseText));
+
+			// if we can't fetch this file, the English
+			// version will be used instead
+			var translation;
+			try {
+				translation = JSON.parse($.ajax({
+					url : repo+'lang/data/' +language+ '/' + filename + '.json',
+					async: false
+				}).responseText);
+			} catch (e) {
+				if (e instanceof SyntaxError && filename === "stype")
+					translation = null;
+				else
+					throw e;
+			}
+			return $.extend(true, translationBase, translation);
 		}
 		
 	};

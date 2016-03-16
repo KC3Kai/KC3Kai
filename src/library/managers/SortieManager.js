@@ -30,7 +30,7 @@ Xxxxxxx
 		sinkList:{main:[],escr:[]},
 		sortieTime: 0,
 		
-		startSortie :function(world, mapnum, fleetNum, stime){
+		startSortie :function(world, mapnum, fleetNum, stime, eventData){
 			// If still on sortie, end previous one
 			if(this.onSortie > 0){ this.endSortie(); }
 			
@@ -75,6 +75,19 @@ Xxxxxxx
 				self.onSortie = id;
 				self.sortieTime = stime;
 				self.save();
+				
+				var
+					mapData = localStorage.getObject('maps'),
+					cMap    = mapData[['m',world,mapnum].join('')];
+				if(eventData && cMap.stat) {
+					var
+						hpData     = cMap.stat.onBoss.hpdat,
+						sorties    = Object.keys(hpData).reverse(),
+						lastSortie = sorties[0];
+					
+					hpData[id] = [eventData.api_now_maphp,eventData.api_max_maphp];
+				}
+				localStorage.setObject('maps',mapData);
 			});
 		},
 		
@@ -104,6 +117,10 @@ Xxxxxxx
 					}
 				}
 			return 0;
+		},
+		
+		getSortieFleet: function() {
+			return focusedFleet.slice(0);
 		},
 		
 		isFullySupplied: function() {
@@ -147,41 +164,50 @@ Xxxxxxx
 		},
 		
 		advanceNode :function( nodeData, UTCTime ){
-			var thisNode;
+			var thisNode, nodeKind;
 			console.log("nodeData", nodeData);
 			
+			nodeKind = "Dud";
 			// Selection node
 			// api_event_id = 6
 			if (typeof nodeData.api_select_route != "undefined") {
 				console.log("nodeData.api_select_route found, defining as selector");
-				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsSelector(nodeData);
+				nodeKind = "Selector";
 			//  Battle Node
 			// api_event_kind = 1 (day battle)
 			// api_event_kind = 2 (start at night battle)
 			// api_event_kind = 4 (aerial exchange)
+			// api_event_kind = 6 (defensive aerial)
 			// api_event_id = 4 (normal battle)
 			// api_event_id = 5 (boss)
-			}else if((nodeData.api_event_kind == 1) || (nodeData.api_event_kind == 2) || (nodeData.api_event_kind == 4)) {
-				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsBattle(nodeData);
+			// api_event_id = 6 (long distance aerial battle)
+			}else if([1,2,4,6].indexOf(nodeData.api_event_kind)>=0) {
+				nodeKind = "Battle";
 			// Resource Node
 			// api_event_kind = 0
 			// api_event_id = 2
 			}else if (typeof nodeData.api_itemget != "undefined") {
-				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsResource(nodeData);
+				nodeKind = "Resource";
 			// Bounty Node
 			// api_event_kind = 0
 			// api_event_id = 8
 			} else if (typeof nodeData.api_itemget_eo_comment != "undefined") {
-				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsBounty(nodeData);
+				nodeKind = "Bounty";
+			// Transport Node 
+			// api_event_kind = 0
+			// api_event_id = 9
+			} else if (nodeData.api_event_id == 9){
+				nodeKind = "Transport";
 			// Maelstrom Node
 			} else if (typeof nodeData.api_happening != "undefined") {
-				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsMaelstrom(nodeData);
+				nodeKind = "Maelstrom";
 			// Empty Node 
 			// api_event_kind = 0 
 			} else {
-				thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime )).defineAsDud(nodeData);
+				
 			}
 			
+			thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime ))['defineAs' + nodeKind](nodeData);
 			this.nodes.push(thisNode);
 			this.save();
 		},
@@ -243,11 +269,10 @@ Xxxxxxx
 		
 		sendFCFHome :function(){
 			console.log("setting escape flag for fcfCheck", this.fcfCheck);
-			KC3ShipManager.get( this.fcfCheck[0] ).didFlee = true;
-			KC3ShipManager.get( this.fcfCheck[1] ).didFlee = true;
-			this.fcfCheck = [];
-			this.escapedList.push( this.fcfCheck[0] );
-			this.escapedList.push( this.fcfCheck[1] );
+			this.fcfCheck.forEach(function(fcfShip){
+				KC3ShipManager.get(fcfShip).didFlee = true;
+			});
+			[].push.apply(this.escapedList,this.fcfCheck.splice(0));
 			console.log( "new escapedList", this.escapedList );
 		},
 		
