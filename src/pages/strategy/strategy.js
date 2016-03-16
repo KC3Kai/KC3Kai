@@ -98,7 +98,6 @@
 			window.location.hash = KC3StrategyTabs.loading;
 			KC3StrategyTabs.pageParams = [KC3StrategyTabs.loading];
 		}
-		KC3StrategyTabs.currentTab = KC3StrategyTabs.loading;
 
 		// Tab definition execution
 		var thisTab = KC3StrategyTabs[ KC3StrategyTabs.loading ];
@@ -114,9 +113,10 @@
 	};
 
 	KC3StrategyTabs.onpopstate = function(event){
-		var hashParams = window.location.hash.substring(1).split("-");
-		if(!!hashParams[0] && !KC3StrategyTabs.loading && KC3StrategyTabs.currentTab !== hashParams[0]){
-			console.debug("Auto reloading from currentTab:", KC3StrategyTabs.currentTab, "to hash:", hashParams);
+		var newHash = window.location.hash.substring(1);
+		var oldHash = KC3StrategyTabs.pageParams.join("-");
+		if(!!newHash && !KC3StrategyTabs.loading && newHash !== oldHash){
+			console.debug("Auto reloading from [", oldHash, "] to [", newHash, "]");
 			KC3StrategyTabs.reloadTab();
 		}
 	};

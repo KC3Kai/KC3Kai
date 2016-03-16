@@ -6,6 +6,7 @@
 	KC3StrategyTabs.mstgear.definition = {
 		tabSelf: KC3StrategyTabs.mstgear,
 		
+		currentGearId: 0,
 		server_ip: "",
 		
 		/* INIT
@@ -34,22 +35,28 @@
 			
 			// Select equipment
 			$(".tab_mstgear .gearRecords .gearRecord").on("click", function(){
-				self.showGear( $(this).data("id") );
+				var gid = $(this).data("id");
+				if( gid != self.currentGearId ){
+					window.location.hash = KC3StrategyTabs.pageParams[0]+"-"+gid;
+					//self.showGear( $(this).data("id") );
+				}
 			});
 			
 			// Default selected if not direct linked
 			if(!!KC3StrategyTabs.pageParams[1]){
-				this.showGear(1*KC3StrategyTabs.pageParams[1]);
+				this.showGear(KC3StrategyTabs.pageParams[1]);
 			}else{
-				this.showGear(124);
+				this.showGear();
 			}
 		},
 		
 		
 		showGear :function(gear_id){
+			gear_id = 1*(gear_id||"124");
 			var self = this;
 			var gearData = KC3Master.slotitem( gear_id );
 			console.log(gearData);
+			self.currentGearId = gear_id;
 			
 			if(gear_id<=500){
 				var gearHost = "http://"+this.server_ip+"/kcs/resources/image/slotitem/";
