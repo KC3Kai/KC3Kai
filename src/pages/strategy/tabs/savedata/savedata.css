@@ -2,9 +2,14 @@
 	width:680px;
 }
 
-/* HEAD
---------------------------------*/
-.tab_savedata .page_padding .datapanel{
+.tab_savedata img{
+	max-width:100%;
+	max-height:100%;
+}
+.tab_savedata .page_padding{
+	margin-top: 20px;
+}
+.tab_savedata .datapanel{
   margin : 10px 10px 10px 10px;
 }
 
@@ -18,4 +23,8 @@
 .tab_savedata th, .tab_savedata td {
     padding: 15px;
     text-align: left;
+}
+.tab_savedata strong {
+		text-decoration: underline;
+		color: #CC0000;
 }

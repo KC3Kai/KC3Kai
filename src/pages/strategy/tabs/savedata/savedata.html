@@ -1,11 +1,3 @@
-<head>
-    <style type="text/css">
-        .auto-style1 {
-            text-decoration: underline;
-            color: #CC0000;
-        }
-    </style>
-</head>
 <div class="page_title">
 	Data Save
 	<div class="page_help_btn hover"><span>?</span> Help Topics</div>
@@ -21,38 +13,47 @@
 </div>
 
 <div class="page_padding">
-    <div class="datapanel">
-    </div>
 
-    <div class ="dataselect">
-	    <ul>
-			    <li><a class="export_data">Export Data To A File(.kc3data)</a></li>
-			    <li>Import Data From File</li>
-			    <ul>
-				    <li>1. select file </li>
-				    <li>
-					    2. <!--<a class="merge_data">merge data</a> --> <input type="file" class="import_file" name="import_file"  accept=".kc3data" />
-					    <a class="overwrite_data">overwrite data</a>
-				    </li>
-		    </ul>
+  <div class ="dataselect">
+    <ul>
+		    <li><a class="export_data">Export Data To A File(.kc3data)</a></li>
+		    <li>Import Data From File(.kc3data)</li>
+		    <ul style="list-style-type:decimal">
+          <li>
+            Read <a class = "warningbtn">waring</a> first
+            <div class="warning" style="display: none;">
+              <ul style="list-style-type:roman">
+                <li><strong>DO NOT</strong> go to other tab while importing data.</li>
+                <li><strong>DO NOT</strong> close the window while importing data.</li>
+                <li><strong>DO NOT</strong> input other files.</li>
+                <li>big files could take more then 5 minutes to process.
+                    BE PATIENT.</li>
+              </ul>
+            <div/>
+
+			    <li>select file<input type="file" class="import_file" name="import_file"  accept=".kc3data" /></li>
+			    <li>
+				         <!--<a class="merge_data">merge data</a> --> <a class="overwrite_data">overwrite data</a>
+			    </li>
 	    </ul>
-    </div>
+    </ul>
+  </div>
 
-    <div class="processDisplay">
-        <table>
-            <tr>
-                <td>
-										<div>please, take your time.<br />
-                      This process could take long.</div>
-										<div><strong><span class="auto-style1">DO NOT MANIPULATE ANYTHING</span><br class="auto-style1" />
-                                            <span class="auto-style1">BEFORE THE "finished!" MESSEGE!!!</span></strong></div>
-                    <img src="../../assets/img/ui/loadingakatsuki.gif" width="450" />
-                </td>
-                <td><div class="processText">
-                    please be patient.
-                </div></td>
-            </tr>
-        </table>
-    </div>
+  <div class="processDisplay">
+      <table>
+          <tr>
+              <td>
+									<div>please be patient.<br />
+                    This process could take long.</div>
+									<div><strong>DO NOT MANIPULATE ANYTHING<br />
+                              BEFORE THE "finished!" MESSEGE!!!</strong></div>
+                  <img src="../../assets/img/ui/loadingakatsuki.gif"   />
+              </td>
+              <td  width="240"><div class="processText" >
+
+              </div></td>
+          </tr>
+      </table>
+  </div>
 
 </div>

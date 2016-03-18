@@ -99,10 +99,8 @@
 										delete record.id;
 										table.add(record);
 									}).then(function(){
-										$(elementkey+" ."+index).text("processing "+index+" 『"+tabledata.length+"/"+reccnt+"』");
 										loopdata(dataarr,reccnt++);
 									});
-
 								};
 								loopdata(tabledata,0);
 

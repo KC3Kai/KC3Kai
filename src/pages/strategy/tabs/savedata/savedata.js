@@ -39,6 +39,11 @@
 				if(confirm("are you sure?"))
 					window.KC3DataBackup.loadData(filename,false);
 			});
+
+			$(".tab_savedata .warningbtn").on("click", function(){
+				$(".tab_savedata .warning").toggle();
+			});
+
 			$(".tab_savedata .overwrite_data").on("click", function(){
 				if(confirm("You will overwrite all your kc3 data! are you sure?"))
 				{
