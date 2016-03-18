@@ -253,13 +253,13 @@ module.exports = function(grunt) {
 		compress: {
 			release: {
 				options: {
-					archive: 'release.zip',
+					archive: 'build/release.zip',
 					pretty: true
 				},
 				expand: true,
-				cwd: 'build/release/',
-				src: [ '**/*' ],
-				dest: 'build/'
+				cwd: 'build/',
+				src: [ 'release/**/*' ],
+				dest: './'
 			}
 		},
 		webstore_upload: {
@@ -274,7 +274,7 @@ module.exports = function(grunt) {
 			"extensions": {
 				"kc3kai": {
 					account: "dragonjet",
-					publish: true, 
+					publish: false, 
 					appID: "hkgmldnainaglpjngpajnnjfhpdjkohh",
 					zip: "build/release.zip"      
 				}
