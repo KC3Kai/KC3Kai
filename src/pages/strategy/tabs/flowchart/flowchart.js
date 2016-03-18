@@ -185,7 +185,9 @@
 				var childContainer = $("ul.questChildren", thisBox);
 				childContainer.attr("id", "questBox_"+quest_id);
 				for(ctr in thisQuest.unlock){
-					this.seedBranch( childContainer, thisQuest.unlock[ctr] );
+					if(KC3QuestManager.isPeriod(thisQuest.unlock[ctr])){
+						this.seedBranch( childContainer, thisQuest.unlock[ctr] );
+					}
 				}
 			}
 		},
