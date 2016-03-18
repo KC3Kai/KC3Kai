@@ -9,4 +9,6 @@ env:
   - secure: ccwwpdxdUpufkFqQUWGdCQAF1TI+Nx1TDVHCIaRM8IdoBU0wc6XD7HEEqq9gNeB3GG5tvPYzwLfj9ARpEiO+KZObLCcaEI5ZKSXPNADzL05fmL8uUDQENR7q+K1iSe5lpE+iBWH1/SHUxUbIzIY1qlaA9+qoKZzzai6JQXEKdzE=
 deploy:
   on:
-    branch: webstore
+    branch:
+    - webstore
+    - webstore_staging
