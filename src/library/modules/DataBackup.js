@@ -86,32 +86,21 @@
 								else tableCount++;
 
 								table.clear();
-								var finished=false;
-								var loopdata = function(dataarr,reccnt){
-									var record=dataarr[reccnt];
-									if(reccnt>=tabledata.length)
-									{
-										finished=true;
-										return;
-									}
-									KC3Database.con.transaction("rw!",table,function(){
-										var id = record.id;
-										delete record.id;
-										table.add(record);
-									}).then(function(){
-										loopdata(dataarr,reccnt++);
-									});
-								};
-								loopdata(tabledata,0);
+								tabledata.forEach(function(record)
+								{
+									var id = record.id;
+									delete record.id;
+									table.add(record);
+								});
 
 								//console.log("processed " + index);
 							}).then(function(){
                 //console.log("processed " + index);
 								$(elementkey+" ."+index).text("processed "+index);
-							}).catch($(elementkey+" ."+index).text).finally(function(){tableCount--;delete tableobj[index];arrEach(tableobj);});
+							}).catch(console.log).finally(function(){tableCount--;delete tableobj[index];arrEach(tableobj);});
 						};//arreach
 						arrEach(dbdata_);
-                        $(elementkey+" .datatransaction").text("=DB transaction all queued=");
+            $(elementkey+" .datatransaction").text("=DB transaction all queued=");
 					};//dothinh
 				  dothing();
 
