@@ -329,6 +329,6 @@ module.exports = function(grunt) {
 	
 	grunt.registerTask('publish-webstore', [
 		'compress:release',
-		//'webstore_upload' // disable during testing
+		'webstore_upload'
 	]);
 };
