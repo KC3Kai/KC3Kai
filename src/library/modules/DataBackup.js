@@ -104,7 +104,6 @@
 									});
 
 								};
-								while(!finished){}
 								loopdata(tabledata,0);
 
 								//console.log("processed " + index);
