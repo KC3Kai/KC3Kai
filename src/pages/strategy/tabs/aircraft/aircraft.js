@@ -136,9 +136,7 @@
 			var self = this;
 			
 			$(".tab_aircraft .item_type").on("click", function(){
-				$(".tab_aircraft .item_type").removeClass("active");
-				$(this).addClass("active");
-				self.showType($(this).data("type"));
+				KC3StrategyTabs.gotoTab(null, $(this).data("type"));
 			});
 			
 			$(".tab_aircraft .item_list").on("change", ".instance_name input", function(){
@@ -146,12 +144,18 @@
 				localStorage.planes = JSON.stringify(self.squadNames);
 			});
 			
-			$(".tab_aircraft .item_type").first().trigger("click");
+			if(!!KC3StrategyTabs.pageParams[1]){
+				this.showType(KC3StrategyTabs.pageParams[1]);
+			} else {
+				this.showType($(".tab_aircraft .item_type").first().data("type"));
+			}
 		},
 		
 		/* Show slotitem type
 		--------------------------------------------*/
 		showType :function(type_id){
+			$(".tab_aircraft .item_type").removeClass("active");
+			$(".tab_aircraft .item_type[data-type={0}]".format(type_id)).addClass("active");
 			$(".tab_aircraft .item_list").html("");
 			
 			var ctr, ThisType, ItemElem, ThisSlotitem;

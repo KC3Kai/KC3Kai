@@ -71,6 +71,7 @@
 						$(".build_ricon img", buildbox).attr("src", "../../assets/img/items/"+MasterItem.api_type[3]+".png");
 						$(".build_ricon img", buildbox).attr("alt", thisBuild.result);
 						$(".build_ricon img", buildbox).click(gearClickFunc);
+						$(".build_ricon", buildbox).addClass("hover");
 						$(".build_result", buildbox).text( KC3Meta.gearName( MasterItem.api_name ) );
 					}else{
 						$(".build_ricon img", buildbox).attr("src", "../../assets/img/client/penguin.png");

@@ -103,7 +103,9 @@
 		KC3StrategyTabs.loading = $(tab).data("id");
 
 		// Google Analytics
-		_gaq.push(['_trackEvent', "Strategy Room: "+KC3StrategyTabs.loading, 'clicked']);
+		var gaEvent = "Strategy Room: "+KC3StrategyTabs.loading;
+		gaEvent += ", hash: #"+KC3StrategyTabs.pageParams.join("-");
+		_gaq.push(['_trackEvent', gaEvent, 'clicked']);
 
 		// Interface
 		$("#menu .submenu ul.menulist li").removeClass("active");

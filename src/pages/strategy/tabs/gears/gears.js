@@ -239,15 +239,7 @@
 			var self = this;
 
 			$(".tab_gears .item_type").on("click", function(){
-				$(".tab_gears .item_type").removeClass("active");
-				$(this).addClass("active");
-				var type_id = $(this).data("type");
-				self._currentTypeId = type_id;
-				var compareMethod = self._defaultCompareMethod["t"+type_id];
-				if (typeof compareMethod == "undefined")
-					compareMethod = "overall";
-				self.updateSorters(type_id);
-				self.showType(type_id, compareMethod);
+				KC3StrategyTabs.gotoTab(null, $(this).data("type"));
 			});
 
 			// setup sort methods
@@ -255,14 +247,27 @@
 			sortControls.push( "overall" );
 			sortControls.forEach( function(property,i) {
 				$(".tab_gears .itemSorters .sortControl." + property).on("click", function() {
-					var type_id = self._currentTypeId;
-					var compareMethod = property;
-					self.showType(type_id, compareMethod);
+					KC3StrategyTabs.gotoTab(null, self._currentTypeId, property);
 				});
 				
 			});
 
-			$(".tab_gears .item_type").first().trigger("click");
+			if(!!KC3StrategyTabs.pageParams[1]){
+				if(!!KC3StrategyTabs.pageParams[2]){
+					this.switchTypeAndSort(KC3StrategyTabs.pageParams[1], KC3StrategyTabs.pageParams[2]);
+				} else {
+					this.switchTypeAndSort(KC3StrategyTabs.pageParams[1]);
+				}
+			} else {
+				this.switchTypeAndSort($(".tab_gears .item_type").first().data("type"));
+			}
+		},
+
+		switchTypeAndSort: function(typeId, sortMethod) {
+			var compareMethod = sortMethod || this._defaultCompareMethod["t"+typeId] || "overall";
+			this.updateSorters(typeId);
+			this._currentTypeId = typeId;
+			this.showType(typeId, compareMethod);
 		},
 
 		/*
@@ -289,10 +294,10 @@
 			});
 
 			// grab stat from all available slotitems
-            function accumulateStats(statSets,ThisSlotitem) {
-                return function(p,i) {
-					statSets[p].push( ThisSlotitem.stats[p] );                    
-                };
+			function accumulateStats(statSets,ThisSlotitem) {
+				return function(p,i) {
+					statSets[p].push( ThisSlotitem.stats[p] );
+				};
 			}
 			
 			if (type_id === "all") {
@@ -347,6 +352,8 @@
 		/* Show slotitem type, with a compare method
 		--------------------------------------------*/
 		showType :function(type_id, compareMethod){
+			$(".tab_gears .item_type").removeClass("active");
+			$(".tab_gears .item_type[data-type={0}]".format(type_id)).addClass("active");
 			$(".tab_gears .item_list").html("");
 
 			var comparator = this._comparator[compareMethod];
@@ -377,6 +384,9 @@
 			}
 
 			var ctr, ThisType, ItemElem, ThisSlotitem;
+			var gearClickFunc = function(e){
+				KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
+			};
 			var SlotItems = [];
 			var self = this;
 			if (type_id === "all") {
@@ -399,9 +409,7 @@
 				ItemElem = $(".tab_gears .factory .slotitem").clone().appendTo(".tab_gears .item_list");
 				$(".icon img", ItemElem).attr("src", "../../assets/img/items/"+ThisSlotitem.type_id+".png");
 				$(".icon img", ItemElem).attr("alt", ThisSlotitem.id);
-				$(".icon img", ItemElem).on("click", function(){
-					KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
-				});
+				$(".icon img", ItemElem).on("click", gearClickFunc);
 				$(".english", ItemElem).text(ThisSlotitem.english);
 				$(".japanese", ItemElem).text(ThisSlotitem.japanese);
 				//$(".counts", ItemElem).html("You have <strong>"+(ThisSlotitem.held.length+ThisSlotitem.extras.length)+"</strong> (<strong>"+ThisSlotitem.held.length+"</strong> worn, <strong>"+ThisSlotitem.extras.length+"</strong> extras)");
@@ -412,7 +420,7 @@
 				});
 
 				var holderCtr, ThisHolder, HolderElem;
-				console.log(ThisSlotitem);
+				//console.log(ThisSlotitem);
 
 				for( var i in ThisSlotitem.arranged ){
 					$('<dl/>')
