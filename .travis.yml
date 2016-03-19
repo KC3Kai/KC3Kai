@@ -13,8 +13,6 @@ env:
 
 # DEPLOY TO CHROME WEBSTORE
 after_success:
-    script:
-    - npm deploy
     on:
       branch:
       - webstore
