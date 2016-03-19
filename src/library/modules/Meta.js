@@ -119,8 +119,11 @@ Provides access to data on built-in JSON files
 				combin = [],
 				repTab = {
 					"甲"   : '_A',
+					"乙"   : '_B',
 					"改二" : '_KaiNi',
 					"改"   : '_Kai',
+					"zwei" : '_Zwei',
+					"drei" : '_Drei',
 				},
 				repRes = null,
 				replaced = false;
