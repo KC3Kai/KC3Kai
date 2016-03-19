@@ -19,8 +19,10 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 
 	// Looks for API link
 	function checkAgain(){
+		console.log("checking...");
 		// If API link is found
 		if(document.getElementById("externalswf")){
+			console.log( document.getElementById("externalswf").getAttribute("src") );
 			// Send it to background script
 			(new RMsg(
 				"service",
