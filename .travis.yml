@@ -13,11 +13,10 @@ env:
 
 # DEPLOY TO CHROME WEBSTORE
 after_success:
-- if [ $TRAVIS_BRANCH == 'webstore' ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then npm run webstore; fi
+- if [ $TRAVIS_BRANCH == 'webstore' ]; then grunt build; fi
+- if [ $TRAVIS_BRANCH == 'webstore' ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then grunt webstore; fi
 
 # DEPLOY TO GITHUB RELEASES
-before_deploy:
-- if [ $TRAVIS_BRANCH == 'webstore' ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then grunt build; fi
 deploy:
   provider: releases
   skip_cleanup: true
