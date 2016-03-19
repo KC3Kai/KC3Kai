@@ -203,7 +203,8 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			console.log("subtitle", request);
 			(new TMsg(request.tabId, "gamescreen", "subtitle", {
 				voicetype: request.voicetype,
-				filename: request.filename,
+				filename: request.filename || false,
+				shipID: request.shipID || false,
 				voiceNum: request.voiceNum,
 				url: request.url
 			})).execute();

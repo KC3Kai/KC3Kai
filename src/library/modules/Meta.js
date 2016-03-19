@@ -30,6 +30,16 @@ Provides access to data on built-in JSON files
 		_edges:{},
 		_defaultIcon:"",
 		
+		voiceKeys: [
+			604825, 607300, 613847, 615318, 624009, 631856, 635451, 637218, 640529,
+			643036, 652687, 658008, 662481, 669598, 675545, 685034, 687703, 696444,
+			702593, 703894, 711191, 714166, 720579, 728970, 738675, 740918, 743009,
+			747240, 750347, 759846, 764051, 770064, 773457, 779858, 786843, 790526,
+			799973, 803260, 808441, 816028, 825381, 827516, 832463, 837868, 843091,
+			852548, 858315, 867580, 875771, 879698, 882759, 885564, 888837, 896168
+		],
+		voiceMapping: [],
+		
 		/* Initialization
 		-------------------------------------------------------*/
 		init :function( repo ){
@@ -58,6 +68,14 @@ Provides access to data on built-in JSON files
 			this._terms.troll		= JSON.parse( $.ajax(repo+'lang/data/troll/terms.json', { async: false }).responseText );
 			// other language loaded here
 			this._terms.lang		= KC3Translation.getJSON(repo, 'terms', true);
+			
+			var i, j, voiceFilename;
+			for(i=0; i < 500; i++){
+				for(j=0; j < 53; j++){
+					voiceFilename = this.getFilenameByVoiceLine (i, j);
+					this.voiceMapping[voiceFilename] = j;
+				}
+			}
 		},
 		
 		loadQuotes :function(){
@@ -245,6 +263,41 @@ Provides access to data on built-in JSON files
 			return edgeId;
 		},
 		
+		/*
+		Getting voice key by filename
+		Source: がか (gakada)
+		https://github.com/KC3Kai/KC3Kai/issues/1180#issuecomment-195947346
+		*/
+		getVoiceKeyByFilename :function(ship_id, filename){
+			var k = 17 * (ship_id + 7), r = filename - 100000;
+			for (var i = 0; i < 1000; ++i) { // 17 * (500 + 7) * 10000 / 99173 = 869
+				var a = r + i * 99173;
+				if (a % k === 0) {
+					return a / k;
+				}
+			}
+			return false; // log ship_id, filename somewhere
+		},
+		
+		/*
+		Get voice line number by filename
+		Mapping idea from `poi-plugin-subtitle` by kcwikizh
+		https://github.com/kcwikizh/poi-plugin-subtitle
+		*/
+		getVoiceLineByFilename :function(ship_id, filename){
+			return this.voiceMapping[filename];
+		},
+		
+		/*
+		Getting new filename for ship voices
+		Source: がか (gakada)
+		http://kancolle.wikia.com/wiki/Thread:388946#30
+		*/
+		getFilenameByVoiceLine :function(ship_id, lineNum){
+			return 100000 + 17 * (ship_id + 7) * (this.voiceKeys[lineNum] - this.voiceKeys[lineNum - 1]) % 99173;
+		},
+		
+		// Subtitle quotes
 		quote :function(identifier, voiceNum){
 			if(identifier){
 				if(typeof this._quotes[identifier] != "undefined"){

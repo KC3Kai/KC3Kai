@@ -6,6 +6,12 @@ var waiting = true;
 // If trusted exit, for exit confirmation
 var trustedExit = false;
 
+// Used to fade out subtitles after calculated duration
+var subtitleVanishTimer = false;
+
+// Holder object for audio files to test mp3 duration
+var subtitleMp3;
+
 // If auto-focus on window to capture key events or not
 var autoFocus = 0;
 
@@ -49,6 +55,7 @@ $(document).on("ready", function(){
 	// Initialize data managers
 	ConfigManager.load();
 	KC3Meta.init("../../../../data/");
+	KC3Meta.loadQuotes();
 	KC3QuestManager.load();
 	KC3Database.init();
 	KC3Translation.execute();
@@ -333,6 +340,64 @@ var interactions = {
 		$(".taiha_red").hide();
 	},
 	
+	// Show subtitles
+	subtitle :function(request, sender, response){
+		if(!ConfigManager.api_subtitles) return true;
+		
+		console.log("subtitle", request);
+		
+		// Get subtitle text
+		var subtitleText = false;
+		var quoteIdentifier = "";
+		var quoteVoiceNum = request.voiceNum;
+		switch(request.voicetype){
+			case "titlecall":
+				quoteIdentifier = "titlecall_"+request.filename;
+				break;
+			case "npc":
+				quoteIdentifier = "npc";
+				break;
+			default:
+				quoteIdentifier = request.shipID;
+				break;
+		}
+		subtitleText = KC3Meta.quote( quoteIdentifier, quoteVoiceNum );
+
+		// If subtitle removal timer is ongoing, reset
+		if(subtitleVanishTimer && subtitleText){
+			clearTimeout(subtitleVanishTimer);
+		}
+		
+		// If subtitles available for the voice
+		if(subtitleText){
+			$(".overlay_subtitles").html(subtitleText);
+			$(".overlay_subtitles").show();
+			
+			/*subtitleMp3 = new Audio();
+			subtitleMp3.canplaythrough = function() { 
+				console.log("DURATION: "+subtitleMp3.duration);
+			};
+			subtitleMp3.src = request.url;*/
+			
+			/*subtitleMp3 = document.createElement("audio");
+			subtitleMp3.addEventListener('canplaythrough', function() { 
+				console.log("DURATION: "+subtitleMp3.duration);
+			}, false);
+			subtitleMp3.src = request.url;*/
+			
+			subtitleVanishTimer = setTimeout(function(){
+				subtitleVanishTimer = false;
+				$(".overlay_subtitles").fadeOut(500);
+			}, (2000+ ($(".overlay_subtitles").text().length*50)) );
+		} else {
+			//$(".overlay_subtitles").html("Missing quote #" + quoteIdentifier + "-" + quoteVoiceNum);
+			$(".overlay_subtitles").hide();
+			subtitleVanishTimer = setTimeout(function(){
+				subtitleVanishTimer = false;
+				$(".overlay_subtitles").fadeOut(500);
+			}, (2000+ ($(".overlay_subtitles").text().length*50)) );
+		}
+	},
 	
 	// Dummy action
 	dummy :function(request, sender, response){

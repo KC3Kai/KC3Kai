@@ -550,6 +550,8 @@ var interactions = {
 	
 	// Show subtitles
 	subtitle :function(request, sender, response){
+		if(!ConfigManager.api_subtitles) return true;
+		
 		console.log("subtitle", request);
 		
 		// Get subtitle text
@@ -564,7 +566,7 @@ var interactions = {
 				quoteIdentifier = "npc";
 				break;
 			default:
-				quoteIdentifier = KC3Master.graph( request.filename );
+				quoteIdentifier = request.shipID;
 				break;
 		}
 		subtitleText = KC3Meta.quote( quoteIdentifier, quoteVoiceNum );
@@ -596,15 +598,16 @@ var interactions = {
 				$(".overlay_subtitles").fadeOut(500);
 			}, (2000+ ($(".overlay_subtitles").text().length*50)) );
 		} else {
-			$(".overlay_subtitles").html("Missing quote #" + quoteIdentifier + "-" + quoteVoiceNum);
-			$(".overlay_subtitles").show();
+			//$(".overlay_subtitles").html("Missing quote #" + quoteIdentifier + "-" + quoteVoiceNum);
+			$(".overlay_subtitles").hide();
 			subtitleVanishTimer = setTimeout(function(){
 				subtitleVanishTimer = false;
 				$(".overlay_subtitles").fadeOut(500);
 			}, (2000+ ($(".overlay_subtitles").text().length*50)) );
 		}
 	},
-		// Dummy action
+	
+	// Dummy action
 	dummy :function(request, sender, response){
 		
 	}

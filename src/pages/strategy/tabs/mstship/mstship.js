@@ -133,7 +133,7 @@
 			// Play voice
 			$(".tab_mstship .shipInfo .voices, .tab_mstship .shipInfo .hourlies").on("click", ".voice", function(){
 				if(self.audio){ self.audio.pause(); }
-				var voiceFile = self.getVoiceLineFileName(self.currentShipId, parseInt($(this).data("vnum"), 10));
+				var voiceFile = KC3Meta.getFilenameByVoiceLine(self.currentShipId, parseInt($(this).data("vnum"), 10));
 				var voiceSrc = "http://"+self.server_ip
 							+ "/kcs/sound/kc"+self.currentGraph+"/"+voiceFile+".mp3"
 							+ (!self.currentVersion?"":"?version="+self.currentVersion);
@@ -442,27 +442,7 @@
 				$(".tab_mstship .shipInfo .tokubest").hide();
 			}
 			
-		},
-		
-		/*
-		Getting new filename for ship voices
-		Source: がか
-		http://kancolle.wikia.com/wiki/Thread:388946#30
-		*/
-		voiceLineKeys: [
-			604825, 607300, 613847, 615318, 624009, 631856, 635451, 637218, 640529,
-			643036, 652687, 658008, 662481, 669598, 675545, 685034, 687703, 696444,
-			702593, 703894, 711191, 714166, 720579, 728970, 738675, 740918, 743009,
-			747240, 750347, 759846, 764051, 770064, 773457, 779858, 786843, 790526,
-			799973, 803260, 808441, 816028, 825381, 827516, 832463, 837868, 843091,
-			852548, 858315, 867580, 875771, 879698, 882759, 885564, 888837, 896168
-		],
-		
-		
-		getVoiceLineFileName: function(ship_api_id, voice_line_id) {
-			return 100000 + 17 * (ship_api_id + 7) * (this.voiceLineKeys[voice_line_id] - this.voiceLineKeys[voice_line_id - 1]) % 99173;
 		}
-		
 	};
 	
 })();

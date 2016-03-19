@@ -106,6 +106,7 @@ Retreives when needed to apply on components
 				api_bg_size			: "cover",
 				api_bg_position		: "top center",
 				api_gameScale		: 100,
+				api_subtitles		: true,
 				
 				dmm_forcecookies	: false,
 				dmm_customize		: false,

@@ -109,7 +109,7 @@ Saves and loads significant data for future use
 		graph_file :function(filename){
 			var self = this;
 			return !this.available ? false : Object.keys(this._raw.shipgraph).filter(function(key){
-				return self._raw.shipgraph[key] === filename;
+				return self._raw.shipgraph[key].api_filename === filename;
 			})[0];
 		},
 		
