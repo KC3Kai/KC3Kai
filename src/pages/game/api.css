@@ -9,7 +9,7 @@ body {
 
 .box-wrap {
 	width:800px;
-	height:100%;
+	height:480px;
 	margin:0px auto;
 	overflow:hidden;
 	background:url(../../assets/img/client/base.jpg);
