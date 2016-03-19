@@ -68,19 +68,20 @@ $(document).on("ready", function(){
 	$(".api_submit").on('click', function(){
 		if($(".api_text").val().indexOf("mainD2.swf") > -1){
 			localStorage.absoluteswf = $(".api_text").val();
+			window.location.reload();
 		}
 	});
 	
 	// Forget API Link
 	$(".forget_btn").on('click', function(){
 		localStorage.absoluteswf = "";
+		window.location.reload();
 	});
 	
 	// Quick Play
 	$(".play_btn").on('click', function(){
 		if($(this).data('play'))
 			ActivateGame();
-		// ResetIdleStat();
 	});
 	
 	$(".play_btn").data('play',!ConfigManager.api_mustPanel);
