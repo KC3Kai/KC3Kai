@@ -1,7 +1,7 @@
 _gaq.push(['_trackPageview']);
 
 // If awaiting activation
-var waiting = false;
+var waiting = true;
 
 // If trusted exit, for exit confirmation
 var trustedExit = false;
