@@ -149,10 +149,10 @@
 		"24": "It's a bit impudent, but your directions in battle send shivers through me, it's not bad!",
 		"8": "Correspondence. Read it carefully.",
 		"13": "Where's the fool that dares challenge me?",
-		"9": "Seaplanes? Don't need that sort of thing.",
+		"9": "Seaplanes? There's no need for that sort of thing.",
 		"10": "It's good, I like it.",
 		"26": "Thanking 'ya.",
-		"27": "Seaplanes? Don't need that sort of thing.",
+		"27": "Seaplanes? There's no need for that sort of thing.",
 		"11": "No helping it, I'm going.",
 		"12": "Thanking 'ya.",
 		"5": "Looks like a new ship has been construced.",
@@ -1619,7 +1619,7 @@
 		"24": "It's a bit impudent, but your directions in battle send shivers through me, it's not bad!",
 		"8": "Correspondence. Read it carefully.",
 		"13": "Where's the fool that dares challenge me?",
-		"9": "Seaplanes? Don't need that sort of thing.",
+		"9": "Seaplanes? There's no need for that sort of thing.",
 		"10": "It's good, I like it.",
 		"26": "Thanking 'ya.",
 		"27": "Thank you for your supply. You must eat much, too, right?",
@@ -4297,7 +4297,7 @@
 		"12": "Hah~ Gotta take a break, yeah~?",
 		"5": "New ship, GET!",
 		"7": "The fleet's back now~",
-		"14": "I'll show some a little of Murasame's greatness!",
+		"14": "I'll show some a little of Murasame's goodness!",
 		"15": "Enemy spotted to starboard.",
 		"16": "Just do it!",
 		"18": "Oh my, you're still going? Th~at's ok~ay!",
@@ -4307,7 +4307,7 @@
 		"20": "W-whoa, wait...",
 		"21": "I'm truely a bit put out... geez...",
 		"22": "I did the best I could... that's great... farewell...",
-		"29": "Is that so... Leaving Murasame alone..Murasame does not like this, its bothering."
+		"29": "I see... you are leaving Murasame aside... I don't have that kind of interest, so I'm upset!"
 	},
 	"245" : {
 		"1": "Hi, I'm Yuudachi, a Shiratsuyu-class destroyer. Nice to meet you!",
@@ -5387,7 +5387,7 @@
 		"20": "Aah! ...Stop the induced explosion!",
 		"21": "I cannot let the pride of the first Carrier Division be lost here...",
 		"22": "My apologies... Please... scuttle me with the torpedoes.",
-		"29": ""
+		"29": "Um, Admiral? Is it mealti-No! Is it time to start the strategy meeting yet!?"
 	},
 	"278" : {
 		"1": "I'm aircraft carrier Kaga. Are you my admiral?... I have fairly high expectation of you.",
@@ -5420,7 +5420,7 @@
 		"29": ".... Um, ... No, nothing."
 	},
 	"279" : {
-		"1": "I'm aircraft carrier Soyryuu. Count me on when organizing a carrier task force!",
+		"1": "I'm aircraft carrier Souryuu. Count me on when organizing a carrier task force!",
 		"25": "Aircraft carrier Souryuu.<br /> Starting from the Pearl Harbor attack, an important battle of the war, I became the flagship.<br /> Huh? Midway? What is that, is it delicious?<br />",
 		"2": "Umm, what is it?",
 		"3": "Errr, that, Type-99 bombers are spilling out...",
@@ -5432,7 +5432,7 @@
 		"9": "Thanks. With this, I will not lose to Hiryuu.",
 		"10": "Yeah, I can fight on with this",
 		"26": "I'm glad.",
-		"27": "Arigato, kore de hiryu ni wa makemasen.",
+		"27": "Thanks. With this, I won't lose to Hiryuu!",
 		"11": "Excuse me, I'm going to fix my make-up for a while.",
 		"12": "Oh, my flight deck... I'll be hospitalized for a while...",
 		"5": "There's a new force in the fleet.",
@@ -5443,10 +5443,10 @@
 		"18": "It's payback time now. All aircrafts, launch!",
 		"17": "Yeah, let's target those big ones.",
 		"23": "The glory of the First Carrier Taskforce isn't diminishing!",
-		"19": "No way!? No way, no way!?",
+		"19": "No no no!",
 		"20": "Hit on flight deck!? No way, it's going to blow!",
 		"21": "Why is it the the the flight deck again?! It hurts!",
-		"22": "The fire on the flight deck, it won't dim... Sorry...",
+		"22": "The fire on the flight deck, it won't go out... Sorry...",
 		"29": ""
 	},
 	"28" : {
@@ -5484,7 +5484,7 @@
 		"25": "Hiryuu-class aircraft carrier, Hiryuu. Huh? Am I not an improved version of the Souryuu-class, you say? Don't worry about the details. More importantly, scouting is paramount. In carrier warfare, the first to strike wins! Don't let pride blind you. Let's carefully, and also boldly, fight on through!",
 		"2": "Hm? Has an enemy carrier appeared?",
 		"3": "Don't do that! The planes will drop off.",
-		"4": "Tamon-maru is going get mad at you.",
+		"4": "Tamon-maru is gonna get mad at you.",
 		"28": "How's that?",
 		"24": "Sometimes… yeah, sometimes… you can forget about the fighting, you know? Hey, look over here. Yeah, I like it, that kind of face?",
 		"8": "Looks like the Red Brick has something to say to you.",
@@ -5660,7 +5660,7 @@
 		"29": "Admiral, I stay here, so whenever you need my help, please tell me to support you."
 	},
 	"286" : {
-		"1": "Of the two Fusou Class Super-Dreadnought/Battleships, I am the elder, Fusou. Please take care of me and my younger sister Yamashiro.",
+		"1": "Of the two Fusou Class super-dreadnought battleships, I am the elder, Fusou. Please take care of me and my younger sister Yamashiro.",
 		"25": "The first of the Japanese designs for the super-dreadnought battleship class, Fusou.Please remember to take care of my younger sister, Yamashiro, as well.Leyte Gulf? Oh well, I would like to go there someday. Right?",
 		"2": "Admiral, the weather is good today...",
 		"3": "*sigh* Although the sky is so blue...",
@@ -7177,8 +7177,8 @@
 		"12": "Hah~ Gotta take a break, yeah~?",
 		"5": "New ship, GET!",
 		"7": "The fleet's back now~",
-		"14": "I'll show some a little of Murasame's greatness!",
-		"15": "Enemy spotted to starboard.",
+		"14": "I'll show some a little of Murasame's goodness!",
+		"15": "Enemy spotted at starboard.",
 		"16": "Just do it!",
 		"18": "Oh my, you're still going? Th~at's ok~ay!",
 		"17": "I've got both cannons and torpedos!",
@@ -7187,7 +7187,7 @@
 		"20": "W-whoa, wait...",
 		"21": "I'm truely a bit put out... geez...",
 		"22": "I did the best I could... that's great... farewell...",
-		"29": "Is that so... Leaving Murasame alone..Murasame does not like this, its bothering."
+		"29": "I see... you are leaving Murasame aside... I don't have that kind of interest, so I'm upset!"
 	},
 	"45" : {
 		"1": "Hi, I'm Yuudachi, a Shiratsuyu-class destroyer. Nice to meet you!",
@@ -8417,7 +8417,7 @@
 		"20": "Aah! ...Stop the induced explosion!",
 		"21": "I cannot let the pride of the first Carrier Division be lost here...",
 		"22": "My apologies... Please... scuttle me with the torpedoes.",
-		"29": ""
+		"29": "Um, Admiral? Is it mealti-No! Is it time to start the strategy meeting yet!?"
 	},
 	"84" : {
 		"1": "I'm aircraft carrier Kaga. Are you my admiral?... I have fairly high expectation of you.",
