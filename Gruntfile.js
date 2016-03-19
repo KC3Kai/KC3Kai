@@ -272,13 +272,7 @@ module.exports = function(grunt) {
 				}
 			},
 			"extensions": {
-				"kc3kai_nopublish": {
-					account: "dragonjet",
-					publish: false, 
-					appID: "hkgmldnainaglpjngpajnnjfhpdjkohh",
-					zip: "build/release.zip"      
-				},
-				"kc3kai_dopublish": {
+				"kc3kai": {
 					account: "dragonjet",
 					publish: true, 
 					appID: "hkgmldnainaglpjngpajnnjfhpdjkohh",
@@ -333,14 +327,9 @@ module.exports = function(grunt) {
 		'qunit'
 	]);
 	
-	grunt.registerTask('stage-webstore', [
-		'compress:release',
-		'webstore_upload:kc3kai_nopublish'
-	]);
-	
 	grunt.registerTask('publish-webstore', [
 		'compress:release',
-		'webstore_upload:kc3kai_dopublish'
+		'webstore_upload:kc3kai'
 	]);
 	
 };

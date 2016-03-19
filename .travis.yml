@@ -13,7 +13,6 @@ env:
 
 # DEPLOY TO CHROME WEBSTORE
 after_success:
-- if [ $TRAVIS_BRANCH == 'webstore_staging' ]; then npm run stage; fi
 - if [ $TRAVIS_BRANCH == 'webstore' ]; then npm run deploy; fi
 
 # DEPLOY TO GITHUB RELEASES
