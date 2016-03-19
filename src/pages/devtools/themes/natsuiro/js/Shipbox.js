@@ -11,7 +11,7 @@ KC3改 Ship Box for Natsuiro theme
 		
 		this.expPercent = this.shipData.exp[2] / 100;
 		this.fuelPercent = this.shipData.fuel / this.shipData.master().api_fuel_max;
-		this.ammoPercent = this.shipData.ammo / this.shipData.master().api_bull_max;	
+		this.ammoPercent = this.shipData.ammo / this.shipData.master().api_bull_max;
 	};
 	
 	/* SET SHIP
@@ -21,6 +21,14 @@ KC3改 Ship Box for Natsuiro theme
 		$(".ship_img img", this.element).attr("src", KC3Meta.shipIcon(this.shipData.masterId));
 		$(".ship_name", this.element).text( this.shipData.name() );
 		$(".ship_type", this.element).text( this.shipData.stype() );
+		
+		$(this.element)
+			.addClass((this.shipData.level >= 100) && 'sWife')
+			.addClass( (ConfigManager.salt_list.indexOf(this.shipData.master().kc3_bship)+1) && 'sSalt' )
+			.addClass( (ConfigManager.lock_list.indexOf(this.shipData.rosterId)+1) && (!this.shipData.lock) && 'sLock' )
+			.end();
+		
+		$(".ship_no_lock",this.element).text(KC3Meta.term("PanelRequireShipLockInFleet"));
 		
 		// Item on 5th slot
 		var myExItem = this.shipData.exItem();
@@ -47,7 +55,7 @@ KC3改 Ship Box for Natsuiro theme
 		$(".ship_exp", this.element).css("width", (120 * this.expPercent)+"px");		
 		$(".ship_fuel", this.element).css("width", (120 * Math.min(this.fuelPercent, 1))+"px");
 		$(".ship_ammo", this.element).css("width", (120 * Math.min(this.ammoPercent, 1))+"px");
-		$(".ship_bars", this.element).attr("title", "Remaining Exp = " + this.shipData.exp[1] + ", Fuel = " + Math.ceil(this.fuelPercent*100) +"%" + ", Ammo = " + Math.ceil(this.ammoPercent*100)+"%");
+		$(".ship_bars", this.element).attr("title", KC3Meta.term("PanelCombinedShipBarsHint").format(this.shipData.exp[1], Math.ceil(this.fuelPercent*100), Math.ceil(this.ammoPercent*100)) );
 		
 		return this.element;
 	};
@@ -61,8 +69,15 @@ KC3改 Ship Box for Natsuiro theme
 		this.showPrediction();
 		this.showMorale();
 		
-		$(".ship_level span", this.element).text( this.shipData.level );		
-		$(".ship_exp_next", this.element).text( this.shipData.exp[1] );		
+		$(".ship_level span.value", this.element)
+			.text( this.shipData.level )
+			.prop( 'title', (function(shipData){
+				var mst = shipData.master();
+				return (shipData.level >= (mst.api_afterlv || Infinity)) ?
+					[KC3Meta.term("PanelPossibleRemodel")] :
+					(mst.api_afterlv && [KC3Meta.term("PanelNextRemodelLv"),mst.api_afterlv].join(' ') || '');
+			})(this.shipData) );
+		$(".ship_exp_next", this.element).text( this.shipData.exp[1] );
 		$(".ship_exp_bar", this.element).css("width", (290*this.expPercent)+"px");
 		
 		$(".ship_fuel .ship_supply_text", this.element).text(Math.ceil(this.fuelPercent*100)+"%");
@@ -134,7 +149,25 @@ KC3改 Ship Box for Natsuiro theme
 					$(".ship_hp_bar", this.element).css("background", "#00FF00");
 				}
 			}
+			
+			if(this.shipData.akashiMark) {
+				this.element.css("background-color", "rgba(191,255,100,0.15)");
+			}
 		}
+		
+		this.hideAkashi();
+	};
+	
+	/* HIDE AKASHI TIMER
+	(If enabled?) Show the timer whenever hover akashi's shipbox.
+	This element will be removed if it does not meet the required condition.
+	[Being repaired/Repairing]
+	---------------------------------------------------*/
+	KC3NatsuiroShipbox.prototype.hideAkashi = function(){
+		if(!this.shipData.akashiMark)
+			$(".ship_repair_data",this.element).remove();
+		else
+			$(".ship_repair_data",this.element).data('sid',this.shipData.rosterId);
 	};
 	
 	/* SHOW PREDICTION

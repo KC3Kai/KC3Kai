@@ -2,7 +2,7 @@
 	
 }
 .tab_lscs .build_list {
-	
+	white-space:nowrap;
 }
 .tab_lscs .factory {
 	display:none;

@@ -29,6 +29,7 @@ Listens to network history and triggers callback if game events happen
 			BattleResult: [],
 			CraftGear: [],
 			CraftShip: [],
+			Modernize: [],
 			ClearedMap: [],
 			PvPStart: [],
 			PvPNight: [],
@@ -134,10 +135,18 @@ Listens to network history and triggers callback if game events happen
 						}
 					});
 					request.getContent(function(x){
-						var data = JSON.parse(/svdata=(.+)$/.exec(x)[1]);
-						message.api_status = data.api_result;
-						message.api_result = data.api_result_msg;
-						(new RMsg("service", "gameScreenChg", message)).execute();
+						try {
+							var data = JSON.parse(/svdata=(.+)$/.exec(x)[1]);
+							message.api_status = data.api_result;
+							message.api_result = data.api_result_msg;
+						} catch (e) {
+							// Only prevent the data parsing error
+							message.api_status = e.name;
+							message.api_result = e.message;
+							console.error("Prevented ",e.name,e.message,e.stack);
+						} finally {
+							(new RMsg("service", "gameScreenChg", message)).execute();
+						}
 					});
 				}else{
 					message.api_status = false;

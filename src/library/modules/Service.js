@@ -34,9 +34,16 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			// If refreshing API link, close source tabs and re-open game frame
 			if(JSON.parse(localStorage.extract_api)){ // localStorage has problems with native boolean
 				localStorage.extract_api = false;
-				// #137 open window first before closing source tab
-				window.open("../pages/game/api.html", "kc3kai_game");
-				chrome.tabs.remove([sender.tab.id], function(){});
+				localStorage.apiUsage = Date.now() + 20 * 60 * 1000;
+				if(false) {
+					// #137 open window first before closing source tab
+					/* Conventional way API Refresh */
+					window.open("../pages/game/api.html", "kc3kai_game");
+					chrome.tabs.remove([sender.tab.id], function(){});
+				} else {
+					/* On-site API Refresh */
+					(new TMsg(sender.tab.id, "gamescreen", "api_refresh", {}, callback)).execute();
+				}
 			}
 		},
 		
@@ -121,6 +128,47 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		------------------------------------------*/
 		"fitScreen" :function(request, sender, response){
 			(new TMsg(request.tabId, "gamescreen", "fitScreen")).execute();
+		},
+		
+		/* IS MUTED
+		Returns boolean if the tab is muted or not
+		------------------------------------------*/
+		"isMuted" :function(request, sender, response){
+			chrome.tabs.get(request.tabId, function(tabInfo){
+				try {
+					response(tabInfo.mutedInfo.muted);
+				}catch(e){
+					response(false);
+				}
+			});
+			return true;
+		},
+		
+		/* TOGGLE SOUNDS
+		Mute or unmute the tab
+		------------------------------------------*/
+		"toggleSounds" :function(request, sender, response){
+			chrome.tabs.get(request.tabId, function(tabInfo){
+				try {
+					chrome.tabs.update(request.tabId, {
+						muted: tabInfo.mutedInfo.muted?false:true,
+					});
+					response(!tabInfo.mutedInfo.muted);
+				}catch(e){
+					response(false);
+				}
+				return true;
+			});
+			return true;
+		},
+		
+		/* OPEN COOKIE SETTINGS
+		DevTools can't use chrome.tabs by itself, so service will open the page for them
+		------------------------------------------*/
+		"openCookieSettings" :function(request, sender, response){
+			chrome.tabs.create({
+				url:'chrome://settings/content'
+			});
 		},
 		
 		/* DMM FRMAE INJECTION
