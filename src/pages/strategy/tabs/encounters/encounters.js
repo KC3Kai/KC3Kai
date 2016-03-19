@@ -23,6 +23,9 @@
 			var curBox;
 			var shipBox;
 			var shipList = [];
+			var shipClickFunc = function(e){
+				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
+			};
 			
 			KC3Database.con.encounters.toArray(function(response){
 				self.list = response;
@@ -54,6 +57,8 @@
 						if(shipId > -1){
 							shipBox = $(".tab_encounters .factory .encounter_ship").clone();
 							$(".encounter_icon img", shipBox).attr("src", KC3Meta.abyssIcon(shipId));
+							$(".encounter_icon img", shipBox).attr("alt", shipId);
+							$(".encounter_icon img", shipBox).click(shipClickFunc);
 							$(".encounter_id", shipBox).text(shipId);
 							shipBox.appendTo($(".encounter_ships", curBox));
 						}

@@ -88,7 +88,7 @@
 			newHash += "-"+params.join("-");
 		}
 		window.location.hash = newHash;
-	}
+	};
 
 	KC3StrategyTabs.reloadTab = function(tab) {
 		var tabElement = typeof tab;
