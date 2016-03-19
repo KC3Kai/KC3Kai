@@ -106,11 +106,6 @@ body {
 	background:rgba(255,255,255,.85);
 	display:none;
 }
-.box-wait .box-refresh,
-.box-wait .box-expired,
-.box-wait .box-ready {
-	display:none;
-}
 .box-refresh .refresh-box {
 	position:fixed;
 	top:0; left:0;
@@ -119,6 +114,7 @@ body {
 }
 .box-wait .api_txt {
 	width:760px;
+	height:45px;
 	margin:0px 0px 15px 0px;
 	position:relative;
 }
@@ -142,9 +138,7 @@ body {
 	-webkit-filter: blur(3px);
 }
 
-.box-wait .api_txt textarea:focus,
-.box-wait .api_txt textarea:hover,
-.box-wait .api_txt textarea:active {
+.box-wait .api_txt textarea:hover {
 	-webkit-filter: blur(0px);
 }
 .box-wait .api_txt:after {
