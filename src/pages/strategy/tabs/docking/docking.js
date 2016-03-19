@@ -110,7 +110,7 @@
 			this.startTime = (new Date()).getTime();
 
 			var shipClickFunc = function(e){
-				window.location.hash = "mstship-" + $(this).attr("alt");
+				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 			};
 
 			// Clear list
@@ -276,7 +276,7 @@
 				var gear = KC3GearManager.get(gear_id);
 				if(gear.itemId<=0){ element.hide(); return; }
 				var gearClickFunc = function(e){
-					window.location.hash = "mstgear-" + $(this).attr("alt");
+					KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 				};
 
 				$("img",element)

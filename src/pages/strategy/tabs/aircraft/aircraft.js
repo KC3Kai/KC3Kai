@@ -156,7 +156,7 @@
 			
 			var ctr, ThisType, ItemElem, ThisSlotitem;
 			var gearClickFunc = function(e){
-				window.location.hash = "mstgear-" + $(this).attr("alt");
+				KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 			};
 			for(ctr in this._items["t"+type_id]){
 				ThisSlotitem = this._items["t"+type_id][ctr];

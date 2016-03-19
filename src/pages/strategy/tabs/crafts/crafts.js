@@ -45,10 +45,10 @@
 				
 				var ctr, thisBuild, buildbox, MasterItem;
 				var shipClickFunc = function(e){
-					window.location.hash = "mstship-" + $(this).attr("alt");
+					KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 				};
 				var gearClickFunc = function(e){
-					window.location.hash = "mstgear-" + $(this).attr("alt");
+					KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 				};
 				for(ctr in response){
 					thisBuild = response[ctr];

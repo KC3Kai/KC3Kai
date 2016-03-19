@@ -400,7 +400,7 @@
 				$(".icon img", ItemElem).attr("src", "../../assets/img/items/"+ThisSlotitem.type_id+".png");
 				$(".icon img", ItemElem).attr("alt", ThisSlotitem.id);
 				$(".icon img", ItemElem).on("click", function(){
-					window.location.hash = "mstgear-" + $(this).attr("alt");
+					KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 				});
 				$(".english", ItemElem).text(ThisSlotitem.english);
 				$(".japanese", ItemElem).text(ThisSlotitem.japanese);

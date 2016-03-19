@@ -37,7 +37,7 @@
 			$(".tab_mstgear .gearRecords .gearRecord").on("click", function(){
 				var gid = $(this).data("id");
 				if( gid != self.currentGearId ){
-					window.location.hash = KC3StrategyTabs.pageParams[0]+"-"+gid;
+					KC3StrategyTabs.gotoTab(null, gid);
 					//self.showGear( $(this).data("id") );
 				}
 			});

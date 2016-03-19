@@ -752,7 +752,7 @@
 					.attr("title", gear.name())
 					.attr("alt", gear.master().api_id);
 				$("img",element).click(function(){
-					window.location.hash = "mstgear-" + $(this).attr("alt");
+					KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 				});
 				$("span",element).css('visibility','hidden');
 			} else {

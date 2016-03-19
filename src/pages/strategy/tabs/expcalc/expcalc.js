@@ -377,7 +377,7 @@
 			// Show all ship_save
 			var goalBox;
 			var shipClickFunc = function(e){
-				window.location.hash = "mstship-" + $(this).attr("alt");
+				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 			};
 			$.each(KC3ShipManager.list, function(index, ThisShip){
 				if(!ThisShip.lock){ return true; }

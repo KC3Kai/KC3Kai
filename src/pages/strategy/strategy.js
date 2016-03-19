@@ -74,6 +74,22 @@
 		
 	});
 	
+	KC3StrategyTabs.gotoTab = function(tab, hashParams) {
+		var newHash = (tab || KC3StrategyTabs.pageParams[0]);
+		if(!!hashParams) {
+			var params = hashParams;
+			if(arguments.length > 2 && hashParams.constructor !== Array) {
+				params = $.makeArray(arguments).slice(1);
+			}
+			if (params.constructor !== Array) {
+				params = [ params ];
+			}
+			// encodeURIComponent may be needed
+			newHash += "-"+params.join("-");
+		}
+		window.location.hash = newHash;
+	}
+
 	KC3StrategyTabs.reloadTab = function(tab) {
 		var tabElement = typeof tab;
 		KC3StrategyTabs.pageParams = (tabElement=="string" ? tab : window.location.hash).substring(1).split("-");

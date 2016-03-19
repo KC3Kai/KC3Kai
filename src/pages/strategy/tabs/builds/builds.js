@@ -45,7 +45,7 @@
 				
 				var ctr, thisBuild, buildbox;
 				var shipClickFunc = function(e){
-					window.location.hash = "mstship-" + $(this).attr("alt");
+					KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 				};
 
 				for(ctr in response){
