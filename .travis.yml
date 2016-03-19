@@ -8,7 +8,26 @@ env:
   - secure: iNlrBA5NB+DtY3wuFA34ThiZayswnXBdf/4vCQyAz6NJYT7IUx8CjVwAb1UOmb9UfFppcnZOSLpzboMuaWsVeKSsPuppGgiWDSU0whoBvpNC9ImD4YO7ZRpeZ25WsAOCp6lz/ypbicu0lSwvmCguVSus8F9EPQUWuEp0oHw+ZMs=
   - secure: ccwwpdxdUpufkFqQUWGdCQAF1TI+Nx1TDVHCIaRM8IdoBU0wc6XD7HEEqq9gNeB3GG5tvPYzwLfj9ARpEiO+KZObLCcaEI5ZKSXPNADzL05fmL8uUDQENR7q+K1iSe5lpE+iBWH1/SHUxUbIzIY1qlaA9+qoKZzzai6JQXEKdzE=
 deploy:
-  on:
-    branch:
-    - webstore
-    - webstore_staging
+  - provider: gae
+    keyfile: client-secret.json.enc
+    project: kc3kai-1249
+    skip_cleanup: true
+    on:
+      branch:
+      - webstore
+      - webstore_staging
+#  - provider: releases
+#    skip_cleanup: true
+#    api_key:
+#      secure: HQBMGX6Dw5NFE48EM7AIiZ8A6KZt7Skwhc0Jf6ttazu/UcH6WV9F/5MBXue3vtEFod6GjH0IsvtH5iGRgV/BDwJzDr4MVf/J/PM4Mdb69EiOhSDcNbT0SOD8xaariWyTpg0F7jqGGaRc8pJoh0fSLCz86T8+RxbePMIOanBh8XM=
+#    file: build/releases.zip
+#    on:
+#      tags: false
+#      branch: webstore
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/e8964a721dd35fd96e46
+    on_success: always 
+    on_failure: always
+    on_start: never
