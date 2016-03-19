@@ -26,6 +26,7 @@ deploy:
   on:
     tags: true
     branch: webstore
+    condition: $TRAVIS_PULL_REQUEST == "false"
 
 # BUILD NOTIFICATION FOR GITTER
 notifications:
