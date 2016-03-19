@@ -68,7 +68,7 @@ Previously known as "Reactor"
 		
 		/* Home Port Screen
 		-------------------------------------------------------*/
-		"api_port/port":function(params, response, headers){	
+		"api_port/port":function(params, response, headers){
 			KC3Network.trigger("HomeScreen");
 			
 			//KC3ShipManager.clear();
