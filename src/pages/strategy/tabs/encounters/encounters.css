@@ -1,0 +1,78 @@
+.tab_encounters {
+	width:680px;
+}
+.tab_encounters .factory {
+	display:none;
+}
+
+/* MAPS
+--------------------------------*/
+.tab_encounters .encounter_world_head {
+	
+}
+.tab_encounters .encounter_world_body {
+	padding:0px 0px 0px 20px;
+}
+
+/* NODES
+--------------------------------*/
+.tab_encounters .encounter_node_head {
+	font-size:16px;
+	font-weight:bold;
+}
+.tab_encounters .encounter_node_body {
+	padding:0px 0px 0px 20px;
+}
+
+/* RECORDS
+--------------------------------*/
+.tab_encounters .encounter_record {
+	width:260px;
+	height:50px;
+	float:left;
+	margin:0px 20px 10px 0px;
+	padding:3px 5px;
+	background:#def;
+	border-radius:8px;
+}
+.tab_encounters .encounter_formation {
+	width:30px;
+	height:30px;
+	line-height:30px;
+	margin:7px 5px 0px 0px;
+	float:left;
+	border-radius:15px;
+}
+.tab_encounters .encounter_formation img {
+	with:30px;
+	height:30px;
+}
+.tab_encounters .encounter_ships {
+	with:210px;
+	height:44px;
+	float:left;
+}
+
+.tab_encounters .encounter_ship {
+	width:30px;
+	height:44px;
+	float:left;
+	margin:0px 5px 0px 0px;
+}
+.tab_encounters .encounter_icon {
+	width:30px;
+	height:30px;
+	border-radius:15px;
+}
+.tab_encounters .encounter_icon img {
+	with:30px;
+	height:30px;
+}
+.tab_encounters .encounter_ship .encounter_id {
+	with:30px;
+	height:14px;
+	line-height:14px;
+	text-align:center;
+	color:#000;
+	font-size:12px;
+}

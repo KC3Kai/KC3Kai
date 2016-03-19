@@ -29,7 +29,8 @@ module.exports = function(grunt) {
 					'assets/js/steganography.js',
 					'assets/js/jquery-ui.min.js',
 					'assets/js/KanColleHelpers.js',
-					'assets/js/twbsPagination.min.js'
+					'assets/js/twbsPagination.min.js',
+					'assets/js/WhoCallsTheFleetShipDb.json'
 				],
 				dest: 'build/release/'
 			},
@@ -56,7 +57,7 @@ module.exports = function(grunt) {
 			}
 		},
 		jshint: {
-			all : {
+			build : {
 				options: {
 					jshintrc: true
 				},
@@ -64,6 +65,16 @@ module.exports = function(grunt) {
 					'build/tmp/assets/js/global.js',
 					'build/tmp/library/**/*.js',
 					'build/tmp/pages/**/*.js'
+				]
+			},
+			src : {
+				options: {
+					jshintrc: true
+				},
+				src: [
+					'src/assets/js/global.js',
+					'src/library/**/*.js',
+					'src/pages/**/*.js'
 				]
 			}
 		},
@@ -181,7 +192,7 @@ module.exports = function(grunt) {
 			}
 		},
 		jsonlint: {
-			all : {
+			build : {
 				options: {
 
 				},
@@ -189,6 +200,16 @@ module.exports = function(grunt) {
 					'build/tmp/manifest.json',
 					'build/tmp/data/*.json',
 					'build/tmp/data/lang/data/**/*.json'
+				]
+			},
+			src :{
+				options: {
+
+				},
+				src: [
+					'src/manifest.json',
+					'src/data/*.json',
+					'src/data/lang/data/**/*.json'
 				]
 			}
 		},
@@ -223,9 +244,50 @@ module.exports = function(grunt) {
 					'build/release/pages/strategy/allstrategytabs.js' : ['build/tmp/pages/strategy/tabs/*/*.js'],
 				}
 			}
+		},
+		qunit: {
+			all: [
+				'tests/**/*.html'
+			]
+		},
+		compress: {
+			release: {
+				options: {
+					archive: 'build/release.zip',
+					pretty: true
+				},
+				expand: true,
+				cwd: 'build/',
+				src: [ 'release/**/*' ],
+				dest: './'
+			}
+		},
+		webstore_upload: {
+			"accounts": {
+				"dragonjet": {
+					publish: true,
+					client_id: process.env.WEBSTORE_CLIENT_ID,
+					client_secret: process.env.WEBSTORE_CLIENT_SECRET,
+					refresh_token: process.env.WEBSTORE_REFRESH_TOKEN
+				}
+			},
+			"extensions": {
+				"kc3kai_nopublish": {
+					account: "dragonjet",
+					publish: false, 
+					appID: "hkgmldnainaglpjngpajnnjfhpdjkohh",
+					zip: "build/release.zip"      
+				},
+				"kc3kai_dopublish": {
+					account: "dragonjet",
+					publish: true, 
+					appID: "hkgmldnainaglpjngpajnnjfhpdjkohh",
+					zip: "build/release.zip"      
+				}
+			}
 		}
 	});
-
+	
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -237,27 +299,50 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-jsonlint');
 	grunt.loadNpmTasks('grunt-string-replace');
 	grunt.loadNpmTasks("grunt-remove-logging");
-
-	grunt.registerTask('default', [
+	grunt.loadNpmTasks("grunt-contrib-qunit");
+	grunt.loadNpmTasks('grunt-contrib-compress');
+	grunt.loadNpmTasks('grunt-webstore-upload');
+	
+	grunt.registerTask('build', [
 		'clean:release',
 		'copy:tmpsrc',
 		'copy:statics',
 		'removelogging',
 		'string-replace:devtooltitle',
-		'jshint',
+		'jshint:build',
 		'cssmin',
 		'uglify',
 		'string-replace:allhtml',
 		'htmlmin',
 		'string-replace:manifest',
-		'jsonlint',
+		'jsonlint:build',
 		'json-minify',
 		'copy:processed',
 		'concat:global_css',
 		'concat:global_js',
 		'concat:library',
-		'concat:strategy',
-		'clean:tmp'
+		'concat:strategy'
 	]);
-
+	
+	grunt.registerTask('test-src', [
+		'jshint:src',
+		'jsonlint:src'
+	]);
+	
+	grunt.registerTask('test-unit', [
+		'qunit'
+	]);
+	
+	if (process.env.TRAVIS_BRANCH == "webstore") {
+		grunt.registerTask('publish-webstore', [
+			'compress:release',
+			'webstore_upload:kc3kai_dopublish'
+		]);
+	} else {
+		grunt.registerTask('publish-webstore', [
+			'compress:release',
+			'webstore_upload:kc3kai_nopublish'
+		]);
+	}
+	
 };

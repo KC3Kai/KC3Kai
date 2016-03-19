@@ -60,27 +60,16 @@ Provides access to data on built-in JSON files
 		defaultIcon :function(iconSrc){
 			this._defaultIcon = iconSrc;
 		},
-		
-		shipIcon :function(id, empty){
+		getIcon: function(id, empty) {
 			if(this._icons.indexOf(id) > -1){
-				return "chrome-extension://"+chrome.runtime.id+"/assets/img/ships/"+id+".png";
+				var path = id >= 500 ? "abyss/" : "ships/";
+				return "chrome-extension://"+chrome.runtime.id+"/assets/img/"+path+id+".png";
 			}
 			if(typeof empty == "undefined"){
 				return this._defaultIcon;
 			}
 			return empty;
 		},
-		
-		abyssIcon :function(id, empty){
-			if(this._icons.indexOf(id) > -1){
-				return "chrome-extension://"+chrome.runtime.id+"/assets/img/abyss/"+id+".png";
-			}
-			if(typeof empty == "undefined"){
-				return this._defaultIcon;
-			}
-			return empty;
-		},
-		
 		knownEnemy :function(id){
 			return this._icons.indexOf(id) > -1;
 		},
@@ -90,6 +79,9 @@ Provides access to data on built-in JSON files
 		},
 		
 		formationText :function(formationId){
+			return this._battle.formation[formationId] || "";
+			// Moved to battle.json, 'formation' array.
+			/*
 			return [
 				"",
 				"Line Ahead",
@@ -100,14 +92,15 @@ Provides access to data on built-in JSON files
 				"","","","","",
 				"Cruising Formation 1 (anti-sub)",
 				"Cruising Formation 2 (forward)",
-				"Cruising Formation 1 (anti-sub)",
-				"Cruising Formation 1 (anti-sub)",
+				"Cruising Formation 3 (anti-air)",
+				"Cruising Formation 4 (full-power)",
 				"","","","","","",
 				"Cruising Formation 1 (anti-sub)",
 				"Cruising Formation 2 (forward)",
-				"Cruising Formation 1 (anti-sub)",
-				"Cruising Formation 1 (anti-sub)"
+				"Cruising Formation 3 (anti-air)",
+				"Cruising Formation 4 (full-power)"
 			][formationId];
+			*/
 		},
 		
 		shipName :function( jp_name ){
@@ -117,6 +110,9 @@ Provides access to data on built-in JSON files
 			if(typeof this._ship[jp_name] !== "undefined"){
 				this._cache[jp_name] = this._ship[jp_name];
 				return this._cache[jp_name];
+			}
+			if(Object.keys(this._ship).length === 0){
+				return jp_name;
 			}
 			var
 				bare = jp_name,
@@ -145,9 +141,15 @@ Provides access to data on built-in JSON files
 				// console.log("this._ship", this._ship);
 				// console.log("this._ship[bare]", this._ship[bare]);
 				if(typeof this._ship[bare] !== "undefined"){
-					this._cache[jp_name] = this._ship[bare] + (combin.length > 0 ? combin.join(" ") : "");
-					return this._cache[jp_name] ;
+				} else {
+					if (typeof this._cache[bare] !== "undefined") {
+						this._cache[bare] = bare;
+					}
 				}
+				
+				this._cache[jp_name] = (this._ship[bare] || this._cache[bare] || bare) +
+					(combin.length > 0 ? combin.join(" ") : "");
+				return this._cache[jp_name] ;
 				// console.log("this._cache[jp_name]", this._cache[jp_name]);
 				// return this._cache[jp_name]; // being here means the jp_name is not cached. there's already a cache checker at the start of this function
 			}
@@ -208,15 +210,15 @@ Provides access to data on built-in JSON files
 		},
 
 		detection :function(index){
-			return this._battle.detection[index] || ["",""];
+			return this._battle.detection[index] || ["","",""];
 		},
 		
 		airbattle :function(index){
-			return this._battle.airbattle[index] || ["",""];
+			return this._battle.airbattle[index] || ["","","Unknown"];
 		},
 		
 		engagement :function(index){
-			return this._battle.engagement[index] || ["",""];
+			return this._battle.engagement[index] || ["","",""];
 		},
 		
 		term: function(key) {
@@ -235,4 +237,7 @@ Provides access to data on built-in JSON files
 		}
 	};
 	
+	window.KC3Meta.shipIcon = KC3Meta.getIcon;
+	window.KC3Meta.abyssIcon = KC3Meta.getIcon;
+
 })();

@@ -5,7 +5,21 @@
 		BATTLE_INVALID = 0,
 		BATTLE_BASIC   = 1,
 		BATTLE_NIGHT   = 2,
-		BATTLE_AERIAL  = 4;
+		BATTLE_AERIAL  = 4,
+		
+		// Sortie Boss Node Indicator
+		// FIXME: this is not for translation. to test sortie status
+		SORTIE_STRING  = {
+			faild : "Did not reach boss",
+			fresh : "Did not able to hurt",
+			graze : "Hurt the boss a little",
+			light : "Lightly Damages the Boss",
+			modrt : "Moderately Damages the Boss",
+			heavy : "Heavily Damages the Boss",
+			despe : "Leaves the boss below 10HP",
+			endur : "Leaves the boss below 2HP",
+			destr : "Completely destroys"
+		};
 	
 	/* KC3 Sortie Logs
 			Arguments:
@@ -109,7 +123,7 @@
 									mapBox.addClass("notcleared");
 									// If HP-based gauge
 									if(typeof element.maxhp != "undefined"){
-										if(element.curhp>1){ // i want to approach last kill as JUST DO IT instead leaving 1HP only.
+										if(element.curhp>(element.baseHp || 1)){ // i want to approach last kill as JUST DO IT instead leaving 1HP only.
 											if((element.maxhp === 9999) || (element.curhp === 9999))
 												$(".map_hp_txt", mapBox).text( "???? / ????" );
 											else
@@ -306,14 +320,16 @@
 		Shows sorties on interface using list of collected sortie objects
 		---------------------------------*/
 		this.showList = function( sortieList ){
+			var self = this;
 			// Show sortie records on list
 			var sortieBox, fleets, fleetkey, mainFleet, isCombined, rshipBox, nodeBox, thisNode, sinkShips;
 			$.each(sortieList, function(id, sortie){
 				try {
+					var skey = ["m",sortie.world,sortie.mapnum].join('');
 					// Create sortie box
 					sortieBox = $(".tab_"+tabCode+" .factory .sortie_box").clone().appendTo(".tab_"+tabCode+" .sortie_list");
 					if(sortie.world >= 10) {
-						sortie.diff = sortie.diff || (maps["m"+sortie.world+sortie.mapnum] || {difficulty:0}).difficulty || 0;
+						sortie.diff = sortie.diff || (maps[skey] || {difficulty:0}).difficulty || 0;
 					}
 					if((sortie.diff || 0) > 0)
 						$(sortieBox)
@@ -506,7 +522,34 @@
 					
 					$(".sortie_nodes", sortieBox).append( $("<div>").addClass("clear") );
 					
-				}catch(e){console.error(e);console.error(e.stack);}
+					var
+						mstat = self.maps[skey].stat,
+						sstat = $(".sortie_stat", sortieBox),
+						kstat = ["now","max"];
+					if(mstat && sstat.length) {
+						var
+							isHClear = mstat.onClear == sortie.id,
+							isCtBomb = mstat.onError.indexOf(sortie.id) >= 0,
+							stateKey = Object.keys(SORTIE_STRING).filter(function(statKey){
+								return (mstat.onBoss[statKey] || []).indexOf(sortie.id) >= 0;
+							}).shift();
+						try {
+							mstat.onBoss.hpdat[sortie.id].forEach(function(v,i){
+								$([".boss.",kstat[i],"hp"].join(''),sstat).text(v);
+							});
+							$(".sortie_end_clear",sstat).css('visibility',isHClear ? 'visible' : '');
+							$(".sortie_end_error",sstat).css('visibility',isCtBomb ? 'visible' : '');
+							$(".sortie_end_final",sstat)
+								.attr('title',SORTIE_STRING[stateKey || 'faild'])
+								.attr("src",
+									["../../../../assets/img/ui/estat_boss",stateKey || 'fresh',".png"].join('')
+								)
+								.css('opacity',1 / (1 + !stateKey));
+						} catch (e) {
+							throw e;
+						}
+					}
+				}catch(e){console.error(e.stack);}
 			});
 			
 			$(".tab_"+tabCode+" .pagination").show();
@@ -566,12 +609,13 @@
 						return false;
 					}
 					
-					console.log(sortieData);
+					console.log(rcontext,sortieData);
 					rcontext.font = "26pt Calibri";
 					rcontext.fillStyle = '#ffffff';
 					rcontext.fillText(sortieData.world+"-"+sortieData.mapnum, 20, 215);
 					
 					rcontext.font = "20pt Calibri";
+					rcontext.fillStyle = '#ffffff';
 					rcontext.fillText(PlayerManager.hq.name, 100, 210);
 					
 					var fleetUsed = sortieData["fleet"+sortieData.fleetnum];

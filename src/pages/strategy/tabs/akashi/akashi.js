@@ -58,8 +58,7 @@
 			});
 			
 			// Select today
-			var JPDate = getJPDate();
-			$("#weekday-"+JPDate.getDay()).trigger("click");
+			$("#weekday-"+Date.getJstDate().getDay()).trigger("click");
 		},
 		
 		showDay :function(dayName){
