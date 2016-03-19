@@ -120,6 +120,7 @@ Provides access to data on built-in JSON files
 				repTab = {
 					"甲"   : '_A',
 					"乙"   : '_B',
+					"丙"   : '_C',
 					"改二" : '_KaiNi',
 					"改"   : '_Kai',
 					"zwei" : '_Zwei',
