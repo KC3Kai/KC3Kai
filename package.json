@@ -34,6 +34,7 @@
   },
   "scripts": {
     "test": "grunt test-src && grunt test-unit",
-    "deploy": "grunt publish-webstore"
+    "stage": "grunt build && grunt stage-webstore",
+    "deploy": "grunt build && grunt publish-webstore"
   }
 }

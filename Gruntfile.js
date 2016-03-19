@@ -333,16 +333,14 @@ module.exports = function(grunt) {
 		'qunit'
 	]);
 	
-	if (process.env.TRAVIS_BRANCH == "webstore") {
-		grunt.registerTask('publish-webstore', [
-			'compress:release',
-			'webstore_upload:kc3kai_dopublish'
-		]);
-	} else {
-		grunt.registerTask('publish-webstore', [
-			'compress:release',
-			'webstore_upload:kc3kai_nopublish'
-		]);
-	}
+	grunt.registerTask('stage-webstore', [
+		'compress:release',
+		'webstore_upload:kc3kai_nopublish'
+	]);
+	
+	grunt.registerTask('publish-webstore', [
+		'compress:release',
+		'webstore_upload:kc3kai_dopublish'
+	]);
 	
 };
