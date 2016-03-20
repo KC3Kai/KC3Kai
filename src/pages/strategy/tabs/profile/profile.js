@@ -51,6 +51,12 @@
 			$(".rank_cutval .rank_content").html(PlayerManager.hq.rankPtCutoff);
 			$(".rank_current .rank_content").html(PlayerManager.hq.getRankPoints());
 			
+			// Manual rank cut-off
+			$("#rank_manual_cut").on("click", function(){
+				PlayerManager.hq.rankCutOff();
+				window.location.reload();
+			});
+			
 			// Show statistics
 			if(this.statistics){
 				if(typeof this.statistics.sortie.rate == "string"){
