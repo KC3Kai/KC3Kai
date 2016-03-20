@@ -93,9 +93,7 @@ $(document).on("ready", function(){
 		if(
 			ConfigManager.api_askExit==1 &&
 			!trustedExit &&
-			!waiting &&
-			$(".box-game").is(":visible") &&
-			$(".game-refresh").text() > 0
+			!waiting
 		){
 			trustedExit = true;
 			setTimeout(function(){ trustedExit = false; }, 100);
