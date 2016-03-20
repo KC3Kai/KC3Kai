@@ -116,7 +116,7 @@ Instantiatable class to represent one player
 			}
 		}
 		
-		return Math.floor((this.exp[3] - this.rankPtCutoff)/1400) + ExOpBonus;
+		return Math.floor((this.exp[3] - this.rankPtCutoff)/1428) + ExOpBonus;
 	};
 	
 	KC3Player.prototype.getRegenCap = function(){
