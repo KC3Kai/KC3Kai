@@ -100,8 +100,7 @@ Instantiatable class to represent one player
 	KC3Player.prototype.getRankPoints = function(){
 		var ExOpBonus = 0;
 		
-		var maps = JSON.parse(localStorage.maps);
-		
+		/*var maps = JSON.parse(localStorage.maps);
 		for(var mapName in maps){
 			if(maps[mapName].clear){
 				switch(mapName){
@@ -114,7 +113,7 @@ Instantiatable class to represent one player
 					default: break;
 				}
 			}
-		}
+		}*/
 		
 		return Math.floor((this.exp[3] - this.rankPtCutoff)/1428) + ExOpBonus;
 	};
