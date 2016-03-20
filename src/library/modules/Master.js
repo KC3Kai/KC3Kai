@@ -159,6 +159,7 @@ Saves and loads significant data for future use
 			};
 			
 			function fnLoad(){
+				/*jshint validthis:true*/
 				this.available = false;
 				for(var storType in keyStor) {
 					if(this.available) continue;
@@ -169,6 +170,7 @@ Saves and loads significant data for future use
 						if(!tempRaw.ship) throw Error("Non-existing ship");
 						
 						this.available |= keyStor[storType].call(this,tempRaw);
+						console.info("Loaded master:%c%s%c data","color:darkblue",storType,"color:initial");
 					} catch (e) {
 						console.error("Failed to process master:%s data",storType,e);
 					}

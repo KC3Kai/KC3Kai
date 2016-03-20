@@ -1415,8 +1415,16 @@
 				)
 			);
 			
-			lookupBound[0] = this.totalBuffer.slice().reverse().find(function(buf){return buf.hour >= lookupBound[0]; }).hour;
-			lookupBound[1] = this.totalBuffer.slice().find(function(buf){return buf.hour <= lookupBound[1]; }).hour;
+			var dupeBuffer = this.totalBuffer.slice();
+			var lookupCheck = [
+				function(buf){return buf.hour >= lookupBound[i]; },
+				function(buf){return buf.hour <= lookupBound[i]; }
+			];
+			
+			for(var i in lookupBound) {
+				dupeBuffer.reverse();
+				lookupBound[i] = (dupeBuffer.find( lookupCheck[i] ) || {hour:lookupBound[i]}).hour;
+			}
 			
 			refreshCurrentBuffer.call(this);
 			this.refreshList();

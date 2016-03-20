@@ -1682,7 +1682,7 @@ Previously known as "Reactor"
 				.forEach(function(x){
 					qLog(x[0]).increment(x[1]);
 				});
-			} else {
+		} else {
 			KC3QuestManager.get(303).increment(); // C2: Daily Exercises 1
 			if(rankPt >= 3) {
 				KC3QuestManager.get(304).increment(); // C3: Daily Exercises 2
