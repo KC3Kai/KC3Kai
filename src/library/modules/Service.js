@@ -34,16 +34,8 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			// If refreshing API link, close source tabs and re-open game frame
 			if(JSON.parse(localStorage.extract_api)){ // localStorage has problems with native boolean
 				localStorage.extract_api = false;
-				localStorage.apiUsage = Date.now() + 20 * 60 * 1000;
-				if(false) {
-					// #137 open window first before closing source tab
-					/* Conventional way API Refresh */
-					window.open("../pages/game/api.html", "kc3kai_game");
-					chrome.tabs.remove([sender.tab.id], function(){});
-				} else {
-					/* On-site API Refresh */
-					(new TMsg(sender.tab.id, "gamescreen", "api_refresh", {}, callback)).execute();
-				}
+				window.open("../pages/game/api.html", "kc3kai_game");
+				chrome.tabs.remove([sender.tab.id], function(){});
 			}
 		},
 		
