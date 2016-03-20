@@ -59,28 +59,37 @@ Instantiatable class to represent one player
 	};
 	
 	KC3Player.prototype.checkRankPoints = function(){
-		var TimestampNow = Date.now();
-		
-		var PvPResetTime;
-		
 		var PvPReset = (new Date());
 		PvPReset.setUTCMinutes(0);
 		PvPReset.setUTCSeconds(0);
 		PvPReset.setUTCMilliseconds(0);
 		
-		PvPReset.setUTCHours(6);
-		PvPResetTime = PvPReset.getTime();
-		if(this.rankPtLastCheck < PvPResetTime && PvPResetTime < TimestampNow){
-			this.rankCutOff();
-		}else{
-			PvPReset.setUTCHours(18);
-			PvPResetTime = PvPReset.getTime();
-			if(this.rankPtLastCheck < PvPResetTime && PvPResetTime < TimestampNow){
-				this.rankCutOff();
-			}
+		// Get last date of this month
+		var lastDay = new Date(Date.UTC(PvPReset.getUTCFullYear(), PvPReset.getUTCMonth()+1, 0));
+		
+		// If this is the last day of the month
+		if(PvPReset.getUTCDate() == lastDay.getUTCDate()) {
+			// At morning, check 0500 UTC = 1400 JST
+			// At night, check 1500 UTC = 2400 JST
+			this.checkRankCutOff(PvPReset, 5);
+			this.checkRankCutOff(PvPReset, 15);
+		}else {
+			// Not last day of the month..
+			// At morning, check 0500 UTC = 1400 JST
+			// At night, check 1700 UTC = 0200 JST
+			this.checkRankCutOff(PvPReset, 5);
+			this.checkRankCutOff(PvPReset, 17);
 		}
 		
-		this.rankPtLastCheck = TimestampNow;
+		this.rankPtLastCheck = Date.now();
+	};
+	
+	KC3Player.prototype.checkRankCutOff = function(dateObj, hr){
+		dateObj.setUTCHours(hr);
+		var PvPResetTime = dateObj.getTime();
+		if(this.rankPtLastCheck < PvPResetTime && PvPResetTime < Date.now()){
+			this.rankCutOff();
+		}
 	};
 	
 	KC3Player.prototype.rankCutOff = function(){
@@ -89,7 +98,25 @@ Instantiatable class to represent one player
 	};
 	
 	KC3Player.prototype.getRankPoints = function(){
-		return Math.floor((this.exp[3] - this.rankPtCutoff)/1400);
+		var ExOpBonus = 0;
+		
+		var maps = JSON.parse(localStorage.maps);
+		
+		for(var mapName in maps){
+			if(maps[mapName].clear){
+				switch(mapName){
+					case "m15": ExOpBonus += 75; break;
+					case "m16": ExOpBonus += 75; break;
+					case "m25": ExOpBonus += 100; break;
+					case "m35": ExOpBonus += 150; break;
+					case "m45": ExOpBonus += 180; break;
+					case "m55": ExOpBonus += 200; break;
+					default: break;
+				}
+			}
+		}
+		
+		return Math.floor((this.exp[3] - this.rankPtCutoff)/1400) + ExOpBonus;
 	};
 	
 	KC3Player.prototype.getRegenCap = function(){

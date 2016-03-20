@@ -47,7 +47,8 @@
 			$(".hq_rank .hq_content").html(PlayerManager.hq.rank);
 			$(".hq_level .hq_content").html(PlayerManager.hq.level);
 			
-			$(".rank_current .rank_cutval").html(PlayerManager.hq.rankPtCutoff);
+			$(".rank_previous .rank_content").html(PlayerManager.hq.rankPtLastCount);
+			$(".rank_cutval .rank_content").html(PlayerManager.hq.rankPtCutoff);
 			$(".rank_current .rank_content").html(PlayerManager.hq.getRankPoints());
 			
 			// Show statistics
