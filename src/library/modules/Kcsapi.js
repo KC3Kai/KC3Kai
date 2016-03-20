@@ -1455,12 +1455,15 @@ Previously known as "Reactor"
 				}
 
 				// Check default gauge info
-				if(typeof maps[key].dkind === 'undefined') {
-					maps[key].dkind = maps[key].kind;
+				if(typeof maps[key] !== 'undefined') {
+					if(typeof maps[key].dkind === 'undefined') {
+						maps[key].dkind = maps[key].kind;
+					}
 				}
 
 				maps[ key ] = localMap;
 			}
+			
 			localStorage.maps = JSON.stringify(maps);
 		},
 

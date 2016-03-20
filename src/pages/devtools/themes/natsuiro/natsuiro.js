@@ -673,6 +673,11 @@
 				overrideFocus = false;
 			}
 			KC3SortieManager.onPvP = false;
+			
+			if(!KC3Master.available){
+				window.location.href = "../../nomaster.html";
+				return false;
+			}
 		},
 		
 		CatBomb: function(data){
