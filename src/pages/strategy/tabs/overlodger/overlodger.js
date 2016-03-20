@@ -1416,14 +1416,16 @@
 			);
 			
 			var dupeBuffer = this.totalBuffer.slice();
-			var lookupCheck = [
-				function(buf){return buf.hour >= lookupBound[i]; },
-				function(buf){return buf.hour <= lookupBound[i]; }
-			];
+			var oldCmp = lookupBound.slice();
+			var lookupCheck = (function(){
+				var rangeCache = Range.apply(null,oldCmp);
+				function fnLookupCheck(buf,i){return rangeCache.inside(buf.hour); }
+				return fnLookupCheck;
+			}).call(this);
 			
 			for(var i in lookupBound) {
 				dupeBuffer.reverse();
-				lookupBound[i] = (dupeBuffer.find( lookupCheck[i] ) || {hour:lookupBound[i]}).hour;
+				lookupBound[i] = (dupeBuffer.find( lookupCheck ) || {hour:lookupBound[i]}).hour;
 			}
 			
 			refreshCurrentBuffer.call(this);
