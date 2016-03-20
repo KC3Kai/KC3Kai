@@ -141,29 +141,43 @@ Saves and loads significant data for future use
 		
 		/* Load from localStorage
 		-------------------------------------*/
-		load :function(){
-			this.available = false;
-			if(typeof localStorage.raw != "undefined"){
-				var tmpRaw = JSON.parse(localStorage.raw);
-				if(!!tmpRaw.ship[1]){
-					this._raw = tmpRaw;
-					this.available = true;
+		load :(function(){
+			var keyStor = {
+				raw: function fnlRaw(data){
+					this._raw = data;
+					return true;
+				},
+				master: function fnlMaster(data){
+					this._raw.ship = data.ship;
+					this._raw.shipgraph = data.graph || {};
+					this._raw.slotitem = data.slotitem;
+					this._raw.stype = data.stype;
+					this._raw.newShips = data.newShips || {};
+					this._raw.newItems = data.newItems || {};
+					return true;
+				},
+			};
+			
+			function fnLoad(){
+				this.available = false;
+				for(var storType in keyStor) {
+					if(this.available) continue;
+					if(typeof localStorage[storType] == 'undefined') continue;
+					
+					try {
+						var tempRaw = JSON.parse(localStorage[storType]);
+						if(!tempRaw.ship) throw Error("Non-existing ship");
+						
+						this.available |= keyStor[storType].call(this,tempRaw);
+					} catch (e) {
+						console.error("Failed to process master:%s data",storType,e);
+					}
 				}
-			} else if(typeof localStorage.master != "undefined"){
-				// Compatibility table for OCD people
-				var tmpMaster = JSON.parse(localStorage.master);
-				if(!!tmpMaster.ship[0]){
-					this._raw.ship = tmpMaster.ship;
-					this._raw.shipgraph = tmpMaster.graph || {};
-					this._raw.slotitem = tmpMaster.slotitem;
-					this._raw.stype = tmpMaster.stype;
-					this._raw.newShips = tmpMaster.newShips || {};
-					this._raw.newItems = tmpMaster.newItems || {};
-					this.available = true;
-				}
+				return this.available;
 			}
-			return this.available;
-		},
+			
+			return fnLoad;
+		})(),
 		
 		/* Remodel Table Storage
 		-------------------------------------*/
