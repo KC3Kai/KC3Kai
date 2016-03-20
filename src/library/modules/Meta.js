@@ -152,7 +152,7 @@ Provides access to data on built-in JSON files
 				}
 				
 				this._cache[jp_name] = (this._ship[bare] || this._cache[bare] || bare) +
-					(combin.length > 0 ? combin.join(" ") : "");
+					(combin.length > 1 ? combin.join(" ") : "");
 				return this._cache[jp_name] ;
 				// console.log("this._cache[jp_name]", this._cache[jp_name]);
 				// return this._cache[jp_name]; // being here means the jp_name is not cached. there's already a cache checker at the start of this function
