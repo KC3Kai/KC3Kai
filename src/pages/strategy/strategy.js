@@ -44,6 +44,10 @@
 
 		// Click a menu item
 		$("#menu .submenu ul.menulist li").on("click", function(){
+			// Google Analytics just for click event
+			var gaEvent = "Strategy Room: " + $(this).data("id");
+			_gaq.push(['_trackEvent', gaEvent, 'clicked']);
+
 			KC3StrategyTabs.reloadTab(this);
 		});
 
@@ -101,11 +105,6 @@
 		if($(tab).hasClass("disabled")){ return false; }
 		if(KC3StrategyTabs.loading){ return false; }
 		KC3StrategyTabs.loading = $(tab).data("id");
-
-		// Google Analytics
-		var gaEvent = "Strategy Room: "+KC3StrategyTabs.loading;
-		gaEvent += ", hash: #"+KC3StrategyTabs.pageParams.join("-");
-		_gaq.push(['_trackEvent', gaEvent, 'clicked']);
 
 		// Interface
 		$("#menu .submenu ul.menulist li").removeClass("active");

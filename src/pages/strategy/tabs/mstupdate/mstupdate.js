@@ -59,6 +59,9 @@
 			
 			var shipBox, gearBox, shipFile, shipVersion, shipSrc;
 			var self = this;
+			var linkClickFunc = function(e){
+				KC3StrategyTabs.gotoTab($(this).data("tab"), $(this).data("api_id"));
+			};
 
 			// New Ship list
 			$.each(this.newShips, function(index, shipData){
@@ -74,6 +77,9 @@
 				$(".ship_cg embed", shipBox).attr("src", shipSrc).attr("menu", "false");
 				
 				$(".ship_name", shipBox).text( KC3Meta.shipName( shipData.api_name ) );
+				$(".ship_name", shipBox).data("tab", "mstship");
+				$(".ship_name", shipBox).data("api_id", shipData.api_id);
+				$(".ship_name", shipBox).click(linkClickFunc);
 				
 				shipBox.appendTo(".tab_mstupdate .mstships");
 			});
@@ -90,9 +96,10 @@
 					$(".gear_cg img", gearBox).hide();
 				}
 				
-				// $("a", gearBox).attr("href", "?#mstgear-"+GearData.api_id);
-				
 				$(".gear_name", gearBox).text( KC3Meta.gearName( GearData.api_name ) );
+				$(".gear_name", gearBox).data("tab", "mstgear");
+				$(".gear_name", gearBox).data("api_id", GearData.api_id);
+				$(".gear_name", gearBox).click(linkClickFunc);
 				
 				gearBox.appendTo(".tab_mstupdate .mstgears");
 			});
