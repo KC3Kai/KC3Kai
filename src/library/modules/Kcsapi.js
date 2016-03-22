@@ -1383,6 +1383,7 @@ Previously known as "Reactor"
 		/* View World Maps
 		-------------------------------------------------------*/
 		"api_get_member/mapinfo":function(params, response, headers){
+			if(localStorage.maps=="null"){ localStorage.maps = ""; }
 			var maps = JSON.parse(localStorage.maps || "{}");
 			var ctr, thisMap, localMap, etcStat, defStat;
 			
