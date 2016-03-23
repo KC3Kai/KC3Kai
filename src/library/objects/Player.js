@@ -70,9 +70,9 @@ Instantiatable class to represent one player
 		// If this is the last day of the month
 		if(PvPReset.getUTCDate() == lastDay.getUTCDate()) {
 			// At morning, check 0500 UTC = 1400 JST
-			// At night, check 1500 UTC = 2400 JST
+			// At night, check 1300 UTC = 2200 JST
 			this.checkRankCutOff(PvPReset, 5);
-			this.checkRankCutOff(PvPReset, 15);
+			this.checkRankCutOff(PvPReset, 13);
 		}else {
 			// Not last day of the month..
 			// At morning, check 0500 UTC = 1400 JST
@@ -100,8 +100,7 @@ Instantiatable class to represent one player
 	KC3Player.prototype.getRankPoints = function(){
 		var ExOpBonus = 0;
 		
-		var maps = JSON.parse(localStorage.maps);
-		
+		/*var maps = JSON.parse(localStorage.maps);
 		for(var mapName in maps){
 			if(maps[mapName].clear){
 				switch(mapName){
@@ -114,9 +113,9 @@ Instantiatable class to represent one player
 					default: break;
 				}
 			}
-		}
+		}*/
 		
-		return Math.floor((this.exp[3] - this.rankPtCutoff)/1400) + ExOpBonus;
+		return Math.floor((this.exp[3] - this.rankPtCutoff)/1428) + ExOpBonus;
 	};
 	
 	KC3Player.prototype.getRegenCap = function(){
