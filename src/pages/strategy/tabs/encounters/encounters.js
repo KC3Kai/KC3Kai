@@ -61,7 +61,7 @@
 					
 				});
 				
-				console.log(self.list);
+				//console.log(self.list);
 			});
 		}
 		

@@ -145,9 +145,13 @@ Provides access to data on built-in JSON files
 				bare = jp_name,
 				combin = [],
 				repTab = {
-					"甲"   : '_A',
-					"改二" : '_KaiNi',
-					"改"   : '_Kai',
+					"甲"    : '_A',
+					"乙"    : '_B',
+					"丙"    : '_C',
+					"改二"  : '_KaiNi',
+					"改"    : '_Kai',
+					" zwei" : '_Zwei',
+					" drei" : '_Drei'
 				},
 				repRes = null,
 				replaced = false;
@@ -156,6 +160,7 @@ Provides access to data on built-in JSON files
 			// the matched one, added to the combination stack (FILO)
 			// removing from the replacement table in order to prevent infinite loop ^^;
 			// if there's no match, it'll instantly stop and return the actual value
+			// just translate the items start with '_' in ships.json, and keep the necessary prefix space
 			while( !!(repRes = (new RegExp(".+("+(Object.keys(repTab).join("|"))+")$",'gi')).exec(bare)) ){
 				bare = bare.substr(0, bare.length-repRes[1].length);
 				combin.unshift(this._ship[repTab[repRes[1]]]);
@@ -164,7 +169,6 @@ Provides access to data on built-in JSON files
 			}
 			// console.log("Remaining", bare, "with combination", combin.join(" "));
 			if(replaced) {
-				combin.unshift("");
 				// console.log("this._ship", this._ship);
 				// console.log("this._ship[bare]", this._ship[bare]);
 				if(typeof this._ship[bare] !== "undefined"){
@@ -175,7 +179,7 @@ Provides access to data on built-in JSON files
 				}
 				
 				this._cache[jp_name] = (this._ship[bare] || this._cache[bare] || bare) +
-					(combin.length > 0 ? combin.join(" ") : "");
+					(combin.length > 0 ? combin.join("") : "");
 				return this._cache[jp_name] ;
 				// console.log("this._cache[jp_name]", this._cache[jp_name]);
 				// return this._cache[jp_name]; // being here means the jp_name is not cached. there's already a cache checker at the start of this function

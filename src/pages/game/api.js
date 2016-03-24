@@ -54,6 +54,7 @@ $(document).on("ready", function(){
 		$("body").css("background-position", ConfigManager.api_bg_position);
 		$("body").css("background-repeat", "no-repeat");
 	}
+	$(".box-wrap").css("zoom", ((ConfigManager.api_gameScale || 100) / 100));
 	
 	if(!(localStorage.absoluteswf || false)) {
 		$(".box-nolink").show();
@@ -101,9 +102,7 @@ $(document).on("ready", function(){
 		if(
 			ConfigManager.api_askExit==1 &&
 			!trustedExit &&
-			!waiting &&
-			$(".box-game").is(":visible") &&
-			$(".game-refresh").text() > 0
+			!waiting
 		){
 			trustedExit = true;
 			setTimeout(function(){ trustedExit = false; }, 100);

@@ -1,7 +1,7 @@
 var imgurLimit = 0;
 
 function KCScreenshot(){
-	this.scale = ((ConfigManager.api_gameScale || 100) / 100);
+	this.scale = ((ConfigManager.api_gameScale || 100) / 100) * (window.devicePixelRatio || 1);
 	this.gamebox = {};
 	this.canvas = {};
 	this.context = {};

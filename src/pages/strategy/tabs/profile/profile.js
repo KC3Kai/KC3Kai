@@ -46,9 +46,17 @@
 			
 			$(".hq_rank .hq_content").html(PlayerManager.hq.rank);
 			$(".hq_level .hq_content").html(PlayerManager.hq.level);
+			$(".hq_exp .hq_content").html( "{0} / {1}".format(PlayerManager.hq.exp[3], PlayerManager.hq.exp[1]+PlayerManager.hq.exp[3]) );
 			
-			$(".rank_current .rank_cutval").html(PlayerManager.hq.rankPtCutoff);
+			$(".rank_previous .rank_content").html(PlayerManager.hq.rankPtLastCount);
+			$(".rank_cutval .rank_content").html(PlayerManager.hq.rankPtCutoff);
 			$(".rank_current .rank_content").html(PlayerManager.hq.getRankPoints());
+			
+			// Manual rank cut-off
+			$("#rank_manual_cut").on("click", function(){
+				PlayerManager.hq.rankCutOff();
+				window.location.reload();
+			});
 			
 			// Show statistics
 			if(this.statistics){
