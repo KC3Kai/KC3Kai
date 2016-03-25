@@ -169,6 +169,16 @@ body {
 	text-shadow:0px 0px 1px #fff;
 }
 
+.page_help .help_more {
+	height:16px;
+	line-height:16px;
+	font-size:12px;
+	font-weight:bold;
+	margin:0px 0px 0px 0px;
+	text-align:right;
+	text-shadow:1px 1px 2px #ccc;
+}
+
 .page_panel {
 	width:700px;
 	background:#f0f5ff;
