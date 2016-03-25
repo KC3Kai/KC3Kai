@@ -52,7 +52,7 @@
 		
 		
 		showGear :function(gear_id){
-			gear_id = 1*(gear_id||"124");
+			gear_id = Number(gear_id||"124");
 			var self = this;
 			var gearData = KC3Master.slotitem( gear_id );
 			console.log(gearData);

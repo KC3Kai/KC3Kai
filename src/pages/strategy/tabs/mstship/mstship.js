@@ -183,7 +183,7 @@
 		
 		
 		showShip :function(ship_id){
-			ship_id = 1*(ship_id||"405");
+			ship_id = Number(ship_id||"405");
 			var
 				self = this,
 				shipData = KC3Master.ship(ship_id),
