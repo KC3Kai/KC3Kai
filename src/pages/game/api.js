@@ -30,6 +30,7 @@ function ActivateGame(){
 		.attr("src", localStorage.absoluteswf)
 		.end()
 		.show();
+	$(".box-wrap").css("zoom", ((ConfigManager.api_gameScale || 100) / 100));
 	return true;
 }
 
@@ -54,7 +55,6 @@ $(document).on("ready", function(){
 		$("body").css("background-position", ConfigManager.api_bg_position);
 		$("body").css("background-repeat", "no-repeat");
 	}
-	$(".box-wrap").css("zoom", ((ConfigManager.api_gameScale || 100) / 100));
 	
 	if(ConfigManager.api_subtitles){
 		$(".overlay_subtitles").css("font-family", ConfigManager.subtitle_font);
