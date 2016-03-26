@@ -364,37 +364,20 @@ var interactions = {
 				break;
 		}
 		subtitleText = KC3Meta.quote( quoteIdentifier, quoteVoiceNum );
-
+		
+		// hide first to fading will stop
+		$(".overlay_subtitles").stop(true);
+		$(".overlay_subtitles").hide();
+		
 		// If subtitle removal timer is ongoing, reset
-		if(subtitleVanishTimer && subtitleText){
+		if(subtitleVanishTimer){
 			clearTimeout(subtitleVanishTimer);
 		}
 		
 		// If subtitles available for the voice
 		if(subtitleText){
 			$(".overlay_subtitles").html(subtitleText);
-			$(".overlay_subtitles").hide(); // hide first to fading will stop
-			$(".overlay_subtitles").show(); // then re-show
-			
-			/*subtitleMp3 = new Audio();
-			subtitleMp3.canplaythrough = function() { 
-				console.log("DURATION: "+subtitleMp3.duration);
-			};
-			subtitleMp3.src = request.url;*/
-			
-			/*subtitleMp3 = document.createElement("audio");
-			subtitleMp3.addEventListener('canplaythrough', function() { 
-				console.log("DURATION: "+subtitleMp3.duration);
-			}, false);
-			subtitleMp3.src = request.url;*/
-			
-			subtitleVanishTimer = setTimeout(function(){
-				subtitleVanishTimer = false;
-				$(".overlay_subtitles").fadeOut(500);
-			}, (2000+ ($(".overlay_subtitles").text().length*50)) );
-		} else {
-			//$(".overlay_subtitles").html("Missing quote #" + quoteIdentifier + "-" + quoteVoiceNum);
-			$(".overlay_subtitles").hide();
+			$(".overlay_subtitles").show();
 			subtitleVanishTimer = setTimeout(function(){
 				subtitleVanishTimer = false;
 				$(".overlay_subtitles").fadeOut(500);

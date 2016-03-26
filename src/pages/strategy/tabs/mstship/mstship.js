@@ -135,6 +135,12 @@
 			$(".tab_mstship .shipInfo .voices, .tab_mstship .shipInfo .hourlies").on("click", ".voice", function(){
 				if(self.audio){ self.audio.pause(); }
 				var voiceFile = KC3Meta.getFilenameByVoiceLine(self.currentShipId, parseInt($(this).data("vnum"), 10));
+				console.log(voiceFile);
+				if(!voiceFile || voiceFile==100000){
+					$(".tab_mstship .shipInfo .subtitles").text("This voice is currently disabled to be replayable in KC3Kai");
+					return true;
+				}
+				
 				var voiceSrc = "http://"+self.server_ip
 							+ "/kcs/sound/kc"+self.currentGraph+"/"+voiceFile+".mp3"
 							+ (!self.currentVersion?"":"?version="+self.currentVersion);
@@ -188,7 +194,7 @@
 			if(!!KC3StrategyTabs.pageParams[1]){
 				this.showShip(KC3StrategyTabs.pageParams[1]);
 			}else{
-				this.showShip(405);
+				this.showShip(323);
 			}
 		},
 		
