@@ -7,7 +7,7 @@ Previously known as "Reactor"
 */
 (function(){
 	"use strict";
-
+	
 	window.Kcsapi = {
 		shipConstruction:{ active: false },
 		remodelSlot:{
@@ -23,17 +23,17 @@ Previously known as "Reactor"
 				return Math.hrdInt('floor',Date.now() - t,3,0,1);
 			}
 		}),
-
+		
 		/* Master Data
 		-------------------------------------------------------*/
 		"api_start2":function(params, response, headers){
 			var newCounts = KC3Master.init( response.api_data );
 			RemodelDb.init( response.api_data );
-
+			
 			if(ConfigManager.KC3DBSubmission_enabled) {
 				KC3DBSubmission.sendMaster( JSON.stringify(response) );
 			}
-
+			
 			KC3SortieManager.load();
 			// Marks last sortie as catbombed
 			if(KC3SortieManager.onSortie) {
@@ -53,30 +53,30 @@ Previously known as "Reactor"
 				}
 				localStorage.setObject('maps',ma);
 			}
-
+			
 			KC3Network.trigger("GameStart");
-
+			
 			// if there is either new ship(s) or new item(s)
 			console.log("api_start2 newCounts", newCounts);
 			if(newCounts[0]>0 || newCounts[1]>0){
 				console.log("triggering GameUpdate");
 				KC3Network.trigger("GameUpdate", newCounts);
 			}
-
+			
 			localStorage.apiUsage = null;
 		},
-
+		
 		/* Home Port Screen
 		-------------------------------------------------------*/
-		"api_port/port":function(params, response, headers){
+		"api_port/port":function(params, response, headers){	
 			KC3Network.trigger("HomeScreen");
-
+			
 			//KC3ShipManager.clear();
 			KC3ShipManager.set(response.api_data.api_ship,true);
 			this.serverOffset = this.moraleRefresh.calibrate( headers.Date );
-
+			
 			KC3SortieManager.endSortie(response);
-
+			
 			PlayerManager.setHQ({
 				mid: response.api_data.api_basic.api_member_id,
 				name: response.api_data.api_basic.api_nickname,
@@ -86,37 +86,37 @@ Previously known as "Reactor"
 				level: response.api_data.api_basic.api_level,
 				exp: response.api_data.api_basic.api_experience
 			});
-
+			
 			PlayerManager.consumables.fcoin = response.api_data.api_basic.api_fcoin;
-
+			
 			KC3ShipManager.max = response.api_data.api_basic.api_max_chara;
 			KC3GearManager.max = response.api_data.api_basic.api_max_slotitem;
-
+			
 			PlayerManager.setFleets( response.api_data.api_deck_port );
 			PlayerManager.setRepairDocks( response.api_data.api_ndock );
 			PlayerManager.buildSlots = response.api_data.api_basic.api_count_kdock;
-
+			
 			var UTCtime = Math.floor((new Date(headers.Date)).getTime()/1000);
-
+			
 			PlayerManager.portRefresh({
 				time: UTCtime * 1000,
 				matAbs: response.api_data.api_material.slice(0,4).map(function(x){return x.api_value;}),
 			});
-
+			
 			PlayerManager.setResources([
 				response.api_data.api_material[0].api_value,
 				response.api_data.api_material[1].api_value,
 				response.api_data.api_material[2].api_value,
 				response.api_data.api_material[3].api_value
 			], UTCtime);
-
+			
 			PlayerManager.setConsumables({
 				torch: response.api_data.api_material[4].api_value,
 				buckets: response.api_data.api_material[5].api_value,
 				devmats: response.api_data.api_material[6].api_value,
 				screws: response.api_data.api_material[7].api_value
 			}, UTCtime);
-
+			
 			PlayerManager.setStatistics({
 				exped: {
 					total: response.api_data.api_basic.api_ms_count,
@@ -133,11 +133,11 @@ Previously known as "Reactor"
 					lose: response.api_data.api_basic.api_st_lose
 				}
 			});
-
+			
 			PlayerManager.setNewsfeed(response.api_data.api_log, UTCtime );
-
+			
 			PlayerManager.combinedFleet = response.api_data.api_combined_flag || 0;
-
+			
 			KC3Network.trigger("HQ");
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("ShipSlots");
@@ -146,11 +146,11 @@ Previously known as "Reactor"
 			KC3Network.trigger("Quests");
 			KC3Network.trigger("Fleet");
 		},
-
+		
 		/*-------------------------------------------------------*/
 		/*--------------------[ PLAYER INFO ]--------------------*/
 		/*-------------------------------------------------------*/
-
+		
 		/* User Basic Information
 		-------------------------------------------------------*/
 		"api_get_member/basic":function(params, response, headers){
@@ -163,14 +163,14 @@ Previously known as "Reactor"
 				level: response.api_data.api_level,
 				exp: response.api_data.api_experience
 			});
-
+			
 			PlayerManager.consumables.fcoin = response.api_data.api_fcoin;
 			PlayerManager.fleetCount = response.api_data.api_count_deck;
 			PlayerManager.repairSlots = response.api_data.api_count_ndock;
 			PlayerManager.buildSlots = response.api_data.api_count_kdock;
 			KC3ShipManager.max = response.api_data.api_max_chara;
 			KC3GearManager.max = response.api_data.api_max_slotitem;
-
+			
 			PlayerManager.setStatistics({
 				exped: {
 					total: response.api_data.api_ms_count,
@@ -187,13 +187,13 @@ Previously known as "Reactor"
 					lose: response.api_data.api_st_lose
 				}
 			});
-
+			
 			KC3Network.trigger("HQ");
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("ShipSlots");
 			KC3Network.trigger("GearSlots");
 		},
-
+		
 		/* HQ Record Screen
 		-------------------------------------------------------*/
 		"api_get_member/record":function(params, response, headers){
@@ -206,14 +206,14 @@ Previously known as "Reactor"
 				level: response.api_data.api_level,
 				exp: response.api_data.api_experience[0]
 			});
-
+			
 			PlayerManager.consumables.fcoin = response.api_data.api_fcoin;
 			PlayerManager.fleetCount = response.api_data.api_deck;
 			PlayerManager.repairSlots = response.api_data.api_ndoc;
 			PlayerManager.buildSlots = response.api_data.api_kdoc;
 			KC3ShipManager.max = response.api_data.api_ship[1];
 			KC3GearManager.max = response.api_data.api_slotitem[1];
-
+			
 			PlayerManager.setStatistics({
 				exped: {
 					rate: response.api_data.api_mission.api_rate,
@@ -231,7 +231,7 @@ Previously known as "Reactor"
 					lose: response.api_data.api_war.api_lose
 				}
 			});
-
+			
 			KC3Network.trigger("HQ");
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("ShipSlots");
@@ -244,10 +244,10 @@ Previously known as "Reactor"
 				record: response.api_data
 			}, function(response){});*/
 		},
-
+		
 		"api_get_member/material":function(params, response, headers){
 			var UTCtime = Math.floor((new Date(headers.Date)).getTime()/1000);
-
+			
 			var thisItem, myResources=[];
 			for(var ctr in response.api_data){
 				thisItem = response.api_data[ctr];
@@ -263,14 +263,14 @@ Previously known as "Reactor"
 					default: break;
 				}
 			}
-
+			
 			PlayerManager.setResources(myResources, UTCtime);
 			KC3Network.trigger("Consumables");
 		},
-
+		
 		"api_get_member/useitem":function(params, response, headers){
 			var UTCtime = Math.floor((new Date(headers.Date)).getTime()/1000);
-
+			
 			var thisItem;
 			for(var ctr in response.api_data){
 				thisItem = response.api_data[ctr];
@@ -283,35 +283,35 @@ Previously known as "Reactor"
 			console.log("useitems", PlayerManager.consumables);
 			KC3Network.trigger("Consumables");
 		},
-
-
+		
+		
 		/*-------------------------------------------------------*/
 		/*----------------------[ LIBRARY ]----------------------*/
 		/*-------------------------------------------------------*/
-
+	
 		/* Picture book
 		-------------------------------------------------------*/
 		"api_get_member/picture_book": function(params, response, headers){
 			PictureBook.record(params, response);
 		},
-
+		
 		/* Ship lists
 		-------------------------------------------------------*/
 		"api_get_member/ship_deck":function(params, response, headers){
 			this.serverOffset = this.moraleRefresh.calibrate( headers.Date );
-
+			
 			KC3ShipManager.set(response.api_data.api_ship_data);
 			KC3Network.delay(0, "Fleet");
 			KC3Network.trigger("Fleet");
 		},
-
+		
 		"api_get_member/ship2":function(params, response, headers){
 			KC3ShipManager.set( response.api_data );
 			PlayerManager.setFleets( response.api_data_deck );
 			KC3Network.trigger("Timers");
 			KC3Network.trigger("Fleet");
 		},
-
+		
 		"api_get_member/ship3":function(params, response, headers){
 			KC3ShipManager.set( response.api_data.api_ship_data );
 			PlayerManager.setFleets( response.api_data.api_deck_data );
@@ -337,34 +337,34 @@ Previously known as "Reactor"
 					}
 			*/
 		},
-
+		
 		"api_req_kaisou/open_exslot":function(params, response, headers){
 			var
 				sid  = parseInt(params.api_id,10),
 				ship = KC3ShipManager.get(sid),
 				mast = ship.master();
-
+			
 			console.log("Extra Slot Unlock for",sid,ship.name());
 		},
-
+		
 		"api_req_kaisou/marriage":function(params, response, headers){
 			var
 				sid      = parseInt(params.api_id,10),
 				ship     = KC3ShipManager.get(sid),
 				mast     = ship.master(),
-
+				
 				ship_obj = response.api_data;
-
+			
 			console.log("Perform Marriage ",sid,ship.name());
 		},
-
+		
 		"api_req_kaisou/remodeling":function(params, response, headers){
 			var
 				ctime    = (new Date(headers.Date)).getTime(),
 				ship     = KC3ShipManager.get(params.api_id),
 				master   = ship.master(),
 				material = [0,-master.api_afterbull,-master.api_afterfuel,0,0,0,0,0];
-
+			
 			// For every pending supply and repair, it'll be counted towards this
 			/*
 			var
@@ -374,14 +374,14 @@ Previously known as "Reactor"
 					}).concat([0,0]);
 				})(ship,master),
 				nd = [ship.repair[1],0,ship.repair[2],0];
-
+			
 			[hk,nd].forEach(function(pending){
 				pending.forEach(function(matr,indx){
 					material[indx] += matr;
 				});
 			});
 			*/
-
+			
 			Object.keys(ship.pendingConsumption).forEach(function(pendingData){
 				ship.pendingConsumption[pendingData].forEach(function(arrayData,consumeIndex){
 					switch(consumeIndex) {
@@ -397,23 +397,23 @@ Previously known as "Reactor"
 					}
 				});
 			});
-
+			
 			KC3Database.Naverall({
 				hour: Math.hrdInt("floor",ctime/3.6,6,1),
 				type: "remodel" + master.api_id,
 				data: material
 			});
 		},
-
+		
 		/* Fleet Presets
 		-------------------------------------------------------*/
-
+		
 		// List Presets
 		"api_get_member/preset_deck":function(params, response, headers){
 			localStorage.presets = JSON.stringify(response.api_data.api_deck);
 			console.log("LIST PRESETS", response.api_data.api_deck, localStorage.presets);
 		},
-
+		
 		// Register preset
 		"api_req_hensei/preset_register":function(params, response, headers){
 			var MyPresets = JSON.parse(localStorage.presets);
@@ -421,7 +421,7 @@ Previously known as "Reactor"
 			localStorage.presets = JSON.stringify(MyPresets);
 			console.log("REGISTERED PRESET", MyPresets, localStorage.presets);
 		},
-
+		
 		// Remove Preset from list
 		"api_req_hensei/preset_delete":function(params, response, headers){
 			var MyPresets = JSON.parse(localStorage.presets);
@@ -429,7 +429,7 @@ Previously known as "Reactor"
 			localStorage.presets = JSON.stringify(MyPresets);
 			console.log("DELETED PRESET", MyPresets, localStorage.presets);
 		},
-
+		
 		// Use a Preset
 		"api_req_hensei/preset_select":function(params, response, headers){
 			var deckId = parseInt(params.api_deck_id, 10);
@@ -437,7 +437,7 @@ Previously known as "Reactor"
 			localStorage.fleets = JSON.stringify(PlayerManager.fleets);
 			KC3Network.trigger("Fleet");
 		},
-
+		
 		/* Equipment list
 		-------------------------------------------------------*/
 		"api_get_member/slot_item": function(params, response, headers){
@@ -446,7 +446,7 @@ Previously known as "Reactor"
 			KC3Network.trigger("GearSlots");
 			KC3Network.trigger("Fleet");
 		},
-
+		
 		// Equipment dragging
 		"api_req_kaisou/slot_exchange_index": function(params, response, headers){
 			var UpdatingShip = KC3ShipManager.get(params.api_id);
@@ -454,7 +454,7 @@ Previously known as "Reactor"
 			KC3ShipManager.save();
 			KC3Network.trigger("Fleet");
 		},
-
+		
 		/* Fleet list
 		-------------------------------------------------------*/
 		"api_get_member/deck":function(params, response, headers){
@@ -462,7 +462,7 @@ Previously known as "Reactor"
 			KC3Network.trigger("Timers");
 			KC3Network.trigger("Fleet");
 		},
-
+		
 		/* Mamiya
 		-------------------------------------------------------*/
 		"api_req_member/itemuse_cond":function(params, response, headers){
@@ -471,19 +471,19 @@ Previously known as "Reactor"
 				useFlag = parseInt(params.api_use_type,10),
 				fMamiya = !!(useFlag & 1),
 				fIrako  = !!(useFlag & 2);
-
+			
 			// there's nothing to do, for now
 			// feel free to check out this listener if you want.
 		},
-
+		
 		/*-------------------------------------------------------*/
 		/*-------------------[ CONSTRUCTION ]--------------------*/
 		/*-------------------------------------------------------*/
-
+		
 		/* Construct a Ship
 		-------------------------------------------------------*/
 		"api_req_kousyou/createship":function(params, response, headers){
-			var
+			var 
 				ctime    = (new Date(headers.Date)).getTime();
 			this.shipConstruction = {
 				active: true,
@@ -511,7 +511,7 @@ Previously known as "Reactor"
 			KC3QuestManager.get(608).increment(); // F4: Daily Construction 2
 			KC3Network.trigger("Quests");
 		},
-
+		
 		/* Construction Docks
 		-------------------------------------------------------*/
 		"api_get_member/kdock":function(params, response, headers){
@@ -539,14 +539,14 @@ Previously known as "Reactor"
 						time: UTCtime
 					});
 				}
-
+				
 				this.shipConstruction = { active: false };
 			}
-
+			
 			PlayerManager.setBuildDocks(response.api_data);
 			KC3Network.trigger("Timers");
 		},
-
+		
 		/* Instant-Torch a construction
 		-------------------------------------------------------*/
 		"api_req_kousyou/createship_speedchange":function(params, response, headers){
@@ -563,7 +563,7 @@ Previously known as "Reactor"
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Timers");
 		},
-
+		
 		/* Get a completed construction
 		-------------------------------------------------------*/
 		"api_req_kousyou/getship":function(params, response, headers){
@@ -574,16 +574,16 @@ Previously known as "Reactor"
 			KC3Network.trigger("GearSlots");
 			KC3Network.trigger("Timers");
 		},
-
+		
 		/*-------------------------------------------------------*/
 		/*-------------------[ FLEET MANAGEMENT ]----------------*/
 		/*-------------------------------------------------------*/
-
+		
 		/* Change fleet member
 		-------------------------------------------------------*/
 		"api_req_hensei/change":function(params, response, headers){
 			var FleetIndex = parseInt(params.api_id, 10);
-
+			
 			// If removing all ships except flagship
 			if(typeof response.api_data != "undefined"){
 				if(typeof response.api_data.api_change_count != "undefined"){
@@ -592,7 +592,7 @@ Previously known as "Reactor"
 					return true;
 				}
 			}
-
+			
 			// Ship swapping
 			var flatShips  = PlayerManager.fleets
 				.map(function(x){ return x.ships; })
@@ -616,14 +616,14 @@ Previously known as "Reactor"
 			PlayerManager.fleets[FleetIndex-1].checkAkashi(true);
 			KC3Network.trigger("Fleet");
 		},
-
+		
 		/* Lock a ship
 		-------------------------------------------------------*/
 		"api_req_hensei/lock":function(params, response, headers){
 			var shipID    = parseInt(params.api_ship_id,10);
 			var lockState = response.api_data.api_locked;
 			var shipData  = KC3ShipManager.get(shipID);
-
+			
 			if(shipData.lock) {
 				console.warn("Unlocked",shipData.rosterId,shipData.name());
 			} else {
@@ -635,12 +635,12 @@ Previously known as "Reactor"
 					console.info("Locked (~)",shipData.rosterId,shipData.name());
 				}
 			}
-
+			
 			shipData.lock = lockState;
 			KC3ShipManager.save();
 			KC3Network.trigger("Fleet");
 		},
-
+		
 		/* Change equipment of a ship
 		-------------------------------------------------------*/
 		"api_req_kaisou/slotset":function(params, response, headers){
@@ -651,14 +651,14 @@ Previously known as "Reactor"
 			KC3ShipManager.get(shipID).items[slotIndex] = itemID;
 			KC3Network.trigger("Fleet");
 		},
-
+		
 		/* Remove all equipment of a ship
 		-------------------------------------------------------*/
 		"api_req_kaisou/unsetslot_all":function(params, response, headers){
 			KC3ShipManager.get( params.api_id ).items = [-1,-1,-1,-1];
 			KC3Network.trigger("Fleet");
 		},
-
+		
 		/* Re-supply a ship
 		-------------------------------------------------------*/
 		"api_req_hokyu/charge":function(params, response, headers){
@@ -668,7 +668,7 @@ Previously known as "Reactor"
 				shipList = response.api_data.api_ship,
 				charge   = parseInt(params.api_kind),
 				sParam   = {noFuel:!(charge & 1),noAmmo:!(charge & 2)};
-
+			
 			$.each(shipList, function( index, ship ) {
 				var
 					shipId = ship.api_id,
@@ -677,33 +677,33 @@ Previously known as "Reactor"
 					shipFn = function(){
 						KC3ShipManager.get(shipId).perform('supply',sParam);
 					};
-
+				
 				shipToSupply.fuel  = ship.api_fuel;
 				shipToSupply.ammo  = ship.api_bull;
 				shipToSupply.slots = ship.api_onslot;
-
+				
 				shipDf.then(shipFn);
 			});
-
+			
 			KC3ShipManager.save();
-
+			
 			PlayerManager.setResources( response.api_data.api_material , ctime);
-
+			
 			KC3Network.trigger("Quests");
 			KC3Network.trigger("Fleet");
 		},
-
+		
 		/* Combine/Uncombine Fleets
 		-------------------------------------------------------*/
 		"api_req_hensei/combined":function(params, response, headers){
 			PlayerManager.combinedFleet = parseInt( params.api_combined_type, 10 );
 			KC3Network.trigger("Fleet");
 		},
-
+		
 		/*-------------------------------------------------------*/
 		/*----------------------[ BATTLES ]----------------------*/
 		/*-------------------------------------------------------*/
-
+		
 		/* Select difficulty
 		-------------------------------------------------------*/
 		"api_req_map/select_eventmap_rank":function(params, response, headers){
@@ -718,10 +718,10 @@ Previously known as "Reactor"
 				allMaps[mkey].curhp = allMaps[mkey].maxhp = 9999;
 			}
 			allMaps[mkey].kind  = allMaps[mkey].dkind; // reset the current map gauge kind
-
+			
 			localStorage.maps = JSON.stringify(allMaps);
 		},
-
+		
 		/* Start Sortie
 		-------------------------------------------------------*/
 		"api_req_map/start":function(params, response, headers){
@@ -733,14 +733,14 @@ Previously known as "Reactor"
 				UTCTime,
 				response.api_data.api_eventmap
 			);
-
+			
 			KC3SortieManager.setBoss(
 				response.api_data.api_bosscell_no,
 				response.api_data.api_bosscomp
 			);
-
+			
 			KC3QuestManager.get(214).increment(0); // Bw1: 1st requirement: Sortie 36 times (index:0)
-
+			
 			if (typeof response.api_data.api_eventmap !== "undefined") {
 				var AllMaps = JSON.parse(localStorage.maps);
 				var thisMapId = "m"+response.api_data.api_maparea_id+""+response.api_data.api_mapinfo_no;
@@ -754,13 +754,13 @@ Previously known as "Reactor"
 			}
 
 			KC3SortieManager.advanceNode( response.api_data, UTCTime );
-
+			
 			KC3Network.trigger("SortieStart");
 			KC3Network.trigger("CompassResult");
 			KC3Network.trigger("Quests");
 			KC3Network.trigger("Fleet");
 		},
-
+		
 		/* Traverse Map
 		-------------------------------------------------------*/
 		"api_req_map/next":function(params, response, headers){
@@ -769,7 +769,7 @@ Previously known as "Reactor"
 			KC3SortieManager.advanceNode( response.api_data, UTCTime );
 			KC3Network.trigger("CompassResult");
 		},
-
+		
 		/* NORMAL: BATTLE STARTS
 		-------------------------------------------------------*/
 		"api_req_sortie/battle":function(params, response, headers){
@@ -785,7 +785,7 @@ Previously known as "Reactor"
 		"api_req_sortie/ld_airbattle":function(params, response, headers){
 			this["api_req_sortie/battle"].apply(this,arguments);
 		},
-
+		
 		/* COMBINED FLEET: BATTLE STARTS
 		-------------------------------------------------------*/
 		"api_req_combined_battle/battle":function(params, response, headers){
@@ -804,7 +804,7 @@ Previously known as "Reactor"
 		"api_req_combined_battle/ld_airbattle":function(params, response, headers){
 			this["api_req_combined_battle/battle"].apply(this,arguments);
 		},
-
+		
 		/* BATTLE STARTS as NIGHT
 		-------------------------------------------------------*/
 		"api_req_battle_midnight/sp_midnight":function(params, response, headers){
@@ -821,7 +821,7 @@ Previously known as "Reactor"
 			);
 			KC3Network.trigger("BattleStart");
 		},
-
+		
 		/* NIGHT BATTLES as SECOND PART
 		-------------------------------------------------------*/
 		"api_req_battle_midnight/battle":function(params, response, headers){
@@ -832,17 +832,17 @@ Previously known as "Reactor"
 			KC3SortieManager.engageNight( response.api_data );
 			KC3Network.trigger("BattleNight");
 		},
-
+		
 		/* BATTLE RESULT SCREENS
 		-------------------------------------------------------*/
 		"api_req_sortie/battleresult":function(params, response, headers){
 			resultScreenQuestFulfillment(response.api_data);
-
+			
 			KC3SortieManager.resultScreen( response.api_data );
-
+			
 			if(!ConfigManager.info_delta)
 				KC3Network.trigger("HQ");
-
+			
 			PlayerManager.fleets.forEach(function(fleet){
 				fleet.ship(function(rosterId,slotId,shipData){
 					shipData.hp[0] = shipData.afterHp[0];
@@ -851,17 +851,17 @@ Previously known as "Reactor"
 			KC3Network.trigger("Fleet");
 			KC3Network.trigger("BattleResult", response.api_data);
 			KC3Network.trigger("Quests");
-
+			
 			KC3Network.delay(1,"Fleet","GearSlots");
 		},
 		"api_req_combined_battle/battleresult":function(params, response, headers){
 			resultScreenQuestFulfillment(response.api_data);
-
+			
 			KC3SortieManager.resultScreen( response.api_data );
-
+			
 			if(!ConfigManager.info_delta)
 				KC3Network.trigger("HQ");
-
+			
 			PlayerManager.fleets.forEach(function(fleet){
 				fleet.ship(function(rosterId,slotId,shipData){
 					shipData.hp[0] = shipData.afterHp[0];
@@ -870,10 +870,10 @@ Previously known as "Reactor"
 			KC3Network.trigger("Fleet");
 			KC3Network.trigger("BattleResult", response.api_data);
 			KC3Network.trigger("Quests");
-
+			
 			KC3Network.delay(1,"Fleet","GearSlots");
 		},
-
+		
 		/* FCF TRIGGER
 		-------------------------------------------------------*/
 		"api_req_combined_battle/goback_port":function(params, response, headers){
@@ -881,42 +881,42 @@ Previously known as "Reactor"
 			KC3Network.delay(0, "Fleet");
 			KC3Network.trigger("Fleet");
 		},
-
+		
 		/*-------------------------------------------------------*/
 		/*----------------------[ QUESTS ]-----------------------*/
 		/*-------------------------------------------------------*/
-
+		
 		/* Quest List
 		-------------------------------------------------------*/
 		"api_get_member/questlist":function(params, response, headers){
 			KC3QuestManager.load();
-
+			
 			// Update quest data for this page
 			KC3QuestManager.definePage(
 				response.api_data.api_list,
 				response.api_data.api_disp_page
 			);
-
+			
 			// Tell service to pass a message to gamescreen on inspected window to show overlays
 			KC3Network.hasOverlay = true;
 			(new RMsg("service", "questOverlay", {
 				tabId: chrome.devtools.inspectedWindow.tabId,
 				questlist: response.api_data.api_list
 			})).execute();
-
+			
 			// Trigger quest listeners
 			KC3Network.trigger("Quests");
 		},
-
+		
 		"api_req_quest/clearitemget": function(params, response, headers){
-			var
+			var 
 				ctime    = (new Date(headers.Date)).getTime(),
 				quest    = params.api_quest_id,
 				data     = response.api_data,
 				material = data.api_material,
 				consume  = [0,0,0,0],
 				bonuses  = data.api_bounus;
-
+			
 			console.log(quest,data);
 			bonuses.forEach(function(x){
 				if(x.api_type == 1 && x.api_item.api_id >= 5) {
@@ -931,17 +931,17 @@ Previously known as "Reactor"
 			});
 			console.log("Quest Item",material);
 		},
-
+		
 		/* Stop Quest
 		-------------------------------------------------------*/
 		"api_req_quest/stop":function(params, response, headers){
-
+			
 		},
-
+		
 		/*-------------------------------------------------------*/
 		/*--------------------[ REPAIR DOCKS ]-------------------*/
 		/*-------------------------------------------------------*/
-
+		
 		/* Repair Docks
 		-------------------------------------------------------*/
 		"api_get_member/ndock":function(params, response, headers){
@@ -949,7 +949,7 @@ Previously known as "Reactor"
 			KC3Network.trigger("Timers");
 			KC3Network.trigger("Fleet");
 		},
-
+		
 		/* Start repair
 		-------------------------------------------------------*/
 		"api_req_nyukyo/start":function(params, response, headers){
@@ -958,34 +958,34 @@ Previously known as "Reactor"
 				bucket     = parseInt( params.api_highspeed , 10),
 				nDockNum   = parseInt( params.api_ndock_id , 10),
 				shipData   = KC3ShipManager.get( ship_id );
-
+			
 			if(bucket==1){
 				PlayerManager.consumables.buckets--;
-
+				
 				// If ship is still is the list being repaired, remove Her
 				var HerRepairIndex = PlayerManager.repairShips.indexOf( ship_id );
 				if(HerRepairIndex  > -1){
 					PlayerManager.repairShips.splice(HerRepairIndex, 1);
 				}
-
+				
 				KC3Database.Naverall({
 					data:[0,0,0,0,0,-1,0,0]
 				},shipData.lastSortie[0]);
-
+				
 				shipData.applyRepair();
 				shipData.resetAfterHp();
 				KC3TimerManager.repair( nDockNum ).deactivate();
 			}
-
+			
 			shipData.perform('repair');
 			KC3ShipManager.save();
-
+			
 			KC3QuestManager.get(503).increment(); // E3: Daily Repairs
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Quests");
 			KC3Network.trigger("Fleet");
 		},
-
+		
 		/* Use bucket
 		-------------------------------------------------------*/
 		"api_req_nyukyo/speedchange":function(params, response, headers){
@@ -995,7 +995,7 @@ Previously known as "Reactor"
 				ship_id  = PlayerManager.repairShips[ params.api_ndock_id ],
 				shipData = KC3ShipManager.get(ship_id);
 			PlayerManager.repairShips.splice(params.api_ndock_id, 1);
-
+			
 			KC3Database.Naverall({
 				data:[0,0,0,0,0,-1,0,0]
 			},shipData.lastSortie[0]);
@@ -1003,21 +1003,21 @@ Previously known as "Reactor"
 			shipData.applyRepair();
 			shipData.resetAfterHp();
 			KC3ShipManager.save();
-
+			
 			KC3TimerManager.repair( params.api_ndock_id ).deactivate();
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Timers");
 			KC3Network.trigger("Fleet");
 		},
-
+		
 		/*-------------------------------------------------------*/
 		/*-----------------------[ PVP ]-------------------------*/
 		/*-------------------------------------------------------*/
-
+		
 		/* PVP Enemy List
 		-------------------------------------------------------*/
 		"api_get_member/practice":function(params, response, headers){
-			/*
+			/* 
 				{
 					"api_member_id":16015130,
 					"api_id":1,
@@ -1037,7 +1037,7 @@ Previously known as "Reactor"
 			var
 				data = response.api_data;
 		},
-
+		
 		/* PVP Fleet List
 		-------------------------------------------------------*/
 		"api_req_member/get_practice_enemyinfo":function(params, response, headers){
@@ -1073,7 +1073,7 @@ Previously known as "Reactor"
 				data    = response.api_data,
 				enemyId = parseInt(params.api_member_id,10);
 		},
-
+		
 		/* PVP Start
 		-------------------------------------------------------*/
 		"api_req_practice/battle":function(params, response, headers){
@@ -1085,27 +1085,27 @@ Previously known as "Reactor"
 				fleetSent: params.api_deck_id
 			});
 		},
-
+		
 		/* PVP Start
 		-------------------------------------------------------*/
 		"api_req_practice/midnight_battle":function(params, response, headers){
 			KC3SortieManager.engageNight( response.api_data );
 			KC3Network.trigger("PvPNight", { battle: response.api_data });
 		},
-
+		
 		/* PVP Result
 		-------------------------------------------------------*/
 		"api_req_practice/battle_result":function(params, response, headers){
 			var thisPvP = KC3SortieManager.currentNode();
 			if(thisPvP.allyNoDamage && response.api_data.api_win_rank == "S")
 				response.api_data.api_win_rank = "SS";
-
+			
 			resultScreenQuestFulfillment(response.api_data,true);
-
+			
 			KC3Network.trigger("PvPEnd", { result: response.api_data });
 			KC3Network.trigger("Quests");
 		},
-
+		
 		/*-------------------------------------------------------*/
 		/*--------------------[ EXPEDITION ]---------------------*/
 		/*-------------------------------------------------------*/
@@ -1121,7 +1121,7 @@ Previously known as "Reactor"
 		"api_req_mission/start": function(params, response, headers) {
 			KC3Network.trigger( "ExpeditionStart" );
 		},
-
+		
 		/* Complete Expedition
 		-------------------------------------------------------*/
 		"api_req_mission/result":function(params, response, headers){
@@ -1132,15 +1132,15 @@ Previously known as "Reactor"
 				shipList = PlayerManager.fleets[deck - 1].ships.slice(0),
 				expedNum = timerRef.expedNum;
 			expedNum = parseInt(expedNum, 10);
-
+			
 			KC3Network.trigger("ExpedResult",{
 				expedNum:expedNum,
 				params:params,
 				response:response.api_data
 			});
-
+			
 			console.log("Fleet #",deck,"has returned from Expedition #",expedNum,"with result",response.api_data);
-
+			
 			shipList.forEach(function(rosterId){
 				var shipData = KC3ShipManager.get(rosterId);
 				if(shipData.masterId > 0) {
@@ -1172,23 +1172,23 @@ Previously known as "Reactor"
 					});
 				}
 			});
-
+			
 			if(response.api_data.api_clear_result > 0){
 					KC3QuestManager.get(402).increment(); // D2: Daily Expeditions 1
 					KC3QuestManager.get(403).increment(); // D3: Daily Expeditions 2
 					KC3QuestManager.get(404).increment(); // D4: Weekly Expeditions
-
+					
 					// If expedition 37 or 38
 					if(expedNum==37 || expedNum==38){
 						KC3QuestManager.get(410).increment(); // D9: Weekly Expedition 2
 						KC3QuestManager.get(411).increment(); // D11: Weekly Expedition 3
 					}
 					KC3Network.trigger("Quests");
-
+					
 			}
-
+			
 			KC3ShipManager.save();
-
+			
 			KC3Database.Expedition({
 				data     :response.api_data,
 				mission  :expedNum,
@@ -1206,7 +1206,7 @@ Previously known as "Reactor"
 						csm = [0,0,0,0],
 						csmap = [0,2,1,3],
 						uniqId = "exped" + dbId;
-
+					
 					// Record expedition gain
 					/*
 					 1:"bucket", => 5
@@ -1221,15 +1221,15 @@ Previously known as "Reactor"
 							csm[useMap - 1] += useItm.api_useitem_count;
 						}
 					});
-
+					
 					rsc = rsc.concat(csm);
-
+					
 					KC3Database.Naverall({
 						hour: Math.hrdInt("floor",ctime/3.6,6,1),
 						type: uniqId,
 						data: rsc
 					},null,true);
-
+					
 					shipList.forEach(function(rosterId,shipIndex){
 						var
 							shipData = KC3ShipManager.get(rosterId),
@@ -1244,22 +1244,22 @@ Previously known as "Reactor"
 							}
 						}
 					});
-
+					
 					KC3ShipManager.save();
-
+					
 					console.log("Materials",rsc);
 				}
 			});
 		},
-
+		
 		"api_req_mission/return_instruction":function(params, response, headers){
 			KC3TimerManager._exped[parseInt(params.api_deck_id)-2].completion = response.api_data.api_mission[2];
 		},
-
+		
 		/*-------------------------------------------------------*/
 		/*---------------------[ ARSENAL ]-----------------------*/
 		/*-------------------------------------------------------*/
-
+		
 		/* Craft Equipment
 		-------------------------------------------------------*/
 		"api_req_kousyou/createitem":function(params, response, headers){
@@ -1267,7 +1267,7 @@ Previously known as "Reactor"
 				resourceUsed = [ params.api_item1, params.api_item2, params.api_item3, params.api_item4 ],
 				failed       = (typeof response.api_data.api_slot_item == "undefined"),
 				ctime        = Math.hrdInt("floor",(new Date(headers.Date)).getTime(),3,1);
-
+			
 			// Log into development History
 			KC3Database.Develop({
 				flag: PlayerManager.fleets[0].ship(0).masterId,
@@ -1278,16 +1278,16 @@ Previously known as "Reactor"
 				result: (!failed)?response.api_data.api_slot_item.api_slotitem_id:-1,
 				time: ctime
 			});
-
+			
 			KC3Database.Naverall({
 				hour: Math.hrdInt("floor",ctime/3.6,3,1),
 				type: "critem",
 				data: resourceUsed.concat([0,0,!failed,0]).map(function(x){return -x;})
 			});
-
+			
 			KC3QuestManager.get(605).increment(); // F1: Daily Development 1
 			KC3QuestManager.get(607).increment(); // F3: Daily Development 2
-
+			
 			// Checks if the development went great
 			if(!failed){
 				// Add new equipment to local data
@@ -1297,7 +1297,7 @@ Previously known as "Reactor"
 					api_locked: 0,
 					api_slotitem_id: response.api_data.api_slot_item.api_slotitem_id
 				}]);
-
+				
 				// Trigger listeners passing crafted IDs
 				KC3Network.trigger("CraftGear", {
 					itemId: response.api_data.api_slot_item.api_id,
@@ -1311,10 +1311,10 @@ Previously known as "Reactor"
 					resourceUsed: resourceUsed
 				});
 			}
-
+			
 			KC3Network.trigger("Quests");
 		},
-
+		
 		/* Scrap a Ship
 		-------------------------------------------------------*/
 		"api_req_kousyou/destroyship":function(params, response, headers){
@@ -1323,7 +1323,7 @@ Previously known as "Reactor"
 				ship  = KC3ShipManager.get(params.api_ship_id),
 				scrap = [],
 				ctime = (new Date(headers.Date)).getTime();
-
+			
 			// Base ship scrap value
 			scrap.push(ship.master());
 			// Collect equipment scrap value
@@ -1353,7 +1353,7 @@ Previously known as "Reactor"
 			KC3Network.trigger("Fleet");
 			KC3Network.trigger("Quests");
 		},
-
+		
 		/* Scrap a Gear
 		-------------------------------------------------------*/
 		"api_req_kousyou/destroyitem2":function(params, response, headers){
@@ -1375,18 +1375,17 @@ Previously known as "Reactor"
 			KC3Network.trigger("GearSlots");
 			KC3Network.trigger("Quests");
 		},
-
+		
 		/*-------------------------------------------------------*/
 		/*----------------------[ OTHERS ]-----------------------*/
 		/*-------------------------------------------------------*/
-
+		
 		/* View World Maps
 		-------------------------------------------------------*/
 		"api_get_member/mapinfo":function(params, response, headers){
-			if(localStorage.maps=="null"){ localStorage.maps = ""; }
 			var maps = JSON.parse(localStorage.maps || "{}");
 			var ctr, thisMap, localMap, etcStat, defStat;
-
+			
 			// Prepare event despair stat ^w^)!
 			etcStat = {};
 			defStat = {
@@ -1404,41 +1403,41 @@ Previously known as "Reactor"
 					hpdat: {}  /* sortieId:[remainingHP,maximumHP]*/
 				}
 			};
-
+			
 			// Exclude gauge based map from being kept every time
 			for(ctr in KC3Meta._gauges) {
 				if(Object.keys(maps).indexOf(ctr)>=0)
 					maps[ctr].clear = maps[ctr].kills = false;
 			}
-
+			
 			// Combine current storage and current available maps data
 			for(ctr in response.api_data){
 				thisMap = response.api_data[ctr];
 				var key = "m"+thisMap.api_id;
-
+				
 				if(typeof (maps[key]||{}).curhp !== 'undefined')
 					etcStat[key] = $.extend(true,{},defStat,maps[key].stat);
-
+				
 				// Create map object
 				localMap = {
 					id: thisMap.api_id,
 					clear: thisMap.api_cleared,
 					kind: 'single'
 				};
-
+				
 				// Check for boss gauge kills
 				if(typeof thisMap.api_defeat_count != "undefined"){
 					localMap.kills = thisMap.api_defeat_count;
 					localMap.kind  = 'multiple';
 				}
-
+				
 				// Check for event map info
 				if(typeof thisMap.api_eventmap != "undefined"){
 					var eventData = thisMap.api_eventmap;
 					localMap.curhp      = eventData.api_now_maphp;
 					localMap.maxhp      = eventData.api_max_maphp;
 					localMap.difficulty = eventData.api_selected_rank;
-
+					
 					if(typeof (maps[key]||{}).baseHp !== 'undefined')
 						localMap.baseHp     = maps[key].baseHp;
 					localMap.stat       = $.extend(true,{},defStat,etcStat[ key ]);
@@ -1454,20 +1453,17 @@ Previously known as "Reactor"
 							console.info('Reported new API Gauge Type',eventData.api_gauge_type);
 					}
 				}
-
+				
 				// Check default gauge info
-				if(typeof maps[key] !== 'undefined') {
-					if(typeof maps[key].dkind === 'undefined') {
-						maps[key].dkind = maps[key].kind;
-					}
+				if(typeof maps[key].dkind === 'undefined') {
+					maps[key].dkind = maps[key].kind;
 				}
-
+				
 				maps[ key ] = localMap;
 			}
-			
 			localStorage.maps = JSON.stringify(maps);
 		},
-
+		
 		/* Ship Modernize
 		-------------------------------------------------------*/
 		"api_req_kaisou/powerup":function(params, response, headers){
@@ -1478,19 +1474,19 @@ Previously known as "Reactor"
 				KC3Network.trigger("ShipSlots");
 				KC3Network.trigger("GearSlots");
 			});
-
+			
 			// Check if successful modernization
 			if(response.api_data.api_powerup_flag==1){
 				KC3QuestManager.get(702).increment(); // G2: Daily Modernization
 				KC3QuestManager.get(703).increment(); // G3: Weekly Modernization
 				KC3Network.trigger("Quests");
 			}
-
+			
 			// Activity Notification
 			var NewShipRaw = response.api_data.api_ship;
 			var OldShipObj = KC3ShipManager.get( NewShipRaw.api_id );
 			var MasterShip = KC3Master.ship( NewShipRaw.api_ship_id );
-
+			
 			KC3Network.trigger("Modernize", {
 				rosterId: response.api_data.api_ship.api_id,
 				oldStats: [
@@ -1515,13 +1511,13 @@ Previously known as "Reactor"
 					MasterShip.api_luck[1] - (MasterShip.api_luck[0] + NewShipRaw.api_kyouka[4])
 				]
 			});
-
+			
 			KC3ShipManager.set([NewShipRaw]);
 			KC3ShipManager.save();
-
+			
 			KC3Network.trigger("Fleet");
 		},
-
+		
 		/* Item Consumption
 		-------------------------------------------------------*/
 		"api_req_member/itemuse":function(params, response, headers){
@@ -1533,7 +1529,7 @@ Previously known as "Reactor"
 				aData  = response.api_data,
 				fChuui = aData.api_caution_flag,
 				flags  = aData.api_flag;
-
+			
 			switch(flags){
 				case 1:
 					// Obtained Item
@@ -1550,7 +1546,7 @@ Previously known as "Reactor"
 					break;
 			}
 		},
-
+		
 		/* Arsenal Item List
 		-------------------------------------------------------*/
 		"api_req_kousyou/remodel_slotlist":function(params, response, headers){
@@ -1597,7 +1593,7 @@ Previously known as "Reactor"
 			['fuel','bull','steel','bauxite','','','buildkit','remodelkit'].forEach(function(dk,id){
 				// rejects empty key
 				if(!dk.length) return;
-
+				
 				var sk = ['api',(id >= 4) ? ky : 'req',dk].join('_');
 				mt[id] = -cu[sk];
 			});
@@ -1611,7 +1607,7 @@ Previously known as "Reactor"
 			// Update equipment on local data
 			KC3GearManager.set([ response.api_data.api_after_slot ]);
 			(response.api_data.api_use_slot_id || []).forEach(function(gearId){ KC3GearManager.remove(gearId); });
-
+			
 			PlayerManager.consumables.buckets = response.api_data.api_after_material[5];
 			PlayerManager.consumables.devmats = response.api_data.api_after_material[6];
 			PlayerManager.consumables.screws = response.api_data.api_after_material[7];
@@ -1620,16 +1616,16 @@ Previously known as "Reactor"
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Quests");
 		},
-
+		
 		/* Dummy
 		-------------------------------------------------------*/
 		"dummy":function(params, response, headers){
-
+			
 		}
-
+		
 	};
-
-
+	
+	
 	/* RESULT SCREEN QUEST FULFILLMENT
 	On a result screen, increment tracked quests that progressed
 	-------------------------------------------------------*/
@@ -1641,87 +1637,60 @@ Previously known as "Reactor"
 				console.log("Quest ",r," progress ["+(q.tracking ? q.tracking[0] + '/' + q.tracking[1] : '-----')+"] ",q.status == 2);
 				return q;
 			};
-
+		
 		// If victory for "defeat"-type quests
 		var rankPt = getRank(data.api_win_rank);
 		if(rankPt==5 && KC3SortieManager.currentNode().allyNoDamage) rankPt++;
-        /*
-          rankPt values:
-          6: Perfect S
-          5: S
-          4: A
-          3: B
-          2: C
-          1: D
-          0: E
-        */
-
-		if (!isPvP) {
-			// at least S rank
-			if (rankPt >= 5) {
-				KC3QuestManager.get(214).increment(3); // Bw1: 4th requirement: 6 S ranks (index:3)
-
-				if(KC3SortieManager.currentNode().isBoss()) {
-					if (KC3SortieManager.isSortieAt(5,2)) {
-						KC3QuestManager.get(243).increment(); // Bw9: Sortie to [W5-2] and S-rank the boss node 2 times
-					}
-
-					if (KC3SortieManager.isSortieAt(6,1)) {
-						KC3QuestManager.get(256).increment(); // Bm2: Deploy to [W6-1] and obtain an S-rank the boss node 3 times
-					}
-				}
-			}
-
-			// at least A rank
-			if (rankPt >= 4) {
-				if( KC3SortieManager.isSortieAt(1,5) && KC3SortieManager.currentNode().isBoss() ){
-					KC3QuestManager.get(261).increment(); // Bw10: Sortie to [W1-5] and A-rank+ the boss node 3 times
-					KC3QuestManager.get(265).increment(); // Bm5: Deploy a fleet to [W1-5] and A-rank+ the boss node 10 times
-				}
-			}
-
-			// at least B rank
-			if (rankPt >= 3) {
-				qLog(201).increment(); // Bd1: Defeat an enemy fleet
-				KC3QuestManager.get(210).increment(); // Bd3: Defeat 10 abyssal fleets (B rank+)
-
-				if(KC3SortieManager.currentNode().isBoss()) {
-					if (KC3SortieManager.isSortieAt( 2 )) {
-						KC3QuestManager.get(226).increment(); // Bd7: Defeat 5 bosses in World 2
-					}
-					if (KC3SortieManager.isSortieAt( 4 )) {
-						KC3QuestManager.get(229).increment(); // Bw6: Defeat 12 bosses in horned nodes in World 4
-					}
-					if (KC3SortieManager.isSortieAt(3,3) ||
-						KC3SortieManager.isSortieAt(3,4) ||
-						KC3SortieManager.isSortieAt(3,5) ) {
-						KC3QuestManager.get(241).increment(); // Bw7: Defeat 5 bosses in Worlds [W3-3], [W3-4] or [W3-5]
-					}
-					if (KC3SortieManager.isSortieAt(4,4)) {
-						KC3QuestManager.get(242).increment(); // Bw8: Defeat a boss in World [W4-4]
-					}
-
-					KC3QuestManager.get(214).increment(2); // Bw1: 3rd requirement: Win vs 12 bosses (index:2)
-				}
-			}
-
-			// Vague quest that clears with no rank requirement
-			qLog(216).increment(); // Bd2: Defeat the flagship of an enemy fleet
-
-			// If node is a boss
-			if( KC3SortieManager.currentNode().isBoss() ){
-				qLog(214).increment(1); // Bw1: 2nd requirement: Encounter 24 bosses (index:1)
-			}
+		if(!isPvP) {
+			[ /* Rank Requirement Table */
+				[ /* E RANK / It does not matter */
+					[216,0,false,false], // Bd2: Defeat the flagship of an enemy fleet
+					[214,1,false, true]  // Bw1: 2nd requirement: Encounter 24 bosses (index:1)
+				],
+				[ /* D RANK */ ],
+				[ /* C RANK */ ],
+				[ /* B RANK */
+					[201,0,false,false], // Bd1: Defeat an enemy fleet
+					[210,0,false,false], // Bd3: Defeat 10 abyssal fleets (B rank+)
+					[226,0,[ 2 ], true], // Bd7: Defeat 5 bosses in World 2
+					[241,0,[3,3], true], // Bw7: Defeat 5 bosses in W3-3,3-4,3-5
+					[241,0,[3,4], true],
+					[241,0,[3,5], true],
+					[229,0,[ 4 ], true], // Bw6: Defeat 12 bosses in horned nodes in World 4
+					[242,0,[4,4], true], // Bw8: Defeat a boss in World [W4-4]
+					[214,2,false, true], // Bw1: 3rd requirement: Win vs 12 bosses (index:2)
+				],
+				[ /* A RANK */
+					[261,0,[1,5], true], // Bw10: Sortie to [W1-5] and A-rank+ the boss node 3 times
+					[265,0,[1,5], true]  // Bm5: Deploy a fleet to [W1-5] and A-rank+ the boss node 10 times
+				],
+				[ /* S RANK */
+					[214,3,false,false], // Bw1: 4th requirement: 6 S ranks (index:3)
+					[243,0,[5,2], true], // Bw9: Sortie to [W5-2] and S-rank the boss node 2 times
+					[256,0,[6,1], true]  // Bm2: Deploy to [W6-1] and obtain an S-rank the boss node 3 times
+				],
+				[ /* KANZEN */ ],
+			].reverse().splice(rankPt)
+				.reduce(function(x,y){ return x.concat(y); })
+				.filter(function(x){
+					return (
+						(!x[2] || KC3SortieManager.isSortieAt.apply(undefined,x[2])) && /* Is sortie at */
+						(!x[3] || KC3SortieManager.currentNode().isBoss())           && /* Is on boss node */
+						true
+					);
+				})
+				.forEach(function(x){
+					qLog(x[0]).increment(x[1]);
+				});
 		} else {
 			KC3QuestManager.get(303).increment(); // C2: Daily Exercises 1
-			// at least B rank
-			if (rankPt >= 3) {
+			if(rankPt >= 3) {
 				KC3QuestManager.get(304).increment(); // C3: Daily Exercises 2
 				KC3QuestManager.get(302).increment(); // C4: Weekly Exercises
 				KC3QuestManager.get(311).increment(); // C8: Elite Fleet Practice
 			}
 		}
-
+		
 		// hunt quests - requires "battle prediction" to know which enemies sunk
 		// KC3QuestManager.get(211).increment(); // Bd4: Sink 3 abyssal CV(L)
 		// KC3QuestManager.get(218).increment(); // Bd5: Sink 3 abyssal transport ships
@@ -1732,5 +1701,5 @@ Previously known as "Reactor"
 		// KC3QuestManager.get(221).increment(); // Bw4: Sink 50 transport ships
 		// KC3QuestManager.get(228).increment(); // Bw5: Sink 15 submarines
 	}
-
+	
 })();
