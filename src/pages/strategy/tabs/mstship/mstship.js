@@ -75,6 +75,7 @@
 		Prepares all data needed
 		---------------------------------*/
 		init :function(){
+			KC3Meta.loadQuotes();
 			var MyServer = (new KC3Server()).setNum( PlayerManager.hq.server );
 			this.server_ip = MyServer.ip;
 		},
@@ -139,6 +140,11 @@
 							+ (!self.currentVersion?"":"?version="+self.currentVersion);
 				self.audio = new Audio(voiceSrc);
 				self.audio.play();
+				
+				// Emulate subtitles
+				var shipGirl = KC3Master.graph_file(self.currentGraph);
+				var voiceLine = KC3Meta.getVoiceLineByFilename(shipGirl, voiceFile);
+				$(".tab_mstship .shipInfo .subtitles").text(KC3Meta.quote( shipGirl, voiceLine ));
 			});
 			
 			// On-click remodels
