@@ -56,6 +56,14 @@ $(document).on("ready", function(){
 	}
 	$(".box-wrap").css("zoom", ((ConfigManager.api_gameScale || 100) / 100));
 	
+	if(ConfigManager.api_subtitles){
+		$(".overlay_subtitles").css("font-family", ConfigManager.subtitle_font);
+		$(".overlay_subtitles").css("font-size", ConfigManager.subtitle_size);
+		if(ConfigManager.subtitle_bold){
+			$(".overlay_subtitles").css("font-weight", "bold");
+		}
+	}
+	
 	if(!(localStorage.absoluteswf || false)) {
 		$(".box-nolink").show();
 	}else{

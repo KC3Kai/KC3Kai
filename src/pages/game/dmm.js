@@ -73,6 +73,14 @@ $(document).on("ready", function(){
 		$("body").css("background-repeat", "no-repeat");
 	}
 	
+	if(ConfigManager.api_subtitles){
+		$(".overlay_subtitles").css("font-family", ConfigManager.subtitle_font);
+		$(".overlay_subtitles").css("font-size", ConfigManager.subtitle_size);
+		if(ConfigManager.subtitle_bold){
+			$(".overlay_subtitles").css("font-weight", "bold");
+		}
+	}
+	
 	$(".box-wait").show();
 	
 	
