@@ -333,7 +333,7 @@ Uses KC3Quest objects to play around with
 		resetDailies :function(){
 			this.load();
 			console.log("resetting dailies");
-			this.resetLoop(_dailyIds);
+			this.resetLoop(this._dailyIds);
 			this.resetCounterLoop([311]);
 			this.save();
 		},
@@ -341,14 +341,14 @@ Uses KC3Quest objects to play around with
 		resetWeeklies :function(){
 			this.load();
 			console.log("resetting weeklies");
-			this.resetLoop(_weeklyIds);
+			this.resetLoop(this._weeklyIds);
 			this.save();
 		},
 		
 		resetMonthlies :function(){
 			this.load();
 			console.log("resetting monthlies");
-			this.resetLoop(_monthlyIds);
+			this.resetLoop(this._monthlyIds);
 			this.save();
 		},
 		clear :function(){
