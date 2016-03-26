@@ -1,30 +1,30 @@
-.tab_savedata {
+.tab_databackup {
 	width:680px;
 }
 
-.tab_savedata img{
+.tab_databackup img{
 	max-width:100%;
 	max-height:100%;
 }
-.tab_savedata .page_padding{
+.tab_databackup .page_padding{
 	margin-top: 20px;
 }
-.tab_savedata .datapanel{
+.tab_databackup .datapanel{
   margin : 10px 10px 10px 10px;
 }
 
-.tab_savedata .tmptextbox{
+.tab_databackup .tmptextbox{
   height : 0px;
 }
 
-.tab_savedata table{
+.tab_databackup table{
 	padding : 5px;
 }
-.tab_savedata th, .tab_savedata td {
+.tab_databackup th, .tab_databackup td {
     padding: 15px;
     text-align: left;
 }
-.tab_savedata strong {
+.tab_databackup strong {
 		text-decoration: underline;
 		color: #CC0000;
 }
