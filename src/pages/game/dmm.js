@@ -54,6 +54,7 @@ function ActivateGame(){
 $(document).on("ready", function(){
 	// Initialize data managers
 	ConfigManager.load();
+	KC3Master.init();
 	KC3Meta.init("../../../../data/");
 	KC3Meta.loadQuotes();
 	KC3QuestManager.load();
@@ -372,7 +373,8 @@ var interactions = {
 		// If subtitles available for the voice
 		if(subtitleText){
 			$(".overlay_subtitles").html(subtitleText);
-			$(".overlay_subtitles").show();
+			$(".overlay_subtitles").hide(); // hide first to fading will stop
+			$(".overlay_subtitles").show(); // then re-show
 			
 			/*subtitleMp3 = new Audio();
 			subtitleMp3.canplaythrough = function() { 

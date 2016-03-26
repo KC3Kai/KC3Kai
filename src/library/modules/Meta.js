@@ -68,18 +68,29 @@ Provides access to data on built-in JSON files
 			this._terms.troll		= JSON.parse( $.ajax(repo+'lang/data/troll/terms.json', { async: false }).responseText );
 			// other language loaded here
 			this._terms.lang		= KC3Translation.getJSON(repo, 'terms', true);
-			
-			var i, j, voiceFilename;
-			for(i=0; i < 500; i++){
-				for(j=0; j < 53; j++){
-					voiceFilename = this.getFilenameByVoiceLine (i, j);
-					this.voiceMapping[voiceFilename] = j;
-				}
-			}
 		},
 		
 		loadQuotes :function(){
 			this._quotes = KC3Translation.getJSON(this.repo, 'quotes', true);
+			
+			var i, j, voiceFilename, curShip, recheckKey, toLineNum;
+			for(i=1; i < 500; i++){
+				curShip = KC3Master.ship(i);
+				if(!curShip) continue;
+				
+				toLineNum = 29;
+				if(curShip.api_voicef > 1){
+					toLineNum = 53;
+				}
+				
+				this.voiceMapping[i] = [];
+				
+				for(j=1; j <= toLineNum; j++){
+					voiceFilename = this.getFilenameByVoiceLine (i, j);
+					this.voiceMapping[i][voiceFilename] = j;
+				}
+			}
+			console.log("voiceMapping", this.voiceMapping);
 		},
 		
 		/* Data Access
@@ -289,7 +300,7 @@ Provides access to data on built-in JSON files
 		https://github.com/kcwikizh/poi-plugin-subtitle
 		*/
 		getVoiceLineByFilename :function(ship_id, filename){
-			return this.voiceMapping[filename];
+			return this.voiceMapping[ship_id][filename];
 		},
 		
 		/*

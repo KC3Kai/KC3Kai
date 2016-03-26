@@ -140,10 +140,12 @@
 							+ (!self.currentVersion?"":"?version="+self.currentVersion);
 				self.audio = new Audio(voiceSrc);
 				self.audio.play();
+				console.log("PLAYING: self.currentShipId, vnum, voiceFile", self.currentShipId, parseInt($(this).data("vnum"), 10), voiceFile);
 				
 				// Emulate subtitles
 				var shipGirl = KC3Master.graph_file(self.currentGraph);
 				var voiceLine = KC3Meta.getVoiceLineByFilename(shipGirl, voiceFile);
+				console.log("SUBTITLE: shipGirl, voiceFile, voiceLine", shipGirl, voiceFile, voiceLine);
 				$(".tab_mstship .shipInfo .subtitles").text(KC3Meta.quote( shipGirl, voiceLine ));
 			});
 			
@@ -350,10 +352,13 @@
 				$(".tab_mstship .shipInfo .consume_fuel .rsc_value").text( shipData.api_fuel_max );
 				$(".tab_mstship .shipInfo .consume_ammo .rsc_value").text( shipData.api_bull_max );
 				
+				$(".tab_mstship .shipInfo .subtitles").html("");
+				
 				// VOICE LINES
 				$(".tab_mstship .shipInfo .voices").show();
 				$(".tab_mstship .shipInfo .voices").html("");
 				$.each(this.lines, function(vname, vnum){
+					if((shipData.api_voicef<1 && vnum==29) || vnum==6) return true;
 					$("<div/>")
 						.addClass("hover")
 						.addClass("voice")
