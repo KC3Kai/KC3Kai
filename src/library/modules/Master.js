@@ -9,14 +9,7 @@ Saves and loads significant data for future use
 	"use strict";
 	
 	window.KC3Master = {
-		isAvailable: false,
-		_ship: {},
-		_slotitem: {},
-		_stype: {},
-		_graph: {},
-		
-		_newShips: {},
-		_newItems: {},
+		available: false,
 		
 		_raw: {},
 		
@@ -38,9 +31,15 @@ Saves and loads significant data for future use
 			if( Object.size(this._raw) > 0) {
 				beforeCounts = [ Object.size(this._raw.ship), Object.size(this._raw.slotitem) ];
 			}
+			this._raw.newShips = this._raw.newShips || {};
+			this._raw.newItems = this._raw.newItems || {};
 			
-			var newCounts = [0, 0];
-			var self = this;
+			var
+				self = this,
+				diff = {"ship":"newShips", "slotitem":"newItems"},
+				oraw = $.extend({}, this._raw),
+				newCounts = [0, 0],
+				ctime = Date.now();
 			
 			// Loops through each api_mst_
 			Object.keys(raw).forEach(function(mst_name) {
@@ -54,17 +53,23 @@ Saves and loads significant data for future use
 					
 					// Store the contents into the new local raw object
 					mst_data.map(function(elem, i){
-						if (typeof elem.api_id != "undefined") {
-							// Add elements to local raw, with their IDs as indexes
-							self._raw[short_mst_name][elem.api_id] = elem;
-						}else {
-							// Elements have no IDs, store them with their original indexes
-							self._raw[short_mst_name][i] = elem;
+						var elem_key = elem.api_id || i;
+						// Add elements to local raw, with their IDs as indexes
+						// Elements have no IDs, store them with their original indexes
+						self._raw[short_mst_name][elem_key] = elem;
+						
+						if(!!diff[short_mst_name] && !!oraw[short_mst_name]) {
+							if(!oraw[short_mst_name][elem_key]) {
+								self._raw[diff[short_mst_name]][elem_key] = ctime;
+							} else {
+								delete self._raw[diff[short_mst_name]][elem_key];
+							}
 						}
 					});
 				}
 			});
 			
+			this.updateRemodelTable();
 			this.save();
 			this.available = true;
 			
@@ -82,27 +87,50 @@ Saves and loads significant data for future use
 		/* Data Access
 		-------------------------------------*/
 		ship :function(id){
-			console.log(this._raw.ship[id]);
-			return this._raw.ship[id] || false;
+			return !this.available ? false : this._raw.ship[id] || false;
+		},
+		
+		all_ships :function(){
+			return this._raw.ship || {};
+		},
+		
+		new_ships :function(){
+			return this._raw.newShips || {};
+		},
+		
+		remove_new_ship :function(id){
+			delete this._raw.newShips[id];
 		},
 		
 		graph :function(id){
-			return this._raw.shipgraph[id] || false;
+			return !this.available ? false : this._raw.shipgraph[id] || false;
 		},
 		
 		graph_file :function(filename){
 			var self = this;
-			return Object.keys(this._graph).filter(function(key){
+			return !this.available ? false : Object.keys(this._raw.shipgraph).filter(function(key){
 				return self._raw.shipgraph[key] === filename;
 			})[0];
 		},
 		
 		slotitem :function(id){
-			return this._raw.slotitem[id] || false;
+			return !this.available ? false : this._raw.slotitem[id] || false;
+		},
+		
+		all_slotitems :function(){
+			return this._raw.slotitem || {};
+		},
+		
+		new_slotitems :function(){
+			return this._raw.newItems || {};
+		},
+		
+		remove_new_slotitem :function(id){
+			delete this._raw.newItems[id];
 		},
 		
 		stype :function(id){
-			return this._raw.stype[id] || false;
+			return !this.available ? false : this._raw.stype[id] || false;
 		},
 		
 		/* Save to localStorage
@@ -114,25 +142,35 @@ Saves and loads significant data for future use
 		/* Load from localStorage
 		-------------------------------------*/
 		load :function(){
+			this.available = false;
 			if(typeof localStorage.raw != "undefined"){
-				var tmpMaster = JSON.parse(localStorage.raw);
-				if(tmpMaster.ship[1] !== null){
-					this._raw = tmpMaster;
+				var tmpRaw = JSON.parse(localStorage.raw);
+				if(!!tmpRaw.ship[1]){
+					this._raw = tmpRaw;
 					this.available = true;
-				}else{
-					this.available = false;
 				}
-			}else{
-				this.available = false;
+			} else if(typeof localStorage.master != "undefined"){
+				// Compatibility table for OCD people
+				var tmpMaster = JSON.parse(localStorage.master);
+				if(!!tmpMaster.ship[0]){
+					this._raw.ship = tmpMaster.ship;
+					this._raw.shipgraph = tmpMaster.graph || {};
+					this._raw.slotitem = tmpMaster.slotitem;
+					this._raw.stype = tmpMaster.stype;
+					this._raw.newShips = tmpMaster.newShips || {};
+					this._raw.newItems = tmpMaster.newItems || {};
+					this.available = true;
+				}
 			}
+			return this.available;
 		},
 		
 		/* Remodel Table Storage
 		-------------------------------------*/
 		removeRemodelTable :function(){
 			var cShip,ship_id;
-			for(ship_id in this._ship) {
-				cShip = this._ship[ship_id];
+			for(ship_id in this._raw.ship) {
+				cShip = this._raw.ship[ship_id];
 				if(!cShip) { /* invalid API */ continue; }
 				if(!cShip.api_buildtime) { /* unbuildable by API */ continue; }
 				delete cShip.kc3_maxed;
@@ -143,15 +181,17 @@ Saves and loads significant data for future use
 		updateRemodelTable :function(){
 			var cShip,ccShip,remodList,ship_id,shipAry,modelLv,bship_id;
 			this.removeRemodelTable();
-			shipAry = Object.keys(this._ship);
+			shipAry = Object.keys(this.all_ships());
 			remodList = [];
 			modelLv = 1;
 			while(shipAry.length) {
 				ship_id = parseInt(shipAry.shift());
-				cShip = this._ship[ship_id];
+				cShip = this._raw.ship[ship_id];
+				
 				// Pre-checks of the remodel table
 				if(!cShip)               { /* invalid API */ continue; }
 				if(!cShip.api_buildtime) { /* unbuildable by API */ continue; }
+				
 				/* proposed variable:
 				  kc3 prefix variable -> to prevent overwriting what devs gonna say later on
 					maxed flag -> is it the end of the cycle? is it returns to a cyclic model?
@@ -161,16 +201,31 @@ Saves and loads significant data for future use
 				cShip.api_aftershipid = Number(cShip.api_aftershipid);
 				if(!!cShip.kc3_model)    { /* already checked ship */ modelLv = 1; continue; }
 				if(cShip.api_name.indexOf("改") >= 0 && modelLv <= 1) { /* delays enumeration of the remodelled ship in normal state */ continue; }
+				
+				// Prepare remodel flag
 				cShip.kc3_maxed = false;
 				cShip.kc3_model = modelLv++; // 1 stands for base model
 				cShip.kc3_bship = cShip.kc3_bship || ship_id;
+				
+				// Prepare salt list for every base ship that is not even a remodel
+				// Only for enabled salt check
+				if(
+					(ConfigManager.info_salt) &&
+					(ConfigManager.salt_list.indexOf(cShip.kc3_bship) < 0) &&
+					(this._raw.newShips[cShip.kc3_bship])
+				){
+					ConfigManager.salt_list.push(cShip.kc3_bship);
+				}
+				
+				// Check whether remodel is available and skip further processing
 				if(!!cShip.api_afterlv) {
 					shipAry.unshift(cShip.api_aftershipid);
-					ccShip = this._ship[cShip.api_aftershipid];
+					ccShip = this._raw.ship[cShip.api_aftershipid];
 					ccShip.kc3_bship = cShip.kc3_bship;
 					cShip.kc3_maxed = !!ccShip.kc3_model;
 					continue;
 				}
+				// Finalize model data
 				cShip.kc3_maxed = true;
 				modelLv = 1;
 			}

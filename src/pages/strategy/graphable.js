@@ -30,9 +30,9 @@
 		Prepares all data needed
 		---------------------------------*/
 		this.init    = function(){
-			this.hour  = Math.floor((new Date()).getTime()/( 1*60*60*1000));
-			this.zone  = Math.floor((new Date()).getTime()/( 6*60*60*1000));
-			this.day   = Math.floor((new Date()).getTime()/(24*60*60*1000));
+			this.hour  = Math.floor(Date.now()/( 1*60*60*1000));
+			this.zone  = Math.floor(Date.now()/( 6*60*60*1000));
+			this.day   = Math.floor(Date.now()/(24*60*60*1000));
 			Chart.defaults.global.scaleBeginAtZero = true;
 		};
 		

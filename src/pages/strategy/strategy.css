@@ -6,6 +6,11 @@ body {
 	width:800px;
 	margin:0px auto;
 }
+#error {
+	width:800px;
+	margin:10px 0px 20px 0px;
+	display:none;
+}
 #body {
 	width:800px;
 	margin:10px 0px 10px 0px;
@@ -46,6 +51,7 @@ body {
 	padding:0px;
 	font-size:12px;
 	font-weight:bold;
+	white-space:nowrap;
 }
 #menu .submenu ul.menulist li {
 	width:100px;

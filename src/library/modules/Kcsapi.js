@@ -15,6 +15,14 @@ Previously known as "Reactor"
 			slotCur :{},
 			slotId  :0
 		},
+		serverOffset: 0,
+		moraleRefresh: $.extend(new Date(),{
+			calibrate:function(t){
+				t = Date.parse(t);
+				this.setTime(t);
+				return Math.hrdInt('floor',Date.now() - t,3,0,1);
+			}
+		}),
 		
 		/* Master Data
 		-------------------------------------------------------*/
@@ -60,11 +68,12 @@ Previously known as "Reactor"
 		
 		/* Home Port Screen
 		-------------------------------------------------------*/
-		"api_port/port":function(params, response, headers){	
+		"api_port/port":function(params, response, headers){
 			KC3Network.trigger("HomeScreen");
 			
 			//KC3ShipManager.clear();
 			KC3ShipManager.set(response.api_data.api_ship,true);
+			this.serverOffset = this.moraleRefresh.calibrate( headers.Date );
 			
 			KC3SortieManager.endSortie(response);
 			
@@ -289,6 +298,8 @@ Previously known as "Reactor"
 		/* Ship lists
 		-------------------------------------------------------*/
 		"api_get_member/ship_deck":function(params, response, headers){
+			this.serverOffset = this.moraleRefresh.calibrate( headers.Date );
+			
 			KC3ShipManager.set(response.api_data.api_ship_data);
 			KC3Network.delay(0, "Fleet");
 			KC3Network.trigger("Fleet");
@@ -306,6 +317,25 @@ Previously known as "Reactor"
 			PlayerManager.setFleets( response.api_data.api_deck_data );
 			KC3Network.trigger("Timers");
 			KC3Network.trigger("Fleet");
+			/*
+				"api_data":{
+					"api_ship_data":[
+						{"api_id":130,"api_sortno":150,"api_ship_id":150,"api_lv":75,"api_exp":[319098,11902,0],"api_nowhp":83,"api_maxhp":83,"api_leng":3,"api_slot":[6032,6033,6034,-1,-1],"api_onslot":[3,3,3,3,0],"api_slot_ex":0,"api_kyouka":[7,0,16,7,0],"api_backs":7,"api_fuel":100,"api_bull":125,"api_slotnum":4,"api_ndock_time":0,"api_ndock_item":[0,0],"api_srate":1,"api_cond":40,"api_karyoku":[103,98],"api_raisou":[0,0],"api_taiku":[59,82],"api_soukou":[79,95],"api_kaihi":[63,72],"api_taisen":[0,0],"api_sakuteki":[45,49],"api_lucky":[13,79],"api_locked":1,"api_locked_equip":0}
+					],
+					"api_deck_data":[
+						{"api_member_id":16015130,"api_id":1,"api_name":"\u30e1\u30a4\u30f3\u8266\u968a","api_name_id":"123990924","api_mission":[0,0,0,0],"api_flagship":"0","api_ship":[130,403,223,1723,141,3349]},
+						{"api_member_id":16015130,"api_id":2,"api_name":"\u5bfe\u6f5c\u8266\u968a","api_name_id":"129857413","api_mission":[1,38,1454999143020,0],"api_flagship":"0","api_ship":[1,2,22,2112,1122,249]},
+						{"api_member_id":16015130,"api_id":3,"api_name":"\u99c6\u9010\u8266\u968a","api_name_id":"129857436","api_mission":[1,37,1454998550795,0],"api_flagship":"0","api_ship":[232,1439,247,1119,9,28]},
+						{"api_member_id":16015130,"api_id":4,"api_name":"\u7b2c4\u8266\u968a","api_name_id":"","api_mission":[1,6,1454993446222,0],"api_flagship":"0","api_ship":[137,807,2576,2564,-1,-1]}
+					],
+					"api_slot_data":{
+							"api_slottype1":[120,1635,1639,1982,2002,3741,2177,2032,5030,4206,4291],
+							"api_slottype2":[205,443,2509,2833,323,602,3848,57,161,163,165,303,428,491,848,1127,4326,4595,5273,524,810,1032,5954,4407,5068],
+							"api_slottype3":[559,619,663,678,826,5275,103,390,448,474,475,691,2508,2832,3099,3102,4123],
+							"api_slottype4":[75,142,407,915,1011,73,186,207,532,620,629,900,1058,2466,3040,3383,449,692,3983,3997,2464,3122,3896,3849],"api_slottype5":[26,82,119,146,174,179,232,290,298,388,519,958,1469,3049,3733,3782,917,1013,2131,1870],"api_slottype6":[1159,1192,1196,1530,1573,2780,3277,3298,3601,3749,5943,3251,3305],"api_slottype7":[487,646,1574,2195,3240,3246,3252,3264,3268,3308,3687,3750,5829,1572,1610],"api_slottype8":[3226,3244,3269,3303,3310,3356,1158,3217,3243,3245,3249,3302,3602,1531,3241,3304,2498,3023],"api_slottype9":[3399],"api_slottype10":[43,1156,1935,2510,2837,2840,3278,3684,3688,3697,3850,3944,4058,4287,4341,4459],"api_slottype11":[1316,2280,2779,3239,3263,3267,3307,3991,4057],"api_slottype12":[5608],"api_slottype13":[916,1033,1871,2132,5205,6013],"api_slottype14":[683,4241,4286,3904,5387],"api_slottype15":[391,705,744,825,1066,1097,1721,1724,3887,4409,5071,5656,395,3893,4221],"api_slottype16":-1,"api_slottype17":-1,"api_slottype18":[3045,3046,3459],"api_slottype19":[162],"api_slottype20":-1,"api_slottype21":[2440,2674,2966,3090,3895,741,922,2967,3036,3088,3203,3460,4047,4108,5830,2118],"api_slottype22":[189,2283],"api_slottype23":[1,2,215,1108,1613,2041,2499,3025,5564,5602,5613,4371,5048],"api_slottype24":-1,"api_slottype25":-1,"api_slottype26":-1,"api_slottype27":-1,"api_slottype28":[3024],"api_slottype29":[5069],"api_slottype30":[1792,2473,2788,5039,5293,5295,5614,5805],"api_slottype31":-1,"api_slottype32":-1,"api_slottype33":-1,"api_slottype34":[5607],"api_slottype35":-1,"api_slottype36":[2106,4142,5363],"api_slottype37":[2568],"api_slottype38":-1,"api_slottype39":[5366],"api_slottype40":-1,"api_slottype41":-1,"api_slottype42":-1,"api_slottype43":[3371,3372,3373,4372,4373,4871,5072,5910],"api_slottype44":-1
+						}
+					}
+			*/
 		},
 		
 		"api_req_kaisou/open_exslot":function(params, response, headers){
@@ -315,6 +345,17 @@ Previously known as "Reactor"
 				mast = ship.master();
 			
 			console.log("Extra Slot Unlock for",sid,ship.name());
+		},
+		
+		"api_req_kaisou/marriage":function(params, response, headers){
+			var
+				sid      = parseInt(params.api_id,10),
+				ship     = KC3ShipManager.get(sid),
+				mast     = ship.master(),
+				
+				ship_obj = response.api_data;
+			
+			console.log("Perform Marriage ",sid,ship.name());
 		},
 		
 		"api_req_kaisou/remodeling":function(params, response, headers){
@@ -576,6 +617,30 @@ Previously known as "Reactor"
 			KC3Network.trigger("Fleet");
 		},
 		
+		/* Lock a ship
+		-------------------------------------------------------*/
+		"api_req_hensei/lock":function(params, response, headers){
+			var shipID    = parseInt(params.api_ship_id,10);
+			var lockState = response.api_data.api_locked;
+			var shipData  = KC3ShipManager.get(shipID);
+			
+			if(shipData.lock) {
+				console.warn("Unlocked",shipData.rosterId,shipData.name());
+			} else {
+				var lockID = ConfigManager.lock_list.indexOf(shipID);
+				if(lockID+1) {
+					ConfigManager.lock_list.splice(lockID,1);
+					ConfigManager.save();
+				} else {
+					console.info("Locked (~)",shipData.rosterId,shipData.name());
+				}
+			}
+			
+			shipData.lock = lockState;
+			KC3ShipManager.save();
+			KC3Network.trigger("Fleet");
+		},
+		
 		/* Change equipment of a ship
 		-------------------------------------------------------*/
 		"api_req_kaisou/slotset":function(params, response, headers){
@@ -665,7 +730,8 @@ Previously known as "Reactor"
 				response.api_data.api_maparea_id,
 				response.api_data.api_mapinfo_no,
 				params.api_deck_id,
-				UTCTime
+				UTCTime,
+				response.api_data.api_eventmap
 			);
 			
 			KC3SortieManager.setBoss(
@@ -680,7 +746,7 @@ Previously known as "Reactor"
 				var thisMapId = "m"+response.api_data.api_maparea_id+""+response.api_data.api_mapinfo_no;
 				var thisMap = AllMaps[thisMapId];
 
-				if (thisMap.curhp === 9999) {
+				if (thisMap.curhp || 9999 === 9999) {
 					thisMap.curhp = response.api_data.api_eventmap.api_now_maphp;
 					thisMap.maxhp = response.api_data.api_eventmap.api_max_maphp;
 					localStorage.maps = JSON.stringify(AllMaps);
@@ -692,6 +758,7 @@ Previously known as "Reactor"
 			KC3Network.trigger("SortieStart");
 			KC3Network.trigger("CompassResult");
 			KC3Network.trigger("Quests");
+			KC3Network.trigger("Fleet");
 		},
 		
 		/* Traverse Map
@@ -713,18 +780,10 @@ Previously known as "Reactor"
 			KC3Network.trigger("BattleStart");
 		},
 		"api_req_sortie/airbattle":function(params, response, headers){
-			KC3SortieManager.engageBattle(
-				response.api_data,
-				Math.floor((new Date(headers.Date)).getTime()/1000)
-			);
-			KC3Network.trigger("BattleStart");
+			this["api_req_sortie/battle"].apply(this,arguments);
 		},
 		"api_req_sortie/ld_airbattle":function(params, response, headers){
-			KC3SortieManager.engageBattle(
-				response.api_data,
-				Math.floor((new Date(headers.Date)).getTime()/1000)
-			);
-			KC3Network.trigger("BattleStart");
+			this["api_req_sortie/battle"].apply(this,arguments);
 		},
 		
 		/* COMBINED FLEET: BATTLE STARTS
@@ -737,25 +796,13 @@ Previously known as "Reactor"
 			KC3Network.trigger("BattleStart");
 		},
 		"api_req_combined_battle/airbattle":function(params, response, headers){
-			KC3SortieManager.engageBattle(
-				response.api_data,
-				Math.floor((new Date(headers.Date)).getTime()/1000)
-			);
-			KC3Network.trigger("BattleStart");
+			this["api_req_combined_battle/battle"].apply(this,arguments);
 		},
 		"api_req_combined_battle/battle_water":function(params, response, headers){
-			KC3SortieManager.engageBattle(
-				response.api_data,
-				Math.floor((new Date(headers.Date)).getTime()/1000)
-			);
-			KC3Network.trigger("BattleStart");
+			this["api_req_combined_battle/battle"].apply(this,arguments);
 		},
 		"api_req_combined_battle/ld_airbattle":function(params, response, headers){
-			KC3SortieManager.engageBattle(
-				response.api_data,
-				Math.floor((new Date(headers.Date)).getTime()/1000)
-			);
-			KC3Network.trigger("BattleStart");
+			this["api_req_combined_battle/battle"].apply(this,arguments);
 		},
 		
 		/* BATTLE STARTS as NIGHT
@@ -831,6 +878,7 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_combined_battle/goback_port":function(params, response, headers){
 			KC3SortieManager.sendFCFHome();
+			KC3Network.delay(0, "Fleet");
 			KC3Network.trigger("Fleet");
 		},
 		
@@ -965,6 +1013,66 @@ Previously known as "Reactor"
 		/*-------------------------------------------------------*/
 		/*-----------------------[ PVP ]-------------------------*/
 		/*-------------------------------------------------------*/
+		
+		/* PVP Enemy List
+		-------------------------------------------------------*/
+		"api_get_member/practice":function(params, response, headers){
+			/* 
+				{
+					"api_member_id":16015130,
+					"api_id":1,
+					"api_enemy_id":16131426,
+					"api_enemy_name":"\u3057\u304a\u3093",
+					"api_enemy_name_id":"135471996",
+					"api_enemy_level":100,
+					"api_enemy_rank":"\u5143\u5e25",
+					"api_enemy_flag":3,
+					"api_enemy_flag_ship":401,
+					"api_enemy_comment":"\u7d50\u5c40\u521d\u96ea\u306f\u53ef\u611b\u3059\u304e\u308b\uff01",
+					"api_enemy_comment_id":"146585663",
+					"api_state":0,
+					"api_medals":0
+				},
+			*/
+			var
+				data = response.api_data;
+		},
+		
+		/* PVP Fleet List
+		-------------------------------------------------------*/
+		"api_req_member/get_practice_enemyinfo":function(params, response, headers){
+			/*
+				{
+					"api_member_id":16131426,
+					"api_nickname":"\u3057\u304a\u3093",
+					"api_nickname_id":"135471996",
+					"api_cmt":"\u7d50\u5c40\u521d\u96ea\u306f\u53ef\u611b\u3059\u304e\u308b\uff01",
+					"api_cmt_id":"146585663",
+					"api_level":100,
+					"api_rank":1,
+					"api_experience":[1322118,1600000],
+					"api_friend":0,
+					"api_ship":[100,100],
+					"api_slotitem":[394,497],
+					"api_furniture":46,
+					"api_deckname":"\u306d\u3048\u4eca\u3069\u3093\u306a\u6c17\u6301\u3061\uff1f",
+					"api_deckname_id":"143652014",
+					"api_deck":{
+						"api_ships":[
+							{"api_id":402539759,"api_ship_id":401,"api_level":85,"api_star":4},
+							{"api_id":287256299,"api_ship_id":398,"api_level":63,"api_star":4},
+							{"api_id":416504460,"api_ship_id":399,"api_level":74,"api_star":4},
+							{"api_id":302286234,"api_ship_id":400,"api_level":77,"api_star":4},
+							{"api_id":-1},
+							{"api_id":-1}
+						]
+					}
+				}
+			*/
+			var
+				data    = response.api_data,
+				enemyId = parseInt(params.api_member_id,10);
+		},
 		
 		/* PVP Start
 		-------------------------------------------------------*/
@@ -1130,6 +1238,7 @@ Previously known as "Reactor"
 							consDat  = [shipData.fuel,shipData.ammo,shipData.slots.reduce(function(x,y){return x+y;})];
 						if(shipData.masterId > 0) {
 							// if there's a change in ship supply
+							console.log(shipData.name(),dataInd,pendCond.costnull,consDat);
 							if(dataInd >= 0) {
 								shipData.getDefer()[1].resolve(dbId);
 							}
@@ -1274,6 +1383,7 @@ Previously known as "Reactor"
 		/* View World Maps
 		-------------------------------------------------------*/
 		"api_get_member/mapinfo":function(params, response, headers){
+			if(localStorage.maps=="null"){ localStorage.maps = ""; }
 			var maps = JSON.parse(localStorage.maps || "{}");
 			var ctr, thisMap, localMap, etcStat, defStat;
 			
@@ -1310,7 +1420,7 @@ Previously known as "Reactor"
 					etcStat[key] = $.extend(true,{},defStat,maps[key].stat);
 				
 				// Create map object
-				localMap = maps[ key ] = {
+				localMap = {
 					id: thisMap.api_id,
 					clear: thisMap.api_cleared,
 					kind: 'single'
@@ -1328,9 +1438,12 @@ Previously known as "Reactor"
 					localMap.curhp      = eventData.api_now_maphp;
 					localMap.maxhp      = eventData.api_max_maphp;
 					localMap.difficulty = eventData.api_selected_rank;
+					
+					if(typeof (maps[key]||{}).baseHp !== 'undefined')
+						localMap.baseHp     = maps[key].baseHp;
 					localMap.stat       = $.extend(true,{},defStat,etcStat[ key ]);
 					switch(eventData.api_gauge_type || 0) {
-						case 0:
+						case 2:
 							localMap.kind   = 'gauge-hp';
 							break;
 						case 3:
@@ -1343,10 +1456,15 @@ Previously known as "Reactor"
 				}
 				
 				// Check default gauge info
-				if(typeof maps[key].dkind === 'undefined') {
-					maps[key].dkind = maps[key].kind;
+				if(typeof maps[key] !== 'undefined') {
+					if(typeof maps[key].dkind === 'undefined') {
+						maps[key].dkind = maps[key].kind;
+					}
 				}
+				
+				maps[ key ] = localMap;
 			}
+			
 			localStorage.maps = JSON.stringify(maps);
 		},
 		
@@ -1483,7 +1601,7 @@ Previously known as "Reactor"
 				var sk = ['api',(id >= 4) ? ky : 'req',dk].join('_');
 				mt[id] = -cu[sk];
 			});
-			console.log.apply(console,["Remodel Cost"].concat(mt));
+			console.info.apply(console,["Remodel Cost"].concat(mt));
 			// Store to Lodger
 			KC3Database.Naverall({
 				hour: Math.hrdInt("floor",ct/3.6,6,1),
@@ -1492,6 +1610,8 @@ Previously known as "Reactor"
 			});
 			// Update equipment on local data
 			KC3GearManager.set([ response.api_data.api_after_slot ]);
+			(response.api_data.api_use_slot_id || []).forEach(function(gearId){ KC3GearManager.remove(gearId); });
+			
 			PlayerManager.consumables.buckets = response.api_data.api_after_material[5];
 			PlayerManager.consumables.devmats = response.api_data.api_after_material[6];
 			PlayerManager.consumables.screws = response.api_data.api_after_material[7];

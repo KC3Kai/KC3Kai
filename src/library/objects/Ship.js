@@ -237,23 +237,26 @@ KC3改 Ship Object
 	when optAfterHp is true, return repair time based on afterHp
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.repairTime = function(optAfterHp){
-		var RepairCalc = PS['KanColle.RepairTime'];
-		var hpArr = optAfterHp ? this.afterHp : this.hp;
+		var
+			HPPercent  = this.hp[0] / this.hp[1],
+			RepairTSec = Math.hrdInt('floor',this.repair[0],3,1),
+			RepairCalc = PS['KanColle.RepairTime'],
+			
+			hpArr = optAfterHp ? this.afterHp : this.hp;
 
 		var result = {};
 
-		result.akashi = ( hpArr[0] / hpArr[1] > 0.50 && this.isFree()) ?
-			RepairCalc.facilityInSecJSNum( this.master().api_stype, this.level, hpArr[0], hpArr[1] ) :
-			0;
+		result.akashi = ( HPPercent > 0.50 && HPPercent < 1.00 && this.isFree()) ?
+			/* RepairCalc.facilityInSecJSNum( this.master().api_stype, this.level, this.hp[0], this.hp[1] ) */
+			Math.max(Math.min((1200 * (this.hp[1] - this.hp[0])),RepairTSec),1200) : 0;
 
 		if (optAfterHp) {
 			result.docking = RepairCalc.dockingInSecJSNum( this.master().api_stype, this.level, hpArr[0], hpArr[1] );
 		} else {
 			result.docking = this.isRepaired() ?
-				// if is being repaired
 				Math.ceil(KC3TimerManager.repair(PlayerManager.repairShips.indexOf(this.rosterId)).remainingTime()) / 1000 :
-				// else get data from api_ndock_time
-				Math.hrdInt('floor',this.repair[0],3,1);
+				/* RepairCalc. dockingInSecJSNum( this.master().api_stype, this.level, this.hp[0], this.hp[1] ) */
+				RepairTSec;
 		}
 		return result;
 	};
@@ -375,10 +378,10 @@ KC3改 Ship Object
 		var fullFuel = master.api_fuel_max;
 		var fullAmmo = master.api_bull_max;
 
-		// TODO: to be verified
+		// http://puu.sh/mtMFg.png
 		if (this.level >= 100) {
-			fullFuel = Math.ceil(fullFuel * 0.85);
-			fullAmmo = Math.ceil(fullAmmo * 0.85);
+			fullFuel = Math.floor(fullFuel * 0.85);
+			fullAmmo = Math.floor(fullAmmo * 0.85);
 		}
 
 		var mulRounded = function (a, percent) {
@@ -405,7 +408,7 @@ KC3改 Ship Object
 		}
 	};
 	KC3Ship.prototype.performSupply = function(args) {
-		consumePending.call(this,0,{0:0,1:1,2:3,c: 1,i: 0},[0,1,2],args);
+		consumePending.call(this,0,{0:0,1:1,2:3,c: 1 - ((this.level >= 100) && 0.15),i: 0},[0,1,2],args);
 	};
 	KC3Ship.prototype.performRepair = function(args) {
 		consumePending.call(this,1,{0:0,1:2,2:6,c: 1,i: 0},[0,1,2],args);
@@ -426,7 +429,9 @@ KC3改 Ship Object
 		if(args.noAmmo) delete mapping['1'];
 		
 		/* clear pending consumption, by iterating each keys */
-		var lsFirst = this.lastSortie[0];
+		var
+			rmd = [0,0,0,0,0,0,0,0],
+			lsFirst = this.lastSortie[0];
 		
 		Object.keys(this.pendingConsumption).forEach(function(shipConsumption,iterant){
 			var
@@ -435,12 +440,19 @@ KC3改 Ship Object
 				sid = self.lastSortie.indexOf(shipConsumption);
 			// Iterate supplied ship part
 			Object.keys(mapping).forEach(function(key){
-				rsc[mapping[key]] += dat[index][key] * mult * (1 + (mapping[key]===3 && 4));
+				var val = dat[index][key] * (mapping[key]===3 ? 5 : mult);
+				
+				// Calibrate for rounding towards zero
+				rmd[mapping[key]] += val % 1;
+				rsc[mapping[key]] += Math.ceil(val) + parseInt(rmd[mapping[key]]);
+				rmd[mapping[key]] %= 1;
 				// Checks whether current iteration is last N pending item
 				if((iterant < lastN) && (clear.indexOf(parseInt(key))>=0))
 					dat[index][key] = 0;
 			});
-			console.log.apply(console,["Ship",self.rosterId,"Consume",shipConsumption,index,[iterant,lastN].join('/')].concat(rsc.map(function(x){return -x;})).concat(dat[index]));
+			
+			
+			console.log.apply(console,["Ship",self.rosterId,"Consume",shipConsumption,sid,[iterant,lastN].join('/')].concat(rsc.map(function(x){return -x;})).concat(dat[index]));
 			
 			// Store supplied resource count to database by updating the source
 			KC3Database.Naverall({
@@ -450,12 +462,22 @@ KC3改 Ship Object
 			if(dat.every(function(consumptionData){
 				return consumptionData.every(function(resource){ return !resource; });
 			})) {
-				if(sid>=0)
-					self.lastSortie.splice( sid ,1);
 				delete self.pendingConsumption[shipConsumption];
 			}
 			/* Comment Stopper */
 		});
+		
+		var
+			lsi = 1,
+			lsk = "";
+		while(lsi < this.lastSortie.length && this.lastSortie[lsi] != 'sortie0') {
+			lsk = this.lastSortie[lsi];
+			if(this.pendingConsumption[ lsk ]){
+				lsi++;
+			}else{
+				this.lastSortie.splice(lsi,1);
+			}
+		}
 		
 		if(this.lastSortie.indexOf(lsFirst) < 0) {
 			this.lastSortie.unshift(lsFirst);

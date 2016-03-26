@@ -120,7 +120,7 @@
 				"id" : "info_salt",
 				"name" : "SettingsSaltyShip",
 				"type" : "check",
-				"hide" : 1,
+				"hide" : 0,
 				"options" : {}
 			},
 			{
@@ -150,6 +150,12 @@
 			{
 				"id" : "info_eng_stype",
 				"name" : "SettingsEnglishShipType",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_jp_ship_item",
+				"name" : "SettingsJapaneseShipItem",
 				"type" : "check",
 				"options" : {}
 			}
@@ -549,35 +555,6 @@
 					"type": "Number"
 				},
 				"options" : { "label" : "%" }
-			}
-		]
-	},
-	{
-		"section": "SettingsLegacyPanel",
-		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Panel",
-		"contents" : [
-			{
-				"id" : "pan_size",
-				"name" : "SettingsPanelSize",
-				"type" : "radio",
-				"options" : {
-					"choices" : [
-						[ "small", "Small" ],
-						[ "big", "Big" ]
-					]
-				}
-			},
-			{
-				"id" : "pan_gear_holder",
-				"name" : "SettingsGearHolder",
-				"type" : "radio",
-				"options" : {
-					"choices" : [
-						[ "black", "Black" ],
-						[ "white", "White" ],
-						[ "none", "None" ]
-					]
-				}
 			}
 		]
 	}

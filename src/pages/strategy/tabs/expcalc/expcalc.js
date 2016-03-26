@@ -232,7 +232,7 @@
 			
 			// Exp Modifier: FLAGSHIP
 			$(".ship_fs .ship_value", goalBox).text( grindData[5]?"Yes":"No" );
-			$(".ship_mvp .ship_value", goalBox).css('color',(grindData[6]? "#e33" : "#039")); 
+			$(".ship_fs .ship_value", goalBox).css('color',(grindData[5]? "#e33" : "#039")); 
 			if(grindData[5]===1){ expPerSortie = expPerSortie * 1.5; }
 			
 			// Exp Modifier: RANK

@@ -18,31 +18,31 @@
 			
 			var timeNow = (new Date()).getTime();
 			var self = this;
-			var MasterChanged = false;
+			var masterChanged = false;
 			
-			$.each(KC3Master._newShips, function(ship_id, ship_time){
+			$.each(KC3Master.new_ships(), function(ship_id, ship_time){
 				console.log("testing ship time", timeNow, ship_time, "diff=", timeNow-ship_time);
 				if(timeNow-ship_time > 7*24*60*60*1000){
-					delete KC3Master._newShips[ship_id];
+					KC3Master.remove_new_ship(ship_id);
 					console.log("SHIP", ship_id, "has expired from update list");
-					MasterChanged = true;
+					masterChanged = true;
 				}else{
 					self.newShips.push( KC3Master.ship(ship_id) );
 				}
 			});
 			
-			$.each(KC3Master._newItems, function(item_id, item_time){
+			$.each(KC3Master.new_slotitems(), function(item_id, item_time){
 				console.log("testing item time", timeNow, item_time, "diff=", timeNow-item_time);
 				if(timeNow-item_time > 7*24*60*60*1000){
-					delete KC3Master._newItems[item_id];
+					KC3Master.remove_new_slotitem(item_id);
 					console.log("ITEM", item_id, "has expired from update list");
-					MasterChanged = true;
+					masterChanged = true;
 				}else{
 					self.newGears.push( KC3Master.slotitem(item_id) );
 				}
 			});
 			
-			if(MasterChanged){
+			if(masterChanged){
 				console.log("master changed, saving..");
 				KC3Master.save();
 			}
@@ -57,19 +57,23 @@
 		execute :function(){
 			$(".tab_mstupdate .runtime_id").text(chrome.runtime.id);
 			
-			var shipBox, gearBox, shipFile;
+			var shipBox, gearBox, shipFile, shipVersion, shipSrc;
 			var self = this;
 
 			// New Ship list
-			$.each(this.newShips, function(index, ShipData){
+			$.each(this.newShips, function(index, shipData){
 				shipBox = $(".tab_mstupdate .factory .mstship").clone();
-				shipFile = KC3Master.graph_id(ShipData.api_id);
+				shipFile = KC3Master.graph(shipData.api_id).api_filename;
+				shipVersion = KC3Master.graph(shipData.api_id).api_version;
 				
-				$(".ship_cg embed", shipBox).attr("src", "../../../../assets/swf/card.swf?sip="+self.server_ip+"&shipFile="+shipFile+"&abyss="+(ShipData.api_id>500?1:0));
+				shipSrc = "../../../../assets/swf/card.swf?sip="+self.server_ip
+						+"&shipFile="+shipFile
+						+"&abyss="+(shipData.api_id>500?1:0)
+						+(!shipVersion?"":"&ver="+shipVersion);
+						
+				$(".ship_cg embed", shipBox).attr("src", shipSrc).attr("menu", "false");
 				
-				// $("a", shipBox).attr("href", "?#mstship-"+ShipData.api_id);
-				
-				$(".ship_name", shipBox).text( KC3Meta.shipName( ShipData.api_name ) );
+				$(".ship_name", shipBox).text( KC3Meta.shipName( shipData.api_name ) );
 				
 				shipBox.appendTo(".tab_mstupdate .mstships");
 			});

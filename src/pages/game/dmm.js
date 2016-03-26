@@ -64,6 +64,7 @@ $(document).on("ready", function(){
 		$("body").css("background-position", ConfigManager.api_bg_position);
 		$("body").css("background-repeat", "no-repeat");
 	}
+	$(".box-wrap").css("zoom", ((ConfigManager.api_gameScale || 100) / 100));
 	
 	$(".box-wait").show();
 	
@@ -284,7 +285,7 @@ var interactions = {
 	
 	// Remove HTML overlays
 	clearOverlays :function(request, sender, response){
-		console.log("clearing overlays");
+		// console.log("clearing overlays");
 		// app.Dom.clearOverlays();
 		$(".overlay_quests").html("");
 		$(".overlay_record").hide();
