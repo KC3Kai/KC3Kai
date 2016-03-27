@@ -1457,10 +1457,9 @@ Previously known as "Reactor"
 				}
 				
 				// Check default gauge info
-				if(typeof maps[key] !== 'undefined') {
-					if(typeof maps[key].dkind === 'undefined') {
-						maps[key].dkind = maps[key].kind;
-					}
+				if(typeof maps[key] !== 'undefined'
+					&& typeof maps[key].dkind === 'undefined') {
+					maps[key].dkind = maps[key].kind;
 				}
 				
 				maps[ key ] = localMap;
@@ -1638,7 +1637,7 @@ Previously known as "Reactor"
 			getRank = function(r){ return ['E','D','C','B','A','S','SS'].indexOf(r); },
 			qLog = function(r){ // this one is used to track things
 				var q = KC3QuestManager.get(r);
-				console.log("Quest ",r," progress ["+(q.tracking ? q.tracking[0] + '/' + q.tracking[1] : '-----')+"] ",q.status == 2);
+				console.log("Quest",r,"progress ["+(q.tracking ? q.tracking : '-----')+"]",q.status == 2);
 				return q;
 			};
 		
@@ -1674,11 +1673,11 @@ Previously known as "Reactor"
 					[256,0,[6,1], true]  // Bm2: Deploy to [W6-1] and obtain an S-rank the boss node 3 times
 				],
 				[ /* KANZEN */ ],
-			].reverse().splice(rankPt)
+			].slice(0, rankPt)
 				.reduce(function(x,y){ return x.concat(y); })
 				.filter(function(x){
 					return (
-						(!x[2] || KC3SortieManager.isSortieAt.apply(undefined,x[2])) && /* Is sortie at */
+						(!x[2] || KC3SortieManager.isSortieAt.apply(KC3SortieManager,x[2])) && /* Is sortie at */
 						(!x[3] || KC3SortieManager.currentNode().isBoss())           && /* Is on boss node */
 						true
 					);
