@@ -91,11 +91,13 @@
 	float:left;
 }
 .tab_flowchart .questFlowItem .questDesc {
-	max-width:381px;
+	max-width:66%;
 	margin:0px 5px 0px 0px;
 	height:20px;
 	float:left;
 	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
 	font-size:11px;
 }
 .tab_flowchart .questFlowItem .questTrack {
@@ -253,6 +255,8 @@
 	height:20px;
 	float:left;
 	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
 	font-size:11px;
 }
 .tab_flowchart .questExtraItem .questRemove {
