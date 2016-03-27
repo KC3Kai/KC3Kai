@@ -16,22 +16,24 @@
 		/* EXECUTE
 		Places data onto the interface
 		---------------------------------*/
-		execute :function(){
-			var sav=false;
-      $(".tab_databackup .processDisplay").hide();
 
-			$(".tab_databackup .export_data").on("click", function(){
+		execute :function(){
+			//inits
+			var sav=false;
+			$(".tab_databackup .processDisplay").hide();
+
+			$(".tab_databackup .export_data").on("click", function(){ //export data
 				sav = true;
 				$(".tab_databackup .dataselect").hide();
 				$(".tab_databackup .processDisplay").show();
-				window.KC3DataBackup.databackup(".tab_databackup .processDisplay .processText",function(){
+				window.KC3DataBackup.saveData(".tab_databackup .processDisplay .processText",function(){
 						alert("finished!");
 						$(".tab_databackup .dataselect").show();
 						$(".tab_databackup .processDisplay").hide();
 				});
 			});
 
-			$(".tab_databackup .merge_data").on("click", function(){
+			$(".tab_databackup .merge_data").on("click", function(){ //merge_data
 				if(filename===""){
 					alert("no file selected");
 					return;
@@ -40,11 +42,11 @@
 					window.KC3DataBackup.loadData(filename,false);
 			});
 
-			$(".tab_databackup .warningbtn").on("click", function(){
+			$(".tab_databackup .warningbtn").on("click", function(){//warningbtn
 				$(".tab_databackup .warning").toggle();
 			});
 
-			$(".tab_databackup .overwrite_data").on("click", function(){
+			$(".tab_databackup .overwrite_data").on("click", function(){//overwrite_data
 				if(confirm("You will overwrite all your kc3 data! are you sure?"))
 				{
 					if(filename==="")
