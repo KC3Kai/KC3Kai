@@ -64,7 +64,6 @@ $(document).on("ready", function(){
 		$("body").css("background-position", ConfigManager.api_bg_position);
 		$("body").css("background-repeat", "no-repeat");
 	}
-	$(".box-wrap").css("zoom", ((ConfigManager.api_gameScale || 100) / 100));
 	
 	$(".box-wait").show();
 	
