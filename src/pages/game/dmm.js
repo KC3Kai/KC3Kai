@@ -373,7 +373,7 @@ var interactions = {
 		subtitleText = KC3Meta.quote( quoteIdentifier, quoteVoiceNum );
 		
 		// hide first to fading will stop
-		$(".overlay_subtitles").stop(true);
+		$(".overlay_subtitles").stop(true, true);
 		$(".overlay_subtitles").hide();
 		
 		// If subtitle removal timer is ongoing, reset
@@ -387,7 +387,7 @@ var interactions = {
 			$(".overlay_subtitles").show();
 			subtitleVanishTimer = setTimeout(function(){
 				subtitleVanishTimer = false;
-				$(".overlay_subtitles").fadeOut(500);
+				$(".overlay_subtitles").fadeOut(2000);
 			}, (2000+ ($(".overlay_subtitles").text().length*50)) );
 		}
 	},
