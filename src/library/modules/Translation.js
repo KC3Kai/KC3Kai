@@ -96,10 +96,12 @@
 					async: false
 				}).responseText);
 			} catch (e) {
-				if (e instanceof SyntaxError && filename === "stype")
+				if (e instanceof SyntaxError && extendEnglish && language!="en"){
+					console.warn(e.stack);
 					translation = null;
-				else
+				} else {
 					throw e;
+				}
 			}
 			return $.extend(true, translationBase, translation);
 		}
