@@ -106,6 +106,10 @@ Retreives when needed to apply on components
 				api_bg_size			: "cover",
 				api_bg_position		: "top center",
 				api_gameScale		: 100,
+				api_subtitles		: true,
+				subtitle_font		: "\"Trebuchet MS\",\"Lucida Grande\",\"Lucida Sans Unicode\",\"Lucida Sans\",Tahoma,sans-serif",
+				subtitle_size		: 22,
+				subtitle_bold		: false,
 				
 				dmm_forcecookies	: false,
 				dmm_customize		: false,
