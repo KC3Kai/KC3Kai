@@ -24,7 +24,7 @@
 				sav = true;
 				$(".tab_databackup .dataselect").hide();
 				$(".tab_databackup .processDisplay").show();
-				window.KC3DataBackup.databackup(".tab_databackup .processDisplay .processText",function(){
+				window.KC3DataBackup.saveData(".tab_databackup .processDisplay .processText",function(){
 						alert("finished!");
 						$(".tab_databackup .dataselect").show();
 						$(".tab_databackup .processDisplay").hide();
