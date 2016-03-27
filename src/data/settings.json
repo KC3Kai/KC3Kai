@@ -381,7 +381,41 @@
 					"type": "Number"
 				},
 				"options" : { "label" : "%" }
+			},
+			{
+				"id" : "api_subtitles",
+				"name" : "SettingsSubtitles",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "subtitle_font",
+				"name" : "SettingsSubtitleFont",
+				"type" : "long_text",
+				"options" : {
+					"placeholder" : "SettingsSubtitleFontDesc"
+				}
+			},
+			{
+				"id" : "subtitle_size",
+				"name" : "SettingsSubtitleSize",
+				"type" : "small_text",
+				"bound" : {
+					"min" :  10,
+					"max" : 50,
+					"type": "Number"
+				},
+				"options" : {
+					"label" : "px"
+				}
+			},
+			{
+				"id" : "subtitle_bold",
+				"name" : "SettingsSubtitleBold",
+				"type" : "check",
+				"options" : {}
 			}
+			
 		]
 	},
 	{

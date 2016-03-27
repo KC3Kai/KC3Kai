@@ -19,9 +19,9 @@
 	$(document).on("ready", function(){
 		// Initialize data managers
 		ConfigManager.load();
+		KC3Master.init();
 		KC3Meta.init("../../data/");
 		KC3Meta.defaultIcon("../../assets/img/ui/empty.png");
-		KC3Master.init();
 		PlayerManager.init();
 		KC3ShipManager.load();
 		KC3GearManager.load();

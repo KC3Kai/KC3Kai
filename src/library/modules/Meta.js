@@ -7,6 +7,8 @@ Provides access to data on built-in JSON files
 	"use strict";
 	
 	window.KC3Meta = {
+		repo: "",
+		
 		_cache:{},
 		_icons:{},
 		_exp:{},
@@ -20,6 +22,7 @@ Provides access to data on built-in JSON files
 		_stype:{},
 		_servers:{},
 		_battle:{},
+		_quotes:{},
 		_terms:{
 			troll:{},
 			lang:{},
@@ -27,12 +30,37 @@ Provides access to data on built-in JSON files
 		_edges:{},
 		_defaultIcon:"",
 		
+		voiceDiffs: [
+			2475,    0,    0, 8691, 7847, 3595, 1767, 3311, 2507,
+			9651, 5321, 4473, 7117, 5947, 9489, 2669, 8741, 6149,
+			1301, 7297, 2975, 6413, 8391, 9705, 2243, 2091, 4231,
+			3107, 9499, 4205, 6013, 3393, 6401, 6985, 3683, 9447,
+			3287, 5181, 7587, 9353, 2135, 4947, 5405, 5223, 9457,
+			5767, 9265, 8191, 3927, 3061, 2805, 3273, 7331
+		],
+		workingDiffs: [
+			2475, 6547, 1471, 8691, 7847, 3595, 1767, 3311, 2507,
+			9651, 5321, 4473, 7117, 5947, 9489, 2669, 8741, 6149,
+			1301, 7297, 2975, 6413, 8391, 9705, 2243, 2091, 4231,
+			3107, 9499, 4205, 6013, 3393, 6401, 6985, 3683, 9447,
+			3287, 5181, 7587, 9353, 2135, 4947, 5405, 5223, 9457,
+			5767, 9265, 8191, 3927, 3061, 2805, 3273, 7331
+		],
+		specialDiffs: {
+			"1555": 2, // valentines 2016, hinamatsuri 2015
+			"3347": 3, // valentines 2016, hinamatsuri 2015
+			"6547": 2, // whiteday 2015
+			"1471": 3 // whiteday 2015
+		},
+		
 		/* Initialization
 		-------------------------------------------------------*/
 		init :function( repo ){
+			this.repo = repo;
 			/* to remove deprecated warning
 				http://stackoverflow.com/questions/22090764/alternative-to-async-false-ajax
 			*/
+			
 			// Load Common Meta
 			this._icons		= JSON.parse( $.ajax(repo+'icons.json', { async: false }).responseText );
 			this._exp		= JSON.parse( $.ajax(repo+'exp_hq.json', { async: false }).responseText );
@@ -53,6 +81,10 @@ Provides access to data on built-in JSON files
 			this._terms.troll		= JSON.parse( $.ajax(repo+'lang/data/troll/terms.json', { async: false }).responseText );
 			// other language loaded here
 			this._terms.lang		= KC3Translation.getJSON(repo, 'terms', true);
+		},
+		
+		loadQuotes :function(){
+			this._quotes = KC3Translation.getJSON(this.repo, 'quotes', true);
 		},
 		
 		/* Data Access
@@ -238,6 +270,74 @@ Provides access to data on built-in JSON files
 				}
 			}
 			return edgeId;
+		},
+		
+		/*
+		Getting voice key by filename
+		Source: がか (gakada)
+		https://github.com/KC3Kai/KC3Kai/issues/1180#issuecomment-195947346
+		*/
+		getVoiceDiffByFilename :function(ship_id, filename){
+			ship_id = parseInt(ship_id, 10);
+			var k = 17 * (ship_id + 7), r = filename - 100000;
+			for (var i = 0; i < 1000; ++i) {
+				var a = r + i * 99173;
+				if (a % k === 0) {
+					return a / k;
+				}
+			}
+			return false;
+		},
+		
+		/*
+		ENTYPOINT: SUBTITLES
+		Get voice line number by filename
+		*/
+		getVoiceLineByFilename :function(ship_id, filename){
+			var computedDiff = this.getVoiceDiffByFilename(ship_id, filename);
+			var computedIndex = this.voiceDiffs.indexOf(computedDiff);
+			// If computed diff is not in voiceDiffs, return the computedDiff itself so we can lookup quotes via voiceDiff
+			return computedIndex > -1 ? computedIndex+1 : computedDiff;
+		},
+		
+		/*
+		ENTYPOINT: LIBRARY
+		Getting new filename for ship voices
+		Source: がか (gakada)
+		https://github.com/KC3Kai/KC3Kai/issues/1180#issuecomment-195654746
+		*/
+		getFilenameByVoiceLine :function(ship_id, lineNum){
+			return 100000 + 17 * (ship_id + 7) * (this.workingDiffs[lineNum - 1]) % 99173;
+		},
+		
+		// Subtitle quotes
+		quote :function(identifier, voiceNum){
+			console.log(identifier, voiceNum);
+			if(identifier){
+				if(typeof this._quotes[identifier] != "undefined"){
+					if(typeof this._quotes[identifier][voiceNum] != "undefined"){
+						return this._quotes[identifier][voiceNum];
+					}else{
+						// no quote for that voice line, check if it's a seasonal line
+						if(typeof this.specialDiffs[voiceNum] != "undefined"){
+							// check if default for seasonal line exists
+							console.log("this.specialDiffs[voiceNum]", this.specialDiffs[voiceNum]);
+							if(typeof this._quotes[identifier][this.specialDiffs[voiceNum]] != "undefined"){
+								console.log("using special default", this.specialDiffs[voiceNum]);
+								return this._quotes[identifier][this.specialDiffs[voiceNum]];
+							}else{
+								return false;
+							}
+						}else{
+							return false;
+						}
+					}
+				}else{
+					return false;
+				}
+			}else{
+				return false;
+			}
 		}
 	};
 	
