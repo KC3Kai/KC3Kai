@@ -1268,7 +1268,9 @@
 				if(eshipId > -1){
 					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.abyssIcon(eshipId));
 					
-					var tooltip = KC3Meta.term("ShipFire") + eParam[0] + String.fromCharCode(13);
+					var eMasterShip = KC3Master.ship(eshipId);
+					var tooltip = "{0}: {1}{2}".format(eshipId, eMasterShip.api_name, eMasterShip.api_yomi.replace("-","")) + String.fromCharCode(13);
+					tooltip += KC3Meta.term("ShipFire") + eParam[0] + String.fromCharCode(13);
 					tooltip += KC3Meta.term("ShipTorpedo") + eParam[1] + String.fromCharCode(13);
 					tooltip += KC3Meta.term("ShipAntiAir") + eParam[2] + String.fromCharCode(13);
 					tooltip += KC3Meta.term("ShipArmor") + eParam[3];
@@ -1634,7 +1636,9 @@
 				
 				if(eshipId > -1){
 					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.shipIcon(eshipId));
-					var tooltip = KC3Meta.term("ShipFire") + eParam[0] + String.fromCharCode(13);
+					var masterShip = KC3Master.ship(eshipId);
+					var tooltip = "{0}: {1}".format(eshipId, KC3Meta.shipName(masterShip.api_name)) + String.fromCharCode(13);
+					tooltip += KC3Meta.term("ShipFire") + eParam[0] + String.fromCharCode(13);
 					tooltip += KC3Meta.term("ShipTorpedo") + eParam[1] + String.fromCharCode(13);
 					tooltip += KC3Meta.term("ShipAntiAir") + eParam[2] + String.fromCharCode(13);
 					tooltip += KC3Meta.term("ShipArmor") + eParam[3];
