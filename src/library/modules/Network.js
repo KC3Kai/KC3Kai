@@ -174,11 +174,11 @@ Listens to network history and triggers callback if game events happen
 						tabId: chrome.devtools.inspectedWindow.tabId
 					})).execute();
 				}else if(soundPaths[5]=="kc9999"){
-					console.log("DETECTED NPC sound");
+					console.log("DETECTED NPC sound", soundPaths);
 					(new RMsg("service", "subtitle", {
 						voicetype: "npc",
-						filename: soundPaths[6],
-						voiceNum: soundPaths[7].split(".")[0],
+						filename: "",
+						voiceNum: soundPaths[6].split(".")[0],
 						tabId: chrome.devtools.inspectedWindow.tabId
 					})).execute();
 				}else{

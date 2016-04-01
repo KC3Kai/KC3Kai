@@ -227,7 +227,7 @@
 			
 			// CG VIEWER
 			var shipFile = KC3Master.graph(ship_id).api_filename;
-			var shipVersion = KC3Master.graph(ship_id).api_version;
+			var shipVersion = KC3Master.graph(ship_id).api_version[0];
 			this.currentGraph = shipFile;
 			this.currentVersion = shipVersion;
 			var shipSrc = "../../../../assets/swf/card.swf?sip="+this.server_ip

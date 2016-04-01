@@ -66,6 +66,14 @@ Previously known as "Reactor"
 			localStorage.apiUsage = null;
 		},
 		
+		/* Consolidated Game Loading Call
+		-------------------------------------------------------*/
+		"api_get_member/require_info":function(params, response, headers){
+			this["api_get_member/slot_item"](params, { api_data: response.api_data.api_slot_item }, headers);
+			this["api_get_member/kdock"](params, { api_data: response.api_data.api_kdock }, headers);
+			this["api_get_member/useitem"](params, { api_data: response.api_data.api_useitem }, headers);
+		},
+		
 		/* Home Port Screen
 		-------------------------------------------------------*/
 		"api_port/port":function(params, response, headers){	
@@ -1673,7 +1681,7 @@ Previously known as "Reactor"
 					[256,0,[6,1], true]  // Bm2: Deploy to [W6-1] and obtain an S-rank the boss node 3 times
 				],
 				[ /* KANZEN */ ],
-			].slice(0, rankPt)
+			].slice(0, rankPt+1)
 				.reduce(function(x,y){ return x.concat(y); })
 				.filter(function(x){
 					return (
