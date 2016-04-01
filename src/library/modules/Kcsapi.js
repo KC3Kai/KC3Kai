@@ -1681,7 +1681,7 @@ Previously known as "Reactor"
 					[256,0,[6,1], true]  // Bm2: Deploy to [W6-1] and obtain an S-rank the boss node 3 times
 				],
 				[ /* KANZEN */ ],
-			].slice(0, rankPt)
+			].slice(0, rankPt+1)
 				.reduce(function(x,y){ return x.concat(y); })
 				.filter(function(x){
 					return (
