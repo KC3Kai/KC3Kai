@@ -2220,7 +2220,7 @@
 					}
 				}
 				
-				if(requireFinisher){
+				if(requireFinisher && ConfigManager.info_blink_gauge){
 					$(".module.activity .map_info").addClass("map_finisher");
 					$(".module.activity .map_hp").text(KC3Meta.term("StrategyEvents1HP"));
 				}
