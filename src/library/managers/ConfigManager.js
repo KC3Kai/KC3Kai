@@ -33,16 +33,16 @@ Retreives when needed to apply on components
 				info_craft 			: true,
 				info_compass 		: true,
 				info_battle 		: true,
+				info_auto_exped_tab : true,
+				info_blink_gauge	: true,
 				info_btstamp 		: false,
 				info_boss 			: false,
 				info_salt 			: false,
 				info_troll 			: false,
 				info_delta 			: false,
 				info_fleetstat 		: true,
-				info_auto_exped_tab : true,
 				info_eng_stype		: false,
-				info_jp_ship_item	: false,
-				info_blink_gauge	: true,
+				info_force_ship_lang: "",
 
 				// AIR PROFICIENCY BONUSES (Configurable by user)
 				air_formula			: 3, // 1=no veteran 2=veteran average 3=veteran bounds
