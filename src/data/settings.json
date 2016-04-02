@@ -158,6 +158,12 @@
 				"name" : "SettingsJapaneseShipItem",
 				"type" : "check",
 				"options" : {}
+			},
+			{
+				"id" : "info_blink_gauge",
+				"name" : "SettingsBlinkGauge",
+				"type" : "check",
+				"options" : {}
 			}
 		]
 	},
