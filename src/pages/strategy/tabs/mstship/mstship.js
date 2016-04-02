@@ -68,7 +68,6 @@
 		currentGraph: "",
 		currentShipId: 0,
 		currentCardVersion: "",
-		currentVoiceVersion: "",
 		audio: false,
 		server_ip: "",
 		
@@ -143,8 +142,7 @@
 				}
 				
 				var voiceSrc = "http://"+self.server_ip
-							+ "/kcs/sound/kc"+self.currentGraph+"/"+voiceFile+".mp3"
-							+ (!self.currentVoiceVersion?"":"?version="+self.currentVoiceVersion);
+							+ "/kcs/sound/kc"+self.currentGraph+"/"+voiceFile+".mp3";
 				self.audio = new Audio(voiceSrc);
 				self.audio.play();
 				console.log("PLAYING: self.currentShipId, vnum, voiceFile", self.currentShipId, parseInt($(this).data("vnum"), 10), voiceFile);
@@ -233,7 +231,6 @@
 			console.log("shipVersions", shipVersions);
 			this.currentGraph = shipFile;
 			this.currentCardVersion = shipVersions[0];
-			this.currentVoiceVersion = !!shipVersions[2] ? shipVersions[2] : this.currentCardVersion;
 			
 			var shipSrc = "../../../../assets/swf/card.swf?sip="+this.server_ip
 					+"&shipFile="+shipFile
