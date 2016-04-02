@@ -67,7 +67,7 @@
 		},
 		currentGraph: "",
 		currentShipId: 0,
-		currentVersion: "",
+		currentCardVersion: "",
 		audio: false,
 		server_ip: "",
 		
@@ -142,8 +142,7 @@
 				}
 				
 				var voiceSrc = "http://"+self.server_ip
-							+ "/kcs/sound/kc"+self.currentGraph+"/"+voiceFile+".mp3"
-							+ (!self.currentVersion?"":"?version="+self.currentVersion);
+							+ "/kcs/sound/kc"+self.currentGraph+"/"+voiceFile+".mp3";
 				self.audio = new Audio(voiceSrc);
 				self.audio.play();
 				console.log("PLAYING: self.currentShipId, vnum, voiceFile", self.currentShipId, parseInt($(this).data("vnum"), 10), voiceFile);
@@ -227,13 +226,16 @@
 			
 			// CG VIEWER
 			var shipFile = KC3Master.graph(ship_id).api_filename;
-			var shipVersion = KC3Master.graph(ship_id).api_version[0];
+			// Changed to an Array from 2016-04-01
+			var shipVersions = KC3Master.graph(ship_id).api_version;
+			console.log("shipVersions", shipVersions);
 			this.currentGraph = shipFile;
-			this.currentVersion = shipVersion;
+			this.currentCardVersion = shipVersions[0];
+			
 			var shipSrc = "../../../../assets/swf/card.swf?sip="+this.server_ip
 					+"&shipFile="+shipFile
 					+"&abyss="+(ship_id>500?1:0)
-					+(!shipVersion?"":"&ver="+shipVersion);
+					+(!this.currentCardVersion?"":"&ver="+this.currentCardVersion);
 			
 			$(".tab_mstship .shipInfo .cgswf embed").remove();
 			$("<embed/>")
