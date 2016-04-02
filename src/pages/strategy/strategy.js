@@ -29,7 +29,6 @@
 		KC3Translation.execute();
 		WhoCallsTheFleetDb.init("../../");
 		RemodelDb.init();
-		K2Badge.init();
 		
 		if(!KC3Master.available){
 			$("#error").text("Unable to load Strategy Room. Please open the game first so we can get data. Also make sure when you play, that you open the F12 devtools panel first before the Game Start button.");
