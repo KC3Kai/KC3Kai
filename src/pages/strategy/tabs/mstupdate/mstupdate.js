@@ -65,6 +65,7 @@
 				shipBox = $(".tab_mstupdate .factory .mstship").clone();
 				shipFile = KC3Master.graph(shipData.api_id).api_filename;
 				shipVersion = KC3Master.graph(shipData.api_id).api_version[0];
+				shipVersion = shipVersion>1 ? shipVersion : "";
 				
 				shipSrc = "../../../../assets/swf/card.swf?sip="+self.server_ip
 						+"&shipFile="+shipFile

@@ -231,8 +231,8 @@
 			// Changed to an Array from 2016-04-01
 			var shipVersions = KC3Master.graph(ship_id).api_version;
 			this.currentGraph = shipFile;
-			this.currentCardVersion = shipVersions[0];
-			this.currentVoiceVersion = shipVersions[2];
+			this.currentCardVersion = shipVersions[0]>1 ? shipVersions[0] : "" ;
+			this.currentVoiceVersion = (!!shipVersions[2] ? (shipVersions[2]>1 ? shipVersions[2] : "") : this.currentCardVersion);
 			var shipSrc = "../../../../assets/swf/card.swf?sip="+this.server_ip
 					+"&shipFile="+shipFile
 					+"&abyss="+(ship_id>500?1:0)
