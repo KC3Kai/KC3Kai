@@ -1382,6 +1382,13 @@
 				$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
 			}
 			
+			// Show predicted battle rank
+			if(thisNode.predictedRank){
+				$(".module.activity .battle_rating img").attr("src",
+				"../../../../assets/img/client/ratings/"+thisNode.predictedRank+".png")
+				.css("opacity", "0.5");
+			}
+			
 			this.Fleet();
 		},
 		
@@ -1426,6 +1433,12 @@
 			
 			$(".module.activity .battle_contact").text(thisNode.fcontact + KC3Meta.term("BattleContactVs") + thisNode.econtact);
 			
+			if(thisNode.predictedRankNight){
+				$(".module.activity .battle_rating img").attr("src",
+				"../../../../assets/img/client/ratings/"+thisNode.predictedRankNight+".png")
+				.css("opacity", "0.5");
+			}
+			
 			this.Fleet();
 		},
 		
@@ -1435,7 +1448,8 @@
 			updateHQEXPGained($(".admiral_lvnext"),KC3SortieManager.hqExpGained);
 			
 			$(".module.activity .battle_rating img").attr("src",
-				"../../../../assets/img/client/ratings/"+thisNode.rating+".png");
+				"../../../../assets/img/client/ratings/"+thisNode.rating+".png")
+				.css("opacity", "");
 			
 			// If there is any special item drop
 			if(typeof data.api_get_useitem != "undefined"){
