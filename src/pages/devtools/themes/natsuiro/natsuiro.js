@@ -14,6 +14,7 @@
 	var selectedFleet = 1;
 	var selectedExpedition = 1;
 	var plannerIsGreatSuccess = false;
+	var showCombinedFleetBars = true;
 	
 	// a flag used by Fleet & ExpeditionStart to indicate
 	// whether a fleet info update is triggered because of
@@ -167,9 +168,10 @@
 		
 		// Initialize data managers
 		ConfigManager.load();
+		KC3Master.init();
 		KC3Meta.init("../../../../data/");
 		KC3Meta.defaultIcon("../../../../assets/img/ui/empty.png");
-		KC3Master.init();
+		KC3Meta.loadQuotes();
 		PlayerManager.init();
 		KC3ShipManager.load();
 		KC3GearManager.load();
@@ -441,8 +443,10 @@
 		// Toggle mini-bars under combined fleet ship list
 		$(".module.fleet .shiplist_combined").on("click", ".sship .ship_bars", function(){
 			if($(this).css("opacity") == "0"){
+				showCombinedFleetBars = true;
 				$(".module.fleet .sship .ship_bars").css("opacity", "1");
 			}else{
+				showCombinedFleetBars = false;
 				$(".module.fleet .sship .ship_bars").css("opacity", "0");
 			}
 		});
@@ -816,7 +820,7 @@
 				// Show ships on main fleet
 				$.each(MainFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						(new KC3NatsuiroShipbox(".sship", rosterId))
+						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars))
 							.commonElements()
 							.defineShort( MainFleet )
 							.appendTo(".module.fleet .shiplist_main");
@@ -826,7 +830,7 @@
 				// Show ships on escort fleet
 				$.each(EscortFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						(new KC3NatsuiroShipbox(".sship", rosterId))
+						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars))
 							.commonElements()
 							.defineShort( EscortFleet )
 							.appendTo(".module.fleet .shiplist_escort");
@@ -878,7 +882,7 @@
 				// Show ships on selected fleet
 				$.each(CurrentFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						(new KC3NatsuiroShipbox(".lship", rosterId))
+						(new KC3NatsuiroShipbox(".lship", rosterId, showCombinedFleetBars))
 							.commonElements()
 							.defineLong( CurrentFleet )
 							.appendTo(".module.fleet .shiplist_single");
@@ -1264,7 +1268,9 @@
 				if(eshipId > -1){
 					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.abyssIcon(eshipId));
 					
-					var tooltip = KC3Meta.term("ShipFire") + eParam[0] + String.fromCharCode(13);
+					var eMasterShip = KC3Master.ship(eshipId);
+					var tooltip = "{0}: {1}{2}".format(eshipId, eMasterShip.api_name, eMasterShip.api_yomi.replace("-","")) + String.fromCharCode(13);
+					tooltip += KC3Meta.term("ShipFire") + eParam[0] + String.fromCharCode(13);
 					tooltip += KC3Meta.term("ShipTorpedo") + eParam[1] + String.fromCharCode(13);
 					tooltip += KC3Meta.term("ShipAntiAir") + eParam[2] + String.fromCharCode(13);
 					tooltip += KC3Meta.term("ShipArmor") + eParam[3];
@@ -1630,7 +1636,9 @@
 				
 				if(eshipId > -1){
 					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.shipIcon(eshipId));
-					var tooltip = KC3Meta.term("ShipFire") + eParam[0] + String.fromCharCode(13);
+					var masterShip = KC3Master.ship(eshipId);
+					var tooltip = "{0}: {1}".format(eshipId, KC3Meta.shipName(masterShip.api_name)) + String.fromCharCode(13);
+					tooltip += KC3Meta.term("ShipFire") + eParam[0] + String.fromCharCode(13);
 					tooltip += KC3Meta.term("ShipTorpedo") + eParam[1] + String.fromCharCode(13);
 					tooltip += KC3Meta.term("ShipAntiAir") + eParam[2] + String.fromCharCode(13);
 					tooltip += KC3Meta.term("ShipArmor") + eParam[3];

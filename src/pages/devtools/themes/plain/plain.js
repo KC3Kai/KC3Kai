@@ -158,9 +158,10 @@
 		
 		// Initialize data managers
 		ConfigManager.load();
+		KC3Master.init();
 		KC3Meta.init("../../../../data/");
 		KC3Meta.defaultIcon("../../../../assets/img/ui/empty.png");
-		KC3Master.init();
+		KC3Meta.loadQuotes();
 		PlayerManager.init();
 		KC3ShipManager.load();
 		KC3GearManager.load();
@@ -1213,7 +1214,9 @@
 				if(eshipId > -1){
 					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.abyssIcon(eshipId));
 					
-					var tooltip = KC3Meta.term("ShipFire") + eParam[0] + String.fromCharCode(13);
+					var eMasterShip = KC3Master.ship(eshipId);
+					var tooltip = "{0}: {1}{2}".format(eshipId, eMasterShip.api_name, eMasterShip.api_yomi.replace("-","")) + String.fromCharCode(13);
+					tooltip += KC3Meta.term("ShipFire") + eParam[0] + String.fromCharCode(13);
 					tooltip += KC3Meta.term("ShipTorpedo") + eParam[1] + String.fromCharCode(13);
 					tooltip += KC3Meta.term("ShipAntiAir") + eParam[2] + String.fromCharCode(13);
 					tooltip += KC3Meta.term("ShipArmor") + eParam[3];
@@ -1551,10 +1554,12 @@
 				
 				if(eshipId > -1){
 					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.shipIcon(eshipId));
-					var tooltip = "FP: " + eParam[0] + String.fromCharCode(13);
-					tooltip += "Torp: " + eParam[1] + String.fromCharCode(13);
-					tooltip += "AA: " + eParam[2] + String.fromCharCode(13);
-					tooltip += "Armor: " + eParam[3];
+					var masterShip = KC3Master.ship(eshipId);
+					var tooltip = "{0}: {1}".format(eshipId, KC3Meta.shipName(masterShip.api_name)) + String.fromCharCode(13);
+					tooltip += KC3Meta.term("ShipFire") + eParam[0] + String.fromCharCode(13);
+					tooltip += KC3Meta.term("ShipTorpedo") + eParam[1] + String.fromCharCode(13);
+					tooltip += KC3Meta.term("ShipAntiAir") + eParam[2] + String.fromCharCode(13);
+					tooltip += KC3Meta.term("ShipArmor") + eParam[3];
 
 					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("title", tooltip);
 					$(".module.activity .abyss_ship_"+(index+1)).show();

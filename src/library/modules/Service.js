@@ -186,6 +186,20 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		------------------------------------------*/
 		"taihaAlertStop" :function(request, sender, response){
 			(new TMsg(request.tabId, "gamescreen", "taihaAlertStop")).execute();
+		},
+
+		/* SUBTITLES
+		When a ship speaks, show subtitles
+		------------------------------------------*/
+		"subtitle" :function(request, sender, response){
+			console.log("subtitle", request);
+			(new TMsg(request.tabId, "gamescreen", "subtitle", {
+				voicetype: request.voicetype,
+				filename: request.filename || false,
+				shipID: request.shipID || false,
+				voiceNum: request.voiceNum,
+				url: request.url
+			})).execute();
 		}
 		
 	};

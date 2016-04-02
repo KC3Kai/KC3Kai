@@ -6,6 +6,12 @@ var waiting = true;
 // If trusted exit, for exit confirmation
 var trustedExit = false;
 
+// Used to fade out subtitles after calculated duration
+var subtitleVanishTimer = false;
+
+// Holder object for audio files to test mp3 duration
+var subtitleMp3;
+
 // If auto-focus on window to capture key events or not
 var autoFocus = 0;
 
@@ -48,7 +54,9 @@ function ActivateGame(){
 $(document).on("ready", function(){
 	// Initialize data managers
 	ConfigManager.load();
+	KC3Master.init();
 	KC3Meta.init("../../../../data/");
+	KC3Meta.loadQuotes();
 	KC3QuestManager.load();
 	KC3Database.init();
 	KC3Translation.execute();
@@ -63,6 +71,14 @@ $(document).on("ready", function(){
 		$("body").css("background-size", ConfigManager.api_bg_size);
 		$("body").css("background-position", ConfigManager.api_bg_position);
 		$("body").css("background-repeat", "no-repeat");
+	}
+	
+	if(ConfigManager.api_subtitles){
+		$(".overlay_subtitles").css("font-family", ConfigManager.subtitle_font);
+		$(".overlay_subtitles").css("font-size", ConfigManager.subtitle_size);
+		if(ConfigManager.subtitle_bold){
+			$(".overlay_subtitles").css("font-weight", "bold");
+		}
 	}
 	
 	$(".box-wait").show();
@@ -333,6 +349,48 @@ var interactions = {
 		$(".taiha_red").hide();
 	},
 	
+	// Show subtitles
+	subtitle :function(request, sender, response){
+		if(!ConfigManager.api_subtitles) return true;
+		
+		console.log("subtitle", request);
+		
+		// Get subtitle text
+		var subtitleText = false;
+		var quoteIdentifier = "";
+		var quoteVoiceNum = request.voiceNum;
+		switch(request.voicetype){
+			case "titlecall":
+				quoteIdentifier = "titlecall_"+request.filename;
+				break;
+			case "npc":
+				quoteIdentifier = "npc";
+				break;
+			default:
+				quoteIdentifier = request.shipID;
+				break;
+		}
+		subtitleText = KC3Meta.quote( quoteIdentifier, quoteVoiceNum );
+		
+		// hide first to fading will stop
+		$(".overlay_subtitles").stop(true, true);
+		$(".overlay_subtitles").hide();
+		
+		// If subtitle removal timer is ongoing, reset
+		if(subtitleVanishTimer){
+			clearTimeout(subtitleVanishTimer);
+		}
+		
+		// If subtitles available for the voice
+		if(subtitleText){
+			$(".overlay_subtitles").html(subtitleText);
+			$(".overlay_subtitles").show();
+			subtitleVanishTimer = setTimeout(function(){
+				subtitleVanishTimer = false;
+				$(".overlay_subtitles").fadeOut(2000);
+			}, (2000+ ($(".overlay_subtitles").text().length*50)) );
+		}
+	},
 	
 	// Dummy action
 	dummy :function(request, sender, response){
