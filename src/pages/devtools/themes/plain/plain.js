@@ -602,7 +602,7 @@
 		$(".module.activity .battle_eformation").css("-webkit-transform", "rotate(0deg)");
 		$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support.png");
 		$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
-		$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/ui/dark_rating.png");
+		$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/ui/dark_rating.png").css("opacity", "");
 		$(".module.activity .battle_drop img").attr("src", "../../../../assets/img/ui/dark_shipdrop.png");
 		$(".module.activity .battle_drop").attr("title", "");
 		$(".module.activity .battle_cond_value").text("");
@@ -1314,6 +1314,13 @@
 				$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
 			}
 			
+			// Show predicted battle rank
+			if(thisNode.predictedRank){
+				$(".module.activity .battle_rating img").attr("src",
+				"../../../../assets/img/client/ratings/"+thisNode.predictedRank+".png")
+				.css("opacity", 0.5);
+			}
+			
 			this.Fleet();
 		},
 		
@@ -1354,6 +1361,12 @@
 			
 			$(".module.activity .battle_contact").text(thisNode.fcontact+KC3Meta.term("BattleContactVs")+thisNode.econtact);
 			
+			if(thisNode.predictedRankNight){
+				$(".module.activity .battle_rating img").attr("src",
+				"../../../../assets/img/client/ratings/"+thisNode.predictedRankNight+".png")
+				.css("opacity", 0.5);
+			}
+			
 			this.Fleet();
 		},
 		
@@ -1363,7 +1376,8 @@
 			updateHQEXPGained($(".admiral_lvnext"),KC3SortieManager.hqExpGained);
 			
 			$(".module.activity .battle_rating img").attr("src",
-				"../../../../assets/img/client/ratings/"+thisNode.rating+".png");
+				"../../../../assets/img/client/ratings/"+thisNode.rating+".png")
+				.css("opacity", 1);
 			
 			// If there is any special item drop
 			if(typeof data.api_get_useitem != "undefined"){
@@ -1606,6 +1620,13 @@
 				$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen-x.png");
 			}
 			
+			// Show predicted battle rank
+			if(thisPvP.predictedRank){
+				$(".module.activity .battle_rating img").attr("src",
+				"../../../../assets/img/client/ratings/"+thisPvP.predictedRank+".png")
+				.css("opacity", 0.5);
+			}
+			
 			// Battle conditions
 			$(".module.activity .battle_detection").text( thisPvP.detection[0] );
 			$(".module.activity .battle_airbattle").text( thisPvP.airbattle[0] );
@@ -1654,7 +1675,9 @@
 		PvPEnd: function(data){
 			KC3SortieManager.onPvP = false;
 			
-			$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/client/ratings/"+data.result.api_win_rank+".png");
+			$(".module.activity .battle_rating img")
+				.attr("src", "../../../../assets/img/client/ratings/"+data.result.api_win_rank+".png")
+				.css("opacity", 1);
 			updateHQEXPGained($(".admiral_lvnext"),data.result.api_get_exp);
 		},
 		ExpeditionSelection: function (data) {

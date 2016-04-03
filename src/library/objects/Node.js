@@ -360,8 +360,10 @@ Used by SortieManager
 				endHPs.ally[i] = result[i+1].currentHp;
 			}
 			
-			this.predictedRank = KC3Node.predictRank( beginHPs, endHPs );
-			console.info("Rank Predict:", this.predictedRank);
+			if(ConfigManager.info_btrank){
+				this.predictedRank = KC3Node.predictRank( beginHPs, endHPs );
+				console.info("Rank Predict:", this.predictedRank);
+			}
 		} else {
 			if (PlayerManager.combinedFleet === 1 || PlayerManager.combinedFleet === 3) {
 				result = DA.analyzeRawCarrierTaskForceBattleJS(battleData); 
@@ -533,8 +535,10 @@ Used by SortieManager
 			ship.afterHp[1] = ship.hp[1];
 			endHPs.ally[i] = result[i+1].currentHp;
 		}
-		this.predictedRankNight = KC3Node.predictRank( beginHPs, endHPs );
-		console.info("Rank Predict (Night):", this.predictedRankNight);
+		if(ConfigManager.info_btrank){
+			this.predictedRankNight = KC3Node.predictRank( beginHPs, endHPs );
+			console.info("Rank Predict (Night):", this.predictedRankNight);
+		}
 		if(this.gaugeDamage > -1)
 			this.gaugeDamage = this.gaugeDamage + Math.min(nightData.api_nowhps[7],nightData.api_nowhps[7] - this.enemyHP[0].currentHp);
 	};
