@@ -313,31 +313,35 @@ Provides access to data on built-in JSON files
 		// Subtitle quotes
 		quote :function(identifier, voiceNum){
 			console.debug("looking up", identifier, voiceNum);
-			if(identifier){
-				if(typeof this._quotes[identifier] != "undefined"){
-					if(typeof this._quotes[identifier][voiceNum] != "undefined"){
-						return this._quotes[identifier][voiceNum];
-					}else if(identifier!=="timing"){
-						// no quote for that voice line, check if it's a seasonal line
-						if(typeof this.specialDiffs[voiceNum] != "undefined"){
-							// check if default for seasonal line exists
-							console.debug("this.specialDiffs[voiceNum]", this.specialDiffs[voiceNum]);
-							if(typeof this._quotes[identifier][this.specialDiffs[voiceNum]] != "undefined"){
-								console.debug("using special default", this.specialDiffs[voiceNum]);
-								return this._quotes[identifier][this.specialDiffs[voiceNum]];
-							}else{
-								return false;
-							}
-						}else{
-							return false;
-						}
-					}
-				}else{
+
+			if (!identifier) return false;
+
+			var quoteTable = this._quotes[identifier];
+			if(typeof quoteTable === "undefined") return false;
+
+			function lookupVoice(vNum) {
+				if (typeof vNum === "undefined")
 					return false;
-				}
-			}else{
-				return false;
+				var retVal = quoteTable[vNum];
+				return typeof retVal !== "undefined" ? retVal : false;
 			}
+
+			var voiceLine = lookupVoice(voiceNum);
+			if (voiceLine) return voiceLine;
+
+			if (identifier !== "timing" ){
+				// no quote for that voice line, check if it's a seasonal line
+				var specialVoiceNum = this.specialDiffs[voiceNum];
+				// check if default for seasonal line exists
+				console.debug("this.specialDiffs[voiceNum]", specialVoiceNum);
+
+				var specialVoiceLine = lookupVoice(specialVoiceNum);
+				if (specialVoiceLine) {
+					console.debug("using special default", specialVoiceLine);
+					return specialVoiceLine;
+				}
+			}
+			return false;
 		}
 	};
 	
