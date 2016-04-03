@@ -35,6 +35,12 @@ var
 	idleFunction,
 	expiryFunction,
 	refreshFunction;
+	
+/*
+make git conflict
+*/
+
+
 // Show game screens
 function ActivateGame(){
 	if(!localStorage.getObject('apiUsage')) {

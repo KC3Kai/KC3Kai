@@ -4,12 +4,6 @@
 	
 	var myVersion = Number(chrome.runtime.getManifest().version);
 	
-	/*
-	Starting v20, time indicators do not count down (kc3 update, pvp, quest resets).
-	No user keeps the popup menu open for a long time to even make use of a countdown.
-	Them knowing how many hours and minutes left at a glance is good enough.
-	*/
-
 	$(document).on("ready", function(){
 		// Load previously stored configs
 		ConfigManager.load();
@@ -58,15 +52,7 @@
 			}
 		});
 		
-		// Play via API Link
-		/*$("#play_cc").on('click', function(){
-			localStorage.extract_api = false;
-			localStorage.dmmplay = false;
-			window.open("../game/api.html", "kc3kai_game");
-		});*/
-		
 		// Refresh API Link
-		// $("#get_api").on('click', function(){
 		$("#play_cc").on('click', function(){
 			_gaq.push(['_trackEvent', "Play via API", 'clicked']);
 			chrome.cookies.set({
