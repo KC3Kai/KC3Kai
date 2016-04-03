@@ -206,7 +206,7 @@
         previousForm: function(shipId) {
             if (shipId === this.originOf(shipId))
                 return false;
-            var group = this.remodelGroup(shipId)
+            var group = this.remodelGroup(shipId);
             var curInd = group.indexOf(shipId);
             console.assert(
                 curInd > 0, 
