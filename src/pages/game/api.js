@@ -37,11 +37,6 @@ var
 	idleFunction,
 	expiryFunction,
 	refreshFunction;
-	
-/*
-make git conflict
-*/
-
 
 // Show game screens
 function ActivateGame(){
@@ -596,22 +591,25 @@ var interactions = {
 			clearTimeout(subtitleVanishTimer);
 		}
 		
-		// Lazy init timing parameters		
-		if(!subtitleVanishBaseMillis){		
-			subtitleVanishBaseMillis = Number(KC3Meta.quote("timing", "baseMillisVoiceLine")) || 2000;		
-		}		
+		// Lazy init timing parameters
+		if(!subtitleVanishBaseMillis){
+			subtitleVanishBaseMillis = Number(KC3Meta.quote("timing", "baseMillisVoiceLine")) || 2000;
+		}
 		if(!subtitleVanishExtraMillisPerChar){		
-			subtitleVanishExtraMillisPerChar = Number(KC3Meta.quote("timing", "extraMillisPerChar")) || 50;		
+			subtitleVanishExtraMillisPerChar = Number(KC3Meta.quote("timing", "extraMillisPerChar")) || 50;
 		}
 		
 		// If subtitles available for the voice
 		if(subtitleText){
 			$(".overlay_subtitles").html(subtitleText);
 			$(".overlay_subtitles").show();
+			var millis = subtitleVanishBaseMillis +
+				(subtitleVanishExtraMillisPerChar * $(".overlay_subtitles").text().length);
+			console.debug("vanish after", millis, "ms");
 			subtitleVanishTimer = setTimeout(function(){
 				subtitleVanishTimer = false;
 				$(".overlay_subtitles").fadeOut(2000);
-			}, (2000+ ($(".overlay_subtitles").text().length*50)) );
+			}, millis);
 		}
 	}
 };
