@@ -84,7 +84,7 @@ Provides access to data on built-in JSON files
 		},
 		
 		loadQuotes :function(){
-			this._quotes = KC3Translation.getJSON(this.repo, 'quotes', true);
+			this._quotes = KC3Translation.getQuotes(this.repo);
 		},
 		
 		/* Data Access
