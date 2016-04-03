@@ -17,6 +17,9 @@
 			dataType: "json",
 			url: "https://raw.githubusercontent.com/KC3Kai/KC3Kai/master/update?v="+(Date.now()),
 			success: function(data, textStatus, request){
+				if (!!data.pr) {
+					$(".nextVersion").attr("href", data.pr);
+				}
 				if( myVersion < Number(data.version) ){
 					// If current installed version less than latest
 					var UpdateDiff = (new Date(data.time)).getTime() - Date.now();
@@ -65,13 +68,7 @@
 			}, function(cookie){
 				localStorage.extract_api = true;
 				localStorage.dmmplay = false;
-				if(false) {
-					// Conventional Way
-					window.open("http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/", "kc3kai_game");
-				} else {
-					// Altered Way
-					window.open("../game/api.html", "kc3kai_game");
-				}
+				window.open("http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/", "kc3kai_game");
 			});
 		});
 		

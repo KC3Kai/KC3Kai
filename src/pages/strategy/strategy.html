@@ -29,6 +29,7 @@
 							<li data-id="consumables">Consumables</li>
 							<li data-id="showcase">Showcase</li>
 							<li data-id="overlodger">Ledger</li>
+							<li data-id="databackup">Data Backup</li>
 						</ul>
 					</div>
 					<div class="submenu">
@@ -72,6 +73,7 @@
 						<ul class="menulist">
 							<li data-id="maps">Maps</li>
 							<li data-id="event">Events</li>
+							<li data-id="encounters">Encounters</li>
 						</ul>
 					</div>
 					<div class="submenu">
@@ -87,11 +89,10 @@
 							<li data-id="mstupdate">Updates</li>
 							<li data-id="mstship">Ships</li>
 							<li data-id="mstgear">Equipment</li>
-							<li data-id="encounters">Encounters</li>
 						</ul>
 					</div>
 				</div>
-				
+
 				<!-- CONTENT -->
 				<div id="content">
 					<div id="contentHtml"></div>
@@ -99,8 +100,8 @@
 				<div class="clear"></div>
 			</div>
 		</div>
-		
-		
+
+
 		<script type="text/javascript" src="../../assets/js/global.js"></script>
 		<script type="text/javascript" src="../../assets/js/steganography.js"></script>
 		<!-- @nonbuildstart -->
@@ -112,7 +113,9 @@
 		<script type="text/javascript" src="../../assets/js/Chart.min.js"></script>
 		<script type="text/javascript" src="../../assets/js/FileSaver.min.js"></script>
 		<script type="text/javascript" src="../../assets/js/KanColleHelpers.js"></script>
+		<script type="text/javascript" src="../../assets/js/jszip.min.js"></script>
 		<script type="text/javascript" src="../../library/modules/StrategyTabs.js"></script>
+
 		<!-- @buildimportjs ../../library/objects.js -->
 		<!-- @buildimportjs ../../library/managers.js -->
 		<!-- @nonbuildstart -->
@@ -134,31 +137,29 @@
 		<script type="text/javascript" src="../../library/managers/QuestManager.js"></script>
 		<script type="text/javascript" src="../../library/managers/ShipManager.js"></script>
 		<!-- @nonbuildend -->
-		
 		<script type="text/javascript" src="../../../../library/modules/RemodelDb.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/Database.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/Master.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/Translation.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/Meta.js"></script>
+		<script type="text/javascript" src="../../../../library/modules/DataBackup.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/WhoCallsTheFleetDb.js">
-		</script>
-		<script type="text/javascript" src="../../library/modules/PictureBook.js"></script>
-		<script type="text/javascript" src="../../library/modules/RemodelDb.js"></script> 
-		<script type="text/javascript" src="../../library/modules/K2Badge.js"></script>
-		
+		</script><script type="text/javascript" src="../../library/modules/PictureBook.js"></script>
+		<script type="text/javascript" src="../../library/modules/RemodelDb.js"></script>
+
 		<script type="text/javascript" src="strategy.js"></script>
-		
+
 		<script type="text/javascript" src="graphable.js"></script>
 		<script type="text/javascript" src="sortielogs.js"></script>
 		<!-- @buildimportjs allstrategytabs.js -->
-		
+
 		<!-- @nonbuildstart -->
 		<script type="text/javascript" src="tabs/profile/profile.js"></script>
 		<script type="text/javascript" src="tabs/ships/ships.js"></script>
 		<script type="text/javascript" src="tabs/docking/docking.js"></script>
 		<script type="text/javascript" src="tabs/gears/gears.js"></script>
 		<script type="text/javascript" src="tabs/newsfeed/newsfeed.js"></script>
-			
+
 		<!-- resources and consumables, implements graphable -->
 		<script type="text/javascript" src="tabs/resources/resources.js"></script>
 		<script type="text/javascript" src="tabs/consumables/consumables.js"></script>
@@ -184,11 +185,12 @@
 		<script type="text/javascript" src="tabs/presets/presets.js"></script>
 		<script type="text/javascript" src="tabs/mstupdate/mstupdate.js"></script>
 		<script type="text/javascript" src="tabs/mstship/mstship.js"></script>
-		<script type="text/javascript" src="tabs/mstgear/mstgear.js"></script>
-		<script type="text/javascript" src="tabs/expcalc/expcalc.js"></script>
 		<script type="text/javascript" src="tabs/badge/badge.js"></script>
+		<script type="text/javascript" src="tabs/mstgear/mstgear.js"></script>
+		<script type="text/javascript" src="tabs/databackup/databackup.js"></script>
+		<script type="text/javascript" src="tabs/expcalc/expcalc.js"></script>
 		<script type="text/javascript" src="tabs/encounters/encounters.js"></script>
 		<!-- @nonbuildend -->
-		
+
 	</body>
 </html>

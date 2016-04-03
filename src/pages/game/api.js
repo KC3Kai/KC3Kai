@@ -1,13 +1,15 @@
 _gaq.push(['_trackPageview']);
 
 // If awaiting activation
-var waiting = false;
+var waiting = true;
 
 // If trusted exit, for exit confirmation
 var trustedExit = false;
 
 // Used to fade out subtitles after calculated duration
 var subtitleVanishTimer = false;
+var subtitleVanishBaseMillis;
+var subtitleVanishExtraMillisPerChar;
 
 // Holder object for audio files to test mp3 duration
 var subtitleMp3;
@@ -18,35 +20,8 @@ var autoFocus = 0;
 // Critical Animation
 var critAnim = false;
 
-// Idle time check
-/*
-  variables explanation:
-  longestIdleTime - high score of idle time
-  idleTimer       - timer ID for interval function of idleFunction
-  idleTimeout     - timer ID for unsafe idle time marker
-  idleFunction    - function that indicates the way of the idle counter
-*/
-localStorage.longestIdleTime = Math.max(parseInt(localStorage.longestIdleTime) || 0,1800000);
-var
-	lastRequestMark,
-	refreshTimeout,  // refresh cancellation time
-	idleTimer,
-	idleTimeout,
-	idleFunction,
-	expiryFunction,
-	refreshFunction;
-	
-/*
-make git conflict
-*/
-
-
 // Show game screens
 function ActivateGame(){
-	if(!localStorage.getObject('apiUsage')) {
-		alert("APIExpiredAlert");
-		return false;
-	}
 	waiting = false;
 	$(".box-wrap").css("background", "#fff");
 	$(".box-wait").hide();
@@ -56,9 +31,8 @@ function ActivateGame(){
 		.find(".game-swf")
 		.attr("src", localStorage.absoluteswf)
 		.end()
-		.trigger('initialize-idle')
 		.show();
-	$(".box-wrap").css("zoom", (ConfigManager.api_gameScale || 100) + "%");
+	$(".box-wrap").css("zoom", ((ConfigManager.api_gameScale || 100) / 100));
 	return true;
 }
 
@@ -84,22 +58,28 @@ $(document).on("ready", function(){
 		$("body").css("background-repeat", "no-repeat");
 	}
 	
-	$(".box-wait .api_txt").attr("title",KC3Meta.term("APIConcealExpl")).on('change','textarea',function(){
+	if(ConfigManager.api_subtitles){
+		$(".overlay_subtitles").css("font-family", ConfigManager.subtitle_font);
+		$(".overlay_subtitles").css("font-size", ConfigManager.subtitle_size);
+		if(ConfigManager.subtitle_bold){
+			$(".overlay_subtitles").css("font-weight", "bold");
+		}
+	}
+	
+	if(!(localStorage.absoluteswf || false)) {
+		$(".box-nolink").show();
+	}else{
+		$(".box-wait .api_txt textarea").val(localStorage.absoluteswf);
+		$(".box-wait").show();
+	}
+	
+	$(".box-wait .api_txt").attr("title",KC3Meta.term("APIConcealExpl"));
+	
+	$(".box-wait .api_txt").on('change', 'textarea', function(){
 		if(($(this).val().length > 0) || confirm("APIDataManualClear")) {
 			localStorage.absoluteswf = $(this).val();
 		} else {
 			$(this).val(localStorage.absoluteswf);
-		}
-		if(localStorage.absoluteswf.length <= 0)
-			$(document).trigger('state-check');
-	});
-	
-	$(".box-game").on('initialize-idle',function(){
-		lastRequestMark = Date.now();
-		clearInterval(idleTimer);
-		idleTimer = setInterval(idleFunction,1000);
-		if(ConfigManager.alert_idle_counter) {
-			$(".game-idle-timer").trigger("refresh-tick");
 		}
 	});
 	
@@ -107,106 +87,23 @@ $(document).on("ready", function(){
 	$(".api_submit").on('click', function(){
 		if($(".api_text").val().indexOf("mainD2.swf") > -1){
 			localStorage.absoluteswf = $(".api_text").val();
-			$(document).trigger('state-check');
+			window.location.reload();
 		}
 	});
 	
 	// Forget API Link
 	$(".forget_btn").on('click', function(){
 		localStorage.absoluteswf = "";
-		$(document).trigger('state-check');
+		window.location.reload();
 	});
 	
 	// Quick Play
 	$(".play_btn").on('click', function(){
 		if($(this).data('play'))
 			ActivateGame();
-		// ResetIdleStat();
 	});
 	
 	$(".play_btn").data('play',!ConfigManager.api_mustPanel);
-	
-	// Configure Refresh Toggle (using $(".game-refresh").trigger("click") is possible)
-	$(".game-refresh").on("click",function(){
-		switch(Math.sign($(this).text()-1)) {
-			case(-1):
-			case( 0):
-				// TODO: BOMB EXPLODED
-				// $(".game-swf").attr("src","about:blank").attr("src",localStorage.absoluteswf);
-				$(this).trigger('bomb-exploded');
-				$(this).text(99);
-				break;
-			default:
-				$(this).text(Math.max(0,$(this).text()-1).toDigits(2));
-				break;
-		}
-	}).on("bomb-exploded",function(){
-		$(this).css('right','');
-		localStorage.extract_api = true;
-		$(document).trigger('state-check');
-		console.warn("Refresh warning");
-		localStorage.apiUsage = null;
-	});
-	
-	$(".api_refresh").on('click',function(){
-		$(".game-refresh").trigger('bomb-exploded');
-	});
-	
-	// Configure Idle Timer
-	/*
-	  unsafe-tick  : remove the safe marker of API idle time
-	  refresh-tick : reset the timer and set the idle time as safe zone
-	*/
-	$(".game-idle-timer").on("unsafe-tick",function(){
-		$(".game-idle-timer").removeClass("safe-timer");
-	}).on("refresh-tick",function(){
-		clearTimeout(idleTimeout);
-		$(".game-idle-timer").addClass("safe-timer");
-		idleTimeout = setTimeout(function(){
-			$(".game-idle-timer").trigger("unsafe-tick");
-		},localStorage.longestIdleTime);
-	});
-	idleFunction = function(){
-		$(".game-idle-timer").css('bottom','');
-		if(ConfigManager.alert_idle_counter) {
-			$(".game-idle-timer").text(String(Math.floor((Date.now() - lastRequestMark) / 1000)).toHHMMSS());
-		} else {
-			$(".game-idle-timer").text(String(NaN).toHHMMSS());
-			clearInterval(idleTimer);
-		}
-	};
-	
-	expiryFunction = function(){
-		var timeLeft = Math.floor(((localStorage.getObject('apiUsage') || Date.now()) - Date.now()) / 1000);
-		$(".game-idle-timer").css('bottom',0);
-		if(timeLeft > 0) {
-			$(".game-idle-timer").text(String(timeLeft).toHHMMSS());
-		} else {
-			localStorage.apiUsage = null;
-			$(document).trigger('api-invalid');
-			clearInterval(idleTimer);
-		}
-	};
-	
-	refreshFunction = function(){
-		var timeLeft = Math.floor((refreshTimeout - Date.now()) / 1000);
-		$(".game-idle-timer").css('bottom',0);
-		if(timeLeft > 0) {
-			$(".game-idle-timer").text(String(timeLeft).toHHMMSS());
-		} else {
-			$(document).trigger('api-invalid');
-			clearInterval(idleTimer);
-		}
-	};
-	
-	// Enable Refresh Toggle
-	if(ConfigManager.api_directRefresh) {
-		$(".game-refresh").css("display","flex");
-	}
-	// Show Idle Counter
-	if(ConfigManager.alert_idle_counter > 1) {
-		$(".game-idle-timer").show();
-	}
 	
 	// Exit confirmation
 	window.onbeforeunload = function(){
@@ -215,9 +112,7 @@ $(document).on("ready", function(){
 		if(
 			ConfigManager.api_askExit==1 &&
 			!trustedExit &&
-			!waiting &&
-			$(".box-game").is(":visible") &&
-			$(".game-refresh").text() > 0
+			!waiting
 		){
 			trustedExit = true;
 			setTimeout(function(){ trustedExit = false; }, 100);
@@ -235,10 +130,6 @@ $(document).on("ready", function(){
 			autoFocus--;
 		}
 	}, 1000);
-	
-	// Automatically check current API state
-	$(this).data('playCount',0);
-	$(this).trigger('state-check');
 });
 
 $(document).on("keydown", function(event){
@@ -264,125 +155,6 @@ $(document).on("keydown", function(event){
 	}
 });
 
-$(document).on("api-refresh",function(){
-	// Initialize Visiblity (Refresh API)
-	$(".box-nolink").hide();
-		$(".box-noapi").hide();
-		$(".box-expired").hide();
-	$(".box-wait").show();
-		$(".box-refresh").show();
-		$(".box-ready").hide();
-	
-	// Initialize State
-	localStorage.extract_api = true;
-	refreshTimeout = Date.now() + 60000;
-	clearInterval(idleTimer);
-	idleTimer = setInterval(refreshFunction,1000);
-	
-	$(".box-wrap").css("background", "");
-	$(".game-swf").remove();
-	$(".refresh-box").remove();
-	$(".box-refresh")
-		.prepend("<iframe class=refresh-box frameborder=0></iframe>")
-		.find('.refresh-box')
-		.on('error',function(e){
-			$(document).trigger('api-invalid');
-		})
-		.attr('src','http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/');
-});
-
-$(document).on("api-valid",function(){
-	// Initialize Visiblity (Valid API)
-	$(".box-nolink").hide();
-		$(".box-noapi").hide();
-		$(".box-expired").hide();
-	$(".box-wait").show();
-		$(".box-refresh").hide();
-		$(".box-ready").show();
-	
-	// Initialize State
-	$(".api_txt textarea").text(localStorage.absoluteswf);
-	waiting = true;
-	
-	// Reset Styles
-	$(".game-idle-timer").css("height","").css("width","");
-	$(".game-refresh").css('right','').text((5 + Math.ceil(Math.random() * ($(this).data('playCount') + 1))).toDigits(2));
-	$(".play_btn").data('play',$(".play_btn").data('play') || $(this).data('playCount'));
-	
-	
-	// Set expiry API time
-	if(localStorage.getObject('apiUsage')) {
-		var timeOut = localStorage.getObject('apiUsage') - Date.now();
-		console.warn("Existing API will expire in",timeOut,'milliseconds');
-		
-		clearInterval(idleTimer);
-		idleTimer = setInterval(expiryFunction,1000);
-	}
-	
-	// Check panel requirement
-	if($(".play_btn").data('play')) {
-		$(".play_btn")
-			.text(KC3Meta.term("GameStartNowBtn"))
-			.css('color','')
-			.css('width','');
-	} else {
-		// Disable Quick Play (must panel)
-		$(".play_btn")
-			.text(KC3Meta.term("APIWaitToggle"))
-			.css('color','#f00')
-			.css('width','40%');
-	}
-	
-	$(this).data('playCount',$(this).data('playCount')+1);
-});
-
-$(document).on("api-invalid",function(){
-	// Initialize Visiblity (Invalid API)
-	$(".box-nolink").show();
-		$(".box-noapi").hide();
-		$(".box-expired").show();
-	$(".box-wait").hide();
-		$(".box-refresh").hide();
-		$(".box-ready").hide();
-	
-});
-
-$(document).on("api-inexists",function(){
-	// Initialize Visiblity (No API)
-	$(".box-nolink").show();
-		$(".box-noapi").show();
-		$(".box-expired").hide();
-	$(".box-wait").hide();
-		$(".box-refresh").hide();
-		$(".box-ready").hide();
-	
-});
-
-$(document).on("state-check",function(){
-	var
-		eventName = "",
-		nowDate   = Date.now();
-	if(JSON.parse(localStorage.extract_api))
-		// Extract API Flag
-		eventName = "api-refresh";
-	else
-		if(!localStorage.absoluteswf)
-			// No API Detected
-			eventName = "api-inexists";
-		else if(nowDate < (localStorage.getObject('apiUsage') || nowDate))
-			// Valid API
-			eventName = "api-valid";
-		else
-			// Invalid API
-			eventName = "api-invalid";
-	
-	$(".box-game").hide();
-	
-	if(eventName) {
-		console.info("Call state",eventName);
-		$(this).trigger(eventName);
-	}
-});
 
 /* Invokable actions
 -----------------------------------*/
@@ -416,27 +188,6 @@ var interactions = {
 			console.error(e);
 		}finally{
 			return false;
-		}
-	},
-	
-	// Request OK Marker
-	goodResponses :function(request, sender, response){
-		if(request.tcp_status === 200 && request.api_status === 1 && Math.sign($('.game-refresh').text())>0) {
-			localStorage.longestIdleTime = Math.max(Number(localStorage.longestIdleTime) || 0,Date.now() - lastRequestMark);
-			lastRequestMark = Date.now();
-			$(".game-idle-timer").trigger("refresh-tick");
-			clearInterval(idleTimer);
-			idleTimer = setInterval(idleFunction,1000);
-			idleFunction();
-		} else {
-			clearInterval(idleTimer);
-			clearTimeout(idleTimeout);
-			
-			$(".game-idle-timer").trigger("unsafe-tick").html([
-				String(Math.floor((Date.now() - lastRequestMark)/1000)).toHHMMSS(),
-				[request.tcp_status,request.api_status,request.api_result].filter(function(x){return !!x;}).join('/')
-			].join('<br>')).css("height","40px").css("width","480px");
-			interactions.catBomb(request,sender,response);
 		}
 	},
 	
@@ -547,18 +298,11 @@ var interactions = {
 		$(".taiha_red").hide();
 	},
 	
-	api_refresh :function(request, sender, response){
-		console.log("Refresh Call");
-		localStorage.extract_api = false;
-		$('.refresh-box').remove();
-		$(document).trigger('state-check');
-	},
-	
 	// Show subtitles
 	subtitle :function(request, sender, response){
 		if(!ConfigManager.api_subtitles) return true;
 		
-		console.log("subtitle", request);
+		console.debug("subtitle", request);
 		
 		// Get subtitle text
 		var subtitleText = false;
@@ -576,47 +320,37 @@ var interactions = {
 				break;
 		}
 		subtitleText = KC3Meta.quote( quoteIdentifier, quoteVoiceNum );
-
+		
+		// hide first to fading will stop
+		$(".overlay_subtitles").stop(true, true);
+		$(".overlay_subtitles").hide();
+		
 		// If subtitle removal timer is ongoing, reset
-		if(subtitleVanishTimer && subtitleText){
+		if(subtitleVanishTimer){
 			clearTimeout(subtitleVanishTimer);
+		}
+		// Lazy init timing parameters
+		if(!subtitleVanishBaseMillis){
+			subtitleVanishBaseMillis = Number(KC3Meta.quote("timing", "baseMillisVoiceLine")) || 2000;
+		}
+		if(!subtitleVanishExtraMillisPerChar){
+			subtitleVanishExtraMillisPerChar = Number(KC3Meta.quote("timing", "extraMillisPerChar")) || 50;
 		}
 		
 		// If subtitles available for the voice
 		if(subtitleText){
 			$(".overlay_subtitles").html(subtitleText);
 			$(".overlay_subtitles").show();
-			
-			/*subtitleMp3 = new Audio();
-			subtitleMp3.canplaythrough = function() { 
-				console.log("DURATION: "+subtitleMp3.duration);
-			};
-			subtitleMp3.src = request.url;*/
-			
-			/*subtitleMp3 = document.createElement("audio");
-			subtitleMp3.addEventListener('canplaythrough', function() { 
-				console.log("DURATION: "+subtitleMp3.duration);
-			}, false);
-			subtitleMp3.src = request.url;*/
-			
+			var millis = subtitleVanishBaseMillis +
+				(subtitleVanishExtraMillisPerChar * $(".overlay_subtitles").text().length);
+			console.debug("vanish after", millis, "ms");
 			subtitleVanishTimer = setTimeout(function(){
 				subtitleVanishTimer = false;
-				$(".overlay_subtitles").fadeOut(500);
-			}, (2000+ ($(".overlay_subtitles").text().length*50)) );
-		} else {
-			//$(".overlay_subtitles").html("Missing quote #" + quoteIdentifier + "-" + quoteVoiceNum);
-			$(".overlay_subtitles").hide();
-			subtitleVanishTimer = setTimeout(function(){
-				subtitleVanishTimer = false;
-				$(".overlay_subtitles").fadeOut(500);
-			}, (2000+ ($(".overlay_subtitles").text().length*50)) );
+				$(".overlay_subtitles").fadeOut(2000);
+			}, millis);
 		}
-	},
-	
-	// Dummy action
-	dummy :function(request, sender, response){
-		
 	}
+	
 };
 
 /* Listen to messaging triggers

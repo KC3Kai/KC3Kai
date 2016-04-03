@@ -67,7 +67,7 @@
 		},
 		currentGraph: "",
 		currentShipId: 0,
-		currentVersion: "",
+		currentCardVersion: "",
 		audio: false,
 		server_ip: "",
 		
@@ -75,6 +75,7 @@
 		Prepares all data needed
 		---------------------------------*/
 		init :function(){
+			KC3Meta.loadQuotes();
 			var MyServer = (new KC3Server()).setNum( PlayerManager.hq.server );
 			this.server_ip = MyServer.ip;
 		},
@@ -134,11 +135,23 @@
 			$(".tab_mstship .shipInfo .voices, .tab_mstship .shipInfo .hourlies").on("click", ".voice", function(){
 				if(self.audio){ self.audio.pause(); }
 				var voiceFile = KC3Meta.getFilenameByVoiceLine(self.currentShipId, parseInt($(this).data("vnum"), 10));
+				console.log(voiceFile);
+				if(!voiceFile || voiceFile==100000){
+					$(".tab_mstship .shipInfo .subtitles").text("This voice is currently disabled to be replayable in KC3Kai");
+					return true;
+				}
+				
 				var voiceSrc = "http://"+self.server_ip
-							+ "/kcs/sound/kc"+self.currentGraph+"/"+voiceFile+".mp3"
-							+ (!self.currentVersion?"":"?version="+self.currentVersion);
+							+ "/kcs/sound/kc"+self.currentGraph+"/"+voiceFile+".mp3";
 				self.audio = new Audio(voiceSrc);
 				self.audio.play();
+				console.log("PLAYING: self.currentShipId, vnum, voiceFile", self.currentShipId, parseInt($(this).data("vnum"), 10), voiceFile);
+				
+				// Emulate subtitles
+				var shipGirl = KC3Master.graph_file(self.currentGraph);
+				var voiceLine = KC3Meta.getVoiceLineByFilename(shipGirl, voiceFile);
+				console.log("SUBTITLE: shipGirl, voiceFile, voiceLine", shipGirl, voiceFile, voiceLine);
+				$(".tab_mstship .shipInfo .subtitles").text(KC3Meta.quote( shipGirl, voiceLine ));
 			});
 			
 			// On-click remodels
@@ -180,7 +193,7 @@
 			if(!!KC3StrategyTabs.pageParams[1]){
 				this.showShip(KC3StrategyTabs.pageParams[1]);
 			}else{
-				this.showShip(405);
+				this.showShip(323);
 			}
 		},
 		
@@ -213,13 +226,16 @@
 			
 			// CG VIEWER
 			var shipFile = KC3Master.graph(ship_id).api_filename;
-			var shipVersion = KC3Master.graph(ship_id).api_version;
+			// Changed to an Array from 2016-04-01
+			var shipVersions = KC3Master.graph(ship_id).api_version;
+			console.log("shipVersions", shipVersions);
 			this.currentGraph = shipFile;
-			this.currentVersion = shipVersion;
+			this.currentCardVersion = shipVersions[0];
+			
 			var shipSrc = "../../../../assets/swf/card.swf?sip="+this.server_ip
 					+"&shipFile="+shipFile
 					+"&abyss="+(ship_id>500?1:0)
-					+(!shipVersion?"":"&ver="+shipVersion);
+					+(!this.currentCardVersion?"":"&ver="+this.currentCardVersion);
 			
 			$(".tab_mstship .shipInfo .cgswf embed").remove();
 			$("<embed/>")
@@ -344,10 +360,13 @@
 				$(".tab_mstship .shipInfo .consume_fuel .rsc_value").text( shipData.api_fuel_max );
 				$(".tab_mstship .shipInfo .consume_ammo .rsc_value").text( shipData.api_bull_max );
 				
+				$(".tab_mstship .shipInfo .subtitles").html("");
+				
 				// VOICE LINES
 				$(".tab_mstship .shipInfo .voices").show();
 				$(".tab_mstship .shipInfo .voices").html("");
 				$.each(this.lines, function(vname, vnum){
+					if((shipData.api_voicef<1 && vnum==29) || vnum==6) return true;
 					$("<div/>")
 						.addClass("hover")
 						.addClass("voice")

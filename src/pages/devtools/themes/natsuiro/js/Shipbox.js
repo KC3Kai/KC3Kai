@@ -4,10 +4,15 @@ KC3改 Ship Box for Natsuiro theme
 (function(){
 	"use strict";
 	
-	window.KC3NatsuiroShipbox = function( base, rosterId ){
+	window.KC3NatsuiroShipbox = function( base, rosterId, showCombinedFleetBars ){
 		this.element = $("#factory "+base).clone();
 		this.element.attr("id", "ShipBox"+rosterId);
 		this.shipData = KC3ShipManager.get( rosterId );
+		
+		this.showCombinedFleetBars = true;
+		if(typeof showCombinedFleetBars != "undefined"){
+			this.showCombinedFleetBars = showCombinedFleetBars;
+		}
 		
 		this.expPercent = this.shipData.exp[2] / 100;
 		this.fuelPercent = this.shipData.fuel / this.shipData.master().api_fuel_max;
@@ -56,6 +61,10 @@ KC3改 Ship Box for Natsuiro theme
 		$(".ship_fuel", this.element).css("width", (120 * Math.min(this.fuelPercent, 1))+"px");
 		$(".ship_ammo", this.element).css("width", (120 * Math.min(this.ammoPercent, 1))+"px");
 		$(".ship_bars", this.element).attr("title", KC3Meta.term("PanelCombinedShipBarsHint").format(this.shipData.exp[1], Math.ceil(this.fuelPercent*100), Math.ceil(this.ammoPercent*100)) );
+		
+		if(!this.showCombinedFleetBars){
+			$(".ship_bars", this.element).css("opacity", "0");
+		}
 		
 		return this.element;
 	};
@@ -240,7 +249,16 @@ KC3改 Ship Box for Natsuiro theme
 		if(this.shipData.slotnum > slot){
 			
 			if(this.shipData.items[slot] > -1){
+				
 				thisGear = KC3GearManager.get( this.shipData.items[slot] );
+				
+				// unknown item
+				if(thisGear.masterId === 0){
+					$(".ship_gear_"+(slot+1)+" .ship_gear_icon img", this.element).attr("src",
+						"../../../../assets/img/ui/empty.png");
+					return false;
+				}
+				
 				$(".ship_gear_"+(slot+1)+" .ship_gear_icon img", this.element).attr("src",
 					"../../../../assets/img/items/"+thisGear.master().api_type[3]+".png");
 				$(".ship_gear_"+(slot+1), this.element).addClass("equipped");

@@ -8,6 +8,7 @@
     
     window.KC3DBSubmission = {
     	sendMaster: function(data) {
+            if (true) return;
     	    $.ajax({
         		url: "http://kc3.jetri.co/data/master/submit",
         		//url: "http://localhost:8000/data/master/submit",
@@ -20,6 +21,7 @@
     	    return;
     	},
         sendQuests: function(data) {
+            if (true) return;
     	    $.ajax({
         		url: "http://kc3.jetri.co/data/quests/submit",
         		//url: "http://localhost:8000/data/quests/submit",

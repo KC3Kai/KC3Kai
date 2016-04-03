@@ -54,6 +54,7 @@ function ActivateGame(){
 $(document).on("ready", function(){
 	// Initialize data managers
 	ConfigManager.load();
+	KC3Master.init();
 	KC3Meta.init("../../../../data/");
 	KC3Meta.loadQuotes();
 	KC3QuestManager.load();
@@ -70,6 +71,14 @@ $(document).on("ready", function(){
 		$("body").css("background-size", ConfigManager.api_bg_size);
 		$("body").css("background-position", ConfigManager.api_bg_position);
 		$("body").css("background-repeat", "no-repeat");
+	}
+	
+	if(ConfigManager.api_subtitles){
+		$(".overlay_subtitles").css("font-family", ConfigManager.subtitle_font);
+		$(".overlay_subtitles").css("font-size", ConfigManager.subtitle_size);
+		if(ConfigManager.subtitle_bold){
+			$(".overlay_subtitles").css("font-weight", "bold");
+		}
 	}
 	
 	$(".box-wait").show();
@@ -362,9 +371,13 @@ var interactions = {
 				break;
 		}
 		subtitleText = KC3Meta.quote( quoteIdentifier, quoteVoiceNum );
-
+		
+		// hide first to fading will stop
+		$(".overlay_subtitles").stop(true, true);
+		$(".overlay_subtitles").hide();
+		
 		// If subtitle removal timer is ongoing, reset
-		if(subtitleVanishTimer && subtitleText){
+		if(subtitleVanishTimer){
 			clearTimeout(subtitleVanishTimer);
 		}
 		
@@ -372,29 +385,9 @@ var interactions = {
 		if(subtitleText){
 			$(".overlay_subtitles").html(subtitleText);
 			$(".overlay_subtitles").show();
-			
-			/*subtitleMp3 = new Audio();
-			subtitleMp3.canplaythrough = function() { 
-				console.log("DURATION: "+subtitleMp3.duration);
-			};
-			subtitleMp3.src = request.url;*/
-			
-			/*subtitleMp3 = document.createElement("audio");
-			subtitleMp3.addEventListener('canplaythrough', function() { 
-				console.log("DURATION: "+subtitleMp3.duration);
-			}, false);
-			subtitleMp3.src = request.url;*/
-			
 			subtitleVanishTimer = setTimeout(function(){
 				subtitleVanishTimer = false;
-				$(".overlay_subtitles").fadeOut(500);
-			}, (2000+ ($(".overlay_subtitles").text().length*50)) );
-		} else {
-			//$(".overlay_subtitles").html("Missing quote #" + quoteIdentifier + "-" + quoteVoiceNum);
-			$(".overlay_subtitles").hide();
-			subtitleVanishTimer = setTimeout(function(){
-				subtitleVanishTimer = false;
-				$(".overlay_subtitles").fadeOut(500);
+				$(".overlay_subtitles").fadeOut(2000);
 			}, (2000+ ($(".overlay_subtitles").text().length*50)) );
 		}
 	},

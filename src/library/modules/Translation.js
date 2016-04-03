@@ -62,13 +62,13 @@
 				(["jp", "tcn"].indexOf(language) > -1)
 				&& (filename==="ships" || filename==="items")
 			){
-				extendEnglish=false;
+				extendEnglish = false;
 			}
-			// make ships.json and items.json an option to be always in Japanese
-			if (ConfigManager.info_jp_ship_item
+			// make ships.json and items.json an option to be always in specified one
+			if (!!ConfigManager.info_force_ship_lang
 				&& (filename==="ships" || filename==="items")){
-				extendEnglish=false;
-				language = "jp";
+				extendEnglish = false;
+				language = ConfigManager.info_force_ship_lang;
 			}
 			// make "stype.json" an option:
 			if (filename === "stype" && ConfigManager.info_eng_stype){
@@ -96,10 +96,12 @@
 					async: false
 				}).responseText);
 			} catch (e) {
-				if (e instanceof SyntaxError && filename === "stype")
+				if (e instanceof SyntaxError && extendEnglish && language!="en"){
+					console.warn(e.stack);
 					translation = null;
-				else
+				} else {
 					throw e;
+				}
 			}
 			return $.extend(true, translationBase, translation);
 		}

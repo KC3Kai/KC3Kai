@@ -17,16 +17,16 @@ after_success:
 - if [ $TRAVIS_BRANCH == 'webstore' ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then grunt webstore; fi
 
 # DEPLOY TO GITHUB RELEASES
-deploy:
-  provider: releases
-  skip_cleanup: true
-  api_key:
-    secure: HQBMGX6Dw5NFE48EM7AIiZ8A6KZt7Skwhc0Jf6ttazu/UcH6WV9F/5MBXue3vtEFod6GjH0IsvtH5iGRgV/BDwJzDr4MVf/J/PM4Mdb69EiOhSDcNbT0SOD8xaariWyTpg0F7jqGGaRc8pJoh0fSLCz86T8+RxbePMIOanBh8XM=
-  file: build/releases.zip
-  on:
-    tags: true
-    branch: webstore
-    condition: $TRAVIS_PULL_REQUEST == "false"
+# deploy:
+#   provider: releases
+#   skip_cleanup: true
+#   api_key:
+#     secure: HQBMGX6Dw5NFE48EM7AIiZ8A6KZt7Skwhc0Jf6ttazu/UcH6WV9F/5MBXue3vtEFod6GjH0IsvtH5iGRgV/BDwJzDr4MVf/J/PM4Mdb69EiOhSDcNbT0SOD8xaariWyTpg0F7jqGGaRc8pJoh0fSLCz86T8+RxbePMIOanBh8XM=
+#   file: build/releases.zip
+#   on:
+#     tags: true
+#     branch: webstore
+#     condition: $TRAVIS_PULL_REQUEST == "false"
 
 # BUILD NOTIFICATION FOR GITTER
 notifications:

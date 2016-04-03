@@ -30,15 +30,28 @@ Provides access to data on built-in JSON files
 		_edges:{},
 		_defaultIcon:"",
 		
-		voiceKeys: [
-			604825, 607300, 613847, 615318, 624009, 631856, 635451, 637218, 640529,
-			643036, 652687, 658008, 662481, 669598, 675545, 685034, 687703, 696444,
-			702593, 703894, 711191, 714166, 720579, 728970, 738675, 740918, 743009,
-			747240, 750347, 759846, 764051, 770064, 773457, 779858, 786843, 790526,
-			799973, 803260, 808441, 816028, 825381, 827516, 832463, 837868, 843091,
-			852548, 858315, 867580, 875771, 879698, 882759, 885564, 888837, 896168
+		voiceDiffs: [
+			2475,    0,    0, 8691, 7847, 3595, 1767, 3311, 2507,
+			9651, 5321, 4473, 7117, 5947, 9489, 2669, 8741, 6149,
+			1301, 7297, 2975, 6413, 8391, 9705, 2243, 2091, 4231,
+			3107, 9499, 4205, 6013, 3393, 6401, 6985, 3683, 9447,
+			3287, 5181, 7587, 9353, 2135, 4947, 5405, 5223, 9457,
+			5767, 9265, 8191, 3927, 3061, 2805, 3273, 7331
 		],
-		voiceMapping: [],
+		workingDiffs: [
+			2475, 6547, 1471, 8691, 7847, 3595, 1767, 3311, 2507,
+			9651, 5321, 4473, 7117, 5947, 9489, 2669, 8741, 6149,
+			1301, 7297, 2975, 6413, 8391, 9705, 2243, 2091, 4231,
+			3107, 9499, 4205, 6013, 3393, 6401, 6985, 3683, 9447,
+			3287, 5181, 7587, 9353, 2135, 4947, 5405, 5223, 9457,
+			5767, 9265, 8191, 3927, 3061, 2805, 3273, 7331
+		],
+		specialDiffs: {
+			"1555": 2, // valentines 2016, hinamatsuri 2015
+			"3347": 3, // valentines 2016, hinamatsuri 2015
+			"6547": 2, // whiteday 2015
+			"1471": 3 // whiteday 2015
+		},
 		
 		/* Initialization
 		-------------------------------------------------------*/
@@ -68,14 +81,6 @@ Provides access to data on built-in JSON files
 			this._terms.troll		= JSON.parse( $.ajax(repo+'lang/data/troll/terms.json', { async: false }).responseText );
 			// other language loaded here
 			this._terms.lang		= KC3Translation.getJSON(repo, 'terms', true);
-			
-			var i, j, voiceFilename;
-			for(i=0; i < 500; i++){
-				for(j=0; j < 53; j++){
-					voiceFilename = this.getFilenameByVoiceLine (i, j);
-					this.voiceMapping[voiceFilename] = j;
-				}
-			}
 		},
 		
 		loadQuotes :function(){
@@ -145,9 +150,13 @@ Provides access to data on built-in JSON files
 				bare = jp_name,
 				combin = [],
 				repTab = {
-					"甲"   : '_A',
-					"改二" : '_KaiNi',
-					"改"   : '_Kai',
+					"甲"    : '_A',
+					"乙"    : '_B',
+					"丙"    : '_C',
+					"改二"  : '_KaiNi',
+					"改"    : '_Kai',
+					" zwei" : '_Zwei',
+					" drei" : '_Drei'
 				},
 				repRes = null,
 				replaced = false;
@@ -156,6 +165,7 @@ Provides access to data on built-in JSON files
 			// the matched one, added to the combination stack (FILO)
 			// removing from the replacement table in order to prevent infinite loop ^^;
 			// if there's no match, it'll instantly stop and return the actual value
+			// just translate the items start with '_' in ships.json, and keep the necessary prefix space
 			while( !!(repRes = (new RegExp(".+("+(Object.keys(repTab).join("|"))+")$",'gi')).exec(bare)) ){
 				bare = bare.substr(0, bare.length-repRes[1].length);
 				combin.unshift(this._ship[repTab[repRes[1]]]);
@@ -164,7 +174,6 @@ Provides access to data on built-in JSON files
 			}
 			// console.log("Remaining", bare, "with combination", combin.join(" "));
 			if(replaced) {
-				combin.unshift("");
 				// console.log("this._ship", this._ship);
 				// console.log("this._ship[bare]", this._ship[bare]);
 				if(typeof this._ship[bare] !== "undefined"){
@@ -175,7 +184,7 @@ Provides access to data on built-in JSON files
 				}
 				
 				this._cache[jp_name] = (this._ship[bare] || this._cache[bare] || bare) +
-					(combin.length > 0 ? combin.join(" ") : "");
+					(combin.length > 0 ? combin.join("") : "");
 				return this._cache[jp_name] ;
 				// console.log("this._cache[jp_name]", this._cache[jp_name]);
 				// return this._cache[jp_name]; // being here means the jp_name is not cached. there's already a cache checker at the start of this function
@@ -268,43 +277,60 @@ Provides access to data on built-in JSON files
 		Source: がか (gakada)
 		https://github.com/KC3Kai/KC3Kai/issues/1180#issuecomment-195947346
 		*/
-		getVoiceKeyByFilename :function(ship_id, filename){
+		getVoiceDiffByFilename :function(ship_id, filename){
+			ship_id = parseInt(ship_id, 10);
 			var k = 17 * (ship_id + 7), r = filename - 100000;
-			for (var i = 0; i < 1000; ++i) { // 17 * (500 + 7) * 10000 / 99173 = 869
+			for (var i = 0; i < 1000; ++i) {
 				var a = r + i * 99173;
 				if (a % k === 0) {
 					return a / k;
 				}
 			}
-			return false; // log ship_id, filename somewhere
+			return false;
 		},
 		
 		/*
+		ENTYPOINT: SUBTITLES
 		Get voice line number by filename
-		Mapping idea from `poi-plugin-subtitle` by kcwikizh
-		https://github.com/kcwikizh/poi-plugin-subtitle
 		*/
 		getVoiceLineByFilename :function(ship_id, filename){
-			return this.voiceMapping[filename];
+			var computedDiff = this.getVoiceDiffByFilename(ship_id, filename);
+			var computedIndex = this.voiceDiffs.indexOf(computedDiff);
+			// If computed diff is not in voiceDiffs, return the computedDiff itself so we can lookup quotes via voiceDiff
+			return computedIndex > -1 ? computedIndex+1 : computedDiff;
 		},
 		
 		/*
+		ENTYPOINT: LIBRARY
 		Getting new filename for ship voices
 		Source: がか (gakada)
-		http://kancolle.wikia.com/wiki/Thread:388946#30
+		https://github.com/KC3Kai/KC3Kai/issues/1180#issuecomment-195654746
 		*/
 		getFilenameByVoiceLine :function(ship_id, lineNum){
-			return 100000 + 17 * (ship_id + 7) * (this.voiceKeys[lineNum] - this.voiceKeys[lineNum - 1]) % 99173;
+			return 100000 + 17 * (ship_id + 7) * (this.workingDiffs[lineNum - 1]) % 99173;
 		},
 		
 		// Subtitle quotes
 		quote :function(identifier, voiceNum){
+			console.debug("looking up", identifier, voiceNum);
 			if(identifier){
 				if(typeof this._quotes[identifier] != "undefined"){
 					if(typeof this._quotes[identifier][voiceNum] != "undefined"){
 						return this._quotes[identifier][voiceNum];
-					}else{
-						return false;
+					}else if(identifier!=="timing"){
+						// no quote for that voice line, check if it's a seasonal line
+						if(typeof this.specialDiffs[voiceNum] != "undefined"){
+							// check if default for seasonal line exists
+							console.debug("this.specialDiffs[voiceNum]", this.specialDiffs[voiceNum]);
+							if(typeof this._quotes[identifier][this.specialDiffs[voiceNum]] != "undefined"){
+								console.debug("using special default", this.specialDiffs[voiceNum]);
+								return this._quotes[identifier][this.specialDiffs[voiceNum]];
+							}else{
+								return false;
+							}
+						}else{
+							return false;
+						}
 					}
 				}else{
 					return false;
