@@ -21,11 +21,11 @@
 				})
 				.filter( function(x) {return x;});
 			if (content.length < this.expectedShipCount) {
-				console.warn("Unexpected entity number, "+
+				console.warn("Unexpected entity number,",
 							 "WhoCallsTheFleetShipDb.json might has been changed.");
 			} else if(content.length > this.expectedShipCount) {
-				console.info("WhoCallsTheFleetShipDb.json has been updated, " +
-							 "commit `expectedShipCount: " + content.length + 
+				console.info("WhoCallsTheFleetShipDb.json has been updated,",
+							 "commit `expectedShipCount: " + content.length +
 							 ",` instead of `" + this.expectedShipCount + "` plz.");
 				this.expectedShipCount = content.length;
 			}
@@ -37,24 +37,23 @@
 
 			this.db = db;
 		},
-		getStockEquipment: function(shipId) {
-			var ent = this.db["s"+shipId];
-			if (typeof(ent) !== 'undefined') {
-				return ent.equip;
-			} else {
-				return false;
-			}
+
+		getShipStat: function(shipId) {
+			var entry = this.db["s"+shipId];
+			return !!entry ? entry.stat : false;
 		},
+
+		getStockEquipment: function(shipId) {
+			var entry = this.db["s"+shipId];
+			return !!entry ? entry.equip : false;
+		},
+
 		getLoSInfo: function(shipId) {
-			var ent = this.db["s"+shipId];
-			if (typeof(ent) !== 'undefined') {
-				return {
-					base: ent.stat.los,
-					max: ent.stat.los_max 
-				};
-			} else {
-				return false;
-			}
+			var entry = this.db["s"+shipId];
+			return !!entry ? {
+					base: entry.stat.los,
+					max: entry.stat.los_max 
+				} : false;
 		}
 	};
 	
