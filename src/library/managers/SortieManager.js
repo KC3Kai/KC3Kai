@@ -313,7 +313,7 @@ Xxxxxxx
 		
 		endSortie :function(){
 			var
-				pvpData = JSON.parse(localStorage.statistics).pvp,
+				pvpData = JSON.parse(localStorage.statistics || "{}").pvp,
 				self = this,
 				cons = {};
 			this.fleetSent = 1;
