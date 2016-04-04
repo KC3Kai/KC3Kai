@@ -1,6 +1,7 @@
 {
-	"version" : "28.2",
-	"time" : "Sun, 27 March 2016 20:00:00 +0900",
+	"version" : "28.5",
+	"pr" : "https://github.com/KC3Kai/KC3Kai/pull/1256",
+	"time" : "Mon, 4 April 2016 13:00:00 +0900",
 	"maintenance_start": "Fri, 1 April 2016 11:00:00 +0900",
 	"maintenance_end": "Fri, 1 April 2016 17:00:00 +0900"
 }

@@ -312,18 +312,18 @@ Provides access to data on built-in JSON files
 		
 		// Subtitle quotes
 		quote :function(identifier, voiceNum){
-			console.log(identifier, voiceNum);
+			console.debug("looking up", identifier, voiceNum);
 			if(identifier){
 				if(typeof this._quotes[identifier] != "undefined"){
 					if(typeof this._quotes[identifier][voiceNum] != "undefined"){
 						return this._quotes[identifier][voiceNum];
-					}else{
+					}else if(identifier!=="timing"){
 						// no quote for that voice line, check if it's a seasonal line
 						if(typeof this.specialDiffs[voiceNum] != "undefined"){
 							// check if default for seasonal line exists
-							console.log("this.specialDiffs[voiceNum]", this.specialDiffs[voiceNum]);
+							console.debug("this.specialDiffs[voiceNum]", this.specialDiffs[voiceNum]);
 							if(typeof this._quotes[identifier][this.specialDiffs[voiceNum]] != "undefined"){
-								console.log("using special default", this.specialDiffs[voiceNum]);
+								console.debug("using special default", this.specialDiffs[voiceNum]);
 								return this._quotes[identifier][this.specialDiffs[voiceNum]];
 							}else{
 								return false;
