@@ -44,11 +44,16 @@ Listens to network history and triggers callback if game events happen
 		All callback to an event
 		------------------------------------------*/
 		addListener : function( eventName, callback ){
+			// Allow custom event names to be listened to
+			if (typeof this.eventTypes[eventName] == "undefined") {
+				this.eventTypes[eventName] = [];
+			}
+			
 			this.eventTypes[eventName].push(callback);
 		},
 
 		/* ADD GLOBAL LISTENER
-		All callback to all events
+		All callback to all existing events
 		------------------------------------------*/
 		addGlobalListener : function( callback ){
 			$.each(this.eventTypes, function( eventType, eventCallbacks ){
@@ -104,8 +109,6 @@ Listens to network history and triggers callback if game events happen
 				KC3Network.clearOverlays();
 
 				// Create new request and process it
-				// console.log(request);
-				// console.log(request.request);
 				var
 					thisRequest = new KC3Request( request ),
 					message = {
@@ -134,6 +137,8 @@ Listens to network history and triggers callback if game events happen
 
 						}
 					});
+					
+					// please put comments on what this does
 					request.getContent(function(x){
 						try {
 							var data = JSON.parse(/svdata=(.+)$/.exec(x)[1]);
@@ -148,6 +153,17 @@ Listens to network history and triggers callback if game events happen
 							(new RMsg("service", "gameScreenChg", message)).execute();
 						}
 					});
+					
+					// Trigger events for API calls
+					try {
+						KC3Network.trigger(thisRequest.call, {
+							params: thisRequest.params,
+							response: thisRequest.response,
+							headers: thisRequest.headers
+						});
+					} catch (e) {
+						console.log("error in API call tigger", thisRequest.call, e.message, e.stack);
+					}
 				}else{
 					message.api_status = false;
 					message.api_result = request.response.statusText;

@@ -517,44 +517,150 @@
     "201": {
         "code": "Bd1",
         "unlock": [ 216, 211, 212 ],
-        "tracking": [ [0,1] ]
+        "tracking": [
+            {
+                "map": null,
+                "need_boss": false,
+                "need_flag": false,
+                "count": 1,
+                "min_rank": "B",
+                "sink_type": false,
+            }
+        ]
     },
     "216": {
         "code": "Bd2",
         "unlock": [ 172, 210, 218, 214, 213, 311, 810 ],
-        "tracking": [ [0,1] ]
+        "tracking": [
+            {
+                "map": false,
+                "need_boss": false,
+                "need_flag": true,
+                "count": 1,
+                "min_rank": false,
+                "sink_type": false,
+            }
+        ]
     },
     "210": {
         "code": "Bd3",
-        "tracking": [ [0,10] ]
+        "tracking": [
+            {
+                "map": false,
+                "need_boss": false,
+                "need_flag": false,
+                "count": 10,
+                "min_rank": "B",
+                "sink_type": false,
+            }
+        ]
     },
     "211": {
         "code": "Bd4",
-        "tracking": [ [0,3] ]
+        "tracking": [
+            {
+                "map": false,
+                "need_boss": false,
+                "need_flag": false,
+                "count": 3,
+                "min_rank": false,
+                "sink_type": ["CV", "CVL"]
+            }
+        ]
     },
     "218": {
         "code": "Bd5",
         "unlock": [ 226, 220 ],
-        "tracking": [ [0,3] ]
+        "tracking": [
+            {
+                "map": false,
+                "need_boss": false,
+                "need_flag": false,
+                "count": 3,
+                "min_rank": false,
+                "sink_type": ["AP"]
+            }
+        ]
     },
     "212": {
         "code": "Bd6",
-        "tracking": [ [0,5] ]
+        "tracking": [
+            {
+                "map": false,
+                "need_boss": false,
+                "need_flag": false,
+                "count": 5,
+                "min_rank": false,
+                "sink_type": ["AP"]
+            }
+        ]
     },
     "226": {
         "code": "Bd7",
         "unlock": [ 230 ],
-        "tracking": [ [0,5] ]
+        "tracking": [
+            {
+                "map": [ [2,1], [2,2], [2,3], [2,4], [2,5], [2,6] ],
+                "need_boss": true,
+                "need_flag": false,
+                "count": 5,
+                "min_rank": "B",
+                "sink_type": false
+            }
+        ]
     },
     "230": {
         "code": "Bd8",
-        "tracking": [ [0,6] ]
+        "tracking": [
+            {
+                "map": false,
+                "need_boss": false,
+                "need_flag": false,
+                "count": 6,
+                "min_rank": false,
+                "sink_type": ["SS", "SSV"]
+            }
+        ]
     },
+    
     
     "214": {
         "code": "Bw1",
         "unlock": [ 221 ],
-        "tracking": [ [0,36], [0,24], [0,12], [0,6] ]
+        "tracking": [
+            {
+                "map": false,
+                "need_boss": false,
+                "need_flag": false,
+                "count": 36,
+                "min_rank": false,
+                "sink_type": false
+            },
+            {
+                "map": false,
+                "need_boss": true,
+                "need_flag": false,
+                "count": 24,
+                "min_rank": false,
+                "sink_type": false
+            },
+            {
+                "map": false,
+                "need_boss": true,
+                "need_flag": false,
+                "count": 12,
+                "min_rank": "B",
+                "sink_type": false
+            },
+            {
+                "map": false,
+                "need_boss": false,
+                "need_flag": false,
+                "count": 6,
+                "min_rank": "S",
+                "sink_type": false
+            }
+        ]
     },
     "220": {
         "code": "Bw2",
@@ -887,6 +993,6 @@
         "tracking": [ [0,15] ]
     },
     "704": {
-        "code": "G4",
+        "code": "G4"
     }
 }
