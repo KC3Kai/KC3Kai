@@ -211,7 +211,7 @@
 			var shipFile = KC3Master.graph(ship_id).api_filename;
 			// Changed to an Array from 2016-04-01
 			var shipVersions = KC3Master.graph(ship_id).api_version;
-			console.log("shipVersions", shipVersions);
+			console.debug("shipgraph.api_version", shipVersions);
 			this.currentGraph = shipFile;
 			this.currentCardVersion = shipVersions[0];
 			

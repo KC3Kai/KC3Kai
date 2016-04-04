@@ -195,9 +195,9 @@
 			var sCtr, cElm;
 
 			for(sCtr in KC3Meta._stype){
-				if(KC3Meta._stype[sCtr]){
-					cElm = $(".tab_ships .factory .ship_filter_type").clone()
-						.appendTo(".tab_ships .filters .ship_types");
+				// stype 1, 15 not used by shipgirl
+				if(KC3Meta._stype[sCtr] && ["1", "15"].indexOf(sCtr) < 0){
+					cElm = $(".tab_ships .factory .ship_filter_type").clone().appendTo(".tab_ships .filters .ship_types");
 					cElm.data("id", sCtr);
 					$(".filter_name", cElm).text(KC3Meta.stype(sCtr));
 				}
