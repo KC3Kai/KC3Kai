@@ -43,6 +43,18 @@ KC3改 Ship Box for Natsuiro theme
 			$(".ex_item", this.element).hide();
 		}
 		
+		// MVP icon
+		if(this.shipData.mvp){
+			$(".mvp_icon", this.element).show();
+			// Reserved value for predicted MVP
+			if(typeof this.shipData.mvp === "string"){
+				$(".mvp_icon img", this.element).css("opacity", 0.5);
+			}
+		} else {
+			$(".mvp_icon", this.element).hide();
+			$(".mvp_icon img", this.element).css("opacity", "");
+		}
+		
 		return this;
 	};
 	
@@ -197,9 +209,9 @@ KC3改 Ship Box for Natsuiro theme
 			$(".ship_hp_prediction", this.element).css("width", (this.hpBarLength*afterHpPercent)+"px");
 			
 			// HP-based UI and colors
-			if(afterHpPercent <= 0.00 && ConfigManager.info_btstamp) { // Sunk or Knocked out
+			if(ConfigManager.info_btstamp && (afterHpPercent <= 0.00 || (KC3SortieManager.isPvP() && this.shipData.afterHp[0] <= 1))) { // Sunk or Knocked out
 				$(this.element).addClass("ship-stamp");
-				$(this.element).attr("title", KC3Meta.term( KC3SortieManager.onPvP ? "PredictionStampPvP" : "PredictionStampSortie") );
+				$(this.element).attr("title", KC3Meta.term( KC3SortieManager.isPvP() ? "PredictionStampPvP" : "PredictionStampSortie") );
 			} else if(afterHpPercent <= 0.25){
 				$(".ship_hp_prediction", this.element).css("background", "#FF0000");
 			} else if(afterHpPercent <= 0.50){

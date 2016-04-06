@@ -1447,6 +1447,7 @@
 			
 			updateHQEXPGained($(".admiral_lvnext"),KC3SortieManager.hqExpGained);
 			
+			// Show real battle rank
 			$(".module.activity .battle_rating img").attr("src",
 				"../../../../assets/img/client/ratings/"+thisNode.rating+".png")
 				.css("opacity", 1);
@@ -1480,6 +1481,8 @@
 					true /* does not matter flagship status */
 				);
 			}
+			
+			this.Fleet();
 			
 			// Show experience calculation
 			if(selectedFleet<5){
@@ -1765,12 +1768,16 @@
 		
 		PvPEnd: function(data){
 			KC3SortieManager.onPvP = false;
+			var thisPvP = KC3SortieManager.currentNode();
 			
 			$(".module.activity .battle_rating img")
-				.attr("src", "../../../../assets/img/client/ratings/"+data.result.api_win_rank+".png")
+				.attr("src", "../../../../assets/img/client/ratings/"+thisPvP.rating+".png")
 				.css("opacity", 1);
-			updateHQEXPGained($(".admiral_lvnext"),data.result.api_get_exp);
+			updateHQEXPGained($(".admiral_lvnext"), KC3SortieManager.hqExpGained);
+			
+			this.Fleet();
 		},
+		
 		ExpeditionSelection: function (data) {
 			if (! ConfigManager.info_auto_exped_tab)
 				return;

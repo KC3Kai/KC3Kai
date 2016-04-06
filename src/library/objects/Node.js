@@ -782,6 +782,21 @@ Used by SortieManager
 			this.saveBattleOnDB(resultData);
 		}
 	};
+
+	KC3Node.prototype.resultsPvP = function( resultData ){
+		try {
+			this.rating = resultData.api_win_rank;
+			this.nodalXP = resultData.api_get_base_exp;
+			if(this.allyNoDamage && this.rating === "S")
+				this.rating = "SS";
+			this.mvps = [resultData.api_mvp || 0];
+		} catch (e) {
+			console.error("Captured an exception ==>", e,"\n==> proceeds safely");
+		} finally {
+			// Reserved for future PvP history storage
+			//this.saveBattleOnDB(resultData);
+		}
+	};
 	
 	KC3Node.prototype.isBoss = function(){
 		//console.log("Meet Boss: " + ((this.eventKind === 1) && (this.eventId === 5)));
