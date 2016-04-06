@@ -198,8 +198,8 @@ KC3改 Ship Box for Natsuiro theme
 			
 			// HP-based UI and colors
 			if(afterHpPercent <= 0.00 && ConfigManager.info_btstamp) { // Sunk or Knocked out
-				this.element.addClass("ship-stamp");
-				this.element.attr("title", KC3Meta.term("PredictionStampPvP"));
+				$(this.element).addClass("ship-stamp");
+				$(this.element).attr("title", KC3Meta.term( KC3SortieManager.onPvP ? "PredictionStampPvP" : "PredictionStampSortie") );
 			} else if(afterHpPercent <= 0.25){
 				$(".ship_hp_prediction", this.element).css("background", "#FF0000");
 			} else if(afterHpPercent <= 0.50){
