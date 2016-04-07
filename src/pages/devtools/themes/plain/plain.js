@@ -1315,9 +1315,9 @@
 			}
 			
 			// Show predicted battle rank
-			if(thisNode.predictedRank){
+			if(thisNode.predictedRank || thisNode.predictedRankNight){
 				$(".module.activity .battle_rating img").attr("src",
-				"../../../../assets/img/client/ratings/"+thisNode.predictedRank+".png")
+				"../../../../assets/img/client/ratings/"+(thisNode.predictedRank||thisNode.predictedRankNight)+".png")
 				.css("opacity", 0.5);
 			}
 			
@@ -1674,11 +1674,12 @@
 		
 		PvPEnd: function(data){
 			KC3SortieManager.onPvP = false;
+			var thisPvP = KC3SortieManager.currentNode();
 			
 			$(".module.activity .battle_rating img")
-				.attr("src", "../../../../assets/img/client/ratings/"+data.result.api_win_rank+".png")
+				.attr("src", "../../../../assets/img/client/ratings/"+thisPvP.rating+".png")
 				.css("opacity", 1);
-			updateHQEXPGained($(".admiral_lvnext"),data.result.api_get_exp);
+			updateHQEXPGained($(".admiral_lvnext"), KC3SortieManager.hqExpGained);
 		},
 		ExpeditionSelection: function (data) {
 			if (! ConfigManager.info_auto_exped_tab)

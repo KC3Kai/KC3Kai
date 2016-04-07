@@ -276,6 +276,7 @@ Used by SortieManager
 			},
 			attackPhase = battleData.api_kouku.api_stage2;
 		this.fcontact = (planePhase.api_touch_plane[0] > -1)? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
+		this.contactplane = planePhase.api_touch_plane[0];
 		this.econtact = (planePhase.api_touch_plane[1] > -1)? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
 		
 		this.airbattle = KC3Meta.airbattle( planePhase.api_disp_seiku );
@@ -489,9 +490,10 @@ Used by SortieManager
 		
 		this.engagement = this.engagement || KC3Meta.engagement( nightData.api_formation[2] );
 		this.fcontact = (nightData.api_touch_plane[0] > -1)? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
+		this.contactplane = nightData.api_touch_plane[0];
 		this.econtact = (nightData.api_touch_plane[1] > -1)? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
-		this.flare = nightData.api_flare_pos[0]; //??
-		this.searchlight = nightData.api_flare_pos[1]; //??
+		this.flare = nightData.api_flare_pos[0]; // Star shell user pos
+		this.searchlight = nightData.api_flare_pos[1]; // Search light user pos
 		
 		var PS = window.PS;
 		var DA = PS["KanColle.DamageAnalysis"];

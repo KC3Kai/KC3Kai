@@ -1383,9 +1383,9 @@
 			}
 			
 			// Show predicted battle rank
-			if(thisNode.predictedRank){
+			if(thisNode.predictedRank || thisNode.predictedRankNight){
 				$(".module.activity .battle_rating img").attr("src",
-				"../../../../assets/img/client/ratings/"+thisNode.predictedRank+".png")
+				"../../../../assets/img/client/ratings/"+(thisNode.predictedRank||thisNode.predictedRankNight)+".png")
 				.css("opacity", 0.5);
 			}
 			
