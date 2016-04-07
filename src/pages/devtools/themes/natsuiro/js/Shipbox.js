@@ -23,7 +23,25 @@ KC3改 Ship Box for Natsuiro theme
 	Short ship box for combined fleets
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.commonElements = function( rosterId ){
-		$(".ship_img img", this.element).attr("src", KC3Meta.shipIcon(this.shipData.masterId));
+		var leftPad = function(num){return ("   "+num).slice(-3);};
+		var tooltip = this.shipData.master().api_yomi + String.fromCharCode(13);
+		tooltip += "{0}{1}\t".format(KC3Meta.term("ShipArmor"), leftPad(this.shipData.ar[0]));
+		tooltip += "{0}{1}\n".format(KC3Meta.term("ShipFire"), leftPad(this.shipData.fp[0]));
+		tooltip += "{0}{1}\t".format(KC3Meta.term("ShipEvasion"), leftPad(this.shipData.ev[0]));
+		tooltip += "{0}{1}\n".format(KC3Meta.term("ShipTorpedo"), leftPad(this.shipData.tp[0]));
+		tooltip += "{0}{1}\t".format(KC3Meta.term("ShipAsw"), leftPad(this.shipData.as[0]));
+		tooltip += "{0}{1}\n".format(KC3Meta.term("ShipAntiAir"), leftPad(this.shipData.aa[0]));
+		tooltip += "{0}{1}\t".format(KC3Meta.term("ShipLos"), leftPad(this.shipData.ls[0]));
+		tooltip += "{0}{1}".format(KC3Meta.term("ShipLuck"), leftPad(this.shipData.lk[0]));
+		$(".ship_img img", this.element).attr("src", KC3Meta.shipIcon(this.shipData.masterId))
+			.attr("title", tooltip);
+		/*
+		$(".ship_img", this.element).addClass("hover").data("sid", this.shipData.masterId);
+		$(".ship_img", this.element).click(function(e){
+			var tab = "#mstship-" + $(this).data("sid");
+			var sr = window.open("/pages/strategy/strategy.html" + tab, "kc3kai_strategy");
+		});
+		*/
 		$(".ship_name", this.element).text( this.shipData.name() );
 		$(".ship_type", this.element).text( this.shipData.stype() );
 		
