@@ -276,7 +276,6 @@ Used by SortieManager
 			},
 			attackPhase = battleData.api_kouku.api_stage2;
 		this.fcontact = (planePhase.api_touch_plane[0] > -1)? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
-		this.contactplane = planePhase.api_touch_plane[0];
 		this.econtact = (planePhase.api_touch_plane[1] > -1)? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
 		
 		this.airbattle = KC3Meta.airbattle( planePhase.api_disp_seiku );
@@ -363,7 +362,7 @@ Used by SortieManager
 			
 			if(ConfigManager.info_btrank){
 				this.predictedRank = KC3Node.predictRank( beginHPs, endHPs );
-				console.info("Rank Predict:", this.predictedRank);
+				// console.info("Rank Predict:", this.predictedRank);
 			}
 		} else {
 			if (PlayerManager.combinedFleet === 1 || PlayerManager.combinedFleet === 3) {
@@ -490,10 +489,9 @@ Used by SortieManager
 		
 		this.engagement = this.engagement || KC3Meta.engagement( nightData.api_formation[2] );
 		this.fcontact = (nightData.api_touch_plane[0] > -1)? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
-		this.contactplane = nightData.api_touch_plane[0];
 		this.econtact = (nightData.api_touch_plane[1] > -1)? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
-		this.flare = nightData.api_flare_pos[0]; // Star shell user pos
-		this.searchlight = nightData.api_flare_pos[1]; // Search light user pos
+		this.flare = nightData.api_flare_pos[0]; //??
+		this.searchlight = nightData.api_flare_pos[1]; //??
 		
 		var PS = window.PS;
 		var DA = PS["KanColle.DamageAnalysis"];
@@ -539,7 +537,7 @@ Used by SortieManager
 		}
 		if(ConfigManager.info_btrank){
 			this.predictedRankNight = KC3Node.predictRank( beginHPs, endHPs );
-			console.info("Rank Predict (Night):", this.predictedRankNight);
+			// console.info("Rank Predict (Night):", this.predictedRankNight);
 		}
 		if(this.gaugeDamage > -1)
 			this.gaugeDamage = this.gaugeDamage + Math.min(nightData.api_nowhps[7],nightData.api_nowhps[7] - this.enemyHP[0].currentHp);

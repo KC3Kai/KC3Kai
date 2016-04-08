@@ -1268,12 +1268,11 @@
 				if(eshipId > -1){
 					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.abyssIcon(eshipId));
 					
-					var eMasterShip = KC3Master.ship(eshipId);
-					var tooltip = "{0}: {1}{2}".format(eshipId, eMasterShip.api_name, eMasterShip.api_yomi.replace("-","")) + String.fromCharCode(13);
-					tooltip += KC3Meta.term("ShipFire") + eParam[0] + String.fromCharCode(13);
-					tooltip += KC3Meta.term("ShipTorpedo") + eParam[1] + String.fromCharCode(13);
-					tooltip += KC3Meta.term("ShipAntiAir") + eParam[2] + String.fromCharCode(13);
-					tooltip += KC3Meta.term("ShipArmor") + eParam[3];
+					var tooltip = "{0}: {1}\n".format(eshipId, KC3Meta.abyssShipName(eshipId));
+					tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipFire"), eParam[0]);
+					tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipTorpedo"), eParam[1]);
+					tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipAntiAir"), eParam[2]);
+					tooltip += "{0}: {1}".format(KC3Meta.term("ShipArmor"), eParam[3]);
 					
 					var eSlot = thisNode.eSlot[index];
 					if (!!eSlot && eSlot.length > 0) {
@@ -1482,8 +1481,6 @@
 				);
 			}
 			
-			this.Fleet();
-			
 			// Show experience calculation
 			if(selectedFleet<5){
 				var CurrentFleet = PlayerManager.fleets[selectedFleet-1];
@@ -1654,11 +1651,11 @@
 				if(eshipId > -1){
 					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.shipIcon(eshipId));
 					var masterShip = KC3Master.ship(eshipId);
-					var tooltip = "{0}: {1}".format(eshipId, KC3Meta.shipName(masterShip.api_name)) + String.fromCharCode(13);
-					tooltip += KC3Meta.term("ShipFire") + eParam[0] + String.fromCharCode(13);
-					tooltip += KC3Meta.term("ShipTorpedo") + eParam[1] + String.fromCharCode(13);
-					tooltip += KC3Meta.term("ShipAntiAir") + eParam[2] + String.fromCharCode(13);
-					tooltip += KC3Meta.term("ShipArmor") + eParam[3];
+					var tooltip = "{0}: {1}\n".format(eshipId, KC3Meta.shipName(masterShip.api_name));
+					tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipFire"), eParam[0]);
+					tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipTorpedo"), eParam[1]);
+					tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipAntiAir"), eParam[2]);
+					tooltip += "{0}: {1}".format(KC3Meta.term("ShipArmor"), eParam[3]);
 					
 					var eSlot = thisPvP.eSlot[index];
 					if (!!eSlot && eSlot.length > 0) {
@@ -1774,8 +1771,6 @@
 				.attr("src", "../../../../assets/img/client/ratings/"+thisPvP.rating+".png")
 				.css("opacity", 1);
 			updateHQEXPGained($(".admiral_lvnext"), KC3SortieManager.hqExpGained);
-			
-			this.Fleet();
 		},
 		
 		ExpeditionSelection: function (data) {

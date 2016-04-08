@@ -24,15 +24,15 @@ KC3改 Ship Box for Natsuiro theme
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.commonElements = function( rosterId ){
 		var leftPad = function(num){return ("   "+num).slice(-3);};
-		var tooltip = this.shipData.master().api_yomi + String.fromCharCode(13);
-		tooltip += "{0}{1}\t".format(KC3Meta.term("ShipArmor"), leftPad(this.shipData.ar[0]));
-		tooltip += "{0}{1}\n".format(KC3Meta.term("ShipFire"), leftPad(this.shipData.fp[0]));
-		tooltip += "{0}{1}\t".format(KC3Meta.term("ShipEvasion"), leftPad(this.shipData.ev[0]));
-		tooltip += "{0}{1}\n".format(KC3Meta.term("ShipTorpedo"), leftPad(this.shipData.tp[0]));
-		tooltip += "{0}{1}\t".format(KC3Meta.term("ShipAsw"), leftPad(this.shipData.as[0]));
-		tooltip += "{0}{1}\n".format(KC3Meta.term("ShipAntiAir"), leftPad(this.shipData.aa[0]));
-		tooltip += "{0}{1}\t".format(KC3Meta.term("ShipLos"), leftPad(this.shipData.ls[0]));
-		tooltip += "{0}{1}".format(KC3Meta.term("ShipLuck"), leftPad(this.shipData.lk[0]));
+		var tooltip = "{0}: {1}\n".format(this.shipData.masterId, this.shipData.master().api_yomi);
+		tooltip += "{0}: {1} \t".format(KC3Meta.term("ShipArmor"), leftPad(this.shipData.ar[0]));
+		tooltip += "{0}: {1} \n".format(KC3Meta.term("ShipFire"), leftPad(this.shipData.fp[0]));
+		tooltip += "{0}: {1} \t".format(KC3Meta.term("ShipEvasion"), leftPad(this.shipData.ev[0]));
+		tooltip += "{0}: {1} \n".format(KC3Meta.term("ShipTorpedo"), leftPad(this.shipData.tp[0]));
+		tooltip += "{0}: {1} \t".format(KC3Meta.term("ShipAsw"), leftPad(this.shipData.as[0]));
+		tooltip += "{0}: {1} \n".format(KC3Meta.term("ShipAntiAir"), leftPad(this.shipData.aa[0]));
+		tooltip += "{0}: {1} \t".format(KC3Meta.term("ShipLos"), leftPad(this.shipData.ls[0]));
+		tooltip += "{0}: {1} ".format(KC3Meta.term("ShipLuck"), leftPad(this.shipData.lk[0]));
 		$(".ship_img img", this.element).attr("src", KC3Meta.shipIcon(this.shipData.masterId))
 			.attr("title", tooltip);
 		/*
