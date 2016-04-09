@@ -20,7 +20,8 @@ Retreives when needed to apply on components
 				timerDisplayType	: 1,
 				marryLevelFormat	: 0,
 				checkLiveQuests		: true,
-				
+				devOnlyPages		: false,
+
 				DBSubmission_enabled: 0,
 				DBSubmission_key : '',
 

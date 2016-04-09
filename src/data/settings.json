@@ -66,6 +66,11 @@
 				"id": "checkLiveQuests",
 				"name": "SettingsCheckLiveQuests",
 				"type": "check"
+			},
+			{
+				"id": "devOnlyPages",
+				"name": "SettingsDevOnlyPages",
+				"type": "check"
 			}
 		]
 	},
