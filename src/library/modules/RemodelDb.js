@@ -212,6 +212,7 @@
                 curInd > 0, 
                 "previousForm: querying on original form?" );
             return group[curInd-1];
+        },
         dumpRemodelGroups: function() {
             return JSON.stringify( this._db.remodelGroups );
         }
