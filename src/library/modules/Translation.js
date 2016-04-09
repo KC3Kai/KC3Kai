@@ -47,11 +47,38 @@
 			// Apply HTML language code
 			$("html").attr("lang", ConfigManager.language);
 		},
+
+		/*
+		  Recursively changing any non-object value "v" into "{val: v, tag: <tag>}".
+		 */
+		addTags: function(obj, tag) {
+			function track(obj) {
+				if (typeof obj === "object") {
+					$.each( obj, function(k,v) {
+						// should work for both arrays and objects
+						obj[k] = track(v);
+					});
+				} else {
+					return {val: obj, tag: tag};
+				}
+				return obj;
+			}
+
+			console.assert(
+				typeof obj === "object",
+				"addTags should only be applied on objects");
+			return track(obj);
+        },
 		
 		getJSONWithOptions: function(repo, filename, extendEnglish,
-									 language, info_force_ship_lang, info_eng_stype) {
+									 language, info_force_ship_lang, info_eng_stype,
+									 track_source) {
+            var self = this;
 			// Check if desired to extend english files
 			if(typeof extendEnglish=="undefined"){ extendEnglish=false; }
+
+			if (typeof track_source==="undefined") { track_source = false; }
+			if (typeof track_source==="undefined") { track_depth = false; }
 			
 			// Japanese special case where ships and items sources are already in JP
 			if(
@@ -70,7 +97,7 @@
 			if (filename === "stype" && info_eng_stype){
 				language = "en";
 			}
-			
+
 			var translationBase = {}, enJSON;
 			if(extendEnglish && language!="en"){
 				// Load english file
@@ -78,10 +105,15 @@
 					url : repo+'lang/data/en/' + filename + '.json',
 					async: false
 				}).responseText);
+
+				if (track_source) {
+					self.addTags(enJSON, "en");
+				}
 				
 				// Make is as the translation base
 				translationBase = enJSON;
 			}
+
 
 			// if we can't fetch this file, the English
 			// version will be used instead
@@ -91,6 +123,10 @@
 					url : repo+'lang/data/' +language+ '/' + filename + '.json',
 					async: false
 				}).responseText);
+
+				if (track_source) {
+					self.addTags(translation, language);
+				}
 			} catch (e) {
 				if (e instanceof SyntaxError && extendEnglish && language!="en"){
 					console.warn(e.stack);
@@ -100,7 +136,7 @@
 				}
 			}
 			return $.extend(true, translationBase, translation);
-        },
+		},
 
 		/* GET JSON
 		Used by KC3Meta.js to load json files
