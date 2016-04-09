@@ -149,7 +149,7 @@
 				callback.apply(self,[translation]);
 			} );
 
-			$("#select-json-file").val("servers").change();
+			$("#select-json-file").val("terms").change();
 		}
 	};
 })();
