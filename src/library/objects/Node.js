@@ -275,8 +275,10 @@ Used by SortieManager
 				api_e_lostcount:0,
 			},
 			attackPhase = battleData.api_kouku.api_stage2;
-		this.fcontact = (planePhase.api_touch_plane[0] > -1)? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
-		this.econtact = (planePhase.api_touch_plane[1] > -1)? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
+		this.fcontactId = planePhase.api_touch_plane[0];
+		this.fcontact = this.fcontactId > 0 ? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
+		this.econtactId = planePhase.api_touch_plane[1];
+		this.econtact = this.econtactId > 0 ? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
 		
 		this.airbattle = KC3Meta.airbattle( planePhase.api_disp_seiku );
 		
@@ -488,10 +490,12 @@ Used by SortieManager
 		}
 		
 		this.engagement = this.engagement || KC3Meta.engagement( nightData.api_formation[2] );
-		this.fcontact = (nightData.api_touch_plane[0] > -1)? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
-		this.econtact = (nightData.api_touch_plane[1] > -1)? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
-		this.flare = nightData.api_flare_pos[0]; //??
-		this.searchlight = nightData.api_flare_pos[1]; //??
+		this.fcontactId = nightData.api_touch_plane[0]; // masterId of slotitem, starts from 1
+		this.fcontact = this.fcontactId > 0 ? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
+		this.econtactId = nightData.api_touch_plane[1];
+		this.econtact = this.econtactId > 0 ? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
+		this.flare = nightData.api_flare_pos[0]; // Star shell user pos
+		this.searchlight = nightData.api_flare_pos[1]; // Search light user pos
 		
 		var PS = window.PS;
 		var DA = PS["KanColle.DamageAnalysis"];
