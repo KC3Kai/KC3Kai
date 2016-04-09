@@ -48,15 +48,11 @@
 			$("html").attr("lang", ConfigManager.language);
 		},
 		
-		
-		/* GET JSON
-		Used by KC3Meta.js to load json files
-		-----------------------------------------*/
-		getJSON :function(repo, filename, extendEnglish){
+		getJSONWithOptions: function(repo, filename, extendEnglish,
+									 language, info_force_ship_lang, info_eng_stype) {
 			// Check if desired to extend english files
 			if(typeof extendEnglish=="undefined"){ extendEnglish=false; }
 			
-			var language = ConfigManager.language;
 			// Japanese special case where ships and items sources are already in JP
 			if(
 				(["jp", "tcn"].indexOf(language) > -1)
@@ -65,13 +61,13 @@
 				extendEnglish = false;
 			}
 			// make ships.json and items.json an option to be always in specified one
-			if (!!ConfigManager.info_force_ship_lang
+			if (!!info_force_ship_lang
 				&& (filename==="ships" || filename==="items")){
 				extendEnglish = false;
-				language = ConfigManager.info_force_ship_lang;
+				language = info_force_ship_lang;
 			}
 			// make "stype.json" an option:
-			if (filename === "stype" && ConfigManager.info_eng_stype){
+			if (filename === "stype" && info_eng_stype){
 				language = "en";
 			}
 			
@@ -104,6 +100,19 @@
 				}
 			}
 			return $.extend(true, translationBase, translation);
+        },
+
+		/* GET JSON
+		Used by KC3Meta.js to load json files
+		-----------------------------------------*/
+		getJSON :function(repo, filename, extendEnglish){
+			return this.getJSONWithOptions(
+				repo,
+				filename,
+				extendEnglish,
+				ConfigManager.language,
+				ConfigManager.info_force_ship_lang,
+				ConfigManager.info_eng_stype);
 		}
 		
 	};
