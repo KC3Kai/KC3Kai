@@ -166,7 +166,11 @@
 					var subId = descToId[subKey];
 					if (subId) {
 						// force overwriting regardless of original content
-						v[subId] = v[subKey];
+
+						// empty content not replaced
+						if (v[subKey] && v[subKey].length) {
+							v[subId] = v[subKey];
+						}
 					} else {
 						if (! isIntStr(subKey) ) {
 							// neither a descriptive key nor a normal number
@@ -180,9 +184,7 @@
 			return quotes;
 		},
 
-		// get quotes without Descriptive Key Transformation
-		// internal use only, please use "getQuotes"
-		getQuotesWithoutDKT: function(repo) {
+		getQuotes: function(repo) {
 			// we always use English version quotes as the base,
 			// assuming all quotes are complete so there
 			// is no need to extend the table by considering pre-remodel ship quotes.
@@ -223,6 +225,7 @@
 				}
 			}
 
+			this.transformQuotes(langJSON);
 			// extend quotes by reusing ship's pre-remodels
 			// 1st pass: extend langJSON by considering pre-models
             if (typeof RemodelDb !== "undefined" && typeof RemodelDb._db !== "undefined") {
@@ -256,13 +259,7 @@
 			langJSON = $.extend(true, {}, enJSON, langJSON);
 
 			return langJSON;
-		},
-
-		getQuotes: function(repo) {
-			return this.transformQuotes( 
-				this.getQuotesWithoutDKT(repo));
 		}
-		
 	};
 	
 })();
