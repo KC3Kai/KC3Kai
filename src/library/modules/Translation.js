@@ -225,9 +225,11 @@
 				}
 			}
 
+            // 1st pass: interpret descriptive keys as keys
 			this.transformQuotes(langJSON);
+
 			// extend quotes by reusing ship's pre-remodels
-			// 1st pass: extend langJSON by considering pre-models
+			// 2nd pass: extend langJSON by considering pre-models
             if (typeof RemodelDb !== "undefined" && typeof RemodelDb._db !== "undefined") {
 			    $.each(RemodelDb._db.remodelGroups, function(orgShipIdStr,groupInfo) {
 				    // a group of ship ids that consider as "same ship"
@@ -255,7 +257,7 @@
                              "please make sureit's been initialized properly");
             }
 
-			// 2nd pass: extend langJSON using enJSON to fill in any missing parts
+			// 3rd pass: extend langJSON using enJSON to fill in any missing parts
 			langJSON = $.extend(true, {}, enJSON, langJSON);
 
 			return langJSON;
