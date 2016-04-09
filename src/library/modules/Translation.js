@@ -109,8 +109,80 @@
 			}
 			return $.extend(true, translationBase, translation);
 		},
+ 		
 
-		getQuotes: function(repo) {
+		// insert quote id as key if descriptive key is used.
+		transformQuotes: function(quotes) {
+			function isIntStr(s) {
+				return parseInt(s,10).toString() === s;
+			}
+
+			var descToId = {
+				"Intro" : 1,
+				"Library" : 25,
+				"Poke(1)" : 2,
+				"Poke(2)" : 3,
+				"Poke(3)" : 4,
+				"Married" : 28,
+				"Wedding" : 24,
+				"Ranking" : 8,
+				"Join" : 13,
+				"Equip(1)" : 9,
+				"Equip(2)" : 10,
+				"Equip(3)" : 26,
+				"Supply" : 27,
+				"Docking(1)" : 11,
+				"Docking(2)" : 12,
+				"Construction" : 5,
+				"Return" : 7,
+				"Sortie" : 14,
+				"Battle" : 15,
+				"Attack" : 16,
+				"Yasen(1)" : 18,
+				"Yasen(2)" : 17,
+				"MVP" : 23,
+				"Damaged(1)" : 19,
+				"Damaged(2)" : 20,
+				"Damaged(3)" : 21,
+				"Sunk" : 22,
+				"Idle" : 29,
+				"Repair" : 6,
+
+				"H0000":30, "H0100":31, "H0200":32, "H0300":33,
+				"H0400":34, "H0500":35, "H0600":36, "H0700":37,
+				"H0800":38, "H0900":39, "H1000":40, "H1100":41,
+				"H1200":42, "H1300":43, "H1400":44, "H1500":45,
+				"H1600":46, "H1700":47, "H1800":48, "H1900":49,
+				"H2000":50, "H2100":51, "H2200":52, "H2300":53
+			};
+			$.each( quotes, function(k,v) {
+				if (! isIntStr(k) )
+					return;
+				// transforming "v" object
+
+				// get an immutable list of keys for further operation
+				var subKeys = Object.keys(v);
+				$.each(subKeys, function(i,subKey) {
+					var subId = descToId[subKey];
+					if (subId) {
+						// force overwriting regardless of original content
+						v[subId] = v[subKey];
+					} else {
+						if (! isIntStr(subKey) ) {
+							// neither a descriptive key nor a normal number
+							console.warn( "Unrecognized subtitle key: " + subKey
+										  + " (masterId=" + k + ")");
+						}
+					}
+				});
+				
+			});
+			return quotes;
+		},
+
+		// get quotes without Descriptive Key Transformation
+		// internal use only, please use "getQuotes"
+		getQuotesWithoutDKT: function(repo) {
 			// we always use English version quotes as the base,
 			// assuming all quotes are complete so there
 			// is no need to extend the table by considering pre-remodel ship quotes.
@@ -184,6 +256,11 @@
 			langJSON = $.extend(true, {}, enJSON, langJSON);
 
 			return langJSON;
+		},
+
+		getQuotes: function(repo) {
+			return this.transformQuotes( 
+				this.getQuotesWithoutDKT(repo));
 		}
 		
 	};
