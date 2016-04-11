@@ -104,26 +104,32 @@
 				"options" : {}
 			},
 			{
-				"id" : "info_fleetstat",
-				"name" : "SettingsFleetStatus",
-				"type" : "check",
-				"options" : {}
-			},
-			{
-				"id" : "info_auto_exped_tab",
-				"name" : "SettingsAutoExpedTab",
-				"type" : "check",
-				"options" : {}
-			},
-			{
-				"id" : "info_blink_gauge",
-				"name" : "SettingsBlinkGauge",
+				"id" : "info_btrank",
+				"name" : "SettingsBattleRank",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "info_btstamp",
 				"name" : "SettingsBattleStamp",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_fleetstat",
+				"name" : "SettingsFleetStatus",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_delta",
+				"name" : "SettingsHQDelta",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_blink_gauge",
+				"name" : "SettingsBlinkGauge",
 				"type" : "check",
 				"options" : {}
 			},
@@ -135,8 +141,8 @@
 				"options" : {}
 			},
 			{
-				"id" : "info_delta",
-				"name" : "SettingsHQDelta",
+				"id" : "info_auto_exped_tab",
+				"name" : "SettingsAutoExpedTab",
 				"type" : "check",
 				"options" : {}
 			},

@@ -18,8 +18,7 @@ KC3改 Ship Box for Natsuiro theme
 	Short ship box for combined fleets
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.commonElements = function( rosterId ){
-		$(".ship_img img", this.element).attr("src", KC3Meta.shipIcon(this.shipData.masterId)).attr("title",
-		JSON.stringify(this.shipData.pendingConsumption));
+		$(".ship_img img", this.element).attr("src", KC3Meta.shipIcon(this.shipData.masterId));
 		$(".ship_name", this.element).text( this.shipData.name() );
 		$(".ship_type", this.element).text( this.shipData.stype() );
 		
@@ -29,6 +28,18 @@ KC3改 Ship Box for Natsuiro theme
 			$(".ex_item img", this.element).attr("src", "../../../../assets/img/items/"+myExItem.master().api_type[3]+".png");
 		}else{
 			$(".ex_item", this.element).hide();
+		}
+		
+		// MVP icon
+		if(this.shipData.mvp){
+			$(".mvp_icon", this.element).show();
+			// Reserved value for predicted MVP
+			if(typeof this.shipData.mvp === "string"){
+				$(".mvp_icon img", this.element).css("opacity", 0.5);
+			}
+		} else {
+			$(".mvp_icon", this.element).hide();
+			$(".mvp_icon img", this.element).css("opacity", "");
 		}
 		
 		return this;
@@ -48,7 +59,7 @@ KC3改 Ship Box for Natsuiro theme
 		$(".ship_exp", this.element).css("width", (120 * this.expPercent)+"px");		
 		$(".ship_fuel", this.element).css("width", (120 * Math.min(this.fuelPercent, 1))+"px");
 		$(".ship_ammo", this.element).css("width", (120 * Math.min(this.ammoPercent, 1))+"px");
-		$(".ship_bars", this.element).attr("title", "Remaining Exp = " + this.shipData.exp[1] + ", Fuel = " + Math.ceil(this.fuelPercent*100) +"%" + ", Ammo = " + Math.ceil(this.ammoPercent*100)+"%");
+		$(".ship_bars", this.element).attr("title", KC3Meta.term("PanelCombinedShipBarsHint").format(this.shipData.exp[1], Math.ceil(this.fuelPercent*100), Math.ceil(this.ammoPercent*100)) );
 		
 		return this.element;
 	};
@@ -62,13 +73,13 @@ KC3改 Ship Box for Natsuiro theme
 		this.showPrediction();
 		this.showMorale();
 		
-		$(".ship_exp_level span", this.element)
+		$(".ship_exp_level span.value", this.element)
 			.text( this.shipData.level )
 			.prop( 'title', (function(shipData){
 				var mst = shipData.master();
 				return (shipData.level >= (mst.api_afterlv || Infinity)) ?
-					['Possible Remodel'] :
-					(mst.api_afterlv && ['Next Remodel',mst.api_afterlv].join(' ') || '');
+					[KC3Meta.term("PanelPossibleRemodel")] :
+					(mst.api_afterlv && [KC3Meta.term("PanelNextRemodelLv"),mst.api_afterlv].join(' ') || '');
 			})(this.shipData) );
 		$(".ship_exp_next", this.element).text( this.shipData.exp[1] );
 		$(".ship_exp_bar", this.element).css("width", (40*this.expPercent)+"px");
@@ -175,9 +186,9 @@ KC3改 Ship Box for Natsuiro theme
 			$(".ship_hp_prediction", this.element).css("width", (this.hpBarLength*afterHpPercent)+"px");
 			
 			// HP-based UI and colors
-			if(afterHpPercent <= 0.00 && ConfigManager.info_btstamp) { // Sunk or Knocked out
-				this.element.addClass("ship-stamp");
-				this.element.attr("title", KC3Meta.term("PredictionStampPvP"));
+			if(ConfigManager.info_btstamp && (afterHpPercent <= 0.00 || (KC3SortieManager.isPvP() && this.shipData.afterHp[0] <= 1))) { // Sunk or Knocked out
+				$(this.element).addClass("ship-stamp");
+				$(this.element).attr("title", KC3Meta.term( KC3SortieManager.isPvP() ? "PredictionStampPvP" : "PredictionStampSortie") );
 			} else if(afterHpPercent <= 0.25){
 				$(".ship_hp_prediction", this.element).css("background", "#FF0000");
 			} else if(afterHpPercent <= 0.50){

@@ -350,7 +350,7 @@ html,body {
 	position:absolute;
 	top:2px;
 	left:46px;
-	color:#ccc;
+	color:#777;
 }
 .module.activity .timer-time {
 	width:60px;
@@ -358,7 +358,7 @@ html,body {
 	line-height:13px;
 	font-size:12px;
 	text-align:center;
-	color:#eee;
+	color:#444;
 }
 /* Repaid and Build Timers */
 .module.activity .timers {
@@ -509,7 +509,7 @@ html,body {
 }
 .module.controls .fleet_num.needsSupply {
 	border:2px solid #f00;
-	line-height:26px;
+	line-height:20px;
 }
 .module.controls .fleet_num.hasTaiha {
 	background:#faa;
@@ -670,6 +670,23 @@ html,body {
 	position:relative;
 	margin:-1px 0px 0px -1px;
 }
+.module.fleet .lship .mvp_icon {
+	width:20px;
+	height:20px;
+	line-height:20px;
+	float:left;
+	position:absolute;
+	left: 0px;
+	top:28px;
+	z-index:2;
+	overflow:hidden;
+	display:none;
+}
+.module.fleet .lship .mvp_icon img {
+	width:20px;
+	height:20px;
+	vertical-align:top;
+}
 
 .module.fleet .lship .ship_col1 {
 	width:120px;
@@ -782,6 +799,7 @@ html,body {
 	text-align:center;
 	color:#000;
 	position:relative;
+	white-space:nowrap;
 }
 .module.fleet .lship .ship_exp_next {
 	width:40px;
@@ -904,6 +922,23 @@ html,body {
 	width:18px;
 	height:18px;
 	line-height:18px;
+	vertical-align:top;
+}
+.module.fleet .sship .mvp_icon {
+	width:20px;
+	height:20px;
+	line-height:20px;
+	float:left;
+	position:absolute;
+	left: 0px;
+	top:28px;
+	z-index:1;
+	overflow:hidden;
+	display:none;
+}
+.module.fleet .sship .mvp_icon img {
+	width:20px;
+	height:20px;
 	vertical-align:top;
 }
 .module.fleet .sship .ship_img {

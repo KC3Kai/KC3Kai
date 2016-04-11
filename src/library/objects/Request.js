@@ -149,6 +149,7 @@ Executes processing and relies on KC3Network for the triggers
 			try {
 				Kcsapi[this.call]( this.params, this.response, this.headers );
 			} catch (e) {
+				console.error(e.stack);
 				throw e;
 			}
 		}
