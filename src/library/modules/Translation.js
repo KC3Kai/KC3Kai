@@ -41,9 +41,9 @@
 				
 				default: break;
 			}
-			
+
 			if(fontFamily){ $("body").css("font-family", fontFamily); }
-			
+
 			// Apply HTML language code
 			$("html").attr("lang", ConfigManager.language);
 		},
@@ -83,7 +83,7 @@
 			// Check if desired to extend english files
 			if (typeof extendEnglish=="undefined") { extendEnglish=false; }
 			if (typeof track_source==="undefined") { track_source = false; }
-			
+
 			// Japanese special case where ships and items sources are already in JP
 			if(
 				(["jp", "tcn"].indexOf(language) > -1)
@@ -105,15 +105,28 @@
 			var translationBase = {}, enJSON;
 			if(extendEnglish && language!="en"){
 				// Load english file
-				enJSON = JSON.parse($.ajax({
-					url : repo+'lang/data/en/' + filename + '.json',
-					async: false
-				}).responseText);
+				try {
+					enJSON = JSON.parse($.ajax({
+						url : repo+'lang/data/en/' + filename + '.json',
+						async: false
+					}).responseText);
 
-				if (track_source) {
-					self.addTags(enJSON, "en");
+					if (track_source) {
+						self.addTags(enJSON, "en");
+					}
+				} catch (e) {
+					console.error(e.stack);
+					var errMsg = $("<p>Fatal error when loading {0} en TL data: {1}</p>" +
+						"<p>Contact developers plz! &gt;_&lt;</p>".format(filename, e));
+					if($("#error").length>0){
+						$("#error").append(errMsg);
+						$("#error").show();
+					} else {
+						$(document.body).append(errMsg);
+					}
+					throw e;
 				}
-				
+
 				// Make is as the translation base
 				translationBase = enJSON;
 			}
@@ -131,10 +144,28 @@
 					self.addTags(translation, language);
 				}
 			} catch (e) {
+				// As EN can be used, fail-safe for other JSON syntax error
 				if (e instanceof SyntaxError && extendEnglish && language!="en"){
 					console.warn(e.stack);/*RemoveLogging:skip*/
 					translation = null;
+					// Show error message for Strategy Room
+					if($("#error").length>0){
+						$("#error").append(
+							$("<p>Syntax error on {0} TL data of {1}: {2}</p>".format(filename, language, e.message))
+						);
+						$("#error").show();
+					}
 				} else {
+					// Unknown error still needs to be handled asap
+					console.error(e.stack);
+					var errMsg = $("<p>Fatal error when loading {0} TL data of {1}: {2}</p>" +
+						"<p>Contact developers plz! &gt;_&lt;</p>".format(filename, language, e));
+					if($("#error").length>0){
+						$("#error").append(errMsg);
+						$("#error").show();
+					} else {
+						$(document.body).append(errMsg);
+					}
 					throw e;
 				}
 			}
@@ -198,12 +229,11 @@
 		// see initialization code below.
 		_idToDesc: null,
 
-
 		// descriptive voice key to numeric one
 		voiceDescToNum: function(k) {
 			return this._descToId[k];
 		},
-	
+
 		// numeric voice key to descriptive one
 		voiceNumToDesc: function(k) {
 			return this._idToDesc[k];
@@ -258,7 +288,6 @@
 					var subId = self.voiceDescToNum(subKey);
 					if (subId) {
 						// force overwriting regardless of original content
-
 						// empty content not replaced
 						if (v[subKey] && v[subKey].length) {
 							v[subId] = v[subKey];
