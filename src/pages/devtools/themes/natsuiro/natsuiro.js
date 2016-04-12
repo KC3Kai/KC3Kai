@@ -655,7 +655,7 @@
 		$(".module.activity .battle_eformation").css("-webkit-transform", "rotate(0deg)");
 		$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support.png");
 		$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
-		$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/ui/dark_rating.png");
+		$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/ui/dark_rating.png").css("opacity", "");
 		$(".module.activity .battle_drop img").attr("src", "../../../../assets/img/ui/dark_shipdrop.png");
 		$(".module.activity .battle_drop").attr("title", "");
 		$(".module.activity .battle_cond_value").text("");
@@ -1269,12 +1269,11 @@
 				if(eshipId > -1){
 					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.abyssIcon(eshipId));
 					
-					var eMasterShip = KC3Master.ship(eshipId);
-					var tooltip = "{0}: {1}{2}".format(eshipId, eMasterShip.api_name, eMasterShip.api_yomi.replace("-","")) + String.fromCharCode(13);
-					tooltip += KC3Meta.term("ShipFire") + eParam[0] + String.fromCharCode(13);
-					tooltip += KC3Meta.term("ShipTorpedo") + eParam[1] + String.fromCharCode(13);
-					tooltip += KC3Meta.term("ShipAntiAir") + eParam[2] + String.fromCharCode(13);
-					tooltip += KC3Meta.term("ShipArmor") + eParam[3];
+					var tooltip = "{0}: {1}\n".format(eshipId, KC3Meta.abyssShipName(eshipId));
+					tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipFire"), eParam[0]);
+					tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipTorpedo"), eParam[1]);
+					tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipAntiAir"), eParam[2]);
+					tooltip += "{0}: {1}".format(KC3Meta.term("ShipArmor"), eParam[3]);
 					
 					var eSlot = thisNode.eSlot[index];
 					if (!!eSlot && eSlot.length > 0) {
@@ -1383,6 +1382,13 @@
 				$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
 			}
 			
+			// Show predicted battle rank
+			if(thisNode.predictedRank || thisNode.predictedRankNight){
+				$(".module.activity .battle_rating img").attr("src",
+				"../../../../assets/img/client/ratings/"+(thisNode.predictedRank||thisNode.predictedRankNight)+".png")
+				.css("opacity", 0.5);
+			}
+			
 			this.Fleet();
 		},
 		
@@ -1427,6 +1433,12 @@
 			
 			$(".module.activity .battle_contact").text(thisNode.fcontact + KC3Meta.term("BattleContactVs") + thisNode.econtact);
 			
+			if(thisNode.predictedRankNight){
+				$(".module.activity .battle_rating img").attr("src",
+				"../../../../assets/img/client/ratings/"+thisNode.predictedRankNight+".png")
+				.css("opacity", 0.5);
+			}
+			
 			this.Fleet();
 		},
 		
@@ -1435,8 +1447,10 @@
 			
 			updateHQEXPGained($(".admiral_lvnext"),KC3SortieManager.hqExpGained);
 			
+			// Show real battle rank
 			$(".module.activity .battle_rating img").attr("src",
-				"../../../../assets/img/client/ratings/"+thisNode.rating+".png");
+				"../../../../assets/img/client/ratings/"+thisNode.rating+".png")
+				.css("opacity", 1);
 			
 			// If there is any special item drop
 			if(typeof data.api_get_useitem != "undefined"){
@@ -1638,11 +1652,11 @@
 				if(eshipId > -1){
 					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.shipIcon(eshipId));
 					var masterShip = KC3Master.ship(eshipId);
-					var tooltip = "{0}: {1}".format(eshipId, KC3Meta.shipName(masterShip.api_name)) + String.fromCharCode(13);
-					tooltip += KC3Meta.term("ShipFire") + eParam[0] + String.fromCharCode(13);
-					tooltip += KC3Meta.term("ShipTorpedo") + eParam[1] + String.fromCharCode(13);
-					tooltip += KC3Meta.term("ShipAntiAir") + eParam[2] + String.fromCharCode(13);
-					tooltip += KC3Meta.term("ShipArmor") + eParam[3];
+					var tooltip = "{0}: {1}\n".format(eshipId, KC3Meta.shipName(masterShip.api_name));
+					tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipFire"), eParam[0]);
+					tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipTorpedo"), eParam[1]);
+					tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipAntiAir"), eParam[2]);
+					tooltip += "{0}: {1}".format(KC3Meta.term("ShipArmor"), eParam[3]);
 					
 					var eSlot = thisPvP.eSlot[index];
 					if (!!eSlot && eSlot.length > 0) {
@@ -1696,6 +1710,13 @@
 				$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen-x.png");
 			}
 			
+			// Show predicted battle rank
+			if(thisPvP.predictedRank){
+				$(".module.activity .battle_rating img").attr("src",
+				"../../../../assets/img/client/ratings/"+thisPvP.predictedRank+".png")
+				.css("opacity", 0.5);
+			}
+			
 			// Battle conditions
 			$(".module.activity .battle_detection").text( thisPvP.detection[0] );
 			$(".module.activity .battle_detection").attr("title", thisPvP.detection[2] || "" );
@@ -1745,10 +1766,14 @@
 		
 		PvPEnd: function(data){
 			KC3SortieManager.onPvP = false;
+			var thisPvP = KC3SortieManager.currentNode();
 			
-			$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/client/ratings/"+data.result.api_win_rank+".png");
-			updateHQEXPGained($(".admiral_lvnext"),data.result.api_get_exp);
+			$(".module.activity .battle_rating img")
+				.attr("src", "../../../../assets/img/client/ratings/"+thisPvP.rating+".png")
+				.css("opacity", 1);
+			updateHQEXPGained($(".admiral_lvnext"), KC3SortieManager.hqExpGained);
 		},
+		
 		ExpeditionSelection: function (data) {
 			if (! ConfigManager.info_auto_exped_tab)
 				return;

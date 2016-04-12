@@ -461,7 +461,7 @@
 							$.each(battleData.api_ship_ke, function(index, eship){
 								if(eship > -1){
 									$(".node_eship_"+(index+1)+" img", nodeBox).attr("src", KC3Meta.abyssIcon( eship ) );
-									$(".node_eship_"+(index+1), nodeBox).attr("title", [KC3Master.ship( eship ).api_name,KC3Master.ship( eship ).api_yomi].filter(function(x){return x.length>1;}).join("") );
+									$(".node_eship_"+(index+1), nodeBox).attr("title", KC3Meta.abyssShipName( eship) );
 									$(".node_eship_"+(index+1), nodeBox).show();
 								}
 							});

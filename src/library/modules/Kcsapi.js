@@ -1104,12 +1104,8 @@ Previously known as "Reactor"
 		/* PVP Result
 		-------------------------------------------------------*/
 		"api_req_practice/battle_result":function(params, response, headers){
-			var thisPvP = KC3SortieManager.currentNode();
-			if(thisPvP.allyNoDamage && response.api_data.api_win_rank == "S")
-				response.api_data.api_win_rank = "SS";
-			
 			resultScreenQuestFulfillment(response.api_data,true);
-			
+			KC3SortieManager.resultScreen(response.api_data);
 			KC3Network.trigger("PvPEnd", { result: response.api_data });
 			KC3Network.trigger("Quests");
 		},

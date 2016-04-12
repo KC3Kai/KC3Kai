@@ -37,6 +37,11 @@
 			return false;
 		}
 		
+		// show dev-only pages conditionally
+		if ( ConfigManager.devOnlyPages ) {
+			$("#menu .submenu.dev-only").show();
+		}
+
 		// Click a menu item
 		$("#menu .submenu ul.menulist li").on("click", function(){
 			// If loading another page, stop

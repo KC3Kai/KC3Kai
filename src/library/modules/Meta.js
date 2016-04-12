@@ -112,27 +112,6 @@ Provides access to data on built-in JSON files
 		
 		formationText :function(formationId){
 			return this._battle.formation[formationId] || "";
-			// Moved to battle.json, 'formation' array.
-			/*
-			return [
-				"",
-				"Line Ahead",
-				"Double Line",
-				"Diamond",
-				"Echelon",
-				"Line Abreast",
-				"","","","","",
-				"Cruising Formation 1 (anti-sub)",
-				"Cruising Formation 2 (forward)",
-				"Cruising Formation 3 (anti-air)",
-				"Cruising Formation 4 (full-power)",
-				"","","","","","",
-				"Cruising Formation 1 (anti-sub)",
-				"Cruising Formation 2 (forward)",
-				"Cruising Formation 3 (anti-air)",
-				"Cruising Formation 4 (full-power)"
-			][formationId];
-			*/
 		},
 		
 		shipName :function( jp_name ){
@@ -198,6 +177,16 @@ Provides access to data on built-in JSON files
 				return this._slotitem[ jp_name ];
 			}
 			return jp_name;
+		},
+		
+		abyssShipName :function(ship){
+			var shipMaster = ship;
+			if(!shipMaster.api_name){
+				shipMaster = KC3Master.ship(Number(ship));
+			}
+			return [this.shipName(shipMaster.api_name), this.shipName(shipMaster.api_yomi)]
+				.filter(function(x){return !!x&&x!=="-";})
+				.join("");
 		},
 		
 		exp :function(level){

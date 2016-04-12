@@ -20,7 +20,8 @@ Retreives when needed to apply on components
 				timerDisplayType	: 1,
 				marryLevelFormat	: 0,
 				checkLiveQuests		: true,
-				
+				devOnlyPages		: false,
+
 				DBSubmission_enabled: 0,
 				DBSubmission_key : '',
 
@@ -33,16 +34,17 @@ Retreives when needed to apply on components
 				info_craft 			: true,
 				info_compass 		: true,
 				info_battle 		: true,
-				info_auto_exped_tab : true,
-				info_blink_gauge	: true,
+				info_btrank			: true,
 				info_btstamp 		: false,
-				info_boss 			: false,
-				info_salt 			: false,
-				info_troll 			: false,
-				info_delta 			: false,
 				info_fleetstat 		: true,
+				info_blink_gauge	: true,
+				info_boss 			: false,
+				info_delta 			: false,
+				info_auto_exped_tab : true,
 				info_eng_stype		: false,
 				info_force_ship_lang: "",
+				info_salt 			: false,
+				info_troll 			: false,
 
 				// AIR PROFICIENCY BONUSES (Configurable by user)
 				air_formula			: 3, // 1=no veteran 2=veteran average 3=veteran bounds
