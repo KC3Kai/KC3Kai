@@ -75,10 +75,8 @@
 									 track_source) {
             var self = this;
 			// Check if desired to extend english files
-			if(typeof extendEnglish=="undefined"){ extendEnglish=false; }
-
+			if (typeof extendEnglish=="undefined") { extendEnglish=false; }
 			if (typeof track_source==="undefined") { track_source = false; }
-			if (typeof track_source==="undefined") { track_depth = false; }
 			
 			// Japanese special case where ships and items sources are already in JP
 			if(
