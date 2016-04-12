@@ -198,6 +198,23 @@
         isFinalForm: function(shipId) {
             var ff = this.finalForms(shipId);
             return ff ? ff.indexOf(shipId) !== -1 : false;
+        },
+        // return ship id of the previous form.
+        // if the ship is already in original form, "false" will be returned
+        // this relation is not circular - tracing from final form using "previousForm"
+        // will not result in infinite loop.
+        previousForm: function(shipId) {
+            if (shipId === this.originOf(shipId))
+                return false;
+            var group = this.remodelGroup(shipId);
+            var curInd = group.indexOf(shipId);
+            console.assert(
+                curInd > 0, 
+                "previousForm: querying on original form?" );
+            return group[curInd-1];
+        },
+        dumpRemodelGroups: function() {
+            return JSON.stringify( this._db.remodelGroups );
         }
     };
 })();
