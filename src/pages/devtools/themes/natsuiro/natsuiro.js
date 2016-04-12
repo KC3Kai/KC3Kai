@@ -1774,6 +1774,7 @@
 				.attr("src", "../../../../assets/img/client/ratings/"+thisPvP.rating+".png")
 				.css("opacity", 1);
 			updateHQEXPGained($(".admiral_lvnext"), KC3SortieManager.hqExpGained);
+			this.Fleet();
 		},
 		
 		ExpeditionSelection: function (data) {
