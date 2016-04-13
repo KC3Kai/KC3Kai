@@ -1274,7 +1274,8 @@
 			
 			// Battle conditions
 			$(".module.activity .battle_engagement").text( thisNode.engagement[2] );
-			$(".module.activity .battle_contact").text(thisNode.fcontact+KC3Meta.term("BattleContactVs")+thisNode.econtact);
+			var contactSpan = buildContactPlaneSpan(thisNode.fcontactId, thisNode.fcontact, thisNode.econtactId, thisNode.econtact);
+			$(".module.activity .battle_contact").html($(contactSpan).html());
 			
 			// Swap fish and support icons
 			$(".module.activity .battle_fish").hide();
@@ -1365,7 +1366,8 @@
 				});
 			}
 			
-			$(".module.activity .battle_contact").text(thisNode.fcontact+KC3Meta.term("BattleContactVs")+thisNode.econtact);
+			var contactSpan = buildContactPlaneSpan(thisNode.fcontactId, thisNode.fcontact, thisNode.econtactId, thisNode.econtact);
+			$(".module.activity .battle_contact").html($(contactSpan).html());
 			
 			if(thisNode.predictedRankNight){
 				$(".module.activity .battle_rating img").attr("src",
@@ -1644,7 +1646,8 @@
 			$(".module.activity .battle_detection").text( thisPvP.detection[0] );
 			$(".module.activity .battle_airbattle").text( thisPvP.airbattle[0] );
 			$(".module.activity .battle_engagement").text( thisPvP.engagement[2] );
-			$(".module.activity .battle_contact").text(thisPvP.fcontact+KC3Meta.term("BattleContactVs")+thisPvP.econtact);
+			var contactSpan = buildContactPlaneSpan(thisPvP.fcontactId, thisPvP.fcontact, thisPvP.econtactId, thisPvP.econtact);
+			$(".module.activity .battle_contact").html($(contactSpan).html());
 			
 			// Fighter phase
 			$(".fighter_ally .plane_before").text(thisPvP.planeFighters.player[0]);
@@ -2094,6 +2097,29 @@
 			.text( PlayerManager.hq.exp[hqDt] );
 	}
 	
+	function buildContactPlaneSpan(fcontactId, fcontact, econtactId, econtact) {
+		var fContactIcon = null,
+			eContactIcon = null,
+			contactSpan = $("<span/>");
+		if(fcontactId > 0){
+			var fcpMaster = KC3Master.slotitem(fcontactId);
+			fContactIcon = $("<img />")
+				.attr("src", "../../../../assets/img/items/"+fcpMaster.api_type[3]+".png")
+				.attr("title", KC3Meta.gearName(fcpMaster.api_name));
+		}
+		if(econtactId > 0){
+			var ecpMaster = KC3Master.slotitem(econtactId);
+			eContactIcon = $("<img />")
+				.attr("src", "../../../../assets/img/items/"+ecpMaster.api_type[3]+".png")
+				.attr("title", KC3Meta.gearName(ecpMaster.api_name));
+		}
+		$(contactSpan)
+			.append(!!fContactIcon ? fContactIcon : fcontact)
+			.append(KC3Meta.term("BattleContactVs"))
+			.append(!!eContactIcon ? eContactIcon : econtact);
+		return contactSpan;
+	}
+
 	function CraftGearStats(MasterItem, StatProperty, Code){
 		if(parseInt(MasterItem["api_"+StatProperty], 10) !== 0){
 			var thisStatBox = $("#factory .equipStat").clone().appendTo(".module.activity .activity_crafting .equipStats");

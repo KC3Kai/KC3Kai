@@ -1334,7 +1334,8 @@
 			// Battle conditions
 			$(".module.activity .battle_engagement").text( thisNode.engagement[2] || thisNode.engagement[0] );
 			$(".module.activity .battle_engagement").attr("title", thisNode.engagement[0] );
-			$(".module.activity .battle_contact").text(thisNode.fcontact + KC3Meta.term("BattleContactVs") + thisNode.econtact);
+			var contactSpan = buildContactPlaneSpan(thisNode.fcontactId, thisNode.fcontact, thisNode.econtactId, thisNode.econtact);
+			$(".module.activity .battle_contact").html($(contactSpan).html());
 			
 			// Swap fish and support icons
 			$(".module.activity .battle_fish").hide();
@@ -1431,7 +1432,8 @@
 				});
 			}
 			
-			$(".module.activity .battle_contact").text(thisNode.fcontact + KC3Meta.term("BattleContactVs") + thisNode.econtact);
+			var contactSpan = buildContactPlaneSpan(thisNode.fcontactId, thisNode.fcontact, thisNode.econtactId, thisNode.econtact);
+			$(".module.activity .battle_contact").html($(contactSpan).html());
 			
 			if(thisNode.predictedRankNight){
 				$(".module.activity .battle_rating img").attr("src",
@@ -1723,7 +1725,8 @@
 			$(".module.activity .battle_airbattle").text( thisPvP.airbattle[0] );
 			$(".module.activity .battle_airbattle").attr("title", thisPvP.airbattle[2] || "" );
 			$(".module.activity .battle_engagement").text( thisPvP.engagement[2] || thisNode.engagement[0] );
-			$(".module.activity .battle_contact").text(thisPvP.fcontact + KC3Meta.term("BattleContactVs") + thisPvP.econtact);
+			var contactSpan = buildContactPlaneSpan(thisPvP.fcontactId, thisPvP.fcontact, thisPvP.econtactId, thisPvP.econtact);
+			$(".module.activity .battle_contact").html($(contactSpan).html());
 			
 			// Fighter phase
 			$(".fighter_ally .plane_before").text(thisPvP.planeFighters.player[0]);
@@ -1772,6 +1775,7 @@
 				.attr("src", "../../../../assets/img/client/ratings/"+thisPvP.rating+".png")
 				.css("opacity", 1);
 			updateHQEXPGained($(".admiral_lvnext"), KC3SortieManager.hqExpGained);
+			this.Fleet();
 		},
 		
 		ExpeditionSelection: function (data) {
@@ -2183,6 +2187,29 @@
 		}
 	}
 	
+	function buildContactPlaneSpan(fcontactId, fcontact, econtactId, econtact) {
+		var fContactIcon = null,
+			eContactIcon = null,
+			contactSpan = $("<span/>");
+		if(fcontactId > 0){
+			var fcpMaster = KC3Master.slotitem(fcontactId);
+			fContactIcon = $("<img />")
+				.attr("src", "../../../../assets/img/items/"+fcpMaster.api_type[3]+".png")
+				.attr("title", KC3Meta.gearName(fcpMaster.api_name));
+		}
+		if(econtactId > 0){
+			var ecpMaster = KC3Master.slotitem(econtactId);
+			eContactIcon = $("<img />")
+				.attr("src", "../../../../assets/img/items/"+ecpMaster.api_type[3]+".png")
+				.attr("title", KC3Meta.gearName(ecpMaster.api_name));
+		}
+		$(contactSpan)
+			.append(!!fContactIcon ? fContactIcon : fcontact)
+			.append(KC3Meta.term("BattleContactVs"))
+			.append(!!eContactIcon ? eContactIcon : econtact);
+		return contactSpan;
+	}
+
 	function updateMapGauge(gaugeDmg,fsKill,noBoss) {
 		// Map Gauge and status
 		var
