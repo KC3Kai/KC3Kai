@@ -1237,7 +1237,7 @@
 				var newEnemyHP, enemyHPPercent;
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > -1){
-						newEnemyHP = thisNode.enemyHP[index].currentHp;
+						newEnemyHP = thisNode.enemyHP[index].hp;
 						if(newEnemyHP < 0){ newEnemyHP = 0; }
 						
 						if(newEnemyHP === 0){
@@ -1338,7 +1338,7 @@
 				var newEnemyHP, enemyHPPercent;
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > -1){
-						newEnemyHP = thisNode.enemyHP[index].currentHp;
+						newEnemyHP = thisNode.enemyHP[index].hp;
 						if(newEnemyHP < 0){ newEnemyHP = 0; }
 						
 						if(newEnemyHP === 0){
@@ -1600,7 +1600,7 @@
 				var newEnemyHP, enemyHPPercent;
 				$.each(thisPvP.eships, function(index, eshipId){
 					if(eshipId > -1){
-						newEnemyHP = thisPvP.enemyHP[index].currentHp;
+						newEnemyHP = thisPvP.enemyHP[index].hp;
 						if(newEnemyHP < 0){ newEnemyHP = 0; }
 						
 						if(newEnemyHP === 0){

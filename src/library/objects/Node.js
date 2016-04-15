@@ -324,16 +324,20 @@ Used by SortieManager
 		}
 
 		var PS = window.PS;
-		var DA = PS["KanColle.DamageAnalysis"];
+		var DA = PS["KanColle.DamageAnalysis.FFI"];
 		var result = null;
 		var i = 0;
 		var fleet;
+		var dameConCode;
 		var shipNum;
 		var ship;
 		var fleetId = parseInt(fleetSent) || KC3SortieManager.fleetSent;
 		
 		if ((typeof PlayerManager.combinedFleet === "undefined") || (PlayerManager.combinedFleet === 0) || fleetId>1){ // single fleet: not combined, or sent fleet is not first fleet
-			result = DA.analyzeRawBattleJS(battleData); 
+			// Update our fleet
+			fleet = PlayerManager.fleets[fleetId - 1];
+			dameConCode = fleet.getDameConCodes();
+			result = DA.analyzeBattleJS(dameConCode, battleData); 
 			// console.log("Single Fleet");
 			// console.log("analysis result", result);
 
@@ -344,22 +348,18 @@ Used by SortieManager
 			
 			// Update enemy
 			for (i = 7; i < 13; i++) {
-				this.enemyHP[i-7] = result[i];
-				endHPs.enemy[i-7] = result[i] ? result[i].currentHp : -1;
-				if ((result[i] || {currentHp:0}).currentHp <= 0) {
-					this.enemySunk[i-7] = true;
-				}
+				this.enemyHP[i-7] = result.enemy[i-7];
+				endHPs.enemy[i-7] = result.enemy[i-7] ? result.enemy[i-7].hp : -1;
+				this.enemySunk[i-7] = result.enemy[i-7] ? result.enemy[i-7].sunk : true;
 			}
 			
-			// Update our fleet
-			fleet = PlayerManager.fleets[fleetId - 1];
 			shipNum = fleet.countShips();
 			for(i = 0; i < shipNum; i++) {
 				ship = fleet.ship(i);
-				ship.afterHp[0] = result[i+1].currentHp;
+				ship.afterHp[0] = result.main[i].hp;
 				this.allyNoDamage &= ship.hp[0]==ship.afterHp[0];
 				ship.afterHp[1] = ship.hp[1];
-				endHPs.ally[i] = result[i+1].currentHp;
+				endHPs.ally[i] = result.main[i].hp;
 			}
 			
 			if(ConfigManager.info_btrank){
@@ -367,21 +367,29 @@ Used by SortieManager
 				// console.info("Rank Predict:", this.predictedRank);
 			}
 		} else {
-			if (PlayerManager.combinedFleet === 1 || PlayerManager.combinedFleet === 3) {
-				result = DA.analyzeRawCarrierTaskForceBattleJS(battleData); 
-				// console.log("Carrier Task Force");
+			// combined fleet
+			dameConCode = PlayerManager.fleets[0].getDameConCodes()
+				 .concat( PlayerManager.fleets[1].getDameConCodes() );
+			console.assert(dameConCode.length === 12, "dameConCode length should be 12 for combined fleets");
+			if (PlayerManager.combinedFleet === 1) {
+				// Carrier Task Force
+				result = DA.analyzeCTFBattleJS(dameConCode,battleData);
+			} else if (PlayerManager.combinedFleet === 2) {
+				// Surface Task Force
+				result = DA.analyzeSTFBattleJS(dameConCode,battleData);
+			} else if (PlayerManager.combinedFleet === 3) {
+				// Transport Escort
+				result = DA.analyzeTECFBattleJS(dameConCode,battleData);
 			} else {
-				result = DA.analyzeRawSurfaceTaskForceBattleJS(battleData); 
-				// console.log("Surface Task Force");
+				console.error( "Unknown combined fleet code: " + PlayerManager.combinedFleet );
 			}
-			// console.log("analysis result", result);
 
 			// Update enemy
 			for(i = 1; i <= 6; i++) {
-				var enemy = result.enemy[i];
+				var enemy = result.enemy[i-1];
 				if (enemy !== null) {
 					this.enemyHP[i-1] = enemy;
-					this.enemySunk[i-1] = (enemy.currentHp <= 0);
+					this.enemySunk[i-1] = enemy.sunk;
 				}
 			}
 
@@ -391,7 +399,7 @@ Used by SortieManager
 			var mainFleet = result.main;
 			for(i = 0; i < shipNum; i++) {
 				ship = fleet.ship(i);
-				ship.afterHp[0] = mainFleet[i+1].currentHp;
+				ship.afterHp[0] = mainFleet[i].hp;
 				this.allyNoDamage &= ship.hp[0]==ship.afterHp[0];
 				ship.afterHp[1] = ship.hp[1];
 			}
@@ -402,13 +410,13 @@ Used by SortieManager
 			var escortFleet = result.escort;
 			for(i = 0; i < shipNum; i++) {
 				ship = fleet.ship(i);
-				ship.afterHp[0] = escortFleet[i+1].currentHp;
+				ship.afterHp[0] = escortFleet[i].hp;
 				this.allyNoDamage &= ship.hp[0]==ship.afterHp[0];
 				ship.afterHp[1] = ship.hp[1];
 			}
 		}
 		if(this.gaugeDamage > -1) {
-			this.gaugeDamage = Math.min(this.originalHPs[7],this.originalHPs[7] - this.enemyHP[0].currentHp);
+			this.gaugeDamage = Math.min(this.originalHPs[7],this.originalHPs[7] - this.enemyHP[0].hp);
 			
 			(function(sortieData){
 				var
@@ -498,22 +506,25 @@ Used by SortieManager
 		this.searchlight = nightData.api_flare_pos[1]; // Search light user pos
 		
 		var PS = window.PS;
-		var DA = PS["KanColle.DamageAnalysis"];
+		var DA = PS["KanColle.DamageAnalysis.FFI"];
 		var result = null;
 		var i = 0;
 		var fleet;
+		var dameConCode;
 		var shipNum;
 		var ship;
 		var fleetId = parseInt(fleetSent) || KC3SortieManager.fleetSent;
 		
 		// COMBINED FLEET
 		if (PlayerManager.combinedFleet && (fleetId <= 1)) { 
-			result = DA.analyzeRawNightBattleCombinedJS( nightData ); 
 			fleet = PlayerManager.fleets[1];
+			dameConCode = fleet.getDameConCodes();
+			result = DA.analyzeCombinedNightBattleJS(dameConCode, nightData); 
 		// SINGLE FLEET
 		} else { // single fleet: not combined, or sent fleet is not first fleet
-			result = DA.analyzeRawNightBattleJS( nightData ); 
 			fleet = PlayerManager.fleets[fleetId - 1];
+			dameConCode = fleet.getDameConCodes();
+			result = DA.analyzeNightBattleJS(dameConCode, nightData); 
 		}
 		var endHPs = {
 			ally: beginHPs.ally.slice(),
@@ -521,12 +532,9 @@ Used by SortieManager
 		};
 			
 		for (i = 7; i < 13; i++) {
-			this.enemyHP[i-7] = result[i];
-			endHPs.enemy[i-7] = result[i] ? result[i].currentHp : -1;
-
-			if ((result[i] || {currentHp:0}).currentHp <= 0) {
-				this.enemySunk[i-7] = true;
-			}
+			this.enemyHP[i-7] = result.enemy[i-7];
+			endHPs.enemy[i-7] = result.enemy[i-7] ? result.enemy[i-7].hp : -1;
+			this.enemySunk[i-7] = result.enemy[i-7] ? result.enemy[i-7].sunk : true;
 		}
 
 		shipNum = fleet.countShips();
@@ -534,17 +542,18 @@ Used by SortieManager
 			ship = fleet.ship(i);
 			ship.hp = [ship.afterHp[0], ship.afterHp[1]];
 			ship.morale = Math.max(0,Math.min(100,ship.morale+(fleetSent ? 1 : -3 )));
-			ship.afterHp[0] = result[i+1].currentHp;
+			ship.afterHp[0] = result.main[i].hp;
 			this.allyNoDamage &= ship.hp[0]==ship.afterHp[0];
 			ship.afterHp[1] = ship.hp[1];
-			endHPs.ally[i] = result[i+1].currentHp;
+			endHPs.ally[i] = result.main[i].hp;
 		}
 		if(ConfigManager.info_btrank){
 			this.predictedRankNight = KC3Node.predictRank( beginHPs, endHPs );
 			// console.info("Rank Predict (Night):", this.predictedRankNight);
 		}
 		if(this.gaugeDamage > -1)
-			this.gaugeDamage = this.gaugeDamage + Math.min(nightData.api_nowhps[7],nightData.api_nowhps[7] - this.enemyHP[0].currentHp);
+			this.gaugeDamage = this.gaugeDamage + 
+				Math.min(nightData.api_nowhps[7],nightData.api_nowhps[7] - this.enemyHP[0].hp);
 	};
 	
 	KC3Node.prototype.night = function( nightData ){

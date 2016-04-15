@@ -1292,7 +1292,7 @@
 				var newEnemyHP, enemyHPPercent;
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > -1){
-						newEnemyHP = Math.max(0,thisNode.enemyHP[index].currentHp);
+						newEnemyHP = Math.max(0,thisNode.enemyHP[index].hp);
 						
 						if(!index &&
 							['multiple','gauge-hp'].indexOf(KC3SortieManager.getCurrentMapData().kind)>=0 /* Flagship */
@@ -1400,7 +1400,7 @@
 				var newEnemyHP, enemyHPPercent;
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > -1){
-						newEnemyHP = Math.max(0,thisNode.enemyHP[index].currentHp);
+						newEnemyHP = Math.max(0,thisNode.enemyHP[index].hp);
 						
 						if(!index &&
 							['multiple','gauge-hp'].indexOf(KC3SortieManager.getCurrentMapData().kind)>=0 /* Flagship */
@@ -1677,7 +1677,7 @@
 				var newEnemyHP, enemyHPPercent;
 				$.each(thisPvP.eships, function(index, eshipId){
 					if(eshipId > -1){
-						newEnemyHP = thisPvP.enemyHP[index].currentHp;
+						newEnemyHP = thisPvP.enemyHP[index].hp;
 						if(newEnemyHP < 0){ newEnemyHP = 0; }
 						
 						if(newEnemyHP === 0){
