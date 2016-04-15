@@ -66,6 +66,11 @@
 				"id": "checkLiveQuests",
 				"name": "SettingsCheckLiveQuests",
 				"type": "check"
+			},
+			{
+				"id": "devOnlyPages",
+				"name": "SettingsDevOnlyPages",
+				"type": "check"
 			}
 		]
 	},
@@ -104,28 +109,20 @@
 				"options" : {}
 			},
 			{
+				"id" : "info_btrank",
+				"name" : "SettingsBattleRank",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "info_btstamp",
 				"name" : "SettingsBattleStamp",
 				"type" : "check",
 				"options" : {}
 			},
 			{
-				"id" : "info_boss",
-				"name" : "SettingsBossComp",
-				"type" : "check",
-				"hide" : 1,
-				"options" : {}
-			},
-			{
-				"id" : "info_salt",
-				"name" : "SettingsSaltyShip",
-				"type" : "check",
-				"hide" : 0,
-				"options" : {}
-			},
-			{
-				"id" : "info_troll",
-				"name" : "SettingsYasenTroll",
+				"id" : "info_fleetstat",
+				"name" : "SettingsFleetStatus",
 				"type" : "check",
 				"options" : {}
 			},
@@ -136,9 +133,16 @@
 				"options" : {}
 			},
 			{
-				"id" : "info_fleetstat",
-				"name" : "SettingsFleetStatus",
+				"id" : "info_blink_gauge",
+				"name" : "SettingsBlinkGauge",
 				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_boss",
+				"name" : "SettingsBossComp",
+				"type" : "check",
+				"hide" : 1,
 				"options" : {}
 			},
 			{
@@ -154,8 +158,27 @@
 				"options" : {}
 			},
 			{
-				"id" : "info_jp_ship_item",
-				"name" : "SettingsJapaneseShipItem",
+				"id" : "info_force_ship_lang",
+				"name" : "SettingsShipNamesLang",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ ""  , "SettingsShipNamesGlobal" ],
+						[ "en", "English" ],
+						[ "jp", "日本語" ]
+					]
+				}
+			},
+			{
+				"id" : "info_salt",
+				"name" : "SettingsSaltyShip",
+				"type" : "check",
+				"hide" : 0,
+				"options" : {}
+			},
+			{
+				"id" : "info_troll",
+				"name" : "SettingsYasenTroll",
 				"type" : "check",
 				"options" : {}
 			}
@@ -192,7 +215,20 @@
 				"id" : "ss_directory",
 				"name" : "SettingsSSDirectory",
 				"type" : "long_text",
-				"options" : { "placeholder" : "Specify subfolder of /Downloads/" }
+				"options" : { "placeholder" : "SettingsSSDirDesc" }
+			},
+			{
+				"id" : "ss_dppx",
+				"name" : "SettingsSSDppx",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 1, "SettingsNormal" ],
+						[ 1.3, "1.3x" ],
+						[ 1.6, "1.6x" ],
+						[ 2, "Retina (2x)" ]
+					]
+				}
 			}
 		]
 	},
@@ -381,7 +417,41 @@
 					"type": "Number"
 				},
 				"options" : { "label" : "%" }
+			},
+			{
+				"id" : "api_subtitles",
+				"name" : "SettingsSubtitles",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "subtitle_font",
+				"name" : "SettingsSubtitleFont",
+				"type" : "long_text",
+				"options" : {
+					"placeholder" : "SettingsSubtitleFontDesc"
+				}
+			},
+			{
+				"id" : "subtitle_size",
+				"name" : "SettingsSubtitleSize",
+				"type" : "small_text",
+				"bound" : {
+					"min" :  10,
+					"max" : 50,
+					"type": "Number"
+				},
+				"options" : {
+					"label" : "px"
+				}
+			},
+			{
+				"id" : "subtitle_bold",
+				"name" : "SettingsSubtitleBold",
+				"type" : "check",
+				"options" : {}
 			}
+			
 		]
 	},
 	{

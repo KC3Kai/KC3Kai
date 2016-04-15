@@ -182,7 +182,6 @@
                         var ship = KC3ShipManager.get(fleet.ships[j]);
                         fleetInfo.push( {lvl: ship.level,
                                          id: ship.masterId
-                                         // str: "icon"+K2Badge.mstId2FleetIdTable[ship.masterId]
                                         } );
 
                     } else {

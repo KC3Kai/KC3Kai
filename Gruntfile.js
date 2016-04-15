@@ -30,7 +30,8 @@ module.exports = function(grunt) {
 					'assets/js/jquery-ui.min.js',
 					'assets/js/KanColleHelpers.js',
 					'assets/js/twbsPagination.min.js',
-					'assets/js/WhoCallsTheFleetShipDb.json'
+					'assets/js/WhoCallsTheFleetShipDb.json',
+					'assets/js/jszip.min.js'
 				],
 				dest: 'build/release/'
 			},

@@ -345,6 +345,14 @@
 	font-size:12px;
 	text-align:center;
 }
+/* Subtitles */
+.tab_mstship .shipInfo .subtitles {
+	width:470px;
+	margin:10px 0px 20px 0px;
+	font-weight: normal;
+	font-size:12px;
+	text-align: center;
+}
 
 /* Regular Voices */
 .tab_mstship .shipInfo .voices {

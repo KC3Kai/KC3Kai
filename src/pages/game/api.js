@@ -6,6 +6,14 @@ var waiting = true;
 // If trusted exit, for exit confirmation
 var trustedExit = false;
 
+// Used to fade out subtitles after calculated duration
+var subtitleVanishTimer = false;
+var subtitleVanishBaseMillis;
+var subtitleVanishExtraMillisPerChar;
+
+// Holder object for audio files to test mp3 duration
+var subtitleMp3;
+
 // If auto-focus on window to capture key events or not
 var autoFocus = 0;
 
@@ -24,13 +32,17 @@ function ActivateGame(){
 		.attr("src", localStorage.absoluteswf)
 		.end()
 		.show();
+	$(".box-wrap").css("zoom", ((ConfigManager.api_gameScale || 100) / 100));
 	return true;
 }
 
 $(document).on("ready", function(){
 	// Initialize data managers
 	ConfigManager.load();
+	KC3Master.init();
+	RemodelDb.init();
 	KC3Meta.init("../../../../data/");
+	KC3Meta.loadQuotes();
 	KC3QuestManager.load();
 	KC3Database.init();
 	KC3Translation.execute();
@@ -46,7 +58,14 @@ $(document).on("ready", function(){
 		$("body").css("background-position", ConfigManager.api_bg_position);
 		$("body").css("background-repeat", "no-repeat");
 	}
-	$(".box-wrap").css("zoom", ((ConfigManager.api_gameScale || 100) / 100));
+	
+	if(ConfigManager.api_subtitles){
+		$(".overlay_subtitles").css("font-family", ConfigManager.subtitle_font);
+		$(".overlay_subtitles").css("font-size", ConfigManager.subtitle_size);
+		if(ConfigManager.subtitle_bold){
+			$(".overlay_subtitles").css("font-weight", "bold");
+		}
+	}
 	
 	if(!(localStorage.absoluteswf || false)) {
 		$(".box-nolink").show();
@@ -278,7 +297,61 @@ var interactions = {
 		if(critAnim){ clearInterval(critAnim); }
 		$(".taiha_blood").hide();
 		$(".taiha_red").hide();
+	},
+	
+	// Show subtitles
+	subtitle :function(request, sender, response){
+		if(!ConfigManager.api_subtitles) return true;
+		
+		console.debug("subtitle", request);
+		
+		// Get subtitle text
+		var subtitleText = false;
+		var quoteIdentifier = "";
+		var quoteVoiceNum = request.voiceNum;
+		switch(request.voicetype){
+			case "titlecall":
+				quoteIdentifier = "titlecall_"+request.filename;
+				break;
+			case "npc":
+				quoteIdentifier = "npc";
+				break;
+			default:
+				quoteIdentifier = request.shipID;
+				break;
+		}
+		subtitleText = KC3Meta.quote( quoteIdentifier, quoteVoiceNum );
+		
+		// hide first to fading will stop
+		$(".overlay_subtitles").stop(true, true);
+		$(".overlay_subtitles").hide();
+		
+		// If subtitle removal timer is ongoing, reset
+		if(subtitleVanishTimer){
+			clearTimeout(subtitleVanishTimer);
+		}
+		// Lazy init timing parameters
+		if(!subtitleVanishBaseMillis){
+			subtitleVanishBaseMillis = Number(KC3Meta.quote("timing", "baseMillisVoiceLine")) || 2000;
+		}
+		if(!subtitleVanishExtraMillisPerChar){
+			subtitleVanishExtraMillisPerChar = Number(KC3Meta.quote("timing", "extraMillisPerChar")) || 50;
+		}
+		
+		// If subtitles available for the voice
+		if(subtitleText){
+			$(".overlay_subtitles").html(subtitleText);
+			$(".overlay_subtitles").show();
+			var millis = subtitleVanishBaseMillis +
+				(subtitleVanishExtraMillisPerChar * $(".overlay_subtitles").text().length);
+			console.debug("vanish after", millis, "ms");
+			subtitleVanishTimer = setTimeout(function(){
+				subtitleVanishTimer = false;
+				$(".overlay_subtitles").fadeOut(2000);
+			}, millis);
+		}
 	}
+	
 };
 
 /* Listen to messaging triggers
