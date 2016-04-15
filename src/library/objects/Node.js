@@ -336,7 +336,8 @@ Used by SortieManager
 		if ((typeof PlayerManager.combinedFleet === "undefined") || (PlayerManager.combinedFleet === 0) || fleetId>1){ // single fleet: not combined, or sent fleet is not first fleet
 			// Update our fleet
 			fleet = PlayerManager.fleets[fleetId - 1];
-			dameConCode = fleet.getDameConCodes();
+			// damecon ignored for PvP
+			dameConCode = KC3SortieManager.isPvP ? [0,0,0, 0,0,0] :	 fleet.getDameConCodes();
 			result = DA.analyzeBattleJS(dameConCode, battleData); 
 			// console.log("Single Fleet");
 			// console.log("analysis result", result);
@@ -523,7 +524,8 @@ Used by SortieManager
 		// SINGLE FLEET
 		} else { // single fleet: not combined, or sent fleet is not first fleet
 			fleet = PlayerManager.fleets[fleetId - 1];
-			dameConCode = fleet.getDameConCodes();
+			// damecon ignored for PvP
+			dameConCode = KC3SortieManager.isPvP() ? [0,0,0, 0,0,0] : fleet.getDameConCodes();
 			result = DA.analyzeNightBattleJS(dameConCode, nightData); 
 		}
 		var endHPs = {
