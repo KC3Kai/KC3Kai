@@ -282,6 +282,10 @@ Used by SortieManager
 		
 		this.airbattle = KC3Meta.airbattle( planePhase.api_disp_seiku );
 		
+		if(!!attackPhase){
+			this.antiAirFire = attackPhase.api_air_fire;
+		}
+		
 		// Fighter phase 1
 		this.planeFighters = {
 			player:[
@@ -304,11 +308,11 @@ Used by SortieManager
 		
 		// Bombing phase 1
 		this.planeBombers = { player:[0,0], abyssal:[0,0] };
-		if(battleData.api_kouku.api_stage2 !== null){
-			this.planeBombers.player[0] = battleData.api_kouku.api_stage2.api_f_count;
-			this.planeBombers.player[1] = battleData.api_kouku.api_stage2.api_f_lostcount;
-			this.planeBombers.abyssal[0] = battleData.api_kouku.api_stage2.api_e_count;
-			this.planeBombers.abyssal[1] = battleData.api_kouku.api_stage2.api_e_lostcount;
+		if(attackPhase !== null){
+			this.planeBombers.player[0] = attackPhase.api_f_count;
+			this.planeBombers.player[1] = attackPhase.api_f_lostcount;
+			this.planeBombers.abyssal[0] = attackPhase.api_e_count;
+			this.planeBombers.abyssal[1] = attackPhase.api_e_lostcount;
 		}
 		
 		// Fighter phase 2
@@ -503,8 +507,8 @@ Used by SortieManager
 		this.fcontact = this.fcontactId > 0 ? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
 		this.econtactId = nightData.api_touch_plane[1];
 		this.econtact = this.econtactId > 0 ? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
-		this.flare = nightData.api_flare_pos[0]; // Star shell user pos
-		this.searchlight = nightData.api_flare_pos[1]; // Search light user pos
+		this.flarePos = nightData.api_flare_pos[0]; // Star shell user pos 1-6
+		this.eFlarePos = nightData.api_flare_pos[1]; // PvP opponent only, abyss star shell not existed yet
 		
 		var PS = window.PS;
 		var DA = PS["KanColle.DamageAnalysis.FFI"];
