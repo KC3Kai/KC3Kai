@@ -227,7 +227,9 @@ KC3改 Ship Box for Natsuiro theme
 			$(".ship_hp_prediction", this.element).css("width", (this.hpBarLength*afterHpPercent)+"px");
 			
 			// HP-based UI and colors
-			if(ConfigManager.info_btstamp && (afterHpPercent <= 0.00 || (KC3SortieManager.isPvP() && this.shipData.afterHp[0] <= 1))) { // Sunk or Knocked out
+			if(ConfigManager.info_btstamp && afterHpPercent <= 0.00) {
+				// Sunk or Knocked out: afterHp[0]<=0 only occurs when battle starts from 'taiha'
+				// Call KO for PvP as although 'sinks' but not lost, and cannot move, gains 0 exp
 				$(this.element).addClass("ship-stamp");
 				$(this.element).attr("title", KC3Meta.term( KC3SortieManager.isPvP() ? "PredictionStampPvP" : "PredictionStampSortie") );
 			} else if(afterHpPercent <= 0.25){
