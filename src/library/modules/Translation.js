@@ -141,6 +141,21 @@
 			return $.extend(true, translationBase, translation);
 		},
 
+		getShipVoiceFlag: function (shipMasterId) {
+			var shipData = KC3Master.ship(shipMasterId);
+			return shipData ? shipData.api_voicef : 0;
+		},
+
+		// check if a ship has idle voice
+		shipHasIdleVoice: function (shipMasterId) {
+			return (1 & this.getShipVoiceFlag(shipMasterId)) !== 0;
+		},
+
+		// check if a ship has hourly voices
+		shipHasHourlyVoices: function (shipMasterId) {
+			return (2 & this.getShipVoiceFlag(shipMasterId)) !== 0;
+		},
+
 		// insert quote id as key if descriptive key is used.
 		transformQuotes: function(quotes) {
 			function isIntStr(s) {

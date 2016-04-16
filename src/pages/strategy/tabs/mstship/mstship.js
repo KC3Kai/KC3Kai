@@ -366,7 +366,11 @@
 				$(".tab_mstship .shipInfo .voices").show();
 				$(".tab_mstship .shipInfo .voices").html("");
 				$.each(this.lines, function(vname, vnum){
-					if((shipData.api_voicef<1 && vnum==29) || vnum==6) return true;
+					// * Hide Repair voice (6)
+					// * Hide Idle voice (29) if the flag says no
+					if (( !KC3Translation.shipHasIdleVoice(shipData.api_id) && vnum==29) 
+					   || vnum==6) 
+						return true;
 					$("<div/>")
 						.addClass("hover")
 						.addClass("voice")
@@ -380,7 +384,7 @@
 				$(".tab_mstship .shipInfo .hourlies").show();
 				$(".tab_mstship .shipInfo .hourlies").html("");
 				
-				if(shipData.api_voicef>1){
+				if (KC3Translation.shipHasHourlyVoices(shipData.api_id)){
 					$.each(this.hourlies, function(vnum, vname){
 						var hhStr = vname.substring(0,2);
 						var mmStr = vname.substring(2);
