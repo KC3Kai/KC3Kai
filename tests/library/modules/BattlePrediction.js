@@ -29,24 +29,31 @@ QUnit.module( "Module", function() {
 
                 var isCombined = battleData.combined !== 0;
                 PlayerManager.combinedFleet = battleData.combined;
-                // register ships
-                $.each(battleData.fleet1, function(rosterId,shipData) {
+
+                function registerShip(masterId,level) {
+                    var rosterId = KC3ShipManager.count();
                     var ship = new KC3Ship();
                     ship.rosterId = rosterId;
-                    ship.masterId = shipData.mst_id;
-                    ship.level = shipData.level;
+                    ship.masterId = masterId;
+                    ship.level = level;
                     KC3ShipManager.list["x"+rosterId] = ship;
-                });
-                // register ships for combined fleets
-                if (isCombined) {
-                    $.each(battleData.fleet2, function(i,shipData) {
-                        var rosterId = i + 6;
-                        var ship = new KC3Ship();
-                        ship.rosterId = rosterId;
-                        ship.masterId = shipData.mst_id;
-                        ship.level = shipData.level;
-                        KC3ShipManager.list["x"+rosterId] = ship;
-                    });
+                    return rosterId;
+                }
+
+                function makeFleet(fleetData) {
+                    var fleet = new KC3Fleet();
+                    if (fleetData) {
+                        $.each([0,1,2,3,4,5],function(ignored,i) {
+                            var shipData;
+                            if (fleetData[i]) {
+                                shipData = fleetData[i];
+                                fleet.ships[i] =
+                                    registerShip(shipData.mst_id,
+                                                 shipData.level);
+                            }
+                        });
+                    }
+                    return fleet;
                 }
 
                 // make fleets
@@ -54,10 +61,13 @@ QUnit.module( "Module", function() {
                 var fleetEscort = new KC3Fleet();
 
                 var i;
+                var shipData;
                 // fleet.ships;
                 for (i=0; i<6; ++i) {
                     if (battleData.fleet1[i]) {
-                        fleet.ships[i] = i;
+                        shipData = battleData.fleet1[i];
+                        fleet.ships[i] =
+                            registerShip(shipData.mst_id, shipData.level);
                     }
                 }
                 PlayerManager.fleets[0] = fleet;
@@ -65,7 +75,9 @@ QUnit.module( "Module", function() {
                 if (isCombined) {
                     for (i=0; i<6; ++i) {
                         if (battleData.fleet2[i]) {
-                            fleetEscort.ships[i] = i+6;
+                            shipData = battleData.fleet2[i];
+                            fleetEscort.ships[i] = 
+                                registerShip(shipData.mst_id, shipData.level);
                         }
                     }
                     PlayerManager.fleets[1] = fleetEscort;
