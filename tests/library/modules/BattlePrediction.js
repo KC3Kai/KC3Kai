@@ -30,12 +30,35 @@ QUnit.module( "Module", function() {
                 var isCombined = battleData.combined !== 0;
                 PlayerManager.combinedFleet = battleData.combined;
 
-                function registerShip(masterId,level) {
+                function registerGear(masterId) {
+                    var itemId = KC3GearManager.count();
+                    var gear = new KC3Gear();
+                    gear.itemId = itemId;
+                    gear.masterId = masterId;
+                    KC3GearManager.list["x"+itemId] = gear;
+                    return itemId;
+                }
+
+                function registerShip(masterId,level,equip) {
                     var rosterId = KC3ShipManager.count();
                     var ship = new KC3Ship();
                     ship.rosterId = rosterId;
                     ship.masterId = masterId;
                     ship.level = level;
+
+                    if (equip) {
+                        // 0-3 for normal items
+                        // 4 for ex_item
+                        $.each([0,1,2,3],function(ignored,i) {
+                            if (equip[i] && equip[i] !== -1) {
+                                ship.items[i] = registerGear(equip[i]);
+                            }
+                        });
+                        if (equip[4] && equip[4] !== -1) {
+                            ship.ex_item = registerGear(equip[4]);
+                        }
+                    }
+
                     KC3ShipManager.list["x"+rosterId] = ship;
                     return rosterId;
                 }
@@ -49,7 +72,8 @@ QUnit.module( "Module", function() {
                                 shipData = fleetData[i];
                                 fleet.ships[i] =
                                     registerShip(shipData.mst_id,
-                                                 shipData.level);
+                                                 shipData.level,
+                                                 shipData.equip);
                             }
                         });
                     }
@@ -63,24 +87,9 @@ QUnit.module( "Module", function() {
                 var i;
                 var shipData;
                 // fleet.ships;
-                for (i=0; i<6; ++i) {
-                    if (battleData.fleet1[i]) {
-                        shipData = battleData.fleet1[i];
-                        fleet.ships[i] =
-                            registerShip(shipData.mst_id, shipData.level);
-                    }
-                }
-                PlayerManager.fleets[0] = fleet;
-
+                PlayerManager.fleets[0] = fleet = makeFleet(battleData.fleet1);
                 if (isCombined) {
-                    for (i=0; i<6; ++i) {
-                        if (battleData.fleet2[i]) {
-                            shipData = battleData.fleet2[i];
-                            fleetEscort.ships[i] = 
-                                registerShip(shipData.mst_id, shipData.level);
-                        }
-                    }
-                    PlayerManager.fleets[1] = fleetEscort;
+                    PlayerManager.fleets[1] = fleetEscort = makeFleet(battleData.fleet2);
                 }
 
                 localStorage.maps = JSON.stringify( {m00: {id:0, clear:1, kind: "single"}} );
@@ -194,7 +203,15 @@ QUnit.module( "Module", function() {
              25,39,44,6,4,4,
 
              150,65,-308,-131,0,-147]
+        );
 
+        testBattlePrediction(
+            "normal battle with damecon",
+            battleSample.normBattleWithDameCon1,
+            [8,32,7,8,4,25,
+
+             396,130,-37,60,520,120],
+            null
         );
     });
 });
