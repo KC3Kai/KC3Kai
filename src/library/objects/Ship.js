@@ -25,7 +25,11 @@ KC3改 Ship Object
 		this.lk = [0,0];
 		this.range = 0;
 		this.items = [-1,-1,-1,-1];
-		this.ex_item = -1;
+        // ex_item correponses to "api_slot_ex" in the API,
+        // which has special meanings on few values:
+        // 0: ex slot is not available
+        // -1: ex slot is available but nothing is equipped
+		this.ex_item = 0;
 		this.slots = [0,0,0,0];
 		this.slotnum = 0;
 		this.mod = [0,0,0,0,0];
