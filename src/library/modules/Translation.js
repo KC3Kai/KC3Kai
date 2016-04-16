@@ -212,7 +212,9 @@
 		// get available ship voice numbers by checking 
 		// voice flag of a ship.
 		// the result is sorted.
-		getShipVoiceNums: function(masterId,includeRepair) {
+		getShipVoiceNums: function(masterId,includeHourlies,includeRepair) {
+			if (typeof includeHourlies === "undefined")
+				includeHourlies = true;
 			if (typeof includeRepair === "undefined")
 				includeRepair = false;
 			var sortedVoiceNums =  [
@@ -232,7 +234,7 @@
 			if (includeRepair)
 				sortedVoiceNums.push(6);
 
-			if (this.shipHasHourlyVoices(masterId))
+			if (includeHourlies && this.shipHasHourlyVoices(masterId))
 				sortedVoiceNums = sortedVoiceNums.concat(hourlyNums);
 
 			return sortedVoiceNums;
