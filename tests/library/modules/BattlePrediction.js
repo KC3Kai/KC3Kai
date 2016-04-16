@@ -31,7 +31,7 @@ QUnit.module( "Module", function() {
                 PlayerManager.combinedFleet = battleData.combined;
 
                 function registerGear(masterId) {
-                    var itemId = KC3GearManager.count();
+                    var itemId = KC3GearManager.count() + 10;
                     var gear = new KC3Gear();
                     gear.itemId = itemId;
                     gear.masterId = masterId;
@@ -40,7 +40,7 @@ QUnit.module( "Module", function() {
                 }
 
                 function registerShip(masterId,level,equip) {
-                    var rosterId = KC3ShipManager.count();
+                    var rosterId = KC3ShipManager.count() + 10;
                     var ship = new KC3Ship();
                     ship.rosterId = rosterId;
                     ship.masterId = masterId;
