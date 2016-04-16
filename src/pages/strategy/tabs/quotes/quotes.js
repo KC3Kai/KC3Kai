@@ -216,10 +216,10 @@
 				var shipLines = quotes[masterId];
 				var availableVoiceNums = normalVoiceNums.slice();
 				/*jshint -W069 */
-				if (shipData.api_voicef >= 1)
+				if ((shipData.api_voicef & 1) !== 0)
 					availableVoiceNums.push( self.lines["Idle"] );
 				/*jshint +W069 */
-				if (shipData.api_voicef > 1)
+				if ((shipData.api_voicef & 2) !== 0)
 					availableVoiceNums = availableVoiceNums.concat( hourlyVoiceNums );
 
 				var language = ConfigManager.language;
