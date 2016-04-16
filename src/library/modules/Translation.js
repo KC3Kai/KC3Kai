@@ -156,50 +156,95 @@
 			return (2 & this.getShipVoiceFlag(shipMasterId)) !== 0;
 		},
 
+		// descriptive keys to numeric keys
+		_descToId: {
+			"Intro" : 1,
+			"Library" : 25,
+			"Poke(1)" : 2,
+			"Poke(2)" : 3,
+			"Poke(3)" : 4,
+			"Married" : 28,
+			"Wedding" : 24,
+			"Ranking" : 8,
+			"Join" : 13,
+			"Equip(1)" : 9,
+			"Equip(2)" : 10,
+			"Equip(3)" : 26,
+			"Supply" : 27,
+			"Docking(1)" : 11,
+			"Docking(2)" : 12,
+			"Construction" : 5,
+			"Return" : 7,
+			"Sortie" : 14,
+			"Battle" : 15,
+			"Attack" : 16,
+			"Yasen(1)" : 18,
+			"Yasen(2)" : 17,
+			"MVP" : 23,
+			"Damaged(1)" : 19,
+			"Damaged(2)" : 20,
+			"Damaged(3)" : 21,
+			"Sunk" : 22,
+			"Idle" : 29,
+			"Repair" : 6,
+
+			"H0000":30, "H0100":31, "H0200":32, "H0300":33,
+			"H0400":34, "H0500":35, "H0600":36, "H0700":37,
+			"H0800":38, "H0900":39, "H1000":40, "H1100":41,
+			"H1200":42, "H1300":43, "H1400":44, "H1500":45,
+			"H1600":46, "H1700":47, "H1800":48, "H1900":49,
+			"H2000":50, "H2100":51, "H2200":52, "H2300":53
+		},
+		// see initialization code below.
+		_idToDesc: null,
+
+
+		// descriptive voice key to numeric one
+		voiceDescToNum: function(k) {
+			return this._descToId[k];
+		},
+	
+		// numeric voice key to descriptive one
+		voiceNumToDesc: function(k) {
+			return this._idToDesc[k];
+		},
+
+		// get available ship voice numbers by checking 
+		// voice flag of a ship.
+		// the result is sorted.
+		getShipVoiceNums: function(masterId,includeRepair) {
+			if (typeof includeRepair === "undefined")
+				includeRepair = false;
+			var sortedVoiceNums =  [
+				1,25,2,3,4,28,24,8,13,9,10,26,27,11,
+				12,5,7,14,15,16,18,17,23,19,20,21,22,
+			];
+			var hourlyNums = [
+				30,31,32,33,34,35,36,37,38,39,40,41,
+				42,43,44,45,46,47,48,49,50,51,52,53
+			];
+
+			// add idle voice key
+			if (this.shipHasIdleVoice(masterId))
+				sortedVoiceNums.push(29);
+
+			// add repair key
+			if (includeRepair)
+				sortedVoiceNums.push(6);
+
+			if (this.shipHasHourlyVoices(masterId))
+				sortedVoiceNums = sortedVoiceNums.concat(hourlyNums);
+
+			return sortedVoiceNums;
+		},
+
 		// insert quote id as key if descriptive key is used.
 		transformQuotes: function(quotes) {
+			var self = this;
 			function isIntStr(s) {
 				return parseInt(s,10).toString() === s;
 			}
 
-			var descToId = {
-				"Intro" : 1,
-				"Library" : 25,
-				"Poke(1)" : 2,
-				"Poke(2)" : 3,
-				"Poke(3)" : 4,
-				"Married" : 28,
-				"Wedding" : 24,
-				"Ranking" : 8,
-				"Join" : 13,
-				"Equip(1)" : 9,
-				"Equip(2)" : 10,
-				"Equip(3)" : 26,
-				"Supply" : 27,
-				"Docking(1)" : 11,
-				"Docking(2)" : 12,
-				"Construction" : 5,
-				"Return" : 7,
-				"Sortie" : 14,
-				"Battle" : 15,
-				"Attack" : 16,
-				"Yasen(1)" : 18,
-				"Yasen(2)" : 17,
-				"MVP" : 23,
-				"Damaged(1)" : 19,
-				"Damaged(2)" : 20,
-				"Damaged(3)" : 21,
-				"Sunk" : 22,
-				"Idle" : 29,
-				"Repair" : 6,
-
-				"H0000":30, "H0100":31, "H0200":32, "H0300":33,
-				"H0400":34, "H0500":35, "H0600":36, "H0700":37,
-				"H0800":38, "H0900":39, "H1000":40, "H1100":41,
-				"H1200":42, "H1300":43, "H1400":44, "H1500":45,
-				"H1600":46, "H1700":47, "H1800":48, "H1900":49,
-				"H2000":50, "H2100":51, "H2200":52, "H2300":53
-			};
 			$.each( quotes, function(k,v) {
 				if (! isIntStr(k) )
 					return;
@@ -208,7 +253,7 @@
 				// get an immutable list of keys for further operation
 				var subKeys = Object.keys(v);
 				$.each(subKeys, function(i,subKey) {
-					var subId = descToId[subKey];
+					var subId = self.voiceDescToNum(subKey);
 					if (subId) {
 						// force overwriting regardless of original content
 
@@ -336,5 +381,9 @@
 		}
 		
 	};
-	
+
+	KC3Translation._idToDesc = {};
+	$.each(KC3Translation._descToId, function(k,v) {
+		KC3Translation._idToDesc[v] = k;
+	});
 })();
