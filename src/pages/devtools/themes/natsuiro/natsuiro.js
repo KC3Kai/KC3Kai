@@ -833,6 +833,11 @@
 			$(".shiplist_combined_fleet").html("");
 			$(".shiplist_combined").hide();
 			
+			var thisNode, dameConConsumed;
+			if(KC3SortieManager.onSortie){
+				thisNode = KC3SortieManager.currentNode();
+			}
+			
 			// COMBINED
 			if(selectedFleet==5){
 				var MainFleet = PlayerManager.fleets[0];
@@ -841,7 +846,12 @@
 				// Show ships on main fleet
 				$.each(MainFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars))
+						try {
+							dameConConsumed = thisNode.dameConConsumed[index];
+						} catch (e){
+							dameConConsumed = false;
+						}
+						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars, dameConConsumed))
 							.commonElements()
 							.defineShort( MainFleet )
 							.appendTo(".module.fleet .shiplist_main");
@@ -851,7 +861,12 @@
 				// Show ships on escort fleet
 				$.each(EscortFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars))
+						try {
+							dameConConsumed = thisNode.dameConConsumedEscort[index];
+						} catch (e){
+							dameConConsumed = false;
+						}
+						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars, dameConConsumed))
 							.commonElements()
 							.defineShort( EscortFleet )
 							.appendTo(".module.fleet .shiplist_escort");
@@ -903,7 +918,12 @@
 				// Show ships on selected fleet
 				$.each(CurrentFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						(new KC3NatsuiroShipbox(".lship", rosterId, showCombinedFleetBars))
+						try {
+							dameConConsumed = thisNode.dameConConsumed[index];
+						} catch (e){
+							dameConConsumed = false;
+						}
+						(new KC3NatsuiroShipbox(".lship", rosterId, showCombinedFleetBars, dameConConsumed))
 							.commonElements()
 							.defineLong( CurrentFleet )
 							.appendTo(".module.fleet .shiplist_single");

@@ -152,6 +152,8 @@ Used by SortieManager
 		this.nodalXP = 0;
 		this.lostShips = [[],[]];
 		this.mvps = [];
+		this.dameConConsumed = [];
+		this.dameConConsumedEscort = [];
 		return this;
 	};
 	
@@ -333,27 +335,30 @@ Used by SortieManager
 		var ship;
 		var fleetId = parseInt(fleetSent) || KC3SortieManager.fleetSent;
 		
-		if ((typeof PlayerManager.combinedFleet === "undefined") || (PlayerManager.combinedFleet === 0) || fleetId>1){ // single fleet: not combined, or sent fleet is not first fleet
+		if ((typeof PlayerManager.combinedFleet === "undefined") || (PlayerManager.combinedFleet === 0) || fleetId>1){
+			// single fleet: not combined, or sent fleet is not first fleet
+			
 			// Update our fleet
 			fleet = PlayerManager.fleets[fleetId - 1];
 			// damecon ignored for PvP
 			dameConCode = KC3SortieManager.isPvP ? [0,0,0, 0,0,0] :	 fleet.getDameConCodes();
 			result = DA.analyzeBattleJS(dameConCode, battleData); 
 			// console.log("Single Fleet");
-			// console.log("analysis result", result);
-
+			console.log("damage analysis result", result);
+			
 			var endHPs = {
 				ally: beginHPs.ally.slice(),
 				enemy: beginHPs.enemy.slice()
 			};
 			
-			// Update enemy
+			// Update enemy ships
 			for (i = 7; i < 13; i++) {
 				this.enemyHP[i-7] = result.enemy[i-7];
 				endHPs.enemy[i-7] = result.enemy[i-7] ? result.enemy[i-7].hp : -1;
 				this.enemySunk[i-7] = result.enemy[i-7] ? result.enemy[i-7].sunk : true;
 			}
 			
+			// update player ships
 			shipNum = fleet.countShips();
 			for(i = 0; i < shipNum; i++) {
 				ship = fleet.ship(i);
@@ -361,7 +366,15 @@ Used by SortieManager
 				this.allyNoDamage &= ship.hp[0]==ship.afterHp[0];
 				ship.afterHp[1] = ship.hp[1];
 				endHPs.ally[i] = result.main[i].hp;
+				// Check if damecon consumed, if yes, get item consumed
+				if (result.main[i].dameConConsumed){
+					this.dameConConsumed[i] = ship.findDameCon();
+				} else {
+					this.dameConConsumed[i] = false;
+				}
 			}
+			
+			
 			
 			if(ConfigManager.info_btrank){
 				this.predictedRank = KC3Node.predictRank( beginHPs, endHPs );
@@ -403,8 +416,14 @@ Used by SortieManager
 				ship.afterHp[0] = mainFleet[i].hp;
 				this.allyNoDamage &= ship.hp[0]==ship.afterHp[0];
 				ship.afterHp[1] = ship.hp[1];
+				// Check if damecon consumed, if yes, get item consumed
+				if (mainFleet[i].dameConConsumed){
+					this.dameConConsumed[i] = ship.findDameCon();
+				} else {
+					this.dameConConsumed[i] = false;
+				}
 			}
-
+			
 			// Update escort fleet
 			fleet = PlayerManager.fleets[1];
 			shipNum = fleet.countShips();
@@ -414,7 +433,14 @@ Used by SortieManager
 				ship.afterHp[0] = escortFleet[i].hp;
 				this.allyNoDamage &= ship.hp[0]==ship.afterHp[0];
 				ship.afterHp[1] = ship.hp[1];
+				// Check if damecon consumed, if yes, get item consumed
+				if (escortFleet[i].dameConConsumed){
+					this.dameConConsumedEscort[i] = ship.findDameCon();
+				} else {
+					this.dameConConsumedEscort[i] = false;
+				}
 			}
+			
 		}
 		if(this.gaugeDamage > -1) {
 			this.gaugeDamage = Math.min(this.originalHPs[7],this.originalHPs[7] - this.enemyHP[0].hp);

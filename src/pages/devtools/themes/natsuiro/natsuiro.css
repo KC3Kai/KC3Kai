@@ -1819,6 +1819,9 @@ html,body {
 	border-radius:9px;
 	margin:1px 3px 0px 0px;
 }
+.module.fleet .lship .ship_gear_icon.item_being_used {
+	background:#f99;
+}
 .module.fleet .lship .ship_gear.equipped .ship_gear_icon {
 	background:#fff;
 }
@@ -1925,6 +1928,9 @@ html,body {
 	border-radius:9px;
 	z-index:1;
 	overflow:hidden;
+}
+.module.fleet .sship .ex_item.item_being_used {
+	background:#f99;
 }
 .module.fleet .sship .ex_item img {
 	width:18px;

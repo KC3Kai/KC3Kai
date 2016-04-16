@@ -4,10 +4,11 @@ KC3改 Ship Box for Natsuiro theme
 (function(){
 	"use strict";
 	
-	window.KC3NatsuiroShipbox = function( base, rosterId, showCombinedFleetBars ){
+	window.KC3NatsuiroShipbox = function( base, rosterId, showCombinedFleetBars, dameConConsumed ){
 		this.element = $("#factory "+base).clone();
 		this.element.attr("id", "ShipBox"+rosterId);
 		this.shipData = KC3ShipManager.get( rosterId );
+		this.dameConConsumed = dameConConsumed || false;
 		
 		this.showCombinedFleetBars = true;
 		if(typeof showCombinedFleetBars != "undefined"){
@@ -60,6 +61,11 @@ KC3改 Ship Box for Natsuiro theme
 		}else{
 			$(".ex_item", this.element).hide();
 		}
+		if(this.dameConConsumed.pos == 4){
+			$(".ex_item", this.element).addClass("item_being_used");
+		} else {
+			$(".ex_item", this.element).removeClass("item_being_used");
+		}
 		
 		// MVP icon
 		if(this.shipData.mvp){
@@ -80,7 +86,7 @@ KC3改 Ship Box for Natsuiro theme
 	/* DEFINE SHORT
 	Short ship box for combined fleets
 	---------------------------------------------------*/
-	KC3NatsuiroShipbox.prototype.defineShort = function(){
+	KC3NatsuiroShipbox.prototype.defineShort = function( CurrentFleet ){
 		this.hpBarLength = 88;
 		this.showHP();
 		this.showPrediction();
@@ -102,7 +108,7 @@ KC3改 Ship Box for Natsuiro theme
 	/* DEFINE LONG
 	Long ship box for single-view fleets
 	---------------------------------------------------*/
-	KC3NatsuiroShipbox.prototype.defineLong = function(){
+	KC3NatsuiroShipbox.prototype.defineLong = function( CurrentFleet ){
 		this.hpBarLength = 118;
 		this.showHP();
 		this.showPrediction();
@@ -308,6 +314,15 @@ KC3改 Ship Box for Natsuiro theme
 							$(".ship_gear_"+(slot+1)+" .ship_gear_lvl", this.element).text(thisGear.stars);
 						}
 					}
+				}
+				
+				// Check damecon if prediction is enabled
+				if(this.dameConConsumed && ConfigManager.info_battle){
+					if(this.dameConConsumed.pos == slot){
+						$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element).addClass("item_being_used");
+					}
+				} else {
+					$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element).removeClass("item_being_used");
 				}
 				
 			}else{
