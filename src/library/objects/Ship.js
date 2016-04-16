@@ -25,7 +25,7 @@ KC3改 Ship Object
 		this.lk = [0,0];
 		this.range = 0;
 		this.items = [-1,-1,-1,-1];
-		this.ex_item = 0;
+		this.ex_item = -1;
 		this.slots = [0,0,0,0];
 		this.slotnum = 0;
 		this.mod = [0,0,0,0,0];
