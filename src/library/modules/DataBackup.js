@@ -7,7 +7,7 @@
 				var locked=false;
 				var fullStorageData={};
 				var zip = new JSZip();
-				var ekex = ((typeof stringValue)==="string");//true if elementkey exists, false if not
+				var ekex = ((typeof elementkey)==="string");//true if elementkey exists, false if not
 
 				if(ekex)$(elementkey).append("Exporting Data...(0/3)");
 				for(var i=0;i<localStorage.length;i++)
@@ -53,7 +53,7 @@
 
 
 			processDB : function(dbstring,overwrite,elementkey,callback){//load data from DB string, elementkey can be null
-				var ekex = ((typeof stringValue)==="string");/
+				var ekex = ((typeof elementkey)==="string");
 				var dbdata = JSON.parse(dbstring);
                 if(ekex)$(elementkey).text("");
 				var processTables = function(dbdata_){
@@ -121,7 +121,7 @@
 			},//processStorage
 
 			loadData : function(file_,overwrite,elementkey,callback){
-				var ekex = ((typeof stringValue)==="string");
+				var ekex = ((typeof elementkey)==="string");
 				var zip;
 				var reader = new FileReader();
 				reader.onload = (function(e) {
