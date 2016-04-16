@@ -24,7 +24,7 @@ KC3改 Ship Box for Natsuiro theme
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.commonElements = function( rosterId ){
 		var leftPad = function(num){return ("   "+num).slice(-3);};
-		var tooltip = "{0}: {1}\n".format(this.shipData.masterId, this.shipData.master().api_yomi);
+		var tooltip = "{0}: {1}\n".format(this.shipData.masterId, KC3Meta.shipName(this.shipData.master().api_yomi));
 		tooltip += "{0}: {1} \t".format(KC3Meta.term("ShipArmor"), leftPad(this.shipData.ar[0]));
 		tooltip += "{0}: {1} \n".format(KC3Meta.term("ShipFire"), leftPad(this.shipData.fp[0]));
 		tooltip += "{0}: {1} \t".format(KC3Meta.term("ShipEvasion"), leftPad(this.shipData.ev[0]));
