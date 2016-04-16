@@ -718,18 +718,40 @@
 		Quests: function(data){
 			KC3QuestManager.load();
 			var questType, questBox;
+			var toggleQuestFunc = function(){
+				var quest = KC3QuestManager.get($(this).data("id"));
+				if(quest.status == 2){
+					console.info("Going to complete quest:", quest);
+					quest.status = 3;
+					KC3QuestManager.save();
+					$(this).parent().addClass("complete");
+				} else if(quest.status == 3){
+					console.info("Going to open quest agin:", quest);
+					quest.status = 2;
+					KC3QuestManager.save();
+					$(this).parent().removeClass("complete");
+				} else {
+					console.warn("Quest status invalid:", quest);
+				}
+			};
 			$(".module.quests").html("");
 			$.each(KC3QuestManager.getActives(), function(index, quest){
 				questBox = $("#factory .quest").clone().appendTo(".module.quests");
 				if(!quest.tracking){ questBox.addClass("untracked"); }
-				$(".quest_color", questBox).css("background", quest.getColor() );
+				$(".quest_color", questBox).css("background", quest.getColor() )
+					.addClass("hover")
+					.attr("title", KC3Meta.term("PanelToggleQuestComplete") )
+					.data("id", quest.id)
+					.click(toggleQuestFunc);
 				if(quest.isComplete()){
 					questBox.addClass("complete");
-					// $(".quest_color", questBox).html("&#x2714;");
 				}
 				if(quest.meta){
 					$(".quest_text", questBox).text( quest.meta().name );
-					$(".quest_text", questBox).attr("title", quest.meta().desc );
+					$(".quest_text", questBox).attr("title", "{0} {1}\n{2}".format(quest.meta().code, quest.meta().name, quest.meta().desc) );
+					if(!!quest.meta().memo) {
+						$(".quest_text", questBox).attr("title", "{0}\n{1}".format($(".quest_text", questBox).attr("title"), quest.meta().memo) );
+					}
 				}else{
 					$(".quest_text", questBox).text( KC3Meta.term("UntranslatedQuest") );
 					$(".quest_text", questBox).attr("title", KC3Meta.term("UntranslatedQuest") );
@@ -1237,7 +1259,7 @@
 				var newEnemyHP, enemyHPPercent;
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > -1){
-						newEnemyHP = thisNode.enemyHP[index].currentHp;
+						newEnemyHP = thisNode.enemyHP[index].hp;
 						if(newEnemyHP < 0){ newEnemyHP = 0; }
 						
 						if(newEnemyHP === 0){
@@ -1338,7 +1360,7 @@
 				var newEnemyHP, enemyHPPercent;
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > -1){
-						newEnemyHP = thisNode.enemyHP[index].currentHp;
+						newEnemyHP = thisNode.enemyHP[index].hp;
 						if(newEnemyHP < 0){ newEnemyHP = 0; }
 						
 						if(newEnemyHP === 0){
@@ -1600,7 +1622,7 @@
 				var newEnemyHP, enemyHPPercent;
 				$.each(thisPvP.eships, function(index, eshipId){
 					if(eshipId > -1){
-						newEnemyHP = thisPvP.enemyHP[index].currentHp;
+						newEnemyHP = thisPvP.enemyHP[index].hp;
 						if(newEnemyHP < 0){ newEnemyHP = 0; }
 						
 						if(newEnemyHP === 0){
