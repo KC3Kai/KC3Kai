@@ -155,7 +155,7 @@ QUnit.module( "Module", function() {
                 assert.deepEqual(hpArr,expectedHPNight,
                                  "hp prediction (night)" );
             });
-        };
+        }
 
         testBattlePrediction(
             "normal battle",
