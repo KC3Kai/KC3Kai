@@ -280,8 +280,8 @@
 					// accumulate quotes
 					var curQuotes = {};
 					var q;
-					for (i=0; i<group.length; ++i) {
-						curShipId = group[i];
+
+					$.each(group, function(i,curShipId) {
 						// implicit casting index from num to str
 						q = langJSON[curShipId] || {};
 						if (track) {
@@ -295,7 +295,7 @@
 						// and we haven't done any modification on curQuotes
 						// so it's safe to be assigned to a table
 						langJSON[curShipId] = curQuotes;
-					}
+					});
 				});
 			} else {
 				console.warn("Translation: failed to load RemodelDb, " +
