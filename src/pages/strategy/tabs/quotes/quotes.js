@@ -41,30 +41,33 @@
 					state = "missing";
 				}
 				elm.addClass(state);
-				if (src) {
-					$(".voice",elm).text(KC3Translation.voiceNumToDesc(voiceNum));
 
-					$(".voice",elm).on("click", function() {
-						var currentGraph = KC3Master.graph(masterId).api_filename;
-						if(self.audio){ self.audio.pause(); }
-						var voiceFile = KC3Meta.getFilenameByVoiceLine(masterId ,voiceNum, 10);
-						console.log(voiceFile);
-						var voiceSrc = "http://"+self.server_ip
-							+ "/kcs/sound/kc"+currentGraph+"/"+voiceFile+".mp3";
-						self.audio = new Audio(voiceSrc);
+				$(".voice",elm).text(KC3Translation.voiceNumToDesc(voiceNum));
+
+				$(".voice",elm).on("click", function() {
+					var currentGraph = KC3Master.graph(masterId).api_filename;
+					if(self.audio){ self.audio.pause(); }
+					var voiceFile = KC3Meta.getFilenameByVoiceLine(masterId ,voiceNum, 10);
+					console.log(voiceFile);
+					var voiceSrc = "http://"+self.server_ip
+						+ "/kcs/sound/kc"+currentGraph+"/"+voiceFile+".mp3";
+					self.audio = new Audio(voiceSrc);
 						self.audio.play();
-					});
+				});
 
-					var sourceText = typeof src.tag === "number"
+				var sourceText;
+				if (src) {
+					sourceText = typeof src.tag === "number"
 						? (state === "direct"
 						   ? "Available" : "From " + KC3Master.ship(src.tag).api_name ) 
-						: src.tag;
-
-					$(".source",elm).text( sourceText  );
-					$(".subtitle",elm).text( (state === "missing") ? "missing"
-											 :src.val );
-					$(".voice_list").append(elm);
-				}				 
+					    : src.tag;
+				} else {
+					sourceText = "missing";
+				}
+				$(".source",elm).text( sourceText  );
+				$(".subtitle",elm).text( (state === "missing") ? "missing"
+										 :src.val );
+				$(".voice_list").append(elm);
 			});
 		},
 		/* EXECUTE
