@@ -77,6 +77,14 @@ module.exports = function(grunt) {
 					'src/library/**/*.js',
 					'src/pages/**/*.js'
 				]
+			},
+			test : {
+				options: {
+					jshintrc: true
+				},
+				src: [
+					'tests/library/**/*.js',
+				]
 			}
 		},
 		cssmin: {
@@ -321,6 +329,7 @@ module.exports = function(grunt) {
 	
 	grunt.registerTask('test-src', [
 		'jshint:src',
+		'jshint:test',
 		'jsonlint:src'
 	]);
 	

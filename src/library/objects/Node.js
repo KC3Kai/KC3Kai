@@ -341,7 +341,9 @@ Used by SortieManager
 			// Update our fleet
 			fleet = PlayerManager.fleets[fleetId - 1];
 			// damecon ignored for PvP
-			dameConCode = KC3SortieManager.isPvP ? [0,0,0, 0,0,0] :	 fleet.getDameConCodes();
+			dameConCode = KC3SortieManager.isPvP() 
+				? [0,0,0, 0,0,0] 
+				: fleet.getDameConCodes();
 			result = DA.analyzeBattleJS(dameConCode, battleData); 
 			// console.log("Single Fleet");
 			console.log("damage analysis result", result);
