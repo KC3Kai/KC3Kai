@@ -654,7 +654,7 @@
 		$(".module.activity .battle_eformation").attr("title", "");
 		$(".module.activity .battle_eformation").css("-webkit-transform", "rotate(0deg)");
 		$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support.png");
-		$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_support.png");
+		$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci.png");
 		$(".module.activity .battle_aaci").attr("title", KC3Meta.term("BattleAntiAirCutIn"));
 		$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
 		$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/ui/dark_rating.png").css("opacity", "");
@@ -1370,7 +1370,7 @@
 				
 				// If anti-air CI fire is triggered
 				if(!!thisNode.antiAirFire){
-					$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_support.png");
+					$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci.png");
 					var aaciTips = "";
 					var fireShipPos = thisNode.antiAirFire.api_idx; // starts from 0
 					if(fireShipPos>=0 && fireShipPos<6){
@@ -1386,7 +1386,7 @@
 					}
 					$(".module.activity .battle_aaci").attr("title", aaciTips);
 				} else {
-					$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_support-x.png");
+					$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci-x.png");
 					$(".module.activity .battle_aaci").attr("title", KC3Meta.term("BattleAntiAirCutIn"));
 				}
 				
@@ -1751,7 +1751,7 @@
 			
 			// If anti-air CI fire is triggered
 			if(!!thisPvP.antiAirFire){
-				$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_support.png");
+				$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci.png");
 				var aaciTips = "";
 				var fireShipPos = thisPvP.antiAirFire.api_idx;
 				if(fireShipPos>=0 && fireShipPos<6){
@@ -1767,7 +1767,7 @@
 				}
 				$(".module.activity .battle_aaci").attr("title", aaciTips);
 			} else {
-				$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_support-x.png");
+				$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci-x.png");
 				$(".module.activity .battle_aaci").attr("title", KC3Meta.term("BattleAntiAirCutIn"));
 			}
 			
