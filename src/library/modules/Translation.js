@@ -214,11 +214,7 @@
 			return quotes;
 		},
 
-		getQuotes: function(repo, track) {
-			var self = this;
-			if (typeof track === "undefined")
-				track = false;
-
+		getQuotes: function(repo) {
 			// we always use English version quotes as the base,
 			// assuming all quotes are complete so there
 			// is no need to extend the table by considering pre-remodel ship quotes.
@@ -229,9 +225,6 @@
 					url : repo+'lang/data/en/quotes.json',
 					async: false
 				}).responseText);
-				if (track) {
-					self.addTags(enJSON,"en");
-				}
 			} catch(e) {
 				if (e instanceof SyntaxError){
 					console.warn(e.stack);
@@ -264,9 +257,6 @@
 
 			// 1st pass: interpret descriptive keys as keys
 			this.transformQuotes(langJSON);
-			if (track) {
-				self.addTags(langJSON,language);
-			}
 
 			// extend quotes by reusing ship's pre-remodels
 			// 2nd pass: extend langJSON by considering pre-models
@@ -284,11 +274,6 @@
 						curShipId = group[i];
 						// implicit casting index from num to str
 						q = langJSON[curShipId] || {};
-						if (track) {
-							$.each(q,function(k,v) {
-								q[k].tag = curShipId;
-							});
-						}
 						// accumulate to curQuotes
 						curQuotes = $.extend(true, {}, curQuotes, q);
 						// note that curQuotes now refers to a different obj
