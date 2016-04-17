@@ -402,7 +402,15 @@
 					cShip = FilteredShips[shipCtr]; //console.log(cShip);
 					shipLevel = cShip.level;
 
+					// we can save some time by avoiding constructing jquery object
+					// if we already have one
+					if (cShip.view) {
+						cShip.view.appendTo(self.shipList);
+						return;
+					}
+
 					cElm = $(".tab_ships .factory .ship_item").clone().appendTo(self.shipList);
+					cShip.view = cElm;
 					if(shipCtr%2 === 0){ cElm.addClass("even"); }else{ cElm.addClass("odd"); }
 					
 					$(".ship_id", cElm).text( cShip.id );
