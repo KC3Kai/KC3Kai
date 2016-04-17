@@ -442,10 +442,6 @@
 					$(".ship_ev", cElm).text( cShip.ev[self.equipMode] );
 					$(".ship_ls", cElm).text( cShip.ls[self.equipMode] );
 					
-					// totals.as += parseInt(cShip.as[self.equipMode], 10);
-					// totals.ev += parseInt(cShip.ev[self.equipMode], 10);
-					// totals.ls += parseInt(cShip.ls[self.equipMode], 10);
-					
 					[1,2,3,4].forEach(function(x){
 						self.equipImg(cElm, x, cShip.slots[x-1], cShip.equip[x-1]);
 					});
@@ -465,18 +461,6 @@
 						else
 							cElm.addClass('modernization-able');
 				});
-				
-				// Show totals
-				/*$(".tab_ships .ship_totals .total_level").text(totals.lv);
-				$(".tab_ships .ship_totals .total_hp").text(totals.hp);
-				$(".tab_ships .ship_totals .total_fp").text(totals.fp);
-				$(".tab_ships .ship_totals .total_tp").text(totals.tp);
-				$(".tab_ships .ship_totals .total_aa").text(totals.aa);
-				$(".tab_ships .ship_totals .total_ar").text(totals.ar);
-				$(".tab_ships .ship_totals .total_as").text(totals.as);
-				$(".tab_ships .ship_totals .total_ev").text(totals.ev);
-				$(".tab_ships .ship_totals .total_ls").text(totals.ls);
-				$(".tab_ships .ship_totals .total_lk").text(totals.lk);*/
 				
 				self.shipList.show();
 				self.isLoading = false;
