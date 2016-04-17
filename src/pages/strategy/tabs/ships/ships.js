@@ -405,7 +405,20 @@
 					// we can save some time by avoiding constructing jquery object
 					// if we already have one
 					if (cShip.view) {
-						cShip.view.appendTo(self.shipList);
+						cElm = cShip.view;
+						cElm.appendTo(self.shipList);
+
+						// things need be recomputed:
+
+						self.modernizableStat("fp", cElm, cShip.fp);
+						self.modernizableStat("tp", cElm, cShip.tp);
+						self.modernizableStat("yasen", cElm, cShip.yasen);
+						self.modernizableStat("aa", cElm, cShip.aa);
+						self.modernizableStat("ar", cElm, cShip.ar);
+					
+						$(".ship_as", cElm).text( cShip.as[self.equipMode] );
+						$(".ship_ev", cElm).text( cShip.ev[self.equipMode] );
+						$(".ship_ls", cElm).text( cShip.ls[self.equipMode] );
 						return;
 					}
 
