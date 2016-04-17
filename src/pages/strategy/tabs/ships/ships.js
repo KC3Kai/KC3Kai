@@ -19,20 +19,29 @@
 		speedFilter: 0,
 		withFleet: true,
 		isLoading: false,
-		//shipList: $(".tab_ships .ship_list"),
-		
+
 		/* INIT
 		Prepares all data needed
 		---------------------------------*/
 		init :function(){
 			// Cache ship info
 			PlayerManager.loadFleets();
-			var ctr, ThisShip, MasterShip, ThisShipData;
+			var ctr, ThisShip, ThisShipData;
 			for(ctr in KC3ShipManager.list){
 				ThisShip = KC3ShipManager.list[ctr];
-				MasterShip = ThisShip.master();
-				ThisShipData = {
-					id : ThisShip.rosterId,
+				ThisShipData = this.prepareShipData(ThisShip);
+				
+				this.shipCache.push(ThisShipData);
+			}
+		},
+
+		// prepares necessary info.
+		// also stores those that doesn't need to be recomputed overtime.
+		prepareShipData: function(ship) {
+			var ThisShip = ship;
+			var MasterShip = ThisShip.master();
+			var cached =  {
+				id: ThisShip.rosterId,
 					bid : ThisShip.masterId,
 					stype: MasterShip.api_stype,
 					english: ThisShip.name(),
@@ -57,26 +66,24 @@
 					lk: ThisShip.lk[0],
 					sp: MasterShip.api_soku,
 					slots: ThisShip.slots,
-					
 					fleet: ThisShip.onFleet(),
-					
+					ship: ThisShip,
+					master: ThisShip.master(),
 					// Check whether remodel is max
-					remodel: !MasterShip.api_afterlv
-                                || (KC3Master._raw.ship[MasterShip.api_aftershipid] && (KC3Master._raw.ship[MasterShip.api_aftershipid].api_aftershipid || 0) == MasterShip.api_id)
+					remodel: RemodelDb.isFinalForm(ship.masterId)
 				};
-				
-				// Check whether modernization is max
-					if( ThisShipData.fp[0] == ThisShipData.fp[1]
-						&& ThisShipData.tp[0] == ThisShipData.tp[1]
-						&& ThisShipData.aa[0] == ThisShipData.aa[1]
-						&& ThisShipData.ar[0] == ThisShipData.ar[1]
-					)
-						ThisShipData.statmax = 1;
-					else
-						ThisShipData.statmax = 0;
-				
-				this.shipCache.push(ThisShipData);
-			}
+			var ThisShipData = cached;
+			// Check whether modernization is max
+			if( ThisShipData.fp[0] == ThisShipData.fp[1]
+				&& ThisShipData.tp[0] == ThisShipData.tp[1]
+				&& ThisShipData.aa[0] == ThisShipData.aa[1]
+				&& ThisShipData.ar[0] == ThisShipData.ar[1]
+			  )
+				ThisShipData.statmax = 1;
+			else
+				ThisShipData.statmax = 0;
+
+			return cached;
 		},
 		
 		/* EXECUTE
@@ -315,9 +322,6 @@
 			// Clear list
 			this.shipList.html("").hide();
 			
-			// Checks the configuration
-			var config = (new KekkonType()).values;
-			
 			// Wait until execute
 			setTimeout(function(){
 				var shipCtr, cElm, cShip, shipLevel;
@@ -389,8 +393,6 @@
 					return returnVal;
 				});
 				
-				// var totals = {lv:0, hp:0, fp:0, tp:0, aa:0, ar:0, as:0, ev:0, ls:0, lk:0 };
-				
 				// Fill up list
 				Object.keys(FilteredShips).forEach(function(shipCtr){
 					if(shipCtr%10 === 0){
@@ -398,45 +400,31 @@
 					}
 					
 					cShip = FilteredShips[shipCtr]; //console.log(cShip);
-					shipLevel = cShip.level + 50 * 0; // marry enforcement (debugging toggle)
+					shipLevel = cShip.level;
+
 					cElm = $(".tab_ships .factory .ship_item").clone().appendTo(self.shipList);
 					if(shipCtr%2 === 0){ cElm.addClass("even"); }else{ cElm.addClass("odd"); }
 					
 					$(".ship_id", cElm).text( cShip.id );
 					$(".ship_img .ship_icon", cElm).attr("src", KC3Meta.shipIcon(cShip.bid));
-					if(config.kanmusuPic && shipLevel >= 100)
-						$(".ship_img .ship_kekkon", cElm).attr("src","tabs/ships/SEGASonicRing.png").show();
 					$(".ship_name", cElm).text( cShip.english );
 					if(shipLevel >= 100) {
-						if(config.kanmusuName)
-							$(".ship_name", cElm).addClass("ship_kekkon");
 						$(".ship_name", cElm).addClass("ship_kekkon-color");
 					}
 					$(".ship_type", cElm).text( KC3Meta.stype(cShip.stype) );
-					var shipLevelConv = shipLevel - (shipLevel>=100 && config.kanmusuLv ? (102 - ConfigManager.marryLevelFormat) : 0);
+					var shipLevelConv = shipLevel;
 					$(".ship_lv", cElm).html( "<span>Lv.</span>" + shipLevelConv);
-					if(config.kanmusuLv && shipLevel >= 100)
-						$(".ship_lv", cElm).addClass("ship_kekkon ship_kekkon-color");
 					$(".ship_morale", cElm).html( cShip.morale );
 					$(".ship_hp", cElm).text( cShip.hp );
 					$(".ship_lk", cElm).text( cShip.lk );
 					
 					if(cShip.morale >= 50){ $(".ship_morale", cElm).addClass("sparkled"); }
 					
-					// totals.lv += parseInt(cShip.level, 10);
-					// totals.hp += parseInt(cShip.hp, 10);
-					// totals.lk += parseInt(cShip.lk, 10);
-					
 					self.modernizableStat("fp", cElm, cShip.fp);
 					self.modernizableStat("tp", cElm, cShip.tp);
 					self.modernizableStat("yasen", cElm, cShip.yasen);
 					self.modernizableStat("aa", cElm, cShip.aa);
 					self.modernizableStat("ar", cElm, cShip.ar);
-					
-					// totals.fp += parseInt($(".ship_fp", cElm).text(), 10);
-					// totals.tp += parseInt($(".ship_tp", cElm).text(), 10);
-					// totals.aa += parseInt($(".ship_aa", cElm).text(), 10);
-					// totals.ar += parseInt($(".ship_ar", cElm).text(), 10);
 					
 					$(".ship_as", cElm).text( cShip.as[self.equipMode] );
 					$(".ship_ev", cElm).text( cShip.ev[self.equipMode] );
@@ -447,7 +435,6 @@
 					});
 					
 					if(FilteredShips[shipCtr].locked){ $(".ship_lock img", cElm).show(); }
-					if(shipLevel >= 100 && config.kanmusuDT){ $(".ship_marry img",cElm).show(); } 
 
 					// Check whether remodel is max
 						if( !cShip.remodel )
@@ -514,26 +501,5 @@
 			}
 		}
 	};
-	
-	// checks kekkon setting
-	function KekkonType(){
-		var checks = {
-			kanmusuDT  : [0],   // ONLY show this
-			kanmusuName: [1],   // ring location: name
-			kanmusuLv  : [2,3], // ring location: level
-			kanmusuLv0 : [2],   // level convention, 0-index
-			kanmusuLv1 : [3],   // level convention, 1-index
-			kanmusuPic : [4],   // ring location: ship icon
-		};
-		if(!KekkonType.values) {
-			this.values = {};
-			KekkonType.instance = this;
-		}
-		Object.keys(checks).forEach(function(k){
-			KekkonType.instance.values[k] = (function(x){return x.indexOf(ConfigManager.marryLevelFormat || -1) >= 0;})(checks[k]);
-		});
-		return KekkonType.instance;
-	}
-	new KekkonType();
 	
 })();
