@@ -105,6 +105,12 @@ KC3改 Ship Box for Natsuiro theme
 		var hpPercent = this.shipData.hp[0] / this.shipData.hp[1];
 		$(".ship_hp_bar", this.element).css("width", (this.hpBarLength*hpPercent)+"px");
 		
+		// Left HP to be Taiha
+		var taihaHp = Math.floor(0.25 * this.shipData.hp[1]);
+		if(this.shipData.hp[0] > taihaHp && this.shipData.hp[0] < this.shipData.hp[1]){
+			$(".ship_hp_cur", this.element).attr("title", KC3Meta.term("PanelTaihaHpLeft").format(taihaHp, this.shipData.hp[0] - taihaHp) );
+		}
+		
 		// Clear box colors
 		this.element.css("background-color", "transparent");
 		
