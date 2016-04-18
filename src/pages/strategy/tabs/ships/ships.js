@@ -202,7 +202,7 @@
 				thisOption.view.on('click', function() {
 					var curRep = self.newFilterRep[filterName];
 					var selectedInd = ind;
-					curRep.onToggle.bind(self)(selectedInd,curRep);
+					curRep.onToggle.call(self,selectedInd,curRep);
 				});
 				console.assert(
 					thisOption.view.length === 1,
@@ -221,7 +221,7 @@
 			};
 					
 			this.newFilterRep[filterName] = optionRep;
-			optionRep.onToggle.bind(self)(defValue,optionRep);
+			optionRep.onToggle.call(self,defValue,optionRep);
 		},
 
 		prepareFilters: function() {
