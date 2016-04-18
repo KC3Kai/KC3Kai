@@ -59,11 +59,16 @@
 	background:#cfc;
 }
 
+.tab_ships .advanced_sorter .adv_label {
+	float: left;
+	font-weight: bold;
+	font-size: 12px;
+	padding-right: 5px;
+}
 .tab_ships .advanced_sorter .adv_sorter {
 	width:80px;
 	height:18px;
 	line-height:18px;
-	margin:0px 5px 2px 0px;
 	float:left;
 }
 .tab_ships .advanced_sorter .adv_sorter:hover {
