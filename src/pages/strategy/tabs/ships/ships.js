@@ -8,12 +8,16 @@
 		
 		shipCache:[],
 		options: [],
-		sortBy: "lv",
-		sortAsc: true,
+		// default sorting method to Level
+		currentSorters: [{name:"lv", reverse:false}],
 		equipMode: 0,
 		isLoading: false,
+		multiKey: false,
 
 		newFilterRep: {},
+		// all sorters
+		sorters: {},
+		sorterDescCtrl: null,
 
 		/* INIT
 		Prepares all data needed
@@ -28,6 +32,82 @@
 				this.shipCache.push(ThisShipData);
 			}
 
+			this.prepareSorters();
+		},
+
+		getLastCurrentSorter: function() {
+			return this.currentSorters[this.currentSorters.length-1];
+		},
+
+		reverseLastCurrentSorter: function() {
+			var sorter = this.getLastCurrentSorter();
+			sorter.reverse = ! sorter.reverse;
+			console.log( JSON.stringify( this.currentSorters) );
+
+			this.updateSorterDescription();
+		},
+
+		pushToCurrentSorters: function(name) {
+			// TODO
+			this.currentSorters.push({
+				name: name,
+				reverse: false
+			});
+
+			this.updateSorterDescription();
+		},
+
+		setCurrentSorter: function(name) {
+			var sorter = this.sorters[name];
+			console.assert(sorter, "sorter should have been registered");
+			this.currentSorters = [ {name: sorter.name, reverse:false} ];
+			console.log( JSON.stringify( this.currentSorters) );
+
+			this.updateSorterDescription();
+		},
+
+		updateSorterDescription: function() {
+			var self = this;
+			var desc = this.currentSorters
+				.map(function(sorterInfo) {
+					var sorter = self.sorters[sorterInfo.name];
+					return sorterInfo.reverse
+						? sorter.desc + "(R)"
+						: sorter.desc;
+				})
+				.join(" > ");
+
+			this.sorterDescCtrl.text( desc );
+		},
+
+		// create comparator based on current list sorters
+		makeComparator: function() {
+			function reversed(comparator) {
+				return function(a,b) {
+					var result = comparator(a,b);
+					return result === 0 
+						? 0 
+						: result < 0 ? 1 : -1;
+				};
+			}
+
+			function compose(prevCmp,curCmp) {
+				return function(a,b) {
+					var prevResult = prevCmp(a,b);
+					return prevResult !== 0 ? prevResult : curCmp(a,b);
+				};
+			};
+
+			var self = this;
+			return this.currentSorters
+				.map( function(sorterInfo) {
+					console.log(sorterInfo);
+					var sorter = self.sorters[sorterInfo.name];
+					return sorterInfo.reverse
+						? reversed(sorter.comparator) 
+						: sorter.comparator;
+				})
+				.reduce( compose );
 		},
 
 		// prepares necessary info.
@@ -97,6 +177,19 @@
 					$(".filter_name", cElm).text(KC3Meta.stype(sCtr));
 				}
 			}
+
+			this.sorterDescCtrl = $(".advanced_sorter .sorter_desc");
+			this.updateSorterDescription();
+
+			var self = this;
+			var multiKeyCtrl = $( ".advanced_sorter .adv_sorter" );
+			$(".filter_check",multiKeyCtrl).toggle( this.multiKey );
+			this.sorterDescCtrl.toggle(this.multiKey);
+			multiKeyCtrl.on("click", function() {
+				self.multiKey = ! self.multiKey;
+				$(".filter_check",this).toggle( self.multiKey );
+				self.sorterDescCtrl.toggle(self.multiKey);
+			});
 
 			this.prepareFilters();
 			this.shipList = $(".tab_ships .ship_list");
@@ -399,16 +492,80 @@
 
 			// Column header sorting
 			$(".tab_ships .ship_header .ship_field.hover").on("click", function(){
-				if($(this).data('type') == self.sortBy){
-					self.sortAsc = !self.sortAsc;
-				}else{
-					self.sortAsc = true;
+				var sorter = self.getLastCurrentSorter();
+				var sorterName = $(this).data("type");
+				if (sorterName === sorter.name) {
+					self.reverseLastCurrentSorter();
+				} else {
+					if (self.multiKey) {
+						// for multi index sorters
+						self.pushToCurrentSorters( sorterName );
+					} else {
+						// for normal sorters
+						self.setCurrentSorter( sorterName  );
+					}
 				}
-				self.sortBy = $(this).data('type');
 				self.refreshTable();
 			});
 			
 			this.refreshTable();
+		},
+
+
+		defineSorter: function(name,desc,comparator) {
+			this.sorters[name] = {
+				name: name,
+				desc: desc,
+				comparator: comparator
+			};
+		},
+
+		defineSimpleSorter: function(name,desc,getter) {
+			var self = this;
+			this.defineSorter(
+				name,desc,
+				function(a,b) {
+					var va = getter.call(self,a);
+					var vb = getter.call(self,b);
+					return va === vb
+						 ? 0 
+						 : (va < vb) ? -1 : 1;
+				});
+		},
+
+		prepareSorters: function() {
+			var define = this.defineSimpleSorter.bind(this);
+
+			define("id", "Id",
+				   function(x) { return x.id; });
+			define("name", "Name", 
+				   function(x) { return x.english; });
+			define("type", "Type",
+				   function(x) { return x.stype; });
+			define("lv", "Level",
+				   function(x) { return -x.level; });
+			define("morale", "Morale",
+				   function(x) { return -x.morale; });
+			define("hp", "HP",
+				   function(x) { return -x.hp; });
+			define("fp", "Firepower",
+				   function(x) { return -x.fp[this.equipMode+1]; });
+			define("tp", "Torpedo",
+				   function(x) { return -x.tp[this.equipMode+1]; });
+			define("yasen", "Yasen",
+				   function(x) { return -(x.fp[this.equipMode+1] + x.tp[this.equipMode+1]); });
+			define("aa", "Anti-Air",
+				   function(x) { return -x.aa[this.equipMode+1]; });
+			define("ar", "Armor",
+				   function(x) { return -x.ar[this.equipMode+1]; });
+			define("as", "ASW",
+				   function(x) { return -x.as[this.equipMode]; });
+			define("ev", "Evasion",
+				   function(x) { return -x.ev[this.equipMode]; });
+			define("ls", "LoS",
+				   function(x) { return -x.ls[this.equipMode]; });
+			define("lk", "Luck",
+				   function(x) { return -x.lk; });
 		},
 		
 		/* REFRESH TABLE
@@ -423,6 +580,8 @@
 			
 			// Clear list
 			this.shipList.html("").hide();
+
+			console.log(this.sorters);
 			
 			// Wait until execute
 			setTimeout(function(){
@@ -434,36 +593,8 @@
 				});
 
 				// Sorting
-				FilteredShips.sort(function(a,b){
-					var returnVal = 0;
-					switch(self.sortBy){
-						case "id":
-							if((a.id-b.id) > 0){ returnVal = 1; }
-							else if((a.id-b.id) < 0){ returnVal = -1; }
-							break;
-						case "name":
-							if(a.english < b.english) returnVal = -1;
-							else if(a.english > b.english) returnVal = 1;
-							break;
-						case "type": returnVal = a.stype  - b.stype; break;
-						case "lv": returnVal = b.level  - a.level; break;
-						case "morale": returnVal = b.morale  - a.morale; break;
-						case "hp": returnVal = b.hp  - a.hp; break;
-						case "fp": returnVal = b.fp[self.equipMode+1] - a.fp[self.equipMode+1]; break;
-						case "tp": returnVal = b.tp[self.equipMode+1] - a.tp[self.equipMode+1]; break;
-						case "yasen": returnVal = (b.fp[self.equipMode+1] + b.tp[self.equipMode+1]) - (a.fp[self.equipMode+1] + a.tp[self.equipMode+1]); break;
-						case "aa": returnVal = b.aa[self.equipMode+1] - a.aa[self.equipMode+1]; break;
-						case "ar": returnVal = b.ar[self.equipMode+1] - a.ar[self.equipMode+1]; break;
-						case "as": returnVal = b.as[self.equipMode] - a.as[self.equipMode]; break;
-						case "ev": returnVal = b.ev[self.equipMode] - a.ev[self.equipMode]; break;
-						case "ls": returnVal = b.ls[self.equipMode] - a.ls[self.equipMode]; break;
-						case "lk": returnVal = b.lk  - a.lk; break;
-						default: returnVal = 0; break;
-					}
-					if(!self.sortAsc){ returnVal =- returnVal; }
-					return returnVal;
-				});
-				
+				FilteredShips.sort( self.makeComparator() );
+
 				// Fill up list
 				Object.keys(FilteredShips).forEach(function(shipCtr){
 					if(shipCtr%10 === 0){
