@@ -25,10 +25,8 @@
 			for(ctr in KC3ShipManager.list){
 				ThisShip = KC3ShipManager.list[ctr];
 				ThisShipData = this.prepareShipData(ThisShip);
-				
 				this.shipCache.push(ThisShipData);
 			}
-
 
 		},
 
@@ -39,36 +37,36 @@
 			var MasterShip = ThisShip.master();
 			var cached =  {
 				id: ThisShip.rosterId,
-					bid : ThisShip.masterId,
-					stype: MasterShip.api_stype,
-					english: ThisShip.name(),
-					level: ThisShip.level,
-					morale: ThisShip.morale,
-					equip: ThisShip.items,
-					locked: ThisShip.lock,
-					
-					hp: ThisShip.hp[0],
-					fp: [MasterShip.api_houg[1], MasterShip.api_houg[0]+ThisShip.mod[0], ThisShip.fp[0] ],
-					tp: [MasterShip.api_raig[1], MasterShip.api_raig[0]+ThisShip.mod[1], ThisShip.tp[0] ],
-					yasen: [
-						MasterShip.api_houg[1] + MasterShip.api_raig[1],
-						MasterShip.api_houg[0]+ThisShip.mod[0] + MasterShip.api_raig[0]+ThisShip.mod[1],
-						ThisShip.fp[0] + ThisShip.tp[0]
-					],
-					aa: [MasterShip.api_tyku[1], MasterShip.api_tyku[0]+ThisShip.mod[2], ThisShip.aa[0] ],
-					ar: [MasterShip.api_souk[1], MasterShip.api_souk[0]+ThisShip.mod[3], ThisShip.ar[0] ],
-					as: [this.getDerivedStatNaked("tais", ThisShip.as[0], ThisShip.items), ThisShip.as[0] ],
-					ev: [this.getDerivedStatNaked("houk", ThisShip.ev[0], ThisShip.items), ThisShip.ev[0] ],
-					ls: [this.getDerivedStatNaked("saku", ThisShip.ls[0], ThisShip.items), ThisShip.ls[0] ],
-					lk: ThisShip.lk[0],
-					sp: MasterShip.api_soku,
-					slots: ThisShip.slots,
-					fleet: ThisShip.onFleet(),
-					ship: ThisShip,
-					master: ThisShip.master(),
-					// Check whether remodel is max
-					remodel: RemodelDb.isFinalForm(ship.masterId)
-				};
+				bid : ThisShip.masterId,
+				stype: MasterShip.api_stype,
+				english: ThisShip.name(),
+				level: ThisShip.level,
+				morale: ThisShip.morale,
+				equip: ThisShip.items,
+				locked: ThisShip.lock,
+				
+				hp: ThisShip.hp[0],
+				fp: [MasterShip.api_houg[1], MasterShip.api_houg[0]+ThisShip.mod[0], ThisShip.fp[0] ],
+				tp: [MasterShip.api_raig[1], MasterShip.api_raig[0]+ThisShip.mod[1], ThisShip.tp[0] ],
+				yasen: [
+					MasterShip.api_houg[1] + MasterShip.api_raig[1],
+					MasterShip.api_houg[0]+ThisShip.mod[0] + MasterShip.api_raig[0]+ThisShip.mod[1],
+					ThisShip.fp[0] + ThisShip.tp[0]
+				],
+				aa: [MasterShip.api_tyku[1], MasterShip.api_tyku[0]+ThisShip.mod[2], ThisShip.aa[0] ],
+				ar: [MasterShip.api_souk[1], MasterShip.api_souk[0]+ThisShip.mod[3], ThisShip.ar[0] ],
+				as: [this.getDerivedStatNaked("tais", ThisShip.as[0], ThisShip.items), ThisShip.as[0] ],
+				ev: [this.getDerivedStatNaked("houk", ThisShip.ev[0], ThisShip.items), ThisShip.ev[0] ],
+				ls: [this.getDerivedStatNaked("saku", ThisShip.ls[0], ThisShip.items), ThisShip.ls[0] ],
+				lk: ThisShip.lk[0],
+				sp: MasterShip.api_soku,
+				slots: ThisShip.slots,
+				fleet: ThisShip.onFleet(),
+				ship: ThisShip,
+				master: ThisShip.master(),
+				// Check whether remodel is max
+				remodel: RemodelDb.isFinalForm(ship.masterId)
+			};
 			var ThisShipData = cached;
 			// Check whether modernization is max
 			if( ThisShipData.fp[0] == ThisShipData.fp[1]
@@ -87,9 +85,7 @@
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
-
 			// now we need to do this before preparing filters
-
 			// Ship types
 			var sCtr, cElm;
 
@@ -136,13 +132,6 @@
 						 + "_" + option);
 			}
 
-			/*
-			  need to prepare following fields for stype filters
-			  (this includes "all", "none" and "invert")
-			  findView: ??
-			  onToggle: mutualExclusiveOnToggle,
-			  testShip: function(curVal,ship) {
-			*/
 			var filterInfoStype = {};
 			filterInfoStype.defValue = [];
 
@@ -334,34 +323,6 @@
 		showFilters :function(){
 			var self = this;
 			var sCtr;
-
-			/*
-			// Select: All
-			self.options.all = $(".tab_ships .filters .massSelect .all").on("click", function(){
-				$(".tab_ships .ship_filter_type .filter_check").show();
-				for(sCtr in KC3Meta._stype){
-					self.filters[sCtr] = true;
-				}
-				self.refreshTable();
-			});
-			
-			// Select: None
-			self.options.none = $(".tab_ships .filters .massSelect .none").on("click", function(){
-				$(".tab_ships .ship_filter_type .filter_check").hide();
-				for(sCtr in KC3Meta._stype){
-					self.filters[sCtr] = false;
-				}
-				self.refreshTable();
-			});
-
-			// Select: Invert
-			self.options.none = $(".tab_ships .filters .massSelect .invert").on("click", function(){
-				$(".tab_ships .ship_filter_type .filter_check").toggle();
-				for(sCtr in KC3Meta._stype){
-					self.filters[sCtr] = !self.filters[sCtr];
-				}
-				self.refreshTable();
-			}); */
 			
 			// Equip Stats: Yes
 			self.options.equip_yes = $(".tab_ships .filters .massSelect .equip_yes").on("click", function(){
@@ -385,16 +346,6 @@
 			else
 				self.options.equip_no.addClass('on');
 
-			/*
-			// Ship type toggled
-			$(".tab_ships .filters .ship_filter_type").on("click", function(){
-				self.filters[ $(this).data("id") ] = !self.filters[ $(this).data("id") ];
-				if(self.filters[ $(this).data("id") ]){ $(".filter_check", this).show(); }
-				else{ $(".filter_check", this).hide(); }
-				self.refreshTable();
-			});
-			*/
-			
 			// Column header sorting
 			$(".tab_ships .ship_header .ship_field.hover").on("click", function(){
 				if($(this).data('type') == self.sortBy){
@@ -425,16 +376,12 @@
 			// Wait until execute
 			setTimeout(function(){
 				var shipCtr, cElm, cShip, shipLevel;
-				var FilteredShips = [];
-				
+
 				// Filtering
-				for(shipCtr in self.shipCache){
-					var thisShip = self.shipCache[shipCtr];
-					if(self.executeFilters(thisShip)){
-						FilteredShips.push(thisShip);
-					}
-				}
-				
+				var FilteredShips = self.shipCache.filter(function(x) {
+					return self.executeFilters(x);
+				})
+
 				// Sorting
 				FilteredShips.sort(function(a,b){
 					var returnVal = 0;
