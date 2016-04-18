@@ -479,17 +479,8 @@
 						cElm = cShip.view;
 						cElm.appendTo(self.shipList);
 
-						// things need be recomputed:
-
-						self.modernizableStat("fp", cElm, cShip.fp);
-						self.modernizableStat("tp", cElm, cShip.tp);
-						self.modernizableStat("yasen", cElm, cShip.yasen);
-						self.modernizableStat("aa", cElm, cShip.aa);
-						self.modernizableStat("ar", cElm, cShip.ar);
-					
-						$(".ship_as", cElm).text( cShip.as[self.equipMode] );
-						$(".ship_ev", cElm).text( cShip.ev[self.equipMode] );
-						$(".ship_ls", cElm).text( cShip.ls[self.equipMode] );
+						if (cElm.onRecompute)
+							cElm.onRecompute();
 						return;
 					}
 
@@ -511,16 +502,21 @@
 					$(".ship_lk", cElm).text( cShip.lk );
 					
 					if(cShip.morale >= 50){ $(".ship_morale", cElm).addClass("sparkled"); }
+
+					// callback for things that has to be recomputed
+					cShip.onRecompute = function() {
+						self.modernizableStat("fp", cElm, cShip.fp);
+						self.modernizableStat("tp", cElm, cShip.tp);
+						self.modernizableStat("yasen", cElm, cShip.yasen);
+						self.modernizableStat("aa", cElm, cShip.aa);
+						self.modernizableStat("ar", cElm, cShip.ar);
 					
-					self.modernizableStat("fp", cElm, cShip.fp);
-					self.modernizableStat("tp", cElm, cShip.tp);
-					self.modernizableStat("yasen", cElm, cShip.yasen);
-					self.modernizableStat("aa", cElm, cShip.aa);
-					self.modernizableStat("ar", cElm, cShip.ar);
-					
-					$(".ship_as", cElm).text( cShip.as[self.equipMode] );
-					$(".ship_ev", cElm).text( cShip.ev[self.equipMode] );
-					$(".ship_ls", cElm).text( cShip.ls[self.equipMode] );
+						$(".ship_as", cElm).text( cShip.as[self.equipMode] );
+						$(".ship_ev", cElm).text( cShip.ev[self.equipMode] );
+						$(".ship_ls", cElm).text( cShip.ls[self.equipMode] );
+					};
+
+					cShip.onRecompute();
 					
 					[1,2,3,4].forEach(function(x){
 						self.equipImg(cElm, x, cShip.slots[x-1], cShip.equip[x-1]);
