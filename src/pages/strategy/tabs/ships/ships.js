@@ -95,15 +95,17 @@
 			var self = this;
 
 			// default UI actions for options that are mutually exclusive
-			function mutualExclusiveOnToggle(newInd,optionRep) {
-				var oldState = optionRep.curValue;
-				if (oldState === newInd)
+			function mutualExclusiveOnToggle(selectedInd,optionRep) {
+				// mutural exclusive options use just value indices
+				// as the option value
+				var oldVal = optionRep.curValue;
+				if (oldVal === selectedInd)
 					return;
-				$.each(optionRep.options, function(thisVal, optionObj) {
-					optionObj.view.toggleClass('on', thisVal === newInd);
+				$.each(optionRep.options, function(thisInd, optionObj) {
+					optionObj.view.toggleClass('on', thisInd === selectedInd);
 				});
-				optionRep.curValue = newInd;
-				if (oldState !== null)
+				optionRep.curValue = selectedInd;
+				if (oldVal !== null)
 					self.refreshTable();
 			}
 
@@ -186,10 +188,8 @@
 					thisOption.view = $(selector);
 					thisOption.view.on('click', function() {
 						var curRep = self.newFilterRep[filterName];
-						var newVal = ind;
-						//var oldVal = self.newFilterRep[filterName].curValue;
-						// curRep.curValue = newVal;
-						curRep.onToggle(newVal,curRep);
+						var selectedInd = ind;
+						curRep.onToggle(selectedInd,curRep);
 					});
 					console.assert(
 						thisOption.view.length === 1,
