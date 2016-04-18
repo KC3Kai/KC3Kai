@@ -193,18 +193,10 @@
 			if (! onToggle)
 				onToggle = this._mutualExclusiveOnToggle;
 
-			var filterInfo = {
-				defValue: defValue,
-				options: options,
-				findView: findView,
-				onToggle: onToggle ,
-				testShip: testShip
-			};
-
 			var newOptions = [];
-			$.each(filterInfo.options, function(ind, optionName) {
+			$.each(options, function(ind, optionName) {
 				var thisOption = {};
-				var view = filterInfo.findView(filterName,optionName);
+				var view = findView(filterName,optionName);
 				thisOption.name = optionName;
 				thisOption.view = view;
 				thisOption.view.on('click', function() {
@@ -222,14 +214,14 @@
 			var optionRep = {
 				curValue: null,
 				options: newOptions,
-				onToggle: filterInfo.onToggle,
+				onToggle: onToggle,
 				testShip: function (ship) {
-					return filterInfo.testShip(optionRep.curValue,ship);
+					return testShip(optionRep.curValue,ship);
 				}
 			};
 					
 			this.newFilterRep[filterName] = optionRep;
-			optionRep.onToggle.bind(self)(filterInfo.defValue,optionRep);
+			optionRep.onToggle.bind(self)(defValue,optionRep);
 		},
 
 		prepareFilters: function() {
@@ -439,7 +431,7 @@
 				// Filtering
 				var FilteredShips = self.shipCache.filter(function(x) {
 					return self.executeFilters(x);
-				})
+				});
 
 				// Sorting
 				FilteredShips.sort(function(a,b){
