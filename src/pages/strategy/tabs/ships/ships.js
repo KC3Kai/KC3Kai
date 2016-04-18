@@ -421,39 +421,39 @@
 				},
 				// onToggle
 				function(selectedInd, optionRep) {
-				var initializing = false;
-				if (optionRep.curValue === null) {
-					// the variable name is a bit misleading,
-					// but when "optionRep.curValue" is null
-					// we know we are initializing
-					initializing = true;
-					optionRep.curValue = selectedInd;
-				} else {
-					var selected = optionRep.options[selectedInd];
-					if (typeof selected.name === 'number') {
-						// this is a ship type toggle
-						optionRep.curValue[selected.name] = !optionRep.curValue[selected.name];
+					var initializing = false;
+					if (optionRep.curValue === null) {
+						// the variable name is a bit misleading,
+						// but when "optionRep.curValue" is null
+						// we know we are initializing
+						initializing = true;
+						optionRep.curValue = selectedInd;
 					} else {
-						$.each(stypes, function(ignore, stype) {
-							optionRep.curValue[stype] = 
-								  (selected.name === "all")
-								? true
-								: (selected.name === "none")
-								? false
-							    : ! optionRep.curValue[stype];
-						});
+						var selected = optionRep.options[selectedInd];
+						if (typeof selected.name === 'number') {
+							// this is a ship type toggle
+							optionRep.curValue[selected.name] = !optionRep.curValue[selected.name];
+						} else {
+							$.each(stypes, function(ignore, stype) {
+								optionRep.curValue[stype] = 
+									(selected.name === "all")
+									? true
+									: (selected.name === "none")
+									? false
+									: ! optionRep.curValue[stype];
+							});
+						}
 					}
-				}
-				// update UI
-				$.each(optionRep.options, function(ignored, x) {
-					if (typeof x.name === "number") {
-					  $( ".filter_check", x.view ).toggle( optionRep.curValue[x.name]  );
-					}
-				});
+					// update UI
+					$.each(optionRep.options, function(ignored, x) {
+						if (typeof x.name === "number") {
+							$( ".filter_check", x.view ).toggle( optionRep.curValue[x.name]  );
+						}
+					});
 
-				if (!initializing)
-					self.refreshTable();
-			}
+					if (!initializing)
+						self.refreshTable();
+				}
 			);
 		},
 
