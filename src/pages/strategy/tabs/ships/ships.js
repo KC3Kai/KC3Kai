@@ -95,13 +95,15 @@
 			var self = this;
 
 			// default UI actions for options that are mutually exclusive
-			function mutualExclusiveOnToggle(oldVal,newVal,optionRep) {
-				if (oldVal === newVal)
+			function mutualExclusiveOnToggle(newInd,optionRep) {
+				var oldState = optionRep.curValue;
+				if (oldState === newInd)
 					return;
 				$.each(optionRep.options, function(thisVal, optionObj) {
-					optionObj.view.toggleClass('on', thisVal === newVal);
+					optionObj.view.toggleClass('on', thisVal === newInd);
 				});
-				if (oldVal !== null)
+				optionRep.curValue = newInd;
+				if (oldState !== null)
 					self.refreshTable();
 			}
 
@@ -109,8 +111,7 @@
 				marriage: {
 					defValue: 0,
 					options: [ "in","on","ex" ],
-					// triggers after setting value to the new one
-					// first callback will always be (null, defValue, optionRep)
+					// onToggle is responsible to mutate "optionObj"
 					onToggle: mutualExclusiveOnToggle,
 					testShip: function(curVal, ship) {
 						return (curVal === 0)
@@ -186,9 +187,9 @@
 					thisOption.view.on('click', function() {
 						var curRep = self.newFilterRep[filterName];
 						var newVal = ind;
-						var oldVal = self.newFilterRep[filterName].curValue;
-						curRep.curValue = newVal;
-						curRep.onToggle(oldVal,newVal,curRep);
+						//var oldVal = self.newFilterRep[filterName].curValue;
+						// curRep.curValue = newVal;
+						curRep.onToggle(newVal,curRep);
 					});
 					console.assert(
 						thisOption.view.length === 1,
@@ -197,7 +198,7 @@
 				});
 
 				var optionRep = {
-					curValue: filterInfo.defValue,
+					curValue: null,
 					options: newOptions,
 					onToggle: filterInfo.onToggle,
 					testShip: function (ship) {
@@ -206,7 +207,7 @@
 				};
 					
 				self.newFilterRep[filterName] = optionRep;
-				optionRep.onToggle(null,filterInfo.defValue,optionRep);
+				optionRep.onToggle(filterInfo.defValue,optionRep);
 			});
 		},
 
