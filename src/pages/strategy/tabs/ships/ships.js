@@ -42,17 +42,29 @@
 		reverseLastCurrentSorter: function() {
 			var sorter = this.getLastCurrentSorter();
 			sorter.reverse = ! sorter.reverse;
-			console.log( JSON.stringify( this.currentSorters) );
-
 			this.updateSorterDescription();
 		},
 
+		// try pushing a new sorter to existing list
+		// if the sorter already exists, the its "reverse"
+		// value will be filpped.
 		pushToCurrentSorters: function(name) {
-			// TODO
-			this.currentSorters.push({
-				name: name,
-				reverse: false
-			});
+			var i;
+			var found = false;
+			for (i=0; !found && i<this.currentSorters.length; ++i) {
+				var sorterInfo = this.currentSorters[i];
+				if (name === sorterInfo.name) {
+					found = true;
+					sorterInfo.reverse = ! sorterInfo.reverse;
+				}
+			}
+
+			if (!found) {
+				this.currentSorters.push({
+					name: name,
+					reverse: false
+				});
+			}
 
 			this.updateSorterDescription();
 		},
@@ -61,8 +73,6 @@
 			var sorter = this.sorters[name];
 			console.assert(sorter, "sorter should have been registered");
 			this.currentSorters = [ {name: sorter.name, reverse:false} ];
-			console.log( JSON.stringify( this.currentSorters) );
-
 			this.updateSorterDescription();
 		},
 
@@ -101,7 +111,6 @@
 			var self = this;
 			return this.currentSorters
 				.map( function(sorterInfo) {
-					console.log(sorterInfo);
 					var sorter = self.sorters[sorterInfo.name];
 					return sorterInfo.reverse
 						? reversed(sorter.comparator) 
@@ -581,8 +590,6 @@
 			// Clear list
 			this.shipList.html("").hide();
 
-			console.log(this.sorters);
-			
 			// Wait until execute
 			setTimeout(function(){
 				var shipCtr, cElm, cShip, shipLevel;
@@ -601,7 +608,7 @@
 						$("<div>").addClass("ingame_page").html("Page "+Math.ceil((Number(shipCtr)+1)/10)).appendTo(self.shipList);
 					}
 					
-					cShip = FilteredShips[shipCtr]; //console.log(cShip);
+					cShip = FilteredShips[shipCtr];
 					shipLevel = cShip.level;
 
 					// we can save some time by avoiding constructing jquery object
