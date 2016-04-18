@@ -12,13 +12,9 @@
 		sortBy: "lv",
 		sortAsc: true,
 		equipMode: 0,
-		remodelOption: 0,
-		modernizationOption: 0,
-		marriageFilter: 0,
-		heartlockFilter: 0,
-		speedFilter: 0,
-		withFleet: true,
 		isLoading: false,
+
+		newFilterRep: null,
 
 		/* INIT
 		Prepares all data needed
@@ -90,8 +86,142 @@
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
+			this.prepareFilters();
 			this.shipList = $(".tab_ships .ship_list");
 			this.showFilters();
+		},
+
+		prepareFilters: function() {
+			var self = this;
+
+			// default UI actions for options that are mutually exclusive
+			function mutualExclusiveOnToggle(oldVal,newVal,optionRep) {
+				if (oldVal === newVal)
+					return;
+				$.each(optionRep.options, function(thisVal, optionObj) {
+					optionObj.view.toggleClass('on', thisVal === newVal);
+				});
+				if (oldVal !== null)
+					self.refreshTable();
+			}
+
+			var newFilterInfo = {
+				marriage: {
+					defValue: 0,
+					options: [ "in","on","ex" ],
+					// triggers after setting value to the new one
+					// first callback will always be (null, defValue, optionRep)
+					onToggle: mutualExclusiveOnToggle,
+					testShip: function(curVal, ship) {
+						return (curVal === 0)
+							|| (curVal === 1 && ship.level >= 100)
+							|| (curVal === 2 && ship.level <  100);
+					}
+				},
+				remodel: {
+					defValue: 0,
+					options: ["all","max","nomax"],
+					onToggle: mutualExclusiveOnToggle,
+					testShip: function(curVal, ship) {
+						return (curVal === 0)
+							|| (curVal === 1 && ship.remodel)
+							|| (curVal === 2 && !ship.remodel);
+					}
+				},
+				modernization: {
+					defValue: 0,
+					options: ["all","max","nomax"],
+					onToggle: mutualExclusiveOnToggle,
+					testShip: function(curVal, ship) {
+						return (curVal === 0)
+							|| (curVal === 1 && ship.statmax)
+							|| (curVal === 2 && !ship.statmax);
+					}
+				},
+				heartlock: {
+					defValue: 0,
+					options: ["all","yes","no"],
+					onToggle: mutualExclusiveOnToggle,
+					testShip: function(curVal, ship) {
+						return (curVal === 0)
+							|| (curVal === 1 && ship.locked === 1)
+							|| (curVal === 2 && ship.locked === 0);
+					}
+				},
+				speed: {
+					defValue: 0,
+					options: ["all","fast","slow"],
+					onToggle: mutualExclusiveOnToggle,
+					testShip: function(curVal,ship) {
+						return (curVal === 0)
+							|| (curVal === 1 && ship.sp >= 10)
+							|| (curVal === 2 && ship.sp < 10);
+					}
+				},
+				fleet: {
+					defValue: 1,
+					options: ["no","yes"],
+					onToggle: mutualExclusiveOnToggle,
+					testShip: function(curVal,ship) {
+						return (curVal === 0 && !ship.fleet)
+							|| (curVal === 1);
+					}
+				}
+			};
+
+			function getSelector(filterName, option) {
+				return ".tab_ships .filters .massSelect"
+					+" ." + filterName
+					+ "_" + option;
+			}
+
+			self.newFilterRep = {};
+			$.each(newFilterInfo, function(filterName, filterInfo) {
+				var newOptions = [];
+				$.each(filterInfo.options, function(ind, optionName) {
+					var thisOption = {};
+					var selector = getSelector(filterName,optionName);
+					thisOption.name = optionName;
+					thisOption.view = $(selector);
+					thisOption.view.on('click', function() {
+						var curRep = self.newFilterRep[filterName];
+						var newVal = ind;
+						var oldVal = self.newFilterRep[filterName].curValue;
+						curRep.curValue = newVal;
+						curRep.onToggle(oldVal,newVal,curRep);
+					});
+					console.assert(
+						thisOption.view.length === 1,
+						"expecting exactly one result of " + selector );
+					newOptions.push( thisOption );
+				});
+
+				var optionRep = {
+					curValue: filterInfo.defValue,
+					options: newOptions,
+					onToggle: filterInfo.onToggle,
+					testShip: function (ship) {
+						return filterInfo.testShip(optionRep.curValue,ship);
+					}
+				};
+					
+				self.newFilterRep[filterName] = optionRep;
+				optionRep.onToggle(null,filterInfo.defValue,optionRep);
+			});
+		},
+
+		
+		// execute all registered filters on a ship
+		executeFilters: function(ship) {
+			var filterKeys = Object.keys(this.newFilterRep);
+			var i;
+			for (i=0;i<filterKeys.length;++i) {
+				var key = filterKeys[i];
+				var filter = this.newFilterRep[key].testShip;
+				if (!filter(ship))
+					return false;
+			}
+			return true;
 		},
 		
 		/* FILTERS
@@ -154,139 +284,12 @@
 				self.options.equip_no.addClass('on');
 			});
 			
-			// Remodel: All
-			self.options.remodel_all = $(".tab_ships .filters .massSelect .remodel_all").on("click", function(){
-				self.remodelOption = 0;
-				self.refreshTable();
-				self.options.remodel_all.addClass('on');
-				self.options.remodel_max.removeClass('on');
-				self.options.remodel_nomax.removeClass('on');
-			});
-			
-			// Remodel: Max
-			self.options.remodel_max = $(".tab_ships .filters .massSelect .remodel_max").on("click", function(){
-				self.remodelOption = 1;
-				self.refreshTable();
-				self.options.remodel_all.removeClass('on');
-				self.options.remodel_max.addClass('on');
-				self.options.remodel_nomax.removeClass('on');
-			});
-			
-			// Remodel: Non-Max
-			self.options.remodel_nomax = $(".tab_ships .filters .massSelect .remodel_nomax").on("click", function(){
-				self.remodelOption = 2;
-				self.refreshTable();
-				self.options.remodel_all.removeClass('on');
-				self.options.remodel_max.removeClass('on');
-				self.options.remodel_nomax.addClass('on');
-			});
-			
-			// Modernization: All
-			self.options.modernization_all = $(".tab_ships .filters .massSelect .modernization_all").on("click", function(){
-				self.modernizationOption = 0;
-				self.refreshTable();
-				self.options.modernization_all.addClass('on');
-				self.options.modernization_max.removeClass('on');
-				self.options.modernization_nomax.removeClass('on');
-			});
-			
-			// Modernization: Max
-			self.options.modernization_max = $(".tab_ships .filters .massSelect .modernization_max").on("click", function(){
-				self.modernizationOption = 1;
-				self.refreshTable();
-				self.options.modernization_all.removeClass('on');
-				self.options.modernization_max.addClass('on');
-				self.options.modernization_nomax.removeClass('on');
-			});
-			
-			// Modernization: Non-Max
-			self.options.modernization_nomax = $(".tab_ships .filters .massSelect .modernization_nomax").on("click", function(){
-				self.modernizationOption = 2;
-				self.refreshTable();
-				self.options.modernization_all.removeClass('on');
-				self.options.modernization_max.removeClass('on');
-				self.options.modernization_nomax.addClass('on');
-			});
-			
-			// Marriage
-			["in","on","ex"].forEach(function(x,i,a){
-				self.options["marriage_"+x] = $(".tab_ships .filters .massSelect .marriage_"+x).on("click",function(){
-					self.marriageFilter = i;
-					self.refreshTable();
-					a.forEach(function(_x,_i,_a){
-						if(i==_i)
-							self.options["marriage_"+_x].addClass('on');
-						else
-							self.options["marriage_"+_x].removeClass('on');
-					});
-				});
-			});
-			
-			// Fleet Inclusion
-			["no","yes"].forEach(function(x,i,a){
-				self.options["fleet_"+x] = $(".tab_ships .filters .massSelect .fleet_"+x).on("click",function(){
-					self.withFleet = !!i;
-					self.refreshTable();
-					a.forEach(function(_x,_i,_a){
-						if(i==_i)
-							self.options["fleet_"+_x].addClass('on');
-						else
-							self.options["fleet_"+_x].removeClass('on');
-					});
- 				});
-			});
-
-			["all","yes","no"].forEach(function(x,i,a){
-				self.options["heartlock_"+x] = $(".tab_ships .filters .massSelect .heartlock_"+x).on("click",function(){
-					self.heartlockFilter = i;
-					self.refreshTable();
-					a.forEach(function(_x,_i,_a){
-						if(i==_i)
-							self.options["heartlock_"+_x].addClass('on');
-						else
-							self.options["heartlock_"+_x].removeClass('on');
-					});
-				});
-			});
-
-			["all","fast","slow"].forEach(function(x,i,a){
-				self.options["speed_"+x] = $(".tab_ships .filters .massSelect .speed_"+x).on("click",function(){
-					self.speedFilter = i;
-					self.refreshTable();
-					a.forEach(function(_x,_i,_a){
-						if(i==_i)
-							self.options["speed_"+_x].addClass('on');
-						else
-							self.options["speed_"+_x].removeClass('on');
-					});
-				});
-			});
-
 			// Default status
 			if( self.equipMode )
 				self.options.equip_yes.addClass('on');
 			else
 				self.options.equip_no.addClass('on');
 
-			if( self.remodelOption === 0 )
-				self.options.remodel_all.addClass('on');
-			else if( self.remodelOption == 1 )
-				self.options.remodel_max.addClass('on');
-			else if( self.remodelOption == 2 )
-				self.options.remodel_nomax.addClass('on');
-
-			if( self.modernizationOption === 0 )
-				self.options.modernization_all.addClass('on');
-			else if( self.modernizationOption == 1 )
-				self.options.modernization_max.addClass('on');
-			else if( self.modernizationOption == 2 )
-				self.options.modernization_nomax.addClass('on');
-
-			self.options["heartlock_"+["all","yes","no"][self.heartlockFilter]].addClass('on');
-			self.options["marriage_"+["in","on","ex"][self.marriageFilter]].addClass('on');
-			self.options["fleet_"+["no","yes"][self.withFleet & 1]].addClass('on');
-			self.options["speed_"+["all","fast","slow"][self.speedFilter]].addClass('on');
-			
 			// Ship type toggled
 			$(".tab_ships .filters .ship_filter_type").on("click", function(){
 				self.filters[ $(this).data("id") ] = !self.filters[ $(this).data("id") ];
@@ -331,31 +334,7 @@
 				for(shipCtr in self.shipCache){
 					var thisShip = self.shipCache[shipCtr];
 					if(typeof self.filters[ thisShip.stype ] != "undefined"){
-						if( self.filters[ thisShip.stype ]
-							&& (
-								self.remodelOption === 0
-								|| (self.remodelOption == 1 && thisShip.remodel)
-								|| (self.remodelOption == 2 && !thisShip.remodel)
-							)
-							&& (
-								self.modernizationOption === 0
-								|| (self.modernizationOption == 1 && thisShip.statmax)
-								|| (self.modernizationOption == 2 && !thisShip.statmax)
-							)
-							&& (
-								((self.marriageFilter || 1) == 1 && thisShip.level >= 100) ||
-								((self.marriageFilter || 2) == 2 && thisShip.level <  100)
-							)
-							&& (self.withFleet || (!self.withFleet && !thisShip.fleet)
-							   )
-							&& (self.heartlockFilter === 0
-								|| (self.heartlockFilter === 1 && thisShip.locked === 1)
-								|| (self.heartlockFilter === 2 && thisShip.locked === 0)
-							   )
-							&& (self.speedFilter === 0
-								|| (self.speedFilter === 1 && thisShip.sp >= 10)
-								|| (self.speedFilter === 2 && thisShip.sp < 10)
-							   )
+						if( self.filters[ thisShip.stype ] && self.executeFilters(thisShip)
 						){
 							FilteredShips.push(thisShip);
 						}
