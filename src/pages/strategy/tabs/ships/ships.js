@@ -102,6 +102,62 @@
 			this.showFilters();
 		},
 
+		/* 
+		   defineShipFilter defines a filter that has UI controls.
+		   
+		   see comments on each arguments for detail.
+		 */
+		defineShipFilter: function(
+			// a string name for this filter
+			filterName,
+			// ship filters can hold a piece of value
+			// which represents its state.
+			// (e.g. true / false for keeping track of whether
+			//  this filter is enabled or disable)
+			defValue,
+			// an array of arbitrary values, each of the option should
+			// correspond to a toggle / control on UI
+			options,
+			// a callback function testShip(curVal,ship)
+			// that does the actual fitlering:
+			// returning a falsy value means
+			// the ship should be filtered out from the list.
+			// curVal is the current state of the filter.
+			testShip,
+			// findView(filterName,option) should return
+			// a jQuery object that represents the UI control specified by
+			// "filterName" and "option", where "option" is one value from "options"
+			// note that the length of the jquery object has to be exactly one,
+			// otherwise you'll see assertion failures in the console.
+			findView,
+			// onToggle(newVal,optionRep) that triggers either when initializing
+			// or when user has changed something on UI.
+			// optionRep is the runtime representation of this filter:
+			// * optionRep.curValue represents the current value
+			//   held by this filter, when initializing, this value is set to "null".
+			// * optionRep.options is the runtime representation of
+			//   all options you have passed to this function.
+			//   for all valid options indices ind
+			//   * optionRep.options[ind].name is set to options[ind]
+			//   * optionRep.options[ind].view is set to the jQuery object returned
+			//     by your "findView".
+			// your onToggle is responsible for 2 things:
+			// * when initalizing a filter, "optionRep.curValue" is set to "null",
+			//   in this case "newVal" is "defValue" you passed to this function,
+			//   you should do something like "optionRep.curValue = newVal"
+			//   to complete initializing filter state. and update UI accordingly
+			//   (but avoid refreshing ship list, since we are just initalizing)
+			// * when user does something on UI, your onToggle function will be triggered.
+			//   in this case "newVal" is set to an index of "options" to indicate
+			//   which option triggers this function. in this case you are responsible
+			//   for updating "optionRep.curValue" accordingly, updating UI to reflect the change
+			//   and finally refresh ship list to execute all filters.
+			onToggle) {
+
+			// TODO
+
+		},
+
 		prepareFilters: function() {
 			var self = this;
 
@@ -147,7 +203,6 @@
 				filterInfoStype.defValue[stype] = true;
 			});
 			var options = stypes.concat(["all","none","invert"]);
-			console.log(options);
 			filterInfoStype.options = options;
 			function findSTypeView(filterName,option) {
 				if (typeof option === "number") {
