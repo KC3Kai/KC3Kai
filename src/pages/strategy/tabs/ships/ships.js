@@ -13,7 +13,7 @@
 		equipMode: 0,
 		isLoading: false,
 
-		newFilterRep: null,
+		newFilterRep: {},
 
 		/* INIT
 		Prepares all data needed
@@ -91,7 +91,8 @@
 
 			for(sCtr in KC3Meta._stype){
 				if(KC3Meta._stype[sCtr]){
-					cElm = $(".tab_ships .factory .ship_filter_type").clone().appendTo(".tab_ships .filters .ship_types");
+					cElm = $(".tab_ships .factory .ship_filter_type").clone()
+						.appendTo(".tab_ships .filters .ship_types");
 					cElm.data("id", sCtr);
 					$(".filter_name", cElm).text(KC3Meta.stype(sCtr));
 				}
@@ -100,6 +101,37 @@
 			this.prepareFilters();
 			this.shipList = $(".tab_ships .ship_list");
 			this.showFilters();
+		},
+
+		// default UI actions for options that are mutually exclusive
+		// NOTE: this function is supposed to be a shared callback function
+		// and should not be called directly.
+		_mutualExclusiveOnToggle: function(selectedInd,optionRep) {
+			// mutural exclusive options use just value indices
+			// as the option value
+			var oldVal = optionRep.curValue;
+			if (oldVal === selectedInd)
+				return;
+			// first update value
+			optionRep.curValue = selectedInd;
+			// then update UI accordingly
+			$.each(optionRep.options, function(thisInd, optionObj) {
+				optionObj.view.toggleClass('on', thisInd === selectedInd);
+			});
+			// only trigger update when it's not the first time
+			// first time we just need to give it a initial value (default value)
+			// and then upate UI.
+			if (oldVal !== null)
+				this.refreshTable();
+		},
+
+		// findView given filter's name and this option
+		// NOTE: this function is supposed to be a shared callback function
+		// and should not be called directly.
+		_commonFindView: function(filterName, option) {
+			return $(".tab_ships .filters .massSelect"
+					 +" ." + filterName
+					 + "_" + option);
 		},
 
 		/* 
@@ -153,43 +185,113 @@
 			//   for updating "optionRep.curValue" accordingly, updating UI to reflect the change
 			//   and finally refresh ship list to execute all filters.
 			onToggle) {
+			var self = this;
+			// as most filters are groups of mutually exclusive controls
+			// it makes sense setting them as defaults
+			if (! findView)
+				findView = this._commonFindView;
+			if (! onToggle)
+				onToggle = this._mutualExclusiveOnToggle;
 
-			// TODO
+			var filterInfo = {
+				defValue: defValue,
+				options: options,
+				findView: findView,
+				onToggle: onToggle ,
+				testShip: testShip
+			};
 
+			var newOptions = [];
+			$.each(filterInfo.options, function(ind, optionName) {
+				var thisOption = {};
+				var view = filterInfo.findView(filterName,optionName);
+				thisOption.name = optionName;
+				thisOption.view = view;
+				thisOption.view.on('click', function() {
+					var curRep = self.newFilterRep[filterName];
+					var selectedInd = ind;
+					curRep.onToggle.bind(self)(selectedInd,curRep);
+				});
+				console.assert(
+					thisOption.view.length === 1,
+					"expecting exactly one result of getView on " 
+						+ filterName  + "," + optionName );
+				newOptions.push( thisOption );
+			});
+
+			var optionRep = {
+				curValue: null,
+				options: newOptions,
+				onToggle: filterInfo.onToggle,
+				testShip: function (ship) {
+					return filterInfo.testShip(optionRep.curValue,ship);
+				}
+			};
+					
+			this.newFilterRep[filterName] = optionRep;
+			optionRep.onToggle.bind(self)(filterInfo.defValue,optionRep);
 		},
 
 		prepareFilters: function() {
 			var self = this;
-
-			// default UI actions for options that are mutually exclusive
-			function mutualExclusiveOnToggle(selectedInd,optionRep) {
-				// mutural exclusive options use just value indices
-				// as the option value
-				var oldVal = optionRep.curValue;
-				if (oldVal === selectedInd)
-					return;
-				// first update value
-				optionRep.curValue = selectedInd;
-				// then update UI accordingly
-				$.each(optionRep.options, function(thisInd, optionObj) {
-					optionObj.view.toggleClass('on', thisInd === selectedInd);
+			self.defineShipFilter(
+				"marriage",
+				0,
+				[ "in","on","ex" ],
+				function(curVal, ship) {
+					return (curVal === 0)
+						|| (curVal === 1 && ship.level >= 100)
+						|| (curVal === 2 && ship.level <  100);
 				});
-				// only trigger update when it's not the first time
-				// first time we just need to give it a initial value (default value)
-				// and then upate UI.
-				if (oldVal !== null)
-					self.refreshTable();
-			}
 
-			// findView given filter's name and this option
-			function commonFindView(filterName, option) {
-				return $(".tab_ships .filters .massSelect"
-						 +" ." + filterName
-						 + "_" + option);
-			}
+			self.defineShipFilter(
+				"remodel",
+				0,
+				["all","max","nomax"],
+				function(curVal, ship) {
+					return (curVal === 0)
+						|| (curVal === 1 && ship.remodel)
+						|| (curVal === 2 && !ship.remodel);
+				});
 
-			var filterInfoStype = {};
-			filterInfoStype.defValue = [];
+			self.defineShipFilter(
+				"modernization",
+				0,
+				["all","max","nomax"],
+				function(curVal, ship) {
+					return (curVal === 0)
+						|| (curVal === 1 && ship.statmax)
+						|| (curVal === 2 && !ship.statmax);
+				});
+				
+			self.defineShipFilter(
+				"heartlock",
+				 0,
+				["all","yes","no"],
+				function(curVal, ship) {
+					return (curVal === 0)
+						|| (curVal === 1 && ship.locked === 1)
+						|| (curVal === 2 && ship.locked === 0);
+				});
+
+			self.defineShipFilter(
+				"speed",
+				0,
+				["all","fast","slow"],
+				function(curVal,ship) {
+					return (curVal === 0)
+						|| (curVal === 1 && ship.sp >= 10)
+						|| (curVal === 2 && ship.sp < 10);
+				});
+
+			self.defineShipFilter(
+				"fleet",
+				1,
+				["no","yes"],
+				function(curVal,ship) {
+					return (curVal === 0 && !ship.fleet)
+						|| (curVal === 1);
+				});
 
 			var stypes = Object
 				.keys(KC3Meta._stype)
@@ -198,25 +300,33 @@
 			console.assert(stypes[0] === 0);
 			// remove initial "0", which is invalid
 			stypes.shift();
-
+			var stypeDefValue = [];
 			$.each(stypes, function(ignore, stype) {
-				filterInfoStype.defValue[stype] = true;
+				stypeDefValue[stype] = true;
 			});
-			var options = stypes.concat(["all","none","invert"]);
-			filterInfoStype.options = options;
-			function findSTypeView(filterName,option) {
-				if (typeof option === "number") {
-					// console.log(option);
-					// this is a ship type toggle
-					return $(".tab_ships .filters .ship_types .ship_filter_type")
-						.filter( function() {  return $(this).data("id") === "" + option;  }  );
-				} else {
-					// one of: all / none / invert
-					return $(".tab_ships .filters .massSelect ." + option);
-				}
-			}
-			filterInfoStype.findView = findSTypeView;
-			function stypeOnToggle(selectedInd, optionRep) {
+
+			self.defineShipFilter(
+				"stype",
+				stypeDefValue,
+				// valid ship types and addtionally 3 controls
+				stypes.concat(["all","none","invert"]),
+				// testShip
+				function(curVal,ship) {
+					return curVal[ship.stype];
+				},
+				// find view
+				function (filterName,option) {
+					if (typeof option === "number") {
+						// this is a ship type toggle
+						return $(".tab_ships .filters .ship_types .ship_filter_type")
+							.filter( function() {  return $(this).data("id") === "" + option;  }  );
+					} else {
+						// one of: all / none / invert
+						return $(".tab_ships .filters .massSelect ." + option);
+					}
+				},
+				// onToggle
+				function(selectedInd, optionRep) {
 				var initializing = false;
 				if (optionRep.curValue === null) {
 					// the variable name is a bit misleading,
@@ -250,113 +360,7 @@
 				if (!initializing)
 					self.refreshTable();
 			}
-			filterInfoStype.onToggle = stypeOnToggle;
-			filterInfoStype.testShip = function(curVal,ship) {
-				return curVal[ship.stype];
-			};
-
-			var newFilterInfo = {
-				marriage: {
-					defValue: 0,
-					options: [ "in","on","ex" ],
-					findView: commonFindView,
-					// onToggle is responsible to mutate "optionObj"
-					onToggle: mutualExclusiveOnToggle,
-					testShip: function(curVal, ship) {
-						return (curVal === 0)
-							|| (curVal === 1 && ship.level >= 100)
-							|| (curVal === 2 && ship.level <  100);
-					}
-				},
-				remodel: {
-					defValue: 0,
-					options: ["all","max","nomax"],
-					findView: commonFindView,
-					onToggle: mutualExclusiveOnToggle,
-					testShip: function(curVal, ship) {
-						return (curVal === 0)
-							|| (curVal === 1 && ship.remodel)
-							|| (curVal === 2 && !ship.remodel);
-					}
-				},
-				modernization: {
-					defValue: 0,
-					options: ["all","max","nomax"],
-					findView: commonFindView,
-					onToggle: mutualExclusiveOnToggle,
-					testShip: function(curVal, ship) {
-						return (curVal === 0)
-							|| (curVal === 1 && ship.statmax)
-							|| (curVal === 2 && !ship.statmax);
-					}
-				},
-				heartlock: {
-					defValue: 0,
-					options: ["all","yes","no"],
-					findView: commonFindView,
-					onToggle: mutualExclusiveOnToggle,
-					testShip: function(curVal, ship) {
-						return (curVal === 0)
-							|| (curVal === 1 && ship.locked === 1)
-							|| (curVal === 2 && ship.locked === 0);
-					}
-				},
-				speed: {
-					defValue: 0,
-					options: ["all","fast","slow"],
-					findView: commonFindView,
-					onToggle: mutualExclusiveOnToggle,
-					testShip: function(curVal,ship) {
-						return (curVal === 0)
-							|| (curVal === 1 && ship.sp >= 10)
-							|| (curVal === 2 && ship.sp < 10);
-					}
-				},
-				fleet: {
-					defValue: 1,
-					options: ["no","yes"],
-					findView: commonFindView,
-					onToggle: mutualExclusiveOnToggle,
-					testShip: function(curVal,ship) {
-						return (curVal === 0 && !ship.fleet)
-							|| (curVal === 1);
-					}
-				},
-				stype: filterInfoStype
-			};
-
-			self.newFilterRep = {};
-			$.each(newFilterInfo, function(filterName, filterInfo) {
-				var newOptions = [];
-				$.each(filterInfo.options, function(ind, optionName) {
-					var thisOption = {};
-					var view = filterInfo.findView(filterName,optionName);
-					thisOption.name = optionName;
-					thisOption.view = view;
-					thisOption.view.on('click', function() {
-						var curRep = self.newFilterRep[filterName];
-						var selectedInd = ind;
-						curRep.onToggle(selectedInd,curRep);
-					});
-					console.assert(
-						thisOption.view.length === 1,
-						"expecting exactly one result of getView on " 
-							+ filterName  + "," + optionName );
-					newOptions.push( thisOption );
-				});
-
-				var optionRep = {
-					curValue: null,
-					options: newOptions,
-					onToggle: filterInfo.onToggle,
-					testShip: function (ship) {
-						return filterInfo.testShip(optionRep.curValue,ship);
-					}
-				};
-					
-				self.newFilterRep[filterName] = optionRep;
-				optionRep.onToggle(filterInfo.defValue,optionRep);
-			});
+			);
 		},
 
 		// execute all registered filters on a ship
