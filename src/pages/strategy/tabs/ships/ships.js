@@ -106,7 +106,7 @@
 					var prevResult = prevCmp(a,b);
 					return prevResult !== 0 ? prevResult : curCmp(a,b);
 				};
-			};
+			}
 
 			var self = this;
 			return this.currentSorters
