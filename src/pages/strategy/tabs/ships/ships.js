@@ -101,18 +101,31 @@
 				var oldVal = optionRep.curValue;
 				if (oldVal === selectedInd)
 					return;
+				// first update value
+				optionRep.curValue = selectedInd;
+				// then update UI accordingly
 				$.each(optionRep.options, function(thisInd, optionObj) {
 					optionObj.view.toggleClass('on', thisInd === selectedInd);
 				});
-				optionRep.curValue = selectedInd;
+				// only trigger update when it's not the first time
+				// first time we just need to give it a initial value (default value)
+				// and then upate UI.
 				if (oldVal !== null)
 					self.refreshTable();
+			}
+
+			// findView given filter's name and this option
+			function commonFindView(filterName, option) {
+				return $(".tab_ships .filters .massSelect"
+						 +" ." + filterName
+						 + "_" + option);
 			}
 
 			var newFilterInfo = {
 				marriage: {
 					defValue: 0,
 					options: [ "in","on","ex" ],
+					findView: commonFindView,
 					// onToggle is responsible to mutate "optionObj"
 					onToggle: mutualExclusiveOnToggle,
 					testShip: function(curVal, ship) {
@@ -124,6 +137,7 @@
 				remodel: {
 					defValue: 0,
 					options: ["all","max","nomax"],
+					findView: commonFindView,
 					onToggle: mutualExclusiveOnToggle,
 					testShip: function(curVal, ship) {
 						return (curVal === 0)
@@ -134,6 +148,7 @@
 				modernization: {
 					defValue: 0,
 					options: ["all","max","nomax"],
+					findView: commonFindView,
 					onToggle: mutualExclusiveOnToggle,
 					testShip: function(curVal, ship) {
 						return (curVal === 0)
@@ -144,6 +159,7 @@
 				heartlock: {
 					defValue: 0,
 					options: ["all","yes","no"],
+					findView: commonFindView,
 					onToggle: mutualExclusiveOnToggle,
 					testShip: function(curVal, ship) {
 						return (curVal === 0)
@@ -154,6 +170,7 @@
 				speed: {
 					defValue: 0,
 					options: ["all","fast","slow"],
+					findView: commonFindView,
 					onToggle: mutualExclusiveOnToggle,
 					testShip: function(curVal,ship) {
 						return (curVal === 0)
@@ -164,6 +181,7 @@
 				fleet: {
 					defValue: 1,
 					options: ["no","yes"],
+					findView: commonFindView,
 					onToggle: mutualExclusiveOnToggle,
 					testShip: function(curVal,ship) {
 						return (curVal === 0 && !ship.fleet)
@@ -172,20 +190,14 @@
 				}
 			};
 
-			function getSelector(filterName, option) {
-				return ".tab_ships .filters .massSelect"
-					+" ." + filterName
-					+ "_" + option;
-			}
-
 			self.newFilterRep = {};
 			$.each(newFilterInfo, function(filterName, filterInfo) {
 				var newOptions = [];
 				$.each(filterInfo.options, function(ind, optionName) {
 					var thisOption = {};
-					var selector = getSelector(filterName,optionName);
+					var view = filterInfo.findView(filterName,optionName);
 					thisOption.name = optionName;
-					thisOption.view = $(selector);
+					thisOption.view = view;
 					thisOption.view.on('click', function() {
 						var curRep = self.newFilterRep[filterName];
 						var selectedInd = ind;
@@ -193,7 +205,8 @@
 					});
 					console.assert(
 						thisOption.view.length === 1,
-						"expecting exactly one result of " + selector );
+						"expecting exactly one result of getView on " 
+							+ filterName  + "," + optionName );
 					newOptions.push( thisOption );
 				});
 
