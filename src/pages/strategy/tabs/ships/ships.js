@@ -7,7 +7,6 @@
 		tabSelf: KC3StrategyTabs.ships,
 		
 		shipCache:[],
-		filters: [],
 		options: [],
 		sortBy: "lv",
 		sortAsc: true,
@@ -29,6 +28,8 @@
 				
 				this.shipCache.push(ThisShipData);
 			}
+
+
 		},
 
 		// prepares necessary info.
@@ -86,6 +87,20 @@
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
+
+			// now we need to do this before preparing filters
+
+			// Ship types
+			var sCtr, cElm;
+
+			for(sCtr in KC3Meta._stype){
+				if(KC3Meta._stype[sCtr]){
+					cElm = $(".tab_ships .factory .ship_filter_type").clone().appendTo(".tab_ships .filters .ship_types");
+					cElm.data("id", sCtr);
+					$(".filter_name", cElm).text(KC3Meta.stype(sCtr));
+				}
+			}
+
 			this.prepareFilters();
 			this.shipList = $(".tab_ships .ship_list");
 			this.showFilters();
@@ -120,6 +135,81 @@
 						 +" ." + filterName
 						 + "_" + option);
 			}
+
+			/*
+			  need to prepare following fields for stype filters
+			  (this includes "all", "none" and "invert")
+			  findView: ??
+			  onToggle: mutualExclusiveOnToggle,
+			  testShip: function(curVal,ship) {
+			*/
+			var filterInfoStype = {};
+			filterInfoStype.defValue = [];
+
+			var stypes = Object
+				.keys(KC3Meta._stype)
+				.map(function(x) { return parseInt(x,10); })
+				.sort(function(a,b) { return a-b; });
+			console.assert(stypes[0] === 0);
+			// remove initial "0", which is invalid
+			stypes.shift();
+
+			$.each(stypes, function(ignore, stype) {
+				filterInfoStype.defValue[stype] = true;
+			});
+			var options = stypes.concat(["all","none","invert"]);
+			console.log(options);
+			filterInfoStype.options = options;
+			function findSTypeView(filterName,option) {
+				if (typeof option === "number") {
+					// console.log(option);
+					// this is a ship type toggle
+					return $(".tab_ships .filters .ship_types .ship_filter_type")
+						.filter( function() {  return $(this).data("id") === "" + option;  }  );
+				} else {
+					// one of: all / none / invert
+					return $(".tab_ships .filters .massSelect ." + option);
+				}
+			}
+			filterInfoStype.findView = findSTypeView;
+			function stypeOnToggle(selectedInd, optionRep) {
+				var initializing = false;
+				if (optionRep.curValue === null) {
+					// the variable name is a bit misleading,
+					// but when "optionRep.curValue" is null
+					// we know we are initializing
+					initializing = true;
+					optionRep.curValue = selectedInd;
+				} else {
+					var selected = optionRep.options[selectedInd];
+					if (typeof selected.name === 'number') {
+						// this is a ship type toggle
+						optionRep.curValue[selected.name] = !optionRep.curValue[selected.name];
+					} else {
+						$.each(stypes, function(ignore, stype) {
+							optionRep.curValue[stype] = 
+								  (selected.name === "all")
+								? true
+								: (selected.name === "none")
+								? false
+							    : ! optionRep.curValue[stype];
+						});
+					}
+				}
+				// update UI
+				$.each(optionRep.options, function(ignored, x) {
+					if (typeof x.name === "number") {
+					  $( ".filter_check", x.view ).toggle( optionRep.curValue[x.name]  );
+					}
+				});
+
+				if (!initializing)
+					self.refreshTable();
+			}
+			filterInfoStype.onToggle = stypeOnToggle;
+			filterInfoStype.testShip = function(curVal,ship) {
+				return curVal[ship.stype];
+			};
 
 			var newFilterInfo = {
 				marriage: {
@@ -187,7 +277,8 @@
 						return (curVal === 0 && !ship.fleet)
 							|| (curVal === 1);
 					}
-				}
+				},
+				stype: filterInfoStype
 			};
 
 			self.newFilterRep = {};
@@ -224,7 +315,6 @@
 			});
 		},
 
-		
 		// execute all registered filters on a ship
 		executeFilters: function(ship) {
 			var filterKeys = Object.keys(this.newFilterRep);
@@ -243,18 +333,9 @@
 		---------------------------------*/
 		showFilters :function(){
 			var self = this;
-			
-			// Ship types
-			var sCtr, cElm;
-			for(sCtr in KC3Meta._stype){
-				if(KC3Meta._stype[sCtr]){
-					cElm = $(".tab_ships .factory .ship_filter_type").clone().appendTo(".tab_ships .filters .ship_types");
-					cElm.data("id", sCtr);
-					$(".filter_name", cElm).text(KC3Meta.stype(sCtr));
-					this.filters[sCtr] = true;
-				}
-			}
-			
+			var sCtr;
+
+			/*
 			// Select: All
 			self.options.all = $(".tab_ships .filters .massSelect .all").on("click", function(){
 				$(".tab_ships .ship_filter_type .filter_check").show();
@@ -280,7 +361,7 @@
 					self.filters[sCtr] = !self.filters[sCtr];
 				}
 				self.refreshTable();
-			});
+			}); */
 			
 			// Equip Stats: Yes
 			self.options.equip_yes = $(".tab_ships .filters .massSelect .equip_yes").on("click", function(){
@@ -304,6 +385,7 @@
 			else
 				self.options.equip_no.addClass('on');
 
+			/*
 			// Ship type toggled
 			$(".tab_ships .filters .ship_filter_type").on("click", function(){
 				self.filters[ $(this).data("id") ] = !self.filters[ $(this).data("id") ];
@@ -311,6 +393,7 @@
 				else{ $(".filter_check", this).hide(); }
 				self.refreshTable();
 			});
+			*/
 			
 			// Column header sorting
 			$(".tab_ships .ship_header .ship_field.hover").on("click", function(){
@@ -347,11 +430,8 @@
 				// Filtering
 				for(shipCtr in self.shipCache){
 					var thisShip = self.shipCache[shipCtr];
-					if(typeof self.filters[ thisShip.stype ] != "undefined"){
-						if( self.filters[ thisShip.stype ] && self.executeFilters(thisShip)
-						){
-							FilteredShips.push(thisShip);
-						}
+					if(self.executeFilters(thisShip)){
+						FilteredShips.push(thisShip);
 					}
 				}
 				
