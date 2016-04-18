@@ -160,6 +160,13 @@
 				});
 			}
 
+			// Link to quotes developer page
+			if(ConfigManager.devOnlyPages){
+				$(".tab_mstship .shipInfo").on("click", ".to-quotes", function(e){
+					KC3StrategyTabs.gotoTab("quotes", self.currentShipId);
+				});
+			}
+
 			// Salt-toggle
 			$(".tab_mstship .shipInfo").on("click", ".salty-zone", function(e){
 				var
@@ -188,7 +195,6 @@
 				this.showShip();
 			}
 		},
-		
 		
 		showShip :function(ship_id){
 			ship_id = Number(ship_id||"405");
@@ -417,6 +423,10 @@
 					$(".tab_mstship .shipInfo .tokubest .salty-zone").show();
 				else
 					$(".tab_mstship .shipInfo .tokubest .salty-zone").hide();
+				if(ConfigManager.devOnlyPages)
+					$(".tab_mstship .shipInfo .tokubest .to-quotes").show();
+				else
+					$(".tab_mstship .shipInfo .tokubest .to-quotes").hide();
 			}else{
 				// abyssals, just show json
 				$(".tab_mstship .shipInfo .stats").hide();

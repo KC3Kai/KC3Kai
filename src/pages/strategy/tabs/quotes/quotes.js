@@ -14,15 +14,24 @@
 			var MyServer = (new KC3Server()).setNum( PlayerManager.hq.server );
 			this.server_ip = MyServer.ip;
 		},
-
-		showVoiceDetail: function(masterId,shipData,voiceNums) {
+		buildShipName: function(masterId, shipData) {
+			return "[{0}] {1}".format(masterId, KC3Meta.shipName((shipData||KC3Master.ship(masterId)).api_name) );
+		},
+		showVoiceDetail: function(masterId, shipData, voiceNums) {
 			var self = this;
 			var repo = "../../data/";
 			var quotes = KC3Translation.getQuotes(repo, true);
+			masterId = Number(masterId) || 318;
 			var shipLines = quotes[masterId];
 			var language = ConfigManager.language;
+			shipData = shipData || KC3Master.ship(masterId);
+			voiceNums = voiceNums || KC3Translation.getShipVoiceNums(masterId);
 			$(".voice_list").empty();
-			$(".part_right .ship_name").text("[" + masterId + "] " + shipData.api_name);
+			$(".ship_info .ship_name").text( this.buildShipName(masterId, shipData) );
+			$(".ship_info .ship_name").data("id", masterId);
+			$(".ship_info .reload").click(function(){
+				self.showVoiceDetail( $(".ship_info .ship_name").data("id") );
+			});
 
 			var allVoiceNums = KC3Translation.getShipVoiceNums(masterId);
 			$.each(allVoiceNums,function(i,voiceNum) {
@@ -42,24 +51,24 @@
 				}
 				elm.addClass(state);
 
-				$(".voice",elm).text(KC3Translation.voiceNumToDesc(voiceNum));
+				$(".voice",elm).text( "{0} [{1}]".format(KC3Translation.voiceNumToDesc(voiceNum), voiceNum) );
 
 				$(".voice",elm).on("click", function() {
 					var currentGraph = KC3Master.graph(masterId).api_filename;
 					if(self.audio){ self.audio.pause(); }
 					var voiceFile = KC3Meta.getFilenameByVoiceLine(masterId ,voiceNum, 10);
-					console.log(voiceFile);
+					console.debug("VOICE: shipId, voiceNum, voiceFile", masterId, voiceNum, voiceFile);
 					var voiceSrc = "http://"+self.server_ip
 						+ "/kcs/sound/kc"+currentGraph+"/"+voiceFile+".mp3";
 					self.audio = new Audio(voiceSrc);
-						self.audio.play();
+					self.audio.play();
 				});
 
 				var sourceText;
 				if (src) {
 					sourceText = typeof src.tag === "number"
 						? (state === "direct"
-						   ? "Available" : "From " + KC3Master.ship(src.tag).api_name ) 
+						   ? "Available" : "From " + self.buildShipName(src.tag) )
 					    : src.tag;
 				} else {
 					sourceText = "missing";
@@ -92,7 +101,7 @@
 				var shipData = allShips[masterId];
 
 				$(".ship_icon img",shipEntity).attr("src", KC3Meta.shipIcon(masterId));
-				$(".ship_name",shipEntity).text("[" + masterId + "] " + shipData.api_name);
+				$(".ship_name",shipEntity).text( self.buildShipName(masterId, shipData) );
 
 				var shipLines = quotes[masterId];
 				var availableVoiceNums = KC3Translation.getShipVoiceNums(masterId);
@@ -121,14 +130,27 @@
 					.css("width", Math.floor(150 * inheritedCount / total  ) +"px");
 
 				shipEntity.on("click", function() {
-					self.showVoiceDetail(masterId,shipData,availableVoiceNums);
+					KC3StrategyTabs.gotoTab(null, $(this).attr("id"));
 				});
 				shipEntity.attr("id",masterId);
 				shipList.append( shipEntity );
 			});
 
-			$(".ship_list #318").trigger("click");
+			// Auto fit height of screen
+			var innerHeight = Math.max(480, window.innerHeight) - (
+				$("#content").position().top+$(".page_title").position().top+$(".page_title").height()+$(".page_padding").position().top+20
+			);
+			if(innerHeight>0){
+				$(".tab_quotes .ship_list").css("height", innerHeight+"px");
+				$(".tab_quotes .part_right").css("height", innerHeight+"px");
+				$(".tab_quotes .voice_list").css("height", (innerHeight-32)+"px");
+			}
 
+			if(!!KC3StrategyTabs.pageParams[1]){
+				this.showVoiceDetail(KC3StrategyTabs.pageParams[1]);
+			}else{
+				this.showVoiceDetail();
+			}
 		}
 	};
 })();

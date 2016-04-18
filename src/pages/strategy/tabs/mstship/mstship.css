@@ -46,7 +46,7 @@
 --------------------------------*/
 .tab_mstship .shipRecords {
 	width:200px;
-	height:760px;
+	height:800px;
 	float:left;
 	overflow-y: scroll;
 	overflow-x: hidden;
@@ -86,7 +86,7 @@
 --------------------------------*/
 .tab_mstship .shipInfo {
 	width:480px;
-	height:760px;
+	height:800px;
 	float:left;
 	background:#eee;
 	border:1px solid #ccc;
@@ -417,6 +417,18 @@
 .tab_mstship .shipInfo.salted .tokubest .salty-zone {
 	border: 1px solid #422;
 	background: #c88;
+}
+
+.tab_mstship .shipInfo .tokubest .to-quotes {
+	width : 120px;
+	height: 20px;
+	line-height: 18px;
+	border-radius: 3px;
+	font-size: 12px;
+	text-align: center;
+	padding: 1px;
+	border: 1px solid #242;
+	background: #77f;
 }
 
 /* salt check */
