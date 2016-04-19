@@ -663,16 +663,16 @@
 					if(FilteredShips[shipCtr].locked){ $(".ship_lock img", cElm).show(); }
 
 					// Check whether remodel is max
-						if( !cShip.remodel )
-							cElm.addClass('remodel-max');
-						else
-							cElm.addClass('remodel-able');
+					if( !cShip.remodel )
+						cElm.addClass('remodel-max');
+					else
+						cElm.addClass('remodel-able');
 
 					// Check whether modernization is max
-						if( cShip.statmax )
-							cElm.addClass('modernization-max');
-						else
-							cElm.addClass('modernization-able');
+					if( cShip.statmax )
+						cElm.addClass('modernization-max');
+					else
+						cElm.addClass('modernization-able');
 				});
 				
 				self.shipList.show();
