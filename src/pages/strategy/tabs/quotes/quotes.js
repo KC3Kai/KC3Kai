@@ -17,21 +17,41 @@
 		buildShipName: function(masterId, shipData) {
 			return "[{0}] {1}".format(masterId, KC3Meta.shipName((shipData||KC3Master.ship(masterId)).api_name) );
 		},
-		showVoiceDetail: function(masterId, shipData, voiceNums) {
+		showVoiceDetail: function(masterId) {
 			var self = this;
 			var repo = "../../data/";
+			var language = ConfigManager.language;
 			var quotes = KC3Translation.getQuotes(repo, true);
+			var enQuotes = [];
+			if(language !== "en")
+				enQuotes = KC3Translation.getQuotes(repo, false, "en");
+			var jpQuotes = [];
+			if(language !== "jp")
+				jpQuotes = KC3Translation.getQuotes(repo, false, "jp");
 			masterId = Number(masterId) || 318;
 			var shipLines = quotes[masterId];
-			var language = ConfigManager.language;
-			shipData = shipData || KC3Master.ship(masterId);
-			voiceNums = voiceNums || KC3Translation.getShipVoiceNums(masterId);
+			var shipData = KC3Master.ship(masterId);
 			$(".voice_list").empty();
 			$(".ship_info .ship_name").text( this.buildShipName(masterId, shipData) );
 			$(".ship_info .ship_name").data("id", masterId);
 			$(".ship_info .reload").click(function(){
 				self.showVoiceDetail( $(".ship_info .ship_name").data("id") );
 			});
+			if(shipData.api_aftershipid){
+				$(".ship_info .after_ship").data("asid", shipData.api_aftershipid);
+				$(".ship_info .after_ship").click(function(){
+					self.showVoiceDetail( $(this).data("asid") );
+				});
+			} else {
+				$(".ship_info .after_ship").hide();
+			}
+			var toFromFunc = function(){
+				KC3StrategyTabs.gotoTab(null, $(this).data("sid"));
+			};
+			var toggleSrcFunc = function(){
+				$(".en_src", $(this).parent()).toggle();
+				$(".jp_src", $(this).parent()).toggle();
+			};
 
 			var allVoiceNums = KC3Translation.getShipVoiceNums(masterId);
 			$.each(allVoiceNums,function(i,voiceNum) {
@@ -73,9 +93,20 @@
 				} else {
 					sourceText = "missing";
 				}
-				$(".source",elm).text( sourceText  );
+				$(".source",elm).text( sourceText );
+				if(sourceText.startsWith("From ")){
+					$(".source",elm).addClass("hover").data("sid", src.tag);
+					$(".source",elm).click(toFromFunc);
+				}
 				$(".subtitle",elm).text( (state === "missing") ? "missing"
 										 :src.val );
+				$(".division",elm).click(toggleSrcFunc);
+				if(enQuotes && enQuotes[masterId] && enQuotes[masterId][voiceNum]){
+					$(".en_src",elm).text(enQuotes[masterId][voiceNum]);
+				}
+				if(jpQuotes && jpQuotes[masterId] && jpQuotes[masterId][voiceNum]){
+					$(".jp_src",elm).text(jpQuotes[masterId][voiceNum]);
+				}
 				$(".voice_list").append(elm);
 			});
 		},
