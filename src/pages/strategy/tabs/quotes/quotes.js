@@ -21,6 +21,7 @@
 			var self = this;
 			var repo = "../../data/";
 			var language = ConfigManager.language;
+			KC3Meta.loadQuotes();
 			var quotes = KC3Translation.getQuotes(repo, true);
 			var enQuotes = [];
 			if(language !== "en")
@@ -34,13 +35,16 @@
 			$(".voice_list").empty();
 			$(".ship_info .ship_name").text( this.buildShipName(masterId, shipData) );
 			$(".ship_info .ship_name").data("id", masterId);
+			$(".ship_info .ship_name").addClass("hover").click(function(){
+				KC3StrategyTabs.gotoTab("mstship", $(this).data("id") );
+			});
 			$(".ship_info .reload").click(function(){
 				self.showVoiceDetail( $(".ship_info .ship_name").data("id") );
 			});
 			if(shipData.api_aftershipid){
 				$(".ship_info .after_ship").data("asid", shipData.api_aftershipid);
 				$(".ship_info .after_ship").click(function(){
-					self.showVoiceDetail( $(this).data("asid") );
+					KC3StrategyTabs.gotoTab(null, $(this).data("asid") );
 				});
 			} else {
 				$(".ship_info .after_ship").hide();
@@ -72,12 +76,18 @@
 				elm.addClass(state);
 
 				$(".voice",elm).text( "{0} [{1}]".format(KC3Translation.voiceNumToDesc(voiceNum), voiceNum) );
+				var voiceFile = KC3Meta.getFilenameByVoiceLine(masterId, voiceNum);
+				var voiceLine = KC3Meta.getVoiceLineByFilename(masterId, voiceFile);
+				$(".voice",elm).data("voiceFile", voiceFile);
+				$(".voice",elm).data("voiceLine", voiceLine);
 
 				$(".voice",elm).on("click", function() {
 					var currentGraph = KC3Master.graph(masterId).api_filename;
 					if(self.audio){ self.audio.pause(); }
-					var voiceFile = KC3Meta.getFilenameByVoiceLine(masterId ,voiceNum, 10);
-					console.debug("VOICE: shipId, voiceNum, voiceFile", masterId, voiceNum, voiceFile);
+					var voiceFile = $(this).data("voiceFile");
+					var voiceLine = $(this).data("voiceLine");
+					console.debug("VOICE: shipId, voiceNum, voiceFile, voiceLine", masterId,
+						voiceNum, voiceFile, voiceLine);
 					var voiceSrc = "http://"+self.server_ip
 						+ "/kcs/sound/kc"+currentGraph+"/"+voiceFile+".mp3";
 					self.audio = new Audio(voiceSrc);
@@ -106,6 +116,10 @@
 				}
 				if(jpQuotes && jpQuotes[masterId] && jpQuotes[masterId][voiceNum]){
 					$(".jp_src",elm).text(jpQuotes[masterId][voiceNum]);
+				}
+				var spQuote = KC3Meta.quote(masterId, voiceLine);
+				if(state !== "missing" && spQuote && src.val !== spQuote){
+					$(".sp_quote",elm).text("[{0}] {1}".format(voiceLine, spQuote)).show();
 				}
 				$(".voice_list").append(elm);
 			});

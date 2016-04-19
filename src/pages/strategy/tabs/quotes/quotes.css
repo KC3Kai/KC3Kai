@@ -98,6 +98,10 @@
 	background: #eeeeee;
 	display: none;
 }
+.tab_quotes .part_right .voice_entity .sp_quote {
+	background: #fff0fd;
+	display: none;
+}
 
 .tab_quotes .part_right .voice_entity.direct {
 	background: #e6ffe6;
