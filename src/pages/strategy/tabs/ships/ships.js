@@ -23,16 +23,20 @@
 		Prepares all data needed
 		---------------------------------*/
 		init :function(){
+			this.prepareSorters();
+		},
+
+		reloadShipList: function() {
 			// Cache ship info
 			PlayerManager.loadFleets();
+			KC3ShipManager.load();
+			this.shipCache = [];
 			var ctr, ThisShip, ThisShipData;
 			for(ctr in KC3ShipManager.list){
 				ThisShip = KC3ShipManager.list[ctr];
 				ThisShipData = this.prepareShipData(ThisShip);
 				this.shipCache.push(ThisShipData);
 			}
-
-			this.prepareSorters();
 		},
 
 		getLastCurrentSorter: function() {
@@ -174,6 +178,7 @@
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
+			this.reloadShipList();
 			// now we need to do this before preparing filters
 			// Ship types
 			var sCtr, cElm;
