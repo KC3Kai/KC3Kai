@@ -192,6 +192,8 @@
 
 			var self = this;
 			var multiKeyCtrl = $( ".advanced_sorter .adv_sorter" );
+			// TODO: when going back to normal mode,
+			// sorters should be kepy sync-ed
 			$(".filter_check",multiKeyCtrl).toggle( this.multiKey );
 			this.sorterDescCtrl.toggle(this.multiKey);
 			multiKeyCtrl.on("click", function() {
@@ -208,7 +210,7 @@
 		// default UI actions for options that are mutually exclusive
 		// NOTE: this function is supposed to be a shared callback function
 		// and should not be called directly.
-		_mutualExclusiveOnToggle: function(selectedInd,optionRep) {
+		_mutualExclusiveOnToggle: function(selectedInd,optionRep,initializing) {
 			// mutural exclusive options use just value indices
 			// as the option value
 			var oldVal = optionRep.curValue;
@@ -223,7 +225,7 @@
 			// only trigger update when it's not the first time
 			// first time we just need to give it a initial value (default value)
 			// and then upate UI.
-			if (oldVal !== null)
+			if (!initializing)
 				this.refreshTable();
 		},
 
@@ -264,7 +266,7 @@
 			// note that the length of the jquery object has to be exactly one,
 			// otherwise you'll see assertion failures in the console.
 			findView,
-			// onToggle(newVal,optionRep) that triggers either when initializing
+			// onToggle(newVal,optionRep,initializing) that triggers either when initializing
 			// or when user has changed something on UI.
 			// optionRep is the runtime representation of this filter:
 			// * optionRep.curValue represents the current value
@@ -275,6 +277,7 @@
 			//   * optionRep.options[ind].name is set to options[ind]
 			//   * optionRep.options[ind].view is set to the jQuery object returned
 			//     by your "findView".
+			// * initializing: newly added to help indicate whether we are initializing
 			// your onToggle is responsible for 2 things:
 			// * when initalizing a filter, "optionRep.curValue" is set to "null",
 			//   in this case "newVal" is "defValue" you passed to this function,
@@ -304,7 +307,7 @@
 				thisOption.view.on('click', function() {
 					var curRep = self.newFilterRep[filterName];
 					var selectedInd = ind;
-					curRep.onToggle.call(self,selectedInd,curRep);
+					curRep.onToggle.call(self,selectedInd,curRep,false);
 				});
 				console.assert(
 					thisOption.view.length === 1,
@@ -323,7 +326,7 @@
 			};
 					
 			this.newFilterRep[filterName] = optionRep;
-			optionRep.onToggle.call(self,defValue,optionRep);
+			optionRep.onToggle.call(self,defValue,optionRep,true);
 		},
 
 		prepareFilters: function() {
@@ -420,13 +423,10 @@
 					}
 				},
 				// onToggle
-				function(selectedInd, optionRep) {
-					var initializing = false;
-					if (optionRep.curValue === null) {
-						// the variable name is a bit misleading,
-						// but when "optionRep.curValue" is null
-						// we know we are initializing
-						initializing = true;
+				function(selectedInd, optionRep,initializing) {
+					if (initializing) {
+						// the variable name is a bit misleading..
+						// but at this point we should set the initial value
 						optionRep.curValue = selectedInd;
 					} else {
 						var selected = optionRep.options[selectedInd];
@@ -476,6 +476,7 @@
 		showFilters :function(){
 			var self = this;
 			var sCtr;
+
 			
 			// Equip Stats: Yes
 			self.options.equip_yes = $(".tab_ships .filters .massSelect .equip_yes").on("click", function(){
@@ -581,6 +582,7 @@
 		Reload ship list based on filters
 		---------------------------------*/
 		refreshTable :function(){
+			// TODO: use "isLoading" to check if we need UI update.
 			if(this.isLoading){ return false; }
 			this.isLoading = true;
 			
@@ -589,6 +591,7 @@
 			
 			// Clear list
 			this.shipList.html("").hide();
+
 
 			// Wait until execute
 			setTimeout(function(){
