@@ -73,6 +73,17 @@
 			this.updateSorterDescription();
 		},
 
+		// remove all sorters except the first one
+		// returning true means visible ship list needs to be updated.
+		cutCurrentSorter: function() {
+			if (this.currentSorters.length > 1) {
+				this.currentSorters = [ this.currentSorters[0] ];
+				this.updateSorterDescription();
+				return true;
+			}
+			return false;
+		},
+
 		setCurrentSorter: function(name) {
 			var sorter = this.sorters[name];
 			console.assert(sorter, "sorter should have been registered");
@@ -197,14 +208,24 @@
 
 			var self = this;
 			var multiKeyCtrl = $( ".advanced_sorter .adv_sorter" );
-			// TODO: when going back to normal mode,
-			// sorters should be kepy sync-ed
-			$(".filter_check",multiKeyCtrl).toggle( this.multiKey );
-			this.sorterDescCtrl.toggle(this.multiKey);
+
+			function updateControl() {
+				$(".filter_check",multiKeyCtrl).toggle( self.multiKey );
+				self.sorterDescCtrl.toggle(self.multiKey);
+			}
+
+			updateControl();
+
 			multiKeyCtrl.on("click", function() {
 				self.multiKey = ! self.multiKey;
-				$(".filter_check",this).toggle( self.multiKey );
-				self.sorterDescCtrl.toggle(self.multiKey);
+				
+				updateControl();
+
+				if (! self.multiKey) {
+					var needUpdate = self.cutCurrentSorter();
+					if (needUpdate)
+						self.refreshTable();
+				}
 			});
 
 			this.prepareFilters();
