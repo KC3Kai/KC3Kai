@@ -2252,19 +2252,26 @@
 
 	function buildAntiAirCutinTooltip(thisNode) {
 		var aaciTips = "";
-		var fireShipPos = thisNode.antiAirFire.api_idx; // starts from 0
-		if(fireShipPos>=0 && fireShipPos<6){
-			var sentFleet = PlayerManager.fleets[KC3SortieManager.fleetSent-1];
-			var shipName = KC3ShipManager.get(sentFleet.ships[fireShipPos]).name();
-			aaciTips += shipName;
+		if(!!thisNode.antiAirFire && thisNode.antiAirFire.length>0){
+			thisNode.antiAirFire.forEach(function(fire){
+				if(!!fire){
+					var fireShipPos = fire.api_idx; // starts from 0
+					if(fireShipPos>=0 && fireShipPos<6){
+						var sentFleet = PlayerManager.fleets[KC3SortieManager.fleetSent-1];
+						var shipName = KC3ShipManager.get(sentFleet.ships[fireShipPos]).name();
+						aaciTips += (!!aaciTips ? String.fromCharCode(13) : "") + shipName;
+					}
+					var itemList = fire.api_use_items;
+					if(!!itemList && itemList.length > 0){
+						for(var itemIdx=0; itemIdx<Math.min(itemList.length,4); itemIdx++) {
+							if(itemList[itemIdx] > -1) aaciTips += String.fromCharCode(13) + 
+								KC3Meta.gearName(KC3Master.slotitem(itemList[itemIdx]).api_name);
+						}
+					}
+				}
+			});
 		}
-		var itemList = thisNode.antiAirFire.api_use_items;
-		if(!!itemList && itemList.length > 0){
-			for(var itemIdx=0; itemIdx<Math.min(itemList.length,4); itemIdx++) {
-				if(itemList[itemIdx] > -1) aaciTips += String.fromCharCode(13) + KC3Meta.gearName(KC3Master.slotitem(itemList[itemIdx]).api_name);
-			}
-		}
-		return aaciTips;
+		return aaciTips || KC3Meta.term("BattleAntiAirCutIn");
 	}
 
 	function updateMapGauge(gaugeDmg,fsKill,noBoss) {
