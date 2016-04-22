@@ -250,6 +250,7 @@ Used by SortieManager
 		this.eships = enemyships;
 		this.eformation = battleData.api_formation[1];
 		this.eParam = battleData.api_eParam;
+		this.eKyouka = battleData.api_eKyouka;
 		this.eSlot = battleData.api_eSlot;
 
 		this.supportFlag = (battleData.api_support_flag>0);
@@ -282,8 +283,8 @@ Used by SortieManager
 		
 		this.airbattle = KC3Meta.airbattle( planePhase.api_disp_seiku );
 		
-		if(!!attackPhase){
-			this.antiAirFire = attackPhase.api_air_fire;
+		if(!!attackPhase && !!attackPhase.api_air_fire){
+			this.antiAirFire = [ attackPhase.api_air_fire ];
 		}
 		
 		// Fighter phase 1
@@ -324,6 +325,12 @@ Used by SortieManager
 			if(battleData.api_kouku2.api_stage2 !== null){
 				this.planeBombers.player[1] += battleData.api_kouku2.api_stage2.api_f_lostcount;
 				this.planeBombers.abyssal[1] += battleData.api_kouku2.api_stage2.api_e_lostcount;
+				if(!!battleData.api_kouku2.api_stage2.api_air_fire){
+					if(!this.antiAirFire || this.antiAirFire.length<1){
+						this.antiAirFire = [null];
+					}
+					this.antiAirFire[1] = battleData.api_kouku2.api_stage2.api_air_fire;
+				}
 			}
 		}
 
@@ -484,6 +491,7 @@ Used by SortieManager
 		this.eships = enemyships;
 		this.eformation = this.eformation || nightData.api_formation[1];
 		this.eParam = nightData.api_eParam;
+		this.eKyouka = nightData.api_eKyouka;
 		this.eSlot = nightData.api_eSlot;
 		
 		// if we did not started at night, at this point dayBeginHPs should be available
