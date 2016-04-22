@@ -7,84 +7,493 @@
 		tabSelf: KC3StrategyTabs.ships,
 		
 		shipCache:[],
-		filters: [],
 		options: [],
-		sortBy: "lv",
-		sortAsc: true,
+		// default sorting method to Level
+		currentSorters: [{name:"lv", reverse:false}],
 		equipMode: 0,
-		remodelOption: 0,
-		modernizationOption: 0,
-		marriageFilter: 0,
-		heartlockFilter: 0,
-		speedFilter: 0,
-		withFleet: true,
 		isLoading: false,
-		//shipList: $(".tab_ships .ship_list"),
-		
+		multiKey: false,
+
+		newFilterRep: {},
+		// all sorters
+		sorters: {},
+		sorterDescCtrl: null,
+
 		/* INIT
 		Prepares all data needed
 		---------------------------------*/
 		init :function(){
+			this.prepareSorters();
+		},
+
+		reloadShipList: function() {
 			// Cache ship info
 			PlayerManager.loadFleets();
-			var ctr, ThisShip, MasterShip, ThisShipData;
+			KC3ShipManager.load();
+			this.shipCache = [];
+			var ctr, ThisShip, ThisShipData;
 			for(ctr in KC3ShipManager.list){
 				ThisShip = KC3ShipManager.list[ctr];
-				MasterShip = ThisShip.master();
-				ThisShipData = {
-					id : ThisShip.rosterId,
-					bid : ThisShip.masterId,
-					stype: MasterShip.api_stype,
-					english: ThisShip.name(),
-					level: ThisShip.level,
-					morale: ThisShip.morale,
-					equip: ThisShip.items,
-					locked: ThisShip.lock,
-					
-					hp: ThisShip.hp[0],
-					fp: [MasterShip.api_houg[1], MasterShip.api_houg[0]+ThisShip.mod[0], ThisShip.fp[0] ],
-					tp: [MasterShip.api_raig[1], MasterShip.api_raig[0]+ThisShip.mod[1], ThisShip.tp[0] ],
-					yasen: [
-						MasterShip.api_houg[1] + MasterShip.api_raig[1],
-						MasterShip.api_houg[0]+ThisShip.mod[0] + MasterShip.api_raig[0]+ThisShip.mod[1],
-						ThisShip.fp[0] + ThisShip.tp[0]
-					],
-					aa: [MasterShip.api_tyku[1], MasterShip.api_tyku[0]+ThisShip.mod[2], ThisShip.aa[0] ],
-					ar: [MasterShip.api_souk[1], MasterShip.api_souk[0]+ThisShip.mod[3], ThisShip.ar[0] ],
-					as: [this.getDerivedStatNaked("tais", ThisShip.as[0], ThisShip.items), ThisShip.as[0] ],
-					ev: [this.getDerivedStatNaked("houk", ThisShip.ev[0], ThisShip.items), ThisShip.ev[0] ],
-					ls: [this.getDerivedStatNaked("saku", ThisShip.ls[0], ThisShip.items), ThisShip.ls[0] ],
-					lk: ThisShip.lk[0],
-					sp: MasterShip.api_soku,
-					slots: ThisShip.slots,
-					
-					fleet: ThisShip.onFleet(),
-					
-					// Check whether remodel is max
-					remodel: !MasterShip.api_afterlv
-                                || (KC3Master._raw.ship[MasterShip.api_aftershipid] && (KC3Master._raw.ship[MasterShip.api_aftershipid].api_aftershipid || 0) == MasterShip.api_id)
-				};
-				
-				// Check whether modernization is max
-					if( ThisShipData.fp[0] == ThisShipData.fp[1]
-						&& ThisShipData.tp[0] == ThisShipData.tp[1]
-						&& ThisShipData.aa[0] == ThisShipData.aa[1]
-						&& ThisShipData.ar[0] == ThisShipData.ar[1]
-					)
-						ThisShipData.statmax = 1;
-					else
-						ThisShipData.statmax = 0;
-				
+				ThisShipData = this.prepareShipData(ThisShip);
 				this.shipCache.push(ThisShipData);
 			}
+		},
+
+		getLastCurrentSorter: function() {
+			return this.currentSorters[this.currentSorters.length-1];
+		},
+
+		reverseLastCurrentSorter: function() {
+			var sorter = this.getLastCurrentSorter();
+			sorter.reverse = ! sorter.reverse;
+			this.updateSorterDescription();
+		},
+
+		// try pushing a new sorter to existing list
+		// if the sorter already exists, the its "reverse"
+		// value will be filpped.
+		pushToCurrentSorters: function(name) {
+			var i;
+			var found = false;
+			for (i=0; !found && i<this.currentSorters.length; ++i) {
+				var sorterInfo = this.currentSorters[i];
+				if (name === sorterInfo.name) {
+					found = true;
+					sorterInfo.reverse = ! sorterInfo.reverse;
+				}
+			}
+
+			if (!found) {
+				this.currentSorters.push({
+					name: name,
+					reverse: false
+				});
+			}
+
+			this.updateSorterDescription();
+		},
+
+		// remove all sorters except the first one
+		// returning true means visible ship list needs to be updated.
+		cutCurrentSorter: function() {
+			if (this.currentSorters.length > 1) {
+				this.currentSorters = [ this.currentSorters[0] ];
+				this.updateSorterDescription();
+				return true;
+			}
+			return false;
+		},
+
+		setCurrentSorter: function(name) {
+			var sorter = this.sorters[name];
+			console.assert(sorter, "sorter should have been registered");
+			this.currentSorters = [ {name: sorter.name, reverse:false} ];
+			this.updateSorterDescription();
+		},
+
+		updateSorterDescription: function() {
+			var self = this;
+			var desc = this.currentSorters
+				.map(function(sorterInfo) {
+					var sorter = self.sorters[sorterInfo.name];
+					return sorterInfo.reverse
+						? sorter.desc + "(R)"
+						: sorter.desc;
+				})
+				.join(" > ");
+
+			this.sorterDescCtrl.text( desc );
+		},
+
+		// create comparator based on current list sorters
+		makeComparator: function() {
+			function reversed(comparator) {
+				return function(a,b) {
+					var result = comparator(a,b);
+					return result === 0 
+						? 0 
+						: result < 0 ? 1 : -1;
+				};
+			}
+
+			function compose(prevCmp,curCmp) {
+				return function(a,b) {
+					var prevResult = prevCmp(a,b);
+					return prevResult !== 0 ? prevResult : curCmp(a,b);
+				};
+			}
+
+			var self = this;
+			return this.currentSorters
+				.map( function(sorterInfo) {
+					var sorter = self.sorters[sorterInfo.name];
+					return sorterInfo.reverse
+						? reversed(sorter.comparator) 
+						: sorter.comparator;
+				})
+				.reduce( compose );
+		},
+
+		// prepares necessary info.
+		// also stores those that doesn't need to be recomputed overtime.
+		prepareShipData: function(ship) {
+			var ThisShip = ship;
+			var MasterShip = ThisShip.master();
+			var cached =  {
+				id: ThisShip.rosterId,
+				bid : ThisShip.masterId,
+				stype: MasterShip.api_stype,
+				english: ThisShip.name(),
+				level: ThisShip.level,
+				morale: ThisShip.morale,
+				equip: ThisShip.items,
+				locked: ThisShip.lock,
+				
+				hp: ThisShip.hp[0],
+				fp: [MasterShip.api_houg[1], MasterShip.api_houg[0]+ThisShip.mod[0], ThisShip.fp[0] ],
+				tp: [MasterShip.api_raig[1], MasterShip.api_raig[0]+ThisShip.mod[1], ThisShip.tp[0] ],
+				yasen: [
+					MasterShip.api_houg[1] + MasterShip.api_raig[1],
+					MasterShip.api_houg[0]+ThisShip.mod[0] + MasterShip.api_raig[0]+ThisShip.mod[1],
+					ThisShip.fp[0] + ThisShip.tp[0]
+				],
+				aa: [MasterShip.api_tyku[1], MasterShip.api_tyku[0]+ThisShip.mod[2], ThisShip.aa[0] ],
+				ar: [MasterShip.api_souk[1], MasterShip.api_souk[0]+ThisShip.mod[3], ThisShip.ar[0] ],
+				as: [this.getDerivedStatNaked("tais", ThisShip.as[0], ThisShip.items), ThisShip.as[0] ],
+				ev: [this.getDerivedStatNaked("houk", ThisShip.ev[0], ThisShip.items), ThisShip.ev[0] ],
+				ls: [this.getDerivedStatNaked("saku", ThisShip.ls[0], ThisShip.items), ThisShip.ls[0] ],
+				lk: ThisShip.lk[0],
+				sp: MasterShip.api_soku,
+				slots: ThisShip.slots,
+				fleet: ThisShip.onFleet(),
+				ship: ThisShip,
+				master: ThisShip.master(),
+				// Check whether remodel is max
+				remodel: RemodelDb.isFinalForm(ship.masterId)
+			};
+			var ThisShipData = cached;
+			// Check whether modernization is max
+			if( ThisShipData.fp[0] == ThisShipData.fp[1]
+				&& ThisShipData.tp[0] == ThisShipData.tp[1]
+				&& ThisShipData.aa[0] == ThisShipData.aa[1]
+				&& ThisShipData.ar[0] == ThisShipData.ar[1]
+			  )
+				ThisShipData.statmax = 1;
+			else
+				ThisShipData.statmax = 0;
+
+			return cached;
 		},
 		
 		/* EXECUTE
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
+			this.reloadShipList();
+			// now we need to do this before preparing filters
+			// Ship types
+			var sCtr, cElm;
+
+			for(sCtr in KC3Meta._stype){
+				if(KC3Meta._stype[sCtr]){
+					cElm = $(".tab_ships .factory .ship_filter_type").clone()
+						.appendTo(".tab_ships .filters .ship_types");
+					cElm.data("id", sCtr);
+					$(".filter_name", cElm).text(KC3Meta.stype(sCtr));
+				}
+			}
+
+			this.sorterDescCtrl = $(".advanced_sorter .sorter_desc");
+			this.updateSorterDescription();
+
+			var self = this;
+			var multiKeyCtrl = $( ".advanced_sorter .adv_sorter" );
+
+			function updateControl() {
+				$(".filter_check",multiKeyCtrl).toggle( self.multiKey );
+				self.sorterDescCtrl.toggle(self.multiKey);
+			}
+
+			updateControl();
+
+			multiKeyCtrl.on("click", function() {
+				self.multiKey = ! self.multiKey;
+				
+				updateControl();
+
+				if (! self.multiKey) {
+					var needUpdate = self.cutCurrentSorter();
+					if (needUpdate)
+						self.refreshTable();
+				}
+			});
+
+			this.prepareFilters();
 			this.shipList = $(".tab_ships .ship_list");
 			this.showFilters();
+		},
+
+		// default UI actions for options that are mutually exclusive
+		// NOTE: this function is supposed to be a shared callback function
+		// and should not be called directly.
+		_mutualExclusiveOnToggle: function(selectedInd,optionRep,initializing) {
+			// mutural exclusive options use just value indices
+			// as the option value
+			var oldVal = optionRep.curValue;
+			if (oldVal === selectedInd)
+				return;
+			// first update value
+			optionRep.curValue = selectedInd;
+			// then update UI accordingly
+			$.each(optionRep.options, function(thisInd, optionObj) {
+				optionObj.view.toggleClass('on', thisInd === selectedInd);
+			});
+			// only trigger update when it's not the first time
+			// first time we just need to give it a initial value (default value)
+			// and then upate UI.
+			if (!initializing)
+				this.refreshTable();
+		},
+
+		// findView given filter's name and this option
+		// NOTE: this function is supposed to be a shared callback function
+		// and should not be called directly.
+		_commonFindView: function(filterName, option) {
+			return $(".tab_ships .filters .massSelect"
+					 +" ." + filterName
+					 + "_" + option);
+		},
+
+		/* 
+		   defineShipFilter defines a filter that has UI controls.
+		   
+		   see comments on each arguments for detail.
+		 */
+		defineShipFilter: function(
+			// a string name for this filter
+			filterName,
+			// ship filters can hold a piece of value
+			// which represents its state.
+			// (e.g. true / false for keeping track of whether
+			//  this filter is enabled or disable)
+			defValue,
+			// an array of arbitrary values, each of the option should
+			// correspond to a toggle / control on UI
+			options,
+			// a callback function testShip(curVal,ship)
+			// that does the actual fitlering:
+			// returning a falsy value means
+			// the ship should be filtered out from the list.
+			// curVal is the current state of the filter.
+			testShip,
+			// findView(filterName,option) should return
+			// a jQuery object that represents the UI control specified by
+			// "filterName" and "option", where "option" is one value from "options"
+			// note that the length of the jquery object has to be exactly one,
+			// otherwise you'll see assertion failures in the console.
+			findView,
+			// onToggle(newVal,optionRep,initializing) that triggers either when initializing
+			// or when user has changed something on UI.
+			// optionRep is the runtime representation of this filter:
+			// * optionRep.curValue represents the current value
+			//   held by this filter, when initializing, this value is set to "null".
+			// * optionRep.options is the runtime representation of
+			//   all options you have passed to this function.
+			//   for all valid options indices ind
+			//   * optionRep.options[ind].name is set to options[ind]
+			//   * optionRep.options[ind].view is set to the jQuery object returned
+			//     by your "findView".
+			// * initializing: newly added to help indicate whether we are initializing
+			// your onToggle is responsible for 2 things:
+			// * when initalizing a filter, "optionRep.curValue" is set to "null",
+			//   in this case "newVal" is "defValue" you passed to this function,
+			//   you should do something like "optionRep.curValue = newVal"
+			//   to complete initializing filter state. and update UI accordingly
+			//   (but avoid refreshing ship list, since we are just initalizing)
+			// * when user does something on UI, your onToggle function will be triggered.
+			//   in this case "newVal" is set to an index of "options" to indicate
+			//   which option triggers this function. in this case you are responsible
+			//   for updating "optionRep.curValue" accordingly, updating UI to reflect the change
+			//   and finally refresh ship list to execute all filters.
+			onToggle) {
+			var self = this;
+			// as most filters are groups of mutually exclusive controls
+			// it makes sense setting them as defaults
+			if (! findView)
+				findView = this._commonFindView;
+			if (! onToggle)
+				onToggle = this._mutualExclusiveOnToggle;
+
+			var newOptions = [];
+			$.each(options, function(ind, optionName) {
+				var thisOption = {};
+				var view = findView(filterName,optionName);
+				thisOption.name = optionName;
+				thisOption.view = view;
+				thisOption.view.on('click', function() {
+					var curRep = self.newFilterRep[filterName];
+					var selectedInd = ind;
+					curRep.onToggle.call(self,selectedInd,curRep,false);
+				});
+				console.assert(
+					thisOption.view.length === 1,
+					"expecting exactly one result of getView on " 
+						+ filterName  + "," + optionName );
+				newOptions.push( thisOption );
+			});
+
+			var optionRep = {
+				curValue: null,
+				options: newOptions,
+				onToggle: onToggle,
+				testShip: function (ship) {
+					return testShip(optionRep.curValue,ship);
+				}
+			};
+					
+			this.newFilterRep[filterName] = optionRep;
+			optionRep.onToggle.call(self,defValue,optionRep,true);
+		},
+
+		prepareFilters: function() {
+			var self = this;
+			self.defineShipFilter(
+				"marriage",
+				0,
+				[ "in","on","ex" ],
+				function(curVal, ship) {
+					return (curVal === 0)
+						|| (curVal === 1 && ship.level >= 100)
+						|| (curVal === 2 && ship.level <  100);
+				});
+
+			self.defineShipFilter(
+				"remodel",
+				0,
+				["all","max","nomax"],
+				function(curVal, ship) {
+					return (curVal === 0)
+						|| (curVal === 1 && ship.remodel)
+						|| (curVal === 2 && !ship.remodel);
+				});
+
+			self.defineShipFilter(
+				"modernization",
+				0,
+				["all","max","nomax"],
+				function(curVal, ship) {
+					return (curVal === 0)
+						|| (curVal === 1 && ship.statmax)
+						|| (curVal === 2 && !ship.statmax);
+				});
+				
+			self.defineShipFilter(
+				"heartlock",
+				 0,
+				["all","yes","no"],
+				function(curVal, ship) {
+					return (curVal === 0)
+						|| (curVal === 1 && ship.locked === 1)
+						|| (curVal === 2 && ship.locked === 0);
+				});
+
+			self.defineShipFilter(
+				"speed",
+				0,
+				["all","fast","slow"],
+				function(curVal,ship) {
+					return (curVal === 0)
+						|| (curVal === 1 && ship.sp >= 10)
+						|| (curVal === 2 && ship.sp < 10);
+				});
+
+			self.defineShipFilter(
+				"fleet",
+				1,
+				["no","yes"],
+				function(curVal,ship) {
+					return (curVal === 0 && !ship.fleet)
+						|| (curVal === 1);
+				});
+
+			var stypes = Object
+				.keys(KC3Meta._stype)
+				.map(function(x) { return parseInt(x,10); })
+				.sort(function(a,b) { return a-b; });
+			console.assert(stypes[0] === 0);
+			// remove initial "0", which is invalid
+			stypes.shift();
+			var stypeDefValue = [];
+			$.each(stypes, function(ignore, stype) {
+				stypeDefValue[stype] = true;
+			});
+
+			self.defineShipFilter(
+				"stype",
+				stypeDefValue,
+				// valid ship types and addtionally 3 controls
+				stypes.concat(["all","none","invert"]),
+				// testShip
+				function(curVal,ship) {
+					return curVal[ship.stype];
+				},
+				// find view
+				function (filterName,option) {
+					if (typeof option === "number") {
+						// this is a ship type toggle
+						return $(".tab_ships .filters .ship_types .ship_filter_type")
+							.filter( function() {  return $(this).data("id") === "" + option;  }  );
+					} else {
+						// one of: all / none / invert
+						return $(".tab_ships .filters .massSelect ." + option);
+					}
+				},
+				// onToggle
+				function(selectedInd, optionRep,initializing) {
+					if (initializing) {
+						// the variable name is a bit misleading..
+						// but at this point we should set the initial value
+						optionRep.curValue = selectedInd;
+					} else {
+						var selected = optionRep.options[selectedInd];
+						if (typeof selected.name === 'number') {
+							// this is a ship type toggle
+							optionRep.curValue[selected.name] = !optionRep.curValue[selected.name];
+						} else {
+							$.each(stypes, function(ignore, stype) {
+								optionRep.curValue[stype] = 
+									(selected.name === "all")
+									? true
+									: (selected.name === "none")
+									? false
+									: ! optionRep.curValue[stype];
+							});
+						}
+					}
+					// update UI
+					$.each(optionRep.options, function(ignored, x) {
+						if (typeof x.name === "number") {
+							$( ".filter_check", x.view ).toggle( optionRep.curValue[x.name]  );
+						}
+					});
+
+					if (!initializing)
+						self.refreshTable();
+				}
+			);
+		},
+
+		// execute all registered filters on a ship
+		executeFilters: function(ship) {
+			var filterKeys = Object.keys(this.newFilterRep);
+			var i;
+			for (i=0;i<filterKeys.length;++i) {
+				var key = filterKeys[i];
+				var filter = this.newFilterRep[key].testShip;
+				if (!filter(ship))
+					return false;
+			}
+			return true;
 		},
 		
 		/* FILTERS
@@ -92,44 +501,8 @@
 		---------------------------------*/
 		showFilters :function(){
 			var self = this;
-			
-			// Ship types
-			var sCtr, cElm;
-			for(sCtr in KC3Meta._stype){
-				if(KC3Meta._stype[sCtr]){
-					cElm = $(".tab_ships .factory .ship_filter_type").clone().appendTo(".tab_ships .filters .ship_types");
-					cElm.data("id", sCtr);
-					$(".filter_name", cElm).text(KC3Meta.stype(sCtr));
-					this.filters[sCtr] = true;
-				}
-			}
-			
-			// Select: All
-			self.options.all = $(".tab_ships .filters .massSelect .all").on("click", function(){
-				$(".tab_ships .ship_filter_type .filter_check").show();
-				for(sCtr in KC3Meta._stype){
-					self.filters[sCtr] = true;
-				}
-				self.refreshTable();
-			});
-			
-			// Select: None
-			self.options.none = $(".tab_ships .filters .massSelect .none").on("click", function(){
-				$(".tab_ships .ship_filter_type .filter_check").hide();
-				for(sCtr in KC3Meta._stype){
-					self.filters[sCtr] = false;
-				}
-				self.refreshTable();
-			});
+			var sCtr;
 
-			// Select: Invert
-			self.options.none = $(".tab_ships .filters .massSelect .invert").on("click", function(){
-				$(".tab_ships .ship_filter_type .filter_check").toggle();
-				for(sCtr in KC3Meta._stype){
-					self.filters[sCtr] = !self.filters[sCtr];
-				}
-				self.refreshTable();
-			});
 			
 			// Equip Stats: Yes
 			self.options.equip_yes = $(".tab_ships .filters .massSelect .equip_yes").on("click", function(){
@@ -147,165 +520,95 @@
 				self.options.equip_no.addClass('on');
 			});
 			
-			// Remodel: All
-			self.options.remodel_all = $(".tab_ships .filters .massSelect .remodel_all").on("click", function(){
-				self.remodelOption = 0;
-				self.refreshTable();
-				self.options.remodel_all.addClass('on');
-				self.options.remodel_max.removeClass('on');
-				self.options.remodel_nomax.removeClass('on');
-			});
-			
-			// Remodel: Max
-			self.options.remodel_max = $(".tab_ships .filters .massSelect .remodel_max").on("click", function(){
-				self.remodelOption = 1;
-				self.refreshTable();
-				self.options.remodel_all.removeClass('on');
-				self.options.remodel_max.addClass('on');
-				self.options.remodel_nomax.removeClass('on');
-			});
-			
-			// Remodel: Non-Max
-			self.options.remodel_nomax = $(".tab_ships .filters .massSelect .remodel_nomax").on("click", function(){
-				self.remodelOption = 2;
-				self.refreshTable();
-				self.options.remodel_all.removeClass('on');
-				self.options.remodel_max.removeClass('on');
-				self.options.remodel_nomax.addClass('on');
-			});
-			
-			// Modernization: All
-			self.options.modernization_all = $(".tab_ships .filters .massSelect .modernization_all").on("click", function(){
-				self.modernizationOption = 0;
-				self.refreshTable();
-				self.options.modernization_all.addClass('on');
-				self.options.modernization_max.removeClass('on');
-				self.options.modernization_nomax.removeClass('on');
-			});
-			
-			// Modernization: Max
-			self.options.modernization_max = $(".tab_ships .filters .massSelect .modernization_max").on("click", function(){
-				self.modernizationOption = 1;
-				self.refreshTable();
-				self.options.modernization_all.removeClass('on');
-				self.options.modernization_max.addClass('on');
-				self.options.modernization_nomax.removeClass('on');
-			});
-			
-			// Modernization: Non-Max
-			self.options.modernization_nomax = $(".tab_ships .filters .massSelect .modernization_nomax").on("click", function(){
-				self.modernizationOption = 2;
-				self.refreshTable();
-				self.options.modernization_all.removeClass('on');
-				self.options.modernization_max.removeClass('on');
-				self.options.modernization_nomax.addClass('on');
-			});
-			
-			// Marriage
-			["in","on","ex"].forEach(function(x,i,a){
-				self.options["marriage_"+x] = $(".tab_ships .filters .massSelect .marriage_"+x).on("click",function(){
-					self.marriageFilter = i;
-					self.refreshTable();
-					a.forEach(function(_x,_i,_a){
-						if(i==_i)
-							self.options["marriage_"+_x].addClass('on');
-						else
-							self.options["marriage_"+_x].removeClass('on');
-					});
-				});
-			});
-			
-			// Fleet Inclusion
-			["no","yes"].forEach(function(x,i,a){
-				self.options["fleet_"+x] = $(".tab_ships .filters .massSelect .fleet_"+x).on("click",function(){
-					self.withFleet = !!i;
-					self.refreshTable();
-					a.forEach(function(_x,_i,_a){
-						if(i==_i)
-							self.options["fleet_"+_x].addClass('on');
-						else
-							self.options["fleet_"+_x].removeClass('on');
-					});
- 				});
-			});
-
-			["all","yes","no"].forEach(function(x,i,a){
-				self.options["heartlock_"+x] = $(".tab_ships .filters .massSelect .heartlock_"+x).on("click",function(){
-					self.heartlockFilter = i;
-					self.refreshTable();
-					a.forEach(function(_x,_i,_a){
-						if(i==_i)
-							self.options["heartlock_"+_x].addClass('on');
-						else
-							self.options["heartlock_"+_x].removeClass('on');
-					});
-				});
-			});
-
-			["all","fast","slow"].forEach(function(x,i,a){
-				self.options["speed_"+x] = $(".tab_ships .filters .massSelect .speed_"+x).on("click",function(){
-					self.speedFilter = i;
-					self.refreshTable();
-					a.forEach(function(_x,_i,_a){
-						if(i==_i)
-							self.options["speed_"+_x].addClass('on');
-						else
-							self.options["speed_"+_x].removeClass('on');
-					});
-				});
-			});
-
 			// Default status
 			if( self.equipMode )
 				self.options.equip_yes.addClass('on');
 			else
 				self.options.equip_no.addClass('on');
 
-			if( self.remodelOption === 0 )
-				self.options.remodel_all.addClass('on');
-			else if( self.remodelOption == 1 )
-				self.options.remodel_max.addClass('on');
-			else if( self.remodelOption == 2 )
-				self.options.remodel_nomax.addClass('on');
-
-			if( self.modernizationOption === 0 )
-				self.options.modernization_all.addClass('on');
-			else if( self.modernizationOption == 1 )
-				self.options.modernization_max.addClass('on');
-			else if( self.modernizationOption == 2 )
-				self.options.modernization_nomax.addClass('on');
-
-			self.options["heartlock_"+["all","yes","no"][self.heartlockFilter]].addClass('on');
-			self.options["marriage_"+["in","on","ex"][self.marriageFilter]].addClass('on');
-			self.options["fleet_"+["no","yes"][self.withFleet & 1]].addClass('on');
-			self.options["speed_"+["all","fast","slow"][self.speedFilter]].addClass('on');
-			
-			// Ship type toggled
-			$(".tab_ships .filters .ship_filter_type").on("click", function(){
-				self.filters[ $(this).data("id") ] = !self.filters[ $(this).data("id") ];
-				if(self.filters[ $(this).data("id") ]){ $(".filter_check", this).show(); }
-				else{ $(".filter_check", this).hide(); }
-				self.refreshTable();
-			});
-			
 			// Column header sorting
 			$(".tab_ships .ship_header .ship_field.hover").on("click", function(){
-				if($(this).data('type') == self.sortBy){
-					self.sortAsc = !self.sortAsc;
-				}else{
-					self.sortAsc = true;
+				var sorter = self.getLastCurrentSorter();
+				var sorterName = $(this).data("type");
+				if (sorterName === sorter.name) {
+					self.reverseLastCurrentSorter();
+				} else {
+					if (self.multiKey) {
+						// for multi index sorters
+						self.pushToCurrentSorters( sorterName );
+					} else {
+						// for normal sorters
+						self.setCurrentSorter( sorterName  );
+					}
 				}
-				self.sortBy = $(this).data('type');
 				self.refreshTable();
 			});
 			
 			this.refreshTable();
+		},
+
+
+		defineSorter: function(name,desc,comparator) {
+			this.sorters[name] = {
+				name: name,
+				desc: desc,
+				comparator: comparator
+			};
+		},
+
+		defineSimpleSorter: function(name,desc,getter) {
+			var self = this;
+			this.defineSorter(
+				name,desc,
+				function(a,b) {
+					var va = getter.call(self,a);
+					var vb = getter.call(self,b);
+					return va === vb
+						 ? 0 
+						 : (va < vb) ? -1 : 1;
+				});
+		},
+
+		prepareSorters: function() {
+			var define = this.defineSimpleSorter.bind(this);
+
+			define("id", "Id",
+				   function(x) { return x.id; });
+			define("name", "Name", 
+				   function(x) { return x.english; });
+			define("type", "Type",
+				   function(x) { return x.stype; });
+			define("lv", "Level",
+				   function(x) { return -x.level; });
+			define("morale", "Morale",
+				   function(x) { return -x.morale; });
+			define("hp", "HP",
+				   function(x) { return -x.hp; });
+			define("fp", "Firepower",
+				   function(x) { return -x.fp[this.equipMode+1]; });
+			define("tp", "Torpedo",
+				   function(x) { return -x.tp[this.equipMode+1]; });
+			define("yasen", "Yasen",
+				   function(x) { return -(x.fp[this.equipMode+1] + x.tp[this.equipMode+1]); });
+			define("aa", "Anti-Air",
+				   function(x) { return -x.aa[this.equipMode+1]; });
+			define("ar", "Armor",
+				   function(x) { return -x.ar[this.equipMode+1]; });
+			define("as", "ASW",
+				   function(x) { return -x.as[this.equipMode]; });
+			define("ev", "Evasion",
+				   function(x) { return -x.ev[this.equipMode]; });
+			define("ls", "LoS",
+				   function(x) { return -x.ls[this.equipMode]; });
+			define("lk", "Luck",
+				   function(x) { return -x.lk; });
 		},
 		
 		/* REFRESH TABLE
 		Reload ship list based on filters
 		---------------------------------*/
 		refreshTable :function(){
+			// TODO: use "isLoading" to check if we need UI update.
 			if(this.isLoading){ return false; }
 			this.isLoading = true;
 			
@@ -314,169 +617,92 @@
 			
 			// Clear list
 			this.shipList.html("").hide();
-			
-			// Checks the configuration
-			var config = (new KekkonType()).values;
-			
+
+
 			// Wait until execute
 			setTimeout(function(){
 				var shipCtr, cElm, cShip, shipLevel;
-				var FilteredShips = [];
-				
+
 				// Filtering
-				for(shipCtr in self.shipCache){
-					var thisShip = self.shipCache[shipCtr];
-					if(typeof self.filters[ thisShip.stype ] != "undefined"){
-						if( self.filters[ thisShip.stype ]
-							&& (
-								self.remodelOption === 0
-								|| (self.remodelOption == 1 && thisShip.remodel)
-								|| (self.remodelOption == 2 && !thisShip.remodel)
-							)
-							&& (
-								self.modernizationOption === 0
-								|| (self.modernizationOption == 1 && thisShip.statmax)
-								|| (self.modernizationOption == 2 && !thisShip.statmax)
-							)
-							&& (
-								((self.marriageFilter || 1) == 1 && thisShip.level >= 100) ||
-								((self.marriageFilter || 2) == 2 && thisShip.level <  100)
-							)
-							&& (self.withFleet || (!self.withFleet && !thisShip.fleet)
-							   )
-							&& (self.heartlockFilter === 0
-								|| (self.heartlockFilter === 1 && thisShip.locked === 1)
-								|| (self.heartlockFilter === 2 && thisShip.locked === 0)
-							   )
-							&& (self.speedFilter === 0
-								|| (self.speedFilter === 1 && thisShip.sp >= 10)
-								|| (self.speedFilter === 2 && thisShip.sp < 10)
-							   )
-						){
-							FilteredShips.push(thisShip);
-						}
-					}
-				}
-				
-				// Sorting
-				FilteredShips.sort(function(a,b){
-					var returnVal = 0;
-					switch(self.sortBy){
-						case "id":
-							if((a.id-b.id) > 0){ returnVal = 1; }
-							else if((a.id-b.id) < 0){ returnVal = -1; }
-							break;
-						case "name":
-							if(a.english < b.english) returnVal = -1;
-							else if(a.english > b.english) returnVal = 1;
-							break;
-						case "type": returnVal = a.stype  - b.stype; break;
-						case "lv": returnVal = b.level  - a.level; break;
-						case "morale": returnVal = b.morale  - a.morale; break;
-						case "hp": returnVal = b.hp  - a.hp; break;
-						case "fp": returnVal = b.fp[self.equipMode+1] - a.fp[self.equipMode+1]; break;
-						case "tp": returnVal = b.tp[self.equipMode+1] - a.tp[self.equipMode+1]; break;
-						case "yasen": returnVal = (b.fp[self.equipMode+1] + b.tp[self.equipMode+1]) - (a.fp[self.equipMode+1] + a.tp[self.equipMode+1]); break;
-						case "aa": returnVal = b.aa[self.equipMode+1] - a.aa[self.equipMode+1]; break;
-						case "ar": returnVal = b.ar[self.equipMode+1] - a.ar[self.equipMode+1]; break;
-						case "as": returnVal = b.as[self.equipMode] - a.as[self.equipMode]; break;
-						case "ev": returnVal = b.ev[self.equipMode] - a.ev[self.equipMode]; break;
-						case "ls": returnVal = b.ls[self.equipMode] - a.ls[self.equipMode]; break;
-						case "lk": returnVal = b.lk  - a.lk; break;
-						default: returnVal = 0; break;
-					}
-					if(!self.sortAsc){ returnVal =- returnVal; }
-					return returnVal;
+				var FilteredShips = self.shipCache.filter(function(x) {
+					return self.executeFilters(x);
 				});
-				
-				// var totals = {lv:0, hp:0, fp:0, tp:0, aa:0, ar:0, as:0, ev:0, ls:0, lk:0 };
-				
+
+				// Sorting
+				FilteredShips.sort( self.makeComparator() );
+
 				// Fill up list
 				Object.keys(FilteredShips).forEach(function(shipCtr){
 					if(shipCtr%10 === 0){
 						$("<div>").addClass("ingame_page").html("Page "+Math.ceil((Number(shipCtr)+1)/10)).appendTo(self.shipList);
 					}
 					
-					cShip = FilteredShips[shipCtr]; //console.log(cShip);
-					shipLevel = cShip.level + 50 * 0; // marry enforcement (debugging toggle)
+					cShip = FilteredShips[shipCtr];
+					shipLevel = cShip.level;
+
+					// we can save some time by avoiding constructing jquery object
+					// if we already have one
+					if (cShip.view) {
+						cElm = cShip.view;
+						cElm.appendTo(self.shipList);
+
+						if (cElm.onRecompute)
+							cElm.onRecompute();
+						return;
+					}
+
 					cElm = $(".tab_ships .factory .ship_item").clone().appendTo(self.shipList);
+					cShip.view = cElm;
 					if(shipCtr%2 === 0){ cElm.addClass("even"); }else{ cElm.addClass("odd"); }
 					
 					$(".ship_id", cElm).text( cShip.id );
 					$(".ship_img .ship_icon", cElm).attr("src", KC3Meta.shipIcon(cShip.bid));
-					if(config.kanmusuPic && shipLevel >= 100)
-						$(".ship_img .ship_kekkon", cElm).attr("src","tabs/ships/SEGASonicRing.png").show();
 					$(".ship_name", cElm).text( cShip.english );
 					if(shipLevel >= 100) {
-						if(config.kanmusuName)
-							$(".ship_name", cElm).addClass("ship_kekkon");
 						$(".ship_name", cElm).addClass("ship_kekkon-color");
 					}
 					$(".ship_type", cElm).text( KC3Meta.stype(cShip.stype) );
-					var shipLevelConv = shipLevel - (shipLevel>=100 && config.kanmusuLv ? (102 - ConfigManager.marryLevelFormat) : 0);
+					var shipLevelConv = shipLevel;
 					$(".ship_lv", cElm).html( "<span>Lv.</span>" + shipLevelConv);
-					if(config.kanmusuLv && shipLevel >= 100)
-						$(".ship_lv", cElm).addClass("ship_kekkon ship_kekkon-color");
 					$(".ship_morale", cElm).html( cShip.morale );
 					$(".ship_hp", cElm).text( cShip.hp );
 					$(".ship_lk", cElm).text( cShip.lk );
 					
 					if(cShip.morale >= 50){ $(".ship_morale", cElm).addClass("sparkled"); }
+
+					// callback for things that has to be recomputed
+					cShip.onRecompute = function() {
+						self.modernizableStat("fp", cElm, cShip.fp);
+						self.modernizableStat("tp", cElm, cShip.tp);
+						self.modernizableStat("yasen", cElm, cShip.yasen);
+						self.modernizableStat("aa", cElm, cShip.aa);
+						self.modernizableStat("ar", cElm, cShip.ar);
 					
-					// totals.lv += parseInt(cShip.level, 10);
-					// totals.hp += parseInt(cShip.hp, 10);
-					// totals.lk += parseInt(cShip.lk, 10);
-					
-					self.modernizableStat("fp", cElm, cShip.fp);
-					self.modernizableStat("tp", cElm, cShip.tp);
-					self.modernizableStat("yasen", cElm, cShip.yasen);
-					self.modernizableStat("aa", cElm, cShip.aa);
-					self.modernizableStat("ar", cElm, cShip.ar);
-					
-					// totals.fp += parseInt($(".ship_fp", cElm).text(), 10);
-					// totals.tp += parseInt($(".ship_tp", cElm).text(), 10);
-					// totals.aa += parseInt($(".ship_aa", cElm).text(), 10);
-					// totals.ar += parseInt($(".ship_ar", cElm).text(), 10);
-					
-					$(".ship_as", cElm).text( cShip.as[self.equipMode] );
-					$(".ship_ev", cElm).text( cShip.ev[self.equipMode] );
-					$(".ship_ls", cElm).text( cShip.ls[self.equipMode] );
-					
-					// totals.as += parseInt(cShip.as[self.equipMode], 10);
-					// totals.ev += parseInt(cShip.ev[self.equipMode], 10);
-					// totals.ls += parseInt(cShip.ls[self.equipMode], 10);
+						$(".ship_as", cElm).text( cShip.as[self.equipMode] );
+						$(".ship_ev", cElm).text( cShip.ev[self.equipMode] );
+						$(".ship_ls", cElm).text( cShip.ls[self.equipMode] );
+					};
+
+					cShip.onRecompute();
 					
 					[1,2,3,4].forEach(function(x){
 						self.equipImg(cElm, x, cShip.slots[x-1], cShip.equip[x-1]);
 					});
 					
 					if(FilteredShips[shipCtr].locked){ $(".ship_lock img", cElm).show(); }
-					if(shipLevel >= 100 && config.kanmusuDT){ $(".ship_marry img",cElm).show(); } 
 
 					// Check whether remodel is max
-						if( !cShip.remodel )
-							cElm.addClass('remodel-max');
-						else
-							cElm.addClass('remodel-able');
+					if( !cShip.remodel )
+						cElm.addClass('remodel-max');
+					else
+						cElm.addClass('remodel-able');
 
 					// Check whether modernization is max
-						if( cShip.statmax )
-							cElm.addClass('modernization-max');
-						else
-							cElm.addClass('modernization-able');
+					if( cShip.statmax )
+						cElm.addClass('modernization-max');
+					else
+						cElm.addClass('modernization-able');
 				});
-				
-				// Show totals
-				/*$(".tab_ships .ship_totals .total_level").text(totals.lv);
-				$(".tab_ships .ship_totals .total_hp").text(totals.hp);
-				$(".tab_ships .ship_totals .total_fp").text(totals.fp);
-				$(".tab_ships .ship_totals .total_tp").text(totals.tp);
-				$(".tab_ships .ship_totals .total_aa").text(totals.aa);
-				$(".tab_ships .ship_totals .total_ar").text(totals.ar);
-				$(".tab_ships .ship_totals .total_as").text(totals.as);
-				$(".tab_ships .ship_totals .total_ev").text(totals.ev);
-				$(".tab_ships .ship_totals .total_ls").text(totals.ls);
-				$(".tab_ships .ship_totals .total_lk").text(totals.lk);*/
 				
 				self.shipList.show();
 				self.isLoading = false;
@@ -530,26 +756,5 @@
 			}
 		}
 	};
-	
-	// checks kekkon setting
-	function KekkonType(){
-		var checks = {
-			kanmusuDT  : [0],   // ONLY show this
-			kanmusuName: [1],   // ring location: name
-			kanmusuLv  : [2,3], // ring location: level
-			kanmusuLv0 : [2],   // level convention, 0-index
-			kanmusuLv1 : [3],   // level convention, 1-index
-			kanmusuPic : [4],   // ring location: ship icon
-		};
-		if(!KekkonType.values) {
-			this.values = {};
-			KekkonType.instance = this;
-		}
-		Object.keys(checks).forEach(function(k){
-			KekkonType.instance.values[k] = (function(x){return x.indexOf(ConfigManager.marryLevelFormat || -1) >= 0;})(checks[k]);
-		});
-		return KekkonType.instance;
-	}
-	new KekkonType();
 	
 })();

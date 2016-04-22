@@ -23,7 +23,25 @@ KC3改 Ship Box for Natsuiro theme
 	Short ship box for combined fleets
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.commonElements = function( rosterId ){
-		$(".ship_img img", this.element).attr("src", KC3Meta.shipIcon(this.shipData.masterId));
+		var leftPad = function(num){return ("   "+num).slice(-3);};
+		var tooltip = "{0}: {1}\n".format(this.shipData.masterId, KC3Meta.shipName(this.shipData.master().api_yomi));
+		tooltip += "{0}: {1} \t".format(KC3Meta.term("ShipArmor"), leftPad(this.shipData.ar[0]));
+		tooltip += "{0}: {1} \n".format(KC3Meta.term("ShipFire"), leftPad(this.shipData.fp[0]));
+		tooltip += "{0}: {1} \t".format(KC3Meta.term("ShipEvasion"), leftPad(this.shipData.ev[0]));
+		tooltip += "{0}: {1} \n".format(KC3Meta.term("ShipTorpedo"), leftPad(this.shipData.tp[0]));
+		tooltip += "{0}: {1} \t".format(KC3Meta.term("ShipAsw"), leftPad(this.shipData.as[0]));
+		tooltip += "{0}: {1} \n".format(KC3Meta.term("ShipAntiAir"), leftPad(this.shipData.aa[0]));
+		tooltip += "{0}: {1} \t".format(KC3Meta.term("ShipLos"), leftPad(this.shipData.ls[0]));
+		tooltip += "{0}: {1} ".format(KC3Meta.term("ShipLuck"), leftPad(this.shipData.lk[0]));
+		$(".ship_img img", this.element).attr("src", KC3Meta.shipIcon(this.shipData.masterId))
+			.attr("title", tooltip);
+		/*
+		$(".ship_img", this.element).addClass("hover").data("sid", this.shipData.masterId);
+		$(".ship_img", this.element).click(function(e){
+			var tab = "#mstship-" + $(this).data("sid");
+			var sr = window.open("/pages/strategy/strategy.html" + tab, "kc3kai_strategy");
+		});
+		*/
 		$(".ship_name", this.element).text( this.shipData.name() );
 		$(".ship_type", this.element).text( this.shipData.stype() );
 		
@@ -41,6 +59,18 @@ KC3改 Ship Box for Natsuiro theme
 			$(".ex_item img", this.element).attr("src", "../../../../assets/img/items/"+myExItem.master().api_type[3]+".png");
 		}else{
 			$(".ex_item", this.element).hide();
+		}
+		
+		// MVP icon
+		if(this.shipData.mvp){
+			$(".mvp_icon", this.element).show();
+			// Reserved value for predicted MVP
+			if(typeof this.shipData.mvp === "string"){
+				$(".mvp_icon img", this.element).css("opacity", 0.5);
+			}
+		} else {
+			$(".mvp_icon", this.element).hide();
+			$(".mvp_icon img", this.element).css("opacity", "");
 		}
 		
 		return this;
@@ -115,6 +145,12 @@ KC3改 Ship Box for Natsuiro theme
 		// HP bar
 		var hpPercent = this.shipData.hp[0] / this.shipData.hp[1];
 		$(".ship_hp_bar", this.element).css("width", (this.hpBarLength*hpPercent)+"px");
+		
+		// Left HP to be Taiha
+		var taihaHp = Math.floor(0.25 * this.shipData.hp[1]);
+		if(this.shipData.hp[0] > taihaHp && this.shipData.hp[0] < this.shipData.hp[1]){
+			$(".ship_hp_cur", this.element).attr("title", KC3Meta.term("PanelTaihaHpLeft").format(taihaHp, this.shipData.hp[0] - taihaHp) );
+		}
 		
 		// Clear box colors
 		this.element.css("background-color", "transparent");
@@ -197,9 +233,11 @@ KC3改 Ship Box for Natsuiro theme
 			$(".ship_hp_prediction", this.element).css("width", (this.hpBarLength*afterHpPercent)+"px");
 			
 			// HP-based UI and colors
-			if(afterHpPercent <= 0.00 && ConfigManager.info_btstamp) { // Sunk or Knocked out
-				this.element.addClass("ship-stamp");
-				this.element.attr("title", KC3Meta.term("PredictionStampPvP"));
+			if(ConfigManager.info_btstamp && afterHpPercent <= 0.00) {
+				// Sunk or Knocked out: afterHp[0]<=0 only occurs when battle starts from 'taiha'
+				// Call KO for PvP as although 'sinks' but not lost, and cannot move, gains 0 exp
+				$(this.element).addClass("ship-stamp");
+				$(this.element).attr("title", KC3Meta.term( KC3SortieManager.isPvP() ? "PredictionStampPvP" : "PredictionStampSortie") );
 			} else if(afterHpPercent <= 0.25){
 				$(".ship_hp_prediction", this.element).css("background", "#FF0000");
 			} else if(afterHpPercent <= 0.50){

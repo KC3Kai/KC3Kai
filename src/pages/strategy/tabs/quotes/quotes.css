@@ -1,0 +1,108 @@
+.tab_quotes {
+	width:680px;
+}
+
+.tab_quotes .factory {
+	display:none;
+}
+
+.tab_quotes .ship_list {
+	width: 180px;
+	height:760px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	border:1px solid #ccc;
+	background:#ffc;
+	border-radius: 8px 0px 0px 8px;
+    float: left;
+}
+
+.tab_quotes .part_right {
+    width: 480px;
+	height:760px;
+    float: left;
+	overflow-y: scroll;
+}
+
+.tab_quotes .part_right .ship_name {
+    font-size: large;
+}
+
+.tab_quotes .part_right .voice_entity.missing {
+    background: #ffcccc;
+}
+
+.tab_quotes .part_right .voice_entity.direct {
+    background: #e6ffe6;
+}
+
+.tab_quotes .part_right .voice_entity.inherit {
+    background: #e6f7ff;
+}
+
+.tab_quotes .part_right .voice_entity .voice {
+    width: 70px;
+    float: left;
+	height:20px;
+	float:left;
+	line-height:18px;
+	border:1px solid #039;
+	background:#def;
+	border-radius:3px;
+	font-size:12px;
+	text-align:center;
+}
+
+.tab_quotes .part_right .voice_entity.missing .source {
+    color: red;
+}
+
+.tab_quotes .part_right .voice_entity.direct .source {
+    color: green;
+}
+
+.tab_quotes .part_right .voice_entity.inherit .source {
+    color: blue;
+}
+
+.tab_quotes .part_right .voice_entity .source {
+    float: right;
+}
+
+.tab_quotes .ship_list .ship_entity:hover {
+	background:#cfc;
+}
+
+.tab_quotes .ship_list .ship_entity .ship_icon img {
+	width:20px;
+	height:20px;
+    float: left;
+}
+
+.tab_quotes .ship_list .ship_entity .ship_name {
+    float: left;
+}
+
+.tab_quotes .ship_list  .ship_entity .ship_pg_box {
+	width: 152px;
+	height:12px;
+	margin:4px 3px 0px;
+	background:#777;
+	border:1px solid #333;
+	border-radius:4px;
+	overflow:hidden;
+}
+
+.tab_quotes .ship_list .ship_entity .ship_pg_val1 {
+	width:65px;
+	height:10px;
+    background: #66FF66;
+    float: left;
+}
+
+.tab_quotes .ship_list .ship_entity .ship_pg_val2 {
+	width:34px;
+	height:10px;
+    background: #6666FF;
+    float: left;
+}

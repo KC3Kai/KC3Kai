@@ -24,13 +24,15 @@
 
 			$(".tab_databackup .export_data").on("click", function(){ //export data
 				sav = true;
-				$(".tab_databackup .dataselect").hide();
-				$(".tab_databackup .processDisplay").show();
-				window.KC3DataBackup.saveData(".tab_databackup .processDisplay .processText",function(){
-						alert("finished!");
-						$(".tab_databackup .dataselect").show();
-						$(".tab_databackup .processDisplay").hide();
-				});
+				if(confirm("are you sure you want to export data?")){
+					$(".tab_databackup .dataselect").hide();
+					$(".tab_databackup .processDisplay").show();
+					window.KC3DataBackup.saveData(".tab_databackup .processDisplay .processText",function(){
+							alert("finished!");
+							$(".tab_databackup .dataselect").show();
+							$(".tab_databackup .processDisplay").hide();
+					});
+				}
 			});
 
 			$(".tab_databackup .merge_data").on("click", function(){ //merge_data
@@ -47,6 +49,7 @@
 			});
 
 			$(".tab_databackup .overwrite_data").on("click", function(){//overwrite_data
+				if(confirm("please close all your curruntly open kc3 panel(you could want kancolle closed too)"))
 				if(confirm("You will overwrite all your kc3 data! are you sure?"))
 				{
 					if(filename==="")
