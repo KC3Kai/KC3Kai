@@ -419,6 +419,7 @@
 			var stypes = Object
 				.keys(KC3Meta._stype)
 				.map(function(x) { return parseInt(x,10); })
+				.filter(function(x) { return [1,15].indexOf(x)<0; })
 				.sort(function(a,b) { return a-b; });
 			console.assert(stypes[0] === 0);
 			// remove initial "0", which is invalid
@@ -654,11 +655,9 @@
 					cElm = $(".tab_ships .factory .ship_item").clone().appendTo(self.shipList);
 					cShip.view = cElm;
 					if(shipCtr%2 === 0){ cElm.addClass("even"); }else{ cElm.addClass("odd"); }
-					
+
 					$(".ship_id", cElm).text( cShip.id );
 					$(".ship_img .ship_icon", cElm).attr("src", KC3Meta.shipIcon(cShip.bid));
-					if(config.kanmusuPic && shipLevel >= 100)
-						$(".ship_img .ship_kekkon", cElm).attr("src","tabs/ships/SEGASonicRing.png").show();
 					$(".ship_img .ship_icon", cElm).attr("alt", cShip.bid);
 					$(".ship_img .ship_icon", cElm).click(self.shipClickFunc);
 					$(".ship_name", cElm).text( cShip.english );
