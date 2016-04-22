@@ -1,0 +1,26 @@
+.tab_databackup img{
+	max-width:100%;
+	max-height:100%;
+}
+.page_padding{
+	margin-top: 20px;
+}
+.datapanel{
+  margin : 10px 10px 10px 10px;
+}
+
+.tmptextbox{
+  height : 0px;
+}
+
+ table{
+	padding : 5px;
+}
+th, td {
+    padding: 15px;
+    text-align: left;
+}
+strong {
+		text-decoration: underline;
+		color: #CC0000;
+}

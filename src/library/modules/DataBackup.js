@@ -2,13 +2,14 @@
 	"use strict";
 
 	window.KC3DataBackup = {
-			saveData : function(elementkey,callback){//Save All Data to file
+			saveData : function(elementkey,callback){//Save All Data to file, elementkey can be null
 				var fullDBData={};
 				var locked=false;
 				var fullStorageData={};
 				var zip = new JSZip();
+				var ekex = ((typeof elementkey)==="string");//true if elementkey exists, false if not
 
-				$(elementkey).append("Exporting Data...(0/3)");
+				if(ekex)$(elementkey).append("Exporting Data...(0/3)");
 				for(var i=0;i<localStorage.length;i++)
 				{
 					var name = localStorage.key(i);
@@ -16,7 +17,7 @@
 				}
 
 				KC3Database.con.transaction("r", KC3Database.con.tables, function(){
-					$(elementkey).append("<div>Loading Data to array...(1/4)<div/>");
+					if(ekex)$(elementkey).append("<div>Loading Data to array...(1/4)<div/>");
 					KC3Database.con.tables.forEach( //access all tables
 						function(table){
 							table.toArray(function(tablearray) { //add table data tmptext
@@ -27,14 +28,14 @@
 							});
 					});//foreach
 				}).then(function(){//for transaction
-					$(elementkey).append("<div>Loading Data to zip...(2/4)<div/>");
+					if(ekex)$(elementkey).append("<div>Loading Data to zip...(2/4)<div/>");
 					zip.file("db.json",JSON.stringify(fullDBData));
 					zip.file("storage.json",JSON.stringify(fullStorageData));
 
-					$(elementkey).append("<div>compressing zip....(3/4)<div/>");
+					if(ekex)$(elementkey).append("<div>compressing zip....(3/4)<div/>");
 					var objurl= URL.createObjectURL(zip.generate({type:"blob", compression: "DEFLATE"}));
 
-					$(elementkey).append("<div>downloading zip....(4/4)<div/>");
+					if(ekex)$(elementkey).append("<div>downloading zip....(4/4)<div/>");
 					console.info("downloading file to "+ConfigManager.ss_directory+'/Backup/');
 
 					chrome.downloads.download({
@@ -51,17 +52,17 @@
 			},//savedata
 
 
-			processDB : function(dbstring,overwrite,elementkey,callback){//load data from DB string
-
+			processDB : function(dbstring,overwrite,elementkey,callback){//load data from DB string, elementkey can be null
+				var ekex = ((typeof elementkey)==="string");
 				var dbdata = JSON.parse(dbstring);
-                $(elementkey).text("");
+                if(ekex)$(elementkey).text("");
 				var processTables = function(dbdata_){
 					var dothing = function(){
 						var tableCount = -1;
 						console.log("processing tables...");
 						KC3Database.init();
 						KC3Database.con.open();
-            $(elementkey).append("<div class =\"datatransaction\">-DB Transaction Started-</div>");
+            			if(ekex)$(elementkey).append("<div class =\"datatransaction\">-DB Transaction Started-</div>");
 						var alertwhenfinished = function() {
 								setTimeout(function()
 								{
@@ -72,7 +73,7 @@
 						alertwhenfinished();
 
 						$.each(dbdata_,function(index,tabledata) {
-							$(elementkey).append("<div class = \""+index+"\">table queued : "+index+" 『size : "+tabledata.length+"』</div>");
+							if(ekex)$(elementkey).append("<div class = \""+index+"\">table queued : "+index+" 『size : "+tabledata.length+"』</div>");
 						});
 						var arrEach = function(tableobj){
 							var index = Object.keys(tableobj)[0];
@@ -80,7 +81,7 @@
 							var table = KC3Database.con[index];
 							KC3Database.con.transaction("rw!",table,function(){
 								console.log("processing "+index+" 『size : "+tabledata.length+"』");
-								$(elementkey+" ."+index).text("processing "+index+" 『size : "+tabledata.length+"』");
+								if(ekex)$(elementkey+" ."+index).text("processing "+index+" 『size : "+tabledata.length+"』");
 
 								if(tableCount == -1)tableCount=1;
 								else tableCount++;
@@ -96,11 +97,11 @@
 								//console.log("processed " + index);
 							}).then(function(){
                 //console.log("processed " + index);
-								$(elementkey+" ."+index).text("processed "+index);
+								if(ekex)$(elementkey+" ."+index).text("processed "+index);
 							}).catch(console.log).finally(function(){tableCount--;delete tableobj[index];arrEach(tableobj);});
 						};//arreach
 						arrEach(dbdata_);
-            $(elementkey+" .datatransaction").text("=DB transaction all queued=");
+           				if(ekex)$(elementkey+" .datatransaction").text("=DB transaction all queued=");
 					};//dothinh
 				  dothing();
 
@@ -120,6 +121,7 @@
 			},//processStorage
 
 			loadData : function(file_,overwrite,elementkey,callback){
+				var ekex = ((typeof elementkey)==="string");
 				var zip;
 				var reader = new FileReader();
 				reader.onload = (function(e) {
@@ -138,9 +140,9 @@
 										if(overwrite)
 												setTimeout(function()
 												{
-                                                     $(elementkey).append("<div class =\"localstorageprocess\">-storage processing-</div>");
+                                                     if(ekex)$(elementkey).append("<div class =\"localstorageprocess\">-storage processing-</div>");
                                                     window.KC3DataBackup.processStorage(zipEntry.asText());
-                                                     $(elementkey+" .localstorageprocess").text("=storage processed=");
+                                                     if(ekex)$(elementkey+" .localstorageprocess").text("=storage processed=");
                                                 },10);
 										break;
 									default:
