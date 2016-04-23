@@ -266,8 +266,8 @@
 					} else {
 						if (! isIntStr(subKey) ) {
 							// neither a descriptive key nor a normal number
-							console.warn( "Unrecognized subtitle key: " + subKey
-										  + " (masterId=" + k + ")");
+							console.debug( "Not transformed subtitle key:", subKey,
+								"(masterId=", k, ")");
 						}
 					}
 				});

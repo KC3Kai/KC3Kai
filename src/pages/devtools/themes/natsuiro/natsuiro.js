@@ -1411,6 +1411,7 @@
 			// Started on night battle
 			}else{
 				$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png");
+				$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci-x.png");
 				$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
 			}
 			
