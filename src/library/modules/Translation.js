@@ -103,7 +103,7 @@
 			}
 
 			var translationBase = {}, enJSON;
-			if(extendEnglish && language!="en"){
+			if(extendEnglish && language!=="en"){
 				// Load english file
 				try {
 					enJSON = JSON.parse($.ajax({
@@ -145,7 +145,7 @@
 				}
 			} catch (e) {
 				// As EN can be used, fail-safe for other JSON syntax error
-				if (e instanceof SyntaxError && extendEnglish && language!="en"){
+				if (e instanceof SyntaxError && extendEnglish && language!=="en"){
 					console.warn(e.stack);/*RemoveLogging:skip*/
 					translation = null;
 					// Show error message for Strategy Room
@@ -157,7 +157,7 @@
 					}
 				} else {
 					// Unknown error still needs to be handled asap
-					console.error(e.stack);
+					console.error(e.stack);/*RemoveLogging:skip*/
 					var errMsg = $("<p>Fatal error when loading {0} TL data of {1}: {2}</p>" +
 						"<p>Contact developers plz! &gt;_&lt;</p>".format(filename, language, e));
 					if($("#error").length>0){
@@ -344,12 +344,20 @@
 						async: false
 					}).responseText);
 				} catch (e) {
-					console.warn("failed to retrieve language specific quotes.");
 					if (e instanceof SyntaxError){
-						console.warn(e.stack);
-						console.log("falling back to eng version");
+						console.warn(e.stack);/*RemoveLogging:skip*/
+						console.warn("Failed to load",language,"quotes, falling back to en version");
+						// Show unduplicated error message for Strategy Room
+						if($("#error").length>0 && $("#error").text().indexOf("quotes.json")<0){
+							$("#error").append(
+								$("<p>Syntax error on {0} quotes.json: {1}</p>".format(language, e.message))
+							);
+							$("#error").show();
+						}
 						langJSON = enJSON;
+						language = "en";
 					} else {
+						console.error(e.stack);/*RemoveLogging:skip*/
 						throw e;
 					}
 				}

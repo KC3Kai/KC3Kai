@@ -21,6 +21,7 @@
 			var self = this;
 			var repo = "../../data/";
 			var language = ConfigManager.language;
+			$("#error").hide();
 			KC3Meta.loadQuotes();
 			var quotes = KC3Translation.getQuotes(repo, true);
 			var enQuotes = [];
@@ -41,11 +42,14 @@
 			$(".ship_info .reload").click(function(){
 				self.showVoiceDetail( $(".ship_info .ship_name").data("id") );
 			});
+			var toNextFunc = function(){
+				if(!!$(this).data("asid")){
+					KC3StrategyTabs.gotoTab(null, $(this).data("asid") );
+				}
+			};
 			if(shipData.api_aftershipid){
 				$(".ship_info .after_ship").data("asid", shipData.api_aftershipid);
-				$(".ship_info .after_ship").click(function(){
-					KC3StrategyTabs.gotoTab(null, $(this).data("asid") );
-				});
+				$(".ship_info .after_ship").click(toNextFunc);
 			} else {
 				$(".ship_info .after_ship").hide();
 			}

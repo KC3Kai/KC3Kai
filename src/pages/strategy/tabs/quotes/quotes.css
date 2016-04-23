@@ -145,14 +145,22 @@
 	background:#cfc;
 }
 
+.tab_quotes .ship_list .ship_entity .ship_icon {
+	width: 20px;
+	height: 20px;
+	float: left;
+}
 .tab_quotes .ship_list .ship_entity .ship_icon img {
-	width:20px;
-	height:20px;
-    float: left;
+	width: 20px;
+	height: 20px;
 }
 
 .tab_quotes .ship_list .ship_entity .ship_name {
-    float: left;
+	width: 141px;
+	height: 20px;
+	float: left;
+	padding:0px 0px 0px 1px;
+	white-space:nowrap;
 }
 
 .tab_quotes .ship_list  .ship_entity .ship_pg_box {
