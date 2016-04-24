@@ -83,8 +83,6 @@ Previously known as "Reactor"
 			KC3ShipManager.set(response.api_data.api_ship,true);
 			this.serverOffset = this.moraleRefresh.calibrate( headers.Date );
 			
-			KC3SortieManager.endSortie(response);
-			
 			PlayerManager.setHQ({
 				mid: response.api_data.api_basic.api_member_id,
 				name: response.api_data.api_basic.api_nickname,
@@ -145,6 +143,8 @@ Previously known as "Reactor"
 			PlayerManager.setNewsfeed(response.api_data.api_log, UTCtime );
 			
 			PlayerManager.combinedFleet = response.api_data.api_combined_flag || 0;
+			
+			KC3SortieManager.endSortie(response);
 			
 			KC3Network.trigger("HQ");
 			KC3Network.trigger("Consumables");
@@ -1104,12 +1104,8 @@ Previously known as "Reactor"
 		/* PVP Result
 		-------------------------------------------------------*/
 		"api_req_practice/battle_result":function(params, response, headers){
-			var thisPvP = KC3SortieManager.currentNode();
-			if(thisPvP.allyNoDamage && response.api_data.api_win_rank == "S")
-				response.api_data.api_win_rank = "SS";
-			
 			resultScreenQuestFulfillment(response.api_data,true);
-			
+			KC3SortieManager.resultScreen(response.api_data);
 			KC3Network.trigger("PvPEnd", { result: response.api_data });
 			KC3Network.trigger("Quests");
 		},
