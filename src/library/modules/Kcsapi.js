@@ -400,7 +400,7 @@ Previously known as "Reactor"
 							arrayData.fill(0,0,3);
 						break;
 						default:
-							console.error("Expected array of length 2 on",pendingData,"consumption data");
+							console.error("Expected array of length 2 on",pendingData,"consumption data");/*RemoveLogging:skip*/
 						break;
 					}
 				});

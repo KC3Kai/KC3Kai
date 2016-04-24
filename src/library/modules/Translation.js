@@ -332,7 +332,7 @@
 
 			// extend quotes by reusing ship's pre-remodels
 			// 2nd pass: extend langJSON by considering pre-models
-			if (typeof RemodelDb !== "undefined" && typeof RemodelDb._db !== "undefined") {
+			if (typeof RemodelDb !== "undefined" && !!RemodelDb._db && !!RemodelDb._db.remodelGroups) {
 				$.each(RemodelDb._db.remodelGroups, function(orgShipIdStr,groupInfo) {
 					// a group of ship ids that consider as "same ship"
 					// sorted by remodels
