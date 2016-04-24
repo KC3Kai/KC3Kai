@@ -20,16 +20,16 @@
                     var db = this.mkDb(masterData);
                     localStorage.remodelDb = JSON.stringify(db);
                     this._db = db;
-                    console.log("RemodelDb: database updated");
+                    console.info("RemodelDb: database updated");
                 } catch (e) {
-                    console.error("RemodelDb:",e);
+                    console.error("RemodelDb:", e.stack);/*RemoveLogging:skip*/
                 }
             } else {
                 console.log("RemodelDb: no update required");
             }
 
             if (! this._db) {
-                console.warn("RemodelDb: database unavailable, need to re-initialize with master data");
+                console.warn("RemodelDb: database unavailable, need to re-initialize with master data");/*RemoveLogging:skip*/
             }
         },
         // compare master data against _db (could be null)
