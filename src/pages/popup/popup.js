@@ -23,6 +23,9 @@
 			dataType: "json",
 			url: "https://raw.githubusercontent.com/KC3Kai/KC3Kai/master/update?v="+(Date.now()),
 			success: function(data, textStatus, request){
+				if (!!data.pr) {
+					$(".nextVersion").attr("href", data.pr);
+				}
 				if( myVersion < Number(data.version) ){
 					// If current installed version less than latest
 					var UpdateDiff = (new Date(data.time)).getTime() - Date.now();

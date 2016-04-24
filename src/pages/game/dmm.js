@@ -55,6 +55,7 @@ $(document).on("ready", function(){
 	// Initialize data managers
 	ConfigManager.load();
 	KC3Master.init();
+	RemodelDb.init();
 	KC3Meta.init("../../../../data/");
 	KC3Meta.loadQuotes();
 	KC3QuestManager.load();
