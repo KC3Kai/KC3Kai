@@ -105,6 +105,12 @@ KC3改 Ship Box for Natsuiro theme
 		var hpPercent = this.shipData.hp[0] / this.shipData.hp[1];
 		$(".ship_hp_bar", this.element).css("width", (this.hpBarLength*hpPercent)+"px");
 		
+		// Left HP to be Taiha
+		var taihaHp = Math.floor(0.25 * this.shipData.hp[1]);
+		if(this.shipData.hp[0] > taihaHp && this.shipData.hp[0] < this.shipData.hp[1]){
+			$(".ship_hp_cur", this.element).attr("title", KC3Meta.term("PanelTaihaHpLeft").format(taihaHp, this.shipData.hp[0] - taihaHp) );
+		}
+		
 		// Clear box colors
 		this.element.css("background-color", "transparent");
 		
@@ -186,7 +192,7 @@ KC3改 Ship Box for Natsuiro theme
 			$(".ship_hp_prediction", this.element).css("width", (this.hpBarLength*afterHpPercent)+"px");
 			
 			// HP-based UI and colors
-			if(ConfigManager.info_btstamp && (afterHpPercent <= 0.00 || (KC3SortieManager.isPvP() && this.shipData.afterHp[0] <= 1))) { // Sunk or Knocked out
+			if(ConfigManager.info_btstamp && afterHpPercent <= 0.00) { // Sunk or Knocked out
 				$(this.element).addClass("ship-stamp");
 				$(this.element).attr("title", KC3Meta.term( KC3SortieManager.isPvP() ? "PredictionStampPvP" : "PredictionStampSortie") );
 			} else if(afterHpPercent <= 0.25){

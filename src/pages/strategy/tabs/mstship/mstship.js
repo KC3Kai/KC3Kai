@@ -7,38 +7,6 @@
 	
 	KC3StrategyTabs.mstship.definition = {
 		tabSelf: KC3StrategyTabs.mstship,
-		
-		lines: {
-			"Intro" : 1,
-			"Library" : 25,
-			"Poke(1)" : 2,
-			"Poke(2)" : 3,
-			"Poke(3)" : 4,
-			"Married" : 28,
-			"Wedding" : 24,
-			"Ranking" : 8,
-			"Join" : 13,
-			"Equip(1)" : 9,
-			"Equip(2)" : 10,
-			"Equip(3)" : 26,
-			"Supply" : 27,
-			"Docking(1)" : 11,
-			"Docking(2)" : 12,
-			"Construction" : 5,
-			"Return" : 7,
-			"Sortie" : 14,
-			"Battle" : 15,
-			"Attack" : 16,
-			"Yasen(1)" : 18,
-			"Yasen(2)" : 17,
-			"MVP" : 23,
-			"Damaged(1)" : 19,
-			"Damaged(2)" : 20,
-			"Damaged(3)" : 21,
-			"Sunk" : 22,
-			"Idle" : 29,
-			"Repair" : 6
-		},
 		hourlies: {
 			30: "0000",
 			31: "0100",
@@ -365,13 +333,14 @@
 				// VOICE LINES
 				$(".tab_mstship .shipInfo .voices").show();
 				$(".tab_mstship .shipInfo .voices").html("");
-				$.each(this.lines, function(vname, vnum){
-					if((shipData.api_voicef<1 && vnum==29) || vnum==6) return true;
+
+				var allVoiceNums = KC3Translation.getShipVoiceNums(shipData.api_id,false,false);
+				$.each(allVoiceNums, function(ignored, vnum){
 					$("<div/>")
 						.addClass("hover")
 						.addClass("voice")
 						.data("vnum", vnum)
-						.text(vname)
+						.text(KC3Translation.voiceNumToDesc(vnum) )
 						.appendTo(".tab_mstship .shipInfo .voices");
 				});
 				$("<div/>").addClass("clear").appendTo(".tab_mstship .shipInfo .voices");
@@ -380,7 +349,7 @@
 				$(".tab_mstship .shipInfo .hourlies").show();
 				$(".tab_mstship .shipInfo .hourlies").html("");
 				
-				if(shipData.api_voicef>1){
+				if (KC3Translation.shipHasHourlyVoices(shipData.api_id)){
 					$.each(this.hourlies, function(vnum, vname){
 						var hhStr = vname.substring(0,2);
 						var mmStr = vname.substring(2);
@@ -406,9 +375,9 @@
 					$(".tab_mstship .shipInfo .tokubest .salty-zone").hide();
 			}else{
 				// abyssals, just show json
-				//$(".tab_mstship .shipInfo .json").text(JSON.stringify(shipData));
 				$(".tab_mstship .shipInfo .stats").hide();
 				$(".tab_mstship .shipInfo .equipments").hide();
+				$(".tab_mstship .shipInfo .subtitles").html("");
 				
 				// STATS
 				KC3Database.get_enemyInfo(ship_id, function(enemyInfo){

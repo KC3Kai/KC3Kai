@@ -250,6 +250,7 @@ Used by SortieManager
 		this.eships = enemyships;
 		this.eformation = battleData.api_formation[1];
 		this.eParam = battleData.api_eParam;
+		this.eKyouka = battleData.api_eKyouka;
 		this.eSlot = battleData.api_eSlot;
 
 		this.supportFlag = (battleData.api_support_flag>0);
@@ -282,6 +283,10 @@ Used by SortieManager
 		
 		this.airbattle = KC3Meta.airbattle( planePhase.api_disp_seiku );
 		
+		if(!!attackPhase && !!attackPhase.api_air_fire){
+			this.antiAirFire = [ attackPhase.api_air_fire ];
+		}
+		
 		// Fighter phase 1
 		this.planeFighters = {
 			player:[
@@ -304,11 +309,11 @@ Used by SortieManager
 		
 		// Bombing phase 1
 		this.planeBombers = { player:[0,0], abyssal:[0,0] };
-		if(battleData.api_kouku.api_stage2 !== null){
-			this.planeBombers.player[0] = battleData.api_kouku.api_stage2.api_f_count;
-			this.planeBombers.player[1] = battleData.api_kouku.api_stage2.api_f_lostcount;
-			this.planeBombers.abyssal[0] = battleData.api_kouku.api_stage2.api_e_count;
-			this.planeBombers.abyssal[1] = battleData.api_kouku.api_stage2.api_e_lostcount;
+		if(attackPhase !== null){
+			this.planeBombers.player[0] = attackPhase.api_f_count;
+			this.planeBombers.player[1] = attackPhase.api_f_lostcount;
+			this.planeBombers.abyssal[0] = attackPhase.api_e_count;
+			this.planeBombers.abyssal[1] = attackPhase.api_e_lostcount;
 		}
 		
 		// Fighter phase 2
@@ -320,6 +325,12 @@ Used by SortieManager
 			if(battleData.api_kouku2.api_stage2 !== null){
 				this.planeBombers.player[1] += battleData.api_kouku2.api_stage2.api_f_lostcount;
 				this.planeBombers.abyssal[1] += battleData.api_kouku2.api_stage2.api_e_lostcount;
+				if(!!battleData.api_kouku2.api_stage2.api_air_fire){
+					if(!this.antiAirFire || this.antiAirFire.length<1){
+						this.antiAirFire = [null];
+					}
+					this.antiAirFire[1] = battleData.api_kouku2.api_stage2.api_air_fire;
+				}
 			}
 		}
 
@@ -480,6 +491,7 @@ Used by SortieManager
 		this.eships = enemyships;
 		this.eformation = this.eformation || nightData.api_formation[1];
 		this.eParam = nightData.api_eParam;
+		this.eKyouka = nightData.api_eKyouka;
 		this.eSlot = nightData.api_eSlot;
 		
 		// if we did not started at night, at this point dayBeginHPs should be available
@@ -503,8 +515,8 @@ Used by SortieManager
 		this.fcontact = this.fcontactId > 0 ? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
 		this.econtactId = nightData.api_touch_plane[1];
 		this.econtact = this.econtactId > 0 ? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
-		this.flare = nightData.api_flare_pos[0]; // Star shell user pos
-		this.searchlight = nightData.api_flare_pos[1]; // Search light user pos
+		this.flarePos = nightData.api_flare_pos[0]; // Star shell user pos 1-6
+		this.eFlarePos = nightData.api_flare_pos[1]; // PvP opponent only, abyss star shell not existed yet
 		
 		var PS = window.PS;
 		var DA = PS["KanColle.DamageAnalysis.FFI"];

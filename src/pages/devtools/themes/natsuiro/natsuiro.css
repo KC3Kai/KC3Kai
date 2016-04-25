@@ -628,7 +628,7 @@ html,body {
 	margin:0px 0px 5px 0px;
 }
 .module.activity .battle_flag {
-	width:36px;
+	width:30px;
 	height:30px;
 	float:left;
 }
@@ -640,7 +640,7 @@ html,body {
 .module.activity .battle_flag.battle_eformation {
 	width:30px;
 	height:30px;
-	margin:0px 3px;
+	margin:0px 0px;
 	border-radius:15px;
 	background:#fff;
 }

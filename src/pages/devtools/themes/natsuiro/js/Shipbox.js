@@ -24,7 +24,7 @@ KC3改 Ship Box for Natsuiro theme
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.commonElements = function( rosterId ){
 		var leftPad = function(num){return ("   "+num).slice(-3);};
-		var tooltip = "{0}: {1}\n".format(this.shipData.masterId, this.shipData.master().api_yomi);
+		var tooltip = "{0}: {1}\n".format(this.shipData.masterId, KC3Meta.shipName(this.shipData.master().api_yomi));
 		tooltip += "{0}: {1} \t".format(KC3Meta.term("ShipArmor"), leftPad(this.shipData.ar[0]));
 		tooltip += "{0}: {1} \n".format(KC3Meta.term("ShipFire"), leftPad(this.shipData.fp[0]));
 		tooltip += "{0}: {1} \t".format(KC3Meta.term("ShipEvasion"), leftPad(this.shipData.ev[0]));
@@ -146,6 +146,12 @@ KC3改 Ship Box for Natsuiro theme
 		var hpPercent = this.shipData.hp[0] / this.shipData.hp[1];
 		$(".ship_hp_bar", this.element).css("width", (this.hpBarLength*hpPercent)+"px");
 		
+		// Left HP to be Taiha
+		var taihaHp = Math.floor(0.25 * this.shipData.hp[1]);
+		if(this.shipData.hp[0] > taihaHp && this.shipData.hp[0] < this.shipData.hp[1]){
+			$(".ship_hp_cur", this.element).attr("title", KC3Meta.term("PanelTaihaHpLeft").format(taihaHp, this.shipData.hp[0] - taihaHp) );
+		}
+		
 		// Clear box colors
 		this.element.css("background-color", "transparent");
 		
@@ -227,7 +233,9 @@ KC3改 Ship Box for Natsuiro theme
 			$(".ship_hp_prediction", this.element).css("width", (this.hpBarLength*afterHpPercent)+"px");
 			
 			// HP-based UI and colors
-			if(ConfigManager.info_btstamp && (afterHpPercent <= 0.00 || (KC3SortieManager.isPvP() && this.shipData.afterHp[0] <= 1))) { // Sunk or Knocked out
+			if(ConfigManager.info_btstamp && afterHpPercent <= 0.00) {
+				// Sunk or Knocked out: afterHp[0]<=0 only occurs when battle starts from 'taiha'
+				// Call KO for PvP as although 'sinks' but not lost, and cannot move, gains 0 exp
 				$(this.element).addClass("ship-stamp");
 				$(this.element).attr("title", KC3Meta.term( KC3SortieManager.isPvP() ? "PredictionStampPvP" : "PredictionStampSortie") );
 			} else if(afterHpPercent <= 0.25){
