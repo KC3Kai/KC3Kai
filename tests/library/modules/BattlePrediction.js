@@ -29,24 +29,55 @@ QUnit.module( "Module", function() {
 
                 var isCombined = battleData.combined !== 0;
                 PlayerManager.combinedFleet = battleData.combined;
-                // register ships
-                $.each(battleData.fleet1, function(rosterId,shipData) {
+
+                function registerGear(masterId) {
+                    var itemId = KC3GearManager.count() + 10;
+                    var gear = new KC3Gear();
+                    gear.itemId = itemId;
+                    gear.masterId = masterId;
+                    KC3GearManager.list["x"+itemId] = gear;
+                    return itemId;
+                }
+
+                function registerShip(masterId,level,equip) {
+                    var rosterId = KC3ShipManager.count() + 10;
                     var ship = new KC3Ship();
                     ship.rosterId = rosterId;
-                    ship.masterId = shipData.mst_id;
-                    ship.level = shipData.level;
+                    ship.masterId = masterId;
+                    ship.level = level;
+
+                    if (equip) {
+                        // 0-3 for normal items
+                        // 4 for ex_item
+                        $.each([0,1,2,3],function(ignored,i) {
+                            if (equip[i] && equip[i] !== -1) {
+                                ship.items[i] = registerGear(equip[i]);
+                            }
+                        });
+                        if (equip[4] && equip[4] !== -1) {
+                            ship.ex_item = registerGear(equip[4]);
+                        }
+                    }
+
                     KC3ShipManager.list["x"+rosterId] = ship;
-                });
-                // register ships for combined fleets
-                if (isCombined) {
-                    $.each(battleData.fleet2, function(i,shipData) {
-                        var rosterId = i + 6;
-                        var ship = new KC3Ship();
-                        ship.rosterId = rosterId;
-                        ship.masterId = shipData.mst_id;
-                        ship.level = shipData.level;
-                        KC3ShipManager.list["x"+rosterId] = ship;
-                    });
+                    return rosterId;
+                }
+
+                function makeFleet(fleetData) {
+                    var fleet = new KC3Fleet();
+                    if (fleetData) {
+                        $.each([0,1,2,3,4,5],function(ignored,i) {
+                            var shipData;
+                            if (fleetData[i]) {
+                                shipData = fleetData[i];
+                                fleet.ships[i] =
+                                    registerShip(shipData.mst_id,
+                                                 shipData.level,
+                                                 shipData.equip);
+                            }
+                        });
+                    }
+                    return fleet;
                 }
 
                 // make fleets
@@ -54,21 +85,11 @@ QUnit.module( "Module", function() {
                 var fleetEscort = new KC3Fleet();
 
                 var i;
+                var shipData;
                 // fleet.ships;
-                for (i=0; i<6; ++i) {
-                    if (battleData.fleet1[i]) {
-                        fleet.ships[i] = i;
-                    }
-                }
-                PlayerManager.fleets[0] = fleet;
-
+                PlayerManager.fleets[0] = fleet = makeFleet(battleData.fleet1);
                 if (isCombined) {
-                    for (i=0; i<6; ++i) {
-                        if (battleData.fleet2[i]) {
-                            fleetEscort.ships[i] = i+6;
-                        }
-                    }
-                    PlayerManager.fleets[1] = fleetEscort;
+                    PlayerManager.fleets[1] = fleetEscort = makeFleet(battleData.fleet2);
                 }
 
                 localStorage.maps = JSON.stringify( {m00: {id:0, clear:1, kind: "single"}} );
@@ -134,7 +155,7 @@ QUnit.module( "Module", function() {
                 assert.deepEqual(hpArr,expectedHPNight,
                                  "hp prediction (night)" );
             });
-        };
+        }
 
         testBattlePrediction(
             "normal battle",
@@ -182,7 +203,15 @@ QUnit.module( "Module", function() {
              25,39,44,6,4,4,
 
              150,65,-308,-131,0,-147]
+        );
 
+        testBattlePrediction(
+            "normal battle with damecon",
+            battleSample.normBattleWithDameCon1,
+            [8,32,7,8,4,25,
+
+             396,130,-37,60,520,120],
+            null
         );
     });
 });
