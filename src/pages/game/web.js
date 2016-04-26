@@ -19,7 +19,6 @@
 	$(document).on("ready", function(){
 		// Load previously stored configs
 		ConfigManager.load();
-		RemodelDb.init();
 		KC3Meta.init("../../data/");
 		KC3Translation.execute();
 		

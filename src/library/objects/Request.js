@@ -142,14 +142,14 @@ Executes processing and relies on KC3Network for the triggers
 			try {
 				KC3QuestManager.checkAndResetQuests(serverTime);
 			} catch (e) {
-				console.error(e.stack);
+				console.error(e.stack);/*RemoveLogging:skip*/
 			}
 			
 			// Execute by passing data
 			try {
 				Kcsapi[this.call]( this.params, this.response, this.headers );
 			} catch (e) {
-				console.error(e.stack);
+				console.error(e.stack);/*RemoveLogging:skip*/
 				throw e;
 			}
 		}

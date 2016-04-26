@@ -400,7 +400,7 @@ Previously known as "Reactor"
 							arrayData.fill(0,0,3);
 						break;
 						default:
-							console.error("Expected array of length 2 on",pendingData,"consumption data");
+							console.error("Expected array of length 2 on",pendingData,"consumption data");/*RemoveLogging:skip*/
 						break;
 					}
 				});
@@ -924,8 +924,13 @@ Previously known as "Reactor"
 				material = data.api_material,
 				consume  = [0,0,0,0],
 				bonuses  = data.api_bounus;
-			
 			console.log(quest,data);
+			
+			// Force to mark quest as complete
+			KC3QuestManager.isOpen( quest, false );
+			KC3QuestManager.isActive( quest, false );
+			
+			// Compute bonuses for ledger
 			bonuses.forEach(function(x){
 				if(x.api_type == 1 && x.api_item.api_id >= 5) {
 					consume[x.api_item.api_id - 5] += x.api_count;
@@ -938,6 +943,9 @@ Previously known as "Reactor"
 				data: material
 			});
 			console.log("Quest Item",material);
+			
+			// Trigger quest listeners
+			KC3Network.trigger("Quests");
 		},
 		
 		/* Stop Quest

@@ -132,7 +132,7 @@
 				}
 			} catch (e) {
 				if (e instanceof SyntaxError && extendEnglish && language!="en"){
-					console.warn(e.stack);
+					console.warn(e.stack);/*RemoveLogging:skip*/
 					translation = null;
 				} else {
 					throw e;
@@ -241,7 +241,7 @@
 		},
 
 		// insert quote id as key if descriptive key is used.
-		transformQuotes: function(quotes) {
+		transformQuotes: function(quotes, checkKey) {
 			var self = this;
 			function isIntStr(s) {
 				return parseInt(s,10).toString() === s;
@@ -264,10 +264,10 @@
 							v[subId] = v[subKey];
 						}
 					} else {
-						if (! isIntStr(subKey) ) {
+						if (!!checkKey && ! isIntStr(subKey) ) {
 							// neither a descriptive key nor a normal number
-							console.warn( "Unrecognized subtitle key: " + subKey
-										  + " (masterId=" + k + ")");
+							console.debug( "Not transformed subtitle key:", subKey,
+								"(masterId=", k, ")");
 						}
 					}
 				});
@@ -276,7 +276,7 @@
 			return quotes;
 		},
 
-		getQuotes: function(repo, track) {
+		getQuotes: function(repo, track, language) {
 			var self = this;
 			if (typeof track === "undefined")
 				track = false;
@@ -284,8 +284,8 @@
 			// we always use English version quotes as the base,
 			// assuming all quotes are complete so there
 			// is no need to extend the table by considering pre-remodel ship quotes.
-			var	enJSON = {};
-			var language = ConfigManager.language;
+			var enJSON = {};
+			language = language || ConfigManager.language;
 			try {
 				enJSON = JSON.parse($.ajax({
 					url : repo+'lang/data/en/quotes.json',
@@ -296,48 +296,49 @@
 				}
 			} catch(e) {
 				if (e instanceof SyntaxError){
-					console.warn(e.stack);
+					console.warn(e.stack);/*RemoveLogging:skip*/
 					translation = null;
 				} else {
 					throw e;
 				}
 			}
 
-			// if it's already English the we are done.
-			if (language === "en") return enJSON;
-			
-			// load language specific quotes.json
 			var langJSON;
-			try {
-				langJSON = JSON.parse($.ajax({
-					url : repo+'lang/data/' +language+ '/quotes.json',
-					async: false
-				}).responseText);
-			} catch (e) {
-				console.warn("failed to retrieve language specific quotes.");
-				if (e instanceof SyntaxError){
-					console.warn(e.stack);
-					console.log("falling back to eng version");
-					return enJSON;
-				} else {
-					throw e;
+			if (language === "en") {
+				// if it's already English the we are done.
+				langJSON = enJSON;
+			} else {
+				// load language specific quotes.json
+				try {
+					langJSON = JSON.parse($.ajax({
+						url : repo+'lang/data/' +language+ '/quotes.json',
+						async: false
+					}).responseText);
+				} catch (e) {
+					console.warn("failed to retrieve language specific quotes.");
+					if (e instanceof SyntaxError){
+						console.warn(e.stack);
+						console.log("falling back to eng version");
+						langJSON = enJSON;
+					} else {
+						throw e;
+					}
 				}
 			}
 
 			// 1st pass: interpret descriptive keys as keys
 			this.transformQuotes(langJSON);
-			if (track) {
+			if (track && language !== "en") {
 				self.addTags(langJSON,language);
 			}
 
 			// extend quotes by reusing ship's pre-remodels
 			// 2nd pass: extend langJSON by considering pre-models
-			if (typeof RemodelDb !== "undefined" && typeof RemodelDb._db !== "undefined") {
+			if (typeof RemodelDb !== "undefined" && !!RemodelDb._db && !!RemodelDb._db.remodelGroups) {
 				$.each(RemodelDb._db.remodelGroups, function(orgShipIdStr,groupInfo) {
 					// a group of ship ids that consider as "same ship"
 					// sorted by remodels
 					var group = groupInfo.group;
-
 					var i,curShipId;
 					// accumulate quotes
 					var curQuotes = {};
@@ -361,11 +362,13 @@
 				});
 			} else {
 				console.warn("Translation: failed to load RemodelDb, " +
-							 "please make sure it's been initialized properly");
+							 "please make sure it's been initialized properly");/*RemoveLogging:skip*/
 			}
 
 			// 3rd pass: extend langJSON using enJSON to fill in any missing parts
-			langJSON = $.extend(true, {}, enJSON, langJSON);
+			if (language !== "en") {
+				langJSON = $.extend(true, {}, enJSON, langJSON);
+			}
 			return langJSON;
 		},
 

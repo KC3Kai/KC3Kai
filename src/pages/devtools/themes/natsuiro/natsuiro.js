@@ -316,7 +316,7 @@
 		/* Morale timers
 		- use end time difference not remaining decrements for accuracy against lag
 		--------------------------------------------*/
-		setInterval(function(){
+		window.KC3DevtoolsMoraleTimer = setInterval(function(){
 			// console.log(moraleClockValue, moraleClockEnd, moraleClockRemain);
 			if(moraleClockEnd > 0){
 				moraleClockRemain = Math.ceil( (moraleClockEnd - Date.now())/1000);
@@ -496,8 +496,8 @@
 			$(".module.activity .build_4")
 		]);
 		
-		// Update Timer UIs
-		setInterval(function(){
+		// Update Timer UIs, attach to global to avoid clearing by GC
+		window.KC3DevtoolsUiTimers = setInterval(function(){
 			// Basic Timer Stat
 			KC3TimerManager.update();
 			
@@ -835,6 +835,11 @@
 			$(".shiplist_combined_fleet").html("");
 			$(".shiplist_combined").hide();
 			
+			var thisNode, dameConConsumed;
+			if(KC3SortieManager.onSortie){
+				thisNode = KC3SortieManager.currentNode();
+			}
+			
 			// COMBINED
 			if(selectedFleet==5){
 				var MainFleet = PlayerManager.fleets[0];
@@ -843,7 +848,12 @@
 				// Show ships on main fleet
 				$.each(MainFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars))
+						try {
+							dameConConsumed = thisNode.dameConConsumed[index];
+						} catch (e){
+							dameConConsumed = false;
+						}
+						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars, dameConConsumed))
 							.commonElements()
 							.defineShort( MainFleet )
 							.appendTo(".module.fleet .shiplist_main");
@@ -853,7 +863,12 @@
 				// Show ships on escort fleet
 				$.each(EscortFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars))
+						try {
+							dameConConsumed = thisNode.dameConConsumedEscort[index];
+						} catch (e){
+							dameConConsumed = false;
+						}
+						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars, dameConConsumed))
 							.commonElements()
 							.defineShort( EscortFleet )
 							.appendTo(".module.fleet .shiplist_escort");
@@ -905,7 +920,12 @@
 				// Show ships on selected fleet
 				$.each(CurrentFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						(new KC3NatsuiroShipbox(".lship", rosterId, showCombinedFleetBars))
+						try {
+							dameConConsumed = thisNode.dameConConsumed[index];
+						} catch (e){
+							dameConConsumed = false;
+						}
+						(new KC3NatsuiroShipbox(".lship", rosterId, showCombinedFleetBars, dameConConsumed))
 							.commonElements()
 							.defineLong( CurrentFleet )
 							.appendTo(".module.fleet .shiplist_single");
@@ -1411,6 +1431,7 @@
 			// Started on night battle
 			}else{
 				$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png");
+				$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci-x.png");
 				$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
 			}
 			

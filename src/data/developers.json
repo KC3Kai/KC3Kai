@@ -399,6 +399,18 @@
 				"fb" : "https://www.facebook.com/ForteBXBassBX",
 				"tw" : "https://twitter.com/ForteBX"
 			}
+		},
+		{
+			"name": "angel84326",
+			"avatar" : "https://avatars3.githubusercontent.com/u/15860898?v=3&s=40",
+			"desc" : "繁體中文",
+			"links" : {
+				"fb": "https://www.facebook.com/angel84326",
+				"wk": "http://zh.kancolle.wikia.com/wiki/User:Angel84326",
+				"wb": "https://www.flickr.com/photos/angel84326/albums",
+				"px": "http://www.pixiv.net/member.php?id=3311248",
+				"wb2": "http://home.gamer.com.tw/homeindex.php?owner=wut84326"
+			}
 		}
 	],
 	"AboutTesters" : [

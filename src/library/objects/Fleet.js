@@ -57,7 +57,7 @@ Contains summary information about a fleet and its 6 ships
 										});
 								});
 						} catch (e) {
-							console.error(e);
+							console.error(e.stack);/*RemoveLogging:skip*/
 							return false;
 						}
 					}
