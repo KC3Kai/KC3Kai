@@ -320,6 +320,7 @@ var interactions = {
 				quoteIdentifier = request.shipID;
 				break;
 		}
+		console.debug("looking up quote:", quoteIdentifier, quoteVoiceNum);
 		subtitleText = KC3Meta.quote( quoteIdentifier, quoteVoiceNum );
 		
 		// hide first to fading will stop

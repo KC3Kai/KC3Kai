@@ -77,7 +77,11 @@
 			// combat ration
 			"t34": "overall",
 			// underway replenishment
-			"t35": "overall"
+			"t35": "overall",
+			// land tank
+			"t36": "overall",
+			// land base bomber
+			"t37": "dv"
 		},
 
 		/* Initialize comparators

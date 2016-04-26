@@ -294,7 +294,7 @@
 		/* Morale timers
 		- use end time difference not remaining decrements for accuracy against lag
 		--------------------------------------------*/
-		setInterval(function(){
+		window.KC3DevtoolsMoraleTimer = setInterval(function(){
 			// console.log(moraleClockValue, moraleClockEnd, moraleClockRemain);
 			if(moraleClockEnd > 0){
 				moraleClockRemain = Math.ceil( (moraleClockEnd - (new Date()).getTime())/1000);
@@ -447,7 +447,7 @@
 		]);
 		
 		// Update Timer UIs
-		setInterval(function(){
+		window.KC3DevtoolsUiTimers = setInterval(function(){
 			// Basic Timer Stat
 			KC3TimerManager.update();
 			
