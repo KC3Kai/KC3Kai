@@ -5,16 +5,78 @@
 
 <!-- HELP TOPICS -->
 <div class="page_help">
-	<div class="help_q"></div>
-	<div class="help_a"></div>
+  <div class="help_q">What do these sections do?</div>
+  <div class="help_a">
+    <ul>
+      <li>In <strong>Current Goal</strong> section you can view and edit all current leveling goals.
+      </li>
+      <li><p><strong>Goal Template</strong> allows you to</p>
+        <ul>
+          <li>auto-apply some leveling settings when new leveling ship is added.</li>
+          <li>filter ships by their types</li>
+          <li>apply templates to existing leveling goals</li>
+        </ul>
+      </li>
+
+      <li>
+        <p><strong>Recommended</strong> and <strong>Other Ships</strong> list all your heartlocked ships not listed in <strong>Current Goals</strong>. If one of your kanmusu is not yet reaching her remodel level, her will show up in <strong>Recommended</strong> section with target level set to the minimal remodel level. Otherwise she will appear in <strong>Other Ships</strong> section with more general goals (Level 99 or Level 155).</p>
+      </li>
+    </ul>
+  </div>
+  <div class="help_q">How goal template works?</div>
+  <div class="help_a">
+    <p>When adding a ship leveling goal, all enabled templates are attempted in order and the first template that has a matching ship type will be applied to that ship.</p>
+    <p>For example, assume if you have the following templates in order:</p>
+    <ol style="list-style-type: decimal">
+      <li><code>CL,DD</code> with map 1-5 and some other settings</li>
+      <li><code>CL,DD,CAV</code> with map 5-4 and some other settings</li>
+      <li><code>Any</code> with map 3-2 and some other settings</li>
+    </ol>
+    <p>The first template matches ship type &quot;light cruisers(CL) or destroyers(DD)&quot;; the second template matches ship type &quot;light cruisers(CL) or destroyers(DD) or aviation cruisers(CAV)&quot;; and the third one matches any ship type.</p>
+    <p>When a destroyer is added to leveling goal, despite all 3 templates match her ship type, only the first template is applied, her map will be set to 1-5 and so does other leveling settings. When an aviation cruiser is added, the second template is applied because this is the first one that matches her ship type. Similarly when a battleship is added, the third template is applied.</p>
+  </div>
+  <div class="help_q">How to use goal templates?</div>
+  <div class="help_a">
+    <ul>
+      <li>&quot;New template&quot; link create a new template with lowest priority (at the end of the list)</li>
+      <li>click green buttons (up / down) to change template orders.</li>
+      <li>click &quot;Enabled&quot; / &quot;Disabled&quot; to toggle a template (a disabled template won't be applied automatically)</li>
+      <li>&quot;X&quot; removes a template, &quot;E&quot; changes a template to edit mode, &quot;S&quot; saves changes.</li>
+      <li>&quot;Apply to Current Goals&quot; does what its name suggests, when clicked, it pops up a confirm message listing all ships in current goals it can affect.</li>
+      <li>&quot;Filter&quot; highlights all ships it can match. &quot;Clear Highlight&quot; can then be used to clear highlights. (Note that even if a template filter highlights a ship, that doesn't mean this template will be auto-applied to that ship, either because other templates have higher priority or this template is disabled)</li>
+    </ul>
+  </div>
+  <div class="help_q">Tell me more about ship type filters!</div>
+  <div class="help_a"><p>The ship type filter is a comma-separated list of ship types, for now only English abbrs and <code>*</code>(will be explained shortly) are accepted (case-insensitive), following inputs are all valid:</p>
+    <ul>
+      <li><code>cl, dd,ca</code></li>
+      <li><code>CL,    DD, CA, DD, CA</code></li>
+      <li><code>*</code></li>
+      <li><code>*, ca, dd</code></li>
+    </ul>
+    <p>Don't worry about case or putting extra spaces or having duplicated stuff when editing, they can be processed properly.</p>
+    <p>The English abbreviations of ship types is also used in &quot;Ship List&quot; tab of strategy room: setting ship type filter to <code>CL,DD,CA</code> selects exactly the same list of ships as only turning on <code>DD</code>, <code>CL</code>, <code>CA</code> filters in &quot;Ship List&quot; tab.</p>
+    <p><code>*</code> is a wildcard that matches all ship type, and any ship type filter containing <code>*</code> matches all ships. (Note that despite <code>*</code> is shown as <code>Any</code> in view mode, <code>Any</code> is an invalid ship type and you should always use <code>*</code> when editing.)</p>
+    <p>You can keep a template with ship type <code>*</code> at the end of the template list, to serve as a &quot;default setting&quot;.</p>
+  </div>
 </div>
 
 <div class="page_padding">
-	
 	<div class="page_section">Current Goals</div>
 	<div class="section_body box_goals">
 		
 	</div>
+
+	<div class="page_section">Goal Templates</div>
+	<div class="section_body box_goal_templates">
+    </div>
+	<div class="section_body">
+      <a class="new_template">New template</a>
+    </div>
+	<div class="section_body">
+      <a class="clear_highlight">Clear Highlight</a>
+    </div>
+
 	
 	<div class="page_section">Recommended</div>
 	<div class="section_body box_recommend">
@@ -90,5 +152,64 @@
 		<div class="ship_col ship_btn hover ship_save">S</div>
 		<div class="clear"></div>
 	</div>
-	
+
+
+    <div class="goal_template">
+      <div class="setting_group">
+        <div class="goal_col goal_type">
+          <div class="goal_label">Ship Types</div>
+          <div class="goal_value">DD CL BB CA CAV</div>
+          <div class="goal_input">
+            <input type="text" name="stype">
+            <br>
+          </div>
+        </div>
+        <div class="goal_col goal_map">
+          <div class="goal_label">Map</div>
+          <div class="goal_value"></div>
+          <div class="goal_input">
+            <select></select>
+          </div>
+        </div>
+        <div class="goal_col goal_rank">
+          <div class="goal_label">Rank</div>
+          <div class="goal_value">S</div>
+          <div class="goal_input">
+            <select>
+              <option value="6">S</option>
+              <option value="5">A</option>
+              <option value="4">B</option>
+              <option value="3">C</option>
+              <option value="2">D</option>
+              <option value="1">E</option>
+            </select>
+          </div>
+        </div>
+        <div class="goal_col goal_fs">
+          <div class="goal_label">FS</div>
+          <div class="goal_value">Yes</div>
+          <div class="goal_input">
+            <input type="checkbox">
+          </div>
+        </div>
+        <div class="goal_col goal_mvp">
+          <div class="goal_label">MVP</div>
+          <div class="goal_value">No</div>
+          <div class="goal_input">
+            <input type="checkbox">
+          </div>
+        </div>
+        <div class="goal_col goal_btn hover goal_edit">E</div>
+        <div class="goal_col goal_btn hover goal_save">S</div>
+        <div class="goal_col goal_btn hover goal_rem">X</div>
+        <div class="clear"></div>
+      </div>
+      <div class="manage_buttons">
+        <div class="goal_col goal_btn hover goal_up">▲</div>
+        <div class="goal_col goal_btn hover goal_down">▼</div>
+        <div class="goal_col goal_btn hover goal_filter">Filter</div>
+        <div class="goal_col goal_btn hover goal_onoff">Enable</div>
+        <div class="goal_col goal_btn hover goal_apply">Apply to Current Goals</div>
+      </div>
+    </div>
 </div>
