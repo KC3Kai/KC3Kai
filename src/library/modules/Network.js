@@ -66,7 +66,7 @@ Listens to network history and triggers callback if game events happen
 				});
 				this.delayedUpdate[eventName] = 0;
 			} else {
-				console.log("Prevented call to ",eventName);
+				console.log("Prevented call to", eventName);
 				this.delayedUpdate[eventName] -= 1;
 			}
 		},
