@@ -241,7 +241,7 @@
 		},
 
 		// insert quote id as key if descriptive key is used.
-		transformQuotes: function(quotes) {
+		transformQuotes: function(quotes, checkKey) {
 			var self = this;
 			function isIntStr(s) {
 				return parseInt(s,10).toString() === s;
@@ -264,7 +264,7 @@
 							v[subId] = v[subKey];
 						}
 					} else {
-						if (! isIntStr(subKey) ) {
+						if (!!checkKey && ! isIntStr(subKey) ) {
 							// neither a descriptive key nor a normal number
 							console.debug( "Not transformed subtitle key:", subKey,
 								"(masterId=", k, ")");

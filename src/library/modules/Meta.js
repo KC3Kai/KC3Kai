@@ -301,8 +301,6 @@ Provides access to data on built-in JSON files
 		
 		// Subtitle quotes
 		quote :function(identifier, voiceNum){
-			console.debug("looking up", identifier, voiceNum);
-
 			if (!identifier) return false;
 
 			var quoteTable = this._quotes[identifier];
@@ -322,11 +320,10 @@ Provides access to data on built-in JSON files
 				// no quote for that voice line, check if it's a seasonal line
 				var specialVoiceNum = this.specialDiffs[voiceNum];
 				// check if default for seasonal line exists
-				console.debug("this.specialDiffs[voiceNum]", specialVoiceNum);
-
+				console.debug("this.specialDiffs["+voiceNum+"] =", specialVoiceNum);
 				var specialVoiceLine = lookupVoice(specialVoiceNum);
 				if (specialVoiceLine) {
-					console.debug("using special default", specialVoiceLine);
+					console.debug("using special default:", specialVoiceLine);
 					return specialVoiceLine;
 				}
 			}

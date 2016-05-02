@@ -230,7 +230,7 @@
 				}
 				
 				// Get 4 most powerful gear on this type
-				TopGears = MergedList.splice(0,4);
+				TopGears = MergedList.slice(0,4);
 				// console.log("TopGears for", element.name, TopGears);
 				
 				// Create gear-type box
