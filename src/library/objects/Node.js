@@ -159,14 +159,14 @@ Used by SortieManager
 	
 	KC3Node.prototype.defineAsResource = function( nodeData ){
 		this.type = "resource";
-		this.item = nodeData.api_itemget.api_icon_id;
+		this.item = nodeData.api_itemget[0].api_icon_id;
 		this.icon = function(folder){
 			return folder+(
 				["fuel","ammo","steel","bauxite","ibuild","bucket","devmat","compass","","box1","box2","box3"]
-				[nodeData.api_itemget.api_icon_id-1]
+				[nodeData.api_itemget[0].api_icon_id - 1]
 			)+".png";
 		};
-		this.amount = nodeData.api_itemget.api_getcount;
+		this.amount = nodeData.api_itemget[0].api_getcount;
 		if(this.item < 8)
 			KC3SortieManager.materialGain[this.item-1] += this.amount;
 		return this;
@@ -356,8 +356,7 @@ Used by SortieManager
 				? [0,0,0, 0,0,0] 
 				: fleet.getDameConCodes();
 			result = DA.analyzeBattleJS(dameConCode, battleData); 
-			// console.log("Single Fleet");
-			console.log("damage analysis result", result);
+			// console.debug("Damage analysis result", result);
 			
 			var endHPs = {
 				ally: beginHPs.ally.slice(),
@@ -387,11 +386,12 @@ Used by SortieManager
 				}
 			}
 			
-			
-			
-			if(ConfigManager.info_btrank){
+			if(ConfigManager.info_btrank &&
+				// long distance aerial battle not predictable for now, see #1333
+				// but go for aerial battle (eventKind:4) possible Yasen
+				[6].indexOf(this.eventKind)<0 ){
 				this.predictedRank = KC3Node.predictRank( beginHPs, endHPs );
-				// console.info("Rank Predict:", this.predictedRank);
+				// console.debug("Rank Predict:", this.predictedRank);
 			}
 		} else {
 			// combined fleet
@@ -591,7 +591,7 @@ Used by SortieManager
 		}
 		if(ConfigManager.info_btrank){
 			this.predictedRankNight = KC3Node.predictRank( beginHPs, endHPs );
-			// console.info("Rank Predict (Night):", this.predictedRankNight);
+			// console.debug("Rank Predict (Night):", this.predictedRankNight);
 		}
 		if(this.gaugeDamage > -1)
 			this.gaugeDamage = this.gaugeDamage + 
@@ -608,7 +608,7 @@ Used by SortieManager
 			this.nodalXP = resultData.api_get_base_exp;
 			if(this.allyNoDamage && this.rating === "S")
 				this.rating = "SS";
-			console.log("This battle, have damaged the ally fleet",!this.allyNoDamage);
+			console.log("This battle, the ally fleet has no damage:",this.allyNoDamage);
 			
 			if(this.isBoss()) {
 				var

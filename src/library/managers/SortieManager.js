@@ -180,7 +180,8 @@ Xxxxxxx
 			// api_event_kind = 6 (defensive aerial)
 			// api_event_id = 4 (normal battle)
 			// api_event_id = 5 (boss)
-			// api_event_id = 6 (long distance aerial battle)
+			// api_event_id = 7 (aerial battle or reconnaissance)
+			// api_event_id = 10 (long distance aerial battle)
 			}else if([1,2,4,6].indexOf(nodeData.api_event_kind)>=0) {
 				nodeKind = "Battle";
 			// Resource Node
