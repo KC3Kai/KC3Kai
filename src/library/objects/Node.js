@@ -159,14 +159,14 @@ Used by SortieManager
 	
 	KC3Node.prototype.defineAsResource = function( nodeData ){
 		this.type = "resource";
-		this.item = nodeData.api_itemget.api_icon_id;
+		this.item = nodeData.api_itemget[0].api_icon_id;
 		this.icon = function(folder){
 			return folder+(
 				["fuel","ammo","steel","bauxite","ibuild","bucket","devmat","compass","","box1","box2","box3"]
-				[nodeData.api_itemget.api_icon_id-1]
+				[nodeData.api_itemget[0].api_icon_id - 1]
 			)+".png";
 		};
-		this.amount = nodeData.api_itemget.api_getcount;
+		this.amount = nodeData.api_itemget[0].api_getcount;
 		if(this.item < 8)
 			KC3SortieManager.materialGain[this.item-1] += this.amount;
 		return this;
