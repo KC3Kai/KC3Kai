@@ -1378,6 +1378,7 @@ Previously known as "Reactor"
 				});
 				KC3GearManager.remove( itemId );
 			});
+			KC3GearManager.save();
 			KC3Database.Naverall({
 				hour: Math.hrdInt("floor",ctime/3.6,6,1),
 				type: "dsitem",
@@ -1620,8 +1621,8 @@ Previously known as "Reactor"
 				data: mt
 			});
 			// Update equipment on local data
-			KC3GearManager.set([ response.api_data.api_after_slot ]);
 			(response.api_data.api_use_slot_id || []).forEach(function(gearId){ KC3GearManager.remove(gearId); });
+			KC3GearManager.set([ response.api_data.api_after_slot ]);
 			
 			PlayerManager.consumables.buckets = response.api_data.api_after_material[5];
 			PlayerManager.consumables.devmats = response.api_data.api_after_material[6];

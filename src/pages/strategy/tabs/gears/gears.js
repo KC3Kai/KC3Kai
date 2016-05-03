@@ -81,7 +81,9 @@
 			// land tank
 			"t36": "overall",
 			// land base bomber
-			"t37": "dv"
+			"t37": "dv",
+			// intercepting fighter
+			"t38": "aa"
 		},
 
 		/* Initialize comparators
@@ -132,6 +134,7 @@
 				this.checkShipSlotForItemHolder(1, KC3ShipManager.list[ctr]);
 				this.checkShipSlotForItemHolder(2, KC3ShipManager.list[ctr]);
 				this.checkShipSlotForItemHolder(3, KC3ShipManager.list[ctr]);
+				this.checkShipSlotForItemHolder(-1, KC3ShipManager.list[ctr]);
 			}
 
 			// Compile ships on Index
@@ -220,7 +223,11 @@
 		/* Check a ship's equipment slot of an item is equipped
 		--------------------------------------------*/
 		checkShipSlotForItemHolder :function(slot, ThisShip){
-			if(ThisShip.items[slot] > -1){
+			if(slot<0){
+				if(ThisShip.ex_item > 0){
+					this._holders["s"+ThisShip.ex_item] = ThisShip;
+				}
+			} else if(ThisShip.items[slot] > -1){
 				this._holders["s"+ThisShip.items[slot]] = ThisShip;
 			}
 		},
