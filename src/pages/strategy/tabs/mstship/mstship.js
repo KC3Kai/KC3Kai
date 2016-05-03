@@ -313,6 +313,7 @@
 					// slots should still be getting cleaned up
 					$(".slotitem", this).text( "" );
 					$(".sloticon img", this).attr("src","");
+					$(".sloticon img", this).hide();
 
 					if (stockEquipments) {
 						var equipId = stockEquipments[index];
@@ -451,6 +452,7 @@
 							$(".ship_stat_name", statBox).text(stat[1]);
 							
 							$(".ship_stat_min", statBox).text(enemyInfo[stat[0]]);
+							$(".ship_stat_max", statBox).hide();
 							
 							statBox.appendTo(".tab_mstship .shipInfo .stats");
 						});
@@ -465,6 +467,10 @@
 								$(".slotitem", this).text(KC3Meta.gearName( equipment.api_name ) );
 								$(".sloticon img", this)
 									.attr("src","../../../../assets/img/items/"+equipment.api_type[3]+".png");
+								$(".sloticon img", this).attr("alt", equipId);
+								$(".sloticon img", this).click(function(){
+									KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
+								});
 								$(".sloticon", this).addClass("hover");
 							} else {
 								$(".slotitem", this).text( "" );

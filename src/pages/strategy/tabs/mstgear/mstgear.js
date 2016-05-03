@@ -55,7 +55,7 @@
 			gear_id = Number(gear_id||"124");
 			var self = this;
 			var gearData = KC3Master.slotitem( gear_id );
-			console.log(gearData);
+			console.debug("gearData", gearData);
 			self.currentGearId = gear_id;
 			
 			if(gear_id<=500){

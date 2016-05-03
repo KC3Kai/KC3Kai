@@ -323,19 +323,19 @@ Uses Dexie.js third-party plugin on the assets directory
 			return true;
 		},
 		
-		Enemy :function(data,callback){
+		Enemy :function(data, callback){
 			try {
 				this.con.enemy.add(data);
 			} catch (e) {
-				console.log("Enemy data already exists.");
+				console.log("Enemy data already exists:", data);
 			}
 		},
 		
-		Encounter :function(data,callback){
+		Encounter :function(data, callback){
 			try {
 				this.con.encounters.add(data);
 			} catch (e) {
-				console.log("Enemy composition already exists.");
+				console.log("Enemy composition already exists:", data);
 			}
 			
 		},
@@ -373,7 +373,7 @@ Uses Dexie.js third-party plugin on the assets directory
 		},
 		
 		get_expeds :function(pageNumber, expeds, fleets, callback){
-			 console.log("expeds", expeds);
+			// console.debug("expeds", expeds);
 			var itemsPerPage = 20;
 			this.con.expedition
 				.where("hq").equals(this.index)
@@ -548,17 +548,16 @@ Uses Dexie.js third-party plugin on the assets directory
 		get_sortie_data :function(sortie_id, callback){
 			var self = this;
 			var sortie_data = {};
-			console.log("firing");
 			this.con.sortie
 				.where("id").equals(sortie_id)
 				.toArray(function(sortieList){
-					console.log(sortieList);
+					console.debug("sortieList", sortieList);
 					sortie_data = sortieList[0];
 					
 					self.con.battle
 						.where("sortie_id").anyOf(sortie_id)
 						.toArray(function(battleList){
-							console.log(battleList);
+							console.debug("battleList", battleList);
 							sortie_data.battles = battleList;
 							callback(sortie_data);
 						});
@@ -629,12 +628,11 @@ Uses Dexie.js third-party plugin on the assets directory
 		},
 		
 		get_enemyInfo :function(shipId, callback){
-			console.log("get_enemyInfo", shipId, this.con.enemy);
 			try {
 				this.con.enemy
 					.where("id").equals(shipId)
 					.toArray(function(matchList){
-						console.log("matchList", matchList);
+						console.debug("matchList", matchList);
 						if(matchList.length > 0){
 							callback(matchList[0]);
 						}else{
@@ -643,7 +641,7 @@ Uses Dexie.js third-party plugin on the assets directory
 					});
 				return true;
 			} catch (e) {
-				console.error(e);
+				console.error(e.stack);
 			}
 		},
 		
@@ -765,7 +763,7 @@ Uses Dexie.js third-party plugin on the assets directory
 				.reverse()
 				.toArray()
 				.then (callbackSucc || $.nop())
-				.catch(callbackFail || function(e){console.error(e);});
+				.catch(callbackFail || function(e){console.error(e.stack);});
 		},
 		
 	};
