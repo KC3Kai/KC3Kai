@@ -13,17 +13,16 @@
 		isLoading: false,
 
 		/* INIT
-		   Prepares all data needed
+		   Prepares static data needed
 		   ---------------------------------*/
 		init :function(){
 		},
 
-		/* EXECUTE
-		   Places data onto the interface
+		/* RELOAD
+		   Prepares reloadable data
 		   ---------------------------------*/
-		execute :function(){
+		reload :function(){
 			PlayerManager.loadFleets();
-
 			// in order to get more up-to-date info
 			// we need to refresh the Ship Manager
 			KC3ShipManager.load();
@@ -55,6 +54,14 @@
 				};
 				this.shipCache.push(ThisShipData);
 			}
+		},
+
+		/* EXECUTE
+		   Places data onto the interface
+		   ---------------------------------*/
+		execute :function(){
+			// Get latest data even clicking on tab
+			this.reload();
 			this.shipList = $(".tab_docking .ship_list");
 			this.showFilters();
 		},

@@ -20,16 +20,20 @@
 		sorterDescCtrl: null,
 
 		/* INIT
-		Prepares all data needed
+		Prepares static data needed
 		---------------------------------*/
 		init :function(){
 			this.prepareSorters();
 		},
 
-		reloadShipList: function() {
+		/* RELOAD
+		Prepares latest ships data
+		---------------------------------*/
+		reload :function(){
 			// Cache ship info
 			PlayerManager.loadFleets();
 			KC3ShipManager.load();
+			KC3GearManager.load();
 			this.shipCache = [];
 			var ctr, ThisShip, ThisShipData;
 			for(ctr in KC3ShipManager.list){
@@ -189,7 +193,6 @@
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
-			this.reloadShipList();
 			// now we need to do this before preparing filters
 			// Ship types
 			var sCtr, cElm;

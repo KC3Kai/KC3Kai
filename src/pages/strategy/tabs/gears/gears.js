@@ -123,10 +123,22 @@
 		},
 
 		/* INIT
-		Prepares all data needed
+		Prepares static data needed
 		---------------------------------*/
 		init :function(){
 			this.initComparator();
+		},
+
+		/* RELOAD
+		Prepares reloadable data
+		---------------------------------*/
+		reload :function(){
+			// Reload data from local storage
+			KC3ShipManager.load();
+			KC3GearManager.load();
+			// Clean old data
+			this._items = {};
+			this._holders = {};
 			// Compile equipment holders
 			var ctr, ThisItem, MasterItem, ThisShip, MasterShip;
 			for(ctr in KC3ShipManager.list){

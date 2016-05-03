@@ -49,8 +49,10 @@
 			KC3StrategyTabs.reloadTab(this);
 		});
 
-		$(".logo img").on("click", function(){
-			KC3StrategyTabs.reloadTab();
+		// Refresh current tab and force data reloading
+		$(".logo").on("click", function(){
+			console.debug("Reloading current tab [", KC3StrategyTabs.pageParams[0], "] on demand");
+			KC3StrategyTabs.reloadTab(undefined, true);
 		});
 		
 		$("#contentHtml").on("click", ".page_help_btn", function(){
@@ -92,7 +94,7 @@
 		window.location.hash = newHash;
 	};
 
-	KC3StrategyTabs.reloadTab = function(tab) {
+	KC3StrategyTabs.reloadTab = function(tab, reloadData) {
 		var tabElement = typeof tab;
 		KC3StrategyTabs.pageParams = (tabElement=="string" ? tab : window.location.hash).substring(1).split("-");
 		if(tabElement != "object") {
@@ -119,7 +121,7 @@
 		if(typeof thisTab != "undefined"){
 			// Execute Tab with callback
 			window.activeTab = thisTab;
-			thisTab.apply();
+			thisTab.apply(reloadData);
 			window.scrollTo(0,0);
 		}else{
 			console.info("Clicked ", KC3StrategyTabs.loading, "menu with no bound actions");
