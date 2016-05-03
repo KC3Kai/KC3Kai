@@ -116,10 +116,8 @@
 			});
 
 			if(!!KC3StrategyTabs.pageParams[1]){
-				this.switchWorld(KC3StrategyTabs.pageParams[1]);
-				if(!!KC3StrategyTabs.pageParams[2]){
-					this.switchMap(KC3StrategyTabs.pageParams[2]);
-				}
+				this.switchWorld(KC3StrategyTabs.pageParams[1],
+					KC3StrategyTabs.pageParams[2]);
 			} else {
 				// Select default opened world
 				this.switchWorld($(".tab_"+tabCode+" .world_box.active").data("world_num"));
@@ -129,7 +127,7 @@
 		/* SWITCH WORLD
 		Handle event on a world has been selected by clicking menu or by url
 		---------------------------------*/
-		this.switchWorld = function(worldNum){
+		this.switchWorld = function(worldNum, mapNum){
 			var self = this;
 			self.selectedWorld = Number(worldNum);
 			$(".tab_"+tabCode+" .world_box").removeClass("active");
@@ -231,7 +229,11 @@
 				});
 
 				$("<div>").addClass("clear").appendTo(".tab_"+tabCode+" .map_list");
-				self.switchMap($(".tab_"+tabCode+" .map_list .map_box.active").data("map_num"));
+				if(!mapNum){
+					self.switchMap($(".tab_"+tabCode+" .map_list .map_box.active").data("map_num"));
+				} else {
+					self.switchMap(mapNum);
+				}
 			}else{
 				self.showMap();
 			}
