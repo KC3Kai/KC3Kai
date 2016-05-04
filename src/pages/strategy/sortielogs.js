@@ -39,9 +39,15 @@
 		this.exportingReplay = false;
 		
 		/* INIT
-		Prepares all data needed
+		Prepares static data needed
 		---------------------------------*/
 		this.init = function(){
+		};
+
+		/* RELOAD
+		Prepares reloadable data
+		---------------------------------*/
+		this.reload = function(){
 			if(typeof localStorage.maps != "undefined"){
 				this.maps = JSON.parse( localStorage.maps );
 			}else{

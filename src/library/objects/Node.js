@@ -337,13 +337,12 @@ Used by SortieManager
 				}
 			}
 		}
-
+		var i = 0;
 		// Battle analysis only if on sortie or PvP, not applied to sortielogs
 		if(KC3SortieManager.onSortie > 0 || KC3SortieManager.isPvP()){
 			var PS = window.PS;
 			var DA = PS["KanColle.DamageAnalysis.FFI"];
 			var result = null;
-			var i = 0;
 			var fleet;
 			var dameConCode;
 			var shipNum;
