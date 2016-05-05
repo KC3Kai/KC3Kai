@@ -236,6 +236,10 @@ Provides access to data on built-in JSON files
 			return this._defeq["s" + id] || 0;
 		},
 
+		support :function(index){
+			return this._battle.support[index] || "";
+		},
+
 		detection :function(index){
 			return this._battle.detection[index] || ["","",""];
 		},

@@ -254,6 +254,10 @@ Used by SortieManager
 		this.eSlot = battleData.api_eSlot;
 
 		this.supportFlag = (battleData.api_support_flag>0);
+		if(this.supportFlag){
+			this.supportInfo = battleData.api_support_info;
+			this.supportInfo.api_support_flag = battleData.api_support_flag;
+		}
 		this.yasenFlag = (battleData.api_midnight_flag>0);
 		
 		this.originalHPs = battleData.api_nowhps;
