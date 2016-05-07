@@ -317,7 +317,7 @@ KC3改 Ship Object
 		if (!(this.didFlee || this.isTaiha())) {
 			var tp1,tp2,tp3;
 			tp1 = String(tp.add(KC3Meta.tpObtained({stype:this.master().api_stype})));
-			tp2 = String(tp.add(KC3Meta.tpObtained({slots:this.equipment().map(function(slot){return slot.masterId})})));
+			tp2 = String(tp.add(KC3Meta.tpObtained({slots:this.equipment().map(function(slot){return slot.masterId;})})));
 			tp3 = String(tp.add(KC3Meta.tpObtained({slots:[this.exItem().masterId]})));
 			//console.log(this.name(),this.rosterId,tp1,tp2,tp3);
 		}
