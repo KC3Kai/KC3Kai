@@ -83,7 +83,7 @@
 		},
 		
 		/* INIT
-		   Prepares all data needed
+		   Prepares static data needed
 		   ---------------------------------*/
 		init :function(){
 			// ensure localStorage has the part we need.
@@ -92,6 +92,16 @@
 			}
 		},
 		
+		/* RELOAD
+		Prepares latest fleets data
+		---------------------------------*/
+		reload :function(){
+			// Latest data for current fleet (ships & gears)
+			KC3ShipManager.load();
+			KC3GearManager.load();
+			PlayerManager.loadFleets();
+		},
+
 		/* EXECUTE
 		   Places data onto the interface
 		   ---------------------------------*/

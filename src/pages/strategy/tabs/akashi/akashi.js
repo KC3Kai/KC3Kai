@@ -12,15 +12,22 @@
 		instances: {},
 		
 		/* INIT
-		Prepares all data needed
+		Prepares static data needed
 		---------------------------------*/
 		init :function(){
-			var self = this;
-			
 			// Get upgrade data
 			var akashiData = $.ajax('../../data/akashi.json', { async: false }).responseText;
 			this.upgrades = JSON.parse(akashiData);
 			console.log(this.upgrades);
+		},
+
+		/* RELOAD
+		Prepares latest player data
+		---------------------------------*/
+		reload :function(){
+			var self = this;
+			KC3ShipManager.load();
+			KC3GearManager.load();
 			
 			// Get API IDs of all player ships
 			$.each(KC3ShipManager.list, function(index, ThisShip){

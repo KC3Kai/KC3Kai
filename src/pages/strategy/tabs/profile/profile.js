@@ -10,23 +10,28 @@
 		statistics: false,
 		
 		/* INIT
-		Prepares all data needed
+		Prepares static data needed
 		---------------------------------*/
 		init :function(){
+
+		},
+
+		/* RELOAD
+		Prepares latest player data
+		---------------------------------*/
+		reload :function(){
 			// Check for player statstics
 			if(typeof localStorage.player != "undefined"){
 				this.player = JSON.parse(localStorage.player);
 			}else{
-				// this.tabSelf.showError("Player information not available");
-				// return false;
+				this.player = {};
 			}
 			
 			// Check for player statstics
 			if(typeof localStorage.statistics != "undefined"){
 				this.statistics = JSON.parse(localStorage.statistics);
 			}else{
-				// this.tabSelf.showError("Player statistics not available");
-				// return false;
+				this.statistics = false;
 			}
 		},
 		

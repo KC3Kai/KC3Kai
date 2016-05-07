@@ -6,7 +6,7 @@
 	KC3StrategyTabs.showcase.definition = {
 		tabSelf: KC3StrategyTabs.showcase,
 		
-		shipCache: { bb:[], fbb:[], bbv:[], cv:[], cvl:[], ca:[], cav:[], cl:[], dd:[], ss:[], clt:[], ax:[], ao:[] },
+		shipCache: {},
 		gearCache: {},
 		equipTypes: {
 			"t2": {
@@ -85,10 +85,22 @@
 		},
 		
 		/* INIT
-		Prepares all data needed
+		Prepares static data needed
 		---------------------------------*/
 		init :function(){
+		},
+		
+		/* RELOAD
+		Prepares latest fleets data
+		---------------------------------*/
+		reload :function(){
 			var ctr, ThisShip, TempShipList, self=this;
+			// Reload data from local storage
+			KC3ShipManager.load();
+			KC3GearManager.load();
+			// Clean cache data
+			this.shipCache = { bb:[], fbb:[], bbv:[], cv:[], cvl:[], ca:[], cav:[], cl:[], dd:[], ss:[], clt:[], ax:[], ao:[] };
+			this.gearCache = {};
 			
 			// Convert ship list object into array
 			TempShipList = $.map(KC3ShipManager.list, function(value, index) {

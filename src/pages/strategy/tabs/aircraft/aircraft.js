@@ -12,10 +12,23 @@
 		_slotNums: {},
 		
 		/* INIT
-		Prepares all data needed
+		Prepares static data needed
 		---------------------------------*/
 		init :function(){
+
+		},
+
+		/* RELOAD
+		Prepares latest player data
+		---------------------------------*/
+		reload :function(){
 			var self = this;
+			this._items = {};
+			this._holders = {};
+			this._slotNums = {};
+
+			KC3ShipManager.load();
+			KC3GearManager.load();
 			
 			// Get squad names
 			if(typeof localStorage.planes == "undefined"){ localStorage.planes = "{}"; }

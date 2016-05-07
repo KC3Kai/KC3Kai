@@ -42,6 +42,13 @@
 			console.log(this.maplist);
 		},
 
+		/* RELOAD
+		Prepares latest ships data
+		---------------------------------*/
+		reload :function(){
+			KC3ShipManager.load();
+		},
+
 		/* EXECUTE
 		Places data onto the interface
 		---------------------------------*/
