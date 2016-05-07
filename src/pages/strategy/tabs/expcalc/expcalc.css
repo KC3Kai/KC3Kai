@@ -248,6 +248,13 @@
 	color: #039;
 }
 
+.tab_expcalc .goal_template .goal_value.yes_or_no {
+	color:#e33;
+}
+.tab_expcalc .goal_template .goal_value.yes_or_no.bool_no {
+	color:#039;
+}
+
 .tab_expcalc .goal_template .goal_input {
 	height: 20px;
 	line-height: 20px;

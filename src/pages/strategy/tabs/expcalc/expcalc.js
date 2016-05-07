@@ -139,6 +139,9 @@
 					goalBox.removeClass("disabled");
 				}
 				$(".goal_onoff", goalBox).text( tdata.enable? "Enabled":"Disabled");
+
+				$(".goal_fs .goal_value", goalBox).toggleClass("bool_no",!tdata.flagship);
+				$(".goal_mvp .goal_value", goalBox).toggleClass("bool_no",!tdata.mvp);
 			}
 
 			function goalTemplateEdit(t) {
