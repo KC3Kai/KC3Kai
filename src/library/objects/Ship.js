@@ -305,7 +305,6 @@ KC3改 Ship Object
 		return this.countEquipment( 68 );
 	};
 	
-<<<<<<< HEAD
 	/* CALCULATE TRANSPORT POINT
 	Retrieve TP object related to the current ship
 	** TP Object Detail --
@@ -325,7 +324,6 @@ KC3改 Ship Object
 		return tp;
 	};
 	
-=======
 	/* FIND DAMECON
 	   Find first available damecon.
 	   search order: extra slot -> 1st slot -> 2ns slot -> 3rd slot -> 4th slot
@@ -354,7 +352,6 @@ KC3改 Ship Object
 		return items.length > 0 ? items[0] : {pos: -1, code: 0};
 	};
 
->>>>>>> master
 	/* FIGHTER POWER
 	Get fighter power of this ship
 	--------------------------------------------------------------*/
