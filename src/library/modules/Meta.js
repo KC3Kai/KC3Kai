@@ -27,6 +27,7 @@ Provides access to data on built-in JSON files
 			troll:{},
 			lang:{},
 		},
+		_tpmult:{},
 		_edges:{},
 		_defaultIcon:"",
 		
@@ -68,6 +69,7 @@ Provides access to data on built-in JSON files
 			this._gauges	= JSON.parse( $.ajax(repo+'gauges.json', { async: false }).responseText );
 			this._defeq		= JSON.parse( $.ajax(repo+'defeq.json', { async: false }).responseText );
 			this._edges		= JSON.parse( $.ajax(repo+'edges.json', { async: false }).responseText );
+			this._tpmult	= JSON.parse( $.ajax(repo+'tp_mult.json', { async: false }).responseText );
 			
 			// Load Translations
 			this._ship 		= KC3Translation.getJSON(repo, 'ships', true);
@@ -270,6 +272,70 @@ Provides access to data on built-in JSON files
 				}
 			}
 			return edgeId;
+		},
+		
+		tpObtained : function(kwargs) {
+			function addTP(tp) {
+				var args = [].slice.call(arguments,1);
+				for(var i in args) {
+					var data = args[i];
+					tp.value += data.value;
+					tp.clear = tp.clear && data.clear;
+				}
+				return tp;
+			}
+			var tpData = {
+				value:0,
+				clear:true,
+				add:function(){return addTP.apply(null,[this].concat([].slice.call(arguments)));},
+				valueOf:function(){return this.clear ? this.value : NaN;},
+				toString:function(){return [(this.clear ? this.value : '??'),"TP"].join(" ");}
+			};
+			
+			var getSType = (function(){
+				var tpBase = $.extend({},tpData);
+				function getSType(stype) {
+					var
+						map  = KC3Meta._tpmult.stype,
+						data = map[stype],
+						tprs = $.extend({},tpBase);
+					switch(typeof data) {
+						case 'number':
+							tprs.value = (tprs.clear = isFinite(data) && !isNaN(data)) ? data : tprs.value;
+						break;
+						default:
+							tprs.clear = false;
+					}
+					return tprs;
+				}
+				return getSType;
+			}).call(this);
+			var getSlot = (function(){
+				var tpBase = $.extend({},tpData);
+				function getSlot(slot) {
+					var
+						map  = KC3Meta._tpmult.slots,
+						data = map[slot],
+						tprs = $.extend({},tpBase);
+					switch(typeof data) {
+						case 'number':
+							tprs.value = (tprs.clear = isFinite(data) && !isNaN(data)) ? data : tprs.value;
+						break;
+					}
+					return tprs;
+				}
+				return getSlot;
+			}).call(this);
+			
+			kwargs = $.extend({stype:0,slots:[]},kwargs);
+			kwargs.stype = parseInt(kwargs.stype,10);
+			if(arguments.length == 1) {
+				tpData.add( getSType(kwargs.stype) );
+				kwargs.slots.forEach(function(slotID){
+					tpData.add( getSlot(slotID) );
+				});
+			}
+			return tpData;
 		},
 		
 		/*

@@ -1234,7 +1234,7 @@
 					$(".module.activity .node_type_resource").removeClass("node_type_maelstrom");
 					$(".module.activity .node_type_resource .node_res_icon img").attr("src",
 						"../../../../assets/img/items/25.png");
-					$(".module.activity .node_type_resource .node_res_text").text( thisNode.amount + " drum carried" );
+					$(".module.activity .node_type_resource .node_res_text").text( Math.floor(thisNode.amount * 0.7) + "~ TP" );
 					$(".module.activity .node_type_resource").show();
 					break;
 				
@@ -2164,7 +2164,8 @@
 			thisMapId = "m"+KC3SortieManager.map_world+KC3SortieManager.map_num,
 			thisMap   = AllMaps[thisMapId],
 			mapHP     = 0,
-			depleteOK = KC3SortieManager.currentNode().isBoss() || !!noBoss;
+			onBoss    = KC3SortieManager.currentNode().isBoss(),
+			depleteOK = onBoss || !!noBoss;
 		
 		// Normalize Parameters
 		fsKill = !!fsKill;
@@ -2172,7 +2173,7 @@
 		
 		if(typeof thisMap != "undefined"){
 			$(".module.activity .map_info").removeClass("map_finisher");
-			if( thisMap.clear == 1){
+			if( thisMap.clear ){
 				$(".module.activity .map_hp").text( KC3Meta.term("BattleMapCleared") );
 				$(".module.activity .map_gauge .curhp").css('width','0%');
 			}else{
@@ -2206,9 +2207,9 @@
 					console.log("KC3Meta", KC3Meta._gauges);
 					console.log("totalKills", totalKills);
 					var
-						killsLeft  = totalKills - thisMap.kills,
+						killsLeft  = totalKills - thisMap.kills + (!onBoss && !!noBoss),
 						postBounty = killsLeft - (depleteOK && fsKill);
-					if(totalKills){
+					if(totalKills){  
 						$(".module.activity .map_hp").text( killsLeft + " / " + totalKills + KC3Meta.term("BattleMapKills"));
 						$(".module.activity .map_gauge")
 							.find('.curhp').css("width", ((postBounty/totalKills)*100)+"%").end()
@@ -2220,9 +2221,14 @@
 					}
 				}
 				
-				if(requireFinisher && ConfigManager.info_blink_gauge){
-					$(".module.activity .map_info").addClass("map_finisher");
-					$(".module.activity .map_hp").text(KC3Meta.term("StrategyEvents1HP"));
+				if(requireFinisher){
+					(function(){
+						var infoElm = $(".module.activity .map_info");
+						infoElm.addClass("map_finisher");
+						if(!ConfigManager.info_blink_gauge)
+							infoElm.addClass("noBlink");
+						$(".module.activity .map_hp").text(KC3Meta.term("StrategyEvents1HP"));
+					})();
 				}
 			}
 		}else{

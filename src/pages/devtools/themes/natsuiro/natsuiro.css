@@ -514,7 +514,10 @@ html,body {
 	padding:0px 0px 0px 5px;
 }
 
-.module.activity .map_info.map_finisher .map_gauge {
+.module.activity .map_info.map_finisher.noBlink .map_gauge {
+	background-color: #b22;
+}
+.module.activity .map_info.map_finisher:not(.noBlink) .map_gauge {
 	animation: gauge-finish-her 0.25s infinite ease alternate;
 }
 .module.activity .map_info.map_finisher .map_hp {
