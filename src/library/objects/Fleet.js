@@ -503,23 +503,23 @@ Contains summary information about a fleet and its 6 ships
 	 */
 	KC3Fleet.prototype.eLos4 = function(){
 		var multipliers = {
-			6: 0.6, // Carrier-Based Fighter 艦上戦闘機
-			7: 0.6, // Carrier-Based Dive Bomber 艦上爆撃機
-			8: 0.8, // Carrier-Based Torpedo Bomber 艦上攻撃機
-			9: 1, // Carrier-Based Reconnaissance Aircraft 艦上偵察機
-			10: 1.2, // Reconnaissance Seaplane 水上偵察機
-			11: 1.1, // Seaplane Bomber 水上爆撃機
-			12: 0.6, // Small Radar 小型電探
-			13: 0.6, // Large Radar 大型電探
-			26: 0.6, // ASW Patrol Aircraft / 対潜哨戒機
-			29: 0.6, // Searchlight Small / Large 探照灯 / 大型探照灯
-			34: 0.6, // Fleet Command Facility 司令部施設
-			35: 0.6, // SCAMP 航空要員(熟練艦載機整備員)
-			39: 0.6, // Skilled Lookouts 水上艦要員(熟練見張員)
-			40: 0.6, // Sonar 大型ソナー
-			41: 0.6, // Large Flying Boat 大型飛行艇
-			45: 0.6,  // Seaplane Fighter 水上戦闘機
-			94: 1 // Carrier-Based Reconnaissance Aircraft艦上偵察機(II)
+			6: 0.6, // Carrier-Based Fighter
+			7: 0.6, // Carrier-Based Dive Bomber
+			8: 0.8, // Carrier-Based Torpedo Bomber
+			9: 1, // Carrier-Based Reconnaissance Aircraft
+			10: 1.2, // Reconnaissance Seaplane
+			11: 1.1, // Seaplane Bomber
+			12: 0.6, // Small Radar
+			13: 0.6, // Large Radar
+			26: 0.6, // ASW Patrol Aircraft
+			29: 0.6, // Searchlight Small / Large
+			34: 0.6, // Fleet Command Facility
+			35: 0.6, // SCAMP
+			39: 0.6, // Skilled Lookouts
+			40: 0.6, // Sonar
+			41: 0.6, // Large Flying Boat
+			45: 0.6,  // Seaplane Fighter
+			94: 1 // Carrier-Based Reconnaissance Aircraft
 		};
 
 		var total = 0;
