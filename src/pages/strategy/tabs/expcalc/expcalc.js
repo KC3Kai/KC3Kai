@@ -254,7 +254,7 @@
 				goalTemplateToggle(goalBox);
 			});
 
-			$(".tab_expcalc").on("click", ".goal_template .goal_filter", function() {
+			$(".tab_expcalc").on("click", ".goal_template .goal_hl_coverage", function() {
 				var goalBox = $(this).parent().parent();
 				var stypes = self.goalTemplates[goalBox.index()].stype;
 				// if there's an "Any" filter, don't proceed because
