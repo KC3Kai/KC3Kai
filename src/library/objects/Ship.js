@@ -309,11 +309,12 @@ KC3改 Ship Object
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.obtainTP = function() {
 		var tp = KC3Meta.tpObtained();
-		if (!(ship.didFlee || ship.isTaiha())) {
-			addTP(tp,KC3Meta.tpObtained({stype:this.master().api_stype}));
-			console.log('Ship base TP',JSON.parse(JSON.stringify(tp)));
-			addTP(tp,KC3Meta.tpObtained({slots:this.master().items}));
-			console.log('Ship TP',JSON.parse(JSON.stringify(tp)));
+		if (!(this.didFlee || this.isTaiha())) {
+			var tp1,tp2,tp3;
+			tp1 = String(tp.add(KC3Meta.tpObtained({stype:this.master().api_stype})));
+			tp2 = String(tp.add(KC3Meta.tpObtained({slots:this.equipment().map(function(slot){return slot.masterId})})));
+			tp3 = String(tp.add(KC3Meta.tpObtained({slots:[this.exItem().masterId]})));
+			//console.log(this.name(),this.rosterId,tp1,tp2,tp3);
 		}
 		return tp;
 	};

@@ -200,18 +200,30 @@
 			});
 		}
 		
-		// Get map exp rewards
-		mapexp = JSON.parse($.ajax({
-			url : '../../../../data/exp_map.json',
-			async: false
-		}).responseText);
-		
-		$.each(mapexp, function(worldNum, mapNums){
-			$.each(mapNums, function(mapNum, mapExp){
-				if(mapExp > 0){
-					maplist[worldNum+"-"+(mapNum+1)] = mapExp;
+		$.ajax({
+			dataType: "JSON",
+			url: "https://raw.githubusercontent.com/KC3Kai/KC3Kai/master/src/data/tp_mult.json?v="+(Date.now()),
+			success: function(newTPData){
+				if(JSON.stringify(newTPData) != JSON.stringify(KC3Meta._tpmult)) {
+					$.extend(true,KC3Meta._tpmult,newTPData);
 				}
-			});
+			}
+		});
+		
+		// Get map exp rewards
+		$.ajax({
+			dataType: "JSON",
+			url : '../../../../data/exp_map.json',
+			success: function(mapData){
+				$.merge(mapexp,mapData);
+				$.each(mapexp, function(worldNum, mapNums){
+					$.each(mapNums, function(mapNum, mapExp){
+						if(mapExp > 0){
+							maplist[worldNum+"-"+(mapNum+1)] = mapExp;
+						}
+					});
+				});
+			}
 		});
 		
 		// Panel customizations: panel opacity
@@ -1234,7 +1246,8 @@
 					$(".module.activity .node_type_resource").removeClass("node_type_maelstrom");
 					$(".module.activity .node_type_resource .node_res_icon img").attr("src",
 						"../../../../assets/img/items/25.png");
-					$(".module.activity .node_type_resource .node_res_text").text( Math.floor(thisNode.amount * 0.7) + "~ TP" );
+					var lowTPGain = Math.floor(thisNode.amount.value * 0.7);
+					$(".module.activity .node_type_resource .node_res_text").text( lowTPGain + (isNaN(thisNode.amount) ? '?' : '~') + " TP" );
 					$(".module.activity .node_type_resource").show();
 					break;
 				
