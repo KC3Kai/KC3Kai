@@ -248,6 +248,10 @@
   text-align: center;
 }
 
+.tab_expcalc .goal_template .goal_input input {
+	width: 90%;
+}
+
 .tab_expcalc .goal_template .goal_up {
   background: #070;
   font-size: 14px;
@@ -282,6 +286,7 @@
 
 .tab_expcalc .goal_template .goal_btn.goal_hl_coverage {
   background: #58b;
+  margin-left: 50px;
   width: 150px;
   font-size: 14px;
   font-weight: bold;
@@ -306,13 +311,12 @@
 	height:24px;
 	line-height:24px;
 	border-radius: 17px;
-	margin:5px 0px 3px 0px;
+	margin:5px 3px 3px 0px;
 	text-align:center;
 	font-size:20px;
 	color:#fff;
 	padding:0px;
 }
-
 
 .tab_expcalc .goal_template .goal_type {
 	width: 380px;
