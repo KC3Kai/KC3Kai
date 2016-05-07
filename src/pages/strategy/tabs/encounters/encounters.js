@@ -44,23 +44,28 @@
 					}
 					// Check node box
 					var nodeLetter = KC3Meta.nodeLetter(encounter.world, encounter.map, encounter.node);
-					if( $("#encounter-"+encounter.world+"-"+encounter.map+diffStr+" .node-"+nodeLetter).length === 0){
+					var nodeName = encounter.name || "";
+					curBox = $("#encounter-"+encounter.world+"-"+encounter.map+diffStr+" .node-"+nodeLetter);
+					if( curBox.length === 0){
 						curBox = $(".tab_encounters .factory .encounter_node").clone();
 						curBox.addClass("node-"+nodeLetter);
-						$(".encounter_node_head", curBox).text("Node "+nodeLetter);
+						$(".encounter_node_head", curBox).text("Node {0} {1}".format(nodeLetter, nodeName));
 						curBox.appendTo("#encounter-"+encounter.world+"-"+encounter.map+diffStr+" .encounter_world_body");
+					} else if(!!nodeName){
+						$(".encounter_node_head", curBox).text("Node {0} {1}".format(nodeLetter, nodeName));
 					}
-					// Clone record box
+					// Check formation and ships box
 					var curNodeBody = $("#encounter-"+encounter.world+"-"+encounter.map+diffStr+" .node-"+nodeLetter+" .encounter_node_body");
 					var keSafe = encounter.ke.replace(/[\[\]\"\'\{\}]/g,"").replace(/[,:]/g,"_");
 					curBox = $(".formke-"+encounter.form+keSafe, curNodeBody);
 					if( curBox.length === 0 ){
+						// Clone record box
 						curBox = $(".tab_encounters .factory .encounter_record").clone();
 						curBox.addClass("formke-"+encounter.form+keSafe);
 						curBox.data("count", encounter.count || 1);
+						curBox.data("nodeName", nodeName);
 						curBox.appendTo(curNodeBody);
 						$(".encounter_formation img", curBox).attr("src", KC3Meta.formationIcon(encounter.form));
-						$(".encounter_formation", curBox).attr("title", curBox.data("count"));
 						shipList = JSON.parse(encounter.ke);
 						$.each(shipList, function(shipIndex, shipId){
 							if(shipId > 0){
@@ -73,9 +78,13 @@
 							}
 						});
 					} else {
+						// Update count
 						curBox.data("count", (encounter.count || 1) + curBox.data("count") );
-						$(".encounter_formation", curBox).attr("title", curBox.data("count"));
+						if(!!nodeName && curBox.data("nodeName")!==nodeName){
+							curBox.data("nodeName", "{0}/{1}".format(curBox.data("nodeName"), nodeName) );
+						}
 					}
+					$(".encounter_formation", curBox).attr("title", "{0}x{1}".format(curBox.data("nodeName"), curBox.data("count")) );
 					
 				});
 				

@@ -197,12 +197,12 @@ Uses Dexie.js third-party plugin on the assets directory
 					},
 					{
 						ch: {
-							encounters: "&uniqid,world,map,diff,node,form,ke,count"
+							encounters: "&uniqid,world,map,diff,node,form,ke,count,name"
 						},
 						up: function(t){
-							console.log("V7.1",t);
+							console.log("V7.2",t);
 						},
-						vr: 7.1,
+						vr: 7.2,
 					}
 				];
 				
@@ -336,11 +336,16 @@ Uses Dexie.js third-party plugin on the assets directory
 			this.con.enemy.put(data).then(callback);
 		},
 		
-		Encounter :function(data, callback){
+		Encounter :function(data, isIncCount, callback){
 			var self = this;
 			this.con.encounters.get(data.uniqid, function(oldData){
 				if(!!oldData){
-					data.count = (oldData.count || 1) + 1;
+					if(!!isIncCount){
+						data.count = (oldData.count || 1) + 1;
+					}
+					if(!data.name && !!oldData.name){
+						data.name = oldData.name;
+					}
 				}
 				self.con.encounters.put(data).then(callback);
 			});

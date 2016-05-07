@@ -490,7 +490,8 @@ Used by SortieManager
 			};
 			ed.uniqid = [ed.world,ed.map,ed.diff,ed.node,ed.form,ed.ke]
 				.filter(function(v){return !!v;}).join("/");
-			KC3Database.Encounter(ed);
+			KC3Database.Encounter(ed, true);
+			this.enemyEncounter = ed;
 			
 			// Save enemy info
 			for(i = 0; i < 6; i++) {
@@ -836,6 +837,13 @@ Used by SortieManager
 					}
 					
 				}
+			}
+			
+			// Save enemy deck name for encounter
+			var name = resultData.api_enemy_info.api_deck_name;
+			if(KC3SortieManager.onSortie > 0 && !!this.enemyEncounter && !!name){
+				this.enemyEncounter.name = name;
+				KC3Database.Encounter(this.enemyEncounter, false);
 			}
 		} catch (e) {
 			console.error("Captured an exception ==>", e,"\n==> proceeds safely");
