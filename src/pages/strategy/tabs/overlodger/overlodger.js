@@ -1018,7 +1018,7 @@
 										givenAry.push(newItem);
 										newTotalBuffer.push(newItem);
 									}
-									self.totalBuffer = newTotalBuffer.concat(self.totalBuffer);
+									[].unshift.apply(self.totalBuffer,newTotalBuffer);
 								} catch (e) {
 									console.error(e.stack);
 								} finally {
