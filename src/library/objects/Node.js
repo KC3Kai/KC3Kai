@@ -483,11 +483,13 @@ Used by SortieManager
 			var ed = {
 				world: KC3SortieManager.map_world,
 				map: KC3SortieManager.map_num,
+				diff: KC3SortieManager.map_difficulty,
 				node: this.id,
 				form: this.eformation,
 				ke: JSON.stringify(this.eships)
 			};
-			ed.uniqid = ed.world+"/"+ed.map+"/"+ed.node+"/"+ed.form+"/"+ed.ke;
+			ed.uniqid = [ed.world,ed.map,ed.diff,ed.node,ed.form,ed.ke]
+				.filter(function(v){return !!v;}).join("/");
 			KC3Database.Encounter(ed);
 			
 			// Save enemy info

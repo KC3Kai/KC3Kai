@@ -7,6 +7,7 @@
 		tabSelf: KC3StrategyTabs.encounters,
 		
 		list: [],
+		diffStrs: ["", "E", "N", "H"],
 		
 		/* INIT
 		Prepares all data needed
@@ -33,36 +34,48 @@
 				$.each(self.list, function(index, encounter){
 					if(encounter.world < 1) return true;
 					
+					var diffStr = self.diffStrs[encounter.diff || 0] || "";
 					// Check map box
-					if( $("#encounter-"+encounter.world+"-"+encounter.map).length === 0){
+					if( $("#encounter-"+encounter.world+"-"+encounter.map+diffStr).length === 0){
 						curBox = $(".tab_encounters .factory .encounter_map").clone();
-						curBox.attr("id", "encounter-"+encounter.world+"-"+encounter.map);
-						$(".encounter_world_head", curBox).text("World "+encounter.world+"-"+encounter.map);
+						curBox.attr("id", "encounter-"+encounter.world+"-"+encounter.map+diffStr);
+						$(".encounter_world_head", curBox).text("World "+encounter.world+"-"+encounter.map+diffStr);
 						curBox.appendTo(".encounter_list");
 					}
 					// Check node box
-					if( $("#encounter-"+encounter.world+"-"+encounter.map+" .node-"+encounter.node).length === 0){
+					var nodeLetter = KC3Meta.nodeLetter(encounter.world, encounter.map, encounter.node);
+					if( $("#encounter-"+encounter.world+"-"+encounter.map+diffStr+" .node-"+nodeLetter).length === 0){
 						curBox = $(".tab_encounters .factory .encounter_node").clone();
-						curBox.addClass("node-"+encounter.node);
-						$(".encounter_node_head", curBox).text("Node "+KC3Meta.nodeLetter(encounter.world, encounter.map, encounter.node));
-						curBox.appendTo("#encounter-"+encounter.world+"-"+encounter.map+" .encounter_world_body");
+						curBox.addClass("node-"+nodeLetter);
+						$(".encounter_node_head", curBox).text("Node "+nodeLetter);
+						curBox.appendTo("#encounter-"+encounter.world+"-"+encounter.map+diffStr+" .encounter_world_body");
 					}
 					// Clone record box
-					curBox = $(".tab_encounters .factory .encounter_record").clone();
-					curBox.appendTo("#encounter-"+encounter.world+"-"+encounter.map+" .node-"+encounter.node+" .encounter_node_body");
-					$(".encounter_formation img", curBox).attr("src", KC3Meta.formationIcon(encounter.form));
-					
-					shipList = JSON.parse(encounter.ke);
-					$.each(shipList, function(shipIndex, shipId){
-						if(shipId > -1){
-							shipBox = $(".tab_encounters .factory .encounter_ship").clone();
-							$(".encounter_icon img", shipBox).attr("src", KC3Meta.abyssIcon(shipId));
-							$(".encounter_icon img", shipBox).attr("alt", shipId);
-							$(".encounter_icon img", shipBox).click(shipClickFunc);
-							$(".encounter_id", shipBox).text(shipId);
-							shipBox.appendTo($(".encounter_ships", curBox));
-						}
-					});
+					var curNodeBody = $("#encounter-"+encounter.world+"-"+encounter.map+diffStr+" .node-"+nodeLetter+" .encounter_node_body");
+					var keSafe = encounter.ke.replace(/[\[\]\"\'\{\}]/g,"").replace(/[,:]/g,"_");
+					curBox = $(".formke-"+encounter.form+keSafe, curNodeBody);
+					if( curBox.length === 0 ){
+						curBox = $(".tab_encounters .factory .encounter_record").clone();
+						curBox.addClass("formke-"+encounter.form+keSafe);
+						curBox.data("count", encounter.count || 1);
+						curBox.appendTo(curNodeBody);
+						$(".encounter_formation img", curBox).attr("src", KC3Meta.formationIcon(encounter.form));
+						$(".encounter_formation", curBox).attr("title", curBox.data("count"));
+						shipList = JSON.parse(encounter.ke);
+						$.each(shipList, function(shipIndex, shipId){
+							if(shipId > 0){
+								shipBox = $(".tab_encounters .factory .encounter_ship").clone();
+								$(".encounter_icon img", shipBox).attr("src", KC3Meta.abyssIcon(shipId));
+								$(".encounter_icon img", shipBox).attr("alt", shipId);
+								$(".encounter_icon img", shipBox).click(shipClickFunc);
+								$(".encounter_id", shipBox).text(shipId);
+								shipBox.appendTo($(".encounter_ships", curBox));
+							}
+						});
+					} else {
+						curBox.data("count", (encounter.count || 1) + curBox.data("count") );
+						$(".encounter_formation", curBox).attr("title", curBox.data("count"));
+					}
 					
 				});
 				
