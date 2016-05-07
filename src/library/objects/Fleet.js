@@ -398,6 +398,7 @@ Contains summary information about a fleet and its 6 ships
 		switch(ConfigManager.elosFormula){
 			case 1: return this.eLos1();
 			case 2: return this.eLos2();
+			case 4: return this.eLos4();
 			default: return this.eLos3();
 		}
 	};
@@ -490,6 +491,90 @@ Contains summary information about a fleet and its 6 ships
 			+ ( srch * 0.9067950 )
 			+ ( nakedLos * 1.6841056 )
 			+ ( (Math.floor(( PlayerManager.hq.level + 4) / 5) * 5) * -0.6142467 );
+		return total;
+	};
+
+	/**
+	 *  LoS : "Formula 33"
+	 *  http://kancolle.wikia.com/wiki/Line_of_Sight
+	 *  http://ja.kancolle.wikia.com/wiki/%E3%83%9E%E3%83%83%E3%83%97%E7%B4%A2%E6%95%B5
+	 *  ID refer to start2 API, api_mst_slotitem_equiptype
+	 * @returns {number}
+	 */
+	KC3Fleet.prototype.eLos4 = function(){
+		var multipliers = {
+			6: 0.6, // Carrier-Based Fighter 艦上戦闘機
+			7: 0.6, // Carrier-Based Dive Bomber 艦上爆撃機
+			8: 0.8, // Carrier-Based Torpedo Bomber 艦上攻撃機
+			9: 1, // Carrier-Based Reconnaissance Aircraft 艦上偵察機
+			10: 1.2, // Reconnaissance Seaplane 水上偵察機
+			11: 1.1, // Seaplane Bomber 水上爆撃機
+			12: 0.6, // Small Radar 小型電探
+			13: 0.6, // Large Radar 大型電探
+			26: 0.6, // ASW Patrol Aircraft / 対潜哨戒機
+			29: 0.6, // Searchlight Small / Large 探照灯 / 大型探照灯
+			34: 0.6, // Fleet Command Facility 司令部施設
+			35: 0.6, // SCAMP 航空要員(熟練艦載機整備員)
+			39: 0.6, // Skilled Lookouts 水上艦要員(熟練見張員)
+			40: 0.6, // Sonar 大型ソナー
+			41: 0.6, // Large Flying Boat 大型飛行艇
+			45: 0.6,  // Seaplane Fighter 水上戦闘機
+			94: 1 // Carrier-Based Reconnaissance Aircraft艦上偵察機(II)
+		};
+
+		var total = 0;
+		var emptyShipSlot = 0;
+
+		// iterate ships
+		for (var i = 0; i < 6; i++) {
+			var shipData = this.ship(i);
+
+			// if empty slot or ship flee ?
+			if(shipData.rosterId === 0 || shipData.didFlee) {
+				emptyShipSlot++;
+				continue;
+			}
+
+			// ship's naked los
+			total += Math.sqrt(shipData.nakedLoS());
+
+			// iterate ship's equipment
+			for (var j = 0; j < 4; j++) {
+				if (shipData.items[j] > -1) {
+					var itemData = shipData.equipment(j);
+					if (itemData.itemId !== 0) {
+						var itemType = itemData.master().api_type[2];
+						var multiplier = multipliers[itemType];
+						if (multiplier) {
+							var equipment_bonus = Math.sqrt(itemData.stars);
+
+							if (itemType === 12 ||
+								itemType === 13) {
+								// radar bonus
+								equipment_bonus *= 1.25;
+							} else if (itemType === 10) {
+								// Reconnaissance Seaplane bonus
+								equipment_bonus *= 1.2;
+							} else if (itemType === 29) {
+								// searchlight no bonus
+								equipment_bonus = 0;
+							}
+
+							// multiple * (raw equipment los + equipment bonus)
+							total += multiplier * (itemData.master().api_saku + equipment_bonus);
+						}
+					}
+				}
+			}
+
+		}
+
+		// player hq level adjustment
+		total -= Math.ceil(0.4 * PlayerManager.hq.level);
+
+		// empty ship slot adjustment
+		total += 2 * emptyShipSlot;
+
 		return total;
 	};
 	
