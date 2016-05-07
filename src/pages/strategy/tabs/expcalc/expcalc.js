@@ -105,7 +105,6 @@
 				editingBox = $(this).parent();
 				self.goals["s"+ editingBox.data("id") ] = [];
 				self.save();
-				//window.location.reload();
 
 				$(".ship_edit", editingBox).show();
 				$(".ship_rem", editingBox).show();
