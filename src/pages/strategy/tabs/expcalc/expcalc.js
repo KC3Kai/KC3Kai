@@ -335,7 +335,7 @@
 				GoalTemplateManager.save( self.goalTemplates );
 				goalTemplateSetupUI(dat, goalBox);
 				goalTemplateShow(goalBox);
-				goalBox.addClass("disabled");
+				goalBox.toggleClass("disabled", !dat.enable);
 				goalBox.appendTo(".tab_expcalc .box_goal_templates");
 			});
 
