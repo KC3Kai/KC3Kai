@@ -50,6 +50,12 @@
 	font-weight:bold;
 	color:#039;
 }
+.tab_expcalc .ship_goal .ship_value.yes_or_no {
+	color:#e33;
+}
+.tab_expcalc .ship_goal .ship_value.yes_or_no.bool_no {
+	color:#039;
+}
 .tab_expcalc .ship_goal .ship_input {
 	height:20px;
 	line-height:20px;

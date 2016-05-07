@@ -474,12 +474,13 @@
 
 			// Exp Modifier: MVP
 			$(".ship_mvp .ship_value", goalBox).text( grindData[6]?"Yes":"No" );
-			$(".ship_mvp .ship_value", goalBox).css('color',(grindData[6]? "#e33" : "#039")); //yes : light red, no : deep blue
+			$(".ship_mvp .ship_value", goalBox).toggleClass( "bool_no", !grindData[6]);
+
 			if(grindData[6]===1){ expPerSortie = expPerSortie * 2; }
 
 			// Exp Modifier: FLAGSHIP
 			$(".ship_fs .ship_value", goalBox).text( grindData[5]?"Yes":"No" );
-			$(".ship_fs .ship_value", goalBox).css('color',(grindData[5]? "#e33" : "#039")); 
+			$(".ship_fs .ship_value", goalBox).toggleClass( "bool_no", !grindData[5]);
 
 			if(grindData[5]===1){ expPerSortie = expPerSortie * 1.5; }
 
