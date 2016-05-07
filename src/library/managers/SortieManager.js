@@ -170,39 +170,47 @@ Xxxxxxx
 			nodeKind = "Dud";
 			// Selection node
 			// api_event_id = 6
+			// api_event_kind = 2
 			if (typeof nodeData.api_select_route != "undefined") {
 				console.log("nodeData.api_select_route found, defining as selector");
 				nodeKind = "Selector";
-			//  Battle Node
+			// Battle avoided node (Enemy not found)
+			// api_event_id = 6
+			// api_event_kind = 1
+			}else if(nodeData.api_event_id == 6 && nodeData.api_event_kind == 1) {
+				console.log("nodeData.api_event_id:6 and api_event_kind:1, defining as dud");
+				// Another name may needed
+				//nodeKind = "Dud";
+			// Battle Node
 			// api_event_kind = 1 (day battle)
 			// api_event_kind = 2 (start at night battle)
 			// api_event_kind = 4 (aerial exchange)
 			// api_event_kind = 6 (defensive aerial)
 			// api_event_id = 4 (normal battle)
 			// api_event_id = 5 (boss)
-			// api_event_id = 6 (long distance aerial battle)
+			// api_event_id = 7 (aerial battle or reconnaissance)
+			// api_event_id = 10 (long distance aerial battle)
 			}else if([1,2,4,6].indexOf(nodeData.api_event_kind)>=0) {
 				nodeKind = "Battle";
 			// Resource Node
-			// api_event_kind = 0
 			// api_event_id = 2
 			}else if (typeof nodeData.api_itemget != "undefined") {
 				nodeKind = "Resource";
 			// Bounty Node
-			// api_event_kind = 0
 			// api_event_id = 8
 			} else if (typeof nodeData.api_itemget_eo_comment != "undefined") {
 				nodeKind = "Bounty";
 			// Transport Node 
-			// api_event_kind = 0
 			// api_event_id = 9
 			} else if (nodeData.api_event_id == 9){
 				nodeKind = "Transport";
 			// Maelstrom Node
+			// api_event_id = 3
 			} else if (typeof nodeData.api_happening != "undefined") {
 				nodeKind = "Maelstrom";
 			// Empty Node 
-			// api_event_kind = 0 
+			// api_event_kind = 0
+			// api_event_id = 6
 			} else {
 				
 			}

@@ -2,7 +2,7 @@
 	"use strict";
 	_gaq.push(['_trackPageview']);
 	
-	var myVersion = Number(chrome.runtime.getManifest().version);
+	var myVersion = chrome.runtime.getManifest().version;
 	
 	$(document).on("ready", function(){
 		// Load previously stored configs
@@ -20,14 +20,14 @@
 				if (!!data.pr) {
 					$(".nextVersion").attr("href", data.pr);
 				}
-				if( myVersion < Number(data.version) ){
+				if( myVersion != data.version ){
 					// If current installed version less than latest
 					var UpdateDiff = (new Date(data.time)).getTime() - Date.now();
 					
 					if(UpdateDiff > 0){
-						$(".nextVersion").html( "v"+data.version+" in <span class=\"timer\">"+String(UpdateDiff/1000).toHHMMSS()+"</span>");
+						$(".nextVersion").html( data.version+" in <span class=\"timer\">"+String(UpdateDiff/1000).toHHMMSS()+"</span>");
 					}else{
-						$(".nextVersion").html( "v"+data.version+" "+KC3Meta.term("MenuScheduledNow"));
+						$(".nextVersion").html( data.version+" "+KC3Meta.term("MenuScheduledNow"));
 					}
 				}else{
 					// Installed version is the same or greater than latest
