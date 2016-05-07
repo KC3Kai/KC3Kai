@@ -8,6 +8,8 @@ var trustedExit = false;
 
 // Used to fade out subtitles after calculated duration
 var subtitleVanishTimer = false;
+var subtitleVanishBaseMillis;
+var subtitleVanishExtraMillisPerChar;
 
 // Holder object for audio files to test mp3 duration
 var subtitleMp3;
@@ -55,6 +57,7 @@ $(document).on("ready", function(){
 	// Initialize data managers
 	ConfigManager.load();
 	KC3Master.init();
+	RemodelDb.init();
 	KC3Meta.init("../../../../data/");
 	KC3Meta.loadQuotes();
 	KC3QuestManager.load();
@@ -353,7 +356,7 @@ var interactions = {
 	subtitle :function(request, sender, response){
 		if(!ConfigManager.api_subtitles) return true;
 		
-		console.log("subtitle", request);
+		console.debug("subtitle", request);
 		
 		// Get subtitle text
 		var subtitleText = false;
@@ -380,15 +383,25 @@ var interactions = {
 		if(subtitleVanishTimer){
 			clearTimeout(subtitleVanishTimer);
 		}
+		// Lazy init timing parameters
+		if(!subtitleVanishBaseMillis){
+			subtitleVanishBaseMillis = Number(KC3Meta.quote("timing", "baseMillisVoiceLine")) || 2000;
+		}
+		if(!subtitleVanishExtraMillisPerChar){
+			subtitleVanishExtraMillisPerChar = Number(KC3Meta.quote("timing", "extraMillisPerChar")) || 50;
+		}
 		
 		// If subtitles available for the voice
 		if(subtitleText){
 			$(".overlay_subtitles").html(subtitleText);
 			$(".overlay_subtitles").show();
+			var millis = subtitleVanishBaseMillis +
+				(subtitleVanishExtraMillisPerChar * $(".overlay_subtitles").text().length);
+			console.debug("vanish after", millis, "ms");
 			subtitleVanishTimer = setTimeout(function(){
 				subtitleVanishTimer = false;
 				$(".overlay_subtitles").fadeOut(2000);
-			}, (2000+ ($(".overlay_subtitles").text().length*50)) );
+			}, millis);
 		}
 	},
 	

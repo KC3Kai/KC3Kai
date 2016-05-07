@@ -57,7 +57,7 @@ Contains summary information about a fleet and its 6 ships
 										});
 								});
 						} catch (e) {
-							console.error(e);
+							console.error(e.stack);/*RemoveLogging:skip*/
 							return false;
 						}
 					}
@@ -125,6 +125,14 @@ Contains summary information about a fleet and its 6 ships
 		}
 	};
 	
+	KC3Fleet.prototype.getDameConCodes = function() {
+		var i;
+		var result = [];
+		for (i=0;i<6;++i) {
+			result.push( this.ship(i).findDameCon().code );
+		}
+		return result;
+	};
 	
 	/*--------------------------------------------------------*/
 	/*-------------------[ FLEET ACTIONS ]--------------------*/

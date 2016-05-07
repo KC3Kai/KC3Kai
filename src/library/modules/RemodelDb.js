@@ -20,16 +20,16 @@
                     var db = this.mkDb(masterData);
                     localStorage.remodelDb = JSON.stringify(db);
                     this._db = db;
-                    console.log("RemodelDb: database updated");
+                    console.info("RemodelDb: database updated");
                 } catch (e) {
-                    console.error("RemodelDb:",e);
+                    console.error("RemodelDb:", e.stack);/*RemoveLogging:skip*/
                 }
             } else {
                 console.log("RemodelDb: no update required");
             }
 
             if (! this._db) {
-                console.warn("RemodelDb: database unavailable, need to re-initialize with master data");
+                console.warn("RemodelDb: database unavailable, need to re-initialize with master data");/*RemoveLogging:skip*/
             }
         },
         // compare master data against _db (could be null)
@@ -198,6 +198,23 @@
         isFinalForm: function(shipId) {
             var ff = this.finalForms(shipId);
             return ff ? ff.indexOf(shipId) !== -1 : false;
+        },
+        // return ship id of the previous form.
+        // if the ship is already in original form, "false" will be returned
+        // this relation is not circular - tracing from final form using "previousForm"
+        // will not result in infinite loop.
+        previousForm: function(shipId) {
+            if (shipId === this.originOf(shipId))
+                return false;
+            var group = this.remodelGroup(shipId);
+            var curInd = group.indexOf(shipId);
+            console.assert(
+                curInd > 0, 
+                "previousForm: querying on original form?" );
+            return group[curInd-1];
+        },
+        dumpRemodelGroups: function() {
+            return JSON.stringify( this._db.remodelGroups );
         }
     };
 })();

@@ -63,6 +63,7 @@ $(document).on("ready", function(){
 	// Initialize data managers
 	ConfigManager.load();
 	KC3Master.init();
+	RemodelDb.init();
 	KC3Meta.init("../../../../data/");
 	KC3Meta.loadQuotes();
 	KC3QuestManager.load();
@@ -580,6 +581,7 @@ var interactions = {
 				quoteIdentifier = request.shipID;
 				break;
 		}
+		console.debug("looking up quote:", quoteIdentifier, quoteVoiceNum);
 		subtitleText = KC3Meta.quote( quoteIdentifier, quoteVoiceNum );
 		
 		// hide first to fading will stop

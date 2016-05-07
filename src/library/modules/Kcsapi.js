@@ -83,8 +83,6 @@ Previously known as "Reactor"
 			KC3ShipManager.set(response.api_data.api_ship,true);
 			this.serverOffset = this.moraleRefresh.calibrate( headers.Date );
 			
-			KC3SortieManager.endSortie(response);
-			
 			PlayerManager.setHQ({
 				mid: response.api_data.api_basic.api_member_id,
 				name: response.api_data.api_basic.api_nickname,
@@ -145,6 +143,8 @@ Previously known as "Reactor"
 			PlayerManager.setNewsfeed(response.api_data.api_log, UTCtime );
 			
 			PlayerManager.combinedFleet = response.api_data.api_combined_flag || 0;
+			
+			KC3SortieManager.endSortie(response);
 			
 			KC3Network.trigger("HQ");
 			KC3Network.trigger("Consumables");
@@ -400,7 +400,7 @@ Previously known as "Reactor"
 							arrayData.fill(0,0,3);
 						break;
 						default:
-							console.error("Expected array of length 2 on",pendingData,"consumption data");
+							console.error("Expected array of length 2 on",pendingData,"consumption data");/*RemoveLogging:skip*/
 						break;
 					}
 				});
@@ -924,8 +924,13 @@ Previously known as "Reactor"
 				material = data.api_material,
 				consume  = [0,0,0,0],
 				bonuses  = data.api_bounus;
-			
 			console.log(quest,data);
+			
+			// Force to mark quest as complete
+			KC3QuestManager.isOpen( quest, false );
+			KC3QuestManager.isActive( quest, false );
+			
+			// Compute bonuses for ledger
 			bonuses.forEach(function(x){
 				if(x.api_type == 1 && x.api_item.api_id >= 5) {
 					consume[x.api_item.api_id - 5] += x.api_count;
@@ -938,6 +943,9 @@ Previously known as "Reactor"
 				data: material
 			});
 			console.log("Quest Item",material);
+			
+			// Trigger quest listeners
+			KC3Network.trigger("Quests");
 		},
 		
 		/* Stop Quest
@@ -1104,12 +1112,8 @@ Previously known as "Reactor"
 		/* PVP Result
 		-------------------------------------------------------*/
 		"api_req_practice/battle_result":function(params, response, headers){
-			var thisPvP = KC3SortieManager.currentNode();
-			if(thisPvP.allyNoDamage && response.api_data.api_win_rank == "S")
-				response.api_data.api_win_rank = "SS";
-			
 			resultScreenQuestFulfillment(response.api_data,true);
-			
+			KC3SortieManager.resultScreen(response.api_data);
 			KC3Network.trigger("PvPEnd", { result: response.api_data });
 			KC3Network.trigger("Quests");
 		},
