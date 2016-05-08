@@ -308,6 +308,7 @@
 		// Live translations
 		if(ConfigManager.checkLiveQuests && ConfigManager.language=="en"){
 			$.ajax({
+				async: true,
 				dataType: "JSON",
 				url: "https://raw.githubusercontent.com/KC3Kai/kc3-translations/master/data/"+ConfigManager.language+"/quests.json?v="+(Date.now()),
 				success: function(newQuestTLs){
@@ -326,16 +327,21 @@
 				}
 			});
 		}
-		
-		$.ajax({
-			dataType: "JSON",
-			url: "https://raw.githubusercontent.com/KC3Kai/KC3Kai/master/src/data/tp_mult.json?v="+(Date.now()),
-			success: function(newTPData){
-				if(JSON.stringify(newTPData) != JSON.stringify(KC3Meta._tpmult)) {
-					$.extend(true,KC3Meta._tpmult,newTPData);
+
+		// Live updating from github repo
+		// TODO the option may be changed to other term, or another new option
+		if(ConfigManager.checkLiveQuests){
+			$.ajax({
+				async: true,
+				dataType: "JSON",
+				url: "https://raw.githubusercontent.com/KC3Kai/KC3Kai/master/src/data/tp_mult.json?v="+(Date.now()),
+				success: function(newTPData){
+					if(JSON.stringify(newTPData) != JSON.stringify(KC3Meta._tpmult)) {
+						$.extend(true,KC3Meta._tpmult,newTPData);
+					}
 				}
-			}
-		});
+			});
+		}
 
 		// Get map exp rewards
 		$.ajax({
