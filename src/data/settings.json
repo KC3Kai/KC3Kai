@@ -35,7 +35,8 @@
 					"choices" : [
 						[ 1, "SettingsELosSum" ],
 						[ 2, "SettingsELosOld" ],
-						[ 3, "SettingsELosNew" ]
+						[ 3, "SettingsELosNew" ],
+						[ 4, "SettingsELosF33" ]
 					]
 				}
 			},

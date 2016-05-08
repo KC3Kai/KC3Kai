@@ -186,7 +186,7 @@ Retreives when needed to apply on components
 		
 		// Toggle Equipment LoS
 		scrollElosMode :function(){
-			this.elosFormula = (this.elosFormula % 3) + 1;
+			this.elosFormula = (this.elosFormula % 4) + 1;
 			this.save();
 		},
 		
