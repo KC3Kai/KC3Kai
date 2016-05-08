@@ -305,6 +305,25 @@ KC3改 Ship Object
 		return this.countEquipment( 68 );
 	};
 	
+	/* CALCULATE TRANSPORT POINT
+	Retrieve TP object related to the current ship
+	** TP Object Detail --
+	   value: known value that were calculated for
+	   clear: is the value already clear or not? it's a NaN like.
+	**
+	--------------------------------------------------------------*/
+	KC3Ship.prototype.obtainTP = function() {
+		var tp = KC3Meta.tpObtained();
+		if (!(this.didFlee || this.isTaiha())) {
+			var tp1,tp2,tp3;
+			tp1 = String(tp.add(KC3Meta.tpObtained({stype:this.master().api_stype})));
+			tp2 = String(tp.add(KC3Meta.tpObtained({slots:this.equipment().map(function(slot){return slot.masterId;})})));
+			tp3 = String(tp.add(KC3Meta.tpObtained({slots:[this.exItem().masterId]})));
+			//console.log(this.name(),this.rosterId,tp1,tp2,tp3);
+		}
+		return tp;
+	};
+	
 	/* FIND DAMECON
 	   Find first available damecon.
 	   search order: extra slot -> 1st slot -> 2ns slot -> 3rd slot -> 4th slot
