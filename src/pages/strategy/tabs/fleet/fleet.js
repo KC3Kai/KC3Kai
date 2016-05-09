@@ -7,6 +7,30 @@
 		tabSelf: KC3StrategyTabs.fleet,
 		
 		fleets: [],
+
+		/*
+		  "fleets" object format:
+		  * an array of "fleet" objects
+		  * length is exactly 4, falsy value for non-existing fleet (null is recommended)
+		  
+		  "fleet" object format:
+		  * an array of "ship" objects
+		  * length is exactly 6, falsy value for non-existing ship (null is recommended)
+
+		  "ship" object format:
+		  { id: <ship master id>
+		  , level: <ship level>
+		  , luck: <ship luck> (optional)
+		  , equipments: <array of equipments, length = 6, falsy for non-existing>
+		  }
+		  
+		  "equipment" object format:
+		  { id: <equipment master id>
+		  , ace: <aircraft proficiency> (optional)
+		  , improve: <improvement level> (optional)
+		  }
+		  
+		 */
 		
 		/* INIT
 		   Prepares all data needed
@@ -28,6 +52,12 @@
 			this.showFleet( 1, PlayerManager.fleets[1] );
 			this.showFleet( 2, PlayerManager.fleets[2] );
 			this.showFleet( 3, PlayerManager.fleets[3] );
+		},
+
+		loadCurrentFleets: function() {
+			PlayerManager.loadFleets();
+
+
 		},
 		
 		/* Show single fleet
