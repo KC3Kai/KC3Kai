@@ -472,6 +472,15 @@ KC3改 Ship Object
 	KC3Ship.prototype.performRepair = function(args) {
 		consumePending.call(this,1,{0:0,1:2,2:6,c: 1,i: 0},[0,1,2],args);
 	};
+
+	// preparation of data saving
+	// try to remove as much unnecessary fields as possible
+	KC3Ship.prototype.minimized = function() {
+		var ship = $.extend({},this);
+		delete ship.GearManager;
+		return ship;
+	};
+
 	function consumePending(index,mapping,clear,args) {
 		/*jshint validthis: true */
 		if(!(this instanceof KC3Ship)) {

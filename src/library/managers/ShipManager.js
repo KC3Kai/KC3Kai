@@ -194,17 +194,29 @@ Saves and loads list to and from localStorage
 		
 		// Show JSON string of the list for debugging purposes
 		json: function(){
-			console.log(JSON.stringify(this.list));
+			console.log(this.encoded());
 		},
 		
 		// Save ship list onto local storage
 		clear: function(){
 			this.list = {};
 		},
+
+		encoded: function() {
+			var shiplistMinimized = {};
+			$.each(this.list, function(k,v) {
+				if (v instanceof KC3Ship) {
+					shiplistMinimized[k] = v.minimized();
+				} else {
+					shiplistMinimized[k] = v;
+				}
+			});
+			return JSON.stringify(shiplistMinimized);
+		},
 		
 		// Save ship list onto local storage
 		save: function(){
-			localStorage.ships = JSON.stringify(this.list);
+			localStorage.ships = this.encoded();
 		},
 		
 		// Load from storage and add each one to manager list

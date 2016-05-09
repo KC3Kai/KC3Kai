@@ -53,7 +53,10 @@ Does not include Ships and Gears which are managed by other Managers
 			[0,1,2,3].forEach(function(i){
 				self.fleets[i].update( data[i] || {} );
 			});
-			localStorage.fleets = JSON.stringify(this.fleets);
+			localStorage.fleets = JSON.stringify(
+				this.fleets.map(
+					function(x){ return x.minimized(); }
+				));
 		},
 		
 		setRepairDocks :function( data ){

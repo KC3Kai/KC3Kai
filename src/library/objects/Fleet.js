@@ -628,5 +628,10 @@ Contains summary information about a fleet and its 6 ships
 			return {};
 		}
 	};
-	
+
+	KC3Fleet.prototype.minimized = function() {
+		var fleet = $.extend({},this);
+		delete fleet.ShipManager;
+		return fleet;
+	};
 })();
