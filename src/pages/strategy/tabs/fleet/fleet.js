@@ -54,7 +54,22 @@
 
 
 			$.each(fleets, function(ind, fleet) {
-				self.createKCFleetObject( fleet );
+				var kcFleet = self.createKCFleetObject( fleet );
+				/*
+				// Show fleet info
+				$(".detail_level .detail_value", fleetBox).text( fleetObj.totalLevel() );
+				$(".detail_los2 .detail_value", fleetBox).text( Math.round( fleetObj.eLos2() * 100) / 100 );
+				$(".detail_los3 .detail_value", fleetBox).text( Math.round( fleetObj.eLos3() * 100) / 100 );
+				$(".detail_air .detail_value", fleetBox).text( fleetObj.fighterPowerText() );
+				$(".detail_speed .detail_value", fleetBox).text( fleetObj.speed() );
+				*/
+				console.log( kcFleet );
+				console.log( kcFleet.totalLevel() );
+				console.log( Math.round( kcFleet.eLos2() * 100) / 100 );
+				console.log( Math.round( kcFleet.eLos3() * 100) / 100 );
+				console.log( kcFleet.fighterPowerText() );
+				console.log( kcFleet.speed() );
+
 			});
 
 			// Execute fleet fill
@@ -86,9 +101,13 @@
 				if (!shipObj) return;
 
 				var equipmentObjectArr = [];
+				var masterData = KC3Master.ship( shipObj.id );
+				ship.rosterId = fleet.ships[ind];
 				ship.masterId = shipObj.id;
+				ship.level = shipObj.level;
 				ship.lk[0] = shipObj.luck;
 				ship.items = [1,2,3,4];
+				ship.slots = masterData.api_maxeq;
 				ship.ex_item = 5;
 				ship.GearManager = {
 					get: function(ind) {
@@ -101,11 +120,14 @@
 					equipmentObjectArr.push( gear );
 					if (!equipment) return;
 					gear.masterId = equipment.id;
+					gear.itemId = ship.items[ind];
 					gear.stars = equipment.improve;
 					gear.ace = equipment.ace;
 				});
 
 			});
+
+			return fleet;
 		},
 
 		loadCurrentFleets: function() {
