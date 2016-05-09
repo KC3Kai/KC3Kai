@@ -3,7 +3,7 @@
 
 	window.WhoCallsTheFleetDb = {
 		db: {},
-		expectedShipCount: 407,
+		expectedShipCount: 417,
 		init: function(repo) {
 			var rawDb = $.ajax({
 				url : repo + 'assets/js/WhoCallsTheFleetShipDb.json',
@@ -41,6 +41,17 @@
 			var ent = this.db["s"+shipId];
 			if (typeof(ent) !== 'undefined') {
 				return ent.equip;
+			} else {
+				return false;
+			}
+		},
+		getLoSInfo: function(shipId) {
+			var ent = this.db["s"+shipId];
+			if (typeof(ent) !== 'undefined') {
+				return {
+					base: ent.stat.los,
+					max: ent.stat.los_max 
+				};
 			} else {
 				return false;
 			}
