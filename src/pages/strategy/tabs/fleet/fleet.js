@@ -46,10 +46,16 @@
 		   Places data onto the interface
 		   ---------------------------------*/
 		execute :function(){
+			var self = this;
 			// Empty fleet list
 			$(".tab_fleet .fleet_list").html("");
 			
-			this.loadCurrentFleets();
+			var fleets = this.loadCurrentFleets();
+
+
+			$.each(fleets, function(ind, fleet) {
+				self.createKCFleetObject( fleet );
+			});
 
 			// Execute fleet fill
 			this.showFleet( 0, PlayerManager.fleets[0] );
@@ -58,8 +64,51 @@
 			this.showFleet( 3, PlayerManager.fleets[3] );
 		},
 
-		loadCurrentFleets: function() {
+		createKCFleetObject: function(fleetObj) {
+			var fleet = new KC3Fleet();
+			fleet.name = fleetObj.name;
+			fleet.ships = [1,2,3,4,5,6];
 
+			var shipObjArr = [];
+
+			// simulate ShipManager
+			fleet.ShipManager = {
+				get: function(ind) {
+					return shipObjArr[ind-1];
+				}
+			};
+
+			// fill in instance of Ships
+			$.each( fleetObj.ships, function(ind,shipObj) {
+				var ship = new KC3Ship();
+				shipObjArr.push( ship );
+				// falsy value -> done
+				if (!shipObj) return;
+
+				var equipmentObjectArr = [];
+				ship.masterId = shipObj.id;
+				ship.lk[0] = shipObj.luck;
+				ship.items = [1,2,3,4];
+				ship.ex_item = 5;
+				ship.GearManager = {
+					get: function(ind) {
+						return equipmentObjectArr[ind-1];
+					}
+				};
+
+				$.each( shipObj.equipments, function(ind,equipment) {
+					var gear = new KC3Gear();
+					equipmentObjectArr.push( gear );
+					if (!equipment) return;
+					gear.masterId = equipment.id;
+					gear.stars = equipment.improve;
+					gear.ace = equipment.ace;
+				});
+
+			});
+		},
+
+		loadCurrentFleets: function() {
 			var fleetsObj = [];
 
 			function convertEquipmentsOf(ship) {
@@ -78,13 +127,11 @@
 						improve: e.stars
 					};
 				}
-
 				return equipments.map( convertEquipment );
 			}
 
 			function convertFleet(fleet) {
 				if (!fleet || !fleet.active) return null;
-				console.log(fleet);
 				var fleetObjShips = [];
 				$.each([0,1,2,3,4,5], function(_,ind) {
 					var ship = fleet.ship(ind);
@@ -96,7 +143,7 @@
 						id: ship.masterId,
 						level: ship.level,
 						luck: ship.lk[0],
-						equipment: convertEquipmentsOf(ship)
+						equipments: convertEquipmentsOf(ship)
 					};
 
 					fleetObjShips.push( shipObj );
@@ -105,8 +152,6 @@
 					name: fleet.name,
 					ships: fleetObjShips
 				};
-				console.log( JSON.stringify( fleetObj ) );
-
 				return fleetObj;
 			}
 
