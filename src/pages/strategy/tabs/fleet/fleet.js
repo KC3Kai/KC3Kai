@@ -9,17 +9,16 @@
 		fleets: [],
 		
 		/* INIT
-		Prepares all data needed
-		---------------------------------*/
+		   Prepares all data needed
+		   ---------------------------------*/
 		init :function(){
 			PlayerManager.loadFleets();
-			console.log(PlayerManager.fleets);
 			
 		},
 		
 		/* EXECUTE
-		Places data onto the interface
-		---------------------------------*/
+		   Places data onto the interface
+		   ---------------------------------*/
 		execute :function(){
 			// Empty fleet list
 			$(".tab_fleet .fleet_list").html("");
@@ -32,7 +31,7 @@
 		},
 		
 		/* Show single fleet
-		--------------------------------------------*/
+		   --------------------------------------------*/
 		showFleet :function( index, fleetObj ){
 			if(!fleetObj.active){ return false;}
 			
@@ -57,7 +56,7 @@
 		},
 		
 		/* Show single ship
-		--------------------------------------------*/
+		   --------------------------------------------*/
 		showShip :function( fleetBox, ship_id ){
 			// If ship exists on current list
 			if(KC3ShipManager.get(ship_id) !== false){
@@ -78,7 +77,7 @@
 		},
 		
 		/* Show single equipment
-		--------------------------------------------*/
+		   --------------------------------------------*/
 		showEquip :function( gearBox, gear_id, capacity){
 			if(gear_id > -1){
 				var thisItem = KC3GearManager.get(gear_id);
