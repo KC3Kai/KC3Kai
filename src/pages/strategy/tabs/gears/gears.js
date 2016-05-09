@@ -175,7 +175,7 @@
 		refresh :function(){
 			var ctr;
 			// Compile equipment holders
-			if(!(JSON.stringify(KC3ShipManager.list) == localStorage.ships)) {
+			if(JSON.stringify(KC3ShipManager.list) != localStorage.ships) {
 				for(ctr in this._holders)
 					delete this._holders[ctr];
 				var ThisShip, MasterShip;
@@ -191,7 +191,7 @@
 			
 			
 			// Compile ships on Index
-			if(!(JSON.stringify(KC3GearManager.list) == localStorage.gears)) {
+			if(JSON.stringify(KC3GearManager.list) != localStorage.gears) {
 				for(ctr in this._items)
 					delete this._items[ctr];
 				var ThisItem, MasterItem;
