@@ -30,6 +30,7 @@
 			// Cache ship info
 			PlayerManager.loadFleets();
 			KC3ShipManager.load();
+			KC3GearManager.load();
 			this.shipCache = [];
 			var ctr, ThisShip, ThisShipData;
 			for(ctr in KC3ShipManager.list){

@@ -96,11 +96,7 @@
 					var result = propertyGetter(b) - propertyGetter(a);
 					// additionally, if they look the same on the given stat
 					// we compare all properties by taking their sum.
-					if (result === 0) {
-						return sumAllGetter(b) - sumAllGetter(a);
-					} else {
-						return result;
-					}
+					return result || (sumAllGetter(b) - sumAllGetter(a));
 				};
 			};
 			var self = this;
@@ -127,97 +123,6 @@
 		---------------------------------*/
 		init :function(){
 			this.initComparator();
-			// Compile equipment holders
-			var ctr, ThisItem, MasterItem, ThisShip, MasterShip;
-			for(ctr in KC3ShipManager.list){
-				this.checkShipSlotForItemHolder(0, KC3ShipManager.list[ctr]);
-				this.checkShipSlotForItemHolder(1, KC3ShipManager.list[ctr]);
-				this.checkShipSlotForItemHolder(2, KC3ShipManager.list[ctr]);
-				this.checkShipSlotForItemHolder(3, KC3ShipManager.list[ctr]);
-				this.checkShipSlotForItemHolder(-1, KC3ShipManager.list[ctr]);
-			}
-
-			// Compile ships on Index
-			for(ctr in KC3GearManager.list){
-				ThisItem = KC3GearManager.list[ctr];
-				MasterItem = ThisItem.master();
-				if(!MasterItem) continue;
-
-				// Check if slotitem_type is filled
-				if(typeof this._items["t"+MasterItem.api_type[3]] == "undefined"){
-					this._items["t"+MasterItem.api_type[3]] = [];
-				}
-
-				// Check if slotitem_id is filled
-				if(typeof this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id] == "undefined"){
-					this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id] = {
-						id: ThisItem.masterId,
-						type_id: MasterItem.api_type[3],
-						english: ThisItem.name(),
-						japanese: MasterItem.api_name,
-						stats: {
-							fp: MasterItem.api_houg,
-							tp: MasterItem.api_raig,
-							aa: MasterItem.api_tyku,
-							ar: MasterItem.api_souk,
-							as: MasterItem.api_tais,
-							ev: MasterItem.api_houk,
-							ls: MasterItem.api_saku,
-							dv: MasterItem.api_baku,
-							ht: MasterItem.api_houm,
-							rn: MasterItem.api_leng
-						},
-						held: [],
-						extras: [],
-						arranged: {}
-					};
-				}
-
-				var holder = this._holders["s"+ThisItem.itemId];
-
-				// Add this item to the instances
-				if(typeof this._holders["s"+ThisItem.itemId] != "undefined"){
-					// Someone is holding it
-					this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].held.push({
-						id: ThisItem.itemId,
-						level: ThisItem.stars,
-						locked: ThisItem.lock,
-						holder: holder,
-					});
-
-					if( !this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].arranged[ThisItem.stars] )
-						this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].arranged[ThisItem.stars] = {
-							holder: {},
-							extraCount: 0,
-							heldCount: 0
-						};
-
-					if( !this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].arranged[ThisItem.stars].holder[holder.rosterId] )
-						this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].arranged[ThisItem.stars].holder[holder.rosterId] = {
-							holder: holder,
-							count: 0
-						};
-
-					this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].arranged[ThisItem.stars].holder[holder.rosterId].count++;
-					this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].arranged[ThisItem.stars].heldCount++;
-				}else{
-					// It's an extra equip on inventory
-					this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].extras.push({
-						id: ThisItem.itemId,
-						level: ThisItem.stars,
-						locked: ThisItem.lock
-					});
-
-					if( !this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].arranged[ThisItem.stars] )
-						this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].arranged[ThisItem.stars] = {
-							holder: {},
-							extraCount: 0,
-							heldCount: 0
-						};
-
-					this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].arranged[ThisItem.stars].extraCount++;
-				}
-			}
 		},
 
 		/* Check a ship's equipment slot of an item is equipped
@@ -237,6 +142,8 @@
 		---------------------------------*/
 		execute :function(){
 			var self = this;
+			
+			this.refresh();
 
 			$(".tab_gears .item_type").on("click", function(){
 				$(".tab_gears .item_type").removeClass("active");
@@ -264,7 +171,119 @@
 
 			$(".tab_gears .item_type").first().trigger("click");
 		},
+		
+		refresh :function(){
+			var ctr;
+			// Compile equipment holders
+			if(!(JSON.stringify(KC3ShipManager.list) == localStorage.ships)) {
+				for(ctr in this._holders)
+					delete this._holders[ctr];
+				var ThisShip, MasterShip;
+				KC3ShipManager.load();
+				for(ctr in KC3ShipManager.list){
+					this.checkShipSlotForItemHolder(0, KC3ShipManager.list[ctr]);
+					this.checkShipSlotForItemHolder(1, KC3ShipManager.list[ctr]);
+					this.checkShipSlotForItemHolder(2, KC3ShipManager.list[ctr]);
+					this.checkShipSlotForItemHolder(3, KC3ShipManager.list[ctr]);
+					this.checkShipSlotForItemHolder(-1, KC3ShipManager.list[ctr]);
+				}
+			}
+			
+			
+			// Compile ships on Index
+			if(!(JSON.stringify(KC3GearManager.list) == localStorage.gears)) {
+				for(ctr in this._items)
+					delete this._items[ctr];
+				var ThisItem, MasterItem;
+				KC3GearManager.load();
+				for(ctr in KC3GearManager.list){
+					ThisItem = KC3GearManager.list[ctr];
+					MasterItem = ThisItem.master();
+					if(!MasterItem) continue;
+					
+					var
+						gearKey = "t"+MasterItem.api_type[3],
+						gearMST = "s"+MasterItem.api_id,
+						gearID  = "s"+ThisItem.itemId;
+					
+					// Check if slotitem_type is filled
+					if(typeof this._items[gearKey] == "undefined"){
+						this._items[gearKey] = [];
+					}
 
+					// Check if slotitem_id is filled
+					if(typeof this._items[gearKey][gearMST] == "undefined"){
+						this._items[gearKey][gearMST] = {
+							id: ThisItem.masterId,
+							type_id: MasterItem.api_type[3],
+							english: ThisItem.name(),
+							japanese: MasterItem.api_name,
+							stats: {
+								fp: MasterItem.api_houg,
+								tp: MasterItem.api_raig,
+								aa: MasterItem.api_tyku,
+								ar: MasterItem.api_souk,
+								as: MasterItem.api_tais,
+								ev: MasterItem.api_houk,
+								ls: MasterItem.api_saku,
+								dv: MasterItem.api_baku,
+								ht: MasterItem.api_houm,
+								rn: MasterItem.api_leng
+							},
+							held: [],
+							extras: [],
+							arranged: {}
+						};
+					}
+
+					var holder = this._holders[gearID];
+
+					// Add this item to the instances
+					if(typeof this._holders[gearID] != "undefined"){
+						// Someone is holding it
+						this._items[gearKey][gearMST].held.push({
+							id: ThisItem.itemId,
+							level: ThisItem.stars,
+							locked: ThisItem.lock,
+							holder: holder,
+						});
+
+						if( !this._items[gearKey][gearMST].arranged[ThisItem.stars] )
+							this._items[gearKey][gearMST].arranged[ThisItem.stars] = {
+								holder: {},
+								extraCount: 0,
+								heldCount: 0
+							};
+
+						if( !this._items[gearKey][gearMST].arranged[ThisItem.stars].holder[holder.rosterId] )
+							this._items[gearKey][gearMST].arranged[ThisItem.stars].holder[holder.rosterId] = {
+								holder: holder,
+								count: 0
+							};
+
+						this._items[gearKey][gearMST].arranged[ThisItem.stars].holder[holder.rosterId].count++;
+						this._items[gearKey][gearMST].arranged[ThisItem.stars].heldCount++;
+					}else{
+						// It's an extra equip on inventory
+						this._items[gearKey][gearMST].extras.push({
+							id: ThisItem.itemId,
+							level: ThisItem.stars,
+							locked: ThisItem.lock
+						});
+
+						if( !this._items[gearKey][gearMST].arranged[ThisItem.stars] )
+							this._items[gearKey][gearMST].arranged[ThisItem.stars] = {
+								holder: {},
+								extraCount: 0,
+								heldCount: 0
+							};
+
+						this._items[gearKey][gearMST].arranged[ThisItem.stars].extraCount++;
+					}
+				}
+			}
+		},
+		
 		/*
 		 * get all available type ids from _items
 		 */
