@@ -1126,6 +1126,7 @@
 				
 				// STATUS: COMBINED
 				if(selectedFleet==1 || selectedFleet==5){
+					$(".module.status .status_butai .status_text").attr("title", "");
 					switch(Number(PlayerManager.combinedFleet)){
 						case 1:
 							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedCarrier") );
@@ -1135,6 +1136,16 @@
 							break;
 						case 3:
 							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedTransport") );
+							var tpValueSum = Math.floor([0,1].map(function(fleetId){
+								return PlayerManager.fleets[fleetId].ship()
+									.map(function(ship){ return ship.obtainTP(); })
+									.reduce(function(pre,cur){ return pre.add(cur); }, KC3Meta.tpObtained());
+							}).reduce(function(pre,cur){ return pre.add(cur); }, KC3Meta.tpObtained()));
+							console.log("tpValueSum", tpValueSum);
+							$(".module.status .status_butai .status_text").attr("title",
+								"{0} ~ {1} TP".format( isNaN(tpValueSum)? "?" : Math.floor(0.7 * tpValueSum),
+													   isNaN(tpValueSum)? "?" : tpValueSum )
+							);
 							break;
 						default:
 							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedNone") );
@@ -1334,11 +1345,12 @@
 					$(".module.activity .node_type_resource").removeClass("node_type_maelstrom");
 					$(".module.activity .node_type_resource .node_res_icon img").attr("src",
 						"../../../../assets/img/items/25.png");
-					var lowTPGain = Math.floor(thisNode.amount.value * 0.7);
-					$(".module.activity .node_type_resource .node_res_text").text( lowTPGain + (isNaN(thisNode.amount) ? '?' : '~') + " TP" );
+					var lowTPGain = isNaN(thisNode.amount) ? "?" : Math.floor(0.7 * thisNode.amount);
+					var highTPGain = isNaN(thisNode.amount) ? "?" : thisNode.amount;
+					$(".module.activity .node_type_resource .node_res_text").text( "{0} ~ {1} TP".format(lowTPGain, highTPGain) );
 					$(".module.activity .node_type_resource").show();
 					break;
-
+				
 				// Battle avoided node
 				default:
 					$(".module.activity .sortie_node_"+numNodes).addClass("nc_avoid");
