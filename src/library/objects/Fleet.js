@@ -13,7 +13,14 @@ Contains summary information about a fleet and its 6 ships
 		this.ships = [ -1, -1, -1, -1, -1, -1 ];
 		this.mission = [ 0, 0, 0, 0 ];
 		this.akashi_tick = 0;
-		
+
+		// useful when making virtual fleet objects.
+		// requirements:
+		// * "ShipManager.get( shipId )" should get the intended ship
+		// * "shipId" is taken from "this.ships"
+		// * "shipId === -1" should always return a dummy ship
+		this.ShipManager = KC3ShipManager;
+
 		if(!!data) {
 			$.extend(this,data);
 		}
@@ -111,7 +118,7 @@ Contains summary information about a fleet and its 6 ships
 			case 'number':
 			case 'string':
 				/* Number/String => converted as fleet slot key */
-				return KC3ShipManager.get( this.ships[slot] );
+				return self.ShipManager.get( this.ships[slot] );
 			case 'undefined':
 				/* Undefined => returns whole fleet as ship object */
 				return Array.apply(null, {length: this.countShips()})
