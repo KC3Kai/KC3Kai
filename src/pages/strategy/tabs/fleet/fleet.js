@@ -55,21 +55,14 @@
 
 			$.each(fleets, function(ind, fleet) {
 				var kcFleet = self.createKCFleetObject( fleet );
-				/*
-				// Show fleet info
-				$(".detail_level .detail_value", fleetBox).text( fleetObj.totalLevel() );
-				$(".detail_los2 .detail_value", fleetBox).text( Math.round( fleetObj.eLos2() * 100) / 100 );
-				$(".detail_los3 .detail_value", fleetBox).text( Math.round( fleetObj.eLos3() * 100) / 100 );
-				$(".detail_air .detail_value", fleetBox).text( fleetObj.fighterPowerText() );
-				$(".detail_speed .detail_value", fleetBox).text( fleetObj.speed() );
-				*/
 				console.log( kcFleet );
 				console.log( kcFleet.totalLevel() );
+				// TODO
 				console.log( Math.round( kcFleet.eLos2() * 100) / 100 );
+				// TODO
 				console.log( Math.round( kcFleet.eLos3() * 100) / 100 );
 				console.log( kcFleet.fighterPowerText() );
 				console.log( kcFleet.speed() );
-
 			});
 
 			// Execute fleet fill
@@ -105,6 +98,8 @@
 				ship.rosterId = fleet.ships[ind];
 				ship.masterId = shipObj.id;
 				ship.level = shipObj.level;
+				// TODO: need to calculate LoS
+
 				ship.lk[0] = shipObj.luck;
 				ship.items = [1,2,3,4];
 				ship.slots = masterData.api_maxeq;

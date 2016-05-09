@@ -19,13 +19,16 @@ Contains summary information about a fleet and its 6 ships
 		// * "ShipManager.get( shipId )" should get the intended ship
 		// * "shipId" is taken from "this.ships"
 		// * "shipId === -1" should always return a dummy ship
-		this.ShipManager = KC3ShipManager;
+		this.ShipManager = null;
 
 		if(!!data) {
 			$.extend(this,data);
 		}
 	};
 	
+	KC3Fleet.prototype.getShipManager = function() {
+		return this.ShipManager ? this.ShipManager : KC3ShipManager;
+	};
 	KC3Fleet.prototype.update = function( data ){
 		if(typeof data.api_member_id != "undefined"){
 			var
@@ -118,7 +121,7 @@ Contains summary information about a fleet and its 6 ships
 			case 'number':
 			case 'string':
 				/* Number/String => converted as fleet slot key */
-				return self.ShipManager.get( this.ships[slot] );
+				return self.getShipManager().get( this.ships[slot] );
 			case 'undefined':
 				/* Undefined => returns whole fleet as ship object */
 				return Array.apply(null, {length: this.countShips()})
