@@ -14,19 +14,21 @@
 		  * length is exactly 4, falsy value for non-existing fleet (null is recommended)
 		  
 		  "fleet" object format:
-		  * an array of "ship" objects
-		  * length is exactly 6, falsy value for non-existing ship (null is recommended)
+		  { ships: <an array of "ship" objects>
+		  ( length is exactly 6, falsy value for non-existing ship (null is recommended) )
+		  , name: <fleet name> (optional)
+		  }
 
 		  "ship" object format:
 		  { id: <ship master id>
 		  , level: <ship level>
 		  , luck: <ship luck> (optional)
-		  , equipments: <array of equipments, length = 6, falsy for non-existing>
+		  , equipments: <array of equipments, length = 5 (4+1), falsy for non-existing>
 		  }
 		  
 		  "equipment" object format:
 		  { id: <equipment master id>
-		  , ace: <aircraft proficiency> (optional)
+		  , ace: <aircraft proficiency> (optional) (-1 if "ace" is not applicable)
 		  , improve: <improvement level> (optional)
 		  }
 		  
@@ -47,6 +49,8 @@
 			// Empty fleet list
 			$(".tab_fleet .fleet_list").html("");
 			
+			this.loadCurrentFleets();
+
 			// Execute fleet fill
 			this.showFleet( 0, PlayerManager.fleets[0] );
 			this.showFleet( 1, PlayerManager.fleets[1] );
@@ -55,9 +59,63 @@
 		},
 
 		loadCurrentFleets: function() {
+
+			var fleetsObj = [];
+
+			function convertEquipmentsOf(ship) {
+				var equipments = [];
+				$.each([0,1,2,3], function(_,ind) {
+					equipments.push( ship.equipment(ind) );
+				});
+				equipments.push( ship.exItem() );
+
+				function convertEquipment(e) {
+					if (e.masterId === 0)
+						return null;
+					return {
+						id: e.masterId,
+						ace: e.ace,
+						improve: e.stars
+					};
+				}
+
+				return equipments.map( convertEquipment );
+			}
+
+			function convertFleet(fleet) {
+				if (!fleet || !fleet.active) return null;
+				console.log(fleet);
+				var fleetObjShips = [];
+				$.each([0,1,2,3,4,5], function(_,ind) {
+					var ship = fleet.ship(ind);
+					if (ship.masterId === 0) {
+						fleetObjShips.push( null );
+						return;
+					}
+					var shipObj = {
+						id: ship.masterId,
+						level: ship.level,
+						luck: ship.lk[0],
+						equipment: convertEquipmentsOf(ship)
+					};
+
+					fleetObjShips.push( shipObj );
+				});
+				var fleetObj = {
+					name: fleet.name,
+					ships: fleetObjShips
+				};
+				console.log( JSON.stringify( fleetObj ) );
+
+				return fleetObj;
+			}
+
 			PlayerManager.loadFleets();
+			$.each([0,1,2,3], function(_,ind) {
+				fleetsObj.push(convertFleet( PlayerManager.fleets[ind] ));
+			});
 
-
+			return fleetsObj;
 		},
 		
 		/* Show single fleet
