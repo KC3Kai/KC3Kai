@@ -8,6 +8,13 @@ KC3改 Ship Object
 		deferList = {};
 	
 	window.KC3Ship = function( data ){
+		// useful when making virtual ship objects.
+		// requirements:
+		// * "GearManager.get( itemId )" should get the intended equipment
+		// * "itemId" is taken from either "items" or "ex_item"
+		// * "shipId === -1 or 0" should always return a dummy gear
+		this.GearManager = KC3GearManager;
+
 		// Default object properties incuded in stringifications
 		this.rosterId = 0;
 		this.masterId = 0;
@@ -127,7 +134,7 @@ KC3改 Ship Object
 			case 'number':
 			case 'string':
 				/* Number/String => converted as equipment slot key */
-				return KC3GearManager.get( this.items[slot] );
+				return self.GearManager.get( this.items[slot] );
 			case 'undefined':
 				/* Undefined => returns whole equipment as equip object */
 				return Array.apply(null, this.items)
@@ -141,7 +148,7 @@ KC3改 Ship Object
 		}
 	};
 	KC3Ship.prototype.isFast = function(){ return this.master().api_soku>=10; };
-	KC3Ship.prototype.exItem = function(){ return KC3GearManager.get(this.ex_item); };
+	KC3Ship.prototype.exItem = function(){ return this.GearManager.get(this.ex_item); };
 	KC3Ship.prototype.isStriped = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.5); };
 	KC3Ship.prototype.isTaiha   = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.25) && !this.isRepaired(); };
 	KC3Ship.prototype.getDefer = function(){
