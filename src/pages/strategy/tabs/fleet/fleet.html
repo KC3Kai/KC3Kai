@@ -21,8 +21,10 @@
 	  <div class="fleet_type_field">
 		<input type="radio" name="view_type" id="saved" value="saved"> 
 		<label for="saved">Saved Fleets</label>
-		<select class="control_input">
+		<select class="control_input" id="saved_fleet_sel">
 		</select>
+		<button type="button" id="control_saved_rename">Rename ...</button>
+		<button type="button" id="control_saved_delete">Delete ...</button>
 		<div class="clear"></div>
 	  </div>
 	  <div class="fleet_type_field">
@@ -38,6 +40,8 @@
 	<div class="fleet_error_msg">Error Message</div>
 	<button type="button" id="control_view">View</button>
 	<button type="button" id="control_save">Save ...</button>
+	<button type="button" id="control_export_dbuilder">Export to DeckBuilder</button>
+	<button type="button" id="control_export_wctf">Export to WhoCallsTheFleet</button>
   </div>
   <div class="page_section" id="fleet_description"></div>
   <div class="fleet_list">

@@ -6,7 +6,8 @@
 	KC3StrategyTabs.fleet.definition = {
 		tabSelf: KC3StrategyTabs.fleet,
 		
-		fleets: [],
+		currentFleetsObj: null,
+		suggestedName: "",
 
 		/*
 		  "fleets" object format:
@@ -38,6 +39,10 @@
 		   Prepares all data needed
 		   ---------------------------------*/
 		init :function(){
+			// ensure localStorage has the part we need.
+			if (typeof localStorage.savedFleets === "undefined") {
+				localStorage.savedFleets = JSON.stringify( {} );
+			}
 		},
 		
 		/* EXECUTE
@@ -54,8 +59,106 @@
 				var viewType = $("input[type=radio][name=view_type]:checked").val();
 				self.executeView(viewType);
 			});
-			
+
+			$("button#control_save").on("click", function() {
+				var name = prompt("Input a name",self.suggestedName);
+				if (!name) return;
+				name = $.trim(name);
+				var confirmFlg = true;
+				if (self.ifFleetsObjExists(name)) {
+					confirmFlg = confirm("Overwrite record with name '" + name + "'?");
+				}
+
+				if (confirmFlg) {
+					self.saveFleetsObj(name);
+					self.refreshSavedFleets();
+				}
+			});
+
+			$("button#control_saved_rename").on("click", function() {
+				var oldName = $("#saved_fleet_sel option:selected").val();
+				if (!oldName) return;
+
+				var newName = prompt("Renaming '" + oldName + "' to:");
+				newName = $.trim(newName);
+				if (!newName) return;
+				if (oldName === newName) return;
+
+				var confirmFlg = true;
+				if (self.ifFleetsObjExists(newName)) {
+					confirmFlg = confirm("Overwrite record with name '" + newName + "'?");
+				}
+
+				if (confirmFlg) {
+					self.renameFleetsObj(oldName,newName);
+					self.refreshSavedFleets();
+				}
+			});
+
+			$("button#control_saved_delete").on("click", function() {
+				var name = $("#saved_fleet_sel option:selected").val();
+				if (!name) return;
+				var confirmFlg = confirm("Confirm Deleting Record '" + name + "'?");
+				if (confirmFlg) {
+					self.deleteFleetsObj(name);
+					self.refreshSavedFleets();
+				}
+			});
+
+			this.refreshSavedFleets();
 			this.executeView("current");
+		},
+
+		ifFleetsObjExists: function(name) {
+			name = $.trim(name);
+			var savedFleets = JSON.parse( localStorage.savedFleets );
+			return !! savedFleets[name];
+		},
+
+		renameFleetsObj: function(oldName, newName) {
+			newName = $.trim(newName);
+			var savedFleets = JSON.parse( localStorage.savedFleets );
+			var tmp = savedFleets[oldName];
+			delete savedFleets[oldName];
+			savedFleets[newName] = tmp;
+			localStorage.savedFleets = JSON.stringify( savedFleets );
+		},
+
+		deleteFleetsObj: function(name) {
+			name = $.trim(name);
+			var savedFleets = JSON.parse( localStorage.savedFleets );
+			delete savedFleets[name];
+			localStorage.savedFleets = JSON.stringify( savedFleets );
+		},
+
+		saveFleetsObj: function(name) {
+			name = $.trim(name);
+			if (name === "") {
+				$(".fleet_error_msg").text("empty name").show();
+				return;
+			}
+			if (!this.currentFleetsObj) {
+				$(".fleet_error_msg").text("cannot find info of current viewing fleets").show();
+				return;
+			}
+
+			var savedFleets = JSON.parse( localStorage.savedFleets );
+			savedFleets[name] = this.currentFleetsObj;
+			localStorage.savedFleets = JSON.stringify( savedFleets );
+		},
+
+		refreshSavedFleets: function() {
+			var savedFleets = JSON.parse( localStorage.savedFleets );
+			var keys = Object.keys( savedFleets );
+			keys.sort();
+			var selectBox = $("#saved_fleet_sel");
+			selectBox.empty();
+
+			$.each( keys, function(_,key) {
+				selectBox.append( $("<option></option>")
+								  .attr("value", key)
+								  .text(key) );
+			});
 		},
 
 		executeView: function(viewType) {
@@ -63,7 +166,10 @@
 			if (viewType === "current") {
 				this.showCurrentFleets();
 			} else if (viewType === "saved") {
-
+				var name = $("#saved_fleet_sel option:selected").val();
+				if (name) {
+					this.showSavedFleets(name);
+				}
 			} else if (viewType === "history") {
 				var q = $("input#hist_query").val();
 				var sortieId = parseInt(q,10);
@@ -81,11 +187,37 @@
 			$("select.control_input").prop("disabled", viewType !== "saved");
 			$("input#hist_query").prop("disabled", viewType !== "history");
 			$("button#control_save").prop("disabled", viewType === "saved");
+
+			$("button#control_saved_rename").prop("disabled", viewType !== "saved");
+			$("button#control_saved_delete").prop("disabled", viewType !== "saved");
 		},
 
 		showCurrentFleets: function() {
 			this.showAllKCFleets( this.loadCurrentFleets() );
 			$("#fleet_description").text("Current Fleets");
+			this.currentFleetsObj = this.getCurrentFleetsObj();
+			this.suggestedName = "Fleets (" + new Date().toString() + ")";
+		},
+
+		showSavedFleets: function(name) {
+			name = $.trim(name);
+			var savedFleets = JSON.parse( localStorage.savedFleets );
+			var fleetsObj = savedFleets[name];
+			var self = this;
+
+			if (!fleetsObj) {
+				$(".fleet_error_msg").text("No record of '" + name + "'").show();
+				return;
+			}
+
+			var kcFleets = fleetsObj.map( function( fleetObj ) {
+				return self.createKCFleetObject(fleetObj);
+			});
+
+			self.showAllKCFleets( kcFleets );
+			$("#fleet_description").text("Saved Fleets '" + name + "'");
+			this.currentFleetsObj = fleetsObj;
+			this.suggestedName = name;
 		},
 
 		showFleetFromSortieId: function(sortieId) {
@@ -140,6 +272,8 @@
 				var kcFleets = fleetsObj.map( function( fleetObj ) {
 					return self.createKCFleetObject(fleetObj);
 				});
+				self.currentFleetsObj = fleetsObj;
+				self.suggestedName = "Sortie #" + sortieId;
 				self.showAllKCFleets( kcFleets );
 				$("#fleet_description").text("Sortie #" + sortieId + " Fleets");
 			});
@@ -275,7 +409,7 @@
 			});
 		},
 
-		loadCurrentFleets1: function() {
+		getCurrentFleetsObj: function() {
 			var fleetsObj = [];
 
 			function convertEquipmentsOf(ship) {
