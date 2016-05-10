@@ -44,17 +44,59 @@
 		   Places data onto the interface
 		   ---------------------------------*/
 		execute :function(){
-			this.showFleetFromSortieId(1234);
+			var self = this;
+			this.setupUIByViewType( "current" );
+			$('input[type=radio][name=view_type]').change(function() {
+				self.setupUIByViewType( this.value );
+			});
+
+			$("button#control_view").on("click", function() {
+				var viewType = $("input[type=radio][name=view_type]:checked").val();
+				self.executeView(viewType);
+			});
+			
+			this.executeView("current");
+		},
+
+		executeView: function(viewType) {
+			$(".fleet_error_msg").text("").hide();
+			if (viewType === "current") {
+				this.showCurrentFleets();
+			} else if (viewType === "saved") {
+
+			} else if (viewType === "history") {
+				var q = $("input#hist_query").val();
+				var sortieId = parseInt(q,10);
+				if (!sortieId) {
+					$(".fleet_error_msg").text("Invalid sortie id: " + q).show();
+					return;
+				}
+				this.showFleetFromSortieId(sortieId);
+			} else {
+				console.error("unknown view type: " + viewType);
+			}
+		},
+
+		setupUIByViewType: function(viewType) {
+			$("select.control_input").prop("disabled", viewType !== "saved");
+			$("input#hist_query").prop("disabled", viewType !== "history");
+			$("button#control_save").prop("disabled", viewType === "saved");
 		},
 
 		showCurrentFleets: function() {
 			this.showAllKCFleets( this.loadCurrentFleets() );
+			$("#fleet_description").text("Current Fleets");
 		},
 
 		showFleetFromSortieId: function(sortieId) {
 			var self = this;
 			KC3Database.get_sortie(sortieId, function(sortieData) {
-				if (! sortieData) return;
+				if (! sortieData) {
+					$(".fleet_error_msg")
+						.text("Cannot find data with sortie Id " + sortieId)
+						.show();
+					return;
+				}
 				var fleetsObj = [];
 
 				function convertShip(shipData) {
@@ -99,12 +141,12 @@
 					return self.createKCFleetObject(fleetObj);
 				});
 				self.showAllKCFleets( kcFleets );
+				$("#fleet_description").text("Sortie #" + sortieId + " Fleets");
 			});
 		},
 
 		showAllKCFleets: function(kcFleetArray) {
 			var self = this;
-
 			// Empty fleet list
 			$(".tab_fleet .fleet_list").html("");
 			$.each(kcFleetArray, function(ind, kcFleet) {
