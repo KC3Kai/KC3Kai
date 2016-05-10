@@ -281,11 +281,20 @@ KC3改 Ship Object
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.nakedLoS = function(){
 		var MyNakedLos = this.ls[0];
-		if(this.items[0] > -1){ MyNakedLos -= this.equipment(0).master().api_saku; }
-		if(this.items[1] > -1){ MyNakedLos -= this.equipment(1).master().api_saku; }
-		if(this.items[2] > -1){ MyNakedLos -= this.equipment(2).master().api_saku; }
-		if(this.items[3] > -1){ MyNakedLos -= this.equipment(3).master().api_saku; }
+		MyNakedLos -= this.equipmentTotalLoS();
 		return MyNakedLos;
+	};
+
+	KC3Ship.prototype.equipmentTotalLoS = function () {
+		var sumLoS = 0;
+		var self = this;
+		$.each([0,1,2,3], function(_,ind) {
+			var item = self.equipment(ind);
+			if (item.masterId !== 0) {
+				sumLoS += item.master().api_saku; 
+			}
+		});
+		return sumLoS;
 	};
 
 	/* COUNT EQUIPMENT
@@ -482,6 +491,15 @@ KC3改 Ship Object
 		var ship = $.extend({},this);
 		delete ship.GearManager;
 		return ship;
+	};
+
+	// estimated LoS without equipments based on WhoCallsTheFleetDb
+	KC3Ship.prototype.estimateNakedLoS = function() {
+		var losInfo = WhoCallsTheFleetDb.getLoSInfo( this.masterId );
+		if (!losInfo || losInfo.base < 0 || losInfo.max < 0) return 0;
+		var retVal = losInfo.base + 
+			Math.floor((losInfo.max - losInfo.base) * this.level / 99.0);
+		return retVal;
 	};
 
 	function consumePending(index,mapping,clear,args) {
