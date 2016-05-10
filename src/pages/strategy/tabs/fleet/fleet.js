@@ -38,22 +38,76 @@
 		   Prepares all data needed
 		   ---------------------------------*/
 		init :function(){
-			PlayerManager.loadFleets();
-			
 		},
 		
 		/* EXECUTE
 		   Places data onto the interface
 		   ---------------------------------*/
 		execute :function(){
+			this.showFleetFromSortieId(1234);
+		},
+
+		showCurrentFleets: function() {
+			this.showAllKCFleets( this.loadCurrentFleets() );
+		},
+
+		showFleetFromSortieId: function(sortieId) {
 			var self = this;
+			KC3Database.get_sortie(sortieId, function(sortieData) {
+				if (! sortieData) return;
+				var fleetsObj = [];
+
+				function convertShip(shipData) {
+					if (!shipData || shipData.mst_id <= 0) return null;
+					var shipObj = {};
+					var masterData = KC3Master.ship(shipData.mst_id);
+					shipObj.id = shipData.mst_id;
+					shipObj.level = shipData.level;
+					shipObj.luck = masterData.api_luck[0];
+					shipObj.equipments = [];
+
+					$.each( shipData.equip, function(_,gearId) {
+						if (gearId <= 0) {
+							shipObj.equipments.push(null);
+							return;
+						}
+						shipObj.equipments.push( {id: gearId } );
+					});
+
+					while (shipObj.equipments.length !== 5)
+						shipObj.equipments.push(null);
+
+					return shipObj;
+				}
+
+				function convertFleet(fleetData, fleetNum) {
+					var fleetObj = {};
+					fleetObj.name = "Fleet #" + fleetNum;
+					fleetObj.ships = [];
+					$.each([0,1,2,3,4,5], function(_,ind) {
+						fleetObj.ships.push(convertShip( fleetData[ind] ));
+					});
+					return fleetObj;
+				}
+
+				fleetsObj.push(convertFleet( sortieData.fleet1, 1));
+				fleetsObj.push(convertFleet( sortieData.fleet2, 2));
+				fleetsObj.push(convertFleet( sortieData.fleet3, 3));
+				fleetsObj.push(convertFleet( sortieData.fleet4, 4));
+
+				var kcFleets = fleetsObj.map( function( fleetObj ) {
+					return self.createKCFleetObject(fleetObj);
+				});
+				self.showAllKCFleets( kcFleets );
+			});
+		},
+
+		showAllKCFleets: function(kcFleetArray) {
+			var self = this;
+
 			// Empty fleet list
 			$(".tab_fleet .fleet_list").html("");
-			
-			var fleets = this.loadCurrentFleets();
-
-			$.each(fleets, function(ind, fleet) {
-				var kcFleet = self.createKCFleetObject( fleet );
+			$.each(kcFleetArray, function(ind, kcFleet) {
 				self.showKCFleet( kcFleet );
 			});
 		},
@@ -65,7 +119,8 @@
 			var self = this;
 
 			// Create fleet box
-			var fleetBox = $(".tab_fleet .factory .fleet_box").clone().appendTo(".tab_fleet .fleet_list");
+			var fleetBox = $(".tab_fleet .factory .fleet_box").clone()
+				.appendTo(".tab_fleet .fleet_list");
 			// fleetBox.attr("id", "fleet_box"+index);
 			$(".fleet_name", fleetBox).text( kcFleet.name );
 
@@ -73,7 +128,7 @@
 				var kcShip = kcFleet.ship(ind);
 				self.showKCShip(fleetBox, kcShip);
 			});
-			
+
 			// Show fleet info
 			$(".detail_level .detail_value", fleetBox).text( kcFleet.totalLevel() );
 			$(".detail_los2 .detail_value", fleetBox).text( Math.round( kcFleet.eLos2() * 100) / 100 );
@@ -162,8 +217,8 @@
 					if (!equipment) return;
 					gear.masterId = equipment.id;
 					gear.itemId = ship.items[ind];
-					gear.stars = equipment.improve;
-					gear.ace = equipment.ace;
+					gear.stars = equipment.improve ? equipment.improve : 0;
+					gear.ace = equipment.ace ? equipment.ace : 0;
 				});
 
 			});
@@ -172,6 +227,13 @@
 		},
 
 		loadCurrentFleets: function() {
+			PlayerManager.loadFleets();
+			return [0,1,2,3].map( function(ind) {
+				return PlayerManager.fleets[ind];
+			});
+		},
+
+		loadCurrentFleets1: function() {
 			var fleetsObj = [];
 
 			function convertEquipmentsOf(ship) {
