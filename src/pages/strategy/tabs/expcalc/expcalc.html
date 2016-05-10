@@ -10,7 +10,7 @@
     <ul>
       <li>In <strong>Current Goal</strong> section you can view and edit all current leveling goals.
       </li>
-      <li><p><strong>Goal Template</strong>(note: not availble for now) allows you to</p>
+      <li><p><strong>Goal Template</strong> allows you to</p>
         <ul>
           <li>auto-apply some leveling settings when new leveling ship is added.</li>
           <li>filter ships by their types</li>
@@ -42,8 +42,8 @@
       <li>click green buttons (up / down) to change template orders.</li>
       <li>click &quot;Enabled&quot; / &quot;Disabled&quot; to toggle a template (a disabled template won't be applied automatically)</li>
       <li>&quot;X&quot; removes a template, &quot;E&quot; changes a template to edit mode, &quot;S&quot; saves changes.</li>
-      <li>&quot;Apply to Current Goals&quot; does what its name suggests, when clicked, it pops up a confirm message listing all ships in current goals it can affect.</li>
-      <li>&quot;Filter&quot; highlights all ships it can match. &quot;Clear Highlight&quot; can then be used to clear highlights. (Note that even if a template filter highlights a ship, that doesn't mean this template will be auto-applied to that ship, either because other templates have higher priority or this template is disabled)</li>
+      <li>&quot;Apply to Current Goals&quot; does what its name suggests. Before template application, it will first pop up a confirm message listing all ships in current goals it can affect.</li>
+      <li>&quot;Highlight Coverage&quot; highlights all ships it can match. &quot;Clear Highlight&quot; can then be used to clear highlights. (Note that even if a template filter highlights a ship, that doesn't mean this template will be auto-applied to that ship, either because other templates have higher priority or this template is disabled)</li>
     </ul>
   </div>
   <div class="help_q">Tell me more about ship type filters!</div>
@@ -67,7 +67,6 @@
 		
 	</div>
 
-	<!--
 	<div class="page_section">Goal Templates</div>
 	<div class="section_body box_goal_templates">
     </div>
@@ -77,7 +76,6 @@
 	<div class="section_body">
       <a class="clear_highlight">Clear Highlight</a>
     </div>
-	-->
 	
 	<div class="page_section">Recommended</div>
 	<div class="section_body box_recommend">
@@ -139,12 +137,12 @@
 		</div>
 		<div class="ship_col ship_fs ship_activeOnly">
 			<div class="ship_label">FS</div>
-			<div class="ship_value"></div>
+			<div class="ship_value yes_or_no"></div>
 			<div class="ship_input"><input type="checkbox"></div>
 		</div>
 		<div class="ship_col ship_mvp ship_activeOnly">
 			<div class="ship_label">MVP</div>
-			<div class="ship_value"></div>
+			<div class="ship_value yes_or_no"></div>
 			<div class="ship_input"><input type="checkbox"></div>
 		</div>
 		<div class="ship_col ship_btn hover ship_add">+</div>
@@ -154,12 +152,11 @@
 		<div class="clear"></div>
 	</div>
 
-
     <div class="goal_template">
       <div class="setting_group">
         <div class="goal_col goal_type">
           <div class="goal_label">Ship Types</div>
-          <div class="goal_value">DD CL BB CA CAV</div>
+          <div class="goal_value"></div>
           <div class="goal_input">
             <input type="text" name="stype">
             <br>
@@ -188,14 +185,14 @@
         </div>
         <div class="goal_col goal_fs">
           <div class="goal_label">FS</div>
-          <div class="goal_value">Yes</div>
+          <div class="goal_value yes_or_no"></div>
           <div class="goal_input">
             <input type="checkbox">
           </div>
         </div>
-        <div class="goal_col goal_mvp">
+        <div class="goal_col goal_mvp yes_or_no">
           <div class="goal_label">MVP</div>
-          <div class="goal_value">No</div>
+          <div class="goal_value yes_or_no"></div>
           <div class="goal_input">
             <input type="checkbox">
           </div>
@@ -208,9 +205,10 @@
       <div class="manage_buttons">
         <div class="goal_col goal_btn hover goal_up">▲</div>
         <div class="goal_col goal_btn hover goal_down">▼</div>
-        <div class="goal_col goal_btn hover goal_filter">Filter</div>
+        <div class="goal_col goal_btn hover goal_hl_coverage">Highlight Coverage</div>
         <div class="goal_col goal_btn hover goal_onoff">Enable</div>
         <div class="goal_col goal_btn hover goal_apply">Apply to Current Goals</div>
+        <div class="clear"></div>
       </div>
     </div>
 </div>

@@ -105,7 +105,6 @@
 				editingBox = $(this).parent();
 				self.goals["s"+ editingBox.data("id") ] = [];
 				self.save();
-				//window.location.reload();
 
 				$(".ship_edit", editingBox).show();
 				$(".ship_rem", editingBox).show();
@@ -140,6 +139,9 @@
 					goalBox.removeClass("disabled");
 				}
 				$(".goal_onoff", goalBox).text( tdata.enable? "Enabled":"Disabled");
+
+				$(".goal_fs .goal_value", goalBox).toggleClass("bool_no",!tdata.flagship);
+				$(".goal_mvp .goal_value", goalBox).toggleClass("bool_no",!tdata.mvp);
 			}
 
 			function goalTemplateEdit(t) {
@@ -255,7 +257,7 @@
 				goalTemplateToggle(goalBox);
 			});
 
-			$(".tab_expcalc").on("click", ".goal_template .goal_filter", function() {
+			$(".tab_expcalc").on("click", ".goal_template .goal_hl_coverage", function() {
 				var goalBox = $(this).parent().parent();
 				var stypes = self.goalTemplates[goalBox.index()].stype;
 				// if there's an "Any" filter, don't proceed because
@@ -336,7 +338,7 @@
 				GoalTemplateManager.save( self.goalTemplates );
 				goalTemplateSetupUI(dat, goalBox);
 				goalTemplateShow(goalBox);
-				goalBox.addClass("disabled");
+				goalBox.toggleClass("disabled", !dat.enable);
 				goalBox.appendTo(".tab_expcalc .box_goal_templates");
 			});
 
@@ -475,12 +477,13 @@
 
 			// Exp Modifier: MVP
 			$(".ship_mvp .ship_value", goalBox).text( grindData[6]?"Yes":"No" );
-			$(".ship_mvp .ship_value", goalBox).css('color',(grindData[6]? "#e33" : "#039")); //yes : light red, no : deep blue
+			$(".ship_mvp .ship_value", goalBox).toggleClass( "bool_no", !grindData[6]);
+
 			if(grindData[6]===1){ expPerSortie = expPerSortie * 2; }
 
 			// Exp Modifier: FLAGSHIP
 			$(".ship_fs .ship_value", goalBox).text( grindData[5]?"Yes":"No" );
-			$(".ship_fs .ship_value", goalBox).css('color',(grindData[5]? "#e33" : "#039")); 
+			$(".ship_fs .ship_value", goalBox).toggleClass( "bool_no", !grindData[5]);
 
 			if(grindData[5]===1){ expPerSortie = expPerSortie * 1.5; }
 
