@@ -472,7 +472,7 @@ Contains summary information about a fleet and its 6 ships
 		}
 		
 		function ConsiderEquipment(itemData){
-			if(itemData.itemId === 0) return false;
+			if(itemData.itemId === 0 || itemData.masterId === 0) return false;
 			switch( itemData.master().api_type[2] ){
 				case  7: dive += itemData.master().api_saku; break;
 				case  8: torp += itemData.master().api_saku; break;
@@ -489,7 +489,8 @@ Contains summary information about a fleet and its 6 ships
 		var self = this;
 		Array.apply(null, {length: 6})
 			.map(Number.call, Number)
-			.forEach(function(x){ConsiderShip(self.ship(x));});
+			.forEach(function(x){
+				ConsiderShip(self.ship(x));});
 		
 		var total = ( dive * 1.0376255 )
 			+ ( torp * 1.3677954 )
