@@ -34,6 +34,53 @@
 		  }
 		  
 		 */
+
+		fleetsObjToDeckBuilder: function(fleetsObj) {
+			var dBuilder = {};
+			dBuilder.version = 3;
+
+			function convertShip(shipObj) {
+				var ship = {};
+				ship.id = shipObj.id;
+				ship.lv = shipObj.level;
+				ship.luck = shipObj.luck;
+				ship.items = {};
+
+				$.each([0,1,2,3,4], function(_,ind) {
+					var gearObj = shipObj.equipments[ind];
+					if (!gearObj) return;
+					var gear = {};
+					gear.id = gearObj.id;
+					
+					if (gearObj.ace && gearObj.ace > 0) {
+						gear.rf = gearObj.ace;
+					} else if (gearObj.improve) {
+						gear.rf = gearObj.improve;
+					}
+
+					var key = ind === 4 ? "ix" : "i"+(ind+1);
+					ship.items[key] = gear;
+				});
+				return ship;
+			}
+
+			function convertFleet(fleetObj) {
+				var fleet = {};
+				$.each([0,1,2,3,4,5], function(_,ind) {
+					var shipObj = fleetObj.ships[ind];
+					if (!shipObj) return;
+					fleet["s"+(ind+1)] = convertShip(shipObj);
+				});
+				return fleet;
+			}
+			
+			$.each([0,1,2,3], function(_,ind) {
+				var fleetObj = fleetsObj[ind];
+				if (fleetObj)
+					dBuilder["f"+(ind+1)] = convertFleet( fleetObj );
+			});
+			return dBuilder;
+		},
 		
 		/* INIT
 		   Prepares all data needed
@@ -103,6 +150,13 @@
 					self.deleteFleetsObj(name);
 					self.refreshSavedFleets();
 				}
+			});
+
+			$("button#control_export_dbuilder").on("click", function() {
+				var converted = self.fleetsObjToDeckBuilder( self.currentFleetsObj );
+				window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck="+
+							encodeURI( JSON.stringify( converted )));
+
 			});
 
 			this.refreshSavedFleets();
