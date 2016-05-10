@@ -35,6 +35,11 @@
 	color: red;
 	display: none;
 }
+
+.tab_fleet button:disabled {
+	color: #AAA;
+}
+
 /* FLEET BOX
 --------------------------------*/
 .tab_fleet .fleet_box {
