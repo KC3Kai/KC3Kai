@@ -708,6 +708,7 @@
 		$(".module.activity .battle_eformation").attr("title", "");
 		$(".module.activity .battle_eformation").css("-webkit-transform", "rotate(0deg)");
 		$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support.png");
+		$(".module.activity .battle_support").attr("title", KC3Meta.term("BattleSupportExped"));
 		$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci.png");
 		$(".module.activity .battle_aaci").attr("title", KC3Meta.term("BattleAntiAirCutIn"));
 		$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
@@ -1457,6 +1458,7 @@
 			if(!thisNode.startNight){
 				// If support expedition is triggered on this battle
 				$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support"+["-x",""][thisNode.supportFlag&1]+".png");
+				$(".module.activity .battle_support").attr("title", buildSupportAttackTooltip(thisNode));
 				
 				// If anti-air CI fire is triggered
 				if(!!thisNode.antiAirFire){
@@ -2339,6 +2341,24 @@
 			.append(KC3Meta.term("BattleContactVs"))
 			.append(!!eContactIcon ? eContactIcon : econtact);
 		return contactSpan;
+	}
+
+	function buildSupportAttackTooltip(thisNode) {
+		var supportTips = "";
+		if(thisNode.supportFlag && !!thisNode.supportInfo){
+			var fleetId = "";
+			var attackType = thisNode.supportInfo.api_support_flag;
+			if(attackType === 1){
+				var airatack = thisNode.supportInfo.api_support_airatack;
+				fleetId = airatack.api_deck_id;
+			} else if([2,3].indexOf(attackType) > -1){
+				var hourai = thisNode.supportInfo.api_support_hourai;
+				fleetId = hourai.api_deck_id;
+				// other info such as damage could be added
+			}
+			supportTips = KC3Meta.term("BattleSupportTips").format(fleetId, KC3Meta.support(attackType));
+		}
+		return supportTips || KC3Meta.term("BattleSupportExped");
 	}
 
 	function buildAntiAirCutinTooltip(thisNode) {
