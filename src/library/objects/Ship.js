@@ -333,6 +333,25 @@ KC3改 Ship Object
 		return items.length > 0 ? items[0] : {pos: -1, code: 0};
 	};
 
+	/* CALCULATE TRANSPORT POINT
+	Retrieve TP object related to the current ship
+	** TP Object Detail --
+	   value: known value that were calculated for
+	   clear: is the value already clear or not? it's a NaN like.
+	**
+	--------------------------------------------------------------*/
+	KC3Ship.prototype.obtainTP = function() {
+		var tp = KC3Meta.tpObtained();
+		if (!(this.didFlee || this.isTaiha())) {
+			var tp1,tp2,tp3;
+			tp1 = String(tp.add(KC3Meta.tpObtained({stype:this.master().api_stype})));
+			tp2 = String(tp.add(KC3Meta.tpObtained({slots:this.equipment().map(function(slot){return slot.masterId;})})));
+			tp3 = String(tp.add(KC3Meta.tpObtained({slots:[this.exItem().masterId]})));
+			//console.log(this.name(),this.rosterId,tp1,tp2,tp3);
+		}
+		return tp;
+	};
+
 	/* FIGHTER POWER
 	Get fighter power of this ship
 	--------------------------------------------------------------*/
