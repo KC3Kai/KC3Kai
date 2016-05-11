@@ -13,12 +13,22 @@ Contains summary information about a fleet and its 6 ships
 		this.ships = [ -1, -1, -1, -1, -1, -1 ];
 		this.mission = [ 0, 0, 0, 0 ];
 		this.akashi_tick = 0;
-		
+
+		// useful when making virtual fleet objects.
+		// requirements:
+		// * "ShipManager.get( shipId )" should get the intended ship
+		// * "shipId" is taken from "this.ships"
+		// * "shipId === -1" should always return a dummy ship
+		this.ShipManager = null;
+
 		if(!!data) {
 			$.extend(this,data);
 		}
 	};
 	
+	KC3Fleet.prototype.getShipManager = function() {
+		return this.ShipManager ? this.ShipManager : KC3ShipManager;
+	};
 	KC3Fleet.prototype.update = function( data ){
 		if(typeof data.api_member_id != "undefined"){
 			var
@@ -111,7 +121,7 @@ Contains summary information about a fleet and its 6 ships
 			case 'number':
 			case 'string':
 				/* Number/String => converted as fleet slot key */
-				return KC3ShipManager.get( this.ships[slot] );
+				return self.getShipManager().get( this.ships[slot] );
 			case 'undefined':
 				/* Undefined => returns whole fleet as ship object */
 				return Array.apply(null, {length: this.countShips()})
@@ -462,7 +472,7 @@ Contains summary information about a fleet and its 6 ships
 		}
 		
 		function ConsiderEquipment(itemData){
-			if(itemData.itemId === 0) return false;
+			if(itemData.itemId === 0 || itemData.masterId === 0) return false;
 			switch( itemData.master().api_type[2] ){
 				case  7: dive += itemData.master().api_saku; break;
 				case  8: torp += itemData.master().api_saku; break;
@@ -479,7 +489,8 @@ Contains summary information about a fleet and its 6 ships
 		var self = this;
 		Array.apply(null, {length: 6})
 			.map(Number.call, Number)
-			.forEach(function(x){ConsiderShip(self.ship(x));});
+			.forEach(function(x){
+				ConsiderShip(self.ship(x));});
 		
 		var total = ( dive * 1.0376255 )
 			+ ( torp * 1.3677954 )
@@ -621,5 +632,10 @@ Contains summary information about a fleet and its 6 ships
 			return {};
 		}
 	};
-	
+
+	KC3Fleet.prototype.minimized = function() {
+		var fleet = $.extend({},this);
+		delete fleet.ShipManager;
+		return fleet;
+	};
 })();
