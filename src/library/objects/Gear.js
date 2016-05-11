@@ -92,7 +92,7 @@ KC3改 Equipment Object
 		
 		// Check if this object is a fighter plane
 		if( [6,7,8,11,45].indexOf( this.master().api_type[2] ) > -1){
-			console.log("this.ace", this.ace);
+			// console.log("this.ace", this.ace);
 			
 			var typInd = String( this.master().api_type[2] );
 			if (typeof ConfigManager.air_bounds[typInd] == 'undefined') {
@@ -106,8 +106,8 @@ KC3改 Equipment Object
 				veteranBounds = airBoundTable[ this.ace ];
 			}
 			
-			console.log("ConfigManager.air_bounds",ConfigManager.air_bounds);
-			console.log("veteranBounds", veteranBounds);
+			// console.log("ConfigManager.air_bounds",ConfigManager.air_bounds);
+			// console.log("veteranBounds", veteranBounds);
 			return [
 				Math.floor( Math.sqrt(capacity) * this.master().api_tyku + veteranBounds[0] ),
 				Math.floor( Math.sqrt(capacity) * this.master().api_tyku + veteranBounds[1] ),
