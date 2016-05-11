@@ -1785,7 +1785,7 @@
 					var eSlot = thisPvP.eSlot[index];
 					if (!!eSlot && eSlot.length > 0) {
 						for(var slotIdx=0; slotIdx<Math.min(eSlot.length,4); slotIdx++) {
-							if(eSlot[slotIdx] > -1) tooltip += String.fromCharCode(13) + KC3Meta.gearName(KC3Master.slotitem(eSlot[slotIdx]).api_name);
+							if(eSlot[slotIdx] > -1) tooltip += "\n" + KC3Meta.gearName(KC3Master.slotitem(eSlot[slotIdx]).api_name);
 						}
 					}
 					
@@ -2350,12 +2350,12 @@
 					if(fireShipPos>=0 && fireShipPos<6){
 						var sentFleet = PlayerManager.fleets[KC3SortieManager.fleetSent-1];
 						var shipName = KC3ShipManager.get(sentFleet.ships[fireShipPos]).name();
-						aaciTips += (!!aaciTips ? String.fromCharCode(13) : "") + shipName;
+						aaciTips += (!!aaciTips ? "\n" : "") + shipName;
 					}
 					var itemList = fire.api_use_items;
 					if(!!itemList && itemList.length > 0){
 						for(var itemIdx=0; itemIdx<Math.min(itemList.length,4); itemIdx++) {
-							if(itemList[itemIdx] > -1) aaciTips += String.fromCharCode(13) + 
+							if(itemList[itemIdx] > -1) aaciTips += "\n" + 
 								KC3Meta.gearName(KC3Master.slotitem(itemList[itemIdx]).api_name);
 						}
 					}
