@@ -154,6 +154,7 @@
 
 			$("button#control_export_dbuilder").on("click", function() {
 				var converted = self.fleetsObjToDeckBuilder( self.currentFleetsObj );
+				console.log( JSON.stringify( converted ) );
 				window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck="+
 							encodeURI( JSON.stringify( converted )));
 
