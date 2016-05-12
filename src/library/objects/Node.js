@@ -225,13 +225,11 @@ Used by SortieManager
 	
 	KC3Node.prototype.defineAsTransport = function( nodeData ){
 		this.type = "transport";
-		this.amount = KC3SortieManager.getSortieFleet().map(function(fleetId){
-			return PlayerManager.fleets[fleetId].ship().filter(function(ship){
-				return !(ship.didFlee);
-			}).map(function(ship){
-				return ship.countDrums();
-			}).reduce(function(pre,cur){ return pre+cur; },0);
-		}).reduce(function(pre,cur){ return pre+cur; },0);
+		this.amount = Math.floor(KC3SortieManager.getSortieFleet().map(function(fleetId){
+			return PlayerManager.fleets[fleetId].ship().map(function(ship){
+				return ship.obtainTP();
+			}).reduce(function(pre,cur){ return pre.add(cur); },KC3Meta.tpObtained());
+		}).reduce(function(pre,cur){ return pre.add(cur); },KC3Meta.tpObtained()));
 		
 		return this;
 	};
@@ -256,6 +254,10 @@ Used by SortieManager
 		this.eSlot = battleData.api_eSlot;
 
 		this.supportFlag = (battleData.api_support_flag>0);
+		if(this.supportFlag){
+			this.supportInfo = battleData.api_support_info;
+			this.supportInfo.api_support_flag = battleData.api_support_flag;
+		}
 		this.yasenFlag = (battleData.api_midnight_flag>0);
 		
 		this.originalHPs = battleData.api_nowhps;

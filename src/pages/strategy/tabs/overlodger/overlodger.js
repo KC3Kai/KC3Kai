@@ -986,12 +986,14 @@
 					
 					// ASYNC == Fetch Available Data
 					(function AsyncFetch(thr){
-						var oldwholebuff = Object.keys(this.totalBuffer);
+						// totalBuffer is ordered by id desc
+						var latestItem = this.totalBuffer[0] || {};
 						// Fetch new buffer
 						KC3Database.get_lodger_data(
-							Range(oldwholebuff.slice(-1).shift() || 0,Infinity,0,1),
+							Range(latestItem.id || 0,Infinity,0,1),
 							function(newBuffer){
 								// Process here
+								var newTotalBuffer = [];
 								try {
 									for(var index in newBuffer) { // tested and faster than those forEach :joy:
 										var
@@ -1014,8 +1016,9 @@
 										//		bufferArray.push(newItem);
 										//});
 										givenAry.push(newItem);
-										(self.totalBuffer).push(newItem);
+										newTotalBuffer.push(newItem);
 									}
+									[].unshift.apply(self.totalBuffer,newTotalBuffer);
 								} catch (e) {
 									console.error(e.stack);
 								} finally {
@@ -1269,7 +1272,7 @@
 						$(".filterGroup",baseContext).trigger('refresh');
 						$(this).trigger('refresh');
 						time = Date.now() - time;
-						console.info("Refresh done in",time,"msec");
+						//console.info("Refresh done in",time,"msec");
 					});
 		},
 		
@@ -1590,7 +1593,7 @@
 				console.info("Milestone",i+1,"check after",Date.now() - t,"msec");
 			}
 		}
-		this.flatBuffer = Object.freeze(allBuffer.slice(0));
+		this.flatBuffer = Object.freeze(allBuffer.sort(function(x,y){return x.hour - y.hour;}).slice(0));
 		this.dataRating = calculateRating.apply(null,[lookupDays()].concat(allBuffer));
 		
 		return true;
