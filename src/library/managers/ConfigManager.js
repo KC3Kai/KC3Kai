@@ -196,6 +196,12 @@ Retreives when needed to apply on components
 			this.save();
 		},
 		
+		// Toggle Fighter Power
+		scrollFighterPowerMode :function(){
+			this.air_formula = (this.air_formula % 3) + 1;
+			this.save();
+		},
+		
 		// Toggle HQ Exp Information
 		scrollHQExpInfo :function(){
 			this.hqExpDetail = (this.hqExpDetail % 3) + 1;
