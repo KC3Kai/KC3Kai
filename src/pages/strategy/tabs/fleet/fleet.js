@@ -261,7 +261,7 @@
 			this.showAllKCFleets( this.loadCurrentFleets() );
 			$("#fleet_description").text("Current Fleets");
 			this.currentFleetsObj = this.getCurrentFleetsObj();
-			this.suggestedName = "Fleets (" + new Date().toString() + ")";
+			this.suggestedName = "Fleets (" + new Date().format("yyyy-mm-dd HH:MM:ss") + ")";
 		},
 
 		showSavedFleets: function(name) {

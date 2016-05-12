@@ -185,11 +185,9 @@
 				shipList.append( shipEntity );
 			});
 
-			// Auto fit height of screen
-			var innerHeight = Math.max(480, window.innerHeight) - (
-				$("#content").position().top+$(".page_title").position().top+$(".page_title").height()+$(".page_padding").position().top+20
-			);
-			if(innerHeight>0){
+			// Try to auto fit the height of window
+			var innerHeight = Math.max(480, window.innerHeight) - 60;
+			if(innerHeight>400){
 				$(".tab_quotes .ship_list").css("height", innerHeight+"px");
 				$(".tab_quotes .part_right").css("height", innerHeight+"px");
 				$(".tab_quotes .voice_list").css("height", (innerHeight-32)+"px");

@@ -41,6 +41,16 @@
 		execute :function(){
 			var self = this;
 			
+			// First time hints can be dismissed
+			if(!ConfigManager.dismissed_hints.homepage_hints){
+				$(".homepage_hints").show();
+				$(".homepage_hints").on("click", function(e){
+					ConfigManager.dismissed_hints.homepage_hints = true;
+					ConfigManager.save();
+					$(".homepage_hints").fadeOut();
+				});
+			}
+			
 			// Show player information
 			$(".hq_id .hq_content").html(PlayerManager.hq.id);
 			$(".hq_name .hq_content").html(PlayerManager.hq.name);

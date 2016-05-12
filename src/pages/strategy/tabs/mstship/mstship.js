@@ -150,23 +150,22 @@
 			});
 			
 			// CG Notice can be dismissed
-			if(!ConfigManager.dismissed_cg_notice){
+			if(!ConfigManager.dismissed_hints.cg_notice){
 				$(".cg_notes").show();
 				$(".cg_notes").on("click", function(e){
-					var cgNoticeProp = "dismissed_cg_notice";
-					ConfigManager[cgNoticeProp] = true;
+					ConfigManager.dismissed_hints.cg_notice = true;
 					ConfigManager.save();
 					$(".cg_notes").fadeOut();
 				});
 			}
-
+			
 			// Link to quotes developer page
 			if(ConfigManager.devOnlyPages){
 				$(".tab_mstship .shipInfo").on("click", ".to-quotes", function(e){
 					KC3StrategyTabs.gotoTab("quotes", self.currentShipId);
 				});
 			}
-
+			
 			// Salt-toggle
 			$(".tab_mstship .shipInfo").on("click", ".salty-zone", function(e){
 				var
