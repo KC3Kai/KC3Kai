@@ -259,6 +259,12 @@
 			$(".summary-eqlos .summary_text").text( Math.round(((selectedFleet < 5) ? PlayerManager.fleets[selectedFleet-1].eLoS() : PlayerManager.fleets[0].eLoS()+PlayerManager.fleets[1].eLoS()) * 100) / 100 );
 		}).addClass("hover");
 		
+		// Fighter Power Toggle
+		$(".summary-airfp").on("click",function(){
+			ConfigManager.scrollFighterPowerMode();
+			$(".summary-airfp .summary_text").text( (selectedFleet < 5) ? PlayerManager.fleets[selectedFleet-1].fighterPowerText() : PlayerManager.fleets[0].fighterPowerText() );
+		}).addClass("hover");
+		
 		// Timer Type Toggle
 		$(".status_docking,.status_akashi").on("click",function(){
 			ConfigManager.scrollTimerType();
@@ -807,7 +813,7 @@
 				FleetSummary = {
 					lv: MainFleet.totalLevel() + EscortFleet.totalLevel(),
 					elos: Math.qckInt(null,MainFleet.eLoS()+EscortFleet.eLoS(),2),
-					air: Math.qckInt(null,MainFleet.fighterPower() + EscortFleet.fighterPower(),2),
+					air: MainFleet.fighterPowerText(),
 					speed:
 						(MainFleet.fastFleet && EscortFleet.fastFleet)
 						? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow"),
