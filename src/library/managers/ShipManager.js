@@ -219,15 +219,7 @@ Saves and loads list to and from localStorage
 		},
 
 		encoded: function() {
-			var shiplistMinimized = {};
-			$.each(this.list, function(k,v) {
-				if (v instanceof KC3Ship) {
-					shiplistMinimized[k] = v.minimized();
-				} else {
-					shiplistMinimized[k] = v;
-				}
-			});
-			return JSON.stringify(shiplistMinimized);
+			return JSON.stringify(this.list);
 		},
 		
 		// Save ship list onto local storage
