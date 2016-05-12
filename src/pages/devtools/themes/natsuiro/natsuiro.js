@@ -1310,11 +1310,18 @@
 				// Resource node
 				case "resource":
 					$(".module.activity .sortie_node_"+numNodes).addClass("nc_resource");
-					$(".module.activity .node_type_resource").removeClass("node_type_maelstrom");
-					$(".module.activity .node_type_resource .node_res_icon img").attr("src",
-						thisNode.icon("../../../../assets/img/client/"));
-					$(".module.activity .node_type_resource .node_res_text").text( thisNode.amount );
-					$(".module.activity .node_type_resource").show();
+					var resBoxDiv = $(".module.activity .node_type_resource");
+					resBoxDiv.removeClass("node_type_maelstrom");
+					resBoxDiv.children().remove();
+					$.each(thisNode.icon, function(i, icon){
+						var iconDiv = $('<div class="node_res_icon"><img/></div>');
+						var textDiv = $('<div class="node_res_text"></div>');
+						resBoxDiv.append(iconDiv).append(textDiv);
+						$("img", iconDiv).attr("src", icon("../../../../assets/img/client/"));
+						textDiv.text( thisNode.amount[i] );
+					});
+					resBoxDiv.append($('<div class="clear"></div>'));
+					resBoxDiv.show();
 					break;
 					
 				// Bounty node on 1-6
