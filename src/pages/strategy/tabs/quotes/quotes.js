@@ -198,6 +198,13 @@
 			}else{
 				this.showVoiceDetail();
 			}
+
+			// Scroll list top to selected ship
+			setTimeout(function(){
+				var listItem = $(".ship_list .ship_entity#{0}".format($(".ship_info .ship_name").data("id")));
+				var scrollTop = listItem.length === 1 ? listItem.offset().top - $(".ship_list").offset().top : 0;
+				$(".ship_list").scrollTop(scrollTop);
+			}, 200);
 		}
 	};
 })();

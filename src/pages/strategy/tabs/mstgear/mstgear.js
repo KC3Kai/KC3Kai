@@ -27,7 +27,7 @@
 			var gearBox;
 			$.each(KC3Master.all_slotitems(), function(index, GearData){
 				gearBox = $(".tab_mstgear .factory .gearRecord").clone();
-				gearBox.data("id", GearData.api_id);
+				gearBox.attr("data-id", GearData.api_id);
 				$(".gearIcon img", gearBox).attr("src", "../../../../assets/img/items/"+GearData.api_type[3]+".png" );
 				$(".gearName", gearBox).text( "[" + GearData.api_id + "] " + KC3Meta.gearName(GearData.api_name) );
 				gearBox.appendTo(".tab_mstgear .gearRecords");
@@ -48,6 +48,13 @@
 			}else{
 				this.showGear();
 			}
+			
+			// Scroll list top to selected one
+			setTimeout(function(){
+				var listItem = $(".tab_mstgear .gearRecords .gearRecord[data-id={0}]".format(self.currentGearId));
+				var scrollTop = listItem.length === 1 ? listItem.offset().top - $(".tab_mstgear .gearRecords").offset().top : 0;
+				$(".tab_mstgear .gearRecords").scrollTop(scrollTop);
+			}, 200);
 		},
 		
 		
