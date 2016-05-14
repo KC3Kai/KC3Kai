@@ -96,6 +96,8 @@
 		Prepares latest fleets data
 		---------------------------------*/
 		reload :function(){
+			// Latest user config (for eLoS & FPow)
+			ConfigManager.load();
 			// Latest data for current fleet (ships & gears)
 			KC3ShipManager.load();
 			KC3GearManager.load();
@@ -398,6 +400,7 @@
 
 			$(".ship_type", shipBox).text( kcShip.stype() );
 			$(".ship_pic img", shipBox).attr("src", KC3Meta.shipIcon( kcShip.masterId ) );
+			// TODO Link to ship list instead of ship library
 			$(".ship_pic img", shipBox).attr("title", kcShip.rosterId );
 			$(".ship_pic img", shipBox).attr("alt", kcShip.masterId );
 			$(".ship_pic img", shipBox).click(function(){
