@@ -415,6 +415,21 @@ Previously known as "Reactor"
 		
 		/* Fleet Presets
 		-------------------------------------------------------*/
+		// List Presets
+		"api_get_member/preset_deck":function(params, response, headers){
+			console.log("LIST PRESETS", response.api_data.api_deck);
+		},
+		
+		// Register preset
+		"api_req_hensei/preset_register":function(params, response, headers){
+			console.log("REGISTERED PRESET", response.api_data.api_preset_no, response.api_data);
+		},
+		
+		// Remove Preset from list
+		"api_req_hensei/preset_delete":function(params, response, headers){
+			console.log("DELETED PRESET", params.api_preset_no);
+		},
+		
 		// Use a Preset
 		"api_req_hensei/preset_select":function(params, response, headers){
 			var deckId = parseInt(params.api_deck_id, 10);
