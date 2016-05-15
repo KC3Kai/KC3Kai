@@ -12,6 +12,13 @@
 		Prepares all data needed
 		---------------------------------*/
 		init :function(){
+
+		},
+
+		/* RELOAD
+		Prepares latest quests data
+		---------------------------------*/
+		reload :function(){
 			KC3QuestManager.load();
 		},
 		

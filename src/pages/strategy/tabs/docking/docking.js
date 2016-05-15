@@ -13,17 +13,16 @@
 		isLoading: false,
 
 		/* INIT
-		   Prepares all data needed
+		   Prepares static data needed
 		   ---------------------------------*/
 		init :function(){
 		},
 
-		/* EXECUTE
-		   Places data onto the interface
+		/* RELOAD
+		   Prepares reloadable data
 		   ---------------------------------*/
-		execute :function(){
+		reload :function(){
 			PlayerManager.loadFleets();
-
 			// in order to get more up-to-date info
 			// we need to refresh the Ship Manager
 			KC3ShipManager.load();
@@ -55,6 +54,14 @@
 				};
 				this.shipCache.push(ThisShipData);
 			}
+		},
+
+		/* EXECUTE
+		   Places data onto the interface
+		   ---------------------------------*/
+		execute :function(){
+			// Get latest data even clicking on tab
+			this.reload();
 			this.shipList = $(".tab_docking .ship_list");
 			this.showFilters();
 		},
@@ -108,6 +115,10 @@
 
 			var self = this;
 			this.startTime = (new Date()).getTime();
+
+			var shipClickFunc = function(e){
+				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
+			};
 
 			// Clear list
 			this.shipList.html("").hide();
@@ -210,6 +221,8 @@
 
 					$(".ship_id", cElm).text( cShip.id );
 					$(".ship_img .ship_icon", cElm).attr("src", KC3Meta.shipIcon(cShip.bid));
+					$(".ship_img .ship_icon", cElm).attr("alt", cShip.bid);
+					$(".ship_img .ship_icon", cElm).click(shipClickFunc);
 					$(".ship_name", cElm).text( cShip.english );
 					$(".ship_type", cElm).text( KC3Meta.stype(cShip.stype) );
 					var shipLevelConv = shipLevel;
@@ -269,11 +282,15 @@
 			if(gear_id > -1){
 				var gear = KC3GearManager.get(gear_id);
 				if(gear.itemId<=0){ element.hide(); return; }
+				var gearClickFunc = function(e){
+					KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
+				};
 
-				var masterGear = KC3Master.slotitem(gear.api_slotitem_id);
 				$("img",element)
 					.attr("src", "../../assets/img/items/" + gear.master().api_type[3] + ".png")
-					.attr("title", gear.name());
+					.attr("title", gear.name())
+					.attr("alt", gear.master().api_id);
+				$("img",element).click(gearClickFunc);
 				$("span",element).css('visibility','hidden');
 			} else {
 				$("img",element).hide();

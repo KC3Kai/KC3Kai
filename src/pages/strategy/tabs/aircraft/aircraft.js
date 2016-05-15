@@ -12,10 +12,23 @@
 		_slotNums: {},
 		
 		/* INIT
-		Prepares all data needed
+		Prepares static data needed
 		---------------------------------*/
 		init :function(){
+
+		},
+
+		/* RELOAD
+		Prepares latest player data
+		---------------------------------*/
+		reload :function(){
 			var self = this;
+			this._items = {};
+			this._holders = {};
+			this._slotNums = {};
+
+			KC3ShipManager.load();
+			KC3GearManager.load();
 			
 			// Get squad names
 			if(typeof localStorage.planes == "undefined"){ localStorage.planes = "{}"; }
@@ -136,9 +149,7 @@
 			var self = this;
 			
 			$(".tab_aircraft .item_type").on("click", function(){
-				$(".tab_aircraft .item_type").removeClass("active");
-				$(this).addClass("active");
-				self.showType($(this).data("type"));
+				KC3StrategyTabs.gotoTab(null, $(this).data("type"));
 			});
 			
 			$(".tab_aircraft .item_list").on("change", ".instance_name input", function(){
@@ -146,20 +157,31 @@
 				localStorage.planes = JSON.stringify(self.squadNames);
 			});
 			
-			$(".tab_aircraft .item_type").first().trigger("click");
+			if(!!KC3StrategyTabs.pageParams[1]){
+				this.showType(KC3StrategyTabs.pageParams[1]);
+			} else {
+				this.showType($(".tab_aircraft .item_type").first().data("type"));
+			}
 		},
 		
 		/* Show slotitem type
 		--------------------------------------------*/
 		showType :function(type_id){
+			$(".tab_aircraft .item_type").removeClass("active");
+			$(".tab_aircraft .item_type[data-type={0}]".format(type_id)).addClass("active");
 			$(".tab_aircraft .item_list").html("");
 			
 			var ctr, ThisType, ItemElem, ThisSlotitem;
+			var gearClickFunc = function(e){
+				KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
+			};
 			for(ctr in this._items["t"+type_id]){
 				ThisSlotitem = this._items["t"+type_id][ctr];
 				
 				ItemElem = $(".tab_aircraft .factory .slotitem").clone().appendTo(".tab_aircraft .item_list");
 				$(".icon img", ItemElem).attr("src", "../../assets/img/items/"+type_id+".png");
+				$(".icon img", ItemElem).attr("alt", ThisSlotitem.id);
+				$(".icon img", ItemElem).click(gearClickFunc);
 				$(".english", ItemElem).text(ThisSlotitem.english);
 				$(".japanese", ItemElem).text(ThisSlotitem.japanese);
 				

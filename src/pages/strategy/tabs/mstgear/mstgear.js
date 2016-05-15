@@ -6,6 +6,7 @@
 	KC3StrategyTabs.mstgear.definition = {
 		tabSelf: KC3StrategyTabs.mstgear,
 		
+		currentGearId: 0,
 		server_ip: "",
 		
 		/* INIT
@@ -26,7 +27,7 @@
 			var gearBox;
 			$.each(KC3Master.all_slotitems(), function(index, GearData){
 				gearBox = $(".tab_mstgear .factory .gearRecord").clone();
-				gearBox.data("id", GearData.api_id);
+				gearBox.attr("data-id", GearData.api_id);
 				$(".gearIcon img", gearBox).attr("src", "../../../../assets/img/items/"+GearData.api_type[3]+".png" );
 				$(".gearName", gearBox).text( "[" + GearData.api_id + "] " + KC3Meta.gearName(GearData.api_name) );
 				gearBox.appendTo(".tab_mstgear .gearRecords");
@@ -34,22 +35,35 @@
 			
 			// Select equipment
 			$(".tab_mstgear .gearRecords .gearRecord").on("click", function(){
-				self.showGear( $(this).data("id") );
+				var gid = $(this).data("id");
+				if( gid != self.currentGearId ){
+					KC3StrategyTabs.gotoTab(null, gid);
+					//self.showGear( $(this).data("id") );
+				}
 			});
 			
 			// Default selected if not direct linked
 			if(!!KC3StrategyTabs.pageParams[1]){
 				this.showGear(KC3StrategyTabs.pageParams[1]);
 			}else{
-				this.showGear(124);
+				this.showGear();
 			}
+			
+			// Scroll list top to selected one
+			setTimeout(function(){
+				var listItem = $(".tab_mstgear .gearRecords .gearRecord[data-id={0}]".format(self.currentGearId));
+				var scrollTop = listItem.length === 1 ? listItem.offset().top - $(".tab_mstgear .gearRecords").offset().top : 0;
+				$(".tab_mstgear .gearRecords").scrollTop(scrollTop);
+			}, 200);
 		},
 		
 		
 		showGear :function(gear_id){
+			gear_id = Number(gear_id||"124");
 			var self = this;
 			var gearData = KC3Master.slotitem( gear_id );
-			console.log(gearData);
+			console.debug("gearData", gearData);
+			self.currentGearId = gear_id;
 			
 			if(gear_id<=500){
 				var gearHost = "http://"+this.server_ip+"/kcs/resources/image/slotitem/";

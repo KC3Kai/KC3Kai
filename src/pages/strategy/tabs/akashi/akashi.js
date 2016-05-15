@@ -12,15 +12,22 @@
 		instances: {},
 		
 		/* INIT
-		Prepares all data needed
+		Prepares static data needed
 		---------------------------------*/
 		init :function(){
-			var self = this;
-			
 			// Get upgrade data
 			var akashiData = $.ajax('../../data/akashi.json', { async: false }).responseText;
 			this.upgrades = JSON.parse(akashiData);
 			console.log(this.upgrades);
+		},
+
+		/* RELOAD
+		Prepares latest player data
+		---------------------------------*/
+		reload :function(){
+			var self = this;
+			KC3ShipManager.load();
+			KC3GearManager.load();
 			
 			// Get API IDs of all player ships
 			$.each(KC3ShipManager.list, function(index, ThisShip){
@@ -71,6 +78,12 @@
 			var ThisBox, MasterItem, ItemName;
 			var hasShip, hasGear, ctr;
 			var ShipBox, ShipId;
+			var shipClickFunc = function(e){
+				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
+			};
+			var gearClickFunc = function(e){
+				KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
+			};
 			
 			$.each(this.today, function(itemId, shipList){
 				MasterItem = KC3Master.slotitem(itemId);
@@ -79,6 +92,8 @@
 				ThisBox = $(".tab_akashi .factory .equipment").clone().appendTo(".equipment_list");
 				
 				$(".eq_icon img", ThisBox).attr("src", "../../assets/img/items/"+MasterItem.api_type[3]+".png");
+				$(".eq_icon img", ThisBox).attr("alt", MasterItem.api_id);
+				$(".eq_icon img", ThisBox).click(gearClickFunc);
 				
 				$(".eq_icon", ThisBox).attr("title", ItemName );
 				$(".eq_name", ThisBox).text( ItemName );
@@ -96,6 +111,8 @@
 					// Add to ship list
 					ShipBox = $(".tab_akashi .factory .eq_ship").clone();
 					$(".eq_ship_icon img", ShipBox).attr("src", KC3Meta.shipIcon(ShipId) );
+					$(".eq_ship_icon img", ShipBox).attr("alt", ShipId );
+					$(".eq_ship_icon img", ShipBox).click(shipClickFunc);
 					$(".eq_ship_name", ShipBox).text( KC3Meta.shipName( KC3Master.ship(ShipId).api_name ) );
 					$(".eq_ships", ThisBox).append(ShipBox);
 				}

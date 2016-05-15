@@ -31,10 +31,8 @@
 		WhoCallsTheFleetDb.init("../../");
 		
 		if(!KC3Master.available){
-			$("#error").text("Unable to load Strategy Room. Please open the game first so we can get data. Also make sure when you play, that you open the F12 devtools panel first before the Game Start button.");
+			$("#error").text("Strategy Room is not ready. Please open the game once so we can get data. Also make sure following the instructions, that open the F12 devtools panel first before the Game Player shown.");
 			$("#error").show();
-			$("#menu .submenu").hide();
-			return false;
 		}
 		
 		// show dev-only pages conditionally
@@ -44,32 +42,17 @@
 
 		// Click a menu item
 		$("#menu .submenu ul.menulist li").on("click", function(){
-			// If loading another page, stop
-			if($(this).hasClass("disabled")){ return false; }
-			if(KC3StrategyTabs.loading){ return false; }
-			KC3StrategyTabs.loading = $(this).data("id");
-			
-			// Google Analytics
-			_gaq.push(['_trackEvent', "Strategy Room: "+KC3StrategyTabs.loading, 'clicked']);
-			
-			// Interface
-			$("#menu .submenu ul.menulist li").removeClass("active");
-			$(this).addClass("active");
-			$("#contentHtml").hide();
-			$("#contentHtml").html("");
-			window.location.hash = KC3StrategyTabs.loading;
-			
-			// Tab definition execution
-			var thisTab = KC3StrategyTabs[ KC3StrategyTabs.loading ];
-			if(typeof thisTab != "undefined"){
-				// Execute Tab with callback
-				window.activeTab = thisTab;
-				thisTab.apply();
-				window.scrollTo(0,0);
-			}else{
-				KC3StrategyTabs.loading = false;
-				console.log("Clicked "+$(this).data("id")+" menu with no bound actions");
-			}
+			// Google Analytics just for click event
+			var gaEvent = "Strategy Room: " + $(this).data("id");
+			_gaq.push(['_trackEvent', gaEvent, 'clicked']);
+
+			KC3StrategyTabs.reloadTab(this);
+		});
+
+		// Refresh current tab and force data reloading
+		$(".logo").on("click", function(){
+			console.debug("Reloading current tab [", KC3StrategyTabs.pageParams[0], "] on demand");
+			KC3StrategyTabs.reloadTab(undefined, true);
 		});
 		
 		$("#contentHtml").on("click", ".page_help_btn", function(){
@@ -80,6 +63,9 @@
 			}
 		});
 		
+		// Add listener to react on URL hash changed
+		window.addEventListener('popstate', KC3StrategyTabs.onpopstate);
+
 		// If there is a hash tag on URL, set it as initial selected
 		KC3StrategyTabs.pageParams = window.location.hash.substring(1).split("-");
 		if(KC3StrategyTabs.pageParams[0] !== ""){
@@ -92,4 +78,64 @@
 		
 	});
 	
+	KC3StrategyTabs.gotoTab = function(tab, hashParams) {
+		var newHash = (tab || KC3StrategyTabs.pageParams[0]);
+		if(!!hashParams) {
+			var params = hashParams;
+			if(arguments.length > 2 && hashParams.constructor !== Array) {
+				params = $.makeArray(arguments).slice(1);
+			}
+			if (params.constructor !== Array) {
+				params = [ params ];
+			}
+			// encodeURIComponent may be needed
+			newHash += "-"+params.join("-");
+		}
+		window.location.hash = newHash;
+	};
+
+	KC3StrategyTabs.reloadTab = function(tab, reloadData) {
+		var tabElement = typeof tab;
+		KC3StrategyTabs.pageParams = (tabElement=="string" ? tab : window.location.hash).substring(1).split("-");
+		if(tabElement != "object") {
+			var tabId = KC3StrategyTabs.pageParams[0] || "profile";
+			tab = $("#menu .submenu ul.menulist li[data-id="+tabId+"]");
+		}
+		// If loading another page, stop
+		if($(tab).hasClass("disabled")){ return false; }
+		if(KC3StrategyTabs.loading){ return false; }
+		KC3StrategyTabs.loading = $(tab).data("id");
+
+		// Interface
+		$("#menu .submenu ul.menulist li").removeClass("active");
+		$(tab).addClass("active");
+		$("#contentHtml").hide();
+		$("#contentHtml").html("");
+		if(KC3StrategyTabs.loading != KC3StrategyTabs.pageParams[0]) {
+			window.location.hash = KC3StrategyTabs.loading;
+			KC3StrategyTabs.pageParams = [KC3StrategyTabs.loading];
+		}
+
+		// Tab definition execution
+		var thisTab = KC3StrategyTabs[ KC3StrategyTabs.loading ];
+		if(typeof thisTab != "undefined"){
+			// Execute Tab with callback
+			window.activeTab = thisTab;
+			thisTab.apply(reloadData);
+			window.scrollTo(0,0);
+		}else{
+			console.info("Clicked ", KC3StrategyTabs.loading, "menu with no bound actions");
+			KC3StrategyTabs.loading = false;
+		}
+	};
+
+	KC3StrategyTabs.onpopstate = function(event){
+		var newHash = window.location.hash.substring(1);
+		var oldHash = KC3StrategyTabs.pageParams.join("-");
+		if(!!newHash && !KC3StrategyTabs.loading && newHash !== oldHash){
+			console.debug("Auto reloading from [", oldHash, "] to [", newHash, "]");
+			KC3StrategyTabs.reloadTab();
+		}
+	};
+
 })();

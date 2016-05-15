@@ -21,6 +21,7 @@
 		// Show estimated time until next update
 		$.ajax({
 			dataType: "json",
+			async: true,
 			url: "https://raw.githubusercontent.com/KC3Kai/KC3Kai/master/update?v="+(Date.now()),
 			success: function(data, textStatus, request){
 				if (!!data.pr) {

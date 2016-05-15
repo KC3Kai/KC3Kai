@@ -253,7 +253,6 @@ Xxxxxxx
 		updateMvps :function(mvps){
 			if(!!mvps && mvps.length > 0){
 				if(PlayerManager.combinedFleet){
-					// FIXME real combined fleet mvp data needed
 					var mvpIndex1 = mvps[0] || mvps[1] || -1,
 						mvpIndex2 = mvps[1] || mvps[0] || -1,
 						ships1 = PlayerManager.fleets[0].ships,

@@ -87,7 +87,8 @@ Retreives when needed to apply on components
 				wish_list 		: new KC3ShipMasterList(),
 				lock_list 		: new KC3ShipRosterList(),
 				lock_prep 		: [],
-
+				dismissed_hints	: {},
+				
 				ss_mode				: 0,
 				ss_type				: 'JPG',
 				ss_directory 		: 'KanColle',

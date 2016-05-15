@@ -52,7 +52,13 @@
 		KC3Translation.execute();
 	};
 	
-	KC3StrategyTab.prototype.apply = function(){
+	/**
+	 * Terms of callback function definitions:
+	 *   "init": Invoked for the first time tab initialzing, only once (for once browser refresh).
+	 *   "reload": Invoked when data loading required, optional once, may many times on demand.
+	 *   "execute": Invoked for rendering HTML content for each time tab is shown.
+	 */
+	KC3StrategyTab.prototype.apply = function(forceReload){
 		this.error = false;
 		this.errorMessage = "";
 			
@@ -61,8 +67,14 @@
 			if(!self.initDone){
 				self.initDone = true;
 				self.definition.init();
+				if(!!self.definition.reload){
+					self.definition.reload();
+				}
 			}
 			if(!self.error){
+				if(!!forceReload && !!self.definition.reload){
+					self.definition.reload();
+				}
 				self.show();
 				self.definition.execute();
 			}else{

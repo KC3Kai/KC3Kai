@@ -20,16 +20,20 @@
 		sorterDescCtrl: null,
 
 		/* INIT
-		Prepares all data needed
+		Prepares static data needed
 		---------------------------------*/
 		init :function(){
 			this.prepareSorters();
 		},
 
-		reloadShipList: function() {
+		/* RELOAD
+		Prepares latest ships data
+		---------------------------------*/
+		reload :function(){
 			// Cache ship info
 			PlayerManager.loadFleets();
 			KC3ShipManager.load();
+			KC3GearManager.load();
 			this.shipCache = [];
 			var ctr, ThisShip, ThisShipData;
 			for(ctr in KC3ShipManager.list){
@@ -189,15 +193,14 @@
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
-			this.reloadShipList();
 			// now we need to do this before preparing filters
 			// Ship types
 			var sCtr, cElm;
 
 			for(sCtr in KC3Meta._stype){
-				if(KC3Meta._stype[sCtr]){
-					cElm = $(".tab_ships .factory .ship_filter_type").clone()
-						.appendTo(".tab_ships .filters .ship_types");
+				// stype 1, 15 not used by shipgirl
+				if(KC3Meta._stype[sCtr] && ["1", "15"].indexOf(sCtr) < 0){
+					cElm = $(".tab_ships .factory .ship_filter_type").clone().appendTo(".tab_ships .filters .ship_types");
 					cElm.data("id", sCtr);
 					$(".filter_name", cElm).text(KC3Meta.stype(sCtr));
 				}
@@ -419,6 +422,7 @@
 			var stypes = Object
 				.keys(KC3Meta._stype)
 				.map(function(x) { return parseInt(x,10); })
+				.filter(function(x) { return [1,15].indexOf(x)<0; })
 				.sort(function(a,b) { return a-b; });
 			console.assert(stypes[0] === 0);
 			// remove initial "0", which is invalid
@@ -654,9 +658,11 @@
 					cElm = $(".tab_ships .factory .ship_item").clone().appendTo(self.shipList);
 					cShip.view = cElm;
 					if(shipCtr%2 === 0){ cElm.addClass("even"); }else{ cElm.addClass("odd"); }
-					
+
 					$(".ship_id", cElm).text( cShip.id );
 					$(".ship_img .ship_icon", cElm).attr("src", KC3Meta.shipIcon(cShip.bid));
+					$(".ship_img .ship_icon", cElm).attr("alt", cShip.bid);
+					$(".ship_img .ship_icon", cElm).click(self.shipClickFunc);
 					$(".ship_name", cElm).text( cShip.english );
 					if(shipLevel >= 100) {
 						$(".ship_name", cElm).addClass("ship_kekkon-color");
@@ -710,6 +716,14 @@
 			},100);
 		},
 		
+		shipClickFunc: function(e){
+			KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
+		},
+
+		gearClickFunc: function(e){
+			KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
+		},
+
 		/* Compute Derived Stats without Equipment
 		--------------------------------------------*/
 		getDerivedStatNaked :function(StatName, EquippedValue, Items){
@@ -740,10 +754,11 @@
 				var gear = KC3GearManager.get(gear_id);
 				if(gear.itemId<=0){ element.hide(); return; }
 
-				var masterGear = KC3Master.slotitem(gear.api_slotitem_id);
 				$("img",element)
 					.attr("src", "../../assets/img/items/" + gear.master().api_type[3] + ".png")
-					.attr("title", gear.name());
+					.attr("title", gear.name())
+					.attr("alt", gear.master().api_id);
+				$("img",element).click(this.gearClickFunc);
 				$("span",element).css('visibility','hidden');
 			} else {
 				$("img",element).hide();
