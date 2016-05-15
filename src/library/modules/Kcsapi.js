@@ -415,29 +415,6 @@ Previously known as "Reactor"
 		
 		/* Fleet Presets
 		-------------------------------------------------------*/
-		
-		// List Presets
-		"api_get_member/preset_deck":function(params, response, headers){
-			localStorage.presets = JSON.stringify(response.api_data.api_deck);
-			console.log("LIST PRESETS", response.api_data.api_deck, localStorage.presets);
-		},
-		
-		// Register preset
-		"api_req_hensei/preset_register":function(params, response, headers){
-			var MyPresets = JSON.parse(localStorage.presets);
-			MyPresets[response.api_data.api_preset_no] = response.api_data;
-			localStorage.presets = JSON.stringify(MyPresets);
-			console.log("REGISTERED PRESET", MyPresets, localStorage.presets);
-		},
-		
-		// Remove Preset from list
-		"api_req_hensei/preset_delete":function(params, response, headers){
-			var MyPresets = JSON.parse(localStorage.presets);
-			delete MyPresets[params.api_preset_no];
-			localStorage.presets = JSON.stringify(MyPresets);
-			console.log("DELETED PRESET", MyPresets, localStorage.presets);
-		},
-		
 		// Use a Preset
 		"api_req_hensei/preset_select":function(params, response, headers){
 			var deckId = parseInt(params.api_deck_id, 10);
