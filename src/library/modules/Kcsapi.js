@@ -1607,6 +1607,7 @@ Previously known as "Reactor"
 			PlayerManager.consumables.torch = response.api_data.api_after_material[4];
 			KC3QuestManager.get(619).increment();
 			KC3Network.trigger("Consumables");
+			KC3Network.trigger("GearSlots");
 			KC3Network.trigger("Quests");
 		},
 		
