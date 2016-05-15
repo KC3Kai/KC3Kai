@@ -479,7 +479,7 @@ Previously known as "Reactor"
 		/* Update fleet name
 		-------------------------------------------------------*/
 		"api_req_member/updatedeckname":function(params, response, headers){
-			PlayerManager.fleets[params.api_deck_id-1].name = params.api_name;
+			PlayerManager.fleets[params.api_deck_id-1].name = decodeURIComponent(params.api_name);
 			localStorage.fleets = JSON.stringify(PlayerManager.fleets);
 		},
 		
