@@ -475,43 +475,7 @@ Used by SortieManager
 		
 		// Record encoutners only if on sortie
 		if(KC3SortieManager.onSortie > 0) {
-			// Validate values
-			if(KC3SortieManager.map_world < 1){ return true; }
-			if(KC3SortieManager.map_num < 1){ return true; }
-			
-			// Save the enemy encounter
-			var ed = {
-				world: KC3SortieManager.map_world,
-				map: KC3SortieManager.map_num,
-				diff: KC3SortieManager.map_difficulty,
-				node: this.id,
-				form: this.eformation,
-				ke: JSON.stringify(this.eships)
-			};
-			ed.uniqid = [ed.world,ed.map,ed.diff,ed.node,ed.form,ed.ke]
-				.filter(function(v){return !!v;}).join("/");
-			KC3Database.Encounter(ed, true);
-			this.enemyEncounter = ed;
-			
-			// Save enemy info
-			for(i = 0; i < 6; i++) {
-				var enemyId = this.eships[i] || -1;
-				// Only record ships with ID more than 500 coz abyss only
-				if (enemyId > 500) {
-					KC3Database.Enemy({
-						id: enemyId,
-						hp: this.battleDay.api_maxhps[i+7],
-						fp: this.battleDay.api_eParam[i][0],
-						tp: this.battleDay.api_eParam[i][1],
-						aa: this.battleDay.api_eParam[i][2],
-						ar: this.battleDay.api_eParam[i][3],
-						eq1: this.battleDay.api_eSlot[i][0],
-						eq2: this.battleDay.api_eSlot[i][1],
-						eq3: this.battleDay.api_eSlot[i][2],
-						eq4: this.battleDay.api_eSlot[i][3]
-					});
-				}
-			}
+			this.saveEnemyEncounterInfo(this.battleDay);
 		}
 	};
 	
@@ -600,9 +564,15 @@ Used by SortieManager
 			this.predictedRankNight = KC3Node.predictRank( beginHPs, endHPs );
 			// console.debug("Rank Predict (Night):", this.predictedRankNight);
 		}
-		if(this.gaugeDamage > -1)
+		if(this.gaugeDamage > -1){
 			this.gaugeDamage = this.gaugeDamage + 
 				Math.min(nightData.api_nowhps[7],nightData.api_nowhps[7] - this.enemyHP[0].hp);
+		}
+		
+		// Record encoutners only if on sortie and starts from night
+		if(this.startNight && KC3SortieManager.onSortie > 0) {
+			this.saveEnemyEncounterInfo(this.battleNight);
+		}
 	};
 	
 	KC3Node.prototype.night = function( nightData ){
@@ -841,9 +811,8 @@ Used by SortieManager
 			
 			// Save enemy deck name for encounter
 			var name = resultData.api_enemy_info.api_deck_name;
-			if(KC3SortieManager.onSortie > 0 && !!this.enemyEncounter && !!name){
-				this.enemyEncounter.name = name;
-				KC3Database.Encounter(this.enemyEncounter, false);
+			if(KC3SortieManager.onSortie > 0 && !!name){
+				this.saveEnemyEncounterInfo(null, name);
 			}
 		} catch (e) {
 			console.error("Captured an exception ==>", e,"\n==> proceeds safely");
@@ -870,6 +839,57 @@ Used by SortieManager
 	KC3Node.prototype.isBoss = function(){
 		//console.log("Meet Boss: " + ((this.eventKind === 1) && (this.eventId === 5)));
 		return ((this.eventKind === 1) && (this.eventId === 5));
+	};
+	
+	KC3Node.prototype.saveEnemyEncounterInfo = function(battleData, updatedName){
+		// Update name only if new name offered
+		if(!battleData && !!updatedName){
+			if(!!this.enemyEncounter){
+				this.enemyEncounter.name = updatedName;
+				KC3Database.Encounter(this.enemyEncounter, false);
+				return true;
+			}
+			return false;
+		}
+		
+		// Validate map values
+		if(KC3SortieManager.map_world < 1){ return false; }
+		if(KC3SortieManager.map_num < 1){ return false; }
+		
+		// Save the enemy encounter
+		var ed = {
+			world: KC3SortieManager.map_world,
+			map: KC3SortieManager.map_num,
+			diff: KC3SortieManager.map_difficulty,
+			node: this.id,
+			form: this.eformation,
+			ke: JSON.stringify(this.eships)
+		};
+		ed.uniqid = [ed.world,ed.map,ed.diff,ed.node,ed.form,ed.ke]
+			.filter(function(v){return !!v;}).join("/");
+		KC3Database.Encounter(ed, true);
+		this.enemyEncounter = ed;
+		
+		// Save enemy info
+		for(var i = 0; i < 6; i++) {
+			var enemyId = this.eships[i] || -1;
+			// Only record ships with ID more than 500 coz abyss only
+			if (enemyId > 500) {
+				KC3Database.Enemy({
+					id: enemyId,
+					hp: battleData.api_maxhps[i+7],
+					fp: battleData.api_eParam[i][0],
+					tp: battleData.api_eParam[i][1],
+					aa: battleData.api_eParam[i][2],
+					ar: battleData.api_eParam[i][3],
+					eq1: battleData.api_eSlot[i][0],
+					eq2: battleData.api_eSlot[i][1],
+					eq3: battleData.api_eSlot[i][2],
+					eq4: battleData.api_eSlot[i][3]
+				});
+			}
+		}
+		return true;
 	};
 	
 	KC3Node.prototype.saveBattleOnDB = function( resultData ){
