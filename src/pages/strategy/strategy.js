@@ -39,16 +39,16 @@
 		if ( ConfigManager.devOnlyPages ) {
 			$("#menu .submenu.dev-only").show();
 		}
-
+		
 		// Click a menu item
 		$("#menu .submenu ul.menulist li").on("click", function(){
 			// Google Analytics just for click event
 			var gaEvent = "Strategy Room: " + $(this).data("id");
 			_gaq.push(['_trackEvent', gaEvent, 'clicked']);
-
+			
 			KC3StrategyTabs.reloadTab(this);
 		});
-
+		
 		// Refresh current tab and force data reloading
 		$(".logo").on("click", function(){
 			console.debug("Reloading current tab [", KC3StrategyTabs.pageParams[0], "] on demand");
@@ -63,9 +63,13 @@
 			}
 		});
 		
+		$("#error").on("click", function(){
+			$(this).empty().hide();
+		});
+		
 		// Add listener to react on URL hash changed
 		window.addEventListener('popstate', KC3StrategyTabs.onpopstate);
-
+		
 		// If there is a hash tag on URL, set it as initial selected
 		KC3StrategyTabs.pageParams = window.location.hash.substring(1).split("-");
 		if(KC3StrategyTabs.pageParams[0] !== ""){
@@ -77,7 +81,7 @@
 		$("#menu .submenu ul.menulist li.active").click();
 		
 	});
-	
+
 	KC3StrategyTabs.gotoTab = function(tab, hashParams) {
 		var newHash = (tab || KC3StrategyTabs.pageParams[0]);
 		if(!!hashParams) {

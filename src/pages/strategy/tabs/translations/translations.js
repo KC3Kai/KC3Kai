@@ -181,6 +181,7 @@
 				$("#tr-container").empty();
 				$("#chk-missing-only").attr("checked",false);
 
+				$("#error").empty().hide();
 				var repo = "../../data/";
 				var translation = KC3Translation.getJSONWithOptions(
 					repo, this.value, true,

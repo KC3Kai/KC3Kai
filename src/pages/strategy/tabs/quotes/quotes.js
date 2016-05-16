@@ -21,6 +21,7 @@
 			var self = this;
 			var repo = "../../data/";
 			var language = ConfigManager.language;
+			$("#error").empty();
 			$("#error").hide();
 			KC3Meta.loadQuotes();
 			var quotes = KC3Translation.getQuotes(repo, true);
