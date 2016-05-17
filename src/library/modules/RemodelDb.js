@@ -25,7 +25,7 @@
                     console.error("RemodelDb:", e.stack);/*RemoveLogging:skip*/
                 }
             } else {
-                console.log("RemodelDb: no update required");
+                console.info("RemodelDb: no update required");
             }
 
             if (! this._db) {

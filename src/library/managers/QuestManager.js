@@ -8,8 +8,6 @@ Uses KC3Quest objects to play around with
 (function(){
 	"use strict";
 	
-	console.log("KC3改 Quest Management loaded");
-	
 	window.KC3QuestManager = {
 		list: {}, // Use curly brace instead of square bracket to avoid using number-based indexes
 		open: [], // Array of quests seen on the quests page, regardless of state
@@ -411,6 +409,7 @@ Uses KC3Quest objects to play around with
 					this.list["q"+tempQuest.id] = new KC3Quest();
 					this.list["q"+tempQuest.id].define( tempQuest );
 				}
+				console.info("Quest management data loaded");
 				return true;
 			}
 			return false;

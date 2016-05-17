@@ -18,7 +18,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 (function(){
 	"use strict";
 	
-	console.log("KC3改 Background Service loaded");
+	console.info("KC3改 Background Service loaded");
 	
 	window.KC3Service = {
 		
@@ -192,7 +192,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		When a ship speaks, show subtitles
 		------------------------------------------*/
 		"subtitle" :function(request, sender, response){
-			console.log("subtitle", request);
+			console.debug("subtitle", request);
 			(new TMsg(request.tabId, "gamescreen", "subtitle", {
 				voicetype: request.voicetype,
 				filename: request.filename || false,
