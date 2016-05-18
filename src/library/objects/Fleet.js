@@ -241,7 +241,7 @@ Contains summary information about a fleet and its 6 ships
 				return;
 			improvedEquipmentCount += 1;
 			improveCount += stars;
-		};
+		}
 
 		var normalCount = 0;
 		var t89Count = 0;
