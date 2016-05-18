@@ -146,7 +146,7 @@ KC3改 Ship Object
 			case 'function':
 				/* Function => iterates over given callback for every equipment */
 				return this.equipment().forEach(function(item,index){
-					slot.call(null,item.rosterId,index,item);
+					slot.call(null,item.itemId,index,item);
 				});
 		}
 	};
