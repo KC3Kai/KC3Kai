@@ -113,7 +113,7 @@
 
 /* Ship Name*/
 .tab_mstship .shipInfo .name {
-	width:90%;
+	width:85%;
 	height:30px;
 	line-height:30px;
 	float:left;
@@ -126,10 +126,10 @@
 }
 
 .tab_mstship .shipInfo .type {
-	width:10%;
+	width:auto;
 	height:30px;
 	line-height:30px;
-	float:left;
+	float:right;
 	font-size:20px;
 	text-align:left;
 	white-space:nowrap;
