@@ -651,7 +651,7 @@
 						cElm.appendTo(self.shipList);
 
 						if (cElm.onRecompute)
-							cElm.onRecompute();
+							cElm.onRecompute(cShip);
 						return;
 					}
 
@@ -662,7 +662,6 @@
 					$(".ship_id", cElm).text( cShip.id );
 					$(".ship_img .ship_icon", cElm).attr("src", KC3Meta.shipIcon(cShip.bid));
 					$(".ship_img .ship_icon", cElm).attr("alt", cShip.bid);
-					$(".ship_img .ship_icon", cElm).click(self.shipClickFunc);
 					$(".ship_name", cElm).text( cShip.english );
 					if(shipLevel >= 100) {
 						$(".ship_name", cElm).addClass("ship_kekkon-color");
@@ -677,19 +676,23 @@
 					if(cShip.morale >= 50){ $(".ship_morale", cElm).addClass("sparkled"); }
 
 					// callback for things that has to be recomputed
-					cShip.onRecompute = function() {
-						self.modernizableStat("fp", cElm, cShip.fp);
-						self.modernizableStat("tp", cElm, cShip.tp);
-						self.modernizableStat("yasen", cElm, cShip.yasen);
-						self.modernizableStat("aa", cElm, cShip.aa);
-						self.modernizableStat("ar", cElm, cShip.ar);
-					
-						$(".ship_as", cElm).text( cShip.as[self.equipMode] );
-						$(".ship_ev", cElm).text( cShip.ev[self.equipMode] );
-						$(".ship_ls", cElm).text( cShip.ls[self.equipMode] );
+					cElm.onRecompute = function(ship) {
+						var thisShip = ship || cShip;
+						// Recomputes stats
+						self.modernizableStat("fp", this, thisShip.fp);
+						self.modernizableStat("tp", this, thisShip.tp);
+						self.modernizableStat("yasen", this, thisShip.yasen);
+						self.modernizableStat("aa", this, thisShip.aa);
+						self.modernizableStat("ar", this, thisShip.ar);
+						$(".ship_as", this).text( thisShip.as[self.equipMode] );
+						$(".ship_ev", this).text( thisShip.ev[self.equipMode] );
+						$(".ship_ls", this).text( thisShip.ls[self.equipMode] );
+						// Rebind click handlers
+						$(".ship_img .ship_icon", this).click(self.shipClickFunc);
+						$(".ship_equip_icon img", this).click(self.gearClickFunc);
 					};
 
-					cShip.onRecompute();
+					cElm.onRecompute(cShip);
 					
 					[1,2,3,4].forEach(function(x){
 						self.equipImg(cElm, x, cShip.slots[x-1], cShip.equip[x-1]);
@@ -758,7 +761,6 @@
 					.attr("src", "../../assets/img/items/" + gear.master().api_type[3] + ".png")
 					.attr("title", gear.name())
 					.attr("alt", gear.master().api_id);
-				$("img",element).click(this.gearClickFunc);
 				$("span",element).css('visibility','hidden');
 			} else {
 				$("img",element).hide();
