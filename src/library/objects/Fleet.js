@@ -222,11 +222,6 @@ Contains summary information about a fleet and its 6 ships
 			.reduce(function(x,y){return x+y;},0);
 	};
 
-	KC3Fleet.prototype.countLandingCrafts = function() {
-		return this.ship().map(function(x){return x.countLandingCrafts();})
-			.reduce(function(x,y){return x+y;},0);
-	};
-	
 	KC3Fleet.prototype.countShipsWithDrums = function(){
 		return this.ship().map(function(x){return x.countDrums() > 0;})
 			.reduce(function(x,y){return x+y;},0);
