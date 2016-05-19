@@ -56,7 +56,8 @@
 	 * Terms of callback function definitions:
 	 *   "init": Invoked for the first time tab initialzing, only once (for once browser refresh).
 	 *   "reload": Invoked when data loading required, optional once, may many times on demand.
-	 *   "execute": Invoked for rendering HTML content for each time tab is shown.
+	 *   "execute": Invoked for rendering HTML content from scratch when each time tab shown (or switched from other tabs).
+	 *   "update": Invoked when arguments or states inside tab changed and partial elements possibly updated.
 	 */
 	KC3StrategyTab.prototype.apply = function(forceReload){
 		this.error = false;

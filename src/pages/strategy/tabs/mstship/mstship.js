@@ -38,7 +38,7 @@
 		server_ip: "",
 		
 		/* INIT
-		Prepares all data needed
+		Prepares static data needed
 		---------------------------------*/
 		init :function(){
 			KC3Meta.loadQuotes();
@@ -46,26 +46,19 @@
 			this.server_ip = MyServer.ip;
 		},
 		
+		/* RELOAD
+		Prepares latest in game data
+		---------------------------------*/
+		reload :function(){
+			// None for ship library
+		},
+		
 		/* EXECUTE
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
 			$(".tab_mstship .runtime_id").text(chrome.runtime.id);
-			
 			var self = this;
-			
-			/*
-			// Add ship type filters
-			$.each(KC3Meta._stype, function(index, stype_code){
-				if(index === 0) return true;
-				
-				$("<div />")
-					.addClass("stype")
-					.text(stype_code)
-					.data("id", index)
-					.appendTo(".tab_mstship .filters");
-			});
-			$("<div />").addClass("clear").appendTo(".tab_mstship .filters");*/
 			
 			// List all ships
 			var shipBox;
@@ -96,7 +89,6 @@
 				var sid = $(this).data("id");
 				if( sid != self.currentShipId ){
 					KC3StrategyTabs.gotoTab(null, sid);
-					//self.showShip( sid );
 				}
 			});
 			
@@ -203,6 +195,21 @@
 			}, 200);
 		},
 		
+		/* UPDATE
+		Partially update elements of the interface without clearing all contents first
+		Be careful! Do NOT only update new data, but also handle the old states (do cleanup)
+		---------------------------------*/
+		update :function(pageParams){
+			// KC3StrategyTabs.pageParams has been keeping the old values for states tracking
+			if(!!pageParams && !!pageParams[1]){
+				this.showShip(pageParams[1]);
+			}else{
+				this.showShip();
+			}
+			// Tell tab manager: Have handled the updating, donot re-execute the rendering
+			return true;
+		},
+		
 		showShip :function(ship_id){
 			ship_id = Number(ship_id||"405");
 			var
@@ -258,6 +265,10 @@
 				// Ship-only, non abyssal
 				$(".tab_mstship .shipInfo .stats").html("");
 				$(".tab_mstship .shipInfo .intro").html( shipData.api_getmes );
+				$(".tab_mstship .shipInfo .cgswf").css("width", "218px")
+					.css("height", "300px");
+				$(".tab_mstship .shipInfo .cgswf embed").css("width", "218px")
+					.css("height", "300px");
 				
 				// STATS
 				var statFromDb = WhoCallsTheFleetDb.getShipStat(ship_id);
@@ -330,13 +341,14 @@
 							$(".sloticon img", this)
 								.attr("src","../../../../assets/img/items/"+equipment.api_type[3]+".png");
 							$(".sloticon img", this).attr("alt", equipId);
-							$(".sloticon img", this).click(function(){
+							$(".sloticon img", this).off("click").click(function(){
 								KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 							});
 							$(".sloticon img", this).show();
 							$(".sloticon", this).addClass("hover");
 						} else {
 							$(".sloticon img", this).hide();
+							$(".sloticon img", this).off("click");
 							$(".sloticon", this).removeClass("hover");
 						}
 					}
@@ -488,13 +500,14 @@
 								$(".sloticon img", this)
 									.attr("src","../../../../assets/img/items/"+equipment.api_type[3]+".png");
 								$(".sloticon img", this).attr("alt", equipId);
-								$(".sloticon img", this).click(function(){
+								$(".sloticon img", this).off("click").click(function(){
 									KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 								});
 								$(".sloticon", this).addClass("hover");
 							} else {
 								$(".slotitem", this).text( "" );
 								$(".sloticon img", this).hide();
+								$(".sloticon img", this).off("click");
 								$(".sloticon", this).removeClass("hover");
 							}
 						});

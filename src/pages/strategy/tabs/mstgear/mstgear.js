@@ -10,14 +10,21 @@
 		server_ip: "",
 		
 		/* INIT
-		Prepares all data needed
+		Prepares static data needed
 		---------------------------------*/
 		init :function(){
 			var MyServer = (new KC3Server()).setNum( PlayerManager.hq.server );
 			this.server_ip = MyServer.ip;
 		},
 		
-		/* EXECUTE
+		/* RELOAD
+		Prepares latest in game data
+		---------------------------------*/
+		reload :function(){
+			// None for gear library
+		},
+		
+			/* EXECUTE
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
@@ -57,6 +64,18 @@
 			}, 200);
 		},
 		
+		/* UPDATE
+		Partially update elements of the interface without clearing all contents first
+		Be careful! Do NOT only update new data, but also handle the old states (do cleanup)
+		---------------------------------*/
+		update :function(pageParams){
+			if(!!pageParams[1]){
+				this.showGear(pageParams[1]);
+			}else{
+				this.showGear();
+			}
+			return true;
+		},
 		
 		showGear :function(gear_id){
 			gear_id = Number(gear_id||"124");
