@@ -64,6 +64,21 @@
 			}
 		});
 		
+		// Add back to top and reload float button
+		$(window).scroll(function(){
+			if($(this).scrollTop() > 90){
+				$('.float_toolbar').fadeIn();
+			} else {
+				$('.float_toolbar').fadeOut();
+			}
+		});
+		$(".float_toolbar .back_to_top").on("click", function(){
+			$("html, body").animate({scrollTop: 0}, 300);
+		});
+		$(".float_toolbar .reload").on("click", function(){
+			$(".logo").click();
+		});
+		
 		$("#error").on("click", function(){
 			$(this).empty().hide();
 		});

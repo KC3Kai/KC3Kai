@@ -330,7 +330,7 @@
 
 					// in case when the data isn't available,
 					// slots should still be getting cleaned up
-					$(".slotitem", this).empty()
+					$(".slotitem", this).empty();
 					$(".sloticon img", this).attr("src", "");
 					$(".sloticon img", this).hide();
 
