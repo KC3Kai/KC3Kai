@@ -158,17 +158,25 @@ Used by SortieManager
 	};
 	
 	KC3Node.prototype.defineAsResource = function( nodeData ){
+		var self = this;
 		this.type = "resource";
-		this.item = nodeData.api_itemget[0].api_icon_id;
-		this.icon = function(folder){
-			return folder+(
-				["fuel","ammo","steel","bauxite","ibuild","bucket","devmat","compass","","box1","box2","box3"]
-				[nodeData.api_itemget[0].api_icon_id - 1]
-			)+".png";
-		};
-		this.amount = nodeData.api_itemget[0].api_getcount;
-		if(this.item < 8)
-			KC3SortieManager.materialGain[this.item-1] += this.amount;
+		this.item = [];
+		this.icon = [];
+		this.amount = [];
+		nodeData.api_itemget.forEach(function(itemget){
+			var icon_id = itemget.api_icon_id;
+			var getcount = itemget.api_getcount;
+			self.item.push(icon_id);
+			self.icon.push(function(folder){
+				return folder+(
+					["fuel","ammo","steel","bauxite","ibuild","bucket","devmat","compass","","box1","box2","box3"]
+					[icon_id - 1]
+				)+".png";
+			});
+			self.amount.push(getcount);
+			if(icon_id < 8)
+				KC3SortieManager.materialGain[icon_id-1] += getcount;
+		});
 		return this;
 	};
 	
