@@ -98,6 +98,7 @@
 				var vnum = Number($(this).data("vnum"));
 				var voiceFile = KC3Meta.getFilenameByVoiceLine(self.currentShipId, vnum);
 				//console.debug("VOICE META: voiceFile", voiceFile);
+				$(".tab_mstship .shipInfo .subtitles").show();
 				if(!voiceFile || voiceFile==100000){
 					$(".tab_mstship .shipInfo .subtitles").html("This voice is currently disabled to be replayable in KC3Kai");
 					return true;
@@ -256,14 +257,14 @@
 				.attr("menu", "false")
 				.appendTo(".tab_mstship .shipInfo .cgswf");
 			$(".tab_mstship .shipInfo .salty-zone").text(KC3Meta.term(denyTerm()));
-			$(".tab_mstship .shipInfo .hourlies").html("");
+			$(".tab_mstship .shipInfo .hourlies").empty();
 			
 			saltClassUpdate();
 			
 			var statBox;
 			if(ship_id<=500){
 				// Ship-only, non abyssal
-				$(".tab_mstship .shipInfo .stats").html("");
+				$(".tab_mstship .shipInfo .stats").empty();
 				$(".tab_mstship .shipInfo .intro").html( shipData.api_getmes );
 				$(".tab_mstship .shipInfo .cgswf").css("width", "218px")
 					.css("height", "300px");
@@ -329,8 +330,8 @@
 
 					// in case when the data isn't available,
 					// slots should still be getting cleaned up
-					$(".slotitem", this).text( "" );
-					$(".sloticon img", this).attr("src","");
+					$(".slotitem", this).empty()
+					$(".sloticon img", this).attr("src", "");
 					$(".sloticon img", this).hide();
 
 					if (stockEquipments) {
@@ -398,11 +399,11 @@
 				$(".tab_mstship .shipInfo .consume_fuel .rsc_value").text( shipData.api_fuel_max );
 				$(".tab_mstship .shipInfo .consume_ammo .rsc_value").text( shipData.api_bull_max );
 				
-				$(".tab_mstship .shipInfo .subtitles").html("");
+				$(".tab_mstship .shipInfo .subtitles").empty();
 				
 				// VOICE LINES
 				$(".tab_mstship .shipInfo .voices").show();
-				$(".tab_mstship .shipInfo .voices").html("");
+				$(".tab_mstship .shipInfo .voices").empty();
 
 				var allVoiceNums = KC3Translation.getShipVoiceNums(shipData.api_id,false,false);
 				$.each(allVoiceNums, function(ignored, vnum){
@@ -417,7 +418,7 @@
 				
 				// HOURLIES
 				$(".tab_mstship .shipInfo .hourlies").show();
-				$(".tab_mstship .shipInfo .hourlies").html("");
+				$(".tab_mstship .shipInfo .hourlies").empty();
 				
 				if (KC3Translation.shipHasHourlyVoices(shipData.api_id)){
 					$.each(this.hourlies, function(vnum, vname){
@@ -453,7 +454,7 @@
 				$(".tab_mstship .shipInfo .equipments").hide();
 				$(".tab_mstship .shipInfo .json").text(JSON.stringify(shipData))
 					.css("width", "100%").show();
-				$(".tab_mstship .shipInfo .subtitles").html("").hide();
+				$(".tab_mstship .shipInfo .subtitles").empty().hide();
 				$(".tab_mstship .shipInfo .cgswf").css("width", "100%")
 					.css("height", "400px");
 				$(".tab_mstship .shipInfo .cgswf embed").css("width", "468px")
@@ -464,7 +465,7 @@
 					console.debug("enemyInfo", enemyInfo);
 					if(enemyInfo){
 						// ENEMY STATS
-						$(".tab_mstship .shipInfo .stats").html("");
+						$(".tab_mstship .shipInfo .stats").empty();
 						$.each([
 							["hp", "taik"],
 							["fp", "houg"],
@@ -503,9 +504,10 @@
 								$(".sloticon img", this).off("click").click(function(){
 									KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 								});
+								$(".sloticon img", this).show();
 								$(".sloticon", this).addClass("hover");
 							} else {
-								$(".slotitem", this).text( "" );
+								$(".slotitem", this).empty();
 								$(".sloticon img", this).hide();
 								$(".sloticon img", this).off("click");
 								$(".sloticon", this).removeClass("hover");
