@@ -2,6 +2,7 @@
 	"use strict";
 	_gaq.push(['_trackPageview']);
 	
+	var HASH_PARAM_DELIM = "-";
 	var activeTab;
 	
 	Object.defineProperties(window,{
@@ -63,6 +64,21 @@
 			}
 		});
 		
+		// Add back to top and reload float button
+		$(window).scroll(function(){
+			if($(this).scrollTop() > 90){
+				$('.float_toolbar').fadeIn();
+			} else {
+				$('.float_toolbar').fadeOut();
+			}
+		});
+		$(".float_toolbar .back_to_top").on("click", function(){
+			$("html, body").animate({scrollTop: 0}, 300);
+		});
+		$(".float_toolbar .reload").on("click", function(){
+			$(".logo").click();
+		});
+		
 		$("#error").on("click", function(){
 			$(this).empty().hide();
 		});
@@ -71,7 +87,7 @@
 		window.addEventListener('popstate', KC3StrategyTabs.onpopstate);
 		
 		// If there is a hash tag on URL, set it as initial selected
-		KC3StrategyTabs.pageParams = window.location.hash.substring(1).split("-");
+		KC3StrategyTabs.pageParams = window.location.hash.substring(1).split(HASH_PARAM_DELIM);
 		if(KC3StrategyTabs.pageParams[0] !== ""){
 			$("#menu .submenu ul.menulist li").removeClass("active");
 			$("#menu .submenu ul.menulist li[data-id="+KC3StrategyTabs.pageParams[0]+"]").addClass("active");
@@ -93,14 +109,14 @@
 				params = [ params ];
 			}
 			// encodeURIComponent may be needed
-			newHash += "-"+params.join("-");
+			newHash += HASH_PARAM_DELIM + params.join(HASH_PARAM_DELIM);
 		}
 		window.location.hash = newHash;
 	};
 
 	KC3StrategyTabs.reloadTab = function(tab, reloadData) {
 		var tabElement = typeof tab;
-		KC3StrategyTabs.pageParams = (tabElement=="string" ? tab : window.location.hash).substring(1).split("-");
+		KC3StrategyTabs.pageParams = (tabElement=="string" ? tab : window.location.hash).substring(1).split(HASH_PARAM_DELIM);
 		if(tabElement != "object") {
 			var tabId = KC3StrategyTabs.pageParams[0] || "profile";
 			tab = $("#menu .submenu ul.menulist li[data-id="+tabId+"]");
@@ -135,8 +151,17 @@
 
 	KC3StrategyTabs.onpopstate = function(event){
 		var newHash = window.location.hash.substring(1);
-		var oldHash = KC3StrategyTabs.pageParams.join("-");
+		var oldHash = KC3StrategyTabs.pageParams.join(HASH_PARAM_DELIM);
 		if(!!newHash && !KC3StrategyTabs.loading && newHash !== oldHash){
+			var newParams = newHash.split(HASH_PARAM_DELIM);
+			if(newParams[0] === KC3StrategyTabs.pageParams[0] && !!window.activeSelf.update){
+				// Pass new hash parameters to callback, keep old params in KC3StrategyTabs
+				if(!!window.activeSelf.update(newParams)){
+					// Update `KC3StrategyTabs.pageParams` if `reloadTab` skipped
+					KC3StrategyTabs.pageParams = window.location.hash.substring(1).split(HASH_PARAM_DELIM);
+					return;
+				}
+			}
 			console.debug("Auto reloading from [", oldHash, "] to [", newHash, "]");
 			KC3StrategyTabs.reloadTab();
 		}

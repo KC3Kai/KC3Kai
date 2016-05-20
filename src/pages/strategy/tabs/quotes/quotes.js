@@ -7,40 +7,42 @@
 		tabSelf: KC3StrategyTabs.quotes,
 		audio: false,
 		server_ip: "",
-		/* INIT
-		   Prepares all data needed
-		   ---------------------------------*/
-		init :function(){
+		repo_loc: "../../data/",
+		enQuotes: [],
+		jpQuotes: [],
+		
+		init :function() {
 			var MyServer = (new KC3Server()).setNum( PlayerManager.hq.server );
 			this.server_ip = MyServer.ip;
+		},
+		reload: function() {
+			ConfigManager.load();
+			this.enQuotes = [];
+			if(ConfigManager.language !== "en")
+				this.enQuotes = KC3Translation.getQuotes(this.repo_loc, false, "en");
+			this.jpQuotes = [];
+			if(ConfigManager.language !== "jp")
+				this.jpQuotes = KC3Translation.getQuotes(this.repo_loc, false, "jp");
 		},
 		buildShipName: function(masterId, shipData) {
 			return "[{0}] {1}".format(masterId, KC3Meta.shipName((shipData||KC3Master.ship(masterId)).api_name) );
 		},
 		showVoiceDetail: function(masterId) {
 			var self = this;
-			var repo = "../../data/";
 			var language = ConfigManager.language;
-			$("#error").empty();
-			$("#error").hide();
+			$("#error").empty().hide();
 			KC3Meta.loadQuotes();
-			var quotes = KC3Translation.getQuotes(repo, true);
-			var enQuotes = [];
-			if(language !== "en")
-				enQuotes = KC3Translation.getQuotes(repo, false, "en");
-			var jpQuotes = [];
-			if(language !== "jp")
-				jpQuotes = KC3Translation.getQuotes(repo, false, "jp");
+			var quotes = KC3Translation.getQuotes(this.repo_loc, true);
 			masterId = Number(masterId) || 318;
 			var shipLines = quotes[masterId];
 			var shipData = KC3Master.ship(masterId);
 			$(".voice_list").empty();
 			$(".ship_info .ship_name").text( this.buildShipName(masterId, shipData) );
 			$(".ship_info .ship_name").data("id", masterId);
-			$(".ship_info .ship_name").addClass("hover").click(function(){
+			$(".ship_info .ship_name").addClass("hover").off("click").click(function(){
 				KC3StrategyTabs.gotoTab("mstship", $(this).data("id") );
 			});
-			$(".ship_info .reload").click(function(){
+			$(".ship_info .reload").off("click").click(function(){
 				self.showVoiceDetail( $(".ship_info .ship_name").data("id") );
 			});
 			var toNextFunc = function(){
@@ -50,8 +52,10 @@
 			};
 			if(shipData.api_aftershipid){
 				$(".ship_info .after_ship").data("asid", shipData.api_aftershipid);
-				$(".ship_info .after_ship").click(toNextFunc);
+				$(".ship_info .after_ship").off("click").click(toNextFunc);
+				$(".ship_info .after_ship").show();
 			} else {
+				$(".ship_info .after_ship").off("click");
 				$(".ship_info .after_ship").hide();
 			}
 			var toFromFunc = function(){
@@ -116,11 +120,11 @@
 				$(".subtitle",elm).text( (state === "missing") ? "missing"
 										 :src.val );
 				$(".division",elm).click(toggleSrcFunc);
-				if(enQuotes && enQuotes[masterId] && enQuotes[masterId][voiceNum]){
-					$(".en_src",elm).text(enQuotes[masterId][voiceNum]);
+				if(self.enQuotes && self.enQuotes[masterId] && self.enQuotes[masterId][voiceNum]){
+					$(".en_src",elm).text(self.enQuotes[masterId][voiceNum]);
 				}
-				if(jpQuotes && jpQuotes[masterId] && jpQuotes[masterId][voiceNum]){
-					$(".jp_src",elm).text(jpQuotes[masterId][voiceNum]);
+				if(self.jpQuotes && self.jpQuotes[masterId] && self.jpQuotes[masterId][voiceNum]){
+					$(".jp_src",elm).text(self.jpQuotes[masterId][voiceNum]);
 				}
 				var spQuote = KC3Meta.quote(masterId, voiceLine);
 				if(state !== "missing" && spQuote && src.val !== spQuote){
@@ -129,9 +133,6 @@
 				$(".voice_list").append(elm);
 			});
 		},
-		/* EXECUTE
-		Places data onto the interface
-		---------------------------------*/
 		execute: function() {
 			var self = this;
 			var allShips = KC3Master.all_ships();
@@ -142,9 +143,7 @@
 				  .sort( function(a,b) { return a-b; });
 
 			var shipList = $(".ship_list");
-
-			var repo = "../../data/";
-			var quotes = KC3Translation.getQuotes(repo, true);
+			var quotes = KC3Translation.getQuotes(this.repo_loc, true);
 
 			$.each(masterIds, function(i, masterId) {
 				var shipEntity = $(".factory .ship_entity").clone();
@@ -206,6 +205,14 @@
 				var scrollTop = listItem.length === 1 ? listItem.offset().top - $(".ship_list").offset().top : 0;
 				$(".ship_list").scrollTop(scrollTop);
 			}, 200);
+		},
+		update: function(pageParams) {
+			if(!!pageParams[1]){
+				this.showVoiceDetail(pageParams[1]);
+			}else{
+				this.showVoiceDetail();
+			}
+			return true;
 		}
 	};
 })();
