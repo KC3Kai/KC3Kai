@@ -3,6 +3,7 @@
 	_gaq.push(['_trackPageview']);
 	
 	var HASH_PARAM_DELIM = "-";
+	var WINDOW_TITLE = "KC3改 Strategy Room";
 	var activeTab;
 	
 	Object.defineProperties(window,{
@@ -76,7 +77,7 @@
 			$("html, body").animate({scrollTop: 0}, 300);
 		});
 		$(".float_toolbar .reload").on("click", function(){
-			$(".logo").click();
+			$(".logo").trigger("click");
 		});
 		
 		$("#error").on("click", function(){
@@ -129,8 +130,8 @@
 		// Interface
 		$("#menu .submenu ul.menulist li").removeClass("active");
 		$(tab).addClass("active");
-		$("#contentHtml").hide();
-		$("#contentHtml").html("");
+		$("#contentHtml").hide().empty();
+		window.document.title = "{0} - {1}".format(WINDOW_TITLE, $(tab).text());
 		if(KC3StrategyTabs.loading != KC3StrategyTabs.pageParams[0]) {
 			window.location.hash = KC3StrategyTabs.loading;
 			KC3StrategyTabs.pageParams = [KC3StrategyTabs.loading];

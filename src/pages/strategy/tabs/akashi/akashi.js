@@ -18,7 +18,7 @@
 			// Get upgrade data
 			var akashiData = $.ajax('../../data/akashi.json', { async: false }).responseText;
 			this.upgrades = JSON.parse(akashiData);
-			console.log(this.upgrades);
+			//console.log(this.upgrades);
 		},
 
 		/* RELOAD
@@ -28,6 +28,10 @@
 			var self = this;
 			KC3ShipManager.load();
 			KC3GearManager.load();
+			
+			this.ships = [];
+			this.gears = [];
+			this.instances = {};
 			
 			// Get API IDs of all player ships
 			$.each(KC3ShipManager.list, function(index, ThisShip){
@@ -48,8 +52,8 @@
 				self.instances[ThisGear.masterId].push(ThisGear);
 			});
 			
-			console.log(this.ships);
-			console.log(this.gears);
+			//console.log(this.ships);
+			//console.log(this.gears);
 		},
 		
 		/* EXECUTE
@@ -59,21 +63,28 @@
 			var self = this;
 			
 			$(".tab_akashi .weekday").on("click", function(){
-				$(".tab_akashi .weekday").removeClass("active");
-				$(this).addClass("active");
-				self.showDay( $(this).data("value") );
+				KC3StrategyTabs.gotoTab(null, $(this).data("value"));
 			});
 			
-			// Select today
-			$("#weekday-"+Date.getJstDate().getDay()).trigger("click");
+			// Link to weekday specified by hash parameter
+			if(!!KC3StrategyTabs.pageParams[1]){
+				this.showDay(KC3StrategyTabs.pageParams[1]);
+			}else{
+				// Select today
+				this.showDay();
+			}
 		},
 		
 		showDay :function(dayName){
 			var self = this;
+			var todayDow = Date.getJstDate().getDay();
+			dayName = (dayName || $("#weekday-{0}".format(todayDow)).data("value")).toLowerCase();
+			$(".weekdays .weekday").removeClass("active");
+			$(".weekdays .weekday[data-value={0}]".format(dayName)).addClass("active");
 			
 			this.today = this.upgrades[ dayName ];
 			
-			$(".equipment_list").html("");
+			$(".equipment_list").empty();
 			
 			var ThisBox, MasterItem, ItemName;
 			var hasShip, hasGear, ctr;

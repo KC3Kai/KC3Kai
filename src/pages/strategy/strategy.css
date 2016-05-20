@@ -207,25 +207,31 @@ body {
 	bottom:2em;
 	right:0px;
 	text-decoration:none;
-	color:#000;
+	color:#79b;
 	font-size:12px;
 	font-weight:bold;
 	display:none;
 }
 .float_toolbar .back_to_top {
 	background-color:#def;
-	padding:8px 10px 8px 10px;
-	margin:0px 0px 4px 0px;
+	border-left: 1px solid #ace;
+	border-top: 1px solid #ace;
+	border-bottom: 1px solid #ace;
 	border-radius:10px 0px 0px 10px;
+	padding:5px 5px 5px 5px;
+	margin:0px 0px 3px 0px;
 }
 .float_toolbar .back_to_top:hover {
 	background-color:#ffc;
 }
 .float_toolbar .reload {
 	background-color:#def;
-	padding:8px 10px 8px 10px;
-	margin:0px 0px 4px 0px;
+	border-left: 1px solid #ace;
+	border-top: 1px solid #ace;
+	border-bottom: 1px solid #ace;
 	border-radius:10px 0px 0px 10px;
+	padding:5px 5px 5px 5px;
+	margin:0px 0px 3px 0px;
 }
 .float_toolbar .reload:hover {
 	background-color:#ffc;
