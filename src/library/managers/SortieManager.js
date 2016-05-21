@@ -252,10 +252,9 @@ Xxxxxxx
 		
 		updateMvps :function(mvps){
 			if(!!mvps && mvps.length > 0){
-				if(PlayerManager.combinedFleet){
-					// FIXME real combined fleet mvp data needed
-					var mvpIndex1 = mvps[0] || mvps[1] || -1,
-						mvpIndex2 = mvps[1] || mvps[0] || -1,
+				if(PlayerManager.combinedFleet && this.fleetSent === 1){
+					var mvpIndex1 = mvps[0] || 1,
+						mvpIndex2 = mvps[1] || 1,
 						ships1 = PlayerManager.fleets[0].ships,
 						ships2 = PlayerManager.fleets[1].ships;
 					if(mvpIndex1 > 0){
@@ -360,7 +359,7 @@ Xxxxxxx
 		endSortie :function(){
 			var
 				pvpData = JSON.parse(localStorage.statistics || "{}").pvp,
-				sentFleet = PlayerManager.fleets[this.fleetSent-1],
+				sentFleet = this.fleetSent,
 				self = this,
 				cons = {};
 			this.fleetSent = 1;
@@ -447,11 +446,11 @@ Xxxxxxx
 				formation: -1,
 				ships: [ -1, -1, -1, -1, -1, -1 ]
 			};
-			if(PlayerManager.combinedFleet){
+			if(PlayerManager.combinedFleet && this.fleetSent === 1){
 				this.cleanMvpShips(PlayerManager.fleets[0].ships);
 				this.cleanMvpShips(PlayerManager.fleets[1].ships);
 			} else {
-				this.cleanMvpShips(sentFleet.ships);
+				this.cleanMvpShips(PlayerManager.fleets[sentFleet - 1].ships);
 			}
 			for(var ectr in this.escapedList){
 				KC3ShipManager.get( this.escapedList[ectr] ).didFlee = false;

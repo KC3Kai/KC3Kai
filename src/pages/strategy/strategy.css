@@ -169,6 +169,16 @@ body {
 	text-shadow:0px 0px 1px #fff;
 }
 
+.page_help .help_more {
+	height:16px;
+	line-height:16px;
+	font-size:12px;
+	font-weight:bold;
+	margin:0px 0px 0px 0px;
+	text-align:right;
+	text-shadow:1px 1px 2px #ccc;
+}
+
 .page_panel {
 	width:700px;
 	background:#f0f5ff;
@@ -190,4 +200,39 @@ body {
 }
 .page_body {
 	margin:0px 0px 20px 0px;
+}
+
+.float_toolbar {
+	position:fixed;
+	bottom:2em;
+	right:0px;
+	text-decoration:none;
+	color:#79b;
+	font-size:12px;
+	font-weight:bold;
+	display:none;
+}
+.float_toolbar .back_to_top {
+	background-color:#def;
+	border-left: 1px solid #ace;
+	border-top: 1px solid #ace;
+	border-bottom: 1px solid #ace;
+	border-radius:10px 0px 0px 10px;
+	padding:5px 5px 5px 5px;
+	margin:0px 0px 3px 0px;
+}
+.float_toolbar .back_to_top:hover {
+	background-color:#ffc;
+}
+.float_toolbar .reload {
+	background-color:#def;
+	border-left: 1px solid #ace;
+	border-top: 1px solid #ace;
+	border-bottom: 1px solid #ace;
+	border-radius:10px 0px 0px 10px;
+	padding:5px 5px 5px 5px;
+	margin:0px 0px 3px 0px;
+}
+.float_toolbar .reload:hover {
+	background-color:#ffc;
 }

@@ -12,32 +12,56 @@
 		init:function(){
 		},
 		
-		showDict: function(jsonData) {
+		showDict: function(jsonData, originalJson) {
 			var keys = Object.keys( jsonData );
 			keys.sort();
 
 			var language = ConfigManager.language;
+			var jsonToggleFunc = function() {
+				$(".tr-json", $(this).parent()).toggle();
+			};
 
 			$.each( keys, function(i,k) {
 				var v = jsonData[k];
 				var row = $(".factory .tr-item").clone();
+				var nested = function(obj){
+					if(Array.isArray(obj)){
+						return nested(obj[0]);
+					}
+					return obj;
+				};
+				var tag = v.tag || nested(v).tag;
 
 				row.addClass( 
-					language === v.tag ?
+					language === tag ?
 						"translation_done" : "translation_missing" );
 
 				$(".tr-key",row).text(k);
-				$(".tr-from",row).text(v.tag);
-				$(".tr-content",row).html(v.val);
+				$(".tr-key",row).click(jsonToggleFunc);
+				$(".tr-from",row).text(tag);
+
+				if(!v.val && Array.isArray(v)){
+					$(".tr-content",row).text(JSON.stringify(originalJson[k]));
+				} else {
+					if($("#html-rendering").is(":checked")){
+						$(".tr-content",row).html(v.val);
+					} else {
+						$(".tr-content",row).text(v.val);
+					}
+				}
+				$(".tr-json",row).text('{0}:{1},'.format(JSON.stringify(k), JSON.stringify(originalJson[k])));
 
 				row.appendTo( "#tr-container" );
 			});
 		},
-		showQuests: function(jsonData) {
+		showQuests: function(jsonData, originalJson) {
 			var keys = Object.keys( jsonData );
 			keys.sort();
 
 			var language = ConfigManager.language;
+			var jsonToggleFunc = function() {
+				$(".tq-json", $(this).parent()).toggle();
+			};
 
 			$.each( keys, function(i,k) {
 				var v = jsonData[k];
@@ -48,6 +72,7 @@
 
 				var questName = v.name.val;
 				var questDesc = v.desc.val;
+				var questMemo = v.memo ? v.memo.val : false;
 
 				var questNameL = v.name.tag;
 				var questDescL = v.desc.tag;
@@ -57,6 +82,7 @@
 						"translation_done" : "translation_missing" );
 
 				$(".tq-key",row).text(questIdPretty);
+				$(".tq-key",row).click(jsonToggleFunc);
 				$(".tq-from",row).text( questNameL + "/" + questDescL);
 				$(".tq-name",row).text(questName).addClass(
 					language === v.name.tag ?
@@ -64,6 +90,18 @@
 				$(".tq-desc",row).text(questDesc).addClass(
 					language === v.desc.tag ?
 						"translation_done" : "translation_missing");
+				if(questMemo){
+					if($("#html-rendering").is(":checked")){
+						$(".tq-memo",row).html(questMemo.replace(/\n/g,"<br/>")).addClass(
+							language === v.desc.tag ?
+							"translation_done" : "translation_missing");
+					} else {
+						$(".tq-memo",row).text(questMemo.replace(/\n/g,"\\n")).addClass(
+							language === v.desc.tag ?
+							"translation_done" : "translation_missing");
+					}
+				}
+				$(".tq-json",row).text('{0}:{1},'.format(JSON.stringify(k), JSON.stringify(originalJson[k])));
 
 				row.appendTo( "#tr-container" );
 			});
@@ -99,7 +137,6 @@
 		execute: function() {
 			var self = this;
 
-			// TODO: servers
 			var defs = {
 				terms: {
 					callback: self.showDict
@@ -112,6 +149,9 @@
 				},
 				quests: {
 					callback: self.showQuests
+				},
+				battle: {
+					callback: self.showDict
 				},
 				servers: {
 					callback: self.showServers
@@ -133,12 +173,23 @@
 				$(".translation_done").toggle( ! this.checked);
 			});
 
+			$("#html-rendering").click( function() {
+				$("#select-json-file").change();
+			});
+
 			$("#select-json-file").change( function() {
 				$("#tr-container").empty();
 				$("#chk-missing-only").attr("checked",false);
 
+				$("#error").empty().hide();
 				var repo = "../../data/";
 				var translation = KC3Translation.getJSONWithOptions(
+					repo, this.value, true,
+					ConfigManager.language,
+					false,
+					false,
+					false);
+				var translationWithSource = KC3Translation.getJSONWithOptions(
 					repo, this.value, true,
 					ConfigManager.language,
 					false,
@@ -146,7 +197,7 @@
 					true);
 
 				var callback = defs[this.value].callback;
-				callback.apply(self,[translation]);
+				callback.apply(self,[translationWithSource, translation]);
 			} );
 
 			$("#select-json-file").val("terms").change();

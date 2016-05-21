@@ -146,7 +146,7 @@ KC3改 Ship Object
 			case 'function':
 				/* Function => iterates over given callback for every equipment */
 				return this.equipment().forEach(function(item,index){
-					slot.call(null,item.rosterId,index,item);
+					slot.call(null,item.itemId,index,item);
 				});
 		}
 	};
@@ -317,13 +317,6 @@ KC3改 Ship Object
 		return this.countEquipment( 75 );
 	};
 
-	/* COUNT LANDING CRAFT
-	   Get number of landing crafts held
-	   ----------------------------------------- */
-	KC3Ship.prototype.countLandingCrafts = function(){
-		return this.countEquipment( 68 );
-	};
-	
 	/* FIND DAMECON
 	   Find first available damecon.
 	   search order: extra slot -> 1st slot -> 2ns slot -> 3rd slot -> 4th slot

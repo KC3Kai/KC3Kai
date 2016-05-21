@@ -222,14 +222,58 @@ Contains summary information about a fleet and its 6 ships
 			.reduce(function(x,y){return x+y;},0);
 	};
 
-	KC3Fleet.prototype.countLandingCrafts = function() {
-		return this.ship().map(function(x){return x.countLandingCrafts();})
-			.reduce(function(x,y){return x+y;},0);
-	};
-	
 	KC3Fleet.prototype.countShipsWithDrums = function(){
 		return this.ship().map(function(x){return x.countDrums() > 0;})
 			.reduce(function(x,y){return x+y;},0);
+	};
+
+	// calculate accurate landing craft bonus
+	// formula taken from http://kancolle.wikia.com/wiki/Expedition as of May 18,2016
+	KC3Fleet.prototype.calcLandingCraftBonus = function() {
+		var self = this;
+		// only first 4 improved landing crafts matter.
+		var improvedEquipmentCount = 0;
+		// use addImprove() to update this value instead of modifying it directly
+		var improveCount = 0;
+		
+		function addImprove(stars) {
+			if (stars <= 0 || improvedEquipmentCount >= 4)
+				return;
+			improvedEquipmentCount += 1;
+			improveCount += stars;
+		}
+
+		var normalCount = 0;
+		var t89Count = 0;
+		var t2Count = 0;
+		this.ship( function( shipRid, shipInd, shipObj ) {
+			shipObj.equipment( function(itemId,eInd,eObj ) {
+				if (itemId <= 0)
+					return;
+				
+				if (eObj.masterId === 68) {
+					// normal landing craft
+					normalCount += 1;
+					addImprove( eObj.stars );
+				} else if (eObj.masterId === 166) {
+					// T89
+					t89Count += 1;
+					addImprove( eObj.stars );
+				} else if (eObj.masterId === 167) {
+					// T2
+					t2Count += 1;
+					addImprove( eObj.stars );
+				}
+			});
+		});
+
+		// without cap
+		var basicBonus = normalCount*0.05 + t89Count*0.02 + t2Count*0.01;
+		var landingCraftCount = normalCount + t89Count + t2Count;
+		var improveBonus = landingCraftCount > 0 
+			? 0.01 * improveCount * basicBonus / landingCraftCount
+			: 0.0;
+		return Math.min(0.2, basicBonus) + improveBonus;
 	};
 	
 	KC3Fleet.prototype.averageLevel = function(){

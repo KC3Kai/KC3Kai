@@ -749,7 +749,6 @@ html,body {
 /* Resource Nodes */
 .module.activity .node_type_resource {
 	width:150px;
-	height:28px;
 	line-height:18px;
 	padding:4px;
 	background:#B1FF5E;
@@ -770,9 +769,8 @@ html,body {
 	vertical-align:top;
 }
 .module.activity .node_res_text {
-	width:100px;
+	width:140px;
 	height:20px;
-	float:left;
 	font-weight:bold;
 	font-size:12px;
 }

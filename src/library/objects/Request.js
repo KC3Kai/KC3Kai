@@ -26,6 +26,7 @@ Executes processing and relies on KC3Network for the triggers
 	KC3Request.prototype.validateHeaders = function(){
 		// If response header statusCode is not 200, means non-in-game error
 		if(this.statusCode != 200){
+			console.error(this.statusCode, this.response);
 			KC3Network.trigger("CatBomb", {
 				title: KC3Meta.term("CatBombServerCommErrorTitle"),
 				message: KC3Meta.term("CatBombServerCommErrorMsg").format([this.call])
@@ -73,6 +74,7 @@ Executes processing and relies on KC3Network for the triggers
 	KC3Request.prototype.validateData = function(){
 		// If gameStatus is not 1. Game API returns 1 if complete success
 		if(this.gameStatus != 1){
+			console.error(this.gameStatus, this.response);
 			
 			// If it fails on "api_start2" which is the first API call
 			if(this.call == "api_start2"){

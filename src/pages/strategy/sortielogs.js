@@ -39,9 +39,15 @@
 		this.exportingReplay = false;
 		
 		/* INIT
-		Prepares all data needed
+		Prepares static data needed
 		---------------------------------*/
 		this.init = function(){
+		};
+
+		/* RELOAD
+		Prepares reloadable data
+		---------------------------------*/
+		this.reload = function(){
 			if(typeof localStorage.maps != "undefined"){
 				this.maps = JSON.parse( localStorage.maps );
 			}else{
@@ -53,124 +59,17 @@
 		Places data onto the interface
 		---------------------------------*/
 		this.execute = function(){
-			var
-				self = this,
-				diffStr = ["E","N","H"];
+			var self = this;
 			
 			// On-click world menus
 			$(".tab_"+tabCode+" .world_box").on("click", function(){
 				if(!$(".world_text",this).text().length) { return false; }
-				self.selectedWorld = $(this).data("world_num");
-				$(".tab_"+tabCode+" .world_box").removeClass("active");
-				$(this).addClass("active");
-				
-				$(".tab_"+tabCode+" .map_list").html("").css("width","").css("margin-left","");
-				$(".tab_"+tabCode+" .page_list").html("");
-				$(".tab_"+tabCode+" .sortie_list").html("");
-				
-				if(self.selectedWorld !== 0){
-					// Add all maps in this world selection
-					var mapBox,countMaps;
-					mapBox = $(".tab_"+tabCode+" .factory .map_box").clone().appendTo(".tab_"+tabCode+" .map_list");
-					$(".map_title", mapBox)
-						.text((function(x){
-							return (x>=10) ? KC3Meta.term("StrategyEventGo") : ("All W"+x);
-						})(self.selectedWorld));
-					
-					for(countMaps = 1;!!self.maps["m"+self.selectedWorld+countMaps];countMaps++){}
-					$(".tab_"+tabCode+" .map_list").css("width",Math.max(7,countMaps)*100);
-					
-					mapBox.data("map_num", 0);
-					$(window).data("map_off", (self.selectedWorld > 10 && countMaps >= 8) ? 1 : 0);
-					$(window).data("map_max", Math.max(0,countMaps-7));
-					mapBox.addClass("empty");
-					mapBox.addClass("active");
-					
-					updateScrollItem(tabCode);
-					
-					// Check player's map list
-					$.each(self.maps, function(index, element){
-						var cWorld = (""+element.id).substr(0, (""+element.id).length-1);
-						var cMap = (""+element.id).substr((""+element.id).length-1);
-						
-						// If this map is part of selected world
-						if(cWorld == self.selectedWorld){
-							mapBox = $(".tab_"+tabCode+" .factory .map_box").clone().appendTo(".tab_"+tabCode+" .map_list");
-							mapBox.data("map_num", cMap);
-							$(".map_title", mapBox).text((cWorld>=10 ? "E" : cWorld)+" - "+cMap+(function(x){
-								switch(x){
-									case 1: case 2: case 3:
-										return " " + diffStr[x-1];
-									default:
-										return "";
-								}
-							})(element.difficulty));
-							
-							// Check unselected difficulty
-							if(cWorld >= 10 && !element.difficulty) {
-								mapBox.addClass("noclearnogauge");
-								$(".map_hp_txt", mapBox).text("No difficulty");
-							} else {
-								// EASY MODO STRIKES BACK
-								if(ConfigManager.info_troll && element.difficulty==1) {
-									mapBox.addClass("easymodokimoi");
-								}
-								// If this map is already cleared
-								if(element.clear == 1){
-									$(".map_hp_txt", mapBox).text("Cleared!");
-									mapBox.addClass("cleared");
-								}else{
-									mapBox.addClass("notcleared");
-									// If HP-based gauge
-									if(typeof element.maxhp != "undefined"){
-										if(element.curhp>(element.baseHp || 1)){ // i want to approach last kill as JUST DO IT instead leaving 1HP only.
-											if((element.maxhp === 9999) || (element.curhp === 9999))
-												$(".map_hp_txt", mapBox).text( "???? / ????" );
-											else
-												$(".map_hp_txt", mapBox).text( element.curhp+" / "+element.maxhp );
-											$(".map_bar", mapBox).css("width", ((element.curhp/element.maxhp)*80)+"px");
-										}else{
-											mapBox.addClass("noclearnogauge");
-											if(ConfigManager.info_troll)
-												mapBox
-													.addClass("justdoit")
-													.attr("title","just kill her already, yesterday you said tommorow! JUST DO IT!!!"); // placeholder class... 
-											$(".map_hp_txt", mapBox).text(KC3Meta.term("StrategyEvents1HP"));
-										}
-									// If kill-based gauge
-									}else{
-										var totalKills = KC3Meta.gauge( element.id );
-										var killsLeft = totalKills - element.kills;
-										if(totalKills){
-											if(killsLeft > 1)
-												$(".map_hp_txt", mapBox).text( killsLeft+" / "+totalKills+" kills left");
-											else
-												$(".map_hp_txt", mapBox).text( KC3Meta.term("StrategyEvents1HP") );
-											$(".map_bar", mapBox).css("width", ((killsLeft/totalKills)*80)+"px");
-										} else {
-											mapBox.addClass("noclearnogauge");
-											$(".map_hp_txt", mapBox).text("Not cleared");
-										}
-									}
-								}
-							
-							}
-						}
-					});
-					
-					$("<div>").addClass("clear").appendTo(".tab_"+tabCode+" .map_list");
-					$(".tab_"+tabCode+" .map_list .map_box.active").trigger("click");
-				}else{
-					self.showMap();
-				}
+				KC3StrategyTabs.gotoTab(null, $(this).data("world_num"));
 			});
 			
 			// On-click map menus
 			$(".tab_"+tabCode+" .map_list").on("click", ".map_box", function(){
-				self.selectedMap = parseInt( $(this).data("map_num"), 10);
-				$(".tab_"+tabCode+" .map_box").removeClass("active");
-				$(this).addClass("active");
-				self.showMap();
+				KC3StrategyTabs.gotoTab(null, self.selectedWorld, $(this).data("map_num"));
 			});
 			
 			// Toggleable map scroll
@@ -197,9 +96,6 @@
 				self.exportBattleImg(parseInt($(this).text()));
 			});
 			
-			// Select default opened world
-			$(".tab_"+tabCode+" .world_box.active").trigger("click");
-			
 			// On-click sortie toggles
 			$(".tab_"+tabCode+" .sortie_list").on("click", ".sortie_box .sortie_toggles .sortie_toggle", function(){
 				var targetName = $(this).data("target");
@@ -224,6 +120,140 @@
 				if(expandedQualif && expandedAfter < 1)
 					targetParent.removeClass("expanded");
 			});
+
+			if(!!KC3StrategyTabs.pageParams[1]){
+				this.switchWorld(KC3StrategyTabs.pageParams[1],
+					KC3StrategyTabs.pageParams[2]);
+			} else {
+				// Select default opened world
+				this.switchWorld($(".tab_"+tabCode+" .world_box.active").data("world_num"));
+			}
+		};
+
+		/* SWITCH WORLD
+		Handle event on a world has been selected by clicking menu or by url
+		---------------------------------*/
+		this.switchWorld = function(worldNum, mapNum){
+			var self = this;
+			self.selectedWorld = Number(worldNum);
+			$(".tab_"+tabCode+" .world_box").removeClass("active");
+			$(".tab_"+tabCode+" .world_box[data-world_num={0}]".format(self.selectedWorld)).addClass("active");
+
+			$(".tab_"+tabCode+" .map_list").html("").css("width","").css("margin-left","");
+			$(".tab_"+tabCode+" .page_list").html("");
+			$(".tab_"+tabCode+" .sortie_list").html("");
+
+			if(self.selectedWorld !== 0){
+				// Add all maps in this world selection
+				var mapBox,countMaps;
+				mapBox = $(".tab_"+tabCode+" .factory .map_box").clone().appendTo(".tab_"+tabCode+" .map_list");
+				$(".map_title", mapBox)
+					.text((function(x){
+						return (x>=10) ? KC3Meta.term("StrategyEventGo") : ("All W"+x);
+					})(self.selectedWorld));
+
+				for(countMaps = 1;!!self.maps["m"+self.selectedWorld+countMaps];countMaps++){}
+				$(".tab_"+tabCode+" .map_list").css("width",Math.max(7,countMaps)*100);
+
+				mapBox.attr("data-map_num", 0);
+				$(window).data("map_off", (self.selectedWorld > 10 && countMaps >= 8) ? 1 : 0);
+				$(window).data("map_max", Math.max(0,countMaps-7));
+				mapBox.addClass("empty");
+				mapBox.addClass("active");
+
+				updateScrollItem(tabCode);
+
+				var diffStr = ["E","N","H"];
+				// Check player's map list
+				$.each(self.maps, function(index, element){
+					var cWorld = (""+element.id).substr(0, (""+element.id).length-1);
+					var cMap = (""+element.id).substr((""+element.id).length-1);
+
+					// If this map is part of selected world
+					if(cWorld == self.selectedWorld){
+						mapBox = $(".tab_"+tabCode+" .factory .map_box").clone().appendTo(".tab_"+tabCode+" .map_list");
+						mapBox.attr("data-map_num", cMap);
+						$(".map_title", mapBox).text((cWorld>=10 ? "E" : cWorld)+" - "+cMap+(function(x){
+							switch(x){
+								case 1: case 2: case 3:
+									return " " + diffStr[x-1];
+								default:
+									return "";
+							}
+						})(element.difficulty));
+
+						// Check unselected difficulty
+						if(cWorld >= 10 && !element.difficulty) {
+							mapBox.addClass("noclearnogauge");
+							$(".map_hp_txt", mapBox).text("No difficulty");
+						} else {
+							// EASY MODO STRIKES BACK
+							if(ConfigManager.info_troll && element.difficulty==1) {
+								mapBox.addClass("easymodokimoi");
+							}
+							// If this map is already cleared
+							if(element.clear == 1){
+								$(".map_hp_txt", mapBox).text("Cleared!");
+								mapBox.addClass("cleared");
+							}else{
+								mapBox.addClass("notcleared");
+								// If HP-based gauge
+								if(typeof element.maxhp != "undefined"){
+									if(element.curhp>(element.baseHp || 1)){ // i want to approach last kill as JUST DO IT instead leaving 1HP only.
+										if((element.maxhp === 9999) || (element.curhp === 9999))
+											$(".map_hp_txt", mapBox).text( "???? / ????" );
+										else
+											$(".map_hp_txt", mapBox).text( element.curhp+" / "+element.maxhp );
+										$(".map_bar", mapBox).css("width", ((element.curhp/element.maxhp)*80)+"px");
+									}else{
+										mapBox.addClass("noclearnogauge");
+										if(ConfigManager.info_troll)
+											mapBox
+												.addClass("justdoit")
+												.attr("title","just kill her already, yesterday you said tommorow! JUST DO IT!!!"); // placeholder class...
+										$(".map_hp_txt", mapBox).text(KC3Meta.term("StrategyEvents1HP"));
+									}
+								// If kill-based gauge
+								}else{
+									var totalKills = KC3Meta.gauge( element.id );
+									var killsLeft = totalKills - element.kills;
+									if(totalKills){
+										if(killsLeft > 1)
+											$(".map_hp_txt", mapBox).text( killsLeft+" / "+totalKills+" kills left");
+										else
+											$(".map_hp_txt", mapBox).text( KC3Meta.term("StrategyEvents1HP") );
+										$(".map_bar", mapBox).css("width", ((killsLeft/totalKills)*80)+"px");
+									} else {
+										mapBox.addClass("noclearnogauge");
+										$(".map_hp_txt", mapBox).text("Not cleared");
+									}
+								}
+							}
+
+						}
+					}
+				});
+
+				$("<div>").addClass("clear").appendTo(".tab_"+tabCode+" .map_list");
+				if(!mapNum){
+					self.switchMap($(".tab_"+tabCode+" .map_list .map_box.active").data("map_num"));
+				} else {
+					self.switchMap(mapNum);
+				}
+			}else{
+				self.showMap();
+			}
+		};
+
+		/* SWITCH MAP
+		Handle event on a map has been selected by clicking menu or by url
+		---------------------------------*/
+		this.switchMap = function(mapNum){
+			var self = this;
+			self.selectedMap = Number(mapNum);
+			$(".tab_"+tabCode+" .map_box").removeClass("active");
+			$(".tab_"+tabCode+" .map_box[data-map_num={0}]".format(self.selectedMap)).addClass("active");
+			self.showMap();
 		};
 		
 		/* SHOW MAP
@@ -534,9 +564,11 @@
 								return (mstat.onBoss[statKey] || []).indexOf(sortie.id) >= 0;
 							}).shift();
 						try {
-							mstat.onBoss.hpdat[sortie.id].forEach(function(v,i){
-								$([".boss.",kstat[i],"hp"].join(''),sstat).text(v);
-							});
+							if(mstat.onBoss.hpdat[sortie.id]){
+								mstat.onBoss.hpdat[sortie.id].forEach(function(v,i){
+									$([".boss.",kstat[i],"hp"].join(''),sstat).text(v);
+								});
+							}
 							$(".sortie_end_clear",sstat).css('visibility',isHClear ? 'visible' : '');
 							$(".sortie_end_error",sstat).css('visibility',isCtBomb ? 'visible' : '');
 							$(".sortie_end_final",sstat)

@@ -9,11 +9,17 @@
 	<div class="help_a">It is currently disabled in favor of the night battle capability column in black. There are plans to enhance this table in the future.</div>
 	<div class="help_q">Where is the speed column?</div>
 	<div class="help_a">The same with heartlock.</div>
+	<div class="help_q">Where are the ship-types of DDE and AP?</div>
+	<div class="help_a">They are not used by our shipgirls (AP taken by abyssal).</div>
 	<div class="help_q">What is "Sort By Multiple Keys"?</div>
 	<div class="help_a"><p>Normally you can sort ships by levels, or sort by ship types so that ships of same type are grouped together. But this doesn't give you the ability to say &quot;sort ship by their types, and under the same type, sort them by level.&quot;.</p>
 	  <p>And sorting by multiple keys solves this problem: you can first sort ships by type to group them, then use ship level as the second key to sort under each type.</p>
 	  <p>To use this function, select one column header you want to sort as usual. Once the first key is chosen, you can click &quot;Start&quot; to enable multiple key sorting, under this mode, each column header you click <strong>accumulates to</strong>, instead of replacing previous sorting method.</p>
 	  <p>Suppose you want to sort ships by type, under the same type you want to sort by level, and if there are ships that have same type and level, you want to further sort them by morale. You can first click &quot;Type&quot; header, then toggle &quot;Start&quot; button to enable multiple key sorting. and then click &quot;Level&quot; and &quot;:)&quot; (Morale) in order. When toggling on &quot;Start&quot; button, you will see an extra line under it to indicate current sorting method. By performing actions above, you'll see &quot;Type &gt; Level &gt; Morale&quot;, which does what you want. If you want some keys to be sorted in reversed order, just click on that header again.</p>
+	</div>
+
+	<div class="help_more">
+		<a href="https://github.com/KC3Kai/KC3Kai/wiki/Strategy-Room%3A-Ships">Learn more</a>
 	</div>
 </div>
 
@@ -97,20 +103,20 @@
 			<div class="ship_field hover ship_id" data-type="id">ID</div>
 			<div class="ship_field ship_img"></div>
 			<div class="ship_field hover ship_name" data-type="name">Name</div>
-			<div class="ship_field hover ship_type"  data-type="type">Type</div>
-			<div class="ship_field hover ship_lv"  data-type="lv">Level</div>
-			<div class="ship_field hover ship_morale"  data-type="morale">:)</div>
+			<div class="ship_field hover ship_type" data-type="type">Type</div>
+			<div class="ship_field hover ship_lv" data-type="lv">Level</div>
+			<div class="ship_field hover ship_morale i18n_title" title="ShipMorale" data-type="morale">:)</div>
 			
-			<div class="ship_field hover ship_stat ship_hp" data-type="hp"><img src="../../assets/img/stats/hp.png" /></div>
-			<div class="ship_field hover ship_stat ship_stat_mod ship_fp" data-type="fp"><img src="../../assets/img/stats/fp.png" /></div>
-			<div class="ship_field hover ship_stat ship_stat_mod ship_tp" data-type="tp"><img src="../../assets/img/stats/tp.png" /></div>
-			<div class="ship_field hover ship_stat ship_stat_mod ship_aa" data-type="aa"><img src="../../assets/img/stats/aa.png" /></div>
-			<div class="ship_field hover ship_stat ship_stat_mod ship_ar" data-type="ar"><img src="../../assets/img/stats/ar.png" /></div>
-			<div class="ship_field hover ship_stat ship_as" data-type="as"><img src="../../assets/img/stats/as.png" /></div>
-			<div class="ship_field hover ship_stat ship_ev" data-type="ev"><img src="../../assets/img/stats/ev.png" /></div>
-			<div class="ship_field hover ship_stat ship_ls" data-type="ls"><img src="../../assets/img/stats/ls.png" /></div>
-			<div class="ship_field hover ship_stat ship_lk" data-type="lk"><img src="../../assets/img/stats/lk.png" /></div>
-			<div class="ship_field hover ship_stat ship_stat_mod ship_yasen" data-type="yasen"><img src="../../assets/img/stats/yasen.png" /></div>
+			<div class="ship_field hover ship_stat ship_hp i18n_title" title="ShipHp" data-type="hp"><img src="../../assets/img/stats/hp.png" /></div>
+			<div class="ship_field hover ship_stat ship_stat_mod ship_fp i18n_title" title="ShipFire" data-type="fp"><img src="../../assets/img/stats/fp.png" /></div>
+			<div class="ship_field hover ship_stat ship_stat_mod ship_tp i18n_title" title="ShipTorpedo" data-type="tp"><img src="../../assets/img/stats/tp.png" /></div>
+			<div class="ship_field hover ship_stat ship_stat_mod ship_aa i18n_title" title="ShipAntiAir" data-type="aa"><img src="../../assets/img/stats/aa.png" /></div>
+			<div class="ship_field hover ship_stat ship_stat_mod ship_ar i18n_title" title="ShipArmor" data-type="ar"><img src="../../assets/img/stats/ar.png" /></div>
+			<div class="ship_field hover ship_stat ship_as i18n_title" title="ShipAsw" data-type="as"><img src="../../assets/img/stats/as.png" /></div>
+			<div class="ship_field hover ship_stat ship_ev i18n_title" title="ShipEvasion" data-type="ev"><img src="../../assets/img/stats/ev.png" /></div>
+			<div class="ship_field hover ship_stat ship_ls i18n_title" title="ShipLos" data-type="ls"><img src="../../assets/img/stats/ls.png" /></div>
+			<div class="ship_field hover ship_stat ship_lk i18n_title" title="ShipLuck" data-type="lk"><img src="../../assets/img/stats/lk.png" /></div>
+			<div class="ship_field hover ship_stat ship_stat_mod ship_yasen i18n_title" title="ShipYasenFp" data-type="yasen"><img src="../../assets/img/stats/yasen.png" /></div>
 			
 			<div class="ship_field ship_equip">Equipment</div>
 			<div class="ship_field ship_lock"></div>
@@ -141,7 +147,7 @@
 		<!-- SHIP RECORD -->
 		<div class="ship_item">
 			<div class="ship_field ship_id"></div>
-			<div class="ship_field ship_img"><img class="ship_icon"/><img class="ship_kekkon" alt=""/></div>
+			<div class="ship_field ship_img hover"><img class="ship_icon"/><img class="ship_kekkon" alt=""/></div>
 			<div class="ship_field ship_name"></div>
 			<div class="ship_field ship_type"></div>
 			<div class="ship_field ship_lv"></div>
@@ -161,10 +167,10 @@
 			<div class="ship_field ship_stat ship_stat_mod ship_yasen"></div>
 			
 			<div class="ship_field ship_equip">
-				<div class="ship_equip_icon ship_equip_1"><img/><span></span></div>
-				<div class="ship_equip_icon ship_equip_2"><img/><span></span></div>
-				<div class="ship_equip_icon ship_equip_3"><img/><span></span></div>
-				<div class="ship_equip_icon ship_equip_4"><img/><span></span></div>
+				<div class="ship_equip_icon ship_equip_1 hover"><img/><span></span></div>
+				<div class="ship_equip_icon ship_equip_2 hover"><img/><span></span></div>
+				<div class="ship_equip_icon ship_equip_3 hover"><img/><span></span></div>
+				<div class="ship_equip_icon ship_equip_4 hover"><img/><span></span></div>
 				<div class="clear"></div>
 			</div> 			
 			

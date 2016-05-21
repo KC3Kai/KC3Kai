@@ -12,6 +12,13 @@
 		Prepares all data needed
 		---------------------------------*/
 		init :function(){
+
+		},
+
+		/* RELOAD
+		Prepares latest quests data
+		---------------------------------*/
+		reload :function(){
 			KC3QuestManager.load();
 		},
 		
@@ -44,26 +51,26 @@
 			
 			$(".resetDailies").on("click", function(){
 				KC3QuestManager.resetDailies();
-				window.location.reload();
+				KC3StrategyTabs.reloadTab(undefined, true);
 			});
 			
 			$(".resetWeeklies").on("click", function(){
 				KC3QuestManager.resetWeeklies();
-				window.location.reload();
+				KC3StrategyTabs.reloadTab(undefined, true);
 			});
 			
 			$(".resetMonthlies").on("click", function(){
 				KC3QuestManager.resetMonthlies();
-				window.location.reload();
+				KC3StrategyTabs.reloadTab(undefined, true);
 			});
 			
 			$(".resetAllQuests").on("click", function(){
 				KC3QuestManager.clear();
-				window.location.reload();
+				KC3StrategyTabs.reloadTab(undefined, true);
 			});
 			
 			// Manual quest count overrides
-			$(".tab_flowchart").on("click", ".questOverride", function(){
+			$(".flowchart").on("click", ".questOverride", function(){
 				var editingQuest = KC3QuestManager.get($(this).data("id"));
 				if(typeof editingQuest.tracking != "undefined"){
 					// +1
@@ -85,21 +92,21 @@
 			});
 			
 			// Manual override quest status
-			$(".tab_flowchart").on("click", ".questToggle", function(){
+			$(".flowchart").on("click", ".questToggle", function(){
 				var editingQuest = KC3QuestManager.get($(this).data("id"));
 				console.log(editingQuest.status);
 				editingQuest.status++;
 				if(editingQuest.status>=4){ editingQuest.status=0; }
 				KC3QuestManager.save();
-				window.location.reload();
+				KC3StrategyTabs.reloadTab(undefined, true);
 			});
 			
 			// Manual remove quest
-			$(".tab_flowchart").on("click", ".questRemove", function(){
+			$(".page_padding").on("click", ".questRemove", function(){
 				console.log(KC3QuestManager.list["q"+$(this).data("id")]);
 				delete KC3QuestManager.list["q"+$(this).data("id")];
 				KC3QuestManager.save();
-				window.location.reload();
+				KC3StrategyTabs.reloadTab(undefined, true);
 			});
 			
 		},

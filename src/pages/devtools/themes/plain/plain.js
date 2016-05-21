@@ -1903,10 +1903,7 @@
 			var ExpdIncome = KEIB.getExpeditionIncomeBase(selectedExpedition);
 			var ExpdFleetCost = fleetObj.calcExpeditionCost( selectedExpedition );
 
-			var numLandingCrafts = fleetObj.countLandingCrafts();
-			if (numLandingCrafts > 4)
-				numLandingCrafts = 4;
-			var landingCraftFactor = 0.05*numLandingCrafts + 1;
+			var landingCraftFactor = fleetObj.calcLandingCraftBonus() + 1;
 			var greatSuccessFactor = plannerIsGreatSuccess ? 1.5 : 1;
 
 			$(".module.activity .activity_expeditionPlanner .estimated_time").text( String( 60*ExpdCost.time ).toHHMMSS() );
@@ -1932,13 +1929,17 @@
 					netResourceIncome -= ExpdFleetCost[v];
 				}
 
-				var tooltipText = String(ExpdIncome[v]);
-				if (landingCraftFactor > 1)
-					tooltipText += "*" + String(landingCraftFactor);
-				if (greatSuccessFactor > 1)
-					tooltipText += "*" + String(greatSuccessFactor);
+				var tooltipText = "{0} = {1}".format(netResourceIncome, incomeVal);
+				if (incomeVal > 0) {
+					tooltipText += "{=" + String(ExpdIncome[v]);
+					if (landingCraftFactor > 1)
+						tooltipText += "*" + String(landingCraftFactor);
+					if (greatSuccessFactor > 1)
+						tooltipText += "*" + String(greatSuccessFactor);
+					tooltipText += "}";
+				}
 				if (v === "fuel" || v === "ammo") {
-					tooltipText += "-" + String(ExpdFleetCost[v]);
+					tooltipText += " - " + String(ExpdFleetCost[v]);
 				}
 
 				jqObj.text( netResourceIncome );

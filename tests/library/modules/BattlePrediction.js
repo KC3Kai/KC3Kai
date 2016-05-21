@@ -19,13 +19,13 @@ QUnit.module( "Module", function() {
             QUnit.test(testTitle, function(assert) {
                 var pathToSrc = "../../../src/";
                 KC3Master.init(api_start2.api_data);
-		        KC3Meta.init(pathToSrc+"data/");
-		        KC3Meta.defaultIcon(pathToSrc+"assets/img/ui/empty.png");
-		        ConfigManager.load();
-		        PlayerManager.init();
-		        KC3ShipManager.load();
-		        KC3GearManager.load();
-		        KC3Database.init();
+                KC3Meta.init(pathToSrc+"data/");
+                KC3Meta.defaultIcon(pathToSrc+"assets/img/ui/empty.png");
+                ConfigManager.load();
+                PlayerManager.init();
+                KC3ShipManager.load();
+                KC3GearManager.load();
+                KC3Database.init();
 
                 var isCombined = battleData.combined !== 0;
                 PlayerManager.combinedFleet = battleData.combined;
@@ -93,6 +93,7 @@ QUnit.module( "Module", function() {
                 }
 
                 localStorage.maps = JSON.stringify( {m00: {id:0, clear:1, kind: "single"}} );
+                KC3SortieManager.onSortie = 0;
                 KC3SortieManager.startSortie(
                     // fake map 0-0
                     0,0,
@@ -100,6 +101,7 @@ QUnit.module( "Module", function() {
                     1,
                     // time & eventData: not used
                     null, null);
+                KC3SortieManager.onSortie = 1;
 
                 // set node 100 as boss node
                 KC3SortieManager.setBoss(100, null);

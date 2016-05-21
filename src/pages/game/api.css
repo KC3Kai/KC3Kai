@@ -9,13 +9,13 @@ body {
 
 .box-wrap {
 	width:800px;
-	height:480px;
+	height:100%;
 	margin:0px auto;
 	overflow:hidden;
 	background:url(../../assets/img/client/base.jpg);
 }
 .box-wrap.critical {
-	/*-webkit-filter: blur(1px);*/
+	/* -webkit-filter: blur(1px); */
 }
 
 #factory {

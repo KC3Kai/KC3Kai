@@ -47,6 +47,12 @@
 	clear: both;
 }
 
+.tab_translations .tr-json {
+	font-family: monospace;
+	color: gray;
+	display: none;
+}
+
 .tab_translations .tq-item {
 	border: thin solid black;
 	padding-left: 10px;
@@ -69,6 +75,17 @@
 
 .tab_translations .tq-desc {
 	clear: both;
+}
+
+.tab_translations .tq-memo {
+	font-size: smaller;
+	clear: both;
+}
+
+.tab_translations .tq-json {
+	font-family: monospace;
+	color: gray;
+	display: none;
 }
 
 .tab_translations .tq-item.translation_done .tq-key {

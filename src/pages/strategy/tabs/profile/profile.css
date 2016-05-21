@@ -2,6 +2,14 @@
 	width:680px;
 }
 
+.tab_profile .homepage_hints {
+	background:#fcf8e3;
+	margin:10px 0px 0px 0px;
+	padding:5px 5px 5px 5px;
+	border-radius:5px 5px 5px 5px;
+	display:none;
+}
+
 /* ADMIRAL
 --------------------------------*/
 .tab_profile .hq_info {

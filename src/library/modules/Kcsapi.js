@@ -102,7 +102,7 @@ Previously known as "Reactor"
 			PlayerManager.setRepairDocks( response.api_data.api_ndock );
 			PlayerManager.buildSlots = response.api_data.api_basic.api_count_kdock;
 			
-			var UTCtime = Math.floor((new Date(headers.Date)).getTime()/1000);
+			var UTCtime = Date.toUTCseconds(headers.Date);
 			
 			PlayerManager.portRefresh({
 				time: UTCtime * 1000,
@@ -254,7 +254,7 @@ Previously known as "Reactor"
 		},
 		
 		"api_get_member/material":function(params, response, headers){
-			var UTCtime = Math.floor((new Date(headers.Date)).getTime()/1000);
+			var UTCtime = Date.toUTCseconds(headers.Date);
 			
 			var thisItem, myResources=[];
 			for(var ctr in response.api_data){
@@ -277,7 +277,7 @@ Previously known as "Reactor"
 		},
 		
 		"api_get_member/useitem":function(params, response, headers){
-			var UTCtime = Math.floor((new Date(headers.Date)).getTime()/1000);
+			var UTCtime = Date.toUTCseconds(headers.Date);
 			
 			var thisItem;
 			for(var ctr in response.api_data){
@@ -368,7 +368,7 @@ Previously known as "Reactor"
 		
 		"api_req_kaisou/remodeling":function(params, response, headers){
 			var
-				ctime    = (new Date(headers.Date)).getTime(),
+				ctime    = Date.safeToUtcTime(headers.Date),
 				ship     = KC3ShipManager.get(params.api_id),
 				master   = ship.master(),
 				material = [0,-master.api_afterbull,-master.api_afterfuel,0,0,0,0,0];
@@ -415,6 +415,21 @@ Previously known as "Reactor"
 		
 		/* Fleet Presets
 		-------------------------------------------------------*/
+		// List Presets
+		"api_get_member/preset_deck":function(params, response, headers){
+			console.log("LIST PRESETS", response.api_data.api_deck);
+		},
+		
+		// Register preset
+		"api_req_hensei/preset_register":function(params, response, headers){
+			console.log("REGISTERED PRESET", response.api_data.api_preset_no, response.api_data);
+		},
+		
+		// Remove Preset from list
+		"api_req_hensei/preset_delete":function(params, response, headers){
+			console.log("DELETED PRESET", params.api_preset_no);
+		},
+		
 		// Use a Preset
 		"api_req_hensei/preset_select":function(params, response, headers){
 			var deckId = parseInt(params.api_deck_id, 10);
@@ -464,7 +479,7 @@ Previously known as "Reactor"
 		/* Update fleet name
 		-------------------------------------------------------*/
 		"api_req_member/updatedeckname":function(params, response, headers){
-			PlayerManager.fleets[params.api_deck_id-1].name = params.api_name;
+			PlayerManager.fleets[params.api_deck_id-1].name = decodeURIComponent(params.api_name);
 			localStorage.fleets = JSON.stringify(PlayerManager.fleets);
 		},
 		
@@ -476,7 +491,7 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_kousyou/createship":function(params, response, headers){
 			var 
-				ctime    = (new Date(headers.Date)).getTime();
+				ctime    = Date.safeToUtcTime(headers.Date);
 			this.shipConstruction = {
 				active: true,
 				dock_num: params.api_kdock_id,
@@ -507,7 +522,7 @@ Previously known as "Reactor"
 		/* Construction Docks
 		-------------------------------------------------------*/
 		"api_get_member/kdock":function(params, response, headers){
-			var UTCtime = Math.hrdInt("floor",(new Date(headers.Date)).getTime(),3,1);
+			var UTCtime = Math.hrdInt("floor",Date.safeToUtcTime(headers.Date),3,1);
 			if(this.shipConstruction.active){
 				if(this.shipConstruction.lsc == 1){
 					KC3Database.LSC({
@@ -717,7 +732,7 @@ Previously known as "Reactor"
 		/* Start Sortie
 		-------------------------------------------------------*/
 		"api_req_map/start":function(params, response, headers){
-			var UTCTime = Math.floor((new Date(headers.Date)).getTime()/1000);
+			var UTCTime = Date.toUTCseconds(headers.Date);
 			KC3SortieManager.startSortie(
 				response.api_data.api_maparea_id,
 				response.api_data.api_mapinfo_no,
@@ -756,7 +771,7 @@ Previously known as "Reactor"
 		/* Traverse Map
 		-------------------------------------------------------*/
 		"api_req_map/next":function(params, response, headers){
-			var UTCTime = Math.floor((new Date(headers.Date)).getTime()/1000);
+			var UTCTime = Date.toUTCseconds(headers.Date);
 			KC3SortieManager.discardSunk();
 			KC3SortieManager.advanceNode( response.api_data, UTCTime );
 			KC3Network.trigger("CompassResult");
@@ -767,7 +782,7 @@ Previously known as "Reactor"
 		"api_req_sortie/battle":function(params, response, headers){
 			KC3SortieManager.engageBattle(
 				response.api_data,
-				Math.floor((new Date(headers.Date)).getTime()/1000)
+				Date.toUTCseconds(headers.Date)
 			);
 			KC3Network.trigger("BattleStart");
 		},
@@ -783,7 +798,7 @@ Previously known as "Reactor"
 		"api_req_combined_battle/battle":function(params, response, headers){
 			KC3SortieManager.engageBattle(
 				response.api_data,
-				Math.floor((new Date(headers.Date)).getTime()/1000)
+				Date.toUTCseconds(headers.Date)
 			);
 			KC3Network.trigger("BattleStart");
 		},
@@ -802,14 +817,14 @@ Previously known as "Reactor"
 		"api_req_battle_midnight/sp_midnight":function(params, response, headers){
 			KC3SortieManager.engageBattleNight(
 				response.api_data,
-				Math.floor((new Date(headers.Date)).getTime()/1000)
+				Date.toUTCseconds(headers.Date)
 			);
 			KC3Network.trigger("BattleStart");
 		},
 		"api_req_combined_battle/sp_midnight":function(params, response, headers){
 			KC3SortieManager.engageBattleNight(
 				response.api_data,
-				Math.floor((new Date(headers.Date)).getTime()/1000)
+				Date.toUTCseconds(headers.Date)
 			);
 			KC3Network.trigger("BattleStart");
 		},
@@ -902,7 +917,7 @@ Previously known as "Reactor"
 		
 		"api_req_quest/clearitemget": function(params, response, headers){
 			var 
-				ctime    = (new Date(headers.Date)).getTime(),
+				ctime    = Date.safeToUtcTime(headers.Date),
 				quest    = params.api_quest_id,
 				data     = response.api_data,
 				material = data.api_material,
@@ -1077,7 +1092,7 @@ Previously known as "Reactor"
 		/* PVP Start
 		-------------------------------------------------------*/
 		"api_req_practice/battle":function(params, response, headers){
-			KC3SortieManager.sortieTime = Math.hrdInt('floor',(new Date(headers.Date)).getTime(),3,1);
+			KC3SortieManager.sortieTime = Math.hrdInt('floor',Date.safeToUtcTime(headers.Date),3,1);
 			KC3SortieManager.map_world  = -1;
 			KC3SortieManager.snapshotFleetState();
 			KC3Network.trigger("PvPStart", {
@@ -1122,7 +1137,7 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_mission/result":function(params, response, headers){
 			var
-				ctime    = (new Date(headers.Date)).getTime(),
+				ctime    = Date.safeToUtcTime(headers.Date),
 				deck     = parseInt(params.api_deck_id, 10),
 				timerRef = KC3TimerManager._exped[ deck-2 ],
 				shipList = PlayerManager.fleets[deck - 1].ships.slice(0),
@@ -1262,7 +1277,7 @@ Previously known as "Reactor"
 			var
 				resourceUsed = [ params.api_item1, params.api_item2, params.api_item3, params.api_item4 ],
 				failed       = (typeof response.api_data.api_slot_item == "undefined"),
-				ctime        = Math.hrdInt("floor",(new Date(headers.Date)).getTime(),3,1);
+				ctime        = Math.hrdInt("floor",Date.safeToUtcTime(headers.Date),3,1);
 			
 			// Log into development History
 			KC3Database.Develop({
@@ -1318,7 +1333,7 @@ Previously known as "Reactor"
 				rsc   = [0,0,0,0,0,0,0,0],
 				ship  = KC3ShipManager.get(params.api_ship_id),
 				scrap = [],
-				ctime = (new Date(headers.Date)).getTime();
+				ctime = Date.safeToUtcTime(headers.Date);
 			
 			// Base ship scrap value
 			scrap.push(ship.master());
@@ -1355,7 +1370,7 @@ Previously known as "Reactor"
 		"api_req_kousyou/destroyitem2":function(params, response, headers){
 			var
 				rsc   = [0,0,0,0,0,0,0,0],
-				ctime = (new Date(headers.Date)).getTime();
+				ctime = Date.safeToUtcTime(headers.Date);
 			$.each(params.api_slotitem_ids.split("%2C"), function(index, itemId){
 				KC3GearManager.get(itemId).master().api_broken.forEach(function(x,i){
 					rsc[i] += x;
@@ -1522,7 +1537,7 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_member/itemuse":function(params, response, headers){
 			var
-				ctime  = (new Date(headers.Date)).getTime(),
+				ctime  = Date.safeToUtcTime(headers.Date),
 				itemId = parseInt(params.api_useitem_id,10),
 				fForce = parseInt(params.api_force_flag,10),
 				fExchg = parseInt(params.api_exchange_type,10), // pops out from present box
@@ -1587,7 +1602,7 @@ Previously known as "Reactor"
 				rm = self.remodelSlot,
 				ky = (parseInt(params.api_certain_flag) && "certain") || "req",
 				cu = rm.slotCur,
-				ct = (new Date(headers.Date)).getTime(),
+				ct = Date.safeToUtcTime(headers.Date),
 				mt = Array.apply(null,{length:8}).map(function(){return 0;}),
 				ms = KC3GearManager.get(parseInt(params.api_slot_id)).master();
 			['fuel','bull','steel','bauxite','','','buildkit','remodelkit'].forEach(function(dk,id){
@@ -1635,7 +1650,7 @@ Previously known as "Reactor"
 			getRank = function(r){ return ['E','D','C','B','A','S','SS'].indexOf(r); },
 			qLog = function(r){ // this one is used to track things
 				var q = KC3QuestManager.get(r);
-				console.log("Quest",r,"progress ["+(q.tracking ? q.tracking : '-----')+"]",q.status == 2);
+				console.log("Quest",r,"progress ["+(q.tracking ? q.tracking : '-----')+"], in progress:",q.status == 2);
 				return q;
 			};
 		
@@ -1670,13 +1685,13 @@ Previously known as "Reactor"
 					[243,0,[5,2], true], // Bw9: Sortie to [W5-2] and S-rank the boss node 2 times
 					[256,0,[6,1], true]  // Bm2: Deploy to [W6-1] and obtain an S-rank the boss node 3 times
 				],
-				[ /* KANZEN */ ],
+				[ /* SS RANK Kanzen shohri */ ],
 			].slice(0, rankPt+1)
 				.reduce(function(x,y){ return x.concat(y); })
 				.filter(function(x){
 					return (
 						(!x[2] || KC3SortieManager.isSortieAt.apply(KC3SortieManager,x[2])) && /* Is sortie at */
-						(!x[3] || KC3SortieManager.currentNode().isBoss())           && /* Is on boss node */
+						(!x[3] || KC3SortieManager.currentNode().isBoss())                  && /* Is on boss node */
 						true
 					);
 				})

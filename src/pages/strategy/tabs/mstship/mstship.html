@@ -18,7 +18,18 @@
 	<div class="help_a">Yes, it is known that sometimes, hourly buttons show up even if the shipfu doesnt really have them. We are still finding whats the API flag for this. If anyone can help, <a href="https://www.facebook.com/kc3kai" target="_blank">let us know</a> :)</div>
 	
 	<div class="help_q">Why do I need to do the flash security settings?</div>
-	<div class="help_a">You'll need to add this extension to the "trusted" locations that can load external files - so that we can show you the CG. If not, you probably have seen the looping disaster.</div>
+	<div class="help_a">You'll need to add this extension to the "trusted" locations that can load external files - so that we can show you the CG. If not, you probably have seen the looping disaster.
+		<div>
+			<strong>Setting directives:</strong>
+			<ul>
+				<li><a target="_blank" href="http://www.macromedia.com/support/documentation/en/flashplayer/help/settings_manager04.html">Click here</a> to go to flash player security settings</li>
+				<li>Click on "<em>Edit Locations...</em>"</li>
+				<li>Choose "<em>Add location</em>"</li>
+				<li>Paste the extension code <code>chrome-extension://<span class="runtime_id"></span>/</code>, and confirm</li>
+				<li>Refresh this page via browser reload button</li>
+			</ul>
+		</div>
+	</div>
 	
 	<div class="help_q">Where are the default equipment?</div>
 	<div class="help_a">It's not here, nothing to show you. <a href="http://kancolle.wikia.com" target="_blank">Just visit the wikia</a>.</div>
@@ -38,13 +49,13 @@
 <!-- UPDATE LIST -->
 <div class="page_padding">
 	
-	<div class="cg_notes">
+	<div class="cg_notes" title="Click to dismiss. It can always be found at Help Topics.">
 		<strong>NOTICE</strong>: If the CG viewer is a looping image-switching disaster, please <a target="_blank" href="http://www.macromedia.com/support/documentation/en/flashplayer/help/settings_manager04.html">click here to go to flash player security settings</a>, and add <code>chrome-extension://<span class="runtime_id"></span>/</code> to the exceptions list.
 		<ul>
 			<li>Click on "<em>Edit Locations...</em>"</li>
 			<li>Choose "<em>Add location</em>"</li>
 			<li>Paste the extension code mentioned, and confirm</li>
-			<li>Refresh this page</li>
+			<li>Refresh this page via browser reload button</li>
 		</ul>
 	</div>
 	
@@ -55,8 +66,9 @@
 	<div class="shipInfo">
 		<div id="saltable">
 			<div class="basic">
-				<div class="cgswf"><embed /></div>
 				<div class="name"></div>
+				<div class="type"></div>
+				<div class="cgswf"><embed /></div>
 				<div class="stats"></div>
 				<div class="equipments">
 					<div class="equipment">
@@ -198,6 +210,7 @@
 		</div>
 		<div class=clear></div>
 		<div class="tokubest">
+			<div class="to-quotes hover i18n">MasterShipGoQuotes</div>
 			<div class="salty-zone hover i18n">MasterShipSaltCheck</div>
 		</div>
 	</div>

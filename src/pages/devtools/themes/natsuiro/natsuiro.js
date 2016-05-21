@@ -137,7 +137,7 @@
 		
 		if (availableFleetInd !== -1) {
 			selectedFleet = availableFleetInd + 1;
-			console.log("Find available fleet: " + String(selectedFleet));
+			console.debug("Find available fleet:", selectedFleet);
 			
 			if (needTabSwith)
 				$("#atab_expeditionPlanner").trigger("click");
@@ -313,16 +313,16 @@
 				url: "https://raw.githubusercontent.com/KC3Kai/kc3-translations/master/data/"+ConfigManager.language+"/quests.json?v="+(Date.now()),
 				success: function(newQuestTLs){
 					if(JSON.stringify(newQuestTLs) != JSON.stringify(KC3Meta._quests)){
-						console.log("new quests detected, updating quest list from live");
+						console.info("New quests detected, updating quest list from live");
 						var enQuests = JSON.parse($.ajax({
 							url : '../../../../data/lang/data/en/quests.json',
 							async: false
 						}).responseText);
 						
 						KC3Meta._quests = $.extend(true, enQuests, newQuestTLs);
-						console.log(KC3Meta._quests);
+						console.debug(KC3Meta._quests);
 					}else{
-						console.log("no new quests...");
+						console.info("No new quests...");
 					}
 				}
 			});
@@ -624,7 +624,7 @@
 				if(typeof NatsuiroListeners[event] != "undefined"){
 					NatsuiroListeners[event](data);
 				} else {
-					console.warn("No event found for keyword",event);
+					console.warn("No event found for keyword", event);
 				}
 			}
 		});
@@ -763,7 +763,7 @@
 		},
 		
 		GameUpdate: function(data){
-			console.log("GameUpdate triggered");
+			console.debug("GameUpdate triggered:", data);
 			$("#gameUpdate").hide();
 			
 			if(data[0] > 0 && data[1] > 0){
@@ -1033,7 +1033,7 @@
 			
 			}
 			
-			console.log(FleetSummary);
+			console.debug("Fleet summary:", FleetSummary);
 			
 			// Fleet Summary Stats
 			$(".summary-level .summary_text").text( FleetSummary.lv );
@@ -1153,7 +1153,7 @@
 									.map(function(ship){ return ship.obtainTP(); })
 									.reduce(function(pre,cur){ return pre.add(cur); }, KC3Meta.tpObtained());
 							}).reduce(function(pre,cur){ return pre.add(cur); }, KC3Meta.tpObtained()));
-							console.log("tpValueSum", tpValueSum);
+							console.debug("tpValueSum", tpValueSum);
 							$(".module.status .status_butai .status_text").attr("title",
 								"{0} ~ {1} TP".format( isNaN(tpValueSum)? "?" : Math.floor(0.7 * tpValueSum),
 													   isNaN(tpValueSum)? "?" : tpValueSum )
@@ -1299,7 +1299,7 @@
 			$(".module.activity .battle_fish").hide();
 			$(".module.activity .battle_support").show();
 			
-			console.log("natsuiro process node", thisNode);
+			console.debug("Processing next node", thisNode);
 			switch(thisNode.type){
 				// Battle node
 				case "battle":
@@ -1310,11 +1310,18 @@
 				// Resource node
 				case "resource":
 					$(".module.activity .sortie_node_"+numNodes).addClass("nc_resource");
-					$(".module.activity .node_type_resource").removeClass("node_type_maelstrom");
-					$(".module.activity .node_type_resource .node_res_icon img").attr("src",
-						thisNode.icon("../../../../assets/img/client/"));
-					$(".module.activity .node_type_resource .node_res_text").text( thisNode.amount );
-					$(".module.activity .node_type_resource").show();
+					var resBoxDiv = $(".module.activity .node_type_resource");
+					resBoxDiv.removeClass("node_type_maelstrom");
+					resBoxDiv.children().remove();
+					$.each(thisNode.icon, function(i, icon){
+						var iconDiv = $('<div class="node_res_icon"><img/></div>');
+						var textDiv = $('<div class="node_res_text"></div>');
+						resBoxDiv.append(iconDiv).append(textDiv);
+						$("img", iconDiv).attr("src", icon("../../../../assets/img/client/"));
+						textDiv.text( thisNode.amount[i] );
+					});
+					resBoxDiv.append($('<div class="clear"></div>'));
+					resBoxDiv.show();
 					break;
 					
 				// Bounty node on 1-6
@@ -1343,7 +1350,7 @@
 					
 				// Selection node
 				case "select":
-					console.log("natsuiro should show selection node");
+					//console.log("natsuiro should show selection node");
 					$(".module.activity .sortie_node_"+numNodes).addClass("nc_select");
 					$(".module.activity .node_type_text").text( KC3Meta.term("BattleSelect") +
 						KC3Meta.term("BattleSelectNodes").format(thisNode.choices[0], thisNode.choices[1]));
@@ -1630,7 +1637,7 @@
 						if(grindData.length===0){ return true; }
 						ThisShip = KC3ShipManager.get( rosterId );
 						expLeft = KC3Meta.expShip(grindData[0])[1] - ThisShip.exp[0];
-						console.log('ship',rosterId,'target',expLeft);
+						console.debug("Ship", rosterId, "target exp", expLeft);
 						if(expLeft < 0){ return true; } // if the ship has reached the goal, skip it
 						expPerSortie = maplist[ grindData[1]+"-"+grindData[2] ];
 						if(grindData[6]===1){ expPerSortie = expPerSortie * 2; }
@@ -1652,6 +1659,7 @@
 			if(!ConfigManager.info_craft){ return true; }
 			
 			var icon = "../../../../assets/img/client/penguin.png";
+			console.debug("Crafted gear:", data);
 			
 			// If success crafting
 			if (data.itemId !== null) {
@@ -1694,7 +1702,6 @@
 			}
 			
 			// Show resource used
-			console.log(data);
 			$(".activity_crafting .used1").text( data.resourceUsed[0] );
 			$(".activity_crafting .used2").text( data.resourceUsed[1] );
 			$(".activity_crafting .used3").text( data.resourceUsed[2] );
@@ -1710,7 +1717,7 @@
 		CraftShip: function(data){},
 		
 		Modernize: function(data){
-			console.log("MODERNIZE TRIGGER", data);
+			console.debug("Modernize triggered:", data);
 			
 			var ModShip = KC3ShipManager.get(data.rosterId);
 			
@@ -1782,7 +1789,7 @@
 			}
 			
 			// Show opponent ships faces
-			console.log(thisPvP.eships);
+			//console.debug(thisPvP.eships);
 			$.each(thisPvP.eships, function(index, eshipId){
 				var eParam = thisPvP.eParam[index];
 				
@@ -2100,10 +2107,7 @@
 			var ExpdIncome = KEIB.getExpeditionIncomeBase(selectedExpedition);
 			var ExpdFleetCost = fleetObj.calcExpeditionCost( selectedExpedition );
 			
-			var numLandingCrafts = fleetObj.countLandingCrafts();
-			if (numLandingCrafts > 4)
-				numLandingCrafts = 4;
-			var landingCraftFactor = 0.05*numLandingCrafts + 1;
+			var landingCraftFactor = fleetObj.calcLandingCraftBonus() + 1;
 			var greatSuccessFactor = plannerIsGreatSuccess ? 1.5 : 1;
 			
 			$(".module.activity .activity_expeditionPlanner .estimated_time").text( String( 60*ExpdCost.time ).toHHMMSS() );
@@ -2129,13 +2133,17 @@
 					netResourceIncome -= ExpdFleetCost[v];
 				}
 				
-				var tooltipText = String(ExpdIncome[v]);
-				if (landingCraftFactor > 1)
-					tooltipText += "*" + String(landingCraftFactor);
-				if (greatSuccessFactor > 1)
-					tooltipText += "*" + String(greatSuccessFactor);
+				var tooltipText = "{0} = {1}".format(netResourceIncome, incomeVal);
+				if (incomeVal > 0) {
+					tooltipText += "{=" + String(ExpdIncome[v]);
+					if (landingCraftFactor > 1)
+						tooltipText += "*" + String(landingCraftFactor);
+					if (greatSuccessFactor > 1)
+						tooltipText += "*" + String(greatSuccessFactor);
+					tooltipText += "}";
+				}
 				if (v === "fuel" || v === "ammo") {
-					tooltipText += "-" + String(ExpdFleetCost[v]);
+					tooltipText += " - " + String(ExpdFleetCost[v]);
 				}
 				
 				jqObj.text( netResourceIncome );
@@ -2431,7 +2439,7 @@
 						return (x/thisMap.maxhp)*100;
 					});
 					
-					console.log(thisMap.curhp,thisMap.baseHp,rate[0],rate[1]);
+					console.debug("Map HP:",thisMap.curhp,thisMap.baseHp,rate[0],rate[1]);
 					$(".module.activity .map_hp").text( thisMap.curhp + " / " + thisMap.maxhp );
 					$(".module.activity .map_gauge")
 						.find('.nowhp').css("width", (rate[0])+"%").end()
@@ -2441,10 +2449,8 @@
 				// If kill-based gauge
 				}else{
 					var totalKills = KC3Meta.gauge( thisMapId.slice(1) );
-					console.log("wm", KC3SortieManager.map_world, KC3SortieManager.map_num);
-					console.log("thisMapId", thisMapId);
-					console.log("KC3Meta", KC3Meta._gauges);
-					console.log("totalKills", totalKills);
+					console.debug("World, map:", KC3SortieManager.map_world, KC3SortieManager.map_num);
+					console.debug("thisMapId", thisMapId, "KC3Meta", KC3Meta._gauges, "totalKills", totalKills);
 					var
 						killsLeft  = totalKills - thisMap.kills + (!onBoss && !!noBoss),
 						postBounty = killsLeft - (depleteOK && fsKill);

@@ -10,23 +10,28 @@
 		statistics: false,
 		
 		/* INIT
-		Prepares all data needed
+		Prepares static data needed
 		---------------------------------*/
 		init :function(){
+
+		},
+
+		/* RELOAD
+		Prepares latest player data
+		---------------------------------*/
+		reload :function(){
 			// Check for player statstics
 			if(typeof localStorage.player != "undefined"){
 				this.player = JSON.parse(localStorage.player);
 			}else{
-				// this.tabSelf.showError("Player information not available");
-				// return false;
+				this.player = {};
 			}
 			
 			// Check for player statstics
 			if(typeof localStorage.statistics != "undefined"){
 				this.statistics = JSON.parse(localStorage.statistics);
 			}else{
-				// this.tabSelf.showError("Player statistics not available");
-				// return false;
+				this.statistics = false;
 			}
 		},
 		
@@ -35,6 +40,16 @@
 		---------------------------------*/
 		execute :function(){
 			var self = this;
+			
+			// First time hints can be dismissed
+			if(!ConfigManager.dismissed_hints.homepage_hints){
+				$(".homepage_hints").show();
+				$(".homepage_hints").on("click", function(e){
+					ConfigManager.dismissed_hints.homepage_hints = true;
+					ConfigManager.save();
+					$(".homepage_hints").fadeOut();
+				});
+			}
 			
 			// Show player information
 			$(".hq_id .hq_content").html(PlayerManager.hq.id);
@@ -93,9 +108,8 @@
 				exportObject.hash = exportString.hashCode();
 				exportString = JSON.stringify(exportObject);
 				
-				var blob = new Blob([exportString], {type: "application/json;charset=utf-8"});
-				
-				saveAs(blob, "["+PlayerManager.hq.name+"] Profile "+((new Date()).format("yyyy-mm-dd"))+".kc3");
+				var filename = self.makeFilename("Profile", "kc3");
+				self.saveFile(filename, exportString, "application/json");
 			});
 			
 			// Import data file open dialog
@@ -193,7 +207,7 @@
 							].join(",")+String.fromCharCode(13);
 						});
 						
-						var filename = self.makeFilename("Expeditions", ".csv");
+						var filename = self.makeFilename("Expeditions", "csv");
 						self.saveFile(filename, exportData, "text/csv");
 					});
 			});
@@ -211,7 +225,7 @@
 					.reverse()
 					.toArray(function(result){
 						result.forEach(function(buildInfo){
-							console.log(buildInfo);
+							//console.log(buildInfo);
 							exportData += [
 								KC3Meta.shipName(KC3Master.ship(buildInfo.flag).api_name),
 								buildInfo.rsc1, buildInfo.rsc2, buildInfo.rsc3, buildInfo.rsc4,
@@ -220,7 +234,7 @@
 							].join(",")+String.fromCharCode(13);
 						});
 						
-						var filename = self.makeFilename("Constructions", ".csv");
+						var filename = self.makeFilename("Constructions", "csv");
 						self.saveFile(filename, exportData, "text/csv");
 					});
 			});
@@ -238,7 +252,7 @@
 					.reverse()
 					.toArray(function(result){
 						result.forEach(function(buildInfo){
-							console.log(buildInfo);
+							//console.log(buildInfo);
 							exportData += [
 								KC3Meta.shipName(KC3Master.ship(buildInfo.flag).api_name),
 								buildInfo.rsc1, buildInfo.rsc2, buildInfo.rsc3, buildInfo.rsc4,
@@ -247,7 +261,7 @@
 							].join(",")+String.fromCharCode(13);
 						});
 						
-						var filename = self.makeFilename("LSC", ".csv");
+						var filename = self.makeFilename("LSC", "csv");
 						self.saveFile(filename, exportData, "text/csv");
 					});
 			});
@@ -265,7 +279,7 @@
 					.reverse()
 					.toArray(function(result){
 						result.forEach(function(buildInfo){
-							console.log(buildInfo);
+							//console.log(buildInfo);
 							exportData += [
 								KC3Meta.shipName(KC3Master.ship(buildInfo.flag).api_name),
 								buildInfo.rsc1, buildInfo.rsc2, buildInfo.rsc3, buildInfo.rsc4,
@@ -275,7 +289,7 @@
 							].join(",")+String.fromCharCode(13);
 						});
 						
-						var filename = self.makeFilename("LSC", ".csv");
+						var filename = self.makeFilename("LSC", "csv");
 						self.saveFile(filename, exportData, "text/csv");
 					});
 			});
@@ -294,20 +308,24 @@
 				});
 			});
 			
-			// Clear Histories
+			// Clear transient properties
 			$(".tab_profile .clear_fcf").on("click", function(event){
-				if(!confirm("Have you closed the game? This fix won't work if you haven't closed the game."))
+				if(!confirm("Have you closed the game?\nThis fix won't work if you haven't closed the game."))
 					return false;
-				var ctr, ThisShip;
-				for(ctr in KC3ShipManager.list){
-					ThisShip = KC3ShipManager.list[ctr];
-					ThisShip.didFlee = false;
+				var json = localStorage.ships;
+				var hash = json.hashCode();
+				json = json.replace(/,\"didFlee\":(true|false)/g, "")
+						   .replace(/,\"mvp\":(true|false)/g, "");
+				if(hash !== json.hashCode()){
+					localStorage.ships = json;
+					KC3ShipManager.load();
+					alert("Done!");
+				} else {
+					alert("No bug found!");
 				}
-				KC3ShipManager.save();
-				alert("Done!");
 			});
 			
-			// Clear Histories
+			// Clear buggy encounter data
 			$(".tab_profile .clear_encounters").on("click", function(event){
 				KC3Database.con.encounters.where("world").equals(0).toArray(function(encounterList){
 					$.each(encounterList, function(index, encounterData){
@@ -325,7 +343,7 @@
 		},
 		
 		makeFilename: function(type, ext){
-			return "["+PlayerManager.hq.name+"] "+type+" "+((new Date()).format("yyyy-mm-dd"))+"."+ext;
+			return ["[",PlayerManager.hq.id,"] ",type," ",new Date().format("yyyy-mm-dd"),".",ext].join("");
 		},
 		
 		saveFile: function(filename, data, type){

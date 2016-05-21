@@ -39,7 +39,14 @@
 			});
 
 			this.goalTemplates = GoalTemplateManager.load();
-			console.log(this.maplist);
+			//console.debug("maplist:", this.maplist);
+		},
+
+		/* RELOAD
+		Prepares latest ships data
+		---------------------------------*/
+		reload :function(){
+			KC3ShipManager.load();
 		},
 
 		/* EXECUTE
@@ -56,7 +63,7 @@
 			var editingBox, mapSplit;
 
 			// Edit Button
-			$(".tab_expcalc .box_goals").on("click", ".ship_edit", function(){
+			$(".section_expcalc .box_goals").on("click", ".ship_edit", function(){
 				editingBox = $(this).parent();
 				var grindData = self.goals[ "s"+editingBox.data("id") ];
 
@@ -74,7 +81,7 @@
 			});
 
 			// Save Button
-			$(".tab_expcalc .box_goals").on("click", ".ship_save", function(){
+			$(".section_expcalc .box_goals").on("click", ".ship_save", function(){
 				editingBox = $(this).parent();
 
 				mapSplit = $(".ship_map select", editingBox).val().split("-");
@@ -101,7 +108,7 @@
 			});
 
 			// Add to Goals Button
-			$(".tab_expcalc").on("click", ".ship_add", function(){
+			$(".section_expcalc").on("click", ".ship_add", function(){
 				editingBox = $(this).parent();
 				self.goals["s"+ editingBox.data("id") ] = [];
 				self.save();
@@ -109,7 +116,7 @@
 				$(".ship_edit", editingBox).show();
 				$(".ship_rem", editingBox).show();
 				editingBox.removeClass("inactive");
-				editingBox.appendTo(".tab_expcalc .box_goals");
+				editingBox.appendTo(".section_expcalc .box_goals");
 				self.recompute( editingBox.data("id") );
 			});
 
@@ -222,42 +229,42 @@
 			}
 
 			// Goal Template Edit & Save button events
-			$(".tab_expcalc").on("click", ".goal_template .goal_edit", function() {
+			$(".section_expcalc").on("click", ".goal_template .goal_edit", function() {
 				var goalBox = $(this).parent().parent();
 				goalTemplateEdit(goalBox);
 			});
 
-			$(".tab_expcalc").on("click", ".goal_template .goal_save", function() {
+			$(".section_expcalc").on("click", ".goal_template .goal_save", function() {
 				var goalBox = $(this).parent().parent();
 				goalTemplateSave(goalBox);
 				goalTemplateSetupUI(self.goalTemplates[ goalBox.index() ], goalBox);
 				goalTemplateShow(goalBox);
 			});
 
-			$(".tab_expcalc").on("click", ".goal_template .goal_rem", function() {
+			$(".section_expcalc").on("click", ".goal_template .goal_rem", function() {
 				var goalBox = $(this).parent().parent();
 				goalTemplateRemove(goalBox);
 			});
 
 
-			$(".tab_expcalc").on("click", ".goal_template .goal_up", function() {
+			$(".section_expcalc").on("click", ".goal_template .goal_up", function() {
 				var goalBox = $(this).parent().parent();
 				var ind = goalBox.index();
 				goalTemplateSwap(ind, ind-1);
 			});
 
-			$(".tab_expcalc").on("click", ".goal_template .goal_down", function() {
+			$(".section_expcalc").on("click", ".goal_template .goal_down", function() {
 				var goalBox = $(this).parent().parent();
 				var ind = goalBox.index();
 				goalTemplateSwap(ind, ind+1);
 			});
 
-			$(".tab_expcalc").on("click", ".goal_template .goal_onoff", function() {
+			$(".section_expcalc").on("click", ".goal_template .goal_onoff", function() {
 				var goalBox = $(this).parent().parent();
 				goalTemplateToggle(goalBox);
 			});
 
-			$(".tab_expcalc").on("click", ".goal_template .goal_hl_coverage", function() {
+			$(".section_expcalc").on("click", ".goal_template .goal_hl_coverage", function() {
 				var goalBox = $(this).parent().parent();
 				var stypes = self.goalTemplates[goalBox.index()].stype;
 				// if there's an "Any" filter, don't proceed because
@@ -286,12 +293,12 @@
 				});
 			});
 
-			$(".tab_expcalc").on("click", ".goal_template .goal_apply", function() {
+			$(".section_expcalc").on("click", ".goal_template .goal_apply", function() {
 				var goalBox = $(this).parent().parent();
 				var template = self.goalTemplates[goalBox.index()];
 
 				var targetShips = [];
-				$(".tab_expcalc .box_goals .ship_goal").each( function(i,x) {
+				$(".section_expcalc .box_goals .ship_goal").each( function(i,x) {
 					var jqObj = $(x);
 					var rosterId = $(x).data("id");
 					var ThisShip = KC3ShipManager.get( rosterId );
@@ -328,10 +335,10 @@
 				goalTemplateSetupUI(self.goalTemplates[i], goalBox);
 				goalTemplateShow(goalBox);
 
-				goalBox.appendTo(".tab_expcalc .box_goal_templates");
+				goalBox.appendTo(".section_expcalc .box_goal_templates");
 			});
 
-			$(".tab_expcalc a.new_template").on("click", function () {
+			$(".section_expcalc a.new_template").on("click", function () {
 				var goalBox = $(".tab_expcalc .factory .goal_template").clone();
 				var dat = GoalTemplateManager.newTemplate();
 				self.goalTemplates.push(dat);
@@ -339,10 +346,10 @@
 				goalTemplateSetupUI(dat, goalBox);
 				goalTemplateShow(goalBox);
 				goalBox.toggleClass("disabled", !dat.enable);
-				goalBox.appendTo(".tab_expcalc .box_goal_templates");
+				goalBox.appendTo(".section_expcalc .box_goal_templates");
 			});
 
-			$(".tab_expcalc a.clear_highlight").on("click", function () {
+			$(".section_expcalc a.clear_highlight").on("click", function () {
 				$(".section_body .ship_goal").each( function(i,x) {
 					var jqObj = $(x);
 					jqObj.removeClass("highlight");
@@ -352,7 +359,7 @@
 			// TODO: prevent double click text selection?
 
 			// Remove from Goals Button
-			$(".tab_expcalc").on("click", ".ship_rem", function(){
+			$(".section_expcalc").on("click", ".ship_rem", function(){
 				editingBox = $(this).parent();
 				delete self.goals["s"+ editingBox.data("id") ];
 				self.save();
@@ -364,18 +371,21 @@
 				editingBox.addClass("inactive");
 				var ThisShip = KC3ShipManager.get(editingBox.data("id"));
 				if(ThisShip.master().api_aftershipid > 0 && ThisShip.level<ThisShip.master().api_afterlv){
-					$(".tab_expcalc .box_recommend .clear").remove();
-					editingBox.appendTo(".tab_expcalc .box_recommend");
-					$("<div />").addClass("clear").appendTo(".tab_expcalc .box_recommend");
+					$(".section_expcalc .box_recommend .clear").remove();
+					editingBox.appendTo(".section_expcalc .box_recommend");
+					$("<div />").addClass("clear").appendTo(".section_expcalc .box_recommend");
 				}else{
-					$(".tab_expcalc .box_other .clear").remove();
-					editingBox.appendTo(".tab_expcalc .box_other");
-					$("<div />").addClass("clear").appendTo(".tab_expcalc .box_other");
+					$(".section_expcalc .box_other .clear").remove();
+					editingBox.appendTo(".section_expcalc .box_other");
+					$("<div />").addClass("clear").appendTo(".section_expcalc .box_other");
 				}
 			});
 
 			// Show all ship_save
 			var goalBox;
+			var shipClickFunc = function(e){
+				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
+			};
 			$.each(KC3ShipManager.list, function(index, ThisShip){
 				if(!ThisShip.lock){ return true; }
 
@@ -386,6 +396,8 @@
 
 				// Icon and level, common for all categories
 				$(".ship_icon img", goalBox).attr("src", KC3Meta.shipIcon(ThisShip.masterId) );
+				$(".ship_icon img", goalBox).attr("alt", ThisShip.masterId );
+				$(".ship_icon img", goalBox).click(shipClickFunc);
 				$(".ship_icon img", goalBox).attr("title", ThisShip.name() + ' (' + ThisShip.rosterId + ')' );
 				$(".ship_name", goalBox).text( ThisShip.name() );
 				$(".ship_type", goalBox).text( ThisShip.stype() );
@@ -395,7 +407,7 @@
 				if(typeof self.goals["s"+ThisShip.rosterId] != "undefined"){
 					$(".ship_edit", goalBox).show();
 					$(".ship_rem", goalBox).show();
-					goalBox.appendTo(".tab_expcalc .box_goals");
+					goalBox.appendTo(".section_expcalc .box_goals");
 
 					self.recompute( ThisShip.rosterId );
 					return true;
@@ -406,7 +418,7 @@
 				// If still has next remodel, add to recommendations
 				if(ThisShip.master().api_aftershipid > 0 && ThisShip.level<ThisShip.master().api_afterlv){
 					$(".ship_target .ship_value", goalBox).text( ThisShip.master().api_afterlv );
-					goalBox.appendTo(".tab_expcalc .box_recommend");
+					goalBox.appendTo(".section_expcalc .box_recommend");
 					return true;
 				}
 
@@ -416,13 +428,13 @@
 				}else{
 					$(".ship_target .ship_value", goalBox).text( 155 );
 				}
-				goalBox.appendTo(".tab_expcalc .box_other");
+				goalBox.appendTo(".section_expcalc .box_other");
 			});
 
 			//this.save();
 
-			$("<div />").addClass("clear").appendTo(".tab_expcalc .box_recommend");
-			$("<div />").addClass("clear").appendTo(".tab_expcalc .box_other");
+			$("<div />").addClass("clear").appendTo(".section_expcalc .box_recommend");
+			$("<div />").addClass("clear").appendTo(".section_expcalc .box_other");
 		},
 
 		save: function(){

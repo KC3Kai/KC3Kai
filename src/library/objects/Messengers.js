@@ -24,7 +24,7 @@ Sample Usage:
 (function(){
 	"use strict";
 	
-	console.log("KC3改 Messengers loaded");
+	console.info("KC3改 Messengers loaded");
 	
 	/* RUNTIME MESSAGE
 	Send message to all components, which will only execute on "target"

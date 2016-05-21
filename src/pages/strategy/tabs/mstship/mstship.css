@@ -6,6 +6,7 @@
 }
 .tab_mstship .cg_notes {
 	margin:0px 0px 10px 0px;
+	display:none;
 }
 .tab_mstship .cg_notes em {
 	font-size:12px;
@@ -45,7 +46,7 @@
 --------------------------------*/
 .tab_mstship .shipRecords {
 	width:200px;
-	height:760px;
+	height:800px;
 	float:left;
 	overflow-y: scroll;
 	overflow-x: hidden;
@@ -85,7 +86,7 @@
 --------------------------------*/
 .tab_mstship .shipInfo {
 	width:480px;
-	height:760px;
+	height:800px;
 	float:left;
 	background:#eee;
 	border:1px solid #ccc;
@@ -102,7 +103,8 @@
 	width:218px;
 	height:300px;
 	float:left;
-	margin:0px 5px 0px 0px;
+	margin:0px 5px 5px 0px;
+	background:#0044a2;
 }
 .tab_mstship .shipInfo .cgswf embed {
 	width:218px;
@@ -111,28 +113,45 @@
 
 /* Ship Name*/
 .tab_mstship .shipInfo .name {
-	width:245px;
+	width:85%;
 	height:30px;
 	line-height:30px;
 	float:left;
 	font-size:20px;
 	text-align:left;
+	text-overflow:ellipsis;
+	overflow:hidden;
+	white-space:nowrap;
+	margin:0px 0px 5px 0px;
+}
+
+.tab_mstship .shipInfo .type {
+	width:auto;
+	max-width:15%;
+	height:30px;
+	line-height:30px;
+	float:right;
+	font-size:20px;
+	text-align:left;
+	text-overflow:ellipsis;
+	overflow:hidden;
+	white-space:nowrap;
 	margin:0px 0px 5px 0px;
 }
 
 /* Ship stats */
 .tab_mstship .shipInfo .stats {
 	width:245px;
-	height:92px;
+	height:132px;
 	float:left;
-	margin:0px 0px 5px 0px;
+	margin:0px 0px 3px 0px;
 }
 .tab_mstship .shipInfo .ship_stat {
-	width:115px;
+	width:119px;
 	height:20px;
 	line-height:20px;
 	float:left;
-	margin:0px 5px 3px 0px;
+	margin:0px 3px 3px 0px;
 }
 .tab_mstship .shipInfo .ship_stat_icon {
 	width:20px;
@@ -146,14 +165,14 @@
 	margin:2px;
 }
 .tab_mstship .shipInfo .ship_stat_name {
-	width:30px;
+	width:45px;
 	height:20px;
 	float:left;
 	font-weight:bold;
 	font-size:11px;
 }
 .tab_mstship .shipInfo .ship_stat_text {
-	width:65px;
+	width:52px;
 	height:20px;
 	float:left;
 	display:none;
@@ -161,7 +180,7 @@
 	padding:0px 0px 0px 5px;
 }
 .tab_mstship .shipInfo .ship_stat_value {
-	width:30px;
+	width:25px;
 	height:20px;
 	font-size:12px;
 	float:left;
@@ -402,6 +421,18 @@
 .tab_mstship .shipInfo.salted .tokubest .salty-zone {
 	border: 1px solid #422;
 	background: #c88;
+}
+
+.tab_mstship .shipInfo .tokubest .to-quotes {
+	width : 120px;
+	height: 20px;
+	line-height: 18px;
+	border-radius: 3px;
+	font-size: 12px;
+	text-align: center;
+	padding: 1px;
+	border: 1px solid #242;
+	background: #77f;
 }
 
 /* salt check */
