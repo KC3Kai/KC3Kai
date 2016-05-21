@@ -156,16 +156,16 @@
 			// On-click remodels
 			$(".tab_mstship .shipInfo").on("click", ".remodel_name a", function(e){
 				var sid = $(this).data("sid");
+				self.scrollShipListTop(sid);
 				KC3StrategyTabs.gotoTab(null, sid);
-				//self.showShip( sid );
 				e.preventDefault();
 				return false;
 			});
 			// On-click other forms
 			$(".tab_mstship .shipInfo").on("click", ".more .other_forms a", function(e){
 				var sid = $(this).data("sid");
+				self.scrollShipListTop(sid);
 				KC3StrategyTabs.gotoTab(null, sid);
-				//self.showShip( sid );
 				e.preventDefault();
 				return false;
 			});
@@ -221,19 +221,18 @@
 			}
 			
 			// Scroll list top to selected ship
-			setTimeout(function(){
-				var listItem = $(".tab_mstship .shipRecords .shipRecord[data-id={0}]".format(self.currentShipId));
-				var scrollTop = listItem.length === 1 ? listItem.offset().top - $(".tab_mstship .shipRecords").offset().top : 0;
-				$(".tab_mstship .shipRecords").scrollTop(scrollTop);
-			}, 200);
+			setTimeout(function(){self.scrollShipListTop();}, 0);
 		},
 		
-		/* UPDATE
-		Partially update elements of the interface without clearing all contents first
-		Be careful! Do NOT only update new data, but also handle the old states (do cleanup)
+		/* UPDATE: optional
+		Partially update elements of the interface,
+			possibly without clearing all contents first.
+		Be careful! Do not only update new data,
+			but also handle the old states (do cleanup).
+		Return `false` if updating all needed,
+			EXECUTE will be invoked instead.
 		---------------------------------*/
 		update :function(pageParams){
-			// KC3StrategyTabs.pageParams has been keeping the old values for states tracking
 			if(!!pageParams && !!pageParams[1]){
 				this.showShip(pageParams[1]);
 			}else{
@@ -243,6 +242,18 @@
 			return true;
 		},
 		
+		scrollShipListTop :function(shipId){
+			var shipList = $(".tab_mstship .shipRecords");
+			var shipItem = $(".tab_mstship .shipRecords .shipRecord[data-id={0}]"
+				.format(shipId || this.currentShipId)
+			);
+			var scrollTop = shipItem.length === 1 ?
+				(shipItem.offset().top
+				 + shipList.scrollTop()
+				 - shipList.offset().top) : 0;
+			shipList.scrollTop(scrollTop);
+		},
+
 		showShip :function(ship_id){
 			ship_id = Number(ship_id||"405");
 			var
@@ -299,9 +310,11 @@
 				// Ship-only, non abyssal
 				$(".tab_mstship .shipInfo .stats").empty();
 				$(".tab_mstship .shipInfo .intro").html( shipData.api_getmes );
-				$(".tab_mstship .shipInfo .cgswf").css("width", "218px")
+				$(".tab_mstship .shipInfo .cgswf")
+					.css("width", "218px")
 					.css("height", "300px");
-				$(".tab_mstship .shipInfo .cgswf embed").css("width", "218px")
+				$(".tab_mstship .shipInfo .cgswf embed")
+					.css("width", "218px")
 					.css("height", "300px");
 				
 				// STATS
@@ -413,6 +426,7 @@
 
 					$.each(otherFormIds, function(i,x) {
 						$("<a/>")
+							.addClass("hover")
 							.text( KC3Meta.shipName(KC3Master.ship(x).api_name) )
 							.data("sid",x)
 							.appendTo( ".tab_mstship .shipInfo .more .other_forms .other_forms_list" );
@@ -499,12 +513,14 @@
 				// abyssals, show larger CG viewer
 				$(".tab_mstship .shipInfo .stats").hide();
 				$(".tab_mstship .shipInfo .equipments").hide();
-				$(".tab_mstship .shipInfo .json").text(JSON.stringify(shipData))
-					.css("width", "100%").show();
+				$(".tab_mstship .shipInfo .json").hide().css("width", "100%")
+					.text(JSON.stringify(shipData));
 				$(".tab_mstship .shipInfo .subtitles").empty().hide();
-				$(".tab_mstship .shipInfo .cgswf").css("width", "100%")
+				$(".tab_mstship .shipInfo .cgswf")
+					.css("width", "100%")
 					.css("height", "400px");
-				$(".tab_mstship .shipInfo .cgswf embed").css("width", "468px")
+				$(".tab_mstship .shipInfo .cgswf embed")
+					.css("width", "468px")
 					.css("height", "400px");
 				
 				// show stats if encounter once
@@ -564,7 +580,8 @@
 						
 						$(".tab_mstship .shipInfo .stats").show();
 						$(".tab_mstship .shipInfo .equipments").show();
-						$(".tab_mstship .shipInfo .json").hide();
+					} else {
+						$(".tab_mstship .shipInfo .json").show();
 					}
 				});
 				
