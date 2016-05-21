@@ -20,6 +20,7 @@
 		---------------------------------*/
 		reload :function(){
 			KC3QuestManager.load();
+			this.flowchartIds = [];
 		},
 		
 		/* EXECUTE
@@ -103,10 +104,12 @@
 			
 			// Manual remove quest
 			$(".page_padding").on("click", ".questRemove", function(){
-				console.log(KC3QuestManager.list["q"+$(this).data("id")]);
-				delete KC3QuestManager.list["q"+$(this).data("id")];
-				KC3QuestManager.save();
-				KC3StrategyTabs.reloadTab(undefined, true);
+				var removingQuest = KC3QuestManager.get($(this).data("id"));
+				console.log(removingQuest);
+				if(KC3QuestManager.remove(removingQuest)){
+					KC3QuestManager.save();
+					KC3StrategyTabs.reloadTab(undefined, true);
+				}
 			});
 			
 		},
@@ -135,8 +138,8 @@
 			$(".questRemove", thisBox).data("id", quest_id);
 			
 			// If we have player data about the quest, not just meta data from json
-			if(typeof KC3QuestManager.list["q"+quest_id] != "undefined"){
-				var questRecord = KC3QuestManager.list["q"+quest_id];
+			if(KC3QuestManager.exists(quest_id)){
+				var questRecord = KC3QuestManager.get(quest_id);
 				
 				// Status-based actions
 				switch(questRecord.status){
@@ -175,12 +178,12 @@
 						break;
 				}
 				
-				$(".questCount", thisBox).text( questRecord.outputShort() );
-				
-				if(typeof questRecord.tracking != "undefined"){
+				if(questRecord.tracking){
 					$(".questTrack", thisBox).show();
 				}
 				
+				$(".questCount", thisBox).text( questRecord.outputShort() );
+
 			// If we don't have player data about the quest
 			}else{
 				$(".questInfo", thisBox).addClass("disabled");

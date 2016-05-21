@@ -31,6 +31,15 @@ Uses KC3Quest objects to play around with
 			return (this.list["q"+questId] || (this.list["q"+questId] = new KC3Quest()));
 		},
 		
+		exists :function( questId ){
+			return !!this.list["q"+questId];
+		},
+
+		remove :function( quest ){
+			var questId = (typeof quest === "object") ? quest.id : quest;
+			return delete this.list["q"+questId];
+		},
+
 		/* GET ACTIVE
 		Get list of active quests
 		------------------------------------------*/
