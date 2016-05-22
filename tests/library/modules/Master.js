@@ -1,3 +1,5 @@
+QUnit.module("Master Module");
+
 QUnit.test("Module > Master > Saving", function( assert ) {
 	var x = $.extend(true, {}, KC3Master);
 	
