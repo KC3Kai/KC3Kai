@@ -1,4 +1,4 @@
-QUnit.module("Master Module");
+QUnit.module("Master Module", function(){ localStorage.clear(); });
 
 QUnit.test("Module > Master > Saving", function( assert ) {
 	var x = $.extend(true, {}, KC3Master);

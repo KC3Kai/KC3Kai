@@ -1,4 +1,4 @@
-QUnit.module("Gear Manager");
+QUnit.module("Gear Manager", function(){ localStorage.clear(); });
 
 QUnit.test("Managers > Gear > Feeding new data", function( assert ) {
 	var x = $.extend(true, {}, KC3GearManager);
