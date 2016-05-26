@@ -133,6 +133,11 @@ Saves and loads significant data for future use
 		stype :function(id){
 			return !this.available ? false : this._raw.stype[id] || false;
 		},
+
+		slotitem_equiptype :function(id){
+			return !this.available ? false : this._raw.slotitem_equiptype[id] || false;
+		},
+
 		/* Save to localStorage
 		-------------------------------------*/
 		save :function(){

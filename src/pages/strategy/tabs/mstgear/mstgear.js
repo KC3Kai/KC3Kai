@@ -98,7 +98,12 @@
 				$(".tab_mstgear .gearInfo .gearAssets").hide();
 			}
 			
-			$(".tab_mstgear .gearInfo .rarity").html("");
+			$(".tab_mstgear .gearInfo .types").text("{0} {1}".format(
+				JSON.stringify(gearData.api_type),
+				KC3Master.slotitem_equiptype(gearData.api_type[2]).api_name
+			));
+
+			$(".tab_mstgear .gearInfo .rarity").empty();
 			for(var bctr=0; bctr<gearData.api_rare; bctr++){
 				$(".tab_mstgear .gearInfo .rarity").append("&#10031;");
 			}
@@ -106,12 +111,13 @@
 				$(".tab_mstgear .gearInfo .rarity").append("&#10031;");
 			}
 			
-			$(".tab_mstgear .gearInfo .name").text( KC3Meta.gearName(gearData.api_name) );
+			$(".tab_mstgear .gearInfo .name").text( "[{0}] {1}".format(
+				gear_id, KC3Meta.gearName(gearData.api_name)) );
 			$(".tab_mstgear .gearInfo .intro").html( gearData.api_info );
 			
 			// Stats
 			var statBox;
-			$(".tab_mstgear .gearInfo .stats").html("");
+			$(".tab_mstgear .gearInfo .stats").empty();
 			$.each([
 				["hp", "taik"],
 				["fp", "houg"],
@@ -125,15 +131,19 @@
 				["ev", "houk"],
 				["ls", "saku"],
 				["rn", "leng"],
+				["or", "distance"],
 			], function(index, sdata){
-				if((gearData["api_"+sdata[1]]||0) > 0){
+				if((gearData["api_"+sdata[1]]||0) > 0
+					&& (sdata[0]!=="or"
+					|| (sdata[0]==="or" && [6,7,8,9,10,33,37,38].indexOf(gearData.api_type[3])>=0) )
+				){
 					statBox = $(".tab_mstgear .factory .stat").clone();
 					$("img", statBox).attr("src", "../../../../assets/img/stats/"+sdata[0]+".png");
-					if(sdata[0]=="rn"){
+					if(sdata[0]==="rn"){
 						$(".stat_value", statBox).text( [
 							"", "S", "M", "L", "VL"
 						][gearData["api_"+sdata[1]]] );
-					}else if(sdata[0]=="sp"){
+					}else if(sdata[0]==="sp"){
 						$(".stat_value", statBox).text( gearData["api_"+sdata[1]]==10?"F":"S" );
 					}else{
 						$(".stat_value", statBox).text( gearData["api_"+sdata[1]] );
