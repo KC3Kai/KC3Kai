@@ -85,7 +85,7 @@
 			// interceptor
 			"t38": "aa",
 		},
-		_landPlaneTypes: [6,7,8,9,10,37,38],
+		_landPlaneTypes: [6,7,8,9,10,33,37,38],
 
 		/* Initialize comparators
 		---------------------------------*/
