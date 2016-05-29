@@ -1,4 +1,6 @@
 QUnit.module( "Module", function() {
+    localStorage.clear();
+    
     QUnit.module( "BattlePrediction", function () {
         // fake KC3Database
         window.KC3Database = {
