@@ -2386,9 +2386,11 @@
 			thisNode.antiAirFire.forEach(function(fire){
 				if(!!fire){
 					var fireShipPos = fire.api_idx; // starts from 0
-					if(fireShipPos>=0 && fireShipPos<6){
-						var sentFleet = PlayerManager.fleets[KC3SortieManager.fleetSent-1];
-						var shipName = KC3ShipManager.get(sentFleet.ships[fireShipPos]).name();
+					// fireShipPos = [0,5]: in normal fleet or main fleet
+					// fireShipPos = [6,11]: in escort fleet
+					if(fireShipPos>=0 && fireShipPos<12){
+						var sentFleet = PlayerManager.fleets[fireShipPos>=6 ? 1 : KC3SortieManager.fleetSent-1];
+						var shipName = KC3ShipManager.get(sentFleet.ships[fireShipPos % 6]).name();
 						aaciTips += (!!aaciTips ? "\n" : "") + shipName;
 					}
 					var itemList = fire.api_use_items;

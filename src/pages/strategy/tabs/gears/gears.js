@@ -10,7 +10,7 @@
 		_holders: {},
 		_comparator: {},
 		_currentTypeId: 1, // keep track of current type_id
-		_allProperties: ["fp","tp","aa","ar","as","ev","ls","dv","ht","rn"],
+		_allProperties: ["fp","tp","aa","ar","as","ev","ls","dv","ht","rn", "or"],
 		_defaultCompareMethod: {
 			// main guns
 			"t1": "fp",
@@ -82,9 +82,10 @@
 			"t36": "overall",
 			// land base bomber
 			"t37": "dv",
-			// intercepting fighter
-			"t38": "aa"
+			// interceptor
+			"t38": "aa",
 		},
+		_landPlaneTypes: [6,7,8,9,10,33,37,38],
 
 		/* Initialize comparators
 		---------------------------------*/
@@ -177,7 +178,8 @@
 							ls: MasterItem.api_saku,
 							dv: MasterItem.api_baku,
 							ht: MasterItem.api_houm,
-							rn: MasterItem.api_leng
+							rn: MasterItem.api_leng,
+							or: MasterItem.api_distance
 						},
 						held: [],
 						extras: [],
@@ -352,8 +354,10 @@
 
 			allProperties.forEach(function(p,i) {
 				var q = ".tab_gears .itemSorters .sortControl." + p;
-				if (statSets[p].length <= 1 &&
-					self._defaultCompareMethod[type_id] !== p) {
+				if ((statSets[p].length <= 1 &&
+					self._defaultCompareMethod["t"+type_id] !== p)
+					|| (p==="or" && self._landPlaneTypes.indexOf(Number(type_id))<0)
+				) {
 					  $(q).addClass("hide");
 				} else {
 					  $(q).removeClass("hide");
@@ -428,7 +432,7 @@
 
 
 				allProperties.forEach( function(v,i) {
-					self.slotitem_stat(ItemElem, ThisSlotitem.stats, v);
+					self.slotitem_stat(ItemElem, ThisSlotitem, v);
 				});
 
 				var holderCtr, ThisHolder, HolderElem;
@@ -496,11 +500,17 @@
 
 		/* Determine if an item has a specific stat
 		--------------------------------------------*/
-		slotitem_stat :function(ItemElem, stats, stat_name){
-			if(stats[stat_name] !== 0){
-				$(".stats .item_"+stat_name+" span", ItemElem).text(stats[stat_name]);
-			}else{
-				$(".stats .item_"+stat_name, ItemElem).hide();
+		slotitem_stat :function(ItemElem, SlotItem, statName){
+			if(SlotItem.stats[statName] !== 0 &&
+				(statName !== "or" || 
+					(statName === "or" &&
+					this._landPlaneTypes.indexOf(SlotItem.type_id)>-1)
+				)
+			){
+				$(".stats .item_{0} span".format(statName), ItemElem)
+					.text(SlotItem.stats[statName]);
+			} else {
+				$(".stats .item_{0}".format(statName), ItemElem).hide();
 			}
 		}
 
