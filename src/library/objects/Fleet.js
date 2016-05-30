@@ -368,6 +368,23 @@ Contains summary information about a fleet and its 6 ships
 		return {fuel: totalFuel, ammo: totalAmmo};
 	};
 
+	KC3Fleet.prototype.calcResupplyCost = function() {
+		var self = this;
+		var totalFuel = 0;
+		var totalAmmo = 0;
+		var totalBauxite = 0;
+		$.each( this.ships, function(i, shipId) {
+			if (shipId > -1) {
+				var shipObj = self.ship(i);
+				var cost = shipObj.calcResupplyCost(-1, -1, true);
+				totalFuel += cost.fuel;
+				totalAmmo += cost.ammo;
+				totalBauxite += cost.bauxite;
+			}
+		});
+		return {fuel: totalFuel, ammo: totalAmmo, bauxite:totalBauxite};
+	};
+
 	/*--------------------------------------------------------*/
 	/*-----------------[ STATUS INDICATORS ]------------------*/
 	/*--------------------------------------------------------*/

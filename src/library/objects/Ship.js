@@ -433,11 +433,13 @@ KC3改 Ship Object
 	
 	/* Calculate resupply cost
 	   ----------------------------------
-	   0 <= fuelPercent <= 1
-	   0 <= ammoPercent <= 1
-	   returns an object: {fuel: <fuelCost>, ammo: <ammoCost>}
+	   0 <= fuelPercent <= 1, < 0 use current fuel
+	   0 <= ammoPercent <= 1, < 0 use current ammo
+	   to calculate bauxite cost: bauxiteNeeded == true
+	   returns an object: {fuel: <fuelCost>, ammo: <ammoCost>, bauxite: <bauxiteCost>}
 	 */
-	KC3Ship.prototype.calcResupplyCost = function(fuelPercent, ammoPercent) {
+	KC3Ship.prototype.calcResupplyCost = function(fuelPercent, ammoPercent, bauxiteNeeded) {
+		var self = this;
 		var master = this.master();
 		var fullFuel = master.api_fuel_max;
 		var fullAmmo = master.api_bull_max;
@@ -451,13 +453,26 @@ KC3改 Ship Object
 		var mulRounded = function (a, percent) {
 			return Math.floor( a * percent );
 		};
-		return { fuel: mulRounded( fullFuel, fuelPercent ),
-				 ammo: mulRounded( fullAmmo, ammoPercent ) };
+		var result = {
+			fuel: fuelPercent < 0 ? fullFuel - this.fuel : mulRounded( fullFuel, fuelPercent ),
+			ammo: ammoPercent < 0 ? fullAmmo - this.ammo : mulRounded( fullAmmo, ammoPercent )
+		};
+		if(!!bauxiteNeeded){
+			var equipBauxiteCost = function() {
+				return self.equipment(0).bauxiteCost(self.slots[0], master.api_maxeq[0])
+					+ self.equipment(1).bauxiteCost(self.slots[1], master.api_maxeq[1])
+					+ self.equipment(2).bauxiteCost(self.slots[2], master.api_maxeq[2])
+					+ self.equipment(3).bauxiteCost(self.slots[3], master.api_maxeq[3]);
+			}
+			result.bauxite = equipBauxiteCost();
+			// TODO 85% bauxite for married ship needs to be verified
+			if (this.level >= 100) {
+				result.bauxite = Math.floor(0.85 * result.bauxite);
+			}
+		}
+		return result;
 	};
-	/*
-	.removeEquip( slotIndex )
-	*/
-	
+
 	/* Expedition Supply Change Check */
 	KC3Ship.prototype.perform = function(command,args) {
 		try {

@@ -96,7 +96,12 @@ KC3改 Ship Box for Natsuiro theme
 		$(".ship_exp", this.element).css("width", (120 * this.expPercent)+"px");		
 		$(".ship_fuel", this.element).css("width", (120 * Math.min(this.fuelPercent, 1))+"px");
 		$(".ship_ammo", this.element).css("width", (120 * Math.min(this.ammoPercent, 1))+"px");
-		$(".ship_bars", this.element).attr("title", KC3Meta.term("PanelCombinedShipBarsHint").format(this.shipData.exp[1], Math.ceil(this.fuelPercent*100), Math.ceil(this.ammoPercent*100)) );
+		var resupplyCost = this.shipData.calcResupplyCost(-1, -1, true);
+		$(".ship_bars", this.element).attr("title",
+			KC3Meta.term("PanelCombinedShipBarsHint")
+			.format(this.shipData.exp[1], Math.ceil(this.fuelPercent*100), Math.ceil(this.ammoPercent*100))
+			+ "\n" + KC3Meta.term("PanelResupplyCosts").format(resupplyCost.fuel, resupplyCost.ammo, resupplyCost.bauxite)
+		);
 		
 		if(!this.showCombinedFleetBars){
 			$(".ship_bars", this.element).css("opacity", "0");
@@ -131,6 +136,16 @@ KC3改 Ship Box for Natsuiro theme
 		$(".ship_fuel .ship_supply_bar", this.element).css("width", (38 * Math.min(this.fuelPercent, 1))+"px");
 		$(".ship_ammo .ship_supply_bar", this.element).css("width", (38 * Math.min(this.ammoPercent, 1))+"px");
 		
+		if(this.fuelPercent<1 || this.ammoPercent<1){
+			var resupplyCost = this.shipData.calcResupplyCost(-1, -1, true);
+			$(".ship_supply", this.element).attr("title",
+				KC3Meta.term("PanelResupplyCosts")
+				.format(resupplyCost.fuel, resupplyCost.ammo, resupplyCost.bauxite)
+			);
+		} else {
+			$(".ship_supply", this.element).attr("title", "");
+		}
+
 		this.showEquipment(0);
 		this.showEquipment(1);
 		this.showEquipment(2);
