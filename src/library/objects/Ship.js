@@ -463,12 +463,11 @@ KC3改 Ship Object
 					+ self.equipment(1).bauxiteCost(self.slots[1], master.api_maxeq[1])
 					+ self.equipment(2).bauxiteCost(self.slots[2], master.api_maxeq[2])
 					+ self.equipment(3).bauxiteCost(self.slots[3], master.api_maxeq[3]);
-			}
+			};
 			result.bauxite = equipBauxiteCost();
-			// TODO 85% bauxite for married ship needs to be verified
-			if (this.level >= 100) {
-				result.bauxite = Math.floor(0.85 * result.bauxite);
-			}
+			// Bauxite cost to replace planes shot down does not change.
+			// via http://kancolle.wikia.com/wiki/Marriage
+			//if (this.level >= 100) { result.bauxite = Math.floor(0.85 * result.bauxite); }
 		}
 		return result;
 	};
