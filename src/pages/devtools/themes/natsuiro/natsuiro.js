@@ -1072,7 +1072,6 @@
 					$(".module.status .status_supply .status_text").text( KC3Meta.term("PanelSupplied") );
 					$(".module.status .status_supply img").attr("src", "../../../../assets/img/ui/check.png");
 					$(".module.status .status_supply .status_text").addClass("good");
-					$(".module.status .status_supply").attr("title", "");
 				}else{
 					$(".module.status .status_supply .status_text").text(KC3Meta.term(
 						FleetSummary.badState[1] ? "PanelEmptySupply" :
@@ -1080,13 +1079,13 @@
 						));
 					$(".module.status .status_supply img").attr("src", "../../../../assets/img/ui/sunk.png");
 					$(".module.status .status_supply .status_text").addClass("bad");
-					$(".module.status .status_supply").attr("title",
-						KC3Meta.term("PanelResupplyCosts").format(
-							FleetSummary.supplyCost.fuel, FleetSummary.supplyCost.ammo, FleetSummary.supplyCost.bauxite
-						)
-					);
 				}
-				
+				$(".module.status .status_supply").attr("title",
+					FleetSummary.supplied ? "": KC3Meta.term("PanelResupplyCosts").format(
+						FleetSummary.supplyCost.fuel, FleetSummary.supplyCost.ammo, FleetSummary.supplyCost.bauxite
+					)
+				);
+
 				// STATUS: MORALE
 				if( FleetSummary.lowestMorale > 54 ){
 					$(".module.status .status_morale .status_text").text( KC3Meta.term("PanelGreatMorale") );
