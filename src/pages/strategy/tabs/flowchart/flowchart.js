@@ -141,6 +141,12 @@
 			if(KC3QuestManager.exists(quest_id)){
 				var questRecord = KC3QuestManager.get(quest_id);
 				
+				if(!questRecord.tracking){
+					$(".questTrack", thisBox).hide();
+				} else {
+					$(".questCount", thisBox).text( questRecord.outputShort() );
+				}
+				
 				// Status-based actions
 				switch(questRecord.status){
 					// Open
@@ -178,15 +184,10 @@
 						break;
 				}
 				
-				if(questRecord.tracking){
-					$(".questTrack", thisBox).show();
-				}
-				
-				$(".questCount", thisBox).text( questRecord.outputShort() );
-
 			// If we don't have player data about the quest
 			}else{
 				$(".questInfo", thisBox).addClass("disabled");
+				$(".questTrack", thisBox).hide();
 			}
 			
 			// If has children, show them under me
