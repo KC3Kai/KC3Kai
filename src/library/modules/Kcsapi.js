@@ -455,6 +455,16 @@ Previously known as "Reactor"
 			KC3Network.trigger("Fleet");
 		},
 		
+		// Equipment swap
+		"api_req_kaisou/slot_deprive": function(params, response, headers){
+			var ShipFrom = KC3ShipManager.get(params.api_unset_ship);
+			var ShipTo = KC3ShipManager.get(params.api_set_ship);
+			ShipFrom.items = response.api_data.api_ship_data.api_unset_ship.api_slot;
+			ShipTo.items = response.api_data.api_ship_data.api_set_ship.api_slot;
+			KC3ShipManager.save();
+			KC3Network.trigger("Fleet");
+		},
+		
 		/* Fleet list
 		-------------------------------------------------------*/
 		"api_get_member/deck":function(params, response, headers){
