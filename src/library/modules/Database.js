@@ -194,6 +194,15 @@ Uses Dexie.js third-party plugin on the assets directory
 							console.log("V7",t);
 						},
 						vr: 7,
+					},
+					{
+						ch: {
+							encounters: "&uniqid,world,map,diff,node,form,ke,count,name"
+						},
+						up: function(t){
+							console.log("V7.2",t);
+						},
+						vr: 7.2,
 					}
 				];
 				
@@ -324,20 +333,22 @@ Uses Dexie.js third-party plugin on the assets directory
 		},
 		
 		Enemy :function(data, callback){
-			try {
-				this.con.enemy.add(data);
-			} catch (e) {
-				console.log("Enemy data already exists:", data);
-			}
+			this.con.enemy.put(data).then(callback);
 		},
 		
-		Encounter :function(data, callback){
-			try {
-				this.con.encounters.add(data);
-			} catch (e) {
-				console.log("Enemy composition already exists:", data);
-			}
-			
+		Encounter :function(data, isIncCount, callback){
+			var self = this;
+			this.con.encounters.get(data.uniqid, function(oldData){
+				if(!!oldData){
+					if(!!isIncCount){
+						data.count = (oldData.count || 1) + 1;
+					}
+					if(!data.name && !!oldData.name){
+						data.name = oldData.name;
+					}
+				}
+				self.con.encounters.put(data).then(callback);
+			});
 		},
 		
 		/* [GET] Retrive logs from Local DB
