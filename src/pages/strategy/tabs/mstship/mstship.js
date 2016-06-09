@@ -492,6 +492,7 @@
 						// ENEMY EQUIPMENT
 						$(".tab_mstship .shipInfo .equipments").css("width", "220px");
 						$(".tab_mstship .equipments .equipment").each(function(index){
+							$(this).show();
 							$(".capacity", this).text("?").hide();
 							
 							var equipId = enemyInfo["eq"+(index+1)];
