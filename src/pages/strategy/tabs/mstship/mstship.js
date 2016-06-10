@@ -321,7 +321,7 @@
 
 				// EQUIPMENT
 				$(".tab_mstship .equipments .equipment").each(function(index){
-					$(".capacity", this).text( shipData.api_maxeq[index] );
+					$(".capacity", this).text( shipData.api_maxeq[index] ).show();
 					if(index >= shipData.api_slot_num){
 						$(this).hide();
 					}else{
