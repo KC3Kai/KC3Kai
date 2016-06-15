@@ -261,6 +261,10 @@
 	background-repeat: no-repeat;
 	text-align: right;
 }
+.tab_ships .ship_item .ship_onfleet-color1 {background: #90D4ED !important;}
+.tab_ships .ship_item .ship_onfleet-color2 {background: #BBDDBA !important;}
+.tab_ships .ship_item .ship_onfleet-color3 {background: #E8E68F !important;}
+.tab_ships .ship_item .ship_onfleet-color4 {background: #F6D0A0 !important;}
 .tab_ships .ship_item .ship_name {
 	width:92px;
 	overflow:hidden;
