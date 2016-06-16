@@ -127,4 +127,12 @@ KC3改 Equipment Object
 			+(2.0 * Number(this.master().api_baku) );
 	};
 	
+	KC3Gear.prototype.bauxiteCost = function(slotCurrent, slotMaxeq){
+		if(this.itemId===0){ return 0; }
+		if( [6,7,8,11,45].indexOf( this.master().api_type[2] ) > -1){
+			return 5 * (slotMaxeq - slotCurrent);
+		}
+		return 0;
+	};
+
 })();
