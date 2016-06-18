@@ -666,6 +666,9 @@
 					if(shipLevel >= 100) {
 						$(".ship_name", cElm).addClass("ship_kekkon-color");
 					}
+					if(cShip.fleet > 0) {
+						$(".ship_name", cElm).addClass("ship_onfleet-color" + cShip.fleet);
+					}
 					$(".ship_type", cElm).text( KC3Meta.stype(cShip.stype) );
 					var shipLevelConv = shipLevel;
 					$(".ship_lv", cElm).html( "<span>Lv.</span>" + shipLevelConv);

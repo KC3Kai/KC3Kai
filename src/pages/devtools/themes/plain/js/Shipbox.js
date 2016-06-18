@@ -59,7 +59,12 @@ KC3改 Ship Box for Natsuiro theme
 		$(".ship_exp", this.element).css("width", (120 * this.expPercent)+"px");		
 		$(".ship_fuel", this.element).css("width", (120 * Math.min(this.fuelPercent, 1))+"px");
 		$(".ship_ammo", this.element).css("width", (120 * Math.min(this.ammoPercent, 1))+"px");
-		$(".ship_bars", this.element).attr("title", KC3Meta.term("PanelCombinedShipBarsHint").format(this.shipData.exp[1], Math.ceil(this.fuelPercent*100), Math.ceil(this.ammoPercent*100)) );
+		var resupplyCost = this.shipData.calcResupplyCost(-1, -1, true);
+		$(".ship_bars", this.element).attr("title",
+			KC3Meta.term("PanelCombinedShipBarsHint")
+			.format(this.shipData.exp[1], Math.ceil(this.fuelPercent*100), Math.ceil(this.ammoPercent*100))
+			+ "\n" + KC3Meta.term("PanelResupplyCosts").format(resupplyCost.fuel, resupplyCost.ammo, resupplyCost.bauxite)
+		);
 		
 		return this.element;
 	};

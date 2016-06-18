@@ -223,7 +223,7 @@ Does not include Ships and Gears which are managed by other Managers
 				return false;
 			}
 			
-			this.fleets.forEach(function(fleet){ fleet.checkAkashi(true); });
+			this.fleets.forEach(function(fleet){ fleet.checkAkashi(); });
 			
 			var
 				// get current player regen cap

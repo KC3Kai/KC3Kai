@@ -433,31 +433,45 @@ KC3改 Ship Object
 	
 	/* Calculate resupply cost
 	   ----------------------------------
-	   0 <= fuelPercent <= 1
-	   0 <= ammoPercent <= 1
-	   returns an object: {fuel: <fuelCost>, ammo: <ammoCost>}
+	   0 <= fuelPercent <= 1, < 0 use current fuel
+	   0 <= ammoPercent <= 1, < 0 use current ammo
+	   to calculate bauxite cost: bauxiteNeeded == true
+	   returns an object: {fuel: <fuelCost>, ammo: <ammoCost>, bauxite: <bauxiteCost>}
 	 */
-	KC3Ship.prototype.calcResupplyCost = function(fuelPercent, ammoPercent) {
+	KC3Ship.prototype.calcResupplyCost = function(fuelPercent, ammoPercent, bauxiteNeeded) {
+		var self = this;
 		var master = this.master();
 		var fullFuel = master.api_fuel_max;
 		var fullAmmo = master.api_bull_max;
 
-		// http://puu.sh/mtMFg.png
-		if (this.level >= 100) {
-			fullFuel = Math.floor(fullFuel * 0.85);
-			fullAmmo = Math.floor(fullAmmo * 0.85);
-		}
-
 		var mulRounded = function (a, percent) {
 			return Math.floor( a * percent );
 		};
-		return { fuel: mulRounded( fullFuel, fuelPercent ),
-				 ammo: mulRounded( fullAmmo, ammoPercent ) };
+		var marriageConserve = function (v) {
+			return self.level >= 100 ? Math.floor(0.85 * v) : v;
+		};
+		var result = {
+			fuel: fuelPercent < 0 ? fullFuel - this.fuel : mulRounded(fullFuel, fuelPercent),
+			ammo: ammoPercent < 0 ? fullAmmo - this.ammo : mulRounded(fullAmmo, ammoPercent)
+		};
+		// After testing, 85% is applied to supply cost, not max value
+		result.fuel = marriageConserve(result.fuel);
+		result.ammo = marriageConserve(result.ammo);
+		if(!!bauxiteNeeded){
+			var equipBauxiteCost = function() {
+				return self.equipment(0).bauxiteCost(self.slots[0], master.api_maxeq[0])
+					+ self.equipment(1).bauxiteCost(self.slots[1], master.api_maxeq[1])
+					+ self.equipment(2).bauxiteCost(self.slots[2], master.api_maxeq[2])
+					+ self.equipment(3).bauxiteCost(self.slots[3], master.api_maxeq[3]);
+			};
+			result.bauxite = equipBauxiteCost();
+			// Bauxite cost to replace planes shot down does not change by marriage.
+			// via http://kancolle.wikia.com/wiki/Marriage
+			//result.bauxite = marriageConserve(result.bauxite);
+		}
+		return result;
 	};
-	/*
-	.removeEquip( slotIndex )
-	*/
-	
+
 	/* Expedition Supply Change Check */
 	KC3Ship.prototype.perform = function(command,args) {
 		try {

@@ -824,6 +824,7 @@
 					hasTaiha: MainFleet.hasTaiha() || EscortFleet.hasTaiha(),
 					taihaIndexes: MainFleet.getTaihas().concat( EscortFleet.getTaihas() ),
 					supplied: MainFleet.isSupplied() && EscortFleet.isSupplied(),
+					supplyCost: MainFleet.calcResupplyCost(),
 					badState: [
 						MainFleet.needsSupply(false)|| EscortFleet.needsSupply(false),
 						MainFleet.needsSupply(true) || EscortFleet.needsSupply(true) ,
@@ -835,7 +836,10 @@
 						? MainFleet.lowestMorale() : EscortFleet.lowestMorale(),
 					supportPower: 0
 				};
-				
+				var escortSupplyCost = EscortFleet.calcResupplyCost();
+				FleetSummary.supplyCost.fuel += escortSupplyCost.fuel;
+				FleetSummary.supplyCost.ammo += escortSupplyCost.ammo;
+				FleetSummary.supplyCost.bauxite += escortSupplyCost.bauxite;
 				
 			// SINGLE
 			}else{
@@ -868,6 +872,7 @@
 					hasTaiha: CurrentFleet.hasTaiha(),
 					taihaIndexes: CurrentFleet.getTaihas(),
 					supplied: CurrentFleet.isSupplied(),
+					supplyCost: CurrentFleet.calcResupplyCost(),
 					badState: [
 						CurrentFleet.needsSupply(false) ||
 						(!(KC3SortieManager.onSortie && KC3SortieManager.fleetSent == selectedFleet)
@@ -924,6 +929,11 @@
 					$(".module.status .status_supply img").attr("src", "../../../../assets/img/ui/sunk.png");
 					$(".module.status .status_supply .status_text").addClass("bad");
 				}
+				$(".module.status .status_supply").attr("title",
+					FleetSummary.supplied ? "": KC3Meta.term("PanelResupplyCosts").format(
+						FleetSummary.supplyCost.fuel, FleetSummary.supplyCost.ammo, FleetSummary.supplyCost.bauxite
+					)
+				);
 				
 				// STATUS: MORALE
 				if( FleetSummary.lowestMorale > 54 ){
