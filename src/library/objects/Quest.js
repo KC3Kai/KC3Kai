@@ -100,17 +100,28 @@ Quest Type:
 	/* INCREMENT
 	Add one to tracking progress
 	------------------------------------------*/
-	KC3Quest.prototype.increment = function(reqNum, amount){
-		if(this.tracking && this.status==2){    //2 = On progress
+	KC3Quest.prototype.increment = function(reqNum, amount, noLoop){
+		var self = this;
+		if(this.tracking && (this.status==2 || !!noLoop)){    //2 = On progress
 			if(typeof reqNum == "undefined"){ reqNum=0; }
 			if(typeof amount == "undefined"){ amount=1; }
-			if (this.tracking[reqNum][0] + amount <= this.tracking[reqNum][1]) {
+			var maxValue = (!!noLoop && this.status!=2) ? this.tracking[reqNum][1] - 1 : this.tracking[reqNum][1];
+			if (this.tracking[reqNum][0] + amount <= maxValue) {
 				this.tracking[reqNum][0] += amount;
 			}
 			KC3QuestManager.save();
 		}
+		if(!noLoop && Array.isArray(KC3QuestManager.sharedCounterQuests)){
+			KC3QuestManager.sharedCounterQuests.forEach(function(idList){
+				for(var idx in idList){
+					if(self.id !== idList[idx]){
+						KC3QuestManager.get(idList[idx]).increment(undefined, undefined, true);
+					}
+				}
+			});
+		}
 	};
-
+	
 	/* ISCOMPLETE
 	Return true iff all of the counters are complete
 	------------------------------------------*/
