@@ -928,7 +928,7 @@ Previously known as "Reactor"
 		"api_req_quest/clearitemget": function(params, response, headers){
 			var 
 				ctime    = Date.safeToUtcTime(headers.Date),
-				quest    = params.api_quest_id,
+				quest    = Number(params.api_quest_id),
 				data     = response.api_data,
 				material = data.api_material,
 				consume  = [0,0,0,0],
@@ -960,7 +960,12 @@ Previously known as "Reactor"
 		/* Stop Quest
 		-------------------------------------------------------*/
 		"api_req_quest/stop":function(params, response, headers){
-			
+			var quest = Number(params.api_quest_id);
+			// Restore to Open but Not Active
+			KC3QuestManager.get(quest).status = 1;
+			KC3QuestManager.save();
+			// Trigger quest listeners
+			KC3Network.trigger("Quests");
 		},
 		
 		/*-------------------------------------------------------*/
