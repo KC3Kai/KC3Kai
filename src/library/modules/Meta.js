@@ -134,6 +134,7 @@ Provides access to data on built-in JSON files
 					"甲"    : '_A',
 					"乙"    : '_B',
 					"丙"    : '_C',
+					"丁"    : '_D',
 					"改二"  : '_KaiNi',
 					"改"    : '_Kai',
 					" zwei" : '_Zwei',
