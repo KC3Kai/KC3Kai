@@ -213,6 +213,15 @@
                 "previousForm: querying on original form?" );
             return group[curInd-1];
         },
+		// query the lowest level certain ship can have
+		lowestLevel: function(shipId) {
+			var prevId = this.previousForm(shipId);
+			if (!prevId)
+				return 1;
+
+			var prevInfo = this.remodelInfo(prevId);
+			return prevInfo.level;
+		},
         dumpRemodelGroups: function() {
             return JSON.stringify( this._db.remodelGroups );
         }
