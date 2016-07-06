@@ -40,20 +40,20 @@
 
 		getShipStat: function(shipId) {
 			var entry = this.db["s"+shipId];
-			return !!entry ? entry.stat : false;
+			return entry ? entry.stat : false;
 		},
 
 		getStockEquipment: function(shipId) {
 			var entry = this.db["s"+shipId];
-			return !!entry ? entry.equip : false;
+			return entry ? entry.equip : false;
 		},
 
 		getLoSInfo: function(shipId) {
 			var entry = this.db["s"+shipId];
-			return !!entry ? {
-					base: entry.stat.los,
-					max: entry.stat.los_max 
-				} : false;
+			return entry ? {
+				base: entry.stat.los,
+				max: entry.stat.los_max 
+			} : false;
 		}
 	};
 	
