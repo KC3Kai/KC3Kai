@@ -12,10 +12,6 @@
 	font-size:12px;
 }
 
-.tab_mstship div {
-	position:relative;
-}
-
 /* FILTERS
 --------------------------------*/
 .tab_mstship .filters {
@@ -94,7 +90,6 @@
 	padding:5px 5px 0px 5px;
 	position:relative;
 }
-
 
 /* BASIC
 --------------------------------*/
@@ -351,6 +346,22 @@
 
 /* Consumption */
 
+/* Level-dependent Stats */
+.tab_mstship .shipInfo .more .at_level.moreinfo_box {
+	height: 45px;
+}
+.tab_mstship .shipInfo .more .at_level.moreinfo_box .level-val {
+	float: left;
+	width: 20px;
+}
+.tab_mstship .shipInfo .more .at_level.moreinfo_box .stat-detail {
+	margin-left: 10px;
+	float: left;
+}
+.tab_mstship .shipInfo .more .at_level .slider {
+	margin:5px 0px 0px 10px;
+	width: 400px;
+}
 
 /* VOICES and HOURLIES
 --------------------------------*/

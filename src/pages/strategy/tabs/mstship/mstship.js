@@ -36,6 +36,11 @@
 		currentCardVersion: "",
 		audio: false,
 		server_ip: "",
+		atLvlSlider: null,
+		// placeholder, the real function is set during "execute()"
+		// atLevelChange(newLevel) updates info on UI
+		// with current ship & specified new level
+		atLevelChange: null,
 		
 		/* INIT
 		Prepares static data needed
@@ -59,7 +64,35 @@
 		execute :function(){
 			$(".tab_mstship .runtime_id").text(chrome.runtime.id);
 			var self = this;
-			
+
+			// slider setup for level-dependent stats
+			self.atLvlSlider = $("input#at-level-slider");
+			// create a dummy slider, this will be destroyed once there's something
+			// to be displayed.
+			self.atLvlSlider.slider();
+
+			var sliderLevel = $(".at_level .level-val");
+			var sliderDetail = $(".at_level .stat-detail");
+			function atLevelChange(newLevel) {
+				sliderLevel.text( newLevel );
+				var aswBound = WhoCallsTheFleetDb.getStatBound( self.currentShipId, 'asw' );
+				var losBound = WhoCallsTheFleetDb.getStatBound( self.currentShipId, 'los' );
+				var evsBound = WhoCallsTheFleetDb.getStatBound( self.currentShipId, 'evasion' );
+
+				var asw = WhoCallsTheFleetDb.estimateStat(aswBound, newLevel);
+				var los = WhoCallsTheFleetDb.estimateStat(losBound, newLevel);
+				var evs = WhoCallsTheFleetDb.estimateStat(evsBound, newLevel);
+
+				function ppr(v) { return v === false ? "???" : String(v); }
+				
+				var statDetail =
+					"ASW: " + ppr(asw) + ", " +
+					"LoS: " + ppr(los) + ", " +
+					"Evasion: " + ppr(evs);
+				sliderDetail.text( statDetail );
+			}
+			self.atLevelChange = atLevelChange;
+
 			// List all ships
 			var shipBox;
 			$.each(KC3Master.all_ships(), function(index, ShipData){
@@ -398,7 +431,21 @@
 				});
 				$(".tab_mstship .shipInfo .consume_fuel .rsc_value").text( shipData.api_fuel_max );
 				$(".tab_mstship .shipInfo .consume_ammo .rsc_value").text( shipData.api_bull_max );
-				
+
+				// level-dependent stats
+				var lowestLevel = RemodelDb.lowestLevel( self.currentShipId );
+				// it seems "ticks" cannot be reset, so we have to
+				// destroy the slider and build a fresh one.
+				self.atLvlSlider.slider('destroy');
+				self.atLvlSlider.slider({
+					tooltip: 'hide',
+					ticks: [lowestLevel,99,155]
+				});
+				self.atLvlSlider.on('change', function(e) {
+					self.atLevelChange( e.value.newValue );
+				});
+				self.atLvlSlider.slider('setValue',99,true,true);
+
 				$(".tab_mstship .shipInfo .subtitles").empty();
 				
 				// VOICE LINES
