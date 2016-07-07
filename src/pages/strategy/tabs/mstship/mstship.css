@@ -42,7 +42,7 @@
 --------------------------------*/
 .tab_mstship .shipRecords {
 	width:200px;
-	height:800px;
+	height:850px;
 	float:left;
 	overflow-y: scroll;
 	overflow-x: hidden;
@@ -82,7 +82,7 @@
 --------------------------------*/
 .tab_mstship .shipInfo {
 	width:480px;
-	height:800px;
+	height:850px;
 	float:left;
 	background:#eee;
 	border:1px solid #ccc;
@@ -348,14 +348,14 @@
 
 /* Level-dependent Stats */
 .tab_mstship .shipInfo .more .at_level.moreinfo_box {
-	height: 45px;
+	height: 50px;
 }
 .tab_mstship .shipInfo .more .at_level.moreinfo_box .level-val {
 	float: left;
 	width: 20px;
 }
 .tab_mstship .shipInfo .more .at_level.moreinfo_box .stat-detail {
-	margin-left: 10px;
+	margin-left: 55px;
 	float: left;
 }
 .tab_mstship .shipInfo .more .at_level .slider {

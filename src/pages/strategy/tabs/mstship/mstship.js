@@ -70,28 +70,23 @@
 			// create a dummy slider, this will be destroyed once there's something
 			// to be displayed.
 			self.atLvlSlider.slider();
-
 			var sliderLevel = $(".at_level .level-val");
 			var sliderDetail = $(".at_level .stat-detail");
-			function atLevelChange(newLevel) {
+			self.atLevelChange = function atLevelChange(newLevel) {
 				sliderLevel.text( newLevel );
 				var aswBound = WhoCallsTheFleetDb.getStatBound( self.currentShipId, 'asw' );
 				var losBound = WhoCallsTheFleetDb.getStatBound( self.currentShipId, 'los' );
 				var evsBound = WhoCallsTheFleetDb.getStatBound( self.currentShipId, 'evasion' );
-
+				
 				var asw = WhoCallsTheFleetDb.estimateStat(aswBound, newLevel);
 				var los = WhoCallsTheFleetDb.estimateStat(losBound, newLevel);
 				var evs = WhoCallsTheFleetDb.estimateStat(evsBound, newLevel);
-
-				function ppr(v) { return v === false ? "???" : String(v); }
 				
-				var statDetail =
-					"ASW: " + ppr(asw) + ", " +
-					"LoS: " + ppr(los) + ", " +
-					"Evasion: " + ppr(evs);
-				sliderDetail.text( statDetail );
-			}
-			self.atLevelChange = atLevelChange;
+				function ppr(v) { return v === false ? "???" : String(v); }
+				$(".asw", sliderDetail).text( ppr(asw) );
+				$(".los", sliderDetail).text( ppr(los) );
+				$(".evs", sliderDetail).text( ppr(evs) );
+			};
 
 			// List all ships
 			var shipBox;
