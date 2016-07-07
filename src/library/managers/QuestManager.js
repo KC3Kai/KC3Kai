@@ -19,7 +19,7 @@ Uses KC3Quest objects to play around with
 		
 		// Internal constants for time period quests
 		_dailyIds: [201, 216, 210, 211, 218, 212, 226, 230, 303, 304, 402, 403, 503, 504, 605, 606, 607, 608, 609, 619, 702],
-		_weeklyIds: [214, 220, 213, 221, 228, 229, 241, 242, 243, 261, 302, 404, 410, 411, 613, 703],
+		_weeklyIds: [214, 220, 213, 221, 228, 229, 241, 242, 243, 261, 302, 404, 410, 411, 613, 638, 703],
 		_monthlyIds: [249, 256, 257, 259, 265, 264, 266, 311, 626, 628],
 		
 		/* GET
@@ -409,7 +409,7 @@ Uses KC3Quest objects to play around with
 					this.list["q"+tempQuest.id] = new KC3Quest();
 					this.list["q"+tempQuest.id].define( tempQuest );
 				}
-				console.info("Quest management data loaded");
+				// console.info("Quest management data loaded");
 				return true;
 			}
 			return false;
