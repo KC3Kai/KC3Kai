@@ -40,20 +40,35 @@
 
 		getShipStat: function(shipId) {
 			var entry = this.db["s"+shipId];
-			return !!entry ? entry.stat : false;
+			return entry ? entry.stat : false;
 		},
 
 		getStockEquipment: function(shipId) {
 			var entry = this.db["s"+shipId];
-			return !!entry ? entry.equip : false;
+			return entry ? entry.equip : false;
 		},
 
 		getLoSInfo: function(shipId) {
+			return this.getStatBound(shipId, 'los');
+		},
+
+		getStatBound: function(shipId, stat) {
+			console.assert(stat === 'los' || stat === 'asw' || stat === 'evasion',
+				   "stat should be one of: los / asw / evasion");
 			var entry = this.db["s"+shipId];
-			return !!entry ? {
-					base: entry.stat.los,
-					max: entry.stat.los_max 
-				} : false;
+			return entry ? {
+				base: entry.stat[stat],
+				max: entry.stat[stat + "_max"] 
+			} : false;
+		},
+
+		estimateStat: function(statBound, level) {
+			var self = this;
+			if (!statBound || statBound.base < 0 || statBound.max < 0)
+				return false;
+			var retVal = statBound.base +
+				Math.floor((statBound.max - statBound.base)*level / 99.0);
+			return retVal;
 		}
 	};
 	
