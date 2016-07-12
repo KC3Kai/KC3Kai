@@ -330,10 +330,52 @@
 						[ 2, "SettingsShowCounter"]
 					]
 				}
-			},
+			}
+		]
+	},
+	{
+		"section": "SettingsTaihaAlert",
+		"help" : "https://github.com/dragonjet/KC3Kai/wiki",
+		"contents" : [
 			{
 				"id" : "alert_taiha",
-				"name" : "SettingsTaihaAlert",
+				"name" : "Enabled",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "alert_taiha_blur",
+				"name" : "SettingsScreenBlur",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "alert_taiha_blood",
+				"name" : "SettingsScreenBlood",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "alert_taiha_ss",
+				"name" : "SettingsAppearOnScreenshots",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "alert_taiha_sound",
+				"name" : "SettingsHeartbeatSound",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "alert_taiha_pvp",
+				"name" : "SettingsDisplayOnPvP",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "alert_taiha_panel",
+				"name" : "SettingsRedShadeOnPanel",
 				"type" : "check",
 				"options" : {}
 			}
