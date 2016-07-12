@@ -59,11 +59,23 @@ function getRandomInt(min, max) {
 
 KCScreenshot.prototype.capture = function(){
 	var self = this;
+	var tempHideTaihaAlert = false;
+	
+	// If taiha alert appear on screenshot is off, hide taiha alert in the mean time
+	if(!ConfigManager.alert_taiha_ss) {
+		interactions.taihaAlertStop({}, {}, {});
+		tempHideTaihaAlert = true;
+	}
 	
 	// Start capturing
 	chromeCapture(this.format[0], function(base64img){
 		self.domImg.src = base64img;
 		self.domImg.onload = self.crop();
+		
+		// screenshot is done, return taiha alert
+		if (tempHideTaihaAlert) {
+			interactions.taihaAlertStart({}, {}, {});
+		}
 	});
 };
 

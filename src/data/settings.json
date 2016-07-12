@@ -368,12 +368,6 @@
 				"options" : {}
 			},
 			{
-				"id" : "alert_taiha_pvp",
-				"name" : "SettingsDisplayOnPvP",
-				"type" : "check",
-				"options" : {}
-			},
-			{
 				"id" : "alert_taiha_panel",
 				"name" : "SettingsRedShadeOnPanel",
 				"type" : "check",
