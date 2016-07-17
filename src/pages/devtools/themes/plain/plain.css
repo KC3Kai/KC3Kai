@@ -835,7 +835,7 @@ html,body {
 	height:20px;
 	float:left;
 }
-.module.fleet .lship .ship_gear_lvl {
+.module.fleet .lship .ship_gear_star {
 	width: 12px;
 	position: absolute;
 	font-size: 8px;
@@ -845,15 +845,23 @@ html,body {
 	border-radius: 6px;
 	text-align: center;
 	line-height: 13px;
-	display:none;
-}
-.module.fleet .lship .ship_gear_lvl.ship_gear_ace {
-	color: #ff0;
-	background: #555;
-}
-.module.fleet .lship .ship_gear_lvl.ship_gear_mod {
 	color: #ff0;
 	background: #45A9A5;
+	display:none;
+}
+.module.fleet .lship .ship_gear_ace {
+	width: 12px;
+	position: absolute;
+	font-size: 8px;
+	margin: 8px 0px 0px 5px;
+	height: 12px;
+	overflow: hidden;
+	border-radius: 6px;
+	text-align: center;
+	line-height: 13px;
+	color: #ff0;
+	background: #555;
+	display:none;
 }
 .module.fleet .lship .ship_gear_icon {
 	width:18px;
