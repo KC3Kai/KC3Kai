@@ -254,23 +254,16 @@ KC3改 Ship Box for Natsuiro theme
 					"../../../../assets/img/items/"+thisGear.master().api_type[3]+".png");
 				$(".ship_gear_"+(slot+1), this.element).addClass("equipped");
 				$(".ship_gear_"+(slot+1), this.element).attr("title", thisGear.name());
-				
-				if(typeof thisGear.ace != "undefined"){
-					if(thisGear.ace > -1){
-						// Is a plane with veterancy
-						$(".ship_gear_"+(slot+1)+" .ship_gear_lvl", this.element).addClass("ship_gear_ace");
-						$(".ship_gear_"+(slot+1)+" .ship_gear_lvl", this.element).show();
-						$(".ship_gear_"+(slot+1)+" .ship_gear_lvl", this.element).text(thisGear.ace);
-					}else{
-						// Is a normal equipment that can be upgraded
-						$(".ship_gear_"+(slot+1)+" .ship_gear_lvl", this.element).addClass("ship_gear_mod");
-						if(thisGear.stars > 0){
-							$(".ship_gear_"+(slot+1)+" .ship_gear_lvl", this.element).show();
-							$(".ship_gear_"+(slot+1)+" .ship_gear_lvl", this.element).text(thisGear.stars);
-						}
-					}
+				if (typeof thisGear.ace !== "undefined" && thisGear.ace > 0) {
+					// Is a plane with veterancy
+					$(".ship_gear_"+(slot+1)+" .ship_gear_ace", this.element).show();
+					$(".ship_gear_"+(slot+1)+" .ship_gear_ace", this.element).text(thisGear.ace);
 				}
-				
+				if (typeof thisGear.stars !== "undefined" && thisGear.stars > 0){
+				    // Is a normal equipment that can be upgraded
+					$(".ship_gear_"+(slot+1)+" .ship_gear_star", this.element).show();
+					$(".ship_gear_"+(slot+1)+" .ship_gear_star", this.element).text(thisGear.stars);
+				}
 			}else{
 				$(".ship_gear_"+(slot+1)+" .ship_gear_icon img", this.element).hide();
 				$(".ship_gear_"+(slot+1), this.element).addClass("empty");
