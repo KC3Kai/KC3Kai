@@ -1209,15 +1209,24 @@
 					.some   (function( shpDat) {
 						return !shpDat.didFlee && shpDat.isTaiha();
 					})
-				&& !KC3SortieManager.isPvP() // if PvP, no taiha alert
 			) {
-				if(ConfigManager.alert_taiha){
-					$("#critical").show();
-					if(critAnim){ clearInterval(critAnim); }
-					critAnim = setInterval(function() {
-						$("#critical").toggleClass("anim2");
-					}, 500);
-					critSound.play();
+				if (!ConfigManager.alert_taiha_pvp && KC3SortieManager.isPvP()) {
+					// if PvP and config for PvP is disabled, do nothing
+					
+				} else if(ConfigManager.alert_taiha){
+					
+					if(ConfigManager.alert_taiha_panel){
+						$("#critical").show();
+						if(critAnim){ clearInterval(critAnim); }
+						critAnim = setInterval(function() {
+							$("#critical").toggleClass("anim2");
+						}, 500);
+					}
+					
+					if(ConfigManager.alert_taiha_sound){
+						critSound.play();
+					}
+					
 					
 					(new RMsg("service", "taihaAlertStart", {
 						tabId: chrome.devtools.inspectedWindow.tabId

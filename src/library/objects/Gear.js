@@ -51,6 +51,18 @@ KC3改 Equipment Object
 		// Equipment did not return on plane check, no fighter power
 		return 0;
 	};
+	// reference: http://wikiwiki.jp/kancolle/?%B2%FE%BD%A4%B9%A9%BE%B3#v63b3544
+	// every star grants +0.2 AA stat, which is added to the AA stat bonus
+	// of the gear.
+	KC3Gear.prototype.AAStatImprovementBonous = function() {
+		if (this.itemId !== 0 &&
+			this.master().api_type[2] === 6 && // is carrier-based fighter
+			typeof(this.stars) !== "undefined" && this.stars > 0 // has been improved
+		   ) {
+			return 0.2 * this.stars;
+		}
+		return 0;
+	};
 	
 	/* FIGHTER POWER: VETERAN
 	Get fighter power of this equipment
@@ -75,7 +87,9 @@ KC3改 Equipment Object
 			}else{
 				veteranBonus = airAverageTable[ this.ace ];
 			}
-			return Math.floor( Math.sqrt(capacity) * this.master().api_tyku + veteranBonus );
+			var aaStat = this.master().api_tyku;
+			aaStat += this.AAStatImprovementBonous();
+			return Math.floor( Math.sqrt(capacity) * aaStat + veteranBonus );
 		}
 		
 		// Equipment did not return on plane check, no fighter power
@@ -105,12 +119,14 @@ KC3改 Equipment Object
 			}else{
 				veteranBounds = airBoundTable[ this.ace ];
 			}
+			var aaStat = this.master().api_tyku;
+			aaStat += this.AAStatImprovementBonous();
 			
 			// console.log("ConfigManager.air_bounds",ConfigManager.air_bounds);
 			// console.log("veteranBounds", veteranBounds);
 			return [
-				Math.floor( Math.sqrt(capacity) * this.master().api_tyku + veteranBounds[0] ),
-				Math.floor( Math.sqrt(capacity) * this.master().api_tyku + veteranBounds[1] ),
+				Math.floor( Math.sqrt(capacity) * aaStat + veteranBounds[0] ),
+				Math.floor( Math.sqrt(capacity) * aaStat + veteranBounds[1] ),
 			];
 		}
 		
