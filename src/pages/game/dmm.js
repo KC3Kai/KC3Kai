@@ -333,15 +333,21 @@ var interactions = {
 	
 	// Taiha Alert Start
 	taihaAlertStart :function(request, sender, response){
-		$(".box-wrap").addClass("critical");
+		ConfigManager.load();
 		
-		if(critAnim){ clearInterval(critAnim); }
-		critAnim = setInterval(function() {
-			$(".taiha_red").toggleClass("anim2");
-		}, 500);
+		if(ConfigManager.alert_taiha_blur) {
+			$(".box-wrap").addClass("critical");
+		}
 		
-		$(".taiha_blood").show();
-		$(".taiha_red").show();
+		if(ConfigManager.alert_taiha_blood) {
+			if(critAnim){ clearInterval(critAnim); }
+			critAnim = setInterval(function() {
+				$(".taiha_red").toggleClass("anim2");
+			}, 500);
+			
+			$(".taiha_blood").show();
+			$(".taiha_red").show();
+		}
 	},
 	
 	// Taiha Alert Stop

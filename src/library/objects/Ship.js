@@ -503,10 +503,8 @@ KC3改 Ship Object
 	// estimated LoS without equipments based on WhoCallsTheFleetDb
 	KC3Ship.prototype.estimateNakedLoS = function() {
 		var losInfo = WhoCallsTheFleetDb.getLoSInfo( this.masterId );
-		if (!losInfo || losInfo.base < 0 || losInfo.max < 0) return 0;
-		var retVal = losInfo.base + 
-			Math.floor((losInfo.max - losInfo.base) * this.level / 99.0);
-		return retVal;
+		var retVal = WhoCallsTheFleetDb.estimateStat(losInfo, this.level);
+		return retVal === false ? 0 : retVal;
 	};
 
 	function consumePending(index,mapping,clear,args) {

@@ -1391,7 +1391,7 @@ Previously known as "Reactor"
 				gearMaster.api_broken.forEach(function(x,i){
 					rsc[i] += x;
 				});
-				// F38: Weekly Scrap Anti-Air Guns
+				// F34: Weekly Scrap Anti-Air Guns
 				if([21].indexOf(gearMaster.api_type[2]) >-1){
 					KC3QuestManager.get(638).increment();
 				}
