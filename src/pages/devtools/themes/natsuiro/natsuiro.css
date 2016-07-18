@@ -1802,23 +1802,30 @@ html,body {
 	border-radius: 6px;
 	text-align: center;
 	line-height: 13px;
-	display:none;
 	color: #ff0;
-	background: #45A9A5;
+	background: #45a9a5;
+	display: none;
 }
 .module.fleet .lship .ship_gear_ace {
 	width: 12px;
 	position: absolute;
 	font-size: 8px;
-	margin: 8px 0px 0px 8px;
+	margin: 4px 0px 0px 15px;
 	height: 12px;
 	overflow: hidden;
 	border-radius: 6px;
 	text-align: center;
 	line-height: 13px;
 	color: #ff0;
-	background: #555;
-	display:none;
+	display: none;
+}
+.module.fleet .lship .ship_gear_ace img {
+	vertical-align:middle;
+	width:17px;
+	height:10px;
+	position:absolute;
+	left:-2px;
+	top:1px;
 }
 .module.fleet .lship .ship_gear_icon {
 	width:18px;
@@ -1844,9 +1851,10 @@ html,body {
 	vertical-align:top;
 }
 .module.fleet .lship .ship_gear_slot {
-	width:18px;
+	width:15px;
 	height:20px;
 	float:left;
+	margin-left:3px;
 	line-height:20px;
 	font-size:12px;
 }
