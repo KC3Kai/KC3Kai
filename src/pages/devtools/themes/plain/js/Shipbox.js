@@ -257,7 +257,8 @@ KC3改 Ship Box for Natsuiro theme
 				if (typeof thisGear.ace !== "undefined" && thisGear.ace > 0) {
 					// Is a plane with veterancy
 					$(".ship_gear_"+(slot+1)+" .ship_gear_ace", this.element).show();
-					$(".ship_gear_"+(slot+1)+" .ship_gear_ace", this.element).text(thisGear.ace);
+					$(".ship_gear_"+(slot+1)+" .ship_gear_ace img", this.element)
+						.attr("src", "../../../../assets/img/client/achev/"+thisGear.ace+".png");
 				}
 				if (typeof thisGear.stars !== "undefined" && thisGear.stars > 0){
 				    // Is a normal equipment that can be upgraded
