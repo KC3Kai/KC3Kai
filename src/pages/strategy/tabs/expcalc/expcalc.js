@@ -415,10 +415,21 @@
 
 				goalBox.addClass("inactive");
 
-				// If still has next remodel, add to recommendations
-				if(ThisShip.master().api_aftershipid > 0 && ThisShip.level<ThisShip.master().api_afterlv){
+				// If can be remodelled
+				if(ThisShip.master().api_aftershipid > 0 && ThisShip.level >= ThisShip.master().api_afterlv) {
+					goalBox.addClass("ship_canBeRemodelled");
+				}
+
+				// If next remodel lvl is greater then current, add to recommendations
+				if(ThisShip.master().api_aftershipid > 0 && ThisShip.level < ThisShip.master().api_afterlv){
 					$(".ship_target .ship_value", goalBox).text( ThisShip.master().api_afterlv );
 					goalBox.appendTo(".section_expcalc .box_recommend");
+
+					//If is close to remodel
+					if(ThisShip.master().api_afterlv - ThisShip.level > 0 &&
+						ThisShip.master().api_afterlv - ThisShip.level <= ConfigManager.sr_lvl_difference){
+						goalBox.addClass("ship_closeToRemodel");
+					}
 					return true;
 				}
 
