@@ -62,7 +62,7 @@ KCScreenshot.prototype.capture = function(){
 	var tempHideTaihaAlert = false;
 	
 	// If taiha alert appear on screenshot is off, hide taiha alert in the mean time
-	if(!ConfigManager.alert_taiha_ss) {
+	if(!ConfigManager.alert_taiha_ss && taihaStatus) {
 		interactions.taihaAlertStop({}, {}, {});
 		tempHideTaihaAlert = true;
 	}

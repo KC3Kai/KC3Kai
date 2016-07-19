@@ -31,7 +31,8 @@ module.exports = function(grunt) {
 					'assets/js/KanColleHelpers.js',
 					'assets/js/twbsPagination.min.js',
 					'assets/js/WhoCallsTheFleetShipDb.json',
-					'assets/js/jszip.min.js'
+					'assets/js/jszip.min.js',
+					'assets/js/bootstrap-slider.min.js'
 				],
 				dest: 'build/release/'
 			},
@@ -40,6 +41,7 @@ module.exports = function(grunt) {
 				cwd: 'build/tmp/',
 				src: [
 					'assets/css/keys.css',
+					'assets/css/bootstrap-slider.min.css',
 					'library/helpers/*.js',
 					'library/injections/*.js',
 					'library/modules/*.js',
@@ -95,6 +97,7 @@ module.exports = function(grunt) {
 					src: [
 						'assets/css/global.css',
 						'assets/css/keys.css',
+						'assets/css/bootstrap-slider.min.css',
 						'pages/**/*.css'
 					],
 					dest: 'build/tmp/'

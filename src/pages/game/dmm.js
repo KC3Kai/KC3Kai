@@ -19,6 +19,7 @@ var autoFocus = 0;
 
 // Critical Animation
 var critAnim = false;
+var taihaStatus = false;
 
 // Idle time check
 /*
@@ -334,6 +335,7 @@ var interactions = {
 	// Taiha Alert Start
 	taihaAlertStart :function(request, sender, response){
 		ConfigManager.load();
+		taihaStatus = true;
 		
 		if(ConfigManager.alert_taiha_blur) {
 			$(".box-wrap").addClass("critical");
@@ -352,6 +354,7 @@ var interactions = {
 	
 	// Taiha Alert Stop
 	taihaAlertStop :function(request, sender, response){
+		taihaStatus = false;
 		$(".box-wrap").removeClass("critical");
 		if(critAnim){ clearInterval(critAnim); }
 		$(".taiha_blood").hide();
