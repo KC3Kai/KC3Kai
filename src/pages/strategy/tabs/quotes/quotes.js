@@ -143,7 +143,7 @@
 				  .sort( function(a,b) { return a-b; });
 
 			var shipList = $(".ship_list");
-			var quotes = KC3Translation.getQuotes(this.repo_loc, true);
+			var quotes = KC3Translation.getQuotes(this.repo_loc, true, undefined, true);
 
 			$.each(masterIds, function(i, masterId) {
 				var shipEntity = $(".factory .ship_entity").clone();

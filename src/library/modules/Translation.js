@@ -271,7 +271,7 @@
 		},
 
 		// insert quote id as key if descriptive key is used.
-		transformQuotes: function(quotes, checkKey, language) {
+		transformQuotes: function(quotes, language, checkKey) {
 			var self = this;
 			function isIntStr(s) {
 				return parseInt(s,10).toString() === s;
@@ -295,7 +295,7 @@
 							// temporary hack for scn quotes
 							// as we don't use special key for seasonal lines
 							// and en will always has priority on that.
-							if (language === "scn") {
+							if (["scn"].indexOf(language) > -1) {
 								if (subId === 2) {
 									v[6547] = v[subKey];
 								}
@@ -317,7 +317,7 @@
 			return quotes;
 		},
 
-		getQuotes: function(repo, track, language) {
+		getQuotes: function(repo, track, language, checkKey) {
 			var self = this;
 			if (typeof track === "undefined")
 				track = false;
@@ -376,9 +376,9 @@
 			}
 
 			// 1st pass: interpret descriptive keys as keys
-			this.transformQuotes(langJSON,true,language);
+			this.transformQuotes(langJSON, language, checkKey);
 			if (track && language !== "en") {
-				self.addTags(langJSON,language);
+				self.addTags(langJSON, language);
 			}
 
 			// extend quotes by reusing ship's pre-remodels
