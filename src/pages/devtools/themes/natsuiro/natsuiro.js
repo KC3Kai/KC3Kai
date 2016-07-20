@@ -120,21 +120,6 @@
 			}
 		}
 		
-		function switchToFleet(targetFleet) {
-			if (targetFleet === "combined") {
-				$(".module.controls .fleet_rengo").trigger("click");
-			} else {
-				var fleetControls = $(".module.controls .fleet_num").toArray();
-				for (var i=0; i<fleetControls.length; ++i) {
-					var thisFleet = parseInt( $(fleetControls[i]).text(), 10);
-					if (thisFleet === targetFleet) {
-						$( fleetControls[i] ).trigger("click");
-						break;
-					}
-				}
-			}
-		}
-		
 		if (availableFleetInd !== -1) {
 			selectedFleet = availableFleetInd + 1;
 			console.debug("Find available fleet:", selectedFleet);
@@ -150,6 +135,21 @@
 			switchToFleet(PlayerManager.combinedFleet !== 0 ? "combined" : 1);
 			// also return focus to basic tab
 			$("#atab_basic").trigger("click");
+		}
+	}
+	
+	function switchToFleet(targetFleet) {
+		if (targetFleet === "combined") {
+			$(".module.controls .fleet_rengo").trigger("click");
+		} else {
+			var fleetControls = $(".module.controls .fleet_num").toArray();
+			for (var i=0; i<fleetControls.length; ++i) {
+				var thisFleet = parseInt( $(fleetControls[i]).text(), 10);
+				if (thisFleet === targetFleet) {
+					$( fleetControls[i] ).trigger("click");
+					break;
+				}
+			}
 		}
 	}
 	
@@ -897,6 +897,13 @@
 		Triggered when fleet data is changed
 		---------------------------------------------*/
 		Fleet: function(data){
+			if (typeof data != "undefined") {
+				if (typeof data.switchTo != "undefined") {
+					switchToFleet(data.switchTo);
+					return false;
+				}
+			}
+			
 			var FleetSummary, MainRepairs;
 			$(".shiplist_single").html("");
 			$(".shiplist_single").hide();
