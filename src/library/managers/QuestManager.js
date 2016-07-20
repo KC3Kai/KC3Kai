@@ -362,57 +362,84 @@ Uses KC3Quest objects to play around with
 		save :function(){
 			// Store only the list. The actives and opens will be redefined on load()
 			localStorage.quests = JSON.stringify(this.list);
+			// Store online via chrome.storage
+			try {
+				chrome.storage.sync.set({
+					quests: JSON.stringify(this.list)
+				}, function(){
+					chrome.storage.sync.getBytesInUse(null, function(bytes){
+						console.log(bytes);
+					});
+				});
+			} catch (e) {}
 		},
 		
 		/* LOAD
 		Read and refill list from localStorage
 		------------------------------------------*/
 		load :function(){
-			if(typeof localStorage.quests != "undefined"){
-				var tempQuests = JSON.parse(localStorage.quests);
-				this.list = {};
-				var tempQuest;
+			var self = this;
+			console.trace("quest.load");
+			chrome.storage.sync.get("quests", function(response){
+				console.log("storage.sync response", response);
 				
-				// Empty actives and opens since they will be re-added
-				this.active = [];
-				this.open = [];
-				
-				for(var ctr in tempQuests){
-					tempQuest = tempQuests[ctr];
-					
-					// Add to actives or opens depeding on status
-					// 1: Unselected
-					// 2: Selected
-					if(tempQuest.status==1 || tempQuest.status==2){
-						
+				if (response.quests) {
+					var questsObj = JSON.parse(response.quests);
+					if (questsObj) {
+						console.log("Loaded quests from storage.sync", questsObj);
+						return self.loadData(questsObj);
 					}
-					switch( tempQuest.status ){
-						case 1:	// Unselected
-							this.isOpen( tempQuest.id, true );
-							this.isActive( tempQuest.id, false );
-							break;
-						case 2:	// Selected
-							this.isOpen( tempQuest.id, true );
-							this.isActive( tempQuest.id, true );
-							break;
-						case 3:	// Completed
-							this.isOpen( tempQuest.id, false );
-							this.isActive( tempQuest.id, false );
-							break;
-						default:
-							this.isOpen( tempQuest.id, false );
-							this.isActive( tempQuest.id, false );
-							break;
-					}
-					
-					// Add to manager's main list using Quest object
-					this.list["q"+tempQuest.id] = new KC3Quest();
-					this.list["q"+tempQuest.id].define( tempQuest );
 				}
-				// console.info("Quest management data loaded");
-				return true;
-			}
+				
+				console.log("Unable to load quests from storage.sync, trying local");
+				if (typeof localStorage.quests != "undefined"){
+					return self.loadData(JSON.parse(localStorage.quests));
+				}
+			});
 			return false;
+		},
+		
+		loadData :function(questsObj){
+			console.log("questsObj", questsObj);
+			this.list = {};
+			var tempQuest;
+			
+			// Empty actives and opens since they will be re-added
+			this.active = [];
+			this.open = [];
+			
+			for(var ctr in questsObj){
+				tempQuest = questsObj[ctr];
+				
+				// Add to actives or opens depeding on status
+				// 1: Unselected
+				// 2: Selected
+				if(tempQuest.status==1 || tempQuest.status==2){
+					
+				}
+				switch( tempQuest.status ){
+					case 1:	// Unselected
+						this.isOpen( tempQuest.id, true );
+						this.isActive( tempQuest.id, false );
+						break;
+					case 2:	// Selected
+						this.isOpen( tempQuest.id, true );
+						this.isActive( tempQuest.id, true );
+						break;
+					case 3:	// Completed
+						this.isOpen( tempQuest.id, false );
+						this.isActive( tempQuest.id, false );
+						break;
+					default:
+						this.isOpen( tempQuest.id, false );
+						this.isActive( tempQuest.id, false );
+						break;
+				}
+				
+				// Add to manager's main list using Quest object
+				this.list["q"+tempQuest.id] = new KC3Quest();
+				this.list["q"+tempQuest.id].define( tempQuest );
+			}
 		}
 	};
 	
