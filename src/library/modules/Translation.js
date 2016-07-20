@@ -271,7 +271,7 @@
 		},
 
 		// insert quote id as key if descriptive key is used.
-		transformQuotes: function(quotes, checkKey) {
+		transformQuotes: function(quotes, checkKey, language) {
 			var self = this;
 			function isIntStr(s) {
 				return parseInt(s,10).toString() === s;
@@ -291,6 +291,18 @@
 						// empty content not replaced
 						if (v[subKey] && v[subKey].length) {
 							v[subId] = v[subKey];
+
+							// temporary hack for scn quotes
+							// as we don't use special key for seasonal lines
+							// and en will always has priority on that.
+							if (language === "scn") {
+								if (subId === 2) {
+									v[6547] = v[subKey];
+								}
+								if (subId === 3) {
+									v[1471] = v[subKey];
+								}
+							}
 						}
 					} else {
 						if (!!checkKey && ! isIntStr(subKey) ) {
@@ -364,7 +376,7 @@
 			}
 
 			// 1st pass: interpret descriptive keys as keys
-			this.transformQuotes(langJSON);
+			this.transformQuotes(langJSON,true,language);
 			if (track && language !== "en") {
 				self.addTags(langJSON,language);
 			}
