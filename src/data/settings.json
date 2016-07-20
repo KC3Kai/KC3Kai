@@ -664,5 +664,24 @@
 				"options" : { "label" : "%" }
 			}
 		]
+	},
+	{
+		"section":"Strategy Room",
+		"help":"",
+		"contents":[
+			{
+				"id" : "sr_lvl_difference",
+				"name" : "SettingsLevellingDifference",
+				"type" : "small_text",
+				"bound" : {
+					"min" :  0,
+					"max" : 15,
+					"type": "Number"
+				},
+				"options" : {
+					"label" : "lvl"
+				}
+			}
+		]
 	}
 ]
