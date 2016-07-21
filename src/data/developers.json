@@ -154,6 +154,15 @@
 			}
 		},
 		{
+			"name": "DynamicSTOP",
+			"avatar" : "https://avatars1.githubusercontent.com/u/9434504?v=3&s=40",
+			"desc" : "AboutDeveloper",
+			"links" : {
+				"gh" :"https://github.com/DynamicSTOP",
+				"fb" :"https://www.facebook.com/DynamicSTOP"
+			}
+		},
+		{
 			"name": "tmerta",
 			"avatar" : "https://avatars0.githubusercontent.com/u/2845736?v=3&s=40",
 			"desc" : "AboutDeveloper",
@@ -266,6 +275,15 @@
 			"desc" : "Deutsch",
 			"links" : {
 				"gh" :"https://github.com/Arebs"
+			}
+		},
+		{
+			"name": "Xwilarg",
+			"avatar" : "https://avatars1.githubusercontent.com/u/20053454?v=3&s=40",
+			"desc" : "Français",
+			"links" : {
+				"gh" :"https://github.com/Xwilarg",
+				"st" :"http://steamcommunity.com/id/Xwilarg/"
 			}
 		},
 		{

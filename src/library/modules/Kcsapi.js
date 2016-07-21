@@ -631,7 +631,7 @@ Previously known as "Reactor"
 				PlayerManager.fleets[FleetIndex-1].ships.push(-1);
 			}
 			PlayerManager.fleets[FleetIndex-1].checkAkashi(true);
-			KC3Network.trigger("Fleet");
+			KC3Network.trigger("Fleet", { switchTo: FleetIndex });
 		},
 		
 		/* Lock a ship
@@ -666,14 +666,42 @@ Previously known as "Reactor"
 			var slotIndex = params.api_slot_idx;
 			var shipID = params.api_id;
 			KC3ShipManager.get(shipID).items[slotIndex] = itemID;
-			KC3Network.trigger("Fleet");
+			
+			// If ship is in a fleet
+			var flatShips  = PlayerManager.fleets
+				.map(function(x){ return x.ships; })
+				.reduce(function(x,y){ return x.concat(y); });
+			var shipIndex = flatShips.indexOf(parseInt(shipID, 10));
+			
+			// If ship is in a fleet, switch view to the fleet containing the ship
+			console.log("shipIndex", shipIndex, flatShips, shipID);
+			if (shipIndex > -1) {
+				var fleetNum = Math.floor(shipIndex / 6);
+				KC3Network.trigger("Fleet", { switchTo: fleetNum+1 });
+			} else {
+				KC3Network.trigger("Fleet");
+			}
 		},
 		
 		/* Remove all equipment of a ship
 		-------------------------------------------------------*/
 		"api_req_kaisou/unsetslot_all":function(params, response, headers){
 			KC3ShipManager.get( params.api_id ).items = [-1,-1,-1,-1];
-			KC3Network.trigger("Fleet");
+			
+			// If ship is in a fleet
+			var flatShips  = PlayerManager.fleets
+				.map(function(x){ return x.ships; })
+				.reduce(function(x,y){ return x.concat(y); });
+			var shipIndex = flatShips.indexOf(parseInt(params.api_id, 10));
+			
+			// If ship is in a fleet, switch view to the fleet containing the ship
+			console.log("shipIndex", shipIndex, flatShips, params.api_id);
+			if (shipIndex > -1) {
+				var fleetNum = Math.floor(shipIndex / 6);
+				KC3Network.trigger("Fleet", { switchTo: fleetNum+1 });
+			} else {
+				KC3Network.trigger("Fleet");
+			}
 		},
 		
 		/* Re-supply a ship
