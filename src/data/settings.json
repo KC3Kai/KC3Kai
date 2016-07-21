@@ -666,7 +666,7 @@
 		]
 	},
 	{
-		"section":"Strategy Room",
+		"section":"SettingsStrategyRoom",
 		"help":"",
 		"contents":[
 			{
@@ -679,7 +679,7 @@
 					"type": "Number"
 				},
 				"options" : {
-					"label" : "lvl"
+					"label" : "Lv"
 				}
 			}
 		]
