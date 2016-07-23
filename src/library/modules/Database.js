@@ -203,7 +203,21 @@ Uses Dexie.js third-party plugin on the assets directory
 							console.log("V7.2",t);
 						},
 						vr: 7.2,
+					},
+					{
+						ch: {
+							pvp: "++id,hq,fleet,enemy,data,yasen,rating,baseEXP,mvp,time"
+						},
+						up: function(t){
+							console.log("Databse v73", t);
+						},
+						vr: 73,
 					}
+					/*
+					Database versions are only integers, no decimals.
+					7.2 was detected as 72 by chrome, and thus specifying 8 is actually lower version
+					From 7.2, we will use 73, 74, 75, as integers onwards...
+					*/
 				];
 				
 			// Process the queue
@@ -349,6 +363,11 @@ Uses Dexie.js third-party plugin on the assets directory
 				}
 				self.con.encounters.put(data).then(callback);
 			});
+		},
+		
+		PvP :function(data, callback){
+			data.hq = this.index;
+			this.con.pvp.add(data).then(callback);
 		},
 		
 		/* [GET] Retrive logs from Local DB
@@ -619,6 +638,21 @@ Uses Dexie.js third-party plugin on the assets directory
 						callback(false);
 					}
 				});
+		},
+		
+		get_pvps :function(pageNumber, callback){
+			var itemsPerPage = 10;
+			this.con.pvp
+				.where("hq").equals(this.index)
+				.reverse()
+				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
+				.toArray(callback);
+		},
+		
+		count_pvps: function(callback){
+			this.con.pvp
+				.where("hq").equals(this.index)
+				.count(callback);
 		},
 		
 		get_enemy : function(enemyId, callback) {

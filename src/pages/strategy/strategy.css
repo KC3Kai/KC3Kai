@@ -15,6 +15,9 @@ body {
 	width:800px;
 	margin:10px 0px 10px 0px;
 }
+.factory {
+	display:none;
+}
 
 /* MENU TABS
 -------------------------------*/

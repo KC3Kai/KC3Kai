@@ -840,7 +840,7 @@ Used by SortieManager
 			console.error("Captured an exception ==>", e,"\n==> proceeds safely");
 		} finally {
 			// Reserved for future PvP history storage
-			//this.saveBattleOnDB(resultData);
+			this.savePvPOnDB(resultData);
 		}
 	};
 	
@@ -918,6 +918,20 @@ Used by SortieManager
 				});
 			}),
 			mvp: this.mvps
+		});
+	};
+	
+	KC3Node.prototype.savePvPOnDB = function( resultData ){
+		console.log("savePvPOnDB", KC3SortieManager);
+		KC3Database.PvP({
+			fleet: PlayerManager.fleets[KC3SortieManager.fleetSent-1].sortieJson(),
+			enemy: [],
+			data: (this.battleDay || {}),
+			yasen: (this.battleNight || {}),
+			rating: this.rating,
+			baseEXP: this.nodalXP,
+			mvp: this.mvps,
+			time: this.stime
 		});
 	};
 	
