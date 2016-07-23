@@ -96,6 +96,7 @@ body {
 	border:1px solid #369;
 	box-shadow:-1px 1px 3px #888;
 	overflow:hidden;
+	margin:0px 0px 60px 0px;
 }
 #contentHtml {
 	width:700px;
@@ -204,7 +205,7 @@ body {
 
 .float_toolbar {
 	position:fixed;
-	bottom:2em;
+	bottom:5px;
 	right:0px;
 	text-decoration:none;
 	color:#79b;
