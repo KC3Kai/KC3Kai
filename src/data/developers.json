@@ -399,7 +399,7 @@
 		},
 		{
 			"name": "Konstantillo",
-			"avatar" : "http://vignette3.wikia.nocookie.net/common/avatars/5/5c/26028877.png/revision/latest/scale-to-width-down/150?cb=1422400487&format=jpg",
+			"avatar" : "../../assets/img/ui/empty.png",
 			"desc" : "Русский",
 			"links" : {
 				"wk" : "http://kancolle.wikia.com/wiki/User:Konstantillo"
@@ -418,7 +418,7 @@
 		},
 		{
 			"name": "ForteBX",
-			"avatar" : "http://vignette4.wikia.nocookie.net/common/avatars/d/df/24333579.png",
+			"avatar" : "../../assets/img/ui/empty.png",
 			"desc" : "Español",
 			"links" : {
 				"wk" : "http://kancolle.wikia.com/wiki/User:ForteBX",
@@ -459,9 +459,10 @@
 		},
 		{
 			"name": "Nanamin",
-			"avatar": "http://img3.wikia.nocookie.net/__cb1431387090/common/avatars/thumb/3/30/26171095.png/150px-26171095.png.jpg",
+			"avatar": "https://avatars3.githubusercontent.com/u/13080673?v=3&s=40",
 			"desc": "AboutDevTester",
 			"links": {
+				"gh" :"https://github.com/madobe",
 				"wk" :"http://kancolle.wikia.com/wiki/User:Nanamin"
 			}
 		},
