@@ -230,6 +230,13 @@
 						self.refreshTable();
 				}
 			});
+			
+			$(".pages_yes").on("click", function(){
+				$(".ingame_page").show();
+			});
+			$(".pages_no").on("click", function(){
+				$(".ingame_page").hide();
+			});
 
 			this.prepareFilters();
 			this.shipList = $(".tab_ships .ship_list");
@@ -412,11 +419,22 @@
 
 			self.defineShipFilter(
 				"fleet",
-				1,
-				["no","yes"],
+				0,
+				["all", "yes","no"],
 				function(curVal,ship) {
-					return (curVal === 0 && !ship.fleet)
-						|| (curVal === 1);
+					return (curVal === 0)
+						|| (curVal === 1 && ship.fleet)
+						|| (curVal === 2 && !ship.fleet);
+				});
+				
+			self.defineShipFilter(
+				"sparkle",
+				0,
+				["all", "yes","no"],
+				function(curVal, ship) {
+					return (curVal === 0)
+						|| (curVal === 1 && ship.morale >= 50)
+						|| (curVal === 2 && ship.morale < 50);
 				});
 
 			var stypes = Object
