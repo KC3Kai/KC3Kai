@@ -255,9 +255,9 @@
 	display:none;
 }
 .tab_ships .ship_item .ship_kekkon-color {
-	color: #E49F9C;
-	text-shadow: #fff -1px -1px 1px, #fff 1px 1px 0px;
-	-webkit-font-smoothing: antialiased;
+    color: #eec5c3;
+    text-shadow: #2f2727 -0px -0px 1px, #2f2727 1px 1px 1px;
+    -webkit-font-smoothing: antialiased;
 }
 .tab_ships .ship_item .ship_kekkon:after {
 	display: inline;
