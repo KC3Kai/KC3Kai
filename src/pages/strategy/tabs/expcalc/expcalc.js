@@ -415,13 +415,16 @@
 
 				goalBox.addClass("inactive");
 
-				// If can be remodelled
-				if(ThisShip.master().api_aftershipid > 0 && ThisShip.level >= ThisShip.master().api_afterlv) {
+				// If can be remodelled (without convert remodels)
+				if(ThisShip.master().api_aftershipid > 0 &&
+					ThisShip.level >= ThisShip.master().api_afterlv &&
+					!RemodelDb.isFinalForm(ThisShip.masterId)){
 					goalBox.addClass("ship_canBeRemodelled");
 				}
 
 				// If next remodel lvl is greater then current, add to recommendations
-				if(ThisShip.master().api_aftershipid > 0 && ThisShip.level < ThisShip.master().api_afterlv){
+				if(ThisShip.master().api_aftershipid > 0 &&
+					ThisShip.level < ThisShip.master().api_afterlv){
 					$(".ship_target .ship_value", goalBox).text( ThisShip.master().api_afterlv );
 					goalBox.appendTo(".section_expcalc .box_recommend");
 
