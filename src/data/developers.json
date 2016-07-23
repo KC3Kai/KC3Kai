@@ -65,6 +65,14 @@
 			}
 		},
 		{
+			"name": "nonsensed",
+			"avatar" : "https://avatars3.githubusercontent.com/u/17221083?v=3&s=40",
+			"desc" : "AboutDeveloper",
+			"links" : {
+				"gh" :"https://github.com/nonsensed"
+			}
+		},
+		{
 			"name": "fourinone41",
 			"avatar": "https://avatars0.githubusercontent.com/u/15643445?v=3&s=40",
 			"desc": [ "AboutDevBattleReplay" ],
@@ -136,7 +144,7 @@
 		},
 		{
 			"name": "YukiNyaa712",
-			"avatar" : "http://kitakami.tk/profile.png",
+			"avatar" : "https://avatars2.githubusercontent.com/u/10284996?v=3&s=40",
 			"desc" : ["AboutDeveloper", "한국어"],
 			"links" : {
 				"gh" :"https://github.com/YukiNyaa",
