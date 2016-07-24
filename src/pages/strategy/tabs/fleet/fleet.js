@@ -438,7 +438,7 @@
 			if(kcGear.ace>0){
 				$(".gear_name .ace", gearBox).text( " \u00bb{0}".format(kcGear.ace) );
 			}
-			if(capacity>0 && [6,7,8,9,10,21,22,33].indexOf(masterData.api_type[3])>-1){
+			if(KC3GearManager.carrierBasedAircraftType3Ids.indexOf(masterData.api_type[3])>-1){
 				$(".gear_name .slot", gearBox).text( " x{0}".format(capacity) );
 			}
 			$(".gear_name", gearBox).attr("title", $(".gear_name", gearBox).text() );
