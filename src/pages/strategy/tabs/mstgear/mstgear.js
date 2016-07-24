@@ -135,7 +135,8 @@
 			], function(index, sdata){
 				if((gearData["api_"+sdata[1]]||0) > 0
 					&& (sdata[0]!=="or"
-					|| (sdata[0]==="or" && [6,7,8,9,10,33,37,38].indexOf(gearData.api_type[3])>=0) )
+					|| (sdata[0]==="or" &&
+						KC3GearManager.landBasedAircraftType3Ids.indexOf(gearData.api_type[3])>-1) )
 				){
 					statBox = $(".tab_mstgear .factory .stat").clone();
 					$("img", statBox).attr("src", "../../../../assets/img/stats/"+sdata[0]+".png");
