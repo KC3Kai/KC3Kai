@@ -350,7 +350,7 @@ KC3改 Ship Box for Natsuiro theme
 			}
 			
 			if(this.shipData.slots[ slot ] > 0 ||
-				KC3GearManager.carrierBasedAircraftType3Ids.indexOf(thisGear.master().api_type[3])>-1){
+				(thisGear && KC3GearManager.carrierBasedAircraftType3Ids.indexOf(thisGear.master().api_type[3])>-1) ){
 				$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).text( this.shipData.slots[ slot ] );
 			}else{
 				$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).text("");
