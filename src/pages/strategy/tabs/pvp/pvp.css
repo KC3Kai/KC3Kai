@@ -1,5 +1,6 @@
 .tab_pvp {
 	width:680px;
+	padding:0px 0px 10px 0px;
 }
 
 /* PAGE LIST
@@ -17,3 +18,191 @@
 
 /* PVP RECORD
 ---------------------------------*/
+.tab_pvp .pvp_record {
+	width: 680px;
+	height:120px;
+	background: #def;
+	border-radius: 10px;
+	margin:8px 0px 0px 0px;
+	padding:5px;
+}
+.tab_pvp .pvp_column {
+	height:110px;
+	float:left;
+}
+
+.tab_pvp .pvp_info {
+	width:70px;
+	margin:0px 5px 0px 0px;
+}
+.tab_pvp .pvp_info .pvp_id {
+	width:70px;
+	height:24px;
+	line-height:24px;
+	/*background:#fff;*/
+	margin:0px 0px 3px 0px;
+	font-size:18px;
+	font-weight:bold;
+	text-align:center;
+}
+.tab_pvp .pvp_info .pvp_date {
+	width:70px;
+	height:16px;
+	line-height:16px;
+	/*background:#fff;*/
+	margin:0px 0px 3px 0px;
+	font-size:12px;
+	color:#579;
+	text-align:center;
+}
+.tab_pvp .pvp_info .pvp_result {
+	width:70px;
+	height:26px;
+	line-height:26px;
+	/*background:#fff;*/
+	margin:0px 0px 10px 0px;
+	text-align:center;
+}
+.tab_pvp .pvp_info .pvp_result img {
+	width:26px;
+	height:26px;
+}
+.tab_pvp .pvp_info .pvp_dl {
+	width:60px;
+	height:20px;
+	line-height:18px;
+	border-radius:5px;
+	background:#ffc;
+	margin:0px 5px 0px 5px;
+	text-align:center;
+	font-size:10px;
+	border:1px solid #ace;
+}
+/* PLAYER */
+.tab_pvp .pvp_player {
+	width:297px;
+	margin:0px 8px 0px 0px;
+	border-right:2px solid #a9caea;
+}
+.tab_pvp .pvp_player .pvp_details_ship {
+	border:1px solid #ace;
+}
+.tab_pvp .pvp_player .pvp_ship_hp {
+	display:none;
+}
+.tab_pvp .pvp_player .pvp_ship_info {
+	width:72px;
+}
+.tab_pvp .pvp_player .pvp_ship_infofield {
+	width:72px;
+}
+.tab_pvp .pvp_player .pvp_ship_stats {
+	display:none;
+}
+
+/* OPPONENT */
+.tab_pvp .pvp_opponent {
+	width:290px;
+}
+.tab_pvp .pvp_opponent .pvp_details_ship {
+	border:1px solid #faa
+}
+.tab_pvp .pvp_opponent .pvp_ship_info {
+	width:40px;
+}
+.tab_pvp .pvp_opponent .pvp_ship_infofield {
+	width:40px;
+}
+.tab_pvp .pvp_opponent .pvp_ship_level {
+	display:none;
+}
+
+
+/* SHIP DETAILS
+---------------------------------*/
+.tab_pvp .pvp_details_ship {
+	width:140px;
+	height:34px;
+	float:left;
+	margin:0px 5px 3px 0px;
+	background:#fff;
+	border-radius:17px 5px 5px 17px;
+}
+.tab_pvp .pvp_ship_columm {
+	height:32px;
+	float:left;
+}
+
+.tab_pvp .pvp_ship_icon {
+	width:32px;
+	margin:0px 2px 0px 0px;
+}
+.tab_pvp .pvp_ship_icon img {
+	width:32px;
+	height:32px;
+}
+
+.tab_pvp .pvp_ship_info {
+	width:40px;
+	margin:0px 2px 0px 0px;
+	padding:2px 0px;
+}
+.tab_pvp .pvp_ship_infofield {
+	width:40px;
+	height:14px;
+	line-height:14px;
+	font-size:11px;
+	overflow:hidden;
+}
+.tab_pvp .pvp_ship_name {
+	
+}
+.tab_pvp .pvp_ship_level {
+	
+}
+.tab_pvp .pvp_ship_hp {
+	
+}
+
+.tab_pvp .pvp_ship_stats {
+	width:30px;
+	margin:0px 2px 0px 0px;
+}
+.tab_pvp .pvp_ship_stats .pvp_ship_stat {
+	width:13px;
+	height:13px;
+	line-height:13px;
+	float:left;
+	margin:1px;
+	border-radius:7px;
+	color:#000;
+	font-size:10px;
+	text-align:center;
+}
+.tab_pvp .pvp_ship_stats .pvp_ship_fp {
+	background:#ff8888;
+}
+.tab_pvp .pvp_ship_stats .pvp_ship_tp {
+	background:#00CCFF;
+}
+.tab_pvp .pvp_ship_stats .pvp_ship_aa {
+	background:#FF9900;
+}
+.tab_pvp .pvp_ship_stats .pvp_ship_ar {
+	background:#ffcc00;
+}
+
+
+.tab_pvp .pvp_ship_items {
+	width:30px;
+}
+.tab_pvp .pvp_ship_items .pvp_ship_item {
+	width:15px;
+	height:15px;
+	line-height:15px;
+	float:left;
+}
+.tab_pvp .pvp_ship_items .pvp_ship_item img {
+	width:15px;
+	height:15px;
+}
