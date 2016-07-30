@@ -931,7 +931,7 @@ Used by SortieManager
 			rating: this.rating,
 			baseEXP: this.nodalXP,
 			mvp: this.mvps,
-			time: this.stime
+			time: KC3SortieManager.sortieTime
 		});
 	};
 	
