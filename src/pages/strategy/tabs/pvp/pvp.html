@@ -5,6 +5,13 @@
 	
 </div>
 
+<!-- TOGGLES -->
+<div class="toggles">
+	<div class="pvp_toggle hover pvp_toggle_ships active">Ship Data</div>
+	<div class="pvp_toggle hover pvp_toggle_battle">Battle Info</div>
+	<div class="clear"></div>
+</div>
+
 <!-- RECORDS LIST -->
 <div id="pvp_list" class="page_padding">
 	
@@ -22,6 +29,17 @@
 		</div>
 		<div class="pvp_column pvp_player">
 			
+		</div>
+		<div class="pvp_column pvp_battle">
+			<div class="pvp_battle_box pvp_battle_day">
+				
+			</div>
+			<div class="pvp_battle_box pvp_battle_night">
+				
+			</div>
+			<div class="pvp_battle_box pvp_battle_result">
+				
+			</div>
 		</div>
 		<div class="pvp_column pvp_opponent">
 			
@@ -48,4 +66,65 @@
 		<div class="clear"></div>
 	</div>
 	
+	<!-- BATTLE DETAILS BOX -->
+	<div class="pvp_battle_info">
+		<div class="node_conds">
+			<div class="node_cond node_cond_detect">
+				<div class="node_cond_label">Detect</div>
+				<div class="node_cond_value node_detect"></div>
+			</div>
+			<div class="node_cond node_cond_engage">
+				<div class="node_cond_label">Engage</div>
+				<div class="node_cond_value node_engage"></div>
+			</div>
+			<div class="node_cond node_cond_contact">
+				<div class="node_cond_label">Contact</div>
+				<div class="node_cond_value node_contact"></div>
+			</div>
+			<div class="node_cond node_cond_airbattle">
+				<div class="node_cond_label">Air Battle</div>
+				<div class="node_cond_value node_airbattle"></div>
+			</div>
+		</div>
+		<div class="node_planes">
+			<div class="node_airtype">
+				<div class="node_planeside">
+					<div class="node_airicon"><img src="../../../../assets/img/items/6.png" /></div>
+					<div class="node_airtext">
+						<span class="node_FFT"></span>
+						<span class="node_FFL node_loss"></span>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="node_planeside">
+					<div class="node_airicon"><img src="../../../../assets/img/items/6.png" /></div>
+					<div class="node_airtext">
+						<span class="node_FAT"></span>
+						<span class="node_FAL node_loss"></span>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="node_airtype">
+				<div class="node_planeside">
+					<div class="node_airicon"><img src="../../../../assets/img/items/7.png" /></div>
+					<div class="node_airtext">
+						<span class="node_BFT"></span>
+						<span class="node_BFL node_loss"></span>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="node_planeside">
+					<div class="node_airicon"><img src="../../../../assets/img/items/7.png" /></div>
+					<div class="node_airtext">
+						<span class="node_BAT"></span>
+						<span class="node_BAL node_loss"></span>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
 </div>

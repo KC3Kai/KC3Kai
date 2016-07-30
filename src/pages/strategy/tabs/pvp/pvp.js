@@ -12,6 +12,8 @@
 		exportingReplay: false,
 		stegcover64: "",
 		
+		toggleMode: 1,
+		
 		init :function(){},
 		execute :function(){
 			var self = this;
@@ -25,9 +27,42 @@
 					$(".tab_pvp .pagination").hide();
 				}
 			});
-			// on-click for download replay button
+			
+			// Download replay button
 			$("#pvp_list").on("click", ".pvp_dl", function(){
 				self.downloadReplay($(this).data("id"));
+			});
+			
+			// Show ship info
+			$(".tab_pvp .pvp_toggle_ships").on("click", function(){
+				if (self.toggleMode === 1) return false;
+				self.toggleMode = 1;
+				// Active button
+				$(".tab_pvp .pvp_toggle").removeClass("active");
+				$(this).addClass("active");
+				// Animate boxes
+				$(".tab_pvp .pvp_details_ship").animate({ width: 140 }, 500, function(){
+					$(this).css({ "border-radius": "17px 5px 5px 17px" });
+				});
+				$(".tab_pvp .pvp_player").animate({ width: 290 }, 500);
+				$(".tab_pvp .pvp_opponent").animate({ width: 290 }, 500);
+				$(".tab_pvp .pvp_battle").animate({ width: 0 }, 500);
+			});
+			
+			// Show battle info
+			$(".tab_pvp .pvp_toggle_battle").on("click", function(){
+				if (self.toggleMode === 2) return false;
+				self.toggleMode = 2;
+				// Active button
+				$(".tab_pvp .pvp_toggle").removeClass("active");
+				$(this).addClass("active");
+				// Animate boxes
+				$(".tab_pvp .pvp_details_ship").animate({ width: 32 }, 500, function(){
+					$(this).css({ "border-radius": 17 });
+				});
+				$(".tab_pvp .pvp_player").animate({ width: 80 }, 500);
+				$(".tab_pvp .pvp_opponent").animate({ width: 80 }, 500);
+				$(".tab_pvp .pvp_battle").animate({ width: 420 }, 500);
 			});
 		},
 		
@@ -47,7 +82,6 @@
 		---------------------------------*/
 		cloneBattleBox :function(pvpBattle){
 			var self = this;
-			console.log(pvpBattle);
 			
 			self.box_record = $(".tab_pvp .factory .pvp_record").clone();
 			
@@ -79,6 +113,8 @@
 					mst_id: mstId,
 				}, $(".pvp_opponent", self.box_record));
 			});
+			
+			self.fillBattleInfo(pvpBattle, $(".pvp_battle", self.box_record));
 			
 			self.box_record.appendTo("#pvp_list");
 		},
@@ -117,6 +153,63 @@
 			});
 			
 			targetBox.append(this.box_ship);
+		},
+		
+		/* FILL BATTLE INFO WITH DATA
+		---------------------------------*/
+		fillBattleInfo :function(data, targetBox){
+			console.log(data);
+			// Result icons
+			// $(".node_formation img", targetBox).attr("src", KC3Meta.formationIcon(data.data.api_formation[0]) );
+			// $(".node_formation", targetBox).attr("title", KC3Meta.formationText(data.data.api_formation[0]) );
+			// $(".node_rating img", targetBox).attr("src", "../../assets/img/client/ratings/"+data.rating+".png");
+			
+			// Process battle
+			KC3SortieManager.onPvP = true;
+			var thisPvP = (new KC3Node()).defineAsBattle();
+			KC3SortieManager.nodes.push(thisPvP);
+			thisPvP.isPvP = true;
+			
+			var battle_info_html = $(".tab_pvp .factory .pvp_battle_info").html();
+			
+			// Day Battle
+			thisPvP.engage( data.data, 1);
+			console.log("DAY", thisPvP);
+			$(".pvp_battle_day", targetBox).html(battle_info_html);
+			this.fillBattleBox(thisPvP, $(".pvp_battle_day", targetBox));
+			
+			// Night battle
+			if (thisPvP.yasenFlag) {
+				thisPvP.engageNight( data.yasen, 1);
+				console.log("NIGHT", thisPvP);
+				$(".pvp_battle_night", targetBox).html(battle_info_html);
+				this.fillBattleBox(thisPvP, $(".pvp_battle_night", targetBox));
+			} else {
+				$(".pvp_battle_night", targetBox).hide();
+			}
+		},
+		
+		/* FILL ONE BATTLE BOX (DAY/NIGHT)
+		---------------------------------*/
+		fillBattleBox :function(nodeInfo, targetBox){
+			console.log(nodeInfo);
+			$(".node_engage", targetBox).text( nodeInfo.engagement[2] );
+			$(".node_engage", targetBox).addClass( nodeInfo.engagement[1] );
+			$(".node_contact", targetBox).text(nodeInfo.fcontact +" vs "+nodeInfo.econtact);
+			$(".node_detect", targetBox).text( nodeInfo.detection[0] );
+			$(".node_detect", targetBox).addClass( nodeInfo.detection[1] );
+			$(".node_airbattle", targetBox).text( nodeInfo.airbattle[0] );
+			$(".node_airbattle", targetBox).addClass( nodeInfo.airbattle[1] );
+			["Fighters","Bombers"].forEach(function(planeType){
+				["player","abyssal"].forEach(function(side,jndex){
+					var nodeName = ".node_"+(planeType[0])+(side[0]=='p' ? 'F' : 'A');
+					// Plane total counts
+					$(nodeName+"T", targetBox).text(nodeInfo["plane"+planeType][side][0]);
+					// Plane losses
+					if(nodeInfo["plane"+planeType][side][1] > 0)
+						$(nodeName+"L", targetBox).text("-"+nodeInfo["plane"+planeType][side][1]);
+				});
+			});
 		},
 		
 		/* PAGINATION

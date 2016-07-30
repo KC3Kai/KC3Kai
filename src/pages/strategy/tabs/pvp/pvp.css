@@ -16,6 +16,30 @@
 	margin:0px;
 }
 
+/* TOGGLES
+---------------------------------*/
+.tab_pvp .toggles {
+	width:700px;
+	margin:0px 0px 0px 0px;
+	background:#f0f5ff;
+	border-bottom:1px solid #369;
+	padding:5px 5px 5px 5px;
+}
+.tab_pvp .toggles .pvp_toggle {
+	height:24px;
+	line-height:24px;
+	float:left;
+	margin:0px 0px 0px 10px;
+	font-size:12px;
+	font-weight:bold;
+	padding:0px 10px;
+}
+.tab_pvp .toggles .pvp_toggle.active{
+	background:#369;
+	border-radius:5px;
+	color:#fff;
+}
+
 /* PVP RECORD
 ---------------------------------*/
 .tab_pvp .pvp_record {
@@ -80,9 +104,8 @@
 }
 /* PLAYER */
 .tab_pvp .pvp_player {
-	width:297px;
-	margin:0px 8px 0px 0px;
-	border-right:2px solid #a9caea;
+	width:290px;
+	margin:0px 5px 0px 0px;
 }
 .tab_pvp .pvp_player .pvp_details_ship {
 	border:1px solid #ace;
@@ -127,6 +150,7 @@
 	margin:0px 5px 3px 0px;
 	background:#fff;
 	border-radius:17px 5px 5px 17px;
+	overflow:hidden;
 }
 .tab_pvp .pvp_ship_columm {
 	height:32px;
@@ -205,4 +229,136 @@
 .tab_pvp .pvp_ship_items .pvp_ship_item img {
 	width:15px;
 	height:15px;
+}
+
+/* BATTLE DETAILS
+---------------------------------*/
+.tab_pvp .pvp_battle {
+	width:0px;
+	overflow:hidden;
+	margin:0px 8px 0px 0px;
+	border-left:1px solid #a9caea;
+	border-right:1px solid #a9caea;
+}
+
+.tab_pvp .pvp_battle_box  {
+	width:130px;
+	height:110px;
+	border-radius: 8px;
+	float:left;
+	padding:3px 5px;
+	color:#fff;
+}
+.tab_pvp .pvp_battle_day {
+	margin:0px 5px 0px 8px;
+	background-image:url('../../../../assets/img/client/map.jpg');
+	background-size: 315px 110px;
+}
+.tab_pvp .pvp_battle_night {
+	margin:0px 5px 0px 0px;
+	background-image:url('../../../devtools/themes/natsuiro/img/wrapper.png');
+	background-size: 315px 110px;
+}
+.tab_pvp .pvp_battle_result {
+	
+}
+/* CUSTOM */
+.tab_pvp .pvp_battle_night .node_cond_detect {
+	display:none;
+}
+.tab_pvp .pvp_battle_night .node_cond_airbattle {
+	display:none;
+}
+.tab_pvp .pvp_battle_night .node_planes {
+	display:none;
+}
+
+/* SORTIE CSS IMPORT
+---------------------------------*/
+.tab_pvp .node_conds {
+	width:120px;
+	height:64px;
+}
+.tab_pvp .node_cond {
+	width:120px;
+	height:15px;
+	line-height:15px;
+	font-size:11px;
+	margin:0px 0px 1px 0px;
+}
+.tab_pvp .node_cond_label {
+	width:50px;
+	height:15px;
+	
+	float:left;
+}
+.tab_pvp .node_cond_value {
+	width:70px;
+	height:15px;
+	float:left;
+	font-weight:bold;
+}
+
+.tab_pvp .node_planes {
+	width:120px;
+}
+.tab_pvp .node_airsides {
+	width:120px;
+	height:15px;
+	line-height:15px;
+	text-align:center;
+}
+.tab_pvp .node_airside {
+	width:60px;
+	height:15px;
+	font-size:11px;
+	font-weight:bold;
+	float:left;
+}
+
+.tab_pvp .node_airtype {
+	width:120px;
+	height:20px;
+	line-height:20px;
+}
+.tab_pvp .node_planeside {
+	width:60px;
+	height:20px;
+	float:left;
+}
+.tab_pvp .node_airicon {
+	width: 18px;
+	height:20px;
+	line-height:20px;
+	float:left;
+	margin:0px 2px 0px 0px;
+}
+.tab_pvp .node_airicon img {
+	width:18px;
+	height:18px;
+	vertical-align:top;
+	margin:1px;
+}
+.tab_pvp .node_airtext {
+	width: 40px;
+	height:20px;
+	float:left;
+	font-size:11px;
+}
+.tab_pvp .node_airtext .node_FFT ,
+.tab_pvp .node_airtext .node_FAT ,
+.tab_pvp .node_airtext .node_BFT ,
+.tab_pvp .node_airtext .node_BAT {
+	float: left;
+}
+.tab_pvp .node_airtext .node_FFT ,
+.tab_pvp .node_airtext .node_FAT {
+
+}
+.tab_pvp .node_airtext .node_BFT ,
+.tab_pvp .node_airtext .node_BAT {
+
+}
+.tab_pvp .node_airtext .node_loss {
+	color:#faa;
 }
