@@ -41,8 +41,12 @@
 				$(".tab_pvp .pvp_toggle").removeClass("active");
 				$(this).addClass("active");
 				// Animate boxes
-				$(".tab_pvp .pvp_details_ship").animate({ width: 140 }, 500, function(){
+				$(".tab_pvp .pvp_player .pvp_details_ship").animate({ width: 140 }, 500, function(){
 					$(this).css({ "border-radius": "17px 5px 5px 17px" });
+				});
+				$(".tab_pvp .pvp_opponent .pvp_details_ship").animate({ width: 140 }, 500, function(){
+					$(this).css({ "border-radius": "17px 5px 5px 17px" });
+					$(".pvp_ship_name", this).css({ width: 40 });
 				});
 				$(".tab_pvp .pvp_player").animate({ width: 290 }, 500);
 				$(".tab_pvp .pvp_opponent").animate({ width: 290 }, 500);
@@ -57,12 +61,16 @@
 				$(".tab_pvp .pvp_toggle").removeClass("active");
 				$(this).addClass("active");
 				// Animate boxes
-				$(".tab_pvp .pvp_details_ship").animate({ width: 32 }, 500, function(){
-					$(this).css({ "border-radius": 17 });
+				$(".tab_pvp .pvp_player .pvp_details_ship").animate({ width: 110 }, 500, function(){
+					$(this).css({ "border-radius": "17px 5px 5px 17px" });
 				});
-				$(".tab_pvp .pvp_player").animate({ width: 80 }, 500);
-				$(".tab_pvp .pvp_opponent").animate({ width: 80 }, 500);
-				$(".tab_pvp .pvp_battle").animate({ width: 420 }, 500);
+				$(".tab_pvp .pvp_opponent .pvp_details_ship").animate({ width: 95 }, 500, function(){
+					$(this).css({ "border-radius": "17px 5px 5px 17px" });
+					$(".pvp_ship_name", this).css({ width: 57 });
+				});
+				$(".tab_pvp .pvp_player").animate({ width: 230 }, 500);
+				$(".tab_pvp .pvp_opponent").animate({ width: 200 }, 500);
+				$(".tab_pvp .pvp_battle").animate({ width: 150 }, 500);
 			});
 		},
 		
@@ -158,12 +166,6 @@
 		/* FILL BATTLE INFO WITH DATA
 		---------------------------------*/
 		fillBattleInfo :function(data, targetBox){
-			console.log(data);
-			// Result icons
-			// $(".node_formation img", targetBox).attr("src", KC3Meta.formationIcon(data.data.api_formation[0]) );
-			// $(".node_formation", targetBox).attr("title", KC3Meta.formationText(data.data.api_formation[0]) );
-			// $(".node_rating img", targetBox).attr("src", "../../assets/img/client/ratings/"+data.rating+".png");
-			
 			// Process battle
 			KC3SortieManager.onPvP = true;
 			var thisPvP = (new KC3Node()).defineAsBattle();
@@ -174,19 +176,8 @@
 			
 			// Day Battle
 			thisPvP.engage( data.data, 1);
-			console.log("DAY", thisPvP);
 			$(".pvp_battle_day", targetBox).html(battle_info_html);
 			this.fillBattleBox(thisPvP, $(".pvp_battle_day", targetBox));
-			
-			// Night battle
-			if (thisPvP.yasenFlag) {
-				thisPvP.engageNight( data.yasen, 1);
-				console.log("NIGHT", thisPvP);
-				$(".pvp_battle_night", targetBox).html(battle_info_html);
-				this.fillBattleBox(thisPvP, $(".pvp_battle_night", targetBox));
-			} else {
-				$(".pvp_battle_night", targetBox).hide();
-			}
 		},
 		
 		/* FILL ONE BATTLE BOX (DAY/NIGHT)
