@@ -649,6 +649,12 @@ Uses Dexie.js third-party plugin on the assets directory
 				.toArray(callback);
 		},
 		
+		get_pvp_data :function(pvp_id, callback){
+			this.con.pvp
+				.where("id").equals(pvp_id)
+				.toArray(callback);
+		},
+		
 		count_pvps: function(callback){
 			this.con.pvp
 				.where("hq").equals(this.index)
