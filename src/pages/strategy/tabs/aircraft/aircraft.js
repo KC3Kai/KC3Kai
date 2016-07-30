@@ -53,7 +53,7 @@
 				ThisItem = KC3GearManager.list[ctr];
 				MasterItem = ThisItem.master();
 				if(!MasterItem) continue;
-				if([6,7,8,9,10,21,22,33].indexOf(MasterItem.api_type[3]) == -1) continue;
+				if(KC3GearManager.carrierBasedAircraftType3Ids.indexOf(MasterItem.api_type[3]) == -1) continue;
 				
 				// Add holder to the item object temporarily via function return
 				if(typeof this._holders["s"+ThisItem.itemId] != "undefined"){
