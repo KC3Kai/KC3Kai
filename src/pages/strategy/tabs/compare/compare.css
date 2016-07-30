@@ -1,0 +1,171 @@
+.tab_compare {
+	width:680px;
+}
+/* ADD
+--------------------------------*/
+.tab_compare .compare_add {
+	height:24px;
+	line-height:24px;
+	margin:10px 0px 20px 0px;
+	display: none;
+}
+.tab_compare .compare_add_col  {
+	height:24px;
+	line-height:24px;
+	float:left;
+}
+.tab_compare .compare_add_label {
+	font-size:12px;
+	font-weight:bold;
+	margin:0px 10px 0px 0px;
+}
+.tab_compare .compare_input {
+	width:150px;
+	margin:0px 10px 0px 0px;
+}
+.tab_compare .compare_input input {
+	width:150px;
+	height:24px;
+}
+.tab_compare .compare_suggest {
+	width:450px;
+	overflow:hidden;
+}
+/* Suggest Box */
+.tab_compare .compare_suggest_item {
+	width:110px;
+	float:left;
+	margin:0px 2px 0px 0px;
+}
+.tab_compare .compare_suggest_icon {
+	width:24px; height:24px;
+	float:left;
+	margin:0px 3px 0px 0px;
+}
+.tab_compare .compare_suggest_icon img {
+	width:24px; height:24px;
+}
+.tab_compare .compare_suggest_name {
+	width:83px;
+	float:left;
+	font-size:12px;
+}
+
+/* LIST
+--------------------------------*/
+.tab_compare .compare_list {
+	min-height:200px;
+	margin:0px 0px 20px 0px;
+	border-bottom:1px solid #ccc;
+	padding:0px 0px 10px 0px;
+}
+.tab_compare .compare_ship {
+	width:680px;
+	height:24px;
+	margin:0px 0px 4px 0px;
+}
+.tab_compare .compare_ship_col {
+	height:24px;
+	float:left;
+}
+
+.tab_compare .compare_ship_icon {
+	width:24px;
+	margin:0px 5px 0px 0px;
+}
+.tab_compare .compare_ship_icon img {
+	width:24px;
+	height:24px;
+}
+.tab_compare .compare_ship_name {
+	width:120px;
+	line-height:24px;
+	font-size:12px;
+	margin:0px 5px 0px 0px;
+	overflow: hidden;
+}
+.tab_compare .compare_ship_stat {
+	width:24px;
+	line-height:24px;
+	margin:0px 5px 0px 0px;
+	border-radius:12px;
+}
+.tab_compare .compare_ship_stat img {
+	width:16px;
+	height:16px;
+	margin:4px;
+	vertical-align:top;
+}
+.tab_compare .compare_remove {
+	width:24px;
+	line-height:24px;
+	margin:0px 0px 0px 5px;
+	border-radius:12px;
+	text-align:center;
+	font-weight:bold;
+	background:#faa;
+}
+
+/* LIST: GRAPH
+--------------------------------*/
+.tab_compare .compare_ship_graph {
+	display:none;
+	width:505px;
+}
+.tab_compare .compare_ship_bar {
+	width:0px;
+	height:10px;
+	margin:7px 5px 7px 0px;;
+	background:-webkit-linear-gradient(top, #7db9e8 0%,#1a0888 100%);
+	float:left;
+}
+.tab_compare .compare_ship_value {
+	width:50px;
+	height:24px;
+	line-height:24px;
+	float:left;
+	font-size:14px;
+	font-weight:bold;
+}
+
+
+/* SELECTOR
+--------------------------------*/
+.tab_compare .compare_selector {
+	width:680px;
+	height:30px;
+}
+.tab_compare .compare_select_back {
+	width:100px;
+	height:30px;
+	line-height:28px;
+	font-size:12px;
+	font-weight:bold;
+	background:#ace;
+	border:1px solid #37b;
+	border-radius: 5px;
+	float:left;
+	margin:0px 5px 0px 0px;
+	text-align:center;
+}
+.tab_compare .compare_select_back.active {
+	background: #fff;
+	color:#000;
+}
+.tab_compare .compare_select_stat {
+	width:28px;
+	height:30px;
+	background:#ace;
+	border:1px solid #37b;
+	border-radius: 5px;
+	float:left;
+	margin:0px 5px 0px 0px;
+}
+.tab_compare .compare_select_stat.active {
+	background: #fff;
+}
+.tab_compare .compare_select_stat img {
+	width:16px;
+	height:16px;
+	margin:7px 6px;
+}
