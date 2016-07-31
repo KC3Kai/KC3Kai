@@ -143,7 +143,7 @@
                 kcLang === "en" ? "en"
                 : kcLang === "jp" ? "jp"
                 : kcLang === "scn" ? "cn"
-                : kcLang === "tcn" ? "cn"
+                : kcLang === "tcn" ? "tw"
             : "en";
             $("#radio_"+lang, ".export_lang #lang").click();
 		},
