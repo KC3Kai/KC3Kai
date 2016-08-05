@@ -20,6 +20,28 @@ body {
 	display:none;
 }
 
+/* COLORS
+-------------------------------*/
+.fcolor1 { color:#000000; }
+.fcolor2 { color:#333333; }
+.fcolor3 { color:#777777; }
+.fcolor4 { color:#cccccc; }
+.fcolor5 { color:#ffffff; }
+
+.fscolor1 { color:#0066CC; }
+.fscolor2 { color:#337ab7; }
+.fscolor3 { color:#7799bb; }
+
+.bcolor1 { background-color:#000000; }
+.bcolor2 { background-color:#333333; }
+.bcolor3 { background-color:#444444; }
+.bcolor4 { background-color:#cccccc; }
+.bcolor5 { background-color:#ffffff; }
+
+.bscolor1 { background-color:#ace; }
+.bscolor2 { background-color:#def; }
+.bscolor3 { background-color:#f3f3f3; }
+
 /* MENU TABS
 -------------------------------*/
 #menu {
@@ -118,7 +140,8 @@ body {
 	border-bottom:1px solid #369;
 	color:#0066CC;
 }
-
+/* COMMONS: HELP BUTTON
+-------------------------------*/
 .page_help_btn {
 	height:24px;
 	line-height:24px;
@@ -147,7 +170,8 @@ body {
 	font-style:normal;
 	display:block;
 }
-
+/* COMMONS: HELP BOX
+-------------------------------*/
 .page_help {
 	width:700px;
 	min-height:200px;
@@ -173,7 +197,6 @@ body {
 	margin:0px 0px 5px 20px;
 	text-shadow:0px 0px 1px #fff;
 }
-
 .page_help .help_more {
 	height:16px;
 	line-height:16px;
@@ -183,7 +206,8 @@ body {
 	text-align:right;
 	text-shadow:1px 1px 2px #ccc;
 }
-
+/* COMMONS: HELP
+-------------------------------*/
 .page_panel {
 	width:700px;
 	background:#f0f5ff;
@@ -195,7 +219,8 @@ body {
 	width:700px;
 	padding:0px 10px 0px;
 }
-
+/* COMMONS: SECTIONS
+-------------------------------*/
 .page_section {
 	height:26px;
 	line-height:24px;
@@ -206,7 +231,8 @@ body {
 .page_body {
 	margin:0px 0px 20px 0px;
 }
-
+/* COMMONS: FLOAT TOOLBAR
+-------------------------------*/
 .float_toolbar {
 	position:fixed;
 	bottom:5px;
@@ -240,4 +266,38 @@ body {
 }
 .float_toolbar .reload:hover {
 	background-color:#ffc;
+}
+
+/* OVERRIDES
+-------------------------------*/
+/* Screenshots */
+.tab_screenshots .page_list {
+	border-bottom:1px solid #369;
+}
+/* Resources */
+.tab_resources .legend_color {
+	border:1px solid #555;
+}
+/* Consumables */
+.tab_consumables .legend_color {
+	border:1px solid #555;
+}
+/* Showcase */
+.tab_showcase .stype_title {
+	background:#B9DCFF;
+}
+.tab_showcase .show_ship {
+	background:#ffffff;
+}
+.tab_showcase .show_ship .ship_level {
+	width:65px;
+	height:12px;
+	line-height:12px;
+	font-size:11px;
+	float:left;
+	margin:1px 0px 0px 0px;
+}
+.tab_showcase .show_ship .ship_mod {
+	background:#eee;
+	border-radius:5px;
 }

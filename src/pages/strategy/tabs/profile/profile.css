@@ -3,7 +3,6 @@
 }
 
 .tab_profile .homepage_hints {
-	background:#fcf8e3;
 	margin:10px 0px 0px 0px;
 	padding:5px 5px 5px 5px;
 	border-radius:5px 5px 5px 5px;
@@ -14,7 +13,6 @@
 --------------------------------*/
 .tab_profile .hq_info {
 	width:680px;
-	/*background:#ccf;*/
 }
 .tab_profile .hq_field {
 	width:680px;
@@ -23,18 +21,18 @@
 	margin:0px 0px 3px 0px;
 }
 .tab_profile .hq_label {
-	width:80px;
+	width:75px;
 	height:20px;
 	float:left;
 	margin:0px 5px 0px 0px;
-	background:#f5f5f5;
+	padding:0px 0px 0px 5px;
 	font-weight:bold;
 }
 .tab_profile .hq_content {
-	width:590px;
+	width:580px;
 	height:20px;
 	float:left;
-	background:#fafafa;
+	padding:0px 5px 0px 5px;
 }
 
 /* STATISTICS
@@ -53,7 +51,6 @@
 	line-height:20px;
 	font-weight:bold;
 	text-align:center;
-	background:#fcc;
 	border-radius:8px 8px 0px 0px;
 	margin:0px 0px 2px 0px;
 }
@@ -74,7 +71,6 @@
 	height:18px;
 	line-height:18px;
 	margin:0px 0px 2px 0px;
-	background:#eee;
 }
 .tab_profile .stat_label {
 	width:100px;
@@ -104,13 +100,11 @@
 	height:20px;
 	float:left;
 	margin:0px 5px 0px 0px;
-	background:#f5f5f5;
 }
 .tab_profile .rank_content {
 	width:420px;
 	height:20px;
 	float:left;
-	background:#fafafa;
 	font-weight:bold;
 }
 

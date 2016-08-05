@@ -1,6 +1,7 @@
 body {
-	background:#333333;
+	background:#414141;
 	display:block !important;
+	color:#cccccc;
 }
 #wrapper {
 	width:800px;
@@ -18,6 +19,28 @@ body {
 .factory {
 	display:none;
 }
+
+/* COLORS
+-------------------------------*/
+.fcolor1 { color:#ffffff; }
+.fcolor2 { color:#cccccc; }
+.fcolor3 { color:#444444; }
+.fcolor4 { color:#333333; }
+.fcolor5 { color:#000000; }
+
+.fscolor1 { color:#ffffff; }
+.fscolor2 { color:#d7d7d7; }
+.fscolor3 { color:#cccccc; }
+
+.bcolor1 { background-color:#000000; }
+.bcolor2 { background-color:#333333; }
+.bcolor3 { background-color:#444444; }
+.bcolor4 { background-color:#cccccc; }
+.bcolor5 { background-color:#ffffff; }
+
+.bscolor1 { background-color:#333333; }
+.bscolor2 { background-color:#555555; }
+.bscolor3 { background-color:#161616; }
 
 /* MENU TABS
 -------------------------------*/
@@ -65,7 +88,7 @@ body {
 	line-height:24px;
 	margin:0px 0px 1px 0px;
 	padding:0px 0px 0px 5px;
-	background:#555555;
+	background:#2e2e2e;
 	color:#cccccc;
 	border-right:0px none;
 	cursor:pointer;
@@ -97,22 +120,22 @@ body {
 	width:700px;
 }
 
-/* COMMONS
+/* COMMONS: TITLE
 -------------------------------*/
 .page_title {
 	width:700px;
-	font-size:18px;
-	height:30px;
-	line-height:30px;
+	font-size:20px;
+	height:34px;
+	line-height:34px;
 	padding:0px 0px 0px 10px;
-	background:#191919;
-	border-bottom:1px solid #000000;
-	color:#ffcc00;
+	margin:0px 0px 10px 0px;
+	color:#ffffff;
 }
-
+/* COMMONS: HELP BUTTON
+-------------------------------*/
 .page_help_btn {
-	height:24px;
-	line-height:24px;
+	height:28px;
+	line-height:28px;
 	text-align:right;
 	float:right;
 	margin:3px 5px 0px 0px;
@@ -121,7 +144,7 @@ body {
 	border-radius:8px;
 }
 .page_help_btn:hover {
-	background:#ffc;
+	background:#000000;
 }
 .page_help_btn span {
 	width:14px;
@@ -138,31 +161,31 @@ body {
 	font-style:normal;
 	display:block;
 }
-
+/* COMMONS: HELP BOX
+-------------------------------*/
 .page_help {
-	width:700px;
+	width:660px;
 	min-height:200px;
-	background:url(../../assets/img/ui/fairy.png) #e6ffe6;
+	background:#333;
 	background-position:bottom right;
 	background-repeat:no-repeat;
 	padding:5px 10px;
-	border-bottom:1px solid #369;
 	display:none;
+	margin:0px 0px 0px 20px;
 }
 .page_help .help_q {
 	height:16px;
 	line-height:16px;
 	font-size:12px;
 	font-weight:bold;
-	margin:0px 0px 0px 0px;
-	color:#0099cc;
-	text-shadow:1px 1px 2px #ccc;
+	margin:0px 0px 3px 0px;
+	color:#ffffff;
 }
 .page_help .help_a {
 	line-height:14px;
 	font-size:12px;
-	margin:0px 0px 5px 20px;
-	text-shadow:0px 0px 1px #fff;
+	margin:0px 0px 10px 10px;
+	color:#9e9e9e;
 }
 
 .page_help .help_more {
@@ -172,63 +195,161 @@ body {
 	font-weight:bold;
 	margin:0px 0px 0px 0px;
 	text-align:right;
-	text-shadow:1px 1px 2px #ccc;
 }
-
+/* COMMONS: HELP
+-------------------------------*/
 .page_panel {
-	width:700px;
-	background:#f0f5ff;
+	width:680px;
+	min-height:30px;
+	background:#131313;
 	padding:5px 10px;
-	border-bottom:1px solid #369;
+	margin:0px 0px 0px 10px;
+	border-bottom:1px solid #444444;
+	color:#cccccc;
 }
-
 .page_padding {
 	width:700px;
 	padding:0px 10px 0px;
 }
-
+/* COMMONS: SECTIONS
+-------------------------------*/
 .page_section {
 	height:26px;
 	line-height:24px;
-	font-size:20px;
-	border-bottom:1px solid #ddd;
+	font-size:18px;
+	border-bottom:1px solid #444444;
+	color:#ccc;
 	margin:10px 0px 10px 0px;
 }
 .page_body {
 	margin:0px 0px 20px 0px;
 }
-
+/* COMMONS: FLOAT TOOLBAR
+-------------------------------*/
 .float_toolbar {
 	position:fixed;
 	bottom:5px;
 	right:0px;
 	text-decoration:none;
-	color:#79b;
+	color:#ffffff;
 	font-size:12px;
 	font-weight:bold;
 	display:none;
 }
 .float_toolbar .back_to_top {
-	background-color:#def;
-	border-left: 1px solid #ace;
-	border-top: 1px solid #ace;
-	border-bottom: 1px solid #ace;
+	background-color:#1e1e1e;
+	border-left: 1px solid #000000;
+	border-top: 1px solid #000000;
+	border-bottom: 1px solid #000000;
 	border-radius:10px 0px 0px 10px;
 	padding:5px 5px 5px 5px;
 	margin:0px 0px 3px 0px;
 }
 .float_toolbar .back_to_top:hover {
-	background-color:#ffc;
+	background-color:#000000;
 }
 .float_toolbar .reload {
-	background-color:#def;
-	border-left: 1px solid #ace;
-	border-top: 1px solid #ace;
-	border-bottom: 1px solid #ace;
+	background-color:#1e1e1e;
+	border-left: 1px solid #000000;
+	border-top: 1px solid #000000;
+	border-bottom: 1px solid #000000;
 	border-radius:10px 0px 0px 10px;
 	padding:5px 5px 5px 5px;
 	margin:0px 0px 3px 0px;
 }
 .float_toolbar .reload:hover {
-	background-color:#ffc;
+	background-color:#000000;
+}
+
+/* OVERRIDES
+-------------------------------*/
+/* Profile */
+.tab_profile .stat_head {
+	border-radius:0px !important;
+}
+.tab_profile .stat_sortie .stat_head {
+	background:#5b0202 !important;
+}
+.tab_profile .stat_pvp .stat_head {
+	background:#004100 !important;
+}
+.tab_profile .stat_exped .stat_head {
+	background:#1b1b6b !important;
+}
+/* Screenshots */
+.tab_screenshots .page_list li a {
+	border:0px none;
+	background:#333333;
+	color:#fff;
+	margin:0px 1px 0px;
+}
+.tab_screenshots .page_list li a:hover {
+	background:#000000;
+	color:#ffcc00;
+}
+/* Resources */
+.tab_resources .legend_color {
+	border:1px solid #000000;
+}
+/* Consumables */
+.tab_consumables .legend_color {
+	border:1px solid #000000;
+}
+/* Showcase */
+.tab_showcase .stype_box {
+	height:127px !important;
+	border-radius:0px !important;
+	background:none !important;
+}
+.tab_showcase .stype_title {
+	background:none !important;
+}
+.tab_showcase .stype_contents {
+	padding:2px !important;
+}
+.tab_showcase .show_ship {
+	width:53px !important;
+	height:100px !important;
+	margin:0px 0px 2px 2px !important;
+	border-radius:0px !important;
+	position:relative;
+	padding:0px !important;
+	pointer-events: none;
+}
+.tab_showcase .show_ship .ship_pic {
+	width:53px !important;
+	height:100px !important;
+	position:absolute;
+	top:0px;
+	left:0px;
+	border-radius:0px !important;
+	margin:0px !important;
+	background:#000;
+}
+.tab_showcase .show_ship .ship_pic img {
+	image-rendering: auto;
+	width:120px !important;
+	height:120px !important;
+	position:relative;
+	margin:-10px 0px 0px -33px;
+	-webkit-mask-image:-webkit-linear-gradient(top, rgba(0,0,0,1) 65%,rgba(0,0,0,0) 100%);
+}
+.tab_showcase .show_ship .ship_name {
+	display:none;
+}
+.tab_showcase .show_ship .ship_level {
+	width:53px;
+	text-align: center;
+	position:absolute;
+	bottom:0px;
+	left:0px;
+	height:24px;
+	line-height:24px;
+	font-size:12px;
+	font-weight:bold;
+	color:#fff;
+	text-shadow:2px 2px 3px #000;
+}
+.tab_showcase .show_ship .ship_mods {
+	display:none;
 }
