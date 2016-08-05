@@ -1,5 +1,6 @@
 body {
 	background:#333333;
+	display:block !important;
 }
 #wrapper {
 	width:800px;
