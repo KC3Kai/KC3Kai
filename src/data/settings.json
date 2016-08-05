@@ -672,7 +672,7 @@
 			{
 				"id" : "sr_lvl_difference",
 				"name" : "SettingsLevellingDifference",
-				"type" : "small_text",
+				"type" : "radio",
 				"bound" : {
 					"min" :  0,
 					"max" : 15,
@@ -680,6 +680,17 @@
 				},
 				"options" : {
 					"label" : "Lv"
+				}
+			},
+			{
+				"id" : "sr_theme",
+				"name" : "SettingsStrategyTheme",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "legacy", "Traditional" ],
+						[ "dark", "Dark" ]
+					]
 				}
 			}
 		]
