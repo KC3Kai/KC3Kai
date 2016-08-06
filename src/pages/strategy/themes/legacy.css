@@ -371,10 +371,10 @@ body {
 .tab_ships .ship_item:hover .ship_field {
 	background:#ffffcc;
 }
-.tab_ships .ship_item .ship_onfleet-color1 {background: #90D4ED !important;}
-.tab_ships .ship_item .ship_onfleet-color2 {background: #BBDDBA !important;}
-.tab_ships .ship_item .ship_onfleet-color3 {background: #E8E68F !important;}
-.tab_ships .ship_item .ship_onfleet-color4 {background: #F6D0A0 !important;}
+.tab_ships .ship_onfleet-color1 {background: #90D4ED !important;}
+.tab_ships .ship_onfleet-color2 {background: #BBDDBA !important;}
+.tab_ships .ship_onfleet-color3 {background: #E8E68F !important;}
+.tab_ships .ship_onfleet-color4 {background: #F6D0A0 !important;}
 .tab_ships .ship_item .ship_morale.sparkled {
 	background:#ff0;
 }
@@ -399,4 +399,113 @@ body {
 }
 .tab_ships .ship_item.even .ship_field.ship_lk {
 	background:#66FF66;
+}
+/* Construction */
+.tab_builds .build_item {
+	background:#eee;
+}
+.tab_builds .color_fuel {
+	background:#AAFFAA;
+}
+.tab_builds .color_ammo {
+	background:#999900;
+}
+.tab_builds .color_steel {
+	background:#999999;
+}
+.tab_builds .color_baux {
+	background:#FF9933;
+}
+.tab_builds .build_item .build_rsc1 {
+	background:#C1FFC1;
+}
+.tab_builds .build_item .build_rsc2 {
+	background:#DFD7B3;
+}
+.tab_builds .build_item .build_rsc3 {
+	background:#ccc;
+}
+.tab_builds .build_item .build_rsc4 {
+	background:#FFDCA8;
+}
+/* LSC */
+.tab_lscs .build_item {
+	background:#eee;
+}
+.tab_lscs .color_fuel {
+	background:#AAFFAA;
+}
+.tab_lscs .color_ammo {
+	background:#999900;
+}
+.tab_lscs .color_steel {
+	background:#999999;
+}
+.tab_lscs .color_baux {
+	background:#FF9933;
+}
+.tab_lscs .build_item .build_rsc1 {
+	background:#C1FFC1;
+}
+.tab_lscs .build_item .build_rsc2 {
+	background:#DFD7B3;
+}
+.tab_lscs .build_item .build_rsc3 {
+	background:#ccc;
+}
+.tab_lscs .build_item .build_rsc4 {
+	background:#FFDCA8;
+}
+.tab_lscs .build_item .build_devmat {
+	background:#009999;
+	color:#fff;
+}
+/* Docking */
+.tab_docking .ship_item.odd .ship_field {
+	background:#efefef;
+}
+.tab_docking .ship_item.even .ship_field {
+	background:#e4e4e4;
+}
+.tab_docking .ship_item:hover .ship_field {
+	background:#ffffcc;
+}
+.tab_docking .ship_item .ship_hp_box {
+	background:#777;
+	border:1px solid #333;
+	border-radius:4px;
+}
+.tab_docking .ship_item.ship_docking .ship_field {
+	background: #C0EEEE;
+}
+
+.tab_docking .ship_item.ship_expedition .ship_field {
+	background: #D7D6ED;
+}
+
+.tab_docking .ship_item.ship_akashi_repairing .ship_field {
+	background: #FFE6F7;
+}
+
+.tab_docking .ship_item .ship_status.ship_normal,
+.tab_docking .ship_item .ship_hp_val.ship_normal {
+	background: #66FF66;
+}
+
+.tab_docking .ship_item .ship_status.ship_shouha,
+.tab_docking .ship_item .ship_hp_val.ship_shouha {
+	background: #FFFF66;
+}
+
+.tab_docking .ship_item .ship_status.ship_chuuha,
+.tab_docking .ship_item .ship_hp_val.ship_chuuha {
+	background: #FFC266;
+}
+
+.tab_docking .ship_item	 .ship_status.ship_taiha,
+.tab_docking .ship_item	 .ship_hp_val.ship_taiha {
+	background: #FF8080;
+}
+.tab_docking .ship_item .ship_equip span {
+	color:#000;
 }
