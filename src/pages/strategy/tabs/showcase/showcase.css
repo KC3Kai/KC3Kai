@@ -99,7 +99,7 @@
 	width:220px;
 	height:102px;
 	float:left;
-	background:#def;
+	/*background:#def;*/
 	border-radius:10px;
 	margin:0px 0px 5px 6px;
 	overflow:hidden;
@@ -108,7 +108,7 @@
 	width:220px;
 	height:20px;
 	line-height:20px;
-	background:#B9DCFF;
+	/*background:#B9DCFF;*/
 	text-align:center;
 	font-size:12px;
 	font-weight:bold;
@@ -166,5 +166,5 @@
 	font-size:12px;
 	font-weight:bold;
 	text-align:center;
-	background:#fff;
+	/*background:#fff;*/
 }

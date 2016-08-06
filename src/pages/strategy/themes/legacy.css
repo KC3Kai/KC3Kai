@@ -301,3 +301,102 @@ body {
 	background:#eee;
 	border-radius:5px;
 }
+/* Ledger */
+.tab_overlodger .filterBox {
+	width:112px;
+	margin:0px 3px 0px 0px;
+	background:#def;	
+}
+.tab_overlodger .filterBox.filter_base {
+	width:217px;
+}
+.tab_overlodger .filterBox .filterRangeLen input {
+	background-color:#daebfc;
+}
+.tab_overlodger .filterBox .filterRangeLen input[disabled] {
+	color:#daebfc;
+}
+.tab_overlodger .lodger-statistics {
+	border-radius: 8px;
+	background-color: #def;
+}
+.tab_overlodger .lodger-data {
+	background-color:#cde;
+	border-radius: 6px;
+}
+.tab_overlodger .lodger-data .bar {
+	height: 20px;
+}
+.tab_overlodger .lodger-data .bar.INV,
+.tab_overlodger .lodger-data .bar.NM {
+	background-color: gray;
+}
+.tab_overlodger .lodger-data .materials .material,
+.tab_overlodger .lodger-data .materials .material.over:before {
+	background-color: #bcd;
+}
+/* Ship List */
+.tab_ships .massSelect .hover {
+	border-radius: 4px;
+	color:#00f;
+}
+.tab_ships .massSelect .hover.on {
+	color:#fff;
+	background: hsl(220, 100%, 60%);
+}
+.tab_ships .filters .ship_filter_type:hover {
+	background:#cfc;
+}
+.tab_ships .advanced_sorter .adv_sorter:hover {
+	background:#cfc;
+}
+.tab_ships .advanced_sorter .filter_box {
+	border:1px solid #000;
+}
+.tab_ships .advanced_sorter .filter_check {
+	background:#000;
+}
+.tab_ships .ship_filter_type .filter_box {
+	border:1px solid #000;
+}
+.tab_ships .ship_filter_type .filter_check {
+	background:#000;
+}
+.tab_ships .ship_item.odd .ship_field {
+	background:#efefef;
+}
+.tab_ships .ship_item.even .ship_field {
+	background:#e4e4e4;
+}
+.tab_ships .ship_item:hover .ship_field {
+	background:#ffffcc;
+}
+.tab_ships .ship_item .ship_onfleet-color1 {background: #90D4ED !important;}
+.tab_ships .ship_item .ship_onfleet-color2 {background: #BBDDBA !important;}
+.tab_ships .ship_item .ship_onfleet-color3 {background: #E8E68F !important;}
+.tab_ships .ship_item .ship_onfleet-color4 {background: #F6D0A0 !important;}
+.tab_ships .ship_item .ship_morale.sparkled {
+	background:#ff0;
+}
+.tab_ships .ship_item .ship_fp.max {
+	background:#ff8888;
+}
+.tab_ships .ship_item .ship_tp.max {
+	background:#00CCFF;
+}
+.tab_ships .ship_item .ship_yasen.max {
+	background:#555555;
+	color:#FFFFFF;
+}
+.tab_ships .ship_item .ship_aa.max {
+	background:#FF9900;
+}
+.tab_ships .ship_item .ship_ar.max {
+	background:#ffcc00;
+}
+.tab_ships .ship_item.odd .ship_field.ship_lk{
+	background:#66FF66;
+}
+.tab_ships .ship_item.even .ship_field.ship_lk {
+	background:#66FF66;
+}
