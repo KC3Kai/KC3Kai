@@ -662,3 +662,118 @@ body {
 .tab_docking .ship_item .ship_equip span {
 	color:#ccc;
 }
+/* Leveling Goals */
+.tab_expcalc .ship_goal {
+	background-color:#333333;
+	border-radius: 0px !important;
+}
+.tab_expcalc .ship_goal .ship_value {
+	color:#fff !important;
+}
+.tab_expcalc .ship_goal .ship_info .ship_name {
+	color:#fff;
+}
+
+.tab_expcalc .ship_goal.inactive {
+	width:167px !important;
+	margin:0px 0px 2px 2px !important;
+	position:relative;
+}
+.tab_expcalc .ship_goal.inactive .ship_label {
+	font-size:11px !important;
+}
+.tab_expcalc .ship_goal.inactive .ship_value {
+	font-size:13px !important;
+}
+.tab_expcalc .ship_goal.inactive:hover {
+	background:#000;
+}
+
+.tab_expcalc .ship_goal.inactive .ship_info {
+	display:block !important;
+	width:60px !important;
+}
+.tab_expcalc .ship_goal.inactive .ship_info .ship_type {
+	color:#999999;
+}
+.tab_expcalc .ship_goal.inactive .ship_lv {
+	width:30px !important;
+	margin:0px !important;
+}
+.tab_expcalc .ship_goal.inactive .ship_target {
+	width:30px !important;
+	margin:0px !important;
+}
+
+.tab_expcalc .ship_goal.inactive .ship_add {
+	background:none !important;
+	position: absolute;
+	top:0px; left:0px;
+	bottom:0px; right:0px;
+	width:inherit !important;
+	height:inherit !important;
+	opacity:0;
+	margin:0px !important;
+	padding:0px !important;
+}
+.tab_expcalc .goal_template {
+	background-color:#333333;
+	border-radius: 0px !important;
+}
+.tab_expcalc .ship_goal.ship_closeToRemodel{
+	background-color:#555555;
+}
+@-webkit-keyframes ship_closeToRemodel{
+	0%  {background-color:#555555;}
+	50%  {background-color:#000000;}
+	100%  {background-color:#555555;}
+}
+@keyframes ship_closeToRemodel {
+	0%  {background-color:#555555;}
+	50%  {background-color:#000000;}
+	100%  {background-color:#555555;}
+}
+.tab_expcalc .ship_goal.ship_canBeRemodelled{
+	background-color:#555555;
+}
+@-webkit-keyframes ship_canBeRemodelled{
+	0%  {background-color:#555555;}
+	50%  {background-color:#000000;}
+	100%  {background-color:#555555;}
+}
+@keyframes ship_canBeRemodelled {
+	0%  {background-color:#555555;}
+	50%  {background-color: #000000;}
+	100%  {background-color:#555555;}
+}
+
+.tab_expcalc .goal_template .goal_value {
+	color:#fff !important;
+}
+.tab_expcalc .goal_template .goal_btn.goal_hl_coverage {
+	border:1px solid #444444 !important;
+	background:#121212 !important;
+	border-radius:0px !important;
+	font-size:12px !important;
+	font-weight: normal !important;
+	line-height:22px;
+	margin-top:10px;
+}
+.tab_expcalc .goal_template .goal_btn.goal_onoff {
+	border:1px solid #444444 !important;
+	background:#121212 !important;
+	border-radius:0px !important;
+	font-size:12px !important;
+	font-weight: normal !important;
+	line-height:22px;
+	margin-top:10px;
+}
+.tab_expcalc .goal_template .goal_btn.goal_apply {
+	border:1px solid #444444 !important;
+	background:#121212 !important;
+	border-radius:0px !important;
+	font-size:12px !important;
+	font-weight: normal !important;
+	line-height:22px;
+	margin-top:10px;
+}

@@ -20,12 +20,10 @@
 .tab_expcalc .ship_goal {
 	width:680px;
 	height:40px;
-	background:#def;
 	border-radius: 8px;
 	margin:0px 0px 3px 0px;
 	padding:2px 4px;
 	line-height:34px;
-	border:1px solid #ace;
 }
 .tab_expcalc .ship_goal.highlight {
 	background:#fdd;
@@ -33,7 +31,6 @@
 .tab_expcalc .ship_goal .ship_col {
 	height:34px;
 	float:left;
-	/*background:#fff;*/
 	overflow:hidden;
 }
 .tab_expcalc .ship_goal .ship_label {
@@ -177,7 +174,6 @@
 }
 
 .tab_expcalc .ship_goal.ship_closeToRemodel{
-	background-color:#2be;
 	/* Chrome */
 	-webkit-animation-name: ship_closeToRemodel;
 	-webkit-animation-duration: 4s;
@@ -186,19 +182,8 @@
 	animation-duration: 4s;
 	animation-iteration-count: infinite;
 }
-@-webkit-keyframes ship_closeToRemodel{
-	0%  {background-color:#def;}
-	50%  {background-color:#2be;}
-	100%  {background-color:#def;}
-}
-@keyframes ship_closeToRemodel {
-	0%  {background-color:#def;}
-	50%  {background-color:#2be;}
-	100%  {background-color:#def;}
-}
 
 .tab_expcalc .ship_goal.ship_canBeRemodelled{
-	background-color:#2be;
 	/* Chrome */
 	-webkit-animation-name: ship_canBeRemodelled;
 	-webkit-animation-duration: 4s;
@@ -208,16 +193,6 @@
 	animation-iteration-count: infinite;
 }
 
-@-webkit-keyframes ship_canBeRemodelled{
-	0%  {background-color:#def;}
-	50%  {background-color:#1e7;}
-	100%  {background-color:#def;}
-}
-@keyframes ship_canBeRemodelled {
-	0%  {background-color:#def;}
-	50%  {background-color: #1e7;}
-	100%  {background-color:#def;}
-}
 /* INACTIVE OVERRIDES
 --------------------------------*/
 .tab_expcalc .ship_goal.inactive {
@@ -244,12 +219,12 @@
 .tab_expcalc .goal_template {
 	width: 680px;
 	height: 80px;
-	background: #def;
 	border-radius: 8px;
 	margin: 0px 0px 3px 0px;
 	padding: 2px 4px;
 	line-height: 34px;
-	border: 1px solid #ace;
+	/*background: #def;
+	border: 1px solid #ace;*/
 }
 
 .tab_expcalc .goal_template.disabled {

@@ -509,3 +509,36 @@ body {
 .tab_docking .ship_item .ship_equip span {
 	color:#000;
 }
+/* Leveling Goals */
+.tab_expcalc .ship_goal {
+	background-color:#def;
+}
+.tab_expcalc .ship_goal.ship_closeToRemodel{
+	background-color:#2be;
+}
+.tab_expcalc .goal_template {
+	background-color:#def;
+}
+@-webkit-keyframes ship_closeToRemodel{
+	0%  {background-color:#def;}
+	50%  {background-color:#2be;}
+	100%  {background-color:#def;}
+}
+@keyframes ship_closeToRemodel {
+	0%  {background-color:#def;}
+	50%  {background-color:#2be;}
+	100%  {background-color:#def;}
+}
+.tab_expcalc .ship_goal.ship_canBeRemodelled{
+	background-color:#2be;
+}
+@-webkit-keyframes ship_canBeRemodelled{
+	0%  {background-color:#def;}
+	50%  {background-color:#1e7;}
+	100%  {background-color:#def;}
+}
+@keyframes ship_canBeRemodelled {
+	0%  {background-color:#def;}
+	50%  {background-color: #1e7;}
+	100%  {background-color:#def;}
+}
