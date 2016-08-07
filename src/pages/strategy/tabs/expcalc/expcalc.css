@@ -176,51 +176,14 @@
 	margin-right:3px;
 }
 
-.tab_expcalc .ship_goal.ship_closeToRemodel.should_blink {
-	background-color:#2be;
-	/* Chrome */
-	-webkit-animation-name: ship_closeToRemodel;
-	-webkit-animation-duration: 4s;
-	-webkit-animation-iteration-count: infinite;
-	animation-name: ship_closeToRemodel;
-	animation-duration: 4s;
-	animation-iteration-count: infinite;
-}
-@-webkit-keyframes ship_closeToRemodel{
-	0%  {background-color:#def;}
-	50%  {background-color:#2be;}
-	100%  {background-color:#def;}
-}
-@keyframes ship_closeToRemodel {
-	0%  {background-color:#def;}
-	50%  {background-color:#2be;}
-	100%  {background-color:#def;}
-}
-
-.tab_expcalc .ship_goal.ship_canBeRemodelled.hl_enabled {
+.tab_expcalc .ship_goal.ship_closeToRemodel {
 	background-color:#2be;
 }
 
-.tab_expcalc .ship_goal.ship_canBeRemodelled.should_blink {
-	/* Chrome */
-	-webkit-animation-name: ship_canBeRemodelled;
-	-webkit-animation-duration: 4s;
-	-webkit-animation-iteration-count: infinite;
-	animation-name: ship_canBeRemodelled;
-	animation-duration: 4s;
-	animation-iteration-count: infinite;
+.tab_expcalc .ship_goal.ship_canBeRemodelled {
+	background-color:#2be;
 }
 
-@-webkit-keyframes ship_canBeRemodelled{
-	0%  {background-color:#def;}
-	50%  {background-color:#1e7;}
-	100%  {background-color:#def;}
-}
-@keyframes ship_canBeRemodelled {
-	0%  {background-color:#def;}
-	50%  {background-color: #1e7;}
-	100%  {background-color:#def;}
-}
 /* INACTIVE OVERRIDES
 --------------------------------*/
 .tab_expcalc .ship_goal.inactive {
