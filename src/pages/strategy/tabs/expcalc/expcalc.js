@@ -420,6 +420,8 @@
 					ThisShip.level >= ThisShip.master().api_afterlv &&
 					!RemodelDb.isFinalForm(ThisShip.masterId)){
 					goalBox.addClass("ship_canBeRemodelled");
+					// goalBox.addClass("should_blink");
+					// goalBox.addClass("hl_enabled");
 				}
 
 				// If next remodel lvl is greater then current, add to recommendations
@@ -432,6 +434,7 @@
 					if(ThisShip.master().api_afterlv - ThisShip.level > 0 &&
 						ThisShip.master().api_afterlv - ThisShip.level <= ConfigManager.sr_lvl_difference){
 						goalBox.addClass("ship_closeToRemodel");
+						// goalBox.addClass("should_blink");
 					}
 					return true;
 				}

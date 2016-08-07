@@ -176,7 +176,7 @@
 	margin-right:3px;
 }
 
-.tab_expcalc .ship_goal.ship_closeToRemodel{
+.tab_expcalc .ship_goal.ship_closeToRemodel.should_blink {
 	background-color:#2be;
 	/* Chrome */
 	-webkit-animation-name: ship_closeToRemodel;
@@ -197,8 +197,11 @@
 	100%  {background-color:#def;}
 }
 
-.tab_expcalc .ship_goal.ship_canBeRemodelled{
+.tab_expcalc .ship_goal.ship_canBeRemodelled.hl_enabled {
 	background-color:#2be;
+}
+
+.tab_expcalc .ship_goal.ship_canBeRemodelled.should_blink {
 	/* Chrome */
 	-webkit-animation-name: ship_canBeRemodelled;
 	-webkit-animation-duration: 4s;
