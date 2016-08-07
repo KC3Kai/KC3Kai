@@ -136,9 +136,6 @@
 .tab_pvp .pvp_opponent .pvp_ship_infofield {
 	width:40px;
 }
-.tab_pvp .pvp_opponent .pvp_ship_level {
-	display:none;
-}
 
 
 /* SHIP DETAILS
@@ -164,6 +161,21 @@
 .tab_pvp .pvp_ship_icon img {
 	width:32px;
 	height:32px;
+}
+.tab_pvp .pvp_ship_mvp_icon {
+	width:15px;
+	height:15px;
+	line-height:15px;
+	float:left;
+	position:relative;
+	left:64px;
+	top:-16px;
+	display:none;
+}
+.tab_pvp .pvp_ship_mvp_icon img {
+	width:15px;
+	height:15px;
+	vertical-align:top;
 }
 
 .tab_pvp .pvp_ship_info {
