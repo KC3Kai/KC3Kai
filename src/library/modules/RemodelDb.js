@@ -224,6 +224,25 @@
 		},
         dumpRemodelGroups: function() {
             return JSON.stringify( this._db.remodelGroups );
-        }
+        },
+		// returns all possible remodel levels for current ship
+		// returns false if the shipId is invalid
+		nextLevels: function(shipId) {
+			var self = this;
+			var remodelGroup = this.remodelGroup(shipId);
+			if (!remodelGroup) return false;
+			// either the final form doesn't remodel or
+			// remodels into another final form, we don't care
+			// for the purpose of this function.
+			remodelGroup.pop();
+
+			// for ships that has at least been remodelled once,
+			// there is no need keepin her prior form info here.
+			while (remodelGroup.length > 0 && remodelGroup[0] !== shipId)
+				remodelGroup.shift();
+			var levels = remodelGroup.map( function(sid) {
+				return self.remodelInfo(sid).level; });
+			return levels;
+		}
     };
 })();
