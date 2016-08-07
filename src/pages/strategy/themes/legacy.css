@@ -41,6 +41,7 @@ body {
 .bscolor1 { background-color:#ace; }
 .bscolor2 { background-color:#def; }
 .bscolor3 { background-color:#f3f3f3; }
+.bscolor4 { background-color:#def; }
 
 /* MENU TABS
 -------------------------------*/
@@ -541,4 +542,59 @@ body {
 	0%  {background-color:#def;}
 	50%  {background-color: #1e7;}
 	100%  {background-color:#def;}
+}
+/* Equipment */
+.tab_gears .item_types .item_type {
+	background:#fff;
+	border-radius:5px;
+}
+
+.tab_gears .itemSorters {
+	border-bottom:1px solid #369;
+}
+.tab_gears .itemSorters .sortControl {
+	color:#00f;
+	border-radius:7px;
+}
+.tab_gears .itemSorters .sortControl:hover {
+	background:#ace;
+}
+
+.tab_gears .slotitem {
+	border:		10px solid transparent;
+	background:#def;
+	border-radius:10px;
+}
+.tab_gears .item_types .item_type.active {
+	background:#2C3A3B;
+}
+.tab_gears .slotitem .holders dl dd .holder{
+	background: #fff;
+	border-radius: 12px 8px 8px 12px;
+}
+.tab_gears .slotitem .holders dl ~ dl{
+	border-top: 2px solid hsl(210, 50%, 85%);
+}
+
+/* Crafting */
+.tab_crafts .build_pages {
+	margin:0px 0px 10px 0px;
+}
+.tab_crafts .build_item {
+	background:#eee;
+}
+.tab_crafts .build_item .build_rsc {
+	font-size:12px;
+}
+.tab_crafts .build_item .build_rsc1 {
+	background:#C1FFC1;
+}
+.tab_crafts .build_item .build_rsc2 {
+	background:#DFD7B3;
+}
+.tab_crafts .build_item .build_rsc3 {
+	background:#ccc;
+}
+.tab_crafts .build_item .build_rsc4 {
+	background:#FFDCA8;
 }

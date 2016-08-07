@@ -19,6 +19,9 @@ body {
 .factory {
 	display:none;
 }
+a:hover {
+	color:#ffffff;
+}
 
 /* COLORS
 -------------------------------*/
@@ -41,6 +44,7 @@ body {
 .bscolor1 { background-color:#333333; }
 .bscolor2 { background-color:#555555; }
 .bscolor3 { background-color:#161616; }
+.bscolor4 { background-color:#121212; }
 
 /* MENU TABS
 -------------------------------*/
@@ -171,7 +175,7 @@ body {
 	background-repeat:no-repeat;
 	padding:5px 10px;
 	display:none;
-	margin:0px 0px 0px 20px;
+	margin:0px 0px 10px 20px;
 }
 .page_help .help_q {
 	height:16px;
@@ -195,6 +199,9 @@ body {
 	font-weight:bold;
 	margin:0px 0px 0px 0px;
 	text-align:right;
+}
+.page_help .help_more a {
+	color:#999999;
 }
 /* COMMONS: HELP
 -------------------------------*/
@@ -776,4 +783,91 @@ body {
 	font-weight: normal !important;
 	line-height:22px;
 	margin-top:10px;
+}
+/* Badge */
+.tab_badge .export_box {
+    background:#131313;
+}
+.tab_badge .export_parts .export_value {
+	background:#333333 !important;
+}
+.tab_badge .export_method .method_choice {
+	background:#333333 !important;
+}
+.tab_badge .export_lang .lang_choice {
+	width:145px !important;
+	background:#333333 !important;
+}
+/* Equipment */
+.tab_gears .item_types .item_type {
+	
+}
+.tab_gears .item_types .item_type.active {
+	background:#555555;
+}
+
+.tab_gears .itemSorters {
+	margin-bottom:10px;
+	padding:7px 0px 7px 0px;
+}
+.tab_gears .itemSorters .sortControl {
+	color:#ffcc00;
+}
+.tab_gears .itemSorters .sortControl img {
+	-webkit-filter: invert(100%);
+}
+.tab_gears .itemSorters .sortControl:hover {
+	background:#CCCCCC;
+	color:#000000;
+}
+.tab_gears .itemSorters .sortControl:hover img {
+	-webkit-filter: invert(0%);
+}
+
+.tab_gears .slotitem {
+	border-radius:0px;
+	border-bottom:1px solid #555555;
+	padding:0px 0px 20px 0px !important;
+	margin:0px 0px 20px 0px !important;
+}
+.tab_gears .slotitem .info .icon {
+	background:none !important;
+}
+.tab_gears .slotitem .info .item_stat img {
+	-webkit-filter: invert(100%);
+}
+.tab_gears .slotitem .holders dt {
+	margin-bottom:5px;
+}
+.tab_gears .slotitem .holders dl dd .holder{
+	border-radius: 12px 0px 0px 12px;
+}
+.tab_gears .slotitem .holders dl dd .holder font {
+	color:#fff;
+}
+.tab_gears .slotitem .holders dl ~ dl{
+	border-top: 1px solid #333333;
+}
+
+/* Crafting */
+.tab_crafts .build_pages {
+	margin-bottom:10px;
+}
+.tab_crafts .build_item {
+	
+}
+.tab_crafts .build_item .build_rsc {
+	font-size:14px;
+}
+.tab_crafts .build_item .build_rsc1 {
+	color:#92c992;
+}
+.tab_crafts .build_item .build_rsc2 {
+	color:#dec558;
+}
+.tab_crafts .build_item .build_rsc3 {
+	color:#cccccc;
+}
+.tab_crafts .build_item .build_rsc4 {
+	color:#b68f55;
 }
