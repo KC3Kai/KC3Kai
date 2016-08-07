@@ -670,18 +670,6 @@
 		"help":"",
 		"contents":[
 			{
-				"id" : "sr_lvl_toggle",
-				"name" : "SettingsLevellingToggle",
-				"type" : "radio",
-				"options" : {
-					"choices" : [
-						[ 0, "None" ],
-						[ 1, "SettingsLevellingToggleEnabled" ],
-						[ 2, "SettingsLevellingToggleEnabledBlink" ]
-					]
-				}
-			},
-			{
 				"id" : "sr_lvl_difference",
 				"name" : "SettingsLevellingDifference",
 				"type" : "small_text",

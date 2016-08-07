@@ -149,7 +149,6 @@ Retreives when needed to apply on components
 				pan_bg_position		: "top center",
 				pan_opacity 		: 100,
 
-				sr_lvl_toggle       : 1,
 				sr_lvl_difference	: 3
 			};
 		},
