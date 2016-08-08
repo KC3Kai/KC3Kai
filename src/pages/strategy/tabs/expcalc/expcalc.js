@@ -49,6 +49,27 @@
 			KC3ShipManager.load();
 		},
 
+		computeNextLevel: function(masterId, currentLevel) {
+			function setAdd(arr,x) {
+				if (arr.indexOf(x) === -1)
+					arr.push(x);
+			}
+			// figure out a list of possible goal levels in ascending order.
+			// a goal level might be remodel level or 99 (can be married) / 155 (full exp)
+			var possibleNextLevels = RemodelDb.nextLevels( masterId );
+			setAdd(possibleNextLevels, 99);
+			setAdd(possibleNextLevels, 155);
+
+			if (masterId == 171)
+				console.log( possibleNextLevels );
+			while (possibleNextLevels.length > 0 && possibleNextLevels[0] <= currentLevel)
+				possibleNextLevels.shift();
+			if (masterId == 171)
+				console.log( possibleNextLevels );
+
+			return possibleNextLevels.length > 0 ? possibleNextLevels[0] : false;
+		},
+
 		/* EXECUTE
 		Places data onto the interface
 		---------------------------------*/
@@ -422,27 +443,26 @@
 					goalBox.addClass("ship_canBeRemodelled");
 				}
 
-				// If next remodel lvl is greater then current, add to recommendations
-				if(ThisShip.master().api_aftershipid > 0 &&
-					ThisShip.level < ThisShip.master().api_afterlv){
-					$(".ship_target .ship_value", goalBox).text( ThisShip.master().api_afterlv );
-					goalBox.appendTo(".section_expcalc .box_recommend");
+				// If next remodel lvl is greater than current, add to recommendations
+				var goalLevel = self.computeNextLevel( ThisShip.masterId, ThisShip.level );
+				if (goalLevel === false)
+					return true;
 
-					//If is close to remodel
-					if(ThisShip.master().api_afterlv - ThisShip.level > 0 &&
-						ThisShip.master().api_afterlv - ThisShip.level <= ConfigManager.sr_lvl_difference){
+				console.log( ThisShip.name(), goalLevel );
+
+				$(".ship_target .ship_value", goalBox).text( goalLevel );
+				if (goalLevel < 99) {
+					goalBox.appendTo(".section_expcalc .box_recommend");
+					// If is close to remodel
+					if(goalLevel - ThisShip.level <= ConfigManager.sr_lvl_difference) { 
 						goalBox.addClass("ship_closeToRemodel");
 					}
 					return true;
+				} else {
+					goalBox.appendTo(".section_expcalc .box_other");
+					return true;
 				}
 
-				// If this is the last remodel stage, add to others
-				if(ThisShip.level<99){
-					$(".ship_target .ship_value", goalBox).text( 99 );
-				}else{
-					$(".ship_target .ship_value", goalBox).text( 155 );
-				}
-				goalBox.appendTo(".section_expcalc .box_other");
 			});
 
 			//this.save();
