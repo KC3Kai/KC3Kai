@@ -484,9 +484,14 @@
 
 			// This has just been added, no grinding data yet, initialize defaults
 			if(grindData.length === 0){
+				var goalLevel = self.computeNextLevel( ThisShip.masterId, ThisShip.level );
+				// if we ever want to run "recompute" on any ship, that particular ship
+				// should have already been added in this tab (those locked but have not yet reached Lv 155) 
+				// in the first place.
+				console.assert( goalLevel !== false, "targeting ship that has no goal?" );
 				// As much as possible use arrays nowadays to shrink JSON size, we might run out of the 5MB localStorage allocated for our app
 				grindData = [
-					/*0*/ (MasterShip.api_aftershipid > 0 && ThisShip.level<MasterShip.api_afterlv)?MasterShip.api_afterlv:(ThisShip.level<99)?99:155, // target level
+					/*0*/ goalLevel, // target level
 					/*1*/ 1, // world
 					/*2*/ 1, // map
 					/*3*/ 1, // node
