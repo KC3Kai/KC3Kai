@@ -391,11 +391,17 @@
 				$(".ship_rem", editingBox).hide();
 				editingBox.addClass("inactive");
 				var ThisShip = KC3ShipManager.get(editingBox.data("id"));
-				if(ThisShip.master().api_aftershipid > 0 && ThisShip.level<ThisShip.master().api_afterlv){
+				var nextLevel = self.computeNextLevel( ThisShip.masterId, ThisShip.level );
+
+				// the only can when nextLevel === false is when your ship have reached Lv.155
+				if (nextLevel === false)
+					return;
+
+				if (nextLevel < 99) {
 					$(".section_expcalc .box_recommend .clear").remove();
 					editingBox.appendTo(".section_expcalc .box_recommend");
 					$("<div />").addClass("clear").appendTo(".section_expcalc .box_recommend");
-				}else{
+				} else {
 					$(".section_expcalc .box_other .clear").remove();
 					editingBox.appendTo(".section_expcalc .box_other");
 					$("<div />").addClass("clear").appendTo(".section_expcalc .box_other");
@@ -424,7 +430,7 @@
 				$(".ship_type", goalBox).text( ThisShip.stype() );
 				$(".ship_lv .ship_value", goalBox).text( ThisShip.level );
 
-				// If ship already on the current goals
+				// If ship is already one of the current goals
 				if(typeof self.goals["s"+ThisShip.rosterId] != "undefined"){
 					$(".ship_edit", goalBox).show();
 					$(".ship_rem", goalBox).show();
@@ -437,9 +443,11 @@
 				goalBox.addClass("inactive");
 
 				// If can be remodelled (without convert remodels)
-				if(ThisShip.master().api_aftershipid > 0 &&
-					ThisShip.level >= ThisShip.master().api_afterlv &&
-					!RemodelDb.isFinalForm(ThisShip.masterId)){
+				var nextLevels = RemodelDb.nextLevels( ThisShip.masterId );
+				if (nextLevels !== false &&
+					nextLevels > 0 &&
+					!RemodelDb.isFinalForm(ThisShip.masterId) &&
+					nextLevels[0] < ThisShip.level) {
 					goalBox.addClass("ship_canBeRemodelled");
 				}
 
@@ -486,10 +494,11 @@
 			if(grindData.length === 0){
 				var goalLevel = self.computeNextLevel( ThisShip.masterId, ThisShip.level );
 				// if we ever want to run "recompute" on any ship, that particular ship
-				// should have already been added in this tab (those locked but have not yet reached Lv 155) 
-				// in the first place.
+				// should have already been added in this tab 
+				// (those locked but have not yet reached Lv 155) in the first place.
 				console.assert( goalLevel !== false, "targeting ship that has no goal?" );
-				// As much as possible use arrays nowadays to shrink JSON size, we might run out of the 5MB localStorage allocated for our app
+				// As much as possible use arrays nowadays to shrink JSON size,
+				// we might run out of the 5MB localStorage allocated for our app
 				grindData = [
 					/*0*/ goalLevel, // target level
 					/*1*/ 1, // world
