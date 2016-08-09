@@ -60,12 +60,8 @@
 			setAdd(possibleNextLevels, 99);
 			setAdd(possibleNextLevels, 155);
 
-			if (masterId == 171)
-				console.log( possibleNextLevels );
 			while (possibleNextLevels.length > 0 && possibleNextLevels[0] <= currentLevel)
 				possibleNextLevels.shift();
-			if (masterId == 171)
-				console.log( possibleNextLevels );
 
 			return possibleNextLevels.length > 0 ? possibleNextLevels[0] : false;
 		},
@@ -382,6 +378,32 @@
 			// Remove from Goals Button
 			$(".section_expcalc").on("click", ".ship_rem", function(){
 				editingBox = $(this).parent();
+
+				var ShipRosterId = editingBox.data("id");
+				var ThisShip = KC3ShipManager.get(ShipRosterId);
+				var nextLevel = self.computeNextLevel( ThisShip.masterId, ThisShip.level );
+
+				var curGoal = self.goals["s"+ ShipRosterId];
+				// when the ship can still be remodelled further
+				// and the current goal set is fewer than that,
+				// we can ask user whether he wants to update the goal level
+				// instead of removing this goal.
+				if (nextLevel < 99
+					&& typeof curGoal !== "undefined"
+					&& curGoal[0] < nextLevel) {
+
+					var resp = confirm(
+						"Would you like to change your leveling goal for " +
+						ThisShip.name() + " (" + ShipRosterId + ") to level " +
+					    nextLevel + "?");
+					if (resp) {
+						self.goals["s"+ ShipRosterId][0] = nextLevel;
+						self.save();
+						self.recompute( ThisShip.rosterId );
+						return true;
+					}
+				}
+				
 				delete self.goals["s"+ editingBox.data("id") ];
 				self.save();
 				//window.location.reload();
@@ -390,8 +412,6 @@
 				$(".ship_edit", editingBox).hide();
 				$(".ship_rem", editingBox).hide();
 				editingBox.addClass("inactive");
-				var ThisShip = KC3ShipManager.get(editingBox.data("id"));
-				var nextLevel = self.computeNextLevel( ThisShip.masterId, ThisShip.level );
 
 				// the only can when nextLevel === false is when your ship have reached Lv.155
 				if (nextLevel === false)
@@ -455,8 +475,6 @@
 				var goalLevel = self.computeNextLevel( ThisShip.masterId, ThisShip.level );
 				if (goalLevel === false)
 					return true;
-
-				console.log( ThisShip.name(), goalLevel );
 
 				$(".ship_target .ship_value", goalBox).text( goalLevel );
 				if (goalLevel < 99) {
