@@ -177,11 +177,11 @@
 }
 
 .tab_expcalc .ship_goal.ship_closeToRemodel {
-	background-color:#2be;
+	background-color:#71d3f4;
 }
 
 .tab_expcalc .ship_goal.ship_canBeRemodelled {
-	background-color:#2be;
+	background-color:#60ebe2;
 }
 
 /* INACTIVE OVERRIDES
