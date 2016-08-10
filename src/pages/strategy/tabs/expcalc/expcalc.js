@@ -166,6 +166,7 @@
 				$(".box_control_line.line_close_to_remodel").show();
 				$(".section_body .ship_goal").each( function(i,x) {
 					var jqObj = $(x);
+					clearHighlight(jqObj);
 					var rosterId = jqObj.data("id");
 					var ThisShip = KC3ShipManager.get( rosterId );
 					if (ThisShip.masterId === 0)
@@ -177,8 +178,7 @@
 					if (goalLevel === false || goalLevel >= 99)
 						return;
 					if (goalLevel - ThisShip.level <= ConfigManager.sr_lvl_difference) {
-						clearHighlight(jqObj)
-							.addClass("highlight_closeToRemodel");
+						jqObj.addClass("highlight_closeToRemodel");
 					}
 				});
 			});
@@ -186,6 +186,7 @@
 				$(".box_control_line.line_close_to_remodel").hide();
 				$(".section_body .ship_goal").each( function(i,x) {
 					var jqObj = $(x);
+					clearHighlight(jqObj);
 					var rosterId = jqObj.data("id");
 					var ThisShip = KC3ShipManager.get( rosterId );
 					if (ThisShip.masterId === 0)
@@ -200,8 +201,7 @@
 						nextLevels.length > 0 &&
 						!RemodelDb.isFinalForm(ThisShip.masterId) &&
 						nextLevels[0] < ThisShip.level) {
-						clearHighlight(jqObj)
-							.addClass("highlight_canBeRemodelled");
+						jqObj.addClass("highlight_canBeRemodelled");
 					}
 				});
 			});
@@ -442,11 +442,14 @@
 				// traverse all ships, toggle "highlight" flag
 				$(".section_body .ship_goal").each( function(i,x) {
 					var jqObj = $(x);
+					jqObj.removeClass(
+						"highlight_stype " +
+						"highlight_closeToRemodel " +
+						"highlight_canBeRemodelled ");
 					var rosterId = jqObj.data("id");
 					var ThisShip = KC3ShipManager.get( rosterId );
 					var MasterShip = ThisShip.master();
 					var stypeId = MasterShip.api_stype;
-
 					if (stypeIds.indexOf(stypeId) != -1) {
 						jqObj.addClass("highlight_stype");
 					} else {
