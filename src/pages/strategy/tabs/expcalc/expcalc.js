@@ -65,12 +65,79 @@
 
 			return possibleNextLevels.length > 0 ? possibleNextLevels[0] : false;
 		},
+		
+		getSettings: function() {
+			var defSettings = {
+				showGoalTemplates: true,
+				showRecommended: true,
+				showOtherShips: true,
+				closeToRemodelLevelDiff: 5
+			};
+			var settings;
+			if (typeof localStorage.srExpcalc === "undefined") {
+				localStorage.srExpcalc = JSON.stringify( defSettings );
+				settings = defSettings;
+			} else {
+				settings = JSON.parse( localStorage.srExpcalc );
+			}
+			return settings;
+		},
 
+		configSectionToggles: function() {
+			var self = this;
+			var settings = self.getSettings();
+			var jqGoalTemplates = $(".gt_content");
+			var jqRecommended = $(".recom_content");
+			var jqOtherShips = $(".other_content");
+
+			var jqToggleGT = $(".toggle_goal_templates");
+			var jqToggleRecom = $(".toggle_recommended");
+			var jqToggleOther = $(".toggle_other_ships");
+
+			jqGoalTemplates.toggle( settings.showGoalTemplates );
+			jqRecommended.toggle( settings.showRecommended );
+			jqOtherShips.toggle( settings.showOtherShips );
+
+			jqToggleGT
+				.toggleClass("active", settings.showGoalTemplates)
+				.on("click", function() {
+					var settings = self.getSettings();
+					settings.showGoalTemplates = !settings.showGoalTemplates;
+					localStorage.srExpcalc = JSON.stringify(settings);
+					jqGoalTemplates.toggle( settings.showGoalTemplates );
+					jqToggleGT
+						.toggleClass("active", settings.showGoalTemplates);
+				});
+			jqToggleRecom
+				.toggleClass("active", settings.showRecommended)
+				.on("click", function() {
+					var settings = self.getSettings();
+					settings.showRecommended = !settings.showRecommended;
+					localStorage.srExpcalc = JSON.stringify(settings);
+					jqRecommended.toggle( settings.showRecommended );
+					jqToggleRecom
+						.toggleClass("active", settings.showRecommended);
+				});
+
+			jqToggleOther
+				.toggleClass("active", settings.showOtherShips)
+				.on("click", function() {
+					var settings = self.getSettings();
+					settings.showOtherShips = !settings.showOtherShips;
+					localStorage.srExpcalc = JSON.stringify(settings);
+					jqOtherShips.toggle( settings.showOtherShips );
+					jqToggleOther
+						.toggleClass("active", settings.showOtherShips);
+				});
+		},
+		
 		/* EXECUTE
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
 			var self = this;
+			self.configSectionToggles();
+		
 			// Add map list into the factory drop-downs
 			$.each(this.maplist, function(MapName, MapExp){
 				$(".tab_expcalc .factory .ship_map select").append("<option>"+MapName+"</option>");
