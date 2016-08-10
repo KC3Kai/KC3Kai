@@ -107,6 +107,14 @@
 		   ---------------------------------*/
 		execute :function(){
 			var self = this;
+
+			$("input#hist_query").on("keydown", function(e) {
+				if (e.which === 13) {
+					$("button#control_view").click();
+					e.preventDefault();
+				}
+			});
+
 			this.setupUIByViewType( "current" );
 			$('input[type=radio][name=view_type]').change(function() {
 				self.setupUIByViewType( this.value );
