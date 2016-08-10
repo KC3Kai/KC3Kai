@@ -102,6 +102,8 @@
 			var jqToggleRecom = $(".toggle_recommended");
 			var jqToggleOther = $(".toggle_other_ships");
 
+			var jqCloseToRemLvlDiff = $("input#inp_lvl_diff");
+
 			function updateUI() {
 				var settings = self.getSettings();
 				jqGoalTemplates.toggle( settings.showGoalTemplates );
@@ -114,6 +116,8 @@
 					.toggleClass("active", settings.showRecommended);
 				jqToggleOther
 					.toggleClass("active", settings.showOtherShips);
+
+				jqCloseToRemLvlDiff.val( settings.closeToRemodelLevelDiff );
 			}
 
 			updateUI();
@@ -138,11 +142,40 @@
 				self.modifySettings( negateField("showOtherShips") );
 				updateUI();
 			});
+			jqCloseToRemLvlDiff
+				.on("blur", function() {
+					var jqObj = $(this);
+					var settings = self.getSettings();
+					var newInp = parseInt(jqObj.val(), 10);
+					if (!newInp) {
+						// restore option when the input isn't valid
+						jqObj.val( settings.closeToRemodelLevelDiff );
+						return;
+					} else {
+						self.modifySettings( function(settings) {
+							settings.closeToRemodelLevelDiff = newInp;
+							return settings;
+						});
+						updateUI();
+						$(".btn_hl_close_to_remodel").click();
+					}
+				})
+				.on("keydown", function(e) {
+					// disable tab otherwise UI might be ruined
+					if (e.which === 9)
+						e.preventDefault();
+
+					// give up focus when hitting enter
+					// so that "blur" event can be triggered.
+					if (e.which === 13) {
+						this.blur();
+						e.preventDefault();
+					}
+				});
 		},
 
 		configHighlightToggles: function() {
 			var self = this;
-
 			// show Close To Remodel options should be shown only when
 			// this button is clicked. If user clears all highlights
 			// or want to show other kinds of highlights, we hide the option again.
@@ -164,6 +197,7 @@
 			});
 			$(".btn_hl_close_to_remodel").on("click", function() {
 				$(".box_control_line.line_close_to_remodel").show();
+				var settings = self.getSettings();
 				$(".section_body .ship_goal").each( function(i,x) {
 					var jqObj = $(x);
 					clearHighlight(jqObj);
@@ -177,7 +211,7 @@
 
 					if (goalLevel === false || goalLevel >= 99)
 						return;
-					if (goalLevel - ThisShip.level <= ConfigManager.sr_lvl_difference) {
+					if (goalLevel - ThisShip.level <= settings.closeToRemodelLevelDiff ) {
 						jqObj.addClass("highlight_closeToRemodel");
 					}
 				});
@@ -192,10 +226,6 @@
 					if (ThisShip.masterId === 0)
 						return;
 					var nextLevels = RemodelDb.nextLevels( ThisShip.masterId );
-					if (ThisShip.masterId == 184 && ThisShip.level === 100) {
-						
-						console.log("here", nextLevels,!RemodelDb.isFinalForm(ThisShip.masterId) );
-					}
 					// If can be remodelled (without convert remodels)
 					if (nextLevels !== false &&
 						nextLevels.length > 0 &&

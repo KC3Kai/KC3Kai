@@ -24,7 +24,7 @@
 .tab_expcalc .box_control_line dl dt {
 	float: left;
 }
-.tab_expcalc .box_control_line .inp_lvl_diff {
+.tab_expcalc .box_control_line #inp_lvl_diff {
 	width: 40px;
 	height: 20px;
 }
