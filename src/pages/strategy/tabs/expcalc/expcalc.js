@@ -142,6 +142,12 @@
 
 		configHighlightToggles: function() {
 			var self = this;
+
+			// show Close To Remodel options should be shown only when
+			// this button is clicked. If user clears all highlights
+			// or want to show other kinds of highlights, we hide the option again.
+			$(".box_control_line.line_close_to_remodel").hide();
+
 			function clearHighlight( jqObj ) {
 				jqObj.removeClass(
 					"highlight_stype " +
@@ -153,9 +159,11 @@
 				$(".section_body .ship_goal").each( function(i,x) {
 					var jqObj = $(x);
 					clearHighlight(jqObj);
+					$(".box_control_line.line_close_to_remodel").hide();
 				});
 			});
 			$(".btn_hl_close_to_remodel").on("click", function() {
+				$(".box_control_line.line_close_to_remodel").show();
 				$(".section_body .ship_goal").each( function(i,x) {
 					var jqObj = $(x);
 					var rosterId = jqObj.data("id");
@@ -175,6 +183,7 @@
 				});
 			});
 			$(".btn_hl_can_be_remodelled").on("click", function() {
+				$(".box_control_line.line_close_to_remodel").hide();
 				$(".section_body .ship_goal").each( function(i,x) {
 					var jqObj = $(x);
 					var rosterId = jqObj.data("id");
@@ -417,6 +426,7 @@
 			});
 
 			$(".section_expcalc").on("click", ".goal_template .goal_hl_coverage", function() {
+				$(".box_control_line.line_close_to_remodel").hide();
 				var goalBox = $(this).parent().parent();
 				var stypes = self.goalTemplates[goalBox.index()].stype;
 				// if there's an "Any" filter, don't proceed because
