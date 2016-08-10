@@ -140,12 +140,25 @@
 			});
 		},
 
+		configHighlightToggles: function() {
+			$(".btn_hl_clear").on("click", function() {
+				$(".section_body .ship_goal").each( function(i,x) {
+					var jqObj = $(x);
+					jqObj.removeClass(
+						"highlight_stype " +
+						"highlight_closeToRemodel " +
+						"highlight_canBeRemodelled ");
+				});
+			});
+		},
+
 		/* EXECUTE
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
 			var self = this;
 			self.configSectionToggles();
+			self.configHighlightToggles();
 
 			// Add map list into the factory drop-downs
 			$.each(this.maplist, function(MapName, MapExp){
@@ -440,13 +453,6 @@
 				goalTemplateShow(goalBox);
 				goalBox.toggleClass("disabled", !dat.enable);
 				goalBox.appendTo(".section_expcalc .box_goal_templates");
-			});
-
-			$(".section_expcalc a.clear_highlight").on("click", function () {
-				$(".section_body .ship_goal").each( function(i,x) {
-					var jqObj = $(x);
-					jqObj.removeClass("highlight");
-				});
 			});
 
 			// TODO: prevent double click text selection?
