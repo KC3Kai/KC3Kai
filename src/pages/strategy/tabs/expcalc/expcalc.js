@@ -141,13 +141,59 @@
 		},
 
 		configHighlightToggles: function() {
+			var self = this;
+			function clearHighlight( jqObj ) {
+				jqObj.removeClass(
+					"highlight_stype " +
+					"highlight_closeToRemodel " +
+					"highlight_canBeRemodelled ");
+				return jqObj;
+			}
 			$(".btn_hl_clear").on("click", function() {
 				$(".section_body .ship_goal").each( function(i,x) {
 					var jqObj = $(x);
-					jqObj.removeClass(
-						"highlight_stype " +
-						"highlight_closeToRemodel " +
-						"highlight_canBeRemodelled ");
+					clearHighlight(jqObj);
+				});
+			});
+			$(".btn_hl_close_to_remodel").on("click", function() {
+				$(".section_body .ship_goal").each( function(i,x) {
+					var jqObj = $(x);
+					var rosterId = jqObj.data("id");
+					var ThisShip = KC3ShipManager.get( rosterId );
+					if (ThisShip.masterId === 0)
+						return;
+					
+					var goalLevel = 
+						self.computeNextLevel( ThisShip.masterId, ThisShip.level );
+
+					if (goalLevel === false || goalLevel >= 99)
+						return;
+					if (goalLevel - ThisShip.level <= ConfigManager.sr_lvl_difference) {
+						clearHighlight(jqObj)
+							.addClass("highlight_closeToRemodel");
+					}
+				});
+			});
+			$(".btn_hl_can_be_remodelled").on("click", function() {
+				$(".section_body .ship_goal").each( function(i,x) {
+					var jqObj = $(x);
+					var rosterId = jqObj.data("id");
+					var ThisShip = KC3ShipManager.get( rosterId );
+					if (ThisShip.masterId === 0)
+						return;
+					var nextLevels = RemodelDb.nextLevels( ThisShip.masterId );
+					if (ThisShip.masterId == 184 && ThisShip.level === 100) {
+						
+						console.log("here", nextLevels,!RemodelDb.isFinalForm(ThisShip.masterId) );
+					}
+					// If can be remodelled (without convert remodels)
+					if (nextLevels !== false &&
+						nextLevels.length > 0 &&
+						!RemodelDb.isFinalForm(ThisShip.masterId) &&
+						nextLevels[0] < ThisShip.level) {
+						clearHighlight(jqObj)
+							.addClass("highlight_canBeRemodelled");
+					}
 				});
 			});
 		},
@@ -544,15 +590,6 @@
 
 				goalBox.addClass("inactive");
 
-				// If can be remodelled (without convert remodels)
-				var nextLevels = RemodelDb.nextLevels( ThisShip.masterId );
-				if (nextLevels !== false &&
-					nextLevels > 0 &&
-					!RemodelDb.isFinalForm(ThisShip.masterId) &&
-					nextLevels[0] < ThisShip.level) {
-					goalBox.addClass("highlight_canBeRemodelled");
-				}
-
 				// If next remodel lvl is greater than current, add to recommendations
 				var goalLevel = self.computeNextLevel( ThisShip.masterId, ThisShip.level );
 				if (goalLevel === false)
@@ -561,10 +598,6 @@
 				$(".ship_target .ship_value", goalBox).text( goalLevel );
 				if (goalLevel < 99) {
 					goalBox.appendTo(".section_expcalc .box_recommend");
-					// If is close to remodel
-					if(goalLevel - ThisShip.level <= ConfigManager.sr_lvl_difference) {
-						goalBox.addClass("highlight_closeToRemodel");
-					}
 					return true;
 				} else {
 					goalBox.appendTo(".section_expcalc .box_other");
