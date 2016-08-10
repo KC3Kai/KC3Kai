@@ -379,9 +379,9 @@
 					var stypeId = MasterShip.api_stype;
 
 					if (stypeIds.indexOf(stypeId) != -1) {
-						jqObj.addClass("highlight");
+						jqObj.addClass("highlight_stype");
 					} else {
-						jqObj.removeClass("highlight");
+						jqObj.removeClass("highlight_stype");
 					}
 				});
 			});
@@ -544,7 +544,7 @@
 					nextLevels > 0 &&
 					!RemodelDb.isFinalForm(ThisShip.masterId) &&
 					nextLevels[0] < ThisShip.level) {
-					goalBox.addClass("ship_canBeRemodelled");
+					goalBox.addClass("highlight_canBeRemodelled");
 				}
 
 				// If next remodel lvl is greater than current, add to recommendations
@@ -557,7 +557,7 @@
 					goalBox.appendTo(".section_expcalc .box_recommend");
 					// If is close to remodel
 					if(goalLevel - ThisShip.level <= ConfigManager.sr_lvl_difference) {
-						goalBox.addClass("ship_closeToRemodel");
+						goalBox.addClass("highlight_closeToRemodel");
 					}
 					return true;
 				} else {

@@ -65,8 +65,15 @@
 	line-height:34px;
 	border:1px solid #ace;
 }
-.tab_expcalc .ship_goal.highlight {
-	background:#fdd;
+.tab_expcalc .ship_goal.highlight_stype {
+	background-color:#fdd;
+}
+.tab_expcalc .ship_goal.highlight_closeToRemodel {
+	background-color:#71d3f4;
+}
+
+.tab_expcalc .ship_goal.highlight_canBeRemodelled {
+	background-color:#60ebe2;
 }
 .tab_expcalc .ship_goal .ship_col {
 	height:34px;
@@ -214,13 +221,6 @@
 	margin-right:3px;
 }
 
-.tab_expcalc .ship_goal.ship_closeToRemodel {
-	background-color:#71d3f4;
-}
-
-.tab_expcalc .ship_goal.ship_canBeRemodelled {
-	background-color:#60ebe2;
-}
 
 /* INACTIVE OVERRIDES
 --------------------------------*/
