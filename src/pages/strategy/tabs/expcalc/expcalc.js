@@ -65,7 +65,7 @@
 
 			return possibleNextLevels.length > 0 ? possibleNextLevels[0] : false;
 		},
-		
+
 		getSettings: function() {
 			var defSettings = {
 				showGoalTemplates: true,
@@ -130,14 +130,14 @@
 						.toggleClass("active", settings.showOtherShips);
 				});
 		},
-		
+
 		/* EXECUTE
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
 			var self = this;
 			self.configSectionToggles();
-		
+
 			// Add map list into the factory drop-downs
 			$.each(this.maplist, function(MapName, MapExp){
 				$(".tab_expcalc .factory .ship_map select").append("<option>"+MapName+"</option>");
@@ -392,9 +392,9 @@
 					if (GoalTemplateManager.checkShipType(stypeId, template))
 						targetShips.push( {
 							rosterId: rosterId,
-							shipDesc: 
-                              ThisShip.name() + " Lv." + ThisShip.level +
-                                " (" + rosterId + ")"
+							shipDesc:
+							  ThisShip.name() + " Lv." + ThisShip.level +
+								" (" + rosterId + ")"
 						}  );
 				});
 
@@ -462,7 +462,7 @@
 					var resp = confirm(
 						"Would you like to change your leveling goal for " +
 						ThisShip.name() + " (" + ShipRosterId + ") to level " +
-					    nextLevel + "?");
+						nextLevel + "?");
 					if (resp) {
 						self.goals["s"+ ShipRosterId][0] = nextLevel;
 						self.save();
@@ -470,7 +470,7 @@
 						return true;
 					}
 				}
-				
+
 				delete self.goals["s"+ editingBox.data("id") ];
 				self.save();
 				//window.location.reload();
@@ -547,7 +547,7 @@
 				if (goalLevel < 99) {
 					goalBox.appendTo(".section_expcalc .box_recommend");
 					// If is close to remodel
-					if(goalLevel - ThisShip.level <= ConfigManager.sr_lvl_difference) { 
+					if(goalLevel - ThisShip.level <= ConfigManager.sr_lvl_difference) {
 						goalBox.addClass("ship_closeToRemodel");
 					}
 					return true;
@@ -579,7 +579,7 @@
 			if(grindData.length === 0){
 				var goalLevel = self.computeNextLevel( ThisShip.masterId, ThisShip.level );
 				// if we ever want to run "recompute" on any ship, that particular ship
-				// should have already been added in this tab 
+				// should have already been added in this tab
 				// (those locked but have not yet reached Lv 155) in the first place.
 				console.assert( goalLevel !== false, "targeting ship that has no goal?" );
 				// As much as possible use arrays nowadays to shrink JSON size,
