@@ -533,7 +533,7 @@
 				goalBox.appendTo(".section_expcalc .box_goal_templates");
 			});
 
-			$(".section_expcalc a.new_template").on("click", function () {
+			$(".section_expcalc .new_template a").on("click", function () {
 				var goalBox = $(".tab_expcalc .factory .goal_template").clone();
 				var dat = GoalTemplateManager.newTemplate();
 				self.goalTemplates.push(dat);

@@ -396,3 +396,14 @@
 .tab_expcalc .goal_template .goal_mvp {
 	width:50px;
 }
+
+.tab_expcalc .gt_content.new_template {
+	width: 680px;
+	background: #def;
+	border-radius: 8px;
+	margin: 0px 0px 3px 0px;
+	padding: 2px 4px;
+	line-height: 34px;
+	border: 1px solid #ace;
+	text-align: center;
+}
