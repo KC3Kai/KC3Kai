@@ -83,9 +83,17 @@
 			return settings;
 		},
 
+		// settingModifier( oldSettings ) should return the new settings object.
+		// feel free to change fields in oldSettings in order to make the new one.
+		modifySettings: function(settingModifier) {
+			var newSettings = settingModifier(this.getSettings());
+			localStorage.srExpcalc = JSON.stringify( newSettings );
+			return newSettings;
+		},
+
 		configSectionToggles: function() {
 			var self = this;
-			var settings = self.getSettings();
+
 			var jqGoalTemplates = $(".gt_content");
 			var jqRecommended = $(".recom_content");
 			var jqOtherShips = $(".other_content");
@@ -94,41 +102,44 @@
 			var jqToggleRecom = $(".toggle_recommended");
 			var jqToggleOther = $(".toggle_other_ships");
 
-			jqGoalTemplates.toggle( settings.showGoalTemplates );
-			jqRecommended.toggle( settings.showRecommended );
-			jqOtherShips.toggle( settings.showOtherShips );
+			function updateUI() {
+				var settings = self.getSettings();
+				jqGoalTemplates.toggle( settings.showGoalTemplates );
+				jqRecommended.toggle( settings.showRecommended );
+				jqOtherShips.toggle( settings.showOtherShips );
 
-			jqToggleGT
-				.toggleClass("active", settings.showGoalTemplates)
-				.on("click", function() {
-					var settings = self.getSettings();
+				jqToggleGT
+					.toggleClass("active", settings.showGoalTemplates);
+				jqToggleRecom
+					.toggleClass("active", settings.showRecommended);
+				jqToggleOther
+					.toggleClass("active", settings.showOtherShips);
+			}
+
+			updateUI();
+
+			jqToggleGT.on("click", function() {
+				self.modifySettings( function(settings) {
 					settings.showGoalTemplates = !settings.showGoalTemplates;
-					localStorage.srExpcalc = JSON.stringify(settings);
-					jqGoalTemplates.toggle( settings.showGoalTemplates );
-					jqToggleGT
-						.toggleClass("active", settings.showGoalTemplates);
+					return settings;
 				});
-			jqToggleRecom
-				.toggleClass("active", settings.showRecommended)
-				.on("click", function() {
-					var settings = self.getSettings();
+				updateUI();
+			});
+			jqToggleRecom.on("click", function() {
+				self.modifySettings( function(settings) {
 					settings.showRecommended = !settings.showRecommended;
-					localStorage.srExpcalc = JSON.stringify(settings);
-					jqRecommended.toggle( settings.showRecommended );
-					jqToggleRecom
-						.toggleClass("active", settings.showRecommended);
+					return settings;
 				});
+				updateUI();
+			});
 
-			jqToggleOther
-				.toggleClass("active", settings.showOtherShips)
-				.on("click", function() {
-					var settings = self.getSettings();
+			jqToggleOther.on("click", function() {
+				self.modifySettings( function(settings) {
 					settings.showOtherShips = !settings.showOtherShips;
-					localStorage.srExpcalc = JSON.stringify(settings);
-					jqOtherShips.toggle( settings.showOtherShips );
-					jqToggleOther
-						.toggleClass("active", settings.showOtherShips);
+					return settings;
 				});
+				updateUI();
+			});
 		},
 
 		/* EXECUTE
