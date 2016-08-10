@@ -117,27 +117,25 @@
 			}
 
 			updateUI();
+			function negateField(field) {
+				return function(obj) {
+					// well, make sure not to use old obj afterwards.
+					obj[field] = !obj[field];
+					return obj;
+				};
+			}
 
 			jqToggleGT.on("click", function() {
-				self.modifySettings( function(settings) {
-					settings.showGoalTemplates = !settings.showGoalTemplates;
-					return settings;
-				});
+				self.modifySettings( negateField("showGoalTemplates") );
 				updateUI();
 			});
 			jqToggleRecom.on("click", function() {
-				self.modifySettings( function(settings) {
-					settings.showRecommended = !settings.showRecommended;
-					return settings;
-				});
+				self.modifySettings( negateField("showRecommended") );
 				updateUI();
 			});
 
 			jqToggleOther.on("click", function() {
-				self.modifySettings( function(settings) {
-					settings.showOtherShips = !settings.showOtherShips;
-					return settings;
-				});
+				self.modifySettings( negateField("showOtherShips") );
 				updateUI();
 			});
 		},
