@@ -2,11 +2,7 @@
 	display:none;
 }
 .tab_aircraft .item_types {
-	width:700px;
-	margin:0px 0px 10px 0px;
-	background:#f0f5ff;
-	padding:10px 5px;
-	border-bottom:1px solid #369;
+	margin-bottom:10px;
 }
 
 .tab_aircraft .item_types .item_type {
@@ -14,29 +10,21 @@
 	height:30px;
 	float:left;
 	margin:0px 3px 5px 3px;
-	background:#fff;
-	border-radius:5px;
 }
 .tab_aircraft .item_types .item_type img {
 	width:30px;
 	height:30px;
 }
 .tab_aircraft .item_types .item_type.active {
-	background:#2C3A3B;
+	
 }
 
 .tab_aircraft .item_list {
 	width:680px;
 }
 .tab_aircraft .slotitem {
-	/*width:680px;*/
 	margin:0px 0px 10px 0px;
-	background:#def;
-	border-radius:10px;
-	/*padding:10px;*/
-	
 	position: 	relative;
-	border: 	10px solid transparent;
 	overflow: 	hidden;
 }
 
@@ -51,8 +39,6 @@
 	line-height:18px;
 	margin:6px 5px 3px 0px;
 	float:left;
-	background:#2C3A3B;
-	border-radius:12px;
 	overflow:hidden;
 }
 .tab_aircraft .slotitem .info .icon img {
@@ -101,7 +87,6 @@
 	height:26px;
 	line-height:20px;
 	margin:0px 0px 3px 0px;
-	background:#fff;
 	border-radius:7px;
 	overflow:hidden;
 	padding:3px 5px;
@@ -150,9 +135,6 @@
 	/*background:#fcc;*/
 	font-size:12px;
 }
-.tab_aircraft .slotitem .instance_aaval.activeSquad {
-	color:#00f;
-}
 .tab_aircraft .slotitem .instance_aaval.reserveSquad {
 	color:#aaa;
 }
@@ -168,10 +150,6 @@
 	border:1px solid transparent;
 	font-size:11px;
 	padding:0px;
-}
-.tab_aircraft .slotitem .instance_name input:hover {
-	background:#ffc;
-	border:1px inset #ccc;
 }
 .tab_aircraft .slotitem .holder_pic {
 	width:20px;

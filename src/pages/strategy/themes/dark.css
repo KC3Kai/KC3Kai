@@ -871,3 +871,183 @@ a:hover {
 .tab_crafts .build_item .build_rsc4 {
 	color:#b68f55;
 }
+
+/* Aircraft */
+.tab_aircraft .item_types {
+	
+}
+.tab_aircraft .item_types .item_type {
+	
+}
+.tab_aircraft .item_types .item_type.active {
+	background:#555555;
+}
+.tab_aircraft .slotitem {
+	border-bottom:1px solid #555555;
+	padding:5px 0px 10px 0px;
+}
+.tab_aircraft .slotitem .info .item_stat img {
+	-webkit-filter: invert(100%);
+}
+.tab_aircraft .slotitem .info .icon {
+	
+}
+.tab_aircraft .slotitem .instance {
+	
+}
+.tab_aircraft .slotitem .instance_aaicon img {
+	-webkit-filter: invert(100%);
+}
+.tab_aircraft .slotitem .instance_aaval.activeSquad {
+	color:#ffffff;
+}
+.tab_aircraft .slotitem .instance_name input:hover {
+	background:#555555;
+	border:1px inset #000000;
+	color:#ffffff;
+}
+
+/* Akashi */
+.tab_akashi .weekday {
+	color:#ffffff;
+	background:#555555;
+}
+.tab_akashi .weekday.active {
+	color:#333333;
+	background:#CCCCCC;
+}
+.tab_akashi .equipment {
+	border-bottom:1px solid #777;
+	margin:0px !important;
+}
+.tab_akashi .equipment.disabled {
+	opacity:0.4;
+	background:#621f1f;
+}
+
+/* Fleet */
+.tab_fleet .fleet_box {
+	border-bottom:1px solid #777;
+	padding:0px 0px 15px 0px !important;
+	margin:0px 0px 10px 0px !important;
+}
+.tab_fleet .fleet_name {
+	background:#131313;
+}
+.tab_fleet button {
+	border:1px solid #444444;
+	background:#121212;
+}
+.detail_field {
+	background:#131313;
+}
+.detail_field img {
+	-webkit-filter: invert(100%);
+}
+.detail_field.incomplete {
+	background:#623636;
+}
+.tab_fleet .fleet_ships {
+	height:160px;
+}
+/* SHIP BOX
+--------------------------------*/
+.tab_fleet .fleet_ship {
+	height:160px;
+	margin:5px 2px 0px 0px;
+	background:#131313;
+	border:1px solid #444444;
+	position:relative;
+	overflow:hidden;
+}
+.tab_fleet .fleet_ship .ship_type {
+	width:110px;
+	margin:0px;
+	color:#fff;
+	z-index:1;
+	text-shadow:2px 2px 5px #000,
+	-2px -2px 5px #000,
+	2px 2px 5px #000;
+}
+.tab_fleet .fleet_ship .ship_pic {
+	width:108px;
+	height:80px;
+	-webkit-mask-image: -webkit-linear-gradient(top, 
+		rgba(34,34,34,0) 0%,
+		rgba(34,34,34,1) 30%,
+		rgba(34,34,34,0) 100%
+	);
+	position:absolute;
+	top:0px;
+	left:0px;
+}
+.tab_fleet .fleet_ship .ship_pic img {
+	width:150px;
+	height:150px;
+	margin:-40px 0px 0px -21px
+}
+
+.tab_fleet .fleet_ship .ship_lv {
+	width:108px;
+	height:20px;
+	z-index:1;
+	position:relative;
+	padding:0px 29px;
+	margin:20px 0px 0px 0px;
+}
+.tab_fleet .fleet_ship .ship_lv_lbl {
+	width:20px;
+	height:20px;
+	line-height:20px;
+	font-size:12px;
+	color:#cccccc;
+	text-shadow:1px 1px 3px #000,
+	-1px -1px 3px #000,
+	1px 1px 3px #000;
+}
+.tab_fleet .fleet_ship .ship_lv_val {
+	height:20px;
+	line-height:20px;
+	color:#fff;
+	text-shadow:2px 2px 5px #000,
+	-2px -2px 5px #000,
+	2px 2px 5px #000;
+}
+.tab_fleet .fleet_ship .ship_name {
+	width:110px;
+	height:20px;
+	line-height:20px;
+	margin:0px 0px 2px 0px;
+	text-align:center;
+	font-size:12px;
+	font-weight:bold;
+	color:#fff;
+}
+.tab_fleet .fleet_ship .ship_gear {
+	width:110px;
+	height:17px;
+	line-height:17px;
+	margin:0px 0px 1px 0px;
+	/*background:#ccf;*/
+	font-size:12px;
+}
+.tab_fleet .fleet_ship .gear_icon {
+	width:17px;
+	height:17px;
+	margin:0px 3px 0px 0px;
+	/*background:#fcc;*/
+	float:left;
+}
+.tab_fleet .fleet_ship .gear_icon img {
+	width:17px;
+	height:17px;
+}
+.tab_fleet .fleet_ship .gear_name {
+	width:85px;
+	height:17px;
+	/*background:#cfc;*/
+	float:left;
+	font-size:10px;
+	white-space: nowrap;
+	overflow:hidden;
+}
