@@ -147,9 +147,7 @@ Retreives when needed to apply on components
 				pan_bg_image		: "",
 				pan_bg_size			: "cover",
 				pan_bg_position		: "top center",
-				pan_opacity 		: 100,
-
-				sr_lvl_difference	: 3
+				pan_opacity 		: 100
 			};
 		},
         

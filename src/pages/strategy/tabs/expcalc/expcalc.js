@@ -49,11 +49,202 @@
 			KC3ShipManager.load();
 		},
 
+		computeNextLevel: function(masterId, currentLevel) {
+			function setAdd(arr,x) {
+				if (arr.indexOf(x) === -1)
+					arr.push(x);
+			}
+			// figure out a list of possible goal levels in ascending order.
+			// a goal level might be remodel level or 99 (can be married) / 155 (full exp)
+			var possibleNextLevels = RemodelDb.nextLevels( masterId );
+			setAdd(possibleNextLevels, 99);
+			setAdd(possibleNextLevels, 155);
+
+			while (possibleNextLevels.length > 0 && possibleNextLevels[0] <= currentLevel)
+				possibleNextLevels.shift();
+
+			return possibleNextLevels.length > 0 ? possibleNextLevels[0] : false;
+		},
+
+		getSettings: function() {
+			var defSettings = {
+				showGoalTemplates: true,
+				showRecommended: true,
+				showOtherShips: true,
+				closeToRemodelLevelDiff: 5
+			};
+			var settings;
+			if (typeof localStorage.srExpcalc === "undefined") {
+				localStorage.srExpcalc = JSON.stringify( defSettings );
+				settings = defSettings;
+			} else {
+				settings = JSON.parse( localStorage.srExpcalc );
+			}
+			return settings;
+		},
+
+		// settingModifier( oldSettings ) should return the new settings object.
+		// feel free to change fields in oldSettings in order to make the new one.
+		modifySettings: function(settingModifier) {
+			var newSettings = settingModifier(this.getSettings());
+			localStorage.srExpcalc = JSON.stringify( newSettings );
+			return newSettings;
+		},
+
+		configSectionToggles: function() {
+			var self = this;
+
+			var jqGoalTemplates = $(".gt_content");
+			var jqRecommended = $(".recom_content");
+			var jqOtherShips = $(".other_content");
+
+			var jqToggleGT = $(".toggle_goal_templates");
+			var jqToggleRecom = $(".toggle_recommended");
+			var jqToggleOther = $(".toggle_other_ships");
+
+			var jqCloseToRemLvlDiff = $("input#inp_lvl_diff");
+
+			function updateUI() {
+				var settings = self.getSettings();
+				jqGoalTemplates.toggle( settings.showGoalTemplates );
+				jqRecommended.toggle( settings.showRecommended );
+				jqOtherShips.toggle( settings.showOtherShips );
+
+				jqToggleGT
+					.toggleClass("active", settings.showGoalTemplates);
+				jqToggleRecom
+					.toggleClass("active", settings.showRecommended);
+				jqToggleOther
+					.toggleClass("active", settings.showOtherShips);
+
+				jqCloseToRemLvlDiff.val( settings.closeToRemodelLevelDiff );
+			}
+
+			updateUI();
+			function negateField(field) {
+				return function(obj) {
+					// well, make sure not to use old obj afterwards.
+					obj[field] = !obj[field];
+					return obj;
+				};
+			}
+
+			jqToggleGT.on("click", function() {
+				self.modifySettings( negateField("showGoalTemplates") );
+				updateUI();
+			});
+			jqToggleRecom.on("click", function() {
+				self.modifySettings( negateField("showRecommended") );
+				updateUI();
+			});
+
+			jqToggleOther.on("click", function() {
+				self.modifySettings( negateField("showOtherShips") );
+				updateUI();
+			});
+			jqCloseToRemLvlDiff
+				.on("blur", function() {
+					var jqObj = $(this);
+					var settings = self.getSettings();
+					var newInp = parseInt(jqObj.val(), 10);
+					if (!newInp) {
+						// restore option when the input isn't valid
+						jqObj.val( settings.closeToRemodelLevelDiff );
+						return;
+					} else {
+						self.modifySettings( function(settings) {
+							settings.closeToRemodelLevelDiff = newInp;
+							return settings;
+						});
+						updateUI();
+						$(".btn_hl_close_to_remodel").click();
+					}
+				})
+				.on("keydown", function(e) {
+					// disable tab otherwise UI might be ruined
+					if (e.which === 9)
+						e.preventDefault();
+
+					// give up focus when hitting enter
+					// so that "blur" event can be triggered.
+					if (e.which === 13) {
+						this.blur();
+						e.preventDefault();
+					}
+				});
+		},
+
+		configHighlightToggles: function() {
+			var self = this;
+			// show Close To Remodel options should be shown only when
+			// this button is clicked. If user clears all highlights
+			// or want to show other kinds of highlights, we hide the option again.
+			$(".box_control_line.line_close_to_remodel").hide();
+
+			function clearHighlight( jqObj ) {
+				jqObj.removeClass(
+					"highlight_stype " +
+					"highlight_closeToRemodel " +
+					"highlight_canBeRemodelled ");
+				return jqObj;
+			}
+			$(".btn_hl_clear").on("click", function() {
+				$(".section_body .ship_goal").each( function(i,x) {
+					var jqObj = $(x);
+					clearHighlight(jqObj);
+					$(".box_control_line.line_close_to_remodel").hide();
+				});
+			});
+			$(".btn_hl_close_to_remodel").on("click", function() {
+				$(".box_control_line.line_close_to_remodel").show();
+				var settings = self.getSettings();
+				$(".section_body .ship_goal").each( function(i,x) {
+					var jqObj = $(x);
+					clearHighlight(jqObj);
+					var rosterId = jqObj.data("id");
+					var ThisShip = KC3ShipManager.get( rosterId );
+					if (ThisShip.masterId === 0)
+						return;
+					
+					var goalLevel = 
+						self.computeNextLevel( ThisShip.masterId, ThisShip.level );
+
+					if (goalLevel === false || goalLevel >= 99)
+						return;
+					if (goalLevel - ThisShip.level <= settings.closeToRemodelLevelDiff ) {
+						jqObj.addClass("highlight_closeToRemodel");
+					}
+				});
+			});
+			$(".btn_hl_can_be_remodelled").on("click", function() {
+				$(".box_control_line.line_close_to_remodel").hide();
+				$(".section_body .ship_goal").each( function(i,x) {
+					var jqObj = $(x);
+					clearHighlight(jqObj);
+					var rosterId = jqObj.data("id");
+					var ThisShip = KC3ShipManager.get( rosterId );
+					if (ThisShip.masterId === 0)
+						return;
+					var nextLevels = RemodelDb.nextLevels( ThisShip.masterId );
+					// If can be remodelled (without convert remodels)
+					if (nextLevels !== false &&
+						nextLevels.length > 0 &&
+						!RemodelDb.isFinalForm(ThisShip.masterId) &&
+						nextLevels[0] < ThisShip.level) {
+						jqObj.addClass("highlight_canBeRemodelled");
+					}
+				});
+			});
+		},
+
 		/* EXECUTE
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
 			var self = this;
+			self.configSectionToggles();
+			self.configHighlightToggles();
+
 			// Add map list into the factory drop-downs
 			$.each(this.maplist, function(MapName, MapExp){
 				$(".tab_expcalc .factory .ship_map select").append("<option>"+MapName+"</option>");
@@ -265,6 +456,7 @@
 			});
 
 			$(".section_expcalc").on("click", ".goal_template .goal_hl_coverage", function() {
+				$(".box_control_line.line_close_to_remodel").hide();
 				var goalBox = $(this).parent().parent();
 				var stypes = self.goalTemplates[goalBox.index()].stype;
 				// if there's an "Any" filter, don't proceed because
@@ -280,15 +472,18 @@
 				// traverse all ships, toggle "highlight" flag
 				$(".section_body .ship_goal").each( function(i,x) {
 					var jqObj = $(x);
+					jqObj.removeClass(
+						"highlight_stype " +
+						"highlight_closeToRemodel " +
+						"highlight_canBeRemodelled ");
 					var rosterId = jqObj.data("id");
 					var ThisShip = KC3ShipManager.get( rosterId );
 					var MasterShip = ThisShip.master();
 					var stypeId = MasterShip.api_stype;
-
 					if (stypeIds.indexOf(stypeId) != -1) {
-						jqObj.addClass("highlight");
+						jqObj.addClass("highlight_stype");
 					} else {
-						jqObj.removeClass("highlight");
+						jqObj.removeClass("highlight_stype");
 					}
 				});
 			});
@@ -308,9 +503,9 @@
 					if (GoalTemplateManager.checkShipType(stypeId, template))
 						targetShips.push( {
 							rosterId: rosterId,
-							shipDesc: 
-                              ThisShip.name() + " Lv." + ThisShip.level +
-                                " (" + rosterId + ")"
+							shipDesc:
+							  ThisShip.name() + " Lv." + ThisShip.level +
+								" (" + rosterId + ")"
 						}  );
 				});
 
@@ -338,7 +533,7 @@
 				goalBox.appendTo(".section_expcalc .box_goal_templates");
 			});
 
-			$(".section_expcalc a.new_template").on("click", function () {
+			$(".section_expcalc .new_template a").on("click", function () {
 				var goalBox = $(".tab_expcalc .factory .goal_template").clone();
 				var dat = GoalTemplateManager.newTemplate();
 				self.goalTemplates.push(dat);
@@ -349,18 +544,37 @@
 				goalBox.appendTo(".section_expcalc .box_goal_templates");
 			});
 
-			$(".section_expcalc a.clear_highlight").on("click", function () {
-				$(".section_body .ship_goal").each( function(i,x) {
-					var jqObj = $(x);
-					jqObj.removeClass("highlight");
-				});
-			});
-
 			// TODO: prevent double click text selection?
 
 			// Remove from Goals Button
 			$(".section_expcalc").on("click", ".ship_rem", function(){
 				editingBox = $(this).parent();
+
+				var ShipRosterId = editingBox.data("id");
+				var ThisShip = KC3ShipManager.get(ShipRosterId);
+				var nextLevel = self.computeNextLevel( ThisShip.masterId, ThisShip.level );
+
+				var curGoal = self.goals["s"+ ShipRosterId];
+				// when the ship can still be remodelled further
+				// and the current goal set is fewer than that,
+				// we can ask user whether he wants to update the goal level
+				// instead of removing this goal.
+				if (nextLevel < 99
+					&& typeof curGoal !== "undefined"
+					&& curGoal[0] < nextLevel) {
+
+					var resp = confirm(
+						"Would you like to change your leveling goal for " +
+						ThisShip.name() + " (" + ShipRosterId + ") to level " +
+						nextLevel + "?");
+					if (resp) {
+						self.goals["s"+ ShipRosterId][0] = nextLevel;
+						self.save();
+						self.recompute( ThisShip.rosterId );
+						return true;
+					}
+				}
+
 				delete self.goals["s"+ editingBox.data("id") ];
 				self.save();
 				//window.location.reload();
@@ -369,12 +583,16 @@
 				$(".ship_edit", editingBox).hide();
 				$(".ship_rem", editingBox).hide();
 				editingBox.addClass("inactive");
-				var ThisShip = KC3ShipManager.get(editingBox.data("id"));
-				if(ThisShip.master().api_aftershipid > 0 && ThisShip.level<ThisShip.master().api_afterlv){
+
+				// the only can when nextLevel === false is when your ship have reached Lv.155
+				if (nextLevel === false)
+					return;
+
+				if (nextLevel < 99) {
 					$(".section_expcalc .box_recommend .clear").remove();
 					editingBox.appendTo(".section_expcalc .box_recommend");
 					$("<div />").addClass("clear").appendTo(".section_expcalc .box_recommend");
-				}else{
+				} else {
 					$(".section_expcalc .box_other .clear").remove();
 					editingBox.appendTo(".section_expcalc .box_other");
 					$("<div />").addClass("clear").appendTo(".section_expcalc .box_other");
@@ -403,7 +621,7 @@
 				$(".ship_type", goalBox).text( ThisShip.stype() );
 				$(".ship_lv .ship_value", goalBox).text( ThisShip.level );
 
-				// If ship already on the current goals
+				// If ship is already one of the current goals
 				if(typeof self.goals["s"+ThisShip.rosterId] != "undefined"){
 					$(".ship_edit", goalBox).show();
 					$(".ship_rem", goalBox).show();
@@ -415,34 +633,20 @@
 
 				goalBox.addClass("inactive");
 
-				// If can be remodelled (without convert remodels)
-				if(ThisShip.master().api_aftershipid > 0 &&
-					ThisShip.level >= ThisShip.master().api_afterlv &&
-					!RemodelDb.isFinalForm(ThisShip.masterId)){
-					goalBox.addClass("ship_canBeRemodelled");
-				}
+				// If next remodel lvl is greater than current, add to recommendations
+				var goalLevel = self.computeNextLevel( ThisShip.masterId, ThisShip.level );
+				if (goalLevel === false)
+					return true;
 
-				// If next remodel lvl is greater then current, add to recommendations
-				if(ThisShip.master().api_aftershipid > 0 &&
-					ThisShip.level < ThisShip.master().api_afterlv){
-					$(".ship_target .ship_value", goalBox).text( ThisShip.master().api_afterlv );
+				$(".ship_target .ship_value", goalBox).text( goalLevel );
+				if (goalLevel < 99) {
 					goalBox.appendTo(".section_expcalc .box_recommend");
-
-					//If is close to remodel
-					if(ThisShip.master().api_afterlv - ThisShip.level > 0 &&
-						ThisShip.master().api_afterlv - ThisShip.level <= ConfigManager.sr_lvl_difference){
-						goalBox.addClass("ship_closeToRemodel");
-					}
+					return true;
+				} else {
+					goalBox.appendTo(".section_expcalc .box_other");
 					return true;
 				}
 
-				// If this is the last remodel stage, add to others
-				if(ThisShip.level<99){
-					$(".ship_target .ship_value", goalBox).text( 99 );
-				}else{
-					$(".ship_target .ship_value", goalBox).text( 155 );
-				}
-				goalBox.appendTo(".section_expcalc .box_other");
 			});
 
 			//this.save();
@@ -464,9 +668,15 @@
 
 			// This has just been added, no grinding data yet, initialize defaults
 			if(grindData.length === 0){
-				// As much as possible use arrays nowadays to shrink JSON size, we might run out of the 5MB localStorage allocated for our app
+				var goalLevel = self.computeNextLevel( ThisShip.masterId, ThisShip.level );
+				// if we ever want to run "recompute" on any ship, that particular ship
+				// should have already been added in this tab
+				// (those locked but have not yet reached Lv 155) in the first place.
+				console.assert( goalLevel !== false, "targeting ship that has no goal?" );
+				// As much as possible use arrays nowadays to shrink JSON size,
+				// we might run out of the 5MB localStorage allocated for our app
 				grindData = [
-					/*0*/ (MasterShip.api_aftershipid > 0 && ThisShip.level<MasterShip.api_afterlv)?MasterShip.api_afterlv:(ThisShip.level<99)?99:155, // target level
+					/*0*/ goalLevel, // target level
 					/*1*/ 1, // world
 					/*2*/ 1, // map
 					/*3*/ 1, // node
