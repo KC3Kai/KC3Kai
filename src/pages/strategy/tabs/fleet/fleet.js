@@ -1,11 +1,11 @@
 (function(){
 	"use strict";
-	
+
 	KC3StrategyTabs.fleet = new KC3StrategyTab("fleet");
-	
+
 	KC3StrategyTabs.fleet.definition = {
 		tabSelf: KC3StrategyTabs.fleet,
-		
+
 		currentFleetsObj: null,
 		suggestedName: "",
 
@@ -13,7 +13,7 @@
 		  "fleets" object format:
 		  * an array of "fleet" objects
 		  * length is exactly 4, falsy value for non-existing fleet (null is recommended)
-		  
+
 		  "fleet" object format:
 		  { ships: <an array of "ship" objects>
 		  ( length is exactly 6, falsy value for non-existing ship (null is recommended) )
@@ -26,13 +26,13 @@
 		  , luck: <ship luck> (optional)
 		  , equipments: <array of equipments, length = 5 (4+1), falsy for non-existing>
 		  }
-		  
+
 		  "equipment" object format:
 		  { id: <equipment master id>
 		  , ace: <aircraft proficiency> (optional) (-1 if "ace" is not applicable)
 		  , improve: <improvement level> (optional)
 		  }
-		  
+
 		 */
 
 		fleetsObjToDeckBuilder: function(fleetsObj) {
@@ -51,7 +51,7 @@
 					if (!gearObj) return;
 					var gear = {};
 					gear.id = gearObj.id;
-					
+
 					if (gearObj.ace && gearObj.ace > 0) {
 						gear.rf = gearObj.ace;
 					} else if (gearObj.improve) {
@@ -73,7 +73,7 @@
 				});
 				return fleet;
 			}
-			
+
 			$.each([0,1,2,3], function(_,ind) {
 				var fleetObj = fleetsObj[ind];
 				if (fleetObj)
@@ -81,7 +81,7 @@
 			});
 			return dBuilder;
 		},
-		
+
 		/* INIT
 		   Prepares static data needed
 		   ---------------------------------*/
@@ -91,7 +91,7 @@
 				localStorage.savedFleets = JSON.stringify( {} );
 			}
 		},
-		
+
 		/* RELOAD
 		Prepares latest fleets data
 		---------------------------------*/
@@ -107,6 +107,14 @@
 		   ---------------------------------*/
 		execute :function(){
 			var self = this;
+
+			$("input#hist_query").on("keydown", function(e) {
+				if (e.which === 13) {
+					$("button#control_view").click();
+					e.preventDefault();
+				}
+			});
+
 			this.setupUIByViewType( "current" );
 			$('input[type=radio][name=view_type]').change(function() {
 				self.setupUIByViewType( this.value );
@@ -382,7 +390,7 @@
 		   --------------------------------------------*/
 		showKCShip: function(fleetBox, kcShip) {
 			if (kcShip.masterId === 0) return;
-			
+
 			var self = this;
 			var shipBox = $(".tab_fleet .factory .fleet_ship").clone();
 			$(".fleet_ships", fleetBox).append( shipBox );
@@ -403,7 +411,7 @@
 					kcShip.slots[ind]);
 			});
 		},
-		
+
 		/* Show single equipment
 		   --------------------------------------------*/
 		showKCGear: function(gearBox, kcGear, capacity) {
@@ -536,5 +544,5 @@
 			return fleetsObj;
 		}
 	};
-	
+
 })();

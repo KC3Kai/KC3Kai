@@ -1870,9 +1870,6 @@
 				return (rosterData.masterId > 0);
 			});
 			
-			if (allShips.length <= 0)
-				return;
-
 			var PS = window.PS;
 			var KE = PS["KanColle.Expedition"];
 			var KER = PS["KanColle.Expedition.Requirement"];
