@@ -12,6 +12,7 @@ Does not include Ships and Gears which are managed by other Managers
 		hq: {},
 		consumables: {},
 		fleets: [],
+		bases: [],
 		fleetCount: 1,
 		repairSlots: 2,
 		repairShips: [-1,-1,-1,-1,-1],
@@ -35,6 +36,12 @@ Does not include Ships and Gears which are managed by other Managers
 				new KC3Fleet(),
 				new KC3Fleet()
 			];
+			this.bases = [
+				new KC3LandBase(),
+				new KC3LandBase(),
+				new KC3LandBase(),
+				new KC3LandBase()
+			];
 		},
 		
 		setHQ :function( data ){
@@ -57,6 +64,14 @@ Does not include Ships and Gears which are managed by other Managers
 				this.fleets.map(
 					function(x){ return x.minimized(); }
 				));
+		},
+		
+		setBases :function( data ){
+			var self = this;
+			[0,1,2,3].forEach(function(i){
+				self.bases[i] = new KC3LandBase(data[i]);
+			});
+			localStorage.bases = JSON.stringify(self.bases);
 		},
 		
 		setRepairDocks :function( data ){
