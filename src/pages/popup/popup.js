@@ -1,6 +1,5 @@
 (function(){
 	"use strict";
-	_gaq.push(['_trackPageview']);
 	
 	var myVersion = chrome.runtime.getManifest().version;
 	
