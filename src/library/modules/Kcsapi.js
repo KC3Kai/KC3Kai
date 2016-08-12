@@ -935,7 +935,7 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_get_member/base_air_corps":function(params, response, headers){
 			PlayerManager.setBases(response.api_data);
-			KC3Network.trigger("LandBases");
+			KC3Network.trigger("Lbas");
 		},
 		
 		

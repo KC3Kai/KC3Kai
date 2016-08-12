@@ -215,7 +215,7 @@
 		KC3TimerManager.update();
 
 		// Docking ~ Akashi Timer Stat
-		var TotalFleet = selectedFleet == 5 ? [0,1] : [selectedFleet-1];
+		var TotalFleet = selectedFleet == 5 ? [0,1] : (selectedFleet == 6 ? [0,1,2,3] : [selectedFleet-1]);
 		var data = TotalFleet
 			.map(function(x){return PlayerManager.fleets[x].highestRepairTimes(true);})
 			.reduce(function(pre,cur){
@@ -227,7 +227,7 @@
 				return data;
 			});
 		UpdateRepairTimerDisplays(data);
-
+		
 		// Akashi current
 		var baseElement = (TotalFleet.length > 1) ? ['main','escort'] : ['single'];
 		var ctime = Date.now();
@@ -542,6 +542,7 @@
 		$(".module.controls .fleet_num").on("click", function(){
 			$(".module.controls .fleet_num").removeClass("active");
 			$(".module.controls .fleet_rengo").removeClass("active");
+			$(".module.controls .fleet_lbas").removeClass("active");
 			$(this).addClass("active");
 			selectedFleet = parseInt( $(this).text(), 10);
 			NatsuiroListeners.Fleet();
@@ -552,9 +553,19 @@
 		// Combined Fleet button
 		$(".module.controls .fleet_rengo").on("click", function(){
 			$(".module.controls .fleet_num").removeClass("active");
+			$(".module.controls .fleet_lbas").removeClass("active");
 			$(this).addClass("active");
 			selectedFleet = 5;
 			NatsuiroListeners.Fleet();
+		});
+		
+		// LBAS button
+		$(".module.controls .fleet_lbas").on("click", function(){
+			$(".module.controls .fleet_num").removeClass("active");
+			$(".module.controls .fleet_rengo").removeClass("active");
+			$(this).addClass("active");
+			selectedFleet = 6;
+			NatsuiroListeners.Lbas();
 		});
 
 		// Toggle mini-bars under combined fleet ship list
@@ -897,6 +908,11 @@
 		Triggered when fleet data is changed
 		---------------------------------------------*/
 		Fleet: function(data){
+			// If LBAS is selected, do not respond to fleet update
+			if (selectedFleet == 6) {
+				return false;
+			}
+			
 			if (typeof data != "undefined") {
 				if (typeof data.switchTo != "undefined") {
 					switchToFleet(data.switchTo);
@@ -1273,6 +1289,19 @@
 				ExpedTabAutoFleetSwitch(false);
 			}
 			NatsuiroListeners.UpdateExpeditionPlanner();
+		},
+		
+		Lbas :function(){
+			if (selectedFleet == 6) {
+				$(".shiplist_single").html("");
+				$(".shiplist_single").hide();
+				$(".shiplist_combined_fleet").html("");
+				$(".shiplist_combined").hide();
+				
+				$.each(PlayerManager.bases, function(i, baseInfo){
+					console.log(i, baseInfo);
+				});
+			}
 		},
 
 		SortieStart: function(data){

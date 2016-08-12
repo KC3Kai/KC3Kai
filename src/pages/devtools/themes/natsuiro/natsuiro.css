@@ -1363,12 +1363,6 @@ html,body {
 	height:20px;
 	line-height:20px;
 }
-.h .module.quests .quest {
-	width:190px;
-}
-.v .module.quests .quest {
-	width:240px;
-}
 .module.quests  .quest.complete {
 	background:rgba(0,255,0,0.25);
 }
@@ -1406,18 +1400,6 @@ html,body {
 	overflow:hidden;
 	text-overflow: ellipsis;
 	color:#eee;
-}
-.h .module.quests .quest_text {
-	width:130px;
-}
-.h .module.quests .untracked .quest_text {
-	width:170px;
-}
-.v .module.quests .quest_text {
-	width:170px;
-}
-.v .module.quests .untracked .quest_text {
-	width:210px;
 }
 
 .module.quests .quest_track {
@@ -1465,19 +1447,34 @@ html,body {
 	color:#000;
 }
 .module.controls .fleet_rengo {
-	width:50px;
-	border-radius:10px;
+	width:45px;
+	border-radius:8px;
 	background:#555;
 	text-align:center;
-	margin:0px 15px 3px 0px;
+	margin:0px 5px 3px 0px;
 	font-size:16px;
 	font-weight:bold;
 	text-align:center;
 	/*border:1px solid #ccc;*/
 }
 .module.controls .fleet_rengo img {
-	width:48px;
+	width:43px;
 	height:28px;
+}
+.module.controls .fleet_lbas {
+	width:40px;
+	border-radius:8px;
+	background:#555;
+	text-align:center;
+	margin:0px 0px 3px 0px;
+	font-size:16px;
+	font-weight:bold;
+	text-align:center;
+	/*border:1px solid #ccc;*/
+}
+.module.controls .fleet_lbas img {
+	width:30px;
+	height:30px;
 }
 .module.controls .control_btn {
 	width:40px;
@@ -1488,9 +1485,6 @@ html,body {
 	text-align:center;
 	/*border:1px solid #ECBA24;*/
 	border:1px solid #ccc;
-}
-.h .module.controls .control_btn {
-	float:right;
 }
 .module.controls .control_btn img {
 	width:38px;
@@ -2180,10 +2174,28 @@ html,body {
 	height:120px;
 	left:5px; top:325px;
 }
+.h .module.quests .quest {
+	width:190px;
+}
+.h .module.quests .quest_text {
+	width:130px;
+}
+.h .module.quests .untracked .quest_text {
+	width:170px;
+}
 .h .module.controls {
 	width:340px;
 	height:30px;
 	left:205px; top:5px;
+}
+.h .module.controls .control_btn {
+	float:right;
+	width:30px;
+	line-height:25px;
+}
+.h .module.controls .control_btn img {
+	width:26px;
+	height:20px;
 }
 .h .module.summary {
 	width:340px;
@@ -2192,6 +2204,15 @@ html,body {
 }
 .h .module.fleet {
 	left:205px; top:75px;
+}
+.h .module.controls .fleet_num {
+	width:23px;
+	line-height:30px;
+	border-radius:5px;
+	margin:0px 2px 3px 0px;
+}
+.h .module.controls .fleet_rengo {
+	margin:0px 2px 3px 0px;
 }
 .h .module.status {
 	width:340px;
@@ -2234,6 +2255,15 @@ html,body {
 	width:240px;
 	height:120px;
 	left:555px; top:200px;
+}
+.v .module.quests .quest {
+	width:240px;
+}
+.v .module.quests .quest_text {
+	width:170px;
+}
+.v .module.quests .untracked .quest_text {
+	width:210px;
 }
 
 /* ANIMATIONS

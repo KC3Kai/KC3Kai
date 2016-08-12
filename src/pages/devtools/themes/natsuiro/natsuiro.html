@@ -576,6 +576,7 @@
 				<div class="control hover fleet_num">3</div>
 				<div class="control hover fleet_num">4</div>
 				<div class="control hover fleet_rengo i18n_title" title="CombinedFleet"><img src="img/rengo.png" /></div>
+				<div class="control hover fleet_lbas"><img src="../../../../assets/img/items/33.png" /></div>
 				
 				<div class="control hover control_btn btn_mute i18n_title" title="PanelToggleSounds"><img src="img/mute.png" /></div>
 				<div class="control hover control_btn btn_resize i18n_title" title="PanelFitWindow"><img src="../../../../assets/img/ui/fit.png" /></div>
@@ -828,6 +829,37 @@
 			<!-- Ship requirement for expedition checker -->
 			<div class="expPlanner_shipReqBox requirements_textbox expPlanner_text_passed"></div>
 			
+			<!-- Clonable: LBAS Base -->
+			<div class="sship">
+				<div class="ship_img"><img/></div>
+				<div class="mvp_icon"><img src="../../../../assets/img/ui/mvp.png" /></div>
+				<div class="ex_item"><img/></div>
+				<div class="ship_info">
+					<div class="ship_name"></div>
+					<div class="ship_hp">
+						<div class="ship_type">WWW</div>
+						<div class="ship_hp_text">
+							<span class="ship_hp_cur">000</span>
+							<span class="ship_hp_max">/000</span>
+						</div>
+						<div class="ship_hp_box">
+							<div class="ship_hp_bar">
+								<div class="ship_hp_prediction"></div>
+							</div>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="ship_morale">100</div>
+					<div class="clear"></div>
+				</div>
+				<div class="clear"></div>
+				<div class="ship_bars hover">
+					<div class="ship_bar ship_exp"></div>
+					<div class="ship_bar ship_fuel"></div>
+					<div class="ship_bar ship_ammo"></div>
+				</div>
+				<div class="ship_no_lock"></div>
+			</div>
 		</div>
 		
 		
@@ -854,6 +886,7 @@
 		<script type="text/javascript" src="../../../../library/objects/Ship.js"></script>
 		<script type="text/javascript" src="../../../../library/objects/Sortie.js"></script>
 		<script type="text/javascript" src="../../../../library/objects/Timer.js"></script>
+		<script type="text/javascript" src="../../../../library/objects/LandBase.js"></script>
 		<!-- @nonbuildend -->
 		
 		<!-- @nonbuildstart -->

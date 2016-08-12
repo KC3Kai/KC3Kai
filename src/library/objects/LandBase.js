@@ -2,7 +2,7 @@
 	"use strict";
 	
 	window.KC3LandBase = function(data){
-		this.rid = 0;
+		this.rid = -1;
 		this.name = "";
 		this.range = -1;
 		this.action = -1;
@@ -20,10 +20,6 @@
 				self.planes.push(plane);
 			});
 		}
-	};
-	
-	KC3LandBase.prototype.update = function() {
-		return this.GearManager ? this.GearManager : KC3GearManager;
 	};
 	
 })();
