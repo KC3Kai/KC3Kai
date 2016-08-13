@@ -1424,13 +1424,13 @@ html,body {
 .module.controls .control {
 	height:30px;
 	float:left;
-	color:#fff;
+	color:#cccccc;
 }
 .module.controls .fleet_num {
 	width:30px;
 	line-height:30px;
 	border-radius:15px;
-	background:#555;
+	background:#333333;
 	text-align:center;
 	margin:0px 5px 3px 0px;
 	font-size:19px;
@@ -1449,13 +1449,12 @@ html,body {
 .module.controls .fleet_rengo {
 	width:45px;
 	border-radius:8px;
-	background:#555;
+	background:#333333;
 	text-align:center;
 	margin:0px 5px 3px 0px;
 	font-size:16px;
 	font-weight:bold;
 	text-align:center;
-	/*border:1px solid #ccc;*/
 }
 .module.controls .fleet_rengo img {
 	width:43px;
@@ -1464,13 +1463,12 @@ html,body {
 .module.controls .fleet_lbas {
 	width:40px;
 	border-radius:8px;
-	background:#555;
+	background:#333333;
 	text-align:center;
 	margin:0px 0px 3px 0px;
 	font-size:16px;
 	font-weight:bold;
 	text-align:center;
-	/*border:1px solid #ccc;*/
 }
 .module.controls .fleet_lbas img {
 	width:30px;
@@ -1479,16 +1477,16 @@ html,body {
 .module.controls .control_btn {
 	width:40px;
 	border-radius:15px;
-	background:#ddd;
+	background:#999999;
 	text-align:center;
 	margin:0px 5px 0px 0px;
 	text-align:center;
-	/*border:1px solid #ECBA24;*/
-	border:1px solid #ccc;
+	overflow:hidden;
+	padding:3px;
 }
 .module.controls .control_btn img {
-	width:38px;
-	height:28px;
+	width:34px;
+	height:24px;
 }
 .module.controls .control.active {
 	background:#ffcc00;
@@ -2155,6 +2153,163 @@ html,body {
 	margin:3px;
 }
 
+/* AIR BASES
+------------------------------*/
+.module.fleet .airbase_list {
+	
+}
+.airbase {
+	width:340px;
+	height:75px;
+	margin:0px 0px 3px 0px;
+}
+
+.airbase .airbase_infos {
+	width:340px;
+	height:20px;
+	margin:0px 0px 2px 0px;
+	background:rgba(0,0,0,0.4);
+	border-radius:6px;
+}
+.airbase .airbase_info {
+	float:left;
+}
+.airbase .base_name {
+	width:110px;
+	height:20px;
+	overflow:hidden;
+	float:left;
+	color:#cccccc;
+	text-shadow:1px 1px 3px #333;
+	font-size:11px;
+	line-height:20px;
+	margin:0px 5px 0px 0px;
+}
+
+.airbase .base_stats {
+	width:180px;
+	height:20px;
+	float:left;
+	overflow:hidden;
+}
+.airbase .base_stats .base_stat {
+	width:45px;
+	height:20px;
+	float:left;
+	overflow:hidden;
+}
+.airbase .base_stats .base_stat_icon {
+	width:18px;
+	height:18px;
+	line-height:16px;
+	margin:1px 2px 1px 0px;
+	border-radius:9px;
+	background:#131313;
+	float:left;
+	padding:1px;
+}
+.airbase .base_stats .base_stat_icon img {
+	width:16px;
+	height:16px;
+	-webkit-filter: invert(100%);
+	vertical-align: top;
+}
+.airbase .base_stats .base_stat_value {
+	width:25px;
+	height:20px;
+	line-height:20px;
+	float:left;
+	text-align:left;
+	overflow:hidden;
+	color:#cccccc;
+	font-size:11px;
+}
+
+.airbase .base_action {
+	width:40px;
+	height:20px;
+	line-height:20px;
+	overflow:hidden;
+	float:left;
+	color:#ffffff;
+	text-align:right;
+	font-size: 11px;
+}
+.airbase .base_planes {
+	width:340px;
+	height:52px;
+	float:left;
+	overflow:hidden;
+}
+
+/* PLANES */
+.airbase_plane {
+	width:165px;
+	height:24px;
+	margin:0px 0px 2px 5px;
+	background:rgba(0,0,0,0.4);
+	float:left;
+	border-radius:6px;
+	overflow:hidden;
+}
+.base_plane_col {
+	float:left;
+	height:24px;
+	overflow:hidden;
+}
+.base_plane_img {
+	width:80px;
+	text-align: center;
+	position:relative;
+	margin:0px 0px 0px -10px;
+}
+.base_plane_img  img {
+	width:100%;
+	vertical-align: middle;
+	margin:-60% -50%;
+	-webkit-mask-image:-webkit-linear-gradient(right, rgba(34,34,34,1) 30%,rgba(34,34,34,0) 100%);
+}
+.base_plane_icon {
+	width:20px;
+	line-height:20px;
+	padding:2px 0px;
+}
+.base_plane_icon img {
+	width:20px;
+	height:20px;
+	vertical-align: top;
+}
+.base_plane_chevs {
+	width:15px;
+	margin:0px 5px 0px 0px;
+}
+.base_plane_chevs img {
+	width:25px;
+	margin:5px 0px 5px -5px;
+	position:relative;
+}
+.base_plane_name {
+	display:none;
+}
+.base_plane_count {
+	line-height:24px;
+	font-size:11px;
+	text-shadow:2px 2px 4px #333,
+		2px 2px 4px #333;
+	text-align:center;
+	color:#ccc;
+	margin:0px 5px 0px 0px;
+}
+.base_plane_cond {
+	width:16px;
+	padding:4px 0px;
+	line-height:16px;
+}
+.base_plane_cond img {
+	width:16px;
+	height:16px;
+	vertical-align:top;
+}
 
 /* HORIZONTAL LAYOUT
 ------------------------------*/
@@ -2191,7 +2346,8 @@ html,body {
 .h .module.controls .control_btn {
 	float:right;
 	width:30px;
-	line-height:25px;
+	line-height:29px;
+	padding:0px;
 }
 .h .module.controls .control_btn img {
 	width:26px;
