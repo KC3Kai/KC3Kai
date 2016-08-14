@@ -407,6 +407,19 @@ KC3改 Ship Object
 		];
 	};
 	
+	/* FIGHTER POWER with INTERCEPTOR FORMULA
+	Normal planes get usual fighter power formula
+	Interceptor planes get special formula
+	--------------------------------------------------------------*/
+	KC3Ship.prototype.interceptionPower = function(type){
+		if(this.rosterId===0){ return 0; }
+		if (typeof type == "undefined") { type = "aa"; }
+		return this.equipment(0).interceptionPower( type, this.slots[0] )
+			+ this.equipment(1).interceptionPower( type, this.slots[1] )
+			+ this.equipment(2).interceptionPower( type, this.slots[2] )
+			+ this.equipment(3).interceptionPower( type, this.slots[3] );
+	};
+	
 	/* SUPPORT POWER
 	Get support expedition power of this ship
 	--------------------------------------------------------------*/

@@ -15,6 +15,7 @@ Saves and loads list to and from localStorage
 		carrierBasedAircraftType3Ids: [6,7,8,9,10,21,22,33],
 		landBasedAircraftType3Ids: [6,7,8,9,10,33,37,38],
 		antiAirFighterType2Ids: [6,7,8,11,45],
+		interceptorsType3Ids: [38],
 
 		// Get a specific item by ID
 		// NOTE: if you want to write testcases, avoid setting KC3GearManager.list["x0"]
