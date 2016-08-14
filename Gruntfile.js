@@ -32,7 +32,8 @@ module.exports = function(grunt) {
 					'assets/js/twbsPagination.min.js',
 					'assets/js/WhoCallsTheFleetShipDb.json',
 					'assets/js/jszip.min.js',
-					'assets/js/bootstrap-slider.min.js'
+					'assets/js/bootstrap-slider.min.js',
+					'assets/js/no_ga.js'
 				],
 				dest: 'build/release/'
 			},
@@ -310,6 +311,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-webstore-upload');
 	
 	grunt.registerTask('build', [
+		'clean:tmp',
 		'clean:release',
 		'copy:tmpsrc',
 		'copy:statics',
