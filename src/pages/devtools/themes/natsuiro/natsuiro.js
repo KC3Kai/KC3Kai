@@ -1304,11 +1304,11 @@
 				
 				var baseBox, planeBox, itemObj, paddedId,
 					eqImgSrc, eqIconSrc, eqChevSrc, eqMorale, eqCondSrc,
-					shipObj;
+					shipObj, afpLower;
 				
 				$.each(PlayerManager.bases, function(i, baseInfo){
 					if (baseInfo.rid != -1) {
-						// console.log("AIRBASE", i, baseInfo);
+						console.log("AIRBASE", i, baseInfo);
 						baseBox = $("#factory .airbase").clone();
 						$(".base_name", baseBox).html(baseInfo.name);
 						$(".base_range .base_stat_value", baseBox).html(baseInfo.range);
@@ -1321,17 +1321,28 @@
 						shipObj.items = baseInfo.planes.map(function(planeInfo){ return planeInfo.api_slotid; });
 						shipObj.slots = baseInfo.planes.map(function(planeInfo){ return planeInfo.api_count; });
 						
+						afpLower = shipObj.fighterBounds()[0];
+						if (afpLower > 0) {
+							$(".base_afp .base_stat_value", baseBox).html(shipObj.fighterBounds()[0]+"+");
+						} else {
+							$(".base_afp .base_stat_value", baseBox).html("None");
+						}
+						
+						$(".base_ifp .base_stat_value", baseBox).html(shipObj.interceptionPower("aa"));
+						$(".base_ibp .base_stat_value", baseBox).html(shipObj.interceptionPower("dv"));
+						
 						$.each(baseInfo.planes, function(i, planeInfo){
 							if (planeInfo.api_state !== 0) {
-								// console.log("PLANE", i, planeInfo);
+								console.log("PLANE", i, planeInfo);
 								
 								itemObj = KC3GearManager.get(planeInfo.api_slotid);
 								planeBox = $("#factory .airbase_plane").clone();
 								
-								var see = [ 163, 164, 165, 168, 169, 170, 171 ];
+								/*var see = [ 163, 164, 165, 168, 169, 170, 171 ];
 								var seemstid = see[Math.floor((Math.random() * see.length))];
-								paddedId = (seemstid<10?"00":seemstid<100?"0":"")+seemstid;
-								// paddedId = (itemObj.masterId<10?"00":itemObj.masterId<100?"0":"")+itemObj.masterId;
+								paddedId = (seemstid<10?"00":seemstid<100?"0":"")+seemstid;*/
+								
+								paddedId = (itemObj.masterId<10?"00":itemObj.masterId<100?"0":"")+itemObj.masterId;
 								eqImgSrc = "../../../../assets/img/planes/"+paddedId+".png";
 								eqIconSrc = "../../../../assets/img/items/"+itemObj.master().api_type[3]+".png";
 								eqChevSrc = "../../../../assets/img/client/achev/"+itemObj.ace+".png";
@@ -1344,6 +1355,12 @@
 								$(".base_plane_count", planeBox).text(planeInfo.api_count+" / "+planeInfo.api_max_count);
 								$(".base_plane_chevs img", planeBox).attr("src", eqChevSrc);
 								$(".base_plane_cond img", planeBox).attr("src", eqCondSrc);
+								
+								if (planeInfo.api_count < planeInfo.api_max_count) {
+									$(".base_plane_count", planeBox).addClass("unsupplied");
+								} else {
+									$(".base_plane_count", planeBox).removeClass("unsupplied");
+								}
 								
 								$(".base_planes", baseBox).append(planeBox);
 							}

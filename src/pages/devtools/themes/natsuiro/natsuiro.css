@@ -2175,7 +2175,7 @@ html,body {
 	float:left;
 }
 .airbase .base_name {
-	width:110px;
+	width:90px;
 	height:20px;
 	overflow:hidden;
 	float:left;
@@ -2187,13 +2187,13 @@ html,body {
 }
 
 .airbase .base_stats {
-	width:180px;
+	width:200px;
 	height:20px;
 	float:left;
 	overflow:hidden;
 }
 .airbase .base_stats .base_stat {
-	width:45px;
+	width:50px;
 	height:20px;
 	float:left;
 	overflow:hidden;
@@ -2215,7 +2215,7 @@ html,body {
 	vertical-align: top;
 }
 .airbase .base_stats .base_stat_value {
-	width:25px;
+	width:30px;
 	height:20px;
 	line-height:20px;
 	float:left;
@@ -2299,6 +2299,9 @@ html,body {
 	text-align:center;
 	color:#ccc;
 	margin:0px 5px 0px 0px;
+}
+.base_plane_count.unsupplied {
+	color:#f55;
 }
 .base_plane_cond {
 	width:16px;
