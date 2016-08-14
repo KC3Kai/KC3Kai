@@ -311,6 +311,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-webstore-upload');
 	
 	grunt.registerTask('build', [
+		'clean:tmp',
 		'clean:release',
 		'copy:tmpsrc',
 		'copy:statics',
