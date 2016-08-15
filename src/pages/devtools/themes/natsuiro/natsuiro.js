@@ -1211,10 +1211,13 @@
 					})
 					.map    (function(  fldat) { return fldat.ships; })
 					.reduce (function(  x,  y) { return x.concat(y); })
-					.filter (function( shipId) { return shipId >= 0; })
-					.map    (function( shipId) { return KC3ShipManager.get(shipId); })
-					.some   (function( shpDat) {
-						return !shpDat.didFlee && shpDat.isTaiha();
+					.map    (function(  x,  y) { return {id:x,fl:y/6,pos:y%6}; })
+					.filter (function( shpDat) {
+						return shpDat.id >= 0 && shpDat.pos;
+					})
+					.map    (function( shpDat) { return $.extend(shpDat,{data:KC3ShipManager.get(shpDat.id)}); })
+					.some   (function( shpDat, rstId) {
+						return !shpDat.didFlee && shpDat.isTaiha() && (shpDat.findDameCon().pos < 0);
 					})
 			) {
 				if (!ConfigManager.alert_taiha_pvp && KC3SortieManager.isPvP()) {
