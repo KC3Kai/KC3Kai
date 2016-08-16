@@ -1,6 +1,5 @@
 (function(){
 	"use strict";
-	_gaq.push(['_trackPageview']);
 	
 	var myVersion = chrome.runtime.getManifest().version;
 	
@@ -79,7 +78,6 @@
 		// Refresh API Link
 		// $("#get_api").on('click', function(){
 		$("#play_cc").on('click', function(){
-			_gaq.push(['_trackEvent', "Play via API", 'clicked']);
 			chrome.cookies.set({
 				url: "http://www.dmm.com",
 				name: "ckcy",
@@ -112,7 +110,6 @@
 		
 		// Play via DMM Frame
 		$("#play_dmmf").on('click', function(){
-			_gaq.push(['_trackEvent', "Play via DMM Frame", 'clicked']);
 			chrome.cookies.set({
 				url: "http://www.dmm.com",
 				name: "ckcy",
