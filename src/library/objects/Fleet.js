@@ -14,12 +14,20 @@ Contains summary information about a fleet and its 6 ships
 		this.mission = [ 0, 0, 0, 0 ];
 		this.akashi_tick = 0;
 
-		// useful when making virtual fleet objects.
-		// requirements:
-		// * "ShipManager.get( shipId )" should get the intended ship
-		// * "shipId" is taken from "this.ships"
-		// * "shipId === -1" should always return a dummy ship
-		this.ShipManager = null;
+		// Define properties not included in stringifications
+		Object.defineProperties(this,{
+			// useful when making virtual fleet objects.
+			// requirements:
+			// * "ShipManager.get( shipId )" should get the intended ship
+			// * "shipId" is taken from "this.ships"
+			// * "shipId === -1" should always return a dummy ship
+			ShipManager: {
+				value: null,
+				enumerable: false,
+				configurable: false,
+				writable: true
+			}
+		});
 
 		if(!!data) {
 			$.extend(this,data);
@@ -27,8 +35,9 @@ Contains summary information about a fleet and its 6 ships
 	};
 	
 	KC3Fleet.prototype.getShipManager = function() {
-		return this.ShipManager ? this.ShipManager : KC3ShipManager;
+		return this.ShipManager || KC3ShipManager;
 	};
+
 	KC3Fleet.prototype.update = function( data ){
 		if(typeof data.api_member_id != "undefined"){
 			var
@@ -627,8 +636,8 @@ Contains summary information about a fleet and its 6 ships
 							} else if (itemType === 10) {
 								// Reconnaissance Seaplane bonus
 								equipment_bonus *= 1.2;
-							} else if (itemType === 29) {
-								// searchlight no bonus
+							} else {
+								// all other equipment with no bonus
 								equipment_bonus = 0;
 							}
 
@@ -694,9 +703,4 @@ Contains summary information about a fleet and its 6 ships
 		}
 	};
 
-	KC3Fleet.prototype.minimized = function() {
-		var fleet = $.extend({},this);
-		delete fleet.ShipManager;
-		return fleet;
-	};
 })();

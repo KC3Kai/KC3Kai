@@ -13,6 +13,7 @@ function KCScreenshot(){
 	this.format = (ConfigManager.ss_type=="JPG")
 		?["jpeg", "jpg", "image/jpeg"]
 		:["png", "png", "image/png"];
+	this.quality = ConfigManager.ss_quality;
 }
 
 KCScreenshot.prototype.start = function(playerName, element){
@@ -33,8 +34,12 @@ KCScreenshot.prototype.start = function(playerName, element){
 	this.capture();
 };
 
-function chromeCapture(captureFormat, response){
-	chrome.tabs.captureVisibleTab(null, {format: captureFormat, quality: 70}, response);
+function chromeCapture(captureFormat, imageQuality, response){
+	console.log("Taking screenshot with quality", imageQuality);
+	chrome.tabs.captureVisibleTab(null, {
+		format: captureFormat,
+		quality: imageQuality || 100
+	}, response);
 }
 
 KCScreenshot.prototype.generateScreenshotFilename = function() {
@@ -68,7 +73,7 @@ KCScreenshot.prototype.capture = function(){
 	}
 	
 	// Start capturing
-	chromeCapture(this.format[0], function(base64img){
+	chromeCapture(this.format[0], this.quality, function(base64img){
 		self.domImg.src = base64img;
 		self.domImg.onload = self.crop();
 		

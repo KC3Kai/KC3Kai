@@ -161,15 +161,11 @@ module.exports = function(grunt) {
 					]
 				}
 			},
-			manifest: {
+			buildobjects: {
 				src: 'build/tmp/manifest.json',
 				dest: 'build/tmp/',
 				options: {
 					replacements: [
-						{
-							pattern: /KC3改 Development/ig,
-							replacement: 'KanColle Command Center 改'
-						},
 						{
 							pattern: /assets\/js\/jquery\-2\.1\.3\.min\.js/ig,
 							replacement: 'assets/js/global.js'
@@ -181,6 +177,18 @@ module.exports = function(grunt) {
 						{
 							pattern: /library\/managers\/ConfigManager\.js/ig,
 							replacement: 'library/managers.js'
+						}
+					]
+				}
+			},
+			manifest: {
+				src: 'build/tmp/manifest.json',
+				dest: 'build/tmp/',
+				options: {
+					replacements: [
+						{
+							pattern: /KC3改 Development/ig,
+							replacement: 'KanColle Command Center 改'
 						},
 						{
 							pattern: /assets\/img\/logo\/dev\.png/ig,
@@ -207,7 +215,7 @@ module.exports = function(grunt) {
 		jsonlint: {
 			build : {
 				options: {
-
+					format: true
 				},
 				src: [
 					'build/tmp/manifest.json',
@@ -310,6 +318,26 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-compress');
 	grunt.loadNpmTasks('grunt-webstore-upload');
 	
+	grunt.registerTask('local', [
+		'clean:tmp',
+		'clean:release',
+		'copy:tmpsrc',
+		'copy:statics',
+		'jshint:build',
+		'cssmin',
+		'string-replace:allhtml',
+		'htmlmin',
+		'string-replace:buildobjects',
+		'jsonlint:build',
+		'json-minify',
+		'copy:processed',
+		'concat:global_css',
+		'concat:global_js',
+		'concat:library',
+		'concat:strategy',
+		'clean:tmp'
+	]);
+	
 	grunt.registerTask('build', [
 		'clean:tmp',
 		'clean:release',
@@ -322,6 +350,7 @@ module.exports = function(grunt) {
 		'uglify',
 		'string-replace:allhtml',
 		'htmlmin',
+		'string-replace:buildobjects',
 		'string-replace:manifest',
 		'jsonlint:build',
 		'json-minify',

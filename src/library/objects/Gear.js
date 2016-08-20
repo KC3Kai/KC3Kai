@@ -111,7 +111,7 @@ KC3改 Equipment Object
 		return 0;
 	};
 
-	/* FIGHTER POWER: VETERAN withBOUNDS
+	/* FIGHTER POWER: VETERAN with BOUNDS
 	Get fighter power of this equipment
 	as an array with lower and upper bound bonuses
 	--------------------------------------------------------------*/
@@ -147,6 +147,57 @@ KC3改 Equipment Object
 
 		// Equipment did not return on plane check, no fighter power
 		return [0,0];
+	};
+	
+	/* FIGHTER POWER with INTERCEPTOR FORMULA
+	Normal planes get usual fighter power formula
+	Interceptor planes get special formula
+	INTPOW = floor((aa + 1.5 * radius + impr_cost(type) * impr_level) * sqrt(slot) + sqrt(0.1 * internal_level(prof_level)) + bonus(prof_level, type)) 
+	--------------------------------------------------------------*/
+	KC3Gear.prototype.interceptionPower = function(type, capacity){
+		// Empty item means no fighter power
+		if(this.itemId===0){ return 0; }
+		
+		// Check if this object is a fighter plane
+		if( KC3GearManager.interceptorsType3Ids.indexOf( this.master().api_type[3] ) > -1) {
+			// If slot has plne capacity
+			if (capacity) {
+				// Intercept AA is from evasion; Intercept DV is from accuracy
+				var statPower = 0;
+				if (type == "aa") {
+					statPower = this.master().api_houk;
+				} else if (type == "dv") {
+					statPower = this.master().api_houm;
+				} else {
+					return 0;
+				}
+				
+				// Base Intercept formula
+				var interceptPower = (
+					this.master().api_tyku + 1.5
+					*
+					statPower + this.AAStatImprovementBonous()
+				) * Math.sqrt(capacity);
+				
+				// Proficiency Bonus
+				if(this.ace != 1){
+					var typInd = String( this.master().api_type[2] );
+					if (typeof ConfigManager.air_average[typInd] == 'undefined') {
+						ConfigManager.resetValueOf('air_average');
+					}
+					var airAverageTable = ConfigManager.air_average[typInd];
+					if (typeof airAverageTable != "undefined") {
+						interceptPower += airAverageTable[ this.ace ];
+					}
+				}
+				
+				return Math.floor(interceptPower);
+			} else {
+				return 0;
+			}
+		} else {
+			return this.fighterVeteran(capacity);
+		}
 	};
 
 	KC3Gear.prototype.supportPower = function(){

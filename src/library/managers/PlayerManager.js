@@ -12,6 +12,7 @@ Does not include Ships and Gears which are managed by other Managers
 		hq: {},
 		consumables: {},
 		fleets: [],
+		bases: [],
 		fleetCount: 1,
 		repairSlots: 2,
 		repairShips: [-1,-1,-1,-1,-1],
@@ -35,6 +36,12 @@ Does not include Ships and Gears which are managed by other Managers
 				new KC3Fleet(),
 				new KC3Fleet()
 			];
+			this.bases = [
+				new KC3LandBase(),
+				new KC3LandBase(),
+				new KC3LandBase(),
+				new KC3LandBase()
+			];
 		},
 		
 		setHQ :function( data ){
@@ -53,10 +60,15 @@ Does not include Ships and Gears which are managed by other Managers
 			[0,1,2,3].forEach(function(i){
 				self.fleets[i].update( data[i] || {} );
 			});
-			localStorage.fleets = JSON.stringify(
-				this.fleets.map(
-					function(x){ return x.minimized(); }
-				));
+			localStorage.fleets = JSON.stringify(this.fleets);
+		},
+		
+		setBases :function( data ){
+			var self = this;
+			[0,1,2,3].forEach(function(i){
+				self.bases[i] = new KC3LandBase(data[i]);
+			});
+			localStorage.bases = JSON.stringify(self.bases);
 		},
 		
 		setRepairDocks :function( data ){
@@ -264,6 +276,15 @@ Does not include Ships and Gears which are managed by other Managers
 				var oldFleets =JSON.parse( localStorage.fleets );
 				this.fleets = this.fleets.map(function(x,i){
 					return (new KC3Fleet()).defineFormatted(oldFleets[i]);
+				});
+			}
+		},
+		
+		loadBases :function(){
+			if(typeof localStorage.bases != "undefined"){
+				var oldBases = JSON.parse( localStorage.bases );
+				this.bases = oldBases.map(function(baseData){
+					return (new KC3LandBase()).defineFormatted(baseData);
 				});
 			}
 		}
