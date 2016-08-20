@@ -281,6 +281,15 @@ Does not include Ships and Gears which are managed by other Managers
 					return (new KC3Fleet()).defineFormatted(oldFleets[i]);
 				});
 			}
+		},
+		
+		loadBases :function(){
+			if(typeof localStorage.bases != "undefined"){
+				var oldBases = JSON.parse( localStorage.bases );
+				this.bases = oldBases.map(function(baseData){
+					return (new KC3LandBase()).defineFormatted(baseData);
+				});
+			}
 		}
 		
 	};

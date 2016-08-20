@@ -22,4 +22,15 @@
 		}
 	};
 	
+	KC3LandBase.prototype.defineFormatted = function(data){
+		if (typeof data != "undefined") {
+			this.rid = data.rid;
+			this.name = data.name;
+			this.range = data.range;
+			this.action = data.action;
+			this.planes = data.planes;
+		}
+		return this;
+	};
+	
 })();

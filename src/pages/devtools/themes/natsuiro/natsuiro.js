@@ -300,6 +300,8 @@
 		KC3Meta.defaultIcon("../../../../assets/img/ui/empty.png");
 		KC3Meta.loadQuotes();
 		PlayerManager.init();
+		PlayerManager.loadFleets();
+		PlayerManager.loadBases();
 		KC3ShipManager.load();
 		KC3GearManager.load();
 		KC3Database.init();
@@ -1345,7 +1347,6 @@
 								paddedId = (itemObj.masterId<10?"00":itemObj.masterId<100?"0":"")+itemObj.masterId;
 								eqImgSrc = "../../../../assets/img/planes/"+paddedId+".png";
 								eqIconSrc = "../../../../assets/img/items/"+itemObj.master().api_type[3]+".png";
-								eqChevSrc = "../../../../assets/img/client/achev/"+itemObj.ace+".png";
 								eqMorale = ["","3","2","1"][planeInfo.api_cond];
 								eqCondSrc = "../../../../assets/img/client/morale/"+eqMorale+".png";
 								
@@ -1353,8 +1354,14 @@
 								$(".base_plane_icon img", planeBox).attr("src", eqIconSrc);
 								$(".base_plane_name", planeBox).text(itemObj.name());
 								$(".base_plane_count", planeBox).text(planeInfo.api_count+" / "+planeInfo.api_max_count);
-								$(".base_plane_chevs img", planeBox).attr("src", eqChevSrc);
 								$(".base_plane_cond img", planeBox).attr("src", eqCondSrc);
+								
+								if (itemObj.ace > -1) {
+									eqChevSrc = "../../../../assets/img/client/achev/"+itemObj.ace+".png";
+									$(".base_plane_chevs img", planeBox).attr("src", eqChevSrc);
+								} else {
+									$(".base_plane_chevs img", planeBox).remove();
+								}
 								
 								if (planeInfo.api_count < planeInfo.api_max_count) {
 									$(".base_plane_count", planeBox).addClass("unsupplied");
