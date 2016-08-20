@@ -215,7 +215,7 @@
 		KC3TimerManager.update();
 
 		// Docking ~ Akashi Timer Stat
-		var TotalFleet = selectedFleet == 5 ? [0,1] : [selectedFleet-1];
+		var TotalFleet = selectedFleet == 5 ? [0,1] : (selectedFleet == 6 ? [0,1,2,3] : [selectedFleet-1]);
 		var data = TotalFleet
 			.map(function(x){return PlayerManager.fleets[x].highestRepairTimes(true);})
 			.reduce(function(pre,cur){
@@ -227,7 +227,7 @@
 				return data;
 			});
 		UpdateRepairTimerDisplays(data);
-
+		
 		// Akashi current
 		var baseElement = (TotalFleet.length > 1) ? ['main','escort'] : ['single'];
 		var ctime = Date.now();
@@ -300,6 +300,8 @@
 		KC3Meta.defaultIcon("../../../../assets/img/ui/empty.png");
 		KC3Meta.loadQuotes();
 		PlayerManager.init();
+		PlayerManager.loadFleets();
+		PlayerManager.loadBases();
 		KC3ShipManager.load();
 		KC3GearManager.load();
 		KC3Database.init();
@@ -542,6 +544,7 @@
 		$(".module.controls .fleet_num").on("click", function(){
 			$(".module.controls .fleet_num").removeClass("active");
 			$(".module.controls .fleet_rengo").removeClass("active");
+			$(".module.controls .fleet_lbas").removeClass("active");
 			$(this).addClass("active");
 			selectedFleet = parseInt( $(this).text(), 10);
 			NatsuiroListeners.Fleet();
@@ -552,9 +555,19 @@
 		// Combined Fleet button
 		$(".module.controls .fleet_rengo").on("click", function(){
 			$(".module.controls .fleet_num").removeClass("active");
+			$(".module.controls .fleet_lbas").removeClass("active");
 			$(this).addClass("active");
 			selectedFleet = 5;
 			NatsuiroListeners.Fleet();
+		});
+		
+		// LBAS button
+		$(".module.controls .fleet_lbas").on("click", function(){
+			$(".module.controls .fleet_num").removeClass("active");
+			$(".module.controls .fleet_rengo").removeClass("active");
+			$(this).addClass("active");
+			selectedFleet = 6;
+			NatsuiroListeners.Lbas();
 		});
 
 		// Toggle mini-bars under combined fleet ship list
@@ -897,6 +910,11 @@
 		Triggered when fleet data is changed
 		---------------------------------------------*/
 		Fleet: function(data){
+			// If LBAS is selected, do not respond to fleet update
+			if (selectedFleet == 6) {
+				return false;
+			}
+			
 			if (typeof data != "undefined") {
 				if (typeof data.switchTo != "undefined") {
 					switchToFleet(data.switchTo);
@@ -909,6 +927,8 @@
 			$(".shiplist_single").hide();
 			$(".shiplist_combined_fleet").html("");
 			$(".shiplist_combined").hide();
+			$(".airbase_list").html("");
+			$(".airbase_list").hide();
 
 			var thisNode, dameConConsumed;
 			if(KC3SortieManager.onSortie){
@@ -1273,6 +1293,106 @@
 				ExpedTabAutoFleetSwitch(false);
 			}
 			NatsuiroListeners.UpdateExpeditionPlanner();
+		},
+		
+		Lbas :function(){
+			if (selectedFleet == 6) {
+				$(".shiplist_single").html("");
+				$(".shiplist_single").hide();
+				$(".shiplist_combined_fleet").html("");
+				$(".shiplist_combined").hide();
+				$(".airbase_list").html("");
+				$(".airbase_list").show();
+				
+				var baseBox, planeBox, itemObj, paddedId,
+					eqImgSrc, eqIconSrc, eqChevSrc, eqMorale, eqCondSrc,
+					shipObj, afpLower;
+				
+				$.each(PlayerManager.bases, function(i, baseInfo){
+					if (baseInfo.rid != -1) {
+						console.log("AIRBASE", i, baseInfo);
+						baseBox = $("#factory .airbase").clone();
+						$(".base_name", baseBox).html(baseInfo.name);
+						$(".base_range .base_stat_value", baseBox).html(baseInfo.range);
+						$(".base_action", baseBox).html([
+							"Waiting", "Sortie", "Defend", "Retreat", "Rest"
+						][baseInfo.action]);
+						
+						shipObj = new KC3Ship();
+						shipObj.rosterId = -1;
+						shipObj.items = baseInfo.planes.map(function(planeInfo){
+							return planeInfo.api_state == 1 ? planeInfo.api_slotid : -1;
+						});
+						shipObj.slots = baseInfo.planes.map(function(planeInfo){
+							return planeInfo.api_state == 1 ? planeInfo.api_count : 0;
+						});
+						
+						afpLower = shipObj.fighterBounds()[0];
+						if (afpLower > 0) {
+							$(".base_afp .base_stat_value", baseBox).html(shipObj.fighterBounds()[0]+"+");
+						} else {
+							$(".base_afp .base_stat_value", baseBox).html("None");
+						}
+						
+						$(".base_ifp .base_stat_value", baseBox).html(shipObj.interceptionPower("aa"));
+						$(".base_ibp .base_stat_value", baseBox).html(shipObj.interceptionPower("dv"));
+						
+						$.each(baseInfo.planes, function(i, planeInfo){
+							planeBox = $("#factory .airbase_plane").clone();
+							
+							if (planeInfo.api_state !== 0) {
+								console.log("PLANE", i, planeInfo);
+								
+								itemObj = KC3GearManager.get(planeInfo.api_slotid);
+								
+								$(".base_plane_name", planeBox).text(itemObj.name());
+								
+								paddedId = (itemObj.masterId<10?"00":itemObj.masterId<100?"0":"")+itemObj.masterId;
+								eqImgSrc = "../../../../assets/img/planes/"+paddedId+".png";
+								$(".base_plane_img img", planeBox).attr("src", eqImgSrc);
+								
+								eqIconSrc = "../../../../assets/img/items/"+itemObj.master().api_type[3]+".png";
+								$(".base_plane_icon img", planeBox).attr("src", eqIconSrc);
+								
+								if (itemObj.ace > -1) {
+									eqChevSrc = "../../../../assets/img/client/achev/"+itemObj.ace+".png";
+									$(".base_plane_chevs img", planeBox).attr("src", eqChevSrc);
+								} else {
+									$(".base_plane_chevs img", planeBox).remove();
+								}
+								
+								if (planeInfo.api_state == 1) {
+									// Plane on standby
+									eqMorale = ["","3","2","1"][planeInfo.api_cond];
+									eqCondSrc = "../../../../assets/img/client/morale/"+eqMorale+".png";
+									$(".base_plane_count", planeBox).text(planeInfo.api_count+" / "+planeInfo.api_max_count);
+									$(".base_plane_cond img", planeBox).attr("src", eqCondSrc);
+									
+									if (planeInfo.api_count < planeInfo.api_max_count) {
+										$(".base_plane_count", planeBox).addClass("unsupplied");
+									} else {
+										$(".base_plane_count", planeBox).removeClass("unsupplied");
+									}
+									
+								} else if (planeInfo.api_state == 2) {
+									// Plane moving
+									planeBox.addClass("moving");
+									$(".base_plane_count", planeBox).text("");
+									$(".base_plane_cond img", planeBox).remove();
+								}
+								
+							} else {
+								// No plane on slot
+								$("div", planeBox).remove();
+							}
+							
+							$(".base_planes", baseBox).append(planeBox);
+						});
+						
+						$(".module.fleet .airbase_list").append(baseBox);
+					}
+				});
+			}
 		},
 
 		SortieStart: function(data){
