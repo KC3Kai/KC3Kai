@@ -207,7 +207,7 @@ module.exports = function(grunt) {
 		jsonlint: {
 			build : {
 				options: {
-
+					format: true
 				},
 				src: [
 					'build/tmp/manifest.json',
@@ -309,6 +309,25 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks("grunt-contrib-qunit");
 	grunt.loadNpmTasks('grunt-contrib-compress');
 	grunt.loadNpmTasks('grunt-webstore-upload');
+	
+	grunt.registerTask('local', [
+		'clean:tmp',
+		'clean:release',
+		'copy:tmpsrc',
+		'copy:statics',
+		'jshint:build',
+		'cssmin',
+		'string-replace:allhtml',
+		'htmlmin',
+		'jsonlint:build',
+		'json-minify',
+		'copy:processed',
+		'concat:global_css',
+		'concat:global_js',
+		'concat:library',
+		'concat:strategy',
+		'clean:tmp'
+	]);
 	
 	grunt.registerTask('build', [
 		'clean:tmp',
