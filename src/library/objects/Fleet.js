@@ -627,8 +627,8 @@ Contains summary information about a fleet and its 6 ships
 							} else if (itemType === 10) {
 								// Reconnaissance Seaplane bonus
 								equipment_bonus *= 1.2;
-							} else if (itemType === 29) {
-								// searchlight no bonus
+							} else {
+								// all other equipment with no bonus
 								equipment_bonus = 0;
 							}
 

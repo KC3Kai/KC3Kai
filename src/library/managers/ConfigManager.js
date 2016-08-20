@@ -15,7 +15,7 @@ Retreives when needed to apply on components
 			return {
 				version				: 8,
 				language			: "en",
-				elosFormula 		: 3,
+				elosFormula 		: 4,
 				hqExpDetail 		: 1,
 				timerDisplayType	: 1,
 				marryLevelFormat	: 0,
@@ -91,6 +91,7 @@ Retreives when needed to apply on components
 				
 				ss_mode				: 0,
 				ss_type				: 'JPG',
+				ss_quality 			: 70,
 				ss_directory 		: 'KanColle',
 				ss_dppx 			: 1,
 				

@@ -213,6 +213,17 @@
 				}
 			},
 			{
+				"id" : "ss_quality",
+				"name" : "SettingsSSQuality",
+				"type" : "small_text",
+				"bound" : {
+					"min" : 0,
+					"max" :  100,
+					"type": "Number"
+				},
+				"options" : { "label" : "%" }
+			},
+			{
 				"id" : "ss_directory",
 				"name" : "SettingsSSDirectory",
 				"type" : "long_text",
