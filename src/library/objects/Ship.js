@@ -8,14 +8,7 @@ KC3改 Ship Object
 		deferList = {};
 	
 	window.KC3Ship = function( data ){
-		// useful when making virtual ship objects.
-		// requirements:
-		// * "GearManager.get( itemId )" should get the intended equipment
-		// * "itemId" is taken from either "items" or "ex_item"
-		// * "shipId === -1 or 0" should always return a dummy gear
-		this.GearManager = null;
-
-		// Default object properties incuded in stringifications
+		// Default object properties included in stringifications
 		this.rosterId = 0;
 		this.masterId = 0;
 		this.level = 0;
@@ -47,9 +40,7 @@ KC3改 Ship Object
 		this.morale = 0;
 		this.lock = 0;
 		this.sally = 0;
-		this.didFlee = false;
 		this.akashiMark = false;
-		this.mvp = false;
 		this.preExpedCond = [
 			/* Data Example
 			["exped300",12,20, 0], // fully supplied
@@ -72,6 +63,33 @@ KC3改 Ship Object
 		};
 		this.lastSortie = ['sortie0'];
 		
+		// Define properties not included in stringifications
+		Object.defineProperties(this,{
+			didFlee: {
+				value: false,
+				enumerable: false,
+				configurable: false,
+				writable: true
+			},
+			mvp: {
+				value: false,
+				enumerable: false,
+				configurable: false,
+				writable: true
+			},
+			// useful when making virtual ship objects.
+			// requirements:
+			// * "GearManager.get( itemId )" should get the intended equipment
+			// * "itemId" is taken from either "items" or "ex_item"
+			// * "shipId === -1 or 0" should always return a dummy gear
+			GearManager: {
+				value: null,
+				enumerable: false,
+				configurable: false,
+				writable: true
+			}
+		});
+
 		// If specified with data, fill this object
 		if(typeof data != "undefined"){
 			// Initialized with raw data
@@ -116,6 +134,7 @@ KC3改 Ship Object
 		}
 	};
 	
+	// Define complex properties on prototype
 	Object.defineProperties(KC3Ship.prototype,{
 		bull: {
 			get: function(){return this.ammo;},
@@ -125,9 +144,7 @@ KC3改 Ship Object
 		}
 	});
 	
-	KC3Ship.prototype.getGearManager = function() {
-		return this.GearManager ? this.GearManager : KC3GearManager;
-	};
+	KC3Ship.prototype.getGearManager = function(){ return this.GearManager || KC3GearManager; };
 	KC3Ship.prototype.master = function(){ return KC3Master.ship( this.masterId ); };
 	KC3Ship.prototype.name = function(){ return KC3Meta.shipName( this.master().api_name ); };
 	KC3Ship.prototype.stype = function(){ return KC3Meta.stype( this.master().api_stype ); };
@@ -490,14 +507,6 @@ KC3改 Ship Object
 	};
 	KC3Ship.prototype.performRepair = function(args) {
 		consumePending.call(this,1,{0:0,1:2,2:6,c: 1,i: 0},[0,1,2],args);
-	};
-
-	// preparation of data saving
-	// try to remove as much unnecessary fields as possible
-	KC3Ship.prototype.minimized = function() {
-		var ship = $.extend({},this);
-		delete ship.GearManager;
-		return ship;
 	};
 
 	// estimated LoS without equipments based on WhoCallsTheFleetDb
