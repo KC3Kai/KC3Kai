@@ -1354,6 +1354,7 @@
 								paddedId = (itemObj.masterId<10?"00":itemObj.masterId<100?"0":"")+itemObj.masterId;
 								eqImgSrc = "../../../../assets/img/planes/"+paddedId+".png";
 								$(".base_plane_img img", planeBox).attr("src", eqImgSrc);
+								$(".base_plane_img", planeBox).attr("title", $(".base_plane_name", planeBox).text());
 								
 								eqIconSrc = "../../../../assets/img/items/"+itemObj.master().api_type[3]+".png";
 								$(".base_plane_icon img", planeBox).attr("src", eqIconSrc);
