@@ -1,7 +1,7 @@
 {
-	"version" : "30.7.2",
-	"pr" : "https://github.com/KC3Kai/KC3Kai/pull/1485",
-	"time" : "Thu, 18 Aug 2016 17:00:00 +0900",
-	"maintenance_start": "Fri, 12 Aug 2016 11:00:00 +0900",
-	"maintenance_end": "Fri, 12 Aug 2016 22:30:00 +0900"
+	"version" : "30.8.0",
+	"pr" : "https://github.com/KC3Kai/KC3Kai/pull/1489",
+	"time" : "Sat, 20 Aug 2016 21:00:00 +0900",
+	"maintenance_start": "Wed, 31 Aug 2016 11:00:00 +0900",
+	"maintenance_end": "Wed, 31 Aug 2016 17:00:00 +0900"
 }
