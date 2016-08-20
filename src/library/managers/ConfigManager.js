@@ -15,7 +15,7 @@ Retreives when needed to apply on components
 			return {
 				version				: 8,
 				language			: "en",
-				elosFormula 		: 3,
+				elosFormula 		: 4,
 				hqExpDetail 		: 1,
 				timerDisplayType	: 1,
 				marryLevelFormat	: 0,
