@@ -186,7 +186,9 @@ KC3改 Equipment Object
 						ConfigManager.resetValueOf('air_average');
 					}
 					var airAverageTable = ConfigManager.air_average[typInd];
-					interceptPower += airAverageTable[ this.ace ];
+					if (typeof airAverageTable != "undefined") {
+						interceptPower += airAverageTable[ this.ace ];
+					}
 				}
 				
 				return Math.floor(interceptPower);
