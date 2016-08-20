@@ -941,7 +941,7 @@ Previously known as "Reactor"
 		/* Change base name
 		-------------------------------------------------------*/
 		"api_req_air_corps/change_name":function(params, response, headers){
-			PlayerManager.bases[params.api_base_id-1].name = params.api_name;
+			PlayerManager.bases[params.api_base_id-1].name = decodeURIComponent(params.api_name);
 			localStorage.bases = JSON.stringify(PlayerManager.bases);
 			KC3Network.trigger("Lbas");
 		},

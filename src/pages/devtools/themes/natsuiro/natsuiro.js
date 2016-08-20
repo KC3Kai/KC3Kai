@@ -878,7 +878,7 @@
 					console.warn("Quest status invalid:", quest);
 				}
 			};
-			$(".module.quests").html("");
+			$(".module.quests").empty();
 			$.each(KC3QuestManager.getActives(), function(index, quest){
 				questBox = $("#factory .quest").clone().appendTo(".module.quests");
 				if(!quest.tracking){ questBox.addClass("untracked"); }
@@ -910,6 +910,16 @@
 		Triggered when fleet data is changed
 		---------------------------------------------*/
 		Fleet: function(data){
+			// Expedition Timer Faces
+			if(KC3TimerManager._exped.length > 0){
+				KC3TimerManager._exped[0].faceId = PlayerManager.fleets[1].ship(0).masterId;
+				KC3TimerManager._exped[1].faceId = PlayerManager.fleets[2].ship(0).masterId;
+				KC3TimerManager._exped[2].faceId = PlayerManager.fleets[3].ship(0).masterId;
+				KC3TimerManager._exped[0].face();
+				KC3TimerManager._exped[1].face();
+				KC3TimerManager._exped[2].face();
+			}
+
 			// If LBAS is selected, do not respond to fleet update
 			if (selectedFleet == 6) {
 				return false;
@@ -923,11 +933,11 @@
 			}
 
 			var FleetSummary, MainRepairs;
-			$(".shiplist_single").html("");
+			$(".shiplist_single").empty();
 			$(".shiplist_single").hide();
-			$(".shiplist_combined_fleet").html("");
+			$(".shiplist_combined_fleet").empty();
 			$(".shiplist_combined").hide();
-			$(".airbase_list").html("");
+			$(".airbase_list").empty();
 			$(".airbase_list").hide();
 
 			var thisNode, dameConConsumed;
@@ -1072,16 +1082,6 @@
 			$(".summary-eqlos .summary_text").text( FleetSummary.elos );
 			$(".summary-airfp .summary_text").text( FleetSummary.air );
 			$(".summary-speed .summary_text").text( FleetSummary.speed );
-
-			// Expedition Timer Faces
-			if(KC3TimerManager._exped.length > 0){
-				KC3TimerManager._exped[0].faceId = PlayerManager.fleets[1].ship(0).masterId;
-				KC3TimerManager._exped[1].faceId = PlayerManager.fleets[2].ship(0).masterId;
-				KC3TimerManager._exped[2].faceId = PlayerManager.fleets[3].ship(0).masterId;
-				KC3TimerManager._exped[0].face();
-				KC3TimerManager._exped[1].face();
-				KC3TimerManager._exped[2].face();
-			}
 
 			// Clear status reminder coloring
 			$(".module.status .status_text").removeClass("good");
@@ -1297,11 +1297,11 @@
 		
 		Lbas :function(){
 			if (selectedFleet == 6) {
-				$(".shiplist_single").html("");
+				$(".shiplist_single").empty();
 				$(".shiplist_single").hide();
-				$(".shiplist_combined_fleet").html("");
+				$(".shiplist_combined_fleet").empty();
 				$(".shiplist_combined").hide();
-				$(".airbase_list").html("");
+				$(".airbase_list").empty();
 				$(".airbase_list").show();
 				
 				var baseBox, planeBox, itemObj, paddedId,
@@ -1315,7 +1315,11 @@
 						$(".base_name", baseBox).html(baseInfo.name);
 						$(".base_range .base_stat_value", baseBox).html(baseInfo.range);
 						$(".base_action", baseBox).html([
-							"Waiting", "Sortie", "Defend", "Retreat", "Rest"
+							KC3Meta.term("LandBaseActionWaiting"),
+							KC3Meta.term("LandBaseActionSortie"),
+							KC3Meta.term("LandBaseActionDefend"),
+							KC3Meta.term("LandBaseActionRetreat"),
+							KC3Meta.term("LandBaseActionRest")
 						][baseInfo.action]);
 						
 						shipObj = new KC3Ship();
@@ -1331,7 +1335,7 @@
 						if (afpLower > 0) {
 							$(".base_afp .base_stat_value", baseBox).html(shipObj.fighterBounds()[0]+"+");
 						} else {
-							$(".base_afp .base_stat_value", baseBox).html("None");
+							$(".base_afp .base_stat_value", baseBox).html( KC3Meta.term("None") );
 						}
 						
 						$(".base_ifp .base_stat_value", baseBox).html(shipObj.interceptionPower("aa"));
@@ -1825,7 +1829,7 @@
 					$(".activity_crafting .equipNote").html( KC3Meta.term("CraftEquipNoteExists").format(countExisting) );
 				}
 
-				$(".activity_crafting .equipStats").html("");
+				$(".activity_crafting .equipStats").empty();
 				CraftGearStats(MasterItem, "souk", "ar");
 				CraftGearStats(MasterItem, "houg", "fp");
 				CraftGearStats(MasterItem, "raig", "tp");
@@ -1843,8 +1847,8 @@
 			} else {
 				$(".activity_crafting .equipIcon img").attr("src", icon);
 				$(".activity_crafting .equipName").text( KC3Meta.term("CraftEquipNotePenguin") );
-				$(".activity_crafting .equipNote").html("");
-				$(".activity_crafting .equipStats").html("");
+				$(".activity_crafting .equipNote").empty();
+				$(".activity_crafting .equipStats").empty();
 			}
 
 			// Show resource used
