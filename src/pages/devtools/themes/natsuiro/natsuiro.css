@@ -2252,6 +2252,9 @@ html,body {
 	border-radius:6px;
 	overflow:hidden;
 }
+.airbase_plane.moving {
+	background:rgba(255,200,0,0.2);
+}
 .base_plane_col {
 	float:left;
 	height:24px;
@@ -2369,6 +2372,9 @@ html,body {
 	line-height:30px;
 	border-radius:5px;
 	margin:0px 2px 3px 0px;
+}
+.h .module.controls .fleet_num.needsSupply {
+	line-height:26px;
 }
 .h .module.controls .fleet_rengo {
 	margin:0px 2px 3px 0px;

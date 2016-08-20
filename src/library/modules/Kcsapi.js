@@ -938,6 +938,33 @@ Previously known as "Reactor"
 			KC3Network.trigger("Lbas");
 		},
 		
+		/* Change base name
+		-------------------------------------------------------*/
+		"api_req_air_corps/change_name":function(params, response, headers){
+			PlayerManager.bases[params.api_base_id-1].name = params.api_name;
+			localStorage.bases = JSON.stringify(PlayerManager.bases);
+			KC3Network.trigger("Lbas");
+		},
+		
+		/* Set base action
+		-------------------------------------------------------*/
+		"api_req_air_corps/set_action":function(params, response, headers){
+			PlayerManager.bases[params.api_base_id-1].action = params.api_action_kind;
+			localStorage.bases = JSON.stringify(PlayerManager.bases);
+			KC3Network.trigger("Lbas");
+		},
+		
+		/* Get bases info
+		-------------------------------------------------------*/
+		"api_req_air_corps/set_plane":function(params, response, headers){
+			PlayerManager.bases[params.api_base_id-1].range = response.api_data.api_distance;
+			PlayerManager
+				.bases[params.api_base_id-1]
+				.planes[params.api_squadron_id-1] = response.api_data.api_plane_info[0];
+			localStorage.bases = JSON.stringify(PlayerManager.bases);
+			KC3Network.trigger("Lbas");
+		},
+		
 		
 		/*-------------------------------------------------------*/
 		/*----------------------[ QUESTS ]-----------------------*/

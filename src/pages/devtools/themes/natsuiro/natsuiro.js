@@ -1320,8 +1320,12 @@
 						
 						shipObj = new KC3Ship();
 						shipObj.rosterId = -1;
-						shipObj.items = baseInfo.planes.map(function(planeInfo){ return planeInfo.api_slotid; });
-						shipObj.slots = baseInfo.planes.map(function(planeInfo){ return planeInfo.api_count; });
+						shipObj.items = baseInfo.planes.map(function(planeInfo){
+							return planeInfo.api_state == 1 ? planeInfo.api_slotid : -1;
+						});
+						shipObj.slots = baseInfo.planes.map(function(planeInfo){
+							return planeInfo.api_state == 1 ? planeInfo.api_count : 0;
+						});
 						
 						afpLower = shipObj.fighterBounds()[0];
 						if (afpLower > 0) {
@@ -1334,27 +1338,21 @@
 						$(".base_ibp .base_stat_value", baseBox).html(shipObj.interceptionPower("dv"));
 						
 						$.each(baseInfo.planes, function(i, planeInfo){
+							planeBox = $("#factory .airbase_plane").clone();
+							
 							if (planeInfo.api_state !== 0) {
 								console.log("PLANE", i, planeInfo);
 								
 								itemObj = KC3GearManager.get(planeInfo.api_slotid);
-								planeBox = $("#factory .airbase_plane").clone();
 								
-								/*var see = [ 163, 164, 165, 168, 169, 170, 171 ];
-								var seemstid = see[Math.floor((Math.random() * see.length))];
-								paddedId = (seemstid<10?"00":seemstid<100?"0":"")+seemstid;*/
+								$(".base_plane_name", planeBox).text(itemObj.name());
 								
 								paddedId = (itemObj.masterId<10?"00":itemObj.masterId<100?"0":"")+itemObj.masterId;
 								eqImgSrc = "../../../../assets/img/planes/"+paddedId+".png";
-								eqIconSrc = "../../../../assets/img/items/"+itemObj.master().api_type[3]+".png";
-								eqMorale = ["","3","2","1"][planeInfo.api_cond];
-								eqCondSrc = "../../../../assets/img/client/morale/"+eqMorale+".png";
-								
 								$(".base_plane_img img", planeBox).attr("src", eqImgSrc);
+								
+								eqIconSrc = "../../../../assets/img/items/"+itemObj.master().api_type[3]+".png";
 								$(".base_plane_icon img", planeBox).attr("src", eqIconSrc);
-								$(".base_plane_name", planeBox).text(itemObj.name());
-								$(".base_plane_count", planeBox).text(planeInfo.api_count+" / "+planeInfo.api_max_count);
-								$(".base_plane_cond img", planeBox).attr("src", eqCondSrc);
 								
 								if (itemObj.ace > -1) {
 									eqChevSrc = "../../../../assets/img/client/achev/"+itemObj.ace+".png";
@@ -1363,14 +1361,32 @@
 									$(".base_plane_chevs img", planeBox).remove();
 								}
 								
-								if (planeInfo.api_count < planeInfo.api_max_count) {
-									$(".base_plane_count", planeBox).addClass("unsupplied");
-								} else {
-									$(".base_plane_count", planeBox).removeClass("unsupplied");
+								if (planeInfo.api_state == 1) {
+									// Plane on standby
+									eqMorale = ["","3","2","1"][planeInfo.api_cond];
+									eqCondSrc = "../../../../assets/img/client/morale/"+eqMorale+".png";
+									$(".base_plane_count", planeBox).text(planeInfo.api_count+" / "+planeInfo.api_max_count);
+									$(".base_plane_cond img", planeBox).attr("src", eqCondSrc);
+									
+									if (planeInfo.api_count < planeInfo.api_max_count) {
+										$(".base_plane_count", planeBox).addClass("unsupplied");
+									} else {
+										$(".base_plane_count", planeBox).removeClass("unsupplied");
+									}
+									
+								} else if (planeInfo.api_state == 2) {
+									// Plane moving
+									planeBox.addClass("moving");
+									$(".base_plane_count", planeBox).text("");
+									$(".base_plane_cond img", planeBox).remove();
 								}
 								
-								$(".base_planes", baseBox).append(planeBox);
+							} else {
+								// No plane on slot
+								$("div", planeBox).remove();
 							}
+							
+							$(".base_planes", baseBox).append(planeBox);
 						});
 						
 						$(".module.fleet .airbase_list").append(baseBox);
