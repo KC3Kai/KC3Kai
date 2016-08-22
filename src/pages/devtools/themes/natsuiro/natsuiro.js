@@ -300,8 +300,6 @@
 		KC3Meta.defaultIcon("../../../../assets/img/ui/empty.png");
 		KC3Meta.loadQuotes();
 		PlayerManager.init();
-		PlayerManager.loadFleets();
-		PlayerManager.loadBases();
 		KC3ShipManager.load();
 		KC3GearManager.load();
 		KC3Database.init();

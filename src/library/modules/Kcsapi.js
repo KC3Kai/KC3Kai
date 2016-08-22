@@ -146,6 +146,8 @@ Previously known as "Reactor"
 			
 			KC3SortieManager.endSortie(response);
 			
+			PlayerManager.loadBases();
+			
 			KC3Network.trigger("HQ");
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("ShipSlots");
