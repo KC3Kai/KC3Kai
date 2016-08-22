@@ -176,7 +176,11 @@
 				$(".cg_notes").on("click", function(e){
 					ConfigManager.dismissed_hints.cg_notice = true;
 					ConfigManager.save();
-					$(".cg_notes").fadeOut();
+					// To keep URL for copying, do not disappear
+					//$(".cg_notes").fadeOut();
+					// Just change color to feed-back the action
+					$(".cg_notes").css("background-color", "#f9f2f4");
+					$(".cg_notes").attr("title", "Dismissed, will not be shown next time. But can always be found at Help Topics.");
 				});
 			}
 			
