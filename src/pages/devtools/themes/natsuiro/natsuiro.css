@@ -2181,6 +2181,8 @@ html,body {
 	float:left;
 	color:#cccccc;
 	text-shadow:1px 1px 3px #333;
+	white-space:nowrap;
+	text-overflow:ellipsis;
 	font-size:11px;
 	line-height:20px;
 	margin:0px 5px 0px 0px;
