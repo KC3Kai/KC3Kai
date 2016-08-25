@@ -1004,7 +1004,7 @@
 					badState: [
 						MainFleet.needsSupply(false)|| EscortFleet.needsSupply(false),
 						MainFleet.needsSupply(true) || EscortFleet.needsSupply(true) ,
-						MainFleet.ship(0).isTaiha(),
+						MainFleet.ship(0).isTaiha() || EscortFleet.ship(0).isTaiha(),
 						MainFleet.ship(0).isStriped() || EscortFleet.ship(0).isStriped()
 					],
 					lowestMorale:
@@ -1150,8 +1150,10 @@
 
 				// STATUS: TAIHA
 				if( (FleetSummary.hasTaiha || FleetSummary.badState[2])
-					&& !FleetSummary.taihaIndexes.equals([0]) // if not flagship only
-					&& !FleetSummary.taihaIndexes.equals([0,0]) // if not flagship only for combined
+					&& !(selectedFleet==5 && 
+						(FleetSummary.taihaIndexes.equals([0]) || 
+						 FleetSummary.taihaIndexes.equals([0,0]))
+					) // if not flagship only for combined fleet
 					&& !KC3SortieManager.isPvP() // if PvP, no taiha alert
 				){
 					$(".module.status .status_repair .status_text").text( KC3Meta.term(
@@ -1160,17 +1162,21 @@
 					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/" +
 						(FleetSummary.badState[2] ? "estat_bossheavy.png" : "sunk.png")
 					);
+					$(".module.status .status_repair .status_text").attr("title", "");
 					$(".module.status .status_repair .status_text").addClass("bad");
-				// Flagship Chuuha (for Combined Fleet only)
+				// Flagship Chuuha or worse for Combined Fleet only
 				}else if (FleetSummary.badState[3]) {
 					$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelCombinedFSChuuha") );
-					$(".module.status .status_repair .status_text").attr("title", KC3Meta.term("PanelCombinedFSChuuha"));
+					$(".module.status .status_repair .status_text").attr("title", KC3Meta.term("PanelCombinedFSChuuhaTip"));
 					$(".module.status .status_repair .status_text").addClass("bad");
-					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/estat_bossmodrt.png");
+					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/" +
+						(FleetSummary.badState[2] ? "estat_bossheavy.png" : "estat_bossmodrt.png")
+					);
 				// Condition Green
 				}else{
 					$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelNoTaiha") );
 					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/check.png");
+					$(".module.status .status_repair .status_text").attr("title", "");
 					$(".module.status .status_repair .status_text").addClass("good");
 				}
 
