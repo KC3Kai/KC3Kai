@@ -437,7 +437,7 @@ Previously known as "Reactor"
 			var deckId = parseInt(params.api_deck_id, 10);
 			PlayerManager.fleets[deckId-1].update( response.api_data );
 			localStorage.fleets = JSON.stringify(PlayerManager.fleets);
-			KC3Network.trigger("Fleet");
+			KC3Network.trigger("Fleet", { switchTo: deckId });
 		},
 		
 		/* Equipment list
@@ -454,7 +454,13 @@ Previously known as "Reactor"
 			var UpdatingShip = KC3ShipManager.get(params.api_id);
 			UpdatingShip.items = response.api_data.api_slot;
 			KC3ShipManager.save();
-			KC3Network.trigger("Fleet");
+			// If ship is in a fleet, switch view to the fleet containing the ship
+			var fleetNum = KC3ShipManager.locateOnFleet(params.api_id);
+			if (fleetNum > -1) {
+				KC3Network.trigger("Fleet", { switchTo: fleetNum+1 });
+			} else {
+				KC3Network.trigger("Fleet");
+			}
 		},
 		
 		// Equipment swap
@@ -464,7 +470,13 @@ Previously known as "Reactor"
 			ShipFrom.items = response.api_data.api_ship_data.api_unset_ship.api_slot;
 			ShipTo.items = response.api_data.api_ship_data.api_set_ship.api_slot;
 			KC3ShipManager.save();
-			KC3Network.trigger("Fleet");
+			// If ship is in a fleet, switch view to the fleet containing the ship
+			var fleetNum = KC3ShipManager.locateOnFleet(params.api_set_ship);
+			if (fleetNum > -1) {
+				KC3Network.trigger("Fleet", { switchTo: fleetNum+1 });
+			} else {
+				KC3Network.trigger("Fleet");
+			}
 		},
 		
 		/* Fleet list
@@ -607,7 +619,7 @@ Previously known as "Reactor"
 			if(typeof response.api_data != "undefined"){
 				if(typeof response.api_data.api_change_count != "undefined"){
 					PlayerManager.fleets[ FleetIndex-1 ].clearNonFlagShips();
-					KC3Network.trigger("Fleet");
+					KC3Network.trigger("Fleet", { switchTo: FleetIndex });
 					return true;
 				}
 			}
@@ -669,16 +681,9 @@ Previously known as "Reactor"
 			var shipID = params.api_id;
 			KC3ShipManager.get(shipID).items[slotIndex] = itemID;
 			
-			// If ship is in a fleet
-			var flatShips  = PlayerManager.fleets
-				.map(function(x){ return x.ships; })
-				.reduce(function(x,y){ return x.concat(y); });
-			var shipIndex = flatShips.indexOf(parseInt(shipID, 10));
-			
 			// If ship is in a fleet, switch view to the fleet containing the ship
-			console.log("shipIndex", shipIndex, flatShips, shipID);
-			if (shipIndex > -1) {
-				var fleetNum = Math.floor(shipIndex / 6);
+			var fleetNum = KC3ShipManager.locateOnFleet(shipID);
+			if (fleetNum > -1) {
 				KC3Network.trigger("Fleet", { switchTo: fleetNum+1 });
 			} else {
 				KC3Network.trigger("Fleet");
@@ -690,16 +695,9 @@ Previously known as "Reactor"
 		"api_req_kaisou/unsetslot_all":function(params, response, headers){
 			KC3ShipManager.get( params.api_id ).items = [-1,-1,-1,-1];
 			
-			// If ship is in a fleet
-			var flatShips  = PlayerManager.fleets
-				.map(function(x){ return x.ships; })
-				.reduce(function(x,y){ return x.concat(y); });
-			var shipIndex = flatShips.indexOf(parseInt(params.api_id, 10));
-			
 			// If ship is in a fleet, switch view to the fleet containing the ship
-			console.log("shipIndex", shipIndex, flatShips, params.api_id);
-			if (shipIndex > -1) {
-				var fleetNum = Math.floor(shipIndex / 6);
+			var fleetNum = KC3ShipManager.locateOnFleet(params.api_id);
+			if (fleetNum > -1) {
 				KC3Network.trigger("Fleet", { switchTo: fleetNum+1 });
 			} else {
 				KC3Network.trigger("Fleet");
@@ -744,7 +742,8 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_hensei/combined":function(params, response, headers){
 			PlayerManager.combinedFleet = parseInt( params.api_combined_type, 10 );
-			KC3Network.trigger("Fleet");
+			KC3Network.trigger("Fleet",
+				PlayerManager.combinedFleet > 0 ? { switchTo: "combined" } : undefined);
 		},
 		
 		/*-------------------------------------------------------*/

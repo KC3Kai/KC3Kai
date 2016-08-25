@@ -185,12 +185,7 @@ Saves and loads list to and from localStorage
 			var thisShip = this.list["x"+rosterId];
 			if(thisShip != "undefined"){
 				// initializing for fleet sanitizing of zombie ships
-				var
-					flatShips  = PlayerManager.fleets
-						.map(function(x){ return x.ships; })
-						.reduce(function(x,y){ return x.concat(y); }),
-					shipTargetOnFleet = flatShips.indexOf(Number(rosterId)), // check from which fleet
-					shipTargetFleetID = Math.floor(shipTargetOnFleet/6);
+				var shipTargetFleetID = this.locateOnFleet(rosterId);
 				// check whether the designated ship is on fleet or not
 				if(shipTargetOnFleet >= 0){
 					PlayerManager.fleets[shipTargetFleetID].discard(rosterId);
@@ -206,6 +201,15 @@ Saves and loads list to and from localStorage
 				this.save();
 				KC3GearManager.save();
 			}
+		},
+		
+		// Locate which fleet the ship is in, return -1 if not in any fleet
+		locateOnFleet: function( rosterId ){
+			var flatShips  = PlayerManager.fleets
+				.map(function(x){ return x.ships; })
+				.reduce(function(x,y){ return x.concat(y); });
+			var shipIndex = flatShips.indexOf(Number(rosterId));
+			return shipIndex < 0 ? -1 : Math.floor(shipIndex / 6);
 		},
 		
 		// Show JSON string of the list for debugging purposes
