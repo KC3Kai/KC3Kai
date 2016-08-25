@@ -141,6 +141,8 @@
 	function switchToFleet(targetFleet) {
 		if (targetFleet === "combined") {
 			$(".module.controls .fleet_rengo").trigger("click");
+		} else if (targetFleet === "lbas") {
+			$(".module.controls .fleet_lbas").trigger("click");
 		} else {
 			var fleetControls = $(".module.controls .fleet_num").toArray();
 			for (var i=0; i<fleetControls.length; ++i) {
@@ -153,6 +155,28 @@
 		}
 	}
 
+	function attemptToSwitchFleet(targetFleet) {
+		// Won't switch when option is disabled at Settings
+		if (!ConfigManager.info_auto_fleet_view) {
+			return false;
+		}
+		// Won't switch if current selected is combined and target will be 1 or 2
+		if (selectedFleet == 5 && (targetFleet == 1 ||
+			targetFleet == 2 || targetFleet === "combined")) {
+			return false;
+		}
+		// Won't switch if current selected is LBAS
+		if (selectedFleet == 6 && targetFleet === "lbas") {
+			return false;
+		}
+		// Won't switch if target fleet is current
+		if (selectedFleet == targetFleet) {
+			return false;
+		}
+		switchToFleet(targetFleet);
+		return true;
+	}
+	
 	/* Morale timers
 	- use end time difference not remaining decrements for accuracy against lag
 	--------------------------------------------*/
@@ -908,6 +932,15 @@
 		Triggered when fleet data is changed
 		---------------------------------------------*/
 		Fleet: function(data){
+			// Auto-Switch Fleet View
+			if (typeof data != "undefined") {
+				if (typeof data.switchTo != "undefined") {
+					if(attemptToSwitchFleet(data.switchTo)) {
+						return false;
+					}
+				}
+			}
+
 			// Expedition Timer Faces
 			if(KC3TimerManager._exped.length > 0){
 				KC3TimerManager._exped[0].faceId = PlayerManager.fleets[1].ship(0).masterId;
@@ -918,16 +951,82 @@
 				KC3TimerManager._exped[2].face();
 			}
 
-			// If LBAS is selected, do not respond to fleet update
+			// TAIHA ALERT CHECK
+			if (
+				PlayerManager.fleets
+					.filter (function(  x,  i) {
+						var
+							cf = PlayerManager.combinedFleet, // Marks combined flag
+							fs = KC3SortieManager.fleetSent,  // Which fleet that requires to focus out
+							so = KC3SortieManager.onSortie;   // Is it on sortie or not? if not, focus all fleets.
+						return !so || ((cf&&fs===1) ? (i <= 1) : (i == fs-1));
+					})
+					.map    (function(  fldat) { return fldat.ships; })
+					.reduce (function(  x,  y) { return x.concat(y); })
+					.filter (function( shipId) { return shipId >= 0; })
+					.map    (function( shipId) { return KC3ShipManager.get(shipId); })
+					.some   (function( shpDat) {
+						return !shpDat.didFlee && shpDat.isTaiha();
+					})
+			) {
+				if (!ConfigManager.alert_taiha_pvp && KC3SortieManager.isPvP()) {
+					// if PvP and config for PvP is disabled, do nothing
+
+				} else if(ConfigManager.alert_taiha){
+
+					if(ConfigManager.alert_taiha_panel){
+						$("#critical").show();
+						if(critAnim){ clearInterval(critAnim); }
+						critAnim = setInterval(function() {
+							$("#critical").toggleClass("anim2");
+						}, 500);
+					}
+
+					if(ConfigManager.alert_taiha_sound){
+						critSound.play();
+					}
+
+					(new RMsg("service", "taihaAlertStart", {
+						tabId: chrome.devtools.inspectedWindow.tabId
+					})).execute();
+				}
+			} else {
+				if(critAnim){ clearInterval(critAnim); }
+				$("#critical").hide();
+				critSound.pause();
+
+				(new RMsg("service", "taihaAlertStop", {
+					tabId: chrome.devtools.inspectedWindow.tabId
+				})).execute();
+			}
+
+			// FLEET BUTTONS RESUPPLY STATUSES
+			$(".module.controls .fleet_num").each(function(i, element){
+				$(element).removeClass("needsSupply");
+				$(element).removeClass("hasTaiha");
+				if(!$(element).hasClass("active")){
+					if(!PlayerManager.fleets[i].isSupplied()){
+						$(element).addClass("needsSupply");
+					}
+					if(PlayerManager.fleets[i].hasTaiha()){
+						$(element).addClass("hasTaiha");
+					}
+				}
+			});
+
+			// whether this update is triggered because of sending expeditions
+			if (expeditionStarted && ConfigManager.info_auto_exped_tab) {
+				// clear flag
+				expeditionStarted = false;
+
+				// we'll try switching to the next available fleet if any
+				ExpedTabAutoFleetSwitch(false);
+			}
+			NatsuiroListeners.UpdateExpeditionPlanner();
+
+			// If LBAS is selected, do not respond to rest fleet update
 			if (selectedFleet == 6) {
 				return false;
-			}
-			
-			if (typeof data != "undefined") {
-				if (typeof data.switchTo != "undefined") {
-					switchToFleet(data.switchTo);
-					return false;
-				}
 			}
 
 			var FleetSummary, MainRepairs;
@@ -1226,80 +1325,6 @@
 				$(".module.status").hide();
 			}
 
-			// TAIHA ALERT CHECK
-			if (
-				PlayerManager.fleets
-					.filter (function(  x,  i) {
-						var
-							cf = PlayerManager.combinedFleet, // Marks combined flag
-							fs = KC3SortieManager.fleetSent,  // Which fleet that requires to focus out
-							so = KC3SortieManager.onSortie;   // Is it on sortie or not? if not, focus all fleets.
-						return !so || ((cf&&fs===1) ? (i <= 1) : (i == fs-1));
-					})
-					.map    (function(  fldat) { return fldat.ships; })
-					.reduce (function(  x,  y) { return x.concat(y); })
-					.filter (function( shipId) { return shipId >= 0; })
-					.map    (function( shipId) { return KC3ShipManager.get(shipId); })
-					.some   (function( shpDat) {
-						return !shpDat.didFlee && shpDat.isTaiha();
-					})
-			) {
-				if (!ConfigManager.alert_taiha_pvp && KC3SortieManager.isPvP()) {
-					// if PvP and config for PvP is disabled, do nothing
-
-				} else if(ConfigManager.alert_taiha){
-
-					if(ConfigManager.alert_taiha_panel){
-						$("#critical").show();
-						if(critAnim){ clearInterval(critAnim); }
-						critAnim = setInterval(function() {
-							$("#critical").toggleClass("anim2");
-						}, 500);
-					}
-
-					if(ConfigManager.alert_taiha_sound){
-						critSound.play();
-					}
-
-
-					(new RMsg("service", "taihaAlertStart", {
-						tabId: chrome.devtools.inspectedWindow.tabId
-					})).execute();
-				}
-			} else {
-				if(critAnim){ clearInterval(critAnim); }
-				$("#critical").hide();
-				critSound.pause();
-
-				(new RMsg("service", "taihaAlertStop", {
-					tabId: chrome.devtools.inspectedWindow.tabId
-				})).execute();
-			}
-
-
-			// FLEET BUTTONS RESUPPLY STATUSES
-			$(".module.controls .fleet_num").each(function(i, element){
-				$(element).removeClass("needsSupply");
-				$(element).removeClass("hasTaiha");
-				if(!$(element).hasClass("active")){
-					if(!PlayerManager.fleets[i].isSupplied()){
-						$(element).addClass("needsSupply");
-					}
-					if(PlayerManager.fleets[i].hasTaiha()){
-						$(element).addClass("hasTaiha");
-					}
-				}
-			});
-
-			// whether this update is triggered because of sending expeditions
-			if (expeditionStarted && ConfigManager.info_auto_exped_tab) {
-				// clear flag
-				expeditionStarted = false;
-
-				// we'll try switching to the next available fleet if any
-				ExpedTabAutoFleetSwitch(false);
-			}
-			NatsuiroListeners.UpdateExpeditionPlanner();
 		},
 		
 		Lbas :function(){

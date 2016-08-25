@@ -187,7 +187,7 @@ Saves and loads list to and from localStorage
 				// initializing for fleet sanitizing of zombie ships
 				var shipTargetFleetID = this.locateOnFleet(rosterId);
 				// check whether the designated ship is on fleet or not
-				if(shipTargetOnFleet >= 0){
+				if(shipTargetFleetID >= 0){
 					PlayerManager.fleets[shipTargetFleetID].discard(rosterId);
 				}
 				// remove any equipments from her

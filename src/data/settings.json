@@ -140,6 +140,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "info_auto_fleet_view",
+				"name" : "SettingsAutoSwitchFleetView",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "info_eng_stype",
 				"name" : "SettingsEnglishShipType",
 				"type" : "check",
