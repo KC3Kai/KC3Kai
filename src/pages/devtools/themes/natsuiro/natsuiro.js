@@ -1005,7 +1005,7 @@
 						MainFleet.needsSupply(false)|| EscortFleet.needsSupply(false),
 						MainFleet.needsSupply(true) || EscortFleet.needsSupply(true) ,
 						MainFleet.ship(0).isTaiha(),
-						EscortFleet.ship(0).isStriped()
+						MainFleet.ship(0).isStriped() || EscortFleet.ship(0).isStriped()
 					],
 					lowestMorale:
 						(MainFleet.lowestMorale() < EscortFleet.lowestMorale())
@@ -1157,14 +1157,17 @@
 					$(".module.status .status_repair .status_text").text( KC3Meta.term(
 						(FleetSummary.badState[2] ? "PanelFSTaiha" : "PanelHasTaiha")
 					) );
-					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/sunk.png");
+					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/" +
+						(FleetSummary.badState[2] ? "estat_bossheavy.png" : "sunk.png")
+					);
 					$(".module.status .status_repair .status_text").addClass("bad");
-
-				// Escort Chuuha
+				// Flagship Chuuha (for Combined Fleet only)
 				}else if (FleetSummary.badState[3]) {
-					$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelEscortChuuha") );
+					$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelCombinedFSChuuha") );
+					$(".module.status .status_repair .status_text").attr("title", KC3Meta.term("PanelCombinedFSChuuha"));
 					$(".module.status .status_repair .status_text").addClass("bad");
-					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/sunk.png");
+					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/estat_bossmodrt.png");
+				// Condition Green
 				}else{
 					$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelNoTaiha") );
 					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/check.png");
