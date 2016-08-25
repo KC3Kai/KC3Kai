@@ -407,7 +407,17 @@
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 			});
 			$(".ship_lv_val", shipBox).text( kcShip.level );
-			$(".ship_name", shipBox).text( kcShip.name() );
+			var nameBox = $(".ship_name", shipBox);
+			nameBox.text( kcShip.name() );
+			var isEllipsis = function(element){
+				var $c = $(element).clone()
+					.css({display: 'inline', width: 'auto', visibility: 'hidden'})
+					.appendTo('body');
+				var cWidth = $c.width();
+				$c.remove();
+				return cWidth > $(element).width();
+			};
+			if (isEllipsis(nameBox)) nameBox.attr("title", nameBox.text());
 
 			$.each([0,1,2,3,4], function(_,ind) {
 				self.showKCGear(
