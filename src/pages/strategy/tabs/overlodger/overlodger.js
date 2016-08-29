@@ -1695,7 +1695,7 @@
 		sRatio  = Math.pow(dcCoef,-0.4);
 		aRating = (aRating * (1-sRatio) + (new KC3LedgerBuffer(null,null,dataSum,"overall")).bRating * sRatio);
 		
-		dRating = dataAvg.length > 1 ? Math.stdev.apply(null,dataAvg) : 0;
+		dRating = dataAvg.length > 1 ? Math.stdev(dataAvg) : 0;
 		pRatio  = Math.pow(Math.max(0,1 - Math.abs(aRating)),1.5) * Math.sign(aRating);
 		
 		bResult = {bRating: aRating + dRating * pRatio};
