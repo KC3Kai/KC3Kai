@@ -287,16 +287,16 @@ Does not include Ships and Gears which are managed by other Managers
 					return (new KC3LandBase()).defineFormatted(baseData);
 				});
 			}
+		},
+		
+		fleets_backup :function(){
+			return this.fleets.map(function(x,i){
+				return x.ships.map(function(s){
+					return new KC3Ship(KC3ShipManager.get(s));
+				});
+			});
 		}
 		
-	};
-	
-	PlayerManager.fleets_backup = function(){
-		return this.fleets.map(function(x,i){
-			return x.ships.map(function(s){
-				return new KC3Ship(KC3ShipManager.get(s));
-			});
-		});
 	};
 	
 })();
