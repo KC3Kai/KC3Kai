@@ -655,15 +655,26 @@ String.prototype.hashCode = function() {
  - Population based deviation
 -------------------------------*/
 Math.stdev  = function(p1f /*, data*/){
-	var args = [].map.call(arguments,function(val){
+	// obtain a real array for carrying data
+	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments
+	var data = Array.prototype.slice.call( arguments );
+	if(typeof p1f === 'boolean') {
+		data.splice(0,1);
+	} else {
+		p1f = false;
+	}
+	// special handling for cases:
+	// * Math.stdev( <bool>, <an array object> )
+	// * Math.stdev( <an array object> )
+	if (data.length > 0 && (data[0] instanceof Array)) {
+		if (data.length !== 1)
+			throw "Math.stdev called with unexpected form";
+		data = data[0];
+	}
+	var args = [].map.call(data,function(val){
 		return Number(val);
 	});
-	if(typeof p1f !== 'boolean') {
-		p1f = false;
-	} else {
-		args.splice(0,1);
-	}
-	
+
 	if(args.length <= 0)
 		return 0;
 
