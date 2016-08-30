@@ -13,6 +13,17 @@ if (typeof NO_GA == "undefined") {
 	})();
 }
 
+if (typeof chrome.tabs !== "undefined") {
+	chrome.tabs.getCurrent(function(tab){
+		if (typeof tab !== "undefined") {
+			chrome.tabs.setZoom(null, 1, function(){
+				chrome.tabs.setZoomSettings(null, { scope: "per-tab", defaultZoomFactor: 1 });
+			});
+		}
+	});
+}
+
+
 /*
  * Date Format 1.2.3
  * (c) 2007-2009 Steven Levithan <stevenlevithan.com>
