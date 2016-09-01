@@ -188,6 +188,25 @@
 			else
 				ThisShipData.statmax = 0;
 
+			var canEquipDaihatsu = true;
+			// ship types: DD=2, CL=3, AV=16, LHA=17, AO=22
+			// so far only ships with types above can equip daihatsu.
+			if ([2,3,16,17,22].indexOf( MasterShip.api_stype ) === -1)
+				canEquipDaihatsu = false;
+			// excluding Akitsushima(445) and Hayasui(352)
+			// (however their remodels are capable of equipping daihatsu
+			if (ThisShip.masterId === 445 || ThisShip.masterId === 460)
+				canEquipDaihatsu = false;
+			// only few DDs and CLs are capable of equipping daihatsu
+			// including:
+			// Abukuma K2(200), Verniy(147), Ooshio K2(199),
+			// Satsuki K2(418), Mutsuki K2(434), Kisaragi K2(435),
+			// Kasumi K2(464), Kasumi K2B(470),
+			// Asashio K2D(468), Kawakaze K2(469)
+			if ([2,3].indexOf( ThisShip.master().api_stype ) !== -1 &&
+				[147,199,200,418,434,435,464,470,468,469].indexOf( ThisShip.masterId ) === -1)
+				canEquipDaihatsu = false;
+			cached.canEquipDaihatsu = canEquipDaihatsu;
 			return cached;
 		},
 
@@ -437,6 +456,15 @@
 					return (curVal === 0)
 						|| (curVal === 1 && ship.morale >= 50)
 						|| (curVal === 2 && ship.morale < 50);
+				});
+			self.defineShipFilter(
+				"daihatsu",
+				0,
+				["all", "yes","no"],
+				function(curVal, ship) {
+					return (curVal === 0)
+						|| (curVal === 1 && ship.canEquipDaihatsu)
+						|| (curVal === 2 && !ship.canEquipDaihatsu);
 				});
 
 			var stypes = Object
