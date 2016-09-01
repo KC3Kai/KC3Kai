@@ -38,7 +38,6 @@
 			var ctr, ThisShip, ThisShipData;
 			for(ctr in KC3ShipManager.list){
 				ThisShip = KC3ShipManager.list[ctr];
-
 				ThisShipData = this.prepareShipData(ThisShip);
 				this.shipCache.push(ThisShipData);
 			}
@@ -699,7 +698,7 @@
 					}
 					$(".ship_type", cElm).text( KC3Meta.stype(cShip.stype) );
 					var shipLevelConv = shipLevel;
-					$(".ship_lv", cElm).html( "<spn>Lv.</span>" + shipLevelConv);
+					$(".ship_lv", cElm).html( "<span>Lv.</span>" + shipLevelConv);
 					$(".ship_morale", cElm).html( cShip.morale );
 					$(".ship_hp", cElm).text( cShip.hp );
 					$(".ship_lk", cElm).text( cShip.lk );
