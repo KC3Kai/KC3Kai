@@ -528,6 +528,30 @@ KC3改 Ship Object
 		var retVal = WhoCallsTheFleetDb.estimateStat(losInfo, this.level);
 		return retVal === false ? 0 : retVal;
 	};
+
+	// check if this ship is capable of equipping Daihatsu (landing craft)
+	KC3Ship.prototype.canEquipDaihatsu = function() {
+		var master = this.master();
+		// ship types: DD=2, CL=3, AV=16, LHA=17, AO=22
+		// so far only ships with types above can equip daihatsu.
+		if ([2,3,16,17,22].indexOf( master.api_stype ) === -1)
+			return false;
+
+		// excluding Akitsushima(445) and Hayasui(352)
+		// (however their remodels are capable of equipping daihatsu
+		if (this.masterId === 445 || this.masterId === 460)
+			return false;
+		
+		// only few DDs and CLs are capable of equipping daihatsu
+		// including:
+		// Abukuma K2(200), Verniy(147), Ooshio K2(199),
+		// Satsuki K2(418), Mutsuki K2(434), Kisaragi K2(435),
+		// Kasumi K2(464), Kasumi K2B(470),
+		// Asashio K2D(468), Kawakaze K2(469)
+		if ([2,3].indexOf( master.api_stype ) !== -1 &&
+			[147,199,200,418,434,435,464,470,468,469].indexOf( this.masterId ) === -1)
+			return false;
+		return true;
 	};
 
 	function consumePending(index,mapping,clear,args) {
