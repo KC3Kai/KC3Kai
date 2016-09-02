@@ -26,7 +26,7 @@
 			// in order to get more up-to-date info
 			// we need to refresh the Ship Manager
 			KC3ShipManager.load();
-			
+
 			var ctr, ThisShip, MasterShip, ThisShipData;
 			this.shipCache = [];
 			for(ctr in KC3ShipManager.list){
@@ -193,11 +193,11 @@
 					case "hp": returnVal = b.hp	 - a.hp; break;
 					case "status": returnVal = a.hp / a.maxhp  - b.hp / b.maxhp; break;
 					case "repair_docking":
-						returnVal = b.repairDocking - a.repairDocking; 
+						returnVal = b.repairDocking - a.repairDocking;
 						if (returnVal === 0 || (!isFinite(a.repairDocking) && !isFinite(b.repairDocking)))
 							returnVal = b.repairAkashi - a.repairAkashi;
 						break;
-					case "repair_akashi": 
+					case "repair_akashi":
 						returnVal = b.repairAkashi - a.repairAkashi;
 						if (returnVal === 0 || (!isFinite(a.repairAkashi) && !isFinite(b.repairAkashi)))
 							returnVal = b.repairDocking - a.repairDocking;
@@ -231,7 +231,7 @@
 
 					var hpStatus = cShip.hp.toString() + " / " + cShip.maxhp.toString();
 					$(".ship_status", cElm).text( hpStatus );
-					
+
 					$(".ship_hp_val", cElm).css("width", parseInt(cShip.hp/cShip.maxhp*100, 10)+"px");
 
 					$(".ship_repair_docking", cElm).text( String(cShip.repairDocking).toHHMMSS() );
