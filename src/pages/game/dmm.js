@@ -54,6 +54,13 @@ function ActivateGame(){
 	}
 }
 
+chrome.runtime.sendMessage({
+	identifier: "kc3_service",
+	action: "debug_game"
+}, function(response){
+	
+});
+
 $(document).on("ready", function(){
 	// Initialize data managers
 	ConfigManager.load();

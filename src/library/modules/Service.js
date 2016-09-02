@@ -61,6 +61,19 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			return true;
 		},
 		
+		/* SCREENSHOT
+		Ask the game container to take a screenshot
+		------------------------------------------*/
+		"debug_game" :function(request, sender, response){
+			console.log(request);
+			console.log(sender);
+			chrome.debugger.attach({
+				tabId: sender.tab.id
+			}, "1.1", function(){
+				
+			});
+		},
+		
 		/* ACTIVATE GAME
 		Request from devTools to activate game on its inspected window
 		DevTools does not have access to chrome.tabs API thus cannot send this message on its own

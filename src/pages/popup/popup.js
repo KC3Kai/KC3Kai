@@ -77,7 +77,7 @@
 		
 		// Refresh API Link
 		// $("#get_api").on('click', function(){
-		$("#play_cc").on('click', function(){
+		/*$("#play_cc").on('click', function(){
 			chrome.cookies.set({
 				url: "http://www.dmm.com",
 				name: "ckcy",
@@ -90,10 +90,10 @@
 				localStorage.dmmplay = false;
 				window.open("http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/", "kc3kai_game");
 			});
-		});
+		});*/
 		
 		// Play DMM Website
-		$("#play_dmm").on('click', function(){
+		/*$("#play_dmm").on('click', function(){
 			chrome.cookies.set({
 				url: "http://www.dmm.com",
 				name: "ckcy",
@@ -106,7 +106,7 @@
 				localStorage.dmmplay = true;
 				window.open("../game/web.html", "kc3kai_game");
 			});
-		});
+		});*/
 		
 		// Play via DMM Frame
 		$("#play_dmmf").on('click', function(){
@@ -120,7 +120,14 @@
 			}, function(cookie){
 				localStorage.extract_api = false;
 				localStorage.dmmplay = false;
-				window.open("../game/dmm.html", "kc3kai_game");
+				chrome.windows.create({
+					url: "pages/game/dmm.html",
+					type: "panel"
+				}, function(){
+				
+				
+				});
+				// window.open("../game/dmm.html", "kc3kai_game");
 			});
 		});
 		
