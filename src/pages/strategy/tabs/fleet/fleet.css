@@ -179,6 +179,9 @@
 	line-height:20px;
 	margin:0px 0px 2px 0px;
 	text-align:center;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap;
 	font-size:12px;
 	font-weight:bold;
 	color:#00f;

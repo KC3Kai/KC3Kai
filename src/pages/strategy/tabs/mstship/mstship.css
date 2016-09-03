@@ -6,6 +6,7 @@
 }
 .tab_mstship .cg_notes {
 	margin:0px 0px 10px 0px;
+	border-radius:5px 5px 5px 5px;
 	display:none;
 }
 .tab_mstship .cg_notes em {
