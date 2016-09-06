@@ -81,7 +81,7 @@
 	background:url(../../../../assets/img/ui/trunk.png);
 }
 .tab_flowchart .questFlowItem .questIcon {
-	width:27px;
+	width:38px;
 	margin:1px 5px 0px 1px;
 	text-align:center;
 	font-size:10px;
@@ -91,11 +91,13 @@
 	float:left;
 }
 .tab_flowchart .questFlowItem .questDesc {
-	max-width:381px;
+	max-width:66%;
 	margin:0px 5px 0px 0px;
 	height:20px;
 	float:left;
 	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
 	font-size:11px;
 }
 .tab_flowchart .questFlowItem .questTrack {
@@ -107,6 +109,57 @@
 	margin:2px 2px 0px 0px;
 	text-align:center;
 	color:#999;
+	display:none;
+}
+.tab_flowchart .questFlowItem .questOverride {
+	width:16px;
+	height:16px;
+	float:left;
+	border-radius:8px;
+	color:#fff;
+	text-align:center;
+	-webkit-user-select:none;
+}
+.tab_flowchart .questFlowItem .questMinus {
+	background:#c55;
+}
+.tab_flowchart .questFlowItem .questAdd {
+	background:#5c5;
+}
+.tab_flowchart .questFlowItem .questCount {
+	width:60px;
+	height:16px;
+	float:left;
+	margin:0px 2px 0px 2px;
+	/*background:#cfc;*/
+}
+.tab_flowchart .questFlowItem .questToggle {
+	width:16px;
+	height:16px;
+	float:left;
+	margin:0px 0px 0px 4px;
+	background:#fff;
+	border-radius:8px;
+}
+.tab_flowchart .questFlowItem .questToggle img {
+	width:12px;
+	height:12px;
+	margin:2px;
+	vertical-align:top;
+}
+.tab_flowchart .questFlowItem .questRemove {
+	width:16px;
+	height:16px;
+	float:left;
+	margin:0px 0px 0px 3px;
+	background:#fff;
+	border-radius:8px;
+}
+.tab_flowchart .questFlowItem .questRemove img {
+	width:12px;
+	height:12px;
+	margin:2px;
+	vertical-align:top;
 }
 
 /* Icon Colors */
@@ -134,6 +187,10 @@
 .tab_flowchart .questIcon.type7 {
 	background:#AE76FA;
 }
+.tab_flowchart .questIcon.type8 {
+	background:#D75048;
+	color:#fff;
+}
 
 /* Statuses */
 .tab_flowchart .questInfo.open {
@@ -144,10 +201,9 @@
 }
 
 .tab_flowchart .questInfo.active {
-	/* background:#FFDA46; */
 	background:#EE9;
 }
-.tab_flowchart .questInfo.active .questTrack {
+.tab_flowchart .questInfo.active .questCount {
 	background:#fff;
 	color:#00f;
 	font-weight:bold;
@@ -184,7 +240,7 @@
 	background:#EE9;
 }
 .tab_flowchart .questExtraItem .questIcon {
-	width:27px;
+	width:38px;
 	height:20px;
 	margin:1px 5px 0px 1px;
 	text-align:center;
@@ -195,9 +251,25 @@
 	float:left;
 }
 .tab_flowchart .questExtraItem .questDesc {
-	width:640px;
+	width:610px;
 	height:20px;
 	float:left;
 	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
 	font-size:11px;
+}
+.tab_flowchart .questExtraItem .questRemove {
+	width:16px;
+	height:16px;
+	float:left;
+	margin:0px 0px 0px 9px;
+	background:#fff;
+	border-radius:8px;
+}
+.tab_flowchart .questExtraItem .questRemove img {
+	width:12px;
+	height:12px;
+	margin:2px;
+	vertical-align:top;
 }

@@ -1,0 +1,132 @@
+<div class="page_title">
+	Resources Ledger
+	<div class="page_help_btn hover"><span>?</span> Help Topics</div>
+</div>
+
+<!-- HELP TOPICS -->
+<div class="page_help">
+	<div class="help_q">Range Scoping? I don't get it..</div>
+	<div class="help_a"><p>It determines on how you want to look onto the lodger itself.</p><p><strong>[Look back]</strong> attempts to collect every data up to the specified interval on the past. (3 days look back from 24th Dec yields 21st Dec, and so on)</p><p><strong>[Look around]</strong> attempts to collect every data from initial of the interval to next possible time from given interval.<br>Example given date is <strong>Wednesday 23 December 2015</strong>. Configured Interval is about <strong>2 weeks</strong>. It will yield the boundary between <strong>Sunday 13 December 2015</strong> and <strong>Sunday 27 December 2015</strong>.</p></div>
+	<div class="help_q">There are two categories that have similar material number, but why they give different rating?</div>
+	<div class="help_a">Each category and each material kind itself have it's own weight. <abbr title="Steel, Instant Build">Common materials</abbr> are not-so-valued over <abbr title="Bauxite, Development Materials">Rare materials</abbr>.</div>
+	<div class="help_q">So basically, what are those rating means?</div>
+	<div class="help_a">Consumption vs Collection ratio. It basically tells how far have you tried to consume what you have or collect materials from possible sources.</div>
+	<div class="help_q">Why some of the range are locked?</div>
+	<div class="help_a">The data collected to show those data for certain range is not enough, which might result nothing even leaving it was enabled. It'll be available as soon as the data required fills the quota.</div>
+	<div class="help_q">I kinda recall one of those quotes there...</div>
+	<div class="help_a" title="did you even play that game">No, you don't. It's basically.. not....</div>
+</div>
+
+<!-- FILTERS -->
+<div class="filterBoxes page_panel">
+	<div class="filterBox filter_range">
+		<span>Time Range</span>
+		<div class=filterRangeLen>
+			<span>Length</span>
+			<input type="number" name="range-scale" value="1" min="1" max="364" placeholder="X" required />
+		</div>
+	</div>
+	<div class="filterBox filter_dataDB">
+	</div>
+	<div class="filterBox filter_dataMS">
+	</div>
+	<div class="filterBox filter_base">
+		<div class="filterGroup" data-duration0="false">
+			<div class=filterScopes>
+				<span>Range Scoping</span>
+				<div class=filterScope>
+					<input type="radio" name="range-scope" value=true  checked />
+					<div class=filterText>Look back</div>
+					<div class=clear></div>
+				</div>
+				<div class=filterScope>
+					<input type="radio" name="range-scope" value=false         />
+					<div class=filterText>Look around</div>
+					<div class=clear></div>
+				</div>
+			</div>
+			<div class=filterDate>
+				<span>Date Time Base</span>
+				<input type="datetime-local" name="range-source" max="now" />
+			</div>
+			<div class=filterDate>
+				<span>Date Travel Back Limit</span>
+				<input type="datetime-local" name="range-maximum" readonly disabled />
+			</div>
+		</div>
+		<div class="filterGroup norq" data-duration0="true">
+			<div class="filterMapTypes">
+				<div class="clear"></div>
+			</div>
+			<div class="filterMapOption">
+				<div class="filterMapWorld"><span>World</span><br/>
+					<select></select>
+				</div>
+				<div class="filterMapNum"><span>Num</span><br/>
+					<select class=map-clear>
+					</select>
+				</div>
+				<div class="filterMapPeriod"><span>Period</span><br/>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="notice_box">This filter is still experimental. Things may not work as the expected behaviour as it requires more data on the development side.</div>
+		</div>
+	</div>
+	<div class="filterBox filter_reset">
+		<button class="i18n filterNavigate nav_prev" data-step="-1">LodgerPageStepRw</button>
+		<button class="i18n filterNavigate nav_next" data-step="+1">LodgerPageStepFw</button>
+		<button class="i18n filterRefresh">LodgerPageRefresh</button>
+	</div>
+	<div class="clear"></div>
+</div>
+
+<!-- INCOME-EXPENSE DATA -->
+<div class="page_padding">
+	<div class="lodger-statistics">
+		<p class="lodger-header"></p>
+	</div>
+</div>
+
+<!-- FACTORY -->
+<div class="factory">
+	<!-- Time Range Filter -->
+	<div class="base-radio">
+		<input type="radio"/>
+		<div class=filterText></div>
+		<div class=clear></div>
+	</div>
+	
+	<!-- Data Type Filter -->
+	<div class=filterData>
+		<input type="checkbox" checked />
+		<div class=filterText></div>
+		<div class=clear></div>
+	</div>
+	
+	<!-- Data Rating -->
+	<div class="lodger-data">
+		<div class="bar INV">
+			<div class="bar NG"></div>
+		</div>
+		<div class="info">
+			<div class="rating"></div>
+			<div class="type"></div>
+		</div>
+		<div class="bar NM">
+			<div class="bar OK"></div>
+		</div>
+		<div class="clear"></div>
+		
+		<div class="materials">
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	
+	<!-- Data Materials -->
+	<div class="base-material material">
+		<img />
+		<span></span>
+	</div>
+</div>

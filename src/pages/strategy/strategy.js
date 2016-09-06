@@ -2,47 +2,93 @@
 	"use strict";
 	_gaq.push(['_trackPageview']);
 	
+	var HASH_PARAM_DELIM = "-";
+	var WINDOW_TITLE = "KC3改 Strategy Room";
+	var activeTab;
+	
+	Object.defineProperties(window,{
+		activeTab:{
+			get:function(){return activeTab;},
+			set:function(newTab){
+				if(newTab instanceof KC3StrategyTab){ activeTab = newTab; }
+			}
+		},
+		activeSelf: {
+			get:function(){return activeTab.definition;}
+		}
+	});
+	
 	$(document).on("ready", function(){
 		// Initialize data managers
 		ConfigManager.load();
-		KC3Meta.init("../../data/");
 		KC3Master.init();
+		KC3Meta.init("../../data/");
+		KC3Meta.defaultIcon("../../assets/img/ui/empty.png");
 		PlayerManager.init();
 		KC3ShipManager.load();
 		KC3GearManager.load();
 		KC3Database.init( PlayerManager.hq.id );
+		RemodelDb.init();
+		KC3Translation.execute();
+		WhoCallsTheFleetDb.init("../../");
+		
+		if(!KC3Master.available){
+			$("#error").text("Strategy Room is not ready. Please open the game once so we can get data. Also make sure following the instructions, that open the F12 devtools panel first before the Game Player shown.");
+			$("#error").show();
+		}
+		
+		// show dev-only pages conditionally
+		if ( ConfigManager.devOnlyPages ) {
+			$("#menu .submenu.dev-only").show();
+		}
 		
 		// Click a menu item
 		$("#menu .submenu ul.menulist li").on("click", function(){
-			// If loading another page, stop
-			if($(this).hasClass("disabled")){ return false; }
-			if(KC3StrategyTabs.loading){ return false; }
-			KC3StrategyTabs.loading = $(this).data("id");
+			// Google Analytics just for click event
+			var gaEvent = "Strategy Room: " + $(this).data("id");
+			_gaq.push(['_trackEvent', gaEvent, 'clicked']);
 			
-			// Google Analytics
-			_gaq.push(['_trackEvent', "Strategy Room: "+KC3StrategyTabs.loading, 'clicked']);
-			
-			// Interface
-			$("#menu .submenu ul.menulist li").removeClass("active");
-			$(this).addClass("active");
-			$("#contentHtml").hide();
-			$("#contentHtml").html("");
-			window.location.hash = KC3StrategyTabs.loading;
-			
-			// Tab definition execution
-			var thisTab = KC3StrategyTabs[ KC3StrategyTabs.loading ];
-			if(typeof thisTab != "undefined"){
-				// Execute Tab with callback
-				thisTab.apply();
-				window.scrollTo(0,0);
+			KC3StrategyTabs.reloadTab(this);
+		});
+		
+		// Refresh current tab and force data reloading
+		$(".logo").on("click", function(){
+			console.debug("Reloading current tab [", KC3StrategyTabs.pageParams[0], "] on demand");
+			KC3StrategyTabs.reloadTab(undefined, true);
+		});
+		
+		$("#contentHtml").on("click", ".page_help_btn", function(){
+			if( $(".page_help").is(":visible") ){
+				$(".page_help").fadeOut();
 			}else{
-				KC3StrategyTabs.loading = false;
-				console.log("Clicked "+$(this).data("id")+" menu with no bound actions");
+				$(".page_help").fadeIn();
 			}
 		});
 		
+		// Add back to top and reload float button
+		$(window).scroll(function(){
+			if($(this).scrollTop() > 90){
+				$('.float_toolbar').fadeIn();
+			} else {
+				$('.float_toolbar').fadeOut();
+			}
+		});
+		$(".float_toolbar .back_to_top").on("click", function(){
+			$("html, body").animate({scrollTop: 0}, 300);
+		});
+		$(".float_toolbar .reload").on("click", function(){
+			$(".logo").trigger("click");
+		});
+		
+		$("#error").on("click", function(){
+			$(this).empty().hide();
+		});
+		
+		// Add listener to react on URL hash changed
+		window.addEventListener('popstate', KC3StrategyTabs.onpopstate);
+		
 		// If there is a hash tag on URL, set it as initial selected
-		KC3StrategyTabs.pageParams = window.location.hash.substring(1).split("-");
+		KC3StrategyTabs.pageParams = window.location.hash.substring(1).split(HASH_PARAM_DELIM);
 		if(KC3StrategyTabs.pageParams[0] !== ""){
 			$("#menu .submenu ul.menulist li").removeClass("active");
 			$("#menu .submenu ul.menulist li[data-id="+KC3StrategyTabs.pageParams[0]+"]").addClass("active");
@@ -52,5 +98,74 @@
 		$("#menu .submenu ul.menulist li.active").click();
 		
 	});
-	
+
+	KC3StrategyTabs.gotoTab = function(tab, hashParams) {
+		var newHash = (tab || KC3StrategyTabs.pageParams[0]);
+		if(!!hashParams) {
+			var params = hashParams;
+			if(arguments.length > 2 && hashParams.constructor !== Array) {
+				params = $.makeArray(arguments).slice(1);
+			}
+			if (params.constructor !== Array) {
+				params = [ params ];
+			}
+			// encodeURIComponent may be needed
+			newHash += HASH_PARAM_DELIM + params.join(HASH_PARAM_DELIM);
+		}
+		window.location.hash = newHash;
+	};
+
+	KC3StrategyTabs.reloadTab = function(tab, reloadData) {
+		var tabElement = typeof tab;
+		KC3StrategyTabs.pageParams = (tabElement=="string" ? tab : window.location.hash).substring(1).split(HASH_PARAM_DELIM);
+		if(tabElement != "object") {
+			var tabId = KC3StrategyTabs.pageParams[0] || "profile";
+			tab = $("#menu .submenu ul.menulist li[data-id="+tabId+"]");
+		}
+		// If loading another page, stop
+		if($(tab).hasClass("disabled")){ return false; }
+		if(KC3StrategyTabs.loading){ return false; }
+		KC3StrategyTabs.loading = $(tab).data("id");
+
+		// Interface
+		$("#menu .submenu ul.menulist li").removeClass("active");
+		$(tab).addClass("active");
+		$("#contentHtml").hide().empty();
+		window.document.title = "{0} - {1}".format(WINDOW_TITLE, $(tab).text());
+		if(KC3StrategyTabs.loading != KC3StrategyTabs.pageParams[0]) {
+			window.location.hash = KC3StrategyTabs.loading;
+			KC3StrategyTabs.pageParams = [KC3StrategyTabs.loading];
+		}
+
+		// Tab definition execution
+		var thisTab = KC3StrategyTabs[ KC3StrategyTabs.loading ];
+		if(typeof thisTab != "undefined"){
+			// Execute Tab with callback
+			window.activeTab = thisTab;
+			thisTab.apply(reloadData);
+			window.scrollTo(0,0);
+		}else{
+			console.info("Clicked ", KC3StrategyTabs.loading, "menu with no bound actions");
+			KC3StrategyTabs.loading = false;
+		}
+	};
+
+	KC3StrategyTabs.onpopstate = function(event){
+		var newHash = window.location.hash.substring(1);
+		var oldHash = KC3StrategyTabs.pageParams.join(HASH_PARAM_DELIM);
+		if(!!newHash && !KC3StrategyTabs.loading && newHash !== oldHash){
+			var newParams = newHash.split(HASH_PARAM_DELIM);
+			if(newParams[0] === KC3StrategyTabs.pageParams[0] && !!window.activeSelf.update){
+				// Pass new hash parameters to callback, keep old params in KC3StrategyTabs
+				if(!!window.activeSelf.update(newParams)){
+					// Update `KC3StrategyTabs.pageParams` if `reloadTab` skipped
+					KC3StrategyTabs.pageParams = window.location.hash.substring(1).split(HASH_PARAM_DELIM);
+					return;
+				}
+			}
+			console.debug("Auto reloading from [", oldHash, "] to [", newHash, "]");
+			KC3StrategyTabs.reloadTab();
+		}
+	};
+
 })();

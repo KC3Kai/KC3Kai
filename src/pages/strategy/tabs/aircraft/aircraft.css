@@ -1,0 +1,199 @@
+.tab_aircraft .factory {
+	display:none;
+}
+.tab_aircraft .item_types {
+	width:700px;
+	margin:0px 0px 10px 0px;
+	background:#f0f5ff;
+	padding:10px 5px;
+	border-bottom:1px solid #369;
+}
+
+.tab_aircraft .item_types .item_type {
+	width:30px;
+	height:30px;
+	float:left;
+	margin:0px 3px 5px 3px;
+	background:#fff;
+	border-radius:5px;
+}
+.tab_aircraft .item_types .item_type img {
+	width:30px;
+	height:30px;
+}
+.tab_aircraft .item_types .item_type.active {
+	background:#2C3A3B;
+}
+
+.tab_aircraft .item_list {
+	width:680px;
+}
+.tab_aircraft .slotitem {
+	/*width:680px;*/
+	margin:0px 0px 10px 0px;
+	background:#def;
+	border-radius:10px;
+	/*padding:10px;*/
+	
+	position: 	relative;
+	border: 	10px solid transparent;
+	overflow: 	hidden;
+}
+
+.tab_aircraft .slotitem .info {
+	width:230px;
+	float:left;
+	margin:0px 30px 0px 0px;
+}
+.tab_aircraft .slotitem .info .icon {
+	width:24px;
+	height:24px;
+	line-height:18px;
+	margin:6px 5px 3px 0px;
+	float:left;
+	background:#2C3A3B;
+	border-radius:12px;
+	overflow:hidden;
+}
+.tab_aircraft .slotitem .info .icon img {
+	width:24px;
+	height:24px;
+}
+.tab_aircraft .slotitem .info .english {
+	width:200px;
+	line-height:20px;
+	min-height:30px;
+	margin:0px 0px 3px 0px;
+	font-weight:bold;
+	float:left;
+}
+.tab_aircraft .slotitem .info .japanese {
+	width:230px;
+	height:20px;
+	line-height:20px;
+	margin:0px 0px 10px 0px;
+}
+.tab_aircraft .slotitem .info .stats {
+	width:230px;
+	height:20px;
+	line-height:20px;
+	margin:0px 0px 5px 0px;
+}
+.tab_aircraft .slotitem .info .item_stat {
+	width:40px;
+	height:20px;
+	float:left;
+	margin:0px 2px 2px 0px;
+	font-size:12px;
+}
+.tab_aircraft .slotitem .info .item_stat img {
+	width:16px;
+	height:16px;
+	margin:0px 2px 0px 0px;
+}
+.tab_aircraft .slotitem .instances {
+	width:400px;
+	float:left;
+}
+
+.tab_aircraft .slotitem .instance {
+	width:400px;
+	height:26px;
+	line-height:20px;
+	margin:0px 0px 3px 0px;
+	background:#fff;
+	border-radius:7px;
+	overflow:hidden;
+	padding:3px 5px;
+}
+.tab_aircraft .slotitem .instance_field {
+	height:20px;
+	float:left;
+}
+.tab_aircraft .slotitem .instance_icon {
+	width:20px;
+	margin:0px 5px 0px 0px;
+	/*background:#fcc;*/
+}
+.tab_aircraft .slotitem .instance_icon img {
+	width:20px;
+	height:20px;
+	vertical-align:top;
+}
+.tab_aircraft .slotitem .instance_chev {
+	width:29px;
+	margin:0px 5px 0px 0px;
+	/*background:#cfc;*/
+	overflow:hidden;
+}
+.tab_aircraft .slotitem .instance_chev img {
+	width:35px;
+	height:20px;
+	vertical-align:top;
+	position:relative;
+	margin:0px 0px 0px -3px;
+}
+.tab_aircraft .slotitem .instance_aaicon {
+	width:16px;
+	height:16px;
+	margin:2px 2px 0px 0px;
+	/*background:#fcc;*/
+}
+.tab_aircraft .slotitem .instance_aaicon img {
+	width:16px;
+	height:16px;
+	vertical-align:top;
+}
+.tab_aircraft .slotitem .instance_aaval {
+	width:22px;
+	margin:0px 2px 0px 0px;
+	/*background:#fcc;*/
+	font-size:12px;
+}
+.tab_aircraft .slotitem .instance_aaval.activeSquad {
+	color:#00f;
+}
+.tab_aircraft .slotitem .instance_aaval.reserveSquad {
+	color:#aaa;
+}
+.tab_aircraft .slotitem .instance_name {
+	width:130px;
+	margin:0px 5px 0px 0px;
+}
+.tab_aircraft .slotitem .instance_name input {
+	width:130px;
+	height:20px;
+	line-height:20px;
+	background:transparent;
+	border:1px solid transparent;
+	font-size:11px;
+	padding:0px;
+}
+.tab_aircraft .slotitem .instance_name input:hover {
+	background:#ffc;
+	border:1px inset #ccc;
+}
+.tab_aircraft .slotitem .holder_pic {
+	width:20px;
+	height:20px;
+	margin:0px 2px 0px 0px;
+	/*background:#ccf;*/
+}
+.tab_aircraft .slotitem .holder_pic img {
+	width:20px;
+	height:20px;
+	vertical-align:top;
+}
+.tab_aircraft .slotitem .holder_name {
+	width:90px;
+	height:20px;
+	margin:0px 2px 0px 0px;
+	/*background:#ccf;*/
+	font-size:12px;
+}
+.tab_aircraft .slotitem .holder_level {
+	width:40px;
+	height:20px;
+	/*background:#ccf;*/
+	font-size:12px;
+}

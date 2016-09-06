@@ -4,6 +4,7 @@
 	KC3StrategyTabs.consumables = new KC3StrategyTab("consumables");
 	
 	KC3StrategyTabs.consumables.definition = new KC3Graphable(
+		KC3StrategyTabs.consumables,
 		KC3Database.get_useitem,
 		{
 			name  :["bucket", "devmat", "screw", "torch"],

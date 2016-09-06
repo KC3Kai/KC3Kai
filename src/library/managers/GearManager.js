@@ -9,15 +9,28 @@ Saves and loads list to and from localStorage
 	
 	window.KC3GearManager = {
 		list: {},
-		max: 400,
+		max: 497,
 		pendingGearNum: 0,
 
+		carrierBasedAircraftType3Ids: [6,7,8,9,10,21,22,33],
+		landBasedAircraftType3Ids: [6,7,8,9,10,33,37,38],
+		antiAirFighterType2Ids: [6,7,8,11,45],
+		interceptorsType3Ids: [38],
+
 		// Get a specific item by ID
+		// NOTE: if you want to write testcases, avoid setting KC3GearManager.list["x0"]
+		// because it'll never be retrieved by "get(0)"
 		get :function( itemId ){
-			// console.log("getting ship", rosterId, this.list["x"+rosterId]);
-			return this.list["x"+itemId] || (new KC3Gear());
+			itemId = parseInt(itemId,10);
+			// in KCAPI some item values has special meanings on
+			// 0 (e.g. ex_slot == 0 means the slot is available but nothing is equipped.)
+
+			// assuming itemId starts from 1
+			// so it's safe to just return an empty gear when itemId <= 0
+			return (itemId <= 0)
+			  ? (new KC3Gear())
+			  : (this.list["x"+itemId] || new KC3Gear());
 		},
-		
 		// Count number of items
 		count :function(){
 			return Object.size(this.list) + this.pendingGearNum;

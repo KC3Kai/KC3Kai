@@ -1,5 +1,5 @@
 module.exports = function(grunt) {
-	
+
 	grunt.initConfig({
 		clean: {
 			tmp: {
@@ -22,10 +22,18 @@ module.exports = function(grunt) {
 				src: [
 					'assets/img/**',
 					'assets/snd/**',
+					'assets/swf/**',
 					'assets/js/Chart.min.js',
 					'assets/js/Dexie.min.js',
+					'assets/js/FileSaver.min.js',
+					'assets/js/steganography.js',
+					'assets/js/jquery-ui.min.js',
 					'assets/js/KanColleHelpers.js',
-					'assets/js/FileSaver.min.js'
+					'assets/js/twbsPagination.min.js',
+					'assets/js/WhoCallsTheFleetShipDb.json',
+					'assets/js/jszip.min.js',
+					'assets/js/bootstrap-slider.min.js',
+					'assets/js/no_ga.js'
 				],
 				dest: 'build/release/'
 			},
@@ -34,13 +42,15 @@ module.exports = function(grunt) {
 				cwd: 'build/tmp/',
 				src: [
 					'assets/css/keys.css',
+					'assets/css/bootstrap-slider.min.css',
 					'library/helpers/*.js',
 					'library/injections/*.js',
 					'library/modules/*.js',
 					'pages/**/*',
 					'!pages/strategy/tabs/**/*.js',
 					'manifest.json',
-					'data/**/*.json'
+					'data/*.json',
+					'data/lang/data/**/*.json'
 				],
 				dest: 'build/release/'
 			}
@@ -51,15 +61,32 @@ module.exports = function(grunt) {
 			}
 		},
 		jshint: {
-			all : {
+			build : {
 				options: {
-					newcap: false,
-					laxbreak: true,
+					jshintrc: true
 				},
 				src: [
 					'build/tmp/assets/js/global.js',
 					'build/tmp/library/**/*.js',
 					'build/tmp/pages/**/*.js'
+				]
+			},
+			src : {
+				options: {
+					jshintrc: true
+				},
+				src: [
+					'src/assets/js/global.js',
+					'src/library/**/*.js',
+					'src/pages/**/*.js'
+				]
+			},
+			test : {
+				options: {
+					jshintrc: true
+				},
+				src: [
+					'tests/library/**/*.js',
 				]
 			}
 		},
@@ -71,6 +98,7 @@ module.exports = function(grunt) {
 					src: [
 						'assets/css/global.css',
 						'assets/css/keys.css',
+						'assets/css/bootstrap-slider.min.css',
 						'pages/**/*.css'
 					],
 					dest: 'build/tmp/'
@@ -133,15 +161,11 @@ module.exports = function(grunt) {
 					]
 				}
 			},
-			manifest: {
+			buildobjects: {
 				src: 'build/tmp/manifest.json',
 				dest: 'build/tmp/',
 				options: {
 					replacements: [
-						{
-							pattern: /KC3改 Development/ig,
-							replacement: 'KanColle Command Center 改'
-						},
 						{
 							pattern: /assets\/js\/jquery\-2\.1\.3\.min\.js/ig,
 							replacement: 'assets/js/global.js'
@@ -153,6 +177,18 @@ module.exports = function(grunt) {
 						{
 							pattern: /library\/managers\/ConfigManager\.js/ig,
 							replacement: 'library/managers.js'
+						}
+					]
+				}
+			},
+			manifest: {
+				src: 'build/tmp/manifest.json',
+				dest: 'build/tmp/',
+				options: {
+					replacements: [
+						{
+							pattern: /KC3改 Development/ig,
+							replacement: 'KanColle Command Center 改'
 						},
 						{
 							pattern: /assets\/img\/logo\/dev\.png/ig,
@@ -177,19 +213,31 @@ module.exports = function(grunt) {
 			}
 		},
 		jsonlint: {
-			all : {
+			build : {
 				options: {
-					
+					format: true
 				},
 				src: [
 					'build/tmp/manifest.json',
-					'build/tmp/data/**/*.json'
+					'build/tmp/data/*.json',
+					'build/tmp/data/lang/data/**/*.json'
+				]
+			},
+			src :{
+				options: {
+
+				},
+				src: [
+					'src/manifest.json',
+					'src/data/*.json',
+					'src/data/lang/data/**/*.json'
 				]
 			}
 		},
 		'json-minify': {
 			manifest : { files: 'build/tmp/manifest.json' },
-			data : { files: 'build/tmp/data/**/*.json' }
+			data1 : { files: 'build/tmp/data/*.json' },
+			data2 : { files: 'build/tmp/data/lang/data/**/*.json' }
 		},
 		concat: {
 			global_css: {
@@ -217,6 +265,41 @@ module.exports = function(grunt) {
 					'build/release/pages/strategy/allstrategytabs.js' : ['build/tmp/pages/strategy/tabs/*/*.js'],
 				}
 			}
+		},
+		qunit: {
+			all: [
+				'tests/**/*.html'
+			]
+		},
+		compress: {
+			release: {
+				options: {
+					archive: 'build/release.zip',
+					pretty: true
+				},
+				expand: true,
+				cwd: 'build/',
+				src: [ 'release/**/*' ],
+				dest: './'
+			}
+		},
+		webstore_upload: {
+			"accounts": {
+				"dragonjet": {
+					publish: true,
+					client_id: process.env.WEBSTORE_CLIENT_ID,
+					client_secret: process.env.WEBSTORE_CLIENT_SECRET,
+					refresh_token: process.env.WEBSTORE_REFRESH_TOKEN
+				}
+			},
+			"extensions": {
+				"kc3kai": {
+					account: "dragonjet",
+					publish: true, 
+					appID: "hkgmldnainaglpjngpajnnjfhpdjkohh",
+					zip: "build/release.zip"      
+				}
+			}
 		}
 	});
 	
@@ -231,20 +314,21 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-jsonlint');
 	grunt.loadNpmTasks('grunt-string-replace');
 	grunt.loadNpmTasks("grunt-remove-logging");
+	grunt.loadNpmTasks("grunt-contrib-qunit");
+	grunt.loadNpmTasks('grunt-contrib-compress');
+	grunt.loadNpmTasks('grunt-webstore-upload');
 	
-	grunt.registerTask('default', [
+	grunt.registerTask('local', [
+		'clean:tmp',
 		'clean:release',
 		'copy:tmpsrc',
 		'copy:statics',
-		'removelogging',
-		'string-replace:devtooltitle',
-		'jshint',
+		'jshint:build',
 		'cssmin',
-		'uglify',
 		'string-replace:allhtml',
 		'htmlmin',
-		'string-replace:manifest',
-		'jsonlint',
+		'string-replace:buildobjects',
+		'jsonlint:build',
 		'json-minify',
 		'copy:processed',
 		'concat:global_css',
@@ -252,6 +336,44 @@ module.exports = function(grunt) {
 		'concat:library',
 		'concat:strategy',
 		'clean:tmp'
+	]);
+	
+	grunt.registerTask('build', [
+		'clean:tmp',
+		'clean:release',
+		'copy:tmpsrc',
+		'copy:statics',
+		'removelogging',
+		'string-replace:devtooltitle',
+		'jshint:build',
+		'cssmin',
+		'uglify',
+		'string-replace:allhtml',
+		'htmlmin',
+		'string-replace:buildobjects',
+		'string-replace:manifest',
+		'jsonlint:build',
+		'json-minify',
+		'copy:processed',
+		'concat:global_css',
+		'concat:global_js',
+		'concat:library',
+		'concat:strategy'
+	]);
+	
+	grunt.registerTask('test-src', [
+		'jshint:src',
+		'jshint:test',
+		'jsonlint:src'
+	]);
+	
+	grunt.registerTask('test-unit', [
+		'qunit'
+	]);
+	
+	grunt.registerTask('webstore', [
+		'compress:release',
+		'webstore_upload:kc3kai'
 	]);
 	
 };

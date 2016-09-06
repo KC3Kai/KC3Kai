@@ -179,7 +179,7 @@
 							.text( PlayerManager.hq.exp[ConfigManager.hqExpDetail] )
 							.attr("title",hqt);
 						if(hqexpd.length>0)
-							$(".battle_hqlevel_next_gain", container).text(hqexpd*(ConfigManager.hqExpDetail==1?-1:1));
+							$(".battle_hqlevel_next_gain", container).text(hqexpd);
 					break;
 				}
 			},
@@ -370,7 +370,7 @@
 					
 				}else if(KC3Panel.mode=="battle"){
 					// Combined Fleet
-					if(PlayerManager.combinedFleet){
+					if(PlayerManager.combinedFleet && false){
 						var MainFleet = PlayerManager.fleets[0];
 						var EscortFleet = PlayerManager.fleets[1];
 						
@@ -428,8 +428,8 @@
 								var AmmoPercent = CurrentShip.ammo / CurrentShip.master().api_bull_max;
 								$(".supply-fuel .supply-text", ShipBox).text(Math.floor(FuelPercent*100)+"%");
 								$(".supply-ammo .supply-text", ShipBox).text(Math.floor(AmmoPercent*100)+"%");
-								$(".supply-fuel .supply-bar", ShipBox).css("width", (50*FuelPercent)+"px");
-								$(".supply-ammo .supply-bar", ShipBox).css("width", (50*AmmoPercent)+"px");
+								$(".supply-fuel .supply-bar", ShipBox).css("width", (50*Math.min(FuelPercent,1))+"px");
+								$(".supply-ammo .supply-bar", ShipBox).css("width", (50*Math.min(AmmoPercent,1))+"px");
 							}
 						});
 						
@@ -562,7 +562,15 @@
 				$(".battle .battle_enemies .battle_abyss .face-container img", container).attr("src", KC3Meta.abyssIcon(-1));
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > -1){
+						var eParam = thisNode.eParam[index];
+
 						$(".battle .battle_enemies .abyss_"+(index+1)+" .face-container img", container).attr("src", KC3Meta.abyssIcon(eshipId));
+						
+						var tooltip = "FP: " + eParam[0] + String.fromCharCode(13);
+						tooltip += "Torp: " + eParam[1] + String.fromCharCode(13);
+						tooltip += "AA: " + eParam[2] + String.fromCharCode(13);
+						tooltip += "Armor: " + eParam[3];
+						$(".battle .battle_enemies .abyss_"+(index+1)+" .face-container img", container).attr("title", tooltip);
 						$(".battle .battle_enemies .abyss_"+(index+1), container).show();
 
 						if ((thisNode.enemySunk[index]) && (ConfigManager.info_battle)) {
@@ -715,7 +723,7 @@
 						return (PlayerManager.hq.exp[2] + Math.min(PlayerManager.hq.exp[1],KC3SortieManager.hqExpGained)) / KC3Meta.exp(PlayerManager.hq.level)[0];
 					})()*60)+"px"});
 				}
-				$(".battle_hqlevel_next_gain", container).text(KC3SortieManager.hqExpGained * (ConfigManager.hqExpDetail==1?-1:1));
+				$(".battle_hqlevel_next_gain", container).text(KC3SortieManager.hqExpGained);
 				
 				$(".battle .battle_rating img").attr("src", "../../../../assets/img/client/ratings/"+thisNode.rating+".png");
 				
@@ -845,8 +853,15 @@
 				console.log(thisPvP.eships);
 				$.each(thisPvP.eships, function(index, eshipId){
 					if(eshipId > -1){
+						var eParam = thisPvP.eParam[index];
+
 						console.log("eshipId", eshipId, "show");
 						$(".battle .battle_enemies .abyss_"+(index+1)+" .face-container img", container).attr("src", KC3Meta.shipIcon(eshipId));
+						var tooltip = "FP: " + eParam[0] + String.fromCharCode(13);
+						tooltip += "Torp: " + eParam[1] + String.fromCharCode(13);
+						tooltip += "AA: " + eParam[2] + String.fromCharCode(13);
+						tooltip += "Armor: " + eParam[3];
+						$(".battle .battle_enemies .abyss_"+(index+1)+" .face-container img", container).attr("title", tooltip);
 						$(".battle .battle_enemies .abyss_"+(index+1), container).show();
 
 						if ((thisPvP.enemySunk[index]) && (ConfigManager.info_battle)) {
@@ -929,10 +944,12 @@
 						return (PlayerManager.hq.exp[2] + Math.min(PlayerManager.hq.exp[1],expGained)) / KC3Meta.exp(PlayerManager.hq.level)[0];
 					})()*60)+"px"});
 				}
-				$(".battle_hqlevel_next_gain", container).text(expGained*(ConfigManager.hqExpDetail==1?-1:1));
+				$(".battle_hqlevel_next_gain", container).text(expGained);
 				// giles bhunder
 				$(".battle .battle_rating img").attr("src", "../../../../assets/img/client/ratings/"+data.result.api_win_rank+".png");
-			}
+			},
+			ExpedResult: function(container, data, local){
+			},
 		}
 	});
 	

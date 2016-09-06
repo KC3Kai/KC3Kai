@@ -6,7 +6,7 @@
 	KC3StrategyTabs.showcase.definition = {
 		tabSelf: KC3StrategyTabs.showcase,
 		
-		shipCache: { bb:[], fbb:[], bbv:[], cv:[], cvl:[], ca:[], cav:[], cl:[], dd:[], ss:[], clt:[], ax:[] },
+		shipCache: {},
 		gearCache: {},
 		equipTypes: {
 			"t2": {
@@ -85,10 +85,22 @@
 		},
 		
 		/* INIT
-		Prepares all data needed
+		Prepares static data needed
 		---------------------------------*/
 		init :function(){
+		},
+		
+		/* RELOAD
+		Prepares latest fleets data
+		---------------------------------*/
+		reload :function(){
 			var ctr, ThisShip, TempShipList, self=this;
+			// Reload data from local storage
+			KC3ShipManager.load();
+			KC3GearManager.load();
+			// Clean cache data
+			this.shipCache = { bb:[], fbb:[], bbv:[], cv:[], cvl:[], ca:[], cav:[], cl:[], dd:[], ss:[], clt:[], ax:[], ao:[] };
+			this.gearCache = {};
 			
 			// Convert ship list object into array
 			TempShipList = $.map(KC3ShipManager.list, function(value, index) {
@@ -122,6 +134,7 @@
 					case 17: this.addToStypeList("ax", ThisShip); break;
 					case 19: this.addToStypeList("ax", ThisShip); break;
 					case 16: this.addToStypeList("ax", ThisShip); break;
+					case 22: this.addToStypeList("ax", ThisShip); break;
 					default: break;
 				}
 			}
@@ -229,7 +242,7 @@
 				}
 				
 				// Get 4 most powerful gear on this type
-				TopGears = MergedList.splice(0,4);
+				TopGears = MergedList.slice(0,4);
 				// console.log("TopGears for", element.name, TopGears);
 				
 				// Create gear-type box
@@ -244,6 +257,7 @@
 						$(".gear_icon img", GearBox).attr("src", "../../assets/img/items/"+GearTypeIcon+".png");
 						GearTypeIcon = 0;
 						$(".gear_name", GearBox).html( ThisTopGear.name );
+						$(".gear_name", GearBox).attr("title", ThisTopGear.name );
 						
 						if(typeof element.order !== "undefined"){
 							$(".gear_stat_icon img", GearBox).attr("src", "../../assets/img/stats/"+element.order+".png");

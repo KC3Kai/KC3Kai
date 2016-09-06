@@ -1,0 +1,69 @@
+.tab_mstupdate {
+	width:680px;
+}
+.tab_mstupdate .factory {
+	display:none;
+}
+.tab_mstupdate .new_ships_note {
+	margin:0px 0px 15px 20px;
+}
+.tab_mstupdate .new_ships_note a {
+	color:#00f;
+}
+.tab_mstupdate .new_ships_note em {
+	font-size:12px;
+}
+
+/* SHIP
+--------------------------------*/
+.tab_mstupdate .mstship {
+	width:220px;
+	height:320px;
+	float:left;
+	margin:0px 5px 10px 0px;
+	background:#eee;
+	border:1px solid #ccc;
+	overflow:hidden;
+}
+.tab_mstupdate .mstship .ship_cg {
+	width:218px;
+	height:300px;
+}
+.tab_mstupdate .mstship .ship_cg embed {
+	width:218px;
+	height:300px;
+}
+.tab_mstupdate .mstship .ship_name {
+	width:218px;
+	height:20px;
+	line-height:20px;
+	text-align:center;
+	font-size:12px;
+}
+
+/* GEAR
+--------------------------------*/
+.tab_mstupdate .mstgear {
+	width:150px;
+	height:170px;
+	float:left;
+	margin:0px 5px 10px 0px;
+	background:#eee;
+	border:1px solid #ccc;
+	overflow:hidden;
+}
+.tab_mstupdate .mstgear .gear_cg {
+	width:150px;
+	height:150px;
+}
+.tab_mstupdate .mstgear .gear_cg img {
+	width:150px;
+	height:150px;
+}
+.tab_mstupdate .mstgear .gear_name {
+	width:150px;
+	height:20px;
+	line-height:20px;
+	text-align:center;
+	font-size:12px;
+}

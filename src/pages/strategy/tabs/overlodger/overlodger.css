@@ -1,0 +1,290 @@
+.tab_overlodger {
+	width:680px;
+}
+
+.tab_overlodger .factory {
+	display:none;
+}
+
+.tab_overlodger input[type=number]::-webkit-inner-spin-button,
+.tab_overlodger input[type=number]::-webkit-outer-spin-button  {
+	-webkit-appearance: none;
+	margin:0;
+}
+
+/* NUMBERS
+-----------------------------*/
+.tab_overlodger .filterBoxes {
+	font-size: smaller;
+}
+.tab_overlodger .filterBox {
+	width:112px;
+	height:152px;
+	float:left;
+	margin:0px 3px 0px 0px;
+	background:#def;
+	border-radius:8px;
+	padding:3px 5px;
+}
+.tab_overlodger .filterBox.filter_base {
+	width:217px;
+}
+.tab_overlodger .filterBox .filterRangeLen {
+	position: relative;
+}
+
+.tab_overlodger .filterBox .filterRangeLen input {
+	position: absolute;
+	top: -2px;
+	right: 0;
+	width:24px;
+	
+	border:inset 1px;
+	background-color:#daebfc;
+	text-align:center;
+}
+.tab_overlodger .filterBox .filterRangeLen input[disabled] {
+	color:#daebfc;
+}
+.tab_overlodger .filterBox input:invalid {
+	color: red;
+	font-weight:bolder;
+}
+.tab_overlodger .filterBox .filterDate input {
+	width : 100%;
+	height: 24px;
+}
+.tab_overlodger .filterBox .filterType,
+.tab_overlodger .filterBox .filterData,
+.tab_overlodger .filterBox .filterScope {
+	width:100%;
+	height:12px;
+	line-height:12px;
+	margin:5px 0px;
+}
+.tab_overlodger .filterBox .filterType  input,
+.tab_overlodger .filterBox .filterData  input,
+.tab_overlodger .filterBox .filterScope  input {
+	display:block;
+	width:12px;
+	height:12px;
+	margin:0px 5px;
+	float:left;
+}
+.tab_overlodger .filterBox .filterText {
+	height:12px;
+	text-align:center;
+	float:left;
+}
+
+.tab_overlodger .filterBox.filter_reset button {
+	width:100%;
+	margin-top: 4px;
+}
+
+.tab_overlodger .filterBox.filter_reset button[disabled] {
+	color:#ccc;
+}
+
+.tab_overlodger .filterBox .filterGroup {
+	display:none;
+}
+.tab_overlodger .filterBox .filterMapTypes .filterSType {
+	position:relative;
+	float:left;
+	width:25%;
+	line-height:12px;
+	margin:5px 0px;
+}
+.tab_overlodger .filterBox .filterMapTypes .filterSType input {
+	display:block;
+	width:12px;
+	height:12px;
+	margin:0px 5px;
+	float:left;
+}
+.tab_overlodger .filterBox .filterMapOption select {
+	width:40px;
+}
+.tab_overlodger .filterBox .filterMapOption select[disabled] {
+	background-color:#eee;
+}
+.tab_overlodger .filterBox .filterGroup.rqev .filterMapOption .filterMapNum .sortieMap.map-clear,
+.tab_overlodger .filterBox .filterGroup.rqev .filterMapOption .filterMapNum select.map-clear {
+	color:black;
+}
+.tab_overlodger .filterBox .filterGroup.rqev .filterMapOption .filterMapNum .sortieMap:not(.map-clear),
+.tab_overlodger .filterBox .filterGroup.rqev .filterMapOption .filterMapNum select:not(.map-clear) {
+	color:red;
+}
+.tab_overlodger .filterBox .filterMapOption div:not(.clear) {
+	float:left;
+	width:22.5%
+}
+.tab_overlodger .filterBox .notice_box {
+	background: #fdd;
+	border: 1px solid red;
+	margin-top: 4px;
+	font-size: 0.85em;
+	text-align: center;
+}
+.tab_overlodger .filterBox .filterMapOption div.filterMapPeriod {
+	width:55%;
+}
+.tab_overlodger .filterBox .filterMapPeriod select {
+	width:100%;
+}
+
+/* SORTIE GROUPING CSS RULE
+--------------------------------*/
+.tab_overlodger .filterBox > .filterGroup[data-duration0="true"] > .filterMapOption > div > select > option[value="0"] {
+	display:block !important;
+}
+.tab_overlodger .filterBox > .filterGroup.rqex .sortieWorld.no-extra,
+
+.tab_overlodger .filterBox > .filterGroup:not(.rqev) .sortieWorld.event,
+.tab_overlodger .filterBox > .filterGroup.rqev .sortieWorld:not(.event),
+
+.tab_overlodger .filterBox > .filterGroup.rqbs .sortieMap.extra,
+.tab_overlodger .filterBox > .filterGroup.rqex .sortieMap.basic,
+
+.tab_overlodger .filterBox > .filterGroup:not(.rqex) .periodExtra,
+.tab_overlodger .filterBox > .filterGroup:not(.rqev) .periodEvent,
+.tab_overlodger .filterBox > .filterGroup.rqbs .filterMapPeriod ,
+.tab_overlodger .filterBox > .filterGroup.norq .filterMapPeriod ,
+
+.tab_overlodger .filterBox > .filterGroup.rqev.crng .filterMapPeriod .sortieMoment.requireClear,
+.tab_overlodger .filterBox > .filterGroup.rqev.acng .filterMapPeriod .sortieMoment.requireAllClear {
+	display:none !important;
+}
+
+/* RATING
+--------------------------------*/
+.tab_overlodger .lodger-statistics {
+	border-radius: 8px;
+	margin: 16px 4px;
+	padding: 4px;
+	background-color: #def;
+}
+
+.tab_overlodger .lodger-header {
+	font-size: 1.1em;
+	text-align:center;
+	font-weight: bold;
+}
+
+/* No data template */
+.tab_overlodger .lodger-data.empty-data {
+	border: solid #f44 2px;
+	background: #fcc;
+	padding: 4px 8px;
+	font-size: smaller;
+	text-align: center;
+}
+
+.tab_overlodger .lodger-statistics .lodger-data:not(:only-child).empty-data{
+	display:none;
+}
+
+/* Factory data template */
+.tab_overlodger .lodger-data {
+	background-color:#cde;
+	border-radius: 6px;
+	margin: 4px 1px;
+	padding: 2px 8px;
+}
+.tab_overlodger .lodger-data .bar {
+	height: 20px;
+	float: left;
+}
+.tab_overlodger .lodger-data .bar.INV,
+.tab_overlodger .lodger-data .bar.NM {
+	position: relative;
+	width: 42%;
+	
+	margin: 9px 0px;
+	
+	background-color: gray;
+}
+.tab_overlodger .lodger-data .bar .bar {
+	position: absolute;
+	top: 0;
+	
+	transition: all 0.4s;
+}
+.tab_overlodger .lodger-data .bar .bar.NG {
+	background-color: red;
+	right: 0;
+}
+.tab_overlodger .lodger-data .bar .bar.NG.over {
+	border-left: solid 2.5px gold;
+}
+.tab_overlodger .lodger-data .bar .bar.OK {
+	background-color: green;
+	left: 0;
+}
+.tab_overlodger .lodger-data .bar .bar.OK.over {
+	border-right: solid 2.5px gold;
+}
+
+.tab_overlodger .lodger-data .info {
+	width: 16%;
+	float: left;
+	text-align: center;
+}
+.tab_overlodger .lodger-data .info .type {
+	font-size: x-small;
+}
+.tab_overlodger .lodger-data .info .rating {
+	font-size: larger;
+}
+.tab_overlodger .lodger-data .info .rating.NG {
+	color: red;
+}
+.tab_overlodger .lodger-data .info .rating.OK {
+	color: green;
+}
+.tab_overlodger .lodger-data .info .rating.over {
+	font-weight: bold;
+}
+
+.tab_overlodger .lodger-data .materials .material,
+.tab_overlodger .lodger-data .materials .material.over:before {
+	position:relative;
+	background-color: #bcd;
+	border-radius: 4px;
+	padding: 0 2px;
+	float:left;
+	vertical-align: middle;
+}
+.tab_overlodger .lodger-data .materials .material {
+	margin: 0 1.4px 0 0;
+	width:12.3%;
+}
+.tab_overlodger .lodger-data .materials .material.rsc {
+}
+.tab_overlodger .lodger-data .materials .material.csm {
+}
+.tab_overlodger .lodger-data .materials .material.over:before {
+	position:absolute;
+	right:0;
+	
+	content:attr(data-actual-value);
+	opacity: 0;
+	transition: all 0.1s;
+}
+.tab_overlodger .lodger-data .materials .material.over:hover:before {
+	opacity: 1;
+}
+
+.tab_overlodger .lodger-data .materials .material:nth-of-type(8) {
+	margin: 0;
+}
+.tab_overlodger .lodger-data .materials .material img {
+	margin:1px;
+}
+.tab_overlodger .lodger-data .materials .material span {
+	display:inline-block;
+	width:calc(100% - 24px);
+	text-align:right;
+}

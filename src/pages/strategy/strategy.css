@@ -6,12 +6,21 @@ body {
 	width:800px;
 	margin:0px auto;
 }
+#error {
+	width:800px;
+	margin:10px 0px 20px 0px;
+	display:none;
+}
 #body {
 	width:800px;
 	margin:10px 0px 10px 0px;
 }
+.factory {
+	display:none;
+}
 
-/* MENU */
+/* MENU TABS
+-------------------------------*/
 #menu {
 	width:100px;
 	float:left;
@@ -29,6 +38,9 @@ body {
 	width:100px;
 	margin:0px 0px 10px 0px;
 }
+#menu .submenu.dev-only {
+    display:none;
+}
 #menu .submenu .title {
 	width:100px;
 	height:18px;
@@ -45,6 +57,7 @@ body {
 	padding:0px;
 	font-size:12px;
 	font-weight:bold;
+	white-space:nowrap;
 }
 #menu .submenu ul.menulist li {
 	width:100px;
@@ -75,22 +88,25 @@ body {
 	line-height:10px;
 }
 
-/* CONTENT */
+/* CONTENT
+-------------------------------*/
 #content {
 	width:700px;
-	min-height:1030px;
+	min-height:1300px;
 	float:left;
 	background:#fff;
 	border-radius:10px;
 	border:1px solid #369;
 	box-shadow:-1px 1px 3px #888;
 	overflow:hidden;
+	margin:0px 0px 60px 0px;
 }
 #contentHtml {
 	width:700px;
 }
 
-/* COMMONS */
+/* COMMONS
+-------------------------------*/
 .page_title {
 	width:700px;
 	font-size:18px;
@@ -101,47 +117,25 @@ body {
 	border-bottom:1px solid #369;
 	color:#0066CC;
 }
-.page_padding {
-	width:700px;
-	padding:0px 10px 0px;
-}
-.page_section {
+
+.page_help_btn {
 	height:24px;
 	line-height:24px;
-	font-size:18px;
-	border-bottom:1px solid #ccc;
-	margin:20px 0px 5px 0px;
-}
-.page_help {
-	width:680px;
-	height:24px;
-	line-height:24px;
-	margin:10px 0px 10px 0px;
-	padding:0px 0px 0px 0px;
-	clear:both;
-	font-size:12px;
-	font-style:italic;
-	background:#cfc;
-	border-radius:12px;
-}
-.page_help_icon {
-	
-}
-.page_wiki {
-	height:30px;
 	text-align:right;
 	float:right;
-	margin:0px 10px 0px 0px;
+	margin:3px 5px 0px 0px;
 	font-size:12px;
+	padding:0px 10px 0px 5px;
+	border-radius:8px;
 }
-.page_wiki a {
-	height:30px;
+.page_help_btn:hover {
+	background:#ffc;
 }
-.page_wiki a span {
+.page_help_btn span {
 	width:14px;
 	height:14px;
 	line-height:14px;
-	margin:7px 3px 3px 3px;
+	margin:4px 3px 3px 3px;
 	float:left;
 	background:#69c;
 	border-radius:9px;
@@ -151,4 +145,98 @@ body {
 	color:#fff;
 	font-style:normal;
 	display:block;
+}
+
+.page_help {
+	width:700px;
+	min-height:200px;
+	background:url(../../assets/img/ui/fairy.png) #e6ffe6;
+	background-position:bottom right;
+	background-repeat:no-repeat;
+	padding:5px 10px;
+	border-bottom:1px solid #369;
+	display:none;
+}
+.page_help .help_q {
+	height:16px;
+	line-height:16px;
+	font-size:12px;
+	font-weight:bold;
+	margin:0px 0px 0px 0px;
+	color:#0099cc;
+	text-shadow:1px 1px 2px #ccc;
+}
+.page_help .help_a {
+	line-height:14px;
+	font-size:12px;
+	margin:0px 0px 5px 20px;
+	text-shadow:0px 0px 1px #fff;
+}
+
+.page_help .help_more {
+	height:16px;
+	line-height:16px;
+	font-size:12px;
+	font-weight:bold;
+	margin:0px 0px 0px 0px;
+	text-align:right;
+	text-shadow:1px 1px 2px #ccc;
+}
+
+.page_panel {
+	width:700px;
+	background:#f0f5ff;
+	padding:5px 10px;
+	border-bottom:1px solid #369;
+}
+
+.page_padding {
+	width:700px;
+	padding:0px 10px 0px;
+}
+
+.page_section {
+	height:26px;
+	line-height:24px;
+	font-size:20px;
+	border-bottom:1px solid #ddd;
+	margin:10px 0px 10px 0px;
+}
+.page_body {
+	margin:0px 0px 20px 0px;
+}
+
+.float_toolbar {
+	position:fixed;
+	bottom:5px;
+	right:0px;
+	text-decoration:none;
+	color:#79b;
+	font-size:12px;
+	font-weight:bold;
+	display:none;
+}
+.float_toolbar .back_to_top {
+	background-color:#def;
+	border-left: 1px solid #ace;
+	border-top: 1px solid #ace;
+	border-bottom: 1px solid #ace;
+	border-radius:10px 0px 0px 10px;
+	padding:5px 5px 5px 5px;
+	margin:0px 0px 3px 0px;
+}
+.float_toolbar .back_to_top:hover {
+	background-color:#ffc;
+}
+.float_toolbar .reload {
+	background-color:#def;
+	border-left: 1px solid #ace;
+	border-top: 1px solid #ace;
+	border-bottom: 1px solid #ace;
+	border-radius:10px 0px 0px 10px;
+	padding:5px 5px 5px 5px;
+	margin:0px 0px 3px 0px;
+}
+.float_toolbar .reload:hover {
+	background-color:#ffc;
 }

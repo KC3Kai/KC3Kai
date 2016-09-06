@@ -6,26 +6,31 @@
 		<link href="../../assets/css/bootstrap.css" rel="stylesheet" type="text/css">
 		<!-- @nonbuildend -->
 		<link href="../../assets/css/global.css" rel="stylesheet" type="text/css">
+		<link href="../../assets/css/bootstrap-slider.min.css" rel="stylesheet" type="text/css">
 		<link href="strategy.css" rel="stylesheet" type="text/css">
 		<title>KC3改 Strategy Room</title>
 		<link rel="shortcut icon" href="../../assets/img/logo/48.png" type="image/x-icon" />
 	</head>
 	<body>
 		<div id="wrapper">
+			<div id="error" class="alert alert-danger"></div>
 			<div id="body">
 				<!-- MENU -->
 				<div id="menu">
-					<div class="logo">
-						<img src="../../assets/img/logo/128.png" />
+					<div class="logo hover" title="Refresh current page">
+						<img src="../../assets/img/logo/128.png" alt="KC3改" />
 					</div>
 					<div class="submenu">
 						<div class="title">Player</div>
 						<ul class="menulist">
 							<li data-id="profile" class="active">Profile</li>
-							<li data-id="newsfeed" class="disabled">Newsfeed</li>
+							<!-- <li data-id="newsfeed">Newsfeed</li> -->
+							<li data-id="screenshots">Screenshots</li>
 							<li data-id="resources">Resources</li>
 							<li data-id="consumables">Consumables</li>
 							<li data-id="showcase">Showcase</li>
+							<li data-id="overlodger">Ledger</li>
+							<li data-id="databackup">Data Backup</li>
 						</ul>
 					</div>
 					<div class="submenu">
@@ -34,10 +39,9 @@
 							<li data-id="ships">Ship List</li>
 							<li data-id="builds">Construction</li>
 							<li data-id="lscs">LSC</li>
-							<li data-id="drops" class="disabled">Drop</li>
-							<li data-id="memorial" class="disabled">Memorial</li>
-							<li data-id="shipmods" class="disabled">Modernization</li>
-							<li data-id="remodels" class="disabled">Remodel</li>
+							<li data-id="docking">Docking</li>
+							<li data-id="expcalc">Leveling</li>
+							<li data-id="badge">Badge</li>
 						</ul>
 					</div>
 					<div class="submenu">
@@ -45,85 +49,87 @@
 						<ul class="menulist">
 							<li data-id="gears">Equipment List</li>
 							<li data-id="crafts">Crafting</li>
-							<li data-id="gearmods" class="disabled">Modernization</li>
+							<li data-id="aircraft">Aircraft</li>
+							<li data-id="akashi">Akashi</li>
 						</ul>
 					</div>
 					<div class="submenu">
 						<div class="title">Fleet</div>
 						<ul class="menulist">
-							<li data-id="fleet">Current</li>
-							<li data-id="wikia">Export</li>
-							<li data-id="teams" class="disabled">Teams</li>
+							<li data-id="fleet">Manager</li>
+							<li data-id="locking">Locking</li>
 						</ul>
 					</div>
 					<div class="submenu">
 						<div class="title">Quests</div>
 						<ul class="menulist">
-							<li data-id="questlist" class="disabled">List Mode</li>
 							<li data-id="flowchart">Flowchart</li>
-							<li data-id="questlog" class="disabled">History</li>
 						</ul>
 					</div>
 					<div class="submenu">
-						<div class="title">Sortie</div>
+						<div class="title">Battles</div>
 						<ul class="menulist">
 							<li data-id="maps">Maps</li>
 							<li data-id="event">Events</li>
-						</ul>
-					</div>
-					<div class="submenu">
-						<div class="title">PvP</div>
-						<ul class="menulist">
-							<li data-id="pvps" class="disabled">History</li>
-							<li data-id="attackers" class="disabled">Attackers</li>
+							<li data-id="encounters">Encounters</li>
+							<li data-id="pvp">PvP History</li>
 						</ul>
 					</div>
 					<div class="submenu">
 						<div class="title">Expeditions</div>
 						<ul class="menulist">
-							<li data-id="expedplan" class="disabled">Planner</li>
-							<li data-id="expedpast" class="disabled">History</li>
+							<li data-id="expedpast">History</li>
+							<li data-id="expedtable">Scorer</li>
 						</ul>
 					</div>
 					<div class="submenu">
-						<div class="title">Goals</div>
+						<div class="title">Library</div>
 						<ul class="menulist">
-							<li data-id="goalrsc" class="disabled">Resource</li>
-							<li data-id="goallevel" class="disabled">Leveling</li>
-							<li data-id="goalsparkle" class="disabled">Sparkling</li>
-							<li data-id="goalremodel" class="disabled">Remodel</li>
+							<li data-id="mstupdate">Updates</li>
+							<li data-id="mstship">Ships</li>
+							<li data-id="mstgear">Equipment</li>
+							<li data-id="compare">Compare</li>
 						</ul>
 					</div>
-					<div class="submenu">
-						<div class="title">Game Data</div>
+					<div class="submenu dev-only">
+						<div class="title">Dev-Only</div>
 						<ul class="menulist">
-							<li data-id="mastership" class="disabled">Ships</li>
-							<li data-id="mastergear" class="disabled">Slotitem</li>
-							<li data-id="masterfurn" class="disabled">Furniture</li>
+							<li data-id="playground">Playground</li>
+							<li data-id="translations">Translations</li>
+							<li data-id="quotes">Quotes</li>
 						</ul>
 					</div>
 				</div>
-				
+
 				<!-- CONTENT -->
 				<div id="content">
 					<div id="contentHtml"></div>
 				</div>
 				<div class="clear"></div>
 			</div>
+			<div class="float_toolbar">
+				<div class="back_to_top hover">Back to Top</div>
+				<div class="reload hover">Refresh Tab</div>
+			</div>
 		</div>
-		
-		
+
 		<script type="text/javascript" src="../../assets/js/global.js"></script>
+		<script type="text/javascript" src="../../assets/js/steganography.js"></script>
 		<!-- @nonbuildstart -->
 		<script type="text/javascript" src="../../assets/js/jquery-2.1.3.min.js"></script>
 		<!-- @nonbuildend -->
+		<script type="text/javascript" src="../../assets/js/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="../../assets/js/twbsPagination.min.js"></script>
 		<script type="text/javascript" src="../../assets/js/Dexie.min.js"></script>
 		<script type="text/javascript" src="../../assets/js/Chart.min.js"></script>
 		<script type="text/javascript" src="../../assets/js/FileSaver.min.js"></script>
+		<script type="text/javascript" src="../../assets/js/bootstrap-slider.min.js"></script>
 		<script type="text/javascript" src="../../assets/js/KanColleHelpers.js"></script>
+		<script type="text/javascript" src="../../assets/js/jszip.min.js"></script>
 		<script type="text/javascript" src="../../library/modules/StrategyTabs.js"></script>
-		<!-- @buildimportjs ../../library/managers.js -->
+
 		<!-- @buildimportjs ../../library/objects.js -->
+		<!-- @buildimportjs ../../library/managers.js -->
 		<!-- @nonbuildstart -->
 		<script type="text/javascript" src="../../library/objects/StrategyTab.js"></script>
 		<script type="text/javascript" src="../../library/objects/Node.js"></script>
@@ -135,45 +141,70 @@
 		<script type="text/javascript" src="../../library/objects/Server.js"></script>
 		<script type="text/javascript" src="../../library/objects/Ship.js"></script>
 		<script type="text/javascript" src="../../library/objects/Sortie.js"></script>
+		<script type="text/javascript" src="../../library/objects/LandBase.js"></script>
 		<script type="text/javascript" src="../../library/managers/ConfigManager.js"></script>
 		<script type="text/javascript" src="../../library/managers/GearManager.js"></script>
 		<script type="text/javascript" src="../../library/managers/PlayerManager.js"></script>
+		<script type="text/javascript" src="../../library/managers/TimerManager.js"></script>
 		<script type="text/javascript" src="../../library/managers/SortieManager.js"></script>
 		<script type="text/javascript" src="../../library/managers/QuestManager.js"></script>
 		<script type="text/javascript" src="../../library/managers/ShipManager.js"></script>
+		<script type="text/javascript" src="../../library/managers/GoalTemplateManager.js"></script>
 		<!-- @nonbuildend -->
-		
+		<script type="text/javascript" src="../../../../library/modules/RemodelDb.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/Database.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/Master.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/Translation.js"></script>
 		<script type="text/javascript" src="../../../../library/modules/Meta.js"></script>
-		
+		<script type="text/javascript" src="../../../../library/modules/DataBackup.js"></script>
+		<script type="text/javascript" src="../../../../library/modules/WhoCallsTheFleetDb.js">
+		</script><script type="text/javascript" src="../../library/modules/PictureBook.js"></script>
+		<script type="text/javascript" src="../../library/modules/RemodelDb.js"></script>
+
 		<script type="text/javascript" src="strategy.js"></script>
-		
+
 		<script type="text/javascript" src="graphable.js"></script>
+		<script type="text/javascript" src="sortielogs.js"></script>
 		<!-- @buildimportjs allstrategytabs.js -->
-		
+
 		<!-- @nonbuildstart -->
 		<script type="text/javascript" src="tabs/profile/profile.js"></script>
 		<script type="text/javascript" src="tabs/ships/ships.js"></script>
+		<script type="text/javascript" src="tabs/docking/docking.js"></script>
 		<script type="text/javascript" src="tabs/gears/gears.js"></script>
 		<script type="text/javascript" src="tabs/newsfeed/newsfeed.js"></script>
+
 		<!-- resources and consumables, implements graphable -->
-			
-			<script type="text/javascript" src="tabs/resources/resources.js"></script>
-			<script type="text/javascript" src="tabs/consumables/consumables.js"></script>
+		<script type="text/javascript" src="tabs/resources/resources.js"></script>
+		<script type="text/javascript" src="tabs/consumables/consumables.js"></script>
+		<script type="text/javascript" src="tabs/overlodger/overlodger.js"></script>
 		<script type="text/javascript" src="tabs/builds/builds.js"></script>
 		<script type="text/javascript" src="tabs/lscs/lscs.js"></script>
 		<script type="text/javascript" src="tabs/crafts/crafts.js"></script>
 		<script type="text/javascript" src="tabs/fleet/fleet.js"></script>
-		<script type="text/javascript" src="tabs/questlist/questlist.js"></script>
 		<script type="text/javascript" src="tabs/flowchart/flowchart.js"></script>
 		<script type="text/javascript" src="tabs/maps/maps.js"></script>
-		<script type="text/javascript" src="tabs/exops/exops.js"></script>
 		<script type="text/javascript" src="tabs/event/event.js"></script>
 		<script type="text/javascript" src="tabs/showcase/showcase.js"></script>
-    <script type="text/javascript" src="tabs/wikia/wikia.js"></script>
+		<script type="text/javascript" src="tabs/locking/locking.js"></script>
+		<script type="text/javascript" src="tabs/aircraft/aircraft.js"></script>
+		<script type="text/javascript" src="tabs/expedtable/expedtable.js"></script>
+		<script type="text/javascript" src="tabs/screenshots/screenshots.js"></script>
+		<script type="text/javascript" src="tabs/akashi/akashi.js"></script>
+		<script type="text/javascript" src="tabs/expedpast/expedpast.js"></script>
+		<script type="text/javascript" src="tabs/mstupdate/mstupdate.js"></script>
+		<script type="text/javascript" src="tabs/mstship/mstship.js"></script>
+		<script type="text/javascript" src="tabs/badge/badge.js"></script>
+		<script type="text/javascript" src="tabs/mstgear/mstgear.js"></script>
+		<script type="text/javascript" src="tabs/databackup/databackup.js"></script>
+		<script type="text/javascript" src="tabs/expcalc/expcalc.js"></script>
+		<script type="text/javascript" src="tabs/encounters/encounters.js"></script>
+		<script type="text/javascript" src="tabs/playground/playground.js"></script>
+		<script type="text/javascript" src="tabs/translations/translations.js"></script>
+		<script type="text/javascript" src="tabs/quotes/quotes.js"></script>
+		<script type="text/javascript" src="tabs/pvp/pvp.js"></script>
+		<script type="text/javascript" src="tabs/compare/compare.js"></script>
 		<!-- @nonbuildend -->
-		
+
 	</body>
 </html>

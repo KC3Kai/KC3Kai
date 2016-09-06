@@ -1,6 +1,5 @@
 (function(){
 	"use strict";
-	_gaq.push(['_trackPageview']);
 	
 	// Document ready
 	$(document).on("ready", function(){

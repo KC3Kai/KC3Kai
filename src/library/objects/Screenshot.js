@@ -1,7 +1,8 @@
 var imgurLimit = 0;
 
 function KCScreenshot(){
-	this.scale = ((ConfigManager.api_gameScale || 100) / 100);
+	ConfigManager.load();
+	this.scale = ((ConfigManager.api_gameScale || 100) / 100) * (ConfigManager.ss_dppx || 1);
 	this.gamebox = {};
 	this.canvas = {};
 	this.context = {};
@@ -12,6 +13,7 @@ function KCScreenshot(){
 	this.format = (ConfigManager.ss_type=="JPG")
 		?["jpeg", "jpg", "image/jpeg"]
 		:["png", "png", "image/png"];
+	this.quality = ConfigManager.ss_quality;
 }
 
 KCScreenshot.prototype.start = function(playerName, element){
@@ -32,8 +34,12 @@ KCScreenshot.prototype.start = function(playerName, element){
 	this.capture();
 };
 
-function chromeCapture(captureFormat, response){
-	chrome.tabs.captureVisibleTab(null, {format: captureFormat, quality: 70}, response);
+function chromeCapture(captureFormat, imageQuality, response){
+	console.log("Taking screenshot with quality", imageQuality);
+	chrome.tabs.captureVisibleTab(null, {
+		format: captureFormat,
+		quality: imageQuality || 100
+	}, response);
 }
 
 KCScreenshot.prototype.generateScreenshotFilename = function() {
@@ -58,11 +64,23 @@ function getRandomInt(min, max) {
 
 KCScreenshot.prototype.capture = function(){
 	var self = this;
+	var tempHideTaihaAlert = false;
+	
+	// If taiha alert appear on screenshot is off, hide taiha alert in the mean time
+	if(!ConfigManager.alert_taiha_ss && taihaStatus) {
+		interactions.taihaAlertStop({}, {}, {});
+		tempHideTaihaAlert = true;
+	}
 	
 	// Start capturing
-	chromeCapture(this.format[0], function(base64img){
+	chromeCapture(this.format[0], this.quality, function(base64img){
 		self.domImg.src = base64img;
 		self.domImg.onload = self.crop();
+		
+		// screenshot is done, return taiha alert
+		if (tempHideTaihaAlert) {
+			interactions.taihaAlertStart({}, {}, {});
+		}
 	});
 };
 
@@ -112,7 +130,7 @@ KCScreenshot.prototype.saveDownload = function(){
 	chrome.downloads.setShelfEnabled(false);
 	chrome.downloads.download({
 		url: this.base64img,
-		filename: 'KanColle/'+this.screenshotFilename+"."+this.format[1],
+		filename: ConfigManager.ss_directory+'/'+this.screenshotFilename+"."+this.format[1],
 		conflictAction: "uniquify"
 	}, function(downloadId){
 		setTimeout(function(){
@@ -153,7 +171,7 @@ KCScreenshot.prototype.saveImgur = function(){
 						type: 'base64'
 					},
 					success: function(response){
-						KC3Database.Screenshot(response.data.link, self.playerIndex);
+						KC3Database.Screenshot(response.data.link);
 					}
 				});
 			}else{

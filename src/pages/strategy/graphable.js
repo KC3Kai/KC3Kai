@@ -3,6 +3,7 @@
 	
 	/* KC3 Graphable
 			Arguments:
+			tabRefer -- StrategyTab object reference
 			callable -- database function
 			itemData -- object with 4 keys
 				name  : consists its short name (aka, variable name)
@@ -11,8 +12,8 @@
 				colorhex : color in hex notation, (6 characters)
 				colorbyte: color in byte notation, (numeric, 0-255)
 	*/
-	window.KC3Graphable = function (callable,itemData){
-		this.tabSelf = KC3StrategyTabs.resources;
+	window.KC3Graphable = function (tabRefer,callable,itemData){
+		this.tabSelf = tabRefer;
 		
 		this.hour = 0;
 		this.zone = 0;
@@ -29,9 +30,9 @@
 		Prepares all data needed
 		---------------------------------*/
 		this.init    = function(){
-			this.hour  = Math.floor((new Date()).getTime()/( 1*60*60*1000));
-			this.zone  = Math.floor((new Date()).getTime()/( 6*60*60*1000));
-			this.day   = Math.floor((new Date()).getTime()/(24*60*60*1000));
+			this.hour  = Math.floor(Date.now()/( 1*60*60*1000));
+			this.zone  = Math.floor(Date.now()/( 6*60*60*1000));
+			this.day   = Math.floor(Date.now()/(24*60*60*1000));
 			Chart.defaults.global.scaleBeginAtZero = true;
 		};
 		

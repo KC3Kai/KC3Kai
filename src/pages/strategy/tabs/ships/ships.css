@@ -21,9 +21,10 @@
 	font-size:12px;
 }
 .tab_ships .massSelect dl{
+	width: 220px;
 	display: 	inline-block;
 	vertical-align: top;
-	margin: 	0 6px 0 0;
+	margin: 0px 0px 5px 0px;
 	overflow: 	hidden;
 }
 .tab_ships .massSelect dl dt,
@@ -47,6 +48,7 @@
 .tab_ships .filters .ship_types {
 	width:680px;
 	height:60px;
+	margin:0px 0px 10px 0px;
 }
 .tab_ships .filters .ship_filter_type {
 	width:80px;
@@ -58,6 +60,50 @@
 .tab_ships .filters .ship_filter_type:hover {
 	background:#cfc;
 }
+
+.tab_ships .advanced_sorter {
+	margin:0px 0px 3px 0px;
+}
+.tab_ships .advanced_sorter .adv_label {
+	float: left;
+	font-weight: bold;
+	font-size: 12px;
+	padding-right: 5px;
+}
+.tab_ships .advanced_sorter .adv_sorter {
+	width:80px;
+	height:18px;
+	line-height:18px;
+	float:left;
+}
+.tab_ships .advanced_sorter .adv_sorter:hover {
+	background:#cfc;
+}
+
+.tab_ships .advanced_sorter .filter_box {
+	width:10px;
+	height:10px;
+	margin:3px 7px 0px 3px;
+	border:1px solid #000;
+	float:left;
+}
+.tab_ships .advanced_sorter .filter_check {
+	width:6px;
+	height:6px;
+	margin:1px;
+	background:#000;
+}
+.tab_ships .advanced_sorter .filter_name {
+	width:55px;
+	height:18px;
+	float:left;
+}
+.tab_ships .advanced_sorter .sorter_desc {
+	font-size:12px;
+	color:#999;
+	padding:0px 0px 0px 10px;
+}
+
 .tab_ships .ship_filter_type .filter_box {
 	width:10px;
 	height:10px;
@@ -168,15 +214,21 @@
 .tab_ships .ship_item.even .ship_field {
 	background:#e4e4e4;
 }
+.tab_ships .ship_item.odd .ship_field.ship_lk{
+	background:#66FF66;
+}
+.tab_ships .ship_item.even .ship_field.ship_lk {
+	background:#66FF66;
+}
 .tab_ships .ingame_page {
 	width:680px;
-	height:11px;
-	line-height:18px;
-	font-size:18px;
+	line-height:14px;
+	font-size:14px;
 	margin:0px 0px 2px 0px;
 	text-align:left;
 	padding:0px 0px 0px 10px;
 	color:#aaa;
+	display:none;
 }
 .tab_ships .ship_item:hover .ship_field {
 	background:#ffffcc;
@@ -187,15 +239,51 @@
 	text-align:center;
 }
 .tab_ships .ship_item .ship_img {
+	position:relative;
 	width:20px;
 }
-.tab_ships .ship_item .ship_img img {
+.tab_ships .ship_item .ship_img img.ship_icon {
 	width:20px;
 	height:20px;
 }
+.tab_ships .ship_item .ship_img img.ship_kekkon {
+	position:absolute;
+	right:0;
+	bottom:0;
+	width:50%;
+	height:50%;
+	display:none;
+}
+.tab_ships .ship_item .ship_kekkon-color {
+	color: #eec5c3;
+	text-shadow: #2f2727 -0px -0px 1px, #2f2727 1px 1px 1px;
+	-webkit-font-smoothing: antialiased;
+}
+.tab_ships .ship_item .ship_kekkon:after {
+	display: inline;
+	position: absolute;
+	width: 100%;
+	right: 0;
+	opacity:0.5;
+	content: "x";
+	color: rgba(0,0,0,0);
+	background-position: 100%;
+	background-image: url('../../assets/img/client/kekkon.png');
+	background-size: 10px;
+	background-repeat: no-repeat;
+	text-align: right;
+}
+.tab_ships .ship_item .ship_onfleet-color1 {background: #90D4ED !important;}
+.tab_ships .ship_item .ship_onfleet-color2 {background: #BBDDBA !important;}
+.tab_ships .ship_item .ship_onfleet-color3 {background: #E8E68F !important;}
+.tab_ships .ship_item .ship_onfleet-color4 {background: #F6D0A0 !important;}
 .tab_ships .ship_item .ship_name {
 	width:92px;
 	overflow:hidden;
+	position:relative;
+}
+.tab_ships .ship_item .ship_name.ship_kekkon {
+	/*width:112px;*/
 }
 .tab_ships .ship_item .ship_type {
 	width:30px;
@@ -205,6 +293,10 @@
 	width:50px;
 	/*margin:0px 5px 0px 0px;*/
 	text-align:center;
+	position:relative;
+}
+.tab_ships .ship_item .ship_lv.ship_kekkon {
+	/*width:70px;*/
 }
 .tab_ships .ship_item .ship_morale {
 	width:20px;
@@ -219,7 +311,7 @@
 }
 /* Fields: Stats */
 .tab_ships .ship_item .ship_stat {
-	width:30px;
+	width:25px;
 	text-align:center;
 }
 .tab_ships .ship_item .ship_stat_mod {
@@ -235,6 +327,10 @@
 }
 .tab_ships .ship_item .ship_tp.max {
 	background:#00CCFF;
+}
+.tab_ships .ship_item .ship_yasen.max {
+	background:#555555;
+	color:#FFFFFF;
 }
 .tab_ships .ship_item .ship_aa.max {
 	background:#FF9900;
@@ -258,16 +354,32 @@
 	height:20px;
 	float:left;
 	overflow:hidden;
+	position:relative;
 }
 .tab_ships .ship_item .ship_equip img {
 	width:20px;
 	height:20px;
 }
-/* Fields: HeartLock */
-.tab_ships .ship_item .ship_lock {
+.tab_ships .ship_item .ship_equip span {
+	position: absolute;
+	display: flex;
+	right: 0;
+	bottom: 0;
+	font-size: 10px;
+	width: 100%;
+	height: 100%;
+	border-radius: 16px;
+	color: #777;
+	text-align: center;
+	align-items: center;
+	justify-content: center;
+}
+/* Fields: HeartLock and Marriage Ring */
+.tab_ships .ship_item .ship_stat_icon {
 	width:20px;
 }
-.tab_ships .ship_item .ship_lock img {
+.tab_ships .ship_item .ship_stat_icon img {
 	width:20px;
 	display:none;
 }
+

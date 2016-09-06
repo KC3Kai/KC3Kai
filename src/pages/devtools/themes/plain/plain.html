@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<!-- @nonbuildstart -->
+		<link href="../../../../assets/css/bootstrap.css" rel="stylesheet" type="text/css">
+		<!-- @nonbuildend -->
+		<link href="../../../../assets/css/global.css" rel="stylesheet" type="text/css">
+		<link href="plain.css" rel="stylesheet" type="text/css">
+	</head>
+	<body>
+		<!-- MAIN LAYOUT -->
+		<div class="wrapper">
+			
+			<!-- Module: Admiral Info -->
+			<div class="module admiral">
+				<div class="admiral_level">
+					<div class="admiral_lvtxt"><span class="i18n">HQAdmiralLv</span> <span class="admiral_lvval"></span></div>
+					<div class="admiral_lvbox">
+						<div class="admiral_lvbar"></div>
+					</div>
+					<div class="admiral_lvnext hover"></div>
+				</div>
+				<div class="admiral_name hover"></div>
+				<div class="admiral_comm"></div>
+				<div class="admiral_rank hover" data-mode="1"></div>
+			</div>
+			
+			<!-- Module: Basic Info -->
+			<div class="module activity">
+				<div class="consumables">
+					<div class="consumable">
+						<div class="consumable_icon"><img src="../../../../assets/img/client/bucket.png" /></div>
+						<div class="consumable_ltext count_buckets">3000</div>
+						<div class="clear"></div>
+					</div>
+					<div class="consumable">
+						<div class="consumable_icon"><img src="../../../../assets/img/client/ship.png" /></div>
+						<div class="consumable_text count_ships">000</div>
+						<div class="consumable_max max_ships">/000</div>
+						<div class="clear"></div>
+					</div>
+					<div class="consumable">
+						<div class="consumable_icon"><img src="../../../../assets/img/client/ibuild.png" /></div>
+						<div class="consumable_ltext count_torch">3000</div>
+						<div class="clear"></div>
+					</div>
+					<div class="consumable">
+						<div class="consumable_icon"><img src="../../../../assets/img/client/gear.png" /></div>
+						<div class="consumable_text count_gear">0000</div>
+						<div class="consumable_max max_gear">/0000</div>
+						<div class="clear"></div>
+					</div>
+					<div class="consumable">
+						<div class="consumable_icon"><img src="../../../../assets/img/client/screws.png" /></div>
+						<div class="consumable_ltext count_screws">3000</div>
+						<div class="clear"></div>
+					</div>
+					<div class="consumable">
+						<div class="consumable_icon"><img src="../../../../assets/img/client/coin.png" /></div>
+						<div class="consumable_ltext count_fcoin">3000</div>
+						<div class="clear"></div>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="expeditions">
+					<div class="expedition expedition_1">
+						<div class="timer-img"><img/></div>
+						<div class="timer-expnum"></div>
+						<div class="timer-time">00:00:00</div>
+					</div>
+					<div class="expedition expedition_2">
+						<div class="timer-img"><img/></div>
+						<div class="timer-expnum"></div>
+						<div class="timer-time">00:00:00</div>
+					</div>
+					<div class="expedition expedition_3">
+						<div class="timer-img"><img/></div>
+						<div class="timer-expnum"></div>
+						<div class="timer-time">00:00:00</div>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="timers">
+					<div class="timer_boxes repairs">
+						<div class="timer_box repair_1">
+							<div class="timer-img"><img/></div>
+							<div class="timer-time">00:00:00</div>
+						</div>
+						<div class="timer_box repair_2">
+							<div class="timer-img"><img/></div>
+							<div class="timer-time">00:00:00</div>
+						</div>
+						<div class="timer_box repair_3">
+							<div class="timer-img"><img/></div>
+							<div class="timer-time">00:00:00</div>
+						</div>
+						<div class="timer_box repair_4">
+							<div class="timer-img"><img/></div>
+							<div class="timer-time">00:00:00</div>
+						</div>
+					</div>
+					<div class="timer_boxes builds">
+						<div class="timer_box build_1">
+							<div class="timer-img"><img/></div>
+							<div class="timer-time">00:00:00</div>
+						</div>
+						<div class="timer_box build_2">
+							<div class="timer-img"><img/></div>
+							<div class="timer-time">00:00:00</div>
+						</div>
+						<div class="timer_box build_3">
+							<div class="timer-img"><img/></div>
+							<div class="timer-time">00:00:00</div>
+						</div>
+						<div class="timer_box build_4">
+							<div class="timer-img"><img/></div>
+							<div class="timer-time">00:00:00</div>
+						</div>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+			
+			<!-- Module: Quests -->
+			<div class="module quests">
+				
+			</div>
+			
+			<!-- Module: Controls -->
+			<div class="module controls">
+				<div class="control hover fleet_num active">1</div>
+				<div class="control hover fleet_num">2</div>
+				<div class="control hover fleet_num">3</div>
+				<div class="control hover fleet_num">4</div>
+				
+				<div class="control hover control_btn btn_mute i18n_title" title="PanelToggleSounds"><img src="img/mute.png" /></div>
+				<div class="control hover control_btn btn_resize i18n_title" title="PanelFitWindow"><img src="../../../../assets/img/ui/fit.png" /></div>
+				<div class="control hover control_btn btn_ss1 i18n_title" title="Screenshot"><img src="img/cam1.png" /></div>
+				<div class="control hover control_btn btn_export i18n_title" title="PanelExportToKCDB"><img src="img/exportdeck.png" /></div>
+			</div>
+			
+			<!-- Module: Fleet Summary -->
+			<div class="module summary">
+				<div class="summary_box summary-level">
+					<div class="summary_icon"><img src="../../../../assets/img/stats/lv.png" /></div>
+					<div class="summary_text">0000</div>
+					<div class="clear"></div>
+				</div>
+				<div class="summary_box summary-eqlos">
+					<div class="summary_icon"><img src="../../../../assets/img/stats/los3.png" /></div>
+					<div class="summary_text">000.00</div>
+					<div class="clear"></div>
+				</div>
+				<div class="summary_box summary-airfp">
+					<div class="summary_icon"><img src="../../../../assets/img/stats/ac.png" /></div>
+					<div class="summary_text">0000</div>
+					<div class="clear"></div>
+				</div>
+				<div class="summary_box summary-speed">
+					<div class="summary_icon"><img src="../../../../assets/img/stats/sp.png" /></div>
+					<div class="summary_text">Fast</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+			
+			<!-- Module: Ship List -->
+			<div class="module fleet">
+				<div class="shiplist shiplist_single">
+					
+				</div>
+				<div class="shiplist shiplist_combined">
+					<div class="shiplist_combined_fleet shiplist_main">
+						
+					</div>
+					<div class="shiplist_combined_fleet shiplist_escort">
+						
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+			
+			<!-- Module: Status Reminders -->
+			<div class="module status">
+				<!-- Resupply Status -->
+				<div class="status_box status_supply hover">
+					<div class="status_icon"><img/></div>
+					<div class="status_text"></div>
+					<div class="clear"></div>
+				</div>
+				<!-- Morale Status -->
+				<div class="status_box status_morale hover">
+					<div class="status_icon"><img/></div>
+					<div class="status_text"></div>
+					<div class="clear"></div>
+				</div>
+				<!-- Repair Status -->
+				<div class="status_box status_repair hover">
+					<div class="status_icon"><img/></div>
+					<div class="status_text"></div>
+					<div class="clear"></div>
+				</div>
+				<!-- Combine Capability -->
+				<div class="status_box status_butai hover">
+					<div class="status_icon"><img src="../../../../assets/img/ui/fleet.png" /></div>
+					<div class="status_text"></div>
+					<div class="clear"></div>
+				</div>
+				<!-- Support Power -->
+				<div class="status_box status_support hover">
+					<div class="status_icon enclose"><img src="../../../../assets/img/stats/dv.png" /></div>
+					<div class="status_text"></div>
+					<div class="clear"></div>
+				</div>
+				<!-- Docking Time -->
+				<div class="status_box status_docking hover">
+					<div class="status_icon"><img src="../../../../assets/img/ui/timer.png" /></div>
+					<div class="status_text"></div>
+					<div class="clear"></div>
+				</div>
+				<!-- Akashi Time -->
+				<div class="status_box status_akashi hover">
+					<div class="status_icon enclose"><img src="../../../../assets/img/items/26.png" /></div>
+					<div class="status_text"></div>
+					<div class="clear"></div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			
+		</div>
+		
+		
+		<!-- CAT BOMB MODAL -->
+		<div id="catBomb" class="modalBox">
+			<div class="blackFilter"></div>
+			<div class="content">
+				<div class="image"><img src="../../../../assets/img/ui/catbomb.png" /></div>
+				<div class="title"></div>
+				<div class="closebtn hover">x</div>
+				<div class="clear"></div>
+				<div class="description"></div>
+			</div>
+		</div>
+		
+		
+		<!-- GAME UPDATE MODAL -->
+		<div id="gameUpdate" class="modalBox">
+			<div class="blackFilter"></div>
+			<div class="content">
+				<div class="image"><img src="../../../../assets/img/ui/update.png" /></div>
+				<div class="title i18n">GameUpdateDetected</div>
+				<div class="closebtn hover">x</div>
+				<div class="clear"></div>
+				<div class="description"><a target="kc3kai_strategy" href="/pages/strategy/strategy.html#mstupdate"></a></div>
+			</div>
+		</div>
+		
+		
+		<!-- CLONABLES -->
+		<div id="factory">
+			
+			<!-- Clonable: Quest Record -->
+			<div class="quest">
+				<div class="quest_color"></div>
+				<div class="quest_text ttp">Daily Equipment Modernization 1</div>
+				<div class="quest_track ttp">00/00</div>
+			</div>
+			
+			<!-- Clonable: Long Ship -->
+			<div class="lship">
+				<div class="ex_item"><img/></div>
+				<div class="mvp_icon"><img src="../../../../assets/img/ui/mvp.png" /></div>
+				<div class="ship_img"><img/></div>
+				<div class="ship_col1">
+					<div class="ship_name"></div>
+					<div class="ship_type"></div>
+					<div class="ship_hp_text">
+						<span class="ship_hp_cur"></span>
+						<span class="ship_hp_max"></span>
+					</div>
+					<div class="ship_hp_box">
+						<div class="ship_hp_bar">
+							<div class="ship_hp_prediction"></div>
+						</div>
+						<div class="ship_repair_data">
+							<div class="ship_repair_tick" data-tick="0"> </div>
+							<div class="ship_repair_timer">--:--:--</div>
+							<div class="clear"></div>
+						</div>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="ship_col2">
+					<div class="ship_exp_box">
+						<div class="ship_exp_bar"></div>
+					</div>
+					<div class="ship_exp_level"><span class="i18n">LevelShort</span> <span class="value"></span></div>
+					<div class="ship_exp_next"></div>
+				</div>
+				<div class="ship_morale"></div>
+				<div class="ship_gears">
+					<div class="ship_gear ship_gear_1">
+						<div class="ship_gear_star"></div>
+						<div class="ship_gear_ace"><img/></div>
+						<div class="ship_gear_icon"><img/></div>
+						<div class="clear"></div>
+					</div>
+					<div class="ship_gear ship_gear_2">
+						<div class="ship_gear_star"></div>
+						<div class="ship_gear_ace"><img/></div>
+						<div class="ship_gear_icon"><img/></div>
+						<div class="clear"></div>
+					</div>
+					<div class="ship_gear ship_gear_3">
+						<div class="ship_gear_star"></div>
+						<div class="ship_gear_ace"><img/></div>
+						<div class="ship_gear_icon"><img/></div>
+						<div class="clear"></div>
+					</div>
+					<div class="ship_gear ship_gear_4">
+						<div class="ship_gear_star"></div>
+						<div class="ship_gear_ace"><img/></div>
+						<div class="ship_gear_icon"><img/></div>
+						<div class="clear"></div>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			
+			<!-- Clonable: Short Ship -->
+			<div class="sship">
+				<div class="ship_img"><img/></div>
+				<div class="mvp_icon"><img src="../../../../assets/img/ui/mvp.png" /></div>
+				<div class="ex_item"><img/></div>
+				<div class="ship_info">
+					<div class="ship_name"></div>
+					<div class="ship_hp">
+						<div class="ship_type">WWW</div>
+						<div class="ship_hp_text">
+							<span class="ship_hp_cur">000</span>
+							<span class="ship_hp_max">/000</span>
+						</div>
+						<div class="ship_hp_box">
+							<div class="ship_hp_bar">
+								<div class="ship_hp_prediction"></div>
+							</div>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="ship_morale">100</div>
+					<div class="clear"></div>
+				</div>
+				<div class="clear"></div>
+				<div class="ship_bars hover">
+					<div class="ship_bar ship_exp"></div>
+					<div class="ship_bar ship_fuel"></div>
+					<div class="ship_bar ship_ammo"></div>
+				</div>
+			</div>
+			<!-- Equipment stats -->
+			<div class="equipStat">
+				<div class="equipStatIcon"><img/></div>
+				<div class="equipStatText"></div>
+				<div class="clear"></div>
+			</div>
+			
+			<!-- Ship requirement for expedition checker -->
+			<div class="expPlanner_shipReqBox requirements_textbox expPlanner_text_passed"></div>
+			
+		</div>
+		
+		
+		<script type="text/javascript" src="../../../../assets/js/global.js"></script>
+		<script type="text/javascript" src="../../../../assets/js/Dexie.min.js"></script>
+		<!-- @nonbuildstart -->
+		<script type="text/javascript" src="../../../../assets/js/jquery-2.1.3.min.js"></script>
+		<!-- @nonbuildend -->
+		
+		<!-- @buildimportjs ../../../../library/objects.js -->
+		<!-- @buildimportjs ../../../../library/managers.js -->
+		
+		<!-- @nonbuildstart -->
+		<script type="text/javascript" src="../../../../library/objects/Node.js"></script>
+		<script type="text/javascript" src="../../../../library/objects/Fleet.js"></script>
+		<script type="text/javascript" src="../../../../library/objects/Gear.js"></script>
+		<script type="text/javascript" src="../../../../library/objects/Messengers.js"></script>
+		<script type="text/javascript" src="../../../../library/objects/Player.js"></script>
+		<script type="text/javascript" src="../../../../library/objects/Quest.js"></script>
+		<script type="text/javascript" src="../../../../library/objects/Request.js"></script>
+		<script type="text/javascript" src="../../../../library/objects/Screenshot.js"></script>
+		<script type="text/javascript" src="../../../../library/objects/Server.js"></script>
+		<script type="text/javascript" src="../../../../library/objects/SettingsBox.js"></script>
+		<script type="text/javascript" src="../../../../library/objects/Ship.js"></script>
+		<script type="text/javascript" src="../../../../library/objects/Sortie.js"></script>
+		<script type="text/javascript" src="../../../../library/objects/Timer.js"></script>
+		<!-- @nonbuildend -->
+		
+		<!-- @nonbuildstart -->
+		<script type="text/javascript" src="../../../../library/managers/ConfigManager.js"></script>
+		<script type="text/javascript" src="../../../../library/managers/GearManager.js"></script>
+		<script type="text/javascript" src="../../../../library/managers/PlayerManager.js"></script>
+		<script type="text/javascript" src="../../../../library/managers/QuestManager.js"></script>
+		<script type="text/javascript" src="../../../../library/managers/ShipManager.js"></script>
+		<script type="text/javascript" src="../../../../library/managers/SortieManager.js"></script>
+		<script type="text/javascript" src="../../../../library/managers/TimerManager.js"></script>
+		<!-- @nonbuildend -->
+		
+		<script type="text/javascript" src="../../../../library/modules/DBSubmission.js"></script>
+		<script type="text/javascript" src="../../../../library/modules/PoiDBSubmission.js"></script>
+		<script type="text/javascript" src="../../../../library/modules/KC3DBSubmission.js"></script>
+		
+		<script type="text/javascript" src="../../../../library/modules/RemodelDb.js"></script>
+		<script type="text/javascript" src="../../../../library/modules/Database.js"></script>
+		<script type="text/javascript" src="../../../../library/modules/Kcsapi.js"></script>
+		<script type="text/javascript" src="../../../../library/modules/Network.js"></script>
+		<script type="text/javascript" src="../../../../library/modules/Translation.js"></script>
+		<script type="text/javascript" src="../../../../library/modules/Master.js"></script>
+		<script type="text/javascript" src="../../../../library/modules/Meta.js"></script>
+		<script type="text/javascript" src="../../../../assets/js/KanColleHelpers.js"></script>
+		<script type="text/javascript" src="../../../../library/helpers/ExpeditionHelper.js"></script>
+		
+		<script type="text/javascript" src="js/Shipbox.js"></script>
+		<script type="text/javascript" src="plain.js"></script>
+	</body>
+</html>

@@ -268,7 +268,7 @@
 							.text( PlayerManager.hq.exp[ConfigManager.hqExpDetail] )
 							.attr("title",hqt);
 						if(hqexpd.length>0)
-							$(".battle_hqlevel_next_gain", container).text(hqexpd*(ConfigManager.hqExpDetail==1?-1:1));
+							$(".battle_hqlevel_next_gain", container).text(hqexpd);
 					break;
 				}
 			},
@@ -433,8 +433,8 @@
 							
 							var SupplyBarMaxWidth = $(".supply-fuel", ShipBox).css("width");
 							SupplyBarMaxWidth = Number(SupplyBarMaxWidth.substring(0, SupplyBarMaxWidth.length-2));
-							$(".supply-fuel .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*FuelPercent)+"px");
-							$(".supply-ammo .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*AmmoPercent)+"px");
+							$(".supply-fuel .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*Math.min(FuelPercent,1))+"px");
+							$(".supply-ammo .supply-bar", ShipBox).css("width", (SupplyBarMaxWidth*Math.min(AmmoPercent,1))+"px");
 						}
 					});
 					
@@ -798,7 +798,13 @@
 				$(".battle .battle_enemies .battle_abyss .face-container img", container).attr("src", KC3Meta.abyssIcon(-1));
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > -1){
+						var eParam = thisNode.eParam[index];
 						$(".battle .battle_enemies .abyss_"+(index+1)+" .face-container img", container).attr("src", KC3Meta.abyssIcon(eshipId));
+						var tooltip = "FP: " + eParam[0] + String.fromCharCode(13);
+						tooltip += "Torp: " + eParam[1] + String.fromCharCode(13);
+						tooltip += "AA: " + eParam[2] + String.fromCharCode(13);
+						tooltip += "Armor: " + eParam[3];
+						$(".battle .battle_enemies .abyss_"+(index+1)+" .face-container img", container).attr("title", tooltip);
 						$(".battle .battle_enemies .abyss_"+(index+1), container).show();
 
 						if ((thisNode.enemySunk[index]) && (ConfigManager.info_battle)) {
@@ -951,7 +957,7 @@
 						return (PlayerManager.hq.exp[2] + Math.min(PlayerManager.hq.exp[1],KC3SortieManager.hqExpGained)) / KC3Meta.exp(PlayerManager.hq.level)[0];
 					})()*60)+"px"});
 				}
-				$(".battle_hqlevel_next_gain", container).text(KC3SortieManager.hqExpGained * (ConfigManager.hqExpDetail==1 ? -1 : 1));
+				$(".battle_hqlevel_next_gain", container).text(KC3SortieManager.hqExpGained);
 				
 				$(".battle .battle_rating img").attr("src", "../../../../assets/img/client/ratings/"+thisNode.rating+".png");
 				
@@ -1083,7 +1089,13 @@
 				// Show opponent ships faces
 				$.each(thisPvP.eships, function(index, eshipId){
 					if(eshipId > -1){
+						var eParam = thisPvP.eParam[index];
 						$(".battle .battle_enemies .abyss_"+(index+1)+" .face-container img", container).attr("src", KC3Meta.shipIcon(eshipId));
+						var tooltip = "FP: " + eParam[0] + String.fromCharCode(13);
+						tooltip += "Torp: " + eParam[1] + String.fromCharCode(13);
+						tooltip += "AA: " + eParam[2] + String.fromCharCode(13);
+						tooltip += "Armor: " + eParam[3];
+						$(".battle .battle_enemies .abyss_"+(index+1)+" .face-container img", container).attr("tooltip", tooltip);
 						$(".battle .battle_enemies .abyss_"+(index+1), container).show();
 
 						if ((thisPvP.enemySunk[index]) && (ConfigManager.info_battle)) {
@@ -1164,10 +1176,12 @@
 						return (PlayerManager.hq.exp[2] + Math.min(PlayerManager.hq.exp[1],expGained)) / KC3Meta.exp(PlayerManager.hq.level)[0];
 					})()*60)+"px"});
 				}
-				$(".battle_hqlevel_next_gain", container).text(expGained * (ConfigManager.hqExpDetail==1 ? -1 : 1));
+				$(".battle_hqlevel_next_gain", container).text(expGained);
 				// giles bhunder
 				$(".battle .battle_rating img").attr("src", "../../../../assets/img/client/ratings/"+data.result.api_win_rank+".png");
-			}
+			},
+			ExpedResult: function(container, data, local){
+			},
 		}
 	});
 	

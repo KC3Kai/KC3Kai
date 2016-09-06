@@ -3,10 +3,30 @@
 #factory {
 	display:none;
 }
+html,body {
+	height:100%;
+}
+#critical {
+	width:100%;
+	height:100%;
+	position:fixed;
+	top:0px;
+	left:0px;
+	z-index:90;
+	pointer-events: none;
+	display:none;
+}
+#critical.anim1 {
+	box-shadow:inset 0px 0px 20px rgba(255,0,0,0.5);
+	transition: all 0.4s;
+}
+#critical.anim2 {
+	box-shadow:inset 0px 0px 60px rgba(255,0,0,0.8); 
+}
 
-/* CATBOMB
+/* MODALS
 ------------------------------*/
-#catBomb {
+.modalBox {
 	width:100%;
 	height:100%;
 	position:absolute;
@@ -14,7 +34,7 @@
 	left:0px;
 	display:none;
 }
-#catBomb .blackFilter {
+.modalBox .blackFilter {
 	width:100%;
 	height:100%;
 	position:fixed;
@@ -24,18 +44,26 @@
 	background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(0,0,0,0.5)), color-stop(100%,rgba(0,0,0,0.85)));
 	background: -webkit-radial-gradient(center, ellipse cover,  rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.85) 100%);
 }
+.modalBox .content {
+	padding:10px;
+	border-radius:10px;
+	top:50%;
+	left:50%;
+	position:absolute;
+	z-index:2;
+}
+
+/* CATBOMB MODAL
+------------------------------*/
+#catBomb {
+	z-index:102;
+}
 #catBomb .content {
 	width:400px;
 	height:120px;
 	background-color: #fdd;
 	margin:-60px auto 0px -200px;
-	padding:10px;
-	border-radius:10px;
 	color:#c44;
-	top:50%;
-	left:50%;
-	position:absolute;
-	z-index:2;
 }
 #catBomb .image {
 	width:40px;
@@ -76,6 +104,57 @@
 	font-size:12px;
 }
 
+/* GAME UPDATE MODAL
+------------------------------*/
+#gameUpdate {
+	z-index:101;
+}
+#gameUpdate .content {
+	width:400px;
+	height:120px;
+	background-color: #dfd;
+	margin:-60px auto 0px -200px;
+	color:#0c0;
+}
+#gameUpdate .image {
+	width:40px;
+	height:40px;
+	margin:0px 10px 0px 0px;
+	float:left;
+}
+#gameUpdate .image img {
+	width:40px;
+	height:40px;
+}
+#gameUpdate .title {
+	width:300px;
+	height:40px;
+	line-height:40px;
+	font-size:14px;
+	font-weight:bold;
+	float:left;
+}
+#gameUpdate .closebtn {
+	width:25px;
+	height:40px;
+	line-height:30px;
+	font-size:14px;
+	font-weight:bold;
+	float:left;
+	text-align:right;
+	font-size:30px;
+	margin:0px 0px 0px 5px;
+	color:#8e8;
+}
+#gameUpdate .closebtn:hover {
+	color:#5f5;
+}
+#gameUpdate .description {
+	width:380px;
+	margin:10px 0px 0px 0px;
+	font-size:12px;
+}
+
 /* MODULES
 ------------------------------*/
 .wrapper {
@@ -83,6 +162,7 @@
 	margin:0px auto;
 	display:none;
 	position:relative;
+	white-space:nowrap;
 	/*background:#FFFFE8;*/
 }
 .wrapper_bg {
@@ -138,6 +218,26 @@
 	line-height:16px;
 	font-size:11px;
 	text-align:center;
+	position: relative;
+}
+.module.admiral .admiral_lvnext:before {
+	content: attr(data-exp);
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	text-align: right;
+	top: 0px;
+	left: -60px;
+}
+.module.admiral .admiral_lvnext:after {
+	content: attr(data-exp-gain);
+	color: red;
+	position: absolute;
+	top: -16px;
+	left: 0;
+	right: 0;
+	text-align: center;
+	text-shadow: 0px 0px 2px black;
 }
 .module.admiral .admiral_name {
 	width:130px;
@@ -186,7 +286,7 @@
 	padding:0px 0px 0px 8px;
 }
 .module.activity .activity_tab {
-	width:53px;
+	width:43px;
 	height:20px;
 	line-height:20px;
 	font-size:11px;
@@ -196,6 +296,9 @@
 	float:left;
 	text-align:center;
 	border-radius:5px 5px 0px 0px;
+}
+#atab_activity {
+	cursor:default;
 }
 .module.activity .activity_tab.active {
 	background:rgba(100,100,100,0.85);
@@ -207,12 +310,17 @@
 	background:rgba(100,100,100,0.85);
 	border-radius:5px;
 	overflow:hidden;
+	white-space:initial;
 }
 .module.activity .activity_box {
 	width:190px;
 	height:235px;
 	display:none;
 	padding:5px;
+}
+.module.activity .activity_dismissable {
+	cursor:pointer;
+	-webkit-user-select:none;
 }
 
 /*------- ACTIVITY: BASIC -------*/
@@ -358,7 +466,7 @@
 
 /*------- ACTIVITY: BATTLE -------*/
 .module.activity .activity_battle {
-	
+	white-space:nowrap;
 }
 /* Map Info */
 .module.activity .map_info {
@@ -378,6 +486,7 @@
 	margin:0px 5px 0px 0px;
 }
 .module.activity .map_gauge {
+	position:relative;
 	width:60px;
 	height:12px;
 	float:left;
@@ -385,9 +494,16 @@
 	background:#222;
 	border:1px solid #fff;
 }
-.module.activity .map_gauge_bar {
+.module.activity .map_gauge * {
+	position:absolute;
 	height:10px;
+	float:left;
+}
+.module.activity .map_gauge .curhp {
 	background:#0f0;
+}
+.module.activity .map_gauge .nowhp {
+	background:#f00;
 }
 .module.activity .map_hp {
 	width:70px;
@@ -396,6 +512,16 @@
 	font-size:11px;
 	color:#eee;
 	padding:0px 0px 0px 5px;
+}
+
+.module.activity .map_info.map_finisher.noBlink .map_gauge {
+	background-color: #b22;
+}
+.module.activity .map_info.map_finisher:not(.noBlink) .map_gauge {
+	animation: gauge-finish-her 0.25s infinite ease alternate;
+}
+.module.activity .map_info.map_finisher .map_hp {
+	color:#e66;
 }
 /* Sortie Nodes */
 .module.activity .sortie_nodes {
@@ -423,10 +549,39 @@
 	background:#007A00;
 }
 .module.activity .sortie_node.nc_maelstrom {
-	background:#80007F;
+	background:#D2C6FF;
+	color:#000;
+}
+.module.activity .sortie_node.nc_select {
+	background:#FFF;
+	color:#000;
 }
 .module.activity .sortie_node.nc_avoid {
 	background:#00B3B1;
+}
+/* Abyss Ships */
+.module.activity .node_type_battle {
+	position: relative;
+}
+.module.activity .sink_icons {
+	width:180px;
+	height:0px;
+	position: absolute;
+	z-index: 1;
+	pointer-events:none;
+}
+.module.activity .sink_icons .sunk {
+	width:16px;
+	height:16px;
+	line-height:16px;
+	float:left;
+	margin:8px 0px 0px 14px;
+}
+.module.activity .sink_icons .sunk img {
+	width:16px;
+	height:16px;
+	vertical-align:top;
+	display:none;
 }
 /* Abyss Ships */
 .module.activity .abyss_ships {
@@ -443,6 +598,7 @@
 	border:1px solid #000;
 	overflow:hidden;
 	background:#888;
+	position:relative;
 }
 .module.activity .abyss_ship img {
 	width:26px;
@@ -475,7 +631,7 @@
 	margin:0px 0px 5px 0px;
 }
 .module.activity .battle_flag {
-	width:36px;
+	width:30px;
 	height:30px;
 	float:left;
 }
@@ -487,7 +643,7 @@
 .module.activity .battle_flag.battle_eformation {
 	width:30px;
 	height:30px;
-	margin:0px 3px;
+	margin:0px 0px;
 	border-radius:15px;
 	background:#fff;
 }
@@ -534,6 +690,11 @@
 	font-size:11px;
 	float:left;
 	color:#fff;
+}
+.module.activity .battle_contact img {
+	width:15px;
+	height:15px;
+	vertical-align:top;
 }
 /* Battle Planes */
 .module.activity .battle_planes {
@@ -585,10 +746,614 @@
 .module.activity .plane_after {
 	color:#FF7979;
 }
-/*------- ACTIVITY: DETAILS -------*/
-.module.activity .activity_details {
+/* Resource Nodes */
+.module.activity .node_type_resource {
+	width:150px;
+	line-height:18px;
+	padding:4px;
+	background:#B1FF5E;
+	border:1px solid #70D800;
+	border-radius:7px;
+	margin: 10px auto;
+}
+.module.activity .node_res_icon {
+	width:18px;
+	height:18px;
+	float:left;
+	margin:0px 5px 0px 0px;
+	vertical-align:top;
+}
+.module.activity .node_res_icon img {
+	width:18px;
+	height:18px;
+	vertical-align:top;
+}
+.module.activity .node_res_text {
+	width:140px;
+	height:20px;
+	font-weight:bold;
+	font-size:12px;
+}
+.module.activity .node_type_maelstrom {
+	background:#D2C6FF;
+	border:1px solid #AE87E9;
+}
+/* Text Nodes */
+.module.activity .node_type_text {
+	width:150px;
+	height:28px;
+	line-height:18px;
+	padding:4px;
+	border-radius:7px;
+	margin: 10px auto;
+	text-align:center;
+	font-size:12px;
+}
+.module.activity .node_type_text.dud {
+	background:#79E7FF;
+	border:1px solid #1ABAEF;
+}
+.module.activity .node_type_text.select {
+	background:#FFF;
+	border:1px solid #CCC;
+}
+
+/*------- ACTIVITY: CRAFTING -------*/
+.module.activity .activity_crafting {
+	padding:10px;
+}
+.module.activity .activity_crafting .equipIcon {
+	width:30px;
+	height:30px;
+	line-height:16px;
+	float:left;
+	background:#fff;
+	border-radius:15px;
+	margin:0px 5px 5px 0px;
+}
+.module.activity .activity_crafting .equipIcon img {
+	width:24px;
+	height:24px;
+	margin:3px;
+	vertical-align:top;
+}
+.module.activity .activity_crafting .equipName {
+	width:135px;
+	/*height:30px;*/
+	line-height:15px;
+	float:left;
+	/*background:#fcc;*/
+	font-size:12px;
+	color:#fff;
+	font-weight:bold;
+	/*white-space:nowrap; */
+	overflow:hidden;
+	text-overflow: ellipsis;
+	margin:0px 0px 5px 0px;
+}
+.module.activity .activity_crafting .equipNote {
+	width:170px;
+	/*background:#cfc;*/
+	line-height:16px;
+	margin:0px 0px 5px 0px;
+	color:#ccc;
+	font-size:12px;
+}
+.module.activity .activity_crafting .equipStats {
+	width:170px;
+	/*background:#cfc;*/
+	line-height:20px;
+	margin:0px 0px 5px 0px;
+}
+.module.activity .activity_crafting .equipStat {
+	width:45px;
+	height:20px;
+	margin:0px 0px 3px 0px;
+	float:left;
+}
+.module.activity .activity_crafting .equipStatIcon {
+	width:20px;
+	height:20px;
+	float:left;
+	margin:0px 5px 0px 0px;
+	background:#fff;
+	border-radius:10px;
 	
 }
+.module.activity .activity_crafting .equipStatIcon img {
+	width:16px;
+	height:16px;
+	margin:2px;
+	vertical-align:top;
+}
+.module.activity .activity_crafting .equipStatText {
+	width:20px;
+	height:20px;
+	float:left;
+	font-size:12px;
+	color:#fff;
+}
+
+.module.activity .activity_crafting .equipResources {
+	width:170px;
+	/*background:#cfc;*/
+	height:36px;
+	line-height:16px;
+}
+.module.activity .activity_crafting .equipResource {
+	width:85px;
+	float:left;
+	/*background:#fcc;*/
+	height:16px;
+	line-height:16px;
+	margin:0px 0px 2px 0px;
+}
+.module.activity .activity_crafting .equipResoIcon {
+	width:16px;
+	height:16px;
+	float:left;
+	margin:0px 9px 0px 0px;
+	/*background:#fcf;*/
+}
+.module.activity .activity_crafting .equipResoAmt {
+	width:60px;
+	height:16px;
+	float:left;
+	/*background:#ccf;*/
+	font-size:12px;
+	color:#fff;
+}
+
+/*------- EXPEDITION -------*/
+.module.activity .activity_expedition {
+	padding:5px 10px;
+	white-space:nowrap;
+}
+
+.module.activity .activity_expedition .expres_img {
+	width:170px;
+	height:30px;
+	line-height:30px;
+}
+.module.activity .activity_expedition .expres_img img {
+	width:170px;
+	height:30px;
+	vertical-align:top;
+}
+
+.module.activity .activity_expedition .expres_status {
+	width:170px;
+	font-size:14px;
+	color:#ffcc00;
+	font-weight:bold;
+	text-align:center;
+}
+.module.activity .activity_expedition .expres_num {
+	width:170px;
+	height:14px;
+	line-height:14px;
+	font-size:12px;
+	color:#ccc;
+	text-align:center;
+	margin:0px 0px 8px 0px;
+}
+
+.module.activity .activity_expedition .expres_resos {
+	width:170px;
+	/*background:#cfc;*/
+	height:36px;
+	line-height:16px;
+	margin:0px 0px 5px 0px;
+}
+.module.activity .activity_expedition .expres_divHF { /* divide half */
+	display:inline-block;
+	width:85px;
+	float:left;
+}
+.module.activity .activity_expedition .expres_reso {
+	float:left;
+	/*background:#fcc;*/
+	height:16px;
+	line-height:16px;
+	margin:0px 0px 2px 0px;
+}
+.module.activity .activity_expedition .expres_icon {
+	width:16px;
+	height:16px;
+	float:left;
+	margin:0px 9px 0px 0px;
+	/*background:#fcf;*/
+}
+.module.activity .activity_expedition .expres_amt {
+	width:60px;
+	height:16px;
+	float:left;
+	/*background:#ccf;*/
+	font-size:12px;
+	color:#fff;
+}
+
+.module.activity .activity_expedition .expres_items {
+	width:170px;
+	height:20px;
+	margin:0px 0px 3px 0px;
+}
+.module.activity .activity_expedition .expres_get {
+	max-width:100px;
+	height:20px;
+	line-height:20px;
+	font-size:12px;
+	color:#fff;
+	float:left;
+	margin:0px 5px 0px 0px;
+}
+.module.activity .activity_expedition .expres_noget {
+	height:20px;
+	line-height:20px;
+	font-size:12px;
+	color:#faa;
+	float:left;
+	display:none;
+}
+.module.activity .activity_expedition .expres_item {
+	width:35px;
+	height:20px;
+	line-height:20px;
+	float:left;
+	margin:0px 5px 0px 0px;
+}
+.module.activity .activity_expedition .expres_item_icon {
+	width:16px;
+	height:16px;
+	float:left;
+	margin:0px 2px 0px 0px;
+}
+.module.activity .activity_expedition .expres_item_icon img {
+	width:16px;
+	height:16px;
+	margin:2px 0px;
+	vertical-align:top;
+}
+.module.activity .activity_expedition .expres_item_text {
+	width:17px;
+	height:20px;
+	float:left;
+	font-size:12px;
+	color:#fff;
+}
+
+.module.activity .activity_expedition .expres_hqexp {
+	width:170px;
+	height:20px;
+	line-height:20px;
+	margin:0px 0px 5px 0px;
+	color:#fff;
+	font-size:14px;
+}
+.module.activity .activity_expedition .expres_hqexp_lbl {
+	font-size:14px;
+	font-weight:bold;
+}
+.module.activity .activity_expedition .expres_hqexp_amt {
+	font-size:12px;
+}
+.module.activity .activity_expedition .expres_hqexp_amt span.value {
+	color:#ffcc00;
+	font-size:14px;
+	font-weight:bold;
+}
+
+.module.activity .activity_expedition .expres_ships {
+	width:170px;
+	line-height:18px;
+	font-size:12px;
+}
+.module.activity .activity_expedition .expres_ship {
+	width:85px;
+	height:18px;
+	float:left;
+	margin:0px 0px 2px 0px;
+	display:none;
+}
+.module.activity .activity_expedition .expres_ship_img {
+	width:18px;
+	height:18px;
+	float:left;
+	margin:0px 2px 0px 0px;
+}
+.module.activity .activity_expedition .expres_ship_img img {
+	width:18px;
+	height:18px;
+	vertical-align:top;
+}
+.module.activity .activity_expedition .expres_ship_exp {
+	width:65px;
+	height:18px;
+	float:left;
+	color:#fff;
+}
+.module.activity .activity_expedition .expres_ship_exp span.value {
+	font-weight:bold;
+	color:#ffcc00;
+}
+
+/*------- MODERNIZE -------*/
+.module.activity .activity_modernization {
+	padding:5px 10px;
+}
+.module.activity .activity_modernization .mod_ship {
+	height:50px;
+	padding:5px 0px;
+	margin:0px 0px 5px 0px;
+}
+.module.activity .activity_modernization .mod_ship_pic {
+	width:40px;
+	height:40px;
+	float:left;
+	border-radius:20px;
+	border:1px solid #000;
+	overflow: hidden;
+	margin:0px 5px 0px 0px;
+}
+.module.activity .activity_modernization .mod_ship_pic img {
+	width:42px;
+	height:42px;
+	position:relative;
+	margin:-1px 0px 0px -1px;
+}
+.module.activity .activity_modernization .mod_ship_name {
+	width:125px;
+	height:22px;
+	line-height:22px;
+	float:left;
+	/*background:#fcc;*/
+	font-size:13px;
+	font-weight:bold;
+	color:#ffcc00;
+	overflow:hidden;
+}
+.module.activity .activity_modernization .mod_ship_level {
+	width:125px;
+	height:14px;
+	line-height:14px;
+	float:left;
+	/*background:#cfc;*/
+	font-size:12px;
+	color:#ccc;
+}
+.module.activity .activity_modernization .mod_result_stats {
+	width:170px;
+	height:125px;
+}
+.module.activity .activity_modernization .mod_result_stat {
+	width:170px;
+	height:20px;
+	line-height:20px;
+	margin:0px 0px 5px 0px;
+}
+.module.activity .activity_modernization .mod_result_icon {
+	width:20px;
+	height:20px;
+	margin:0px 5px 0px 0px;
+	float:left;
+}
+.module.activity .activity_modernization .mod_result_icon img {
+	width:20px;
+	height:20px;
+	display:block;
+}
+.module.activity .activity_modernization .mod_result_old {
+	width:35px;
+	height:20px;
+	float:left;
+	color:#aaa;
+	font-size:14px;
+}
+.module.activity .activity_modernization .mod_result_plus {
+	width:40px;
+	height:20px;
+	float:left;
+	font-weight:bold;
+	color:#0f0;
+	font-size:16px;
+}
+.module.activity .activity_modernization .mod_result_left {
+	width:70px;
+	height:20px;
+	float:left;
+	color:#aaa;
+	font-size:12px;
+}
+.module.activity .activity_modernization .mod_result_note {
+	width:170px;
+	height:20px;
+	color:#aaa;
+	font-size:12px;
+	text-align:center;
+}
+
+/* ACTIVITY: Expedition Planner
+------------------------*/
+.module.activity .activity_expeditionPlanner {
+    text-align:center;
+    white-space:nowrap;
+}
+.module.activity .activity_expeditionPlanner .dropdown_title.expPlanner_text_passed{	
+	color:#006600;
+}
+.module.activity .activity_expeditionPlanner .dropdown_title.expPlanner_text_failed{	
+	color:#cc0000;
+}
+
+.module.activity .activity_expeditionPlanner .expPlan_dropdown_menu {
+    width: 100%;
+    height: 28px;
+}
+
+.module.activity .activity_expeditionPlanner .expPlan_dropdown_title {
+  width:100%;
+  list-style: none;
+  position: relative;
+  float: left;
+  margin: 0;
+  padding: 0;
+  	background: #dddddd;
+	text-align: center;
+	text-decoration: none;
+	border-style:solid;
+	border-width:3px;
+}
+
+.module.activity .activity_expeditionPlanner li {
+  background: #dddddd;
+  border-style:solid;
+  border-width:1px;
+}
+
+.module.activity .activity_expeditionPlanner li:hover {
+  background: #ffffff;
+}
+
+.module.activity .activity_expeditionPlanner  li ul {
+  list-style: none;
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  padding:0;
+  width:30%;
+}
+
+.module.activity .activity_expeditionPlanner li ui li{
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  width:50px;
+}
+
+
+.module.activity .activity_expeditionPlanner li ul ul {
+	top:0%;
+	left:100%;
+	cursor:pointer;
+	width:150%;
+}
+
+
+.module.activity .activity_expeditionPlanner .expPlan_dropdown_topEntry {
+	display: none;
+}
+
+
+.module.activity .activity_expeditionPlanner li:hover >ul {
+	display: block;
+}
+
+.module.activity .activity_expeditionPlanner .expPlanner_timer {
+	margin-bottom:4px;
+}
+
+.module.activity .activity_expeditionPlanner .expPlanner_timer_description {
+    float: left;
+    margin-right: 3px;
+}
+
+
+.module.activity .activity_expeditionPlanner .expPlanner_resos_title {
+    text-align: center;
+    height: 20px;
+    margin-bottom: 2px;
+    display:none;
+}
+.module.activity .activity_expeditionPlanner .expres_resos {
+	width:170px;
+    height: 40px;
+    margin-bottom:3px;
+    display:inline-block;
+}
+.module.activity .activity_expeditionPlanner .expres_divHF {/* divide half */
+	display:inline-block;
+	width:65px;
+	height:40px;
+	float:left;
+	/* text-align: center; */
+	/*background:#fcc;*/
+}
+.module.activity .activity_expeditionPlanner .expres_greatbtn {
+	width:40px;
+	/*background:#cfc;*/
+	float:left;
+	height:40px;
+	line-height:40px;
+}
+.module.activity .activity_expeditionPlanner .expres_greatbtn img {
+	width:40px;
+	height:40px;
+	/*margin:2px;
+	vertical-align:top;*/
+}
+.module.activity .activity_expeditionPlanner .expres_reso {
+	float:left;
+	/*background:#fcc;*/
+	height:16px;
+	line-height:16px;
+	margin: 0px 0px 6px 0px;
+}
+.module.activity .activity_expeditionPlanner .expres_icon {
+	width:16px;
+	height:16px;
+	float:left;
+	margin:0px 9px 0px 0px;
+	/*background:#fcf;*/
+}
+.module.activity .activity_expeditionPlanner .expres_icon img {
+	width:16px;
+	height:16px;
+	vertical-align: top;
+}
+.module.activity .activity_expeditionPlanner .expres_amt {
+	width: 30px;
+	height:16px;
+	float:left;
+	font-size:12px;
+	color:#fff;
+	text-align:left;
+}
+
+.module.activity .activity_expeditionPlanner .expPlanner_requirements {
+    margin-bottom:4px;
+}
+.module.activity .activity_expeditionPlanner .expPlanner_checker_criterias {
+	margin-bottom:3px;
+}
+.module.activity .activity_expeditionPlanner .expPlanner_shipReqBox {
+	margin-right:10px;
+}
+.module.activity .activity_expeditionPlanner .requirements_textbox{
+	display:inline-block;	
+}
+.module.activity .activity_expeditionPlanner .expPlanner_text{	
+	font-size: 14px;
+	color:#ccc
+}
+.module.activity .activity_expeditionPlanner .expPlanner_text_passed{	
+	font-size: 14px;
+	color:#00CC00
+}
+.module.activity .activity_expeditionPlanner .expPlanner_text_failed{	
+	font-size: 14px;
+	color:#FF5555
+}
+.module.activity .activity_expeditionPlanner .expedition_entry.cond_passed {	
+	color:green
+}
+.module.activity .activity_expeditionPlanner .expedition_entry.cond_failed {	
+	color:red
+}
+
 
 /*------- QUESTS -------*/
 .module.quests {
@@ -598,11 +1363,8 @@
 	height:20px;
 	line-height:20px;
 }
-.h .module.quests .quest {
-	width:190px;
-}
-.v .module.quests .quest {
-	width:240px;
+.module.quests  .quest.complete {
+	background:rgba(0,255,0,0.25);
 }
 
 .module.quests .quest_color {
@@ -611,6 +1373,21 @@
 	margin:3px;
 	background:#555;
 	float:left;
+	line-height:normal;
+	text-align:center;
+}
+.module.quests .quest.complete .quest_color {
+	width:16px;
+	height:16px;
+	line-height:12px;
+	font-size:10px;
+	margin:2px;
+	background:#555;
+	float:left;
+	line-height:normal;
+	text-align:center;
+	border:2px solid #0f0;
+	text-shadow:0px 0px 2px #fff, 0px 0px 2px #fff, 0px 0px 2px #fff;
 }
 
 .module.quests .quest_text {
@@ -623,18 +1400,6 @@
 	overflow:hidden;
 	text-overflow: ellipsis;
 	color:#eee;
-}
-.h .module.quests .quest_text {
-	width:130px;
-}
-.h .module.quests .untracked .quest_text {
-	width:170px;
-}
-.v .module.quests .quest_text {
-	width:170px;
-}
-.v .module.quests .untracked .quest_text {
-	width:210px;
 }
 
 .module.quests .quest_track {
@@ -659,13 +1424,13 @@
 .module.controls .control {
 	height:30px;
 	float:left;
-	color:#fff;
+	color:#cccccc;
 }
 .module.controls .fleet_num {
 	width:30px;
 	line-height:30px;
 	border-radius:15px;
-	background:#555;
+	background:#333333;
 	text-align:center;
 	margin:0px 5px 3px 0px;
 	font-size:19px;
@@ -673,37 +1438,55 @@
 	text-align:center;
 	/*border:1px solid #ccc;*/
 }
+.module.controls .fleet_num.needsSupply {
+	border:2px solid #f00;
+	line-height:26px;
+}
+.module.controls .fleet_num.hasTaiha {
+	background:#faa;
+	color:#000;
+}
 .module.controls .fleet_rengo {
-	width:50px;
-	border-radius:10px;
-	background:#555;
+	width:45px;
+	border-radius:8px;
+	background:#333333;
 	text-align:center;
-	margin:0px 15px 3px 0px;
+	margin:0px 5px 3px 0px;
 	font-size:16px;
 	font-weight:bold;
 	text-align:center;
-	/*border:1px solid #ccc;*/
 }
 .module.controls .fleet_rengo img {
-	width:48px;
+	width:43px;
 	height:28px;
+}
+.module.controls .fleet_lbas {
+	width:40px;
+	border-radius:8px;
+	background:#333333;
+	text-align:center;
+	margin:0px 0px 3px 0px;
+	font-size:16px;
+	font-weight:bold;
+	text-align:center;
+}
+.module.controls .fleet_lbas img {
+	width:30px;
+	height:30px;
 }
 .module.controls .control_btn {
 	width:40px;
 	border-radius:15px;
-	background:#ddd;
+	background:#999999;
 	text-align:center;
 	margin:0px 5px 0px 0px;
 	text-align:center;
-	/*border:1px solid #ECBA24;*/
-	border:1px solid #ccc;
-}
-.h .module.controls .control_btn {
-	float:right;
+	overflow:hidden;
+	padding:3px;
 }
 .module.controls .control_btn img {
-	width:38px;
-	height:28px;
+	width:34px;
+	height:24px;
 }
 .module.controls .control.active {
 	background:#ffcc00;
@@ -772,6 +1555,7 @@
 	margin:0px 0px 3px 0px;
 	border-radius:5px;
 	padding:3px 0px 0px 0px;
+	position:relative;
 }
 .module.fleet .lship.ship-stamp:after {
 	content: attr(title);
@@ -790,6 +1574,24 @@
 	background-color: rgba(255,0,0,0.5);
 	z-index: 1;
 }
+.module.fleet .lship .ex_item {
+	width:18px;
+	height:18px;
+	line-height:18px;
+	position:absolute;
+	top:30px;
+	left:25px;
+	background:#fff;
+	border-radius:9px;
+	z-index:1;
+	overflow:hidden;
+}
+.module.fleet .lship .ex_item img {
+	width:18px;
+	height:18px;
+	line-height:18px;
+	vertical-align:top;
+}
 .module.fleet .lship .ship_img {
 	width:40px;
 	height:40px;
@@ -805,6 +1607,23 @@
 	position:relative;
 	margin:-1px 0px 0px -1px;
 }
+.module.fleet .lship .mvp_icon {
+	width:20px;
+	height:20px;
+	line-height:20px;
+	float:left;
+	position:absolute;
+	left: 0px;
+	top:28px;
+	z-index:1;
+	overflow:hidden;
+	display:none;
+}
+.module.fleet .lship .mvp_icon img {
+	width:20px;
+	height:20px;
+	vertical-align:top;
+}
 
 .module.fleet .lship .ship_col1 {
 	width:120px;
@@ -812,6 +1631,7 @@
 	float:left;
 	margin:0px 5px 0px 0px;
 }
+
 .module.fleet .lship .ship_name {
 	width:120px;
 	height:15px;
@@ -833,15 +1653,16 @@
 	color:#00FFFF;
 }
 .module.fleet .lship .ship_level {
-	width:35px;
+	width:40px;
 	height:15px;
 	line-height:15px;
 	float:left;
 	font-size:11px;
 	color:#ffffff;
+	white-space:nowrap;
 }
 .module.fleet .lship .ship_hp_text {
-	width:55px;
+	width:50px;
 	height:15px;
 	line-height:15px;
 	float:left;
@@ -862,6 +1683,7 @@
 	float:left;
 	border:1px solid #000;
 	background:#555;
+	position:relative;
 }
 .module.fleet .lship .ship_hp_bar {
 	height:8px;
@@ -869,6 +1691,37 @@
 .module.fleet .lship .ship_hp_prediction {
 	height:8px;
 }
+
+/* ==> Akashi Timer <== */
+.module.fleet .lship:not(:hover) .ship_repair_data {
+	display:none;
+}
+.module.fleet .lship:hover .ship_repair_data {
+	display:block;
+}
+.module.fleet .lship .ship_repair_data {
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	font-size:10px;
+	width:100%;
+	height:100%;
+}
+
+.module.fleet .lship .ship_repair_tick:before {
+	content:"x" attr(data-tick);
+}
+
+.module.fleet .lship .ship_repair_tick,
+.module.fleet .lship .ship_repair_timer {
+	width:50%;
+	float:left;
+	text-align:center;
+	background-color:white;
+	color:red;
+}
+/* ==> Akashi Timer <== */
 
 .module.fleet .lship .ship_col2 {
 	width:40px;
@@ -895,6 +1748,22 @@
 	font-size:11px;
 	text-align:center;
 	color:#aaa;
+	position:relative;
+}
+.module.fleet .lship .ship_exp_label .expNotice {
+	width:40px;
+	height:22px;
+	line-height:22px;
+	position:absolute;
+	top:0px;
+	left:0px;
+	font-size:14px;
+	text-shadow:
+		0px 0px 4px #000,
+		0px 0px 4px #000,
+		0px 0px 4px #000;
+	text-align:center;
+	color:#ffcc00;
 }
 .module.fleet .lship .ship_exp_next {
 	width:40px;
@@ -915,6 +1784,41 @@
 	height:20px;
 	float:left;
 }
+.module.fleet .lship .ship_gear_star {
+	width: 12px;
+	position: absolute;
+	font-size: 8px;
+	margin: 8px 0px 0px -5px;
+	height: 12px;
+	overflow: hidden;
+	border-radius: 6px;
+	text-align: center;
+	line-height: 13px;
+	color: #ff0;
+	background: #45a9a5;
+	display: none;
+}
+.module.fleet .lship .ship_gear_ace {
+	width: 12px;
+	position: absolute;
+	font-size: 8px;
+	margin: 4px 0px 0px 15px;
+	height: 12px;
+	overflow: hidden;
+	border-radius: 6px;
+	text-align: center;
+	line-height: 13px;
+	color: #ff0;
+	display: none;
+}
+.module.fleet .lship .ship_gear_ace img {
+	vertical-align:middle;
+	width:17px;
+	height:10px;
+	position:absolute;
+	left:-2px;
+	top:1px;
+}
 .module.fleet .lship .ship_gear_icon {
 	width:18px;
 	height:18px;
@@ -922,6 +1826,9 @@
 	float:left;
 	border-radius:9px;
 	margin:1px 3px 0px 0px;
+}
+.module.fleet .lship .ship_gear_icon.item_being_used {
+	background:#f99;
 }
 .module.fleet .lship .ship_gear.equipped .ship_gear_icon {
 	background:#fff;
@@ -936,9 +1843,10 @@
 	vertical-align:top;
 }
 .module.fleet .lship .ship_gear_slot {
-	width:18px;
+	width:15px;
 	height:20px;
 	float:left;
+	margin-left:3px;
 	line-height:20px;
 	font-size:12px;
 }
@@ -999,6 +1907,7 @@
 	height:50px;
 	margin:0px 0px 2px 0px;
 	border-radius:5px;
+	position:relative;
 }
 .module.fleet .sship.ship-stamp:after {
 	content: attr(title);
@@ -1016,6 +1925,44 @@
 	width: 160px;
 	background-color: rgba(255,0,0,0.5);
 	z-index: 1;
+}
+.module.fleet .sship .ex_item {
+	width:18px;
+	height:18px;
+	line-height:18px;
+	position:absolute;
+	top:30px;
+	left:25px;
+	background:#fff;
+	border-radius:9px;
+	z-index:1;
+	overflow:hidden;
+}
+.module.fleet .sship .ex_item.item_being_used {
+	background:#f99;
+}
+.module.fleet .sship .ex_item img {
+	width:18px;
+	height:18px;
+	line-height:18px;
+	vertical-align:top;
+}
+.module.fleet .sship .mvp_icon {
+	width:20px;
+	height:20px;
+	line-height:20px;
+	float:left;
+	position:absolute;
+	left: 0px;
+	top:28px;
+	z-index:1;
+	overflow:hidden;
+	display:none;
+}
+.module.fleet .sship .mvp_icon img {
+	width:20px;
+	height:20px;
+	vertical-align:top;
 }
 .module.fleet .sship .ship_img {
 	width:40px;
@@ -1085,6 +2032,7 @@
 	float:left;
 	border:1px solid #000;
 	background:#555;
+	position:relative;
 }
 .module.fleet .sship .ship_hp_bar {
 	height:6px;
@@ -1127,11 +2075,249 @@
 	background:#999900;
 }
 
+/* Ship Misc Marker */
+.module.fleet .sSalt {
+	-webkit-filter: blur(1.5px);
+}
+.module.fleet .sWife .ship_name {
+	color:#fbb;
+}
+.module.fleet .ship_no_lock {
+	visibility:hidden;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	text-align: center;
+	background-color: pink;
+	color: red;
+}
+.module.fleet .sLock .ship_no_lock {
+	animation: lock-warning 0.5s steps(5,start) infinite;
+	visibility:visible;
+}
 /*------- STATUS -------*/
 .module.status {
-	background:rgba(80,80,80,0.5);
+	/*background:rgba(255,80,80,0.4);*/
+}
+.module.status .status_box {
+	width:110px;
+	height:20px;
+	line-height:20px;
+	float:left;
+	margin:0px 3px 3px 0px;
+	/*background:#fcc;*/
+}
+.module.status .status_icon {
+	width:20px;
+	height:20px;
+	float:left;
+	margin:0px 4px 0px 1px;
+	/*background:#ccf;*/
+}
+.module.status .status_icon.enclose {
+	background:#fff;
+	border-radius:10px;
+}
+.module.status .status_icon img {
+	width:20px;
+	height:20px;
+	vertical-align:top;
+}
+.module.status .status_text {
+	width:85px;
+	height:20px;
+	float:left;
+	/*background:#cfc;*/
+	color:#fff;
+	text-shadow:0px 0px 5px #000;
+	font-size:13px;
+	white-space:nowrap; 
+	overflow:hidden;
+	text-overflow: ellipsis;
+	-webkit-user-select: none;
+}
+.module.status .status_text.bad {
+	color:#faa;
+}
+.module.status .status_text.good {
+	color:#afa;
 }
 
+.module.status .status_support {
+	display:none;
+}
+.module.status .status_support img {
+	width:14px;
+	height:14px;
+	margin:3px;
+}
+
+/* AIR BASES
+------------------------------*/
+.module.fleet .airbase_list {
+	
+}
+.airbase {
+	width:340px;
+	height:75px;
+	margin:0px 0px 3px 0px;
+}
+
+.airbase .airbase_infos {
+	width:340px;
+	height:20px;
+	margin:0px 0px 2px 0px;
+	background:rgba(0,0,0,0.4);
+	border-radius:6px;
+}
+.airbase .airbase_info {
+	float:left;
+}
+.airbase .base_name {
+	width:90px;
+	height:20px;
+	overflow:hidden;
+	float:left;
+	color:#cccccc;
+	text-shadow:1px 1px 3px #333;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	font-size:11px;
+	line-height:20px;
+	margin:0px 5px 0px 0px;
+}
+
+.airbase .base_stats {
+	width:200px;
+	height:20px;
+	float:left;
+	overflow:hidden;
+}
+.airbase .base_stats .base_stat {
+	width:50px;
+	height:20px;
+	float:left;
+	overflow:hidden;
+}
+.airbase .base_stats .base_stat_icon {
+	width:18px;
+	height:18px;
+	line-height:16px;
+	margin:1px 2px 1px 0px;
+	border-radius:9px;
+	background:#131313;
+	float:left;
+	padding:1px;
+}
+.airbase .base_stats .base_stat_icon img {
+	width:16px;
+	height:16px;
+	-webkit-filter: invert(100%);
+	vertical-align: top;
+}
+.airbase .base_stats .base_stat_value {
+	width:30px;
+	height:20px;
+	line-height:20px;
+	float:left;
+	text-align:left;
+	overflow:hidden;
+	color:#cccccc;
+	font-size:11px;
+}
+
+.airbase .base_action {
+	width:40px;
+	height:20px;
+	line-height:20px;
+	overflow:hidden;
+	float:left;
+	color:#ffffff;
+	text-align:right;
+	font-size: 11px;
+}
+.airbase .base_planes {
+	width:340px;
+	height:52px;
+	float:left;
+	overflow:hidden;
+}
+
+/* PLANES */
+.airbase_plane {
+	width:165px;
+	height:24px;
+	margin:0px 0px 2px 5px;
+	background:rgba(0,0,0,0.4);
+	float:left;
+	border-radius:6px;
+	overflow:hidden;
+}
+.airbase_plane.moving {
+	background:rgba(255,200,0,0.2);
+}
+.base_plane_col {
+	float:left;
+	height:24px;
+	overflow:hidden;
+}
+.base_plane_img {
+	width:80px;
+	text-align: center;
+	position:relative;
+	margin:0px 0px 0px -10px;
+}
+.base_plane_img  img {
+	width:100%;
+	vertical-align: middle;
+	margin:-60% -50%;
+	-webkit-mask-image:-webkit-linear-gradient(right, rgba(34,34,34,1) 30%,rgba(34,34,34,0) 100%);
+}
+.base_plane_icon {
+	width:20px;
+	line-height:20px;
+	padding:2px 0px;
+}
+.base_plane_icon img {
+	width:20px;
+	height:20px;
+	vertical-align: top;
+}
+.base_plane_chevs {
+	width:15px;
+	margin:0px 5px 0px 0px;
+}
+.base_plane_chevs img {
+	width:25px;
+	margin:5px 0px 5px -5px;
+	position:relative;
+}
+.base_plane_name {
+	display:none;
+}
+.base_plane_count {
+	line-height:24px;
+	font-size:11px;
+	text-shadow:2px 2px 4px #333,
+		2px 2px 4px #333;
+	text-align:center;
+	color:#ccc;
+	margin:0px 5px 0px 0px;
+}
+.base_plane_count.unsupplied {
+	color:#f55;
+}
+.base_plane_cond {
+	width:16px;
+	padding:4px 0px;
+	line-height:16px;
+}
+.base_plane_cond img {
+	width:16px;
+	height:16px;
+	vertical-align:top;
+}
 
 /* HORIZONTAL LAYOUT
 ------------------------------*/
@@ -1151,10 +2337,29 @@
 	height:120px;
 	left:5px; top:325px;
 }
+.h .module.quests .quest {
+	width:190px;
+}
+.h .module.quests .quest_text {
+	width:130px;
+}
+.h .module.quests .untracked .quest_text {
+	width:170px;
+}
 .h .module.controls {
 	width:340px;
 	height:30px;
 	left:205px; top:5px;
+}
+.h .module.controls .control_btn {
+	float:right;
+	width:30px;
+	line-height:29px;
+	padding:0px;
+}
+.h .module.controls .control_btn img {
+	width:26px;
+	height:20px;
 }
 .h .module.summary {
 	width:340px;
@@ -1163,6 +2368,18 @@
 }
 .h .module.fleet {
 	left:205px; top:75px;
+}
+.h .module.controls .fleet_num {
+	width:23px;
+	line-height:30px;
+	border-radius:5px;
+	margin:0px 2px 3px 0px;
+}
+.h .module.controls .fleet_num.needsSupply {
+	line-height:26px;
+}
+.h .module.controls .fleet_rengo {
+	margin:0px 2px 3px 0px;
 }
 .h .module.status {
 	width:340px;
@@ -1205,4 +2422,30 @@
 	width:240px;
 	height:120px;
 	left:555px; top:200px;
+}
+.v .module.quests .quest {
+	width:240px;
+}
+.v .module.quests .quest_text {
+	width:170px;
+}
+.v .module.quests .untracked .quest_text {
+	width:210px;
+}
+
+/* ANIMATIONS
+----------------------------------- */
+@-webkit-keyframes lock-warning {
+	to {
+		visibility:hidden;
+	}
+}
+
+@-webkit-keyframes gauge-finish-her {
+	0% {
+		background:#222;
+	}
+	100% {
+		background:#d22;
+	}
 }

@@ -1,7 +1,7 @@
 [
 	{
 		"section": "SettingsGlobal",
-		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Global",
+		"help" : "https://github.com/KC3Kai/KC3Kai/wiki/Settings%3A-Global",
 		"contents" : [
 			{
 				"id" : "language",
@@ -10,27 +10,20 @@
 				"options" : {
 					"choices" : [
 						[ "en", "English" ],
-						[ "jp", "日本語" ],
-						[ "id", "Indonesian" ],
-						[ "tcn", "繁體中文" ],
-						[ "scn", "简体中文" ],
-						[ "vi", "Tiếng Việt" ],
 						[ "de", "Deutsch" ],
+						[ "nl", "Dutch" ],
+						[ "es", "Español" ],
 						[ "fr", "Français" ],
+						[ "id", "Indonesian" ],
 						[ "it", "Italiano" ],
-						[ "kr", "한국어" ]
-					]
-				}
-			},
-			{
-				"id" : "elosFormula",
-				"name" : "SettingsELosFormula",
-				"type" : "radio",
-				"options" : {
-					"choices" : [
-						[ 1, "SettingsELosSum" ],
-						[ 2, "SettingsELosOld" ],
-						[ 3, "SettingsELosNew" ]
+						[ "jp", "日本語" ],
+						[ "kr", "한국어" ],
+						[ "pt", "Português" ],
+						[ "ru", "Русский" ],
+						[ "scn", "简体中文" ],
+						[ "tcn", "繁體中文" ],
+						[ "th", "ภาษาไทย" ],
+						[ "vi", "Tiếng Việt" ]
 					]
 				}
 			},
@@ -45,6 +38,27 @@
 						[ 3, "SettingsHQExpTotal" ]
 					]
 				}
+			},
+			{
+				"id": "timerDisplayType",
+				"name": "SettingsTimerDisplayType",
+				"type": "radio",
+				"options" : {
+					"choices" : [
+						[ 1, "SettingsTimeRemaining" ],
+						[ 2, "SettingsTimeFinished" ]
+					]
+				}
+			},
+			{
+				"id": "checkLiveQuests",
+				"name": "SettingsCheckLiveQuests",
+				"type": "check"
+			},
+			{
+				"id": "devOnlyPages",
+				"name": "SettingsDevOnlyPages",
+				"type": "check"
 			}
 		]
 	},
@@ -83,8 +97,32 @@
 				"options" : {}
 			},
 			{
+				"id" : "info_btrank",
+				"name" : "SettingsBattleRank",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "info_btstamp",
 				"name" : "SettingsBattleStamp",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_fleetstat",
+				"name" : "SettingsFleetStatus",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_delta",
+				"name" : "SettingsHQDelta",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_blink_gauge",
+				"name" : "SettingsBlinkGauge",
 				"type" : "check",
 				"options" : {}
 			},
@@ -96,15 +134,90 @@
 				"options" : {}
 			},
 			{
-				"id" : "info_troll",
-				"name" : "SettingsYasenTroll",
+				"id" : "info_auto_exped_tab",
+				"name" : "SettingsAutoExpedTab",
 				"type" : "check",
 				"options" : {}
 			},
 			{
-				"id" : "info_delta",
-				"name" : "SettingsHQDelta",
+				"id" : "info_auto_fleet_view",
+				"name" : "SettingsAutoSwitchFleetView",
 				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_eng_stype",
+				"name" : "SettingsEnglishShipType",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_force_ship_lang",
+				"name" : "SettingsShipNamesLang",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ ""  , "SettingsShipNamesGlobal" ],
+						[ "en", "English" ],
+						[ "jp", "日本語" ]
+					]
+				}
+			},
+			{
+				"id" : "info_salt",
+				"name" : "SettingsSaltyShip",
+				"type" : "check",
+				"hide" : 0,
+				"options" : {}
+			},
+			{
+				"id" : "info_troll",
+				"name" : "SettingsYasenTroll",
+				"type" : "check",
+				"options" : {}
+			}
+		]
+	},
+	{
+		"section": "SettingsFormulas",
+		"help" : "",
+		"contents" : [
+			{
+				"id" : "elosFormula",
+				"name" : "SettingsELosFormula",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 1, "SettingsELosSum" ],
+						[ 2, "SettingsELosOld" ],
+						[ 3, "SettingsELosNew" ],
+						[ 4, "SettingsELosF33" ]
+					]
+				}
+			},
+			{
+				"id" : "air_formula",
+				"name" : "SettingsAirFormula",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 1, "SettingsAFPNoBonus" ],
+						[ 2, "SettingsAFPVeteran" ],
+						[ 3, "SettingsAFPRange" ],
+						[ 4, "SettingsIntercept" ]
+					]
+				}
+			},
+			{
+				"id" : "air_average",
+				"name" : "SettingsAFPAverage",
+				"type" : "json",
+				"options" : {}
+			},
+			{
+				"id" : "air_bounds",
+				"name" : "SettingsAFPBounds",
+				"type" : "json",
 				"options" : {}
 			}
 		]
@@ -135,6 +248,36 @@
 						[ "PNG", "PNG" ]
 					]
 				}
+			},
+			{
+				"id" : "ss_quality",
+				"name" : "SettingsSSQuality",
+				"type" : "small_text",
+				"bound" : {
+					"min" : 0,
+					"max" :  100,
+					"type": "Number"
+				},
+				"options" : { "label" : "%" }
+			},
+			{
+				"id" : "ss_directory",
+				"name" : "SettingsSSDirectory",
+				"type" : "long_text",
+				"options" : { "placeholder" : "SettingsSSDirDesc" }
+			},
+			{
+				"id" : "ss_dppx",
+				"name" : "SettingsSSDppx",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 1, "SettingsNormal" ],
+						[ 1.3, "1.3x" ],
+						[ 1.6, "1.6x" ],
+						[ 2, "Retina (2x)" ]
+					]
+				}
 			}
 		]
 	},
@@ -146,7 +289,47 @@
 				"id" : "alert_diff",
 				"name" : "SettingsTimeDiff",
 				"type" : "small_text",
+				"bound" : {
+					"min" : -300,
+					"max" :  300,
+					"type": "Number"
+				},
 				"options" : { "label" : "SettingsSeconds" }
+			},
+			{
+				"id" : "alert_morale_notif",
+				"name" : "SettingsMoraleNotif",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "alert_morale_value",
+				"name" : "SettingsMoraleValue",
+				"type" : "small_text",
+				"bound" : {
+					"min" :  1,
+					"max" : 49,
+					"type": "Number"
+				},
+				"options" : { "label" : "" }
+			},
+			{
+				"id" : "alert_supply",
+				"name" : "SettingsSupplyRate",
+				"type" : "small_text",
+				"bound" : {
+					"min" : 0,
+					"length_min" : 1,
+					"length_max" : 1,
+					"type": "Number"
+				},
+				"options" : { "label" : "SettingsSupplyBarLabel" }
+			},
+			{
+				"id" : "alert_supply_exped",
+				"name" : "SettingsSupplyExped",
+				"type" : "check",
+				"options" : {}
 			},
 			{
 				"id" : "alert_type",
@@ -155,7 +338,8 @@
 				"options" : {
 					"choices" : [
 						[ 0, "None" ],
-						[ 1, "DING!" ],
+						[ 1, "POP!" ],
+						[ 3, "DING!" ],
 						[ 2, "SettingsCustom" ]
 					]
 				}
@@ -170,11 +354,70 @@
 				"id" : "alert_volume",
 				"name" : "Volume",
 				"type" : "small_text",
+				"bound" : {
+					"min" :   0.0,
+					"max" : 100.0,
+					"type": "Number"
+				},
 				"options" : { "label" : "%" }
 			},
 			{
 				"id" : "alert_desktop",
 				"name" : "SettingsDesktopNotif",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "alert_idle_counter",
+				"name" : "SettingsIdleWarning",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "None"],
+						[ 1, "SettingsHideCounter"],
+						[ 2, "SettingsShowCounter"]
+					]
+				}
+			}
+		]
+	},
+	{
+		"section": "SettingsTaihaAlert",
+		"help" : "https://github.com/dragonjet/KC3Kai/wiki",
+		"contents" : [
+			{
+				"id" : "alert_taiha",
+				"name" : "Enabled",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "alert_taiha_blur",
+				"name" : "SettingsScreenBlur",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "alert_taiha_blood",
+				"name" : "SettingsScreenBlood",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "alert_taiha_ss",
+				"name" : "SettingsAppearOnScreenshots",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "alert_taiha_sound",
+				"name" : "SettingsHeartbeatSound",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "alert_taiha_panel",
+				"name" : "SettingsRedShadeOnPanel",
 				"type" : "check",
 				"options" : {}
 			}
@@ -209,9 +452,20 @@
 				"options" : {}
 			},
 			{
+				"id" : "api_directRefresh",
+				"name" : "SettingsDirectRefresh",
+				"type" : "check",
+				"chui" : 1,
+				"options" : {}
+			},
+			{
 				"id" : "api_margin",
 				"name" : "SettingsScreenMargin",
 				"type" : "small_text",
+				"bound" : {
+					"length_min": 1,
+					"type": "Number"
+				},
 				"options" : { "label" : "pixels" }
 			},
 			{
@@ -242,8 +496,47 @@
 				"id" : "api_gameScale",
 				"name" : "SettingsPlayerScale",
 				"type" : "small_text",
+				"bound" : {
+					"min" :  0.0,
+					"max" : null,
+					"type": "Number"
+				},
 				"options" : { "label" : "%" }
+			},
+			{
+				"id" : "api_subtitles",
+				"name" : "SettingsSubtitles",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "subtitle_font",
+				"name" : "SettingsSubtitleFont",
+				"type" : "long_text",
+				"options" : {
+					"placeholder" : "SettingsSubtitleFontDesc"
+				}
+			},
+			{
+				"id" : "subtitle_size",
+				"name" : "SettingsSubtitleSize",
+				"type" : "small_text",
+				"bound" : {
+					"min" :  10,
+					"max" : 50,
+					"type": "Number"
+				},
+				"options" : {
+					"label" : "px"
+				}
+			},
+			{
+				"id" : "subtitle_bold",
+				"name" : "SettingsSubtitleBold",
+				"type" : "check",
+				"options" : {}
 			}
+			
 		]
 	},
 	{
@@ -322,6 +615,52 @@
 		]
 	},
 	{
+		"section": "SettingsKC3DBSubmission",
+		"help" : "",
+		"contents" :[
+			{
+				"id" : "KC3DBSubmission_enabled",
+				"name" : "SettingsEnableKC3DBSubmission",
+				"type" : "check",
+				"options" : {}
+			}
+		]
+	},
+	{
+		"section": "SettingsDBSubmission",
+		"help" : "",
+		"contents" :[
+			{
+				"id" : "DBSubmission_enabled",
+				"name" : "SettingsEnableDBSubmission",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "DBSubmission_key",
+				"name" : "SettingsDBSubmissionKey",
+				"type" : "long_text",
+				"options" : {"placeholder" : "API Key" },
+				"bound" : {
+					"length_min" : 27,
+					"length_max" : 27
+				}
+			}
+		]
+	},
+	{
+		"section": "SettingsPoiDBSubmission",
+		"help" : "",
+		"contents" :[
+			{
+				"id" : "PoiDBSubmission_enabled",
+				"name" : "SettingsEnablePoiDBSubmission",
+				"type" : "check",
+				"options" : {}
+			}
+		]
+	},
+	{
 		"section": "Panel",
 		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Panel",
 		"contents" : [
@@ -331,31 +670,8 @@
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ "default", "Default" ],
-						[ "natsuiro", "Natsuiro" ]
-					]
-				}
-			},
-			{
-				"id" : "pan_size",
-				"name" : "SettingsPanelSize",
-				"type" : "radio",
-				"options" : {
-					"choices" : [
-						[ "small", "Small" ],
-						[ "big", "Big" ]
-					]
-				}
-			},
-			{
-				"id" : "pan_gear_holder",
-				"name" : "SettingsGearHolder",
-				"type" : "radio",
-				"options" : {
-					"choices" : [
-						[ "black", "Black" ],
-						[ "white", "White" ],
-						[ "none", "None" ]
+						[ "natsuiro", "Natsuiro" ],
+						[ "plain", "Plain" ]
 					]
 				}
 			},
@@ -387,6 +703,12 @@
 				"id" : "pan_opacity",
 				"name" : "SettingsPanelOpacity",
 				"type" : "small_text",
+				"bound" : {
+					"min" :   0.0,
+					"max" : 100.0,
+					"length_min" : 1,
+					"type": "Number"
+				},
 				"options" : { "label" : "%" }
 			}
 		]
