@@ -279,7 +279,8 @@
 			
 			var shipSrc = "../../../../assets/swf/card.swf?sip="+this.server_ip
 					+"&shipFile="+shipFile
-					+"&abyss="+(ship_id>500?1:0)
+					+"&abyss="+(ship_id>500 && ship_id<=800 ?1:0)
+					+(ship_id > 800 ? "&forceFrame=6":"")
 					+(!this.currentCardVersion?"":"&ver="+this.currentCardVersion);
 			
 			$(".tab_mstship .shipInfo .cgswf embed").remove();
@@ -494,7 +495,7 @@
 					$(".tab_mstship .shipInfo .tokubest .to-quotes").show();
 				else
 					$(".tab_mstship .shipInfo .tokubest .to-quotes").hide();
-			}else{
+			} else if (shipData.api_id <= 800) {
 				// abyssals, show larger CG viewer
 				$(".tab_mstship .shipInfo .stats").hide();
 				$(".tab_mstship .shipInfo .equipments").hide();
@@ -572,8 +573,20 @@
 				$(".tab_mstship .shipInfo .intro").hide();
 				$(".tab_mstship .shipInfo .more").hide();
 				$(".tab_mstship .shipInfo .tokubest").hide();
+			} else {
+				$(".tab_mstship .shipInfo .stats").hide();
+				$(".tab_mstship .shipInfo .equipments").hide();
+				$(".tab_mstship .shipInfo .json").hide();
+				$(".tab_mstship .shipInfo .subtitles").hide();
+				$(".tab_mstship .shipInfo .cgswf").css("width", "100%").css("height", "600px");
+				$(".tab_mstship .shipInfo .cgswf embed").css("width", "100%").css("height", "600px");
+				
+				$(".tab_mstship .shipInfo .voices").hide();
+				$(".tab_mstship .shipInfo .hourlies").hide();
+				$(".tab_mstship .shipInfo .intro").hide();
+				$(".tab_mstship .shipInfo .more").hide();
+				$(".tab_mstship .shipInfo .tokubest").hide();
 			}
-			
 		}
 	};
 	

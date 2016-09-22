@@ -280,6 +280,7 @@
 .tab_ships .ship_item .ship_name {
 	width:92px;
 	overflow:hidden;
+	white-space:nowrap;
 	position:relative;
 }
 .tab_ships .ship_item .ship_name.ship_kekkon {
