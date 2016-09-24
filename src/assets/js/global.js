@@ -3,13 +3,15 @@
 \*******************************/
 /* GOOGLE ANALYTICS
 -------------------------------*/
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-9789944-12']);
-(function() {
-	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	ga.src = 'https://ssl.google-analytics.com/ga.js';
-	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
+if (typeof NO_GA == "undefined") {
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-9789944-12']);
+	(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = 'https://ssl.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();
+}
 
 /*
  * Date Format 1.2.3
@@ -35,29 +37,29 @@ var dateFormat = function () {
 			while (val.length < len) val = "0" + val;
 			return val;
 		};
-	
+
 	// Regexes and supporting functions are cached through closure
 	return function (date, mask, utc) {
 		var dF = dateFormat;
-		
+
 		// You can't provide utc if you skip other args (use the "UTC:" mask prefix)
 		if (arguments.length == 1 && Object.prototype.toString.call(date) == "[object String]" && !/\d/.test(date)) {
 			mask = date;
 			date = undefined;
 		}
-		
+
 		// Passing date through Date applies Date.parse, if necessary
 		date = date ? new Date(date) : new Date();
 		if (isNaN(date)) throw SyntaxError("invalid date");
-		
+
 		mask = String(dF.masks[mask] || mask || dF.masks["default"]);
-		
+
 		// Allow setting the utc argument via the mask
 		if (mask.slice(0, 4) == "UTC:") {
 			mask = mask.slice(4);
 			utc = true;
 		}
-		
+
 		var _ = utc ? "getUTC" : "get",
 			d = date[_ + "Date"](),
 			D = date[_ + "Day"](),
@@ -228,13 +230,13 @@ String.prototype.toHHMMSS = function () {
 		time = "--:--:--";
 	} else {
 		var isNeg   = sec_num < 0;
-		
+
 		if(isNeg) sec_num = -sec_num;
-		
+
 		var hours   = (Math.floor(sec_num / 3600)).toDigits(2);
 		var minutes = (Math.floor((sec_num - (hours * 3600)) / 60)).toDigits(2);
 		var seconds = (sec_num - (hours * 3600) - (minutes * 60)).toDigits(2);
-		
+
 		time    = (isNeg ? "-" : "")+hours+':'+minutes+':'+seconds;
 	}
 	return time;
@@ -244,11 +246,11 @@ String.prototype.toHHMMSS = function () {
 -------------------------------*/
 String.prototype.plusCurrentTime = function() {
 	var currentTime = new Date();
-	var secondsAfterMidnight = 
+	var secondsAfterMidnight =
 		3600 * currentTime.getHours() +
 		60   * currentTime.getMinutes() +
 		       currentTime.getSeconds();
-		
+
 	var secondsRemaining = parseInt(this, 10);
 	var timeFinished = (secondsAfterMidnight + secondsRemaining) % 86400;
 	return String(timeFinished).toHHMMSS();
@@ -285,17 +287,17 @@ String.prototype.hashCode = function() {
 		bRight = parseInt(bRight,10);
 		iLeft  = typeof iLeft  == 'undefined' ? true : !!iLeft;
 		iRight = typeof iRight == 'undefined' ? true : !!iRight;
-		
+
 		bLeft  = isNaN(bLeft)  ? -Infinity : bLeft ;
 		bRight = isNaN(bRight) ? +Infinity : bRight;
-		
+
 		if(bLeft > bRight) { return this.inside(bRight,bLeft,iRight,iLeft); }
 		return (
 			(iLeft  ? this >= bLeft  : this > bLeft ) &&
 			(iRight ? this <= bRight : this < bRight)
 		);
 	};
-	
+
 	/* Number Padding
 	 * Supplied Argument:
 	 * <Optional> Digits (any invalid value / less than 1, forced to 1)
@@ -325,7 +327,7 @@ String.prototype.hashCode = function() {
 		sgnArray : ['-','','+'],
 		metPrefx : ['','k','M','G','T','P','E','Z','Y']
 	};
-	
+
 	Number.prototype.shorten = function(decimals) {
 		var ret = this.toString();
 		try{
@@ -340,10 +342,10 @@ String.prototype.hashCode = function() {
 					sgof = shorten.expRegex.exec(this.toExponential()),
 					sgch = shorten.sgnArray.indexOf(sgof[1]) - 1,
 					udfg = sgof[3] == '-';
-				
+
 				if (!isFinite(decimals)) { decimals = undefined; }
 				decimals = Math.min(Math.max(decimals || 1,1),3);
-				
+
 				if(ret == this.toExponential()){
 					throw [sgch < 0 ? "Ng" : "Ps",(udfg ? 'Under' : 'Over') + 'flow'].join(' ');
 				} else {
@@ -390,7 +392,7 @@ String.prototype.hashCode = function() {
 					if (!array)
 						return false;
 
-					// compare lengths - can save a lot of time 
+					// compare lengths - can save a lot of time
 					if (this.length != array.length)
 						return false;
 
@@ -409,7 +411,7 @@ String.prototype.hashCode = function() {
 				},
 				configurable:true
 			},
-			
+
 			/*
 				Fill method polyfill
 				https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/fill
@@ -420,21 +422,21 @@ String.prototype.hashCode = function() {
 					if (this === null) {
 						throw new TypeError('this is null or not defined');
 					}
-					
+
 					var O = Object(this);
-					
+
 					// Steps 3-5.
 					var len = O.length >>> 0;
-					
+
 					// Steps 6-7.
 					var start = arguments[1];
 					var relativeStart = start >> 0;
-					
+
 					// Step 8.
 					var k = relativeStart < 0 ?
 						Math.max(len + relativeStart, 0) :
 						Math.min(relativeStart, len);
-					
+
 					// Steps 9-10.
 					var end = arguments[2];
 					var relativeEnd = end === undefined ?
@@ -457,7 +459,7 @@ String.prototype.hashCode = function() {
 				configurable:true
 			},
 		};
-	
+
 	Object.keys(over).forEach((function(method){
 		over[method][(!this.prototype[method])>>0].call(this);
 	}).bind(this));
@@ -476,26 +478,26 @@ String.prototype.hashCode = function() {
 		},[[],[]]),
 		ResetableKeys = ['Milliseconds', 'Seconds','Minutes','Hours','Date','Month'],
 		ShiftableKeys = ResetableKeys.concat(['FullYear']);
-	
+
 	function shiftTime(key,step,clear,offset) {
 		var self = this;
-		
+
 		if(ShiftableKeys.indexOf(key) < 0) {
 			console.log(arguments);
 			throw new Error("Cannot shift invalid time key ("+key+")");
 		}
-		
+
 		clear  = !!clear;
 		step   = parseInt(step,10);
 		step   = (!isNaN(step) && isFinite(step)) ? (step+clear) : 1;
 		offset = $.extend({},offset);
-		
+
 		var ki = ShiftableKeys.indexOf(key);
-		
+
 		if(clear) {
 			this.resetTime(ResetableKeys.filter(function(k,i){return i < ki;}));
 		}
-		
+
 		Object.keys(offset).forEach(function(k){
 			if(ResetableKeys.indexOf(k) < ki &&
 				['number','string'].some(function(desiredType){
@@ -505,17 +507,17 @@ String.prototype.hashCode = function() {
 				offset[k] = parseInt(offset[k],10);
 				if(isNaN(offset[k]) || !isFinite(offset[k]))
 					return false;
-				
+
 				self['setUTC'+k](self['getUTC'+k]()+(offset[k]));
 			} else {
 				delete offset.k;
 			}
 		});
-		
+
 		this['setUTC'+key](this['getUTC'+key]()+(step));
 		return this;
 	}
-	
+
 	Object.defineProperties(Date.prototype,{
 		format: { value: function format(mask, utc) {
 			return dateFormat(this, mask, utc);
@@ -533,14 +535,14 @@ String.prototype.hashCode = function() {
 				var args = Array.apply(null,arguments);
 				lookType = parseInt(lookType,10);
 				lookType = isFinite(lookType) && lookType || 0;
-				
+
 				switch(typeof target){
 					case 'number':
 						var check = WeekStrings.map(function(array){return array[target];})
 							.filter(function(value){return typeof value == 'string';}).pop();
 						if(typeof check !== 'undefined') {
 							// Correct index detection
-							
+
 						} else {
 							// Invalid index detection
 							throw new RangeError(["Invalid range (",String(target),")"].join(''));
@@ -556,14 +558,14 @@ String.prototype.hashCode = function() {
 							args[0] = undefined;
 							return this.shiftWeek.apply(this,args);
 						}
-						
+
 						var checkKey = parseInt(target,10);
 						if(!isNaN(checkKey)) {
 							// Number (on string) detection
 							args[0] = checkKey;
 							return this.shiftWeek.apply(this,args);
 						}
-						
+
 						// Any type detection
 						checkKey = WeekStrings.filter(function(array){return array.indexOf(target)>=0;}).pop();
 						if(typeof checkKey === 'undefined') {
@@ -574,23 +576,23 @@ String.prototype.hashCode = function() {
 						}
 					break;
 				}
-				
+
 				calibr = (target - this.getDay());
 				// Adjust calibrator boundary
 				while(calibr >  3 && lookType <= 0) calibr -= 7;
 				while(calibr < -3 && lookType >= 0) calibr += 7;
 				calibr -= parseInt(calibr / 7,10) * 7 * Math.sign(lookType);
-				
+
 				args.splice(0,2);
-				
+
 				step = parseInt(step,10);
 				if(isNaN(step) || !isFinite(step))
 					step = 0;
-				
+
 				/*
 				  UTCD DATE CALB
-					 20   21   -1 
-					  2    1   +1 
+					 20   21   -1
+					  2    1   +1
 					  1   30  -29? => +1
 					 31    1  +30? => -1
 				*/
@@ -605,7 +607,7 @@ String.prototype.hashCode = function() {
 			var
 				self = this,
 				cFunc = function(){return false;};
-			
+
 			switch(typeof clearTable) {
 				case 'number':
 				case 'string':
@@ -613,7 +615,7 @@ String.prototype.hashCode = function() {
 					// Invalid >> pick all elements
 					clearTable = parseInt(clearTable,10);
 					clearTable = ((clearTable >= 0) && !isNaN(clearTable) && isFinite(clearTable) || ResetableKeys.length) && clearTable;
-					
+
 					// Provided String or Number ->
 					// Pick nth+1 elements from start
 					cFunc = function(x,i){
@@ -624,7 +626,7 @@ String.prototype.hashCode = function() {
 					// Pick any matching element from Resetable Array
 					// Invalid >> pick all elements
 					clearTable = ((typeof clearTable === 'object' && clearTable instanceof Array && clearTable) || ResetableKeys);
-					
+
 					// Provided Anything else
 					// Pick any element that match the clearTable data (either value or index)
 					// ['Seconds',2,3] => ['Seconds','Hours','Date']
@@ -633,9 +635,9 @@ String.prototype.hashCode = function() {
 					};
 					break;
 			}
-			
+
 			clearTable = ResetableKeys.filter(cFunc);
-			
+
 			clearTable.forEach(function(k){
 				self['setUTC' + k](k === 'Date' ? 1 : 0);
 			});
@@ -653,23 +655,34 @@ String.prototype.hashCode = function() {
  - Population based deviation
 -------------------------------*/
 Math.stdev  = function(p1f /*, data*/){
-	var args = [].map.call(arguments,function(val){
+	// obtain a real array for carrying data
+	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments
+	var data = Array.prototype.slice.call( arguments );
+	if(typeof p1f === 'boolean') {
+		data.splice(0,1);
+	} else {
+		p1f = false;
+	}
+	// special handling for cases:
+	// * Math.stdev( <bool>, <an array object> )
+	// * Math.stdev( <an array object> )
+	if (data.length > 0 && (data[0] instanceof Array)) {
+		if (data.length !== 1)
+			throw "Math.stdev called with unexpected form";
+		data = data[0];
+	}
+	var args = [].map.call(data,function(val){
 		return Number(val);
 	});
-	if(typeof p1f !== 'boolean') {
-		p1f = false;
-	} else {
-		args.splice(0,1);
-	}
-	
+
 	if(args.length <= 0)
 		return 0;
-	
+
 	var avg;
 	avg = args.reduce(function(cAve,nVal,nInd){
 		return ((cAve * nInd) + nVal) / (nInd + 1);
 	},0);
-	
+
 	return Math.sqrt(args.reduce(function(tDev,nVal,nInd){
 		return tDev + Math.pow(nVal - avg,2);
 	},0)/(args.length - !p1f));
@@ -685,7 +698,7 @@ Math.qckInt = function(command,value,rate,rev,magn) {
 	rate    = rate    || 0;
 	rev     = !rev;
 	magn    = !!magn;
-	
+
 	var shift = Math.pow(10,rate);
 	return (magn ? Math.sign(value) : 1) *
 		Math[command]((magn ? Math.abs(value) : value) * shift) / (rev ? shift : 1);
@@ -716,7 +729,7 @@ Storage.prototype.getObject = function(key) {
 (function(){
 	/*jshint: validthis true*/
 	Object.defineProperties(this.prototype,{
-		/* ELEMENT OVERFLOW CHECK 
+		/* ELEMENT OVERFLOW CHECK
 		------------------------------------ */
 		overflow:{
 			get:function(){ return this.overflowHorz || this.overflowVert; },
@@ -739,7 +752,7 @@ Storage.prototype.getObject = function(key) {
 \*******************************/
 (function(){
 	var base = Object.freeze([-Infinity,+Infinity,true,true]);
-	
+
 	function exclusiveClamp(rangeObj){
 		if(rangeObj instanceof Range) {
 			if(
@@ -752,7 +765,7 @@ Storage.prototype.getObject = function(key) {
 			return false;
 		}
 	}
-	
+
 	window.Range = function Range(b1,b2,i1,i2){
 		/*jshint: validthis true*/
 		if(!(this instanceof Range)){ return new Range(b1,b2,i1,i2); } else {
@@ -765,52 +778,52 @@ Storage.prototype.getObject = function(key) {
 				i2 = b2[1]; i1 = b2[0];
 				b2 = b1[1]; b1 = b1[0];
 			}
-			
+
 			b1 = parseInt(b1,10);
 			b2 = parseInt(b2,10);
 			i1 = typeof i1 == 'undefined' ? base[2] : !!i1;
 			i2 = typeof i2 == 'undefined' ? base[3] : !!i2;
-			
+
 			b1 = isNaN(b1) ? base[0] : b1;
 			b2 = isNaN(b2) ? base[1] : b2;
-			
+
 			if(b1 > b2){
 			// Swap bad ranges
 				var tp;
 				tp = b2; b2 = b1; b1 = tp;
 				tp = i2; i2 = i1; i1 = tp;
 			}
-			
+
 			Object.defineProperties(this,{
 				begin  :{get:function(){return b1;},set:function(v){v = parseInt(v,10); b1 = isNaN(v) ? base[0] : v;}},
 				end    :{get:function(){return b2;},set:function(v){v = parseInt(v,10); b2 = isNaN(v) ? base[1] : v;}},
 				inFirst:{get:function(){return i1;},set:function(v){v = !!v; i1 = v;}},
 				inLast :{get:function(){return i2;},set:function(v){v = !!v; i2 = v;}},
-				
+
 				first  :{get:function(){return this.begin;},set:function(v){this.begin=v;exclusiveClamp(this);}},
 				last   :{get:function(){return this.end  ;},set:function(v){this.end  =v;exclusiveClamp(this);}},
 			});
 		}
 	};
-	
+
 	Object.defineProperties(Range.prototype,{
 		begin    :{get:function(){return base[0];}},
 		first    :{get:function(){return base[0];}},
-		
+
 		last     :{get:function(){return base[1];}},
 		end      :{get:function(){return base[1];}},
-		
+
 		inFirst  :{get:function(){return !!base[2];}},
 		inLast   :{get:function(){return !!base[3];}},
-		
+
 		inside   :{value:function(x){return Number(x).inside(this);}},
 		exclusive:{value:function( ){return this.inFirst || this.inLast;}},
-		
+
 		0        :{get:function(){return this.begin;}  ,set:function(v){this.begin=v;}  },
 		1        :{get:function(){return this.end;}    ,set:function(v){this.end=v;}    },
 		2        :{get:function(){return this.inFirst;},set:function(v){this.inFirst=v;}},
 		3        :{get:function(){return this.inLast;} ,set:function(v){this.inLast=v;} },
-		
+
 		toJSON   :{value:function(){ return Array.apply(null,this); }},
 		toString :{value:function(){
 			return ("%L%B,%E%R")
@@ -820,6 +833,5 @@ Storage.prototype.getObject = function(key) {
 		valueOf  :{value:function(){return [this.begin,this.end,this.inFirst,this.inLast];}},
 		length   :{value:4}, // for array operation
 	});
-	
-})();
 
+})();

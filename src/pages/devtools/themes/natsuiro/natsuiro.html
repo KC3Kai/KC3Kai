@@ -576,6 +576,7 @@
 				<div class="control hover fleet_num">3</div>
 				<div class="control hover fleet_num">4</div>
 				<div class="control hover fleet_rengo i18n_title" title="CombinedFleet"><img src="img/rengo.png" /></div>
+				<div class="control hover fleet_lbas"><img src="../../../../assets/img/items/33.png" /></div>
 				
 				<div class="control hover control_btn btn_mute i18n_title" title="PanelToggleSounds"><img src="img/mute.png" /></div>
 				<div class="control hover control_btn btn_resize i18n_title" title="PanelFitWindow"><img src="../../../../assets/img/ui/fit.png" /></div>
@@ -620,6 +621,9 @@
 						
 					</div>
 					<div class="clear"></div>
+				</div>
+				<div class="shiplist airbase_list">
+					
 				</div>
 			</div>
 			
@@ -828,6 +832,50 @@
 			<!-- Ship requirement for expedition checker -->
 			<div class="expPlanner_shipReqBox requirements_textbox expPlanner_text_passed"></div>
 			
+			<!-- Clonable: LBAS Base -->
+			<div class="airbase">
+				<div class="airbase_infos">
+					<div class="airbase_info base_name i18n">None</div>
+					<div class="airbase_info base_stats">
+						<div class="base_stat base_range">
+							<div class="base_stat_icon"><img src="../../../../assets/img/stats/rn.png" /></div>
+							<div class="base_stat_value"></div>
+							<div class="clear"></div>
+						</div>
+						<div class="base_stat base_afp i18n_title" title="LandBaseTipFighterPower">
+							<div class="base_stat_icon"><img src="../../../../assets/img/stats/ac.png" /></div>
+							<div class="base_stat_value"></div>
+							<div class="clear"></div>
+						</div>
+						<div class="base_stat base_ifp i18n_title" title="LandBaseTipInterceptFighters">
+							<div class="base_stat_icon"><img src="../../../../assets/img/stats/if.png" /></div>
+							<div class="base_stat_value"></div>
+							<div class="clear"></div>
+						</div>
+						<div class="base_stat base_ibp i18n_title" title="LandBaseTipInterceptBombers">
+							<div class="base_stat_icon"><img src="../../../../assets/img/stats/ib.png" /></div>
+							<div class="base_stat_value"></div>
+							<div class="clear"></div>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="airbase_info base_action"></div>
+				</div>
+				<div class="base_planes">
+					
+				</div>
+			</div>
+			
+			<!-- Clonable: LBAS Plane -->
+			<div class="airbase_plane">
+				<div class="base_plane_col base_plane_img"><img/></div>
+				<div class="base_plane_col base_plane_icon"><img/></div>
+				<div class="base_plane_col base_plane_chevs"><img/></div>
+				<div class="base_plane_col base_plane_name"></div>
+				<div class="base_plane_col base_plane_count"></div>
+				<div class="base_plane_col base_plane_cond"><img/></div>
+			</div>
+			
 		</div>
 		
 		
@@ -854,6 +902,7 @@
 		<script type="text/javascript" src="../../../../library/objects/Ship.js"></script>
 		<script type="text/javascript" src="../../../../library/objects/Sortie.js"></script>
 		<script type="text/javascript" src="../../../../library/objects/Timer.js"></script>
+		<script type="text/javascript" src="../../../../library/objects/LandBase.js"></script>
 		<!-- @nonbuildend -->
 		
 		<!-- @nonbuildstart -->

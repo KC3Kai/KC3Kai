@@ -166,6 +166,40 @@ To be dynamically used on the settings page
 		});
 	};
 	
+	SettingsBox.prototype.json = function( options ){
+		var self = this;
+		$(".options", this.element).append(
+			$("<textarea/>")
+				.addClass("json_text")
+				.val( JSON.stringify(ConfigManager[ this.config ]) )
+				.on("change", function(){
+					var newValue = false;
+					try {
+						newValue = JSON.parse($(this).val());
+						ConfigManager[ self.config ] = newValue;
+						ConfigManager.save();
+						elementControl($(this).parent().siblings(".note"), '', KC3Meta.term("SettingsErrorNG"));
+					} catch (e) {
+						elementControl($(this).parent().siblings(".note"), 'red', KC3Meta.term("SettingsErrorSuper"));
+					}
+				})
+		);
+	};
+	
+	SettingsBox.prototype.textarea = function( options ){
+		var self = this;
+		$(".options", this.element).append(
+			$("<textarea/>")
+				.addClass("huge_text")
+				.val( ConfigManager[ this.config ] )
+				.on("change", function(){
+					ConfigManager[ self.config ] = $(this).val();
+					ConfigManager.save();
+					elementControl($(this).parent().siblings(".note"), '', KC3Meta.term("SettingsErrorNG"));
+				})
+		);
+	};
+	
 	function elementControl(ele,colorCSS,msg) {
 		return ele.stop(true, true).css('color',colorCSS).text(msg).show().fadeOut(2000);
 	}

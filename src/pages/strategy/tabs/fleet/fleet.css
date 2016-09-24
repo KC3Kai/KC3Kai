@@ -59,7 +59,7 @@
 	font-weight:bold;
 }
 .tab_fleet .fleet_details {
-	width:450px;
+	width:480px;
 	height:25px;
 	line-height:25px;
 	float:left;
@@ -77,15 +77,18 @@
 	margin:4px;
 }
 .detail_field {
-	width:80px;
+	width:85px;
 	height:25px;
 	float:left;
-	margin:0px 8px 0px 0px;
+	margin:0px 5px 0px 0px;
 	padding:0px 0px 0px 5px;
 	font-weight:bold;
 }
 .detail_field.incomplete {
 	
+}
+.detail_field.detail_air {
+	width:110px;
 }
 .tab_fleet .detail_value {
 	width:40px;
@@ -95,7 +98,7 @@
 /* Ships */
 .tab_fleet .fleet_ships {
 	width:672px;
-	height:160px;
+	height:175px;
 	margin:0px 4px;
 }
 
@@ -138,6 +141,9 @@
 	line-height:20px;
 	margin:0px 0px 2px 0px;
 	text-align:center;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap;
 	font-size:12px;
 	font-weight:bold;
 }
@@ -146,14 +152,15 @@
 	height:17px;
 	line-height:17px;
 	margin:0px 0px 1px 0px;
-	/*background:#ccf;*/
 	font-size:12px;
+}
+.tab_fleet .fleet_ship .ship_gear.ship_gear_5 .gear_name {
+	color:#79b;
 }
 .tab_fleet .fleet_ship .gear_icon {
 	width:17px;
 	height:17px;
 	margin:0px 3px 0px 0px;
-	/*background:#fcc;*/
 	float:left;
 }
 .tab_fleet .fleet_ship .gear_icon img {
@@ -163,9 +170,17 @@
 .tab_fleet .fleet_ship .gear_name {
 	width:85px;
 	height:17px;
-	/*background:#cfc;*/
 	float:left;
 	font-size:10px;
 	white-space: nowrap;
 	overflow:hidden;
+}
+.tab_fleet .fleet_ship .gear_name .stars {
+	color:#2b2;
+}
+.tab_fleet .fleet_ship .gear_name .ace {
+	color:#fa1;
+}
+.tab_fleet .fleet_ship .gear_name .slot {
+	color:#999;
 }

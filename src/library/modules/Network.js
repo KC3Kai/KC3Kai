@@ -22,6 +22,7 @@ Listens to network history and triggers callback if game events happen
 			Timers: [],
 			Quests: [],
 			Fleet: [],
+			Lbas: [],
 			SortieStart: [],
 			CompassResult: [],
 			BattleStart: [],

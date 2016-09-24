@@ -5,6 +5,44 @@
 	display:none;
 }
 
+.tab_expcalc .box_control {
+	width:700px;
+	background:#def;
+	margin:0px 0px 3px 0px;
+	line-height:34px;
+	border:1px solid #ace;
+	padding-bottom: 5px;
+}
+
+.tab_expcalc .box_control_line {
+	padding: 5px 10px 0px 10px;
+}
+
+.tab_expcalc .box_control_line dl dd {
+	float: left;
+}
+.tab_expcalc .box_control_line dl dt {
+	float: left;
+}
+.tab_expcalc .box_control_line #inp_lvl_diff {
+	width: 40px;
+	height: 20px;
+}
+.tab_expcalc .box_control_line .hover {
+	padding: 0 5px;
+	margin: 0 0 0 4px;
+}
+
+.tab_expcalc .box_control_line .hover.active {
+	background: #3333ff;
+	color: #fff;
+}
+
+.tab_expcalc .box_control_line .toggle {
+	border-radius: 4px;
+	background: #fff;
+}
+
 .tab_expcalc .box_goals {
 	margin:0px 0px 20px 0px;
 }
@@ -25,8 +63,15 @@
 	padding:2px 4px;
 	line-height:34px;
 }
-.tab_expcalc .ship_goal.highlight {
-	background:#fdd;
+.tab_expcalc .ship_goal.highlight_stype {
+	background-color:#fdd;
+}
+.tab_expcalc .ship_goal.highlight_closeToRemodel {
+	background-color:#71d3f4;
+}
+
+.tab_expcalc .ship_goal.highlight_canBeRemodelled {
+	background-color:#60ebe2;
 }
 .tab_expcalc .ship_goal .ship_col {
 	height:34px;
@@ -173,25 +218,6 @@
 	margin-right:3px;
 }
 
-.tab_expcalc .ship_goal.ship_closeToRemodel{
-	/* Chrome */
-	-webkit-animation-name: ship_closeToRemodel;
-	-webkit-animation-duration: 4s;
-	-webkit-animation-iteration-count: infinite;
-	animation-name: ship_closeToRemodel;
-	animation-duration: 4s;
-	animation-iteration-count: infinite;
-}
-
-.tab_expcalc .ship_goal.ship_canBeRemodelled{
-	/* Chrome */
-	-webkit-animation-name: ship_canBeRemodelled;
-	-webkit-animation-duration: 4s;
-	-webkit-animation-iteration-count: infinite;
-	animation-name: ship_canBeRemodelled;
-	animation-duration: 4s;
-	animation-iteration-count: infinite;
-}
 
 /* INACTIVE OVERRIDES
 --------------------------------*/
@@ -366,4 +392,15 @@
 
 .tab_expcalc .goal_template .goal_mvp {
 	width:50px;
+}
+
+.tab_expcalc .gt_content.new_template {
+	width: 680px;
+	background: #def;
+	border-radius: 8px;
+	margin: 0px 0px 3px 0px;
+	padding: 2px 4px;
+	line-height: 34px;
+	border: 1px solid #ace;
+	text-align: center;
 }

@@ -645,10 +645,14 @@ Used by SortieManager
 						break;
 					case 'gauge-tp': /* TP-Gauge */
 						/* TP Gauge */
-						var TPdata = resultData.api_landing_hp;
-						this.gaugeDamage = Math.min(TPdata.api_now_hp,TPdata.api_sub_value);
-						maps[ckey].curhp = TPdata.api_now_hp - this.gaugeDamage;
-						maps[ckey].maxhp = TPdata.api_max_hp - 0;
+						if (typeof resultData.api_landing_hp != "undefined") {
+							var TPdata = resultData.api_landing_hp;
+							this.gaugeDamage = Math.min(TPdata.api_now_hp,TPdata.api_sub_value);
+							maps[ckey].curhp = TPdata.api_now_hp - this.gaugeDamage;
+							maps[ckey].maxhp = TPdata.api_max_hp - 0;
+						} else {
+							maps[ckey].curhp = 0;
+						}
 						break;
 					default:         /* Undefined */
 						break;

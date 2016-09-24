@@ -28,19 +28,6 @@
 				}
 			},
 			{
-				"id" : "elosFormula",
-				"name" : "SettingsELosFormula",
-				"type" : "radio",
-				"options" : {
-					"choices" : [
-						[ 1, "SettingsELosSum" ],
-						[ 2, "SettingsELosOld" ],
-						[ 3, "SettingsELosNew" ],
-						[ 4, "SettingsELosF33" ]
-					]
-				}
-			},
-			{
 				"id" : "hqExpDetail",
 				"name" : "SettingsHQExpDetail",
 				"type" : "radio",
@@ -153,6 +140,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "info_auto_fleet_view",
+				"name" : "SettingsAutoSwitchFleetView",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "info_eng_stype",
 				"name" : "SettingsEnglishShipType",
 				"type" : "check",
@@ -186,6 +179,50 @@
 		]
 	},
 	{
+		"section": "SettingsFormulas",
+		"help" : "",
+		"contents" : [
+			{
+				"id" : "elosFormula",
+				"name" : "SettingsELosFormula",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 1, "SettingsELosSum" ],
+						[ 2, "SettingsELosOld" ],
+						[ 3, "SettingsELosNew" ],
+						[ 4, "SettingsELosF33" ]
+					]
+				}
+			},
+			{
+				"id" : "air_formula",
+				"name" : "SettingsAirFormula",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 1, "SettingsAFPNoBonus" ],
+						[ 2, "SettingsAFPVeteran" ],
+						[ 3, "SettingsAFPRange" ],
+						[ 4, "SettingsIntercept" ]
+					]
+				}
+			},
+			{
+				"id" : "air_average",
+				"name" : "SettingsAFPAverage",
+				"type" : "json",
+				"options" : {}
+			},
+			{
+				"id" : "air_bounds",
+				"name" : "SettingsAFPBounds",
+				"type" : "json",
+				"options" : {}
+			}
+		]
+	},
+	{
 		"section": "SettingsScreenshot",
 		"help" : "",
 		"contents" : [
@@ -211,6 +248,17 @@
 						[ "PNG", "PNG" ]
 					]
 				}
+			},
+			{
+				"id" : "ss_quality",
+				"name" : "SettingsSSQuality",
+				"type" : "small_text",
+				"bound" : {
+					"min" : 0,
+					"max" :  100,
+					"type": "Number"
+				},
+				"options" : { "label" : "%" }
 			},
 			{
 				"id" : "ss_directory",

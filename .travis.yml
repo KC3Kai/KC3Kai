@@ -13,10 +13,11 @@ env:
 
 # BUILD WEBSTORE PACKAGE
 before_script:
-- if [ $TRAVIS_BRANCH == 'webstore' ]; then grunt build; fi
+- npm test
 
 # DEPLOY TO CHROME WEBSTORE
 script:
+- if [ $TRAVIS_BRANCH == 'webstore' ]; then grunt build; fi
 - if [ $TRAVIS_BRANCH == 'webstore' ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then grunt webstore; fi
 
 # DEPLOY TO GITHUB RELEASES

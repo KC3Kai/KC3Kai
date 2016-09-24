@@ -213,17 +213,36 @@
                 "previousForm: querying on original form?" );
             return group[curInd-1];
         },
-		// query the lowest level certain ship can have
-		lowestLevel: function(shipId) {
-			var prevId = this.previousForm(shipId);
-			if (!prevId)
-				return 1;
+        // query the lowest level certain ship can have
+        lowestLevel: function(shipId) {
+            var prevId = this.previousForm(shipId);
+            if (!prevId)
+                return 1;
 
-			var prevInfo = this.remodelInfo(prevId);
-			return prevInfo.level;
-		},
+            var prevInfo = this.remodelInfo(prevId);
+            return prevInfo.level;
+        },
         dumpRemodelGroups: function() {
             return JSON.stringify( this._db.remodelGroups );
+        },
+        // returns all possible remodel levels for current ship
+        // returns false if the shipId is invalid
+        nextLevels: function(shipId) {
+            var self = this;
+            var remodelGroup = this.remodelGroup(shipId).slice();
+            if (!remodelGroup) return false;
+            // either the final form doesn't remodel or
+            // remodels into another final form, we don't care
+            // for the purpose of this function.
+            remodelGroup.pop();
+
+            // for ships that has at least been remodelled once,
+            // there is no need keepin her prior form info here.
+            while (remodelGroup.length > 0 && remodelGroup[0] !== shipId)
+                remodelGroup.shift();
+            var levels = remodelGroup.map( function(sid) {
+                return self.remodelInfo(sid).level; });
+            return levels;
         }
     };
 })();

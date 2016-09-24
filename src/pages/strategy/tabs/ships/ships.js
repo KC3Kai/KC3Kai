@@ -1,11 +1,11 @@
 (function(){
 	"use strict";
-	
+
 	KC3StrategyTabs.ships = new KC3StrategyTab("ships");
-	
+
 	KC3StrategyTabs.ships.definition = {
 		tabSelf: KC3StrategyTabs.ships,
-		
+
 		shipCache:[],
 		options: [],
 		// default sorting method to Level
@@ -114,8 +114,8 @@
 			function reversed(comparator) {
 				return function(a,b) {
 					var result = comparator(a,b);
-					return result === 0 
-						? 0 
+					return result === 0
+						? 0
 						: result < 0 ? 1 : -1;
 				};
 			}
@@ -132,7 +132,7 @@
 				.map( function(sorterInfo) {
 					var sorter = self.sorters[sorterInfo.name];
 					return sorterInfo.reverse
-						? reversed(sorter.comparator) 
+						? reversed(sorter.comparator)
 						: sorter.comparator;
 				})
 				.reduce( compose );
@@ -152,7 +152,7 @@
 				morale: ThisShip.morale,
 				equip: ThisShip.items,
 				locked: ThisShip.lock,
-				
+
 				hp: ThisShip.hp[0],
 				fp: [MasterShip.api_houg[1], MasterShip.api_houg[0]+ThisShip.mod[0], ThisShip.fp[0] ],
 				tp: [MasterShip.api_raig[1], MasterShip.api_raig[0]+ThisShip.mod[1], ThisShip.tp[0] ],
@@ -173,7 +173,8 @@
 				ship: ThisShip,
 				master: ThisShip.master(),
 				// Check whether remodel is max
-				remodel: RemodelDb.isFinalForm(ship.masterId)
+				remodel: RemodelDb.isFinalForm(ship.masterId),
+				canEquipDaihatsu: ThisShip.canEquipDaihatsu()
 			};
 			var ThisShipData = cached;
 			// Check whether modernization is max
@@ -185,10 +186,9 @@
 				ThisShipData.statmax = 1;
 			else
 				ThisShipData.statmax = 0;
-
 			return cached;
 		},
-		
+
 		/* EXECUTE
 		Places data onto the interface
 		---------------------------------*/
@@ -221,7 +221,7 @@
 
 			multiKeyCtrl.on("click", function() {
 				self.multiKey = ! self.multiKey;
-				
+
 				updateControl();
 
 				if (! self.multiKey) {
@@ -230,7 +230,7 @@
 						self.refreshTable();
 				}
 			});
-			
+
 			$(".pages_yes").on("click", function(){
 				$(".ingame_page").show();
 			});
@@ -274,9 +274,9 @@
 					 + "_" + option);
 		},
 
-		/* 
+		/*
 		   defineShipFilter defines a filter that has UI controls.
-		   
+
 		   see comments on each arguments for detail.
 		 */
 		defineShipFilter: function(
@@ -347,7 +347,7 @@
 				});
 				console.assert(
 					thisOption.view.length === 1,
-					"expecting exactly one result of getView on " 
+					"expecting exactly one result of getView on "
 						+ filterName  + "," + optionName );
 				newOptions.push( thisOption );
 			});
@@ -360,7 +360,7 @@
 					return testShip(optionRep.curValue,ship);
 				}
 			};
-					
+
 			this.newFilterRep[filterName] = optionRep;
 			optionRep.onToggle.call(self,defValue,optionRep,true);
 		},
@@ -396,7 +396,7 @@
 						|| (curVal === 1 && ship.statmax)
 						|| (curVal === 2 && !ship.statmax);
 				});
-				
+
 			self.defineShipFilter(
 				"heartlock",
 				 0,
@@ -426,7 +426,7 @@
 						|| (curVal === 1 && ship.fleet)
 						|| (curVal === 2 && !ship.fleet);
 				});
-				
+
 			self.defineShipFilter(
 				"sparkle",
 				0,
@@ -435,6 +435,15 @@
 					return (curVal === 0)
 						|| (curVal === 1 && ship.morale >= 50)
 						|| (curVal === 2 && ship.morale < 50);
+				});
+			self.defineShipFilter(
+				"daihatsu",
+				0,
+				["all", "yes","no"],
+				function(curVal, ship) {
+					return (curVal === 0)
+						|| (curVal === 1 && ship.canEquipDaihatsu)
+						|| (curVal === 2 && !ship.canEquipDaihatsu);
 				});
 
 			var stypes = Object
@@ -483,7 +492,7 @@
 							optionRep.curValue[selected.name] = !optionRep.curValue[selected.name];
 						} else {
 							$.each(stypes, function(ignore, stype) {
-								optionRep.curValue[stype] = 
+								optionRep.curValue[stype] =
 									(selected.name === "all")
 									? true
 									: (selected.name === "none")
@@ -517,7 +526,7 @@
 			}
 			return true;
 		},
-		
+
 		/* FILTERS
 		Ship types, and other toggles
 		---------------------------------*/
@@ -525,7 +534,7 @@
 			var self = this;
 			var sCtr;
 
-			
+
 			// Equip Stats: Yes
 			self.options.equip_yes = $(".tab_ships .filters .massSelect .equip_yes").on("click", function(){
 				self.equipMode = 1;
@@ -533,7 +542,7 @@
 				self.options.equip_yes.addClass('on');
 				self.options.equip_no.removeClass('on');
 			});
-			
+
 			// Equip Stats: No
 			self.options.equip_no = $(".tab_ships .filters .massSelect .equip_no").on("click", function(){
 				self.equipMode = 0;
@@ -541,7 +550,7 @@
 				self.options.equip_yes.removeClass('on');
 				self.options.equip_no.addClass('on');
 			});
-			
+
 			// Default status
 			if( self.equipMode )
 				self.options.equip_yes.addClass('on');
@@ -565,7 +574,7 @@
 				}
 				self.refreshTable();
 			});
-			
+
 			this.refreshTable();
 		},
 
@@ -586,7 +595,7 @@
 					var va = getter.call(self,a);
 					var vb = getter.call(self,b);
 					return va === vb
-						 ? 0 
+						 ? 0
 						 : (va < vb) ? -1 : 1;
 				});
 		},
@@ -596,7 +605,7 @@
 
 			define("id", "Id",
 				   function(x) { return x.id; });
-			define("name", "Name", 
+			define("name", "Name",
 				   function(x) { return x.english; });
 			define("type", "Type",
 				   function(x) { return x.stype; });
@@ -625,7 +634,7 @@
 			define("lk", "Luck",
 				   function(x) { return -x.lk; });
 		},
-		
+
 		/* REFRESH TABLE
 		Reload ship list based on filters
 		---------------------------------*/
@@ -633,10 +642,10 @@
 			// TODO: use "isLoading" to check if we need UI update.
 			if(this.isLoading){ return false; }
 			this.isLoading = true;
-			
+
 			var self = this;
 			this.startTime = Date.now();
-			
+
 			// Clear list
 			this.shipList.html("").hide();
 
@@ -658,7 +667,7 @@
 					if(shipCtr%10 === 0){
 						$("<div>").addClass("ingame_page").html("Page "+Math.ceil((Number(shipCtr)+1)/10)).appendTo(self.shipList);
 					}
-					
+
 					cShip = FilteredShips[shipCtr];
 					shipLevel = cShip.level;
 
@@ -693,7 +702,7 @@
 					$(".ship_morale", cElm).html( cShip.morale );
 					$(".ship_hp", cElm).text( cShip.hp );
 					$(".ship_lk", cElm).text( cShip.lk );
-					
+
 					if(cShip.morale >= 50){ $(".ship_morale", cElm).addClass("sparkled"); }
 
 					// callback for things that has to be recomputed
@@ -714,11 +723,11 @@
 					};
 
 					cElm.onRecompute(cShip);
-					
+
 					[1,2,3,4].forEach(function(x){
 						self.equipImg(cElm, x, cShip.slots[x-1], cShip.equip[x-1]);
 					});
-					
+
 					if(FilteredShips[shipCtr].locked){ $(".ship_lock img", cElm).show(); }
 
 					// Check whether remodel is max
@@ -733,13 +742,13 @@
 					else
 						cElm.addClass('modernization-able');
 				});
-				
+
 				self.shipList.show();
 				self.isLoading = false;
 				console.log("Showing this list took", (Date.now() - self.startTime)-100 , "milliseconds");
 			},100);
 		},
-		
+
 		shipClickFunc: function(e){
 			KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 		},
@@ -758,7 +767,7 @@
 			}
 			return EquippedValue;
 		},
-		
+
 		/* Show cell contents of a mod stat
 		--------------------------------------------*/
 		modernizableStat :function(stat, cElm, Values){
@@ -769,7 +778,7 @@
 				$(".ship_"+stat, cElm).append("<span>+"+(Values[0] - Values[1])+"</span>");
 			}
 		},
-		
+
 		/* Show single equipment icon
 		--------------------------------------------*/
 		equipImg :function(cElm, equipNum, equipSlot, gear_id){
@@ -794,5 +803,5 @@
 			}
 		}
 	};
-	
+
 })();

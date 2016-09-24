@@ -20,7 +20,8 @@ Uses KC3Quest objects to play around with
 		// Internal constants for time period quests
 		_dailyIds: [201, 216, 210, 211, 218, 212, 226, 230, 303, 304, 402, 403, 503, 504, 605, 606, 607, 608, 609, 619, 702],
 		_weeklyIds: [214, 220, 213, 221, 228, 229, 241, 242, 243, 261, 302, 404, 410, 411, 613, 638, 703],
-		_monthlyIds: [249, 256, 257, 259, 265, 264, 266, 311, 626, 628],
+		_monthlyIds: [249, 256, 257, 259, 265, 264, 266, 311, 626, 628, 645],
+		_quarterlyIds: [637, 643, 822],
 		
 		/* GET
 		Get a specific quest object in the list using its ID
@@ -296,6 +297,7 @@ Uses KC3Quest objects to play around with
 			var period = this._dailyIds.indexOf(questId)>-1;
 			period |= this._weeklyIds.indexOf(questId)>-1;
 			period |= this._monthlyIds.indexOf(questId)>-1;
+			period |= this._quarterlyIds.indexOf(questId)>-1;
 			return !!period;
 		},
 		
@@ -349,6 +351,14 @@ Uses KC3Quest objects to play around with
 			this.resetLoop(this._monthlyIds);
 			this.save();
 		},
+		
+		resetQuarterlies :function(){
+			this.load();
+			console.log("resetting quarterlies");
+			this.resetLoop(this._quarterlyIds);
+			this.save();
+		},
+		
 		clear :function(){
 			this.list = {};
 			this.active = [];

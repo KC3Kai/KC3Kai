@@ -1,11 +1,11 @@
 (function(){
 	"use strict";
-	
+
 	KC3StrategyTabs.fleet = new KC3StrategyTab("fleet");
-	
+
 	KC3StrategyTabs.fleet.definition = {
 		tabSelf: KC3StrategyTabs.fleet,
-		
+
 		currentFleetsObj: null,
 		suggestedName: "",
 
@@ -13,7 +13,7 @@
 		  "fleets" object format:
 		  * an array of "fleet" objects
 		  * length is exactly 4, falsy value for non-existing fleet (null is recommended)
-		  
+
 		  "fleet" object format:
 		  { ships: <an array of "ship" objects>
 		  ( length is exactly 6, falsy value for non-existing ship (null is recommended) )
@@ -26,13 +26,13 @@
 		  , luck: <ship luck> (optional)
 		  , equipments: <array of equipments, length = 5 (4+1), falsy for non-existing>
 		  }
-		  
+
 		  "equipment" object format:
 		  { id: <equipment master id>
 		  , ace: <aircraft proficiency> (optional) (-1 if "ace" is not applicable)
 		  , improve: <improvement level> (optional)
 		  }
-		  
+
 		 */
 
 		fleetsObjToDeckBuilder: function(fleetsObj) {
@@ -51,7 +51,7 @@
 					if (!gearObj) return;
 					var gear = {};
 					gear.id = gearObj.id;
-					
+
 					if (gearObj.ace && gearObj.ace > 0) {
 						gear.rf = gearObj.ace;
 					} else if (gearObj.improve) {
@@ -73,7 +73,7 @@
 				});
 				return fleet;
 			}
-			
+
 			$.each([0,1,2,3], function(_,ind) {
 				var fleetObj = fleetsObj[ind];
 				if (fleetObj)
@@ -81,7 +81,7 @@
 			});
 			return dBuilder;
 		},
-		
+
 		/* INIT
 		   Prepares static data needed
 		   ---------------------------------*/
@@ -91,11 +91,13 @@
 				localStorage.savedFleets = JSON.stringify( {} );
 			}
 		},
-		
+
 		/* RELOAD
 		Prepares latest fleets data
 		---------------------------------*/
 		reload :function(){
+			// Latest user config (for eLoS & FPow)
+			ConfigManager.load();
 			// Latest data for current fleet (ships & gears)
 			KC3ShipManager.load();
 			KC3GearManager.load();
@@ -107,6 +109,14 @@
 		   ---------------------------------*/
 		execute :function(){
 			var self = this;
+
+			$("input#hist_query").on("keydown", function(e) {
+				if (e.which === 13) {
+					$("button#control_view").click();
+					e.preventDefault();
+				}
+			});
+
 			this.setupUIByViewType( "current" );
 			$('input[type=radio][name=view_type]').change(function() {
 				self.setupUIByViewType( this.value );
@@ -372,38 +382,51 @@
 
 			// Show fleet info
 			$(".detail_level .detail_value", fleetBox).text( kcFleet.totalLevel() );
-			$(".detail_los2 .detail_value", fleetBox).text( Math.round( kcFleet.eLos2() * 100) / 100 );
-			$(".detail_los3 .detail_value", fleetBox).text( Math.round( kcFleet.eLos3() * 100) / 100 );
+			$(".detail_los .detail_icon img", fleetBox).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png" );
+			$(".detail_los .detail_value", fleetBox).text( Math.round( kcFleet.eLoS() * 100) / 100 );
 			$(".detail_air .detail_value", fleetBox).text( kcFleet.fighterPowerText() );
 			$(".detail_speed .detail_value", fleetBox).text( kcFleet.speed() );
+			$(".detail_support .detail_value", fleetBox).text( kcFleet.supportPower() );
 		},
 
 		/* Show single ship
 		   --------------------------------------------*/
 		showKCShip: function(fleetBox, kcShip) {
 			if (kcShip.masterId === 0) return;
-			
+
 			var self = this;
 			var shipBox = $(".tab_fleet .factory .fleet_ship").clone();
 			$(".fleet_ships", fleetBox).append( shipBox );
 
 			$(".ship_type", shipBox).text( kcShip.stype() );
 			$(".ship_pic img", shipBox).attr("src", KC3Meta.shipIcon( kcShip.masterId ) );
+			// TODO Link to ship list instead of ship library
+			$(".ship_pic img", shipBox).attr("title", kcShip.rosterId );
 			$(".ship_pic img", shipBox).attr("alt", kcShip.masterId );
 			$(".ship_pic img", shipBox).click(function(){
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 			});
 			$(".ship_lv_val", shipBox).text( kcShip.level );
-			$(".ship_name", shipBox).text( kcShip.name() );
+			var nameBox = $(".ship_name", shipBox);
+			nameBox.text( kcShip.name() );
+			var isEllipsis = function(element){
+				var $c = $(element).clone()
+					.css({display: 'inline', width: 'auto', visibility: 'hidden'})
+					.appendTo('body');
+				var cWidth = $c.width();
+				$c.remove();
+				return cWidth > $(element).width();
+			};
+			if (isEllipsis(nameBox)) nameBox.attr("title", nameBox.text());
 
-			$.each([0,1,2,3], function(_,ind) {
+			$.each([0,1,2,3,4], function(_,ind) {
 				self.showKCGear(
 					$(".ship_gear_"+(ind+1), shipBox),
-					kcShip.equipment(ind),
+					ind === 4 ? kcShip.exItem() : kcShip.equipment(ind),
 					kcShip.slots[ind]);
 			});
 		},
-		
+
 		/* Show single equipment
 		   --------------------------------------------*/
 		showKCGear: function(gearBox, kcGear, capacity) {
@@ -418,7 +441,17 @@
 			$("img", gearBox).click(function(){
 				KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 			});
-			$(".gear_name", gearBox).text( kcGear.name() );
+			$(".gear_name .name", gearBox).text(kcGear.name());
+			if(kcGear.stars>0){
+				$(".gear_name .stars", gearBox).text( " +{0}".format(kcGear.stars) );
+			}
+			if(kcGear.ace>0){
+				$(".gear_name .ace", gearBox).text( " \u00bb{0}".format(kcGear.ace) );
+			}
+			if(KC3GearManager.carrierBasedAircraftType3Ids.indexOf(masterData.api_type[3])>-1){
+				$(".gear_name .slot", gearBox).text( " x{0}".format(capacity) );
+			}
+			$(".gear_name", gearBox).attr("title", $(".gear_name", gearBox).text() );
 		},
 
 		createKCFleetObject: function(fleetObj) {
@@ -445,7 +478,7 @@
 
 				var equipmentObjectArr = [];
 				var masterData = KC3Master.ship( shipObj.id );
-				ship.rosterId = fleet.ships[ind];
+				ship.rosterId = shipObj.rid || fleet.ships[ind];
 				ship.masterId = shipObj.id;
 				ship.level = shipObj.level;
 				// calculate naked LoS
@@ -515,6 +548,7 @@
 					}
 					var shipObj = {
 						id: ship.masterId,
+						rid: ship.rosterId,
 						level: ship.level,
 						luck: ship.lk[0],
 						equipments: convertEquipmentsOf(ship)
@@ -536,5 +570,5 @@
 			return fleetsObj;
 		}
 	};
-	
+
 })();

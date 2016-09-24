@@ -15,7 +15,7 @@ Retreives when needed to apply on components
 			return {
 				version				: 8,
 				language			: "en",
-				elosFormula 		: 3,
+				elosFormula 		: 4,
 				hqExpDetail 		: 1,
 				timerDisplayType	: 1,
 				marryLevelFormat	: 0,
@@ -41,6 +41,7 @@ Retreives when needed to apply on components
 				info_boss 			: false,
 				info_delta 			: false,
 				info_auto_exped_tab : true,
+				info_auto_fleet_view: true,
 				info_eng_stype		: false,
 				info_force_ship_lang: "",
 				info_salt 			: false,
@@ -53,7 +54,9 @@ Retreives when needed to apply on components
 					"7":  [0,    1,	  1,   1,    2,	   2,  2,  3],
 					"8":  [0,    1,	  1,   1,    2,	   2,  2,  3],
 					"11": [0,    1,	  1,   3,    3,	   7,  7,  9],
-					"45": [0, 1.35, 3.5, 7.1, 11.4, 16.8, 17, 25]
+					"45": [0, 1.35, 3.5, 7.1, 11.4, 16.8, 17, 25],
+					"47": [0, 1.35, 3.5, 7.1, 11.4, 16.8, 17, 25],
+					"48": [0, 1.35, 3.5, 7.1, 11.4, 16.8, 17, 25]
 				},
 				air_bounds			: {
 					"6": [
@@ -80,6 +83,16 @@ Retreives when needed to apply on components
 						[0.026, 0.845], // 0
 						[1, 1.715], [3.212, 3.984], [6.845, 7.504], // 3
 						[11.205, 11.786], [16.639, 17], [16.999, 17.205], [24.679, 25.411] // 7
+					],
+					"47": [
+						[0.026, 0.845], // 0
+						[1, 1.715], [3.212, 3.984], [6.845, 7.504], // 3
+						[11.205, 11.786], [16.639, 17], [16.999, 17.205], [24.679, 25.411] // 7
+					],
+					"48": [
+						[0.026, 0.845], // 0
+						[1, 1.715], [3.212, 3.984], [6.845, 7.504], // 3
+						[11.205, 11.786], [16.639, 17], [16.999, 17.205], [24.679, 25.411] // 7
 					]
 				},
 				
@@ -91,6 +104,7 @@ Retreives when needed to apply on components
 				
 				ss_mode				: 0,
 				ss_type				: 'JPG',
+				ss_quality 			: 70,
 				ss_directory 		: 'KanColle',
 				ss_dppx 			: 1,
 				
