@@ -748,3 +748,44 @@ body {
 	white-space: nowrap;
 	overflow:hidden;
 }
+
+/* LOCKING
+--------------------------------*/
+.tab_locking .lock_mode_1 { background:#029DD5; }
+.tab_locking .lock_mode_2 { background:#64B162; }
+.tab_locking .lock_mode_3 { background:#CCC700; }
+.tab_locking .lock_mode_4 { background:#EB9528; }
+.tab_locking .lock_mode_5 { background:#B1A2C1; }
+
+/* QUEST FLOWCHART
+--------------------------------*/
+.tab_flowchart .questControls {
+	background:#f0f5ff;
+	border-bottom:1px solid #369;
+}
+.tab_flowchart .questControls .questControl {
+	background:#369;
+	color:#fff;
+}
+.tab_flowchart .questControls .questControl:hover {
+	background:#ace;
+}
+.tab_flowchart .questFlowItem .questInfo {
+	background:#f6f6f6;
+}
+
+.tab_flowchart .questInfo.active {
+	background:#EE9;
+}
+.tab_flowchart .questInfo.active .questCount {
+	background:#fff;
+	color:#00f;
+	font-weight:bold;
+}
+
+.tab_flowchart .questInfo.complete {
+	color:#00CC00;
+}
+.tab_flowchart .questExtraItem.active {
+	background:#EE9;
+}

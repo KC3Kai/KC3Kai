@@ -46,6 +46,19 @@ a:hover {
 .bscolor3 { background-color:#161616; }
 .bscolor4 { background-color:#121212; }
 
+/* COLORS FRAMEWORK
+-------------------------------*/
+.tableCell {
+	color:#aaa;
+	background:#303030;
+}
+.sectionBox {
+	background:#131313;
+}
+.sectionBoxField {
+	background:#131313;
+}
+
 /* MENU TABS
 -------------------------------*/
 #menu {
@@ -1050,4 +1063,53 @@ a:hover {
 	font-size:10px;
 	white-space: nowrap;
 	overflow:hidden;
+}
+
+/* LOCKING
+--------------------------------*/
+.tab_locking .lock_mode_1 { background:#044d67; }
+.tab_locking .lock_mode_2 { background:#2c4e2c; }
+.tab_locking .lock_mode_3 { background:#737006; }
+.tab_locking .lock_mode_4 { background:#6c4513; }
+.tab_locking .lock_mode_5 { background:#544c5c; }
+
+/* QUEST FLOWCHART
+--------------------------------*/
+.tab_flowchart .questControls .questControl {
+	background:#444;
+	color:#fff;
+}
+.tab_flowchart .questFlowItem .questInfo {
+	
+}
+
+.tab_flowchart .questInfo.active {
+	background:#81811a;
+	color:#fff;
+}
+.tab_flowchart .questInfo.active .questCount {
+	background:#000;
+	color:#ccf;
+	font-weight:bold;
+}
+
+.tab_flowchart .questInfo.complete {
+	color:#016901;
+}
+.tab_flowchart .questExtraItem.active {
+	background:#81811a;
+	color:#fff;
+}
+
+.tab_flowchart .questIcon.type3 {
+	color:#000;
+}
+.tab_flowchart .questIcon.type4 {
+	color:#000;
+}
+.tab_flowchart .questIcon.type5 {
+	color:#000;
+}
+.tab_flowchart .questIcon.type7 {
+	color:#fff;
 }
