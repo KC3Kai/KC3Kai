@@ -789,3 +789,133 @@ body {
 .tab_flowchart .questExtraItem.active {
 	background:#EE9;
 }
+
+
+/* MAPS
+--------------------------------*/
+.tab_event .world_list,
+.tab_maps .world_list {
+	background:#f0f5ff;
+	border-bottom:1px solid #369;
+}
+.tab_event .world_box,
+.tab_maps .world_box {
+	border:1px outset #ace;
+	background: -webkit-linear-gradient(top, rgba(206,245,255,1) 0%, rgba(111,226,255,1) 100%);
+}
+.tab_event .world_box.active,
+.tab_maps .world_box.active {
+	border:1px inset #FFCC00;
+	background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(240,248,255,1) 100%);
+}
+.tab_event .map_list,
+.tab_maps .map_list {
+	background:#f0f8ff;
+	border-bottom:1px solid #369;
+}
+.tab_event .map_box,
+.tab_maps .map_box {
+	background:#cde;
+	border-radius:8px;
+}
+.tab_event .map_box.active,
+.tab_maps .map_box.active {
+	border:2px inset #ace;
+	padding-top:4px;
+}
+.tab_event .map_box .map_title,
+.tab_maps .map_box .map_title {
+	color:#006699;
+}
+.tab_event .map_box .map_gauge,
+.tab_maps .map_box .map_gauge {
+	background:#555;
+	border-radius:5px;
+	border:1px solid #000;
+}
+.tab_event .map_box .map_bar,
+.tab_maps .map_box .map_bar {
+	background:#f00;
+}
+.tab_event .map_box.cleared .map_gauge,
+.tab_maps .map_box.cleared .map_gauge {
+	background:#0f0;
+	border:1px solid #393;
+}
+/* Map is NOT Cleared */
+.tab_event .map_box.notcleared,
+.tab_maps .map_box.notcleared {
+	background:#fdd;
+}
+.tab_event .map_box.active.notcleared,
+.tab_maps .map_box.active.notcleared {
+	border:2px inset #FAA;
+}
+.tab_event .sortie_list .sortie_box,
+.tab_maps .sortie_list .sortie_box {
+	background:#def;
+	border-radius:10px;
+	margin:0px 0px 5px 0px;
+}
+.tab_event .sortie_list .sortie_date,
+.tab_maps .sortie_list .sortie_date {
+	color:#3399cc;
+}
+.tab_event .sortie_list .sortie_map,
+.tab_maps .sortie_list .sortie_map {
+	background:#ffc;
+	border-radius:8px;
+}
+.tab_event .sortie_list .sortie_ship,
+.tab_maps .sortie_list .sortie_ship {
+	background:#fff;
+}
+.tab_event .sortie_list .sortie_edge,
+.tab_maps .sortie_list .sortie_edge {
+	background:#fff;
+}
+.tab_event .sortie_list .sortie_toggle,
+.tab_maps .sortie_list .sortie_toggle {
+	background:#ace;
+	color:#fff;
+	border-radius:5px;
+	border:1px outset #9bd;
+}
+.tab_event .sortie_list .sortie_toggle.active,
+.tab_maps .sortie_list .sortie_toggle.active {
+	line-height:16px;
+	border-width:2px;
+	border-style:inset;
+}
+.tab_event .sortie_list .sortie_toggle_in,
+.tab_maps .sortie_list .sortie_toggle_in {
+	background:#cde;
+	color:#000;
+}
+.tab_event .sortie_list .sortie_rfleet,
+.tab_maps .sortie_list .sortie_rfleet {
+	background:#fff;
+	border-radius:8px;
+}
+.tab_event .sortie_list .rfleet_title,
+.tab_maps .sortie_list .rfleet_title {
+	background:#ffc;
+	border-bottom:1px solid #def;
+}
+.tab_event .sortie_list .sortie_nodeinfo,
+.tab_maps .sortie_list .sortie_nodeinfo {
+	background:#fff;
+	border-radius:8px;
+}
+.tab_event .sortie_list .node_exp,
+.tab_maps .sortie_list .node_exp {
+	color: cornflowerblue;
+}
+.tab_event .sortie_list .node_exp span,
+.tab_maps .sortie_list .node_exp span {
+	color: black;
+}
+.tab_event .sortie_list .node_exp:before,
+.tab_maps .sortie_list .node_exp:before {
+	color: black;
+}

@@ -222,10 +222,13 @@ a:hover {
 	width:680px;
 	min-height:30px;
 	background:#131313;
-	padding:5px 10px;
+	padding:8px 10px 5px 10px;
 	margin:0px 0px 0px 10px;
 	border-bottom:1px solid #444444;
 	color:#cccccc;
+}
+.page_panel ul.pagination {
+	margin:0px;
 }
 .page_panel ul.pagination li a {
 	border:0px none;
@@ -1112,4 +1115,122 @@ a:hover {
 }
 .tab_flowchart .questIcon.type7 {
 	color:#fff;
+}
+
+
+/* MAPS
+--------------------------------*/
+.tab_event .world_box.active,
+.tab_maps .world_box.active {
+	background:#555;
+}
+.tab_event .map_box,
+.tab_maps .map_box {
+	background:#131313;
+}
+.tab_event .map_box.active,
+.tab_maps .map_box.active {
+	background:#555;
+}
+.tab_event .map_box .map_title,
+.tab_maps .map_box .map_title {
+	color:#aaa;
+}
+.tab_event .map_box .map_gauge,
+.tab_maps .map_box .map_gauge {
+	background:#fff;
+	height:8px !important;
+}
+.tab_event .map_box .map_bar,
+.tab_maps .map_box .map_bar {
+	background:#d21414;
+	height:8px !important;
+}
+.tab_event .map_box.cleared .map_gauge,
+.tab_maps .map_box.cleared .map_gauge {
+	background:#036b03;
+}
+/* Map is NOT Cleared */
+.tab_event .map_box.notcleared,
+.tab_maps .map_box.notcleared {
+	background:#440404;
+}
+.tab_event .map_box.active.notcleared,
+.tab_maps .map_box.active.notcleared {
+	background:#7c0606;
+}
+.tab_event .sortie_list .sortie_box,
+.tab_maps .sortie_list .sortie_box {
+	background:#303030;
+	margin:0px 0px 2px 0px;
+}
+.tab_event .sortie_list .sortie_date ,
+.tab_maps .sortie_list .sortie_date {
+	color:#aaa;
+}
+.tab_event .sortie_list .sortie_map,
+.tab_maps .sortie_list .sortie_map {
+	background:#222;
+	color:#fff;
+}
+.tab_event .sortie_list .sortie_ship,
+.tab_maps .sortie_list .sortie_ship {
+	background:#000;
+}
+.tab_event .sortie_list .sortie_edge,
+.tab_maps .sortie_list .sortie_edge {
+	background:#222;
+}
+.tab_event .sortie_list .sortie_edge.active,
+.tab_maps .sortie_list .sortie_edge.active {
+	color:#fff;
+}
+.tab_event .sortie_list .sortie_toggle,
+.tab_maps .sortie_list .sortie_toggle {
+	background:#000;
+	color:#999;
+}
+.tab_event .sortie_list .sortie_toggle.active,
+.tab_maps .sortie_list .sortie_toggle.active {
+	background:#555;
+	color:#fff;
+}
+.tab_event .sortie_list .sortie_toggle_in,
+.tab_maps .sortie_list .sortie_toggle_in {
+	background:#000;
+	color:#999;
+}
+.tab_event .sortie_list .sortie_rfleet,
+.tab_maps .sortie_list .sortie_rfleet {
+	background:#222;
+}
+.tab_event .sortie_list .rfleet_title,
+.tab_maps .sortie_list .rfleet_title {
+	background:#131313;
+}
+.tab_event .sortie_list .sortie_nodeinfo,
+.tab_maps .sortie_list .sortie_nodeinfo {
+	background:#222;
+	color:#aaa;
+}
+
+.tab_event .sortie_list .node_formation img,
+.tab_maps .sortie_list .node_formation img {
+	-webkit-filter: invert(100%);
+}
+.tab_event .sortie_list .node_eformation img,
+.tab_maps .sortie_list .node_eformation img {
+	-webkit-filter: invert(100%);
+}
+.tab_event .sortie_list .node_exp,
+.tab_maps .sortie_list .node_exp {
+	color: rgb(91, 172, 223);
+}
+.tab_event .sortie_list .node_exp span,
+.tab_maps .sortie_list .node_exp span {
+	color: #fff;
+}
+.tab_event .sortie_list .node_exp:before,
+.tab_maps .sortie_list .node_exp:before {
+	color: #aaa;
 }
