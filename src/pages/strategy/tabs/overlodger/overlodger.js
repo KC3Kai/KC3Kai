@@ -491,6 +491,11 @@
 				self = this,
 				mdb  = localStorage.getObject('maps');
 			
+			console.log(typeof mdb);
+			if (typeof mdb == "undefined" || mdb == null) {
+				return false;
+			}
+			
 			// Refresh Map Data Buffer
 			$.each(mapBuffer,function(k,v){ delete mapBuffer[k]; });
 			$.each(sortieCache,function(k,v){ delete sortieCache[k]; });
