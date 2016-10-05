@@ -255,12 +255,35 @@ Used by SortieManager
 		
 		var enemyships = battleData.api_ship_ke;
 		if(enemyships[0]==-1){ enemyships.splice(0,1); }
+		
+		console.log("battleData", battleData);
+		var enemyEscort = battleData.api_ship_ke_combined;
+		if (typeof enemyEscort != "undefined") {
+			console.log("escort found");
+			if(enemyEscort[0]==-1){ enemyEscort.splice(0,1); }
+			enemyships = enemyships.concat(enemyEscort);
+			console.log("enemyEscort", enemyEscort);
+			console.log("enemyships", enemyships);
+		}
+		
 		this.eships = enemyships;
+		console.log("this.eships", this.eships);
 		this.eformation = battleData.api_formation[1];
+		
+		
 		this.eParam = battleData.api_eParam;
-		this.eKyouka = battleData.api_eKyouka;
+		if (typeof battleData.api_eParam_combined != "undefined") {
+			this.eParam = this.eParam.concat(battleData.api_eParam_combined);
+		}
+		
+		this.eKyouka = battleData.api_eKyouka || [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1];
+		
+		
 		this.eSlot = battleData.api_eSlot;
-
+		if (typeof battleData.api_eSlot_combined != "undefined") {
+			this.eSlot = this.eSlot.concat(battleData.api_eSlot_combined);
+		}
+		
 		this.supportFlag = (battleData.api_support_flag>0);
 		if(this.supportFlag){
 			this.supportInfo = battleData.api_support_info;
