@@ -1513,8 +1513,8 @@ Previously known as "Reactor"
 			}
 			
 			// Combine current storage and current available maps data
-			for(ctr in response.api_data){
-				thisMap = response.api_data[ctr];
+			for(ctr in response.api_data.api_map_info){
+				thisMap = response.api_data.api_map_info[ctr];
 				var key = "m"+thisMap.api_id;
 				
 				if(typeof (maps[key]||{}).curhp !== 'undefined')

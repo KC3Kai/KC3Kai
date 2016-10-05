@@ -237,18 +237,14 @@ Contains summary information about a fleet and its 6 ships
 	};
 
 	// calculate accurate landing craft bonus
-	// formula taken from http://kancolle.wikia.com/wiki/Expedition as of May 18,2016
+	// formula taken from http://kancolle.wikia.com/wiki/Expedition as of Oct 4,2016
 	KC3Fleet.prototype.calcLandingCraftBonus = function() {
 		var self = this;
-		// only first 4 improved landing crafts matter.
-		var improvedEquipmentCount = 0;
 		// use addImprove() to update this value instead of modifying it directly
 		var improveCount = 0;
-		
 		function addImprove(stars) {
-			if (stars <= 0 || improvedEquipmentCount >= 4)
+			if (!stars || stars <= 0)
 				return;
-			improvedEquipmentCount += 1;
 			improveCount += stars;
 		}
 
@@ -259,7 +255,6 @@ Contains summary information about a fleet and its 6 ships
 			shipObj.equipment( function(itemId,eInd,eObj ) {
 				if (itemId <= 0)
 					return;
-				
 				if (eObj.masterId === 68) {
 					// normal landing craft
 					normalCount += 1;
@@ -278,11 +273,13 @@ Contains summary information about a fleet and its 6 ships
 
 		// without cap
 		var basicBonus = normalCount*0.05 + t89Count*0.02 + t2Count*0.01;
+		// cap at 20%
+		var cappedBasicBonus = Math.min(0.2, basicBonus);
 		var landingCraftCount = normalCount + t89Count + t2Count;
-		var improveBonus = landingCraftCount > 0 
-			? 0.01 * improveCount * basicBonus / landingCraftCount
+		var improveBonus = landingCraftCount > 0
+			? 0.01 * improveCount * cappedBasicBonus / landingCraftCount
 			: 0.0;
-		return Math.min(0.2, basicBonus) + improveBonus;
+		return cappedBasicBonus + improveBonus;
 	};
 	
 	KC3Fleet.prototype.averageLevel = function(){
