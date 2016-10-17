@@ -189,6 +189,12 @@
 	});
 	
 	function checkDMMLogin(callback){
+		// should be exactly of value "false",
+		// so we can fallback as if it's default value "true"
+		if (ConfigManager.forceDMMLogin === false) {
+			callback(true);
+			return;
+		}
 		// Check if user is already logged in on DMM
 		chrome.cookies.get({
 			url: "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/",
