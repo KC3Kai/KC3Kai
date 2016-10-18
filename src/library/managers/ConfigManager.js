@@ -21,6 +21,7 @@ Retreives when needed to apply on components
 				marryLevelFormat	: 0,
 				checkLiveQuests		: true,
 				devOnlyPages		: false,
+				forceDMMLogin       : true,
 
 				DBSubmission_enabled: 0,
 				DBSubmission_key : '',
