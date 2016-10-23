@@ -796,6 +796,13 @@
 			$("#catBomb .description").html( data.message );
 			$("#catBomb").fadeIn(300);
 		},
+		
+		APIError: function(data){
+			$("#catBomb").hide();
+			$("#catBomb .title").html( data.title );
+			$("#catBomb .description").html( data.message );
+			$("#catBomb").fadeIn(300);
+		},
 
 		GameUpdate: function(data){
 			console.debug("GameUpdate triggered:", data);
