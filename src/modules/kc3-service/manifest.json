@@ -1,0 +1,7 @@
+{
+	"background": {
+		"scripts": [
+			"modules/kc3-service/background.js"
+		]
+	}
+}

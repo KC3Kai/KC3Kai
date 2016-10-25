@@ -1,0 +1,14 @@
+{
+	"icons": {
+		"16": "modules/kc3-index/img/logo/16.png",
+        "48": "modules/kc3-index/img/logo/48.png",
+        "128": "modules/kc3-index/img/logo/128.png"
+	},
+	"browser_action": {
+		"default_icon": "modules/kc3-index/assets/img/logo/dev.png",
+		"default_popup": "pages/popup/popup.html"
+	},
+	"permissions": [
+		"<all_urls>"
+	]
+}
