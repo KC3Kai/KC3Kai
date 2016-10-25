@@ -59,6 +59,11 @@
 				"id": "devOnlyPages",
 				"name": "SettingsDevOnlyPages",
 				"type": "check"
+			},
+			{
+				"id": "forceDMMLogin",
+				"name": "SettingsForceDMMLogin",
+				"type": "check"
 			}
 		]
 	},
