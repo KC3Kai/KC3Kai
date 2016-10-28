@@ -64,6 +64,11 @@
 				"id": "forceDMMLogin",
 				"name": "SettingsForceDMMLogin",
 				"type": "check"
+			},
+			{
+				"id": "apiRecorder",
+				"name": "SettingsAPIRecorder",
+				"type": "check"
 			}
 		]
 	},

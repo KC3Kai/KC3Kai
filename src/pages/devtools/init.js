@@ -21,6 +21,14 @@
 				}
 			});
 			
+			if (ConfigManager.apiRecorder) {
+				chrome.devtools.panels.create("KCSAPI",
+					"../../assets/img/logo/16.png",
+					"pages/devtools/recorder/recorder.html",
+					function(panel){}
+				);
+			}
+			
 		} catch (e) {
 			// Catch any exceptions in the attempt
 			chrome.devtools.panels.create("DevKC3Kai",
