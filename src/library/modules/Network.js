@@ -13,6 +13,7 @@ Listens to network history and triggers callback if game events happen
 		eventTypes : {
 			GameStart: [],
 			CatBomb: [],
+			APIError: [],
 			GameUpdate: [],
 			HomeScreen: [],
 			HQ: [],
