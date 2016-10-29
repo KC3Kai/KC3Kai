@@ -58,6 +58,11 @@ KC3改 Ship Box for Natsuiro theme
 		var myExItem = this.shipData.exItem();
 		if( myExItem && (myExItem.masterId > 0)){
 			$(".ex_item img", this.element).attr("src", "../../../../assets/img/items/"+myExItem.master().api_type[3]+".png");
+			if (myExItem.masterId == 43) {
+				$(".ex_item", this.element).addClass("goddess");
+			} else {
+				$(".ex_item", this.element).removeClass("goddess");
+			}
 		}else{
 			$(".ex_item", this.element).hide();
 		}
@@ -322,6 +327,12 @@ KC3改 Ship Box for Natsuiro theme
 					"../../../../assets/img/items/"+thisGear.master().api_type[3]+".png");
 				$(".ship_gear_"+(slot+1), this.element).addClass("equipped");
 				$(".ship_gear_"+(slot+1), this.element).attr("title", thisGear.name());
+				
+				if (thisGear.masterId == 43) {
+					$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element).addClass("goddess");
+				} else {
+					$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element).removeClass("goddess");
+				}
 				
 				if (typeof thisGear.ace !== "undefined" && thisGear.ace > 0) {
 					// Is a plane with veterancy

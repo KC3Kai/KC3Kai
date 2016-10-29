@@ -68,12 +68,24 @@
 			}
 		});
 		
-		// Play via API Link
-		/*$("#play_cc").on('click', function(){
+		checkDMMLogin(function(isLoggedIn){
+			if (!isLoggedIn) {
+				$("#play_cc").hide();
+				$("#play_dmm").hide();
+				$("#play_dmmf").hide();
+				
+				$("#login_dmm").show();
+				
+				$(".wrapper").css("height", "372px");
+			}
+		});
+		
+		// Login on DMM
+		$("#login_dmm").on('click', function(){
 			localStorage.extract_api = false;
 			localStorage.dmmplay = false;
-			window.open("../game/api.html", "kc3kai_game");
-		});*/
+			window.open("https://www.dmm.com/my/-/login/=/path=Sg__/", "dmm_login");
+		});
 		
 		// Refresh API Link
 		// $("#get_api").on('click', function(){
@@ -175,5 +187,28 @@
 			UTC6PM.getTime() - now);
 		$(".timePvP").text( String(remaining/1000).toHHMMSS() );
 	});
+	
+	function checkDMMLogin(callback){
+		// should be exactly of value "false",
+		// so we can fallback as if it's default value "true"
+		if (ConfigManager.forceDMMLogin === false) {
+			callback(true);
+			return;
+		}
+		// Check if user is already logged in on DMM
+		chrome.cookies.get({
+			url: "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/",
+			name: "INT_SESID"
+		}, function(cookie){
+			// Not yet logged in
+			if(cookie===null){
+				callback(false);
+				
+			// Already logged in
+			}else{
+				callback(true);
+			}
+		});
+	}
 	
 })();

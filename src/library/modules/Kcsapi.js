@@ -879,6 +879,23 @@ Previously known as "Reactor"
 			KC3Network.trigger("BattleNight");
 		},
 		
+		/* ENEMY COMBINED FLEET
+		-------------------------------------------------------*/
+		"api_req_combined_battle/ec_battle":function(params, response, headers){
+			KC3SortieManager.engageBattle(
+				response.api_data,
+				Date.toUTCseconds(headers.Date)
+			);
+			KC3Network.trigger("BattleStart");
+		},
+		"api_req_combined_battle/ec_midnight_battle":function(params, response, headers){
+			KC3SortieManager.engageNight(
+				response.api_data,
+				Date.toUTCseconds(headers.Date)
+			);
+			KC3Network.trigger("BattleNight");
+		},
+		
 		/* BATTLE RESULT SCREENS
 		-------------------------------------------------------*/
 		"api_req_sortie/battleresult":function(params, response, headers){
@@ -1006,6 +1023,7 @@ Previously known as "Reactor"
 			// Force to mark quest as complete
 			KC3QuestManager.isOpen( quest, false );
 			KC3QuestManager.isActive( quest, false );
+			KC3QuestManager.save();
 			
 			// Compute bonuses for ledger
 			bonuses.forEach(function(x){
@@ -1513,8 +1531,8 @@ Previously known as "Reactor"
 			}
 			
 			// Combine current storage and current available maps data
-			for(ctr in response.api_data){
-				thisMap = response.api_data[ctr];
+			for(ctr in response.api_data.api_map_info){
+				thisMap = response.api_data.api_map_info[ctr];
 				var key = "m"+thisMap.api_id;
 				
 				if(typeof (maps[key]||{}).curhp !== 'undefined')
