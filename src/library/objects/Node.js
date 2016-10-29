@@ -259,15 +259,11 @@ Used by SortieManager
 		console.log("battleData", battleData);
 		var enemyEscort = battleData.api_ship_ke_combined;
 		if (typeof enemyEscort != "undefined") {
-			console.log("escort found");
 			if(enemyEscort[0]==-1){ enemyEscort.splice(0,1); }
 			enemyships = enemyships.concat(enemyEscort);
-			console.log("enemyEscort", enemyEscort);
-			console.log("enemyships", enemyships);
 		}
 		
 		this.eships = enemyships;
-		console.log("this.eships", this.eships);
 		this.eformation = battleData.api_formation[1];
 		
 		
@@ -296,6 +292,10 @@ Used by SortieManager
 			ally: battleData.api_nowhps.slice(1,7),
 			enemy: battleData.api_nowhps.slice(7,13)
 		};
+		if (typeof battleData.api_nowhps_combined != "undefined") {
+			beginHPs.ally = beginHPs.ally.concat(battleData.api_nowhps_combined.slice(1,7));
+			beginHPs.enemy = beginHPs.enemy.concat(battleData.api_nowhps_combined.slice(7,13));
+		}
 		this.dayBeginHPs = beginHPs;
 		
 		this.detection = KC3Meta.detection( battleData.api_search[0] );
@@ -390,27 +390,38 @@ Used by SortieManager
 					? [0,0,0, 0,0,0]
 					: fleet.getDameConCodes();
 				
-				// enemy combined fleet
-				if (this.eships.length > 7) {
-					result = DA.analyzeAbyssalCTFBattleJS(dameConCode, battleData);
-				} else {
-					// regular day-battle
-					result = DA.analyzeBattleJS(dameConCode, battleData);
-				}
-				// console.debug("Damage analysis result", result);
-
 				var endHPs = {
 					ally: beginHPs.ally.slice(),
 					enemy: beginHPs.enemy.slice()
 				};
-
-				// Update enemy ships
-				for (i = 7; i < 13; i++) {
-					this.enemyHP[i-7] = result.enemy[i-7];
-					endHPs.enemy[i-7] = result.enemy[i-7] ? result.enemy[i-7].hp : -1;
-					this.enemySunk[i-7] = result.enemy[i-7] ? result.enemy[i-7].sunk : true;
+				
+				// enemy combined fleet
+				if (this.eships.length > 7) {
+					result = DA.analyzeAbyssalCTFBattleJS(dameConCode, battleData);
+					
+					// Update enemy ships
+					for (i = 7; i < 13; i++) {
+						this.enemyHP[i-7] = result.enemyMain[i-7];
+						endHPs.enemy[i-7] = result.enemyMain[i-7] ? result.enemyMain[i-7].hp : -1;
+						this.enemySunk[i-7] = result.enemyMain[i-7] ? result.enemyMain[i-7].sunk : true;
+					}
+					for (i = 13; i < 19; i++) {
+						this.enemyHP[i-7] = result.enemyEscort[i-13];
+						endHPs.enemy[i-7] = result.enemyEscort[i-13] ? result.enemyEscort[i-13].hp : -1;
+						this.enemySunk[i-7] = result.enemyEscort[i-13] ? result.enemyEscort[i-13].sunk : true;
+					}
+				} else {
+					// regular day-battle
+					result = DA.analyzeBattleJS(dameConCode, battleData);
+					
+					// Update enemy ships
+					for (i = 7; i < 13; i++) {
+						this.enemyHP[i-7] = result.enemy[i-7];
+						endHPs.enemy[i-7] = result.enemy[i-7] ? result.enemy[i-7].hp : -1;
+						this.enemySunk[i-7] = result.enemy[i-7] ? result.enemy[i-7].sunk : true;
+					}
 				}
-
+				
 				// update player ships
 				shipNum = fleet.countShips();
 				for(i = 0; i < shipNum; i++) {

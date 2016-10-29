@@ -1634,7 +1634,8 @@
 	
 							enemyHPPercent = ( newEnemyHP / thisNode.originalHPs[index+7] );
 							if (enemyFleetBox == "combined") {
-								$(".module.activity .abyss_hp_bar_"+(index+1)).css("height", 15*enemyHPPercent);
+								$(".module.activity .abyss_hp_bar_"+(index+1))
+									.css("height", 15*enemyHPPercent);
 								enemyBarHeight = $(".module.activity .abyss_hp_bar_"+(index+1)).height();
 								$(".module.activity .abyss_hp_bar_"+(index+1)).css("margin-top", 15-enemyBarHeight);
 							} else {
@@ -1743,8 +1744,10 @@
 		BattleNight: function(data){
 			// Enemy HP Predictions
 			var thisNode = KC3SortieManager.currentNode();
+			var enemyFleetBox = thisNode.eships.length > 6 ? "combined" : "single";
+			
 			if(ConfigManager.info_battle){
-				var newEnemyHP, enemyHPPercent;
+				var newEnemyHP, enemyHPPercent, enemyBarHeight;
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > -1){
 						newEnemyHP = Math.max(0,thisNode.enemyHP[index].hp);
@@ -1760,10 +1763,16 @@
 								.show()
 								.css("-webkit-filter",(data||{safeSunk:false}).safeSunk ? "grayscale(100%)" : "");
 						}
-
+						
 						enemyHPPercent = ( newEnemyHP / thisNode.originalHPs[index+7] );
-						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width", 28*enemyHPPercent);
-
+						if (enemyFleetBox == "combined") {
+							$(".module.activity .abyss_hp_bar_"+(index+1)).css("height", 15*enemyHPPercent);
+							enemyBarHeight = $(".module.activity .abyss_hp_bar_"+(index+1)).height();
+							$(".module.activity .abyss_hp_bar_"+(index+1)).css("margin-top", 15-enemyBarHeight);
+						} else {
+							$(".module.activity .abyss_hp_bar_"+(index+1)).css("width", 28*enemyHPPercent);
+						}
+						
 						if(enemyHPPercent <= 0.25){
 							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FF0000");
 						} else if(enemyHPPercent <= 0.50){

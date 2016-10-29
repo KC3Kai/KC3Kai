@@ -658,7 +658,7 @@ ABYSS FLEET
 	height:10px;
 	line-height:10px;
 	float:left;
-	margin:4px 0px 0px 14px;
+	margin:4px 0px 0px 17px;
 }
 .module.activity .abyss_combined .sink_icons .sunk img {
 	width:10px;
@@ -678,6 +678,7 @@ ABYSS FLEET
 	margin:0px 1px;
 	background:#222;
 	float:left;
+	overflow:hidden;
 }
 .module.activity .abyss_combined .abyss_hp_bar {
 	height:15px;
@@ -689,7 +690,7 @@ ABYSS FLEET
 	height:15px;
 	line-height:15px;
 	float:left;
-	margin:0px 2px;
+	margin:0px 7px 0px 2px;
 	border-radius:8px;
 	overflow:hidden;
 	background:#888;
