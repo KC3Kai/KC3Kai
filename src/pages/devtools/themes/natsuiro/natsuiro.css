@@ -563,33 +563,38 @@ html,body {
 .module.activity .node_type_battle {
 	position: relative;
 }
-.module.activity .sink_icons {
+
+/**
+ABYSS FLEET
+**/
+
+/* Abyss single fleet */
+.module.activity .abyss_single .sink_icons {
 	width:180px;
 	height:0px;
 	position: absolute;
 	z-index: 1;
 	pointer-events:none;
 }
-.module.activity .sink_icons .sunk {
+.module.activity .abyss_single .sink_icons .sunk {
 	width:16px;
 	height:16px;
 	line-height:16px;
 	float:left;
 	margin:8px 0px 0px 14px;
 }
-.module.activity .sink_icons .sunk img {
+.module.activity .abyss_single .sink_icons .sunk img {
 	width:16px;
 	height:16px;
 	vertical-align:top;
 	display:none;
 }
-/* Abyss Ships */
-.module.activity .abyss_ships {
+.module.activity .abyss_single .abyss_ships {
 	width:180px;
 	height:26px;
 	margin:0px 0px 1px 0px;
 }
-.module.activity .abyss_ship {
+.module.activity .abyss_single .abyss_ship {
 	width:26px;
 	height:26px;
 	float:left;
@@ -600,30 +605,104 @@ html,body {
 	background:#888;
 	position:relative;
 }
-.module.activity .abyss_ship img {
+.module.activity .abyss_single .abyss_ship img {
 	width:26px;
 	height:26px;
 	position:relative;
 	top:-1px;
 	left:-1px;
 }
-/* Abyss HPs */
-.module.activity .abyss_hps {
+.module.activity .abyss_single .abyss_hps {
 	width:180px;
 	height:4px;
 	margin:0px 0px 5px 0px;
 }
-.module.activity .abyss_hp {
+.module.activity .abyss_single .abyss_hp {
 	width:28px;
 	height:4px;
 	margin:0px 1px;
 	background:#222;
 	float:left;
 }
-.module.activity .abyss_hp_bar {
+.module.activity .abyss_single .abyss_hp_bar {
 	height:4px;
 	background:#0f0;
 }
+
+/* Abyss combined fleet */
+.module.activity .abyss_combined {
+	width:180px;
+	margin:0px 0px 4px 0px;
+}
+.module.activity .abyss_combined .abyss_fleet {
+	width:180px;
+	height:15px;
+	margin:0px 0px 1px 0px;
+}
+.module.activity .abyss_combined .abyss_fleet_1 {
+	
+}
+.module.activity .abyss_combined .abyss_fleet_2 {
+	margin:0px 0px 0px 10px;
+}
+
+.module.activity .abyss_combined .sink_icons {
+	width:180px;
+	height:0px;
+	position: absolute;
+	z-index: 1;
+	pointer-events:none;
+}
+.module.activity .abyss_combined .sink_icons .sunk {
+	width:10px;
+	height:10px;
+	line-height:10px;
+	float:left;
+	margin:4px 0px 0px 17px;
+}
+.module.activity .abyss_combined .sink_icons .sunk img {
+	width:10px;
+	height:10px;
+	vertical-align:top;
+	display:none;
+}
+.module.activity .abyss_combined .abyss_ships {
+	width:180px;
+	height:15px;
+	margin:0px 0px 0px 0px;
+}
+
+.module.activity .abyss_combined .abyss_hp {
+	width:2px;
+	height:15px;
+	margin:0px 1px;
+	background:#222;
+	float:left;
+	overflow:hidden;
+}
+.module.activity .abyss_combined .abyss_hp_bar {
+	height:15px;
+	background:#0f0;
+}
+
+.module.activity .abyss_combined .abyss_ship {
+	width:15px;
+	height:15px;
+	line-height:15px;
+	float:left;
+	margin:0px 7px 0px 2px;
+	border-radius:8px;
+	overflow:hidden;
+	background:#888;
+	position:relative;
+}
+.module.activity .abyss_combined .abyss_ship img {
+	width:15px;
+	height:15px;
+	position:relative;
+	vertical-align:top;
+}
+
 /* Battle Flags */
 .module.activity .battle_flags {
 	width:180px;

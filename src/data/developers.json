@@ -450,6 +450,25 @@
 	],
 	"AboutTesters" : [
 		{
+			"name": "mikenzb",
+			"avatar" : "https://avatars3.githubusercontent.com/u/5982780?v=3&s=40",
+			"desc" : "AboutDevTester",
+			"links" : {
+				"gh" :"https://github.com/Mikenzb",
+				"wk" :"http://kancolle.wikia.com/wiki/User:Mikenzb",
+				"st" :"http://steamcommunity.com/id/mikenzb"
+			}
+		},
+		{
+			"name": "Tedster",
+			"avatar" : "https://avatars1.githubusercontent.com/u/21696818?v=3&s=40",
+			"desc" : "AboutDevTester",
+			"links" : {
+				"gh" :"https://github.com/Tedster59",
+				"wb": "http://forum.worldofwarships.com/index.php?/user/tedster-1001311062/"
+			}
+		},
+		{
 			"name": "Erupi",
 			"avatar": "https://avatars1.githubusercontent.com/u/12823927?v=3&s=40",
 			"desc": "AboutDevTester",
@@ -505,16 +524,6 @@
 		 }
 	],
 	"AboutReporters" : [
-		{
-			"name": "mikenzb",
-			"avatar" : "https://avatars3.githubusercontent.com/u/5982780?v=3&s=40",
-			"desc" : "AboutChannel",
-			"links" : {
-				"gh" :"https://github.com/Mikenzb",
-				"wk" :"http://kancolle.wikia.com/wiki/User:Mikenzb",
-				"st" :"http://steamcommunity.com/id/mikenzb"
-			}
-		},
 		{
 			"name": "HKGPsy ",
 			"avatar" : "https://avatars2.githubusercontent.com/u/16491462?v=3&s=40",
