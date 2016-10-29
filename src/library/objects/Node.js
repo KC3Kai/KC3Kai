@@ -163,6 +163,9 @@ Used by SortieManager
 		this.item = [];
 		this.icon = [];
 		this.amount = [];
+		if (typeof nodeData.api_itemget == "object" && typeof nodeData.api_itemget.api_id != "undefined") {
+			nodeData.api_itemget = [nodeData.api_itemget];
+		}
 		nodeData.api_itemget.forEach(function(itemget){
 			var icon_id = itemget.api_icon_id;
 			var getcount = itemget.api_getcount;
