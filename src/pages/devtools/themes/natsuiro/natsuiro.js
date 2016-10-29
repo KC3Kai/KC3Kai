@@ -1746,6 +1746,14 @@
 			var thisNode = KC3SortieManager.currentNode();
 			var enemyFleetBox = thisNode.eships.length > 6 ? "combined" : "single";
 			
+			if (enemyFleetBox == "combined") {
+				$(".module.activity .abyss_single").hide();
+				$(".module.activity .abyss_combined").show();
+			} else {
+				$(".module.activity .abyss_single").show();
+				$(".module.activity .abyss_combined").hide();
+			}
+			
 			if(ConfigManager.info_battle){
 				var newEnemyHP, enemyHPPercent, enemyBarHeight;
 				$.each(thisNode.eships, function(index, eshipId){
@@ -1972,7 +1980,11 @@
 			clearBattleData();
 			$(".module.activity .map_world").text( KC3Meta.term("BattleMapWorldPvP") );
 			$(".module.activity .map_hp").text( KC3Meta.term("BattleMapNoHpGauge") );
-
+			
+			// PvP enemy never combined
+			$(".module.activity .abyss_single").show();
+			$(".module.activity .abyss_combined").hide();
+			
 			// Process PvP Battle
 			KC3SortieManager.fleetSent = data.fleetSent;
 			KC3SortieManager.onPvP = true;
