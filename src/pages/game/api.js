@@ -48,6 +48,11 @@ $(document).on("ready", function(){
 	KC3Database.init();
 	KC3Translation.execute();
 	
+	// API Flash Notice
+	if(typeof localStorage.read_api_notice == "undefined") {
+		$(".api_link_notice").show();
+	}
+	
 	// Apply interface configs
 	$(".box-wrap").css("margin-top", ConfigManager.api_margin+"px");
 	if(ConfigManager.api_bg_image === ""){
@@ -103,6 +108,12 @@ $(document).on("ready", function(){
 	$(".play_btn").on('click', function(){
 		if($(this).data('play'))
 			ActivateGame();
+	});
+	
+	// I've read the API Link notice
+	$(".api_notice_close").on('click', function(){
+		localStorage.read_api_notice = 1;
+		$(".api_link_notice").hide();
 	});
 	
 	$(".play_btn").data('play',!ConfigManager.api_mustPanel);
