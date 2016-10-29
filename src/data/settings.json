@@ -728,19 +728,6 @@
 		"help":"",
 		"contents":[
 			{
-				"id" : "sr_lvl_difference",
-				"name" : "SettingsLevellingDifference",
-				"type" : "radio",
-				"bound" : {
-					"min" :  0,
-					"max" : 15,
-					"type": "Number"
-				},
-				"options" : {
-					"label" : "Lv"
-				}
-			},
-			{
 				"id" : "sr_theme",
 				"name" : "SettingsStrategyTheme",
 				"type" : "radio",
