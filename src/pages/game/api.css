@@ -347,7 +347,7 @@ body {
 }
 .ol_quest .tracking {
 	width:60px;
-	height:60px;
+	height:40px;
 	line-height:60px;
 	margin:2px 0px 0px 0px;
 	float:left;
@@ -359,8 +359,8 @@ body {
 	opacity:0.80;
 }
 .ol_quest .tracking.small {
-	line-height:15px;
-	font-size:13px;
+	line-height:10px;
+	font-size:11px;
 }
 
 
