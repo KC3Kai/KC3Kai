@@ -18,7 +18,6 @@
 	line-height:20px;
 	padding:0px 10px;
 	float:right;
-	background:#def;
 	border-radius:5px;
 	font-size:12px;
 	font-weight:bold;
@@ -36,11 +35,6 @@
 	margin:0px 6px 0px 0px;
 	padding:5px 5px 5px 5px;
 }
-.tab_locking .lock_mode_1 { background:#029DD5; }
-.tab_locking .lock_mode_2 { background:#64B162; }
-.tab_locking .lock_mode_3 { background:#CCC700; }
-.tab_locking .lock_mode_4 { background:#EB9528; }
-.tab_locking .lock_mode_5 { background:#B1A2C1; }
 
 .tab_locking .map_area {
 	width:130px;
@@ -107,7 +101,7 @@
 	height:30px;
 	line-height:24px;
 	float:left;
-	background:#eee;
+	/*background:#eee;*/
 	border-radius:7px;
 	margin:2px;
 	padding:3px 4px;

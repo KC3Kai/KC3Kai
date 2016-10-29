@@ -47,6 +47,18 @@
 				var shipClickFunc = function(e){
 					KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 				};
+				// response[0] = {
+				// 	id: 1,
+				// 	flag: 212,
+				// 	hq: "18066975",
+				// 	devmat: 10,
+				// 	rsc1: "30",
+				// 	rsc2: "30",
+				// 	rsc3: "30",
+				// 	rsc4: "30",
+				// 	result: 55,
+				// 	time: 1459512349
+				// };
 				for(ctr in response){
 					thisBuild = response[ctr];
 					

@@ -59,6 +59,16 @@
 				"id": "devOnlyPages",
 				"name": "SettingsDevOnlyPages",
 				"type": "check"
+			},
+			{
+				"id": "forceDMMLogin",
+				"name": "SettingsForceDMMLogin",
+				"type": "check"
+			},
+			{
+				"id": "apiRecorder",
+				"name": "SettingsAPIRecorder",
+				"type": "check"
 			}
 		]
 	},
@@ -710,6 +720,36 @@
 					"type": "Number"
 				},
 				"options" : { "label" : "%" }
+			}
+		]
+	},
+	{
+		"section":"SettingsStrategyRoom",
+		"help":"",
+		"contents":[
+			{
+				"id" : "sr_lvl_difference",
+				"name" : "SettingsLevellingDifference",
+				"type" : "radio",
+				"bound" : {
+					"min" :  0,
+					"max" : 15,
+					"type": "Number"
+				},
+				"options" : {
+					"label" : "Lv"
+				}
+			},
+			{
+				"id" : "sr_theme",
+				"name" : "SettingsStrategyTheme",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "legacy", "Traditional" ],
+						[ "dark", "Dark" ]
+					]
+				}
 			}
 		]
 	}

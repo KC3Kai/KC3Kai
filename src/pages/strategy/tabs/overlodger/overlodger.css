@@ -18,16 +18,13 @@
 	font-size: smaller;
 }
 .tab_overlodger .filterBox {
-	width:112px;
 	height:152px;
 	float:left;
-	margin:0px 3px 0px 0px;
-	background:#def;
 	border-radius:8px;
 	padding:3px 5px;
 }
 .tab_overlodger .filterBox.filter_base {
-	width:217px;
+	
 }
 .tab_overlodger .filterBox .filterRangeLen {
 	position: relative;
@@ -38,13 +35,8 @@
 	top: -2px;
 	right: 0;
 	width:24px;
-	
 	border:inset 1px;
-	background-color:#daebfc;
 	text-align:center;
-}
-.tab_overlodger .filterBox .filterRangeLen input[disabled] {
-	color:#daebfc;
 }
 .tab_overlodger .filterBox input:invalid {
 	color: red;
@@ -161,10 +153,8 @@
 /* RATING
 --------------------------------*/
 .tab_overlodger .lodger-statistics {
-	border-radius: 8px;
 	margin: 16px 4px;
 	padding: 4px;
-	background-color: #def;
 }
 
 .tab_overlodger .lodger-header {
@@ -188,23 +178,17 @@
 
 /* Factory data template */
 .tab_overlodger .lodger-data {
-	background-color:#cde;
-	border-radius: 6px;
 	margin: 4px 1px;
 	padding: 2px 8px;
 }
 .tab_overlodger .lodger-data .bar {
-	height: 20px;
 	float: left;
 }
 .tab_overlodger .lodger-data .bar.INV,
 .tab_overlodger .lodger-data .bar.NM {
 	position: relative;
 	width: 42%;
-	
 	margin: 9px 0px;
-	
-	background-color: gray;
 }
 .tab_overlodger .lodger-data .bar .bar {
 	position: absolute;
@@ -251,7 +235,6 @@
 .tab_overlodger .lodger-data .materials .material,
 .tab_overlodger .lodger-data .materials .material.over:before {
 	position:relative;
-	background-color: #bcd;
 	border-radius: 4px;
 	padding: 0 2px;
 	float:left;

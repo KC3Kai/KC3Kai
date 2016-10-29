@@ -8,7 +8,6 @@
 	width:335px;
 	height:134px;
 	float:left;
-	background:#def;
 	border-radius:10px;
 	margin:0px 0px 5px 5px;
 	overflow:hidden;
@@ -17,14 +16,12 @@
 	width:335px;
 	height:20px;
 	line-height:20px;
-	background:#B9DCFF;
 	text-align:center;
 	font-size:12px;
 	font-weight:bold;
 }
 .tab_showcase .stype_contents {
 	width:335px;
-	height:80px;
 	padding:5px;
 }
 
@@ -32,7 +29,6 @@
 	width:105px;
 	height:50px;
 	float:left;
-	background:#fff;
 	margin:0px 0px 3px 3px;
 	border-radius:8px;
 }
@@ -42,7 +38,6 @@
 	line-height:30px;
 	float:left;
 	margin:2px 5px 0px 2px;
-	background:#ccc;
 	border-radius:15px;
 	overflow:hidden;
 }
@@ -63,12 +58,7 @@
 	margin:3px 0px 0px 0px;
 }
 .tab_showcase .show_ship .ship_level {
-	width:65px;
-	height:12px;
-	line-height:12px;
-	font-size:11px;
-	float:left;
-	margin:1px 0px 0px 0px;
+	
 }
 .tab_showcase .show_ship .ship_mods {
 	width:105px;
@@ -83,8 +73,6 @@
 	font-size:10px;
 	text-align:center;
 	margin:1px 0px 0px 2px;
-	border-radius:5px;
-	background:#eee;
 }
 .tab_showcase .show_ship .ship_mod_fp.max {
 	background:#ff8888;
@@ -111,7 +99,7 @@
 	width:220px;
 	height:102px;
 	float:left;
-	background:#def;
+	/*background:#def;*/
 	border-radius:10px;
 	margin:0px 0px 5px 6px;
 	overflow:hidden;
@@ -120,7 +108,7 @@
 	width:220px;
 	height:20px;
 	line-height:20px;
-	background:#B9DCFF;
+	/*background:#B9DCFF;*/
 	text-align:center;
 	font-size:12px;
 	font-weight:bold;
@@ -178,5 +166,5 @@
 	font-size:12px;
 	font-weight:bold;
 	text-align:center;
-	background:#fff;
+	/*background:#fff;*/
 }

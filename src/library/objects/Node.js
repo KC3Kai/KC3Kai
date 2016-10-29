@@ -163,6 +163,9 @@ Used by SortieManager
 		this.item = [];
 		this.icon = [];
 		this.amount = [];
+		if (typeof nodeData.api_itemget == "object" && typeof nodeData.api_itemget.api_id != "undefined") {
+			nodeData.api_itemget = [nodeData.api_itemget];
+		}
 		nodeData.api_itemget.forEach(function(itemget){
 			var icon_id = itemget.api_icon_id;
 			var getcount = itemget.api_getcount;
@@ -255,12 +258,31 @@ Used by SortieManager
 		
 		var enemyships = battleData.api_ship_ke;
 		if(enemyships[0]==-1){ enemyships.splice(0,1); }
+		
+		console.log("battleData", battleData);
+		var enemyEscort = battleData.api_ship_ke_combined;
+		if (typeof enemyEscort != "undefined") {
+			if(enemyEscort[0]==-1){ enemyEscort.splice(0,1); }
+			enemyships = enemyships.concat(enemyEscort);
+		}
+		
 		this.eships = enemyships;
 		this.eformation = battleData.api_formation[1];
+		
+		
 		this.eParam = battleData.api_eParam;
-		this.eKyouka = battleData.api_eKyouka;
+		if (typeof battleData.api_eParam_combined != "undefined") {
+			this.eParam = this.eParam.concat(battleData.api_eParam_combined);
+		}
+		
+		this.eKyouka = battleData.api_eKyouka || [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1];
+		
+		
 		this.eSlot = battleData.api_eSlot;
-
+		if (typeof battleData.api_eSlot_combined != "undefined") {
+			this.eSlot = this.eSlot.concat(battleData.api_eSlot_combined);
+		}
+		
 		this.supportFlag = (battleData.api_support_flag>0);
 		if(this.supportFlag){
 			this.supportInfo = battleData.api_support_info;
@@ -273,6 +295,10 @@ Used by SortieManager
 			ally: battleData.api_nowhps.slice(1,7),
 			enemy: battleData.api_nowhps.slice(7,13)
 		};
+		if (typeof battleData.api_nowhps_combined != "undefined") {
+			beginHPs.ally = beginHPs.ally.concat(battleData.api_nowhps_combined.slice(1,7));
+			beginHPs.enemy = beginHPs.enemy.concat(battleData.api_nowhps_combined.slice(7,13));
+		}
 		this.dayBeginHPs = beginHPs;
 		
 		this.detection = KC3Meta.detection( battleData.api_search[0] );
@@ -366,21 +392,39 @@ Used by SortieManager
 				dameConCode = KC3SortieManager.isPvP()
 					? [0,0,0, 0,0,0]
 					: fleet.getDameConCodes();
-				result = DA.analyzeBattleJS(dameConCode, battleData);
-				// console.debug("Damage analysis result", result);
-
+				
 				var endHPs = {
 					ally: beginHPs.ally.slice(),
 					enemy: beginHPs.enemy.slice()
 				};
-
-				// Update enemy ships
-				for (i = 7; i < 13; i++) {
-					this.enemyHP[i-7] = result.enemy[i-7];
-					endHPs.enemy[i-7] = result.enemy[i-7] ? result.enemy[i-7].hp : -1;
-					this.enemySunk[i-7] = result.enemy[i-7] ? result.enemy[i-7].sunk : true;
+				
+				// enemy combined fleet
+				if (this.eships.length > 7) {
+					result = DA.analyzeAbyssalCTFBattleJS(dameConCode, battleData);
+					
+					// Update enemy ships
+					for (i = 7; i < 13; i++) {
+						this.enemyHP[i-7] = result.enemyMain[i-7];
+						endHPs.enemy[i-7] = result.enemyMain[i-7] ? result.enemyMain[i-7].hp : -1;
+						this.enemySunk[i-7] = result.enemyMain[i-7] ? result.enemyMain[i-7].sunk : true;
+					}
+					for (i = 13; i < 19; i++) {
+						this.enemyHP[i-7] = result.enemyEscort[i-13];
+						endHPs.enemy[i-7] = result.enemyEscort[i-13] ? result.enemyEscort[i-13].hp : -1;
+						this.enemySunk[i-7] = result.enemyEscort[i-13] ? result.enemyEscort[i-13].sunk : true;
+					}
+				} else {
+					// regular day-battle
+					result = DA.analyzeBattleJS(dameConCode, battleData);
+					
+					// Update enemy ships
+					for (i = 7; i < 13; i++) {
+						this.enemyHP[i-7] = result.enemy[i-7];
+						endHPs.enemy[i-7] = result.enemy[i-7] ? result.enemy[i-7].hp : -1;
+						this.enemySunk[i-7] = result.enemy[i-7] ? result.enemy[i-7].sunk : true;
+					}
 				}
-
+				
 				// update player ships
 				shipNum = fleet.countShips();
 				for(i = 0; i < shipNum; i++) {
@@ -545,7 +589,13 @@ Used by SortieManager
 			fleet = PlayerManager.fleets[fleetId - 1];
 			// damecon ignored for PvP
 			dameConCode = KC3SortieManager.isPvP() ? [0,0,0, 0,0,0] : fleet.getDameConCodes();
-			result = DA.analyzeNightBattleJS(dameConCode, nightData); 
+			// enemy combined fleet
+			if (this.eships.length > 7) {
+				result = DA.analyzeAbyssalCTFNightBattleJS(dameConCode, battleData);
+			} else {
+				// regular yasen
+				result = DA.analyzeNightBattleJS(dameConCode, nightData); 
+			}
 		}
 		var endHPs = {
 			ally: beginHPs.ally.slice(),

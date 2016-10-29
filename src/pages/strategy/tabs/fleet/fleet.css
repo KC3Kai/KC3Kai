@@ -16,9 +16,7 @@
 }
 .tab_fleet .fleet_control {
 	width:680px;
-	background:#def;
 	margin: 10px 0px 5px 0px;
-	border-radius:12px;
 	padding: 10px;
 }
 .tab_fleet .fleet_control .fleet_type_field {
@@ -44,23 +42,17 @@
 --------------------------------*/
 .tab_fleet .fleet_box {
 	width:680px;
-	height:215px;
-	background:#def;
 	margin:0px 0px 5px 0px;
-	border-radius:12px;
 }
 /* Info */
 .tab_fleet .fleet_info {
 	width:680px;
 	height:35px;
-	/*background:#cfc;*/
 }
 .tab_fleet .fleet_name {
 	width:180px;
 	height:25px;
 	line-height:25px;
-	background:#fff;
-	border-radius:8px;
 	float:left;
 	margin:5px 0px 0px 5px;
 	padding:0px 0px 0px 5px;
@@ -71,7 +63,6 @@
 	height:25px;
 	line-height:25px;
 	float:left;
-	/*background:#fcf;*/
 	margin:5px 0px 0px 10px;
 }
 .tab_fleet .detail_icon {
@@ -88,15 +79,13 @@
 .detail_field {
 	width:85px;
 	height:25px;
-	background:#fff;
-	border-radius:8px;
 	float:left;
 	margin:0px 5px 0px 0px;
 	padding:0px 0px 0px 5px;
 	font-weight:bold;
 }
 .detail_field.incomplete {
-	background:#fcc;
+	
 }
 .detail_field.detail_air {
 	width:110px;
@@ -105,70 +94,43 @@
 	width:40px;
 	height:25px;
 	float:left;
-	/*background:#ffc;*/
 }
 /* Ships */
 .tab_fleet .fleet_ships {
 	width:672px;
 	height:175px;
 	margin:0px 4px;
-	/*background:#ffc;*/
 }
 
 /* SHIP BOX
 --------------------------------*/
 .tab_fleet .fleet_ship {
 	width:110px;
-	height:165px;
 	float:left;
-	background:#ffc;
-	border-radius:8px;
-	margin:10px 2px 0px 0px;
 }
 .tab_fleet .fleet_ship .ship_type {
-	width:50px;
 	height:21px;
 	line-height:21px;
 	position:relative;
-	margin:-10px auto 0px;
-	background:#79b;
-	border:1px solid #369;
 	font-weight:bold;
 	font-size:14px;
 	text-align:center;
-	border-radius:6px;
-	color:#fff;
 }
 .tab_fleet .fleet_ship .ship_pic {
-	width:40px;
-	height:40px;
 	float:left;
-	margin:3px 0px 0px 10px;
-	background:#ccc;
-	border-radius:20px;
 }
 .tab_fleet .fleet_ship .ship_pic img {
-	width:40px;
-	height:40px;
+	
 }
+
 .tab_fleet .fleet_ship .ship_lv {
-	width:50px;
-	height:40px;
-	float:left;
-	margin:3px 0px 0px 5px;
+	
 }
 .tab_fleet .fleet_ship .ship_lv_lbl {
-	width:20px;
-	height:40px;
-	line-height:40px;
-	font-size:12px;
-	color:#777;
 	float:left;
 }
 .tab_fleet .fleet_ship .ship_lv_val {
 	width:30px;
-	height:40px;
-	line-height:40px;
 	font-size:16px;
 	font-weight:bold;
 	float:left;
@@ -184,7 +146,6 @@
 	white-space:nowrap;
 	font-size:12px;
 	font-weight:bold;
-	color:#00f;
 }
 .tab_fleet .fleet_ship .ship_gear {
 	width:110px;

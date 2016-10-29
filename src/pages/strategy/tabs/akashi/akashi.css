@@ -27,14 +27,8 @@
 	width:90px;
 	height:24px;
 	margin:0px 5px 0px 0px;
-	background:#def;
 	float:left;
 	text-align:center;
-	color:#0033CC;
-}
-.tab_akashi .weekday.active {
-	color:#def;
-	background:#0033CC;
 }
 
 /* EQUIPMENT
@@ -45,15 +39,11 @@
 .tab_akashi .equipment {
 	width:680px;
 	line-height:24px;
-	background:#def;
 	margin:0px 0px 5px 0px;
-	border-radius:8px;
 	padding:5px;
 }
-
 .tab_akashi .equipment.disabled {
-	opacity:0.4;
-	background:#fcc;
+	
 }
 
 .tab_akashi .equipment .eq_icon {

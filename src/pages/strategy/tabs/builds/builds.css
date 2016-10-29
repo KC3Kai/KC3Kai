@@ -9,10 +9,7 @@
 }
 
 .tab_builds .legend {
-	width:700px;
-	background:#f0f5ff;
-	padding:5px 10px;
-	border-bottom:1px solid #369;
+	
 }
 .tab_builds .legend_item {
 	width:120px;
@@ -25,18 +22,6 @@
 	margin:3px 5px 0px 3px;
 	float:left;
 	border:1px solid #555;
-}
-.tab_builds .color_fuel {
-	background:#AAFFAA;
-}
-.tab_builds .color_ammo {
-	background:#999900;
-}
-.tab_builds .color_steel {
-	background:#999999;
-}
-.tab_builds .color_baux {
-	background:#FF9933;
 }
 .tab_builds .legend_icon {
 	width:20px;
@@ -61,13 +46,11 @@
 	height:24px;
 	line-height:24px;
 	margin:0px 0px 2px 0px;
-	background:#eee;
 	white-space:nowrap;
 }
 .tab_builds .build_item .build_field {
 	float:left;
 	height:24px;
-	/*background:#ccf;*/
 }
 .tab_builds .build_item .build_id {
 	width:50px;
@@ -93,18 +76,6 @@
 	margin:0px 5px 0px 0px;
 	text-align:center;
 }
-.tab_builds .build_item .build_rsc1 {
-	background:#C1FFC1;
-}
-.tab_builds .build_item .build_rsc2 {
-	background:#DFD7B3;
-}
-.tab_builds .build_item .build_rsc3 {
-	background:#ccc;
-}
-.tab_builds .build_item .build_rsc4 {
-	background:#FFDCA8;
-}
 .tab_builds .build_item .build_time {
 	width:140px;
 	font-size:11px;
@@ -113,11 +84,7 @@
 /* PAGINATION
 --------------------------------*/
 .tab_builds .build_pages {
-	width:700px;
-	margin:0px 0px 10px 0px;
-	background:#f0f5ff;
-	padding:5px 10px 0px;
-	border-bottom:1px solid #369;
+	margin-bottom:10px;
 }
 .tab_builds .build_pages .pagination {
 	margin:0px;

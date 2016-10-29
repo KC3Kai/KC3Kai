@@ -8,3 +8,6 @@
 .i18n {
 	visibility:hidden;
 }
+.xhidden {
+	display: none;
+}

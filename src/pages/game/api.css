@@ -7,6 +7,38 @@ body {
 	background-color:#def;
 }
 
+.api_link_notice {
+	width:800px;
+	padding:5px 10px;
+	font-size:14px;
+	font-weight:bold;
+	border:1px solid #f55;
+	background:#faa;
+	margin:10px auto;
+	display:none;
+	position:relative;
+}
+.api_notice_close {
+	position:absolute;
+	top:5px;
+	right:5px;
+	width:14px;
+	height:14px;
+	line-height:14px;
+	font-size:14px;
+}
+.api_notice_title {
+	font-size:16px;
+	color:#c22;
+	margin:0px 0px 10px 0px;
+}
+.api_notice_desc {
+	font-size:13px;
+}
+.api_link_notice ul {
+	font-size:13px;
+}
+
 .box-wrap {
 	width:800px;
 	height:100%;
@@ -347,7 +379,7 @@ body {
 }
 .ol_quest .tracking {
 	width:60px;
-	height:60px;
+	height:40px;
 	line-height:60px;
 	margin:2px 0px 0px 0px;
 	float:left;
@@ -359,8 +391,8 @@ body {
 	opacity:0.80;
 }
 .ol_quest .tracking.small {
-	line-height:15px;
-	font-size:13px;
+	line-height:10px;
+	font-size:11px;
 }
 
 
