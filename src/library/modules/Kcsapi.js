@@ -1006,6 +1006,7 @@ Previously known as "Reactor"
 			// Force to mark quest as complete
 			KC3QuestManager.isOpen( quest, false );
 			KC3QuestManager.isActive( quest, false );
+			KC3QuestManager.save();
 			
 			// Compute bonuses for ledger
 			bonuses.forEach(function(x){
