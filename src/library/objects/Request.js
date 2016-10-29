@@ -74,7 +74,16 @@ Executes processing and relies on KC3Network for the triggers
 	KC3Request.prototype.validateData = function(){
 		// If gameStatus is not 1. Game API returns 1 if complete success
 		if(this.gameStatus != 1){
-			console.error(this.gameStatus, this.response);
+			console.error("Error Game Status", this.gameStatus, this.response);
+			
+			// Error 201
+			if (parseInt(this.gameStatus, 10) === 201) {
+				KC3Network.trigger("Bomb201", {
+					title: KC3Meta.term("Bomb201Title"),
+					message: KC3Meta.term("Bomb201Message")
+				});
+				return false;
+			}
 			
 			// If it fails on "api_start2" which is the first API call
 			if(this.call == "api_start2"){

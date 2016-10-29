@@ -14,6 +14,7 @@ Listens to network history and triggers callback if game events happen
 			GameStart: [],
 			CatBomb: [],
 			APIError: [],
+			Bomb201: [],
 			GameUpdate: [],
 			HomeScreen: [],
 			HQ: [],
