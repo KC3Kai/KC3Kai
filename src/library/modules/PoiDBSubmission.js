@@ -186,6 +186,10 @@
 			dropShipData.rank = response.api_win_rank;
 			dropShipData.teitokuLv = PlayerManager.hq.level;
 			dropShipData.enemyShips = response.api_ship_id.slice(1);
+			dropShipData.itemId = (typeof response.api_get_useitem === "undefined")
+				? -1
+				: response.api_get_useitem.api_useitem_id;
+
 			console.log( "[dropship] prepared: " + JSON.stringify( dropShipData ) );
 			this.sendData( "drop_ship", dropShipData );
 			this.state = null;

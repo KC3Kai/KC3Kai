@@ -21,6 +21,9 @@ var autoFocus = 0;
 var critAnim = false;
 var taihaStatus = false;
 
+// Screenshot status
+var isTakingScreenshot = false;
+
 // Idle time check
 /*
   variables explanation:
@@ -181,7 +184,14 @@ $(document).on("keydown", function(event){
 			
 		// F9: Screenshot
 		case(120):
-			(new KCScreenshot()).start("Auto", $(".box-wrap"));
+			if (isTakingScreenshot) return;
+			isTakingScreenshot = true;
+			
+			(new KCScreenshot())
+				.setCallback(function(){
+					isTakingScreenshot = false;
+				})
+				.start("Auto", $(".box-wrap"));
 			return false;
 		
 		// F10: Clear overlays
@@ -313,9 +323,17 @@ var interactions = {
 	
 	// Screenshot triggered, capture the visible tab
 	screenshot :function(request, sender, response){
+		if (isTakingScreenshot) return;
+		isTakingScreenshot = true;
+		
 		// ~Please rewrite the screenshot script
-		(new KCScreenshot()).start(request.playerName, $(".box-wrap"));
-		response({success:true});
+		(new KCScreenshot())
+			.setCallback(function(){
+				response({success:true});
+				isTakingScreenshot = false;
+			})
+			.start(request.playerName, $(".box-wrap"));
+		return true;
 	},
 	
 	// Fit screen
@@ -333,7 +351,7 @@ var interactions = {
 	},
 	
 	// Taiha Alert Start
-	taihaAlertStart :function(request, sender, response){
+	taihaAlertStart :function(request, sender, response, callback){
 		ConfigManager.load();
 		taihaStatus = true;
 		
@@ -347,18 +365,24 @@ var interactions = {
 				$(".taiha_red").toggleClass("anim2");
 			}, 500);
 			
-			$(".taiha_blood").show();
-			$(".taiha_red").show();
+			$(".taiha_blood").show(0, function(){
+				$(".taiha_red").show(0, function(){
+					(callback || function(){})();
+				});
+			});
 		}
 	},
 	
 	// Taiha Alert Stop
-	taihaAlertStop :function(request, sender, response){
+	taihaAlertStop :function(request, sender, response, callback){
 		taihaStatus = false;
 		$(".box-wrap").removeClass("critical");
 		if(critAnim){ clearInterval(critAnim); }
-		$(".taiha_blood").hide();
-		$(".taiha_red").hide();
+		$(".taiha_blood").hide(0, function(){
+			$(".taiha_red").hide(0, function(){
+				(callback || function(){})();
+			});
+		});
 	},
 	
 	// Show subtitles

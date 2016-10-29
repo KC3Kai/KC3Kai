@@ -163,6 +163,9 @@ Used by SortieManager
 		this.item = [];
 		this.icon = [];
 		this.amount = [];
+		if (typeof nodeData.api_itemget == "object" && typeof nodeData.api_itemget.api_id != "undefined") {
+			nodeData.api_itemget = [nodeData.api_itemget];
+		}
 		nodeData.api_itemget.forEach(function(itemget){
 			var icon_id = itemget.api_icon_id;
 			var getcount = itemget.api_getcount;
@@ -366,7 +369,14 @@ Used by SortieManager
 				dameConCode = KC3SortieManager.isPvP()
 					? [0,0,0, 0,0,0]
 					: fleet.getDameConCodes();
-				result = DA.analyzeBattleJS(dameConCode, battleData);
+				
+				// enemy combined fleet
+				if (this.eships.length > 7) {
+					result = DA.analyzeAbyssalCTFBattleJS(dameConCode, battleData);
+				} else {
+					// regular day-battle
+					result = DA.analyzeBattleJS(dameConCode, battleData);
+				}
 				// console.debug("Damage analysis result", result);
 
 				var endHPs = {
@@ -545,7 +555,13 @@ Used by SortieManager
 			fleet = PlayerManager.fleets[fleetId - 1];
 			// damecon ignored for PvP
 			dameConCode = KC3SortieManager.isPvP() ? [0,0,0, 0,0,0] : fleet.getDameConCodes();
-			result = DA.analyzeNightBattleJS(dameConCode, nightData); 
+			// enemy combined fleet
+			if (this.eships.length > 7) {
+				result = DA.analyzeAbyssalCTFNightBattleJS(dameConCode, battleData);
+			} else {
+				// regular yasen
+				result = DA.analyzeNightBattleJS(dameConCode, nightData); 
+			}
 		}
 		var endHPs = {
 			ally: beginHPs.ally.slice(),

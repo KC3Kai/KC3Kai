@@ -21,6 +21,9 @@ var autoFocus = 0;
 var critAnim = false;
 var taihaStatus = false;
 
+// Screenshot status
+var isTakingScreenshot = false;
+
 // Show game screens
 function ActivateGame(){
 	waiting = false;
@@ -47,6 +50,11 @@ $(document).on("ready", function(){
 	KC3QuestManager.load();
 	KC3Database.init();
 	KC3Translation.execute();
+	
+	// API Flash Notice
+	if(typeof localStorage.read_api_notice == "undefined") {
+		$(".api_link_notice").show();
+	}
 	
 	// Apply interface configs
 	$(".box-wrap").css("margin-top", ConfigManager.api_margin+"px");
@@ -105,6 +113,12 @@ $(document).on("ready", function(){
 			ActivateGame();
 	});
 	
+	// I've read the API Link notice
+	$(".api_notice_close").on('click', function(){
+		localStorage.read_api_notice = 1;
+		$(".api_link_notice").hide();
+	});
+	
 	$(".play_btn").data('play',!ConfigManager.api_mustPanel);
 	
 	// Exit confirmation
@@ -143,7 +157,14 @@ $(document).on("keydown", function(event){
 			
 		// F9: Screenshot
 		case(120):
-			(new KCScreenshot()).start("Auto", $(".box-wrap"));
+			if (isTakingScreenshot) return;
+			isTakingScreenshot = true;
+			
+			(new KCScreenshot())
+				.setCallback(function(){
+					isTakingScreenshot = false;
+				})
+				.start("Auto", $(".box-wrap"));
 			return false;
 		
 		// F10: Clear overlays
@@ -258,9 +279,17 @@ var interactions = {
 	
 	// Screenshot triggered, capture the visible tab
 	screenshot :function(request, sender, response){
+		if (isTakingScreenshot) return;
+		isTakingScreenshot = true;
+		
 		// ~Please rewrite the screenshot script
-		(new KCScreenshot()).start(request.playerName, $(".box-wrap"));
-		response({success:true});
+		(new KCScreenshot())
+			.setCallback(function(){
+				response({success:true});
+				isTakingScreenshot = false;
+			})
+			.start(request.playerName, $(".box-wrap"));
+		return true;
 	},
 	
 	// Fit screen
