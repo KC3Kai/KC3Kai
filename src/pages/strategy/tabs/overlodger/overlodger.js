@@ -491,8 +491,7 @@
 				self = this,
 				mdb  = localStorage.getObject('maps');
 			
-			console.log(typeof mdb);
-			if (typeof mdb == "undefined" || mdb == null) {
+			if (typeof mdb == "undefined" || mdb === null) {
 				return false;
 			}
 			
