@@ -14,7 +14,8 @@
 	var selectedExpedition = 1;
 	var plannerIsGreatSuccess = false;
 	var showCombinedFleetBars = true;
-
+	var isTakingScreenshot = false;
+	
 	// a flag used by Fleet & ExpeditionStart to indicate
 	// whether a fleet info update is triggered because of
 	// sending out fleets.
@@ -38,7 +39,7 @@
 	// UI Updating Timer
 	var uiTimerHandler = 0;
 	var uiTimerLastUpdated = 0;
-
+	
 	// Experience Calculation
 	var mapexp = [], maplist = {}, rankFactors = [0, 0.5, 0.7, 0.8, 1, 1, 1.2],
 		newGoals, grindData, expLeft, expPerSortie;
@@ -456,14 +457,18 @@
 
 		// Screenshot buttons
 		$(".module.controls .btn_ss1").on("click", function(){
-			$(this).hide();
+			if (isTakingScreenshot) return;
+			isTakingScreenshot = true;
+			
+			$(this).addClass("active");
 
 			// Tell service to pass a message to gamescreen on inspected window to get a screenshot
 			(new RMsg("service", "screenshot", {
 				tabId: chrome.devtools.inspectedWindow.tabId,
 				playerName: PlayerManager.hq.name
 			}, function(response){
-				$(".module.controls .btn_ss1").show();
+				$(".module.controls .btn_ss1").removeClass("active");
+				isTakingScreenshot = false;
 			})).execute();
 		});
 
