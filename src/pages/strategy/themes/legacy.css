@@ -62,9 +62,6 @@ body {
 	width:100px;
 	margin:0px 0px 10px 0px;
 }
-#menu .submenu.dev-only {
-    display:none;
-}
 #menu .submenu .title {
 	width:100px;
 	height:18px;
