@@ -50,6 +50,7 @@
 				var gearClickFunc = function(e){
 					KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 				};
+				
 				for(ctr in response){
 					thisBuild = response[ctr];
 					

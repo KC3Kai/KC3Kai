@@ -1,0 +1,1236 @@
+body {
+	background:#414141;
+	display:block !important;
+	color:#cccccc;
+}
+#wrapper {
+	width:800px;
+	margin:0px auto;
+}
+#error {
+	width:800px;
+	margin:10px 0px 20px 0px;
+	display:none;
+}
+#body {
+	width:800px;
+	margin:10px 0px 10px 0px;
+}
+.factory {
+	display:none;
+}
+a:hover {
+	color:#ffffff;
+}
+
+/* COLORS
+-------------------------------*/
+.fcolor1 { color:#ffffff; }
+.fcolor2 { color:#cccccc; }
+.fcolor3 { color:#444444; }
+.fcolor4 { color:#333333; }
+.fcolor5 { color:#000000; }
+
+.fscolor1 { color:#ffffff; }
+.fscolor2 { color:#d7d7d7; }
+.fscolor3 { color:#cccccc; }
+
+.bcolor1 { background-color:#000000; }
+.bcolor2 { background-color:#333333; }
+.bcolor3 { background-color:#444444; }
+.bcolor4 { background-color:#cccccc; }
+.bcolor5 { background-color:#ffffff; }
+
+.bscolor1 { background-color:#333333; }
+.bscolor2 { background-color:#555555; }
+.bscolor3 { background-color:#161616; }
+.bscolor4 { background-color:#121212; }
+
+/* COLORS FRAMEWORK
+-------------------------------*/
+.tableCell {
+	color:#aaa;
+	background:#303030;
+}
+.sectionBox {
+	background:#131313;
+}
+.sectionBoxField {
+	background:#131313;
+}
+
+/* MENU TABS
+-------------------------------*/
+#menu {
+	width:100px;
+	float:left;
+}
+#menu .logo {
+	width:100px;
+	height:100px;
+}
+#menu .logo img {
+	width:80px;
+	height:80px;
+	margin:10px;
+}
+#menu .submenu {
+	width:100px;
+	margin:0px 0px 10px 0px;
+}
+#menu .submenu.dev-only {
+    display:none;
+}
+#menu .submenu .title {
+	width:100px;
+	height:18px;
+	line-height:18px;
+	font-size:14px;
+	font-weight:bold;
+	text-align:center;
+	margin:0px 0px 5px 0px;
+	color:#ffffff;
+}
+#menu .submenu ul.menulist {
+	list-style:none;
+	margin:0px;
+	padding:0px;
+	font-size:12px;
+	font-weight:bold;
+	white-space:nowrap;
+}
+#menu .submenu ul.menulist li {
+	width:100px;
+	height:24px;
+	line-height:24px;
+	margin:0px 0px 1px 0px;
+	padding:0px 0px 0px 5px;
+	background:#2e2e2e;
+	color:#cccccc;
+	border-right:0px none;
+	cursor:pointer;
+}
+#menu .submenu ul.menulist li.active {
+	width:100px;
+	background:#222222;
+	color:#ffcc00;
+	position:relative;
+}
+#menu .submenu ul.menulist li.disabled {
+	opacity:0.3;
+	font-size:4px;
+	height:10px;
+	line-height:10px;
+}
+
+/* CONTENT
+-------------------------------*/
+#content {
+	width:700px;
+	min-height:1300px;
+	float:left;
+	background:#222222;
+	overflow:hidden;
+	margin:0px 0px 60px 0px;
+}
+#contentHtml {
+	width:700px;
+}
+
+/* COMMONS: TITLE
+-------------------------------*/
+.page_title {
+	width:700px;
+	font-size:20px;
+	height:34px;
+	line-height:34px;
+	padding:0px 0px 0px 10px;
+	margin:0px 0px 10px 0px;
+	color:#ffffff;
+}
+/* COMMONS: HELP BUTTON
+-------------------------------*/
+.page_help_btn {
+	height:28px;
+	line-height:28px;
+	text-align:right;
+	float:right;
+	margin:3px 5px 0px 0px;
+	font-size:12px;
+	padding:0px 10px 0px 5px;
+	border-radius:8px;
+}
+.page_help_btn:hover {
+	background:#000000;
+}
+.page_help_btn span {
+	width:14px;
+	height:14px;
+	line-height:14px;
+	margin:4px 3px 3px 3px;
+	float:left;
+	background:#69c;
+	border-radius:9px;
+	font-weight:bold;
+	font-size:14px;
+	text-align:center;
+	color:#fff;
+	font-style:normal;
+	display:block;
+}
+/* COMMONS: HELP BOX
+-------------------------------*/
+.page_help {
+	width:660px;
+	min-height:200px;
+	background:#333;
+	background-position:bottom right;
+	background-repeat:no-repeat;
+	padding:5px 10px;
+	display:none;
+	margin:0px 0px 10px 20px;
+}
+.page_help .help_q {
+	height:16px;
+	line-height:16px;
+	font-size:12px;
+	font-weight:bold;
+	margin:0px 0px 3px 0px;
+	color:#ffffff;
+}
+.page_help .help_a {
+	line-height:14px;
+	font-size:12px;
+	margin:0px 0px 10px 10px;
+	color:#9e9e9e;
+}
+
+.page_help .help_more {
+	height:16px;
+	line-height:16px;
+	font-size:12px;
+	font-weight:bold;
+	margin:0px 0px 0px 0px;
+	text-align:right;
+}
+.page_help .help_more a {
+	color:#999999;
+}
+/* COMMONS: HELP
+-------------------------------*/
+.page_panel {
+	width:680px;
+	min-height:30px;
+	background:#131313;
+	padding:8px 10px 5px 10px;
+	margin:0px 0px 0px 10px;
+	border-bottom:1px solid #444444;
+	color:#cccccc;
+}
+.page_panel ul.pagination {
+	margin:0px;
+}
+.page_panel ul.pagination li a {
+	border:0px none;
+	background:#333333;
+	color:#fff;
+	margin:0px 1px 0px;
+}
+.page_panel ul.pagination li a:hover {
+	background:#000000;
+	color:#ffcc00;
+}
+.page_padding {
+	width:700px;
+	padding:0px 10px 0px;
+}
+/* COMMONS: SECTIONS
+-------------------------------*/
+.page_section {
+	height:26px;
+	line-height:24px;
+	font-size:18px;
+	border-bottom:1px solid #444444;
+	color:#ccc;
+	margin:10px 0px 10px 0px;
+}
+.page_body {
+	margin:0px 0px 20px 0px;
+}
+/* COMMONS: FLOAT TOOLBAR
+-------------------------------*/
+.float_toolbar {
+	position:fixed;
+	bottom:5px;
+	right:0px;
+	text-decoration:none;
+	color:#ffffff;
+	font-size:12px;
+	font-weight:bold;
+	display:none;
+}
+.float_toolbar .back_to_top {
+	background-color:#1e1e1e;
+	border-left: 1px solid #000000;
+	border-top: 1px solid #000000;
+	border-bottom: 1px solid #000000;
+	border-radius:10px 0px 0px 10px;
+	padding:5px 5px 5px 5px;
+	margin:0px 0px 3px 0px;
+}
+.float_toolbar .back_to_top:hover {
+	background-color:#000000;
+}
+.float_toolbar .reload {
+	background-color:#1e1e1e;
+	border-left: 1px solid #000000;
+	border-top: 1px solid #000000;
+	border-bottom: 1px solid #000000;
+	border-radius:10px 0px 0px 10px;
+	padding:5px 5px 5px 5px;
+	margin:0px 0px 3px 0px;
+}
+.float_toolbar .reload:hover {
+	background-color:#000000;
+}
+
+/* OVERRIDES
+-------------------------------*/
+/* Profile */
+.tab_profile .stat_head {
+	border-radius:0px !important;
+}
+.tab_profile .stat_sortie .stat_head {
+	background:#5b0202 !important;
+}
+.tab_profile .stat_pvp .stat_head {
+	background:#004100 !important;
+}
+.tab_profile .stat_exped .stat_head {
+	background:#1b1b6b !important;
+}
+/* Resources */
+.tab_resources .legend_color {
+	border:1px solid #000000;
+}
+/* Consumables */
+.tab_consumables .legend_color {
+	border:1px solid #000000;
+}
+/* Showcase */
+.tab_showcase .stype_box {
+	height:128px !important;
+	border-radius:0px !important;
+	background:none !important;
+}
+.tab_showcase .stype_title {
+	background:none !important;
+	font-size:14px !important;
+	color:#fff !important;
+	height:24px !important;
+	line-height:24px !important;
+}
+.tab_showcase .stype_contents {
+	padding:2px !important;
+}
+.tab_showcase .show_ship {
+	width:64px !important;
+	height:100px !important;
+	margin:0px 0px 2px 2px !important;
+	border-radius:0px !important;
+	position:relative;
+	padding:0px !important;
+	pointer-events: none;
+}
+.tab_showcase .show_ship .ship_pic {
+	width:64px !important;
+	height:100px !important;
+	position:absolute;
+	top:0px;
+	left:0px;
+	border-radius:0px !important;
+	margin:0px !important;
+}
+.tab_showcase .show_ship .ship_pic img {
+	image-rendering: auto;
+	width:120px !important;
+	height:120px !important;
+	position:relative;
+	margin:-15px 0px 0px -28px;
+	-webkit-mask-image:-webkit-linear-gradient(top, rgba(34,34,34,1) 40%,rgba(34,34,34,0) 90%);
+}
+.tab_showcase .show_ship .ship_name {
+	display:none;
+}
+.tab_showcase .show_ship .ship_level {
+	width:64px;
+	text-align: center;
+	position:absolute;
+	bottom:0px;
+	left:0px;
+	height:24px;
+	line-height:24px;
+	font-size:14px;
+	/*font-weight:bold;*/
+	color:#fff;
+	text-shadow:2px 2px 3px #000;
+}
+.tab_showcase .show_ship .ship_mods {
+	display:none;
+}
+.tab_showcase .show_gear .gear_stat_icon img {
+	-webkit-filter: invert(100%);
+}
+/* Ledger */
+.tab_overlodger .filterBox {
+	width:120px;
+	margin:0px !important;
+	background:none;	
+}
+.tab_overlodger .filterBox.filter_base {
+	width: 180px;
+}
+.tab_overlodger .filterBox .filterRangeLen input {
+	background:#000000;
+}
+.tab_overlodger .filterBox .filterRangeLen input[disabled] {
+	color:#555555;
+}
+.tab_overlodger .filterBox.filter_reset button {
+	border:1px solid #444444;
+	background:#121212;
+	height:24px;
+	margin:0px 0px 4px 0px;
+}
+.tab_overlodger .filterBox.filter_reset button:hover {
+	background:#000000;
+}
+.tab_overlodger .lodger-statistics {
+	
+}
+.tab_overlodger .lodger-data {
+	border-bottom:1px solid #555555;
+	margin:0px !important;
+	padding:10px 0px 10px 0px !important;
+}
+.tab_overlodger .lodger-data .info .rating {
+	display:none;
+}
+.tab_overlodger .lodger-data .info .type {
+	font-size:13px !important;
+	color:#fff;
+}
+.tab_overlodger .lodger-data .bar {
+	height: 6px;
+}
+.tab_overlodger .lodger-data .bar.INV,
+.tab_overlodger .lodger-data .bar.NM {
+	background-color: #dddddd;
+	margin:5px 0px 0px 0px !important;
+}
+.tab_overlodger .lodger-data .materials .material,
+.tab_overlodger .lodger-data .materials .material.over:before {
+	
+}
+/* Ship List */
+.tab_ships .massSelect .hover {
+	color:#ffffff
+}
+.tab_ships .massSelect .hover.on {
+	color:#ffcc00;
+	background: #5f5f5f;
+	border-radius:0px !important;
+}
+.tab_ships .massSelect dl{
+	width: 218px !important;
+}
+.tab_ships .ship_header .ship_stat img {
+	-webkit-filter: invert(100%);
+}
+.tab_ships .filters .ship_filter_type:hover {
+	background:#555555;
+}
+.tab_ships .advanced_sorter .adv_sorter:hover {
+	background:#555555;
+}
+.tab_ships .advanced_sorter .filter_box {
+	border:1px solid #888888;
+}
+.tab_ships .advanced_sorter .filter_check {
+	background:#ffffff;
+}
+.tab_ships .ship_filter_type .filter_box {
+	border:1px solid #888888;
+}
+.tab_ships .ship_filter_type .filter_check {
+	background:#ffffff;
+}
+.tab_ships .ship_header {
+	margin:10px 0px 5px 0px !important;
+}
+.tab_ships .ship_list {
+	margin:0px 0px 5px 0px !important;
+}
+.tab_ships .ship_item.odd .ship_field {
+	background:#303030;
+}
+.tab_ships .ship_item.even .ship_field {
+	/*background:#404040;*/
+	background:#303030;
+}
+.tab_ships .ship_item:hover .ship_field {
+	background:#000000;
+}
+.tab_ships .page_help .ship_onfleet-color1 {
+	padding:0px 5px;
+	border:1px solid #000;
+}
+.tab_ships .page_help .ship_onfleet-color2 {
+	padding:0px 5px;
+	border:1px solid #000;
+}
+.tab_ships .page_help .ship_onfleet-color3 {
+	padding:0px 5px;
+	border:1px solid #000;
+}
+.tab_ships .page_help .ship_onfleet-color4 {
+	padding:0px 5px;
+	border:1px solid #000;
+}
+.tab_ships .ship_onfleet-color1 {
+	background: #2e4a79 !important; color:#fff;
+}
+.tab_ships .ship_onfleet-color2 {
+	background: #527e51 !important; 
+	color:#fff;
+}
+.tab_ships .ship_onfleet-color3 {
+	background: #878533 !important;
+	 color:#fff;
+ }
+.tab_ships .ship_onfleet-color4 {
+	background: #946e3d !important; 
+	color:#fff;
+}
+.tab_ships .ship_item .ship_morale.sparkled {
+	background:#b1b101;
+	color:#000;
+}
+.tab_ships .ship_item .ship_fp.max {
+	background:#833232;
+}
+.tab_ships .ship_item .ship_tp.max {
+	background:#073e78;
+}rgb(198, 191, 130)
+.tab_ships .ship_item .ship_yasen.max {
+	background:#555555;
+	color:#FFFFFF;
+}
+.tab_ships .ship_item .ship_aa.max {
+	background:#935b07;
+}
+.tab_ships .ship_item .ship_ar.max {
+	background:#947600;
+}
+.tab_ships .ship_item.odd .ship_field.ship_lk{
+	background:#116311;
+}
+.tab_ships .ship_item.even .ship_field.ship_lk {
+	background:#116311;
+}
+/* Construction */
+.tab_builds .build_item {
+	background:#333333;
+	color:#ffffff;
+}
+.tab_builds .build_pages {
+	padding:8px 10px 5px 10px;
+}
+.tab_builds .build_item .build_rsc {
+	font-weight:bold;
+	font-size:16px
+}
+.tab_builds .color_fuel {
+	background:#92c992;
+}
+.tab_builds .color_ammo {
+	background:#dec558;
+}
+.tab_builds .color_steel {
+	background:#cccccc;
+}
+.tab_builds .color_baux {
+	background:#b68f55;
+}
+.tab_builds .build_item .build_rsc1 {
+	color:#92c992;
+}
+.tab_builds .build_item .build_rsc2 {
+	color:#dec558;
+}
+.tab_builds .build_item .build_rsc3 {
+	color:#cccccc;
+}
+.tab_builds .build_item .build_rsc4 {
+	color:#b68f55;
+}
+/* LSC */
+.tab_lscs .build_item {
+	background:#333333;
+	color:#ffffff;
+}
+.tab_lscs .build_pages {
+	padding:8px 10px 5px 10px;
+}
+.tab_lscs .build_item .build_rsc {
+	font-weight:bold;
+	font-size:16px
+}
+.tab_lscs .color_fuel {
+	background:#92c992;
+}
+.tab_lscs .color_ammo {
+	background:#dec558;
+}
+.tab_lscs .color_steel {
+	background:#cccccc;
+}
+.tab_lscs .color_baux {
+	background:#b68f55;
+}
+.tab_lscs .build_item .build_id {
+	width:45px !important;
+}
+.tab_lscs .build_item .build_rsc1 {
+	width:50px !important;
+	margin:0px !important;
+	color:#92c992;
+}
+.tab_lscs .build_item .build_rsc2 {
+	width:50px !important;
+	margin:0px !important;
+	color:#dec558;
+}
+.tab_lscs .build_item .build_rsc3 {
+	width:50px !important;
+	margin:0px !important;
+	color:#cccccc;
+}
+.tab_lscs .build_item .build_rsc4 {
+	width:50px !important;
+	margin:0px !important;
+	color:#b68f55;
+}
+.tab_lscs .build_item .build_devmat {
+	color:#009999;
+	margin:0px 10px 0px 0px !important;
+}
+/* Docking */
+.tab_docking .ship_item.odd .ship_field {
+	background:#303030;
+}
+.tab_docking .ship_item.even .ship_field {
+	background:#303030;
+}
+.tab_docking .ship_item:hover .ship_field {
+	background:#000000;
+}
+.tab_docking .ship_item .ship_status {
+	color:#ffffff;
+}
+.tab_docking .ship_item .ship_hp_box {
+	background:#636363;
+	border:1px solid #000000;
+	border-radius:0px;
+	height:8px;
+	margin:6px 3px 0px;
+	overflow:hidden;
+}
+.tab_docking .ship_item .ship_hp_val {
+	width:0px;
+	height:6px;
+	border-right:1px solid #000000;
+}
+.tab_docking .ship_item.ship_docking .ship_field {
+	background: #668585;
+}
+
+.tab_docking .ship_item.ship_expedition .ship_field {
+	background: #7e7d98;
+}
+
+.tab_docking .ship_item.ship_akashi_repairing .ship_field {
+	background: #836d7c;
+}
+
+.tab_docking .ship_item .ship_status.ship_normal,
+.tab_docking .ship_item .ship_hp_val.ship_normal {
+	background: #2b702b;
+}
+
+.tab_docking .ship_item .ship_status.ship_shouha,
+.tab_docking .ship_item .ship_hp_val.ship_shouha {
+	background: #858533;
+}
+
+.tab_docking .ship_item .ship_status.ship_chuuha,
+.tab_docking .ship_item .ship_hp_val.ship_chuuha {
+	background: #9e7433;
+}
+
+.tab_docking .ship_item	 .ship_status.ship_taiha,
+.tab_docking .ship_item	 .ship_hp_val.ship_taiha {
+	background: #993b3b;
+}
+.tab_docking .ship_item .ship_equip span {
+	color:#ccc;
+}
+/* Leveling Goals */
+.tab_expcalc .ship_goal {
+	background-color:#333333;
+	border-radius: 0px !important;
+}
+.tab_expcalc .ship_goal .ship_value {
+	color:#fff !important;
+}
+.tab_expcalc .ship_goal .ship_info .ship_name {
+	color:#fff;
+}
+
+.tab_expcalc .ship_goal.inactive {
+	width:167px !important;
+	margin:0px 0px 2px 2px !important;
+	position:relative;
+}
+.tab_expcalc .ship_goal.inactive .ship_label {
+	font-size:11px !important;
+}
+.tab_expcalc .ship_goal.inactive .ship_value {
+	font-size:13px !important;
+}
+.tab_expcalc .ship_goal.inactive:hover {
+	background:#000;
+}
+
+.tab_expcalc .ship_goal.inactive .ship_info {
+	display:block !important;
+	width:60px !important;
+}
+.tab_expcalc .ship_goal.inactive .ship_info .ship_type {
+	color:#999999;
+}
+.tab_expcalc .ship_goal.inactive .ship_lv {
+	width:30px !important;
+	margin:0px !important;
+}
+.tab_expcalc .ship_goal.inactive .ship_target {
+	width:30px !important;
+	margin:0px !important;
+}
+
+.tab_expcalc .ship_goal.inactive .ship_add {
+	background:none !important;
+	position: absolute;
+	top:0px; left:0px;
+	bottom:0px; right:0px;
+	width:inherit !important;
+	height:inherit !important;
+	opacity:0;
+	margin:0px !important;
+	padding:0px !important;
+}
+.tab_expcalc .goal_template {
+	background-color:#333333;
+	border-radius: 0px !important;
+}
+.tab_expcalc .ship_goal.ship_closeToRemodel{
+	background-color:#555555;
+}
+@-webkit-keyframes ship_closeToRemodel{
+	0%  {background-color:#555555;}
+	50%  {background-color:#000000;}
+	100%  {background-color:#555555;}
+}
+@keyframes ship_closeToRemodel {
+	0%  {background-color:#555555;}
+	50%  {background-color:#000000;}
+	100%  {background-color:#555555;}
+}
+.tab_expcalc .ship_goal.ship_canBeRemodelled{
+	background-color:#555555;
+}
+@-webkit-keyframes ship_canBeRemodelled{
+	0%  {background-color:#555555;}
+	50%  {background-color:#000000;}
+	100%  {background-color:#555555;}
+}
+@keyframes ship_canBeRemodelled {
+	0%  {background-color:#555555;}
+	50%  {background-color: #000000;}
+	100%  {background-color:#555555;}
+}
+
+.tab_expcalc .goal_template .goal_value {
+	color:#fff !important;
+}
+.tab_expcalc .goal_template .goal_btn.goal_hl_coverage {
+	border:1px solid #444444 !important;
+	background:#121212 !important;
+	border-radius:0px !important;
+	font-size:12px !important;
+	font-weight: normal !important;
+	line-height:22px;
+	margin-top:10px;
+}
+.tab_expcalc .goal_template .goal_btn.goal_onoff {
+	border:1px solid #444444 !important;
+	background:#121212 !important;
+	border-radius:0px !important;
+	font-size:12px !important;
+	font-weight: normal !important;
+	line-height:22px;
+	margin-top:10px;
+}
+.tab_expcalc .goal_template .goal_btn.goal_apply {
+	border:1px solid #444444 !important;
+	background:#121212 !important;
+	border-radius:0px !important;
+	font-size:12px !important;
+	font-weight: normal !important;
+	line-height:22px;
+	margin-top:10px;
+}
+/* Badge */
+.tab_badge .export_box {
+    background:#131313;
+}
+.tab_badge .export_parts .export_value {
+	background:#333333 !important;
+}
+.tab_badge .export_method .method_choice {
+	background:#333333 !important;
+}
+.tab_badge .export_lang .lang_choice {
+	width:145px !important;
+	background:#333333 !important;
+}
+/* Equipment */
+.tab_gears .item_types .item_type {
+	
+}
+.tab_gears .item_types .item_type.active {
+	background:#555555;
+}
+
+.tab_gears .itemSorters {
+	margin-bottom:10px;
+	padding:7px 0px 7px 0px;
+}
+.tab_gears .itemSorters .sortControl {
+	color:#ffcc00;
+}
+.tab_gears .itemSorters .sortControl img {
+	-webkit-filter: invert(100%);
+}
+.tab_gears .itemSorters .sortControl:hover {
+	background:#CCCCCC;
+	color:#000000;
+}
+.tab_gears .itemSorters .sortControl:hover img {
+	-webkit-filter: invert(0%);
+}
+
+.tab_gears .slotitem {
+	border-radius:0px;
+	border-bottom:1px solid #555555;
+	padding:0px 0px 20px 0px !important;
+	margin:0px 0px 20px 0px !important;
+}
+.tab_gears .slotitem .info .icon {
+	background:none !important;
+}
+.tab_gears .slotitem .info .item_stat img {
+	-webkit-filter: invert(100%);
+}
+.tab_gears .slotitem .holders dt {
+	margin-bottom:5px;
+}
+.tab_gears .slotitem .holders dl dd .holder{
+	border-radius: 12px 0px 0px 12px;
+}
+.tab_gears .slotitem .holders dl dd .holder font {
+	color:#fff;
+}
+.tab_gears .slotitem .holders dl ~ dl{
+	border-top: 1px solid #333333;
+}
+
+/* Crafting */
+.tab_crafts .build_pages {
+	margin-bottom:10px;
+}
+.tab_crafts .build_item {
+	
+}
+.tab_crafts .build_item .build_rsc {
+	font-size:14px;
+}
+.tab_crafts .build_item .build_rsc1 {
+	color:#92c992;
+}
+.tab_crafts .build_item .build_rsc2 {
+	color:#dec558;
+}
+.tab_crafts .build_item .build_rsc3 {
+	color:#cccccc;
+}
+.tab_crafts .build_item .build_rsc4 {
+	color:#b68f55;
+}
+
+/* Aircraft */
+.tab_aircraft .item_types {
+	
+}
+.tab_aircraft .item_types .item_type {
+	
+}
+.tab_aircraft .item_types .item_type.active {
+	background:#555555;
+}
+.tab_aircraft .slotitem {
+	border-bottom:1px solid #555555;
+	padding:5px 0px 10px 0px;
+}
+.tab_aircraft .slotitem .info .item_stat img {
+	-webkit-filter: invert(100%);
+}
+.tab_aircraft .slotitem .info .icon {
+	
+}
+.tab_aircraft .slotitem .instance {
+	
+}
+.tab_aircraft .slotitem .instance_aaicon img {
+	-webkit-filter: invert(100%);
+}
+.tab_aircraft .slotitem .instance_aaval.activeSquad {
+	color:#ffffff;
+}
+.tab_aircraft .slotitem .instance_name input:hover {
+	background:#555555;
+	border:1px inset #000000;
+	color:#ffffff;
+}
+
+/* Akashi */
+.tab_akashi .weekday {
+	color:#ffffff;
+	background:#555555;
+}
+.tab_akashi .weekday.active {
+	color:#333333;
+	background:#CCCCCC;
+}
+.tab_akashi .equipment {
+	border-bottom:1px solid #777;
+	margin:0px !important;
+}
+.tab_akashi .equipment.disabled {
+	opacity:0.4;
+	background:#621f1f;
+}
+
+/* Fleet */
+.tab_fleet .fleet_box {
+	border-bottom:1px solid #777;
+	padding:0px 0px 15px 0px !important;
+	margin:0px 0px 10px 0px !important;
+}
+.tab_fleet .fleet_name {
+	background:#131313;
+}
+.tab_fleet button {
+	border:1px solid #444444;
+	background:#121212;
+}
+.detail_field {
+	background:#131313;
+}
+.detail_field img {
+	-webkit-filter: invert(100%);
+}
+.detail_field.incomplete {
+	background:#623636;
+}
+.tab_fleet .fleet_ships {
+	height:160px;
+}
+/* SHIP BOX
+--------------------------------*/
+.tab_fleet .fleet_ship {
+	height:160px;
+	margin:5px 2px 0px 0px;
+	background:#131313;
+	border:1px solid #444444;
+	position:relative;
+	overflow:hidden;
+}
+.tab_fleet .fleet_ship .ship_type {
+	width:110px;
+	margin:0px;
+	color:#fff;
+	z-index:1;
+	text-shadow:2px 2px 5px #000,
+	-2px -2px 5px #000,
+	2px 2px 5px #000;
+}
+.tab_fleet .fleet_ship .ship_pic {
+	width:108px;
+	height:80px;
+	-webkit-mask-image: -webkit-linear-gradient(top, 
+		rgba(34,34,34,0) 0%,
+		rgba(34,34,34,1) 30%,
+		rgba(34,34,34,0) 100%
+	);
+	position:absolute;
+	top:0px;
+	left:0px;
+}
+.tab_fleet .fleet_ship .ship_pic img {
+	width:150px;
+	height:150px;
+	margin:-40px 0px 0px -21px
+}
+
+.tab_fleet .fleet_ship .ship_lv {
+	width:108px;
+	height:20px;
+	z-index:1;
+	position:relative;
+	padding:0px 29px;
+	margin:20px 0px 0px 0px;
+}
+.tab_fleet .fleet_ship .ship_lv_lbl {
+	width:20px;
+	height:20px;
+	line-height:20px;
+	font-size:12px;
+	color:#cccccc;
+	text-shadow:1px 1px 3px #000,
+	-1px -1px 3px #000,
+	1px 1px 3px #000;
+}
+.tab_fleet .fleet_ship .ship_lv_val {
+	height:20px;
+	line-height:20px;
+	color:#fff;
+	text-shadow:2px 2px 5px #000,
+	-2px -2px 5px #000,
+	2px 2px 5px #000;
+}
+.tab_fleet .fleet_ship .ship_name {
+	width:110px;
+	height:20px;
+	line-height:20px;
+	margin:0px 0px 2px 0px;
+	text-align:center;
+	font-size:12px;
+	font-weight:bold;
+	color:#fff;
+}
+.tab_fleet .fleet_ship .ship_gear {
+	width:110px;
+	height:17px;
+	line-height:17px;
+	margin:0px 0px 1px 0px;
+	/*background:#ccf;*/
+	font-size:12px;
+}
+.tab_fleet .fleet_ship .gear_icon {
+	width:17px;
+	height:17px;
+	margin:0px 3px 0px 0px;
+	/*background:#fcc;*/
+	float:left;
+}
+.tab_fleet .fleet_ship .gear_icon img {
+	width:17px;
+	height:17px;
+}
+.tab_fleet .fleet_ship .gear_name {
+	width:85px;
+	height:17px;
+	/*background:#cfc;*/
+	float:left;
+	font-size:10px;
+	white-space: nowrap;
+	overflow:hidden;
+}
+
+/* LOCKING
+--------------------------------*/
+.tab_locking .lock_mode_1 { background:#044d67; }
+.tab_locking .lock_mode_2 { background:#2c4e2c; }
+.tab_locking .lock_mode_3 { background:#737006; }
+.tab_locking .lock_mode_4 { background:#6c4513; }
+.tab_locking .lock_mode_5 { background:#544c5c; }
+
+/* QUEST FLOWCHART
+--------------------------------*/
+.tab_flowchart .questControls .questControl {
+	background:#444;
+	color:#fff;
+}
+.tab_flowchart .questFlowItem .questInfo {
+	
+}
+
+.tab_flowchart .questInfo.active {
+	background:#81811a;
+	color:#fff;
+}
+.tab_flowchart .questInfo.active .questCount {
+	background:#000;
+	color:#ccf;
+	font-weight:bold;
+}
+
+.tab_flowchart .questInfo.complete {
+	color:#016901;
+}
+.tab_flowchart .questExtraItem.active {
+	background:#81811a;
+	color:#fff;
+}
+
+.tab_flowchart .questIcon.type3 {
+	color:#000;
+}
+.tab_flowchart .questIcon.type4 {
+	color:#000;
+}
+.tab_flowchart .questIcon.type5 {
+	color:#000;
+}
+.tab_flowchart .questIcon.type7 {
+	color:#fff;
+}
+
+
+/* MAPS
+--------------------------------*/
+.tab_event .world_box.active,
+.tab_maps .world_box.active {
+	background:#555;
+}
+.tab_event .map_box,
+.tab_maps .map_box {
+	background:#131313;
+}
+.tab_event .map_box.active,
+.tab_maps .map_box.active {
+	background:#555;
+}
+.tab_event .map_box .map_title,
+.tab_maps .map_box .map_title {
+	color:#aaa;
+}
+.tab_event .map_box .map_gauge,
+.tab_maps .map_box .map_gauge {
+	background:#fff;
+	height:8px !important;
+}
+.tab_event .map_box .map_bar,
+.tab_maps .map_box .map_bar {
+	background:#d21414;
+	height:8px !important;
+}
+.tab_event .map_box.cleared .map_gauge,
+.tab_maps .map_box.cleared .map_gauge {
+	background:#036b03;
+}
+/* Map is NOT Cleared */
+.tab_event .map_box.notcleared,
+.tab_maps .map_box.notcleared {
+	background:#440404;
+}
+.tab_event .map_box.active.notcleared,
+.tab_maps .map_box.active.notcleared {
+	background:#7c0606;
+}
+.tab_event .sortie_list .sortie_box,
+.tab_maps .sortie_list .sortie_box {
+	background:#303030;
+	margin:0px 0px 2px 0px;
+}
+.tab_event .sortie_list .sortie_date ,
+.tab_maps .sortie_list .sortie_date {
+	color:#aaa;
+}
+.tab_event .sortie_list .sortie_map,
+.tab_maps .sortie_list .sortie_map {
+	background:#222;
+	color:#fff;
+}
+.tab_event .sortie_list .sortie_ship,
+.tab_maps .sortie_list .sortie_ship {
+	background:#000;
+}
+.tab_event .sortie_list .sortie_edge,
+.tab_maps .sortie_list .sortie_edge {
+	background:#222;
+}
+.tab_event .sortie_list .sortie_edge.active,
+.tab_maps .sortie_list .sortie_edge.active {
+	color:#fff;
+}
+.tab_event .sortie_list .sortie_toggle,
+.tab_maps .sortie_list .sortie_toggle {
+	background:#000;
+	color:#999;
+}
+.tab_event .sortie_list .sortie_toggle.active,
+.tab_maps .sortie_list .sortie_toggle.active {
+	background:#555;
+	color:#fff;
+}
+.tab_event .sortie_list .sortie_toggle_in,
+.tab_maps .sortie_list .sortie_toggle_in {
+	background:#000;
+	color:#999;
+}
+.tab_event .sortie_list .sortie_rfleet,
+.tab_maps .sortie_list .sortie_rfleet {
+	background:#222;
+}
+.tab_event .sortie_list .rfleet_title,
+.tab_maps .sortie_list .rfleet_title {
+	background:#131313;
+}
+.tab_event .sortie_list .sortie_nodeinfo,
+.tab_maps .sortie_list .sortie_nodeinfo {
+	background:#222;
+	color:#aaa;
+}
+
+.tab_event .sortie_list .node_formation img,
+.tab_maps .sortie_list .node_formation img {
+	-webkit-filter: invert(100%);
+}
+.tab_event .sortie_list .node_eformation img,
+.tab_maps .sortie_list .node_eformation img {
+	-webkit-filter: invert(100%);
+}
+.tab_event .sortie_list .node_exp,
+.tab_maps .sortie_list .node_exp {
+	color: rgb(91, 172, 223);
+}
+.tab_event .sortie_list .node_exp span,
+.tab_maps .sortie_list .node_exp span {
+	color: #fff;
+}
+.tab_event .sortie_list .node_exp:before,
+.tab_maps .sortie_list .node_exp:before {
+	color: #aaa;
+}

@@ -194,10 +194,12 @@
 			$.each(this.shipCache, function(stype, stypeList){
 				
 				$.each(stypeList, function(index, shipObj){
+					if (shipObj.level == 1) return true;
+					
 					shipBox = $(".tab_showcase .factory .show_ship").clone();
 					$(".ship_pic img", shipBox).attr("src", KC3Meta.shipIcon( shipObj.masterId ) );
 					$(".ship_name", shipBox).html( shipObj.name() );
-					$(".ship_level", shipBox).html( KC3Meta.term("LevelText")+" "+ shipObj.level );
+					$(".ship_level", shipBox).html( KC3Meta.term("LevelShort")+" "+ shipObj.level );
 					self.checkModStat(shipBox, "api_houg", "fp", 0, shipObj);
 					self.checkModStat(shipBox, "api_raig", "tp", 1, shipObj);
 					self.checkModStat(shipBox, "api_tyku", "aa", 2, shipObj);

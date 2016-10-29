@@ -2,48 +2,6 @@
 	display:none;
 }
 
-/* FILTERS
-------------------------------*/
-.tab_docking .filters {
-	width:700px;
-	margin:0px 0px 10px 0px;
-	background:#f0f5ff;
-	padding:5px 10px;
-	border-bottom:1px solid #369;
-}
-.tab_docking .filters .ship_types {
-	width:680px;
-	height:60px;
-}
-.tab_docking .filters .ship_filter_type {
-	width:80px;
-	height:18px;
-	line-height:18px;
-	margin:0px 5px 2px 0px;
-	float:left;
-}
-.tab_docking .filters .ship_filter_type:hover {
-	background:#cfc;
-}
-.tab_docking .ship_filter_type .filter_box {
-	width:10px;
-	height:10px;
-	margin:3px 7px 0px 3px;
-	border:1px solid #000;
-	float:left;
-}
-.tab_docking .ship_filter_type .filter_check {
-	width:6px;
-	height:6px;
-	margin:1px;
-	background:#000;
-}
-.tab_docking .ship_filter_type .filter_name {
-	width:55px;
-	height:18px;
-	float:left;
-}
-
 /* HEADER
 ------------------------------*/
 .tab_docking .ship_header {
@@ -51,7 +9,6 @@
 	height:22px;
 	margin:0px 0px 0px 0px;
 }
-/* Icons */
 .tab_docking .ship_header .ship_item {
 	width:680px;
 	height:20px;
@@ -59,51 +16,6 @@
 	font-size:12px;
 	font-weight:bold;
 	margin:0px 0px 3px 0px;
-}
-.tab_docking .ship_header .ship_stat img {
-	width:16px;
-	height:16px;
-	margin:2px;
-}
-/* Totals */
-.tab_docking .ship_header .ship_totals {
-	width:680px;
-	height:20px;
-	line-height:20px;
-	font-size:12px;
-	overflow:hidden;
-	/*background:#fcc;*/
-}
-.tab_docking .ship_totals .total_field {
-	float:left;
-	height:20px;
-	text-align:center;
-	font-size:11px;
-	overflow:hidden;
-	/*background:#ccf;*/
-}
-.tab_docking .ship_totals .total_left {
-	width:205px;
-	font-size:11px;
-	/*background:#cfc;*/
-}
-.tab_docking .ship_totals .total_level {
-	width:50px;
-	/*margin:0px 5px 0px 0px;*/
-	font-weight:bold;
-	background:#cfc;
-}
-.tab_docking .ship_totals .total_stat {
-	width:30px;
-	margin:0px 2px 0px 0px;
-	font-weight:bold;
-	background:#cfc;
-}
-.tab_docking .ship_totals .total_mod {
-	width:35px;
-}
-.tab_docking .ship_totals .total_ar {
-	/*margin:0px 5px 0px 0px;*/
 }
 
 /* SHIP LIST
@@ -129,30 +41,15 @@
 	float:left;
 	margin:0px 2px 0px 0px;
 }
-.tab_docking .ship_item.odd .ship_field {
-	background:#efefef;
-}
-.tab_docking .ship_item.even .ship_field {
-	background:#e4e4e4;
-}
-.tab_docking .ship_item.odd .ship_field.ship_lk{
-	background:#66FF66;
-}
-.tab_docking .ship_item.even .ship_field.ship_lk {
-	background:#66FF66;
-}
 .tab_docking .ingame_page {
 	width:680px;
-	height:11px;
-	line-height:18px;
-	font-size:18px;
-	margin:0px 0px 2px 0px;
+	height:14px;
+	line-height:14px;
+	font-size:12px;
+	margin:4px 0px 2px 0px;
 	text-align:left;
 	padding:0px 0px 0px 10px;
 	color:#aaa;
-}
-.tab_docking .ship_item:hover .ship_field {
-	background:#ffffcc;
 }
 /* Fields: Basic */
 .tab_docking .ship_item .ship_id {
@@ -225,46 +122,11 @@
 	width:100px;
 	height:12px;
 	margin:4px 3px 0px;
-	background:#777;
-	border:1px solid #333;
-	border-radius:4px;
 	overflow:hidden;
 }
 .tab_docking .ship_item .ship_hp_val {
 	width:0px;
 	height:10px;
-}
-
-.tab_docking .ship_item.ship_docking .ship_field {
-	background: #C0EEEE;
-}
-
-.tab_docking .ship_item.ship_expedition .ship_field {
-	background: #D7D6ED;
-}
-
-.tab_docking .ship_item.ship_akashi_repairing .ship_field {
-	background: #FFE6F7;
-}
-
-.tab_docking .ship_item .ship_status.ship_normal,
-.tab_docking .ship_item .ship_hp_val.ship_normal {
-	background: #66FF66;
-}
-
-.tab_docking .ship_item .ship_status.ship_shouha,
-.tab_docking .ship_item .ship_hp_val.ship_shouha {
-	background: #FFFF66;
-}
-
-.tab_docking .ship_item .ship_status.ship_chuuha,
-.tab_docking .ship_item .ship_hp_val.ship_chuuha {
-	background: #FFC266;
-}
-
-.tab_docking .ship_item	 .ship_status.ship_taiha,
-.tab_docking .ship_item	 .ship_hp_val.ship_taiha {
-	background: #FF8080;
 }
 
 .tab_docking .ship_item .ship_repair_docking {
@@ -306,22 +168,6 @@
 	font-size:8px;
 	color:#aaa;
 }
-.tab_docking .ship_item .ship_fp.max {
-	background:#ff8888;
-}
-.tab_docking .ship_item .ship_tp.max {
-	background:#00CCFF;
-}
-.tab_docking .ship_item .ship_yasen.max {
-	background:#555555;
-	color:#FFFFFF;
-}
-.tab_docking .ship_item .ship_aa.max {
-	background:#FF9900;
-}
-.tab_docking .ship_item .ship_ar.max {
-	background:#ffcc00;
-}
 .tab_docking .ship_item .ship_ar {
 	/*margin:0px 5px 0px 0px;*/
 }
@@ -349,16 +195,12 @@
 	display: flex;
 	right: 0;
 	bottom: 0;
-	font-size: 1.0em;
+	font-size: 11px;
 	width: 100%;
 	height: 100%;
-	background-color: rgba(0,0,0,0.25);
-	border-radius: 16px;
-	color: white;
 	text-align: center;
 	align-items: center;
 	justify-content: center;
-	font-weight: bold;
 }
 /* Fields: HeartLock and Marriage Ring */
 .tab_docking .ship_item .ship_stat_icon {
