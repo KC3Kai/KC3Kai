@@ -166,7 +166,7 @@ Retreives when needed to apply on components
 				pan_opacity 		: 100,
 
 				sr_lvl_difference	: 3,
-				sr_theme			: "dark"
+				sr_theme			: "legacy"
 			};
 		},
         
