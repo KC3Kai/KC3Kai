@@ -558,7 +558,8 @@ body {
 }
 
 .tab_gears .slotitem {
-	border:		10px solid transparent;
+	margin:10px 0px 10px 0px;
+	border:10px solid transparent;
 	background:#def;
 	border-radius:10px;
 }
