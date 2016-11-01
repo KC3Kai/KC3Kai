@@ -23,6 +23,7 @@ var taihaStatus = false;
 
 // Screenshot status
 var isTakingScreenshot = false;
+var suspendedTaiha = false;
 
 // Idle time check
 /*
@@ -352,9 +353,8 @@ var interactions = {
 	
 	// Taiha Alert Start
 	taihaAlertStart :function(request, sender, response, callback){
-		ConfigManager.load();
 		taihaStatus = true;
-		
+		ConfigManager.load();
 		if(ConfigManager.alert_taiha_blur) {
 			$(".box-wrap").addClass("critical");
 		}
@@ -383,6 +383,32 @@ var interactions = {
 				(callback || function(){})();
 			});
 		});
+	},
+	
+	// Suspend Taiha Alert for taking screenshot
+	suspendTaiha :function(callback){
+		var self = this;
+		
+		if (!taihaStatus && !suspendedTaiha) {
+			(callback || function(){})();
+			return false;
+		}
+		
+		if (suspendedTaiha) {
+			clearTimeout(suspendedTaiha);
+			(callback || function(){})();
+		} else {
+			this.taihaAlertStop({}, {}, {}, function(){
+				setTimeout(function(){
+					(callback || function(){})();
+				}, 10);
+			});
+		}
+		
+		suspendedTaiha = setTimeout(function(){
+			self.taihaAlertStart({}, {}, {});
+			suspendedTaiha = false;
+		}, 2000);
 	},
 	
 	// Show subtitles
