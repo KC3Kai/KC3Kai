@@ -25,6 +25,9 @@ var taihaStatus = false;
 var isTakingScreenshot = false;
 var suspendedTaiha = false;
 
+// Overlay avoids cursor
+var subtitlePosition = "bottom";
+
 // Show game screens
 function ActivateGame(){
 	waiting = false;
@@ -130,6 +133,19 @@ $(document).on("ready", function(){
 				+"%0A%0A"
 				+encodeURIComponent($(this).data("qdesc"))
 		});
+	});
+	
+	// Overlay avoids cursor
+	$(".overlay_subtitles span").on("mouseover", function(){
+		if (subtitlePosition == "bottom") {
+			$(".overlay_subtitles").css("bottom", "");
+			$(".overlay_subtitles").css("top", "5px");
+			subtitlePosition = "top";
+		} else {
+			$(".overlay_subtitles").css("top", "");
+			$(".overlay_subtitles").css("bottom", "5px");
+			subtitlePosition = "bottom";
+		}
 	});
 	
 	// Exit confirmation
@@ -392,8 +408,6 @@ var interactions = {
 	subtitle :function(request, sender, response){
 		if(!ConfigManager.api_subtitles) return true;
 		
-		console.debug("subtitle", request);
-		
 		// Get subtitle text
 		var subtitleText = false;
 		var quoteIdentifier = "";
@@ -430,14 +444,18 @@ var interactions = {
 		
 		// If subtitles available for the voice
 		if(subtitleText){
-			$(".overlay_subtitles").html(subtitleText);
+			$(".overlay_subtitles span").html(subtitleText);
 			$(".overlay_subtitles").show();
 			var millis = subtitleVanishBaseMillis +
 				(subtitleVanishExtraMillisPerChar * $(".overlay_subtitles").text().length);
 			console.debug("vanish after", millis, "ms");
 			subtitleVanishTimer = setTimeout(function(){
 				subtitleVanishTimer = false;
-				$(".overlay_subtitles").fadeOut(2000);
+				$(".overlay_subtitles").fadeOut(1000, function(){
+					$(".overlay_subtitles").css("top", "");
+					$(".overlay_subtitles").css("bottom", "5px");
+					subtitlePosition = "bottom";
+				});
 			}, millis);
 		}
 	}
