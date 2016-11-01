@@ -40,6 +40,7 @@ Listens to network history and triggers callback if game events happen
 			ExpeditionSelection: [],
 			ExpeditionStart: [],
 			ExpedResult: [],
+			GunFit: [],
 		},
 		delayedUpdate: {},
 

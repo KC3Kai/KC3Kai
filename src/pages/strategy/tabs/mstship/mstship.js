@@ -481,6 +481,40 @@
 					$("<div/>").addClass("clear").appendTo(".tab_mstship .shipInfo .hourlies");
 				}
 				
+				// GUN FITS
+				$(".gunfitList").html("");
+				var gunfits = KC3Meta.gunfit(shipData.api_id);
+				if (gunfits) {
+					console.log("gunfits", gunfits);
+					
+					var gunfitBox, gearObj;
+					$.each(gunfits, function(itemId, fitValue){
+						
+						gunfitBox = $(".tab_mstship .factory .fitgear").clone();
+						gearObj = KC3Master.slotitem(itemId);
+						
+						$(".gearName", gunfitBox).text(KC3Meta.gearName(gearObj.api_name));
+						
+						if (fitValue === "") {
+							$(".gearFit", gunfitBox).text(KC3Meta.term("FitWeightUnknown"));
+							gunfitBox.addClass("fit_unknown");
+						} else {
+							$(".gearFit", gunfitBox).text(KC3Meta.term("FitWeight_"+fitValue));
+							fitValue = parseInt(fitValue, 10);
+							if (fitValue < 0) {
+								gunfitBox.addClass("fit_penalty");
+							} else if (fitValue > 0) {
+								gunfitBox.addClass("fit_bonus");
+							} else {
+								gunfitBox.addClass("fit_neutral");
+							}
+						}
+						
+						gunfitBox.appendTo(".gunfitList");
+					});
+				}
+				
+				// BOXES
 				$(".tab_mstship .shipInfo .stats").show();
 				$(".tab_mstship .shipInfo .equipments").show();
 				$(".tab_mstship .shipInfo .intro").show();

@@ -1432,7 +1432,86 @@ ABYSS FLEET
 .module.activity .activity_expeditionPlanner .expedition_entry.cond_failed {	
 	color:red
 }
-
+/*------- ACTIVITY: FIT -------*/
+.module.activity .activity_gunfit {
+	padding:5px 10px;
+}
+.module.activity .activity_gunfit .fit_profile {
+	height:50px;
+	padding:5px 0px;
+	margin:0px 0px 5px 0px;
+}
+.module.activity .activity_gunfit .fit_profile_pic {
+	width:40px;
+	height:40px;
+	float:left;
+	border-radius:20px;
+	border:1px solid #000;
+	overflow: hidden;
+	margin:0px 5px 0px 0px;
+}
+.module.activity .activity_gunfit .fit_gear_pic {
+	width:40px;
+	height:40px;
+	border:0px none;
+	background:#333;
+}
+.module.activity .activity_gunfit .fit_profile_pic img {
+	width:42px;
+	height:42px;
+	position:relative;
+	margin:-1px 0px 0px -1px;
+}
+.module.activity .activity_gunfit .fit_gear_pic img {
+	width:32px;
+	height:32px;
+	position:relative;
+	margin:4px 0px 0px 4px;
+}
+.module.activity .activity_gunfit .fit_profile_name {
+	width:125px;
+	height:22px;
+	line-height:22px;
+	float:left;
+	font-size:13px;
+	font-weight:bold;
+	color:#ffcc00;
+	overflow:hidden;
+}
+.module.activity .activity_gunfit .fit_profile_level {
+	width:125px;
+	height:14px;
+	line-height:14px;
+	float:left;
+	font-size:12px;
+	color:#ccc;
+}
+.module.activity .activity_gunfit .fit_value {
+	height:30px;
+	line-height:30px;
+	text-align:center;
+	font-weight:bold;
+	font-size:14px;
+	border-radius:8px;
+}
+.module.activity .activity_gunfit .fit_value.fit_bonus {
+	color:#fff;
+	background:#5a5;
+}
+.module.activity .activity_gunfit .fit_value.fit_neutral {
+	color:#000;
+	background:#ccc;
+}
+.module.activity .activity_gunfit .fit_value.fit_penalty {
+	color:#fff;
+	background:#a55;
+}
+.module.activity .activity_gunfit .fit_value.fit_unknown {
+	
+}
+.module.activity .activity_gunfit .fit_more {
+	color:#aaa;
+}
 
 /*------- QUESTS -------*/
 .module.quests {
