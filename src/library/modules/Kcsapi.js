@@ -676,10 +676,11 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_kaisou/slotset":function(params, response, headers){
 			// Set params on variables for future understandability
-			var itemID = params.api_item_id;
+			var itemID = parseInt(params.api_item_id, 10);
 			var slotIndex = params.api_slot_idx;
-			var shipID = params.api_id;
-			KC3ShipManager.get(shipID).items[slotIndex] = itemID;
+			var shipID = parseInt(params.api_id, 10);
+			var shipObj = KC3ShipManager.get(shipID);
+			shipObj.items[slotIndex] = itemID;
 			
 			// If ship is in a fleet, switch view to the fleet containing the ship
 			var fleetNum = KC3ShipManager.locateOnFleet(shipID);
@@ -687,6 +688,18 @@ Previously known as "Reactor"
 				KC3Network.trigger("Fleet", { switchTo: fleetNum+1 });
 			} else {
 				KC3Network.trigger("Fleet");
+			}
+			
+			// Gun fit bonus / penalty
+			var gearObj = KC3GearManager.get(itemID);
+			var gunfit = KC3Meta.gunfit(shipObj.masterId, gearObj.masterId);
+			if (gunfit) {
+				KC3Network.trigger("GunFit", {
+					shipObj: shipObj,
+					gearObj: gearObj,
+					thisFit: gunfit,
+					shipFits: KC3Meta.gunfit(shipObj.masterId) // different from above
+				});
 			}
 		},
 		

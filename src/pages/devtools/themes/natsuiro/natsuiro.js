@@ -2552,6 +2552,43 @@
 				 */
 
 		},
+		
+		GunFit: function(data) {
+			console.log("gunfit", data);
+			
+			$(".activity_gunfit .fit_ship_pic img").attr("src", KC3Meta.shipIcon(data.shipObj.masterId) );
+			$(".activity_gunfit .fit_ship_name").text( data.shipObj.name() );
+			$(".activity_gunfit .fit_ship_level span.value").text( data.shipObj.level );
+			
+			$(".activity_gunfit .fit_gear_pic img").attr("src", "../../../../assets/img/items/"+data.gearObj.master().api_type[3]+".png");
+			$(".activity_gunfit .fit_gear_name").text( data.gearObj.name() );
+			if (data.gearObj.stars > 0) {
+				$(".activity_gunfit .fit_gear_level span").text( data.gearObj.stars );
+			} else {
+				$(".activity_gunfit .fit_gear_level").hide();
+			}
+			
+			if (data.thisFit === "") {
+				$(".activity_gunfit .fit_value").text(KC3Meta.term("FitWeightUnknown"));
+				$(".activity_gunfit .fit_value").addClass("fit_unknown");
+			} else {
+				var fitValue = parseInt(data.thisFit, 10);
+				$(".activity_gunfit .fit_value").text(KC3Meta.term("FitWeight_"+fitValue));
+				if (fitValue < 0) {
+					$(".activity_gunfit .fit_value").addClass("fit_penalty");
+				} else if (fitValue > 0) {
+					$(".activity_gunfit .fit_value").addClass("fit_bonus");
+				} else {
+					$(".activity_gunfit .fit_value").addClass("fit_neutral");
+				}
+			}
+			
+			
+			$(".module.activity .activity_tab").removeClass("active");
+			$("#atab_activity").addClass("active");
+			$(".module.activity .activity_box").hide();
+			$(".module.activity .activity_gunfit").fadeIn(500);
+		}
 	};
 
 	function updateHQEXPGained(ele,newDelta) {
