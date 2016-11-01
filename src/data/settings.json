@@ -545,6 +545,12 @@
 				"name" : "SettingsSubtitleBold",
 				"type" : "check",
 				"options" : {}
+			},
+			{
+				"id" : "google_translate",
+				"name" : "SettingsGoogleTranslate",
+				"type" : "check",
+				"options" : {}
 			}
 			
 		]

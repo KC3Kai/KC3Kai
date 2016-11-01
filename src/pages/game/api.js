@@ -122,6 +122,16 @@ $(document).on("ready", function(){
 	
 	$(".play_btn").data('play',!ConfigManager.api_mustPanel);
 	
+	// untranslated quest copiable text form
+	$(".overlay_quests").on("click", ".no_tl", function(){
+		chrome.tabs.create({
+			url: "https://translate.google.com/#ja/"+ConfigManager.language+"/"
+				+encodeURIComponent($(this).data("qtitle"))
+				+"%0A%0A"
+				+encodeURIComponent($(this).data("qdesc"))
+		});
+	});
+	
 	// Exit confirmation
 	window.onbeforeunload = function(){
 		ConfigManager.load();
@@ -250,7 +260,15 @@ var interactions = {
 						$(".tracking", QuestBox).addClass("small");
 					}
 				}else{
-					QuestBox.css({ visibility: "hidden" });
+					if(ConfigManager.google_translate) {
+						$(".with_tl", QuestBox).css({ visibility: "hidden" });
+						$(".no_tl", QuestBox).data("qid", QuestRaw.api_no);
+						$(".no_tl", QuestBox).data("qtitle", QuestRaw.api_title);
+						$(".no_tl", QuestBox).data("qdesc", QuestRaw.api_detail);
+						$(".no_tl", QuestBox).show();
+					} else {
+						QuestBox.css({ visibility: "hidden" });
+					}
 				}
 			}
 		});

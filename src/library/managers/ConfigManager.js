@@ -144,6 +144,7 @@ Retreives when needed to apply on components
 				subtitle_font		: "\"Trebuchet MS\",\"Lucida Grande\",\"Lucida Sans Unicode\",\"Lucida Sans\",Tahoma,sans-serif",
 				subtitle_size		: 22,
 				subtitle_bold		: false,
+				google_translate	: true,
 				
 				dmm_forcecookies	: false,
 				dmm_customize		: false,
