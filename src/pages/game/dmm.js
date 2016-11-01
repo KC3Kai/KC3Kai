@@ -353,8 +353,9 @@ var interactions = {
 	
 	// Taiha Alert Start
 	taihaAlertStart :function(request, sender, response, callback){
-		taihaStatus = true;
 		ConfigManager.load();
+		taihaStatus = true;
+		
 		if(ConfigManager.alert_taiha_blur) {
 			$(".box-wrap").addClass("critical");
 		}

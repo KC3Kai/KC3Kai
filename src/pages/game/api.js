@@ -23,6 +23,7 @@ var taihaStatus = false;
 
 // Screenshot status
 var isTakingScreenshot = false;
+var suspendedTaiha = false;
 
 // Show game screens
 function ActivateGame(){
@@ -309,7 +310,7 @@ var interactions = {
 	},
 	
 	// Taiha Alert Start
-	taihaAlertStart :function(request, sender, response){
+	taihaAlertStart :function(request, sender, response, callback){
 		ConfigManager.load();
 		taihaStatus = true;
 		
@@ -323,18 +324,50 @@ var interactions = {
 				$(".taiha_red").toggleClass("anim2");
 			}, 500);
 			
-			$(".taiha_blood").show();
-			$(".taiha_red").show();
+			$(".taiha_blood").show(0, function(){
+				$(".taiha_red").show(0, function(){
+					(callback || function(){})();
+				});
+			});
 		}
 	},
 	
 	// Taiha Alert Stop
-	taihaAlertStop :function(request, sender, response){
+	taihaAlertStop :function(request, sender, response, callback){
 		taihaStatus = false;
 		$(".box-wrap").removeClass("critical");
 		if(critAnim){ clearInterval(critAnim); }
-		$(".taiha_blood").hide();
-		$(".taiha_red").hide();
+		$(".taiha_blood").hide(0, function(){
+			$(".taiha_red").hide(0, function(){
+				(callback || function(){})();
+			});
+		});
+	},
+	
+	// Suspend Taiha Alert for taking screenshot
+	suspendTaiha :function(callback){
+		var self = this;
+		
+		if (!taihaStatus && !suspendedTaiha) {
+			(callback || function(){})();
+			return false;
+		}
+		
+		if (suspendedTaiha) {
+			clearTimeout(suspendedTaiha);
+			(callback || function(){})();
+		} else {
+			this.taihaAlertStop({}, {}, {}, function(){
+				setTimeout(function(){
+					(callback || function(){})();
+				}, 10);
+			});
+		}
+		
+		suspendedTaiha = setTimeout(function(){
+			self.taihaAlertStart({}, {}, {});
+			suspendedTaiha = false;
+		}, 2000);
 	},
 	
 	// Show subtitles
