@@ -1,0 +1,13 @@
+/* strategy.css
+Only CSS definitions that are common to all themes should be added here
+
+Things like colors, border radiuses, text-shadows should be defined in theme CSS 
+*/
+
+#error {
+	display:none;
+}
+
+#menu .submenu.dev-only {
+	display:none;
+}

@@ -46,8 +46,8 @@
 		}
 		
 		// show dev-only pages conditionally
-		if ( !ConfigManager.devOnlyPages ) {
-			$("#menu .submenu.dev-only").hide();
+		if ( ConfigManager.devOnlyPages ) {
+			$("#menu .submenu.dev-only").show();
 		}
 		
 		// Click a menu item
