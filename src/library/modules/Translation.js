@@ -43,9 +43,9 @@
 				
 				default: break;
 			}
-
+			
 			if(fontFamily){ $("body").css("font-family", fontFamily); }
-
+			
 			// Apply HTML language code
 			$("html").attr("lang", ConfigManager.language);
 		},
@@ -71,7 +71,20 @@
 				"addTags should only be applied on objects");
 			return track(obj);
 		},
-		
+
+		/** Clear specified attribute key from specified JSON object. */
+		unoverrideAttr: function(obj, key) {
+			console.assert(
+				typeof obj === "object",
+				"unoverrideAttr should only be applied on objects");
+			$.each(obj, function(k, v) {
+				if (typeof v[key] !== "undefined") {
+					delete obj[k][key];
+				}
+			});
+			return obj;
+		},
+
 		getJSONWithOptions: function(repo, filename, extendEnglish,
 									 language, info_force_ship_lang, info_eng_stype,
 									 track_source) {
@@ -115,6 +128,9 @@
 
 					if (track_source) {
 						self.addTags(enJSON, "en");
+					}
+					if (filename === "quests") {
+						self.unoverrideAttr(enJSON, "memo");
 					}
 				} catch (e) {
 					console.error(e.stack);
