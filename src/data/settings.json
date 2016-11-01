@@ -545,6 +545,12 @@
 				"name" : "SettingsSubtitleBold",
 				"type" : "check",
 				"options" : {}
+			},
+			{
+				"id" : "google_translate",
+				"name" : "SettingsGoogleTranslate",
+				"type" : "check",
+				"options" : {}
 			}
 			
 		]
@@ -727,19 +733,6 @@
 		"section":"SettingsStrategyRoom",
 		"help":"",
 		"contents":[
-			{
-				"id" : "sr_lvl_difference",
-				"name" : "SettingsLevellingDifference",
-				"type" : "radio",
-				"bound" : {
-					"min" :  0,
-					"max" : 15,
-					"type": "Number"
-				},
-				"options" : {
-					"label" : "Lv"
-				}
-			},
 			{
 				"id" : "sr_theme",
 				"name" : "SettingsStrategyTheme",

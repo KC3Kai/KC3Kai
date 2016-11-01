@@ -17,11 +17,11 @@
 		
 		if (newInstall) {
 			$("title").text(KC3Meta.term("InstalledTitle"));
-			$(".versionNotes").text(KC3Meta.term("InstallText"));
+			$(".versionNotes").html(KC3Meta.term("InstallText"));
 			$(".viewLogs").hide();
 		} else {
 			$("title").text(KC3Meta.term("UpdatedTitle"));
-			$(".versionNotes").text(KC3Meta.term("UpdateText"));
+			$(".versionNotes").html(KC3Meta.term("UpdateText"));
 			$(".viewWiki").hide();
 		}
 		

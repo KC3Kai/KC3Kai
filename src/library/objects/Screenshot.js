@@ -1,5 +1,4 @@
 var imgurLimit = 0;
-var retaihaFadeTimer = false;
 var enableShelfTimer = false;
 
 function KCScreenshot(){
@@ -16,6 +15,7 @@ function KCScreenshot(){
 		?["jpeg", "jpg", "image/jpeg"]
 		:["png", "png", "image/png"];
 	this.quality = ConfigManager.ss_quality;
+	this.callback = function(){};
 }
 
 KCScreenshot.prototype.setCallback = function(callback){
@@ -72,16 +72,10 @@ function getRandomInt(min, max) {
 KCScreenshot.prototype.capture = function(){
 	var self = this;
 	
-	if (retaihaFadeTimer) {
-		clearTimeout(retaihaFadeTimer);
-	}
-	
 	// If taiha alert appear on screenshot is off, hide taiha alert in the mean time
-	if(!ConfigManager.alert_taiha_ss && taihaStatus) {
-		interactions.taihaAlertStop({}, {}, {}, function(){
-			setTimeout(function(){
-				self.startCapture();
-			}, 50);
+	if(!ConfigManager.alert_taiha_ss) {
+		interactions.suspendTaiha(function(){
+			self.startCapture();
 		});
 	} else {
 		this.startCapture();
@@ -139,11 +133,6 @@ KCScreenshot.prototype.output = function(){
 };
 
 KCScreenshot.prototype.complete = function(){
-	retaihaFadeTimer = setTimeout(function(){
-		interactions.taihaAlertStart({}, {}, {});
-		retaihaFadeTimer = false;
-	}, 1000);
-	
 	(this.callback || function(){})();
 };
 

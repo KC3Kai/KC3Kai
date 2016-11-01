@@ -10,7 +10,6 @@ body {
 #error {
 	width:800px;
 	margin:10px 0px 20px 0px;
-	display:none;
 }
 #body {
 	width:800px;
@@ -77,9 +76,6 @@ a:hover {
 #menu .submenu {
 	width:100px;
 	margin:0px 0px 10px 0px;
-}
-#menu .submenu.dev-only {
-    display:none;
 }
 #menu .submenu .title {
 	width:100px;

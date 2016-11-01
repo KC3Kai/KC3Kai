@@ -342,7 +342,6 @@ body {
 .overlay_quests {
 	width:629px;
 	height:336px;
-	overflow:hidden;
 	top:110px;
 	left:144px;
 }
@@ -393,6 +392,22 @@ body {
 .ol_quest .tracking.small {
 	line-height:10px;
 	font-size:11px;
+}
+.ol_quest .no_tl {
+	width: 24px;
+	height: 24px;
+	background: rgba(150,190,230, 0.6);
+	float: right;
+	margin: 20px -26px 0px 0px;
+	position:relative;
+	border-radius: 15px;
+	line-height: 24px;
+	text-align: center;
+	font-size: 16px;
+	font-weight: bold;
+	color: #fff;
+	pointer-events: visible;
+	display:none;
 }
 
 
@@ -539,4 +554,9 @@ body {
 		-1px -1px 2px #000,
 		-1px 1px 2px #000,
 		0px 0px 2px #000;
+	pointer-events: none;
+}
+.overlay_subtitles span {
+	width:100%;
+	pointer-events: visible;
 }

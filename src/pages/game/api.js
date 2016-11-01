@@ -23,6 +23,10 @@ var taihaStatus = false;
 
 // Screenshot status
 var isTakingScreenshot = false;
+var suspendedTaiha = false;
+
+// Overlay avoids cursor
+var subtitlePosition = "bottom";
 
 // Show game screens
 function ActivateGame(){
@@ -120,6 +124,29 @@ $(document).on("ready", function(){
 	});
 	
 	$(".play_btn").data('play',!ConfigManager.api_mustPanel);
+	
+	// untranslated quest copiable text form
+	$(".overlay_quests").on("click", ".no_tl", function(){
+		chrome.tabs.create({
+			url: "https://translate.google.com/#ja/"+ConfigManager.language+"/"
+				+encodeURIComponent($(this).data("qtitle"))
+				+"%0A%0A"
+				+encodeURIComponent($(this).data("qdesc"))
+		});
+	});
+	
+	// Overlay avoids cursor
+	$(".overlay_subtitles span").on("mouseover", function(){
+		if (subtitlePosition == "bottom") {
+			$(".overlay_subtitles").css("bottom", "");
+			$(".overlay_subtitles").css("top", "5px");
+			subtitlePosition = "top";
+		} else {
+			$(".overlay_subtitles").css("top", "");
+			$(".overlay_subtitles").css("bottom", "5px");
+			subtitlePosition = "bottom";
+		}
+	});
 	
 	// Exit confirmation
 	window.onbeforeunload = function(){
@@ -249,7 +276,15 @@ var interactions = {
 						$(".tracking", QuestBox).addClass("small");
 					}
 				}else{
-					QuestBox.css({ visibility: "hidden" });
+					if(ConfigManager.google_translate) {
+						$(".with_tl", QuestBox).css({ visibility: "hidden" });
+						$(".no_tl", QuestBox).data("qid", QuestRaw.api_no);
+						$(".no_tl", QuestBox).data("qtitle", QuestRaw.api_title);
+						$(".no_tl", QuestBox).data("qdesc", QuestRaw.api_detail);
+						$(".no_tl", QuestBox).show();
+					} else {
+						QuestBox.css({ visibility: "hidden" });
+					}
 				}
 			}
 		});
@@ -309,7 +344,7 @@ var interactions = {
 	},
 	
 	// Taiha Alert Start
-	taihaAlertStart :function(request, sender, response){
+	taihaAlertStart :function(request, sender, response, callback){
 		ConfigManager.load();
 		taihaStatus = true;
 		
@@ -323,25 +358,55 @@ var interactions = {
 				$(".taiha_red").toggleClass("anim2");
 			}, 500);
 			
-			$(".taiha_blood").show();
-			$(".taiha_red").show();
+			$(".taiha_blood").show(0, function(){
+				$(".taiha_red").show(0, function(){
+					(callback || function(){})();
+				});
+			});
 		}
 	},
 	
 	// Taiha Alert Stop
-	taihaAlertStop :function(request, sender, response){
+	taihaAlertStop :function(request, sender, response, callback){
 		taihaStatus = false;
 		$(".box-wrap").removeClass("critical");
 		if(critAnim){ clearInterval(critAnim); }
-		$(".taiha_blood").hide();
-		$(".taiha_red").hide();
+		$(".taiha_blood").hide(0, function(){
+			$(".taiha_red").hide(0, function(){
+				(callback || function(){})();
+			});
+		});
+	},
+	
+	// Suspend Taiha Alert for taking screenshot
+	suspendTaiha :function(callback){
+		var self = this;
+		
+		if (!taihaStatus && !suspendedTaiha) {
+			(callback || function(){})();
+			return false;
+		}
+		
+		if (suspendedTaiha) {
+			clearTimeout(suspendedTaiha);
+			(callback || function(){})();
+		} else {
+			this.taihaAlertStop({}, {}, {}, function(){
+				setTimeout(function(){
+					(callback || function(){})();
+				}, 10);
+			});
+		}
+		
+		suspendedTaiha = setTimeout(function(){
+			self.taihaAlertStart({}, {}, {});
+			suspendedTaiha = false;
+		}, 2000);
 	},
 	
 	// Show subtitles
 	subtitle :function(request, sender, response){
 		if(!ConfigManager.api_subtitles) return true;
-		
-		console.debug("subtitle", request);
 		
 		// Get subtitle text
 		var subtitleText = false;
@@ -379,14 +444,18 @@ var interactions = {
 		
 		// If subtitles available for the voice
 		if(subtitleText){
-			$(".overlay_subtitles").html(subtitleText);
+			$(".overlay_subtitles span").html(subtitleText);
 			$(".overlay_subtitles").show();
 			var millis = subtitleVanishBaseMillis +
 				(subtitleVanishExtraMillisPerChar * $(".overlay_subtitles").text().length);
 			console.debug("vanish after", millis, "ms");
 			subtitleVanishTimer = setTimeout(function(){
 				subtitleVanishTimer = false;
-				$(".overlay_subtitles").fadeOut(2000);
+				$(".overlay_subtitles").fadeOut(1000, function(){
+					$(".overlay_subtitles").css("top", "");
+					$(".overlay_subtitles").css("bottom", "5px");
+					subtitlePosition = "bottom";
+				});
 			}, millis);
 		}
 	}

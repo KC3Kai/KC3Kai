@@ -121,11 +121,11 @@ Retreives when needed to apply on components
 				alert_supply_exped 	:true,
 				alert_idle_counter	: 1,
 				
-				alert_taiha			: true,
+				alert_taiha			: false,
 				alert_taiha_blur	: false,
 				alert_taiha_blood	: true,
 				alert_taiha_ss		: false,
-				alert_taiha_sound	: true,
+				alert_taiha_sound	: false,
 				alert_taiha_pvp		: false,
 				alert_taiha_panel	: true,
 				
@@ -144,6 +144,7 @@ Retreives when needed to apply on components
 				subtitle_font		: "\"Trebuchet MS\",\"Lucida Grande\",\"Lucida Sans Unicode\",\"Lucida Sans\",Tahoma,sans-serif",
 				subtitle_size		: 22,
 				subtitle_bold		: false,
+				google_translate	: true,
 				
 				dmm_forcecookies	: false,
 				dmm_customize		: false,
@@ -165,7 +166,6 @@ Retreives when needed to apply on components
 				pan_bg_position		: "top center",
 				pan_opacity 		: 100,
 
-				sr_lvl_difference	: 3,
 				sr_theme			: "legacy"
 			};
 		},
