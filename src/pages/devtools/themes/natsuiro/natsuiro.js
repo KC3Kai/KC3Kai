@@ -2583,6 +2583,8 @@
 				}
 			}
 			
+			$(".activity_gunfit .fit_more").attr("href", "/pages/strategy/strategy.html#mstship-"+data.shipObj.masterId);
+			
 			
 			$(".module.activity .activity_tab").removeClass("active");
 			$("#atab_activity").addClass("active");
