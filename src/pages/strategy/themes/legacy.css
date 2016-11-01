@@ -563,6 +563,7 @@ body {
 	border-radius:10px;
 }
 .tab_gears .item_types .item_type.active {
+	color:#def;
 	background:#2C3A3B;
 }
 .tab_gears .slotitem .holders dl dd .holder{
