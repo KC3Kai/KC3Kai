@@ -411,11 +411,10 @@
 	margin:0px 0px 10px 0px;
 }
 .tab_mstship .shipInfo .gunfit .fitgear {
-	width:330px;
+	width:400px;
 	height:24px;
 	margin:0px 0px 3px 0px;
 	padding:2px 5px;
-	background:#f7f7f7;
 	border-radius:6px;
 	line-height:20px;
 }
@@ -427,7 +426,7 @@
 	font-size:12px;
 }
 .tab_mstship .shipInfo .gunfit .fitgear .gearFit {
-	width:80px;
+	width:150px;
 	height:20px;
 	float:left;
 	text-align:center;

@@ -485,8 +485,6 @@
 				$(".gunfitList").html("");
 				var gunfits = KC3Meta.gunfit(shipData.api_id);
 				if (gunfits) {
-					console.log("gunfits", gunfits);
-					
 					var gunfitBox, gearObj;
 					$.each(gunfits, function(itemId, fitValue){
 						

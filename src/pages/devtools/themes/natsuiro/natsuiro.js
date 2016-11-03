@@ -2574,6 +2574,7 @@
 			} else {
 				var fitValue = parseInt(data.thisFit, 10);
 				$(".activity_gunfit .fit_value").text(KC3Meta.term("FitWeight_"+fitValue));
+				$(".activity_gunfit .fit_value").removeClass("fit_penalty fit_bonus fit_neutral");
 				if (fitValue < 0) {
 					$(".activity_gunfit .fit_value").addClass("fit_penalty");
 				} else if (fitValue > 0) {
