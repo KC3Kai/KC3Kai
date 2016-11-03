@@ -78,6 +78,37 @@ $(document).on("ready", function(){
 		if(ConfigManager.subtitle_bold){
 			$(".overlay_subtitles").css("font-weight", "bold");
 		}
+		
+		switch (ConfigManager.subtitle_display) {
+			case "bottom":
+				$(".overlay_subtitles span").css("pointer-events", "none");
+				break;
+			case "below":
+				$(".overlay_subtitles").appendTo("body");
+				$(".overlay_subtitles").css({
+					position: "relative",
+					margin: "5px auto 0px",
+					left: "auto",
+					top: "auto",
+					bottom: "auto",
+					right: "auto",
+					width: $(".box-game").width()
+				});
+				break;
+			case "stick":
+				$(".overlay_subtitles").appendTo("body");
+				$(".overlay_subtitles").css({
+					position: "fixed",
+					left: "50%",
+					top: "auto",
+					bottom: "3px",
+					right: "auto",
+					margin: "0px 0px 0px "+(-($(".box-game").width()/2))+"px",
+					width: $(".box-game").width()
+				});
+				break;
+			default: break;
+		}
 	}
 	
 	if(!(localStorage.absoluteswf || false)) {
@@ -137,14 +168,22 @@ $(document).on("ready", function(){
 	
 	// Overlay avoids cursor
 	$(".overlay_subtitles span").on("mouseover", function(){
-		if (subtitlePosition == "bottom") {
-			$(".overlay_subtitles").css("bottom", "");
-			$(".overlay_subtitles").css("top", "5px");
-			subtitlePosition = "top";
-		} else {
-			$(".overlay_subtitles").css("top", "");
-			$(".overlay_subtitles").css("bottom", "5px");
-			subtitlePosition = "bottom";
+		switch (ConfigManager.subtitle_display) {
+			case "evade":
+				if (subtitlePosition == "bottom") {
+					$(".overlay_subtitles").css("bottom", "");
+					$(".overlay_subtitles").css("top", "5px");
+					subtitlePosition = "top";
+				} else {
+					$(".overlay_subtitles").css("top", "");
+					$(".overlay_subtitles").css("bottom", "5px");
+					subtitlePosition = "bottom";
+				}
+				break;
+			case "ghost":
+				$(".overlay_subtitles").addClass("ghost");
+				break;
+			default: break;
 		}
 	});
 	
@@ -452,9 +491,17 @@ var interactions = {
 			subtitleVanishTimer = setTimeout(function(){
 				subtitleVanishTimer = false;
 				$(".overlay_subtitles").fadeOut(1000, function(){
-					$(".overlay_subtitles").css("top", "");
-					$(".overlay_subtitles").css("bottom", "5px");
-					subtitlePosition = "bottom";
+					switch (ConfigManager.subtitle_display) {
+						case "evade":
+							$(".overlay_subtitles").css("top", "");
+							$(".overlay_subtitles").css("bottom", "5px");
+							subtitlePosition = "bottom";
+							break;
+						case "ghost":
+							$(".overlay_subtitles").removeClass("ghost");
+							break;
+						default: break;
+					}
 				});
 			}, millis);
 		}

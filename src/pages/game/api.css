@@ -556,7 +556,14 @@ body {
 		0px 0px 2px #000;
 	pointer-events: none;
 }
+.overlay_subtitles.ghost {
+	opacity: 0.2;
+	filter: blur(1px);
+}
 .overlay_subtitles span {
 	width:100%;
 	pointer-events: visible;
+}
+.overlay_subtitles.ghost span {
+	pointer-events:none !important;
 }

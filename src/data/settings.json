@@ -547,6 +547,21 @@
 				"options" : {}
 			},
 			{
+				"id" : "subtitle_display",
+				"name" : "SettingsSubtitleDisplay",
+				"type" : "dropdown",
+				"options" : {
+					"choices" : [
+						[ "bottom", "SubtitleDisplayBottom" ],
+						[ "below", "SubtitleDisplayBelow" ],
+						[ "stick", "SubtitleDisplayStick" ],
+						[ "evade", "SubtitleDisplayEvade" ],
+						[ "ghost", "SubtitleDisplayGhost" ],
+						[ "free", "SubtitleDisplayFree", "disabled" ]
+					]
+				}
+			},
+			{
 				"id" : "google_translate",
 				"name" : "SettingsGoogleTranslate",
 				"type" : "check",
