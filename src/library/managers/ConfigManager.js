@@ -145,6 +145,7 @@ Retreives when needed to apply on components
 				subtitle_size		: 22,
 				subtitle_bold		: false,
 				subtitle_display	: "ghost",
+				subtitle_speaker	: false,
 				google_translate	: true,
 				
 				dmm_forcecookies	: false,
