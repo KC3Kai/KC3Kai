@@ -444,6 +444,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "google_translate",
+				"name" : "SettingsGoogleTranslate",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "api_tracking",
 				"name" : "SettingsQuestTracking",
 				"type" : "check",
@@ -547,10 +553,19 @@
 				"options" : {}
 			},
 			{
-				"id" : "google_translate",
-				"name" : "SettingsGoogleTranslate",
-				"type" : "check",
-				"options" : {}
+				"id" : "subtitle_display",
+				"name" : "SettingsSubtitleDisplay",
+				"type" : "dropdown",
+				"options" : {
+					"choices" : [
+						[ "bottom", "SubtitleDisplayBottom" ],
+						[ "below", "SubtitleDisplayBelow" ],
+						[ "stick", "SubtitleDisplayStick" ],
+						[ "evade", "SubtitleDisplayEvade" ],
+						[ "ghost", "SubtitleDisplayGhost" ],
+						[ "free", "SubtitleDisplayFree", "disabled" ]
+					]
+				}
 			}
 			
 		]

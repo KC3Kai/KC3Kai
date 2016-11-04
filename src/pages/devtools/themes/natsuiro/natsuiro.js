@@ -1650,8 +1650,8 @@
 									.show()
 									.css("-webkit-filter","");
 							}
-	
-							enemyHPPercent = ( newEnemyHP / thisNode.originalHPs[index+7] );
+							
+							enemyHPPercent = ( newEnemyHP / thisNode.maxHPs.enemy[index] );
 							if (enemyFleetBox == "combined") {
 								$(".module.activity .abyss_hp_bar_"+(index+1))
 									.css("height", 15*enemyHPPercent);
@@ -1791,7 +1791,7 @@
 								.css("-webkit-filter",(data||{safeSunk:false}).safeSunk ? "grayscale(100%)" : "");
 						}
 						
-						enemyHPPercent = ( newEnemyHP / thisNode.originalHPs[index+7] );
+						enemyHPPercent = ( newEnemyHP / thisNode.maxHPs.enemy[index] );
 						if (enemyFleetBox == "combined") {
 							$(".module.activity .abyss_hp_bar_"+(index+1)).css("height", 15*enemyHPPercent);
 							enemyBarHeight = $(".module.activity .abyss_hp_bar_"+(index+1)).height();
@@ -2074,7 +2074,7 @@
 								.css("-webkit-filter","grayscale(100%)");
 						}
 
-						enemyHPPercent = ( newEnemyHP / thisPvP.originalHPs[index+7] );
+						enemyHPPercent = ( newEnemyHP / thisPvP.maxHPs.enemy[index] );
 						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width", 28*enemyHPPercent);
 
 						if(enemyHPPercent <= 0.25){
@@ -2574,6 +2574,7 @@
 			} else {
 				var fitValue = parseInt(data.thisFit, 10);
 				$(".activity_gunfit .fit_value").text(KC3Meta.term("FitWeight_"+fitValue));
+				$(".activity_gunfit .fit_value").removeClass("fit_penalty fit_bonus fit_neutral");
 				if (fitValue < 0) {
 					$(".activity_gunfit .fit_value").addClass("fit_penalty");
 				} else if (fitValue > 0) {
