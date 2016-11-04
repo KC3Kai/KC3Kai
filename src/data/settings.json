@@ -444,6 +444,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "google_translate",
+				"name" : "SettingsGoogleTranslate",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "api_tracking",
 				"name" : "SettingsQuestTracking",
 				"type" : "check",
@@ -560,12 +566,6 @@
 						[ "free", "SubtitleDisplayFree", "disabled" ]
 					]
 				}
-			},
-			{
-				"id" : "google_translate",
-				"name" : "SettingsGoogleTranslate",
-				"type" : "check",
-				"options" : {}
 			}
 			
 		]
