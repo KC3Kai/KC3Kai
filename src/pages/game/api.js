@@ -92,7 +92,8 @@ $(document).on("ready", function(){
 					top: "auto",
 					bottom: "auto",
 					right: "auto",
-					width: $(".box-game").width()
+					width: $(".box-game").width(),
+					zoom: ((ConfigManager.api_gameScale || 100) / 100)
 				});
 				break;
 			case "stick":
