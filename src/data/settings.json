@@ -566,6 +566,12 @@
 						[ "free", "SubtitleDisplayFree", "disabled" ]
 					]
 				}
+			},
+			{
+				"id" : "subtitle_speaker",
+				"name" : "SettingsSubtitleSpeaker",
+				"type" : "check",
+				"options" : {}
 			}
 			
 		]
