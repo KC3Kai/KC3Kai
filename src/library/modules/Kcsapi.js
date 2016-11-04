@@ -74,6 +74,12 @@ Previously known as "Reactor"
 			this["api_get_member/useitem"](params, { api_data: response.api_data.api_useitem }, headers);
 		},
 		
+		"api_req_member/require_info":function(params, response, headers){
+			this["api_get_member/slot_item"](params, { api_data: response.api_data.api_slot_item }, headers);
+			this["api_get_member/kdock"](params, { api_data: response.api_data.api_kdock }, headers);
+			this["api_get_member/useitem"](params, { api_data: response.api_data.api_useitem }, headers);
+		},
+		
 		/* Home Port Screen
 		-------------------------------------------------------*/
 		"api_port/port":function(params, response, headers){	
