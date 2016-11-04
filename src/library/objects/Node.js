@@ -291,14 +291,27 @@ Used by SortieManager
 		this.yasenFlag = (battleData.api_midnight_flag>0);
 		
 		this.originalHPs = battleData.api_nowhps;
+		
+		this.maxHPs = {
+			ally: battleData.api_maxhps.slice(1,7),
+			enemy: battleData.api_maxhps.slice(7,13)
+		};
+		
+		if (typeof battleData.api_maxhps_combined != "undefined") {
+			this.maxHPs.ally = this.maxHPs.ally.concat(battleData.api_maxhps_combined.slice(1,7));
+			this.maxHPs.enemy = this.maxHPs.enemy.concat(battleData.api_maxhps_combined.slice(7,13));
+		}
+		
 		var beginHPs = {
 			ally: battleData.api_nowhps.slice(1,7),
 			enemy: battleData.api_nowhps.slice(7,13)
 		};
+		
 		if (typeof battleData.api_nowhps_combined != "undefined") {
 			beginHPs.ally = beginHPs.ally.concat(battleData.api_nowhps_combined.slice(1,7));
 			beginHPs.enemy = beginHPs.enemy.concat(battleData.api_nowhps_combined.slice(7,13));
 		}
+		
 		this.dayBeginHPs = beginHPs;
 		
 		this.detection = KC3Meta.detection( battleData.api_search[0] );
