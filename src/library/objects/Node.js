@@ -579,9 +579,13 @@ Used by SortieManager
 			beginHPs.ally = nightData.api_nowhps.slice(1,7);
 			beginHPs.enemy = nightData.api_nowhps.slice(7,13);
 		}
-
+		
 		if(setAsOriginalHP){
 			this.originalHPs = nightData.api_nowhps;
+			this.maxHPs = {
+				ally: nightData.api_maxhps.slice(1,7),
+				enemy: nightData.api_maxhps.slice(7,13)
+			};
 		}
 		
 		this.engagement = this.engagement || KC3Meta.engagement( nightData.api_formation[2] );

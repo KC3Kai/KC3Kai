@@ -29,6 +29,7 @@ Provides access to data on built-in JSON files
 		},
 		_tpmult:{},
 		_edges:{},
+		_nodes:{},
 		_gunfit:{},
 		_defaultIcon:"",
 		
@@ -70,6 +71,7 @@ Provides access to data on built-in JSON files
 			this._gauges	= JSON.parse( $.ajax(repo+'gauges.json', { async: false }).responseText );
 			this._defeq		= JSON.parse( $.ajax(repo+'defeq.json', { async: false }).responseText );
 			this._edges		= JSON.parse( $.ajax(repo+'edges.json', { async: false }).responseText );
+			this._nodes		= JSON.parse( $.ajax(repo+'nodes.json', { async: false }).responseText );
 			this._tpmult	= JSON.parse( $.ajax(repo+'tp_mult.json', { async: false }).responseText );
 			this._gunfit	= JSON.parse( $.ajax(repo+'gunfit.json', { async: false }).responseText );
 			
@@ -268,6 +270,22 @@ Provides access to data on built-in JSON files
 				}
 			}
 			return edgeId;
+		},
+		
+		nodeLetters : function(worldId, mapId) {
+			var map = this._nodes["World " + worldId + "-" + mapId];
+			if (typeof map !== "undefined" && !!map.letters) {
+				return map.letters;
+			}
+			return {};
+		},
+		
+		nodeMarkers : function(worldId, mapId) {
+			var map = this._nodes["World " + worldId + "-" + mapId];
+			if (typeof map !== "undefined" && !!map.markers) {
+				return map.markers;
+			}
+			return [];
 		},
 		
 		tpObtained : function(kwargs) {
