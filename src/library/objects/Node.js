@@ -558,6 +558,16 @@ Used by SortieManager
 		this.eKyouka = nightData.api_eKyouka;
 		this.eSlot = nightData.api_eSlot;
 		
+		this.maxHPs = {
+			ally: nightData.api_maxhps.slice(1,7),
+			enemy: nightData.api_maxhps.slice(7,13)
+		};
+		
+		if (typeof nightData.api_maxhps_combined != "undefined") {
+			this.maxHPs.ally = this.maxHPs.ally.concat(nightData.api_maxhps_combined.slice(1,7));
+			this.maxHPs.enemy = this.maxHPs.enemy.concat(nightData.api_maxhps_combined.slice(7,13));
+		}
+		
 		// if we did not started at night, at this point dayBeginHPs should be available
 		var beginHPs = {
 			ally: [],
