@@ -125,7 +125,9 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			(new TMsg(request.tabId, "gamescreen", "markersOverlay", {
 				worldId: request.nextNode.api_maparea_id,
 				mapId: request.nextNode.api_mapinfo_no,
-				needsDelay: !!request.startSortie
+				compassShow: !!request.nextNode.api_rashin_flg,
+				needsDelay: !!request.startSortie,
+				apiData: request.nextNode
 			})).execute();
 		},
 		

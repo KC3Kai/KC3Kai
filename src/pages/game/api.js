@@ -349,7 +349,8 @@ var interactions = {
 	markersOverlay :function(request, sender, response){
 		if(!ConfigManager.map_markers) { response({success:false}); return true; }
 		var sortieStartDelayMillis = 2800;
-		var markersShowMillis = 5000;
+		var markersShowMillis = 5500;
+		var compassLeastShowMillis = 2500;
 		if(markersOverlayTimer){
 			// Keep showing if last ones not disappear yet
 			clearTimeout(markersOverlayTimer);
@@ -400,7 +401,10 @@ var interactions = {
 			markersOverlayTimer = setTimeout(function(){
 				$(".overlay_markers").fadeOut(2000);
 				markersOverlayTimer = false;
-			}, markersShowMillis + (request.needsDelay ? sortieStartDelayMillis : 0));
+			}, markersShowMillis
+				+ (request.compassShow ? compassLeastShowMillis : 0)
+				+ (request.needsDelay ? sortieStartDelayMillis : 0)
+			);
 		}
 		response({success:true});
 	},
