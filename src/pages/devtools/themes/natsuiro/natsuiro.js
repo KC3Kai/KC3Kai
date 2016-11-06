@@ -1041,13 +1041,13 @@
 				// we'll try switching to the next available fleet if any
 				ExpedTabAutoFleetSwitch(false);
 			}
-			NatsuiroListeners.UpdateExpeditionPlanner();
 
 			// If LBAS is selected, do not respond to rest fleet update
 			if (selectedFleet == 6) {
 				return false;
 			}
 
+			NatsuiroListeners.UpdateExpeditionPlanner();
 			var FleetSummary, MainRepairs;
 			$(".shiplist_single").empty();
 			$(".shiplist_single").hide();
@@ -2290,8 +2290,8 @@
 		},
 
 		UpdateExpeditionPlanner: function (data) {
-			// if combined fleet, cancel action
-			if(selectedFleet===5){ return false; }
+			// if combined fleet or LBAS, cancel action
+			if(selectedFleet===5 || selectedFleet===6){ return false; }
 
 			$( ".module.activity .activity_expeditionPlanner .expres_greatbtn img" )
 				.attr("src", "../../../../assets/img/ui/btn-"+(plannerIsGreatSuccess?"":"x")+"gs.png");

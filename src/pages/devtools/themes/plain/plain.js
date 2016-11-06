@@ -1851,8 +1851,8 @@
 		},
 
 		UpdateExpeditionPlanner: function (data) {
-			// if combined fleet, cancel action
-			if(selectedFleet===5){ return false; }
+			// if combined fleet or LBAS, cancel action
+			if(selectedFleet===5 || selectedFleet===6){ return false; }
 			
 			$( ".module.activity .activity_expeditionPlanner .expres_greatbtn img" )
 				.attr("src", "../../../../assets/img/ui/btn-"+(plannerIsGreatSuccess?"":"x")+"gs.png");
