@@ -395,8 +395,8 @@ var interactions = {
 	markersOverlay :function(request, sender, response){
 		if(!ConfigManager.map_markers) { response({success:false}); return true; }
 		var sortieStartDelayMillis = 2800;
-		var markersShowMillis = 5500;
-		var compassLeastShowMillis = 2500;
+		var markersShowMillis = 5000;
+		var compassLeastShowMillis = 3000;
 		if(markersOverlayTimer){
 			// Keep showing if last ones not disappear yet
 			clearTimeout(markersOverlayTimer);
