@@ -350,7 +350,7 @@ var interactions = {
 		if(!ConfigManager.map_markers) { response({success:false}); return true; }
 		var sortieStartDelayMillis = 2800;
 		var markersShowMillis = 5000;
-		var compassLeastShowMillis = 3000;
+		var compassLeastShowMillis = 3500;
 		if(markersOverlayTimer){
 			// Keep showing if last ones not disappear yet
 			clearTimeout(markersOverlayTimer);
