@@ -633,6 +633,7 @@ ABYSS FLEET
 .module.activity .abyss_combined {
 	width:180px;
 	margin:0px 0px 4px 0px;
+	display:none;
 }
 .module.activity .abyss_combined .abyss_fleet {
 	width:180px;

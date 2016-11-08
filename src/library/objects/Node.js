@@ -579,7 +579,7 @@ Used by SortieManager
 			beginHPs.ally = nightData.api_nowhps.slice(1,7);
 			beginHPs.enemy = nightData.api_nowhps.slice(7,13);
 		}
-
+		
 		if(setAsOriginalHP){
 			this.originalHPs = nightData.api_nowhps;
 		}

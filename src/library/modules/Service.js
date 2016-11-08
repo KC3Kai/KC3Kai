@@ -118,6 +118,19 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			(new TMsg(request.tabId, "gamescreen", "clearOverlays", {})).execute();
 		},
 		
+		/* MAP MARKERS
+		When sortie to a world map, show node markers
+		------------------------------------------*/
+		"mapMarkers" :function(request, sender, response){
+			(new TMsg(request.tabId, "gamescreen", "markersOverlay", {
+				worldId: request.nextNode.api_maparea_id,
+				mapId: request.nextNode.api_mapinfo_no,
+				compassShow: !!request.nextNode.api_rashin_flg,
+				needsDelay: !!request.startSortie,
+				apiData: request.nextNode
+			})).execute();
+		},
+		
 		/* GET CONFIG
 		For content scripts who doesnt have access to localStorage
 		Mainly used at the moment for DMM cookie injection

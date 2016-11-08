@@ -29,6 +29,9 @@ var suspendedTaiha = false;
 var subtitlePosition = "bottom";
 var subtitleGhostout = false;
 
+// Overlay for map markers
+var markersOverlayTimer = false;
+
 // Idle time check
 /*
   variables explanation:
@@ -388,11 +391,76 @@ var interactions = {
 		response({success:true});
 	},
 	
+	// Show map markers for old worlds (node letters & icons)
+	markersOverlay :function(request, sender, response){
+		if(!ConfigManager.map_markers) { response({success:false}); return true; }
+		var sortieStartDelayMillis = 2800;
+		var markersShowMillis = 5000;
+		var compassLeastShowMillis = 3500;
+		if(markersOverlayTimer){
+			// Keep showing if last ones not disappear yet
+			clearTimeout(markersOverlayTimer);
+			$(".overlay_markers").show();
+		} else {
+			var letters = KC3Meta.nodeLetters(request.worldId, request.mapId);
+			var lettersFound = (!!letters && Object.keys(letters).length > 0);
+			var icons = KC3Meta.nodeMarkers(request.worldId, request.mapId);
+			var iconsFound =  (!!icons.length && icons.length > 0);
+			$(".overlay_markers").hide().empty();
+			if(lettersFound){
+				// Show node letters
+				var l;
+				for(l in letters){
+					var letterDiv = $('<div class="letter"></div>').text(l)
+						.css("left", letters[l][0] + "px")
+						.css("top", letters[l][1] + "px");
+					$(".overlay_markers").append(letterDiv);
+				}
+			}
+			if(iconsFound){
+				// Show some icon style markers
+				var i;
+				for(i in icons){
+					var obj = icons[i];
+					var iconImg = $('<img />')
+						.attr("src", "../../assets/img/" + obj.img)
+						.attr("width", obj.size[0])
+						.attr("height", obj.size[1]);
+					var iconDiv = $('<div class="icon"></div>')
+						.css("left", obj.pos[0] + "px")
+						.css("top", obj.pos[1] + "px")
+						.append(iconImg);
+					$(".overlay_markers").append(iconDiv);
+				}
+			}
+			if(request.needsDelay){
+				// Delay to show on start of sortie
+				setTimeout(function(){
+					$(".overlay_markers").fadeIn(1000);
+				}, sortieStartDelayMillis);
+			} else {
+				$(".overlay_markers").fadeIn(1000);
+			}
+			markersOverlayTimer = true;
+		}
+		if(markersOverlayTimer){
+			markersOverlayTimer = setTimeout(function(){
+				$(".overlay_markers").fadeOut(2000);
+				markersOverlayTimer = false;
+			}, markersShowMillis
+				+ (request.compassShow ? compassLeastShowMillis : 0)
+				+ (request.needsDelay ? sortieStartDelayMillis : 0)
+			);
+		}
+		response({success:true});
+	},
+	
 	// Remove HTML overlays
 	clearOverlays :function(request, sender, response){
 		// console.log("clearing overlays");
 		// app.Dom.clearOverlays();
-		$(".overlay_quests").html("");
+		$(".overlay_quests").empty();
+		$(".overlay_markers").empty();
 		$(".overlay_record").hide();
 		response({success:true});
 	},

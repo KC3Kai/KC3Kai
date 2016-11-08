@@ -752,6 +752,8 @@
 		$(".module.activity .abyss_ship img").attr("src", KC3Meta.abyssIcon(-1));
 		$(".module.activity .abyss_ship img").attr("title", "");
 		$(".module.activity .abyss_ship").css("opacity", 1);
+		$(".module.activity .abyss_combined").hide();
+		$(".module.activity .abyss_single").show();
 		$(".module.activity .abyss_ship").hide();
 		$(".module.activity .abyss_hp").hide();
 		$(".module.activity .battle_eformation img").attr("src", "../../../../assets/img/ui/empty.png");
