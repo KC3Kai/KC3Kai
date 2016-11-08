@@ -74,6 +74,7 @@
 								$(".encounter_icon img", shipBox).attr("alt", shipId);
 								$(".encounter_icon img", shipBox).click(shipClickFunc);
 								$(".encounter_id", shipBox).text(shipId);
+								$(shipBox).attr("title", KC3Meta.abyssShipName(shipId));
 								shipBox.appendTo($(".encounter_ships", curBox));
 							}
 						});

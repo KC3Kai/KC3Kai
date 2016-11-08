@@ -76,7 +76,7 @@ Quest Type:
 			if (!showAll) {
 				return textToShow;
 			} else {
-				return trackingText.join(String.fromCharCode(13));
+				return trackingText.join(String.fromCharCode(10));
 			}
 		}
 		return "";
