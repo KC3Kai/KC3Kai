@@ -157,57 +157,6 @@ body {
 .devBox .devLinks .devLink img {
 	width:16px; height:16px;
 }
-
-/* DevBox */
-.partnerBox {
-	width:380px;
-	height:78px;
-	background:#def;
-	float:left;
-	margin:3px 5px;
-	padding:4px;
-	border-radius:7px;
-}
-.partnerBox .partnerAvatar {
-	width:60px;
-	height:60px;
-	float:left;
-	margin:5px 8px 0px 3px;
-	border-radius:5px;
-	overflow:hidden;
-}
-.partnerBox .partnerAvatar img {
-	width:60px;
-	height:60px;
-}
-.partnerBox .partnerName {
-	width:300px;
-	float:left;
-	font-size:14px;
-	font-weight:bold;
-	line-height:16px;
-	margin:3px 0px 3px 0px;
-}
-.partnerBox .partnerDesc {
-	width:300px;
-	height:30px;
-	line-height:15px;
-	float:left;
-	font-size:12px;
-	color:#8ac;
-	margin:0px 0px 0px 0px;
-}
-.partnerBox .partnerLink {
-	width:300px;
-	float:left;
-	list-style:none;
-	line-height:20px;
-	font-size:12px;
-	margin:0px;
-	padding:0px;
-	margin:0px 0px 0px 0px;
-}
-
 /* Help out box */
 .helpOut {
 	width:189px;
