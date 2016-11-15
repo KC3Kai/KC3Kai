@@ -20,6 +20,7 @@
 		---------------------------------*/
 		reload :function(){
 			KC3QuestManager.load();
+			this.flowchartIds = [];
 		},
 		
 		/* EXECUTE
@@ -39,6 +40,8 @@
 			this.seedBranch( rootQuestTree, 249 ); // Bm1
 			this.seedBranch( rootQuestTree, 256 ); // Bm2
 			this.seedBranch( rootQuestTree, 259 ); // Bm4
+			this.seedBranch( rootQuestTree, 645 ); // F41
+			this.seedBranch( rootQuestTree, 643 ); // F39
 			
 			// Other non-flowchart quests
 			var rootQuestList = $(".tab_flowchart .extralist ul.questList");
@@ -61,6 +64,11 @@
 			
 			$(".resetMonthlies").on("click", function(){
 				KC3QuestManager.resetMonthlies();
+				KC3StrategyTabs.reloadTab(undefined, true);
+			});
+			
+			$(".resetQuarterlies").on("click", function(){
+				KC3QuestManager.resetQuarterlies();
 				KC3StrategyTabs.reloadTab(undefined, true);
 			});
 			
@@ -103,10 +111,12 @@
 			
 			// Manual remove quest
 			$(".page_padding").on("click", ".questRemove", function(){
-				console.log(KC3QuestManager.list["q"+$(this).data("id")]);
-				delete KC3QuestManager.list["q"+$(this).data("id")];
-				KC3QuestManager.save();
-				KC3StrategyTabs.reloadTab(undefined, true);
+				var removingQuest = KC3QuestManager.get($(this).data("id"));
+				console.log(removingQuest);
+				if(KC3QuestManager.remove(removingQuest)){
+					KC3QuestManager.save();
+					KC3StrategyTabs.reloadTab(undefined, true);
+				}
 			});
 			
 		},
@@ -135,8 +145,14 @@
 			$(".questRemove", thisBox).data("id", quest_id);
 			
 			// If we have player data about the quest, not just meta data from json
-			if(typeof KC3QuestManager.list["q"+quest_id] != "undefined"){
-				var questRecord = KC3QuestManager.list["q"+quest_id];
+			if(KC3QuestManager.exists(quest_id)){
+				var questRecord = KC3QuestManager.get(quest_id);
+				
+				if(!questRecord.tracking){
+					$(".questTrack", thisBox).hide();
+				} else {
+					$(".questCount", thisBox).text( questRecord.outputShort() );
+				}
 				
 				// Status-based actions
 				switch(questRecord.status){
@@ -175,15 +191,10 @@
 						break;
 				}
 				
-				$(".questCount", thisBox).text( questRecord.outputShort() );
-				
-				if(typeof questRecord.tracking != "undefined"){
-					$(".questTrack", thisBox).show();
-				}
-				
 			// If we don't have player data about the quest
 			}else{
 				$(".questInfo", thisBox).addClass("disabled");
+				$(".questTrack", thisBox).hide();
 			}
 			
 			// If has children, show them under me

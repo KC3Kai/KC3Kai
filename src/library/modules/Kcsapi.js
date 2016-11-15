@@ -819,6 +819,12 @@ Previously known as "Reactor"
 			}
 
 			KC3SortieManager.advanceNode( response.api_data, UTCTime );
+			KC3Network.hasOverlay = true;
+			(new RMsg("service", "mapMarkers", {
+				tabId: chrome.devtools.inspectedWindow.tabId,
+				nextNode: response.api_data,
+				startSortie: true
+			})).execute();
 			
 			KC3Network.trigger("SortieStart");
 			KC3Network.trigger("CompassResult");
@@ -832,6 +838,11 @@ Previously known as "Reactor"
 			var UTCTime = Date.toUTCseconds(headers.Date);
 			KC3SortieManager.discardSunk();
 			KC3SortieManager.advanceNode( response.api_data, UTCTime );
+			KC3Network.hasOverlay = true;
+			(new RMsg("service", "mapMarkers", {
+				tabId: chrome.devtools.inspectedWindow.tabId,
+				nextNode: response.api_data
+			})).execute();
 			KC3Network.trigger("CompassResult");
 		},
 		

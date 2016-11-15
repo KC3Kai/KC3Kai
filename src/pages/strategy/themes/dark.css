@@ -1230,3 +1230,39 @@ a:hover {
 .tab_maps .sortie_list .node_exp:before {
 	color: #aaa;
 }
+/* ENCOUNTERS
+--------------------------------*/
+.tab_encounters .encounter_record {
+	background:#414141 !important;
+}
+
+/* SHIPS LIBRARY
+--------------------------------*/
+.tab_mstship .filters {
+	background:#222 !important;
+	border-bottom:0px !important;
+}
+.tab_mstship .shipInfo {
+	background:#222 !important;
+}
+.tab_mstship .shipRecords {
+	background:#222 !important;
+}
+.tab_mstship .shipInfo .ship_stat_icon img {
+	-webkit-filter:invert(100%);
+}
+.tab_mstship .shipInfo .voice {
+	background:#222 !important;
+}
+/* GEARS LIBRARY
+--------------------------------*/
+.tab_mstgear .gearRecords {
+	background:#222 !important;
+}
+.tab_mstgear .gearInfo {
+	background:#222 !important;
+
+}
+.tab_mstgear .gearInfo .stat_icon img {
+	-webkit-filter:invert(100%);
+}

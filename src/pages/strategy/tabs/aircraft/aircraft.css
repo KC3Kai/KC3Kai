@@ -97,7 +97,7 @@
 }
 .tab_aircraft .slotitem .instance_icon {
 	width:20px;
-	margin:0px 5px 0px 0px;
+	margin:0px 3px 0px 0px;
 	/*background:#fcc;*/
 }
 .tab_aircraft .slotitem .instance_icon img {
@@ -106,8 +106,8 @@
 	vertical-align:top;
 }
 .tab_aircraft .slotitem .instance_chev {
-	width:29px;
-	margin:0px 5px 0px 0px;
+	width:20px;
+	margin:0px 3px 0px 0px;
 	/*background:#cfc;*/
 	overflow:hidden;
 }
@@ -117,6 +117,12 @@
 	vertical-align:top;
 	position:relative;
 	margin:0px 0px 0px -3px;
+}
+.tab_aircraft .slotitem .instance_slot {
+	width:16px;
+	margin:0px 3px 0px 0px;
+	overflow:hidden;
+	font-size:12px;
 }
 .tab_aircraft .slotitem .instance_aaicon {
 	width:16px;
@@ -170,7 +176,7 @@
 	font-size:12px;
 }
 .tab_aircraft .slotitem .holder_level {
-	width:40px;
+	width:34px;
 	height:20px;
 	/*background:#ccf;*/
 	font-size:12px;

@@ -752,6 +752,8 @@
 		$(".module.activity .abyss_ship img").attr("src", KC3Meta.abyssIcon(-1));
 		$(".module.activity .abyss_ship img").attr("title", "");
 		$(".module.activity .abyss_ship").css("opacity", 1);
+		$(".module.activity .abyss_combined").hide();
+		$(".module.activity .abyss_single").show();
 		$(".module.activity .abyss_ship").hide();
 		$(".module.activity .abyss_hp").hide();
 		$(".module.activity .battle_eformation img").attr("src", "../../../../assets/img/ui/empty.png");
@@ -1041,13 +1043,13 @@
 				// we'll try switching to the next available fleet if any
 				ExpedTabAutoFleetSwitch(false);
 			}
-			NatsuiroListeners.UpdateExpeditionPlanner();
 
 			// If LBAS is selected, do not respond to rest fleet update
 			if (selectedFleet == 6) {
 				return false;
 			}
 
+			NatsuiroListeners.UpdateExpeditionPlanner();
 			var FleetSummary, MainRepairs;
 			$(".shiplist_single").empty();
 			$(".shiplist_single").hide();
@@ -2290,8 +2292,8 @@
 		},
 
 		UpdateExpeditionPlanner: function (data) {
-			// if combined fleet, cancel action
-			if(selectedFleet===5){ return false; }
+			// if combined fleet or LBAS, cancel action
+			if(selectedFleet===5 || selectedFleet===6){ return false; }
 
 			$( ".module.activity .activity_expeditionPlanner .expres_greatbtn img" )
 				.attr("src", "../../../../assets/img/ui/btn-"+(plannerIsGreatSuccess?"":"x")+"gs.png");
