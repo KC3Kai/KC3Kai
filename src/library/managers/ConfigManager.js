@@ -131,7 +131,7 @@ Retreives when needed to apply on components
 				
 				api_translation		: true,
 				api_tracking 		: true,
-				api_mustPanel 		: false,
+				api_mustPanel 		: true,
 				api_askExit			: true,
 				api_directRefresh	: false,
 				api_margin			: 0,
