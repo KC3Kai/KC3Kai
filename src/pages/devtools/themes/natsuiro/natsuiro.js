@@ -1618,6 +1618,17 @@
 				$(".module.activity .abyss_combined").hide();
 			}
 			
+			
+			if (thisNode.debuffed || true) {
+				$(".module.activity .map_world")
+					.addClass("debuffed")
+					.attr("title", KC3Meta.term("Debuffed"));
+			} else {
+				$(".module.activity .map_world")
+					.removeClass("debuffed")
+					.attr("title", "");
+			}
+			
 			// Load enemy icons
 			$.each(thisNode.eships, function(index, eshipId){
 				var eParam = thisNode.eParam[index];

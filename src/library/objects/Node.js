@@ -385,6 +385,12 @@ Used by SortieManager
 				}
 			}
 		}
+		
+		// Boss Debuffed
+		this.debuffed = typeof battleData.api_boss_damaged != "undefined" ?
+			(battleData.api_boss_damaged == 1) ? true : false
+			: false;
+		
 		var i = 0;
 		// Battle analysis only if on sortie or PvP, not applied to sortielogs
 		if(KC3SortieManager.onSortie > 0 || KC3SortieManager.isPvP()){
