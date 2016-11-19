@@ -240,7 +240,8 @@ Used by SortieManager
 			return PlayerManager.fleets[fleetId].ship().map(function(ship){
 				return ship.obtainTP();
 			}).reduce(function(pre,cur){ return pre.add(cur); },KC3Meta.tpObtained());
-		}).reduce(function(pre,cur){ return pre.add(cur); },KC3Meta.tpObtained()));
+		}).reduce(function(pre,cur){ return pre.add(cur); },KC3Meta.tpObtained())
+		.value);
 		
 		return this;
 	};
