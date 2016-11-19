@@ -485,6 +485,9 @@ html,body {
 	text-align:center;
 	margin:0px 5px 0px 0px;
 }
+.module.activity .map_world.debuffed {
+	color:#dc8280;
+}
 .module.activity .map_gauge {
 	position:relative;
 	width:60px;

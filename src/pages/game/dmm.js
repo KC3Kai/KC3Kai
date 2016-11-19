@@ -559,7 +559,7 @@ var interactions = {
 	subtitle :function(request, sender, response){
 		if(!ConfigManager.api_subtitles) return true;
 		
-		console.debug("subtitle", request);
+		//console.debug("subtitle", request);
 		
 		// Get subtitle text
 		var subtitleText = false;

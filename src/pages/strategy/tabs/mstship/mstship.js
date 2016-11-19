@@ -496,7 +496,7 @@
 				}
 				
 				// GUN FITS
-				$(".gunfitList").html("");
+				$(".gunfitList").empty();
 				var gunfits = KC3Meta.gunfit(shipData.api_id);
 				if (gunfits) {
 					var gunfitBox, gearObj;
@@ -532,6 +532,7 @@
 				$(".tab_mstship .shipInfo .intro").show();
 				$(".tab_mstship .shipInfo .more").show();
 				$(".tab_mstship .shipInfo .json").hide();
+				$(".tab_mstship .shipInfo .gunfit").show();
 				$(".tab_mstship .shipInfo .tokubest").show();
 				if(ConfigManager.info_salt)
 					$(".tab_mstship .shipInfo .tokubest .salty-zone").show();
@@ -621,6 +622,7 @@
 				$(".tab_mstship .shipInfo .hourlies").hide();
 				$(".tab_mstship .shipInfo .intro").hide();
 				$(".tab_mstship .shipInfo .more").hide();
+				$(".tab_mstship .shipInfo .gunfit").hide();
 				$(".tab_mstship .shipInfo .tokubest").hide();
 			} else {
 				$(".tab_mstship .shipInfo .stats").hide();
@@ -634,6 +636,7 @@
 				$(".tab_mstship .shipInfo .hourlies").hide();
 				$(".tab_mstship .shipInfo .intro").hide();
 				$(".tab_mstship .shipInfo .more").hide();
+				$(".tab_mstship .shipInfo .gunfit").hide();
 				$(".tab_mstship .shipInfo .tokubest").hide();
 			}
 		}

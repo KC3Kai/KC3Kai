@@ -1130,7 +1130,12 @@
 					lowestMorale:
 						(MainFleet.lowestMorale() < EscortFleet.lowestMorale())
 						? MainFleet.lowestMorale() : EscortFleet.lowestMorale(),
-					supportPower: 0
+					supportPower: 0,
+					tpValueSum: Math.floor([0,1].map(function(fleetId){
+						return PlayerManager.fleets[fleetId].ship()
+							.map(function(ship){ return ship.obtainTP(); })
+							.reduce(function(pre,cur){ return pre.add(cur); }, KC3Meta.tpObtained());
+					}).reduce(function(pre,cur){ return pre.add(cur); }, KC3Meta.tpObtained()).value)
 				};
 				var escortSupplyCost = EscortFleet.calcResupplyCost();
 				FleetSummary.supplyCost.fuel += escortSupplyCost.fuel;
@@ -1188,7 +1193,12 @@
 						false//3
 					],
 					lowestMorale: CurrentFleet.lowestMorale(),
-					supportPower: CurrentFleet.supportPower()
+					supportPower: CurrentFleet.supportPower(),
+					tpValueSum: Math.floor(CurrentFleet.ship()
+						.map(function(ship){ return ship.obtainTP(); })
+						.reduce(function(pre,cur){ return pre.add(cur); }, KC3Meta.tpObtained())
+						.value
+						)
 				};
 
 			}
@@ -1312,19 +1322,17 @@
 							break;
 						case 3:
 							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedTransport") );
-							var tpValueSum = Math.floor([0,1].map(function(fleetId){
-								return PlayerManager.fleets[fleetId].ship()
-									.map(function(ship){ return ship.obtainTP(); })
-									.reduce(function(pre,cur){ return pre.add(cur); }, KC3Meta.tpObtained());
-							}).reduce(function(pre,cur){ return pre.add(cur); }, KC3Meta.tpObtained()));
-							console.debug("tpValueSum", tpValueSum);
 							$(".module.status .status_butai .status_text").attr("title",
-								"{0} ~ {1} TP".format( isNaN(tpValueSum)? "?" : Math.floor(0.7 * tpValueSum),
-													   isNaN(tpValueSum)? "?" : tpValueSum )
+								"{0} ~ {1} TP".format( isNaN(FleetSummary.tpValueSum)? "?" : Math.floor(0.7 * FleetSummary.tpValueSum),
+													   isNaN(FleetSummary.tpValueSum)? "?" : FleetSummary.tpValueSum )
 							);
 							break;
 						default:
 							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedNone") );
+							$(".module.status .status_butai .status_text").attr("title",
+								"{0} ~ {1} TP".format( isNaN(FleetSummary.tpValueSum)? "?" : Math.floor(0.7 * FleetSummary.tpValueSum),
+													   isNaN(FleetSummary.tpValueSum)? "?" : FleetSummary.tpValueSum )
+							);
 							break;
 					}
 					$(".module.status .status_butai").show();
@@ -1336,6 +1344,10 @@
 
 				// STATUS: SUPPORT
 				$(".module.status .status_support .status_text").text( FleetSummary.supportPower );
+				$(".module.status .status_support .status_text").attr("title",
+					"{0} ~ {1} TP".format( isNaN(FleetSummary.tpValueSum)? "?" : Math.floor(0.7 * FleetSummary.tpValueSum),
+										   isNaN(FleetSummary.tpValueSum)? "?" : FleetSummary.tpValueSum )
+				);
 
 				// STATUS: REPAIRS
 				UpdateRepairTimerDisplays(FleetSummary.docking, FleetSummary.akashi);
@@ -1604,6 +1616,17 @@
 			} else {
 				$(".module.activity .abyss_single").show();
 				$(".module.activity .abyss_combined").hide();
+			}
+			
+			
+			if (thisNode.debuffed) {
+				$(".module.activity .map_world")
+					.addClass("debuffed")
+					.attr("title", KC3Meta.term("Debuffed"));
+			} else {
+				$(".module.activity .map_world")
+					.removeClass("debuffed")
+					.attr("title", "");
 			}
 			
 			// Load enemy icons
