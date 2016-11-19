@@ -926,6 +926,16 @@ Previously known as "Reactor"
 			KC3Network.trigger("BattleNight");
 		},
 		
+		/* BOTH COMBINED FLEET
+		-------------------------------------------------------*/
+		"api_req_combined_battle/each_battle":function(params, response, headers){
+			KC3SortieManager.engageBattle(
+				response.api_data,
+				Date.toUTCseconds(headers.Date)
+			);
+			KC3Network.trigger("BattleStart");
+		},
+		
 		/* BATTLE RESULT SCREENS
 		-------------------------------------------------------*/
 		"api_req_sortie/battleresult":function(params, response, headers){
