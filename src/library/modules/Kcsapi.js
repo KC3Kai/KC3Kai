@@ -1051,6 +1051,7 @@ Previously known as "Reactor"
 			console.log(quest,data);
 			
 			// Force to mark quest as complete
+			KC3QuestManager.get(quest).status = 3;
 			KC3QuestManager.isOpen( quest, false );
 			KC3QuestManager.isActive( quest, false );
 			KC3QuestManager.save();
