@@ -1619,7 +1619,7 @@
 			}
 			
 			
-			if (thisNode.debuffed || true) {
+			if (thisNode.debuffed) {
 				$(".module.activity .map_world")
 					.addClass("debuffed")
 					.attr("title", KC3Meta.term("Debuffed"));
