@@ -376,6 +376,10 @@ KC3改 Ship Object
 			tp1 = String(tp.add(KC3Meta.tpObtained({stype:this.master().api_stype})));
 			tp2 = String(tp.add(KC3Meta.tpObtained({slots:this.equipment().map(function(slot){return slot.masterId;})})));
 			tp3 = String(tp.add(KC3Meta.tpObtained({slots:[this.exItem().masterId]})));
+			// Special case of Kinu Kai 2: Daihatsu embedded :)
+			if (this.masterId == 487) {
+				tp.add(KC3Meta.tpObtained({slots:[68]}));
+			}
 			//console.log(this.name(),this.rosterId,tp1,tp2,tp3);
 		}
 		return tp;

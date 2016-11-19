@@ -1013,6 +1013,18 @@ Previously known as "Reactor"
 			KC3Network.trigger("Lbas");
 		},
 		
+		/* Supply base squadrons
+		-------------------------------------------------------*/
+		"api_req_air_corps/supply":function(params, response, headers){
+			$.each(params.api_squadron_id.split("%2C"), function(index, sid){
+				PlayerManager
+					.bases[params.api_base_id-1]
+					.planes[sid-1] = response.api_data.api_plane_info[index];
+			});
+			localStorage.bases = JSON.stringify(PlayerManager.bases);
+			KC3Network.trigger("Lbas");
+		},
+		
 		
 		/*-------------------------------------------------------*/
 		/*----------------------[ QUESTS ]-----------------------*/
@@ -1614,6 +1626,11 @@ Previously known as "Reactor"
 				maps[ key ] = localMap;
 			}
 			localStorage.maps = JSON.stringify(maps);
+			
+			if(typeof response.api_data.api_air_base !== "undefined") {
+				PlayerManager.setBases(response.api_data.api_air_base);
+				KC3Network.trigger("Lbas");
+			}
 		},
 		
 		/* Ship Modernize
