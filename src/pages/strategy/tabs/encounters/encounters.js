@@ -70,6 +70,7 @@
 						$.each(shipList, function(shipIndex, shipId){
 							if(shipId > 0){
 								shipBox = $(".tab_encounters .factory .encounter_ship").clone();
+								$(".encounter_icon", shipBox).addClass(KC3Meta.abyssShipBorderClass(shipId));
 								$(".encounter_icon img", shipBox).attr("src", KC3Meta.abyssIcon(shipId));
 								$(".encounter_icon img", shipBox).attr("alt", shipId);
 								$(".encounter_icon img", shipBox).click(shipClickFunc);

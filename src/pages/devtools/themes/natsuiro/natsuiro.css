@@ -615,6 +615,22 @@ ABYSS FLEET
 	top:-1px;
 	left:-1px;
 }
+.module.activity .abyss_ships .boss {
+	border-color:#5ef;
+	box-shadow:0px 0px 1px 1px #fe5;
+}
+.module.activity .abyss_ships .kai {
+	border-color:#2af;
+	box-shadow:0px 0px 1px 0px #2af;
+}
+.module.activity .abyss_ships .flagship {
+	border-color:#fc3;
+	box-shadow:0px 0px 1px 0px #fc3;
+}
+.module.activity .abyss_ships .elite {
+	border-color:#f33;
+	box-shadow:0px 0px 1px 0px #f33;
+}
 .module.activity .abyss_single .abyss_hps {
 	width:180px;
 	height:4px;
