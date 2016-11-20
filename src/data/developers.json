@@ -446,6 +446,16 @@
 					"px": "http://www.pixiv.net/member.php?id=3311248",
 					"wb2": "http://home.gamer.com.tw/homeindex.php?owner=wut84326"
 				}
+			},
+			{
+				"name": "JoyceTheBleak",
+				"avatar" : "https://avatars2.githubusercontent.com/u/19313885?v=3&s=40",
+				"desc" : "Українська",
+				"active": 1,
+				"links" : {
+					"fb": "https://www.facebook.com/rostyslav.fed",
+					"wb": "https://vk.com/joyce_the_bleak"
+				}
 			}
 		],
 		"AboutForkContributors": [
