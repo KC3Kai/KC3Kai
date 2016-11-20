@@ -989,7 +989,7 @@ Previously known as "Reactor"
 		/*-----------------------[ LBAS ]------------------------*/
 		/*-------------------------------------------------------*/
 		
-		/* Get bases info
+		/* Get bases info. deprecated by devs, see `mapinfo`.
 		-------------------------------------------------------*/
 		"api_get_member/base_air_corps":function(params, response, headers){
 			PlayerManager.setBases(response.api_data);
@@ -999,7 +999,11 @@ Previously known as "Reactor"
 		/* Change base name
 		-------------------------------------------------------*/
 		"api_req_air_corps/change_name":function(params, response, headers){
-			PlayerManager.bases[params.api_base_id-1].name = decodeURIComponent(params.api_name);
+			$.each(PlayerManager.bases, function(i, base){
+				if(base.map == params.api_area_id && base.rid == params.api_base_id){
+					base.name = decodeURIComponent(params.api_name);
+				}
+			});
 			localStorage.bases = JSON.stringify(PlayerManager.bases);
 			KC3Network.trigger("Lbas");
 		},
@@ -1007,7 +1011,15 @@ Previously known as "Reactor"
 		/* Set base action
 		-------------------------------------------------------*/
 		"api_req_air_corps/set_action":function(params, response, headers){
-			PlayerManager.bases[params.api_base_id-1].action = params.api_action_kind;
+			$.each(PlayerManager.bases, function(i, base){
+				if(base.map == params.api_area_id){
+					$.each(params.api_base_id.split("%2C"), function(j, baseId){
+						if(base.rid == baseId){
+							base.action = params.api_action_kind.split("%2C")[j];
+						}
+					});
+				}
+			});
 			localStorage.bases = JSON.stringify(PlayerManager.bases);
 			KC3Network.trigger("Lbas");
 		},
@@ -1015,10 +1027,14 @@ Previously known as "Reactor"
 		/* Get bases info
 		-------------------------------------------------------*/
 		"api_req_air_corps/set_plane":function(params, response, headers){
-			PlayerManager.bases[params.api_base_id-1].range = response.api_data.api_distance;
-			PlayerManager
-				.bases[params.api_base_id-1]
-				.planes[params.api_squadron_id-1] = response.api_data.api_plane_info[0];
+			$.each(PlayerManager.bases, function(i, base){
+				if(base.map == params.api_area_id && base.rid == params.api_base_id){
+					base.range = response.api_data.api_distance;
+					$.each(params.api_squadron_id.split("%2C"), function(j, sid){
+						base.planes[sid-1] = response.api_data.api_plane_info[j];
+					});
+				}
+			});
 			localStorage.bases = JSON.stringify(PlayerManager.bases);
 			KC3Network.trigger("Lbas");
 		},
@@ -1026,10 +1042,12 @@ Previously known as "Reactor"
 		/* Supply base squadrons
 		-------------------------------------------------------*/
 		"api_req_air_corps/supply":function(params, response, headers){
-			$.each(params.api_squadron_id.split("%2C"), function(index, sid){
-				PlayerManager
-					.bases[params.api_base_id-1]
-					.planes[sid-1] = response.api_data.api_plane_info[index];
+			$.each(PlayerManager.bases, function(i, base){
+				if(base.map == params.api_area_id && base.rid == params.api_base_id){
+					$.each(params.api_squadron_id.split("%2C"), function(j, sid){
+						base.planes[sid-1] = response.api_data.api_plane_info[j];
+					});
+				}
 			});
 			localStorage.bases = JSON.stringify(PlayerManager.bases);
 			KC3Network.trigger("Lbas");
