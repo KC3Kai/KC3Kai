@@ -2,6 +2,7 @@
 	"use strict";
 	
 	window.KC3LandBase = function(data){
+		this.map = -1;
 		this.rid = -1;
 		this.name = "";
 		this.range = -1;
@@ -10,6 +11,7 @@
 		
 		// If specified with data, fill this object
 		if(typeof data != "undefined"){
+			this.map = data.api_area_id;
 			this.rid = data.api_rid;
 			this.name = data.api_name;
 			this.range = data.api_distance;
@@ -24,6 +26,7 @@
 	
 	KC3LandBase.prototype.defineFormatted = function(data){
 		if (typeof data != "undefined") {
+			this.map = data.map;
 			this.rid = data.rid;
 			this.name = data.name;
 			this.range = data.range;
