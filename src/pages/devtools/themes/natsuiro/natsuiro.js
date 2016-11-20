@@ -1105,6 +1105,10 @@
 				MainRepairs = MainFleet.highestRepairTimes(true);
 				var EscortRepairs = EscortFleet.highestRepairTimes(true);
 
+				// Update "fastFleet" marker
+				MainFleet.speed();
+				EscortFleet.speed();
+				
 				// Compile fleet attributes
 				FleetSummary = {
 					lv: MainFleet.totalLevel() + EscortFleet.totalLevel(),
@@ -1167,7 +1171,7 @@
 
 				// Show fleet containers on UI
 				$(".shiplist_single").show();
-
+				
 				// Compile fleet attributes
 				FleetSummary = {
 					lv: CurrentFleet.totalLevel(),
