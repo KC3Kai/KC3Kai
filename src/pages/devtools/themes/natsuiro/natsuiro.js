@@ -1678,14 +1678,17 @@
 							
 							enemyHPPercent = ( newEnemyHP / thisNode.maxHPs.enemy[index] );
 							if (enemyFleetBox == "combined") {
-								console.log("battle start, enemy combined, enemy", index, "percent height", enemyHPPercent);
-								$(".module.activity .abyss_hp_bar_"+(index+1))
+								$(".module.activity .abyss_"+enemyFleetBox+" .abyss_hp_bar_"+(index+1))
 									.css("height", 15*enemyHPPercent);
+									
 								enemyBarHeight = $(".module.activity .abyss_hp_bar_"+(index+1)).height();
-								$(".module.activity .abyss_hp_bar_"+(index+1)).css("margin-top", 15-enemyBarHeight);
+								
+								$(".module.activity .abyss_"+enemyFleetBox+" .abyss_hp_bar_"+(index+1))
+									.css("margin-top", 15-enemyBarHeight);
+								
 							} else {
-								console.log("battle start, enemy single, enemy", index, "percent width", enemyHPPercent);
-								$(".module.activity .abyss_hp_bar_"+(index+1)).css("width", 28*enemyHPPercent);
+								$(".module.activity .abyss_"+enemyFleetBox+" .abyss_hp_bar_"+(index+1))
+									.css("width", 28*enemyHPPercent);
 							}
 							
 							if(enemyHPPercent <= 0.25){
@@ -1831,9 +1834,10 @@
 								.css("-webkit-filter",(data||{safeSunk:false}).safeSunk ? "grayscale(100%)" : "");
 						}
 						
-						console.log("battle night, enemy", index, "percent width", enemyHPPercent);
 						enemyHPPercent = ( newEnemyHP / thisNode.maxHPs.enemy[index] );
-						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width", 28*enemyHPPercent);
+						
+						$(".module.activity .abyss_single .abyss_hp_bar_"+(index+1))
+							.css("width", 28*enemyHPPercent);
 						
 						if(enemyHPPercent <= 0.25){
 							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FF0000");
