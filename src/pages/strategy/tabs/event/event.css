@@ -297,6 +297,8 @@
 	line-height:10px;
 	float:left;
 	font-size:10px;
+	transform:scale(0.85);
+	transform-origin:left;
 	overflow:hidden;
 	/*background:#fcc;*/
 }
@@ -306,6 +308,8 @@
 	line-height:10px;
 	float:left;
 	font-size:10px;
+	transform:scale(0.75);
+	transform-origin:left;
 	overflow:hidden;
 	/*background:#cfc;*/
 }

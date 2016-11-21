@@ -140,10 +140,19 @@
 		---------------------------------*/
 		cloneShipBox :function(data, targetBox){
 			var self = this;
+			var shipClickFunc = function(e){
+				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
+			};
+			var gearClickFunc = function(e){
+				KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
+			};
 			this.box_ship = $(".tab_pvp .factory .pvp_details_ship").clone();
 			
 			$(".pvp_ship_icon img", this.box_ship).attr("src", KC3Meta.shipIcon(data.mst_id));
+			$(".pvp_ship_icon img", this.box_ship).attr("alt", data.mst_id);
+			$(".pvp_ship_icon img", this.box_ship).click(shipClickFunc);
 			$(".pvp_ship_icon", this.box_ship).addClass("simg-"+data.mst_id);
+			$(".pvp_ship_icon", this.box_ship).addClass("hover");
 			$(".pvp_ship_name", this.box_ship).text(KC3Meta.shipName(KC3Master.ship(data.mst_id).api_name));
 			
 			$(".pvp_ship_level span", this.box_ship).text(data.level);
@@ -164,8 +173,11 @@
 					var divTag = $("<div/>").addClass("pvp_ship_item");
 					
 					thisItem = KC3Master.slotitem(itemMstId);
-					var imgTag = $("<img/>").attr("src", "../../assets/img/items/"+thisItem.api_type[3]+".png");
-					divTag.append(imgTag).attr("title", KC3Meta.gearName(thisItem.api_name));
+					var imgTag = $("<img/>").attr("src", "../../assets/img/items/"+thisItem.api_type[3]+".png")
+						.attr("alt", itemMstId)
+						.attr("title", KC3Meta.gearName(thisItem.api_name))
+						.click(gearClickFunc);
+					divTag.append(imgTag).addClass("hover");
 					
 					$(".pvp_ship_items", self.box_ship).append(divTag);
 				}
