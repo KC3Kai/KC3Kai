@@ -862,7 +862,7 @@ Previously known as "Reactor"
 			this["api_req_sortie/battle"].apply(this,arguments);
 		},
 		
-		/* COMBINED FLEET: BATTLE STARTS
+		/* PLAYER-ONLY COMBINED FLEET: BATTLE STARTS
 		-------------------------------------------------------*/
 		"api_req_combined_battle/battle":function(params, response, headers){
 			KC3SortieManager.engageBattle(
@@ -891,11 +891,10 @@ Previously known as "Reactor"
 			KC3Network.trigger("BattleStart");
 		},
 		"api_req_combined_battle/sp_midnight":function(params, response, headers){
-			KC3SortieManager.engageBattleNight(
-				response.api_data,
-				Date.toUTCseconds(headers.Date)
-			);
-			KC3Network.trigger("BattleStart");
+			this["api_req_battle_midnight/sp_midnight"].apply(this,arguments);
+		},
+		"api_req_combined_battle/each_sp_midnight":function(params, response, headers){
+			this["api_req_battle_midnight/sp_midnight"].apply(this,arguments);
 		},
 		
 		/* NIGHT BATTLES as SECOND PART
@@ -934,6 +933,15 @@ Previously known as "Reactor"
 				Date.toUTCseconds(headers.Date)
 			);
 			KC3Network.trigger("BattleStart");
+		},
+		"api_req_combined_battle/each_airbattle":function(params, response, headers){
+			this["api_req_combined_battle/each_battle"].apply(this,arguments);
+		},
+		"api_req_combined_battle/each_battle_water":function(params, response, headers){
+			this["api_req_combined_battle/each_battle"].apply(this,arguments);
+		},
+		"api_req_combined_battle/each_ld_airbattle":function(params, response, headers){
+			this["api_req_combined_battle/each_battle"].apply(this,arguments);
 		},
 		
 		/* BATTLE RESULT SCREENS
