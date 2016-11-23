@@ -1153,7 +1153,7 @@ Used by SortieManager
 		this.enemyEncounter = ed;
 		
 		// Save enemy info
-		for(var i = 0; i < this.eships.length; i++) {
+		for(var i = 0; i < 6; i++) {
 			var enemyId = this.eships[i] || -1;
 			// Only record ships with ID more than 500 coz abyss only
 			if (enemyId > 500) {
@@ -1171,6 +1171,27 @@ Used by SortieManager
 				});
 			}
 		}
+		// Save combined enemy info
+		if(eships.length > 6) {
+			for(var i = 7; i < 13; i++) {
+				var enemyId = this.eships[i] || -1;
+				if (enemyId > 500) {
+					KC3Database.Enemy({
+						id: enemyId,
+						hp: battleData.api_maxhps_combined[i],
+						fp: battleData.api_eParam_combined[i-7][0],
+						tp: battleData.api_eParam_combined[i-7][1],
+						aa: battleData.api_eParam_combined[i-7][2],
+						ar: battleData.api_eParam_combined[i-7][3],
+						eq1: battleData.api_eSlot_combined[i-7][0],
+						eq2: battleData.api_eSlot_combined[i-7][1],
+						eq3: battleData.api_eSlot_combined[i-7][2],
+						eq4: battleData.api_eSlot_combined[i-7][3]
+					});
+				}
+			}
+		}
+		
 		return true;
 	};
 	
