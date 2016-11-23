@@ -1151,10 +1151,10 @@ Used by SortieManager
 			.filter(function(v){return !!v;}).join("/");
 		KC3Database.Encounter(ed, true);
 		this.enemyEncounter = ed;
-		var i;
+		var i, enemyId;
 		// Save enemy info
 		for(i = 0; i < 6; i++) {
-			var enemyId = this.eships[i] || -1;
+			enemyId = this.eships[i] || -1;
 			// Only record ships with ID more than 500 coz abyss only
 			if (enemyId > 500) {
 				KC3Database.Enemy({
@@ -1174,7 +1174,7 @@ Used by SortieManager
 		// Save combined enemy info
 		if(eships.length > 6) {
 			for(i = 7; i < 13; i++) {
-				var enemyId = this.eships[i] || -1;
+				enemyId = this.eships[i] || -1;
 				if (enemyId > 500) {
 					KC3Database.Enemy({
 						id: enemyId,
