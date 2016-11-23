@@ -1172,7 +1172,7 @@ Used by SortieManager
 			}
 		}
 		// Save combined enemy info
-		if(eships.length > 6) {
+		if(this.eships.length > 6) {
 			for(i = 7; i < 13; i++) {
 				enemyId = this.eships[i] || -1;
 				if (enemyId > 500) {
