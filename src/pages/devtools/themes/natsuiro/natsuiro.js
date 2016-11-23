@@ -1681,15 +1681,12 @@
 							}
 							
 							enemyHPPercent = ( newEnemyHP / thisNode.maxHPs.enemy[index] );
-							if (enemyFleetBox == "combined") {
-								$(".module.activity .abyss_"+enemyFleetBox+" .abyss_hp_bar_"+(index+1))
+							if (enemyFleetBox === "combined") {
+								$(".module.activity .abyss_combined .abyss_hp_bar_"+(index+1))
 									.css("height", 15*enemyHPPercent);
-									
-								enemyBarHeight = $(".module.activity .abyss_hp_bar_"+(index+1)).height();
-								
-								$(".module.activity .abyss_"+enemyFleetBox+" .abyss_hp_bar_"+(index+1))
+								enemyBarHeight = $(".module.activity .abyss_combined .abyss_hp_bar_"+(index+1)).height();
+								$(".module.activity .abyss_combined .abyss_hp_bar_"+(index+1))
 									.css("margin-top", 15-enemyBarHeight);
-								
 							} else {
 								$(".module.activity .abyss_"+enemyFleetBox+" .abyss_hp_bar_"+(index+1))
 									.css("width", 28*enemyHPPercent);
