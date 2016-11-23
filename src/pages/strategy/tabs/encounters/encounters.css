@@ -44,13 +44,16 @@
 	border-radius:15px;
 }
 .tab_encounters .encounter_formation img {
-	with:30px;
+	width:30px;
 	height:30px;
 }
 .tab_encounters .encounter_ships {
-	with:210px;
+	width:210px;
 	height:44px;
 	float:left;
+}
+.tab_encounters .encounter_ships.combined {
+	width:130px;
 }
 
 .tab_encounters .encounter_ship {
@@ -58,6 +61,12 @@
 	height:44px;
 	float:left;
 	margin:0px 5px 0px 0px;
+}
+.tab_encounters .combined .encounter_ship {
+	transform:scale(0.5);
+	transform-origin:24px 0px;
+	width:16px;
+	height:24px;
 }
 .tab_encounters .encounter_icon {
 	width:30px;
@@ -69,7 +78,7 @@
 	height:30px;
 }
 .tab_encounters .encounter_ship .encounter_id {
-	with:30px;
+	width:30px;
 	height:14px;
 	line-height:14px;
 	text-align:center;

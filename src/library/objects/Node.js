@@ -421,7 +421,7 @@ Used by SortieManager
 				};
 				
 				// ONLY ENEMY IS COMBINED
-				if (this.eships.length > 7) {
+				if (this.eships.length >= 7) {
 					result = DA.analyzeAbyssalCTFBattleJS(dameConCode, battleData);
 					console.log("only enemy is combined", result);
 					
@@ -482,7 +482,7 @@ Used by SortieManager
 				console.assert(dameConCode.length === 12, "dameConCode length should be 12 for combined fleets");
 				
 				// BOTH COMBINED FLEET
-				if (this.eships.length > 7) {
+				if (this.eships.length >= 7) {
 					if (PlayerManager.combinedFleet === 1 || PlayerManager.combinedFleet === 3) {
 						// Carrier Task Force or Transport Escort
 						result = DA.analyzeBothCombinedCTFBattleJS(dameConCode,battleData);
@@ -508,8 +508,8 @@ Used by SortieManager
 					for(i = 1; i <= 6; i++) {
 						enemyEscort = result.enemyEscort[i-1];
 						if (enemyEscort !== null) {
-							this.enemyHP[i+6] = enemyEscort;
-							this.enemySunk[i+6] = enemyEscort.sunk;
+							this.enemyHP[i+5] = enemyEscort;
+							this.enemySunk[i+5] = enemyEscort.sunk;
 						}
 					}
 	
@@ -639,7 +639,7 @@ Used by SortieManager
 		if(typeof setAsOriginalHP == "undefined"){ setAsOriginalHP = true; }
 		
 		this.battleNight = nightData;
-		this.startNight = (fleetSent !== undefined);
+		this.startNight = !!fleetSent;
 		
 		var enemyships = nightData.api_ship_ke;
 		if(enemyships[0]==-1){ enemyships.splice(0,1); }
@@ -728,9 +728,9 @@ Used by SortieManager
 				} else {
 					console.log("enemy escort fleet in yasen", result.enemyEscort);
 					for (i = 7; i < 13; i++) {
-						this.enemyHP[i+6] = result.enemyEscort[i-7];
-						endHPs.enemy[i+6] = result.enemyEscort[i-7] ? result.enemyEscort[i-7].hp : -1;
-						this.enemySunk[i+6] = result.enemyEscort[i-7] ? result.enemyEscort[i-7].sunk : true;
+						this.enemyHP[i-7] = result.enemyEscort[i-7];
+						endHPs.enemy[i-7] = result.enemyEscort[i-7] ? result.enemyEscort[i-7].hp : -1;
+						this.enemySunk[i-7] = result.enemyEscort[i-7] ? result.enemyEscort[i-7].sunk : true;
 					}
 				}
 				
@@ -781,7 +781,7 @@ Used by SortieManager
 			dameConCode = KC3SortieManager.isPvP() ? [0,0,0, 0,0,0] : fleet.getDameConCodes();
 			
 			// ONLY ENEMY IS COMBINED
-			if (this.eships.length > 7) {
+			if (this.eships.length >= 7) {
 				// enemy combined fleet
 				result = DA.analyzeAbyssalCTFNightBattleJS(dameConCode, battleData);
 				console.log("player single", "enemy combined", result);
@@ -799,9 +799,9 @@ Used by SortieManager
 				} else {
 					console.log("enemy escort fleet in yasen", result.enemyEscort);
 					for (i = 7; i < 13; i++) {
-						this.enemyHP[i+6] = result.enemyEscort[i-7];
-						endHPs.enemy[i+6] = result.enemyEscort[i-7] ? result.enemyEscort[i-7].hp : -1;
-						this.enemySunk[i+6] = result.enemyEscort[i-7] ? result.enemyEscort[i-7].sunk : true;
+						this.enemyHP[i-7] = result.enemyEscort[i-7];
+						endHPs.enemy[i-7] = result.enemyEscort[i-7] ? result.enemyEscort[i-7].hp : -1;
+						this.enemySunk[i-7] = result.enemyEscort[i-7] ? result.enemyEscort[i-7].sunk : true;
 					}
 				}
 				
@@ -1117,8 +1117,10 @@ Used by SortieManager
 	};
 	
 	KC3Node.prototype.isBoss = function(){
-		//console.log("Meet Boss: " + ((this.eventKind === 1) && (this.eventId === 5)));
-		return ((this.eventKind === 1) && (this.eventId === 5));
+		// Normal BOSS node starts from day battle
+		return (this.eventKind === 1 && this.eventId === 5)
+		// Combined BOSS node, see advanceNode()@SortieManager.js
+			|| (this.eventKind === 5 && this.eventId === 5);
 	};
 	
 	KC3Node.prototype.saveEnemyEncounterInfo = function(battleData, updatedName){
@@ -1151,7 +1153,7 @@ Used by SortieManager
 		this.enemyEncounter = ed;
 		
 		// Save enemy info
-		for(var i = 0; i < 6; i++) {
+		for(var i = 0; i < this.eships.length; i++) {
 			var enemyId = this.eships[i] || -1;
 			// Only record ships with ID more than 500 coz abyss only
 			if (enemyId > 500) {

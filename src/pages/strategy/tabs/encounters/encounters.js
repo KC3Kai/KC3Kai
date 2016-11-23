@@ -78,6 +78,9 @@
 								shipBox.appendTo($(".encounter_ships", curBox));
 							}
 						});
+						if(shipList.length > 6){
+							$(".encounter_ships", curBox).addClass("combined");
+						}
 					} else {
 						// Update count
 						curBox.data("count", (encounter.count || 1) + curBox.data("count") );
