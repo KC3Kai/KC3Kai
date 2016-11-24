@@ -1683,7 +1683,8 @@
 							enemyHPPercent = ( newEnemyHP / thisNode.maxHPs.enemy[index] );
 							if (enemyFleetBox === "combined") {
 								$(".module.activity .abyss_combined .abyss_hp_bar_"+(index+1))
-									.css("height", 15*enemyHPPercent);
+									.css("height", 15*enemyHPPercent)
+									.css("width", "2px");
 								enemyBarHeight = $(".module.activity .abyss_combined .abyss_hp_bar_"+(index+1)).height();
 								$(".module.activity .abyss_combined .abyss_hp_bar_"+(index+1))
 									.css("margin-top", 15-enemyBarHeight);
@@ -2044,6 +2045,7 @@
 			$(".module.activity .map_hp").text( KC3Meta.term("BattleMapNoHpGauge") );
 			
 			// PvP enemy never combined
+			// CAUTION: old CSS selector below will affect elements in both single and combined!
 			$(".module.activity .abyss_single").show();
 			$(".module.activity .abyss_combined").hide();
 			
