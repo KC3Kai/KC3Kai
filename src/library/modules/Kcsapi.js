@@ -699,7 +699,7 @@ Previously known as "Reactor"
 			// Gun fit bonus / penalty
 			var gearObj = KC3GearManager.get(itemID);
 			var gunfit = KC3Meta.gunfit(shipObj.masterId, gearObj.masterId);
-			if (gunfit) {
+			if (gunfit !== false) {
 				KC3Network.trigger("GunFit", {
 					shipObj: shipObj,
 					gearObj: gearObj,

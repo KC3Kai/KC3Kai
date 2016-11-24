@@ -890,13 +890,13 @@ Used by SortieManager
 					}
 					sb[pt].push(srid);
 					oc = sb[pt].length;
-					console.info('Current sortie recorded as',pt,'.');
+					console.info('Current sortie recorded as',pt);
 					console.info('You\'ve done this',oc,'time'+(oc != 1 ? 's' : '')+'.','Good luck, see you next time!');
 				}
 				/* ==> DESPAIR STATISTICS */
 				
 				/* FLAGSHIP ATTACKING ==> */
-				console.log("Damaged Flagship ",this.gaugeDamage,"/",maps[ckey].curhp || 0,"pts");
+				console.log("Damaged Flagship",this.gaugeDamage,"/",maps[ckey].curhp || 0,"pts");
 				switch(maps[ckey].kind) {
 					case 'single':   /* Single Victory */
 						break;
@@ -921,6 +921,7 @@ Used by SortieManager
 						} else {
 							maps[ckey].curhp = 0;
 						}
+						console.log("Landing get",this.gaugeDamage,"->",maps[ckey].curhp,"/",maps[ckey].maxhp,"TP");
 						break;
 					default:         /* Undefined */
 						break;

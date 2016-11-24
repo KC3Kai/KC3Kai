@@ -911,7 +911,7 @@ ABYSS FLEET
 	font-weight:bold;
 	/*white-space:nowrap; */
 	overflow:hidden;
-	text-overflow: ellipsis;
+	text-overflow:ellipsis;
 	margin:0px 0px 5px 0px;
 }
 .module.activity .activity_crafting .equipNote {
@@ -1175,7 +1175,7 @@ ABYSS FLEET
 	float:left;
 	border-radius:20px;
 	border:1px solid #000;
-	overflow: hidden;
+	overflow:hidden;
 	margin:0px 5px 0px 0px;
 }
 .module.activity .activity_modernization .mod_ship_pic img {
@@ -1189,18 +1189,18 @@ ABYSS FLEET
 	height:22px;
 	line-height:22px;
 	float:left;
-	/*background:#fcc;*/
 	font-size:13px;
 	font-weight:bold;
 	color:#ffcc00;
 	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap;
 }
 .module.activity .activity_modernization .mod_ship_level {
 	width:125px;
 	height:14px;
 	line-height:14px;
 	float:left;
-	/*background:#cfc;*/
 	font-size:12px;
 	color:#ccc;
 }
@@ -1812,7 +1812,7 @@ ABYSS FLEET
 	font-weight:bold;
 	white-space:nowrap; 
 	overflow:hidden;
-	text-overflow: ellipsis;
+	text-overflow:ellipsis;
 }
 .module.fleet .lship .ship_type {
 	width:30px;
@@ -2174,7 +2174,7 @@ ABYSS FLEET
 	font-weight:bold;
 	white-space:nowrap; 
 	overflow:hidden;
-	text-overflow: ellipsis;
+	text-overflow:ellipsis;
 }
 .module.fleet .sship .ship_hp {
 	width:90px;
