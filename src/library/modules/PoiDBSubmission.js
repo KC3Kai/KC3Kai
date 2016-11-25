@@ -164,7 +164,7 @@
 		},
 		processMapInfo: function( requestObj ) {
 			var self = this;
-			$.each( requestObj.response.api_data, function(i, entry) {
+			$.each( requestObj.response.api_data.api_map_info, function(i, entry) {
 				if (entry.api_eventmap) {
 					self.mapInfo[entry.api_id] = entry.api_eventmap.api_selected_rank;
 				}
