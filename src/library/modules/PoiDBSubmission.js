@@ -193,15 +193,14 @@
 							 + enemyShips.length );
 			}
 			if (typeof response.api_ship_ke_combined !== "undefined") {
-				console.log("processBattle: enemy fleet is combined");
-				enemyShips.concat( response.api_ship_ke_combined.slice(1,7) );
+				// console.log("processBattle: enemy fleet is combined");
+				enemyShips = enemyShips.concat( response.api_ship_ke_combined.slice(1,7) );
 				if (enemyShips.length !== 12) {
 					console.warn("processBattle: incorrect enemy ship arr length expect 12 but got " 
 								 + enemyShips.length );
 				}
 			}
 			dropShipData.enemyShips = enemyShips;
-			console.log( "processBattle: enemy ship arr prepared", enemyShips );
 			this.state = 'drop_ship_2';
 		},
 		processMapInfo: function( requestObj ) {
