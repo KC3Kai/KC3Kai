@@ -1058,6 +1058,20 @@ Previously known as "Reactor"
 				}
 			});
 			localStorage.bases = JSON.stringify(PlayerManager.bases);
+			// Record material consuming, but it's hard to define its type
+			var hour = Math.hrdInt("floor", Date.safeToUtcTime(headers.Date)/3.6,6,1);
+			var fuel = response.api_data.api_after_fuel,
+				ammo = PlayerManager.hq.lastMaterial[1],
+				steel = PlayerManager.hq.lastMaterial[2],
+				bauxite = response.api_data.api_after_bauxite;
+			var consumedFuel = fuel - PlayerManager.hq.lastMaterial[0],
+				consumedBauxite = bauxite - PlayerManager.hq.lastMaterial[3];
+			KC3Database.Naverall({
+				hour: hour,
+				type: (PlayerManager.hq.lastSortie || ["sortie0"])[0],
+				data: [consumedFuel,0,0,consumedBauxite].concat([0,0,0,0])
+			});
+			PlayerManager.setResources([fuel, ammo, steel, bauxite] , hour);
 			KC3Network.trigger("Lbas");
 		},
 		

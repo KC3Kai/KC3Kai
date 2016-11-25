@@ -1174,20 +1174,20 @@ Used by SortieManager
 		}
 		// Save combined enemy info
 		if(this.eships.length > 6) {
-			for(i = 7; i < 13; i++) {
+			for(i = 6; i < 13; i++) {
 				enemyId = this.eships[i] || -1;
 				if (enemyId > 500) {
 					KC3Database.Enemy({
 						id: enemyId,
-						hp: battleData.api_maxhps_combined[i],
-						fp: battleData.api_eParam_combined[i-7][0],
-						tp: battleData.api_eParam_combined[i-7][1],
-						aa: battleData.api_eParam_combined[i-7][2],
-						ar: battleData.api_eParam_combined[i-7][3],
-						eq1: battleData.api_eSlot_combined[i-7][0],
-						eq2: battleData.api_eSlot_combined[i-7][1],
-						eq3: battleData.api_eSlot_combined[i-7][2],
-						eq4: battleData.api_eSlot_combined[i-7][3]
+						hp: battleData.api_maxhps_combined[i+1],
+						fp: battleData.api_eParam_combined[i-6][0],
+						tp: battleData.api_eParam_combined[i-6][1],
+						aa: battleData.api_eParam_combined[i-6][2],
+						ar: battleData.api_eParam_combined[i-6][3],
+						eq1: battleData.api_eSlot_combined[i-6][0],
+						eq2: battleData.api_eSlot_combined[i-6][1],
+						eq3: battleData.api_eSlot_combined[i-6][2],
+						eq4: battleData.api_eSlot_combined[i-6][3]
 					});
 				}
 			}
