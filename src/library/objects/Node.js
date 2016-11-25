@@ -789,7 +789,7 @@ Used by SortieManager
 			// ONLY ENEMY IS COMBINED
 			if (isEnemyCombined) {
 				// enemy combined fleet
-				result = DA.analyzeAbyssalCTFNightBattleJS(dameConCode, battleData);
+				result = DA.analyzeAbyssalCTFNightBattleJS(dameConCode, nightData);
 				console.log("player single", "enemy combined", result);
 				
 				// enemy info, enemy main fleet in yasen
