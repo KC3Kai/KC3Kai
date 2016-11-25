@@ -259,6 +259,7 @@ Used by SortieManager
 		
 		var enemyships = battleData.api_ship_ke;
 		if(enemyships[0]==-1){ enemyships.splice(0,1); }
+		var isEnemyCombined = (typeof battleData.api_ship_ke_combined !== "undefined");
 		
 		console.log("battleData", battleData);
 		var enemyEscortList = battleData.api_ship_ke_combined;
@@ -270,14 +271,12 @@ Used by SortieManager
 		this.eships = enemyships;
 		this.eformation = battleData.api_formation[1];
 		
-		
 		this.eParam = battleData.api_eParam;
 		if (typeof battleData.api_eParam_combined != "undefined") {
 			this.eParam = this.eParam.concat(battleData.api_eParam_combined);
 		}
 		
 		this.eKyouka = battleData.api_eKyouka || [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1];
-		
 		
 		this.eSlot = battleData.api_eSlot;
 		if (typeof battleData.api_eSlot_combined != "undefined") {
@@ -407,7 +406,7 @@ Used by SortieManager
 			// PLAYER SINGLE FLEET
 			if ((typeof PlayerManager.combinedFleet === "undefined") || (PlayerManager.combinedFleet === 0) || fleetId>1){
 				// single fleet: not combined, or sent fleet is not first fleet
-
+				
 				// Update our fleet
 				fleet = PlayerManager.fleets[fleetId - 1];
 				// damecon ignored for PvP
@@ -421,7 +420,7 @@ Used by SortieManager
 				};
 				
 				// ONLY ENEMY IS COMBINED
-				if (this.eships.length >= 7) {
+				if (isEnemyCombined) {
 					result = DA.analyzeAbyssalCTFBattleJS(dameConCode, battleData);
 					console.log("only enemy is combined", result);
 					
@@ -436,7 +435,7 @@ Used by SortieManager
 						endHPs.enemy[i-7] = result.enemyEscort[i-13] ? result.enemyEscort[i-13].hp : -1;
 						this.enemySunk[i-7] = result.enemyEscort[i-13] ? result.enemyEscort[i-13].sunk : true;
 					}
-					
+				
 				// BOTH SINGLE FLEET
 				} else {
 					// regular day-battle
@@ -466,7 +465,7 @@ Used by SortieManager
 						this.dameConConsumed[i] = false;
 					}
 				}
-
+				
 				if(ConfigManager.info_btrank &&
 					// long distance aerial battle not predictable for now, see #1333
 					// but go for aerial battle (eventKind:4) possible Yasen
@@ -482,7 +481,7 @@ Used by SortieManager
 				console.assert(dameConCode.length === 12, "dameConCode length should be 12 for combined fleets");
 				
 				// BOTH COMBINED FLEET
-				if (this.eships.length >= 7) {
+				if (isEnemyCombined) {
 					if (PlayerManager.combinedFleet === 1 || PlayerManager.combinedFleet === 3) {
 						// Carrier Task Force or Transport Escort
 						result = DA.analyzeBothCombinedCTFBattleJS(dameConCode,battleData);
@@ -512,7 +511,7 @@ Used by SortieManager
 							this.enemySunk[i+5] = enemyEscort.sunk;
 						}
 					}
-	
+					
 					// Update main fleet
 					fleet = PlayerManager.fleets[0];
 					shipNum = fleet.countShips();
@@ -529,7 +528,7 @@ Used by SortieManager
 							this.dameConConsumed[i] = false;
 						}
 					}
-	
+					
 					// Update escort fleet
 					fleet = PlayerManager.fleets[1];
 					shipNum = fleet.countShips();
@@ -546,7 +545,7 @@ Used by SortieManager
 							this.dameConConsumedEscort[i] = false;
 						}
 					}
-				
+					
 				// ONLY PLAYER IS COMBINED
 				} else {
 					if (PlayerManager.combinedFleet === 1) {
@@ -576,7 +575,7 @@ Used by SortieManager
 							this.enemySunk[i-1] = enemyMain.sunk;
 						}
 					}
-	
+					
 					// Update main fleet
 					fleet = PlayerManager.fleets[0];
 					shipNum = fleet.countShips();
@@ -593,7 +592,7 @@ Used by SortieManager
 							this.dameConConsumed[i] = false;
 						}
 					}
-	
+					
 					// Update escort fleet
 					fleet = PlayerManager.fleets[1];
 					shipNum = fleet.countShips();
@@ -611,10 +610,10 @@ Used by SortieManager
 						}
 					}
 				}
-
+				
 			}
 		}
-
+		
 		if(this.gaugeDamage > -1) {
 			this.gaugeDamage = Math.min(this.originalHPs[7],this.originalHPs[7] - this.enemyHP[0].hp);
 			
@@ -643,10 +642,12 @@ Used by SortieManager
 		
 		var enemyships = nightData.api_ship_ke;
 		if(enemyships[0]==-1){ enemyships.splice(0,1); }
+		var isEnemyCombined = (typeof nightData.api_ship_ke_combined !== "undefined");
+		
 		this.eships = enemyships;
 		this.eformation = this.eformation || nightData.api_formation[1];
 		this.eParam = nightData.api_eParam;
-		this.eKyouka = nightData.api_eKyouka;
+		this.eKyouka = nightData.api_eKyouka || [-1,-1,-1,-1,-1,-1];
 		this.eSlot = nightData.api_eSlot;
 		
 		this.maxHPs = {
@@ -706,7 +707,7 @@ Used by SortieManager
 			dameConCode = fleet.getDameConCodes();
 			
 			// BOTH COMBINED FLEET
-			if (typeof nightData.api_ship_ke_combined != "undefined") {
+			if (isEnemyCombined) {
 				// still needs 12-element array for dameConCode
 				if (dameConCode.length < 7) {
 					dameConCode = dameConCode.concat([0,0,0,0,0,0]);
@@ -727,6 +728,11 @@ Used by SortieManager
 				// enemy info, enemy escort fleet in yasen
 				} else {
 					console.log("enemy escort fleet in yasen", result.enemyEscort);
+					enemyships = nightData.api_ship_ke_combined;
+					if(enemyships[0]==-1){ enemyships.splice(0,1); }
+					this.eships = enemyships;
+					this.eParam = nightData.api_eParam_combined;
+					this.eSlot = nightData.api_eSlot_combined;
 					for (i = 7; i < 13; i++) {
 						this.enemyHP[i-7] = result.enemyEscort[i-7];
 						endHPs.enemy[i-7] = result.enemyEscort[i-7] ? result.enemyEscort[i-7].hp : -1;
@@ -781,7 +787,7 @@ Used by SortieManager
 			dameConCode = KC3SortieManager.isPvP() ? [0,0,0, 0,0,0] : fleet.getDameConCodes();
 			
 			// ONLY ENEMY IS COMBINED
-			if (this.eships.length >= 7) {
+			if (isEnemyCombined) {
 				// enemy combined fleet
 				result = DA.analyzeAbyssalCTFNightBattleJS(dameConCode, battleData);
 				console.log("player single", "enemy combined", result);
@@ -798,6 +804,11 @@ Used by SortieManager
 				// enemy info, enemy escort fleet in yasen
 				} else {
 					console.log("enemy escort fleet in yasen", result.enemyEscort);
+					enemyships = nightData.api_ship_ke_combined;
+					if(enemyships[0]==-1){ enemyships.splice(0,1); }
+					this.eships = enemyships;
+					this.eParam = nightData.api_eParam_combined;
+					this.eSlot = nightData.api_eSlot_combined;
 					for (i = 7; i < 13; i++) {
 						this.enemyHP[i-7] = result.enemyEscort[i-7];
 						endHPs.enemy[i-7] = result.enemyEscort[i-7] ? result.enemyEscort[i-7].hp : -1;
