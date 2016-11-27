@@ -855,7 +855,8 @@ Used by SortieManager
 			// console.debug("Rank Predict (Night):", this.predictedRankNight);
 		}
 		
-		if(this.gaugeDamage > -1){
+		if(this.gaugeDamage > -1
+			&& (!isEnemyCombined || nightData.api_active_deck[1] == 1) ){
 			this.gaugeDamage = this.gaugeDamage + 
 				Math.min(nightData.api_nowhps[7],nightData.api_nowhps[7] - this.enemyHP[0].hp);
 		}

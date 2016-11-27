@@ -1035,6 +1035,13 @@
 				}
 			});
 
+			// LBAS button resupply indicator
+			$(".module.controls .fleet_lbas").removeClass("needsSupply");
+			if(!$(".module.controls .fleet_lbas").hasClass("active")
+				&& !PlayerManager.isBasesSupplied()){
+				$(".module.controls .fleet_lbas").addClass("needsSupply");
+			}
+
 			// whether this update is triggered because of sending expeditions
 			if (expeditionStarted && ConfigManager.info_auto_exped_tab) {
 				// clear flag
@@ -1365,6 +1372,11 @@
 		},
 		
 		Lbas :function(){
+			$(".module.controls .fleet_lbas").removeClass("needsSupply");
+			if(!$(".module.controls .fleet_lbas").hasClass("active")
+				&& !PlayerManager.isBasesSupplied()){
+				$(".module.controls .fleet_lbas").addClass("needsSupply");
+			}
 			if (selectedFleet == 6) {
 				$(".shiplist_single").empty();
 				$(".shiplist_single").hide();

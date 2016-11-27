@@ -1636,6 +1636,12 @@ ABYSS FLEET
 	width:30px;
 	height:30px;
 }
+.module.controls .fleet_lbas.needsSupply {
+	border:2px solid #f00;
+}
+.module.controls .fleet_lbas.needsSupply img {
+	margin-top:-2px;
+}
 .module.controls .control_btn {
 	width:40px;
 	border-radius:15px;
@@ -2336,7 +2342,8 @@ ABYSS FLEET
 /* AIR BASES
 ------------------------------*/
 .module.fleet .airbase_list {
-	
+	overflow-y:scroll;
+	overflow-x:hidden;
 }
 .airbase {
 	width:340px;
@@ -2628,4 +2635,21 @@ ABYSS FLEET
 	100% {
 		background:#d22;
 	}
+}
+/* Customized Scrollbar */
+::-webkit-scrollbar {
+	width:8px;
+	height:8px;
+}
+::-webkit-scrollbar-track {
+	-webkit-box-shadow:inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius:8px;
+}
+::-webkit-scrollbar-thumb {
+	-webkit-box-shadow:inset 0 0 6px rgba(0,0,0,0.5);
+	background:rgba(158,158,158,0.6);
+	border-radius:8px;
+}
+::-webkit-scrollbar-thumb:window-inactive {
+	background:rgba(158,158,158,0.3);
 }
