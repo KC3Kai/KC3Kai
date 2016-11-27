@@ -269,6 +269,8 @@ Used by SortieManager
 		}
 		
 		this.eships = enemyships;
+		// Reserved for combined enemy ships if eships re-assigned on night battle
+		this.ecships = undefined;
 		this.eformation = battleData.api_formation[1];
 		
 		this.eParam = battleData.api_eParam;
@@ -421,6 +423,7 @@ Used by SortieManager
 				
 				// ONLY ENEMY IS COMBINED
 				if (isEnemyCombined) {
+					this.ecships = this.eships;
 					result = DA.analyzeAbyssalCTFBattleJS(dameConCode, battleData);
 					console.log("only enemy is combined", result);
 					
@@ -482,6 +485,7 @@ Used by SortieManager
 				
 				// BOTH COMBINED FLEET
 				if (isEnemyCombined) {
+					this.ecships = this.eships;
 					if (PlayerManager.combinedFleet === 1 || PlayerManager.combinedFleet === 3) {
 						// Carrier Task Force or Transport Escort
 						result = DA.analyzeBothCombinedCTFBattleJS(dameConCode,battleData);
@@ -1066,10 +1070,10 @@ Used by SortieManager
 			//var enemyCV = [512, 525, 528, 565, 579];
 			//var enemySS = [530, 532, 534, 531, 533, 535, 570, 571, 572];
 			//var enemyAP = [513, 526, 558];
-
-			for(var i = 0; i < 6; i++) {
+			var eshipCnt = (this.ecships || []).length || 6;
+			for(var i = 0; i < eshipCnt; i++) {
 				if (this.enemySunk[i]) {
-					var enemyShip = KC3Master.ship(this.eships[i]);
+					var enemyShip = KC3Master.ship( (this.ecships || this.eships)[i] );
 					if (!enemyShip) {
 						console.log("Cannot find enemy " + this.eships[i]);
 					} else if (this.eships[i] < 500) {
