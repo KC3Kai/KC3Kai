@@ -1318,13 +1318,14 @@ Previously known as "Reactor"
 		/* Expedition Selection Screen
 		  -------------------------------------------------------*/
 		"api_get_member/mission": function(params, response, headers) {
-			KC3Network.trigger( "ExpeditionSelection" );
+			KC3Network.trigger("ExpeditionSelection");
 		},
 
 		/* Expedition Start
 		  -------------------------------------------------------*/
 		"api_req_mission/start": function(params, response, headers) {
-			KC3Network.trigger( "ExpeditionStart" );
+			KC3Network.trigger("ExpeditionStart");
+			KC3Network.trigger("Fleet");
 		},
 		
 		/* Complete Expedition
