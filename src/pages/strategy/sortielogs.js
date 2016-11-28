@@ -504,6 +504,7 @@
 									$(".node_eship_"+(index+1)+" img", nodeBox).attr("alt", eship);
 									$(".node_eship_"+(index+1)+" img", nodeBox).click(shipClickFunc);
 									$(".node_eship_"+(index+1), nodeBox).addClass("hover");
+									$(".node_eship_"+(index+1), nodeBox).addClass( KC3Meta.abyssShipBorderClass( eship) );
 									$(".node_eship_"+(index+1), nodeBox).show();
 								}
 							});

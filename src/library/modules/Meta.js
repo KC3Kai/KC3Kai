@@ -56,6 +56,17 @@ Provides access to data on built-in JSON files
 			"1471": 3 // whiteday 2015
 		},
 		
+		abyssKaiShipIds: [
+			565, 566, 567, 616, 617, 618, 714, 715
+		],
+		abyssNonBossIds: [
+			541, 542, 543, 549, 550, 551, 552, 553, 554, 555,
+			558, 559, 560, 561, 562, 563, 570, 571, 572, 575,
+			576, 577, 579, 580, 591, 592, 593, 594, 595, 614,
+			615, 621, 622, 623, 624, 637, 638, 639, 640, 665,
+			666, 667
+		],
+		
 		/* Initialization
 		-------------------------------------------------------*/
 		init :function( repo ){
@@ -194,6 +205,28 @@ Provides access to data on built-in JSON files
 			return [this.shipName(shipMaster.api_name), this.shipName(shipMaster.api_yomi)]
 				.filter(function(x){return !!x&&x!=="-";})
 				.join("");
+		},
+		
+		abyssShipBorderClass :function(ship){
+			var shipMaster = ship;
+			// No ship specified, return all possible class names
+			if(!ship){
+				return ["boss", "kai", "flagship", "elite"];
+			}
+			if(typeof shipMaster !== "object"){
+				shipMaster = KC3Master.ship(Number(ship));
+			}
+			// Abyssal Kai
+			if(this.abyssKaiShipIds.indexOf(shipMaster.api_id) > -1){
+				return "kai";
+			}
+			// Princesses and demons, using black-list
+			// To reduce updating work, consider new abyssal ships as boss by default
+			if(shipMaster.api_id > 538 && shipMaster.api_id <= 800 &&
+				this.abyssNonBossIds.indexOf(shipMaster.api_id) < 0){
+				return "boss";
+			}
+			return shipMaster.api_id > 500 ? shipMaster.api_yomi.replace("-", "") : "";
 		},
 		
 		exp :function(level){
