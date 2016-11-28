@@ -286,6 +286,10 @@ Provides access to data on built-in JSON files
 			return this._battle.airbattle[index] || ["","","Unknown"];
 		},
 		
+		airraiddamage :function(index){
+			return this._battle.airraiddamage[index] || "";
+		},
+		
 		engagement :function(index){
 			return this._battle.engagement[index] || ["","",""];
 		},

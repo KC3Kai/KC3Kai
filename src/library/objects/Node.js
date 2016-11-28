@@ -256,12 +256,12 @@ Used by SortieManager
 	---------------------------------------------*/
 	KC3Node.prototype.engage = function( battleData, fleetSent ){
 		this.battleDay = battleData;
+		//console.log("battleData", battleData);
 		
 		var enemyships = battleData.api_ship_ke;
 		if(enemyships[0]==-1){ enemyships.splice(0,1); }
 		var isEnemyCombined = (typeof battleData.api_ship_ke_combined !== "undefined");
 		
-		console.log("battleData", battleData);
 		var enemyEscortList = battleData.api_ship_ke_combined;
 		if (typeof enemyEscortList != "undefined") {
 			if(enemyEscortList[0]==-1){ enemyEscortList.splice(0,1); }
@@ -1130,6 +1130,59 @@ Used by SortieManager
 		} finally {
 			// Reserved for future PvP history storage
 			this.savePvPOnDB(resultData);
+		}
+	};
+	
+	/**
+	 * Not real battle on this node in fact. Enemy raid just randomly occurs before entering node.
+	 * See: http://kancolle.wikia.com/wiki/Land-Base_Aerial_Support#Enemy_Raid
+	 */
+	KC3Node.prototype.airBaseRaid = function( battleData ){
+		this.battleDestruction = battleData;
+		console.log("AirBaseRaidBattle", battleData);
+		this.lostKind = battleData.api_lost_kind;
+		this.eships = battleData.api_ship_ke.slice(1);
+		this.eformation = battleData.api_formation[1];
+		this.eSlot = battleData.api_eSlot;
+		this.engagement = KC3Meta.engagement(battleData.api_formation[2]);
+		var planePhase = battleData.api_air_base_attack.api_stage1 || {
+				api_touch_plane:[-1,-1],
+				api_f_count    :0,
+				api_f_lostcount:0,
+				api_e_count    :0,
+				api_e_lostcount:0,
+			},
+			attackPhase = battleData.api_air_base_attack.api_stage2;
+		this.fplaneFrom = battleData.api_air_base_attack.api_plane_from[0];
+		this.fcontactId = planePhase.api_touch_plane[0];
+		this.fcontact = this.fcontactId > 0 ? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
+		this.eplaneFrom = battleData.api_air_base_attack.api_plane_from[1];
+		this.econtactId = planePhase.api_touch_plane[1];
+		this.econtact = this.econtactId > 0 ? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
+		this.airbattle = KC3Meta.airbattle(planePhase.api_disp_seiku);
+		this.planeFighters = {
+			player:[
+				planePhase.api_f_count,
+				planePhase.api_f_lostcount
+			],
+			abyssal:[
+				planePhase.api_e_count,
+				planePhase.api_e_lostcount
+			]
+		};
+		if(
+			this.planeFighters.player[0]===0
+			&& this.planeFighters.abyssal[0]===0
+			&& attackPhase===null
+		){
+			this.airbattle = KC3Meta.airbattle(5);
+		}
+		this.planeBombers = { player:[0,0], abyssal:[0,0] };
+		if(attackPhase !== null){
+			this.planeBombers.player[0] = attackPhase.api_f_count;
+			this.planeBombers.player[1] = attackPhase.api_f_lostcount;
+			this.planeBombers.abyssal[0] = attackPhase.api_e_count;
+			this.planeBombers.abyssal[1] = attackPhase.api_e_lostcount;
 		}
 	};
 	

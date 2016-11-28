@@ -789,6 +789,8 @@ ABYSS FLEET
 	font-size:11px;
 	float:left;
 	color:#fff;
+	white-space:nowrap;
+	overflow:hidden;
 }
 .module.activity .battle_contact img {
 	width:15px;
