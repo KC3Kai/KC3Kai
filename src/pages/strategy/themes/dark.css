@@ -994,6 +994,7 @@ a:hover {
 	position:absolute;
 	top:0px;
 	left:0px;
+	overflow:hidden;
 }
 .tab_fleet .fleet_ship .ship_pic img {
 	width:150px;
