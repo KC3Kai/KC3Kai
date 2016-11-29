@@ -1348,7 +1348,6 @@ Previously known as "Reactor"
 		  -------------------------------------------------------*/
 		"api_req_mission/start": function(params, response, headers) {
 			KC3Network.trigger("ExpeditionStart");
-			KC3Network.trigger("Fleet");
 		},
 		
 		/* Complete Expedition
