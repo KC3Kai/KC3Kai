@@ -264,6 +264,7 @@ a:hover {
 	font-size:12px;
 	font-weight:bold;
 	display:none;
+	z-index:99;
 }
 .float_toolbar .back_to_top {
 	background-color:#1e1e1e;
@@ -346,6 +347,7 @@ a:hover {
 	left:0px;
 	border-radius:0px !important;
 	margin:0px !important;
+	overflow:hidden;
 }
 .tab_showcase .show_ship .ship_pic img {
 	image-rendering: auto;
