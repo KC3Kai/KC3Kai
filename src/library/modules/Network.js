@@ -27,6 +27,7 @@ Listens to network history and triggers callback if game events happen
 			Lbas: [],
 			SortieStart: [],
 			CompassResult: [],
+			LandBaseAirRaid: [],
 			BattleStart: [],
 			BattleNight: [],
 			BattleResult: [],

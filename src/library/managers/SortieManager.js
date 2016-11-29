@@ -184,6 +184,7 @@ Xxxxxxx
 			// Battle Node
 			// api_event_kind = 1 (day battle)
 			// api_event_kind = 2 (start at night battle)
+			// api_event_kind = 3 (night battle first, then day battle)
 			// api_event_kind = 4 (aerial exchange)
 			// api_event_kind = 5 (enemy combined)
 			// api_event_kind = 6 (defensive aerial)
@@ -219,6 +220,10 @@ Xxxxxxx
 			thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime ))['defineAs' + nodeKind](nodeData);
 			this.nodes.push(thisNode);
 			this.save();
+		},
+		
+		engageLandBaseAirRaid :function( battleData ){
+			this.currentNode().airBaseRaid( battleData );
 		},
 		
 		engageBattle :function( battleData, stime ){

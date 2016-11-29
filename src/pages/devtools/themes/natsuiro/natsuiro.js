@@ -751,6 +751,7 @@
 	function clearBattleData(){
 		$(".module.activity .abyss_ship img").attr("src", KC3Meta.abyssIcon(-1));
 		$(".module.activity .abyss_ship img").attr("title", "");
+		$(".module.activity .abyss_ship").removeClass(KC3Meta.abyssShipBorderClass().join(" "));
 		$(".module.activity .abyss_ship").css("opacity", 1);
 		$(".module.activity .abyss_combined").hide();
 		$(".module.activity .abyss_single").show();
@@ -768,7 +769,9 @@
 		$(".module.activity .battle_drop img").attr("src", "../../../../assets/img/ui/dark_shipdrop.png");
 		$(".module.activity .battle_drop").attr("title", "");
 		$(".module.activity .battle_cond_value").text("");
+		$(".module.activity .battle_engagement").prev().text(KC3Meta.term("BattleEngangement"));
 		$(".module.activity .battle_engagement").attr("title", "");
+		$(".module.activity .battle_detection").prev().text(KC3Meta.term("BattleDetection"));
 		$(".module.activity .battle_detection").attr("title", "");
 		$(".module.activity .battle_airbattle").attr("title", "");
 		$(".module.activity .plane_text span").text("");
@@ -1620,6 +1623,65 @@
 			}
 		},
 
+		LandBaseAirRaid: function(data){
+			var thisNode = KC3SortieManager.currentNode();
+			var battleData = thisNode.battleDestruction;
+			var self = this;
+			if(!battleData) { return false; }
+			var updateBattleActivityFunc = function(){
+				clearBattleData();
+				$(".module.activity .abyss_single").show();
+				$(".module.activity .abyss_combined").hide();
+				$.each(thisNode.eships, function(index, eshipId){
+					if(eshipId > -1 && $(".module.activity .abyss_single .abyss_ship_"+(index+1)).length > 0){
+						$(".module.activity .abyss_single .abyss_ship_"+(index+1)).addClass(KC3Meta.abyssShipBorderClass(eshipId));
+						$(".module.activity .abyss_single .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.abyssIcon(eshipId));
+						$(".module.activity .abyss_single .abyss_ship_"+(index+1)+" img")
+							.attr("title", "{0}: {1}\n".format(eshipId, KC3Meta.abyssShipName(eshipId)) );
+						$(".module.activity .abyss_single .abyss_ship_"+(index+1)).show();
+					}
+				});
+				if((typeof thisNode.eformation != "undefined") && (thisNode.eformation > -1)){
+					$(".module.activity .battle_eformation img").attr("src", KC3Meta.formationIcon(thisNode.eformation));
+					$(".module.activity .battle_eformation").css("-webkit-transform", "rotate(-90deg)");
+					$(".module.activity .battle_eformation").attr("title", KC3Meta.formationText(thisNode.eformation));
+				}
+				$(".module.activity .battle_detection").prev().text(KC3Meta.term("BattleAirDefend"));
+				var airDefender = (!thisNode.fplaneFrom || thisNode.fplaneFrom[0] === -1) ?
+					KC3Meta.term("BattleAirDefendNo") :
+					KC3Meta.term("BattleAirDefendYes").format(thisNode.fplaneFrom.join(","));
+				$(".module.activity .battle_detection").text(airDefender);
+				$(".module.activity .battle_detection").attr("title", airDefender);
+				$(".module.activity .battle_engagement").prev().text(KC3Meta.term("BattleAirBaseLoss"));
+				$(".module.activity .battle_engagement").text(KC3Meta.airraiddamage(thisNode.lostKind));
+				var contactSpan = buildContactPlaneSpan(thisNode.fcontactId, thisNode.fcontact, thisNode.econtactId, thisNode.econtact);
+				$(".module.activity .battle_contact").html($(contactSpan).html());
+				$(".module.activity .battle_airbattle").text( thisNode.airbattle[0] );
+				$(".module.activity .battle_airbattle").attr("title", thisNode.airbattle[2] || "" );
+				$(".fighter_ally .plane_before").text(thisNode.planeFighters.player[0]);
+				$(".fighter_enemy .plane_before").text(thisNode.planeFighters.abyssal[0]);
+				$(".bomber_ally .plane_before").text(thisNode.planeBombers.player[0]);
+				$(".bomber_enemy .plane_before").text(thisNode.planeBombers.abyssal[0]);
+				if(thisNode.planeFighters.player[1] > 0){
+					$(".fighter_ally .plane_after").text("-"+thisNode.planeFighters.player[1]);
+				}
+				if(thisNode.planeFighters.abyssal[1] > 0){
+					$(".fighter_enemy .plane_after").text("-"+thisNode.planeFighters.abyssal[1]);
+				}
+				if(thisNode.planeBombers.player[1] > 0){
+					$(".bomber_ally .plane_after").text("-"+thisNode.planeBombers.player[1]);
+				}
+				if(thisNode.planeBombers.abyssal[1] > 0){
+					$(".bomber_enemy .plane_after").text("-"+thisNode.planeBombers.abyssal[1]);
+				}
+				$(".module.activity .battle_support").show();
+				$(".module.activity .battle_fish").hide();
+				$(".module.activity .node_type_battle").show();
+			};
+			// Have to wait seconds for game animate and see compass results
+			setTimeout(updateBattleActivityFunc, 6500);
+		},
+
 		BattleStart: function(data){
 			// Clear battle details box just to make sure
 			clearBattleData();
@@ -1636,7 +1698,6 @@
 				$(".module.activity .abyss_combined").hide();
 			}
 			
-			
 			if (thisNode.debuffed) {
 				$(".module.activity .map_world")
 					.addClass("debuffed")
@@ -1652,6 +1713,7 @@
 				var eParam = thisNode.eParam[index];
 				if(eshipId > -1){
 					if ($(".module.activity .abyss_"+enemyFleetBox+" .abyss_ship_"+(index+1)).length > 0) {
+						$(".module.activity .abyss_"+enemyFleetBox+" .abyss_ship_"+(index+1)).addClass(KC3Meta.abyssShipBorderClass(eshipId));
 						$(".module.activity .abyss_"+enemyFleetBox+" .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.abyssIcon(eshipId));
 
 						var tooltip = "{0}: {1}\n".format(eshipId, KC3Meta.abyssShipName(eshipId));
