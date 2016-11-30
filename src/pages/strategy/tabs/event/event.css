@@ -353,6 +353,12 @@
 	font-size:12px;
 	font-weight:bold;
 }
+.tab_event .sortie_list .node_id.nodamage {
+	box-shadow: 0px 0px 2px 2px #8c4;
+}
+.tab_event .sortie_list .node_id.damaged {
+	box-shadow: 0px 0px 2px 2px #f90;
+}
 
 .tab_event .sortie_list .node_result {
 	width:90px;

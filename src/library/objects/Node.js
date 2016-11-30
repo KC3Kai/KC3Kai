@@ -1271,6 +1271,7 @@ Used by SortieManager
 			enemyId: (this.epattern || 0),
 			data: (this.battleDay || {}),
 			yasen: (this.battleNight || {}),
+			airRaid: (this.battleDestruction || {}),
 			rating: this.rating,
 			drop: this.drop,
 			time: this.stime,
