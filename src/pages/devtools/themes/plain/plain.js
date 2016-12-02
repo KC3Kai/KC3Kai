@@ -1070,9 +1070,11 @@
 			
 			// FLEET BUTTONS RESUPPLY STATUSES
 			$(".module.controls .fleet_num").each(function(i, element){
-				$(element).removeClass("needsSupply");
-				$(element).removeClass("hasTaiha");
+				$(element).removeClass("onExped needsSupply hasTaiha");
 				if(!$(element).hasClass("active")){
+					if(PlayerManager.fleets[i].isOnExped()){
+						$(element).addClass("onExped");
+					}
 					if(!PlayerManager.fleets[i].isSupplied()){
 						$(element).addClass("needsSupply");
 					}
@@ -1851,8 +1853,8 @@
 		},
 
 		UpdateExpeditionPlanner: function (data) {
-			// if combined fleet, cancel action
-			if(selectedFleet===5){ return false; }
+			// if combined fleet or LBAS, cancel action
+			if(selectedFleet===5 || selectedFleet===6){ return false; }
 			
 			$( ".module.activity .activity_expeditionPlanner .expres_greatbtn img" )
 				.attr("src", "../../../../assets/img/ui/btn-"+(plannerIsGreatSuccess?"":"x")+"gs.png");

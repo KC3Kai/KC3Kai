@@ -7,7 +7,7 @@ Does not include Ships and Gears which are managed by other Managers
 */
 (function(){
 	"use strict";
-	
+
 	window.PlayerManager = {
 		hq: {},
 		consumables: {},
@@ -19,7 +19,7 @@ Does not include Ships and Gears which are managed by other Managers
 		buildSlots: 2,
 		combinedFleet: 0,
 		statistics: {},
-	
+
 		init :function(){
 			this.hq = new KC3Player();
 			this.consumables = {
@@ -43,7 +43,7 @@ Does not include Ships and Gears which are managed by other Managers
 				new KC3LandBase()
 			];
 		},
-		
+
 		setHQ :function( data ){
 			// Check if player suddenly changed
 			if(this.hq.id !== 0 && this.hq.id != data.mid){
@@ -54,7 +54,7 @@ Does not include Ships and Gears which are managed by other Managers
 			this.hq.update( data );
 			this.hq.save();
 		},
-		
+
 		setFleets :function( data ){
 			var self = this;
 			[0,1,2,3].forEach(function(i){
@@ -62,15 +62,19 @@ Does not include Ships and Gears which are managed by other Managers
 			});
 			localStorage.fleets = JSON.stringify(this.fleets);
 		},
-		
+
 		setBases :function( data ){
 			var self = this;
-			[0,1,2,3].forEach(function(i){
+			Array.numbers(0, data.length < 4 ? 3 : data.length - 1)
+				.forEach(function(i){
 				self.bases[i] = new KC3LandBase(data[i]);
-			});
+				});
+			if(self.bases.length > 4 && data.length < self.bases.length){
+				self.bases.splice(data.length < 4 ? 4 : data.length);
+			}
 			localStorage.bases = JSON.stringify(self.bases);
 		},
-		
+
 		setRepairDocks :function( data ){
 			var lastRepair = this.repairShips.map(function(x){return x;}); // clone
 			this.repairShips.splice(0);
@@ -80,10 +84,10 @@ Does not include Ships and Gears which are managed by other Managers
 				if(lastRepair[ndock.api_id] != ndock.api_ship_id) { // check if not in the list (repaired)
 					KC3ShipManager.get(lastRepair[ndock.api_id]).applyRepair();
 				}
-				
+
 				if(ndock.api_state > 0){
 					self.repairShips[ ndock.api_id ] = ndock.api_ship_id;
-					var repairInfo = 
+					var repairInfo =
 						{ id: ndock.api_ship_id,
 						  completeTime: ndock.api_complete_time
 						};
@@ -140,7 +144,7 @@ Does not include Ships and Gears which are managed by other Managers
 				}
 			});
 		},
-		
+
 		setResources :function( data, stime ){
 			if(typeof localStorage.lastResource == "undefined"){ localStorage.lastResource = 0; }
 			var ResourceHour = Math.floor(stime/3600);
@@ -155,10 +159,10 @@ Does not include Ships and Gears which are managed by other Managers
 				hour : ResourceHour
 			});
 		},
-		
+
 		setConsumables :function( data, stime ){
 			$.extend(this.consumables, data);
-			
+
 			if(typeof localStorage.lastUseitem == "undefined"){ localStorage.lastUseitem = 0; }
 			var ResourceHour = Math.floor(stime/3600);
 			if(ResourceHour == localStorage.lastUseitem){ return false; }
@@ -171,7 +175,7 @@ Does not include Ships and Gears which are managed by other Managers
 				hour : ResourceHour
 			});
 		},
-		
+
 		setStatistics :function( data ){
 			var oldStatistics = JSON.parse(localStorage.statistics || "{\"exped\":{},\"pvp\":{},\"sortie\":{}}");
 			var newStatistics = {
@@ -205,7 +209,7 @@ Does not include Ships and Gears which are managed by other Managers
 			// console.log("rates", newStatistics.sortie.rate, newStatistics.pvp.rate, newStatistics.exped.rate);
 			localStorage.statistics = JSON.stringify(newStatistics);
 		},
-		
+
 		setNewsfeed :function( data, stime ){
 			//console.log("newsfeed", data);
 			$.each(data, function( index, element){
@@ -220,13 +224,13 @@ Does not include Ships and Gears which are managed by other Managers
 				}
 			});
 		},
-		
+
 		portRefresh :function( data ){
 			var
 				self      = this,
 				// get server time (as usual)
 				ctime     = Math.hrdInt("floor",(new Date(data.time)).getTime(),3,1);
-			
+
 			if(!(this.hq.lastPortTime && this.hq.lastMaterial)) {
 				if(!this.hq.lastPortTime)
 					this.hq.lastPortTime = ctime;
@@ -234,9 +238,9 @@ Does not include Ships and Gears which are managed by other Managers
 					this.hq.lastMaterial = data.matAbs;
 				return false;
 			}
-			
+
 			this.fleets.forEach(function(fleet){ fleet.checkAkashi(); });
-			
+
 			var
 				// get current player regen cap
 				regenCap  = this.hq.getRegenCap(),
@@ -267,10 +271,10 @@ Does not include Ships and Gears which are managed by other Managers
 				data:regenVal.concat([0,0,0,0])
 			});
 			this.hq.lastMaterial = data.matAbs || this.hq.lastMaterial;
-			
+
 			this.hq.save();
 		},
-		
+
 		loadFleets :function(){
 			if(typeof localStorage.fleets != "undefined"){
 				var oldFleets =JSON.parse( localStorage.fleets );
@@ -279,7 +283,7 @@ Does not include Ships and Gears which are managed by other Managers
 				});
 			}
 		},
-		
+
 		loadBases :function(){
 			if(typeof localStorage.bases != "undefined"){
 				var oldBases = JSON.parse( localStorage.bases );
@@ -288,7 +292,13 @@ Does not include Ships and Gears which are managed by other Managers
 				});
 			}
 		},
-		
+
+		isBasesSupplied :function(){
+			return this.bases.every(function(base){
+				return base.isPlanesSupplied();
+			});
+		},
+
 		fleets_backup :function(){
 			return this.fleets.map(function(x,i){
 				return x.ships.map(function(s){
@@ -298,5 +308,5 @@ Does not include Ships and Gears which are managed by other Managers
 		}
 		
 	};
-	
+
 })();

@@ -1,4 +1,5 @@
 var imgurLimit = 0;
+var enableShelfTimer = false;
 
 function KCScreenshot(){
 	ConfigManager.load();
@@ -14,7 +15,13 @@ function KCScreenshot(){
 		?["jpeg", "jpg", "image/jpeg"]
 		:["png", "png", "image/png"];
 	this.quality = ConfigManager.ss_quality;
+	this.callback = function(){};
 }
+
+KCScreenshot.prototype.setCallback = function(callback){
+	this.callback = callback;
+	return this;
+};
 
 KCScreenshot.prototype.start = function(playerName, element){
 	var self = this;
@@ -64,23 +71,22 @@ function getRandomInt(min, max) {
 
 KCScreenshot.prototype.capture = function(){
 	var self = this;
-	var tempHideTaihaAlert = false;
 	
 	// If taiha alert appear on screenshot is off, hide taiha alert in the mean time
-	if(!ConfigManager.alert_taiha_ss && taihaStatus) {
-		interactions.taihaAlertStop({}, {}, {});
-		tempHideTaihaAlert = true;
+	if(!ConfigManager.alert_taiha_ss) {
+		interactions.suspendTaiha(function(){
+			self.startCapture();
+		});
+	} else {
+		this.startCapture();
 	}
-	
-	// Start capturing
+};
+
+KCScreenshot.prototype.startCapture = function(){
+	var self = this;
 	chromeCapture(this.format[0], this.quality, function(base64img){
 		self.domImg.src = base64img;
 		self.domImg.onload = self.crop();
-		
-		// screenshot is done, return taiha alert
-		if (tempHideTaihaAlert) {
-			interactions.taihaAlertStart({}, {}, {});
-		}
 	});
 };
 
@@ -126,18 +132,27 @@ KCScreenshot.prototype.output = function(){
 	}
 };
 
+KCScreenshot.prototype.complete = function(){
+	(this.callback || function(){})();
+};
+
 KCScreenshot.prototype.saveDownload = function(){
+	if (enableShelfTimer) {
+		clearTimeout(enableShelfTimer);
+	}
+	var self = this;
 	chrome.downloads.setShelfEnabled(false);
 	chrome.downloads.download({
 		url: this.base64img,
 		filename: ConfigManager.ss_directory+'/'+this.screenshotFilename+"."+this.format[1],
 		conflictAction: "uniquify"
 	}, function(downloadId){
-		setTimeout(function(){
+		enableShelfTimer = setTimeout(function(){
 			chrome.downloads.setShelfEnabled(true);
-		}, 1000);
+			enableShelfTimer = false;
+			self.complete();
+		}, 100);
 	});
-	
 };
 
 KCScreenshot.prototype.saveImgur = function(){
@@ -172,6 +187,7 @@ KCScreenshot.prototype.saveImgur = function(){
 					},
 					success: function(response){
 						KC3Database.Screenshot(response.data.link);
+						self.complete();
 					}
 				});
 			}else{
@@ -183,4 +199,5 @@ KCScreenshot.prototype.saveImgur = function(){
 
 KCScreenshot.prototype.saveTab = function(){
 	window.open(this.base64img, "_blank");
+	this.complete();
 };

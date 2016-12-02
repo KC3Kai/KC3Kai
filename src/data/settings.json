@@ -23,7 +23,8 @@
 						[ "scn", "简体中文" ],
 						[ "tcn", "繁體中文" ],
 						[ "th", "ภาษาไทย" ],
-						[ "vi", "Tiếng Việt" ]
+						[ "vi", "Tiếng Việt" ],
+						[ "ua", "Українська" ]
 					]
 				}
 			},
@@ -58,6 +59,16 @@
 			{
 				"id": "devOnlyPages",
 				"name": "SettingsDevOnlyPages",
+				"type": "check"
+			},
+			{
+				"id": "forceDMMLogin",
+				"name": "SettingsForceDMMLogin",
+				"type": "check"
+			},
+			{
+				"id": "apiRecorder",
+				"name": "SettingsAPIRecorder",
 				"type": "check"
 			}
 		]
@@ -434,6 +445,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "google_translate",
+				"name" : "SettingsGoogleTranslate",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "api_tracking",
 				"name" : "SettingsQuestTracking",
 				"type" : "check",
@@ -533,6 +550,33 @@
 			{
 				"id" : "subtitle_bold",
 				"name" : "SettingsSubtitleBold",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "subtitle_display",
+				"name" : "SettingsSubtitleDisplay",
+				"type" : "dropdown",
+				"options" : {
+					"choices" : [
+						[ "bottom", "SubtitleDisplayBottom" ],
+						[ "below", "SubtitleDisplayBelow" ],
+						[ "stick", "SubtitleDisplayStick" ],
+						[ "evade", "SubtitleDisplayEvade" ],
+						[ "ghost", "SubtitleDisplayGhost" ],
+						[ "free", "SubtitleDisplayFree", "disabled" ]
+					]
+				}
+			},
+			{
+				"id" : "subtitle_speaker",
+				"name" : "SettingsSubtitleSpeaker",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "map_markers",
+				"name" : "SettingsMapNodeMarkers",
 				"type" : "check",
 				"options" : {}
 			}
@@ -710,6 +754,23 @@
 					"type": "Number"
 				},
 				"options" : { "label" : "%" }
+			}
+		]
+	},
+	{
+		"section":"SettingsStrategyRoom",
+		"help":"",
+		"contents":[
+			{
+				"id" : "sr_theme",
+				"name" : "SettingsStrategyTheme",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "legacy", "Traditional" ],
+						[ "dark", "Dark" ]
+					]
+				}
 			}
 		]
 	}

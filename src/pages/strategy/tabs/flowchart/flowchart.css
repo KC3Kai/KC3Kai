@@ -17,9 +17,7 @@
 .tab_flowchart .questControls {
 	width:700px;
 	margin:0px 0px 10px 0px;
-	background:#f0f5ff;
 	padding:5px 10px;
-	border-bottom:1px solid #369;
 }
 .tab_flowchart .questControls .questLabel {
 	width:90px;
@@ -34,16 +32,11 @@
 	height:20px;
 	line-height:20px;
 	margin:0px 5px 0px 0px;
-	background:#369;
-	color:#fff;
 	font-weight:bold;
 	font-size:12px;
 	text-align:center;
 	float:left;
 	border-radius:7px;
-}
-.tab_flowchart .questControls .questControl:hover {
-	background:#ace;
 }
 .tab_flowchart .flowchart {
 	width:680px;
@@ -65,7 +58,6 @@
 .tab_flowchart .questFlowItem .questInfo {
 	height:20px;
 	margin:0px 0px 2px 0px;
-	background:#f6f6f6;
 }
 .tab_flowchart .questFlowItem .questChildren {
 	padding:0px 0px 0px 20px;
@@ -109,7 +101,6 @@
 	margin:2px 2px 0px 0px;
 	text-align:center;
 	color:#999;
-	display:none;
 }
 .tab_flowchart .questFlowItem .questOverride {
 	width:16px;
@@ -200,18 +191,7 @@
 	opacity:.4;
 }
 
-.tab_flowchart .questInfo.active {
-	background:#EE9;
-}
-.tab_flowchart .questInfo.active .questCount {
-	background:#fff;
-	color:#00f;
-	font-weight:bold;
-}
 
-.tab_flowchart .questInfo.complete {
-	color:#00CC00;
-}
 .tab_flowchart .questInfo.complete .questTrack {
 	display:none;
 }
@@ -235,9 +215,6 @@
 	line-height:20px;
 	margin:0px 0px 2px 0px;
 	font-size:12px;
-}
-.tab_flowchart .questExtraItem.active {
-	background:#EE9;
 }
 .tab_flowchart .questExtraItem .questIcon {
 	width:38px;

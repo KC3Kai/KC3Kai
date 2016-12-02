@@ -14,6 +14,18 @@
 	<body>
 		<div id="critical" class="anim1"></div>
 		
+		<div class="api_link_notice">
+			<div class="api_notice_close hover">x</div>
+			<div class="api_notice_title i18n">GameAPIPlayFlashNoticeTitle</div>
+			<div class="api_notice_desc i18n">GameAPIPlayFlashNoticeDesc</div>
+			<ul>
+				<li class="i18n">GameAPIPlayFlashNoticeStep1</li>
+				<li class="i18n">GameAPIPlayFlashNoticeStep2</li>
+				<li class="i18n">GameAPIPlayFlashNoticeStep3</li>
+				<li class="i18n">GameAPIPlayFlashNoticeStep4</li>
+			</ul>
+		</div>
+		
 		<div class="box-wrap">
 			
 			<!-- NO API LINK -->
@@ -78,7 +90,10 @@
 				<div class="overlays">
 					<!-- Quest Overlay -->
 					<div class="overlay_box overlay_quests">
-						
+					</div>
+					
+					<!-- Map Markers Overlay -->
+					<div class="overlay_box overlay_markers">
 					</div>
 					
 					<!-- Record Overlays -->
@@ -104,7 +119,7 @@
 					<div class="overlay_box taiha_red anim1"></div>
 
 					<!-- Suibtitles -->
-					<div class="overlay_box overlay_subtitles"></div>
+					<div class="overlay_box overlay_subtitles"><span></span></div>
 				</div>
 			</div>
 			
@@ -118,12 +133,13 @@
 			
 			<!-- Quest Overlay -->
 			<div class="overlay ol_quest ol_quest_exist">
-				<div class="icon"></div>
-				<div class="content">
+				<div class="icon with_tl"></div>
+				<div class="content with_tl">
 					<div class="name"></div>
 					<div class="desc"></div>
 				</div>
-				<div class="tracking"></div>
+				<div class="tracking with_tl"></div>
+				<div class="no_tl hover">?</div>
 			</div>
 			
 			<div class="overlay ol_quest ol_quest_empty"></div>

@@ -6,21 +6,31 @@
 	KC3StrategyTabs.locking.definition = {
 		tabSelf: KC3StrategyTabs.locking,
 		
-		lock_plan: [[],[],[],[],[]], // array of ship rosterIds planned earlier saved on localStorage
-		boxContents: [[],[],[],[],[],[]], // array of ship objects based on lock_plan
+		// array of ship rosterIds planned earlier saved on localStorage
+		lock_plan: [[],[],[],[],[]],
+		// array of ship objects based on lock_plan
+		boxContents: [[],[],[],[],[],[]],
 		listReserved: [],
 		loading: false,
 		clearAllFlag: false,
 		
 		/* INIT
-		Prepares all data needed
+		Prepares initial static data needed
 		---------------------------------*/
 		init :function(){
+		},
+		
+		/* RELOAD
+		Loads latest player or game data if needed.
+		---------------------------------*/
+		reload :function() {
+			this.boxContents = [[],[],[],[],[],[]];
 			// Shiplock Plan
 			if(typeof localStorage.lock_plan != "undefined"){
 				this.lock_plan = JSON.parse(localStorage.lock_plan);
 			}
 			
+			KC3ShipManager.load();
 			// Cache ship info
 			var ctr, ThisShip, containingBox;
 			for(ctr in KC3ShipManager.list){
@@ -47,6 +57,7 @@
 		---------------------------------*/
 		execute :function(){
 			var self = this;
+			this.listReserved = [];
 			
 			$.each(this.boxContents, function(boxIndex, ShipList){
 				$.each(ShipList, function(shipIndex, ThiShip){

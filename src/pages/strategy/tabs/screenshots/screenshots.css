@@ -8,10 +8,8 @@
 /* PAGE LIST
 ---------------------------------*/
 .tab_screenshots .page_list {
-	width:700px;
-	margin:0px 0px 0px 0px;
-	background:#f0f5ff;
-	border-bottom:1px solid #369;
+	/*width:700px;
+	margin:0px 0px 0px 0px;*/
 	padding:5px 5px 0px;
 }
 .tab_screenshots .page_list .pagination {
@@ -24,7 +22,6 @@
 	width:166px;
 	height:116px;
 	margin:7px 0px 0px 7px;
-	border:1px solid #ccc;
 	padding:2px;
 	float:left;
 }

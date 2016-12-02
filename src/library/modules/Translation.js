@@ -37,13 +37,15 @@
 				
 				case "scn": fontFamily = '"HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,"Nimbus Sans L",Arial,"Lucida Grande","Liberation Sans","Microsoft YaHei UI","Microsoft YaHei","Hiragino Sans GB","Wenquanyi Micro Hei","WenQuanYi Zen Hei","ST Heiti",SimHei,"WenQuanYi Zen Hei Sharp",sans-serif'; break;
 				
+				case "tcn": fontFamily = '"Helvetica Neue", Helvetica, "Microsoft JhengHei", "Microsoft JhengHei UI", Arial,"Heiti TC", sans-serif'; break;
+				
 				case "jp": fontFamily = '"Helvetica Neue", "Tahoma", Helvetica, Arial, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", Osaka, "メイリオ", "Meiryo", "Yu Gothic UI Semibold", "ＭＳ Ｐゴシック", "MS PGothic", sans-serif'; break;
 				
 				default: break;
 			}
-
+			
 			if(fontFamily){ $("body").css("font-family", fontFamily); }
-
+			
 			// Apply HTML language code
 			$("html").attr("lang", ConfigManager.language);
 		},
@@ -69,7 +71,20 @@
 				"addTags should only be applied on objects");
 			return track(obj);
 		},
-		
+
+		/** Clear specified attribute key from specified JSON object. */
+		unoverrideAttr: function(obj, key) {
+			console.assert(
+				typeof obj === "object",
+				"unoverrideAttr should only be applied on objects");
+			$.each(obj, function(k, v) {
+				if (typeof v[key] !== "undefined") {
+					delete obj[k][key];
+				}
+			});
+			return obj;
+		},
+
 		getJSONWithOptions: function(repo, filename, extendEnglish,
 									 language, info_force_ship_lang, info_eng_stype,
 									 track_source) {
@@ -113,6 +128,9 @@
 
 					if (track_source) {
 						self.addTags(enJSON, "en");
+					}
+					if (filename === "quests") {
+						self.unoverrideAttr(enJSON, "memo");
 					}
 				} catch (e) {
 					console.error(e.stack);

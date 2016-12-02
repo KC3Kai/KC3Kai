@@ -84,6 +84,8 @@
 			"t37": "dv",
 			// interceptor
 			"t38": "aa",
+			// all types
+			"tall": "type",
 		},
 		_landPlaneTypes: KC3GearManager.landBasedAircraftType3Ids,
 
@@ -120,6 +122,14 @@
 			});
 			self._comparator.overall = function(a,b) {
 				return sumAllGetter(b) - sumAllGetter(a);
+			};
+			self._comparator.type = function(a,b) {
+				var result = a.type_id - b.type_id;
+				if (result === 0) {
+					return self._comparator[self._defaultCompareMethod["t" + a.type_id]](a, b);
+				} else {
+					return result;
+				}
 			};
 		},
 
@@ -259,6 +269,7 @@
 			// setup sort methods
 			var sortControls = this._allProperties.slice(0);
 			sortControls.push( "overall" );
+			sortControls.push( "type" );
 			sortControls.forEach( function(property,i) {
 				$(".tab_gears .itemSorters .sortControl." + property).on("click", function() {
 					KC3StrategyTabs.gotoTab(null, self._currentTypeId, property);
@@ -363,6 +374,13 @@
 					  $(q).removeClass("hide");
 				}
 			});
+
+			var q = ".tab_gears .itemSorters .sortControl.type";
+			if (type_id === "all") {
+				$(q).removeClass("hide");
+			} else {
+				$(q).addClass("hide");
+			}
 		},
 
 		/* Show slotitem type, with a compare method

@@ -1,0 +1,62 @@
+body {
+	background:#aaa !important;
+}
+
+#wrapper {
+	width:700px;
+	background:#f3f3f3;
+	min-height:400px;
+	margin:5px auto 10px;
+}
+
+#controls {
+	width:700px;
+	height:31px;
+	padding:3px;
+	border-bottom:1px solid #ccc;
+}
+#controls .button {
+	width:80px;
+	height:24px;
+	line-height:22px;
+	background:#def;
+	float:left;
+	margin:0px 5px 0px 0px;
+	text-align:center;
+	font-size:12px;
+	font-weight:bold;
+	border:1px solid #ace;
+}
+#controls .button.recording {
+	background:#fcc;
+	border:1px solid #f99;
+}
+
+#apilist {
+	width:200px;
+	height:500px;
+	float:left;
+	border-right:1px solid #ccc;
+	overflow:hidden;
+}
+#apilist .apiitem {
+	width:200px;
+	height:20px;
+	line-height:20px;
+	border-bottom:1px solid #ccc;
+	font-size:11px;
+	padding:0px 0px 0px 5px;
+	overflow:hidden;
+}
+
+#contents {
+	background:#fff;
+	width:500px;
+	height:500px;
+	float:left;
+	font-size:10px;
+	font-family: monospace;
+	padding:5px;
+	overflow-y:scroll;
+	word-wrap: break-word;
+}

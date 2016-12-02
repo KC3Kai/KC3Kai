@@ -29,6 +29,8 @@ Provides access to data on built-in JSON files
 		},
 		_tpmult:{},
 		_edges:{},
+		_nodes:{},
+		_gunfit:{},
 		_defaultIcon:"",
 		
 		voiceDiffs: [
@@ -54,6 +56,17 @@ Provides access to data on built-in JSON files
 			"1471": 3 // whiteday 2015
 		},
 		
+		abyssKaiShipIds: [
+			565, 566, 567, 616, 617, 618, 714, 715
+		],
+		abyssNonBossIds: [
+			541, 542, 543, 549, 550, 551, 552, 553, 554, 555,
+			558, 559, 560, 561, 562, 563, 570, 571, 572, 575,
+			576, 577, 579, 580, 591, 592, 593, 594, 595, 614,
+			615, 621, 622, 623, 624, 637, 638, 639, 640, 665,
+			666, 667
+		],
+		
 		/* Initialization
 		-------------------------------------------------------*/
 		init :function( repo ){
@@ -69,7 +82,9 @@ Provides access to data on built-in JSON files
 			this._gauges	= JSON.parse( $.ajax(repo+'gauges.json', { async: false }).responseText );
 			this._defeq		= JSON.parse( $.ajax(repo+'defeq.json', { async: false }).responseText );
 			this._edges		= JSON.parse( $.ajax(repo+'edges.json', { async: false }).responseText );
+			this._nodes		= JSON.parse( $.ajax(repo+'nodes.json', { async: false }).responseText );
 			this._tpmult	= JSON.parse( $.ajax(repo+'tp_mult.json', { async: false }).responseText );
+			this._gunfit	= JSON.parse( $.ajax(repo+'gunfit.json', { async: false }).responseText );
 			
 			// Load Translations
 			this._ship 		= KC3Translation.getJSON(repo, 'ships', true);
@@ -192,6 +207,28 @@ Provides access to data on built-in JSON files
 				.join("");
 		},
 		
+		abyssShipBorderClass :function(ship){
+			var shipMaster = ship;
+			// No ship specified, return all possible class names
+			if(!ship){
+				return ["boss", "kai", "flagship", "elite"];
+			}
+			if(typeof shipMaster !== "object"){
+				shipMaster = KC3Master.ship(Number(ship));
+			}
+			// Abyssal Kai
+			if(this.abyssKaiShipIds.indexOf(shipMaster.api_id) > -1){
+				return "kai";
+			}
+			// Princesses and demons, using black-list
+			// To reduce updating work, consider new abyssal ships as boss by default
+			if(shipMaster.api_id > 538 && shipMaster.api_id <= 800 &&
+				this.abyssNonBossIds.indexOf(shipMaster.api_id) < 0){
+				return "boss";
+			}
+			return shipMaster.api_id > 500 ? shipMaster.api_yomi.replace("-", "") : "";
+		},
+		
 		exp :function(level){
 			return this._exp[level] || [0,0];
 		},
@@ -249,6 +286,10 @@ Provides access to data on built-in JSON files
 			return this._battle.airbattle[index] || ["","","Unknown"];
 		},
 		
+		airraiddamage :function(index){
+			return this._battle.airraiddamage[index] || "";
+		},
+		
 		engagement :function(index){
 			return this._battle.engagement[index] || ["","",""];
 		},
@@ -266,6 +307,22 @@ Provides access to data on built-in JSON files
 				}
 			}
 			return edgeId;
+		},
+		
+		nodeLetters : function(worldId, mapId) {
+			var map = this._nodes["World " + worldId + "-" + mapId];
+			if (typeof map !== "undefined" && !!map.letters) {
+				return map.letters;
+			}
+			return {};
+		},
+		
+		nodeMarkers : function(worldId, mapId) {
+			var map = this._nodes["World " + worldId + "-" + mapId];
+			if (typeof map !== "undefined" && !!map.markers) {
+				return map.markers;
+			}
+			return [];
 		},
 		
 		tpObtained : function(kwargs) {
@@ -399,6 +456,22 @@ Provides access to data on built-in JSON files
 				}
 			}
 			return false;
+		},
+		
+		gunfit :function(shipMstId, itemMstId){
+			if (typeof this._gunfit[shipMstId+""] == "undefined") {
+				return false;
+			}
+			
+			if (typeof itemMstId != "undefined") {
+				if (typeof this._gunfit[shipMstId+""][itemMstId+""] != "undefined") {
+					return this._gunfit[shipMstId+""][itemMstId+""];
+				} else {
+					return false;
+				}
+			} else {
+				return this._gunfit[shipMstId+""];
+			}
 		}
 	};
 	

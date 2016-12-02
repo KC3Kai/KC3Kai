@@ -58,12 +58,10 @@
 .tab_expcalc .ship_goal {
 	width:680px;
 	height:40px;
-	background:#def;
 	border-radius: 8px;
 	margin:0px 0px 3px 0px;
 	padding:2px 4px;
 	line-height:34px;
-	border:1px solid #ace;
 }
 .tab_expcalc .ship_goal.highlight_stype {
 	background-color:#fdd;
@@ -78,7 +76,6 @@
 .tab_expcalc .ship_goal .ship_col {
 	height:34px;
 	float:left;
-	/*background:#fff;*/
 	overflow:hidden;
 }
 .tab_expcalc .ship_goal .ship_label {
@@ -248,12 +245,12 @@
 .tab_expcalc .goal_template {
 	width: 680px;
 	height: 80px;
-	background: #def;
 	border-radius: 8px;
 	margin: 0px 0px 3px 0px;
 	padding: 2px 4px;
 	line-height: 34px;
-	border: 1px solid #ace;
+	/*background: #def;
+	border: 1px solid #ace;*/
 }
 
 .tab_expcalc .goal_template.disabled {

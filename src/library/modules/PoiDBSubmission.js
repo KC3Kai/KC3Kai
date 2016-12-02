@@ -41,15 +41,28 @@
 				// detect formation
 				'api_req_sortie/battle': this.processBattle,
 				'api_req_sortie/airbattle': this.processBattle,
-				'api_req_sortie/night_to_day': this.processBattle,
-				"api_req_sortie/ld_airbattle": this.processBattle,
+				// the following two are commented out 
+				// as poi "plugin-report" doesn't seem to support them.
+				// (might have been deprecated)
+				// 'api_req_sortie/night_to_day': this.processBattle,
 				// 'api_req_battle_midnight/battle': this.processBattle,
+
+				"api_req_sortie/ld_airbattle": this.processBattle,
 				'api_req_battle_midnight/sp_midnight': this.processBattle,
 				'api_req_combined_battle/airbattle': this.processBattle,
 				'api_req_combined_battle/battle': this.processBattle,
 				'api_req_combined_battle/sp_midnight': this.processBattle,
 				'api_req_combined_battle/battle_water': this.processBattle,
 				"api_req_combined_battle/ld_airbattle": this.processBattle,
+
+				"api_req_combined_battle/ec_battle": this.processBattle,
+				"api_req_combined_battle/each_battle": this.processBattle,
+				"api_req_combined_battle/each_airbattle": this.processBattle,
+				"api_req_combined_battle/each_sp_midnight": this.processBattle,
+				"api_req_combined_battle/each_battle_water": this.processBattle,
+				"api_req_combined_battle/ec_midnight_battle": this.processBattle,
+				"api_req_combined_battle/each_ld_airbattle": this.processBattle,
+
 				// detect ship id
 				'api_req_sortie/battleresult': this.processBattleResult,
 				'api_req_combined_battle/battleresult': this.processBattleResult,
@@ -132,7 +145,7 @@
 			var dropShipData = {
 				mapId: response.api_maparea_id*10 + response.api_mapinfo_no,
 				cellId: response.api_no,
-				isBoss: ( response.api_event_id === 5)
+				isBoss: (response.api_event_id === 5)
 			};
 
 			this.dropShipData = dropShipData;
@@ -146,9 +159,14 @@
 				this.cleanup();
 				return;
 			}
+			// if this function ("processBattle") is entered more than once for a single battle
+			// (which usually happens when the user starts with day battle and decide to go for night one)
+			// the latest formation takes priority.
+
 			var response = requestObj.response.api_data;
 			var dropShipData = this.dropShipData;
 
+			// fill in formation and enemy ship info.
 			try {
 				dropShipData.enemyFormation = response.api_formation[1];
 			} catch (err) {
@@ -160,11 +178,34 @@
 				dropShipData.enemyFormation = 0;
 			}
 
+			// build up enemy ship array
+			var enemyShips;
+			try {
+				enemyShips = response.api_ship_ke.slice(1,7);
+			} catch (err) {
+				console.warn("error while extracting enemy ship array");
+				console.warn(err);
+				console.warn("using an empty ship array as placeholder");
+				enemyShips = [-1,-1,-1,-1,-1,-1];
+			}
+			if (enemyShips.length !== 6) {
+				console.warn("processBattle: incorrect enemy ship arr length expect 6 but got " 
+							 + enemyShips.length );
+			}
+			if (typeof response.api_ship_ke_combined !== "undefined") {
+				// console.log("processBattle: enemy fleet is combined");
+				enemyShips = enemyShips.concat( response.api_ship_ke_combined.slice(1,7) );
+				if (enemyShips.length !== 12) {
+					console.warn("processBattle: incorrect enemy ship arr length expect 12 but got " 
+								 + enemyShips.length );
+				}
+			}
+			dropShipData.enemyShips = enemyShips;
 			this.state = 'drop_ship_2';
 		},
 		processMapInfo: function( requestObj ) {
 			var self = this;
-			$.each( requestObj.response.api_data, function(i, entry) {
+			$.each( requestObj.response.api_data.api_map_info, function(i, entry) {
 				if (entry.api_eventmap) {
 					self.mapInfo[entry.api_id] = entry.api_eventmap.api_selected_rank;
 				}
@@ -185,7 +226,16 @@
 			dropShipData.mapLv = this.mapInfo[dropShipData.mapId] || 0;
 			dropShipData.rank = response.api_win_rank;
 			dropShipData.teitokuLv = PlayerManager.hq.level;
-			dropShipData.enemyShips = response.api_ship_id.slice(1);
+
+			if (typeof dropShipData.enemyShips === "undefined") {
+				console.warn("[dropship] missing enemy ship info during battle, info from battleresult is used instead.");
+				dropShipData.enemyShips = response.api_ship_id.slice(1);
+			}
+
+			dropShipData.itemId = (typeof response.api_get_useitem === "undefined")
+				? -1
+				: response.api_get_useitem.api_useitem_id;
+
 			console.log( "[dropship] prepared: " + JSON.stringify( dropShipData ) );
 			this.sendData( "drop_ship", dropShipData );
 			this.state = null;

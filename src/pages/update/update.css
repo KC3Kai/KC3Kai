@@ -1,0 +1,49 @@
+/* GLOBAL
+--------------------------*/
+body {
+	background:#eee;
+}
+#wrapper {
+	width:600px;
+	margin:30px auto;
+	background:#fff;
+	padding:20px 20px 10px;
+}
+.logo {
+	width:100px;
+	height:100px;
+	line-height:100px;
+	float:left;
+	margin:0px 10px 0px 0px;
+}
+.logo img {
+	width:100px;
+	height:100px;
+	vertical-align:too;
+}
+
+.versionInfo {
+	width:450px;
+	height:100px;
+	float:left;
+}
+.versionName {
+	width:450px;
+	height:24px;
+	line-height:24px;
+	margin:0px 0px 6px 0px;
+	font-size:20px;
+	font-weight:bold;
+}
+.versionNotes {
+	width:450px;
+	height:70px;
+	font-size:12px;
+}
+
+.viewButtons {
+	width:560px;
+	float:left;
+	margin:20px 0px 10px 0px;
+	text-align:center;
+}

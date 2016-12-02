@@ -16,26 +16,20 @@
 .tab_event .world_list {
 	width:700px;
 	height:31px;
-	background:#f0f5ff;
-	border-bottom:1px solid #369;
 }
 .tab_event .world_box {
 	width:116px;
 	height:30px;
 	float:left;
 	line-height:28px;
-	border:1px outset #ace;
 	text-align:center;
 	font-weight:bold;
 	font-size:14px;
-	background: -webkit-linear-gradient(top, rgba(206,245,255,1) 0%, rgba(111,226,255,1) 100%);
 }
 .tab_event .world_box.active {
 	height:31px;
-	border:1px inset #FFCC00;
 	line-height:29px;
 	border-bottom:0px none;
-	background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(240,248,255,1) 100%);
 }
 
 /* MAP LIST
@@ -50,7 +44,6 @@
 	height: 95%;
 	display: flex;
 	align-items: center;
-	background-color: #f0f8ff;
 	cursor: pointer;
 }
 .tab_event .map_shift.left {
@@ -67,23 +60,15 @@
 	position: relative;
 	min-width: 800px;
 	margin: 0px 0px 0px 0px;
-	background: #f0f8ff;
 	padding: 5px 10px;
-	border-bottom: 1px solid #369;
 	margin-left: -97px;
 }
 .tab_event .map_box {
 	width:90px;
 	height:56px;
-	background:#cde;
-	border-radius:8px;
 	float:left;
 	padding:5px 0px;
 	margin:0px 7px 0px 0px;
-}
-.tab_event .map_box.active {
-	border:2px inset #ace;
-	padding-top:4px;
 }
 .tab_event .map_box .map_title {
 	width:80px;
@@ -93,7 +78,6 @@
 	font-weight:bold;
 	font-size:16px;
 	text-align:center;
-	color:#006699;
 }
 .tab_event .map_box .map_hp_txt {
 	width:80px;
@@ -106,16 +90,12 @@
 .tab_event .map_box .map_gauge {
 	width:80px;
 	height:10px;
-	background:#555;
-	border-radius:5px;
-	border:1px solid #000;
 	margin:0px auto;
 	overflow:hidden;
 }
 .tab_event .map_box .map_bar {
 	width:80px;
 	height:10px;
-	background:#f00;
 }
 
 /* Map without gauge (All maps) */
@@ -131,21 +111,10 @@
 }
 
 /* Map is Cleared */
-.tab_event .map_box.cleared .map_gauge {
-	background:#0f0;
-	border:1px solid #393;
-}
 .tab_event .map_box.cleared .map_bar {
 	display:none;
 }
 
-/* Map is NOT Cleared */
-.tab_event .map_box.notcleared {
-	background:#fdd;
-}
-.tab_event .map_box.active.notcleared {
-	border:2px inset #FAA;
-}
 
 /* Map not cleared and no gauge */
 .tab_event .map_box.noclearnogauge .map_title {
@@ -154,19 +123,6 @@
 }
 .tab_event .map_box.noclearnogauge .map_gauge {
 	display:none;
-}
-
-/* PAGE LIST
----------------------------------*/
-.tab_event .page_list {
-	width:700px;
-	margin:0px 0px 0px 0px;
-	background:#f0f5ff;
-	border-bottom:1px solid #369;
-	padding:5px 5px 0px;
-}
-.tab_event .page_list .pagination {
-	margin:0px;
 }
 
 /* SORTIE LIST
@@ -179,9 +135,6 @@
 .tab_event .sortie_list .sortie_box {
 	width:680px;
 	line-height:40px;
-	background:#def;
-	border-radius:10px;
-	margin:0px 0px 5px 0px;
 	padding:5px;
 	position:relative;
 }
@@ -189,7 +142,6 @@
 .tab_event .sortie_list .sortie_info {
 	width:670px;
 	height:30px;
-	/*background:#ffc;*/
 }
 .tab_event .sortie_list .sortie_column {
 	float:left;
@@ -198,7 +150,6 @@
 .tab_event .sortie_list .sortie_record {
 	width:50px;
 	margin:0px 10px 0px 0px;
-	/*background:#ffc;*/
 }
 .tab_event .sortie_list .sortie_id {
 	width:50px;
@@ -214,7 +165,6 @@
 	line-height:14px;
 	font-size:12px;
 	text-align:center;
-	color:#3399cc;
 }
 
 /* Sortie Info: MAP */
@@ -225,14 +175,11 @@
 	text-align:center;
 	font-size:16px;
 	font-weight:bold;
-	background:#ffc;
-	border-radius:8px;
 }
 
 /* Sortie Info: FLEET */
 .tab_event .sortie_list .sortie_fleet {
 	width:210px;
-	/*background:#ffc;*/
 	margin:0px 10px 0px 0px;
 }
 .tab_event .sortie_list .sortie_ship {
@@ -240,7 +187,6 @@
 	height:30px;
 	line-height:30px;
 	margin:0px 5px 0px 0px;
-	background:#fff;
 	border-radius:15px;
 	float:left;
 	overflow:hidden;
@@ -254,7 +200,6 @@
 /* Sortie Info: EDGES */
 .tab_event .sortie_list .sortie_edges {
 	width:175px;
-	/*background:#ffc;*/
 	margin:0px 10px 0px 0px;
 }
 .tab_event .sortie_list .nonodes {
@@ -269,7 +214,6 @@
 	float:left;
 	text-align:center;
 	margin:0px 5px 0px 0px;
-	background:#fff;
 	color:#fff;
 	border-radius:15px;
 	font-size:14px;
@@ -290,22 +234,8 @@
 	line-height:18px;
 	float:left;
 	text-align:center;
-	/*padding:0px 3px;*/
 	margin:5px 5px 0px 0px;
-	background:#ace;
-	color:#fff;
-	border-radius:5px;
 	font-size:10px;
-	border:1px outset #9bd;
-}
-.tab_event .sortie_list .sortie_toggle.active {
-	line-height:16px;
-	border-width:2px;
-	border-style:inset;
-}
-.tab_event .sortie_list .sortie_toggle_in {
-	background:#cde;
-	color:#000;
 }
 
 /* Sortie Roster */
@@ -318,8 +248,6 @@
 	width:163px;
 	height:92px;
 	margin:0px 2px 0px 2px;
-	background:#fff;
-	border-radius:8px;
 	float:left;
 	overflow:hidden;
 }
@@ -331,16 +259,13 @@
 	width:163px;
 	height:20px;
 	line-height:20px;
-	background:#ffc;
 	text-align:center;
 	font-size:11px;
 	font-weight:bold;
-	border-bottom:1px solid #def;
 }
 .tab_event .sortie_list .rfleet_body {
 	width:163px;
 	height:72px;
-	/*background:#ffc;*/
 }
 
 .tab_event .sortie_list .rfleet_ship {
@@ -372,6 +297,8 @@
 	line-height:10px;
 	float:left;
 	font-size:10px;
+	transform:scale(0.85);
+	transform-origin:left;
 	overflow:hidden;
 	/*background:#fcc;*/
 }
@@ -381,6 +308,8 @@
 	line-height:10px;
 	float:left;
 	font-size:10px;
+	transform:scale(0.75);
+	transform-origin:left;
 	overflow:hidden;
 	/*background:#cfc;*/
 }
@@ -407,8 +336,6 @@
 	/*height:207px;*/
 	line-height:20px;
 	margin:0px 2px 0px 2px;
-	background:#fff;
-	border-radius:8px;
 	float:left;
 	overflow:hidden;
 	padding:5px;
@@ -425,6 +352,12 @@
 	border-radius:12px;
 	font-size:12px;
 	font-weight:bold;
+}
+.tab_event .sortie_list .node_id.nodamage {
+	box-shadow: 0px 0px 2px 2px #8c4;
+}
+.tab_event .sortie_list .node_id.damaged {
+	box-shadow: 0px 0px 2px 2px #f90;
 }
 
 .tab_event .sortie_list .node_result {
@@ -485,6 +418,19 @@
 .tab_event .sortie_list .node_eship img {
 	width:20px;
 	height:20px;
+	vertical-align:top;
+}
+.tab_event .sortie_list .node_enemy .boss {
+	box-shadow:0px 0px 1px 1px #5ef;
+}
+.tab_event .sortie_list .node_enemy .kai {
+	box-shadow:0px 0px 1px 1px #2af;
+}
+.tab_event .sortie_list .node_enemy .flagship {
+	box-shadow:0px 0px 1px 1px #fc3;
+}
+.tab_event .sortie_list .node_enemy .elite {
+	box-shadow:0px 0px 1px 1px #f33;
 }
 
 .tab_event .sortie_list .node_details {
@@ -673,7 +619,6 @@
 }
 .tab_event .sortie_list .node_exp {
 	display: inline-block;
-	color: cornflowerblue;
 	text-align: right;
 	width: 48%;
 	font-size: 0.8em;
@@ -681,7 +626,6 @@
 	position:relative;
 }
 .tab_event .sortie_list .node_exp span {
-	color: black;
 	font-weight: bolder;
 	font-size: 1.25em;
 }
@@ -693,7 +637,6 @@
 	display: block;
 	font-size: 0.8em;
 	text-align: center;
-	color: black;
 }
 .tab_event .sortie_list .node_exp.hq:before {
 	content: "HQ EXP";

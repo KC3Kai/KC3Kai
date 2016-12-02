@@ -3,7 +3,7 @@
 
 	window.WhoCallsTheFleetDb = {
 		db: {},
-		expectedShipCount: 427,
+		expectedShipCount: 438,
 		init: function(repo) {
 			var rawDb = $.ajax({
 				url : repo + 'assets/js/WhoCallsTheFleetShipDb.json',

@@ -21,6 +21,8 @@ Retreives when needed to apply on components
 				marryLevelFormat	: 0,
 				checkLiveQuests		: true,
 				devOnlyPages		: false,
+				forceDMMLogin       : false,
+				apiRecorder         : false,
 
 				DBSubmission_enabled: 0,
 				DBSubmission_key : '',
@@ -119,17 +121,17 @@ Retreives when needed to apply on components
 				alert_supply_exped 	:true,
 				alert_idle_counter	: 1,
 				
-				alert_taiha			: true,
+				alert_taiha			: false,
 				alert_taiha_blur	: false,
 				alert_taiha_blood	: true,
 				alert_taiha_ss		: false,
-				alert_taiha_sound	: true,
+				alert_taiha_sound	: false,
 				alert_taiha_pvp		: false,
 				alert_taiha_panel	: true,
 				
 				api_translation		: true,
 				api_tracking 		: true,
-				api_mustPanel 		: false,
+				api_mustPanel 		: true,
 				api_askExit			: true,
 				api_directRefresh	: false,
 				api_margin			: 0,
@@ -142,6 +144,10 @@ Retreives when needed to apply on components
 				subtitle_font		: "\"Trebuchet MS\",\"Lucida Grande\",\"Lucida Sans Unicode\",\"Lucida Sans\",Tahoma,sans-serif",
 				subtitle_size		: 22,
 				subtitle_bold		: false,
+				subtitle_display	: "ghost",
+				subtitle_speaker	: false,
+				google_translate	: true,
+				map_markers			: false,
 				
 				dmm_forcecookies	: false,
 				dmm_customize		: false,
@@ -161,7 +167,9 @@ Retreives when needed to apply on components
 				pan_bg_image		: "",
 				pan_bg_size			: "cover",
 				pan_bg_position		: "top center",
-				pan_opacity 		: 100
+				pan_opacity 		: 100,
+
+				sr_theme			: "legacy"
 			};
 		},
         

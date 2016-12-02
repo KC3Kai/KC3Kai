@@ -2,11 +2,7 @@
 	display:none;
 }
 .tab_gears .item_types {
-	width:700px;
-/*	margin:0px 0px 10px 0px; */
-	background:#f0f5ff;
-	padding:10px 5px;
-	border-bottom:1px solid #369;
+	
 }
 
 .tab_gears .item_types .item_type {
@@ -14,35 +10,23 @@
 	height:24px;
 	float:left;
 	margin:0px 3px 5px 3px;
-	background:#fff;
-	border-radius:5px;
 }
 .tab_gears .item_types .item_type.text {
 	text-align: center;
 	line-height: 24px;
 }
 .tab_gears .item_types .item_type.text.active {
-	color: white;
+	
 }
 .tab_gears .item_types .item_type img {
 	width:24px;
 	height:24px;
 }
-.tab_gears .item_types .item_type.active {
-	background:#2C3A3B;
-}
 .tab_gears .item_list {
 	width:680px;
 }
 .tab_gears .slotitem {
-	/*width:680px;*/
-	margin:0px 0px 10px 0px;
-	background:#def;
-	border-radius:10px;
-	/*padding:10px;*/
-
 	position:	relative;
-	border:		10px solid transparent;
 	overflow:	hidden;
 }
 
@@ -199,7 +183,6 @@
 .tab_gears .slotitem .holders dl ~ dl{
 	margin-top:		10px;
 	padding-top:	10px;
-	border-top:		2px solid hsl(210, 50%, 85%);
 }
 .tab_gears .slotitem .holders dl:last-child{
 	position:	absolute;
@@ -224,8 +207,6 @@
 	height:		24px;
 	line-height:20px;
 	margin:		5px 10px 0 0;
-	background: #fff;
-	border-radius: 12px 8px 8px 12px;
 	padding:	2px 5px 2px 0;
 	overflow:	hidden;
 	font-size:	12px;
@@ -257,10 +238,7 @@
 }
 
 .tab_gears .itemSorters {
-	width:700px;
-	margin:0px 0px 10px 0px;
-	padding:5px 10px;
-	border-bottom:1px solid #369;
+	
 }
 .tab_gears .itemSorters .sorterLabel {
 	width: 60px;
@@ -276,14 +254,8 @@
 	line-height:20px;
 	padding:0px 4px 0px 4px;
 	margin: 0px 2px 0px 1px;
-	background:#def;
-	color:#00f;
 	font-weight:bold;
 	font-size:12px;
 	text-align:center;
 	float:left;
-	border-radius:7px;
-}
-.tab_gears .itemSorters .sortControl:hover {
-	background:#ace;
 }

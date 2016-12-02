@@ -53,7 +53,7 @@
 				ThisItem = KC3GearManager.list[ctr];
 				MasterItem = ThisItem.master();
 				if(!MasterItem) continue;
-				if(KC3GearManager.carrierBasedAircraftType3Ids.indexOf(MasterItem.api_type[3]) == -1) continue;
+				//if(KC3GearManager.carrierBasedAircraftType3Ids.indexOf(MasterItem.api_type[3]) == -1) continue;
 				
 				// Add holder to the item object temporarily via function return
 				if(typeof this._holders["s"+ThisItem.itemId] != "undefined"){
@@ -225,6 +225,7 @@
 						// Compute for veteranized fighter power
 						ThisCapacity = ThisPlane.MyHolder().slots[ this._slotNums["s"+ThisPlane.itemId] ];
 						$(".instance_aaval", PlaneBox).addClass("activeSquad");
+						$(".instance_slot", PlaneBox).text(ThisCapacity);
 						
 						var MyFighterPowerText = "";
 						if(ConfigManager.air_formula == 1){

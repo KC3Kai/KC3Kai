@@ -74,6 +74,12 @@ Previously known as "Reactor"
 			this["api_get_member/useitem"](params, { api_data: response.api_data.api_useitem }, headers);
 		},
 		
+		"api_req_member/require_info":function(params, response, headers){
+			this["api_get_member/slot_item"](params, { api_data: response.api_data.api_slot_item }, headers);
+			this["api_get_member/kdock"](params, { api_data: response.api_data.api_kdock }, headers);
+			this["api_get_member/useitem"](params, { api_data: response.api_data.api_useitem }, headers);
+		},
+		
 		/* Home Port Screen
 		-------------------------------------------------------*/
 		"api_port/port":function(params, response, headers){	
@@ -676,10 +682,11 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_kaisou/slotset":function(params, response, headers){
 			// Set params on variables for future understandability
-			var itemID = params.api_item_id;
+			var itemID = parseInt(params.api_item_id, 10);
 			var slotIndex = params.api_slot_idx;
-			var shipID = params.api_id;
-			KC3ShipManager.get(shipID).items[slotIndex] = itemID;
+			var shipID = parseInt(params.api_id, 10);
+			var shipObj = KC3ShipManager.get(shipID);
+			shipObj.items[slotIndex] = itemID;
 			
 			// If ship is in a fleet, switch view to the fleet containing the ship
 			var fleetNum = KC3ShipManager.locateOnFleet(shipID);
@@ -687,6 +694,18 @@ Previously known as "Reactor"
 				KC3Network.trigger("Fleet", { switchTo: fleetNum+1 });
 			} else {
 				KC3Network.trigger("Fleet");
+			}
+			
+			// Gun fit bonus / penalty
+			var gearObj = KC3GearManager.get(itemID);
+			var gunfit = KC3Meta.gunfit(shipObj.masterId, gearObj.masterId);
+			if (gunfit !== false) {
+				KC3Network.trigger("GunFit", {
+					shipObj: shipObj,
+					gearObj: gearObj,
+					thisFit: gunfit,
+					shipFits: KC3Meta.gunfit(shipObj.masterId) // different from above
+				});
 			}
 		},
 		
@@ -800,6 +819,12 @@ Previously known as "Reactor"
 			}
 
 			KC3SortieManager.advanceNode( response.api_data, UTCTime );
+			KC3Network.hasOverlay = true;
+			(new RMsg("service", "mapMarkers", {
+				tabId: chrome.devtools.inspectedWindow.tabId,
+				nextNode: response.api_data,
+				startSortie: true
+			})).execute();
 			
 			KC3Network.trigger("SortieStart");
 			KC3Network.trigger("CompassResult");
@@ -813,7 +838,18 @@ Previously known as "Reactor"
 			var UTCTime = Date.toUTCseconds(headers.Date);
 			KC3SortieManager.discardSunk();
 			KC3SortieManager.advanceNode( response.api_data, UTCTime );
+			KC3Network.hasOverlay = true;
+			(new RMsg("service", "mapMarkers", {
+				tabId: chrome.devtools.inspectedWindow.tabId,
+				nextNode: response.api_data
+			})).execute();
 			KC3Network.trigger("CompassResult");
+			if(typeof response.api_data.api_destruction_battle !== "undefined"){
+				KC3SortieManager.engageLandBaseAirRaid(
+					response.api_data.api_destruction_battle
+				);
+				KC3Network.trigger("LandBaseAirRaid");
+			}
 		},
 		
 		/* NORMAL: BATTLE STARTS
@@ -832,7 +868,7 @@ Previously known as "Reactor"
 			this["api_req_sortie/battle"].apply(this,arguments);
 		},
 		
-		/* COMBINED FLEET: BATTLE STARTS
+		/* PLAYER-ONLY COMBINED FLEET: BATTLE STARTS
 		-------------------------------------------------------*/
 		"api_req_combined_battle/battle":function(params, response, headers){
 			KC3SortieManager.engageBattle(
@@ -861,11 +897,10 @@ Previously known as "Reactor"
 			KC3Network.trigger("BattleStart");
 		},
 		"api_req_combined_battle/sp_midnight":function(params, response, headers){
-			KC3SortieManager.engageBattleNight(
-				response.api_data,
-				Date.toUTCseconds(headers.Date)
-			);
-			KC3Network.trigger("BattleStart");
+			this["api_req_battle_midnight/sp_midnight"].apply(this,arguments);
+		},
+		"api_req_combined_battle/each_sp_midnight":function(params, response, headers){
+			this["api_req_battle_midnight/sp_midnight"].apply(this,arguments);
 		},
 		
 		/* NIGHT BATTLES as SECOND PART
@@ -877,6 +912,42 @@ Previously known as "Reactor"
 		"api_req_combined_battle/midnight_battle":function(params, response, headers){
 			KC3SortieManager.engageNight( response.api_data );
 			KC3Network.trigger("BattleNight");
+		},
+		
+		/* ENEMY COMBINED FLEET
+		-------------------------------------------------------*/
+		"api_req_combined_battle/ec_battle":function(params, response, headers){
+			KC3SortieManager.engageBattle(
+				response.api_data,
+				Date.toUTCseconds(headers.Date)
+			);
+			KC3Network.trigger("BattleStart");
+		},
+		"api_req_combined_battle/ec_midnight_battle":function(params, response, headers){
+			KC3SortieManager.engageNight(
+				response.api_data,
+				Date.toUTCseconds(headers.Date)
+			);
+			KC3Network.trigger("BattleNight");
+		},
+		
+		/* BOTH COMBINED FLEET
+		-------------------------------------------------------*/
+		"api_req_combined_battle/each_battle":function(params, response, headers){
+			KC3SortieManager.engageBattle(
+				response.api_data,
+				Date.toUTCseconds(headers.Date)
+			);
+			KC3Network.trigger("BattleStart");
+		},
+		"api_req_combined_battle/each_airbattle":function(params, response, headers){
+			this["api_req_combined_battle/each_battle"].apply(this,arguments);
+		},
+		"api_req_combined_battle/each_battle_water":function(params, response, headers){
+			this["api_req_combined_battle/each_battle"].apply(this,arguments);
+		},
+		"api_req_combined_battle/each_ld_airbattle":function(params, response, headers){
+			this["api_req_combined_battle/each_battle"].apply(this,arguments);
 		},
 		
 		/* BATTLE RESULT SCREENS
@@ -932,7 +1003,7 @@ Previously known as "Reactor"
 		/*-----------------------[ LBAS ]------------------------*/
 		/*-------------------------------------------------------*/
 		
-		/* Get bases info
+		/* Get bases info. deprecated by devs, see `mapinfo`.
 		-------------------------------------------------------*/
 		"api_get_member/base_air_corps":function(params, response, headers){
 			PlayerManager.setBases(response.api_data);
@@ -942,7 +1013,11 @@ Previously known as "Reactor"
 		/* Change base name
 		-------------------------------------------------------*/
 		"api_req_air_corps/change_name":function(params, response, headers){
-			PlayerManager.bases[params.api_base_id-1].name = decodeURIComponent(params.api_name);
+			$.each(PlayerManager.bases, function(i, base){
+				if(base.map == params.api_area_id && base.rid == params.api_base_id){
+					base.name = decodeURIComponent(params.api_name);
+				}
+			});
 			localStorage.bases = JSON.stringify(PlayerManager.bases);
 			KC3Network.trigger("Lbas");
 		},
@@ -950,7 +1025,15 @@ Previously known as "Reactor"
 		/* Set base action
 		-------------------------------------------------------*/
 		"api_req_air_corps/set_action":function(params, response, headers){
-			PlayerManager.bases[params.api_base_id-1].action = params.api_action_kind;
+			$.each(PlayerManager.bases, function(i, base){
+				if(base.map == params.api_area_id){
+					$.each(params.api_base_id.split("%2C"), function(j, baseId){
+						if(base.rid == baseId){
+							base.action = params.api_action_kind.split("%2C")[j];
+						}
+					});
+				}
+			});
 			localStorage.bases = JSON.stringify(PlayerManager.bases);
 			KC3Network.trigger("Lbas");
 		},
@@ -958,11 +1041,60 @@ Previously known as "Reactor"
 		/* Get bases info
 		-------------------------------------------------------*/
 		"api_req_air_corps/set_plane":function(params, response, headers){
-			PlayerManager.bases[params.api_base_id-1].range = response.api_data.api_distance;
-			PlayerManager
-				.bases[params.api_base_id-1]
-				.planes[params.api_squadron_id-1] = response.api_data.api_plane_info[0];
+			$.each(PlayerManager.bases, function(i, base){
+				if(base.map == params.api_area_id && base.rid == params.api_base_id){
+					base.range = response.api_data.api_distance;
+					$.each(params.api_squadron_id.split("%2C"), function(j, sid){
+						base.planes[sid-1] = response.api_data.api_plane_info[j];
+					});
+				}
+			});
 			localStorage.bases = JSON.stringify(PlayerManager.bases);
+			// Record material consuming. Yes, set plane use your bauxite :)
+			if(typeof response.api_data.api_after_bauxite !== "undefined"){
+				var hour = Math.hrdInt("floor", Date.safeToUtcTime(headers.Date)/3.6,6,1);
+				var fuel = PlayerManager.hq.lastMaterial[0],
+					ammo = PlayerManager.hq.lastMaterial[1],
+					steel = PlayerManager.hq.lastMaterial[2],
+					bauxite = response.api_data.api_after_bauxite;
+				var consumedBauxite = bauxite - PlayerManager.hq.lastMaterial[3];
+				KC3Database.Naverall({
+					hour: hour,
+					type: "lbas",
+					data: [0,0,0,consumedBauxite].concat([0,0,0,0])
+				});
+				PlayerManager.setResources([fuel, ammo, steel, bauxite] , hour);
+			}
+			KC3Network.trigger("Lbas");
+		},
+		
+		/* Supply base squadrons
+		-------------------------------------------------------*/
+		"api_req_air_corps/supply":function(params, response, headers){
+			$.each(PlayerManager.bases, function(i, base){
+				if(base.map == params.api_area_id && base.rid == params.api_base_id){
+					$.each(params.api_squadron_id.split("%2C"), function(j, sid){
+						base.planes[sid-1] = response.api_data.api_plane_info[j];
+					});
+				}
+			});
+			localStorage.bases = JSON.stringify(PlayerManager.bases);
+			// Record material consuming.
+			// But it's hard to define its type, maybe a new type called: lbas
+			// And NOT yet record fuel and ammo cost for sortie land base squadron
+			var hour = Math.hrdInt("floor", Date.safeToUtcTime(headers.Date)/3.6,6,1);
+			var fuel = response.api_data.api_after_fuel,
+				ammo = PlayerManager.hq.lastMaterial[1],
+				steel = PlayerManager.hq.lastMaterial[2],
+				bauxite = response.api_data.api_after_bauxite;
+			var consumedFuel = fuel - PlayerManager.hq.lastMaterial[0],
+				consumedBauxite = bauxite - PlayerManager.hq.lastMaterial[3];
+			KC3Database.Naverall({
+				hour: hour,
+				type: (PlayerManager.hq.lastSortie || ["sortie0"])[0],
+				data: [consumedFuel,0,0,consumedBauxite].concat([0,0,0,0])
+			});
+			PlayerManager.setResources([fuel, ammo, steel, bauxite] , hour);
 			KC3Network.trigger("Lbas");
 		},
 		
@@ -1004,8 +1136,10 @@ Previously known as "Reactor"
 			console.log(quest,data);
 			
 			// Force to mark quest as complete
+			KC3QuestManager.get(quest).status = 3;
 			KC3QuestManager.isOpen( quest, false );
 			KC3QuestManager.isActive( quest, false );
+			KC3QuestManager.save();
 			
 			// Compute bonuses for ledger
 			bonuses.forEach(function(x){
@@ -1207,13 +1341,13 @@ Previously known as "Reactor"
 		/* Expedition Selection Screen
 		  -------------------------------------------------------*/
 		"api_get_member/mission": function(params, response, headers) {
-			KC3Network.trigger( "ExpeditionSelection" );
+			KC3Network.trigger("ExpeditionSelection");
 		},
 
 		/* Expedition Start
 		  -------------------------------------------------------*/
 		"api_req_mission/start": function(params, response, headers) {
-			KC3Network.trigger( "ExpeditionStart" );
+			KC3Network.trigger("ExpeditionStart");
 		},
 		
 		/* Complete Expedition
@@ -1513,8 +1647,8 @@ Previously known as "Reactor"
 			}
 			
 			// Combine current storage and current available maps data
-			for(ctr in response.api_data){
-				thisMap = response.api_data[ctr];
+			for(ctr in response.api_data.api_map_info){
+				thisMap = response.api_data.api_map_info[ctr];
 				var key = "m"+thisMap.api_id;
 				
 				if(typeof (maps[key]||{}).curhp !== 'undefined')
@@ -1565,6 +1699,11 @@ Previously known as "Reactor"
 				maps[ key ] = localMap;
 			}
 			localStorage.maps = JSON.stringify(maps);
+			
+			if(typeof response.api_data.api_air_base !== "undefined") {
+				PlayerManager.setBases(response.api_data.api_air_base);
+				KC3Network.trigger("Lbas");
+			}
 		},
 		
 		/* Ship Modernize

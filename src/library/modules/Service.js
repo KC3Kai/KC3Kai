@@ -20,6 +20,18 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	
 	console.info("KC3改 Background Service loaded");
 	
+	
+	if (typeof localStorage.kc3version == "undefined"){
+		window.open("../../pages/update/update.html#installed", "kc3kai_updates");
+		
+	} else {
+		if (localStorage.kc3version != chrome.runtime.getManifest().version) {
+			window.open("../../pages/update/update.html#updated", "kc3kai_updates");
+		}
+	}
+	
+	localStorage.kc3version = chrome.runtime.getManifest().version;
+	
 	window.KC3Service = {
 		
 		/* SET API LINK
@@ -135,6 +147,19 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		------------------------------------------*/
 		"clearOverlays" :function(request, sender, response){
 			(new TMsg(request.tabId, "gamescreen", "clearOverlays", {})).execute();
+		},
+		
+		/* MAP MARKERS
+		When sortie to a world map, show node markers
+		------------------------------------------*/
+		"mapMarkers" :function(request, sender, response){
+			(new TMsg(request.tabId, "gamescreen", "markersOverlay", {
+				worldId: request.nextNode.api_maparea_id,
+				mapId: request.nextNode.api_mapinfo_no,
+				compassShow: !!request.nextNode.api_rashin_flg,
+				needsDelay: !!request.startSortie,
+				apiData: request.nextNode
+			})).execute();
 		},
 		
 		/* GET CONFIG

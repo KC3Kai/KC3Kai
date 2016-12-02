@@ -156,16 +156,16 @@
 			// On-click remodels
 			$(".tab_mstship .shipInfo").on("click", ".remodel_name a", function(e){
 				var sid = $(this).data("sid");
+				self.scrollShipListTop(sid);
 				KC3StrategyTabs.gotoTab(null, sid);
-				//self.showShip( sid );
 				e.preventDefault();
 				return false;
 			});
 			// On-click other forms
 			$(".tab_mstship .shipInfo").on("click", ".more .other_forms a", function(e){
 				var sid = $(this).data("sid");
+				self.scrollShipListTop(sid);
 				KC3StrategyTabs.gotoTab(null, sid);
-				//self.showShip( sid );
 				e.preventDefault();
 				return false;
 			});
@@ -221,19 +221,18 @@
 			}
 			
 			// Scroll list top to selected ship
-			setTimeout(function(){
-				var listItem = $(".tab_mstship .shipRecords .shipRecord[data-id={0}]".format(self.currentShipId));
-				var scrollTop = listItem.length === 1 ? listItem.offset().top - $(".tab_mstship .shipRecords").offset().top : 0;
-				$(".tab_mstship .shipRecords").scrollTop(scrollTop);
-			}, 200);
+			setTimeout(function(){self.scrollShipListTop();}, 0);
 		},
 		
-		/* UPDATE
-		Partially update elements of the interface without clearing all contents first
-		Be careful! Do NOT only update new data, but also handle the old states (do cleanup)
+		/* UPDATE: optional
+		Partially update elements of the interface,
+			possibly without clearing all contents first.
+		Be careful! Do not only update new data,
+			but also handle the old states (do cleanup).
+		Return `false` if updating all needed,
+			EXECUTE will be invoked instead.
 		---------------------------------*/
 		update :function(pageParams){
-			// KC3StrategyTabs.pageParams has been keeping the old values for states tracking
 			if(!!pageParams && !!pageParams[1]){
 				this.showShip(pageParams[1]);
 			}else{
@@ -243,6 +242,18 @@
 			return true;
 		},
 		
+		scrollShipListTop :function(shipId){
+			var shipList = $(".tab_mstship .shipRecords");
+			var shipItem = $(".tab_mstship .shipRecords .shipRecord[data-id={0}]"
+				.format(shipId || this.currentShipId)
+			);
+			var scrollTop = shipItem.length === 1 ?
+				(shipItem.offset().top
+				 + shipList.scrollTop()
+				 - shipList.offset().top) : 0;
+			shipList.scrollTop(scrollTop);
+		},
+
 		showShip :function(ship_id){
 			ship_id = Number(ship_id||"405");
 			var
@@ -279,7 +290,8 @@
 			
 			var shipSrc = "../../../../assets/swf/card.swf?sip="+this.server_ip
 					+"&shipFile="+shipFile
-					+"&abyss="+(ship_id>500?1:0)
+					+"&abyss="+(ship_id>500 && ship_id<=800 ?1:0)
+					+(ship_id > 800 ? "&forceFrame=6":"")
 					+(!this.currentCardVersion?"":"&ver="+this.currentCardVersion);
 			
 			$(".tab_mstship .shipInfo .cgswf embed").remove();
@@ -298,9 +310,11 @@
 				// Ship-only, non abyssal
 				$(".tab_mstship .shipInfo .stats").empty();
 				$(".tab_mstship .shipInfo .intro").html( shipData.api_getmes );
-				$(".tab_mstship .shipInfo .cgswf").css("width", "218px")
+				$(".tab_mstship .shipInfo .cgswf")
+					.css("width", "218px")
 					.css("height", "300px");
-				$(".tab_mstship .shipInfo .cgswf embed").css("width", "218px")
+				$(".tab_mstship .shipInfo .cgswf embed")
+					.css("width", "218px")
 					.css("height", "300px");
 				
 				// STATS
@@ -412,6 +426,7 @@
 
 					$.each(otherFormIds, function(i,x) {
 						$("<a/>")
+							.addClass("hover")
 							.text( KC3Meta.shipName(KC3Master.ship(x).api_name) )
 							.data("sid",x)
 							.appendTo( ".tab_mstship .shipInfo .more .other_forms .other_forms_list" );
@@ -480,11 +495,44 @@
 					$("<div/>").addClass("clear").appendTo(".tab_mstship .shipInfo .hourlies");
 				}
 				
+				// GUN FITS
+				$(".gunfitList").empty();
+				var gunfits = KC3Meta.gunfit(shipData.api_id);
+				if (gunfits) {
+					var gunfitBox, gearObj;
+					$.each(gunfits, function(itemId, fitValue){
+						
+						gunfitBox = $(".tab_mstship .factory .fitgear").clone();
+						gearObj = KC3Master.slotitem(itemId);
+						
+						$(".gearName", gunfitBox).text(KC3Meta.gearName(gearObj.api_name));
+						
+						if (fitValue === "") {
+							$(".gearFit", gunfitBox).text(KC3Meta.term("FitWeightUnknown"));
+							gunfitBox.addClass("fit_unknown");
+						} else {
+							$(".gearFit", gunfitBox).text(KC3Meta.term("FitWeight_"+fitValue));
+							fitValue = parseInt(fitValue, 10);
+							if (fitValue < 0) {
+								gunfitBox.addClass("fit_penalty");
+							} else if (fitValue > 0) {
+								gunfitBox.addClass("fit_bonus");
+							} else {
+								gunfitBox.addClass("fit_neutral");
+							}
+						}
+						
+						gunfitBox.appendTo(".gunfitList");
+					});
+				}
+				
+				// BOXES
 				$(".tab_mstship .shipInfo .stats").show();
 				$(".tab_mstship .shipInfo .equipments").show();
 				$(".tab_mstship .shipInfo .intro").show();
 				$(".tab_mstship .shipInfo .more").show();
 				$(".tab_mstship .shipInfo .json").hide();
+				$(".tab_mstship .shipInfo .gunfit").show();
 				$(".tab_mstship .shipInfo .tokubest").show();
 				if(ConfigManager.info_salt)
 					$(".tab_mstship .shipInfo .tokubest .salty-zone").show();
@@ -494,16 +542,18 @@
 					$(".tab_mstship .shipInfo .tokubest .to-quotes").show();
 				else
 					$(".tab_mstship .shipInfo .tokubest .to-quotes").hide();
-			}else{
+			} else if (shipData.api_id <= 800) {
 				// abyssals, show larger CG viewer
 				$(".tab_mstship .shipInfo .stats").hide();
 				$(".tab_mstship .shipInfo .equipments").hide();
-				$(".tab_mstship .shipInfo .json").text(JSON.stringify(shipData))
-					.css("width", "100%").show();
+				$(".tab_mstship .shipInfo .json").hide().css("width", "100%")
+					.text(JSON.stringify(shipData));
 				$(".tab_mstship .shipInfo .subtitles").empty().hide();
-				$(".tab_mstship .shipInfo .cgswf").css("width", "100%")
+				$(".tab_mstship .shipInfo .cgswf")
+					.css("width", "100%")
 					.css("height", "400px");
-				$(".tab_mstship .shipInfo .cgswf embed").css("width", "468px")
+				$(".tab_mstship .shipInfo .cgswf embed")
+					.css("width", "468px")
 					.css("height", "400px");
 				
 				// show stats if encounter once
@@ -563,7 +613,8 @@
 						
 						$(".tab_mstship .shipInfo .stats").show();
 						$(".tab_mstship .shipInfo .equipments").show();
-						$(".tab_mstship .shipInfo .json").hide();
+					} else {
+						$(".tab_mstship .shipInfo .json").show();
 					}
 				});
 				
@@ -571,9 +622,23 @@
 				$(".tab_mstship .shipInfo .hourlies").hide();
 				$(".tab_mstship .shipInfo .intro").hide();
 				$(".tab_mstship .shipInfo .more").hide();
+				$(".tab_mstship .shipInfo .gunfit").hide();
+				$(".tab_mstship .shipInfo .tokubest").hide();
+			} else {
+				$(".tab_mstship .shipInfo .stats").hide();
+				$(".tab_mstship .shipInfo .equipments").hide();
+				$(".tab_mstship .shipInfo .json").hide();
+				$(".tab_mstship .shipInfo .subtitles").hide();
+				$(".tab_mstship .shipInfo .cgswf").css("width", "100%").css("height", "600px");
+				$(".tab_mstship .shipInfo .cgswf embed").css("width", "100%").css("height", "600px");
+				
+				$(".tab_mstship .shipInfo .voices").hide();
+				$(".tab_mstship .shipInfo .hourlies").hide();
+				$(".tab_mstship .shipInfo .intro").hide();
+				$(".tab_mstship .shipInfo .more").hide();
+				$(".tab_mstship .shipInfo .gunfit").hide();
 				$(".tab_mstship .shipInfo .tokubest").hide();
 			}
-			
 		}
 	};
 	

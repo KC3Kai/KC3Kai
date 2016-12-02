@@ -15,19 +15,32 @@ body {
 .static_credits {
 	
 }
+/* Section */
+.section {
+	width:780px;
+	margin:20px 0px 10px 0px;
+}
+.section .title {
+	height:24px;
+	font-size:20px;
+	line-height:24px;
+	color:#0099FF;
+	margin:0px 0px 10px 0px;
+}
+.section .list {
+	width:770px;
+	margin:0px 0px 0px 10px;
+}
+/* Contributors */
+.contributors {
+	width:780px;
+}
 
 /* ABOUT
 --------------------------*/
-.about {
-	width:780px;
-	margin:0px 0px 15px 0px;
-}
 .kc3 {
 	width:780px;
 	height:70px;
-	border-radius:8px;
-	margin:0px 0px 3px 0px;
-	padding:3px 5px;
 }
 .kc3 .logo {
 	width:64px;
@@ -81,43 +94,37 @@ body {
 	float:left;
 }
 
-/* DEVELOPERS
---------------------------*/
-.developers {
-	width:780px;
+/* INDIVIDUALS
+-----------------------------*/
+/* Developer Category */
+.devCategory {
+	margin:0px 0px 10px 0px;
+	width:770px;
+	/*background:#cfc;*/
 }
-
-/* Section */
-.section {
-	width:780px;
-	height:24px;
-	padding:0px 0px 0px 10px;
-	margin:20px 0px 10px 0px;
+.devCategory .devcatTitle {
+	font-size:16px;
+	font-weight:bold;
+	margin:0px 0px 5px 0px;
 }
-.section .title {
-	height:24px;
-	float:left;
-	font-size:20px;
-	line-height:24px;
-	margin:0px 10px 0px 0px;
-	color:#0099FF;
+.devCategory .devcatList {
+	
 }
-
-/* DevBox */
+/* Developer Box */
 .devBox {
-	width:189px;
-	height:58px;
-	background:#def;
+	width:185px;
+	height:50px;
+	background:#eaf4ff;
 	float:left;
-	margin:3px;
-	padding:4px;
+	margin:0px 7px 7px 0px;
+	padding:5px 7px;
 	border-radius:7px;
 }
 .devBox .devAvatar {
 	width:40px;
 	height:40px;
 	float:left;
-	margin:5px 8px 0px 3px;
+	margin:0px 11px 0px 0px;
 	border-radius:5px;
 	overflow:hidden;
 }
@@ -126,24 +133,41 @@ body {
 	height:40px;
 }
 .devBox .devName {
-	width:130px;
+	width:120px;
+	height:16px;
 	float:left;
 	font-size:14px;
 	font-weight:bold;
 	line-height:16px;
+	margin:3px 0px 4px 0px;
+	overflow:hidden;
 }
 .devBox .devDesc {
-	width:130px;
+	/*width:120px;
+	height:12px;
 	float:left;
 	font-size:11px;
-	line-height:13px;
+	line-height:12px;
 	color:#8ac;
+	margin:0px 0px 2px 0px;
+	overflow:hidden;
+	display:none;*/
+	width:120px;
+	height:12px;
+	float:left;
+	line-height:12px;
+	color:#8ac;
+	font-size:10px;
+	display:none;
+	margin:0px;
+	padding:0px;
 }
 .devBox .devLinks {
-	width:130px;
+	width:120px;
+	height:12px;
 	float:left;
-	list-style:none;
-	line-height:20px;
+	line-height:12px;
+	list-style: none;
 	margin:0px;
 	padding:0px;
 }
@@ -155,65 +179,143 @@ body {
 	
 }
 .devBox .devLinks .devLink img {
-	width:16px; height:16px;
+	width:12px;
+	height:12px;
+	vertical-align: top;
+	filter:grayscale(100%) opacity(60%);
 }
-/* Help out box */
-.helpOut {
-	width:189px;
-	height:58px;
-	background:#def;
+.devBox.inactive {
+	background:#eee;
+	/*filter:grayscale(100%);*/
+}
+.devBox.inactive .devDesc {
+	display:block;
+	color:#aaa;
+}
+.devBox.inactive .devLinks {
+	display:none;
+}
+
+/* PARTNERS
+-----------------------------*/
+.partnerBox {
+	width:380px;
+	height:80px;
+	background:#eaf4ff;
 	float:left;
-	margin:3px;
-	padding:4px;
+	margin:0px 5px 3px 0px;
+	padding:5px 10px;
 	border-radius:7px;
 }
-.helpOut .helpIcon {
-	width:40px;
-	height:40px;
+.partnerBox .partnerAvatar {
+	width:60px;
+	height:60px;
 	float:left;
-	margin:5px 8px 0px 3px;
+	margin:5px 10px 5px 0px;
+	border-radius:5px;
 	overflow:hidden;
 }
-.helpOut .helpIcon img {
-	width:40px;
-	height:40px;
+.partnerBox .partnerAvatar img {
+	width:60px;
+	height:60px;
 }
-.helpOut .helpTitle {
-	width:130px;
-	margin:3px 0px 2px 0px;
+.partnerBox .partnerName {
+	width:290px;
 	float:left;
 	font-size:14px;
 	font-weight:bold;
 	line-height:16px;
+	margin:3px 0px 3px 0px;
 }
-.helpOut .helpNote {
-	width:130px;
+.partnerBox .partnerDesc {
+	width:290px;
+	max-height:30px;
+	line-height:15px;
 	float:left;
-	font-size:11px;
-	line-height:13px;
-	color:#8ac;
-}
-
-/* OTHER SOURCES
---------------------------*/
-.other_sources {
-	margin:0px 0px 30px 0px;
-}
-
-/* LICENSE
---------------------------*/
-.license_box {
-	width:780px;
-	padding:0px 0px 0px 10px;
-}
-.license_disclaimer {
 	font-size:12px;
-	margin:0px 0px 10px 0px;
+	color:#8ac;
+	margin:0px 0px 0px 0px;
 }
-.license_text {
-	width:680px;
-}
-.license_text pre {
-	width:600px;
+.partnerBox .partnerLinks {
+	width:290px;
+	float:left;
+	list-style:none;
+	line-height:20px;
+	font-size:12px;
 	margin:0px;
+	padding:0px;
+	margin:0px 0px 0px 0px;
+}
+.partnerBox .partnerLink {
+	width:50px;
+	float:left;
+	margin:0px 3px 0px 0px;
+}
+
+/* OTHER CREDITS
+-----------------------------*/
+.otherBox {
+	width:380px;
+	height:20px;
+	line-height:20px;
+	background:#eaf4ff;
+	border-radius:5px;
+	margin:0px 5px 2px 0px;
+	float:left;
+	font-size:12px;
+	overflow:hidden;
+}
+.otherBox .otherName {
+	width:120px;
+	height:20px;
+	float:left;
+	font-weight:bold;
+	padding:0px 5px 0px 5px;
+	border-right:1px solid #ace;
+	background:#def;
+	margin:0px 5px 0px 0px;
+	overflow:hidden;
+}
+.otherBox .otherDesc {
+	width:255px;
+	height:20px;
+	float:left;
+	overflow:hidden;
+}
+.otherBox .otherDesc a {
+	color:#8af;
+}
+.otherBox .otherDesc a:hover {
+	text-decoration: none;
+}
+
+/* DONATORS
+-----------------------------*/
+.donatorBox {
+	width:150px;
+	height:20px;
+	line-height:20px;
+	background:#eaf4ff;
+	border-radius:5px;
+	margin:0px 4px 4px 0px;
+	float:left;
+	font-size:12px;
+	overflow:hidden;
+	font-weight:bold;
+}
+.donatorBox .donatorName {
+	width:100px;
+	height:20px;
+	float:left;
+	padding:0px 5px 0px 5px;
+	border-right:1px solid #ace;
+	background:#def;
+	overflow:hidden;
+}
+.donatorBox .donatorAmount {
+	width:50px;
+	height:20px;
+	float:left;
+	overflow:hidden;
+	text-align:center;
 }

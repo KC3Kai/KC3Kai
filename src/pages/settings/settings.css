@@ -237,6 +237,21 @@ body {
 	background:#fff;
 }
 
+.settingBox .options .dropdown {
+	width:440px;
+	height:25px;
+	line-height:23px;
+	font-size:14px;
+	margin:9px 5px 0px 0px;
+	border-radius:7px;
+	background:#ffc;
+	border:1px solid #ccc;
+	padding:0px 3px;
+}
+.settingBox .options .dropdown option:disabled {
+	color:#f99;
+}
+
 .settingBox.dangerous {
 	color: red;
 	background:#f68383;

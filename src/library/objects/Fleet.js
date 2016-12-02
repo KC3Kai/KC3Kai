@@ -9,6 +9,7 @@ Contains summary information about a fleet and its 6 ships
 	window.KC3Fleet = function( data ){
 		this.active = false;
 		this.fastFleet = true;
+		this.fleetId = 0;
 		this.name = "";
 		this.ships = [ -1, -1, -1, -1, -1, -1 ];
 		this.mission = [ 0, 0, 0, 0 ];
@@ -85,21 +86,22 @@ Contains summary information about a fleet and its 6 ships
 			shipState.set('pre');
 			
 			this.active = true;
+			this.fleetId = data.api_id;
 			this.name = data.api_name;
 			this.ships = data.api_ship;
 			this.mission = data.api_mission;
 			
 			shipState.set('post');
 			
-			if(data.api_id > 1){
+			if(this.fleetId > 1){
 				if(this.mission[0] > 0){
-					KC3TimerManager.exped( data.api_id ).activate(
+					KC3TimerManager.exped( this.fleetId ).activate(
 						this.mission[2],
 						this.ship(0).masterId,
 						this.mission[1]
 					);
 				}else{
-					KC3TimerManager.exped( data.api_id ).deactivate();
+					KC3TimerManager.exped( this.fleetId ).deactivate();
 				}
 			}
 			
@@ -112,6 +114,7 @@ Contains summary information about a fleet and its 6 ships
 	
 	KC3Fleet.prototype.defineFormatted = function( data ){
 		this.active = data.active;
+		this.fleetId = data.fleetId;
 		this.name = data.name;
 		this.ships = data.ships;
 		this.mission = data.mission;
@@ -237,29 +240,27 @@ Contains summary information about a fleet and its 6 ships
 	};
 
 	// calculate accurate landing craft bonus
-	// formula taken from http://kancolle.wikia.com/wiki/Expedition as of May 18,2016
+	// formula taken from 
+	// http://kancolle.wikia.com/wiki/Expedition/Introduction#Extra_bonuses_to_expedition_incomes
+	// as of Nov 7th, 2016
 	KC3Fleet.prototype.calcLandingCraftBonus = function() {
 		var self = this;
-		// only first 4 improved landing crafts matter.
-		var improvedEquipmentCount = 0;
 		// use addImprove() to update this value instead of modifying it directly
 		var improveCount = 0;
-		
 		function addImprove(stars) {
-			if (stars <= 0 || improvedEquipmentCount >= 4)
+			if (!stars || stars <= 0)
 				return;
-			improvedEquipmentCount += 1;
 			improveCount += stars;
 		}
 
 		var normalCount = 0;
 		var t89Count = 0;
 		var t2Count = 0;
+		var tokuCount = 0;
 		this.ship( function( shipRid, shipInd, shipObj ) {
 			shipObj.equipment( function(itemId,eInd,eObj ) {
 				if (itemId <= 0)
 					return;
-				
 				if (eObj.masterId === 68) {
 					// normal landing craft
 					normalCount += 1;
@@ -272,17 +273,45 @@ Contains summary information about a fleet and its 6 ships
 					// T2
 					t2Count += 1;
 					addImprove( eObj.stars );
+				} else if (eObj.masterId === 193) {
+					// toku landing craft
+					tokuCount += 1;
+					addImprove( eObj.stars );
 				}
 			});
 		});
+		// count number of bonus ships 
+		var bonusShipCount = 0;
+		this.ship( function(rosterId, ind, shipObj) {
+			// for now this can only be applied to Kinu Kai Ni (master id 487)
+			if (shipObj.masterId === 487)
+				bonusShipCount += 1;
+		});
 
 		// without cap
-		var basicBonus = normalCount*0.05 + t89Count*0.02 + t2Count*0.01;
-		var landingCraftCount = normalCount + t89Count + t2Count;
-		var improveBonus = landingCraftCount > 0 
-			? 0.01 * improveCount * basicBonus / landingCraftCount
+		var basicBonus = (normalCount+tokuCount+bonusShipCount)*0.05 + t89Count*0.02 + t2Count*0.01;
+		// cap at 20%
+		// "B1" in the formula (see comment link of this function)
+		var cappedBasicBonus = Math.min(0.2, basicBonus);
+		// "B2" in the formula
+		var tokuBonus = Math.min(0.05, 0.02*tokuCount);
+		var landingCraftCount = normalCount + t89Count + t2Count + tokuCount;
+		// "B3" in the formula
+		var improveBonus = landingCraftCount > 0
+			? 0.01 * improveCount * cappedBasicBonus / landingCraftCount
 			: 0.0;
-		return Math.min(0.2, basicBonus) + improveBonus;
+
+		// note that this formula is a bit inaccurate because
+		// the floor is taken *after* summing these factors up.
+		// however, because this function is meant to calculate a factor
+		// that can be applied to a base resource,
+		// we can do no better than this without rewriting some other parts of the code.
+
+		// TODO: a better solution would be passing [cappedBasicBonus, tokuBonus, improveBonus]
+		// as the result value, but that requires some modification on other parts of the code.
+		// plus that this formula is not the final version anyway (still under investigation
+		// as there are still unsolved counter-examples)
+		return cappedBasicBonus + tokuBonus + improveBonus;
 	};
 	
 	KC3Fleet.prototype.averageLevel = function(){
@@ -435,6 +464,10 @@ Contains summary information about a fleet and its 6 ships
 		return this.ship().reduce(function(moralePre,shipData,moraleInd){
 			return Math.min(moralePre,shipData.didFlee ? 100 : shipData.morale);
 		},100);
+	};
+	
+	KC3Fleet.prototype.isOnExped = function(){
+		return this.fleetId > 1 && !!this.mission && this.mission[0] > 0;
 	};
 	
 	KC3Fleet.prototype.highestRepairTimes = function(akashiReduce){

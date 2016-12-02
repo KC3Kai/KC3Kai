@@ -83,12 +83,12 @@
 --------------------------------*/
 .tab_mstship .shipInfo {
 	width:480px;
-	height:850px;
+	min-height:850px;
 	float:left;
 	background:#eee;
 	border:1px solid #ccc;
 	border-radius: 0px 8px 8px 0px;
-	padding:5px 5px 0px 5px;
+	padding:5px 5px 40px 5px;
 	position:relative;
 }
 
@@ -100,7 +100,7 @@
 	height:300px;
 	float:left;
 	margin:0px 5px 5px 0px;
-	background:#0044a2;
+	background:#006c91;
 }
 .tab_mstship .shipInfo .cgswf embed {
 	width:218px;
@@ -388,7 +388,7 @@
 /* Regular Voices */
 .tab_mstship .shipInfo .voices {
 	width:470px;
-	margin:10px 0px 20px 0px;
+	margin:10px 0px 10px 0px;
 }
 .tab_mstship .shipInfo .voices .voice {
 	width:90px;
@@ -403,6 +403,49 @@
 .tab_mstship .shipInfo .hourlies .voice {
 	width:60px;
 	margin:0px 3px 2px 3px;
+}
+/* GUNFIT
+--------------------------------*/
+.tab_mstship .shipInfo .gunfit {
+	width:470px;
+	margin:0px 0px 10px 0px;
+}
+.tab_mstship .shipInfo .gunfit .fitgear {
+	width:400px;
+	height:24px;
+	margin:0px 0px 3px 0px;
+	padding:2px 5px;
+	border-radius:6px;
+	line-height:20px;
+}
+.tab_mstship .shipInfo .gunfit .fitgear .gearName {
+	width:230px;
+	height:20px;
+	margin:0px 5px 0px 0px;
+	float:left;
+	font-size:12px;
+}
+.tab_mstship .shipInfo .gunfit .fitgear .gearFit {
+	width:150px;
+	height:20px;
+	float:left;
+	text-align:center;
+	font-size:10px;
+}
+.tab_mstship .shipInfo .gunfit .fitgear.fit_bonus {
+	color:#fff;
+	background:#5a5;
+}
+.tab_mstship .shipInfo .gunfit .fitgear.fit_neutral {
+	color:#000;
+	background:#ccc;
+}
+.tab_mstship .shipInfo .gunfit .fitgear.fit_penalty {
+	color:#fff;
+	background:#a55;
+}
+.tab_mstship .shipInfo .gunfit .fitgear.fit_unknown {
+	
 }
 
 /* SPECIAL (Salt Check)

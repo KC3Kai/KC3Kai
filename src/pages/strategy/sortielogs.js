@@ -353,6 +353,9 @@
 			var self = this;
 			// Show sortie records on list
 			var sortieBox, fleets, fleetkey, mainFleet, isCombined, rshipBox, nodeBox, thisNode, sinkShips;
+			var shipClickFunc = function(e){
+				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
+			};
 			$.each(sortieList, function(id, sortie){
 				try {
 					var skey = ["m",sortie.world,sortie.mapnum].join('');
@@ -392,6 +395,9 @@
 								if(ship===false){ return false; }
 								
 								$(".sortie_ship_"+(index+1)+" img", sortieBox).attr("src", KC3Meta.shipIcon(ship.mst_id));
+								$(".sortie_ship_"+(index+1)+" img", sortieBox).attr("alt", ship.mst_id);
+								$(".sortie_ship_"+(index+1)+" img", sortieBox).click(shipClickFunc);
+								$(".sortie_ship_"+(index+1), sortieBox).addClass("hover");
 								$(".sortie_ship_"+(index+1), sortieBox).addClass("simg-"+ship.mst_id);
 								$(".sortie_ship_"+(index+1), sortieBox).show();
 							}
@@ -455,6 +461,7 @@
 								battleType = BATTLE_INVALID;
 								return true;
 							}
+							var airRaidLostKind = (battle.airRaid || {}).api_lost_kind;
 							
 							battle.shizunde |= [[],[]];
 							
@@ -465,6 +472,9 @@
 							// HTML elements
 							nodeBox = $(".tab_"+tabCode+" .factory .sortie_nodeinfo").clone();
 							$(".node_id", nodeBox).text( KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node ) );
+							if(airRaidLostKind > 0){
+								$(".node_id", nodeBox).addClass(airRaidLostKind === 4 ? "nodamage" : "damaged");
+							}
 							
 							// Result Icons
 							$(".node_formation img", nodeBox).attr("src", KC3Meta.formationIcon(battleData.api_formation[0]) );
@@ -474,6 +484,9 @@
 							// Kanmusu Drop
 							if(battle.drop > 0){
 								$(".node_drop img", nodeBox).attr("src", KC3Meta.shipIcon( battle.drop ) );
+								$(".node_drop img", nodeBox).attr("alt", battle.drop);
+								$(".node_drop img", nodeBox).click(shipClickFunc);
+								$(".node_drop", nodeBox).addClass("hover");
 							}else{
 								$(".node_drop img", nodeBox).attr("src", "../../assets/img/ui/shipdrop-x.png");
 							}
@@ -492,6 +505,10 @@
 								if(eship > -1){
 									$(".node_eship_"+(index+1)+" img", nodeBox).attr("src", KC3Meta.abyssIcon( eship ) );
 									$(".node_eship_"+(index+1), nodeBox).attr("title", KC3Meta.abyssShipName( eship) );
+									$(".node_eship_"+(index+1)+" img", nodeBox).attr("alt", eship);
+									$(".node_eship_"+(index+1)+" img", nodeBox).click(shipClickFunc);
+									$(".node_eship_"+(index+1), nodeBox).addClass("hover");
+									$(".node_eship_"+(index+1), nodeBox).addClass( KC3Meta.abyssShipBorderClass( eship) );
 									$(".node_eship_"+(index+1), nodeBox).show();
 								}
 							});

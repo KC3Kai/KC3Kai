@@ -261,7 +261,7 @@
 							].join(",")+String.fromCharCode(13);
 						});
 						
-						var filename = self.makeFilename("LSC", "csv");
+						var filename = self.makeFilename("Crafting", "csv");
 						self.saveFile(filename, exportData, "text/csv");
 					});
 			});
