@@ -26,6 +26,7 @@
 		"cookies",
 		"webRequest",
 		"webRequestBlocking",
+		"debugger",
 		"<all_urls>"
 	],
 	"background": {
