@@ -121,8 +121,10 @@
 				localStorage.extract_api = false;
 				localStorage.dmmplay = false;
 				chrome.windows.create({
-					url: "pages/game/dmm.html",
-					type: "panel"
+					url: "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/",
+					type: "popup",
+					width:860,
+					height:500
 				}, function(){
 				
 				

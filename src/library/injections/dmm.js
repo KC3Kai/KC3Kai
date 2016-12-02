@@ -11,3 +11,6 @@
 		$("#dmm-ntgnavi-renew").css("display", "none");
 	}
 })).execute();
+
+
+(new RMsg("service", "debug_game", {}, function(){})).execute();

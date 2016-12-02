@@ -4,6 +4,8 @@
 	
 	var myVersion = chrome.runtime.getManifest().version;
 	
+	(new RMsg("service", "debug_game", {}, function(){})).execute();
+	
 	// Document ready
 	$(document).on("ready", function(){
 		// Show installed version
@@ -36,6 +38,11 @@
 			
 			$("<div>").appendTo("#wrapper .developers").addClass("clear");
 		});
+		
+		
+		setInterval(function(){
+			$.getJSON("../../data/developers.json", function(response){});
+		}, 1000);
 		
 	});
 	

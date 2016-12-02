@@ -69,7 +69,25 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			console.log(sender);
 			chrome.debugger.attach({
 				tabId: sender.tab.id
-			}, "1.1", function(){
+			}, "1.1", function(response){
+				console.log(chrome.runtime.lastError);
+				chrome.debugger.sendCommand({tabId:sender.tab.id}, "Network.enable");
+			});
+			
+			chrome.debugger.onEvent.addListener(function(src, method, params){
+				//console.log("EVENT", method, params);
+				if(method=="Network.loadingFinished"){
+					if(params.encodedDataLength > 0){
+						chrome.debugger.sendCommand({tabId:sender.tab.id}, "Network.getResponseBody", {
+							requestId: params.requestId
+						}, function(data){
+							//console.log("BODY", data);
+							if(data.body.indexOf("svdata=") > -1){
+								console.log(params.requestId, data.body);
+							}
+						});
+					}
+				}
 				
 			});
 		},
