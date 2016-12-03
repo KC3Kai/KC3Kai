@@ -1019,6 +1019,13 @@
 										//	}))
 										//		bufferArray.push(newItem);
 										//});
+
+										if (givenType[1]==="lbas") {
+											// TODO: LBAS data is ignored for now because
+											// I don't know how to handle it properly.
+											// see #1644
+											continue;
+										}
 										givenAry.push(newItem);
 										newTotalBuffer.push(newItem);
 									}
