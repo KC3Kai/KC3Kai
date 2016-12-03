@@ -68,7 +68,9 @@ function ActivateGame(){
 $(document).on("ready", function(){
 	// Chrome 55 incompatibilities
 	if (parseInt(getChromeVersion(), 10) >= 55) {
-		$("#chrome55frame").show();
+		if(typeof localStorage.read_dmm_notice_55 == "undefined") {
+			$("#chrome55frame").show();
+		}
 	}
 	
 	// Initialize data managers
@@ -191,6 +193,12 @@ $(document).on("ready", function(){
 				break;
 			default: break;
 		}
+	});
+	
+	// I've read the Chrome 55 API Link notice
+	$("#chrome55frame .api_notice_close").on('click', function(){
+		localStorage.read_dmm_notice_55 = 1;
+		$("#chrome55frame").hide();
 	});
 	
 	

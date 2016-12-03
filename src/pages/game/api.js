@@ -50,7 +50,6 @@ function ActivateGame(){
 $(document).on("ready", function(){
 	// Chrome 54 incompatibilities
 	if (parseInt(getChromeVersion(), 10) >= 54) {
-		// API Flash Notice
 		if(typeof localStorage.read_api_notice == "undefined") {
 			$("#chrome54flash").show();
 		}
@@ -58,7 +57,9 @@ $(document).on("ready", function(){
 	
 	// Chrome 55 incompatibilities
 	if (parseInt(getChromeVersion(), 10) >= 55) {
-		$("#chrome55network").show();
+		if(typeof localStorage.read_api_notice_55 == "undefined") {
+			$("#chrome55network").show();
+		}
 	}
 	
 	// Initialize data managers
@@ -160,10 +161,16 @@ $(document).on("ready", function(){
 			ActivateGame();
 	});
 	
-	// I've read the API Link notice
+	// I've read the Chrome 54 API Link notice
 	$("#chrome54flash .api_notice_close").on('click', function(){
 		localStorage.read_api_notice = 1;
 		$("#chrome54flash").hide();
+	});
+	
+	// I've read the Chrome 55 API Link notice
+	$("#chrome55network .api_notice_close").on('click', function(){
+		localStorage.read_api_notice_55 = 1;
+		$("#chrome55network").hide();
 	});
 	
 	$(".play_btn").data('play',!ConfigManager.api_mustPanel);
