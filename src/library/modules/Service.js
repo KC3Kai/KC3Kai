@@ -193,8 +193,23 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		------------------------------------------*/
 		"dmmFrameInject" :function(request, sender, response){
 			if(sender.tab.url.indexOf("/pages/game/dmm.html") > -1){
+				response({value:true, type:'frame'});
+			} else if (typeof localStorage.dmmcrop != 'undefined' && localStorage.dmmcrop){
+				localStorage.dmmcrop = false;
+				response({value:true, type:'crop'});
+			} else {
+				response({value:false});
+			}
+		},
+		
+		/* DMM FRMAE INJECTION
+		Responds if content script should inject DMM Frame customizations
+		------------------------------------------*/
+		"osapiCssInject" :function(request, sender, response){
+			if (typeof localStorage.osapicrop != 'undefined' && localStorage.osapicrop){
+				localStorage.osapicrop = false;
 				response({value:true});
-			}else{
+			} else {
 				response({value:false});
 			}
 		},

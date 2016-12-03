@@ -89,15 +89,34 @@
 			}
 		});
 		
+		
+		$("#play_dmm_c55").on('click', function(){
+			chrome.cookies.set({
+				url: "http://www.dmm.com",
+				name: "ckcy",
+				value: "1",
+				domain: ".dmm.com",
+				expirationDate: Math.ceil((new Date("Sun, 09 Feb 2019 09:00:09 GMT")).getTime()/1000),
+				path: '/netgame/',
+			}, function(cookie){
+				localStorage.extract_api = false;
+				localStorage.dmmplay = false;
+				localStorage.dmmcrop = true;
+				localStorage.osapicrop = true;
+				window.open("http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/", "kc3kai_game");
+			});
+		});
+		
 		// Login on DMM
 		$("#login_dmm").on('click', function(){
 			localStorage.extract_api = false;
 			localStorage.dmmplay = false;
+			localStorage.dmmcrop = false;
+			localStorage.osapicrop = false;
 			window.open("https://www.dmm.com/my/-/login/=/path=Sg__/", "dmm_login");
 		});
 		
 		// Refresh API Link
-		// $("#get_api").on('click', function(){
 		$("#play_cc").on('click', function(){
 			chrome.cookies.set({
 				url: "http://www.dmm.com",
@@ -109,6 +128,8 @@
 			}, function(cookie){
 				localStorage.extract_api = true;
 				localStorage.dmmplay = false;
+				localStorage.dmmcrop = false;
+				localStorage.osapicrop = false;
 				window.open("http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/", "kc3kai_game");
 			});
 		});
@@ -125,6 +146,8 @@
 			}, function(cookie){
 				localStorage.extract_api = false;
 				localStorage.dmmplay = true;
+				localStorage.dmmcrop = false;
+				localStorage.osapicrop = false;
 				window.open("../game/web.html", "kc3kai_game");
 			});
 		});
@@ -141,6 +164,8 @@
 			}, function(cookie){
 				localStorage.extract_api = false;
 				localStorage.dmmplay = false;
+				localStorage.dmmcrop = false;
+				localStorage.osapicrop = false;
 				window.open("../game/dmm.html", "kc3kai_game");
 			});
 		});

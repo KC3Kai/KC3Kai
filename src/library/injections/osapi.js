@@ -38,4 +38,13 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 	// Start timer to check if API link exists every half-second
 	intervalChecker = setInterval(checkAgain, 500);
 	
+	// Check if we are on KC3改 frame to override DMM style to crop game screen
+	(new RMsg("service", "osapiCssInject", {}, function(response){
+		// if yes, apply CSS overrides
+		if (response.value) {
+			$("#spacing_top").hide();
+		}
+	})).execute();
+
+	
 })();
