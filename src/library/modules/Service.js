@@ -188,7 +188,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			});
 		},
 		
-		/* DMM FRMAE INJECTION
+		/* DMM FRAME INJECTION
 		Responds if content script should inject DMM Frame customizations
 		------------------------------------------*/
 		"dmmFrameInject" :function(request, sender, response){
@@ -202,8 +202,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			}
 		},
 		
-		/* DMM FRMAE INJECTION
-		Responds if content script should inject DMM Frame customizations
+		/* OSAPI FRAME INJECTION
 		------------------------------------------*/
 		"osapiCssInject" :function(request, sender, response){
 			if (typeof localStorage.osapicrop != 'undefined' && localStorage.osapicrop){
@@ -212,6 +211,22 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			} else {
 				response({value:false});
 			}
+		},
+		
+		/* GET DMM CUSTOMIZATIONS
+		------------------------------------------*/
+		"dmmGetCustomizations" :function(request, sender, response){
+			ConfigManager.load();
+			KC3Master.init();
+			KC3Meta.init("../../data/");
+			KC3Meta.loadQuotes();
+			KC3QuestManager.load();
+			response({
+				config: ConfigManager,
+				master: KC3Master,
+				meta: KC3Meta,
+				quest: KC3QuestManager,
+			});
 		},
 		
 		/* TAIHA ALERT START

@@ -17,7 +17,9 @@
 			$("body").css({ margin:0, padding:0, 'min-width':0 });
 			$("#main-ntg").css({ position: 'static' });
 			$("#area-game").css({
-				margin: '0px auto',
+				// margin: '0px auto',
+				'margin-left': 'auto',
+				'margin-right': 'auto',
 				padding: 0,
 				width: 800,
 				height: 480,
@@ -33,15 +35,22 @@
 				width: '100%',
 				height: 0
 			});
-			$(document).ready(function(){
-				$("#game_frame").css({
-					width: 800,
-					height: 480
-				});
-				
-				$("body").css("background-image", "url(https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-342351.jpg)");
-				$("body").css("background-repeat", "no-repeat");
-			});
+			
+			$(document).on("ready", resizeGameFrame);
+			$(document).on("ready", specialDMMMode);
+			$(window).on("load", resizeGameFrame);
+			setTimeout(resizeGameFrame, 5000);
+			setTimeout(resizeGameFrame, 10000);
+			setTimeout(resizeGameFrame, 15000);
+			setTimeout(resizeGameFrame, 20000);
 		}
 	}
 })).execute();
+
+function resizeGameFrame(){
+	console.log("resizing game frame");
+	$("#game_frame").css({
+		width: 800,
+		height: 480
+	});
+}
