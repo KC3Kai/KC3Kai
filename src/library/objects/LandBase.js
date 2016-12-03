@@ -36,4 +36,11 @@
 		return this;
 	};
 	
+	KC3LandBase.prototype.isPlanesSupplied = function(){
+		return this.planes.every(function(p){
+			return !p.api_slotid ||
+				(!!p.api_max_count && p.api_count === p.api_max_count);
+		});
+	};
+	
 })();

@@ -27,6 +27,7 @@ Listens to network history and triggers callback if game events happen
 			Lbas: [],
 			SortieStart: [],
 			CompassResult: [],
+			LandBaseAirRaid: [],
 			BattleStart: [],
 			BattleNight: [],
 			BattleResult: [],
@@ -122,6 +123,13 @@ Listens to network history and triggers callback if game events happen
 				if(thisRequest.validateHeaders()){
 					thisRequest.readResponse(request, function(){
 						if(thisRequest.validateData()){
+							// -- Poi DB Submission
+							// turns out "Request.process()" modifies the request,
+							// so we handle the process before that is invoked.
+							if (ConfigManager.PoiDBSubmission_enabled) {
+								PoiDBSubmission.processData( thisRequest );
+							}
+
 							thisRequest.process();
 							//---Kancolle DB Submission
 							if (ConfigManager.DBSubmission_enabled && DBSubmission.checkIfDataNeeded(request.request.url)){
@@ -129,13 +137,6 @@ Listens to network history and triggers callback if game events happen
 									DBSubmission.submitData(request.request.url,request.request.postData, content);
 								});
 							}
-							//---
-
-							// -- Poi DB Submission
-							if (ConfigManager.PoiDBSubmission_enabled) {
-								PoiDBSubmission.processData( thisRequest );
-							}
-
 						}
 					});
 					request.getContent(function(x){

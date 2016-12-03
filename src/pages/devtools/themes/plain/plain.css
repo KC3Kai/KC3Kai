@@ -507,6 +507,10 @@ html,body {
 	font-weight:bold;
 	text-align:center;
 }
+.module.controls .fleet_num.onExped {
+	border:2px solid #a69de6;
+	line-height:20px;
+}
 .module.controls .fleet_num.needsSupply {
 	border:2px solid #f00;
 	line-height:20px;

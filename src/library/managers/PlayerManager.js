@@ -65,9 +65,13 @@ Does not include Ships and Gears which are managed by other Managers
 
 		setBases :function( data ){
 			var self = this;
-			[0,1,2,3].forEach(function(i){
+			Array.numbers(0, data.length < 4 ? 3 : data.length - 1)
+				.forEach(function(i){
 				self.bases[i] = new KC3LandBase(data[i]);
-			});
+				});
+			if(self.bases.length > 4 && data.length < self.bases.length){
+				self.bases.splice(data.length < 4 ? 4 : data.length);
+			}
 			localStorage.bases = JSON.stringify(self.bases);
 		},
 
@@ -288,7 +292,13 @@ Does not include Ships and Gears which are managed by other Managers
 				});
 			}
 		},
-		
+
+		isBasesSupplied :function(){
+			return this.bases.every(function(base){
+				return base.isPlanesSupplied();
+			});
+		},
+
 		fleets_backup :function(){
 			return this.fleets.map(function(x,i){
 				return x.ships.map(function(s){

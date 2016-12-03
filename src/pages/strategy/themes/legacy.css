@@ -239,6 +239,7 @@ body {
 	font-size:12px;
 	font-weight:bold;
 	display:none;
+	z-index:99;
 }
 .float_toolbar .back_to_top {
 	background-color:#def;

@@ -467,6 +467,14 @@ String.prototype.hashCode = function() {
 	Object.defineProperties(this.prototype,meth);
 }).call(Array);
 
+/** Construct a Number array contains range from N to M */
+Array.numbers = function(start, end){
+	var n = parseInt(start, 10), m = parseInt(end, 10);
+	var i = m - n + 1, a = [];
+	while(i-- > 0) a[i] = n + i;
+	return a;
+};
+
 /*******************************\
 |*** Date                       |
 \*******************************/

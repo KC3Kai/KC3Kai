@@ -44,13 +44,16 @@
 	border-radius:15px;
 }
 .tab_encounters .encounter_formation img {
-	with:30px;
+	width:30px;
 	height:30px;
 }
 .tab_encounters .encounter_ships {
-	with:210px;
+	width:210px;
 	height:44px;
 	float:left;
+}
+.tab_encounters .encounter_ships.combined {
+	width:130px;
 }
 
 .tab_encounters .encounter_ship {
@@ -59,17 +62,35 @@
 	float:left;
 	margin:0px 5px 0px 0px;
 }
+.tab_encounters .combined .encounter_ship {
+	transform:scale(0.5);
+	transform-origin:24px 0px;
+	width:16px;
+	height:24px;
+}
 .tab_encounters .encounter_icon {
 	width:30px;
 	height:30px;
 	border-radius:15px;
 }
-.tab_encounters .encounter_icon img {
-	with:30px;
+.tab_encounters  .encounter_icon img {
+	width:30px;
 	height:30px;
 }
+.tab_encounters .encounter_ship .boss {
+	box-shadow:0px 0px 1px 1px #5ef, 0px 0px 3px 2px #fe5;
+}
+.tab_encounters .encounter_ship .kai {
+	box-shadow:0px 0px 3px 1px #2af;
+}
+.tab_encounters .encounter_ship .flagship {
+	box-shadow:0px 0px 3px 1px #fc3;
+}
+.tab_encounters .encounter_ship .elite {
+	box-shadow:0px 0px 3px 1px #f33;
+}
 .tab_encounters .encounter_ship .encounter_id {
-	with:30px;
+	width:30px;
 	height:14px;
 	line-height:14px;
 	text-align:center;

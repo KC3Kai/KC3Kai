@@ -461,6 +461,7 @@
 								battleType = BATTLE_INVALID;
 								return true;
 							}
+							var airRaidLostKind = (battle.airRaid || {}).api_lost_kind;
 							
 							battle.shizunde |= [[],[]];
 							
@@ -471,6 +472,9 @@
 							// HTML elements
 							nodeBox = $(".tab_"+tabCode+" .factory .sortie_nodeinfo").clone();
 							$(".node_id", nodeBox).text( KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node ) );
+							if(airRaidLostKind > 0){
+								$(".node_id", nodeBox).addClass(airRaidLostKind === 4 ? "nodamage" : "damaged");
+							}
 							
 							// Result Icons
 							$(".node_formation img", nodeBox).attr("src", KC3Meta.formationIcon(battleData.api_formation[0]) );
@@ -504,6 +508,7 @@
 									$(".node_eship_"+(index+1)+" img", nodeBox).attr("alt", eship);
 									$(".node_eship_"+(index+1)+" img", nodeBox).click(shipClickFunc);
 									$(".node_eship_"+(index+1), nodeBox).addClass("hover");
+									$(".node_eship_"+(index+1), nodeBox).addClass( KC3Meta.abyssShipBorderClass( eship) );
 									$(".node_eship_"+(index+1), nodeBox).show();
 								}
 							});

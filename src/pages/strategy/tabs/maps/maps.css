@@ -323,6 +323,12 @@
 	font-size:12px;
 	font-weight:bold;
 }
+.tab_maps .sortie_list .node_id.nodamage {
+	box-shadow: 0px 0px 2px 2px #8c4;
+}
+.tab_maps .sortie_list .node_id.damaged {
+	box-shadow: 0px 0px 2px 2px #f90;
+}
 
 .tab_maps .sortie_list .node_result {
 	width:90px;
@@ -382,6 +388,23 @@
 .tab_maps .sortie_list .node_eship img {
 	width:20px;
 	height:20px;
+	vertical-align:top;
+}
+.tab_maps .sortie_list .node_enemy .boss {
+	border-color:#5ef;
+	box-shadow:0px 0px 1px 1px #5ef;
+}
+.tab_maps .sortie_list .node_enemy .kai {
+	border-color:#2af;
+	box-shadow:0px 0px 1px 1px #2af;
+}
+.tab_maps .sortie_list .node_enemy .flagship {
+	border-color:#fc3;
+	box-shadow:0px 0px 1px 1px #fc3;
+}
+.tab_maps .sortie_list .node_enemy .elite {
+	border-color:#f33;
+	box-shadow:0px 0px 1px 1px #f33;
 }
 
 .tab_maps .sortie_list .node_details {

@@ -699,7 +699,7 @@ Previously known as "Reactor"
 			// Gun fit bonus / penalty
 			var gearObj = KC3GearManager.get(itemID);
 			var gunfit = KC3Meta.gunfit(shipObj.masterId, gearObj.masterId);
-			if (gunfit) {
+			if (gunfit !== false) {
 				KC3Network.trigger("GunFit", {
 					shipObj: shipObj,
 					gearObj: gearObj,
@@ -844,6 +844,12 @@ Previously known as "Reactor"
 				nextNode: response.api_data
 			})).execute();
 			KC3Network.trigger("CompassResult");
+			if(typeof response.api_data.api_destruction_battle !== "undefined"){
+				KC3SortieManager.engageLandBaseAirRaid(
+					response.api_data.api_destruction_battle
+				);
+				KC3Network.trigger("LandBaseAirRaid");
+			}
 		},
 		
 		/* NORMAL: BATTLE STARTS
@@ -1044,6 +1050,21 @@ Previously known as "Reactor"
 				}
 			});
 			localStorage.bases = JSON.stringify(PlayerManager.bases);
+			// Record material consuming. Yes, set plane use your bauxite :)
+			if(typeof response.api_data.api_after_bauxite !== "undefined"){
+				var hour = Math.hrdInt("floor", Date.safeToUtcTime(headers.Date)/3.6,6,1);
+				var fuel = PlayerManager.hq.lastMaterial[0],
+					ammo = PlayerManager.hq.lastMaterial[1],
+					steel = PlayerManager.hq.lastMaterial[2],
+					bauxite = response.api_data.api_after_bauxite;
+				var consumedBauxite = bauxite - PlayerManager.hq.lastMaterial[3];
+				KC3Database.Naverall({
+					hour: hour,
+					type: "lbas",
+					data: [0,0,0,consumedBauxite].concat([0,0,0,0])
+				});
+				PlayerManager.setResources([fuel, ammo, steel, bauxite] , hour);
+			}
 			KC3Network.trigger("Lbas");
 		},
 		
@@ -1058,6 +1079,22 @@ Previously known as "Reactor"
 				}
 			});
 			localStorage.bases = JSON.stringify(PlayerManager.bases);
+			// Record material consuming.
+			// But it's hard to define its type, maybe a new type called: lbas
+			// And NOT yet record fuel and ammo cost for sortie land base squadron
+			var hour = Math.hrdInt("floor", Date.safeToUtcTime(headers.Date)/3.6,6,1);
+			var fuel = response.api_data.api_after_fuel,
+				ammo = PlayerManager.hq.lastMaterial[1],
+				steel = PlayerManager.hq.lastMaterial[2],
+				bauxite = response.api_data.api_after_bauxite;
+			var consumedFuel = fuel - PlayerManager.hq.lastMaterial[0],
+				consumedBauxite = bauxite - PlayerManager.hq.lastMaterial[3];
+			KC3Database.Naverall({
+				hour: hour,
+				type: (PlayerManager.hq.lastSortie || ["sortie0"])[0],
+				data: [consumedFuel,0,0,consumedBauxite].concat([0,0,0,0])
+			});
+			PlayerManager.setResources([fuel, ammo, steel, bauxite] , hour);
 			KC3Network.trigger("Lbas");
 		},
 		
@@ -1304,13 +1341,13 @@ Previously known as "Reactor"
 		/* Expedition Selection Screen
 		  -------------------------------------------------------*/
 		"api_get_member/mission": function(params, response, headers) {
-			KC3Network.trigger( "ExpeditionSelection" );
+			KC3Network.trigger("ExpeditionSelection");
 		},
 
 		/* Expedition Start
 		  -------------------------------------------------------*/
 		"api_req_mission/start": function(params, response, headers) {
-			KC3Network.trigger( "ExpeditionStart" );
+			KC3Network.trigger("ExpeditionStart");
 		},
 		
 		/* Complete Expedition

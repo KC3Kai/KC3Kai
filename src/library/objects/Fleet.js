@@ -9,6 +9,7 @@ Contains summary information about a fleet and its 6 ships
 	window.KC3Fleet = function( data ){
 		this.active = false;
 		this.fastFleet = true;
+		this.fleetId = 0;
 		this.name = "";
 		this.ships = [ -1, -1, -1, -1, -1, -1 ];
 		this.mission = [ 0, 0, 0, 0 ];
@@ -85,21 +86,22 @@ Contains summary information about a fleet and its 6 ships
 			shipState.set('pre');
 			
 			this.active = true;
+			this.fleetId = data.api_id;
 			this.name = data.api_name;
 			this.ships = data.api_ship;
 			this.mission = data.api_mission;
 			
 			shipState.set('post');
 			
-			if(data.api_id > 1){
+			if(this.fleetId > 1){
 				if(this.mission[0] > 0){
-					KC3TimerManager.exped( data.api_id ).activate(
+					KC3TimerManager.exped( this.fleetId ).activate(
 						this.mission[2],
 						this.ship(0).masterId,
 						this.mission[1]
 					);
 				}else{
-					KC3TimerManager.exped( data.api_id ).deactivate();
+					KC3TimerManager.exped( this.fleetId ).deactivate();
 				}
 			}
 			
@@ -112,6 +114,7 @@ Contains summary information about a fleet and its 6 ships
 	
 	KC3Fleet.prototype.defineFormatted = function( data ){
 		this.active = data.active;
+		this.fleetId = data.fleetId;
 		this.name = data.name;
 		this.ships = data.ships;
 		this.mission = data.mission;
@@ -461,6 +464,10 @@ Contains summary information about a fleet and its 6 ships
 		return this.ship().reduce(function(moralePre,shipData,moraleInd){
 			return Math.min(moralePre,shipData.didFlee ? 100 : shipData.morale);
 		},100);
+	};
+	
+	KC3Fleet.prototype.isOnExped = function(){
+		return this.fleetId > 1 && !!this.mission && this.mission[0] > 0;
 	};
 	
 	KC3Fleet.prototype.highestRepairTimes = function(akashiReduce){
