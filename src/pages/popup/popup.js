@@ -17,6 +17,15 @@
 		
 		$(".myVersion").text(myVersion);
 		
+		// Chrome 55 incompatibilities
+		if (parseInt(getChromeVersion(), 10) >= 55) {
+			$("#play_cc, #play_dmmf").addClass("short");
+			$("#play_cc .desc").text(KC3Meta.term("Chrome55Incompatible"));
+			$("#play_dmmf .desc").text(KC3Meta.term("Chrome55Incompatible"));
+			$("#play_dmm").prependTo("#wrapper");
+			$(".wrapper").css("height", "473px");
+		}
+		
 		// Show estimated time until next update
 		$.ajax({
 			dataType: "json",
@@ -209,6 +218,11 @@
 				callback(true);
 			}
 		});
+	}
+	
+	function getChromeVersion() {
+		var raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
+		return raw ? parseInt(raw[2], 10) : false;
 	}
 	
 })();

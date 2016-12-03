@@ -59,6 +59,22 @@ body {
 	color:#999;
 }
 
+/* MENU: SHORT
+--------------------------*/
+.menu.short {
+	height:50px;
+}
+.menu.short .icon img {
+	opacity:0.5;
+}
+.menu.short .text {
+	color:#cc0000;
+}
+.menu.short .desc {
+	height:15px;
+	color:#ccaaaa;
+}
+
 /* FACEBOOK
 --------------------------*/
 .footFb {

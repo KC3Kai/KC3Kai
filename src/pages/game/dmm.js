@@ -66,6 +66,11 @@ function ActivateGame(){
 }
 
 $(document).on("ready", function(){
+	// Chrome 55 incompatibilities
+	if (parseInt(getChromeVersion(), 10) >= 55) {
+		$("#chrome55frame").show();
+	}
+	
 	// Initialize data managers
 	ConfigManager.load();
 	KC3Master.init();
@@ -646,3 +651,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, response){
 		}
 	}
 });
+
+function getChromeVersion() {
+	var raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
+	return raw ? parseInt(raw[2], 10) : false;
+}
