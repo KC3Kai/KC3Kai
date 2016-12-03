@@ -1258,7 +1258,7 @@
 				);
 
 				// STATUS: MORALE
-				if( FleetSummary.lowestMorale > 54 ){
+				if( FleetSummary.lowestMorale > 52 ){
 					$(".module.status .status_morale .status_text").text( KC3Meta.term("PanelGreatMorale") );
 					$(".module.status .status_morale .status_text").addClass("good");
 					moraleClockValue = 100;
