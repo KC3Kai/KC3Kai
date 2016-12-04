@@ -18,6 +18,7 @@
 			this.backgrounds();
 			this.subtitleSpace();
 			this.clearOverlayHotKey();
+			this.exitConfirmation();
 			
 			chrome.runtime.onMessage.addListener(this.subtitlesOverlay());
 			chrome.runtime.onMessage.addListener(this.clearOverlays());
@@ -337,6 +338,16 @@
 				$(".overlay_markers").empty();
 				$(".overlay_subtitles span").empty();
 				response({success:true});
+			};
+		},
+		
+		/* EXIT CONFIRMATION
+		Attach onUnload listener to stop accidental exit
+		--------------------------------------*/
+		exitConfirmation: function(){
+			if (!ConfigManager.api_askExit) return false;
+			window.onbeforeunload = function(){
+				return meta.term("UnwantedExitDMM");
 			};
 		}
 	};
