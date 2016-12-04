@@ -14,16 +14,16 @@
 			
 		} else {
 			// DMM CROP
+			$("body").addClass("kc3");
 			$("body").css({ margin:0, padding:0, 'min-width':0 });
 			$("#main-ntg").css({ position: 'static' });
 			$("#area-game").css({
-				// margin: '0px auto',
 				'margin-left': 'auto',
 				'margin-right': 'auto',
 				padding: 0,
 				width: 800,
 				height: 480,
-				background: '#000'
+				position: 'relative'
 			});
 			$(".dmm-ntgnavi").hide();
 			$(".area-naviapp").hide();
