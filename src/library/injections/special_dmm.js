@@ -130,7 +130,8 @@
 						$(".overlay_subtitles span").css("pointer-events", "none");
 						break;
 					case "below":
-						$(".overlay_subtitles").appendTo("body");
+						$("#area-game").css({ overflow:'', height:'' });
+						$(".overlay_subtitles").appendTo("#area-game");
 						$(".overlay_subtitles").css({
 							position: "relative",
 							margin: "5px auto 0px",
