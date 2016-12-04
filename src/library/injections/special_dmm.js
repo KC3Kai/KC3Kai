@@ -24,6 +24,7 @@
 			chrome.runtime.onMessage.addListener(this.subtitlesOverlay());
 			chrome.runtime.onMessage.addListener(this.clearOverlays());
 			chrome.runtime.onMessage.addListener(this.questOverlay());
+			chrome.runtime.onMessage.addListener(this.mapMarkersOverlay());
 			chrome.runtime.onMessage.addListener(this.getWindowSize());
 			chrome.runtime.onMessage.addListener(this.getGamescreenOffset());
 		},
@@ -397,6 +398,79 @@
 				});
 			};
 		},
+		
+		/* MAP MARKERS OVERLAY
+		Node markers on screen during sortie
+		--------------------------------------*/
+		markersOverlayTimer: false,
+		mapMarkersOverlay: function(){
+			var self = this;
+			return function(request, sender, response){
+				if(request.action != "markersOverlay") return true;
+				if(!config.map_markers) { response({success:false}); return true; }
+				console.log('markers', request);
+				
+				var sortieStartDelayMillis = 2800;
+				var markersShowMillis = 5000;
+				var compassLeastShowMillis = 3500;
+				if(self.markersOverlayTimer){
+					// Keep showing if last ones not disappear yet
+					clearTimeout(self.markersOverlayTimer);
+					$(".overlay_markers").show();
+				} else {
+					var letters = meta.nodeLetters(request.worldId, request.mapId);
+					var lettersFound = (!!letters && Object.keys(letters).length > 0);
+					var icons = meta.nodeMarkers(request.worldId, request.mapId);
+					var iconsFound =  (!!icons.length && icons.length > 0);
+					$(".overlay_markers").hide().empty();
+					if(lettersFound){
+						// Show node letters
+						var l;
+						for(l in letters){
+							var letterDiv = $('<div class="letter"></div>').text(l)
+								.css("left", letters[l][0] + "px")
+								.css("top", letters[l][1] + "px");
+							$(".overlay_markers").append(letterDiv);
+						}
+					}
+					if(iconsFound){
+						// Show some icon style markers
+						var i;
+						for(i in icons){
+							var obj = icons[i];
+							var iconImg = $('<img />')
+								.attr("src", chrome.extension.getURL("assets/img/"+ obj.img))
+								.attr("width", obj.size[0])
+								.attr("height", obj.size[1]);
+							var iconDiv = $('<div class="icon"></div>')
+								.css("left", obj.pos[0] + "px")
+								.css("top", obj.pos[1] + "px")
+								.append(iconImg);
+							$(".overlay_markers").append(iconDiv);
+						}
+					}
+					if(request.needsDelay){
+						// Delay to show on start of sortie
+						setTimeout(function(){
+							$(".overlay_markers").fadeIn(1000);
+						}, sortieStartDelayMillis);
+					} else {
+						$(".overlay_markers").fadeIn(1000);
+					}
+					self.markersOverlayTimer = true;
+				}
+				if(self.markersOverlayTimer){
+					self.markersOverlayTimer = setTimeout(function(){
+						$(".overlay_markers").fadeOut(2000);
+						self.markersOverlayTimer = false;
+					}, markersShowMillis
+						+ (request.compassShow ? compassLeastShowMillis : 0)
+						+ (request.needsDelay ? sortieStartDelayMillis : 0)
+					);
+				}
+				response({success:true});
+			};
+		}
 	};
 	
 	window.specialDMMMode = function (){
