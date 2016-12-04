@@ -11,6 +11,7 @@
 	font-family: Arial;
 	font-size:12px;
 	text-align:left;
+	overflow:hidden;
 }
 .kc3 #factory {
 	display:none;

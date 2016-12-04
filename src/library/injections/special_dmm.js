@@ -23,6 +23,7 @@
 			chrome.runtime.onMessage.addListener(this.subtitlesOverlay());
 			chrome.runtime.onMessage.addListener(this.clearOverlays());
 			chrome.runtime.onMessage.addListener(this.questOverlay());
+			chrome.runtime.onMessage.addListener(this.getWindowSize());
 		},
 		
 		/* WINDOW KEEP FOCUS, NOT FLASH
@@ -348,6 +349,20 @@
 			if (!ConfigManager.api_askExit) return false;
 			window.onbeforeunload = function(){
 				return meta.term("UnwantedExitDMM");
+			};
+		},
+		
+		/* GET WINDOW SIZE
+		Used for "Fit Screen" function
+		FitScreen itself is executed in background service
+		Content Scripts like this don't have access to needed chrome.* API
+		--------------------------------------*/
+		getWindowSize: function(){
+			return function(request, sender, response){
+				response({
+					width: $(window).width(),
+					height: $(window).height()
+				});
 			};
 		}
 	};

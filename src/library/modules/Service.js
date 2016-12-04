@@ -146,7 +146,33 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		Auto-resize browser window to fit the game screen
 		------------------------------------------*/
 		"fitScreen" :function(request, sender, response){
-			(new TMsg(request.tabId, "gamescreen", "fitScreen")).execute();
+			// Get tab info first to determine action depending on requester
+			chrome.tabs.get(request.tabId, function(tabInfo){
+				var src = tabInfo.url;
+				
+				if(src.indexOf("/game/dmm.html") > -1 || src.indexOf("/game/api.html") > -1){
+					// FitScreen on DMM Frame and API gameplay
+					(new TMsg(request.tabId, "gamescreen", "fitScreen")).execute();
+					
+				} else {
+					// Fit Screen on Special Mode
+					
+					// Get browser zoon level for the page
+					chrome.tabs.getZoom(request.tabId, function(ZoomFactor){
+						// Resize the window
+						chrome.windows.getCurrent(function(wind){
+							(new TMsg(request.tabId, "gamescreen", "getWindowSize", {}, function(size){
+								chrome.windows.update(wind.id, {
+									width: Math.ceil(800*ZoomFactor)
+										+ (wind.width- Math.ceil(size.width*ZoomFactor) ),
+									height: Math.ceil(480*ZoomFactor)
+										+ (wind.height- Math.ceil(size.height*ZoomFactor) )
+								});
+							})).execute();
+						});
+					});
+				}
+			});
 		},
 		
 		/* IS MUTED
