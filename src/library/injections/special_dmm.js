@@ -17,8 +17,10 @@
 			this.attachHTML();
 			this.backgrounds();
 			this.subtitleSpace();
+			this.clearOverlayHotKey();
 			
 			chrome.runtime.onMessage.addListener(this.subtitlesOverlay());
+			chrome.runtime.onMessage.addListener(this.clearOverlays());
 			chrome.runtime.onMessage.addListener(this.questOverlay());
 		},
 		
@@ -105,7 +107,10 @@
 		/* SUBTITLE BOX
 		Only prepares the container box for subtitles
 		--------------------------------------*/
+		subtitlePosition: "bottom",
 		subtitleSpace: function(){
+			var self = this;
+			
 			if(config.api_subtitles){
 				// Subtitle font customizations
 				$(".overlay_subtitles").css("font-family", config.subtitle_font);
@@ -150,14 +155,14 @@
 				$(".overlay_subtitles span").on("mouseover", function(){
 					switch (config.subtitle_display) {
 						case "evade":
-							if (subtitlePosition == "bottom") {
+							if (self.subtitlePosition == "bottom") {
 								$(".overlay_subtitles").css("bottom", "");
 								$(".overlay_subtitles").css("top", "5px");
-								subtitlePosition = "top";
+								self.subtitlePosition = "top";
 							} else {
 								$(".overlay_subtitles").css("top", "");
 								$(".overlay_subtitles").css("bottom", "5px");
-								subtitlePosition = "bottom";
+								self.subtitlePosition = "bottom";
 							}
 							break;
 						case "ghost":
@@ -231,7 +236,7 @@
 								case "evade":
 									$(".overlay_subtitles").css("top", "");
 									$(".overlay_subtitles").css("bottom", "5px");
-									subtitlePosition = "bottom";
+									self.subtitlePosition = "bottom";
 									break;
 								case "ghost":
 									$(".overlay_subtitles").removeClass("ghost");
@@ -267,8 +272,6 @@
 				if(!config.api_translation && !config.api_tracking) return true;
 				
 				quests = $.extend(true, quests, request.KC3QuestManager);
-				
-				$(".overlay_quests").empty();
 				
 				$.each(request.questlist, function( index, QuestRaw ){
 					if( QuestRaw !=- 1 ){
@@ -314,6 +317,28 @@
 				response({success:true});
 			};
 		},
+		
+		/* CLEAR OVERLAYS
+		Empties or hides current shown or filled overlays
+		--------------------------------------*/
+		clearOverlayHotKey: function(){
+			var self = this;
+			$(document).on("keydown", function(event){
+				if (event.keyCode == 121) {
+					self.clearOverlays()({action:'clearOverlays'}, {}, function(){});
+				}
+			});
+		},
+		clearOverlays: function(){
+			var self = this;
+			return function(request, sender, response){
+				if(request.action != "clearOverlays") return true;
+				$(".overlay_quests").empty();
+				$(".overlay_markers").empty();
+				$(".overlay_subtitles span").empty();
+				response({success:true});
+			};
+		}
 	};
 	
 	window.specialDMMMode = function (){
