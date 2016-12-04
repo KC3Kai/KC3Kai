@@ -218,6 +218,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		"dmmGetCustomizations" :function(request, sender, response){
 			ConfigManager.load();
 			KC3Master.init();
+			RemodelDb.init();
 			KC3Meta.init("../../data/");
 			KC3Meta.loadQuotes();
 			KC3QuestManager.load();
