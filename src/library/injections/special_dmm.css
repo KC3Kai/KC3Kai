@@ -1,5 +1,12 @@
 /* DEFAULTS
 --------------------------*/
+.hover {
+	cursor:hand;
+	cursor:pointer;
+}
+.clear {
+	clear:both !important;
+}
 .kc3 #area-game {
 	font-family: Arial;
 	font-size:12px;

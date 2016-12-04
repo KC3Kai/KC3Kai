@@ -7,8 +7,8 @@
 	
 	var DMMCustomizations = {
 		apply: function(response){
-			console.log("DMMCustomizations", response);
-			config = response.config;
+			config =  $.extend(true, ConfigManager, response.config);
+			window.ConfigManager = config;
 			master = $.extend(true, KC3Master, response.master);
 			meta = $.extend(true, KC3Meta, response.meta);
 			quests = $.extend(true, KC3QuestManager, response.quests);
@@ -74,7 +74,7 @@
 					.append($("<div>").addClass("desc"))
 				)
 				.append($("<div>").addClass("tracking with_tl"))
-				.append($("<div>").addClass("no_tl hover"))
+				.append($("<div>").addClass("no_tl hover").text("?"))
 				.appendTo("#factory");
 			
 			var ol_quest_empty = $("<div>").addClass("overlay ol_quest ol_quest_empty")
@@ -255,12 +255,10 @@
 			
 			// untranslated quest clickable google translate
 			$(".overlay_quests").on("click", ".no_tl", function(){
-				chrome.tabs.create({
-					url: "https://translate.google.com/#ja/"+config.language+"/"
-						+encodeURIComponent($(this).data("qtitle"))
-						+"%0A%0A"
-						+encodeURIComponent($(this).data("qdesc"))
-				});
+				window.open("https://translate.google.com/#ja/"+config.language+"/"
+					+encodeURIComponent($(this).data("qtitle"))
+					+"%0A%0A"
+					+encodeURIComponent($(this).data("qdesc")), "_blank");
 			});
 			
 			// runtime listener

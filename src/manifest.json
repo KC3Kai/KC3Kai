@@ -61,6 +61,7 @@
 				"library/modules/Meta.js",
 				"library/modules/Translation.js",
 				"library/objects/Quest.js",
+				"library/managers/ConfigManager.js",
 				"library/managers/QuestManager.js",
 				"library/injections/special_dmm.js",
 				"library/injections/dmm.js"
