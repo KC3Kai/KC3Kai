@@ -56,6 +56,7 @@
 				"library/injections/special_dmm.css"
 			],
 			"js": [
+				"assets/js/global.js",
 				"assets/js/jquery-2.1.3.min.js",
 				"library/objects/Messengers.js",
 				"library/modules/Master.js",
