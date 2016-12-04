@@ -14,30 +14,6 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 (function(){
 	"use strict";
 	
-	// Initialize global variables
-	var intervalChecker;
-
-	// Looks for API link
-	function checkAgain(){
-		console.log("checking...");
-		// If API link is found
-		if(document.getElementById("externalswf")){
-			console.log( document.getElementById("externalswf").getAttribute("src") );
-			// Send it to background script
-			(new RMsg(
-				"service",
-				"set_api_link",
-				{ swfsrc: document.getElementById("externalswf").getAttribute("src") }
-			)).execute();
-			
-			// Stop interval
-			clearInterval(intervalChecker);
-		}
-	}
-	
-	// Start timer to check if API link exists every half-second
-	intervalChecker = setInterval(checkAgain, 500);
-	
 	// Check if we are on KC3改 frame to override DMM style to crop game screen
 	(new RMsg("service", "osapiCssInject", {}, function(response){
 		// if yes, apply CSS overrides
