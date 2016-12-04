@@ -19,11 +19,13 @@
 			this.subtitleSpace();
 			this.clearOverlayHotKey();
 			this.exitConfirmation();
+			this.screenshotHotkey();
 			
 			chrome.runtime.onMessage.addListener(this.subtitlesOverlay());
 			chrome.runtime.onMessage.addListener(this.clearOverlays());
 			chrome.runtime.onMessage.addListener(this.questOverlay());
 			chrome.runtime.onMessage.addListener(this.getWindowSize());
+			chrome.runtime.onMessage.addListener(this.getGamescreenOffset());
 		},
 		
 		/* WINDOW KEEP FOCUS, NOT FLASH
@@ -359,12 +361,42 @@
 		--------------------------------------*/
 		getWindowSize: function(){
 			return function(request, sender, response){
+				if(request.action != "getWindowSize") return true;
 				response({
 					width: $(window).width(),
 					height: $(window).height()
 				});
 			};
-		}
+		},
+		
+		/* SCREENSHOT HOTKEY
+		Ask background service to take my selfie
+		--------------------------------------*/
+		screenshotHotkey: function(){
+			var self = this;
+			$(document).on("keydown", function(event){
+				// F9: Screenshot
+				if (event.keyCode == 120) {
+					(new RMsg("service", "screenshot", {})).execute();
+				}
+			});
+		},
+		
+		
+		/* GET GAMESCREEN OFFSET
+		Used for taking screenshots
+		FitScreen itself is executed in background service
+		Content Scripts like this don't have access to needed chrome.* API
+		--------------------------------------*/
+		getGamescreenOffset: function(){
+			return function(request, sender, response){
+				if(request.action != "getGamescreenOffset") return true;
+				response({
+					top: $("#area-game").offset().top,
+					left: $("#area-game").offset().left
+				});
+			};
+		},
 	};
 	
 	window.specialDMMMode = function (){

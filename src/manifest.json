@@ -38,6 +38,7 @@
 			"library/modules/Meta.js",
 			"library/modules/Translation.js",
 			"library/objects/Quest.js",
+			"library/objects/ScreenshotService.js",
 			"library/managers/QuestManager.js",
 			"library/modules/Service.js"
 		]

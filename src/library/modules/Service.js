@@ -67,9 +67,23 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		Ask the game container to take a screenshot
 		------------------------------------------*/
 		"screenshot" :function(request, sender, response){
-			(new TMsg(request.tabId, "gamescreen", "screenshot", {
-				playerName: request.playerName
-			}, response)).execute();
+			var tabId = request.tabId || sender.tab.id;
+			dependSpecialMode(
+				tabId,
+				function(){
+					(new TMsg(tabId, "gamescreen", "getGamescreenOffset", {}, function(offset){
+						(new KCScreenshot())
+							.onComplete(response)
+							.start(tabId, offset);
+					})).execute();
+					
+				},
+				function(){
+					(new TMsg(request.tabId, "gamescreen", "screenshot", {
+						playerName: request.playerName
+					}, response)).execute();
+				}
+			);
 			return true;
 		},
 		
@@ -147,16 +161,9 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		------------------------------------------*/
 		"fitScreen" :function(request, sender, response){
 			// Get tab info first to determine action depending on requester
-			chrome.tabs.get(request.tabId, function(tabInfo){
-				var src = tabInfo.url;
-				
-				if(src.indexOf("/game/dmm.html") > -1 || src.indexOf("/game/api.html") > -1){
-					// FitScreen on DMM Frame and API gameplay
-					(new TMsg(request.tabId, "gamescreen", "fitScreen")).execute();
-					
-				} else {
-					// Fit Screen on Special Mode
-					
+			dependSpecialMode(
+				request.tabId,
+				function(){
 					// Get browser zoon level for the page
 					chrome.tabs.getZoom(request.tabId, function(ZoomFactor){
 						// Resize the window
@@ -171,8 +178,12 @@ See Manifest File [manifest.json] under "background" > "scripts"
 							})).execute();
 						});
 					});
+				},
+				function(){
+					// FitScreen on DMM Frame and API gameplay
+					(new TMsg(request.tabId, "gamescreen", "fitScreen")).execute();
 				}
-			});
+			);
 		},
 		
 		/* IS MUTED
@@ -276,7 +287,6 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		When a ship speaks, show subtitles
 		------------------------------------------*/
 		"subtitle" :function(request, sender, response){
-			console.debug("subtitle", request);
 			(new TMsg(request.tabId, "gamescreen", "subtitle", {
 				voicetype: request.voicetype,
 				filename: request.filename || false,
@@ -360,6 +370,25 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		}
 	});
 	
+	function dependSpecialMode(tabId, specialCb, regularCb){
+		isSpecialMode(tabId, function(result){
+			if (result) {
+				specialCb();
+			} else {
+				regularCb();
+			}
+		});
+	}
 	
+	function isSpecialMode(tabId, callback) {
+		chrome.tabs.get(tabId, function(tabInfo){
+			var src = tabInfo.url;
+			if(src.indexOf("/game/dmm.html") > -1 || src.indexOf("/game/api.html") > -1){
+				callback(false);
+			} else {
+				callback(true);
+			}
+		});
+	}
 	
 })();
