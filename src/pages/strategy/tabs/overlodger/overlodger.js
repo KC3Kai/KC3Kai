@@ -51,7 +51,8 @@
 		dataType       = [
 			// Apply grouping
 			['sortie','pvp'   ,'exped' ,'quest' ,'akashi' ,'regen'  ,'useitem'],
-			['crship','critem','dsship','dsitem','remodel','rmditem','overall']
+			['crship','critem','dsship','dsitem','remodel','rmditem','lbas'   ],
+			['overall']
 		],
 		dataScale      = [
 			1.0, 4.0, 2.5, 2.0, 2.5,25.0, 3.0,
@@ -1019,13 +1020,6 @@
 										//	}))
 										//		bufferArray.push(newItem);
 										//});
-
-										if (givenType[1]==="lbas") {
-											// TODO: LBAS data is ignored for now because
-											// I don't know how to handle it properly.
-											// see #1644
-											continue;
-										}
 										givenAry.push(newItem);
 										newTotalBuffer.push(newItem);
 									}
