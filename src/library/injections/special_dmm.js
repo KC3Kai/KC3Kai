@@ -19,6 +19,7 @@
 			this.subtitleSpace();
 			
 			chrome.runtime.onMessage.addListener(this.subtitlesOverlay());
+			chrome.runtime.onMessage.addListener(this.questOverlay());
 		},
 		
 		/* WINDOW KEEP FOCUS, NOT FLASH
@@ -50,6 +51,7 @@
 		Looking at ReactJS for KC3KaiNi
 		--------------------------------------*/
 		attachHTML: function(){
+			// Overlay screens
 			var overlays = $("<div>").addClass("overlays").appendTo("#area-game");
 			
 			var overlay_quests = $("<div>").addClass("overlay_box overlay_quests");
@@ -61,6 +63,22 @@
 			var overlay_subtitles = $("<div>").addClass("overlay_box overlay_subtitles")
 				.append($("<span>"));
 			overlays.append(overlay_subtitles);
+			
+			// Clonable Factory
+			var factory = $("<div>").attr("id", "factory").appendTo("body");
+			
+			var ol_quest = $("<div>").addClass("overlay ol_quest ol_quest_exist")
+				.append($("<div>").addClass("icon with_tl"))
+				.append($("<div>").addClass("content with_tl")
+					.append($("<div>").addClass("name"))
+					.append($("<div>").addClass("desc"))
+				)
+				.append($("<div>").addClass("tracking with_tl"))
+				.append($("<div>").addClass("no_tl hover"))
+				.appendTo("#factory");
+			
+			var ol_quest_empty = $("<div>").addClass("overlay ol_quest ol_quest_empty")
+				.appendTo("#factory");
 		},
 		
 		/* BACKGROUND CUSTOMIZATIONS
@@ -130,7 +148,7 @@
 				
 				// Overlay avoids cursor
 				$(".overlay_subtitles span").on("mouseover", function(){
-					switch (ConfigManager.subtitle_display) {
+					switch (config.subtitle_display) {
 						case "evade":
 							if (subtitlePosition == "bottom") {
 								$(".overlay_subtitles").css("bottom", "");
@@ -160,89 +178,144 @@
 		subtitlesOverlay: function(){
 			var self = this;
 			return function(request, sender, response){
-				console.log("RUNTIME MESSAGE", request);
-				if(request.action == "subtitle"){
-					if(!config.api_subtitles) return true;
-					
-					// Get subtitle text
-					var subtitleText = false;
-					var quoteIdentifier = "";
-					var quoteVoiceNum = request.voiceNum;
-					var quoteSpeaker = "";
-					console.log("voicetype", request.voicetype);
-					switch(request.voicetype){
-						case "titlecall":
-							quoteIdentifier = "titlecall_"+request.filename;
-							break;
-						case "npc":
-							quoteIdentifier = "npc";
-							break;
-						default:
-							quoteIdentifier = request.shipID;
-							console.log('quoteIdentifier', quoteIdentifier);
-							if(config.subtitle_speaker){
-								quoteSpeaker = meta.shipName(master.ship(quoteIdentifier).api_name);
-							}
-							console.log('quoteSpeaker', quoteSpeaker);
-							break;
-					}
-					console.log('quoteVoiceNum', quoteVoiceNum);
-					subtitleText = meta.quote( quoteIdentifier, quoteVoiceNum );
-					console.log("subtitleText", subtitleText);
-					// hide first to fading will stop
-					$(".overlay_subtitles").stop(true, true);
-					$(".overlay_subtitles").hide();
-					
-					// If subtitle removal timer is ongoing, reset
-					if(self.subtitleVanishTimer){
-						clearTimeout(self.subtitleVanishTimer);
-					}
-					// Lazy init timing parameters
-					if(!self.subtitleVanishBaseMillis){
-						self.subtitleVanishBaseMillis = Number(meta.quote("timing", "baseMillisVoiceLine")) || 2000;
-					}
-					if(!self.subtitleVanishExtraMillisPerChar){
-						self.subtitleVanishExtraMillisPerChar = Number(meta.quote("timing", "extraMillisPerChar")) || 50;
-					}
-					
-					// If subtitles available for the voice
-					if(subtitleText){
-						$(".overlay_subtitles span").html(subtitleText);
-						$(".overlay_subtitles").show();
-						var millis = self.subtitleVanishBaseMillis +
-							(self.subtitleVanishExtraMillisPerChar * $(".overlay_subtitles").text().length);
-						self.subtitleVanishTimer = setTimeout(function(){
-							self.subtitleVanishTimer = false;
-							$(".overlay_subtitles").fadeOut(1000, function(){
-								switch (ConfigManager.subtitle_display) {
-									case "evade":
-										$(".overlay_subtitles").css("top", "");
-										$(".overlay_subtitles").css("bottom", "5px");
-										subtitlePosition = "bottom";
-										break;
-									case "ghost":
-										$(".overlay_subtitles").removeClass("ghost");
-										break;
-									default: break;
-								}
-							});
-						}, millis);
-						if(!!quoteSpeaker){
-							$(".overlay_subtitles span").html("{0}: {1}".format(quoteSpeaker, subtitleText));
+				if(request.action != "subtitle") return true;
+				if(!config.api_subtitles) return true;
+				
+				// Get subtitle text
+				var subtitleText = false;
+				var quoteIdentifier = "";
+				var quoteVoiceNum = request.voiceNum;
+				var quoteSpeaker = "";
+				switch(request.voicetype){
+					case "titlecall":
+						quoteIdentifier = "titlecall_"+request.filename;
+						break;
+					case "npc":
+						quoteIdentifier = "npc";
+						break;
+					default:
+						quoteIdentifier = request.shipID;
+						if(config.subtitle_speaker){
+							quoteSpeaker = meta.shipName(master.ship(quoteIdentifier).api_name);
 						}
+						break;
+				}
+				subtitleText = meta.quote( quoteIdentifier, quoteVoiceNum );
+				
+				// hide first to fading will stop
+				$(".overlay_subtitles").stop(true, true);
+				$(".overlay_subtitles").hide();
+				
+				// If subtitle removal timer is ongoing, reset
+				if(self.subtitleVanishTimer){
+					clearTimeout(self.subtitleVanishTimer);
+				}
+				// Lazy init timing parameters
+				if(!self.subtitleVanishBaseMillis){
+					self.subtitleVanishBaseMillis = Number(meta.quote("timing", "baseMillisVoiceLine")) || 2000;
+				}
+				if(!self.subtitleVanishExtraMillisPerChar){
+					self.subtitleVanishExtraMillisPerChar = Number(meta.quote("timing", "extraMillisPerChar")) || 50;
+				}
+				
+				// If subtitles available for the voice
+				if(subtitleText){
+					$(".overlay_subtitles span").html(subtitleText);
+					$(".overlay_subtitles").show();
+					var millis = self.subtitleVanishBaseMillis +
+						(self.subtitleVanishExtraMillisPerChar * $(".overlay_subtitles").text().length);
+					self.subtitleVanishTimer = setTimeout(function(){
+						self.subtitleVanishTimer = false;
+						$(".overlay_subtitles").fadeOut(1000, function(){
+							switch (config.subtitle_display) {
+								case "evade":
+									$(".overlay_subtitles").css("top", "");
+									$(".overlay_subtitles").css("bottom", "5px");
+									subtitlePosition = "bottom";
+									break;
+								case "ghost":
+									$(".overlay_subtitles").removeClass("ghost");
+									break;
+								default: break;
+							}
+						});
+					}, millis);
+					if(!!quoteSpeaker){
+						$(".overlay_subtitles span").html("{0}: {1}".format(quoteSpeaker, subtitleText));
 					}
 				}
 			};
 		},
 		
-		/* SUBTITLE BOX
-		Only prepares the container box for subtitles
+		/* QUEST OVERLAYS
+		On-screen translation on quest page
 		--------------------------------------*/
 		questOverlay: function(){
+			var self = this;
 			
+			// untranslated quest clickable google translate
+			$(".overlay_quests").on("click", ".no_tl", function(){
+				chrome.tabs.create({
+					url: "https://translate.google.com/#ja/"+config.language+"/"
+						+encodeURIComponent($(this).data("qtitle"))
+						+"%0A%0A"
+						+encodeURIComponent($(this).data("qdesc"))
+				});
+			});
 			
+			// runtime listener
+			return function(request, sender, response){
+				if(request.action != "questOverlay") return true;
+				if(!config.api_translation && !config.api_tracking) return true;
+				
+				quests = $.extend(true, quests, request.KC3QuestManager);
+				
+				$(".overlay_quests").empty();
+				
+				$.each(request.questlist, function( index, QuestRaw ){
+					if( QuestRaw !=- 1 ){
+						var QuestBox = $("#factory .ol_quest_exist").clone().appendTo(".overlay_quests");
+						
+						// Get quest data
+						var QuestData = new KC3Quest();
+						QuestData.define(quests.get( QuestRaw.api_no ));
+						
+						// Show meta, title and description
+						if( typeof QuestData.meta().available != "undefined" ){
+							
+							if (config.api_translation){
+								$(".name", QuestBox).text( QuestData.meta().name );
+								$(".desc", QuestBox).text( QuestData.meta().desc );
+							}else{
+								$(".content", QuestBox).css({opacity: 0});
+							}
+							
+							if(config.api_tracking){
+								$(".tracking", QuestBox).html( QuestData.outputHtml() );
+							}else{
+								$(".tracking", QuestBox).hide();
+							}
+							
+							// Special Bw1 case multiple requirements
+							if( QuestRaw.api_no == 214 ){
+								$(".tracking", QuestBox).addClass("small");
+							}
+						}else{
+							if(config.google_translate) {
+								$(".with_tl", QuestBox).css({ visibility: "hidden" });
+								$(".no_tl", QuestBox).data("qid", QuestRaw.api_no);
+								$(".no_tl", QuestBox).data("qtitle", QuestRaw.api_title);
+								$(".no_tl", QuestBox).data("qdesc", QuestRaw.api_detail);
+								$(".no_tl", QuestBox).show();
+							} else {
+								QuestBox.css({ visibility: "hidden" });
+							}
+						}
+					}
+				});
+				response({success:true});
+			};
 		},
-		
 	};
 	
 	window.specialDMMMode = function (){

@@ -1,3 +1,16 @@
+/* DEFAULTS
+--------------------------*/
+.kc3 #area-game {
+	font-family: Arial;
+	font-size:12px;
+	text-align:left;
+}
+.kc3 #factory {
+	display:none;
+}
+
+/* OVERLAY: QUEST
+--------------------------*/
 .kc3 .overlays {
 	width:800px;
 	height:480px;
@@ -9,6 +22,79 @@
 }
 .kc3 .overlay_box {
 	position:absolute;
+}
+
+/* OVERLAY: QUEST
+--------------------------*/
+.kc3 .overlay_quests {
+	width:629px;
+	height:336px;
+	top:110px;
+	left:144px;
+}
+.kc3 .ol_quest {
+	width:629px;
+	height:64px;
+	margin:0px 0px 4px 0px;
+}
+.kc3 .ol_quest .icon {
+	width:72px;
+	height:64px;
+	float:left;
+}
+.kc3 .ol_quest .content {
+	width:431px;
+	height:40px;
+	background:#E4D5C2;
+	float:left;
+	margin:2px 0px 0px 0px;
+}
+.kc3 .ol_quest .content .name {
+	width:431px;
+	height:13px;
+	line-height:13px;
+	font-size:13px;
+	margin:2px 0px 2px 0px;
+}
+.kc3 .ol_quest .content .desc {
+	width:431px;
+	height:22px;
+	line-height:11px;
+	font-size:11px;
+	overflow:hidden;
+}
+.kc3 .ol_quest .tracking {
+	width:60px;
+	height:40px;
+	line-height:60px;
+	margin:2px 0px 0px 0px;
+	float:left;
+	font-size:18px;
+	font-weight:bold;
+	text-align:center;
+	color:#555;
+	background:#E4D5C2;
+	opacity:0.80;
+}
+.kc3 .ol_quest .tracking.small {
+	line-height:10px;
+	font-size:11px;
+}
+.kc3 .ol_quest .no_tl {
+	width: 24px;
+	height: 24px;
+	background: rgba(150,190,230, 0.6);
+	float: right;
+	margin: 20px -26px 0px 0px;
+	position:relative;
+	border-radius: 15px;
+	line-height: 24px;
+	text-align: center;
+	font-size: 16px;
+	font-weight: bold;
+	color: #fff;
+	pointer-events: visible;
+	display:none;
 }
 
 /* OVERLAY: SUBTITLES

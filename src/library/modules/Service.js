@@ -103,7 +103,9 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		We don't want global runtime message that will show overlays on all windows
 		------------------------------------------*/
 		"questOverlay" :function(request, sender, response){
+			KC3QuestManager.load();
 			(new TMsg(request.tabId, "gamescreen", "questOverlay", {
+				KC3QuestManager: KC3QuestManager,
 				questlist: request.questlist
 			})).execute();
 		},
@@ -194,7 +196,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		"dmmFrameInject" :function(request, sender, response){
 			if(sender.tab.url.indexOf("/pages/game/dmm.html") > -1){
 				response({value:true, type:'frame'});
-			} else if (typeof localStorage.dmmcrop != 'undefined' && localStorage.dmmcrop){
+			} else if (typeof localStorage.dmmcrop != 'undefined' && localStorage.dmmcrop != 'false'){
 				localStorage.dmmcrop = false;
 				response({value:true, type:'crop'});
 			} else {
@@ -205,7 +207,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		/* OSAPI FRAME INJECTION
 		------------------------------------------*/
 		"osapiCssInject" :function(request, sender, response){
-			if (typeof localStorage.osapicrop != 'undefined' && localStorage.osapicrop){
+			if (typeof localStorage.osapicrop != 'undefined' && localStorage.osapicrop != 'false'){
 				localStorage.osapicrop = false;
 				response({value:true});
 			} else {

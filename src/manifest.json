@@ -37,6 +37,7 @@
 			"library/modules/RemodelDb.js",
 			"library/modules/Meta.js",
 			"library/modules/Translation.js",
+			"library/objects/Quest.js",
 			"library/managers/QuestManager.js",
 			"library/modules/Service.js"
 		]
@@ -59,6 +60,7 @@
 				"library/modules/Master.js",
 				"library/modules/Meta.js",
 				"library/modules/Translation.js",
+				"library/objects/Quest.js",
 				"library/managers/QuestManager.js",
 				"library/injections/special_dmm.js",
 				"library/injections/dmm.js"
