@@ -327,7 +327,7 @@
 			$(".tab_profile .clear_dismissed").on("click", function(event){
 				// These variables may be moved into ConfigManager
 				delete localStorage.read_api_notice;
-				delete localStorage.read_api_notice_55
+				delete localStorage.read_api_notice_55;
 				delete localStorage.read_dmm_notice_55;
 				ConfigManager.load();
 				ConfigManager.dismissed_hints = {};
