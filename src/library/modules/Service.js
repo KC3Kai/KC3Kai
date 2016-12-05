@@ -3,14 +3,12 @@ KC3改 Background Service.
 
 It is always running, from Chrome startup until the browser is closed or explicitly terminated.
 This will serve as a central script that lets devtools and content scripts communicate.
-Sometimes, the scripts on different parts of the extension cannot communicate with each other, thus this can relay messages and events for them.
-Sometimes, specific scripts do not have access to Chrome APIs. Those scripts can then request it to be done by this service.
 
-Ultimately, this script handles data management on aspects that are best centralized such as:
-> [Countdown Timers]
-To have a consistent timer unaffected by lags on devtools and Chrome tabs
-> [Quest Management]
-To ensure all components are synced in real-time without relying on localStorage
+Sometimes, the scripts on different parts of the extension cannot communicate with each other,
+thus this can relay messages and events for them.
+
+Sometimes, specific scripts do not have access to Chrome APIs.
+Those scripts can then request it to be done by this service.
 
 The above aspects are imported into the background service, and not necessarily on this file.
 See Manifest File [manifest.json] under "background" > "scripts"
@@ -19,7 +17,6 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	"use strict";
 	
 	console.info("KC3改 Background Service loaded");
-	
 	
 	if (typeof localStorage.kc3version == "undefined"){
 		window.open("../../pages/update/update.html#installed", "kc3kai_updates");
@@ -33,23 +30,6 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	localStorage.kc3version = chrome.runtime.getManifest().version;
 	
 	window.KC3Service = {
-		
-		/* SET API LINK
-		From osapi content script, the API Link has been extracted
-		Save the link onto localStorage and disable extracing API further
-		If came from menu "Extract API Link", so open "Play via API" and close DMM source
-		------------------------------------------*/
-		"set_api_link" :function(request, sender, callback){
-			// Set api link on internal storage
-			localStorage.absoluteswf = request.swfsrc;
-			
-			// If refreshing API link, close source tabs and re-open game frame
-			if(JSON.parse(localStorage.extract_api)){ // localStorage has problems with native boolean
-				localStorage.extract_api = false;
-				window.open("../pages/game/api.html", "kc3kai_game");
-				chrome.tabs.remove([sender.tab.id], function(){});
-			}
-		},
 		
 		/* NOTIFY DESKTOP
 		Devtools do not have access to chrome.notifications API
@@ -67,23 +47,16 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		Ask the game container to take a screenshot
 		------------------------------------------*/
 		"screenshot" :function(request, sender, response){
-			var tabId = request.tabId || sender.tab.id;
-			dependSpecialMode(
-				tabId,
-				function(){
-					(new TMsg(tabId, "gamescreen", "getGamescreenOffset", {}, function(offset){
-						(new KCScreenshot())
-							.onComplete(response)
-							.start(tabId, offset);
-					})).execute();
-					
-				},
-				function(){
-					(new TMsg(request.tabId, "gamescreen", "screenshot", {
-						playerName: request.playerName
-					}, response)).execute();
-				}
-			);
+			var tabId = sender.tab.id || request.tabId || false;
+			if (tabId) {
+				(new TMsg(tabId, "gamescreen", "getGamescreenOffset", {}, function(offset){
+					(new KCScreenshot())
+						.onComplete(response)
+						.start(tabId, offset);
+				})).execute();
+			} else {
+				response({ value: false });
+			}
 			return true;
 		},
 		
@@ -94,20 +67,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		We don't want global runtime message that will activate games on all windows
 		------------------------------------------*/
 		"activateGame" :function(request, sender, response){
-			(new TMsg(request.tabId, "gamescreen", "activateGame", {})).execute();
-		},
-		
-		/* Game Screen Change
-		A specific game screen manipulation. Such as idle timer, catbombing, and others. That marks
-		the guy who make this function is lazier than making another key for such purpose XD
-		(PS: self-insulting)
-		------------------------------------------*/
-		"gameScreenChg" :function(request, sender, response){
-			(new TMsg(request.tabId, "gamescreen", request.message_id || "goodResponses", {
-				tcp_status: request.tcp_status,
-				api_status: request.api_status,
-				api_result: request.api_result,
-			})).execute();
+			(new TMsg( request.tabId, "gamescreen", "activateGame", {})).execute();
 		},
 		
 		/* QUEST OVERLAYS
@@ -121,7 +81,8 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			(new TMsg(request.tabId, "gamescreen", "questOverlay", {
 				KC3QuestManager: KC3QuestManager,
 				questlist: request.questlist
-			})).execute();
+			}, response)).execute();
+			return true;
 		},
 		
 		/* CLEAR OVERLAYS
@@ -147,43 +108,30 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			})).execute();
 		},
 		
-		/* GET CONFIG
-		For content scripts who doesnt have access to localStorage
-		Mainly used at the moment for DMM cookie injection
-		------------------------------------------*/
-		"getConfig" :function(request, sender, response){
-			ConfigManager.load();
-			response({value: ConfigManager[request.id]});
-		},
-		
 		/* FIT SCREEN
 		Auto-resize browser window to fit the game screen
 		------------------------------------------*/
 		"fitScreen" :function(request, sender, response){
-			// Get tab info first to determine action depending on requester
-			dependSpecialMode(
-				request.tabId,
-				function(){
-					// Get browser zoon level for the page
-					chrome.tabs.getZoom(request.tabId, function(ZoomFactor){
-						// Resize the window
-						chrome.windows.getCurrent(function(wind){
-							(new TMsg(request.tabId, "gamescreen", "getWindowSize", {}, function(size){
-								chrome.windows.update(wind.id, {
-									width: Math.ceil(800*ZoomFactor)
-										+ (wind.width- Math.ceil(size.width*ZoomFactor) ),
-									height: Math.ceil(480*ZoomFactor)
-										+ (wind.height- Math.ceil(size.height*ZoomFactor) )
-								});
-							})).execute();
-						});
+			var tabId = sender.tab.id || request.tabId || false;
+			if (tabId) {
+				// Get browser zoon level for the page
+				chrome.tabs.getZoom(tabId, function(ZoomFactor){
+					// Resize the window
+					chrome.windows.getCurrent(function(wind){
+						(new TMsg(tabId, "gamescreen", "getWindowSize", {}, function(size){
+							chrome.windows.update(wind.id, {
+								width: Math.ceil(800*ZoomFactor)
+									+ (wind.width- Math.ceil(size.width*ZoomFactor) ),
+								height: Math.ceil(480*ZoomFactor)
+									+ (wind.height- Math.ceil(size.height*ZoomFactor) )
+							});
+						})).execute();
 					});
-				},
-				function(){
-					// FitScreen on DMM Frame and API gameplay
-					(new TMsg(request.tabId, "gamescreen", "fitScreen")).execute();
-				}
-			);
+				});
+			} else {
+				response({ value: false });
+			}
+			return true;
 		},
 		
 		/* IS MUTED
@@ -230,43 +178,37 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		/* DMM FRAME INJECTION
 		Responds if content script should inject DMM Frame customizations
 		------------------------------------------*/
-		"dmmFrameInject" :function(request, sender, response){
-			if(sender.tab.url.indexOf("/pages/game/dmm.html") > -1){
-				response({value:true, type:'frame'});
-			} else if (typeof localStorage.dmmcrop != 'undefined' && localStorage.dmmcrop != 'false'){
-				localStorage.dmmcrop = false;
-				response({value:true, type:'crop'});
-			} else {
-				response({value:false});
-			}
+		"willInjectDMM" :function(request, sender, response){
+			chrome.tabs.update(sender.tab.id, {
+				autoDiscardable: false,
+				highlighted: true
+			}, function(){
+				ConfigManager.load();
+				if (ConfigManager.dmm_customize){
+					KC3Master.init();
+					RemodelDb.init();
+					KC3Meta.init("../../data/");
+					KC3Meta.loadQuotes();
+					KC3QuestManager.load();
+					response({
+						value: true,
+						config: ConfigManager,
+						master: KC3Master,
+						meta: KC3Meta,
+						quest: KC3QuestManager,
+					});
+				} else {
+					response({ value:false });
+				}
+			});
+			return true;
 		},
 		
 		/* OSAPI FRAME INJECTION
 		------------------------------------------*/
-		"osapiCssInject" :function(request, sender, response){
-			if (typeof localStorage.osapicrop != 'undefined' && localStorage.osapicrop != 'false'){
-				localStorage.osapicrop = false;
-				response({value:true});
-			} else {
-				response({value:false});
-			}
-		},
-		
-		/* GET DMM CUSTOMIZATIONS
-		------------------------------------------*/
-		"dmmGetCustomizations" :function(request, sender, response){
+		"willInjectOSAPI" :function(request, sender, response){
 			ConfigManager.load();
-			KC3Master.init();
-			RemodelDb.init();
-			KC3Meta.init("../../data/");
-			KC3Meta.loadQuotes();
-			KC3QuestManager.load();
-			response({
-				config: ConfigManager,
-				master: KC3Master,
-				meta: KC3Meta,
-				quest: KC3QuestManager,
-			});
+			response({ value: ConfigManager.dmm_customize });
 		},
 		
 		/* TAIHA ALERT START
@@ -369,26 +311,5 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			}
 		}
 	});
-	
-	function dependSpecialMode(tabId, specialCb, regularCb){
-		isSpecialMode(tabId, function(result){
-			if (result) {
-				specialCb();
-			} else {
-				regularCb();
-			}
-		});
-	}
-	
-	function isSpecialMode(tabId, callback) {
-		chrome.tabs.get(tabId, function(tabInfo){
-			var src = tabInfo.url;
-			if(src.indexOf("/game/dmm.html") > -1 || src.indexOf("/game/api.html") > -1){
-				callback(false);
-			} else {
-				callback(true);
-			}
-		});
-	}
 	
 })();
