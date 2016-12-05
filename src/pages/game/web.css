@@ -4,46 +4,240 @@ body {
 	background-color:#f5f5f5;
 }
 .box-wrap {
-	width:600px;
-	margin:20px auto;
+	width:800px;
+	min-height:600px;
+	margin:0px auto;
+	background:#fcfcfc;
+	padding:10px 10px 0px;
+	font-size:14px;
+}
+.disabled {
+	display:none;
+}
+.notApplicable {
+	opacity:0.3;
+	filter:blur(1px);
+	pointer-events: none;
 }
 
-/* NOTES
+/* HEADER
 --------------------------*/
-.faq_title {
-	text-align:left;
-	font-weight:bold;
-	font-size:14px;
-	margin:0px 0px 5px 0px;
+.headBox {
+	width:780px;
+	margin:10px 0px 20px 0px;
 }
-.faq_content {
-	margin:0px 0px 20px 0px;
+.headBox .headImage {
+	width:24px;
+	height:24px;
+	float:left;
+	margin:0px 6px 0px 0px;
+}
+.headBox .headImage img {
+	width:24px;
+	height:24px;
+	vertical-align: top;
+}
+.headBox .headTitle {
+	width:750px;
+	height:24px;
+	line-height:24px;
+	font-size:18px;
+}
+
+/* SECTIONS
+--------------------------*/
+.section {
+	width:780px;
+	margin:0px 0px 13px 0px;
+}
+.section .sectionHead {
+	width:780px;
+	line-height:20px;
+	font-size:10px;
+	margin:0px 0px 10px 0px;
+	border-bottom:1px solid #e5e5e5;
+	padding:4px 5px;
+}
+.section .sectionIcon {
+	width:18px;
+	height:18px;
+	margin:0px 5px 0px 0px;
+	float:left;
+}
+.section .sectionIcon img {
+	width:18px;
+	height:18px;
+	vertical-align: top;
+}
+.section .sectionText {
+	width:747px;
+	height:18px;
+	float:left;
+	font-size:16px;
+}
+.section .sectionText a {
+	float:right;
 	font-size:12px;
 }
-.faq_content ul {
-	margin:10px 0px 10px 0px;
-	font-size:14px;
-}
-.faq_content ul li {
-	margin:0px 0px 5px 0px;
+.section .sectionBody {
+	padding:0px 0px 0px 20px;
 }
 
-/* OTHERS
+/* SECTION-SHORT
 --------------------------*/
-.notice {
-	margin:0px 0px 15px 0px;
+.section.short {
+	width:250px;
+	min-height:10px;
+	margin:0px 10px 0px 0px;
+	float:left;
+}
+.section.short .sectionHead {
+	width:250px;
+}
+.section.short .sectionText {
+	width:217px;
+}
+.section.short .sectionBody {
+	padding:0px 5px 0px 5px;
+	background:#ccf;
+}
+
+/* CUSTOMIZE OPTIONS
+--------------------------*/
+.enableCustomizations {
+	width:780px;
+	margin:0px 0px 10px 0px;
+}
+.enableCustomizations .customization {
+	width:780px;
+	
+}
+.enableCustomizations .customizationText {
+	width:745px;
+	
+}
+.customization {
+	width:240px;
+	height:18px;
+	margin:0px 5px 5px 0px;
+	float:left;
+}
+.customizationText {
+	width:205px;
+	height:18px;
+	line-height:18px;
+	float:left;
+}
+
+/* HOTKEYS
+--------------------------*/
+.hotkeys {
+	margin:0px;
+	padding:0px;
+	list-style: none;
+}
+.hotkeys li {
+	width:375px;
+	height:18px;
+	float:left;
+	margin:0px 5px 5px 0px;
+}
+.hotkeys li kbd {
+	font-size:14px;
+}
+.hotkeys li span {
+	font-size:12px;
+}
+
+/* F12 INSTRUCTIONS
+--------------------------*/
+.instructStep  {
+	margin:0px 0px 10px 0px;
+}
+.instructStep .stepNum {
+	width:30px;
+	height:30px;
+	line-height:30px;
+	border-radius:20px;
+	font-size:20px;
+	color:#fff;
+	background:#69b;
 	text-align:center;
-	padding:10px 0px;
-	font-weight:bold;
-	background:#def;
-	border:1px solid #ace;
+	float:left;
+	margin:0px 10px 0px 0px;
 }
-.play_now {
-	margin:0px 0px 0px 20px;
-	padding:10px 0px 0px 0px;
+.instructStep .stepText {
+	width:720px;
+	height:30px;
+	line-height:30px;
+	float:left;
 }
-.play_btn {
-	width:200px;
-	height:26px;
-	line-height:14px;
+.instructF12 {
+	font-size:18px;
+	display:none;
+}
+.instructKancolleTab {
+	font-size:14px;
+}
+
+/* QUICK SETTINGS
+--------------------------*/
+
+
+/* TRANSLATIONS
+--------------------------*/
+
+
+/* IMPORTED
+--------------------------*/
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 30px;
+	height: 16px;
+	float:left;
+	margin:1px 5px 0px 0px;
+}
+.switch input { display:none; }
+.slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #ccc;
+	-webkit-transition: .4s;
+	transition: .4s;
+}
+.slider:before {
+	position: absolute;
+	content: "";
+	height: 12px;
+	width: 12px;
+	left: 2px;
+	bottom: 2px;
+	background-color: white;
+	-webkit-transition: .4s;
+	transition: .4s;
+}
+input:checked + .slider {
+	background-color: #58a;
+}
+input:focus + .slider {
+	box-shadow: 0 0 1px #58a;
+}
+input:disabled + .slider {
+	background-color: #777;
+}
+input:checked + .slider:before {
+	-webkit-transform: translateX(14px);
+	-ms-transform: translateX(14px);
+	transform: translateX(14px);
+}
+.slider.round {
+	border-radius: 16px;
+}
+.slider.round:before {
+	border-radius: 50%;
 }

@@ -4,12 +4,14 @@
 	
 	// Redirect to DMM play page when activated
 	function ActivateGame(){
+		var infinityExpire = new Date();
+		infinityExpire.setYear(infinityExpire.getUTCFullYear()+1);
 		chrome.cookies.set({
 			url: "http://www.dmm.com",
 			name: "ckcy",
 			value: "1",
 			domain: ".dmm.com",
-			expirationDate: Math.ceil((new Date("Sun, 09 Feb 2019 09:00:09 GMT")).getTime()/1000),
+			expirationDate: Math.ceil(infinityExpire.getTime()/1000),
 			path: '/netgame/',
 		}, function(cookie){
 			window.location = "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/";
@@ -23,19 +25,53 @@
 		KC3Translation.execute();
 		
 		// Quick Play
-		$(".play_btn").on('click', function(){
-			ActivateGame();
+		$("#startAnyway").on('click', ActivateGame);
+		
+		// Show instructions by OS
+		chrome.runtime.getPlatformInfo(function(platformInfo){
+			if ($(".instructF12."+platformInfo.os).length > 0) {
+				$(".instructF12."+platformInfo.os).show();
+			} else {
+				$(".instructF12").show();
+			}
 		});
 		
+		// Toggleable settings
+		toggleSetting("dmm_customize", "#background");
+		toggleSetting("api_subtitles", "#subtitles");
+		toggleSetting("api_translation", "#questtl");
+		toggleSetting("map_markers", "#mapmarkers");
+		toggleSetting("api_askExit", "#exitconfirm");
+		
+		$("#background").on("change", customizationConsequence);
+		customizationConsequence();
 	});
+	
+	// Toggleable setting
+	function toggleSetting(configName, elementName){
+		if (ConfigManager[configName]) {
+			$(elementName).prop("checked", true);
+		}
+		$(elementName).on("change", function(){
+			ConfigManager[configName] = $(this).prop("checked");
+			ConfigManager.save();
+		});
+	}
+	
+	// Applying toggle consequence
+	function customizationConsequence(){
+		if ($("#background").prop("checked")) {
+			$(".dependsOnCustomization").removeClass("notApplicable");
+		} else {
+			$(".dependsOnCustomization").addClass("notApplicable");
+		}
+	}
 	
 	// Extension Interaction
 	chrome.runtime.onMessage.addListener(function(request, sender, response) {
-		if(request.identifier == "kc3_gamescreen"){
-			if(request.action == "activateGame"){
-				ActivateGame();
-			}
-		}
+		if (request.identifier != "kc3_gamescreen") return true;
+		if (request.action != "activateGame") return true;
+		ActivateGame();
 	});
 	
 })();
