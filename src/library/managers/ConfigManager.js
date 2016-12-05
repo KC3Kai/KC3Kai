@@ -13,7 +13,7 @@ Retreives when needed to apply on components
 		// Default values. As a function to not include on JSON string
 		defaults : function(){
 			return {
-				version				: 8,
+				version				: 9,
 				language			: "en",
 				elosFormula 		: 4,
 				hqExpDetail 		: 1,
@@ -139,7 +139,9 @@ Retreives when needed to apply on components
 				api_bg_image		: "",
 				api_bg_size			: "cover",
 				api_bg_position		: "top center",
+				
 				api_gameScale		: 100,
+				
 				api_subtitles		: true,
 				subtitle_font		: "\"Trebuchet MS\",\"Lucida Grande\",\"Lucida Sans Unicode\",\"Lucida Sans\",Tahoma,sans-serif",
 				subtitle_size		: 22,
@@ -150,15 +152,7 @@ Retreives when needed to apply on components
 				map_markers			: false,
 				
 				dmm_forcecookies	: false,
-				dmm_customize		: false,
-				dmm_translation		: true,
-				dmm_tracking		: true,
-				dmm_askExit			: false,
-				dmm_margin			: 0,
-				dmm_bg_color		: "#def",
-				dmm_bg_image		: "",
-				dmm_bg_size			: "cover",
-				dmm_bg_position		: "top center",
+				dmm_customize		: true,
 				
 				pan_theme			: "natsuiro",
 				pan_size			: "big",
