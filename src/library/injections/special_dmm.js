@@ -7,6 +7,8 @@
 	
 	var DMMCustomizations = {
 		apply: function(response){
+			console.log('Applying DMM customizations...');
+			
 			config =  $.extend(true, ConfigManager, response.config);
 			window.ConfigManager = config;
 			master = $.extend(true, KC3Master, response.master);
@@ -15,6 +17,7 @@
 			
 			this.windowFocus();
 			this.attachHTML();
+			this.layout();
 			this.backgrounds();
 			this.subtitleSpace();
 			this.clearOverlayHotKey();
@@ -86,6 +89,47 @@
 			
 			var ol_quest_empty = $("<div>").addClass("overlay ol_quest ol_quest_empty")
 				.appendTo("#factory");
+		},
+		
+		/* DMM PAGE LAYOUT
+		Override layout to only show game frame
+		--------------------------------------*/
+		layout: function(){
+			$("body").addClass("kc3");
+			$("body").css({ margin:0, padding:0, 'min-width':0 });
+			$("#main-ntg").css({ position: 'static' });
+			$("#area-game").css({
+				'margin-left': 'auto',
+				'margin-right': 'auto',
+				padding: 0,
+				width: 800,
+				height: 480,
+				position: 'relative'
+			});
+			$(".dmm-ntgnavi").hide();
+			$(".area-naviapp").hide();
+			$("#ntg-recommend").hide();
+			$("#foot").hide();
+			$("#w, #main-ntg, #page").css({
+				margin:0,
+				padding:0,
+				width: '100%',
+				height: 0
+			});
+			$(document).on("ready", this.resizeGameFrame);
+			$(window).on("load", this.resizeGameFrame);
+			setTimeout(this.resizeGameFrame, 5000);
+			setTimeout(this.resizeGameFrame, 10000);
+			setTimeout(this.resizeGameFrame, 15000);
+			setTimeout(this.resizeGameFrame, 20000);
+		},
+		// Resize game frame to 800x480
+		resizeGameFrame: function(){
+			console.log("resizing game frame");
+			$("#game_frame").css({
+				width: 800,
+				height: 480
+			});
 		},
 		
 		/* BACKGROUND CUSTOMIZATIONS
@@ -474,10 +518,11 @@
 		}
 	};
 	
-	window.specialDMMMode = function (){
-		(new RMsg("service", "dmmGetCustomizations", {}, function(response){
+	// Start the script by asking the service to initialize injection
+	(new RMsg("service", "willInjectDMM", {}, function(response){
+		if (response.value === true) {
 			DMMCustomizations.apply(response);
-		})).execute();
-	};
+		}
+	})).execute();
 	
 })();
