@@ -212,8 +212,7 @@ module.exports = function(grunt) {
 									"library/modules/Master.js",
 									"library/modules/Meta.js",
 									"library/modules/Translation.js",
-									"library/injections/special_dmm.js",
-									"library/injections/dmm.js"
+									"library/injections/special_dmm.js"
 								],
 								"run_at": "document_end",
 								"all_frames": true
