@@ -2364,7 +2364,7 @@ ABYSS FLEET
 /* AIR BASES
 ------------------------------*/
 .module.fleet .airbase_list {
-	overflow-y:scroll;
+	overflow-y:auto;
 	overflow-x:hidden;
 }
 .airbase {
