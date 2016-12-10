@@ -1060,7 +1060,7 @@ Previously known as "Reactor"
 				var consumedBauxite = bauxite - PlayerManager.hq.lastMaterial[3];
 				KC3Database.Naverall({
 					hour: hour,
-					type: "lbas",
+					type: "lbas" + (params.api_area_id || "0"),
 					data: [0,0,0,consumedBauxite].concat([0,0,0,0])
 				});
 				PlayerManager.setResources([fuel, ammo, steel, bauxite] , hour);
@@ -1091,7 +1091,7 @@ Previously known as "Reactor"
 				consumedBauxite = bauxite - PlayerManager.hq.lastMaterial[3];
 			KC3Database.Naverall({
 				hour: hour,
-				type: (PlayerManager.hq.lastSortie || ["sortie0"])[0],
+				type: "lbas" + (params.api_area_id || "0"),
 				data: [consumedFuel,0,0,consumedBauxite].concat([0,0,0,0])
 			});
 			PlayerManager.setResources([fuel, ammo, steel, bauxite] , hour);

@@ -474,6 +474,8 @@
 							$(".node_id", nodeBox).text( KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node ) );
 							if(airRaidLostKind > 0){
 								$(".node_id", nodeBox).addClass(airRaidLostKind === 4 ? "nodamage" : "damaged");
+							} else {
+								$(".node_id", nodeBox).removeClass("nodamage damaged");
 							}
 							
 							// Result Icons
@@ -508,7 +510,8 @@
 									$(".node_eship_"+(index+1)+" img", nodeBox).attr("alt", eship);
 									$(".node_eship_"+(index+1)+" img", nodeBox).click(shipClickFunc);
 									$(".node_eship_"+(index+1), nodeBox).addClass("hover");
-									$(".node_eship_"+(index+1), nodeBox).addClass( KC3Meta.abyssShipBorderClass( eship) );
+									$(".node_eship_"+(index+1), nodeBox).removeClass(KC3Meta.abyssShipBorderClass());
+									$(".node_eship_"+(index+1), nodeBox).addClass(KC3Meta.abyssShipBorderClass(eship));
 									$(".node_eship_"+(index+1), nodeBox).show();
 								}
 							});

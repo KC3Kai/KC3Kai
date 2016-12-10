@@ -18,7 +18,7 @@
 		$(".myVersion").text(myVersion);
 		
 		// Chrome 55 incompatibilities
-		if (parseInt(getChromeVersion(), 10) >= 55) {
+		if (parseInt(getChromeVersion(), 10) >= 55 && false/*no warning for now*/) {
 			$("#play_cc, #play_dmmf").addClass("short");
 			$("#play_cc .desc").text(KC3Meta.term("Chrome55Incompatible"));
 			$("#play_dmmf .desc").text(KC3Meta.term("Chrome55Incompatible"));

@@ -92,6 +92,21 @@
 				$(".stat_exped .stat_total .stat_value").html(this.statistics.exped.total);
 			}
 			
+			// Fix LBAS type of ledger data from IndexedDB
+			// Should be reserved until next several releases when most users have their fixed data
+			if(typeof localStorage.fixed_lbas_ledger === "undefined"){
+				KC3Database.get_lodger_data(Range(0,Infinity,0,1),
+				function(ld){
+					ld.forEach(function(d){
+						if(d.type === "sortie0" || d.type === "lbas"){
+							KC3Database.con.navaloverall.where("id").equals(d.id).modify(function(r){r.type="lbas6";});
+						}
+					});
+				});
+				localStorage.fixed_lbas_ledger = 1;
+				console.info("Ledger data of LBAS have been fixed");
+			}
+			
 			// Export all data
 			$(".tab_profile .export_data").on("click", function(){
 				var exportObject = {
@@ -306,6 +321,19 @@
 				KC3Database.clear(function(){
 					window.location.reload();
 				});
+			});
+			
+			// Reset Dismissed messages
+			$(".tab_profile .clear_dismissed").on("click", function(event){
+				// These variables may be moved into ConfigManager
+				delete localStorage.read_api_notice;
+				delete localStorage.read_api_notice_55;
+				delete localStorage.read_dmm_notice_55;
+				ConfigManager.load();
+				ConfigManager.dismissed_hints = {};
+				ConfigManager.save();
+				// For debugging or special case
+				delete localStorage.fixed_lbas_ledger;
 			});
 			
 			// Clear transient properties
