@@ -84,6 +84,10 @@
 			"t37": "dv",
 			// interceptor
 			"t38": "aa",
+			// jet bomber (keiun)
+			"t39": "dv",
+			// jet bomber (kikka)
+			"t40": "dv",
 			// all types
 			"tall": "type",
 		},
