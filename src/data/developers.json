@@ -519,7 +519,8 @@
 				"links" : {
 					"gh" :"https://github.com/Mikenzb",
 					"wk" :"http://kancolle.wikia.com/wiki/User:Mikenzb",
-					"st" :"http://steamcommunity.com/id/mikenzb"
+					"st" :"http://steamcommunity.com/id/mikenzb",
+					"wb" :"http://forum.worldofwarships.asia/index.php?/user/mikenzb-2007237814/"
 				}
 			},
 			{
@@ -853,6 +854,9 @@
 	"AboutDonators": [
 		["y7h65", ""],
 		["Rexlent", ""],
-		["Tempest 101", "$2"]
+		["Tempest 101", "$2"],
+		["mikenzb", "$15"],
+		["Lychwee", "$2.30"],
+		["Ingarson", "$8"]
 	]
 }
