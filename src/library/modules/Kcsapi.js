@@ -303,9 +303,15 @@ Previously known as "Reactor"
 					case 60: PlayerManager.consumables.presents = thisItem.api_count; break;
 					case 62: PlayerManager.consumables.hishimochi = thisItem.api_count; break;
 					case 64: PlayerManager.consumables.expansion = thisItem.api_count; break;
+					case 65: PlayerManager.consumables.protoCatapult = thisItem.api_count; break;
+					case 66: PlayerManager.consumables.ration = thisItem.api_count; break;
+					case 67: PlayerManager.consumables.resupplier = thisItem.api_count; break;
 					case 68: PlayerManager.consumables.pike = thisItem.api_count; break;
 					case 69: PlayerManager.consumables.mackerel = thisItem.api_count; break;
 					case 70: PlayerManager.consumables.skilledCrew = thisItem.api_count; break;
+					case 71: PlayerManager.consumables.Nengine = thisItem.api_count; break;
+					case 72: PlayerManager.consumables.decMat = thisItem.api_count; break;
+					case 73: PlayerManager.consumables.ConstCo = thisItem.api_count; break;
 					case 74: PlayerManager.consumables.newAircraftBlueprint = thisItem.api_count; break;
 					default: break;
 				}
