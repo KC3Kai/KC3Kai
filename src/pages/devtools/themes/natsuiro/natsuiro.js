@@ -432,6 +432,12 @@
 			}
 		});
 
+		// HQ Info Toggle
+		$(".consumables").on("click",function(){
+			ConfigManager.scrollHqInfoPage();
+			NatsuiroListeners.Consumables();
+		});
+
 		// eLoS Toggle
 		$(".summary-eqlos").on("click",function(){
 			ConfigManager.scrollElosMode();
@@ -855,8 +861,18 @@
 			$(".count_buckets").text( PlayerManager.consumables.buckets );
 			$(".count_screws").text( PlayerManager.consumables.screws );
 			$(".count_torch").text( PlayerManager.consumables.torch );
+			$(".count_devmats").text( PlayerManager.consumables.devmats );
+			$(".count_fuel").text( PlayerManager.hq.lastMaterial[0] );
+			$(".count_steel").text( PlayerManager.hq.lastMaterial[2] );
+			$(".count_ammo").text( PlayerManager.hq.lastMaterial[1] );
+			$(".count_bauxite").text( PlayerManager.hq.lastMaterial[3] );
+			// More pages could be added, see `api_get_member/useitem` in Kcsapi.js
+			// $(".count_medals").text( PlayerManager.consumables.medals || "?" );
+			// $(".count_blueprints").text( PlayerManager.consumables.blueprints || "?" );
 			// $(".count_pike").text( PlayerManager.consumables.pike || "?" );
-			// $(".count_saury").text( PlayerManager.consumables.saury || "?" );
+			// $(".count_saury").text( PlayerManager.consumables.mackerel || "?" );
+			$(".consumables .consumable").hide();
+			$(".consumables .consumable.page{0}".format(ConfigManager.hqInfoPage||0)).show();
 		},
 
 		ShipSlots: function(data){

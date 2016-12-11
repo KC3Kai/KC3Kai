@@ -373,6 +373,12 @@ html,body {
 	line-height:20px;
 	color:#aaa;
 }
+.module.activity .consumables .consumable.page1 {
+	display:block;
+}
+.module.activity .consumables .consumable.page2 {
+	display:none;
+}
 
 /* Expedition */
 .module.activity .expeditions {

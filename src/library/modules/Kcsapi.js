@@ -291,8 +291,22 @@ Previously known as "Reactor"
 			for(var ctr in response.api_data){
 				thisItem = response.api_data[ctr];
 				switch(thisItem.api_id){
+					case 10: PlayerManager.consumables.furniture200 = thisItem.api_count; break;
+					case 11: PlayerManager.consumables.furniture400 = thisItem.api_count; break;
+					case 12: PlayerManager.consumables.furniture700 = thisItem.api_count; break;
+					case 52: PlayerManager.consumables.fairy = thisItem.api_count; break;
+					case 54: PlayerManager.consumables.mamiya = thisItem.api_count; break;
+					case 56: PlayerManager.consumables.chocolate = thisItem.api_count; break;
+					case 57: PlayerManager.consumables.medals = thisItem.api_count; break;
+					case 58: PlayerManager.consumables.blueprints = thisItem.api_count; break;
+					case 59: PlayerManager.consumables.irako = thisItem.api_count; break;
+					case 60: PlayerManager.consumables.presents = thisItem.api_count; break;
+					case 62: PlayerManager.consumables.hishimochi = thisItem.api_count; break;
+					case 64: PlayerManager.consumables.expansion = thisItem.api_count; break;
 					case 68: PlayerManager.consumables.pike = thisItem.api_count; break;
-					case 69: PlayerManager.consumables.saury = thisItem.api_count; break;
+					case 69: PlayerManager.consumables.mackerel = thisItem.api_count; break;
+					case 70: PlayerManager.consumables.skilledCrew = thisItem.api_count; break;
+					case 74: PlayerManager.consumables.newAircraftBlueprint = thisItem.api_count; break;
 					default: break;
 				}
 			}
