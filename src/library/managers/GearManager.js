@@ -17,6 +17,21 @@ Saves and loads list to and from localStorage
 		antiAirFighterType2Ids: [6,7,8,11,45,57],
 		interceptorsType3Ids: [38],
 
+		carrierSupplyBauxiteCostPerSlot: 5,
+		// LBAS mechanism still in progress
+		landBaseSupplyBauxiteCostPerSlot: 5,
+		landBaseSupplyFuelCostPerSlot: 3,
+		landBaseSetPlaneBauxiteCostPerSlot: 1,
+		landBaseBomberSortieFuelCostPerSlot: 1.5,
+		landBaseReconnSortieFuelCostPerSlot: 1,
+		landBaseOtherSortieFuelCostPerSlot: 1,
+		landBaseBomberSortieAmmoCostPerSlot: 0.7,
+		landBaseReconnSortieAmmoCostPerSlot: 0.75,
+		landBaseOtherSortieAmmoCostPerSlot: 0.65,
+		landBaseBomberMaxSlot: 18,
+		landBaseReconnMaxSlot: 4,
+		landBaseOtherMaxSlot: 18,
+
 		// Get a specific item by ID
 		// NOTE: if you want to write testcases, avoid setting KC3GearManager.list["x0"]
 		// because it'll never be retrieved by "get(0)"

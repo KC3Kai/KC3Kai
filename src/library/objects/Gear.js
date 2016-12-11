@@ -210,9 +210,10 @@ KC3改 Equipment Object
 	};
 
 	KC3Gear.prototype.bauxiteCost = function(slotCurrent, slotMaxeq){
+		// Only used for the slot already equiped aircrafts, unused for now
 		if(this.itemId===0){ return 0; }
-		if( KC3GearManager.antiAirFighterType2Ids.indexOf( this.master().api_type[2] ) > -1){
-			return 5 * (slotMaxeq - slotCurrent);
+		if( KC3GearManager.carrierBasedAircraftType3Ids.indexOf( this.master().api_type[3] ) > -1){
+			return KC3GearManager.carrierSupplyBauxiteCostPerSlot * (slotMaxeq - slotCurrent);
 		}
 		return 0;
 	};
