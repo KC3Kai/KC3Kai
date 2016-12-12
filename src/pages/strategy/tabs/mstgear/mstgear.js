@@ -110,6 +110,15 @@
 			if(gearData.api_rare===0){
 				$(".tab_mstgear .gearInfo .rarity").append("&#10031;");
 			}
+			if(gear_id<500 && gearData.api_broken.length>=4){
+				$(".tab_mstgear .gearInfo .scrap .fuel span").text(gearData.api_broken[0]);
+				$(".tab_mstgear .gearInfo .scrap .ammo span").text(gearData.api_broken[1]);
+				$(".tab_mstgear .gearInfo .scrap .steel span").text(gearData.api_broken[2]);
+				$(".tab_mstgear .gearInfo .scrap .bauxite span").text(gearData.api_broken[3]);
+				$(".tab_mstgear .gearInfo .scrap").show();
+			} else {
+				$(".tab_mstgear .gearInfo .scrap").hide();
+			}
 			
 			$(".tab_mstgear .gearInfo .name").text( "[{0}] {1}".format(
 				gear_id, KC3Meta.gearName(gearData.api_name)) );
