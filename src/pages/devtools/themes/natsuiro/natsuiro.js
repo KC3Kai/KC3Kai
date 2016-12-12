@@ -867,12 +867,15 @@
 			$(".count_ammo").text( PlayerManager.hq.lastMaterial[1] );
 			$(".count_bauxite").text( PlayerManager.hq.lastMaterial[3] );
 			// More pages could be added, see `api_get_member/useitem` in Kcsapi.js
-			// $(".count_medals").text( PlayerManager.consumables.medals || "?" );
-			// $(".count_blueprints").text( PlayerManager.consumables.blueprints || "?" );
-			// $(".count_pike").text( PlayerManager.consumables.pike || "?" );
-			// $(".count_saury").text( PlayerManager.consumables.mackerel || "?" );
+			$(".count_1classMedals").text( PlayerManager.consumables.firstClassMedals || 0 );
+			$(".count_medals").text( PlayerManager.consumables.medals || 0 );
+			$(".count_reinforcement").text( PlayerManager.consumables.reinforceExpansion || 0 );
+			$(".count_blueprints").text( PlayerManager.consumables.blueprints || 0 );
+			$(".count_fairy").text( PlayerManager.consumables.furnitureFairy || 0 );
+			$(".count_morale").text( (PlayerManager.consumables.mamiya || 0)
+				+ (PlayerManager.consumables.irako || 0) );
 			$(".consumables .consumable").hide();
-			$(".consumables .consumable.page{0}".format(ConfigManager.hqInfoPage||0)).show();
+			$(".consumables .consumable.page{0}".format(ConfigManager.hqInfoPage||1)).show();
 		},
 
 		ShipSlots: function(data){

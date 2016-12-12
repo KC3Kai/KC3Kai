@@ -223,7 +223,7 @@ Retreives when needed to apply on components
 		
 		// Toggle HQ Info Page
 		scrollHqInfoPage :function(){
-			this.hqInfoPage = (this.hqInfoPage % 2) + 1;
+			this.hqInfoPage = (this.hqInfoPage % 3) + 1;
 			this.save();
 		},
 		

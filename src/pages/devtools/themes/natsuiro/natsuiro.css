@@ -379,6 +379,9 @@ html,body {
 .module.activity .consumables .consumable.page2 {
 	display:none;
 }
+.module.activity .consumables .consumable.page3 {
+	display:none;
+}
 
 /* Expedition */
 .module.activity .expeditions {
