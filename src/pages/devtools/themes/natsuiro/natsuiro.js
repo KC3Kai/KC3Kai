@@ -741,6 +741,8 @@
 			.removeClass("nc_maelstrom")
 			.removeClass("nc_select")
 			.removeClass("nc_avoid");
+		$(".module.activity .sortie_nodes .boss_node").removeAttr("style");
+		$(".module.activity .sortie_nodes .boss_node").hide();
 		$(".module.activity .node_types").hide();
 		$(".battle_support,.battle_drop",".module.activity").find('img')
 			.css("visibility","");
@@ -1537,6 +1539,11 @@
 			$(".module.activity .battle_support").show();
 
 			console.debug("Processing next node", thisNode);
+			if(thisNode.isBoss()){
+				$(".module.activity .sortie_nodes .boss_node .boss_circle").text(nodeId);
+				$(".module.activity .sortie_nodes .boss_node").css("left", 20 * (numNodes-1));
+				$(".module.activity .sortie_nodes .boss_node").show();
+			}
 			switch(thisNode.type){
 				// Battle node
 				case "battle":
