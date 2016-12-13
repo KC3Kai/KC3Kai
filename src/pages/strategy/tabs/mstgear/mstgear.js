@@ -141,20 +141,27 @@
 				["ls", "saku"],
 				["rn", "leng"],
 				["or", "distance"],
+				["kk", "cost"],
 			], function(index, sdata){
 				if((gearData["api_"+sdata[1]]||0) > 0
-					&& (sdata[0]!=="or"
-					|| (sdata[0]==="or" &&
+					&& (["or","kk"].indexOf(sdata[0]) < 0
+					|| (["or","kk"].indexOf(sdata[0]) >=0 &&
 						KC3GearManager.landBasedAircraftType3Ids.indexOf(gearData.api_type[3])>-1) )
 				){
 					statBox = $(".tab_mstgear .factory .stat").clone();
 					$("img", statBox).attr("src", "../../../../assets/img/stats/"+sdata[0]+".png");
-					if(sdata[0]==="rn"){
+					if(sdata[0]==="rn"){ // For range length
 						$(".stat_value", statBox).text( [
 							"", "S", "M", "L", "VL"
 						][gearData["api_"+sdata[1]]] );
-					}else if(sdata[0]==="sp"){
+					}else if(sdata[0]==="sp"){ // For speed
 						$(".stat_value", statBox).text( gearData["api_"+sdata[1]]==10?"F":"S" );
+					}else if(sdata[0]==="kk"){ // For bauxite cost when deploy to LBAS
+						var landSlot = KC3GearManager.landBaseReconnType2Ids.indexOf(gearData.api_type[2])>-1 ?
+							KC3GearManager.landBaseReconnMaxSlot : KC3GearManager.landBaseOtherMaxSlot;
+						var deployCost = gearData["api_"+sdata[1]] * landSlot;
+						$(".stat_value", statBox).text( "{0}(={1}*{2})".format(deployCost, gearData["api_"+sdata[1]], landSlot) );
+						$(statBox).css("width", "118px");
 					}else{
 						$(".stat_value", statBox).text( gearData["api_"+sdata[1]] );
 					}
