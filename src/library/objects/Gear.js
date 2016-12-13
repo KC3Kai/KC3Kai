@@ -93,7 +93,7 @@ KC3改 Equipment Object
 			var airAverageTable = ConfigManager.air_average[typInd];
 			// if new type added to default, have to reset to default
 			if(typeof airAverageTable === 'undefined') {
-				var defaultTable = ConfigManager.defaults()['air_average'][typInd];
+				var defaultTable = ConfigManager.defaults().air_average[typInd];
 				if(typeof defaultTable !== 'undefined') {
 					ConfigManager.resetValueOf('air_average');
 					airAverageTable = defaultTable;
@@ -135,7 +135,7 @@ KC3改 Equipment Object
 			var airBoundTable = ConfigManager.air_bounds[typInd];
 			// if new type added to default, have to reset to default
 			if(typeof airBoundTable === 'undefined') {
-				var defaultTable = ConfigManager.defaults()['air_bounds'][typInd];
+				var defaultTable = ConfigManager.defaults().air_bounds[typInd];
 				if(typeof defaultTable !== 'undefined') {
 					ConfigManager.resetValueOf('air_bounds');
 					airBoundTable = defaultTable;
