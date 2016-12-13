@@ -100,7 +100,7 @@ KC3改 Equipment Object
 					console.info("Setting 'air_average' reset to default for missing type:", typInd);
 				} else {
 					console.warn("No 'air_average' setting found for type:", typInd);
-					return [0,0];
+					return 0;
 				}
 			}
 
