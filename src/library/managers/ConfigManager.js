@@ -95,7 +95,12 @@ Retreives when needed to apply on components
 						[0.026, 0.845], // 0
 						[1, 1.715], [3.212, 3.984], [6.845, 7.504], // 3
 						[11.205, 11.786], [16.639, 17], [16.999, 17.205], [24.679, 25.411] // 7
-					]
+					],
+					"57": [  // jet fighter-bomber
+						[0,0], // 0
+						[0,1], [0,1], [0,1], // 3
+						[1,2], [1,2], [1,2], [1,3]	// 7
+					]  // assumed to be equivalent to regular bombers unless proved otherwise
 				},
 				
 				salt_list 		: new KC3ShipMasterList(),
