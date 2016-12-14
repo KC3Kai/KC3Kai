@@ -1864,7 +1864,7 @@
 				var fightersBefore, fightersAfter, bombersBefore, bombersAfter;
 				if(!!thisNode.planeJetFighters && thisNode.planeJetFighters.player[0] > 0){
 					$(".fighter_ally .plane_icon img").attr("src", "../../../../assets/img/items/40.png");
-					fightersBefore = thisNode.planeFighters.player[0] + thisNode.planeJetFighters.player[1];
+					fightersBefore = thisNode.planeFighters.player[0] + thisNode.planeJetFighters.player[1] + thisNode.planeJetBombers.player[1];
 					$(".fighter_ally .plane_before").text(fightersBefore);
 					fightersAfter = thisNode.planeFighters.player[1] + thisNode.planeJetFighters.player[1];
 					if(fightersAfter > 0){
@@ -1873,7 +1873,7 @@
 				}
 				if(!!thisNode.planeJetFighters && thisNode.planeJetFighters.abyssal[0] > 0){
 					$(".fighter_enemy .plane_icon img").attr("src", "../../../../assets/img/items/40.png");
-					fightersBefore = thisNode.planeFighters.abyssal[0] + thisNode.planeJetFighters.abyssal[1];
+					fightersBefore = thisNode.planeFighters.abyssal[0] + thisNode.planeJetFighters.abyssal[1] + thisNode.planeJetBombers.abyssal[1];
 					$(".fighter_enemy .plane_before").text(fightersBefore);
 					fightersAfter = thisNode.planeFighters.abyssal[1] + thisNode.planeJetFighters.abyssal[1];
 					if(fightersAfter > 0){
@@ -2317,7 +2317,7 @@
 			var fightersBefore, fightersAfter, bombersBefore, bombersAfter;
 			if(!!thisPvP.planeJetFighters && thisPvP.planeJetFighters.player[0] > 0){
 				$(".fighter_ally .plane_icon img").attr("src", "../../../../assets/img/items/40.png");
-				fightersBefore = thisPvP.planeFighters.player[0] + thisPvP.planeJetFighters.player[1];
+				fightersBefore = thisPvP.planeFighters.player[0] + thisPvP.planeJetFighters.player[1] + thisPvP.planeJetBombers.player[1];
 				$(".fighter_ally .plane_before").text(fightersBefore);
 				fightersAfter = thisPvP.planeFighters.player[1] + thisPvP.planeJetFighters.player[1];
 				if(fightersAfter > 0){
@@ -2326,7 +2326,7 @@
 			}
 			if(!!thisPvP.planeJetFighters && thisPvP.planeJetFighters.abyssal[0] > 0){
 				$(".fighter_enemy .plane_icon img").attr("src", "../../../../assets/img/items/40.png");
-				fightersBefore = thisPvP.planeFighters.abyssal[0] + thisPvP.planeJetFighters.abyssal[1];
+				fightersBefore = thisPvP.planeFighters.abyssal[0] + thisPvP.planeJetFighters.abyssal[1] + thisPvP.planeJetBombers.abyssal[1];
 				$(".fighter_enemy .plane_before").text(fightersBefore);
 				fightersAfter = thisPvP.planeFighters.abyssal[1] + thisPvP.planeJetFighters.abyssal[1];
 				if(fightersAfter > 0){
