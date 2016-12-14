@@ -1861,38 +1861,39 @@
 				}
 
 				// if jet plane phase found
+				var fightersBefore, fightersAfter, bombersBefore, bombersAfter;
 				if(!!thisNode.planeJetFighters && thisNode.planeJetFighters.player[0] > 0){
 					$(".fighter_ally .plane_icon img").attr("src", "../../../../assets/img/items/40.png");
-					var fightersBefore = thisNode.planeFighters.player[0] + thisNode.planeJetFighters.player[1];
+					fightersBefore = thisNode.planeFighters.player[0] + thisNode.planeJetFighters.player[1];
 					$(".fighter_ally .plane_before").text(fightersBefore);
-					var fightersAfter = thisNode.planeFighters.player[1] + thisNode.planeJetFighters.player[1];
+					fightersAfter = thisNode.planeFighters.player[1] + thisNode.planeJetFighters.player[1];
 					if(fightersAfter > 0){
 						$(".fighter_ally .plane_after").text("-"+fightersAfter);
 					}
 				}
 				if(!!thisNode.planeJetFighters && thisNode.planeJetFighters.abyssal[0] > 0){
 					$(".fighter_enemy .plane_icon img").attr("src", "../../../../assets/img/items/40.png");
-					var fightersBefore = thisNode.planeFighters.abyssal[0] + thisNode.planeJetFighters.abyssal[1];
+					fightersBefore = thisNode.planeFighters.abyssal[0] + thisNode.planeJetFighters.abyssal[1];
 					$(".fighter_enemy .plane_before").text(fightersBefore);
-					var fightersAfter = thisNode.planeFighters.abyssal[1] + thisNode.planeJetFighters.abyssal[1];
+					fightersAfter = thisNode.planeFighters.abyssal[1] + thisNode.planeJetFighters.abyssal[1];
 					if(fightersAfter > 0){
 						$(".fighter_enemy .plane_after").text("-"+fightersAfter);
 					}
 				}
 				if(!!thisNode.planeJetBombers && thisNode.planeJetBombers.player[0] > 0){
 					$(".bomber_ally .plane_icon img").attr("src", "../../../../assets/img/items/39.png");
-					var bombersBefore = thisNode.planeBombers.player[0] + thisNode.planeJetBombers.player[1];
+					bombersBefore = thisNode.planeBombers.player[0] + thisNode.planeJetBombers.player[1];
 					$(".bomber_ally .plane_before").text(bombersBefore);
-					var bombersAfter = thisNode.planeBombers.player[1] + thisNode.planeJetBombers.player[1];
+					bombersAfter = thisNode.planeBombers.player[1] + thisNode.planeJetBombers.player[1];
 					if(bombersAfter > 0){
 						$(".bomber_ally .plane_after").text("-"+bombersAfter);
 					}
 				}
 				if(!!thisNode.planeJetBombers && thisNode.planeJetBombers.abyssal[0] > 0){
 					$(".bomber_enemy .plane_icon img").attr("src", "../../../../assets/img/items/39.png");
-					var bombersBefore = thisNode.planeBombers.abyssal[0] + thisNode.planeJetBombers.abyssal[1];
+					bombersBefore = thisNode.planeBombers.abyssal[0] + thisNode.planeJetBombers.abyssal[1];
 					$(".bomber_enemy .plane_before").text(bombersBefore);
-					var bombersAfter = thisNode.planeBombers.abyssal[1] + thisNode.planeJetBombers.abyssal[1];
+					bombersAfter = thisNode.planeBombers.abyssal[1] + thisNode.planeJetBombers.abyssal[1];
 					if(bombersAfter > 0){
 						$(".bomber_enemy .plane_after").text("-"+bombersAfter);
 					}
@@ -2313,38 +2314,39 @@
 			}
 
 			// if jet plane phase found
+			var fightersBefore, fightersAfter, bombersBefore, bombersAfter;
 			if(!!thisPvP.planeJetFighters && thisPvP.planeJetFighters.player[0] > 0){
 				$(".fighter_ally .plane_icon img").attr("src", "../../../../assets/img/items/40.png");
-				var fightersBefore = thisPvP.planeFighters.player[0] + thisPvP.planeJetFighters.player[1];
+				fightersBefore = thisPvP.planeFighters.player[0] + thisPvP.planeJetFighters.player[1];
 				$(".fighter_ally .plane_before").text(fightersBefore);
-				var fightersAfter = thisPvP.planeFighters.player[1] + thisPvP.planeJetFighters.player[1];
+				fightersAfter = thisPvP.planeFighters.player[1] + thisPvP.planeJetFighters.player[1];
 				if(fightersAfter > 0){
 					$(".fighter_ally .plane_after").text("-"+fightersAfter);
 				}
 			}
 			if(!!thisPvP.planeJetFighters && thisPvP.planeJetFighters.abyssal[0] > 0){
 				$(".fighter_enemy .plane_icon img").attr("src", "../../../../assets/img/items/40.png");
-				var fightersBefore = thisPvP.planeFighters.abyssal[0] + thisPvP.planeJetFighters.abyssal[1];
+				fightersBefore = thisPvP.planeFighters.abyssal[0] + thisPvP.planeJetFighters.abyssal[1];
 				$(".fighter_enemy .plane_before").text(fightersBefore);
-				var fightersAfter = thisPvP.planeFighters.abyssal[1] + thisPvP.planeJetFighters.abyssal[1];
+				fightersAfter = thisPvP.planeFighters.abyssal[1] + thisPvP.planeJetFighters.abyssal[1];
 				if(fightersAfter > 0){
 					$(".fighter_enemy .plane_after").text("-"+fightersAfter);
 				}
 			}
 			if(!!thisPvP.planeJetBombers && thisPvP.planeJetBombers.player[0] > 0){
 				$(".bomber_ally .plane_icon img").attr("src", "../../../../assets/img/items/39.png");
-				var bombersBefore = thisPvP.planeBombers.player[0] + thisPvP.planeJetBombers.player[1];
+				bombersBefore = thisPvP.planeBombers.player[0] + thisPvP.planeJetBombers.player[1];
 				$(".bomber_ally .plane_before").text(bombersBefore);
-				var bombersAfter = thisPvP.planeBombers.player[1] + thisPvP.planeJetBombers.player[1];
+				bombersAfter = thisPvP.planeBombers.player[1] + thisPvP.planeJetBombers.player[1];
 				if(bombersAfter > 0){
 					$(".bomber_ally .plane_after").text("-"+bombersAfter);
 				}
 			}
 			if(!!thisPvP.planeJetBombers && thisPvP.planeJetBombers.abyssal[0] > 0){
 				$(".bomber_enemy .plane_icon img").attr("src", "../../../../assets/img/items/39.png");
-				var bombersBefore = thisPvP.planeBombers.abyssal[0] + thisPvP.planeJetBombers.abyssal[1];
+				bombersBefore = thisPvP.planeBombers.abyssal[0] + thisPvP.planeJetBombers.abyssal[1];
 				$(".bomber_enemy .plane_before").text(bombersBefore);
-				var bombersAfter = thisPvP.planeBombers.abyssal[1] + thisPvP.planeJetBombers.abyssal[1];
+				bombersAfter = thisPvP.planeBombers.abyssal[1] + thisPvP.planeJetBombers.abyssal[1];
 				if(bombersAfter > 0){
 					$(".bomber_enemy .plane_after").text("-"+bombersAfter);
 				}
