@@ -31,7 +31,8 @@ Saves and loads list to and from localStorage
 		landBaseOtherMaxSlot: 18,
 		landBaseReconnType2Ids: [9,10,41],
 		// Jet aircraft mechanism still in progress
-		jetBomberSteelCostPerSlot: 2.6,
+		jetBomberSteelCostRatioPerSlot: 0.2,
+		// steel_consumption = floor(api_cost * current_slot * 0.2)
 
 		// Get a specific item by ID
 		// NOTE: if you want to write testcases, avoid setting KC3GearManager.list["x0"]
