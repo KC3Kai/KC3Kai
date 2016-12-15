@@ -321,6 +321,15 @@ Used by SortieManager
 		this.detection = KC3Meta.detection( battleData.api_search[0] );
 		this.engagement = KC3Meta.engagement( battleData.api_formation[2] );
 		
+		// LBAS attack phase, including jet plane assault
+		this.lbasFlag = typeof battleData.api_air_base_attack != "undefined";
+		if(this.lbasFlag){
+			// Array of engaged land bases
+			this.airBaseAttack = battleData.api_air_base_attack;
+			// No plane from, just injecting from far away air base :)
+			this.airBaseJetInjection = battleData.api_air_base_injection;
+		}
+		
 		// Air phases
 		var
 			planePhase  = battleData.api_kouku.api_stage1 || {

@@ -764,6 +764,8 @@
 		$(".module.activity .battle_eformation").css("-webkit-transform", "rotate(0deg)");
 		$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support.png");
 		$(".module.activity .battle_support").attr("title", KC3Meta.term("BattleSupportExped"));
+		$(".module.activity .battle_support .support_lbas").hide();
+		$(".module.activity .battle_support .support_exped").hide();
 		$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci.png");
 		$(".module.activity .battle_aaci").attr("title", KC3Meta.term("BattleAntiAirCutIn"));
 		$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
@@ -1818,8 +1820,18 @@
 
 			// Day battle-only environment
 			if(!thisNode.startNight){
-				// If support expedition is triggered on this battle
-				$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support"+["-x",""][thisNode.supportFlag&1]+".png");
+				// If support expedition or LBAS is triggered on this battle
+				$(".module.activity .battle_support img").attr("src",
+					"../../../../assets/img/ui/dark_support"+["-x",""][(thisNode.supportFlag||thisNode.lbasFlag)&1]+".png");
+				if(thisNode.supportFlag && !!thisNode.supportInfo){
+					var fleetId = (thisNode.supportInfo.api_support_airatack||{}).api_deck_id
+						|| (thisNode.supportInfo.api_support_hourai||{}).api_deck_id || "?";
+					$(".module.activity .battle_support .support_exped").text(fleetId);
+					$(".module.activity .battle_support .support_exped").show();
+				}
+				if(thisNode.lbasFlag){
+					$(".module.activity .battle_support .support_lbas").show();
+				}
 				$(".module.activity .battle_support").attr("title", buildSupportAttackTooltip(thisNode));
 
 				// If anti-air CI fire is triggered
@@ -2865,7 +2877,28 @@
 			}
 			supportTips = KC3Meta.term("BattleSupportTips").format(fleetId, KC3Meta.support(attackType));
 		}
-		return supportTips || KC3Meta.term("BattleSupportExped");
+		var lbasTips = "";
+		if(thisNode.lbasFlag && !!thisNode.airBaseAttack){
+			if(!!thisNode.airBaseJetInjection){
+				var jet = thisNode.airBaseJetInjection;
+				var jetPlanes = jet.api_stage1.api_f_count;
+				var jetShotdown = jet.api_stage1.api_e_lostcount + jet.api_stage2.api_e_lostcount;
+				var jetDamage = Math.floor(jet.api_stage3.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
+				var jetLost = jet.api_stage1.api_f_lostcount + jet.api_stage2.api_f_lostcount;
+				lbasTips += KC3Meta.term("BattleLbasJetSupportTips").format(jetPlanes, jetShotdown, jetDamage, jetLost);
+			}
+			$.each(thisNode.airBaseAttack, function(i, ab){
+				var baseId = ab.api_base_id;
+				var planes = ab.api_stage1.api_f_count;
+				var shotdown = ab.api_stage1.api_e_lostcount + ab.api_stage2.api_e_lostcount;
+				var damage = Math.floor(ab.api_stage3.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
+				var lost = ab.api_stage1.api_f_lostcount + ab.api_stage2.api_f_lostcount;
+				if(!!lbasTips) { lbasTips += "\n"; }
+				lbasTips += KC3Meta.term("BattleLbasSupportTips").format(planes, baseId, shotdown, damage, lost);
+			});
+			if(!!supportTips && !!lbasTips) { supportTips += "\n"; }
+		}
+		return (supportTips + lbasTips) || KC3Meta.term("BattleSupportExped");
 	}
 
 	function buildAntiAirCutinTooltip(thisNode) {
