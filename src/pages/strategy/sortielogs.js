@@ -493,9 +493,18 @@
 								$(".node_drop img", nodeBox).attr("src", "../../assets/img/ui/shipdrop-x.png");
 							}
 							
-							// Support Exped Triggered
-							if(battle.data.api_support_flag > 0){
+							// Support Exped/LBAS Triggered
+							if(battleData.api_support_flag > 0 || !!battleData.api_air_base_attack){
 								$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support.png");
+								if(battleData.api_support_flag > 0 && !!battleData.api_support_info){
+									var fleetId = (battleData.api_support_info.api_support_airatack||{}).api_deck_id
+										|| (battleData.api_support_info.api_support_hourai||{}).api_deck_id || "?";
+									$(".node_support .exped", nodeBox).text(fleetId);
+									$(".node_support .exped", nodeBox).show();
+								}
+								if(!!battleData.api_air_base_attack){
+									$(".node_support .lbas", nodeBox).show();
+								}
 							}else{
 								$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support-x.png");
 							}
