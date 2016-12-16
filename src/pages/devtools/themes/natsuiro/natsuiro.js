@@ -436,7 +436,7 @@
 		$(".summary-eqlos").on("click",function(){
 			ConfigManager.scrollElosMode();
 			$(".summary-eqlos img", self.domElement).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png");
-			$(".summary-eqlos .summary_text").text( Math.round(((selectedFleet < 5) ? PlayerManager.fleets[selectedFleet-1].eLoS() : PlayerManager.fleets[0].eLoS()+PlayerManager.fleets[1].eLoS()) * 100) / 100 );
+			NatsuiroListeners.Fleet();
 		}).addClass("hover");
 		// Update with configured icon when non-default
 		if(ConfigManager.elosFormula !== 3){
@@ -1234,6 +1234,19 @@
 			$(".summary-eqlos .summary_text").text( FleetSummary.elos );
 			$(".summary-airfp .summary_text").text( FleetSummary.air );
 			$(".summary-speed .summary_text").text( FleetSummary.speed );
+			// F33 different factors for now: 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
+			// Not support for combined fleet yet as factor not sure for event maps
+			if(ConfigManager.elosFormula === 4 && selectedFleet < 5){
+				var f33x3 = Math.round( CurrentFleet.eLos4(3) * 100) / 100;
+				var f33x4 = Math.round( CurrentFleet.eLos4(4) * 100) / 100;
+				$(".summary-eqlos").attr("title",
+					"x4={0} \t3-5(G~28), 6-1(E~16, F~25)\nx3={1} \t6-2(F~50, H~40), 6-3(H~38)"
+					.format(f33x4, f33x3)
+				);
+			} else {
+				$(".summary-eqlos").attr("title", "");
+			}
+
 
 			// Clear status reminder coloring
 			$(".module.status .status_text").removeClass("good");
