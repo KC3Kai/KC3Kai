@@ -1237,8 +1237,8 @@
 			// F33 different factors for now: 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
 			// Not support for combined fleet yet as factor not sure for event maps
 			if(ConfigManager.elosFormula === 4 && selectedFleet < 5){
-				var f33x3 = Math.round( CurrentFleet.eLos4(3) * 100) / 100;
-				var f33x4 = Math.round( CurrentFleet.eLos4(4) * 100) / 100;
+				var f33x3 = Math.round( PlayerManager.fleets[selectedFleet-1].eLos4(3) * 100) / 100;
+				var f33x4 = Math.round( PlayerManager.fleets[selectedFleet-1].eLos4(4) * 100) / 100;
 				$(".summary-eqlos").attr("title",
 					"x4={0} \t3-5(G~28), 6-1(E~16, F~25)\nx3={1} \t6-2(F~50, H~40), 6-3(H~38)"
 					.format(f33x4, f33x3)
