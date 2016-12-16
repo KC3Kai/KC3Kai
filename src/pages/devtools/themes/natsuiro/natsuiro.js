@@ -1240,7 +1240,7 @@
 				var f33x3 = Math.round( PlayerManager.fleets[selectedFleet-1].eLos4(3) * 100) / 100;
 				var f33x4 = Math.round( PlayerManager.fleets[selectedFleet-1].eLos4(4) * 100) / 100;
 				$(".summary-eqlos").attr("title",
-					"x4={0} \t3-5(G~28), 6-1(E~16, F~25)\nx3={1} \t6-2(F~50, H~40), 6-3(H~38)"
+					"x4={0} \t3-5(G>28), 6-1(E>16, F>25)\nx3={1} \t6-2(F<43/>50, H>40), 6-3(H>38)"
 					.format(f33x4, f33x3)
 				);
 			} else {
