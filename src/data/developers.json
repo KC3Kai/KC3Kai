@@ -848,6 +848,16 @@
 			"name": "Mike Koenig",
 			"desc": ["AboutSourceHeartSound"],
 			"link": "http://soundbible.com/1707-Hearbeat-2.html"
+		},
+		{
+			"name": "欧米嘉·风焰",
+			"desc": ["AboutSampleBattleData"],
+			"link": "https://github.com/KC3Kai/KC3Kai/issues/1652#issuecomment-266793051"
+		},
+		{
+			"name": "yukixz",
+			"desc": ["AboutCompleteMapNodes"],
+			"link": "https://github.com/yukixz/kcmap"
 		}
 	],
 	
