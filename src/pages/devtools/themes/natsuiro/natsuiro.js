@@ -8,6 +8,7 @@
 	// Flags
 	var currentLayout = "";
 	var isRunning = false;
+	var shownAPIError = false;
 
 	// Interface values
 	var selectedFleet = 1;
@@ -15,15 +16,13 @@
 	var plannerIsGreatSuccess = false;
 	var showCombinedFleetBars = true;
 	var isTakingScreenshot = false;
+	var overrideFocus = false;
 	
 	// a flag used by Fleet & ExpeditionStart to indicate
 	// whether a fleet info update is triggered because of
 	// sending out fleets.
 	var expeditionStarted = false;
-
-	// Auto Focus Overriding
-	var overrideFocus = false;
-
+	
 	// Critical Animation and Sound Effect
 	var critAnim = false;
 	var critSound = new Audio("../../../../assets/snd/heart.mp3");
@@ -43,6 +42,18 @@
 	// Experience Calculation
 	var mapexp = [], maplist = {}, rankFactors = [0, 0.5, 0.7, 0.8, 1, 1, 1.2],
 		newGoals, grindData, expLeft, expPerSortie;
+		
+	// Error reporting
+	var errorReport = {
+		title: "",
+		message: "",
+		stack: "",
+		request: "",
+		params: "",
+		response: "",
+		serverUtc: 0,
+		utc: 0
+	};
 
 	// make sure localStorage.expedTab is available
 	// and is in correct format.
@@ -401,6 +412,12 @@
 		// Close CatBomb modal
 		$(".modalBox").on("click", ".closebtn", function(){
 			$(this).parent().parent().fadeOut(300);
+		});
+		
+		// Download error report
+		$("#catBomb .download").on("click", function(){
+			var blob = new Blob([JSON.stringify(errorReport)], {type: "application/json;charset=utf-8"});
+			saveAs(blob, 'KC3-Error-'+Math.floor((new Date()).getTime()/1000)+".json");
 		});
 
 		// HQ name censoring
@@ -810,22 +827,57 @@
 
 		CatBomb: function(data){
 			$("#catBomb").hide();
+			
+			ConfigManager.load();
+			if (!ConfigManager.showCatBombs) return false;
+			
 			$("#catBomb .title").html( data.title );
 			$("#catBomb .description").html( data.message );
+			$("#catBomb .download").hide();
+			$("#catBomb .content").removeClass("withDownload");
 			$("#catBomb").fadeIn(300);
 		},
 		
 		APIError: function(data){
 			$("#catBomb").hide();
+			
+			ConfigManager.load();
+			if (!ConfigManager.showApiError || (!ConfigManager.repeatApiError && shownAPIError))
+				return false;
+			
+			shownAPIError = true;
+			
 			$("#catBomb .title").html( data.title );
 			$("#catBomb .description").html( data.message );
 			$("#catBomb").fadeIn(300);
+			
+			if (ConfigManager.detailedApiError) {
+				$("#catBomb .download").show();
+				$("#catBomb .content").addClass("withDownload");
+				errorReport.title = data.title;
+				errorReport.message = data.message;
+				errorReport.stack = data.stack;
+				errorReport.request = JSON.stringify(data.request);
+				errorReport.params = JSON.stringify(data.params);
+				errorReport.response = data.response;
+				errorReport.serverUtc = data.serverUtc;
+				errorReport.utc = (new Date()).getTime();
+			} else {
+				$("#catBomb .download").hide();
+				$("#catBomb .content").removeClass("withDownload");
+			}
 		},
 		
 		Bomb201: function(data){
 			$("#catBomb").hide();
+			
+			ConfigManager.load();
+			if (!ConfigManager.showCatBombs) return false;
+			
 			$("#catBomb .title").html( data.title );
 			$("#catBomb .description").html( data.message );
+			$("#catBomb .download").hide();
+			$("#catBomb .content").removeClass("withDownload");
 			$("#catBomb").fadeIn(300);
 		},
 

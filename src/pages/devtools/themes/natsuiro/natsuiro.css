@@ -65,6 +65,10 @@ html,body {
 	margin:-60px auto 0px -200px;
 	color:#c44;
 }
+#catBomb .content.withDownload {
+	margin:-70px auto 0px -200px;
+	height:140px;
+}
 #catBomb .image {
 	width:40px;
 	height:40px;
@@ -102,6 +106,12 @@ html,body {
 	width:380px;
 	margin:10px 0px 0px 0px;
 	font-size:12px;
+}
+#catBomb .download {
+	text-align: center;
+	font-weight: bold;
+	font-size: 14px;
+	margin: 2px 0px 0px 0px;
 }
 
 /* GAME UPDATE MODAL

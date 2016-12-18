@@ -160,12 +160,26 @@ Executes processing and relies on KC3Network for the triggers
 			try {
 				Kcsapi[this.call]( this.params, this.response, this.headers );
 			} catch (e) {
+				var reportParams = this.params;
+				if (typeof reportParams.api_token != 'undefined') {
+					delete reportParams.api_token;
+				}
+				
 				KC3Network.trigger("APIError", {
 					title: KC3Meta.term("APIErrorNoticeTitle"),
-					message: KC3Meta.term("APIErrorNoticeMessage").format([this.call])
+					message: KC3Meta.term("APIErrorNoticeMessage").format([this.call]),
+					stack: e.stack,
+					request: {
+						url: this.url,
+						headers: this.headers,
+						statusCode: this.statusCode
+					},
+					params: reportParams,
+					response: this.response,
+					serverUtc: serverTime
 				});
-				console.error(e.stack);/*RemoveLogging:skip*/
-				throw e;
+				
+				console.log(e.stack);
 			}
 		}
 	};
