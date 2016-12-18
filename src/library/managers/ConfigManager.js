@@ -23,7 +23,7 @@ Retreives when needed to apply on components
 				devOnlyPages		: false,
 				forceDMMLogin		: false,
 				apiRecorder			: false,
-				
+
 				showCatBombs		: true,
 				showApiError		: true,
 				repeatApiError		: true,

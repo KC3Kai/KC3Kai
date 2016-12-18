@@ -8,7 +8,7 @@
 	// Flags
 	var currentLayout = "";
 	var isRunning = false;
-	var shownAPIError = false;
+	var lastApiError = false;
 
 	// Interface values
 	var selectedFleet = 1;
@@ -52,6 +52,8 @@
 		params: "",
 		response: "",
 		serverUtc: 0,
+		kc3Version: "",
+		userAgent: "",
 		utc: 0
 	};
 
@@ -845,11 +847,14 @@
 			$("#catBomb").hide();
 			
 			ConfigManager.load();
-			if (!ConfigManager.showApiError || (!ConfigManager.repeatApiError && shownAPIError))
+			if (!ConfigManager.showApiError
+				|| (!ConfigManager.repeatApiError
+					&& !!lastApiError && lastApiError.stack === data.stack
+					)
+				) {
 				return false;
-			
-			shownAPIError = true;
-			
+			}
+			lastApiError = data;
 			$("#catBomb .title").html( data.title );
 			$("#catBomb .description").html( data.message );
 			$("#catBomb").fadeIn(300);
@@ -864,7 +869,9 @@
 				errorReport.params = JSON.stringify(data.params);
 				errorReport.response = data.response;
 				errorReport.serverUtc = data.serverUtc;
-				errorReport.utc = (new Date()).getTime();
+				errorReport.kc3Version = data.kc3Manifest;
+				errorReport.userAgent = navigator.userAgent;
+				errorReport.utc = Date.now();
 			} else {
 				$("#catBomb .download").hide();
 				$("#catBomb .content").removeClass("withDownload");
