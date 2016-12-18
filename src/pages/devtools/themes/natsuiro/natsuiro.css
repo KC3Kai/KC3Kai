@@ -840,6 +840,24 @@ ABYSS FLEET
 	white-space:nowrap;
 	overflow:hidden;
 }
+.module.activity .battle_cond_value.best {
+	color:#1f1;
+}
+.module.activity .battle_cond_value.better {
+	color:#5f5;
+}
+.module.activity .battle_cond_value.good {
+	color:#afa;
+}
+.module.activity .battle_cond_value.bad {
+	color:#faa;
+}
+.module.activity .battle_cond_value.worse {
+	color:#f77;
+}
+.module.activity .battle_cond_value.worst {
+	color:#f44;
+}
 .module.activity .battle_contact img {
 	width:15px;
 	height:15px;
