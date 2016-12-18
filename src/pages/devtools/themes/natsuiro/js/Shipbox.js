@@ -363,8 +363,21 @@ KC3改 Ship Box for Natsuiro theme
 			if(this.shipData.slots[ slot ] > 0 ||
 				(thisGear && KC3GearManager.carrierBasedAircraftType3Ids.indexOf(thisGear.master().api_type[3])>-1) ){
 				$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).text( this.shipData.slots[ slot ] );
+				var slotPercent = this.shipData.slots[slot] / (this.shipData.master().api_maxeq[slot] || 1);
+				if(slotPercent <= 0){
+					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).css("color", "#999");
+				} else if(slotPercent <= 0.25){
+					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).css("color", "#f00");
+				} else if(slotPercent <= 0.50){
+					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).css("color", "#f90");
+				} else if(slotPercent <= 0.75){
+					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).css("color", "#ff0");
+				} else {
+					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).css("color", "");
+				}
 			}else{
 				$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).text("");
+				$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).css("color", "");
 			}
 		}else{
 			$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element).hide();
