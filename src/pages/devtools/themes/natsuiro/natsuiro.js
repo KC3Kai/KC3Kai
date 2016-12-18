@@ -791,9 +791,12 @@
 		$(".module.activity .battle_drop").attr("title", "");
 		$(".module.activity .battle_cond_value").text("");
 		$(".module.activity .battle_engagement").prev().text(KC3Meta.term("BattleEngangement"));
+		$(".module.activity .battle_engagement").removeClass("good better best bad worse worst");
 		$(".module.activity .battle_engagement").attr("title", "");
 		$(".module.activity .battle_detection").prev().text(KC3Meta.term("BattleDetection"));
+		$(".module.activity .battle_detection").removeClass("good better best bad worse worst");
 		$(".module.activity .battle_detection").attr("title", "");
+		$(".module.activity .battle_airbattle").removeClass("good better best bad worse worst");
 		$(".module.activity .battle_airbattle").attr("title", "");
 		$(".module.activity .plane_text span").text("");
 		$(".module.activity .sink_icons .sunk img").hide();
@@ -1875,6 +1878,7 @@
 
 			// Battle conditions
 			$(".module.activity .battle_engagement").text( thisNode.engagement[2] || thisNode.engagement[0] );
+			$(".module.activity .battle_engagement").addClass( thisNode.engagement[1] );
 			$(".module.activity .battle_engagement").attr("title", thisNode.engagement[0] );
 			var contactSpan = buildContactPlaneSpan(thisNode.fcontactId, thisNode.fcontact, thisNode.econtactId, thisNode.econtact);
 			$(".module.activity .battle_contact").html($(contactSpan).html());
@@ -1913,8 +1917,10 @@
 
 				// Battle conditions
 				$(".module.activity .battle_detection").text( thisNode.detection[0] );
+				$(".module.activity .battle_detection").addClass( thisNode.detection[1] );
 				$(".module.activity .battle_detection").attr("title", thisNode.detection[2] || "" );
 				$(".module.activity .battle_airbattle").text( thisNode.airbattle[0] );
+				$(".module.activity .battle_airbattle").addClass( thisNode.airbattle[1] );
 				$(".module.activity .battle_airbattle").attr("title", thisNode.airbattle[2] || "" );
 
 				// Fighter phase
@@ -2363,10 +2369,13 @@
 
 			// Battle conditions
 			$(".module.activity .battle_detection").text( thisPvP.detection[0] );
+			$(".module.activity .battle_detection").addClass( thisPvP.detection[1] );
 			$(".module.activity .battle_detection").attr("title", thisPvP.detection[2] || "" );
 			$(".module.activity .battle_airbattle").text( thisPvP.airbattle[0] );
+			$(".module.activity .battle_airbattle").addClass( thisPvP.airbattle[1] );
 			$(".module.activity .battle_airbattle").attr("title", thisPvP.airbattle[2] || "" );
 			$(".module.activity .battle_engagement").text( thisPvP.engagement[2] || thisNode.engagement[0] );
+			$(".module.activity .battle_engagement").addClass( thisPvP.engagement[1] );
 			var contactSpan = buildContactPlaneSpan(thisPvP.fcontactId, thisPvP.fcontact, thisPvP.econtactId, thisPvP.econtact);
 			$(".module.activity .battle_contact").html($(contactSpan).html());
 

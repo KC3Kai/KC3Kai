@@ -636,7 +636,8 @@ Contains summary information about a fleet and its 6 ships
 			39: 0.6, // Skilled Lookouts
 			40: 0.6, // Sonar
 			41: 0.6, // Large Flying Boat
-			45: 0.6,  // Seaplane Fighter
+			45: 0.6, // Seaplane Fighter
+			57: 0.6, // Jet Bomber
 			94: 1 // Carrier-Based Reconnaissance Aircraft
 		};
 
@@ -667,12 +668,11 @@ Contains summary information about a fleet and its 6 ships
 						if (multiplier) {
 							var equipment_bonus = Math.sqrt(itemData.stars);
 
-							if (itemType === 12 ||
-								itemType === 13) {
-								// radar bonus
+							if ([12, 13].indexOf(itemType) > -1) {
+								// Radar bonus
 								equipment_bonus *= 1.25;
-							} else if (itemType === 10) {
-								// Reconnaissance Seaplane bonus
+							} else if ([9, 10].indexOf(itemType) > -1) {
+								// Reconnaissance Plane/Seaplane bonus
 								equipment_bonus *= 1.2;
 							} else {
 								// all other equipment with no bonus
