@@ -172,7 +172,7 @@
 				$(window).data("world_off", selectOffset-5);
 			}
 			$(window).data("world_max", Math.max(0, countWorlds-6));
-			updateScrollItem("world", 116)
+			updateScrollItem("world", 116);
 
 			if(self.selectedWorld !== 0){
 				// Add all maps in this world selection
