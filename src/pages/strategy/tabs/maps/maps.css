@@ -466,10 +466,22 @@
 	float:left;
 	font-weight:bold;
 }
+.tab_maps .sortie_list .node_cond_value.best {
+	color:#009900;
+}
+.tab_maps .sortie_list .node_cond_value.better {
+	color:#009900;
+}
 .tab_maps .sortie_list .node_cond_value.good {
 	color:#009900;
 }
 .tab_maps .sortie_list .node_cond_value.bad {
+	color:#f33;
+}
+.tab_maps .sortie_list .node_cond_value.worse {
+	color:#f33;
+}
+.tab_maps .sortie_list .node_cond_value.worst {
 	color:#f33;
 }
 

@@ -273,31 +273,44 @@ Provides access to data on built-in JSON files
 			}
 			return this._defeq["s" + id] || 0;
 		},
-
-		support :function(index){
-			return this._battle.support[index] || "";
+		
+		battleSeverityClass :function(battleArray){
+			return (Array.isArray(battleArray) && battleArray[0].length > 2) ?
+				battleArray.map(function(e){if(!!e[1]) return e[1];})
+					.reduce(function(p, c){if(!!c && p.indexOf(c) < 0) p.push(c);
+						return p;}, []).join(" ")
+				: "";
 		},
-
+		
+		support :function(index){
+			return (typeof index === "undefined") ? this._battle.support :
+				this._battle.support[index] || "";
+		},
+		
 		detection :function(index){
-			return this._battle.detection[index] || ["","",""];
+			return (typeof index === "undefined") ? this._battle.detection :
+				this._battle.detection[index] || ["","",""];
 		},
 		
 		airbattle :function(index){
-			return this._battle.airbattle[index] || ["","","Unknown"];
+			return (typeof index === "undefined") ? this._battle.airbattle :
+				this._battle.airbattle[index] || ["","","Unknown"];
 		},
 		
 		airraiddamage :function(index){
-			return this._battle.airraiddamage[index] || "";
+			return (typeof index === "undefined") ? this._battle.airraiddamage :
+				this._battle.airraiddamage[index] || "";
 		},
 		
 		engagement :function(index){
-			return this._battle.engagement[index] || ["","",""];
+			return (typeof index === "undefined") ? this._battle.engagement :
+				this._battle.engagement[index] || ["","",""];
 		},
 		
 		term: function(key) {
 			return (ConfigManager.info_troll && this._terms.troll[key]) || this._terms.lang[key] || key;
 		},
-
+		
 		nodeLetter : function(worldId, mapId, edgeId) {
 			var map = this._edges["World " + worldId + "-" + mapId];
 			if (typeof map !== "undefined") {

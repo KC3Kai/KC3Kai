@@ -793,12 +793,12 @@
 		$(".module.activity .battle_drop").attr("title", "");
 		$(".module.activity .battle_cond_value").text("");
 		$(".module.activity .battle_engagement").prev().text(KC3Meta.term("BattleEngangement"));
-		$(".module.activity .battle_engagement").removeClass("good better best bad worse worst");
+		$(".module.activity .battle_engagement").removeClass(KC3Meta.battleSeverityClass(KC3Meta.engagement()));
 		$(".module.activity .battle_engagement").attr("title", "");
 		$(".module.activity .battle_detection").prev().text(KC3Meta.term("BattleDetection"));
-		$(".module.activity .battle_detection").removeClass("good better best bad worse worst");
+		$(".module.activity .battle_detection").removeClass(KC3Meta.battleSeverityClass(KC3Meta.detection()));
 		$(".module.activity .battle_detection").attr("title", "");
-		$(".module.activity .battle_airbattle").removeClass("good better best bad worse worst");
+		$(".module.activity .battle_airbattle").removeClass(KC3Meta.battleSeverityClass(KC3Meta.airbattle()));
 		$(".module.activity .battle_airbattle").attr("title", "");
 		$(".module.activity .plane_text span").text("");
 		$(".module.activity .sink_icons .sunk img").hide();
@@ -1311,8 +1311,7 @@
 
 
 			// Clear status reminder coloring
-			$(".module.status .status_text").removeClass("good");
-			$(".module.status .status_text").removeClass("bad");
+			$(".module.status .status_text").removeClass("good bad");
 
 			// If fleet status summary is enabled on settings
 			if(ConfigManager.info_fleetstat){
