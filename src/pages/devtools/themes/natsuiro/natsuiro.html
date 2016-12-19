@@ -282,6 +282,10 @@
 							<div class="clear"></div>
 						</div>
 						<div class="sortie_nodes">
+							<div class="boss_node">
+								<img src="../../../../assets/img/client/boss.png" />
+								<div class="sortie_node boss_circle"></div>
+							</div>
 							<div class="sortie_node sortie_node_1"></div>
 							<div class="sortie_node sortie_node_2"></div>
 							<div class="sortie_node sortie_node_3"></div>
@@ -418,7 +422,11 @@
 							
 							<div class="battle_flags">
 								<div class="battle_flag battle_eformation"><img/></div>
-								<div class="battle_flag battle_support i18n_title" title="BattleSupportExped"><img/></div>
+								<div class="battle_flag battle_support i18n_title" title="BattleSupportExped">
+									<div class="support_exped">0</div>
+									<div class="support_lbas">AB</div>
+									<img/>
+								</div>
 								<div class="battle_flag battle_fish i18n_title" title="BattleItemDrop"><img src="../../../../assets/img/ui/map_drop.png" /></div>
 								<div class="battle_flag battle_aaci i18n_title" title="BattleAntiAirCutIn"><img/></div>
 								<div class="battle_flag battle_night i18n_title" title="BattleNightNeeded"><img/></div>
@@ -800,6 +808,7 @@
 				<div class="closebtn hover">x</div>
 				<div class="clear"></div>
 				<div class="description"></div>
+				<div class="download i18n hover">DownloadErrorReport</div>
 			</div>
 		</div>
 		
@@ -995,6 +1004,7 @@
 		
 		<script type="text/javascript" src="../../../../assets/js/global.js"></script>
 		<script type="text/javascript" src="../../../../assets/js/Dexie.min.js"></script>
+		<script type="text/javascript" src="../../../../assets/js/FileSaver.min.js"></script>
 		<!-- @nonbuildstart -->
 		<script type="text/javascript" src="../../../../assets/js/jquery-2.1.3.min.js"></script>
 		<!-- @nonbuildend -->

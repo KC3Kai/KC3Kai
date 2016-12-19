@@ -21,6 +21,8 @@ Used by SortieManager
 	// , enemy: [array of hps]
 	// }
 	// arrays are all begins at 0
+	// Regular battle rules: https://github.com/andanteyk/ElectronicObserver/blob/master/ElectronicObserver/Other/Information/kcmemo.md#%E6%88%A6%E9%97%98%E5%8B%9D%E5%88%A9%E5%88%A4%E5%AE%9A
+	// Long distance air raid rules: https://github.com/andanteyk/ElectronicObserver/blob/master/ElectronicObserver/Other/Information/kcmemo.md#%E9%95%B7%E8%B7%9D%E9%9B%A2%E7%A9%BA%E8%A5%B2%E6%88%A6%E3%81%A7%E3%81%AE%E5%8B%9D%E5%88%A9%E5%88%A4%E5%AE%9A
 	KC3Node.predictRank = function(beginHPs, endHPs) {
 		console.assert( 
 			beginHPs.ally.length === endHPs.ally.length,
@@ -319,6 +321,15 @@ Used by SortieManager
 		this.detection = KC3Meta.detection( battleData.api_search[0] );
 		this.engagement = KC3Meta.engagement( battleData.api_formation[2] );
 		
+		// LBAS attack phase, including jet plane assault
+		this.lbasFlag = typeof battleData.api_air_base_attack != "undefined";
+		if(this.lbasFlag){
+			// Array of engaged land bases
+			this.airBaseAttack = battleData.api_air_base_attack;
+			// No plane from, just injecting from far away air base :)
+			this.airBaseJetInjection = battleData.api_air_base_injection;
+		}
+		
 		// Air phases
 		var
 			planePhase  = battleData.api_kouku.api_stage1 || {
@@ -385,6 +396,21 @@ Used by SortieManager
 					this.antiAirFire[1] = battleData.api_kouku2.api_stage2.api_air_fire;
 				}
 			}
+		}
+		
+		// Jet plane phase, happen before fighter attack phase
+		if(typeof battleData.api_injection_kouku != "undefined"){
+			var jetPlanePhase = battleData.api_injection_kouku;
+			this.planeJetFighters = { player:[0,0], abyssal:[0,0] };
+			this.planeJetBombers = { player:[0,0], abyssal:[0,0] };
+			this.planeJetFighters.player[0] = jetPlanePhase.api_stage1.api_f_count;
+			this.planeJetFighters.player[1] = jetPlanePhase.api_stage1.api_f_lostcount;
+			this.planeJetFighters.abyssal[0] = jetPlanePhase.api_stage1.api_e_count;
+			this.planeJetFighters.abyssal[1] = jetPlanePhase.api_stage1.api_e_lostcount;
+			this.planeJetBombers.player[0] = jetPlanePhase.api_stage2.api_f_count;
+			this.planeJetBombers.player[1] = jetPlanePhase.api_stage2.api_f_lostcount;
+			this.planeJetBombers.abyssal[0] = jetPlanePhase.api_stage2.api_e_count;
+			this.planeJetBombers.abyssal[1] = jetPlanePhase.api_stage2.api_e_lostcount;
 		}
 		
 		// Boss Debuffed

@@ -74,6 +74,33 @@
 		]
 	},
 	{
+		"section": "SettingsErrors",
+		"help" : "",
+		"contents" : [
+			{
+				"id": "showCatBombs",
+				"name": "SettingsShowCatBombs",
+				"type": "check"
+			},
+			{
+				"id": "showApiError",
+				"name": "SettingsShowAPIError",
+				"type": "check",
+				"disabled": true
+			},
+			{
+				"id": "repeatApiError",
+				"name": "SettingsRepeatAPIError",
+				"type": "check"
+			},
+			{
+				"id": "detailedApiError",
+				"name": "SettingsDetailedAPIError",
+				"type": "check"
+			}
+		]
+	},
+	{
 		"section": "SettingsGameInfo",
 		"help" : "",
 		"contents" : [

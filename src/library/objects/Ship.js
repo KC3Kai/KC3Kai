@@ -492,14 +492,17 @@ KC3改 Ship Object
 		result.fuel = marriageConserve(result.fuel);
 		result.ammo = marriageConserve(result.ammo);
 		if(!!bauxiteNeeded){
-			var equipBauxiteCost = function() {
-				return self.equipment(0).bauxiteCost(self.slots[0], master.api_maxeq[0])
-					+ self.equipment(1).bauxiteCost(self.slots[1], master.api_maxeq[1])
-					+ self.equipment(2).bauxiteCost(self.slots[2], master.api_maxeq[2])
-					+ self.equipment(3).bauxiteCost(self.slots[3], master.api_maxeq[3]);
+			var slotsBauxiteCost = function(current, max) {
+				return current < max ? (max-current) * KC3GearManager.carrierSupplyBauxiteCostPerSlot : 0;
 			};
-			result.bauxite = equipBauxiteCost();
-			// Bauxite cost to replace planes shot down does not change by marriage.
+			var shipBauxiteCost = function() {
+				return slotsBauxiteCost(self.slots[0], master.api_maxeq[0])
+					+ slotsBauxiteCost(self.slots[1], master.api_maxeq[1])
+					+ slotsBauxiteCost(self.slots[2], master.api_maxeq[2])
+					+ slotsBauxiteCost(self.slots[3], master.api_maxeq[3]);
+			};
+			result.bauxite = shipBauxiteCost();
+			// Bauxite cost to fill slots not affected by marriage.
 			// via http://kancolle.wikia.com/wiki/Marriage
 			//result.bauxite = marriageConserve(result.bauxite);
 		}

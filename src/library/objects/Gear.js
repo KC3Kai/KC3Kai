@@ -90,11 +90,19 @@ KC3改 Equipment Object
 		// Check if this object is a fighter plane
 		if( KC3GearManager.antiAirFighterType2Ids.indexOf( this.master().api_type[2] ) > -1){
 			var typInd = String( this.master().api_type[2] );
-
-			if (typeof ConfigManager.air_average[typInd] == 'undefined') {
-				ConfigManager.resetValueOf('air_average');
-			}
 			var airAverageTable = ConfigManager.air_average[typInd];
+			// if new type added to default, have to reset to default
+			if(typeof airAverageTable === 'undefined') {
+				var defaultTable = ConfigManager.defaults().air_average[typInd];
+				if(typeof defaultTable !== 'undefined') {
+					ConfigManager.resetValueOf('air_average');
+					airAverageTable = defaultTable;
+					console.info("Setting 'air_average' reset to default for missing type:", typInd);
+				} else {
+					console.warn("No 'air_average' setting found for type:", typInd);
+					return 0;
+				}
+			}
 
 			var veteranBonus;
 			if(this.ace==-1){
@@ -124,10 +132,20 @@ KC3改 Equipment Object
 			// console.log("this.ace", this.ace);
 
 			var typInd = String( this.master().api_type[2] );
-			if (typeof ConfigManager.air_bounds[typInd] == 'undefined') {
-				ConfigManager.resetValueOf('air_bounds');
-			}
 			var airBoundTable = ConfigManager.air_bounds[typInd];
+			// if new type added to default, have to reset to default
+			if(typeof airBoundTable === 'undefined') {
+				var defaultTable = ConfigManager.defaults().air_bounds[typInd];
+				if(typeof defaultTable !== 'undefined') {
+					ConfigManager.resetValueOf('air_bounds');
+					airBoundTable = defaultTable;
+					console.info("Setting 'air_bounds' reset to default for missing type:", typInd);
+				} else {
+					console.warn("No 'air_bounds' setting found for type:", typInd);
+					return [0,0];
+				}
+			} 
+
 			var veteranBounds;
 			if(this.ace==-1){
 				veteranBounds = airBoundTable[ 0 ];
@@ -210,9 +228,10 @@ KC3改 Equipment Object
 	};
 
 	KC3Gear.prototype.bauxiteCost = function(slotCurrent, slotMaxeq){
+		// Only used for the slot already equiped aircrafts, unused for now
 		if(this.itemId===0){ return 0; }
-		if( KC3GearManager.antiAirFighterType2Ids.indexOf( this.master().api_type[2] ) > -1){
-			return 5 * (slotMaxeq - slotCurrent);
+		if( KC3GearManager.carrierBasedAircraftType3Ids.indexOf( this.master().api_type[3] ) > -1){
+			return KC3GearManager.carrierSupplyBauxiteCostPerSlot * (slotMaxeq - slotCurrent);
 		}
 		return 0;
 	};

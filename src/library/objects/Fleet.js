@@ -613,9 +613,13 @@ Contains summary information about a fleet and its 6 ships
 	 *  http://kancolle.wikia.com/wiki/Line_of_Sight
 	 *  http://ja.kancolle.wikia.com/wiki/%E3%83%9E%E3%83%83%E3%83%97%E7%B4%A2%E6%95%B5
 	 *  ID refer to start2 API, api_mst_slotitem_equiptype
+	 * @param nodeDivaricatedFactor
 	 * @returns {number}
 	 */
-	KC3Fleet.prototype.eLos4 = function(){
+	KC3Fleet.prototype.eLos4 = function(nodeDivaricatedFactor){
+		// The weighting of the eqipment sum part
+		// For now: 2-5(H,I):x1, 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
+		nodeDivaricatedFactor = nodeDivaricatedFactor || 1;
 		var multipliers = {
 			6: 0.6, // Carrier-Based Fighter
 			7: 0.6, // Carrier-Based Dive Bomber
@@ -632,7 +636,8 @@ Contains summary information about a fleet and its 6 ships
 			39: 0.6, // Skilled Lookouts
 			40: 0.6, // Sonar
 			41: 0.6, // Large Flying Boat
-			45: 0.6,  // Seaplane Fighter
+			45: 0.6, // Seaplane Fighter
+			57: 0.6, // Jet Bomber
 			94: 1 // Carrier-Based Reconnaissance Aircraft
 		};
 
@@ -653,8 +658,9 @@ Contains summary information about a fleet and its 6 ships
 			total += Math.sqrt(shipData.nakedLoS());
 
 			// iterate ship's equipment
+			var equipTotal = 0;
 			for (var j = 0; j < 4; j++) {
-				if (shipData.items[j] > -1) {
+				if (shipData.items[j] > 0) {
 					var itemData = shipData.equipment(j);
 					if (itemData.itemId !== 0) {
 						var itemType = itemData.master().api_type[2];
@@ -662,12 +668,11 @@ Contains summary information about a fleet and its 6 ships
 						if (multiplier) {
 							var equipment_bonus = Math.sqrt(itemData.stars);
 
-							if (itemType === 12 ||
-								itemType === 13) {
-								// radar bonus
+							if ([12, 13].indexOf(itemType) > -1) {
+								// Radar bonus
 								equipment_bonus *= 1.25;
-							} else if (itemType === 10) {
-								// Reconnaissance Seaplane bonus
+							} else if ([9, 10].indexOf(itemType) > -1) {
+								// Reconnaissance Plane/Seaplane bonus
 								equipment_bonus *= 1.2;
 							} else {
 								// all other equipment with no bonus
@@ -675,11 +680,12 @@ Contains summary information about a fleet and its 6 ships
 							}
 
 							// multiple * (raw equipment los + equipment bonus)
-							total += multiplier * (itemData.master().api_saku + equipment_bonus);
+							equipTotal += multiplier * (itemData.master().api_saku + equipment_bonus);
 						}
 					}
 				}
 			}
+			total += nodeDivaricatedFactor * equipTotal;
 
 		}
 

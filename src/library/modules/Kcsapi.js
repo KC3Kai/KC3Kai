@@ -1051,6 +1051,10 @@ Previously known as "Reactor"
 			});
 			localStorage.bases = JSON.stringify(PlayerManager.bases);
 			// Record material consuming. Yes, set plane use your bauxite :)
+			// Known formula:
+			//var landSlot = KC3GearManager.landBaseReconnType2Ids.indexOf(planeMaster.api_type[2])>-1 ?
+			//	KC3GearManager.landBaseReconnMaxSlot : KC3GearManager.landBaseOtherMaxSlot;
+			//var deployBauxiteCost = planeMaster.api_cost * landSlot;
 			if(typeof response.api_data.api_after_bauxite !== "undefined"){
 				var hour = Math.hrdInt("floor", Date.safeToUtcTime(headers.Date)/3.6,6,1);
 				var fuel = PlayerManager.hq.lastMaterial[0],
@@ -1079,9 +1083,8 @@ Previously known as "Reactor"
 				}
 			});
 			localStorage.bases = JSON.stringify(PlayerManager.bases);
-			// Record material consuming.
-			// But it's hard to define its type, maybe a new type called: lbas
-			// And NOT yet record fuel and ammo cost for sortie land base squadron
+			// Record material consuming, using a new type called: lbas
+			// NOT yet record fuel and ammo cost for sortie land base squadron
 			var hour = Math.hrdInt("floor", Date.safeToUtcTime(headers.Date)/3.6,6,1);
 			var fuel = response.api_data.api_after_fuel,
 				ammo = PlayerManager.hq.lastMaterial[1],

@@ -21,8 +21,13 @@ Retreives when needed to apply on components
 				marryLevelFormat	: 0,
 				checkLiveQuests		: true,
 				devOnlyPages		: false,
-				forceDMMLogin       : false,
-				apiRecorder         : false,
+				forceDMMLogin		: false,
+				apiRecorder			: false,
+
+				showCatBombs		: true,
+				showApiError		: true,
+				repeatApiError		: true,
+				detailedApiError	: true,
 
 				DBSubmission_enabled: 0,
 				DBSubmission_key : '',
@@ -58,7 +63,8 @@ Retreives when needed to apply on components
 					"11": [0,    1,	  1,   3,    3,	   7,  7,  9],
 					"45": [0, 1.35, 3.5, 7.1, 11.4, 16.8, 17, 25],
 					"47": [0, 1.35, 3.5, 7.1, 11.4, 16.8, 17, 25],
-					"48": [0, 1.35, 3.5, 7.1, 11.4, 16.8, 17, 25]
+					"48": [0, 1.35, 3.5, 7.1, 11.4, 16.8, 17, 25],
+					"57": [0,    1,	  1,   3,    3,	   7,  7,  9]
 				},
 				air_bounds			: {
 					"6": [
@@ -95,7 +101,12 @@ Retreives when needed to apply on components
 						[0.026, 0.845], // 0
 						[1, 1.715], [3.212, 3.984], [6.845, 7.504], // 3
 						[11.205, 11.786], [16.639, 17], [16.999, 17.205], [24.679, 25.411] // 7
-					]
+					],
+					"57": [  // jet fighter-bomber
+						[0,0], // 0
+						[0,1], [0,1], [0,1], // 3
+						[1,2], [1,2], [1,2], [1,3]	// 7
+					]  // assumed to be equivalent to regular bombers unless proved otherwise
 				},
 				
 				salt_list 		: new KC3ShipMasterList(),

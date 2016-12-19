@@ -65,6 +65,10 @@ html,body {
 	margin:-60px auto 0px -200px;
 	color:#c44;
 }
+#catBomb .content.withDownload {
+	margin:-70px auto 0px -200px;
+	height:140px;
+}
 #catBomb .image {
 	width:40px;
 	height:40px;
@@ -102,6 +106,12 @@ html,body {
 	width:380px;
 	margin:10px 0px 0px 0px;
 	font-size:12px;
+}
+#catBomb .download {
+	text-align: center;
+	font-weight: bold;
+	font-size: 14px;
+	margin: 2px 0px 0px 0px;
 }
 
 /* GAME UPDATE MODAL
@@ -531,6 +541,7 @@ html,body {
 	width:180px;
 	height:19px;
 	margin:0px 0px 5px 0px;
+	position:relative;
 }
 .module.activity .sortie_node {
 	width:19px;
@@ -542,8 +553,25 @@ html,body {
 	border-radius:10px;
 	color:#fff;
 	font-size:10px;
-	text-align: center;
+	text-align:center;
 	border:1px solid #aaa;
+}
+.module.activity .sortie_nodes .boss_node {
+	float:left;
+	position:absolute;
+	display:none;
+}
+.module.activity .sortie_nodes .boss_node img {
+	width:19px;
+	height:19px;
+	margin-top:-10px;
+}
+.module.activity .sortie_nodes .boss_node .boss_circle {
+	position:absolute;
+	margin-top:-20px;
+	border-color:#a90a0a;
+	background:#7d0000;
+	z-index: 1;
 }
 .module.activity .sortie_node.nc_battle {
 	background:#7D0000;
@@ -751,6 +779,36 @@ ABYSS FLEET
 	height:24px;
 	margin:3px;
 }
+.module.activity .battle_flag .support_exped {
+	width:12px;
+	height:12px;
+	line-height:13px;
+	border-radius:6px;
+	margin:16px 0px 0px 3px;
+	position:absolute;
+	font-size:8px;
+	text-align:center;
+	color:#fff;
+	background:#a69de6;
+	overflow:hidden;
+	cursor:default;
+	display:none;
+}
+.module.activity .battle_flag .support_lbas {
+	width:14px;
+	height:13px;
+	line-height:13px;
+	border-radius:6px;
+	margin:15px 0px 0px 17px;
+	position:absolute;
+	font-size:8px;
+	text-align:center;
+	color:#ff0;
+	background:#5b5;
+	overflow:hidden;
+	cursor:default;
+	display:none;
+}
 /* Battle Conditions */
 .module.activity .battle_conditions {
 	width:180px;
@@ -791,6 +849,24 @@ ABYSS FLEET
 	color:#fff;
 	white-space:nowrap;
 	overflow:hidden;
+}
+.module.activity .battle_cond_value.best {
+	color:#1f1;
+}
+.module.activity .battle_cond_value.better {
+	color:#5f5;
+}
+.module.activity .battle_cond_value.good {
+	color:#afa;
+}
+.module.activity .battle_cond_value.bad {
+	color:#faa;
+}
+.module.activity .battle_cond_value.worse {
+	color:#f77;
+}
+.module.activity .battle_cond_value.worst {
+	color:#f44;
 }
 .module.activity .battle_contact img {
 	width:15px;

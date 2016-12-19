@@ -11,7 +11,14 @@ To be dynamically used on the settings page
 		this.element = $("#factory .settingBox").clone().appendTo("#wrapper .settings");
 		$(".title", this.element).text( KC3Meta.term( info.name ) );
 		this.soundPreview = false;
-		this.bound = $.extend({min:-Infinity,max:Infinity,length_min:0,length_max:Infinity,type:"String"},info.bound || {});
+		this.bound = $.extend({
+			min:-Infinity,
+			max:Infinity,
+			length_min:0,
+			length_max:Infinity,
+			type:"String"
+		}, info.bound || {});
+		this.disabled = info.disabled;
 		this[info.type]( info.options );
 		if(parseInt(info.chui) || 0 === 1)
 			$(this.element).addClass("dangerous");
@@ -23,6 +30,7 @@ To be dynamically used on the settings page
 			$("<input/>")
 			.attr("type", "checkbox")
 			.addClass("checkbox")
+			.prop("disabled", this.disabled)
 			.prop("checked", ConfigManager[ this.config ])
 			.on("change", function(){
 				// Dangerous Settings Change Attempt
@@ -44,6 +52,7 @@ To be dynamically used on the settings page
 			$("<input/>")
 			.attr("type", "text")
 			.addClass("small_text")
+			.prop("disabled", this.disabled)
 			.val( ConfigManager[ this.config ] )
 			.on("change", function(){
 				// Dangerous Settings Change Attempt
@@ -103,6 +112,7 @@ To be dynamically used on the settings page
 			.attr("type", "text")
 			.attr("placeholder", KC3Meta.term( options.placeholder ) )
 			.addClass("long_text")
+			.prop("disabled", this.disabled)
 			.val( ConfigManager[ this.config ] )
 			.on("change", function(){
 				// Dangerous Settings Change Attempt
@@ -171,6 +181,7 @@ To be dynamically used on the settings page
 		$(".options", this.element).append(
 			$("<textarea/>")
 				.addClass("json_text")
+				.prop("disabled", this.disabled)
 				.val( JSON.stringify(ConfigManager[ this.config ]) )
 				.on("change", function(){
 					var newValue = false;
@@ -191,6 +202,7 @@ To be dynamically used on the settings page
 		$(".options", this.element).append(
 			$("<textarea/>")
 				.addClass("huge_text")
+				.prop("disabled", this.disabled)
 				.val( ConfigManager[ this.config ] )
 				.on("change", function(){
 					ConfigManager[ self.config ] = $(this).val();
@@ -207,6 +219,7 @@ To be dynamically used on the settings page
 		$(".options", this.element).append(
 			$("<select/>")
 				.addClass("dropdown")
+				.prop("disabled", this.disabled)
 				.on("change", function(){
 					ConfigManager[ self.config ] = $(this).val();
 					ConfigManager.save();
