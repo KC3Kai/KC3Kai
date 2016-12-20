@@ -1703,7 +1703,7 @@
 					break;
 			}
 
-			// If compass setting disabled, hide node letters
+			// If compass setting disabled, hide node letters and all battle activities
 			if(!ConfigManager.info_compass){
 				$(".module.activity .node_types").hide();
 				$(".module.activity .sortie_node").hide();
@@ -1768,8 +1768,11 @@
 				$(".module.activity .battle_fish").hide();
 				$(".module.activity .node_type_battle").show();
 			};
-			// Have to wait seconds for game animate and see compass results
-			setTimeout(updateBattleActivityFunc, 6500);
+			// `info_compass` including 'Battle Data', so no activity if it's off
+			if(ConfigManager.info_compass){
+				// Have to wait seconds for game animate and see compass results
+				setTimeout(updateBattleActivityFunc, 6500);
+			}
 		},
 
 		BattleStart: function(data){
@@ -1825,7 +1828,7 @@
 				}
 			});
 
-			// Enemy HP Predictions
+			// Enemy HP Predictions. `info_battle` should be considered as `hp_prediction`
 			if(ConfigManager.info_battle){
 				var newEnemyHP, enemyHPPercent, enemyBarHeight;
 				$.each(thisNode.eships, function(index, eshipId){
@@ -2273,6 +2276,10 @@
 			KC3SortieManager.nodes.push(thisPvP = (new KC3Node()).defineAsBattle());
 			thisPvP.isPvP = true;
 			thisPvP.engage( data.battle,data.fleetSent );
+
+			// PvP battle activities data should be hidden when `info_compass` turned off,
+			// Here left it unfixed to keep identical.
+			//if(!ConfigManager.info_compass){ $(".module.activity .node_types").hide(); }
 
 			// Hide useless information
 			$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png").css("visibility","hidden");
