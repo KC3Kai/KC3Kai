@@ -1229,7 +1229,7 @@
 				// Show ships on selected fleet
 				$.each(CurrentFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						if(selectedFleet === KC3SortieManager.fleetSent){
+						if(KC3SortieManager.onSortie && selectedFleet === KC3SortieManager.fleetSent){
 							dameConConsumed = (thisNode.dameConConsumed || [])[index];
 						}
 						(new KC3NatsuiroShipbox(".lship", rosterId, showCombinedFleetBars, dameConConsumed))
