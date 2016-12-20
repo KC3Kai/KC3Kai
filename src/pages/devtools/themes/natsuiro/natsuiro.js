@@ -1707,6 +1707,7 @@
 			if(!ConfigManager.info_compass){
 				$(".module.activity .node_types").hide();
 				$(".module.activity .sortie_node").hide();
+				$(".module.activity .sortie_nodes .boss_node").hide();
 			}
 		},
 
@@ -1741,9 +1742,11 @@
 				$(".module.activity .battle_detection").attr("title", airDefender);
 				$(".module.activity .battle_engagement").prev().text(KC3Meta.term("BattleAirBaseLoss"));
 				$(".module.activity .battle_engagement").text(KC3Meta.airraiddamage(thisNode.lostKind));
+				$(".module.activity .battle_engagement").addClass( thisNode.lostKind !==4 ? "bad" : "" );
 				var contactSpan = buildContactPlaneSpan(thisNode.fcontactId, thisNode.fcontact, thisNode.econtactId, thisNode.econtact);
 				$(".module.activity .battle_contact").html($(contactSpan).html());
 				$(".module.activity .battle_airbattle").text( thisNode.airbattle[0] );
+				$(".module.activity .battle_airbattle").addClass( thisNode.airbattle[1] );
 				$(".module.activity .battle_airbattle").attr("title", thisNode.airbattle[2] || "" );
 				$(".fighter_ally .plane_before").text(thisNode.planeFighters.player[0]);
 				$(".fighter_enemy .plane_before").text(thisNode.planeFighters.abyssal[0]);

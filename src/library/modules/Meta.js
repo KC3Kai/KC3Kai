@@ -275,7 +275,7 @@ Provides access to data on built-in JSON files
 		},
 		
 		battleSeverityClass :function(battleArray){
-			return (Array.isArray(battleArray) && battleArray[0].length > 2) ?
+			return (Array.isArray(battleArray) && battleArray[0].length >= 2) ?
 				battleArray.map(function(e){if(!!e[1]) return e[1];})
 					.reduce(function(p, c){if(!!c && p.indexOf(c) < 0) p.push(c);
 						return p;}, []).join(" ")
