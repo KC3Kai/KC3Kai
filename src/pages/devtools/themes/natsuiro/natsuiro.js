@@ -1151,7 +1151,9 @@
 				// Show ships on main fleet
 				$.each(MainFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						dameConConsumed = (thisNode.dameConConsumed || [])[index];
+						if(KC3SortieManager.onSortie && KC3SortieManager.fleetSent === 1){
+							dameConConsumed = (thisNode.dameConConsumed || [])[index];
+						}
 						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars, dameConConsumed))
 							.commonElements()
 							.defineShort( MainFleet )
@@ -1162,7 +1164,15 @@
 				// Show ships on escort fleet
 				$.each(EscortFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						dameConConsumed = (thisNode.dameConConsumedEscort || [])[index];
+						if(KC3SortieManager.onSortie){
+							if(!!PlayerManager.combinedFleet && KC3SortieManager.fleetSent === 1){
+								// Send combined fleet, get escort info
+								dameConConsumed = (thisNode.dameConConsumedEscort || [])[index];
+							} else if(!PlayerManager.combinedFleet && KC3SortieManager.fleetSent === 2){
+								// Not combined, but send fleet #2, get regular info
+								dameConConsumed = (thisNode.dameConConsumed || [])[index];
+							}
+						}
 						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars, dameConConsumed))
 							.commonElements()
 							.defineShort( EscortFleet )
