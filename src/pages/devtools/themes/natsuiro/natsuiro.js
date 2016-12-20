@@ -1140,10 +1140,8 @@
 			$(".airbase_list").empty();
 			$(".airbase_list").hide();
 
-			var thisNode, dameConConsumed;
-			if(KC3SortieManager.onSortie){
-				thisNode = KC3SortieManager.currentNode();
-			}
+			var thisNode = KC3SortieManager.onSortie ? KC3SortieManager.currentNode() || {} : {};
+			var dameConConsumed = false;
 
 			// COMBINED
 			if(selectedFleet==5){
@@ -1153,11 +1151,7 @@
 				// Show ships on main fleet
 				$.each(MainFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						try {
-							dameConConsumed = thisNode.dameConConsumed[index];
-						} catch (e){
-							dameConConsumed = false;
-						}
+						dameConConsumed = (thisNode.dameConConsumed || [])[index];
 						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars, dameConConsumed))
 							.commonElements()
 							.defineShort( MainFleet )
@@ -1168,11 +1162,7 @@
 				// Show ships on escort fleet
 				$.each(EscortFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						try {
-							dameConConsumed = thisNode.dameConConsumedEscort[index];
-						} catch (e){
-							dameConConsumed = false;
-						}
+						dameConConsumed = (thisNode.dameConConsumedEscort || [])[index];
 						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars, dameConConsumed))
 							.commonElements()
 							.defineShort( EscortFleet )
@@ -1239,10 +1229,8 @@
 				// Show ships on selected fleet
 				$.each(CurrentFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						try {
-							dameConConsumed = thisNode.dameConConsumed[index];
-						} catch (e){
-							dameConConsumed = false;
+						if(selectedFleet === KC3SortieManager.fleetSent){
+							dameConConsumed = (thisNode.dameConConsumed || [])[index];
 						}
 						(new KC3NatsuiroShipbox(".lship", rosterId, showCombinedFleetBars, dameConConsumed))
 							.commonElements()
