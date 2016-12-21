@@ -1,7 +1,40 @@
 .tab_showcase .factory {
 	display:none;
 }
-
+/* BUTTONS
+-----------------------------*/
+.tab_showcase  .controls .control {
+	width: 140px;
+	height: 20px;
+	line-height: 20px;
+	margin: 0px 5px 0px 0px;
+	font-weight: bold;
+	font-size: 12px;
+	text-align: center;
+	float: left;
+	border-radius: 7px;
+}
+.tab_showcase  .control {
+	background:#369;
+	color:#fff;
+}
+.tab_showcase  .control:hover {
+	background-color: #0066CC;
+}
+.tab_showcase .controls {
+	background:#f0f5ff;
+	border-bottom:1px solid #369;
+	width: 700px;
+	margin: 0px 0px 0px 0px;
+	padding: 5px 10px;
+}
+.tab_showcase  .control.disabled {
+	background-color:#eee;
+}
+.tab_showcase  .control.disabled:hover {
+	background-color: #eee;
+	cursor:default;
+}
 /* SHIPS
 -----------------------------*/
 .tab_showcase .stype_box {
