@@ -313,7 +313,7 @@
 							// temporary hack for scn quotes
 							// as we don't use special key for seasonal lines
 							// and en will always has priority on that.
-							if (["scn"].indexOf(language) > -1) {
+							if (["scn", "kr"].indexOf(language) > -1) {
 								if (subId === 2) {
 									v[6547] = v[subKey];
 								}
