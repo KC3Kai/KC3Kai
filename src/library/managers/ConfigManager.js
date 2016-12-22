@@ -15,6 +15,7 @@ Retreives when needed to apply on components
 			return {
 				version				: 8,
 				language			: "en",
+				hqInfoPage			: 1,
 				elosFormula 		: 4,
 				hqExpDetail 		: 1,
 				timerDisplayType	: 1,
@@ -229,6 +230,12 @@ Retreives when needed to apply on components
 		save : function(){
 			// console.log(this);
 			localStorage.config = JSON.stringify(this);
+		},
+		
+		// Toggle HQ Info Page
+		scrollHqInfoPage :function(){
+			this.hqInfoPage = (this.hqInfoPage % 3) + 1;
+			this.save();
 		},
 		
 		// Toggle Equipment LoS

@@ -290,9 +290,35 @@ Previously known as "Reactor"
 			var thisItem;
 			for(var ctr in response.api_data){
 				thisItem = response.api_data[ctr];
+				// Recognize some frequently used items, full IDs set in master useitem
 				switch(thisItem.api_id){
-					case 68: PlayerManager.consumables.pike = thisItem.api_count; break;
-					case 69: PlayerManager.consumables.saury = thisItem.api_count; break;
+					case 10: PlayerManager.consumables.furniture200 = thisItem.api_count; break;
+					case 11: PlayerManager.consumables.furniture400 = thisItem.api_count; break;
+					case 12: PlayerManager.consumables.furniture700 = thisItem.api_count; break;
+					// 50 and 51 not found in this API, as they are slotitem
+					//case 50: PlayerManager.consumables.repairTeam = thisItem.api_count; break;
+					//case 51: PlayerManager.consumables.repairGoddess = thisItem.api_count; break;
+					case 52: PlayerManager.consumables.furnitureFairy = thisItem.api_count; break;
+					case 54: PlayerManager.consumables.mamiya = thisItem.api_count; break;
+					case 56: PlayerManager.consumables.chocolate = thisItem.api_count; break;
+					case 57: PlayerManager.consumables.medals = thisItem.api_count; break;
+					case 58: PlayerManager.consumables.blueprints = thisItem.api_count; break;
+					case 59: PlayerManager.consumables.irako = thisItem.api_count; break;
+					case 60: PlayerManager.consumables.presents = thisItem.api_count; break;
+					case 61: PlayerManager.consumables.firstClassMedals = thisItem.api_count; break;
+					case 62: PlayerManager.consumables.hishimochi = thisItem.api_count; break;
+					case 64: PlayerManager.consumables.reinforceExpansion = thisItem.api_count; break;
+					case 65: PlayerManager.consumables.protoCatapult = thisItem.api_count; break;
+					// 66 and 67 not found in this API, as they are slotitem
+					//case 66: PlayerManager.consumables.ration = thisItem.api_count; break;
+					//case 67: PlayerManager.consumables.resupplier = thisItem.api_count; break;
+					case 68: PlayerManager.consumables.mackerel = thisItem.api_count; break;
+					case 69: PlayerManager.consumables.mackerelCan = thisItem.api_count; break;
+					case 70: PlayerManager.consumables.skilledCrew = thisItem.api_count; break;
+					case 71: PlayerManager.consumables.nEngine = thisItem.api_count; break;
+					case 72: PlayerManager.consumables.decoMaterial = thisItem.api_count; break;
+					case 73: PlayerManager.consumables.constCorps = thisItem.api_count; break;
+					case 74: PlayerManager.consumables.newAircraftBlueprint = thisItem.api_count; break;
 					default: break;
 				}
 			}

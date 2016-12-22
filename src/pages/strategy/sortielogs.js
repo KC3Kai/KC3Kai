@@ -67,6 +67,25 @@
 				KC3StrategyTabs.gotoTab(null, $(this).data("world_num"));
 			});
 			
+			// Toggleable world scroll
+			$(".tab_"+tabCode+" .world_shift").on("click", function(){
+				var le,cr,re;
+				le = 0;
+				cr = $(window).data("world_off");
+				re = $(window).data("world_max");
+				$(window).data("world_off",cr = Math.max(le,Math.min(re,(function(e){
+					if(e.hasClass("disabled"))
+						return cr;
+					else if(e.hasClass("left"))
+						return cr-1;
+					else if(e.hasClass("right"))
+						return cr+1;
+					else
+						return cr;
+				})($(this)))));
+				updateScrollItem("world", 116);
+			});
+			
 			// On-click map menus
 			$(".tab_"+tabCode+" .map_list").on("click", ".map_box", function(){
 				KC3StrategyTabs.gotoTab(null, self.selectedWorld, $(this).data("map_num"));
@@ -88,7 +107,7 @@
 					else
 						return cr;
 				})($(this)))));
-				updateScrollItem();
+				updateScrollItem("map", 97);
 			});
 			
 			// On-click sortie ID export battle
@@ -139,9 +158,21 @@
 			$(".tab_"+tabCode+" .world_box").removeClass("active");
 			$(".tab_"+tabCode+" .world_box[data-world_num={0}]".format(self.selectedWorld)).addClass("active");
 
-			$(".tab_"+tabCode+" .map_list").html("").css("width","").css("margin-left","");
-			$(".tab_"+tabCode+" .page_list").html("");
-			$(".tab_"+tabCode+" .sortie_list").html("");
+			$(".tab_"+tabCode+" .map_list").empty().css("width","").css("margin-left","");
+			$(".tab_"+tabCode+" .page_list").empty();
+			$(".tab_"+tabCode+" .sortie_list").empty();
+			var countWorlds = $(".tab_"+tabCode+" .world_box").length;
+			var worldOffset = $(window).data("world_off");
+			var selectOffset = $(".tab_"+tabCode+" .world_box[data-world_num={0}]".format(self.selectedWorld)).index();
+			if(typeof worldOffset === "undefined"){
+				$(window).data("world_off", Math.min(selectOffset, countWorlds-6));
+			} else if(selectOffset < worldOffset){
+				$(window).data("world_off", selectOffset);
+			} else if(selectOffset >= 6 && worldOffset < selectOffset-5){
+				$(window).data("world_off", selectOffset-5);
+			}
+			$(window).data("world_max", Math.max(0, countWorlds-6));
+			updateScrollItem("world", 116);
 
 			if(self.selectedWorld !== 0){
 				// Add all maps in this world selection
@@ -161,7 +192,7 @@
 				mapBox.addClass("empty");
 				mapBox.addClass("active");
 
-				updateScrollItem(tabCode);
+				updateScrollItem("map", 97);
 
 				var diffStr = ["E","N","H"];
 				// Check player's map list
@@ -616,22 +647,22 @@
 			$(".tab_"+tabCode+" .pagination").show();
 		};
 		
-		function updateScrollItem() {
+		function updateScrollItem(worldMap, itemWidth) {
 			var
 				le = 0,
-				cr = $(window).data("map_off"),
-				re = $(window).data("map_max");
+				cr = $(window).data(worldMap + "_off"),
+				re = $(window).data(worldMap + "_max");
 			if(cr<=le)
-				$(".tab_"+tabCode+" .map_shift.left").addClass("disabled");
+				$(".tab_"+tabCode+" ."+worldMap+"_shift.left").addClass("disabled");
 			else
-				$(".tab_"+tabCode+" .map_shift.left").removeClass("disabled");
-				
-			if(cr>=re)
-				$(".tab_"+tabCode+" .map_shift.right").addClass("disabled");
-			else
-				$(".tab_"+tabCode+" .map_shift.right").removeClass("disabled");
+				$(".tab_"+tabCode+" ."+worldMap+"_shift.left").removeClass("disabled");
 			
-			$(".tab_"+tabCode+" .map_list").css("margin-left",(cr * -97) + "px");
+			if(cr>=re)
+				$(".tab_"+tabCode+" ."+worldMap+"_shift.right").addClass("disabled");
+			else
+				$(".tab_"+tabCode+" ."+worldMap+"_shift.right").removeClass("disabled");
+			
+			$(".tab_"+tabCode+" ."+worldMap+"_list").css("margin-left",(cr * -itemWidth) + "px");
 		}
 		
 		/* EXPORT REPLAY IMAGE

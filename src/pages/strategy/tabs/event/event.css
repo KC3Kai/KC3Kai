@@ -14,8 +14,10 @@
 /* WORLD LIST
 ---------------------------------*/
 .tab_event .world_list {
-	width:700px;
 	height:31px;
+	position:relative;
+	min-width:700px;
+	overflow:hidden;
 }
 .tab_event .world_box {
 	width:116px;
@@ -30,6 +32,25 @@
 	height:31px;
 	line-height:29px;
 	border-bottom:0px none;
+}
+.tab_event .world_shift {
+	position:absolute;
+	top:0px;
+	width:10px;
+	height:95%;
+	display:flex;
+	align-items:center;
+	cursor:pointer;
+}
+.tab_event .world_shift.left {
+	left:-3px;
+}
+.tab_event .world_shift.right {
+	right:3px;
+}
+.tab_event .world_shift.disabled {
+	cursor:default;
+	display:none;
 }
 
 /* MAP LIST

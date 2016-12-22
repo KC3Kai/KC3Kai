@@ -383,6 +383,15 @@ html,body {
 	line-height:20px;
 	color:#aaa;
 }
+.module.activity .consumables .consumable.page1 {
+	display:block;
+}
+.module.activity .consumables .consumable.page2 {
+	display:none;
+}
+.module.activity .consumables .consumable.page3 {
+	display:none;
+}
 
 /* Expedition */
 .module.activity .expeditions {

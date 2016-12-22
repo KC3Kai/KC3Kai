@@ -28,6 +28,7 @@ Does not include Ships and Gears which are managed by other Managers
 				devmats : 0,
 				screws: 0,
 				torch: 0,
+				medals: 0,
 				blueprints: 0
 			};
 			this.fleets = [

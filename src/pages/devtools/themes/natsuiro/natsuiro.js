@@ -451,6 +451,12 @@
 			}
 		});
 
+		// HQ Info Toggle
+		$(".consumables").on("click",function(){
+			ConfigManager.scrollHqInfoPage();
+			NatsuiroListeners.Consumables();
+		});
+
 		// eLoS Toggle
 		$(".summary-eqlos").on("click",function(){
 			ConfigManager.scrollElosMode();
@@ -925,8 +931,21 @@
 			$(".count_buckets").text( PlayerManager.consumables.buckets );
 			$(".count_screws").text( PlayerManager.consumables.screws );
 			$(".count_torch").text( PlayerManager.consumables.torch );
-			// $(".count_pike").text( PlayerManager.consumables.pike || "?" );
-			// $(".count_saury").text( PlayerManager.consumables.saury || "?" );
+			$(".count_devmats").text( PlayerManager.consumables.devmats );
+			$(".count_fuel").text( PlayerManager.hq.lastMaterial[0] );
+			$(".count_steel").text( PlayerManager.hq.lastMaterial[2] );
+			$(".count_ammo").text( PlayerManager.hq.lastMaterial[1] );
+			$(".count_bauxite").text( PlayerManager.hq.lastMaterial[3] );
+			// More pages could be added, see `api_get_member/useitem` in Kcsapi.js
+			$(".count_1classMedals").text( PlayerManager.consumables.firstClassMedals || 0 );
+			$(".count_medals").text( PlayerManager.consumables.medals || 0 );
+			$(".count_reinforcement").text( PlayerManager.consumables.reinforceExpansion || 0 );
+			$(".count_blueprints").text( PlayerManager.consumables.blueprints || 0 );
+			$(".count_fairy").text( PlayerManager.consumables.furnitureFairy || 0 );
+			$(".count_morale").text( (PlayerManager.consumables.mamiya || 0)
+				+ (PlayerManager.consumables.irako || 0) );
+			$(".consumables .consumable").hide();
+			$(".consumables .consumable.page{0}".format(ConfigManager.hqInfoPage||1)).show();
 		},
 
 		ShipSlots: function(data){
@@ -1140,10 +1159,8 @@
 			$(".airbase_list").empty();
 			$(".airbase_list").hide();
 
-			var thisNode, dameConConsumed;
-			if(KC3SortieManager.onSortie){
-				thisNode = KC3SortieManager.currentNode();
-			}
+			var thisNode = KC3SortieManager.onSortie ? KC3SortieManager.currentNode() || {} : {};
+			var dameConConsumed = false;
 
 			// COMBINED
 			if(selectedFleet==5){
@@ -1153,10 +1170,8 @@
 				// Show ships on main fleet
 				$.each(MainFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						try {
-							dameConConsumed = thisNode.dameConConsumed[index];
-						} catch (e){
-							dameConConsumed = false;
+						if(KC3SortieManager.onSortie && KC3SortieManager.fleetSent === 1){
+							dameConConsumed = (thisNode.dameConConsumed || [])[index];
 						}
 						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars, dameConConsumed))
 							.commonElements()
@@ -1168,10 +1183,14 @@
 				// Show ships on escort fleet
 				$.each(EscortFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						try {
-							dameConConsumed = thisNode.dameConConsumedEscort[index];
-						} catch (e){
-							dameConConsumed = false;
+						if(KC3SortieManager.onSortie){
+							if(!!PlayerManager.combinedFleet && KC3SortieManager.fleetSent === 1){
+								// Send combined fleet, get escort info
+								dameConConsumed = (thisNode.dameConConsumedEscort || [])[index];
+							} else if(!PlayerManager.combinedFleet && KC3SortieManager.fleetSent === 2){
+								// Not combined, but send fleet #2, get regular info
+								dameConConsumed = (thisNode.dameConConsumed || [])[index];
+							}
 						}
 						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars, dameConConsumed))
 							.commonElements()
@@ -1239,10 +1258,8 @@
 				// Show ships on selected fleet
 				$.each(CurrentFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						try {
-							dameConConsumed = thisNode.dameConConsumed[index];
-						} catch (e){
-							dameConConsumed = false;
+						if(KC3SortieManager.onSortie && selectedFleet === KC3SortieManager.fleetSent){
+							dameConConsumed = (thisNode.dameConConsumed || [])[index];
 						}
 						(new KC3NatsuiroShipbox(".lship", rosterId, showCombinedFleetBars, dameConConsumed))
 							.commonElements()
@@ -1703,10 +1720,11 @@
 					break;
 			}
 
-			// If compass setting disabled, hide node letters
+			// If compass setting disabled, hide node letters and all battle activities
 			if(!ConfigManager.info_compass){
 				$(".module.activity .node_types").hide();
 				$(".module.activity .sortie_node").hide();
+				$(".module.activity .sortie_nodes .boss_node").hide();
 			}
 		},
 
@@ -1741,9 +1759,11 @@
 				$(".module.activity .battle_detection").attr("title", airDefender);
 				$(".module.activity .battle_engagement").prev().text(KC3Meta.term("BattleAirBaseLoss"));
 				$(".module.activity .battle_engagement").text(KC3Meta.airraiddamage(thisNode.lostKind));
+				$(".module.activity .battle_engagement").addClass( thisNode.lostKind !==4 ? "bad" : "" );
 				var contactSpan = buildContactPlaneSpan(thisNode.fcontactId, thisNode.fcontact, thisNode.econtactId, thisNode.econtact);
 				$(".module.activity .battle_contact").html($(contactSpan).html());
 				$(".module.activity .battle_airbattle").text( thisNode.airbattle[0] );
+				$(".module.activity .battle_airbattle").addClass( thisNode.airbattle[1] );
 				$(".module.activity .battle_airbattle").attr("title", thisNode.airbattle[2] || "" );
 				$(".fighter_ally .plane_before").text(thisNode.planeFighters.player[0]);
 				$(".fighter_enemy .plane_before").text(thisNode.planeFighters.abyssal[0]);
@@ -1765,8 +1785,11 @@
 				$(".module.activity .battle_fish").hide();
 				$(".module.activity .node_type_battle").show();
 			};
-			// Have to wait seconds for game animate and see compass results
-			setTimeout(updateBattleActivityFunc, 6500);
+			// `info_compass` including 'Battle Data', so no activity if it's off
+			if(ConfigManager.info_compass){
+				// Have to wait seconds for game animate and see compass results
+				setTimeout(updateBattleActivityFunc, 6500);
+			}
 		},
 
 		BattleStart: function(data){
@@ -1822,7 +1845,7 @@
 				}
 			});
 
-			// Enemy HP Predictions
+			// Enemy HP Predictions. `info_battle` should be considered as `hp_prediction`
 			if(ConfigManager.info_battle){
 				var newEnemyHP, enemyHPPercent, enemyBarHeight;
 				$.each(thisNode.eships, function(index, eshipId){
@@ -2270,6 +2293,10 @@
 			KC3SortieManager.nodes.push(thisPvP = (new KC3Node()).defineAsBattle());
 			thisPvP.isPvP = true;
 			thisPvP.engage( data.battle,data.fleetSent );
+
+			// PvP battle activities data should be hidden when `info_compass` turned off,
+			// Here left it unfixed to keep identical.
+			//if(!ConfigManager.info_compass){ $(".module.activity .node_types").hide(); }
 
 			// Hide useless information
 			$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png").css("visibility","hidden");
