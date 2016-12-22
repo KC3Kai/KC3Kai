@@ -58,6 +58,7 @@ KC3改 Ship Box for Natsuiro theme
 		var myExItem = this.shipData.exItem();
 		if( myExItem && (myExItem.masterId > 0)){
 			$(".ex_item img", this.element).attr("src", "../../../../assets/img/items/"+myExItem.master().api_type[3]+".png");
+			$(".ex_item img", this.element).attr("title", myExItem.name());
 			if (myExItem.masterId == 43) {
 				$(".ex_item", this.element).addClass("goddess");
 			} else {
