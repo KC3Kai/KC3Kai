@@ -143,7 +143,7 @@
 				["or", "distance"],
 				["kk", "cost"],
 			], function(index, sdata){
-				if((gearData["api_"+sdata[1]]||0) > 0
+				if((gearData["api_"+sdata[1]]||0) !== 0
 					&& (["or","kk"].indexOf(sdata[0]) < 0
 					|| (["or","kk"].indexOf(sdata[0]) >=0 &&
 						KC3GearManager.landBasedAircraftType3Ids.indexOf(gearData.api_type[3])>-1) )
