@@ -268,10 +268,9 @@ Provides access to data on built-in JSON files
 		},
 		
 		defaultEquip :function(id){
-			if (typeof this._defeq["s" + id] == "undefined") {
-				console.log("No ship has master id " + id + " in defeq.json");
-			}
-			return this._defeq["s" + id] || 0;
+			var eq = WhoCallsTheFleetDb.getEquippedSlotCount(id);
+			// Just return 0 if wanna remove _defeq json
+			return eq !== false ? eq : (this._defeq["s" + id] || 0);
 		},
 		
 		battleSeverityClass :function(battleArray){
