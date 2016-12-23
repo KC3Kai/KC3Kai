@@ -440,7 +440,7 @@ a:hover {
 	border-radius:0px !important;
 }
 .tab_ships .massSelect dl{
-	width: 218px !important;
+	width: 215px !important;
 }
 .tab_ships .ship_header .ship_stat img {
 	-webkit-filter: invert(100%);
@@ -519,10 +519,10 @@ a:hover {
 }
 .tab_ships .ship_item .ship_tp.max {
 	background:#073e78;
-}rgb(198, 191, 130)
+}
 .tab_ships .ship_item .ship_yasen.max {
 	background:#555555;
-	color:#FFFFFF;
+	color:#ffffff;
 }
 .tab_ships .ship_item .ship_aa.max {
 	background:#935b07;
@@ -536,6 +536,10 @@ a:hover {
 .tab_ships .ship_item.even .ship_field.ship_lk {
 	background:#116311;
 }
+.tab_ships .ship_item .ship_equip .ship_equip_ex .empty {
+	background:#555555 !important;
+}
+
 /* Construction */
 .tab_builds .build_item {
 	background:#333333;
@@ -967,7 +971,7 @@ a:hover {
 /* SHIP BOX
 --------------------------------*/
 .tab_fleet .fleet_ship {
-	height:160px;
+	height:175px;
 	margin:5px 2px 0px 0px;
 	background:#131313;
 	border:1px solid #444444;
