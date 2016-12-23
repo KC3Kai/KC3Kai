@@ -243,7 +243,7 @@ Contains summary information about a fleet and its 6 ships
 	// formula taken from 
 	// http://kancolle.wikia.com/wiki/Expedition/Introduction#Extra_bonuses_to_expedition_incomes
 	// as of Nov 7th, 2016
-	KC3Fleet.prototype.calcLandingCraftBonus = function() {
+	KC3Fleet.prototype.calcLandingCraftInfo = function() {
 		var self = this;
 		// use addImprove() to update this value instead of modifying it directly
 		var improveCount = 0;
@@ -311,7 +311,16 @@ Contains summary information about a fleet and its 6 ships
 		// as the result value, but that requires some modification on other parts of the code.
 		// plus that this formula is not the final version anyway (still under investigation
 		// as there are still unsolved counter-examples)
-		return cappedBasicBonus + tokuBonus + improveBonus;
+		var info =
+			{ basicBonus: cappedBasicBonus + improveBonus,
+			  tokuBonus: tokuBonus
+			};
+		return info;
+	};
+
+	KC3Fleet.prototype.calcLandingCraftBonus = function () {
+		var info = this.calcLandingCraftInfo();
+		return info.basicBonus + info.tokuBonus;
 	};
 	
 	KC3Fleet.prototype.averageLevel = function(){
