@@ -19,7 +19,7 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 
 	// Looks for API link
 	function checkAgain(){
-		console.log("checking...");
+		console.log("Checking API link...");
 		// If API link is found
 		if(document.getElementById("externalswf")){
 			console.log( document.getElementById("externalswf").getAttribute("src") );
@@ -37,5 +37,17 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 	
 	// Start timer to check if API link exists every half-second
 	intervalChecker = setInterval(checkAgain, 500);
+	
+	// Change osapi whole page zoom based on configured scale
+	chrome.runtime.sendMessage({
+		identifier: "kc3_service",
+		action: "getConfig",
+		id: "api_gameScale"
+	}, function(response){
+		if(response.value){
+			console.log("Setting zoom to scale", response.value + "%");
+			$("body").css("zoom", (response.value || 100) / 100);
+		}
+	});
 	
 })();

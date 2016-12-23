@@ -59,6 +59,7 @@ function ActivateGame(){
 		.attr("src", "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/")
 		.end()
 		.show();
+	$(".box-wrap").css("zoom", ((ConfigManager.api_gameScale || 100) / 100));
 	idleTimer = setInterval(idleFunction,1000);
 	if(ConfigManager.alert_idle_counter) {
 		$(".game-idle-timer").trigger("refresh-tick");
@@ -115,7 +116,8 @@ $(document).on("ready", function(){
 					top: "auto",
 					bottom: "auto",
 					right: "auto",
-					width: $(".box-game").width()
+					width: $(".box-game").width(),
+					zoom: ((ConfigManager.api_gameScale || 100) / 100)
 				});
 				break;
 			case "stick":

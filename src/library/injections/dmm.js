@@ -9,5 +9,6 @@
 		$("#game_frame").css("top", "-16px");
 		$("#game_frame").css("z-index", "999");
 		$("#dmm-ntgnavi-renew").css("display", "none");
+		$("#game_frame").css("zoom", (response.scale || 100) / 100);
 	}
 })).execute();

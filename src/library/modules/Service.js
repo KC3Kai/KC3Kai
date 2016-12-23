@@ -193,7 +193,8 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		------------------------------------------*/
 		"dmmFrameInject" :function(request, sender, response){
 			if(sender.tab.url.indexOf("/pages/game/dmm.html") > -1){
-				response({value:true});
+				ConfigManager.load();
+				response({value:true, scale:ConfigManager.api_gameScale});
 			}else{
 				response({value:false});
 			}
