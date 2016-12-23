@@ -311,16 +311,102 @@ Contains summary information about a fleet and its 6 ships
 		// as the result value, but that requires some modification on other parts of the code.
 		// plus that this formula is not the final version anyway (still under investigation
 		// as there are still unsolved counter-examples)
-		var info =
-			{ basicBonus: cappedBasicBonus + improveBonus,
-			  tokuBonus: tokuBonus
-			};
-		return info;
+		return {
+			basicBonus: cappedBasicBonus + improveBonus,
+			tokuBonus: tokuBonus,
+			dhCount: landingCraftCount,
+			dhStarCount: improveCount
+		};
 	};
 
 	KC3Fleet.prototype.calcLandingCraftBonus = function () {
 		var info = this.calcLandingCraftInfo();
 		return info.basicBonus + info.tokuBonus;
+	};
+
+	KC3Fleet.prototype.landingCraftBonusText = function(
+		base /* basic resource income */,
+		resupply /* must be a non-negative number */, 
+		greatSuccess /* must be boolean */) {
+		if (typeof greatSuccess !== "boolean") {
+			console.error( "greatSuccess has non-boolean value" );
+			return;
+		}
+		if (typeof resupply !== "number") {
+			console.error( "resupply is not a number" );
+			return;
+		}
+
+		var info = this.calcLandingCraftInfo();
+		var outputs = [];
+		function o(text) {
+			outputs.push(text);
+		}
+
+		// keep at most 5 digits after decimal point
+		// but if a shorter representation is possible, it will be used instead
+		function formatFloat(v) {
+			if (typeof v !== "number") {
+				console.error( "formatFloat", "argument not taking a number");
+			}
+			var fixed = v.toFixed(5);
+			var converted = "" + v;
+			return (fixed.length <= converted.length) ? fixed : converted;
+		}
+
+		// "+percent% (actual)"
+		// p = 100*percent
+		function bonusText(p, actual) {
+			return "+" + formatFloat(100*p) + "% (" + formatFloat(actual) + ")";
+		}
+		
+		// "a: b"
+		function pairText(a,b) {
+			return a + ": " + b;
+		}
+
+		var actualBase = Math.floor( greatSuccess ? 1.5 * base : base );
+		var total = actualBase;
+		var totalText = "" + actualBase;
+		if (greatSuccess) {
+			o( pairText("Base (Great Success)", actualBase + " = " + base + "x150%" ));
+		} else {
+			o( pairText("Base", actualBase) );
+		}
+		if (info.dhCount > 0 && info.dhStarCount > 0) {
+			o( pairText("Average Improvement",
+						formatFloat(info.dhStarCount/info.dhCount) + " = " + 
+						info.dhStarCount + "/" + info.dhCount ) );
+		}
+
+		var bonus1 = Math.floor( actualBase * info.basicBonus );
+		if (info.basicBonus > 0) {
+			o( pairText("Bonus", bonusText(info.basicBonus, bonus1)) );
+			total += bonus1;
+			totalText += "+" + bonus1;
+		}
+
+		var bonus2 = Math.floor( actualBase * info.tokuBonus );
+		if (info.tokuBonus > 0) {
+			o( pairText("Bonus (Toku)", bonusText(info.tokuBonus, bonus2)) );
+			total += bonus2;
+			totalText += "+" + bonus2;
+		}
+
+		var totalNoSup = total;
+		if (resupply > 0) {
+			o( pairText("Resupply", "-" + formatFloat( resupply )));
+			total -= resupply;
+			totalText += "-" + resupply;
+		}
+		
+		totalText = "" + total + " = " + totalText;
+		if (resupply > 0) {
+			totalText += " = " + totalNoSup + "-" + resupply;
+		}
+
+		o( pairText("Total", totalText ) );
+		console.log(info,outputs);
 	};
 	
 	KC3Fleet.prototype.averageLevel = function(){
