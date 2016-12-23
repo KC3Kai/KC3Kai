@@ -26,9 +26,22 @@ Saves and loads list to and from localStorage
 			return this.list["x"+rosterId] || (new KC3Ship());
 		},
 		
-		// Count number of ships
-		count :function(){
-			return Object.size(this.list) + this.pendingShipNum;
+		// Count number of ships satisfying some precondition.
+		// when precondition is not explicitly given, it counts all ships
+		// including pending ships.
+		// but pending ships are not counted when a precondition is given.
+		count: function( cond ){
+			if (typeof cond === "undefined") {
+				return Object.size(this.list) + this.pendingShipNum;
+			}
+			var n = 0;
+			var x;
+			for (var ind in this.list) {
+				x = this.list[ind];
+				if (cond.call(x, x))
+					n += 1;
+			}
+			return n;
 		},
 		
 		// Add or replace a ship on the list
