@@ -324,7 +324,7 @@ Contains summary information about a fleet and its 6 ships
 		return info.basicBonus + info.tokuBonus;
 	};
 
-	KC3Fleet.prototype.landingCraftBonusText = function(
+	KC3Fleet.prototype.landingCraftBonusTextAndVal = function(
 		base /* basic resource income */,
 		resupply /* must be a non-negative number */, 
 		greatSuccess /* must be boolean */) {
@@ -406,7 +406,9 @@ Contains summary information about a fleet and its 6 ships
 		}
 
 		o( pairText("Total", totalText ) );
-		console.log(info,outputs);
+		// "outputs" is always non-empty at this point, safe to reduce.
+		return { text: outputs.reduce( function(acc,i) { return acc + "\n" + i; } ),
+				 val: total };
 	};
 	
 	KC3Fleet.prototype.averageLevel = function(){
