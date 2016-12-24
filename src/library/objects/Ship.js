@@ -562,6 +562,23 @@ KC3改 Ship Object
 		return true;
 	};
 
+	KC3Ship.prototype.equipmentAntiAir = function() {
+		var allItems = [
+			this.equipment(0),
+			this.equipment(1),
+			this.equipment(2),
+			this.equipment(3),
+			this.exItem()
+		];
+		return allItems.reduce( function(curAA, item) {
+			return curAA + item.aaDefense();
+		}, 0);
+	};
+
+	KC3Ship.prototype.adjustedAntiAir = function() {
+		return this.aa[1] + this.equipmentAntiAir();
+	};
+
 	function consumePending(index,mapping,clear,args) {
 		/*jshint validthis: true */
 		if(!(this instanceof KC3Ship)) {
