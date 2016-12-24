@@ -562,7 +562,7 @@ KC3改 Ship Object
 		return true;
 	};
 
-	KC3Ship.prototype.equipmentAntiAir = function() {
+	KC3Ship.prototype.equipmentAntiAir = function(forFleet) {
 		var allItems = [
 			this.equipment(0),
 			this.equipment(1),
@@ -571,12 +571,12 @@ KC3改 Ship Object
 			this.exItem()
 		];
 		return allItems.reduce( function(curAA, item) {
-			return curAA + item.aaDefense();
+			return curAA + item.aaDefense(forFleet);
 		}, 0);
 	};
 
 	KC3Ship.prototype.adjustedAntiAir = function() {
-		return this.aa[1] + this.equipmentAntiAir();
+		return this.aa[1] + this.equipmentAntiAir(false);
 	};
 
 	function consumePending(index,mapping,clear,args) {

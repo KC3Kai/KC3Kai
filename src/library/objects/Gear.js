@@ -236,58 +236,99 @@ KC3改 Equipment Object
 		return 0;
 	};
 
-	KC3Gear.prototype.aaDefense = function() {
+	KC3Gear.prototype.aaDefense = function(forFleet) {
 		if (this.masterId === 0)
 			return 0;
-		return KC3Gear.aaDefense( this.master(), this.stars );
+		return KC3Gear.aaDefense( this.master(), this.stars, forFleet );
 	};
 
 	// there is no need of any Gear instance to calculate this.
-	KC3Gear.aaEquipTypeModifier = function (mst) {
+	KC3Gear.aaEquipTypeModifier = function (mst, forFleet) {
 		var category = mst.api_type[2];
 		var icon = mst.api_type[3];
-		
-		// High-angle mounts: check by icon (16)
-		// AAFD: check by category (36)
-		if (icon === 16 || category === 36) {
-			return 4;
-		}
+		forFleet = (typeof forFleet === "boolean") ? forFleet : false;
+		if (forFleet) {
+			// High-angle mounts & AAFD
+			if (icon === 16 || category === 36) {
+				return 0.35;
+			}
 
-		// Machine Gun & Rocket Launchers
-		if (category === 21) {
-			return 6;
-		}
-		
-		// AA Radar (12 for small, 13 for large)
-		// Surface Radar are excluded by checking whether
-		// the equipment gives AA stat (api_tyku)
-		if ((category === 12 || category === 13) && mst.api_tyku > 0) {
-			return 3;
-		}
+			if ( ((category === 1) || (category === 2) || (category === 3)) || /* main gun (red) */
+				 (category === 4) || /* secondary gun */
+				 (category === 21) || /* machine gun & rocket launcher */
+				 ((category === 6) || /* fighter */
+				  (category === 7) || /* dive bomber */
+				  (category === 10) /* seaplace recon */
+				  )) {
+				return 0.2;
+			}
 
-		// otherwise default to 0
-		return 0;
+			// AA Radar
+			if ((category === 12 || category === 13) && mst.api_tyku > 0) {
+				return 0.4;
+			}
+
+			// Type 3 Shell
+			if (category === 18) {
+				return 0.6;
+			}
+			return 0;
+			
+		} else {
+			// High-angle mounts: check by icon (16)
+			// AAFD: check by category (36)
+			if (icon === 16 || category === 36) {
+				return 4;
+			}
+
+			// Machine Gun & Rocket Launchers
+			if (category === 21) {
+				return 6;
+			}
+			
+			// AA Radar (12 for small, 13 for large)
+			// Surface Radar are excluded by checking whether
+			// the equipment gives AA stat (api_tyku)
+			if ((category === 12 || category === 13) && mst.api_tyku > 0) {
+				return 3;
+			}
+
+			// otherwise default to 0
+			return 0;
+		}
 	};
 
-	KC3Gear.aaImprovementModifier = function(mst) {
+	KC3Gear.aaImprovementModifier = function(mst, forFleet) {
 		var category = mst.api_type[2];
 		var icon = mst.api_type[3];
-		
-		// High-angle mounts
-		if (icon === 16) {
-			return 3;
+		forFleet = (typeof forFleet === "boolean") ? forFleet : false;
+		if (forFleet) {
+			// High-angle mounts
+			if (icon === 16) {
+				return 3;
+			}
+			// AA Radar
+			if ((category === 12 || category === 13) && mst.api_tyku > 0) {
+				return 1.5;
+			}
+			return 0;
+		} else {
+			// High-angle mounts
+			if (icon === 16) {
+				return 3;
+			}
+			// Anti-Air Guns
+			if (category === 21) {
+				return 4;
+			}
+			return 0;
 		}
-		// Anti-Air Guns
-		if (category === 21) {
-			return 4;
-		}
-		return 0;
 	};
 
 	// permissive on "rawStars" in case the improvement level is not yet available.
-	KC3Gear.aaDefense = function(mst,rawStars) {
-		var eTypMod = KC3Gear.aaEquipTypeModifier(mst);
-		var eImproveMod = KC3Gear.aaImprovementModifier(mst);
+	KC3Gear.aaDefense = function(mst,rawStars,forFleet) {
+		var eTypMod = KC3Gear.aaEquipTypeModifier(mst, forFleet);
+		var eImproveMod = KC3Gear.aaImprovementModifier(mst,forFleet);
 		var stars = (typeof rawStars === "number") ? rawStars : 0;
 		var aaStat = mst.api_tyku;
 		return eTypMod*aaStat + eImproveMod*Math.sqrt( stars );
