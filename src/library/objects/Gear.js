@@ -236,4 +236,59 @@ KC3改 Equipment Object
 		return 0;
 	};
 
+	KC3Gear.prototype.antiAirDefense = function() {
+		return KC3Gear.aaDefense( this.master(), this.stars );
+	};
+
+	// there is no need of any Gear instance to calculate this.
+	KC3Gear.aaEquipTypeModifier = function (mst) {
+		var category = mst.api_type[2];
+		var icon = mst.api_type[3];
+		
+		// High-angle mounts: check by icon (16)
+		// AAFD: check by category (36)
+		if (icon === 16 || category === 36) {
+			return 4;
+		}
+
+		// Machine Gun & Rocket Launchers
+		if (category === 21) {
+			return 6;
+		}
+		
+		// AA Radar (12 for small, 13 for large)
+		// Surface Radar are excluded by checking whether
+		// the equipment gives AA stat (api_tyku)
+		if ((category === 12 || category === 13) && mst.api_tyku > 0) {
+			return 3;
+		}
+
+		// otherwise default to 0
+		return 0;
+	};
+
+	KC3Gear.aaImprovementModifier = function(mst) {
+		var category = mst.api_type[2];
+		var icon = mst.api_type[3];
+		
+		// High-angle mounts
+		if (icon === 16) {
+			return 3;
+		}
+		// Anti-Air Guns
+		if (category === 21) {
+			return 4;
+		}
+		return 0;
+	};
+
+	// permissive on "rawStars" in case the improvement level is not yet available.
+	KC3Gear.aaDefense = function(mst,rawStars) {
+		var eTypMod = KC3Gear.aaEquipTypeModifier(mst);
+		var eImproveMod = KC3Gear.aaImprovementModifier(mst);
+		var stars = (typeof rawStars === "number") ? rawStars : 0;
+		var aaStat = mst.api_tyku;
+		return eTypMod*aaStat + eImproveMod*Math.sqrt( stars );
+	};
+
 })();
