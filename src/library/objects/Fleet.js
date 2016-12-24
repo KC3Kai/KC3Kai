@@ -307,21 +307,12 @@ Contains summary information about a fleet and its 6 ships
 		// that can be applied to a base resource,
 		// we can do no better than this without rewriting some other parts of the code.
 
-		// TODO: a better solution would be passing [cappedBasicBonus, tokuBonus, improveBonus]
-		// as the result value, but that requires some modification on other parts of the code.
-		// plus that this formula is not the final version anyway (still under investigation
-		// as there are still unsolved counter-examples)
 		return {
 			basicBonus: cappedBasicBonus + improveBonus,
 			tokuBonus: tokuBonus,
 			dhCount: landingCraftCount,
 			dhStarCount: improveCount
 		};
-	};
-
-	KC3Fleet.prototype.calcLandingCraftBonus = function () {
-		var info = this.calcLandingCraftInfo();
-		return info.basicBonus + info.tokuBonus;
 	};
 
 	KC3Fleet.prototype.landingCraftBonusTextAndVal = function(
@@ -369,33 +360,33 @@ Contains summary information about a fleet and its 6 ships
 		var total = actualBase;
 		var totalText = "" + actualBase;
 		if (greatSuccess) {
-			o( pairText("Base (Great Success)", actualBase + " = " + base + "x150%" ));
+			o( pairText(KC3Meta.term("ExpedBaseGreat"), actualBase + " = " + base + "x150%" ));
 		} else {
-			o( pairText("Base", actualBase) );
+			o( pairText(KC3Meta.term("ExpedBaseNormal"), actualBase) );
 		}
 		if (info.dhCount > 0 && info.dhStarCount > 0) {
-			o( pairText("Average Improvement",
+			o( pairText(KC3Meta.term("ExpedAveStars"),
 						formatFloat(info.dhStarCount/info.dhCount) + " = " + 
 						info.dhStarCount + "/" + info.dhCount ) );
 		}
 
 		var bonus1 = Math.floor( actualBase * info.basicBonus );
 		if (info.basicBonus > 0) {
-			o( pairText("Bonus", bonusText(info.basicBonus, bonus1)) );
+			o( pairText(KC3Meta.term("ExpedBonus"), bonusText(info.basicBonus, bonus1)) );
 			total += bonus1;
 			totalText += "+" + bonus1;
 		}
 
 		var bonus2 = Math.floor( actualBase * info.tokuBonus );
 		if (info.tokuBonus > 0) {
-			o( pairText("Bonus (Toku)", bonusText(info.tokuBonus, bonus2)) );
+			o( pairText(KC3Meta.term("ExpedBonusToku"), bonusText(info.tokuBonus, bonus2)) );
 			total += bonus2;
 			totalText += "+" + bonus2;
 		}
 
 		var totalNoSup = total;
 		if (resupply > 0) {
-			o( pairText("Resupply", "-" + formatFloat( resupply )));
+			o( pairText(KC3Meta.term("ExpedResupply") , "-" + formatFloat( resupply )));
 			total -= resupply;
 			totalText += "-" + resupply;
 		}
@@ -405,7 +396,7 @@ Contains summary information about a fleet and its 6 ships
 			totalText += " = " + totalNoSup + "-" + resupply;
 		}
 
-		o( pairText("Total", totalText ) );
+		o( pairText(KC3Meta.term("ExpedTotalIncome"), totalText ) );
 		// "outputs" is always non-empty at this point, safe to reduce.
 		return { text: outputs.reduce( function(acc,i) { return acc + "\n" + i; } ),
 				 val: total };
