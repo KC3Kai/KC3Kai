@@ -242,7 +242,7 @@ Contains summary information about a fleet and its 6 ships
 	// calculate accurate landing craft bonus
 	// formula taken from 
 	// http://kancolle.wikia.com/wiki/Expedition/Introduction#Extra_bonuses_to_expedition_incomes
-	// as of Nov 7th, 2016
+	// as of Dec 23th, 2016
 	KC3Fleet.prototype.calcLandingCraftInfo = function() {
 		var self = this;
 		// use addImprove() to update this value instead of modifying it directly
@@ -294,7 +294,9 @@ Contains summary information about a fleet and its 6 ships
 		// "B1" in the formula (see comment link of this function)
 		var cappedBasicBonus = Math.min(0.2, basicBonus);
 		// "B2" in the formula
-		var tokuBonus = Math.min(0.05, 0.02*tokuCount);
+		// 5% for <= 3 toku and 5.4% for > 3 toku
+		var tokuCap = tokuCount <= 3 ? 0.05 : 0.054;
+		var tokuBonus = Math.min(tokuCap, 0.02*tokuCount);
 		var landingCraftCount = normalCount + t89Count + t2Count + tokuCount;
 		// "B3" in the formula
 		var improveBonus = landingCraftCount > 0
