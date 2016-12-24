@@ -236,7 +236,9 @@ KC3改 Equipment Object
 		return 0;
 	};
 
-	KC3Gear.prototype.antiAirDefense = function() {
+	KC3Gear.prototype.aaDefense = function() {
+		if (this.masterId === 0)
+			return 0;
 		return KC3Gear.aaDefense( this.master(), this.stars );
 	};
 
