@@ -157,9 +157,18 @@ $(document).on("ready", function(){
 	
 	// Quick Play
 	$(".play_btn").on('click', function(){
-		if($(this).data('play'))
-			ActivateGame();
+		ActivateGame();
 	});
+	
+	// Disable Quick Play (must panel)
+	if(ConfigManager.api_mustPanel) {
+		$(".play_btn")
+			.off("click")
+			.attr("disabled", "disabled")
+			.text(KC3Meta.term("APIWaitToggle"))
+			.css("color", "#777")
+			.css('width', "40%");
+	}
 	
 	// I've read the Chrome 54 API Link notice
 	$("#chrome54flash .api_notice_close").on('click', function(){
@@ -172,8 +181,6 @@ $(document).on("ready", function(){
 		localStorage.read_api_notice_55 = 1;
 		$("#chrome55network").hide();
 	});
-	
-	$(".play_btn").data('play',!ConfigManager.api_mustPanel);
 	
 	// untranslated quest copiable text form
 	$(".overlay_quests").on("click", ".no_tl", function(){

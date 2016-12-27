@@ -148,9 +148,10 @@ $(document).on("ready", function(){
 	if(ConfigManager.api_mustPanel) {
 		$(".play_btn")
 			.off('click')
+			.attr("disabled", "disabled")
 			.text(KC3Meta.term("APIWaitToggle"))
-			.css('color','#f00')
-			.css('width','40%');
+			.css("color", "#777")
+			.css('width', "40%");
 	}
 	
 	// Configure Refresh Toggle (using $(".game-refresh").trigger("click") is possible)
