@@ -102,13 +102,13 @@
 			// Japanese special case where ships and items sources are already in JP
 			if(
 				(["jp", "tcn"].indexOf(language) > -1)
-				&& (filename==="ships" || filename==="items")
+				&& (["ships", "items", "ship_affix"].indexOf(filename) > -1)
 			){
 				extendEnglish = false;
 			}
 			// make ships.json and items.json an option to be always in specified one
 			if (!!info_force_ship_lang
-				&& (filename==="ships" || filename==="items")){
+				&& (["ships", "items", "ship_affix"].indexOf(filename) > -1)){
 				extendEnglish = false;
 				language = info_force_ship_lang;
 			}
