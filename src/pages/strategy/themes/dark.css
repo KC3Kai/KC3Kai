@@ -1099,8 +1099,8 @@ a:hover {
 	font-weight:bold;
 }
 
-.tab_flowchart .questInfo.complete {
-	color:#016901;
+.tab_flowchart .questInfo.complete .questDesc {
+	color:#4caf50;
 }
 .tab_flowchart .questExtraItem.active {
 	background:#81811a;

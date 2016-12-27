@@ -869,7 +869,7 @@ body {
 	font-weight:bold;
 }
 
-.tab_flowchart .questInfo.complete {
+.tab_flowchart .questInfo.complete .questDesc {
 	color:#00CC00;
 }
 .tab_flowchart .questExtraItem.active {

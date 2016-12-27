@@ -164,25 +164,13 @@
 					// Active
 					case 2:
 						$(".questInfo", thisBox).addClass("active");
-						$(".questInfo .questIcon", thisBox).text("");
-						$(".questInfo .questIcon", thisBox).css({
-							"background-image": "url(../../assets/img/ui/quest_active.png)",
-							"background-color": "transparent",
-							"background-repeat": "no-repeat",
-							"margin-right": "0px"
-						});
+						$(".questInfo .questIcon", thisBox).addClass("progress");
 						break;
-					
+						
 					// Complete
 					case 3:
 						$(".questInfo", thisBox).addClass("complete");
-						$(".questInfo .questIcon", thisBox).text("");
-						$(".questInfo .questIcon", thisBox).css({
-							"background-image": "url(../../assets/img/ui/quest_check.png)",
-							"background-color": "transparent",
-							"background-repeat": "no-repeat",
-							"margin-right": "0px"
-						});
+						$(".questInfo .questIcon", thisBox).addClass("ticked");
 						break;
 						
 					// Else
