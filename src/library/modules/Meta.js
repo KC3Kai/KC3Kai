@@ -17,6 +17,7 @@ Provides access to data on built-in JSON files
 		_ship:{},
 		_defeq:{},
 		_slotitem:{},
+		_equiptype:[],
 		_quests:{},
 		_ranks:{},
 		_stype:{},
@@ -89,6 +90,7 @@ Provides access to data on built-in JSON files
 			// Load Translations
 			this._ship 		= KC3Translation.getJSON(repo, 'ships', true);
 			this._slotitem	= KC3Translation.getJSON(repo, 'items', true);
+			this._equiptype	= KC3Translation.getJSON(repo, 'equiptype', true);
 			this._quests	= KC3Translation.getJSON(repo, 'quests', true);
 			this._ranks		= KC3Translation.getJSON(repo, 'ranks', true);
 			this._stype		= KC3Translation.getJSON(repo, 'stype', true);
@@ -195,6 +197,16 @@ Provides access to data on built-in JSON files
 				return this._slotitem[ jp_name ];
 			}
 			return jp_name;
+		},
+		
+		gearTypeName :function(categoryType, categoryId){
+			if(typeof categoryType === "undefined"){
+				return this._equiptype || [[],[],[],[],[]];
+			}
+			if(typeof categoryId === "undefined"){
+				return this._equiptype[categoryType] || [];
+			}
+			return this._equiptype[categoryType][categoryId] || "";
 		},
 		
 		abyssShipName :function(ship){
