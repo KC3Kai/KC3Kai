@@ -97,14 +97,19 @@
 				$(".tab_mstgear .gearInfo .gearAssets").hide();
 			}
 			
-			var gearTypes = $(".tab_mstgear .gearInfo .types");
-			gearTypes.text("{0} {3:type2} \u21da {2:type1} \u21da {1:type0}".format(
+			var gearTypesBox = $(".tab_mstgear .gearInfo .types");
+			gearTypesBox.text("{0} {3:type2} \u21da {2:type1} \u21da {1:type0}".format(
 				JSON.stringify(gearData.api_type),
 				KC3Meta.gearTypeName(0, gearData.api_type[0]),
 				KC3Meta.gearTypeName(1, gearData.api_type[1]),
 				KC3Meta.gearTypeName(2, gearData.api_type[2]) ||
 					KC3Master.slotitem_equiptype(gearData.api_type[2]).api_name
-			)).attr("title", gearTypes.text());
+			));
+			if(KC3StrategyTabs.isTextEllipsis(gearTypesBox)){
+				gearTypesBox.attr("title", gearTypesBox.text());
+			} else {
+				gearTypesBox.attr("title", "");
+			}
 
 			$(".tab_mstgear .gearInfo .rarity").empty();
 			for(var bctr=0; bctr<gearData.api_rare; bctr++){

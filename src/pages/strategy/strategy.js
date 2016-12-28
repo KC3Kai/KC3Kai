@@ -176,4 +176,13 @@
 		}
 	};
 
+	KC3StrategyTabs.isTextEllipsis = function(element){
+		var $c = $(element).clone()
+			.css({display: 'inline', width: 'auto', visibility: 'hidden'})
+			.appendTo('body');
+		var cWidth = $c.width();
+		$c.remove();
+		return cWidth > $(element).width();
+	};
+
 })();
