@@ -563,20 +563,19 @@ KC3改 Ship Object
 	};
 
 	KC3Ship.prototype.equipmentAntiAir = function(forFleet) {
-		var allItems = [
-			this.equipment(0),
-			this.equipment(1),
-			this.equipment(2),
-			this.equipment(3),
-			this.exItem()
-		];
-		return allItems.reduce( function(curAA, item) {
-			return curAA + item.aaDefense(forFleet);
-		}, 0);
+		return AntiAir.shipEquipmentAntiAir(this, forFleet);
 	};
 
 	KC3Ship.prototype.adjustedAntiAir = function() {
-		return this.aa[1] + this.equipmentAntiAir(false);
+		return AntiAir.shipAdjustedAntiAir(this);
+	};
+
+	KC3Ship.prototype.proportionalShotdownRate = function() {
+		return AntiAir.shipProportionalShotdownRate(this);
+	};
+
+	KC3Ship.prototype.proportionalShotdown = function(n) {
+		return AntiAir.shipProportionalShotdown(this,n);
 	};
 
 	function consumePending(index,mapping,clear,args) {

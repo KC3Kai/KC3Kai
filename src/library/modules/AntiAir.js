@@ -145,6 +145,54 @@
 		return eTypMod*aaStat + eImproveMod*Math.sqrt( stars );
 	}
 
+	// returns a special floor function f(x) = q * floor( x / q )
+	// - q = 1 if shipObj equips nothing
+	// - q = 2 otherwise
+	function specialFloor(shipObj) {
+		var q = 1;
+		var allItems = allShipEquipments(shipObj);
+		for (let item of allItems) {
+			if (item.masterId !== 0) {
+				q = 2;
+				break;
+			}
+		}
+
+		return function(x) {
+			return q*Math.floor(x / q)
+		};
+	}
+
+	function allShipEquipments(shipObj) {
+		return [
+			shipObj.equipment(0),
+			shipObj.equipment(1),
+			shipObj.equipment(2),
+			shipObj.equipment(3),
+			shipObj.exItem()];
+	}
+
+	function shipEquipmentAntiAir(shipObj, forFleet) {
+		var allItems = allShipEquipments(shipObj);
+		return allItems.reduce( function(curAA, item) {
+			return curAA + item.aaDefense(forFleet);
+		}, 0);
+	}
+
+	function shipAdjustedAntiAir(shipObj) {
+		return shipObj.aa[1] + shipEquipmentAntiAir(shipObj,false);
+	}
+
+	function shipProportionalShotdownRate(shipObj) {
+		var floor = specialFloor(shipObj);
+		var adjustedAA = shipAdjustedAntiAir(shipObj);
+		return floor(adjustedAA) / 400;
+	}
+
+	function shipProportionalShotdown(shipObj, num) {
+		return Math.floor( shipProportionalShotdownRate(shipObj) * num );
+	}
+
 	// exporting module
 	window.AntiAir = {
 		isAARadar: isAARadar,
@@ -160,6 +208,11 @@
 		getFleetImprovementModifier: getFleetImprovementModifier,
 		getShipImprovementModifier: getShipImprovementModifier,
 
-		calcEquipmentAADefense: calcEquipmentAADefense
+		calcEquipmentAADefense: calcEquipmentAADefense,
+		shipEquipmentAntiAir: shipEquipmentAntiAir,
+		shipAdjustedAntiAir: shipAdjustedAntiAir,
+		specialFloor: specialFloor,
+		shipProportionalShotdown: shipProportionalShotdown,
+		shipProportionalShotdownRate: shipProportionalShotdownRate
 	};
 })();
