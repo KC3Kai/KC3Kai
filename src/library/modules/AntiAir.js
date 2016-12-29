@@ -195,14 +195,6 @@
 
 	// exporting module
 	window.AntiAir = {
-		isAARadar: isAARadar,
-		isAAFD: isAAFD,
-		isHighAngleMount: isHighAngleMount,
-		isType3Shell: isType3Shell,
-		isAAGun: isAAGun,
-		isRedGun: isRedGun,
-		isYellowGun: isYellowGun,
-
 		getFleetShipEquipmentModifier: getFleetShipEquipmentModifier,
 		getShipEquipmentModifier: getShipEquipmentModifier,
 		getFleetImprovementModifier: getFleetImprovementModifier,
