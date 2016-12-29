@@ -17,10 +17,10 @@
 	// test all predicates passed as argument in order,
 	// return the first non-falsy value or "false" if all predicates have falled.
 	function anyOf(/* list of predicates */) {
-		let args = arguments;
+		var args = arguments;
 		return function(x) {
-			for (let f of args) {
-				let result = f(x);
+			for (var fInd in args) {
+				var result = args[fInd](x);
 				if (result)
 					return result;
 			}
@@ -130,9 +130,11 @@
 		return 0;
 	}
 
-	function calcEquipmentAADefense(mst,
-									stars /* number 0..10 */,
-									forFleet /* bool */) {
+	function calcEquipmentAADefense(
+		mst,
+		stars /* number 0..10 */,
+		forFleet /* bool */) {
+
 		var eTypMod = 
 			(forFleet 
 			 ? getFleetShipEquipmentModifier 
@@ -151,7 +153,8 @@
 	function specialFloor(shipObj) {
 		var q = 1;
 		var allItems = allShipEquipments(shipObj);
-		for (let item of allItems) {
+		for (var itemInd in allItems) {
+			var item = allItems[itemInd];
 			if (item.masterId !== 0) {
 				q = 2;
 				break;
@@ -159,7 +162,7 @@
 		}
 
 		return function(x) {
-			return q*Math.floor(x / q)
+			return q*Math.floor(x / q);
 		};
 	}
 
