@@ -927,15 +927,17 @@
 		},
 
 		Consumables: function(data){
-			$(".count_fcoin").text( PlayerManager.consumables.fcoin );
-			$(".count_buckets").text( PlayerManager.consumables.buckets );
-			$(".count_screws").text( PlayerManager.consumables.screws );
-			$(".count_torch").text( PlayerManager.consumables.torch );
-			$(".count_devmats").text( PlayerManager.consumables.devmats );
-			$(".count_fuel").text( PlayerManager.hq.lastMaterial[0] );
-			$(".count_steel").text( PlayerManager.hq.lastMaterial[2] );
-			$(".count_ammo").text( PlayerManager.hq.lastMaterial[1] );
-			$(".count_bauxite").text( PlayerManager.hq.lastMaterial[3] );
+			$(".count_fcoin").text( PlayerManager.consumables.fcoin || 0 );
+			$(".count_buckets").text( PlayerManager.consumables.buckets || 0 );
+			$(".count_screws").text( PlayerManager.consumables.screws || 0 );
+			$(".count_torch").text( PlayerManager.consumables.torch || 0 );
+			$(".count_devmats").text( PlayerManager.consumables.devmats || 0 );
+			if(!!PlayerManager.hq.lastMaterial){
+				$(".count_fuel").text( PlayerManager.hq.lastMaterial[0] );
+				$(".count_steel").text( PlayerManager.hq.lastMaterial[2] );
+				$(".count_ammo").text( PlayerManager.hq.lastMaterial[1] );
+				$(".count_bauxite").text( PlayerManager.hq.lastMaterial[3] );
+			}
 			// More pages could be added, see `api_get_member/useitem` in Kcsapi.js
 			$(".count_1classMedals").text( PlayerManager.consumables.firstClassMedals || 0 );
 			$(".count_medals").text( PlayerManager.consumables.medals || 0 );
