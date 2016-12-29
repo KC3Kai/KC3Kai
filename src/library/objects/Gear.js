@@ -247,7 +247,7 @@ KC3改 Equipment Object
 	// there is no need of any Gear instance to calculate this
 	// as long as we know the improvement level
 	// serves as a shortcut to AntiAir module
-	KC3Gear.aaDefense = function(mst,rawStars,forFleet) {
-		return  AntiAir.calcEquipmentAADefense(mst,stars,forFleet);
+	KC3Gear.aaDefense = function(mst,stars,forFleet) {
+		return AntiAir.calcEquipmentAADefense(mst,stars,forFleet);
 	};
 })();

@@ -48,12 +48,12 @@
 	// Anti-air gun includes machine guns and rocket launchers
 	var isAAGun = categoryEq(21);
 
-	var isMainGun = anyOf(
-		categoryEq(1),
-		categoryEq(2),
-		categoryEq(3));
+	var isRedGun = anyOf(
+		iconEq(1),
+		iconEq(2),
+		iconEq(3));
 	
-	var isSecondaryGun = categoryEq(4);
+	var isYellowGun = iconEq(4);
 	var isFighter = categoryEq(6);
 	var isDiveBomber = categoryEq(7);
 	var isSeaplaneRecon = categoryEq(10);
@@ -69,11 +69,19 @@
 
 	// TODO: abyssal equipments into consideration?
 
+	// it is possible for conditions to have overlap:
+	// Akizuki-gun for example is both high angle mount and short caliber main gun.
+	// to resolve this:
+	// - the conditions are re-ordered so the highest applicable
+	//   modifier is always checked first.
+	// - the wiki says main gun (red), so maybe an icon-based checker "isRedGun"
+	//   might be more appropriate.
+
 	function getShipEquipmentModifier(mst) {
-		if (isHighAngleMount(mst) || isAAFD(mst))
-			return 4;
 		if (isAAGun(mst))
 			return 6;
+		if (isHighAngleMount(mst) || isAAFD(mst))
+			return 4;
 		if (isAARadar(mst))
 			return 3;
 
@@ -81,30 +89,30 @@
 	}
 
 	function getFleetShipEquipmentModifier(mst) {
-		if (anyOf(isMainGun,
-				  isSecondaryGun,
+		if (isType3Shell(mst))
+			return 0.6;
+		if (isAARadar(mst))
+			return 0.4;
+		if (isHighAngleMount(mst) || isAAFD(mst))
+			return 0.35;
+		if (anyOf(isRedGun,
+				  isYellowGun,
 				  isAAGun,
 				  isFighter,
 				  isDiveBomber,
 				  isSeaplaneRecon)(mst))
 			return 0.2;
-		if (isHighAngleMount(mst) || isAAFD(mst))
-			return 0.35;
-		if (isAARadar(mst))
-			return 0.4;
-		if (isType3Shell(mst))
-			return 0.6;
 
 		return 0;
 	}
 
 	function getShipImprovementModifier(mst) {
+		if (isAAGun(mst))
+			return 4;
 		if (isHighAngleMount(mst))
 			return 3;
 		if (isAARadar(mst))
 			return 0;
-		if (isAAGun(mst))
-			return 4;
 
 		return 0;
 	}
@@ -144,7 +152,8 @@
 		isHighAngleMount: isHighAngleMount,
 		isType3Shell: isType3Shell,
 		isAAGun: isAAGun,
-		isMainGun: isMainGun,
+		isRedGun: isRedGun,
+		isYellowGun: isYellowGun,
 
 		getFleetShipEquipmentModifier: getFleetShipEquipmentModifier,
 		getShipEquipmentModifier: getShipEquipmentModifier,
