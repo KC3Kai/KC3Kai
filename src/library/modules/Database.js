@@ -795,6 +795,7 @@ Uses Dexie.js third-party plugin on the assets directory
 				rmditem   ItemMaster
 				remodel   ShipMaster
 				regen     ------
+				lbas      WorldID
 			*/
 			// hour filter
 			iFilters = (

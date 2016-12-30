@@ -57,6 +57,9 @@
 	margin:5px 0px 0px 5px;
 	padding:0px 0px 0px 5px;
 	font-weight:bold;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap;
 }
 .tab_fleet .fleet_details {
 	width:480px;
@@ -94,7 +97,13 @@
 	width:40px;
 	height:25px;
 	float:left;
+	overflow:hidden;
+	white-space:nowrap;
 }
+.tab_fleet .detail_value:hover {
+	overflow:visible;
+}
+
 /* Ships */
 .tab_fleet .fleet_ships {
 	width:672px;

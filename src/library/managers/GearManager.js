@@ -12,10 +12,27 @@ Saves and loads list to and from localStorage
 		max: 497,
 		pendingGearNum: 0,
 
-		carrierBasedAircraftType3Ids: [6,7,8,9,10,21,22,33],
-		landBasedAircraftType3Ids: [6,7,8,9,10,33,37,38],
-		antiAirFighterType2Ids: [6,7,8,11,45],
+		carrierBasedAircraftType3Ids: [6,7,8,9,10,21,22,33,39,40],
+		landBasedAircraftType3Ids: [6,7,8,9,10,33,37,38,39,40],
+		antiAirFighterType2Ids: [6,7,8,11,45,57],
 		interceptorsType3Ids: [38],
+
+		carrierSupplyBauxiteCostPerSlot: 5,
+		// LBAS mechanism still in progress
+		landBaseSupplyBauxiteCostPerSlot: 5,
+		landBaseSupplyFuelCostPerSlot: 3,
+		landBaseBomberSortieFuelCostPerSlot: 1.5,
+		landBaseReconnSortieFuelCostPerSlot: 1,
+		landBaseOtherSortieFuelCostPerSlot: 1,
+		landBaseBomberSortieAmmoCostPerSlot: 0.7,
+		landBaseReconnSortieAmmoCostPerSlot: 0.75,
+		landBaseOtherSortieAmmoCostPerSlot: 0.65,
+		landBaseReconnMaxSlot: 4,
+		landBaseOtherMaxSlot: 18,
+		landBaseReconnType2Ids: [9,10,41],
+		// Jet aircraft mechanism still in progress
+		jetBomberSteelCostRatioPerSlot: 0.2,
+		// steel_consumption = floor(api_cost * current_slot * 0.2)
 
 		// Get a specific item by ID
 		// NOTE: if you want to write testcases, avoid setting KC3GearManager.list["x0"]

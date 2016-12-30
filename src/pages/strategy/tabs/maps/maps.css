@@ -353,6 +353,36 @@
 	height:20px;
 	vertical-align:top;
 }
+.tab_maps .sortie_list .node_result_box .exped {
+	width:10px;
+	height:11px;
+	line-height:11px;
+	border-radius:6px;
+	margin:9px 0px 0px -1px;
+	position:absolute;
+	font-size:8px;
+	text-align:center;
+	color:#fff;
+	background:#a69de6;
+	overflow:hidden;
+	cursor:default;
+	display:none;
+}
+.tab_maps .sortie_list .node_result_box .lbas {
+	width:12px;
+	height:12px;
+	line-height:12px;
+	border-radius:6px;
+	margin:8px 0px 0px 7px;
+	position:absolute;
+	font-size:8px;
+	text-align:center;
+	color:#ff0;
+	background:#5b5;
+	overflow:hidden;
+	cursor:default;
+	display:none;
+}
 
 .tab_maps .sortie_list .node_enemy {
 	width:120px;
@@ -436,10 +466,22 @@
 	float:left;
 	font-weight:bold;
 }
+.tab_maps .sortie_list .node_cond_value.best {
+	color:#009900;
+}
+.tab_maps .sortie_list .node_cond_value.better {
+	color:#009900;
+}
 .tab_maps .sortie_list .node_cond_value.good {
 	color:#009900;
 }
 .tab_maps .sortie_list .node_cond_value.bad {
+	color:#f33;
+}
+.tab_maps .sortie_list .node_cond_value.worse {
+	color:#f33;
+}
+.tab_maps .sortie_list .node_cond_value.worst {
 	color:#f33;
 }
 

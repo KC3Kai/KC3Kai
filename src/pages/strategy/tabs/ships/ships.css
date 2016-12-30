@@ -297,34 +297,40 @@
 }
 /* Fields: Equips */
 .tab_ships .ship_item .ship_equip {
-	width:80px;
-	/*margin:0px 5px 0px 0px;*/
+	width:85px;
 }
 .tab_ships .ship_item .ship_equip_icon {
-	width:20px;
+	width:17px;
 	height:20px;
 	float:left;
 	overflow:hidden;
 	position:relative;
 }
 .tab_ships .ship_item .ship_equip img {
-	width:20px;
-	height:20px;
+	width:17px;
+	height:18px;
 }
 .tab_ships .ship_item .ship_equip span {
-	position: absolute;
-	display: flex;
-	right: 0;
-	bottom: 0;
-	font-size: 10px;
-	width: 100%;
-	height: 100%;
-	border-radius: 16px;
-	color: #777;
-	text-align: center;
-	align-items: center;
-	justify-content: center;
+	position:absolute;
+	display:flex;
+	right:0px;
+	bottom:0px;
+	font-size:10px;
+	width:100%;
+	height:100%;
+	border-radius:18px;
+	color:#777;
+	text-align:center;
+	align-items:center;
+	justify-content:center;
 }
+.tab_ships .ship_item .ship_equip .ship_equip_ex img {
+	display:none;
+}
+.tab_ships .ship_item .ship_equip .ship_equip_ex .empty {
+	background:#ccc;
+}
+
 /* Fields: HeartLock and Marriage Ring */
 .tab_ships .ship_item .ship_stat_icon {
 	width:20px;

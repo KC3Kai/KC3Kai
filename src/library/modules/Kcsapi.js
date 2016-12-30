@@ -290,9 +290,35 @@ Previously known as "Reactor"
 			var thisItem;
 			for(var ctr in response.api_data){
 				thisItem = response.api_data[ctr];
+				// Recognize some frequently used items, full IDs set in master useitem
 				switch(thisItem.api_id){
-					case 68: PlayerManager.consumables.pike = thisItem.api_count; break;
-					case 69: PlayerManager.consumables.saury = thisItem.api_count; break;
+					case 10: PlayerManager.consumables.furniture200 = thisItem.api_count; break;
+					case 11: PlayerManager.consumables.furniture400 = thisItem.api_count; break;
+					case 12: PlayerManager.consumables.furniture700 = thisItem.api_count; break;
+					// 50 and 51 not found in this API, as they are slotitem
+					//case 50: PlayerManager.consumables.repairTeam = thisItem.api_count; break;
+					//case 51: PlayerManager.consumables.repairGoddess = thisItem.api_count; break;
+					case 52: PlayerManager.consumables.furnitureFairy = thisItem.api_count; break;
+					case 54: PlayerManager.consumables.mamiya = thisItem.api_count; break;
+					case 56: PlayerManager.consumables.chocolate = thisItem.api_count; break;
+					case 57: PlayerManager.consumables.medals = thisItem.api_count; break;
+					case 58: PlayerManager.consumables.blueprints = thisItem.api_count; break;
+					case 59: PlayerManager.consumables.irako = thisItem.api_count; break;
+					case 60: PlayerManager.consumables.presents = thisItem.api_count; break;
+					case 61: PlayerManager.consumables.firstClassMedals = thisItem.api_count; break;
+					case 62: PlayerManager.consumables.hishimochi = thisItem.api_count; break;
+					case 64: PlayerManager.consumables.reinforceExpansion = thisItem.api_count; break;
+					case 65: PlayerManager.consumables.protoCatapult = thisItem.api_count; break;
+					// 66 and 67 not found in this API, as they are slotitem
+					//case 66: PlayerManager.consumables.ration = thisItem.api_count; break;
+					//case 67: PlayerManager.consumables.resupplier = thisItem.api_count; break;
+					case 68: PlayerManager.consumables.mackerel = thisItem.api_count; break;
+					case 69: PlayerManager.consumables.mackerelCan = thisItem.api_count; break;
+					case 70: PlayerManager.consumables.skilledCrew = thisItem.api_count; break;
+					case 71: PlayerManager.consumables.nEngine = thisItem.api_count; break;
+					case 72: PlayerManager.consumables.decoMaterial = thisItem.api_count; break;
+					case 73: PlayerManager.consumables.constCorps = thisItem.api_count; break;
+					case 74: PlayerManager.consumables.newAircraftBlueprint = thisItem.api_count; break;
 					default: break;
 				}
 			}
@@ -359,8 +385,10 @@ Previously known as "Reactor"
 				sid  = parseInt(params.api_id,10),
 				ship = KC3ShipManager.get(sid),
 				mast = ship.master();
-			
-			console.log("Extra Slot Unlock for",sid,ship.name());
+			if(PlayerManager.consumables.reinforceExpansion > 0){
+				PlayerManager.consumables.reinforceExpansion -= 1;
+			}
+			console.log("Extra Slot unlocked for",sid,ship.name());
 		},
 		
 		"api_req_kaisou/marriage":function(params, response, headers){
@@ -1051,6 +1079,10 @@ Previously known as "Reactor"
 			});
 			localStorage.bases = JSON.stringify(PlayerManager.bases);
 			// Record material consuming. Yes, set plane use your bauxite :)
+			// Known formula:
+			//var landSlot = KC3GearManager.landBaseReconnType2Ids.indexOf(planeMaster.api_type[2])>-1 ?
+			//	KC3GearManager.landBaseReconnMaxSlot : KC3GearManager.landBaseOtherMaxSlot;
+			//var deployBauxiteCost = planeMaster.api_cost * landSlot;
 			if(typeof response.api_data.api_after_bauxite !== "undefined"){
 				var hour = Math.hrdInt("floor", Date.safeToUtcTime(headers.Date)/3.6,6,1);
 				var fuel = PlayerManager.hq.lastMaterial[0],
@@ -1060,7 +1092,7 @@ Previously known as "Reactor"
 				var consumedBauxite = bauxite - PlayerManager.hq.lastMaterial[3];
 				KC3Database.Naverall({
 					hour: hour,
-					type: "lbas",
+					type: "lbas" + (params.api_area_id || "0"),
 					data: [0,0,0,consumedBauxite].concat([0,0,0,0])
 				});
 				PlayerManager.setResources([fuel, ammo, steel, bauxite] , hour);
@@ -1079,9 +1111,8 @@ Previously known as "Reactor"
 				}
 			});
 			localStorage.bases = JSON.stringify(PlayerManager.bases);
-			// Record material consuming.
-			// But it's hard to define its type, maybe a new type called: lbas
-			// And NOT yet record fuel and ammo cost for sortie land base squadron
+			// Record material consuming, using a new type called: lbas
+			// NOT yet record fuel and ammo cost for sortie land base squadron
 			var hour = Math.hrdInt("floor", Date.safeToUtcTime(headers.Date)/3.6,6,1);
 			var fuel = response.api_data.api_after_fuel,
 				ammo = PlayerManager.hq.lastMaterial[1],
@@ -1091,7 +1122,7 @@ Previously known as "Reactor"
 				consumedBauxite = bauxite - PlayerManager.hq.lastMaterial[3];
 			KC3Database.Naverall({
 				hour: hour,
-				type: (PlayerManager.hq.lastSortie || ["sortie0"])[0],
+				type: "lbas" + (params.api_area_id || "0"),
 				data: [consumedFuel,0,0,consumedBauxite].concat([0,0,0,0])
 			});
 			PlayerManager.setResources([fuel, ammo, steel, bauxite] , hour);

@@ -90,7 +90,6 @@ Saves and loads significant data for future use
 			return !this.available ? false : this._raw.ship[id] || false;
 		},
 
-
 		all_ships :function(){
 			return this._raw.ship || {};
 		},
@@ -136,6 +135,14 @@ Saves and loads significant data for future use
 
 		slotitem_equiptype :function(id){
 			return !this.available ? false : this._raw.slotitem_equiptype[id] || false;
+		},
+
+		useitem :function(id){
+			return !this.available ? false : this._raw.useitem[id] || false;
+		},
+
+		all_useitems :function(){
+			return this._raw.useitem || {};
 		},
 
 		/* Save to localStorage

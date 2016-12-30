@@ -65,6 +65,10 @@ html,body {
 	margin:-60px auto 0px -200px;
 	color:#c44;
 }
+#catBomb .content.withDownload {
+	margin:-70px auto 0px -200px;
+	height:140px;
+}
 #catBomb .image {
 	width:40px;
 	height:40px;
@@ -102,6 +106,12 @@ html,body {
 	width:380px;
 	margin:10px 0px 0px 0px;
 	font-size:12px;
+}
+#catBomb .download {
+	text-align: center;
+	font-weight: bold;
+	font-size: 14px;
+	margin: 2px 0px 0px 0px;
 }
 
 /* GAME UPDATE MODAL
@@ -373,6 +383,15 @@ html,body {
 	line-height:20px;
 	color:#aaa;
 }
+.module.activity .consumables .consumable.page1 {
+	display:block;
+}
+.module.activity .consumables .consumable.page2 {
+	display:none;
+}
+.module.activity .consumables .consumable.page3 {
+	display:none;
+}
 
 /* Expedition */
 .module.activity .expeditions {
@@ -531,6 +550,7 @@ html,body {
 	width:180px;
 	height:19px;
 	margin:0px 0px 5px 0px;
+	position:relative;
 }
 .module.activity .sortie_node {
 	width:19px;
@@ -542,8 +562,25 @@ html,body {
 	border-radius:10px;
 	color:#fff;
 	font-size:10px;
-	text-align: center;
+	text-align:center;
 	border:1px solid #aaa;
+}
+.module.activity .sortie_nodes .boss_node {
+	float:left;
+	position:absolute;
+	display:none;
+}
+.module.activity .sortie_nodes .boss_node img {
+	width:19px;
+	height:19px;
+	margin-top:-10px;
+}
+.module.activity .sortie_nodes .boss_node .boss_circle {
+	position:absolute;
+	margin-top:-20px;
+	border-color:#a90a0a;
+	background:#7d0000;
+	z-index: 1;
 }
 .module.activity .sortie_node.nc_battle {
 	background:#7D0000;
@@ -751,6 +788,36 @@ ABYSS FLEET
 	height:24px;
 	margin:3px;
 }
+.module.activity .battle_flag .support_exped {
+	width:12px;
+	height:12px;
+	line-height:13px;
+	border-radius:6px;
+	margin:16px 0px 0px 3px;
+	position:absolute;
+	font-size:8px;
+	text-align:center;
+	color:#fff;
+	background:#a69de6;
+	overflow:hidden;
+	cursor:default;
+	display:none;
+}
+.module.activity .battle_flag .support_lbas {
+	width:14px;
+	height:13px;
+	line-height:13px;
+	border-radius:6px;
+	margin:15px 0px 0px 17px;
+	position:absolute;
+	font-size:8px;
+	text-align:center;
+	color:#ff0;
+	background:#5b5;
+	overflow:hidden;
+	cursor:default;
+	display:none;
+}
 /* Battle Conditions */
 .module.activity .battle_conditions {
 	width:180px;
@@ -791,6 +858,24 @@ ABYSS FLEET
 	color:#fff;
 	white-space:nowrap;
 	overflow:hidden;
+}
+.module.activity .battle_cond_value.best {
+	color:#1f1;
+}
+.module.activity .battle_cond_value.better {
+	color:#5f5;
+}
+.module.activity .battle_cond_value.good {
+	color:#afa;
+}
+.module.activity .battle_cond_value.bad {
+	color:#faa;
+}
+.module.activity .battle_cond_value.worse {
+	color:#f77;
+}
+.module.activity .battle_cond_value.worst {
+	color:#f44;
 }
 .module.activity .battle_contact img {
 	width:15px;
@@ -2364,7 +2449,7 @@ ABYSS FLEET
 /* AIR BASES
 ------------------------------*/
 .module.fleet .airbase_list {
-	overflow-y:scroll;
+	overflow-y:auto;
 	overflow-x:hidden;
 }
 .airbase {
@@ -2462,6 +2547,7 @@ ABYSS FLEET
 	float:left;
 	border-radius:6px;
 	overflow:hidden;
+	white-space:nowrap;
 }
 .airbase_plane.moving {
 	background:rgba(255,200,0,0.2);
@@ -2473,13 +2559,13 @@ ABYSS FLEET
 }
 .base_plane_img {
 	width:80px;
-	text-align: center;
+	text-align:center;
 	position:relative;
 	margin:0px 0px 0px -10px;
 }
 .base_plane_img  img {
 	width:100%;
-	vertical-align: middle;
+	vertical-align:middle;
 	margin:-60% -50%;
 	-webkit-mask-image:-webkit-linear-gradient(right, rgba(34,34,34,1) 30%,rgba(34,34,34,0) 100%);
 }
@@ -2491,11 +2577,11 @@ ABYSS FLEET
 .base_plane_icon img {
 	width:20px;
 	height:20px;
-	vertical-align: top;
+	vertical-align:top;
 }
 .base_plane_chevs {
 	width:15px;
-	margin:0px 5px 0px 0px;
+	margin:0px 2px 0px 0px;
 }
 .base_plane_chevs img {
 	width:25px;
@@ -2512,7 +2598,7 @@ ABYSS FLEET
 		2px 2px 4px #333;
 	text-align:center;
 	color:#ccc;
-	margin:0px 5px 0px 0px;
+	margin:0px 1px 0px 0px;
 }
 .base_plane_count.unsupplied {
 	color:#f55;
@@ -2521,6 +2607,7 @@ ABYSS FLEET
 	width:16px;
 	padding:4px 0px;
 	line-height:16px;
+	float:right;
 }
 .base_plane_cond img {
 	width:16px;
