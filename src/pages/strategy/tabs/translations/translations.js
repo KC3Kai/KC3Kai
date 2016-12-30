@@ -26,7 +26,7 @@
 				var row = $(".factory .tr-item").clone();
 				var nested = function(obj){
 					if(Array.isArray(obj)){
-						return nested(obj[0]);
+						return obj.length === 0 ? {} : nested(obj[0]);
 					}
 					if(typeof obj === "object"){
 						if(!!obj.tag){ return obj; }
@@ -35,7 +35,7 @@
 					}
 					return obj;
 				};
-				var tag = v.tag || nested(v).tag;
+				var tag = v.tag || nested(v).tag || language;
 
 				row.addClass( 
 					language === tag ?
