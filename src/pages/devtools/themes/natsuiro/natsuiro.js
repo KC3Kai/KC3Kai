@@ -334,6 +334,7 @@
 		ConfigManager.load();
 		KC3Master.init();
 		RemodelDb.init();
+		WhoCallsTheFleetDb.init("../../../../");
 		KC3Meta.init("../../../../data/");
 		KC3Meta.defaultIcon("../../../../assets/img/ui/empty.png");
 		KC3Meta.loadQuotes();
@@ -927,15 +928,17 @@
 		},
 
 		Consumables: function(data){
-			$(".count_fcoin").text( PlayerManager.consumables.fcoin );
-			$(".count_buckets").text( PlayerManager.consumables.buckets );
-			$(".count_screws").text( PlayerManager.consumables.screws );
-			$(".count_torch").text( PlayerManager.consumables.torch );
-			$(".count_devmats").text( PlayerManager.consumables.devmats );
-			$(".count_fuel").text( PlayerManager.hq.lastMaterial[0] );
-			$(".count_steel").text( PlayerManager.hq.lastMaterial[2] );
-			$(".count_ammo").text( PlayerManager.hq.lastMaterial[1] );
-			$(".count_bauxite").text( PlayerManager.hq.lastMaterial[3] );
+			$(".count_fcoin").text( PlayerManager.consumables.fcoin || 0 );
+			$(".count_buckets").text( PlayerManager.consumables.buckets || 0 );
+			$(".count_screws").text( PlayerManager.consumables.screws || 0 );
+			$(".count_torch").text( PlayerManager.consumables.torch || 0 );
+			$(".count_devmats").text( PlayerManager.consumables.devmats || 0 );
+			if(!!PlayerManager.hq.lastMaterial){
+				$(".count_fuel").text( PlayerManager.hq.lastMaterial[0] );
+				$(".count_steel").text( PlayerManager.hq.lastMaterial[2] );
+				$(".count_ammo").text( PlayerManager.hq.lastMaterial[1] );
+				$(".count_bauxite").text( PlayerManager.hq.lastMaterial[3] );
+			}
 			// More pages could be added, see `api_get_member/useitem` in Kcsapi.js
 			$(".count_1classMedals").text( PlayerManager.consumables.firstClassMedals || 0 );
 			$(".count_medals").text( PlayerManager.consumables.medals || 0 );
@@ -2990,7 +2993,7 @@
 				var jet = thisNode.airBaseJetInjection;
 				var jetPlanes = jet.api_stage1.api_f_count;
 				var jetShotdown = jet.api_stage1.api_e_lostcount + jet.api_stage2.api_e_lostcount;
-				var jetDamage = Math.floor(jet.api_stage3.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
+				var jetDamage = !jet.api_stage3 ? 0 : Math.floor(jet.api_stage3.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
 				var jetLost = jet.api_stage1.api_f_lostcount + jet.api_stage2.api_f_lostcount;
 				lbasTips += KC3Meta.term("BattleLbasJetSupportTips").format(jetPlanes, jetShotdown, jetDamage, jetLost);
 			}
@@ -2998,7 +3001,7 @@
 				var baseId = ab.api_base_id;
 				var planes = ab.api_stage1.api_f_count;
 				var shotdown = ab.api_stage1.api_e_lostcount + ab.api_stage2.api_e_lostcount;
-				var damage = Math.floor(ab.api_stage3.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
+				var damage = !ab.api_stage3 ? 0 : Math.floor(ab.api_stage3.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
 				var lost = ab.api_stage1.api_f_lostcount + ab.api_stage2.api_f_lostcount;
 				if(!!lbasTips) { lbasTips += "\n"; }
 				lbasTips += KC3Meta.term("BattleLbasSupportTips").format(planes, baseId, shotdown, damage, lost);

@@ -169,6 +169,7 @@
 				lk: ThisShip.lk[0],
 				sp: MasterShip.api_soku,
 				slots: ThisShip.slots,
+				exSlot: ThisShip.ex_item,
 				fleet: ThisShip.onFleet(),
 				ship: ThisShip,
 				master: ThisShip.master(),
@@ -444,6 +445,15 @@
 					return (curVal === 0)
 						|| (curVal === 1 && ship.canEquipDaihatsu)
 						|| (curVal === 2 && !ship.canEquipDaihatsu);
+				});
+			self.defineShipFilter(
+				"exslot",
+				0,
+				["all", "yes","no"],
+				function(curVal, ship) {
+					return (curVal === 0)
+						|| (curVal === 1 && (ship.exSlot > 0 || ship.exSlot === -1))
+						|| (curVal === 2 && ship.exSlot === 0);
 				});
 
 			var stypes = Object
@@ -727,6 +737,9 @@
 					[1,2,3,4].forEach(function(x){
 						self.equipImg(cElm, x, cShip.slots[x-1], cShip.equip[x-1]);
 					});
+					if(cShip.exSlot !== 0){
+						self.equipImg(cElm, "ex", -2, cShip.exSlot);
+					}
 
 					if(FilteredShips[shipCtr].locked){ $(".ship_lock img", cElm).show(); }
 
@@ -781,22 +794,26 @@
 
 		/* Show single equipment icon
 		--------------------------------------------*/
-		equipImg :function(cElm, equipNum, equipSlot, gear_id){
+		equipImg :function(cElm, equipNum, equipSlot, gearId){
 			var element = $(".ship_equip_" + equipNum, cElm);
-			if(gear_id > -1){
-				var gear = KC3GearManager.get(gear_id);
+			if(gearId > 0){
+				var gear = KC3GearManager.get(gearId);
 				if(gear.itemId<=0){ element.hide(); return; }
 
 				$("img",element)
 					.attr("src", "../../assets/img/items/" + gear.master().api_type[3] + ".png")
 					.attr("title", gear.name())
-					.attr("alt", gear.master().api_id);
+					.attr("alt", gear.master().api_id)
+					.show();
 				$("span",element).css('visibility','hidden');
 			} else {
 				$("img",element).hide();
 				$("span",element).each(function(i,x){
 					if(equipSlot > 0)
 						$(x).text(equipSlot);
+					else if(equipSlot === -2)
+						// for ex slot opened, but not equipped
+						$(x).addClass("empty");
 					else
 						$(x).css('visibility','hidden');
 				});

@@ -385,8 +385,10 @@ Previously known as "Reactor"
 				sid  = parseInt(params.api_id,10),
 				ship = KC3ShipManager.get(sid),
 				mast = ship.master();
-			
-			console.log("Extra Slot Unlock for",sid,ship.name());
+			if(PlayerManager.consumables.reinforceExpansion > 0){
+				PlayerManager.consumables.reinforceExpansion -= 1;
+			}
+			console.log("Extra Slot unlocked for",sid,ship.name());
 		},
 		
 		"api_req_kaisou/marriage":function(params, response, headers){

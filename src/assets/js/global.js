@@ -213,8 +213,11 @@ String.prototype.format = function(params) {
 	if (params.constructor !== Array) {
 		params = [ params ];
 	}
+	// A-Z a-z 0-9 _ $ [more unicodes]
+	var validCommentChars = "[_$\\w\\d\xA0-\uFFFF]*";
 	$.each(params, function( i, n ) {
-		source = source.replace( new RegExp("\\{" + i + "\\}", "g"), function() {
+		source = source.replace( new RegExp("\\{" + i
+			+ "(:" + validCommentChars + ")?\\}", "g"), function() {
 			return n;
 		});
 	});

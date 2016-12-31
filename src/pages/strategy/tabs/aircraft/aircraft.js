@@ -72,6 +72,7 @@
 				if(typeof this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id] == "undefined"){
 					this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id] = {
 						id: ThisItem.masterId,
+						type_id: MasterItem.api_type[3],
 						english: ThisItem.name(),
 						japanese: MasterItem.api_name,
 						stats: {
@@ -84,12 +85,13 @@
 							ls: MasterItem.api_saku,
 							dv: MasterItem.api_baku,
 							ht: MasterItem.api_houm,
-							rn: MasterItem.api_leng
+							rn: MasterItem.api_leng,
+							or: MasterItem.api_distance
 						},
 						instances: []
 					};
 				}
-				thisSlotitem = 	this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id];
+				thisSlotitem = this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id];
 				
 				thisSlotitem.instances.push(ThisItem);
 			}
@@ -185,16 +187,17 @@
 				$(".english", ItemElem).text(ThisSlotitem.english);
 				$(".japanese", ItemElem).text(ThisSlotitem.japanese);
 				
-				this.slotitem_stat(ItemElem, ThisSlotitem.stats, "fp");
-				this.slotitem_stat(ItemElem, ThisSlotitem.stats, "tp");
-				this.slotitem_stat(ItemElem, ThisSlotitem.stats, "aa");
-				this.slotitem_stat(ItemElem, ThisSlotitem.stats, "ar");
-				this.slotitem_stat(ItemElem, ThisSlotitem.stats, "as");
-				this.slotitem_stat(ItemElem, ThisSlotitem.stats, "ev");
-				this.slotitem_stat(ItemElem, ThisSlotitem.stats, "ls");
-				this.slotitem_stat(ItemElem, ThisSlotitem.stats, "dv");
-				this.slotitem_stat(ItemElem, ThisSlotitem.stats, "ht");
-				this.slotitem_stat(ItemElem, ThisSlotitem.stats, "rn");
+				this.slotitem_stat(ItemElem, ThisSlotitem, "fp");
+				this.slotitem_stat(ItemElem, ThisSlotitem, "tp");
+				this.slotitem_stat(ItemElem, ThisSlotitem, "aa");
+				this.slotitem_stat(ItemElem, ThisSlotitem, "ar");
+				this.slotitem_stat(ItemElem, ThisSlotitem, "as");
+				this.slotitem_stat(ItemElem, ThisSlotitem, "ev");
+				this.slotitem_stat(ItemElem, ThisSlotitem, "ls");
+				this.slotitem_stat(ItemElem, ThisSlotitem, "dv");
+				this.slotitem_stat(ItemElem, ThisSlotitem, "ht");
+				this.slotitem_stat(ItemElem, ThisSlotitem, "rn");
+				this.slotitem_stat(ItemElem, ThisSlotitem, "or");
 				
 				var PlaneCtr, ThisPlane, PlaneBox, rankLines, ThisCapacity;
 				for(PlaneCtr in ThisSlotitem.instances){
@@ -250,11 +253,16 @@
 		
 		/* Determine if an item has a specific stat
 		--------------------------------------------*/
-		slotitem_stat :function(ItemElem, stats, stat_name){
-			if(stats[stat_name] !== 0){
-				$(".stats .item_"+stat_name+" span", ItemElem).text(stats[stat_name]);
+		slotitem_stat :function(ItemElem, SlotItem, statName){
+			if(SlotItem.stats[statName] !== 0 &&
+				(statName !== "or" ||
+					(statName === "or" &&
+					KC3GearManager.landBasedAircraftType3Ids.indexOf(SlotItem.type_id)>-1)
+				)
+			){
+				$(".stats .item_"+statName+" span", ItemElem).text(SlotItem.stats[statName]);
 			}else{
-				$(".stats .item_"+stat_name, ItemElem).hide();
+				$(".stats .item_"+statName, ItemElem).hide();
 			}
 		}
 		

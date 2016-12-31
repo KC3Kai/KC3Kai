@@ -92,6 +92,10 @@
 	overflow:hidden;
 	white-space:nowrap;
 }
+.tab_mstgear .gearInfo .name:hover {
+	text-overflow:clip;
+	white-space:normal;
+}
 .tab_mstgear .gearInfo .types {
 	width:270px;
 	height:20px;

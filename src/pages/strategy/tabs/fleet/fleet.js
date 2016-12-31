@@ -401,7 +401,7 @@
 			$(".ship_type", shipBox).text( kcShip.stype() );
 			$(".ship_pic img", shipBox).attr("src", KC3Meta.shipIcon( kcShip.masterId ) );
 			// TODO Link to ship list instead of ship library
-			$(".ship_pic img", shipBox).attr("title", kcShip.rosterId );
+			//$(".ship_pic img", shipBox).attr("title", kcShip.rosterId );
 			$(".ship_pic img", shipBox).attr("alt", kcShip.masterId );
 			$(".ship_pic img", shipBox).click(function(){
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
@@ -409,15 +409,8 @@
 			$(".ship_lv_val", shipBox).text( kcShip.level );
 			var nameBox = $(".ship_name", shipBox);
 			nameBox.text( kcShip.name() );
-			var isEllipsis = function(element){
-				var $c = $(element).clone()
-					.css({display: 'inline', width: 'auto', visibility: 'hidden'})
-					.appendTo('body');
-				var cWidth = $c.width();
-				$c.remove();
-				return cWidth > $(element).width();
-			};
-			if (isEllipsis(nameBox)) nameBox.attr("title", nameBox.text());
+			if (KC3StrategyTabs.isTextEllipsis(nameBox))
+				nameBox.attr("title", nameBox.text());
 
 			$.each([0,1,2,3,4], function(_,ind) {
 				self.showKCGear(

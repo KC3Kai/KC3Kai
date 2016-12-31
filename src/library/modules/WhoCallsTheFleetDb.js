@@ -48,6 +48,14 @@
 			return entry ? entry.equip : false;
 		},
 
+		getEquippedSlotCount: function(shipId) {
+			var entry = this.db["s"+shipId];
+			return entry ? entry.equip.reduce(
+				function(p, c){
+					if(!!c) return p+1; else return p;
+				}, 0) : false;
+		},
+
 		getLoSInfo: function(shipId) {
 			return this.getStatBound(shipId, 'los');
 		},

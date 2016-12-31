@@ -24,6 +24,7 @@
 		ConfigManager.load();
 		KC3Master.init();
 		KC3Meta.init("../../data/");
+		KC3Master.loadSeasonalShips("../../data/");
 		KC3Meta.defaultIcon("../../assets/img/ui/empty.png");
 		PlayerManager.init();
 		KC3ShipManager.load();
@@ -174,6 +175,15 @@
 			console.debug("Auto reloading from [", oldHash, "] to [", newHash, "]");
 			KC3StrategyTabs.reloadTab();
 		}
+	};
+
+	KC3StrategyTabs.isTextEllipsis = function(element){
+		var $c = $(element).clone()
+			.css({display: 'inline', width: 'auto', visibility: 'hidden'})
+			.appendTo('body');
+		var cWidth = $c.width();
+		$c.remove();
+		return cWidth > $(element).width();
 	};
 
 })();
