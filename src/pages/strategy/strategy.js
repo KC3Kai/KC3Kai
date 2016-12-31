@@ -24,6 +24,7 @@
 		ConfigManager.load();
 		KC3Master.init();
 		KC3Meta.init("../../data/");
+		KC3Master.loadSeasonalShips("../../data/");
 		KC3Meta.defaultIcon("../../assets/img/ui/empty.png");
 		PlayerManager.init();
 		KC3ShipManager.load();

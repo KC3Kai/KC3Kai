@@ -12,6 +12,7 @@ Saves and loads significant data for future use
 		available: false,
 
 		_raw: {},
+		_seasonalShips: {},
 
 		init: function( raw ){
 			this.load();
@@ -84,13 +85,32 @@ Saves and loads significant data for future use
 			}
 		},
 
+		loadSeasonalShips: function(repo) {
+			var shipJson = $.ajax({
+				url : repo + "seasonal_mstship.json",
+				async: false
+			}).responseText;
+			try {
+				this._seasonalShips = JSON.parse(shipJson) || {};
+			} catch(e) {
+			}
+		},
+
 		/* Data Access
 		-------------------------------------*/
 		ship :function(id){
 			return !this.available ? false : this._raw.ship[id] || false;
 		},
 
-		all_ships :function(){
+		all_ships :function(withSeasonals){
+			if(!!withSeasonals && Object.keys(this._seasonalShips).length > 0){
+				var ships = $.extend(this._raw.ship, {});
+				for(var id in this._seasonalShips){
+					var ss = ships[id];
+					if(!ss) { ships[id] = this._seasonalShips[id]; }
+				}
+				return ships;
+			}
 			return this._raw.ship || {};
 		},
 
