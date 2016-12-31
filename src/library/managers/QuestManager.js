@@ -240,6 +240,7 @@ Uses KC3Quest objects to play around with
 			// For each element in quest List
 			//console.log("=================PAGE " + questPage + "===================");
 			var untranslated = [];
+			var reportedQuests = JSON.parse(localStorage.reportedQuests||"[]");
 			for(var ctr in questList){
 				if(questList[ctr]===-1) continue;
 				
@@ -250,12 +251,10 @@ Uses KC3Quest objects to play around with
 				
 				// Check for untranslated quests
 				if( typeof oldQuest.meta().available == "undefined" ){
-					var repotedQuests = JSON.parse(localStorage.repotedQuests||"[]");
-					if(repotedQuests.indexOf(questId)===-1){
+					if(reportedQuests.indexOf(questId) === -1){
 						untranslated.push(questList[ctr]);
 						// remember reported quest so wont send data twice
-						repotedQuests.push(questId);
-						localStorage.repotedQuests = JSON.stringify(repotedQuests);
+						reportedQuests.push(questId);
 					}
 				}
 				
@@ -283,6 +282,7 @@ Uses KC3Quest objects to play around with
 			// submit untranslated quests to kc3kai website
 			if(ConfigManager.KC3DBSubmission_enabled){
 				if(untranslated.length > 0){
+					localStorage.reportedQuests = JSON.stringify(reportedQuests);
 					KC3DBSubmission.sendQuests( JSON.stringify(untranslated) );
 				}
 			}
