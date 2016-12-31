@@ -85,109 +85,140 @@
 			return obj;
 		},
 
-		getJSONWithOptions: function(repo, filename, extendEnglish,
-									 language, info_force_ship_lang, info_eng_stype,
-									 track_source) {
-			var self = this;
+		getJSONWithOptions: function(
+			repo, filename, extendEnglish, language,
+			info_force_ship_lang, info_eng_stype, track_source,
+			shouldAsync, callback
+		) {
+			this.translationBase = {};
+			this.enJSON = {};
+			this.localJSON = {};
+			
+			// default values of params
+			shouldAsync = typeof shouldAsync == "undefined" ? false : shouldAsync;
+			extendEnglish = typeof extendEnglish == "undefined" ? false : extendEnglish;
+			track_source = typeof track_source == "undefined" ? false : track_source;
 
+			// if quotes.json is desired, use specialized function
 			if (filename === "quotes") {
 				console.log("warning: using KC3Translation.getQuotes to get quotes");
 				return this.getQuotes(repo);
 			}
 
-			// Check if desired to extend english files
-			if (typeof extendEnglish=="undefined") { extendEnglish=false; }
-			if (typeof track_source==="undefined") { track_source = false; }
-
 			// Japanese special case where ships and items sources are already in JP
 			if(
 				(["jp", "tcn"].indexOf(language) > -1)
-				&& (filename==="ships" || filename==="items")
+				&& (filename == "ships" || filename == "items")
 			){
 				extendEnglish = false;
 			}
+			
 			// make ships.json and items.json an option to be always in specified one
 			if (!!info_force_ship_lang
-				&& (filename==="ships" || filename==="items")){
+				&& (filename==="ships" || filename==="items"))
+			{
 				extendEnglish = false;
 				language = info_force_ship_lang;
 			}
+			
 			// make "stype.json" an option:
 			if (filename === "stype" && info_eng_stype){
 				language = "en";
 			}
-
-			var translationBase = {}, enJSON;
+			
+			var tlfile = new KC3TranslationFile();
+			
 			if(extendEnglish && language!=="en"){
-				// Load english file
-				try {
-					enJSON = JSON.parse($.ajax({
-						url : repo+'lang/data/en/' + filename + '.json',
-						async: false
-					}).responseText);
-
+				tlfile.loadEnglish(function(){
 					if (track_source) {
-						self.addTags(enJSON, "en");
+						tlfile.addTags("en");
 					}
 					if (filename === "quests") {
-						self.unoverrideAttr(enJSON, "memo");
+						tlfile.unoverrideAttr("memo");
 					}
-				} catch (e) {
-					console.error(e.stack);
-					var errMsg = $("<p>Fatal error when loading {0} en TL data: {1}</p>" +
-						"<p>Contact developers plz! &gt;_&lt;</p>".format(filename, e));
-					if($("#error").length>0){
-						$("#error").append(errMsg);
-						$("#error").show();
-					} else {
-						$(document.body).append(errMsg);
-					}
-					throw e;
-				}
-
-				// Make is as the translation base
-				translationBase = enJSON;
+					tlfile.loadLanguage(function(){
+						tlfile.process();
+					});
+				});
+			} else {
+				tlfile.loadLanguage(function(){
+					tlfile.process();
+				});
 			}
-
-			// if we can't fetch this file, the English
-			// version will be used instead
-			var translation;
+		},
+		
+		loadDataENBase: function(callback){
+			self.loadData(
+				repo+'lang/data/en/' + filename + '.json',
+				shouldAsync,
+				function(data){
+					enJSON = data;
+					
+					
+					
+					// Make is as the translation base
+					translationBase = enJSON;
+					
+					callback();
+				}
+			);
+		},
+		
+		loadDataLocal: function(callback){
+			self.loadData(
+				repo+'lang/data/' +language+ '/' + filename + '.json',
+				shouldAsync,
+				function(data, err){
+					if (typeof err == "undefined") {
+						translation = data;
+						
+						if (track_source) {
+							self.addTags(translation, language);
+						}
+						
+						callback($.extend(true, translationBase, translation));
+						
+					} else {
+						// As EN can be used, fail-safe for other JSON syntax error
+						if (e instanceof SyntaxError && extendEnglish && language!=="en"){
+							console.warn(e.stack);/*RemoveLogging:skip*/
+							translation = null;
+							// Show error message for Strategy Room
+							if($("#error").length>0){
+								$("#error").append(
+									$("<p>Syntax error on {0} TL data of {1}: {2}</p>".format(filename, language, e.message))
+								);
+								$("#error").show();
+							}
+						}
+						
+						callback({}, e);
+					}
+				}
+			);
+		},
+		
+		loadData: function(targetUrl, doAsync, callback){
 			try {
-				translation = JSON.parse($.ajax({
-					url : repo+'lang/data/' +language+ '/' + filename + '.json',
-					async: false
-				}).responseText);
-
-				if (track_source) {
-					self.addTags(translation, language);
+				if (doAsync) {
+					$.ajax({
+						url : targetUrl,
+						dataType: 'JSON',
+						sucess: function(response){
+							callback(JSON.parse(response));
+						}
+					});
+				} else {
+					var data = JSON.parse($.ajax({
+						url : targetUrl,
+						dataType: 'JSON',
+						async: false
+					}).responseText);
+					callback(data);
 				}
 			} catch (e) {
-				// As EN can be used, fail-safe for other JSON syntax error
-				if (e instanceof SyntaxError && extendEnglish && language!=="en"){
-					console.warn(e.stack);/*RemoveLogging:skip*/
-					translation = null;
-					// Show error message for Strategy Room
-					if($("#error").length>0){
-						$("#error").append(
-							$("<p>Syntax error on {0} TL data of {1}: {2}</p>".format(filename, language, e.message))
-						);
-						$("#error").show();
-					}
-				} else {
-					// Unknown error still needs to be handled asap
-					console.error(e.stack);/*RemoveLogging:skip*/
-					var errMsg = $("<p>Fatal error when loading {0} TL data of {1}: {2}</p>" +
-						"<p>Contact developers plz! &gt;_&lt;</p>".format(filename, language, e));
-					if($("#error").length>0){
-						$("#error").append(errMsg);
-						$("#error").show();
-					} else {
-						$(document.body).append(errMsg);
-					}
-					throw e;
-				}
+				callback({}, e);
 			}
-			return $.extend(true, translationBase, translation);
 		},
 
 		getShipVoiceFlag: function (shipMasterId) {
@@ -450,6 +481,19 @@
 				ConfigManager.language,
 				ConfigManager.info_force_ship_lang,
 				ConfigManager.info_eng_stype);
+		},
+		
+		loadOnlineTranslations :function(filename, extendEnglish, language, info_force_ship_lang, info_eng_stype, track_source){
+			this.getJSONWithOptions(
+				"https://raw.githubusercontent.com/KC3Kai/kc3-translations/master/data",
+				filename,
+				extendEnglish,
+				language,
+				info_force_ship_lang,
+				info_eng_stype,
+				track_source,
+				true // async
+			);
 		}
 		
 	};

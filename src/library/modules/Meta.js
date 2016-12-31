@@ -23,6 +23,7 @@ Provides access to data on built-in JSON files
 		_stype:{},
 		_servers:{},
 		_battle:{},
+		_langcustom:{},
 		_quotes:{},
 		_terms:{
 			troll:{},
@@ -88,18 +89,29 @@ Provides access to data on built-in JSON files
 			this._gunfit	= JSON.parse( $.ajax(repo+'gunfit.json', { async: false }).responseText );
 			
 			// Load Translations
-			this._ship 		= KC3Translation.getJSON(repo, 'ships', true);
-			this._slotitem	= KC3Translation.getJSON(repo, 'items', true);
-			this._equiptype	= KC3Translation.getJSON(repo, 'equiptype', true);
-			this._quests	= KC3Translation.getJSON(repo, 'quests', true);
-			this._ranks		= KC3Translation.getJSON(repo, 'ranks', true);
-			this._stype		= KC3Translation.getJSON(repo, 'stype', true);
-			this._servers	= KC3Translation.getJSON(repo, 'servers', true);
-			this._battle	= KC3Translation.getJSON(repo, 'battle', true);
+			this.loadTranslations(repo);
+			
 			// troll language always loaded
 			this._terms.troll		= JSON.parse( $.ajax(repo+'lang/data/troll/terms.json', { async: false }).responseText );
+			
 			// other language loaded here
 			this._terms.lang		= KC3Translation.getJSON(repo, 'terms', true);
+		},
+		
+		loadTranslations: function(){
+			var self = this;
+			
+			KC3Translation.setSource(repo);
+			
+			KC3Translation.load('ships', function(data){ self._ship = data; });
+			KC3Translation.load('items', function(data){ self._slotitem = data; });
+			KC3Translation.load('equiptype', function(data){ self._equiptype = data; });
+			KC3Translation.load('quests', function(data){ self._quests = data; });
+			KC3Translation.load('ranks', function(data){ self._ranks = data; });
+			KC3Translation.load('stype', function(data){ self._stype = data; });
+			KC3Translation.load('servers', function(data){ self._servers = data; });
+			KC3Translation.load('battle', function(data){ self._battle = data; });
+			KC3Translation.load('custom', function(data){ self._langcustom = data; });
 		},
 		
 		loadQuotes :function(){
