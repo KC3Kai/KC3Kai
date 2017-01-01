@@ -960,7 +960,7 @@
 			$(".count_ships")
 				.text( shipCount )
 				.toggleClass( "danger", (KC3ShipManager.max - shipCount) < 5)
-				.attr("title", "❤ " + lockedShipCount);
+				.attr("title", "\u2764 " + lockedShipCount);
 
 			$(".max_ships").text( "/"+ KC3ShipManager.max );
 		},
@@ -974,7 +974,7 @@
 			$(".count_gear")
 				.text( gearCount )
 				.toggleClass("danger", (KC3GearManager.max - gearCount) < 20)
-				.attr("title", "❤ " + lockedGearCount);
+				.attr("title", "\u2764 " + lockedGearCount);
 
 			$(".max_gear").text( "/"+ KC3GearManager.max );
 		},
