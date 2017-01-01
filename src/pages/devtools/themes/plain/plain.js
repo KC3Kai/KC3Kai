@@ -1912,9 +1912,6 @@
 			var ExpdIncome = KEIB.getExpeditionIncomeBase(selectedExpedition);
 			var ExpdFleetCost = fleetObj.calcExpeditionCost( selectedExpedition );
 
-			var landingCraftFactor = fleetObj.calcLandingCraftBonus() + 1;
-			var greatSuccessFactor = plannerIsGreatSuccess ? 1.5 : 1;
-
 			$(".module.activity .activity_expeditionPlanner .estimated_time").text( String( 60*ExpdCost.time ).toHHMMSS() );
 
 			// setup expedition item colors
@@ -1931,28 +1928,18 @@
 
 			var resourceRoot = $(".module.activity .activity_expeditionPlanner .expres_resos");
 			$.each(["fuel","ammo","steel","bauxite"], function(i,v) {
-				var incomeVal = Math.floor( ExpdIncome[v] * landingCraftFactor * greatSuccessFactor );
+				var basicIncome = ExpdIncome[v];
 				var jqObj = $( "."+v, resourceRoot );
-				var netResourceIncome = incomeVal;
+				var resupply;
 				if (v === "fuel" || v === "ammo") {
-					netResourceIncome -= ExpdFleetCost[v];
+					resupply = ExpdFleetCost[v];
+				} else {
+					resupply = 0;
 				}
 
-				var tooltipText = "{0} = {1}".format(netResourceIncome, incomeVal);
-				if (incomeVal > 0) {
-					tooltipText += "{=" + String(ExpdIncome[v]);
-					if (landingCraftFactor > 1)
-						tooltipText += "*" + String(landingCraftFactor);
-					if (greatSuccessFactor > 1)
-						tooltipText += "*" + String(greatSuccessFactor);
-					tooltipText += "}";
-				}
-				if (v === "fuel" || v === "ammo") {
-					tooltipText += " - " + String(ExpdFleetCost[v]);
-				}
-
-				jqObj.text( netResourceIncome );
-				jqObj.attr( 'title', tooltipText );
+				var tooltipText = fleetObj.landingCraftBonusTextAndVal(basicIncome,resupply,plannerIsGreatSuccess);
+				jqObj.text( tooltipText.val );
+				jqObj.attr( 'title', tooltipText.text );
 			});
 
 			var markFailed = function (jq) {

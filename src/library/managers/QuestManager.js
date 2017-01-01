@@ -16,6 +16,7 @@ Uses KC3Quest objects to play around with
 		timeToResetDailyQuests: -1,
 		timeToResetWeeklyQuests: -1,
 		timeToResetMonthlyQuests: -1,
+		timeToResetQuarterlyQuests: -1,
 		
 		// Internal constants for time period quests
 		_dailyIds: [201, 216, 210, 211, 218, 212, 226, 230, 303, 304, 402, 403, 503, 504, 605, 606, 607, 608, 609, 619, 702],
@@ -62,10 +63,6 @@ Uses KC3Quest objects to play around with
 		},
 		
 		checkAndResetQuests :function(serverJstTime){
-			//console.log($.isEmptyObject(this.list));
-			/*if ($.isEmptyObject(this.list)) {
-				this.load();
-			}*/
 			this.load();
 			
 			// 5AM JST = 8PM GMT (previous day)
@@ -86,6 +83,11 @@ Uses KC3Quest objects to play around with
 			var nextNextMonthFirstDay8PmGmt = (new Date(thisMonthFirstDay8PmGmt)).shiftMonth(2);
 			var nextMonthLastDay8PmGmt = (new Date(nextNextMonthFirstDay8PmGmt)).shiftDate(-1);
 			
+			// Quarterly quests reset on the first day of every March, June, September, and December at 05:00 JST
+			var quarterTables = {"0":2,"1":1,"2":3,"3":2,"4":1,"5":3,"6":2,"7":1,"8":3,"9":2,"10":1,"11":3};
+			var nextQuarterFirstDay8PmGmt = (new Date(thisMonthFirstDay8PmGmt)).shiftMonth(quarterTables[thisMonthFirstDay8PmGmt.getMonth()]);
+			var nextQuarterLastDay8PmGmt = (new Date(nextQuarterFirstDay8PmGmt)).shiftDate(-1);
+			
 			ServerJstClock.shiftHour(-4);
 			
 			//console.log("============================================");
@@ -96,11 +98,11 @@ Uses KC3Quest objects to play around with
 			//console.log( 'Next week ', nextWeekSunday8PmGmt.format(undefined,true) );
 			//console.log( 'Curr month', thisMonthFirstDay8PmGmt.format(undefined,true), thisMonthLastDay8PmGmt.format(undefined,true) );
 			//console.log( 'Next month', nextMonthFirstDay8PmGmt.format(undefined,true), nextMonthLastDay8PmGmt.format(undefined,true) );
+			//console.log( 'Next quart', nextQuarterFirstDay8PmGmt.format(undefined,true), nextQuarterLastDay8PmGmt.format(undefined,true) );
 			
 			/*if ( ServerJstClock.getTime() > today8PmGmt.getTime()) {
 				console.log("Passed 5AM JST");
 			}*/
-			
 			var timeFromLocalStorage;
 			
 			/* RESET DAILY QUESTS
@@ -209,6 +211,25 @@ Uses KC3Quest objects to play around with
 				KC3Network.trigger("Quests");
 			}
 			
+			/* RESET QUARTERLY QUESTS
+			-----------------------------------------------------*/
+			if (this.timeToResetQuarterlyQuests === -1) {
+				timeFromLocalStorage = this.getTimeToResetFromLocalStorage("timeToResetQuarterlyQuests");
+				if (timeFromLocalStorage === -1) {
+					this.timeToResetQuarterlyQuests = nextQuarterLastDay8PmGmt.getTime();
+					localStorage.timeToResetQuarterlyQuests = this.timeToResetQuarterlyQuests;
+				} else {
+					this.timeToResetQuarterlyQuests = timeFromLocalStorage;
+				}
+				console.log("Reset Quarterly Quests: " + this.timeToResetQuarterlyQuests + " " + new Date(this.timeToResetQuarterlyQuests));
+			}
+			if (this.timeToResetQuarterlyQuests <= ServerJstClock.getTime()) {
+				this.resetQuarterlies();
+				this.timeToResetQuarterlyQuests = nextQuarterLastDay8PmGmt.getTime();
+				localStorage.timeToResetQuarterlyQuests = this.timeToResetQuarterlyQuests;
+				KC3Network.trigger("Quests");
+			}
+			
 			this.save();
 		},
 		
@@ -219,6 +240,7 @@ Uses KC3Quest objects to play around with
 			// For each element in quest List
 			//console.log("=================PAGE " + questPage + "===================");
 			var untranslated = [];
+			var reportedQuests = JSON.parse(localStorage.reportedQuests||"[]");
 			for(var ctr in questList){
 				if(questList[ctr]===-1) continue;
 				
@@ -229,12 +251,10 @@ Uses KC3Quest objects to play around with
 				
 				// Check for untranslated quests
 				if( typeof oldQuest.meta().available == "undefined" ){
-					var repotedQuests = JSON.parse(localStorage.repotedQuests||"[]");
-					if(repotedQuests.indexOf(questId)===-1){
+					if(reportedQuests.indexOf(questId) === -1){
 						untranslated.push(questList[ctr]);
 						// remember reported quest so wont send data twice
-						repotedQuests.push(questId);
-						localStorage.repotedQuests = JSON.stringify(repotedQuests);
+						reportedQuests.push(questId);
 					}
 				}
 				
@@ -262,6 +282,7 @@ Uses KC3Quest objects to play around with
 			// submit untranslated quests to kc3kai website
 			if(ConfigManager.KC3DBSubmission_enabled){
 				if(untranslated.length > 0){
+					localStorage.reportedQuests = JSON.stringify(reportedQuests);
 					KC3DBSubmission.sendQuests( JSON.stringify(untranslated) );
 				}
 			}

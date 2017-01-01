@@ -334,6 +334,7 @@
 		ConfigManager.load();
 		KC3Master.init();
 		RemodelDb.init();
+		WhoCallsTheFleetDb.init("../../../../");
 		KC3Meta.init("../../../../data/");
 		KC3Meta.defaultIcon("../../../../assets/img/ui/empty.png");
 		KC3Meta.loadQuotes();
@@ -951,24 +952,30 @@
 		},
 
 		ShipSlots: function(data){
-			$(".count_ships").text( KC3ShipManager.count() ).each(function(){
-				if((KC3ShipManager.max - KC3ShipManager.count()) < 5){
-					$(this).addClass("danger");
-				}else{
-					$(this).removeClass("danger");
-				}
+			var shipCount = KC3ShipManager.count();
+			var lockedShipCount = KC3ShipManager.count( function() {
+				return this.lock;
 			});
+
+			$(".count_ships")
+				.text( shipCount )
+				.toggleClass( "danger", (KC3ShipManager.max - shipCount) < 5)
+				.attr("title", "\u2764 " + lockedShipCount);
+
 			$(".max_ships").text( "/"+ KC3ShipManager.max );
 		},
 
 		GearSlots: function(data){
-			$(".count_gear").text( KC3GearManager.count() ).each(function(){
-				if((KC3GearManager.max - KC3GearManager.count()) < 20){
-					$(this).addClass("danger");
-				}else{
-					$(this).removeClass("danger");
-				}
+			var gearCount = KC3GearManager.count();
+			var lockedGearCount = KC3GearManager.count( function() {
+				return this.lock;
 			});
+
+			$(".count_gear")
+				.text( gearCount )
+				.toggleClass("danger", (KC3GearManager.max - gearCount) < 20)
+				.attr("title", "\u2764 " + lockedGearCount);
+
 			$(".max_gear").text( "/"+ KC3GearManager.max );
 		},
 
@@ -2676,9 +2683,6 @@
 			var ExpdIncome = KEIB.getExpeditionIncomeBase(selectedExpedition);
 			var ExpdFleetCost = fleetObj.calcExpeditionCost( selectedExpedition );
 
-			var landingCraftFactor = fleetObj.calcLandingCraftBonus() + 1;
-			var greatSuccessFactor = plannerIsGreatSuccess ? 1.5 : 1;
-
 			$(".module.activity .activity_expeditionPlanner .estimated_time").text( String( 60*ExpdCost.time ).toHHMMSS() );
 
 			// setup expedition item colors
@@ -2695,28 +2699,18 @@
 
 			var resourceRoot = $(".module.activity .activity_expeditionPlanner .expres_resos");
 			$.each(["fuel","ammo","steel","bauxite"], function(i,v) {
-				var incomeVal = Math.floor( ExpdIncome[v] * landingCraftFactor * greatSuccessFactor );
+				var basicIncome = ExpdIncome[v];
 				var jqObj = $( "."+v, resourceRoot );
-				var netResourceIncome = incomeVal;
+				var resupply;
 				if (v === "fuel" || v === "ammo") {
-					netResourceIncome -= ExpdFleetCost[v];
+					resupply = ExpdFleetCost[v];
+				} else {
+					resupply = 0;
 				}
 
-				var tooltipText = "{0} = {1}".format(netResourceIncome, incomeVal);
-				if (incomeVal > 0) {
-					tooltipText += "{=" + String(ExpdIncome[v]);
-					if (landingCraftFactor > 1)
-						tooltipText += "*" + String(landingCraftFactor);
-					if (greatSuccessFactor > 1)
-						tooltipText += "*" + String(greatSuccessFactor);
-					tooltipText += "}";
-				}
-				if (v === "fuel" || v === "ammo") {
-					tooltipText += " - " + String(ExpdFleetCost[v]);
-				}
-
-				jqObj.text( netResourceIncome );
-				jqObj.attr( 'title', tooltipText );
+				var tooltipText = fleetObj.landingCraftBonusTextAndVal(basicIncome,resupply,plannerIsGreatSuccess);
+				jqObj.text( tooltipText.val );
+				jqObj.attr( 'title', tooltipText.text );
 			});
 
 			var markFailed = function (jq) {
