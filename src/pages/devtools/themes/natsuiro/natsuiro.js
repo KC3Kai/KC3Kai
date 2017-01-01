@@ -2940,18 +2940,20 @@
 		if(thisNode.lbasFlag && !!thisNode.airBaseAttack){
 			if(!!thisNode.airBaseJetInjection){
 				var jet = thisNode.airBaseJetInjection;
+				var jetStage2 = jet.api_stage2 || {};
 				var jetPlanes = jet.api_stage1.api_f_count;
-				var jetShotdown = jet.api_stage1.api_e_lostcount + jet.api_stage2.api_e_lostcount;
+				var jetShotdown = jet.api_stage1.api_e_lostcount + (jetStage2.api_e_lostcount || 0);
 				var jetDamage = !jet.api_stage3 ? 0 : Math.floor(jet.api_stage3.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
-				var jetLost = jet.api_stage1.api_f_lostcount + jet.api_stage2.api_f_lostcount;
+				var jetLost = jet.api_stage1.api_f_lostcount + (jetStage2.api_f_lostcount || 0);
 				lbasTips += KC3Meta.term("BattleLbasJetSupportTips").format(jetPlanes, jetShotdown, jetDamage, jetLost);
 			}
 			$.each(thisNode.airBaseAttack, function(i, ab){
 				var baseId = ab.api_base_id;
+				var stage2 = ab.api_stage2 || {};
 				var planes = ab.api_stage1.api_f_count;
-				var shotdown = ab.api_stage1.api_e_lostcount + ab.api_stage2.api_e_lostcount;
+				var shotdown = ab.api_stage1.api_e_lostcount + (stage2.api_e_lostcount || 0);
 				var damage = !ab.api_stage3 ? 0 : Math.floor(ab.api_stage3.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
-				var lost = ab.api_stage1.api_f_lostcount + ab.api_stage2.api_f_lostcount;
+				var lost = ab.api_stage1.api_f_lostcount + (stage2.api_f_lostcount || 0);
 				if(!!lbasTips) { lbasTips += "\n"; }
 				lbasTips += KC3Meta.term("BattleLbasSupportTips").format(planes, baseId, shotdown, damage, lost);
 			});
