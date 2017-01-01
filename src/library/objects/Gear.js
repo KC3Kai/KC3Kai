@@ -236,4 +236,18 @@ KC3改 Equipment Object
 		return 0;
 	};
 
+	// prepare info necessary for deckbuilder
+	KC3Gear.prototype.deckbuilder = function() {
+		if (this.masterId <= 0)
+			return false;
+		var result = {id: this.masterId};
+		if (typeof this.stars !== "undefined" &&
+			this.stars > 0)
+			result.rf = this.stars;
+		if (typeof this.ace !== "undefined" &&
+			this.ace > 0)
+			result.mas = this.ace;
+		return result;
+	};
+
 })();
