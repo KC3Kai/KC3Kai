@@ -952,24 +952,30 @@
 		},
 
 		ShipSlots: function(data){
-			$(".count_ships").text( KC3ShipManager.count() ).each(function(){
-				if((KC3ShipManager.max - KC3ShipManager.count()) < 5){
-					$(this).addClass("danger");
-				}else{
-					$(this).removeClass("danger");
-				}
+			var shipCount = KC3ShipManager.count();
+			var lockedShipCount = KC3ShipManager.count( function() {
+				return this.lock;
 			});
+
+			$(".count_ships")
+				.text( shipCount )
+				.toggleClass( "danger", (KC3ShipManager.max - shipCount) < 5)
+				.attr("title", "❤ " + lockedShipCount);
+
 			$(".max_ships").text( "/"+ KC3ShipManager.max );
 		},
 
 		GearSlots: function(data){
-			$(".count_gear").text( KC3GearManager.count() ).each(function(){
-				if((KC3GearManager.max - KC3GearManager.count()) < 20){
-					$(this).addClass("danger");
-				}else{
-					$(this).removeClass("danger");
-				}
+			var gearCount = KC3GearManager.count();
+			var lockedGearCount = KC3GearManager.count( function() {
+				return this.lock;
 			});
+
+			$(".count_gear")
+				.text( gearCount )
+				.toggleClass("danger", (KC3GearManager.max - gearCount) < 20)
+				.attr("title", "❤ " + lockedGearCount);
+
 			$(".max_gear").text( "/"+ KC3GearManager.max );
 		},
 
