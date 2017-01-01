@@ -503,10 +503,10 @@
 			window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck=".concat(encodeURI(
 				JSON.stringify({
 					"version":4,
-					"f1":generate_fleet_JSON(PlayerManager.fleets[0]),
-					"f2":generate_fleet_JSON(PlayerManager.fleets[1]),
-					"f3":generate_fleet_JSON(PlayerManager.fleets[2]),
-					"f4":generate_fleet_JSON(PlayerManager.fleets[3]),
+					"f1":PlayerManager.fleets[0].deckbuilder(),
+					"f2":PlayerManager.fleets[1].deckbuilder(),
+					"f3":PlayerManager.fleets[2].deckbuilder(),
+					"f4":PlayerManager.fleets[3].deckbuilder()
 					})
 				)));
 		});
