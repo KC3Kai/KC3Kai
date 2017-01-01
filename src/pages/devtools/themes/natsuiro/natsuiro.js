@@ -502,7 +502,7 @@
 		$(".module.controls .btn_export").on("click", function(){
 			window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck=".concat(encodeURI(
 				JSON.stringify({
-					"version":3,
+					"version":4,
 					"f1":generate_fleet_JSON(PlayerManager.fleets[0]),
 					"f2":generate_fleet_JSON(PlayerManager.fleets[1]),
 					"f3":generate_fleet_JSON(PlayerManager.fleets[2]),
@@ -554,15 +554,33 @@
 
 		function generate_equipment_JSON (shipObj) {
 			var result = {};
+			var item;
+			var output;
 			for(var i = 0; i < 4; i++) {
 				if(shipObj.items[i]> -1){
-					var item = KC3GearManager.get(shipObj.items[i]);
-					var rank = (item.ace === -1) ? item.stars : item.ace ;
-					result["i".concat(i+1)] ={
-							"id":item.masterId,
-							"rf":rank
+					item = KC3GearManager.get(shipObj.items[i]);
+					output = {
+						id: item.masterId 
 					};
+					if (typeof item.stars !== "undefined" &&
+						item.stars > 0)
+						output.rf = item.stars;
+					if (typeof item.ace !== "undefined" &&
+						item.ace > 0)
+						output.mas = item.ace;
+					result["i".concat(i+1)] = output;
 				} else {break;}
+			}
+			item = shipObj.exItem();
+			if (item.masterId !== 0) {
+				output = { id: item.masterId };
+				if (typeof item.stars !== "undefined" &&
+					item.stars > 0)
+					output.rf = item.stars;
+				if (typeof item.ace !== "undefined" &&
+					item.ace > 0)
+					output.mas = item.ace;
+				result.ix = output;
 			}
 			return result;
 		}
