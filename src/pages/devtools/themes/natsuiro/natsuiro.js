@@ -530,62 +530,6 @@
 			checkAndRestartUiTimer();
 		});
 
-		/* Code for generating deckbuilder style JSON data.
-		--------------------------------------------*/
-		function generate_fleet_JSON(fleet) {
-			var result = {};
-			for(var i = 0; i < fleet.ships.length; i++) {
-				if(fleet.ships[i] > -1){
-					result["s".concat(i+1)] = generate_ship_JSON(fleet.ships[i]);
-				}
-			}
-			return result;
-		}
-
-		function generate_ship_JSON (ship_ID) {
-			var result = {};
-			var ship = KC3ShipManager.get(ship_ID);
-			result.id = ship.masterId;
-			result.lv = ship.level;
-			result.luck = ship.lk[0];
-			result.items = generate_equipment_JSON(ship);
-			return result;
-		}
-
-		function generate_equipment_JSON (shipObj) {
-			var result = {};
-			var item;
-			var output;
-			for(var i = 0; i < 4; i++) {
-				if(shipObj.items[i]> -1){
-					item = KC3GearManager.get(shipObj.items[i]);
-					output = {
-						id: item.masterId 
-					};
-					if (typeof item.stars !== "undefined" &&
-						item.stars > 0)
-						output.rf = item.stars;
-					if (typeof item.ace !== "undefined" &&
-						item.ace > 0)
-						output.mas = item.ace;
-					result["i".concat(i+1)] = output;
-				} else {break;}
-			}
-			item = shipObj.exItem();
-			if (item.masterId !== 0) {
-				output = { id: item.masterId };
-				if (typeof item.stars !== "undefined" &&
-					item.stars > 0)
-					output.rf = item.stars;
-				if (typeof item.ace !== "undefined" &&
-					item.ace > 0)
-					output.mas = item.ace;
-				result.ix = output;
-			}
-			return result;
-		}
-
-
 		// Switching Activity Tabs
 		$(".module.activity .activity_tab").on("click", function(){
 			// if($(this).data("target")===""){ return false; }
