@@ -242,8 +242,8 @@ Contains summary information about a fleet and its 6 ships
 	// calculate accurate landing craft bonus
 	// formula taken from 
 	// http://kancolle.wikia.com/wiki/Expedition/Introduction#Extra_bonuses_to_expedition_incomes
-	// as of Nov 7th, 2016
-	KC3Fleet.prototype.calcLandingCraftBonus = function() {
+	// as of Dec 23th, 2016
+	KC3Fleet.prototype.calcLandingCraftInfo = function() {
 		var self = this;
 		// use addImprove() to update this value instead of modifying it directly
 		var improveCount = 0;
@@ -294,7 +294,9 @@ Contains summary information about a fleet and its 6 ships
 		// "B1" in the formula (see comment link of this function)
 		var cappedBasicBonus = Math.min(0.2, basicBonus);
 		// "B2" in the formula
-		var tokuBonus = Math.min(0.05, 0.02*tokuCount);
+		// 5% for <= 3 toku and 5.4% for > 3 toku
+		var tokuCap = tokuCount <= 3 ? 0.05 : 0.054;
+		var tokuBonus = Math.min(tokuCap, 0.02*tokuCount);
 		var landingCraftCount = normalCount + t89Count + t2Count + tokuCount;
 		// "B3" in the formula
 		var improveBonus = landingCraftCount > 0
@@ -307,11 +309,99 @@ Contains summary information about a fleet and its 6 ships
 		// that can be applied to a base resource,
 		// we can do no better than this without rewriting some other parts of the code.
 
-		// TODO: a better solution would be passing [cappedBasicBonus, tokuBonus, improveBonus]
-		// as the result value, but that requires some modification on other parts of the code.
-		// plus that this formula is not the final version anyway (still under investigation
-		// as there are still unsolved counter-examples)
-		return cappedBasicBonus + tokuBonus + improveBonus;
+		return {
+			basicBonus: cappedBasicBonus + improveBonus,
+			tokuBonus: tokuBonus,
+			dhCount: landingCraftCount,
+			dhStarCount: improveCount
+		};
+	};
+
+	KC3Fleet.prototype.landingCraftBonusTextAndVal = function(
+		base /* basic resource income */,
+		resupply /* must be a non-negative number */, 
+		greatSuccess /* must be boolean */) {
+		if (typeof greatSuccess !== "boolean") {
+			console.error( "greatSuccess has non-boolean value" );
+			return;
+		}
+		if (typeof resupply !== "number") {
+			console.error( "resupply is not a number" );
+			return;
+		}
+
+		var info = this.calcLandingCraftInfo();
+		var outputs = [];
+		function o(text) {
+			outputs.push(text);
+		}
+
+		// keep at most 5 digits after decimal point
+		// but if a shorter representation is possible, it will be used instead
+		function formatFloat(v) {
+			if (typeof v !== "number") {
+				console.error( "formatFloat", "argument not taking a number");
+			}
+			var fixed = v.toFixed(5);
+			var converted = "" + v;
+			return (fixed.length <= converted.length) ? fixed : converted;
+		}
+
+		// "+percent% (actual)"
+		// p = 100*percent
+		function bonusText(p, actual) {
+			return "+" + formatFloat(100*p) + "% (" + formatFloat(actual) + ")";
+		}
+		
+		// "a: b"
+		function pairText(a,b) {
+			return a + ": " + b;
+		}
+
+		var actualBase = Math.floor( greatSuccess ? 1.5 * base : base );
+		var total = actualBase;
+		var totalText = "" + actualBase;
+		if (greatSuccess) {
+			o( pairText(KC3Meta.term("ExpedBaseGreat"), actualBase + " = " + base + "x150%" ));
+		} else {
+			o( pairText(KC3Meta.term("ExpedBaseNormal"), actualBase) );
+		}
+		if (info.dhCount > 0 && info.dhStarCount > 0) {
+			o( pairText(KC3Meta.term("ExpedAveStars"),
+						formatFloat(info.dhStarCount/info.dhCount) + " = " + 
+						info.dhStarCount + "/" + info.dhCount ) );
+		}
+
+		var bonus1 = Math.floor( actualBase * info.basicBonus );
+		if (info.basicBonus > 0) {
+			o( pairText(KC3Meta.term("ExpedBonus"), bonusText(info.basicBonus, bonus1)) );
+			total += bonus1;
+			totalText += "+" + bonus1;
+		}
+
+		var bonus2 = Math.floor( actualBase * info.tokuBonus );
+		if (info.tokuBonus > 0) {
+			o( pairText(KC3Meta.term("ExpedBonusToku"), bonusText(info.tokuBonus, bonus2)) );
+			total += bonus2;
+			totalText += "+" + bonus2;
+		}
+
+		var totalNoSup = total;
+		if (resupply > 0) {
+			o( pairText(KC3Meta.term("ExpedResupply") , "-" + formatFloat( resupply )));
+			total -= resupply;
+			totalText += "-" + resupply;
+		}
+		
+		totalText = "" + total + " = " + totalText;
+		if (resupply > 0) {
+			totalText += " = " + totalNoSup + "-" + resupply;
+		}
+
+		o( pairText(KC3Meta.term("ExpedTotalIncome"), totalText ) );
+		// "outputs" is always non-empty at this point, safe to reduce.
+		return { text: outputs.reduce( function(acc,i) { return acc + "\n" + i; } ),
+				 val: total };
 	};
 	
 	KC3Fleet.prototype.averageLevel = function(){
