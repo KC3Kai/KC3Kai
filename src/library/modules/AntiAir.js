@@ -13,10 +13,10 @@
 		};
 	}
 
-	// a predicate combinator, "anyOf(f,g)(x)" is the same as "f(x) || g(x)"
+	// a predicate combinator, "predAnyOf(f,g)(x)" is the same as "f(x) || g(x)"
 	// test all predicates passed as argument in order,
 	// return the first non-falsy value or "false" if all predicates have falled.
-	function anyOf(/* list of predicates */) {
+	function predAnyOf(/* list of predicates */) {
 		var args = arguments;
 		return function(x) {
 			for (var fInd in args) {
@@ -25,6 +25,25 @@
 					return result;
 			}
 			return false;
+		};
+	}
+
+	function predAllOf(/* list of predicates */) {
+		var args = arguments;
+		return function(x) {
+			var result;
+			for (var fInd in args) {
+				result = args[fInd](x);
+				if (! result)
+					return false;
+			}
+			return result;
+		};
+	}
+
+	function predNot( pred ) {
+		return function(x) {
+			return ! pred(x);
 		};
 	}
 
@@ -48,7 +67,7 @@
 	// Anti-air gun includes machine guns and rocket launchers
 	var isAAGun = categoryEq(21);
 
-	var isRedGun = anyOf(
+	var isRedGun = predAnyOf(
 		iconEq(1),
 		iconEq(2),
 		iconEq(3));
@@ -57,6 +76,23 @@
 	var isFighter = categoryEq(6);
 	var isDiveBomber = categoryEq(7);
 	var isSeaplaneRecon = categoryEq(10);
+
+	function isBuiltinHighAngleMount(mst) {
+		return [
+			122 /* aki-gun */,
+			130 /* maya-gun */,
+			135 /* 90mm single HA */,
+			172 /* 5inch */
+		].indexOf( mst.api_id ) !== -1;
+	}
+
+	function isCDMG(mst) {
+		return [
+			131 /* 25mm triple (CD) */,
+			173 /* Bofors */,
+			191 /* QF 2-pounder */
+		].indexOf( mst.api_id ) !== -1;
+	}
 
 	// for equipments the coefficient is different for
 	// calculating adjusted ship AA stat and fleet AA stat,
@@ -95,7 +131,7 @@
 			return 0.4;
 		if (isHighAngleMount(mst) || isAAFD(mst))
 			return 0.35;
-		if (anyOf(isRedGun,
+		if (predAnyOf(isRedGun,
 				  isYellowGun,
 				  isAAGun,
 				  isFighter,
@@ -196,6 +232,93 @@
 		return Math.floor( shipProportionalShotdownRate(shipObj) * num );
 	}
 
+	// avoid modifying this structure directly, use "declareAACI" instead.
+	var AACITable = {};
+
+	// predicate is a function f:
+	// f(shipObj)
+	// returns a boolean to indicate whether the ship in question (with equipments)
+	// is capable of performing such type of AACI
+	function declareAACI(
+		apiId,
+		fixedBonus, 
+		modifier, 
+		predicate) {
+		AACITable[apiId] =
+			{id: apiId,
+			 fixed: fixedBonus,
+			 modifier: modifier,
+			 predicate: predicate };
+	}
+
+	function isNotSubmarine( shipObj ) {
+		var stype = shipObj.master().api_stype;
+		return [13 /* SS */, 14 /* SSV */].indexOf( stype ) === -1;
+	}
+
+	function withEquipmentMsts( pred ) {
+		return function(shipObj) {
+			var gears = allShipEquipments(shipObj)
+				.filter( function(g) { return g.masterId !== 0; } )
+				.map( function(g) { return g.master(); });
+			return pred(gears);
+		};
+	}
+
+	// all non-sub ships
+	declareAACI(
+		5, 4, 1.5,
+		predAllOf(
+			isNotSubmarine,
+			withEquipmentMsts(
+				function (gears) {
+					console.log( gears );
+					return gears.filter( isBuiltinHighAngleMount ).length >= 2 &&
+						gears.some( isAARadar );
+				})));
+
+	declareAACI(
+		8, 4, 1.4,
+		predAllOf(
+			isNotSubmarine,
+			withEquipmentMsts(
+				function(gears) {
+				 	return gears.some( isBuiltinHighAngleMount ) &&
+						gears.some( isAARadar );
+				})));
+
+	declareAACI(
+		7, 3, 1.35,
+		predAllOf(
+			isNotSubmarine,
+			withEquipmentMsts(
+				function(gears) {
+					return gears.some( isHighAngleMount ) &&
+						gears.some( isAAFD ) &&
+						gears.some( isAARadar );
+				})));
+
+	declareAACI(
+		9, 2, 1.3,
+		predAllOf(
+			isNotSubmarine,
+			withEquipmentMsts(
+				function(gears) {
+					return gears.some( isHighAngleMount ) &&
+						gears.some( isAAFD );
+				})));
+
+	declareAACI(
+		12, 3, 1.25,
+		predAllOf(
+			isNotSubmarine,
+			withEquipmentMsts(
+				function(gears) {
+					return gears.some( isCDMG ) &&
+						gears.some( isAAGun ) &&
+						gears.some( isAARadar );
+				})));
+
 	// exporting module
 	window.AntiAir = {
 		getFleetShipEquipmentModifier: getFleetShipEquipmentModifier,
@@ -208,6 +331,7 @@
 		shipAdjustedAntiAir: shipAdjustedAntiAir,
 		specialFloor: specialFloor,
 		shipProportionalShotdown: shipProportionalShotdown,
-		shipProportionalShotdownRate: shipProportionalShotdownRate
+		shipProportionalShotdownRate: shipProportionalShotdownRate,
+		AACITable: AACITable
 	};
 })();
