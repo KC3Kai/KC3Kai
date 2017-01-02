@@ -11,45 +11,7 @@
 		},
 		
 		
-		/* APPLY WORDS
-		Change words inside visible DOM elements
-		-----------------------------------------*/
-		applyWords :function(){
-			// Interchange element contents with translations
-			$(".i18n").each(function(){
-				$(this).html( KC3Meta.term( $(this).text() ) );
-				$(this).css("visibility", "visible");
-			});
-			// Update title attribute with translations
-			$(".i18n_title").each(function(){
-				$(this).attr("title", KC3Meta.term( $(this).attr("title") ) );
-			});
-		},
 		
-		
-		/* APPLY HTML
-		Specialized Language HTML adjustments
-		-----------------------------------------*/
-		applyHTML :function(){
-			// Specialized fonts
-			var fontFamily = false;
-			switch(ConfigManager.language){
-				
-				case "scn": fontFamily = '"HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,"Nimbus Sans L",Arial,"Lucida Grande","Liberation Sans","Microsoft YaHei UI","Microsoft YaHei","Hiragino Sans GB","Wenquanyi Micro Hei","WenQuanYi Zen Hei","ST Heiti",SimHei,"WenQuanYi Zen Hei Sharp",sans-serif'; break;
-				
-				case "tcn": fontFamily = '"Helvetica Neue", Helvetica, "Microsoft JhengHei", "Microsoft JhengHei UI", Arial,"Heiti TC", sans-serif'; break;
-				
-				case "jp": fontFamily = '"Helvetica Neue", "Tahoma", Helvetica, Arial, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", Osaka, "メイリオ", "Meiryo", "Yu Gothic UI Semibold", "ＭＳ Ｐゴシック", "MS PGothic", sans-serif'; break;
-				
-				default: break;
-			}
-			
-			if(fontFamily){ $("body").css("font-family", fontFamily); }
-			
-			// Apply HTML language code
-			$("html").attr("lang", ConfigManager.language);
-		},
-
 		/*
 		  Recursively changing any non-object value "v" into "{val: v, tag: <tag>}".
 		 */

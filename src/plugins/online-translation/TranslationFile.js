@@ -1,6 +1,31 @@
+/**
+ * KC3 Translation File
+ * Used to laod a single translation file from a specifiable source
+ * 
+ * Browser compatibility
+ * Requires: Chrome 49.0 (ES6)
+ * https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes#Browser_compatibility
+ */
+class KC3TranslationFile {
+    
+    constructor(source, filename, language, async) {
+        this.source = source;
+        this.filename = filename;
+        this.language = language;
+        this.async = typeof async == 'undefined' ? true : async;
+        
+        this.json_en = {};
+        this.json_local = {};
+    }
+    
+    
+}
+
+
 (function(){
     "use strict";
 
+    
     window.KC3TranslationFile = function( source, filename, language, async ){
         this.source = source;
         this.filename = filename;

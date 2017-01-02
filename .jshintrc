@@ -1,4 +1,5 @@
 {
     "newcap": false,
-    "laxbreak": true
+    "laxbreak": true,
+    "esversion": 6
 }
