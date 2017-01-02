@@ -58,9 +58,10 @@
 							$(".tab_databackup .dataselect").hide();
 							$(".tab_databackup .processDisplay").show();
 							window.KC3DataBackup.loadData(filename,true,".tab_databackup .processDisplay .processText",function(){
-								alert("Finished! Please reload this page too.");
+								alert("Finished! Will reload this page.");
 								$(".tab_databackup .dataselect").show();
 								$(".tab_databackup .processDisplay").hide();
+								window.location.reload();
 							});
 						}
 				}

@@ -60,9 +60,10 @@
 					var dothing = function(){
 						var tableCount = -1;
 						if(!!overwrite){
-							console.log("Clean up old database...");
 							KC3Database.con.close();
-							indexedDB.deleteDatabase("KC3");
+							KC3Database.clear(function(){
+								console.log("Cleaned up old database...");
+							});
 						}
 						console.log("Processing tables...");
 						KC3Database.init();
