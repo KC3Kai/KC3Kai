@@ -1,6 +1,37 @@
 /*
 
-  AntiAir: anti-air related calculations
+AntiAir: anti-air related calculations
+  
+- variable naming convention:
+	- fleetObj: instance of KC3Fleet
+	- shipObj: instance of KC3Ship
+		- mst: master data of either ship or gear
+		- pred: predicates, a function that accepts a single parameter and returns a boolean value
+		- predXXX: predicate combinators. "predXXX(pred1, pred2, ...)" combines pred1, pred2, ...
+          in some specific way to produce a new prediate.
+
+- module contents:
+    - shipProportionalShotdownRate(shipObj)
+	  returns a value (supposed to be 0 <= v <= 1) indicating the rate of planes
+	  being shot down. note that it might be possible for this value to exceed 1.0.
+	- shipProportionalShotdown(shipObj, num)
+	  same as "shipProportionalShotdownRate", except that this one calculates
+	  the number of planes being shotdown with slot capacity is given by "num".
+	- shipFixedShotdown(shipObj, fleetObj, formationModifier, [K])
+	  returns an integer indicating how many planes will be shotdown.
+	  "formationModifier" takes one of: 1/1.2/1.6 depending on formation
+	  (see "getFormationModifiers" for detail).
+	  K (defaults to 1) is optional, depending on whether AACI is triggered and
+	  which kind of AACI is triggered.
+	- possibleAACIs(shipObj)
+	  returns a list of possible AACI API Ids that ship could perform.
+	- AACITable[<AACI API>] returns a record of AACI info:
+		- id: AACI API Id
+		- fixed: fixed shotdown bonus
+		- modifier: the "K" value to "shipFixedShotdown" when this AACI is triggered
+		- predicate: calling "predicateShip(shipObj)" will test whether "shipObj" can
+		  perform this particular kind of AACI.
+	- other not explicitly listed contents are for debugging or internal use only.
 
  */
 (function() {
@@ -185,7 +216,7 @@
 
 		var eTypMod = 
 			(forFleet 
-			 ? getFleetShipEquipmentModifier 
+			 ? getFleetEquipmentModifier 
 			 : getShipEquipmentModifier)(mst);
 		var eImproveMod =
 			(forFleet
@@ -538,7 +569,7 @@
 
 	// exporting module
 	window.AntiAir = {
-		getFleetShipEquipmentModifier: getFleetShipEquipmentModifier,
+		getFleetEquipmentModifier: getFleetEquipmentModifier,
 		getShipEquipmentModifier: getShipEquipmentModifier,
 		getFleetImprovementModifier: getFleetImprovementModifier,
 		getShipImprovementModifier: getShipImprovementModifier,
