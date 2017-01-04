@@ -239,6 +239,28 @@
 		return Math.floor( shipProportionalShotdownRate(shipObj) * num );
 	}
 
+	function getFormationModifiers(id) {
+		return (id === 1 || id === 4 || id === 5) ? 1  // line ahead / echelon / line abreast
+			:  (id === 2) ? 1.2 // double line
+			:  (id === 3) ? 1.6 // diamond
+		    :  NaN; // NaN for indicating an invalid id
+	}
+
+	function fleetAdjustedAntiAir(fleetObj, formationModifier) {
+		var allShipEquipmentAA = fleetObj.ship().reduce( function(curAA, ship) {
+			return curAA + shipEquipmentAntiAir(ship, true);
+		}, 0);
+		return 1.54 * Math.floor( formationModifier * allShipEquipmentAA );
+	}
+
+	function shipFixedShotdown(shipObj, fleetObj, formationModifier, K /* AACI modifier, default to 1 */) {
+		K = typeof K === "undefined" ? 1 : K;
+		var floor = specialFloor(shipObj);
+		var adjustedAA = shipAdjustedAntiAir(shipObj);
+		return Math.floor( (floor(adjustedAA) + Math.floor( fleetAdjustedAntiAir(fleetObj, formationModifier) ))
+						   * K / 10);
+	}
+
 	// avoid modifying this structure directly, use "declareAACI" instead.
 	var AACITable = {};
 
@@ -493,6 +515,22 @@
 			withEquipmentMsts(
 				hasSome( isCDMG ))));
 
+	// return a list of possible AACI APIs based on ship and her equipments
+	// - returns a list of **strings**, not numbers
+	//   (since object keys has to be strings, and AACITable[key] accepts keys
+	//   of both number and string anyway)
+	// - because of the game mechanism, some AACI API Ids returned might be overlapped
+	//   and never triggered, "possibleAACIs" is **not** responsible for removing never-triggered
+	//   AACI from resulting list.
+	function possibleAACIs( shipObj ) {
+		var result = [];
+		$.each( AACITable, function(k,entry) {
+			if (entry.predicate( shipObj ))
+				result.push( k );
+		});
+		return result;
+	}
+
 	// exporting module
 	window.AntiAir = {
 		getFleetShipEquipmentModifier: getFleetShipEquipmentModifier,
@@ -504,8 +542,15 @@
 		shipEquipmentAntiAir: shipEquipmentAntiAir,
 		shipAdjustedAntiAir: shipAdjustedAntiAir,
 		specialFloor: specialFloor,
+
 		shipProportionalShotdown: shipProportionalShotdown,
 		shipProportionalShotdownRate: shipProportionalShotdownRate,
-		AACITable: AACITable
+
+		getFormationModifiers: getFormationModifiers,
+		fleetAdjustedAntiAir: fleetAdjustedAntiAir,
+		shipFixedShotdown: shipFixedShotdown,
+
+		AACITable: AACITable,
+		possibleAACIs: possibleAACIs
 	};
 })();
