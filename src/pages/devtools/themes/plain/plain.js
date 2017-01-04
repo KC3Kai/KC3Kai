@@ -159,6 +159,8 @@
 		// Initialize data managers
 		ConfigManager.load();
 		KC3Master.init();
+		RemodelDb.init();
+		WhoCallsTheFleetDb.init("../../../../");
 		KC3Meta.init("../../../../data/");
 		KC3Meta.defaultIcon("../../../../assets/img/ui/empty.png");
 		KC3Meta.loadQuotes();
