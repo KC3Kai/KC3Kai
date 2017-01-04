@@ -25,7 +25,7 @@ AntiAir: anti-air related calculations
 	  which kind of AACI is triggered.
 	- shipFixedShotdownRange(shipObj, fleetObj, formationModifier)
 	  like "shipFixedShotdown" but this one returns a range by considering
-      all possible AACIs "shipObj" can perform and use the largest modifier as upper bound.
+	  all possible AACIs "shipObj" can perform and use the largest modifier as upper bound.
 	- possibleAACIs(shipObj)
 	  returns a list of possible AACI API Ids that ship could perform.
 	- AACITable[<AACI API>] returns a record of AACI info:
