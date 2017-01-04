@@ -226,6 +226,17 @@ Does not include Ships and Gears which are managed by other Managers
 			});
 		},
 
+		// make sure to "loadFleets" before calling this function.
+		prepareDeckbuilder: function() {
+			return {
+				version: 4,
+				f1: PlayerManager.fleets[0].deckbuilder(),
+				f2: PlayerManager.fleets[1].deckbuilder(),
+				f3: PlayerManager.fleets[2].deckbuilder(),
+				f4: PlayerManager.fleets[3].deckbuilder()
+			};
+		},
+
 		portRefresh :function( data ){
 			var
 				self      = this,

@@ -407,10 +407,12 @@ Used by SortieManager
 			this.planeJetFighters.player[1] = jetPlanePhase.api_stage1.api_f_lostcount;
 			this.planeJetFighters.abyssal[0] = jetPlanePhase.api_stage1.api_e_count;
 			this.planeJetFighters.abyssal[1] = jetPlanePhase.api_stage1.api_e_lostcount;
-			this.planeJetBombers.player[0] = jetPlanePhase.api_stage2.api_f_count;
-			this.planeJetBombers.player[1] = jetPlanePhase.api_stage2.api_f_lostcount;
-			this.planeJetBombers.abyssal[0] = jetPlanePhase.api_stage2.api_e_count;
-			this.planeJetBombers.abyssal[1] = jetPlanePhase.api_stage2.api_e_lostcount;
+			if(!!jetPlanePhase.api_stage2){
+				this.planeJetBombers.player[0] = jetPlanePhase.api_stage2.api_f_count;
+				this.planeJetBombers.player[1] = jetPlanePhase.api_stage2.api_f_lostcount;
+				this.planeJetBombers.abyssal[0] = jetPlanePhase.api_stage2.api_e_count;
+				this.planeJetBombers.abyssal[1] = jetPlanePhase.api_stage2.api_e_lostcount;
+			}
 		}
 		
 		// Boss Debuffed

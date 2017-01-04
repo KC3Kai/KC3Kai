@@ -501,13 +501,7 @@
 		// Export button
 		$(".module.controls .btn_export").on("click", function(){
 			window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck=".concat(encodeURI(
-				JSON.stringify({
-					"version":3,
-					"f1":generate_fleet_JSON(PlayerManager.fleets[0]),
-					"f2":generate_fleet_JSON(PlayerManager.fleets[1]),
-					"f3":generate_fleet_JSON(PlayerManager.fleets[2]),
-					"f4":generate_fleet_JSON(PlayerManager.fleets[3]),
-					})
+				JSON.stringify(PlayerManager.prepareDeckbuilder())
 				)));
 		});
 
@@ -529,44 +523,6 @@
 			checkAndRestartMoraleTimer();
 			checkAndRestartUiTimer();
 		});
-
-		/* Code for generating deckbuilder style JSON data.
-		--------------------------------------------*/
-		function generate_fleet_JSON(fleet) {
-			var result = {};
-			for(var i = 0; i < fleet.ships.length; i++) {
-				if(fleet.ships[i] > -1){
-					result["s".concat(i+1)] = generate_ship_JSON(fleet.ships[i]);
-				}
-			}
-			return result;
-		}
-
-		function generate_ship_JSON (ship_ID) {
-			var result = {};
-			var ship = KC3ShipManager.get(ship_ID);
-			result.id = ship.masterId;
-			result.lv = ship.level;
-			result.luck = ship.lk[0];
-			result.items = generate_equipment_JSON(ship);
-			return result;
-		}
-
-		function generate_equipment_JSON (shipObj) {
-			var result = {};
-			for(var i = 0; i < 4; i++) {
-				if(shipObj.items[i]> -1){
-					var item = KC3GearManager.get(shipObj.items[i]);
-					var rank = (item.ace === -1) ? item.stars : item.ace ;
-					result["i".concat(i+1)] ={
-							"id":item.masterId,
-							"rf":rank
-					};
-				} else {break;}
-			}
-			return result;
-		}
-
 
 		// Switching Activity Tabs
 		$(".module.activity .activity_tab").on("click", function(){
@@ -2984,18 +2940,30 @@
 		if(thisNode.lbasFlag && !!thisNode.airBaseAttack){
 			if(!!thisNode.airBaseJetInjection){
 				var jet = thisNode.airBaseJetInjection;
+				var jetStage2 = jet.api_stage2 || {};
 				var jetPlanes = jet.api_stage1.api_f_count;
-				var jetShotdown = jet.api_stage1.api_e_lostcount + jet.api_stage2.api_e_lostcount;
+				var jetShotdown = jet.api_stage1.api_e_lostcount + (jetStage2.api_e_lostcount || 0);
 				var jetDamage = !jet.api_stage3 ? 0 : Math.floor(jet.api_stage3.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
-				var jetLost = jet.api_stage1.api_f_lostcount + jet.api_stage2.api_f_lostcount;
+				jetDamage += !jet.api_stage3_combined ? 0 : Math.floor(jet.api_stage3_combined.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
+				var jetLost = jet.api_stage1.api_f_lostcount + (jetStage2.api_f_lostcount || 0);
+				var jetEnemyPlanes = jet.api_stage1.api_e_count;
+				if(jetEnemyPlanes > 0) {
+					jetShotdown = "{0:eLostCount} / {1:eTotalCount}".format(jetShotdown, jetEnemyPlanes);
+				}
 				lbasTips += KC3Meta.term("BattleLbasJetSupportTips").format(jetPlanes, jetShotdown, jetDamage, jetLost);
 			}
 			$.each(thisNode.airBaseAttack, function(i, ab){
 				var baseId = ab.api_base_id;
+				var stage2 = ab.api_stage2 || {};
 				var planes = ab.api_stage1.api_f_count;
-				var shotdown = ab.api_stage1.api_e_lostcount + ab.api_stage2.api_e_lostcount;
+				var shotdown = ab.api_stage1.api_e_lostcount + (stage2.api_e_lostcount || 0);
 				var damage = !ab.api_stage3 ? 0 : Math.floor(ab.api_stage3.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
-				var lost = ab.api_stage1.api_f_lostcount + ab.api_stage2.api_f_lostcount;
+				damage += !ab.api_stage3_combined ? 0 : Math.floor(ab.api_stage3_combined.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
+				var lost = ab.api_stage1.api_f_lostcount + (stage2.api_f_lostcount || 0);
+				var enemyPlanes = ab.api_stage1.api_e_count;
+				if(enemyPlanes > 0) {
+					shotdown = "{0:eLostCount} / {1:eTotalCount}".format(shotdown, enemyPlanes);
+				}
 				if(!!lbasTips) { lbasTips += "\n"; }
 				lbasTips += KC3Meta.term("BattleLbasSupportTips").format(planes, baseId, shotdown, damage, lost);
 			});

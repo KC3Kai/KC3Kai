@@ -650,4 +650,28 @@ KC3改 Ship Object
 
 		KC3ShipManager.save();
 	}
+
+	KC3Ship.prototype.deckbuilder = function() {
+		var itemsInfo = {};
+		var result = {
+			id: this.masterId,
+			lv: this.level,
+			luck: this.lk[0],
+			items: itemsInfo
+		};
+
+		var gearInfo;
+		for(var i=0; i<4; ++i) {
+			gearInfo = this.equipment(i).deckbuilder();
+			if (gearInfo)
+				itemsInfo["i".concat(i+1)] = gearInfo;
+			else 
+				break;
+		}
+		gearInfo = this.exItem().deckbuilder();
+		if (gearInfo)
+			itemsInfo.ix = gearInfo;
+		
+		return result;
+	};
 })();

@@ -832,4 +832,12 @@ Contains summary information about a fleet and its 6 ships
 		}
 	};
 
+	KC3Fleet.prototype.deckbuilder = function() {
+		var result = {};
+		this.ship().map( function(x,i) {
+			result["s".concat(i+1)] = x.deckbuilder();
+		});
+		return result;
+	};
+
 })();

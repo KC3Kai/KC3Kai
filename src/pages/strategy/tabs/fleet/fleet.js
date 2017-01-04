@@ -37,7 +37,7 @@
 
 		fleetsObjToDeckBuilder: function(fleetsObj) {
 			var dBuilder = {};
-			dBuilder.version = 3;
+			dBuilder.version = 4;
 
 			function convertShip(shipObj) {
 				var ship = {};
@@ -53,8 +53,10 @@
 					gear.id = gearObj.id;
 
 					if (gearObj.ace && gearObj.ace > 0) {
-						gear.rf = gearObj.ace;
-					} else if (gearObj.improve) {
+						gear.mas = gearObj.ace;
+					}
+
+					if (gearObj.improve && gearObj.improve > 0) {
 						gear.rf = gearObj.improve;
 					}
 
@@ -427,7 +429,6 @@
 				gearBox.hide();
 				return;
 			}
-
 			var masterData = kcGear.master();
 			$("img", gearBox).attr("src", "../../assets/img/items/"+masterData.api_type[3]+".png");
 			$("img", gearBox).attr("alt", masterData.api_id);
