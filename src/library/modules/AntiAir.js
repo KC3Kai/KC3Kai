@@ -11,7 +11,7 @@ AntiAir: anti-air related calculations
           in some specific way to produce a new prediate.
 
 - module contents:
-    - shipProportionalShotdownRate(shipObj)
+	- shipProportionalShotdownRate(shipObj)
 	  returns a value (supposed to be 0 <= v <= 1) indicating the rate of planes
 	  being shot down. note that it might be possible for this value to exceed 1.0.
 	- shipProportionalShotdown(shipObj, num)
