@@ -31,7 +31,7 @@
 	function predAllOf(/* list of predicates */) {
 		var args = arguments;
 		return function(x) {
-			var result;
+			var result = true;
 			for (var fInd in args) {
 				result = args[fInd](x);
 				if (! result)
