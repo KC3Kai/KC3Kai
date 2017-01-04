@@ -167,7 +167,7 @@ AntiAir: anti-air related calculations
 		return 0;
 	}
 
-	function getFleetShipEquipmentModifier(mst) {
+	function getFleetEquipmentModifier(mst) {
 		if (isType3Shell(mst))
 			return 0.6;
 		if (isAARadar(mst))
@@ -567,6 +567,18 @@ AntiAir: anti-air related calculations
 		return result;
 	}
 
+	function shipFixedShotdownRange(shipObj, fleetObj, formationModifier) {
+		var possibleAACIModifiers = possibleAACIs(shipObj).map( function( apiId ) {
+			return AACITable[apiId].modifier;
+		});
+		// default value 1 is always available, making call to Math.max always non-empty
+		possibleAACIModifiers.push( 1 );
+		var mod = Math.max.apply( null, possibleAACIModifiers );
+		return [ shipFixedShotdown(shipObj, fleetObj, formationModifier, 1),
+				 shipFixedShotdown(shipObj, fleetObj, formationModifier, mod) ];
+	}
+	
+
 	// exporting module
 	window.AntiAir = {
 		getFleetEquipmentModifier: getFleetEquipmentModifier,
@@ -585,6 +597,7 @@ AntiAir: anti-air related calculations
 		getFormationModifiers: getFormationModifiers,
 		fleetAdjustedAntiAir: fleetAdjustedAntiAir,
 		shipFixedShotdown: shipFixedShotdown,
+		shipFixedShotdownRange: shipFixedShotdownRange,
 
 		AACITable: AACITable,
 		possibleAACIs: possibleAACIs
