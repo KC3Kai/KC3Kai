@@ -392,9 +392,8 @@
 			isAkizukiClass,
 			withEquipmentMsts(
 				predAllOf(
-					hasAtLeast(
-						hasAtLeast( isHighAngleMount, 2 ),
-						hasSome( isRadar ))))));
+					hasAtLeast( isHighAngleMount, 2 ),
+					hasSome( isRadar )))));
 	declareAACI(
 		2, 6, 1.7,
 		predAllOf(
