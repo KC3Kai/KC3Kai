@@ -47,11 +47,16 @@
 		};
 	}
 
-	// AA Radar (12 for small, 13 for large)
+	// all types of Radar (12 for small, 13 for large)
+	function isRadar(mst) {
+		return (categoryEq(12)(mst) || categoryEq(13)(mst));
+	}
+
+	// AA Radar
 	// Surface Radar are excluded by checking whether
 	// the equipment gives AA stat (api_tyku)
 	function isAARadar(mst) {
-		return (categoryEq(12)(mst) || categoryEq(13)(mst)) && 
+		return isRadar(mst) && 
 			mst.api_tyku > 0;
 	}
 
@@ -76,6 +81,8 @@
 	var isFighter = categoryEq(6);
 	var isDiveBomber = categoryEq(7);
 	var isSeaplaneRecon = categoryEq(10);
+
+	var isLargeCaliberMainGun = categoryEq(3);
 
 	function isBuiltinHighAngleMount(mst) {
 		return [
@@ -256,6 +263,33 @@
 		return [13 /* SS */, 14 /* SSV */].indexOf( stype ) === -1;
 	}
 
+	function isBattleship( shipObj ) {
+		var stype = shipObj.master().api_stype;
+		return [8 /* FBB */, 9 /* BB */, 10 /* BBV */].indexOf( stype ) !== -1;
+	}
+
+	function isAkizukiClass( shipObj ) {
+		return [
+			421, 330 /* Akizuki & Kai */,
+			422, 346 /* Teruzuki & Kai */,
+			423, 357 /* Hatsuzuki & Kai */
+		].indexOf( shipObj.masterId ) !== -1;
+	}
+
+	function masterIdEq( n ) {
+		return function(shipObj) {
+			return shipObj.masterId === n;
+		};
+	}
+
+	var isMayaK2 = masterIdEq( 428 );
+	var isIsuzuK2 = masterIdEq( 141 );
+	var isKasumiK2B = masterIdEq( 470 );
+	var isSatsukiK2 = masterIdEq( 418 );
+	var isKinuK2 = masterIdEq( 487 );
+	
+	// turns a "shipObj" into the list of her equipments
+	// for its parameter function "pred"
 	function withEquipmentMsts( pred ) {
 		return function(shipObj) {
 			var gears = allShipEquipments(shipObj)
@@ -265,59 +299,198 @@
 		};
 	}
 
+	// "hasAtLeast(pred)(n)(xs)" is the same as:
+	// xs.filter(pred).length >= n
+	function hasAtLeast(pred, n) {
+		return function(xs) {
+			return xs.filter(pred).length >= n;
+		};
+	}
+
+	// "hasSome(pred)(xs)" is the same as:
+	// xs.some(pred)
+	function hasSome(pred) {
+		return function(xs) {
+			return xs.some(pred);
+		};
+	}
+
 	// all non-sub ships
 	declareAACI(
 		5, 4, 1.5,
 		predAllOf(
 			isNotSubmarine,
 			withEquipmentMsts(
-				function (gears) {
-					console.log( gears );
-					return gears.filter( isBuiltinHighAngleMount ).length >= 2 &&
-						gears.some( isAARadar );
-				})));
+				predAllOf(
+					hasAtLeast(isBuiltinHighAngleMount, 2),
+					hasSome( isAARadar )))));
 
 	declareAACI(
 		8, 4, 1.4,
 		predAllOf(
 			isNotSubmarine,
 			withEquipmentMsts(
-				function(gears) {
-				 	return gears.some( isBuiltinHighAngleMount ) &&
-						gears.some( isAARadar );
-				})));
+				predAllOf(
+					hasSome( isBuiltinHighAngleMount ),
+					hasSome( isAARadar )))));
 
 	declareAACI(
 		7, 3, 1.35,
 		predAllOf(
 			isNotSubmarine,
 			withEquipmentMsts(
-				function(gears) {
-					return gears.some( isHighAngleMount ) &&
-						gears.some( isAAFD ) &&
-						gears.some( isAARadar );
-				})));
+				predAllOf(
+					hasSome( isHighAngleMount ),
+					hasSome( isAAFD ),
+					hasSome( isAARadar )))));
 
 	declareAACI(
 		9, 2, 1.3,
 		predAllOf(
 			isNotSubmarine,
 			withEquipmentMsts(
-				function(gears) {
-					return gears.some( isHighAngleMount ) &&
-						gears.some( isAAFD );
-				})));
+				predAllOf(
+					hasSome( isHighAngleMount ),
+					hasSome( isAAFD )))));
 
 	declareAACI(
 		12, 3, 1.25,
 		predAllOf(
 			isNotSubmarine,
 			withEquipmentMsts(
-				function(gears) {
-					return gears.some( isCDMG ) &&
-						gears.some( isAAGun ) &&
-						gears.some( isAARadar );
-				})));
+				predAllOf(
+					hasSome( isCDMG ),
+					hasSome( isAAGun ),
+					hasSome( isAARadar )))));
+
+	// battleship special AACIs
+	declareAACI(
+		4, 6, 1.4,
+		predAllOf(
+			isBattleship,
+			withEquipmentMsts(
+				predAllOf(
+					hasSome( isLargeCaliberMainGun ),
+					hasSome( isType3Shell ),
+					hasSome( isAAFD ),
+					hasSome( isAARadar )))));
+
+	declareAACI(
+		6, 4, 1.45,
+		predAllOf(
+			isBattleship,
+			withEquipmentMsts(
+				predAllOf(
+					hasSome( isLargeCaliberMainGun ),
+					hasSome( isType3Shell ),
+					hasSome( isAAFD )))));
+
+	// Akizuki-class AACIs
+	declareAACI(
+		1, 7, 1.7,
+		predAllOf(
+			isAkizukiClass,
+			withEquipmentMsts(
+				predAllOf(
+					hasAtLeast(
+						hasAtLeast( isHighAngleMount, 2 ),
+						hasSome( isRadar ))))));
+	declareAACI(
+		2, 6, 1.7,
+		predAllOf(
+			isAkizukiClass,
+			withEquipmentMsts(
+				predAllOf(
+					hasSome( isHighAngleMount ),
+					hasSome( isRadar )))));
+	declareAACI(
+		3, 4, 1.6,
+		predAllOf(
+			isAkizukiClass,
+			withEquipmentMsts(
+				hasAtLeast( isHighAngleMount, 2 ))));
+
+	// Maya K2
+	declareAACI(
+		10, 8, 1.65,
+		predAllOf(
+			isMayaK2,
+			withEquipmentMsts(
+				predAllOf(
+					hasSome( isHighAngleMount ),
+					hasSome( isCDMG ),
+					hasSome( isAARadar )))));
+	declareAACI(
+		11, 6, 1.5,
+		predAllOf(
+			isMayaK2,
+			withEquipmentMsts(
+				predAllOf(
+					hasSome( isHighAngleMount ),
+					hasSome( isCDMG )))));
+
+	// Isuzu K2
+	declareAACI(
+		14, 4, 1.45,
+		predAllOf(
+			isIsuzuK2,
+			withEquipmentMsts(
+				predAllOf(
+					hasSome( isHighAngleMount ),
+					hasSome( isAAGun ),
+					hasSome( isAARadar )))));
+	declareAACI(
+		15, 3, 1.3,
+		predAllOf(
+			isIsuzuK2,
+			withEquipmentMsts(
+				predAllOf(
+					hasSome( isHighAngleMount ),
+					hasSome( isAAGun )))));
+
+	// Kasumi K2B
+	declareAACI(
+		16, 4, 1.4,
+		predAllOf(
+			isKasumiK2B,
+			withEquipmentMsts(
+				predAllOf(
+					hasSome( isHighAngleMount ),
+					hasSome( isAAGun ),
+					hasSome( isAARadar )))));
+	declareAACI(
+		17, 2, 1.25,
+		predAllOf(
+			isKasumiK2B,
+			withEquipmentMsts(
+				predAllOf(
+					hasSome( isHighAngleMount ),
+					hasSome( isAAGun )))));
+	// Satsuki K2
+	declareAACI(
+		18, 2, 1.2,
+		predAllOf(
+			isSatsukiK2,
+			withEquipmentMsts(
+				hasSome( isCDMG ))));
+
+	// Kinu K2
+	declareAACI(
+		19, 5, 1.45,
+		predAllOf(
+			isKinuK2,
+			withEquipmentMsts(
+				predAllOf(
+					/* any HA with builtin AAFD will not work  */
+					predNot( hasSome( isBuiltinHighAngleMount )),
+					hasSome( isHighAngleMount ),
+					hasSome( isCDMG )))));
+	declareAACI(
+		20, 3, 1.25,
+		predAllOf(
+			isKinuK2,
+			withEquipmentMsts(
+				hasSome( isCDMG ))));
 
 	// exporting module
 	window.AntiAir = {
