@@ -236,6 +236,7 @@ KC3改 Equipment Object
 		return 0;
 	};
 
+
 	KC3Gear.prototype.aaDefense = function(forFleet) {
 		if (this.masterId === 0)
 			return 0;
@@ -250,7 +251,7 @@ KC3改 Equipment Object
 	KC3Gear.aaDefense = function(mst,stars,forFleet) {
 		return AntiAir.calcEquipmentAADefense(mst,stars,forFleet);
 	};
-
+  
 	// prepare info necessary for deckbuilder
 	KC3Gear.prototype.deckbuilder = function() {
 		if (this.masterId <= 0)
@@ -264,6 +265,4 @@ KC3改 Equipment Object
 			result.mas = this.ace;
 		return result;
 	};
-
-
 })();
