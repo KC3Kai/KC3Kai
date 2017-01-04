@@ -1,3 +1,8 @@
+/*
+
+  AntiAir: anti-air related calculations
+
+ */
 (function() {
 	"use strict";
 
