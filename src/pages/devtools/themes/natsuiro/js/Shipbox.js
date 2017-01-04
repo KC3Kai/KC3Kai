@@ -40,6 +40,8 @@ KC3改 Ship Box for Natsuiro theme
 			this.shipData.proportionalShotdownRate() * 100, 
 			fixedShotdownRange[0], fixedShotdownRange[1]
 		);
+		tooltip += "\nMaximum AACI Shotdown bonus: {0}".format(
+			this.shipData.maxShotdownBonus() );
 		$(".ship_img img", this.element).attr("src", KC3Meta.shipIcon(this.shipData.masterId))
 			.attr("title", tooltip);
 		/*

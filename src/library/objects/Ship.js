@@ -591,6 +591,10 @@ KC3改 Ship Object
 		return AntiAir.shipFixedShotdownRange(this, fleetObj, formationModifier);
 	};
 
+	KC3Ship.prototype.maxShotdownBonus = function() {
+		return AntiAir.shipMaxShotdownBonus( this );
+	};
+
 	function consumePending(index,mapping,clear,args) {
 		/*jshint validthis: true */
 		if(!(this instanceof KC3Ship)) {

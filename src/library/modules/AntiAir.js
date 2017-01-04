@@ -580,7 +580,15 @@ AntiAir: anti-air related calculations
 		return [ shipFixedShotdown(shipObj, fleetObj, formationModifier, 1),
 				 shipFixedShotdown(shipObj, fleetObj, formationModifier, mod) ];
 	}
-	
+
+	function shipMaxShotdownBonus(shipObj) {
+		var possibleBonuses = possibleAACIs(shipObj).map( function( apiId ) {
+			return AACITable[apiId].fixed;
+		});
+		// default value 0 is always available, making call to Math.max always non-empty
+		possibleBonuses.push( 0 );
+		return Math.max.apply( null, possibleBonuses );
+	}
 
 	// exporting module
 	window.AntiAir = {
@@ -601,6 +609,7 @@ AntiAir: anti-air related calculations
 		fleetAdjustedAntiAir: fleetAdjustedAntiAir,
 		shipFixedShotdown: shipFixedShotdown,
 		shipFixedShotdownRange: shipFixedShotdownRange,
+		shipMaxShotdownBonus: shipMaxShotdownBonus,
 
 		AACITable: AACITable,
 		possibleAACIs: possibleAACIs
