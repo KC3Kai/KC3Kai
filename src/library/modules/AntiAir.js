@@ -360,7 +360,9 @@
 			withEquipmentMsts(
 				predAllOf(
 					hasSome( isCDMG ),
-					hasSome( isAAGun ),
+					/* CDMGs are AAGuns, so we need at least 2 AA guns 
+					   including the CDMG one we have just counted */
+					hasAtLeast(isAAGun, 2),
 					hasSome( isAARadar )))));
 
 	// battleship special AACIs
