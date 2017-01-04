@@ -243,7 +243,7 @@
 		return (id === 1 || id === 4 || id === 5) ? 1  // line ahead / echelon / line abreast
 			:  (id === 2) ? 1.2 // double line
 			:  (id === 3) ? 1.6 // diamond
-		    :  NaN; // NaN for indicating an invalid id
+			:  NaN; // NaN for indicating an invalid id
 	}
 
 	function fleetAdjustedAntiAir(fleetObj, formationModifier) {
