@@ -304,51 +304,78 @@ AntiAir: anti-air related calculations
 	var AACITable = {};
 
 	// predicate is a function f:
-	// f(shipObj)
+	// f(shipObj / mst)
 	// returns a boolean to indicate whether the ship in question (with equipments)
 	// is capable of performing such type of AACI
 	function declareAACI(
 		apiId,
-		fixedBonus, 
-		modifier, 
-		predicate) {
-		AACITable[apiId] =
-			{id: apiId,
-			 fixed: fixedBonus,
-			 modifier: modifier,
-			 predicate: predicate };
+		fixedBonus,
+		modifier,
+		typeIcons,
+		predicate,
+		predicateIgnoreEquips) {
+		AACITable[apiId] = {
+			id: apiId,
+			fixed: fixedBonus,
+			modifier: modifier,
+			icons: typeIcons,
+			predicate: predicate,
+			predicateMaster: predicateIgnoreEquips
+		};
 	}
 
-	function isNotSubmarine( shipObj ) {
-		var stype = shipObj.master().api_stype;
+	function isNotSubmarine( shipObjOrMst ) {
+		var stype = typeof shipObjOrMst.master === "function" ?
+			shipObjOrMst.master().api_stype : shipObjOrMst.api_stype;
 		return [13 /* SS */, 14 /* SSV */].indexOf( stype ) === -1;
 	}
 
-	function isBattleship( shipObj ) {
-		var stype = shipObj.master().api_stype;
+	function isBattleship( shipObjOrMst ) {
+		var stype = typeof shipObjOrMst.master === "function" ?
+			shipObjOrMst.master().api_stype : shipObjOrMst.api_stype;
 		return [8 /* FBB */, 9 /* BB */, 10 /* BBV */].indexOf( stype ) !== -1;
 	}
 
-	function isAkizukiClass( shipObj ) {
+	function isAkizukiClass( shipObjOrMst ) {
 		return [
 			421, 330 /* Akizuki & Kai */,
 			422, 346 /* Teruzuki & Kai */,
 			423, 357 /* Hatsuzuki & Kai */
-		].indexOf( shipObj.masterId ) !== -1;
+		].indexOf( shipObjOrMst.masterId || shipObjOrMst.api_id ) !== -1;
 	}
 
 	function masterIdEq( n ) {
-		return function(shipObj) {
-			return shipObj.masterId === n;
+		return function(shipObjOrMst) {
+			return (shipObjOrMst.masterId || shipObjOrMst.api_id) === n;
 		};
 	}
 
-	var isMayaK2 = masterIdEq( 428 );
-	var isIsuzuK2 = masterIdEq( 141 );
-	var isKasumiK2B = masterIdEq( 470 );
-	var isSatsukiK2 = masterIdEq( 418 );
-	var isKinuK2 = masterIdEq( 487 );
-	
+	// Icons used to declare AACI type
+	var surfaceShipIcon = 0,
+		akizukiIcon = 421,
+		battleShipIcon = 131,
+		mayaK2Icon = 428,
+		isuzuK2Icon = 141,
+		kasumiK2BIcon = 470,
+		satsukiK2Icon = 418,
+		kinuK2Icon = 487,
+		haMountIcon = 16,
+		radarIcon = 11,
+		aaFdIcon = 30,
+		aaGunIcon = 15,
+		lcMainGunIcon = 3,
+		type3ShellIcon = 12,
+		// Combined icons for Build-in HA / CDMG
+		biHaMountIcon = "16+30",
+		cdmgIcon = "15+15",
+		haMountNbifdIcon = "16-30";
+
+	var isMayaK2 = masterIdEq( mayaK2Icon );
+	var isIsuzuK2 = masterIdEq( isuzuK2Icon );
+	var isKasumiK2B = masterIdEq( kasumiK2BIcon );
+	var isSatsukiK2 = masterIdEq( satsukiK2Icon );
+	var isKinuK2 = masterIdEq( kinuK2Icon );
+
 	// turns a "shipObj" into the list of her equipments
 	// for its parameter function "pred"
 	function withEquipmentMsts( pred ) {
@@ -376,46 +403,68 @@ AntiAir: anti-air related calculations
 		};
 	}
 
+	// check if slot num of ship (excluding ex slot) equals or greater
+	function slotNumAtLeast(n) {
+		return function(shipObjOrMst) {
+			var slotnum = (typeof shipObjOrMst.master === "function" ?
+				shipObjOrMst.master().api_slot_num : shipObjOrMst.api_slot_num) || 0;
+			return slotnum >= n;
+		};
+	}
+
 	// all non-sub ships
 	declareAACI(
 		5, 4, 1.5,
+		[surfaceShipIcon, biHaMountIcon, biHaMountIcon, radarIcon],
 		predAllOf(
 			isNotSubmarine,
 			withEquipmentMsts(
 				predAllOf(
 					hasAtLeast(isBuiltinHighAngleMount, 2),
-					hasSome( isAARadar )))));
+					hasSome( isAARadar )))),
+		predAllOf(isNotSubmarine, slotNumAtLeast(3))
+	);
 
 	declareAACI(
 		8, 4, 1.4,
+		[surfaceShipIcon, biHaMountIcon, radarIcon],
 		predAllOf(
 			isNotSubmarine,
 			withEquipmentMsts(
 				predAllOf(
 					hasSome( isBuiltinHighAngleMount ),
-					hasSome( isAARadar )))));
+					hasSome( isAARadar )))),
+		predAllOf(isNotSubmarine, slotNumAtLeast(2))
+	);
 
 	declareAACI(
 		7, 3, 1.35,
+		[surfaceShipIcon, haMountIcon, aaFdIcon, radarIcon],
 		predAllOf(
 			isNotSubmarine,
 			withEquipmentMsts(
 				predAllOf(
 					hasSome( isHighAngleMount ),
 					hasSome( isAAFD ),
-					hasSome( isAARadar )))));
+					hasSome( isAARadar )))),
+		predAllOf(isNotSubmarine, slotNumAtLeast(3))
+	);
 
 	declareAACI(
 		9, 2, 1.3,
+		[surfaceShipIcon, haMountIcon, aaFdIcon],
 		predAllOf(
 			isNotSubmarine,
 			withEquipmentMsts(
 				predAllOf(
 					hasSome( isHighAngleMount ),
-					hasSome( isAAFD )))));
+					hasSome( isAAFD )))),
+		predAllOf(isNotSubmarine, slotNumAtLeast(2))
+	);
 
 	declareAACI(
 		12, 3, 1.25,
+		[surfaceShipIcon, cdmgIcon, aaGunIcon, radarIcon],
 		predAllOf(
 			isNotSubmarine,
 			withEquipmentMsts(
@@ -424,11 +473,14 @@ AntiAir: anti-air related calculations
 					/* CDMGs are AAGuns, so we need at least 2 AA guns 
 					   including the CDMG one we have just counted */
 					hasAtLeast(isAAGun, 2),
-					hasSome( isAARadar )))));
+					hasSome( isAARadar )))),
+		predAllOf(isNotSubmarine, slotNumAtLeast(2))
+	);
 
 	// battleship special AACIs
 	declareAACI(
 		4, 6, 1.4,
+		[battleShipIcon, lcMainGunIcon, type3ShellIcon, aaFdIcon, radarIcon],
 		predAllOf(
 			isBattleship,
 			withEquipmentMsts(
@@ -436,109 +488,146 @@ AntiAir: anti-air related calculations
 					hasSome( isLargeCaliberMainGun ),
 					hasSome( isType3Shell ),
 					hasSome( isAAFD ),
-					hasSome( isAARadar )))));
+					hasSome( isAARadar )))),
+		predAllOf(isBattleship, slotNumAtLeast(4))
+	);
 
 	declareAACI(
 		6, 4, 1.45,
+		[battleShipIcon, lcMainGunIcon, type3ShellIcon, aaFdIcon],
 		predAllOf(
 			isBattleship,
 			withEquipmentMsts(
 				predAllOf(
 					hasSome( isLargeCaliberMainGun ),
 					hasSome( isType3Shell ),
-					hasSome( isAAFD )))));
+					hasSome( isAAFD )))),
+		predAllOf(isBattleship, slotNumAtLeast(3))
+	);
 
 	// Akizuki-class AACIs
 	declareAACI(
 		1, 7, 1.7,
+		[akizukiIcon, haMountIcon, haMountIcon, radarIcon],
 		predAllOf(
 			isAkizukiClass,
 			withEquipmentMsts(
 				predAllOf(
 					hasAtLeast( isHighAngleMount, 2 ),
-					hasSome( isRadar )))));
+					hasSome( isRadar )))),
+		predAllOf(isAkizukiClass, slotNumAtLeast(3))
+	);
 	declareAACI(
 		2, 6, 1.7,
+		[akizukiIcon, haMountIcon, radarIcon],
 		predAllOf(
 			isAkizukiClass,
 			withEquipmentMsts(
 				predAllOf(
 					hasSome( isHighAngleMount ),
-					hasSome( isRadar )))));
+					hasSome( isRadar )))),
+		predAllOf(isAkizukiClass, slotNumAtLeast(2))
+	);
 	declareAACI(
 		3, 4, 1.6,
+		[akizukiIcon, haMountIcon, haMountIcon],
 		predAllOf(
 			isAkizukiClass,
 			withEquipmentMsts(
-				hasAtLeast( isHighAngleMount, 2 ))));
+				hasAtLeast( isHighAngleMount, 2 ))),
+		predAllOf(isAkizukiClass, slotNumAtLeast(2))
+	);
 
 	// Maya K2
 	declareAACI(
 		10, 8, 1.65,
+		[mayaK2Icon, haMountIcon, cdmgIcon, radarIcon],
 		predAllOf(
 			isMayaK2,
 			withEquipmentMsts(
 				predAllOf(
 					hasSome( isHighAngleMount ),
 					hasSome( isCDMG ),
-					hasSome( isAARadar )))));
+					hasSome( isAARadar )))),
+		predAllOf(isMayaK2)
+	);
 	declareAACI(
 		11, 6, 1.5,
+		[mayaK2Icon, haMountIcon, cdmgIcon],
 		predAllOf(
 			isMayaK2,
 			withEquipmentMsts(
 				predAllOf(
 					hasSome( isHighAngleMount ),
-					hasSome( isCDMG )))));
+					hasSome( isCDMG )))),
+		predAllOf(isMayaK2)
+	);
 
 	// Isuzu K2
 	declareAACI(
 		14, 4, 1.45,
+		[isuzuK2Icon, haMountIcon, aaGunIcon, radarIcon],
 		predAllOf(
 			isIsuzuK2,
 			withEquipmentMsts(
 				predAllOf(
 					hasSome( isHighAngleMount ),
 					hasSome( isAAGun ),
-					hasSome( isAARadar )))));
+					hasSome( isAARadar )))),
+		predAllOf(isIsuzuK2)
+	);
 	declareAACI(
 		15, 3, 1.3,
+		[isuzuK2Icon, haMountIcon, aaGunIcon],
 		predAllOf(
 			isIsuzuK2,
 			withEquipmentMsts(
 				predAllOf(
 					hasSome( isHighAngleMount ),
-					hasSome( isAAGun )))));
+					hasSome( isAAGun )))),
+		predAllOf(isIsuzuK2)
+	);
 
 	// Kasumi K2B
 	declareAACI(
 		16, 4, 1.4,
+		[kasumiK2BIcon, haMountIcon, aaGunIcon, radarIcon],
 		predAllOf(
 			isKasumiK2B,
 			withEquipmentMsts(
 				predAllOf(
 					hasSome( isHighAngleMount ),
 					hasSome( isAAGun ),
-					hasSome( isAARadar )))));
+					hasSome( isAARadar )))),
+		predAllOf(isKasumiK2B)
+	);
 	declareAACI(
 		17, 2, 1.25,
+		[kasumiK2BIcon, haMountIcon, aaGunIcon],
 		predAllOf(
 			isKasumiK2B,
 			withEquipmentMsts(
 				predAllOf(
 					hasSome( isHighAngleMount ),
-					hasSome( isAAGun )))));
+					hasSome( isAAGun )))),
+		predAllOf(isKasumiK2B)
+	);
+
 	// Satsuki K2
 	declareAACI(
 		18, 2, 1.2,
+		[satsukiK2Icon, cdmgIcon],
 		predAllOf(
 			isSatsukiK2,
 			withEquipmentMsts(
-				hasSome( isCDMG ))));
+				hasSome( isCDMG ))),
+		predAllOf(isSatsukiK2)
+	);
 
 	// Kinu K2
 	declareAACI(
 		19, 5, 1.45,
+		[kinuK2Icon, haMountNbifdIcon, cdmgIcon],
 		predAllOf(
 			isKinuK2,
 			withEquipmentMsts(
@@ -546,13 +635,18 @@ AntiAir: anti-air related calculations
 					/* any HA with builtin AAFD will not work  */
 					predNot( hasSome( isBuiltinHighAngleMount )),
 					hasSome( isHighAngleMount ),
-					hasSome( isCDMG )))));
+					hasSome( isCDMG )))),
+		predAllOf(isKinuK2)
+	);
 	declareAACI(
 		20, 3, 1.25,
+		[kinuK2Icon, cdmgIcon],
 		predAllOf(
 			isKinuK2,
 			withEquipmentMsts(
-				hasSome( isCDMG ))));
+				hasSome( isCDMG ))),
+		predAllOf(isKinuK2)
+	);
 
 	// return a list of possible AACI APIs based on ship and her equipments
 	// - returns a list of **strings**, not numbers
@@ -568,6 +662,30 @@ AntiAir: anti-air related calculations
 				result.push( k );
 		});
 		return result;
+	}
+
+	// return a list of all possible AACI based on master ship only, equipments ignored
+	function allPossibleAACIs( shipMaster ) {
+		var result = [];
+		$.each( AACITable, function(k, entry) {
+			if (entry.predicateMaster( shipMaster ))
+				result.push( k );
+		});
+		return result;
+	}
+
+	// return: a list of sorted AACI objects order by effect desc,
+	//   as most effective AACI gets priority to be triggered.
+	// param: AACI IDs from `possibleAACIs` or `allPossibleAACIs`
+	function sortedPossibleAaciList( aaciIds ) {
+		var aaciList = [];
+		$.each( aaciIds, function(i, id) {
+			aaciList.push( AACITable[id] );
+		});
+		aaciList = aaciList.sort(function(a, b) {
+			return (b.fixed * b.modifier) - (a.fixed * a.modifier);
+		});
+		return aaciList;
 	}
 
 	function shipFixedShotdownRange(shipObj, fleetObj, formationModifier) {
@@ -612,6 +730,8 @@ AntiAir: anti-air related calculations
 		shipMaxShotdownBonus: shipMaxShotdownBonus,
 
 		AACITable: AACITable,
-		possibleAACIs: possibleAACIs
+		possibleAACIs: possibleAACIs,
+		allPossibleAACIs: allPossibleAACIs,
+		sortedPossibleAaciList : sortedPossibleAaciList
 	};
 })();
