@@ -823,6 +823,20 @@ Contains summary information about a fleet and its 6 ships
 							ship.equipment(3).masterId,
 							ship.exItem().masterId
 						],
+						stars: [
+							ship.equipment(0).stars,
+							ship.equipment(1).stars,
+							ship.equipment(2).stars,
+							ship.equipment(3).stars,
+							ship.exItem().stars
+						],
+						ace: [
+							ship.equipment(0).ace,
+							ship.equipment(1).ace,
+							ship.equipment(2).ace,
+							ship.equipment(3).ace,
+							ship.exItem().ace
+						]
 					});
 				}
 			});
