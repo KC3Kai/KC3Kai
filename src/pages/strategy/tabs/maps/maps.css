@@ -298,14 +298,14 @@
 
 /* Sortie Nodes */
 .tab_maps .sortie_list .sortie_nodes {
-	width:670px;
+	width:675px;
 	margin:5px 0px 2px 0px;
 	display:none;
 }
 .tab_maps .sortie_list .sortie_nodeinfo {
 	width:130px;
 	line-height:20px;
-	margin:0px 3px 0px 2px;
+	margin:0px 2px 0px 2px;
 	float:left;
 	overflow:hidden;
 	padding:5px;

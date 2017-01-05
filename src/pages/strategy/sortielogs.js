@@ -524,22 +524,6 @@
 								$(".node_drop img", nodeBox).attr("src", "../../assets/img/ui/shipdrop-x.png");
 							}
 							
-							// Support Exped/LBAS Triggered
-							if(battleData.api_support_flag > 0 || !!battleData.api_air_base_attack){
-								$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support.png");
-								if(battleData.api_support_flag > 0 && !!battleData.api_support_info){
-									var fleetId = (battleData.api_support_info.api_support_airatack||{}).api_deck_id
-										|| (battleData.api_support_info.api_support_hourai||{}).api_deck_id || "?";
-									$(".node_support .exped", nodeBox).text(fleetId);
-									$(".node_support .exped", nodeBox).show();
-								}
-								if(!!battleData.api_air_base_attack){
-									$(".node_support .lbas", nodeBox).show();
-								}
-							}else{
-								$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support-x.png");
-							}
-							
 							// Enemies
 							$(".node_eformation img", nodeBox).attr("src", KC3Meta.formationIcon(battleData.api_formation[1]) );
 							$(".node_eformation", nodeBox).attr("title", KC3Meta.formationText(battleData.api_formation[1]) );
@@ -569,6 +553,23 @@
 							
 							sinkShips[0].concat(battle.shizunde[0]);
 							sinkShips[1].concat(battle.shizunde[1]);
+							
+							// Support Exped/LBAS Triggered
+							if(thisNode.supportFlag || thisNode.lbasFlag){
+								$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support.png");
+								if(battleData.supportFlag > 0 && !!battleData.api_support_info){
+									var fleetId = (battleData.api_support_info.api_support_airatack||{}).api_deck_id
+										|| (battleData.api_support_info.api_support_hourai||{}).api_deck_id || "?";
+									$(".node_support .exped", nodeBox).text(fleetId);
+									$(".node_support .exped", nodeBox).show();
+								}
+								if(!!battleData.api_air_base_attack){
+									$(".node_support .lbas", nodeBox).show();
+								}
+								$(".node_support", nodeBox).attr("title", buildSupportAttackTooltip(thisNode));
+							}else{
+								$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support-x.png");
+							}
 							
 							// Conditions
 							$(".node_engage", nodeBox).text( thisNode.engagement[2] );
@@ -646,6 +647,58 @@
 			
 			$(".tab_"+tabCode+" .pagination").show();
 		};
+		
+		function buildSupportAttackTooltip(thisNode) {
+			var supportTips = "";
+			if(thisNode.supportFlag && !!thisNode.supportInfo){
+				var fleetId = "";
+				var attackType = thisNode.supportInfo.api_support_flag;
+				if(attackType === 1){
+					var airatack = thisNode.supportInfo.api_support_airatack;
+					fleetId = airatack.api_deck_id;
+				} else if([2,3].indexOf(attackType) > -1){
+					var hourai = thisNode.supportInfo.api_support_hourai;
+					fleetId = hourai.api_deck_id;
+					// other info such as damage could be added
+				}
+				supportTips = KC3Meta.term("BattleSupportTips").format(fleetId, KC3Meta.support(attackType));
+			}
+			var lbasTips = "";
+			if(thisNode.lbasFlag && !!thisNode.airBaseAttack){
+				if(!!thisNode.airBaseJetInjection){
+					var jet = thisNode.airBaseJetInjection;
+					var jetStage2 = jet.api_stage2 || {};
+					var jetPlanes = jet.api_stage1.api_f_count;
+					var jetShotdown = jet.api_stage1.api_e_lostcount + (jetStage2.api_e_lostcount || 0);
+					var jetDamage = !jet.api_stage3 ? 0 : Math.floor(jet.api_stage3.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
+					jetDamage += !jet.api_stage3_combined ? 0 : Math.floor(jet.api_stage3_combined.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
+					var jetLost = jet.api_stage1.api_f_lostcount + (jetStage2.api_f_lostcount || 0);
+					var jetEnemyPlanes = jet.api_stage1.api_e_count;
+					if(jetEnemyPlanes > 0) {
+						jetShotdown = "{0:eLostCount} / {1:eTotalCount}".format(jetShotdown, jetEnemyPlanes);
+					}
+					lbasTips += KC3Meta.term("BattleLbasJetSupportTips").format(jetPlanes, jetShotdown, jetDamage, jetLost);
+				}
+				$.each(thisNode.airBaseAttack, function(i, ab){
+					var baseId = ab.api_base_id;
+					var stage2 = ab.api_stage2 || {};
+					var airBattle = KC3Meta.airbattle(ab.api_stage1.api_disp_seiku || 5)[2];
+					var planes = ab.api_stage1.api_f_count;
+					var shotdown = ab.api_stage1.api_e_lostcount + (stage2.api_e_lostcount || 0);
+					var damage = !ab.api_stage3 ? 0 : Math.floor(ab.api_stage3.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
+					damage += !ab.api_stage3_combined ? 0 : Math.floor(ab.api_stage3_combined.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
+					var lost = ab.api_stage1.api_f_lostcount + (stage2.api_f_lostcount || 0);
+					var enemyPlanes = ab.api_stage1.api_e_count;
+					if(enemyPlanes > 0) {
+						shotdown = "{0:eLostCount} / {1:eTotalCount}".format(shotdown, enemyPlanes);
+					}
+					if(!!lbasTips) { lbasTips += "\n"; }
+					lbasTips += KC3Meta.term("BattleLbasSupportTips").format(planes, baseId, shotdown, damage, lost, airBattle);
+				});
+				if(!!supportTips && !!lbasTips) { supportTips += "\n"; }
+			}
+			return (supportTips + lbasTips) || "";
+		}
 		
 		function updateScrollItem(worldMap, itemWidth) {
 			var
