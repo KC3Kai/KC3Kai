@@ -26,8 +26,8 @@ AntiAir: anti-air related calculations
 	- shipFixedShotdownRange(shipObj, fleetObj, formationModifier)
 	  like "shipFixedShotdown" but this one returns a range by considering
 	  all possible AACIs "shipObj" can perform and use the largest modifier as upper bound.
-	- possibleAACIs(shipObj)
-	  returns a list of possible AACI API Ids that ship could perform.
+	- possibleAACIs(shipObj) / fleetPossibleAACIs(fleetObj)
+	  returns a list of possible AACI API Ids that ship / fleet could perform.
 	- allPossibleAACIs(mst)
 	  returns a list of possible AACI API Ids that type of ship could perform ignored equipments.
 	- sortedPossibleAaciList(aaciIdList)
@@ -677,8 +677,18 @@ AntiAir: anti-air related calculations
 		return aaciList;
 	}
 
+	function fleetPossibleAACIs(fleetObj) {
+		var aaciSet = {};
+		fleetObj.ship(function(rId,ind,shipObj) {
+			possibleAACIs(shipObj).map(function(apiId) {
+				aaciSet[apiId] = true;
+			});
+		});
+		return Object.keys(aaciSet);
+	}
+
 	function shipFixedShotdownRange(shipObj, fleetObj, formationModifier) {
-		var possibleAACIModifiers = possibleAACIs(shipObj).map( function( apiId ) {
+		var possibleAACIModifiers = fleetPossibleAACIs(fleetObj).map( function( apiId ) {
 			return AACITable[apiId].modifier;
 		});
 		// default value 1 is always available, making call to Math.max always non-empty
@@ -720,6 +730,7 @@ AntiAir: anti-air related calculations
 
 		AACITable: AACITable,
 		possibleAACIs: possibleAACIs,
+		fleetPossibleAACIs: fleetPossibleAACIs,
 		allPossibleAACIs: allPossibleAACIs,
 		sortedPossibleAaciList: sortedPossibleAaciList
 	};
