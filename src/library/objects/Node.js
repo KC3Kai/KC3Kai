@@ -1156,9 +1156,108 @@ Used by SortieManager
 		} catch (e) {
 			console.error("Captured an exception ==>", e,"\n==> proceeds safely");
 		} finally {
-			// Reserved for future PvP history storage
 			this.savePvPOnDB(resultData);
 		}
+	};
+	
+	/**
+	 * Builds a complex long message for results of Exped/LBAS support attack,
+	 * Used as a tooltip by devtools panel or SRoom Maps History for now.
+	 * return a empty string if no any support triggered.
+	 */
+	KC3Node.prototype.buildSupportAttackMessage = function(){
+		var thisNode = this;
+		var supportTips = "";
+		if(thisNode.supportFlag && !!thisNode.supportInfo){
+			var fleetId = "", supportDamage = 0;
+			var attackType = thisNode.supportInfo.api_support_flag;
+			if(attackType === 1){
+				var airatack = thisNode.supportInfo.api_support_airatack;
+				fleetId = airatack.api_deck_id;
+				supportDamage = !airatack.api_stage3 ? 0 :
+					Math.floor(airatack.api_stage3.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
+				// Support air attack has the same structure with kouku/LBAS
+				// So disp_seiku, plane xxx_count are also possible to be displayed
+				// Should break BattleSupportTips into another type for air attack
+			} else if([2,3].indexOf(attackType) > -1){
+				var hourai = thisNode.supportInfo.api_support_hourai;
+				fleetId = hourai.api_deck_id;
+				supportDamage = !hourai.api_damage ? 0 :
+					Math.floor(hourai.api_damage.slice(1).reduce(function(a,b){return a+b;},0));
+			}
+			supportTips = KC3Meta.term("BattleSupportTips").format(fleetId, KC3Meta.support(attackType), supportDamage);
+		}
+		var lbasTips = "";
+		if(thisNode.lbasFlag && !!thisNode.airBaseAttack){
+			if(!!thisNode.airBaseJetInjection){
+				var jet = thisNode.airBaseJetInjection;
+				var jetStage2 = jet.api_stage2 || {};
+				var jetPlanes = jet.api_stage1.api_f_count;
+				var jetShotdown = jet.api_stage1.api_e_lostcount + (jetStage2.api_e_lostcount || 0);
+				var jetDamage = !jet.api_stage3 ? 0 :
+					Math.floor(jet.api_stage3.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
+				jetDamage += !jet.api_stage3_combined ? 0 :
+					Math.floor(jet.api_stage3_combined.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
+				var jetLost = jet.api_stage1.api_f_lostcount + (jetStage2.api_f_lostcount || 0);
+				var jetEnemyPlanes = jet.api_stage1.api_e_count;
+				if(jetEnemyPlanes > 0) {
+					jetShotdown = "{0:eLostCount} / {1:eTotalCount}".format(jetShotdown, jetEnemyPlanes);
+				}
+				lbasTips += KC3Meta.term("BattleLbasJetSupportTips").format(jetPlanes, jetShotdown, jetDamage, jetLost);
+			}
+			$.each(thisNode.airBaseAttack, function(i, ab){
+				var baseId = ab.api_base_id;
+				var stage2 = ab.api_stage2 || {};
+				var airBattle = KC3Meta.airbattle(ab.api_stage1.api_disp_seiku || 5)[2];
+				var planes = ab.api_stage1.api_f_count;
+				var shotdown = ab.api_stage1.api_e_lostcount + (stage2.api_e_lostcount || 0);
+				var damage = !ab.api_stage3 ? 0 :
+					Math.floor(ab.api_stage3.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
+				damage += !ab.api_stage3_combined ? 0 :
+					Math.floor(ab.api_stage3_combined.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
+				var lost = ab.api_stage1.api_f_lostcount + (stage2.api_f_lostcount || 0);
+				var enemyPlanes = ab.api_stage1.api_e_count;
+				if(enemyPlanes > 0) {
+					shotdown = "{0:eLostCount} / {1:eTotalCount}".format(shotdown, enemyPlanes);
+				}
+				if(!!lbasTips) { lbasTips += "\n"; }
+				lbasTips += KC3Meta.term("BattleLbasSupportTips").format(planes, baseId, shotdown, damage, lost, airBattle);
+			});
+			if(!!supportTips && !!lbasTips) { supportTips += "\n"; }
+		}
+		return supportTips + lbasTips;
+	};
+	
+	/**
+	 * Builds a complex long message for results of AACI fire,
+	 * Used as a tooltip by devtools panel or SRoom Maps History for now.
+	 * return a empty string if no any AACI triggered.
+	 */
+	KC3Node.prototype.buildAntiAirCutinMessage = function(){
+		var thisNode = this;
+		var aaciTips = "";
+		if(!!thisNode.antiAirFire && thisNode.antiAirFire.length > 0){
+			thisNode.antiAirFire.forEach(function(fire){
+				if(!!fire){
+					var fireShipPos = fire.api_idx; // starts from 0
+					// fireShipPos = [0,5]: in normal fleet or main fleet
+					// fireShipPos = [6,11]: in escort fleet
+					if(fireShipPos >= 0 && fireShipPos < 12){
+						var sentFleet = PlayerManager.fleets[fireShipPos >= 6 ? 1 : KC3SortieManager.fleetSent-1];
+						var shipName = KC3ShipManager.get(sentFleet.ships[fireShipPos % 6]).name();
+						aaciTips += (!!aaciTips ? "\n" : "") + shipName;
+					}
+					var itemList = fire.api_use_items;
+					if(!!itemList && itemList.length > 0){
+						for(var itemIdx = 0; itemIdx < Math.min(itemList.length,4); itemIdx++) {
+							if(itemList[itemIdx] > -1) aaciTips += "\n" +
+								KC3Meta.gearName(KC3Master.slotitem(itemList[itemIdx]).api_name);
+						}
+					}
+				}
+			});
+		}
+		return aaciTips;
 	};
 	
 	/**

@@ -1892,19 +1892,15 @@
 					$(".module.activity .battle_support .support_exped").text(fleetId);
 					$(".module.activity .battle_support .support_exped").show();
 				}
-				if(thisNode.lbasFlag){
-					$(".module.activity .battle_support .support_lbas").show();
-				}
-				$(".module.activity .battle_support").attr("title", buildSupportAttackTooltip(thisNode));
+				$(".module.activity .battle_support .support_lbas").toggle(thisNode.lbasFlag);
+				$(".module.activity .battle_support").attr("title",
+					thisNode.buildSupportAttackMessage() || KC3Meta.term("BattleSupportExped") );
 
 				// If anti-air CI fire is triggered
-				if(!!thisNode.antiAirFire){
-					$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci.png");
-					$(".module.activity .battle_aaci").attr("title", buildAntiAirCutinTooltip(thisNode));
-				} else {
-					$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci-x.png");
-					$(".module.activity .battle_aaci").attr("title", KC3Meta.term("BattleAntiAirCutIn"));
-				}
+				$(".module.activity .battle_aaci img").attr("src",
+					"../../../../assets/img/ui/dark_aaci"+["-x",""][(!!thisNode.antiAirFire)&1]+".png");
+				$(".module.activity .battle_aaci").attr("title",
+					thisNode.buildAntiAirCutinMessage() || KC3Meta.term("BattleAntiAirCutIn") );
 
 				// If night battle will be asked after this battle
 				$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen"+["-x",""][thisNode.yasenFlag&1]+".png");
@@ -2343,20 +2339,14 @@
 			}
 
 			// If anti-air CI fire is triggered
-			if(!!thisPvP.antiAirFire){
-				$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci.png");
-				$(".module.activity .battle_aaci").attr("title", buildAntiAirCutinTooltip(thisPvP));
-			} else {
-				$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci-x.png");
-				$(".module.activity .battle_aaci").attr("title", KC3Meta.term("BattleAntiAirCutIn"));
-			}
+			$(".module.activity .battle_aaci img").attr("src",
+				"../../../../assets/img/ui/dark_aaci"+["-x",""][(!!thisPvP.antiAirFire)&1]+".png");
+			$(".module.activity .battle_aaci").attr("title",
+				thisPvP.buildAntiAirCutinMessage() || KC3Meta.term("BattleAntiAirCutIn") );
 
 			// If night battle will be asked after this battle
-			if(thisPvP.yasenFlag){
-				$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
-			}else{
-				$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen-x.png");
-			}
+			$(".module.activity .battle_night img").attr("src",
+				"../../../../assets/img/ui/dark_yasen"+["-x",""][thisPvP.yasenFlag&1]+".png");
 
 			// Show predicted battle rank
 			if(thisPvP.predictedRank){
@@ -2919,84 +2909,6 @@
 			.append(KC3Meta.term("BattleContactVs"))
 			.append(!!eContactIcon ? eContactIcon : econtact);
 		return contactSpan;
-	}
-
-	function buildSupportAttackTooltip(thisNode) {
-		var supportTips = "";
-		if(thisNode.supportFlag && !!thisNode.supportInfo){
-			var fleetId = "";
-			var attackType = thisNode.supportInfo.api_support_flag;
-			if(attackType === 1){
-				var airatack = thisNode.supportInfo.api_support_airatack;
-				fleetId = airatack.api_deck_id;
-			} else if([2,3].indexOf(attackType) > -1){
-				var hourai = thisNode.supportInfo.api_support_hourai;
-				fleetId = hourai.api_deck_id;
-				// other info such as damage could be added
-			}
-			supportTips = KC3Meta.term("BattleSupportTips").format(fleetId, KC3Meta.support(attackType));
-		}
-		var lbasTips = "";
-		if(thisNode.lbasFlag && !!thisNode.airBaseAttack){
-			if(!!thisNode.airBaseJetInjection){
-				var jet = thisNode.airBaseJetInjection;
-				var jetStage2 = jet.api_stage2 || {};
-				var jetPlanes = jet.api_stage1.api_f_count;
-				var jetShotdown = jet.api_stage1.api_e_lostcount + (jetStage2.api_e_lostcount || 0);
-				var jetDamage = !jet.api_stage3 ? 0 : Math.floor(jet.api_stage3.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
-				jetDamage += !jet.api_stage3_combined ? 0 : Math.floor(jet.api_stage3_combined.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
-				var jetLost = jet.api_stage1.api_f_lostcount + (jetStage2.api_f_lostcount || 0);
-				var jetEnemyPlanes = jet.api_stage1.api_e_count;
-				if(jetEnemyPlanes > 0) {
-					jetShotdown = "{0:eLostCount} / {1:eTotalCount}".format(jetShotdown, jetEnemyPlanes);
-				}
-				lbasTips += KC3Meta.term("BattleLbasJetSupportTips").format(jetPlanes, jetShotdown, jetDamage, jetLost);
-			}
-			$.each(thisNode.airBaseAttack, function(i, ab){
-				var baseId = ab.api_base_id;
-				var stage2 = ab.api_stage2 || {};
-				var airBattle = KC3Meta.airbattle(ab.api_stage1.api_disp_seiku || 5)[2];
-				var planes = ab.api_stage1.api_f_count;
-				var shotdown = ab.api_stage1.api_e_lostcount + (stage2.api_e_lostcount || 0);
-				var damage = !ab.api_stage3 ? 0 : Math.floor(ab.api_stage3.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
-				damage += !ab.api_stage3_combined ? 0 : Math.floor(ab.api_stage3_combined.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
-				var lost = ab.api_stage1.api_f_lostcount + (stage2.api_f_lostcount || 0);
-				var enemyPlanes = ab.api_stage1.api_e_count;
-				if(enemyPlanes > 0) {
-					shotdown = "{0:eLostCount} / {1:eTotalCount}".format(shotdown, enemyPlanes);
-				}
-				if(!!lbasTips) { lbasTips += "\n"; }
-				lbasTips += KC3Meta.term("BattleLbasSupportTips").format(planes, baseId, shotdown, damage, lost, airBattle);
-			});
-			if(!!supportTips && !!lbasTips) { supportTips += "\n"; }
-		}
-		return (supportTips + lbasTips) || KC3Meta.term("BattleSupportExped");
-	}
-
-	function buildAntiAirCutinTooltip(thisNode) {
-		var aaciTips = "";
-		if(!!thisNode.antiAirFire && thisNode.antiAirFire.length>0){
-			thisNode.antiAirFire.forEach(function(fire){
-				if(!!fire){
-					var fireShipPos = fire.api_idx; // starts from 0
-					// fireShipPos = [0,5]: in normal fleet or main fleet
-					// fireShipPos = [6,11]: in escort fleet
-					if(fireShipPos>=0 && fireShipPos<12){
-						var sentFleet = PlayerManager.fleets[fireShipPos>=6 ? 1 : KC3SortieManager.fleetSent-1];
-						var shipName = KC3ShipManager.get(sentFleet.ships[fireShipPos % 6]).name();
-						aaciTips += (!!aaciTips ? "\n" : "") + shipName;
-					}
-					var itemList = fire.api_use_items;
-					if(!!itemList && itemList.length > 0){
-						for(var itemIdx=0; itemIdx<Math.min(itemList.length,4); itemIdx++) {
-							if(itemList[itemIdx] > -1) aaciTips += "\n" +
-								KC3Meta.gearName(KC3Master.slotitem(itemList[itemIdx]).api_name);
-						}
-					}
-				}
-			});
-		}
-		return aaciTips || KC3Meta.term("BattleAntiAirCutIn");
 	}
 
 	function updateMapGauge(gaugeDmg,fsKill,noBoss) {
