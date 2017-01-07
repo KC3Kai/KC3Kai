@@ -144,84 +144,133 @@
 				</div>
 			</div>
 			
-			<!-- QUICK SETTINGS -->
-			<div class="section short disabled">
-				<div class="sectionHead">
-					<div class="sectionIcon"><img src="../../assets/img/ui/empty.png" /></div>
-					<div class="sectionText">Quick Settings</div>
-					<div class="clear"></div>
-				</div>
-				<div class="sectionBody">
-					
-				</div>
-			</div>
+			<div class="divider"></div>
 			
 			<!-- TRANSLATIONS -->
-			<div class="section short disabled">
+			<div class="section short">
 				<div class="sectionHead">
 					<div class="sectionIcon"><img src="../../assets/img/ui/empty.png" /></div>
 					<div class="sectionText">Translations</div>
 					<div class="clear"></div>
 				</div>
 				<div class="sectionBody">
-					<div class="languageSelect">
-						<select>
-							
-						</select>
+					<div class="sectionDesc">Load language files online to get the latest translations for quests, and seasonal subtitles.</div>
+					
+					<div class="tl_autocheck">
+						<label class="switch">
+							<input type="checkbox" id="tl_autocheck_switch">
+							<div class="slider round"></div>
+						</label>
+						<div class="">Auto-check on startup</div>
 					</div>
-					<div class="translationFiles">
-						
+					<div class="clear"></div>
+					
+					<div class="tl_checknow hover">
+						Check for translations now
 					</div>
+					
+					<ul class="translationFiles">
+						<li>
+							<div class="tlfile_status">
+								<div class="loader"></div>
+							</div>
+							<div class="tlfile_name">Quest Descriptions</div>
+						</li>
+						<li>
+							<div class="tlfile_status">
+								<div class="loader"></div>
+							</div>
+							<div class="tlfile_name">Ship Quotes</div>
+						</li>
+						<li>
+							<div class="tlfile_status">
+								<div class="loader"></div>
+							</div>
+							<div class="tlfile_name">Ships Names</div>
+						</li>
+						<li>
+							<div class="tlfile_status">
+								<div class="loader"></div>
+							</div>
+							<div class="tlfile_name">Equipment Names</div>
+						</li>
+					</ul>
+					
+					<div class="sectionDesc">If you want to update your translations, please do so before opening the devtools panel so that they will apply on that interface as well.</div>
 				</div>
 			</div>
 			
 			<!-- LINKS -->
-			<div class="section short disabled">
+			<div class="section short">
 				<div class="sectionHead">
 					<div class="sectionIcon"><img src="../../assets/img/ui/empty.png" /></div>
 					<div class="sectionText">Links</div>
 					<div class="clear"></div>
 				</div>
 				<div class="sectionBody">
-					
+					<ul class="linkList">
+						<li>
+							<a class="linkItem" target="_blank" href="https://www.facebook.com/kc3kai/">
+								<div class="linkIcon"><img src="../../assets/img/social/fb.png" /></div>
+								<div class="linkName">Like on Facebook</div>
+								<div class="clear"></div>
+							</a>
+						</li>
+						<li>
+							<a class="linkItem" target="_blank" href="https://twitter.com/kc3kai">
+								<div class="linkIcon"><img src="../../assets/img/social/tw.png" /></div>
+								<div class="linkName">Follow on Twitter</div>
+								<div class="clear"></div>
+							</a>
+						</li>
+						<li>
+							<a class="linkItem" target="_blank" href="https://github.com/KC3Kai/KC3Kai">
+								<div class="linkIcon"><img src="../../assets/img/social/gh.png" /></div>
+								<div class="linkName">Star on GitHub</div>
+								<div class="clear"></div>
+							</a>
+						</li>
+						<li>
+							<a class="linkItem" target="_blank" href="https://chrome.google.com/webstore/detail/kancolle-command-center-%E6%94%B9/hkgmldnainaglpjngpajnnjfhpdjkohh/reviews">
+								<div class="linkIcon"><img src="../../assets/img/social/ws.png" /></div>
+								<div class="linkName">Review on WebStore</div>
+								<div class="clear"></div>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			
+			<!-- ALTERNATIVE GAMEPLAY -->
+			<div class="section short">
+				<div class="sectionHead">
+					<div class="sectionIcon"><img src="../../assets/img/ui/empty.png" /></div>
+					<div class="sectionText">Alternative Gameplay</div>
+					<div class="clear"></div>
+				</div>
+				<div class="sectionBody">
+					<div class="sectionDesc">
+						Alternatively, you can use our old gameplay options, which may or may not work depending on your Chromium version. See more info on the move on <a href="https://github.com/KC3Kai/KC3Kai/pull/1645" target="_blank">this thread</a>.
+					</div>
+					<ul>
+						<li>
+							<a href="#">
+								<div class="oldPlayIcon"><img src="../popup/img/dmmf.png" /></div>
+								<div class="oldPlayName">DMM Frame</div>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<div class="oldPlayIcon"><img src="../popup/img/api.png" /></div>
+								<div class="oldPlayName">API Link</div>
+							</a>
+						</li>
+					</ul>
 				</div>
 			</div>
 			
 			<div class="clear"></div>
-			
-			<!-- OTHER GAMEPLAY OPTIONS -->
-			<div class="section disabled">
-				<div class="sectionHead">
-					<div class="sectionIcon"><img src="../../assets/img/ui/empty.png" /></div>
-					<div class="sectionText">Other gameplay options</div>
-					<div class="clear"></div>
-				</div>
-				<div class="sectionBody">
-					<div class="oldPlayNote">
-						Alternatively, you can use our old gameplay options, which may or may not work depending on your Chromium version. See more info on the move on <a href="https://github.com/KC3Kai/KC3Kai/pull/1645" target="_blank">this thread</a>.
-					</div>
-					<div class="oldPlayList">
-						<ul>
-							<li>
-								<a href="#">
-									<div class="oldPlayIcon"><img src="../popup/img/dmmf.png" /></div>
-									<div class="oldPlayName">DMM Frame</div>
-								</a>
-							</li>
-							<li>
-								<a href="#">
-									<div class="oldPlayIcon"><img src="../popup/img/api.png" /></div>
-									<div class="oldPlayName">API Link</div>
-								</a>
-							</li>
-						</ul>
-						
-						
-					</div>
-					<div class="clear"></div>
-				</div>
-			</div>
-			
+			<div class="divider"></div>
 		</div>
 		<script type="text/javascript" src="../../assets/js/global.js"></script>
 		<!-- @nonbuildstart -->

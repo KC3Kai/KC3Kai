@@ -42,6 +42,7 @@
 		toggleSetting("api_translation", "#questtl");
 		toggleSetting("map_markers", "#mapmarkers");
 		toggleSetting("api_askExit", "#exitconfirm");
+		toggleSetting("checkLiveQuests", "#tl_autocheck_switch");
 		
 		$("#background").on("change", customizationConsequence);
 		customizationConsequence();
