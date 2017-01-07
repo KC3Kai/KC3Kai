@@ -26,9 +26,9 @@ AntiAir: anti-air related calculations
 	- shipFixedShotdownRange(shipObj, fleetObj, formationModifier)
 	  like "shipFixedShotdown" but this one returns a range by considering
 	  all possible AACIs "shipObj" can perform and use the largest modifier as upper bound.
-	- possibleAACIs(shipObj) / fleetPossibleAACIs(fleetObj)
+	- shipPossibleAACIs(shipObj) / fleetPossibleAACIs(fleetObj)
 	  returns a list of possible AACI API Ids that ship / fleet could perform.
-	- allPossibleAACIs(mst)
+	- shipAllPossibleAACIs(mst)
 	  returns a list of possible AACI API Ids that type of ship could perform ignored equipments.
 	- sortedPossibleAaciList(aaciIdList)
 	  return a list of AACI object sorted by shot down bonus descended.
@@ -356,7 +356,7 @@ AntiAir: anti-air related calculations
 	// Icons used to declare AACI type
 	var surfaceShipIcon = 0, // Means no icon, low priority
 		akizukiIcon = 421,
-		battleShipIcon = 131, // Yamato, weight anchor!
+		battleShipIcon = 131, // Yamato, weigh anchor!
 		mayaK2Icon = 428,
 		isuzuK2Icon = 141,
 		kasumiK2BIcon = 470,
@@ -639,7 +639,7 @@ AntiAir: anti-air related calculations
 	// - because of the game mechanism, some AACI API Ids returned might be overlapped
 	//   and never triggered, "possibleAACIs" is **not** responsible for removing never-triggered
 	//   AACI from resulting list.
-	function possibleAACIs( shipObj ) {
+	function shipPossibleAACIs(shipObj) {
 		var result = [];
 		$.each( AACITable, function(k,entry) {
 			if (entry.predicateShipMst(shipObj.master())
@@ -650,7 +650,7 @@ AntiAir: anti-air related calculations
 	}
 
 	// return a list of all possible AACI based on master ship only, equipments ignored
-	function allPossibleAACIs( shipMst ) {
+	function shipAllPossibleAACIs(shipMst) {
 		var result = [];
 		$.each( AACITable, function(k, entry) {
 			if (entry.predicateShipMst( shipMst ))
@@ -659,32 +659,41 @@ AntiAir: anti-air related calculations
 		return result;
 	}
 
-	// return: a list of sorted AACI objects order by effect desc,
-	//   as most effective AACI gets priority to be triggered.
-	// param: AACI IDs from `possibleAACIs` or `allPossibleAACIs`
-	function sortedPossibleAaciList( aaciIds ) {
-		var aaciList = [];
-		$.each( aaciIds, function(i, apiId) {
-			aaciList.push( AACITable[apiId] );
-		});
-		aaciList = aaciList.sort(function(a, b) {
-			// Just sort by fixed may be enough,
-			// Not sure modifier sould be here or not :)
-			var c = (b.fixed * b.modifier) - (a.fixed * a.modifier);
-			// Give ship specified pattern 2nd priority
-			return c === 0 ? (b.icons[0] - a.icons[0]) : c;
-		});
-		return aaciList;
-	}
-
+	// return a list of unduplicated possible AACI APIs based on all ships in fleet
 	function fleetPossibleAACIs(fleetObj) {
 		var aaciSet = {};
-		fleetObj.ship(function(rId,ind,shipObj) {
-			possibleAACIs(shipObj).map(function(apiId) {
+		fleetObj.ship(function(rId, ind, shipObj) {
+			shipPossibleAACIs(shipObj).map(function(apiId) {
 				aaciSet[apiId] = true;
 			});
 		});
 		return Object.keys(aaciSet);
+	}
+
+	// return: a list of sorted AACI objects order by effect desc,
+	//   as most effective AACI gets priority to be triggered.
+	// param: AACI IDs from possibleAACIs functions
+	function sortedPossibleAaciList(aaciIds) {
+		var aaciList = [];
+		$.each( aaciIds, function(i, apiId) {
+			if(!!AACITable[apiId]) aaciList.push( AACITable[apiId] );
+		});
+		aaciList = aaciList.sort(function(a, b) {
+			// Order by fixed desc, modifier desc, icons[0] desc
+			var c = b.fixed - a.fixed
+				|| b.modifier - a.modifier
+				|| b.icons[0] - a.icons[0];
+			return c;
+		});
+		return aaciList;
+	}
+
+	function sortedFleetPossibleAaciList(triggeredShipAaciList) {
+		var aaciList = triggeredShipAaciList.sort(function(a, b) {
+			// Order by (API) id desc
+			return b.id - a.id;
+		}) || [];
+		return aaciList;
 	}
 
 	function shipFixedShotdownRange(shipObj, fleetObj, formationModifier) {
@@ -699,7 +708,7 @@ AntiAir: anti-air related calculations
 	}
 
 	function shipMaxShotdownBonus(shipObj) {
-		var possibleBonuses = possibleAACIs(shipObj).map( function( apiId ) {
+		var possibleBonuses = shipPossibleAACIs(shipObj).map( function( apiId ) {
 			return AACITable[apiId].fixed;
 		});
 		// default value 0 is always available, making call to Math.max always non-empty
@@ -729,9 +738,9 @@ AntiAir: anti-air related calculations
 		shipMaxShotdownBonus: shipMaxShotdownBonus,
 
 		AACITable: AACITable,
-		possibleAACIs: possibleAACIs,
+		shipPossibleAACIs: shipPossibleAACIs,
+		shipAllPossibleAACIs: shipAllPossibleAACIs,
 		fleetPossibleAACIs: fleetPossibleAACIs,
-		allPossibleAACIs: allPossibleAACIs,
 		sortedPossibleAaciList: sortedPossibleAaciList
 	};
 })();
