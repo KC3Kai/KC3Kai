@@ -1208,7 +1208,7 @@ Used by SortieManager
 			$.each(thisNode.airBaseAttack, function(i, ab){
 				var baseId = ab.api_base_id;
 				var stage2 = ab.api_stage2 || {};
-				var airBattle = KC3Meta.airbattle(ab.api_stage1.api_disp_seiku || 5)[2];
+				var airBattle = KC3Meta.airbattle(ab.api_stage1.api_disp_seiku)[2];
 				var planes = ab.api_stage1.api_f_count;
 				var shotdown = ab.api_stage1.api_e_lostcount + (stage2.api_e_lostcount || 0);
 				var damage = !ab.api_stage3 ? 0 :
