@@ -109,6 +109,8 @@ Saves and loads significant data for future use
 					var ss = ships[id];
 					if(!ss) { ships[id] = this._seasonalShips[id]; }
 				}
+				// Apply a patch for Mikuma typo of KC devs
+				ships[882] = this._seasonalShips[882];
 				return ships;
 			}
 			return this._raw.ship || {};

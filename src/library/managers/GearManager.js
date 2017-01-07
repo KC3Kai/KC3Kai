@@ -48,20 +48,32 @@ Saves and loads list to and from localStorage
 			  ? (new KC3Gear())
 			  : (this.list["x"+itemId] || new KC3Gear());
 		},
+
 		// Count number of items
-		count :function(){
-			return Object.size(this.list) + this.pendingGearNum;
+		// - when "cond" is given, count items satisfying "cond"
+		//   and pending items are not included
+		// - when "cond" is not given, count items
+		//   including pending ones.
+		count :function( cond ){
+			if (typeof cond === "undefined") {
+				return Object.size(this.list) + this.pendingGearNum;
+			}
+			var n = 0;
+			var x;
+			for (var ind in this.list) {
+				x = this.list[ind];
+				if (cond.call(x,x)) {
+					n += 1;
+				}
+			}
+			return n;
 		},
 		
 		// Count number of equipment by master item
 		countByMasterId :function(slotitem_id){
-			var returnCount = 0;
-			for(var ctr in this.list){
-				if(this.list[ctr].masterId == slotitem_id){
-					returnCount++;
-				}
-			}
-			return returnCount;
+			return this.count( function() {
+				return this.masterId == slotitem_id;
+			});
 		},
 		
 		// Add or replace an item on the list
