@@ -158,46 +158,27 @@ Used by SortieManager
 		this.dameConConsumedEscort = [];
 		return this;
 	};
-
-	// (TODO) perhaps there are better places for holding this...
-	var resourceNames = {
-		1: "Fuel",
-		2: "Ammo",
-		3: "Steel",
-		4: "Bauxite",
-		5: "Blowtorch",
-		6: "Bucket",
-		7: "DevMat",
-		10: "Furniture Box (Small)",
-		11: "Furniture Box (Medium)",
-		12: "Furniture Box (Large)"
-	};
-
-	// for building up resource gain / loss descriptions
-	// internal use only.
-	function buildDescription(itemInfoAr) {
-		function vconcat(xs) {
-			if (xs.length > 0)
-				return xs.reduce(function(acc,cur) {
-					return acc + "\n" + cur;
-				});
-			else
-				return "";
-		}
+	
+	// Building up resource / item gain / loss descriptions
+	KC3Node.prototype.buildItemNodeDesc = function(itemInfoArray) {
+		var resourceNameMap = {
+			"1": 31, "2": 32, "3": 33, "4": 34, // Fuel, Ammo, Steel, Bauxite
+			"5": 2 , "6": 1 , "7": 3 // Blowtorch, Bucket, DevMat, Compass
+		};
 		var resourceDescs = [];
-		itemInfoAr.map(function(item) {
-			var rescKeyDesc = resourceNames[ item.api_icon_id ];
-			if (typeof rescKeyDesc === "undefined")
+		itemInfoArray.forEach(function(item) {
+			var rescKeyDesc = KC3Meta.useItemName(
+				resourceNameMap[item.api_icon_id] || item.api_icon_id
+			);
+			if (!rescKeyDesc)
 				return;
 			if (typeof item.api_getcount !== "undefined")
 				resourceDescs.push( rescKeyDesc + ": " + item.api_getcount );
 			else if (typeof item.api_count !== "undefined")
 				resourceDescs.push( rescKeyDesc + ": -" + item.api_count );
-			else
-				return;
 		});
-		return vconcat( resourceDescs );
-	}
+		return resourceDescs.join("\n");
+	};
 	
 	KC3Node.prototype.defineAsResource = function( nodeData ){
 		var self = this;
@@ -208,7 +189,7 @@ Used by SortieManager
 		if (typeof nodeData.api_itemget == "object" && typeof nodeData.api_itemget.api_id != "undefined") {
 			nodeData.api_itemget = [nodeData.api_itemget];
 		}
-		this.tooltip = buildDescription( nodeData.api_itemget );
+		this.nodeDesc = this.buildItemNodeDesc( nodeData.api_itemget );
 		nodeData.api_itemget.forEach(function(itemget){
 			var icon_id = itemget.api_icon_id;
 			var getcount = itemget.api_getcount;
@@ -239,10 +220,11 @@ Used by SortieManager
 				[self.item-1]
 			)+".png";
 		};
-		this.tooltip = buildDescription(
-			[ { api_icon_id: nodeData.api_itemget_eo_comment.api_id,
-				api_getcount: nodeData.api_itemget_eo_comment.api_getcount
-			  } ] );
+		this.nodeDesc = this.buildItemNodeDesc([
+			{ api_icon_id: nodeData.api_itemget_eo_comment.api_id,
+			  api_getcount: nodeData.api_itemget_eo_comment.api_getcount
+			}
+		]);
 		this.amount = nodeData.api_itemget_eo_comment.api_getcount;
 		KC3SortieManager.materialGain[this.item-1] += this.amount;
 		
@@ -260,7 +242,7 @@ Used by SortieManager
 				[nodeData.api_happening.api_icon_id-1]
 			)+".png";
 		};
-		this.tooltip = buildDescription( [nodeData.api_happening] );
+		this.nodeDesc = this.buildItemNodeDesc( [nodeData.api_happening] );
 		this.amount = nodeData.api_happening.api_count;
 		return this;
 	};
