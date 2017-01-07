@@ -24,7 +24,7 @@
 
 			$(".tab_databackup .export_data").on("click", function(){ //export data
 				sav = true;
-				if(confirm("are you sure you want to export data?")){
+				if(confirm("Are you sure you want to export data?")){
 					$(".tab_databackup .dataselect").hide();
 					$(".tab_databackup .processDisplay").show();
 					window.KC3DataBackup.saveData(".tab_databackup .processDisplay .processText",function(){
@@ -37,10 +37,10 @@
 
 			$(".tab_databackup .merge_data").on("click", function(){ //merge_data
 				if(filename===""){
-					alert("no file selected");
+					alert("No file selected");
 					return;
 				}
-				if(confirm("are you sure?"))
+				if(confirm("Are you sure?"))
 					window.KC3DataBackup.loadData(filename,false);
 			});
 
@@ -49,22 +49,21 @@
 			});
 
 			$(".tab_databackup .overwrite_data").on("click", function(){//overwrite_data
-				if(confirm("please close all your curruntly open kc3 panel(you could want kancolle closed too)"))
-				if(confirm("You will overwrite all your kc3 data! are you sure?"))
-				{
+				if(confirm("Please close all your currently opened KC3 panels and pages (including devtools) first."))
+				if(confirm("Will overwrite all your KC3 data! Are you sure?")){
 					if(filename==="")
-						alert("no file selected");
+						alert("No file selected");
 					else
-						if(sav||confirm("You didn't backup your data! are you sure?"))
-                        {
-                            $(".tab_databackup .dataselect").hide();
-                            $(".tab_databackup .processDisplay").show();
-                            window.KC3DataBackup.loadData(filename,true,".tab_databackup .processDisplay .processText",function(){
-                                alert("finished!");
-                                $(".tab_databackup .dataselect").show();
-                                $(".tab_databackup .processDisplay").hide();
-                            });
-                        }
+						if(sav||confirm("If you haven't backup your old data, will be lost! Are you sure?")){
+							$(".tab_databackup .dataselect").hide();
+							$(".tab_databackup .processDisplay").show();
+							window.KC3DataBackup.loadData(filename,true,".tab_databackup .processDisplay .processText",function(){
+								alert("Finished! Will reload this page.");
+								$(".tab_databackup .dataselect").show();
+								$(".tab_databackup .processDisplay").hide();
+								window.location.reload();
+							});
+						}
 				}
 			});
 

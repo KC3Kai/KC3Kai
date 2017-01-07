@@ -329,6 +329,7 @@
 				delete localStorage.read_api_notice;
 				delete localStorage.read_api_notice_55;
 				delete localStorage.read_dmm_notice_55;
+				delete localStorage.repotedQuests;
 				ConfigManager.load();
 				ConfigManager.dismissed_hints = {};
 				ConfigManager.save();

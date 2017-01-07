@@ -524,22 +524,6 @@
 								$(".node_drop img", nodeBox).attr("src", "../../assets/img/ui/shipdrop-x.png");
 							}
 							
-							// Support Exped/LBAS Triggered
-							if(battleData.api_support_flag > 0 || !!battleData.api_air_base_attack){
-								$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support.png");
-								if(battleData.api_support_flag > 0 && !!battleData.api_support_info){
-									var fleetId = (battleData.api_support_info.api_support_airatack||{}).api_deck_id
-										|| (battleData.api_support_info.api_support_hourai||{}).api_deck_id || "?";
-									$(".node_support .exped", nodeBox).text(fleetId);
-									$(".node_support .exped", nodeBox).show();
-								}
-								if(!!battleData.api_air_base_attack){
-									$(".node_support .lbas", nodeBox).show();
-								}
-							}else{
-								$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support-x.png");
-							}
-							
 							// Enemies
 							$(".node_eformation img", nodeBox).attr("src", KC3Meta.formationIcon(battleData.api_formation[1]) );
 							$(".node_eformation", nodeBox).attr("title", KC3Meta.formationText(battleData.api_formation[1]) );
@@ -569,6 +553,21 @@
 							
 							sinkShips[0].concat(battle.shizunde[0]);
 							sinkShips[1].concat(battle.shizunde[1]);
+							
+							// Support Exped/LBAS Triggered
+							if(thisNode.supportFlag || thisNode.lbasFlag){
+								$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support.png");
+								if(thisNode.supportFlag && !!battleData.api_support_info){
+									var fleetId = (battleData.api_support_info.api_support_airatack||{}).api_deck_id
+										|| (battleData.api_support_info.api_support_hourai||{}).api_deck_id || "?";
+									$(".node_support .exped", nodeBox).text(fleetId);
+									$(".node_support .exped", nodeBox).show();
+								}
+								$(".node_support .lbas", nodeBox).toggle(thisNode.lbasFlag);
+								$(".node_support", nodeBox).attr("title", thisNode.buildSupportAttackMessage(thisNode));
+							}else{
+								$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support-x.png");
+							}
 							
 							// Conditions
 							$(".node_engage", nodeBox).text( thisNode.engagement[2] );
