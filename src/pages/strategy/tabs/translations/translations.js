@@ -152,6 +152,9 @@
 				equiptype: {
 					callback: self.showDict
 				},
+				useitems: {
+					callback: self.showDict
+				},
 				ships: {
 					callback: self.showDict
 				},

@@ -896,13 +896,20 @@
 				$(".count_bauxite").text( PlayerManager.hq.lastMaterial[3] );
 			}
 			// More pages could be added, see `api_get_member/useitem` in Kcsapi.js
-			$(".count_1classMedals").text( PlayerManager.consumables.firstClassMedals || 0 );
-			$(".count_medals").text( PlayerManager.consumables.medals || 0 );
-			$(".count_reinforcement").text( PlayerManager.consumables.reinforceExpansion || 0 );
-			$(".count_blueprints").text( PlayerManager.consumables.blueprints || 0 );
-			$(".count_fairy").text( PlayerManager.consumables.furnitureFairy || 0 );
+			$(".count_1classMedals").text( PlayerManager.consumables.firstClassMedals || 0 )
+				.prev().attr("title", KC3Meta.useItemName(61) );
+			$(".count_medals").text( PlayerManager.consumables.medals || 0 )
+				.prev().attr("title", KC3Meta.useItemName(57) );
+			$(".count_reinforcement").text( PlayerManager.consumables.reinforceExpansion || 0 )
+				.prev().attr("title", KC3Meta.useItemName(64) );
+			$(".count_blueprints").text( PlayerManager.consumables.blueprints || 0 )
+				.prev().attr("title", KC3Meta.useItemName(58) );
+			$(".count_fairy").text( PlayerManager.consumables.furnitureFairy || 0 )
+				.prev().attr("title", KC3Meta.useItemName(52) );
 			$(".count_morale").text( (PlayerManager.consumables.mamiya || 0)
-				+ (PlayerManager.consumables.irako || 0) );
+				+ (PlayerManager.consumables.irako || 0) )
+				.prev().attr("title", "{0} + {1}"
+					.format(KC3Meta.useItemName(54), KC3Meta.useItemName(59)) );
 			$(".consumables .consumable").hide();
 			$(".consumables .consumable.page{0}".format(ConfigManager.hqInfoPage||1)).show();
 		},
