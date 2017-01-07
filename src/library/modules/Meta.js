@@ -215,7 +215,7 @@ Provides access to data on built-in JSON files
 		},
 		
 		useItemName :function(id){
-			return this._useitems[id] || KC3Master.useitem(id) || "";
+			return this._useitems[id] || (KC3Master.useitem(id) || {}).api_name || "";
 		},
 		
 		abyssShipName :function(ship){
