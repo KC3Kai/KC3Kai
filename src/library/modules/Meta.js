@@ -197,6 +197,11 @@ Provides access to data on built-in JSON files
 			return root;
 		},
 		
+		shipReadingName :function(jpYomi){
+			// Translate api_yomi, might be just Romaji. Priorly use yomi in affix
+			return this.shipNameAffix("yomi")[jpYomi] || this.shipName(jpYomi);
+		},
+		
 		gearName :function(jpName){
 			if(typeof this._slotitem[jpName] !== "undefined"){
 				return this._slotitem[jpName];
@@ -223,9 +228,8 @@ Provides access to data on built-in JSON files
 			if(!shipMaster.api_name){
 				shipMaster = KC3Master.ship(Number(ship));
 			}
-			return [this.shipName(shipMaster.api_name),
-				this.shipNameAffix("yomi")[shipMaster.api_yomi] || this.shipName(shipMaster.api_yomi)
-				].filter(function(x){return !!x&&x!=="-";})
+			return [this.shipName(shipMaster.api_name), this.shipReadingName(shipMaster.api_yomi)]
+				.filter(function(x){return !!x&&x!=="-";})
 				.join("");
 		},
 		
