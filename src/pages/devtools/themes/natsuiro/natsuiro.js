@@ -2018,7 +2018,8 @@
 						if ($(".module.activity .abyss_single .abyss_ship_"+(index+1)).length > 0) {
 							$(".module.activity .abyss_single .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.abyssIcon(eshipId));
 	
-							var tooltip = "{0}: {1}\n".format(eshipId, KC3Meta.abyssShipName(eshipId));
+							var tooltip = "{0}: {1}\n".format(eshipId,
+								thisNode.isPvP ? KC3Meta.shipName(KC3Master.ship(eshipId).api_name) : KC3Meta.abyssShipName(eshipId));
 							tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipFire"), eParam[0]);
 							tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipTorpedo"), eParam[1]);
 							tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipAntiAir"), eParam[2]);
