@@ -2680,7 +2680,31 @@
 			// "???" instead of "?" to make it more noticable.
 			var sparkedCount = fleetObj.ship().filter( function(s) { return s.morale >= 50; } ).length;
 			var estSuccessRate = "~" + Math.min( 99, 19 * sparkedCount ) + "%";
+			var fleetDrumCount = fleetObj.countDrums();
 			jqGSRate.text( sparkedCount < 4 ? "???" : estSuccessRate );
+			// reference: http://wikiwiki.jp/kancolle/?%B1%F3%C0%AC
+			var gsDrumCountTable = {
+				21: 3+1,
+				37: 4+1,
+				38: 8+2,
+				24: 0+4,
+				40: 0+4 };
+			var gsDrumCount = gsDrumCountTable[selectedExpedition];
+			// apply golden text when we have >= 4 sparked ships.
+			// for overdrum expeds, we further require extra number of drums
+			jqGSRate.toggleClass(
+				"golden",
+				(sparkedCount >= 4) &&
+					(typeof gsDrumCount !== "undefined"
+					 ? fleetDrumCount >= gsDrumCount
+					 : true) );
+
+			// apply tooltip to overdrum expeds
+			if (typeof gsDrumCount !== "undefined") {
+				jqGSRate.attr("title", "text TODO {0}/{1}".format(fleetDrumCount, gsDrumCount));
+			} else {
+				jqGSRate.removeAttr( "title" );
+			}
 
 			var markFailed = function (jq) {
 				jq.addClass("expPlanner_text_failed").removeClass("expPlanner_text_passed");
