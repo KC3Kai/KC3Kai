@@ -1524,7 +1524,9 @@ ABYSS FLEET
 	font-size: 14px;
 	color:#ccc
 }
-.module.activity .activity_expeditionPlanner .expPlanner_text_passed{	
+.module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content.golden {	
+	color:gold;
+}
 	font-size: 14px;
 	color:#00CC00
 }
