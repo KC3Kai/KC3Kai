@@ -2699,12 +2699,13 @@
 					 ? fleetDrumCount >= gsDrumCount
 					 : true) );
 
+			var tooltipText = KC3Meta.term("ExpedGSRateExplainSparkle").format(sparkedCount);
 			// apply tooltip to overdrum expeds
-			if (typeof gsDrumCount !== "undefined") {
-				jqGSRate.attr("title", "text TODO {0}/{1}".format(fleetDrumCount, gsDrumCount));
-			} else {
-				jqGSRate.removeAttr( "title" );
-			}
+			if (typeof gsDrumCount !== "undefined")
+				tooltipText += "\n" + KC3Meta.term("ExpedGSRateExplainExtraDrum").format(fleetDrumCount, gsDrumCount);
+
+			jqGSRate.attr("title", tooltipText);
+
 			// hide GS rate if user does not intend doing so.
 			$(".module.activity .activity_expeditionPlanner .row_gsrate")
 				.toggle( plannerIsGreatSuccess );
