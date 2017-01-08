@@ -497,7 +497,7 @@
 				
 				// AACI Types
 				$(".aaciList").empty();
-				var aaciList = AntiAir.sortedPossibleAaciList( AntiAir.allPossibleAACIs(shipData) );
+				var aaciList = AntiAir.sortedPossibleAaciList( AntiAir.shipAllPossibleAACIs(shipData) );
 				if (aaciList.length > 0) {
 					var aaciBox, equipIcon, i;
 					$.each(aaciList, function(idx, aaciObj){
