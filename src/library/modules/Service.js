@@ -192,11 +192,39 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		Responds if content script should inject DMM Frame customizations
 		------------------------------------------*/
 		"dmmFrameInject" :function(request, sender, response){
+			console.log('dmmFrameInject');
+			
 			if(sender.tab.url.indexOf("/pages/game/dmm.html") > -1){
+				// DMM FRAME
 				ConfigManager.load();
-				response({value:true, scale:ConfigManager.api_gameScale});
-			}else{
-				response({value:false});
+				response({ mode: 'frame', scale: ConfigManager.api_gameScale});
+				
+			} else if(ConfigManager.dmm_customize) {
+				// DMM CUSTOMIZATION
+				console.log('customize DMM');
+				chrome.tabs.update(sender.tab.id, {
+					autoDiscardable: false,
+					highlighted: true
+				}, function(){
+					ConfigManager.load();
+					KC3Master.init();
+					RemodelDb.init();
+					KC3Meta.init("../../data/");
+					KC3Meta.loadQuotes();
+					KC3QuestManager.load();
+					response({
+						mode: 'inject',
+						config: ConfigManager,
+						master: KC3Master,
+						meta: KC3Meta,
+						quest: KC3QuestManager,
+					});
+				});
+				return true;
+				
+			} else {
+				// NO DMM EXECUTIONS
+				response({ mode: false });
 			}
 		},
 		

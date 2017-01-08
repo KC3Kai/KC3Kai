@@ -50,4 +50,11 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 		}
 	});
 	
+	// Hide spacing top
+	(new RMsg("service", "dmmFrameInject", {}, function(response){
+		if (response.mode == 'inject') {
+			$("#spacing_top").hide();
+		}
+	})).execute();
+	
 })();
