@@ -404,6 +404,89 @@
 	width:60px;
 	margin:0px 3px 2px 3px;
 }
+/* AACI
+--------------------------------*/
+.tab_mstship .shipInfo .aaci {
+	width:468px;
+	margin:0px 0px 10px 0px;
+}
+.tab_mstship .shipInfo .aaci .aaciPattern {
+	width:290px;
+	height:22px;
+	margin:0px 0px 1px 0px;
+	border-radius:6px;
+	font-size:12px;
+}
+.tab_mstship .shipInfo .aaci .apiId {
+	width:40px;
+	height:20px;
+	margin:0px 5px 0px 0px;
+	padding:2px 5px;
+	float:left;
+}
+.tab_mstship .shipInfo .aaci .shipIcon {
+	width:20px;
+	height:20px;
+	margin:0px 1px 0px 0px;
+	padding:2px 5px;
+	float:left;
+}
+.tab_mstship .shipInfo .aaci .shipIcon img {
+	width:20px;
+	height:20px;
+	margin-top:-2px
+}
+.tab_mstship .shipInfo .aaci .equipIcons {
+	width:100px;
+	height:20px;
+	margin:0px 5px 0px 0px;
+	padding:2px 5px;
+	float:left;
+}
+.tab_mstship .shipInfo .aaci .equipIcons img {
+	width:20px;
+	height:20px;
+}
+.tab_mstship .shipInfo .aaci .equipIcons .plusIcon {
+	width:15px;
+	height:15px;
+	margin:6px 0px 0px -12px;
+	position:absolute;
+	filter:hue-rotate(75deg);
+	transform:scaleX(-1);
+}
+.tab_mstship .shipInfo .aaci .equipIcons .minusIcon {
+	width:15px;
+	height:15px;
+	margin:6px 0px 0px -12px;
+	position:absolute;
+	filter:hue-rotate(-90deg);
+	transform:scaleX(-1);
+}
+.tab_mstship .shipInfo .aaci .fixed {
+	width:50px;
+	height:20px;
+	margin:0px 5px 0px 0px;
+	padding:2px 5px;
+	float:left;
+}
+.tab_mstship .shipInfo .aaci .modifier {
+	width:50px;
+	height:20px;
+	margin:0px 5px 0px 0px;
+	padding:2px 5px;
+	float:left;
+}
+.tab_mstship .shipInfo .aaci .aaciPattern.odd {
+	background:#ddd;
+}
+.tab_mstship .shipInfo .aaci .aaciPattern.even {
+	background:#ccc;
+}
+.tab_mstship .shipInfo .aaci .aaciPattern.triggerable {
+	background:#ed3;
+}
+
 /* GUNFIT
 --------------------------------*/
 .tab_mstship .shipInfo .gunfit {
