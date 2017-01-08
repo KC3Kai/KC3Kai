@@ -1593,7 +1593,8 @@
 			var map = KC3SortieManager.map_num;
 			var nodeId = KC3Meta.nodeLetter(world, map, thisNode.id );
 
-			$(".module.activity .sortie_node_"+numNodes).text( nodeId );
+			$(".module.activity .sortie_node_"+numNodes).text( nodeId ).removeAttr("title");
+
 			$(".module.activity .node_types").hide();
 
 			$(".module.activity .abyss_ship").hide();
@@ -1622,7 +1623,9 @@
 
 				// Resource node
 				case "resource":
-					$(".module.activity .sortie_node_"+numNodes).addClass("nc_resource");
+					$(".module.activity .sortie_node_"+numNodes)
+						.addClass("nc_resource")
+						.attr("title", thisNode.nodeDesc);
 					var resBoxDiv = $(".module.activity .node_type_resource");
 					resBoxDiv.removeClass("node_type_maelstrom");
 					resBoxDiv.children().remove();
@@ -1639,7 +1642,9 @@
 
 				// Bounty node on 1-6
 				case "bounty":
-					$(".module.activity .sortie_node_"+numNodes).addClass("nc_resource");
+					$(".module.activity .sortie_node_"+numNodes)
+						.addClass("nc_resource")
+						.attr("title", thisNode.nodeDesc);
 					$(".module.activity .node_type_resource").removeClass("node_type_maelstrom");
 					$(".module.activity .node_type_resource .node_res_icon img").attr("src",
 						thisNode.icon("../../../../assets/img/client/"));
@@ -1653,7 +1658,9 @@
 
 				// Maelstrom node
 				case "maelstrom":
-					$(".module.activity .sortie_node_"+numNodes).addClass("nc_maelstrom");
+					$(".module.activity .sortie_node_"+numNodes)
+						.addClass("nc_maelstrom")
+						.attr("title", thisNode.nodeDesc);
 					$(".module.activity .node_type_resource").addClass("node_type_maelstrom");
 					$(".module.activity .node_type_resource .node_res_icon img").attr("src",
 						thisNode.icon("../../../../assets/img/client/"));
