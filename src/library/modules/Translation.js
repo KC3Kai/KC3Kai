@@ -450,8 +450,27 @@
 				ConfigManager.language,
 				ConfigManager.info_force_ship_lang,
 				ConfigManager.info_eng_stype);
-		}
+		},
 		
+		updateTranslations: function(lang, file, newVersion, newData, callback){
+			KC3Database.getTranslations(file, function(curr){
+				if (curr) {
+					if (parseInt(curr.ver, 10) < parseInt(newVersion, 10)) {
+						KC3Database.clearTranslations(file, function(){
+							KC3Database.setTranslations(lang, file, newVersion, newData, function(){
+								callback();
+							});
+						});
+					} else {
+						callback();
+					}
+				} else {
+					KC3Database.setTranslations(lang, file, newVersion, newData, function(){
+						callback();
+					});
+				}
+			});
+		}
 	};
 
 	KC3Translation._idToDesc = {};

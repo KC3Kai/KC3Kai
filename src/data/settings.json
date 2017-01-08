@@ -6,7 +6,7 @@
 			{
 				"id" : "language",
 				"name" : "SettingsLanguage",
-				"type" : "radio",
+				"type" : "dropdown",
 				"options" : {
 					"choices" : [
 						[ "en", "English" ],
@@ -624,64 +624,7 @@
 				"id" : "dmm_customize",
 				"name" : "SettingsDMMCustomize",
 				"type" : "check",
-				"hide" : 1,
 				"options" : {}
-			},
-			{
-				"id" : "dmm_translation",
-				"name" : "SettingsQuestOverlay",
-				"type" : "check",
-				"hide" : 1,
-				"options" : {}
-			},
-			{
-				"id" : "dmm_tracking",
-				"name" : "SettingsQuestTracking",
-				"type" : "check",
-				"hide" : 1,
-				"options" : {}
-			},
-			{
-				"id" : "dmm_askExit",
-				"name" : "SettingsConfirmExit",
-				"type" : "check",
-				"hide" : 1,
-				"options" : {}
-			},
-			{
-				"id" : "dmm_margin",
-				"name" : "SettingsScreenMargin",
-				"type" : "small_text",
-				"hide" : 1,
-				"options" : { "label" : "pixels" }
-			},
-			{
-				"id" : "dmm_bg_color",
-				"name" : "SettingsBGColor",
-				"type" : "long_text",
-				"hide" : 1,
-				"options" : { "placeholder" : "SettingsBGColorDesc" }
-			},
-			{
-				"id" : "dmm_bg_image",
-				"name" : "SettingsBGImage",
-				"type" : "long_text",
-				"hide" : 1,
-				"options" : { "placeholder" : "http://" }
-			},
-			{
-				"id" : "dmm_bg_size",
-				"name" : "SettingsBGSize",
-				"type" : "long_text",
-				"hide" : 1,
-				"options" : { "placeholder" : "SettingsBGSizeDesc" }
-			},
-			{
-				"id" : "dmm_bg_position",
-				"name" : "SettingsBGPosition",
-				"type" : "long_text",
-				"hide" : 1,
-				"options" : { "placeholder" : "SettingsBGPositionDesc" }
 			}
 		]
 	},

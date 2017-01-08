@@ -212,6 +212,15 @@ Uses Dexie.js third-party plugin on the assets directory
 							console.log("Databse v73", t);
 						},
 						vr: 73,
+					},
+					{
+						ch: {
+							lang: "++id,lang,file,ver,data"
+						},
+						up: function(t){
+							console.log("Databse v74", t);
+						},
+						vr: 74,
 					}
 					/*
 					Database versions are only integers, no decimals.
@@ -818,6 +827,33 @@ Uses Dexie.js third-party plugin on the assets directory
 				.catch(callbackFail || function(e){console.error(e.stack);});
 		},
 		
+		// lang: "++id,lang,file,ver,data"
+		getTranslations: function(file, callback){
+			this.con.lang
+				.where("file").equals(file)
+				.limit(1)
+				.sortBy('ver', function(data){
+					if (data.length > 0) {
+						callback(data[0]);
+					} else {
+						callback(null);
+					}
+				});
+		},
+		
+		clearTranslations: function(file, callback){
+			this.con.lang.where("file").equals(file).delete().then(callback);
+		},
+		
+		setTranslations: function(lang, file, newVersion, newData, callback){
+			console.log('adding new TL to local db', lang, file, newVersion, newData);
+			this.con.lang.add({
+				lang: lang,
+				file: file,
+				ver: newVersion,
+				data: newData
+			}).then(callback);
+		}
 	};
 	
 	// Prevent the user ID stored as non-string

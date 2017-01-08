@@ -29,8 +29,6 @@ Redirects to KanColle game page after writing
 	}, function(response){
 		if(response.value){
 			writeCookies();
-		}else{
-			console.log("KC3改 forcing cookies disabled, enjoy error areas..");
 		}
 	});
 	

@@ -45,6 +45,7 @@ module.exports = function(grunt) {
 					'assets/css/bootstrap-slider.min.css',
 					'library/helpers/*.js',
 					'library/injections/*.js',
+					'library/injections/*.css',
 					'library/modules/*.js',
 					'pages/**/*',
 					'!pages/strategy/tabs/**/*.js',
@@ -160,43 +161,79 @@ module.exports = function(grunt) {
 						}
 					]
 				}
-			},
-			buildobjects: {
-				src: 'build/tmp/manifest.json',
-				dest: 'build/tmp/',
-				options: {
-					replacements: [
-						{
-							pattern: /assets\/js\/jquery\-2\.1\.3\.min\.js/ig,
-							replacement: 'assets/js/global.js'
-						},
-						{
-							pattern: /library\/objects\/Messengers\.js/ig,
-							replacement: 'library/objects.js'
-						},
-						{
-							pattern: /library\/managers\/ConfigManager\.js/ig,
-							replacement: 'library/managers.js'
-						}
-					]
-				}
-			},
-			manifest: {
-				src: 'build/tmp/manifest.json',
-				dest: 'build/tmp/',
-				options: {
-					replacements: [
-						{
-							pattern: /KC3改 Development/ig,
-							replacement: 'KanColle Command Center 改'
-						},
-						{
-							pattern: /assets\/img\/logo\/dev\.png/ig,
-							replacement: 'assets/img/logo/19.png'
-						}
-					]
-				}
 			}
+		},
+		modify_json: {
+			manifest_info: {
+				options: {
+					fields: {
+						"name": "KanColle Command Center 改",
+						"browser_action": {
+							"default_icon": "assets/img/logo/19.png",
+							"default_popup": "pages/popup/popup.html"
+						}
+					}
+				},
+				files: {
+					'build/tmp/manifest.json': ['build/tmp/manifest.json'],
+				}
+			},
+			manifest_scripts: {
+				options: {
+					fields: {
+						"background": {
+							"scripts": [
+								"assets/js/global.js",
+								"library/objects.js",
+								"library/managers.js",
+								"library/modules/Master.js",
+								"library/modules/RemodelDb.js",
+								"library/modules/Meta.js",
+								"library/modules/Translation.js",
+								"library/modules/Service.js"
+							]
+						},
+						"content_scripts": [
+							{
+								"matches":["*://www.dmm.com/*"],
+								"js": ["library/injections/cookie.js"],
+								"run_at": "document_end",
+								"all_frames": true
+							},
+							{
+								"matches":["*://www.dmm.com/netgame/*/app_id=854854*"],
+								"css": [
+									"library/injections/special_dmm.css"
+								],
+								"js": [
+									"assets/js/global.js",
+									"library/objects.js",
+									"library/managers.js",
+									"library/modules/Master.js",
+									"library/modules/Meta.js",
+									"library/modules/Translation.js",
+									"library/injections/special_dmm.js"
+								],
+								"run_at": "document_end",
+								"all_frames": true
+							},
+							{
+								"matches":["*://osapi.dmm.com/gadgets/*aid=854854*"],
+								"js": [
+									"assets/js/global.js",
+									"library/objects.js",
+									"library/injections/osapi.js"
+								],
+								"run_at": "document_end",
+								"all_frames": true
+							}
+						],
+					}
+				},
+				files: {
+					'build/tmp/manifest.json': ['build/tmp/manifest.json'],
+				}
+			},
 		},
 		htmlmin: {
 			all : {
@@ -317,6 +354,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks("grunt-contrib-qunit");
 	grunt.loadNpmTasks('grunt-contrib-compress');
 	grunt.loadNpmTasks('grunt-webstore-upload');
+	grunt.loadNpmTasks('grunt-modify-json');
 	
 	grunt.registerTask('local', [
 		'clean:tmp',
@@ -327,7 +365,7 @@ module.exports = function(grunt) {
 		'cssmin',
 		'string-replace:allhtml',
 		'htmlmin',
-		'string-replace:buildobjects',
+		'modify_json:manifest_scripts',
 		'jsonlint:build',
 		'json-minify',
 		'copy:processed',
@@ -350,8 +388,8 @@ module.exports = function(grunt) {
 		'uglify',
 		'string-replace:allhtml',
 		'htmlmin',
-		'string-replace:buildobjects',
-		'string-replace:manifest',
+		'modify_json:manifest_scripts',
+		'modify_json:manifest_info',
 		'jsonlint:build',
 		'json-minify',
 		'copy:processed',

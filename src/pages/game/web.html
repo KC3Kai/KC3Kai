@@ -8,31 +8,283 @@
 		<link href="../../assets/css/global.css" rel="stylesheet" type="text/css">
 		<link href="../../assets/css/keys.css" rel="stylesheet" type="text/css">
 		<link href="web.css" rel="stylesheet" type="text/css">
-		<title>KC3改</title>
+		<title>Play via KC3改</title>
 		<link rel="shortcut icon" href="../../assets/img/logo/48.png" type="image/x-icon" />
 	</head>
 	<body>
 		<div class="box-wrap">
-			<div class="notice i18n">GameDMMRedirect</div>
-			<div class="faq_title i18n">GameStartDashTitle</div>
-			<div class="faq_content">
-				<span class="i18n">GameStartDashDesc</span>
-				<ul>
-					<li><span class="i18n">GameStartDashWin</span> <kbd class="light">F12</kbd></li>
-					<li><span class="i18n">GameStartDashOr</span> <kbd class="light">Ctrl</kbd> + <kbd class="light">Shift</kbd> + <kbd class="light">J</kbd></li>
-					<li><span class="i18n">GameStartDashMac</span> <kbd class="light">Cmd</kbd> + <kbd class="light">Opt</kbd> + <kbd class="light">I</kbd></li>
-				</ul>
-				<span class="i18n">GameStartDashChrome</span>
+			<div class="headBox">
+				<div class="headImage"><img src="../../assets/img/logo/32.png" /></div>
+				<div class="headTitle i18n">GamePlayViaKC3</div>
 			</div>
-			<div class="faq_title i18n">GameStartNowTitle</div>
-			<div class="faq_content">
-				<span class="i18n">GameStartNowDesc</span>
-				<div class="play_now">
-					<button class="play_btn i18n">GameStartNowBtn</button>
+			
+			<!-- SCREEN CUSTOMIZATION -->
+			<div class="section">
+				<!-- Title -->
+				<div class="sectionHead">
+					<div class="sectionIcon"><img src="../../assets/img/ui/empty.png" /></div>
+					<div class="sectionText">
+						<span class="i18n">GameToggleFeatures</span>
+						<a href="../settings/settings.html" target="_blank" class="i18n">GameEditMoreSettings</a>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<!-- Customization List -->
+				<div class="sectionBody">
+					<div class="customization">
+						<label class="switch">
+							<input type="checkbox" id="background">
+							<div class="slider round"></div>
+						</label>
+						<div class="customizationText i18n">SettingsDMMCustomize</div>
+						<div class="clear"></div>
+					</div>
+					<div class="customization dependsOnCustomization">
+						<label class="switch">
+							<input type="checkbox" id="subtitles">
+							<div class="slider round"></div>
+						</label>
+						<div class="customizationText i18n">SettingsSubtitles</div>
+						<div class="clear"></div>
+					</div>
+					<div class="customization dependsOnCustomization">
+						<label class="switch">
+							<input type="checkbox" id="questtl">
+							<div class="slider round"></div>
+						</label>
+						<div class="customizationText i18n">SettingsQuestOverlay</div>
+						<div class="clear"></div>
+					</div>
+					<div class="customization dependsOnCustomization">
+						<label class="switch">
+							<input type="checkbox" id="mapmarkers">
+							<div class="slider round"></div>
+						</label>
+						<div class="customizationText i18n">SettingsMapNodeMarkers</div>
+						<div class="clear"></div>
+					</div>
+					<div class="customization dependsOnCustomization">
+						<label class="switch">
+							<input type="checkbox" id="exitconfirm">
+							<div class="slider round"></div>
+						</label>
+						<div class="customizationText i18n">SettingsConfirmExit</div>
+						<div class="clear"></div>
+					</div>
+					<div class="customization dependsOnCustomization disabled">
+						<label class="switch">
+							<input type="checkbox" id="specialhud">
+							<div class="slider round"></div>
+						</label>
+						<div class="customizationText">KC3改 Special HUD</div>
+						<div class="clear"></div>
+					</div>
+					<div class="clear"></div>
 				</div>
 			</div>
+			
+			<!-- HOTKEYS -->
+			<div class="section">
+				<!-- Title -->
+				<div class="sectionHead">
+					<div class="sectionIcon"><img src="../../assets/img/ui/empty.png" /></div>
+					<div class="sectionText">
+						<span class="i18n">GameSpecialHotkeys</span>
+						<a href="https://github.com/KC3Kai/KC3Kai/wiki/Hotkeys" target="_blank" class="i18n">GameMoreHotkeys</a>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<!-- List of Hotkeys -->
+				<div class="sectionBody dependsOnCustomization">
+					<ul class="hotkeys">
+						<li class="disabled"><kbd>Esc</kbd> <kbd>Esc</kbd> <kbd>Esc</kbd> <span class="i18n">GameHotkeyExit</span></li>
+						<li class="disabled"><kbd>Tab</kbd> <span class="i18n">GameHotkeyHUD</span></li>
+						<li><kbd>F7</kbd> <span class="i18n">GameHotkeyType</span></li>
+						<li><kbd>F9</kbd> <span class="i18n">GameHotkeyScreenshot</span></li>
+						<li><kbd>F10</kbd> <span class="i18n">GameHotkeyClear</span></li>
+					</ul>
+					<div class="clear"></div>
+				</div>
+			</div>
+			
+			<!-- START GAME -->
+			<div class="section">
+				<!-- Title -->
+				<div class="sectionHead">
+					<div class="sectionIcon"><img src="../../assets/img/ui/empty.png" /></div>
+					<div class="sectionText">
+						<span class="i18n">GameStartGame</span>
+						<a href="#" id="startAnyway" class="i18n">GameStartNoPanel</a>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<!-- Instructions -->
+				<div class="sectionBody">
+					<div class="instructStep instructF12 win cros linux openbsd">
+						<div class="stepNum">1</div>
+						<div class="stepText"><kbd>F12</kbd> <span class="i18n">GameOReither</span> <kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>J</kbd></div>
+						<div class="clear"></div>
+					</div>
+					<div class="instructStep instructF12 mac">
+						<div class="stepNum">1</div>
+						<div class="stepText"><kbd>&#8984;</kbd> <kbd>Option</kbd> <kbd>I</kbd></div>
+						<div class="clear"></div>
+					</div>
+					<div class="instructStep instructKancolleTab">
+						<div class="stepNum">2</div>
+						<div class="stepText i18n">GameStep2</div>
+						<div class="clear"></div>
+					</div>
+					<div class="instructStep">
+						<div class="stepNum">3</div>
+						<div class="stepText i18n">GameStep3</div>
+						<div class="clear"></div>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+			
+			<div class="divider"></div>
+			
+			<!-- TRANSLATIONS -->
+			<div class="section short">
+				<div class="sectionHead">
+					<div class="sectionIcon"><img src="../../assets/img/ui/empty.png" /></div>
+					<div class="sectionText">Translations</div>
+					<div class="clear"></div>
+				</div>
+				<div class="sectionBody">
+					<div class="sectionDesc">Load language files online to get the latest translations for quests, and seasonal subtitles.</div>
+					
+					<div class="tl_autocheck">
+						<label class="switch">
+							<input type="checkbox" id="tl_autocheck_switch">
+							<div class="slider round"></div>
+						</label>
+						<div class="">Auto-check on startup</div>
+					</div>
+					<div class="clear"></div>
+					
+					<div class="tl_checknow hover">
+						Check for translations now
+					</div>
+					<div class="tl_checklive_status">
+						<em>Looking for new translations...</em>
+					</div>
+					
+					<ul class="translationFiles">
+						<li id="tlfile_item_quests">
+							<div class="tlfile_status">
+								<div class="tlfile_status_icon idle"><img src="../../assets/img/ui/rating.png" /></div>
+								<div class="tlfile_status_icon done"><img src="../../assets/img/ui/check.png" /></div>
+								<div class="tlfile_status_icon loader"></div>
+							</div>
+							<div class="tlfile_name">Quest Descriptions</div>
+						</li>
+						<li id="tlfile_item_quotes">
+							<div class="tlfile_status">
+								<div class="tlfile_status_icon idle"><img src="../../assets/img/ui/rating.png" /></div>
+								<div class="tlfile_status_icon done"><img src="../../assets/img/ui/check.png" /></div>
+								<div class="tlfile_status_icon loader"></div>
+							</div>
+							<div class="tlfile_name">Ship Quotes</div>
+						</li>
+						<li id="tlfile_item_ships">
+							<div class="tlfile_status">
+								<div class="tlfile_status_icon idle"><img src="../../assets/img/ui/rating.png" /></div>
+								<div class="tlfile_status_icon done"><img src="../../assets/img/ui/check.png" /></div>
+								<div class="tlfile_status_icon loader"></div>
+							</div>
+							<div class="tlfile_name">Ships Names</div>
+						</li>
+						<li id="tlfile_item_items">
+							<div class="tlfile_status">
+								<div class="tlfile_status_icon idle"><img src="../../assets/img/ui/rating.png" /></div>
+								<div class="tlfile_status_icon done"><img src="../../assets/img/ui/check.png" /></div>
+								<div class="tlfile_status_icon loader"></div>
+							</div>
+							<div class="tlfile_name">Equipment Names</div>
+						</li>
+					</ul>
+					
+					<div class="sectionDesc">If you want to update your translations, please do so before opening the devtools panel so that they will apply on that interface as well.</div>
+				</div>
+			</div>
+			
+			<!-- LINKS -->
+			<div class="section short">
+				<div class="sectionHead">
+					<div class="sectionIcon"><img src="../../assets/img/ui/empty.png" /></div>
+					<div class="sectionText">Links</div>
+					<div class="clear"></div>
+				</div>
+				<div class="sectionBody">
+					<ul class="linkList">
+						<li>
+							<a class="linkItem" target="_blank" href="https://www.facebook.com/kc3kai/">
+								<div class="linkIcon"><img src="../../assets/img/social/fb.png" /></div>
+								<div class="linkName">Like on Facebook</div>
+								<div class="clear"></div>
+							</a>
+						</li>
+						<li>
+							<a class="linkItem" target="_blank" href="https://twitter.com/kc3kai">
+								<div class="linkIcon"><img src="../../assets/img/social/tw.png" /></div>
+								<div class="linkName">Follow on Twitter</div>
+								<div class="clear"></div>
+							</a>
+						</li>
+						<li>
+							<a class="linkItem" target="_blank" href="https://github.com/KC3Kai/KC3Kai">
+								<div class="linkIcon"><img src="../../assets/img/social/gh.png" /></div>
+								<div class="linkName">Star on GitHub</div>
+								<div class="clear"></div>
+							</a>
+						</li>
+						<li>
+							<a class="linkItem" target="_blank" href="https://chrome.google.com/webstore/detail/kancolle-command-center-%E6%94%B9/hkgmldnainaglpjngpajnnjfhpdjkohh/reviews">
+								<div class="linkIcon"><img src="../../assets/img/social/ws.png" /></div>
+								<div class="linkName">Review on WebStore</div>
+								<div class="clear"></div>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			
+			<!-- ALTERNATIVE GAMEPLAY -->
+			<div class="section short">
+				<div class="sectionHead">
+					<div class="sectionIcon"><img src="../../assets/img/ui/empty.png" /></div>
+					<div class="sectionText">Alternative Gameplay</div>
+					<div class="clear"></div>
+				</div>
+				<div class="sectionBody">
+					<div class="sectionDesc">
+						Alternatively, you can use our old gameplay options, which may or may not work depending on your Chromium version. See more info on the move on <a href="https://github.com/KC3Kai/KC3Kai/pull/1645" target="_blank">this thread</a>.
+					</div>
+					<ul>
+						<li>
+							<a href="#">
+								<div class="oldPlayIcon"><img src="../popup/img/dmmf.png" /></div>
+								<div class="oldPlayName">DMM Frame</div>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<div class="oldPlayIcon"><img src="../popup/img/api.png" /></div>
+								<div class="oldPlayName">API Link</div>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			
+			<div class="clear"></div>
+			<div class="divider"></div>
 		</div>
 		<script type="text/javascript" src="../../assets/js/global.js"></script>
+		<script type="text/javascript" src="../../assets/js/Dexie.min.js"></script>
 		<!-- @nonbuildstart -->
 		<script type="text/javascript" src="../../assets/js/jquery-2.1.3.min.js"></script>
 		<script type="text/javascript" src="../../library/managers/ConfigManager.js"></script>
@@ -42,6 +294,7 @@
 		<!-- @buildimportjs ../../library/managers.js -->
 		<script type="text/javascript" src="../../library/modules/Translation.js"></script>
 		<script type="text/javascript" src="../../library/modules/Meta.js"></script>
+		<script type="text/javascript" src="../../library/modules/Database.js"></script>
 		<script type="text/javascript" src="web.js"></script>
 	</body>
 </html>
