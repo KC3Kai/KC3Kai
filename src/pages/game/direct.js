@@ -1,0 +1,139 @@
+(function(){
+	"use strict";
+	var source = 'https://raw.githubusercontent.com/KC3Kai/kc3-translations/dev-autotl/data';
+	
+	// Redirect to DMM play page when activated
+	function ActivateGame(){
+		var infinityExpire = new Date();
+		infinityExpire.setYear(infinityExpire.getUTCFullYear()+1);
+		chrome.cookies.set({
+			url: "http://www.dmm.com",
+			name: "ckcy",
+			value: "1",
+			domain: ".dmm.com",
+			expirationDate: Math.ceil(infinityExpire.getTime()/1000),
+			path: '/netgame/',
+		}, function(cookie){
+			window.location = "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/";
+		});
+	}
+	
+	$(document).on("ready", function(){
+		// Load previously stored configs
+		ConfigManager.load();
+		KC3Meta.init("../../data/");
+		KC3Translation.execute();
+		KC3Database.init();
+		
+		// Quick Play
+		$("#startAnyway").on('click', ActivateGame);
+		
+		// Show instructions by OS
+		chrome.runtime.getPlatformInfo(function(platformInfo){
+			if ($(".instructF12."+platformInfo.os).length > 0) {
+				$(".instructF12."+platformInfo.os).show();
+			} else {
+				$(".instructF12").show();
+			}
+		});
+		
+		// Toggleable settings
+		toggleSetting("dmm_customize", "#background");
+		toggleSetting("api_subtitles", "#subtitles");
+		toggleSetting("api_translation", "#questtl");
+		toggleSetting("map_markers", "#mapmarkers");
+		toggleSetting("api_askExit", "#exitconfirm");
+		toggleSetting("checkLiveQuests", "#tl_autocheck_switch");
+		
+		$("#background").on("change", customizationConsequence);
+		customizationConsequence();
+		
+		// Auto-check live translations
+		$(".tl_checknow").on("click", function(){
+			$(".tl_checknow").hide();
+			$(".tl_checklive_status").show();
+			tl_loadLanguageVersion();
+		});
+		if (ConfigManager.checkLiveQuests) {
+			$(".tl_checknow").trigger("click");
+		}
+	});
+	
+	// Toggleable setting
+	function toggleSetting(configName, elementName){
+		if (ConfigManager[configName]) {
+			$(elementName).prop("checked", true);
+		}
+		$(elementName).on("change", function(){
+			ConfigManager[configName] = $(this).prop("checked");
+			ConfigManager.save();
+		});
+	}
+	
+	// Applying toggle consequence
+	function customizationConsequence(){
+		if ($("#background").prop("checked")) {
+			$(".dependsOnCustomization").removeClass("notApplicable");
+		} else {
+			$(".dependsOnCustomization").addClass("notApplicable");
+		}
+	}
+	
+	// Online TL: Check language version
+	function tl_loadLanguageVersion(){
+		var lang = ConfigManager.language;
+		
+		$(document).ajaxError(function(event, request, settings){
+			console.log(event, request, settings);
+			$(".tl_checklive_status").text("Unable to load online translations for this language");
+			$(".tl_checklive_status").css({ color:'#f00' });
+		});
+
+		$.ajax({
+			url: source+'/'+lang+'/custom.json',
+			dataType: 'JSON',
+			success: function(response){
+				$(".tl_checklive_status").text("Loading files...");
+				tl_loadLanguageFile("quests.json", response.version.quests, $("#tlfile_item_quests"));
+				tl_loadLanguageFile("quotes.json", response.version.quotes, $("#tlfile_item_quotes"));
+				tl_loadLanguageFile("ships.json", response.version.ships, $("#tlfile_item_ships"));
+				tl_loadLanguageFile("items.json", response.version.items, $("#tlfile_item_items"));
+			}
+		});
+	}
+	
+	// Online TL: Load language file
+	function  tl_loadLanguageFile(filename, filever, element){
+		var lang = ConfigManager.language;
+		$(".tlfile_status_icon", element).hide();
+		$(".loader", element).show();
+		
+		$.ajax({
+			url: source+'/'+lang+'/'+filename,
+			dataType: 'JSON',
+			success: function(response){
+				KC3Translation.updateTranslations(lang, filename, filever, response, function(){
+					$(".tlfile_status_icon", element).hide();
+					$(".done", element).show();
+					loadFileComplete();
+				});
+			}
+		});
+	}
+	
+	var filesLoaded = 0;
+	function loadFileComplete(){
+		filesLoaded++;
+		if (filesLoaded >= 4) {
+			$(".tl_checklive_status").text("Done.");
+		}
+	}
+	
+	// Extension Interaction
+	chrome.runtime.onMessage.addListener(function(request, sender, response) {
+		if (request.identifier != "kc3_gamescreen") return true;
+		if (request.action != "activateGame") return true;
+		ActivateGame();
+	});
+	
+})();
