@@ -1,17 +1,17 @@
-.tab_expedtable {
+.tab_expedscorer {
 	width:680px;
 }
-.tab_expedtable .factory{
+.tab_expedscorer .factory{
 	display:none;
 }
 
 
 /* NUMBERS
 -----------------------------*/
-.tab_expedtable .expedNumBoxes {
+.tab_expedscorer .expedNumBoxes {
 	
 }
-.tab_expedtable .expedNumBox {
+.tab_expedscorer .expedNumBox {
 	width:110px;
 	height:152px;
 	float:left;
@@ -27,18 +27,18 @@
 	line-height:15px;
 	margin:0px 0px 1px 0px;
 }
-.tab_expedtable .expedNumBox .expedCheck {
+.tab_expedscorer .expedNumBox .expedCheck {
 	width:15px;
 	height:15px;
 	float:left;
 	margin:0px 5px 0px 5px;
 }
-.tab_expedtable .expedNumBox .expedCheck input {
+.tab_expedscorer .expedNumBox .expedCheck input {
 	width:13px;
 	height:13px;
 	margin:1px;
 }
-.tab_expedtable .expedNumBox .expedText {
+.tab_expedscorer .expedNumBox .expedText {
 	width:25px;
 	height:15px;
 	float:left;
@@ -46,33 +46,33 @@
 	margin:0px 5px 0px 0px;
 	font-size:12px;
 }
-.tab_expedtable .expedNumBox .expedWhole .expedText {
+.tab_expedscorer .expedNumBox .expedWhole .expedText {
 	width:70px;
 	margin:0px;
 }
-.tab_expedtable .expedNumBox .expedTime {
+.tab_expedscorer .expedNumBox .expedTime {
 	width:40px;
 	height:15px;
 	float:left;
 	font-size:11px;
 	color:#999;
 }
-.tab_expedtable .fleetCounts .fleetCount {
+.tab_expedscorer .fleetCounts .fleetCount {
 	width:100px;
 	height:20px;
 	line-height:20px;
 }
-.tab_expedtable .fleetCounts .fleetRadio {
+.tab_expedscorer .fleetCounts .fleetRadio {
 	width:20px;
 	height:20px;
 	float:left;
 }
-.tab_expedtable .fleetCounts .fleetRadio input {
+.tab_expedscorer .fleetCounts .fleetRadio input {
 	width:14px;
 	height:14px;
 	margin:3px;
 }
-.tab_expedtable .fleetCounts .fleetText {
+.tab_expedscorer .fleetCounts .fleetText {
 	width:50px;
 	height:15px;
 	float:left;
@@ -80,16 +80,16 @@
 
 /* CONTROLS
 -----------------------------*/
-.tab_expedtable .expedControls {
+.tab_expedscorer .expedControls {
 	line-height:20px;
 }
-.tab_expedtable .expedControls .control_box {
+.tab_expedscorer .expedControls .control_box {
 	height:50px;
 	float:left;
 	margin:0px 20px 0px 0px;
 	border-right:1px solid #ccc;
 }
-.tab_expedtable .expedControls .control_title {
+.tab_expedscorer .expedControls .control_title {
 	height:20px;
 	margin:0px 0px 5px 0px;
 	text-align:center;
@@ -98,35 +98,35 @@
 }
 
 /* Resource Priorities */
-.tab_expedtable .expedControls .control_priorities {
+.tab_expedscorer .expedControls .control_priorities {
 	width:320px;
 }
-.tab_expedtable .control_priorities .control {
+.tab_expedscorer .control_priorities .control {
 	width:75px;
 	height:20px;
 	line-height:20px;
 	float:left;
 	margin:0px 3px 0px 0px;
 }
-.tab_expedtable .control_priorities .control_label {
+.tab_expedscorer .control_priorities .control_label {
 	width:20px;
 	height:20px;
 	float:left;
 	margin:0px 5px 0px 0px;
 }
-.tab_expedtable .control_priorities .control_label img {
+.tab_expedscorer .control_priorities .control_label img {
 	width:18px;
 	height:18px;
 	margin:1px;
 	vertical-align:top;
 }
-.tab_expedtable .control_priorities .control_input {
+.tab_expedscorer .control_priorities .control_input {
 	width:50px;
 	height:18px;
 	line-height:18px;
 	float:left;
 }
-.tab_expedtable .control_priorities .control_input input {
+.tab_expedscorer .control_priorities .control_input input {
 	width:50px;
 	height:18px;
 	line-height:18px;
@@ -136,29 +136,29 @@
 }
 
 /* AFK Time */
-.tab_expedtable .expedControls .control_afktime {
+.tab_expedscorer .expedControls .control_afktime {
 	width:200px;
 }
-.tab_expedtable .control_afktime .control {
+.tab_expedscorer .control_afktime .control {
 	width:95px;
 	height:20px;
 	line-height:20px;
 	float:left;
 	margin:0px 3px 0px 0px;
 }
-.tab_expedtable .control_afktime .control_label {
+.tab_expedscorer .control_afktime .control_label {
 	width:30px;
 	height:20px;
 	float:left;
 	margin:0px 5px 0px 0px;
 }
-.tab_expedtable .control_afktime .control_input {
+.tab_expedscorer .control_afktime .control_input {
 	width:55px;
 	height:18px;
 	line-height:18px;
 	float:left;
 }
-.tab_expedtable .control_afktime .control_input input {
+.tab_expedscorer .control_afktime .control_input input {
 	width:55px;
 	height:18px;
 	line-height:18px;
@@ -168,12 +168,12 @@
 }
 
 /* Calculate button */
-.tab_expedtable .expedControls .control_calculate {
+.tab_expedscorer .expedControls .control_calculate {
 	width:120px;
 	margin-right:0px;
 	border-right:0px none;
 }
-.tab_expedtable .expedControls .calculate_btn {
+.tab_expedscorer .expedControls .calculate_btn {
 	width:100px;
 	height:30px;
 	line-height:28px;
