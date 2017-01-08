@@ -2705,6 +2705,9 @@
 			} else {
 				jqGSRate.removeAttr( "title" );
 			}
+			// hide GS rate if user does not intend doing so.
+			$(".module.activity .activity_expeditionPlanner .row_gsrate")
+				.toggle( plannerIsGreatSuccess );
 
 			var markFailed = function (jq) {
 				jq.addClass("expPlanner_text_failed").removeClass("expPlanner_text_passed");
