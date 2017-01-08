@@ -2673,6 +2673,15 @@
 				jqObj.attr( 'title', tooltipText.text );
 			});
 
+			var jqGSRate = $(".module.activity .activity_expeditionPlanner .row_gsrate .gsrate_content");
+
+			// success rate is forced to be unknown when there are less than 4 ships
+			// and is capped at 99%.
+			// "???" instead of "?" to make it more noticable.
+			var sparkedCount = fleetObj.ship().filter( function(s) { return s.morale >= 50; } ).length;
+			var estSuccessRate = "~" + Math.min( 99, 19 * sparkedCount ) + "%";
+			jqGSRate.text( sparkedCount < 4 ? "???" : estSuccessRate );
+
 			var markFailed = function (jq) {
 				jq.addClass("expPlanner_text_failed").removeClass("expPlanner_text_passed");
 				return jq;
