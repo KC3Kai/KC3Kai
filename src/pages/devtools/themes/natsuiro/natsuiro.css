@@ -1447,7 +1447,6 @@ ABYSS FLEET
     margin-right: 3px;
 }
 
-
 .module.activity .activity_expeditionPlanner .expPlanner_resos_title {
     text-align: center;
     height: 20px;
@@ -1513,12 +1512,12 @@ ABYSS FLEET
     margin-bottom:4px;
 }
 .module.activity .activity_expeditionPlanner .expPlanner_checker_criterias {
-	margin-bottom:3px;
+	margin-bottom:2px;
 }
 .module.activity .activity_expeditionPlanner .expPlanner_shipReqBox {
 	margin-right:10px;
 }
-.module.activity .activity_expeditionPlanner .requirements_textbox{
+.module.activity .activity_expeditionPlanner .requirements_textbox {
 	display:inline-block;	
 }
 .module.activity .activity_expeditionPlanner .expPlanner_text{	
