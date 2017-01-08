@@ -36,51 +36,16 @@
 		 */
 
 		fleetsObjToDeckBuilder: function(fleetsObj) {
-			var dBuilder = {};
-			dBuilder.version = 4;
+			var self = this;
+			var dBuilder = {
+				version: 4
+			};
 
-			function convertShip(shipObj) {
-				var ship = {};
-				ship.id = shipObj.id;
-				ship.lv = shipObj.level;
-				ship.luck = shipObj.luck;
-				ship.items = {};
-
-				$.each([0,1,2,3,4], function(_,ind) {
-					var gearObj = shipObj.equipments[ind];
-					if (!gearObj) return;
-					var gear = {};
-					gear.id = gearObj.id;
-
-					if (gearObj.ace && gearObj.ace > 0) {
-						gear.mas = gearObj.ace;
-					}
-
-					if (gearObj.improve && gearObj.improve > 0) {
-						gear.rf = gearObj.improve;
-					}
-
-					var key = ind === 4 ? "ix" : "i"+(ind+1);
-					ship.items[key] = gear;
+			fleetsObj
+				.map( self.createKCFleetObject )
+				.map( function(x,i) {
+					dBuilder["f" + (i+1)] = x.deckbuilder();
 				});
-				return ship;
-			}
-
-			function convertFleet(fleetObj) {
-				var fleet = {};
-				$.each([0,1,2,3,4,5], function(_,ind) {
-					var shipObj = fleetObj.ships[ind];
-					if (!shipObj) return;
-					fleet["s"+(ind+1)] = convertShip(shipObj);
-				});
-				return fleet;
-			}
-
-			$.each([0,1,2,3], function(_,ind) {
-				var fleetObj = fleetsObj[ind];
-				if (fleetObj)
-					dBuilder["f"+(ind+1)] = convertFleet( fleetObj );
-			});
 			return dBuilder;
 		},
 
@@ -451,7 +416,7 @@
 		createKCFleetObject: function(fleetObj) {
 			var fleet = new KC3Fleet();
 			fleet.name = fleetObj.name;
-			fleet.ships = [1,2,3,4,5,6];
+			fleet.ships = [];
 			if (!fleetObj) return;
 			fleet.active = true;
 			var shipObjArr = [];
@@ -465,10 +430,14 @@
 
 			// fill in instance of Ships
 			$.each( fleetObj.ships, function(ind,shipObj) {
+				if (shipObj === null) {
+					fleet.ships.push( -1 );
+					return;
+				}
+				
 				var ship = new KC3Ship();
 				shipObjArr.push( ship );
-				// falsy value -> done
-				if (!shipObj) return;
+				fleet.ships.push( shipObjArr.length );
 
 				var equipmentObjectArr = [];
 				var masterData = KC3Master.ship( shipObj.id );
