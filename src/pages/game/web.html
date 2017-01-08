@@ -168,29 +168,40 @@
 					<div class="tl_checknow hover">
 						Check for translations now
 					</div>
+					<div class="tl_checklive_status">
+						<em>Looking for new translations...</em>
+					</div>
 					
 					<ul class="translationFiles">
-						<li>
+						<li id="tlfile_item_quests">
 							<div class="tlfile_status">
-								<div class="loader"></div>
+								<div class="tlfile_status_icon idle"><img src="../../assets/img/ui/rating.png" /></div>
+								<div class="tlfile_status_icon done"><img src="../../assets/img/ui/check.png" /></div>
+								<div class="tlfile_status_icon loader"></div>
 							</div>
 							<div class="tlfile_name">Quest Descriptions</div>
 						</li>
-						<li>
+						<li id="tlfile_item_quotes">
 							<div class="tlfile_status">
-								<div class="loader"></div>
+								<div class="tlfile_status_icon idle"><img src="../../assets/img/ui/rating.png" /></div>
+								<div class="tlfile_status_icon done"><img src="../../assets/img/ui/check.png" /></div>
+								<div class="tlfile_status_icon loader"></div>
 							</div>
 							<div class="tlfile_name">Ship Quotes</div>
 						</li>
-						<li>
+						<li id="tlfile_item_ships">
 							<div class="tlfile_status">
-								<div class="loader"></div>
+								<div class="tlfile_status_icon idle"><img src="../../assets/img/ui/rating.png" /></div>
+								<div class="tlfile_status_icon done"><img src="../../assets/img/ui/check.png" /></div>
+								<div class="tlfile_status_icon loader"></div>
 							</div>
 							<div class="tlfile_name">Ships Names</div>
 						</li>
-						<li>
+						<li id="tlfile_item_items">
 							<div class="tlfile_status">
-								<div class="loader"></div>
+								<div class="tlfile_status_icon idle"><img src="../../assets/img/ui/rating.png" /></div>
+								<div class="tlfile_status_icon done"><img src="../../assets/img/ui/check.png" /></div>
+								<div class="tlfile_status_icon loader"></div>
 							</div>
 							<div class="tlfile_name">Equipment Names</div>
 						</li>
@@ -273,6 +284,7 @@
 			<div class="divider"></div>
 		</div>
 		<script type="text/javascript" src="../../assets/js/global.js"></script>
+		<script type="text/javascript" src="../../assets/js/Dexie.min.js"></script>
 		<!-- @nonbuildstart -->
 		<script type="text/javascript" src="../../assets/js/jquery-2.1.3.min.js"></script>
 		<script type="text/javascript" src="../../library/managers/ConfigManager.js"></script>
@@ -282,6 +294,7 @@
 		<!-- @buildimportjs ../../library/managers.js -->
 		<script type="text/javascript" src="../../library/modules/Translation.js"></script>
 		<script type="text/javascript" src="../../library/modules/Meta.js"></script>
+		<script type="text/javascript" src="../../library/modules/Database.js"></script>
 		<script type="text/javascript" src="web.js"></script>
 	</body>
 </html>

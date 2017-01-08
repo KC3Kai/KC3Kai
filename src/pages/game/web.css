@@ -213,6 +213,13 @@ body {
 	text-align:center;
 	font-size:11px;
 }
+.tl_checklive_status {
+	font-size:11px;
+	margin:0px 0px 10px 0px;
+	height:24px;
+	line-height:24px;
+	display:none;
+}
 
 ul.translationFiles {
 	margin:0px 0px 10px 0px;
@@ -226,11 +233,28 @@ ul.translationFiles li {
 ul.translationFiles li .tlfile_status {
 	width:20px;
 	height:20px;
+	line-height:16px;
 	margin:0px 5px 0px 0px;
 	float:left;
 }
-ul.translationFiles li .tlfile_status img {
-	
+ul.translationFiles li .tlfile_status_icon {
+	width:20px;
+	height:20px;
+}
+ul.translationFiles li .tlfile_status_icon.loader {
+	display:none;
+}
+ul.translationFiles li .tlfile_status_icon.done {
+	display:none;
+}
+ul.translationFiles li .tlfile_status_icon img {
+	width:16px;
+	height:16px;
+	margin:2px;
+	vertical-align: top;
+}
+ul.translationFiles li .tlfile_status .loader {
+	display:none;
 }
 ul.translationFiles li .tlfile_name {
 	width:225px;
