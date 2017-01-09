@@ -567,7 +567,8 @@ KC3改 Ship Object
 	};
 
 	KC3Ship.prototype.adjustedAntiAir = function() {
-		return AntiAir.shipAdjustedAntiAir(this);
+		var floor = AntiAir.specialFloor(this);
+		return floor(AntiAir.shipAdjustedAntiAir(this));
 	};
 
 	KC3Ship.prototype.proportionalShotdownRate = function() {
@@ -686,8 +687,15 @@ KC3改 Ship Object
 				break;
 		}
 		gearInfo = this.exItem().deckbuilder();
-		if (gearInfo)
-			itemsInfo.ix = gearInfo;
+		if (gearInfo) {
+			// #1726 Deckbuilder: if max slot not reach 4, `ix` will not be used
+			var usedSlot = Object.keys(itemsInfo).length;
+			if(usedSlot < 4) {
+				itemsInfo["i".concat(usedSlot+1)] = gearInfo;
+			} else {
+				itemsInfo.ix = gearInfo;
+			}
+		}
 		
 		return result;
 	};
