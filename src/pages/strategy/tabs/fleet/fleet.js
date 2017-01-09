@@ -355,9 +355,9 @@
 			$(".detail_los .detail_icon img", fleetBox).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png" );
 			$(".detail_los .detail_value", fleetBox).text( Math.round( kcFleet.eLoS() * 100) / 100 );
 			$(".detail_air .detail_value", fleetBox).text( kcFleet.fighterPowerText() );
-			$(".detail_antiair .detail_value", fleetBox).text( kcFleet.adjustedAntiAir(1) )
-				.attr("title", "Double-line: {0}\nDiamond: {1}"
-					.format(kcFleet.adjustedAntiAir(2), kcFleet.adjustedAntiAir(3)) );
+			$(".detail_antiair .detail_value", fleetBox).text( kcFleet.adjustedAntiAir(ConfigManager.aaFormation) )
+				.attr("title", "Line-Ahead: {0}\nDouble-Line: {1}\nDiamond: {2}"
+					.format(kcFleet.adjustedAntiAir(1), kcFleet.adjustedAntiAir(2), kcFleet.adjustedAntiAir(3)) );
 			$(".detail_speed .detail_value", fleetBox).text( kcFleet.speed() );
 			$(".detail_support .detail_value", fleetBox).text( kcFleet.supportPower() );
 		},

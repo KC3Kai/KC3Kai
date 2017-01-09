@@ -254,9 +254,17 @@ Retreives when needed to apply on components
 		},
 		
 		// Toggle AntiAir Formation Type
-		scrollAntiAirFormation :function(){
-			// Loop between 1~3 for now, wait for combined support
-			this.aaFormation = (this.aaFormation % 3) + 1;
+		// Only loop between frequently used (different modifiers):
+		// Line Ahead / Double Line / Diamond / C anti-sub / C diamond / C battle
+		scrollAntiAirFormation :function(isCombined){
+			this.aaFormation += 1;
+			if(!!isCombined){
+				if(this.aaFormation == 4) this.aaFormation = 11;
+				if(this.aaFormation == 12) this.aaFormation = 13;
+				if(this.aaFormation == 15) this.aaFormation = 1;
+			} else {
+				this.aaFormation = this.aaFormation > 3 ? 1 : this.aaFormation;
+			}
 			this.save();
 		},
 		

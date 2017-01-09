@@ -283,9 +283,12 @@ AntiAir: anti-air related calculations
 	}
 
 	function getFormationModifiers(id) {
-		return (id === 1 || id === 4 || id === 5) ? 1  // line ahead / echelon / line abreast
+		return (id === 1 || id === 4 || id === 5) ? 1.0  // line ahead / echelon / line abreast
 			:  (id === 2) ? 1.2 // double line
 			:  (id === 3) ? 1.6 // diamond
+			:  (id === 11 || id === 21) ? 1.1 // Combined anti-sub
+			:  (id === 12 || id === 14 || id === 22 || id === 24) ? 1.0 // Combined forward / battle
+			:  (id === 13 || id === 23) ? 1.5 // Combined diamond
 			:  NaN; // NaN for indicating an invalid id
 	}
 
@@ -294,6 +297,16 @@ AntiAir: anti-air related calculations
 			return curAA + shipEquipmentAntiAir(ship, true);
 		}, 0);
 		return (2/1.3) * Math.floor( formationModifier * allShipEquipmentAA );
+	}
+
+	function fleetCombinedAdjustedAntiAir(mainFleetObj, escortFleetObj, formationModifier) {
+		var mainAllShipEquipmentAA = mainFleetObj.ship().reduce( function(curAA, ship) {
+			return curAA + shipEquipmentAntiAir(ship, true);
+		}, 0);
+		var escortAllShipEquipmentAA = escortFleetObj.ship().reduce( function(curAA, ship) {
+			return curAA + shipEquipmentAntiAir(ship, true);
+		}, 0);
+		return (2/1.3) * Math.floor( formationModifier * (mainAllShipEquipmentAA + escortAllShipEquipmentAA) );
 	}
 
 	function shipFixedShotdown(shipObj, fleetObj, formationModifier, K /* AACI modifier, default to 1 */) {
@@ -741,6 +754,7 @@ AntiAir: anti-air related calculations
 
 		getFormationModifiers: getFormationModifiers,
 		fleetAdjustedAntiAir: fleetAdjustedAntiAir,
+		fleetCombinedAdjustedAntiAir: fleetCombinedAdjustedAntiAir,
 		shipFixedShotdown: shipFixedShotdown,
 		shipFixedShotdownRange: shipFixedShotdownRange,
 		shipMaxShotdownFixedBonus: shipMaxShotdownFixedBonus,
