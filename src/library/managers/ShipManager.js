@@ -196,7 +196,7 @@ Saves and loads list to and from localStorage
 		remove :function( rosterId ){
 			console.log("removing ship", rosterId);
 			var thisShip = this.list["x"+rosterId];
-			if(thisShip != "undefined"){
+			if(typeof thisShip != "undefined"){
 				// initializing for fleet sanitizing of zombie ships
 				var shipTargetFleetID = this.locateOnFleet(rosterId);
 				// check whether the designated ship is on fleet or not
