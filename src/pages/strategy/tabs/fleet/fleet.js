@@ -282,12 +282,15 @@
 					shipObj.luck = masterData.api_luck[0];
 					shipObj.equipments = [];
 
-					$.each( shipData.equip, function(_,gearId) {
+					$.each( shipData.equip, function(i,gearId) {
 						if (gearId <= 0) {
 							shipObj.equipments.push(null);
 							return;
 						}
-						shipObj.equipments.push( {id: gearId } );
+						shipObj.equipments.push( {id: gearId,
+							improve: shipData.stars ? shipData.stars[i] : 0,
+							ace: shipData.ace ? shipData.ace[i] : 0
+						} );
 					});
 
 					while (shipObj.equipments.length !== 5)
@@ -359,7 +362,7 @@
 		/* Show single ship
 		   --------------------------------------------*/
 		showKCShip: function(fleetBox, kcShip) {
-			if (kcShip.masterId === 0) return;
+			if (!kcShip || kcShip.masterId === 0) return;
 
 			var self = this;
 			var shipBox = $(".tab_fleet .factory .fleet_ship").clone();
@@ -416,7 +419,7 @@
 		createKCFleetObject: function(fleetObj) {
 			var fleet = new KC3Fleet();
 			fleet.name = fleetObj.name;
-			fleet.ships = [];
+			fleet.ships = [ -1, -1, -1, -1, -1, -1 ];
 			if (!fleetObj) return;
 			fleet.active = true;
 			var shipObjArr = [];
@@ -424,20 +427,16 @@
 			// simulate ShipManager
 			fleet.ShipManager = {
 				get: function(ind) {
-					return shipObjArr[ind-1];
+					return shipObjArr[ind-1] || new KC3Ship();
 				}
 			};
 
 			// fill in instance of Ships
 			$.each( fleetObj.ships, function(ind,shipObj) {
-				if (shipObj === null) {
-					fleet.ships.push( -1 );
-					return;
-				}
-				
+				if (!shipObj) return;
 				var ship = new KC3Ship();
 				shipObjArr.push( ship );
-				fleet.ships.push( shipObjArr.length );
+				fleet.ships[ind] = shipObjArr.length;
 
 				var equipmentObjectArr = [];
 				var masterData = KC3Master.ship( shipObj.id );
