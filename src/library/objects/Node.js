@@ -23,7 +23,7 @@ Used by SortieManager
 	// arrays are all begins at 0
 	// Regular battle rules: https://github.com/andanteyk/ElectronicObserver/blob/master/ElectronicObserver/Other/Information/kcmemo.md#%E6%88%A6%E9%97%98%E5%8B%9D%E5%88%A9%E5%88%A4%E5%AE%9A
 	// Long distance air raid rules: https://github.com/andanteyk/ElectronicObserver/blob/master/ElectronicObserver/Other/Information/kcmemo.md#%E9%95%B7%E8%B7%9D%E9%9B%A2%E7%A9%BA%E8%A5%B2%E6%88%A6%E3%81%A7%E3%81%AE%E5%8B%9D%E5%88%A9%E5%88%A4%E5%AE%9A
-	KC3Node.predictRank = function(beginHPs, endHPs) {
+	KC3Node.predictRank = function(beginHPs, endHPs, battleName) {
 		console.assert( 
 			beginHPs.ally.length === endHPs.ally.length,
 			"ally data length mismatched");
@@ -93,6 +93,20 @@ Used by SortieManager
 		var equalOrMore = enemyGaugeRate > (0.9 * allyGaugeRate);
 		var superior = enemyGaugeRate > 0 && enemyGaugeRate > (2.5 * allyGaugeRate);
 
+		// For long distance air raid
+		if ( (battleName||"").indexOf("ld_airbattle") >-1 ) {
+			if (allyGaugeRate <= 0)
+				return "SS";
+			else if (allyGaugeRate < 10)
+				return "A";
+			else if (allyGaugeRate < 20)
+				return "B";
+			else if (allyGaugeRate < 50)
+				return "C";
+			else if (allyGaugeRate < 80)
+				return "D";
+			return "E";
+		}
 		if (allySunkCount === 0) {
 			if (enemySunkCount === enemyCount) {
 				return allyGauge === 0 ? "SS" : "S";
@@ -525,11 +539,12 @@ Used by SortieManager
 					}
 				}
 				
-				if(ConfigManager.info_btrank &&
-					// long distance aerial battle not predictable for now, see #1333
+				if(ConfigManager.info_btrank
+					// long distance aerial battle not accurate for now, see #1333
 					// but go for aerial battle (eventKind:4) possible Yasen
-					[6].indexOf(this.eventKind)<0 ){
-					this.predictedRank = KC3Node.predictRank( beginHPs, endHPs );
+					//&& [6].indexOf(this.eventKind)<0
+					){
+					this.predictedRank = KC3Node.predictRank( beginHPs, endHPs, battleData.api_name );
 					// console.debug("Rank Predict:", this.predictedRank);
 				}
 				
