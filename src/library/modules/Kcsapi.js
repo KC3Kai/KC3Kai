@@ -223,7 +223,7 @@ Previously known as "Reactor"
 				exp: response.api_data.api_experience[0]
 			});
 			
-			PlayerManager.consumables.fcoin = response.api_data.api_fcoin;
+			//PlayerManager.consumables.fcoin = response.api_data.api_fcoin;
 			PlayerManager.fleetCount = response.api_data.api_deck;
 			PlayerManager.repairSlots = response.api_data.api_ndoc;
 			PlayerManager.buildSlots = response.api_data.api_kdoc;
