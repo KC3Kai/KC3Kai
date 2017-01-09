@@ -725,15 +725,42 @@ Previously known as "Reactor"
 				KC3Network.trigger("Fleet");
 			}
 			
-			// Gun fit bonus / penalty
+			// Gun fit bonus / penalty OR possible AACI patterns
 			var gearObj = KC3GearManager.get(itemID);
 			var gunfit = KC3Meta.gunfit(shipObj.masterId, gearObj.masterId);
-			if (gunfit !== false) {
+			var aaciTypes = AntiAir.sortedPossibleAaciList(AntiAir.shipPossibleAACIs(shipObj));
+			if (gunfit !== false || aaciTypes.length > 0) {
 				KC3Network.trigger("GunFit", {
 					shipObj: shipObj,
 					gearObj: gearObj,
 					thisFit: gunfit,
-					shipFits: KC3Meta.gunfit(shipObj.masterId) // different from above
+					shipFits: KC3Meta.gunfit(shipObj.masterId), // different from above
+					shipAacis: aaciTypes
+				});
+			}
+		},
+		
+		"api_req_kaisou/slotset_ex":function(params, response, headers){
+			var itemID = parseInt(params.api_item_id, 10);
+			var shipID = parseInt(params.api_id, 10);
+			var shipObj = KC3ShipManager.get(shipID);
+			var gearObj = KC3GearManager.get(itemID);
+			shipObj.ex_item = itemID;
+			// If ship is in a fleet, switch view to the fleet containing the ship
+			var fleetNum = KC3ShipManager.locateOnFleet(shipID);
+			if (fleetNum > -1) {
+				KC3Network.trigger("Fleet", { switchTo: fleetNum+1 });
+			} else {
+				KC3Network.trigger("Fleet");
+			}
+			// Possible AACI patterns
+			var aaciTypes = AntiAir.sortedPossibleAaciList(AntiAir.shipPossibleAACIs(shipObj));
+			if (aaciTypes.length > 0) {
+				KC3Network.trigger("GunFit", {
+					shipObj: shipObj,
+					gearObj: gearObj,
+					thisFit: false,
+					shipAacis: aaciTypes
 				});
 			}
 		},

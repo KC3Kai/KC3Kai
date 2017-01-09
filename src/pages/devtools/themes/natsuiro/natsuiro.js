@@ -2892,25 +2892,66 @@
 			} else {
 				$(".activity_gunfit .fit_gear_level").hide();
 			}
-			
-			if (data.thisFit === "") {
-				$(".activity_gunfit .fit_value").text(KC3Meta.term("FitWeightUnknown"));
-				$(".activity_gunfit .fit_value").addClass("fit_unknown");
-			} else {
-				var fitValue = parseInt(data.thisFit, 10);
-				$(".activity_gunfit .fit_value").text(KC3Meta.term("FitWeight_"+fitValue));
-				$(".activity_gunfit .fit_value").removeClass("fit_penalty fit_bonus fit_neutral");
-				if (fitValue < 0) {
-					$(".activity_gunfit .fit_value").addClass("fit_penalty");
-				} else if (fitValue > 0) {
-					$(".activity_gunfit .fit_value").addClass("fit_bonus");
+			if (data.thisFit !== false) {
+				if (data.thisFit === "") {
+					$(".activity_gunfit .fit_value").text(KC3Meta.term("FitWeightUnknown"));
+					$(".activity_gunfit .fit_value").addClass("fit_unknown");
 				} else {
-					$(".activity_gunfit .fit_value").addClass("fit_neutral");
+					var fitValue = parseInt(data.thisFit, 10);
+					$(".activity_gunfit .fit_value").text(KC3Meta.term("FitWeight_"+fitValue));
+					$(".activity_gunfit .fit_value").removeClass("fit_penalty fit_bonus fit_neutral");
+					if (fitValue < 0) {
+						$(".activity_gunfit .fit_value").addClass("fit_penalty");
+					} else if (fitValue > 0) {
+						$(".activity_gunfit .fit_value").addClass("fit_bonus");
+					} else {
+						$(".activity_gunfit .fit_value").addClass("fit_neutral");
+					}
 				}
+				$(".activity_gunfit .fit_value").show();
+			} else {
+				$(".activity_gunfit .fit_value").hide();
 			}
 			
-			$(".activity_gunfit .fit_more").attr("href", "/pages/strategy/strategy.html#mstship-"+data.shipObj.masterId);
-			
+			if (data.shipAacis.length > 0) {
+				var aaciBox, equipIcon, i;
+				$(".activity_gunfit .aaciList").empty();
+				$.each(data.shipAacis, function(idx, aaciObj){
+					aaciBox = $("#factory .aaciPattern").clone();
+					$(".apiId", aaciBox).text(aaciObj.id);
+					if(aaciObj.icons[0] > 0) {
+						$(".shipIcon img", aaciBox)
+							.attr("src", KC3Meta.shipIcon(aaciObj.icons[0]) )
+							.attr("title", KC3Meta.aacitype(aaciObj.id)[0] || "");
+					} else {
+						$(".shipIcon img", aaciBox).hide();
+					}
+					if(aaciObj.icons.length > 1) {
+						for(i = 1; i < aaciObj.icons.length; i++) {
+							equipIcon = String(aaciObj.icons[i]).split(/[+-]/);
+							$("<img/>")
+								.attr("src", "../../../../assets/img/items/"+equipIcon[0]+".png")
+								.attr("title", KC3Meta.aacitype(aaciObj.id)[i] || "")
+								.appendTo($(".equipIcons", aaciBox));
+							if(equipIcon.length>1) {
+								$('<img/>')
+									.attr("src", "../../../../assets/img/items/"+equipIcon[1]+".png")
+									.attr("title", KC3Meta.aacitype(aaciObj.id)[i] || "")
+									.addClass(aaciObj.icons[i].indexOf("-")>-1 ? "minusIcon" : "plusIcon")
+									.appendTo($(".equipIcons", aaciBox));
+							}
+						}
+					}
+					$(".fixed", aaciBox).text(aaciObj.fixed);
+					$(".modifier", aaciBox).text(aaciObj.modifier);
+					$(".activity_gunfit .aaci").height(data.thisFit !== false ? 88 : 118);
+					if(idx === 0) aaciBox.addClass("triggerable");
+					aaciBox.appendTo(".activity_gunfit .aaciList");
+				});
+				$(".activity_gunfit .aaci").show();
+			} else {
+				$(".activity_gunfit .aaci").hide();
+			}
 			
 			$(".module.activity .activity_tab").removeClass("active");
 			$("#atab_activity").addClass("active");

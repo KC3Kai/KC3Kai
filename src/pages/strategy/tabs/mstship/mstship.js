@@ -527,7 +527,7 @@
 							}
 						}
 						$(".fixed", aaciBox).text(aaciObj.fixed);
-						$(".modifier", aaciBox).text("+{0}%".format(Math.round((aaciObj.modifier - 1.0)*100)));
+						$(".modifier", aaciBox).text(aaciObj.modifier);
 						aaciBox.toggleClass("odd", idx % 2 !== 0);
 						aaciBox.toggleClass("even", idx % 2 === 0);
 						aaciBox.appendTo(".aaciList");
