@@ -293,7 +293,7 @@ AntiAir: anti-air related calculations
 		var allShipEquipmentAA = fleetObj.ship().reduce( function(curAA, ship) {
 			return curAA + shipEquipmentAntiAir(ship, true);
 		}, 0);
-		return 1.54 * Math.floor( formationModifier * allShipEquipmentAA );
+		return (2/1.3) * Math.floor( formationModifier * allShipEquipmentAA );
 	}
 
 	function shipFixedShotdown(shipObj, fleetObj, formationModifier, K /* AACI modifier, default to 1 */) {
@@ -704,16 +704,24 @@ AntiAir: anti-air related calculations
 		possibleAACIModifiers.push( 1 );
 		var mod = Math.max.apply( null, possibleAACIModifiers );
 		return [ shipFixedShotdown(shipObj, fleetObj, formationModifier, 1),
-				 shipFixedShotdown(shipObj, fleetObj, formationModifier, mod) ];
+				 shipFixedShotdown(shipObj, fleetObj, formationModifier, mod),
+				 mod ];
 	}
 
-	function shipMaxShotdownBonus(shipObj) {
+	function shipMaxShotdownFixedBonus(shipObj) {
 		var possibleBonuses = shipPossibleAACIs(shipObj).map( function( apiId ) {
 			return AACITable[apiId].fixed;
 		});
 		// default value 0 is always available, making call to Math.max always non-empty
 		possibleBonuses.push( 0 );
 		return Math.max.apply( null, possibleBonuses );
+	}
+
+	function shipMaxShotdownAllBonuses(shipObj) {
+		var possibleAaciList = sortedPossibleAaciList(shipPossibleAACIs(shipObj));
+		return possibleAaciList.length > 0 ?
+			[possibleAaciList[0].id, possibleAaciList[0].fixed, possibleAaciList[0].modifier]
+			: [0, 0, 1];
 	}
 
 	// exporting module
@@ -735,7 +743,8 @@ AntiAir: anti-air related calculations
 		fleetAdjustedAntiAir: fleetAdjustedAntiAir,
 		shipFixedShotdown: shipFixedShotdown,
 		shipFixedShotdownRange: shipFixedShotdownRange,
-		shipMaxShotdownBonus: shipMaxShotdownBonus,
+		shipMaxShotdownFixedBonus: shipMaxShotdownFixedBonus,
+		shipMaxShotdownAllBonuses: shipMaxShotdownAllBonuses,
 
 		AACITable: AACITable,
 		shipPossibleAACIs: shipPossibleAACIs,

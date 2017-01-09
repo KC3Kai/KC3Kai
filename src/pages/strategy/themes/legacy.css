@@ -674,7 +674,7 @@ body {
 	border-radius:12px;
 }
 .tab_fleet .fleet_name {
-	width:180px;
+	width:150px;
 	height:25px;
 	line-height:25px;
 	background:#fff;
@@ -685,11 +685,11 @@ body {
 	font-weight:bold;
 }
 .tab_fleet .fleet_details {
-	width:480px;
+	width:520px;
 	height:25px;
 	line-height:25px;
 	float:left;
-	margin:5px 0px 0px 10px;
+	margin:5px 0px 0px 5px;
 }
 .tab_fleet .detail_icon {
 	width:25px;
@@ -703,7 +703,7 @@ body {
 	margin:4px;
 }
 .detail_field {
-	width:85px;
+	width:82px;
 	height:25px;
 	background:#fff;
 	border-radius:8px;
@@ -715,13 +715,30 @@ body {
 .detail_field.incomplete {
 	background:#fcc;
 }
+.detail_field.detail_level {
+	width:66px;
+}
+.detail_field.detail_level .detail_value {
+	width:30px;
+}
 .detail_field.detail_air {
 	width:110px;
 }
+.detail_field.detail_air .detail_value {
+	width:72px;
+}
+.detail_field.detail_antiair {
+	width:66px;
+}
+.detail_field.detail_antiair .detail_value {
+	width:30px;
+}
 .tab_fleet .detail_value {
-	width:40px;
+	width:45px;
 	height:25px;
 	float:left;
+	overflow:hidden;
+	white-space:nowrap;
 }
 .tab_fleet .fleet_ships {
 	width:672px;

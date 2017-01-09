@@ -355,6 +355,9 @@
 			$(".detail_los .detail_icon img", fleetBox).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png" );
 			$(".detail_los .detail_value", fleetBox).text( Math.round( kcFleet.eLoS() * 100) / 100 );
 			$(".detail_air .detail_value", fleetBox).text( kcFleet.fighterPowerText() );
+			$(".detail_antiair .detail_value", fleetBox).text( kcFleet.adjustedAntiAir(1) )
+				.attr("title", "Double-line: {0}\nDiamond: {1}"
+					.format(kcFleet.adjustedAntiAir(2), kcFleet.adjustedAntiAir(3)) );
 			$(".detail_speed .detail_value", fleetBox).text( kcFleet.speed() );
 			$(".detail_support .detail_value", fleetBox).text( kcFleet.supportPower() );
 		},
@@ -371,7 +374,7 @@
 			$(".ship_type", shipBox).text( kcShip.stype() );
 			$(".ship_pic img", shipBox).attr("src", KC3Meta.shipIcon( kcShip.masterId ) );
 			// TODO Link to ship list instead of ship library
-			//$(".ship_pic img", shipBox).attr("title", kcShip.rosterId );
+			$(".ship_pic img", shipBox).attr("title", kcShip.rosterId );
 			$(".ship_pic img", shipBox).attr("alt", kcShip.masterId );
 			$(".ship_pic img", shipBox).click(function(){
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
@@ -444,8 +447,10 @@
 				ship.masterId = shipObj.id;
 				ship.level = shipObj.level;
 				// calculate naked LoS
-				ship.ls[0] = ship.estimateNakedLoS() + ship.equipmentTotalLoS();
+				ship.ls[0] = shipObj.ls || (ship.estimateNakedLoS() + ship.equipmentTotalLoS());
 				ship.lk[0] = shipObj.luck;
+				ship.fp[0] = shipObj.fp || 0;
+				ship.tp[0] = shipObj.tp || 0;
 				ship.items = [1,2,3,4];
 				ship.slots = masterData.api_maxeq;
 				ship.ex_item = 5;
@@ -513,6 +518,9 @@
 						rid: ship.rosterId,
 						level: ship.level,
 						luck: ship.lk[0],
+						ls: ship.ls[0],
+						fp: ship.fp[0],
+						tp: ship.tp[0],
 						equipments: convertEquipmentsOf(ship)
 					};
 					fleetObjShips.push( shipObj );

@@ -37,13 +37,27 @@ KC3改 Ship Box for Natsuiro theme
 		tooltip += "{0}: {1} \t".format(KC3Meta.term("ShipSpeed"), this.shipData.speedName());
 		tooltip += "{0}: {1} ".format(KC3Meta.term("ShipLength"), this.shipData.rangeName());
 		
+		tooltip += "\n" + KC3Meta.term("ShipAAAdjusted")
+			.format( this.shipData.adjustedAntiAir() ) ;
 		tooltip += "\n" + KC3Meta.term("ShipAAShotdownRate")
 			.format( Math.floor(this.shipData.proportionalShotdownRate() * 100) );
-		var fixedShotdownRange = this.shipData.fixedShotdownRange(1);
-		tooltip += "\n" + KC3Meta.term("ShipAAFixedShotdown")
-			.format( fixedShotdownRange[0], fixedShotdownRange[1] );
-		tooltip += "\n" + KC3Meta.term("ShipAACIMaxBonus")
-			.format( this.shipData.maxShotdownBonus() );
+		var fixedShotdownRange = this.shipData.fixedShotdownRange(ConfigManager.aaFormation);
+		if(fixedShotdownRange[2] > 1){
+			tooltip += "\n" + KC3Meta.term("ShipAAFixedShotdown")
+				.format( "{0}~{1} (x{2})".
+					format(fixedShotdownRange[0], fixedShotdownRange[1], fixedShotdownRange[2])
+				);
+		} else {
+			tooltip += "\n" + KC3Meta.term("ShipAAFixedShotdown")
+				.format( fixedShotdownRange[0] );
+		}
+		var maxAaciParams = this.shipData.maxAaciShotdownBonuses();
+		if(maxAaciParams[0] > 0){
+			tooltip += "\n" + KC3Meta.term("ShipAACIMaxBonus")
+				.format( "{0} (x{1})".format(maxAaciParams[1], maxAaciParams[2]) );
+		} else {
+			tooltip += "\n" + KC3Meta.term("ShipAACIMaxBonus").format( KC3Meta.term("None") );
+		}
 		$(".ship_img img", this.element).attr("src", KC3Meta.shipIcon(this.shipData.masterId))
 			.attr("title", tooltip);
 		/*

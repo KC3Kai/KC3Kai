@@ -13,12 +13,13 @@ Retreives when needed to apply on components
 		// Default values. As a function to not include on JSON string
 		defaults : function(){
 			return {
-				version				: 8,
-				language			: "en",
-				hqInfoPage			: 1,
+				version     		: 8,
+				language    		: "en",
+				hqInfoPage  		: 1,
 				elosFormula 		: 4,
 				hqExpDetail 		: 1,
 				rankPtsMode 		: 1,
+				aaFormation 		: 1,
 				timerDisplayType	: 1,
 				marryLevelFormat	: 0,
 				checkLiveQuests		: true,
@@ -249,6 +250,13 @@ Retreives when needed to apply on components
 		// Toggle Fighter Power
 		scrollFighterPowerMode :function(){
 			this.air_formula = (this.air_formula % 3) + 1;
+			this.save();
+		},
+		
+		// Toggle AntiAir Formation Type
+		scrollAntiAirFormation :function(){
+			// Loop between 1~3 for now, wait for combined support
+			this.aaFormation = (this.aaFormation % 3) + 1;
 			this.save();
 		},
 		

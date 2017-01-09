@@ -467,6 +467,12 @@
 			$(".summary-airfp .summary_text").text( (selectedFleet < 5) ? PlayerManager.fleets[selectedFleet-1].fighterPowerText() : PlayerManager.fleets[0].fighterPowerText() );
 		}).addClass("hover");
 
+		// AntiAir Formation Toggle
+		$(".summary-antiair").on("click",function(){
+			ConfigManager.scrollAntiAirFormation();
+			NatsuiroListeners.Fleet();
+		}).addClass("hover");
+
 		// Timer Type Toggle
 		$(".status_docking,.status_akashi").on("click",function(){
 			ConfigManager.scrollTimerType();
@@ -1240,6 +1246,7 @@
 					lv: CurrentFleet.totalLevel(),
 					elos: Math.round( CurrentFleet.eLoS() * 100) / 100,
 					air: CurrentFleet.fighterPowerText(),
+					antiAir: CurrentFleet.adjustedAntiAir(ConfigManager.aaFormation),
 					speed: CurrentFleet.speed(),
 					docking: MainRepairs.docking,
 					akashi: MainRepairs.akashi,
@@ -1276,6 +1283,8 @@
 			$(".summary-level .summary_text").text( FleetSummary.lv );
 			$(".summary-eqlos .summary_text").text( FleetSummary.elos );
 			$(".summary-airfp .summary_text").text( FleetSummary.air );
+			$(".summary-antiair .summary_text").text( FleetSummary.antiAir )
+				.parent().attr("title", KC3Meta.formationText(ConfigManager.aaFormation) );
 			$(".summary-speed .summary_text").text( FleetSummary.speed );
 			// F33 different factors for now: 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
 			// Not support for combined fleet yet as factor not sure for event maps

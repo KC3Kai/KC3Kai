@@ -589,19 +589,20 @@ KC3改 Ship Object
 
 	// note:
 	// - fixed shotdown makes no sense if the current ship is not in a fleet.
-	// - formationModifier takes one of the following:
-	//   - 1 (for line ahead / echelon / line abreast)
-	//   - 1.2 (for double line)
-	//   - 1.6 (for diamond)
+	// - formationId takes one of the following:
+	//   - 1/4/5 (for line ahead / echelon / line abreast)
+	//   - 2 (for double line)
+	//   - 3 (for diamond)
 	// - all possible AACIs are considered and the largest AACI modifier
 	//   is used for calculation the maximum number of fixed shotdown
-	KC3Ship.prototype.fixedShotdownRange = function(formationModifier) {
+	KC3Ship.prototype.fixedShotdownRange = function(formationId) {
 		var fleetObj = PlayerManager.fleets[ this.onFleet() - 1 ];
-		return AntiAir.shipFixedShotdownRange(this, fleetObj, formationModifier);
+		return AntiAir.shipFixedShotdownRange(this, fleetObj,
+			AntiAir. getFormationModifiers(formationId || 1) );
 	};
 
-	KC3Ship.prototype.maxShotdownBonus = function() {
-		return AntiAir.shipMaxShotdownBonus( this );
+	KC3Ship.prototype.maxAaciShotdownBonuses = function() {
+		return AntiAir.shipMaxShotdownAllBonuses( this );
 	};
 
 	function consumePending(index,mapping,clear,args) {
