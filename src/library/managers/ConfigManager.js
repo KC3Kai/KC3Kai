@@ -18,6 +18,7 @@ Retreives when needed to apply on components
 				hqInfoPage			: 1,
 				elosFormula 		: 4,
 				hqExpDetail 		: 1,
+				rankPtsMode 		: 1,
 				timerDisplayType	: 1,
 				marryLevelFormat	: 0,
 				checkLiveQuests		: true,
@@ -254,6 +255,12 @@ Retreives when needed to apply on components
 		// Toggle HQ Exp Information
 		scrollHQExpInfo :function(){
 			this.hqExpDetail = (this.hqExpDetail % 3) + 1;
+			this.save();
+		},
+		
+		// Toggle Rank Title vs Rank Points
+		scrollRankPtsMode :function(){
+			this.rankPtsMode = (this.rankPtsMode % 2) + 1;
 			this.save();
 		},
 		
