@@ -528,8 +528,8 @@
 						}
 						$(".fixed", aaciBox).text(aaciObj.fixed);
 						$(".modifier", aaciBox).text(aaciObj.modifier);
-						aaciBox.toggleClass("odd", idx % 2 !== 0);
-						aaciBox.toggleClass("even", idx % 2 === 0);
+						aaciBox.toggleClass("odd", (idx+1) % 2 !== 0);
+						aaciBox.toggleClass("even", (idx+1) % 2 === 0);
 						aaciBox.appendTo(".aaciList");
 					});
 					$(".aaci").show();
