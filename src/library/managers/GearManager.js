@@ -120,7 +120,11 @@ Saves and loads list to and from localStorage
 		// Load from storage and add each one to manager list
 		load: function(){
 			// Use ConfigManager's instead, but remember: elements are String
-			this.antiAirFighterType2Ids = Object.keys(ConfigManager.air_average || ConfigManager.air_bounds);
+			var configured = ConfigManager.air_average || ConfigManager.air_bounds;
+			if(typeof configured === "object"){
+				// Here skip config if ConfigManager not load first
+				this.antiAirFighterType2Ids = Object.keys(configured);
+			}
 			if(typeof localStorage.gears != "undefined"){
 				this.clear();
 				var GearList = JSON.parse(localStorage.gears);
