@@ -14,7 +14,9 @@ Saves and loads list to and from localStorage
 
 		carrierBasedAircraftType3Ids: [6,7,8,9,10,21,22,33,39,40],
 		landBasedAircraftType3Ids: [6,7,8,9,10,33,37,38,39,40],
-		antiAirFighterType2Ids: [6,7,8,11,45,57],
+		// Current = [6,7,8,11,45,47,48,57], to avoid manually update
+		// Use ConfigManager instead, but remember: elements are String
+		antiAirFighterType2Ids: Object.keys(ConfigManager.air_average || ConfigManager.air_bounds),
 		interceptorsType3Ids: [38],
 
 		carrierSupplyBauxiteCostPerSlot: 5,

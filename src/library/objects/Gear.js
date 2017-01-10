@@ -44,7 +44,7 @@ KC3改 Equipment Object
 		if(this.itemId===0){ return 0; }
 
 		// Check if this object is a fighter plane
-		if( KC3GearManager.antiAirFighterType2Ids.indexOf( this.master().api_type[2] ) > -1){
+		if( KC3GearManager.antiAirFighterType2Ids.indexOf( String(this.master().api_type[2]) ) > -1){
 			return Math.floor( Math.sqrt(capacity) * this.master().api_tyku );
 		}
 
@@ -88,7 +88,7 @@ KC3改 Equipment Object
 		if(this.itemId===0){ return 0; }
 
 		// Check if this object is a fighter plane
-		if( KC3GearManager.antiAirFighterType2Ids.indexOf( this.master().api_type[2] ) > -1){
+		if( KC3GearManager.antiAirFighterType2Ids.indexOf( String(this.master().api_type[2]) ) > -1){
 			var typInd = String( this.master().api_type[2] );
 			var airAverageTable = ConfigManager.air_average[typInd];
 			// if new type added to default, have to reset to default
@@ -128,7 +128,7 @@ KC3改 Equipment Object
 		if(this.itemId===0){ return [0,0]; }
 
 		// Check if this object is a fighter plane
-		if( KC3GearManager.antiAirFighterType2Ids.indexOf( this.master().api_type[2] ) > -1){
+		if( KC3GearManager.antiAirFighterType2Ids.indexOf( String(this.master().api_type[2]) ) > -1){
 			// console.log("this.ace", this.ace);
 
 			var typInd = String( this.master().api_type[2] );

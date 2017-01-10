@@ -56,7 +56,8 @@ Retreives when needed to apply on components
 				info_troll 			: false,
 
 				// AIR PROFICIENCY BONUSES (Configurable by user)
-				air_formula			: 3, // 1=no veteran 2=veteran average 3=veteran bounds
+				// 1=no veteran 2=veteran average 3=veteran bounds 4=configurable, but unused yet
+				air_formula			: 3,
 				air_average			: {
 					"6":  [0, 1.35, 3.5, 7.1, 11.4, 16.8, 17, 25],
 					"7":  [0,    1,	  1,   1,    2,	   2,  2,  3],
