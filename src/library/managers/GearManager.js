@@ -14,9 +14,8 @@ Saves and loads list to and from localStorage
 
 		carrierBasedAircraftType3Ids: [6,7,8,9,10,21,22,33,39,40],
 		landBasedAircraftType3Ids: [6,7,8,9,10,33,37,38,39,40],
-		// Current = [6,7,8,11,45,47,48,57], to avoid manually update
-		// Use ConfigManager instead, but remember: elements are String
-		antiAirFighterType2Ids: Object.keys(ConfigManager.air_average || ConfigManager.air_bounds),
+		// To avoid manually update, see `load`
+		antiAirFighterType2Ids: ["6","7","8","11","45","47","48","57"],
 		interceptorsType3Ids: [38],
 
 		carrierSupplyBauxiteCostPerSlot: 5,
@@ -120,6 +119,8 @@ Saves and loads list to and from localStorage
 		
 		// Load from storage and add each one to manager list
 		load: function(){
+			// Use ConfigManager's instead, but remember: elements are String
+			this.antiAirFighterType2Ids = Object.keys(ConfigManager.air_average || ConfigManager.air_bounds);
 			if(typeof localStorage.gears != "undefined"){
 				this.clear();
 				var GearList = JSON.parse(localStorage.gears);
