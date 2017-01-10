@@ -34,6 +34,14 @@ KC3改 Ship Box for Natsuiro theme
 		tooltip += "{0}: {1} \n".format(KC3Meta.term("ShipAntiAir"), leftPad(this.shipData.aa[0]));
 		tooltip += "{0}: {1} \t".format(KC3Meta.term("ShipLos"), leftPad(this.shipData.ls[0]));
 		tooltip += "{0}: {1} ".format(KC3Meta.term("ShipLuck"), leftPad(this.shipData.lk[0]));
+		
+		tooltip += "\n" + KC3Meta.term("ShipAAShotdownRate")
+			.format( Math.floor(this.shipData.proportionalShotdownRate() * 100) );
+		var fixedShotdownRange = this.shipData.fixedShotdownRange(1);
+		tooltip += "\n" + KC3Meta.term("ShipAAFixedShotdown")
+			.format( fixedShotdownRange[0], fixedShotdownRange[1] );
+		tooltip += "\n" + KC3Meta.term("ShipAACIMaxBonus")
+			.format( this.shipData.maxShotdownBonus() );
 		$(".ship_img img", this.element).attr("src", KC3Meta.shipIcon(this.shipData.masterId))
 			.attr("title", tooltip);
 		/*

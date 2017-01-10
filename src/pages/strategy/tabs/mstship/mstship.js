@@ -495,6 +495,48 @@
 					$("<div/>").addClass("clear").appendTo(".tab_mstship .shipInfo .hourlies");
 				}
 				
+				// AACI Types
+				$(".aaciList").empty();
+				var aaciList = AntiAir.sortedPossibleAaciList( AntiAir.shipAllPossibleAACIs(shipData) );
+				if (aaciList.length > 0) {
+					var aaciBox, equipIcon, i;
+					$.each(aaciList, function(idx, aaciObj){
+						aaciBox = $(".tab_mstship .factory .aaciPattern").clone();
+						$(".apiId", aaciBox).text(aaciObj.id);
+						if(aaciObj.icons[0] > 0) {
+							$(".shipIcon img", aaciBox)
+								.attr("src", KC3Meta.shipIcon(aaciObj.icons[0]) )
+								.attr("title", KC3Meta.aacitype(aaciObj.id)[0] || "");
+						} else {
+							$(".shipIcon img", aaciBox).hide();
+						}
+						if(aaciObj.icons.length > 1) {
+							for(i = 1; i < aaciObj.icons.length; i++) {
+								equipIcon = String(aaciObj.icons[i]).split(/[+-]/);
+								$("<img/>")
+									.attr("src", "../../../../assets/img/items/"+equipIcon[0]+".png")
+									.attr("title", KC3Meta.aacitype(aaciObj.id)[i] || "")
+									.appendTo($(".equipIcons", aaciBox));
+								if(equipIcon.length>1) {
+									$('<img/>')
+										.attr("src", "../../../../assets/img/items/"+equipIcon[1]+".png")
+										.attr("title", KC3Meta.aacitype(aaciObj.id)[i] || "")
+										.addClass(aaciObj.icons[i].indexOf("-")>-1 ? "minusIcon" : "plusIcon")
+										.appendTo($(".equipIcons", aaciBox));
+								}
+							}
+						}
+						$(".fixed", aaciBox).text(aaciObj.fixed);
+						$(".modifier", aaciBox).text("+{0}%".format(Math.round((aaciObj.modifier - 1.0)*100)));
+						aaciBox.toggleClass("odd", idx % 2 !== 0);
+						aaciBox.toggleClass("even", idx % 2 === 0);
+						aaciBox.appendTo(".aaciList");
+					});
+					$(".aaci").show();
+				} else {
+					$(".aaci").hide();
+				}
+				
 				// GUN FITS
 				$(".gunfitList").empty();
 				var gunfits = KC3Meta.gunfit(shipData.api_id);
@@ -622,6 +664,7 @@
 				$(".tab_mstship .shipInfo .hourlies").hide();
 				$(".tab_mstship .shipInfo .intro").hide();
 				$(".tab_mstship .shipInfo .more").hide();
+				$(".tab_mstship .shipInfo .aaci").hide();
 				$(".tab_mstship .shipInfo .gunfit").hide();
 				$(".tab_mstship .shipInfo .tokubest").hide();
 			} else {
@@ -636,6 +679,7 @@
 				$(".tab_mstship .shipInfo .hourlies").hide();
 				$(".tab_mstship .shipInfo .intro").hide();
 				$(".tab_mstship .shipInfo .more").hide();
+				$(".tab_mstship .shipInfo .aaci").hide();
 				$(".tab_mstship .shipInfo .gunfit").hide();
 				$(".tab_mstship .shipInfo .tokubest").hide();
 			}

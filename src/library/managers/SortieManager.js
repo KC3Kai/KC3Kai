@@ -70,6 +70,7 @@ Xxxxxxx
 				fleet4: PlayerManager.fleets[3].sortieJson(),
 				support1: this.getSupportingFleet(false),
 				support2: this.getSupportingFleet(true),
+				lbas: this.getWorldLandBases(world),
 				time: stime
 			}, function(id){
 				self.onSortie = id;
@@ -117,6 +118,18 @@ Xxxxxxx
 					}
 				}
 			return 0;
+		},
+		
+		getWorldLandBases :function(world){
+			var lbas = [];
+			$.each(PlayerManager.bases, function(i, base){
+				if(base.rid > -1 && base.map === world
+					// Only sortie and defend needed
+					&& [1,2].indexOf(base.action) > -1){
+					lbas.push(base.sortieJson());
+				}
+			});
+			return lbas;
 		},
 		
 		getSortieFleet: function() {

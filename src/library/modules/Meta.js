@@ -332,6 +332,11 @@ Provides access to data on built-in JSON files
 				this._battle.engagement[index] || ["","",""];
 		},
 		
+		aacitype :function(index){
+			return (typeof index === "undefined") ? this._battle.aacitype :
+				this._battle.aacitype[index] || [];
+		},
+		
 		term: function(key) {
 			return (ConfigManager.info_troll && this._terms.troll[key]) || this._terms.lang[key] || key;
 		},

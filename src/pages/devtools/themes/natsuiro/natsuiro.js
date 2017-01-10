@@ -1593,7 +1593,8 @@
 			var map = KC3SortieManager.map_num;
 			var nodeId = KC3Meta.nodeLetter(world, map, thisNode.id );
 
-			$(".module.activity .sortie_node_"+numNodes).text( nodeId );
+			$(".module.activity .sortie_node_"+numNodes).text( nodeId ).removeAttr("title");
+
 			$(".module.activity .node_types").hide();
 
 			$(".module.activity .abyss_ship").hide();
@@ -1622,7 +1623,9 @@
 
 				// Resource node
 				case "resource":
-					$(".module.activity .sortie_node_"+numNodes).addClass("nc_resource");
+					$(".module.activity .sortie_node_"+numNodes)
+						.addClass("nc_resource")
+						.attr("title", thisNode.nodeDesc);
 					var resBoxDiv = $(".module.activity .node_type_resource");
 					resBoxDiv.removeClass("node_type_maelstrom");
 					resBoxDiv.children().remove();
@@ -1639,7 +1642,9 @@
 
 				// Bounty node on 1-6
 				case "bounty":
-					$(".module.activity .sortie_node_"+numNodes).addClass("nc_resource");
+					$(".module.activity .sortie_node_"+numNodes)
+						.addClass("nc_resource")
+						.attr("title", thisNode.nodeDesc);
 					$(".module.activity .node_type_resource").removeClass("node_type_maelstrom");
 					$(".module.activity .node_type_resource .node_res_icon img").attr("src",
 						thisNode.icon("../../../../assets/img/client/"));
@@ -1653,7 +1658,9 @@
 
 				// Maelstrom node
 				case "maelstrom":
-					$(".module.activity .sortie_node_"+numNodes).addClass("nc_maelstrom");
+					$(".module.activity .sortie_node_"+numNodes)
+						.addClass("nc_maelstrom")
+						.attr("title", thisNode.nodeDesc);
 					$(".module.activity .node_type_resource").addClass("node_type_maelstrom");
 					$(".module.activity .node_type_resource .node_res_icon img").attr("src",
 						thisNode.icon("../../../../assets/img/client/"));
@@ -2011,7 +2018,8 @@
 						if ($(".module.activity .abyss_single .abyss_ship_"+(index+1)).length > 0) {
 							$(".module.activity .abyss_single .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.abyssIcon(eshipId));
 	
-							var tooltip = "{0}: {1}\n".format(eshipId, KC3Meta.abyssShipName(eshipId));
+							var tooltip = "{0}: {1}\n".format(eshipId,
+								thisNode.isPvP ? KC3Meta.shipName(KC3Master.ship(eshipId).api_name) : KC3Meta.abyssShipName(eshipId));
 							tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipFire"), eParam[0]);
 							tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipTorpedo"), eParam[1]);
 							tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipAntiAir"), eParam[2]);
@@ -2665,6 +2673,43 @@
 				jqObj.text( tooltipText.val );
 				jqObj.attr( 'title', tooltipText.text );
 			});
+
+			var jqGSRate = $(".module.activity .activity_expeditionPlanner .row_gsrate .gsrate_content");
+
+			// success rate is forced to be unknown when there are less than 4 ships
+			// and is capped at 99%.
+			// "???" instead of "?" to make it more noticable.
+			var sparkedCount = fleetObj.ship().filter( function(s) { return s.morale >= 50; } ).length;
+			var estSuccessRate = "~" + Math.min( 99, 19 * sparkedCount ) + "%";
+			var fleetDrumCount = fleetObj.countDrums();
+			jqGSRate.text( sparkedCount < 4 ? "???" : estSuccessRate );
+			// reference: http://wikiwiki.jp/kancolle/?%B1%F3%C0%AC
+			var gsDrumCountTable = {
+				21: 3+1,
+				37: 4+1,
+				38: 8+2,
+				24: 0+4,
+				40: 0+4 };
+			var gsDrumCount = gsDrumCountTable[selectedExpedition];
+			// apply golden text when we have >= 4 sparked ships.
+			// for overdrum expeds, we further require extra number of drums
+			jqGSRate.toggleClass(
+				"golden",
+				(sparkedCount >= 4) &&
+					(typeof gsDrumCount !== "undefined"
+					 ? fleetDrumCount >= gsDrumCount
+					 : true) );
+
+			var tooltipText = KC3Meta.term("ExpedGSRateExplainSparkle").format(sparkedCount);
+			// apply tooltip to overdrum expeds
+			if (typeof gsDrumCount !== "undefined")
+				tooltipText += "\n" + KC3Meta.term("ExpedGSRateExplainExtraDrum").format(fleetDrumCount, gsDrumCount);
+
+			jqGSRate.attr("title", tooltipText);
+
+			// hide GS rate if user does not intend doing so.
+			$(".module.activity .activity_expeditionPlanner .row_gsrate")
+				.toggle( plannerIsGreatSuccess );
 
 			var markFailed = function (jq) {
 				jq.addClass("expPlanner_text_failed").removeClass("expPlanner_text_passed");
