@@ -1543,7 +1543,8 @@ Previously known as "Reactor"
 			var
 				resourceUsed = [ params.api_item1, params.api_item2, params.api_item3, params.api_item4 ],
 				failed       = (typeof response.api_data.api_slot_item == "undefined"),
-				ctime        = Math.hrdInt("floor",Date.safeToUtcTime(headers.Date),3,1);
+				ctime        = Math.hrdInt("floor",Date.safeToUtcTime(headers.Date),3,1),
+				hour         = Math.hrdInt("floor",ctime/3.6,3,1);
 			
 			// Log into development History
 			KC3Database.Develop({
@@ -1557,10 +1558,15 @@ Previously known as "Reactor"
 			});
 			
 			KC3Database.Naverall({
-				hour: Math.hrdInt("floor",ctime/3.6,3,1),
+				hour: hour,
 				type: "critem",
 				data: resourceUsed.concat([0,0,!failed,0]).map(function(x){return -x;})
 			});
+			
+			if(Array.isArray(response.api_data.api_material)){
+				PlayerManager.setResources(response.api_data.api_material.slice(0,4), hour);
+				PlayerManager.consumables.devmats = response.api_data.api_material[6];
+			}
 			
 			KC3QuestManager.get(605).increment(); // F1: Daily Development 1
 			KC3QuestManager.get(607).increment(); // F3: Daily Development 2
@@ -1589,6 +1595,7 @@ Previously known as "Reactor"
 				});
 			}
 			
+			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Quests");
 		},
 		
