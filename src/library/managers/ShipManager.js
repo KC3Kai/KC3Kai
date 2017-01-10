@@ -20,8 +20,6 @@ Saves and loads list to and from localStorage
 		max: 100,
 		pendingShipNum: 0,
 
-		speedTermsMap: {"0":"SpeedLand", "5":"SpeedSlow", "10":"SpeedFast", "15":"SpeedFaster", "20":"SpeedFastest"},
-
 		// Get a specific ship by ID
 		get :function( rosterId ){
 			// console.log("getting ship", rosterId, this.list["x"+rosterId]);

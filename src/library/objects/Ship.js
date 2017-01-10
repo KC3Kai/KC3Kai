@@ -173,12 +173,8 @@ KC3改 Ship Object
 	KC3Ship.prototype.exItem = function(){ return this.getGearManager().get(this.ex_item); };
 	KC3Ship.prototype.isStriped = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.5); };
 	KC3Ship.prototype.isTaiha   = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.25) && !this.isRepaired(); };
-	KC3Ship.prototype.speedTerm = function(){
-		// No Land ship for shipgirls for now
-		return this.speed === 0 ? "SpeedLand" :
-			Object.values(KC3ShipManager.speedTermsMap)[Math.floor(this.speed/5)]
-			|| "Unknown";
-	};
+	KC3Ship.prototype.speedName = function(){ return KC3Meta.shipSpeed(this.speed); };
+	KC3Ship.prototype.rangeName = function(){ return KC3Meta.shipRange(this.range); };
 	KC3Ship.prototype.getDefer = function(){
 		// returns a new defer if possible
 		return deferList[this.rosterId] || [];

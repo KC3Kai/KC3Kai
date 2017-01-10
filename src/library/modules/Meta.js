@@ -255,6 +255,18 @@ Provides access to data on built-in JSON files
 			return shipMaster.api_id > 500 ? shipMaster.api_yomi.replace("-", "") : "";
 		},
 		
+		shipSpeed :function(apiSoku, returnTerm){
+			var speedTermsMap = {"0":"SpeedLand", "5":"SpeedSlow", "10":"SpeedFast", "15":"SpeedFaster", "20":"SpeedFastest"};
+			var term = speedTermsMap[apiSoku] || "Unknown";
+			return !returnTerm ? this.term(term) : term;
+		},
+		
+		shipRange :function(apiLeng, returnTerm){
+			var rangeTermsMap = {"1":"RangeShort", "2":"RangeMedium", "3":"RangeLong", "4":"RangeVeryLong"};
+			var term = rangeTermsMap[apiLeng] || "Unknown";
+			return !returnTerm ? this.term(term) : term;
+		},
+		
 		exp :function(level){
 			return this._exp[level] || [0,0];
 		},
