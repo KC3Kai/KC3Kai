@@ -32,6 +32,7 @@ KC3改 Ship Object
 		this.ex_item = 0;
 		this.slots = [0,0,0,0];
 		this.slotnum = 0;
+		this.speed = 0;
 		this.mod = [0,0,0,0,0];
 		this.fuel = 0;
 		this.ammo = 0;
@@ -118,6 +119,7 @@ KC3改 Ship Object
 				}
 				this.slotnum = data.api_slotnum;
 				this.slots = data.api_onslot;
+				this.speed = data.api_soku;
 				this.mod = data.api_kyouka;
 				this.fuel = data.api_fuel;
 				this.ammo = data.api_bull;
@@ -167,10 +169,16 @@ KC3改 Ship Object
 				});
 		}
 	};
-	KC3Ship.prototype.isFast = function(){ return this.master().api_soku>=10; };
+	KC3Ship.prototype.isFast = function(){ return (this.speed || this.master().api_soku) >= 10; };
 	KC3Ship.prototype.exItem = function(){ return this.getGearManager().get(this.ex_item); };
 	KC3Ship.prototype.isStriped = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.5); };
 	KC3Ship.prototype.isTaiha   = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.25) && !this.isRepaired(); };
+	KC3Ship.prototype.speedTerm = function(){
+		// No Land ship for shipgirls for now
+		return this.speed === 0 ? "SpeedLand" :
+			Object.values(KC3ShipManager.speedTermsMap)[Math.floor(this.speed/5)]
+			|| "Unknown";
+	};
 	KC3Ship.prototype.getDefer = function(){
 		// returns a new defer if possible
 		return deferList[this.rosterId] || [];

@@ -616,7 +616,8 @@
 							$("img", statBox).attr("src", "../../../../assets/img/stats/"+stat[0]+".png");
 							$(".ship_stat_name", statBox).text(stat[1]);
 							if(stat[0]=="sp"){
-								$(".ship_stat_text", statBox).text({"0":"Land","5":"Slow","10":"Fast"}[shipData.api_soku]);
+								var speedEnNameMap = {"0":"Land","5":"Slow","10":"Fast","15":"Fast+","20":"Fastest"};
+								$(".ship_stat_text", statBox).text(speedEnNameMap[shipData.api_soku]);
 								$(".ship_stat_text", statBox).show();
 								$(".ship_stat_value", statBox).hide();
 							} else {

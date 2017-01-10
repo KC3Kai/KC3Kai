@@ -167,7 +167,7 @@
 				ev: [this.getDerivedStatNaked("houk", ThisShip.ev[0], ThisShip.items), ThisShip.ev[0] ],
 				ls: [this.getDerivedStatNaked("saku", ThisShip.ls[0], ThisShip.items), ThisShip.ls[0] ],
 				lk: ThisShip.lk[0],
-				sp: MasterShip.api_soku,
+				sp: ThisShip.speed,
 				slots: ThisShip.slots,
 				exSlot: ThisShip.ex_item,
 				fleet: ThisShip.onFleet(),
@@ -411,11 +411,13 @@
 			self.defineShipFilter(
 				"speed",
 				0,
-				["all","fast","slow"],
+				["all","slow","fast","faster","fastest"],
 				function(curVal,ship) {
 					return (curVal === 0)
-						|| (curVal === 1 && ship.sp >= 10)
-						|| (curVal === 2 && ship.sp < 10);
+						|| (curVal === 1 && ship.sp > 0 && ship.sp < 10)
+						|| (curVal === 2 && ship.sp >= 10 && ship.sp < 15)
+						|| (curVal === 3 && ship.sp >= 15 && ship.sp < 20)
+						|| (curVal === 4 && ship.sp >= 20);
 				});
 
 			self.defineShipFilter(

@@ -1813,7 +1813,7 @@
 
 						var eSlot = thisNode.eSlot[index];
 						if (!!eSlot && eSlot.length > 0) {
-							for(var slotIdx=0; slotIdx<Math.min(eSlot.length,4); slotIdx++) {
+							for(var slotIdx=0; slotIdx<Math.min(eSlot.length,5); slotIdx++) {
 								if(eSlot[slotIdx] > 0) tooltip += "\n" + KC3Meta.gearName(KC3Master.slotitem(eSlot[slotIdx]).api_name);
 							}
 						}
@@ -2027,7 +2027,7 @@
 	
 							var eSlot = thisNode.eSlot[index];
 							if (!!eSlot && eSlot.length > 0) {
-								for(var slotIdx=0; slotIdx<Math.min(eSlot.length,4); slotIdx++) {
+								for(var slotIdx=0; slotIdx<Math.min(eSlot.length,5); slotIdx++) {
 									if(eSlot[slotIdx] > 0) tooltip += "\n" + KC3Meta.gearName(KC3Master.slotitem(eSlot[slotIdx]).api_name);
 								}
 							}
@@ -2310,7 +2310,7 @@
 
 					var eSlot = thisPvP.eSlot[index];
 					if (!!eSlot && eSlot.length > 0) {
-						for(var slotIdx=0; slotIdx<Math.min(eSlot.length,4); slotIdx++) {
+						for(var slotIdx=0; slotIdx<Math.min(eSlot.length,5); slotIdx++) {
 							if(eSlot[slotIdx] > 0) tooltip += "\n" + KC3Meta.gearName(KC3Master.slotitem(eSlot[slotIdx]).api_name);
 						}
 					}
