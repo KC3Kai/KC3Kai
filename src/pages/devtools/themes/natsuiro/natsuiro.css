@@ -800,7 +800,7 @@ ABYSS FLEET
 	color:#fff;
 	background:#a69de6;
 	overflow:hidden;
-	cursor:default;
+	pointer-events:none;
 	display:none;
 }
 .module.activity .battle_flag .support_lbas {
@@ -815,7 +815,7 @@ ABYSS FLEET
 	color:#ff0;
 	background:#5b5;
 	overflow:hidden;
-	cursor:default;
+	pointer-events:none;
 	display:none;
 }
 /* Battle Conditions */
@@ -2094,6 +2094,7 @@ ABYSS FLEET
 	text-align: center;
 	line-height: 13px;
 	color: #ff0;
+	pointer-events: none;
 	display: none;
 }
 .module.fleet .lship .ship_gear_ace img {

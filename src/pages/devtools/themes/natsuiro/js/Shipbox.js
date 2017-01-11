@@ -337,7 +337,7 @@ KC3改 Ship Box for Natsuiro theme
 				$(".ship_gear_"+(slot+1)+" .ship_gear_icon img", this.element).attr("src",
 					"../../../../assets/img/items/"+thisGear.master().api_type[3]+".png");
 				$(".ship_gear_"+(slot+1), this.element).addClass("equipped");
-				$(".ship_gear_"+(slot+1), this.element).attr("title", thisGear.name());
+				$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element).attr("title", thisGear.name());
 				
 				if (thisGear.masterId == 43) {
 					$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element).addClass("goddess");
@@ -373,8 +373,14 @@ KC3改 Ship Box for Natsuiro theme
 			
 			if(this.shipData.slots[ slot ] > 0 ||
 				(thisGear && KC3GearManager.carrierBasedAircraftType3Ids.indexOf(thisGear.master().api_type[3])>-1) ){
-				$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).text( this.shipData.slots[ slot ] );
-				var slotPercent = this.shipData.slots[slot] / (this.shipData.master().api_maxeq[slot] || 1);
+				var slotCurr = this.shipData.slots[slot];
+				$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).text( slotCurr );
+				var slotMax = this.shipData.master().api_maxeq[slot];
+				if(slotCurr < slotMax){
+					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).attr("title",
+						"{0} /{1}".format(slotCurr, slotMax) );
+				}
+				var slotPercent = slotCurr / (slotMax || 1);
 				if(slotPercent <= 0){
 					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).css("color", "#999");
 				} else if(slotPercent <= 0.25){
