@@ -721,6 +721,15 @@ AntiAir: anti-air related calculations
 				 mod ];
 	}
 
+	function shipFixedShotdownRangeWithAACI(shipObj, fleetObj, formationModifier) {
+		var possibleAaciList = sortedPossibleAaciList(fleetPossibleAACIs(fleetObj));
+		var aaciId = possibleAaciList.length > 0 ? possibleAaciList[0].id : 0;
+		var mod = possibleAaciList.length > 0 ? possibleAaciList[0].modifier : 1;
+		return [ shipFixedShotdown(shipObj, fleetObj, formationModifier, 1),
+				 shipFixedShotdown(shipObj, fleetObj, formationModifier, mod),
+				 aaciId ];
+	}
+
 	function shipMaxShotdownFixedBonus(shipObj) {
 		var possibleBonuses = shipPossibleAACIs(shipObj).map( function( apiId ) {
 			return AACITable[apiId].fixed;
@@ -757,6 +766,7 @@ AntiAir: anti-air related calculations
 		fleetCombinedAdjustedAntiAir: fleetCombinedAdjustedAntiAir,
 		shipFixedShotdown: shipFixedShotdown,
 		shipFixedShotdownRange: shipFixedShotdownRange,
+		shipFixedShotdownRangeWithAACI: shipFixedShotdownRangeWithAACI,
 		shipMaxShotdownFixedBonus: shipMaxShotdownFixedBonus,
 		shipMaxShotdownAllBonuses: shipMaxShotdownAllBonuses,
 

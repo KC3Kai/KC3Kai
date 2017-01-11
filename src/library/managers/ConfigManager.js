@@ -21,7 +21,6 @@ Retreives when needed to apply on components
 				imaginaryEnemySlot	: 96,
 				hqExpDetail 		: 1,
 				rankPtsMode 		: 1,
-				aaFormation 		: 1,
 				timerDisplayType	: 1,
 				marryLevelFormat	: 0,
 				checkLiveQuests		: true,

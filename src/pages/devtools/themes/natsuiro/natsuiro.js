@@ -469,6 +469,7 @@
 
 		// AntiAir Formation Toggle
 		$(".summary-antiair").on("click",function(){
+			ConfigManager.load();
 			ConfigManager.scrollAntiAirFormation(selectedFleet === 5);
 			NatsuiroListeners.Fleet();
 		}).addClass("hover");

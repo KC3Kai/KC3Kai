@@ -597,7 +597,7 @@ KC3改 Ship Object
 	//   is used for calculation the maximum number of fixed shotdown
 	KC3Ship.prototype.fixedShotdownRange = function(formationId) {
 		var fleetObj = PlayerManager.fleets[ this.onFleet() - 1 ];
-		return AntiAir.shipFixedShotdownRange(this, fleetObj,
+		return AntiAir.shipFixedShotdownRangeWithAACI(this, fleetObj,
 			AntiAir. getFormationModifiers(formationId || 1) );
 	};
 
