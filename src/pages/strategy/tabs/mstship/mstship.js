@@ -90,7 +90,7 @@
 
 			// List all ships
 			var shipBox;
-			$.each(KC3Master.all_ships(true), function(index, ShipData){
+			$.each(KC3Master.all_ships(true, true), function(index, ShipData){
 				if(!ShipData) { return true; }
 				
 				shipBox = $(".tab_mstship .factory .shipRecord").clone();
