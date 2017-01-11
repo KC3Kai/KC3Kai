@@ -686,27 +686,29 @@ AntiAir: anti-air related calculations
 	// return: a list of sorted AACI objects order by effect desc,
 	//   as most effective AACI gets priority to be triggered.
 	// param: AACI IDs from possibleAACIs functions
-	function sortedPossibleAaciList(aaciIds) {
+	// param: a optional callback function to customize ordering
+	function sortedPossibleAaciList(aaciIds, sortCallback) {
 		var aaciList = [];
-		$.each( aaciIds, function(i, apiId) {
-			if(!!AACITable[apiId]) aaciList.push( AACITable[apiId] );
-		});
-		aaciList = aaciList.sort(function(a, b) {
-			// Order by fixed desc, modifier desc, icons[0] desc
-			var c = b.fixed - a.fixed
-				|| b.modifier - a.modifier
-				|| b.icons[0] - a.icons[0];
-			return c;
-		});
+		if(!!aaciIds && Array.isArray(aaciIds)) {
+			$.each( aaciIds, function(i, apiId) {
+				if(!!AACITable[apiId]) aaciList.push( AACITable[apiId] );
+			});
+			var defaultOrder = function(a, b) {
+				// Order by fixed desc, modifier desc, icons[0] desc
+				return b.fixed - a.fixed
+					|| b.modifier - a.modifier
+					|| b.icons[0] - a.icons[0];
+			};
+			aaciList = aaciList.sort(sortCallback || defaultOrder);
+		}
 		return aaciList;
 	}
 
-	function sortedFleetPossibleAaciList(triggeredShipAaciList) {
-		var aaciList = triggeredShipAaciList.sort(function(a, b) {
+	function sortedFleetPossibleAaciList(triggeredShipAaciIds) {
+		return sortedPossibleAaciList(triggeredShipAaciIds, function(a, b) {
 			// Order by (API) id desc
 			return b.id - a.id;
-		}) || [];
-		return aaciList;
+		});
 	}
 
 	function shipFixedShotdownRange(shipObj, fleetObj, formationModifier) {
@@ -722,7 +724,13 @@ AntiAir: anti-air related calculations
 	}
 
 	function shipFixedShotdownRangeWithAACI(shipObj, fleetObj, formationModifier) {
-		var possibleAaciList = sortedPossibleAaciList(fleetPossibleAACIs(fleetObj));
+		var possibleAaciList = sortedPossibleAaciList(fleetPossibleAACIs(fleetObj),
+			function(a, b){
+				// Order by modifier desc, fixed desc, icons[0] desc
+				return b.modifier - a.modifier
+					|| b.fixed - a.fixed
+					|| b.icons[0] - a.icons[0];
+			});
 		var aaciId = possibleAaciList.length > 0 ? possibleAaciList[0].id : 0;
 		var mod = possibleAaciList.length > 0 ? possibleAaciList[0].modifier : 1;
 		return [ shipFixedShotdown(shipObj, fleetObj, formationModifier, 1),
