@@ -115,11 +115,12 @@ Saves and loads significant data for future use
 		},
 
 		all_ships :function(withAbyssals, withSeasonals){
+			var id, ss, as;
 			var ships = $.extend(this._raw.ship, {});
 			if(!!withAbyssals && Object.keys(this._abyssalShips).length > 0){
-				for(var id in this._abyssalShips){
-					var ss = ships[id];
-					var as = this._abyssalShips[id];
+				for(id in this._abyssalShips){
+					ss = ships[id];
+					as = this._abyssalShips[id];
 					if(!!ss && !!as){
 						for(var k in as){
 							if(!ss.hasOwnProperty(k))
@@ -129,8 +130,8 @@ Saves and loads significant data for future use
 				}
 			}
 			if(!!withSeasonals && Object.keys(this._seasonalShips).length > 0){
-				for(var id in this._seasonalShips){
-					var ss = ships[id];
+				for(id in this._seasonalShips){
+					ss = ships[id];
 					if(!ss) { ships[id] = this._seasonalShips[id]; }
 				}
 				// Apply a patch for Mikuma typo of KC devs
