@@ -17,6 +17,8 @@ Retreives when needed to apply on components
 				language    		: "en",
 				hqInfoPage  		: 1,
 				elosFormula 		: 4,
+				aaFormation 		: 1,
+				imaginaryEnemySlot	: 96,
 				hqExpDetail 		: 1,
 				rankPtsMode 		: 1,
 				aaFormation 		: 1,

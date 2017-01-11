@@ -1675,6 +1675,7 @@ ABYSS FLEET
 	height:15px;
 	margin:6px 0px 0px -12px;
 	position:relative;
+	pointer-events:none;
 	filter:hue-rotate(75deg);
 	transform:scaleX(-1);
 }
@@ -1683,6 +1684,7 @@ ABYSS FLEET
 	height:15px;
 	margin:6px 0px 0px -12px;
 	position:relative;
+	pointer-events:none;
 	filter:hue-rotate(-90deg);
 	transform:scaleX(-1);
 }

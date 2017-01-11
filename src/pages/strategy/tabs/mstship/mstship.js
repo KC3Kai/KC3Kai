@@ -520,7 +520,6 @@
 								if(equipIcon.length>1) {
 									$('<img/>')
 										.attr("src", "../../../../assets/img/items/"+equipIcon[1]+".png")
-										.attr("title", KC3Meta.aacitype(aaciObj.id)[i] || "")
 										.addClass(aaciObj.icons[i].indexOf("-")>-1 ? "minusIcon" : "plusIcon")
 										.appendTo($(".equipIcons", aaciBox));
 								}

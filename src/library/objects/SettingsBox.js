@@ -73,13 +73,13 @@ To be dynamically used on the settings page
 							.replace("%CMP",KC3Meta.term("SettingsError" + ((ERRCODE & 2) == 2 ? "Above" :  "Below")))
 							.replace("%VAL",self.bound[((ERRCODE & 4) == 4 ? "" : "length_") + ((ERRCODE & 2) == 2 ? "max" : "min")]);
 					}
-					console.error(errstr);
+					console.info(errstr);
 					elementControl($(this).parent().siblings(".note"),'red',errstr);
 					$(this).val(ConfigManager[self.config]);
 					return false;
 				}
 				
-				ConfigManager[ self.config ] = window[self.bound.type]($(this).val());
+				ConfigManager[ self.config ] = window[self.bound.type==="Integer"?"Number":self.bound.type]($(this).val());
 				ConfigManager.save();
 				elementControl($(this).parent().siblings(".note"),'',KC3Meta.term("SettingsErrorNG"));
 				
@@ -260,12 +260,19 @@ To be dynamically used on the settings page
 		// having all bit is set means invalid value
 		// otherwise, having all bit is unset means valid value
 		console.log(bound);
+		var isNumber = function(str){
+			return !(isNaN(str) || str === "" || str === null || str === false);
+		};
+		var isInteger = function(str){
+			return isNumber(str) && Number.isFinite(Number(str)) && Math.floor(Number(str)) === Number(str);
+		};
 		switch(true) {
-			case(bound.type === "Number" && (isNaN(Number(value)) || (value || null) === null)): return -1; // Number Expectation
+			case(bound.type === "Number" && !isNumber(value)): return -1; // Number Expectation
+			case(bound.type === "Integer" && !isInteger(value)): return -1;
 			case(String(value).length > (Number(bound.length_max) || Infinity)): return  3;
 			case(String(value).length < (Number(bound.length_min) ||        0)): return  1;
-			case(value > (Number(bound.max) ||  Infinity)): return  7;
-			case(value < (Number(bound.min) || -Infinity)): return  5;
+			case(value > (isInteger(bound.max) ? Number(bound.max) :  Infinity)): return  7;
+			case(value < (isInteger(bound.min) ? Number(bound.min) : -Infinity)): return  5;
 			default: return 0;
 		}
 	}
