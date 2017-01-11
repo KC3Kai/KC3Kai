@@ -2081,6 +2081,7 @@ ABYSS FLEET
 	line-height: 13px;
 	color: #ff0;
 	background: #45a9a5;
+	pointer-events: none;
 	display: none;
 }
 .module.fleet .lship .ship_gear_ace {
