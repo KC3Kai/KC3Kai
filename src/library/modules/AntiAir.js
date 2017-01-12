@@ -26,6 +26,10 @@ AntiAir: anti-air related calculations
 	- shipFixedShotdownRange(shipObj, fleetObj, formationModifier)
 	  like "shipFixedShotdown" but this one returns a range by considering
 	  all possible AACIs "shipObj" can perform and use the largest modifier as upper bound.
+	- shipFixedShotdownRangeWithAACI(shipObj, fleetObj, formationModifier)
+	  the same as "shipFixedShotdownRange" except returning the AACI ID of largest modifier.
+	- shipMaxShotdownAllBonuses(shipObj)
+	  return the largest fixed and with modifier bonuses of all possible AACIs "shipObj" can perform.
 	- shipPossibleAACIs(shipObj) / fleetPossibleAACIs(fleetObj)
 	  returns a list of possible AACI API Ids that ship / fleet could perform.
 	- shipAllPossibleAACIs(mst)
@@ -36,8 +40,9 @@ AntiAir: anti-air related calculations
 		- id: AACI API Id
 		- fixed: fixed shotdown bonus
 		- modifier: the "K" value to "shipFixedShotdown" when this AACI is triggered
-		- predicate: calling "predicateShip(shipObj)" will test whether "shipObj" can
-		  perform this particular kind of AACI.
+		- icon: IDs of icons representing this kind of AACI
+		- predicateShipMst: test whether "mst" can perform this kind of AACI ingoring equipments
+		- predicateShipObj: test whether "shipObj" can perform this particular kind of AACI
 	- other not explicitly listed contents are for debugging or internal use only.
 
  */

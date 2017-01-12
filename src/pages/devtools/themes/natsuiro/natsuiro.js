@@ -1497,7 +1497,7 @@
 						
 						afpLower = shipObj.fighterBounds()[0];
 						if (afpLower > 0) {
-							$(".base_afp .base_stat_value", baseBox).html(shipObj.fighterBounds()[0]+"+");
+							$(".base_afp .base_stat_value", baseBox).html( afpLower+"+" );
 						} else {
 							$(".base_afp .base_stat_value", baseBox).html( KC3Meta.term("None") );
 						}
@@ -2880,7 +2880,11 @@
 		},
 		
 		GunFit: function(data) {
-			console.log("gunfit", data);
+			console.log("GunFit/AACI", data);
+			if(!data.isShow){
+				$("#atab_basic").trigger("click");
+				return;
+			}
 			
 			$(".activity_gunfit .fit_ship_pic img").attr("src", KC3Meta.shipIcon(data.shipObj.masterId) );
 			$(".activity_gunfit .fit_ship_name").text( data.shipObj.name() );

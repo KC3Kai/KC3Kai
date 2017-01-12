@@ -729,15 +729,14 @@ Previously known as "Reactor"
 			var gearObj = KC3GearManager.get(itemID);
 			var gunfit = KC3Meta.gunfit(shipObj.masterId, gearObj.masterId);
 			var aaciTypes = AntiAir.sortedPossibleAaciList(AntiAir.shipPossibleAACIs(shipObj));
-			if (gunfit !== false || aaciTypes.length > 0) {
-				KC3Network.trigger("GunFit", {
-					shipObj: shipObj,
-					gearObj: gearObj,
-					thisFit: gunfit,
-					shipFits: KC3Meta.gunfit(shipObj.masterId), // different from above
-					shipAacis: aaciTypes
-				});
-			}
+			KC3Network.trigger("GunFit", {
+				isShow: (gunfit !== false || aaciTypes.length > 0),
+				shipObj: shipObj,
+				gearObj: gearObj,
+				thisFit: gunfit,
+				shipFits: KC3Meta.gunfit(shipObj.masterId), // different from above
+				shipAacis: aaciTypes
+			});
 		},
 		
 		"api_req_kaisou/slotset_ex":function(params, response, headers){
@@ -755,14 +754,13 @@ Previously known as "Reactor"
 			}
 			// Possible AACI patterns
 			var aaciTypes = AntiAir.sortedPossibleAaciList(AntiAir.shipPossibleAACIs(shipObj));
-			if (aaciTypes.length > 0) {
-				KC3Network.trigger("GunFit", {
-					shipObj: shipObj,
-					gearObj: gearObj,
-					thisFit: false,
-					shipAacis: aaciTypes
-				});
-			}
+			KC3Network.trigger("GunFit", {
+				isShow: aaciTypes.length > 0,
+				shipObj: shipObj,
+				gearObj: gearObj,
+				thisFit: false,
+				shipAacis: aaciTypes
+			});
 		},
 		
 		/* Remove all equipment of a ship
