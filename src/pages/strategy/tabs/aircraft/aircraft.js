@@ -29,6 +29,7 @@
 
 			KC3ShipManager.load();
 			KC3GearManager.load();
+			PlayerManager.loadBases();
 			
 			// Get squad names
 			if(typeof localStorage.planes == "undefined"){ localStorage.planes = "{}"; }
@@ -41,6 +42,9 @@
 				this.checkShipSlotForItemHolder(1, KC3ShipManager.list[ctr]);
 				this.checkShipSlotForItemHolder(2, KC3ShipManager.list[ctr]);
 				this.checkShipSlotForItemHolder(3, KC3ShipManager.list[ctr]);
+			}
+			for(ctr in PlayerManager.bases){
+				this.checkLbasSlotForItemHolder(PlayerManager.bases[ctr]);
 			}
 			
 			// Compile ships on Index
@@ -144,6 +148,14 @@
 			}
 		},
 		
+		/* Check LBAS slot of an aircraft is equipped
+		--------------------------------------------*/
+		checkLbasSlotForItemHolder :function(LandBase){
+			for(var squad in LandBase.planes){
+				this._holders["s"+LandBase.planes[squad].api_slotid] = LandBase;
+			}
+		},
+		
 		/* EXECUTE
 		Places data onto the interface
 		---------------------------------*/
@@ -221,23 +233,30 @@
 					}
 					
 					if(ThisPlane.MyHolder()){
-						$(".holder_pic img", PlaneBox).attr("src", KC3Meta.shipIcon(ThisPlane.MyHolder().masterId) );
-						$(".holder_name", PlaneBox).text( ThisPlane.MyHolder().name() );
-						$(".holder_level", PlaneBox).text("Lv."+ThisPlane.MyHolder().level);
-						
-						// Compute for veteranized fighter power
-						ThisCapacity = ThisPlane.MyHolder().slots[ this._slotNums["s"+ThisPlane.itemId] ];
+						if(ThisPlane.MyHolder() instanceof KC3LandBase){
+							$(".holder_pic img", PlaneBox).attr("src", "../../../../assets/img/items/33.png" );
+							$(".holder_name", PlaneBox).text( "LBAS World "+ThisPlane.MyHolder().map );
+							$(".holder_level", PlaneBox).text( "#"+ThisPlane.MyHolder().rid );
+							ThisCapacity = ThisPlane.MyHolder().planes
+								.filter(function(s){return s.api_slotid===ThisPlane.itemId;})
+								[0].api_max_count;
+							// Lazy to compute fighter power for LBAS :)
+						} else {
+							$(".holder_pic img", PlaneBox).attr("src", KC3Meta.shipIcon(ThisPlane.MyHolder().masterId) );
+							$(".holder_name", PlaneBox).text( ThisPlane.MyHolder().name() );
+							$(".holder_level", PlaneBox).text("Lv."+ThisPlane.MyHolder().level);
+							ThisCapacity = ThisPlane.MyHolder().slots[ this._slotNums["s"+ThisPlane.itemId] ];
+							// Compute for veteranized fighter power
+							var MyFighterPowerText = "";
+							if(ConfigManager.air_formula == 1){
+								MyFighterPowerText = ThisPlane.fighterPower(ThisCapacity);
+							}else{
+								MyFighterPowerText = "~"+ThisPlane.fighterVeteran(ThisCapacity);
+							}
+							$(".instance_aaval", PlaneBox).text( MyFighterPowerText );
+						}
 						$(".instance_aaval", PlaneBox).addClass("activeSquad");
 						$(".instance_slot", PlaneBox).text(ThisCapacity);
-						
-						var MyFighterPowerText = "";
-						if(ConfigManager.air_formula == 1){
-							MyFighterPowerText = ThisPlane.fighterPower(ThisCapacity);
-						}else{
-							MyFighterPowerText = "~"+ThisPlane.fighterVeteran(ThisCapacity);
-						}
-						$(".instance_aaval", PlaneBox).text( MyFighterPowerText );
-						
 					}else{
 						$(".holder_pic", PlaneBox).hide();
 						$(".holder_name", PlaneBox).hide();
