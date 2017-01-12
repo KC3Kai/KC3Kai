@@ -189,6 +189,9 @@
 			var gearClickFunc = function(e){
 				KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 			};
+			var lbasPlanesFilter = function(s){
+				return s.api_slotid === ThisPlane.itemId;
+			};
 			for(ctr in this._items["t"+type_id]){
 				ThisSlotitem = this._items["t"+type_id][ctr];
 				
@@ -212,9 +215,6 @@
 				this.slotitem_stat(ItemElem, ThisSlotitem, "or");
 				
 				var PlaneCtr, ThisPlane, PlaneBox, rankLines, ThisCapacity;
-				var lbasPlanesFilter = function(s){
-					return s.api_slotid === ThisPlane.itemId;
-				};
 				for(PlaneCtr in ThisSlotitem.instances){
 					ThisPlane = ThisSlotitem.instances[PlaneCtr];
 					
