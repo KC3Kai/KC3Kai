@@ -64,7 +64,7 @@
 						//max_count: squad.api_max_count,
 						stars: gear.stars,
 						ace: gear.ace,
-						//state: squad.api_state,
+						state: squad.api_state,
 						morale: squad.api_cond
 					});
 				}
