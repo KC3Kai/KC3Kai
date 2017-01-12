@@ -212,6 +212,9 @@
 				this.slotitem_stat(ItemElem, ThisSlotitem, "or");
 				
 				var PlaneCtr, ThisPlane, PlaneBox, rankLines, ThisCapacity;
+				var lbasPlanesFilter = function(s){
+					return s.api_slotid === ThisPlane.itemId;
+				};
 				for(PlaneCtr in ThisSlotitem.instances){
 					ThisPlane = ThisSlotitem.instances[PlaneCtr];
 					
@@ -238,8 +241,7 @@
 							$(".holder_name", PlaneBox).text( "LBAS World "+ThisPlane.MyHolder().map );
 							$(".holder_level", PlaneBox).text( "#"+ThisPlane.MyHolder().rid );
 							ThisCapacity = ThisPlane.MyHolder().planes
-								.filter(function(s){return s.api_slotid===ThisPlane.itemId;})
-								[0].api_max_count;
+								.filter(lbasPlanesFilter)[0].api_max_count;
 							// Lazy to compute fighter power for LBAS :)
 						} else {
 							$(".holder_pic img", PlaneBox).attr("src", KC3Meta.shipIcon(ThisPlane.MyHolder().masterId) );
