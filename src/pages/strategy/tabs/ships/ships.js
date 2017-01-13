@@ -163,9 +163,9 @@
 				],
 				aa: [MasterShip.api_tyku[1], MasterShip.api_tyku[0]+ThisShip.mod[2], ThisShip.aa[0] ],
 				ar: [MasterShip.api_souk[1], MasterShip.api_souk[0]+ThisShip.mod[3], ThisShip.ar[0] ],
-				as: [this.getDerivedStatNaked("tais", ThisShip.as[0], ThisShip.items), ThisShip.as[0] ],
-				ev: [this.getDerivedStatNaked("houk", ThisShip.ev[0], ThisShip.items), ThisShip.ev[0] ],
-				ls: [this.getDerivedStatNaked("saku", ThisShip.ls[0], ThisShip.items), ThisShip.ls[0] ],
+				as: [this.getDerivedStatNaked("tais", ThisShip.as[0], ThisShip), ThisShip.as[0] ],
+				ev: [this.getDerivedStatNaked("houk", ThisShip.ev[0], ThisShip), ThisShip.ev[0] ],
+				ls: [this.getDerivedStatNaked("saku", ThisShip.ls[0], ThisShip), ThisShip.ls[0] ],
 				lk: ThisShip.lk[0],
 				sp: ThisShip.speed,
 				slots: ThisShip.slots,
@@ -774,10 +774,11 @@
 
 		/* Compute Derived Stats without Equipment
 		--------------------------------------------*/
-		getDerivedStatNaked :function(StatName, EquippedValue, Items){
+		getDerivedStatNaked :function(StatName, EquippedValue, ShipObj){
+			var Items = ShipObj.equipment(true);
 			for(var ctr in Items){
-				if(Items[ctr] > -1){
-					EquippedValue -= KC3GearManager.get( Items[ctr] ).master()["api_"+StatName];
+				if(Items[ctr].itemId > 0){
+					EquippedValue -= Items[ctr].master()["api_"+StatName];
 				}
 			}
 			return EquippedValue;

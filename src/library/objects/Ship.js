@@ -157,6 +157,10 @@ KC3改 Ship Object
 			case 'string':
 				/* Number/String => converted as equipment slot key */
 				return self.getGearManager().get( this.items[slot] );
+			case 'boolean':
+				/* Boolean => return all equipments with ex item if true */
+				return slot ? this.equipment().concat(this.exItem())
+					: this.equipment();
 			case 'undefined':
 				/* Undefined => returns whole equipment as equip object */
 				return Array.apply(null, this.items)

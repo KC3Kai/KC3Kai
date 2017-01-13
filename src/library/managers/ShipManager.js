@@ -204,9 +204,10 @@ Saves and loads list to and from localStorage
 					PlayerManager.fleets[shipTargetFleetID].discard(rosterId);
 				}
 				// remove any equipments from her
-				for(var gctr in thisShip.items){
-					if(thisShip.items[gctr] > -1){
-						KC3GearManager.remove( thisShip.items[gctr] );
+				var items = thisShip.equipment(true);
+				for(var gctr in items){
+					if(items[gctr].itemId > 0){
+						KC3GearManager.remove( items[gctr].itemId );
 					}
 				}
 				
