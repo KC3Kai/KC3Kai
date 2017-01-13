@@ -797,6 +797,7 @@ Previously known as "Reactor"
 			
 			PlayerManager.setResources( response.api_data.api_material , ctime);
 			
+			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Quests");
 			KC3Network.trigger("Fleet");
 		},
@@ -882,10 +883,47 @@ Previously known as "Reactor"
 			var strikePoint1 = params.api_strike_point_1,
 				strikePoint2 = params.api_strike_point_2,
 				strikePoint3 = params.api_strike_point_3;
-			/* What can be done here?
-			 *   Record fuel & ammo consumption of sortie LBAS
-			 *   Show indicator of sortie LBAS at panel (also show striked nodes name?)
-			 */
+			var hour = Math.hrdInt("floor", Date.safeToUtcTime(headers.Date)/3.6,6,1);
+			var consumedFuel = 0, consumedAmmo = 0;
+			$.each(PlayerManager.bases, function(i, base){
+				// Land Base of this world, Action: sortie
+				if(base.map === KC3SortieManager.map_world && base.action === 1){
+					console.log("Sortied LBAS:", base);
+					$.each(base.planes, function(j, plane){
+						// Plane is set, not moving
+						if(plane.api_slotid > 0 && plane.api_state === 1){
+							var planeType2 = KC3GearManager.get(plane.api_slotid).master().api_type[2];
+							var fuelCostPerSlot = KC3GearManager.landBaseReconnType2Ids.indexOf(planeType2) > -1 ?
+								KC3GearManager.landBaseReconnSortieFuelCostPerSlot : planeType2 === 47 ?
+								KC3GearManager.landBaseBomberSortieFuelCostPerSlot :
+								KC3GearManager.landBaseOtherSortieFuelCostPerSlot;
+							var ammoCostPerSlot = KC3GearManager.landBaseReconnType2Ids.indexOf(planeType2) > -1 ?
+								KC3GearManager.landBaseReconnSortieAmmoCostPerSlot : planeType2 === 47 ?
+								KC3GearManager.landBaseBomberSortieAmmoCostPerSlot :
+								KC3GearManager.landBaseOtherSortieAmmoCostPerSlot;
+							// not sure use api_max_count or api_count
+							consumedFuel += Math.floor(plane.api_max_count * fuelCostPerSlot);
+							consumedAmmo += Math.floor(plane.api_max_count * ammoCostPerSlot);
+						}
+					});
+				}
+			});
+			// Record hidden fuel & ammo consumption of sortied LBAS
+			console.log("Consumed fuel & ammo:", consumedFuel, consumedAmmo);
+			if(consumedFuel > 0 || consumedAmmo > 0){
+				KC3Database.Naverall({
+					hour: hour,
+					type: "lbas" + KC3SortieManager.map_world,
+					data: [-consumedFuel,-consumedAmmo,0,0].concat([0,0,0,0])
+				});
+				var fuel = PlayerManager.hq.lastMaterial[0] - consumedFuel,
+					ammo = PlayerManager.hq.lastMaterial[1] - consumedAmmo,
+					steel = PlayerManager.hq.lastMaterial[2],
+					bauxite = PlayerManager.hq.lastMaterial[3];
+				PlayerManager.setResources([fuel, ammo, steel, bauxite], hour);
+				KC3Network.trigger("Consumables");
+			}
+			// TODO Show indicator of sortied LBAS at panel (also show striked nodes name?)
 		},
 		
 		/* Traverse Map
@@ -1147,6 +1185,7 @@ Previously known as "Reactor"
 					data: [0,0,0,consumedBauxite].concat([0,0,0,0])
 				});
 				PlayerManager.setResources([fuel, ammo, steel, bauxite] , hour);
+				KC3Network.trigger("Consumables");
 			}
 			KC3Network.trigger("Lbas");
 		},
@@ -1177,6 +1216,7 @@ Previously known as "Reactor"
 				data: [consumedFuel,0,0,consumedBauxite].concat([0,0,0,0])
 			});
 			PlayerManager.setResources([fuel, ammo, steel, bauxite] , hour);
+			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Lbas");
 		},
 		
