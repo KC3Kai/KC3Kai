@@ -38,7 +38,7 @@
 	
 	KC3LandBase.prototype.isPlanesSupplied = function(){
 		return this.planes.every(function(p){
-			return !p.api_slotid ||
+			return !p.api_slotid || p.api_state !== 1 ||
 				(!!p.api_max_count && p.api_count === p.api_max_count);
 		});
 	};

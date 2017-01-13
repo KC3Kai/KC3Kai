@@ -861,6 +861,18 @@ Previously known as "Reactor"
 			KC3Network.trigger("Fleet");
 		},
 		
+		/* Start LBAS Sortie
+		-------------------------------------------------------*/
+		"api_req_map/start_air_base":function(params, response, headers){
+			var strikePoint1 = params.api_strike_point_1,
+				strikePoint2 = params.api_strike_point_2,
+				strikePoint3 = params.api_strike_point_3;
+			/* What can be done here?
+			 *   Record fuel & ammo consumption of sortie LBAS
+			 *   Show indicator of sortie LBAS at panel (also show striked nodes name?)
+			 */
+		},
+		
 		/* Traverse Map
 		-------------------------------------------------------*/
 		"api_req_map/next":function(params, response, headers){
@@ -1091,8 +1103,13 @@ Previously known as "Reactor"
 			$.each(PlayerManager.bases, function(i, base){
 				if(base.map == params.api_area_id && base.rid == params.api_base_id){
 					base.range = response.api_data.api_distance;
+					/* not work for swapping planes by drag and drop
 					$.each(params.api_squadron_id.split("%2C"), function(j, sid){
 						base.planes[sid-1] = response.api_data.api_plane_info[j];
+					});
+					*/
+					$.each(response.api_data.api_plane_info, function(_, p){
+						base.planes[p.api_squadron_id-1] = p;
 					});
 				}
 			});

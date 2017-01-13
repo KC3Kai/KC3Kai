@@ -455,6 +455,13 @@ Used by SortieManager
 				this.planeJetBombers.abyssal[0] = jetPlanePhase.api_stage2.api_e_count;
 				this.planeJetBombers.abyssal[1] = jetPlanePhase.api_stage2.api_e_lostcount;
 			}
+			// Jet planes consume steels each battle based on:
+			// pendingConsumingSteel = floor(jetMaster.api_cost * ship.slots[jetIdx] * 0.2)
+			/* Pseudocode of logic:
+			 PlayerManager.fleets[fleetId - 1].forEach(ship):
+			   if ship.equipment(i) === jet && ship.slots[i] > 0:
+			     ship.pendingConsuming[steel] = Math.floor(ship.slots[i] * jet.master().api_costs * 0.2)
+			*/
 		}
 		
 		// Boss Debuffed
