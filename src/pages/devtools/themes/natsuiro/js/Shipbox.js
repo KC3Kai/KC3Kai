@@ -116,7 +116,11 @@ KC3改 Ship Box for Natsuiro theme
 		$(".ship_bars", this.element).attr("title",
 			KC3Meta.term("PanelCombinedShipBarsHint")
 			.format(this.shipData.exp[1], Math.ceil(this.fuelPercent*100), Math.ceil(this.ammoPercent*100))
-			+ "\n" + KC3Meta.term("PanelResupplyCosts").format(resupplyCost.fuel, resupplyCost.ammo, resupplyCost.bauxite)
+			+ "\n" + KC3Meta.term("PanelResupplyCosts").format(
+				"+{0} \u27A4{1}".format(resupplyCost.fuel, this.shipData.master().api_fuel_max),
+				"+{0} \u27A4{1}".format(resupplyCost.ammo, this.shipData.master().api_bull_max),
+				resupplyCost.bauxite
+			)
 		);
 		
 		if(!this.showCombinedFleetBars){
@@ -155,11 +159,16 @@ KC3改 Ship Box for Natsuiro theme
 		if(this.fuelPercent<1 || this.ammoPercent<1){
 			var resupplyCost = this.shipData.calcResupplyCost(-1, -1, true);
 			$(".ship_supply", this.element).attr("title",
-				KC3Meta.term("PanelResupplyCosts")
-				.format(resupplyCost.fuel, resupplyCost.ammo, resupplyCost.bauxite)
+				KC3Meta.term("PanelResupplyCosts").format(
+					"+{0} \u27A4{1}".format(resupplyCost.fuel, this.shipData.master().api_fuel_max),
+					"+{0} \u27A4{1}".format(resupplyCost.ammo, this.shipData.master().api_bull_max),
+					resupplyCost.bauxite
+				)
 			);
 		} else {
-			$(".ship_supply", this.element).attr("title", "");
+			$(".ship_supply", this.element).attr("title",
+				"\u27A4{0}\n\u27A4{1}".format(this.shipData.master().api_fuel_max, this.shipData.master().api_bull_max)
+			);
 		}
 
 		this.showEquipment(0);
