@@ -388,7 +388,7 @@
 			$.each([0,1,2,3,4], function(_,ind) {
 				self.showKCGear(
 					$(".ship_gear_"+(ind+1), shipBox),
-					ind === 4 ? kcShip.exItem() : kcShip.equipment(ind),
+					kcShip.equipment(ind),
 					kcShip.slots[ind]);
 			});
 		},
@@ -451,19 +451,23 @@
 				ship.lk[0] = shipObj.luck;
 				ship.fp[0] = shipObj.fp || 0;
 				ship.tp[0] = shipObj.tp || 0;
-				ship.items = [1,2,3,4];
+				ship.items = [-1,-1,-1,-1];
 				ship.slots = masterData.api_maxeq;
-				ship.ex_item = 5;
+				ship.ex_item = 0;
 				ship.GearManager = {
 					get: function(ind) {
-						return equipmentObjectArr[ind-1];
+						return equipmentObjectArr[ind-1] || new KC3Gear();
 					}
 				};
 
 				$.each( shipObj.equipments, function(ind,equipment) {
+					if (!equipment) return;
 					var gear = new KC3Gear();
 					equipmentObjectArr.push( gear );
-					if (!equipment) return;
+					if(ind >= 4)
+						ship.ex_item = equipmentObjectArr.length;
+					else
+						ship.items[ind] = equipmentObjectArr.length;
 					gear.masterId = equipment.id;
 					gear.itemId = ship.items[ind];
 					gear.stars = equipment.improve ? equipment.improve : 0;
