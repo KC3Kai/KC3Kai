@@ -46,6 +46,9 @@
 			for(ctr in PlayerManager.bases){
 				this.checkLbasSlotForItemHolder(PlayerManager.bases[ctr]);
 			}
+			for(ctr in PlayerManager.baseConvertingSlots){
+				this._holders["s"+PlayerManager.baseConvertingSlots[ctr]] = "LbasMoving";
+			}
 			
 			// Compile ships on Index
 			var thisType, thisSlotitem, thisGearInstance;
@@ -243,6 +246,11 @@
 							ThisCapacity = ThisPlane.MyHolder().planes
 								.filter(lbasPlanesFilter)[0].api_max_count;
 							// Lazy to compute fighter power for LBAS :)
+						} else if(ThisPlane.MyHolder() === "LbasMoving"){
+							$(".holder_pic img", PlaneBox).attr("src", "../../../../assets/img/items/33.png" );
+							$(".holder_name", PlaneBox).text( "LBAS Moving" );
+							$(".holder_level", PlaneBox).text( "" );
+							ThisCapacity = "";
 						} else {
 							$(".holder_pic img", PlaneBox).attr("src", KC3Meta.shipIcon(ThisPlane.MyHolder().masterId) );
 							$(".holder_name", PlaneBox).text( ThisPlane.MyHolder().name() );

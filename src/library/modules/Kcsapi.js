@@ -154,6 +154,21 @@ Previously known as "Reactor"
 			
 			PlayerManager.loadBases();
 			
+			PlayerManager.baseConvertingSlots = [];
+			if(typeof response.api_data.api_plane_info !== "undefined"){
+				// Let client know: these type of slotitems is free
+				/*
+				if(!!response.api_data.api_plane_info.api_unset_slot){
+				}
+				*/
+				// Let client know: these slotitems are moving, not equippable
+				// For now, moving peroid of LBAS plane is 12 mins.
+				if(Array.isArray(response.api_data.api_plane_info.api_base_convert_slot)){
+					[].push.apply(PlayerManager.baseConvertingSlots, response.api_data.api_plane_info.api_base_convert_slot);
+				}
+			}
+			localStorage.setObject("baseConvertingSlots", PlayerManager.baseConvertingSlots);
+			
 			KC3Network.trigger("HQ");
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("ShipSlots");

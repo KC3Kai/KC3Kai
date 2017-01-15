@@ -217,6 +217,19 @@ Saves and loads list to and from localStorage
 			}
 		},
 		
+		// Look for ships by specified conditions
+		find :function( cond ){
+			var result = [];
+			var s;
+			for(var i in this.list) {
+				x = this.list[i];
+				if(cond.call(x, x)) {
+					result.push(x);
+				}
+			}
+			return result;
+		},
+		
 		// Locate which fleet the ship is in, return -1 if not in any fleet
 		locateOnFleet: function( rosterId ){
 			var flatShips  = PlayerManager.fleets

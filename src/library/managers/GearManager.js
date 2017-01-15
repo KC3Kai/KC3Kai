@@ -77,6 +77,19 @@ Saves and loads list to and from localStorage
 			});
 		},
 		
+		// Look for items by specified conditions
+		find :function( cond ){
+			var result = [];
+			var x;
+			for(var i in this.list) {
+				x = this.list[i];
+				if(cond.call(x, x)) {
+					result.push(x);
+				}
+			}
+			return result;
+		},
+		
 		// Add or replace an item on the list
 		add :function(data){
 			if(typeof data.api_id != "undefined"){
