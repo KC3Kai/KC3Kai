@@ -2623,6 +2623,7 @@
 			var availableExpeditions = KE.getAvailableExpeditions( fleet );
 
 			var unsatRequirements = KER.unsatisfiedRequirements(selectedExpedition)(fleet);
+			var condCheckWithoutResupply = unsatRequirements.length === 0;
 
 			//Don't forget to use KERO.*ToObject to convert raw data to JS friendly objs
 			var rawExpdReqPack = KERO.getExpeditionRequirementPack(selectedExpedition);
@@ -2672,9 +2673,10 @@
 			// and is capped at 99%.
 			// "???" instead of "?" to make it more noticable.
 			var sparkedCount = fleetObj.ship().filter( function(s) { return s.morale >= 50; } ).length;
-			var estSuccessRate = "~" + Math.min( 99, 19 * sparkedCount ) + "%";
+			var estSuccessRate = Math.min( 99, 19 * sparkedCount );
+			var estSuccessRateText = "~" + estSuccessRate + "%";
 			var fleetDrumCount = fleetObj.countDrums();
-			jqGSRate.text( sparkedCount < 4 ? "???" : estSuccessRate );
+			jqGSRate.text( sparkedCount < 4 ? "???" : estSuccessRateText );
 			// reference: http://wikiwiki.jp/kancolle/?%B1%F3%C0%AC
 			var gsDrumCountTable = {
 				21: 3+1,
@@ -2813,7 +2815,7 @@
 				markFailed( $( ".module.activity .activity_expeditionPlanner .text.supplyCheck" ) );
 			}
 
-			if (unsatRequirements.length === 0 && fleetObj.isSupplied()) {
+			if (condCheckWithoutResupply && fleetObj.isSupplied()) {
 				markPassed( $(".module.activity .activity_expeditionPlanner .dropdown_title") );
 			} else {
 				markFailed( $(".module.activity .activity_expeditionPlanner .dropdown_title") );
