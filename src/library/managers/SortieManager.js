@@ -375,21 +375,23 @@ Xxxxxxx
 			localStorage.setObject('sortie',this);
 		},
 		
-		endSortie :function(){
-			var
-				pvpData = JSON.parse(localStorage.statistics || "{}").pvp,
-				sentFleet = this.fleetSent,
-				self = this,
-				cons = {};
-			this.fleetSent = 1;
-			cons.name = self.isPvP() ? (
+		sortieName :function(diff){
+			var pvpData = JSON.parse(localStorage.statistics || "{}").pvp;
+			return this.isPvP() ? (
 				/* There's a possibility to encounter String bug
 				   -- if either win/lose counter is zero
 				*/
-				"pvp" + (self.onSortie = (Number(pvpData.win) + Number(pvpData.lose) + 1))
-			) : ("sortie" + self.onSortie);
+				"pvp" + (this.onSortie = (Number(pvpData.win) + Number(pvpData.lose) + (diff||1)))
+			) : ("sortie" + this.onSortie);
+		},
+		
+		endSortie :function(){
+			var sentFleet = this.fleetSent,
+				self = this,
+				cons = {};
+			this.fleetSent = 1;
+			cons.name = self.sortieName();
 			cons.resc = Array.apply(null,{length:8}).map(function(){return 0;});
-			console.log("Pre-%s State",cons.name,PlayerManager.hq.lastSortie);
 			// Calculate sortie difference with buffer
 			(PlayerManager.hq.lastSortie || []).forEach(function(fleet,fleet_id){
 				fleet.forEach(function(after,ship_fleet){
@@ -414,21 +416,23 @@ Xxxxxxx
 						repLen   = before.repair.length * !self.isPvP(),
 						repair   = [1,2,9].map(function(x){
 							return (x<repLen) ? Math.min(0,after.repair[x] - before.repair[x]) : 0;
-						});
+						}),
+						pendingCon = before.pendingConsumption[cons.name];
 					if(!self.isPvP())
 						before.lastSortie.unshift(cons.name);
-					if(!(supply.every(function(matr){return !matr;}) && repair.every(function(matr){return !matr;})))
-						if(true) {
-							console.log(rosterId,repair);
-							before.pendingConsumption[cons.name] = [supply,repair];
-						} else
-							[supply.repair].forEach(function(cost){
-								cost.forEach(function(matr,indx){
-									cons.resc[indx] -= matr;
-								});
-							});
+					console.log("Pending consumption",pendingCon);
+					// Count steel consumed by jet
+					if(Array.isArray(pendingCon) && pendingCon.length > 2) {
+						cons.resc[2] += pendingCon[2][0] || 0;
+						pendingCon.splice(2,1);
+					}
+					if(!(supply.every(function(matr){return !matr;}) && repair.every(function(matr){return !matr;}))){
+						console.log("Repair consumption",rosterId,repair);
+						before.pendingConsumption[cons.name] = [supply, repair];
+					}
 				});
 			});
+			console.log("Pre-%s State",cons.name,cons.resc,PlayerManager.hq.lastSortie);
 			// Ignore every resource gain if disconnected during sortie
 			if(this.onCat)
 				this.materialGain.fill(0);

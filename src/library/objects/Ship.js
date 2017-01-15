@@ -53,10 +53,11 @@ KC3改 Ship Object
 			/* Data Example
 			typeName: type + W {WorldNum} + M {MapNum} + literal underscore + type_id
 				type_id can be described as sortie/pvp/expedition id
-			valueStructure: typeName int[2][3] of [fuel, ammo, bauxites] and [fuel, steel, buckets]
+			valueStructure: typeName int[3][3] of [fuel, ammo, bauxites] and [fuel, steel, buckets] and [steel]
 				"sortie3000":[[12,24, 0],[ 0, 0, 0]], // OREL (3 nodes)
 				"sortie3001":[[ 8,16, 0],[ 0, 0, 0]], // SPARKLE GO 1-1 (2 nodes)
 				"sortie3002":[[ 4,12, 0],[ 0, 0, 0]], // PVP (1 node+yasen)
+				"sortie3003":[[ 0, 0, 0],[ 0, 0, 0],[-88]], // 1 node with Jet battle of 36 slot
 
 				Practice and Expedition automatically ignore repair consumption.
 				For every action will be recorded before the sortie.
@@ -478,9 +479,10 @@ KC3改 Ship Object
 	   0 <= fuelPercent <= 1, < 0 use current fuel
 	   0 <= ammoPercent <= 1, < 0 use current ammo
 	   to calculate bauxite cost: bauxiteNeeded == true
-	   returns an object: {fuel: <fuelCost>, ammo: <ammoCost>, bauxite: <bauxiteCost>}
+	   to calculate steel cost per battles: steelNeeded == true
+	   returns an object: {fuel: <fuelCost>, ammo: <ammoCost>, steel: <steelCost>, bauxite: <bauxiteCost>}
 	 */
-	KC3Ship.prototype.calcResupplyCost = function(fuelPercent, ammoPercent, bauxiteNeeded) {
+	KC3Ship.prototype.calcResupplyCost = function(fuelPercent, ammoPercent, bauxiteNeeded, steelNeeded) {
 		var self = this;
 		var master = this.master();
 		var fullFuel = master.api_fuel_max;
@@ -514,7 +516,43 @@ KC3改 Ship Object
 			// via http://kancolle.wikia.com/wiki/Marriage
 			//result.bauxite = marriageConserve(result.bauxite);
 		}
+		if(!!steelNeeded){
+			result.steel = this.calcJetsSteelCost();
+		}
 		return result;
+	};
+
+	/**
+	 * Calculate steel cost of jet aircraft for 1 battle based on current slot size.
+	 * returns total steel cost for this ship at this time
+	 */
+	KC3Ship.prototype.calcJetsSteelCost = function(currentSortieId) {
+		var i, item, pc, self = this;
+		var totalSteel = 0, consumedSteel = 0;
+		for(i = 0; i < self.items.length; i++) {
+			item = self.equipment(i);
+			// Is Jet aircraft and left slot > 0
+			if(item.masterId > 0 && item.master().api_type[2] == 57 && self.slots[i] > 0) {
+				consumedSteel = Math.floor(
+					self.slots[i]
+					* item.master().api_cost
+					* KC3GearManager.jetBomberSteelCostRatioPerSlot
+				) || 0;
+				totalSteel += consumedSteel;
+				if(!!currentSortieId) {
+					pc = self.pendingConsumption[currentSortieId];
+					if(!pc) {
+						pc = [[0,0,0],[0,0,0],[0]];
+						self.pendingConsumption[currentSortieId] = pc;
+					}
+					pc[2][0] -= consumedSteel;
+				}
+			}
+		}
+		if(!!currentSortieId && totalSteel > 0) {
+			KC3ShipManager.save();
+		}
+		return totalSteel;
 	};
 
 	/* Expedition Supply Change Check */

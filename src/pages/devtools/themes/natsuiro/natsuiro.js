@@ -1315,9 +1315,10 @@
 					$(".module.status .status_supply .status_text").addClass("bad");
 				}
 				$(".module.status .status_supply").attr("title",
-					FleetSummary.supplied ? "": KC3Meta.term("PanelResupplyCosts").format(
+					KC3Meta.term("PanelResupplyCosts").format(
 						FleetSummary.supplyCost.fuel, FleetSummary.supplyCost.ammo, FleetSummary.supplyCost.bauxite
-					)
+					) + (!FleetSummary.supplyCost.steel ? "" :
+						"\n" + KC3Meta.term("PanelConsumedSteel").format(FleetSummary.supplyCost.steel))
 				);
 
 				// STATUS: MORALE
