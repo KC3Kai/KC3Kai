@@ -40,7 +40,7 @@ KC3改 Ship Box for Natsuiro theme
 		tooltip += "\n" + KC3Meta.term("ShipAAAdjusted")
 			.format( this.shipData.adjustedAntiAir() ) ;
 		tooltip += "\n" + KC3Meta.term("ShipAAShotdownRate")
-			.format( Math.floor(this.shipData.proportionalShotdownRate() * 100) );
+			.format( Math.qckInt("floor", this.shipData.proportionalShotdownRate(), 3) * 100 );
 		var fixedShotdownRange = this.shipData.fixedShotdownRange(ConfigManager.aaFormation);
 		var fleetPossibleAaci = fixedShotdownRange[2];
 		if(fleetPossibleAaci > 0){
