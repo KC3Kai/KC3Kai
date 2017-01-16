@@ -2890,11 +2890,17 @@
 			$(".activity_gunfit .fit_ship_name").text( data.shipObj.name() );
 			$(".activity_gunfit .fit_ship_level span.value").text( data.shipObj.level );
 			
-			$(".activity_gunfit .fit_gear_pic img").attr("src", "../../../../assets/img/items/"+data.gearObj.master().api_type[3]+".png");
-			$(".activity_gunfit .fit_gear_name").text( data.gearObj.name() );
-			if (data.gearObj.stars > 0) {
-				$(".activity_gunfit .fit_gear_level span").text( data.gearObj.stars );
+			if(data.gearObj.masterId > 0){
+				$(".activity_gunfit .fit_gear_pic img").attr("src", "../../../../assets/img/items/"+data.gearObj.master().api_type[3]+".png");
+				$(".activity_gunfit .fit_gear_name").text( data.gearObj.name() );
+				if (data.gearObj.stars > 0) {
+					$(".activity_gunfit .fit_gear_level span").text( data.gearObj.stars );
+				} else {
+					$(".activity_gunfit .fit_gear_level").hide();
+				}
 			} else {
+				$(".activity_gunfit .fit_gear_pic img").attr("src", "../../../../assets/img/ui/empty.png");
+				$(".activity_gunfit .fit_gear_name").text("");
 				$(".activity_gunfit .fit_gear_level").hide();
 			}
 			if (data.thisFit !== false) {
