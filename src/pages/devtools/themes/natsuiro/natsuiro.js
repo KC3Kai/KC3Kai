@@ -467,6 +467,13 @@
 			$(".summary-airfp .summary_text").text( (selectedFleet < 5) ? PlayerManager.fleets[selectedFleet-1].fighterPowerText() : PlayerManager.fleets[0].fighterPowerText() );
 		}).addClass("hover");
 
+		// AntiAir Formation Toggle
+		$(".summary-antiair").on("click",function(){
+			ConfigManager.load();
+			ConfigManager.scrollAntiAirFormation(selectedFleet === 5);
+			NatsuiroListeners.Fleet();
+		}).addClass("hover");
+
 		// Timer Type Toggle
 		$(".status_docking,.status_akashi").on("click",function(){
 			ConfigManager.scrollTimerType();
@@ -1177,8 +1184,11 @@
 				// Compile fleet attributes
 				FleetSummary = {
 					lv: MainFleet.totalLevel() + EscortFleet.totalLevel(),
-					elos: Math.qckInt(null,MainFleet.eLoS()+EscortFleet.eLoS(),2),
+					elos: Math.qckInt("floor", MainFleet.eLoS()+EscortFleet.eLoS(), 1),
 					air: MainFleet.fighterPowerText(),
+					antiAir: Math.floor(AntiAir.fleetCombinedAdjustedAntiAir(
+						MainFleet, EscortFleet,
+						AntiAir.getFormationModifiers(ConfigManager.aaFormation))),
 					speed:
 						(MainFleet.fastFleet && EscortFleet.fastFleet)
 						? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow"),
@@ -1238,8 +1248,9 @@
 				// Compile fleet attributes
 				FleetSummary = {
 					lv: CurrentFleet.totalLevel(),
-					elos: Math.round( CurrentFleet.eLoS() * 100) / 100,
+					elos: Math.qckInt("floor", CurrentFleet.eLoS(), 1),
 					air: CurrentFleet.fighterPowerText(),
+					antiAir: CurrentFleet.adjustedAntiAir(ConfigManager.aaFormation),
 					speed: CurrentFleet.speed(),
 					docking: MainRepairs.docking,
 					akashi: MainRepairs.akashi,
@@ -1276,12 +1287,16 @@
 			$(".summary-level .summary_text").text( FleetSummary.lv );
 			$(".summary-eqlos .summary_text").text( FleetSummary.elos );
 			$(".summary-airfp .summary_text").text( FleetSummary.air );
+			$(".summary-antiair .summary_icon img")
+				.attr("src", KC3Meta.formationIcon(ConfigManager.aaFormation));
+			$(".summary-antiair .summary_text").text( FleetSummary.antiAir )
+				.parent().attr("title", KC3Meta.formationText(ConfigManager.aaFormation) );
 			$(".summary-speed .summary_text").text( FleetSummary.speed );
 			// F33 different factors for now: 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
 			// Not support for combined fleet yet as factor not sure for event maps
 			if(ConfigManager.elosFormula === 4 && selectedFleet < 5){
-				var f33x3 = Math.round( PlayerManager.fleets[selectedFleet-1].eLos4(3) * 100) / 100;
-				var f33x4 = Math.round( PlayerManager.fleets[selectedFleet-1].eLos4(4) * 100) / 100;
+				var f33x3 = Math.qckInt("floor", PlayerManager.fleets[selectedFleet-1].eLos4(3), 1);
+				var f33x4 = Math.qckInt("floor", PlayerManager.fleets[selectedFleet-1].eLos4(4), 1);
 				$(".summary-eqlos").attr("title",
 					"x4={0} \t3-5(G>28), 6-1(E>16, F>25)\nx3={1} \t6-2(F<43/>50, H>40), 6-3(H>38)"
 					.format(f33x4, f33x3)
@@ -1482,7 +1497,7 @@
 						
 						afpLower = shipObj.fighterBounds()[0];
 						if (afpLower > 0) {
-							$(".base_afp .base_stat_value", baseBox).html(shipObj.fighterBounds()[0]+"+");
+							$(".base_afp .base_stat_value", baseBox).html( afpLower+"+" );
 						} else {
 							$(".base_afp .base_stat_value", baseBox).html( KC3Meta.term("None") );
 						}
@@ -2865,7 +2880,11 @@
 		},
 		
 		GunFit: function(data) {
-			console.log("gunfit", data);
+			console.log("GunFit/AACI", data);
+			if(!data.isShow){
+				$("#atab_basic").trigger("click");
+				return;
+			}
 			
 			$(".activity_gunfit .fit_ship_pic img").attr("src", KC3Meta.shipIcon(data.shipObj.masterId) );
 			$(".activity_gunfit .fit_ship_name").text( data.shipObj.name() );
@@ -2878,25 +2897,65 @@
 			} else {
 				$(".activity_gunfit .fit_gear_level").hide();
 			}
-			
-			if (data.thisFit === "") {
-				$(".activity_gunfit .fit_value").text(KC3Meta.term("FitWeightUnknown"));
-				$(".activity_gunfit .fit_value").addClass("fit_unknown");
-			} else {
-				var fitValue = parseInt(data.thisFit, 10);
-				$(".activity_gunfit .fit_value").text(KC3Meta.term("FitWeight_"+fitValue));
-				$(".activity_gunfit .fit_value").removeClass("fit_penalty fit_bonus fit_neutral");
-				if (fitValue < 0) {
-					$(".activity_gunfit .fit_value").addClass("fit_penalty");
-				} else if (fitValue > 0) {
-					$(".activity_gunfit .fit_value").addClass("fit_bonus");
+			if (data.thisFit !== false) {
+				if (data.thisFit === "") {
+					$(".activity_gunfit .fit_value").text(KC3Meta.term("FitWeightUnknown"));
+					$(".activity_gunfit .fit_value").addClass("fit_unknown");
 				} else {
-					$(".activity_gunfit .fit_value").addClass("fit_neutral");
+					var fitValue = parseInt(data.thisFit, 10);
+					$(".activity_gunfit .fit_value").text(KC3Meta.term("FitWeight_"+fitValue));
+					$(".activity_gunfit .fit_value").removeClass("fit_penalty fit_bonus fit_neutral");
+					if (fitValue < 0) {
+						$(".activity_gunfit .fit_value").addClass("fit_penalty");
+					} else if (fitValue > 0) {
+						$(".activity_gunfit .fit_value").addClass("fit_bonus");
+					} else {
+						$(".activity_gunfit .fit_value").addClass("fit_neutral");
+					}
 				}
+				$(".activity_gunfit .fit_value").show();
+			} else {
+				$(".activity_gunfit .fit_value").hide();
 			}
 			
-			$(".activity_gunfit .fit_more").attr("href", "/pages/strategy/strategy.html#mstship-"+data.shipObj.masterId);
-			
+			if (data.shipAacis.length > 0) {
+				var aaciBox, equipIcon, i;
+				$(".activity_gunfit .aaciList").empty();
+				$.each(data.shipAacis, function(idx, aaciObj){
+					aaciBox = $("#factory .aaciPattern").clone();
+					$(".apiId", aaciBox).text(aaciObj.id);
+					if(aaciObj.icons[0] > 0) {
+						$(".shipIcon img", aaciBox)
+							.attr("src", KC3Meta.shipIcon(aaciObj.icons[0]) )
+							.attr("title", KC3Meta.aacitype(aaciObj.id)[0] || "");
+					} else {
+						$(".shipIcon img", aaciBox).hide();
+					}
+					if(aaciObj.icons.length > 1) {
+						for(i = 1; i < aaciObj.icons.length; i++) {
+							equipIcon = String(aaciObj.icons[i]).split(/[+-]/);
+							$("<img/>")
+								.attr("src", "../../../../assets/img/items/"+equipIcon[0]+".png")
+								.attr("title", KC3Meta.aacitype(aaciObj.id)[i] || "")
+								.appendTo($(".equipIcons", aaciBox));
+							if(equipIcon.length>1) {
+								$('<img/>')
+									.attr("src", "../../../../assets/img/items/"+equipIcon[1]+".png")
+									.addClass(aaciObj.icons[i].indexOf("-")>-1 ? "minusIcon" : "plusIcon")
+									.appendTo($(".equipIcons", aaciBox));
+							}
+						}
+					}
+					$(".fixed", aaciBox).text(aaciObj.fixed);
+					$(".modifier", aaciBox).text(aaciObj.modifier);
+					$(".activity_gunfit .aaci").height(data.thisFit !== false ? 88 : 118);
+					if(idx === 0) aaciBox.addClass("triggerable");
+					aaciBox.appendTo(".activity_gunfit .aaciList");
+				});
+				$(".activity_gunfit .aaci").show();
+			} else {
+				$(".activity_gunfit .aaci").hide();
+			}
 			
 			$(".module.activity .activity_tab").removeClass("active");
 			$("#atab_activity").addClass("active");

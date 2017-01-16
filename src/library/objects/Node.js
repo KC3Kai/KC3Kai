@@ -1297,6 +1297,11 @@ Used by SortieManager
 						var sentFleet = PlayerManager.fleets[fireShipPos >= 6 ? 1 : KC3SortieManager.fleetSent-1];
 						var shipName = KC3ShipManager.get(sentFleet.ships[fireShipPos % 6]).name();
 						aaciTips += (!!aaciTips ? "\n" : "") + shipName;
+						var aaciType = AntiAir.AACITable[fire.api_kind];
+						if(!!aaciType){
+							aaciTips += "\n[{0}] +{1} (x{2})"
+								.format(aaciType.id, aaciType.fixed, aaciType.modifier);
+						}
 					}
 					var itemList = fire.api_use_items;
 					if(!!itemList && itemList.length > 0){

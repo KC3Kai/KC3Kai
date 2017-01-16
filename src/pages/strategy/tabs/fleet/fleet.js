@@ -353,8 +353,11 @@
 			// Show fleet info
 			$(".detail_level .detail_value", fleetBox).text( kcFleet.totalLevel() );
 			$(".detail_los .detail_icon img", fleetBox).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png" );
-			$(".detail_los .detail_value", fleetBox).text( Math.round( kcFleet.eLoS() * 100) / 100 );
+			$(".detail_los .detail_value", fleetBox).text( Math.qckInt("floor", kcFleet.eLoS(), 1) );
 			$(".detail_air .detail_value", fleetBox).text( kcFleet.fighterPowerText() );
+			$(".detail_antiair .detail_value", fleetBox).text( kcFleet.adjustedAntiAir(ConfigManager.aaFormation) )
+				.attr("title", "Line-Ahead: {0}\nDouble-Line: {1}\nDiamond: {2}"
+					.format(kcFleet.adjustedAntiAir(1), kcFleet.adjustedAntiAir(2), kcFleet.adjustedAntiAir(3)) );
 			$(".detail_speed .detail_value", fleetBox).text( kcFleet.speed() );
 			$(".detail_support .detail_value", fleetBox).text( kcFleet.supportPower() );
 		},
@@ -371,7 +374,7 @@
 			$(".ship_type", shipBox).text( kcShip.stype() );
 			$(".ship_pic img", shipBox).attr("src", KC3Meta.shipIcon( kcShip.masterId ) );
 			// TODO Link to ship list instead of ship library
-			//$(".ship_pic img", shipBox).attr("title", kcShip.rosterId );
+			$(".ship_pic img", shipBox).attr("title", kcShip.rosterId );
 			$(".ship_pic img", shipBox).attr("alt", kcShip.masterId );
 			$(".ship_pic img", shipBox).click(function(){
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
@@ -385,7 +388,7 @@
 			$.each([0,1,2,3,4], function(_,ind) {
 				self.showKCGear(
 					$(".ship_gear_"+(ind+1), shipBox),
-					ind === 4 ? kcShip.exItem() : kcShip.equipment(ind),
+					kcShip.equipment(ind),
 					kcShip.slots[ind]);
 			});
 		},
@@ -444,21 +447,27 @@
 				ship.masterId = shipObj.id;
 				ship.level = shipObj.level;
 				// calculate naked LoS
-				ship.ls[0] = ship.estimateNakedLoS() + ship.equipmentTotalLoS();
+				ship.ls[0] = shipObj.ls || (ship.estimateNakedLoS() + ship.equipmentTotalLoS());
 				ship.lk[0] = shipObj.luck;
-				ship.items = [1,2,3,4];
+				ship.fp[0] = shipObj.fp || 0;
+				ship.tp[0] = shipObj.tp || 0;
+				ship.items = [-1,-1,-1,-1];
 				ship.slots = masterData.api_maxeq;
-				ship.ex_item = 5;
+				ship.ex_item = 0;
 				ship.GearManager = {
 					get: function(ind) {
-						return equipmentObjectArr[ind-1];
+						return equipmentObjectArr[ind-1] || new KC3Gear();
 					}
 				};
 
 				$.each( shipObj.equipments, function(ind,equipment) {
+					if (!equipment) return;
 					var gear = new KC3Gear();
 					equipmentObjectArr.push( gear );
-					if (!equipment) return;
+					if(ind >= 4)
+						ship.ex_item = equipmentObjectArr.length;
+					else
+						ship.items[ind] = equipmentObjectArr.length;
 					gear.masterId = equipment.id;
 					gear.itemId = ship.items[ind];
 					gear.stars = equipment.improve ? equipment.improve : 0;
@@ -513,6 +522,9 @@
 						rid: ship.rosterId,
 						level: ship.level,
 						luck: ship.lk[0],
+						ls: ship.ls[0],
+						fp: ship.fp[0],
+						tp: ship.tp[0],
 						equipments: convertEquipmentsOf(ship)
 					};
 					fleetObjShips.push( shipObj );

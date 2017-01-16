@@ -475,6 +475,12 @@ Contains summary information about a fleet and its 6 ships
 		return (this.fastFleet) ? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow");
 	};
 
+	KC3Fleet.prototype.adjustedAntiAir = function(formationId){
+		return Math.floor(
+			AntiAir.fleetAdjustedAntiAir(this, AntiAir.getFormationModifiers(formationId || 1))
+		);
+	};
+
 	/* Calculate expedition cost of a fleet
 	   -------------------------------------
 	   1 <= expeditionId <= 40

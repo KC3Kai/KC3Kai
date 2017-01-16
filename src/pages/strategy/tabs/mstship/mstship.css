@@ -451,7 +451,8 @@
 	width:15px;
 	height:15px;
 	margin:6px 0px 0px -12px;
-	position:absolute;
+	position:relative;
+	pointer-events:none;
 	filter:hue-rotate(75deg);
 	transform:scaleX(-1);
 }
@@ -459,7 +460,8 @@
 	width:15px;
 	height:15px;
 	margin:6px 0px 0px -12px;
-	position:absolute;
+	position:relative;
+	pointer-events:none;
 	filter:hue-rotate(-90deg);
 	transform:scaleX(-1);
 }
