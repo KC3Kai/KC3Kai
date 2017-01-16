@@ -199,7 +199,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				ConfigManager.load();
 				response({ mode: 'frame', scale: ConfigManager.api_gameScale});
 				
-			} else if(ConfigManager.dmm_customize) {
+			} else if(ConfigManager.dmm_customize && localStorage.extract_api != "true") {
 				// DMM CUSTOMIZATION
 				console.log('customize DMM');
 				chrome.tabs.update(sender.tab.id, {
