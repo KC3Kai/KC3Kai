@@ -26,6 +26,10 @@ AntiAir: anti-air related calculations
 	- shipFixedShotdownRange(shipObj, fleetObj, formationModifier)
 	  like "shipFixedShotdown" but this one returns a range by considering
 	  all possible AACIs "shipObj" can perform and use the largest modifier as upper bound.
+	- shipFixedShotdownRangeWithAACI(shipObj, fleetObj, formationModifier)
+	  the same as "shipFixedShotdownRange" except returning the AACI ID of largest modifier.
+	- shipMaxShotdownAllBonuses(shipObj)
+	  return the largest fixed and with modifier bonuses of all possible AACIs "shipObj" can perform.
 	- shipPossibleAACIs(shipObj) / fleetPossibleAACIs(fleetObj)
 	  returns a list of possible AACI API Ids that ship / fleet could perform.
 	- shipAllPossibleAACIs(mst)
@@ -36,8 +40,9 @@ AntiAir: anti-air related calculations
 		- id: AACI API Id
 		- fixed: fixed shotdown bonus
 		- modifier: the "K" value to "shipFixedShotdown" when this AACI is triggered
-		- predicate: calling "predicateShip(shipObj)" will test whether "shipObj" can
-		  perform this particular kind of AACI.
+		- icon: IDs of icons representing this kind of AACI
+		- predicateShipMst: test whether "mst" can perform this kind of AACI ingoring equipments
+		- predicateShipObj: test whether "shipObj" can perform this particular kind of AACI
 	- other not explicitly listed contents are for debugging or internal use only.
 
  */
@@ -283,9 +288,12 @@ AntiAir: anti-air related calculations
 	}
 
 	function getFormationModifiers(id) {
-		return (id === 1 || id === 4 || id === 5) ? 1  // line ahead / echelon / line abreast
+		return (id === 1 || id === 4 || id === 5) ? 1.0  // line ahead / echelon / line abreast
 			:  (id === 2) ? 1.2 // double line
 			:  (id === 3) ? 1.6 // diamond
+			:  (id === 11 || id === 21) ? 1.1 // Combined anti-sub
+			:  (id === 12 || id === 14 || id === 22 || id === 24) ? 1.0 // Combined forward / battle
+			:  (id === 13 || id === 23) ? 1.5 // Combined diamond
 			:  NaN; // NaN for indicating an invalid id
 	}
 
@@ -293,7 +301,17 @@ AntiAir: anti-air related calculations
 		var allShipEquipmentAA = fleetObj.ship().reduce( function(curAA, ship) {
 			return curAA + shipEquipmentAntiAir(ship, true);
 		}, 0);
-		return 1.54 * Math.floor( formationModifier * allShipEquipmentAA );
+		return (2/1.3) * Math.floor( formationModifier * allShipEquipmentAA );
+	}
+
+	function fleetCombinedAdjustedAntiAir(mainFleetObj, escortFleetObj, formationModifier) {
+		var mainAllShipEquipmentAA = mainFleetObj.ship().reduce( function(curAA, ship) {
+			return curAA + shipEquipmentAntiAir(ship, true);
+		}, 0);
+		var escortAllShipEquipmentAA = escortFleetObj.ship().reduce( function(curAA, ship) {
+			return curAA + shipEquipmentAntiAir(ship, true);
+		}, 0);
+		return (2/1.3) * Math.floor( formationModifier * (mainAllShipEquipmentAA + escortAllShipEquipmentAA) );
 	}
 
 	function shipFixedShotdown(shipObj, fleetObj, formationModifier, K /* AACI modifier, default to 1 */) {
@@ -673,27 +691,29 @@ AntiAir: anti-air related calculations
 	// return: a list of sorted AACI objects order by effect desc,
 	//   as most effective AACI gets priority to be triggered.
 	// param: AACI IDs from possibleAACIs functions
-	function sortedPossibleAaciList(aaciIds) {
+	// param: a optional callback function to customize ordering
+	function sortedPossibleAaciList(aaciIds, sortCallback) {
 		var aaciList = [];
-		$.each( aaciIds, function(i, apiId) {
-			if(!!AACITable[apiId]) aaciList.push( AACITable[apiId] );
-		});
-		aaciList = aaciList.sort(function(a, b) {
-			// Order by fixed desc, modifier desc, icons[0] desc
-			var c = b.fixed - a.fixed
-				|| b.modifier - a.modifier
-				|| b.icons[0] - a.icons[0];
-			return c;
-		});
+		if(!!aaciIds && Array.isArray(aaciIds)) {
+			$.each( aaciIds, function(i, apiId) {
+				if(!!AACITable[apiId]) aaciList.push( AACITable[apiId] );
+			});
+			var defaultOrder = function(a, b) {
+				// Order by fixed desc, modifier desc, icons[0] desc
+				return b.fixed - a.fixed
+					|| b.modifier - a.modifier
+					|| b.icons[0] - a.icons[0];
+			};
+			aaciList = aaciList.sort(sortCallback || defaultOrder);
+		}
 		return aaciList;
 	}
 
-	function sortedFleetPossibleAaciList(triggeredShipAaciList) {
-		var aaciList = triggeredShipAaciList.sort(function(a, b) {
+	function sortedFleetPossibleAaciList(triggeredShipAaciIds) {
+		return sortedPossibleAaciList(triggeredShipAaciIds, function(a, b) {
 			// Order by (API) id desc
 			return b.id - a.id;
-		}) || [];
-		return aaciList;
+		});
 	}
 
 	function shipFixedShotdownRange(shipObj, fleetObj, formationModifier) {
@@ -704,16 +724,39 @@ AntiAir: anti-air related calculations
 		possibleAACIModifiers.push( 1 );
 		var mod = Math.max.apply( null, possibleAACIModifiers );
 		return [ shipFixedShotdown(shipObj, fleetObj, formationModifier, 1),
-				 shipFixedShotdown(shipObj, fleetObj, formationModifier, mod) ];
+				 shipFixedShotdown(shipObj, fleetObj, formationModifier, mod),
+				 mod ];
 	}
 
-	function shipMaxShotdownBonus(shipObj) {
+	function shipFixedShotdownRangeWithAACI(shipObj, fleetObj, formationModifier) {
+		var possibleAaciList = sortedPossibleAaciList(fleetPossibleAACIs(fleetObj),
+			function(a, b){
+				// Order by modifier desc, fixed desc, icons[0] desc
+				return b.modifier - a.modifier
+					|| b.fixed - a.fixed
+					|| b.icons[0] - a.icons[0];
+			});
+		var aaciId = possibleAaciList.length > 0 ? possibleAaciList[0].id : 0;
+		var mod = possibleAaciList.length > 0 ? possibleAaciList[0].modifier : 1;
+		return [ shipFixedShotdown(shipObj, fleetObj, formationModifier, 1),
+				 shipFixedShotdown(shipObj, fleetObj, formationModifier, mod),
+				 aaciId ];
+	}
+
+	function shipMaxShotdownFixedBonus(shipObj) {
 		var possibleBonuses = shipPossibleAACIs(shipObj).map( function( apiId ) {
 			return AACITable[apiId].fixed;
 		});
 		// default value 0 is always available, making call to Math.max always non-empty
 		possibleBonuses.push( 0 );
 		return Math.max.apply( null, possibleBonuses );
+	}
+
+	function shipMaxShotdownAllBonuses(shipObj) {
+		var possibleAaciList = sortedPossibleAaciList(shipPossibleAACIs(shipObj));
+		return possibleAaciList.length > 0 ?
+			[possibleAaciList[0].id, possibleAaciList[0].fixed, possibleAaciList[0].modifier]
+			: [0, 0, 1];
 	}
 
 	// exporting module
@@ -733,9 +776,12 @@ AntiAir: anti-air related calculations
 
 		getFormationModifiers: getFormationModifiers,
 		fleetAdjustedAntiAir: fleetAdjustedAntiAir,
+		fleetCombinedAdjustedAntiAir: fleetCombinedAdjustedAntiAir,
 		shipFixedShotdown: shipFixedShotdown,
 		shipFixedShotdownRange: shipFixedShotdownRange,
-		shipMaxShotdownBonus: shipMaxShotdownBonus,
+		shipFixedShotdownRangeWithAACI: shipFixedShotdownRangeWithAACI,
+		shipMaxShotdownFixedBonus: shipMaxShotdownFixedBonus,
+		shipMaxShotdownAllBonuses: shipMaxShotdownAllBonuses,
 
 		AACITable: AACITable,
 		shipPossibleAACIs: shipPossibleAACIs,

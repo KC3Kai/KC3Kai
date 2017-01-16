@@ -302,6 +302,9 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		}
 	});
 	
-	
-	
 })();
+
+// A timer to make this script always running
+// This is so that chrome will see us as active and will not force an update
+// Aims to avoid automatic closing of the game due to webstore update
+setInterval(function(){}, 3600000);

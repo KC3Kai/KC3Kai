@@ -719,7 +719,7 @@
 						</div>
 					</div>
 					<!-- GUN FIT: Bonus / Penalty -->
-					<div class="activity_box activity_gunfit">
+					<div class="activity_box activity_gunfit activity_dismissable">
 						<div class="fit_ship fit_profile">
 							<div class="fit_ship_pic fit_profile_pic"><img/></div>
 							<div class="fit_ship_name fit_profile_name"></div>
@@ -729,11 +729,14 @@
 						<div class="fit_gear fit_profile">
 							<div class="fit_gear_pic fit_profile_pic"><img/></div>
 							<div class="fit_gear_name fit_profile_name"></div>
-							<div class="fit_gear_level fit_profile_level"><span></span> <img src="../../../../assets/img/client/eqstar.png"></div>
+							<div class="fit_gear_level fit_profile_level"><img src="../../../../assets/img/client/eqstar.png">+<span></span></div>
 							<div class="clear"></div>
 						</div>
 						<div class="fit_value"></div>
-						<a class="fit_more i18n" target="_blank">LearnMore</a>
+						<div class="aaci">
+							<div class="aaciList">
+							</div>
+						</div>
 					</div>
 					
 					<!-- end activity boxes -->
@@ -764,7 +767,7 @@
 			<div class="module summary">
 				<div class="summary_box summary-level">
 					<div class="summary_icon"><img src="../../../../assets/img/stats/lv.png" /></div>
-					<div class="summary_text">0000</div>
+					<div class="summary_text">000</div>
 					<div class="clear"></div>
 				</div>
 				<div class="summary_box summary-eqlos">
@@ -774,7 +777,12 @@
 				</div>
 				<div class="summary_box summary-airfp">
 					<div class="summary_icon"><img src="../../../../assets/img/stats/ac.png" /></div>
-					<div class="summary_text">0000</div>
+					<div class="summary_text">000~</div>
+					<div class="clear"></div>
+				</div>
+				<div class="summary_box summary-antiair">
+					<div class="summary_icon"><img src="../../../../assets/img/stats/aa.png" /></div>
+					<div class="summary_text">000</div>
 					<div class="clear"></div>
 				</div>
 				<div class="summary_box summary-speed">
@@ -1008,6 +1016,15 @@
 			
 			<!-- Ship requirement for expedition checker -->
 			<div class="expPlanner_shipReqBox requirements_textbox expPlanner_text_passed"></div>
+			
+			<!-- Gunfit / AACI patterns -->
+			<div class="aaciPattern">
+				<div class="apiId"></div>
+				<div class="shipIcon"><img/></div>
+				<div class="equipIcons"></div>
+				<div class="fixed"></div>
+				<div class="modifier"></div>
+			</div>
 			
 			<!-- Clonable: LBAS Base -->
 			<div class="airbase">

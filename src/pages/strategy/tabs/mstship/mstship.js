@@ -90,7 +90,7 @@
 
 			// List all ships
 			var shipBox;
-			$.each(KC3Master.all_ships(true), function(index, ShipData){
+			$.each(KC3Master.all_ships(true, true), function(index, ShipData){
 				if(!ShipData) { return true; }
 				
 				shipBox = $(".tab_mstship .factory .shipRecord").clone();
@@ -520,16 +520,15 @@
 								if(equipIcon.length>1) {
 									$('<img/>')
 										.attr("src", "../../../../assets/img/items/"+equipIcon[1]+".png")
-										.attr("title", KC3Meta.aacitype(aaciObj.id)[i] || "")
 										.addClass(aaciObj.icons[i].indexOf("-")>-1 ? "minusIcon" : "plusIcon")
 										.appendTo($(".equipIcons", aaciBox));
 								}
 							}
 						}
 						$(".fixed", aaciBox).text(aaciObj.fixed);
-						$(".modifier", aaciBox).text("+{0}%".format(Math.round((aaciObj.modifier - 1.0)*100)));
-						aaciBox.toggleClass("odd", idx % 2 !== 0);
-						aaciBox.toggleClass("even", idx % 2 === 0);
+						$(".modifier", aaciBox).text(aaciObj.modifier);
+						aaciBox.toggleClass("odd", (idx+1) % 2 !== 0);
+						aaciBox.toggleClass("even", (idx+1) % 2 === 0);
 						aaciBox.appendTo(".aaciList");
 					});
 					$(".aaci").show();
@@ -616,7 +615,8 @@
 							$("img", statBox).attr("src", "../../../../assets/img/stats/"+stat[0]+".png");
 							$(".ship_stat_name", statBox).text(stat[1]);
 							if(stat[0]=="sp"){
-								$(".ship_stat_text", statBox).text({"0":"Land","5":"Slow","10":"Fast"}[shipData.api_soku]);
+								var speedEnNameMap = {"0":"Land","5":"Slow","10":"Fast","15":"Fast+","20":"Fastest"};
+								$(".ship_stat_text", statBox).text(speedEnNameMap[shipData.api_soku]);
 								$(".ship_stat_text", statBox).show();
 								$(".ship_stat_value", statBox).hide();
 							} else {
