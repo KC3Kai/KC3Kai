@@ -154,6 +154,21 @@ Previously known as "Reactor"
 			
 			PlayerManager.loadBases();
 			
+			PlayerManager.baseConvertingSlots = [];
+			if(typeof response.api_data.api_plane_info !== "undefined"){
+				// Let client know: these type of slotitems is free
+				/*
+				if(!!response.api_data.api_plane_info.api_unset_slot){
+				}
+				*/
+				// Let client know: these slotitems are moving, not equippable
+				// For now, moving peroid of LBAS plane is 12 mins.
+				if(Array.isArray(response.api_data.api_plane_info.api_base_convert_slot)){
+					[].push.apply(PlayerManager.baseConvertingSlots, response.api_data.api_plane_info.api_base_convert_slot);
+				}
+			}
+			localStorage.setObject("baseConvertingSlots", PlayerManager.baseConvertingSlots);
+			
 			KC3Network.trigger("HQ");
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("ShipSlots");
@@ -223,7 +238,7 @@ Previously known as "Reactor"
 				exp: response.api_data.api_experience[0]
 			});
 			
-			PlayerManager.consumables.fcoin = response.api_data.api_fcoin;
+			//PlayerManager.consumables.fcoin = response.api_data.api_fcoin;
 			PlayerManager.fleetCount = response.api_data.api_deck;
 			PlayerManager.repairSlots = response.api_data.api_ndoc;
 			PlayerManager.buildSlots = response.api_data.api_kdoc;
@@ -389,6 +404,7 @@ Previously known as "Reactor"
 				PlayerManager.consumables.reinforceExpansion -= 1;
 			}
 			console.log("Extra Slot unlocked for",sid,ship.name());
+			KC3Network.trigger("Consumables");
 		},
 		
 		"api_req_kaisou/marriage":function(params, response, headers){
@@ -860,6 +876,18 @@ Previously known as "Reactor"
 			KC3Network.trigger("Fleet");
 		},
 		
+		/* Start LBAS Sortie
+		-------------------------------------------------------*/
+		"api_req_map/start_air_base":function(params, response, headers){
+			var strikePoint1 = params.api_strike_point_1,
+				strikePoint2 = params.api_strike_point_2,
+				strikePoint3 = params.api_strike_point_3;
+			/* What can be done here?
+			 *   Record fuel & ammo consumption of sortie LBAS
+			 *   Show indicator of sortie LBAS at panel (also show striked nodes name?)
+			 */
+		},
+		
 		/* Traverse Map
 		-------------------------------------------------------*/
 		"api_req_map/next":function(params, response, headers){
@@ -883,6 +911,7 @@ Previously known as "Reactor"
 		/* NORMAL: BATTLE STARTS
 		-------------------------------------------------------*/
 		"api_req_sortie/battle":function(params, response, headers){
+			response.api_data.api_name = response.api_data.api_name || "battle";
 			KC3SortieManager.engageBattle(
 				response.api_data,
 				Date.toUTCseconds(headers.Date)
@@ -890,15 +919,18 @@ Previously known as "Reactor"
 			KC3Network.trigger("BattleStart");
 		},
 		"api_req_sortie/airbattle":function(params, response, headers){
+			response.api_data.api_name = "airbattle";
 			this["api_req_sortie/battle"].apply(this,arguments);
 		},
 		"api_req_sortie/ld_airbattle":function(params, response, headers){
+			response.api_data.api_name = "ld_airbattle";
 			this["api_req_sortie/battle"].apply(this,arguments);
 		},
 		
 		/* PLAYER-ONLY COMBINED FLEET: BATTLE STARTS
 		-------------------------------------------------------*/
 		"api_req_combined_battle/battle":function(params, response, headers){
+			response.api_data.api_name = response.api_data.api_name || "fc_battle";
 			KC3SortieManager.engageBattle(
 				response.api_data,
 				Date.toUTCseconds(headers.Date)
@@ -906,18 +938,22 @@ Previously known as "Reactor"
 			KC3Network.trigger("BattleStart");
 		},
 		"api_req_combined_battle/airbattle":function(params, response, headers){
+			response.api_data.api_name = "fc_airbattle";
 			this["api_req_combined_battle/battle"].apply(this,arguments);
 		},
 		"api_req_combined_battle/battle_water":function(params, response, headers){
+			response.api_data.api_name = "fc_battle_water";
 			this["api_req_combined_battle/battle"].apply(this,arguments);
 		},
 		"api_req_combined_battle/ld_airbattle":function(params, response, headers){
+			response.api_data.api_name = "fc_ld_airbattle";
 			this["api_req_combined_battle/battle"].apply(this,arguments);
 		},
 		
 		/* BATTLE STARTS as NIGHT
 		-------------------------------------------------------*/
 		"api_req_battle_midnight/sp_midnight":function(params, response, headers){
+			response.api_data.api_name = response.api_data.api_name || "sp_midnight";
 			KC3SortieManager.engageBattleNight(
 				response.api_data,
 				Date.toUTCseconds(headers.Date)
@@ -925,19 +961,23 @@ Previously known as "Reactor"
 			KC3Network.trigger("BattleStart");
 		},
 		"api_req_combined_battle/sp_midnight":function(params, response, headers){
+			response.api_data.api_name = "fc_sp_midnight";
 			this["api_req_battle_midnight/sp_midnight"].apply(this,arguments);
 		},
 		"api_req_combined_battle/each_sp_midnight":function(params, response, headers){
+			response.api_data.api_name = "each_sp_midnight";
 			this["api_req_battle_midnight/sp_midnight"].apply(this,arguments);
 		},
 		
 		/* NIGHT BATTLES as SECOND PART
 		-------------------------------------------------------*/
 		"api_req_battle_midnight/battle":function(params, response, headers){
+			response.api_data.api_name = "midnight_battle";
 			KC3SortieManager.engageNight( response.api_data );
 			KC3Network.trigger("BattleNight");
 		},
 		"api_req_combined_battle/midnight_battle":function(params, response, headers){
+			response.api_data.api_name = "fc_midnight_battle";
 			KC3SortieManager.engageNight( response.api_data );
 			KC3Network.trigger("BattleNight");
 		},
@@ -945,6 +985,7 @@ Previously known as "Reactor"
 		/* ENEMY COMBINED FLEET
 		-------------------------------------------------------*/
 		"api_req_combined_battle/ec_battle":function(params, response, headers){
+			response.api_data.api_name = "ec_battle";
 			KC3SortieManager.engageBattle(
 				response.api_data,
 				Date.toUTCseconds(headers.Date)
@@ -952,6 +993,7 @@ Previously known as "Reactor"
 			KC3Network.trigger("BattleStart");
 		},
 		"api_req_combined_battle/ec_midnight_battle":function(params, response, headers){
+			response.api_data.api_name = "ec_midnight_battle";
 			KC3SortieManager.engageNight(
 				response.api_data,
 				Date.toUTCseconds(headers.Date)
@@ -962,6 +1004,7 @@ Previously known as "Reactor"
 		/* BOTH COMBINED FLEET
 		-------------------------------------------------------*/
 		"api_req_combined_battle/each_battle":function(params, response, headers){
+			response.api_data.api_name = response.api_data.api_name || "each_battle";
 			KC3SortieManager.engageBattle(
 				response.api_data,
 				Date.toUTCseconds(headers.Date)
@@ -969,12 +1012,15 @@ Previously known as "Reactor"
 			KC3Network.trigger("BattleStart");
 		},
 		"api_req_combined_battle/each_airbattle":function(params, response, headers){
+			response.api_data.api_name = "each_airbattle";
 			this["api_req_combined_battle/each_battle"].apply(this,arguments);
 		},
 		"api_req_combined_battle/each_battle_water":function(params, response, headers){
+			response.api_data.api_name = "each_battle_water";
 			this["api_req_combined_battle/each_battle"].apply(this,arguments);
 		},
 		"api_req_combined_battle/each_ld_airbattle":function(params, response, headers){
+			response.api_data.api_name = "each_ld_airbattle";
 			this["api_req_combined_battle/each_battle"].apply(this,arguments);
 		},
 		
@@ -1072,8 +1118,13 @@ Previously known as "Reactor"
 			$.each(PlayerManager.bases, function(i, base){
 				if(base.map == params.api_area_id && base.rid == params.api_base_id){
 					base.range = response.api_data.api_distance;
+					/* not work for swapping planes by drag and drop
 					$.each(params.api_squadron_id.split("%2C"), function(j, sid){
 						base.planes[sid-1] = response.api_data.api_plane_info[j];
+					});
+					*/
+					$.each(response.api_data.api_plane_info, function(_, p){
+						base.planes[p.api_squadron_id-1] = p;
 					});
 				}
 			});
@@ -1525,7 +1576,8 @@ Previously known as "Reactor"
 			var
 				resourceUsed = [ params.api_item1, params.api_item2, params.api_item3, params.api_item4 ],
 				failed       = (typeof response.api_data.api_slot_item == "undefined"),
-				ctime        = Math.hrdInt("floor",Date.safeToUtcTime(headers.Date),3,1);
+				ctime        = Math.hrdInt("floor",Date.safeToUtcTime(headers.Date),3,1),
+				hour         = Math.hrdInt("floor",ctime/3.6,3,1);
 			
 			// Log into development History
 			KC3Database.Develop({
@@ -1539,10 +1591,15 @@ Previously known as "Reactor"
 			});
 			
 			KC3Database.Naverall({
-				hour: Math.hrdInt("floor",ctime/3.6,3,1),
+				hour: hour,
 				type: "critem",
 				data: resourceUsed.concat([0,0,!failed,0]).map(function(x){return -x;})
 			});
+			
+			if(Array.isArray(response.api_data.api_material)){
+				PlayerManager.setResources(response.api_data.api_material.slice(0,4), hour);
+				PlayerManager.consumables.devmats = response.api_data.api_material[6];
+			}
 			
 			KC3QuestManager.get(605).increment(); // F1: Daily Development 1
 			KC3QuestManager.get(607).increment(); // F3: Daily Development 2
@@ -1571,6 +1628,7 @@ Previously known as "Reactor"
 				});
 			}
 			
+			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Quests");
 		},
 		

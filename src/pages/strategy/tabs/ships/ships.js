@@ -163,11 +163,11 @@
 				],
 				aa: [MasterShip.api_tyku[1], MasterShip.api_tyku[0]+ThisShip.mod[2], ThisShip.aa[0] ],
 				ar: [MasterShip.api_souk[1], MasterShip.api_souk[0]+ThisShip.mod[3], ThisShip.ar[0] ],
-				as: [this.getDerivedStatNaked("tais", ThisShip.as[0], ThisShip.items), ThisShip.as[0] ],
-				ev: [this.getDerivedStatNaked("houk", ThisShip.ev[0], ThisShip.items), ThisShip.ev[0] ],
-				ls: [this.getDerivedStatNaked("saku", ThisShip.ls[0], ThisShip.items), ThisShip.ls[0] ],
+				as: [this.getDerivedStatNaked("tais", ThisShip.as[0], ThisShip), ThisShip.as[0] ],
+				ev: [this.getDerivedStatNaked("houk", ThisShip.ev[0], ThisShip), ThisShip.ev[0] ],
+				ls: [this.getDerivedStatNaked("saku", ThisShip.ls[0], ThisShip), ThisShip.ls[0] ],
 				lk: ThisShip.lk[0],
-				sp: MasterShip.api_soku,
+				sp: ThisShip.speed,
 				slots: ThisShip.slots,
 				exSlot: ThisShip.ex_item,
 				fleet: ThisShip.onFleet(),
@@ -199,8 +199,8 @@
 			var sCtr, cElm;
 
 			for(sCtr in KC3Meta._stype){
-				// stype 1, 15 not used by shipgirl
-				if(KC3Meta._stype[sCtr] && ["1", "15"].indexOf(sCtr) < 0){
+				// stype 1, 12, 15 not used by shipgirl
+				if(KC3Meta._stype[sCtr] && ["1", "12", "15"].indexOf(sCtr) < 0){
 					cElm = $(".tab_ships .factory .ship_filter_type").clone().appendTo(".tab_ships .filters .ship_types");
 					cElm.data("id", sCtr);
 					$(".filter_name", cElm).text(KC3Meta.stype(sCtr));
@@ -411,11 +411,13 @@
 			self.defineShipFilter(
 				"speed",
 				0,
-				["all","fast","slow"],
+				["all","slow","fast","faster","fastest"],
 				function(curVal,ship) {
 					return (curVal === 0)
-						|| (curVal === 1 && ship.sp >= 10)
-						|| (curVal === 2 && ship.sp < 10);
+						|| (curVal === 1 && ship.sp > 0 && ship.sp < 10)
+						|| (curVal === 2 && ship.sp >= 10 && ship.sp < 15)
+						|| (curVal === 3 && ship.sp >= 15 && ship.sp < 20)
+						|| (curVal === 4 && ship.sp >= 20);
 				});
 
 			self.defineShipFilter(
@@ -459,7 +461,7 @@
 			var stypes = Object
 				.keys(KC3Meta._stype)
 				.map(function(x) { return parseInt(x,10); })
-				.filter(function(x) { return [1,15].indexOf(x)<0; })
+				.filter(function(x) { return [1,12,15].indexOf(x)<0; })
 				.sort(function(a,b) { return a-b; });
 			console.assert(stypes[0] === 0);
 			// remove initial "0", which is invalid
@@ -772,10 +774,11 @@
 
 		/* Compute Derived Stats without Equipment
 		--------------------------------------------*/
-		getDerivedStatNaked :function(StatName, EquippedValue, Items){
+		getDerivedStatNaked :function(StatName, EquippedValue, ShipObj){
+			var Items = ShipObj.equipment(true);
 			for(var ctr in Items){
-				if(Items[ctr] > -1){
-					EquippedValue -= KC3GearManager.get( Items[ctr] ).master()["api_"+StatName];
+				if(Items[ctr].itemId > 0){
+					EquippedValue -= Items[ctr].master()["api_"+StatName];
 				}
 			}
 			return EquippedValue;

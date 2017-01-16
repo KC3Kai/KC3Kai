@@ -749,29 +749,28 @@ Contains summary information about a fleet and its 6 ships
 
 			// iterate ship's equipment
 			var equipTotal = 0;
-			for (var j = 0; j < 4; j++) {
-				if (shipData.items[j] > 0) {
-					var itemData = shipData.equipment(j);
-					if (itemData.itemId !== 0) {
-						var itemType = itemData.master().api_type[2];
-						var multiplier = multipliers[itemType];
-						if (multiplier) {
-							var equipment_bonus = Math.sqrt(itemData.stars);
+			var allEquips = shipData.equipment(true);
+			for (var j in allEquips) {
+				var itemData = allEquips[j];
+				if (itemData.itemId > 0) {
+					var itemType = itemData.master().api_type[2];
+					var multiplier = multipliers[itemType];
+					if (multiplier) {
+						var equipment_bonus = Math.sqrt(itemData.stars);
 
-							if ([12, 13].indexOf(itemType) > -1) {
-								// Radar bonus
-								equipment_bonus *= 1.25;
-							} else if ([9, 10].indexOf(itemType) > -1) {
-								// Reconnaissance Plane/Seaplane bonus
-								equipment_bonus *= 1.2;
-							} else {
-								// all other equipment with no bonus
-								equipment_bonus = 0;
-							}
-
-							// multiple * (raw equipment los + equipment bonus)
-							equipTotal += multiplier * (itemData.master().api_saku + equipment_bonus);
+						if ([12, 13].indexOf(itemType) > -1) {
+							// Radar bonus
+							equipment_bonus *= 1.25;
+						} else if ([9, 10].indexOf(itemType) > -1) {
+							// Reconnaissance Plane/Seaplane bonus
+							equipment_bonus *= 1.2;
+						} else {
+							// all other equipment with no bonus
+							equipment_bonus = 0;
 						}
+
+						// multiple * (raw equipment los + equipment bonus)
+						equipTotal += multiplier * (itemData.master().api_saku + equipment_bonus);
 					}
 				}
 			}
@@ -823,6 +822,20 @@ Contains summary information about a fleet and its 6 ships
 							ship.equipment(3).masterId,
 							ship.exItem().masterId
 						],
+						stars: [
+							ship.equipment(0).stars,
+							ship.equipment(1).stars,
+							ship.equipment(2).stars,
+							ship.equipment(3).stars,
+							ship.exItem().stars
+						],
+						ace: [
+							ship.equipment(0).ace,
+							ship.equipment(1).ace,
+							ship.equipment(2).ace,
+							ship.equipment(3).ace,
+							ship.exItem().ace
+						]
 					});
 				}
 			});

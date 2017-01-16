@@ -38,9 +38,39 @@
 	
 	KC3LandBase.prototype.isPlanesSupplied = function(){
 		return this.planes.every(function(p){
-			return !p.api_slotid ||
+			return !p.api_slotid || p.api_state !== 1 ||
 				(!!p.api_max_count && p.api_count === p.api_max_count);
 		});
+	};
+	
+	/**
+	 * Convert to new Object used to record sorties on indexedDB
+	 * Use masterId instead of rosterId, also record stars and ace of aircraft.
+	 */
+	KC3LandBase.prototype.sortieJson = function(){
+		var returnObj = {};
+		if(this.rid > -1){
+			returnObj.rid = this.rid;
+			returnObj.range = this.range;
+			returnObj.action = this.action;
+			returnObj.planes = [];
+			$.each(this.planes, function(index, squad){
+				if(squad.api_slotid > 0){
+					var gear = KC3GearManager.get(squad.api_slotid);
+					returnObj.planes.push({
+						//squadron: squad.api_squadron_id,
+						mst_id: gear.masterId,
+						count: squad.api_count,
+						//max_count: squad.api_max_count,
+						stars: gear.stars,
+						ace: gear.ace,
+						state: squad.api_state,
+						morale: squad.api_cond
+					});
+				}
+			});
+		}
+		return returnObj;
 	};
 	
 })();

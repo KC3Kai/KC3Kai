@@ -416,7 +416,7 @@
 	color:#fff;
 	background:#a69de6;
 	overflow:hidden;
-	cursor:default;
+	pointer-events:none;
 	display:none;
 }
 .tab_event .sortie_list .node_result_box .lbas {
@@ -431,7 +431,7 @@
 	color:#ff0;
 	background:#5b5;
 	overflow:hidden;
-	cursor:default;
+	pointer-events:none;
 	display:none;
 }
 

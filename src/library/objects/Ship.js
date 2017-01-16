@@ -32,6 +32,7 @@ KC3改 Ship Object
 		this.ex_item = 0;
 		this.slots = [0,0,0,0];
 		this.slotnum = 0;
+		this.speed = 0;
 		this.mod = [0,0,0,0,0];
 		this.fuel = 0;
 		this.ammo = 0;
@@ -118,6 +119,7 @@ KC3改 Ship Object
 				}
 				this.slotnum = data.api_slotnum;
 				this.slots = data.api_onslot;
+				this.speed = data.api_soku;
 				this.mod = data.api_kyouka;
 				this.fuel = data.api_fuel;
 				this.ammo = data.api_bull;
@@ -155,6 +157,10 @@ KC3改 Ship Object
 			case 'string':
 				/* Number/String => converted as equipment slot key */
 				return self.getGearManager().get( this.items[slot] );
+			case 'boolean':
+				/* Boolean => return all equipments with ex item if true */
+				return slot ? this.equipment().concat(this.exItem())
+					: this.equipment();
 			case 'undefined':
 				/* Undefined => returns whole equipment as equip object */
 				return Array.apply(null, this.items)
@@ -167,10 +173,12 @@ KC3改 Ship Object
 				});
 		}
 	};
-	KC3Ship.prototype.isFast = function(){ return this.master().api_soku>=10; };
+	KC3Ship.prototype.isFast = function(){ return (this.speed || this.master().api_soku) >= 10; };
 	KC3Ship.prototype.exItem = function(){ return this.getGearManager().get(this.ex_item); };
 	KC3Ship.prototype.isStriped = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.5); };
 	KC3Ship.prototype.isTaiha   = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.25) && !this.isRepaired(); };
+	KC3Ship.prototype.speedName = function(){ return KC3Meta.shipSpeed(this.speed); };
+	KC3Ship.prototype.rangeName = function(){ return KC3Meta.shipRange(this.range); };
 	KC3Ship.prototype.getDefer = function(){
 		// returns a new defer if possible
 		return deferList[this.rosterId] || [];
@@ -562,6 +570,40 @@ KC3改 Ship Object
 		return true;
 	};
 
+	KC3Ship.prototype.equipmentAntiAir = function(forFleet) {
+		return AntiAir.shipEquipmentAntiAir(this, forFleet);
+	};
+
+	KC3Ship.prototype.adjustedAntiAir = function() {
+		var floor = AntiAir.specialFloor(this);
+		return floor(AntiAir.shipAdjustedAntiAir(this));
+	};
+
+	KC3Ship.prototype.proportionalShotdownRate = function() {
+		return AntiAir.shipProportionalShotdownRate(this);
+	};
+
+	KC3Ship.prototype.proportionalShotdown = function(n) {
+		return AntiAir.shipProportionalShotdown(this,n);
+	};
+
+	// note:
+	// - fixed shotdown makes no sense if the current ship is not in a fleet.
+	// - formationModifier takes one of the following:
+	//   - 1 (for line ahead / echelon / line abreast)
+	//   - 1.2 (for double line)
+	//   - 1.6 (for diamond)
+	// - all possible AACIs are considered and the largest AACI modifier
+	//   is used for calculation the maximum number of fixed shotdown
+	KC3Ship.prototype.fixedShotdownRange = function(formationModifier) {
+		var fleetObj = PlayerManager.fleets[ this.onFleet() - 1 ];
+		return AntiAir.shipFixedShotdownRange(this, fleetObj, formationModifier);
+	};
+
+	KC3Ship.prototype.maxShotdownBonus = function() {
+		return AntiAir.shipMaxShotdownBonus( this );
+	};
+
 	function consumePending(index,mapping,clear,args) {
 		/*jshint validthis: true */
 		if(!(this instanceof KC3Ship)) {
@@ -653,8 +695,15 @@ KC3改 Ship Object
 				break;
 		}
 		gearInfo = this.exItem().deckbuilder();
-		if (gearInfo)
-			itemsInfo.ix = gearInfo;
+		if (gearInfo) {
+			// #1726 Deckbuilder: if max slot not reach 4, `ix` will not be used
+			var usedSlot = Object.keys(itemsInfo).length;
+			if(usedSlot < 4) {
+				itemsInfo["i".concat(usedSlot+1)] = gearInfo;
+			} else {
+				itemsInfo.ix = gearInfo;
+			}
+		}
 		
 		return result;
 	};
