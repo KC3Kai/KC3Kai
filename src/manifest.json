@@ -29,6 +29,7 @@
 		"<all_urls>"
 	],
 	"background": {
+		"persistent": true,
 		"scripts": [
 			"assets/js/jquery-2.1.3.min.js",
 			"library/objects/Messengers.js",
