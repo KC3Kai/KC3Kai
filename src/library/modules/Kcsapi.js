@@ -296,6 +296,7 @@ Previously known as "Reactor"
 			}
 			
 			PlayerManager.setResources(myResources, UTCtime);
+			PlayerManager.setConsumables({}, UTCtime);
 			KC3Network.trigger("Consumables");
 		},
 		
@@ -338,6 +339,7 @@ Previously known as "Reactor"
 				}
 			}
 			console.log("useitems", PlayerManager.consumables);
+			PlayerManager.setConsumables({}, UTCtime);
 			KC3Network.trigger("Consumables");
 		},
 		

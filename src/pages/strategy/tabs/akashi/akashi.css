@@ -43,7 +43,8 @@
 	padding:5px;
 }
 .tab_akashi .equipment.disabled {
-	
+	opacity:0.4;
+	background:#fcc;
 }
 
 .tab_akashi .equipment .eq_icon {
@@ -57,31 +58,26 @@
 	height:24px;
 }
 .tab_akashi .equipment .eq_name {
-	width:180px;
+	width:170px;
 	height:24px;
 	font-size:12px;
 	float:left;
 	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
 	margin:0px 5px 0px 0px;
 }
+
+
 .tab_akashi .equipment .eq_ships {
-	width:150px;
+	width:127px;
 	float:left;
 	padding:3px 0px;
+	margin:0px 2px 0px 0px;
 	min-height:24px;
 }
-.tab_akashi .equipment .eq_have {
-	height:24px;
-	float:left;
-}
-.tab_akashi .equipment .eq_next {
-	height:24px;
-	float:left;
-}
-
 
 .tab_akashi .eq_ship {
-	width:150px;
 	height:24px;
 }
 .tab_akashi .eq_ship .eq_ship_icon {
@@ -95,27 +91,103 @@
 	margin:2px;
 }
 .tab_akashi .eq_ship .eq_ship_name {
+	width:100px;
+	float:left;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+
+
+.tab_akashi .equipment .eq_resources {
+	width:340px;
+	float:left;
+	padding:0px 0px;
+	min-height:78px;
+}
+
+.tab_akashi .eq_res {
+	margin:0px 0px 2px 0px;
+}
+.tab_akashi .eq_res .eq_res_line {
+	width:340px;
+	min-height:24px;
+	border-radius:7px;
+	margin:0px 0px 1px 0px;
+}
+.tab_akashi .eq_res .eq_res_line.insufficient {
+	background:#fcc;
+}
+.tab_akashi .eq_res .insufficient {
+	color:#f22 !important;
+}
+
+.tab_akashi .eq_res .eq_res_label {
+	width:60px;
+	font-size:12px;
+	color:#45a9a5;
+	float:left;
+	overflow:hidden;
+	white-space:nowrap;
+}
+.tab_akashi .eq_res .eq_res_icon {
+	width:20px;
+	height:20px;
 	float:left;
 }
-
-
-.tab_akashi .eq_inst {
-	width:40px;
-	height:22px;
-	margin:0px 2px 2px 0px;
-	border-radius:7px;
-	background:#def;
+.tab_akashi .eq_res .eq_res_value {
+	width:50px;
+	color:#333;
+	overflow:hidden;
+	white-space:nowrap;
+	float:left;
 }
-.tab_akashi .eq_inst .eq_inst_icon {
+.tab_akashi .eq_res .eq_res_value > span.cnt,
+.tab_akashi .eq_res .eq_res_value > div.cnt {
+	color:#7bcb52;
+}
+.tab_akashi .eq_res .eq_res_icon.consumed_icon img {
+	width:20px;
+	height:20px;
+}
+.tab_akashi .eq_res .eq_res_value.consumed_name {
+	width:120px;
+}
+.tab_akashi .eq_res .eq_res_value.consumed_name > div.val {
+	width:100px;
+	font-size:12px;
+	float:left;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+.tab_akashi .eq_res .eq_res_value.consumed_name > div.cnt {
+	width:20px;
+}
+.tab_akashi .eq_res .eq_res_value.consumed_name > div.cnt.locked {
+	color:#ec0;
+}
+
+.tab_akashi .eq_res .eq_next {
+	margin-left:42px;
+}
+.tab_akashi .eq_res .eq_next .eq_arrow {
+	color:#7bcb52;
+	float:left;
+}
+.tab_akashi .eq_res .eq_next .eq_res_icon {
 	width:24px;
 	height:24px;
 	float:left;
 }
-.tab_akashi .eq_inst .eq_inst_upgrade img {
-	width:20px;
-	height:20px;
-	margin:2px;
+.tab_akashi .eq_res .eq_next .eq_res_icon img {
+	width:24px;
+	height:24px;
 }
-.tab_akashi .eq_inst .eq_ship_name {
-	float:left;
+.tab_akashi .eq_res .eq_next .eq_res_name {
+	width:260px;
+	font-size:12px;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
 }
