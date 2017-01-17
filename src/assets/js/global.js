@@ -699,7 +699,14 @@ Math.stdev  = function(p1f /*, data*/){
 	},0)/(args.length - !p1f));
 };
 
-/* LIMIT ROUNDING
+/** LIMIT ROUNDING
+ * @param command: do Math."round"(default) or "ceil" or "floor"
+ * @param value: the number to be rounded
+ * @param rate: how many decimal digits to be reserved
+ * @param rev: if false, moving decimal point "rate" place(s) to the right,
+ *             then integer will be returned
+ * @param magn: if true, negative rounding behaves like positive
+ * @return the rounded number
 -------------------------------*/
 Math.qckInt = function(command,value,rate,rev,magn) {
 	if (["round","ceil","floor"].indexOf(command) < 0)
@@ -714,6 +721,7 @@ Math.qckInt = function(command,value,rate,rev,magn) {
 	return (magn ? Math.sign(value) : 1) *
 		Math[command]((magn ? Math.abs(value) : value) * shift) / (rev ? shift : 1);
 };
+/* Rounding towards left side of decimal point */
 Math.hrdInt = function(command,value,rate,rev) {
 	return Math.qckInt(command,value,-rate,rev);
 };
