@@ -168,7 +168,7 @@
 						var landSlot = KC3GearManager.landBaseReconnType2Ids.indexOf(gearData.api_type[2])>-1 ?
 							KC3GearManager.landBaseReconnMaxSlot : KC3GearManager.landBaseOtherMaxSlot;
 						var deployCost = gearData["api_"+sdata[1]] * landSlot;
-						$(".stat_value", statBox).text( "{0}(={1}*{2})".format(deployCost, gearData["api_"+sdata[1]], landSlot) );
+						$(".stat_value", statBox).text( "{0}(={1}x{2})".format(deployCost, gearData["api_"+sdata[1]], landSlot) );
 						$(statBox).css("width", "130px");
 					}else{
 						$(".stat_value", statBox).text( gearData["api_"+sdata[1]] );

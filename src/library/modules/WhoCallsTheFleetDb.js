@@ -4,38 +4,45 @@
 	window.WhoCallsTheFleetDb = {
 		db: {},
 		expectedShipCount: 438,
+		expectedItemCount: 202,
 		init: function(repo) {
-			var rawDb = $.ajax({
-				url : repo + 'assets/js/WhoCallsTheFleetShipDb.json',
-				async: false
-			}).responseText;
+			var self = this;
+			var loadAndParseDb = function(prefix, filename, expectedCount) {
+				var rawDb = $.ajax({
+					url : repo + 'assets/js/' + filename,
+					async: false
+				}).responseText;
 
-			var content = rawDb
-				.split("\n")
-				.map( function(x) {
-					try {
-						return JSON.parse(x); 
-					} catch (e) {
-						return false;
-					}
-				})
-				.filter( function(x) {return x;});
-			if (content.length < this.expectedShipCount) {
-				console.warn("Unexpected entity number,",
-							 "WhoCallsTheFleetShipDb.json might has been changed.");
-			} else if(content.length > this.expectedShipCount) {
-				console.info("WhoCallsTheFleetShipDb.json has been updated,",
-							 "commit `expectedShipCount: " + content.length +
-							 ",` instead of `" + this.expectedShipCount + "` plz.");
-				this.expectedShipCount = content.length;
-			}
+				var content = rawDb
+					.split("\n")
+					.map( function(x) {
+						try {
+							return JSON.parse(x); 
+						} catch (e) {
+							return false;
+						}
+					})
+					.filter( function(x) {return x;});
+				
+				if (content.length < expectedCount) {
+					console.warn("Unexpected entity number,",
+								 filename, "might has been changed.");
+				} else if(content.length > expectedCount) {
+					console.info(filename, " has been updated,",
+								 "commit `expected????Count:", content.length +
+								 ",` instead of `" + expectedCount + "` plz.");
+				}
 
-			var db = {};
-			$.each( content, function(i,x) {
-				db["s"+x.id] = x;
-			});
+				$.each( content, function(i,x) {
+					self.db[(prefix || "s") + x.id] = x;
+				});
 
-			this.db = db;
+				return content.length;
+			};
+
+			this.db = {};
+			this.expectedShipCount = loadAndParseDb("s", "WhoCallsTheFleetShipDb.json", this.expectedShipCount);
+			this.expectedItemCount = loadAndParseDb("i", "WhoCallsTheFleetItemDb.json", this.expectedItemCount);
 		},
 
 		getShipStat: function(shipId) {
@@ -77,6 +84,11 @@
 			var retVal = statBound.base +
 				Math.floor((statBound.max - statBound.base)*level / 99.0);
 			return retVal;
+		},
+
+		getItemImprovement: function(itemId) {
+			var entry = this.db["i"+itemId];
+			return !entry ? undefined : entry.improvement ? entry.improvement : false;
 		}
 	};
 	

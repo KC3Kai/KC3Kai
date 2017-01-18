@@ -1586,6 +1586,8 @@ ABYSS FLEET
 	font-weight:bold;
 	color:#ffcc00;
 	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
 }
 .module.activity .activity_gunfit .fit_profile_level {
 	width:125px;
@@ -1596,12 +1598,13 @@ ABYSS FLEET
 	color:#ccc;
 }
 .module.activity .activity_gunfit .fit_value {
-	height:30px;
-	line-height:30px;
+	height:26px;
+	line-height:26px;
 	text-align:center;
 	font-weight:bold;
 	font-size:14px;
 	border-radius:8px;
+	margin:0px 0px 4px 0px;
 }
 .module.activity .activity_gunfit .fit_value.fit_bonus {
 	color:#fff;
@@ -1620,6 +1623,87 @@ ABYSS FLEET
 }
 .module.activity .activity_gunfit .fit_more {
 	color:#aaa;
+}
+
+.module.activity .activity_gunfit .aaci {
+	width:176px;
+	height:88px;
+	margin:0px 0px 2px 0px;
+	overflow:hidden;
+	overflow-y:auto;
+}
+.module.activity .activity_gunfit .aaci .aaciPattern {
+	width:170px;
+	height:20px;
+	margin:0px 0px 1px 0px;
+	border-radius:6px;
+	font-size:12px;
+	color:#ccc;
+}
+.module.activity .activity_gunfit .aaci .apiId {
+	width:20px;
+	height:20px;
+	margin:0px 2px 0px 0px;
+	padding:1px 5px;
+	float:left;
+}
+.module.activity .activity_gunfit .aaci .shipIcon {
+	width:18px;
+	height:20px;
+	margin:0px 1px 0px 0px;
+	padding:1px 2px;
+	float:left;
+}
+.module.activity .activity_gunfit .aaci .shipIcon img {
+	width:18px;
+	height:18px;
+	margin-top:-2px
+}
+.module.activity .activity_gunfit .aaci .equipIcons {
+	width:76px;
+	height:20px;
+	margin:0px 2px 0px 0px;
+	padding:1px 2px;
+	float:left;
+}
+.module.activity .activity_gunfit .aaci .equipIcons img {
+	width:18px;
+	height:18px;
+}
+.module.activity .activity_gunfit .aaci .equipIcons .plusIcon {
+	width:15px;
+	height:15px;
+	margin:6px 0px 0px -12px;
+	position:relative;
+	pointer-events:none;
+	filter:hue-rotate(75deg);
+	transform:scaleX(-1);
+}
+.module.activity .activity_gunfit .aaci .equipIcons .minusIcon {
+	width:15px;
+	height:15px;
+	margin:6px 0px 0px -12px;
+	position:relative;
+	pointer-events:none;
+	filter:hue-rotate(-90deg);
+	transform:scaleX(-1);
+}
+.module.activity .activity_gunfit .aaci .fixed {
+	width:20px;
+	height:20px;
+	margin:0px 2px 0px 0px;
+	padding:1px 2px;
+	float:left;
+}
+.module.activity .activity_gunfit .aaci .modifier {
+	width:20px;
+	height:20px;
+	margin:0px 2px 0px 0px;
+	padding:1px 2px;
+	float:left;
+}
+.module.activity .activity_gunfit .aaci .aaciPattern.triggerable {
+	background:#777;
 }
 
 /*------- QUESTS -------*/
@@ -1775,7 +1859,7 @@ ABYSS FLEET
 
 }
 .module.summary .summary_box {
-	width:73px;
+	width:66px;
 	height:20px;
 	float:left;
 	line-height:20px;
@@ -1796,18 +1880,31 @@ ABYSS FLEET
 	vertical-align:top;
 }
 .module.summary .summary_text {
-	width:48px;
+	width:41px;
 	height:20px;
 	float:left;
 	color:#eee;
 	font-size:12px;
 	font-weight:bold;
+	white-space:nowrap
 }
-.module.summary .summary-speed {
-	width:105px;
+.module.summary .summary-level {
+	width:53px;
 }
-.module.summary .summary-speed .summary_text {
-	width:80px;
+.module.summary .summary-level .summary_text {
+	width:28px;
+}
+.module.summary .summary-airfp {
+	width:85px;
+}
+.module.summary .summary-airfp .summary_text {
+	width:60px;
+}
+.module.summary .summary-antiair {
+	width:53px;
+}
+.module.summary .summary-antiair .summary_text {
+	width:28px;
 }
 
 /*------- FLEET -------*/
@@ -2662,7 +2759,7 @@ ABYSS FLEET
 	height:20px;
 }
 .h .module.summary {
-	width:340px;
+	width:343px;
 	height:20px;
 	left:205px; top:45px;
 }

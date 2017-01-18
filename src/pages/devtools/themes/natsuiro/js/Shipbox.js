@@ -37,13 +37,45 @@ KC3改 Ship Box for Natsuiro theme
 		tooltip += "{0}: {1} \t".format(KC3Meta.term("ShipSpeed"), this.shipData.speedName());
 		tooltip += "{0}: {1} ".format(KC3Meta.term("ShipLength"), this.shipData.rangeName());
 		
+		tooltip += "\n" + KC3Meta.term("ShipAAAdjusted")
+			.format( this.shipData.adjustedAntiAir() ) ;
 		tooltip += "\n" + KC3Meta.term("ShipAAShotdownRate")
-			.format( Math.floor(this.shipData.proportionalShotdownRate() * 100) );
-		var fixedShotdownRange = this.shipData.fixedShotdownRange(1);
-		tooltip += "\n" + KC3Meta.term("ShipAAFixedShotdown")
-			.format( fixedShotdownRange[0], fixedShotdownRange[1] );
-		tooltip += "\n" + KC3Meta.term("ShipAACIMaxBonus")
-			.format( this.shipData.maxShotdownBonus() );
+			.format( Math.qckInt("floor", this.shipData.proportionalShotdownRate() * 100, 1) );
+		var fixedShotdownRange = this.shipData.fixedShotdownRange(ConfigManager.aaFormation);
+		var fleetPossibleAaci = fixedShotdownRange[2];
+		if(fleetPossibleAaci > 0){
+			tooltip += "\n" + KC3Meta.term("ShipAAFixedShotdown")
+				.format( "{0}~{1} (x{2})".
+					format(fixedShotdownRange[0], fixedShotdownRange[1],
+						AntiAir.AACITable[fleetPossibleAaci].modifier)
+				);
+		} else {
+			tooltip += "\n" + KC3Meta.term("ShipAAFixedShotdown")
+				.format( fixedShotdownRange[0] );
+		}
+		var maxAaciParams = this.shipData.maxAaciShotdownBonuses();
+		if(maxAaciParams[0] > 0){
+			tooltip += "\n" + KC3Meta.term("ShipAACIMaxBonus")
+				.format( "{0} (x{1})".format(maxAaciParams[1], maxAaciParams[2]) );
+		} else {
+			tooltip += "\n" + KC3Meta.term("ShipAACIMaxBonus").format( KC3Meta.term("None") );
+		}
+		tooltip += "\n" + KC3Meta.term("ShipAAImgEnemySlot").format( ConfigManager.imaginaryEnemySlot );
+		var propShotdown = this.shipData.proportionalShotdown(ConfigManager.imaginaryEnemySlot);
+		var aaciFixedShotdown = fleetPossibleAaci > 0 ? AntiAir.AACITable[fleetPossibleAaci].fixed : 0;
+		tooltip += "\n" + KC3Meta.term("ShipAAShotdownPred").format(
+			"-{0} / -{1} / -{2} / -{3}".format(
+				// Both succeeded
+				propShotdown + fixedShotdownRange[1] + aaciFixedShotdown + 1,
+				// Proportional succeeded only
+				propShotdown + aaciFixedShotdown + 1,
+				// Fixed succeeded only
+				fixedShotdownRange[1] + aaciFixedShotdown + 1,
+				// Both failed
+				aaciFixedShotdown + 1
+			)
+		);
+		
 		$(".ship_img img", this.element).attr("src", KC3Meta.shipIcon(this.shipData.masterId))
 			.attr("title", tooltip);
 		/*

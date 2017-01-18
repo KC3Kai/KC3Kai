@@ -13,10 +13,12 @@ Retreives when needed to apply on components
 		// Default values. As a function to not include on JSON string
 		defaults : function(){
 			return {
-				version				: 8,
-				language			: "en",
-				hqInfoPage			: 1,
+				version     		: 8,
+				language    		: "en",
+				hqInfoPage  		: 1,
 				elosFormula 		: 4,
+				aaFormation 		: 1,
+				imaginaryEnemySlot	: 96,
 				hqExpDetail 		: 1,
 				rankPtsMode 		: 1,
 				timerDisplayType	: 1,
@@ -249,6 +251,21 @@ Retreives when needed to apply on components
 		// Toggle Fighter Power
 		scrollFighterPowerMode :function(){
 			this.air_formula = (this.air_formula % 3) + 1;
+			this.save();
+		},
+		
+		// Toggle AntiAir Formation Type
+		// Only loop between frequently used (different modifiers):
+		// Line Ahead / Double Line / Diamond / C anti-sub / C diamond / C battle
+		scrollAntiAirFormation :function(isCombined){
+			this.aaFormation += 1;
+			if(!!isCombined){
+				if(this.aaFormation == 4) this.aaFormation = 11;
+				if(this.aaFormation == 12) this.aaFormation = 13;
+				if(this.aaFormation == 15) this.aaFormation = 1;
+			} else {
+				this.aaFormation = this.aaFormation > 3 ? 1 : this.aaFormation;
+			}
 			this.save();
 		},
 		

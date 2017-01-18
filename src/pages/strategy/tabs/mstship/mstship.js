@@ -520,16 +520,15 @@
 								if(equipIcon.length>1) {
 									$('<img/>')
 										.attr("src", "../../../../assets/img/items/"+equipIcon[1]+".png")
-										.attr("title", KC3Meta.aacitype(aaciObj.id)[i] || "")
 										.addClass(aaciObj.icons[i].indexOf("-")>-1 ? "minusIcon" : "plusIcon")
 										.appendTo($(".equipIcons", aaciBox));
 								}
 							}
 						}
 						$(".fixed", aaciBox).text(aaciObj.fixed);
-						$(".modifier", aaciBox).text("+{0}%".format(Math.round((aaciObj.modifier - 1.0)*100)));
-						aaciBox.toggleClass("odd", idx % 2 !== 0);
-						aaciBox.toggleClass("even", idx % 2 === 0);
+						$(".modifier", aaciBox).text(aaciObj.modifier);
+						aaciBox.toggleClass("odd", (idx+1) % 2 !== 0);
+						aaciBox.toggleClass("even", (idx+1) % 2 === 0);
 						aaciBox.appendTo(".aaciList");
 					});
 					$(".aaci").show();

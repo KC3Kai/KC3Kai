@@ -1242,7 +1242,27 @@ a:hover {
 .tab_encounters .encounter_record {
 	background:#414141 !important;
 }
-
+/* PVP
+--------------------------------*/
+.tab_pvp .page_list {
+	background:#222 !important;
+}
+.tab_pvp .toggles {
+	background:#222 !important;
+}
+.tab_pvp .pvp_record {
+	background:#303030 !important;
+}
+.tab_pvp .pvp_battle {
+	border-left:1px solid #369 !important;
+	border-right:1px solid #369 !important;
+}
+.tab_pvp .pvp_details_ship {
+	background:#222 !important;
+}
+.tab_pvp .pvp_info .pvp_dl {
+	background:#369 !important;
+}
 /* SHIPS LIBRARY
 --------------------------------*/
 .tab_mstship .filters {
@@ -1255,20 +1275,38 @@ a:hover {
 .tab_mstship .shipRecords {
 	background:#222 !important;
 }
+.tab_mstship .shipRecord:hover {
+	background:#039 !important;
+}
 .tab_mstship .shipInfo .ship_stat_icon img {
-	-webkit-filter:invert(100%);
+	filter:invert(100%);
+}
+.tab_mstship .shipInfo .at_level .rsc_icon img {
+	filter:invert(100%);
 }
 .tab_mstship .shipInfo .voice {
 	background:#222 !important;
 }
+.tab_mstship .shipInfo .aaci .aaciPattern.odd {
+	background:#444 !important;
+}
+.tab_mstship .shipInfo .aaci .aaciPattern.even {
+	background:#333 !important;
+}
+.tab_mstship .shipInfo .aaci .aaciPattern.triggerable {
+	background:#ed3;
+}
+
 /* GEARS LIBRARY
 --------------------------------*/
 .tab_mstgear .gearRecords {
 	background:#222 !important;
 }
+.tab_mstgear .gearRecord:hover {
+	background:#039 !important;
+}
 .tab_mstgear .gearInfo {
 	background:#222 !important;
-
 }
 .tab_mstgear .gearInfo .stat_icon img {
 	-webkit-filter:invert(100%);

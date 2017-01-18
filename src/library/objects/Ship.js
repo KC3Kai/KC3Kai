@@ -24,13 +24,18 @@ KC3改 Ship Object
 		this.ls = [0,0];
 		this.lk = [0,0];
 		this.range = 0;
+		// corresponds to "api_slot" in the API,
+		// but devs change it to length == 5 someday,
+		// and item of ex slot still not at 5th.
 		this.items = [-1,-1,-1,-1];
-        // ex_item correponses to "api_slot_ex" in the API,
-        // which has special meanings on few values:
-        // 0: ex slot is not available
-        // -1: ex slot is available but nothing is equipped
+		// corresponds to "api_slot_ex" in the API,
+		// which has special meanings on few values:
+		// 0: ex slot is not available
+		// -1: ex slot is available but nothing is equipped
 		this.ex_item = 0;
-		this.slots = [0,0,0,0];
+		// "api_onslot" in API, also changed to length 5,
+		// not sure it represent size of ex slot or not
+		this.slots = [0,0,0,0,0];
 		this.slotnum = 0;
 		this.speed = 0;
 		this.mod = [0,0,0,0,0];
@@ -110,7 +115,8 @@ KC3改 Ship Object
 				this.ls = data.api_sakuteki;
 				this.lk = data.api_lucky;
 				this.range = data.api_leng;
-				this.items = data.api_slot;
+				// git rid of unused 5th, guarantee equipment(4) is exItem
+				this.items = data.api_slot.slice(0, 4);
 				if(typeof data.api_slot_ex != "undefined"){
 					this.ex_item = data.api_slot_ex;
 				}
@@ -156,7 +162,7 @@ KC3改 Ship Object
 			case 'number':
 			case 'string':
 				/* Number/String => converted as equipment slot key */
-				return self.getGearManager().get( this.items[slot] );
+				return self.getGearManager().get( slot>=this.items.length ? this.ex_item : this.items[slot] );
 			case 'boolean':
 				/* Boolean => return all equipments with ex item if true */
 				return slot ? this.equipment().concat(this.exItem())
@@ -313,8 +319,7 @@ KC3改 Ship Object
 	KC3Ship.prototype.equipmentTotalLoS = function () {
 		var sumLoS = 0;
 		var self = this;
-		$.each([0,1,2,3], function(_,ind) {
-			var item = self.equipment(ind);
+		$.each(this.equipment(true), function(_,item) {
 			if (item.masterId !== 0) {
 				sumLoS += item.master().api_saku;
 			}
@@ -327,11 +332,10 @@ KC3改 Ship Object
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.countEquipment = function(masterId) {
 		var self = this;
-		var getEquip = function(slotInd) {
-			var eId = self.equipment(slotInd);
-			return (eId.masterId === masterId) ? 1 : 0;
+		var getEquip = function(item) {
+			return (item.masterId === masterId) ? 1 : 0;
 		};
-		return [0,1,2,3].map( getEquip ).reduce(
+		return this.equipment(true).map( getEquip ).reduce(
 			function(a,b) { return a + b; }, 0 );
 	};
 
@@ -465,6 +469,7 @@ KC3改 Ship Object
 			supportPower += Number(this.equipment(1).supportPower());
 			supportPower += Number(this.equipment(2).supportPower());
 			supportPower += Number(this.equipment(3).supportPower());
+			supportPower += Number(this.equipment(4).supportPower());
 
 		}else{
 			// console.log( this.name(), "normal firepower for support" );
@@ -589,19 +594,20 @@ KC3改 Ship Object
 
 	// note:
 	// - fixed shotdown makes no sense if the current ship is not in a fleet.
-	// - formationModifier takes one of the following:
-	//   - 1 (for line ahead / echelon / line abreast)
-	//   - 1.2 (for double line)
-	//   - 1.6 (for diamond)
+	// - formationId takes one of the following:
+	//   - 1/4/5 (for line ahead / echelon / line abreast)
+	//   - 2 (for double line)
+	//   - 3 (for diamond)
 	// - all possible AACIs are considered and the largest AACI modifier
 	//   is used for calculation the maximum number of fixed shotdown
-	KC3Ship.prototype.fixedShotdownRange = function(formationModifier) {
+	KC3Ship.prototype.fixedShotdownRange = function(formationId) {
 		var fleetObj = PlayerManager.fleets[ this.onFleet() - 1 ];
-		return AntiAir.shipFixedShotdownRange(this, fleetObj, formationModifier);
+		return AntiAir.shipFixedShotdownRangeWithAACI(this, fleetObj,
+			AntiAir. getFormationModifiers(formationId || 1) );
 	};
 
-	KC3Ship.prototype.maxShotdownBonus = function() {
-		return AntiAir.shipMaxShotdownBonus( this );
+	KC3Ship.prototype.maxAaciShotdownBonuses = function() {
+		return AntiAir.shipMaxShotdownAllBonuses( this );
 	};
 
 	function consumePending(index,mapping,clear,args) {

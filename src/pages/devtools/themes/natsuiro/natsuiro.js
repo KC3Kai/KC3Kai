@@ -467,6 +467,13 @@
 			$(".summary-airfp .summary_text").text( (selectedFleet < 5) ? PlayerManager.fleets[selectedFleet-1].fighterPowerText() : PlayerManager.fleets[0].fighterPowerText() );
 		}).addClass("hover");
 
+		// AntiAir Formation Toggle
+		$(".summary-antiair").on("click",function(){
+			ConfigManager.load();
+			ConfigManager.scrollAntiAirFormation(selectedFleet === 5);
+			NatsuiroListeners.Fleet();
+		}).addClass("hover");
+
 		// Timer Type Toggle
 		$(".status_docking,.status_akashi").on("click",function(){
 			ConfigManager.scrollTimerType();
@@ -1177,8 +1184,11 @@
 				// Compile fleet attributes
 				FleetSummary = {
 					lv: MainFleet.totalLevel() + EscortFleet.totalLevel(),
-					elos: Math.qckInt(null,MainFleet.eLoS()+EscortFleet.eLoS(),2),
+					elos: Math.qckInt("floor", MainFleet.eLoS()+EscortFleet.eLoS(), 1),
 					air: MainFleet.fighterPowerText(),
+					antiAir: Math.floor(AntiAir.fleetCombinedAdjustedAntiAir(
+						MainFleet, EscortFleet,
+						AntiAir.getFormationModifiers(ConfigManager.aaFormation))),
 					speed:
 						(MainFleet.fastFleet && EscortFleet.fastFleet)
 						? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow"),
@@ -1238,8 +1248,9 @@
 				// Compile fleet attributes
 				FleetSummary = {
 					lv: CurrentFleet.totalLevel(),
-					elos: Math.round( CurrentFleet.eLoS() * 100) / 100,
+					elos: Math.qckInt("floor", CurrentFleet.eLoS(), 1),
 					air: CurrentFleet.fighterPowerText(),
+					antiAir: CurrentFleet.adjustedAntiAir(ConfigManager.aaFormation),
 					speed: CurrentFleet.speed(),
 					docking: MainRepairs.docking,
 					akashi: MainRepairs.akashi,
@@ -1276,12 +1287,16 @@
 			$(".summary-level .summary_text").text( FleetSummary.lv );
 			$(".summary-eqlos .summary_text").text( FleetSummary.elos );
 			$(".summary-airfp .summary_text").text( FleetSummary.air );
+			$(".summary-antiair .summary_icon img")
+				.attr("src", KC3Meta.formationIcon(ConfigManager.aaFormation));
+			$(".summary-antiair .summary_text").text( FleetSummary.antiAir )
+				.parent().attr("title", KC3Meta.formationText(ConfigManager.aaFormation) );
 			$(".summary-speed .summary_text").text( FleetSummary.speed );
 			// F33 different factors for now: 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
 			// Not support for combined fleet yet as factor not sure for event maps
 			if(ConfigManager.elosFormula === 4 && selectedFleet < 5){
-				var f33x3 = Math.round( PlayerManager.fleets[selectedFleet-1].eLos4(3) * 100) / 100;
-				var f33x4 = Math.round( PlayerManager.fleets[selectedFleet-1].eLos4(4) * 100) / 100;
+				var f33x3 = Math.qckInt("floor", PlayerManager.fleets[selectedFleet-1].eLos4(3), 1);
+				var f33x4 = Math.qckInt("floor", PlayerManager.fleets[selectedFleet-1].eLos4(4), 1);
 				$(".summary-eqlos").attr("title",
 					"x4={0} \t3-5(G>28), 6-1(E>16, F>25)\nx3={1} \t6-2(F<43/>50, H>40), 6-3(H>38)"
 					.format(f33x4, f33x3)
@@ -1482,7 +1497,7 @@
 						
 						afpLower = shipObj.fighterBounds()[0];
 						if (afpLower > 0) {
-							$(".base_afp .base_stat_value", baseBox).html(shipObj.fighterBounds()[0]+"+");
+							$(".base_afp .base_stat_value", baseBox).html( afpLower+"+" );
 						} else {
 							$(".base_afp .base_stat_value", baseBox).html( KC3Meta.term("None") );
 						}
@@ -2623,6 +2638,7 @@
 			var availableExpeditions = KE.getAvailableExpeditions( fleet );
 
 			var unsatRequirements = KER.unsatisfiedRequirements(selectedExpedition)(fleet);
+			var condCheckWithoutResupply = unsatRequirements.length === 0;
 
 			//Don't forget to use KERO.*ToObject to convert raw data to JS friendly objs
 			var rawExpdReqPack = KERO.getExpeditionRequirementPack(selectedExpedition);
@@ -2668,13 +2684,9 @@
 
 			var jqGSRate = $(".module.activity .activity_expeditionPlanner .row_gsrate .gsrate_content");
 
-			// success rate is forced to be unknown when there are less than 4 ships
-			// and is capped at 99%.
 			// "???" instead of "?" to make it more noticable.
 			var sparkedCount = fleetObj.ship().filter( function(s) { return s.morale >= 50; } ).length;
-			var estSuccessRate = "~" + Math.min( 99, 19 * sparkedCount ) + "%";
 			var fleetDrumCount = fleetObj.countDrums();
-			jqGSRate.text( sparkedCount < 4 ? "???" : estSuccessRate );
 			// reference: http://wikiwiki.jp/kancolle/?%B1%F3%C0%AC
 			var gsDrumCountTable = {
 				21: 3+1,
@@ -2683,14 +2695,40 @@
 				24: 0+4,
 				40: 0+4 };
 			var gsDrumCount = gsDrumCountTable[selectedExpedition];
+
+			var condCheckEnoughSparkled = sparkedCount >= 4;
+			// check if # of sparkled ship & extra drum requirement is met
+			// this variable only make sense when gsDrumCount refers to a valid drum count
+			var condCheckExtraDrumExped = condCheckEnoughSparkled && fleetDrumCount >= gsDrumCount;
+
+			// GS rate estimation in general: +19% for each sparkled ship
+			// (experiment shows that this estimation might be very inaccurate
+			// when there are less than 4 sparkled ships
+			// so we decide to make it shown only when there are >= 4 sparkled ships)
+			var estSuccessRate = Math.min( 99, 19 * sparkedCount );
+			// for expeditions that support extra drums,
+			// a GS is almost guaranteed when there are >= 4 sparkled ships and sufficient # of extra drums.
+			if ((typeof gsDrumCount !== "undefined") && condCheckExtraDrumExped)
+				estSuccessRate = 99;
+
+			// GS rate is only shown when all of the followings are true:
+			// - expedition requirement are met
+			//   (without resupply taken into account)
+			// - there are >= 4 sparked ships
+			// otherwise it is forced to be unknown 
+			// and is capped at 99%.
+			jqGSRate.text(
+				(condCheckWithoutResupply && condCheckEnoughSparkled)
+					? "~" + estSuccessRate + "%"
+					: "???");
+
 			// apply golden text when we have >= 4 sparked ships.
 			// for overdrum expeds, we further require extra number of drums
 			jqGSRate.toggleClass(
 				"golden",
-				(sparkedCount >= 4) &&
-					(typeof gsDrumCount !== "undefined"
-					 ? fleetDrumCount >= gsDrumCount
-					 : true) );
+				(typeof gsDrumCount !== "undefined"
+				 ? condCheckExtraDrumExped
+				 : condCheckEnoughSparkled));
 
 			var tooltipText = KC3Meta.term("ExpedGSRateExplainSparkle").format(sparkedCount);
 			// apply tooltip to overdrum expeds
@@ -2813,7 +2851,7 @@
 				markFailed( $( ".module.activity .activity_expeditionPlanner .text.supplyCheck" ) );
 			}
 
-			if (unsatRequirements.length === 0 && fleetObj.isSupplied()) {
+			if (condCheckWithoutResupply && fleetObj.isSupplied()) {
 				markPassed( $(".module.activity .activity_expeditionPlanner .dropdown_title") );
 			} else {
 				markFailed( $(".module.activity .activity_expeditionPlanner .dropdown_title") );
@@ -2865,38 +2903,96 @@
 		},
 		
 		GunFit: function(data) {
-			console.log("gunfit", data);
+			console.log("GunFit/AACI", data);
+
+			// if expedition planner is activated,
+			// user are probably configuring exped fleets and
+			// in that case we prevent gunfit or AACI info from popping up
+			if ($("#atab_expeditionPlanner").hasClass("active")) {
+				return;
+			}
+
+			if(!data.isShow){
+				if($("#atab_activity").hasClass("active")) $("#atab_basic").trigger("click");
+				return;
+			}
 			
 			$(".activity_gunfit .fit_ship_pic img").attr("src", KC3Meta.shipIcon(data.shipObj.masterId) );
 			$(".activity_gunfit .fit_ship_name").text( data.shipObj.name() );
 			$(".activity_gunfit .fit_ship_level span.value").text( data.shipObj.level );
 			
-			$(".activity_gunfit .fit_gear_pic img").attr("src", "../../../../assets/img/items/"+data.gearObj.master().api_type[3]+".png");
-			$(".activity_gunfit .fit_gear_name").text( data.gearObj.name() );
-			if (data.gearObj.stars > 0) {
-				$(".activity_gunfit .fit_gear_level span").text( data.gearObj.stars );
+			if(data.gearObj.masterId > 0){
+				$(".activity_gunfit .fit_gear_pic img").attr("src", "../../../../assets/img/items/"+data.gearObj.master().api_type[3]+".png");
+				$(".activity_gunfit .fit_gear_name").text( data.gearObj.name() );
+				if (data.gearObj.stars > 0) {
+					$(".activity_gunfit .fit_gear_level span").text( data.gearObj.stars );
+				} else {
+					$(".activity_gunfit .fit_gear_level").hide();
+				}
 			} else {
+				$(".activity_gunfit .fit_gear_pic img").attr("src", "../../../../assets/img/ui/empty.png");
+				$(".activity_gunfit .fit_gear_name").text("");
 				$(".activity_gunfit .fit_gear_level").hide();
 			}
-			
-			if (data.thisFit === "") {
-				$(".activity_gunfit .fit_value").text(KC3Meta.term("FitWeightUnknown"));
-				$(".activity_gunfit .fit_value").addClass("fit_unknown");
-			} else {
-				var fitValue = parseInt(data.thisFit, 10);
-				$(".activity_gunfit .fit_value").text(KC3Meta.term("FitWeight_"+fitValue));
-				$(".activity_gunfit .fit_value").removeClass("fit_penalty fit_bonus fit_neutral");
-				if (fitValue < 0) {
-					$(".activity_gunfit .fit_value").addClass("fit_penalty");
-				} else if (fitValue > 0) {
-					$(".activity_gunfit .fit_value").addClass("fit_bonus");
+			if (data.thisFit !== false) {
+				if (data.thisFit === "") {
+					$(".activity_gunfit .fit_value").text(KC3Meta.term("FitWeightUnknown"));
+					$(".activity_gunfit .fit_value").addClass("fit_unknown");
 				} else {
-					$(".activity_gunfit .fit_value").addClass("fit_neutral");
+					var fitValue = parseInt(data.thisFit, 10);
+					$(".activity_gunfit .fit_value").text(KC3Meta.term("FitWeight_"+fitValue));
+					$(".activity_gunfit .fit_value").removeClass("fit_penalty fit_bonus fit_neutral");
+					if (fitValue < 0) {
+						$(".activity_gunfit .fit_value").addClass("fit_penalty");
+					} else if (fitValue > 0) {
+						$(".activity_gunfit .fit_value").addClass("fit_bonus");
+					} else {
+						$(".activity_gunfit .fit_value").addClass("fit_neutral");
+					}
 				}
+				$(".activity_gunfit .fit_value").show();
+			} else {
+				$(".activity_gunfit .fit_value").hide();
 			}
 			
-			$(".activity_gunfit .fit_more").attr("href", "/pages/strategy/strategy.html#mstship-"+data.shipObj.masterId);
-			
+			if (data.shipAacis.length > 0) {
+				var aaciBox, equipIcon, i;
+				$(".activity_gunfit .aaciList").empty();
+				$.each(data.shipAacis, function(idx, aaciObj){
+					aaciBox = $("#factory .aaciPattern").clone();
+					$(".apiId", aaciBox).text(aaciObj.id);
+					if(aaciObj.icons[0] > 0) {
+						$(".shipIcon img", aaciBox)
+							.attr("src", KC3Meta.shipIcon(aaciObj.icons[0]) )
+							.attr("title", KC3Meta.aacitype(aaciObj.id)[0] || "");
+					} else {
+						$(".shipIcon img", aaciBox).hide();
+					}
+					if(aaciObj.icons.length > 1) {
+						for(i = 1; i < aaciObj.icons.length; i++) {
+							equipIcon = String(aaciObj.icons[i]).split(/[+-]/);
+							$("<img/>")
+								.attr("src", "../../../../assets/img/items/"+equipIcon[0]+".png")
+								.attr("title", KC3Meta.aacitype(aaciObj.id)[i] || "")
+								.appendTo($(".equipIcons", aaciBox));
+							if(equipIcon.length>1) {
+								$('<img/>')
+									.attr("src", "../../../../assets/img/items/"+equipIcon[1]+".png")
+									.addClass(aaciObj.icons[i].indexOf("-")>-1 ? "minusIcon" : "plusIcon")
+									.appendTo($(".equipIcons", aaciBox));
+							}
+						}
+					}
+					$(".fixed", aaciBox).text(aaciObj.fixed);
+					$(".modifier", aaciBox).text(aaciObj.modifier);
+					$(".activity_gunfit .aaci").height(data.thisFit !== false ? 88 : 118);
+					if(idx === 0) aaciBox.addClass("triggerable");
+					aaciBox.appendTo(".activity_gunfit .aaciList");
+				});
+				$(".activity_gunfit .aaci").show();
+			} else {
+				$(".activity_gunfit .aaci").hide();
+			}
 			
 			$(".module.activity .activity_tab").removeClass("active");
 			$("#atab_activity").addClass("active");
