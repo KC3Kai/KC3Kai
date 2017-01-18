@@ -1,5 +1,50 @@
 (function(){
 	"use strict";
+	/*
+	  (TODO) data format for expedition table:
+	  - for income modifier:
+	  
+	      - standard modifier:
+
+		  { type: "normal",
+	        gs: true / false,
+			daihatsu: 0 ~ 4 
+		  }
+			
+			  - "gs" indicates whether great success is intended
+			  - whoever saves the data is responsible for its consistency
+			    if say daihatsu value turns out to be 5, that's not my fault
+
+		  - custom modifier:
+
+          { type: "direct",
+		    value: a number, from 1.0 to perhaps 2.0 (meaning 100% ~ 200%)
+		  }
+
+		      - great success should be taken into account by custom modifier.
+			    which means if user intends to carry 4 daihatsus and ensure GS,
+				this value needs to be 1.8 (1.5 * 1.2)
+			  - the design decision is made in this way so that if future update
+                adds some mechanism that affect GS modifier, we will still be flexible.
+
+	  - for cost:
+	      - cost deals with the problem that user might carry extra ships for
+            a higher GS rate.
+
+	      - standard:
+		  
+		  { type: "costmodel",
+		    wildcard: "DD" / "SS" / false,
+			count: 0 ~ 6
+		  }
+		
+		  - custom:
+
+		  { type: "custom",
+		    fuel: integer (non-negative),
+			ammo: integer (non-negative)
+		  }
+	 */
 
 	KC3StrategyTabs.expedtable = new KC3StrategyTab("expedtable");
 
