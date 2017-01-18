@@ -118,6 +118,7 @@
 			}
 
 			var translationBase = {}, enJSON;
+			var errMsg;
 			if(extendEnglish && language!=="en"){
 				// Load english file
 				try {
@@ -134,7 +135,7 @@
 					}
 				} catch (e) {
 					console.error(e.stack);
-					var errMsg = $("<p>Fatal error when loading {0} en TL data: {1}</p>" +
+					errMsg = $("<p>Fatal error when loading {0} en TL data: {1}</p>" +
 						"<p>Contact developers plz! &gt;_&lt;</p>".format(filename, e));
 					if($("#error").length>0){
 						$("#error").append(errMsg);
@@ -176,7 +177,7 @@
 				} else {
 					// Unknown error still needs to be handled asap
 					console.error(e.stack);/*RemoveLogging:skip*/
-					var errMsg = $("<p>Fatal error when loading {0} TL data of {1}: {2}</p>" +
+					errMsg = $("<p>Fatal error when loading {0} TL data of {1}: {2}</p>" +
 						"<p>Contact developers plz! &gt;_&lt;</p>".format(filename, language, e));
 					if($("#error").length>0){
 						$("#error").append(errMsg);
