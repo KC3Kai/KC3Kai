@@ -112,7 +112,7 @@
 			var ThisBox, MasterItem, ItemName;
 			var hasShip, hasGear, ctr;
 			var ShipBox, ShipId;
-			var ResBox, checkConsumedItem;
+			var ResBox, improveList;
 			var consumedItem, upgradedItem;
 			
 			var shipClickFunc = function(e){
@@ -236,19 +236,22 @@
 				
 				var imps = WhoCallsTheFleetDb.getItemImprovement(MasterItem.api_id);
 				if(Array.isArray(imps) && imps.length > 0){
-					$.each(imps, function(idx, imp){
+					improveList = [];
+					$.each(imps, function(_, imp){
 						var dowReq = false;
 						imp.req.forEach(function(reqArr){
 							// DOW check
 							dowReq |= !Array.isArray(reqArr[0]) || reqArr[0][dayIdx];
 							// Yet another has ship check on reqArr[1]
 						});
-						if(!dowReq) return;
+						if(dowReq) improveList.push(imp);
+					});
+					$.each(improveList, function(_, imp){
 						ResBox = $(".tab_akashi .factory .eq_res").clone();
 						var resArr = imp.resource || [[]];
 						
 						// Add some precondition ship icons as not check them yet
-						if(imps.length > 1){
+						if(improveList.length > 1){
 							var shipIcons = $(".eq_res_label.material", ResBox).empty();
 							imp.req.forEach(function(reqArr){
 								if(reqArr[0][dayIdx] && reqArr[1]){
