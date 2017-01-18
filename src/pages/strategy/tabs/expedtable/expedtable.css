@@ -11,6 +11,23 @@
 .tab_expedtable .exped_row .info_col {
 	float: left;
 	margin: 0px 2px 0px 0px;
+	font-size: 16px;
+}
+
+.tab_expedtable .exped_row .info_col.id {
+	width: 20px;
+}
+
+.tab_expedtable .exped_row .info_col.time {
+	width: 80px;
+}
+
+.tab_expedtable .exped_row .info_col.resource {
+	width: 50px;
+}
+
+.tab_expedtable .exped_row .info_col.item {
+	width: 50px;
 }
 
 .tab_expedtable .factory {
