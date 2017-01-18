@@ -2881,8 +2881,8 @@
 		
 		GunFit: function(data) {
 			console.log("GunFit/AACI", data);
-			if(!data.isShow && $("#atab_activity").hasClass("active")){
-				$("#atab_basic").trigger("click");
+			if(!data.isShow){
+				if($("#atab_activity").hasClass("active")) $("#atab_basic").trigger("click");
 				return;
 			}
 			
