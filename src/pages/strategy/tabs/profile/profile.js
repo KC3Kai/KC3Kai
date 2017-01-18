@@ -20,13 +20,8 @@
 		Prepares latest player data
 		---------------------------------*/
 		reload :function(){
-			// Check for player statstics
-			if(typeof localStorage.player != "undefined"){
-				this.player = JSON.parse(localStorage.player);
-			}else{
-				this.player = {};
-			}
-			
+			// Check for player HQ info
+			PlayerManager.hq.load();
 			// Check for player statstics
 			if(typeof localStorage.statistics != "undefined"){
 				this.statistics = JSON.parse(localStorage.statistics);

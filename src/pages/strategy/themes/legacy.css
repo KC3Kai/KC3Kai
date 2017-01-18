@@ -627,6 +627,14 @@ body {
 }
 
 /* Akashi */
+.tab_akashi .controls {
+	background:#f0f5ff;
+	border-bottom:1px solid #369;
+}
+.tab_akashi .control {
+	background:#369;
+	color:#fff;
+}
 .tab_akashi .weekday {
 	color:#0033CC;
 }
@@ -641,6 +649,18 @@ body {
 .tab_akashi .equipment.disabled {
 	opacity:0.4;
 	background:#fcc;
+}
+.tab_akashi .eq_res .eq_res_line.insufficient {
+	background:#fcc;
+}
+.tab_akashi .eq_res .insufficient {
+	color:#f22 !important;
+}
+.tab_akashi .eq_res .eq_res_value {
+	color:#333;
+}
+.tab_akashi .eq_res .eq_res_value.consumed_name > div.cnt.locked {
+	color:#f90;
 }
 
 /* Fleet */
