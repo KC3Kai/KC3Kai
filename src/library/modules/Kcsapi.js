@@ -154,6 +154,21 @@ Previously known as "Reactor"
 			
 			PlayerManager.loadBases();
 			
+			PlayerManager.baseConvertingSlots = [];
+			if(typeof response.api_data.api_plane_info !== "undefined"){
+				// Let client know: these type of slotitems is free
+				/*
+				if(!!response.api_data.api_plane_info.api_unset_slot){
+				}
+				*/
+				// Let client know: these slotitems are moving, not equippable
+				// For now, moving peroid of LBAS plane is 12 mins.
+				if(Array.isArray(response.api_data.api_plane_info.api_base_convert_slot)){
+					[].push.apply(PlayerManager.baseConvertingSlots, response.api_data.api_plane_info.api_base_convert_slot);
+				}
+			}
+			localStorage.setObject("baseConvertingSlots", PlayerManager.baseConvertingSlots);
+			
 			KC3Network.trigger("HQ");
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("ShipSlots");
@@ -223,7 +238,7 @@ Previously known as "Reactor"
 				exp: response.api_data.api_experience[0]
 			});
 			
-			PlayerManager.consumables.fcoin = response.api_data.api_fcoin;
+			//PlayerManager.consumables.fcoin = response.api_data.api_fcoin;
 			PlayerManager.fleetCount = response.api_data.api_deck;
 			PlayerManager.repairSlots = response.api_data.api_ndoc;
 			PlayerManager.buildSlots = response.api_data.api_kdoc;
@@ -389,6 +404,7 @@ Previously known as "Reactor"
 				PlayerManager.consumables.reinforceExpansion -= 1;
 			}
 			console.log("Extra Slot unlocked for",sid,ship.name());
+			KC3Network.trigger("Consumables");
 		},
 		
 		"api_req_kaisou/marriage":function(params, response, headers){
@@ -501,8 +517,12 @@ Previously known as "Reactor"
 		"api_req_kaisou/slot_deprive": function(params, response, headers){
 			var ShipFrom = KC3ShipManager.get(params.api_unset_ship);
 			var ShipTo = KC3ShipManager.get(params.api_set_ship);
+			var setExSlot = params.api_set_slot_kind == 1;
+			var unsetExSlot = params.api_unset_slot_kind == 1;
 			ShipFrom.items = response.api_data.api_ship_data.api_unset_ship.api_slot;
+			if(unsetExSlot) ShipFrom.ex_item = response.api_data.api_ship_data.api_unset_ship.api_slot_ex;
 			ShipTo.items = response.api_data.api_ship_data.api_set_ship.api_slot;
+			if(setExSlot) ShipTo.ex_item = response.api_data.api_ship_data.api_set_ship.api_slot_ex;
 			KC3ShipManager.save();
 			// If ship is in a fleet, switch view to the fleet containing the ship
 			var fleetNum = KC3ShipManager.locateOnFleet(params.api_set_ship);
@@ -511,6 +531,19 @@ Previously known as "Reactor"
 			} else {
 				KC3Network.trigger("Fleet");
 			}
+			
+			var shipObj = ShipTo;
+			var gearObj = KC3GearManager.get(setExSlot ? shipObj.ex_item : shipObj.items[params.api_set_idx]);
+			var gunfit = KC3Meta.gunfit(shipObj.masterId, gearObj.masterId);
+			var aaciTypes = AntiAir.sortedPossibleAaciList(AntiAir.shipPossibleAACIs(shipObj));
+			KC3Network.trigger("GunFit", {
+				isShow: (gunfit !== false || aaciTypes.length > 0),
+				shipObj: shipObj,
+				gearObj: gearObj,
+				thisFit: gunfit,
+				shipFits: KC3Meta.gunfit(shipObj.masterId),
+				shipAacis: aaciTypes
+			});
 		},
 		
 		/* Fleet list
@@ -724,17 +757,42 @@ Previously known as "Reactor"
 				KC3Network.trigger("Fleet");
 			}
 			
-			// Gun fit bonus / penalty
+			// Gun fit bonus / penalty OR possible AACI patterns
 			var gearObj = KC3GearManager.get(itemID);
 			var gunfit = KC3Meta.gunfit(shipObj.masterId, gearObj.masterId);
-			if (gunfit !== false) {
-				KC3Network.trigger("GunFit", {
-					shipObj: shipObj,
-					gearObj: gearObj,
-					thisFit: gunfit,
-					shipFits: KC3Meta.gunfit(shipObj.masterId) // different from above
-				});
+			var aaciTypes = AntiAir.sortedPossibleAaciList(AntiAir.shipPossibleAACIs(shipObj));
+			KC3Network.trigger("GunFit", {
+				isShow: (gunfit !== false || aaciTypes.length > 0),
+				shipObj: shipObj,
+				gearObj: gearObj,
+				thisFit: gunfit,
+				shipFits: KC3Meta.gunfit(shipObj.masterId), // different from above
+				shipAacis: aaciTypes
+			});
+		},
+		
+		"api_req_kaisou/slotset_ex":function(params, response, headers){
+			var itemID = parseInt(params.api_item_id, 10);
+			var shipID = parseInt(params.api_id, 10);
+			var shipObj = KC3ShipManager.get(shipID);
+			var gearObj = KC3GearManager.get(itemID);
+			shipObj.ex_item = itemID;
+			// If ship is in a fleet, switch view to the fleet containing the ship
+			var fleetNum = KC3ShipManager.locateOnFleet(shipID);
+			if (fleetNum > -1) {
+				KC3Network.trigger("Fleet", { switchTo: fleetNum+1 });
+			} else {
+				KC3Network.trigger("Fleet");
 			}
+			// Possible AACI patterns
+			var aaciTypes = AntiAir.sortedPossibleAaciList(AntiAir.shipPossibleAACIs(shipObj));
+			KC3Network.trigger("GunFit", {
+				isShow: aaciTypes.length > 0,
+				shipObj: shipObj,
+				gearObj: gearObj,
+				thisFit: false,
+				shipAacis: aaciTypes
+			});
 		},
 		
 		/* Remove all equipment of a ship
@@ -858,6 +916,18 @@ Previously known as "Reactor"
 			KC3Network.trigger("CompassResult");
 			KC3Network.trigger("Quests");
 			KC3Network.trigger("Fleet");
+		},
+		
+		/* Start LBAS Sortie
+		-------------------------------------------------------*/
+		"api_req_map/start_air_base":function(params, response, headers){
+			var strikePoint1 = params.api_strike_point_1,
+				strikePoint2 = params.api_strike_point_2,
+				strikePoint3 = params.api_strike_point_3;
+			/* What can be done here?
+			 *   Record fuel & ammo consumption of sortie LBAS
+			 *   Show indicator of sortie LBAS at panel (also show striked nodes name?)
+			 */
 		},
 		
 		/* Traverse Map
@@ -1090,8 +1160,13 @@ Previously known as "Reactor"
 			$.each(PlayerManager.bases, function(i, base){
 				if(base.map == params.api_area_id && base.rid == params.api_base_id){
 					base.range = response.api_data.api_distance;
+					/* not work for swapping planes by drag and drop
 					$.each(params.api_squadron_id.split("%2C"), function(j, sid){
 						base.planes[sid-1] = response.api_data.api_plane_info[j];
+					});
+					*/
+					$.each(response.api_data.api_plane_info, function(_, p){
+						base.planes[p.api_squadron_id-1] = p;
 					});
 				}
 			});
@@ -1543,7 +1618,8 @@ Previously known as "Reactor"
 			var
 				resourceUsed = [ params.api_item1, params.api_item2, params.api_item3, params.api_item4 ],
 				failed       = (typeof response.api_data.api_slot_item == "undefined"),
-				ctime        = Math.hrdInt("floor",Date.safeToUtcTime(headers.Date),3,1);
+				ctime        = Math.hrdInt("floor",Date.safeToUtcTime(headers.Date),3,1),
+				hour         = Math.hrdInt("floor",ctime/3.6,3,1);
 			
 			// Log into development History
 			KC3Database.Develop({
@@ -1557,10 +1633,15 @@ Previously known as "Reactor"
 			});
 			
 			KC3Database.Naverall({
-				hour: Math.hrdInt("floor",ctime/3.6,3,1),
+				hour: hour,
 				type: "critem",
 				data: resourceUsed.concat([0,0,!failed,0]).map(function(x){return -x;})
 			});
+			
+			if(Array.isArray(response.api_data.api_material)){
+				PlayerManager.setResources(response.api_data.api_material.slice(0,4), hour);
+				PlayerManager.consumables.devmats = response.api_data.api_material[6];
+			}
 			
 			KC3QuestManager.get(605).increment(); // F1: Daily Development 1
 			KC3QuestManager.get(607).increment(); // F3: Daily Development 2
@@ -1589,6 +1670,7 @@ Previously known as "Reactor"
 				});
 			}
 			
+			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Quests");
 		},
 		

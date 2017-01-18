@@ -88,8 +88,8 @@ Used by SortieManager
 			enemyBeginHP += beginHPs.enemy[i];
 		}
 
-		var allyGaugeRate = Math.floor(allyGauge / allyBeginHP * 100);
-		var enemyGaugeRate = Math.floor(enemyGauge / enemyBeginHP * 100);
+		var allyGaugeRate = Math.qckInt("floor", allyGauge / allyBeginHP * 100, 1);
+		var enemyGaugeRate = Math.qckInt("floor", enemyGauge / enemyBeginHP * 100, 1);
 		var equalOrMore = enemyGaugeRate > (0.9 * allyGaugeRate);
 		var superior = enemyGaugeRate > 0 && enemyGaugeRate > (2.5 * allyGaugeRate);
 
@@ -455,6 +455,13 @@ Used by SortieManager
 				this.planeJetBombers.abyssal[0] = jetPlanePhase.api_stage2.api_e_count;
 				this.planeJetBombers.abyssal[1] = jetPlanePhase.api_stage2.api_e_lostcount;
 			}
+			// Jet planes consume steels each battle based on:
+			// pendingConsumingSteel = floor(jetMaster.api_cost * ship.slots[jetIdx] * 0.2)
+			/* Pseudocode of logic:
+			 PlayerManager.fleets[fleetId - 1].forEach(ship):
+			   if ship.equipment(i) === jet && ship.slots[i] > 0:
+			     ship.pendingConsuming[steel] = Math.floor(ship.slots[i] * jet.master().api_costs * 0.2)
+			*/
 		}
 		
 		// Boss Debuffed
@@ -1252,6 +1259,7 @@ Used by SortieManager
 				var baseId = ab.api_base_id;
 				var stage2 = ab.api_stage2 || {};
 				var airBattle = KC3Meta.airbattle(ab.api_stage1.api_disp_seiku)[2];
+				airBattle += ab.api_stage1.api_touch_plane[0] > 0 ? "+" + KC3Meta.term("BattleContact") : "";
 				var planes = ab.api_stage1.api_f_count;
 				var shotdown = ab.api_stage1.api_e_lostcount + (stage2.api_e_lostcount || 0);
 				var damage = !ab.api_stage3 ? 0 :
@@ -1289,6 +1297,11 @@ Used by SortieManager
 						var sentFleet = PlayerManager.fleets[fireShipPos >= 6 ? 1 : KC3SortieManager.fleetSent-1];
 						var shipName = KC3ShipManager.get(sentFleet.ships[fireShipPos % 6]).name();
 						aaciTips += (!!aaciTips ? "\n" : "") + shipName;
+						var aaciType = AntiAir.AACITable[fire.api_kind];
+						if(!!aaciType){
+							aaciTips += "\n[{0}] +{1} (x{2})"
+								.format(aaciType.id, aaciType.fixed, aaciType.modifier);
+						}
 					}
 					var itemList = fire.api_use_items;
 					if(!!itemList && itemList.length > 0){

@@ -13,11 +13,14 @@ Retreives when needed to apply on components
 		// Default values. As a function to not include on JSON string
 		defaults : function(){
 			return {
-				version				: 8,
-				language			: "en",
-				hqInfoPage			: 1,
+				version     		: 8,
+				language    		: "en",
+				hqInfoPage  		: 1,
 				elosFormula 		: 4,
+				aaFormation 		: 1,
+				imaginaryEnemySlot	: 96,
 				hqExpDetail 		: 1,
+				rankPtsMode 		: 1,
 				timerDisplayType	: 1,
 				marryLevelFormat	: 0,
 				checkLiveQuests		: true,
@@ -56,7 +59,8 @@ Retreives when needed to apply on components
 				info_troll 			: false,
 
 				// AIR PROFICIENCY BONUSES (Configurable by user)
-				air_formula			: 3, // 1=no veteran 2=veteran average 3=veteran bounds
+				// 1=no veteran 2=veteran average 3=veteran bounds 4=configurable, but unused yet
+				air_formula			: 3,
 				air_average			: {
 					"6":  [0, 1.35, 3.5, 7.1, 11.4, 16.8, 17, 25],
 					"7":  [0,    1,	  1,   1,    2,	   2,  2,  3],
@@ -250,9 +254,30 @@ Retreives when needed to apply on components
 			this.save();
 		},
 		
+		// Toggle AntiAir Formation Type
+		// Only loop between frequently used (different modifiers):
+		// Line Ahead / Double Line / Diamond / C anti-sub / C diamond / C battle
+		scrollAntiAirFormation :function(isCombined){
+			this.aaFormation += 1;
+			if(!!isCombined){
+				if(this.aaFormation == 4) this.aaFormation = 11;
+				if(this.aaFormation == 12) this.aaFormation = 13;
+				if(this.aaFormation == 15) this.aaFormation = 1;
+			} else {
+				this.aaFormation = this.aaFormation > 3 ? 1 : this.aaFormation;
+			}
+			this.save();
+		},
+		
 		// Toggle HQ Exp Information
 		scrollHQExpInfo :function(){
 			this.hqExpDetail = (this.hqExpDetail % 3) + 1;
+			this.save();
+		},
+		
+		// Toggle Rank Title vs Rank Points
+		scrollRankPtsMode :function(){
+			this.rankPtsMode = (this.rankPtsMode % 2) + 1;
 			this.save();
 		},
 		

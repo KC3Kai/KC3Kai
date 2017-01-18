@@ -13,6 +13,7 @@ Does not include Ships and Gears which are managed by other Managers
 		consumables: {},
 		fleets: [],
 		bases: [],
+		baseConvertingSlots: [],
 		fleetCount: 1,
 		repairSlots: 2,
 		repairShips: [-1,-1,-1,-1,-1],
@@ -74,6 +75,7 @@ Does not include Ships and Gears which are managed by other Managers
 				self.bases.splice(data.length < 4 ? 4 : data.length);
 			}
 			localStorage.bases = JSON.stringify(self.bases);
+			localStorage.setObject("baseConvertingSlots", self.baseConvertingSlots);
 		},
 
 		setRepairDocks :function( data ){
@@ -302,6 +304,9 @@ Does not include Ships and Gears which are managed by other Managers
 				this.bases = oldBases.map(function(baseData){
 					return (new KC3LandBase()).defineFormatted(baseData);
 				});
+			}
+			if(typeof localStorage.baseConvertingSlots != "undefined"){
+				this.baseConvertingSlots = localStorage.getObject("baseConvertingSlots");
 			}
 		},
 

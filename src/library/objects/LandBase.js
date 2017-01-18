@@ -38,7 +38,7 @@
 	
 	KC3LandBase.prototype.isPlanesSupplied = function(){
 		return this.planes.every(function(p){
-			return !p.api_slotid ||
+			return !p.api_slotid || p.api_state !== 1 ||
 				(!!p.api_max_count && p.api_count === p.api_max_count);
 		});
 	};
@@ -64,7 +64,7 @@
 						//max_count: squad.api_max_count,
 						stars: gear.stars,
 						ace: gear.ace,
-						//state: squad.api_state,
+						state: squad.api_state,
 						morale: squad.api_cond
 					});
 				}
