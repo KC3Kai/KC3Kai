@@ -10,7 +10,9 @@
 		todaySortedIds: [],
 		ships: [],
 		gears: [],
+		heldGearsIds: [],
 		instances: {},
+		hideNotImprovable: false,
 		
 		/* INIT
 		Prepares static data needed
@@ -40,6 +42,7 @@
 			$.each(KC3ShipManager.list, function(index, ThisShip){
 				if(self.ships.indexOf(ThisShip.masterId) === -1){
 					self.ships.push(ThisShip.masterId);
+					[].push.apply(self.heldGearsIds, ThisShip.items);
 				}
 			});
 			
@@ -51,7 +54,7 @@
 				
 				if(typeof self.instances[ThisGear.masterId] == "undefined"){
 					self.instances[ThisGear.masterId] = {
-						total:0,star0_5:0,star6_9:0,starmax:0,unlocked:0
+						total:0,star0_5:0,star6_9:0,starmax:0,free:0
 					};
 				}
 				self.instances[ThisGear.masterId].id = ThisGear.masterId;
@@ -59,7 +62,8 @@
 				self.instances[ThisGear.masterId].star0_5 += (!ThisGear.stars || ThisGear.stars < 6) & 1;
 				self.instances[ThisGear.masterId].star6_9 += (ThisGear.stars >= 6 && ThisGear.stars < 10) & 1;
 				self.instances[ThisGear.masterId].starmax += (ThisGear.stars == 10) & 1;
-				self.instances[ThisGear.masterId].unlocked += (ThisGear.lock === 0) & 1;
+				self.instances[ThisGear.masterId].free += (ThisGear.lock === 0 
+					&& self.heldGearsIds.indexOf(ThisGear.itemId) === -1 ) & 1;
 			});
 		},
 		
@@ -68,9 +72,15 @@
 		---------------------------------*/
 		execute :function(){
 			var self = this;
+			self.hideNotImprovable = false;
 			
 			$(".tab_akashi .weekday").on("click", function(){
 				KC3StrategyTabs.gotoTab(null, $(this).data("value"));
+			});
+			
+			$("#disabled_toggle").on("click", function(){
+				self.hideNotImprovable = !self.hideNotImprovable;
+				$(".equipment.disabled").toggle(!self.hideNotImprovable);
 			});
 			
 			// Link to weekday specified by hash parameter
@@ -86,6 +96,7 @@
 			var self = this;
 			var todayDow = Date.getJstDate().getDay();
 			dayName = (dayName || $("#weekday-{0}".format(todayDow)).data("value")).toLowerCase();
+			var dayIdx = {"sun":0,"mon":1,"tue":2,"wed":3,"thu":4,"fri":5,"sat":6}[dayName];
 			$(".weekdays .weekday").removeClass("active");
 			$(".weekdays .weekday[data-value={0}]".format(dayName)).addClass("active");
 			
@@ -101,15 +112,46 @@
 			var ThisBox, MasterItem, ItemName;
 			var hasShip, hasGear, ctr;
 			var ShipBox, ShipId;
-			var ResBox;
+			var ResBox, checkConsumedItem;
+			var consumedItem, upgradedItem;
+			
 			var shipClickFunc = function(e){
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 			};
 			var gearClickFunc = function(e){
 				KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 			};
-			var toAmount = function(v){
+			var toAmountStr = function(v){
 				return typeof v === "undefined" || v < 0  ? "?" : String(v);
+			};
+			var showDevScrew = function(stars, devmats, devmatsGS, screws, screwsGS){
+				$(".eq_res_value.devmats.plus{0} .val".format(stars), ResBox)
+					.text( toAmountStr(devmats) );
+				$(".eq_res_value.devmats.plus{0} .cnt".format(stars), ResBox)
+					.text( "({0})".format(toAmountStr(devmatsGS)) );
+				$(".eq_res_value.screws.plus{0} .val".format(stars), ResBox)
+					.text( toAmountStr(screws) );
+				$(".eq_res_value.screws.plus{0} .cnt".format(stars), ResBox)
+					.text( "({0})".format(toAmountStr(screwsGS)) );
+			};
+			var showConsumedItem = function(stars, consumedItem, amount){
+				if(!consumedItem){
+					$(".eq_res_icon.consumed_icon.plus{0}".format(stars), ResBox).hide();
+					$(".eq_res_value.consumed_name.plus{0}".format(stars), ResBox).hide();
+					return;
+				}
+				$(".eq_res_icon.consumed_icon.plus{0} img".format(stars), ResBox)
+					.attr("src", "../../assets/img/items/"+consumedItem.api_type[3]+".png");
+				$(".eq_res_icon.consumed_icon.plus{0}".format(stars), ResBox)
+					.attr("alt", consumedItem.api_id);
+				$(".eq_res_icon.consumed_icon.plus{0}".format(stars), ResBox)
+					.click(gearClickFunc);
+				$(".eq_res_value.consumed_name.plus{0} .val".format(stars), ResBox)
+					.text( KC3Meta.gearName(consumedItem.api_name) );
+				$(".eq_res_value.consumed_name.plus{0} .val".format(stars), ResBox)
+					.attr("title", KC3Meta.gearName(consumedItem.api_name) );
+				$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), ResBox)
+					.text( "x{0}".format(toAmountStr(amount)) );
 			};
 			var checkDevScrew = function(stars, itemId, devmats, screws){
 				if(!hasGear || !hasShip) return;
@@ -130,19 +172,19 @@
 					$(".eq_res_line.plus{0}".format(stars), ResBox).addClass("insufficient");
 				}
 			};
-			var checkConsumedItem = function(stars, consumedItem, unlocked){
+			var checkConsumedItem = function(stars, consumedItem, amount){
 				if(!hasGear || !hasShip) return;
 				if(!self.instances[consumedItem.api_id]
-					|| self.instances[consumedItem.api_id].total < unlocked){
+					|| self.instances[consumedItem.api_id].total < amount){
 					$(".eq_res_line.plus{0}".format(stars), ResBox).addClass("insufficient");
 					$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), ResBox).addClass("insufficient");
 				} else if(!!self.instances[consumedItem.api_id]
-					&& self.instances[consumedItem.api_id].unlocked < unlocked){
+					&& self.instances[consumedItem.api_id].free < amount){
 					$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), ResBox).addClass("locked");
 				}
 			};
 			
-			$.each(this.todaySortedIds, function(idx, itemId){
+			$.each(this.todaySortedIds, function(_, itemId){
 				var shipList = self.today[itemId];
 				MasterItem = KC3Master.slotitem(itemId);
 				ItemName = KC3Meta.gearName( MasterItem.api_name );
@@ -187,16 +229,47 @@
 					$(".eq_ships", ThisBox).append(ShipBox);
 				}
 				
+				// If doesn't have either ship or gear
+				if(!hasGear || !hasShip){
+					ThisBox.addClass("disabled");
+				}
+				
 				var imps = WhoCallsTheFleetDb.getItemImprovement(MasterItem.api_id);
-				var consumedItem, upgradedItem;
 				if(Array.isArray(imps) && imps.length > 0){
-					$.each(imps, function(_, imp){
+					$.each(imps, function(idx, imp){
+						var dowReq = false;
+						imp.req.forEach(function(reqArr){
+							// DOW check
+							dowReq |= !Array.isArray(reqArr[0]) || reqArr[0][dayIdx];
+							// Yet another has ship check on reqArr[1]
+						});
+						if(!dowReq) return;
 						ResBox = $(".tab_akashi .factory .eq_res").clone();
-						var resArr = imp.resource;
-						$(".eq_res_value.fuel", ResBox).text(resArr[0][0]);
-						$(".eq_res_value.ammo", ResBox).text(resArr[0][1]);
-						$(".eq_res_value.steel", ResBox).text(resArr[0][2]);
-						$(".eq_res_value.bauxite", ResBox).text(resArr[0][3]);
+						var resArr = imp.resource || [[]];
+						
+						// Add some precondition ship icons as not check them yet
+						if(imps.length > 1){
+							var shipIcons = $(".eq_res_label.material", ResBox).empty();
+							imp.req.forEach(function(reqArr){
+								if(reqArr[0][dayIdx] && reqArr[1]){
+									reqArr[1].forEach(function(reqShipId){
+										var remodel = WhoCallsTheFleetDb.getShipRemodel(reqShipId);
+										if(!remodel || !remodel.prev
+											|| reqArr[1].indexOf(remodel.prev) < 0){
+											shipIcons.append(
+												$("<img/>").attr("src", KC3Meta.shipIcon(reqShipId))
+												.width("16px").height("16px")
+											);
+										}
+									});
+								}
+							});
+						}
+						
+						$(".eq_res_value.fuel", ResBox).text(toAmountStr(resArr[0][0]));
+						$(".eq_res_value.ammo", ResBox).text(toAmountStr(resArr[0][1]));
+						$(".eq_res_value.steel", ResBox).text(toAmountStr(resArr[0][2]));
+						$(".eq_res_value.bauxite", ResBox).text(toAmountStr(resArr[0][3]));
 						if(PlayerManager.hq.lastMaterial[0] < resArr[0][0]
 							|| PlayerManager.hq.lastMaterial[1] < resArr[0][1]
 							|| PlayerManager.hq.lastMaterial[2] < resArr[0][2]
@@ -204,61 +277,34 @@
 							$(".eq_res_line.material", ResBox).addClass("insufficient");
 						}
 						
-						$(".eq_res_value.devmats.plus0_5 .val", ResBox).text( toAmount(resArr[1][0]) );
-						$(".eq_res_value.devmats.plus0_5 .cnt", ResBox).text( "({0})".format(toAmount(resArr[1][1])) );
-						$(".eq_res_value.screws.plus0_5 .val", ResBox).text( toAmount(resArr[1][2]));
-						$(".eq_res_value.screws.plus0_5 .cnt", ResBox).text( "({0})".format(toAmount(resArr[1][3])) );
+						showDevScrew("0_5", resArr[1][0], resArr[1][1], resArr[1][2], resArr[1][3]);
 						checkDevScrew("0_5", itemId, resArr[1][1], resArr[1][3]);
 						if(resArr[1][4] > 0){
 							consumedItem = KC3Master.slotitem(resArr[1][4]);
-							$(".eq_res_icon.consumed_icon.plus0_5 img", ResBox).attr("src", "../../assets/img/items/"+consumedItem.api_type[3]+".png");
-							$(".eq_res_icon.consumed_icon.plus0_5", ResBox).attr("alt", consumedItem.api_id);
-							$(".eq_res_icon.consumed_icon.plus0_5", ResBox).click(gearClickFunc);
-							$(".eq_res_value.consumed_name.plus0_5 .val", ResBox).text( KC3Meta.gearName(consumedItem.api_name) );
-							$(".eq_res_value.consumed_name.plus0_5 .val", ResBox).attr("title", KC3Meta.gearName(consumedItem.api_name) );
-							$(".eq_res_value.consumed_name.plus0_5 .cnt", ResBox).text( "x{0}".format(toAmount(resArr[1][5])) );
+							showConsumedItem("0_5", consumedItem, resArr[1][5]);
 							checkConsumedItem("0_5", consumedItem, resArr[1][5]);
 						} else {
-							$(".eq_res_icon.consumed_icon.plus0_5", ResBox).hide();
-							$(".eq_res_value.consumed_name.plus0_5", ResBox).hide();
+							showConsumedItem("0_5", null);
 						}
 						
-						$(".eq_res_value.devmats.plus6_9 .val", ResBox).text( toAmount(resArr[2][0]) );
-						$(".eq_res_value.devmats.plus6_9 .cnt", ResBox).text( "({0})".format(toAmount(resArr[2][1])) );
-						$(".eq_res_value.screws.plus6_9 .val", ResBox).text( toAmount(resArr[2][2]) );
-						$(".eq_res_value.screws.plus6_9 .cnt", ResBox).text( "({0})".format(toAmount(resArr[2][3])) );
+						showDevScrew("6_9", resArr[2][0], resArr[2][1], resArr[2][2], resArr[2][3]);
 						checkDevScrew("6_9", itemId, resArr[2][1], resArr[2][3]);
 						if(resArr[2][4] > 0){
 							consumedItem = KC3Master.slotitem(resArr[2][4]);
-							$(".eq_res_icon.consumed_icon.plus6_9 img", ResBox).attr("src", "../../assets/img/items/"+consumedItem.api_type[3]+".png");
-							$(".eq_res_icon.consumed_icon.plus6_9", ResBox).attr("alt", consumedItem.api_id);
-							$(".eq_res_icon.consumed_icon.plus6_9", ResBox).click(gearClickFunc);
-							$(".eq_res_value.consumed_name.plus6_9 .val", ResBox).text( KC3Meta.gearName(consumedItem.api_name) );
-							$(".eq_res_value.consumed_name.plus6_9 .val", ResBox).attr("title", KC3Meta.gearName(consumedItem.api_name) );
-							$(".eq_res_value.consumed_name.plus6_9 .cnt", ResBox).text( "x{0}".format(toAmount(resArr[2][5])) );
+							showConsumedItem("6_9", consumedItem, resArr[2][5]);
 							checkConsumedItem("6_9", consumedItem, resArr[2][5]);
 						} else {
-							$(".eq_res_icon.consumed_icon.plus6_9", ResBox).hide();
-							$(".eq_res_value.consumed_name.plus6_9", ResBox).hide();
+							showConsumedItem("6_9", null);
 						}
 						if(imp.upgrade && imp.upgrade[0] > 0){
-							$(".eq_res_value.devmats.plusmax .val", ResBox).text( toAmount(resArr[3][0]) );
-							$(".eq_res_value.devmats.plusmax .cnt", ResBox).text( "({0})".format(toAmount(resArr[3][1])) );
-							$(".eq_res_value.screws.plusmax .val", ResBox).text( toAmount(resArr[3][2]) );
-							$(".eq_res_value.screws.plusmax .cnt", ResBox).text( "({0})".format(toAmount(resArr[3][3])) );
+							showDevScrew("max", resArr[3][0], resArr[3][1], resArr[3][2], resArr[3][3]);
 							checkDevScrew("max", itemId, resArr[3][1], resArr[3][3]);
 							if(resArr[3][4] > 0){
 								consumedItem = KC3Master.slotitem(resArr[3][4]);
-								$(".eq_res_icon.consumed_icon.plusmax img", ResBox).attr("src", "../../assets/img/items/"+consumedItem.api_type[3]+".png");
-								$(".eq_res_icon.consumed_icon.plusmax", ResBox).attr("alt", consumedItem.api_id);
-								$(".eq_res_icon.consumed_icon.plusmax", ResBox).click(gearClickFunc);
-								$(".eq_res_value.consumed_name.plusmax .val", ResBox).text( KC3Meta.gearName(consumedItem.api_name) );
-								$(".eq_res_value.consumed_name.plusmax .val", ResBox).attr("title", KC3Meta.gearName(consumedItem.api_name) );
-								$(".eq_res_value.consumed_name.plusmax .cnt", ResBox).text( "x{0}".format(toAmount(resArr[3][5])) );
+								showConsumedItem("max", consumedItem, resArr[3][5]);
 								checkConsumedItem("max", consumedItem, resArr[3][5]);
 							} else {
-								$(".eq_res_icon.consumed_icon.plusmax", ResBox).hide();
-								$(".eq_res_value.consumed_name.plusmax", ResBox).hide();
+								showConsumedItem("max", null);
 							}
 							upgradedItem = KC3Master.slotitem(imp.upgrade[0]);
 							$(".eq_next .eq_res_icon img", ResBox).attr("src", "../../assets/img/items/"+upgradedItem.api_type[3]+".png");
@@ -276,12 +322,7 @@
 					$(".eq_resources", ThisBox).hide();
 				}
 				
-				// If doesn't have either ship or gear, and 
-				if(!hasGear || !hasShip){
-					ThisBox.addClass("disabled");
-				}
 			});
-			
 			
 		}
 		
