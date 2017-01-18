@@ -88,8 +88,8 @@ Used by SortieManager
 			enemyBeginHP += beginHPs.enemy[i];
 		}
 
-		var allyGaugeRate = Math.floor(allyGauge / allyBeginHP * 100);
-		var enemyGaugeRate = Math.floor(enemyGauge / enemyBeginHP * 100);
+		var allyGaugeRate = Math.qckInt("floor", allyGauge / allyBeginHP * 100, 1);
+		var enemyGaugeRate = Math.qckInt("floor", enemyGauge / enemyBeginHP * 100, 1);
 		var equalOrMore = enemyGaugeRate > (0.9 * allyGaugeRate);
 		var superior = enemyGaugeRate > 0 && enemyGaugeRate > (2.5 * allyGaugeRate);
 
