@@ -24,9 +24,21 @@ KCScreenshot.prototype.setCallback = function(callback){
 };
 
 KCScreenshot.prototype.start = function(playerName, element){
-	var self = this;
 	this.playerName = playerName;
 	this.gamebox = element;
+	this.prepare();
+	this.capture();
+};
+
+KCScreenshot.prototype.remoteStart = function(tabId, offset){
+	this.tabId = tabId;
+	this.offset = offset;
+	this.prepare();
+	this.remoteCapture();
+};
+
+KCScreenshot.prototype.prepare = function(playerName, element){
+	// Generate timestamp for filename
 	this.generateScreenshotFilename();
 	
 	// Initialize HTML5 Canvas
@@ -37,8 +49,6 @@ KCScreenshot.prototype.start = function(playerName, element){
 	
 	// Initialize Image Tag
 	this.domImg = new Image();
-	
-	this.capture();
 };
 
 function chromeCapture(captureFormat, imageQuality, response){
@@ -80,6 +90,19 @@ KCScreenshot.prototype.capture = function(){
 	} else {
 		this.startCapture();
 	}
+};
+
+KCScreenshot.prototype.remoteCapture = function(){
+	var self = this;
+	chrome.tabs.get(this.tabId, function(tabInfo){
+		chrome.tabs.captureVisibleTab(tabInfo.windowId, {
+			format: self.format[0],
+			quality: self.quality || 100
+		}, function(base64img){
+			self.domImg.onload = self.crop();
+			self.domImg.src = base64img;
+		});
+	});
 };
 
 KCScreenshot.prototype.startCapture = function(){

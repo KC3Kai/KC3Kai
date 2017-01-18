@@ -34,6 +34,7 @@
 			"assets/js/jquery-2.1.3.min.js",
 			"library/objects/Messengers.js",
 			"library/objects/Quest.js",
+			"library/objects/Screenshot.js",
 			"library/managers/ConfigManager.js",
 			"library/managers/QuestManager.js",
 			"library/modules/Master.js",

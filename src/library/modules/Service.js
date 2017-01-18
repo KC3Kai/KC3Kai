@@ -67,9 +67,32 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		Ask the game container to take a screenshot
 		------------------------------------------*/
 		"screenshot" :function(request, sender, response){
-			(new TMsg(request.tabId, "gamescreen", "screenshot", {
-				playerName: request.playerName
-			}, response)).execute();
+			var senderUrl = sender.url || sender.tab.url || "";
+			
+			// If API or DMM Frame, use traditional screenshot call
+			if( isDMMFrame(senderUrl) || isAPIFrame(senderUrl) ){
+				(new TMsg(request.tabId, "gamescreen", "screenshot", {
+					playerName: request.playerName
+				}, response)).execute();
+				return true;
+			}
+			
+			// Not from API or DMM Frame, check if special mode enabled
+			ConfigManager.load();
+			if(ConfigManager.dmm_customize) {
+				var tabId = sender.tab.id || request.tabId || false;
+				if (tabId) {
+					(new TMsg(tabId, "gamescreen", "getGamescreenOffset", {}, function(offset){
+						(new KCScreenshot())
+							.setCallback(response)
+							.remoteStart(tabId, offset);
+					})).execute();
+					return true;
+				}
+			}
+			
+			// Did not pass any return, fail
+			response({ value: false });
 			return true;
 		},
 		
@@ -192,16 +215,15 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		Responds if content script should inject DMM Frame customizations
 		------------------------------------------*/
 		"dmmFrameInject" :function(request, sender, response){
-			console.log('dmmFrameInject');
+			var senderUrl = sender.url || sender.tab.url || "";
 			
-			if(sender.tab.url.indexOf("/pages/game/dmm.html") > -1){
+			if( isDMMFrame(senderUrl) ){
 				// DMM FRAME
 				ConfigManager.load();
 				response({ mode: 'frame', scale: ConfigManager.api_gameScale});
 				
 			} else if(ConfigManager.dmm_customize && localStorage.extract_api != "true") {
 				// DMM CUSTOMIZATION
-				console.log('customize DMM');
 				chrome.tabs.update(sender.tab.id, {
 					autoDiscardable: false,
 					highlighted: true
@@ -329,6 +351,14 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			}
 		}
 	});
+	
+	function isDMMFrame(url){
+		return url.indexOf("/pages/game/dmm.html") > -1;
+	}
+	
+	function isAPIFrame(url){
+		return url.indexOf("/pages/game/api.html") > -1;
+	}
 	
 })();
 
