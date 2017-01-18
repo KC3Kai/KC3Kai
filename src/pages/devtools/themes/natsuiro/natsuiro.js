@@ -2881,6 +2881,14 @@
 		
 		GunFit: function(data) {
 			console.log("GunFit/AACI", data);
+
+			// if expedition planner is activated,
+			// user are probably configuring exped fleets and
+			// in that case we prevent gunfit or AACI info from popping up
+			if ($("#atab_expeditionPlanner").hasClass("active")) {
+				return;
+			}
+
 			if(!data.isShow){
 				if($("#atab_activity").hasClass("active")) $("#atab_basic").trigger("click");
 				return;
