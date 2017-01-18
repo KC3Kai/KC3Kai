@@ -80,7 +80,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			// Not from API or DMM Frame, check if special mode enabled
 			ConfigManager.load();
 			if(ConfigManager.dmm_customize) {
-				var tabId = sender.tab.id || request.tabId || false;
+				var tabId = request.tabId || (sender.tab ? sender.tab.id : false) || false;
 				if (tabId) {
 					(new TMsg(tabId, "gamescreen", "getGamescreenOffset", {}, function(offset){
 						(new KCScreenshot())
