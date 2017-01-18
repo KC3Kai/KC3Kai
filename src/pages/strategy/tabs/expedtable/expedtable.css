@@ -2,6 +2,17 @@
 	width:680px;
 }
 
+.tab_expedtable .exped_row {
+	background-color: #def;
+	border-radius: 3px;
+	margin: 0px 0px 2px 0px;
+}
+
+.tab_expedtable .exped_row .info_col {
+	float: left;
+	margin: 0px 2px 0px 0px;
+}
+
 .tab_expedtable .factory {
 	display:none;
 }
