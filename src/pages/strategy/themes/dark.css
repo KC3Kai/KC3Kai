@@ -926,13 +926,17 @@ a:hover {
 }
 
 /* Akashi */
+.tab_akashi .control {
+	background:#444;
+	color:#fff;
+}
 .tab_akashi .weekday {
 	color:#ffffff;
 	background:#555555;
 }
 .tab_akashi .weekday.active {
 	color:#333333;
-	background:#CCCCCC;
+	background:#cccccc;
 }
 .tab_akashi .equipment {
 	border-bottom:1px solid #777;
@@ -941,6 +945,21 @@ a:hover {
 .tab_akashi .equipment.disabled {
 	opacity:0.4;
 	background:#621f1f;
+}
+.tab_akashi .eq_res .eq_res_line.insufficient {
+	background:#710 !important;
+}
+.tab_akashi .eq_res .insufficient {
+	color:#f10 !important;
+}
+.tab_akashi .equipment {
+	color:#9e9e9e;
+}
+.tab_akashi .eq_res .eq_res_value {
+	color:#9e9e9e;
+}
+.tab_akashi .eq_res .eq_res_value.consumed_name > div.cnt.locked {
+	color:#ec0;
 }
 
 /* Fleet */
