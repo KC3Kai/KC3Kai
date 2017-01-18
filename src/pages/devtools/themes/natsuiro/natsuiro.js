@@ -2638,6 +2638,7 @@
 			var availableExpeditions = KE.getAvailableExpeditions( fleet );
 
 			var unsatRequirements = KER.unsatisfiedRequirements(selectedExpedition)(fleet);
+			var condCheckWithoutResupply = unsatRequirements.length === 0;
 
 			//Don't forget to use KERO.*ToObject to convert raw data to JS friendly objs
 			var rawExpdReqPack = KERO.getExpeditionRequirementPack(selectedExpedition);
@@ -2683,13 +2684,9 @@
 
 			var jqGSRate = $(".module.activity .activity_expeditionPlanner .row_gsrate .gsrate_content");
 
-			// success rate is forced to be unknown when there are less than 4 ships
-			// and is capped at 99%.
 			// "???" instead of "?" to make it more noticable.
 			var sparkedCount = fleetObj.ship().filter( function(s) { return s.morale >= 50; } ).length;
-			var estSuccessRate = "~" + Math.min( 99, 19 * sparkedCount ) + "%";
 			var fleetDrumCount = fleetObj.countDrums();
-			jqGSRate.text( sparkedCount < 4 ? "???" : estSuccessRate );
 			// reference: http://wikiwiki.jp/kancolle/?%B1%F3%C0%AC
 			var gsDrumCountTable = {
 				21: 3+1,
@@ -2698,14 +2695,40 @@
 				24: 0+4,
 				40: 0+4 };
 			var gsDrumCount = gsDrumCountTable[selectedExpedition];
+
+			var condCheckEnoughSparkled = sparkedCount >= 4;
+			// check if # of sparkled ship & extra drum requirement is met
+			// this variable only make sense when gsDrumCount refers to a valid drum count
+			var condCheckExtraDrumExped = condCheckEnoughSparkled && fleetDrumCount >= gsDrumCount;
+
+			// GS rate estimation in general: +19% for each sparkled ship
+			// (experiment shows that this estimation might be very inaccurate
+			// when there are less than 4 sparkled ships
+			// so we decide to make it shown only when there are >= 4 sparkled ships)
+			var estSuccessRate = Math.min( 99, 19 * sparkedCount );
+			// for expeditions that support extra drums,
+			// a GS is almost guaranteed when there are >= 4 sparkled ships and sufficient # of extra drums.
+			if ((typeof gsDrumCount !== "undefined") && condCheckExtraDrumExped)
+				estSuccessRate = 99;
+
+			// GS rate is only shown when all of the followings are true:
+			// - expedition requirement are met
+			//   (without resupply taken into account)
+			// - there are >= 4 sparked ships
+			// otherwise it is forced to be unknown 
+			// and is capped at 99%.
+			jqGSRate.text(
+				(condCheckWithoutResupply && condCheckEnoughSparkled)
+					? "~" + estSuccessRate + "%"
+					: "???");
+
 			// apply golden text when we have >= 4 sparked ships.
 			// for overdrum expeds, we further require extra number of drums
 			jqGSRate.toggleClass(
 				"golden",
-				(sparkedCount >= 4) &&
-					(typeof gsDrumCount !== "undefined"
-					 ? fleetDrumCount >= gsDrumCount
-					 : true) );
+				(typeof gsDrumCount !== "undefined"
+				 ? condCheckExtraDrumExped
+				 : condCheckEnoughSparkled));
 
 			var tooltipText = KC3Meta.term("ExpedGSRateExplainSparkle").format(sparkedCount);
 			// apply tooltip to overdrum expeds
@@ -2828,7 +2851,7 @@
 				markFailed( $( ".module.activity .activity_expeditionPlanner .text.supplyCheck" ) );
 			}
 
-			if (unsatRequirements.length === 0 && fleetObj.isSupplied()) {
+			if (condCheckWithoutResupply && fleetObj.isSupplied()) {
 				markPassed( $(".module.activity .activity_expeditionPlanner .dropdown_title") );
 			} else {
 				markFailed( $(".module.activity .activity_expeditionPlanner .dropdown_title") );
