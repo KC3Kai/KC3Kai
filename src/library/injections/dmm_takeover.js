@@ -94,6 +94,7 @@
 		/* DMM PAGE LAYOUT
 		Override layout to only show game frame
 		--------------------------------------*/
+		resizeTimer: 0,
 		layout: function(){
 			$("body").addClass("kc3");
 			$("body").css({ margin:0, padding:0, 'min-width':0 });
@@ -104,7 +105,12 @@
 				padding: 0,
 				width: 800,
 				height: 480,
-				position: 'relative'
+				position: 'relative',
+				zoom: (ConfigManager.api_gameScale || 100) / 100
+			});
+			$("#game_frame").css({
+				width: 800,
+				height: 480
 			});
 			$(".dmm-ntgnavi").hide();
 			$(".area-naviapp").hide();
@@ -116,26 +122,31 @@
 				width: '100%',
 				height: 0
 			});
-			$(document).on("ready", this.resizeGameFrame);
-			$(window).on("load", this.resizeGameFrame);
+			$(document).on("ready", this.resizeGameFrameFinal);
+			$(window).on("load", this.resizeGameFrameFinal);
 			
 			var self = this;
-			var resizeFast = setInterval(function(){
-				console.log('checking size of frame...');
+			this.resizeTimer = setInterval(function(){
+				console.log('Checking size of frame...');
 				if ($("#game_frame").width() != 800 || $("#game_frame").height() != 480) {
 					self.resizeGameFrame();
-				} else {
-					clearInterval(resizeFast);
 				}
-			}, 100);
+			}, 1000);
 		},
 		// Resize game frame to 800x480
 		resizeGameFrame: function(){
-			console.log("resizing game frame");
+			console.log("Resizing game frame to 800x480");
 			$("#game_frame").css({
 				width: 800,
 				height: 480
 			});
+		},
+		// Final process on document ready
+		resizeGameFrameFinal: function(){
+			if(window.DMMCustomizations.resizeTimer){
+				clearInterval(window.DMMCustomizations.resizeTimer);
+			}
+			window.DMMCustomizations.resizeGameFrame();
 		},
 		
 		/* BACKGROUND CUSTOMIZATIONS
