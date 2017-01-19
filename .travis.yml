@@ -3,6 +3,8 @@ node_js:
 - "6"
 before_install:
 - npm install -g grunt-cli
+- npm install
+- patch -d node_modules/grunt-contrib-uglify -p2 < patches/uglify-harmony.patch
 
 # ENVIRONMENT VARIABLES: CHROME WEBSTORE CREDENTIALS
 env:
