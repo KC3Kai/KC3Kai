@@ -414,7 +414,6 @@ module.exports = function(grunt) {
 		'copy:testenv',
 		'babel:testenv',
 		'qunit'
-		// TODO: re-activate qunit tests
 	]);
 	
 	grunt.registerTask('webstore', [
