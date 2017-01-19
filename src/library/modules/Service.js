@@ -307,6 +307,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	This will avoid auto-restart when webstore update is available
 	Officially handle the moment update is release and user is playing
 	------------------------------------------*/
+	delete localStorage.updateAvailable;
 	chrome.runtime.onUpdateAvailable.addListener(function(details){
 		localStorage.updateAvailable = details.version;
 	});
