@@ -35,26 +35,36 @@
 				if (!!data.pr) {
 					$(".nextVersion").attr("href", data.pr);
 				}
-				if( myVersion != data.version ){
-					// If unknown time
-					if (data.time === "") {
-						$(".nextVersion").html( data.version+" "+KC3Meta.term("MenuScheduledSoon"));
+				
+				// Check for available extension updates
+				if (typeof localStorage.updateAvailable != "undefined" && localStorage.updateAvailable != myVersion) {
+					// Update available, as notified by chrome itself
+					$(".nextVersion").html( localStorage.updateAvailable+" "+KC3Meta.term("UpdateAvailableNow"));
 					
-					// If there is a fixed scheduled time
-					} else {
-						// If current installed version less than latest
-						var UpdateDiff = (new Date(data.time)).getTime() - Date.now();
+				} else {
+					// Check the GitHub JSON
+					if( myVersion != data.version ){
+						// If unknown time
+						if (data.time === "") {
+							$(".nextVersion").html( data.version+" "+KC3Meta.term("MenuScheduledSoon"));
 						
-						if(UpdateDiff > 0){
-							$(".nextVersion").html( data.version+" in <span class=\"timer\">"+String(UpdateDiff/1000).toHHMMSS()+"</span>");
-						}else{
-							$(".nextVersion").html( data.version+" "+KC3Meta.term("MenuScheduledNow"));
+						// If there is a fixed scheduled time
+						} else {
+							// If current installed version less than latest
+							var UpdateDiff = (new Date(data.time)).getTime() - Date.now();
+							
+							if(UpdateDiff > 0){
+								$(".nextVersion").html( data.version+" in <span class=\"timer\">"+String(UpdateDiff/1000).toHHMMSS()+"</span>");
+							}else{
+								$(".nextVersion").html( data.version+" "+KC3Meta.term("MenuScheduledNow"));
+							}
 						}
+					}else{
+						// Installed version is the same or greater than latest
+						$(".nextVersion").html( KC3Meta.term("MenuOnLatest") );
 					}
-				}else{
-					// Installed version is the same or greater than latest
-					$(".nextVersion").html( KC3Meta.term("MenuOnLatest") );
 				}
+				
 				// Next Maintenance time
 				if (data.maintenance_start) {
 					var nextMtDate = new Date(data.maintenance_start);
