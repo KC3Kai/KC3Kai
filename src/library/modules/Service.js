@@ -310,6 +310,14 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	delete localStorage.updateAvailable;
 	chrome.runtime.onUpdateAvailable.addListener(function(details){
 		localStorage.updateAvailable = details.version;
+		
+		chrome.windows.getCurrent(null, function(cwindow){
+			chrome.tabs.create({
+				windowId: cwindow.id,
+				url: chrome.extension.getURL("pages/update/update.html"),
+				active: false
+			});
+		});
 	});
 	
 })();
