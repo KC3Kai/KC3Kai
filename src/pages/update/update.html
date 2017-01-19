@@ -7,34 +7,55 @@
 		<!-- @nonbuildend -->
 		<link href="../../assets/css/global.css" rel="stylesheet" type="text/css">
 		<link href="update.css" rel="stylesheet" type="text/css">
-		<title>UpdatedTitle</title>
+		<title class="i18n">PageUpdateTitle</title>
 		<link rel="shortcut icon" href="../../assets/img/logo/48.png" type="image/x-icon" />
 	</head>
 	<body>
 		<!-- CONTENTS -->
+		<div id="header">
+			<div class="logo"><img src="../../assets/img/logo/32.png" /></div>
+			<div class="title i18n">PageUpdateTitle</div>
+		</div>
+		
+		<div id="updateReady">
+			<div class="updateReadyTitle">
+				<span class="i18n">Version</span>
+				<span class="num"></span>
+				<span class="i18n">UpdateAvailableNow</span>
+			</div>
+			<div class="updateReadyText i18n">PageUpdateReadyText</div>
+			<div class="updateReadyButtons">
+				<div id="restartNow" class="updateReadyButton i18n hover">PageUpdateRestartNow</div>
+				<div id="restartLater" class="updateReadyButton i18n hover">PageUpdateRestartLater</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+		
 		<div id="wrapper">
-			<div class="logo"><img src="../../assets/img/logo/128.png" /></div>
-			<div class="versionInfo">
-				<div class="versionName">
-					KC3改 <span class="verNum"></span>
-				</div>
-				<div class="versionNotes"></div>
+			<div id="wipVersion">
+				
 			</div>
 			
-			<div class="viewButtons">
-				<a class="btn btn-info btn-sm viewLogs i18n" href="https://github.com/KC3Kai/KC3Kai/pulls?q=label%3Atype%3Arelease%20">NewVerViewChangelogGithub</a>
-				<a class="btn btn-info btn-sm viewWiki i18n" href="https://github.com/KC3Kai/KC3Kai/wiki">NewVerViewWikiGithub</a>
-			</div>
-			
-			
-			<div class="changeLog">
+			<div id="versionList">
 				
 			</div>
 			
 			<div class="clear"></div>
 		</div>
 		
+		<div id="factory">
+			
+			<div class="versionPR">
+				<div class="versionIcon"></div>
+				<div class="versionName"></div>
+				<div class="versionSha"></div>
+				
+			</div>
+			
+		</div>
+		
 		<script type="text/javascript" src="../../assets/js/global.js"></script>
+		<script type="text/javascript" src="../../assets/js/markdown.min.js"></script>
 		<!-- @nonbuildstart -->
 		<script type="text/javascript" src="../../assets/js/jquery-2.1.3.min.js"></script>
 		<script type="text/javascript" src="../../library/managers/ConfigManager.js"></script>

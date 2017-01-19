@@ -6,28 +6,31 @@
 	KC3Meta.init("../../data/");
 	KC3Translation.execute();
 	
-	var newInstall = window.location.hash.substring(1) == "installed";
-	
 	var myVersion = chrome.runtime.getManifest().version;
 	
 	// Document ready
 	$(document).on("ready", function(){
-		// Show installed version
-		$(".verNum").text(myVersion);
+		// Get all release pull request
+		/*$.ajax({
+			url: "https://api.github.com/repos/KC3Kai/KC3Kai/pulls?state=all&base=webstore",
+			dataType: "JSON",
+			success: function(response){
+				console.log(response);
+			}
+		});*/
 		
-		if (newInstall) {
-			$("title").text(KC3Meta.term("InstalledTitle"));
-			$(".versionNotes").html(KC3Meta.term("InstallText"));
-			$(".viewLogs").hide();
-		} else {
-			$("title").text(KC3Meta.term("UpdatedTitle"));
-			$(".versionNotes").html(KC3Meta.term("UpdateText"));
-			$(".viewWiki").hide();
+		if (typeof localStorage.updateAvailable != "undefined" && localStorage.updateAvailable != myVersion) {
+			$("#updateReady .updateReadyTitle span.num").text(localStorage.updateAvailable);
+			$("#updateReady").show();
 		}
 		
-		// Set HTML language
-		$("html").attr("lang", ConfigManager.language);
+		$("#restartNow").on("click", function(){
+			chrome.runtime.reload();
+		});
 		
+		$("#restartLater").on("click", function(){
+			$("#updateReady").hide();
+		});
 	});
 	
 })();

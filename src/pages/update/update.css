@@ -3,47 +3,73 @@
 body {
 	background:#eee;
 }
-#wrapper {
-	width:600px;
-	margin:30px auto;
-	background:#fff;
-	padding:20px 20px 10px;
+
+
+#header {
+	width:800px;
+	margin:10px auto 10px;
+	height:30px;
+	line-height:30px;
 }
-.logo {
-	width:100px;
-	height:100px;
-	line-height:100px;
+#header .logo {
+	width:30px;
+	height:30px;
+	float:left;
+	margin:0px 6px 0px 0px;
+}
+#header .logo img {
+	width:30px;
+	height:30px;
+	vertical-align: top;
+}
+#header .title {
+	width:730px;
+	height:30px;
+	float:left;
+	font-size:20px;
+}
+
+#updateReady {
+	width:800px;
+	margin:0px auto 10px;
+	border:2px solid #e3d081;
+	background:url('../../assets/img/ui/catbomb.png') 5px 5px no-repeat #f1ebcf;
+	border-radius:4px;
+	min-height:50px;
+	padding:5px 10px 10px 65px;
+	font-size:12px;
+	font-weight:bold;
+	display:none;
+}
+#updateReady .updateReadyTitle {
+	height:20px;
+	line-height:20px;
+	margin:0px 0px 2px 0px;
+	font-size:14px;
+	font-weight: bold;
+}
+#updateReady .updateReadyText {
+	margin:0px 0px 5px 0px;
+}
+#updateReady .updateReadyButtons {
+	width:500px;
+}
+#updateReady .updateReadyButton {
+	padding:0px 20px;
+	height:20px;
+	line-height:20px;
+	border-top:1px solid #e3d081;
+	border-bottom:1px solid #e3d081;
 	float:left;
 	margin:0px 10px 0px 0px;
-}
-.logo img {
-	width:100px;
-	height:100px;
-	vertical-align:too;
+	text-align: center;
+	color:#00f;
+	background: linear-gradient(to right, #f1ebcf 0%,#ebdda4 50%,#f1ebcf 100%);
 }
 
-.versionInfo {
-	width:450px;
-	height:100px;
-	float:left;
-}
-.versionName {
-	width:450px;
-	height:24px;
-	line-height:24px;
-	margin:0px 0px 6px 0px;
-	font-size:20px;
-	font-weight:bold;
-}
-.versionNotes {
-	width:450px;
-	height:70px;
-	font-size:12px;
-}
-
-.viewButtons {
-	width:560px;
-	float:left;
-	margin:20px 0px 10px 0px;
-	text-align:center;
+#wrapper {
+	width:800px;
+	margin:0px auto;
+	background:#fff;
+	padding:10px 20px 10px;
 }
