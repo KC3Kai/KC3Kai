@@ -133,8 +133,8 @@ Saves and loads list to and from localStorage
 		// Load from storage and add each one to manager list
 		load: function(){
 			// Use ConfigManager's defaults instead, but remember: elements are String
-			var configured = ConfigManager.defaults()["air_average"]
-				|| ConfigManager.defaults()["air_bounds"];
+			var configured = ConfigManager.defaults().air_average
+				|| ConfigManager.defaults().air_bounds;
 			// Here skip config if ConfigManager not load first
 			if(typeof configured === "object" && Object.keys(configured).length > 0){
 				this.antiAirFighterType2Ids = Object.keys(configured);
