@@ -22,9 +22,9 @@ To be dynamically used on the settings page
 		this.disabled = info.disabled;
 		this[info.type]( info.options );
 		// If different with default, show reset button
-		if(this.config != "language" &&
-			JSON.stringify(ConfigManager[this.config]).hashCode()
-			!== JSON.stringify(ConfigManager.defaults()[this.config]).hashCode()){
+		if( this.config != "language" &&
+			JSON.stringify(ConfigManager[this.config])
+			!== JSON.stringify(ConfigManager.defaults()[this.config]) ){
 			$(".resetButton", this.element).show();
 		}
 		$(".resetButton", this.element).on("click", function(){
