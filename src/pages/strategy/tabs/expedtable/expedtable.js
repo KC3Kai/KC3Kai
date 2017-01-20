@@ -118,8 +118,9 @@
 				$(".modifier .view.view_general", expedRow).toggle( flg );
 				$(".modifier .view.view_normal", expedRow).toggle( !flg );
 
-				$(".cost .view.view_general", expedRow).show();
-				$(".cost .view.view_normal", expedRow).hide();
+				var flg2 = mkFlg();
+				$(".cost .view.view_general", expedRow).toggle( flg2 );
+				$(".cost .view.view_normal", expedRow).toggle( !flg2 );
 				
 				$(".modifier .view.view_general", expedRow).text("+50.00%");
 
@@ -128,6 +129,9 @@
 						? "../../assets/img/ui/btn-gs.png" 
 						: "../../assets/img/ui/btn-xgs.png" );
 				$(".modifier .view.view_normal .dht_times", expedRow).text("x4");
+
+				$(".cost .view.view_general .fuel", expedRow).text("-100");
+				$(".cost .view.view_general .ammo", expedRow).text("-100");
 
 				expedTableRoot.append( expedRow );
 			});
