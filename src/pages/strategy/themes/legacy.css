@@ -1059,3 +1059,39 @@ body {
 
 /* EXPEDITION HISTORY
 --------------------------------*/
+
+/* PVP
+--------------------------------*/
+.tab_pvp .pvp_player .pvp_details_ship {
+	border:1px solid #ace;
+}
+.tab_pvp .pvp_opponent .pvp_details_ship {
+	border:1px solid #faa;
+}
+.tab_pvp .pvp_info .pvp_dl {
+	background:#ffc;
+	border:1px solid #ace;
+}
+/* QUOTES
+--------------------------------*/
+.tab_quotes .ship_list {
+	background:#ffc;
+}
+
+.tab_quotes .part_right .voice_entity.direct {
+	background: #e6ffe6;
+}
+
+.tab_quotes .part_right .voice_entity.inherit {
+	background: #e6f7ff;
+}
+.tab_quotes .part_right .voice_entity .voice {
+	border: 1px solid #039;
+	background: #def;
+}
+.tab_quotes .part_right .voice_entity.inherit .source {
+    color: blue;
+}
+.tab_quotes .part_right .voice_entity.direct .source {
+    color: green;
+}

@@ -1286,8 +1286,15 @@ a:hover {
 .tab_pvp .pvp_details_ship {
 	background:#222 !important;
 }
+.tab_pvp .pvp_player .pvp_details_ship {
+	border:1px solid #004d99;
+}
+.tab_pvp .pvp_opponent .pvp_details_ship {
+	border:1px solid #b30000;
+}
 .tab_pvp .pvp_info .pvp_dl {
 	background:#369 !important;
+	border:1px solid #3f8cd9;
 }
 /* SHIPS LIBRARY
 --------------------------------*/
@@ -1369,4 +1376,33 @@ a:hover {
 --------------------------------*/
 .tab_expedpast .page_panel {
 	width: 700px;
+}
+/* QUOTES
+--------------------------------*/
+.tab_quotes .ship_list {
+	background:#222 !important;
+}
+
+.tab_quotes .ship_list .ship_entity:hover {
+	background:#039 !important;
+}
+
+.tab_quotes .part_right .voice_entity.direct {
+	background: #003300;
+}
+
+.tab_quotes .part_right .voice_entity.inherit {
+	background: #00344d;
+}
+
+.tab_quotes .part_right .voice_entity .voice {
+	border: 1px solid gray;
+	background: #00264d;
+}
+
+.tab_quotes .part_right .voice_entity.inherit .source {
+    color: #00ffff;
+}
+.tab_quotes .part_right .voice_entity.direct .source {
+    color: #00ff00;
 }
