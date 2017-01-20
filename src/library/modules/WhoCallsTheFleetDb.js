@@ -86,6 +86,11 @@
 			return retVal;
 		},
 
+		getShipRemodel: function(shipId) {
+			var entry = this.db["s"+shipId];
+			return entry ? entry.remodel : false;
+		},
+
 		getItemImprovement: function(itemId) {
 			var entry = this.db["i"+itemId];
 			return !entry ? undefined : entry.improvement ? entry.improvement : false;
