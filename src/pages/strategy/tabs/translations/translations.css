@@ -76,7 +76,6 @@
 .tab_translations .tr-item.translation_done .tr-from,
 .tab_translations .tq-item.translation_done .tq-key,
 .tab_translations .tq-item.translation_done .tq-from {
-	color: blue;
 }
 
 .tab_translations .tr-item.translation_missing .tr-key,
@@ -85,5 +84,4 @@
 .tab_translations .tq-item.translation_missing .tq-from,
 .tab_translations .tq-item .tq-name.translation_missing,
 .tab_translations .tq-item .tq-desc.translation_missing {
-	color: red;
 }
