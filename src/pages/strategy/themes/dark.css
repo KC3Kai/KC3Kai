@@ -1345,3 +1345,15 @@ a:hover {
 .tab_compare .compare_ship {
 	background: #666666;
 }
+
+/* EXPEDITION SCORER
+--------------------------------*/
+.tab_expedscorer .page_panel {
+	width: 700px;
+}
+
+/* EXPEDITION HISTORY
+--------------------------------*/
+.tab_expedpast .page_panel {
+	width: 700px;
+}
