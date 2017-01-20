@@ -95,11 +95,9 @@
 }
 
 .tab_quotes .part_right .voice_entity .jp_src,.en_src {
-	background: #eeeeee;
 	display: none;
 }
 .tab_quotes .part_right .voice_entity .sp_quote {
-	background: #fff0fd;
 	display: none;
 }
 

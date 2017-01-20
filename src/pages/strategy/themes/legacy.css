@@ -1093,6 +1093,12 @@ body {
 .tab_quotes .part_right .voice_entity.inherit {
 	background: #e6f7ff;
 }
+.tab_quotes .part_right .voice_entity .jp_src,.en_src {
+	background: #eeeeee;
+}
+.tab_quotes .part_right .voice_entity .sp_quote {
+	background: #fff0fd;
+}
 .tab_quotes .part_right .voice_entity .voice {
 	border: 1px solid #039;
 	background: #def;
