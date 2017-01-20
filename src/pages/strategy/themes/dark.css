@@ -1342,3 +1342,6 @@ a:hover {
 .tab_compare .compare_select_back {
 	color: black;
 }
+.tab_compare .compare_ship {
+	background: #666666;
+}
