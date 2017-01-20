@@ -688,9 +688,34 @@ a:hover {
 	color:#ccc;
 }
 /* Leveling Goals */
+.tab_expcalc .box_control {
+	background-color:#333333;
+	border:1px solid #666;
+}
+.tab_expcalc .box_control_line .toggle {
+	border-radius: 4px;
+	background: #000;
+}
+.tab_expcalc .box_control_line .hover.active {
+	background: #33ccff;
+	color: #000;
+}
 .tab_expcalc .ship_goal {
 	background-color:#333333;
 	border-radius: 0px !important;
+}
+.tab_expcalc .ship_goal.highlight_stype {
+	background-color:#330000;
+}
+.tab_expcalc .ship_goal.highlight_closeToRemodel {
+	background-color:#04242f;
+}
+
+.tab_expcalc .ship_goal.highlight_canBeRemodelled {
+	background-color:#062d2b;
+}
+.tab_expcalc .goal_template {
+	background-color:#def;
 }
 .tab_expcalc .ship_goal .ship_value {
 	color:#fff !important;
@@ -745,33 +770,10 @@ a:hover {
 	background-color:#333333;
 	border-radius: 0px !important;
 }
-.tab_expcalc .ship_goal.ship_closeToRemodel{
-	background-color:#555555;
+.tab_expcalc .goal_template.disabled {
+	background: #666666;
+	border: 1px solid;
 }
-@-webkit-keyframes ship_closeToRemodel{
-	0%  {background-color:#555555;}
-	50%  {background-color:#000000;}
-	100%  {background-color:#555555;}
-}
-@keyframes ship_closeToRemodel {
-	0%  {background-color:#555555;}
-	50%  {background-color:#000000;}
-	100%  {background-color:#555555;}
-}
-.tab_expcalc .ship_goal.ship_canBeRemodelled{
-	background-color:#555555;
-}
-@-webkit-keyframes ship_canBeRemodelled{
-	0%  {background-color:#555555;}
-	50%  {background-color:#000000;}
-	100%  {background-color:#555555;}
-}
-@keyframes ship_canBeRemodelled {
-	0%  {background-color:#555555;}
-	50%  {background-color: #000000;}
-	100%  {background-color:#555555;}
-}
-
 .tab_expcalc .goal_template .goal_value {
 	color:#fff !important;
 }
@@ -802,6 +804,11 @@ a:hover {
 	line-height:22px;
 	margin-top:10px;
 }
+.tab_expcalc .gt_content.new_template {
+	background: #333333;
+	border: 1px;
+}
+
 /* Badge */
 .tab_badge .export_box {
     background:#131313;

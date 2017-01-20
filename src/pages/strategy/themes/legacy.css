@@ -508,37 +508,41 @@ body {
 	color:#000;
 }
 /* Leveling Goals */
+.tab_expcalc .box_control {
+	background:#def;
+	border:1px solid #ace;
+}
+.tab_expcalc .box_control_line .toggle {
+	border-radius: 4px;
+	background: #fff;
+}
+.tab_expcalc .box_control_line .hover.active {
+	background: #3333ff;
+	color: #fff;
+}
 .tab_expcalc .ship_goal {
 	background-color:#def;
 }
-.tab_expcalc .ship_goal.ship_closeToRemodel{
-	background-color:#2be;
+.tab_expcalc .ship_goal.highlight_stype {
+	background-color:#fdd;
+}
+.tab_expcalc .ship_goal.highlight_closeToRemodel {
+	background-color:#71d3f4;
+}
+
+.tab_expcalc .ship_goal.highlight_canBeRemodelled {
+	background-color:#60ebe2;
 }
 .tab_expcalc .goal_template {
 	background-color:#def;
 }
-@-webkit-keyframes ship_closeToRemodel{
-	0%  {background-color:#def;}
-	50%  {background-color:#2be;}
-	100%  {background-color:#def;}
+.tab_expcalc .goal_template.disabled {
+	background: #bbb;
+	border: 1px solid #555;
 }
-@keyframes ship_closeToRemodel {
-	0%  {background-color:#def;}
-	50%  {background-color:#2be;}
-	100%  {background-color:#def;}
-}
-.tab_expcalc .ship_goal.ship_canBeRemodelled{
-	background-color:#2be;
-}
-@-webkit-keyframes ship_canBeRemodelled{
-	0%  {background-color:#def;}
-	50%  {background-color:#1e7;}
-	100%  {background-color:#def;}
-}
-@keyframes ship_canBeRemodelled {
-	0%  {background-color:#def;}
-	50%  {background-color: #1e7;}
-	100%  {background-color:#def;}
+.tab_expcalc .gt_content.new_template {
+	background: #def;
+	border: 1px solid #ace;
 }
 /* Equipment */
 .tab_gears .item_types .item_type {
