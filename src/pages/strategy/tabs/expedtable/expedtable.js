@@ -111,6 +111,16 @@
 
 				makeWinItem( $(".info_col.item1", expedRow), masterInfo.api_win_item1 );
 				makeWinItem( $(".info_col.item2", expedRow), masterInfo.api_win_item2 );
+				
+				$(".modifier .view.view_general", expedRow).hide();
+				$(".modifier .view.view_normal", expedRow).show();
+				$(".cost .view.view_general", expedRow).show();
+				$(".cost .view.view_normal", expedRow).hide();
+				
+				$(".modifier .view.view_general", expedRow).text("+50.00%");
+
+				$(".modifier .view.view_normal img.gs", expedRow).attr( "src", "../../assets/img/ui/btn-gs.png" );
+				$(".modifier .view.view_normal .dht_times", expedRow).text("x4");
 
 				expedTableRoot.append( expedRow );
 			});

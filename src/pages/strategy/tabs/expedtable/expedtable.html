@@ -27,8 +27,23 @@
 		<div class="info_col item item1" />
 		<div class="info_col item item2" />
 		<div class="info_col modifier">
+			<!-- 
+				 "view"s are mutual exclusive and exactly one of them should be visible.
+				 "view_general" displays the most general parameter
+				 while "view_normal" contains more details
+				 but is only suitable for non-custom settings.
+			-->
+			<div class="view view_general" />
+			<div class="view view_normal">
+			  <img class="gs" />
+			  <img class="dht" src="../../assets/img/items/20.png" />
+			  <div class="dht_times"></div>
+			  <div class="clear" />
+			</div>
 		</div>
 		<div class="info_col cost">
+			<div class="view view_general" />
+			<div class="view view_normal" />
 		</div>
 		<div class="clear" />
 	</div>
