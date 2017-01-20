@@ -1046,3 +1046,16 @@ body {
 .tab_maps .sortie_list .node_exp:before {
 	color: black;
 }
+
+/* EXPEDITION SCORER
+--------------------------------*/
+.tab_expedscorer .expedNumBox {
+	background: #def;
+}
+.tab_expedscorer .expedControls .calculate_btn {
+	background:#cde;
+	border:1px outset #ace;
+}
+
+/* EXPEDITION HISTORY
+--------------------------------*/

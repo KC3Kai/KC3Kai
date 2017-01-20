@@ -1351,7 +1351,20 @@ a:hover {
 .tab_expedscorer .page_panel {
 	width: 700px;
 }
-
+.tab_expedscorer .expedNumBox {
+	background: #666666;
+}
+.tab_expedscorer .expedControls .calculate_btn {
+	background:#666666;
+}
+.tab_expedscorer .expedControls input {
+	background-color: #eee;
+	color: black;
+}
+.tab_expedscorer .table-hover tbody tr:hover td,
+.tab_expedscorer .table-hover tbody tr:hover th {
+	color: black;
+}
 /* EXPEDITION HISTORY
 --------------------------------*/
 .tab_expedpast .page_panel {
