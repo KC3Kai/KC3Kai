@@ -3,31 +3,55 @@
 }
 
 .tab_expedtable .exped_row {
+	height: 30px;
 	background-color: #def;
 	border-radius: 3px;
-	margin: 0px 0px 2px 0px;
+	margin: 0px 0px 3px 0px;
 }
 
 .tab_expedtable .exped_row .info_col {
+	height: 100%;
 	float: left;
-	margin: 0px 2px 0px 0px;
-	font-size: 16px;
+	margin: 0px 4px 0px 0px;
+	font-size: 17px;
+	padding: 5px 0px 5px 0px;
+	text-align: center;
 }
 
 .tab_expedtable .exped_row .info_col.id {
-	width: 20px;
+	width: 30px;
 }
 
 .tab_expedtable .exped_row .info_col.time {
-	width: 80px;
+	width: 90px;
 }
 
 .tab_expedtable .exped_row .info_col.resource {
 	width: 50px;
+	font-weight: bold;
+	background: #eee;
+}
+
+.tab_expedtable .exped_row .info_col.resource.fuel {
+	color: #92c992;
+}
+
+.tab_expedtable .exped_row .info_col.resource.ammo {
+	color:#dec558;
+}
+.tab_expedtable .exped_row .info_col.resource.stell {
+	color:#cccccc;
+}
+.tab_expedtable .exped_row .info_col.resource.bauxite {
+	color:#b68f55;
 }
 
 .tab_expedtable .exped_row .info_col.item {
 	width: 50px;
+}
+
+.tab_expedtable .exped_row .info_col.item2 {
+	background: #ffd966;
 }
 
 .tab_expedtable .factory {
