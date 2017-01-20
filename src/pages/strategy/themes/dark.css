@@ -1132,6 +1132,14 @@ a:hover {
 	background:#81811a;
 	color:#fff;
 }
+.tab_flowchart .questFlowItem .questOverride {
+	color:#444 !important;
+}
+.tab_flowchart .questFlowItem .questToggle,
+.tab_flowchart .questFlowItem .questRemove,
+.tab_flowchart .questExtraItem .questRemove {
+	background:#444;
+}
 
 .tab_flowchart .questIcon.type3 {
 	color:#000;

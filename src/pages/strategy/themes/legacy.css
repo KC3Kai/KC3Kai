@@ -916,6 +916,14 @@ body {
 .tab_flowchart .questExtraItem.active {
 	background:#EE9;
 }
+.tab_flowchart .questFlowItem .questOverride {
+	color:#fff;
+}
+.tab_flowchart .questFlowItem .questToggle,
+.tab_flowchart .questFlowItem .questRemove,
+.tab_flowchart .questExtraItem .questRemove  {
+	background:#fff;
+}
 
 
 /* MAPS
