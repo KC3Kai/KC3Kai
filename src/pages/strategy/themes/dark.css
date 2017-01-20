@@ -1337,3 +1337,8 @@ a:hover {
 .tab_mstgear .gearInfo .stat_icon img {
 	-webkit-filter:invert(100%);
 }
+/* SHIP COMPARE
+--------------------------------*/
+.tab_compare .compare_select_back {
+	color: black;
+}
