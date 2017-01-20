@@ -1457,3 +1457,6 @@ a:hover {
 .tab_translations .tq-item .tq-desc.translation_missing {
 	color: firebrick;
 }
+.tab_translations .page_content select {
+	color: black;
+}
