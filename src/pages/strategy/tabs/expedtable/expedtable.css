@@ -67,23 +67,18 @@
 	display:none;
 }
 
-.tab_expedtable .exped_row .modifier .view_normal {
+.tab_expedtable .exped_row .modifier .view_normal img,
+.tab_expedtable .exped_row .modifier .view_normal div {
 	float: left;
 }
 
 .tab_expedtable .exped_row .modifier .view_normal img.gs {
-	float: left;
 	width: 25px;
 	height: 25px;
 	margin: 0px 10px 0px 2px;
 }
 
 .tab_expedtable .exped_row .modifier .view_normal img.dht {
-	float: left;
 	width: 25px;
 	height: 25px;
-}
-
-.tab_expedtable .exped_row .modifier .view_normal .dht_times {
-	float: left;
 }
