@@ -7,6 +7,7 @@ To be dynamically used on the settings page
 	"use strict";
 	
 	window.SettingsBox = function( info ){
+		var self = this;
 		this.config = info.id;
 		this.element = $("#factory .settingBox").clone().appendTo("#wrapper .settings");
 		$(".title", this.element).text( KC3Meta.term( info.name ) );
@@ -20,8 +21,26 @@ To be dynamically used on the settings page
 		}, info.bound || {});
 		this.disabled = info.disabled;
 		this[info.type]( info.options );
-		if(parseInt(info.chui) || 0 === 1)
+		// If different with default, show reset button
+		if(this.config != "language" &&
+			JSON.stringify(ConfigManager[this.config]).hashCode()
+			!== JSON.stringify(ConfigManager.defaults()[this.config]).hashCode()){
+			$(".resetButton", this.element).show();
+		}
+		$(".resetButton", this.element).on("click", function(){
+			console.log("Reset", self.config, "=", ConfigManager[self.config],
+				"to default:", ConfigManager.defaults()[self.config]);
+			ConfigManager.resetValueOf(self.config);
+			elementControl($(this).siblings(".note"),'',KC3Meta.term("SettingsErrorNG"));
+			// Refresh this option
+			//window.location.reload();
+			//$(this).hide();
+			$(".options", self.element).empty();
+			self[info.type]( info.options );
+		});
+		if(parseInt(info.chui) || 0 === 1){
 			$(this.element).addClass("dangerous");
+		}
 	};
 	
 	SettingsBox.prototype.check = function( options ){
@@ -239,7 +258,7 @@ To be dynamically used on the settings page
 	};
 	
 	function elementControl(ele,colorCSS,msg) {
-		return ele.stop(true, true).css('color',colorCSS).text(msg).show().fadeOut(2000);
+		return ele.stop(true, true).css('color',colorCSS).text(msg).show().fadeOut(colorCSS ? 5000 : 2000);
 	}
 	
 	function isDangerous(element,key,current) {
