@@ -1059,7 +1059,15 @@ body {
 
 /* EXPEDITION HISTORY
 --------------------------------*/
-
+.tab_expedpast .expedNumBox {
+	background:#def;
+}
+.tab_expedpast .exped_pages {
+	background:#f0f5ff;
+}
+.tab_expedpast .exped_item {
+	background:#f3f3f3;
+}
 /* PVP
 --------------------------------*/
 .tab_pvp .pvp_player .pvp_details_ship {

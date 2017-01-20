@@ -1377,6 +1377,27 @@ a:hover {
 .tab_expedpast .page_panel {
 	width: 700px;
 }
+
+.tab_expedpast .expedNumBox {
+	background: #666666;
+}
+.tab_expedpast .exped_item {
+	background: #666666;
+	color: black;
+}
+.tab_expedpast .exped_item .exped_info {
+	color: white;
+}
+
+.tab_expedpast .pagination > li > a {
+	color: white;
+	background: #666666;
+}
+
+.tab_expedpast .pagination > li.active > a {
+	color: white;
+	background: #337ab7;
+}
 /* QUOTES
 --------------------------------*/
 .tab_quotes .ship_list {
