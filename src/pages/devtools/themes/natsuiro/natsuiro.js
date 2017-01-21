@@ -2983,8 +2983,8 @@
 							}
 						}
 					}
-					$(".fixed", aaciBox).text(aaciObj.fixed);
-					$(".modifier", aaciBox).text(aaciObj.modifier);
+					$(".fixed", aaciBox).text("+{0}".format(aaciObj.fixed));
+					$(".modifier", aaciBox).text("x{0}".format(aaciObj.modifier));
 					$(".activity_gunfit .aaci").height(data.thisFit !== false ? 88 : 118);
 					if(idx === 0) aaciBox.addClass("triggerable");
 					aaciBox.appendTo(".activity_gunfit .aaciList");

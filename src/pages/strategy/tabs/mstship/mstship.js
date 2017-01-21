@@ -502,7 +502,7 @@
 					var aaciBox, equipIcon, i;
 					$.each(aaciList, function(idx, aaciObj){
 						aaciBox = $(".tab_mstship .factory .aaciPattern").clone();
-						$(".apiId", aaciBox).text(aaciObj.id);
+						$(".apiId", aaciBox).text("[{0}]".format(aaciObj.id));
 						if(aaciObj.icons[0] > 0) {
 							$(".shipIcon img", aaciBox)
 								.attr("src", KC3Meta.shipIcon(aaciObj.icons[0]) )
@@ -525,8 +525,8 @@
 								}
 							}
 						}
-						$(".fixed", aaciBox).text(aaciObj.fixed);
-						$(".modifier", aaciBox).text(aaciObj.modifier);
+						$(".fixed", aaciBox).text("+{0}".format(aaciObj.fixed));
+						$(".modifier", aaciBox).text("x{0}".format(aaciObj.modifier));
 						aaciBox.toggleClass("odd", (idx+1) % 2 !== 0);
 						aaciBox.toggleClass("even", (idx+1) % 2 === 0);
 						aaciBox.appendTo(".aaciList");
