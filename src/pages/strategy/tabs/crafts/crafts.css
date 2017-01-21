@@ -1,5 +1,4 @@
 .tab_crafts {
-	
 }
 .tab_crafts .build_list {
 	width:680px;
@@ -75,8 +74,7 @@
 /* PAGINATION
 --------------------------------*/
 .tab_crafts .build_pages {
-	
 }
 .tab_crafts .build_pages .pagination {
-	
+	margin:5px 0px 0px 0px;
 }

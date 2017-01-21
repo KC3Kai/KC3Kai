@@ -1,15 +1,12 @@
 .tab_builds {
-	
 }
 .tab_builds .build_list {
-	
 }
 .tab_builds .factory {
 	display:none;
 }
 
 .tab_builds .legend {
-	
 }
 .tab_builds .legend_item {
 	width:120px;
@@ -87,5 +84,5 @@
 	margin-bottom:10px;
 }
 .tab_builds .build_pages .pagination {
-	margin:0px;
+	margin:5px 0px 0px 0px;
 }
