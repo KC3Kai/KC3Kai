@@ -27,7 +27,7 @@ Retreives when needed to apply on components
 				devOnlyPages		: false,
 				forceDMMLogin		: false,
 				apiRecorder			: false,
-				updateNotification	: true,
+				updateNotification	: 2,
 
 				showCatBombs		: true,
 				showApiError		: true,

@@ -74,7 +74,14 @@
 			{
 				"id": "updateNotification",
 				"name": "SettingsUpdateNotification",
-				"type": "check"
+				"type": "radio",
+				"options" : {
+					"choices" : [
+						[ 1, "SettingsUpdateNotifNone" ],
+						[ 2, "SettingsUpdateNotifPage" ],
+						[ 3, "SettingsUpdateNotifPop" ]
+					]
+				}
 			}
 		]
 	},

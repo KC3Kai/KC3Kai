@@ -33,6 +33,8 @@
 			"assets/js/jquery-2.1.3.min.js",
 			"library/objects/Messengers.js",
 			"library/managers/ConfigManager.js",
+			"library/modules/Meta.js",
+			"library/modules/Translation.js",
 			"library/modules/Service.js"
 		]
 	},

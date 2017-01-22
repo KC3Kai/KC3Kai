@@ -21,15 +21,42 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	console.info("KC3改 Background Service loaded");
 	
 	ConfigManager.load();
-	if (ConfigManager.updateNotification) {
-		if (typeof localStorage.kc3version == "undefined"){
-			window.open("../../pages/update/update.html#installed", "kc3_update_page");
-		} else {
-			if (localStorage.kc3version != chrome.runtime.getManifest().version) {
-				window.open("../../pages/update/update.html#updated", "kc3_update_page");
+	KC3Meta.init("../../data/");
+	
+	switch (ConfigManager.updateNotification) {
+		case 2: // Open update status page
+			if (typeof localStorage.kc3version == "undefined"){
+				window.open("../../pages/update/update.html#installed", "kc3_update_page");
+			} else {
+				if (localStorage.kc3version != chrome.runtime.getManifest().version) {
+					window.open("../../pages/update/update.html#updated", "kc3_update_page");
+				}
 			}
-		}
+			break;
+		case 3: // Just desktop notification
+			if (typeof localStorage.kc3version == "undefined"){
+				chrome.notifications.clear("kc3kai_update");
+				chrome.notifications.create("kc3kai_update", {
+					type: "basic",
+					iconUrl: chrome.extension.getURL("assets/img/logo/128.png"),
+					title: KC3Meta.term("InstalledTitle"),
+					message: KC3Meta.term("InstalledText"),
+				});
+			} else {
+				if (localStorage.kc3version != chrome.runtime.getManifest().version) {
+					chrome.notifications.clear("kc3kai_update");
+					chrome.notifications.create("kc3kai_update", {
+						type: "basic",
+						iconUrl: chrome.extension.getURL("assets/img/logo/128.png"),
+						title: KC3Meta.term("UpdatedTitle"),
+						message: KC3Meta.term("UpdatedText"),
+					});
+				}
+			}
+			break;
 	}
+	
+	
 	
 	localStorage.kc3version = chrome.runtime.getManifest().version;
 	
@@ -312,13 +339,52 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	chrome.runtime.onUpdateAvailable.addListener(function(details){
 		localStorage.updateAvailable = details.version;
 		
-		chrome.windows.getCurrent(null, function(cwindow){
-			chrome.tabs.create({
-				windowId: cwindow.id,
-				url: chrome.extension.getURL("pages/update/update.html"),
-				active: false
-			});
-		});
+		ConfigManager.load();
+		switch (ConfigManager.updateNotification) {
+			case 2: // Open update status page
+				chrome.windows.getCurrent(null, function(cwindow){
+					chrome.tabs.create({
+						windowId: cwindow.id,
+						url: chrome.extension.getURL("pages/update/update.html"),
+						active: false
+					});
+				});
+				break;
+			case 3: // Just desktop notification
+				chrome.notifications.clear("kc3kai_update");
+				chrome.notifications.create("kc3kai_update", {
+					type: "basic",
+					iconUrl: chrome.extension.getURL("assets/img/logo/128.png"),
+					title: KC3Meta.term("UpdateNotifTitle").replace("{0}", details.version),
+					message: KC3Meta.term("UpdateNotifText"),
+					buttons: [
+						{ title: "Restart now." },
+						{ title: "Update later..." }
+					],
+					requireInteraction: true
+				});
+				break;
+		}
 	});
 	
+	// Chrome Desktop Notifications: Box Click
+	chrome.notifications.onClicked.addListener(function(notificationId, byUser){
+		if (notificationId == "kc3kai_update") {
+			window.open("../../pages/update/update.html", "kc3_update_page");
+			chrome.notifications.clear("kc3kai_update");
+		}
+	});
+	
+	// Chrome Desktop Notifications: Button Click
+	chrome.notifications.onButtonClicked.addListener(function(notificationId, buttonIndex){
+		if (notificationId == "kc3kai_update") {
+			if (buttonIndex === 0) {
+				reloadApp();
+			} else {
+				chrome.notifications.clear("kc3kai_update");
+			}
+		}
+	});
+	
+	function reloadApp(){ chrome.runtime.reload(); }
 })();
