@@ -125,8 +125,6 @@
 							// First x-axis with no record, use zero :: if there's no data beyond the axis
 								data[itemData.name[j]][graphIndex] = (nearest!==undefined) ? this[dataKey][nearest][itemData.dbkey[j]] : 0;
 						}
-						if(typeof data[itemData.name[j]][graphIndex] === "undefined")
-							console.log("false",data[itemData.name[j]][graphIndex-1]);
 					}
 				}
 				graphIndex++;
