@@ -18,6 +18,8 @@ Uses KC3Quest objects to play around with
 		timeToResetMonthlyQuests: -1,
 		timeToResetQuarterlyQuests: -1,
 		
+		// A quests list which confirmed sharing same counter at server-side
+		// Currently quests list is confirmed at: http://wikiwiki.jp/kancolle/?%C7%A4%CC%B3#sc3afcc0
 		sharedCounterQuests: [ [218, 212] ],
 		
 		// Internal constants for time period quests

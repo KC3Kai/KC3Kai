@@ -99,19 +99,26 @@ Quest Type:
 	
 	/* INCREMENT
 	Add one to tracking progress
+	@param {number} reqNum - index of counter type, mainly for Bw1. Default: 0
+	@param {number} amount - progress amount to be increased. Default: 1
+	@param isAdjustingCounter - if true, prevent recursively inc on specific quest itself
 	------------------------------------------*/
-	KC3Quest.prototype.increment = function(reqNum, amount, noLoop){
+	KC3Quest.prototype.increment = function(reqNum, amount, isAdjustingCounter){
 		var self = this;
-		if(this.tracking && (this.status==2 || !!noLoop)){    //2 = On progress
+		//2 = on progress, or force to be adjusted on shared counter
+		if(this.tracking && (this.status==2 || !!isAdjustingCounter)){
 			if(typeof reqNum == "undefined"){ reqNum=0; }
 			if(typeof amount == "undefined"){ amount=1; }
-			var maxValue = (!!noLoop && this.status!=2) ? this.tracking[reqNum][1] - 1 : this.tracking[reqNum][1];
+			var maxValue = (!!isAdjustingCounter && this.status!=2) ? this.tracking[reqNum][1] - 1 : this.tracking[reqNum][1];
 			if (this.tracking[reqNum][0] + amount <= maxValue) {
 				this.tracking[reqNum][0] += amount;
 			}
 			KC3QuestManager.save();
 		}
-		if(!noLoop && Array.isArray(KC3QuestManager.sharedCounterQuests)){
+		// Some quests are reported bug-like behavior on progress counter at server-side,
+		// Try to simulate the increment behavior, keep counters the same with in-game's
+		// See PR #1436
+		if(!isAdjustingCounter && Array.isArray(KC3QuestManager.sharedCounterQuests)){
 			KC3QuestManager.sharedCounterQuests.forEach(function(idList){
 				var ids = Array.apply(null, idList);
 				ids.forEach(function(incId, idx){
