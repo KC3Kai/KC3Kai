@@ -146,6 +146,10 @@
 	display:none;
 }
 
+.tab_event .page_list .pagination {
+	margin:5px 0px 0px 0px;
+}
+
 /* SORTIE LIST
 ---------------------------------*/
 .tab_event .sortie_list {

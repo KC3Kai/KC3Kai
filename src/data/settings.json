@@ -358,7 +358,7 @@
 	},
 	{
 		"section": "SettingsAlerts",
-		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Alerts",
+		"help" : "https://github.com/KC3Kai/KC3Kai/wiki/Settings%3A-Alerts",
 		"contents" : [
 			{
 				"id" : "alert_diff",
@@ -458,7 +458,7 @@
 	},
 	{
 		"section": "SettingsTaihaAlert",
-		"help" : "https://github.com/dragonjet/KC3Kai/wiki",
+		"help" : "https://github.com/KC3Kai/KC3Kai/wiki",
 		"contents" : [
 			{
 				"id" : "alert_taiha",
@@ -500,7 +500,7 @@
 	},
 	{
 		"section": "SettingsAPIGameScreen",
-		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Screen",
+		"help" : "https://github.com/KC3Kai/KC3Kai/wiki/Settings%3A-Screen",
 		"contents" : [
 			{
 				"id" : "api_translation",
@@ -770,7 +770,7 @@
 	},
 	{
 		"section": "Panel",
-		"help" : "https://github.com/dragonjet/KC3Kai/wiki/Settings%3A-Panel",
+		"help" : "https://github.com/KC3Kai/KC3Kai/wiki/Settings%3A-Panel",
 		"contents" : [
 			{
 				"id" : "pan_theme",

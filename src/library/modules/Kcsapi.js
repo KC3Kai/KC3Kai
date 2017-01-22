@@ -727,6 +727,7 @@ Previously known as "Reactor"
 			if(shipData.lock) {
 				console.warn("Unlocked",shipData.rosterId,shipData.name());
 			} else {
+				ConfigManager.loadIfNecessary();
 				var lockID = ConfigManager.lock_list.indexOf(shipID);
 				if(lockID+1) {
 					ConfigManager.lock_list.splice(lockID,1);

@@ -469,7 +469,6 @@
 
 		// AntiAir Formation Toggle
 		$(".summary-antiair").on("click",function(){
-			ConfigManager.load();
 			ConfigManager.scrollAntiAirFormation(selectedFleet === 5);
 			NatsuiroListeners.Fleet();
 		}).addClass("hover");
@@ -773,6 +772,7 @@
 	var NatsuiroListeners = {
 		GameStart: function(data){ Activate(); },
 		HomeScreen: function(data){
+			ConfigManager.loadIfNecessary();
 			Activate();
 			clearSortieData();
 			clearBattleData();
@@ -795,7 +795,7 @@
 		CatBomb: function(data){
 			$("#catBomb").hide();
 			
-			ConfigManager.load();
+			ConfigManager.loadIfNecessary();
 			if (!ConfigManager.showCatBombs) return false;
 			
 			$("#catBomb .title").html( data.title );
@@ -808,7 +808,7 @@
 		APIError: function(data){
 			$("#catBomb").hide();
 			
-			ConfigManager.load();
+			ConfigManager.loadIfNecessary();
 			if (!ConfigManager.showApiError
 				|| (!ConfigManager.repeatApiError
 					&& !!lastApiError && lastApiError.stack === data.stack
@@ -843,7 +843,7 @@
 		Bomb201: function(data){
 			$("#catBomb").hide();
 			
-			ConfigManager.load();
+			ConfigManager.loadIfNecessary();
 			if (!ConfigManager.showCatBombs) return false;
 			
 			$("#catBomb .title").html( data.title );
@@ -2983,8 +2983,8 @@
 							}
 						}
 					}
-					$(".fixed", aaciBox).text(aaciObj.fixed);
-					$(".modifier", aaciBox).text(aaciObj.modifier);
+					$(".fixed", aaciBox).text("+{0}".format(aaciObj.fixed));
+					$(".modifier", aaciBox).text("x{0}".format(aaciObj.modifier));
 					$(".activity_gunfit .aaci").height(data.thisFit !== false ? 88 : 118);
 					if(idx === 0) aaciBox.addClass("triggerable");
 					aaciBox.appendTo(".activity_gunfit .aaciList");

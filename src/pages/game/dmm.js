@@ -505,7 +505,6 @@ var interactions = {
 	
 	// Taiha Alert Start
 	taihaAlertStart :function(request, sender, response, callback){
-		ConfigManager.load();
 		taihaStatus = true;
 		
 		if(ConfigManager.alert_taiha_blur) {
@@ -649,6 +648,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, response){
 	if((request.identifier||"") == "kc3_gamescreen"){
 		// If action requested is supported
 		if(typeof interactions[request.action] !== "undefined"){
+			ConfigManager.loadIfNecessary();
 			// Execute the action
 			interactions[request.action](request, sender, response);
 			return true;

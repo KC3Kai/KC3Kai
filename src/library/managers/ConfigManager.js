@@ -192,9 +192,9 @@ Retreives when needed to apply on components
         
 		// Reset value of a specific key to the current default value
 		resetValueOf: function(key) {
+			ConfigManager.loadIfNecessary();
 			this[key] = this.defaults()[key];
-			console.log( "key is " + key);
-			console.log( "new value is " + JSON.stringify( this[key] ));
+			console.log( "reset key", key, " to default:", JSON.stringify(this[key]) );
 			this.save();
 		},
 		
@@ -231,26 +231,35 @@ Retreives when needed to apply on components
 				this.resetValueOf('language');
 		},
 		
+		loadIfNecessary : function(){
+			var currentConfig = JSON.stringify(this);
+			if(currentConfig !== localStorage.config){
+				this.load();
+			}
+		},
+		
 		// Save current config onto localStorage
 		save : function(){
-			// console.log(this);
 			localStorage.config = JSON.stringify(this);
 		},
 		
 		// Toggle HQ Info Page
 		scrollHqInfoPage :function(){
+			this.loadIfNecessary();
 			this.hqInfoPage = (this.hqInfoPage % 3) + 1;
 			this.save();
 		},
 		
 		// Toggle Equipment LoS
 		scrollElosMode :function(){
+			this.loadIfNecessary();
 			this.elosFormula = (this.elosFormula % 4) + 1;
 			this.save();
 		},
 		
 		// Toggle Fighter Power
 		scrollFighterPowerMode :function(){
+			this.loadIfNecessary();
 			this.air_formula = (this.air_formula % 3) + 1;
 			this.save();
 		},
@@ -259,6 +268,7 @@ Retreives when needed to apply on components
 		// Only loop between frequently used (different modifiers):
 		// Line Ahead / Double Line / Diamond / C anti-sub / C diamond / C battle
 		scrollAntiAirFormation :function(isCombined){
+			this.loadIfNecessary();
 			this.aaFormation += 1;
 			if(!!isCombined){
 				if(this.aaFormation == 4) this.aaFormation = 11;
@@ -272,18 +282,21 @@ Retreives when needed to apply on components
 		
 		// Toggle HQ Exp Information
 		scrollHQExpInfo :function(){
+			this.loadIfNecessary();
 			this.hqExpDetail = (this.hqExpDetail % 3) + 1;
 			this.save();
 		},
 		
 		// Toggle Rank Title vs Rank Points
 		scrollRankPtsMode :function(){
+			this.loadIfNecessary();
 			this.rankPtsMode = (this.rankPtsMode % 2) + 1;
 			this.save();
 		},
 		
 		// Toggle repair timer type
 		scrollTimerType :function(){
+			this.loadIfNecessary();
 			this.timerDisplayType = (this.timerDisplayType % 2) + 1;
 			this.save();
 		}
