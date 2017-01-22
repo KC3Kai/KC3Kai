@@ -23,61 +23,95 @@ KC3改 Ship Box for Natsuiro theme
 	/* SET SHIP
 	Short ship box for combined fleets
 	---------------------------------------------------*/
-	KC3NatsuiroShipbox.prototype.commonElements = function( rosterId ){
-		var leftPad = function(num){return ("   "+num).slice(-3);};
-		var tooltip = "{0}: {1}\n".format(this.shipData.masterId, KC3Meta.shipReadingName(this.shipData.master().api_yomi));
-		tooltip += "{0}: {1} \t".format(KC3Meta.term("ShipArmor"), leftPad(this.shipData.ar[0]));
-		tooltip += "{0}: {1} \n".format(KC3Meta.term("ShipFire"), leftPad(this.shipData.fp[0]));
-		tooltip += "{0}: {1} \t".format(KC3Meta.term("ShipEvasion"), leftPad(this.shipData.ev[0]));
-		tooltip += "{0}: {1} \n".format(KC3Meta.term("ShipTorpedo"), leftPad(this.shipData.tp[0]));
-		tooltip += "{0}: {1} \t".format(KC3Meta.term("ShipAsw"), leftPad(this.shipData.as[0]));
-		tooltip += "{0}: {1} \n".format(KC3Meta.term("ShipAntiAir"), leftPad(this.shipData.aa[0]));
-		tooltip += "{0}: {1} \t".format(KC3Meta.term("ShipLos"), leftPad(this.shipData.ls[0]));
-		tooltip += "{0}: {1} \n".format(KC3Meta.term("ShipLuck"), leftPad(this.shipData.lk[0]));
-		tooltip += "{0}: {1} \t".format(KC3Meta.term("ShipSpeed"), this.shipData.speedName());
-		tooltip += "{0}: {1} ".format(KC3Meta.term("ShipLength"), this.shipData.rangeName());
-		
-		tooltip += "\n" + KC3Meta.term("ShipAAAdjusted")
-			.format( this.shipData.adjustedAntiAir() ) ;
-		tooltip += "\n" + KC3Meta.term("ShipAAShotdownRate")
-			.format( Math.qckInt("floor", this.shipData.proportionalShotdownRate() * 100, 1) );
+	KC3NatsuiroShipbox.prototype.commonElements = function( isCombinedEscort ){
+		var shipDb = WhoCallsTheFleetDb.getShipStat(this.shipData.masterId);
+		var tooltipBox = $("#factory .ship_face_tooltip_outer").clone();
+		tooltipBox.hide();
+		tooltipBox.appendTo(this.element);
+		// Show a rich text tool-tip like stats in game
+		$(".ship_face_tooltip .ship_name", tooltipBox).text("[{0}] {1} ({2})"
+			.format(this.shipData.masterId, this.shipData.name(),
+				KC3Meta.shipReadingName(this.shipData.master().api_yomi))
+		);
+		$(".ship_face_tooltip .ship_rosterId span", tooltipBox).text(this.shipData.rosterId);
+		$(".ship_face_tooltip .ship_stype", tooltipBox).text(this.shipData.stype());
+		$(".ship_face_tooltip .ship_level span.value", tooltipBox).text(this.shipData.level);
+		$(".ship_face_tooltip .ship_hp span.hp", tooltipBox).text(this.shipData.hp[0]);
+		$(".ship_face_tooltip .ship_hp span.mhp", tooltipBox).text(this.shipData.hp[1]);
+		$(".ship_face_tooltip .stat_hp", tooltipBox).text(this.shipData.hp[0]);
+		$(".ship_face_tooltip .stat_fp", tooltipBox).text(this.shipData.fp[0]);
+		$(".ship_face_tooltip .stat_ar", tooltipBox).text(this.shipData.ar[0]);
+		$(".ship_face_tooltip .stat_tp", tooltipBox).text(this.shipData.tp[0]);
+		$(".ship_face_tooltip .stat_ev", tooltipBox).text(this.shipData.ev[0]);
+		$(".ship_face_tooltip .stat_aa", tooltipBox).text(this.shipData.aa[0]);
+		$(".ship_face_tooltip .stat_ac", tooltipBox).text(shipDb.carry >= 0 ? shipDb.carry : "?");
+		$(".ship_face_tooltip .stat_as", tooltipBox).text(this.shipData.as[0]);
+		$(".ship_face_tooltip .stat_sp", tooltipBox).text(this.shipData.speedName());
+		$(".ship_face_tooltip .stat_ls", tooltipBox).text(this.shipData.ls[0]);
+		$(".ship_face_tooltip .stat_rn", tooltipBox).text(this.shipData.rangeName());
+		$(".ship_face_tooltip .stat_lk", tooltipBox).text(this.shipData.lk[0]);
+		$(".ship_face_tooltip .adjustedAntiAir", tooltipBox).text(
+			KC3Meta.term("ShipAAAdjusted").format(this.shipData.adjustedAntiAir())
+		);
+		$(".ship_face_tooltip .propShotdownRate", tooltipBox).text(
+				KC3Meta.term("ShipAAShotdownRate").format(
+					Math.qckInt("floor", this.shipData.proportionalShotdownRate() * 100, 1)
+				)
+			);
 		var fixedShotdownRange = this.shipData.fixedShotdownRange(ConfigManager.aaFormation);
 		var fleetPossibleAaci = fixedShotdownRange[2];
 		if(fleetPossibleAaci > 0){
-			tooltip += "\n" + KC3Meta.term("ShipAAFixedShotdown")
-				.format( "{0}~{1} (x{2})".
-					format(fixedShotdownRange[0], fixedShotdownRange[1],
+			$(".ship_face_tooltip .fixedShotdown", tooltipBox).text(
+				KC3Meta.term("ShipAAFixedShotdown").format(
+					"{0}~{1} (x{2})".format(fixedShotdownRange[0], fixedShotdownRange[1],
 						AntiAir.AACITable[fleetPossibleAaci].modifier)
-				);
+				)
+			);
 		} else {
-			tooltip += "\n" + KC3Meta.term("ShipAAFixedShotdown")
-				.format( fixedShotdownRange[0] );
+			$(".ship_face_tooltip .fixedShotdown", tooltipBox).text(
+				KC3Meta.term("ShipAAFixedShotdown").format(fixedShotdownRange[0])
+			);
 		}
 		var maxAaciParams = this.shipData.maxAaciShotdownBonuses();
 		if(maxAaciParams[0] > 0){
-			tooltip += "\n" + KC3Meta.term("ShipAACIMaxBonus")
-				.format( "+{0} (x{1})".format(maxAaciParams[1], maxAaciParams[2]) );
+			$(".ship_face_tooltip .aaciMaxBonus", tooltipBox).text(
+				KC3Meta.term("ShipAACIMaxBonus").format(
+					"+{0} (x{1})".format(maxAaciParams[1], maxAaciParams[2])
+				)
+			);
 		} else {
-			tooltip += "\n" + KC3Meta.term("ShipAACIMaxBonus").format( KC3Meta.term("None") );
+			$(".ship_face_tooltip .aaciMaxBonus", tooltipBox).text(
+				KC3Meta.term("ShipAACIMaxBonus").format(KC3Meta.term("None"))
+			);
 		}
-		tooltip += "\n" + KC3Meta.term("ShipAAImgEnemySlot").format( ConfigManager.imaginaryEnemySlot );
 		var propShotdown = this.shipData.proportionalShotdown(ConfigManager.imaginaryEnemySlot);
 		var aaciFixedShotdown = fleetPossibleAaci > 0 ? AntiAir.AACITable[fleetPossibleAaci].fixed : 0;
-		tooltip += "\n" + KC3Meta.term("ShipAAShotdownPred").format(
-			"-{0} / -{1} / -{2} / -{3}".format(
-				// Both succeeded
-				propShotdown + fixedShotdownRange[1] + aaciFixedShotdown + 1,
-				// Proportional succeeded only
-				propShotdown + aaciFixedShotdown + 1,
-				// Fixed succeeded only
-				fixedShotdownRange[1] + aaciFixedShotdown + 1,
-				// Both failed
-				aaciFixedShotdown + 1
-			)
+		$.each($(".ship_face_tooltip .sd_title .aa_col", tooltipBox), function(idx, col){
+			$(col).text(KC3Meta.term("ShipAAShotdownTitles").split("/")[idx] || "");
+		});
+		$(".ship_face_tooltip .bomberSlot span", tooltipBox).text(ConfigManager.imaginaryEnemySlot);
+		$(".ship_face_tooltip .sd_both span", tooltipBox).text(
+			// Both succeeded
+			propShotdown + fixedShotdownRange[1] + aaciFixedShotdown + 1
 		);
-		
-		$(".ship_img img", this.element).attr("src", KC3Meta.shipIcon(this.shipData.masterId))
-			.attr("title", tooltip);
+		$(".ship_face_tooltip .sd_prop span", tooltipBox).text(
+			// Proportional succeeded only
+			propShotdown + aaciFixedShotdown + 1
+		);
+		$(".ship_face_tooltip .sd_fixed span", tooltipBox).text(
+			// Fixed succeeded only
+			fixedShotdownRange[1] + aaciFixedShotdown + 1
+		);
+		$(".ship_face_tooltip .sd_fail span", tooltipBox).text(
+			// Both failed
+			aaciFixedShotdown + 1
+		);
+		$(".ship_img", this.element).tooltip({
+			position: { my: !!isCombinedEscort ? "left-50 top" : "left+50 top",
+				at: "left top", of: $(".module.fleet") },
+			items: "div",
+			content: tooltipBox.html()
+		});
 		/*
 		$(".ship_img", this.element).addClass("hover").data("sid", this.shipData.masterId);
 		$(".ship_img", this.element).click(function(e){
@@ -85,6 +119,7 @@ KC3改 Ship Box for Natsuiro theme
 			var sr = window.open("/pages/strategy/strategy.html" + tab, "kc3kai_strategy");
 		});
 		*/
+		$(".ship_img img", this.element).attr("src", KC3Meta.shipIcon(this.shipData.masterId));
 		$(".ship_name", this.element).text( this.shipData.name() );
 		$(".ship_type", this.element).text( this.shipData.stype() );
 		
@@ -443,4 +478,11 @@ KC3改 Ship Box for Natsuiro theme
 		}
 	};
 	
+	KC3NatsuiroShipbox.tooltipOptions = {
+		position: { my: "left+40 top-20", at: "left center" },
+		content: function(){
+			return $(this).attr("title").replace(/\n/g, "<br/>");
+		}
+	};
+
 })();

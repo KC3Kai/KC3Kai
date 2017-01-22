@@ -33,6 +33,7 @@ button, input, select, textarea {
 	box-shadow:0 0 5px 1px #777;
 	color:#cccccc;
 	background:#444;
+	font-family:inherit;
 	font-size:12px;
 }
 
@@ -1020,6 +1021,28 @@ button, input, select, textarea {
 .tab_fleet .fleet_ships {
 	height:160px;
 }
+.ui-tooltip-content .ship_tooltip .stat_icon img {
+	-webkit-filter: invert(100%);
+}
+.ui-tooltip-content .ship_tooltip .stat_icon {
+	background-color:#333 !important;
+	border:1px solid #111 !important;
+	border-right-color:#333 !important;
+	border-bottom-color:#555 !important;
+}
+.ui-tooltip-content .ship_tooltip .stat_value {
+	background-color:#444 !important;
+	border:1px solid #222 !important;
+	border-right-color:#777 !important;
+	border-bottom-color:#777 !important;
+}
+.ui-tooltip-content .ship_tooltip .aa_col {
+	background-color:#444 !important;
+	border:1px solid #222 !important;
+	border-right-color:#777 !important;
+	border-bottom-color:#777 !important;
+}
+
 /* SHIP BOX
 --------------------------------*/
 .tab_fleet .fleet_ship {

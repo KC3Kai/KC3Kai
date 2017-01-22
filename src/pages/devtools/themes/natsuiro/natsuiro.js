@@ -1157,7 +1157,7 @@
 							}
 						}
 						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars, dameConConsumed))
-							.commonElements()
+							.commonElements(true)
 							.defineShort( EscortFleet )
 							.appendTo(".module.fleet .shiplist_escort");
 					}
