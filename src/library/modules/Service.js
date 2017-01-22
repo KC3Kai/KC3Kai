@@ -358,8 +358,8 @@ See Manifest File [manifest.json] under "background" > "scripts"
 					title: KC3Meta.term("UpdateNotifTitle").replace("{0}", details.version),
 					message: KC3Meta.term("UpdateNotifText"),
 					buttons: [
-						{ title: "Restart now." },
-						{ title: "Update later..." }
+						{ title: KC3Meta.term("PageUpdateRestartNow") },
+						{ title: KC3Meta.term("PageUpdateRestartLater") }
 					],
 					requireInteraction: true
 				});
