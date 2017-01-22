@@ -70,6 +70,11 @@
 				"id": "apiRecorder",
 				"name": "SettingsAPIRecorder",
 				"type": "check"
+			},
+			{
+				"id": "updateNotification",
+				"name": "SettingsUpdateNotification",
+				"type": "check"
 			}
 		]
 	},

@@ -20,13 +20,14 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	
 	console.info("KC3改 Background Service loaded");
 	
-	
-	if (typeof localStorage.kc3version == "undefined"){
-		window.open("../../pages/update/update.html#installed", "kc3kai_updates");
-		
-	} else {
-		if (localStorage.kc3version != chrome.runtime.getManifest().version) {
-			window.open("../../pages/update/update.html#updated", "kc3kai_updates");
+	ConfigManager.load();
+	if (ConfigManager.updateNotification) {
+		if (typeof localStorage.kc3version == "undefined"){
+			window.open("../../pages/update/update.html#installed", "kc3_update_page");
+		} else {
+			if (localStorage.kc3version != chrome.runtime.getManifest().version) {
+				window.open("../../pages/update/update.html#updated", "kc3_update_page");
+			}
 		}
 	}
 	

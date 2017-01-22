@@ -26,6 +26,13 @@
 			$("#versionText .desc").html(markdown.toHTML( $(this).data("desc") ));
 		});
 		
+		// Check if there is an opener event flag
+		if (window.location.hash.substring(1) == "installed") {
+			$("#installed").show();
+		} else if (window.location.hash.substring(1) == "updated") {
+			$("#updated").show();
+		}
+		
 		// Check if an available update is pending
 		if (typeof localStorage.updateAvailable != "undefined" && localStorage.updateAvailable != myVersion) {
 			$("#updateReady .updateReadyTitle span.num").text(localStorage.updateAvailable);
