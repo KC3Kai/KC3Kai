@@ -355,7 +355,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				chrome.notifications.create("kc3kai_update", {
 					type: "basic",
 					iconUrl: chrome.extension.getURL("assets/img/logo/128.png"),
-					title: KC3Meta.term("UpdateNotifTitle").replace("{0}", details.version),
+					title: KC3Meta.term("UpdateNotifTitle").format(details.version),
 					message: KC3Meta.term("UpdateNotifText"),
 					buttons: [
 						{ title: KC3Meta.term("PageUpdateRestartNow") },
