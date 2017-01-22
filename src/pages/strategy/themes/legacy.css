@@ -1057,6 +1057,32 @@ body {
 
 /* EXPEDITION SCORER
 --------------------------------*/
+.tab_compare .compare_ship_stat {
+	background:#0f0;
+}
+.tab_compare .compare_select_back {
+	background:#ace;
+	border:1px solid #37b;
+	border-radius: 5px;
+}
+.tab_compare .compare_select_back.active {
+	background: #fff;
+	color:#000;
+}
+.tab_compare .compare_select_stat {
+	background:#ace;
+	border:1px solid #37b;
+	border-radius: 5px;
+}
+.tab_compare .compare_select_stat.active {
+	background: #fff;
+}
+.tab_compare .compare_ship_bar {
+	background:-webkit-linear-gradient(top, #7db9e8 0%,#1a0888 100%);
+}
+
+/* EXPEDITION SCORER
+--------------------------------*/
 .tab_expedscorer .expedNumBox {
 	background: #def;
 }

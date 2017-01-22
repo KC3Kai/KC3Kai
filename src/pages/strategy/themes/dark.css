@@ -1319,6 +1319,9 @@ a:hover {
 .tab_mstship .shipRecord:hover {
 	background:#039 !important;
 }
+.tab_mstship .shipInfo .more .remodel_name a {
+	color:#ffcc00 !important;
+}
 .tab_mstship .shipInfo .ship_stat_icon img {
 	filter:invert(100%);
 }
@@ -1327,6 +1330,7 @@ a:hover {
 }
 .tab_mstship .shipInfo .voice {
 	background:#222 !important;
+	border:1px solid #3e3e3e !important;
 }
 .tab_mstship .shipInfo .aaci .aaciPattern.odd {
 	background:#444 !important;
@@ -1357,8 +1361,42 @@ a:hover {
 .tab_compare .compare_select_back {
 	color: black;
 }
+.tab_compare .compare_list {
+	border-bottom:1px solid #585858 !important;
+}
 .tab_compare .compare_ship {
-	background: #666666;
+	background: #333333;
+}
+.tab_compare .compare_remove {
+	background:#7d3e3e !important;
+}
+.tab_compare .compare_ship_stat {
+	background:#017701;
+}
+.tab_compare .compare_ship_stat.mono img {
+	filter:invert(100%);
+}
+.tab_compare .compare_select_back {
+	border:1px solid #77;
+	background:#292929;
+	color:#aaa;
+}
+.tab_compare .compare_select_back.active {
+	background: #777;
+	color:#ccc;
+}
+.tab_compare .compare_select_stat {
+	border:1px solid #444;
+	background:#292929;
+}
+.tab_compare .compare_select_stat.active {
+	background: #777;
+}
+.tab_compare .compare_select_stat.mono img {
+	filter:invert(100%);
+}
+.tab_compare .compare_ship_bar {
+	background:#888;
 }
 
 /* EXPEDITION SCORER
