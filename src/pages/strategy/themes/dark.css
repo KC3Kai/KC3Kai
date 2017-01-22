@@ -26,6 +26,16 @@ button, input, select, textarea {
 	background:#121212;
 }
 
+.ui-tooltip {
+	max-width:500px;
+	border-width:1px !important;
+	border:1px solid #eee;
+	box-shadow:0 0 5px 1px #777;
+	color:#cccccc;
+	background:#444;
+	font-size:12px;
+}
+
 /* COLORS
 -------------------------------*/
 .fcolor1 { color:#ffffff; }
