@@ -55,7 +55,7 @@
 		Prepares latest in game data
 		---------------------------------*/
 		reload :function(){
-			// None for ship library
+			ConfigManager.load();
 		},
 		
 		/* EXECUTE
@@ -174,6 +174,7 @@
 			if(!ConfigManager.dismissed_hints.cg_notice){
 				$(".cg_notes").show();
 				$(".cg_notes").on("click", function(e){
+					ConfigManager.loadIfNecessary();
 					ConfigManager.dismissed_hints.cg_notice = true;
 					ConfigManager.save();
 					// To keep URL for copying, do not disappear

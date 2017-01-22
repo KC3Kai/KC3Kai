@@ -114,14 +114,14 @@ Quest Type:
 		if(!noLoop && Array.isArray(KC3QuestManager.sharedCounterQuests)){
 			KC3QuestManager.sharedCounterQuests.forEach(function(idList){
 				var ids = Array.apply(null, idList);
-				for(var idx in ids){
-					if(self.id === ids[idx]){
+				ids.forEach(function(incId, idx){
+					if(self.id === incId){
 						ids.splice(idx, 1);
 						ids.forEach(function(id){
 							KC3QuestManager.get(id).increment(undefined, undefined, true);
 						});
 					}
-				}
+				});
 			});
 		}
 	};

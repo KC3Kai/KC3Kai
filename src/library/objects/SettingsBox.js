@@ -57,7 +57,7 @@ To be dynamically used on the settings page
 					$(this).prop("checked",ConfigManager[self.config]);
 					return false;
 				}
-				
+				ConfigManager.loadIfNecessary();
 				ConfigManager[ self.config ] = $(this).prop("checked");
 				ConfigManager.save();
 				elementControl($(this).parent().siblings(".note"),'',KC3Meta.term("SettingsErrorNG"));
@@ -97,7 +97,7 @@ To be dynamically used on the settings page
 					$(this).val(ConfigManager[self.config]);
 					return false;
 				}
-				
+				ConfigManager.loadIfNecessary();
 				ConfigManager[ self.config ] = window[self.bound.type==="Integer"?"Number":self.bound.type]($(this).val());
 				ConfigManager.save();
 				elementControl($(this).parent().siblings(".note"),'',KC3Meta.term("SettingsErrorNG"));
@@ -139,7 +139,7 @@ To be dynamically used on the settings page
 					$(this).val(ConfigManager[self.config]);
 					return false;
 				}
-				
+				ConfigManager.loadIfNecessary();
 				ConfigManager[ self.config ] = $(this).val();
 				ConfigManager.save();
 				elementControl($(this).parent().siblings(".note"),'',KC3Meta.term("SettingsErrorNG"));
@@ -167,6 +167,7 @@ To be dynamically used on the settings page
 			console.log(this,arguments);
 			$("."+$(this).data("class")).removeClass("active");
 			$(this).addClass("active");
+			ConfigManager.loadIfNecessary();
 			ConfigManager[ self.config ] = $(this).data("value");
 			ConfigManager.save();
 			elementControl($(this).parent().siblings(".note"),'',KC3Meta.term("SettingsErrorNG"));
@@ -206,6 +207,7 @@ To be dynamically used on the settings page
 					var newValue = false;
 					try {
 						newValue = JSON.parse($(this).val());
+						ConfigManager.loadIfNecessary();
 						ConfigManager[ self.config ] = newValue;
 						ConfigManager.save();
 						elementControl($(this).parent().siblings(".note"), '', KC3Meta.term("SettingsErrorNG"));
@@ -224,6 +226,7 @@ To be dynamically used on the settings page
 				.prop("disabled", this.disabled)
 				.val( ConfigManager[ this.config ] )
 				.on("change", function(){
+					ConfigManager.loadIfNecessary();
 					ConfigManager[ self.config ] = $(this).val();
 					ConfigManager.save();
 					elementControl($(this).parent().siblings(".note"), '', KC3Meta.term("SettingsErrorNG"));
@@ -240,6 +243,7 @@ To be dynamically used on the settings page
 				.addClass("dropdown")
 				.prop("disabled", this.disabled)
 				.on("change", function(){
+					ConfigManager.loadIfNecessary();
 					ConfigManager[ self.config ] = $(this).val();
 					ConfigManager.save();
 					elementControl($(this).parent().siblings(".note"), '', KC3Meta.term("SettingsErrorNG"));
