@@ -32,10 +32,6 @@
 			async: true,
 			url: "https://raw.githubusercontent.com/KC3Kai/KC3Kai/master/update?v="+(Date.now()),
 			success: function(data, textStatus, request){
-				if (!!data.pr) {
-					$(".nextVersion").attr("href", data.pr);
-				}
-				
 				// Check for available extension updates
 				if (typeof localStorage.updateAvailable != "undefined" && localStorage.updateAvailable != myVersion) {
 					// Update available, as notified by chrome itself
