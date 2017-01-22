@@ -3,8 +3,12 @@
 body {
 	background:#eee;
 }
+#factory {
+	display:none;
+}
 
-
+/* HEADER
+--------------------------*/
 #header {
 	width:800px;
 	margin:10px auto 10px;
@@ -23,12 +27,24 @@ body {
 	vertical-align: top;
 }
 #header .title {
-	width:730px;
+	width:530px;
 	height:30px;
 	float:left;
 	font-size:20px;
 }
+#header .howToUpdateBtn {
+	float:left;
+	display:block;
+	width:230px;
+	height:30px;
+	line-height:30px;
+	text-align:right;
+	font-size:12px;
+	text-decoration: none;
+}
 
+/* UPDATE READY
+--------------------------*/
 #updateReady {
 	width:800px;
 	margin:0px auto 10px;
@@ -67,9 +83,107 @@ body {
 	background: linear-gradient(to right, #f1ebcf 0%,#ebdda4 50%,#f1ebcf 100%);
 }
 
-#wrapper {
+/* VERSIONS
+--------------------------*/
+#versions {
 	width:800px;
 	margin:0px auto;
+}
+
+/* Version List */
+#versionList {
+	width:200px;
+	float:left;
+	padding:10px 0px 0px 0px;
+}
+.versionPR {
+	width:200px;
+	height:40px;
+	margin:0px 0px 3px 0px;
+	background:#f7f7f7;
+	position:relative;
+}
+.versionPR.active {
 	background:#fff;
-	padding:10px 20px 10px;
+}
+.versionPR .versionStatus {
+	width:6px;
+	height:40px;
+	float:left;
+	margin:0px 2px 0px 0px;
+}
+.versionPR .versionIcon {
+	width:30px;
+	float:left;
+	height:40px;
+	padding:5px 0px;
+	margin:0px 2px 0px 0px;
+}
+.versionPR .versionIcon img {
+	width:30px;
+	height:30px;
+}
+.versionPR .versionName {
+	width:160px;
+	float:left;
+	height:18px;
+	line-height:18px;
+	font-weight:bold;
+	font-size:14px;
+	color:#000;
+	margin:5px 0px 0px 0px;
+}
+.versionPR .versionDate {
+	width:160px;
+	float:left;
+	height:12px;
+	line-height:12px;
+	font-size:10px;
+	color:#999;
+}
+.versionPR .installed {
+	display:none;
+}
+.versionPR.pending img {
+	width:16px;
+	height:16px;
+	margin:7px;
+}
+.versionPR.installed .installed {
+	display:block;
+	position:absolute;
+	top:4px;
+	right:-5px;
+	height:10px;
+	line-height:10px;
+	font-size:9px;
+	padding:0px 3px 0px 3px;
+	background:#933;
+	color:#dddd99;
+}
+
+/* Version Text */
+#versionText {
+	width:600px;
+	float:left;
+	min-height:550px;
+	background:#fff;
+	padding:10px 20px;
+	margin:0px 0px 10px 0px;
+}
+#versionText .title {
+	width:560px;
+	height:24px;
+	line-height:24px;
+	font-size:18px;
+}
+#versionText .link {
+	width:560px;
+	height:16px;
+	line-height:16px;
+	font-size:12px;
+	margin:0px 0px 10px 0px;
+}
+#versionText .desc {
+	zoom:90%;
 }
