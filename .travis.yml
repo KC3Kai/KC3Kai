@@ -18,8 +18,8 @@ before_script:
 # DEPLOY TO CHROME WEBSTORE
 script:
 - if [ $TRAVIS_BRANCH == 'webstore' ]; then grunt build; fi
-- if [ $TRAVIS_BRANCH == 'webstore' ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then npm run-script export-tag && grunt webstore; fi
-- if [ $TRAVIS_BRANCH == 'dev-crx' ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then npm run-script export-tag && grunt build && grunt compress:release; fi
+- if [ $TRAVIS_BRANCH == 'webstore' ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then export KC3_VERSION=$(node -p -e "require('./package.json').version") && grunt webstore; fi
+- if [ $TRAVIS_BRANCH == 'dev-crx' ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then export KC3_VERSION=$(node -p -e "require('./package.json').version") && grunt build && grunt compress:release; fi
 
 # DEPLOY TO GITHUB RELEASES
 before_deploy:
