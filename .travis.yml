@@ -34,7 +34,7 @@ deploy:
   api_key: $GITHUB_API_KEY
   file: build/releases.zip
   on:
-    tags: true
+    tags: false
     branch: dev-crx
     condition: $TRAVIS_PULL_REQUEST == "false"
 
