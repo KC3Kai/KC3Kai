@@ -1,5 +1,7 @@
 module.exports = function(grunt) {
 
+	require('load-grunt-tasks')(grunt);
+
 	grunt.initConfig({
 		clean: {
 			tmp: {
@@ -7,6 +9,9 @@ module.exports = function(grunt) {
 			},
 			release: {
 				src: [ 'build/release/**/*', 'build/release/' ]
+			},
+			testenv: {
+				src: [ 'build/testenv/**/*', 'build/testenv/' ]
 			}
 		},
 		copy: {
@@ -15,6 +20,19 @@ module.exports = function(grunt) {
 				cwd: 'src/',
 				src: '**/*',
 				dest: 'build/tmp/'
+			},
+			testenv: {
+				expand: true,
+				src: [
+					// some tests would load from the following 2 paths:
+					'node_modules/qunitjs/**/*',
+					'node_modules/jquery/**/*',
+
+					'src/**/*',
+					'!src/data/lang/node_modules/**/*',
+					'tests/**/*'
+				],
+				dest: 'build/testenv/'
 			},
 			statics: {
 				expand: true,
@@ -270,7 +288,7 @@ module.exports = function(grunt) {
 		},
 		qunit: {
 			all: [
-				'tests/**/*.html'
+				'build/testenv/tests/**/*.html'
 			]
 		},
 		compress: {
@@ -301,6 +319,29 @@ module.exports = function(grunt) {
 					appID: "hkgmldnainaglpjngpajnnjfhpdjkohh",
 					zip: "build/release.zip"      
 				}
+			}
+		},
+		// currently use just for running tests
+		babel: {
+			options: {
+				sourceMap: true,
+				presets: ['babel-preset-es2015']
+			},
+			testenv: {
+				files: [
+					{  
+						expand: true,
+						cwd: 'build/testenv/',
+						// for now only transpile code in "library" & "pages" (whitelist)
+						// avoiding stepping into "assets" and "data".
+						// same reason for "tests/library".
+						src: [ "src/library/**/*.js",
+							   "src/pages/**/*.js",
+							   "tests/library/**/*.js"
+							 ],
+						dest: 'build/testenv/'
+					}
+				]
 			}
 		}
 	});
@@ -370,6 +411,9 @@ module.exports = function(grunt) {
 	]);
 	
 	grunt.registerTask('test-unit', [
+		'clean:testenv',
+		'copy:testenv',
+		'babel:testenv',
 		'qunit'
 	]);
 	
