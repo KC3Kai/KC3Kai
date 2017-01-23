@@ -143,7 +143,9 @@ body {
 }
 .enableCustomizations .customizationText {
 	width:745px;
-	
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
 }
 .customization {
 	width:240px;
@@ -176,6 +178,9 @@ body {
 }
 .hotkeys li span {
 	font-size:12px;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
 }
 
 /* LINKS
