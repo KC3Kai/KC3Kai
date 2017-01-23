@@ -23,6 +23,8 @@ script:
 
 # DEPLOY TO GITHUB RELEASES
 before_deploy:
+  - git config --global user.email "builds@travis-ci.com"
+  - git config --global user.name "Travis CI"
   - git tag $KC3_VERSION -a -m "Generated tag for $KC3_VERSION"
   - git push -q https://dragonjet:$GITHUB_API_KEY@github.com/KC3Kai/KC3Kai --tags
 deploy:
