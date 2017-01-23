@@ -35,7 +35,6 @@
   "scripts": {
     "test": "grunt test-src && grunt test-unit",
     "build": "grunt build",
-    "webstore": "grunt webstore",
-    "tag": "KC3_VERSION=$(node -p -e \"require('./package.json').version\")"
+    "webstore": "grunt webstore"
   }
 }
