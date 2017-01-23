@@ -32,7 +32,7 @@ deploy:
   provider: releases
   skip_cleanup: true
   api_key: $GITHUB_API_KEY
-  file: build/releases.zip
+  file: ./build/releases.zip
   on:
     tags: false
     branch: dev-crx
