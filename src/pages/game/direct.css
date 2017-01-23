@@ -143,9 +143,6 @@ body {
 }
 .enableCustomizations .customizationText {
 	width:745px;
-	overflow:hidden;
-	white-space:nowrap;
-	text-overflow:ellipsis;
 }
 .customization {
 	width:240px;
@@ -158,6 +155,9 @@ body {
 	height:18px;
 	line-height:18px;
 	float:left;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
 }
 
 /* HOTKEYS
@@ -172,15 +172,15 @@ body {
 	height:18px;
 	float:left;
 	margin:0px 0px 10px 0px;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
 }
 .hotkeys li kbd {
 	font-size:14px;
 }
 .hotkeys li span {
 	font-size:12px;
-	overflow:hidden;
-	white-space:nowrap;
-	text-overflow:ellipsis;
 }
 
 /* LINKS
@@ -208,6 +208,9 @@ body {
 	width:215px;
 	height:30px;
 	float:left;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
 }
 
 /* F12 INSTRUCTIONS
