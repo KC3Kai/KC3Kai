@@ -123,7 +123,9 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		We don't want global runtime message that will show overlays on all windows
 		------------------------------------------*/
 		"questOverlay" :function(request, sender, response){
+			KC3QuestManager.load();
 			(new TMsg(request.tabId, "gamescreen", "questOverlay", {
+				KC3QuestManager: KC3QuestManager,
 				questlist: request.questlist
 			})).execute();
 		},
