@@ -27,12 +27,10 @@ before_deploy:
   - export GIT_TAG=$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER
   - git tag $GIT_TAG -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
   - git push -q https://dragonjet:$GITHUB_API_KEY@github.com/KC3Kai/KC3Kai --tags
-  - ls -R
 deploy:
   provider: releases
   skip_cleanup: true
-  api_key:
-    secure: HQBMGX6Dw5NFE48EM7AIiZ8A6KZt7Skwhc0Jf6ttazu/UcH6WV9F/5MBXue3vtEFod6GjH0IsvtH5iGRgV/BDwJzDr4MVf/J/PM4Mdb69EiOhSDcNbT0SOD8xaariWyTpg0F7jqGGaRc8pJoh0fSLCz86T8+RxbePMIOanBh8XM=
+  api_key: $GITHUB_API_KEY
   file: build/releases.zip
   on:
     tags: false
