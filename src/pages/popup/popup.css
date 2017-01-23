@@ -119,6 +119,8 @@ body {
 	font-size:12px;
 	padding:0px 0px 0px 5px;
 	background:#def;
+	word-break: break-all;
+	overflow: hidden;
 }
 .updateTime {
 	color:#f00;
