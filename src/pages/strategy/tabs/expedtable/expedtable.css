@@ -112,3 +112,15 @@
 .tab_expedtable .exped_row .cost .view_normal img {
 	margin: 0px 2px 0px 2px;
 }
+
+.tab_expedtable .exped_row .info_col.edit_btn {
+	width: 24px;
+	height: 24px;
+	float: right;
+	font-size: 20px;
+	margin: 4px 4px 0px 0px;
+	padding: 2px 0px 2px 0px;
+	background-color: #93bcff;
+	border-radius: 10px;
+	text-align: center;
+}
