@@ -70,7 +70,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			var senderUrl = sender.url || sender.tab.url || "";
 			
 			// If API or DMM Frame, use traditional screenshot call
-			if( isDMMFrame(senderUrl) || isAPIFrame(senderUrl) ){
+			if( isDMMFrame(senderUrl) || isAPIFrame(senderUrl) || isDevtools(senderUrl)){
 				(new TMsg(request.tabId, "gamescreen", "screenshot", {
 					playerName: request.playerName
 				}, response)).execute();
@@ -167,7 +167,34 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		Auto-resize browser window to fit the game screen
 		------------------------------------------*/
 		"fitScreen" :function(request, sender, response){
-			(new TMsg(request.tabId, "gamescreen", "fitScreen")).execute();
+			var senderUrl = sender.url || sender.tab.url || "";
+			
+			// If API or DMM Frame, use traditional screenshot call
+			if( isDMMFrame(senderUrl) || isAPIFrame(senderUrl) || isDevtools(senderUrl)){
+				(new TMsg(request.tabId, "gamescreen", "fitScreen")).execute();
+				return true;
+			}
+			
+			// Not from API or DMM Frame, check if special mode enabled
+			var tabId = (sender.tab)?sender.tab.id:false || request.tabId || false;
+			if (tabId) {
+				// Get browser zoon level for the page
+				chrome.tabs.getZoom(tabId, function(ZoomFactor){
+					// Resize the window
+					chrome.windows.getCurrent(function(wind){
+						(new TMsg(tabId, "gamescreen", "getWindowSize", {}, function(size){
+							chrome.windows.update(wind.id, {
+								width: Math.ceil(800*ZoomFactor*size.game_zoom)
+									+ (wind.width- Math.ceil(size.width*ZoomFactor) ),
+								height: Math.ceil((480+size.margin_top)*size.game_zoom*ZoomFactor)
+									+ (wind.height- Math.ceil(size.height*ZoomFactor) )
+							});
+						})).execute();
+					});
+				});
+			} else {
+				response({ value: false });
+			}
 		},
 		
 		/* IS MUTED
@@ -215,7 +242,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		Responds if content script should inject DMM Frame customizations
 		------------------------------------------*/
 		"dmmFrameInject" :function(request, sender, response){
-			var senderUrl = sender.url || sender.tab.url || "";
+			var senderUrl = (sender.tab)?sender.tab.url:false || sender.url  || "";
 			
 			if( isDMMFrame(senderUrl) ){
 				// DMM FRAME
@@ -358,6 +385,10 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	
 	function isAPIFrame(url){
 		return url.indexOf("/pages/game/api.html") > -1;
+	}
+	
+	function isDevtools(url){
+		return url.indexOf("/pages/devtools/themes/") > -1;
 	}
 	
 })();

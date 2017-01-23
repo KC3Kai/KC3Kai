@@ -427,7 +427,9 @@
 				if(request.action != "getWindowSize") return true;
 				response({
 					width: $(window).width(),
-					height: $(window).height()
+					height: $(window).height(),
+					game_zoom: $("#area-game").css("zoom"),
+					margin_top: parseInt($("#area-game").css("margin-top"))
 				});
 			};
 		},
