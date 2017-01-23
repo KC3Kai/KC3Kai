@@ -95,20 +95,16 @@
 }
 
 .tab_quotes .part_right .voice_entity .jp_src,.en_src {
-	background: #eeeeee;
 	display: none;
 }
 .tab_quotes .part_right .voice_entity .sp_quote {
-	background: #fff0fd;
 	display: none;
 }
 
 .tab_quotes .part_right .voice_entity.direct {
-	background: #e6ffe6;
 }
 
 .tab_quotes .part_right .voice_entity.inherit {
-	background: #e6f7ff;
 	margin: 2px 0px 2px 0px;
 }
 
@@ -117,8 +113,6 @@
     float: left;
 	height: 20px;
 	line-height: 18px;
-	border: 1px solid #039;
-	background: #def;
 	border-radius: 3px;
 	font-size: 12px;
 	text-align: left;
@@ -130,11 +124,9 @@
 }
 
 .tab_quotes .part_right .voice_entity.direct .source {
-    color: green;
 }
 
 .tab_quotes .part_right .voice_entity.inherit .source {
-    color: blue;
 }
 
 .tab_quotes .part_right .voice_entity .source {
