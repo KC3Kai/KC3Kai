@@ -1,0 +1,11 @@
+--- node_modules/grunt-contrib-uglify/package.json	2017-01-19 12:48:34.672225217 -0500
++++ node_modules/grunt-contrib-uglify/package.json.new	2017-01-19 12:48:15.695558378 -0500
+@@ -67,7 +67,7 @@
+     "chalk": "^1.0.0",
+     "lodash": "^3.2.0",
+     "maxmin": "^1.0.0",
+-    "uglify-js": "^2.4.24",
++    "uglify-js": "git+https://github.com/mishoo/UglifyJS2.git#harmony",
+     "uri-path": "0.0.2"
+   },
+   "description": "Minify files with UglifyJS",

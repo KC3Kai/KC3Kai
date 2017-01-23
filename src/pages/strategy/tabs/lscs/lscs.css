@@ -1,5 +1,4 @@
 .tab_lscs {
-	
 }
 .tab_lscs .build_list {
 	white-space:nowrap;
@@ -9,7 +8,6 @@
 }
 
 .tab_lscs .legend {
-	
 }
 .tab_lscs .legend_item {
 	width:120px;
@@ -90,5 +88,5 @@
 	margin-bottom:10px;
 }
 .tab_lscs .build_pages .pagination {
-	margin:0px;
+	margin:5px 0px 0px 0px;
 }

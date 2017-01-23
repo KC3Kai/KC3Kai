@@ -508,37 +508,41 @@ body {
 	color:#000;
 }
 /* Leveling Goals */
+.tab_expcalc .box_control {
+	background:#def;
+	border:1px solid #ace;
+}
+.tab_expcalc .box_control_line .toggle {
+	border-radius: 4px;
+	background: #fff;
+}
+.tab_expcalc .box_control_line .hover.active {
+	background: #3333ff;
+	color: #fff;
+}
 .tab_expcalc .ship_goal {
 	background-color:#def;
 }
-.tab_expcalc .ship_goal.ship_closeToRemodel{
-	background-color:#2be;
+.tab_expcalc .ship_goal.highlight_stype {
+	background-color:#fdd;
+}
+.tab_expcalc .ship_goal.highlight_closeToRemodel {
+	background-color:#71d3f4;
+}
+
+.tab_expcalc .ship_goal.highlight_canBeRemodelled {
+	background-color:#60ebe2;
 }
 .tab_expcalc .goal_template {
 	background-color:#def;
 }
-@-webkit-keyframes ship_closeToRemodel{
-	0%  {background-color:#def;}
-	50%  {background-color:#2be;}
-	100%  {background-color:#def;}
+.tab_expcalc .goal_template.disabled {
+	background: #bbb;
+	border: 1px solid #555;
 }
-@keyframes ship_closeToRemodel {
-	0%  {background-color:#def;}
-	50%  {background-color:#2be;}
-	100%  {background-color:#def;}
-}
-.tab_expcalc .ship_goal.ship_canBeRemodelled{
-	background-color:#2be;
-}
-@-webkit-keyframes ship_canBeRemodelled{
-	0%  {background-color:#def;}
-	50%  {background-color:#1e7;}
-	100%  {background-color:#def;}
-}
-@keyframes ship_canBeRemodelled {
-	0%  {background-color:#def;}
-	50%  {background-color: #1e7;}
-	100%  {background-color:#def;}
+.tab_expcalc .gt_content.new_template {
+	background: #def;
+	border: 1px solid #ace;
 }
 /* Equipment */
 .tab_gears .item_types .item_type {
@@ -912,6 +916,14 @@ body {
 .tab_flowchart .questExtraItem.active {
 	background:#EE9;
 }
+.tab_flowchart .questFlowItem .questOverride {
+	color:#fff;
+}
+.tab_flowchart .questFlowItem .questToggle,
+.tab_flowchart .questFlowItem .questRemove,
+.tab_flowchart .questExtraItem .questRemove  {
+	background:#fff;
+}
 
 
 /* MAPS
@@ -1041,4 +1053,110 @@ body {
 .tab_event .sortie_list .node_exp:before,
 .tab_maps .sortie_list .node_exp:before {
 	color: black;
+}
+
+/* EXPEDITION SCORER
+--------------------------------*/
+.tab_compare .compare_ship_stat {
+	background:#0f0;
+}
+.tab_compare .compare_select_back {
+	background:#ace;
+	border:1px solid #37b;
+	border-radius: 5px;
+}
+.tab_compare .compare_select_back.active {
+	background: #fff;
+	color:#000;
+}
+.tab_compare .compare_select_stat {
+	background:#ace;
+	border:1px solid #37b;
+	border-radius: 5px;
+}
+.tab_compare .compare_select_stat.active {
+	background: #fff;
+}
+.tab_compare .compare_ship_bar {
+	background:-webkit-linear-gradient(top, #7db9e8 0%,#1a0888 100%);
+}
+
+/* EXPEDITION SCORER
+--------------------------------*/
+.tab_expedscorer .expedNumBox {
+	background: #def;
+}
+.tab_expedscorer .expedControls .calculate_btn {
+	background:#cde;
+	border:1px outset #ace;
+}
+
+/* EXPEDITION HISTORY
+--------------------------------*/
+.tab_expedpast .expedNumBox {
+	background:#def;
+}
+.tab_expedpast .exped_pages {
+	background:#f0f5ff;
+}
+.tab_expedpast .exped_item {
+	background:#f3f3f3;
+}
+/* PVP
+--------------------------------*/
+.tab_pvp .pvp_player .pvp_details_ship {
+	border:1px solid #ace;
+}
+.tab_pvp .pvp_opponent .pvp_details_ship {
+	border:1px solid #faa;
+}
+.tab_pvp .pvp_info .pvp_dl {
+	background:#ffc;
+	border:1px solid #ace;
+}
+/* QUOTES
+--------------------------------*/
+.tab_quotes .ship_list {
+	background:#ffc;
+}
+
+.tab_quotes .part_right .voice_entity.direct {
+	background: #e6ffe6;
+}
+
+.tab_quotes .part_right .voice_entity.inherit {
+	background: #e6f7ff;
+}
+.tab_quotes .part_right .voice_entity .jp_src,.en_src {
+	background: #eeeeee;
+}
+.tab_quotes .part_right .voice_entity .sp_quote {
+	background: #fff0fd;
+}
+.tab_quotes .part_right .voice_entity .voice {
+	border: 1px solid #039;
+	background: #def;
+}
+.tab_quotes .part_right .voice_entity.inherit .source {
+    color: blue;
+}
+.tab_quotes .part_right .voice_entity.direct .source {
+    color: green;
+}
+/* TRANSLATIONS
+--------------------------------*/
+.tab_translations .tr-item.translation_done .tr-key,
+.tab_translations .tr-item.translation_done .tr-from,
+.tab_translations .tq-item.translation_done .tq-key,
+.tab_translations .tq-item.translation_done .tq-from {
+	color: blue;
+}
+
+.tab_translations .tr-item.translation_missing .tr-key,
+.tab_translations .tr-item.translation_missing .tr-from,
+.tab_translations .tq-item.translation_missing .tq-key,
+.tab_translations .tq-item.translation_missing .tq-from,
+.tab_translations .tq-item .tq-name.translation_missing,
+.tab_translations .tq-item .tq-desc.translation_missing {
+	color: red;
 }

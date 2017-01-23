@@ -1075,7 +1075,7 @@ Used by SortieManager
 				});
 			}).call(this,resultData.api_get_eventitem);
 			
-			ConfigManager.load();
+			ConfigManager.loadIfNecessary();
 			ship_get.forEach(function(newShipId){
 				var wish_kind = ["salt","wish"];
 				

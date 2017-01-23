@@ -111,6 +111,9 @@
 				if(typeof this[dataKey][prefx+thisTime] != "undefined") {
 					for(j=0;j<(Object.keys(itemData.name).length);j++) {
 						data[itemData.name[j]][graphIndex] = this[dataKey][prefx+thisTime][itemData.dbkey[j]];
+						if(typeof data[itemData.name[j]][graphIndex] == "undefined"){
+							data[itemData.name[j]][graphIndex] = data[itemData.name[j]][graphIndex-1] || 0;
+						}
 					}
 				} else {
 					for(j=0;j<(Object.keys(itemData.name).length);j++) {

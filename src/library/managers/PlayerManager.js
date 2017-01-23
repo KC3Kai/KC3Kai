@@ -169,7 +169,9 @@ Does not include Ships and Gears which are managed by other Managers
 
 			if(typeof localStorage.lastUseitem == "undefined"){ localStorage.lastUseitem = 0; }
 			var ResourceHour = Math.floor(stime/3600);
-			if(ResourceHour == localStorage.lastUseitem){ return false; }
+			if(ResourceHour == localStorage.lastUseitem || Object.keys(data).length < 4){
+				return false;
+			}
 			localStorage.lastUseitem = ResourceHour;
 			KC3Database.Useitem({
 				torch : data.torch,

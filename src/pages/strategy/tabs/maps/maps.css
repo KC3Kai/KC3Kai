@@ -100,6 +100,10 @@
 	display:none;
 }
 
+.tab_maps .page_list .pagination {
+	margin:5px 0px 0px 0px;
+}
+
 /* SORTIE LIST
 ---------------------------------*/
 .tab_maps .sortie_list {

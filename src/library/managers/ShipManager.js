@@ -101,6 +101,7 @@ Saves and loads list to and from localStorage
 				}).call(this);
 			} else {
 				// check ship master in lock_prep before lock request it
+				ConfigManager.loadIfNecessary();
 				if(ConfigManager.lock_prep[0] == cShip.rosterId) {
 					ConfigManager.lock_prep.shift();
 					if(!cShip.lock)
