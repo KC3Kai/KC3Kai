@@ -20,13 +20,9 @@
 		Prepares latest player data
 		---------------------------------*/
 		reload :function(){
-			// Check for player statstics
-			if(typeof localStorage.player != "undefined"){
-				this.player = JSON.parse(localStorage.player);
-			}else{
-				this.player = {};
-			}
-			
+			ConfigManager.load();
+			// Check for player HQ info
+			PlayerManager.hq.load();
 			// Check for player statstics
 			if(typeof localStorage.statistics != "undefined"){
 				this.statistics = JSON.parse(localStorage.statistics);
@@ -45,6 +41,7 @@
 			if(!ConfigManager.dismissed_hints.homepage_hints){
 				$(".homepage_hints").show();
 				$(".homepage_hints").on("click", function(e){
+					ConfigManager.loadIfNecessary();
 					ConfigManager.dismissed_hints.homepage_hints = true;
 					ConfigManager.save();
 					$(".homepage_hints").fadeOut();

@@ -55,7 +55,7 @@
 		Prepares latest in game data
 		---------------------------------*/
 		reload :function(){
-			// None for ship library
+			ConfigManager.load();
 		},
 		
 		/* EXECUTE
@@ -174,6 +174,7 @@
 			if(!ConfigManager.dismissed_hints.cg_notice){
 				$(".cg_notes").show();
 				$(".cg_notes").on("click", function(e){
+					ConfigManager.loadIfNecessary();
 					ConfigManager.dismissed_hints.cg_notice = true;
 					ConfigManager.save();
 					// To keep URL for copying, do not disappear
@@ -502,7 +503,7 @@
 					var aaciBox, equipIcon, i;
 					$.each(aaciList, function(idx, aaciObj){
 						aaciBox = $(".tab_mstship .factory .aaciPattern").clone();
-						$(".apiId", aaciBox).text(aaciObj.id);
+						$(".apiId", aaciBox).text("[{0}]".format(aaciObj.id));
 						if(aaciObj.icons[0] > 0) {
 							$(".shipIcon img", aaciBox)
 								.attr("src", KC3Meta.shipIcon(aaciObj.icons[0]) )
@@ -525,8 +526,8 @@
 								}
 							}
 						}
-						$(".fixed", aaciBox).text(aaciObj.fixed);
-						$(".modifier", aaciBox).text(aaciObj.modifier);
+						$(".fixed", aaciBox).text("+{0}".format(aaciObj.fixed));
+						$(".modifier", aaciBox).text("x{0}".format(aaciObj.modifier));
 						aaciBox.toggleClass("odd", (idx+1) % 2 !== 0);
 						aaciBox.toggleClass("even", (idx+1) % 2 === 0);
 						aaciBox.appendTo(".aaciList");

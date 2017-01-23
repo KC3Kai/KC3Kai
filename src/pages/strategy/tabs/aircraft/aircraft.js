@@ -226,6 +226,12 @@
 					
 					$(".instance_icon img", PlaneBox).attr("src", "../../assets/img/items/"+type_id+".png");
 					
+					if(ThisPlane.stars > 0){
+						$(".instance_star span", PlaneBox).text( ThisPlane.stars > 9 ? "m" : ThisPlane.stars);
+					} else {
+						$(".instance_star img", PlaneBox).hide();
+					}
+					
 					if(ThisPlane.ace > 0){
 						$(".instance_chev img", PlaneBox).attr("src", "../../assets/img/client/achev/"+ThisPlane.ace+".png");
 					}else{
@@ -256,6 +262,8 @@
 							$(".holder_name", PlaneBox).text( ThisPlane.MyHolder().name() );
 							$(".holder_level", PlaneBox).text("Lv."+ThisPlane.MyHolder().level);
 							ThisCapacity = ThisPlane.MyHolder().slots[ this._slotNums["s"+ThisPlane.itemId] ];
+						}
+						if(ThisCapacity > 0){
 							// Compute for veteranized fighter power
 							var MyFighterPowerText = "";
 							if(ConfigManager.air_formula == 1){

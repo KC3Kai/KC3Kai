@@ -296,6 +296,7 @@ Previously known as "Reactor"
 			}
 			
 			PlayerManager.setResources(myResources, UTCtime);
+			PlayerManager.setConsumables({}, UTCtime);
 			KC3Network.trigger("Consumables");
 		},
 		
@@ -338,6 +339,7 @@ Previously known as "Reactor"
 				}
 			}
 			console.log("useitems", PlayerManager.consumables);
+			PlayerManager.setConsumables({}, UTCtime);
 			KC3Network.trigger("Consumables");
 		},
 		
@@ -725,6 +727,7 @@ Previously known as "Reactor"
 			if(shipData.lock) {
 				console.warn("Unlocked",shipData.rosterId,shipData.name());
 			} else {
+				ConfigManager.loadIfNecessary();
 				var lockID = ConfigManager.lock_list.indexOf(shipID);
 				if(lockID+1) {
 					ConfigManager.lock_list.splice(lockID,1);

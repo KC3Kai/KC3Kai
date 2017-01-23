@@ -168,7 +168,7 @@
 				$(window).data("world_off", Math.min(selectOffset, countWorlds-6));
 			} else if(selectOffset < worldOffset){
 				$(window).data("world_off", selectOffset);
-			} else if(selectOffset >= 6 && worldOffset < selectOffset-5){
+			} else if(selectOffset >= 6+((tabCode=="maps")&1) && worldOffset < selectOffset-5){
 				$(window).data("world_off", selectOffset-5);
 			}
 			$(window).data("world_max", Math.max(0, countWorlds-6));

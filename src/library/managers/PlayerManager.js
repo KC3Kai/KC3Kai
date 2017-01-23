@@ -165,10 +165,13 @@ Does not include Ships and Gears which are managed by other Managers
 
 		setConsumables :function( data, stime ){
 			$.extend(this.consumables, data);
+			localStorage.consumables = JSON.stringify(this.consumables);
 
 			if(typeof localStorage.lastUseitem == "undefined"){ localStorage.lastUseitem = 0; }
 			var ResourceHour = Math.floor(stime/3600);
-			if(ResourceHour == localStorage.lastUseitem){ return false; }
+			if(ResourceHour == localStorage.lastUseitem || Object.keys(data).length < 4){
+				return false;
+			}
 			localStorage.lastUseitem = ResourceHour;
 			KC3Database.Useitem({
 				torch : data.torch,
@@ -295,6 +298,12 @@ Does not include Ships and Gears which are managed by other Managers
 				this.fleets = this.fleets.map(function(x,i){
 					return (new KC3Fleet()).defineFormatted(oldFleets[i]);
 				});
+			}
+		},
+
+		loadConsumables :function(){
+			if(typeof localStorage.consumables != "undefined"){
+				this.consumables =  $.extend(this.consumables, JSON.parse(localStorage.consumables));
 			}
 		},
 

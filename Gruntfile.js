@@ -31,6 +31,7 @@ module.exports = function(grunt) {
 					'assets/js/KanColleHelpers.js',
 					'assets/js/twbsPagination.min.js',
 					'assets/js/WhoCallsTheFleetShipDb.json',
+					'assets/js/WhoCallsTheFleetItemDb.json',
 					'assets/js/jszip.min.js',
 					'assets/js/bootstrap-slider.min.js',
 					'assets/js/no_ga.js'
