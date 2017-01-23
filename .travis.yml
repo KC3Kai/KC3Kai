@@ -19,20 +19,17 @@ before_script:
 script:
 - if [ $TRAVIS_BRANCH == 'webstore' ]; then grunt build; fi
 - if [ $TRAVIS_BRANCH == 'webstore' ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then grunt webstore; fi
-- if [ $TRAVIS_BRANCH == 'dev-crx' ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then grunt build && grunt compress:release; fi
+- if [ $TRAVIS_BRANCH == 'dev-crx' ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then npm run-script tag && grunt build && grunt compress:release; fi
 
 # DEPLOY TO GITHUB RELEASES
 before_deploy:
-  - git config --global user.email "builds@travis-ci.com"
-  - git config --global user.name "Travis CI"
-  - export GIT_TAG=$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER
-  - git tag $GIT_TAG -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
+  - git tag $KC3_VERSION -a -m "Generated tag for $KC3_VERSION"
   - git push -q https://dragonjet:$GITHUB_API_KEY@github.com/KC3Kai/KC3Kai --tags
 deploy:
   provider: releases
   skip_cleanup: true
   api_key: $GITHUB_API_KEY
-  file: ./build/releases.zip
+  file: build/release.zip
   on:
     tags: false
     branch: dev-crx
