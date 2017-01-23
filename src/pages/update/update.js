@@ -70,11 +70,11 @@
 					
 					if (rel.merged_at) {
 						$(".versionIcon img", releaseBox).attr("src", "../../assets/img/social/ws.png");
-						$(".versionDate", releaseBox).text(new Date(rel.merged_at).format("mmm dd, yyyy - hh:MM:ss TT"));
+						$(".versionDate", releaseBox).text(new Date(rel.merged_at).format("UTC:yyyy-mm-dd HH:MM:ss Z"));
 					} else {
 						releaseBox.addClass("pending");
 						$(".versionIcon img", releaseBox).attr("src", "../../assets/img/social/gh.png");
-						$(".versionDate", releaseBox).text("In development");
+						$(".versionDate", releaseBox).text(KC3Meta.term("PageUpdateInDevelop"));
 					}
 					
 					releaseBox.appendTo("#versionList");
