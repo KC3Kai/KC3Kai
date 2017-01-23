@@ -244,9 +244,9 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		"dmmFrameInject" :function(request, sender, response){
 			var senderUrl = (sender.tab)?sender.tab.url:false || sender.url  || "";
 			
+			ConfigManager.load();
 			if( isDMMFrame(senderUrl) ){
 				// DMM FRAME
-				ConfigManager.load();
 				response({ mode: 'frame', scale: ConfigManager.api_gameScale});
 				
 			} else if(ConfigManager.dmm_customize && localStorage.extract_api != "true") {
