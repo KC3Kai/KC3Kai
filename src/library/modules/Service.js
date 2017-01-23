@@ -68,31 +68,28 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		------------------------------------------*/
 		"screenshot" :function(request, sender, response){
 			var senderUrl = sender.url || sender.tab.url || "";
-			
-			// If API or DMM Frame, use traditional screenshot call
-			if( isDMMFrame(senderUrl) || isAPIFrame(senderUrl) || isDevtools(senderUrl)){
-				(new TMsg(request.tabId, "gamescreen", "screenshot", {
-					playerName: request.playerName
-				}, response)).execute();
-				return true;
+			// If devtools, a tab ID should be in the request param
+			if (isDevtools(senderUrl)) {
+				// Get tab information to get URL of requester
+				chrome.tabs.get(request.tabId, function(tabDetails){
+					if( isDMMFrame(tabDetails.url) || isAPIFrame(tabDetails.url)){
+						// If API or DMM Frame, use traditional screenshot call
+						(new TMsg(request.tabId, "gamescreen", "screenshot", {
+							playerName: request.playerName
+						}, response)).execute();
+						return true;
+						
+					} else {
+						// If not API or DMM Frame, must be special mode
+						screenshotSpecialMode(request.tabId, response);
+						return true;
+					}
+				});
+			} else if (sender.tab && sender.tab.id){
+				screenshotSpecialMode(sender.tab.id, response);
+			} else {
+				response({ value: false });
 			}
-			
-			// Not from API or DMM Frame, check if special mode enabled
-			ConfigManager.load();
-			if(ConfigManager.dmm_customize) {
-				var tabId = request.tabId || (sender.tab ? sender.tab.id : false) || false;
-				if (tabId) {
-					(new TMsg(tabId, "gamescreen", "getGamescreenOffset", {}, function(offset){
-						(new KCScreenshot())
-							.setCallback(response)
-							.remoteStart(tabId, offset);
-					})).execute();
-					return true;
-				}
-			}
-			
-			// Did not pass any return, fail
-			response({ value: false });
 			return true;
 		},
 		
@@ -389,6 +386,17 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	
 	function isDevtools(url){
 		return url.indexOf("/pages/devtools/themes/") > -1;
+	}
+	
+	function screenshotSpecialMode(tabId, response){
+		ConfigManager.load();
+		if(ConfigManager.dmm_customize) {
+			(new TMsg(tabId, "gamescreen", "getGamescreenOffset", {}, function(offset){
+				(new KCScreenshot())
+					.setCallback(response)
+					.remoteStart(tabId, offset);
+			})).execute();
+		}
 	}
 	
 })();
