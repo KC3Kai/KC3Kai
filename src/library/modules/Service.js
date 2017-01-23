@@ -164,34 +164,32 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		Auto-resize browser window to fit the game screen
 		------------------------------------------*/
 		"fitScreen" :function(request, sender, response){
-			var senderUrl = sender.url || sender.tab.url || "";
-			
-			// If API or DMM Frame, use traditional screenshot call
-			if( isDMMFrame(senderUrl) || isAPIFrame(senderUrl) || isDevtools(senderUrl)){
-				(new TMsg(request.tabId, "gamescreen", "fitScreen")).execute();
-				return true;
-			}
-			
-			// Not from API or DMM Frame, check if special mode enabled
-			var tabId = (sender.tab)?sender.tab.id:false || request.tabId || false;
-			if (tabId) {
-				// Get browser zoon level for the page
-				chrome.tabs.getZoom(tabId, function(ZoomFactor){
-					// Resize the window
-					chrome.windows.getCurrent(function(wind){
-						(new TMsg(tabId, "gamescreen", "getWindowSize", {}, function(size){
-							chrome.windows.update(wind.id, {
-								width: Math.ceil(800*ZoomFactor*size.game_zoom)
-									+ (wind.width- Math.ceil(size.width*ZoomFactor) ),
-								height: Math.ceil((480+size.margin_top)*size.game_zoom*ZoomFactor)
-									+ (wind.height- Math.ceil(size.height*ZoomFactor) )
-							});
-						})).execute();
+			// Get tab information to get URL of requester
+			chrome.tabs.get(request.tabId, function(tabDetails){
+				if( isDMMFrame(tabDetails.url) || isAPIFrame(tabDetails.url)){
+					// If API or DMM Frame, use traditional screenshot call
+					(new TMsg(request.tabId, "gamescreen", "fitScreen")).execute();
+					return true;
+					
+				} else {
+					// If not API or DMM Frame, must be special mode
+					chrome.tabs.getZoom(request.tabId, function(ZoomFactor){
+						// Resize the window
+						chrome.windows.getCurrent(function(wind){
+							(new TMsg(request.tabId, "gamescreen", "getWindowSize", {}, function(size){
+								chrome.windows.update(wind.id, {
+									width: Math.ceil(800*ZoomFactor*size.game_zoom)
+										+ (wind.width- Math.ceil(size.width*ZoomFactor) ),
+									height: Math.ceil((480+size.margin_top)*size.game_zoom*ZoomFactor)
+										+ (wind.height- Math.ceil(size.height*ZoomFactor) )
+								});
+							})).execute();
+						});
 					});
-				});
-			} else {
-				response({ value: false });
-			}
+					return true;
+				}
+			});
+			return true;
 		},
 		
 		/* IS MUTED
