@@ -25,13 +25,17 @@ script:
 before_deploy:
   - git config --global user.email "builds@travis-ci.com"
   - git config --global user.name "Travis CI"
-  - git tag $KC3_VERSION -a -m "Generated tag for $KC3_VERSION"
+  - git tag $KC3_VERSION -a -m "Automated GitHub release for $KC3_VERSION"
   - git push -q https://dragonjet:$GITHUB_API_KEY@github.com/KC3Kai/KC3Kai --tags
+  - cp build/release.zip build/kc3kai-$KC3_VERSION.crx
+  - mv build/release.zip build/kc3kai-$KC3_VERSION.zip
 deploy:
   provider: releases
   skip_cleanup: true
   api_key: $GITHUB_API_KEY
-  file: build/release.zip
+  file:
+    - build/kc3kai-$KC3_VERSION.crx
+    - build/kc3kai-$KC3_VERSION.zip
   on:
     tags: false
     branch: dev-crx
@@ -43,5 +47,5 @@ notifications:
     urls:
       - https://webhooks.gitter.im/e/e8964a721dd35fd96e46
     on_success: change
-    on_failure: always
+    on_failure: change
     on_start: never

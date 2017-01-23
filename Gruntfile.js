@@ -279,8 +279,8 @@ module.exports = function(grunt) {
 					pretty: true
 				},
 				expand: true,
-				cwd: 'build/',
-				src: [ 'release/**/*' ],
+				cwd: 'build/release/',
+				src: [ '**/*' ],
 				dest: './'
 			}
 		},
