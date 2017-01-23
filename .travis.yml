@@ -19,7 +19,6 @@ before_script:
 script:
 - if [ $TRAVIS_BRANCH == 'webstore' ]; then grunt build; fi
 - if [ $TRAVIS_BRANCH == 'webstore' ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then export KC3_VERSION=$(node -p -e "require('./package.json').version") && grunt webstore; fi
-- if [ $TRAVIS_BRANCH == 'dev-crx' ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then export KC3_VERSION=$(node -p -e "require('./package.json').version") && grunt build && grunt compress:release; fi
 
 # DEPLOY TO GITHUB RELEASES
 before_deploy:
@@ -27,7 +26,6 @@ before_deploy:
   - git config --global user.name "Travis CI"
   - git tag $KC3_VERSION -a -m "Automated GitHub release for $KC3_VERSION"
   - git push -q https://dragonjet:$GITHUB_API_KEY@github.com/KC3Kai/KC3Kai --tags
-  - cp build/release.zip build/kc3kai-$KC3_VERSION.crx
   - mv build/release.zip build/kc3kai-$KC3_VERSION.zip
 deploy:
   provider: releases
@@ -37,7 +35,7 @@ deploy:
     - build/kc3kai-$KC3_VERSION.zip
   on:
     tags: false
-    branch: dev-crx
+    branch: webstore
     condition: $TRAVIS_PULL_REQUEST == "false"
 
 # BUILD NOTIFICATION FOR GITTER
