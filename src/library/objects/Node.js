@@ -457,11 +457,13 @@ Used by SortieManager
 			}
 			// Jet planes consume steels each battle based on:
 			// pendingConsumingSteel = floor(jetMaster.api_cost * ship.slots[jetIdx] * 0.2)
-			/* Pseudocode of logic:
-			 PlayerManager.fleets[fleetId - 1].forEach(ship):
-			   if ship.equipment(i) === jet && ship.slots[i] > 0:
-			     ship.pendingConsuming[steel] = Math.floor(ship.slots[i] * jet.master().api_costs * 0.2)
-			*/
+			if(this.planeJetFighters.player[0] > 0
+				&& (KC3SortieManager.onSortie > 0 || KC3SortieManager.isPvP())){
+				var consumedSteel = PlayerManager.fleets[
+					(parseInt(fleetSent) || KC3SortieManager.fleetSent) - 1
+				].calcJetsSteelCost(KC3SortieManager.sortieName(2));
+				console.log("Jets consumed steel:", consumedSteel);
+			}
 		}
 		
 		// Boss Debuffed
