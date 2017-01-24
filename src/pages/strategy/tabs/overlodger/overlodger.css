@@ -150,6 +150,19 @@
 	display:none !important;
 }
 
+.tab_overlodger .loading {
+	margin:8px 0px;
+	display:block;
+}
+.tab_overlodger .loading img {
+	content:url(../../../../assets/img/ui/indicator.svg);
+	width:24px;
+	height:24px;
+	margin-left:auto;
+	margin-right:auto;
+	display:block;
+}
+
 /* RATING
 --------------------------------*/
 .tab_overlodger .lodger-statistics {
