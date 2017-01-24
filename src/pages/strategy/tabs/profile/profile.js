@@ -8,6 +8,8 @@
 		
 		player: {},
 		statistics: false,
+		newsfeed: {},
+		englishNewsfeed: false,
 		
 		/* INIT
 		Prepares static data needed
@@ -29,6 +31,8 @@
 			}else{
 				this.statistics = false;
 			}
+			// Check for player news feed
+			this.newsfeed = JSON.parse(localStorage.playerNewsFeed || "{}");
 		},
 		
 		/* EXECUTE
@@ -88,6 +92,15 @@
 				$(".stat_exped .stat_success .stat_value").html(this.statistics.exped.success);
 				$(".stat_exped .stat_total .stat_value").html(this.statistics.exped.total);
 			}
+			
+			// Show news feed
+			this.refreshNewsfeed();
+			// Toggle news feed translation
+			$("#translate_newsfeed").on("click", function(){
+				self.englishNewsfeed = !self.englishNewsfeed;
+				self.refreshNewsfeed();
+				return false;
+			});
 			
 			// Fix ledger data of IndexedDB, current:
 			// 0: LBAS type, 1: Consumables empty useitem
@@ -388,6 +401,59 @@
 					});
 				});
 			});
+		},
+		
+		refreshNewsfeed: function(){
+			var self = this;
+			if(this.newsfeed && this.newsfeed.time){
+				this.newsfeed.log.forEach(function(log, i){
+					self.showFeedItem(i, self.newsfeed.time, log, !self.englishNewsfeed);
+				});
+				$(".newsfeed").show();
+			} else {
+				$(".newsfeed").hide();
+			}
+		},
+		
+		showFeedItem: function(index, time, log, showRawMessage){
+			var selector = ".newsfeed .feed_item_{0}".format(index + 1);
+			$(selector + " .time").text(new Date(time).format("mm/dd HH:MM"));
+			switch(log.api_type){
+			case "1":
+				$(selector + " .colorbox").css("background", "#ffcc00");
+				$(selector + " .feed_text").text(!!showRawMessage ? log.api_message : "Repairs Complete");
+				break;
+			case "2":
+				$(selector + " .colorbox").css("background", "#996600");
+				$(selector + " .feed_text").text(!!showRawMessage ? log.api_message : "Construction Complete");
+				break;
+			case "3":
+				$(selector + " .colorbox").css("background", "#ace");
+				$(selector + " .feed_text").text(!!showRawMessage ? log.api_message : "Expedition fleet has returned");
+				break;
+			case "5":
+				$(selector + " .colorbox").css("background", "#98e75f");
+				var opponent = log.api_message.substring(1, log.api_message.indexOf("」"));
+				if(log.api_message.indexOf("勝利") > -1){
+					$(selector + " .feed_text").html(!!showRawMessage ? log.api_message : "You were attacked in PvP by \"<strong>{0}</strong>\" but won!".format(opponent) );
+				}else if(log.api_message.indexOf("敗北") > -1){
+					$(selector + " .feed_text").html(!!showRawMessage ? log.api_message : "You were attacked in PvP by \"<strong>{0}</strong>\" and lost!".format(opponent));
+				}
+				break;
+			case "7":
+				$(selector + " .colorbox").css("background", "#d75048");
+				$(selector + " .feed_text").text(!!showRawMessage ? log.api_message : "Unlocked a new map");
+				break;
+			case "11":
+				$(selector + " .colorbox").css("background", "#9999ff");
+				$(selector + " .feed_text").text(!!showRawMessage ? log.api_message : "Your ship library has been updated");
+				break;
+			default:
+				$(selector + " .colorbox").css("background", "#ccc");
+				$(selector + " .feed_text").html(!!showRawMessage ? log.api_message :
+					"<span style='color:red;'>Unknown. To help, report that type {0} is \"{1}\"</span>".format(log.api_type, log.api_message) );
+				break;
+			}
 		},
 		
 		makeFilename: function(type, ext){

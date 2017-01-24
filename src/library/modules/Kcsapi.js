@@ -146,7 +146,7 @@ Previously known as "Reactor"
 				}
 			});
 			
-			PlayerManager.setNewsfeed(response.api_data.api_log, UTCtime );
+			PlayerManager.setNewsfeed(response.api_data.api_log, UTCtime * 1000 );
 			
 			PlayerManager.combinedFleet = response.api_data.api_combined_flag || 0;
 			
