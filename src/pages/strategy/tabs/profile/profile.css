@@ -130,6 +130,8 @@
 	padding:0px 0px 0px 5px;
 	margin:1px 1px 1px 1px;
 	float:left;
+	overflow:hidden;
+	white-space:nowrap;
 }
 .tab_profile .feed_item .feed_text {
 	width:394px;
@@ -138,6 +140,9 @@
 	padding:0px 0px 0px 5px;
 	margin:1px 1px 1px 1px;
 	float:left;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
 }
 
 /* MANAGEMENT

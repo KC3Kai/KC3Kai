@@ -436,9 +436,11 @@
 				$(selector + " .colorbox").css("background", "#98e75f");
 				var opponent = log.api_message.substring(1, log.api_message.indexOf("」"));
 				if(log.api_message.indexOf("勝利") > -1){
-					$(selector + " .feed_text").html(isRaw ? log.api_message : KC3Meta.term("NewsfeedPvPWin").format(opponent) );
-				}else if(log.api_message.indexOf("敗北") > -1){
+					$(selector + " .feed_text").html(isRaw ? log.api_message : KC3Meta.term("NewsfeedPvPWin").format(opponent));
+				} else if(log.api_message.indexOf("敗北") > -1){
 					$(selector + " .feed_text").html(isRaw ? log.api_message : KC3Meta.term("NewsfeedPvPLose").format(opponent));
+				} else {
+					$(selector + " .feed_text").html(isRaw ? log.api_message : KC3Meta.term("NewsfeedUnknown").format(log.api_type, log.api_message) );
 				}
 				break;
 			case "7":
@@ -451,8 +453,7 @@
 				break;
 			default:
 				$(selector + " .colorbox").css("background", "#ccc");
-				$(selector + " .feed_text").html(isRaw ? log.api_message :
-					KC3Meta.term("NewsfeedUnknown").format(log.api_type, log.api_message) );
+				$(selector + " .feed_text").html(isRaw ? log.api_message : KC3Meta.term("NewsfeedUnknown").format(log.api_type, log.api_message) );
 				break;
 			}
 		},
