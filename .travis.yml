@@ -20,19 +20,25 @@ before_script:
 # DEPLOY TO CHROME WEBSTORE
 script:
 - if [ $TRAVIS_BRANCH == 'webstore' ]; then grunt build; fi
-- if [ $TRAVIS_BRANCH == 'webstore' ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then grunt webstore; fi
+- if [ $TRAVIS_BRANCH == 'webstore' ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then export KC3_VERSION=$(node -p -e "require('./package.json').version") && grunt webstore; fi
 
 # DEPLOY TO GITHUB RELEASES
-# deploy:
-#   provider: releases
-#   skip_cleanup: true
-#   api_key:
-#     secure: HQBMGX6Dw5NFE48EM7AIiZ8A6KZt7Skwhc0Jf6ttazu/UcH6WV9F/5MBXue3vtEFod6GjH0IsvtH5iGRgV/BDwJzDr4MVf/J/PM4Mdb69EiOhSDcNbT0SOD8xaariWyTpg0F7jqGGaRc8pJoh0fSLCz86T8+RxbePMIOanBh8XM=
-#   file: build/releases.zip
-#   on:
-#     tags: true
-#     branch: webstore
-#     condition: $TRAVIS_PULL_REQUEST == "false"
+before_deploy:
+  - git config --global user.email "builds@travis-ci.com"
+  - git config --global user.name "Travis CI"
+  - git tag $KC3_VERSION -a -m "Automated GitHub release for $KC3_VERSION"
+  - git push -q https://dragonjet:$GITHUB_API_KEY@github.com/KC3Kai/KC3Kai --tags
+  - mv build/release.zip build/kc3kai-$KC3_VERSION.zip
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key: $GITHUB_API_KEY
+  file:
+    - build/kc3kai-$KC3_VERSION.zip
+  on:
+    tags: false
+    branch: webstore
+    condition: $TRAVIS_PULL_REQUEST == "false"
 
 # BUILD NOTIFICATION FOR GITTER
 notifications:
@@ -40,5 +46,5 @@ notifications:
     urls:
       - https://webhooks.gitter.im/e/e8964a721dd35fd96e46
     on_success: change
-    on_failure: always
+    on_failure: change
     on_start: never
