@@ -9,7 +9,7 @@
 		player: {},
 		statistics: false,
 		newsfeed: {},
-		englishNewsfeed: false,
+		showRawNewsfeed: false,
 		
 		/* INIT
 		Prepares static data needed
@@ -94,11 +94,11 @@
 			}
 			
 			// Show news feed
-			this.refreshNewsfeed();
+			this.refreshNewsfeed(this.showRawNewsfeed);
 			// Toggle news feed translation
 			$("#translate_newsfeed").on("click", function(){
-				self.englishNewsfeed = !self.englishNewsfeed;
-				self.refreshNewsfeed();
+				self.showRawNewsfeed = !self.showRawNewsfeed;
+				self.refreshNewsfeed(self.showRawNewsfeed);
 				return false;
 			});
 			
@@ -403,11 +403,11 @@
 			});
 		},
 		
-		refreshNewsfeed: function(){
+		refreshNewsfeed: function(showRawNewsfeed){
 			var self = this;
 			if(this.newsfeed && this.newsfeed.time){
 				this.newsfeed.log.forEach(function(log, i){
-					self.showFeedItem(i, self.newsfeed.time, log, !self.englishNewsfeed);
+					self.showFeedItem(i, self.newsfeed.time, log, !!showRawNewsfeed);
 				});
 				$(".newsfeed").show();
 			} else {
@@ -415,43 +415,44 @@
 			}
 		},
 		
-		showFeedItem: function(index, time, log, showRawMessage){
+		showFeedItem: function(index, time, log, showRawNewsfeed){
+			var isRaw = !!showRawNewsfeed || ConfigManager.language == "jp";
 			var selector = ".newsfeed .feed_item_{0}".format(index + 1);
 			$(selector + " .time").text(new Date(time).format("mm/dd HH:MM"));
 			switch(log.api_type){
 			case "1":
 				$(selector + " .colorbox").css("background", "#ffcc00");
-				$(selector + " .feed_text").text(!!showRawMessage ? log.api_message : "Repairs Complete");
+				$(selector + " .feed_text").html(isRaw ? log.api_message : KC3Meta.term("NewsfeedRepair"));
 				break;
 			case "2":
 				$(selector + " .colorbox").css("background", "#996600");
-				$(selector + " .feed_text").text(!!showRawMessage ? log.api_message : "Construction Complete");
+				$(selector + " .feed_text").html(isRaw ? log.api_message : KC3Meta.term("NewsfeedConstrct"));
 				break;
 			case "3":
 				$(selector + " .colorbox").css("background", "#ace");
-				$(selector + " .feed_text").text(!!showRawMessage ? log.api_message : "Expedition fleet has returned");
+				$(selector + " .feed_text").html(isRaw ? log.api_message : KC3Meta.term("NewsfeedExped"));
 				break;
 			case "5":
 				$(selector + " .colorbox").css("background", "#98e75f");
 				var opponent = log.api_message.substring(1, log.api_message.indexOf("」"));
 				if(log.api_message.indexOf("勝利") > -1){
-					$(selector + " .feed_text").html(!!showRawMessage ? log.api_message : "You were attacked in PvP by \"<strong>{0}</strong>\" but won!".format(opponent) );
+					$(selector + " .feed_text").html(isRaw ? log.api_message : KC3Meta.term("NewsfeedPvPWin").format(opponent) );
 				}else if(log.api_message.indexOf("敗北") > -1){
-					$(selector + " .feed_text").html(!!showRawMessage ? log.api_message : "You were attacked in PvP by \"<strong>{0}</strong>\" and lost!".format(opponent));
+					$(selector + " .feed_text").html(isRaw ? log.api_message : KC3Meta.term("NewsfeedPvPLose").format(opponent));
 				}
 				break;
 			case "7":
 				$(selector + " .colorbox").css("background", "#d75048");
-				$(selector + " .feed_text").text(!!showRawMessage ? log.api_message : "Unlocked a new map");
+				$(selector + " .feed_text").html(isRaw ? log.api_message : KC3Meta.term("NewsfeedUnlockMap"));
 				break;
 			case "11":
 				$(selector + " .colorbox").css("background", "#9999ff");
-				$(selector + " .feed_text").text(!!showRawMessage ? log.api_message : "Your ship library has been updated");
+				$(selector + " .feed_text").html(isRaw ? log.api_message : KC3Meta.term("NewsfeedUpdateLib"));
 				break;
 			default:
 				$(selector + " .colorbox").css("background", "#ccc");
-				$(selector + " .feed_text").html(!!showRawMessage ? log.api_message :
-					"<span style='color:red;'>Unknown. To help, report that type {0} is \"{1}\"</span>".format(log.api_type, log.api_message) );
+				$(selector + " .feed_text").html(isRaw ? log.api_message :
+					KC3Meta.term("NewsfeedUnknown").format(log.api_type, log.api_message) );
 				break;
 			}
 		},
