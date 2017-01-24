@@ -89,9 +89,10 @@
 				$(".stat_exped .stat_total .stat_value").html(this.statistics.exped.total);
 			}
 			
-			// Fix LBAS type of ledger data from IndexedDB
+			// Fix ledger data of IndexedDB, current:
+			// 0: LBAS type, 1: Consumables empty useitem
 			// Should be reserved until next several releases when most users have their fixed data
-			if(typeof localStorage.fixed_lbas_ledger === "undefined"){
+			if(!localStorage.fixed_ledger_db){
 				KC3Database.get_lodger_data(Range(0,Infinity,0,1),
 				function(ld){
 					ld.forEach(function(d){
@@ -100,8 +101,28 @@
 						}
 					});
 				});
-				localStorage.fixed_lbas_ledger = 1;
+				delete localStorage.fixed_lbas_ledger;
+				localStorage.fixed_ledger_db = 1;
 				console.info("Ledger data of LBAS have been fixed");
+			} else if(localStorage.fixed_ledger_db == 1){
+				// Fix "hq": "0"
+				KC3Database.con.useitem.where("hq").equals("0").modify(function(mr){mr.hq = PlayerManager.hq.id;});
+				// Fix undefined consumables via using values of previous hour
+				KC3Database.get_useitem(null, function(rs){
+					var i,j,r,rp;
+					for(i in rs){
+						r = rs[i];
+						for(j=i-1; j>0; j--){ rp = rs[j];
+							if(typeof rp.torch !== "undefined") break;
+						}
+						if(typeof r.torch === "undefined" && typeof rp.torch !== "undefined"){
+							rp.id = r.id; rp.hour = r.hour;
+							KC3Database.con.useitem.put(rp);
+						}
+					}
+				});
+				localStorage.fixed_ledger_db = 2;
+				console.info("Ledger data of Consumables have been fixed");
 			}
 			
 			// Export all data
@@ -332,6 +353,7 @@
 				ConfigManager.save();
 				// For debugging or special case
 				delete localStorage.fixed_lbas_ledger;
+				delete localStorage.fixed_ledger_db;
 			});
 			
 			// Clear transient properties

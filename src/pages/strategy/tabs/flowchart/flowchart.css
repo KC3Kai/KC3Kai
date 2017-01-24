@@ -144,7 +144,6 @@
 	height:16px;
 	float:left;
 	margin:0px 0px 0px 4px;
-	background:#fff;
 	border-radius:8px;
 }
 .tab_flowchart .questFlowItem .questToggle img {
@@ -158,7 +157,6 @@
 	height:16px;
 	float:left;
 	margin:0px 0px 0px 3px;
-	background:#fff;
 	border-radius:8px;
 }
 .tab_flowchart .questFlowItem .questRemove img {
@@ -256,7 +254,6 @@
 	height:16px;
 	float:left;
 	margin:0px 0px 0px 9px;
-	background:#fff;
 	border-radius:8px;
 }
 .tab_flowchart .questExtraItem .questRemove img {

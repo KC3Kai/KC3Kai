@@ -157,7 +157,6 @@
 			$.each(this.ships, function(index, mstId){
 				MasterShip = KC3Master.ship(mstId);
 				shipBox = $("#mst-"+mstId);
-				
 				$.each(self.statList, function(code, stat){
 					myStat = self.getStat(MasterShip, stat);
 					alpha = 0;
@@ -171,7 +170,16 @@
 						range = highestStats[stat[0]][1] - highestStats[stat[0]][0];
 						alpha = 1 - (myValue / range);
 					}
-					$(".compare_ship_"+stat[0], shipBox).css({background:"rgba(0,255,0,"+alpha+")"});
+					
+					if (alpha) {
+						var oldBG = $(".compare_ship_"+stat[0], shipBox).css("background-color");
+						var newBG = oldBG.insert( oldBG.length-1, ", "+alpha);
+						newBG = newBG.insert(3, "a");
+						$(".compare_ship_"+stat[0], shipBox).css({background:newBG});
+					} else {
+						$(".compare_ship_"+stat[0], shipBox).css({background:'transparent'});
+					}
+					
 				});
 			});
 			
@@ -205,7 +213,6 @@
 					percent = myStat / highestStats[stat[0]][1];
 				}
 				
-				$(".compare_ship_bar", shipBox).css({ width:0 });
 				$(".compare_ship_bar", shipBox).animate({
 					width: barMaxWidth * percent
 				}, 500);

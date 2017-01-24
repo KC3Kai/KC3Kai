@@ -70,6 +70,18 @@
 				"id": "apiRecorder",
 				"name": "SettingsAPIRecorder",
 				"type": "check"
+			},
+			{
+				"id": "updateNotification",
+				"name": "SettingsUpdateNotification",
+				"type": "radio",
+				"options" : {
+					"choices" : [
+						[ 1, "SettingsUpdateNotifNone" ],
+						[ 2, "SettingsUpdateNotifPage" ],
+						[ 3, "SettingsUpdateNotifPop" ]
+					]
+				}
 			}
 		]
 	},

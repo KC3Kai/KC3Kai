@@ -115,8 +115,7 @@
 .tab_compare .compare_ship_bar {
 	width:0px;
 	height:10px;
-	margin:7px 5px 7px 0px;;
-	background:-webkit-linear-gradient(top, #7db9e8 0%,#1a0888 100%);
+	margin:7px 5px 7px 0px;
 	float:left;
 }
 .tab_compare .compare_ship_value {
@@ -141,28 +140,15 @@
 	line-height:28px;
 	font-size:12px;
 	font-weight:bold;
-	background:#ace;
-	border:1px solid #37b;
-	border-radius: 5px;
 	float:left;
 	margin:0px 5px 0px 0px;
 	text-align:center;
 }
-.tab_compare .compare_select_back.active {
-	background: #fff;
-	color:#000;
-}
 .tab_compare .compare_select_stat {
 	width:28px;
 	height:30px;
-	background:#ace;
-	border:1px solid #37b;
-	border-radius: 5px;
 	float:left;
 	margin:0px 5px 0px 0px;
-}
-.tab_compare .compare_select_stat.active {
-	background: #fff;
 }
 .tab_compare .compare_select_stat img {
 	width:16px;

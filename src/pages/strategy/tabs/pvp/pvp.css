@@ -96,11 +96,9 @@
 	height:20px;
 	line-height:18px;
 	border-radius:5px;
-	background:#ffc;
 	margin:0px 5px 0px 5px;
 	text-align:center;
 	font-size:10px;
-	border:1px solid #ace;
 }
 /* PLAYER */
 .tab_pvp .pvp_player {
@@ -108,7 +106,6 @@
 	margin:0px 5px 0px 0px;
 }
 .tab_pvp .pvp_player .pvp_details_ship {
-	border:1px solid #ace;
 }
 .tab_pvp .pvp_player .pvp_ship_hp {
 	display:none;
@@ -128,7 +125,6 @@
 	width:290px;
 }
 .tab_pvp .pvp_opponent .pvp_details_ship {
-	border:1px solid #faa
 }
 .tab_pvp .pvp_opponent .pvp_ship_info {
 	width:40px;
