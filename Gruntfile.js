@@ -187,7 +187,7 @@ module.exports = function(grunt) {
 				options: {
 					replacements: [
 						{
-							pattern: /\"assets\/js\/\.\.\/js\/global\.js\",/ig,
+							pattern: /\"assets\/js\/global\.js\",/ig,
 							replacement: ''
 						},
 						{
