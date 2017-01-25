@@ -169,7 +169,9 @@ Does not include Ships and Gears which are managed by other Managers
 
 			if(typeof localStorage.lastUseitem == "undefined"){ localStorage.lastUseitem = 0; }
 			var ResourceHour = Math.floor(stime/3600);
-			if(ResourceHour == localStorage.lastUseitem){ return false; }
+			if(ResourceHour == localStorage.lastUseitem || Object.keys(data).length < 4){
+				return false;
+			}
 			localStorage.lastUseitem = ResourceHour;
 			KC3Database.Useitem({
 				torch : data.torch,
@@ -216,10 +218,14 @@ Does not include Ships and Gears which are managed by other Managers
 
 		setNewsfeed :function( data, stime ){
 			//console.log("newsfeed", data);
+			localStorage.playerNewsFeed = JSON.stringify({ time: stime, log: data });
+			// Give up to save into DB, just keep recent 6 logs
+			return;
+			// No way to track which logs are already recorded,
+			// because no cursor/timestamp/state could be found in API
+			/*
 			$.each(data, function( index, element){
-				//console.log("checking newsfeed item", element);
 				if(parseInt(element.api_state, 10) !== 0){
-					//console.log("saved news", element);
 					KC3Database.Newsfeed({
 						type: element.api_type,
 						message: element.api_message,
@@ -227,6 +233,7 @@ Does not include Ships and Gears which are managed by other Managers
 					});
 				}
 			});
+			*/
 		},
 
 		// make sure to "loadFleets" before calling this function.

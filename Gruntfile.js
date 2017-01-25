@@ -1,5 +1,7 @@
 module.exports = function(grunt) {
 
+	require('load-grunt-tasks')(grunt);
+
 	grunt.initConfig({
 		clean: {
 			tmp: {
@@ -7,6 +9,9 @@ module.exports = function(grunt) {
 			},
 			release: {
 				src: [ 'build/release/**/*', 'build/release/' ]
+			},
+			testenv: {
+				src: [ 'build/testenv/**/*', 'build/testenv/' ]
 			}
 		},
 		copy: {
@@ -15,6 +20,19 @@ module.exports = function(grunt) {
 				cwd: 'src/',
 				src: '**/*',
 				dest: 'build/tmp/'
+			},
+			testenv: {
+				expand: true,
+				src: [
+					// some tests would load from the following 2 paths:
+					'node_modules/qunitjs/**/*',
+					'node_modules/jquery/**/*',
+
+					'src/**/*',
+					'!src/data/lang/node_modules/**/*',
+					'tests/**/*'
+				],
+				dest: 'build/testenv/'
 			},
 			statics: {
 				expand: true,
@@ -34,7 +52,8 @@ module.exports = function(grunt) {
 					'assets/js/WhoCallsTheFleetItemDb.json',
 					'assets/js/jszip.min.js',
 					'assets/js/bootstrap-slider.min.js',
-					'assets/js/no_ga.js'
+					'assets/js/no_ga.js',
+					'assets/js/markdown.min.js'
 				],
 				dest: 'build/release/'
 			},
@@ -168,8 +187,8 @@ module.exports = function(grunt) {
 				options: {
 					replacements: [
 						{
-							pattern: /assets\/js\/jquery\-2\.1\.3\.min\.js/ig,
-							replacement: 'assets/js/global.js'
+							pattern: /"assets\/js\/jquery\-2\.1\.3\.min\.js",/ig,
+							replacement: ''
 						},
 						{
 							pattern: /library\/objects\/Messengers\.js/ig,
@@ -269,7 +288,7 @@ module.exports = function(grunt) {
 		},
 		qunit: {
 			all: [
-				'tests/**/*.html'
+				'build/testenv/tests/**/*.html'
 			]
 		},
 		compress: {
@@ -279,8 +298,8 @@ module.exports = function(grunt) {
 					pretty: true
 				},
 				expand: true,
-				cwd: 'build/',
-				src: [ 'release/**/*' ],
+				cwd: 'build/release/',
+				src: [ '**/*' ],
 				dest: './'
 			}
 		},
@@ -300,6 +319,29 @@ module.exports = function(grunt) {
 					appID: "hkgmldnainaglpjngpajnnjfhpdjkohh",
 					zip: "build/release.zip"      
 				}
+			}
+		},
+		// currently use just for running tests
+		babel: {
+			options: {
+				sourceMap: true,
+				presets: ['babel-preset-es2015']
+			},
+			testenv: {
+				files: [
+					{  
+						expand: true,
+						cwd: 'build/testenv/',
+						// for now only transpile code in "library" & "pages" (whitelist)
+						// avoiding stepping into "assets" and "data".
+						// same reason for "tests/library".
+						src: [ "src/library/**/*.js",
+							   "src/pages/**/*.js",
+							   "tests/library/**/*.js"
+							 ],
+						dest: 'build/testenv/'
+					}
+				]
 			}
 		}
 	});
@@ -369,6 +411,9 @@ module.exports = function(grunt) {
 	]);
 	
 	grunt.registerTask('test-unit', [
+		'clean:testenv',
+		'copy:testenv',
+		'babel:testenv',
 		'qunit'
 	]);
 	

@@ -688,9 +688,34 @@ a:hover {
 	color:#ccc;
 }
 /* Leveling Goals */
+.tab_expcalc .box_control {
+	background-color:#333333;
+	border:1px solid #666;
+}
+.tab_expcalc .box_control_line .toggle {
+	border-radius: 4px;
+	background: #000;
+}
+.tab_expcalc .box_control_line .hover.active {
+	background: #33ccff;
+	color: #000;
+}
 .tab_expcalc .ship_goal {
 	background-color:#333333;
 	border-radius: 0px !important;
+}
+.tab_expcalc .ship_goal.highlight_stype {
+	background-color:#330000;
+}
+.tab_expcalc .ship_goal.highlight_closeToRemodel {
+	background-color:#04242f;
+}
+
+.tab_expcalc .ship_goal.highlight_canBeRemodelled {
+	background-color:#062d2b;
+}
+.tab_expcalc .goal_template {
+	background-color:#def;
 }
 .tab_expcalc .ship_goal .ship_value {
 	color:#fff !important;
@@ -745,33 +770,10 @@ a:hover {
 	background-color:#333333;
 	border-radius: 0px !important;
 }
-.tab_expcalc .ship_goal.ship_closeToRemodel{
-	background-color:#555555;
+.tab_expcalc .goal_template.disabled {
+	background: #666666;
+	border: 1px solid;
 }
-@-webkit-keyframes ship_closeToRemodel{
-	0%  {background-color:#555555;}
-	50%  {background-color:#000000;}
-	100%  {background-color:#555555;}
-}
-@keyframes ship_closeToRemodel {
-	0%  {background-color:#555555;}
-	50%  {background-color:#000000;}
-	100%  {background-color:#555555;}
-}
-.tab_expcalc .ship_goal.ship_canBeRemodelled{
-	background-color:#555555;
-}
-@-webkit-keyframes ship_canBeRemodelled{
-	0%  {background-color:#555555;}
-	50%  {background-color:#000000;}
-	100%  {background-color:#555555;}
-}
-@keyframes ship_canBeRemodelled {
-	0%  {background-color:#555555;}
-	50%  {background-color: #000000;}
-	100%  {background-color:#555555;}
-}
-
 .tab_expcalc .goal_template .goal_value {
 	color:#fff !important;
 }
@@ -802,6 +804,11 @@ a:hover {
 	line-height:22px;
 	margin-top:10px;
 }
+.tab_expcalc .gt_content.new_template {
+	background: #333333;
+	border: 1px;
+}
+
 /* Badge */
 .tab_badge .export_box {
     background:#131313;
@@ -1125,6 +1132,14 @@ a:hover {
 	background:#81811a;
 	color:#fff;
 }
+.tab_flowchart .questFlowItem .questOverride {
+	color:#444 !important;
+}
+.tab_flowchart .questFlowItem .questToggle,
+.tab_flowchart .questFlowItem .questRemove,
+.tab_flowchart .questExtraItem .questRemove {
+	background:#444;
+}
 
 .tab_flowchart .questIcon.type3 {
 	color:#000;
@@ -1279,8 +1294,15 @@ a:hover {
 .tab_pvp .pvp_details_ship {
 	background:#222 !important;
 }
+.tab_pvp .pvp_player .pvp_details_ship {
+	border:1px solid #004d99;
+}
+.tab_pvp .pvp_opponent .pvp_details_ship {
+	border:1px solid #b30000;
+}
 .tab_pvp .pvp_info .pvp_dl {
 	background:#369 !important;
+	border:1px solid #3f8cd9;
 }
 /* SHIPS LIBRARY
 --------------------------------*/
@@ -1297,6 +1319,9 @@ a:hover {
 .tab_mstship .shipRecord:hover {
 	background:#039 !important;
 }
+.tab_mstship .shipInfo .more .remodel_name a {
+	color:#ffcc00 !important;
+}
 .tab_mstship .shipInfo .ship_stat_icon img {
 	filter:invert(100%);
 }
@@ -1305,6 +1330,7 @@ a:hover {
 }
 .tab_mstship .shipInfo .voice {
 	background:#222 !important;
+	border:1px solid #3e3e3e !important;
 }
 .tab_mstship .shipInfo .aaci .aaciPattern.odd {
 	background:#444 !important;
@@ -1329,4 +1355,146 @@ a:hover {
 }
 .tab_mstgear .gearInfo .stat_icon img {
 	-webkit-filter:invert(100%);
+}
+/* SHIP COMPARE
+--------------------------------*/
+.tab_compare .compare_select_back {
+	color: black;
+}
+.tab_compare .compare_list {
+	border-bottom:1px solid #585858 !important;
+}
+.tab_compare .compare_ship {
+	background: #333333;
+}
+.tab_compare .compare_remove {
+	background:#7d3e3e !important;
+}
+.tab_compare .compare_ship_stat {
+	background:#017701;
+}
+.tab_compare .compare_ship_stat.mono img {
+	filter:invert(100%);
+}
+.tab_compare .compare_select_back {
+	border:1px solid #77;
+	background:#292929;
+	color:#aaa;
+}
+.tab_compare .compare_select_back.active {
+	background: #777;
+	color:#ccc;
+}
+.tab_compare .compare_select_stat {
+	border:1px solid #444;
+	background:#292929;
+}
+.tab_compare .compare_select_stat.active {
+	background: #777;
+}
+.tab_compare .compare_select_stat.mono img {
+	filter:invert(100%);
+}
+.tab_compare .compare_ship_bar {
+	background:#888;
+}
+
+/* EXPEDITION SCORER
+--------------------------------*/
+.tab_expedscorer .page_panel {
+	width: 700px;
+}
+.tab_expedscorer .expedNumBox {
+	background: #666666;
+}
+.tab_expedscorer .expedControls .calculate_btn {
+	background:#666666;
+}
+.tab_expedscorer .expedControls input {
+	background-color: #eee;
+	color: black;
+}
+.tab_expedscorer .table-hover tbody tr:hover td,
+.tab_expedscorer .table-hover tbody tr:hover th {
+	color: black;
+}
+/* EXPEDITION HISTORY
+--------------------------------*/
+.tab_expedpast .page_panel {
+	width: 700px;
+}
+
+.tab_expedpast .expedNumBox {
+	background: #666666;
+}
+.tab_expedpast .exped_item {
+	background: #666666;
+	color: black;
+}
+.tab_expedpast .exped_item .exped_info {
+	color: white;
+}
+
+.tab_expedpast .pagination > li > a {
+	color: white;
+	background: #666666;
+}
+
+.tab_expedpast .pagination > li.active > a {
+	color: white;
+	background: #337ab7;
+}
+/* QUOTES
+--------------------------------*/
+.tab_quotes .ship_list {
+	background:#222 !important;
+}
+
+.tab_quotes .ship_list .ship_entity:hover {
+	background:#039 !important;
+}
+
+.tab_quotes .part_right .voice_entity.direct {
+	background: #003300;
+}
+
+.tab_quotes .part_right .voice_entity.inherit {
+	background: #00344d;
+}
+.tab_quotes .part_right .voice_entity .jp_src,.en_src {
+	background: #333;
+}
+.tab_quotes .part_right .voice_entity .sp_quote {
+	background: #625;
+}
+.tab_quotes .part_right .voice_entity .voice {
+	border: 1px solid gray;
+	background: #00264d;
+}
+
+.tab_quotes .part_right .voice_entity.inherit .source {
+    color: #00ffff;
+}
+.tab_quotes .part_right .voice_entity.direct .source {
+    color: #00ff00;
+}
+/* TRANSLATIONS
+--------------------------------*/
+.tab_translations .tr-item.translation_done .tr-key,
+.tab_translations .tr-item.translation_done .tr-from,
+.tab_translations .tq-item.translation_done .tq-key,
+.tab_translations .tq-item.translation_done .tq-from {
+	color: cyan;
+}
+
+.tab_translations .tr-item.translation_missing .tr-key,
+.tab_translations .tr-item.translation_missing .tr-from,
+.tab_translations .tq-item.translation_missing .tq-key,
+.tab_translations .tq-item.translation_missing .tq-from,
+.tab_translations .tq-item .tq-name.translation_missing,
+.tab_translations .tq-item .tq-desc.translation_missing {
+	color: firebrick;
+}
+.tab_translations .page_content select {
+	color: black;
 }

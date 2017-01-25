@@ -28,6 +28,7 @@
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 			};
 			
+			$(".loading").show();
 			KC3Database.con.encounters.toArray(function(response){
 				self.list = response;
 				
@@ -95,6 +96,7 @@
 				});
 				
 				//console.log(self.list);
+				$(".loading").hide();
 			});
 		}
 		

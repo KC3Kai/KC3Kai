@@ -3,7 +3,7 @@
 	"name": "KC3改 Development",
 	"short_name": "KC3改",
 	"description": "Kantai Collection Game Viewer and Helper",
-	"version": "30.15.1",
+	"version": "30.16.0",
 	"devtools_page": "pages/devtools/init.html",
 	"options_page": "pages/settings/settings.html",
 	"icons": {
@@ -29,11 +29,13 @@
 		"<all_urls>"
 	],
 	"background": {
-		"persistent": true,
 		"scripts": [
+			"assets/js/global.js",
 			"assets/js/jquery-2.1.3.min.js",
 			"library/objects/Messengers.js",
 			"library/managers/ConfigManager.js",
+			"library/modules/Meta.js",
+			"library/modules/Translation.js",
 			"library/modules/Service.js"
 		]
 	},

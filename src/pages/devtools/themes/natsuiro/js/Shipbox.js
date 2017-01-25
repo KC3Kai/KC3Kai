@@ -56,7 +56,7 @@ KC3改 Ship Box for Natsuiro theme
 		var maxAaciParams = this.shipData.maxAaciShotdownBonuses();
 		if(maxAaciParams[0] > 0){
 			tooltip += "\n" + KC3Meta.term("ShipAACIMaxBonus")
-				.format( "{0} (x{1})".format(maxAaciParams[1], maxAaciParams[2]) );
+				.format( "+{0} (x{1})".format(maxAaciParams[1], maxAaciParams[2]) );
 		} else {
 			tooltip += "\n" + KC3Meta.term("ShipAACIMaxBonus").format( KC3Meta.term("None") );
 		}

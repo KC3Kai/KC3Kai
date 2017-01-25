@@ -7,34 +7,68 @@
 		<!-- @nonbuildend -->
 		<link href="../../assets/css/global.css" rel="stylesheet" type="text/css">
 		<link href="update.css" rel="stylesheet" type="text/css">
-		<title>UpdatedTitle</title>
+		<title class="i18n">PageUpdateTitle</title>
 		<link rel="shortcut icon" href="../../assets/img/logo/48.png" type="image/x-icon" />
 	</head>
 	<body>
 		<!-- CONTENTS -->
-		<div id="wrapper">
-			<div class="logo"><img src="../../assets/img/logo/128.png" /></div>
-			<div class="versionInfo">
-				<div class="versionName">
-					KC3改 <span class="verNum"></span>
-				</div>
-				<div class="versionNotes"></div>
+		<div id="header">
+			<div class="logo"><img src="../../assets/img/logo/32.png" /></div>
+			<div class="title i18n">PageUpdateTitle</div>
+			<a href="https://github.com/KC3Kai/KC3Kai/wiki/Updating" target="_blank" class="howToUpdateBtn i18n">PageUpdateHowToManual</a>
+		</div>
+		
+		<div id="updateReady" class="notice">
+			<div class="updateReadyTitle noticeTitle">
+				<span class="i18n">Version</span>
+				<span class="num"></span>
+				<span class="i18n">UpdateAvailableNow</span>
 			</div>
-			
-			<div class="viewButtons">
-				<a class="btn btn-info btn-sm viewLogs i18n" href="https://github.com/KC3Kai/KC3Kai/pulls?q=label%3Atype%3Arelease%20">NewVerViewChangelogGithub</a>
-				<a class="btn btn-info btn-sm viewWiki i18n" href="https://github.com/KC3Kai/KC3Kai/wiki">NewVerViewWikiGithub</a>
+			<div class="updateReadyText noticeText i18n">PageUpdateReadyText</div>
+			<div class="updateReadyButtons">
+				<div id="restartNow" class="updateReadyButton i18n hover">PageUpdateRestartNow</div>
+				<div id="restartLater" class="updateReadyButton i18n hover">PageUpdateRestartLater</div>
+				<div class="clear"></div>
 			</div>
-			
-			
-			<div class="changeLog">
-				
+		</div>
+		
+		<div id="installed" class="notice">
+			<div class="installedTitle noticeTitle i18n">InstalledTitle</div>
+			<div class="installedText noticeText i18n">InstalledText</div>
+		</div>
+		
+		<div id="updated" class="notice">
+			<div class="updatedTitle noticeTitle i18n">UpdatedTitle</div>
+			<div class="updatedText noticeText i18n">UpdatedText</div>
+		</div>
+		
+		<div id="versions">
+			<div id="versionList">
+				<div class="loading"><img /></div>
 			</div>
-			
+			<div id="versionText">
+				<div class="title"></div>
+				<div class="link"><a target="_blank"></a></div>
+				<div class="desc"></div>
+			</div>
 			<div class="clear"></div>
 		</div>
 		
+		<div id="factory">
+			
+			<div class="versionPR hover">
+				<div class="versionStatus"></div>
+				<div class="versionIcon"><img/></div>
+				<div class="versionName"></div>
+				<div class="versionDate"></div>
+				<div class="installed i18n">PageUpdateInstalled</div>
+				<div class="clear"></div>
+			</div>
+			
+		</div>
+		
 		<script type="text/javascript" src="../../assets/js/global.js"></script>
+		<script type="text/javascript" src="../../assets/js/markdown.min.js"></script>
 		<!-- @nonbuildstart -->
 		<script type="text/javascript" src="../../assets/js/jquery-2.1.3.min.js"></script>
 		<script type="text/javascript" src="../../library/managers/ConfigManager.js"></script>
