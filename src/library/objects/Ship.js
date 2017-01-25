@@ -601,14 +601,18 @@ KC3改 Ship Object
 			return false;
 		
 		// only few DDs and CLs are capable of equipping daihatsu
-		// including:
-		// Abukuma K2(200), Verniy(147), Ooshio K2(199), Arashio K2(490)
-		// Satsuki K2(418), Mutsuki K2(434), Kisaragi K2(435),
-		// Kasumi K2(464), Kasumi K2B(470),
-		// Asashio K2D(468), Kawakaze K2(469),
-		// Kinu K2(487)
-		if ([2,3].indexOf( master.api_stype ) !== -1 &&
-			[147,199,200,418,434,435,464,470,468,469,487,490].indexOf( this.masterId ) === -1)
+		// see comments below.
+		if ([2 /* DD */,3 /* CL */].indexOf( master.api_stype ) !== -1 &&
+			[
+				// Abukuma K2(200), Kinu K2(487)
+				200, 487,
+				// Satsuki K2(418), Mutsuki K2(434), Kisaragi K2(435)
+				418, 434, 435,
+				// Kasumi K2(464), Kasumi K2B(470), Ooshio K2(199), Asashio K2D(468), Arashio K2(490)
+				464, 470, 199, 468, 490,
+				// Verniy(147), Kawakaze K2(469)
+				147, 469
+			].indexOf( this.masterId ) === -1)
 			return false;
 		return true;
 	};
