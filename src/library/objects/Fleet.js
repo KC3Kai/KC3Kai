@@ -504,19 +504,31 @@ Contains summary information about a fleet and its 6 ships
 
 	KC3Fleet.prototype.calcResupplyCost = function() {
 		var self = this;
-		var totalFuel = 0;
-		var totalAmmo = 0;
-		var totalBauxite = 0;
+		var totalFuel = 0,
+			totalAmmo = 0,
+			totalSteel = 0,
+			totalBauxite = 0;
 		$.each( this.ships, function(i, shipId) {
 			if (shipId > -1) {
 				var shipObj = self.ship(i);
-				var cost = shipObj.calcResupplyCost(-1, -1, true);
+				var cost = shipObj.calcResupplyCost(-1, -1, true, true);
 				totalFuel += cost.fuel;
 				totalAmmo += cost.ammo;
+				totalSteel += cost.steel;
 				totalBauxite += cost.bauxite;
 			}
 		});
-		return {fuel: totalFuel, ammo: totalAmmo, bauxite:totalBauxite};
+		return {fuel: totalFuel, ammo: totalAmmo, steel: totalSteel, bauxite: totalBauxite};
+	};
+
+	KC3Fleet.prototype.calcJetsSteelCost = function(currentSortieId) {
+		var i, ship;
+		var totalSteel = 0;
+		for(i = 0; i < this.countShips(); i++) {
+			ship = this.ship(i);
+			totalSteel += ship.calcJetsSteelCost(currentSortieId);
+		}
+		return totalSteel;
 	};
 
 	/*--------------------------------------------------------*/
