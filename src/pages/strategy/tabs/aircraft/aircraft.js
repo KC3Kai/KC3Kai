@@ -42,6 +42,7 @@
 				this.checkShipSlotForItemHolder(1, KC3ShipManager.list[ctr]);
 				this.checkShipSlotForItemHolder(2, KC3ShipManager.list[ctr]);
 				this.checkShipSlotForItemHolder(3, KC3ShipManager.list[ctr]);
+				// No plane is able to be equipped in ex-slot for now
 			}
 			for(ctr in PlayerManager.bases){
 				this.checkLbasSlotForItemHolder(PlayerManager.bases[ctr]);
@@ -145,7 +146,7 @@
 		/* Check a ship's equipment slot of an item is equipped
 		--------------------------------------------*/
 		checkShipSlotForItemHolder :function(slot, ThisShip){
-			if(ThisShip.items[slot] > -1){
+			if(ThisShip.items[slot] > 0){
 				this._holders["s"+ThisShip.items[slot]] = ThisShip;
 				this._slotNums["s"+ThisShip.items[slot]] = slot;
 			}
@@ -155,7 +156,9 @@
 		--------------------------------------------*/
 		checkLbasSlotForItemHolder :function(LandBase){
 			for(var squad in LandBase.planes){
-				this._holders["s"+LandBase.planes[squad].api_slotid] = LandBase;
+				if(LandBase.planes[squad].api_slotid > 0){
+					this._holders["s"+LandBase.planes[squad].api_slotid] = LandBase;
+				}
 			}
 		},
 		

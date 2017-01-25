@@ -260,7 +260,7 @@
 				if(ThisShip.ex_item > 0){
 					this._holders["s"+ThisShip.ex_item] = ThisShip;
 				}
-			} else if(ThisShip.items[slot] > -1){
+			} else if(ThisShip.items[slot] > 0){
 				this._holders["s"+ThisShip.items[slot]] = ThisShip;
 			}
 		},
@@ -269,7 +269,9 @@
 		--------------------------------------------*/
 		checkLbasSlotForItemHolder :function(LandBase){
 			for(var squad in LandBase.planes){
-				this._holders["s"+LandBase.planes[squad].api_slotid] = LandBase;
+				if(LandBase.planes[squad].api_slotid > 0){
+					this._holders["s"+LandBase.planes[squad].api_slotid] = LandBase;
+				}
 			}
 		},
 
