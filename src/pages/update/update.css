@@ -119,12 +119,23 @@ body {
 #updated .updatedText {
 	
 }
-
 /* VERSIONS
 --------------------------*/
 #versions {
 	width:800px;
 	margin:0px auto;
+}
+
+#versions .loading {
+	width:200px;
+}
+#versions .loading img {
+	content:url(../../assets/img/ui/indicator.svg);
+	width:32px;
+	height:32px;
+	margin-left:auto;
+	margin-right:auto;
+	display:block;
 }
 
 /* Version List */

@@ -1271,12 +1271,13 @@
 					})
 					.on('click',function(){
 						$('button,input,select,option',baseContext).prop('disabled',true);
-						
+						$(".loading").show();
 						var time = Date.now();
 						self.resetBuffer();
 						$(".filterGroup",baseContext).trigger('refresh');
 						$(this).trigger('refresh');
 						time = Date.now() - time;
+						$(".loading").hide();
 						//console.info("Refresh done in",time,"msec");
 					});
 		},

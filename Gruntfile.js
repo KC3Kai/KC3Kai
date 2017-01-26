@@ -187,8 +187,12 @@ module.exports = function(grunt) {
 				options: {
 					replacements: [
 						{
-							pattern: /"assets\/js\/jquery\-2\.1\.3\.min\.js",/ig,
+							pattern: /\"assets\/js\/global\.js\",/ig,
 							replacement: ''
+						},
+						{
+							pattern: /assets\/js\/jquery\-2\.1\.3\.min\.js/ig,
+							replacement: 'assets/js/global.js'
 						},
 						{
 							pattern: /library\/objects\/Messengers\.js/ig,
@@ -298,8 +302,8 @@ module.exports = function(grunt) {
 					pretty: true
 				},
 				expand: true,
-				cwd: 'build/',
-				src: [ 'release/**/*' ],
+				cwd: 'build/release/',
+				src: [ '**/*' ],
 				dest: './'
 			}
 		},

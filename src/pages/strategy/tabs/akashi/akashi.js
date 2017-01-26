@@ -10,7 +10,7 @@
 		todaySortedIds: [],
 		ships: [],
 		gears: [],
-		heldGearsIds: [],
+		heldGearRosterIds: [],
 		instances: {},
 		hideNotImprovable: false,
 		
@@ -31,6 +31,7 @@
 			var self = this;
 			PlayerManager.hq.load();
 			PlayerManager.loadConsumables();
+			PlayerManager.loadBases();
 			KC3ShipManager.load();
 			KC3GearManager.load();
 			
@@ -38,12 +39,23 @@
 			this.gears = [];
 			this.instances = {};
 			
-			// Get API IDs of all player ships
+			// Get API IDs of all player ships, remember all roster IDs of gears they hold
 			$.each(KC3ShipManager.list, function(index, ThisShip){
 				if(self.ships.indexOf(ThisShip.masterId) === -1){
 					self.ships.push(ThisShip.masterId);
-					[].push.apply(self.heldGearsIds, ThisShip.items);
+					// Doesn't matter to hold some -1 in array
+					[].push.apply(self.heldGearRosterIds, ThisShip.items);
 				}
+			});
+			
+			// Get all roster IDs of planes held in LBAS
+			$.each(PlayerManager.bases, function(index, LandBase){
+				for(var squad in LandBase.planes){
+					self.heldGearRosterIds.push(LandBase.planes[squad].api_slotid);
+				}
+			});
+			$.each(PlayerManager.baseConvertingSlots, function(index, rosterId){
+				self.heldGearRosterIds.push(rosterId);
 			});
 			
 			// Get API IDs of all player gear
@@ -62,8 +74,8 @@
 				self.instances[ThisGear.masterId].star0_5 += (!ThisGear.stars || ThisGear.stars < 6) & 1;
 				self.instances[ThisGear.masterId].star6_9 += (ThisGear.stars >= 6 && ThisGear.stars < 10) & 1;
 				self.instances[ThisGear.masterId].starmax += (ThisGear.stars == 10) & 1;
-				self.instances[ThisGear.masterId].free += (ThisGear.lock === 0 
-					&& self.heldGearsIds.indexOf(ThisGear.itemId) === -1 ) & 1;
+				self.instances[ThisGear.masterId].free += 1 & ( ThisGear.lock === 0 
+					&& self.heldGearRosterIds.indexOf(ThisGear.itemId) === -1 );
 			});
 		},
 		

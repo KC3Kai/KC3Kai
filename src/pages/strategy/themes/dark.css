@@ -22,6 +22,10 @@ a:hover {
 	color:#ffffff;
 }
 
+button, input, select, textarea {
+	background:#121212;
+}
+
 /* COLORS
 -------------------------------*/
 .fcolor1 { color:#ffffff; }

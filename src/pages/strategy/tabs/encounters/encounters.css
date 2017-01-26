@@ -5,6 +5,19 @@
 	display:none;
 }
 
+.tab_encounters .loading {
+	margin:8px 5px;
+	display:block;
+}
+.tab_encounters .loading img {
+	content:url(../../../../assets/img/ui/indicator.svg);
+	width:24px;
+	height:24px;
+	margin-left:auto;
+	margin-right:auto;
+	display:block;
+}
+
 /* MAPS
 --------------------------------*/
 .tab_encounters .encounter_world_head {
