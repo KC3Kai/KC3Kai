@@ -948,8 +948,8 @@ Previously known as "Reactor"
 								KC3GearManager.landBaseOtherSortieAmmoCostPerSlot;
 							// After testing, should use api_count, not api_max_count
 							// but the accuray depend on costPerSlot series constants
-							consumedFuel += Math.floor(plane.api_count * fuelCostPerSlot);
-							consumedAmmo += Math.floor(plane.api_count * ammoCostPerSlot);
+							consumedFuel += Math.round(plane.api_count * fuelCostPerSlot);
+							consumedAmmo += Math.round(plane.api_count * ammoCostPerSlot);
 						}
 					});
 				}
