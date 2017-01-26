@@ -238,6 +238,8 @@ $(document).on("ready", function(){
 		if(ConfigManager.api_askExit==1 && !trustedExit && !waiting){
 			trustedExit = true;
 			setTimeout(function(){ trustedExit = false; }, 100);
+			// Not support custom message any more, see:
+			// https://bugs.chromium.org/p/chromium/issues/detail?id=587940
 			return KC3Meta.term("UnwantedExitDMM");
 		}
 	};
