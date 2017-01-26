@@ -235,15 +235,18 @@ $(document).on("ready", function(){
 	idleFunction = function(){
 		if(ConfigManager.alert_idle_counter) {
 			$(".game-idle-timer").text(String(Math.floor((Date.now() - lastRequestMark) / 1000)).toHHMMSS());
+			// Show Idle Counter
+			if(ConfigManager.alert_idle_counter > 1) {
+				$(".game-idle-timer").show();
+			} else {
+				$(".game-idle-timer").hide();
+			}
 		} else {
 			$(".game-idle-timer").text(String(NaN).toHHMMSS());
+			$(".game-idle-timer").hide();
 			clearInterval(idleTimer);
 		}
 	};
-	// Show Idle Counter
-	if(ConfigManager.alert_idle_counter > 1) {
-		$(".game-idle-timer").show();
-	}
 	
 	// Exit confirmation
 	window.onbeforeunload = function(){
