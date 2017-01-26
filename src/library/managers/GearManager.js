@@ -22,7 +22,7 @@ Saves and loads list to and from localStorage
 		// LBAS mechanism still in progress
 		landBaseSupplyBauxiteCostPerSlot: 5,
 		landBaseSupplyFuelCostPerSlot: 3,
-		landBaseBomberSortieFuelCostPerSlot: 1.5,
+		landBaseBomberSortieFuelCostPerSlot: 1.6,
 		landBaseReconnSortieFuelCostPerSlot: 1,
 		landBaseOtherSortieFuelCostPerSlot: 1,
 		landBaseBomberSortieAmmoCostPerSlot: 0.7,

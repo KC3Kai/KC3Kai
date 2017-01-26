@@ -156,7 +156,7 @@ Previously known as "Reactor"
 			
 			PlayerManager.baseConvertingSlots = [];
 			if(typeof response.api_data.api_plane_info !== "undefined"){
-				// Let client know: these type of slotitems is free
+				// Let client know: these types of slotitem are free
 				/*
 				if(!!response.api_data.api_plane_info.api_unset_slot){
 				}
@@ -946,9 +946,10 @@ Previously known as "Reactor"
 								KC3GearManager.landBaseReconnSortieAmmoCostPerSlot : planeType2 === 47 ?
 								KC3GearManager.landBaseBomberSortieAmmoCostPerSlot :
 								KC3GearManager.landBaseOtherSortieAmmoCostPerSlot;
-							// not sure use api_max_count or api_count
-							consumedFuel += Math.floor(plane.api_max_count * fuelCostPerSlot);
-							consumedAmmo += Math.floor(plane.api_max_count * ammoCostPerSlot);
+							// After testing, should use api_count, not api_max_count
+							// but the accuray depend on costPerSlot series constants
+							consumedFuel += Math.floor(plane.api_count * fuelCostPerSlot);
+							consumedAmmo += Math.floor(plane.api_count * ammoCostPerSlot);
 						}
 					});
 				}
