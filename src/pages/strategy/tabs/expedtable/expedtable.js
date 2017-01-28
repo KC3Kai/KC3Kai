@@ -189,7 +189,21 @@
 
 			stypeTexts.map( function(stype) {
 				let tblRow = $("<tr>");
-				tblRow.append( $("<th>").text( stype ) );
+				let stypeHead = $("<th>");
+
+				if (stype === "CVLike") {
+					stypeHead
+						.text("CV(*)")
+						.attr("title", "CV / CVL / AV / CVB");
+				} else if (stype === "SSLike") {
+					stypeHead
+						.text( "SS(*)" )
+						.attr("title", "SS / SSV");
+				} else {
+					stypeHead.text( stype );
+				}
+
+				tblRow.append( stypeHead );
 				for (let i=1; i<=6; ++i) {
 
 					let stypeInst = ExpedSType[stype].value;
