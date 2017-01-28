@@ -493,7 +493,8 @@
 								return true;
 							}
 							var airRaidLostKind = (battle.airRaid || {}).api_lost_kind;
-							var baseTotalDamage = battle.airRaid.api_air_base_attack && battle.airRaid.api_air_base_attack.api_stage3
+							var baseTotalDamage = battle.airRaid && battle.airRaid.api_air_base_attack
+									&& battle.airRaid.api_air_base_attack.api_stage3
 									&& battle.airRaid.api_air_base_attack.api_stage3.api_fdam ?
 									Math.floor(battle.airRaid.api_air_base_attack.api_stage3.api_fdam.slice(1).reduce(function(a,b){return a+b;},0))
 								: 0;
