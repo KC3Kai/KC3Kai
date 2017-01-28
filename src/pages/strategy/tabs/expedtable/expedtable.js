@@ -175,12 +175,16 @@
 				});
 			}
 
-			$("input#cost_model_fuel").slider(sliderSettings).on("change", function(e) {
-				updateCostModelTable( "fuel", e.value.newValue );
-			});
-			$("input#cost_model_ammo").slider(sliderSettings).on("change", function(e) {
-				updateCostModelTable( "ammo", e.value.newValue );
-			});
+			let sliderFuel = $("input#cost_model_fuel")
+				.slider(sliderSettings)
+				.on("change", function(e) {
+					updateCostModelTable( "fuel", e.value.newValue );
+				});
+			let sliderAmmo = $("input#cost_model_ammo")
+				.slider(sliderSettings)
+				.on("change", function(e) {
+					updateCostModelTable( "ammo", e.value.newValue );
+				});
 
 			// setup table
 			let stypeTexts = [
@@ -228,8 +232,8 @@
 			});
 
 			// sync controls with default value
-			updateCostModelTable("fuel", 80);
-			updateCostModelTable("ammo", 80);
+			updateCostModelTable("fuel", sliderFuel.slider("getValue"));
+			updateCostModelTable("ammo", sliderAmmo.slider("getValue"));
 		},
 
 		/* UPDATE: optional
