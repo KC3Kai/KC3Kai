@@ -153,16 +153,33 @@
 				// ticks = [0,10..100]
 				ticks: Array.from(Array(10 + 1).keys(), x => x * 10),
 				step: 10,
+				// default of both fuel and ammo are 80%
 				value: 80,
 				tooltip: "hide"
 			};
+
 			let viewFuelPercent = $(".control_row.fuel .val");
 			let viewAmmoPercent = $(".control_row.ammo .val");
+			let tableBody = $("tbody",tableRoot);
+			function updateCostModelTable( which, newValue ){
+				console.assert( which === "fuel" || which === "ammo" );
+				(  which === "fuel" ? viewFuelPercent
+				 : which === "ammo" ? viewAmmoPercent
+				 : undefined ).text( newValue + "%" );
+
+				let actualPercent = (newValue + 0.0) / 100.0;
+				$(".cost_cell", tableBody).each( function() {
+					let jq = $(this);
+					let maxCost = jq.data("max-cost");
+					$("." + which, this).text( Math.floor(maxCost[which] * actualPercent) );
+				});
+			}
+
 			$("input#cost_model_fuel").slider(sliderSettings).on("change", function(e) {
-				viewFuelPercent.text( e.value.newValue + "%" );
+				updateCostModelTable( "fuel", e.value.newValue );
 			});
 			$("input#cost_model_ammo").slider(sliderSettings).on("change", function(e) {
-				viewAmmoPercent.text( e.value.newValue + "%" );
+				updateCostModelTable( "ammo", e.value.newValue );
 			});
 
 			// setup table
@@ -170,7 +187,6 @@
 				"DD", "CL", "CVLike", "SSLike", 
 				"CA", "BBV", "AS", "CT", "AV"];
 
-			let tableBody = $("tbody",tableRoot);
 			stypeTexts.map( function(stype) {
 				let tblRow = $("<tr>");
 				tblRow.append( $("<th>").text( stype ) );
@@ -188,10 +204,7 @@
 									 fuel: acc.fuel + cur.fuel };
 						}, {ammo: 0, fuel: 0});
 
-						cell.data( "max-consumption", costSum );
-
-						$(".ammo", cell).text( costSum.ammo );
-						$(".fuel", cell).text( costSum.fuel );
+						cell.data( "max-cost", costSum );
 					} else {
 						cell = $(".tab_expedtable .factory .cost_cell_na").clone();
 					}
@@ -200,6 +213,9 @@
 				
 				tableBody.append( tblRow );
 			});
+
+			updateCostModelTable("fuel", 80);
+			updateCostModelTable("ammo", 80);
 		},
 
 		/* UPDATE: optional
