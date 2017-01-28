@@ -205,7 +205,6 @@
 
 				tblRow.append( stypeHead );
 				for (let i=1; i<=6; ++i) {
-
 					let stypeInst = ExpedSType[stype].value;
 					let costResult = calcCostModel(stypeInst, i);
 					let cell;
@@ -228,6 +227,7 @@
 				tableBody.append( tblRow );
 			});
 
+			// sync controls with default value
 			updateCostModelTable("fuel", 80);
 			updateCostModelTable("ammo", 80);
 		},
