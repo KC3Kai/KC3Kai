@@ -68,8 +68,15 @@
 		---------------------------------*/
 		execute: function() {
 			var ExpedInfo = PS["KanColle.Expedition.New.Info"];
+			var ExpedSType = PS["KanColle.Expedition.New.SType"];
 			var factory = $(".tab_expedtable .factory");
 			var expedTableRoot = $("#exped_table_content_root");
+			var ExpedCostModel = PS["KanColle.Expedition.New.CostModel"];
+			var Maybe = PS["Data.Maybe"];
+			var PartialUnsafe = PS["Partial.Unsafe"];
+			function calcCostModel(stypeInstance, num) {
+				return ExpedCostModel.normalCostModel(stypeInstance)(num);
+			}
 
 			var allExpeds = [];
 			var i;
@@ -141,7 +148,7 @@
 
 
 			let stypeTexts = [
-				"DD", "CL", "Carriers", "Subs", 
+				"DD", "CL", "CVLike", "SSLike", 
 				"CA", "BBV", "AS", "CT", "AV"];
 		
 			let tableBody = $("tbody",tableRoot);
@@ -149,7 +156,23 @@
 				let tblRow = $("<tr>");
 				tblRow.append( $("<th>").text( stype ) );
 				for (let i=1; i<=6; ++i) {
-					let cell = $(".tab_expedtable .factory .cost_cell").clone();
+
+					let stypeInst = ExpedSType[stype].value;
+					let costResult = calcCostModel(stypeInst, i);
+					let cell;
+
+					if (Maybe.isJust( costResult )) {
+						cell = $(".tab_expedtable .factory .cost_cell").clone();
+						let costSum = PartialUnsafe.unsafePartial(Maybe.fromJust)
+							(costResult).reduce( function(acc, cur) {
+							return { ammo: acc.ammo + cur.ammo,
+									 fuel: acc.fuel + cur.fuel };
+						}, {ammo: 0, fuel: 0});
+						$(".ammo", cell).text( costSum.ammo );
+						$(".fuel", cell).text( costSum.fuel );
+					} else {
+						cell = $(".tab_expedtable .factory .cost_cell_na").clone();
+					}
 					tblRow.append( $("<td />").append(cell) );
 				}
 				
