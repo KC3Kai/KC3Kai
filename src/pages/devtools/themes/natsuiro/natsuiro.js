@@ -1746,7 +1746,16 @@
 				$(".module.activity .battle_detection").attr("title", airDefender);
 				$(".module.activity .battle_engagement").prev().text(KC3Meta.term("BattleAirBaseLoss"));
 				$(".module.activity .battle_engagement").text(KC3Meta.airraiddamage(thisNode.lostKind));
-				$(".module.activity .battle_engagement").addClass( thisNode.lostKind !==4 ? "bad" : "" );
+				if(thisNode.lostKind == 4){
+					$(".module.activity .battle_engagement").removeClass("bad");
+					$(".module.activity .battle_engagement").attr("title", "");
+				} else {
+					$(".module.activity .battle_engagement").addClass("bad");
+					// http://wikiwiki.jp/kancolle/?%B4%F0%C3%CF%B9%D2%B6%F5%C2%E2#airraid
+					$(".module.activity .battle_engagement").attr("title", KC3Meta.term("BattleAirBaseLossTip")
+						.format( thisNode.baseDamage, Math.round(thisNode.baseDamage * 0.9 + 0.1) )
+					);
+				}
 				var contactSpan = buildContactPlaneSpan(thisNode.fcontactId, thisNode.fcontact, thisNode.econtactId, thisNode.econtact);
 				$(".module.activity .battle_contact").html($(contactSpan).html());
 				$(".module.activity .battle_airbattle").text( thisNode.airbattle[0] );

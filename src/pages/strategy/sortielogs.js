@@ -493,6 +493,11 @@
 								return true;
 							}
 							var airRaidLostKind = (battle.airRaid || {}).api_lost_kind;
+							var baseTotalDamage = battle.airRaid && battle.airRaid.api_air_base_attack
+									&& battle.airRaid.api_air_base_attack.api_stage3
+									&& battle.airRaid.api_air_base_attack.api_stage3.api_fdam ?
+									Math.floor(battle.airRaid.api_air_base_attack.api_stage3.api_fdam.slice(1).reduce(function(a,b){return a+b;},0))
+								: 0;
 							
 							battle.shizunde |= [[],[]];
 							
@@ -505,6 +510,11 @@
 							$(".node_id", nodeBox).text( KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node ) );
 							if(airRaidLostKind > 0){
 								$(".node_id", nodeBox).addClass(airRaidLostKind === 4 ? "nodamage" : "damaged");
+								// Show Enemy Air Raid damage
+								if(airRaidLostKind != 4){
+									$(".node_id", nodeBox).attr("title",
+										KC3Meta.term("BattleAirBaseLossTip").format(baseTotalDamage, Math.round(baseTotalDamage * 0.9 + 0.1)));
+								}
 							} else {
 								$(".node_id", nodeBox).removeClass("nodamage damaged");
 							}
