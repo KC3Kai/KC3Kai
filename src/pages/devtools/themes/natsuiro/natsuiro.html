@@ -718,7 +718,7 @@
 							<div class="clear"></div>
 						</div>
 					</div>
-					<!-- GUN FIT: Bonus / Penalty -->
+					<!-- GUN FIT: Bonus / Penalty + AACI patterns -->
 					<div class="activity_box activity_gunfit activity_dismissable">
 						<div class="fit_ship fit_profile">
 							<div class="fit_ship_pic fit_profile_pic"><img/></div>
@@ -736,6 +736,41 @@
 						<div class="aaci">
 							<div class="aaciList">
 							</div>
+							<div class="clear"></div>
+						</div>
+					</div>
+					<!-- PvP Enemy List and Fleet Info -->
+					<div class="activity_box activity_pvp activity_dismissable">
+						<div class="pvpList">
+							<div class="pvp_header">
+								<div class="pvp_title i18n">PvpListTitle</div>
+								<div class="pvp_create_kind"></div>
+								<div class="clear"></div>
+							</div>
+							<div class="pvp_list">
+							</div>
+							<div class="clear"></div>
+						</div>
+						<div class="pvpFleet">
+							<div class="pvp_admiral">
+								<div class="pvp_admiral_name"><div class="i18n">Name</div><div class="value"></div></div>
+								<div class="pvp_admiral_level"><div class="i18n">LevelShort</div><div class="value"></div></div>
+								<div class="pvp_admiral_rank">Admiral</div>
+								<div class="pvp_admiral_comment"></div>
+								<div class="pvp_admiral_label i18n">ShipGirlsOwned</div>
+								<div class="pvp_admiral_ships">300/300</div>
+								<div class="pvp_admiral_label i18n">EquipmentItemCount</div>
+								<div class="pvp_admiral_gears">9999/9999</div>
+								<div class="pvp_admiral_label i18n">FurnitureOwned</div>
+								<div class="pvp_admiral_furniture">999</div>
+							</div>
+							<div class="clear"></div>
+							<div class="pvp_fleet_name"></div>
+							<div class="pvp_fleet_list">
+							</div>
+							<div class="clear"></div>
+							<div class="pvp_formation"></div>
+							<div class="clear"></div>
 						</div>
 					</div>
 					
@@ -1017,13 +1052,32 @@
 			<!-- Ship requirement for expedition checker -->
 			<div class="expPlanner_shipReqBox requirements_textbox expPlanner_text_passed"></div>
 			
-			<!-- Gunfit / AACI patterns -->
+			<!-- Clonable: Gunfit / AACI patterns -->
 			<div class="aaciPattern">
 				<div class="apiId"></div>
 				<div class="shipIcon"><img/></div>
 				<div class="equipIcons"></div>
 				<div class="fixed"></div>
 				<div class="modifier"></div>
+			</div>
+			
+			<!-- Clonable: PvP enemy list -->
+			<div class="pvpEnemyInfo">
+				<div class="pvp_enemy_pic"><img/></div>
+				<div class="pvp_enemy_name"></div>
+				<div class="pvp_enemy_level"></div>
+				<div class="pvp_enemy_rank"></div>
+				<div class="pvp_enemy_comment"></div>
+				<div class="pvp_enemy_medals"><img src="../../../../assets/img/client/medal.png" /><span></span></div>
+				<div class="pvp_enemy_state"><img/></div>
+				<div class="clear"></div>
+			</div>
+			<!-- Clonable: PvP fleet info -->
+			<div class="pvpFleetShip">
+				<div class="pvp_fleet_ship_icon"><img/></div>
+				<div class="pvp_fleet_ship_name"></div>
+				<div class="pvp_fleet_ship_level"><span class="i18n">LevelShort</span> <span class="value"></span></div>
+				<div class="pvp_fleet_ship_star"><span class="star">&#9733;</span><span class="value"></span></div>
 			</div>
 			
 			<!-- Clonable: LBAS Base -->

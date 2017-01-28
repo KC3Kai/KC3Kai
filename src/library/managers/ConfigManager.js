@@ -54,6 +54,7 @@ Retreives when needed to apply on components
 				info_delta 			: false,
 				info_auto_exped_tab : true,
 				info_auto_fleet_view: true,
+				info_pvp_info		: true,
 				info_eng_stype		: false,
 				info_force_ship_lang: "",
 				info_salt 			: false,

@@ -2267,6 +2267,84 @@
 
 		ClearedMap: function(data){},
 
+		PvPList: function(data){
+			if(!ConfigManager.info_pvp_info)
+				return;
+			console.log("PvP Enemy List", data);
+			var jpRankArr = ["","\u5143\u5e25","\u5927\u5c06","\u4e2d\u5c06","\u5c11\u5c06","\u5927\u4f50","\u4e2d\u4f50","\u65b0\u7c73\u4e2d\u4f50","\u5c11\u4f50","\u4e2d\u5805\u5c11\u4f50","\u65b0\u7c73\u5c11\u4f50"];
+			$(".activity_pvp .pvp_header .pvp_create_kind").text(
+				KC3Meta.term("PvpListCreateType{0}".format(data.api_create_kind))
+			);
+			$(".activity_pvp .pvp_list").empty();
+			$.each(data.api_list, function(idx, enemy){
+				var enemyBox = $("#factory .pvpEnemyInfo").clone();
+				$(".pvp_enemy_pic img", enemyBox).attr("src", KC3Meta.shipIcon(enemy.api_enemy_flag_ship));
+				$(".pvp_enemy_pic", enemyBox).attr("title", KC3Meta.shipName(KC3Master.ship(enemy.api_enemy_flag_ship).api_name));
+				$(".pvp_enemy_name", enemyBox).text(enemy.api_enemy_name);
+				$(".pvp_enemy_name", enemyBox).attr("title", enemy.api_enemy_name);
+				$(".pvp_enemy_level", enemyBox).text(enemy.api_enemy_level);
+				// api_enemy_rank is not int ID of rank, fml
+				var rankId = jpRankArr.indexOf(enemy.api_enemy_rank);
+				$(".pvp_enemy_rank", enemyBox).text(KC3Meta.rank(rankId));
+				$(".pvp_enemy_rank", enemyBox).attr("title", KC3Meta.rank(rankId));
+				$(".pvp_enemy_comment", enemyBox).text(enemy.api_enemy_comment);
+				$(".pvp_enemy_comment", enemyBox).attr("title", enemy.api_enemy_comment);
+				if(enemy.api_medals > 0){
+					$(".pvp_enemy_medals span", enemyBox).text(enemy.api_medals);
+				} else {
+					$(".pvp_enemy_medals", enemyBox).hide();
+				}
+				if(enemy.api_state > 0){
+					$(".pvp_enemy_state img", enemyBox).attr("src",
+						"../../../../assets/img/client/ratings/{0}.png".format(["","E","D","C","B","A","S"][enemy.api_state])
+					);
+				} else {
+					$(".pvp_enemy_state", enemyBox).hide();
+				}
+				enemyBox.appendTo(".activity_pvp .pvp_list");
+			});
+			$(".module.activity .activity_tab").removeClass("active");
+			$("#atab_activity").addClass("active");
+			$(".module.activity .activity_box").hide();
+			$(".module.activity .activity_pvp .pvpList").show();
+			$(".module.activity .activity_pvp .pvpFleet").hide();
+			$(".module.activity .activity_pvp").fadeIn(500);
+		},
+
+		PvPFleet: function(data){
+			if(!ConfigManager.info_pvp_info)
+				return;
+			console.log("PvP Enemy Fleet", data);
+			$(".activity_pvp .pvp_admiral .pvp_admiral_name .value").text(data.api_nickname);
+			$(".activity_pvp .pvp_admiral .pvp_admiral_level .value").text(data.api_level);
+			$(".activity_pvp .pvp_admiral .pvp_admiral_rank").text(KC3Meta.rank(data.api_rank));
+			$(".activity_pvp .pvp_admiral .pvp_admiral_comment").text(data.api_cmt);
+			$(".activity_pvp .pvp_admiral .pvp_admiral_ships").text("{0} /{1}".format(data.api_ship));
+			$(".activity_pvp .pvp_admiral .pvp_admiral_gears").text("{0} /{1}".format(data.api_slotitem));
+			$(".activity_pvp .pvp_admiral .pvp_admiral_furniture").text(data.api_furniture);
+			$(".activity_pvp .pvp_fleet_name").text(data.api_deckname);
+			$(".activity_pvp .pvp_fleet_list").empty();
+			$.each(data.api_deck.api_ships, function(idx, ship){
+				if(ship.api_id > 0){
+					var shipBox = $("#factory .pvpFleetShip").clone();
+					var shipMaster = KC3Master.ship(ship.api_ship_id);
+					$(".pvp_fleet_ship_icon img", shipBox).attr("src", KC3Meta.shipIcon(ship.api_ship_id))
+						.attr("title", KC3Meta.stype(shipMaster.api_stype));
+					var shipName = KC3Meta.shipName(shipMaster.api_name);
+					$(".pvp_fleet_ship_name", shipBox).text(shipName).attr("title", shipName);
+					$(".pvp_fleet_ship_level .value", shipBox).text(ship.api_level);
+					$(".pvp_fleet_ship_star .value", shipBox).text(1+ship.api_star);
+					shipBox.appendTo(".activity_pvp .pvp_fleet_list");
+				}
+			});
+			$(".module.activity .activity_tab").removeClass("active");
+			$("#atab_activity").addClass("active");
+			$(".module.activity .activity_box").hide();
+			$(".module.activity .activity_pvp .pvpList").hide();
+			$(".module.activity .activity_pvp .pvpFleet").show();
+			$(".module.activity .activity_pvp").fadeIn(500);
+		},
+
 		PvPStart: function(data){
 			// Clear battle details box just to make sure
 			clearBattleData();
