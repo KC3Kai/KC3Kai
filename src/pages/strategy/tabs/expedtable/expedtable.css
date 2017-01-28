@@ -145,7 +145,12 @@
 	font-weight: bold;
 }
 
-.tab_expedtable #cost_model_content_root .cost_cell {
+.tab_expedtable #cost_model_content_root table > tbody > tr > td {
+	vertical-align: middle;
+}
+
+.tab_expedtable #cost_model_content_root .cost_cell
+.tab_expedtable #cost_model_content_root .cost_cell_na {
 	width: 80px;
 	height: 40px;
 }
@@ -160,4 +165,8 @@
 
 .tab_expedtable #cost_model_content_root .cost_cell div.ammo {
 	margin-right: -15px;
+}
+
+.tab_expedtable #cost_model_content_root .cost_cell_na {
+	text-align: center;
 }
