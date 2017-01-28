@@ -127,6 +127,25 @@
 	text-align: center;
 }
 
+.tab_expedtable #cost_model_content_root .control_group .control_row div {
+	float: left;
+}
+
+.tab_expedtable #cost_model_content_root .control_group .control_row {
+	height: 40px;
+}
+
+.tab_expedtable #cost_model_content_root .control_group .control_row .view {
+	width: 150px;
+	font-weight: bold;
+	font-size: 16px;
+	padding-left: 10px;
+}
+
+.tab_expedtable #cost_model_content_root .control_group .control_row .slider {
+	width: 500px;
+}
+
 .tab_expedtable #cost_model_content_root table > thead > tr th.stype {
 	width: 12%;
 }
@@ -160,11 +179,13 @@
 }
 
 .tab_expedtable #cost_model_content_root .cost_cell div.fuel {
-	margin-left: -15px;
+	text-align: left;
+	margin-left: 15px;
 }
 
 .tab_expedtable #cost_model_content_root .cost_cell div.ammo {
-	margin-right: -15px;
+	text-align: right;
+	margin-right: 15px;
 }
 
 .tab_expedtable #cost_model_content_root .cost_cell_na {
