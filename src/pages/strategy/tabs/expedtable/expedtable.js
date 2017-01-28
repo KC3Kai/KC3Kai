@@ -144,7 +144,8 @@
 			});
 
 			// setup cost model
-			let tableRoot = $(".tab_expedtable #cost_model_content_root table");
+			let contentRoot = $(".tab_expedtable #cost_model_content_root");
+			let tableRoot = $("table", contentRoot);
 
 			// setup slider controls
 			let ticks = Array.from(Array(10 + 1).keys(), x => x * 10);
@@ -155,11 +156,13 @@
 				value: 80,
 				tooltip: "hide"
 			};
+			let viewFuelPercent = $(".control_row.fuel .val");
+			let viewAmmoPercent = $(".control_row.ammo .val");
 			$("input#cost_model_fuel").slider(sliderSettings).on("change", function(e) {
-				console.log("fuel", e.value.newValue);
+				viewFuelPercent.text( e.value.newValue + "%" );
 			});
 			$("input#cost_model_ammo").slider(sliderSettings).on("change", function(e) {
-				console.log("ammo", e.value.newValue);
+				viewAmmoPercent.text( e.value.newValue + "%" );
 			});
 
 			// setup table
@@ -184,6 +187,9 @@
 							return { ammo: acc.ammo + cur.ammo,
 									 fuel: acc.fuel + cur.fuel };
 						}, {ammo: 0, fuel: 0});
+
+						cell.data( "max-consumption", costSum );
+
 						$(".ammo", cell).text( costSum.ammo );
 						$(".fuel", cell).text( costSum.fuel );
 					} else {
