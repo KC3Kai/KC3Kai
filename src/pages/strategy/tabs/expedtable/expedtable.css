@@ -89,11 +89,13 @@
 	font-weight: bold;
 }
 
-.tab_expedtable .exped_row .cost .view_general .fuel {
+.tab_expedtable .exped_row .cost .view_general .fuel,
+.tab_expedtable #cost_model_content_root table .fuel {
 	color: #92c992;
 }
 
-.tab_expedtable .exped_row .cost .view_general .ammo {
+.tab_expedtable .exped_row .cost .view_general .ammo,
+.tab_expedtable #cost_model_content_root table .ammo {
 	color:#dec558;
 }
 
@@ -123,4 +125,39 @@
 	background-color: #93bcff;
 	border-radius: 10px;
 	text-align: center;
+}
+
+.tab_expedtable #cost_model_content_root table > thead > tr th.stype {
+	width: 12%;
+}
+
+.tab_expedtable #cost_model_content_root table > thead > tr th.ship_count {
+	width: 14%;
+	text-align: center;
+}
+
+.tab_expedtable #cost_model_content_root table > tbody > tr > th {
+	vertical-align: middle;
+}
+
+.tab_expedtable #cost_model_content_root table > tbody {
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.tab_expedtable #cost_model_content_root .cost_cell {
+	width: 80px;
+	height: 40px;
+}
+
+.tab_expedtable #cost_model_content_root .cost_cell div {
+	text-align: center;
+}
+
+.tab_expedtable #cost_model_content_root .cost_cell div.fuel {
+	margin-left: -15px;
+}
+
+.tab_expedtable #cost_model_content_root .cost_cell div.ammo {
+	margin-right: -15px;
 }

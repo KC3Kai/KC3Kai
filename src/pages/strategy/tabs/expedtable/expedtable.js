@@ -135,6 +135,26 @@
 
 				expedTableRoot.append( expedRow );
 			});
+
+			// setup cost model
+			let tableRoot = $(".tab_expedtable #cost_model_content_root table");
+
+
+			let stypeTexts = [
+				"DD", "CL", "Carriers", "Subs", 
+				"CA", "BBV", "AS", "CT", "AV"];
+		
+			let tableBody = $("tbody",tableRoot);
+			stypeTexts.map( function(stype) {
+				let tblRow = $("<tr>");
+				tblRow.append( $("<th>").text( stype ) );
+				for (let i=1; i<=6; ++i) {
+					let cell = $(".tab_expedtable .factory .cost_cell").clone();
+					tblRow.append( $("<td />").append(cell) );
+				}
+				
+				tableBody.append( tblRow );
+			});
 		},
 
 		/* UPDATE: optional
