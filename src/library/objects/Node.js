@@ -1337,7 +1337,8 @@ Used by SortieManager
 				api_e_count    :0,
 				api_e_lostcount:0,
 			},
-			attackPhase = battleData.api_air_base_attack.api_stage2;
+			attackPhase = battleData.api_air_base_attack.api_stage2,
+			bomberPhase = battleData.api_air_base_attack.api_stage3;
 		this.fplaneFrom = battleData.api_air_base_attack.api_plane_from[0];
 		this.fcontactId = planePhase.api_touch_plane[0];
 		this.fcontact = this.fcontactId > 0 ? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
@@ -1369,6 +1370,9 @@ Used by SortieManager
 			this.planeBombers.abyssal[0] = attackPhase.api_e_count;
 			this.planeBombers.abyssal[1] = attackPhase.api_e_lostcount;
 		}
+		this.baseDamage = bomberPhase && bomberPhase.api_fdam ? Math.floor(
+			bomberPhase.api_fdam.slice(1).reduce(function(a,b){return a+b;},0)
+		) : 0;
 	};
 	
 	KC3Node.prototype.isBoss = function(){
