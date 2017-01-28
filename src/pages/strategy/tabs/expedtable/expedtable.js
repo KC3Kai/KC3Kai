@@ -146,11 +146,27 @@
 			// setup cost model
 			let tableRoot = $(".tab_expedtable #cost_model_content_root table");
 
+			// setup slider controls
+			let ticks = Array.from(Array(10 + 1).keys(), x => x * 10);
+			let sliderSettings = {
+				// ticks = [0,10..100]
+				ticks: Array.from(Array(10 + 1).keys(), x => x * 10),
+				step: 10,
+				value: 80,
+				tooltip: "hide"
+			};
+			$("input#cost_model_fuel").slider(sliderSettings).on("change", function(e) {
+				console.log("fuel", e.value.newValue);
+			});
+			$("input#cost_model_ammo").slider(sliderSettings).on("change", function(e) {
+				console.log("ammo", e.value.newValue);
+			});
 
+			// setup table
 			let stypeTexts = [
 				"DD", "CL", "CVLike", "SSLike", 
 				"CA", "BBV", "AS", "CT", "AV"];
-		
+
 			let tableBody = $("tbody",tableRoot);
 			stypeTexts.map( function(stype) {
 				let tblRow = $("<tr>");
