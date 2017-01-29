@@ -35,7 +35,7 @@
 		  
 		  { type: "costmodel",
 		    wildcard: "DD" / "SS" / false,
-			count: 0 ~ 6
+			count: 0 ~ 6 (but make it only possible to select 4~6 from UI)
 		  }
 		
 		  - custom:
@@ -45,9 +45,59 @@
 			ammo: integer (non-negative)
 		  }
 	 */
+	function getRandomInt(min,max) {
+		min = Math.ceil(min);
+		max = Math.floor(max);
+		return Math.floor(Math.random() * (max - min + 1)) + min;
+	}
+
+	let coinFlip = () => Math.random() > 0.5;
+
+	function genModStandard() {
+		return {
+			type: "normal",
+			gs: coinFlip(),
+			daihatsu: getRandomInt(0,4)
+		};
+	}
+
+	function genModCustom() {
+		return {
+			type: "direct",
+			value: 1.5 + Math.random() * 0.3
+		};
+	}
+
+	function genCostNormal() {
+		return {
+			type: "costmodel",
+			wildcard: [false,"DD","SS"][getRandomInt(0,2)],
+			count: getRandomInt(4,6)
+		};
+	}
+
+	function genCostCustom() {
+		return {
+			type: "custom",
+			fuel: getRandomInt(10,500),
+			ammo: getRandomInt(10,500)
+		};
+	}
+
+	function generateRandomConfig() {
+		let config = {};
+		for (let i = 1; i <= 40; ++i) {
+			config[i] = {
+				modifier: (coinFlip()) ? genModStandard() : genModCustom(),
+				cost: (coinFlip()) ? genCostNormal() : genCostCustom()
+			};
+		}
+
+		return config;
+	}
 	/*
 	  TODO: UI viewer and sorter.
-	  viewer: view by: net income / gross income
+	  viewer: view by: net income / gross income, general config / allow normal config
 	  sorter: by exped id, fuel, ammo, etc.
 
 	  disabled whenever any of the expeditions are still under editing
@@ -82,6 +132,9 @@
 		Places data onto the interface from scratch.
 		---------------------------------*/
 		execute: function() {
+			// a random-generated configuration for debugging purpose
+			var expedConfig = generateRandomConfig();
+
 			var factory = $(".tab_expedtable .factory");
 			var expedTableRoot = $("#exped_table_content_root");
 			function calcCostModel(stypeInstance, num) {
@@ -119,6 +172,8 @@
 				expedRow.data( "id", eId );
 				var resourceInfo = ExpedInfo.getInformation( eId ).resource;
 				var masterInfo = KC3Master._raw.mission[eId];
+				var config = expedConfig[eId];
+				console.log(config);
 
 				$(".info_col.id", expedRow).text( eId );
 				$(".info_col.time", expedRow).text( String( 60 * masterInfo.api_time ).toHHMMSS() );
@@ -130,26 +185,51 @@
 				makeWinItem( $(".info_col.item1", expedRow), masterInfo.api_win_item1 );
 				makeWinItem( $(".info_col.item2", expedRow), masterInfo.api_win_item2 );
 				
-				var mkFlg = () => Math.random() > 0.5;
-				
-				var flg = mkFlg();
-				$(".modifier .view.view_general", expedRow).toggle( flg );
-				$(".modifier .view.view_normal", expedRow).toggle( !flg );
+				var modViewByGeneral = config.modifier.type !== "normal";
+				$(".modifier .view.view_general", expedRow).toggle( modViewByGeneral );
+				$(".modifier .view.view_normal", expedRow).toggle( !modViewByGeneral );
 
-				var flg2 = mkFlg();
-				$(".cost .view.view_general", expedRow).toggle( flg2 );
-				$(".cost .view.view_normal", expedRow).toggle( !flg2 );
-				
-				$(".modifier .view.view_general", expedRow).text("+50.00%");
+				var costViewByGeneral = config.cost.type !== "costmodel" ||
+					(config.cost.type === "costmodel" &&
+					 config.cost.wildcard === false);
+				$(".cost .view.view_general", expedRow).toggle( costViewByGeneral );
+				$(".cost .view.view_normal", expedRow).toggle( !costViewByGeneral );
 
-				$(".modifier .view.view_normal img.gs", expedRow).attr( 
-					"src", mkFlg() 
-						? "../../assets/img/ui/btn-gs.png" 
-						: "../../assets/img/ui/btn-xgs.png" );
-				$(".modifier .view.view_normal .dht_times", expedRow).text("x4");
+				var generalModifier = config.modifier.type === "normal"
+					? (config.modifier.gs ? 1.5 : 1.0)*(1.0 + config.modifier.daihatsu*0.05)
+					: config.modifier.value;
 
-				$(".cost .view.view_general .fuel", expedRow).text("-100");
-				$(".cost .view.view_general .ammo", expedRow).text("-100");
+				$(".modifier .view.view_general", expedRow).text(
+					"+" + ((generalModifier-1.0)*100).toFixed(2) + "%");
+
+				if (config.modifier.type === "normal") {
+					$(".modifier .view.view_normal img.gs", expedRow).attr( 
+						"src", config.modifier.gs
+							? "../../assets/img/ui/btn-gs.png" 
+							: "../../assets/img/ui/btn-xgs.png" );
+					$(".modifier .view.view_normal .dht_times", expedRow).text(
+						"x" + config.modifier.daihatsu);
+				}
+
+				var computedCost = config.cost.type === "costmodel"
+					? { fuel: 100, ammo: 100 }  // TODO: compute cost.
+					: { fuel: config.cost.fuel,
+						ammo: config.cost.ammo };
+
+				$(".cost .view.view_general .fuel", expedRow).text("-" + computedCost.fuel);
+				$(".cost .view.view_general .ammo", expedRow).text("-" + computedCost.ammo);
+
+				if (!costViewByGeneral) {
+					$(".cost .view.view_normal .limit", expedRow)
+						.text("≥" + config.cost.count);
+					$(".cost .view.view_normal .wildcard", expedRow)
+						.text("(*=" + config.cost.wildcard + ")");
+				}
+
+				$(".edit_btn", expedRow).on("click", function() {
+					expedRow.toggleClass("active");
+					$(this).text( expedRow.hasClass("active") ? "▼" : "◀");
+				});
 
 				expedTableRoot.append( expedRow );
 			});
