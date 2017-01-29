@@ -47,8 +47,6 @@
 
 	 */
 
-
-
 	// some PureScript librarys, imported locally.
 	let ExpedInfo = PS["KanColle.Expedition.New.Info"];
 	let ExpedSType = PS["KanColle.Expedition.New.SType"];
@@ -321,8 +319,11 @@
 				let actualPercent = (newValue + 0.0) / 100.0;
 				$(".cost_cell", tableBody).each( function() {
 					let jq = $(this);
-					let maxCost = jq.data("max-cost");
-					$("." + which, this).text( Math.floor(maxCost[which] * actualPercent) );
+					let maxCostArr = jq.data("max-cost-arr");
+					let actualCost = maxCostArr
+						.map( x => Math.floor( x[which] * actualPercent ) )
+						.reduce( (x,y) => x+y, 0);
+					$("." + which, this).text( actualCost );
 				});
 			}
 
@@ -371,7 +372,7 @@
 					if (Maybe.isJust( costResult )) {
 						cell = $(".tab_expedtable .factory .cost_cell").clone();
 						let costArr = PartialUnsafe.unsafePartial(Maybe.fromJust)(costResult);
-						cell.data( "max-cost", mergeExpedCost( costArr ) );
+						cell.data( "max-cost-arr", costArr );
 					} else {
 						cell = $(".tab_expedtable .factory .cost_cell_na").clone();
 					}
