@@ -15,13 +15,15 @@ Used by SortieManager
 		this.isPvP = false;
 	};
 
-	// static function. predicts battle rank,
-	// arguments are beginHPs, endHPs in following structure:
-	// { ally: [array of hps]
-	// , enemy: [array of hps]
-	// }
-	// arrays are all begins at 0
-
+	/**
+	// Return predicted battle rank letter. Static function.
+	// @param beginHPs, endHPs in following structure:
+	//   { ally: [array of hps],
+	//     enemy: [array of hps]
+	//   }
+	//   arrays are all begins at 0.
+	// @param battleName - optional, the API call name invoked currently
+	*/
 	KC3Node.predictRank = function(beginHPs, endHPs, battleName) {
 		console.assert( 
 			beginHPs.ally.length === endHPs.ally.length,
@@ -30,7 +32,7 @@ Used by SortieManager
 			beginHPs.enemy.length === endHPs.enemy.length,
 			"enemy data length mismatched");
 
-		// removes "-1"s in begin HPs
+		// Removes "-1"s in begin HPs
 		// also removes data from same position
 		// in end HPs
 		// in addition, negative end HP values are set to 0
@@ -87,12 +89,12 @@ Used by SortieManager
 			enemyBeginHP += beginHPs.enemy[i];
 		}
 
-		// related comments:
+		// Related comments:
 		// - https://github.com/KC3Kai/KC3Kai/issues/728#issuecomment-139681987
 		// - https://github.com/KC3Kai/KC3Kai/issues/1766#issuecomment-275883784
-		// - Regular battle rules: https://github.com/andanteyk/ElectronicObserver/blob/master/ElectronicObserver/Other/Information/kcmemo.md#%E6%88%A6%E9%97%98%E5%8B%9D%E5%88%A9%E5%88%A4%E5%AE%9A
-		// the flooring behavior is intended and important.
-		// please do not change it unless it's proved to be more accurate than
+		// - https://github.com/andanteyk/ElectronicObserver/blob/master/ElectronicObserver/Other/Information/kcmemo.md#%E6%88%A6%E9%97%98%E5%8B%9D%E5%88%A9%E5%88%A4%E5%AE%9A
+		// The flooring behavior is intended and important.
+		// Please do not change it unless it's proved to be more accurate than
 		// the formula referred to by the comments above.
 		var allyGaugeRate = Math.floor(allyGauge / allyBeginHP * 100);
 		var enemyGaugeRate = Math.floor(enemyGauge / enemyBeginHP * 100);
@@ -101,10 +103,11 @@ Used by SortieManager
 
 		// For long distance air raid
 		if ( (battleName||"").indexOf("ld_airbattle") >-1 ) {
-			// reference:
+			// Based on long distance air raid rules from:
+			// https://github.com/andanteyk/ElectronicObserver/blob/master/ElectronicObserver/Other/Information/kcmemo.md#%E9%95%B7%E8%B7%9D%E9%9B%A2%E7%A9%BA%E8%A5%B2%E6%88%A6%E3%81%A7%E3%81%AE%E5%8B%9D%E5%88%A9%E5%88%A4%E5%AE%9A
+			// Also referenced:
 			// - http://kancolle.wikia.com/wiki/Events/Mechanics (as of 2017-01-28)
 			// - http://nga.178.com/read.php?tid=8989155
-			// - Long distance air raid rules: https://github.com/andanteyk/ElectronicObserver/blob/master/ElectronicObserver/Other/Information/kcmemo.md#%E9%95%B7%E8%B7%9D%E9%9B%A2%E7%A9%BA%E8%A5%B2%E6%88%A6%E3%81%A7%E3%81%AE%E5%8B%9D%E5%88%A9%E5%88%A4%E5%AE%9A
 			return (allyGauge === 0) ? "SS"
 				: (allyGaugeRate < 10) ? "A"
 				: (allyGaugeRate < 20) ? "B"
