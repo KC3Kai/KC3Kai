@@ -3,21 +3,21 @@
 	/*
 	  (TODO) data format for expedition table:
 	  - for income modifier:
-	  
+
 	      - standard modifier:
 
 		  { type: "normal",
 	        gs: true / false,
-			daihatsu: 0 ~ 4 
+			daihatsu: 0 ~ 4
 		  }
-			
+
 			  - "gs" indicates whether great success is intended
 			  - whoever saves the data is responsible for its consistency
 			    if say daihatsu value turns out to be 5, that's not my fault
 
 		  - custom modifier:
 
-          { type: "direct",
+          { type: "custom",
 		    value: a number, from 1.0 to perhaps 2.0 (meaning 100% ~ 200%)
 		  }
 
@@ -33,11 +33,11 @@
 
 	      - standard:
 		  { type: "costmodel",
-		  
+
 		    wildcard: "DD" / "SS" / false,
 			count: 0 ~ 6 (but make it only possible to select 4~6 from UI)
 		  }
-		
+
 		  - custom:
 
 		  { type: "custom",
@@ -74,8 +74,8 @@
 
 	function genModCustom() {
 		return {
-			type: "direct",
-			value: 1.5 + Math.random() * 0.3
+			type: "custom",
+			value: 1.0 + Math.random() * 0.8
 		};
 	}
 
@@ -119,6 +119,21 @@
 		for (let i=from; i<=to; i+=step)
 			arr.push(i);
 		return arr;
+	}
+
+	function normalModifierToNumber(modConfig) {
+		console.assert( modConfig.type === "normal" );
+		return (modConfig.gs ? 1.5 : 1.0)*(1.0+0.05*modConfig.daihatsu);
+	}
+
+	function prettyFloat(n,precision=2) {
+		let fixed = n.toFixed(precision);
+		let str = String(n);
+		return (str.length <= fixed.length) ? str : fixed;
+	}
+
+	function saturate(v,min,max) {
+		return Math.max(Math.min(v,max),min);
 	}
 
 	function costConfigToActualCost(costConfig,eId) {
@@ -204,7 +219,7 @@
 				value: 80,
 				tooltip: "hide"
 			};
-			
+
 			let viewFuelPercent = $(".control_row.fuel .val");
 			let viewAmmoPercent = $(".control_row.ammo .val");
 			let tableBody = $("tbody",tableRoot);
@@ -235,7 +250,7 @@
 
 			// setup table
 			let stypeTexts = [
-				"DD", "CL", "CVLike", "SSLike", 
+				"DD", "CL", "CVLike", "SSLike",
 				"CA", "BBV", "AS", "CT", "AV"];
 
 			stypeTexts.map( function(stype) {
@@ -262,14 +277,14 @@
 
 					if (Maybe.isJust( costResult )) {
 						cell = $(".tab_expedtable .factory .cost_cell").clone();
-						let costSum = mergeExpedCost( PartialUnsafe.unsafePartial(Maybe.fromJust)(costResult) );
-						cell.data( "max-cost", costSum );
+						let costArr = PartialUnsafe.unsafePartial(Maybe.fromJust)(costResult);
+						cell.data( "max-cost", mergeExpedCost( costArr ) );
 					} else {
 						cell = $(".tab_expedtable .factory .cost_cell_na").clone();
 					}
 					tblRow.append( $("<td />").append(cell) );
 				}
-				
+
 				tableBody.append( tblRow );
 			});
 
@@ -326,7 +341,7 @@
 
 				makeWinItem( $(".info_col.item1", expedRow), masterInfo.api_win_item1 );
 				makeWinItem( $(".info_col.item2", expedRow), masterInfo.api_win_item2 );
-				
+
 				var modViewByGeneral = config.modifier.type !== "normal";
 				$(".modifier .view.view_general", expedRow).toggle( modViewByGeneral );
 				$(".modifier .view.view_normal", expedRow).toggle( !modViewByGeneral );
@@ -338,16 +353,16 @@
 				$(".cost .view.view_normal", expedRow).toggle( !costViewByGeneral );
 
 				var generalModifier = config.modifier.type === "normal"
-					? (config.modifier.gs ? 1.5 : 1.0)*(1.0 + config.modifier.daihatsu*0.05)
+					? normalModifierToNumber(config.modifier)
 					: config.modifier.value;
 
 				$(".modifier .view.view_general", expedRow).text(
-					"+" + ((generalModifier-1.0)*100).toFixed(2) + "%");
+					"+" + prettyFloat((generalModifier-1.0)*100) + "%");
 
 				if (config.modifier.type === "normal") {
-					$(".modifier .view.view_normal img.gs", expedRow).attr( 
+					$(".modifier .view.view_normal img.gs", expedRow).attr(
 						"src", config.modifier.gs
-							? "../../assets/img/ui/btn-gs.png" 
+							? "../../assets/img/ui/btn-gs.png"
 							: "../../assets/img/ui/btn-xgs.png" );
 					$(".modifier .view.view_normal .dht_times", expedRow).text(
 						"x" + config.modifier.daihatsu);
@@ -371,16 +386,54 @@
 
 				// setup Income Modifier
 				let jqIMRoot = $(".exped_config .modifier .content", expedRow);
-				$("input[type=radio]", jqIMRoot).each( function() {
-					$(this).attr("name",  "modifier-" + eId );
-				});
+				$("input[type=radio]", jqIMRoot)
+					.change( function() {
+						let isModNormal = this.value === "normal";
+						$(".group.mod_normal *", jqIMRoot)
+							.filter(":input").prop("disabled", !isModNormal);
+						$(".group.mod_custom *", jqIMRoot)
+							.filter(":input").prop("disabled", isModNormal);
+					})
+					.each( function() {
+						$(this).attr("name",  "modifier-" + eId );
+					});
+
+				$("input[type=radio]", jqIMRoot).filter("[value=" + config.modifier.type + "]")
+					.prop("checked", true).change();
+
+				// we try to fill in as much as info as we can for the other option.
+				if (config.modifier.type === "normal") {
+					// normal
+					$("input[type=checkbox][name=gs]",jqIMRoot)
+						.prop("checked", config.modifier.gs);
+					$("select.dht",jqIMRoot).val(config.modifier.daihatsu);
+					
+					$("input.custom_val[type=text]",jqIMRoot)
+						.val( prettyFloat(normalModifierToNumber(config.modifier)) );
+				} else {
+					// custom
+					$("input.custom_val[type=text]",jqIMRoot)
+						.val( config.modifier.value );
+
+					// now let's guess what could be the corresponding setting for normal config
+					let guessedGS = config.modifier.value >= 1.5;
+					let valBeforeGS = guessedGS 
+						? config.modifier.value / 1.5 
+						: config.modifier.value;
+					let guessedDHT = Math.floor((valBeforeGS - 1)/0.05);
+					guessedDHT = saturate(guessedDHT,0,4);
+					$("input[type=checkbox][name=gs]",jqIMRoot)
+						.prop("checked", guessedGS);
+					$("select.dht",jqIMRoot).val(guessedDHT);
+				}
+
 
 				// setup Resupply Cost
 				let jqCRoot = $(".exped_config .cost .content", expedRow);
 				$("input[type=radio]", jqCRoot).each( function() {
 					$(this).attr("name",  "cost-" + eId );
 				});
-				
+
 				expedTableRoot.append( expedRow );
 			});
 
