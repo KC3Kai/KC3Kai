@@ -48,6 +48,13 @@
 
 	KC3StrategyTabs.expedtable = new KC3StrategyTab("expedtable");
 
+	// some PureScript librarys, imported locally.
+	let ExpedInfo = PS["KanColle.Expedition.New.Info"];
+	let ExpedSType = PS["KanColle.Expedition.New.SType"];
+	let ExpedCostModel = PS["KanColle.Expedition.New.CostModel"];
+	let Maybe = PS["Data.Maybe"];
+	let PartialUnsafe = PS["Partial.Unsafe"];
+
 	KC3StrategyTabs.expedtable.definition = {
 		tabSelf: KC3StrategyTabs.expedtable,
 
@@ -67,13 +74,8 @@
 		Places data onto the interface from scratch.
 		---------------------------------*/
 		execute: function() {
-			var ExpedInfo = PS["KanColle.Expedition.New.Info"];
-			var ExpedSType = PS["KanColle.Expedition.New.SType"];
 			var factory = $(".tab_expedtable .factory");
 			var expedTableRoot = $("#exped_table_content_root");
-			var ExpedCostModel = PS["KanColle.Expedition.New.CostModel"];
-			var Maybe = PS["Data.Maybe"];
-			var PartialUnsafe = PS["Partial.Unsafe"];
 			function calcCostModel(stypeInstance, num) {
 				return ExpedCostModel.normalCostModel(stypeInstance)(num);
 			}
@@ -106,6 +108,7 @@
 
 			allExpeds.forEach( function(eId) {
 				var expedRow = $(".exped_row", factory).clone();
+				expedRow.data( "id", eId );
 				var resourceInfo = ExpedInfo.getInformation( eId ).resource;
 				var masterInfo = KC3Master._raw.mission[eId];
 

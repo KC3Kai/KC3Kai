@@ -5,8 +5,72 @@
 .tab_expedtable .exped_row .exped_view {
 	height: 30px;
 	background-color: #def;
-	border-radius: 3px;
+}
+
+.tab_expedtable .exped_row {
+	overflow: hidden;
+	border-radius: 5px;
+	border: 1px solid;
 	margin: 0px 0px 3px 0px;
+}
+
+.tab_expedtable .exped_row .exped_config {
+	border-top: 1px solid;
+	background-color: #eee;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box {
+	width: 48%;
+	border: 1px solid;
+	border-radius: 4px;
+	margin: 5px 5px 5px 5px;
+	overflow: hidden;
+	background: #fff;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box .content {
+	margin: 5px;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box .content .group {
+	margin: 5px 0 5px 10px;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box .content .group .key {
+	width: 120px;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box .content .group .key,
+.tab_expedtable .exped_row .exped_config .config_box .content .group input {
+	float: left;
+	font-weight: normal;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box .content .group input[type=text]{
+	height: 20px;
+	width: 100px;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box .content .group input[type=checkbox] {
+	width: auto;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box.modifier {
+	float: left;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box.cost {
+	float: right;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box.modifier {
+	float: left;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box .header {
+	background: #def;
+	padding: 0 5px 0 5px;
+	border-bottom: 1px solid;
 }
 
 .tab_expedtable .exped_row .exped_view .info_col {
