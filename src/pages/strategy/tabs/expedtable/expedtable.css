@@ -21,6 +21,10 @@
 	background-color: #eee;
 }
 
+.tab_expedtable .exped_row.active .exped_config {
+	display: initial;
+}
+
 .tab_expedtable .exped_row .exped_config .config_box {
 	width: 48%;
 	border: 1px solid;
