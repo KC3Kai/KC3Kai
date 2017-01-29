@@ -21,8 +21,7 @@ Used by SortieManager
 	// , enemy: [array of hps]
 	// }
 	// arrays are all begins at 0
-	// Regular battle rules: https://github.com/andanteyk/ElectronicObserver/blob/master/ElectronicObserver/Other/Information/kcmemo.md#%E6%88%A6%E9%97%98%E5%8B%9D%E5%88%A9%E5%88%A4%E5%AE%9A
-	// Long distance air raid rules: https://github.com/andanteyk/ElectronicObserver/blob/master/ElectronicObserver/Other/Information/kcmemo.md#%E9%95%B7%E8%B7%9D%E9%9B%A2%E7%A9%BA%E8%A5%B2%E6%88%A6%E3%81%A7%E3%81%AE%E5%8B%9D%E5%88%A9%E5%88%A4%E5%AE%9A
+
 	KC3Node.predictRank = function(beginHPs, endHPs, battleName) {
 		console.assert( 
 			beginHPs.ally.length === endHPs.ally.length,
@@ -91,6 +90,7 @@ Used by SortieManager
 		// related comments:
 		// - https://github.com/KC3Kai/KC3Kai/issues/728#issuecomment-139681987
 		// - https://github.com/KC3Kai/KC3Kai/issues/1766#issuecomment-275883784
+		// - Regular battle rules: https://github.com/andanteyk/ElectronicObserver/blob/master/ElectronicObserver/Other/Information/kcmemo.md#%E6%88%A6%E9%97%98%E5%8B%9D%E5%88%A9%E5%88%A4%E5%AE%9A
 		// the flooring behavior is intended and important.
 		// please do not change it unless it's proved to be more accurate than
 		// the formula referred to by the comments above.
@@ -104,6 +104,7 @@ Used by SortieManager
 			// reference:
 			// - http://kancolle.wikia.com/wiki/Events/Mechanics (as of 2017-01-28)
 			// - http://nga.178.com/read.php?tid=8989155
+			// - Long distance air raid rules: https://github.com/andanteyk/ElectronicObserver/blob/master/ElectronicObserver/Other/Information/kcmemo.md#%E9%95%B7%E8%B7%9D%E9%9B%A2%E7%A9%BA%E8%A5%B2%E6%88%A6%E3%81%A7%E3%81%AE%E5%8B%9D%E5%88%A9%E5%88%A4%E5%AE%9A
 			return (allyGauge === 0) ? "SS"
 				: (allyGaugeRate < 10) ? "A"
 				: (allyGaugeRate < 20) ? "B"
