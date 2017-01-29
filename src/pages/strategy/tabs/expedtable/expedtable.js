@@ -290,7 +290,7 @@
 		reload: function() {
 		},
 
-		prepareCostModelSection: function() {
+		setupCostModelSection: function() {
 			let contentRoot = $(".tab_expedtable #cost_model_content_root");
 			let tableRoot = $("table", contentRoot);
 			let jqPreset = $("select.cost_preset", contentRoot);
@@ -497,6 +497,9 @@
 				$(".edit_btn", expedRow).on("click", function() {
 					expedRow.toggleClass("active");
 					$(this).text( expedRow.hasClass("active") ? "▼" : "◀");
+					// TODO: 
+					// - config => UI on expand,
+					// - UI => config on collapse. (and then config => UI on view zone)
 				});
 
 				// setup Income Modifier
@@ -590,7 +593,7 @@
 				expedTableRoot.append( expedRow );
 			});
 
-			self.prepareCostModelSection();
+			self.setupCostModelSection();
 		},
 
 		/* UPDATE: optional
