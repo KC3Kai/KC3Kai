@@ -101,18 +101,15 @@ Used by SortieManager
 
 		// For long distance air raid
 		if ( (battleName||"").indexOf("ld_airbattle") >-1 ) {
-			let allyGaugeRateLD = Math.qckInt("floor", allyGauge / allyBeginHP * 100, 1);
-			if (allyGaugeRateLD <= 0)
-				return "SS";
-			else if (allyGaugeRateLD < 10)
-				return "A";
-			else if (allyGaugeRateLD < 20)
-				return "B";
-			else if (allyGaugeRateLD < 50)
-				return "C";
-			else if (allyGaugeRateLD < 80)
-				return "D";
-			return "E";
+			// reference:
+			// - http://kancolle.wikia.com/wiki/Events/Mechanics (as of 2017-01-28)
+			// - http://nga.178.com/read.php?tid=8989155
+			return (allyGauge === 0) ? "SS"
+				: (allyGaugeRate < 10) ? "A"
+				: (allyGaugeRate < 20) ? "B"
+				: (allyGaugeRate < 50) ? "C"
+				: (allyGaugeRate < 80) ? "D"
+				: /* otherwise */ "E";
 		}
 
 		if (allySunkCount === 0) {
