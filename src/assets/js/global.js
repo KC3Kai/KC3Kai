@@ -199,19 +199,24 @@ String.prototype.toArray = function() {
 	return this.split("");
 };
 
-/** String.format("msg {0} is {1}", args)
+/**
+ * String.format("msg {0} is {1}", args) - convenient placeholders replacing,
  * from http://jqueryvalidation.org/jQuery.validator.format/
+ *
+ * @return a new string replaced with given expressions like template literals in ES6
+ * @param {an Array/String..} args - the real values to be replaced with
+ * notes:
+ *   - in fact, NO l10n format feature like Date, Currency, Float Number
+ *   - placeholders can be commented via {0:commentGoesHere} (no space)
+ *   - if first parameter is Array, left params will be ignored
+ *   - if param or element in Array is not String, will be auto toString
 ------------------------------------------------------------ */
 String.prototype.format = function(params) {
-	var source = this;
+	var source = this.toString();
 	if (arguments.length < 1) {
 		return source;
-	}
-	if (arguments.length > 1 && params.constructor !== Array) {
+	} else if(!Array.isArray(params)) {
 		params = $.makeArray(arguments);
-	}
-	if (params.constructor !== Array) {
-		params = [ params ];
 	}
 	// A-Z a-z 0-9 _ $ [more unicodes]
 	var validCommentChars = "[_$\\w\\d\\xA0-\\uFFFF]*";
