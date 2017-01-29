@@ -1902,7 +1902,9 @@ ABYSS FLEET
 	height: 13px;
 	line-height: 13px;
 	margin: 0px 0px 1px 0px;
+	float: left;
 	font-size: 11px;
+	text-align: right;
 }
 
 .module.activity .activity_pvp .pvp_fleet_name {
