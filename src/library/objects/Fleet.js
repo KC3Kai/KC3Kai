@@ -816,6 +816,72 @@ Contains summary information about a fleet and its 6 ships
 		this.checkAkashi(true);
 	};
 	
+	/**
+	 * Look up for Katori Class Exp Bonus from current Fleet.
+	 * @return exp bonus modifier, default is 1.0
+	 * @see http://wikiwiki.jp/kancolle/?%B1%E9%BD%AC#v657609b
+	 */
+	KC3Fleet.prototype.lookupKatoriClassBonus = function() {
+		var ctBonusTable = [
+			[ 1.0,  1.0,  1.0,  1.0,  1.0], // No CT
+			[1.05, 1.08, 1.12, 1.15, 1.20], // CT x 1 as flagship
+			[1.03, 1.05, 1.07, 1.10, 1.15], // CT x 1
+			[1.10, 1.13, 1.16, 1.20, 1.25], // CT x 2, 1 flagship
+			[1.04, 1.06, 1.08, 1.12, 1.175] // CT x 2
+		];
+		var maxCtLevel = 0, katoriIndex = 0;
+		this.ship(function(rid, idx, ship){
+			if(ship.master().api_stype == 21){
+				if(ship.level > maxCtLevel) maxCtLevel = ship.level;
+				if(idx === 0) katoriIndex = 1;
+				else katoriIndex = katoriIndex < 3 ?
+					katoriIndex + 2 : katoriIndex;
+			}
+		});
+		var levelIndex =
+			(maxCtLevel < 10)  ? 0 :
+			(maxCtLevel < 30)  ? 1 :
+			(maxCtLevel < 60)  ? 2 :
+			(maxCtLevel < 100) ? 3 :
+			4;
+		return ctBonusTable[katoriIndex][levelIndex] || 1;
+	};
+
+	/**
+	 * Predicts PvP opponent's battle formation.
+	 * @param opponentFleetShips - master ID array of opponent fleet, no -1 placeholders
+	 * @return predicted formation ID
+	 * @see http://wikiwiki.jp/kancolle/?%B1%E9%BD%AC#m478a4e5
+	 */
+	KC3Fleet.prototype.predictOpponentFormation = function(opponentFleetShips){
+		// Convert fleet ships to master IDs, remove -1 elements
+		var playerFleetShips = this.ships
+			.filter(function(v){return v > 0;})
+			.map(function(v){return KC3ShipManager.get(v).masterId;});
+		var playerFlagshipMst = KC3Master.ship(playerFleetShips[0]);
+		var opponentFlagshipMst = KC3Master.ship(opponentFleetShips[0]);
+		var playerSubmarineCount = playerFleetShips.reduce(function(acc, v){
+			return acc + ([13,14].indexOf(KC3Master.ship(v).api_stype) > -1 & 1);
+		}, 0);
+		// 1st priority: flagship is SS/SSV and SS/SSV > 1 in our fleet, ships >= 4 of enemy fleet
+		if(opponentFleetShips.length >= 4
+			&& [13, 14].indexOf(playerFlagshipMst.api_stype) > -1
+			&& playerSubmarineCount > 1){
+			return 5; // Line Abreast
+		}
+		// flagship is SS/SSV and ships >= 4 in enemy fleet
+		if(opponentFleetShips.length >= 4
+			&& [13, 14].indexOf(opponentFlagshipMst.api_stype) > -1){
+			return 4; // Echelon
+		}
+		// flagship is CV/CVL/AV and ships >= 5 in enemy fleet
+		if(opponentFleetShips.length >= 5
+			&& [7, 11, 16].indexOf(opponentFlagshipMst.api_stype) > -1){
+			return 3; // Diamond
+		}
+		return 1; // Line Ahead
+	};
+
 	/* SORTIE JSON
 	Used for recording sorties on indexedDB
 	Generate fleet summary object without referential data (all masterId)

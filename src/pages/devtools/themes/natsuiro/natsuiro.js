@@ -2349,58 +2349,27 @@
 					shipBox.appendTo(".activity_pvp .pvp_fleet_list");
 				}
 			});
-			
+			// Base EXP only affected by first two ships of opponent's fleet
 			var baseExp = 3 + Math.floor(KC3Meta.expShip(levelFlagship)[1] / 100 + KC3Meta.expShip(level2ndShip)[1] / 300);
 			if(baseExp > 500){
 				baseExp = Math.floor(500 + Math.sqrt(baseExp - 500));
 			}
-			$(".activity_pvp .pvp_base_exp .value").text(baseExp);
-			// TODO to show multiplied EXP by CT ship bonus
-			// may detect their position and level in current selected fleet
-			var baseExpS = Math.floor(baseExp * 1.2),
-				baseExpC = Math.floor(baseExp * 0.64),
-				baseExpD = Math.floor(baseExp * 0.56);
+			// Check CT bonus in current selected fleet
+			var playerFleet = PlayerManager.fleets[selectedFleet > 4 ? 0 : selectedFleet - 1];
+			var ctBonus = playerFleet.lookupKatoriClassBonus();
+			// Variant of battle rank
+			var baseExpS  = Math.floor(baseExp * 1.2 * ctBonus),
+				baseExpAB = Math.floor(baseExp * 1.0 * ctBonus),
+				baseExpC  = Math.floor(baseExp * 0.64 * ctBonus),
+				baseExpD  = Math.floor(baseExp * 0.56 * 0.8 * ctBonus);
+			$(".activity_pvp .pvp_base_exp .value").text(baseExpS);
 			$(".activity_pvp .pvp_base_exp").attr("title",
-				"x1.2(S+): {0}\nx1 (A/B): {1}\nx0.64(C): {2}\nx0.56(D): {3}"
-				.format(baseExpS, baseExp, baseExpC, baseExpD)
+				KC3Meta.term("PvpBaseExp") + ": {0}\n"
+				+ "x1.2(S+): {1}\nx1 (A/B): {2}\nx0.64(C): {3}\nx0.56(D): {4}"
+				.format(baseExp, baseExpS, baseExpAB, baseExpC, baseExpD)
 			);
-			/**
-			 * Predicts opponent's battle formation.
-			 * @param playerFleetShips - master ID array of player fleet, no -1 placeholders
-			 * @param opponentFleetShips - master ID array of opponent fleet, no -1 placeholders
-			 * @return predicted formation ID
-			 */
-			var predictFormation = function(playerFleetShips, opponentFleetShips){
-				var playerFlagshipMst = KC3Master.ship(playerFleetShips[0]);
-				var opponentFlagshipMst = KC3Master.ship(opponentFleetShips[0]);
-				var playerSubmarineCount = playerFleetShips.reduce(function(acc, v){
-					return acc + ([13,14].indexOf(KC3Master.ship(v).api_stype) > -1 & 1);
-				}, 0);
-				// 1st priority: flagship is SS/SSV and SS/SSV > 1 in our fleet, ships >= 4 of enemy fleet
-				if(opponentFleetShips.length >= 4
-					&& [13, 14].indexOf(playerFlagshipMst.api_stype) > -1
-					&& playerSubmarineCount > 1){
-					return 5; // Line Abreast
-				}
-				// flagship is SS/SSV and ships >= 4 in enemy fleet
-				if(opponentFleetShips.length >= 4
-					&& [13, 14].indexOf(opponentFlagshipMst.api_stype) > -1){
-					return 4; // Echelon
-				}
-				// flagship is CV/CVL/AV and ships >= 5 in enemy fleet
-				if(opponentFleetShips.length >= 5
-					&& [7, 11, 16].indexOf(opponentFlagshipMst.api_stype) > -1){
-					return 3; // Diamond
-				}
-				return 1; // Line Ahead
-			};
-			// Normalize fleet ships Array of both sides
-			var predictedFormation = predictFormation(
-				// Player's fleet: convert to master IDs, remove -1 elements
-				PlayerManager.fleets[selectedFleet > 4 ? 0 : selectedFleet - 1].ships
-					.filter(function(v){return v > 0;})
-					.map(function(v){return KC3ShipManager.get(v).masterId;}),
-				// Opponent's fleet: convert Object to Array, remove -1 elements
+			var predictedFormation = playerFleet.predictOpponentFormation(
+				// Normalize opponent's fleet: convert Object to Array, remove -1 elements
 				data.api_deck.api_ships
 					.map(function(v){return v.api_id > 0 ? v.api_ship_id : -1;})
 					.filter(function(v){return v > 0;})
