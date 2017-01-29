@@ -272,7 +272,6 @@
 	  - hotzone coloring (based on number of completed expedtion)
 	  - error message on config save.
 
-	  TODO: for cost model, we can have some preset slider values.
 	 */
 
 	KC3StrategyTabs.expedtable = new KC3StrategyTab("expedtable");
@@ -295,6 +294,8 @@
 		prepareCostModelSection: function() {
 			let contentRoot = $(".tab_expedtable #cost_model_content_root");
 			let tableRoot = $("table", contentRoot);
+			let jqPreset = $("select.cost_preset", contentRoot);
+			let presetFlag = false;
 
 			let calcCostModel = (stypeInstance, num) =>
 				ExpedCostModel.normalCostModel(stypeInstance)(num);
@@ -329,11 +330,15 @@
 				.slider(sliderSettings)
 				.on("change", function(e) {
 					updateCostModelTable( "fuel", e.value.newValue );
+					if (!presetFlag)
+						jqPreset.val("title");
 				});
 			let sliderAmmo = $("input#cost_model_ammo")
 				.slider(sliderSettings)
 				.on("change", function(e) {
 					updateCostModelTable( "ammo", e.value.newValue );
+					if (!presetFlag)
+						jqPreset.val("title");
 				});
 
 			// setup table
@@ -379,6 +384,26 @@
 			// sync controls with default value
 			updateCostModelTable("fuel", sliderFuel.slider("getValue"));
 			updateCostModelTable("ammo", sliderAmmo.slider("getValue"));
+
+			expedCostGrouping.map( function(x,i) {
+				let desc = "" + x.fuel + "% Fuel, " + x.ammo + "% Ammo,";
+				desc += " " +
+					(x.expeds.length > 1 ? "Expeditions" : "Expedition")+ ": " +
+					x.expeds.join(",");
+				jqPreset.append( $("<option />", {value: i}).text(desc) );
+			});
+
+			jqPreset.change( function() {
+				if (this.value === "title")
+					return;
+				presetFlag = true;
+				let cost = expedCostGrouping[this.value];
+				sliderFuel.slider("setValue", cost.fuel);
+				sliderAmmo.slider("setValue", cost.ammo);
+				updateCostModelTable("fuel", cost.fuel);
+				updateCostModelTable("ammo", cost.ammo);
+				presetFlag = false;
+			});
 		},
 
 		/* EXECUTE: mandatory

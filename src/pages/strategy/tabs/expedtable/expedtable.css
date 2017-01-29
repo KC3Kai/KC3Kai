@@ -276,3 +276,8 @@
 .tab_expedtable #cost_model_content_root .cost_cell_na {
 	text-align: center;
 }
+
+.tab_expedtable #cost_model_content_root select.cost_preset {
+	min-width: 200px;
+	margin: 0 0 15px 10px;
+}
