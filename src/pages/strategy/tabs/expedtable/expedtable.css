@@ -15,6 +15,8 @@
 }
 
 .tab_expedtable .exped_row .exped_config {
+	/* configs are invisible by default */
+	display: none;
 	border-top: 1px solid;
 	background-color: #eee;
 }
@@ -30,6 +32,7 @@
 
 .tab_expedtable .exped_row .exped_config .config_box .content {
 	margin: 5px;
+	height: 160px;
 }
 
 .tab_expedtable .exped_row .exped_config .config_box .content .group {

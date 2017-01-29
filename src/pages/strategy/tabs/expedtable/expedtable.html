@@ -122,8 +122,26 @@
 					Resupply Cost
 				</div>
 				<div class="content">
-					<input type="radio" name="cost" value="normal"> Normal<br>
-					<input type="radio" name="cost" value="custom"> Custom
+					<label><input type="radio" name="cost" value="normal"> Normal</label><br>
+					<div class="group">
+						<div class="key">Wildcard:</div>
+						<select>
+							<option value="None">None</option>
+							<option value="SS">SS</option>
+							<option value="DD">DD</option>
+						</select><br>
+						<div class="key">Number of Ships:</div>
+						<select>
+							<option value="4">4 ships</option>
+							<option value="5">5 ships</option>
+							<option value="6">6 ships</option>
+						</select>
+					</div>
+					<label><input type="radio" name="cost" value="custom"> Custom</label>
+					<div class="group">
+						<div class="key">Fuel:</div><input type="text" name="fuel"><br>
+						<div class="key">Ammo:</div><input type="text" name="ammo"><br>
+					</div>
 				</div>
 			</div>
 			<div class="clear" />
