@@ -44,6 +44,7 @@
 		    fuel: integer (non-negative),
 			ammo: integer (non-negative)
 		  }
+
 	 */
 
 
@@ -180,14 +181,98 @@
 		}
 	}
 
+	function generateCostGrouping() {
+		let allExpeds = enumFromTo(1,40).map( function(x) {
+			let info = ExpedInfo.getInformation(x);
+			return { ammo: Math.round( info.ammoCostPercent * 100),
+					 ammoP: info.ammoCostPercent,
+					 fuel: Math.round( info.fuelCostPercent * 100),
+					 fuelP: info.fuelCostPercent,
+					 id: x };
+		});
+		allExpeds.sort( function(a,b) {
+			// key 1: group by total consumption
+			let aTotal = a.ammo + a.fuel;
+			let bTotal = b.ammo + b.fuel;
+			if (aTotal != bTotal)
+				return aTotal - bTotal;
+
+			// key 2: group by either (begin with fuel because all expeds
+			// is sure to spend some)
+			if (a.fuel != b.fuel)
+				return a.fuel - b.fuel;
+			if (a.ammo != b.ammo)
+				return a.ammo - b.ammo;
+
+			// finally tie break by exped id
+			return a.id - b.id;
+		});
+		
+		let currentGrp = false;
+		let grouped = [];
+
+		function eq(a,b) {
+			return (a.fuel == b.fuel) && (a.ammo == b.ammo);
+		}
+
+		while (allExpeds.length > 0) {
+			let curExped = allExpeds.shift();
+			if (currentGrp === false) {
+				currentGrp = [curExped];
+			} else if (eq(currentGrp[0], curExped)) {
+				currentGrp.push( curExped );
+			} else {
+				grouped.push( currentGrp );
+				currentGrp = [curExped];
+			}
+		}
+
+		if (currentGrp !== false) {
+			grouped.push( currentGrp );
+			currentGrp = false;
+		}
+
+		grouped = grouped.map( function(x) {
+			return { ammo: x[0].ammo,
+					 fuel: x[0].fuel,
+					 expeds: x.map( y => y.id ) };
+		});
+
+		grouped.sort( function(a,b) {
+			if (b.expeds.length !== a.expeds.length)
+				return b.expeds.length- a.expeds.length;
+
+			let aTotal = a.ammo + a.fuel;
+			let bTotal = b.ammo + b.fuel;
+			return bTotal - aTotal;
+		});
+		console.log(JSON.stringify(grouped));
+	}
+
+	// generated from generateCostGrouping()
+	let expedCostGrouping = [
+		{ammo:0,fuel:50,expeds:[2,4,5,7,9,11,12,14,31]},
+		{ammo:80,fuel:80,expeds:[23,26,27,28,35,36,37,38]},
+		{ammo:40,fuel:50,expeds:[13,15,16,19,20]},
+		{ammo:70,fuel:80,expeds:[21,22,40]},
+		{ammo:80,fuel:50,expeds:[25,33,34]},
+		{ammo:20,fuel:50,expeds:[8,18]},{ammo:20,fuel:30,expeds:[3,6]},
+		{ammo:0,fuel:30,expeds:[1,10]},{ammo:90,fuel:90,expeds:[39]},
+		{ammo:70,fuel:90,expeds:[30]},{ammo:60,fuel:90,expeds:[24]},
+		{ammo:40,fuel:90,expeds:[29]},{ammo:30,fuel:90,expeds:[32]},
+		{ammo:40,fuel:30,expeds:[17]}];
+
 	/*
 	  TODO: UI viewer and sorter.
 	  viewer: view by: net income / gross income / basic income, general config / allow normal config
-	  sorter: by exped id, fuel, ammo, etc.
+	  sorter: by exped id, time, fuel, ammo, etc.
 
 	  disabled whenever any of the expeditions are still under editing
 
 	  - hotzone coloring (based on number of completed expedtion)
+	  - error message on config save.
+
+	  TODO: for cost model, we can have some preset slider values.
 	 */
 
 	KC3StrategyTabs.expedtable = new KC3StrategyTab("expedtable");
