@@ -101,11 +101,11 @@
 			return { ammo: acc.ammo + cur.ammo,
 					 fuel: acc.fuel + cur.fuel };
 		}, {ammo: 0, fuel: 0});
-	};
+	}
 
 	/*
 	  TODO: UI viewer and sorter.
-	  viewer: view by: net income / gross income, general config / allow normal config
+	  viewer: view by: net income / gross income / basic income, general config / allow normal config
 	  sorter: by exped id, fuel, ammo, etc.
 
 	  disabled whenever any of the expeditions are still under editing
@@ -122,14 +122,6 @@
 	let Maybe = PS["Data.Maybe"];
 	let PartialUnsafe = PS["Partial.Unsafe"];
 
-
-	var Data_Unfoldable = PS["Data.Unfoldable"];
-	var Data_Array = PS["Data.Array"];
-	var Data_Ord = PS["Data.Ord"];
-	var Data_Semigroup = PS["Data.Semigroup"];
-	var Data_Ring = PS["Data.Ring"];
-	var Data_Functor = PS["Data.Functor"];
-
 	KC3StrategyTabs.expedtable.definition = {
 		tabSelf: KC3StrategyTabs.expedtable,
 
@@ -145,18 +137,107 @@
 		reload: function() {
 		},
 
+		prepareCostModelSection: function() {
+			let contentRoot = $(".tab_expedtable #cost_model_content_root");
+			let tableRoot = $("table", contentRoot);
+
+			let calcCostModel = (stypeInstance, num) =>
+				ExpedCostModel.normalCostModel(stypeInstance)(num);
+
+			// setup slider controls
+			let ticks = Array.from(Array(10 + 1).keys(), x => x * 10);
+			let sliderSettings = {
+				// ticks = [0,10..100]
+				ticks: Array.from(Array(10 + 1).keys(), x => x * 10),
+				step: 10,
+				// default of both fuel and ammo are 80%
+				value: 80,
+				tooltip: "hide"
+			};
+			
+			let viewFuelPercent = $(".control_row.fuel .val");
+			let viewAmmoPercent = $(".control_row.ammo .val");
+			let tableBody = $("tbody",tableRoot);
+			function updateCostModelTable( which, newValue ){
+				console.assert( which === "fuel" || which === "ammo" );
+				(  which === "fuel" ? viewFuelPercent
+				   : which === "ammo" ? viewAmmoPercent
+				   : undefined ).text( newValue + "%" );
+
+				let actualPercent = (newValue + 0.0) / 100.0;
+				$(".cost_cell", tableBody).each( function() {
+					let jq = $(this);
+					let maxCost = jq.data("max-cost");
+					$("." + which, this).text( Math.floor(maxCost[which] * actualPercent) );
+				});
+			}
+
+			let sliderFuel = $("input#cost_model_fuel")
+				.slider(sliderSettings)
+				.on("change", function(e) {
+					updateCostModelTable( "fuel", e.value.newValue );
+				});
+			let sliderAmmo = $("input#cost_model_ammo")
+				.slider(sliderSettings)
+				.on("change", function(e) {
+					updateCostModelTable( "ammo", e.value.newValue );
+				});
+
+			// setup table
+			let stypeTexts = [
+				"DD", "CL", "CVLike", "SSLike", 
+				"CA", "BBV", "AS", "CT", "AV"];
+
+			stypeTexts.map( function(stype) {
+				let tblRow = $("<tr>");
+				let stypeHead = $("<th>");
+
+				if (stype === "CVLike") {
+					stypeHead
+						.text("CV(*)")
+						.attr("title", "CV / CVL / AV / CVB");
+				} else if (stype === "SSLike") {
+					stypeHead
+						.text( "SS(*)" )
+						.attr("title", "SS / SSV");
+				} else {
+					stypeHead.text( stype );
+				}
+
+				tblRow.append( stypeHead );
+				for (let i=1; i<=6; ++i) {
+					let stypeInst = ExpedSType[stype].value;
+					let costResult = calcCostModel(stypeInst, i);
+					let cell;
+
+					if (Maybe.isJust( costResult )) {
+						cell = $(".tab_expedtable .factory .cost_cell").clone();
+						let costSum = mergeExpedCost( PartialUnsafe.unsafePartial(Maybe.fromJust)(costResult) );
+						cell.data( "max-cost", costSum );
+					} else {
+						cell = $(".tab_expedtable .factory .cost_cell_na").clone();
+					}
+					tblRow.append( $("<td />").append(cell) );
+				}
+				
+				tableBody.append( tblRow );
+			});
+
+			// sync controls with default value
+			updateCostModelTable("fuel", sliderFuel.slider("getValue"));
+			updateCostModelTable("ammo", sliderAmmo.slider("getValue"));
+		},
+
 		/* EXECUTE: mandatory
 		Places data onto the interface from scratch.
 		---------------------------------*/
 		execute: function() {
+			let self = this;
 			// a random-generated configuration for debugging purpose
 			var expedConfig = generateRandomConfig();
 
 			var factory = $(".tab_expedtable .factory");
 			var expedTableRoot = $("#exped_table_content_root");
-			function calcCostModel(stypeInstance, num) {
-				return ExpedCostModel.normalCostModel(stypeInstance)(num);
-			}
 
 			var allExpeds = [];
 			var i;
@@ -249,11 +330,10 @@
 					let costModel = ExpedCostModel.normalCostModel;
 					let fleetMaxCost = ExpedCostModel.calcFleetMaxCost(costModel)(actualCompo);
 					if (! Maybe.isJust(fleetMaxCost)) {
-						throw "CostModel fails to compute a cost for current fleet composition"
+						throw "CostModel fails to compute a cost for current fleet composition";
 					} else {
 						fleetMaxCost = PartialUnsafe.unsafePartial(Maybe.fromJust)(fleetMaxCost);
 					}
-					console.log(info);
 					let fleetActualCost = fleetMaxCost.map( function(x) {
 						return {
 							fuel: Math.floor( info.fuelCostPercent * x.fuel ),
@@ -285,92 +365,7 @@
 				expedTableRoot.append( expedRow );
 			});
 
-			// setup cost model
-			let contentRoot = $(".tab_expedtable #cost_model_content_root");
-			let tableRoot = $("table", contentRoot);
-
-			// setup slider controls
-			let ticks = Array.from(Array(10 + 1).keys(), x => x * 10);
-			let sliderSettings = {
-				// ticks = [0,10..100]
-				ticks: Array.from(Array(10 + 1).keys(), x => x * 10),
-				step: 10,
-				// default of both fuel and ammo are 80%
-				value: 80,
-				tooltip: "hide"
-			};
-
-			let viewFuelPercent = $(".control_row.fuel .val");
-			let viewAmmoPercent = $(".control_row.ammo .val");
-			let tableBody = $("tbody",tableRoot);
-			function updateCostModelTable( which, newValue ){
-				console.assert( which === "fuel" || which === "ammo" );
-				(  which === "fuel" ? viewFuelPercent
-				 : which === "ammo" ? viewAmmoPercent
-				 : undefined ).text( newValue + "%" );
-
-				let actualPercent = (newValue + 0.0) / 100.0;
-				$(".cost_cell", tableBody).each( function() {
-					let jq = $(this);
-					let maxCost = jq.data("max-cost");
-					$("." + which, this).text( Math.floor(maxCost[which] * actualPercent) );
-				});
-			}
-
-			let sliderFuel = $("input#cost_model_fuel")
-				.slider(sliderSettings)
-				.on("change", function(e) {
-					updateCostModelTable( "fuel", e.value.newValue );
-				});
-			let sliderAmmo = $("input#cost_model_ammo")
-				.slider(sliderSettings)
-				.on("change", function(e) {
-					updateCostModelTable( "ammo", e.value.newValue );
-				});
-
-			// setup table
-			let stypeTexts = [
-				"DD", "CL", "CVLike", "SSLike", 
-				"CA", "BBV", "AS", "CT", "AV"];
-
-			stypeTexts.map( function(stype) {
-				let tblRow = $("<tr>");
-				let stypeHead = $("<th>");
-
-				if (stype === "CVLike") {
-					stypeHead
-						.text("CV(*)")
-						.attr("title", "CV / CVL / AV / CVB");
-				} else if (stype === "SSLike") {
-					stypeHead
-						.text( "SS(*)" )
-						.attr("title", "SS / SSV");
-				} else {
-					stypeHead.text( stype );
-				}
-
-				tblRow.append( stypeHead );
-				for (let i=1; i<=6; ++i) {
-					let stypeInst = ExpedSType[stype].value;
-					let costResult = calcCostModel(stypeInst, i);
-					let cell;
-
-					if (Maybe.isJust( costResult )) {
-						cell = $(".tab_expedtable .factory .cost_cell").clone();
-						let costSum = mergeExpedCost( PartialUnsafe.unsafePartial(Maybe.fromJust)(costResult) );
-						cell.data( "max-cost", costSum );
-					} else {
-						cell = $(".tab_expedtable .factory .cost_cell_na").clone();
-					}
-					tblRow.append( $("<td />").append(cell) );
-				}
-				
-				tableBody.append( tblRow );
-			});
-
-			// sync controls with default value
-			updateCostModelTable("fuel", sliderFuel.slider("getValue"));
-			updateCostModelTable("ammo", sliderAmmo.slider("getValue"));
+			self.prepareCostModelSection();
 		},
 
 		/* UPDATE: optional
