@@ -49,44 +49,85 @@
 
 <div class="factory">
 	<div class="exped_row">
-		<div class="info_col id" />
-		<div class="info_col time" />
-		<div class="info_col resource fuel" />
-		<div class="info_col resource ammo" />
-		<div class="info_col resource steel" />
-		<div class="info_col resource bauxite" />
-		<div class="info_col item item1" />
-		<div class="info_col item item2" />
-		<div class="info_col modifier">
-			<!-- 
-				 "view"s are mutual exclusive and exactly one of them should be visible.
-				 "view_general" displays the most general parameter
-				 while "view_normal" contains more details
-				 but is only suitable for non-custom settings.
-			-->
-			<div class="view view_general" />
-			<div class="view view_normal">
-			  <img class="gs" />
-			  <img class="dht" src="../../assets/img/items/20.png" />
-			  <div class="dht_times"></div>
-			  <div class="clear" />
+		<div class="exped_view">
+			<div class="info_col id" />
+			<div class="info_col time" />
+			<div class="info_col resource fuel" />
+			<div class="info_col resource ammo" />
+			<div class="info_col resource steel" />
+			<div class="info_col resource bauxite" />
+			<div class="info_col item item1" />
+			<div class="info_col item item2" />
+			<div class="info_col modifier">
+				<!-- 
+					 "view"s are mutual exclusive and exactly one of them should be visible.
+					 "view_general" displays the most general parameter
+					 while "view_normal" contains more details
+					 but is only suitable for non-custom settings.
+				  -->
+				<div class="view view_general" />
+				<div class="view view_normal">
+					<img class="gs" />
+					<img class="dht" src="../../assets/img/items/20.png" />
+					<div class="dht_times"></div>
+					<div class="clear" />
+				</div>
 			</div>
-		</div>
-		<div class="info_col cost">
-			<div class="view view_general">
-				<div class="fuel" />
-				<div class="ammo" />
+			<div class="info_col cost">
+				<div class="view view_general">
+					<div class="fuel" />
+					<div class="ammo" />
+				</div>
+				<div class="view view_normal">
+					<div class="limit">≥4</div>
+					<img src="../../assets/img/client/ship.png" />
+					<div class="wildcard">(*=DD)</div>
+				</div>
 			</div>
-			<div class="view view_normal">
-			  <div class="limit">≥4</div>
-			  <img src="../../assets/img/client/ship.png" />
-			  <div class="wildcard">(*=DD)</div>
+			<div class="info_col edit_btn">
+				▼
 			</div>
+			<div class="clear" />
 		</div>
-		<div class="info_col edit_btn">
-		  ▼
+		<div class="exped_config">
+			<div class="modifier config_box">
+				<div class="header">
+					Income Modifier
+				</div>
+				<div class="content">
+					<label><input type="radio" name="modifier" value="normal"> Normal</label><br>
+					<div class="group">
+						<label><div class="key">Great Success:</div>
+							<input type="checkbox" name="gs"/></label> <br>
+						<div class="key">Number of
+							<img class="dht" src="../../assets/img/items/20.png" 
+								 style="width: 25px; height: 25px;"/>:</div>
+						<select>
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+						</select>
+						<div class="clear" />
+					</div>
+					<label><input type="radio" name="modifier" value="custom"> Custom</label>
+					<div class="group">
+						<div class="key">Modifier:</div><input type="text" name="modifier"><br>
+					</div>
+				</div>
+			</div>
+			<div class="cost config_box">
+				<div class="header">
+					Resupply Cost
+				</div>
+				<div class="content">
+					<input type="radio" name="cost" value="normal"> Normal<br>
+					<input type="radio" name="cost" value="custom"> Custom
+				</div>
+			</div>
+			<div class="clear" />
 		</div>
-		<div class="clear" />
 	</div>
 	<div class="cost_cell">
 		<div class="fuel"></div>
