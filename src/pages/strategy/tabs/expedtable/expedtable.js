@@ -32,8 +32,8 @@
             a higher GS rate.
 
 	      - standard:
-		  
 		  { type: "costmodel",
+		  
 		    wildcard: "DD" / "SS" / false,
 			count: 0 ~ 6 (but make it only possible to select 4~6 from UI)
 		  }
@@ -95,6 +95,14 @@
 
 		return config;
 	}
+
+	function mergeExpedCost(arr) {
+		return arr.reduce( function(acc, cur) {
+			return { ammo: acc.ammo + cur.ammo,
+					 fuel: acc.fuel + cur.fuel };
+		}, {ammo: 0, fuel: 0});
+	};
+
 	/*
 	  TODO: UI viewer and sorter.
 	  viewer: view by: net income / gross income, general config / allow normal config
@@ -110,8 +118,17 @@
 	let ExpedInfo = PS["KanColle.Expedition.New.Info"];
 	let ExpedSType = PS["KanColle.Expedition.New.SType"];
 	let ExpedCostModel = PS["KanColle.Expedition.New.CostModel"];
+	let ExpedMinCompo = PS["KanColle.Expedition.New.MinCompo"];
 	let Maybe = PS["Data.Maybe"];
 	let PartialUnsafe = PS["Partial.Unsafe"];
+
+
+	var Data_Unfoldable = PS["Data.Unfoldable"];
+	var Data_Array = PS["Data.Array"];
+	var Data_Ord = PS["Data.Ord"];
+	var Data_Semigroup = PS["Data.Semigroup"];
+	var Data_Ring = PS["Data.Ring"];
+	var Data_Functor = PS["Data.Functor"];
 
 	KC3StrategyTabs.expedtable.definition = {
 		tabSelf: KC3StrategyTabs.expedtable,
@@ -173,7 +190,6 @@
 				var resourceInfo = ExpedInfo.getInformation( eId ).resource;
 				var masterInfo = KC3Master._raw.mission[eId];
 				var config = expedConfig[eId];
-				console.log(config);
 
 				$(".info_col.id", expedRow).text( eId );
 				$(".info_col.time", expedRow).text( String( 60 * masterInfo.api_time ).toHHMMSS() );
@@ -211,13 +227,48 @@
 						"x" + config.modifier.daihatsu);
 				}
 
-				var computedCost = config.cost.type === "costmodel"
-					? { fuel: 100, ammo: 100 }  // TODO: compute cost.
-					: { fuel: config.cost.fuel,
-						ammo: config.cost.ammo };
+				let computedCost;
 
-				$(".cost .view.view_general .fuel", expedRow).text("-" + computedCost.fuel);
-				$(".cost .view.view_general .ammo", expedRow).text("-" + computedCost.ammo);
+				if (config.cost.type === "costmodel") {
+					let minCompo = ExpedMinCompo.getMinimumComposition(eId);
+					let stype =
+						/* when wildcard is not used, count must be 0 so
+						   we have nothing to fill in, here "DD" is just
+						   a placeholder that never got used.
+						 */
+						config.cost.wildcard === false ? new ExpedSType.DD()
+						: config.cost.wildcard === "DD" ? new ExpedSType.DD()
+						: config.cost.wildcard === "SS" ? new ExpedSType.SSLike()
+					    : "Invalid wildcard in config.cost";
+
+					if (typeof stype === "string")
+						throw stype;
+					let actualCompo =
+						ExpedMinCompo.concretizeComposition(config.cost.count)(stype)(minCompo);
+					let info = ExpedInfo.getInformation(eId);
+					let costModel = ExpedCostModel.normalCostModel;
+					let fleetMaxCost = ExpedCostModel.calcFleetMaxCost(costModel)(actualCompo);
+					if (! Maybe.isJust(fleetMaxCost)) {
+						throw "CostModel fails to compute a cost for current fleet composition"
+					} else {
+						fleetMaxCost = PartialUnsafe.unsafePartial(Maybe.fromJust)(fleetMaxCost);
+					}
+					console.log(info);
+					let fleetActualCost = fleetMaxCost.map( function(x) {
+						return {
+							fuel: Math.floor( info.fuelCostPercent * x.fuel ),
+							ammo: Math.floor( info.ammoCostPercent * x.ammo )
+						};
+					});
+					computedCost = mergeExpedCost( fleetActualCost );
+				} else {
+					computedCost = {
+						fuel: config.cost.fuel,
+						ammo: config.cost.ammo };
+				}
+
+				$(".cost .view.view_general .fuel", expedRow).text(String(-computedCost.fuel));
+				$(".cost .view.view_general .ammo", expedRow).text(String(-computedCost.ammo));
 
 				if (!costViewByGeneral) {
 					$(".cost .view.view_normal .limit", expedRow)
@@ -306,12 +357,7 @@
 
 					if (Maybe.isJust( costResult )) {
 						cell = $(".tab_expedtable .factory .cost_cell").clone();
-						let costSum = PartialUnsafe.unsafePartial(Maybe.fromJust)
-							(costResult).reduce( function(acc, cur) {
-							return { ammo: acc.ammo + cur.ammo,
-									 fuel: acc.fuel + cur.fuel };
-						}, {ammo: 0, fuel: 0});
-
+						let costSum = mergeExpedCost( PartialUnsafe.unsafePartial(Maybe.fromJust)(costResult) );
 						cell.data( "max-cost", costSum );
 					} else {
 						cell = $(".tab_expedtable .factory .cost_cell_na").clone();
