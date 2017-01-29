@@ -45,6 +45,17 @@
 			ammo: integer (non-negative)
 		  }
 	 */
+
+
+
+	// some PureScript librarys, imported locally.
+	let ExpedInfo = PS["KanColle.Expedition.New.Info"];
+	let ExpedSType = PS["KanColle.Expedition.New.SType"];
+	let ExpedCostModel = PS["KanColle.Expedition.New.CostModel"];
+	let ExpedMinCompo = PS["KanColle.Expedition.New.MinCompo"];
+	let Maybe = PS["Data.Maybe"];
+	let PartialUnsafe = PS["Partial.Unsafe"];
+
 	function getRandomInt(min,max) {
 		min = Math.ceil(min);
 		max = Math.floor(max);
@@ -103,6 +114,54 @@
 		}, {ammo: 0, fuel: 0});
 	}
 
+	function enumFromTo(from,to,step=1) {
+		var arr = [];
+		for (let i=from; i<=to; i+=step)
+			arr.push(i);
+		return arr;
+	}
+
+	function costConfigToActualCost(costConfig,eId) {
+		console.assert( costConfig.type === "costmodel" ||
+						costConfig.type === "custom" );
+		if (costConfig.type === "costmodel") {
+			let minCompo = ExpedMinCompo.getMinimumComposition(eId);
+			let stype =
+				/* when wildcard is not used, count must be 0 so
+				   we have nothing to fill in, here "DD" is just
+				   a placeholder that never got used.
+				*/
+				costConfig.wildcard === false ? new ExpedSType.DD()
+				: costConfig.wildcard === "DD" ? new ExpedSType.DD()
+				: costConfig.wildcard === "SS" ? new ExpedSType.SSLike()
+				: "Invalid wildcard in costConfig";
+
+			if (typeof stype === "string")
+				throw stype;
+			let actualCompo =
+				ExpedMinCompo.concretizeComposition(costConfig.count)(stype)(minCompo);
+			let info = ExpedInfo.getInformation(eId);
+			let costModel = ExpedCostModel.normalCostModel;
+			let fleetMaxCost = ExpedCostModel.calcFleetMaxCost(costModel)(actualCompo);
+			if (! Maybe.isJust(fleetMaxCost)) {
+				throw "CostModel fails to compute a cost for current fleet composition";
+			} else {
+				fleetMaxCost = PartialUnsafe.unsafePartial(Maybe.fromJust)(fleetMaxCost);
+			}
+			let fleetActualCost = fleetMaxCost.map( function(x) {
+				return {
+					fuel: Math.floor( info.fuelCostPercent * x.fuel ),
+					ammo: Math.floor( info.ammoCostPercent * x.ammo )
+				};
+			});
+			return mergeExpedCost( fleetActualCost );
+		} else {
+			return {
+				fuel: costConfig.fuel,
+				ammo: costConfig.ammo };
+		}
+	}
+
 	/*
 	  TODO: UI viewer and sorter.
 	  viewer: view by: net income / gross income / basic income, general config / allow normal config
@@ -110,17 +169,10 @@
 
 	  disabled whenever any of the expeditions are still under editing
 
+	  - hotzone coloring (based on number of completed expedtion)
 	 */
 
 	KC3StrategyTabs.expedtable = new KC3StrategyTab("expedtable");
-
-	// some PureScript librarys, imported locally.
-	let ExpedInfo = PS["KanColle.Expedition.New.Info"];
-	let ExpedSType = PS["KanColle.Expedition.New.SType"];
-	let ExpedCostModel = PS["KanColle.Expedition.New.CostModel"];
-	let ExpedMinCompo = PS["KanColle.Expedition.New.MinCompo"];
-	let Maybe = PS["Data.Maybe"];
-	let PartialUnsafe = PS["Partial.Unsafe"];
 
 	KC3StrategyTabs.expedtable.definition = {
 		tabSelf: KC3StrategyTabs.expedtable,
@@ -145,10 +197,8 @@
 				ExpedCostModel.normalCostModel(stypeInstance)(num);
 
 			// setup slider controls
-			let ticks = Array.from(Array(10 + 1).keys(), x => x * 10);
 			let sliderSettings = {
-				// ticks = [0,10..100]
-				ticks: Array.from(Array(10 + 1).keys(), x => x * 10),
+				ticks: enumFromTo(0,100,10),
 				step: 10,
 				// default of both fuel and ammo are 80%
 				value: 80,
@@ -235,14 +285,9 @@
 			let self = this;
 			// a random-generated configuration for debugging purpose
 			var expedConfig = generateRandomConfig();
-
 			var factory = $(".tab_expedtable .factory");
 			var expedTableRoot = $("#exped_table_content_root");
-
-			var allExpeds = [];
-			var i;
-			for (i=1; i<=40; ++i)
-				allExpeds.push(i);
+			let allExpeds = enumFromTo(1,40);
 
 			function makeWinItem( jqObj, winItemArr ) {
 				var itemId = winItemArr[0];
@@ -308,45 +353,7 @@
 						"x" + config.modifier.daihatsu);
 				}
 
-				let computedCost;
-
-				if (config.cost.type === "costmodel") {
-					let minCompo = ExpedMinCompo.getMinimumComposition(eId);
-					let stype =
-						/* when wildcard is not used, count must be 0 so
-						   we have nothing to fill in, here "DD" is just
-						   a placeholder that never got used.
-						 */
-						config.cost.wildcard === false ? new ExpedSType.DD()
-						: config.cost.wildcard === "DD" ? new ExpedSType.DD()
-						: config.cost.wildcard === "SS" ? new ExpedSType.SSLike()
-					    : "Invalid wildcard in config.cost";
-
-					if (typeof stype === "string")
-						throw stype;
-					let actualCompo =
-						ExpedMinCompo.concretizeComposition(config.cost.count)(stype)(minCompo);
-					let info = ExpedInfo.getInformation(eId);
-					let costModel = ExpedCostModel.normalCostModel;
-					let fleetMaxCost = ExpedCostModel.calcFleetMaxCost(costModel)(actualCompo);
-					if (! Maybe.isJust(fleetMaxCost)) {
-						throw "CostModel fails to compute a cost for current fleet composition";
-					} else {
-						fleetMaxCost = PartialUnsafe.unsafePartial(Maybe.fromJust)(fleetMaxCost);
-					}
-					let fleetActualCost = fleetMaxCost.map( function(x) {
-						return {
-							fuel: Math.floor( info.fuelCostPercent * x.fuel ),
-							ammo: Math.floor( info.ammoCostPercent * x.ammo )
-						};
-					});
-					computedCost = mergeExpedCost( fleetActualCost );
-				} else {
-					computedCost = {
-						fuel: config.cost.fuel,
-						ammo: config.cost.ammo };
-				}
-
+				let computedCost = costConfigToActualCost(config.cost,eId);
 				$(".cost .view.view_general .fuel", expedRow).text(String(-computedCost.fuel));
 				$(".cost .view.view_general .ammo", expedRow).text(String(-computedCost.ammo));
 
