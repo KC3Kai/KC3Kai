@@ -88,6 +88,12 @@ Used by SortieManager
 			enemyBeginHP += beginHPs.enemy[i];
 		}
 
+		// related comments:
+		// - https://github.com/KC3Kai/KC3Kai/issues/728#issuecomment-139681987
+		// - https://github.com/KC3Kai/KC3Kai/issues/1766#issuecomment-275883784
+		// the flooring behavior is intended and important.
+		// please do not change it unless it's proved to be more accurate than
+		// the formula referred to by the comments above.
 		var allyGaugeRate = Math.floor(allyGauge / allyBeginHP * 100);
 		var enemyGaugeRate = Math.floor(enemyGauge / enemyBeginHP * 100);
 		var equalOrMore = enemyGaugeRate > (0.9 * allyGaugeRate);
@@ -95,18 +101,20 @@ Used by SortieManager
 
 		// For long distance air raid
 		if ( (battleName||"").indexOf("ld_airbattle") >-1 ) {
-			if (allyGaugeRate <= 0)
+			let allyGaugeRateLD = Math.qckInt("floor", allyGauge / allyBeginHP * 100, 1);
+			if (allyGaugeRateLD <= 0)
 				return "SS";
-			else if (allyGaugeRate < 10)
+			else if (allyGaugeRateLD < 10)
 				return "A";
-			else if (allyGaugeRate < 20)
+			else if (allyGaugeRateLD < 20)
 				return "B";
-			else if (allyGaugeRate < 50)
+			else if (allyGaugeRateLD < 50)
 				return "C";
-			else if (allyGaugeRate < 80)
+			else if (allyGaugeRateLD < 80)
 				return "D";
 			return "E";
 		}
+
 		if (allySunkCount === 0) {
 			if (enemySunkCount === enemyCount) {
 				return allyGauge === 0 ? "SS" : "S";
