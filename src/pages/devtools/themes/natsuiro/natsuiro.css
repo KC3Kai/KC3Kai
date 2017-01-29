@@ -1739,10 +1739,12 @@ ABYSS FLEET
 	height: 35px;
 	float: left;
 	margin-right: 1px;
+	border: 1px solid #000;
+	border-radius: 20px;
 }
 .module.activity .activity_pvp .pvp_enemy_pic img {
-	width: 35px;
-	height: 35px;
+	width: 33px;
+	height: 33px;
 }
 .module.activity .activity_pvp .pvp_enemy_name {
 	width: 53px;
@@ -1820,7 +1822,7 @@ ABYSS FLEET
 
 .module.activity .activity_pvp .pvp_admiral {
 	width: 170px;
-	height: 84px;
+	height: 92px;
 	margin: 0px 0px 1px 0px;
 	white-space: nowrap;
 }
@@ -1844,6 +1846,7 @@ ABYSS FLEET
 .module.activity .activity_pvp .pvp_admiral .pvp_admiral_level {
 	width: 42px;
 	height: 15px;
+	line-height: 15px;
 	margin: 0px 1px 1px 0px;
 	float: left;
 }
@@ -1853,22 +1856,28 @@ ABYSS FLEET
 	float: left;
 }
 .module.activity .activity_pvp .pvp_admiral .pvp_admiral_rank {
-	width: 127px;
+	width: 76px;
 	height: 15px;
-	line-height: 17px;
-	margin: 0px 0px 1px 0px;
+	line-height: 15px;
+	margin: 0px 1px 1px 0px;
 	float: left;
 	font-size: 11px;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+.module.activity .activity_pvp .pvp_admiral .pvp_admiral_exp {
+	width: 50px;
+	height: 15px;
+	line-height: 15px;
+	float: left;
+	font-size: 11px;
 }
 .module.activity .activity_pvp .pvp_admiral .pvp_admiral_comment {
 	width: 170px;
 	height: 17px;
 	line-height: 17px;
 	padding: 0px 0px 0px 3px;
-	margin: 0px 0px 1px 0px;
-	float: left;
+	margin: 0px 0px 2px 0px;
 	color: #222;
 	font-size: 11px;
 	background-color: #eee;
@@ -1878,7 +1887,8 @@ ABYSS FLEET
 }
 .module.activity .activity_pvp .pvp_admiral .pvp_admiral_label {
 	width: 110px;
-	height: 15px;
+	height: 13px;
+	line-height: 13px;
 	margin: 0px 1px 1px 0px;
 	float: left;
 	overflow: hidden;
@@ -1889,9 +1899,9 @@ ABYSS FLEET
 .module.activity .activity_pvp .pvp_admiral .pvp_admiral_gears,
 .module.activity .activity_pvp .pvp_admiral .pvp_admiral_furniture {
 	width: 59px;
-	height: 15px;
+	height: 13px;
+	line-height: 13px;
 	margin: 0px 0px 1px 0px;
-	float: left;
 	font-size: 11px;
 }
 
@@ -1900,7 +1910,7 @@ ABYSS FLEET
 	height: 17px;
 	line-height: 17px;
 	padding: 0px 0px 0px 3px;
-	margin: 0px 0px 1px 0px;
+	margin: 1px 0px 2px 0px;
 	color: #222;
 	font-size: 11px;
 	background-color: #eee;
@@ -1911,13 +1921,13 @@ ABYSS FLEET
 }
 .module.activity .activity_pvp .pvp_fleet_list {
 	width: 170px;
-	height: 98px;
-	margin: 0px 0px 1px 0px;
+	height: 93px;
+	margin: 0px 0px 2px 0px;
 	white-space: nowrap;
 }
 .module.activity .activity_pvp .pvpFleetShip {
 	width: 83px;
-	height: 32px;
+	height: 30px;
 	margin: 0px 2px 1px 0px;
 	float: left;
 	font-size: 11px;
@@ -1926,45 +1936,93 @@ ABYSS FLEET
 	background-color: #555;
 }
 .module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_icon {
-	width: 30px;
-	height: 30px;
-	margin: 0px 2px 1px 0px;
+	width: 28px;
+	height: 28px;
+	margin: 0px 3px 1px 0px;
 	float: left;
 }
 .module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_icon img {
-	width: 30px;
-	height: 30px;
+	width: 28px;
+	height: 28px;
 }
 .module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_name {
 	width: 49px;
-	height: 15px;
+	height: 13px;
+	line-height: 13px;
 	margin: 0px 0px 1px 0px;
 	float: left;
 	overflow: hidden;
 }
 .module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_level {
-	width: 31px;
-	height: 15px;
+	width: 32px;
+	height: 13px;
+	line-height: 13px;
 	margin: 0px 0px 0px 0px;
 	float: left;
 }
 .module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_level .i18n {
+	width: 13px;
+	float: left;
+	overflow: hidden;
 	color: #3ec0bf;
+}
+.module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_level .value {
+	width: 19px;
+	float: left;
 }
 .module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_star {
 	width: 18px;
-	height: 15px;
+	height: 13px;
+	line-height: 13px;
 	margin: 0px 0px 0px 0px;
 	float: left;
 }
 .module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_star .star {
 	color: #eedab1;
 }
-.module.activity .activity_pvp .pvp_formation {
+.module.activity .activity_pvp .pvp_prediction {
 	width: 170px;
-	float: left;
-	margin: 0px 0px 1px 0px;
+	height: 15px;
+	line-height: 15px;
+	font-size: 11px;
+	margin: 2px 0px 1px 0px;
 	white-space: nowrap;
+}
+.module.activity .activity_pvp .pvp_base_exp {
+	width: 88px;
+	height: 15px;
+	float: left;
+	margin: 0px 1px 0px 0px;
+}
+.module.activity .activity_pvp .pvp_base_exp .i18n {
+	width: 59px;
+	float: left;
+	margin: 0px 1px 0px 0px;
+	color: #3ec0bf;
+	overflow: hidden;
+}
+.module.activity .activity_pvp .pvp_base_exp .value {
+	width: 28px;
+	float: left;
+}
+.module.activity .activity_pvp .pvp_formation {
+	width: 81px;
+	height: 15px;
+	float: left;
+}
+.module.activity .activity_pvp .pvp_formation .i18n {
+	width: 64px;
+	float: left;
+	margin: 0px 1px 0px 0px;
+	color: #3ec0bf;
+	overflow: hidden;
+}
+.module.activity .activity_pvp .pvp_formation img {
+	width: 15px;
+	height: 15px;
+	background-color: #fff;
+	border-radius: 10px;
+	vertical-align: inherit;
 }
 
 /*------- QUESTS -------*/

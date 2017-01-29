@@ -2317,13 +2317,23 @@
 			console.log("PvP Enemy Fleet", data);
 			$(".activity_pvp .pvp_admiral .pvp_admiral_name .value").text(data.api_nickname);
 			$(".activity_pvp .pvp_admiral .pvp_admiral_level .value").text(data.api_level);
-			$(".activity_pvp .pvp_admiral .pvp_admiral_rank").text(KC3Meta.rank(data.api_rank));
+			// why is this rank int ID, fml
+			$(".activity_pvp .pvp_admiral .pvp_admiral_rank").text(KC3Meta.rank(data.api_rank))
+				.attr("title", KC3Meta.rank(data.api_rank));
+			// guess nobody is interest in api_experience[1]?
+			$(".activity_pvp .pvp_admiral .pvp_admiral_exp").text(data.api_experience[0]);
 			$(".activity_pvp .pvp_admiral .pvp_admiral_comment").text(data.api_cmt);
 			$(".activity_pvp .pvp_admiral .pvp_admiral_ships").text("{0} /{1}".format(data.api_ship));
-			$(".activity_pvp .pvp_admiral .pvp_admiral_gears").text("{0} /{1}".format(data.api_slotitem));
+			$(".activity_pvp .pvp_admiral .pvp_admiral_gears").text("{0} /{1}".format(
+				data.api_slotitem[0],
+				// 3 fixed item space for everyone? fml
+				3 + data.api_slotitem[1]
+			));
 			$(".activity_pvp .pvp_admiral .pvp_admiral_furniture").text(data.api_furniture);
+			// This is not shown in game
 			$(".activity_pvp .pvp_fleet_name").text(data.api_deckname);
 			$(".activity_pvp .pvp_fleet_list").empty();
+			var levelFlagship = 0, level2ndShip = 0;
 			$.each(data.api_deck.api_ships, function(idx, ship){
 				if(ship.api_id > 0){
 					var shipBox = $("#factory .pvpFleetShip").clone();
@@ -2333,10 +2343,32 @@
 					var shipName = KC3Meta.shipName(shipMaster.api_name);
 					$(".pvp_fleet_ship_name", shipBox).text(shipName).attr("title", shipName);
 					$(".pvp_fleet_ship_level .value", shipBox).text(ship.api_level);
-					$(".pvp_fleet_ship_star .value", shipBox).text(1+ship.api_star);
+					if(idx === 0) levelFlagship = ship.api_level;
+					if(idx === 1) level2ndShip = ship.api_level;
+					$(".pvp_fleet_ship_star .value", shipBox).text(1 + ship.api_star);
 					shipBox.appendTo(".activity_pvp .pvp_fleet_list");
 				}
 			});
+			
+			var baseExp = 3 + Math.floor(KC3Meta.expShip(levelFlagship)[1] / 100 + KC3Meta.expShip(level2ndShip)[1] / 300);
+			if(baseExp > 500){
+				baseExp = Math.floor(500 + Math.sqrt(baseExp - 500));
+			}
+			$(".activity_pvp .pvp_base_exp .value").text(baseExp);
+			// TODO scan current selected fleet to detect position of CT and their levels
+			var baseExpS = Math.floor(baseExp * 1.2),
+				baseExpC = Math.floor(baseExp * 0.64),
+				baseExpD = Math.floor(baseExp * 0.56);
+			$(".activity_pvp .pvp_base_exp").attr("title",
+				"x1.2(S+): {0}\nx1 (A/B): {1}\nx0.64(C): {2}\nx0.56(D): {3}"
+				.format(baseExpS, baseExp, baseExpC, baseExpD)
+			);
+			// TODO predicts opponent's formation
+			var predictedFormation = 1;
+			$(".activity_pvp .pvp_formation img")
+				.attr("src", KC3Meta.formationIcon(predictedFormation))
+				.attr("title", KC3Meta.formationText(predictedFormation));
+			
 			$(".module.activity .activity_tab").removeClass("active");
 			$("#atab_activity").addClass("active");
 			$(".module.activity .activity_box").hide();
