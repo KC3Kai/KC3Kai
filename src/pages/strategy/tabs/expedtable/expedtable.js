@@ -369,6 +369,18 @@
 					$(this).text( expedRow.hasClass("active") ? "▼" : "◀");
 				});
 
+				// setup Income Modifier
+				let jqIMRoot = $(".exped_config .modifier .content", expedRow);
+				$("input[type=radio]", jqIMRoot).each( function() {
+					$(this).attr("name",  "modifier-" + eId );
+				});
+
+				// setup Resupply Cost
+				let jqCRoot = $(".exped_config .cost .content", expedRow);
+				$("input[type=radio]", jqCRoot).each( function() {
+					$(this).attr("name",  "cost-" + eId );
+				});
+				
 				expedTableRoot.append( expedRow );
 			});
 
