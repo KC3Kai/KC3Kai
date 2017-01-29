@@ -45,6 +45,14 @@
 			ammo: integer (non-negative)
 		  }
 	 */
+	/*
+	  TODO: UI viewer and sorter.
+	  viewer: view by: net income / gross income
+	  sorter: by exped id, fuel, ammo, etc.
+
+	  disabled whenever any of the expeditions are still under editing
+
+	 */
 
 	KC3StrategyTabs.expedtable = new KC3StrategyTab("expedtable");
 
