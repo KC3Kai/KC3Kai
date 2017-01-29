@@ -54,6 +54,7 @@
 	let ExpedMinCompo = PS["KanColle.Expedition.New.MinCompo"];
 	let Maybe = PS["Data.Maybe"];
 	let PartialUnsafe = PS["Partial.Unsafe"];
+	let fromJust = PartialUnsafe.unsafePartial(Maybe.fromJust);
 
 	function getRandomInt(min,max) {
 		min = Math.ceil(min);
@@ -163,7 +164,7 @@
 			if (! Maybe.isJust(fleetMaxCost)) {
 				throw "CostModel fails to compute a cost for current fleet composition";
 			} else {
-				fleetMaxCost = PartialUnsafe.unsafePartial(Maybe.fromJust)(fleetMaxCost);
+				fleetMaxCost = fromJust(fleetMaxCost);
 			}
 			let fleetActualCost = fleetMaxCost.map( function(x) {
 				return {
@@ -371,7 +372,7 @@
 
 					if (Maybe.isJust( costResult )) {
 						cell = $(".tab_expedtable .factory .cost_cell").clone();
-						let costArr = PartialUnsafe.unsafePartial(Maybe.fromJust)(costResult);
+						let costArr = fromJust(costResult);
 						cell.data( "max-cost-arr", costArr );
 					} else {
 						cell = $(".tab_expedtable .factory .cost_cell_na").clone();
