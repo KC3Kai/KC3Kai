@@ -14,6 +14,10 @@
 	margin: 0px 0px 3px 0px;
 }
 
+.tab_expedtable .exped_view .edit_btn {
+	-webkit-user-select: none;
+}
+
 .tab_expedtable .exped_row .exped_config {
 	/* configs are invisible by default */
 	display: none;
