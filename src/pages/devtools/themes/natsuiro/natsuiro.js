@@ -2364,9 +2364,10 @@
 				baseExpD  = Math.floor(baseExp * 0.56 * 0.8 * ctBonus);
 			$(".activity_pvp .pvp_base_exp .value").text(baseExpS);
 			$(".activity_pvp .pvp_base_exp").attr("title",
-				KC3Meta.term("PvpBaseExp") + ": {0}\n"
-				+ "x1.2(S+): {1}\nx1 (A/B): {2}\nx0.64(C): {3}\nx0.56(D): {4}"
-				.format(baseExp, baseExpS, baseExpAB, baseExpC, baseExpD)
+				("{0}: {1}\nx1.2(S+): {2}\nx1 (A/B): {3}\nx0.64(C): {4}\nx0.56(D): {5}"
+				 + ctBonus > 1 ? "\n(CT x{6})" : "")
+					.format(KC3Meta.term("PvpBaseExp"),
+						baseExp, baseExpS, baseExpAB, baseExpC, baseExpD, ctBonus)
 			);
 			var predictedFormation = playerFleet.predictOpponentFormation(
 				// Normalize opponent's fleet: convert Object to Array, remove -1 elements
