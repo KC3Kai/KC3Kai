@@ -80,11 +80,14 @@
 	}
 
 	function genCostNormal() {
-		return {
+		let retVal = {
 			type: "costmodel",
 			wildcard: [false,"DD","SS"][getRandomInt(0,2)],
 			count: getRandomInt(4,6)
 		};
+		if (retVal.wildcard === false)
+			retVal.count = 0;
+		return retVal;
 	}
 
 	function genCostCustom() {
@@ -427,13 +430,51 @@
 					$("select.dht",jqIMRoot).val(guessedDHT);
 				}
 
-
 				// setup Resupply Cost
 				let jqCRoot = $(".exped_config .cost .content", expedRow);
-				$("input[type=radio]", jqCRoot).each( function() {
-					$(this).attr("name",  "cost-" + eId );
-				});
+				$("input[type=radio]", jqCRoot)
+					.change( function() {
+						let isCostNormal = this.value === "normal";
+						$(".group.cost_normal *", jqCRoot)
+							.filter(":input").prop("disabled", !isCostNormal);
+						$(".group.cost_custom *", jqCRoot)
+							.filter(":input").prop("disabled", isCostNormal);
+					})
+					.each( function() {
+						$(this).attr("name",  "cost-" + eId );
+					});
+				
+				$("input[type=radio]", jqCRoot).filter(
+					"[value=" + (config.cost.type === "costmodel" 
+								 ? "normal" : "custom") + "]")
+					.prop("checked", true).change();
 
+				if (config.cost.type === "costmodel") {
+					// normal
+					$("select.wildcard",jqCRoot).val(
+						config.cost.wildcard === false 
+							? "None" : config.cost.wildcard);
+					$("select.count",jqCRoot).val( config.cost.count );
+
+					let actualCost = costConfigToActualCost( config.cost, eId );
+					$("input[type=text][name=fuel]", jqCRoot).val( actualCost.fuel );
+					$("input[type=text][name=ammo]", jqCRoot).val( actualCost.ammo );
+				} else {
+					// custom
+					$("input[type=text][name=fuel]", jqCRoot).val( config.cost.fuel );
+					$("input[type=text][name=ammo]", jqCRoot).val( config.cost.ammo );
+					// it's hard to guess info from cost.
+					// so let's just set everything to default:
+					// - if user requires great success, we set wildcard to DD with 6 ships.
+					// - otherwise, None with no ship.
+					let guessedGS = (config.modifier.type === "normal" 
+									 ? config.modifier.gs
+									 : config.modifier.value >= 1.5);
+					let guessedWildcard = guessedGS ? "DD" : "None";
+					let guessedCount = guessedGS ? 6 : 0;
+					$("select.wildcard",jqCRoot).val( guessedWildcard );
+					$("select.count",jqCRoot).val( guessedCount );
+				}
 				expedTableRoot.append( expedRow );
 			});
 
