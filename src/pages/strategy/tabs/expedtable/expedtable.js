@@ -4,44 +4,44 @@
 	  data format for expedition table:
 	  - for income modifier:
 
-	      - standard modifier:
+		  - standard modifier:
 
 		  { type: "normal",
-	        gs: true / false,
+			gs: true / false,
 			daihatsu: 0 ~ 4
 		  }
 
-			  - "gs" indicates whether great success is intended
-			  - whoever saves the data is responsible for its consistency
-			    if say daihatsu value turns out to be 5, that's not my fault
+		  - "gs" indicates whether great success is intended
+		  - whoever saves the data is responsible for its consistency
+				if say daihatsu value turns out to be 5, that's not my fault
 
 		  - custom modifier:
 
-          { type: "custom",
-		    value: a number, from 1.0 to perhaps 2.0 (meaning 100% ~ 200%)
+		  { type: "custom",
+			value: a number, from 1.0 to perhaps 2.0 (meaning 100% ~ 200%)
 		  }
 
-		      - great success should be taken into account by custom modifier.
-			    which means if user intends to carry 4 daihatsus and ensure GS,
+			  - great success should be taken into account by custom modifier.
+				which means if user intends to carry 4 daihatsus and ensure GS,
 				this value needs to be 1.8 (1.5 * 1.2)
 			  - the design decision is made in this way so that if future update
-                adds some mechanism that affect GS modifier, we will still be flexible.
+				adds some mechanism that affect GS modifier, we will still be flexible.
 
 	  - for cost:
-	      - cost deals with the problem that user might carry extra ships for
-            a higher GS rate.
+		  - cost deals with the problem that user might carry extra ships for
+			a higher GS rate.
 
-	      - standard:
+		  - standard:
 		  { type: "costmodel",
 
-		    wildcard: "DD" / "SS" / false,
+			wildcard: "DD" / "SS" / false,
 			count: 0 ~ 6 (but make it only possible to select 4~6 from UI)
 		  }
 
 		  - custom:
 
 		  { type: "custom",
-		    fuel: integer (non-negative),
+			fuel: integer (non-negative),
 			ammo: integer (non-negative)
 		  }
 
@@ -206,7 +206,7 @@
 			// finally tie break by exped id
 			return a.id - b.id;
 		});
-		
+
 		let currentGrp = false;
 		let grouped = [];
 
@@ -454,7 +454,7 @@
 						.append($(
 							"<img>",
 							{src: "../../assets/img/client/"+idToItem[itemId]+".png"}))
-					    .append("x" + winItemArr[1]);
+						.append("x" + winItemArr[1]);
 				} else {
 					jqObj.text( "-" );
 				}
@@ -481,7 +481,7 @@
 				// a local to this UI setup function, used as an internal state
 				// to indicate whether we need to re-update config part of UI.
 				let configSynced = false;
-				
+
 				$(".edit_btn", expedRow).on("click", function() {
 					expedRow.toggleClass("active");
 					let expanding = expedRow.hasClass("active");
@@ -501,7 +501,7 @@
 						if (configSynced) {
 							// console.log( "config UI is already synced, skipping UI update" );
 						} else {
-							self.setupExpedConfig(configRoot, config, eId); 
+							self.setupExpedConfig(configRoot, config, eId);
 							configSynced = true;
 						}
 					} else {
@@ -606,7 +606,7 @@
 				$("input[type=checkbox][name=gs]",jqIMRoot)
 					.prop("checked", config.modifier.gs);
 				$("select.dht",jqIMRoot).val(config.modifier.daihatsu);
-				
+
 				$("input.custom_val[type=text]",jqIMRoot)
 					.val( prettyFloat(normalModifierToNumber(config.modifier)) );
 			} else {
@@ -616,8 +616,8 @@
 
 				// now let's guess what could be the corresponding setting for normal config
 				let guessedGS = config.modifier.value >= 1.5;
-				let valBeforeGS = guessedGS 
-					? config.modifier.value / 1.5 
+				let valBeforeGS = guessedGS
+					? config.modifier.value / 1.5
 					: config.modifier.value;
 				let guessedDHT = Math.floor((valBeforeGS - 1)/0.05);
 				guessedDHT = saturate(guessedDHT,0,4);
@@ -630,14 +630,14 @@
 			let jqCRoot = $(".cost .content", jqConfigRoot);
 
 			$("input[type=radio]", jqCRoot).filter(
-				"[value=" + (config.cost.type === "costmodel" 
+				"[value=" + (config.cost.type === "costmodel"
 							 ? "normal" : "custom") + "]")
 				.prop("checked", true).change();
 
 			if (config.cost.type === "costmodel") {
 				// normal
 				$("select.wildcard",jqCRoot).val(
-					config.cost.wildcard === false 
+					config.cost.wildcard === false
 						? "None" : config.cost.wildcard);
 				$("select.count",jqCRoot).val( config.cost.count );
 
@@ -652,7 +652,7 @@
 				// so let's just set everything to default:
 				// - if user requires great success, we set wildcard to DD with 6 ships.
 				// - otherwise, None with no ship.
-				let guessedGS = (config.modifier.type === "normal" 
+				let guessedGS = (config.modifier.type === "normal"
 								 ? config.modifier.gs
 								 : config.modifier.value >= 1.5);
 				let guessedWildcard = guessedGS ? "DD" : "None";
@@ -665,7 +665,7 @@
 		getExpedConfig: function(jqConfigRoot, eId) {
 			let modifier = {};
 			let jqIMRoot = $(".modifier .content", jqConfigRoot);
-			
+
 			modifier.type = $("input[type=radio]:checked", jqIMRoot).val();
 			console.assert( modifier.type === "normal" ||
 							modifier.type === "custom" );
@@ -681,9 +681,9 @@
 				// but let's assume user knows what he is done and be more permissive.
 				modifier.value = saturate(parseFloat( modifier.value ) || 1.0,
 										  0.5, 4.0);
-				
+
 				// update user input to prevent UI out-of-sync due to normalization
-				$("input.custom_val[type=text]",jqIMRoot).val( modifier.value );				
+				$("input.custom_val[type=text]",jqIMRoot).val( modifier.value );
 			}
 
 			let cost = {};
@@ -723,7 +723,7 @@
 				cost.ammo = normalize(cost.ammo);
 
 				// update user input to prevent UI out-of-sync due to normalization
-				$("input[type=text][name=fuel]", jqCRoot).val( cost.fuel );				
+				$("input[type=text][name=fuel]", jqCRoot).val( cost.fuel );
 				$("input[type=text][name=ammo]", jqCRoot).val( cost.ammo );
 			}
 
