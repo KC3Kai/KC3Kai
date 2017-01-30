@@ -2358,16 +2358,18 @@
 			var playerFleet = PlayerManager.fleets[selectedFleet > 4 ? 0 : selectedFleet - 1];
 			var ctBonus = playerFleet.lookupKatoriClassBonus();
 			// Variant of battle rank
-			var baseExpS  = Math.floor(baseExp * 1.2 * ctBonus),
-				baseExpAB = Math.floor(baseExp * 1.0 * ctBonus),
-				baseExpC  = Math.floor(baseExp * 0.64 * ctBonus),
-				baseExpD  = Math.floor(baseExp * 0.56 * 0.8 * ctBonus);
+			var baseExpWoCT = Math.floor(baseExp * 1.2),
+				baseExpS  = Math.floor(Math.floor(baseExp * 1.2) * ctBonus),
+				baseExpAB = Math.floor(Math.floor(baseExp * 1.0) * ctBonus),
+				baseExpC  = Math.floor(Math.floor(baseExp * 0.64) * ctBonus),
+				baseExpD  = Math.floor(Math.floor(Math.floor(baseExp * 0.56) * 0.8) * ctBonus);
 			$(".activity_pvp .pvp_base_exp .value").text(baseExpS);
 			$(".activity_pvp .pvp_base_exp").attr("title",
-				("{0}: {1}\nx1.2(S+): {2}\nx1 (A/B): {3}\nx0.64(C): {4}\nx0.56(D): {5}"
-				 + ctBonus > 1 ? "\n(CT x{6})" : "")
+				("{0}: {1}\nSS/S: {2}\nA/B: {3}\nC: {4}\nD: {5}"
+				 + (ctBonus > 1 ? "\n{6}: {7}" : ""))
 					.format(KC3Meta.term("PvpBaseExp"),
-						baseExp, baseExpS, baseExpAB, baseExpC, baseExpD, ctBonus)
+						baseExp, baseExpS, baseExpAB, baseExpC, baseExpD,
+						KC3Meta.term("PvpDispBaseExpWoCT").format(ctBonus), baseExpWoCT)
 			);
 			var predictedFormation = playerFleet.predictOpponentFormation(
 				// Normalize opponent's fleet: convert Object to Array, remove -1 elements

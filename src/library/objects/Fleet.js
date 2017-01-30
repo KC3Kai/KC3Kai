@@ -823,21 +823,27 @@ Contains summary information about a fleet and its 6 ships
 	 */
 	KC3Fleet.prototype.lookupKatoriClassBonus = function() {
 		var ctBonusTable = [
+			// ~9,  ~29,  ~59,  ~99, ~155?
 			[ 1.0,  1.0,  1.0,  1.0,  1.0], // No CT
 			[1.05, 1.08, 1.12, 1.15, 1.20], // CT x 1 as flagship
 			[1.03, 1.05, 1.07, 1.10, 1.15], // CT x 1
 			[1.10, 1.13, 1.16, 1.20, 1.25], // CT x 2, 1 flagship
 			[1.04, 1.06, 1.08, 1.12, 1.175] // CT x 2
 		];
-		var maxCtLevel = 0, katoriIndex = 0;
+		var fsCtLevel = 0, maxCtLevel = 0, katoriIndex = 0;
 		this.ship(function(rid, idx, ship){
 			if(ship.master().api_stype == 21){
 				if(ship.level > maxCtLevel) maxCtLevel = ship.level;
-				if(idx === 0) katoriIndex = 1;
-				else katoriIndex = katoriIndex < 3 ?
-					katoriIndex + 2 : katoriIndex;
+				if(idx === 0){
+					katoriIndex = 1;
+					fsCtLevel = ship.level;
+				} else {
+					katoriIndex = katoriIndex < 3 ?
+						katoriIndex + 2 : katoriIndex;
+				}
 			}
 		});
+		if(katoriIndex === 3) maxCtLevel = fsCtLevel;
 		var levelIndex =
 			(maxCtLevel < 10)  ? 0 :
 			(maxCtLevel < 30)  ? 1 :
