@@ -477,6 +477,9 @@
 				makeWinItem( $(".info_col.item2", expedRow), masterInfo.api_win_item2 );
 
 				self.setupExpedView(expedRow, config, eId);
+				// a local to this UI setup function, used as an internal state
+				// to indicate whether we need to re-update config part of UI.
+				let configSynced = false;
 				
 				$(".edit_btn", expedRow).on("click", function() {
 					expedRow.toggleClass("active");
@@ -484,26 +487,34 @@
 					let configRoot = $(".exped_config", expedRow);
 					$(this).text( expanding ? "▼" : "◀");
 					if (expanding) {
-						// when expanding, we need to put configs on UI
-						// (TODO) later we can prevent reseting UI every time
-						// if user has modified nothing.
+						// when expanding, we need to put configs on UI.
+
+						// we prevent reseting UI every time
+						// if nothing has been changed,
+						// local variable "configSynced" is used as an indicator
+						// to tell whether we need to update the config part of UI
 
 						// intentionally shadowing "config",
 						// and now we have the latest "config".
 						let config = expedConfig[eId];
-						self.setupExpedConfig(configRoot, config, eId); 
+						if (configSynced) {
+							// console.log( "config UI is already synced, skipping UI update" );
+						} else {
+							self.setupExpedConfig(configRoot, config, eId); 
+							configSynced = true;
+						}
 					} else {
 						// collapsing
 						// construct new config from UI.
 						let newConfig = self.getExpedConfig(configRoot, eId);
 						if (eqConfig(expedConfig[eId], newConfig)) {
-							console.log( "config is not changed, skipping UI update." );
+							// console.log( "config is not changed, skipping UI update." );
 						} else {
 							expedConfig[eId] = newConfig;
 							self.setupExpedView(expedRow, newConfig, eId);
+							configSynced = false;
 						}
 					}
-
 				});
 
 				// setup Income Modifier
@@ -669,6 +680,9 @@
 				// but let's assume user knows what he is done and be more permissive.
 				modifier.value = saturate(parseFloat( modifier.value ) || 1.0,
 										  0.5, 4.0);
+				
+				// update user input to prevent UI out-of-sync due to normalization
+				$("input.custom_val[type=text]",jqIMRoot).val( modifier.value );				
 			}
 
 			let cost = {};
@@ -700,10 +714,16 @@
 					// limit cost range to 0~1000, sounds like a permissive range
 					return saturate(raw,0,1000);
 				};
+
 				cost.fuel = $("input[type=text][name=fuel]", jqCRoot).val();
 				cost.fuel = normalize(cost.fuel);
+
 				cost.ammo = $("input[type=text][name=ammo]", jqCRoot).val();
 				cost.ammo = normalize(cost.ammo);
+
+				// update user input to prevent UI out-of-sync due to normalization
+				$("input[type=text][name=fuel]", jqCRoot).val( cost.fuel );				
+				$("input[type=text][name=ammo]", jqCRoot).val( cost.ammo );
 			}
 
 			return {modifier, cost};
