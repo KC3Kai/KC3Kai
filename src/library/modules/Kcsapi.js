@@ -1878,6 +1878,10 @@ Previously known as "Reactor"
 			if(typeof response.api_data.api_air_base !== "undefined") {
 				PlayerManager.setBases(response.api_data.api_air_base);
 				KC3Network.trigger("Lbas");
+			} else if(PlayerManager.bases[0].map > 0) {
+				// Clean land bases after event if World 6 not opened
+				PlayerManager.setBases([]);
+				KC3Network.trigger("Lbas");
 			}
 		},
 		
