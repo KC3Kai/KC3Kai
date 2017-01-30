@@ -672,13 +672,13 @@
 				}
 			} else {
 				// custom
-				function normalize(raw) {
+				let normalize = (raw) => {
 					raw = parseInt(raw,10) || 0;
 					// in case user decides to put down a negative value
 					raw = Math.abs(raw);
 					// limit cost range to 0~1000, sounds like a permissive range
 					return saturate(raw,0,1000);
-				}
+				};
 				cost.fuel = $("input[type=text][name=fuel]", jqCRoot).val();
 				cost.fuel = normalize(cost.fuel);
 				cost.ammo = $("input[type=text][name=ammo]", jqCRoot).val();
