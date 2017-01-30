@@ -880,9 +880,9 @@ Contains summary information about a fleet and its 6 ships
 			&& [13, 14].indexOf(opponentFlagshipMst.api_stype) > -1){
 			return 4; // Echelon
 		}
-		// flagship is CV/CVL/AV and ships >= 5 in enemy fleet
+		// flagship is CV/CVL/AV/CVB and ships >= 5 in enemy fleet
 		if(opponentFleetShips.length >= 5
-			&& [7, 11, 16].indexOf(opponentFlagshipMst.api_stype) > -1){
+			&& [7, 11, 16, 18].indexOf(opponentFlagshipMst.api_stype) > -1){
 			return 3; // Diamond
 		}
 		return 1; // Line Ahead
