@@ -457,43 +457,8 @@
 				makeWinItem( $(".info_col.item1", expedRow), masterInfo.api_win_item1 );
 				makeWinItem( $(".info_col.item2", expedRow), masterInfo.api_win_item2 );
 
-				var modViewByGeneral = config.modifier.type !== "normal";
-				$(".modifier .view.view_general", expedRow).toggle( modViewByGeneral );
-				$(".modifier .view.view_normal", expedRow).toggle( !modViewByGeneral );
-
-				var costViewByGeneral = config.cost.type !== "costmodel" ||
-					(config.cost.type === "costmodel" &&
-					 config.cost.wildcard === false);
-				$(".cost .view.view_general", expedRow).toggle( costViewByGeneral );
-				$(".cost .view.view_normal", expedRow).toggle( !costViewByGeneral );
-
-				var generalModifier = config.modifier.type === "normal"
-					? normalModifierToNumber(config.modifier)
-					: config.modifier.value;
-
-				$(".modifier .view.view_general", expedRow).text(
-					"+" + prettyFloat((generalModifier-1.0)*100) + "%");
-
-				if (config.modifier.type === "normal") {
-					$(".modifier .view.view_normal img.gs", expedRow).attr(
-						"src", config.modifier.gs
-							? "../../assets/img/ui/btn-gs.png"
-							: "../../assets/img/ui/btn-xgs.png" );
-					$(".modifier .view.view_normal .dht_times", expedRow).text(
-						"x" + config.modifier.daihatsu);
-				}
-
-				let computedCost = costConfigToActualCost(config.cost,eId);
-				$(".cost .view.view_general .fuel", expedRow).text(String(-computedCost.fuel));
-				$(".cost .view.view_general .ammo", expedRow).text(String(-computedCost.ammo));
-
-				if (!costViewByGeneral) {
-					$(".cost .view.view_normal .limit", expedRow)
-						.text("≥" + config.cost.count);
-					$(".cost .view.view_normal .wildcard", expedRow)
-						.text("(*=" + config.cost.wildcard + ")");
-				}
-
+				self.setupExpedView(expedRow, config, eId);
+				
 				$(".edit_btn", expedRow).on("click", function() {
 					expedRow.toggleClass("active");
 					let expanding = expedRow.hasClass("active");
@@ -502,7 +467,7 @@
 					if (expanding) {
 						// when expanding, we need to put configs on UI
 						// (TODO) later we can prevent reseting UI every time
-						// if user has modifiered nothing.
+						// if user has modified nothing.
 
 						// intentionally shadowing "config",
 						// and now we have the latest "config".
@@ -554,6 +519,48 @@
 			self.setupCostModelSection();
 		},
 
+		// the "setup" does not include UI initialization, just those that can be changed due to
+		// the change of a config.
+		setupExpedView: function(jqViewRoot, config, eId) {
+			let modViewByGeneral = config.modifier.type !== "normal";
+			$(".modifier .view.view_general", jqViewRoot).toggle( modViewByGeneral );
+			$(".modifier .view.view_normal", jqViewRoot).toggle( !modViewByGeneral );
+
+			let costViewByGeneral = config.cost.type !== "costmodel" ||
+				(config.cost.type === "costmodel" &&
+				 config.cost.wildcard === false);
+			$(".cost .view.view_general", jqViewRoot).toggle( costViewByGeneral );
+			$(".cost .view.view_normal", jqViewRoot).toggle( !costViewByGeneral );
+
+			let generalModifier = config.modifier.type === "normal"
+				? normalModifierToNumber(config.modifier)
+				: config.modifier.value;
+
+			$(".modifier .view.view_general", jqViewRoot).text(
+				"+" + prettyFloat((generalModifier-1.0)*100) + "%");
+
+			if (config.modifier.type === "normal") {
+				$(".modifier .view.view_normal img.gs", jqViewRoot).attr(
+					"src", config.modifier.gs
+						? "../../assets/img/ui/btn-gs.png"
+						: "../../assets/img/ui/btn-xgs.png" );
+				$(".modifier .view.view_normal .dht_times", jqViewRoot).text(
+					"x" + config.modifier.daihatsu);
+			}
+
+			let computedCost = costConfigToActualCost(config.cost,eId);
+			$(".cost .view.view_general .fuel", jqViewRoot).text(String(-computedCost.fuel));
+			$(".cost .view.view_general .ammo", jqViewRoot).text(String(-computedCost.ammo));
+			if (!costViewByGeneral) {
+				$(".cost .view.view_normal .limit", jqViewRoot)
+					.text("≥" + config.cost.count);
+				$(".cost .view.view_normal .wildcard", jqViewRoot)
+					.text("(*=" + config.cost.wildcard + ")");
+			}
+		},
+
+		// the "setup" does not include UI initialization, just those that can be changed due to
+		// the change of a config.
 		setupExpedConfig: function(jqConfigRoot, config, eId) {
 			let jqIMRoot = $(".modifier .content", jqConfigRoot);
 
