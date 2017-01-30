@@ -1,7 +1,7 @@
 (function(){
 	"use strict";
 	/*
-	  (TODO) data format for expedition table:
+	  data format for expedition table:
 	  - for income modifier:
 
 	      - standard modifier:
@@ -288,7 +288,8 @@
 	  disabled whenever any of the expeditions are still under editing
 
 	  - hotzone coloring (based on number of completed expedtion)
-	  - error message on config save.
+
+	  - generate config using data from exped table of devtools
 
 	 */
 
@@ -332,9 +333,9 @@
 			let tableBody = $("tbody",tableRoot);
 			function updateCostModelTable( which, newValue ){
 				console.assert( which === "fuel" || which === "ammo" );
-				(  which === "fuel" ? viewFuelPercent
-				   : which === "ammo" ? viewAmmoPercent
-				   : undefined ).text( newValue + "%" );
+				( which === "fuel" ? viewFuelPercent
+				  : which === "ammo" ? viewAmmoPercent
+				  : undefined ).text( newValue + "%" );
 
 				let actualPercent = (newValue + 0.0) / 100.0;
 				$(".cost_cell", tableBody).each( function() {
