@@ -496,10 +496,28 @@
 
 				$(".edit_btn", expedRow).on("click", function() {
 					expedRow.toggleClass("active");
-					$(this).text( expedRow.hasClass("active") ? "▼" : "◀");
-					// TODO: 
-					// - config => UI on expand,
-					// - UI => config on collapse. (and then config => UI on view zone)
+					let expanding = expedRow.hasClass("active");
+					let configRoot = $(".exped_config", expedRow);
+					$(this).text( expanding ? "▼" : "◀");
+					if (expanding) {
+						// when expanding, we need to put configs on UI
+						// (TODO) later we can prevent reseting UI every time
+						// if user has modifiered nothing.
+
+						// intentionally shadowing "config",
+						// and now we have the latest "config".
+						let config = expedConfig[eId];
+						self.setupExpedConfig(configRoot, config, eId); 
+					} else {
+						// collapsing
+						// construct new config from UI.
+						let newConfig = self.getExpedConfig(configRoot, eId);
+						expedConfig[eId] = newConfig;
+						// TODO: config equiality check to save some time.
+
+						// TODO: reflect config change on UI
+					}
+
 				});
 
 				// setup Income Modifier
@@ -529,7 +547,7 @@
 					.each( function() {
 						$(this).attr("name",  "cost-" + eId );
 					});
-				self.setupExpedConfig($(".exped_config", expedRow), config, eId); 
+
 				expedTableRoot.append( expedRow );
 			});
 
@@ -537,7 +555,6 @@
 		},
 
 		setupExpedConfig: function(jqConfigRoot, config, eId) {
-			console.log(jqConfigRoot);
 			let jqIMRoot = $(".modifier .content", jqConfigRoot);
 
 			$("input[type=radio]", jqIMRoot).filter("[value=" + config.modifier.type + "]")
@@ -603,6 +620,65 @@
 				$("select.wildcard",jqCRoot).val( guessedWildcard );
 				$("select.count",jqCRoot).val( guessedCount );
 			}
+		},
+
+		getExpedConfig: function(jqConfigRoot, eId) {
+			let modifier = {};
+			let jqIMRoot = $(".modifier .content", jqConfigRoot);
+			
+			modifier.type = $("input[type=radio]:checked", jqIMRoot).val();
+			console.assert( modifier.type === "normal" ||
+							modifier.type === "custom" );
+
+			if (modifier.type === "normal") {
+				modifier.gs = $("input[type=checkbox][name=gs]",jqIMRoot).prop("checked");
+				modifier.daihatsu = parseInt(
+					$("select.dht",jqIMRoot).val(), 10);
+			} else {
+				modifier.value = $("input.custom_val[type=text]",jqIMRoot).val();
+				// parse value, and then limit its range to 0.5 ~ 4.0.
+				// a more practical range would be 1.0 ~ 1.95(=1.5*1.30)
+				// but let's assume user knows what he is done and be more permissive.
+				modifier.value = saturate(parseFloat( modifier.value ) || 1.0,
+										  0.5, 4.0);
+			}
+
+			let cost = {};
+			let jqCRoot = $(".cost .content", jqConfigRoot);
+
+			cost.type = $("input[type=radio]:checked", jqCRoot).val();
+			console.assert( cost.type === "normal" ||
+							cost.type === "custom" );
+			if (cost.type === "normal") {
+				cost.type = "costmodel";
+				cost.wildcard = $("select.wildcard",jqCRoot).val();
+				console.assert( ["None", "SS", "DD"].indexOf(cost.wildcard) !== -1);
+				if (cost.wildcard === "None") {
+					cost.wildcard = false;
+					// force count to be 0, no matter what user sets.
+					cost.count = 0;
+				} else {
+					cost.count = $("select.count",jqCRoot).val();
+					cost.count = parseInt(cost.count, 10);
+					console.assert( typeof cost.count === "number" &&
+									cost.count >= 0 && cost.count <= 6);
+				}
+			} else {
+				// custom
+				function normalize(raw) {
+					raw = parseInt(raw,10) || 0;
+					// in case user decides to put down a negative value
+					raw = Math.abs(raw);
+					// limit cost range to 0~1000, sounds like a permissive range
+					return saturate(raw,0,1000);
+				}
+				cost.fuel = $("input[type=text][name=fuel]", jqCRoot).val();
+				cost.fuel = normalize(cost.fuel);
+				cost.ammo = $("input[type=text][name=ammo]", jqCRoot).val();
+				cost.ammo = normalize(cost.ammo);
+			}
+
+			return {modifier, cost};
 		},
 
 		/* UPDATE: optional
