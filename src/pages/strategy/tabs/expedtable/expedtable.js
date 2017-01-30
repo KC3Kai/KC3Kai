@@ -129,10 +129,12 @@
 		return (modConfig.gs ? 1.5 : 1.0)*(1.0+0.05*modConfig.daihatsu);
 	}
 
-	function prettyFloat(n,precision=2) {
+	function prettyFloat(n,precision=2,positiveSign=false) {
 		let fixed = n.toFixed(precision);
 		let str = String(n);
-		return (str.length <= fixed.length) ? str : fixed;
+		// we want "0" to be "+0"
+		let pre = (positiveSign && n >= 0) ? "+" : "";
+		return pre + ((str.length <= fixed.length) ? str : fixed);
 	}
 
 	function saturate(v,min,max) {
@@ -573,8 +575,9 @@
 				? normalModifierToNumber(config.modifier)
 				: config.modifier.value;
 
+			let gainPercent = (generalModifier-1.0)*100;
 			$(".modifier .view.view_general", jqViewRoot).text(
-				"+" + prettyFloat((generalModifier-1.0)*100) + "%");
+				prettyFloat(gainPercent,2,true) + "%");
 
 			if (config.modifier.type === "normal") {
 				$(".modifier .view.view_normal img.gs", jqViewRoot).attr(
