@@ -291,6 +291,10 @@
 
 	  - generate config using data from exped table of devtools
 
+	  - localStorage
+
+	  - re-format data format
+
 	 */
 
 	KC3StrategyTabs.expedtable = new KC3StrategyTab("expedtable");
