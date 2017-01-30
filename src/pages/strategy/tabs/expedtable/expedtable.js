@@ -516,35 +516,6 @@
 						$(this).attr("name",  "modifier-" + eId );
 					});
 
-				$("input[type=radio]", jqIMRoot).filter("[value=" + config.modifier.type + "]")
-					.prop("checked", true).change();
-
-				// we try to fill in as much as info as we can for the other option.
-				if (config.modifier.type === "normal") {
-					// normal
-					$("input[type=checkbox][name=gs]",jqIMRoot)
-						.prop("checked", config.modifier.gs);
-					$("select.dht",jqIMRoot).val(config.modifier.daihatsu);
-					
-					$("input.custom_val[type=text]",jqIMRoot)
-						.val( prettyFloat(normalModifierToNumber(config.modifier)) );
-				} else {
-					// custom
-					$("input.custom_val[type=text]",jqIMRoot)
-						.val( config.modifier.value );
-
-					// now let's guess what could be the corresponding setting for normal config
-					let guessedGS = config.modifier.value >= 1.5;
-					let valBeforeGS = guessedGS 
-						? config.modifier.value / 1.5 
-						: config.modifier.value;
-					let guessedDHT = Math.floor((valBeforeGS - 1)/0.05);
-					guessedDHT = saturate(guessedDHT,0,4);
-					$("input[type=checkbox][name=gs]",jqIMRoot)
-						.prop("checked", guessedGS);
-					$("select.dht",jqIMRoot).val(guessedDHT);
-				}
-
 				// setup Resupply Cost
 				let jqCRoot = $(".exped_config .cost .content", expedRow);
 				$("input[type=radio]", jqCRoot)
@@ -558,42 +529,80 @@
 					.each( function() {
 						$(this).attr("name",  "cost-" + eId );
 					});
-				
-				$("input[type=radio]", jqCRoot).filter(
-					"[value=" + (config.cost.type === "costmodel" 
-								 ? "normal" : "custom") + "]")
-					.prop("checked", true).change();
-
-				if (config.cost.type === "costmodel") {
-					// normal
-					$("select.wildcard",jqCRoot).val(
-						config.cost.wildcard === false 
-							? "None" : config.cost.wildcard);
-					$("select.count",jqCRoot).val( config.cost.count );
-
-					let actualCost = costConfigToActualCost( config.cost, eId );
-					$("input[type=text][name=fuel]", jqCRoot).val( actualCost.fuel );
-					$("input[type=text][name=ammo]", jqCRoot).val( actualCost.ammo );
-				} else {
-					// custom
-					$("input[type=text][name=fuel]", jqCRoot).val( config.cost.fuel );
-					$("input[type=text][name=ammo]", jqCRoot).val( config.cost.ammo );
-					// it's hard to guess info from cost.
-					// so let's just set everything to default:
-					// - if user requires great success, we set wildcard to DD with 6 ships.
-					// - otherwise, None with no ship.
-					let guessedGS = (config.modifier.type === "normal" 
-									 ? config.modifier.gs
-									 : config.modifier.value >= 1.5);
-					let guessedWildcard = guessedGS ? "DD" : "None";
-					let guessedCount = guessedGS ? 6 : 0;
-					$("select.wildcard",jqCRoot).val( guessedWildcard );
-					$("select.count",jqCRoot).val( guessedCount );
-				}
+				self.setupExpedConfig($(".exped_config", expedRow), config, eId); 
 				expedTableRoot.append( expedRow );
 			});
 
 			self.setupCostModelSection();
+		},
+
+		setupExpedConfig: function(jqConfigRoot, config, eId) {
+			console.log(jqConfigRoot);
+			let jqIMRoot = $(".modifier .content", jqConfigRoot);
+
+			$("input[type=radio]", jqIMRoot).filter("[value=" + config.modifier.type + "]")
+				.prop("checked", true).change();
+
+			// we try to fill in as much as info as we can for the other option.
+			if (config.modifier.type === "normal") {
+				// normal
+				$("input[type=checkbox][name=gs]",jqIMRoot)
+					.prop("checked", config.modifier.gs);
+				$("select.dht",jqIMRoot).val(config.modifier.daihatsu);
+				
+				$("input.custom_val[type=text]",jqIMRoot)
+					.val( prettyFloat(normalModifierToNumber(config.modifier)) );
+			} else {
+				// custom
+				$("input.custom_val[type=text]",jqIMRoot)
+					.val( config.modifier.value );
+
+				// now let's guess what could be the corresponding setting for normal config
+				let guessedGS = config.modifier.value >= 1.5;
+				let valBeforeGS = guessedGS 
+					? config.modifier.value / 1.5 
+					: config.modifier.value;
+				let guessedDHT = Math.floor((valBeforeGS - 1)/0.05);
+				guessedDHT = saturate(guessedDHT,0,4);
+				$("input[type=checkbox][name=gs]",jqIMRoot)
+					.prop("checked", guessedGS);
+				$("select.dht",jqIMRoot).val(guessedDHT);
+			}
+
+			// setup Resupply Cost
+			let jqCRoot = $(".cost .content", jqConfigRoot);
+
+			$("input[type=radio]", jqCRoot).filter(
+				"[value=" + (config.cost.type === "costmodel" 
+							 ? "normal" : "custom") + "]")
+				.prop("checked", true).change();
+
+			if (config.cost.type === "costmodel") {
+				// normal
+				$("select.wildcard",jqCRoot).val(
+					config.cost.wildcard === false 
+						? "None" : config.cost.wildcard);
+				$("select.count",jqCRoot).val( config.cost.count );
+
+				let actualCost = costConfigToActualCost( config.cost, eId );
+				$("input[type=text][name=fuel]", jqCRoot).val( actualCost.fuel );
+				$("input[type=text][name=ammo]", jqCRoot).val( actualCost.ammo );
+			} else {
+				// custom
+				$("input[type=text][name=fuel]", jqCRoot).val( config.cost.fuel );
+				$("input[type=text][name=ammo]", jqCRoot).val( config.cost.ammo );
+				// it's hard to guess info from cost.
+				// so let's just set everything to default:
+				// - if user requires great success, we set wildcard to DD with 6 ships.
+				// - otherwise, None with no ship.
+				let guessedGS = (config.modifier.type === "normal" 
+								 ? config.modifier.gs
+								 : config.modifier.value >= 1.5);
+				let guessedWildcard = guessedGS ? "DD" : "None";
+				let guessedCount = guessedGS ? 6 : 0;
+				$("select.wildcard",jqCRoot).val( guessedWildcard );
+				$("select.count",jqCRoot).val( guessedCount );
+			}
 		},
 
 		/* UPDATE: optional
