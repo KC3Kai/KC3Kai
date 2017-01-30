@@ -261,6 +261,25 @@
 		{ammo:40,fuel:90,expeds:[29]},{ammo:30,fuel:90,expeds:[32]},
 		{ammo:40,fuel:30,expeds:[17]}];
 
+	function eqModConfig(a,b) {
+		return a.type === b.type &&
+			(a.type === "normal"
+			 ? (a.gs === b.gs && a.daihatsu === b.daihatsu)
+			 : a.value === b.value);
+	}
+
+	function eqCostConfig(a,b) {
+		return a.type === b.type &&
+			(a.type === "costmodel"
+			 ? (a.count === b.count && a.wildcard === b.wildcard)
+			 : (a.fuel === b.fuel && a.ammo === b.ammo));
+	}
+
+	function eqConfig(a,b) {
+		return eqModConfig(a.modifier, b.modifier) &&
+			eqCostConfig(a.cost, b.cost);
+	}
+
 	/*
 	  TODO: UI viewer and sorter.
 	  viewer: view by: net income / gross income / basic income, general config / allow normal config
@@ -477,10 +496,12 @@
 						// collapsing
 						// construct new config from UI.
 						let newConfig = self.getExpedConfig(configRoot, eId);
-						expedConfig[eId] = newConfig;
-						// TODO: config equiality check to save some time.
-
-						// TODO: reflect config change on UI
+						if (eqConfig(expedConfig[eId], newConfig)) {
+							console.log( "config is not changed, skipping UI update." );
+						} else {
+							expedConfig[eId] = newConfig;
+							self.setupExpedView(expedRow, newConfig, eId);
+						}
 					}
 
 				});
