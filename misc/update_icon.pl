@@ -1,5 +1,14 @@
 #!/usr/bin/perl
 
+=pod
+
+This script is for updating "src/data/icons.json"
+by collecting icon files under "src/assets/ships" and "src/assert".
+
+You can execute this file under any non-npm subdirectory of KC3Kai.
+
+=cut
+
 use strict;
 use warnings;
 use v5.10;
