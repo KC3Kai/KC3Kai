@@ -345,3 +345,13 @@
 	min-width: 200px;
 	margin: 0 0 15px 10px;
 }
+
+.tab_expedtable .section_body.reset {
+	margin: 0 0 15px 0;
+}
+
+.tab_expedtable .section_body.reset button.reset {
+	width: 100px;
+	height: 30px;
+	margin: 10px 0 0 0;
+}
