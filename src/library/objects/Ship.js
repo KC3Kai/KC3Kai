@@ -279,6 +279,26 @@ KC3改 Ship Object
 		this.repair.fill(0);
 	};
 
+	/**
+	 * Return max HP of a ship. Static method for library.
+	 * Especially after marriage. api_taik[1] is not used in game.
+	 * @see http://wikiwiki.jp/kancolle/?%A5%B1%A5%C3%A5%B3%A5%F3%A5%AB%A5%C3%A5%B3%A5%AB%A5%EA
+	 */
+	KC3Ship.getMaxHp = function(masterId){
+		var masterHp = KC3Master.ship(masterId).api_taik[0];
+		return this.level < 100 ? masterHp :
+			masterHp >  90 ? masterHp + 9 :
+			masterHp >= 70 ? masterHp + 8 :
+			masterHp >= 50 ? masterHp + 7 :
+			masterHp >= 40 ? masterHp + 6 :
+			masterHp >= 30 ? masterHp + 5 :
+			masterHp >= 8  ? masterHp + 4 :
+			masterHp + 3;
+	};
+	KC3Ship.prototype.maxHp = function(){
+		return KC3Ship.getMaxHp(this.masterId);
+	};
+
 	/* REPAIR TIME
 	Get ship's docking and Akashi times
 	when optAfterHp is true, return repair time based on afterHp
