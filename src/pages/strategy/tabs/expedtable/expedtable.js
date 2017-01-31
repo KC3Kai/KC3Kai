@@ -558,13 +558,7 @@
 		---------------------------------*/
 		execute: function() {
 			let self = this;
-			let needGen = false;
-			if (self.expedConfig === false) {
-				needGen = true;
-				// as placeholder
-				self.expedConfig = generateRecommendedConfig();
-			}
-			let expedConfig = self.expedConfig;
+			// let expedConfig = self.expedConfig;
 			var factory = $(".tab_expedtable .factory");
 			var expedTableRoot = $("#exped_table_content_root");
 			let allExpeds = enumFromTo(1,40);
@@ -574,6 +568,7 @@
 
 			// TODO: remove after test is done
 			// TODO: this is async, perhaps we just reload page after saving to localStorage
+			/*
 			if (needGen) {
 				console.log("generating")
 				asyncGenerateConfigFromHistory( function(config) {
@@ -585,7 +580,21 @@
 					// page reload
 					$(".logo").click();
 				}, generateNormalConfig());
-			}
+			} */
+
+			self.setupAllExpedRows();
+
+			self.setupSorters();
+			self.setupCostModelSection();
+		},
+
+		setupAllExpedRows: function() {
+			let self = this;
+			let expedConfig = generateRandomConfig();
+			self.expedConfig = expedConfig;
+			var factory = $(".tab_expedtable .factory");
+			var expedTableRoot = $("#exped_table_content_root");
+			let allExpeds = enumFromTo(1,40);
 
 			function makeWinItem( jqObj, winItemArr ) {
 				var itemId = winItemArr[0];
@@ -616,7 +625,8 @@
 				var config = expedConfig[eId];
 
 				// store some basic info for later calculation.
-				expedRow.data("info",
+				expedRow.data(
+					"info",
 					$.extend( {}, resourceInfo, { time: masterInfo.api_time }));
 
 				$(".info_col.id", expedRow).text( eId );
@@ -712,8 +722,6 @@
 				expedTableRoot.append( expedRow );
 			});
 
-			self.setupSorters();
-			self.setupCostModelSection();
 		},
 
 		setupSorters: function() {
