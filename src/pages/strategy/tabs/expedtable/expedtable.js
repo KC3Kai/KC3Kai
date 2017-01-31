@@ -406,8 +406,6 @@
 
 	  TODO:
 
-	  - first-time reseting messages instead of do it automatically
-
 	  - localStorage
 
 	  - dark theme
@@ -557,8 +555,6 @@
 		Places data onto the interface from scratch.
 		---------------------------------*/
 		execute: function() {
-			let self = this;
-
 			// TODO: remove after test is done
 			// TODO: this is async, perhaps we just reload page after saving to localStorage
 			/*
@@ -575,23 +571,59 @@
 				}, generateNormalConfig());
 			} */
 
-			if (self.expedConfig === false) {
+			if (this.expedConfig === false) {
 				$(".tab_expedtable .section_body.exped_table .alert.first_time").show();
 				$(".tab_expedtable .section_body.exped_table .exped_control_row").hide();
 			} else {
 				// view controls need to be set up before any exped rows
-				self.setupViewControls();
-				self.setupAllExpedRows();
-				self.setupSorters();
+				this.setupViewControls();
+				this.setupAllExpedRows();
+				this.setupSorters();
 			}
 
-			self.setupCostModelSection();
+			this.setupCostModelSection();
+			this.setupResetConfigSection();
+		},
+
+		setupResetConfigSection: function() {
+			let self = this;
+			let contentRoot = $(".tab_expedtable .section_body.reset");
+			$("button.reset", contentRoot).click( function() {
+				// TODO: confirmation before actually reseting.
+				let resetMode =
+					$("input[type=radio][name=reset_mode]:checked", contentRoot).val();
+				console.assert(["recommended","normal"].indexOf(resetMode) !== -1);
+				let guess =
+					$("input.reset_guess[type=checkbox]", contentRoot).prop("checked");
+
+				let baseConfig = resetMode === "recommended"
+					? generateRecommendedConfig()
+					: generateNormalConfig();
+
+				console.log("hello", JSON.stringify(baseConfig));
+				if (guess) {
+					asyncGenerateConfigFromHistory( function(config) {
+						console.log("config generated");
+						$.each( config, function(k,v) {
+							console.log(k,v);
+						});
+						self.expedConfig = config;
+						$(".alert.config_gen_success", contentRoot).show();
+						$(".logo").click();
+					}, baseConfig);
+				} else {
+					self.expedConfig = baseConfig;
+					$(".alert.config_gen_success", contentRoot).show();
+					$(".logo").click();
+				}
+
+			});
 		},
 
 		setupAllExpedRows: function() {
 			let self = this;
-			let expedConfig = generateRandomConfig();
-			self.expedConfig = expedConfig;
+			let expedConfig = self.expedConfig;
+			console.assert(expedConfig !== false);
 			var factory = $(".tab_expedtable .factory");
 			var expedTableRoot = $("#exped_table_content_root");
 			let allExpeds = enumFromTo(1,40);
