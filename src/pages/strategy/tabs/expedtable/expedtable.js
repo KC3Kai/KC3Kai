@@ -477,6 +477,10 @@
 				var masterInfo = KC3Master._raw.mission[eId];
 				var config = expedConfig[eId];
 
+				// store some basic info for later calculation.
+				expedRow.data("info",
+					$.extend( {}, resourceInfo, { time: masterInfo.api_time }));
+
 				$(".info_col.id", expedRow).text( eId );
 				$(".info_col.time", expedRow).text( String( 60 * masterInfo.api_time ).toHHMMSS() );
 
@@ -572,6 +576,25 @@
 					let eId = parseInt(jq.data("id"), 10);
 					let config = self.expedConfig[eId];
 					self.setupExpedView.call(self, jq, config, eId, forcingGeneral);
+				});
+			});
+
+			let jqDenomControls = $(".view_control .denom_control button");
+			jqDenomControls.click( function() {
+				let thisMode = $(this).data("mode");
+				jqDenomControls.each( function() {
+					let thatMode = $(this).data("mode");
+					$(this).toggleClass("active", thisMode === thatMode );
+				});
+
+			});
+
+			let jqIncomeControls = $(".view_control .income_control button");
+			jqIncomeControls.click( function() {
+				let thisMode = $(this).data("mode");
+				jqIncomeControls.each( function() {
+					let thatMode = $(this).data("mode");
+					$(this).toggleClass("active", thisMode === thatMode );
 				});
 			});
 		},
