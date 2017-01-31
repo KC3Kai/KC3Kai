@@ -68,13 +68,11 @@
 
 .tab_expedtable .exped_row .exped_view {
 	height: 30px;
-	background-color: #def;
 }
 
 .tab_expedtable .exped_row {
 	overflow: hidden;
 	border-radius: 5px;
-	border: 1px solid;
 	margin: 0px 0px 3px 0px;
 }
 
@@ -95,11 +93,9 @@
 
 .tab_expedtable .exped_row .exped_config .config_box {
 	width: 48%;
-	border: 1px solid;
 	border-radius: 4px;
 	margin: 5px 5px 5px 5px;
 	overflow: hidden;
-	background: #fff;
 }
 
 .tab_expedtable .exped_row .exped_config .config_box .content {
@@ -143,9 +139,7 @@
 }
 
 .tab_expedtable .exped_row .exped_config .config_box .header {
-	background: #def;
 	padding: 0 5px 0 5px;
-	border-bottom: 1px solid;
 }
 
 .tab_expedtable .exped_row .exped_view .info_col {
@@ -168,29 +162,26 @@
 .tab_expedtable .exped_row .exped_view .info_col.resource {
 	width: 50px;
 	font-weight: bold;
-	background: #eee;
 }
 
 .tab_expedtable .exped_row .exped_view .info_col.resource.fuel {
-	color: #92c992;
 }
 
 .tab_expedtable .exped_row .exped_view .info_col.resource.ammo {
-	color:#dec558;
 }
-.tab_expedtable .exped_row .exped_view .info_col.resource.stell {
-	color:#cccccc;
+
+.tab_expedtable .exped_row .exped_view .info_col.resource.steel {
 }
+
 .tab_expedtable .exped_row .exped_view .info_col.resource.bauxite {
-	color:#b68f55;
 }
+
 
 .tab_expedtable .exped_row .exped_view .info_col.item {
 	width: 50px;
 }
 
 .tab_expedtable .exped_row .exped_view .info_col.item2 {
-	background: #ffd966;
 }
 
 .tab_expedtable .exped_row .exped_view .info_col.modifier {
@@ -226,16 +217,6 @@
 	float: left;
 	width: 50%;
 	font-weight: bold;
-}
-
-.tab_expedtable .exped_row .exped_view .cost .view_general .fuel,
-.tab_expedtable #cost_model_content_root table .fuel {
-	color: #92c992;
-}
-
-.tab_expedtable .exped_row .exped_view .cost .view_general .ammo,
-.tab_expedtable #cost_model_content_root table .ammo {
-	color:#dec558;
 }
 
 .tab_expedtable .exped_row .exped_view .cost .view_normal {
