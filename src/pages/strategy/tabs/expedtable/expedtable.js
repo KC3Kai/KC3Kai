@@ -163,9 +163,12 @@
 		return config;
 	}
 
-	function asyncGenerateConfigFromHistory( onSuccess ) {
+	// baseConfig is used in case we found nothing for one particular expedition
+	function asyncGenerateConfigFromHistory( onSuccess, baseConfig ) {
 		let config = {};
 		let expedIds = enumFromTo(1,40);
+		// "completedFlag[eId-1] = true" means querying for "eId" is done.
+		let completedFlag = expedIds.map( () => false );
 		expedIds.map( function(eId) {
 			// query for most recent 5 records of the current user.
 			KC3Database.con.expedition
@@ -175,7 +178,7 @@
 				.limit(5)
 				.toArray(function(xs) {
 					if (xs.length === 0) {
-						config[eId] = false;
+						completedFlag[eId-1] = true;
 					} else {
 						let gsCount = xs.filter( x => x.data.api_clear_result === 2).length;
 						// require great success if over half of the past 5 expeds are GS
@@ -222,16 +225,17 @@
 								count: shipCount === false ? 0 : shipCount
 							}
 						};
+						completedFlag[eId-1] = true;
 					}
-					for (let i=1; i<=40; ++i)
-						if (typeof config[i] === "undefined")
-							return;
 
+					if (completedFlag.some( x => x === false ))
+						return;
 					// finally fill in missing fields
-					let defConfig = generateRecommendedConfig();
+					let defConfig = baseConfig;
 					expedIds.map( function(eId) {
-						if (config[eId] === false)
+						if (typeof config[eId] === "undefined") {
 							config[eId] = defConfig[eId];
+						}
 					});
 					onSuccess( config );
 				});
@@ -577,6 +581,7 @@
 			// TODO: remove after test is done
 			// TODO: this is async, perhaps we just reload page after saving to localStorage
 			if (needGen) {
+				console.log("generating")
 				asyncGenerateConfigFromHistory( function(config) {
 					console.log("config generated");
 					$.each( config, function(k,v) {
@@ -585,7 +590,7 @@
 					self.expedConfig = config;
 					// page reload
 					$(".logo").click();
-				});
+				}, generateNormalConfig());
 			}
 
 			function makeWinItem( jqObj, winItemArr ) {
