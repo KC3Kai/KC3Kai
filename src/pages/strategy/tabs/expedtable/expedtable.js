@@ -555,22 +555,6 @@
 		Places data onto the interface from scratch.
 		---------------------------------*/
 		execute: function() {
-			// TODO: remove after test is done
-			// TODO: this is async, perhaps we just reload page after saving to localStorage
-			/*
-			if (needGen) {
-				console.log("generating")
-				asyncGenerateConfigFromHistory( function(config) {
-					console.log("config generated");
-					$.each( config, function(k,v) {
-						console.log(k,v);
-					});
-					self.expedConfig = config;
-					// page reload
-					$(".logo").click();
-				}, generateNormalConfig());
-			} */
-
 			if (this.expedConfig === false) {
 				$(".tab_expedtable .section_body.exped_table .alert.first_time").show();
 				$(".tab_expedtable .section_body.exped_table .exped_control_row").hide();
@@ -589,7 +573,10 @@
 			let self = this;
 			let contentRoot = $(".tab_expedtable .section_body.reset");
 			$("button.reset", contentRoot).click( function() {
-				// TODO: confirmation before actually reseting.
+				let c = confirm("Please confirm resetting, the change cannot be reverted!");
+				if (c !== true)
+					return;
+
 				let resetMode =
 					$("input[type=radio][name=reset_mode]:checked", contentRoot).val();
 				console.assert(["recommended","normal"].indexOf(resetMode) !== -1);
@@ -600,23 +587,22 @@
 					? generateRecommendedConfig()
 					: generateNormalConfig();
 
-				console.log("hello", JSON.stringify(baseConfig));
-				if (guess) {
-					asyncGenerateConfigFromHistory( function(config) {
-						console.log("config generated");
-						$.each( config, function(k,v) {
-							console.log(k,v);
-						});
-						self.expedConfig = config;
-						$(".alert.config_gen_success", contentRoot).show();
-						$(".logo").click();
-					}, baseConfig);
-				} else {
-					self.expedConfig = baseConfig;
+				function onCompletion() {
+					// show success message
 					$(".alert.config_gen_success", contentRoot).show();
+					// reload
 					$(".logo").click();
 				}
 
+				if (guess) {
+					asyncGenerateConfigFromHistory( function(config) {
+						self.expedConfig = config;
+						onCompletion();
+					}, baseConfig);
+				} else {
+					self.expedConfig = baseConfig;
+					onCompletion();
+				}
 			});
 		},
 
