@@ -1629,3 +1629,6 @@ button, input, select, textarea {
 	color: #b68f55;
 }
 
+.tab_expedtable .exped_row .exped_view .info_col.edit_btn {
+	background-color: #647ea9;
+}

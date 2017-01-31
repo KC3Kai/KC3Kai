@@ -421,7 +421,7 @@
 
 	  TODO:
 
-	  - dark theme
+	  - Q & A section
 
 	 */
 
@@ -828,6 +828,12 @@
 				});
 				if (alreadyActive)
 					return;
+
+				// deselect some sorters because a view change might affect
+				// sorting result of them.
+				$(".sort_control .sort_methods button.resource", expedTableRoot)
+					.removeClass("active");
+
 				self.refreshAllExpedRows();
 			});
 			let jqIncomeControls = $(".view_control .income_control button", expedTableRoot);
@@ -840,6 +846,12 @@
 				});
 				if (alreadyActive)
 					return;
+
+				// deselect some sorters because a view change might affect
+				// sorting result of them.
+				$(".sort_control .sort_methods button.resource", expedTableRoot)
+					.removeClass("active");
+
 				self.refreshAllExpedRows();
 			});
 			// setup view strategy: total, basic income.
