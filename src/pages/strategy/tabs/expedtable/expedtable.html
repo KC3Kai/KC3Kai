@@ -99,6 +99,23 @@
 			</tbody>
 		</table>
 	</div>
+	<div class="page_section">Reset Configuration</div>
+	<div class="section_body">
+		<div class="description">
+			A default set of expedition configuration should have been generated first time you enter this page
+			with recommended settings and some guesswork from your expedition history. <br>
+			You can reset your configuration with following options if you are unsatisfied with the current one
+			and want to work from scratch.
+		</div>
+		<label><input type="radio" name="reset_mode" value="recommended" checked>
+			Recommended (turn on great success if one time resource income is decent)</label><br>
+		<label><input type="radio" name="reset_mode" value="normal">
+			Normal (great success turned off on all expeditions)</label><br>
+		<label><input type="checkbox" class="reset_guess" checked>
+			Guess configuration from my expedition history
+		</label><br>
+		<button type="button" class="btn btn-primary">Reset</button>
+	</div>
 </div>
 
 <div class="factory">
