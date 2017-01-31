@@ -231,13 +231,7 @@
 					if (completedFlag.some( x => x === false ))
 						return;
 					// finally fill in missing fields
-					let defConfig = baseConfig;
-					expedIds.map( function(eId) {
-						if (typeof config[eId] === "undefined") {
-							config[eId] = defConfig[eId];
-						}
-					});
-					onSuccess( config );
+					onSuccess( $.extend( baseConfig, config ) );
 				});
 		});
 	}
