@@ -1160,3 +1160,50 @@ body {
 .tab_translations .tq-item .tq-desc.translation_missing {
 	color: red;
 }
+
+
+.tab_expedtable .exped_row .exped_view {
+	background-color: #def;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.resource {
+	background: #cbe5ff;
+}
+
+.tab_expedtable .exped_row {
+	border: 1px solid;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box .header {
+	background: #def;
+	border-bottom: 1px solid;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box {
+	border: 1px solid;
+	background: #fff;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.item2 {
+	background: #fff5c4;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.resource.fuel,
+.tab_expedtable .exped_row .exped_view .cost .view_general .fuel,
+.tab_expedtable #cost_model_content_root table .fuel {
+	color: #59ab59;
+}
+
+.tab_expedtable .exped_row .exped_view .cost .view_general .ammo,
+.tab_expedtable #cost_model_content_root table .ammo,
+.tab_expedtable .exped_row .exped_view .info_col.resource.ammo {
+	color: #bba856;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.resource.steel {
+	color: #777777;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.resource.bauxite {
+	color: #b68f55;
+}
