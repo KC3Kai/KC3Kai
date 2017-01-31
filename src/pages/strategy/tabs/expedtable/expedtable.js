@@ -183,7 +183,7 @@
 						// => gsCount * 2 >= xs.length
 						let needGS = gsCount * 2 >= xs.length;
 
-						function countDaihatsu( expedRecord ) {
+						let countDaihatsu = expedRecord => {
 							let onlyDaihatsu = x => [68,193].indexOf(x) !== -1;
 							let ys = expedRecord.fleet.map( function(shipRecord) {
 								let dhtCount = 0;
@@ -194,11 +194,11 @@
 								return dhtCount;
 							});
 							return ys.reduce( (a,b) => a+b, 0 );
-						}
+						};
 
-						function countShips( expedRecord ) {
+						let countShips = expedRecord => {
 							return expedRecord.fleet.length;
-						}
+						};
 
 						let daihatsuCountsFromHist = xs.map( countDaihatsu );
 						let daihatsuCount = saturate( Math.max.apply(undefined,daihatsuCountsFromHist) , 0, 4);
