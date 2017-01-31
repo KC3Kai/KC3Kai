@@ -402,11 +402,24 @@
 			eqCostConfig(a.cost, b.cost);
 	}
 
+	function loadExpedConfig() {
+		if (typeof localStorage.expedConfig === "undefined")
+			return false;
+		try {
+			return JSON.parse( localStorage.expedConfig );
+		} catch (e) {
+			console.error("Error while parsing localStorage.expedConfig", e);
+			throw e;
+		}
+	}
+
+	function saveExpedConfig(newConfig) {
+		localStorage.expedConfig = JSON.stringify( newConfig );
+	}
+
 	/*
 
 	  TODO:
-
-	  - localStorage
 
 	  - dark theme
 
@@ -416,10 +429,6 @@
 
 	KC3StrategyTabs.expedtable.definition = {
 		tabSelf: KC3StrategyTabs.expedtable,
-
-		// TODO: will be replaced by localStorage
-		expedConfig: false,
-		generated: false,
 
 		/* INIT: mandatory
 		Prepares initial static data needed.
@@ -555,7 +564,8 @@
 		Places data onto the interface from scratch.
 		---------------------------------*/
 		execute: function() {
-			if (this.expedConfig === false) {
+			let expedConfig = loadExpedConfig();
+			if (expedConfig === false) {
 				$(".tab_expedtable .section_body.exped_table .alert.first_time").show();
 				$(".tab_expedtable .section_body.exped_table .exped_control_row").hide();
 			} else {
@@ -596,11 +606,11 @@
 
 				if (guess) {
 					asyncGenerateConfigFromHistory( function(config) {
-						self.expedConfig = config;
+						saveExpedConfig( config );
 						onCompletion();
 					}, baseConfig);
 				} else {
-					self.expedConfig = baseConfig;
+					saveExpedConfig( baseConfig );
 					onCompletion();
 				}
 			});
@@ -608,7 +618,7 @@
 
 		setupAllExpedRows: function() {
 			let self = this;
-			let expedConfig = self.expedConfig;
+			let expedConfig = loadExpedConfig();
 			console.assert(expedConfig !== false);
 			var factory = $(".tab_expedtable .factory");
 			var expedTableRoot = $("#exped_table_content_root");
@@ -691,6 +701,7 @@
 							// console.log( "config is not changed, skipping UI update." );
 						} else {
 							expedConfig[eId] = newConfig;
+							saveExpedConfig( expedConfig );
 							self.setupExpedView(expedRow, newConfig, eId);
 
 							// deselect some sorters because a modifier config might affect
@@ -841,10 +852,11 @@
 		refreshAllExpedRows: function() {
 			let self = this;
 			let expedTableRoot = $("#exped_table_content_root");
+			let expedConfig = loadExpedConfig();
 			$(".exped_row", expedTableRoot).each( function() {
 				let jq = $(this);
 				let eId = parseInt(jq.data("id"), 10);
-				let config = self.expedConfig[eId];
+				let config = expedConfig[eId];
 				self.setupExpedView.call(self, jq, config, eId);
 			});
 		},
