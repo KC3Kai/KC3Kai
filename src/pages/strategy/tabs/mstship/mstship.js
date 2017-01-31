@@ -348,6 +348,10 @@
 						$(".ship_stat_text", statBox).show();
 						$(".ship_stat_value", statBox).hide();
 						
+					}else if(stat[0]=="hp"){
+						$(".ship_stat_min", statBox).text(shipData["api_"+stat[1]][0]);
+						// Show our max value for married ship, as api_taik[1] is unreasonable
+						$(".ship_stat_max span", statBox).text(KC3Ship.getMaxHp(ship_id));
 					}else if(stat[1].startsWith("db_")){
 						var realName = stat[1].slice(3);
 						$(".ship_stat_name", statBox).text(realName);
