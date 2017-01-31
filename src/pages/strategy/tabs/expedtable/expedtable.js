@@ -628,7 +628,7 @@
 				let sortBy = (getter) => (xs) => xs.sort( function (a,b) {
 					let retVal = getter(a) - getter(b);
 					// tie break by id for an idempotent result.
-					return retVal == 0 ? $(a).data("id") - $(b).data("id") : retVal;
+					return retVal === 0 ? $(a).data("id") - $(b).data("id") : retVal;
 				});
 				console.assert(
 					["id","time","fuel","ammo","steel","bauxite"].indexOf(thisMethod) !== -1);
