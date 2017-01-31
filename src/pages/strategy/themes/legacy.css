@@ -1207,3 +1207,7 @@ body {
 .tab_expedtable .exped_row .exped_view .info_col.resource.bauxite {
 	color: #b68f55;
 }
+
+.tab_expedtable .exped_row .exped_view .info_col.edit_btn {
+	background-color: #93bcff;
+}
