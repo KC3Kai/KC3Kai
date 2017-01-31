@@ -406,7 +406,7 @@
 
 	  TODO:
 
-	  - config reseting section
+	  - first-time reseting messages instead of do it automatically
 
 	  - localStorage
 

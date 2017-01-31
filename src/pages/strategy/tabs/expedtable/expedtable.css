@@ -355,3 +355,11 @@
 	height: 30px;
 	margin: 10px 0 0 0;
 }
+
+.tab_expedtable .section_body.exped_table .alert.first_time {
+	display: none;
+}
+
+.tab_expedtable .section_body.reset .alert.config_gen_success {
+	display: none;
+}
