@@ -49,6 +49,9 @@
 
 .tab_expedtable #exped_table_content_root .exped_control_row > .btn-group > button {
 	height: 30px;
+	outline: none;
+	-webkit-box-shadow: 0 0 0 0 rgba(204, 204, 204, 0.5);
+            box-shadow: 0 0 0 0 rgba(204, 204, 204, 0.5);
 }
 
 .tab_expedtable #exped_table_content_root
