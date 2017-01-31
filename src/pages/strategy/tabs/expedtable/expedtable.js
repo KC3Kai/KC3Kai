@@ -571,19 +571,11 @@
 
 		setupViewControls: function() {
 			let self = this;
-			var expedTableRoot = $("#exped_table_content_root");
+			let expedTableRoot = $("#exped_table_content_root");
 
 			$(".view_control .force_general", expedTableRoot).click( function() {
-				let jq = $(this);
-				jq.toggleClass("active");
-				let forcingGeneral = jq.hasClass("active");
-
-				$(".exped_row", expedTableRoot).each( function() {
-					let jq = $(this);
-					let eId = parseInt(jq.data("id"), 10);
-					let config = self.expedConfig[eId];
-					self.setupExpedView.call(self, jq, config, eId, forcingGeneral);
-				});
+				$(this).toggleClass("active");
+				self.refreshAllExpedRows();
 			});
 
 			let jqDenomControls = $(".view_control .denom_control button");
@@ -609,9 +601,23 @@
 			jqIncomeControls.filter("[data-mode=basic]").click();
 		},
 
+		refreshAllExpedRows: function() {
+			let self = this;
+			let expedTableRoot = $("#exped_table_content_root");
+			$(".exped_row", expedTableRoot).each( function() {
+				let jq = $(this);
+				let eId = parseInt(jq.data("id"), 10);
+				let config = self.expedConfig[eId];
+				self.setupExpedView.call(self, jq, config, eId);
+			});
+		},
+
 		// the "setup" does not include UI initialization, just those that can be changed due to
 		// the change of a config.
-		setupExpedView: function(jqViewRoot, config, eId, forceGeneral=false) {
+		setupExpedView: function(jqViewRoot, config, eId) {
+			let expedTableRoot = $("#exped_table_content_root");
+			let forceGeneral =
+				$(".view_control .force_general", expedTableRoot).hasClass("active");
 			let modViewByGeneral = forceGeneral ||
 				config.modifier.type !== "normal";
 			$(".modifier .view.view_general", jqViewRoot).toggle( modViewByGeneral );
