@@ -283,11 +283,11 @@
 	}
 
 	/*
-	  TODO: UI viewer and sorter.
-	  viewer: view by: net income / gross income / basic income, general config / allow normal config
+	  TODO:
+
 	  sorter: by exped id, time, fuel, ammo, etc.
 
-	  disabled whenever any of the expeditions are still under editing
+	  - disabled whenever any of the expeditions are still under editing
 
 	  - hotzone coloring (based on number of completed expedtion)
 
@@ -487,10 +487,6 @@
 				$(".info_col.id", expedRow).text( eId );
 				$(".info_col.time", expedRow).text( String( 60 * masterInfo.api_time ).toHHMMSS() );
 
-				["fuel", "ammo", "steel", "bauxite"].forEach( function(name) {
-					$(".info_col." + name, expedRow).text( resourceInfo[name] );
-				});
-
 				makeWinItem( $(".info_col.item1", expedRow), masterInfo.api_win_item1 );
 				makeWinItem( $(".info_col.item2", expedRow), masterInfo.api_win_item2 );
 
@@ -581,18 +577,26 @@
 			let jqDenomControls = $(".view_control .denom_control button");
 			jqDenomControls.click( function() {
 				let thisMode = $(this).data("mode");
+				let alreadyActive = $(this).hasClass("active");
 				jqDenomControls.each( function() {
 					let thatMode = $(this).data("mode");
 					$(this).toggleClass("active", thisMode === thatMode );
 				});
+				if (alreadyActive)
+					return;
+				self.refreshAllExpedRows();
 			});
 			let jqIncomeControls = $(".view_control .income_control button");
 			jqIncomeControls.click( function() {
 				let thisMode = $(this).data("mode");
+				let alreadyActive = $(this).hasClass("active");
 				jqIncomeControls.each( function() {
 					let thatMode = $(this).data("mode");
 					$(this).toggleClass("active", thisMode === thatMode );
 				});
+				if (alreadyActive)
+					return;
+				self.refreshAllExpedRows();
 			});
 			// setup view strategy: total, basic income.
 			// we don't have to save state internally, one just need to find the active
@@ -616,6 +620,7 @@
 		// the change of a config.
 		setupExpedView: function(jqViewRoot, config, eId) {
 			let expedTableRoot = $("#exped_table_content_root");
+
 			let forceGeneral =
 				$(".view_control .force_general", expedTableRoot).hasClass("active");
 			let modViewByGeneral = forceGeneral ||
@@ -656,6 +661,37 @@
 				$(".cost .view.view_normal .wildcard", jqViewRoot)
 					.text("(*=" + config.cost.wildcard + ")");
 			}
+
+			// work out resource info to show last,
+			// because by now we have "computedCost" and "generalModifier" available.
+			let denomMode =
+				$(".view_control .denom_control button.active",expedTableRoot).data("mode");
+			let incomeMode =
+				$(".view_control .income_control button.active",expedTableRoot).data("mode");
+			console.assert( ["total","hourly"].indexOf( denomMode ) !== -1);
+			console.assert( ["gross","net","basic"].indexOf( incomeMode ) !== -1);
+
+			let expedInfo = jqViewRoot.data("info");
+			function processResource(basicValue, resourceName) {
+				let grossValue = Math.floor(basicValue * generalModifier);
+				let netValue = typeof computedCost[resourceName] !== "undefined"
+					? grossValue - computedCost[resourceName]
+					: grossValue;
+				let subTotal = incomeMode === "basic" ? basicValue
+					: incomeMode === "gross" ? grossValue : netValue;
+				return denomMode === "total" ? subTotal
+					: (0.0 + subTotal) / expedInfo.time;
+			}
+			// for recording final resource value
+			let actual = {};
+			["fuel", "ammo", "steel", "bauxite"].forEach( function(name) {
+				actual[name] = processResource(expedInfo[name], name);
+				let resourceText = denomMode === "total" ? String(actual[name])
+					: prettyFloat(actual[name]);
+				$(".info_col." + name, jqViewRoot).text( resourceText );
+			});
+			jqViewRoot.data("actual", actual);
+
 		},
 
 		// the "setup" does not include UI initialization, just those that can be changed due to
