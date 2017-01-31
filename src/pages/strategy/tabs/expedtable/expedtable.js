@@ -423,6 +423,7 @@
 
 		// TODO: will be replaced by localStorage
 		expedConfig: false,
+		generated: false,
 
 		/* INIT: mandatory
 		Prepares initial static data needed.
@@ -559,9 +560,13 @@
 		---------------------------------*/
 		execute: function() {
 			let self = this;
-			// a random-generated configuration for debugging purpose
-			var expedConfig = generateRandomConfig();
-			self.expedConfig = expedConfig;
+			let needGen = false;
+			if (self.expedConfig === false) {
+				needGen = true;
+				// as placeholder
+				self.expedConfig = generateRecommendedConfig();
+			}
+			let expedConfig = self.expedConfig;
 			var factory = $(".tab_expedtable .factory");
 			var expedTableRoot = $("#exped_table_content_root");
 			let allExpeds = enumFromTo(1,40);
@@ -571,12 +576,17 @@
 
 			// TODO: remove after test is done
 			// TODO: this is async, perhaps we just reload page after saving to localStorage
-			asyncGenerateConfigFromHistory( function(config) {
-				console.log("config generated");
-				$.each( config, function(k,v) {
-					console.log(k,v);
+			if (needGen) {
+				asyncGenerateConfigFromHistory( function(config) {
+					console.log("config generated");
+					$.each( config, function(k,v) {
+						console.log(k,v);
+					});
+					self.expedConfig = config;
+					// page reload
+					$(".logo").click();
 				});
-			});
+			}
 
 			function makeWinItem( jqObj, winItemArr ) {
 				var itemId = winItemArr[0];
