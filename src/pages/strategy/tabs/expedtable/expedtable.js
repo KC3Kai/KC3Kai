@@ -285,7 +285,9 @@
 	/*
 	  TODO:
 
-	  sorter: by exped id, time, fuel, ammo, etc.
+	  - sorter: by exped id, time, fuel, ammo, etc.
+
+	  - don't do reverse sort by clicking one repeatly, let's just put a "reverse" button
 
 	  - disabled whenever any of the expeditions are still under editing
 
@@ -517,6 +519,9 @@
 							self.setupExpedConfig(configRoot, config, eId);
 							configSynced = true;
 						}
+
+						// disable all view / sort controls when start editing
+						$(".exped_control_row button", expedTableRoot).prop("disabled", true);
 					} else {
 						// collapsing
 						// construct new config from UI.
@@ -527,6 +532,12 @@
 							expedConfig[eId] = newConfig;
 							self.setupExpedView(expedRow, newConfig, eId);
 							configSynced = false;
+						}
+
+						// enable all view / sort controls
+						// if none of the rows are still under editing.
+						if ($(".exped_row.active", expedTableRoot).length === 0) {
+							$(".exped_control_row button", expedTableRoot).prop("disabled", false);
 						}
 					}
 				});
@@ -562,7 +573,19 @@
 				expedTableRoot.append( expedRow );
 			});
 
+			self.setupSorters();
 			self.setupCostModelSection();
+		},
+
+		setupSorters: function() {
+			// Sorter behavior: (TODO)
+			// - mutually exclusive, with expedition id being default
+			// - any config change invalidates sorting method,
+			//   so we will clear all sorter active states, unless the already
+			//   selected one is "sort by id" or "sort by time"
+			// - won't redo sorting after user has changed some config,
+			//   by doing so we keep every exped row in its before-editing place
+			//   so it can be conveniently edited again.
 		},
 
 		setupViewControls: function() {
