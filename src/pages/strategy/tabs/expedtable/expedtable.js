@@ -285,7 +285,19 @@
 	/*
 	  TODO:
 
-	  - generate config using data from exped table of devtools
+	  - generate config using data from exped history (default if missing record)
+
+	  - exped config reseting section: reset to:
+
+		 - "guess from history & recommended"
+
+	     - "no prefernece"
+
+		 - "recommended"
+
+		     - normal if < 2 hr
+			 - resource score: f + a + s + 3*b, gs if score >= 500
+			 - if gs, force >= 6 DD (except >= 5 for expedition 21)
 
 	  - localStorage
 
