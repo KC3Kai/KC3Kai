@@ -284,9 +284,9 @@ KC3改 Ship Object
 	 * Especially after marriage. api_taik[1] is not used in game.
 	 * @see http://wikiwiki.jp/kancolle/?%A5%B1%A5%C3%A5%B3%A5%F3%A5%AB%A5%C3%A5%B3%A5%AB%A5%EA
 	 */
-	KC3Ship.getMaxHp = function(masterId){
+	KC3Ship.getMaxHp = function(masterId, currentLevel){
 		var masterHp = KC3Master.ship(masterId).api_taik[0];
-		return this.level < 100 ? masterHp :
+		return (currentLevel || 155) < 100 ? masterHp :
 			masterHp >  90 ? masterHp + 9 :
 			masterHp >= 70 ? masterHp + 8 :
 			masterHp >= 50 ? masterHp + 7 :
@@ -296,7 +296,7 @@ KC3改 Ship Object
 			masterHp + 3;
 	};
 	KC3Ship.prototype.maxHp = function(){
-		return KC3Ship.getMaxHp(this.masterId);
+		return KC3Ship.getMaxHp(this.masterId, this.level);
 	};
 
 	/* REPAIR TIME
