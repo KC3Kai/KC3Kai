@@ -449,6 +449,9 @@
 			var expedTableRoot = $("#exped_table_content_root");
 			let allExpeds = enumFromTo(1,40);
 
+			// view controls need to be set up before any exped rows
+			self.setupViewControls();
+
 			function makeWinItem( jqObj, winItemArr ) {
 				var itemId = winItemArr[0];
 				var idToItem = {
@@ -564,8 +567,12 @@
 			});
 
 			self.setupCostModelSection();
+		},
 
-			// setup view controls
+		setupViewControls: function() {
+			let self = this;
+			var expedTableRoot = $("#exped_table_content_root");
+
 			$(".view_control .force_general", expedTableRoot).click( function() {
 				let jq = $(this);
 				jq.toggleClass("active");
@@ -586,9 +593,7 @@
 					let thatMode = $(this).data("mode");
 					$(this).toggleClass("active", thisMode === thatMode );
 				});
-
 			});
-
 			let jqIncomeControls = $(".view_control .income_control button");
 			jqIncomeControls.click( function() {
 				let thisMode = $(this).data("mode");
@@ -597,6 +602,11 @@
 					$(this).toggleClass("active", thisMode === thatMode );
 				});
 			});
+			// setup view strategy: total, basic income.
+			// we don't have to save state internally, one just need to find the active
+			// button from page itself.
+			jqDenomControls.filter("[data-mode=total]").click();
+			jqIncomeControls.filter("[data-mode=basic]").click();
 		},
 
 		// the "setup" does not include UI initialization, just those that can be changed due to
