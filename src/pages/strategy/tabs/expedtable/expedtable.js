@@ -558,13 +558,6 @@
 		---------------------------------*/
 		execute: function() {
 			let self = this;
-			// let expedConfig = self.expedConfig;
-			var factory = $(".tab_expedtable .factory");
-			var expedTableRoot = $("#exped_table_content_root");
-			let allExpeds = enumFromTo(1,40);
-
-			// view controls need to be set up before any exped rows
-			self.setupViewControls();
 
 			// TODO: remove after test is done
 			// TODO: this is async, perhaps we just reload page after saving to localStorage
@@ -582,9 +575,16 @@
 				}, generateNormalConfig());
 			} */
 
-			self.setupAllExpedRows();
+			if (self.expedConfig === false) {
+				$(".tab_expedtable .section_body.exped_table .alert.first_time").show();
+				$(".tab_expedtable .section_body.exped_table .exped_control_row").hide();
+			} else {
+				// view controls need to be set up before any exped rows
+				self.setupViewControls();
+				self.setupAllExpedRows();
+				self.setupSorters();
+			}
 
-			self.setupSorters();
 			self.setupCostModelSection();
 		},
 
