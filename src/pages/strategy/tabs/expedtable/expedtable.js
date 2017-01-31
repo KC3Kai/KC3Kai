@@ -287,8 +287,6 @@
 
 	  - sorter: by exped id, time, fuel, ammo, etc.
 
-	  - don't do reverse sort by clicking one repeatly, let's just put a "reverse" button
-
 	  - disabled whenever any of the expeditions are still under editing
 
 	  - hotzone coloring (based on number of completed expedtion)
@@ -578,18 +576,49 @@
 		},
 
 		setupSorters: function() {
-			// Sorter behavior: (TODO)
+			// Sorter behavior:
 			// - mutually exclusive, with expedition id being default
-			// - any config change invalidates sorting method,
+			// - (TODO) any config change invalidates sorting method,
 			//   so we will clear all sorter active states, unless the already
 			//   selected one is "sort by id" or "sort by time"
 			// - won't redo sorting after user has changed some config,
 			//   by doing so we keep every exped row in its before-editing place
 			//   so it can be conveniently edited again.
+			let self = this;
+			let expedTableRoot = $("#exped_table_content_root");
+
+			// arrayTransformer :: [<jqObj of exped row>] -> [<jqObj of exped row>]
+			function rearrangeExpedRows(arrayTransformer) {
+				var expedRows = $(".exped_row", expedTableRoot).toArray();
+				expedRows.map( (x) => $(x).detach() );
+				var transformed = arrayTransformer(expedRows);
+				transformed.map( (x) => expedTableRoot.append(x) );
+			}
+
+			let jqSorters = $(".sort_control .sort_methods button", expedTableRoot);
+			// sort by exped id by default.
+			$(".sort_control .sort_methods button", expedTableRoot)
+				.filter("[data-sort-by=id]").addClass("active");
+
+			jqSorters.click( function() {
+				let thisMethod = $(this).data("sortBy");
+				jqSorters.each( function() {
+					let thatMethod = $(this).data("sortBy");
+					$(this).toggleClass("active", thisMethod === thatMethod);
+				});
+
+				// TODO: actual sorting
+
+			});
+
+			$(".sort_control .rearrange .reverse").click( function() {
+				rearrangeExpedRows( x => x.reverse() );
+			});
 		},
 
 		setupViewControls: function() {
 			let self = this;
+			// TODO: lift this out.
 			let expedTableRoot = $("#exped_table_content_root");
 
 			$(".view_control .force_general", expedTableRoot).click( function() {
@@ -597,7 +626,7 @@
 				self.refreshAllExpedRows();
 			});
 
-			let jqDenomControls = $(".view_control .denom_control button");
+			let jqDenomControls = $(".view_control .denom_control button", expedTableRoot);
 			jqDenomControls.click( function() {
 				let thisMode = $(this).data("mode");
 				let alreadyActive = $(this).hasClass("active");
@@ -609,7 +638,7 @@
 					return;
 				self.refreshAllExpedRows();
 			});
-			let jqIncomeControls = $(".view_control .income_control button");
+			let jqIncomeControls = $(".view_control .income_control button", expedTableRoot);
 			jqIncomeControls.click( function() {
 				let thisMode = $(this).data("mode");
 				let alreadyActive = $(this).hasClass("active");
