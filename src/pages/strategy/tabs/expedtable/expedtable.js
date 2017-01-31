@@ -35,7 +35,7 @@
 		  { type: "costmodel",
 
 			wildcard: "DD" / "SS" / false,
-			count: 0 ~ 6 (but make it only possible to select 4~6 from UI)
+			count: 0 ~ 6
 		  }
 
 		  - custom:
@@ -161,6 +161,81 @@
 			};
 		});
 		return config;
+	}
+
+	function asyncGenerateConfigFromHistory( onSuccess ) {
+		let config = {};
+		let expedIds = enumFromTo(1,40);
+		expedIds.map( function(eId) {
+			// query for most recent 5 records of the current user.
+			KC3Database.con.expedition
+				.where("mission").equals(eId)
+				.and( x => x.hq === PlayerManager.hq.id )
+				.reverse()
+				.limit(5)
+				.toArray(function(xs) {
+					if (xs.length === 0) {
+						config[eId] = false;
+					} else {
+						let gsCount = xs.filter( x => x.data.api_clear_result === 2).length;
+						// require great success if over half of the past 5 expeds are GS
+						// gsCount >= xs.length / 2
+						// => gsCount * 2 >= xs.length
+						let needGS = gsCount * 2 >= xs.length;
+
+						function countDaihatsu( expedRecord ) {
+							let onlyDaihatsu = x => [68,193].indexOf(x) !== -1;
+							let ys = expedRecord.fleet.map( function(shipRecord) {
+								let dhtCount = 0;
+								// Kinu K2
+								if (shipRecord.mst_id === 487)
+									dhtCount += 1;
+								dhtCount += (shipRecord.equip || []).filter( onlyDaihatsu ).length;
+								return dhtCount;
+							});
+							return ys.reduce( (a,b) => a+b, 0 );
+						}
+
+						function countShips( expedRecord ) {
+							return expedRecord.fleet.length;
+						}
+
+						let daihatsuCountsFromHist = xs.map( countDaihatsu );
+						let daihatsuCount = saturate( Math.max.apply(undefined,daihatsuCountsFromHist) , 0, 4);
+
+						let shipCountsFromHist = xs.map( countShips );
+						let shipCount = saturate( Math.max.apply(undefined,shipCountsFromHist) , 1, 6);
+						let minCompo = ExpedMinCompo.getMinimumComposition(eId);
+						// we don't need to enforce ship count if it's already the minimal requirement
+						if (shipCount <= minCompo.length)
+							shipCount = false;
+
+						config[eId] = {
+							modifier: {
+								type: "normal",
+								gs: needGS,
+								daihatsu: daihatsuCount
+							},
+							cost: {
+								type: "costmodel",
+								wildcard: shipCount === false ? false : "DD",
+								count: shipCount === false ? 0 : shipCount
+							}
+						};
+					}
+					for (let i=1; i<=40; ++i)
+						if (typeof config[i] === "undefined")
+							return;
+
+					// finally fill in missing fields
+					let defConfig = generateRecommendedConfig();
+					expedIds.map( function(eId) {
+						if (config[eId] === false)
+							config[eId] = defConfig[eId];
+					});
+					onSuccess( config );
+				});
+		});
 	}
 
 	function mergeExpedCost(arr) {
@@ -330,24 +405,12 @@
 	}
 
 	/*
+
 	  TODO:
 
-	  - generate config using data from exped history (default if missing record)
-
-	  - exped config reseting section: reset to:
-
-		 - "guess from history & recommended"
-
-		 - "recommended"
-
-			 - resource score: f + a + s + 3*b, gs if score >= 500, otherwise normal
-			 - if gs, force >= 6 DD (except >= 5 for expedition 21)
-
-	     - "normal"
+	  - config reseting section
 
 	  - localStorage
-
-	  - re-format data format
 
 	  - dark theme
 
@@ -506,8 +569,14 @@
 			// view controls need to be set up before any exped rows
 			self.setupViewControls();
 
-			// TODO
-			generateRecommendedConfig();
+			// TODO: remove after test is done
+			// TODO: this is async, perhaps we just reload page after saving to localStorage
+			asyncGenerateConfigFromHistory( function(config) {
+				console.log("config generated");
+				$.each( config, function(k,v) {
+					console.log(k,v);
+				});
+			});
 
 			function makeWinItem( jqObj, winItemArr ) {
 				var itemId = winItemArr[0];
