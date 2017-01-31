@@ -15,17 +15,22 @@
 	<div class="section_body exped_table" id="exped_table_content_root">
 		<div class="exped_control_row view_control">
 			<div class="control_header">View: </div>
-			<div class="btn-group">
-				<button type="button" class="btn btn-secondary">Total</button>
-				<button type="button" class="btn btn-secondary">Hourly</button>
+			<div class="btn-group denom_control">
+				<button type="button" class="btn btn-secondary view_total"
+						data-mode="total">Total</button>
+				<button type="button" class="btn btn-secondary view_hourly"
+						data-mode="hourly">Hourly</button>
 			</div>
-			<div class="btn-group">
-				<button type="button" class="btn btn-secondary"
-						title="Resource income without resupply cost">Gross Income</button>
-				<button type="button" class="btn btn-secondary"
+			<div class="btn-group income_control">
+				<button type="button" class="btn btn-secondary view_gross_income"
+						data-mode="gross"
+						title="Resource income without resupply">Gross Income</button>
+				<button type="button" class="btn btn-secondary view_net_income"
+						data-mode="net"
 						title="Resource income with resupply cost">Net Income</button>
-				<button type="button" class="btn btn-secondary"
-						title="Basic resource income without great success ">Basic Income</button>
+				<button type="button" class="btn btn-secondary view_basic_income"
+						data-mode="basic"
+						title="Basic resource income without great success">Basic Income</button>
 			</div>
 			<div class="btn-group">
 				<button
