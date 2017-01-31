@@ -635,7 +635,6 @@
 
 		setupViewControls: function() {
 			let self = this;
-			// TODO: lift this out.
 			let expedTableRoot = $("#exped_table_content_root");
 
 			$(".view_control .force_general", expedTableRoot).click( function() {
