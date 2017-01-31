@@ -41,22 +41,25 @@
 			<div class="clear" />
 		</div>
 		<div class="exped_control_row sort_control">
-			<div class="control_header">Sort: </div>
-			<div class="btn-group">
-				<button type="button" class="btn btn-secondary">#</button>
-				<button type="button" class="btn btn-secondary">Time</button>
-				<button type="button" class="btn btn-secondary resource">
+			<div class="control_header">Sort by: </div>
+			<div class="btn-group sort_methods">
+				<button type="button" class="btn btn-secondary" data-sort-by="id">#</button>
+				<button type="button" class="btn btn-secondary" data-sort-by="time">Time</button>
+				<button type="button" class="btn btn-secondary resource" data-sort-by="fuel">
 					<img src="../../assets/img/client/fuel.png" />
 				</button>
-				<button type="button" class="btn btn-secondary resource">
+				<button type="button" class="btn btn-secondary resource" data-sort-by="ammo">
 					<img src="../../assets/img/client/ammo.png" />
 				</button>
-				<button type="button" class="btn btn-secondary resource">
+				<button type="button" class="btn btn-secondary resource" data-sort-by="steel">
 					<img src="../../assets/img/client/steel.png" />
 				</button>
-				<button type="button" class="btn btn-secondary resource">
+				<button type="button" class="btn btn-secondary resource" data-sort-by="bauxite">
 					<img src="../../assets/img/client/bauxite.png" />
 				</button>
+			</div>
+			<div class="btn-group rearrange">
+				<button type="button" class="btn btn-secondary reverse">Reverse</button>
 			</div>
 			<div class="clear" />
 		</div>
