@@ -285,8 +285,6 @@
 	/*
 	  TODO:
 
-	  - hotzone coloring (based on number of completed expedtion)
-
 	  - generate config using data from exped table of devtools
 
 	  - localStorage
