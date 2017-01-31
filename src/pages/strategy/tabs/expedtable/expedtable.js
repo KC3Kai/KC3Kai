@@ -64,6 +64,13 @@
 
 	let coinFlip = () => Math.random() > 0.5;
 
+	function enumFromTo(from,to,step=1) {
+		var arr = [];
+		for (let i=from; i<=to; i+=step)
+			arr.push(i);
+		return arr;
+	}
+
 	function genModStandard() {
 		return {
 			type: "normal",
@@ -100,13 +107,59 @@
 
 	function generateRandomConfig() {
 		let config = {};
-		for (let i = 1; i <= 40; ++i) {
-			config[i] = {
+		enumFromTo(1,40).map(function(x) {
+			config[x] = {
 				modifier: (coinFlip()) ? genModStandard() : genModCustom(),
 				cost: (coinFlip()) ? genCostNormal() : genCostCustom()
 			};
-		}
+		});
+		return config;
+	}
 
+	function generateNormalConfig() {
+		let config = {};
+		enumFromTo(1,40).map(function(x) {
+			config[x] = {
+				modifier: {
+					type: "normal",
+					gs: false,
+					daihatsu: 0
+				},
+				cost: {
+					type: "costmodel",
+					wildcard: false,
+					count: 0
+				}
+			};
+		});
+		return config;
+	}
+
+	function generateRecommendedConfig() {
+		let config = {};
+		enumFromTo(1,40).map(function(eId) {
+			let resourceInfo = ExpedInfo.getInformation( eId ).resource;
+			let masterInfo = KC3Master._raw.mission[eId];
+			// allow bauxite to weight more
+			let score = resourceInfo.fuel +
+				resourceInfo.ammo +
+				resourceInfo.steel +
+				resourceInfo.bauxite*3;
+			let gsFlag = score >= 500;
+			config[eId] = {
+				modifier: {
+					type: "normal",
+					gs: gsFlag,
+					daihatsu: 0
+				},
+				cost: {
+					type: "costmodel",
+					wildcard: gsFlag ? "DD" : false,
+					// for exped 21 it needs only 5 sparkled DD for an almost-guaranteed success
+					count: gsFlag ? (eId === 21 ? 5 : 6) : false
+				}
+			};
+		});
 		return config;
 	}
 
@@ -117,12 +170,6 @@
 		}, {ammo: 0, fuel: 0});
 	}
 
-	function enumFromTo(from,to,step=1) {
-		var arr = [];
-		for (let i=from; i<=to; i+=step)
-			arr.push(i);
-		return arr;
-	}
 
 	function normalModifierToNumber(modConfig) {
 		console.assert( modConfig.type === "normal" );
@@ -291,13 +338,12 @@
 
 		 - "guess from history & recommended"
 
-	     - "no prefernece"
-
 		 - "recommended"
 
-		     - normal if < 2 hr
-			 - resource score: f + a + s + 3*b, gs if score >= 500
+			 - resource score: f + a + s + 3*b, gs if score >= 500, otherwise normal
 			 - if gs, force >= 6 DD (except >= 5 for expedition 21)
+
+	     - "normal"
 
 	  - localStorage
 
@@ -459,6 +505,9 @@
 
 			// view controls need to be set up before any exped rows
 			self.setupViewControls();
+
+			// TODO
+			generateRecommendedConfig();
 
 			function makeWinItem( jqObj, winItemArr ) {
 				var itemId = winItemArr[0];
