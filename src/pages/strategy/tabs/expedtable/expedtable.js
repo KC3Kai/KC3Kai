@@ -285,10 +285,6 @@
 	/*
 	  TODO:
 
-	  - sorter: by exped id, time, fuel, ammo, etc.
-
-	  - disabled whenever any of the expeditions are still under editing
-
 	  - hotzone coloring (based on number of completed expedtion)
 
 	  - generate config using data from exped table of devtools
@@ -296,6 +292,8 @@
 	  - localStorage
 
 	  - re-format data format
+
+	  - dark theme
 
 	 */
 
@@ -529,6 +527,12 @@
 						} else {
 							expedConfig[eId] = newConfig;
 							self.setupExpedView(expedRow, newConfig, eId);
+
+							// deselect some sorters because a modifier config might affect
+							// sorting result of them.
+							$(".sort_control .sort_methods button.resource", expedTableRoot)
+								.removeClass("active");
+
 							configSynced = false;
 						}
 
@@ -578,7 +582,7 @@
 		setupSorters: function() {
 			// Sorter behavior:
 			// - mutually exclusive, with expedition id being default
-			// - (TODO) any config change invalidates sorting method,
+			// - any config change invalidates sorting method,
 			//   so we will clear all sorter active states, unless the already
 			//   selected one is "sort by id" or "sort by time"
 			// - won't redo sorting after user has changed some config,
@@ -606,9 +610,24 @@
 					let thatMethod = $(this).data("sortBy");
 					$(this).toggleClass("active", thisMethod === thatMethod);
 				});
+				// intentionally not doing "already-active" check,
+				// as view change might also affect sort result.
 
-				// TODO: actual sorting
-
+				// sortBy :: Ord x => (a -> x) -> [a] -> [a]
+				// "getter" extracts a value from element for comparison
+				let sortBy = (getter) => (xs) => xs.sort( function (a,b) {
+					let retVal = getter(a) - getter(b);
+					// tie break by id for an idempotent result.
+					return retVal == 0 ? $(a).data("id") - $(b).data("id") : retVal;
+				});
+				console.assert(
+					["id","time","fuel","ammo","steel","bauxite"].indexOf(thisMethod) !== -1);
+				let getter =
+					thisMethod === "id" ? (x => $(x).data("id"))
+					: thisMethod === "time" ? (x => $(x).data("info").time)
+					: /* must be one of the resources, descending order. */
+					  (x => - $(x).data("actual")[thisMethod]);
+				rearrangeExpedRows( sortBy( getter ) );
 			});
 
 			$(".sort_control .rearrange .reverse").click( function() {
