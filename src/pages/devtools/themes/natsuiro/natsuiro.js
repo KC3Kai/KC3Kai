@@ -976,7 +976,7 @@
 					KC3QuestManager.save();
 					$(this).parent().addClass("complete");
 				} else if(quest.status == 3){
-					console.info("Going to open quest agin:", quest);
+					console.info("Going to open quest again:", quest);
 					quest.status = 2;
 					KC3QuestManager.save();
 					$(this).parent().removeClass("complete");
