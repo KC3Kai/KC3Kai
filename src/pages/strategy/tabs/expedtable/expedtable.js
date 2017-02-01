@@ -575,9 +575,12 @@
 			let self = this;
 			let contentRoot = $(".tab_expedtable .section_body.reset");
 			$("button.reset", contentRoot).click( function() {
-				let c = confirm("Please confirm resetting, the change cannot be reverted!");
-				if (c !== true)
-					return;
+				// only require confirmation when it overwrites an existing config
+				if (loadExpedConfig() !== false) {
+					let c = confirm("Please confirm resetting, the change cannot be reverted!");
+					if (c !== true)
+						return;
+				}
 
 				let resetMode =
 					$("input[type=radio][name=reset_mode]:checked", contentRoot).val();
