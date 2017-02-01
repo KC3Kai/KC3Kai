@@ -40,8 +40,7 @@
 	var uiTimerLastUpdated = 0;
 	
 	// Experience Calculation
-	var mapexp = [], maplist = {}, rankFactors = [0, 0.5, 0.7, 0.8, 1, 1, 1.2],
-		newGoals, grindData, expLeft, expPerSortie;
+	var mapexp = [], maplist = {}, rankFactors = [0, 0.5, 0.7, 0.8, 1, 1, 1.2];
 		
 	// Error reporting
 	var errorReport = {
@@ -2142,23 +2141,29 @@
 
 			// Show experience calculation
 			if(selectedFleet<5){
+				let expJustGained = data.api_get_ship_exp;
 				var CurrentFleet = PlayerManager.fleets[selectedFleet-1];
-				var ThisShip;
-				newGoals = JSON.parse(localStorage.goals || "{}");
+				let newGoals = JSON.parse(localStorage.goals || "{}");
 				$.each(CurrentFleet.ships, function(index, rosterId){
 					if(typeof newGoals["s"+rosterId] != "undefined"){
-						grindData = newGoals["s"+rosterId];
+						let grindData = newGoals["s"+rosterId];
 						if(grindData.length===0){ return true; }
-						ThisShip = KC3ShipManager.get( rosterId );
-						expLeft = KC3Meta.expShip(grindData[0])[1] - ThisShip.exp[0];
+						let ThisShip = KC3ShipManager.get( rosterId );
+						// we are at battle result page and old ship exp data has not yet been updated,
+						// so here we need to add  "expJustGained" to get the correct exp.
+						// also we don't update ship.exp here, as it will be automatically sync-ed
+						// once we back to port or continue sortie.
+						let expLeft = KC3Meta.expShip(grindData[0])[1] - (ThisShip.exp[0] + expJustGained[index+1]);
 						console.debug("Ship", rosterId, "target exp", expLeft);
 						if(expLeft < 0){ return true; } // if the ship has reached the goal, skip it
-						expPerSortie = maplist[ grindData[1]+"-"+grindData[2] ];
+						let expPerSortie = maplist[ grindData[1]+"-"+grindData[2] ];
 						if(grindData[6]===1){ expPerSortie = expPerSortie * 2; }
 						if(grindData[5]===1){ expPerSortie = expPerSortie * 1.5; }
 						expPerSortie = expPerSortie * rankFactors[grindData[4]];
-
-						$("<div />").addClass("expNotice").text( Math.ceil(expLeft / expPerSortie) ).appendTo("#ShipBox"+rosterId+" .ship_exp_label").delay( 5000 ).fadeOut(1000, function(){ $(this).remove(); } );
+						$("<div />").addClass("expNotice").text( Math.ceil(expLeft / expPerSortie) )
+							.appendTo("#ShipBox"+rosterId+" .ship_exp_label")
+							.delay( 5000 )
+							.fadeOut(1000, function(){ $(this).remove(); } );
 					}
 				});
 
