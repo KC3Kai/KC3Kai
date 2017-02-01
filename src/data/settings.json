@@ -196,6 +196,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "info_pvp_info",
+				"name" : "SettingsPvPInfoActivity",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "info_eng_stype",
 				"name" : "SettingsEnglishShipType",
 				"type" : "check",

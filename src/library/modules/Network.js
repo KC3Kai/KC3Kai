@@ -35,6 +35,8 @@ Listens to network history and triggers callback if game events happen
 			CraftShip: [],
 			Modernize: [],
 			ClearedMap: [],
+			PvPList: [],
+			PvPFleet: [],
 			PvPStart: [],
 			PvPNight: [],
 			PvPEnd: [],
