@@ -417,14 +417,6 @@
 		localStorage.expedConfig = JSON.stringify( newConfig );
 	}
 
-	/*
-
-	  TODO:
-
-	  - Q & A section
-
-	 */
-
 	KC3StrategyTabs.expedtable = new KC3StrategyTab("expedtable");
 
 	KC3StrategyTabs.expedtable.definition = {

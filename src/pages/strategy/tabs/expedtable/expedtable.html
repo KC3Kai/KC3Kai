@@ -5,8 +5,97 @@
 
 <!-- HELP TOPICS -->
 <div class="page_help">
-	<div class="help_q"></div>
-	<div class="help_a"></div>
+	<div class="help_q">What is this tab for?</div>
+	<div class="help_a">
+		<p>This table gives you a detail and accurate view of expeditions. Expedition scorer also uses the configuration you set in this tab to figure out some best set of expeditions to be run parallelly for you.</p>
+	</div>
+
+	<div class="help_q">tl;dr</div>
+	<div class="help_a">
+		<p>If this is the first time you run into this page:</p>
+		<ul>
+			<li>Scroll down to bottom and click &quot;Reset&quot;.</li>
+			<li>Congrats, your expedition scorer is now more accurate than before!</li>
+		</ul>
+		<p>otherwise, have fun messing around with these views and sorting methods xD</p>
+	</div>
+
+	<div class="help_q">What is expedition configuration?</div>
+	<div class="help_a">
+		<p>Expedition configuration represents how you normally run expedtions: for a single expedition, this includes whether you want to guarantee great success, how many Daihatsu your fleet usually carry and what fleet composition you use for running the expedition.</p>
+		<ul>
+			<li><p>Each expedition is associated with its own configuration.</p></li>
+			<li><p>For each expedition, a configuration consists of 2 parts:</p>
+				<ul>
+					<li><p><code>Income Modifier</code> is a number applied directly to the basic resource income. For example, great success grants you 50% extra resource income, which is equivalent to an income modifier of <code>1.5</code> (i.e. 150%). Having 4 daihatsu in your fleet will further boost the income modifier to <code>1.8</code> (<code>= 1.5 x (1 + 0.05x4) = 1.5 x 1.2</code>).</p>
+						<p>There are two methods of configuring income modifier:</p>
+						<ul>
+							<li><p><code>Normal</code> method allows you to specify whether great success is intended and how many Daihatsu you want to carry, and works out the income modifier for you.</p></li>
+							<li><p><code>Custom</code> method is for advanced users. You can fill in an income modifier directly in case you have Toku Daihatsu or improved Daihatsu and want more accurate results. For example, if you want 4 fully improved Daihatsu (122%) together with guaranteed great success (150%), Your income modifier will be <code>1.83</code> (<code>=1.22 x 1.5</code>).</p></li>
+					</ul></li>
+					<li><p><code>Resupply Cost</code> is the fuel and ammo cost per run.</p>
+						<p>There are two ways of configuring resupply cost:</p>
+						<ul>
+							<li><p><code>Normal</code> method estimates the fuel and ammo cost for you, all you need to do is to set <code>Number of Ships</code> and <code>wildcard</code>. Take expedition 5 as an example, for a successful run you would just need 4 ships including one light cruiser (<code>1CL</code>) and two destroyers (<code>2DD</code>). For an almost guaranteed great success rate (about 95%), however, you would need 5 sparkled ships in total. and the actual fleet composition would be <code>1CL4DD</code>. Here the <code>Number of Ships</code> is <code>5</code> in total, and in addition to the require <code>1CL2DD</code>, you have two <code>DD</code> as <code>wildcard</code> ships.</p>
+								<p>In case you are interested about how the resupply cost is estimated, see <code>Cost Model</code> section.</p></li>
+							<li><p><code>Custom</code> method lets you accurately specify the cost: say if you have a fleet of 6 Mutsuki-class destroyers for expedition 38 (so it's 80% fuel and 80% ammo consumption), you would set both <code>Fuel</code> and <code>Ammo</code> to <code>72</code>. Because one Mutsuki-class destroyer will cost 12 fuel and 12 ammo per run. and you have 6 of them in fleet summing up to <code>72</code> (<code>=12x6</code>) fuel and <code>72</code> ammo cost per run.</p></li>
+					</ul></li>
+			</ul></li>
+		</ul>
+
+	</div>
+
+	<div class="help_q">I can't see any expeditions</div>
+	<div class="help_a">
+		<p>If you are entering this tab for the first time, you need to reset your configuration, please find &quot;Reset Configuration&quot; section below and pick one resetting method you like.</p>
+	</div>
+
+	<div class="help_q">I can't change view method or sort expeditions</div>
+	<div class="help_a">
+		<p>All these functions are disabled when you are editing expeditions.</p>
+	</div>
+
+	<div class="help_q">What does <code>General Config</code> button do?</div>
+	<div class="help_a">
+		<p>Normally expedition table tries to represent your configuration instead of some general numbers. A <code>General Config</code> view forces every expedition configuration to show its actual bonus and resupply cost.</p>
+	</div>
+
+	<div class="help_q">Resetting</div>
+	<div class="help_a">
+		<p>Reseting allows you to initialize your expedition configuration.</p>
+		<p>There are two resetting methods:</p>
+		<ul>
+			<li><p>&quot;Normal&quot; method sets default configuration to all expeditions. A default configuration considers basic income as your final income - not aim for great success and no Daihatsu is carried.</p></li>
+			<li><p>&quot;Recommended&quot; method tries to aim for great success if one expedition has decent income per run. For an expedition to be considered decent, its <code>fuel + ammo + steel + bauxite x 3</code> value must be no less than <code>500</code>.</p></li>
+		</ul>
+		<p>Optionally you can let KC3 guess some configuration from your recent expedition history.</p>
+	</div>
+
+	<div class="help_q">What are <code>Gross Income</code>, <code>Net Income</code> and <code>Basic Income</code>?</div>
+	<div class="help_a">
+		<ul>
+			<li><code>Basic Inome</code> is the amount of resource you get when you have a normally successful expedition.</li>
+			<li><code>Gross Income</code> considers everything: great success, Daihatsu, except resupply cost.</li>
+			<li><code>Net Income</code> is <code>Gross Income</code> but with resupply cost in mind.</li>
+		</ul>
+	</div>
+
+	<div class="help_q">Why can't I have multiple configuration for a single expedition?</div>
+	<div class="help_a">
+		<p>That would mean even more complicated user interface and it would take longer time for expedition scorer to get some results.</p>
+	</div>
+
+	<div class="help_q">What is <code>Cost Model</code>?</div>
+	<div class="help_a">
+		<p>A cost model is a function that estimates resupply cost given a fleet composition. You can work out the resupply cost manually by adding up corresponding table cells in <code>Cost Model</code> section.</p>
+		<p>For example, given fleet composition <code>1CL5DD</code>, with 80% fuel and ammo cost:</p>
+		<ul>
+			<li>first look for <code>CL - 1 Ship</code> cell, which indicates the cost is 20 fuel and 20 ammo.</li>
+			<li>then look for <code>DD - 5 Ships</code> cell, which indicates the cost is 60 fuel and 60 ammo.</li>
+		</ul>
+		<p>Therefore <code>1CL5DD</code> sums up to a total cost of 80 fuel and 80 ammo.</p>
+
+	</div>
 </div>
 
 <!-- CONTENT -->
