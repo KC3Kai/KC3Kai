@@ -1032,25 +1032,24 @@
 			// TAIHA ALERT CHECK
 			if (
 				PlayerManager.fleets
-					.filter (function(  x,  i) {
+					.filter (function( obj,  i) {
 						var
 							cf = PlayerManager.combinedFleet, // Marks combined flag
 							fs = KC3SortieManager.fleetSent,  // Which fleet that requires to focus out
 							so = KC3SortieManager.onSortie;   // Is it on sortie or not? if not, focus all fleets.
-						return !so || ((cf&&fs===1) ? (i <= 1) : (i == fs-1));
+						return !so || ((cf && fs===1) ? (i <= 1) : (i == fs-1));
 					})
-					.map    (function(  fldat) { return fldat.ships; })
-					.reduce (function(  x,  y) { return x.concat(y); })
-					.filter (function( shipId) { return shipId >= 0; })
-					.map    (function( shipId) { return KC3ShipManager.get(shipId); })
-					.some   (function( shpDat) {
-						return !shpDat.didFlee && shpDat.isTaiha();
+					.map    (function(fleetObj) { return fleetObj.ships; }) // Convert to ship ID array
+					.reduce (function(   x,  y) { return x.concat(y); })    // Join IDs from fleets
+					.map    (function(   v,  i) { return {id: v, pos: i % 6}; }) // Convert to {rosterId, posIndex} object
+					.filter (function(shipData) { return shipData.id>0 && shipData.pos>0; }) // Remove ID -1 and flagship
+					.map    (function(shipData) { return KC3ShipManager.get(shipData.id); }) // Convert to Ship instance
+					.some   (function( shipObj) { // Check if any ship is Taiha, not flee, no damecon found
+						return !shipObj.didFlee && shipObj.isTaiha() && shipObj.findDameCon().pos < 0;
 					})
 			) {
-				if (!ConfigManager.alert_taiha_pvp && KC3SortieManager.isPvP()) {
-					// if PvP and config for PvP is disabled, do nothing
-
-				} else if(ConfigManager.alert_taiha){
+				// if not PvP and taiha alert setting is enabled
+				if(!KC3SortieManager.isPvP() && ConfigManager.alert_taiha){
 
 					if(ConfigManager.alert_taiha_panel){
 						$("#critical").show();
