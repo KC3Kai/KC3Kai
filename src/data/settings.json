@@ -473,6 +473,18 @@
 				"options" : {}
 			},
 			{
+				"id" : "alert_taiha_homeport",
+				"name" : "SettingsDisableHomePort",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "alert_taiha_damecon",
+				"name" : "SettingsDisableHasDameon",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "alert_taiha_blur",
 				"name" : "SettingsScreenBlur",
 				"type" : "check",
