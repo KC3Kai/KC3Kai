@@ -478,11 +478,4 @@ KC3改 Ship Box for Natsuiro theme
 		}
 	};
 	
-	KC3NatsuiroShipbox.tooltipOptions = {
-		position: { my: "left+40 top-20", at: "left center" },
-		content: function(){
-			return $(this).attr("title").replace(/\n/g, "<br/>");
-		}
-	};
-
 })();
