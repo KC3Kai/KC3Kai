@@ -970,18 +970,12 @@
 			var questType, questBox;
 			var toggleQuestFunc = function(){
 				var quest = KC3QuestManager.get($(this).data("id"));
-				if(quest.status == 2){
-					console.info("Going to complete quest:", quest);
-					quest.status = 3;
-					KC3QuestManager.save();
+				if(quest.isSelected()){
+					quest.toggleCompletion();
 					$(this).parent().addClass("complete");
-				} else if(quest.status == 3){
-					console.info("Going to open quest agin:", quest);
-					quest.status = 2;
-					KC3QuestManager.save();
+				} else if(quest.isCompleted()){
+					quest.toggleCompletion();
 					$(this).parent().removeClass("complete");
-				} else {
-					console.warn("Quest status invalid:", quest);
 				}
 			};
 			$(".module.quests").empty();
@@ -1746,7 +1740,16 @@
 				$(".module.activity .battle_detection").attr("title", airDefender);
 				$(".module.activity .battle_engagement").prev().text(KC3Meta.term("BattleAirBaseLoss"));
 				$(".module.activity .battle_engagement").text(KC3Meta.airraiddamage(thisNode.lostKind));
-				$(".module.activity .battle_engagement").addClass( thisNode.lostKind !==4 ? "bad" : "" );
+				if(thisNode.lostKind == 4){
+					$(".module.activity .battle_engagement").removeClass("bad");
+					$(".module.activity .battle_engagement").attr("title", "");
+				} else {
+					$(".module.activity .battle_engagement").addClass("bad");
+					// http://wikiwiki.jp/kancolle/?%B4%F0%C3%CF%B9%D2%B6%F5%C2%E2#airraid
+					$(".module.activity .battle_engagement").attr("title", KC3Meta.term("BattleAirBaseLossTip")
+						.format( thisNode.baseDamage, Math.round(thisNode.baseDamage * 0.9 + 0.1) )
+					);
+				}
 				var contactSpan = buildContactPlaneSpan(thisNode.fcontactId, thisNode.fcontact, thisNode.econtactId, thisNode.econtact);
 				$(".module.activity .battle_contact").html($(contactSpan).html());
 				$(".module.activity .battle_airbattle").text( thisNode.airbattle[0] );
@@ -2257,6 +2260,128 @@
 		},
 
 		ClearedMap: function(data){},
+
+		PvPList: function(data){
+			if(!ConfigManager.info_pvp_info)
+				return;
+			console.log("PvP Enemy List", data);
+			var jpRankArr = ["","\u5143\u5e25","\u5927\u5c06","\u4e2d\u5c06","\u5c11\u5c06","\u5927\u4f50","\u4e2d\u4f50","\u65b0\u7c73\u4e2d\u4f50","\u5c11\u4f50","\u4e2d\u5805\u5c11\u4f50","\u65b0\u7c73\u5c11\u4f50"];
+			$(".activity_pvp .pvp_header .pvp_create_kind").text(
+				KC3Meta.term("PvpListCreateType{0}".format(data.api_create_kind))
+			);
+			$(".activity_pvp .pvp_list").empty();
+			$.each(data.api_list, function(idx, enemy){
+				var enemyBox = $("#factory .pvpEnemyInfo").clone();
+				$(".pvp_enemy_pic img", enemyBox).attr("src", KC3Meta.shipIcon(enemy.api_enemy_flag_ship));
+				$(".pvp_enemy_pic", enemyBox).attr("title", KC3Meta.shipName(KC3Master.ship(enemy.api_enemy_flag_ship).api_name));
+				$(".pvp_enemy_name", enemyBox).text(enemy.api_enemy_name);
+				$(".pvp_enemy_name", enemyBox).attr("title", enemy.api_enemy_name);
+				$(".pvp_enemy_level", enemyBox).text(enemy.api_enemy_level);
+				// api_enemy_rank is not int ID of rank, fml
+				var rankId = jpRankArr.indexOf(enemy.api_enemy_rank);
+				$(".pvp_enemy_rank", enemyBox).text(KC3Meta.rank(rankId));
+				$(".pvp_enemy_rank", enemyBox).attr("title", KC3Meta.rank(rankId));
+				$(".pvp_enemy_comment", enemyBox).text(enemy.api_enemy_comment);
+				$(".pvp_enemy_comment", enemyBox).attr("title", enemy.api_enemy_comment);
+				if(enemy.api_medals > 0){
+					$(".pvp_enemy_medals span", enemyBox).text(enemy.api_medals);
+				} else {
+					$(".pvp_enemy_medals", enemyBox).hide();
+				}
+				if(enemy.api_state > 0){
+					$(".pvp_enemy_state img", enemyBox).attr("src",
+						"../../../../assets/img/client/ratings/{0}.png".format(["","E","D","C","B","A","S"][enemy.api_state])
+					);
+				} else {
+					$(".pvp_enemy_state", enemyBox).hide();
+				}
+				enemyBox.appendTo(".activity_pvp .pvp_list");
+			});
+			$(".module.activity .activity_tab").removeClass("active");
+			$("#atab_activity").addClass("active");
+			$(".module.activity .activity_box").hide();
+			$(".module.activity .activity_pvp .pvpList").show();
+			$(".module.activity .activity_pvp .pvpFleet").hide();
+			$(".module.activity .activity_pvp").fadeIn(500);
+		},
+
+		PvPFleet: function(data){
+			if(!ConfigManager.info_pvp_info)
+				return;
+			console.log("PvP Enemy Fleet", data);
+			$(".activity_pvp .pvp_admiral .pvp_admiral_name .value").text(data.api_nickname);
+			$(".activity_pvp .pvp_admiral .pvp_admiral_level .value").text(data.api_level);
+			// why is this rank int ID, fml
+			$(".activity_pvp .pvp_admiral .pvp_admiral_rank").text(KC3Meta.rank(data.api_rank))
+				.attr("title", KC3Meta.rank(data.api_rank));
+			// guess nobody is interest in api_experience[1]?
+			$(".activity_pvp .pvp_admiral .pvp_admiral_exp").text(data.api_experience[0]);
+			$(".activity_pvp .pvp_admiral .pvp_admiral_comment").text(data.api_cmt);
+			$(".activity_pvp .pvp_admiral .pvp_admiral_ships").text("{0} /{1}".format(data.api_ship));
+			$(".activity_pvp .pvp_admiral .pvp_admiral_gears").text("{0} /{1}".format(
+				data.api_slotitem[0],
+				// 3 fixed item space for everyone? fml
+				3 + data.api_slotitem[1]
+			));
+			$(".activity_pvp .pvp_admiral .pvp_admiral_furniture").text(data.api_furniture);
+			// This is not shown in game
+			$(".activity_pvp .pvp_fleet_name").text(data.api_deckname);
+			$(".activity_pvp .pvp_fleet_list").empty();
+			var levelFlagship = 0, level2ndShip = 0;
+			$.each(data.api_deck.api_ships, function(idx, ship){
+				if(ship.api_id > 0){
+					var shipMaster = KC3Master.ship(ship.api_ship_id);
+					var shipName = KC3Meta.shipName(shipMaster.api_name);
+					if(idx === 0) levelFlagship = ship.api_level;
+					if(idx === 1) level2ndShip = ship.api_level;
+					var shipBox = $("#factory .pvpFleetShip").clone();
+					$(".pvp_fleet_ship_icon img", shipBox).attr("src", KC3Meta.shipIcon(ship.api_ship_id))
+						.attr("title", KC3Meta.stype(shipMaster.api_stype));
+					$(".pvp_fleet_ship_name", shipBox).text(shipName).attr("title", shipName);
+					$(".pvp_fleet_ship_level .value", shipBox).text(ship.api_level);
+					$(".pvp_fleet_ship_star .value", shipBox).text(1 + ship.api_star);
+					shipBox.appendTo(".activity_pvp .pvp_fleet_list");
+				}
+			});
+			// Base EXP only affected by first two ships of opponent's fleet
+			var baseExp = 3 + Math.floor(KC3Meta.expShip(levelFlagship)[1] / 100 + KC3Meta.expShip(level2ndShip)[1] / 300);
+			if(baseExp > 500){
+				baseExp = Math.floor(500 + Math.sqrt(baseExp - 500));
+			}
+			// Check CT bonus in current selected fleet
+			var playerFleet = PlayerManager.fleets[selectedFleet > 4 ? 0 : selectedFleet - 1];
+			var ctBonus = playerFleet.lookupKatoriClassBonus();
+			// Variant of battle rank
+			var baseExpWoCT = Math.floor(baseExp * 1.2),
+				baseExpS  = Math.floor(Math.floor(baseExp * 1.2) * ctBonus),
+				baseExpAB = Math.floor(Math.floor(baseExp * 1.0) * ctBonus),
+				baseExpC  = Math.floor(Math.floor(baseExp * 0.64) * ctBonus),
+				baseExpD  = Math.floor(Math.floor(Math.floor(baseExp * 0.56) * 0.8) * ctBonus);
+			$(".activity_pvp .pvp_base_exp .value").text(baseExpS);
+			$(".activity_pvp .pvp_base_exp").attr("title",
+				("{0}: {1}\nSS/S: {2}\nA/B: {3}\nC: {4}\nD: {5}"
+				 + (ctBonus > 1 ? "\n{6}: {7}" : ""))
+					.format(KC3Meta.term("PvpBaseExp"),
+						baseExp, baseExpS, baseExpAB, baseExpC, baseExpD,
+						KC3Meta.term("PvpDispBaseExpWoCT").format(ctBonus), baseExpWoCT)
+			);
+			var predictedFormation = playerFleet.predictOpponentFormation(
+				// Normalize opponent's fleet: convert Object to Array, remove -1 elements
+				data.api_deck.api_ships
+					.map(function(v){return v.api_id > 0 ? v.api_ship_id : -1;})
+					.filter(function(v){return v > 0;})
+			);
+			$(".activity_pvp .pvp_formation img")
+				.attr("src", KC3Meta.formationIcon(predictedFormation))
+				.attr("title", KC3Meta.formationText(predictedFormation));
+			
+			$(".module.activity .activity_tab").removeClass("active");
+			$("#atab_activity").addClass("active");
+			$(".module.activity .activity_box").hide();
+			$(".module.activity .activity_pvp .pvpList").hide();
+			$(".module.activity .activity_pvp .pvpFleet").show();
+			$(".module.activity .activity_pvp").fadeIn(500);
+		},
 
 		PvPStart: function(data){
 			// Clear battle details box just to make sure

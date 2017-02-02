@@ -279,6 +279,26 @@ KC3改 Ship Object
 		this.repair.fill(0);
 	};
 
+	/**
+	 * Return max HP of a ship. Static method for library.
+	 * Especially after marriage. api_taik[1] is not used in game.
+	 * @see http://wikiwiki.jp/kancolle/?%A5%B1%A5%C3%A5%B3%A5%F3%A5%AB%A5%C3%A5%B3%A5%AB%A5%EA
+	 */
+	KC3Ship.getMaxHp = function(masterId, currentLevel){
+		var masterHp = KC3Master.ship(masterId).api_taik[0];
+		return (currentLevel || 155) < 100 ? masterHp :
+			masterHp >  90 ? masterHp + 9 :
+			masterHp >= 70 ? masterHp + 8 :
+			masterHp >= 50 ? masterHp + 7 :
+			masterHp >= 40 ? masterHp + 6 :
+			masterHp >= 30 ? masterHp + 5 :
+			masterHp >= 8  ? masterHp + 4 :
+			masterHp + 3;
+	};
+	KC3Ship.prototype.maxHp = function(){
+		return KC3Ship.getMaxHp(this.masterId, this.level);
+	};
+
 	/* REPAIR TIME
 	Get ship's docking and Akashi times
 	when optAfterHp is true, return repair time based on afterHp
@@ -601,14 +621,18 @@ KC3改 Ship Object
 			return false;
 		
 		// only few DDs and CLs are capable of equipping daihatsu
-		// including:
-		// Abukuma K2(200), Verniy(147), Ooshio K2(199),
-		// Satsuki K2(418), Mutsuki K2(434), Kisaragi K2(435),
-		// Kasumi K2(464), Kasumi K2B(470),
-		// Asashio K2D(468), Kawakaze K2(469),
-		// Kinu K2(487)
-		if ([2,3].indexOf( master.api_stype ) !== -1 &&
-			[147,199,200,418,434,435,464,470,468,469,487].indexOf( this.masterId ) === -1)
+		// see comments below.
+		if ([2 /* DD */,3 /* CL */].indexOf( master.api_stype ) !== -1 &&
+			[
+				// Abukuma K2(200), Kinu K2(487)
+				200, 487,
+				// Satsuki K2(418), Mutsuki K2(434), Kisaragi K2(435)
+				418, 434, 435,
+				// Kasumi K2(464), Kasumi K2B(470), Ooshio K2(199), Asashio K2D(468), Arashio K2(490)
+				464, 470, 199, 468, 490,
+				// Verniy(147), Kawakaze K2(469)
+				147, 469
+			].indexOf( this.masterId ) === -1)
 			return false;
 		return true;
 	};

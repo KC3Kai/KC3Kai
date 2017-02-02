@@ -46,7 +46,7 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 	}, function(response){
 		if(response.value){
 			console.log("Setting zoom to scale", response.value + "%");
-			$("body").css("zoom", (response.value || 100) / 100);
+			document.body.style.zoom = (response.value || 100) / 100;
 		}
 	});
 	
