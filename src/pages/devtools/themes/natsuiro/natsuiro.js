@@ -970,18 +970,12 @@
 			var questType, questBox;
 			var toggleQuestFunc = function(){
 				var quest = KC3QuestManager.get($(this).data("id"));
-				if(quest.status == 2){
-					console.info("Going to complete quest:", quest);
-					quest.status = 3;
-					KC3QuestManager.save();
+				if(quest.isSelected()){
+					quest.toggleCompletion();
 					$(this).parent().addClass("complete");
-				} else if(quest.status == 3){
-					console.info("Going to open quest again:", quest);
-					quest.status = 2;
-					KC3QuestManager.save();
+				} else if(quest.isCompleted()){
+					quest.toggleCompletion();
 					$(this).parent().removeClass("complete");
-				} else {
-					console.warn("Quest status invalid:", quest);
 				}
 			};
 			$(".module.quests").empty();

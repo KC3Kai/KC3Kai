@@ -1304,7 +1304,7 @@ Previously known as "Reactor"
 			console.log(quest,data);
 			
 			// Force to mark quest as complete
-			KC3QuestManager.get(quest).status = 3;
+			KC3QuestManager.get(quest).toggleCompletion(true);
 			KC3QuestManager.isOpen( quest, false );
 			KC3QuestManager.isActive( quest, false );
 			KC3QuestManager.save();
@@ -2014,7 +2014,7 @@ Previously known as "Reactor"
 			getRank = function(r){ return ['E','D','C','B','A','S','SS'].indexOf(r); },
 			qLog = function(r){ // this one is used to track things
 				var q = KC3QuestManager.get(r);
-				console.log("Quest",r,"progress ["+(q.tracking ? q.tracking : '-----')+"], in progress:",q.status == 2);
+				console.log("Quest",r,"progress ["+(q.tracking ? q.tracking : '-----')+"], in progress:",q.isSelected());
 				return q;
 			};
 		
