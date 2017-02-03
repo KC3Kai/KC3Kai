@@ -135,7 +135,7 @@ KC3改 Ship Box for Natsuiro theme
 		var myExItem = this.shipData.exItem();
 		if( myExItem && (myExItem.masterId > 0)){
 			$(".ex_item img", this.element).attr("src", "../../../../assets/img/items/"+myExItem.master().api_type[3]+".png");
-			$(".ex_item img", this.element).attr("title", myExItem.name());
+			$(".ex_item img", this.element).attr("title", myExItem.name()).lazyInitTooltip();
 			if (myExItem.masterId == 43) {
 				$(".ex_item", this.element).addClass("goddess");
 			} else {
@@ -188,7 +188,7 @@ KC3改 Ship Box for Natsuiro theme
 				"+{0} \u27A4{1}".format(resupplyCost.ammo, this.shipData.master().api_bull_max),
 				resupplyCost.bauxite
 			)
-		);
+		).lazyInitTooltip();
 		
 		if(!this.showCombinedFleetBars){
 			$(".ship_bars", this.element).css("opacity", "0");
@@ -208,12 +208,12 @@ KC3改 Ship Box for Natsuiro theme
 		
 		$(".ship_level span.value", this.element)
 			.text( this.shipData.level )
-			.prop( 'title', (function(shipData){
+			.attr( "title", (function(shipData){
 				var mst = shipData.master();
 				return (shipData.level >= (mst.api_afterlv || Infinity)) ?
 					[KC3Meta.term("PanelPossibleRemodel")] :
 					(mst.api_afterlv && [KC3Meta.term("PanelNextRemodelLv"),mst.api_afterlv].join(' ') || '');
-			})(this.shipData) );
+			})(this.shipData) ).lazyInitTooltip();
 		$(".ship_exp_next", this.element).text( this.shipData.exp[1] );
 		$(".ship_exp_bar", this.element).css("width", (290*this.expPercent)+"px");
 		
@@ -231,11 +231,11 @@ KC3改 Ship Box for Natsuiro theme
 					"+{0} \u27A4{1}".format(resupplyCost.ammo, this.shipData.master().api_bull_max),
 					resupplyCost.bauxite
 				)
-			);
+			).lazyInitTooltip();
 		} else {
 			$(".ship_supply", this.element).attr("title",
 				"\u27A4{0}\n\u27A4{1}".format(this.shipData.master().api_fuel_max, this.shipData.master().api_bull_max)
-			);
+			).lazyInitTooltip();
 		}
 
 		this.showEquipment(0);
@@ -262,7 +262,9 @@ KC3改 Ship Box for Natsuiro theme
 		// Left HP to be Taiha
 		var taihaHp = Math.floor(0.25 * this.shipData.hp[1]);
 		if(this.shipData.hp[0] > taihaHp && this.shipData.hp[0] < this.shipData.hp[1]){
-			$(".ship_hp_cur", this.element).attr("title", KC3Meta.term("PanelTaihaHpLeft").format(taihaHp, this.shipData.hp[0] - taihaHp) );
+			$(".ship_hp_cur", this.element)
+				.attr("title", KC3Meta.term("PanelTaihaHpLeft").format(taihaHp, this.shipData.hp[0] - taihaHp) )
+				.lazyInitTooltip();
 		}
 		
 		// Clear box colors
@@ -278,9 +280,9 @@ KC3改 Ship Box for Natsuiro theme
 					((RepairTimes.akashi>0)
 						?String(RepairTimes.akashi).toHHMMSS()
 						:KC3Meta.term("PanelCantRepair"))
-			);
+			).lazyInitTooltip();
 		}else{
-			$(".ship_hp_box", this.element).attr("title", KC3Meta.term("PanelNoRepair"));
+			$(".ship_hp_box", this.element).attr("title", KC3Meta.term("PanelNoRepair")).lazyInitTooltip();
 		}
 		
 		// If ship is being repaired
@@ -413,7 +415,8 @@ KC3改 Ship Box for Natsuiro theme
 				$(".ship_gear_"+(slot+1)+" .ship_gear_icon img", this.element).attr("src",
 					"../../../../assets/img/items/"+thisGear.master().api_type[3]+".png");
 				$(".ship_gear_"+(slot+1), this.element).addClass("equipped");
-				$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element).attr("title", thisGear.name());
+				$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element)
+					.attr("title", thisGear.name()).lazyInitTooltip();
 				
 				if (thisGear.masterId == 43) {
 					$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element).addClass("goddess");
@@ -454,7 +457,7 @@ KC3改 Ship Box for Natsuiro theme
 				var slotMax = this.shipData.master().api_maxeq[slot];
 				if(slotCurr < slotMax){
 					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).attr("title",
-						"{0} /{1}".format(slotCurr, slotMax) );
+						"{0} /{1}".format(slotCurr, slotMax) ).lazyInitTooltip();
 				}
 				var slotPercent = slotCurr / (slotMax || 1);
 				if(slotPercent <= 0){
