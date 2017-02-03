@@ -480,7 +480,7 @@
 			},
 			{
 				"id" : "alert_taiha_damecon",
-				"name" : "SettingsDisableHasDameon",
+				"name" : "SettingsDisableHasDamecon",
 				"type" : "check",
 				"options" : {}
 			},
