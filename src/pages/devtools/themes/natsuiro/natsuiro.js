@@ -43,53 +43,17 @@
 	var nativeTooltipOptions = {
 		position: { my: "left top+4", at: "left bottom", collision: "flipfit flip" },
 		content: function(){
-			return $(this).attr("title").replace(/\n/g, "<br/>");
+			// Default escaping not used, keep html, simulate native one
+			return $(this).attr("title")
+				.replace(/\n/g, "<br/>")
+				.replace(/\t/g, "&emsp;&emsp;");
 		}
 	};
 	(function($) {
-		// Define proxy functions to override jQuery predefined functions
-		// See https://github.com/hypesystem/showandtell.js/blob/master/jquery.showandtell.js
-		function applyIfExistsOrNull(fun, self, args) {
-			return typeof fun !== "undefined" ? fun.apply(self, args) : null;
-		}
-		function checkIfElementWasHidden() { return $(this).is(":hidden"); }
-		function proxy$Functions(functionProxies) {
-			$.each(functionProxies, function(oldFunctionName, proxySettings) {
-				var oldFunction = $.fn[oldFunctionName];
-				$.fn[oldFunctionName] = function() {
-					var preResult = applyIfExistsOrNull(proxySettings.pre, this, arguments);
-					var result = oldFunction.apply(this, arguments);
-					var postArguments = [result, preResult, arguments];
-					applyIfExistsOrNull(proxySettings.post, this, postArguments);
-					return result;
-				};
-			});
-		}
-		// Trigger 'hide' event after element hidden
-		/*
-		proxy$Functions({
-			hide: {
-				pre: checkIfElementWasHidden,
-				post: function(result, elementWasHidden, oldArgs) {
-					if(!elementWasHidden)
-						this.triggerHandler("hide", {type: "action"});
-				}
-			},
-			css: {
-				pre: checkIfElementWasHidden,
-				post: function(result, elementWasHidden, oldArgs) {
-					if(!elementWasHidden && oldArgs[0] == "display" && oldArgs[1] == "none")
-						$(this).triggerHandler("hide", {type: "css"});
-				}
-			}
-		});
-		*/
 		// A lazy initialzing method, prevent duplicate tooltip instance
 		$.fn.lazyInitTooltip = function(opts) {
 			if(typeof this.tooltip("instance") === "undefined") {
 				this.tooltip(opts || nativeTooltipOptions);
-				// Close tooltip if it has been opened but element is going to hide
-				//this.on("hide", function() { $(this).tooltip("close"); } );
 			}
 			return this;
 		};
@@ -105,7 +69,7 @@
 
 	// Experience Calculation
 	var mapexp = [], maplist = {}, rankFactors = [0, 0.5, 0.7, 0.8, 1, 1, 1.2];
-		
+
 	// Error reporting
 	var errorReport = {
 		title: "",
@@ -739,12 +703,6 @@
 			"font-weight" : "bold",
 			"font-size" : "14px"
 		}).addClass("waitingForActions").html( KC3Meta.term("PanelWaitActions") ).appendTo("body");
-
-		// Last minute translations
-		$(".module.activity .plane_count.fighter_ally").attr("title", KC3Meta.term("PanelPlanesFighter") );
-		$(".module.activity .plane_count.fighter_enemy").attr("title", KC3Meta.term("PanelPlanesFighter") );
-		$(".module.activity .plane_count.bomber_ally").attr("title", KC3Meta.term("PanelPlanesBomber") );
-		$(".module.activity .plane_count.bomber_enemy").attr("title", KC3Meta.term("PanelPlanesBomber") );
 	});
 
 	$(window).on("resize", function(){
@@ -1096,9 +1054,9 @@
 				KC3TimerManager._exped[0].faceId = PlayerManager.fleets[1].ship(0).masterId;
 				KC3TimerManager._exped[1].faceId = PlayerManager.fleets[2].ship(0).masterId;
 				KC3TimerManager._exped[2].faceId = PlayerManager.fleets[3].ship(0).masterId;
-				KC3TimerManager._exped[0].face();
-				KC3TimerManager._exped[1].face();
-				KC3TimerManager._exped[2].face();
+				KC3TimerManager._exped[0].face().lazyInitTooltip();
+				KC3TimerManager._exped[1].face().lazyInitTooltip();
+				KC3TimerManager._exped[2].face().lazyInitTooltip();
 			}
 
 			// TAIHA ALERT CHECK
@@ -1895,15 +1853,34 @@
 						$(".module.activity .abyss_"+enemyFleetBox+" .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.abyssIcon(eshipId));
 
 						var tooltip = "{0}: {1}\n".format(eshipId, KC3Meta.abyssShipName(eshipId));
+						tooltip += "{0} Lv {1} HP {2}\n".format(
+							KC3Meta.stype(KC3Master.ship(eshipId).api_stype),
+							thisNode.elevels[index] || "?",
+							thisNode.maxHPs.enemy[index] || "?"
+						);
+						tooltip += $("<img />").attr("src", "../../../../assets/img/client/mod_fp.png")
+							.width(13).height(13).css("margin-top", "-3px").prop("outerHTML");
 						tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipFire"), eParam[0]);
+						tooltip += $("<img />").attr("src", "../../../../assets/img/client/mod_tp.png")
+							.width(13).height(13).css("margin-top", "-3px").prop("outerHTML");
 						tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipTorpedo"), eParam[1]);
+						tooltip += $("<img />").attr("src", "../../../../assets/img/client/mod_aa.png")
+							.width(13).height(13).css("margin-top", "-3px").prop("outerHTML");
 						tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipAntiAir"), eParam[2]);
+						tooltip += $("<img />").attr("src", "../../../../assets/img/client/mod_ar.png")
+							.width(13).height(13).css("margin-top", "-3px").prop("outerHTML");
 						tooltip += "{0}: {1}".format(KC3Meta.term("ShipArmor"), eParam[3]);
 
-						var eSlot = thisNode.eSlot[index];
+						var eSlot = thisNode.eSlot[index], eSlotMaster;
 						if (!!eSlot && eSlot.length > 0) {
 							for(var slotIdx=0; slotIdx<Math.min(eSlot.length,5); slotIdx++) {
-								if(eSlot[slotIdx] > 0) tooltip += "\n" + KC3Meta.gearName(KC3Master.slotitem(eSlot[slotIdx]).api_name);
+								if(eSlot[slotIdx] > 0) {
+									eSlotMaster = KC3Master.slotitem(eSlot[slotIdx]);
+									tooltip += "\n" + $("<img />")
+										.attr("src","../../../../assets/img/items/"+eSlotMaster.api_type[3]+".png")
+										.width(13).height(13).css("margin-top", "-3px").prop("outerHTML");
+									tooltip += KC3Meta.gearName(eSlotMaster.api_name);
+								}
 							}
 						}
 
@@ -2105,25 +2082,44 @@
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > -1){
 						var eParam = thisNode.eParam[index];
+						var eMaster = KC3Master.ship(eshipId);
 						newEnemyHP = Math.max(0,thisNode.enemyHP[index].hp);
-						
 						if ($(".module.activity .abyss_single .abyss_ship_"+(index+1)).length > 0) {
 							$(".module.activity .abyss_single .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.abyssIcon(eshipId));
-	
+
 							var tooltip = "{0}: {1}\n".format(eshipId,
-								thisNode.isPvP ? KC3Meta.shipName(KC3Master.ship(eshipId).api_name) : KC3Meta.abyssShipName(eshipId));
+								thisNode.isPvP ? KC3Meta.shipName(eMaster.api_name) : KC3Meta.abyssShipName(eshipId));
+							tooltip += "{0} Lv {1} HP {2}\n".format(
+								KC3Meta.stype(eMaster.api_stype),
+								thisNode.elevels[index] || "?",
+								thisNode.maxHPs.enemy[index] || "?"
+							);
+							tooltip += $("<img />").attr("src", "../../../../assets/img/client/mod_fp.png")
+								.width(13).height(13).css("margin-top", "-3px").prop("outerHTML");
 							tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipFire"), eParam[0]);
+							tooltip += $("<img />").attr("src", "../../../../assets/img/client/mod_tp.png")
+								.width(13).height(13).css("margin-top", "-3px").prop("outerHTML");
 							tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipTorpedo"), eParam[1]);
+							tooltip += $("<img />").attr("src", "../../../../assets/img/client/mod_aa.png")
+								.width(13).height(13).css("margin-top", "-3px").prop("outerHTML");
 							tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipAntiAir"), eParam[2]);
+							tooltip += $("<img />").attr("src", "../../../../assets/img/client/mod_ar.png")
+								.width(13).height(13).css("margin-top", "-3px").prop("outerHTML");
 							tooltip += "{0}: {1}".format(KC3Meta.term("ShipArmor"), eParam[3]);
-	
-							var eSlot = thisNode.eSlot[index];
+
+							var eSlot = thisNode.eSlot[index], eSlotMaster;
 							if (!!eSlot && eSlot.length > 0) {
 								for(var slotIdx=0; slotIdx<Math.min(eSlot.length,5); slotIdx++) {
-									if(eSlot[slotIdx] > 0) tooltip += "\n" + KC3Meta.gearName(KC3Master.slotitem(eSlot[slotIdx]).api_name);
+									if(eSlot[slotIdx] > 0) {
+										eSlotMaster = KC3Master.slotitem(eSlot[slotIdx]);
+										tooltip += "\n" + $("<img />")
+											.attr("src","../../../../assets/img/items/"+eSlotMaster.api_type[3]+".png")
+											.width(13).height(13).css("margin-top", "-3px").prop("outerHTML");
+										tooltip += KC3Meta.gearName(eSlotMaster.api_name);
+									}
 								}
 							}
-	
+
 							$(".module.activity .abyss_single .abyss_ship_"+(index+1)+" img")
 								.attr("title", tooltip).lazyInitTooltip();
 							$(".module.activity .abyss_single .abyss_ship_"+(index+1)).show();
@@ -2510,7 +2506,7 @@
 
 			// Swap fish and support icons
 			$(".module.activity .battle_fish").hide();
-			$(".module.activity .battle_support").show();
+			$(".module.activity .battle_support").attr("title", "").show();
 
 			// Enemy Formation
 			if((typeof thisPvP.eformation != "undefined") && (thisPvP.eformation > -1)){
@@ -2533,15 +2529,34 @@
 					$(".module.activity .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.shipIcon(eshipId));
 					var masterShip = KC3Master.ship(eshipId);
 					var tooltip = "{0}: {1}\n".format(eshipId, KC3Meta.shipName(masterShip.api_name));
+					tooltip += "{0} Lv {1} HP {2}\n".format(
+						KC3Meta.stype(masterShip.api_stype),
+						thisPvP.elevels[index] || "?",
+						thisPvP.maxHPs.enemy[index] || "?"
+					);
+					tooltip += $("<img />").attr("src", "../../../../assets/img/client/mod_fp.png")
+						.width(13).height(13).css("margin-top", "-3px").prop("outerHTML");
 					tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipFire"), eParam[0]);
+					tooltip += $("<img />").attr("src", "../../../../assets/img/client/mod_tp.png")
+						.width(13).height(13).css("margin-top", "-3px").prop("outerHTML");
 					tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipTorpedo"), eParam[1]);
+					tooltip += $("<img />").attr("src", "../../../../assets/img/client/mod_aa.png")
+						.width(13).height(13).css("margin-top", "-3px").prop("outerHTML");
 					tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipAntiAir"), eParam[2]);
+					tooltip += $("<img />").attr("src", "../../../../assets/img/client/mod_ar.png")
+						.width(13).height(13).css("margin-top", "-3px").prop("outerHTML");
 					tooltip += "{0}: {1}".format(KC3Meta.term("ShipArmor"), eParam[3]);
 
-					var eSlot = thisPvP.eSlot[index];
+					var eSlot = thisPvP.eSlot[index], eSlotMaster;
 					if (!!eSlot && eSlot.length > 0) {
 						for(var slotIdx=0; slotIdx<Math.min(eSlot.length,5); slotIdx++) {
-							if(eSlot[slotIdx] > 0) tooltip += "\n" + KC3Meta.gearName(KC3Master.slotitem(eSlot[slotIdx]).api_name);
+							if(eSlot[slotIdx] > 0) {
+								eSlotMaster = KC3Master.slotitem(eSlot[slotIdx]);
+								tooltip += "\n" + $("<img />")
+									.attr("src","../../../../assets/img/items/"+eSlotMaster.api_type[3]+".png")
+									.width(13).height(13).css("margin-top", "-3px").prop("outerHTML");
+								tooltip += KC3Meta.gearName(eSlotMaster.api_name);
+							}
 						}
 					}
 
