@@ -1,68 +1,13 @@
 (function(){
 	"use strict";
-	/*
-	  data format for expedition table:
-	  - for income modifier:
-
-		  - standard modifier:
-
-		  { type: "normal",
-			gs: true / false,
-			daihatsu: 0 ~ 4
-		  }
-
-		  - "gs" indicates whether great success is intended
-		  - whoever saves the data is responsible for its consistency
-				if say daihatsu value turns out to be 5, that's not my fault
-
-		  - custom modifier:
-
-		  { type: "custom",
-			value: a number, from 1.0 to perhaps 2.0 (meaning 100% ~ 200%)
-		  }
-
-			  - great success should be taken into account by custom modifier.
-				which means if user intends to carry 4 daihatsus and ensure GS,
-				this value needs to be 1.8 (1.5 * 1.2)
-			  - the design decision is made in this way so that if future update
-				adds some mechanism that affect GS modifier, we will still be flexible.
-
-	  - for cost:
-		  - cost deals with the problem that user might carry extra ships for
-			a higher GS rate.
-
-		  - standard:
-		  { type: "costmodel",
-
-			wildcard: "DD" / "SS" / false,
-			count: 0 ~ 6
-		  }
-
-		  - custom:
-
-		  { type: "custom",
-			fuel: integer (non-negative),
-			ammo: integer (non-negative)
-		  }
-
-	 */
 
 	// some PureScript librarys, imported locally.
 	let ExpedInfo = PS["KanColle.Expedition.New.Info"];
 	let ExpedSType = PS["KanColle.Expedition.New.SType"];
 	let ExpedCostModel = PS["KanColle.Expedition.New.CostModel"];
-	let ExpedMinCompo = PS["KanColle.Expedition.New.MinCompo"];
 	let Maybe = PS["Data.Maybe"];
 	let PartialUnsafe = PS["Partial.Unsafe"];
 	let fromJust = PartialUnsafe.unsafePartial(Maybe.fromJust);
-
-	function getRandomInt(min,max) {
-		min = Math.ceil(min);
-		max = Math.floor(max);
-		return Math.floor(Math.random() * (max - min + 1)) + min;
-	}
-
-	let coinFlip = () => Math.random() > 0.5;
 
 	function enumFromTo(from,to,step=1) {
 		var arr = [];
@@ -71,183 +16,13 @@
 		return arr;
 	}
 
-	function genModStandard() {
-		return {
-			type: "normal",
-			gs: coinFlip(),
-			daihatsu: getRandomInt(0,4)
-		};
-	}
+	let allExpedIds = Expedition.allExpedIds;
+	let modifierToNumber = Expedition.modifierToNumber;
+	let computeActualCost = Expedition.computeActualCost;
 
-	function genModCustom() {
-		return {
-			type: "custom",
-			value: 1.0 + Math.random() * 0.8
-		};
-	}
-
-	function genCostNormal() {
-		let retVal = {
-			type: "costmodel",
-			wildcard: [false,"DD","SS"][getRandomInt(0,2)],
-			count: getRandomInt(4,6)
-		};
-		if (retVal.wildcard === false)
-			retVal.count = 0;
-		return retVal;
-	}
-
-	function genCostCustom() {
-		return {
-			type: "custom",
-			fuel: getRandomInt(10,500),
-			ammo: getRandomInt(10,500)
-		};
-	}
-
-	function generateRandomConfig() {
-		let config = {};
-		enumFromTo(1,40).map(function(x) {
-			config[x] = {
-				modifier: (coinFlip()) ? genModStandard() : genModCustom(),
-				cost: (coinFlip()) ? genCostNormal() : genCostCustom()
-			};
-		});
-		return config;
-	}
-
-	function generateNormalConfig() {
-		let config = {};
-		enumFromTo(1,40).map(function(x) {
-			config[x] = {
-				modifier: {
-					type: "normal",
-					gs: false,
-					daihatsu: 0
-				},
-				cost: {
-					type: "costmodel",
-					wildcard: false,
-					count: 0
-				}
-			};
-		});
-		return config;
-	}
-
-	function generateRecommendedConfig() {
-		let config = {};
-		enumFromTo(1,40).map(function(eId) {
-			let resourceInfo = ExpedInfo.getInformation( eId ).resource;
-			let masterInfo = KC3Master._raw.mission[eId];
-			// allow bauxite to weight more
-			let score = resourceInfo.fuel +
-				resourceInfo.ammo +
-				resourceInfo.steel +
-				resourceInfo.bauxite*3;
-			let gsFlag = score >= 500;
-			config[eId] = {
-				modifier: {
-					type: "normal",
-					gs: gsFlag,
-					daihatsu: 0
-				},
-				cost: {
-					type: "costmodel",
-					wildcard: gsFlag ? "DD" : false,
-					// for exped 21 it needs only 5 sparkled DD for an almost-guaranteed success
-					count: gsFlag ? (eId === 21 ? 5 : 6) : false
-				}
-			};
-		});
-		return config;
-	}
-
-	// baseConfig is used in case we found nothing for one particular expedition
-	function asyncGenerateConfigFromHistory( onSuccess, baseConfig ) {
-		let config = {};
-		let expedIds = enumFromTo(1,40);
-		// "completedFlag[eId-1] = true" means querying for "eId" is done.
-		let completedFlag = expedIds.map( () => false );
-		expedIds.map( function(eId) {
-			// query for most recent 5 records of the current user.
-			KC3Database.con.expedition
-				.where("mission").equals(eId)
-				.and( x => x.hq === PlayerManager.hq.id )
-				.reverse()
-				.limit(5)
-				.toArray(function(xs) {
-					if (xs.length === 0) {
-						completedFlag[eId-1] = true;
-					} else {
-						let gsCount = xs.filter( x => x.data.api_clear_result === 2).length;
-						// require great success if over half of the past 5 expeds are GS
-						// gsCount >= xs.length / 2
-						// => gsCount * 2 >= xs.length
-						let needGS = gsCount * 2 >= xs.length;
-
-						let countDaihatsu = expedRecord => {
-							let onlyDaihatsu = x => [68,193].indexOf(x) !== -1;
-							let ys = expedRecord.fleet.map( function(shipRecord) {
-								let dhtCount = 0;
-								// Kinu K2
-								if (shipRecord.mst_id === 487)
-									dhtCount += 1;
-								dhtCount += (shipRecord.equip || []).filter( onlyDaihatsu ).length;
-								return dhtCount;
-							});
-							return ys.reduce( (a,b) => a+b, 0 );
-						};
-
-						let countShips = expedRecord => {
-							return expedRecord.fleet.length;
-						};
-
-						let daihatsuCountsFromHist = xs.map( countDaihatsu );
-						let daihatsuCount = saturate( Math.max.apply(undefined,daihatsuCountsFromHist) , 0, 4);
-
-						let shipCountsFromHist = xs.map( countShips );
-						let shipCount = saturate( Math.max.apply(undefined,shipCountsFromHist) , 1, 6);
-						let minCompo = ExpedMinCompo.getMinimumComposition(eId);
-						// we don't need to enforce ship count if it's already the minimal requirement
-						if (shipCount <= minCompo.length)
-							shipCount = false;
-
-						config[eId] = {
-							modifier: {
-								type: "normal",
-								gs: needGS,
-								daihatsu: daihatsuCount
-							},
-							cost: {
-								type: "costmodel",
-								wildcard: shipCount === false ? false : "DD",
-								count: shipCount === false ? 0 : shipCount
-							}
-						};
-						completedFlag[eId-1] = true;
-					}
-
-					if (completedFlag.some( x => x === false ))
-						return;
-					// finally fill in missing fields
-					onSuccess( $.extend( baseConfig, config ) );
-				});
-		});
-	}
-
-	function mergeExpedCost(arr) {
-		return arr.reduce( function(acc, cur) {
-			return { ammo: acc.ammo + cur.ammo,
-					 fuel: acc.fuel + cur.fuel };
-		}, {ammo: 0, fuel: 0});
-	}
-
-
-	function normalModifierToNumber(modConfig) {
-		console.assert( modConfig.type === "normal" );
-		return (modConfig.gs ? 1.5 : 1.0)*(1.0+0.05*modConfig.daihatsu);
-	}
+	let eqConfig = Expedition.eqConfig;
+	let loadExpedConfig = Expedition.loadExpedConfig;
+	let saveExpedConfig = Expedition.saveExpedConfig;
 
 	function prettyFloat(n,precision=2,positiveSign=false) {
 		let fixed = n.toFixed(precision);
@@ -261,49 +36,8 @@
 		return Math.max(Math.min(v,max),min);
 	}
 
-	function costConfigToActualCost(costConfig,eId) {
-		console.assert( costConfig.type === "costmodel" ||
-						costConfig.type === "custom" );
-		if (costConfig.type === "costmodel") {
-			let minCompo = ExpedMinCompo.getMinimumComposition(eId);
-			let stype =
-				/* when wildcard is not used, count must be 0 so
-				   we have nothing to fill in, here "DD" is just
-				   a placeholder that never got used.
-				*/
-				costConfig.wildcard === false ? new ExpedSType.DD()
-				: costConfig.wildcard === "DD" ? new ExpedSType.DD()
-				: costConfig.wildcard === "SS" ? new ExpedSType.SSLike()
-				: "Invalid wildcard in costConfig";
-
-			if (typeof stype === "string")
-				throw stype;
-			let actualCompo =
-				ExpedMinCompo.concretizeComposition(costConfig.count)(stype)(minCompo);
-			let info = ExpedInfo.getInformation(eId);
-			let costModel = ExpedCostModel.normalCostModel;
-			let fleetMaxCost = ExpedCostModel.calcFleetMaxCost(costModel)(actualCompo);
-			if (! Maybe.isJust(fleetMaxCost)) {
-				throw "CostModel fails to compute a cost for current fleet composition";
-			} else {
-				fleetMaxCost = fromJust(fleetMaxCost);
-			}
-			let fleetActualCost = fleetMaxCost.map( function(x) {
-				return {
-					fuel: Math.floor( info.fuelCostPercent * x.fuel ),
-					ammo: Math.floor( info.ammoCostPercent * x.ammo )
-				};
-			});
-			return mergeExpedCost( fleetActualCost );
-		} else {
-			return {
-				fuel: costConfig.fuel,
-				ammo: costConfig.ammo };
-		}
-	}
-
 	function generateCostGrouping() {
-		let allExpeds = enumFromTo(1,40).map( function(x) {
+		let allExpeds = allExpedIds.map( function(x) {
 			let info = ExpedInfo.getInformation(x);
 			return { ammo: Math.round( info.ammoCostPercent * 100),
 					 ammoP: info.ammoCostPercent,
@@ -382,40 +116,6 @@
 		{ammo:70,fuel:90,expeds:[30]},{ammo:60,fuel:90,expeds:[24]},
 		{ammo:40,fuel:90,expeds:[29]},{ammo:30,fuel:90,expeds:[32]},
 		{ammo:40,fuel:30,expeds:[17]}];
-
-	function eqModConfig(a,b) {
-		return a.type === b.type &&
-			(a.type === "normal"
-			 ? (a.gs === b.gs && a.daihatsu === b.daihatsu)
-			 : a.value === b.value);
-	}
-
-	function eqCostConfig(a,b) {
-		return a.type === b.type &&
-			(a.type === "costmodel"
-			 ? (a.count === b.count && a.wildcard === b.wildcard)
-			 : (a.fuel === b.fuel && a.ammo === b.ammo));
-	}
-
-	function eqConfig(a,b) {
-		return eqModConfig(a.modifier, b.modifier) &&
-			eqCostConfig(a.cost, b.cost);
-	}
-
-	function loadExpedConfig() {
-		if (typeof localStorage.expedConfig === "undefined")
-			return false;
-		try {
-			return JSON.parse( localStorage.expedConfig );
-		} catch (e) {
-			console.error("Error while parsing localStorage.expedConfig", e);
-			throw e;
-		}
-	}
-
-	function saveExpedConfig(newConfig) {
-		localStorage.expedConfig = JSON.stringify( newConfig );
-	}
 
 	KC3StrategyTabs.expedtable = new KC3StrategyTab("expedtable");
 
@@ -589,8 +289,8 @@
 					$("input.reset_guess[type=checkbox]", contentRoot).prop("checked");
 
 				let baseConfig = resetMode === "recommended"
-					? generateRecommendedConfig()
-					: generateNormalConfig();
+					? Expedition.generateRecommendedConfig()
+					: Expedition.generateNormalConfig();
 
 				function onCompletion() {
 					// show success message
@@ -600,7 +300,7 @@
 				}
 
 				if (guess) {
-					asyncGenerateConfigFromHistory( function(config) {
+					Expedition.asyncGenerateConfigFromHistory( function(config) {
 						saveExpedConfig( config );
 						onCompletion();
 					}, baseConfig);
@@ -617,7 +317,7 @@
 			console.assert(expedConfig !== false);
 			var factory = $(".tab_expedtable .factory");
 			var expedTableRoot = $("#exped_table_content_root");
-			let allExpeds = enumFromTo(1,40);
+			let allExpeds = allExpedIds;
 
 			function makeWinItem( jqObj, winItemArr ) {
 				var itemId = winItemArr[0];
@@ -887,9 +587,7 @@
 			$(".cost .view.view_general", jqViewRoot).toggle( costViewByGeneral );
 			$(".cost .view.view_normal", jqViewRoot).toggle( !costViewByGeneral );
 
-			let generalModifier = config.modifier.type === "normal"
-				? normalModifierToNumber(config.modifier)
-				: config.modifier.value;
+			let generalModifier = Expedition.modifierToNumber( config.modifier );
 
 			let gainPercent = (generalModifier-1.0)*100;
 			$(".modifier .view.view_general", jqViewRoot).text(
@@ -904,7 +602,7 @@
 					"x" + config.modifier.daihatsu);
 			}
 
-			let computedCost = costConfigToActualCost(config.cost,eId);
+			let computedCost = computeActualCost(config.cost,eId);
 			$(".cost .view.view_general .fuel", jqViewRoot).text(String(-computedCost.fuel));
 			$(".cost .view.view_general .ammo", jqViewRoot).text(String(-computedCost.ammo));
 			if (!costViewByGeneral) {
@@ -962,7 +660,7 @@
 				$("select.dht",jqIMRoot).val(config.modifier.daihatsu);
 
 				$("input.custom_val[type=text]",jqIMRoot)
-					.val( prettyFloat(normalModifierToNumber(config.modifier)) );
+					.val( prettyFloat(modifierToNumber(config.modifier)) );
 			} else {
 				// custom
 				$("input.custom_val[type=text]",jqIMRoot)
@@ -995,7 +693,7 @@
 						? "None" : config.cost.wildcard);
 				$("select.count",jqCRoot).val( config.cost.count );
 
-				let actualCost = costConfigToActualCost( config.cost, eId );
+				let actualCost = computeActualCost( config.cost, eId );
 				$("input[type=text][name=fuel]", jqCRoot).val( actualCost.fuel );
 				$("input[type=text][name=ammo]", jqCRoot).val( actualCost.ammo );
 			} else {
