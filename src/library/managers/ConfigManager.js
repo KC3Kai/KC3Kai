@@ -144,8 +144,9 @@ Retreives when needed to apply on components
 				alert_taiha_blood	: true,
 				alert_taiha_ss		: false,
 				alert_taiha_sound	: false,
-				alert_taiha_pvp		: false,
 				alert_taiha_panel	: true,
+				alert_taiha_homeport: false,
+				alert_taiha_damecon	: false,
 				
 				api_translation		: true,
 				api_tracking 		: true,

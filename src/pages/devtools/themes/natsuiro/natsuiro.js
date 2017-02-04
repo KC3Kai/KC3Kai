@@ -1029,14 +1029,16 @@
 			}
 
 			// TAIHA ALERT CHECK
-			if (
+			ConfigManager.loadIfNecessary();
+			// if not PvP and Taiha alert setting is enabled
+			if(ConfigManager.alert_taiha && !KC3SortieManager.isPvP() &&
 				PlayerManager.fleets
 					.filter (function( obj,  i) {
 						var
 							cf = PlayerManager.combinedFleet, // Marks combined flag
 							fs = KC3SortieManager.fleetSent,  // Which fleet that requires to focus out
 							so = KC3SortieManager.onSortie;   // Is it on sortie or not? if not, focus all fleets.
-						return !so || ((cf && fs===1) ? (i <= 1) : (i == fs-1));
+						return !so || ((cf && fs===1) ? i <= 1 : i == fs-1);
 					})
 					.map    (function(fleetObj) { return fleetObj.ships; }) // Convert to ship ID array
 					.reduce (function(   x,  y) { return x.concat(y); })    // Join IDs from fleets
@@ -1044,28 +1046,27 @@
 					.filter (function(shipData) { return shipData.id>0 && shipData.pos>0; }) // Remove ID -1 and flagship
 					.map    (function(shipData) { return KC3ShipManager.get(shipData.id); }) // Convert to Ship instance
 					.some   (function( shipObj) { // Check if any ship is Taiha, not flee, no damecon found
-						return !shipObj.didFlee && shipObj.isTaiha() && shipObj.findDameCon().pos < 0;
+						return !shipObj.didFlee && shipObj.isTaiha()
+							&& (!ConfigManager.alert_taiha_damecon || shipObj.findDameCon().pos < 0);
 					})
+				// if not disabled at Home Port
+				&& (KC3SortieManager.onSortie || !ConfigManager.alert_taiha_homeport)
 			) {
-				// if not PvP and taiha alert setting is enabled
-				if(!KC3SortieManager.isPvP() && ConfigManager.alert_taiha){
-
-					if(ConfigManager.alert_taiha_panel){
-						$("#critical").show();
-						if(critAnim){ clearInterval(critAnim); }
-						critAnim = setInterval(function() {
-							$("#critical").toggleClass("anim2");
-						}, 500);
-					}
-
-					if(ConfigManager.alert_taiha_sound){
-						critSound.play();
-					}
-
-					(new RMsg("service", "taihaAlertStart", {
-						tabId: chrome.devtools.inspectedWindow.tabId
-					})).execute();
+				if(ConfigManager.alert_taiha_panel){
+					$("#critical").show();
+					if(critAnim){ clearInterval(critAnim); }
+					critAnim = setInterval(function() {
+						$("#critical").toggleClass("anim2");
+					}, 500);
 				}
+
+				if(ConfigManager.alert_taiha_sound){
+					critSound.play();
+				}
+
+				(new RMsg("service", "taihaAlertStart", {
+					tabId: chrome.devtools.inspectedWindow.tabId
+				})).execute();
 			} else {
 				if(critAnim){ clearInterval(critAnim); }
 				$("#critical").hide();
