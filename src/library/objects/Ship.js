@@ -781,7 +781,12 @@ KC3改 Ship Object
 	// there are two requirements:
 	// - sonar should be equipped
 	// - ASW stat >= 100
+	// also Isuzu K2 can do OASW unconditionally
 	KC3Ship.prototype.canDoOASW = function () {
+		// master Id for Isuzu
+		if (this.masterId === 141)
+			return true;
+
 		// shortcutting on the stricter condition first
 		if (this.as[0] < 100)
 			return false;
