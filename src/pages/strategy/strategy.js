@@ -187,4 +187,38 @@
 		return cWidth > $(element).width();
 	};
 
+	// A jquery-ui tooltip options like native one
+	KC3StrategyTabs.nativeTooltipOptions = {
+		position: { my: "left top+4", at: "left bottom", collision: "flipfit flip" },
+		content: function(){
+			// Default escaping not used, keep html, simulate native one
+			return $(this).attr("title")
+				.replace(/\n/g, "<br/>")
+				.replace(/\t/g, "&emsp;&emsp;");
+		}
+	};
+	(function($) {
+		// A lazy initialzing method, prevent duplicate tooltip instance
+		$.fn.lazyInitTooltip = function(opts) {
+			if(typeof this.tooltip("instance") === "undefined") {
+				this.tooltip(opts || KC3StrategyTabs.nativeTooltipOptions);
+			}
+			return this;
+		};
+		// Actively close tooltips of element and its children
+		$.fn.hideChildrenTooltips = function() {
+			$.each($("[title]:not([disabled])", this), function(_, el){
+				if(typeof $(el).tooltip("instance") !== "undefined")
+					$(el).tooltip("close");
+			});
+			return this;
+		};
+		// Create native-like tooltips of element and its children
+		$.fn.createChildrenTooltips = function() {
+			$.each($("[title]:not([disabled])", this), function(_, el){
+				$(el).lazyInitTooltip();
+			});
+		};
+	}(jQuery));
+
 })();

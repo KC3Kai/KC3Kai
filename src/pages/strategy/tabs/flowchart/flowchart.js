@@ -7,12 +7,6 @@
 		tabSelf: KC3StrategyTabs.flowchart,
 		
 		flowchartIds: [],
-		tooltipOptions: {
-			position: { my: "left+2 top+10", at: "left center" },
-			content: function(){
-				return $(this).attr("title").replace(/\n/g, "<br/>");
-			}
-		},
 		
 		/* INIT
 		Prepares all data needed
@@ -151,8 +145,7 @@
 			if(!!thisQuest.memo) {
 				title += "\n" + thisQuest.memo;
 			}
-			$(".questDesc", thisBox).attr("title", title);
-			$(".questDesc", thisBox).tooltip(this.tooltipOptions);
+			$(".questDesc", thisBox).attr("title", title).lazyInitTooltip();
 			$(".questOverride", thisBox).data("id", quest_id);
 			$(".questToggle", thisBox).data("id", quest_id);
 			$(".questRemove", thisBox).data("id", quest_id);
@@ -240,8 +233,7 @@
 					if(!!cq) title += "\n -> "+masterQuest.unlock[ctr]+": ["+(cq.code||"N/A")+"] "+cq.name;
 				}
 			}
-			$(".questDesc", thisBox).attr("title", title);
-			$(".questDesc", thisBox).tooltip(this.tooltipOptions);
+			$(".questDesc", thisBox).attr("title", title).lazyInitTooltip();
 			$(".questToggle", thisBox).data("id", thisQuest.id);
 			$(".questRemove", thisBox).data("id", thisQuest.id);
 			
