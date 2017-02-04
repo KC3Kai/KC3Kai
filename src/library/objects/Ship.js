@@ -775,4 +775,31 @@ KC3改 Ship Object
 		
 		return result;
 	};
+
+	// test to see if this ship is capable of opening ASW
+	// reference: http://kancolle.wikia.com/wiki/Partials/Opening_ASW as of Feb 3, 2017
+	// there are two requirements:
+	// - sonar should be equipped
+	// - ASW stat >= 100
+	KC3Ship.prototype.canDoOASW = function () {
+		// shortcutting on the stricter condition first
+		if (this.as[0] < 100)
+			return false;
+
+		function isSonar(masterData) {
+			/* checking on equipment type sounds better than
+			   letting a list of master Ids
+			   should match the following equipments: (id, name)
+			   - 46: T93 Passive Sonar
+			   - 47: T3 Active Sonar
+			   - 132: T0 Passive
+			   - 149: T4 Passive
+			 */
+			return masterData &&
+				masterData.api_type[1] === 10;
+		}
+		let hasSonar = [0,1,2,3,4]
+			.some( slot => isSonar( this.equipment(slot).master() ));
+		return hasSonar;
+	};
 })();
