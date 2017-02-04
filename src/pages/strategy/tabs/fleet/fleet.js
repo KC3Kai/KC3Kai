@@ -404,8 +404,10 @@
 				$(".ship_tooltip .stat_ev", shipBox).text(kcShip.ev[0]);
 				$(".ship_tooltip .stat_aa", shipBox).text(kcShip.aa[0]);
 				$(".ship_tooltip .stat_ac", shipBox).text(shipDb.carry >= 0 ? shipDb.carry : "?");
-				$(".ship_tooltip .stat_as", shipBox).text(kcShip.as[0]);
-				$(".ship_tooltip .stat_sp", shipBox).text(kcShip.speedName());
+				$(".ship_tooltip .stat_as", shipBox).text(kcShip.as[0])
+					.toggleClass("oasw", kcShip.canDoOASW());
+				$(".ship_tooltip .stat_sp", shipBox).text(kcShip.speedName())
+					.addClass(KC3Meta.shipSpeed(kcShip.speed, true));
 				$(".ship_tooltip .stat_ls", shipBox).text(kcShip.ls[0]);
 				$(".ship_tooltip .stat_rn", shipBox).text(kcShip.rangeName());
 				$(".ship_tooltip .stat_lk", shipBox).text(kcShip.lk[0]);
