@@ -135,6 +135,12 @@
                 if (!actionPath)
                     actionPath = $('#radio_en', "#lang").val();
                 formPart.attr("action",  "http://threebards.com/kaini/"+actionPath);
+				// starting from chrome 56, a form needs to be attached to document
+				// for the submit action to work. see https://github.com/KC3Kai/KC3Kai/issues/1781
+				// TODO: please remove this line for confirming this is working again on chrome +56.
+				$(".tab_badge .page_section.dummy_section")
+					.empty()
+					.append( formPart );
                 formPart.submit();
             });
 

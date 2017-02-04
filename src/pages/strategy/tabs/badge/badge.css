@@ -77,9 +77,6 @@
     border-radius:7px;
 }
 
-/* RESULT
-------------------------------*/
-.export_result div {
-    width:600px;
-    word-break:break-all;
+.tab_badge .page_section.dummy_section {
+	display: none;
 }
