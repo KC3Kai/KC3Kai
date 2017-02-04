@@ -88,7 +88,8 @@
                     self.exportTtkInfo(),
                     self.exportFleetInfo());
 
-
+				// the name is a bit confusing, but here this "submitBtn" acts like an agent
+				// that allows us to construct and submit POST requests.
                 var submitBtn = $(".tab_badge .factory .submit_form").clone();
                 var formPart = $("form", submitBtn);
                 function encodeVal(d) {
@@ -121,7 +122,7 @@
                 if (checkLabel("#ep_colle")) {
                     resultPost.colleFlag = "on";
                 }
-                
+
                 $.each(resultPost, function(k,v) {
                     resultPost[k] = encodeVal(v);
                     $("<input type='hidden' />")
