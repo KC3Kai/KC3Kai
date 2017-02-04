@@ -218,6 +218,7 @@
 			$.each($("[title]:not([disabled])", this), function(_, el){
 				$(el).lazyInitTooltip();
 			});
+			return this;
 		};
 	}(jQuery));
 
