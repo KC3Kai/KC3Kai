@@ -39,15 +39,25 @@ Expedition: Expedition information, income estimation, scoring and utils for Exp
 		- baseConfig: in case we can't find any history for a specific expedition,
 			its value defaults to baseConfig[eId]
 
-	- loadExpedConfig(): load the set of expedition configs from localStorage.
-		returns "false" when not found
+	- loadExpedConfig(requireDefault=false): load the set of expedition configs from localStorage.
+		returns "false" when not found.
+		however, in case of not finding ExpedConfig,
+		if requireDefault is set to true, this function will call generateNormalConfig()
+		and use the result value as a placeholder so we always get the expected structure.
+
 	- saveExpedConfig(newConfig): save a set of expedition to localStorage.
+
+	- chooseN(xs,n): all possible ways of picking n elements from xs without replacement.
+		example:
+		> JSON.stringify( chooseN([2,3,5,7,9],3) )
+		"[[2,3,5],[2,3,7],[2,3,9],[2,5,7],[2,5,9],[2,7,9],[3,5,7],[3,5,9],[3,7,9],[5,7,9]]"
 
 	- eqConfig(config1,config2): test whether two expedition configs are structurally the same
 
 	- modifierToNumber(modifier): convert a modifier to a number
 		ready to be applied on basic resources.
 	- computeActualCost(cost, eId): compute the actual cost given cost config and eId
+	- computeNetIncome(config, eId): compute net income for a specific expedition
 
 - data format for configs
 
@@ -308,9 +318,9 @@ Expedition: Expedition information, income estimation, scoring and utils for Exp
 		});
 	}
 
-	function loadExpedConfig() {
+	function loadExpedConfig(requireDefault=false) {
 		if (typeof localStorage.expedConfig === "undefined")
-			return false;
+			return requireDefault ? generateNormalConfig() : false;
 		try {
 			return JSON.parse( localStorage.expedConfig );
 		} catch (e) {
@@ -400,6 +410,29 @@ Expedition: Expedition information, income estimation, scoring and utils for Exp
 		}
 	}
 
+	let tranformIncome = f => income => {
+		let retVal = {};
+		["fuel","ammo","steel","bauxite"].map( name => {
+			retVal[name] = f(income[name]);
+		});
+		return retVal;
+	};
+
+	function computeNetIncome(config, eId) {
+		let numModifier = modifierToNumber( config.modifier );
+		let actualCost = computeActualCost(config.cost, eId);
+		let basicIncome = ExpedInfo.getInformation( eId ).resource;
+		let grossIncome = tranformIncome( v => Math.floor(v*numModifier) )(basicIncome);
+		return {
+			fuel: grossIncome.fuel - actualCost.fuel,
+			ammo: grossIncome.ammo - actualCost.ammo,
+			steel: grossIncome.steel,
+			bauxite: grossIncome.bauxite
+		};
+	}
+
+	let chooseN = PS["KanColle.Util"].chooseN_FFI;
+
 	window.Expedition = {
 		allExpedIds,
 
@@ -411,8 +444,11 @@ Expedition: Expedition information, income estimation, scoring and utils for Exp
 		loadExpedConfig,
 		saveExpedConfig,
 
+		chooseN,
 		eqConfig,
 		modifierToNumber,
-		computeActualCost
+		computeActualCost,
+
+		computeNetIncome
 	};
 })();
