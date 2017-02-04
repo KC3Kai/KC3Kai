@@ -1853,7 +1853,7 @@
 			
 			// Load enemy icons
 			$.each(thisNode.eships, function(index, eshipId){
-				if(eshipId > -1){
+				if(eshipId > 0){
 					if ($(".module.activity .abyss_"+enemyFleetBox+" .abyss_ship_"+(index+1)).length > 0) {
 						$(".module.activity .abyss_"+enemyFleetBox+" .abyss_ship_"+(index+1)).addClass(KC3Meta.abyssShipBorderClass(eshipId));
 						$(".module.activity .abyss_"+enemyFleetBox+" .abyss_ship_"+(index+1)+" img")
@@ -2056,11 +2056,11 @@
 				var newEnemyHP, enemyHPPercent, enemyBarHeight;
 				
 				$.each(thisNode.eships, function(index, eshipId){
-					if(eshipId > -1){
+					if(eshipId > 0){
 						newEnemyHP = Math.max(0,thisNode.enemyHP[index].hp);
 						if ($(".module.activity .abyss_single .abyss_ship_"+(index+1)).length > 0) {
 							$(".module.activity .abyss_single .abyss_ship_"+(index+1)+" img")
-								.attr("src", KC3Meta.abyssIcon(eshipId))
+								.attr("src", thisNode.isPvP ? KC3Meta.shipIcon(eshipId) : KC3Meta.abyssIcon(eshipId))
 								.attr("title", buildEnemyFaceTooltip(eshipId, thisNode.elevels[index],
 									thisNode.maxHPs.enemy[index], thisNode.eParam[index],
 									thisNode.eSlot[index], thisNode.isPvP))
@@ -2465,7 +2465,7 @@
 
 			// Show opponent ships faces
 			$.each(thisPvP.eships, function(index, eshipId){
-				if(eshipId > -1){
+				if(eshipId > 0){
 					$(".module.activity .abyss_ship_"+(index+1)+" img")
 						.attr("src", KC3Meta.shipIcon(eshipId))
 						.attr("title", buildEnemyFaceTooltip(eshipId, thisPvP.elevels[index],
