@@ -236,7 +236,8 @@ button, input, select, textarea {
 	color:#fff;
 	margin:0px 1px 0px;
 }
-.page_panel ul.pagination li a:hover {
+.page_panel ul.pagination li a:hover,
+.page_panel ul.pagination li.active a {
 	background:#000000;
 	color:#ffcc00;
 }
