@@ -29,10 +29,9 @@ KC3改 Ship Box for Natsuiro theme
 		tooltipBox.hide();
 		tooltipBox.appendTo(this.element);
 		// Show a rich text tool-tip like stats in game
-		$(".ship_face_tooltip .ship_name", tooltipBox).text("[{0}] {1} ({2})"
-			.format(this.shipData.masterId, this.shipData.name(),
-				KC3Meta.shipReadingName(this.shipData.master().api_yomi))
-		);
+		$(".ship_face_tooltip .ship_full_name .ship_masterId", tooltipBox).text("[{0}]".format(this.shipData.masterId));
+		$(".ship_face_tooltip .ship_full_name span.value", tooltipBox).text(this.shipData.name());
+		$(".ship_face_tooltip .ship_full_name .ship_yomi", tooltipBox).text(KC3Meta.shipReadingName(this.shipData.master().api_yomi));
 		$(".ship_face_tooltip .ship_rosterId span", tooltipBox).text(this.shipData.rosterId);
 		$(".ship_face_tooltip .ship_stype", tooltipBox).text(this.shipData.stype());
 		$(".ship_face_tooltip .ship_level span.value", tooltipBox).text(this.shipData.level);

@@ -389,10 +389,9 @@
 			var viewType = $("input[type=radio][name=view_type]:checked").val();
 			if(viewType === "current"){
 				// Show a rich text tool-tip like stats in game
-				$(".ship_tooltip .ship_name", shipBox).text("[{0}] {1} ({2})"
-					.format(kcShip.masterId, kcShip.name(),
-						KC3Meta.shipReadingName(kcShip.master().api_yomi))
-				);
+				$(".ship_tooltip .ship_full_name .ship_masterId", shipBox).text("[{0}]".format(kcShip.masterId));
+				$(".ship_tooltip .ship_full_name span.value", shipBox).text(kcShip.name());
+				$(".ship_tooltip .ship_full_name .ship_yomi", shipBox).text(KC3Meta.shipReadingName(kcShip.master().api_yomi));
 				$(".ship_tooltip .ship_rosterId span", shipBox).text(kcShip.rosterId);
 				$(".ship_tooltip .ship_stype", shipBox).text(kcShip.stype());
 				$(".ship_tooltip .ship_level span.value", shipBox).text(kcShip.level);

@@ -976,17 +976,17 @@
 			KC3TimerManager._exped[2].expnum();
 
 			// Repair faces
-			KC3TimerManager._repair[0].face();
-			KC3TimerManager._repair[1].face();
-			KC3TimerManager._repair[2].face();
-			KC3TimerManager._repair[3].face();
+			KC3TimerManager._repair[0].face().lazyInitTooltip();
+			KC3TimerManager._repair[1].face().lazyInitTooltip();
+			KC3TimerManager._repair[2].face().lazyInitTooltip();
+			KC3TimerManager._repair[3].face().lazyInitTooltip();
 
 			// Construction faces
 			if(ConfigManager.info_face){
-				KC3TimerManager._build[0].face();
-				KC3TimerManager._build[1].face();
-				KC3TimerManager._build[2].face();
-				KC3TimerManager._build[3].face();
+				KC3TimerManager._build[0].face().lazyInitTooltip();
+				KC3TimerManager._build[1].face().lazyInitTooltip();
+				KC3TimerManager._build[2].face().lazyInitTooltip();
+				KC3TimerManager._build[3].face().lazyInitTooltip();
 			}
 		},
 

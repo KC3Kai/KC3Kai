@@ -1021,6 +1021,9 @@ button, input, select, textarea {
 .tab_fleet .fleet_ships {
 	height:160px;
 }
+.ui-tooltip-content .ship_tooltip .ship_full_name span.ship_yomi {
+	color:#777 !important;
+}
 .ui-tooltip-content .ship_tooltip .stat_icon img {
 	-webkit-filter: invert(100%);
 }
