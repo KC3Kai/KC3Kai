@@ -54,6 +54,7 @@ Retreives when needed to apply on components
 				info_delta 			: false,
 				info_auto_exped_tab : true,
 				info_auto_fleet_view: true,
+				info_pvp_info		: true,
 				info_eng_stype		: false,
 				info_force_ship_lang: "",
 				info_salt 			: false,
@@ -143,8 +144,9 @@ Retreives when needed to apply on components
 				alert_taiha_blood	: true,
 				alert_taiha_ss		: false,
 				alert_taiha_sound	: false,
-				alert_taiha_pvp		: false,
 				alert_taiha_panel	: true,
+				alert_taiha_homeport: false,
+				alert_taiha_damecon	: false,
 				
 				api_translation		: true,
 				api_tracking 		: true,
@@ -164,7 +166,7 @@ Retreives when needed to apply on components
 				subtitle_display	: "ghost",
 				subtitle_speaker	: false,
 				google_translate	: true,
-				map_markers			: false,
+				map_markers			: true,
 				
 				dmm_forcecookies	: false,
 				dmm_customize		: false,

@@ -284,9 +284,9 @@ KC3改 Ship Object
 	 * Especially after marriage. api_taik[1] is not used in game.
 	 * @see http://wikiwiki.jp/kancolle/?%A5%B1%A5%C3%A5%B3%A5%F3%A5%AB%A5%C3%A5%B3%A5%AB%A5%EA
 	 */
-	KC3Ship.getMaxHp = function(masterId){
+	KC3Ship.getMaxHp = function(masterId, currentLevel){
 		var masterHp = KC3Master.ship(masterId).api_taik[0];
-		return this.level < 100 ? masterHp :
+		return (currentLevel || 155) < 100 ? masterHp :
 			masterHp >  90 ? masterHp + 9 :
 			masterHp >= 70 ? masterHp + 8 :
 			masterHp >= 50 ? masterHp + 7 :
@@ -296,7 +296,7 @@ KC3改 Ship Object
 			masterHp + 3;
 	};
 	KC3Ship.prototype.maxHp = function(){
-		return KC3Ship.getMaxHp(this.masterId);
+		return KC3Ship.getMaxHp(this.masterId, this.level);
 	};
 
 	/* REPAIR TIME
@@ -774,5 +774,37 @@ KC3改 Ship Object
 		}
 		
 		return result;
+	};
+
+	// test to see if this ship is capable of opening ASW
+	// reference: http://kancolle.wikia.com/wiki/Partials/Opening_ASW as of Feb 3, 2017
+	// there are two requirements:
+	// - sonar should be equipped
+	// - ASW stat >= 100
+	// also Isuzu K2 can do OASW unconditionally
+	KC3Ship.prototype.canDoOASW = function () {
+		// master Id for Isuzu
+		if (this.masterId === 141)
+			return true;
+
+		// shortcutting on the stricter condition first
+		if (this.as[0] < 100)
+			return false;
+
+		function isSonar(masterData) {
+			/* checking on equipment type sounds better than
+			   letting a list of master Ids
+			   should match the following equipments: (id, name)
+			   - 46: T93 Passive Sonar
+			   - 47: T3 Active Sonar
+			   - 132: T0 Passive
+			   - 149: T4 Passive
+			 */
+			return masterData &&
+				masterData.api_type[1] === 10;
+		}
+		let hasSonar = [0,1,2,3,4]
+			.some( slot => isSonar( this.equipment(slot).master() ));
+		return hasSonar;
 	};
 })();
