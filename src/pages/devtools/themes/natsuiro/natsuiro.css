@@ -301,18 +301,17 @@ html,body {
 	line-height:20px;
 	font-size:11px;
 	margin:0px 2px 0px 0px;
-	color:#ddd;
+	color:#fff;
 	float:left;
 	text-align:center;
 	border-radius:5px 5px 0px 0px;
-	filter: brightness(0.6);
+	filter:brightness(0.5);
 }
 #atab_activity {
 	cursor:default;
 }
 .module.activity .activity_tab.active {
-	filter: brightness(1);
-	color:#fff;
+	filter:brightness(1);
 }
 .module.activity .activity_body {
 	width:190px;

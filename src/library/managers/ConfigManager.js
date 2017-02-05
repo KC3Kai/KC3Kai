@@ -187,7 +187,7 @@ Retreives when needed to apply on components
 				pan_bg_size			: "cover",
 				pan_bg_position		: "top center",
 				pan_opacity 		: 100,
-				pan_box_bcolor 		: "rgba(70, 70, 70, 0.80)",
+				pan_box_bcolor 		: "rgba(100, 100, 100, 0.618)",
 
 				sr_theme			: "legacy"
 			};
