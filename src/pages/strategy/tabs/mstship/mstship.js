@@ -384,7 +384,7 @@
 
 					// in case when the data isn't available,
 					// slots should still be getting cleaned up
-					$(".slotitem", this).empty();
+					$(".slotitem", this).empty().removeAttr("title");
 					$(".sloticon img", this).attr("src", "");
 					$(".sloticon img", this).hide();
 
@@ -636,7 +636,7 @@
 								$(".ship_stat_min", statBox).text(
 									// Priority to show stats recorded via encounter
 									enemyDbStats ? enemyDbStats[stat[0]] : abyssMaster["api_" + stat[1]]
-								).attr("title", "");
+								);
 								$(".ship_stat_max", statBox).hide();
 								// Check diff for updating `abyssal_stats.json`
 								if(enemyDbStats && (!abyssMaster ||
