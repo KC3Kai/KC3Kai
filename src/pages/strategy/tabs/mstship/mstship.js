@@ -278,7 +278,9 @@
 			console.debug("shipData", shipData);
 			if(!shipData) { return; }
 			
-			$(".tab_mstship .shipInfo .name").text( "[{0}] {1} {2}".format(ship_id, KC3Meta.shipName(shipData.api_name), KC3Meta.shipReadingName(shipData.api_yomi) ) );
+			$(".tab_mstship .shipInfo .name").text( "[{0}] {1} {2}"
+				.format(ship_id, KC3Meta.shipName(shipData.api_name),
+					KC3Meta.shipReadingName(shipData.api_yomi).replace("-", "") ) );
 			$(".tab_mstship .shipInfo .type").text( "{0}".format(KC3Meta.stype(shipData.api_stype)) );
 			
 			// CG VIEWER
@@ -310,6 +312,7 @@
 			if(ship_id<=500){
 				// Ship-only, non abyssal
 				$(".tab_mstship .shipInfo .stats").empty();
+				$(".tab_mstship .shipInfo .stats").css("width", "");
 				$(".tab_mstship .shipInfo .intro").html( shipData.api_getmes );
 				$(".tab_mstship .shipInfo .cgswf")
 					.css("width", "218px")
@@ -578,6 +581,8 @@
 				$(".tab_mstship .shipInfo .intro").show();
 				$(".tab_mstship .shipInfo .more").show();
 				$(".tab_mstship .shipInfo .json").hide();
+				$(".tab_mstship .shipInfo .boss").hide();
+				$(".tab_mstship .shipInfo .encounter").hide();
 				$(".tab_mstship .shipInfo .gunfit").show();
 				$(".tab_mstship .shipInfo .tokubest").show();
 				if(ConfigManager.info_salt)
@@ -602,10 +607,13 @@
 					.css("width", "468px")
 					.css("height", "400px");
 				
-				// show stats if encounter once
-				KC3Database.get_enemyInfo(ship_id, function(enemyInfo){
-					console.debug("enemyInfo", enemyInfo);
-					if(enemyInfo){
+				// show stats if encounter once, or show stats of internal db
+				KC3Database.get_enemyInfo(ship_id, function(enemyDbStats){
+					var abyssMaster = KC3Master.abyssalShip(ship_id, true);
+					console.debug("enemyDbStats", enemyDbStats);
+					console.debug("abyssalMaster", abyssMaster);
+					$(".tab_mstship .shipInfo .encounter").toggle(!!enemyDbStats);
+					if(enemyDbStats || abyssMaster){
 						// ENEMY STATS
 						$(".tab_mstship .shipInfo .stats").empty();
 						$.each([
@@ -625,7 +633,10 @@
 								$(".ship_stat_text", statBox).show();
 								$(".ship_stat_value", statBox).hide();
 							} else {
-								$(".ship_stat_min", statBox).text(enemyInfo[stat[0]]);
+								$(".ship_stat_min", statBox).text(
+									// Priority to show stats recorded via encounter
+									enemyDbStats ? enemyDbStats[stat[0]] : abyssMaster["api_" + stat[1]]
+								);
 								$(".ship_stat_max", statBox).hide();
 							}
 							
@@ -633,12 +644,16 @@
 						});
 						
 						// ENEMY EQUIPMENT
-						$(".tab_mstship .shipInfo .equipments").css("width", "220px");
+						$(".tab_mstship .shipInfo .stats").css("width", "220px");
 						$(".tab_mstship .equipments .equipment").each(function(index){
 							$(this).show();
-							$(".capacity", this).text("?").hide();
-							
-							var equipId = enemyInfo["eq"+(index+1)];
+							if(abyssMaster && typeof abyssMaster.api_maxeq[index] !== "undefined"){
+								$(".capacity", this).text(abyssMaster.api_maxeq[index]).show();
+							} else {
+								$(".capacity", this).text(index < abyssMaster.api_slotnum ? "?" : "-").show();
+							}
+							// Priority to show equipment recorded via encounter
+							var equipId = enemyDbStats ? enemyDbStats["eq"+(index+1)] : abyssMaster.kc3_slots[index];
 							if (equipId > 0) {
 								var equipment = KC3Master.slotitem( equipId );
 								$(".slotitem", this).text(KC3Meta.gearName( equipment.api_name ) );
@@ -668,6 +683,7 @@
 				$(".tab_mstship .shipInfo .voices").hide();
 				$(".tab_mstship .shipInfo .hourlies").hide();
 				$(".tab_mstship .shipInfo .intro").hide();
+				$(".tab_mstship .shipInfo .boss").toggle("boss" === KC3Meta.abyssShipBorderClass(shipData));
 				$(".tab_mstship .shipInfo .more").hide();
 				$(".tab_mstship .shipInfo .aaci").hide();
 				$(".tab_mstship .shipInfo .gunfit").hide();
@@ -683,6 +699,8 @@
 				$(".tab_mstship .shipInfo .voices").hide();
 				$(".tab_mstship .shipInfo .hourlies").hide();
 				$(".tab_mstship .shipInfo .intro").hide();
+				$(".tab_mstship .shipInfo .boss").hide();
+				$(".tab_mstship .shipInfo .encounter").hide();
 				$(".tab_mstship .shipInfo .more").hide();
 				$(".tab_mstship .shipInfo .aaci").hide();
 				$(".tab_mstship .shipInfo .gunfit").hide();

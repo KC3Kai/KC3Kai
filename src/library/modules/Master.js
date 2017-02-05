@@ -191,6 +191,13 @@ Saves and loads significant data for future use
 			return this._raw.useitem || {};
 		},
 
+		abyssalShip :function(id, isMasterMerged){
+			var master = !!isMasterMerged && id > 500 && this.ship(id) || {};
+			return Object.keys(master).length === 0 &&
+				(Object.keys(this._abyssalShips).length === 0 || !this._abyssalShips[id]) ?
+				false : $.extend(master, this._abyssalShips[id]);
+		},
+
 		/* Save to localStorage
 		-------------------------------------*/
 		save :function(){
