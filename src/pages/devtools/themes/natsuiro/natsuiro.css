@@ -1719,6 +1719,8 @@ ABYSS FLEET
 	white-space: nowrap;
 }
 .module.activity .activity_pvp .pvp_title {
+	color: #ffcc00;
+	font-weight: bold;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
