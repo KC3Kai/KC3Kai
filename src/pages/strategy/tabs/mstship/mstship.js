@@ -636,10 +636,20 @@
 								$(".ship_stat_min", statBox).text(
 									// Priority to show stats recorded via encounter
 									enemyDbStats ? enemyDbStats[stat[0]] : abyssMaster["api_" + stat[1]]
-								);
+								).attr("title", "");
 								$(".ship_stat_max", statBox).hide();
+								// Check diff for updating `abyssal_stats.json`
+								if(enemyDbStats && (!abyssMaster ||
+									typeof abyssMaster["api_" + stat[1]] === "undefined" ||
+									enemyDbStats[stat[0]] != abyssMaster["api_" + stat[1]])){
+									// Different color to indicate stats attribute to be updated
+									$(".ship_stat_min", statBox).html(
+										$("<span style='color:orangered'></span>").text($(".ship_stat_min", statBox).text())
+									).attr("title",
+										"{0} => {1}".format(abyssMaster["api_" + stat[1]], enemyDbStats[stat[0]])
+									);
+								}
 							}
-							
 							statBox.appendTo(".tab_mstship .shipInfo .stats");
 						});
 						
@@ -650,13 +660,14 @@
 							if(abyssMaster && typeof abyssMaster.api_maxeq[index] !== "undefined"){
 								$(".capacity", this).text(abyssMaster.api_maxeq[index]).show();
 							} else {
-								$(".capacity", this).text(index < abyssMaster.api_slotnum ? "?" : "-").show();
+								$(".capacity", this).text(index >= abyssMaster.api_slot_num ? "-" : "?").show();
 							}
 							// Priority to show equipment recorded via encounter
 							var equipId = enemyDbStats ? enemyDbStats["eq"+(index+1)] : abyssMaster.kc3_slots[index];
 							if (equipId > 0) {
 								var equipment = KC3Master.slotitem( equipId );
-								$(".slotitem", this).text(KC3Meta.gearName( equipment.api_name ) );
+								$(".slotitem", this).text(KC3Meta.gearName( equipment.api_name ) )
+									.attr("title", "");
 								$(".sloticon img", this)
 									.attr("src","../../../../assets/img/items/"+equipment.api_type[3]+".png");
 								$(".sloticon img", this).attr("alt", equipId);
@@ -665,6 +676,16 @@
 								});
 								$(".sloticon img", this).show();
 								$(".sloticon", this).addClass("hover");
+								// Check diff for updating `abyssal_stats.json`
+								if(enemyDbStats && (!abyssMaster ||
+									typeof abyssMaster.kc3_slots[index] === "undefined" ||
+									enemyDbStats["eq"+(index+1)] != abyssMaster.kc3_slots[index])){
+									$(".slotitem", this).html(
+										$("<span style='color:yellow'></span>").text($(".slotitem", this).text())
+									).attr("title",
+										"{0} => {1}".format(abyssMaster.kc3_slots[index], enemyDbStats["eq"+(index+1)])
+									);
+								}
 							} else {
 								$(".slotitem", this).empty();
 								$(".sloticon img", this).hide();
