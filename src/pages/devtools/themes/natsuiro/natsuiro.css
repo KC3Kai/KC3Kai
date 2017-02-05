@@ -301,7 +301,7 @@ html,body {
 	line-height:20px;
 	font-size:11px;
 	margin:0px 2px 0px 0px;
-	color:#888;
+	color:#ddd;
 	float:left;
 	text-align:center;
 	border-radius:5px 5px 0px 0px;
@@ -312,6 +312,7 @@ html,body {
 }
 .module.activity .activity_tab.active {
 	filter: brightness(1);
+	color:#fff;
 }
 .module.activity .activity_body {
 	width:190px;
