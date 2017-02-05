@@ -35,97 +35,75 @@
 	</div>
 </div>
 
-<div class="expedNumBoxes page_panel">
-	<div class="expedNumBox expedNumBox_1">
-
-	</div>
-	<div class="expedNumBox expedNumBox_2">
-
-	</div>
-	<div class="expedNumBox expedNumBox_3">
-
-	</div>
-	<div class="expedNumBox expedNumBox_4">
-
-	</div>
-	<div class="expedNumBox expedNumBox_5">
-
-	</div>
-	<div class="expedNumBox fleetCounts">
-		<div class="fleetCount">
-			<div class="fleetRadio"><input type="radio" name="fleetCount" value="1" /></div>
-			<div class="fleetText">1 fleet</div>
-			<div class="clear"></div>
+<div class="controls" id="exped_scorer_control_root">
+	<!-- for world boxes, and presets -->
+	<div class="control_row row1">
+		<div class="control_box preset">
+			<div class="header">
+				Preset
+			</div>
+			<div class="content">
+				<button type="button" class="btn" data-name="all">All</button>
+				<button type="button" class="btn" data-name="recommended">Recommended</button>
+				<button type="button" class="btn" data-name="buckets">Buckets</button>
+				<button type="button" class="btn" data-name="none">None</button>
+			</div>
 		</div>
-		<div class="fleetCount">
-			<div class="fleetRadio"><input type="radio" name="fleetCount" value="2" /></div>
-			<div class="fleetText">2 fleets</div>
-			<div class="clear"></div>
-		</div>
-		<div class="fleetCount">
-			<div class="fleetRadio"><input type="radio" name="fleetCount" value="3" CHECKED /></div>
-			<div class="fleetText">3 fleets</div>
-			<div class="clear"></div>
-		</div>
+		<div class="clear" />
 	</div>
-	<div class="clear"></div>
+
+	<!-- for priority control, AFK time, fleet number and compute button -->
+	<div class="control_row row2">
+		<div class="control_box resource">
+			<div class="header">
+				Resource Priority
+			</div>
+			<div class="content">
+			</div>
+		</div>
+		<div class="control_col">
+			<div class="control_box afktime">
+				<div class="header">
+					AFK Time
+				</div>
+				<div class="content">
+					<input type="text" name="hrs" value="0" /><div>Hrs</div>
+					<input type="text" name="mins" value="0" /><div>Mins</div>
+				</div>
+			</div>
+			<div class="control_box fleet">
+				<div class="header">
+					Available Fleets
+				</div>
+				<div class="content">
+					<label><div class="fleet_radio">
+							<input type="radio" name="fleet_count" value="1"/>
+							1
+					</div></label>
+					<label><div class="fleet_radio">
+							<input type="radio" name="fleet_count" value="2"/>
+							2
+					</div></label>
+					<label><div class="fleet_radio">
+							<input type="radio" name="fleet_count" value="3"/>
+							3
+					</div></label>
+					<div class="clear" />
+				</div>
+			</div>
+		</div>
+		<div class="control_box calc">
+			<div class="header">
+				Calculate
+			</div>
+			<div class="content">
+				<button type="button" class="btn calc">Calculate</button>
+			</div>
+		</div>
+		<div class="clear" />
+	</div>
 </div>
-
-<div class="expedControls page_panel">
-
-	<!-- Resource Priorities -->
-	<div class="control_box control_priorities">
-		<div class="control_title">Resource Priority</div>
-		<div class="clear"></div>
-		<div class="control">
-			<div class="control_label"><img src="../../assets/img/client/fuel.png" /></div>
-			<div class="control_input"><input type="text" class="priorityFuel" value="1" /></div>
-			<div class="clear"></div>
-		</div>
-		<div class="control">
-			<div class="control_label"><img src="../../assets/img/client/ammo.png" /></div>
-			<div class="control_input"><input type="text" class="priorityAmmo" value="1" /></div>
-			<div class="clear"></div>
-		</div>
-		<div class="control">
-			<div class="control_label"><img src="../../assets/img/client/steel.png" /></div>
-			<div class="control_input"><input type="text" class="prioritySteel" value="1" /></div>
-			<div class="clear"></div>
-		</div>
-		<div class="control">
-			<div class="control_label"><img src="../../assets/img/client/bauxite.png" /></div>
-			<div class="control_input"><input type="text" class="priorityBaux" value="1" /></div>
-			<div class="clear"></div>
-		</div>
-		<div class="clear"></div>
-	</div>
-
-	<!-- AFK Time -->
-	<div class="control_box control_afktime">
-		<div class="control_title">AFK Time</div>
-		<div class="clear"></div>
-		<div class="control">
-			<div class="control_label">Hrs</div>
-			<div class="control_input"><input type="text" class="afkH" value="0" /></div>
-			<div class="clear"></div>
-		</div>
-		<div class="control">
-			<div class="control_label">Mins</div>
-			<div class="control_input"><input type="text" class="afkM" value="0" /></div>
-			<div class="clear"></div>
-		</div>
-		<div class="clear"></div>
-	</div>
-
-	<!-- Calculate button -->
-	<div class="control_box control_calculate">
-		<div class="calculate_btn hover">Calculate</div>
-	</div>
-	<div class="clear"></div>
-</div>
-
 <div class="page_padding">
-
 	<!-- Results Table -->
 	<table class="table table-hover results">
 		<thead>
@@ -142,18 +120,26 @@
 
 		</tbody>
 	</table>
-
 </div>
 
 <div class="factory">
-
-	<!-- Expedition checkboxes for candidates -->
-	<div class="expedNum">
-		<div class="expedCheck"><input type="checkbox" CHECKED /></div>
-		<div class="expedText"></div>
-		<div class="expedTime"></div>
-		<div class="clear"></div>
+	<div class="control_box">
+		<div class="header">
+		</div>
+		<div class="content">
+		</div>
 	</div>
-
-	<!-- Expedition result row -->
+	<div class="resource_box">
+		<img />
+		<div class="view"></div>
+		<input class="slider" />
+	</div>
+	<label class="exped_toggle">
+		<div class="toggle_row">
+			<input type="checkbox"/>
+			<div class="name"></div>
+			<div class="time"></div>
+			<div class="clear"></div>
+		</div>
+	</label>
 </div>
