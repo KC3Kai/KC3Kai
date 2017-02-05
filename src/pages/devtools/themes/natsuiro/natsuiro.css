@@ -301,23 +301,21 @@ html,body {
 	line-height:20px;
 	font-size:11px;
 	margin:0px 2px 0px 0px;
-	background:#222;
 	color:#888;
 	float:left;
 	text-align:center;
 	border-radius:5px 5px 0px 0px;
+	filter: brightness(0.6);
 }
 #atab_activity {
 	cursor:default;
 }
 .module.activity .activity_tab.active {
-	background:rgba(100,100,100,0.85);
-	color:#fff;
+	filter: brightness(1);
 }
 .module.activity .activity_body {
 	width:190px;
 	height:235px;
-	background:rgba(100,100,100,0.85);
 	border-radius:5px;
 	overflow:hidden;
 	white-space:initial;
