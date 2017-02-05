@@ -24,6 +24,8 @@ Expedition: Expedition information, income estimation, scoring and utils for Exp
 - export list:
 
 	- allExpedIds: a list of [1..40] for doing maping or "forEach"-ing
+	- enumFromTo(from,to,step=1): generate a list: [from,from+step .. to]
+	- saturate(v,min,max): limit v in range of min..max
 	- generateRandomConfig(): generate random ExpedConfig,
 		was written to see a vary of possible config views,
 		now this function is just kept for fun.
@@ -145,7 +147,7 @@ Expedition: Expedition information, income estimation, scoring and utils for Exp
 
 	let coinFlip = () => Math.random() >= 0.5;
 
-	// pull v to be in range of min..max
+
 	function saturate(v,min,max) {
 		return Math.max(Math.min(v,max),min);
 	}
@@ -434,6 +436,8 @@ Expedition: Expedition information, income estimation, scoring and utils for Exp
 	let chooseN = PS["KanColle.Util"].chooseN_FFI;
 
 	window.Expedition = {
+		enumFromTo,
+		saturate,
 		allExpedIds,
 
 		generateRandomConfig,
