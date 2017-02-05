@@ -370,6 +370,7 @@
 		RemodelDb.init();
 		WhoCallsTheFleetDb.init("../../../../");
 		KC3Meta.init("../../../../data/");
+		KC3Master.loadAbyssalShips("../../../../data/");
 		KC3Meta.defaultIcon("../../../../assets/img/ui/empty.png");
 		KC3Meta.loadQuotes();
 		PlayerManager.init();
@@ -3182,8 +3183,10 @@
 
 	function buildEnemyFaceTooltip(eshipId, level, maxHP, eParam, eSlot, isPvP) {
 		var tooltip = "", shipMaster, gearMaster, slotIdx;
+		var abyssMaster, slotMaxeq;
 		if(eshipId > 0){
 			shipMaster = KC3Master.ship(eshipId);
+			abyssMaster = KC3Master.abyssalShip(eshipId);
 			tooltip += "{0}: {1}\n".format(eshipId,
 				!!isPvP ? KC3Meta.shipName(shipMaster.api_name) : KC3Meta.abyssShipName(eshipId));
 			tooltip += "{0} Lv {1} HP {2}\n".format(
@@ -3213,6 +3216,12 @@
 							.attr("src","../../../../assets/img/items/"+gearMaster.api_type[3]+".png")
 							.width(13).height(13).css("margin-top", "-3px").prop("outerHTML");
 						tooltip += KC3Meta.gearName(gearMaster.api_name);
+						if(KC3GearManager.carrierBasedAircraftType3Ids
+							.indexOf(gearMaster.api_type[3]) > -1){
+							slotMaxeq = !!isPvP ? shipMaster.api_maxeq[slotIdx] : abyssMaster.api_maxeq[slotIdx];
+							slotMaxeq = typeof slotMaxeq === "undefined" ? "?" : slotMaxeq;
+							tooltip += $("<span></span>").css("color", "#999").text(" x"+slotMaxeq).prop("outerHTML");
+						}
 					}
 				}
 			}
