@@ -713,8 +713,9 @@
 		$(".module.activity .map_info").removeClass("map_finisher");
 		$(".module.activity .map_gauge *:not(.clear)").css("width", "0%");
 		$(".module.activity .map_hp").text("");
-		$(".module.activity .sortie_node").text("");
 		$(".module.activity .sortie_node")
+			.text("")
+			.removeAttr("title")
 			.removeClass("nc_battle")
 			.removeClass("nc_resource")
 			.removeClass("nc_maelstrom")
@@ -1594,7 +1595,7 @@
 			var map = KC3SortieManager.map_num;
 			var nodeId = KC3Meta.nodeLetter(world, map, thisNode.id );
 
-			$(".module.activity .sortie_node_"+numNodes).text( nodeId ).removeAttr("title");
+			$(".module.activity .sortie_node_"+numNodes).text( nodeId );
 
 			$(".module.activity .node_types").hide();
 
