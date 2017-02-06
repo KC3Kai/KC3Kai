@@ -477,6 +477,7 @@
 	position:relative;
 	pointer-events:none;
 	filter:hue-rotate(75deg);
+	-webkit-filter:hue-rotate(75deg);
 	transform:scaleX(-1);
 }
 .tab_mstship .shipInfo .aaci .equipIcons .minusIcon {
@@ -486,6 +487,7 @@
 	position:relative;
 	pointer-events:none;
 	filter:hue-rotate(-90deg);
+	-webkit-filter:hue-rotate(-90deg);
 	transform:scaleX(-1);
 }
 .tab_mstship .shipInfo .aaci .fixed {
@@ -601,6 +603,7 @@
 /* salt check */
 .tab_mstship .shipInfo.salted #saltable {
 	/* blur salt */
+	filter: blur(24px);
 	-webkit-filter: blur(24px);
 }
 .tab_mstship .shipRecord.salted {
