@@ -79,6 +79,9 @@
 				jqBox.addClass(resourceName);
 				$("img",jqBox).attr("src", "../../assets/img/client/"+resourceName+".png");
 				let jqView = $(".view", jqBox);
+				// value initialzation is left undone on purpose,
+				// after all things get setup, we will trigger a resource slider reset event
+				// which should then initialize every slider and attached view properly.
 				let sliderSettings = {
 					min: -5, max: 20, step: 1,
 					tooltip: "hide"
@@ -87,15 +90,27 @@
 					.slider(sliderSettings)
 					.change(function (e) {
 						jqView.text(e.value.newValue);
-					})
-					.trigger( $.Event("change", {value: {newValue: 5}}) );
+					});
 				jqBox.data("slider",slider);
 				jqBox.data("name",resourceName);
-				jqResourceControl.append(jqBox);
+				jqBox.insertBefore( $("button.reset", jqResourceControl) );
 				if (ind === 1 || ind === 3) {
-					jqResourceControl.append( $("<div></div>").addClass("clear") );
+					$("<div></div>").addClass("clear")
+						.insertBefore( $("button.reset", jqResourceControl) );
 				}
 			});
+
+			$("button.reset", jqResourceControl).click( function() {
+				$(".resource_box", jqResourceControl).each( function() {
+					let slider = $(this).data("slider");
+					slider
+						.trigger( $.Event("change", {value: {newValue: 5}}) )
+						.slider("setValue", 5);
+				});
+			});
+
+			$("button.reset").click();
+
 			$(".control_box.calc button.calc").click( () => this.computeResults() );
 
 			// setup default values (TODO: will save changes to localStorage)
@@ -128,6 +143,7 @@
 				let weight = jq.data("slider").slider("getValue");
 				resourceWeight[name]=weight;
 			});
+			console.log( resourceWeight );
 
 			// get afk time, and write back normalized values
 			let jqHrs = $(".control_box.afktime input[type=text][name=hrs]",jqRoot);
