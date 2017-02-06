@@ -134,12 +134,18 @@
 			var thisBox = $(".tab_flowchart .factory .questFlowItem").clone().appendTo("#"+parentElement.attr("id"));
 			$(".questIcon", thisBox).text( thisQuest.code );
 			$(".questIcon", thisBox).addClass("type"+(String(quest_id).substring(0,1)));
+			$(".questIcon", thisBox).on("mouseover", function(){
+				$(this).next().tooltip("open");
+			});
+			$(".questIcon", thisBox).on("mouseleave", function(){
+				$(this).next().tooltip("close");
+			});
 			$(".questDesc", thisBox).text( thisQuest.desc);
 			var title = quest_id+": ["+thisQuest.code+"] "+thisQuest.name+"\n"+thisQuest.desc;
 			if(!!thisQuest.memo) {
 				title += "\n" + thisQuest.memo;
 			}
-			$(".questDesc", thisBox).attr("title", title);
+			$(".questDesc", thisBox).attr("title", title).lazyInitTooltip();
 			$(".questOverride", thisBox).data("id", quest_id);
 			$(".questToggle", thisBox).data("id", quest_id);
 			$(".questRemove", thisBox).data("id", quest_id);
@@ -207,6 +213,12 @@
 			var thisBox = $(".tab_flowchart .factory .questExtraItem").clone().appendTo(".tab_flowchart .extralist");
 			$(".questIcon", thisBox).text( masterQuest.code || thisQuest.id );
 			$(".questIcon", thisBox).addClass("type"+(String(thisQuest.id).substring(0,1)));
+			$(".questIcon", thisBox).on("mouseover", function(){
+				$(this).next().tooltip("open");
+			});
+			$(".questIcon", thisBox).on("mouseleave", function(){
+				$(this).next().tooltip("close");
+			});
 			$(".questDesc", thisBox).text( masterQuest.desc || KC3Meta.term("UntranslatedQuest") );
 			var title = thisQuest.id+": ["+(masterQuest.code||"N/A")+"] "
 				+ (masterQuest.name || KC3Meta.term("UntranslatedQuest"))
@@ -221,7 +233,7 @@
 					if(!!cq) title += "\n -> "+masterQuest.unlock[ctr]+": ["+(cq.code||"N/A")+"] "+cq.name;
 				}
 			}
-			$(".questDesc", thisBox).attr("title", title);
+			$(".questDesc", thisBox).attr("title", title).lazyInitTooltip();
 			$(".questToggle", thisBox).data("id", thisQuest.id);
 			$(".questRemove", thisBox).data("id", thisQuest.id);
 			
