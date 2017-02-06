@@ -352,7 +352,7 @@
 		this.showPage = function(){
 			var self = this;
 			$(".tab_"+tabCode+" .pagination").hide();
-			$(".tab_"+tabCode+" .sortie_list").html("");
+			$(".tab_"+tabCode+" .sortie_list").empty();
 			
 			// Show all sorties
 			if(this.selectedWorld === 0){
@@ -654,6 +654,7 @@
 			});
 			
 			$(".tab_"+tabCode+" .pagination").show();
+			$(".tab_"+tabCode+" .sortie_list").createChildrenTooltips();
 		};
 		
 		function updateScrollItem(worldMap, itemWidth) {
