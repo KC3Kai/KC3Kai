@@ -103,7 +103,7 @@
 }
 
 .tab_expedscorer .control_box.resource > .content {
-	padding-top: 15px;
+
 }
 
 .tab_expedscorer .control_box.resource .resource_box > * {
@@ -111,13 +111,12 @@
 }
 
 .tab_expedscorer .control_box.resource .resource_box > *:not(.slider) {
-	margin: 5px 6px 7px 2px;
+	margin: 5px 6px 5px 2px;
 }
 
 .tab_expedscorer .control_box.resource .resource_box > .slider {
 	margin: 5px 9px 5px 9px;
 	width: 120px;
-
 }
 
 .tab_expedscorer .control_box.resource .resource_box > .slider .slider-handle {
@@ -141,10 +140,16 @@
 	font-weight: bold;
 }
 
+.tab_expedscorer .control_box.resource button.reset,
+.tab_expedscorer .control_box.resource button.auto {
+	float: right;
+	margin: 8px 5px 0 0;
+}
+
 .tab_expedscorer .control_box.afktime,
 .tab_expedscorer .control_box.fleet {
 	width: 162px;
-	height: 52px;
+	height: 57.5px;
 	float: none;
  }
 
@@ -163,6 +168,10 @@
 	margin: 5px 0 0 0;
 }
 
+.tab_expedscorer .control_box.fleet .content {
+	padding-top: 7px;
+}
+
 .tab_expedscorer .control_box.fleet .fleet_radio {
 	height: 20px;
 	margin: 0 10px 0 10px;
@@ -174,7 +183,7 @@
 
 .tab_expedscorer .control_row.row2 > .control_box,
 .tab_expedscorer .control_row.row2 > .control_col {
-	height: 110px;
+	height: 120px;
 }
 
 .tab_expedscorer .control_box.calc button {
@@ -183,5 +192,5 @@
 }
 
 .tab_expedscorer .control_box.calc .content {
-	padding-top: 10px;
+	padding-top: 14px;
 }
