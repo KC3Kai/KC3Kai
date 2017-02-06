@@ -62,6 +62,7 @@ module.exports = function(grunt) {
 				cwd: 'build/tmp/',
 				src: [
 					'assets/css/keys.css',
+					'assets/css/jquery-ui.min.css',
 					'assets/css/bootstrap-slider.min.css',
 					'library/helpers/*.js',
 					'library/injections/*.js',
@@ -187,7 +188,7 @@ module.exports = function(grunt) {
 				options: {
 					replacements: [
 						{
-							pattern: /\"assets\/js\/\.\.\/js\/global\.js\",/ig,
+							pattern: /\"assets\/js\/global\.js\",/ig,
 							replacement: ''
 						},
 						{

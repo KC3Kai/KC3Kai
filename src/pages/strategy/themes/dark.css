@@ -26,6 +26,17 @@ button, input, select, textarea {
 	background:#121212;
 }
 
+.ui-tooltip {
+	max-width:500px;
+	border-width:1px !important;
+	border:1px solid #eee;
+	box-shadow:0 0 5px 1px #777;
+	color:#cccccc;
+	background:#444;
+	font-family:inherit;
+	font-size:12px;
+}
+
 /* COLORS
 -------------------------------*/
 .fcolor1 { color:#ffffff; }
@@ -236,7 +247,8 @@ button, input, select, textarea {
 	color:#fff;
 	margin:0px 1px 0px;
 }
-.page_panel ul.pagination li a:hover {
+.page_panel ul.pagination li a:hover,
+.page_panel ul.pagination li.active a {
 	background:#000000;
 	color:#ffcc00;
 }
@@ -719,10 +731,10 @@ button, input, select, textarea {
 	background-color:#062d2b;
 }
 .tab_expcalc .goal_template {
-	background-color:#def;
+	background-color:#cdf;
 }
 .tab_expcalc .ship_goal .ship_value {
-	color:#fff !important;
+	color:#cdf;
 }
 .tab_expcalc .ship_goal .ship_info .ship_name {
 	color:#fff;
@@ -811,6 +823,17 @@ button, input, select, textarea {
 .tab_expcalc .gt_content.new_template {
 	background: #333333;
 	border: 1px;
+}
+
+.tab_expcalc .ship_goal .ship_result .ship_value,
+.tab_expcalc .ship_goal .ship_value.yes_or_no,
+.tab_expcalc .goal_template .goal_value.yes_or_no {
+	color:#fbb;
+}
+
+.tab_expcalc .ship_goal .ship_value.yes_or_no.bool_no,
+.tab_expcalc .goal_template .goal_value.yes_or_no.bool_no {
+	color:#cdf;
 }
 
 /* Badge */
@@ -998,6 +1021,31 @@ button, input, select, textarea {
 .tab_fleet .fleet_ships {
 	height:160px;
 }
+.ui-tooltip-content .ship_tooltip .ship_full_name span.ship_yomi {
+	color:#777 !important;
+}
+.ui-tooltip-content .ship_tooltip .stat_icon img {
+	-webkit-filter: invert(100%);
+}
+.ui-tooltip-content .ship_tooltip .stat_icon {
+	background-color:#333 !important;
+	border:1px solid #111 !important;
+	border-right-color:#333 !important;
+	border-bottom-color:#555 !important;
+}
+.ui-tooltip-content .ship_tooltip .stat_value {
+	background-color:#444 !important;
+	border:1px solid #222 !important;
+	border-right-color:#777 !important;
+	border-bottom-color:#777 !important;
+}
+.ui-tooltip-content .ship_tooltip .aa_col {
+	background-color:#444 !important;
+	border:1px solid #222 !important;
+	border-right-color:#777 !important;
+	border-bottom-color:#777 !important;
+}
+
 /* SHIP BOX
 --------------------------------*/
 .tab_fleet .fleet_ship {
@@ -1500,5 +1548,6 @@ button, input, select, textarea {
 	color: firebrick;
 }
 .tab_translations .page_content select {
-	color: black;
+	background-color: black;
+	font-weight: bold;
 }

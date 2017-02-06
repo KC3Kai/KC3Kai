@@ -111,7 +111,7 @@
 /* NEWS FEED
 --------------------------------*/
 .tab_profile .feed_item {
-	width:500px;
+	width:680px;
 	height:22px;
 	margin:0px 0px 0px 0px;
 	font-size:12px;
@@ -128,13 +128,13 @@
 	height:20px;
 	line-height:20px;
 	padding:0px 0px 0px 5px;
-	margin:1px 1px 1px 1px;
+	margin:1px 2px 1px 2px;
 	float:left;
 	overflow:hidden;
 	white-space:nowrap;
 }
 .tab_profile .feed_item .feed_text {
-	width:394px;
+	width:553px;
 	height:20px;
 	line-height:20px;
 	padding:0px 0px 0px 5px;
