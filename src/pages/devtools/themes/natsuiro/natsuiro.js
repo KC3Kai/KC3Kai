@@ -435,6 +435,8 @@
 
 		// Panel customizations: panel opacity
 		$(".wrapper_bg").css("opacity", ConfigManager.pan_opacity/100);
+		$(".module.activity .activity_tab").css("background", ConfigManager.pan_box_bcolor);
+		$(".module.activity .activity_body").css("background", ConfigManager.pan_box_bcolor);
 
 		// Panel customizations: bg image
 		if(ConfigManager.pan_bg_image === ""){
