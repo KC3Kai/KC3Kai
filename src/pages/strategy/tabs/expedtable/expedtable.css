@@ -244,6 +244,7 @@
 	padding: 2px 0px 2px 0px;
 	border-radius: 10px;
 	text-align: center;
+	line-height: 20px;
 }
 
 .tab_expedtable #cost_model_content_root .control_group .control_row > div,
