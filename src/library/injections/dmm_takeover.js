@@ -576,6 +576,7 @@
 			
 			// Receives and remembers the time when a network request was last made
 			return function(request, sender, response){
+				if (!ConfigManager.alert_idle_start) return true;
 				if(request.action != "goodResponses") return true;
 				lastNetworkTime = (new Date()).getTime();
 				hideIdleScreen = false;
