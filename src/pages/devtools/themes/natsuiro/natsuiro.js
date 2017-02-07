@@ -2362,11 +2362,12 @@
 			if(!ConfigManager.info_pvp_info)
 				return;
 			console.log("PvP Enemy Fleet", data);
-			$(".activity_pvp .pvp_admiral .pvp_admiral_name .value").text(data.api_nickname);
+			$(".activity_pvp .pvp_admiral .pvp_admiral_name .value").text(data.api_nickname)
+				.attr("title", data.api_nickname).lazyInitTooltip();
 			$(".activity_pvp .pvp_admiral .pvp_admiral_level .value").text(data.api_level);
 			// why is this rank int ID, fml
 			$(".activity_pvp .pvp_admiral .pvp_admiral_rank").text(KC3Meta.rank(data.api_rank))
-				.attr("title", KC3Meta.rank(data.api_rank));
+				.attr("title", KC3Meta.rank(data.api_rank)).lazyInitTooltip();
 			// guess nobody is interest in api_experience[1]?
 			$(".activity_pvp .pvp_admiral .pvp_admiral_exp").text(data.api_experience[0]);
 			$(".activity_pvp .pvp_admiral .pvp_admiral_comment").text(data.api_cmt);
