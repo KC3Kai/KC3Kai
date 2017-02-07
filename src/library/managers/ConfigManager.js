@@ -138,6 +138,7 @@ Retreives when needed to apply on components
 				alert_supply 		: 3,
 				alert_supply_exped 	:true,
 				alert_idle_counter	: 1,
+				alert_idle_start	: 180000,
 				
 				alert_taiha			: false,
 				alert_taiha_blur	: false,

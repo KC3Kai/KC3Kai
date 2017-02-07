@@ -30,6 +30,7 @@
 			chrome.runtime.onMessage.addListener(this.mapMarkersOverlay());
 			chrome.runtime.onMessage.addListener(this.getWindowSize());
 			chrome.runtime.onMessage.addListener(this.getGamescreenOffset());
+			chrome.runtime.onMessage.addListener(this.idleTimer());
 		},
 		
 		/* WINDOW KEEP FOCUS, NOT FLASH
@@ -73,6 +74,10 @@
 			var overlay_subtitles = $("<div>").addClass("overlay_box overlay_subtitles")
 				.append($("<span>"));
 			overlays.append(overlay_subtitles);
+			
+			var overlay_idle = $("<div>").addClass("overlay_box overlay_idle")
+				.append($("<span>"));
+			overlays.append(overlay_idle);
 			
 			// Clonable Factory
 			var factory = $("<div>").attr("id", "factory").appendTo("body");
@@ -127,7 +132,6 @@
 			
 			var self = this;
 			this.resizeTimer = setInterval(function(){
-				console.log('Checking size of frame...');
 				if ($("#game_frame").width() != 800 || $("#game_frame").height() != 480) {
 					self.resizeGameFrame();
 				}
@@ -447,7 +451,6 @@
 			});
 		},
 		
-		
 		/* GET GAMESCREEN OFFSET
 		Used for taking screenshots
 		FitScreen itself is executed in background service
@@ -533,6 +536,50 @@
 					);
 				}
 				response({success:true});
+			};
+		},
+		
+		/* IDLE TIMER
+		Ask background service to take my selfie
+		--------------------------------------*/
+		idleTimer: function(){
+			let lastNetworkTime = (new Date()).getTime();
+			let hideIdleScreen = false;
+			let maxIdleScreenOpacity = 0.8;
+			
+			let timeIdleStart = ConfigManager.alert_idle_start;
+			// If less than 1000, assume user input was in seconds
+			if (timeIdleStart < 1000) timeIdleStart = timeIdleStart * 1000;
+			let timeIdleMax = timeIdleStart + 100000;
+			
+			// Timer that checks idle time and show UI
+			setInterval(function(){
+				let idleMillis = (new Date()).getTime() - lastNetworkTime;
+				// If idle for more than 60 seconds, start to show UI
+				if (idleMillis > timeIdleStart && !hideIdleScreen) {
+					$(".overlay_idle").show();
+					$(".overlay_idle").css({ opacity:1 });
+					$(".overlay_idle").text(String(Math.floor(idleMillis/1000)).toHHMMSS());
+					let opacity = (idleMillis - timeIdleStart) / (timeIdleMax - timeIdleStart);
+					opacity = Math.round(opacity * 100) / 100;
+					if (opacity > maxIdleScreenOpacity) opacity = maxIdleScreenOpacity;
+					if (opacity < 0) opacity = 0;
+					$(".overlay_idle").css({ background: 'radial-gradient(ellipse at center, rgba(0,0,0,'+(opacity/2)+') 0%, rgba(0,0,0,'+opacity+') 100%)' });
+				}
+			}, 1000);
+			
+			// Hide on mouse move
+			$(".overlay_idle").on('click', function(){
+				hideIdleScreen = true;
+				$(this).hide();
+			});
+			
+			// Receives and remembers the time when a network request was last made
+			return function(request, sender, response){
+				if(request.action != "goodResponses") return true;
+				lastNetworkTime = (new Date()).getTime();
+				hideIdleScreen = false;
+				$(".overlay_idle").hide();
 			};
 		}
 	};

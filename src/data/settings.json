@@ -449,16 +449,10 @@
 				"options" : {}
 			},
 			{
-				"id" : "alert_idle_counter",
+				"id" : "alert_idle_start",
 				"name" : "SettingsIdleWarning",
-				"type" : "radio",
-				"options" : {
-					"choices" : [
-						[ 0, "None"],
-						[ 1, "SettingsHideCounter"],
-						[ 2, "SettingsShowCounter"]
-					]
-				}
+				"type" : "long_text",
+				"options" : { "placeholder" : "Time before idle screen shows, in milliseconds" }
 			}
 		]
 	},

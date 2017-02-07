@@ -1,10 +1,10 @@
 /* DEFAULTS
 --------------------------*/
-.hover {
+.kc3 .hover {
 	cursor:hand;
 	cursor:pointer;
 }
-.clear {
+.kc3 .clear {
 	clear:both !important;
 }
 .kc3 #area-game {
@@ -162,4 +162,22 @@
 	padding:0;
 	float:left;
 	pointer-events:none;
+}
+
+/* OVERLAY: IDLE SCREEN
+--------------------------*/
+.kc3 .overlay_idle {
+	width:790px;
+	height:480px;
+	padding:445px 10px 0px 0px;
+	text-align:right;
+	font-size:22px;
+	color:#fff;
+	font-weight:normal;
+	text-shadow:1px 1px 2px #151515,
+		-1px -1px 2px #151515,
+		-1px 1px 2px #151515,
+		1px -1px 2px #151515;
+	pointer-events: all;
+	display:none;
 }
