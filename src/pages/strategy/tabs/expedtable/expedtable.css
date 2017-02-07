@@ -156,11 +156,11 @@
 }
 
 .tab_expedtable .exped_row .exped_view .info_col.time {
-	width: 80px;
+	width: 60px;
 }
 
 .tab_expedtable .exped_row .exped_view .info_col.resource {
-	width: 50px;
+	width: 55px;
 	font-weight: bold;
 }
 

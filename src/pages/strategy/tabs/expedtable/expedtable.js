@@ -653,7 +653,11 @@
 					$.extend( {}, resourceInfo, { time: masterInfo.api_time }));
 
 				$(".info_col.id", expedRow).text( eId );
-				$(".info_col.time", expedRow).text( String( 60 * masterInfo.api_time ).toHHMMSS() );
+				let timeText = String( 60 * masterInfo.api_time ).toHHMMSS();
+				// total expedtion time always ends with ":00" in HHMMSS represetation,
+				// so we can cut that out as we've done in expedscorer
+				timeText =  /(.*):00$/.exec( timeText )[1];
+				$(".info_col.time", expedRow).text( timeText );
 
 				makeWinItem( $(".info_col.item1", expedRow), masterInfo.api_win_item1 );
 				makeWinItem( $(".info_col.item2", expedRow), masterInfo.api_win_item2 );
@@ -932,7 +936,7 @@
 				let subTotal = incomeMode === "basic" ? basicValue
 					: incomeMode === "gross" ? grossValue : netValue;
 				return denomMode === "total" ? subTotal
-					: (0.0 + subTotal) / expedInfo.time;
+					: (subTotal * 60.0) / expedInfo.time;
 			}
 			// for recording final resource value
 			let actual = {};
