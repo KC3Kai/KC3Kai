@@ -14,7 +14,7 @@
 	<div class="help_a">
 		<p>If this is the first time you run into this page:</p>
 		<ul>
-			<li>Scroll down to bottom and click &quot;Reset&quot;.</li>
+			<li>Scroll down to bottom and click <code>Reset</code>.</li>
 			<li>Congrats, your expedition scorer is now more accurate than before!</li>
 		</ul>
 		<p>otherwise, have fun messing around with these views and sorting methods xD</p>
@@ -47,7 +47,7 @@
 
 	<div class="help_q">I can't see any expeditions</div>
 	<div class="help_a">
-		<p>If you are entering this tab for the first time, you need to reset your configuration, please find &quot;Reset Configuration&quot; section below and pick one resetting method you like.</p>
+		<p>If you are entering this tab for the first time, you need to reset your configuration, please find <code>Reset Configuration</code> section below and pick one resetting method you like.</p>
 	</div>
 
 	<div class="help_q">I can't change view method or sort expeditions</div>
@@ -65,8 +65,8 @@
 		<p>Reseting allows you to initialize your expedition configuration.</p>
 		<p>There are two resetting methods:</p>
 		<ul>
-			<li><p>&quot;Normal&quot; method sets default configuration to all expeditions. A default configuration considers basic income as your final income - not aim for great success and no Daihatsu is carried.</p></li>
-			<li><p>&quot;Recommended&quot; method tries to aim for great success if one expedition has decent income per run. For an expedition to be considered decent, its <code>fuel + ammo + steel + bauxite x 3</code> value must be no less than <code>500</code>.</p></li>
+			<li><p><code>Normal</code> method sets default configuration to all expeditions. A default configuration considers basic income as your final income - not aim for great success and no Daihatsu is carried.</p></li>
+			<li><p><code>Recommended</code> method tries to aim for great success if one expedition has decent income per run. For an expedition to be considered decent, its <code>fuel + ammo + steel + bauxite x 3</code> value must be no less than <code>500</code>.</p></li>
 		</ul>
 		<p>Optionally you can let KC3 guess some configuration from your recent expedition history.</p>
 	</div>
@@ -80,9 +80,22 @@
 		</ul>
 	</div>
 
+
+
+
 	<div class="help_q">Why can't I have multiple configuration for a single expedition?</div>
 	<div class="help_a">
-		<p>That would mean even more complicated user interface and it would take longer time for expedition scorer to get some results.</p>
+		<p>That would mean even more complicated user interface and algorithm to support it. If you do want to try things like having different amount of Daihatsu for different expeditions, you can have both this tab and <code>Expedition Scorer</code> opened, change configs in this tab and whenever you click <code>Calculate</code> button on <code>Expedition Scorer</code>, it always uses your latest configs.</p>
+	</div>
+
+
+	<div class="help_q">How can I sort in reversed order?</div>
+	<div class="help_a">
+		<p>Clicking on an already-active sorting method reverses the whole list.</p>
+	</div>
+	<div class="help_q">Why switching view methods deactivates the current sorting method?</div>
+	<div class="help_a">
+		<p>Because switching view methods, especially between <code>Total</code> view and <code>Hourly</code> view makes the current list no longer sorted. On the other hand, if current list is sorted by expedition id or time, it will be kept.</p>
 	</div>
 
 	<div class="help_q">What is <code>Cost Model</code>?</div>
