@@ -705,8 +705,7 @@
 
 							// deselect some sorters because a modifier config might affect
 							// sorting result of them.
-							$(".sort_control .sort_methods button.resource", expedTableRoot)
-								.removeClass("active");
+							self.deselectResourceSorters();
 
 							configSynced = false;
 						}
@@ -775,36 +774,90 @@
 			let jqSorters = $(".sort_control .sort_methods button", expedTableRoot);
 			// sort by exped id by default.
 			$(".sort_control .sort_methods button", expedTableRoot)
-				.filter("[data-sort-by=id]").addClass("active");
+				.filter("[data-sort-by=id]").each( function() {
+					$(this).addClass("active");
+					$(".ord",this).text("⬆");
+				});
 
 			jqSorters.click( function() {
 				let thisMethod = $(this).data("sortBy");
+				// before toggling active statuses, take a note about old sorting method.
+				let oldMethod = self.getActiveSortMethod();
 				jqSorters.each( function() {
 					let thatMethod = $(this).data("sortBy");
 					$(this).toggleClass("active", thisMethod === thatMethod);
+					if (thisMethod !== thatMethod) {
+						$(".ord",this).empty();
+					}
 				});
+
 				// intentionally not doing "already-active" check,
 				// as view change might also affect sort result.
 
-				// sortBy :: Ord x => (a -> x) -> [a] -> [a]
-				// "getter" extracts a value from element for comparison
-				let sortBy = (getter) => (xs) => xs.sort( function (a,b) {
-					let retVal = getter(a) - getter(b);
-					// tie break by id for an idempotent result.
-					return retVal === 0 ? $(a).data("id") - $(b).data("id") : retVal;
-				});
-				console.assert(
-					["id","time","fuel","ammo","steel","bauxite"].indexOf(thisMethod) !== -1);
-				let getter =
-					thisMethod === "id" ? (x => $(x).data("id"))
-					: thisMethod === "time" ? (x => $(x).data("info").time)
-					: /* must be one of the resources, descending order. */
-					  (x => - $(x).data("actual")[thisMethod]);
-				rearrangeExpedRows( sortBy( getter ) );
+				if (oldMethod !== null && oldMethod.method === thisMethod) {
+					// reverse current list instead of actual sorting
+					let nowAscending = ! oldMethod.ascending;
+					$(".ord",this).text(nowAscending ? "⬆" : "⬇");
+					rearrangeExpedRows( x => x.reverse() );
+				} else {
+					// sortBy :: Ord x => (a -> x) -> [a] -> [a]
+					// "getter" extracts a value from element for comparison
+					let sortBy = (getter) => (xs) => xs.sort( function (a,b) {
+						let retVal = getter(a) - getter(b);
+						// tie break by id for an idempotent result.
+						return retVal === 0 ? $(a).data("id") - $(b).data("id") : retVal;
+					});
+					console.assert(
+						["id","time","fuel","ammo","steel","bauxite"].indexOf(thisMethod) !== -1);
+					let getter;
+					if (thisMethod === "id") {
+						getter = x => $(x).data("id");
+						$(".ord",this).text("⬆");
+					} else if (thisMethod === "time") {
+						getter = x => $(x).data("info").time;
+						$(".ord",this).text("⬆");
+					} else {
+						/* must be one of the resources, descending order. */
+						getter = x => - $(x).data("actual")[thisMethod];
+						$(".ord",this).text("⬇");
+					}
+					rearrangeExpedRows( sortBy( getter ) );
+				}
 			});
+		},
 
-			$(".sort_control .rearrange .reverse").click( function() {
-				rearrangeExpedRows( x => x.reverse() );
+		// returns a sorting method ( data("sortBy"), and whether it is accending or descending. )
+		// returns "null", if none is active.
+		getActiveSortMethod: function() {
+			let expedTableRoot = $("#exped_table_content_root");
+			let activeSorters = $(".sort_control .sort_methods button.active", expedTableRoot);
+			console.assert(activeSorters.length <= 1, "should only be at most one active sorter at any time");
+			if (activeSorters.length === 0)
+				return null;
+			let sorter = activeSorters.first();
+			let ordText = $(".ord",sorter).text();
+			let ascending;
+			// instead of having another state to maintain, let's just track sorting order
+			// by testing the text carried by ".ord", and require that active sorter
+			// must have it set to either "⬆" or "⬇".
+			if (ordText === "⬆") {
+				ascending = true;
+			} else if (ordText === "⬇") {
+				ascending = false;
+			} else {
+				throw "active sorter found without ordering info";
+			}
+			return {
+				method: sorter.data("sortBy"),
+				ascending
+			};
+		},
+
+		deselectResourceSorters: function() {
+			let expedTableRoot = $("#exped_table_content_root");
+			$(".sort_control .sort_methods button.resource", expedTableRoot).each( function() {
+				$(this).removeClass("active");
+				$(".ord",this).empty();
 			});
 		},
 
@@ -830,8 +883,7 @@
 
 				// deselect some sorters because a view change might affect
 				// sorting result of them.
-				$(".sort_control .sort_methods button.resource", expedTableRoot)
-					.removeClass("active");
+				self.deselectResourceSorters();
 
 				self.refreshAllExpedRows();
 			});
@@ -848,8 +900,7 @@
 
 				// deselect some sorters because a view change might affect
 				// sorting result of them.
-				$(".sort_control .sort_methods button.resource", expedTableRoot)
-					.removeClass("active");
+				self.deselectResourceSorters();
 
 				self.refreshAllExpedRows();
 			});
