@@ -144,8 +144,9 @@ Retreives when needed to apply on components
 				alert_taiha_blood	: true,
 				alert_taiha_ss		: false,
 				alert_taiha_sound	: false,
-				alert_taiha_pvp		: false,
 				alert_taiha_panel	: true,
+				alert_taiha_homeport: false,
+				alert_taiha_damecon	: false,
 				
 				api_translation		: true,
 				api_tracking 		: true,
@@ -186,6 +187,7 @@ Retreives when needed to apply on components
 				pan_bg_size			: "cover",
 				pan_bg_position		: "top center",
 				pan_opacity 		: 100,
+				pan_box_bcolor 		: "rgba(100, 100, 100, 0.618)",
 
 				sr_theme			: "legacy"
 			};

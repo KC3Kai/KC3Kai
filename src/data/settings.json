@@ -473,6 +473,18 @@
 				"options" : {}
 			},
 			{
+				"id" : "alert_taiha_homeport",
+				"name" : "SettingsDisableHomePort",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "alert_taiha_damecon",
+				"name" : "SettingsDisableHasDamecon",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "alert_taiha_blur",
 				"name" : "SettingsScreenBlur",
 				"type" : "check",
@@ -824,6 +836,12 @@
 					"type": "Number"
 				},
 				"options" : { "label" : "%" }
+			},
+			{
+				"id" : "pan_box_bcolor",
+				"name" : "SettingsPanelBoxBackColor",
+				"type" : "long_text",
+				"options" : { "placeholder" : "SettingsBGColorDesc" }
 			}
 		]
 	},

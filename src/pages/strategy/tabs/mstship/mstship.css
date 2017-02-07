@@ -250,6 +250,29 @@
 	background:#ffc;
 	padding:5px;
 }
+/* Abyssal boss flag & encounter */
+.tab_mstship .shipInfo .encounter {
+	position:relative;
+	left:-20px;
+	top:-93px;
+	float:left;
+	display:none;
+}
+.tab_mstship .shipInfo .encounter img {
+	width:20px;
+	height:20px;
+}
+.tab_mstship .shipInfo .boss {
+	position:absolute;
+	left:128px;
+	top:445px;
+	float:left;
+	display:none;
+}
+.tab_mstship .shipInfo .boss img {
+	width:15px;
+	height:15px;
+}
 
 /* Intro message */
 .tab_mstship .shipInfo .intro {
@@ -454,6 +477,7 @@
 	position:relative;
 	pointer-events:none;
 	filter:hue-rotate(75deg);
+	-webkit-filter:hue-rotate(75deg);
 	transform:scaleX(-1);
 }
 .tab_mstship .shipInfo .aaci .equipIcons .minusIcon {
@@ -463,6 +487,7 @@
 	position:relative;
 	pointer-events:none;
 	filter:hue-rotate(-90deg);
+	-webkit-filter:hue-rotate(-90deg);
 	transform:scaleX(-1);
 }
 .tab_mstship .shipInfo .aaci .fixed {
@@ -578,6 +603,7 @@
 /* salt check */
 .tab_mstship .shipInfo.salted #saltable {
 	/* blur salt */
+	filter: blur(24px);
 	-webkit-filter: blur(24px);
 }
 .tab_mstship .shipRecord.salted {

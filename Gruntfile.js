@@ -62,6 +62,7 @@ module.exports = function(grunt) {
 				cwd: 'build/tmp/',
 				src: [
 					'assets/css/keys.css',
+					'assets/css/jquery-ui.min.css',
 					'assets/css/bootstrap-slider.min.css',
 					'library/helpers/*.js',
 					'library/injections/*.js',
