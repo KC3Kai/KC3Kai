@@ -59,6 +59,22 @@
 	width: 60px;
 }
 
+.tab_expedtable #exped_table_content_root
+  .exped_control_row.sort_control > .btn-group > button > .sorter_name {
+	float: left;
+	padding-left: 5px;
+}
+
+.tab_expedtable #exped_table_content_root
+  .exped_control_row.sort_control > .btn-group > button[data-sort-by=id] {
+	width: 50px;
+}
+
+.tab_expedtable #exped_table_content_root
+  .exped_control_row.sort_control > .btn-group > button[data-sort-by=time] {
+	width: 70px;
+}
+
 .tab_expedtable #exped_table_content_root .exped_control_row .control_header {
 	width: 65px;
 	padding: 5px 0 5px 0;
