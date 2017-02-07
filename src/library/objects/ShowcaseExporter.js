@@ -120,7 +120,7 @@
             canvas.height - 1
         );
         var x = 20;
-        if (topLine.indexOf("Ship") != -1) {
+        if (topLine.indexOf("Ship") !== -1) {
             x = this._addConsumableImage(ctx, canvas, x, "medals") + 50;
             this._addConsumableImage(ctx, canvas, x, "blueprints");
         } else {
@@ -319,7 +319,7 @@
             }
         }
 
-        return !(x >= this.canvas.width && y != 0);
+        return !(x >= this.canvas.width && y !== 0);
     };
 
     ShowcaseExporter.prototype._getShips = function () {
@@ -337,7 +337,7 @@
         for (i in this.allShipGroups) {
             if (this.allShipGroups[i].length > 0) {
                 this.allShipGroups[i].sort(function (shipA, shipB) {
-                    if (shipB.level != shipA.level)
+                    if (shipB.level !== shipA.level)
                         return shipB.level - shipA.level;
                     else
                         return shipB.masterId - shipA.masterId;
@@ -501,7 +501,7 @@
     ShowcaseExporter.prototype._getBiggestColumn = function (columns) {
         var maxSize = 0;
         for (var i = 0; i < columns.length; i++) {
-            if (typeof columns[i] != "object")
+            if (typeof columns[i] !== "object")
                 continue;
 
             var size = 0;
@@ -751,7 +751,7 @@
         var name = this._splitText(equip.name, ctx, available);
         y = this._drawEquipName(name, ctx, x + 30, y, rowHeight, fontSize, fake);
 
-        if (equip.name != KC3Master.slotitem(equip.masterId).api_name) {
+        if (equip.name !== KC3Master.slotitem(equip.masterId).api_name) {
             name = this._splitText(KC3Master.slotitem(equip.masterId).api_name, ctx, available, "");
             y = this._drawEquipName(name, ctx, x + 30, y, fontSize, fontSize, fake);
         }
@@ -786,7 +786,7 @@
         if (typeof splitter === "undefined")
             splitter = " ";
 
-        if (text.indexOf(splitter) == -1)
+        if (text.indexOf(splitter) === -1)
             splitter = "";
 
         var rows = [];
@@ -822,7 +822,7 @@
         var noStats = true;
 
         function drawStat(img) {
-            if (typeof equip[i] != "undefined" && equip[i] > 0) {
+            if (typeof equip[i] !== "undefined" && equip[i] > 0) {
                 noStats = false;
                 if (x + img.width + 3 + ctx.measureText(equip[i]).width > startX + available) {
                     y += img.height + 5;
@@ -841,7 +841,7 @@
 
         var sortingParam = KC3StrategyTabs.gears.definition._defaultCompareMethod["t" + KC3Master.slotitem(equip.masterId).api_type[3]];
         var i;
-        if (!!sortingParam && sortingParam != "overall") {
+        if (!!sortingParam && sortingParam !== "overall") {
             i = sortingParam;
             img = this._statsImages[i];
             drawStat.call(this, img);
@@ -855,7 +855,7 @@
             if (i === "or" && this.aircraftTypes.indexOf(KC3Master.slotitem(equip.masterId).api_type[3]) === -1)
                 continue;
 
-            if (sortingParam == i)
+            if (sortingParam === i)
                 continue;
             img = this._statsImages[i];
             drawStat.call(this, img);
