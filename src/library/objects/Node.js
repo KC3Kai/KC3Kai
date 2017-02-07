@@ -1293,7 +1293,8 @@ Used by SortieManager
 			});
 			if(!!supportTips && !!lbasTips) { supportTips += "\n"; }
 		}
-		return supportTips + lbasTips;
+		return $("<p></p>").css("font-size", "11px")
+			.text(supportTips + lbasTips).prop("outerHTML");
 	};
 	
 	/**

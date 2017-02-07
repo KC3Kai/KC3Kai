@@ -28,6 +28,7 @@ button, input, select, textarea {
 
 .ui-tooltip {
 	max-width:500px;
+	padding:2px 5px 3px 6px;
 	border-width:1px !important;
 	border:1px solid #eee;
 	box-shadow:0 0 5px 1px #777;
@@ -35,6 +36,12 @@ button, input, select, textarea {
 	background:#444;
 	font-family:inherit;
 	font-size:12px;
+}
+.ui-tooltip-content hr {
+	margin:3px 0px 3px 0px;
+}
+.ui-tooltip-content p {
+	margin:0px;
 }
 
 /* COLORS

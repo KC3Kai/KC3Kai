@@ -3177,7 +3177,8 @@ ABYSS FLEET
 }
 
 .ui-tooltip {
-	max-width:400px;
+	max-width:500px;
+	padding:2px 5px 3px 6px;
 	border-width:1px !important;
 	border:1px solid #222;
 	box-shadow:0 0 5px 1px #888;
@@ -3185,9 +3186,17 @@ ABYSS FLEET
 	font-size:12px;
 	background:#fff;
 }
+.ui-tooltip-content hr {
+	margin:3px 0px 3px 0px;
+}
+.ui-tooltip-content p {
+	margin:0px;
+}
 
 .ui-tooltip-content .ship_face_tooltip {
 	width:202px;
+	height:280px;
+	padding:2px 0px 2px 0px;
 }
 .ui-tooltip-content .ship_face_tooltip .ship_full_name {
 	width:158px;
@@ -3280,7 +3289,7 @@ ABYSS FLEET
 	margin-top:-2px;
 }
 .ui-tooltip-content .ship_face_tooltip .stat_name {
-	color:#a9a150;
+	color:#b49a47;
 	font-size:11px;
 	margin:0px 0px 0px 2px;
 }
