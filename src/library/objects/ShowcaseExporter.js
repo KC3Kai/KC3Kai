@@ -3,7 +3,7 @@
 
     var enableShelfTimer = false;
 
-    window.ShowcaseExporter = function() {
+    window.ShowcaseExporter = function () {
         this.canvas = {};
         this.ctx = {};
         this.allShipGroups = {};
@@ -62,7 +62,7 @@
         this.allShipGroups = {};
         this.aircraftTypes = $.unique($.merge(KC3GearManager.carrierBasedAircraftType3Ids, KC3GearManager.landBasedAircraftType3Ids));
         for (var i in KC3Meta._stype) {
-            if (KC3Meta._stype != "")
+            if (KC3Meta._stype !== "")
                 this.allShipGroups[i] = [];
         }
     };
@@ -271,7 +271,7 @@
     };
 
     ShowcaseExporter.prototype._finalize = function () {
-        if (this.loading != 0)
+        if (this.loading !== 0)
             return;
         this._drawBorders();
         this._addCredits();
@@ -432,8 +432,8 @@
                 };
             }
 
-            if (!sorted[groupId]['types'][typeId]) {
-                sorted[groupId]['types'][typeId] = {
+            if (!sorted[groupId].types[typeId]) {
+                sorted[groupId].types[typeId] = {
                     typeId: KC3Master.slotitem(equip.masterId).api_type[3],
                     name: KC3Meta.gearTypeName(2, equipMaster.api_type[2]),
                     gears: {}
@@ -441,8 +441,8 @@
                 this._equipTypeImages[KC3Master.slotitem(equip.masterId).api_type[3]] = null;
             }
 
-            if (!sorted[groupId]['types'][typeId]['gears'][masterId]) {
-                sorted[groupId]['types'][typeId]['gears'][masterId] = {
+            if (!sorted[groupId].types[typeId].gears[masterId]) {
+                sorted[groupId].types[typeId].gears[masterId] = {
                     masterId: equip.masterId,
                     name: KC3Meta.gearName(equipMaster.api_name),
                     fp: equipMaster.api_houg,
@@ -461,7 +461,7 @@
                     "s6": 0, "s7": 0, "s8": 0, "s9": 0, "s10": 0
                 };
             }
-            sorted[groupId]['types'][typeId]['gears'][masterId]["s" + equip.stars]++;
+            sorted[groupId].types[typeId].gears[masterId]["s" + equip.stars]++;
         }
 
         return sorted;
@@ -796,7 +796,7 @@
         while (words.length > 0) {
             var line = [];
             var next = words.shift();
-            while (ctx.measureText((line.join(splitter) + splitter + next).trim()).width < maxWidth && next != "") {
+            while (ctx.measureText((line.join(splitter) + splitter + next).trim()).width < maxWidth && next !== "") {
                 line.push(next);
                 if (words.length > 0)
                     next = words.shift();
@@ -804,7 +804,7 @@
                     next = "";
             }
             rows.push(line.join(splitter));
-            if (next != "") {
+            if (next !== "") {
                 words.unshift(next);
             }
         }
@@ -844,7 +844,7 @@
         if (!!sortingParam && sortingParam != "overall") {
             i = sortingParam;
             img = this._statsImages[i];
-            drawStat.call(this,img);
+            drawStat.call(this, img);
         }
 
 
@@ -858,7 +858,7 @@
             if (sortingParam == i)
                 continue;
             img = this._statsImages[i];
-            drawStat.call(this,img);
+            drawStat.call(this, img);
         }
         if (noStats)
             return 0;
