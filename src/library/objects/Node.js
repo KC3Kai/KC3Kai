@@ -1167,6 +1167,7 @@ Used by SortieManager
 			//var enemySS = [530, 532, 534, 531, 533, 535, 570, 571, 572];
 			//var enemyAP = [513, 526, 558];
 			var eshipCnt = (this.ecships || []).length || 6;
+			var sunkApCnt = 0;
 			for(var i = 0; i < eshipCnt; i++) {
 				if (this.enemySunk[i]) {
 					var enemyShip = KC3Master.ship( (this.ecships || this.eships)[i] );
@@ -1190,8 +1191,7 @@ Used by SortieManager
 								break;
 							case 15:	// 15 = AP
 								console.log("You sunk a AP");
-								KC3QuestManager.get(218).increment();
-								KC3QuestManager.get(212).increment();
+								sunkApCnt += 1;
 								KC3QuestManager.get(213).increment();
 								KC3QuestManager.get(221).increment();
 								break;
@@ -1199,6 +1199,11 @@ Used by SortieManager
 					}
 					
 				}
+			}
+			if(sunkApCnt > 0){
+				// Bd6 must inc first than Bd5 as its id smaller :)
+				KC3QuestManager.get(212).increment(0, sunkApCnt);
+				KC3QuestManager.get(218).increment(0, sunkApCnt);
 			}
 			
 			// Save enemy deck name for encounter
