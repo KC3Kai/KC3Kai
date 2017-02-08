@@ -59,6 +59,22 @@
 	width: 60px;
 }
 
+.tab_expedtable #exped_table_content_root
+  .exped_control_row.sort_control > .btn-group > button > .sorter_name {
+	float: left;
+	padding-left: 5px;
+}
+
+.tab_expedtable #exped_table_content_root
+  .exped_control_row.sort_control > .btn-group > button[data-sort-by=id] {
+	width: 50px;
+}
+
+.tab_expedtable #exped_table_content_root
+  .exped_control_row.sort_control > .btn-group > button[data-sort-by=time] {
+	width: 70px;
+}
+
 .tab_expedtable #exped_table_content_root .exped_control_row .control_header {
 	width: 65px;
 	padding: 5px 0 5px 0;
@@ -156,11 +172,11 @@
 }
 
 .tab_expedtable .exped_row .exped_view .info_col.time {
-	width: 80px;
+	width: 60px;
 }
 
 .tab_expedtable .exped_row .exped_view .info_col.resource {
-	width: 50px;
+	width: 55px;
 	font-weight: bold;
 }
 
@@ -244,6 +260,7 @@
 	padding: 2px 0px 2px 0px;
 	border-radius: 10px;
 	text-align: center;
+	line-height: 20px;
 }
 
 .tab_expedtable #cost_model_content_root .control_group .control_row > div,

@@ -8,7 +8,7 @@ to figure out some best set of expeditions to be run parallelly for you.
 
 If this is the first time you run into this page:
 
-- Scroll down to bottom and click "Reset".
+- Scroll down to bottom and click `Reset`.
 - Congrats, your expedition scorer is now more accurate than before!
 
 otherwise, have fun messing around with these views and sorting methods xD
@@ -61,7 +61,7 @@ and what fleet composition you use for running the expedition.
 # I can't see any expeditions
 
 If you are entering this tab for the first time, you need to reset your configuration,
-please find "Reset Configuration" section below and pick one resetting method you like.
+please find `Reset Configuration` section below and pick one resetting method you like.
 
 # I can't change view method or sort expeditions
 
@@ -78,10 +78,10 @@ Reseting allows you to initialize your expedition configuration.
 
 There are two resetting methods:
 
-- "Normal" method sets default configuration to all expeditions.
+- `Normal` method sets default configuration to all expeditions.
   A default configuration considers basic income as your final income - not aim for great success and no Daihatsu is carried.
 
-- "Recommended" method tries to aim for great success if one expedition has decent income per run.
+- `Recommended` method tries to aim for great success if one expedition has decent income per run.
   For an expedition to be considered decent, its `fuel + ammo + steel + bauxite x 3` value must be no less than `500`.
 
 Optionally you can let KC3 guess some configuration from your recent expedition history.
@@ -94,7 +94,20 @@ Optionally you can let KC3 guess some configuration from your recent expedition 
 
 # Why can't I have multiple configuration for a single expedition?
 
-That would mean even more complicated user interface and it would take longer time for expedition scorer to get some results.
+That would mean even more complicated user interface and algorithm to support it.
+If you do want to try things like having different amount of Daihatsu for different expeditions,
+you can have both this tab and `Expedition Scorer` opened, change configs in this tab and whenever
+you click `Calculate` button on `Expedition Scorer`, it always uses your latest configs.
+
+# How can I sort in reversed order?
+
+Clicking on an already-active sorting method reverses the whole list.
+
+# Why switching view methods deactivates the current sorting method?
+
+Because switching view methods, especially between `Total` view and `Hourly` view makes the
+current list no longer sorted. On the other hand, if current list is sorted by expedition id
+or time, it will be kept.
 
 # What is `Cost Model`?
 
