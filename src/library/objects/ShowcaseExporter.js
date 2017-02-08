@@ -3,6 +3,10 @@
 
     var enableShelfTimer = false;
 
+    function generateFontString(weight, px){
+      return weight+" "+px+"px \"Helvetica Neue\", Helvetica, Arial, sans-serif";
+    }
+
     window.ShowcaseExporter = function () {
         this.canvas = {};
         this.ctx = {};
@@ -22,7 +26,6 @@
         this.loadingCount = 0;
         this.callback = function () {
         };
-        this.aircraftTypes = [];
         this._statsImages = {
             fp: null,
             tp: null,
@@ -60,7 +63,6 @@
         this.canvas = document.createElement("CANVAS");
         this.ctx = this.canvas.getContext("2d");
         this.allShipGroups = {};
-        this.aircraftTypes = $.unique($.merge(KC3GearManager.carrierBasedAircraftType3Ids, KC3GearManager.landBasedAircraftType3Ids));
         for (var i in KC3Meta._stype) {
             if (KC3Meta._stype !== "")
                 this.allShipGroups[i] = [];
@@ -105,7 +107,7 @@
         ctx.drawImage(canvasData, 0, this.rowParams.height * 2, canvasData.width, canvasData.height);
 
         var created = "Made in KC3 on " + dateFormat("dd mmm yyyy");
-        ctx.font = "400 14pt \"Helvetica Neue\", Helvetica, Arial, sans-serif";
+        ctx.font = generateFontString(400,14);
         ctx.fillStyle = "#000";
 
         ctx.fillText(
@@ -125,7 +127,7 @@
         var header = this.addName ? JSON.parse(localStorage.player).name + " " + topLine : topLine;
 
         var fontsize = 30;
-        ctx.font = "600 " + fontsize + "pt \"Helvetica Neue\", Helvetica, Arial, sans-serif";
+        ctx.font = generateFontString(600,fontsize);
         ctx.fillText(header, (canvas.width - ctx.measureText(header).width) / 2, this.rowParams.height + fontsize / 2);
 
         var img = new Image();
@@ -148,17 +150,18 @@
                 clearTimeout(enableShelfTimer);
             }
             var self = this;
+            var filename = ConfigManager.ss_directory + '/' + dateFormat("yyyy-mm-dd") + '_' + topLine.replace(" ", "") + ".png";
             chrome.downloads.setShelfEnabled(false);
             chrome.downloads.download({
-                url: canvas.toDataURL("PNG"),
-                filename: ConfigManager.ss_directory + '/' + dateFormat("yyyy-mm-dd") + '_' + topLine.replace(" ", "") + ".PNG",
+                url: canvas.toDataURL("image/png"),
+                filename: filename,
                 conflictAction: "uniquify"
             }, function (downloadId) {
                 enableShelfTimer = setTimeout(function () {
                     chrome.downloads.setShelfEnabled(true);
                     enableShelfTimer = false;
                     self.exporter.cleanUp();
-                    self.exporter.complete();
+                    self.exporter.complete({downloadId:downloadId,filename:filename});
                 }, 100);
             });
         };
@@ -219,7 +222,6 @@
         this.canvas = {};
         this.ctx = {};
         this.allShipGroups = {};
-        this.aircraftTypes = [];
         this._statsImages = {};
         this._equipTypeImages = {};
         this._shipImages = {};
@@ -272,7 +274,7 @@
         this.ctx.fillStyle = background;
         this.ctx.fillRect(x, y, this.rowParams.width, this.rowParams.height);
 
-        this.ctx.font = "600 20pt \"Helvetica Neue\", Helvetica, Arial, sans-serif";
+        this.ctx.font = generateFontString(600,20);
         this.ctx.fillStyle = "#0066CC";
         this.ctx.fillText(KC3Meta.stype(type), x + this.rowParams.height / 2, y + this.rowParams.height - (this.rowParams.height - 18) / 2);
     };
@@ -365,15 +367,15 @@
         this._drawIcon(x + xOffset, y, ship.masterId);
 
         var fontSize = 19;
-        this.ctx.font = "400 " + fontSize + "pt \"Helvetica Neue\", Helvetica, Arial, sans-serif";
+        this.ctx.font = generateFontString(400,fontSize);
         while (this.ctx.measureText(ship.name()).width > this.rowParams.width - this.rowParams.height * 3.5) {
             fontSize--;
-            this.ctx.font = "400 " + fontSize + "pt \"Helvetica Neue\", Helvetica, Arial, sans-serif";
+            this.ctx.font = generateFontString(400,fontSize);
         }
         this.ctx.fillStyle = "#000";
         this.ctx.fillText(ship.name(), x + this.rowParams.height * 2, y + this.rowParams.height - (this.rowParams.height - fontSize) / 2);
 
-        this.ctx.font = "400 19pt \"Helvetica Neue\", Helvetica, Arial, sans-serif";
+        this.ctx.font = generateFontString(400,19);
         this.ctx.fillText(
             ship.level,
             x + this.rowParams.width - this.rowParams.height * 0.5 - this.ctx.measureText(ship.level).width,
@@ -622,7 +624,7 @@
 
         var y = 0;
         var fontSize = 16;
-        ctx.font = "600 " + fontSize + "pt \"Helvetica Neue\", Helvetica, Arial, sans-serif";
+        ctx.font = generateFontString(600,fontSize);
         ctx.fillStyle = "#000";
         ctx.fillText(group.name, (canvas.width - ctx.measureText(group.name).width) / 2, ( rowHeight + fontSize) / 2);
         y += rowHeight;
@@ -633,7 +635,7 @@
                 if (typeCount > 1) {
                     y += rowHeight / 2;
                     fontSize = 16;
-                    ctx.font = "500 " + fontSize + "pt \"Helvetica Neue\", Helvetica, Arial, sans-serif";
+                    ctx.font = generateFontString(500,fontSize);
                     ctx.fillStyle = "#000";
                     ctx.fillText(type.name, (canvas.width - ctx.measureText(type.name).width) / 2, y + (rowHeight + fontSize) / 2);
                     y += rowHeight * 1.5;
@@ -731,7 +733,7 @@
                 text = "+" + i + "★ x";
             }
             text += equip["s" + i];
-            ctx.font = fontSize + "pt \"Helvetica Neue\", Helvetica, Arial, sans-serif";
+            ctx.font = generateFontString(400,fontSize);
             if (!fake)
                 ctx.fillText(text, x + rowWidth - rowHeight * 0.5 - ctx.measureText(text).width, y + (rowHeight + fontSize) / 2);
             y += fontSize + 4;
@@ -746,7 +748,7 @@
     ShowcaseExporter.prototype._drawEquipInfo = function (equip, ctx, x, y, rowWidth, rowHeight, fake) {
         var startY = y;
         var fontSize = 10;
-        ctx.font = fontSize + "pt \"Helvetica Neue\", Helvetica, Arial, sans-serif";
+        ctx.font = generateFontString(400,fontSize);
         ctx.fillStyle = "#000";
 
         var available = rowWidth - rowHeight * 3.5;
@@ -773,16 +775,16 @@
     ShowcaseExporter.prototype._drawEquipName = function (nameLines, ctx, x, y, rowHeight, fontSize, fake) {
         if (nameLines.length === 1) {
             if (!fake)
-                ctx.fillText(nameLines[0], x, y + fontSize);
+                ctx.fillText(nameLines[0], x, y + fontSize + 2);
             y += fontSize + 5;
         } else {
             for (var i = 0; i < nameLines.length; i++) {
                 if (!fake)
-                    ctx.fillText(nameLines[i], x, y + fontSize);
+                    ctx.fillText(nameLines[i], x, y + fontSize + 2);
                 y += fontSize + 5;
             }
         }
-        return y;
+        return y + 2;
     };
 
     ShowcaseExporter.prototype._splitText = function (text, ctx, maxWidth, splitter) {
@@ -817,7 +819,7 @@
 
     ShowcaseExporter.prototype._drawEquipStats = function (equip, ctx, x, y, available, fake) {
         var fontSize = 10;
-        ctx.font = fontSize + "pt \"Helvetica Neue\", Helvetica, Arial, sans-serif";
+        ctx.font = generateFontString(400,fontSize);
         ctx.fillStyle = "#000";
 
         var startX = x;
@@ -825,7 +827,7 @@
         var noStats = true;
 
         function drawStat(img) {
-            if (typeof equip[i] !== "undefined" && equip[i] > 0) {
+            if (typeof equip[i] !== "undefined" && equip[i] !== 0) {
                 noStats = false;
                 if (x + img.width + 3 + ctx.measureText(equip[i]).width > startX + available) {
                     y += img.height + 5;
@@ -855,7 +857,7 @@
             if (!this._statsImages.hasOwnProperty(i))
                 continue;
 
-            if (i === "or" && this.aircraftTypes.indexOf(KC3Master.slotitem(equip.masterId).api_type[3]) === -1)
+            if (i === "or" && KC3GearManager.landBasedAircraftType3Ids.indexOf(KC3Master.slotitem(equip.masterId).api_type[3]) === -1)
                 continue;
 
             if (sortingParam === i)
