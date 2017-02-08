@@ -191,6 +191,10 @@
 	height: 60px;
 }
 
+.tab_expedscorer .control_box.calc.out_of_sync button {
+	color: #0056ff;
+}
+
 .tab_expedscorer .control_box.calc .content {
 	padding-top: 14px;
 }
