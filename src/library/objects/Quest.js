@@ -14,7 +14,7 @@ Quest Type:
 */
 (function(){
 	"use strict";
-	
+
 	window.KC3Quest = function(){
 		this.id = 0;
 		this.type = 0;
@@ -22,7 +22,7 @@ Quest Type:
 		this.progress = 0;
 		this.tracking = false;
 	};
-	
+
 	/* DEFINE
 	Fill object with already-formatted quest data
 	------------------------------------------*/
@@ -33,14 +33,14 @@ Quest Type:
 		if (data.progress) {
 			this.progress = data.progress;
 		} else {
-			this.progress =  0;
+			this.progress =	 0;
 		}
 		if (!this.tracking) {
 			this.tracking = data.tracking;
 		}
 		this.attachMeta();
 	};
-	
+
 	/* DEFINE RAW
 	Fill object with quest data from Raw API response
 	------------------------------------------*/
@@ -50,11 +50,11 @@ Quest Type:
 		this.type = data.api_type;
 		this.progress = data.api_progress_flag;
 		this.attachMeta();
-		
+
 		// Attach temporary raw data for quick reference
 		this.raw = function(){ return data; };
 	};
-	
+
 	/* OUTPUT SHORT
 	Return tracking text to be shown on Panel
 	------------------------------------------*/
@@ -81,7 +81,7 @@ Quest Type:
 		}
 		return "";
 	};
-	
+
 	/* OUTPUT HTML
 	Return tracking text to be shown on Strategy Room
 	------------------------------------------*/
@@ -96,7 +96,7 @@ Quest Type:
 		}
 		return "";
 	};
-	
+
 	/* INCREMENT
 	Add one to tracking progress
 	@param {number} reqNum - index of counter type, mainly for Bw1. Default: 0
@@ -135,7 +135,7 @@ Quest Type:
 			});
 		}
 	};
-	
+
 	/* ISCOMPLETE
 	Return true iff all of the counters are complete
 	------------------------------------------*/
@@ -143,14 +143,14 @@ Quest Type:
 		if (this.tracking) {
 			for (var ctr in this.tracking) {
 				if (this.tracking[ctr][0] <
-				    this.tracking[ctr][1])
+					this.tracking[ctr][1])
 					return false;
 			}
 			return true;
 		}
 		return false;
 	};
-	
+
 	/* ATTACH META
 	Add reference to its Meta data from the built-in JSON files
 	this.meta assigned as function to avoid being included in JSON.stringify
@@ -161,10 +161,10 @@ Quest Type:
 		if(typeof this.meta == "undefined"){
 			// Get data from Meta Manager
 			var MyMeta = KC3Meta.quest( this.id );
-			
+
 			// If we have meta for this quest
 			if(MyMeta){
-				// Attach meta info to this object 
+				// Attach meta info to this object
 				this.meta = function(){ return {
 					available: true,
 					code : MyMeta.code,
@@ -177,7 +177,7 @@ Quest Type:
 					this.tracking = MyMeta.tracking;
 				}
 			}else{
-				// Attach meta info to this object 
+				// Attach meta info to this object
 				this.meta = function(){ return {
 					code : "N/A",
 					name : KC3Meta.term("UntranslatedQuest"),
@@ -186,33 +186,33 @@ Quest Type:
 			}
 		}
 	};
-	
+
 	KC3Quest.prototype.isDaily = function(){
-		return (this.type == 2) 	// Daily Quest
-			|| (this.type == 4) 	// Bd4
+		return (this.type == 2)		// Daily Quest
+			|| (this.type == 4)		// Bd4
 			|| (this.type == 5);	// Bd6
 	};
-	
+
 	KC3Quest.prototype.isWeekly = function(){
 		return this.type == 3;	// Weekly Quest
 	};
-	
+
 	KC3Quest.prototype.isMonthly = function(){
 		return this.type == 6;	// Weekly Quest
 	};
-	
+
 	KC3Quest.prototype.isUnselected = function(){
-		return this.status == 1;	// Unselected 
+		return this.status == 1;	// Unselected
 	};
-	
+
 	KC3Quest.prototype.isSelected = function(){
 		return this.status == 2;	// Selected
 	};
-	
+
 	KC3Quest.prototype.isCompleted = function(){
 		return this.status == 3;	// Completed
 	};
-	
+
 	KC3Quest.prototype.autoAdjustCounter = function(){
 		if(this.tracking){
 			if(this.isCompleted()) {
@@ -237,7 +237,7 @@ Quest Type:
 			}
 		}
 	};
-	
+
 	KC3Quest.prototype.toggleCompletion = function(forceCompleted){
 		if(this.isSelected() || !!forceCompleted){
 			console.info("Force to complete quest:", this.id);
@@ -257,7 +257,7 @@ Quest Type:
 			console.warn("Quest", this.id, "status", this.status, "invalid");
 		}
 	};
-	
+
 	KC3Quest.prototype.getColor = function(){
 		return [
 			"#555555", //0
@@ -271,5 +271,5 @@ Quest Type:
 			"#D75048", //8
 		][(this.id+"").substring(0,1)];
 	};
-	
+
 })();
