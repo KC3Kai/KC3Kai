@@ -1575,12 +1575,32 @@ button, input, select, textarea {
 	font-weight: bold;
 }
 
+.tab_expedtable .btn-group {
+	border:1px solid #555 !important;
+}
+.tab_expedtable .btn-group button {
+	color: #aaa !important;
+    background-color: #141414 !important;
+    background-image: none;
+    border: 0px none !important;
+	border-radius:0px !important;
+	color: #aaa !important;
+}
+.tab_expedtable .btn-group button.active {
+	background:#333 !important;
+	color:#ffcc00 !important;
+}
+
 .tab_expedtable .exped_row {
 	color: white;
+	border:0px none !important;
+	border-radius:0px !important;
+	font-size:12px;
+	margin-bottom:2px !important;
 }
 
 .tab_expedtable .exped_row .exped_view {
-	background-color: #414141;
+	background-color: #2f2f2f;
 }
 
 .tab_expedtable .exped_row .exped_view .info_col.resource {
@@ -1592,17 +1612,18 @@ button, input, select, textarea {
 }
 
 .tab_expedtable .exped_row .exped_config .config_box .header {
-	background: #384e65;
+	background: #151515;
 	border-bottom: 1px solid #414141;
+	padding:3px 0px 3px 5px !important;
 }
 
 .tab_expedtable .exped_row .exped_config .config_box {
-	border: 1px solid #8b8b8b;
-	background-color: #414141;
+	background-color: #2f2f2f;
+	border-radius:0px !important;
 }
 
-.tab_expedtable .exped_row .exped_config .config_box .content {
-	background-color: #414141;
+.tab_expedtable .exped_row .exped_view .info_col {
+	font-size:14px !important;
 }
 
 .tab_expedtable .exped_row .exped_view .info_col.item2 {
@@ -1630,5 +1651,13 @@ button, input, select, textarea {
 }
 
 .tab_expedtable .exped_row .exped_view .info_col.edit_btn {
-	background-color: #647ea9;
+	color:#aaa;
+	font-size:12px !important;
+}
+
+.tab_expedtable .config_box input[type=text] {
+	border:1px solid #414141 !important;
+}
+.tab_expedtable .config_box input[type=text]:disabled {
+	border:0px none !important;
 }
