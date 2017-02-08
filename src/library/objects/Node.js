@@ -1191,21 +1191,25 @@ Used by SortieManager
 								break;
 							case 15:	// 15 = AP
 								console.log("You sunk a AP");
-								sunkApCnt += 1;
+								if (! ConfigManager.spCounterAdjust ) {
+									KC3QuestManager.get(218).increment();
+									KC3QuestManager.get(212).increment();
+								} else {
+									sunkApCnt += 1;
+								}
 								KC3QuestManager.get(213).increment();
 								KC3QuestManager.get(221).increment();
 								break;
 						}
 					}
-					
+
 				}
 			}
-			if(sunkApCnt > 0){
+			if(ConfigManager.spCounterAdjust && sunkApCnt > 0){
 				// Bd6 must inc first than Bd5 as its id smaller :)
 				KC3QuestManager.get(212).increment(0, sunkApCnt);
 				KC3QuestManager.get(218).increment(0, sunkApCnt);
 			}
-			
 			// Save enemy deck name for encounter
 			var name = resultData.api_enemy_info.api_deck_name;
 			if(KC3SortieManager.onSortie > 0 && !!name){
