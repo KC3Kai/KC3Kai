@@ -103,9 +103,19 @@ Quest Type:
 	@param {number} amount - progress amount to be increased. Default: 1
 	@param isAdjustingCounter - if true, prevent recursively inc on specific quest itself
 	------------------------------------------*/
-	KC3Quest.prototype.increment = function(reqNum, amount, isAdjustingCounter){
+	KC3Quest.prototype.increment = function(reqNum=0, amount=1, isAdjustingCounter=false){
 		var self = this;
 		var isIncreased = false;
+		if (! ConfigManager.spCounterAdjust) {
+			if (this.tracking && this.isSelected()) {
+				if (this.tracking[reqNum][0] + amount <= this.tracking[reqNum][1]) {
+					this.tracking[reqNum][0] += amount;
+				}
+				KC3QuestManager.save();
+			}
+			return;
+		}
+
 		// is selected on progress, or force to be adjusted on shared counter
 		if(this.tracking && (this.isSelected() || !!isAdjustingCounter)){
 			if(typeof reqNum == "undefined"){ reqNum=0; }
