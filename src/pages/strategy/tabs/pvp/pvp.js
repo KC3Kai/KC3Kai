@@ -321,16 +321,25 @@
 						mapnum: 0,
 					};
 					
-					var newImg = steganography.encode(JSON.stringify(encodeData), withDataCover64);
-					
-					chrome.downloads.download({
-						url: newImg,
-						filename: ConfigManager.ss_directory+'/replay/'+PlayerManager.hq.name+"_pvp_"+pvpData.id+'.png',
-						conflictAction: "uniquify"
-					}, function(downloadId){
-						self.exportingReplay = false;
-						$("body").css("opacity", "1");
+					steg.encode(JSON.stringify(encodeData), withDataCover64, {
+						success: function(newImg){
+							chrome.downloads.download({
+								url: newImg,
+								filename: ConfigManager.ss_directory+'/replay/'+PlayerManager.hq.name+"_pvp_"+pvpData.id+'.png',
+								conflictAction: "uniquify"
+							}, function(downloadId){
+								self.exportingReplay = false;
+								$("body").css("opacity", "1");
+							});
+						},
+						error: function(e){
+							console.error("Failed to encode replay data by", e, e.stack);
+							self.exportingReplay = false;
+							$("body").css("opacity", "1");
+							return false;
+						}
 					});
+					
 				});
 				
 			};

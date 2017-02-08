@@ -1,5 +1,5 @@
 /*
- * steganography.js v1.0.2 2016-04-23
+ * steganography.js v1.0.2.mod 2016-04-23, 2017-02-08
  *
  * Copyright (C) 2012 Peter Eigenschink (http://www.peter-eigenschink.at/)
  * Dual-licensed under MIT and Beerware license.
@@ -56,10 +56,23 @@ var util = {
 
     return ret;
   },
-  "loadImg": function(url) {
+  "loadImg": function(url, onload, success, error) {
     var image = new Image();
     image.src = url;
-    while(image.hasOwnProperty('complete') && !image.complete) {}
+    image.onload = function() {
+        try {
+            this.result = onload(image);
+            if(typeof success === "function")
+                success(this.result, image);
+        } catch(e) {
+            // this.onload will be executed at different thread,
+            // handle exception from onload handler, dispatch to error callback
+            if(typeof error === "function")
+                error(e, image);
+        }
+    };
+    // not work any more from Chrome 57
+    //while(image.hasOwnProperty('complete') && !image.complete) {}
     return image;
   }
 };
@@ -94,10 +107,6 @@ Cover.prototype.getHidingCapacity = function(image, options) {
   return t*width*height/codeUnitSize >> 0;
 };
 Cover.prototype.encode = function(message, image, options) {
-  if(image.length) {
-    image = util.loadImg(image);
-  }
-
   options = options || {};
   var config = this.config;
 
@@ -110,6 +119,8 @@ Cover.prototype.encode = function(message, image, options) {
 
   if(!t || t < 1 || t > 7) throw "Error: Parameter t = " + t + " is not valid: 0 < t < 8";
 
+  // process on canvas must wait for image loaded completely
+  var onload = function(image) {
   var shadowCanvas = document.createElement('canvas'),
     shadowCtx = shadowCanvas.getContext('2d');
 
@@ -202,12 +213,13 @@ Cover.prototype.encode = function(message, image, options) {
   shadowCtx.putImageData(imageData, 0, 0);
 
   return shadowCanvas.toDataURL();
-};
-Cover.prototype.decode = function(image, options) {
-  if(image.length) {
-    image = util.loadImg(image);
   }
 
+  if(image.length) {
+    return util.loadImg(image, onload, options.success, options.error);
+  }
+};
+Cover.prototype.decode = function(image, options) {
   options = options || {};
   var config = this.config;
   
@@ -220,6 +232,7 @@ Cover.prototype.decode = function(image, options) {
 
   if(!t || t < 1 || t > 7) throw "Error: Parameter t = " + t + " is not valid: 0 < t < 8";
     
+  var onload = function(image) {
   var shadowCanvas = document.createElement('canvas'),
     shadowCtx = shadowCanvas.getContext('2d');
 
@@ -305,6 +318,10 @@ Cover.prototype.decode = function(image, options) {
   if(charCode !== 0) message += String.fromCharCode(charCode & mask);
 
   return message;
+  }
+  if(image.length) {
+    return util.loadImg(image, onload, callback, options.success, options.error);
+  }
 };
 return new Cover();
 });
