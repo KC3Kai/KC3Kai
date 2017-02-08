@@ -199,6 +199,7 @@
                     $("<div></div>").html("Saved to ").append(
                         $("<a></a>")
                             .html(result.filename)
+                            .attr("title","Show in folder")
                             .click(function () {
                                 chrome.downloads.show(result.downloadId);
                                 return false;

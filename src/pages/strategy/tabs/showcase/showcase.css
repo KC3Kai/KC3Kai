@@ -35,6 +35,12 @@
 	background-color: #eee;
 	cursor:default;
 }
+.tab_showcase .exportResults div:first-child{
+	margin-top:10px;
+}
+.tab_showcase .exportResults a{
+	cursor: pointer;
+}
 /* SHIPS
 -----------------------------*/
 .tab_showcase .stype_box {
