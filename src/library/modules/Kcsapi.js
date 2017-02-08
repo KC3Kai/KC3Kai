@@ -1304,7 +1304,7 @@ Previously known as "Reactor"
 			console.log(quest,data);
 			
 			// Force to mark quest as complete
-			KC3QuestManager.get(quest).status = 3;
+			KC3QuestManager.get(quest).toggleCompletion(true);
 			KC3QuestManager.isOpen( quest, false );
 			KC3QuestManager.isActive( quest, false );
 			KC3QuestManager.save();
@@ -1417,61 +1417,19 @@ Previously known as "Reactor"
 		/* PVP Enemy List
 		-------------------------------------------------------*/
 		"api_get_member/practice":function(params, response, headers){
-			/* 
-				{
-					"api_member_id":16015130,
-					"api_id":1,
-					"api_enemy_id":16131426,
-					"api_enemy_name":"\u3057\u304a\u3093",
-					"api_enemy_name_id":"135471996",
-					"api_enemy_level":100,
-					"api_enemy_rank":"\u5143\u5e25",
-					"api_enemy_flag":3,
-					"api_enemy_flag_ship":401,
-					"api_enemy_comment":"\u7d50\u5c40\u521d\u96ea\u306f\u53ef\u611b\u3059\u304e\u308b\uff01",
-					"api_enemy_comment_id":"146585663",
-					"api_state":0,
-					"api_medals":0
-				},
-			*/
-			var
-				data = response.api_data;
+			KC3Network.trigger("PvPList", response.api_data);
+		},
+		
+		"api_req_practice/change_matching_kind":function(params, response, headers){
+			var selectedKind = parseInt(params.api_selected_kind, 10);
 		},
 		
 		/* PVP Fleet List
 		-------------------------------------------------------*/
 		"api_req_member/get_practice_enemyinfo":function(params, response, headers){
-			/*
-				{
-					"api_member_id":16131426,
-					"api_nickname":"\u3057\u304a\u3093",
-					"api_nickname_id":"135471996",
-					"api_cmt":"\u7d50\u5c40\u521d\u96ea\u306f\u53ef\u611b\u3059\u304e\u308b\uff01",
-					"api_cmt_id":"146585663",
-					"api_level":100,
-					"api_rank":1,
-					"api_experience":[1322118,1600000],
-					"api_friend":0,
-					"api_ship":[100,100],
-					"api_slotitem":[394,497],
-					"api_furniture":46,
-					"api_deckname":"\u306d\u3048\u4eca\u3069\u3093\u306a\u6c17\u6301\u3061\uff1f",
-					"api_deckname_id":"143652014",
-					"api_deck":{
-						"api_ships":[
-							{"api_id":402539759,"api_ship_id":401,"api_level":85,"api_star":4},
-							{"api_id":287256299,"api_ship_id":398,"api_level":63,"api_star":4},
-							{"api_id":416504460,"api_ship_id":399,"api_level":74,"api_star":4},
-							{"api_id":302286234,"api_ship_id":400,"api_level":77,"api_star":4},
-							{"api_id":-1},
-							{"api_id":-1}
-						]
-					}
-				}
-			*/
-			var
-				data    = response.api_data,
+			var data    = response.api_data,
 				enemyId = parseInt(params.api_member_id,10);
+			KC3Network.trigger("PvPFleet", data);
 		},
 		
 		/* PVP Start
@@ -2056,7 +2014,7 @@ Previously known as "Reactor"
 			getRank = function(r){ return ['E','D','C','B','A','S','SS'].indexOf(r); },
 			qLog = function(r){ // this one is used to track things
 				var q = KC3QuestManager.get(r);
-				console.log("Quest",r,"progress ["+(q.tracking ? q.tracking : '-----')+"], in progress:",q.status == 2);
+				console.log("Quest",r,"progress ["+(q.tracking ? q.tracking : '-----')+"], in progress:",q.isSelected());
 				return q;
 			};
 		
@@ -2065,6 +2023,7 @@ Previously known as "Reactor"
 		if(rankPt==5 && KC3SortieManager.currentNode().allyNoDamage) rankPt++;
 		if(!isPvP) {
 			[ /* Rank Requirement Table */
+				 /* [Quest ID, index of tracking, [world, map], isBoss] */
 				[ /* E RANK / It does not matter */
 					[216,0,false,false], // Bd2: Defeat the flagship of an enemy fleet
 					[214,1,false, true]  // Bw1: 2nd requirement: Encounter 24 bosses (index:1)
@@ -2089,9 +2048,10 @@ Previously known as "Reactor"
 				[ /* S RANK */
 					[214,3,false,false], // Bw1: 4th requirement: 6 S ranks (index:3)
 					[243,0,[5,2], true], // Bw9: Sortie to [W5-2] and S-rank the boss node 2 times
-					[256,0,[6,1], true]  // Bm2: Deploy to [W6-1] and obtain an S-rank the boss node 3 times
+					[256,0,[6,1], true], // Bm2: Deploy to [W6-1] and obtain an S-rank the boss node 3 times
+					[822,0,[2,4], true]  // Bq1: Sortie to [W2-4] and S-rank the boss node 2 times
 				],
-				[ /* SS RANK Kanzen shohri */ ],
+				[ /* SS RANK Kanzen shohri */ ]
 			].slice(0, rankPt+1)
 				.reduce(function(x,y){ return x.concat(y); })
 				.filter(function(x){

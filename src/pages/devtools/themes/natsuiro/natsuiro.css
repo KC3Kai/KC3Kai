@@ -301,23 +301,23 @@ html,body {
 	line-height:20px;
 	font-size:11px;
 	margin:0px 2px 0px 0px;
-	background:#222;
-	color:#888;
+	color:#fff;
 	float:left;
 	text-align:center;
 	border-radius:5px 5px 0px 0px;
+	filter:brightness(0.6) drop-shadow(1px 0px 0px) opacity(0.62);
+	-webkit-filter:brightness(0.6) drop-shadow(1px 0px 0px) opacity(0.62);
 }
 #atab_activity {
 	cursor:default;
 }
 .module.activity .activity_tab.active {
-	background:rgba(100,100,100,0.85);
-	color:#fff;
+	filter:brightness(1);
+	-webkit-filter:brightness(1);
 }
 .module.activity .activity_body {
 	width:190px;
 	height:235px;
-	background:rgba(100,100,100,0.85);
 	border-radius:5px;
 	overflow:hidden;
 	white-space:initial;
@@ -1679,6 +1679,7 @@ ABYSS FLEET
 	position:relative;
 	pointer-events:none;
 	filter:hue-rotate(75deg);
+	-webkit-filter:hue-rotate(75deg);
 	transform:scaleX(-1);
 }
 .module.activity .activity_gunfit .aaci .equipIcons .minusIcon {
@@ -1688,6 +1689,7 @@ ABYSS FLEET
 	position:relative;
 	pointer-events:none;
 	filter:hue-rotate(-90deg);
+	-webkit-filter:hue-rotate(-90deg);
 	transform:scaleX(-1);
 }
 .module.activity .activity_gunfit .aaci .fixed {
@@ -1706,6 +1708,327 @@ ABYSS FLEET
 }
 .module.activity .activity_gunfit .aaci .aaciPattern.triggerable {
 	background:#777;
+}
+/*------- ACTIVITY: PvP Info -------*/
+.module.activity .activity_pvp {
+	padding: 5px 10px;
+	color: #ddd;
+	font-size: 12px;
+}
+.module.activity .activity_pvp .pvp_header {
+	width: 170px;
+	margin: 0px 0px 1px 0px;
+	white-space: nowrap;
+}
+.module.activity .activity_pvp .pvp_title {
+	color: #ffcc00;
+	font-weight: bold;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.module.activity .activity_pvp .pvp_create_kind {
+	color: #86b465;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.module.activity .activity_pvp .pvp_list {
+}
+.module.activity .activity_pvp .pvpEnemyInfo {
+	width: 170px;
+	margin-bottom: 2px;
+	white-space: nowrap;
+}
+.module.activity .activity_pvp .pvp_enemy_pic {
+	width: 35px;
+	height: 35px;
+	float: left;
+	margin-right: 1px;
+	border: 1px solid #000;
+	border-radius: 20px;
+}
+.module.activity .activity_pvp .pvp_enemy_pic img {
+	width: 33px;
+	height: 33px;
+}
+.module.activity .activity_pvp .pvp_enemy_name {
+	width: 53px;
+	height: 17px;
+	line-height: 17px;
+	float: left;
+	padding-left: 2px;
+	margin: 0px 1px 1px 0px;
+	color: #3ec0bf;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.module.activity .activity_pvp .pvp_enemy_level {
+	width: 20px;
+	height: 17px;
+	line-height: 17px;
+	float: left;
+	padding-left: 2px;
+	margin: 0px 1px 1px 0px;
+	font-size: 11px;
+}
+.module.activity .activity_pvp .pvp_enemy_rank {
+	width: 38px;
+	height: 17px;
+	line-height: 17px;
+	float: left;
+	padding-left: 2px;
+	margin: 0px 1px 1px 0px;
+	overflow: hidden;
+	font-size: 11px;
+}
+.module.activity .activity_pvp .pvp_enemy_comment {
+	width: 95px;
+	height: 17px;
+	line-height: 15px;
+	float: left;
+	padding: 0px 0px 0px 3px;
+	margin: 0px 1px 0px 0px;
+	border: 1px solid #222;
+	border-radius: 5px;
+	color: #222;
+	font-size: 11px;
+	background-color: #eee;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.module.activity .activity_pvp .pvp_enemy_medals {
+	width: 17px;
+	height: 18px;
+	float: left;
+}
+.module.activity .activity_pvp .pvp_enemy_medals img {
+	width: 13px;
+	height: 13px;
+}
+.module.activity .activity_pvp .pvp_enemy_medals span {
+	font-size: 10px;
+	position: relative;
+	float: right;
+	margin-top: -12px;
+	margin-right: 1px;
+}
+.module.activity .activity_pvp .pvp_enemy_state {
+	width: 20px;
+	height: 36px;
+	margin-top: -18px;
+	float: right;
+}
+.module.activity .activity_pvp .pvp_enemy_state img {
+	width: 24px;
+	height: 24px;
+	margin-left: -2px;
+	margin-top: 6px;
+}
+
+.module.activity .activity_pvp .pvp_admiral {
+	width: 170px;
+	height: 92px;
+	margin: 0px 0px 1px 0px;
+	white-space: nowrap;
+}
+.module.activity .activity_pvp .pvp_admiral .pvp_admiral_name {
+	width: 170px;
+	height: 14px;
+	margin: 0px 0px 1px 0px;
+	float: left;
+}
+.module.activity .activity_pvp .pvp_admiral .pvp_admiral_name .i18n {
+	width: 42px;
+	margin: 0px 1px 0px 0px;
+	float: left;
+	font-size: 11px;
+	color: #3ec0bf;
+}
+.module.activity .activity_pvp .pvp_admiral .pvp_admiral_name .value {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.module.activity .activity_pvp .pvp_admiral .pvp_admiral_level {
+	width: 42px;
+	height: 15px;
+	line-height: 15px;
+	margin: 0px 1px 1px 0px;
+	float: left;
+}
+.module.activity .activity_pvp .pvp_admiral .pvp_admiral_level .i18n {
+	width: 16px;
+	color: #3ec0bf;
+	float: left;
+}
+.module.activity .activity_pvp .pvp_admiral .pvp_admiral_rank {
+	width: 76px;
+	height: 15px;
+	line-height: 15px;
+	margin: 0px 1px 1px 0px;
+	float: left;
+	font-size: 11px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.module.activity .activity_pvp .pvp_admiral .pvp_admiral_exp {
+	width: 50px;
+	height: 15px;
+	line-height: 15px;
+	float: left;
+	font-size: 11px;
+}
+.module.activity .activity_pvp .pvp_admiral .pvp_admiral_comment {
+	width: 170px;
+	height: 17px;
+	line-height: 17px;
+	padding: 0px 0px 0px 3px;
+	margin: 0px 0px 2px 0px;
+	color: #222;
+	font-size: 11px;
+	background-color: #eee;
+	border-radius: 5px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.module.activity .activity_pvp .pvp_admiral .pvp_admiral_label {
+	width: 110px;
+	height: 13px;
+	line-height: 13px;
+	margin: 0px 1px 1px 0px;
+	float: left;
+	overflow: hidden;
+	font-size: 11px;
+	color: #c3b180;
+}
+.module.activity .activity_pvp .pvp_admiral .pvp_admiral_ships,
+.module.activity .activity_pvp .pvp_admiral .pvp_admiral_gears,
+.module.activity .activity_pvp .pvp_admiral .pvp_admiral_furniture {
+	width: 59px;
+	height: 13px;
+	line-height: 13px;
+	margin: 0px 0px 1px 0px;
+	float: left;
+	font-size: 11px;
+	text-align: right;
+}
+
+.module.activity .activity_pvp .pvp_fleet_name {
+	width: 170px;
+	height: 17px;
+	line-height: 17px;
+	padding: 0px 0px 0px 3px;
+	margin: 1px 0px 2px 0px;
+	color: #222;
+	font-size: 11px;
+	background-color: #eee;
+	border-radius: 5px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.module.activity .activity_pvp .pvp_fleet_list {
+	width: 170px;
+	height: 93px;
+	margin: 0px 0px 2px 0px;
+	white-space: nowrap;
+}
+.module.activity .activity_pvp .pvpFleetShip {
+	width: 83px;
+	height: 30px;
+	margin: 0px 2px 1px 0px;
+	float: left;
+	font-size: 11px;
+	border: 1px solid #faa;
+	border-radius: 17px 5px 5px 17px;
+	background-color: #555;
+}
+.module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_icon {
+	width: 28px;
+	height: 28px;
+	margin: 0px 3px 1px 0px;
+	float: left;
+}
+.module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_icon img {
+	width: 28px;
+	height: 28px;
+}
+.module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_name {
+	width: 49px;
+	height: 13px;
+	line-height: 13px;
+	margin: 0px 0px 1px 0px;
+	float: left;
+	overflow: hidden;
+}
+.module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_level {
+	width: 32px;
+	height: 13px;
+	line-height: 13px;
+	margin: 0px 0px 0px 0px;
+	float: left;
+}
+.module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_level .i18n {
+	width: 13px;
+	float: left;
+	overflow: hidden;
+	color: #3ec0bf;
+}
+.module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_level .value {
+	width: 19px;
+	float: left;
+}
+.module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_star {
+	width: 18px;
+	height: 13px;
+	line-height: 13px;
+	margin: 0px 0px 0px 0px;
+	float: left;
+}
+.module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_star .star {
+	color: #eedab1;
+}
+.module.activity .activity_pvp .pvp_prediction {
+	width: 170px;
+	height: 15px;
+	line-height: 15px;
+	font-size: 11px;
+	margin: 2px 0px 1px 0px;
+	white-space: nowrap;
+}
+.module.activity .activity_pvp .pvp_base_exp {
+	width: 88px;
+	height: 15px;
+	float: left;
+	margin: 0px 1px 0px 0px;
+}
+.module.activity .activity_pvp .pvp_base_exp .i18n {
+	width: 59px;
+	float: left;
+	margin: 0px 1px 0px 0px;
+	color: #3ec0bf;
+	overflow: hidden;
+}
+.module.activity .activity_pvp .pvp_base_exp .value {
+	width: 28px;
+	float: left;
+}
+.module.activity .activity_pvp .pvp_formation {
+	width: 81px;
+	height: 15px;
+	float: left;
+}
+.module.activity .activity_pvp .pvp_formation .i18n {
+	width: 64px;
+	float: left;
+	margin: 0px 1px 0px 0px;
+	color: #3ec0bf;
+	overflow: hidden;
+}
+.module.activity .activity_pvp .pvp_formation img {
+	width: 15px;
+	height: 15px;
+	background-color: #fff;
+	border-radius: 10px;
+	vertical-align: inherit;
 }
 
 /*------- QUESTS -------*/
@@ -1746,7 +2069,6 @@ ABYSS FLEET
 .module.quests .quest_text {
 	width:130px;
 	height:20px;
-	/*background:#0f0;*/
 	float:left;
 	font-size:11px;
 	white-space:nowrap;
@@ -2473,6 +2795,7 @@ ABYSS FLEET
 
 /* Ship Misc Marker */
 .module.fleet .sSalt {
+	filter: blur(1.5px);
 	-webkit-filter: blur(1.5px);
 }
 .module.fleet .sWife .ship_name {
@@ -2610,6 +2933,7 @@ ABYSS FLEET
 .airbase .base_stats .base_stat_icon img {
 	width:16px;
 	height:16px;
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 	vertical-align: top;
 }
@@ -2851,6 +3175,188 @@ ABYSS FLEET
 		background:#d22;
 	}
 }
+
+.ui-tooltip {
+	max-width:500px;
+	padding:2px 5px 3px 6px;
+	border-width:1px !important;
+	border:1px solid #222;
+	box-shadow:0 0 5px 1px #888;
+	font-family:inherit;
+	font-size:12px;
+	background:#fff;
+}
+.ui-tooltip-content hr {
+	margin:3px 0px 3px 0px;
+}
+.ui-tooltip-content p {
+	margin:0px;
+}
+
+.ui-tooltip-content .ship_face_tooltip {
+	width:202px;
+	height:280px;
+	padding:2px 0px 2px 0px;
+}
+.ui-tooltip-content .ship_face_tooltip .ship_full_name {
+	width:158px;
+	height:17px;
+	line-height:17px;
+	padding:0px 2px 0px 2px;
+	margin:0px 0px 0px 0px;
+	float:left;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+.ui-tooltip-content .ship_face_tooltip .ship_full_name span.ship_masterId {
+	color:#c4a957;
+}
+.ui-tooltip-content .ship_face_tooltip .ship_full_name span.ship_yomi {
+	color:#ccc;
+}
+.ui-tooltip-content .ship_face_tooltip .ship_rosterId {
+	width:40px;
+	height:17px;
+	line-height:17px;
+	margin:0px 2px 0px 0px;
+	font-size:11px;
+	float:left;
+	color:#a9a150;
+	text-align:right;
+}
+.ui-tooltip-content .ship_face_tooltip .ship_stype {
+	width:32px;
+	height:17px;
+	line-height:17px;
+	padding:0px 0px 0px 2px;
+	margin:0px 2px 0px 0px;
+	float:left;
+	overflow:hidden;
+	white-space:nowrap;
+}
+.ui-tooltip-content .ship_face_tooltip .ship_level {
+	width:48px;
+	height:17px;
+	line-height:17px;
+	padding:0px 0px 0px 0px;
+	margin:0px 2px 0px 0px;
+	float:left;
+	overflow:hidden;
+	white-space:nowrap;
+}
+.ui-tooltip-content .ship_face_tooltip .ship_level span.i18n {
+	color:#3ec0bf;
+}
+.ui-tooltip-content .ship_face_tooltip .ship_hp {
+	width:64px;
+	height:17px;
+	line-height:17px;
+	padding:0px 0px 0px 0px;
+	margin:0px 2px 0px 0px;
+	text-align:right;
+	float:right;
+	overflow:hidden;
+	white-space:nowrap;
+}
+.ui-tooltip-content .ship_face_tooltip .ship_stats_col {
+	width:101px;
+	margin:0px 0px 0px 0px;
+	float:left;
+}
+.ui-tooltip-content .ship_face_tooltip .ship_stats_row {
+	width:200px;
+	margin:0px 0px 0px 0px;
+	float:left;
+}
+.ui-tooltip-content .ship_face_tooltip .stat_icon {
+	width:52px;
+	height:19px;
+	line-height:17px;
+	padding:0px 0px 0px 1px;
+	margin:0px 0px 1px 0px;
+	float:left;
+	overflow:hidden;
+	white-space:nowrap;
+	background-color:#ffe;
+	border:1px solid #ddd;
+	border-right-color:#ffe;
+	border-bottom-color:#fcfcfc;
+}
+.ui-tooltip-content .ship_face_tooltip .stat_icon img {
+	width:15px;
+	height:15px;
+	margin-top:-2px;
+}
+.ui-tooltip-content .ship_face_tooltip .stat_name {
+	color:#b49a47;
+	font-size:11px;
+	margin:0px 0px 0px 2px;
+}
+.ui-tooltip-content .ship_face_tooltip .stat_value {
+	width:46px;
+	height:19px;
+	line-height:17px;
+	padding:0px 2px 1px 2px;
+	margin:0px 2px 1px 0px;
+	float:left;
+	font-size:12px;
+	text-align:right;
+	overflow:hidden;
+	white-space:nowrap;
+	background-color:#ffffe3;
+	border:1px solid #aaa;
+	border-right-color:#f0f0f0;
+	border-bottom-color:#f0f0f0;
+}
+.ui-tooltip-content .ship_face_tooltip .stat_value.oasw {
+	color:#0cd;
+}
+.ui-tooltip-content .ship_face_tooltip .stat_value.SpeedFaster,
+.ui-tooltip-content .ship_face_tooltip .stat_value.SpeedFastest {
+	color:#7aabb8;
+}
+.ui-tooltip-content .ship_face_tooltip .stat_wide {
+	width:199px;
+}
+.ui-tooltip-content .ship_face_tooltip .aa_col {
+	width: 39px;
+	height:19px;
+	line-height:17px;
+	padding:0px 2px 0px 2px;
+	margin:0px 1px 1px 0px;
+	float:left;
+	font-size:11px;
+	text-align:right;
+	overflow:hidden;
+	white-space:nowrap;
+	background-color:#ffffe3;
+	border:1px solid #aaa;
+	border-right-color:#f0f0f0;
+	border-bottom-color:#f0f0f0;
+}
+.ui-tooltip-content .ship_face_tooltip .aa_col.bomberSlot img {
+	width:15px;
+	height:15px;
+	margin-top:-5px;
+	margin-left:-2px;
+}
+.ui-tooltip-content .ship_face_tooltip .aa_col.sd_both,
+.ui-tooltip-content .ship_face_tooltip .aa_col.sd_prop,
+.ui-tooltip-content .ship_face_tooltip .aa_col.sd_fixed,
+.ui-tooltip-content .ship_face_tooltip .aa_col.sd_fail {
+	color:#f00;
+}
+.ui-tooltip-content .ship_face_tooltip .text_center {
+	text-align:center;
+}
+.ui-tooltip-content .ship_face_tooltip .text_left {
+	text-align:left;
+}
+.ui-tooltip-content .ship_face_tooltip .text_right {
+	text-align:right;
+}
+
 /* Customized Scrollbar */
 ::-webkit-scrollbar {
 	width:8px;

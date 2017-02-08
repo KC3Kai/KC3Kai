@@ -61,6 +61,7 @@ Has functions for TimerManager to use
 			$(".timer-img", this.element).attr("title", "");
 			$(".timer-img img", this.element).hide();
 		}
+		return $(".timer-img", this.element);
 	};
 	
 	KC3Timer.prototype.updateElement = function(element){
