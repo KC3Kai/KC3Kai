@@ -104,13 +104,7 @@
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(canvasData, 0, this.rowParams.height * 2, canvasData.width, canvasData.height);
 
-        var d = new Date();
-
-        var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
-            "July", "Aug", "Sep", "Oct", "Nov", "Dec"
-        ];
-
-        var created = "Made in KC3 on " + d.getDate() + " " + monthNames[d.getMonth()] + " " + d.getFullYear();
+        var created = "Made in KC3 on " + dateFormat("dd mmm yyyy");
         ctx.font = "400 14pt \"Helvetica Neue\", Helvetica, Arial, sans-serif";
         ctx.fillStyle = "#000";
 
@@ -150,7 +144,6 @@
                 0, 0,
                 this.exporter.rowParams.height * 2, this.exporter.rowParams.height * 2
             );
-            var date = d.getFullYear() + "_" + d.getMonth() + "_" + d.getDate();
             if (enableShelfTimer) {
                 clearTimeout(enableShelfTimer);
             }
@@ -158,7 +151,7 @@
             chrome.downloads.setShelfEnabled(false);
             chrome.downloads.download({
                 url: canvas.toDataURL("PNG"),
-                filename: ConfigManager.ss_directory + '/' + date + '_' + topLine.replace(" ", "") + ".PNG",
+                filename: ConfigManager.ss_directory + '/' + dateFormat("yyyy-mm-dd") + '_' + topLine.replace(" ", "") + ".PNG",
                 conflictAction: "uniquify"
             }, function (downloadId) {
                 enableShelfTimer = setTimeout(function () {
@@ -337,14 +330,12 @@
     };
 
     ShowcaseExporter.prototype._getShips = function () {
-        var ships = JSON.parse(localStorage.ships);
-        for (var i in ships) {
-            if (ships[i].lock === 0)
-                continue;
+        KC3ShipManager.load();
+        var ships = KC3ShipManager.find(function(s){return s.lock !==0;});
 
-            var ship = KC3ShipManager.get(ships[i].rosterId);
-            this.allShipGroups[ship.master().api_stype].push(ship);
-            this._shipImages[ship.masterId] = null;
+        for (var i in ships) {
+            this.allShipGroups[ships[i].master().api_stype].push(ships[i]);
+            this._shipImages[ships[i].masterId] = null;
             this.shipCount++;
         }
 
@@ -736,8 +727,6 @@
             var text = "";
             if (i === 0) {
                 text = " x";
-            } else if (i === 10) {
-                text = "+10★ x";
             } else {
                 text = "+" + i + "★ x";
             }
@@ -881,15 +870,4 @@
         return y;
     };
 
-    ShowcaseExporter.prototype._cloneArray = function (a) {
-        var b = [];
-        var i = a.length;
-        while (i--) {
-            if (typeof a[i] === "object")
-                b[i] = this._cloneArray(a[i]);
-            else
-                b[i] = a[i];
-        }
-        return b;
-    };
 })();
