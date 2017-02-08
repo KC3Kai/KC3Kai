@@ -19,6 +19,24 @@ body {
 	display:none;
 }
 
+.ui-tooltip {
+	max-width:500px;
+	padding:2px 5px 3px 6px;
+	border-width:1px !important;
+	border:1px solid #222;
+	box-shadow:0 0 5px 1px #888;
+	color:#575757;
+	background:#fff;
+	font-family:inherit;
+	font-size:12px;
+}
+.ui-tooltip-content hr {
+	margin:3px 0px 3px 0px;
+}
+.ui-tooltip-content p {
+	margin:0px;
+}
+
 /* COLORS
 -------------------------------*/
 .fcolor1 { color:#000000; }
@@ -879,7 +897,7 @@ body {
 	height:17px;
 	float:left;
 	font-size:10px;
-	white-space: nowrap;
+	white-space:nowrap;
 	overflow:hidden;
 }
 .tab_fleet .fleet_ship .gear_name .stars {

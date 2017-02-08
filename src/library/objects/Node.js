@@ -326,6 +326,11 @@ Used by SortieManager
 		this.ecships = undefined;
 		this.eformation = battleData.api_formation[1];
 		
+		this.elevels = battleData.api_ship_lv.slice(1);
+		if(isEnemyCombined) {
+			this.elevels = this.elevels.concat(battleData.api_ship_lv_combined.slice(1));
+		}
+		
 		this.eParam = battleData.api_eParam;
 		if (typeof battleData.api_eParam_combined != "undefined") {
 			this.eParam = this.eParam.concat(battleData.api_eParam_combined);
@@ -738,6 +743,7 @@ Used by SortieManager
 		var isEnemyCombined = (typeof nightData.api_ship_ke_combined !== "undefined");
 		
 		this.eships = enemyships;
+		this.elevels = nightData.api_ship_lv.slice(1);
 		this.eformation = this.eformation || nightData.api_formation[1];
 		this.eParam = nightData.api_eParam;
 		this.eKyouka = nightData.api_eKyouka || [-1,-1,-1,-1,-1,-1];
@@ -1287,7 +1293,8 @@ Used by SortieManager
 			});
 			if(!!supportTips && !!lbasTips) { supportTips += "\n"; }
 		}
-		return supportTips + lbasTips;
+		return $("<p></p>").css("font-size", "11px")
+			.text(supportTips + lbasTips).prop("outerHTML");
 	};
 	
 	/**
