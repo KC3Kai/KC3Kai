@@ -28,7 +28,22 @@
 		init :function(){
 		},
 
+		resetResourcePriority(newPriority) {
+			let jqResourceControl = $(".tab_expedscorer .control_box.resource .content");
+
+			$(".resource_box", jqResourceControl).each( function() {
+				let jq = $(this);
+				let slider = jq.data("slider");
+				let newPri = newPriority[jq.data("name")];
+				slider
+					.trigger( $.Event("change", {value: {newValue: newPri}}) )
+					.slider("setValue", newPri);
+			});
+
+		},
+
 		setupControls() {
+			let self = this;
 			let factoryRoot = $(".tab_expedscorer .factory");
 			let jqRoot = $(".tab_expedscorer #exped_scorer_control_root");
 			let jqControlRow1 = $(".control_row.row1", jqRoot);
@@ -101,11 +116,32 @@
 			});
 
 			$("button.reset", jqResourceControl).click( function() {
-				$(".resource_box", jqResourceControl).each( function() {
-					let slider = $(this).data("slider");
-					slider
-						.trigger( $.Event("change", {value: {newValue: 5}}) )
-						.slider("setValue", 5);
+				self.resetResourcePriority( { fuel: 5, ammo: 5, steel: 5, bauxite: 5 } );
+			});
+
+			$("button.balanced", jqResourceControl).click( function() {
+				let currentResources;
+				try {
+					if (PlayerManager.hq.lastMaterial === null)
+						throw "hq.lastMaterial is empty";
+					currentResources = PlayerManager.hq.lastMaterial;
+				} catch (e) {
+					console.warn("error while getting hq resources", e);
+					currentResources = [0,0,0,0];
+				}
+				// * +10 for making every value non-zero
+				// * use (300000 + 10) so that there are fewer significant digits
+				//   in floating parts
+				let currentResourcesWeighted = currentResources
+					.map( x => 300010 /(x + 10) );
+				let maxVal = Math.max.apply(undefined, currentResourcesWeighted);
+				let scaledRate = currentResourcesWeighted.map( x => saturate(Math.round( x*20/maxVal ),0,20) );
+
+				self.resetResourcePriority({
+					fuel: scaledRate[0],
+					ammo: scaledRate[1],
+					steel: scaledRate[2],
+					bauxite: scaledRate[3]
 				});
 			});
 
@@ -143,7 +179,6 @@
 				let weight = jq.data("slider").slider("getValue");
 				resourceWeight[name]=weight;
 			});
-			console.log( resourceWeight );
 
 			// get afk time, and write back normalized values
 			let jqHrs = $(".control_box.afktime input[type=text][name=hrs]",jqRoot);
@@ -158,7 +193,6 @@
 			let fleetCount = parseInt( $(".control_box.fleet input[type=radio]:checked", jqRoot).val(), 10);
 			console.assert( typeof fleetCount === "number" &&
 							fleetCount > 0 && fleetCount <= 3);
-
 
 			// make sure we reload config every time
 			// so user can also have expedtable opened and whatever changes made there
