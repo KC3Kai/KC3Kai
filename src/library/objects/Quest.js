@@ -118,8 +118,6 @@ Quest Type:
 
 		// is selected on progress, or force to be adjusted on shared counter
 		if(this.tracking && (this.isSelected() || !!isAdjustingCounter)){
-			if(typeof reqNum == "undefined"){ reqNum=0; }
-			if(typeof amount == "undefined"){ amount=1; }
 			// passive adjusted never reach completion
 			var maxValue = !!isAdjustingCounter ? this.tracking[reqNum][1] - 1 : this.tracking[reqNum][1];
 			if (this.tracking[reqNum][0] < maxValue) {
