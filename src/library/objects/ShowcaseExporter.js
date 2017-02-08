@@ -1,10 +1,11 @@
 (function () {
     "use strict";
 
+    var imgurLimit = 0;
     var enableShelfTimer = false;
 
-    function generateFontString(weight, px){
-      return weight+" "+px+"px \"Helvetica Neue\", Helvetica, Arial, sans-serif";
+    function generateFontString(weight, px) {
+        return weight + " " + px + "px \"Helvetica Neue\", Helvetica, Arial, sans-serif";
     }
 
     window.ShowcaseExporter = function () {
@@ -22,7 +23,6 @@
             even: "#f2f2f2"
         };
         this.columnCount = 5;
-        this.addName = false;
         this.loadingCount = 0;
         this.callback = function () {
         };
@@ -107,7 +107,7 @@
         ctx.drawImage(canvasData, 0, this.rowParams.height * 2, canvasData.width, canvasData.height);
 
         var created = "Made in KC3 on " + dateFormat("dd mmm yyyy");
-        ctx.font = generateFontString(400,14);
+        ctx.font = generateFontString(400, 14);
         ctx.fillStyle = "#000";
 
         ctx.fillText(
@@ -124,11 +124,9 @@
             this._addConsumableImage(ctx, canvas, x, "screws");
         }
 
-        var header = this.addName ? JSON.parse(localStorage.player).name + " " + topLine : topLine;
-
         var fontsize = 30;
-        ctx.font = generateFontString(600,fontsize);
-        ctx.fillText(header, (canvas.width - ctx.measureText(header).width) / 2, this.rowParams.height + fontsize / 2);
+        ctx.font = generateFontString(600, fontsize);
+        ctx.fillText(topLine, (canvas.width - ctx.measureText(topLine).width) / 2, this.rowParams.height + fontsize / 2);
 
         var img = new Image();
         img.exporter = this;
@@ -146,24 +144,7 @@
                 0, 0,
                 this.exporter.rowParams.height * 2, this.exporter.rowParams.height * 2
             );
-            if (enableShelfTimer) {
-                clearTimeout(enableShelfTimer);
-            }
-            var self = this;
-            var filename = ConfigManager.ss_directory + '/' + dateFormat("yyyy-mm-dd") + '_' + topLine.replace(" ", "") + ".png";
-            chrome.downloads.setShelfEnabled(false);
-            chrome.downloads.download({
-                url: canvas.toDataURL("image/png"),
-                filename: filename,
-                conflictAction: "uniquify"
-            }, function (downloadId) {
-                enableShelfTimer = setTimeout(function () {
-                    chrome.downloads.setShelfEnabled(true);
-                    enableShelfTimer = false;
-                    self.exporter.cleanUp();
-                    self.exporter.complete({downloadId:downloadId,filename:filename});
-                }, 100);
-            });
+            this.exporter._finish(canvas.toDataURL("image/png"), topLine);
         };
         img.src = "/assets/img/logo/128.png";
 
@@ -230,6 +211,93 @@
         this._equipGroupCanvases = {};
     };
 
+    ShowcaseExporter.prototype._finish = function (dataURL, topLine) {
+        switch (parseInt(ConfigManager.ss_mode, 10)) {
+            case 0:
+                this._download(dataURL, topLine);
+                break;
+            case 1:
+                this._postToImgur(dataURL, topLine);
+                break;
+            default:
+                this._openInNewTab(dataURL, topLine);
+                break;
+        }
+    };
+
+    ShowcaseExporter.prototype._download = function (dataURL, topLine) {
+        if (enableShelfTimer) {
+            clearTimeout(enableShelfTimer);
+        }
+        var self = this;
+        var filename = ConfigManager.ss_directory + '/' + dateFormat("yyyy-mm-dd") + '_' + topLine.replace(" ", "") + ".png";
+        chrome.downloads.setShelfEnabled(false);
+        chrome.downloads.download({
+            url: dataURL,
+            filename: filename,
+            conflictAction: "uniquify"
+        }, function (downloadId) {
+            enableShelfTimer = setTimeout(function () {
+                chrome.downloads.setShelfEnabled(true);
+                enableShelfTimer = false;
+                self.cleanUp();
+                self.complete({downloadId: downloadId, filename: filename});
+            }, 100);
+        });
+    };
+
+    ShowcaseExporter.prototype._postToImgur = function (dataURL, topLine) {
+        var stampNow = Math.floor((new Date()).getTime() / 1000);
+        if (stampNow - imgurLimit > 10) {
+            imgurLimit = stampNow;
+        } else {
+            this._download(dataURL, topLine);
+            return false;
+        }
+
+        var self = this;
+        $.ajax({
+            url: 'https://api.imgur.com/3/credits',
+            method: 'GET',
+            headers: {
+                Authorization: 'Client-ID 088cfe6034340b1',
+                Accept: 'application/json'
+            },
+            success: function (response) {
+                if (response.data.UserRemaining > 10 && response.data.ClientRemaining > 100) {
+                    $.ajax({
+                        url: 'https://api.imgur.com/3/image',
+                        method: 'POST',
+                        headers: {
+                            Authorization: 'Client-ID 088cfe6034340b1',
+                            Accept: 'application/json'
+                        },
+                        data: {
+                            image: dataURL.substring(23),
+                            type: 'base64'
+                        },
+                        success: function (response) {
+                            self.complete({url: response.data.link});
+                        },
+                        error: function (response) {
+                            self._download(dataURL, topLine);
+                        }
+                    });
+                } else {
+                    self._download(dataURL, topLine);
+                }
+            },
+            error: function (response) {
+                self._download(dataURL, topLine);
+            }
+        });
+    };
+
+    ShowcaseExporter.prototype._openInNewTab = function (dataURL) {
+        window.open(dataURL, "_blank");
+        this.complete({});
+    };
+
     /* SHIP EXPORT
      ------------------------- */
     ShowcaseExporter.prototype.exportShips = function () {
@@ -274,7 +342,7 @@
         this.ctx.fillStyle = background;
         this.ctx.fillRect(x, y, this.rowParams.width, this.rowParams.height);
 
-        this.ctx.font = generateFontString(600,20);
+        this.ctx.font = generateFontString(600, 20);
         this.ctx.fillStyle = "#0066CC";
         this.ctx.fillText(KC3Meta.stype(type), x + this.rowParams.height / 2, y + this.rowParams.height - (this.rowParams.height - 18) / 2);
     };
@@ -333,7 +401,9 @@
 
     ShowcaseExporter.prototype._getShips = function () {
         KC3ShipManager.load();
-        var ships = KC3ShipManager.find(function(s){return s.lock !==0;});
+        var ships = KC3ShipManager.find(function (s) {
+            return s.lock !== 0;
+        });
 
         for (var i in ships) {
             this.allShipGroups[ships[i].master().api_stype].push(ships[i]);
@@ -367,15 +437,15 @@
         this._drawIcon(x + xOffset, y, ship.masterId);
 
         var fontSize = 19;
-        this.ctx.font = generateFontString(400,fontSize);
+        this.ctx.font = generateFontString(400, fontSize);
         while (this.ctx.measureText(ship.name()).width > this.rowParams.width - this.rowParams.height * 3.5) {
             fontSize--;
-            this.ctx.font = generateFontString(400,fontSize);
+            this.ctx.font = generateFontString(400, fontSize);
         }
         this.ctx.fillStyle = "#000";
         this.ctx.fillText(ship.name(), x + this.rowParams.height * 2, y + this.rowParams.height - (this.rowParams.height - fontSize) / 2);
 
-        this.ctx.font = generateFontString(400,19);
+        this.ctx.font = generateFontString(400, 19);
         this.ctx.fillText(
             ship.level,
             x + this.rowParams.width - this.rowParams.height * 0.5 - this.ctx.measureText(ship.level).width,
@@ -463,12 +533,13 @@
                     ht: equipMaster.api_houm,
                     rn: equipMaster.api_leng,
                     or: equipMaster.api_distance,
-                    "s0": 0,
+                    "total": 0, "s0": 0,
                     "s1": 0, "s2": 0, "s3": 0, "s4": 0, "s5": 0,
                     "s6": 0, "s7": 0, "s8": 0, "s9": 0, "s10": 0
                 };
             }
             sorted[groupId].types[typeId].gears[masterId]["s" + equip.stars]++;
+            sorted[groupId].types[typeId].gears[masterId].total++;
         }
 
         return sorted;
@@ -624,7 +695,7 @@
 
         var y = 0;
         var fontSize = 16;
-        ctx.font = generateFontString(600,fontSize);
+        ctx.font = generateFontString(600, fontSize);
         ctx.fillStyle = "#000";
         ctx.fillText(group.name, (canvas.width - ctx.measureText(group.name).width) / 2, ( rowHeight + fontSize) / 2);
         y += rowHeight;
@@ -635,7 +706,7 @@
                 if (typeCount > 1) {
                     y += rowHeight / 2;
                     fontSize = 16;
-                    ctx.font = generateFontString(500,fontSize);
+                    ctx.font = generateFontString(500, fontSize);
                     ctx.fillStyle = "#000";
                     ctx.fillText(type.name, (canvas.width - ctx.measureText(type.name).width) / 2, y + (rowHeight + fontSize) / 2);
                     y += rowHeight * 1.5;
@@ -716,26 +787,35 @@
 
         var equipMaxY = this._drawEquipInfo(equip, ctx, x, y, rowWidth, rowHeight, fake);
 
-        ctx.fillStyle = "#000";
+
         var fontSize;
         for (var i = 0; i <= 10; i++) {
-            if (i === 0)
-                fontSize = 14;
-            else
-                fontSize = 10;
-            if (equip["s" + i] === 0)
-                continue;
-
             var text = "";
-            if (i === 0) {
-                text = " x";
+            if (i === 0){
+                fontSize = 14;
+                text = "x" + equip.total;
+                ctx.font = generateFontString(400, fontSize);
+                ctx.fillStyle = "#000";
+                if (!fake)
+                    ctx.fillText(text, x + rowWidth - rowHeight * 0.5 - ctx.measureText(text).width, y + (rowHeight + fontSize) / 2);
             } else {
-                text = "+" + i + "★ x";
+                fontSize = 10;
+                if (equip["s" + i] === 0)
+                    continue;
+                ctx.fillStyle = "#000";
+                ctx.font = generateFontString(400, fontSize);
+                text = " x" + equip["s" + i];
+                var xOffset = ctx.measureText(text).width;
+                if (!fake)
+                    ctx.fillText(text, x + rowWidth - rowHeight * 0.5 - ctx.measureText(text).width, y + (rowHeight + fontSize) / 2);
+
+
+                text = "★" + i;
+                ctx.fillStyle="#42837f";
+                ctx.font = generateFontString(600, fontSize);
+                if (!fake)
+                    ctx.fillText(text, x + rowWidth - rowHeight * 0.5 - xOffset - ctx.measureText(text).width, y + (rowHeight + fontSize) / 2);
             }
-            text += equip["s" + i];
-            ctx.font = generateFontString(400,fontSize);
-            if (!fake)
-                ctx.fillText(text, x + rowWidth - rowHeight * 0.5 - ctx.measureText(text).width, y + (rowHeight + fontSize) / 2);
             y += fontSize + 4;
         }
         if (equipMaxY > y)
@@ -748,7 +828,7 @@
     ShowcaseExporter.prototype._drawEquipInfo = function (equip, ctx, x, y, rowWidth, rowHeight, fake) {
         var startY = y;
         var fontSize = 10;
-        ctx.font = generateFontString(400,fontSize);
+        ctx.font = generateFontString(400, fontSize);
         ctx.fillStyle = "#000";
 
         var available = rowWidth - rowHeight * 3.5;
@@ -819,7 +899,7 @@
 
     ShowcaseExporter.prototype._drawEquipStats = function (equip, ctx, x, y, available, fake) {
         var fontSize = 10;
-        ctx.font = generateFontString(400,fontSize);
+        ctx.font = generateFontString(400, fontSize);
         ctx.fillStyle = "#000";
 
         var startX = x;

@@ -184,6 +184,30 @@
 			}
 		},
 
+        displayExportResult: function (result) {
+            if (!!result.url) {
+                $(".exportResults").append(
+                    $("<div></div>").html("Uploaded to ").append(
+                        $("<a></a>")
+                            .html("Imgur")
+                            .attr("target", "_blank")
+                            .attr("href", result.url)
+                    )
+                );
+            } else if (!!result.downloadId) {
+                $(".exportResults").append(
+                    $("<div></div>").html("Saved to ").append(
+                        $("<a></a>")
+                            .html(result.filename)
+                            .click(function () {
+                                chrome.downloads.show(result.downloadId);
+                                return false;
+                            })
+                    )
+                );
+            }
+        },
+
 		/* EXECUTE
 		Places data onto the interface
 		---------------------------------*/
@@ -196,9 +220,9 @@
                     return;
                 $(this).addClass("disabled");
                 var exporter = new ShowcaseExporter();
-                var self = this;
-                exporter.complete = function () {
-                    $(self).removeClass("disabled");
+                exporter.complete = function (data) {
+                	self.displayExportResult(data);
+                    $("#exportShips").removeClass("disabled");
                 };
                 exporter.exportShips();
             });
@@ -208,9 +232,9 @@
                     return;
                 $(this).addClass("disabled");
                 var exporter = new ShowcaseExporter();
-                var self = this;
-                exporter.complete = function () {
-                    $(self).removeClass("disabled");
+                exporter.complete = function (data) {
+                    self.displayExportResult(data);
+                    $("#exportEquipment").removeClass("disabled");
                 };
                 exporter.exportEquip();
             });
