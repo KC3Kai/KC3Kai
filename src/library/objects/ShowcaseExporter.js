@@ -273,7 +273,7 @@
                             Accept: 'application/json'
                         },
                         data: {
-                            image: dataURL.substring(23),
+                            image: dataURL.substring(22),
                             type: 'base64'
                         },
                         success: function (response) {
