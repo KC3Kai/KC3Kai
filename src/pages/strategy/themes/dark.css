@@ -1661,3 +1661,8 @@ button, input, select, textarea {
 .tab_expedtable .config_box input[type=text]:disabled {
 	border:0px none !important;
 }
+.tab_expedtable  .sort_methods .ord {
+	line-height:20px;
+	color:#aaa !important;
+	font-size:12px !important;
+}

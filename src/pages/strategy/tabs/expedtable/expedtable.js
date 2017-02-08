@@ -671,7 +671,7 @@
 					expedRow.toggleClass("active");
 					let expanding = expedRow.hasClass("active");
 					let configRoot = $(".exped_config", expedRow);
-					$(this).text( expanding ? "▼" : "◀");
+					$(this).html( expanding ? "&#9660;" : "&#9668;");
 					if (expanding) {
 						// when expanding, we need to put configs on UI.
 
@@ -776,7 +776,8 @@
 			$(".sort_control .sort_methods button", expedTableRoot)
 				.filter("[data-sort-by=id]").each( function() {
 					$(this).addClass("active");
-					$(".ord",this).text("⬆");
+					$(".ord",this).html("&#9660;");
+					$(".ord",this).data("order", "desc");
 				});
 
 			jqSorters.click( function() {
@@ -788,6 +789,7 @@
 					$(this).toggleClass("active", thisMethod === thatMethod);
 					if (thisMethod !== thatMethod) {
 						$(".ord",this).empty();
+						$(".ord",this).data("order", "");
 					}
 				});
 
@@ -797,7 +799,8 @@
 				if (oldMethod !== null && oldMethod.method === thisMethod) {
 					// reverse current list instead of actual sorting
 					let nowAscending = ! oldMethod.ascending;
-					$(".ord",this).text(nowAscending ? "⬆" : "⬇");
+					$(".ord",this).html(nowAscending ? "&#9650;" : "&#9660;");
+					$(".ord",this).data("order", nowAscending ? "asc" : "desc");
 					rearrangeExpedRows( x => x.reverse() );
 				} else {
 					// sortBy :: Ord x => (a -> x) -> [a] -> [a]
@@ -812,14 +815,14 @@
 					let getter;
 					if (thisMethod === "id") {
 						getter = x => $(x).data("id");
-						$(".ord",this).text("⬆");
+						$(".ord",this).html("&#9660;");
 					} else if (thisMethod === "time") {
 						getter = x => $(x).data("info").time;
-						$(".ord",this).text("⬆");
+						$(".ord",this).html("&#9660;");
 					} else {
 						/* must be one of the resources, descending order. */
 						getter = x => - $(x).data("actual")[thisMethod];
-						$(".ord",this).text("⬇");
+						$(".ord",this).html("&#9660;");
 					}
 					rearrangeExpedRows( sortBy( getter ) );
 				}
@@ -835,18 +838,21 @@
 			if (activeSorters.length === 0)
 				return null;
 			let sorter = activeSorters.first();
-			let ordText = $(".ord",sorter).text();
+			let ordText = $(".ord", sorter).html();
+			let order = $(".ord", sorter).data("order");
 			let ascending;
 			// instead of having another state to maintain, let's just track sorting order
 			// by testing the text carried by ".ord", and require that active sorter
 			// must have it set to either "⬆" or "⬇".
-			if (ordText === "⬆") {
+			console.log(ordText);
+			ascending = order === "asc";
+			/*if (order === "asc") {
 				ascending = true;
-			} else if (ordText === "⬇") {
+			} else if (order === "desc") {
 				ascending = false;
 			} else {
 				throw "active sorter found without ordering info";
-			}
+			}*/
 			return {
 				method: sorter.data("sortBy"),
 				ascending
