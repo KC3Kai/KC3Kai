@@ -104,7 +104,11 @@
 					$("input[type=checkbox]", jq)
 						.prop("checked", preset.indexOf(jq.data("eid")) !== -1);
 				});
+				self.invalidateResult();
 			});
+
+			$("input[type=checkbox]", jqExpeds)
+				.change( () => self.invalidateResult() );
 
 			let jqControlRow2 = $(".control_row.row2", jqRoot);
 			let jqResourceControl = $(".control_box.resource .content", jqControlRow2);
@@ -128,6 +132,7 @@
 					.slider(sliderSettings)
 					.change(function (e) {
 						jqView.text(e.value.newValue);
+						self.invalidateResult();
 					});
 				jqBox.data("slider",slider);
 				jqBox.data("name",resourceName);
@@ -168,6 +173,12 @@
 				});
 			});
 
+			$(".control_box.fleet input[type=radio][name=fleet_count]")
+				.change( () => self.invalidateResult() );
+
+			$(".control_box.afktime input[type=text]")
+				.change( () => self.invalidateResult() );
+
 			$(".control_box.calc button.calc").click( () => this.computeResults() );
 
 			// setup default values
@@ -198,8 +209,24 @@
 				.prop("checked",true);
 		},
 
+		// adds a out-of-sync mark if the result table is visible
+		invalidateResult() {
+			if ($(".control_box.calc").hasClass("out_of_sync"))
+				return;
+
+			if ($(".tab_expedscorer .results").is(":visible") ) {
+				$(".control_box.calc").addClass("out_of_sync");
+				$(".control_box.calc button.calc")
+					.attr("title","Settings may have been changed, please re-calculate");
+			}
+		},
+
 		computeResults() {
 			let jqRoot = $(".tab_expedscorer #exped_scorer_control_root");
+			$(".control_box.calc")
+				.removeClass("out_of_sync");
+			$(".control_box.calc button.calc").removeAttr("title");
+
 			let calcBtn = $(".control_box.calc button.calc");
 			// prevent running same computation more than once if user has clicked too quick
 			calcBtn.prop("disabled", true);
