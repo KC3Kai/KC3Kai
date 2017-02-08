@@ -1,185 +1,182 @@
 .tab_expedscorer {
 	width:680px;
 }
-.tab_expedscorer .factory{
+.tab_expedscorer .factory {
 	display:none;
 }
 
+.tab_expedscorer .control_row > .control_box,
+.tab_expedscorer .control_row.row2 .control_col {
+	margin: 5px 2px 0 2px;
+	float: left;
+}
 
-/* NUMBERS
------------------------------*/
-.tab_expedscorer .expedNumBoxes {
-	
+.tab_expedscorer .control_box {
+	border-radius: 6px;
+	overflow: hidden;
 }
-.tab_expedscorer .expedNumBox {
-	width:110px;
-	height:152px;
-	float:left;
-	margin:0px 3px 0px 0px;
-	border-radius:8px;
-	padding:3px 5px;
+
+.tab_expedscorer .control_box > .header {
+	text-align: center;
 }
-.tab_expedpast .expedNumBox .expedNum,
-.tab_expedpast .expedNumBox .expedWhole {
-	width:100px;
-	height:15px;
-	line-height:15px;
-	margin:0px 0px 1px 0px;
+
+.tab_expedscorer .control_box > .content {
+	padding: 2px;
 }
-.tab_expedscorer .expedNumBox .expedCheck {
-	width:15px;
-	height:15px;
-	float:left;
-	margin:0px 5px 0px 5px;
+
+.tab_expedscorer .control_box > .content input[type=text] {
+	background-color: white;
+	color: black;
 }
-.tab_expedscorer .expedNumBox .expedCheck input {
+
+.tab_expedscorer .control_row {
+	margin: 0 5px 0 5px;
+}
+
+.tab_expedscorer .control_row.row1 .control_box {
+	height: 160px;
+}
+
+.tab_expedscorer .control_box.world {
+	width: 110px;
+}
+
+.tab_expedscorer .control_box.world label {
+	display: inline;
+}
+.tab_expedscorer .control_box.world .toggle_row {
+	padding: 0 0 0 15px;
+}
+.tab_expedscorer .control_box.world .toggle_row * {
+	float: left;
+	line-height: 15px;
+}
+.tab_expedscorer .control_box.world .toggle_row input[type=checkbox] {
 	width:13px;
 	height:13px;
 	margin:1px;
 }
-.tab_expedscorer .expedNumBox .expedText {
+.tab_expedscorer .control_box.world .toggle_row .name {
 	width:25px;
 	height:15px;
 	float:left;
 	text-align:center;
-	margin:0px 5px 0px 0px;
 	font-size:12px;
 }
-.tab_expedscorer .expedNumBox .expedWhole .expedText {
-	width:70px;
-	margin:0px;
-}
-.tab_expedscorer .expedNumBox .expedTime {
+.tab_expedscorer .control_box.world .toggle_row .time {
 	width:40px;
 	height:15px;
 	float:left;
+	text-align: center;
 	font-size:11px;
 	color:#999;
 }
-.tab_expedscorer .fleetCounts .fleetCount {
-	width:100px;
-	height:20px;
-	line-height:20px;
-}
-.tab_expedscorer .fleetCounts .fleetRadio {
-	width:20px;
-	height:20px;
-	float:left;
-}
-.tab_expedscorer .fleetCounts .fleetRadio input {
-	width:14px;
-	height:14px;
-	margin:3px;
-}
-.tab_expedscorer .fleetCounts .fleetText {
-	width:50px;
-	height:15px;
-	float:left;
+
+.tab_expedscorer .control_box.preset {
+	width: 115px;
 }
 
-/* CONTROLS
------------------------------*/
-.tab_expedscorer .expedControls {
-	line-height:20px;
-}
-.tab_expedscorer .expedControls .control_box {
-	height:50px;
-	float:left;
-	margin:0px 20px 0px 0px;
-	border-right:1px solid #ccc;
-}
-.tab_expedscorer .expedControls .control_title {
-	height:20px;
-	margin:0px 0px 5px 0px;
-	text-align:center;
-	font-weight:bold;
-	color:#33a;
+.tab_expedscorer .control_box .content button:hover {
+	color: #ffcc00;
 }
 
-/* Resource Priorities */
-.tab_expedscorer .expedControls .control_priorities {
-	width:320px;
-}
-.tab_expedscorer .control_priorities .control {
-	width:75px;
-	height:20px;
-	line-height:20px;
-	float:left;
-	margin:0px 3px 0px 0px;
-}
-.tab_expedscorer .control_priorities .control_label {
-	width:20px;
-	height:20px;
-	float:left;
-	margin:0px 5px 0px 0px;
-}
-.tab_expedscorer .control_priorities .control_label img {
-	width:18px;
-	height:18px;
-	margin:1px;
-	vertical-align:top;
-}
-.tab_expedscorer .control_priorities .control_input {
-	width:50px;
-	height:18px;
-	line-height:18px;
-	float:left;
-}
-.tab_expedscorer .control_priorities .control_input input {
-	width:50px;
-	height:18px;
-	line-height:18px;
-	font-size:12px;
-	padding:0px;
-	text-align:center;
+.tab_expedscorer .control_box .content button {
+	font-size: 12px;
+	font-weight: bold;
+	height: 25px;
+	width: 100px;
+	margin: 5px 0 0 5px;
 }
 
-/* AFK Time */
-.tab_expedscorer .expedControls .control_afktime {
-	width:200px;
-}
-.tab_expedscorer .control_afktime .control {
-	width:95px;
-	height:20px;
-	line-height:20px;
-	float:left;
-	margin:0px 3px 0px 0px;
-}
-.tab_expedscorer .control_afktime .control_label {
-	width:30px;
-	height:20px;
-	float:left;
-	margin:0px 5px 0px 0px;
-}
-.tab_expedscorer .control_afktime .control_input {
-	width:55px;
-	height:18px;
-	line-height:18px;
-	float:left;
-}
-.tab_expedscorer .control_afktime .control_input input {
-	width:55px;
-	height:18px;
-	line-height:18px;
-	font-size:12px;
-	padding:0px;
-	text-align:center;
+.tab_expedscorer .control_box.preset .content button {
+	height: 25px;
 }
 
-/* Calculate button */
-.tab_expedscorer .expedControls .control_calculate {
-	width:120px;
-	margin-right:0px;
-	border-right:0px none;
-}
-.tab_expedscorer .expedControls .calculate_btn {
-	width:100px;
-	height:30px;
-	line-height:28px;
-	margin:10px 0px;
-	border-radius:10px;
-	text-align:center;
+.tab_expedscorer .control_box.resource {
+	width: 400px;
 }
 
-/* CONTENT
------------------------------*/
+.tab_expedscorer .control_box.resource > .content {
+
+}
+
+.tab_expedscorer .control_box.resource .resource_box > * {
+	float: left;
+}
+
+.tab_expedscorer .control_box.resource .resource_box > *:not(.slider) {
+	margin: 5px 6px 5px 2px;
+}
+
+.tab_expedscorer .control_box.resource .resource_box > .slider {
+	margin: 5px 9px 5px 9px;
+	width: 120px;
+}
+
+.tab_expedscorer .control_box.resource .resource_box > .view {
+	width: 20px;
+	text-align: center;
+	font-weight: bold;
+}
+
+.tab_expedscorer .control_box.resource button.reset,
+.tab_expedscorer .control_box.resource button.balanced {
+	float: right;
+	margin: 8px 5px 0 0;
+}
+
+.tab_expedscorer .control_box.afktime,
+.tab_expedscorer .control_box.fleet {
+	width: 162px;
+	height: 57.5px;
+	float: none;
+ }
+
+.tab_expedscorer .control_box.afktime .content * {
+	float: left;
+	margin: 5px 2px 5px 3px;
+}
+
+.tab_expedscorer .control_box.afktime .content input[type=text] {
+	width: 40px;
+	height: 20px;
+	text-align: center;
+}
+
+.tab_expedscorer .control_box.fleet {
+	margin: 5px 0 0 0;
+}
+
+.tab_expedscorer .control_box.fleet .content {
+	padding-top: 7px;
+}
+
+.tab_expedscorer .control_box.fleet .fleet_radio {
+	height: 20px;
+	margin: 0 10px 0 10px;
+}
+
+.tab_expedscorer .control_box.calc {
+	width: 115px;
+}
+
+.tab_expedscorer .control_row.row2 > .control_box,
+.tab_expedscorer .control_row.row2 > .control_col {
+	height: 120px;
+}
+
+.tab_expedscorer .control_box.calc button {
+	font-size: 18px;
+	height: 60px;
+}
+
+.tab_expedscorer .control_box.calc.out_of_sync button {
+}
+
+.tab_expedscorer .control_box.calc .content {
+	padding-top: 14px;
+}
+
+.tab_expedscorer .table.results {
+	display: none;
+}
