@@ -210,6 +210,9 @@
 				$('<td></td>').text(curVal.score.toFixed(2)).appendTo(row);
 				resultTable.append( row );
 			});
+
+			$(".tab_expedscorer .results").show();
+
 			calcBtn.prop("disabled", false);
 		},
 

@@ -194,3 +194,7 @@
 .tab_expedscorer .control_box.calc .content {
 	padding-top: 14px;
 }
+
+.tab_expedscorer .table.results {
+	display: none;
+}
