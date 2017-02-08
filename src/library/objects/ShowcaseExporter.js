@@ -164,6 +164,7 @@
                 enableShelfTimer = setTimeout(function () {
                     chrome.downloads.setShelfEnabled(true);
                     enableShelfTimer = false;
+                    self.exporter.cleanUp();
                     self.exporter.complete();
                 }, 100);
             });
@@ -219,6 +220,19 @@
         this._loadImage("screws", "_otherImages", "/assets/img/useitems/4.png", callback);
         this._loadImage("devmats", "_otherImages", "/assets/img/useitems/3.png", callback);
 
+    };
+
+    ShowcaseExporter.prototype.cleanUp = function () {
+        this.canvas = {};
+        this.ctx = {};
+        this.allShipGroups = {};
+        this.aircraftTypes = [];
+        this._statsImages = {};
+        this._equipTypeImages = {};
+        this._shipImages = {};
+        this._otherImages = {};
+        this._equipCanvases = {};
+        this._equipGroupCanvases = {};
     };
 
     /* SHIP EXPORT
