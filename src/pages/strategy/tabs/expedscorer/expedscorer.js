@@ -17,6 +17,29 @@
 		"none": []
 	};
 
+	/*
+		data format for localStorage.srExpedscorer:
+
+		{ candidates: [list of expedition ids, sorted]
+		, priority: [4 elements for fuel, ammo, steel, bauxite, in this order]
+		, afkTime: integer, in minutes
+		, fleetCount: 1/2/3
+		}
+
+	 */
+	function loadUserSelections() {
+		if (typeof localStorage.srExpedscorer !== "undefined") {
+			return JSON.parse( localStorage.srExpedscorer );
+		}
+
+		return {
+			candidates: enumFromTo(1,40),
+			priority: [5,5,5,5],
+			afkTime: 0,
+			fleetCount: 3
+		};
+	}
+
 	KC3StrategyTabs.expedscorer = new KC3StrategyTab("expedscorer");
 
 	KC3StrategyTabs.expedscorer.definition = {
@@ -145,13 +168,33 @@
 				});
 			});
 
-			$("button.reset").click();
-
 			$(".control_box.calc button.calc").click( () => this.computeResults() );
 
-			// setup default values (TODO: will save changes to localStorage)
-			$(".control_box.preset button[data-name=recommended]",jqRoot).click();
-			$(".control_box.fleet input[type=radio][name=fleet_count][value=3]",jqRoot)
+			// setup default values
+			let userSelections = loadUserSelections();
+
+			jqExpeds.each( function() {
+				let jq = $(this);
+				let eId = jq.data("eid");
+				$("input[type=checkbox]", jq)
+					.prop("checked", userSelections.candidates.indexOf(eId) !== -1);
+			});
+
+			let userPri = userSelections.priority;
+			self.resetResourcePriority({
+				fuel: userPri[0],
+				ammo: userPri[1],
+				steel: userPri[2],
+				bauxite: userPri[3]});
+
+			let afkHH = Math.floor( userSelections.afkTime / 60 );
+			let afkMM = userSelections.afkTime - afkHH*60;
+			console.log(afkHH, afkMM);
+			$(".control_box.afktime input[type=text][name=hrs]",jqRoot).val(afkHH);
+			$(".control_box.afktime input[type=text][name=mins]",jqRoot).val(afkMM);
+
+			$(".control_box.fleet input[type=radio][name=fleet_count][value="
+			  + userSelections.fleetCount + "]",jqRoot)
 				.prop("checked",true);
 		},
 
@@ -246,6 +289,16 @@
 			});
 
 			$(".tab_expedscorer .results").show();
+
+			// now save user selections
+			localStorage.srExpedscorer = JSON.stringify( {
+				candidates: candidateIds,
+				priority: [resourceWeight.fuel,
+						   resourceWeight.ammo,
+						   resourceWeight.steel,
+						   resourceWeight.bauxite],
+				afkTime: afkTimeInMin,
+				fleetCount });
 
 			calcBtn.prop("disabled", false);
 		},
