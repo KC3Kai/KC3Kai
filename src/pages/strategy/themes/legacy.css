@@ -1099,12 +1099,23 @@ body {
 
 /* EXPEDITION SCORER
 --------------------------------*/
-.tab_expedscorer .expedNumBox {
+.tab_expedscorer .control_box {
 	background: #def;
 }
-.tab_expedscorer .expedControls .calculate_btn {
-	background:#cde;
-	border:1px outset #ace;
+
+.tab_expedscorer .control_box > .header {
+	background-color: #4c7bab;
+	color: white;
+}
+
+.tab_expedscorer .control_box .content button {
+	background: #79b6e0;
+	border-color: #79b6e0;
+	color: white;
+}
+
+.tab_expedscorer .control_box.calc.out_of_sync button {
+	color: #003294;
 }
 
 /* EXPEDITION HISTORY

@@ -1420,20 +1420,45 @@ button, input, select, textarea {
 .tab_expedscorer .page_panel {
 	width: 700px;
 }
-.tab_expedscorer .expedNumBox {
+.tab_expedscorer .control_box {
 	background: #666666;
 }
-.tab_expedscorer .expedControls .calculate_btn {
-	background:#666666;
-}
-.tab_expedscorer .expedControls input {
-	background-color: #eee;
+
+.tab_expedscorer .control_box > .header {
+	background-color: #cacaca;
 	color: black;
 }
+
+.tab_expedscorer .control_box .content button {
+	background: #9c9c9c;
+	border-color: #9c9c9c;
+	color: white;
+}
+
 .tab_expedscorer .table-hover tbody tr:hover td,
 .tab_expedscorer .table-hover tbody tr:hover th {
 	color: black;
 }
+
+.tab_expedscorer .control_box.resource .resource_box > .slider .slider-handle {
+	/* this was used just for steel, and other resources have their own coloring:
+
+		fuel:
+			background-image:linear-gradient(to bottom,#5ca353 0,#177e09 100%);
+		ammo:
+			background-image:linear-gradient(to bottom,#a79b6d 0,#5b4d2c 100%);
+		bauxite:
+			background-image:linear-gradient(to bottom,#f0b07b 0,#935f39 100%);
+
+		the effect does not look good, so let's just use this for every slider
+	 */
+	background-image:linear-gradient(to bottom,#cecece 0,#909090 100%);
+}
+
+.tab_expedscorer .control_box.calc.out_of_sync button {
+	color: #0056ff;
+}
+
 /* EXPEDITION HISTORY
 --------------------------------*/
 .tab_expedpast .page_panel {
