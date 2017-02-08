@@ -141,7 +141,7 @@
 }
 
 .tab_expedscorer .control_box.resource button.reset,
-.tab_expedscorer .control_box.resource button.auto {
+.tab_expedscorer .control_box.resource button.balanced {
 	float: right;
 	margin: 8px 5px 0 0;
 }
