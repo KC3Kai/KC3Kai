@@ -110,10 +110,11 @@ Quest Type:
 		if(this.tracking && (this.isSelected() || !!isAdjustingCounter)){
 			if(typeof reqNum == "undefined"){ reqNum=0; }
 			if(typeof amount == "undefined"){ amount=1; }
-			var maxValue = (!!isAdjustingCounter && !this.isSelected()) ? this.tracking[reqNum][1] - 1 : this.tracking[reqNum][1];
-			if (this.tracking[reqNum][0] + amount <= maxValue) {
+			// passive adjusted never reach completion
+			var maxValue = !!isAdjustingCounter ? this.tracking[reqNum][1] - 1 : this.tracking[reqNum][1];
+			if (this.tracking[reqNum][0] < maxValue) {
 				isIncreased = true;
-				this.tracking[reqNum][0] += amount;
+				this.tracking[reqNum][0] += Math.min(amount, maxValue - this.tracking[reqNum][0]);
 			}
 			KC3QuestManager.save();
 		}
@@ -127,7 +128,7 @@ Quest Type:
 					if(self.id === incId){
 						ids.splice(idx, 1);
 						ids.forEach(function(id){
-							KC3QuestManager.get(id).increment(undefined, undefined, true);
+							KC3QuestManager.get(id).increment(reqNum, amount, true);
 						});
 					}
 				});

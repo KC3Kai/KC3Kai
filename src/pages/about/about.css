@@ -183,10 +183,10 @@ body {
 	height:12px;
 	vertical-align: top;
 	filter:grayscale(100%) opacity(60%);
+	-webkit-filter:grayscale(100%) opacity(60%);
 }
 .devBox.inactive {
 	background:#eee;
-	/*filter:grayscale(100%);*/
 }
 .devBox.inactive .devDesc {
 	display:block;

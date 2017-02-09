@@ -26,6 +26,24 @@ button, input, select, textarea {
 	background:#121212;
 }
 
+.ui-tooltip {
+	max-width:500px;
+	padding:2px 5px 3px 6px;
+	border-width:1px !important;
+	border:1px solid #eee;
+	box-shadow:0 0 5px 1px #777;
+	color:#cccccc;
+	background:#444;
+	font-family:inherit;
+	font-size:12px;
+}
+.ui-tooltip-content hr {
+	margin:3px 0px 3px 0px;
+}
+.ui-tooltip-content p {
+	margin:0px;
+}
+
 /* COLORS
 -------------------------------*/
 .fcolor1 { color:#ffffff; }
@@ -397,6 +415,7 @@ button, input, select, textarea {
 	display:none;
 }
 .tab_showcase .show_gear .gear_stat_icon img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
 /* Ledger */
@@ -463,6 +482,7 @@ button, input, select, textarea {
 	width: 215px !important;
 }
 .tab_ships .ship_header .ship_stat img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
 .tab_ships .filters .ship_filter_type:hover {
@@ -735,10 +755,10 @@ button, input, select, textarea {
 	background-color:#062d2b;
 }
 .tab_expcalc .goal_template {
-	background-color:#def;
+	background-color:#cdf;
 }
 .tab_expcalc .ship_goal .ship_value {
-	color:#fff !important;
+	color:#cdf;
 }
 .tab_expcalc .ship_goal .ship_info .ship_name {
 	color:#fff;
@@ -829,6 +849,17 @@ button, input, select, textarea {
 	border: 1px;
 }
 
+.tab_expcalc .ship_goal .ship_result .ship_value,
+.tab_expcalc .ship_goal .ship_value.yes_or_no,
+.tab_expcalc .goal_template .goal_value.yes_or_no {
+	color:#fbb;
+}
+
+.tab_expcalc .ship_goal .ship_value.yes_or_no.bool_no,
+.tab_expcalc .goal_template .goal_value.yes_or_no.bool_no {
+	color:#cdf;
+}
+
 /* Badge */
 .tab_badge .export_box {
     background:#131313;
@@ -859,6 +890,7 @@ button, input, select, textarea {
 	color:#ffcc00;
 }
 .tab_gears .itemSorters .sortControl img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
 .tab_gears .itemSorters .sortControl:hover {
@@ -866,6 +898,7 @@ button, input, select, textarea {
 	color:#000000;
 }
 .tab_gears .itemSorters .sortControl:hover img {
+	filter: invert(0%);
 	-webkit-filter: invert(0%);
 }
 
@@ -879,6 +912,7 @@ button, input, select, textarea {
 	background:none !important;
 }
 .tab_gears .slotitem .info .item_stat img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
 .tab_gears .slotitem .holders dt {
@@ -932,6 +966,7 @@ button, input, select, textarea {
 	padding:5px 0px 10px 0px;
 }
 .tab_aircraft .slotitem .info .item_stat img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
 .tab_aircraft .slotitem .info .icon {
@@ -941,6 +976,7 @@ button, input, select, textarea {
 	
 }
 .tab_aircraft .slotitem .instance_aaicon img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
 .tab_aircraft .slotitem .instance_aaval.activeSquad {
@@ -1006,6 +1042,7 @@ button, input, select, textarea {
 	background:#131313;
 }
 .detail_field img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
 .detail_field.incomplete {
@@ -1014,6 +1051,32 @@ button, input, select, textarea {
 .tab_fleet .fleet_ships {
 	height:160px;
 }
+.ui-tooltip-content .ship_tooltip .ship_full_name span.ship_yomi {
+	color:#777 !important;
+}
+.ui-tooltip-content .ship_tooltip .stat_icon img {
+	filter: invert(100%);
+	-webkit-filter: invert(100%);
+}
+.ui-tooltip-content .ship_tooltip .stat_icon {
+	background-color:#333 !important;
+	border:1px solid #111 !important;
+	border-right-color:#333 !important;
+	border-bottom-color:#555 !important;
+}
+.ui-tooltip-content .ship_tooltip .stat_value {
+	background-color:#444 !important;
+	border:1px solid #222 !important;
+	border-right-color:#777 !important;
+	border-bottom-color:#777 !important;
+}
+.ui-tooltip-content .ship_tooltip .aa_col {
+	background-color:#444 !important;
+	border:1px solid #222 !important;
+	border-right-color:#777 !important;
+	border-bottom-color:#777 !important;
+}
+
 /* SHIP BOX
 --------------------------------*/
 .tab_fleet .fleet_ship {
@@ -1273,10 +1336,12 @@ button, input, select, textarea {
 
 .tab_event .sortie_list .node_formation img,
 .tab_maps .sortie_list .node_formation img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
 .tab_event .sortie_list .node_eformation img,
 .tab_maps .sortie_list .node_eformation img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
 .tab_event .sortie_list .node_exp,
@@ -1344,9 +1409,11 @@ button, input, select, textarea {
 }
 .tab_mstship .shipInfo .ship_stat_icon img {
 	filter:invert(100%);
+	-webkit-filter:invert(100%);
 }
 .tab_mstship .shipInfo .at_level .rsc_icon img {
 	filter:invert(100%);
+	-webkit-filter:invert(100%);
 }
 .tab_mstship .shipInfo .voice {
 	background:#222 !important;
@@ -1374,6 +1441,7 @@ button, input, select, textarea {
 	background:#222 !important;
 }
 .tab_mstgear .gearInfo .stat_icon img {
+	filter:invert(100%);
 	-webkit-filter:invert(100%);
 }
 /* SHIP COMPARE
@@ -1395,6 +1463,7 @@ button, input, select, textarea {
 }
 .tab_compare .compare_ship_stat.mono img {
 	filter:invert(100%);
+	-webkit-filter:invert(100%);
 }
 .tab_compare .compare_select_back {
 	border:1px solid #77;
@@ -1414,6 +1483,7 @@ button, input, select, textarea {
 }
 .tab_compare .compare_select_stat.mono img {
 	filter:invert(100%);
+	-webkit-filter:invert(100%);
 }
 .tab_compare .compare_ship_bar {
 	background:#888;

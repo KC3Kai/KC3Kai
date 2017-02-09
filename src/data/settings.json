@@ -836,6 +836,12 @@
 					"type": "Number"
 				},
 				"options" : { "label" : "%" }
+			},
+			{
+				"id" : "pan_box_bcolor",
+				"name" : "SettingsPanelBoxBackColor",
+				"type" : "long_text",
+				"options" : { "placeholder" : "SettingsBGColorDesc" }
 			}
 		]
 	},

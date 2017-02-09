@@ -742,6 +742,18 @@ Previously known as "Reactor"
 			KC3Network.trigger("Fleet");
 		},
 		
+		/* Lock a equipment
+		-------------------------------------------------------*/
+		"api_req_kaisou/lock":function(params, response, headers){
+			var itemId = parseInt(params.api_slotitem_id, 10);
+			var lockState = response.api_data.api_locked;
+			var gearObj = KC3GearManager.get(itemId);
+			if(gearObj.itemId > 0){
+				gearObj.lock = lockState;
+				KC3GearManager.save();
+			}
+		},
+		
 		/* Change equipment of a ship
 		-------------------------------------------------------*/
 		"api_req_kaisou/slotset":function(params, response, headers){
@@ -2023,6 +2035,7 @@ Previously known as "Reactor"
 		if(rankPt==5 && KC3SortieManager.currentNode().allyNoDamage) rankPt++;
 		if(!isPvP) {
 			[ /* Rank Requirement Table */
+				 /* [Quest ID, index of tracking, [world, map], isBoss] */
 				[ /* E RANK / It does not matter */
 					[216,0,false,false], // Bd2: Defeat the flagship of an enemy fleet
 					[214,1,false, true]  // Bw1: 2nd requirement: Encounter 24 bosses (index:1)
@@ -2047,9 +2060,10 @@ Previously known as "Reactor"
 				[ /* S RANK */
 					[214,3,false,false], // Bw1: 4th requirement: 6 S ranks (index:3)
 					[243,0,[5,2], true], // Bw9: Sortie to [W5-2] and S-rank the boss node 2 times
-					[256,0,[6,1], true]  // Bm2: Deploy to [W6-1] and obtain an S-rank the boss node 3 times
+					[256,0,[6,1], true], // Bm2: Deploy to [W6-1] and obtain an S-rank the boss node 3 times
+					[822,0,[2,4], true]  // Bq1: Sortie to [W2-4] and S-rank the boss node 2 times
 				],
-				[ /* SS RANK Kanzen shohri */ ],
+				[ /* SS RANK Kanzen shohri */ ]
 			].slice(0, rankPt+1)
 				.reduce(function(x,y){ return x.concat(y); })
 				.filter(function(x){
