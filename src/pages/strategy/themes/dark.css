@@ -1581,24 +1581,27 @@ button, input, select, textarea {
 	border:1px solid #555 !important;
 }
 .tab_expedtable .btn-group button {
-	color: #aaa !important;
-    background-color: #141414 !important;
+    background-color: #141414;
     background-image: none;
     border: 0px none !important;
 	border-radius:0px !important;
-	color: #aaa !important;
+	color: #aaa;
 }
-.tab_expedtable .btn-group button.active {
-	background:#333 !important;
-	color:#ffcc00 !important;
+.tab_expedtable .btn-secondary:hover {
+	background-color: #000;
+}
+.tab_expedtable .btn-secondary:active,
+.tab_expedtable .btn-secondary.active,
+.tab_expedtable .show > .btn-secondary.dropdown-toggle {
+	background:#353535;
+	color:#ffcc00;
 }
 
 .tab_expedtable .exped_row {
 	color: white;
 	border:0px none !important;
-	border-radius:0px !important;
 	font-size:12px;
-	margin-bottom:2px !important;
+	margin-bottom:2px;
 }
 
 .tab_expedtable .exped_row .exped_view {
@@ -1616,12 +1619,11 @@ button, input, select, textarea {
 .tab_expedtable .exped_row .exped_config .config_box .header {
 	background: #151515;
 	border-bottom: 1px solid #414141;
-	padding:3px 0px 3px 5px !important;
+	padding:3px 0px 3px 5px;
 }
 
 .tab_expedtable .exped_row .exped_config .config_box {
 	background-color: #2f2f2f;
-	border-radius:0px !important;
 }
 
 .tab_expedtable .exped_row .exped_view .info_col.item2 {
@@ -1650,17 +1652,17 @@ button, input, select, textarea {
 
 .tab_expedtable .exped_row .exped_view .info_col.edit_btn {
 	color:#aaa;
-	font-size:12px !important;
+	font-size:12px;
 }
 
 .tab_expedtable .config_box input[type=text] {
-	border:1px solid #414141 !important;
+	border:1px solid #414141;
 }
 .tab_expedtable .config_box input[type=text]:disabled {
-	border:0px none !important;
+	border:0px none;
 }
 .tab_expedtable  .sort_methods .ord {
 	line-height:20px;
-	color:#aaa !important;
-	font-size:12px !important;
+	color:#aaa;
+	font-size:12px;
 }
