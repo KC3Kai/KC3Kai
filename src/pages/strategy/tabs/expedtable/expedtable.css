@@ -8,12 +8,6 @@
   border-color: #ccc;
 }
 
-.tab_expedtable .btn-secondary:hover {
-  color: #292b2c;
-  background-color: #e6e6e6;
-  border-color: #adadad;
-}
-
 .tab_expedtable .btn-secondary:focus,
 .tab_expedtable .btn-secondary.focus {
   -webkit-box-shadow: 0 0 0 2px rgba(204, 204, 204, 0.5);
@@ -29,8 +23,6 @@
 .tab_expedtable .btn-secondary:active,
 .tab_expedtable .btn-secondary.active,
 .tab_expedtable .show > .btn-secondary.dropdown-toggle {
-  color: #292b2c;
-  background-color: #e6e6e6;
   background-image: none;
   border-color: #adadad;
 }
@@ -51,7 +43,7 @@
 	height: 30px;
 	outline: none;
 	-webkit-box-shadow: 0 0 0 0 rgba(204, 204, 204, 0.5);
-            box-shadow: 0 0 0 0 rgba(204, 204, 204, 0.5);
+	box-shadow: 0 0 0 0 rgba(204, 204, 204, 0.5);
 }
 
 .tab_expedtable #exped_table_content_root
@@ -88,8 +80,6 @@
 
 .tab_expedtable .exped_row {
 	overflow: hidden;
-	border-radius: 5px;
-	margin: 0px 0px 3px 0px;
 }
 
 .tab_expedtable .exped_view .edit_btn {
@@ -109,7 +99,6 @@
 
 .tab_expedtable .exped_row .exped_config .config_box {
 	width: 48%;
-	border-radius: 4px;
 	margin: 5px 5px 5px 5px;
 	overflow: hidden;
 }
@@ -152,10 +141,6 @@
 
 .tab_expedtable .exped_row .exped_config .config_box.modifier {
 	float: left;
-}
-
-.tab_expedtable .exped_row .exped_config .config_box .header {
-	padding: 0 5px 0 5px;
 }
 
 .tab_expedtable .exped_row .exped_view .info_col {
@@ -255,7 +240,6 @@
 	width: 24px;
 	height: 24px;
 	float: right;
-	font-size: 20px;
 	margin: 4px 4px 0px 0px;
 	padding: 2px 0px 2px 0px;
 	border-radius: 10px;
