@@ -1596,6 +1596,10 @@ button, input, select, textarea {
 	background:#353535;
 	color:#ffcc00;
 }
+.tab_expedtable .btn-secondary.disabled,
+.tab_expedtable .btn-secondary:disabled {
+  opacity:0.4;
+}
 
 .tab_expedtable .exped_row {
 	color: white;

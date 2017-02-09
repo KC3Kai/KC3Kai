@@ -14,12 +14,6 @@
           box-shadow: 0 0 0 2px rgba(204, 204, 204, 0.5);
 }
 
-.tab_expedtable .btn-secondary.disabled,
-.tab_expedtable .btn-secondary:disabled {
-  background-color: #fff;
-  border-color: #ccc;
-}
-
 .tab_expedtable .btn-secondary:active,
 .tab_expedtable .btn-secondary.active,
 .tab_expedtable .show > .btn-secondary.dropdown-toggle {
