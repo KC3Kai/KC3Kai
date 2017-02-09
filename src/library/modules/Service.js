@@ -95,9 +95,29 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		Ask the game container to take a screenshot
 		------------------------------------------*/
 		"screenshot" :function(request, sender, response){
-			(new TMsg(request.tabId, "gamescreen", "screenshot", {
-				playerName: request.playerName
-			}, response)).execute();
+			var senderUrl = sender.url || sender.tab.url || "";
+			// If devtools, a tab ID should be in the request param
+			if (isDevtools(senderUrl)) {
+				// Get tab information to get URL of requester
+				chrome.tabs.get(request.tabId, function(tabDetails){
+					if( isDMMFrame(tabDetails.url) || isAPIFrame(tabDetails.url)){
+						// If API or DMM Frame, use traditional screenshot call
+						(new TMsg(request.tabId, "gamescreen", "screenshot", {
+							playerName: request.playerName
+						}, response)).execute();
+						return true;
+						
+					} else {
+						// If not API or DMM Frame, must be special mode
+						screenshotSpecialMode(request.tabId, response);
+						return true;
+					}
+				});
+			} else if (sender.tab && sender.tab.id){
+				screenshotSpecialMode(sender.tab.id, response);
+			} else {
+				response({ value: false });
+			}
 			return true;
 		},
 		
@@ -131,7 +151,9 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		We don't want global runtime message that will show overlays on all windows
 		------------------------------------------*/
 		"questOverlay" :function(request, sender, response){
+			KC3QuestManager.load();
 			(new TMsg(request.tabId, "gamescreen", "questOverlay", {
+				KC3QuestManager: KC3QuestManager,
 				questlist: request.questlist
 			})).execute();
 		},
@@ -172,7 +194,32 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		Auto-resize browser window to fit the game screen
 		------------------------------------------*/
 		"fitScreen" :function(request, sender, response){
-			(new TMsg(request.tabId, "gamescreen", "fitScreen")).execute();
+			// Get tab information to get URL of requester
+			chrome.tabs.get(request.tabId, function(tabDetails){
+				if( isDMMFrame(tabDetails.url) || isAPIFrame(tabDetails.url)){
+					// If API or DMM Frame, use traditional screenshot call
+					(new TMsg(request.tabId, "gamescreen", "fitScreen")).execute();
+					return true;
+					
+				} else {
+					// If not API or DMM Frame, must be special mode
+					chrome.tabs.getZoom(request.tabId, function(ZoomFactor){
+						// Resize the window
+						chrome.windows.getCurrent(function(wind){
+							(new TMsg(request.tabId, "gamescreen", "getWindowSize", {}, function(size){
+								chrome.windows.update(wind.id, {
+									width: Math.ceil(800*ZoomFactor*size.game_zoom)
+										+ (wind.width- Math.ceil(size.width*ZoomFactor) ),
+									height: Math.ceil((480+size.margin_top)*size.game_zoom*ZoomFactor)
+										+ (wind.height- Math.ceil(size.height*ZoomFactor) )
+								});
+							})).execute();
+						});
+					});
+					return true;
+				}
+			});
+			return true;
 		},
 		
 		/* IS MUTED
@@ -220,11 +267,38 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		Responds if content script should inject DMM Frame customizations
 		------------------------------------------*/
 		"dmmFrameInject" :function(request, sender, response){
-			if(sender.tab.url.indexOf("/pages/game/dmm.html") > -1){
-				ConfigManager.load();
-				response({value:true, scale:ConfigManager.api_gameScale});
-			}else{
-				response({value:false});
+			var senderUrl = (sender.tab)?sender.tab.url:false || sender.url  || "";
+			
+			ConfigManager.load();
+			if( isDMMFrame(senderUrl) ){
+				// DMM FRAME
+				response({ mode: 'frame', scale: ConfigManager.api_gameScale});
+				
+			} else if(ConfigManager.dmm_customize && localStorage.extract_api != "true") {
+				// DMM CUSTOMIZATION
+				chrome.tabs.update(sender.tab.id, {
+					autoDiscardable: false,
+					highlighted: true
+				}, function(){
+					ConfigManager.load();
+					KC3Master.init();
+					RemodelDb.init();
+					KC3Meta.init("../../data/");
+					KC3Meta.loadQuotes();
+					KC3QuestManager.load();
+					response({
+						mode: 'inject',
+						config: ConfigManager,
+						master: KC3Master,
+						meta: KC3Meta,
+						quest: KC3QuestManager,
+					});
+				});
+				return true;
+				
+			} else {
+				// NO DMM EXECUTIONS
+				response({ mode: false });
 			}
 		},
 		
@@ -387,4 +461,28 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	});
 	
 	function reloadApp(){ chrome.runtime.reload(); }
+	
+	function isDMMFrame(url){
+		return url.indexOf("/pages/game/dmm.html") > -1;
+	}
+	
+	function isAPIFrame(url){
+		return url.indexOf("/pages/game/api.html") > -1;
+	}
+	
+	function isDevtools(url){
+		return url.indexOf("/pages/devtools/themes/") > -1;
+	}
+	
+	function screenshotSpecialMode(tabId, response){
+		ConfigManager.load();
+		if(ConfigManager.dmm_customize) {
+			(new TMsg(tabId, "gamescreen", "getGamescreenOffset", {}, function(offset){
+				(new KCScreenshot())
+					.setCallback(response)
+					.remoteStart(tabId, offset);
+			})).execute();
+		}
+	}
+	
 })();

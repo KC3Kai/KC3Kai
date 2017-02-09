@@ -103,7 +103,6 @@
 		});
 		
 		// Refresh API Link
-		// $("#get_api").on('click', function(){
 		$("#play_cc").on('click', function(){
 			chrome.cookies.set({
 				url: "http://www.dmm.com",
@@ -131,7 +130,7 @@
 			}, function(cookie){
 				localStorage.extract_api = false;
 				localStorage.dmmplay = true;
-				window.open("../game/web.html", "kc3kai_game");
+				window.open("../game/direct.html", "kc3kai_game");
 			});
 		});
 		
