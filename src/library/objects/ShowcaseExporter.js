@@ -294,9 +294,13 @@
         });
     };
 
-    ShowcaseExporter.prototype._openInNewTab = function (dataURL) {
-        window.open(dataURL, "_blank");
-        this.complete({});
+    ShowcaseExporter.prototype._openInNewTab = function (dataURL,topLine) {
+        if(dataURL.length>=2*1024*1024){
+            this._download(dataURL,topLine);
+        } else {
+            window.open(dataURL, "_blank");
+            this.complete({});
+        }
     };
 
     /* SHIP EXPORT
