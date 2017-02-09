@@ -1197,6 +1197,17 @@ body {
 
 /* EXPEDITION TABLE
 --------------------------------*/
+.tab_expedtable .btn-secondary:active,
+.tab_expedtable .btn-secondary.active,
+.tab_expedtable .show > .btn-secondary.dropdown-toggle {
+  color: #292b2c;
+  background-color: #e6e6e6;
+}
+.tab_expedtable .btn-secondary:hover {
+  color: #292b2c;
+  background-color: #e6e6e6;
+  border-color: #adadad;
+}
 .tab_expedtable .exped_row .exped_view {
 	background-color: #def;
 }
@@ -1207,16 +1218,20 @@ body {
 
 .tab_expedtable .exped_row {
 	border: 1px solid;
+	border-radius: 5px;
+	margin: 0px 0px 3px 0px;
 }
 
 .tab_expedtable .exped_row .exped_config .config_box .header {
 	background: #def;
 	border-bottom: 1px solid;
+	padding: 0 5px 0 5px;
 }
 
 .tab_expedtable .exped_row .exped_config .config_box {
 	border: 1px solid;
 	background: #fff;
+	border-radius: 4px;
 }
 
 .tab_expedtable .exped_row .exped_view .info_col.item2 {
