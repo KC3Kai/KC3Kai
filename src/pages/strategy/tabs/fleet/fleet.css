@@ -215,6 +215,8 @@
 
 .ui-tooltip-content .ship_tooltip {
 	width:202px;
+	height:280px;
+	padding:2px 0px 2px 0px;
 }
 .ui-tooltip-content .ship_tooltip .ship_full_name {
 	width:158px;

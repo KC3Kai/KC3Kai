@@ -41,7 +41,7 @@
 
 	// A jquery-ui tooltip options like native one
 	var nativeTooltipOptions = {
-		position: { my: "left top+4", at: "left bottom", collision: "flipfit" },
+		position: { my: "left top", at: "left+25 bottom", collision: "flipfit" },
 		content: function(){
 			// Default escaping not used, keep html, simulate native one
 			return $(this).attr("title")
