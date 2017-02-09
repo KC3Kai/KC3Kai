@@ -1208,6 +1208,11 @@ body {
   background-color: #e6e6e6;
   border-color: #adadad;
 }
+.tab_expedtable .btn-secondary.disabled,
+.tab_expedtable .btn-secondary:disabled {
+  background-color: #fff;
+  border-color: #ccc;
+}
 .tab_expedtable .exped_row .exped_view {
 	background-color: #def;
 }
@@ -1217,7 +1222,7 @@ body {
 }
 
 .tab_expedtable .exped_row {
-	border: 1px solid;
+	border: 1px solid #afcae6;
 	border-radius: 5px;
 	margin: 0px 0px 3px 0px;
 }
