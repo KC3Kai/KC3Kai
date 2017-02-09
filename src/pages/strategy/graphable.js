@@ -1,173 +1,81 @@
-(function(){
-	"use strict";
+class KC3Graphable {
 	
-	/* KC3 Graphable
-			Arguments:
-			tabRefer -- StrategyTab object reference
-			callable -- database function
-			itemData -- object with 4 keys
-				name  : consists its short name (aka, variable name)
-				dbkey : consists the reference variable name to the database
-				full  : written name of the variable (full name)
-				colorhex : color in hex notation, (6 characters)
-				colorbyte: color in byte notation, (numeric, 0-255)
-	*/
-	window.KC3Graphable = function (tabRefer,callable,itemData){
-		this.tabSelf = tabRefer;
+	constructor(tableName, graphableItems){
+		this.tableName = tableName;
+		this.graphableItems = graphableItems;
+		this.loadingGraph = false;
+		this.ctx   = null;
+		this.chart = null;
+	}
+	
+	// Executes only on first tab visit unless refreshed
+	init(){
 		
-		this.ctx   = [];
-		this.chart = [];
+	}
+	
+	// Executes every tab visit
+	execute(){
+		let self = this;
 		
-		/* INIT
-		Prepares all data needed
-		---------------------------------*/
-		this.init    = function(){
-			this.hour  = Math.floor(Date.now()/( 1*60*60*1000));
-			this.zone  = Math.floor(Date.now()/( 6*60*60*1000));
-			this.day   = Math.floor(Date.now()/(24*60*60*1000));
-			Chart.defaults.global.scaleBeginAtZero = true;
-		};
+		// Set default filter states
+		let startDate = new Date();
+		let endDate = new Date();
+		startDate.setDate(endDate.getDate()-30);
+		$("#startDate").val(startDate.format("yyyy-mm-dd"));
+		$("#endDate").val(endDate.format("yyyy-mm-dd"));
+		$("#graphInterval").val(24);
+		$("#startZero").prop("checked", true);
 		
-		/* EXECUTE
-		Places data onto the interface
-		---------------------------------*/
-		this.execute = function(){
-			var self = this;
-			// Get list of resources for the past 24 hours
-			callable.call(KC3Database, this.hour, function(ResourceRecords){
-				// Arrange resources into index
-				var ctr;
-				for(ctr in ResourceRecords){
-					self.data_hour["h"+ ResourceRecords[ctr].hour ] = ResourceRecords[ctr];
-					self.data_zone["z"+ Math.floor(ResourceRecords[ctr].hour/ 6) ] = ResourceRecords[ctr];
-					self.data_day ["d"+ Math.floor(ResourceRecords[ctr].hour/24) ] = ResourceRecords[ctr];
-				}
-				
-				// Call interface functions
-				self.thisWeek();
-				try {
-				self.draw(0, 1,"hour",function(x){
-					var h = x.getHours();
-					if(h%12===0) {
-						return ((h === 0) ? 'M':'N') + 'N';
-					} else { 
-						return (h % 12) + ((h > 12) ? 'P':'A');
-					}
-				},23);
-				self.draw(1, 6,"zone",function(x){return x.getDate()+"-"+x.getHours()+"h";},28);
-				self.draw(2,24, "day",function(x){return (x.getMonth()+1)+"/"+x.getDate();},30);
-				} catch(e) {console.error(e);}
-			});
+		// Refresh graph button
+		$("#apply_options").on("click", function(){
+			if (self.loadingGraph) return false;
+			self.loadingGraph = true;
+			$(".graph_options input, .graph_options select, .legend_toggle input, #apply_options").prop("disabled", true);
 			
-			this.collectData();
-		};
-		
-		/* Get data to be drawn
-		
-		--------------------------------------------*/
-		this.collectData = function(){
-			var DataCollector = new Worker(chrome.extension.getURL('library/workers/graph-data.js'));
-			DataCollector.onmessage = (response) => {
-				this.reformatData(response);
-				DataCollector.terminate();
-			};
-			DataCollector.postMessage({
+			Chart.defaults.global.scaleBeginAtZero = $(this).prop("checked");
+			
+			$(".graph_title").text("Loading...");
+			
+			self.collectData({
+				tableName: self.tableName,
+				graphableItems: self.graphableItems,
 				start: $("#startDate").val(),
 				end: $("#endDate").val(),
 				interval: $("#graphInterval").val()
 			});
-		};
-		
-		this.reformatData = function(response) {
-			console.log('worker response', response.data);
-		};
-		
-		/* Generalized Chart Draw
-		 * replaces basic chart draw, and generalizes into a function
-		 *
-		 * Arguments:
-		 * i           - index
-		 * hourMult    - offset multiplication
-		 * reqKey      - requested key
-		 * dataStrFunc - a callable function with one argument (date object),
-		 *               returning a string
-		 * backtracks  - number of backtracks required to process the chart
-		--------------------------------------------*/
-		this.draw = function(i,hourMult,reqKey,dateStrFunc,backtracks){
-			// Object for chart drawing parameters
-			var data = { hours: [] };
-				// Dynamically assign the variable name from itemData.name to data
-				(itemData.name).forEach(function(k){ data[k] = []; });
-			// Create automated variables
-			// pref(i)x, pick one letter from key
-			// data_key, just prepend the data_ from the key
-			var
-				prefx   = reqKey.charAt(0),
-				dataKey = "data_"+reqKey;
-			// Check records beyond the first axis existed or not
-			var
-				self = this,
-				nearest = Object.keys(this[dataKey]).filter(function(x){return x.slice(1)<(self[reqKey]-backtracks);}).pop();
-			// Loop starting from past 24 hr, per hour, to current
-			var graphIndex=0, thisTime, thisDateObj;
-			for(; backtracks>=0; backtracks--){
-				thisTime = this[reqKey]-backtracks;
-				thisDateObj = new Date(thisTime*hourMult*60*60*1000);
-				data.hours[graphIndex] = dateStrFunc(thisDateObj);
-				// If a resource for this hour exists
-				var j;
-				if(typeof this[dataKey][prefx+thisTime] != "undefined") {
-					for(j=0;j<(Object.keys(itemData.name).length);j++) {
-						data[itemData.name[j]][graphIndex] = this[dataKey][prefx+thisTime][itemData.dbkey[j]];
-						if(typeof data[itemData.name[j]][graphIndex] == "undefined"){
-							data[itemData.name[j]][graphIndex] = data[itemData.name[j]][graphIndex-1] || 0;
-						}
-					}
-				} else {
-					for(j=0;j<(Object.keys(itemData.name).length);j++) {
-						// Check if its not the first x-axis
-						if(graphIndex > 0) {
-							// Use the values from previous record
-								data[itemData.name[j]][graphIndex] = data[itemData.name[j]][graphIndex-1];
-						} else {
-							// First x-axis with no record, use zero :: if there's no data beyond the axis
-								data[itemData.name[j]][graphIndex] = (nearest!==undefined) ? this[dataKey][nearest][itemData.dbkey[j]] : 0;
-						}
-					}
-				}
-				graphIndex++;
-			}
-			
-			// Draw graph
-			this.ctx[i] = $("#chart" + (i+1)).get(0).getContext("2d");
-			this.chart[i] = new Chart( this.ctx[i] ).Line(this.buildGraphData(data), {});
-		};
-		
-		/* Util: Build charting parameters
-		--------------------------------------------*/
-		this.dataset = function(label, color1, color2, dataList){
-			return {
-				label: label,
-				fillColor: "rgba(225,225,225,0)",
-				strokeColor: "rgba("+color1+",1)",
-				pointColor: "rgba("+color1+",1)",
-				pointStrokeColor: "#"+color2,
-				pointHighlightFill: "#"+color2,
-				pointHighlightStroke: "rgba("+color1+",1)",
-				data: dataList
-			};
-		};
-		
-		this.buildGraphData = function(data){
-			var self = this;
-			return {
-				labels: data.hours,
-				datasets: Array.apply(null,{length:Object.keys(itemData.name).length}).map(function(c,i){
-					return self.dataset(itemData.full[i], itemData.colorbyte[i], itemData.colorhex[i], data[itemData.name[i]]);
-				}).reverse(),
-			};
-		};
-		
-	};
+		});
+		$("#apply_options").trigger("click");
+	}
 	
-})();
+	// Get data via worker using specified filters
+	collectData(filters){
+		let DataCollector = new Worker(chrome.extension.getURL('library/workers/graph-data.js'));
+		DataCollector.onmessage = (response) => {
+			this.refreshGraph(response.data);
+			DataCollector.terminate();
+		};
+		DataCollector.postMessage(Object.assign({
+			url: chrome.extension.getURL(""),
+			playerId: PlayerManager.hq.id
+		}, filters));
+	}
+	
+	// Re-draw the graph and date title
+	refreshGraph(data){
+		// Show graph title dates
+		$(".graph_title").text(
+			new Date($("#startDate").val()).format("mmm d, yyyy")
+			+" to "
+			+new Date($("#endDate").val()+" 00:00:00").format("mmm d, yyyy")
+		);
+		
+		// Draw graph
+		this.ctx = $("#chart").get(0).getContext("2d");
+		if (this.chart) this.chart.destroy();
+		this.chart = new Chart(this.ctx).Line(data);
+		
+		// Revert flags and input states
+		this.loadingGraph = false;
+		$(".graph_options input, .graph_options select, .legend_toggle input, #apply_options").prop("disabled", false);
+	}
+}
