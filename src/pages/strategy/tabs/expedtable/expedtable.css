@@ -36,6 +36,7 @@
 .tab_expedtable #exped_table_content_root .exped_control_row > .btn-group > button {
 	height: 30px;
 	outline: none;
+	font-size: 12px;
 	-webkit-box-shadow: 0 0 0 0 rgba(204, 204, 204, 0.5);
 	box-shadow: 0 0 0 0 rgba(204, 204, 204, 0.5);
 }
@@ -65,7 +66,7 @@
 	width: 65px;
 	padding: 5px 0 5px 0;
 	font-weight: bold;
-	font-size: 16px;
+	font-size: 14px;
 }
 
 .tab_expedtable .exped_row .exped_view {
@@ -216,7 +217,7 @@
 
 .tab_expedtable .exped_row .exped_view .cost .view_normal {
 	width: 100%;
-	font-size: 14px;
+	font-size: 12px;
 	padding-left: 12px;
 	float: left;
 }
