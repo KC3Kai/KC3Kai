@@ -2,9 +2,18 @@
 	width:680px;
 }
 .tab_resources .legend_item {
-	width:120px;
+	width:150px;
 	height:20px;
 	float:left;
+}
+.tab_resources .legend_toggle {
+	width:20px;
+	height:20px;
+	line-height:20px;
+	float:left;
+}
+.tab_resources .legend_toggle input {
+	
 }
 .tab_resources .legend_color {
 	width:14px;
@@ -78,8 +87,6 @@
 	width:140px;
 	height:18px;
 	margin:1px 0px 0px 0px;
-	border:1px solid #555;
-	background:#333;
 	font-size:12px;
 }
 /* Interval */
@@ -96,7 +103,6 @@
 	width:75px;
 	height:18px;
 	margin:1px 0px 0px 0px;
-	border:1px solid #555;
 	font-size:12px;
 }
 
@@ -116,7 +122,6 @@
 	height:22px;
 	line-height:22px;
 	float:left;
-	color:#eee;
 	font-size:12px;
 	margin:0px 20px 0px 0px;
 }
@@ -124,9 +129,6 @@
 	height:22px;
 	line-height:20px;
 	float:right;
-	color:#eee;
-	background:#323232;
-	border:1px solid #555;
 	font-size:12px;
 	padding:0px 10px;
 }

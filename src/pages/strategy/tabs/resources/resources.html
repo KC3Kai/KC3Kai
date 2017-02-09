@@ -16,24 +16,28 @@
 <!-- LEGEND -->
 <div class="page_panel">
 	<div class="legend_item">
+		<div class="legend_toggle"><input type="checkbox" data-type="fuel" CHECKED /></div>
 		<div class="legend_color color_fuel"></div>
 		<div class="legend_icon"><img src="../../assets/img/client/fuel.png" /></div>
 		<div class="legend_label">Fuel</div>
 		<div class="clear"></div>
 	</div>
 	<div class="legend_item">
+		<div class="legend_toggle"><input type="checkbox" data-type="ammo" CHECKED /></div>
 		<div class="legend_color color_ammo"></div>
 		<div class="legend_icon"><img src="../../assets/img/client/ammo.png" /></div>
 		<div class="legend_label">Ammo</div>
 		<div class="clear"></div>
 	</div>
 	<div class="legend_item">
+		<div class="legend_toggle"><input type="checkbox" data-type="steel" CHECKED /></div>
 		<div class="legend_color color_steel"></div>
 		<div class="legend_icon"><img src="../../assets/img/client/steel.png" /></div>
 		<div class="legend_label">Steel</div>
 		<div class="clear"></div>
 	</div>
 	<div class="legend_item">
+		<div class="legend_toggle"><input type="checkbox" data-type="baux" CHECKED /></div>
 		<div class="legend_color color_baux"></div>
 		<div class="legend_icon"><img src="../../assets/img/client/bauxite.png" /></div>
 		<div class="legend_label">Bauxite</div>
@@ -62,7 +66,7 @@
 				<option value="3">3 hours</option>
 				<option value="6">6 hours</option>
 				<option value="12">12 hours</option>
-				<option value="24">1 day</option>
+				<option value="24" SELECTED>1 day</option>
 				<option value="72">3 days</option>
 				<option value="168">1 week</option>
 				<option value="336">2 weeks</option>
@@ -79,15 +83,15 @@
 	<div class="option_preset hover">Past day</div>
 	<div class="option_preset hover">Past week</div>
 	<div class="option_preset hover">Past Month</div>
-	<div id="apply_options">Apply Filters</div>
+	<button id="apply_options" class="hover">Refresh Graph</button>
 	<div class="clear"></div>
 </div>
 
 
 <!-- GRAPHS -->
 <div class="page_padding main_graph">
-	<div class="page_section graph_title">Jan 5 2017 - Feb 4 2017</div>
+	<div class="page_section graph_title"></div>
 	<div class="section_body">
-		<canvas id="chart1" width="680" height="350"></canvas>
+		<canvas id="chart" width="680" height="350"></canvas>
 	</div>
 </div>

@@ -315,6 +315,21 @@ button, input, select, textarea {
 .tab_resources .legend_color {
 	border:1px solid #000000;
 }
+.tab_resources .date_input input {
+	border:1px solid #555;
+	background:#333;
+}
+.tab_resources .dropdown_input select {
+	border:1px solid #555;
+}
+.tab_resources #apply_options {
+	color:#eee;
+	background:#323232;
+	border:1px solid #555;
+}
+.tab_resources .option_preset {
+	color:#eee;
+}
 /* Consumables */
 .tab_consumables .legend_color {
 	border:1px solid #000000;
