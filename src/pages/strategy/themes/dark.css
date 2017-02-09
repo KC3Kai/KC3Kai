@@ -1575,6 +1575,8 @@ button, input, select, textarea {
 	font-weight: bold;
 }
 
+/* EXPEDITION TABLE
+--------------------------------*/
 .tab_expedtable .btn-group {
 	border:1px solid #555 !important;
 }
@@ -1620,10 +1622,6 @@ button, input, select, textarea {
 .tab_expedtable .exped_row .exped_config .config_box {
 	background-color: #2f2f2f;
 	border-radius:0px !important;
-}
-
-.tab_expedtable .exped_row .exped_view .info_col {
-	font-size:14px !important;
 }
 
 .tab_expedtable .exped_row .exped_view .info_col.item2 {
