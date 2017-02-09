@@ -182,7 +182,7 @@ KCScreenshot.prototype.saveImgur = function(){
 						Accept: 'application/json'
 					},
 					data: {
-						image: self.base64img.substring(23),
+						image: self.base64img.split(',')[1],
 						type: 'base64'
 					},
 					success: function(response){
