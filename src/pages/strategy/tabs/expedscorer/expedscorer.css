@@ -81,11 +81,12 @@
 }
 
 .tab_expedscorer .control_box .content button {
-	font-size: 12px;
+	font-size: 11px;
 	font-weight: bold;
 	height: 25px;
 	width: 100px;
 	margin: 5px 0 0 5px;
+	padding-left: 5px;
 }
 
 .tab_expedscorer .control_box.preset .content button {
@@ -166,8 +167,9 @@
 }
 
 .tab_expedscorer .control_box.calc button {
-	font-size: 18px;
+	font-size: 16px;
 	height: 60px;
+	padding-left: 8px;
 }
 
 .tab_expedscorer .control_box.calc.out_of_sync button {
