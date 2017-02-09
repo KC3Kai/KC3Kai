@@ -100,7 +100,7 @@
         var ctx = canvas.getContext("2d");
 
         var fontsize = 18;
-        canvas.height = canvasData.height + this.rowParams.height * 2 + fontsize+4;
+        canvas.height = canvasData.height + this.rowParams.height * 2 + fontsize + 4;
         canvas.width = canvasData.width;
 
         ctx.fillStyle = "#FFF";
@@ -125,7 +125,7 @@
             this._addConsumableImage(ctx, canvas, x, "screws");
         }
 
-        var fontsize = 30;
+        fontsize = 30;
         ctx.font = generateFontString(600, fontsize);
         ctx.fillText(topLine, (canvas.width - ctx.measureText(topLine).width) / 2, this.rowParams.height + fontsize / 2);
 
@@ -347,7 +347,7 @@
         this.ctx.textBaseline = "middle";
         this.ctx.font = generateFontString(600, fontsize);
         this.ctx.fillStyle = "#0066CC";
-        this.ctx.fillText(KC3Meta.stype(type), x + this.rowParams.height / 2, y + (this.rowParams.height)/2 );
+        this.ctx.fillText(KC3Meta.stype(type), x + this.rowParams.height / 2, y + (this.rowParams.height) / 2);
     };
 
     ShowcaseExporter.prototype._finalize = function () {
@@ -796,7 +796,7 @@
         var fontSize;
         for (var i = 0; i <= 10; i++) {
             var text = "";
-            if (i === 0){
+            if (i === 0) {
                 fontSize = 18;
                 text = "x" + equip.total;
                 ctx.font = generateFontString(400, fontSize);
@@ -816,7 +816,7 @@
 
 
                 text = "★" + i;
-                ctx.fillStyle="#42837f";
+                ctx.fillStyle = "#42837f";
                 ctx.font = generateFontString(600, fontSize);
                 if (!fake)
                     ctx.fillText(text, x + rowWidth - rowHeight * 0.5 - xOffset - ctx.measureText(text).width, y + (rowHeight + fontSize) / 2);
