@@ -15,14 +15,6 @@
 	window.KC3Graphable = function (tabRefer,callable,itemData){
 		this.tabSelf = tabRefer;
 		
-		this.hour = 0;
-		this.zone = 0;
-		this.day  = 0;
-		
-		this.data_hour = {};
-		this.data_zone = {};
-		this.data_day  = {};
-		
 		this.ctx   = [];
 		this.chart = [];
 		
@@ -66,12 +58,28 @@
 				self.draw(2,24, "day",function(x){return (x.getMonth()+1)+"/"+x.getDate();},30);
 				} catch(e) {console.error(e);}
 			});
+			
+			this.collectData();
 		};
 		
-		/* This Week's table
+		/* Get data to be drawn
+		
 		--------------------------------------------*/
-		this.thisWeek = function(){
-			
+		this.collectData = function(){
+			var DataCollector = new Worker(chrome.extension.getURL('library/workers/graph-data.js'));
+			DataCollector.onmessage = (response) => {
+				this.reformatData(response);
+				DataCollector.terminate();
+			};
+			DataCollector.postMessage({
+				start: $("#startDate").val(),
+				end: $("#endDate").val(),
+				interval: $("#graphInterval").val()
+			});
+		};
+		
+		this.reformatData = function(response) {
+			console.log('worker response', response.data);
 		};
 		
 		/* Generalized Chart Draw
