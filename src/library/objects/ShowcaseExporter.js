@@ -99,7 +99,8 @@
         var canvas = document.createElement("CANVAS");
         var ctx = canvas.getContext("2d");
 
-        canvas.height = canvasData.height + this.rowParams.height * 2 + 18;
+        var fontsize = 18;
+        canvas.height = canvasData.height + this.rowParams.height * 2 + fontsize+4;
         canvas.width = canvasData.width;
 
         ctx.fillStyle = "#FFF";
@@ -107,7 +108,7 @@
         ctx.drawImage(canvasData, 0, this.rowParams.height * 2, canvasData.width, canvasData.height);
 
         var created = "Made in KC3 on " + dateFormat("dd mmm yyyy");
-        ctx.font = generateFontString(400, 14);
+        ctx.font = generateFontString(400, fontsize);
         ctx.fillStyle = "#000";
 
         ctx.fillText(
@@ -342,9 +343,11 @@
         this.ctx.fillStyle = background;
         this.ctx.fillRect(x, y, this.rowParams.width, this.rowParams.height);
 
-        this.ctx.font = generateFontString(600, 20);
+        var fontsize = 25;
+        this.ctx.textBaseline = "middle";
+        this.ctx.font = generateFontString(600, fontsize);
         this.ctx.fillStyle = "#0066CC";
-        this.ctx.fillText(KC3Meta.stype(type), x + this.rowParams.height / 2, y + this.rowParams.height - (this.rowParams.height - 18) / 2);
+        this.ctx.fillText(KC3Meta.stype(type), x + this.rowParams.height / 2, y + (this.rowParams.height)/2 );
     };
 
     ShowcaseExporter.prototype._finalize = function () {
@@ -436,20 +439,22 @@
 
         this._drawIcon(x + xOffset, y, ship.masterId);
 
-        var fontSize = 19;
+        var fontSize = 24;
         this.ctx.font = generateFontString(400, fontSize);
         while (this.ctx.measureText(ship.name()).width > this.rowParams.width - this.rowParams.height * 3.5) {
             fontSize--;
             this.ctx.font = generateFontString(400, fontSize);
         }
         this.ctx.fillStyle = "#000";
-        this.ctx.fillText(ship.name(), x + this.rowParams.height * 2, y + this.rowParams.height - (this.rowParams.height - fontSize) / 2);
+        this.ctx.textBaseline = "middle";
+        this.ctx.fillText(ship.name(), x + this.rowParams.height * 2, y + this.rowParams.height / 2);
 
-        this.ctx.font = generateFontString(400, 19);
+        this.ctx.font = generateFontString(400, 24);
+        this.ctx.textBaseline = "middle";
         this.ctx.fillText(
             ship.level,
             x + this.rowParams.width - this.rowParams.height * 0.5 - this.ctx.measureText(ship.level).width,
-            y + this.rowParams.height - (this.rowParams.height - fontSize) / 2
+            y + this.rowParams.height / 2
         );
 
     };
@@ -694,7 +699,7 @@
         }
 
         var y = 0;
-        var fontSize = 16;
+        var fontSize = 20;
         ctx.font = generateFontString(600, fontSize);
         ctx.fillStyle = "#000";
         ctx.fillText(group.name, (canvas.width - ctx.measureText(group.name).width) / 2, ( rowHeight + fontSize) / 2);
@@ -705,7 +710,7 @@
                 var type = group.types[typeId];
                 if (typeCount > 1) {
                     y += rowHeight / 2;
-                    fontSize = 16;
+                    fontSize = 20;
                     ctx.font = generateFontString(500, fontSize);
                     ctx.fillStyle = "#000";
                     ctx.fillText(type.name, (canvas.width - ctx.measureText(type.name).width) / 2, y + (rowHeight + fontSize) / 2);
@@ -792,14 +797,14 @@
         for (var i = 0; i <= 10; i++) {
             var text = "";
             if (i === 0){
-                fontSize = 14;
+                fontSize = 18;
                 text = "x" + equip.total;
                 ctx.font = generateFontString(400, fontSize);
                 ctx.fillStyle = "#000";
                 if (!fake)
                     ctx.fillText(text, x + rowWidth - rowHeight * 0.5 - ctx.measureText(text).width, y + (rowHeight + fontSize) / 2);
             } else {
-                fontSize = 10;
+                fontSize = 13;
                 if (equip["s" + i] === 0)
                     continue;
                 ctx.fillStyle = "#000";
@@ -827,7 +832,7 @@
 
     ShowcaseExporter.prototype._drawEquipInfo = function (equip, ctx, x, y, rowWidth, rowHeight, fake) {
         var startY = y;
-        var fontSize = 10;
+        var fontSize = 13;
         ctx.font = generateFontString(400, fontSize);
         ctx.fillStyle = "#000";
 
@@ -898,7 +903,7 @@
     };
 
     ShowcaseExporter.prototype._drawEquipStats = function (equip, ctx, x, y, available, fake) {
-        var fontSize = 10;
+        var fontSize = 16;
         ctx.font = generateFontString(400, fontSize);
         ctx.fillStyle = "#000";
 
