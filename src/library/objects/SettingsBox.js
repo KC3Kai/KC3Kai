@@ -147,7 +147,36 @@ To be dynamically used on the settings page
 		);
 		$(".options", this.element).append( options.label );
 	};
-	
+
+	SettingsBox.prototype.number = function( options ){
+		var self = this;
+		$(".options", this.element).append(
+			$("<input/>")
+			.attr("type", "text")
+			.attr("placeholder", KC3Meta.term( options.placeholder ) )
+			.addClass("number")
+			.prop("disabled", this.disabled)
+			.val( ConfigManager[ this.config ] )
+			.on("change", function(){
+				// Dangerous Settings Change Attempt
+				if(isDangerous($(this).parent().parent(),self.config,$(this).val())) {
+					$(this).val(ConfigManager[self.config]);
+					return false;
+				}
+				ConfigManager.loadIfNecessary();
+
+				let parsed = parseFloat( $(this).val() );
+				$(this).val( parsed );
+
+				ConfigManager[ self.config ] = parsed;
+				ConfigManager.save();
+
+				elementControl($(this).parent().siblings(".note"),'',KC3Meta.term("SettingsErrorNG"));
+			})
+		);
+		$(".options", this.element).append( options.label );
+	};
+
 	SettingsBox.prototype.radio = function( options ){
 		var self = this;
 		var choiceClass = "choices_" + this.config;

@@ -468,7 +468,7 @@
 			{
 				"id" : "alert_idle_start",
 				"name" : "SettingsIdleWarnStartAt",
-				"type" : "long_text",
+				"type" : "number",
 				"options" : { "placeholder" : "SettingsIdleWarnDesc" }
 			}
 		]

@@ -184,7 +184,8 @@ body {
 	background:#ffc;
 	padding:0px 2px;
 }
-.settingBox .options .long_text {
+.settingBox .options .long_text,
+.settingBox .options .number {
 	width:430px;
 	height:22px;
 	line-height:22px;
@@ -193,10 +194,12 @@ body {
 	border:0px none;
 	background:transparent;
 }
-.settingBox .options .long_text:hover {
+.settingBox .options .long_text:hover,
+.settingBox .options .number:hover {
 	background:#ffc;
 }
-.settingBox .options .long_text:focus {
+.settingBox .options .long_text:focus,
+.settingBox .options .number:focus {
 	border:1px inset;
 	background:#ffc;
 	padding:0px 2px;
