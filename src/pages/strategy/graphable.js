@@ -71,8 +71,6 @@ class KC3Graphable {
 		$(".graph_input").prop("disabled", true);
 		$(".graph_title").text("Loading...");
 		
-		Chart.defaults.global.scaleBeginAtZero = $("#startZero").prop("checked");
-		
 		this.collectData({
 			tableName: this.tableName,
 			graphableItems: this.graphableItems,
@@ -117,10 +115,21 @@ class KC3Graphable {
 			}
 		});
 		
+		// New chart JS only accepts an array, not object
+		data.datasets = Object.values(data.datasets);
+		
 		// Draw graph
 		this.ctx = $("#chart").get(0).getContext("2d");
 		if (this.chart) this.chart.destroy();
-		this.chart = new Chart(this.ctx).Line(data);
+		this.chart = new Chart(this.ctx, {
+			type: 'line',
+			data: data,
+			options: {
+				legend: { display: false },
+				tooltips: { mode: "x" },
+				scales: { yAxes: [{ ticks: { beginAtZero: $("#startZero").prop("checked") } }] }
+			}
+		});
 		
 		// Revert flags and input states
 		this.loadingGraph = false;

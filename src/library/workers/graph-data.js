@@ -30,12 +30,12 @@ function formatData(startHour, endHour, options, result){
 	options.graphableItems.name.forEach(function(name, gii){
 		datasets[options.graphableItems.dbkey[gii]] = {
 			label: options.graphableItems.full[gii],
-			fillColor: "rgba(225,225,225,0)",
-			strokeColor: "rgba("+options.graphableItems.colorbyte[gii]+",1)",
-			pointColor: "rgba("+options.graphableItems.colorbyte[gii]+",1)",
-			pointStrokeColor: "#"+options.graphableItems.colorhex[gii],
-			pointHighlightFill: "#"+options.graphableItems.colorhex[gii],
-			pointHighlightStroke: "rgba("+options.graphableItems.colorbyte[gii]+",1)",
+			fill: false,
+			lineTension: 0.4,
+			borderWidth: 1.5,
+			borderColor: "#"+options.graphableItems.colorhex[gii],
+			pointRadius: 2,
+			pointHitRadius: 5,
 			data: Array.from('0'.repeat(maxPoints)).map((e)=>{ return parseInt(e); })
 		};
 	});
