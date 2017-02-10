@@ -57,6 +57,9 @@
             rn: "api_leng",
             or: "api_distance"
         };
+        //TODO save next two vars somewhere
+        this._outputMode = 2;
+        this._addNameAndLevel = false;
     };
 
     ShowcaseExporter.prototype._init = function () {
@@ -89,12 +92,9 @@
         }
     };
 
-    ShowcaseExporter.prototype._addCredits = function (canvasData, topLine) {
+    ShowcaseExporter.prototype._addCredits = function (canvasData, isShipList) {
         if (!canvasData)
             canvasData = this.canvas;
-        if (!topLine)
-            topLine = "Ship List";
-
 
         var canvas = document.createElement("CANVAS");
         var ctx = canvas.getContext("2d");
@@ -116,8 +116,14 @@
             canvas.width - this.rowParams.height * 0.5 - ctx.measureText(created).width,
             canvas.height - 1
         );
+
         var x = 20;
-        if (topLine.indexOf("Ship") !== -1) {
+        if (this._addNameAndLevel) {
+            ctx.fillText("HQ LVL " + PlayerManager.hq.level, x, canvas.height - 1);
+            x += ctx.measureText("HQ LVL " + PlayerManager.hq.level).width + 50;
+        }
+
+        if (isShipList) {
             x = this._addConsumableImage(ctx, canvas, x, "medals") + 50;
             this._addConsumableImage(ctx, canvas, x, "blueprints");
         } else {
@@ -125,8 +131,20 @@
             this._addConsumableImage(ctx, canvas, x, "screws");
         }
 
+        var topLine = isShipList ? "Ship List" : "Equipment List";
+        if (this._addNameAndLevel) {
+            topLine = PlayerManager.hq.rank + " " + PlayerManager.hq.name + " " + topLine;
+        }
+
         fontsize = 30;
         ctx.font = generateFontString(600, fontsize);
+
+        var available = canvas.width - this.rowParams.height * 5;
+        while (ctx.measureText(topLine).width > available) {
+            fontsize--;
+            ctx.font = generateFontString(600, fontsize);
+        }
+
         ctx.fillText(topLine, (canvas.width - ctx.measureText(topLine).width) / 2, this.rowParams.height + fontsize / 2);
 
         var img = new Image();
@@ -213,7 +231,7 @@
     };
 
     ShowcaseExporter.prototype._finish = function (dataURL, topLine) {
-        switch (parseInt(ConfigManager.ss_mode, 10)) {
+        switch (parseInt(this._outputMode, 10)) {
             case 0:
                 this._download(dataURL, topLine);
                 break;
@@ -231,7 +249,8 @@
             clearTimeout(enableShelfTimer);
         }
         var self = this;
-        var filename = ConfigManager.ss_directory + '/' + dateFormat("yyyy-mm-dd") + '_' + topLine.replace(" ", "") + ".png";
+        topLine = topLine.replace(new RegExp(/<>:"\/\|\?\*/,'g'),"").replace(new RegExp(/\s/,'g'),"_");
+        var filename = ConfigManager.ss_directory + '/' + dateFormat("yyyy-mm-dd") + '_' + topLine + ".png";
         chrome.downloads.setShelfEnabled(false);
         chrome.downloads.download({
             url: dataURL,
@@ -294,9 +313,9 @@
         });
     };
 
-    ShowcaseExporter.prototype._openInNewTab = function (dataURL,topLine) {
-        if(dataURL.length>=2*1024*1024){
-            this._download(dataURL,topLine);
+    ShowcaseExporter.prototype._openInNewTab = function (dataURL, topLine) {
+        if (dataURL.length >= 2 * 1024 * 1024) {
+            this._download(dataURL, topLine);
         } else {
             window.open(dataURL, "_blank");
             this.complete({});
@@ -358,7 +377,7 @@
         if (this.loading !== 0)
             return;
         this._drawBorders();
-        this._addCredits();
+        this._addCredits(null, true);
     };
 
     ShowcaseExporter.prototype._resizeCanvas = function () {
@@ -566,7 +585,7 @@
         var columns = this._splitEquipByColumns(columnsCount);
         this._fillEquipCanvas(canvas, ctx, columns, rowWidth);
         this._drawBorders(canvas, ctx, rowWidth);
-        this._addCredits(canvas, "Equipment List");
+        this._addCredits(canvas, false);
     };
 
     ShowcaseExporter.prototype._fillEquipCanvas = function (canvas, ctx, columns, rowWidth) {
