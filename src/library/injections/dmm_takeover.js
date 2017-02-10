@@ -4,17 +4,17 @@
 	var master = {};
 	var meta = {};
 	var quests = {};
-	
+
 	window.DMMCustomizations = {
 		apply: function(response){
 			console.log('Applying DMM customizations...');
-			
+
 			config =  $.extend(true, ConfigManager, response.config);
 			window.ConfigManager = config;
 			master = $.extend(true, KC3Master, response.master);
 			meta = $.extend(true, KC3Meta, response.meta);
 			quests = $.extend(true, KC3QuestManager, response.quests);
-			
+
 			this.windowFocus();
 			this.attachHTML();
 			this.layout();
@@ -23,7 +23,7 @@
 			this.clearOverlayHotKey();
 			this.exitConfirmation();
 			this.screenshotHotkey();
-			
+
 			chrome.runtime.onMessage.addListener(this.subtitlesOverlay());
 			chrome.runtime.onMessage.addListener(this.clearOverlays());
 			chrome.runtime.onMessage.addListener(this.questOverlay());
@@ -32,14 +32,14 @@
 			chrome.runtime.onMessage.addListener(this.getGamescreenOffset());
 			chrome.runtime.onMessage.addListener(this.idleTimer());
 		},
-		
+
 		/* WINDOW KEEP FOCUS, NOT FLASH
 		So we can detect keydown for hotkeys
 		--------------------------------------*/
 		nonFocusSeconds: 0,
 		windowFocus: function(){
 			var self = this;
-			
+
 			// Timer to keep auto-focusing on window every second
 			setInterval(function(){
 				if(self.nonFocusSeconds === 0){
@@ -48,7 +48,7 @@
 					self.nonFocusSeconds--;
 				}
 			}, 1000);
-			
+
 			// Press F7 to stop focusing on window to get time to focus on flash
 			$(document).on("keydown", function(event){
 				if (event.keyCode == 118) {
@@ -56,7 +56,7 @@
 				}
 			});
 		},
-		
+
 		/* CUSTOM HTML TAGS
 		For tags not in DMM but needed by our UI
 		Looking at ReactJS for KC3KaiNi
@@ -64,24 +64,24 @@
 		attachHTML: function(){
 			// Overlay screens
 			var overlays = $("<div>").addClass("overlays").appendTo("#area-game");
-			
+
 			var overlay_quests = $("<div>").addClass("overlay_box overlay_quests");
 			overlays.append(overlay_quests);
-			
+
 			var overlay_markers = $("<div>").addClass("overlay_box overlay_markers");
 			overlays.append(overlay_markers);
-			
+
 			var overlay_subtitles = $("<div>").addClass("overlay_box overlay_subtitles")
 				.append($("<span>"));
 			overlays.append(overlay_subtitles);
-			
+
 			var overlay_idle = $("<div>").addClass("overlay_box overlay_idle")
 				.append($("<span>"));
 			overlays.append(overlay_idle);
-			
+
 			// Clonable Factory
 			var factory = $("<div>").attr("id", "factory").appendTo("body");
-			
+
 			var ol_quest = $("<div>").addClass("overlay ol_quest ol_quest_exist")
 				.append($("<div>").addClass("icon with_tl"))
 				.append($("<div>").addClass("content with_tl")
@@ -91,11 +91,11 @@
 				.append($("<div>").addClass("tracking with_tl"))
 				.append($("<div>").addClass("no_tl hover").text("?"))
 				.appendTo("#factory");
-			
+
 			var ol_quest_empty = $("<div>").addClass("overlay ol_quest ol_quest_empty")
 				.appendTo("#factory");
 		},
-		
+
 		/* DMM PAGE LAYOUT
 		Override layout to only show game frame
 		--------------------------------------*/
@@ -129,7 +129,7 @@
 			});
 			$(document).on("ready", this.resizeGameFrameFinal);
 			$(window).on("load", this.resizeGameFrameFinal);
-			
+
 			var self = this;
 			this.resizeTimer = setInterval(function(){
 				if ($("#game_frame").width() != 800 || $("#game_frame").height() != 480) {
@@ -152,14 +152,14 @@
 			}
 			window.DMMCustomizations.resizeGameFrame();
 		},
-		
+
 		/* BACKGROUND CUSTOMIZATIONS
 		Let users customize background via settings
 		--------------------------------------*/
 		backgrounds: function(){
 			// Top Margin from game frame to window
 			$("#area-game").css("margin-top", config.api_margin+"px");
-			
+
 			// Background
 			if(config.api_bg_image === ""){
 				// Solid color
@@ -173,14 +173,14 @@
 				$("body").css("background-repeat", "no-repeat");
 			}
 		},
-		
+
 		/* SUBTITLE BOX
 		Only prepares the container box for subtitles
 		--------------------------------------*/
 		subtitlePosition: "bottom",
 		subtitleSpace: function(){
 			var self = this;
-			
+
 			if(config.api_subtitles){
 				// Subtitle font customizations
 				$(".overlay_subtitles").css("font-family", config.subtitle_font);
@@ -188,7 +188,7 @@
 				if(config.subtitle_bold){
 					$(".overlay_subtitles").css("font-weight", "bold");
 				}
-				
+
 				// Subtitle display modes
 				switch (config.subtitle_display) {
 					case "bottom":
@@ -221,7 +221,7 @@
 						break;
 					default: break;
 				}
-				
+
 				// Overlay avoids cursor
 				$(".overlay_subtitles span").on("mouseover", function(){
 					switch (config.subtitle_display) {
@@ -244,7 +244,7 @@
 				});
 			}
 		},
-		
+
 		/* SUBTITLES OVERLAY
 		Only prepares the container box for subtitles
 		--------------------------------------*/
@@ -256,7 +256,7 @@
 			return function(request, sender, response){
 				if(request.action != "subtitle") return true;
 				if(!config.api_subtitles) return true;
-				
+
 				// Get subtitle text
 				var subtitleText = false;
 				var quoteIdentifier = "";
@@ -277,11 +277,11 @@
 						break;
 				}
 				subtitleText = meta.quote( quoteIdentifier, quoteVoiceNum );
-				
+
 				// hide first to fading will stop
 				$(".overlay_subtitles").stop(true, true);
 				$(".overlay_subtitles").hide();
-				
+
 				// If subtitle removal timer is ongoing, reset
 				if(self.subtitleVanishTimer){
 					clearTimeout(self.subtitleVanishTimer);
@@ -293,7 +293,7 @@
 				if(!self.subtitleVanishExtraMillisPerChar){
 					self.subtitleVanishExtraMillisPerChar = Number(meta.quote("timing", "extraMillisPerChar")) || 50;
 				}
-				
+
 				// If subtitles available for the voice
 				if(subtitleText){
 					$(".overlay_subtitles span").html(subtitleText);
@@ -322,13 +322,13 @@
 				}
 			};
 		},
-		
+
 		/* QUEST OVERLAYS
 		On-screen translation on quest page
 		--------------------------------------*/
 		questOverlay: function(){
 			var self = this;
-			
+
 			// untranslated quest clickable google translate
 			$(".overlay_quests").on("click", ".no_tl", function(){
 				window.open("https://translate.google.com/#ja/"+config.language+"/"
@@ -336,38 +336,38 @@
 					+"%0A%0A"
 					+encodeURIComponent($(this).data("qdesc")), "_blank");
 			});
-			
+
 			// runtime listener
 			return function(request, sender, response){
 				if(request.action != "questOverlay") return true;
 				if(!config.api_translation && !config.api_tracking) return true;
-				
+
 				quests = $.extend(true, quests, request.KC3QuestManager);
-				
+
 				$.each(request.questlist, function( index, QuestRaw ){
 					if( QuestRaw !=- 1 ){
 						var QuestBox = $("#factory .ol_quest_exist").clone().appendTo(".overlay_quests");
-						
+
 						// Get quest data
 						var QuestData = new KC3Quest();
 						QuestData.define(quests.get( QuestRaw.api_no ));
-						
+
 						// Show meta, title and description
 						if( typeof QuestData.meta().available != "undefined" ){
-							
+
 							if (config.api_translation){
 								$(".name", QuestBox).text( QuestData.meta().name );
 								$(".desc", QuestBox).text( QuestData.meta().desc );
 							}else{
 								$(".content", QuestBox).css({opacity: 0});
 							}
-							
+
 							if(config.api_tracking){
 								$(".tracking", QuestBox).html( QuestData.outputHtml() );
 							}else{
 								$(".tracking", QuestBox).hide();
 							}
-							
+
 							// Special Bw1 case multiple requirements
 							if( QuestRaw.api_no == 214 ){
 								$(".tracking", QuestBox).addClass("small");
@@ -388,7 +388,7 @@
 				response({success:true});
 			};
 		},
-		
+
 		/* CLEAR OVERLAYS
 		Empties or hides current shown or filled overlays
 		--------------------------------------*/
@@ -410,7 +410,7 @@
 				response({success:true});
 			};
 		},
-		
+
 		/* EXIT CONFIRMATION
 		Attach onUnload listener to stop accidental exit
 		--------------------------------------*/
@@ -420,7 +420,7 @@
 				return meta.term("UnwantedExitDMM");
 			};
 		},
-		
+
 		/* GET WINDOW SIZE
 		Used for "Fit Screen" function
 		FitScreen itself is executed in background service
@@ -437,7 +437,7 @@
 				});
 			};
 		},
-		
+
 		/* SCREENSHOT HOTKEY
 		Ask background service to take my selfie
 		--------------------------------------*/
@@ -450,7 +450,7 @@
 				}
 			});
 		},
-		
+
 		/* GET GAMESCREEN OFFSET
 		Used for taking screenshots
 		FitScreen itself is executed in background service
@@ -465,7 +465,7 @@
 				});
 			};
 		},
-		
+
 		/* MAP MARKERS OVERLAY
 		Node markers on screen during sortie
 		--------------------------------------*/
@@ -476,7 +476,7 @@
 				if(request.action != "markersOverlay") return true;
 				if(!config.map_markers) { response({success:false}); return true; }
 				console.log('markers', request);
-				
+
 				var sortieStartDelayMillis = 2800;
 				var markersShowMillis = 5000;
 				var compassLeastShowMillis = 3500;
@@ -538,7 +538,7 @@
 				response({success:true});
 			};
 		},
-		
+
 		/* IDLE TIMER
 		Ask background service to take my selfie
 		--------------------------------------*/
@@ -546,12 +546,12 @@
 			let lastNetworkTime = (new Date()).getTime();
 			let hideIdleScreen = false;
 			let maxIdleScreenOpacity = 0.8;
-			
+
 			let timeIdleStart = ConfigManager.alert_idle_start;
 			// If less than 1000, assume user input was in seconds
 			if (timeIdleStart < 1000) timeIdleStart = timeIdleStart * 1000;
 			let timeIdleMax = timeIdleStart + 100000;
-			
+
 			// Timer that checks idle time and show UI
 			setInterval(function(){
 				let idleMillis = (new Date()).getTime() - lastNetworkTime;
@@ -567,13 +567,13 @@
 					$(".overlay_idle").css({ background: 'radial-gradient(ellipse at center, rgba(0,0,0,'+(opacity/2)+') 0%, rgba(0,0,0,'+opacity+') 100%)' });
 				}
 			}, 1000);
-			
+
 			// Hide on mouse move
 			$(".overlay_idle").on('click', function(){
 				hideIdleScreen = true;
 				$(this).hide();
 			});
-			
+
 			// Receives and remembers the time when a network request was last made
 			return function(request, sender, response){
 				if (!ConfigManager.alert_idle_start) return true;
@@ -584,5 +584,5 @@
 			};
 		}
 	};
-	
+
 })();

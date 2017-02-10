@@ -5,7 +5,7 @@ To be dynamically used on the settings page
 */
 (function(){
 	"use strict";
-	
+
 	window.SettingsBox = function( info ){
 		var self = this;
 		this.config = info.id;
@@ -42,7 +42,7 @@ To be dynamically used on the settings page
 			$(this.element).addClass("dangerous");
 		}
 	};
-	
+
 	SettingsBox.prototype.check = function( options ){
 		var self = this;
 		$(".options", this.element).append(
@@ -64,7 +64,7 @@ To be dynamically used on the settings page
 			})
 		);
 	};
-	
+
 	SettingsBox.prototype.small_text = function( options ){
 		var self = this;
 		$(".options", this.element).append(
@@ -79,7 +79,7 @@ To be dynamically used on the settings page
 					$(this).val(ConfigManager[self.config]);
 					return false;
 				}
-				
+
 				// Invalid Value Attempt
 				var ERRCODE = isInvalid(self.bound,$(this).val());
 				if(!!ERRCODE) {
@@ -101,7 +101,7 @@ To be dynamically used on the settings page
 				ConfigManager[ self.config ] = window[self.bound.type==="Integer"?"Number":self.bound.type]($(this).val());
 				ConfigManager.save();
 				elementControl($(this).parent().siblings(".note"),'',KC3Meta.term("SettingsErrorNG"));
-				
+
 				// If changed volume, test play the alert sound
 				if(self.config == "alert_volume"){
 					if(self.soundPreview){
@@ -109,7 +109,7 @@ To be dynamically used on the settings page
 					}
 					switch(ConfigManager.alert_type){
 						case 1: self.soundPreview = new Audio("../../../../assets/snd/pop.mp3"); break;
-						case 2: self.soundPreview = new Audio(ConfigManager.alert_custom); break; 
+						case 2: self.soundPreview = new Audio(ConfigManager.alert_custom); break;
 						case 3: self.soundPreview = new Audio("../../../../assets/snd/ding.mp3"); break;
 						default: self.soundPreview = false; break;
 					}
@@ -122,8 +122,8 @@ To be dynamically used on the settings page
 		);
 		$(".options", this.element).append( KC3Meta.term( options.label ) );
 	};
-	
-	
+
+
 	SettingsBox.prototype.long_text = function( options ){
 		var self = this;
 		$(".options", this.element).append(
@@ -162,7 +162,7 @@ To be dynamically used on the settings page
 				.html( KC3Meta.term( options.choices[ctr][1] ) )
 			);
 		}
-		
+
 		$("."+choiceClass, this.element).on("click", function(){
 			console.log(this,arguments);
 			$("."+$(this).data("class")).removeClass("active");
@@ -171,7 +171,7 @@ To be dynamically used on the settings page
 			ConfigManager[ self.config ] = $(this).data("value");
 			ConfigManager.save();
 			elementControl($(this).parent().siblings(".note"),'',KC3Meta.term("SettingsErrorNG"));
-			
+
 			// If changed sound type, test play the alert sound
 			if(self.config == "alert_type"){
 				if(self.soundPreview){
@@ -179,7 +179,7 @@ To be dynamically used on the settings page
 				}
 				switch(ConfigManager.alert_type){
 					case 1: self.soundPreview = new Audio("../../../../assets/snd/pop.mp3"); break;
-					case 2: self.soundPreview = new Audio(ConfigManager.alert_custom); break; 
+					case 2: self.soundPreview = new Audio(ConfigManager.alert_custom); break;
 					case 3: self.soundPreview = new Audio("../../../../assets/snd/ding.mp3"); break;
 					default: self.soundPreview = false; break;
 				}
@@ -188,14 +188,14 @@ To be dynamically used on the settings page
 					self.soundPreview.play();
 				}
 			}
-			
+
 			// Refresh page when a language option is clicked
 			if(self.config == "language"){
 				window.location.reload();
 			}
 		});
 	};
-	
+
 	SettingsBox.prototype.json = function( options ){
 		var self = this;
 		$(".options", this.element).append(
@@ -217,7 +217,7 @@ To be dynamically used on the settings page
 				})
 		);
 	};
-	
+
 	SettingsBox.prototype.textarea = function( options ){
 		var self = this;
 		$(".options", this.element).append(
@@ -233,11 +233,11 @@ To be dynamically used on the settings page
 				})
 		);
 	};
-	
+
 	SettingsBox.prototype.dropdown = function( options ){
 		var self = this;
 		var choiceClass = "choices_" + this.config;
-		
+
 		$(".options", this.element).append(
 			$("<select/>")
 				.addClass("dropdown")
@@ -249,7 +249,7 @@ To be dynamically used on the settings page
 					elementControl($(this).parent().siblings(".note"), '', KC3Meta.term("SettingsErrorNG"));
 				})
 		);
-		
+
 		for(var ctr in options.choices){
 			$(".options select", this.element).append(
 				$("<option/>")
@@ -260,13 +260,13 @@ To be dynamically used on the settings page
 			);
 		}
 	};
-	
+
 	function elementControl(ele,colorCSS,msg) {
 		return ele.stop(true, true).css('color',colorCSS).text(msg).show().fadeOut(colorCSS ? 5000 : 2000);
 	}
-	
+
 	function isDangerous(element,key,current) {
-		var 
+		var
 			isDG = $(element).hasClass("dangerous"),
 			isEqPrev = ConfigManager[key] === current,
 			isEqDef  = ConfigManager.defaults()[key] === current;
@@ -299,5 +299,5 @@ To be dynamically used on the settings page
 			default: return 0;
 		}
 	}
-	
+
 })();
