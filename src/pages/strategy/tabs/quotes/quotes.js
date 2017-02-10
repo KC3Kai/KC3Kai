@@ -141,7 +141,7 @@
 			var masterIds = Object
 				  .keys( allShips )
 				  .map( function(x) { return parseInt(x,10); })
-				  .filter( function(x) { return x < 500; } )
+				  .filter( function(x) { return x <= 500; } )
 				  .sort( function(a,b) { return a-b; });
 
 			var shipList = $(".ship_list");

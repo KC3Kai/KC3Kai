@@ -1173,7 +1173,7 @@ Used by SortieManager
 					var enemyShip = KC3Master.ship( (this.ecships || this.eships)[i] );
 					if (!enemyShip) {
 						console.log("Cannot find enemy " + this.eships[i]);
-					} else if (this.eships[i] < 500) {
+					} else if (this.eships[i] <= 500) {
 						console.log("Enemy ship is not Abyssal!");
 					} else {
 						switch(enemyShip.api_stype) {
