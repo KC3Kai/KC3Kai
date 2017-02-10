@@ -555,7 +555,7 @@
 			// Timer that checks idle time and show UI
 			setInterval(function(){
 				let idleMillis = (new Date()).getTime() - lastNetworkTime;
-				// If idle for more than 60 seconds, start to show UI
+				// If idle for more than setting seconds, start to show UI
 				if (idleMillis > timeIdleStart && !hideIdleScreen) {
 					$(".overlay_idle").show();
 					$(".overlay_idle").css({ opacity:1 });
