@@ -92,6 +92,24 @@ function formatData(startHour, endHour, options, result){
 		});
 	});
 	
+	// Delta mode, only computed after all data is filled above
+	if (options.delta) {
+		let previous = {};
+		Array.from('0'.repeat(maxPoints)).forEach((e, i) => {
+			options.graphableItems.dbkey.forEach(function(dbkey){
+				if (previous[dbkey]) {
+					let originalValue = datasets[dbkey].data[i];
+					datasets[dbkey].data[i] = datasets[dbkey].data[i] - previous[dbkey];
+					previous[dbkey] = originalValue;
+				} else {
+					previous[dbkey] = datasets[dbkey].data[i];
+					datasets[dbkey].data[i] = null;
+				}
+				
+			});
+		});
+	}
+	
 	postMessage({ labels: labels, datasets: datasets });
 }
 

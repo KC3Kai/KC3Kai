@@ -25,6 +25,7 @@ class KC3Graphable {
 		$("#endDate").val(endDate.format("yyyy-mm-dd"));
 		$("#graphInterval").val(24);
 		$("#startZero").prop("checked", true);
+		$("#showTooltips").prop("checked", true);
 		
 		// User input refreshes the graph
 		$(".graph_input").on("change", function(){
@@ -76,7 +77,8 @@ class KC3Graphable {
 			graphableItems: this.graphableItems,
 			start: $("#startDate").val(),
 			end: $("#endDate").val(),
-			interval: $("#graphInterval").val()
+			interval: $("#graphInterval").val(),
+			delta: $("#deltaMode").prop("checked")
 		});
 	}
 	
@@ -126,7 +128,7 @@ class KC3Graphable {
 			data: data,
 			options: {
 				legend: { display: false },
-				tooltips: { mode: "x" },
+				tooltips: { enabled: $("#showTooltips").prop("checked"), mode: "x" },
 				scales: { yAxes: [{ ticks: { beginAtZero: $("#startZero").prop("checked") } }] }
 			}
 		});

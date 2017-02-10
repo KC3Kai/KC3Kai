@@ -46,16 +46,12 @@
 	<div class="clear"></div>
 </div>
 <div class="page_panel graph_options">
-	<div class="graph_option graph_check">
-		<div class="checkbox_input"><input type="checkbox" id="startZero" class="graph_input" /></div>
-		<div class="checkbox_label"><label for="startZero">Start at zero</label></div>
-	</div>
 	<div class="graph_option graph_date">
-		<div class="date_label"><label for="startDate">Start Date</label></div>
+		<div class="date_label"><label for="startDate">Start</label></div>
 		<div class="date_input"><input type="date" id="startDate" class="graph_input" /></div>
 	</div>
 	<div class="graph_option graph_date">
-		<div class="date_label"><label for="endDate">End Date</label></div>
+		<div class="date_label"><label for="endDate">End</label></div>
 		<div class="date_input"><input type="date" id="endDate" class="graph_input" /></div>
 	</div>
 	<div class="graph_option graph_dropdown">
@@ -76,13 +72,24 @@
 			</select>
 		</div>
 	</div>
+	<div class="graph_option option_preset hover" data-preset="day">Day</div>
+	<div class="graph_option option_preset hover" data-preset="week">Week</div>
+	<div class="graph_option option_preset hover" data-preset="month">Month</div>
 	<div class="clear"></div>
 </div>
-<div class="page_panel option_presets">
-	<div class="preset_label">or choose a preset:</div>
-	<div class="option_preset hover" data-preset="day">Past day</div>
-	<div class="option_preset hover" data-preset="week">Past week</div>
-	<div class="option_preset hover" data-preset="month">Past Month</div>
+<div class="page_panel">
+	<div class="graph_option graph_check">
+		<div class="checkbox_input"><input type="checkbox" id="startZero" class="graph_input" /></div>
+		<div class="checkbox_label"><label for="startZero">Start at zero</label></div>
+	</div>
+	<div class="graph_option graph_check">
+		<div class="checkbox_input"><input type="checkbox" id="deltaMode" class="graph_input" /></div>
+		<div class="checkbox_label"><label for="deltaMode">Delta mode</label></div>
+	</div>
+	<div class="graph_option graph_check">
+		<div class="checkbox_input"><input type="checkbox" id="showTooltips" class="graph_input" /></div>
+		<div class="checkbox_label"><label for="showTooltips">Tooltips</label></div>
+	</div>
 	<div class="clear"></div>
 </div>
 

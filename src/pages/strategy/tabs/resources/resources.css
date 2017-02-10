@@ -64,7 +64,7 @@
 }
 /* Start at zero */
 .tab_resources .graph_check {
-	width:100px;
+	margin:0px 20px 0px 0px;
 }
 .tab_resources .checkbox_input {
 	margin:0px 3px 0px 0px;
@@ -74,17 +74,17 @@
 }
 /* Date range */
 .tab_resources .graph_date {
-	width:200px;
+	width:160px;
 	margin:0px 15px 0px 0px;
 }
 .tab_resources .date_label {
-	width:60px;
+	width:40px;
 }
 .tab_resources .date_input {
-	width:140px;
+	width:120px;
 }
 .tab_resources .date_input input {
-	width:140px;
+	width:120px;
 	height:18px;
 	margin:1px 0px 0px 0px;
 	font-size:12px;
@@ -107,9 +107,6 @@
 }
 
 /* Filter presets */
-.tab_resources .option_presets {
-	
-}
 .tab_resources .preset_label {
 	height:22px;
 	line-height:22px;
@@ -123,7 +120,7 @@
 	line-height:22px;
 	float:left;
 	font-size:12px;
-	margin:0px 20px 0px 0px;
+	margin:0px 0px 0px 20px;
 }
 
 .tab_resources .main_graph {
