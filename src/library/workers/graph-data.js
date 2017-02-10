@@ -49,7 +49,7 @@ function formatData(startHour, endHour, options, result){
 	graphPoints.forEach(function(graphPoint, pointIndex){
 		options.graphableItems.dbkey.forEach(function(dbkey){
 			let valuesInPoint = graphPoint.map((e) => {return e[dbkey]; });
-			datasets[dbkey].data[pointIndex] = avg(valuesInPoint);
+			datasets[dbkey].data[pointIndex] = Math.round(avg(valuesInPoint));
 		});
 	});
 	
