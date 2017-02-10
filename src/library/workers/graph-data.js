@@ -9,6 +9,10 @@ onmessage = function(request) {
 function fetchData(options){
 	let startHour = Math.floor((new Date(options.start))/( 1*60*60*1000));
 	let endHour = Math.floor((new Date(options.end))/( 1*60*60*1000))+24;
+	if (startHour >= endHour) {
+		postMessage(false);
+		return false;
+	}
 	KC3Database.con[options.tableName]
 		.where("hour").between(startHour, endHour, true, true)
 		.toArray(function(result){
@@ -55,6 +59,7 @@ function formatData(startHour, endHour, options, result){
 	
 	// Walk through all points in graph and complete data
 	let lastExistingData = {};
+	let rightToLeftData = {};
 	Array.from('0'.repeat(maxPoints)).forEach((e, i) => {
 		// Fill the label name
 		let pointHour = startHour + (options.interval * i);
@@ -66,12 +71,23 @@ function formatData(startHour, endHour, options, result){
 		}
 		// Check if point values is zero, carry over last known value to this point
 		options.graphableItems.dbkey.forEach(function(dbkey){
+			// Left to right fill
 			if (datasets[dbkey].data[i] === 0) {
 				if (lastExistingData[dbkey]) {
 					datasets[dbkey].data[i] = lastExistingData[dbkey];
 				}
 			} else {
 				lastExistingData[dbkey] = datasets[dbkey].data[i];
+			}
+			
+			// Right to left fill
+			let inverseData = datasets[dbkey].data[(maxPoints-1)-i];
+			if (inverseData === 0 || inverseData === null) {
+				if (rightToLeftData[dbkey]) {
+					datasets[dbkey].data[(maxPoints-1)-i] = rightToLeftData[dbkey];
+				}
+			} else {
+				rightToLeftData[dbkey] = datasets[dbkey].data[(maxPoints-1)-i];
 			}
 		});
 	});

@@ -31,6 +31,34 @@ class KC3Graphable {
 			self.triggerRefresh();
 		});
 		
+		// Presets
+		$(".option_preset").on("click", function(){
+			switch ($(this).data("preset")) {
+				case "day":
+					startDate = new Date();
+					startDate.setDate(endDate.getDate()-1);
+					$("#startDate").val(startDate.format("yyyy-mm-dd"));
+					$("#endDate").val(endDate.format("yyyy-mm-dd"));
+					$("#graphInterval").val(1);
+					break;
+				case "week":
+					startDate = new Date();
+					startDate.setDate(endDate.getDate()-7);
+					$("#startDate").val(startDate.format("yyyy-mm-dd"));
+					$("#endDate").val(endDate.format("yyyy-mm-dd"));
+					$("#graphInterval").val(24);
+					break;
+				case "month":
+					startDate = new Date();
+					startDate.setDate(endDate.getDate()-30);
+					$("#startDate").val(startDate.format("yyyy-mm-dd"));
+					$("#endDate").val(endDate.format("yyyy-mm-dd"));
+					$("#graphInterval").val(24);
+					break;
+			}
+			self.triggerRefresh();
+		});
+		
 		// Initial refresh graph onload
 		this.triggerRefresh();
 	}
@@ -39,6 +67,7 @@ class KC3Graphable {
 		if (this.loadingGraph) return false;
 		this.loadingGraph = true;
 		
+		if (this.chart) this.chart.destroy();
 		$(".graph_input").prop("disabled", true);
 		$(".graph_title").text("Loading...");
 		
@@ -57,7 +86,13 @@ class KC3Graphable {
 	collectData(filters){
 		let DataCollector = new Worker(chrome.extension.getURL('library/workers/graph-data.js'));
 		DataCollector.onmessage = (response) => {
-			this.refreshGraph(response.data);
+			if (response.data) {
+				this.refreshGraph(response.data);
+			} else {
+				this.loadingGraph = false;
+				$(".graph_title").text("Unable to render");
+				$(".graph_input").prop("disabled", false);
+			}
 			DataCollector.terminate();
 		};
 		DataCollector.postMessage(Object.assign({
