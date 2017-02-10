@@ -13,6 +13,18 @@ body {
 	display:none;
 }
 
+.ui-tooltip {
+	max-width:500px;
+	padding:2px 5px 3px 6px;
+	border-width:1px !important;
+	border:1px solid #222;
+	box-shadow:0 0 5px 1px #888;
+	color:#575757;
+	background:#fff;
+	font-family:inherit;
+	font-size:12px;
+}
+
 /* ABOUT
 --------------------------*/
 .about {
@@ -184,8 +196,7 @@ body {
 	background:#ffc;
 	padding:0px 2px;
 }
-.settingBox .options .long_text,
-.settingBox .options .number {
+.settingBox .options .long_text {
 	width:430px;
 	height:22px;
 	line-height:22px;
@@ -194,12 +205,10 @@ body {
 	border:0px none;
 	background:transparent;
 }
-.settingBox .options .long_text:hover,
-.settingBox .options .number:hover {
+.settingBox .options .long_text:hover {
 	background:#ffc;
 }
-.settingBox .options .long_text:focus,
-.settingBox .options .number:focus {
+.settingBox .options .long_text:focus {
 	border:1px inset;
 	background:#ffc;
 	padding:0px 2px;

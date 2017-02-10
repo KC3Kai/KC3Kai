@@ -11,6 +11,9 @@ To be dynamically used on the settings page
 		this.config = info.id;
 		this.element = $("#factory .settingBox").clone().appendTo("#wrapper .settings");
 		$(".title", this.element).text( KC3Meta.term( info.name ) );
+		if(info.options && info.options.tooltip){
+			$(".title", this.element).attr("title", KC3Meta.term(info.options.tooltip));
+		}
 		this.soundPreview = false;
 		this.bound = $.extend({
 			min:-Infinity,
@@ -48,6 +51,7 @@ To be dynamically used on the settings page
 		$(".options", this.element).append(
 			$("<input/>")
 			.attr("type", "checkbox")
+			.attr("title", KC3Meta.term( (options || {}).tooltip ) )
 			.addClass("checkbox")
 			.prop("disabled", this.disabled)
 			.prop("checked", ConfigManager[ this.config ])
@@ -70,6 +74,7 @@ To be dynamically used on the settings page
 		$(".options", this.element).append(
 			$("<input/>")
 			.attr("type", "text")
+			.attr("title", KC3Meta.term( (options || {}).tooltip ) )
 			.addClass("small_text")
 			.prop("disabled", this.disabled)
 			.val( ConfigManager[ this.config ] )
@@ -130,6 +135,7 @@ To be dynamically used on the settings page
 			$("<input/>")
 			.attr("type", "text")
 			.attr("placeholder", KC3Meta.term( options.placeholder ) )
+			.attr("title", KC3Meta.term( (options || {}).tooltip ) )
 			.addClass("long_text")
 			.prop("disabled", this.disabled)
 			.val( ConfigManager[ this.config ] )
@@ -142,35 +148,6 @@ To be dynamically used on the settings page
 				ConfigManager.loadIfNecessary();
 				ConfigManager[ self.config ] = $(this).val();
 				ConfigManager.save();
-				elementControl($(this).parent().siblings(".note"),'',KC3Meta.term("SettingsErrorNG"));
-			})
-		);
-		$(".options", this.element).append( options.label );
-	};
-
-	SettingsBox.prototype.number = function( options ){
-		var self = this;
-		$(".options", this.element).append(
-			$("<input/>")
-			.attr("type", "text")
-			.attr("placeholder", KC3Meta.term( options.placeholder ) )
-			.addClass("number")
-			.prop("disabled", this.disabled)
-			.val( ConfigManager[ this.config ] )
-			.on("change", function(){
-				// Dangerous Settings Change Attempt
-				if(isDangerous($(this).parent().parent(),self.config,$(this).val())) {
-					$(this).val(ConfigManager[self.config]);
-					return false;
-				}
-				ConfigManager.loadIfNecessary();
-
-				let parsed = parseFloat( $(this).val() );
-				$(this).val( parsed );
-
-				ConfigManager[ self.config ] = parsed;
-				ConfigManager.save();
-
 				elementControl($(this).parent().siblings(".note"),'',KC3Meta.term("SettingsErrorNG"));
 			})
 		);
@@ -229,6 +206,7 @@ To be dynamically used on the settings page
 		var self = this;
 		$(".options", this.element).append(
 			$("<textarea/>")
+				.attr("title", KC3Meta.term( (options || {}).tooltip ) )
 				.addClass("json_text")
 				.prop("disabled", this.disabled)
 				.val( JSON.stringify(ConfigManager[ this.config ]) )
@@ -251,6 +229,7 @@ To be dynamically used on the settings page
 		var self = this;
 		$(".options", this.element).append(
 			$("<textarea/>")
+				.attr("title", KC3Meta.term( (options || {}).tooltip ) )
 				.addClass("huge_text")
 				.prop("disabled", this.disabled)
 				.val( ConfigManager[ this.config ] )
@@ -269,6 +248,7 @@ To be dynamically used on the settings page
 
 		$(".options", this.element).append(
 			$("<select/>")
+				.attr("title", KC3Meta.term( (options || {}).tooltip ) )
 				.addClass("dropdown")
 				.prop("disabled", this.disabled)
 				.on("change", function(){

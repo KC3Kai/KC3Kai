@@ -554,7 +554,7 @@
 
 			// idle time unit is second
 			let timeIdleStartSec = ConfigManager.alert_idle_start;
-			let timeIdleStart = timeIdleStartSec * 1000;
+			let timeIdleStart = Math.floor(timeIdleStartSec * 1000);
 			let timeIdleMax = timeIdleStart + 100000;
 
 			// Timer that checks idle time and show UI
