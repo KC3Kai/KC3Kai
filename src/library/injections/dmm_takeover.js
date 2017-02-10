@@ -30,7 +30,12 @@
 			chrome.runtime.onMessage.addListener(this.mapMarkersOverlay());
 			chrome.runtime.onMessage.addListener(this.getWindowSize());
 			chrome.runtime.onMessage.addListener(this.getGamescreenOffset());
-			chrome.runtime.onMessage.addListener(this.idleTimer());
+			if (ConfigManager.alert_idle_start // to exclude falsy values like NaN and 0
+				&& ConfigManager.alert_idle_start > 0) {
+				chrome.runtime.onMessage.addListener(this.idleTimer());
+			} else {
+				console.log("idleTimer canncelled due to config");
+			}
 		},
 
 		/* WINDOW KEEP FOCUS, NOT FLASH
@@ -547,9 +552,9 @@
 			let hideIdleScreen = false;
 			let maxIdleScreenOpacity = 0.8;
 
-			let timeIdleStart = ConfigManager.alert_idle_start;
-			// If less than 1000, assume user input was in seconds
-			if (timeIdleStart < 1000) timeIdleStart = timeIdleStart * 1000;
+			// idle time unit is second
+			let timeIdleStartSec = ConfigManager.alert_idle_start;
+			let timeIdleStart = timeIdleStartSec * 1000;
 			let timeIdleMax = timeIdleStart + 100000;
 
 			// Timer that checks idle time and show UI
