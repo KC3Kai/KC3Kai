@@ -30,12 +30,7 @@
 			chrome.runtime.onMessage.addListener(this.mapMarkersOverlay());
 			chrome.runtime.onMessage.addListener(this.getWindowSize());
 			chrome.runtime.onMessage.addListener(this.getGamescreenOffset());
-			if (ConfigManager.alert_idle_start // to exclude falsy values like NaN and 0
-				&& ConfigManager.alert_idle_start > 0) {
-				chrome.runtime.onMessage.addListener(this.idleTimer());
-			} else {
-				console.log("idleTimer canncelled due to config");
-			}
+			chrome.runtime.onMessage.addListener(this.idleTimer());
 		},
 
 		/* WINDOW KEEP FOCUS, NOT FLASH
@@ -581,7 +576,9 @@
 
 			// Receives and remembers the time when a network request was last made
 			return function(request, sender, response){
-				if (!ConfigManager.alert_idle_start) return true;
+				if (!ConfigManager.alert_idle_start // to exclude falsy values like NaN and 0
+					|| ConfigManager.alert_idle_start <= 0)
+					return true;
 				if(request.action != "goodResponses") return true;
 				lastNetworkTime = (new Date()).getTime();
 				hideIdleScreen = false;
