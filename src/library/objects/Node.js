@@ -1191,11 +1191,10 @@ Used by SortieManager
 								break;
 							case 15:	// 15 = AP
 								console.log("You sunk a AP");
+								sunkApCnt += 1;
 								if (! ConfigManager.spCounterAdjust ) {
 									KC3QuestManager.get(218).increment();
 									KC3QuestManager.get(212).increment();
-								} else {
-									sunkApCnt += 1;
 								}
 								KC3QuestManager.get(213).increment();
 								KC3QuestManager.get(221).increment();

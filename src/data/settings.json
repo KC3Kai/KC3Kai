@@ -72,11 +72,6 @@
 				"type": "check"
 			},
 			{
-				"id": "spCounterAdjust",
-				"name": "SettingsSpecialCounterAdjust",
-				"type": "check"
-			},
-			{
 				"id": "updateNotification",
 				"name": "SettingsUpdateNotification",
 				"type": "radio",
@@ -305,6 +300,11 @@
 					"type": "Integer"
 				},
 				"options" : { "label" : "" }
+			},
+			{
+				"id": "spCounterAdjust",
+				"name": "SettingsSpecialCounterAdjust",
+				"type": "check"
 			}
 		]
 	},
