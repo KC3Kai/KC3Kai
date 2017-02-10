@@ -26,25 +26,31 @@ class KC3Graphable {
 		$("#graphInterval").val(24);
 		$("#startZero").prop("checked", true);
 		
-		// Refresh graph button
-		$("#apply_options").on("click", function(){
-			if (self.loadingGraph) return false;
-			self.loadingGraph = true;
-			$(".graph_options input, .graph_options select, .legend_toggle input, #apply_options").prop("disabled", true);
-			
-			Chart.defaults.global.scaleBeginAtZero = $(this).prop("checked");
-			
-			$(".graph_title").text("Loading...");
-			
-			self.collectData({
-				tableName: self.tableName,
-				graphableItems: self.graphableItems,
-				start: $("#startDate").val(),
-				end: $("#endDate").val(),
-				interval: $("#graphInterval").val()
-			});
+		// User input refreshes the graph
+		$(".graph_input").on("change", function(){
+			self.triggerRefresh();
 		});
-		$("#apply_options").trigger("click");
+		
+		// Initial refresh graph onload
+		this.triggerRefresh();
+	}
+	
+	triggerRefresh(){
+		if (this.loadingGraph) return false;
+		this.loadingGraph = true;
+		
+		$(".graph_input").prop("disabled", true);
+		$(".graph_title").text("Loading...");
+		
+		Chart.defaults.global.scaleBeginAtZero = $("#startZero").prop("checked");
+		
+		this.collectData({
+			tableName: this.tableName,
+			graphableItems: this.graphableItems,
+			start: $("#startDate").val(),
+			end: $("#endDate").val(),
+			interval: $("#graphInterval").val()
+		});
 	}
 	
 	// Get data via worker using specified filters
@@ -69,6 +75,13 @@ class KC3Graphable {
 			+new Date($("#endDate").val()+" 00:00:00").format("mmm d, yyyy")
 		);
 		
+		// Ability to hide types
+		this.graphableItems.dbkey.forEach(function(dbkey, ind){
+			if (!$(".legend_toggle input[data-type=\""+dbkey+"\"]").prop("checked")) {
+				delete data.datasets[dbkey];
+			}
+		});
+		
 		// Draw graph
 		this.ctx = $("#chart").get(0).getContext("2d");
 		if (this.chart) this.chart.destroy();
@@ -76,6 +89,6 @@ class KC3Graphable {
 		
 		// Revert flags and input states
 		this.loadingGraph = false;
-		$(".graph_options input, .graph_options select, .legend_toggle input, #apply_options").prop("disabled", false);
+		$(".graph_input").prop("disabled", false);
 	}
 }

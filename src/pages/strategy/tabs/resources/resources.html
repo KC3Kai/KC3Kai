@@ -16,28 +16,28 @@
 <!-- LEGEND -->
 <div class="page_panel">
 	<div class="legend_item">
-		<div class="legend_toggle"><input type="checkbox" data-type="fuel" CHECKED /></div>
+		<div class="legend_toggle"><input type="checkbox" data-type="rsc1" class="graph_input" CHECKED /></div>
 		<div class="legend_color color_fuel"></div>
 		<div class="legend_icon"><img src="../../assets/img/client/fuel.png" /></div>
 		<div class="legend_label">Fuel</div>
 		<div class="clear"></div>
 	</div>
 	<div class="legend_item">
-		<div class="legend_toggle"><input type="checkbox" data-type="ammo" CHECKED /></div>
+		<div class="legend_toggle"><input type="checkbox" data-type="rsc2" class="graph_input" CHECKED /></div>
 		<div class="legend_color color_ammo"></div>
 		<div class="legend_icon"><img src="../../assets/img/client/ammo.png" /></div>
 		<div class="legend_label">Ammo</div>
 		<div class="clear"></div>
 	</div>
 	<div class="legend_item">
-		<div class="legend_toggle"><input type="checkbox" data-type="steel" CHECKED /></div>
+		<div class="legend_toggle"><input type="checkbox" data-type="rsc3" class="graph_input" CHECKED /></div>
 		<div class="legend_color color_steel"></div>
 		<div class="legend_icon"><img src="../../assets/img/client/steel.png" /></div>
 		<div class="legend_label">Steel</div>
 		<div class="clear"></div>
 	</div>
 	<div class="legend_item">
-		<div class="legend_toggle"><input type="checkbox" data-type="baux" CHECKED /></div>
+		<div class="legend_toggle"><input type="checkbox" data-type="rsc4" class="graph_input" CHECKED /></div>
 		<div class="legend_color color_baux"></div>
 		<div class="legend_icon"><img src="../../assets/img/client/bauxite.png" /></div>
 		<div class="legend_label">Bauxite</div>
@@ -47,21 +47,21 @@
 </div>
 <div class="page_panel graph_options">
 	<div class="graph_option graph_check">
-		<div class="checkbox_input"><input type="checkbox" id="startZero" /></div>
+		<div class="checkbox_input"><input type="checkbox" id="startZero" class="graph_input" /></div>
 		<div class="checkbox_label"><label for="startZero">Start at zero</label></div>
 	</div>
 	<div class="graph_option graph_date">
 		<div class="date_label"><label for="startDate">Start Date</label></div>
-		<div class="date_input"><input type="date" id="startDate" /></div>
+		<div class="date_input"><input type="date" id="startDate" class="graph_input" /></div>
 	</div>
 	<div class="graph_option graph_date">
 		<div class="date_label"><label for="endDate">End Date</label></div>
-		<div class="date_input"><input type="date" id="endDate" /></div>
+		<div class="date_input"><input type="date" id="endDate" class="graph_input" /></div>
 	</div>
 	<div class="graph_option graph_dropdown">
 		<div class="dropdown_label"><label for="graphInterval">Interval</label></div>
 		<div class="dropdown_input">
-			<select id="graphInterval">
+			<select id="graphInterval" class="graph_input">
 				<option value="1">1 hour</option>
 				<option value="3">3 hours</option>
 				<option value="6">6 hours</option>
@@ -83,7 +83,6 @@
 	<div class="option_preset hover">Past day</div>
 	<div class="option_preset hover">Past week</div>
 	<div class="option_preset hover">Past Month</div>
-	<button id="apply_options" class="hover">Refresh Graph</button>
 	<div class="clear"></div>
 </div>
 
