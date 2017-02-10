@@ -221,6 +221,8 @@
                     return;
                 $(this).addClass("disabled");
                 var exporter = new ShowcaseExporter();
+                exporter._outputMode = $("#exportOutputMode").val();
+                exporter._addNameAndLevel = $("#exportAddName")[0].checked;
                 exporter.complete = function (data) {
                 	self.displayExportResult(data);
                     $("#exportShips").removeClass("disabled");
@@ -233,12 +235,16 @@
                     return;
                 $(this).addClass("disabled");
                 var exporter = new ShowcaseExporter();
+                exporter._outputMode = $("#exportOutputMode").val();
+                exporter._addNameAndLevel = $("#exportAddName")[0].checked;
                 exporter.complete = function (data) {
                     self.displayExportResult(data);
                     $("#exportEquipment").removeClass("disabled");
                 };
+                $("#exportOutputMode").val();
                 exporter.exportEquip();
             });
+            $("#exportOutputMode").val(parseInt(ConfigManager.ss_mode,10));
 
 			// SHIPS
 			$.each(this.shipCache, function(stype, stypeList){
