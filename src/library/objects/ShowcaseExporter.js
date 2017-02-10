@@ -564,16 +564,17 @@
 
         this._drawEquipGroups(gears, rowWidth, rowHeight);
         var columns = this._splitEquipByColumns(columnsCount);
-        canvas.height = this._getBiggestColumn(columns);
-        canvas.width = rowWidth * columnsCount;
-        ctx.fillStyle = this.colors.odd;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
         this._fillEquipCanvas(canvas, ctx, columns, rowWidth);
         this._drawBorders(canvas, ctx, rowWidth);
         this._addCredits(canvas, "Equipment List");
     };
 
     ShowcaseExporter.prototype._fillEquipCanvas = function (canvas, ctx, columns, rowWidth) {
+        canvas.height = this._getBiggestColumn(columns);
+        canvas.width = rowWidth * columns.length;
+        ctx.fillStyle = this.colors.odd;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
         for (var i = 0; i < columns.length; i++) {
             var column = columns[i];
             var y = 0, x = i * rowWidth;
