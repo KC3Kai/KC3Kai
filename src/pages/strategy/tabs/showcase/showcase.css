@@ -15,15 +15,13 @@
 	border-radius: 7px;
 }
 .tab_showcase  .control {
-	background:#369;
-	color:#fff;
 }
+
 .tab_showcase  .control:hover {
 	background-color: #0066CC;
 }
+
 .tab_showcase .controls {
-	background:#f0f5ff;
-	border-bottom:1px solid #369;
 	width: 700px;
 	margin: 0px 0px 0px 0px;
 	padding: 5px 10px;

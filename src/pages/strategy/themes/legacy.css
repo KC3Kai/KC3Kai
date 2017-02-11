@@ -317,6 +317,14 @@ body {
 	background:#eee;
 	border-radius:5px;
 }
+.tab_showcase .controls {
+	background:#f0f5ff;
+	border-bottom:1px solid #369;
+}
+.tab_showcase  .control {
+	background:#369;
+	color:#fff;
+}
 /* Ledger */
 .tab_overlodger .filterBox {
 	width:112px;
