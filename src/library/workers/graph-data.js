@@ -95,9 +95,9 @@ function formatData(startHour, endHour, options, result){
 	});
 	
 	// Delta mode, only computed after all data is filled above
-	if (options.delta) {
+	if (options.delta && Object.values(datasets).length > 0) {
 		let previous = {};
-		datasets[dbkey].data.forEach((e, i) => {
+		Object.values(datasets)[0].data.forEach((e, i) => {
 			options.graphableItems.dbkey.forEach(function(dbkey){
 				if (previous[dbkey]) {
 					let originalValue = datasets[dbkey].data[i];
