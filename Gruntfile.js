@@ -130,6 +130,11 @@ module.exports = function(grunt) {
 		},
 		uglify: {
 			all : {
+				options: {
+					mangle: {
+						except: ['window', 'this']
+					}
+				},
 				files: [{
 					expand: true,
 					cwd: 'build/tmp/',

@@ -1,5 +1,7 @@
 let window = self;
 onmessage = function(request) {
+	this.window = self;
+	self.window = self;
 	importScripts(request.data.url+"assets/js/Dexie.min.js");
 	importScripts(request.data.url+"library/modules/Database.js");
 	KC3Database.init( request.data.playerId );
@@ -38,6 +40,8 @@ function formatData(startHour, endHour, options, result){
 			borderWidth: 1.5,
 			borderColor: "#"+options.graphableItems.colorhex[gii],
 			pointRadius: 2,
+			pointBackgroundColor: "#"+options.graphableItems.colorhex[gii],
+			multiKeyBackground: "#"+options.graphableItems.colorhex[gii],
 			data: Array.from('0'.repeat(maxPoints)).map((e)=>{ return parseInt(e); })
 		};
 	});
