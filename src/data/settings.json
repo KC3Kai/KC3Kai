@@ -350,7 +350,10 @@
 				"id" : "ss_directory",
 				"name" : "SettingsSSDirectory",
 				"type" : "long_text",
-				"options" : { "placeholder" : "SettingsSSDirDesc" }
+				"options" : {
+					"placeholder" : "SettingsSSDirDesc",
+					"tooltip" : "SettingsSSDirDesc"
+				}
 			},
 			{
 				"id" : "ss_dppx",
@@ -468,8 +471,14 @@
 			{
 				"id" : "alert_idle_start",
 				"name" : "SettingsIdleWarnStartAt",
-				"type" : "long_text",
-				"options" : { "placeholder" : "SettingsIdleWarnDesc" }
+				"type" : "small_text",
+				"bound" : {
+					"min" :  0,
+					"type": "Number"
+				},
+				"options" : {
+					"tooltip" : "SettingsIdleWarnDesc"
+				}
 			}
 		]
 	},
@@ -582,7 +591,10 @@
 				"id" : "api_bg_color",
 				"name" : "SettingsBGColor",
 				"type" : "long_text",
-				"options" : { "placeholder" : "SettingsBGColorDesc" }
+				"options" : {
+					"placeholder" : "SettingsBGColorDesc",
+					"tooltip" : "SettingsBGColorDesc"
+				}
 			},
 			{
 				"id" : "api_bg_image",
@@ -594,13 +606,19 @@
 				"id" : "api_bg_size",
 				"name" : "SettingsBGSize",
 				"type" : "long_text",
-				"options" : { "placeholder" : "SettingsBGSizeDesc" }
+				"options" : {
+					"placeholder" : "SettingsBGSizeDesc",
+					"tooltip" : "SettingsBGSizeDesc"
+				}
 			},
 			{
 				"id" : "api_bg_position",
 				"name" : "SettingsBGPosition",
 				"type" : "long_text",
-				"options" : { "placeholder" : "SettingsBGPositionDesc" }
+				"options" : {
+					"placeholder" : "SettingsBGPositionDesc",
+					"tooltip" : "SettingsBGPositionDesc"
+				}
 			},
 			{
 				"id" : "api_gameScale",
@@ -624,7 +642,8 @@
 				"name" : "SettingsSubtitleFont",
 				"type" : "long_text",
 				"options" : {
-					"placeholder" : "SettingsSubtitleFontDesc"
+					"placeholder" : "SettingsSubtitleFontDesc",
+					"tooltip" : "SettingsSubtitleFontDesc"
 				}
 			},
 			{
@@ -726,7 +745,10 @@
 				"name" : "SettingsBGColor",
 				"type" : "long_text",
 				"hide" : 1,
-				"options" : { "placeholder" : "SettingsBGColorDesc" }
+				"options" : {
+					"placeholder" : "SettingsBGColorDesc",
+					"tooltip" : "SettingsBGColorDesc"
+				}
 			},
 			{
 				"id" : "dmm_bg_image",
@@ -740,14 +762,20 @@
 				"name" : "SettingsBGSize",
 				"type" : "long_text",
 				"hide" : 1,
-				"options" : { "placeholder" : "SettingsBGSizeDesc" }
+				"options" : {
+					"placeholder" : "SettingsBGSizeDesc",
+					"tooltip" : "SettingsBGSizeDesc"
+				}
 			},
 			{
 				"id" : "dmm_bg_position",
 				"name" : "SettingsBGPosition",
 				"type" : "long_text",
 				"hide" : 1,
-				"options" : { "placeholder" : "SettingsBGPositionDesc" }
+				"options" : {
+					"placeholder" : "SettingsBGPositionDesc",
+					"tooltip" : "SettingsBGPositionDesc"
+				}
 			}
 		]
 	},
@@ -816,7 +844,10 @@
 				"id" : "pan_bg_color",
 				"name" : "SettingsBGColor",
 				"type" : "long_text",
-				"options" : { "placeholder" : "SettingsBGColorDesc" }
+				"options" : {
+					"placeholder" : "SettingsBGColorDesc",
+					"tooltip" : "SettingsBGColorDesc"
+				}
 			},
 			{
 				"id" : "pan_bg_image",
@@ -828,13 +859,19 @@
 				"id" : "pan_bg_size",
 				"name" : "SettingsBGSize",
 				"type" : "long_text",
-				"options" : { "placeholder" : "SettingsBGSizeDesc" }
+				"options" : {
+					"placeholder" : "SettingsBGSizeDesc",
+					"tooltip" : "SettingsBGSizeDesc"
+				}
 			},
 			{
 				"id" : "pan_bg_position",
 				"name" : "SettingsBGPosition",
 				"type" : "long_text",
-				"options" : { "placeholder" : "SettingsBGPositionDesc" }
+				"options" : {
+					"placeholder" : "SettingsBGPositionDesc",
+					"tooltip" : "SettingsBGPositionDesc"
+				}
 			},
 			{
 				"id" : "pan_opacity",
@@ -852,7 +889,10 @@
 				"id" : "pan_box_bcolor",
 				"name" : "SettingsPanelBoxBackColor",
 				"type" : "long_text",
-				"options" : { "placeholder" : "SettingsBGColorDesc" }
+				"options" : {
+					"placeholder" : "SettingsBGColorDesc",
+					"tooltip" : "SettingsBGColorDesc"
+				}
 			}
 		]
 	},
