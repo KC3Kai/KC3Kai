@@ -2,7 +2,7 @@
     "use strict";
 
     var imgurLimit = 0;
-    var enableShelfTimer = false;
+    var enableShelfTimer = null;
 
     function generateFontString(weight, px) {
         return weight + " " + px + "px \"Helvetica Neue\", Helvetica, Arial, sans-serif";
@@ -21,7 +21,24 @@
         };
         this.colors = {
             odd: "#e0e0e0",
-            even: "#f2f2f2"
+            even: "#f2f2f2",
+            border: "#fff",
+            creditsBackground: "#fff",
+            creditsFontColor: "#000",
+            shipTypeHeader: "#0066cc",
+            statFP: "#ff8888",
+            statTP: "#00ccff",
+            statAA: "#ff9900",
+            statAR: "#ffcc00",
+            statLK: "#66ff66",
+            shipInfo: "#000",
+            canvasBackground: "#efefef",
+            equipGroup: "#000",
+            equipType: "#000",
+            equipCount: "#000",
+            equipStars: "#42837f",
+            equipInfo: "#000",
+            equipStat: "#000"
         };
         this.columnCount = 5;
         this.loadingCount = 0;
@@ -67,6 +84,9 @@
         this.canvas = document.createElement("CANVAS");
         this.ctx = this.canvas.getContext("2d");
         this.allShipGroups = {};
+        var columnCount = parseInt(this.columnCount,10);
+        if (isNaN(columnCount) || columnCount < 3)
+            this.columnCount = 3;
         for (var i in KC3Meta._stype) {
             if (KC3Meta._stype !== "")
                 this.allShipGroups[i] = [];
@@ -86,7 +106,7 @@
         if (!rowWidth)
             rowWidth = this.rowParams.width;
         for (var x = rowWidth; x < canvas.width; x += rowWidth) {
-            ctx.fillStyle = "#FFF";
+            ctx.fillStyle = this.colors.border;
             for (var y = 0; y < canvas.height; y += 20) {
                 ctx.fillRect(x - 1, y, 2, 10);
             }
@@ -100,17 +120,17 @@
         var canvas = document.createElement("CANVAS");
         var ctx = canvas.getContext("2d");
 
-        var fontsize = 18;
-        canvas.height = canvasData.height + this.rowParams.height * 2 + fontsize + 4;
+        var fontSize = 18;
+        canvas.height = canvasData.height + this.rowParams.height * 2 + fontSize + 4;
         canvas.width = canvasData.width;
 
-        ctx.fillStyle = "#FFF";
+        ctx.fillStyle = this.colors.creditsBackground;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(canvasData, 0, this.rowParams.height * 2, canvasData.width, canvasData.height);
 
         var created = "Made in KC3 on " + dateFormat("dd mmm yyyy");
-        ctx.font = generateFontString(400, fontsize);
-        ctx.fillStyle = "#000";
+        ctx.font = generateFontString(400, fontSize);
+        ctx.fillStyle = this.colors.creditsFontColor;
 
         ctx.fillText(
             created,
@@ -137,16 +157,16 @@
             topLine = PlayerManager.hq.rank + " " + PlayerManager.hq.name + " " + topLine;
         }
 
-        fontsize = 30;
-        ctx.font = generateFontString(600, fontsize);
+        fontSize = 30;
+        ctx.font = generateFontString(600, fontSize);
 
         var available = canvas.width - this.rowParams.height * 5;
         while (ctx.measureText(topLine).width > available) {
-            fontsize--;
-            ctx.font = generateFontString(600, fontsize);
+            fontSize--;
+            ctx.font = generateFontString(600, fontSize);
         }
 
-        ctx.fillText(topLine, (canvas.width - ctx.measureText(topLine).width) / 2, this.rowParams.height + fontsize / 2);
+        ctx.fillText(topLine, (canvas.width - ctx.measureText(topLine).width) / 2, this.rowParams.height + fontSize / 2);
 
         var img = new Image();
         img.exporter = this;
@@ -190,33 +210,42 @@
             if (self.loadingCount === 0)
                 callback();
         };
+        img.onerror = function(){
+            self[imageGroup][this.imageName] = self._otherImages.empty;
+            self.loadingCount--;
+
+            if (self.loadingCount === 0)
+                callback();
+        };
         img.src = url;
     };
 
     ShowcaseExporter.prototype._loadImages = function (callback) {
-        for (var i in this._statsImages) {
-            if (!this._statsImages.hasOwnProperty(i))
-                continue;
-            this._loadImage(i, "_statsImages", "/assets/img/stats/" + i + ".png", callback);
-        }
+        var self = this;
+        this._loadImage("empty", "_otherImages", "/assets/img/ui/empty.png", function(){
+            for (var i in self._statsImages) {
+                if (!self._statsImages.hasOwnProperty(i))
+                    continue;
+                self._loadImage(i, "_statsImages", "/assets/img/stats/" + i + ".png", callback);
+            }
 
-        for (i in this._equipTypeImages) {
-            if (!this._equipTypeImages.hasOwnProperty(i))
-                continue;
-            this._loadImage(i, "_equipTypeImages", "/assets/img/items/" + i + ".png", callback);
-        }
+            for (i in self._equipTypeImages) {
+                if (!self._equipTypeImages.hasOwnProperty(i))
+                    continue;
+                self._loadImage(i, "_equipTypeImages", "/assets/img/items/" + i + ".png", callback);
+            }
 
-        for (i in this._shipImages) {
-            if (!this._shipImages.hasOwnProperty(i))
-                continue;
-            this._loadImage(i, "_shipImages", "/assets/img/ships/" + i + ".png", callback);
-        }
+            for (i in self._shipImages) {
+                if (!self._shipImages.hasOwnProperty(i))
+                    continue;
+                self._loadImage(i, "_shipImages", "/assets/img/ships/" + i + ".png", callback);
+            }
 
-        this._loadImage("medals", "_otherImages", "/assets/img/useitems/57.png", callback);
-        this._loadImage("blueprints", "_otherImages", "/assets/img/useitems/58.png", callback);
-        this._loadImage("screws", "_otherImages", "/assets/img/useitems/4.png", callback);
-        this._loadImage("devmats", "_otherImages", "/assets/img/useitems/3.png", callback);
-
+            self._loadImage("medals", "_otherImages", "/assets/img/useitems/57.png", callback);
+            self._loadImage("blueprints", "_otherImages", "/assets/img/useitems/58.png", callback);
+            self._loadImage("screws", "_otherImages", "/assets/img/useitems/4.png", callback);
+            self._loadImage("devmats", "_otherImages", "/assets/img/useitems/3.png", callback);
+        });
     };
 
     ShowcaseExporter.prototype.cleanUp = function () {
@@ -300,7 +329,7 @@
                         success: function (response) {
                             self.complete({url: response.data.link});
                         },
-                        error: function (response) {
+                        error: function () {
                             self._download(dataURL, topLine);
                         }
                     });
@@ -308,7 +337,7 @@
                     self._download(dataURL, topLine);
                 }
             },
-            error: function (response) {
+            error: function () {
                 self._download(dataURL, topLine);
             }
         });
@@ -328,6 +357,10 @@
     ShowcaseExporter.prototype.exportShips = function () {
         this._init();
         this.isShipList = true;
+        this.rowParams = {
+            width: 330,
+            height: 35
+        };
         this._getShips();
         var self = this;
         this._loadImages(function () {
@@ -368,10 +401,10 @@
         this.ctx.fillStyle = background;
         this.ctx.fillRect(x, y, this.rowParams.width, this.rowParams.height);
 
-        var fontsize = 25;
+        var fontSize = 25;
         this.ctx.textBaseline = "middle";
-        this.ctx.font = generateFontString(600, fontsize);
-        this.ctx.fillStyle = "#0066CC";
+        this.ctx.font = generateFontString(600, fontSize);
+        this.ctx.fillStyle = this.colors.shipTypeHeader;
         this.ctx.fillText(KC3Meta.stype(type), x + this.rowParams.height / 2, y + (this.rowParams.height) / 2);
     };
 
@@ -456,11 +489,11 @@
         this.ctx.fillRect(x, y, this.rowParams.width, this.rowParams.height);
         var xOffset = this.rowParams.height / 7;
 
-        this._drawStat(ship.fp, x + xOffset, y, this.rowParams.height / 2, this.rowParams.height / 2, "#ff8888", background);
-        this._drawStat(ship.tp, x + xOffset + this.rowParams.height / 2, y, this.rowParams.height / 2, this.rowParams.height / 2, "#00CCFF", background);
-        this._drawStat(ship.aa, x + xOffset + this.rowParams.height / 2, y + this.rowParams.height / 2, this.rowParams.height / 2, this.rowParams.height / 2, "#ff9900", background);
-        this._drawStat(ship.ar, x + xOffset, y + this.rowParams.height / 2, this.rowParams.height / 2, this.rowParams.height / 2, "#ffcc00", background);
-        this._drawStat(ship.lk, x + xOffset + this.rowParams.height, y, this.rowParams.height / 5, this.rowParams.height / 2, "#66FF66", background);
+        this._drawStat(ship.fp, x + xOffset, y, this.rowParams.height / 2, this.rowParams.height / 2, this.colors.statFP, background);
+        this._drawStat(ship.tp, x + xOffset + this.rowParams.height / 2, y, this.rowParams.height / 2, this.rowParams.height / 2, this.colors.statTP, background);
+        this._drawStat(ship.aa, x + xOffset + this.rowParams.height / 2, y + this.rowParams.height / 2, this.rowParams.height / 2, this.rowParams.height / 2, this.colors.statAA, background);
+        this._drawStat(ship.ar, x + xOffset, y + this.rowParams.height / 2, this.rowParams.height / 2, this.rowParams.height / 2, this.colors.statAR, background);
+        this._drawStat(ship.lk, x + xOffset + this.rowParams.height, y, this.rowParams.height / 5, this.rowParams.height / 2, this.colors.statLK, background);
 
         this._drawIcon(x + xOffset, y, ship.masterId);
 
@@ -470,7 +503,7 @@
             fontSize--;
             this.ctx.font = generateFontString(400, fontSize);
         }
-        this.ctx.fillStyle = "#000";
+        this.ctx.fillStyle = this.colors.shipInfo;
         this.ctx.textBaseline = "middle";
         this.ctx.fillText(ship.name(), x + this.rowParams.height * 2, y + this.rowParams.height / 2);
 
@@ -503,7 +536,7 @@
     };
 
     ShowcaseExporter.prototype._fill = function () {
-        this.ctx.fillStyle = "#efefef";
+        this.ctx.fillStyle = this.colors.canvasBackground;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     };
 
@@ -512,6 +545,10 @@
 
     ShowcaseExporter.prototype.exportEquip = function () {
         this.isShipList = false;
+        this.rowParams = {
+            width: 350,
+            height: 30
+        };
         var gears = this._getGears();
         var self = this;
 
@@ -580,26 +617,22 @@
         var canvas = document.createElement("CANVAS");
         var ctx = canvas.getContext("2d");
 
-        var columnsCount = 5;
-        var rowHeight = 30;
-        var rowWidth = 350;
-
-        this._drawEquipGroups(gears, rowWidth, rowHeight);
-        var columns = this._splitEquipByColumns(columnsCount);
-        this._fillEquipCanvas(canvas, ctx, columns, rowWidth);
-        this._drawBorders(canvas, ctx, rowWidth);
+        this._drawEquipGroups(gears);
+        var columns = this._splitEquipByColumns(this.columnCount);
+        this._fillEquipCanvas(canvas, ctx, columns);
+        this._drawBorders(canvas, ctx);
         this._addCredits(canvas);
     };
 
-    ShowcaseExporter.prototype._fillEquipCanvas = function (canvas, ctx, columns, rowWidth) {
+    ShowcaseExporter.prototype._fillEquipCanvas = function (canvas, ctx, columns) {
         canvas.height = this._getBiggestColumn(columns);
-        canvas.width = rowWidth * columns.length;
+        canvas.width = this.rowParams.width * columns.length;
         ctx.fillStyle = this.colors.odd;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         for (var i = 0; i < columns.length; i++) {
             var column = columns[i];
-            var y = 0, x = i * rowWidth;
+            var y = 0, x = i * this.rowParams.width;
             for (var j = 0; j < column.length; j++) {
                 var canvasData = this._equipGroupCanvases[column[j]];
                 ctx.drawImage(canvasData, x, y, canvasData.width, canvasData.height);
@@ -626,27 +659,27 @@
 
     ShowcaseExporter.prototype._splitEquipByColumns = function (maxColumns) {
         var maxHeight = this._getMaxHeight(), totalHeight = this._getTotalHeight();
-        var aproxSize = Math.max(Math.ceil(totalHeight / maxColumns), maxHeight);
-        var paging = this._fillEquipColumns(aproxSize);
+        var approxSize = Math.max(Math.ceil(totalHeight / maxColumns), maxHeight);
+        var paging = this._fillEquipColumns(approxSize);
 
         if (paging.length > maxColumns) {
-            paging = this._fixEquipPaging(aproxSize, paging, maxColumns);
+            paging = this._fixEquipPaging(approxSize, paging, maxColumns);
         }
         return paging;
     };
 
-    ShowcaseExporter.prototype._fixEquipPaging = function (aproxSize, paging, maxColumns) {
+    ShowcaseExporter.prototype._fixEquipPaging = function (approxSize, paging, maxColumns) {
         while (paging.length > maxColumns) {
-            paging = this._fillEquipColumns(aproxSize++);
+            paging = this._fillEquipColumns(approxSize++);
         }
         return paging;
     };
 
-    ShowcaseExporter.prototype._fillEquipColumns = function (aproxSize) {
+    ShowcaseExporter.prototype._fillEquipColumns = function (approxSize) {
         var groupIds = [];
         for (var groupId in this._equipGroupCanvases) {
             if (groupId.startsWith("g"))
-                groupIds.push(parseInt(groupId.slice("1")));
+                groupIds.push(parseInt(groupId.slice(1)));
         }
         groupIds.sort(function (a, b) {
             return a - b;
@@ -657,7 +690,7 @@
         var size = 0;
         var column = 0;
         for (var i = 0; i < groupIds.length; i++) {
-            if (size + this._equipGroupCanvases["g" + groupIds[i]].height > aproxSize) {
+            if (size + this._equipGroupCanvases["g" + groupIds[i]].height > approxSize) {
                 column++;
                 newPaging.push([]);
                 size = 0;
@@ -691,11 +724,11 @@
         return totalHeight;
     };
 
-    ShowcaseExporter.prototype._drawEquipGroups = function (gears, rowWidth, rowHeight) {
+    ShowcaseExporter.prototype._drawEquipGroups = function (gears) {
         var groupIds = [];
         for (var groupId in gears) {
             if (groupId.startsWith("g"))
-                groupIds.push(parseInt(groupId.slice("1")));
+                groupIds.push(parseInt(groupId.slice(1)));
         }
         groupIds.sort(function (a, b) {
             return a - b;
@@ -704,44 +737,41 @@
         var bool = true;
         for (var i = 0; i < groupIds.length; i++) {
             var canvas = document.createElement("CANVAS"), ctx = canvas.getContext("2d");
-            canvas.height = this._drawEquipGroup(gears["g" + groupIds[i]], rowWidth, rowHeight);
-            canvas.width = rowWidth;
+            canvas.height = this._drawEquipGroup(gears["g" + groupIds[i]]);
+            canvas.width = this.rowParams.width;
             ctx.fillStyle = bool ? this.colors.odd : this.colors.even;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             bool = !bool;
-            this._addEquipGroupsToCanvas(gears["g" + groupIds[i]], canvas, ctx, rowHeight);
+            this._addEquipGroupsToCanvas(gears["g" + groupIds[i]], canvas, ctx);
             this._equipGroupCanvases["g" + groupIds[i]] = canvas;
         }
     };
 
-    ShowcaseExporter.prototype._addEquipGroupsToCanvas = function (group, canvas, ctx, rowHeight) {
+    ShowcaseExporter.prototype._addEquipGroupsToCanvas = function (group, canvas, ctx) {
         function compareEquip(a, b) {
             var equipA = KC3Master.slotitem(a.slice(1)), equipB = KC3Master.slotitem(b.slice(1));
             return equipB[sortingParam] - equipA[sortingParam];
         }
 
-        var typeCount = 0;
-        for (var typeId in group.types) {
-            typeCount++;
-        }
+        var typeCount = Object.keys(group.types).length;
 
         var y = 0;
         var fontSize = 20;
         ctx.font = generateFontString(600, fontSize);
-        ctx.fillStyle = "#000";
-        ctx.fillText(group.name, (canvas.width - ctx.measureText(group.name).width) / 2, ( rowHeight + fontSize) / 2);
-        y += rowHeight;
+        ctx.fillStyle = this.colors.equipGroup;
+        ctx.fillText(group.name, (canvas.width - ctx.measureText(group.name).width) / 2, ( this.rowParams.height + fontSize) / 2);
+        y += this.rowParams.height;
 
-        for (typeId in group.types) {
+        for (var typeId in group.types) {
             if (typeId.startsWith("t")) {
                 var type = group.types[typeId];
                 if (typeCount > 1) {
-                    y += rowHeight / 2;
+                    y += this.rowParams.height / 2;
                     fontSize = 20;
                     ctx.font = generateFontString(500, fontSize);
-                    ctx.fillStyle = "#000";
-                    ctx.fillText(type.name, (canvas.width - ctx.measureText(type.name).width) / 2, y + (rowHeight + fontSize) / 2);
-                    y += rowHeight * 1.5;
+                    ctx.fillStyle = this.colors.equipType;
+                    ctx.fillText(type.name, (canvas.width - ctx.measureText(type.name).width) / 2, y + (this.rowParams.height + fontSize) / 2);
+                    y += this.rowParams.height * 1.5;
                 }
 
                 var masterIds = [];
@@ -763,9 +793,9 @@
                     y += canvasData.height;
 
                 }
-                y += rowHeight * 0.5;
+                y += this.rowParams.height * 0.5;
 
-                ctx.fillStyle = "#FFF";
+                ctx.fillStyle = this.colors.border;
                 for (var xPos = 0; xPos < 0 + canvas.width; xPos += 20) {
                     ctx.fillRect(xPos, y - 2, 10, 2);
                 }
@@ -773,38 +803,35 @@
         }
     };
 
-    ShowcaseExporter.prototype._drawEquipGroup = function (group, rowWidth, rowHeight) {
-        var typeCount = 0;
-        for (var typeId in group.types) {
-            typeCount++;
-        }
+    ShowcaseExporter.prototype._drawEquipGroup = function (group) {
+        var typeCount = Object.keys(group.types).length;
 
         var height = 0;
         for (var i in group.types) {
             if (i.startsWith("t")) {
-                height += this._drawEquipTypes(group.types[i], rowWidth, rowHeight);
+                height += this._drawEquipTypes(group.types[i]);
             }
         }
         if (typeCount > 1)
-            height += rowHeight * typeCount * 2;// + typename each
-        return height + rowHeight;// + groupName
+            height += this.rowParams.height * typeCount * 2;// + typename each
+        return height + this.rowParams.height;// + groupName
     };
 
-    ShowcaseExporter.prototype._drawEquipTypes = function (types, rowWidth, rowHeight) {
+    ShowcaseExporter.prototype._drawEquipTypes = function (types) {
         var height = 0;
 
         for (var masterId in types.gears) {
             if (!types.hasOwnProperty(masterId) && masterId.startsWith("m")) {
-                height += this._drawEquip(types.gears[masterId], rowWidth, rowHeight, false);
+                height += this._drawEquip(types.gears[masterId], false);
             }
         }
-        return height + 0.5 * rowHeight;
+        return height + 0.5 * this.rowParams.height;
     };
 
-    ShowcaseExporter.prototype._drawEquip = function (equip, rowWidth, rowHeight, fake) {
+    ShowcaseExporter.prototype._drawEquip = function (equip, fake) {
         var height;
         if (!fake) {
-            height = this._drawEquip(equip, rowWidth, rowHeight, true);
+            height = this._drawEquip(equip, true);
         }
 
         var img = this._equipTypeImages[KC3Master.slotitem(equip.masterId).api_type[3]];
@@ -812,12 +839,12 @@
         var x = 0, y = 0;
 
         if (fake === false) {
-            canvas.width = rowWidth;
+            canvas.width = this.rowParams.width;
             canvas.height = height;
-            ctx.drawImage(img, 0, 0, img.width, img.height, x, y, rowHeight, rowHeight);
+            ctx.drawImage(img, 0, 0, img.width, img.height, x, y, this.rowParams.height, this.rowParams.height);
         }
 
-        var equipMaxY = this._drawEquipInfo(equip, ctx, x, y, rowWidth, rowHeight, fake);
+        var equipMaxY = this._drawEquipInfo(equip, ctx, x, y, fake);
 
 
         var fontSize;
@@ -827,26 +854,26 @@
                 fontSize = 18;
                 text = "x" + equip.total;
                 ctx.font = generateFontString(400, fontSize);
-                ctx.fillStyle = "#000";
+                ctx.fillStyle = this.colors.equipCount;
                 if (!fake)
-                    ctx.fillText(text, x + rowWidth - rowHeight * 0.5 - ctx.measureText(text).width, y + (rowHeight + fontSize) / 2);
+                    ctx.fillText(text, x + this.rowParams.width - this.rowParams.height * 0.5 - ctx.measureText(text).width, y + (this.rowParams.height + fontSize) / 2);
             } else {
                 fontSize = 13;
                 if (equip["s" + i] === 0)
                     continue;
-                ctx.fillStyle = "#000";
+                ctx.fillStyle = this.colors.equipCount;
                 ctx.font = generateFontString(400, fontSize);
                 text = " x" + equip["s" + i];
                 var xOffset = ctx.measureText(text).width;
                 if (!fake)
-                    ctx.fillText(text, x + rowWidth - rowHeight * 0.5 - ctx.measureText(text).width, y + (rowHeight + fontSize) / 2);
+                    ctx.fillText(text, x + this.rowParams.width - this.rowParams.height * 0.5 - ctx.measureText(text).width, y + (this.rowParams.height + fontSize) / 2);
 
 
                 text = "★" + i;
-                ctx.fillStyle = "#42837f";
+                ctx.fillStyle = this.colors.equipStars;
                 ctx.font = generateFontString(600, fontSize);
                 if (!fake)
-                    ctx.fillText(text, x + rowWidth - rowHeight * 0.5 - xOffset - ctx.measureText(text).width, y + (rowHeight + fontSize) / 2);
+                    ctx.fillText(text, x + this.rowParams.width - this.rowParams.height * 0.5 - xOffset - ctx.measureText(text).width, y + (this.rowParams.height + fontSize) / 2);
             }
             y += fontSize + 4;
         }
@@ -857,34 +884,34 @@
         return y + 5;
     };
 
-    ShowcaseExporter.prototype._drawEquipInfo = function (equip, ctx, x, y, rowWidth, rowHeight, fake) {
+    ShowcaseExporter.prototype._drawEquipInfo = function (equip, ctx, x, y, fake) {
         var startY = y;
         var fontSize = 13;
         ctx.font = generateFontString(400, fontSize);
-        ctx.fillStyle = "#000";
+        ctx.fillStyle = this.colors.equipInfo;
 
-        var available = rowWidth - rowHeight * 3.5;
+        var available = this.rowParams.width - this.rowParams.height * 3.5;
 
         var name = this._splitText(equip.name, ctx, available);
-        y = this._drawEquipName(name, ctx, x + 30, y, rowHeight, fontSize, fake);
+        y = this._drawEquipName(name, ctx, x + 30, y, fontSize, fake);
 
         if (equip.name !== KC3Master.slotitem(equip.masterId).api_name) {
             name = this._splitText(KC3Master.slotitem(equip.masterId).api_name, ctx, available, "");
-            y = this._drawEquipName(name, ctx, x + 30, y, fontSize, fontSize, fake);
+            y = this._drawEquipName(name, ctx, x + 30, y, fontSize, fake);
         }
         y = y < startY + 30 ? startY + 30 : y;
 
-        available = rowWidth - rowHeight * 3.5;
+        available = this.rowParams.width - this.rowParams.height * 3.5;
 
         y += 5;
-        var statsY = this._drawEquipStats(equip, ctx, x + rowHeight, y, available, fake);
+        var statsY = this._drawEquipStats(equip, ctx, x + this.rowParams.height, y, available, fake);
         y = Math.max(statsY, y);
         if (statsY > 0)
             y += 10;
         return y;
     };
 
-    ShowcaseExporter.prototype._drawEquipName = function (nameLines, ctx, x, y, rowHeight, fontSize, fake) {
+    ShowcaseExporter.prototype._drawEquipName = function (nameLines, ctx, x, y, fontSize, fake) {
         if (nameLines.length === 1) {
             if (!fake)
                 ctx.fillText(nameLines[0], x, y + fontSize + 2);
@@ -932,7 +959,7 @@
     ShowcaseExporter.prototype._drawEquipStats = function (equip, ctx, x, y, available, fake) {
         var fontSize = 16;
         ctx.font = generateFontString(400, fontSize);
-        ctx.fillStyle = "#000";
+        ctx.fillStyle = this.colors.equipStat;
 
         var startX = x;
         var img;
