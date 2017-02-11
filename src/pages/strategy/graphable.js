@@ -133,7 +133,11 @@ class KC3Graphable {
 			data: data,
 			options: {
 				legend: { display: false },
-				tooltips: { enabled: $("#showTooltips").prop("checked"), mode: "x" },
+				tooltips: {
+					enabled: $("#showTooltips").prop("checked"),
+					mode: "index",
+					intersect: false
+				},
 				scales: { yAxes: [{ ticks: { beginAtZero: $("#startZero").prop("checked") } }] }
 			}
 		});

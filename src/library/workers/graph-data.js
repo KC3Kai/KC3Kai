@@ -38,7 +38,6 @@ function formatData(startHour, endHour, options, result){
 			borderWidth: 1.5,
 			borderColor: "#"+options.graphableItems.colorhex[gii],
 			pointRadius: 2,
-			pointHitRadius: 5,
 			data: Array.from('0'.repeat(maxPoints)).map((e)=>{ return parseInt(e); })
 		};
 	});
