@@ -13,6 +13,7 @@
         this.ctx = {};
         this.allShipGroups = {};
         this.loading = 0;
+        this.isShipList = true;
         this.shipCount = 0;
         this.rowParams = {
             width: 330,
@@ -92,7 +93,7 @@
         }
     };
 
-    ShowcaseExporter.prototype._addCredits = function (canvasData, isShipList) {
+    ShowcaseExporter.prototype._addCredits = function (canvasData) {
         if (!canvasData)
             canvasData = this.canvas;
 
@@ -119,11 +120,11 @@
 
         var x = 20;
         if (this._addNameAndLevel) {
-            ctx.fillText("HQ LVL " + PlayerManager.hq.level, x, canvas.height - 1);
-            x += ctx.measureText("HQ LVL " + PlayerManager.hq.level).width + 50;
+            ctx.fillText("HQ Lv " + PlayerManager.hq.level, x, canvas.height - 1);
+            x += ctx.measureText("HQ Lv " + PlayerManager.hq.level).width + 50;
         }
 
-        if (isShipList) {
+        if (this.isShipList) {
             x = this._addConsumableImage(ctx, canvas, x, "medals") + 50;
             this._addConsumableImage(ctx, canvas, x, "blueprints");
         } else {
@@ -131,7 +132,7 @@
             this._addConsumableImage(ctx, canvas, x, "screws");
         }
 
-        var topLine = isShipList ? "Ship List" : "Equipment List";
+        var topLine = this.isShipList ? "Ship List" : "Equipment List";
         if (this._addNameAndLevel) {
             topLine = PlayerManager.hq.rank + " " + PlayerManager.hq.name + " " + topLine;
         }
@@ -244,12 +245,12 @@
         }
     };
 
-    ShowcaseExporter.prototype._download = function (dataURL, topLine) {
+    ShowcaseExporter.prototype._download = function (dataURL) {
         if (enableShelfTimer) {
             clearTimeout(enableShelfTimer);
         }
         var self = this;
-        topLine = topLine.replace(new RegExp(/<>:"\/\|\?\*/,'g'),"").replace(new RegExp(/\s/,'g'),"_");
+        var topLine = this.isShipList ? "Ship_List" : "Equipment_List";
         var filename = ConfigManager.ss_directory + '/' + dateFormat("yyyy-mm-dd") + '_' + topLine + ".png";
         chrome.downloads.setShelfEnabled(false);
         chrome.downloads.download({
@@ -326,6 +327,7 @@
      ------------------------- */
     ShowcaseExporter.prototype.exportShips = function () {
         this._init();
+        this.isShipList = true;
         this._getShips();
         var self = this;
         this._loadImages(function () {
@@ -377,7 +379,7 @@
         if (this.loading !== 0)
             return;
         this._drawBorders();
-        this._addCredits(null, true);
+        this._addCredits(null);
     };
 
     ShowcaseExporter.prototype._resizeCanvas = function () {
@@ -509,6 +511,7 @@
      ------------------------- */
 
     ShowcaseExporter.prototype.exportEquip = function () {
+        this.isShipList = false;
         var gears = this._getGears();
         var self = this;
 
@@ -585,7 +588,7 @@
         var columns = this._splitEquipByColumns(columnsCount);
         this._fillEquipCanvas(canvas, ctx, columns, rowWidth);
         this._drawBorders(canvas, ctx, rowWidth);
-        this._addCredits(canvas, false);
+        this._addCredits(canvas);
     };
 
     ShowcaseExporter.prototype._fillEquipCanvas = function (canvas, ctx, columns, rowWidth) {

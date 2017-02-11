@@ -3,7 +3,11 @@
 }
 /* BUTTONS
 -----------------------------*/
-.tab_showcase  .controls .control {
+.tab_showcase .options .output_method {
+	margin-right: 10px;
+	float: left;
+}
+.tab_showcase .controls .control {
 	width: 140px;
 	height: 20px;
 	line-height: 20px;

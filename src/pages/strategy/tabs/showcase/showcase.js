@@ -184,30 +184,30 @@
 			}
 		},
 
-        displayExportResult: function (result) {
-            if (!!result.url) {
-                $(".exportResults").append(
-                    $("<div></div>").html("Uploaded to ").append(
-                        $("<a></a>")
-                            .html("Imgur")
-                            .attr("target", "_blank")
-                            .attr("href", result.url)
-                    )
-                );
-            } else if (!!result.downloadId) {
-                $(".exportResults").append(
-                    $("<div></div>").html("Saved to ").append(
-                        $("<a></a>")
-                            .html(result.filename)
-                            .attr("title","Show in folder")
-                            .click(function () {
-                                chrome.downloads.show(result.downloadId);
-                                return false;
-                            })
-                    )
-                );
-            }
-        },
+		displayExportResult: function (result) {
+			if (!!result.url) {
+				$(".exportResults").append(
+					$("<div></div>").html("Uploaded to ").append(
+						$("<a></a>")
+							.html("Imgur")
+							.attr("target", "_blank")
+							.attr("href", result.url)
+					)
+				);
+			} else if (!!result.downloadId) {
+				$(".exportResults").append(
+					$("<div></div>").html("Saved to ").append(
+						$("<a></a>")
+							.html(result.filename)
+							.attr("title","Show in folder")
+							.click(function () {
+								chrome.downloads.show(result.downloadId);
+								return false;
+							})
+					)
+				);
+			}
+		},
 
 		/* EXECUTE
 		Places data onto the interface
@@ -216,35 +216,35 @@
 			var shipBox, self=this;
 
 			// BUTTONS
-            $("#exportShips").on("click", function(){
-                if ($(this).hasClass("disabled"))
-                    return;
-                $(this).addClass("disabled");
-                var exporter = new ShowcaseExporter();
-                exporter._outputMode = $("#exportOutputMode").val();
-                exporter._addNameAndLevel = $("#exportAddName")[0].checked;
-                exporter.complete = function (data) {
-                	self.displayExportResult(data);
-                    $("#exportShips").removeClass("disabled");
-                };
-                exporter.exportShips();
-            });
+			$("#exportShips").on("click", function(){
+				if ($(this).hasClass("disabled"))
+					return;
+				$(this).addClass("disabled");
+				var exporter = new ShowcaseExporter();
+				exporter._outputMode = $("#exportOutputMode").val();
+				exporter._addNameAndLevel = $("#exportAddName")[0].checked;
+				exporter.complete = function (data) {
+					self.displayExportResult(data);
+					$("#exportShips").removeClass("disabled");
+				};
+				exporter.exportShips();
+			});
 
-            $("#exportEquipment").on("click", function(){
-                if ($(this).hasClass("disabled"))
-                    return;
-                $(this).addClass("disabled");
-                var exporter = new ShowcaseExporter();
-                exporter._outputMode = $("#exportOutputMode").val();
-                exporter._addNameAndLevel = $("#exportAddName")[0].checked;
-                exporter.complete = function (data) {
-                    self.displayExportResult(data);
-                    $("#exportEquipment").removeClass("disabled");
-                };
-                $("#exportOutputMode").val();
-                exporter.exportEquip();
-            });
-            $("#exportOutputMode").val(parseInt(ConfigManager.ss_mode,10));
+			$("#exportEquipment").on("click", function(){
+				if ($(this).hasClass("disabled"))
+					return;
+				$(this).addClass("disabled");
+				var exporter = new ShowcaseExporter();
+				exporter._outputMode = $("#exportOutputMode").val();
+				exporter._addNameAndLevel = $("#exportAddName")[0].checked;
+				exporter.complete = function (data) {
+					self.displayExportResult(data);
+					$("#exportEquipment").removeClass("disabled");
+				};
+				$("#exportOutputMode").val();
+				exporter.exportEquip();
+			});
+			$("#exportOutputMode").val(parseInt(ConfigManager.ss_mode,10));
 
 			// SHIPS
 			$.each(this.shipCache, function(stype, stypeList){
