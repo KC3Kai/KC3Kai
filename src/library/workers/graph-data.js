@@ -9,10 +9,19 @@ onmessage = function(request) {
 function fetchData(options){
 	let startHour = Math.floor((new Date(options.start))/( 1*60*60*1000));
 	let endHour = Math.floor((new Date(options.end))/( 1*60*60*1000))+24;
+	
+	// Start must be higher than end
 	if (startHour >= endHour) {
 		postMessage(false);
 		return false;
 	}
+	
+	// April 27, 2015 is kc3kai launch date
+	if (startHour < 397248) {
+		postMessage(false);
+		return false;
+	}
+	
 	KC3Database.con[options.tableName]
 		.where("hour").between(startHour, endHour, true, true)
 		.toArray(function(result){

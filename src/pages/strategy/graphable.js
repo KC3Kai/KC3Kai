@@ -31,6 +31,10 @@ class KC3Graphable {
 		$(".graph_input").on("change", function(){
 			self.triggerRefresh();
 		});
+		$(".graph_input[type=date]").off("change");
+		$(".graph_input[type=date]").on("blur", function(){
+			self.triggerRefresh();
+		});
 		
 		// Presets
 		$(".option_preset").on("click", function(){
