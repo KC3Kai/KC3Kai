@@ -28,6 +28,7 @@ button, input, select, textarea {
 
 .ui-tooltip {
 	max-width:500px;
+	padding:2px 5px 3px 6px;
 	border-width:1px !important;
 	border:1px solid #eee;
 	box-shadow:0 0 5px 1px #777;
@@ -35,6 +36,12 @@ button, input, select, textarea {
 	background:#444;
 	font-family:inherit;
 	font-size:12px;
+}
+.ui-tooltip-content hr {
+	margin:3px 0px 3px 0px;
+}
+.ui-tooltip-content p {
+	margin:0px;
 }
 
 /* COLORS
@@ -326,9 +333,29 @@ button, input, select, textarea {
 .tab_resources .legend_color {
 	border:1px solid #000000;
 }
+.tab_resources .date_input input {
+	border:1px solid #555;
+	background:#333;
+}
+.tab_resources .dropdown_input select {
+	border:1px solid #555;
+}
+.tab_resources .option_preset {
+	color:#eee;
+}
 /* Consumables */
 .tab_consumables .legend_color {
 	border:1px solid #000000;
+}
+.tab_consumables .date_input input {
+	border:1px solid #555;
+	background:#333;
+}
+.tab_consumables .dropdown_input select {
+	border:1px solid #555;
+}
+.tab_consumables .option_preset {
+	color:#eee;
 }
 /* Showcase */
 .tab_showcase .stype_box {
@@ -393,7 +420,16 @@ button, input, select, textarea {
 	display:none;
 }
 .tab_showcase .show_gear .gear_stat_icon img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
+}
+.tab_showcase .controls {
+	background:#464646;
+	border-bottom:1px solid #a2a2a2;
+}
+.tab_showcase  .control {
+	background:#808080;
+	color:#fff;
 }
 /* Ledger */
 .tab_overlodger .filterBox {
@@ -459,6 +495,7 @@ button, input, select, textarea {
 	width: 215px !important;
 }
 .tab_ships .ship_header .ship_stat img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
 .tab_ships .filters .ship_filter_type:hover {
@@ -866,6 +903,7 @@ button, input, select, textarea {
 	color:#ffcc00;
 }
 .tab_gears .itemSorters .sortControl img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
 .tab_gears .itemSorters .sortControl:hover {
@@ -873,6 +911,7 @@ button, input, select, textarea {
 	color:#000000;
 }
 .tab_gears .itemSorters .sortControl:hover img {
+	filter: invert(0%);
 	-webkit-filter: invert(0%);
 }
 
@@ -886,6 +925,7 @@ button, input, select, textarea {
 	background:none !important;
 }
 .tab_gears .slotitem .info .item_stat img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
 .tab_gears .slotitem .holders dt {
@@ -939,6 +979,7 @@ button, input, select, textarea {
 	padding:5px 0px 10px 0px;
 }
 .tab_aircraft .slotitem .info .item_stat img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
 .tab_aircraft .slotitem .info .icon {
@@ -948,6 +989,7 @@ button, input, select, textarea {
 	
 }
 .tab_aircraft .slotitem .instance_aaicon img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
 .tab_aircraft .slotitem .instance_aaval.activeSquad {
@@ -1013,6 +1055,7 @@ button, input, select, textarea {
 	background:#131313;
 }
 .detail_field img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
 .detail_field.incomplete {
@@ -1025,6 +1068,7 @@ button, input, select, textarea {
 	color:#777 !important;
 }
 .ui-tooltip-content .ship_tooltip .stat_icon img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
 .ui-tooltip-content .ship_tooltip .stat_icon {
@@ -1305,10 +1349,12 @@ button, input, select, textarea {
 
 .tab_event .sortie_list .node_formation img,
 .tab_maps .sortie_list .node_formation img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
 .tab_event .sortie_list .node_eformation img,
 .tab_maps .sortie_list .node_eformation img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
 .tab_event .sortie_list .node_exp,
@@ -1376,9 +1422,11 @@ button, input, select, textarea {
 }
 .tab_mstship .shipInfo .ship_stat_icon img {
 	filter:invert(100%);
+	-webkit-filter:invert(100%);
 }
 .tab_mstship .shipInfo .at_level .rsc_icon img {
 	filter:invert(100%);
+	-webkit-filter:invert(100%);
 }
 .tab_mstship .shipInfo .voice {
 	background:#222 !important;
@@ -1406,6 +1454,7 @@ button, input, select, textarea {
 	background:#222 !important;
 }
 .tab_mstgear .gearInfo .stat_icon img {
+	filter:invert(100%);
 	-webkit-filter:invert(100%);
 }
 /* SHIP COMPARE
@@ -1427,6 +1476,7 @@ button, input, select, textarea {
 }
 .tab_compare .compare_ship_stat.mono img {
 	filter:invert(100%);
+	-webkit-filter:invert(100%);
 }
 .tab_compare .compare_select_back {
 	border:1px solid #77;
@@ -1446,6 +1496,7 @@ button, input, select, textarea {
 }
 .tab_compare .compare_select_stat.mono img {
 	filter:invert(100%);
+	-webkit-filter:invert(100%);
 }
 .tab_compare .compare_ship_bar {
 	background:#888;
@@ -1456,20 +1507,45 @@ button, input, select, textarea {
 .tab_expedscorer .page_panel {
 	width: 700px;
 }
-.tab_expedscorer .expedNumBox {
+.tab_expedscorer .control_box {
 	background: #666666;
 }
-.tab_expedscorer .expedControls .calculate_btn {
-	background:#666666;
-}
-.tab_expedscorer .expedControls input {
-	background-color: #eee;
+
+.tab_expedscorer .control_box > .header {
+	background-color: #cacaca;
 	color: black;
 }
+
+.tab_expedscorer .control_box .content button {
+	background: #9c9c9c;
+	border-color: #9c9c9c;
+	color: white;
+}
+
 .tab_expedscorer .table-hover tbody tr:hover td,
 .tab_expedscorer .table-hover tbody tr:hover th {
 	color: black;
 }
+
+.tab_expedscorer .control_box.resource .resource_box > .slider .slider-handle {
+	/* this was used just for steel, and other resources have their own coloring:
+
+		fuel:
+			background-image:linear-gradient(to bottom,#5ca353 0,#177e09 100%);
+		ammo:
+			background-image:linear-gradient(to bottom,#a79b6d 0,#5b4d2c 100%);
+		bauxite:
+			background-image:linear-gradient(to bottom,#f0b07b 0,#935f39 100%);
+
+		the effect does not look good, so let's just use this for every slider
+	 */
+	background-image:linear-gradient(to bottom,#cecece 0,#909090 100%);
+}
+
+.tab_expedscorer .control_box.calc.out_of_sync button {
+	color: #0056ff;
+}
+
 /* EXPEDITION HISTORY
 --------------------------------*/
 .tab_expedpast .page_panel {
@@ -1550,4 +1626,100 @@ button, input, select, textarea {
 .tab_translations .page_content select {
 	background-color: black;
 	font-weight: bold;
+}
+
+/* EXPEDITION TABLE
+--------------------------------*/
+.tab_expedtable .btn-group {
+	border:1px solid #555 !important;
+}
+.tab_expedtable .btn-group button {
+    background-color: #141414;
+    background-image: none;
+    border: 0px none !important;
+	border-radius:0px !important;
+	color: #aaa;
+}
+.tab_expedtable .btn-secondary:hover {
+	background-color: #000;
+}
+.tab_expedtable .btn-secondary:active,
+.tab_expedtable .btn-secondary.active,
+.tab_expedtable .show > .btn-secondary.dropdown-toggle {
+	background:#353535;
+	color:#ffcc00;
+}
+.tab_expedtable .btn-secondary.disabled,
+.tab_expedtable .btn-secondary:disabled {
+  opacity:0.4;
+}
+
+.tab_expedtable .exped_row {
+	color: white;
+	border:0px none !important;
+	font-size:12px;
+	margin-bottom:2px;
+}
+
+.tab_expedtable .exped_row .exped_view {
+	background-color: #2f2f2f;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.resource {
+	background: #003366;
+}
+
+.tab_expedtable .exped_row {
+	border: 1px solid #7a7a84;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box .header {
+	background: #151515;
+	border-bottom: 1px solid #414141;
+	padding:3px 0px 3px 5px;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box {
+	background-color: #2f2f2f;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.item2 {
+	background: #5f4100;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.resource.fuel,
+.tab_expedtable .exped_row .exped_view .cost .view_general .fuel,
+.tab_expedtable #cost_model_content_root table .fuel {
+	color: #92c992;
+}
+
+.tab_expedtable .exped_row .exped_view .cost .view_general .ammo,
+.tab_expedtable #cost_model_content_root table .ammo,
+.tab_expedtable .exped_row .exped_view .info_col.resource.ammo {
+	color: #dec558;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.resource.steel {
+	color: #cccccc;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.resource.bauxite {
+	color: #b68f55;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.edit_btn {
+	color:#aaa;
+	font-size:12px;
+}
+
+.tab_expedtable .config_box input[type=text] {
+	border:1px solid #414141;
+}
+.tab_expedtable .config_box input[type=text]:disabled {
+	border:0px none;
+}
+.tab_expedtable  .sort_methods .ord {
+	line-height:20px;
+	color:#aaa;
+	font-size:12px;
 }

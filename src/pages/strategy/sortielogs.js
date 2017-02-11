@@ -699,7 +699,6 @@
 			rcanvas.height = 400;
 			var rcontext = rcanvas.getContext("2d");
 			
-			
 			var domImg = new Image();
 			domImg.onload = function(){
 				rcontext.drawImage( domImg, 0, 0, 400, 400, 0, 0, 400, 400 );
@@ -711,7 +710,7 @@
 						return false;
 					}
 					
-					console.log(rcontext,sortieData);
+					console.log("Downloading reply", sortieId, ", data:", sortieData);
 					rcontext.font = "26pt Calibri";
 					rcontext.fillStyle = '#ffffff';
 					rcontext.fillText(sortieData.world+"-"+sortieData.mapnum, 20, 215);
@@ -728,18 +727,26 @@
 					});
 					
 					withDataCover64 = rcanvas.toDataURL("image/png");
-					// window.open(withDataCover64);
 					
-					var newImg = steganography.encode(JSON.stringify(sortieData), withDataCover64);
-					
-					chrome.downloads.download({
-						url: newImg,
-						filename: ConfigManager.ss_directory+'/replay/'+PlayerManager.hq.name+"_"+sortieId+'.png',
-						conflictAction: "uniquify"
-					}, function(downloadId){
-						self.exportingReplay = false;
-						$("body").css("opacity", "1");
+					steg.encode(JSON.stringify(sortieData), withDataCover64, {
+						success: function(newImg){
+							chrome.downloads.download({
+								url: newImg,
+								filename: ConfigManager.ss_directory+'/replay/'+PlayerManager.hq.name+"_"+sortieId+'.png',
+								conflictAction: "uniquify"
+							}, function(downloadId){
+								self.exportingReplay = false;
+								$("body").css("opacity", "1");
+							});
+						},
+						error: function(e){
+							console.error("Failed to encode replay data by", e, e.stack);
+							self.exportingReplay = false;
+							$("body").css("opacity", "1");
+							return false;
+						}
 					});
+					
 				});
 				
 			};

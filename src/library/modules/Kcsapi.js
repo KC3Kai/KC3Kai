@@ -742,6 +742,18 @@ Previously known as "Reactor"
 			KC3Network.trigger("Fleet");
 		},
 		
+		/* Lock a equipment
+		-------------------------------------------------------*/
+		"api_req_kaisou/lock":function(params, response, headers){
+			var itemId = parseInt(params.api_slotitem_id, 10);
+			var lockState = response.api_data.api_locked;
+			var gearObj = KC3GearManager.get(itemId);
+			if(gearObj.itemId > 0){
+				gearObj.lock = lockState;
+				KC3GearManager.save();
+			}
+		},
+		
 		/* Change equipment of a ship
 		-------------------------------------------------------*/
 		"api_req_kaisou/slotset":function(params, response, headers){

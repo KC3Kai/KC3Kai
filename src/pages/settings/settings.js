@@ -36,6 +36,7 @@
 						  new SettingsBox( response[sctr].contents[cctr] );
 					}
 				}
+				$(".settings").tooltip();
 			}
 		});
 		

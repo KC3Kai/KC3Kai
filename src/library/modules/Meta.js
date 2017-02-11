@@ -116,11 +116,12 @@ Provides access to data on built-in JSON files
 			this._defaultIcon = iconSrc;
 		},
 		getIcon: function(id, empty) {
+			id = Number(id);
 			if(this._icons.indexOf(id) > -1){
-				var path = id >= 500 ? "abyss/" : "ships/";
+				var path = id > 500 ? "abyss/" : "ships/";
 				return "chrome-extension://"+chrome.runtime.id+"/assets/img/"+path+id+".png";
 			}
-			if(typeof empty == "undefined"){
+			if(typeof empty === "undefined"){
 				return this._defaultIcon;
 			}
 			return empty;

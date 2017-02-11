@@ -1,11 +1,11 @@
 (function(){
 	"use strict";
-	
+
 	KC3StrategyTabs.showcase = new KC3StrategyTab("showcase");
-	
+
 	KC3StrategyTabs.showcase.definition = {
 		tabSelf: KC3StrategyTabs.showcase,
-		
+
 		shipCache: {},
 		gearCache: {},
 		equipTypes: {
@@ -83,13 +83,13 @@
 				types: [ 20, 21, 22, 33 ]
 			}
 		},
-		
+
 		/* INIT
 		Prepares static data needed
 		---------------------------------*/
 		init :function(){
 		},
-		
+
 		/* RELOAD
 		Prepares latest fleets data
 		---------------------------------*/
@@ -101,17 +101,17 @@
 			// Clean cache data
 			this.shipCache = { bb:[], fbb:[], bbv:[], cv:[], cvl:[], ca:[], cav:[], cl:[], dd:[], ss:[], clt:[], ax:[], ao:[] };
 			this.gearCache = {};
-			
+
 			// Convert ship list object into array
 			TempShipList = $.map(KC3ShipManager.list, function(value, index) {
 				return [value];
 			});
-			
+
 			// Order by level
 			TempShipList.sort(function(a,b){
 				return b.level  - a.level;
 			});
-			
+
 			// Add leveled list to ship cache, max 6 per type
 			for(ctr in TempShipList){
 				ThisShip = TempShipList[ctr];
@@ -138,7 +138,7 @@
 					default: break;
 				}
 			}
-			
+
 			// Organize all owned equipment by slotitem_id
 			var GearRecords = {};
 			$.each(KC3GearManager.list, function(index, element){
@@ -149,12 +149,12 @@
 				// Increment this gear to the slotitem_id
 				GearRecords["g"+element.masterId]++;
 			});
-			
+
 			// Organize slotitem_ids into their types
 			var GearMaster, GearType;
 			$.each(GearRecords, function(index, element){
 				GearMaster = KC3Master.slotitem( index.substr(1) );
-				
+
 				GearType = GearMaster.api_type[3];
 				// If gear type does not exist yet
 				if(typeof self.gearCache["t"+GearType] == "undefined"){
@@ -177,25 +177,81 @@
 				});
 			});
 		},
-		
+
 		addToStypeList :function(stype, shipObj){
 			if(this.shipCache[stype].length < 6){
 				this.shipCache[stype].push(shipObj);
 			}
 		},
-		
+
+		displayExportResult: function (result) {
+			if (!!result.url) {
+				$(".exportResults").append(
+					$("<div></div>").html("Uploaded to ").append(
+						$("<a></a>")
+							.html("Imgur")
+							.attr("target", "_blank")
+							.attr("href", result.url)
+					)
+				);
+			} else if (!!result.downloadId) {
+				$(".exportResults").append(
+					$("<div></div>").html("Saved to ").append(
+						$("<a></a>")
+							.html(result.filename)
+							.attr("title","Show in folder")
+							.click(function () {
+								chrome.downloads.show(result.downloadId);
+								return false;
+							})
+					)
+				);
+			}
+		},
+
 		/* EXECUTE
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
 			var shipBox, self=this;
-			
+
+			// BUTTONS
+			$("#exportShips").on("click", function(){
+				if ($(this).hasClass("disabled"))
+					return;
+				$(this).addClass("disabled");
+				var exporter = new ShowcaseExporter();
+				exporter._outputMode = $("#exportOutputMode").val();
+				exporter._addNameAndLevel = $("#exportAddName")[0].checked;
+				exporter.complete = function (data) {
+					self.displayExportResult(data);
+					$("#exportShips").removeClass("disabled");
+				};
+				exporter.exportShips();
+			});
+
+			$("#exportEquipment").on("click", function(){
+				if ($(this).hasClass("disabled"))
+					return;
+				$(this).addClass("disabled");
+				var exporter = new ShowcaseExporter();
+				exporter._outputMode = $("#exportOutputMode").val();
+				exporter._addNameAndLevel = $("#exportAddName")[0].checked;
+				exporter.complete = function (data) {
+					self.displayExportResult(data);
+					$("#exportEquipment").removeClass("disabled");
+				};
+				$("#exportOutputMode").val();
+				exporter.exportEquip();
+			});
+			$("#exportOutputMode").val(parseInt(ConfigManager.ss_mode,10));
+
 			// SHIPS
 			$.each(this.shipCache, function(stype, stypeList){
-				
+
 				$.each(stypeList, function(index, shipObj){
 					if (shipObj.level == 1) return true;
-					
+
 					shipBox = $(".tab_showcase .factory .show_ship").clone();
 					$(".ship_pic img", shipBox).attr("src", KC3Meta.shipIcon( shipObj.masterId ) );
 					$(".ship_name", shipBox).html( shipObj.name() );
@@ -205,15 +261,15 @@
 					self.checkModStat(shipBox, "api_tyku", "aa", 2, shipObj);
 					self.checkModStat(shipBox, "api_souk", "ar", 3, shipObj);
 					// self.checkModStat(shipBox, "api_luck", "lk", 4, shipObj);
-					
+
 					$(".ship_mod_lk", shipBox).html( shipObj.lk[0] );
 					$(".ship_mod_lk", shipBox).addClass("max");
-					
+
 					$(".tab_showcase .stype_"+stype).append(shipBox);
 				});
-				
+
 			});
-			
+
 			// GEARS
 			var GearTypeBox, GearBox, TopGears, MergedList, GearTypeIcon;
 			$.each(this.equipTypes, function(index, element){
@@ -221,11 +277,11 @@
 				if(typeof self.gearCache[index] != "undefined"){
 					MergedList = self.gearCache[index];
 					GearTypeIcon = index.substr(1);
-					
+
 				// Check if he does have any of this gear type
 				}else if(typeof element.types == "undefined"){
 					return true;
-					
+
 				// IS TYPE-COLLECTION
 				}else{
 					// Merge each type on this list
@@ -235,22 +291,22 @@
 					});
 					GearTypeIcon = 0;
 				}
-				
+
 				// If has order-by parameter
 				if(typeof element.order != "undefined"){
 					MergedList.sort(function(a,b){
 						return b[ element.order ]  - a[ element.order ];
 					});
 				}
-				
+
 				// Get 4 most powerful gear on this type
 				TopGears = MergedList.slice(0,4);
 				// console.log("TopGears for", element.name, TopGears);
-				
+
 				// Create gear-type box
 				GearTypeBox = $(".tab_showcase .factory .gtype_box").clone();
 				$(".gtype_title", GearTypeBox).html(element.name);
-				
+
 				// Add gears on this gear-type
 				$.each(TopGears, function(gearIndex, ThisTopGear){
 					if(typeof ThisTopGear !== "undefined"){
@@ -260,7 +316,7 @@
 						GearTypeIcon = 0;
 						$(".gear_name", GearBox).html( ThisTopGear.name );
 						$(".gear_name", GearBox).attr("title", ThisTopGear.name );
-						
+
 						if(typeof element.order !== "undefined"){
 							$(".gear_stat_icon img", GearBox).attr("src", "../../assets/img/stats/"+element.order+".png");
 							$(".gear_stat_val", GearBox).html( ThisTopGear[element.order] );
@@ -269,18 +325,18 @@
 							$(".gear_stat_icon", GearBox).hide();
 							$(".gear_stat_val", GearBox).hide();
 						}
-						
+
 						$(".gear_count", GearBox).html( ThisTopGear.count );
-						
+
 						$(".gtype_contents", GearTypeBox).append(GearBox);
 					}
 				});
-				
+
 				$(".tab_showcase .gtype_boxes").append(GearTypeBox);
 			});
 			$(".tab_showcase .gtype_boxes").append( $("<div/>").addClass("clear") );
 		},
-		
+
 		checkModStat :function(shipBox, apiStat, statCode, modIndex, shipObj){
 			var minStat = shipObj.master()[ apiStat ][0];
 			var maxStat = shipObj.master()[ apiStat ][1];
@@ -292,7 +348,7 @@
 				$(".ship_mod_"+statCode, shipBox).html( maxStat - (minStat+modStat) );
 			}
 		}
-		
+
 	};
-	
+
 })();

@@ -41,7 +41,7 @@
 
 	// A jquery-ui tooltip options like native one
 	var nativeTooltipOptions = {
-		position: { my: "left top+4", at: "left bottom", collision: "flipfit flip" },
+		position: { my: "left top", at: "left+25 bottom", collision: "flipfit" },
 		content: function(){
 			// Default escaping not used, keep html, simulate native one
 			return $(this).attr("title")
@@ -1017,6 +1017,23 @@
 					$(this).parent().removeClass("complete");
 				}
 			};
+			var buildQuestTooltip = function(quest){
+				var title = "{0:code} {1:name}".format(
+					quest.code || "N/A",
+					quest.name || KC3Meta.term("UntranslatedQuest")
+					) + $("<p></p>").css("font-size", "11px")
+					.css("margin-left", "1em")
+					.css("text-indent", "-1em")
+					.text(quest.desc || KC3Meta.term("UntranslatedQuestTip"))
+					.prop("outerHTML");
+				if(!!quest.memo){
+					title += $("<p></p>")
+						.css("font-size", "11px")
+						.css("color", "#69a").text(quest.memo)
+						.prop("outerHTML");
+				}
+				return title;
+			};
 			$(".module.quests").empty();
 			$.each(KC3QuestManager.getActives(), function(index, quest){
 				questBox = $("#factory .quest").clone().appendTo(".module.quests");
@@ -1030,20 +1047,17 @@
 					questBox.addClass("complete");
 				}
 				if(quest.meta){
-					$(".quest_text", questBox).text( quest.meta().name );
-					$(".quest_text", questBox).attr("title", "{0} {1}\n{2}".format(quest.meta().code, quest.meta().name, quest.meta().desc) );
-					if(!!quest.meta().memo) {
-						$(".quest_text", questBox).attr("title", "{0}\n{1}".format($(".quest_text", questBox).attr("title"), quest.meta().memo) );
-					}
-					$(".quest_text", questBox).lazyInitTooltip();
-				}else{
-					$(".quest_text", questBox).text( KC3Meta.term("UntranslatedQuest") );
-					$(".quest_text", questBox).attr("title", KC3Meta.term("UntranslatedQuest") );
-					$(".quest_text", questBox).lazyInitTooltip();
+					$(".quest_text", questBox).text(quest.meta().name)
+						.attr("title", buildQuestTooltip(quest.meta()))
+						.lazyInitTooltip();
+				} else {
+					$(".quest_text", questBox).text(KC3Meta.term("UntranslatedQuest"))
+						.attr("title", KC3Meta.term("UntranslatedQuest"))
+						.lazyInitTooltip();
 				}
-				$(".quest_track", questBox).text( quest.outputShort() );
-				$(".quest_track", questBox).attr("title", quest.outputShort(true) );
-				$(".quest_track", questBox).lazyInitTooltip();
+				$(".quest_track", questBox).text(quest.outputShort())
+					.attr("title", quest.outputShort(true))
+					.lazyInitTooltip();
 			});
 		},
 
@@ -1325,7 +1339,8 @@
 			$(".summary-antiair .summary_icon img")
 				.attr("src", KC3Meta.formationIcon(ConfigManager.aaFormation));
 			$(".summary-antiair .summary_text").text( FleetSummary.antiAir )
-				.parent().attr("title", KC3Meta.formationText(ConfigManager.aaFormation) );
+				.parent().attr("title", KC3Meta.formationText(ConfigManager.aaFormation) )
+				.lazyInitTooltip();
 			$(".summary-speed .summary_text").text( FleetSummary.speed );
 			// F33 different factors for now: 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
 			// Not support for combined fleet yet as factor not sure for event maps
@@ -2347,11 +2362,12 @@
 			if(!ConfigManager.info_pvp_info)
 				return;
 			console.log("PvP Enemy Fleet", data);
-			$(".activity_pvp .pvp_admiral .pvp_admiral_name .value").text(data.api_nickname);
+			$(".activity_pvp .pvp_admiral .pvp_admiral_name .value").text(data.api_nickname)
+				.attr("title", data.api_nickname).lazyInitTooltip();
 			$(".activity_pvp .pvp_admiral .pvp_admiral_level .value").text(data.api_level);
 			// why is this rank int ID, fml
 			$(".activity_pvp .pvp_admiral .pvp_admiral_rank").text(KC3Meta.rank(data.api_rank))
-				.attr("title", KC3Meta.rank(data.api_rank));
+				.attr("title", KC3Meta.rank(data.api_rank)).lazyInitTooltip();
 			// guess nobody is interest in api_experience[1]?
 			$(".activity_pvp .pvp_admiral .pvp_admiral_exp").text(data.api_experience[0]);
 			$(".activity_pvp .pvp_admiral .pvp_admiral_comment").text(data.api_cmt);
@@ -3081,6 +3097,7 @@
 				$(".activity_gunfit .fit_gear_name").text( data.gearObj.name() );
 				if (data.gearObj.stars > 0) {
 					$(".activity_gunfit .fit_gear_level span").text( data.gearObj.stars );
+					$(".activity_gunfit .fit_gear_level").show();
 				} else {
 					$(".activity_gunfit .fit_gear_level").hide();
 				}
@@ -3187,6 +3204,10 @@
 	function buildEnemyFaceTooltip(eshipId, level, maxHP, eParam, eSlot, isPvP) {
 		var tooltip = "", shipMaster, gearMaster, slotIdx;
 		var abyssMaster, slotMaxeq;
+		var iconStyles = {
+			"width":"13px", "height":"13px",
+			"margin-top":"-3px", "margin-right":"2px"
+		};
 		if(eshipId > 0){
 			shipMaster = KC3Master.ship(eshipId);
 			abyssMaster = KC3Master.abyssalShip(eshipId);
@@ -3199,16 +3220,16 @@
 			);
 			if(Array.isArray(eParam)){
 				tooltip += $("<img />").attr("src", "../../../../assets/img/client/mod_fp.png")
-					.width(13).height(13).css("margin-top", "-3px").prop("outerHTML");
+					.css(iconStyles).prop("outerHTML");
 				tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipFire"), eParam[0]);
 				tooltip += $("<img />").attr("src", "../../../../assets/img/client/mod_tp.png")
-					.width(13).height(13).css("margin-top", "-3px").prop("outerHTML");
+					.css(iconStyles).prop("outerHTML");
 				tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipTorpedo"), eParam[1]);
 				tooltip += $("<img />").attr("src", "../../../../assets/img/client/mod_aa.png")
-					.width(13).height(13).css("margin-top", "-3px").prop("outerHTML");
+					.css(iconStyles).prop("outerHTML");
 				tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipAntiAir"), eParam[2]);
 				tooltip += $("<img />").attr("src", "../../../../assets/img/client/mod_ar.png")
-					.width(13).height(13).css("margin-top", "-3px").prop("outerHTML");
+					.css(iconStyles).prop("outerHTML");
 				tooltip += "{0}: {1}".format(KC3Meta.term("ShipArmor"), eParam[3]);
 			}
 			if(Array.isArray(eSlot) && eSlot.length > 0){
@@ -3217,7 +3238,7 @@
 						gearMaster = KC3Master.slotitem(eSlot[slotIdx]);
 						tooltip += "\n" + $("<img />")
 							.attr("src","../../../../assets/img/items/"+gearMaster.api_type[3]+".png")
-							.width(13).height(13).css("margin-top", "-3px").prop("outerHTML");
+							.css(iconStyles).prop("outerHTML");
 						tooltip += KC3Meta.gearName(gearMaster.api_name);
 						if(KC3GearManager.carrierBasedAircraftType3Ids
 							.indexOf(gearMaster.api_type[3]) > -1){

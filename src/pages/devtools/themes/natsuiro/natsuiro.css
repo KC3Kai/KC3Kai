@@ -305,13 +305,15 @@ html,body {
 	float:left;
 	text-align:center;
 	border-radius:5px 5px 0px 0px;
-	filter:brightness(0.5);
+	filter:brightness(0.6) drop-shadow(1px 0px 0px) opacity(0.62);
+	-webkit-filter:brightness(0.6) drop-shadow(1px 0px 0px) opacity(0.62);
 }
 #atab_activity {
 	cursor:default;
 }
 .module.activity .activity_tab.active {
 	filter:brightness(1);
+	-webkit-filter:brightness(1);
 }
 .module.activity .activity_body {
 	width:190px;
@@ -1677,6 +1679,7 @@ ABYSS FLEET
 	position:relative;
 	pointer-events:none;
 	filter:hue-rotate(75deg);
+	-webkit-filter:hue-rotate(75deg);
 	transform:scaleX(-1);
 }
 .module.activity .activity_gunfit .aaci .equipIcons .minusIcon {
@@ -1686,6 +1689,7 @@ ABYSS FLEET
 	position:relative;
 	pointer-events:none;
 	filter:hue-rotate(-90deg);
+	-webkit-filter:hue-rotate(-90deg);
 	transform:scaleX(-1);
 }
 .module.activity .activity_gunfit .aaci .fixed {
@@ -2791,6 +2795,7 @@ ABYSS FLEET
 
 /* Ship Misc Marker */
 .module.fleet .sSalt {
+	filter: blur(1.5px);
 	-webkit-filter: blur(1.5px);
 }
 .module.fleet .sWife .ship_name {
@@ -2928,6 +2933,7 @@ ABYSS FLEET
 .airbase .base_stats .base_stat_icon img {
 	width:16px;
 	height:16px;
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 	vertical-align: top;
 }
@@ -3171,7 +3177,8 @@ ABYSS FLEET
 }
 
 .ui-tooltip {
-	max-width:400px;
+	max-width:500px;
+	padding:2px 5px 3px 6px;
 	border-width:1px !important;
 	border:1px solid #222;
 	box-shadow:0 0 5px 1px #888;
@@ -3179,9 +3186,17 @@ ABYSS FLEET
 	font-size:12px;
 	background:#fff;
 }
+.ui-tooltip-content hr {
+	margin:3px 0px 3px 0px;
+}
+.ui-tooltip-content p {
+	margin:0px;
+}
 
 .ui-tooltip-content .ship_face_tooltip {
 	width:202px;
+	height:280px;
+	padding:2px 0px 2px 0px;
 }
 .ui-tooltip-content .ship_face_tooltip .ship_full_name {
 	width:158px;
@@ -3274,7 +3289,7 @@ ABYSS FLEET
 	margin-top:-2px;
 }
 .ui-tooltip-content .ship_face_tooltip .stat_name {
-	color:#a9a150;
+	color:#b49a47;
 	font-size:11px;
 	margin:0px 0px 0px 2px;
 }

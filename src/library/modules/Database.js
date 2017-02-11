@@ -222,9 +222,9 @@ Uses Dexie.js third-party plugin on the assets directory
 				
 			// Process the queue
 			var self = this;
-			$.each(dbUpdates, function(index, dbCurr){
+			dbUpdates.forEach(function callback(dbCurr, index) {
 				var dbVer;
-				dbCurr = $.extend({ch:{},rm:[],up:dbNonFunc},dbCurr);
+				dbCurr = Object.assign({ch:{},rm:[],up:dbNonFunc},dbCurr);
 				
 				// Replaces the proposed database table with the new one
 				Object.keys(dbCurr.ch).forEach(function(k){
@@ -814,7 +814,7 @@ Uses Dexie.js third-party plugin on the assets directory
 				})
 				.reverse()
 				.toArray()
-				.then (callbackSucc || $.nop())
+				.then (callbackSucc || function(){})
 				.catch(callbackFail || function(e){console.error(e.stack);});
 		},
 		

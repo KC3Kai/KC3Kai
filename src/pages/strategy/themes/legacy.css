@@ -21,6 +21,7 @@ body {
 
 .ui-tooltip {
 	max-width:500px;
+	padding:2px 5px 3px 6px;
 	border-width:1px !important;
 	border:1px solid #222;
 	box-shadow:0 0 5px 1px #888;
@@ -28,6 +29,12 @@ body {
 	background:#fff;
 	font-family:inherit;
 	font-size:12px;
+}
+.ui-tooltip-content hr {
+	margin:3px 0px 3px 0px;
+}
+.ui-tooltip-content p {
+	margin:0px;
 }
 
 /* COLORS
@@ -287,6 +294,14 @@ body {
 .tab_resources .legend_color {
 	border:1px solid #555;
 }
+.tab_resources #apply_options {
+	color:#000;
+	background:#def;
+	border:1px solid #ace;
+}
+.tab_resources .option_preset {
+	color:#369;
+}
 /* Consumables */
 .tab_consumables .legend_color {
 	border:1px solid #555;
@@ -309,6 +324,14 @@ body {
 .tab_showcase .show_ship .ship_mod {
 	background:#eee;
 	border-radius:5px;
+}
+.tab_showcase .controls {
+	background:#f0f5ff;
+	border-bottom:1px solid #369;
+}
+.tab_showcase  .control {
+	background:#369;
+	color:#fff;
 }
 /* Ledger */
 .tab_overlodger .filterBox {
@@ -1110,12 +1133,23 @@ body {
 
 /* EXPEDITION SCORER
 --------------------------------*/
-.tab_expedscorer .expedNumBox {
+.tab_expedscorer .control_box {
 	background: #def;
 }
-.tab_expedscorer .expedControls .calculate_btn {
-	background:#cde;
-	border:1px outset #ace;
+
+.tab_expedscorer .control_box > .header {
+	background-color: #4c7bab;
+	color: white;
+}
+
+.tab_expedscorer .control_box .content button {
+	background: #79b6e0;
+	border-color: #79b6e0;
+	color: white;
+}
+
+.tab_expedscorer .control_box.calc.out_of_sync button {
+	color: #003294;
 }
 
 /* EXPEDITION HISTORY
@@ -1186,4 +1220,76 @@ body {
 .tab_translations .tq-item .tq-name.translation_missing,
 .tab_translations .tq-item .tq-desc.translation_missing {
 	color: red;
+}
+
+/* EXPEDITION TABLE
+--------------------------------*/
+.tab_expedtable .btn-secondary:active,
+.tab_expedtable .btn-secondary.active,
+.tab_expedtable .show > .btn-secondary.dropdown-toggle {
+  color: #292b2c;
+  background-color: #e6e6e6;
+}
+.tab_expedtable .btn-secondary:hover {
+  color: #292b2c;
+  background-color: #e6e6e6;
+  border-color: #adadad;
+}
+.tab_expedtable .btn-secondary.disabled,
+.tab_expedtable .btn-secondary:disabled {
+  background-color: #fff;
+  border-color: #ccc;
+}
+.tab_expedtable .exped_row .exped_view {
+	background-color: #def;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.resource {
+	background: #cbe5ff;
+}
+
+.tab_expedtable .exped_row {
+	border: 1px solid #afcae6;
+	border-radius: 5px;
+	margin: 0px 0px 3px 0px;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box .header {
+	background: #def;
+	border-bottom: 1px solid;
+	padding: 0 5px 0 5px;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box {
+	border: 1px solid;
+	background: #fff;
+	border-radius: 4px;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.item2 {
+	background: #fff5c4;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.resource.fuel,
+.tab_expedtable .exped_row .exped_view .cost .view_general .fuel,
+.tab_expedtable #cost_model_content_root table .fuel {
+	color: #59ab59;
+}
+
+.tab_expedtable .exped_row .exped_view .cost .view_general .ammo,
+.tab_expedtable #cost_model_content_root table .ammo,
+.tab_expedtable .exped_row .exped_view .info_col.resource.ammo {
+	color: #bba856;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.resource.steel {
+	color: #777777;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.resource.bauxite {
+	color: #b68f55;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.edit_btn {
+	background-color: #93bcff;
 }

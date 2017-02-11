@@ -24,11 +24,22 @@ KCScreenshot.prototype.setCallback = function(callback){
 };
 
 KCScreenshot.prototype.start = function(playerName, element){
-	var self = this;
 	this.playerName = playerName;
 	this.gamebox = element;
 	this.generateScreenshotFilename();
-	
+	this.prepare();
+	this.capture();
+};
+
+KCScreenshot.prototype.remoteStart = function(tabId, offset){
+	this.tabId = tabId;
+	this.offset = offset;
+	this.generateScreenshotFilename(false);
+	this.prepare();
+	this.remoteCapture();
+};
+
+KCScreenshot.prototype.prepare = function(){
 	// Initialize HTML5 Canvas
 	this.canvas = document.createElement("canvas");
 	this.canvas.width = 800 * this.scale;
@@ -37,8 +48,6 @@ KCScreenshot.prototype.start = function(playerName, element){
 	
 	// Initialize Image Tag
 	this.domImg = new Image();
-	
-	this.capture();
 };
 
 function chromeCapture(captureFormat, imageQuality, response){
@@ -49,20 +58,26 @@ function chromeCapture(captureFormat, imageQuality, response){
 	}, response);
 }
 
-KCScreenshot.prototype.generateScreenshotFilename = function() {
-  var d = new Date();
-  curr_month = (d.getMonth()+1) + "";
-  if (curr_month.length == 1) { curr_month = "0" + curr_month; }
-  curr_date = d.getDate() + "";
-  if (curr_date.length == 1) { curr_date = "0" + curr_date; }
-  curr_hour = d.getHours() + "";
-  if (curr_hour.length == 1) { curr_hour = "0" + curr_hour; }
-  curr_min = d.getMinutes() + "";
-  if (curr_min.length == 1) { curr_min = "0" + curr_min; }
-  curr_second = d.getSeconds() + "";
-  if (curr_second.length == 1) { curr_second = "0" + curr_second; }
-
-  this.screenshotFilename = "["+this.playerName+"] "+d.getFullYear()+"-"+curr_month+"-"+curr_date+" "+curr_hour+"-"+curr_min+"-"+curr_second + " " + getRandomInt(10,99);
+KCScreenshot.prototype.generateScreenshotFilename = function(withPlayerName) {
+	withPlayerName = typeof withPlayerName == 'undefined' ? true : withPlayerName;
+	
+	var d = new Date();
+	curr_month = (d.getMonth()+1) + "";
+	if (curr_month.length == 1) { curr_month = "0" + curr_month; }
+	curr_date = d.getDate() + "";
+	if (curr_date.length == 1) { curr_date = "0" + curr_date; }
+	curr_hour = d.getHours() + "";
+	if (curr_hour.length == 1) { curr_hour = "0" + curr_hour; }
+	curr_min = d.getMinutes() + "";
+	if (curr_min.length == 1) { curr_min = "0" + curr_min; }
+	curr_second = d.getSeconds() + "";
+	if (curr_second.length == 1) { curr_second = "0" + curr_second; }
+	
+	if (withPlayerName) {
+		this.screenshotFilename = "["+this.playerName+"] "+d.getFullYear()+"-"+curr_month+"-"+curr_date+" "+curr_hour+"-"+curr_min+"-"+curr_second + " " + getRandomInt(10,99);
+	} else {
+		this.screenshotFilename = d.getFullYear()+"-"+curr_month+"-"+curr_date+" "+curr_hour+"-"+curr_min+"-"+curr_second + " " + getRandomInt(10,99);
+	}
 };
 
 function getRandomInt(min, max) {
@@ -82,15 +97,28 @@ KCScreenshot.prototype.capture = function(){
 	}
 };
 
+KCScreenshot.prototype.remoteCapture = function(){
+	var self = this;
+	chrome.tabs.get(this.tabId, function(tabInfo){
+		chrome.tabs.captureVisibleTab(tabInfo.windowId, {
+			format: self.format[0],
+			quality: self.quality || 100
+		}, function(base64img){
+			self.domImg.onload = self.crop(self.offset);
+			self.domImg.src = base64img;
+		});
+	});
+};
+
 KCScreenshot.prototype.startCapture = function(){
 	var self = this;
 	chromeCapture(this.format[0], this.quality, function(base64img){
 		self.domImg.src = base64img;
-		self.domImg.onload = self.crop();
+		self.domImg.onload = self.crop(self.gamebox.offset());
 	});
 };
 
-KCScreenshot.prototype.crop = function(){
+KCScreenshot.prototype.crop = function(offset){
 	var self = this;
 	
 	// Get zoom factor
@@ -99,8 +127,8 @@ KCScreenshot.prototype.crop = function(){
 		var params = {
 			realWidth: 800 * zoomFactor * self.scale,
 			realHeight: 480 * zoomFactor * self.scale,
-			offTop: self.gamebox.offset().top * zoomFactor * self.scale,
-			offLeft: self.gamebox.offset().left * zoomFactor * self.scale,
+			offTop: offset.top * zoomFactor * self.scale,
+			offLeft: offset.left * zoomFactor * self.scale,
 		};
 		
 		// Actual Cropping
@@ -151,7 +179,7 @@ KCScreenshot.prototype.saveDownload = function(){
 			chrome.downloads.setShelfEnabled(true);
 			enableShelfTimer = false;
 			self.complete();
-		}, 100);
+		}, 300);
 	});
 };
 
@@ -182,7 +210,7 @@ KCScreenshot.prototype.saveImgur = function(){
 						Accept: 'application/json'
 					},
 					data: {
-						image: self.base64img.substring(23),
+						image: self.base64img.split(',')[1],
 						type: 'base64'
 					},
 					success: function(response){
