@@ -11,13 +11,7 @@ function fetchData(options){
 	let endHour = Math.floor((new Date(options.end))/( 1*60*60*1000))+24;
 	
 	// Start must be higher than end
-	if (startHour >= endHour) {
-		postMessage(false);
-		return false;
-	}
-	
-	// April 27, 2015 is kc3kai launch date
-	if (startHour < 397248) {
+	if (startHour >= endHour || startHour < 397248 || !startHour || !endHour) {
 		postMessage(false);
 		return false;
 	}
