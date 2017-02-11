@@ -119,6 +119,7 @@ class KC3Graphable {
 		
 		// New chart JS only accepts an array, not object
 		data.datasets = Object.values(data.datasets);
+		console.log('datasets', data.datasets);
 		
 		// Draw graph
 		this.ctx = $("#chart").get(0).getContext("2d");
