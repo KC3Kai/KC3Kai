@@ -606,15 +606,18 @@
 				$(".tab_mstship .shipInfo .cgswf embed")
 					.css("width", "468px")
 					.css("height", "400px");
+				$(".tab_mstship .shipInfo .boss").toggle("boss" === KC3Meta.abyssShipBorderClass(shipData));
 				
+				// ENEMY STATS
 				// show stats if encounter once, or show stats of internal db
 				KC3Database.get_enemyInfo(ship_id, function(enemyDbStats){
-					var abyssMaster = KC3Master.abyssalShip(ship_id, true);
+					var abyssMaster = KC3Master.abyssalShip(ship_id, false);
 					console.debug("enemyDbStats", enemyDbStats);
 					console.debug("abyssalMaster", abyssMaster);
 					$(".tab_mstship .shipInfo .encounter").toggle(!!enemyDbStats);
 					if(enemyDbStats || abyssMaster){
-						// ENEMY STATS
+						// Merge to official master
+						abyssMaster = KC3Master.abyssalShip(ship_id, true);
 						$(".tab_mstship .shipInfo .stats").empty();
 						$.each([
 							["hp", "taik"],
@@ -698,13 +701,13 @@
 						$(".tab_mstship .shipInfo .equipments").show();
 					} else {
 						$(".tab_mstship .shipInfo .json").show();
+						$(".tab_mstship .shipInfo .boss").hide();
 					}
 				});
 				
 				$(".tab_mstship .shipInfo .voices").hide();
 				$(".tab_mstship .shipInfo .hourlies").hide();
 				$(".tab_mstship .shipInfo .intro").hide();
-				$(".tab_mstship .shipInfo .boss").toggle("boss" === KC3Meta.abyssShipBorderClass(shipData));
 				$(".tab_mstship .shipInfo .more").hide();
 				$(".tab_mstship .shipInfo .aaci").hide();
 				$(".tab_mstship .shipInfo .gunfit").hide();

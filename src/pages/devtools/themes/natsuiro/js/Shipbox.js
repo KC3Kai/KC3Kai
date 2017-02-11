@@ -515,7 +515,7 @@ KC3改 Ship Box for Natsuiro theme
 				$(".icon", statBox).attr("src", "../../../../assets/img/stats/"+sdata[0]+".png");
 				$(".icon", statBox).width(13).height(13).css("margin-top", "-3px");
 				if(sdata[0]==="rn"){
-					$(".value", statBox).text(["","S","M","L","VL"][gearData["api_"+sdata[1]]]);
+					$(".value", statBox).text(["?","S","M","L","VL","XL"][gearData["api_"+sdata[1]]]||"?");
 				} else {
 					$(".value", statBox).text(gearData["api_"+sdata[1]]);
 				}

@@ -88,6 +88,10 @@
 			"t39": "dv",
 			// jet bomber (kikka)
 			"t40": "dv",
+			// transport material
+			"t41": "overall",
+			// submarine radar
+			"t42": "ev",
 			// all types
 			"tall": "type",
 		},

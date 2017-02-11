@@ -102,7 +102,7 @@
 				JSON.stringify(gearData.api_type),
 				KC3Meta.gearTypeName(0, gearData.api_type[0]),
 				KC3Meta.gearTypeName(1, gearData.api_type[1]),
-				KC3Meta.gearTypeName(2, gearData.api_type[2]) ||
+				KC3Meta.gearTypeName(2, gearData.api_type[2]).replace("?", "") ||
 					KC3Master.slotitem_equiptype(gearData.api_type[2]).api_name
 			));
 			if(KC3StrategyTabs.isTextEllipsis(gearTypesBox)){
@@ -160,10 +160,12 @@
 					$("img", statBox).attr("src", "../../../../assets/img/stats/"+sdata[0]+".png");
 					if(sdata[0]==="rn"){ // For range length
 						$(".stat_value", statBox).text( [
-							"", "S", "M", "L", "VL"
-						][gearData["api_"+sdata[1]]] );
-					}else if(sdata[0]==="sp"){ // For speed
-						$(".stat_value", statBox).text( gearData["api_"+sdata[1]]==10?"F":"S" );
+							"?", "S", "M", "L", "VL", "XL"
+						][gearData["api_"+sdata[1]]] || "?" );
+					}else if(sdata[0]==="sp"){ // For speed, but not found in gears
+						$(".stat_value", statBox).text( ({
+							"0":"L", "5":"S", "10":"F", "15":"F+", "20":"F++"
+						})[gearData["api_"+sdata[1]]] || "?");
 					}else if(sdata[0]==="kk"){ // For bauxite cost when deploy to LBAS
 						var landSlot = KC3GearManager.landBaseReconnType2Ids.indexOf(gearData.api_type[2])>-1 ?
 							KC3GearManager.landBaseReconnMaxSlot : KC3GearManager.landBaseOtherMaxSlot;

@@ -68,6 +68,7 @@ module.exports = function(grunt) {
 					'library/injections/*.js',
 					'library/injections/*.css',
 					'library/modules/*.js',
+					'library/workers/*.js',
 					'pages/**/*',
 					'!pages/strategy/tabs/**/*.js',
 					'manifest.json',
