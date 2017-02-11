@@ -123,3 +123,14 @@
 .tab_consumables .main_graph {
 	margin:15px 0px 0px 0px;
 }
+.tab_consumables .loading {
+	margin:2px 3px 0px 0px;
+	float:left;
+	display:block;
+}
+.tab_consumables .loading img {
+	content:url(../../../../assets/img/ui/indicator.svg);
+	width:20px;
+	height:20px;
+	display:block;
+}

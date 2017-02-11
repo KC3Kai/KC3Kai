@@ -75,6 +75,7 @@ class KC3Graphable {
 		if (this.chart) this.chart.destroy();
 		$(".graph_input").prop("disabled", true);
 		$(".graph_title").text("Loading...");
+		$(".loading").show();
 		
 		this.collectData({
 			tableName: this.tableName,
@@ -94,6 +95,7 @@ class KC3Graphable {
 				this.refreshGraph(response.data);
 			} else {
 				this.loadingGraph = false;
+				$(".loading").hide();
 				$(".graph_title").text("Unable to render");
 				$(".graph_input").prop("disabled", false);
 			}
@@ -107,6 +109,7 @@ class KC3Graphable {
 	
 	// Re-draw the graph and date title
 	refreshGraph(data){
+		$(".loading").hide();
 		// Show graph title dates
 		$(".graph_title").text(
 			new Date($("#startDate").val()).format("mmm d, yyyy")
