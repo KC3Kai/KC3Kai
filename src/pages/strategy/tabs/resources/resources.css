@@ -2,8 +2,14 @@
 	width:680px;
 }
 .tab_resources .legend_item {
-	width:120px;
+	width:150px;
 	height:20px;
+	float:left;
+}
+.tab_resources .legend_toggle {
+	width:20px;
+	height:20px;
+	line-height:20px;
 	float:left;
 }
 .tab_resources .legend_color {
@@ -38,4 +44,82 @@
 .tab_resources .legend_label {
 	width:70px;
 	float:left;
+}
+
+.tab_resources .graph_option {
+	float:left;
+	margin:0px 5px 0px 0px;
+	/*background:#cfc;*/
+}
+.tab_resources .graph_option div {
+	line-height:20px;
+	float:left;
+}
+.tab_resources .graph_option label {
+	font-weight:normal;
+	font-size:12px;
+}
+/* Start at zero */
+.tab_resources .graph_check {
+	margin:0px 20px 0px 0px;
+}
+.tab_resources .checkbox_input {
+	margin:0px 3px 0px 0px;
+}
+.tab_resources .checkbox_label {
+	
+}
+/* Date range */
+.tab_resources .graph_date {
+	width:160px;
+	margin:0px 15px 0px 0px;
+}
+.tab_resources .date_label {
+	width:40px;
+}
+.tab_resources .date_input {
+	width:120px;
+}
+.tab_resources .date_input input {
+	width:120px;
+	height:18px;
+	margin:1px 0px 0px 0px;
+	font-size:12px;
+}
+/* Interval */
+.tab_resources .graph_dropdown {
+	width:120px;
+}
+.tab_resources .dropdown_label {
+	width:45px;
+}
+.tab_resources .dropdown_input {
+	width:75px;
+}
+.tab_resources .dropdown_input select {
+	width:75px;
+	height:18px;
+	margin:1px 0px 0px 0px;
+	font-size:12px;
+}
+
+/* Filter presets */
+.tab_resources .preset_label {
+	height:22px;
+	line-height:22px;
+	float:left;
+	font-size:12px;
+	color:#aaa;
+	margin:0px 10px 0px 0px;
+}
+.tab_resources .option_preset {
+	height:22px;
+	line-height:22px;
+	float:left;
+	font-size:12px;
+	margin:0px 0px 0px 20px;
+}
+
+.tab_resources .main_graph {
+	margin:15px 0px 0px 0px;
 }

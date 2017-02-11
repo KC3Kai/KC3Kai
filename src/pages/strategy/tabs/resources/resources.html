@@ -16,24 +16,28 @@
 <!-- LEGEND -->
 <div class="page_panel">
 	<div class="legend_item">
+		<div class="legend_toggle"><input type="checkbox" data-type="rsc1" class="graph_input" CHECKED /></div>
 		<div class="legend_color color_fuel"></div>
 		<div class="legend_icon"><img src="../../assets/img/client/fuel.png" /></div>
 		<div class="legend_label">Fuel</div>
 		<div class="clear"></div>
 	</div>
 	<div class="legend_item">
+		<div class="legend_toggle"><input type="checkbox" data-type="rsc2" class="graph_input" CHECKED /></div>
 		<div class="legend_color color_ammo"></div>
 		<div class="legend_icon"><img src="../../assets/img/client/ammo.png" /></div>
 		<div class="legend_label">Ammo</div>
 		<div class="clear"></div>
 	</div>
 	<div class="legend_item">
+		<div class="legend_toggle"><input type="checkbox" data-type="rsc3" class="graph_input" CHECKED /></div>
 		<div class="legend_color color_steel"></div>
 		<div class="legend_icon"><img src="../../assets/img/client/steel.png" /></div>
 		<div class="legend_label">Steel</div>
 		<div class="clear"></div>
 	</div>
 	<div class="legend_item">
+		<div class="legend_toggle"><input type="checkbox" data-type="rsc4" class="graph_input" CHECKED /></div>
 		<div class="legend_color color_baux"></div>
 		<div class="legend_icon"><img src="../../assets/img/client/bauxite.png" /></div>
 		<div class="legend_label">Bauxite</div>
@@ -41,21 +45,59 @@
 	</div>
 	<div class="clear"></div>
 </div>
+<div class="page_panel graph_options">
+	<div class="graph_option graph_date">
+		<div class="date_label"><label for="startDate">Start</label></div>
+		<div class="date_input"><input type="date" id="startDate" class="graph_input" /></div>
+	</div>
+	<div class="graph_option graph_date">
+		<div class="date_label"><label for="endDate">End</label></div>
+		<div class="date_input"><input type="date" id="endDate" class="graph_input" /></div>
+	</div>
+	<div class="graph_option graph_dropdown">
+		<div class="dropdown_label"><label for="graphInterval">Interval</label></div>
+		<div class="dropdown_input">
+			<select id="graphInterval" class="graph_input">
+				<option value="1">1 hour</option>
+				<option value="3">3 hours</option>
+				<option value="6">6 hours</option>
+				<option value="12">12 hours</option>
+				<option value="24" SELECTED>1 day</option>
+				<option value="72">3 days</option>
+				<option value="168">1 week</option>
+				<option value="336">2 weeks</option>
+				<option value="504">3 weeks</option>
+				<option value="672">4 weeks</option>
+				<option value="720">30 days</option>
+			</select>
+		</div>
+	</div>
+	<div class="graph_option option_preset hover" data-preset="day">Day</div>
+	<div class="graph_option option_preset hover" data-preset="week">Week</div>
+	<div class="graph_option option_preset hover" data-preset="month">Month</div>
+	<div class="clear"></div>
+</div>
+<div class="page_panel">
+	<div class="graph_option graph_check">
+		<div class="checkbox_input"><input type="checkbox" id="startZero" class="graph_input" /></div>
+		<div class="checkbox_label"><label for="startZero">Start at zero</label></div>
+	</div>
+	<div class="graph_option graph_check">
+		<div class="checkbox_input"><input type="checkbox" id="deltaMode" class="graph_input" /></div>
+		<div class="checkbox_label"><label for="deltaMode">Delta mode</label></div>
+	</div>
+	<div class="graph_option graph_check">
+		<div class="checkbox_input"><input type="checkbox" id="showTooltips" class="graph_input" /></div>
+		<div class="checkbox_label"><label for="showTooltips">Tooltips</label></div>
+	</div>
+	<div class="clear"></div>
+</div>
+
 
 <!-- GRAPHS -->
-<div class="page_padding">
-	<div class="page_section">Over the past day (per hour)</div>
+<div class="page_padding main_graph">
+	<div class="page_section graph_title"></div>
 	<div class="section_body">
-		<canvas id="chart1" width="680" height="250"></canvas>
-	</div>
-	
-	<div class="page_section">Over the past week (per 6 hours)</div>
-	<div class="section_body">
-		<canvas id="chart2" width="680" height="250"></canvas>
-	</div>
-	
-	<div class="page_section">Over the past month (per day)</div>
-	<div class="section_body">
-		<canvas id="chart3" width="680" height="250"></canvas>
+		<canvas id="chart" width="680" height="350"></canvas>
 	</div>
 </div>

@@ -294,6 +294,14 @@ body {
 .tab_resources .legend_color {
 	border:1px solid #555;
 }
+.tab_resources #apply_options {
+	color:#000;
+	background:#def;
+	border:1px solid #ace;
+}
+.tab_resources .option_preset {
+	color:#369;
+}
 /* Consumables */
 .tab_consumables .legend_color {
 	border:1px solid #555;
