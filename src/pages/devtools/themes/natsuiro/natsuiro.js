@@ -901,6 +901,12 @@
 			}else{
 				$("#gameUpdate .description a").html( KC3Meta.term("GameUpdateEquips").format(data[1]) );
 			}
+			
+			$("#gameUpdate .description a").on("click", function(){
+				(new RMsg("service", "openExtensionPage", {
+					path: "pages/strategy/strategy.html#mstupdate"
+				})).execute();
+			});
 
 			$("#gameUpdate").fadeIn(300);
 		},
@@ -3122,6 +3128,12 @@
 						$(".activity_gunfit .fit_value").addClass("fit_neutral");
 					}
 				}
+				$(".activity_gunfit .fit_value").on("click", function(e){
+					(new RMsg("service", "openExtensionPage", {
+						path: "pages/strategy/strategy.html#mstship-"+data.shipObj.masterId
+					})).execute();
+					e.stopPropagation();
+				});
 				$(".activity_gunfit .fit_value").show();
 			} else {
 				$(".activity_gunfit .fit_value").hide();

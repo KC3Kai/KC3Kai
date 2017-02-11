@@ -263,6 +263,15 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			});
 		},
 		
+		/* OPEN CHROME EXTENSION PAGE
+		DevTools open about:blank page when trying to open new tab by itself
+		------------------------------------------*/
+		"openExtensionPage" :function(request, sender, response){
+			chrome.tabs.create({
+				url: chrome.extension.getURL(request.path)
+			});
+		},
+		
 		/* DMM FRMAE INJECTION
 		Responds if content script should inject DMM Frame customizations
 		------------------------------------------*/
