@@ -1857,7 +1857,7 @@
 			var thisNode = KC3SortieManager.currentNode();
 			var battleData = (thisNode.startNight)? thisNode.battleNight : thisNode.battleDay;
 			var enemyFleetBox = thisNode.eships.length > 6 ? "combined" : "single";
-			
+			var enemyFleetBoxSelector = ".module.activity .abyss_" + enemyFleetBox;
 			if (enemyFleetBox == "combined") {
 				$(".module.activity .abyss_single").hide();
 				$(".module.activity .abyss_combined").show();
@@ -1880,15 +1880,21 @@
 			// Load enemy icons
 			$.each(thisNode.eships, function(index, eshipId){
 				if(eshipId > 0){
-					if ($(".module.activity .abyss_"+enemyFleetBox+" .abyss_ship_"+(index+1)).length > 0) {
-						$(".module.activity .abyss_"+enemyFleetBox+" .abyss_ship_"+(index+1)).addClass(KC3Meta.abyssShipBorderClass(eshipId));
-						$(".module.activity .abyss_"+enemyFleetBox+" .abyss_ship_"+(index+1)+" img")
+					if ($(enemyFleetBoxSelector+" .abyss_ship_"+(index+1)).length > 0) {
+						$(enemyFleetBoxSelector+" .abyss_ship_"+(index+1)).addClass(KC3Meta.abyssShipBorderClass(eshipId));
+						$(enemyFleetBoxSelector+" .abyss_ship_"+(index+1)+" img")
 							.attr("src", KC3Meta.abyssIcon(eshipId))
 							.attr("title", buildEnemyFaceTooltip(eshipId, thisNode.elevels[index],
 								thisNode.maxHPs.enemy[index], thisNode.eParam[index],
 								thisNode.eSlot[index], false))
 							.lazyInitTooltip();
-						$(".module.activity .abyss_"+enemyFleetBox+" .abyss_ship_"+(index+1)).show();
+						$(enemyFleetBoxSelector+" .abyss_ship_"+(index+1))
+							.data("masterId", eshipId)
+							.off("dblclick").on("dblclick", function(e){
+								(new RMsg("service", "strategyRoomPage", {
+									tabPath: "mstship-{0}".format($(this).data("masterId"))
+								})).execute();
+							}).show();
 					}
 				}
 			});
@@ -1908,8 +1914,8 @@
 								updateMapGauge(KC3SortieManager.currentNode().gaugeDamage,!newEnemyHP);
 	
 							if(newEnemyHP === 0){
-								$(".module.activity .abyss_ship_"+(index+1)).css("opacity", "0.6");
-								$(".module.activity .sunk_"+(index+1)+" img")
+								$(enemyFleetBoxSelector+" .abyss_ship_"+(index+1)).css("opacity", "0.6");
+								$(enemyFleetBoxSelector+" .sunk_"+(index+1)+" img")
 									.show()
 									.css("-webkit-filter","");
 							}
@@ -1923,25 +1929,25 @@
 								$(".module.activity .abyss_combined .abyss_hp_bar_"+(index+1))
 									.css("margin-top", 15-enemyBarHeight);
 							} else {
-								$(".module.activity .abyss_"+enemyFleetBox+" .abyss_hp_bar_"+(index+1))
+								$(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1))
 									.css("width", 28*enemyHPPercent);
 							}
 							
 							if(enemyHPPercent <= 0.25){
-								$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FF0000");
+								$(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1)).css("background", "#FF0000");
 							} else if(enemyHPPercent <= 0.50){
-								$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FF9900");
+								$(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1)).css("background", "#FF9900");
 							} else if(enemyHPPercent <= 0.75){
-								$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FFFF00");
+								$(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1)).css("background", "#FFFF00");
 							} else{
-								$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#00FF00");
+								$(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1)).css("background", "#00FF00");
 							}
 							
 						} else {
-							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#999999");
+							$(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1)).css("background", "#999999");
 						}
 						
-						$(".module.activity .abyss_hp_"+(index+1)).show();
+						$(enemyFleetBoxSelector+" .abyss_hp_"+(index+1)).show();
 					}
 				});
 			}
@@ -2091,7 +2097,13 @@
 									thisNode.maxHPs.enemy[index], thisNode.eParam[index],
 									thisNode.eSlot[index], thisNode.isPvP))
 								.lazyInitTooltip();
-							$(".module.activity .abyss_single .abyss_ship_"+(index+1)).show();
+							$(".module.activity .abyss_single .abyss_ship_"+(index+1))
+								.data("masterId", eshipId)
+								.off("dblclick").on("dblclick", function(e){
+									(new RMsg("service", "strategyRoomPage", {
+										tabPath: "mstship-{0}".format($(this).data("masterId"))
+									})).execute();
+								}).show();
 						}
 						
 						if(!index &&
@@ -2100,8 +2112,8 @@
 							updateMapGauge(KC3SortieManager.currentNode().gaugeDamage,!newEnemyHP);
 
 						if(newEnemyHP === 0){
-							$(".module.activity .abyss_ship_"+(index+1)).css("opacity", "0.6");
-							$(".module.activity .sunk_"+(index+1)+" img")
+							$(".module.activity .abyss_single .abyss_ship_"+(index+1)).css("opacity", "0.6");
+							$(".module.activity .abyss_single .sunk_"+(index+1)+" img")
 								.show()
 								.css("-webkit-filter",(data||{safeSunk:false}).safeSunk ? "grayscale(100%)" : "");
 						}
@@ -2112,16 +2124,16 @@
 							.css("width", 28*enemyHPPercent);
 						
 						if(enemyHPPercent <= 0.25){
-							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FF0000");
+							$(".module.activity .abyss_single .abyss_hp_bar_"+(index+1)).css("background", "#FF0000");
 						} else if(enemyHPPercent <= 0.50){
-							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FF9900");
+							$(".module.activity .abyss_single .abyss_hp_bar_"+(index+1)).css("background", "#FF9900");
 						} else if(enemyHPPercent <= 0.75){
-							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FFFF00");
+							$(".module.activity .abyss_single .abyss_hp_bar_"+(index+1)).css("background", "#FFFF00");
 						} else{
-							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#00FF00");
+							$(".module.activity .abyss_single .abyss_hp_bar_"+(index+1)).css("background", "#00FF00");
 						}
 
-						$(".module.activity .abyss_hp_"+(index+1)).show();
+						$(".module.activity .abyss_single .abyss_hp_"+(index+1)).show();
 					}
 				});
 				
@@ -2453,7 +2465,6 @@
 			$(".module.activity .map_hp").text( KC3Meta.term("BattleMapNoHpGauge") );
 			
 			// PvP enemy never combined
-			// CAUTION: old CSS selector below will affect elements in both single and combined!
 			$(".module.activity .abyss_single").show();
 			$(".module.activity .abyss_combined").hide();
 			
@@ -2493,13 +2504,19 @@
 			// Show opponent ships faces
 			$.each(thisPvP.eships, function(index, eshipId){
 				if(eshipId > 0){
-					$(".module.activity .abyss_ship_"+(index+1)+" img")
+					$(".module.activity .abyss_single .abyss_ship_"+(index+1)+" img")
 						.attr("src", KC3Meta.shipIcon(eshipId))
 						.attr("title", buildEnemyFaceTooltip(eshipId, thisPvP.elevels[index],
 							thisPvP.maxHPs.enemy[index], thisPvP.eParam[index],
 							thisPvP.eSlot[index], true))
 						.lazyInitTooltip();
-					$(".module.activity .abyss_ship_"+(index+1)).show();
+					$(".module.activity .abyss_single .abyss_ship_"+(index+1))
+						.data("masterId", eshipId)
+						.off("dblclick").on("dblclick", function(e){
+							(new RMsg("service", "strategyRoomPage", {
+								tabPath: "mstship-{0}".format($(this).data("masterId"))
+							})).execute();
+						}).show();
 				}
 			});
 
@@ -2512,26 +2529,26 @@
 						if(newEnemyHP < 0){ newEnemyHP = 0; }
 
 						if(newEnemyHP === 0){
-							$(".module.activity .abyss_ship_"+(index+1)).css("opacity", "0.6");
-							$(".module.activity .sunk_"+(index+1)+" img")
+							$(".module.activity .abyss_single .abyss_ship_"+(index+1)).css("opacity", "0.6");
+							$(".module.activity .abyss_single .sunk_"+(index+1)+" img")
 								.show()
 								.css("-webkit-filter","grayscale(100%)");
 						}
 
 						enemyHPPercent = ( newEnemyHP / thisPvP.maxHPs.enemy[index] );
-						$(".module.activity .abyss_hp_bar_"+(index+1)).css("width", 28*enemyHPPercent);
+						$(".module.activity .abyss_single .abyss_hp_bar_"+(index+1)).css("width", 28*enemyHPPercent);
 
 						if(enemyHPPercent <= 0.25){
-							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FF0000");
+							$(".module.activity .abyss_single .abyss_hp_bar_"+(index+1)).css("background", "#FF0000");
 						} else if(enemyHPPercent <= 0.50){
-							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FF9900");
+							$(".module.activity .abyss_single .abyss_hp_bar_"+(index+1)).css("background", "#FF9900");
 						} else if(enemyHPPercent <= 0.75){
-							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#FFFF00");
+							$(".module.activity .abyss_single .abyss_hp_bar_"+(index+1)).css("background", "#FFFF00");
 						} else{
-							$(".module.activity .abyss_hp_bar_"+(index+1)).css("background", "#00FF00");
+							$(".module.activity .abyss_single .abyss_hp_bar_"+(index+1)).css("background", "#00FF00");
 						}
 
-						$(".module.activity .abyss_hp_"+(index+1)).show();
+						$(".module.activity .abyss_single .abyss_hp_"+(index+1)).show();
 					}
 				});
 			}
