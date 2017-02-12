@@ -902,10 +902,11 @@
 				$("#gameUpdate .description a").html( KC3Meta.term("GameUpdateEquips").format(data[1]) );
 			}
 			
-			$("#gameUpdate .description a").on("click", function(){
-				(new RMsg("service", "openExtensionPage", {
-					path: "pages/strategy/strategy.html#mstupdate"
+			$("#gameUpdate .description a").off("click").on("click", function(e){
+				(new RMsg("service", "strategyRoomPage", {
+					tabPath: "mstupdate"
 				})).execute();
+				return false;
 			});
 
 			$("#gameUpdate").fadeIn(300);
@@ -3128,9 +3129,9 @@
 						$(".activity_gunfit .fit_value").addClass("fit_neutral");
 					}
 				}
-				$(".activity_gunfit .fit_value").on("click", function(e){
-					(new RMsg("service", "openExtensionPage", {
-						path: "pages/strategy/strategy.html#mstship-"+data.shipObj.masterId
+				$(".activity_gunfit .fit_value").off("click").on("click", function(e){
+					(new RMsg("service", "strategyRoomPage", {
+						tabPath: "mstship-{0}".format(data.shipObj.masterId)
 					})).execute();
 					e.stopPropagation();
 				});
