@@ -221,27 +221,82 @@ Quest Type:
 		return this.status == 3;	// Completed
 	};
 
-	KC3Quest.prototype.autoAdjustCounter = function(){
-		if(this.tracking){
-			if(this.isCompleted()) {
-				this.tracking[0][0] = this.tracking[0][1];
+	KC3Quest.prototype.autoAdjustCounter = function() {
+		if (! this.tracking || !Array.isArray(this.tracking))
+			return;
+		// no adjustment for multi-counter quests
+		// an example of this Bw1 (questId = 214)
+		if (this.tracking.length > 1)
+			return;
+
+		// at this point we can confirm this is a singleton array
+		// so only need to deal with one tracking data, let's give it a name
+		const trackingData = this.tracking[0];
+
+		if(this.isCompleted()) {
+			trackingData[0] = trackingData[1];
+			return;
+		} else {
+			// known fact at this point: the actual quest is *not* completed
+			let currentCount = trackingData[0];
+			let maxCount = parseFloat(trackingData[1]);
+
+			// pFlag: short for Progress Flag,
+			// for incompleted quests:
+			// pFlag = 2: 80% <= progress percentage < 100%
+			// pFlag = 1: 50% <= progress percentage < 80%
+			// pFlag = 0:        progress percentage < 50%
+			let actualPFlag = this.progress;
+			console.assert([0,1,2].indexOf( actualPFlag ) !== -1);
+			let progress =
+				  actualPFlag === 0 ? 0.0
+				: actualPFlag === 1 ? 0.5
+				: actualPFlag === 2 ? 0.8
+				: NaN /* unreachable */;
+
+			// we compare actual pFlag and pFlag under our track
+			// to see if they are consistent,
+			// by doing so we not only correct counter falling-behind problems,
+			// but also overshotting ones.
+			let trackedPFlag =
+				/* cur/max >= 4/5 (80%) */
+				5*currentCount >= 4*maxCount ? 2
+			    /* cur/max >= 1/2 (50%) */
+				: 2*currentCount >= maxCount ? 1
+				: 0;
+
+			// does the actual correction and announce it
+			let announcedCorrection = newCurrentCount => {
+				console.log("Adjusting quest", this.id, "tracking", currentCount,
+							"to", newCurrentCount , "=", progress * 100 + "%",
+							"of", maxCount);
+				trackingData[0] = newCurrentCount;
+			};
+
+			// it's good if pFlag is consistent
+			// but something is defintely wrong if cur >= max
+			if (trackedPFlag === actualPFlag &&
+			    currentCount < maxCount)
 				return;
-			}
-			// No adjustment for Bw1, F7, F8
-			if([214, 607, 608].indexOf(this.id) < 0){
-				var currentCount = this.tracking[0][0];
-				var maxCount = parseFloat(this.tracking[0][1]);
-				var progress = 0;
-				if (this.progress == 1) {
-					progress = 0.5;
-				} else if (this.progress == 2) {
-					progress = 0.8;
-				}
-				if (currentCount/maxCount < progress) {
-					console.log("Adjusting quest", this.id, "tracking", currentCount,
-						"to", Math.ceil(maxCount * progress), "=", progress * 100 + "%", "of", maxCount);
-					this.tracking[0][0] = Math.ceil(maxCount * progress);
-				}
+
+			if (maxCount >= 5) {
+				announcedCorrection( Math.ceil(maxCount*progress) );
+			} else {
+				// things special about maxCount < 5 quests is that
+				// it is possible for:
+				//   ceil(maxCount * 0.5), ceil(maxCount * 0.8), maxCount
+				// to take the same number
+
+				// so if we end up making new "currentCount" equal to "maxCount",
+				// we must minus 1 from it to prevent it from completion
+				let potentialCount = Math.ceil(maxCount * progress);
+				if (potentialCount === maxCount)
+					potentialCount = maxCount-1;
+				// if what we have figured out is the same as current counter
+				// then it's still fine.
+				if (potentialCount === currentCount)
+					return;
+				announcedCorrection( potentialCount );
 			}
 		}
 	};
