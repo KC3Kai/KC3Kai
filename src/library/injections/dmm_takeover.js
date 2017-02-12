@@ -542,6 +542,7 @@
 		/* IDLE TIMER
 		Ask background service to take my selfie
 		--------------------------------------*/
+		idleTimerHandler: false,
 		idleTimer: function(){
 			let lastNetworkTime = (new Date()).getTime();
 			let hideIdleScreen = false;
@@ -553,10 +554,10 @@
 			let timeIdleMax = timeIdleStart + 100000;
 
 			// Timer that checks idle time and show UI
-			setInterval(function(){
+			this.idleTimerHandler = setInterval(function(){
 				let idleMillis = (new Date()).getTime() - lastNetworkTime;
 				// If idle for more than setting seconds, start to show UI
-				if (idleMillis > timeIdleStart && !hideIdleScreen) {
+				if (idleMillis > timeIdleStart && !!timeIdleStart && !hideIdleScreen) {
 					$(".overlay_idle").show();
 					$(".overlay_idle").css({ opacity:1 });
 					$(".overlay_idle").text(String(Math.floor(idleMillis/1000)).toHHMMSS());
