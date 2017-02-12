@@ -4,13 +4,14 @@ KC3改 Quest Class
 Instantiatable class to represent a single Quest
 Mainly used by QuestManager to store quest information
 
-Quest Type:
-1 = One time
-2 = Daily
-3 = Weekly
-4 = Sink 3 Aircraft Carrier (only on dates ending in -3rd, -7th, or -0th) Bd4
-5 = Sink Transport Fleet (only on dates ending in -2nd or -8th} Bd6
-6 = Monthly
+Known Quest Type (api_type):
+1 = Daily
+2 = Weekly
+3 = Monthly
+4 = Once
+5 = Other (Bd4, Bd6, Quarterly, etc)
+
+known IDs see QuestManager
 */
 (function(){
 	"use strict";
@@ -196,17 +197,23 @@ Quest Type:
 	};
 
 	KC3Quest.prototype.isDaily = function(){
-		return (this.type == 2)		// Daily Quest
-			|| (this.type == 4)		// Bd4
-			|| (this.type == 5);	// Bd6
+		return (this.type == 1)		// Daily Quest
+			|| (this.id == 211)		// Bd4, but type == 5
+			|| (this.id == 212)		// Bd6, but type == 5
+			// Other known cases
+			|| KC3QuestManager._dailyIds.indexOf(this.id) > -1;
 	};
 
 	KC3Quest.prototype.isWeekly = function(){
-		return this.type == 3;	// Weekly Quest
+		return this.type == 2;	// Weekly Quest
 	};
 
 	KC3Quest.prototype.isMonthly = function(){
-		return this.type == 6;	// Weekly Quest
+		return this.type == 3;	// Monthly Quest
+	};
+
+	KC3Quest.prototype.isQuarterly = function(){
+		return KC3QuestManager._quarterlyIds.indexOf(this.id) > -1;
 	};
 
 	KC3Quest.prototype.isUnselected = function(){
@@ -284,7 +291,7 @@ Quest Type:
 			} else {
 				// things special about maxCount < 5 quests is that
 				// it is possible for:
-				//   ceil(maxCount * 0.5), ceil(maxCount * 0.8), maxCount
+				//   ceil(maxCount * 0.8), maxCount
 				// to take the same number
 
 				// so if we end up making new "currentCount" equal to "maxCount",
@@ -311,8 +318,8 @@ Quest Type:
 		} else if(this.isCompleted()){
 			console.info("Re-select quest again:", this.id);
 			this.status = 2;
-			// Reset counter, but do not touch Bw1
-			if(this.tracking && this.id != 214){
+			// Reset counter, but do not touch multi-counter (Bw1 for now)
+			if(Array.isArray(this.tracking) && this.tracking.length === 1){
 				this.tracking[0][0] = 0;
 			}
 			KC3QuestManager.save();
