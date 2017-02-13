@@ -135,7 +135,7 @@
 				if ($("#game_frame").width() != 800 || $("#game_frame").height() != 480) {
 					self.resizeGameFrame();
 				}
-			}, 1000);
+			}, 30000);
 		},
 		// Resize game frame to 800x480
 		resizeGameFrame: function(){
@@ -147,9 +147,14 @@
 		},
 		// Final process on document ready
 		resizeGameFrameFinal: function(){
+			// Do not clear resize timer for now, because
+			// there may be many other facts affecting document loading and sizing.
+			// As it's tiny footprint, let it keep running at larger interval
+			/*
 			if(window.DMMCustomizations.resizeTimer){
 				clearInterval(window.DMMCustomizations.resizeTimer);
 			}
+			*/
 			window.DMMCustomizations.resizeGameFrame();
 		},
 
@@ -246,7 +251,7 @@
 		},
 
 		/* SUBTITLES OVERLAY
-		Only prepares the container box for subtitles
+		Displays subtitles on voice audio file requested
 		--------------------------------------*/
 		subtitleVanishTimer: null,
 		subtitleVanishBaseMillis: null,
@@ -417,6 +422,8 @@
 		exitConfirmation: function(){
 			if (!ConfigManager.api_askExit) return false;
 			window.onbeforeunload = function(){
+				// Not support custom message any more, see:
+				// https://bugs.chromium.org/p/chromium/issues/detail?id=587940
 				return meta.term("UnwantedExitDMM");
 			};
 		},
@@ -565,12 +572,14 @@
 					opacity = Math.round(opacity * 100) / 100;
 					if (opacity > maxIdleScreenOpacity) opacity = maxIdleScreenOpacity;
 					if (opacity < 0) opacity = 0;
-					$(".overlay_idle").css({ background: 'radial-gradient(ellipse at center, rgba(0,0,0,'+(opacity/2)+') 0%, rgba(0,0,0,'+opacity+') 100%)' });
+					$(".overlay_idle").css({
+						background: "radial-gradient(ellipse at center, rgba(0,0,0,"+(opacity/2)+") 0%, rgba(0,0,0,"+opacity+") 100%)"
+					});
 				}
 			}, 1000);
 
-			// Hide on mouse move
-			$(".overlay_idle").on('click', function(){
+			// Hide on mouse click
+			$(".overlay_idle").on("click", function(){
 				hideIdleScreen = true;
 				$(this).hide();
 			});

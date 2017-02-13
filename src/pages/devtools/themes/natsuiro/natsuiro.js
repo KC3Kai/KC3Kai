@@ -3240,7 +3240,7 @@
 		};
 		if(eshipId > 0){
 			shipMaster = KC3Master.ship(eshipId);
-			abyssMaster = KC3Master.abyssalShip(eshipId);
+			abyssMaster = KC3Master.abyssalShip(eshipId, true);
 			tooltip += "{0}: {1}\n".format(eshipId,
 				!!isPvP ? KC3Meta.shipName(shipMaster.api_name) : KC3Meta.abyssShipName(eshipId));
 			tooltip += "{0} Lv {1} HP {2}\n".format(
@@ -3272,7 +3272,7 @@
 						tooltip += KC3Meta.gearName(gearMaster.api_name);
 						if(KC3GearManager.carrierBasedAircraftType3Ids
 							.indexOf(gearMaster.api_type[3]) > -1){
-							slotMaxeq = !!isPvP ? shipMaster.api_maxeq[slotIdx] : abyssMaster.api_maxeq[slotIdx];
+							slotMaxeq = !!isPvP ? shipMaster.api_maxeq[slotIdx] : (abyssMaster.api_maxeq || [])[slotIdx];
 							slotMaxeq = typeof slotMaxeq === "undefined" ? "?" : slotMaxeq;
 							tooltip += $("<span></span>").css("color", "#999").text(" x"+slotMaxeq).prop("outerHTML");
 						}

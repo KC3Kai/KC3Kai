@@ -744,7 +744,7 @@ Used by SortieManager
 		
 		this.eships = enemyships;
 		this.elevels = nightData.api_ship_lv.slice(1);
-		this.eformation = this.eformation || nightData.api_formation[1];
+		this.eformation = this.eformation || (nightData.api_formation || [])[1];
 		this.eParam = nightData.api_eParam;
 		this.eKyouka = nightData.api_eKyouka || [-1,-1,-1,-1,-1,-1];
 		this.eSlot = nightData.api_eSlot;
@@ -830,6 +830,7 @@ Used by SortieManager
 					enemyships = nightData.api_ship_ke_combined;
 					if(enemyships[0]==-1){ enemyships.splice(0,1); }
 					this.eships = enemyships;
+					this.elevels = nightData.api_ship_lv_combined.slice(1);
 					this.eParam = nightData.api_eParam_combined;
 					this.eSlot = nightData.api_eSlot_combined;
 					for (i = 7; i < 13; i++) {
@@ -906,6 +907,7 @@ Used by SortieManager
 					enemyships = nightData.api_ship_ke_combined;
 					if(enemyships[0]==-1){ enemyships.splice(0,1); }
 					this.eships = enemyships;
+					this.elevels = nightData.api_ship_lv_combined.slice(1);
 					this.eParam = nightData.api_eParam_combined;
 					this.eSlot = nightData.api_eSlot_combined;
 					for (i = 7; i < 13; i++) {
