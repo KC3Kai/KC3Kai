@@ -1349,15 +1349,29 @@
 				.parent().attr("title", KC3Meta.formationText(ConfigManager.aaFormation) )
 				.lazyInitTooltip();
 			$(".summary-speed .summary_text").text( FleetSummary.speed );
-			// F33 different factors for now: 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
-			// Not support for combined fleet yet as factor not sure for event maps
-			if(ConfigManager.elosFormula === 4 && selectedFleet < 5){
-				var f33x3 = Math.qckInt("floor", PlayerManager.fleets[selectedFleet-1].eLos4(3), 1);
-				var f33x4 = Math.qckInt("floor", PlayerManager.fleets[selectedFleet-1].eLos4(4), 1);
-				$(".summary-eqlos").attr("title",
-					"x4={0} \t3-5(G>28), 6-1(E>16, F>25)\nx3={1} \t6-2(F<43/>50, H>40), 6-3(H>38)"
-					.format(f33x4, f33x3)
-				).lazyInitTooltip();
+			if(ConfigManager.elosFormula === 4){
+				// F33 different factors for now: 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
+				if(selectedFleet < 5){
+					let f33x3 = Math.qckInt("floor", PlayerManager.fleets[selectedFleet-1].eLos4(3), 1);
+					let f33x4 = Math.qckInt("floor", PlayerManager.fleets[selectedFleet-1].eLos4(4), 1);
+					$(".summary-eqlos").attr("title",
+						"x4={0} \t3-5(G>28), 6-1(E>16, F>25)\nx3={1} \t6-2(F<43/>50, H>40), 6-3(H>38)"
+						.format(f33x4, f33x3)
+					).lazyInitTooltip();
+				// No reference values for combined fleet yet, only show computed values
+				} else if(selectedFleet === 5){
+					let mainFleet = PlayerManager.fleets[0];
+					let escortFleet = PlayerManager.fleets[1];
+					let f33Cn = [
+						Math.qckInt("floor", mainFleet.eLos4(2) + escortFleet.eLos4(2), 1),
+						Math.qckInt("floor", mainFleet.eLos4(3) + escortFleet.eLos4(3), 1),
+						Math.qckInt("floor", mainFleet.eLos4(4) + escortFleet.eLos4(4), 1),
+						Math.qckInt("floor", mainFleet.eLos4(5) + escortFleet.eLos4(5), 1)
+					];
+					$(".summary-eqlos").attr("title",
+						"x2={0}\nx3={1}\nx4={2}\nx5={3}".format(f33Cn)
+					).lazyInitTooltip();
+				}
 			} else {
 				$(".summary-eqlos").attr("title", "");
 			}
