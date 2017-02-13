@@ -152,6 +152,10 @@
 		
 		// Strategy Room
 		$("#strategy").on('click', function(){
+			// To unify Strategy Room open method (always 1 tab), maybe a setting for it
+			//(new RMsg("service", "strategyRoomPage", { tabPath: "profile" })).execute();
+			//window.close();
+			// To allow multi Strategy Room tabs
 			window.open("../strategy/strategy.html", "kc3kai_strategy");
 		});
 		

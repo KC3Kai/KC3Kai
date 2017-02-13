@@ -113,13 +113,13 @@ KC3改 Ship Box for Natsuiro theme
 			items: "div",
 			content: tooltipBox.html()
 		});
-		/*
-		$(".ship_img", this.element).addClass("hover").data("sid", this.shipData.masterId);
-		$(".ship_img", this.element).click(function(e){
-			var tab = "#mstship-" + $(this).data("sid");
-			var sr = window.open("/pages/strategy/strategy.html" + tab, "kc3kai_strategy");
-		});
-		*/
+		// Double click on icon to show Strategy Room Ship Library page
+		$(".ship_img", this.element).data("masterId", this.shipData.masterId)
+			.on("dblclick", function(e){
+				(new RMsg("service", "strategyRoomPage", {
+					tabPath: "mstship-{0}".format($(this).data("masterId"))
+				})).execute();
+			});
 		$(".ship_img img", this.element).attr("src", KC3Meta.shipIcon(this.shipData.masterId));
 		$(".ship_name", this.element).text( this.shipData.name() );
 		$(".ship_type", this.element).text( this.shipData.stype() );
@@ -407,7 +407,7 @@ KC3改 Ship Box for Natsuiro theme
 				
 				thisGear = KC3GearManager.get( this.shipData.items[slot] );
 				
-				// unknown item
+				// Unknown item
 				if(thisGear.masterId === 0){
 					$(".ship_gear_"+(slot+1)+" .ship_gear_icon img", this.element).attr("src",
 						"../../../../assets/img/ui/empty.png");
@@ -419,7 +419,13 @@ KC3改 Ship Box for Natsuiro theme
 				$(".ship_gear_"+(slot+1), this.element).addClass("equipped");
 				$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element)
 					.attr("title", this.buildEquipmentTooltip(thisGear))
-					.lazyInitTooltip();
+					.lazyInitTooltip()
+					.data("masterId", thisGear.masterId)
+					.on("dblclick", function(e){
+						(new RMsg("service", "strategyRoomPage", {
+							tabPath: "mstgear-{0}".format($(this).data("masterId"))
+						})).execute();
+					});
 				
 				if (thisGear.masterId == 43) {
 					$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element).addClass("goddess");

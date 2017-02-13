@@ -56,8 +56,6 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			break;
 	}
 	
-	
-	
 	localStorage.kc3version = chrome.runtime.getManifest().version;
 	
 	window.KC3Service = {
@@ -272,6 +270,39 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			});
 		},
 		
+		/* OPEN OR UPDATE STRATEGY ROOM PAGE
+		Similar with `openExtensionPage`, to reuse Strategy Room existed page
+		@param request.tabPath -
+			different with `request.path`, no prefix of Strategy Room path needed
+		------------------------------------------*/
+		"strategyRoomPage" :function(request, sender, response){
+			var sroomUrlPrefix = "pages/strategy/strategy.html";
+			var tabId = 0;
+			// Find first existed SRoom page tab
+			chrome.tabs.query({
+				url: chrome.extension.getURL(sroomUrlPrefix)
+			}, function(tabs){
+				if(!!tabs[0]){
+					tabId = tabs[0].id;
+					// Found existed tab, update url and activate it
+					chrome.tabs.update(tabId, {
+						url: chrome.extension.getURL(sroomUrlPrefix + "#" + request.tabPath),
+						active: true
+					}, function(tab) {
+						tabId = tab.id;
+					});
+				} else {
+					// No existed tab, create new
+					chrome.tabs.create({
+						url: chrome.extension.getURL(sroomUrlPrefix + "#" + request.tabPath)
+					}, function(tab){
+						tabId = tab.id;
+					});
+				}
+					
+			});
+		},
+		
 		/* DMM FRMAE INJECTION
 		Responds if content script should inject DMM Frame customizations
 		------------------------------------------*/
@@ -284,11 +315,16 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				response({ mode: 'frame', scale: ConfigManager.api_gameScale});
 				
 			} else if(ConfigManager.dmm_customize && localStorage.extract_api != "true") {
-				// DMM CUSTOMIZATION
-				chrome.tabs.update(sender.tab.id, {
-					autoDiscardable: false,
+				var props = {
 					highlighted: true
-				}, function(){
+				};
+				// Prevent Chrome auto discard the game tab
+				// autoDiscardable since Chrome 54
+				if(parseChromeVersion() >= 54) {
+					props.autoDiscardable = false;
+				}
+				// DMM CUSTOMIZATION
+				chrome.tabs.update(sender.tab.id, props, function(){
 					ConfigManager.load();
 					KC3Master.init();
 					RemodelDb.init();
@@ -324,7 +360,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		"taihaAlertStop" :function(request, sender, response){
 			(new TMsg(request.tabId, "gamescreen", "taihaAlertStop")).execute();
 		},
-
+		
 		/* SUBTITLES
 		When a ship speaks, show subtitles
 		------------------------------------------*/
@@ -337,6 +373,18 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				voiceNum: request.voiceNum,
 				url: request.url
 			})).execute();
+		},
+		
+		/* GET VERSIONS
+		Return platform related manifest and versions
+		------------------------------------------*/
+		"getVersion" :function(request, sender, response){
+			// May be more, such as OS arch, version
+			response({
+				chrome: parseChromeVersion(),
+				manifest: chrome.runtime.getManifest(),
+				kc3version: chrome.runtime.getManifest().version
+			});
 		}
 		
 	};
@@ -492,6 +540,11 @@ See Manifest File [manifest.json] under "background" > "scripts"
 					.remoteStart(tabId, offset);
 			})).execute();
 		}
+	}
+	
+	function parseChromeVersion() {
+		var raw = navigator.appVersion.match(/Chrom(e|ium)\/([0-9]+)\./);
+		return raw ? parseInt(raw[2], 10) : 0;
 	}
 	
 })();
