@@ -2,7 +2,9 @@ QUnit.module("Quest", function(){ localStorage.clear(); });
 
 QUnit.test("Objects > Quest > Counter Auto Adjustment", function( assert ) {
 
-	let questCount = 0;
+	// having a large start quest id so their never coincide
+	// with the real ones
+	let questCount = 10000;
 
 	function fromPercent(x) {
 		if (x === 0.8)
