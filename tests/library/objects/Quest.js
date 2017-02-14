@@ -1,7 +1,6 @@
 QUnit.module("Quest", function(){ localStorage.clear(); });
 
 QUnit.test("Objects > Quest > Counter Auto Adjustment", function( assert ) {
-
 	// having a large start quest id so their never coincide
 	// with the real ones
 	let questCount = 10000;
@@ -100,4 +99,10 @@ QUnit.test("Objects > Quest > Counter Auto Adjustment", function( assert ) {
 			mkOngoingSingleCounterQuest(fromPercent(percent),i,50),
 			i,50, "no adjustment for correct counter: " + i + "/50");
 	}
+
+
+	testQuestAdjust(
+		mkQuest(3,0,[ [10,20], [40,40], [48,60 ] ]),
+		[ [20,20], [40,40], [60,60 ] ],
+		"multi counter quest adjustment upon completion");
 });
