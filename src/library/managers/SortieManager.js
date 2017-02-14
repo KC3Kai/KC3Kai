@@ -491,6 +491,76 @@ Xxxxxxx
 			this.onCat = false;
 			this.sortieTime = 0;
 			this.save();
+		},
+		/**
+		 * Get battle opponent's fighter power only based on master data.
+		 * @param enemyFleetShips - master ID array of opponent fleet ships.
+		 * @param enemyShipSlots - master ID array of equip slots, optional.
+		 *                         length should be the same with enemyFleetShips.
+		 * @return a tuple contains [
+		 *           computed fighter power (without improvement and proficiency bonus),
+		 *           sum of known slot capacity,
+		 *           exception map indicates which ship or gear missing required data:
+		 *             {shipId: null || {gearId: null || aaStat}}
+		 *         ]
+		 * @see To compute fighter power of our fleet, see Fleet, Ship, Gear classes.
+		 */
+		enemyFighterPower :function(enemyFleetShips, enemyShipSlots){
+			var totalPower = false;
+			var totalCapacity = false;
+			var exceptions = {};
+			// no ship IDs
+			if(!enemyFleetShips){
+				exceptions.ship = null;
+				return [totalPower, totalCapacity, exceptions];
+			}
+			$.each(enemyFleetShips, function(shipIdx, shipId){
+				// ignore -1 placeholder
+				if(!shipId || shipId < 0){
+					return;
+				}
+				let shipMst = (shipId <= 500) ?
+					KC3Master.ship(shipId) : KC3Master.abyssalShip(shipId, true);
+				// no ship master data
+				if(!shipMst){
+					exceptions[shipId] = null;
+					return;
+				}
+				let shipSlots = (enemyShipSlots || [])[shipIdx] || shipMst.kc3_slots;
+				// no slot gear IDs
+				if(!Array.isArray(shipSlots)){
+					exceptions[shipId] = {};
+					return;
+				}
+				// mainly remove -1 placeholders
+				shipSlots = shipSlots.filter(function(id) { return id > 0; });
+				for(let slotIdx = 0; slotIdx < shipSlots.length; slotIdx++){
+					let gearId = shipSlots[slotIdx];
+					let gearMst = KC3Master.slotitem(gearId);
+					// no gear master data
+					if(!gearMst){
+						exceptions[shipId] = exceptions[shipId] || {};
+						exceptions[shipId][gearId] = null;
+						continue;
+					}
+					if(KC3GearManager.antiAirFighterType2Ids.indexOf(
+						String(gearMst.api_type[2]) ) > -1){
+						let aaStat = gearMst.api_tyku || 0;
+						let capacity = (shipMst.api_maxeq || [])[slotIdx];
+						if(typeof capacity !== "undefined"){
+							if(aaStat > 0){
+								totalCapacity += capacity;
+								totalPower += Math.floor(Math.sqrt(capacity) * aaStat);
+							}
+						} else {
+							// no slot maxeq (capacity)
+							exceptions[shipId] = exceptions[shipId] || {};
+							exceptions[shipId][gearId] = aaStat;
+						}
+					}
+				}
+			});
+			return [totalPower, totalCapacity, exceptions];
 		}
 	};
 	

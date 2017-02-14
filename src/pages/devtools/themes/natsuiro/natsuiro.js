@@ -1836,7 +1836,9 @@
 				$(".module.activity .battle_contact").html(contactSpan.html()).lazyInitTooltip();
 				$(".module.activity .battle_airbattle").text( thisNode.airbattle[0] );
 				$(".module.activity .battle_airbattle").addClass( thisNode.airbattle[1] );
-				$(".module.activity .battle_airbattle").attr("title", thisNode.airbattle[2] || "" );
+				$(".module.activity .battle_airbattle").attr("title",
+					thisNode.buildAirPowerMessage()
+				).lazyInitTooltip();
 				$(".fighter_ally .plane_before").text(thisNode.planeFighters.player[0]);
 				$(".fighter_enemy .plane_before").text(thisNode.planeFighters.abyssal[0]);
 				$(".bomber_ally .plane_before").text(thisNode.planeBombers.player[0]);
@@ -2016,7 +2018,9 @@
 				$(".module.activity .battle_detection").attr("title", thisNode.detection[2] || "" );
 				$(".module.activity .battle_airbattle").text( thisNode.airbattle[0] );
 				$(".module.activity .battle_airbattle").addClass( thisNode.airbattle[1] );
-				$(".module.activity .battle_airbattle").attr("title", thisNode.airbattle[2] || "" );
+				$(".module.activity .battle_airbattle").attr("title",
+					thisNode.buildAirPowerMessage()
+				).lazyInitTooltip();
 
 				// Fighter phase
 				$(".fighter_ally .plane_before").text(thisNode.planeFighters.player[0]);
@@ -2591,7 +2595,9 @@
 			$(".module.activity .battle_detection").attr("title", thisPvP.detection[2] || "" );
 			$(".module.activity .battle_airbattle").text( thisPvP.airbattle[0] );
 			$(".module.activity .battle_airbattle").addClass( thisPvP.airbattle[1] );
-			$(".module.activity .battle_airbattle").attr("title", thisPvP.airbattle[2] || "" );
+			$(".module.activity .battle_airbattle").attr("title",
+				thisPvP.buildAirPowerMessage()
+			).lazyInitTooltip();
 			$(".module.activity .battle_engagement").text( thisPvP.engagement[2] || thisNode.engagement[0] );
 			$(".module.activity .battle_engagement").addClass( thisPvP.engagement[1] );
 			var contactSpan = buildContactPlaneSpan(thisPvP.fcontactId, thisPvP.fcontact, thisPvP.econtactId, thisPvP.econtact);
