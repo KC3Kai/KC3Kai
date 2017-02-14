@@ -467,7 +467,7 @@
         });
 
         for (var i in ships) {
-            this.allShipGroups[ships[i].master().api_stype].push(ships[i]);
+            this.allShipGroups[ships[i].master().api_stype].push(this._removeEquippedBonus(ships[i]));
             this._shipImages[ships[i].masterId] = null;
             this.shipCount++;
         }
@@ -483,6 +483,26 @@
             }
         }
     };
+
+    ShowcaseExporter.prototype._removeEquippedBonus = function (ship) {
+        var equip = ship.equipment(true);
+        var self = this;
+        equip.forEach(function (item) {
+            if (item === false)
+                return;
+
+            for (var param in self._paramToApi) {
+                if (typeof ship[param] === "undefined")
+                    continue;
+                var itemPower = parseInt(item.master()[self._paramToApi[param]], 10);
+                if (!isNaN(itemPower)) {
+                    ship[param][0] -= item.master()[self._paramToApi[param]];
+                }
+            }
+        });
+        return ship;
+    };
+
 
     ShowcaseExporter.prototype._drawShip = function (x, y, ship, background) {
         this.ctx.fillStyle = background;
