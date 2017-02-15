@@ -1487,19 +1487,15 @@
 							break;
 						case 3:
 							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedTransport") );
-							$(".module.status .status_butai .status_text").attr("title",
-								"{0} ~ {1} TP".format( isNaN(FleetSummary.tpValueSum)? "?" : Math.floor(0.7 * FleetSummary.tpValueSum),
-													   isNaN(FleetSummary.tpValueSum)? "?" : FleetSummary.tpValueSum )
-							).lazyInitTooltip();
 							break;
 						default:
 							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedNone") );
-							$(".module.status .status_butai .status_text").attr("title",
-								"{0} ~ {1} TP".format( isNaN(FleetSummary.tpValueSum)? "?" : Math.floor(0.7 * FleetSummary.tpValueSum),
-													   isNaN(FleetSummary.tpValueSum)? "?" : FleetSummary.tpValueSum )
-							).lazyInitTooltip();
 							break;
 					}
+					$(".module.status .status_butai .status_text").attr("title",
+						"{0} ~ {1} TP".format( isNaN(FleetSummary.tpValueSum)? "?" : Math.floor(0.7 * FleetSummary.tpValueSum),
+											   isNaN(FleetSummary.tpValueSum)? "?" : FleetSummary.tpValueSum )
+					).lazyInitTooltip();
 					$(".module.status .status_butai").show();
 					$(".module.status .status_support").hide();
 				}else{
