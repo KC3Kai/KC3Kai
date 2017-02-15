@@ -768,6 +768,7 @@
 		$(".module.activity .abyss_ship img").attr("src", KC3Meta.abyssIcon(-1));
 		$(".module.activity .abyss_ship img").attr("title", "").lazyInitTooltip();
 		$(".module.activity .abyss_ship").removeClass(KC3Meta.abyssShipBorderClass().join(" "));
+		$(".module.activity .abyss_ship").removeData("masterId").off("dblclick");
 		$(".module.activity .abyss_ship").css("opacity", 1);
 		$(".module.activity .abyss_combined").hide();
 		$(".module.activity .abyss_single").show();
@@ -788,6 +789,7 @@
 		$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/ui/dark_rating.png").css("opacity", "");
 		$(".module.activity .battle_rating").lazyInitTooltip();
 		$(".module.activity .battle_drop img").attr("src", "../../../../assets/img/ui/dark_shipdrop.png");
+		$(".module.activity .battle_drop").removeData("masterId").off("dblclick");
 		$(".module.activity .battle_drop").attr("title", "").lazyInitTooltip();
 		$(".module.activity .battle_cond_value").text("");
 		$(".module.activity .battle_engagement").prev().text(KC3Meta.term("BattleEngangement"));
@@ -1902,7 +1904,7 @@
 							.lazyInitTooltip();
 						$(enemyFleetBoxSelector+" .abyss_ship_"+(index+1))
 							.data("masterId", eshipId)
-							.off("dblclick").on("dblclick", function(e){
+							.on("dblclick", function(e){
 								(new RMsg("service", "strategyRoomPage", {
 									tabPath: "mstship-{0}".format($(this).data("masterId"))
 								})).execute();
@@ -2113,7 +2115,7 @@
 								.lazyInitTooltip();
 							$(".module.activity .abyss_single .abyss_ship_"+(index+1))
 								.data("masterId", eshipId)
-								.off("dblclick").on("dblclick", function(e){
+								.on("dblclick", function(e){
 									(new RMsg("service", "strategyRoomPage", {
 										tabPath: "mstship-{0}".format($(this).data("masterId"))
 									})).execute();
@@ -2189,8 +2191,14 @@
 				if(ConfigManager.info_drop){
 					$(".module.activity .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop));
 					$(".module.activity .battle_drop")
+						.data("masterId", thisNode.drop)
 						.attr("title", KC3Meta.shipName( KC3Master.ship(thisNode.drop).api_name ))
-						.lazyInitTooltip();
+						.lazyInitTooltip()
+						.on("dblclick", function(e){
+							(new RMsg("service", "strategyRoomPage", {
+								tabPath: "mstship-{0}".format($(this).data("masterId"))
+							})).execute();
+						});
 				}
 
 				// Update Counts
@@ -2526,7 +2534,7 @@
 						.lazyInitTooltip();
 					$(".module.activity .abyss_single .abyss_ship_"+(index+1))
 						.data("masterId", eshipId)
-						.off("dblclick").on("dblclick", function(e){
+						.on("dblclick", function(e){
 							(new RMsg("service", "strategyRoomPage", {
 								tabPath: "mstship-{0}".format($(this).data("masterId"))
 							})).execute();
