@@ -256,18 +256,19 @@ known IDs see QuestManager
 		if (this.tracking.length > 1)
 			return;
 
-		// no adjustment for F7 and F8:
-		// these two quests have a weird behavior that 1/3 is marked as being 50% completed
-		// so our auto-adjustment won't work for them.
-		if([607, 608].indexOf(this.id) !== -1)
-			return;
-
 		// at this point we can confirm this is a singleton array
 		// so only need to deal with one tracking data, let's give it a name
 		const trackingData = this.tracking[0];
 
 		let currentCount = trackingData[0];
 		let maxCount = parseFloat(trackingData[1]);
+
+		// no adjustment for F7 and F8:
+		// these two quests have a weird behavior that 1/3 is marked as being 50% completed
+		// so our auto-adjustment won't work for them.
+		if([607, 608].indexOf(this.id) > -1
+			&& currentCount > 0 && currentCount < maxCount)
+			return;
 
 		// pFlag: short for Progress Flag,
 		// for incompleted quests:
