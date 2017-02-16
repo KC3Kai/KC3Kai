@@ -135,6 +135,16 @@
 					"wk" : "http://kancolle.wikia.com/wiki/User:YukiNyaa",
 					"fb" : "https://www.facebook.com/iTwilly.HJW"
 				}
+			},
+			{
+				"name": "DynamicSTOP",
+				"avatar" : "https://avatars1.githubusercontent.com/u/9434504?v=3&s=40",
+				"desc" : "AboutDeveloper",
+				"active": 1,
+				"links" : {
+					"gh" :"https://github.com/DynamicSTOP",
+					"fb" :"https://www.facebook.com/DynamicSTOP"
+				}
 			}
 		],
 		"AboutModerators": [
@@ -477,23 +487,13 @@
 			}
 		],
 		"AboutForkContributors": [
-      {
+			{
 				"name": "Vultren",
 				"avatar" : "https://avatars0.githubusercontent.com/u/10458410?v=3&s=40",
 				"desc" : "AboutDeveloper",
 				"active": 1,
 				"links" : {
 					"gh" :"https://github.com/Vultren"
-				}
-			},
-			{
-				"name": "DynamicSTOP",
-				"avatar" : "https://avatars1.githubusercontent.com/u/9434504?v=3&s=40",
-				"desc" : "AboutDeveloper",
-				"active": 1,
-				"links" : {
-					"gh" :"https://github.com/DynamicSTOP",
-					"fb" :"https://www.facebook.com/DynamicSTOP"
 				}
 			},
 			{
