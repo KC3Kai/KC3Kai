@@ -48,7 +48,10 @@ body {
 --------------------------*/
 .section {
 	width:780px;
-	margin:0px 0px 13px 0px;
+	margin:13px 0px 0px 0px;
+}
+.section.hide {
+	display:none;
 }
 .section .sectionHead {
 	width:780px;
@@ -95,12 +98,30 @@ body {
 	height:30px;
 }
 
-/* SECTION-MEDIUM
+/* SECTION-HALF (1/2)
+--------------------------*/
+.section.half {
+	width:380px;
+	min-height:10px;
+	margin-right:10px;
+	float:left;
+}
+.section.half .sectionHead {
+	width:380px;
+}
+.section.half .sectionText {
+	width:345px;
+}
+.section.half .sectionBody {
+	padding:0px 5px 0px 5px;
+}
+
+/* SECTION-MEDIUM (2/3)
 --------------------------*/
 .section.medium {
 	width:510px;
 	min-height:10px;
-	margin:0px 10px 0px 0px;
+	margin-right:10px;
 	float:left;
 }
 .section.medium .sectionHead {
@@ -113,12 +134,12 @@ body {
 	padding:0px 5px 0px 5px;
 }
 
-/* SECTION-SHORT
+/* SECTION-SHORT (1/3)
 --------------------------*/
 .section.short {
 	width:250px;
 	min-height:10px;
-	margin:0px 10px 0px 0px;
+	margin-right:10px;
 	float:left;
 }
 .section.short .sectionHead {
@@ -168,11 +189,8 @@ body {
 	list-style: none;
 }
 .hotkeys li {
-	width:245px;
-	height:18px;
-	float:left;
-	margin:0px 0px 10px 0px;
-	overflow:hidden;
+	width:490px;
+	margin:0px 0px 7px 0px;
 	white-space:nowrap;
 	text-overflow:ellipsis;
 }
@@ -181,6 +199,57 @@ body {
 }
 .hotkeys li span {
 	font-size:12px;
+}
+
+/* ALT GAME MODES
+--------------------------*/
+ul.altGameModes {
+	padding:0px 0px 0px 10px;
+}
+ul.altGameModes li {
+	width:370px;
+	margin:0px 0px 3px 0px;
+	padding:3px 5px
+}
+ul.altGameModes li.selected {
+	background:#def;
+}
+ul.altGameModes li.deprecated:hover {
+	background:#fee;
+}
+ul.altGameModes li .modeIcon {
+	float:left;
+	width:30px;
+}
+ul.altGameModes li .modeIcon img {
+	width:30px;
+	height:30px;
+}
+ul.altGameModes li .modeName {
+	float:right;
+	width:320px;
+	line-height:16px;
+	font-size:12px;
+}
+ul.altGameModes li .modeName.activeMode {
+	color:#5295b8;
+	font-weight:bold;
+}
+ul.altGameModes li .modeName.oldMode {
+	color:#bbb;
+}
+ul.altGameModes li .modeDesc {
+	float:right;
+	width:320px;
+	line-height:12px;
+	margin:0px 0px 2px 0px;
+	font-size:11px;
+}
+ul.altGameModes li .modePlay {
+	float:right;
+	width:320px;
+	font-size:11px;
+	color:#daa6a6;
 }
 
 /* LINKS
@@ -262,7 +331,7 @@ body {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background-color: #ccc;
+	background-color: #c55;
 	-webkit-transition: .4s;
 	transition: .4s;
 }
@@ -278,13 +347,13 @@ body {
 	transition: .4s;
 }
 input:checked + .slider {
-	background-color: #58a;
+	background-color: #5c5;
 }
 input:focus + .slider {
-	box-shadow: 0 0 1px #58a;
+	box-shadow: 0 0 1px #5c5;
 }
 input:disabled + .slider {
-	background-color: #777;
+	background-color: #c55;
 }
 input:checked + .slider:before {
 	-webkit-transform: translateX(14px);
