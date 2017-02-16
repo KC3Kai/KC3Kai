@@ -17,15 +17,6 @@
 		
 		$(".myVersion").text(myVersion);
 		
-		// Chrome 55 incompatibilities
-		if (parseInt(getChromeVersion(), 10) >= 55 && false/*no warning for now*/) {
-			$("#play_cc, #play_dmmf").addClass("short");
-			$("#play_cc .desc").text(KC3Meta.term("Chrome55Incompatible"));
-			$("#play_dmmf .desc").text(KC3Meta.term("Chrome55Incompatible"));
-			$("#play_dmm").prependTo("#wrapper");
-			$(".wrapper").css("height", "473px");
-		}
-		
 		// Show estimated time until next update
 		$.ajax({
 			dataType: "json",
@@ -83,71 +74,11 @@
 			}
 		});
 		
-		checkDMMLogin(function(isLoggedIn){
-			if (!isLoggedIn) {
-				$("#play_cc").hide();
-				$("#play_dmm").hide();
-				$("#play_dmmf").hide();
-				
-				$("#login_dmm").show();
-				
-				$(".wrapper").css("height", "372px");
-			}
-		});
-		
-		// Login on DMM
-		$("#login_dmm").on('click', function(){
-			localStorage.extract_api = false;
-			localStorage.dmmplay = false;
-			window.open("https://www.dmm.com/my/-/login/=/path=Sg__/", "dmm_login");
-		});
-		
-		// Refresh API Link
-		$("#play_cc").on('click', function(){
-			chrome.cookies.set({
-				url: "http://www.dmm.com",
-				name: "ckcy",
-				value: "1",
-				domain: ".dmm.com",
-				expirationDate: Math.ceil((new Date("Sun, 09 Feb 2019 09:00:09 GMT")).getTime()/1000),
-				path: '/netgame/',
-			}, function(cookie){
-				localStorage.extract_api = true;
-				localStorage.dmmplay = false;
-				window.open("http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/", "kc3kai_game");
-			});
-		});
-		
 		// Play DMM Website
 		$("#play_dmm").on('click', function(){
-			chrome.cookies.set({
-				url: "http://www.dmm.com",
-				name: "ckcy",
-				value: "1",
-				domain: ".dmm.com",
-				expirationDate: Math.ceil((new Date("Sun, 09 Feb 2019 09:00:09 GMT")).getTime()/1000),
-				path: '/netgame/',
-			}, function(cookie){
-				localStorage.extract_api = false;
-				localStorage.dmmplay = true;
-				window.open("../game/direct.html", "kc3kai_game");
-			});
-		});
-		
-		// Play via DMM Frame
-		$("#play_dmmf").on('click', function(){
-			chrome.cookies.set({
-				url: "http://www.dmm.com",
-				name: "ckcy",
-				value: "1",
-				domain: ".dmm.com",
-				expirationDate: Math.ceil((new Date("Sun, 09 Feb 2019 09:00:09 GMT")).getTime()/1000),
-				path: '/netgame/',
-			}, function(cookie){
-				localStorage.extract_api = false;
-				localStorage.dmmplay = false;
-				window.open("../game/dmm.html", "kc3kai_game");
-			});
+			localStorage.extract_api = false;
+			localStorage.dmmplay = true;
+			window.open("../game/direct.html", "kc3kai_game");
 		});
 		
 		// Strategy Room
@@ -167,11 +98,6 @@
 		// About
 		$("#about").on('click', function(){
 			window.open("../about/about.html", "kc3kai_about");
-		});
-		
-		// About
-		$("#facebook").on('click', function(){
-			window.open("https://www.facebook.com/kc3kai", "_blank");
 		});
 		
 		// Calculate reset countdowns
@@ -205,33 +131,5 @@
 			UTC6PM.getTime() - now);
 		$(".timePvP").text( String(remaining/1000).toHHMMSS() );
 	});
-	
-	function checkDMMLogin(callback){
-		// should be exactly of value "false",
-		// so we can fallback as if it's default value "true"
-		if (ConfigManager.forceDMMLogin === false) {
-			callback(true);
-			return;
-		}
-		// Check if user is already logged in on DMM
-		chrome.cookies.get({
-			url: "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/",
-			name: "INT_SESID"
-		}, function(cookie){
-			// Not yet logged in
-			if(cookie===null){
-				callback(false);
-				
-			// Already logged in
-			}else{
-				callback(true);
-			}
-		});
-	}
-	
-	function getChromeVersion() {
-		var raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
-		return raw ? parseInt(raw[2], 10) : false;
-	}
 	
 })();
