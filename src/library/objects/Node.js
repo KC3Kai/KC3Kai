@@ -1347,6 +1347,30 @@ Used by SortieManager
 	};
 	
 	/**
+		Build a tooltip about computed enemy air power for researching air battle
+	*/
+	KC3Node.prototype.buildAirPowerMessage = function(){
+		var tooltip = this.airbattle[2] || "";
+		var apTuple = KC3SortieManager.enemyFighterPower(this.eships, this.eSlot);
+		var ap = apTuple[0];
+		// Air Power: AI<1/3, 1/3<=AD<2/3, 2/3<=AP<3/2, 3/2<=AS<3, 3<=AS+
+		// No i18n yet as it's for researchers
+		if(!!ap){
+			tooltip += "\nPOW: {0} (AI< {1}< AD< {2}< AP< {3}< AS< {4}< AS+)"
+				.format(ap, Math.floor(ap / 3), Math.floor(2 * ap / 3),
+					Math.floor(3 * ap / 2), 3 * ap);
+		}
+		var enemyTotalPlanes = this.planeFighters.abyssal[0];
+		if(!!enemyTotalPlanes){
+			tooltip += "\nFTG: {0} /{1}".format(apTuple[1] || 0, enemyTotalPlanes);
+		}
+		if(Object.keys(apTuple[2]).length > 0){
+			tooltip += "\nERR: " + JSON.stringify(apTuple[2]);
+		}
+		return tooltip;
+	};
+
+	/**
 	 * Not real battle on this node in fact. Enemy raid just randomly occurs before entering node.
 	 * See: http://kancolle.wikia.com/wiki/Land-Base_Aerial_Support#Enemy_Raid
 	 */

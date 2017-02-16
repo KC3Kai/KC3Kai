@@ -591,6 +591,9 @@
 								
 								$(".node_airbattle", nodeBox).text( thisNode.airbattle[0] );
 								$(".node_airbattle", nodeBox).addClass( thisNode.airbattle[1] );
+								$(".node_airbattle", nodeBox).attr("title",
+									thisNode.buildAirPowerMessage()
+								);
 								
 								["Fighters","Bombers"].forEach(function(planeType){
 									["player","abyssal"].forEach(function(side,jndex){

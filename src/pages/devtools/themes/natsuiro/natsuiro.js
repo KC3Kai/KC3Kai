@@ -768,6 +768,7 @@
 		$(".module.activity .abyss_ship img").attr("src", KC3Meta.abyssIcon(-1));
 		$(".module.activity .abyss_ship img").attr("title", "").lazyInitTooltip();
 		$(".module.activity .abyss_ship").removeClass(KC3Meta.abyssShipBorderClass().join(" "));
+		$(".module.activity .abyss_ship").removeData("masterId").off("dblclick");
 		$(".module.activity .abyss_ship").css("opacity", 1);
 		$(".module.activity .abyss_combined").hide();
 		$(".module.activity .abyss_single").show();
@@ -788,6 +789,7 @@
 		$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/ui/dark_rating.png").css("opacity", "");
 		$(".module.activity .battle_rating").lazyInitTooltip();
 		$(".module.activity .battle_drop img").attr("src", "../../../../assets/img/ui/dark_shipdrop.png");
+		$(".module.activity .battle_drop").removeData("masterId").off("dblclick");
 		$(".module.activity .battle_drop").attr("title", "").lazyInitTooltip();
 		$(".module.activity .battle_cond_value").text("");
 		$(".module.activity .battle_engagement").prev().text(KC3Meta.term("BattleEngangement"));
@@ -1349,15 +1351,29 @@
 				.parent().attr("title", KC3Meta.formationText(ConfigManager.aaFormation) )
 				.lazyInitTooltip();
 			$(".summary-speed .summary_text").text( FleetSummary.speed );
-			// F33 different factors for now: 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
-			// Not support for combined fleet yet as factor not sure for event maps
-			if(ConfigManager.elosFormula === 4 && selectedFleet < 5){
-				var f33x3 = Math.qckInt("floor", PlayerManager.fleets[selectedFleet-1].eLos4(3), 1);
-				var f33x4 = Math.qckInt("floor", PlayerManager.fleets[selectedFleet-1].eLos4(4), 1);
-				$(".summary-eqlos").attr("title",
-					"x4={0} \t3-5(G>28), 6-1(E>16, F>25)\nx3={1} \t6-2(F<43/>50, H>40), 6-3(H>38)"
-					.format(f33x4, f33x3)
-				).lazyInitTooltip();
+			if(ConfigManager.elosFormula === 4){
+				// F33 different factors for now: 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
+				if(selectedFleet < 5){
+					let f33x3 = Math.qckInt("floor", PlayerManager.fleets[selectedFleet-1].eLos4(3), 1);
+					let f33x4 = Math.qckInt("floor", PlayerManager.fleets[selectedFleet-1].eLos4(4), 1);
+					$(".summary-eqlos").attr("title",
+						"x4={0} \t3-5(G>28), 6-1(E>16, F>25)\nx3={1} \t6-2(F<43/>50, H>40), 6-3(H>38)"
+						.format(f33x4, f33x3)
+					).lazyInitTooltip();
+				// No reference values for combined fleet yet, only show computed values
+				} else if(selectedFleet === 5){
+					let mainFleet = PlayerManager.fleets[0];
+					let escortFleet = PlayerManager.fleets[1];
+					let f33Cn = [
+						Math.qckInt("floor", mainFleet.eLos4(2) + escortFleet.eLos4(2), 1),
+						Math.qckInt("floor", mainFleet.eLos4(3) + escortFleet.eLos4(3), 1),
+						Math.qckInt("floor", mainFleet.eLos4(4) + escortFleet.eLos4(4), 1),
+						Math.qckInt("floor", mainFleet.eLos4(5) + escortFleet.eLos4(5), 1)
+					];
+					$(".summary-eqlos").attr("title",
+						"x2={0}\nx3={1}\nx4={2}\nx5={3}".format(f33Cn)
+					).lazyInitTooltip();
+				}
 			} else {
 				$(".summary-eqlos").attr("title", "");
 			}
@@ -1473,19 +1489,15 @@
 							break;
 						case 3:
 							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedTransport") );
-							$(".module.status .status_butai .status_text").attr("title",
-								"{0} ~ {1} TP".format( isNaN(FleetSummary.tpValueSum)? "?" : Math.floor(0.7 * FleetSummary.tpValueSum),
-													   isNaN(FleetSummary.tpValueSum)? "?" : FleetSummary.tpValueSum )
-							).lazyInitTooltip();
 							break;
 						default:
 							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedNone") );
-							$(".module.status .status_butai .status_text").attr("title",
-								"{0} ~ {1} TP".format( isNaN(FleetSummary.tpValueSum)? "?" : Math.floor(0.7 * FleetSummary.tpValueSum),
-													   isNaN(FleetSummary.tpValueSum)? "?" : FleetSummary.tpValueSum )
-							).lazyInitTooltip();
 							break;
 					}
+					$(".module.status .status_butai .status_text").attr("title",
+						"{0} ~ {1} TP".format( isNaN(FleetSummary.tpValueSum)? "?" : Math.floor(0.7 * FleetSummary.tpValueSum),
+											   isNaN(FleetSummary.tpValueSum)? "?" : FleetSummary.tpValueSum )
+					).lazyInitTooltip();
 					$(".module.status .status_butai").show();
 					$(".module.status .status_support").hide();
 				}else{
@@ -1822,7 +1834,9 @@
 				$(".module.activity .battle_contact").html(contactSpan.html()).lazyInitTooltip();
 				$(".module.activity .battle_airbattle").text( thisNode.airbattle[0] );
 				$(".module.activity .battle_airbattle").addClass( thisNode.airbattle[1] );
-				$(".module.activity .battle_airbattle").attr("title", thisNode.airbattle[2] || "" );
+				$(".module.activity .battle_airbattle").attr("title",
+					thisNode.buildAirPowerMessage()
+				).lazyInitTooltip();
 				$(".fighter_ally .plane_before").text(thisNode.planeFighters.player[0]);
 				$(".fighter_enemy .plane_before").text(thisNode.planeFighters.abyssal[0]);
 				$(".bomber_ally .plane_before").text(thisNode.planeBombers.player[0]);
@@ -1890,7 +1904,7 @@
 							.lazyInitTooltip();
 						$(enemyFleetBoxSelector+" .abyss_ship_"+(index+1))
 							.data("masterId", eshipId)
-							.off("dblclick").on("dblclick", function(e){
+							.on("dblclick", function(e){
 								(new RMsg("service", "strategyRoomPage", {
 									tabPath: "mstship-{0}".format($(this).data("masterId"))
 								})).execute();
@@ -2002,7 +2016,9 @@
 				$(".module.activity .battle_detection").attr("title", thisNode.detection[2] || "" );
 				$(".module.activity .battle_airbattle").text( thisNode.airbattle[0] );
 				$(".module.activity .battle_airbattle").addClass( thisNode.airbattle[1] );
-				$(".module.activity .battle_airbattle").attr("title", thisNode.airbattle[2] || "" );
+				$(".module.activity .battle_airbattle").attr("title",
+					thisNode.buildAirPowerMessage()
+				).lazyInitTooltip();
 
 				// Fighter phase
 				$(".fighter_ally .plane_before").text(thisNode.planeFighters.player[0]);
@@ -2099,7 +2115,7 @@
 								.lazyInitTooltip();
 							$(".module.activity .abyss_single .abyss_ship_"+(index+1))
 								.data("masterId", eshipId)
-								.off("dblclick").on("dblclick", function(e){
+								.on("dblclick", function(e){
 									(new RMsg("service", "strategyRoomPage", {
 										tabPath: "mstship-{0}".format($(this).data("masterId"))
 									})).execute();
@@ -2175,8 +2191,14 @@
 				if(ConfigManager.info_drop){
 					$(".module.activity .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop));
 					$(".module.activity .battle_drop")
+						.data("masterId", thisNode.drop)
 						.attr("title", KC3Meta.shipName( KC3Master.ship(thisNode.drop).api_name ))
-						.lazyInitTooltip();
+						.lazyInitTooltip()
+						.on("dblclick", function(e){
+							(new RMsg("service", "strategyRoomPage", {
+								tabPath: "mstship-{0}".format($(this).data("masterId"))
+							})).execute();
+						});
 				}
 
 				// Update Counts
@@ -2512,7 +2534,7 @@
 						.lazyInitTooltip();
 					$(".module.activity .abyss_single .abyss_ship_"+(index+1))
 						.data("masterId", eshipId)
-						.off("dblclick").on("dblclick", function(e){
+						.on("dblclick", function(e){
 							(new RMsg("service", "strategyRoomPage", {
 								tabPath: "mstship-{0}".format($(this).data("masterId"))
 							})).execute();
@@ -2577,7 +2599,9 @@
 			$(".module.activity .battle_detection").attr("title", thisPvP.detection[2] || "" );
 			$(".module.activity .battle_airbattle").text( thisPvP.airbattle[0] );
 			$(".module.activity .battle_airbattle").addClass( thisPvP.airbattle[1] );
-			$(".module.activity .battle_airbattle").attr("title", thisPvP.airbattle[2] || "" );
+			$(".module.activity .battle_airbattle").attr("title",
+				thisPvP.buildAirPowerMessage()
+			).lazyInitTooltip();
 			$(".module.activity .battle_engagement").text( thisPvP.engagement[2] || thisNode.engagement[0] );
 			$(".module.activity .battle_engagement").addClass( thisPvP.engagement[1] );
 			var contactSpan = buildContactPlaneSpan(thisPvP.fcontactId, thisPvP.fcontact, thisPvP.econtactId, thisPvP.econtact);

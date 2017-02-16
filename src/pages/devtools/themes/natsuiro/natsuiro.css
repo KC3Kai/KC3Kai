@@ -2183,7 +2183,7 @@ ABYSS FLEET
 
 }
 .module.summary .summary_box {
-	width:66px;
+	width:61px;
 	height:20px;
 	float:left;
 	line-height:20px;
@@ -2204,7 +2204,7 @@ ABYSS FLEET
 	vertical-align:top;
 }
 .module.summary .summary_text {
-	width:41px;
+	width:36px;
 	height:20px;
 	float:left;
 	color:#eee;
@@ -2213,10 +2213,10 @@ ABYSS FLEET
 	white-space:nowrap
 }
 .module.summary .summary-level {
-	width:53px;
+	width:57px;
 }
 .module.summary .summary-level .summary_text {
-	width:28px;
+	width:32px;
 }
 .module.summary .summary-airfp {
 	width:85px;
@@ -2225,10 +2225,16 @@ ABYSS FLEET
 	width:60px;
 }
 .module.summary .summary-antiair {
-	width:53px;
+	width:50px;
 }
 .module.summary .summary-antiair .summary_text {
-	width:28px;
+	width:25px;
+}
+.module.summary .summary-speed {
+	width:66px;
+}
+.module.summary .summary-speed .summary_text {
+	width:41px;
 }
 
 /*------- FLEET -------*/
