@@ -534,6 +534,9 @@
 	margin:0px 5px 0px 0px;
 	float:left;
 	font-size:12px;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
 }
 .tab_mstship .shipInfo .gunfit .fitgear .gearFit {
 	width:150px;
@@ -541,6 +544,8 @@
 	float:left;
 	text-align:center;
 	font-size:10px;
+	white-space:nowrap;
+	overflow:hidden;
 }
 .tab_mstship .shipInfo .gunfit .fitgear.fit_bonus {
 	color:#fff;
