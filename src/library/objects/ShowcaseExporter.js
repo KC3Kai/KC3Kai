@@ -73,8 +73,10 @@
             dv: "api_baku",
             ht: "api_houm",
             rn: "api_leng",
-            or: "api_distance"
+            or: "api_distance",
+            lk: "api_luck"
         };
+        this._modToParam = ["fp", "tp", "aa", "ar", "lk"];
         //TODO save next two vars somewhere
         this._outputMode = 2;
         this._addNameAndLevel = false;
@@ -489,11 +491,11 @@
         this.ctx.fillRect(x, y, this.rowParams.width, this.rowParams.height);
         var xOffset = this.rowParams.height / 7;
 
-        this._drawStat(ship.fp, x + xOffset, y, this.rowParams.height / 2, this.rowParams.height / 2, this.colors.statFP, background);
-        this._drawStat(ship.tp, x + xOffset + this.rowParams.height / 2, y, this.rowParams.height / 2, this.rowParams.height / 2, this.colors.statTP, background);
-        this._drawStat(ship.aa, x + xOffset + this.rowParams.height / 2, y + this.rowParams.height / 2, this.rowParams.height / 2, this.rowParams.height / 2, this.colors.statAA, background);
-        this._drawStat(ship.ar, x + xOffset, y + this.rowParams.height / 2, this.rowParams.height / 2, this.rowParams.height / 2, this.colors.statAR, background);
-        this._drawStat(ship.lk, x + xOffset + this.rowParams.height, y, this.rowParams.height / 5, this.rowParams.height / 2, this.colors.statLK, background);
+        this._drawStat(ship, "fp", x + xOffset, y, this.rowParams.height / 2, this.rowParams.height / 2, this.colors.statFP);
+        this._drawStat(ship, "tp", x + xOffset + this.rowParams.height / 2, y, this.rowParams.height / 2, this.rowParams.height / 2, this.colors.statTP);
+        this._drawStat(ship, "aa", x + xOffset + this.rowParams.height / 2, y + this.rowParams.height / 2, this.rowParams.height / 2, this.rowParams.height / 2, this.colors.statAA);
+        this._drawStat(ship, "ar", x + xOffset, y + this.rowParams.height / 2, this.rowParams.height / 2, this.rowParams.height / 2, this.colors.statAR);
+        this._drawStat(ship, "lk", x + xOffset + this.rowParams.height, y, this.rowParams.height / 5, this.rowParams.height / 2, this.colors.statLK);
 
         this._drawIcon(x + xOffset, y, ship.masterId);
 
@@ -525,12 +527,10 @@
         );
     };
 
-    ShowcaseExporter.prototype._drawStat = function (stat, x, y, w, h, color, background) {
-        if (stat[0] >= stat[1]) {
+    ShowcaseExporter.prototype._drawStat = function (ship, stat, x, y, w, h, color, background) {
+        var MasterShipStat = ship.master()[this._paramToApi[stat]];
+        if(MasterShipStat[0]+ship.mod[this._modToParam.indexOf(stat)]>=MasterShipStat[1]){
             this.ctx.fillStyle = color;
-            this.ctx.fillRect(x, y, w, h);
-        } else {
-            this.ctx.fillStyle = background;
             this.ctx.fillRect(x, y, w, h);
         }
     };
