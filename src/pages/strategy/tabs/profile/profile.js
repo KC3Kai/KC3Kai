@@ -353,7 +353,18 @@
 					window.location.reload();
 				});
 			});
-			
+
+			// Clear remodelDb
+			$(".tab_profile .clear_remodeldb").on("click", function() {
+				let result = confirm(
+					"You are about to remove ship remodel information, " +
+						"it won't be available until next time you restart game with KC3Kai");
+				if (result === true) {
+					delete localStorage.remodelDb;
+					window.location.reload();
+				}
+			});
+
 			// Reset Dismissed messages
 			$(".tab_profile .clear_dismissed").on("click", function(event){
 				// These variables may be moved into ConfigManager
