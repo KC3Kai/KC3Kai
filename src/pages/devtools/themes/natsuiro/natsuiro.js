@@ -2422,6 +2422,11 @@
 			// This is not shown in game
 			$(".activity_pvp .pvp_fleet_name").text(data.api_deckname);
 			$(".activity_pvp .pvp_fleet_list").empty();
+			var doubleClickFunc = function(e){
+				(new RMsg("service", "strategyRoomPage", {
+					tabPath: "mstship-{0}".format($(this).attr("alt"))
+				})).execute();
+			};
 			var levelFlagship = 0, level2ndShip = 0;
 			$.each(data.api_deck.api_ships, function(idx, ship){
 				if(ship.api_id > 0){
@@ -2431,6 +2436,7 @@
 					if(idx === 1) level2ndShip = ship.api_level;
 					var shipBox = $("#factory .pvpFleetShip").clone();
 					$(".pvp_fleet_ship_icon img", shipBox).attr("src", KC3Meta.shipIcon(ship.api_ship_id))
+						.attr("alt", ship.api_ship_id).on("dblclick", doubleClickFunc)
 						.attr("title", KC3Meta.stype(shipMaster.api_stype)).lazyInitTooltip();
 					$(".pvp_fleet_ship_name", shipBox).text(shipName).attr("title", shipName).lazyInitTooltip();
 					$(".pvp_fleet_ship_level .value", shipBox).text(ship.api_level);
