@@ -1,0 +1,262 @@
+(function(){
+	"use strict";
+
+	KC3StrategyTabs.shipquests = new KC3StrategyTab("shipquests");
+
+	KC3StrategyTabs.shipquests.definition = {
+		tabSelf: KC3StrategyTabs.shipquests,
+
+		shipCache:[],
+		shipQuests:[],
+
+		// default sorting method to Level
+		currentSorters: [{name:"lv", reverse:false}],
+
+		// all sorters
+		sorters: {},
+
+		/* INIT
+		Prepares all data needed
+		---------------------------------*/
+		init :function(){
+			// Load ships quests data
+			var questsData = $.ajax('../../data/ship_quests.json', { async: false }).responseText;
+			this.shipQuests = JSON.parse(questsData);
+
+			this.prepareSorters();
+		},
+
+		/* RELOAD
+		Prepares latest ships data
+		---------------------------------*/
+		reload :function(){
+			// Cache ship info
+			KC3ShipManager.load();
+			KC3QuestManager.load();
+
+			this.shipCache = [];
+
+			var ctr, ThisShip, ThisShipData;
+			for(ctr in KC3ShipManager.list){
+				ThisShip = KC3ShipManager.list[ctr];
+				ThisShipData = this.prepareShipData(ThisShip);
+				this.shipCache.push(ThisShipData);
+			}
+		},
+
+		// Get ship quests
+		getShipQuests: function(shipId) {
+			var entry = this.shipQuests[shipId];
+			return entry ? entry : [];
+		},
+
+		// Prepares necessary info
+		prepareShipData: function(ship) {
+			var ThisShip = ship;
+			var MasterShip = ThisShip.master();
+			var BaseRemodelForm = RemodelDb.remodelGroup(ThisShip.masterId)[0];
+			var Quests = this.getShipQuests(BaseRemodelForm);
+
+			var cached = {
+				id: ThisShip.rosterId,
+				bid: ThisShip.masterId,
+				stype: MasterShip.api_stype,
+				english: ThisShip.name(),
+				level: ThisShip.level,
+				quests: Quests,
+			};
+
+			return cached;
+		},
+
+		getLastCurrentSorter: function() {
+			return this.currentSorters[this.currentSorters.length-1];
+		},
+
+		reverseLastCurrentSorter: function() {
+			var sorter = this.getLastCurrentSorter();
+			sorter.reverse = ! sorter.reverse;
+		},
+
+		setCurrentSorter: function(name) {
+			var sorter = this.sorters[name];
+			console.assert(sorter, "sorter should have been registered");
+			this.currentSorters = [ {name: sorter.name, reverse:false} ];
+		},
+
+		defineSorter: function(name,desc,comparator) {
+			this.sorters[name] = {
+				name: name,
+				desc: desc,
+				comparator: comparator
+			};
+		},
+
+		defineSimpleSorter: function(name,desc,getter) {
+			var self = this;
+			this.defineSorter(
+				name,desc,
+				function(a,b) {
+					var va = getter.call(self,a);
+					var vb = getter.call(self,b);
+					return va === vb
+						 ? 0
+						 : (va < vb) ? -1 : 1;
+				});
+		},
+
+		prepareSorters: function() {
+			var define = this.defineSimpleSorter.bind(this);
+
+			define("id", "Id", function(x) { return x.id; });
+			define("name", "Name", function(x) { return x.english; });
+			define("type", "Type", function(x) { return x.stype; });
+			define("lv", "Level", function(x) { return -x.level; });
+		},
+
+		// create comparator based on current list sorters
+		makeComparator: function() {
+			function reversed(comparator) {
+				return function(a,b) {
+					var result = comparator(a,b);
+					return result === 0
+						? 0
+						: result < 0 ? 1 : -1;
+				};
+			}
+
+			function compose(prevCmp,curCmp) {
+				return function(a,b) {
+					var prevResult = prevCmp(a,b);
+					return prevResult !== 0 ? prevResult : curCmp(a,b);
+				};
+			}
+
+			var self = this;
+			return this.currentSorters
+				.map( function(sorterInfo) {
+					var sorter = self.sorters[sorterInfo.name];
+					return sorterInfo.reverse
+						? reversed(sorter.comparator)
+						: sorter.comparator;
+				})
+				.reduce( compose );
+		},
+
+		/* EXECUTE
+		---------------------------------*/
+		execute :function(){
+			var self = this;
+
+			// Column header sorting
+			$(".tab_shipquests .ship_header .ship_field.hover").on("click", function(){
+				var sorter = self.getLastCurrentSorter();
+				var sorterName = $(this).data("type");
+				if (sorterName === sorter.name) {
+					self.reverseLastCurrentSorter();
+				} else {
+					self.setCurrentSorter( sorterName  );
+				}
+				self.showList();
+			});
+
+			this.shipList = $(".tab_shipquests .ship_list");
+			this.showList();
+		},
+
+		/* SHOW PAGE
+		---------------------------------*/
+		showList :function(){
+			var self = this;
+
+			this.startTime = Date.now();
+
+			// Clear list
+			this.shipList.empty().hide();
+
+			// Wait until execute
+			setTimeout(function(){
+				var shipCtr, cElm, qElm, cShip, shipLevel, questCtr;
+
+				// Sorting
+				self.shipCache.sort( self.makeComparator() );
+
+				// Fill up list
+				Object.keys(self.shipCache).forEach(function(shipCtr){
+					cShip = self.shipCache[shipCtr];
+					shipLevel = cShip.level;
+
+					cElm = $(".tab_shipquests .factory .ship_item").clone().appendTo(self.shipList);
+					if(shipCtr%2 === 0){ cElm.addClass("even"); }else{ cElm.addClass("odd"); }
+
+					$(".ship_id", cElm).text( cShip.id );
+					$(".ship_img .ship_icon", cElm).attr("src", KC3Meta.shipIcon(cShip.bid));
+					$(".ship_img .ship_icon", cElm).attr("alt", cShip.bid);
+					$(".ship_img .ship_icon", this).click(self.shipClickFunc);
+					$(".ship_name", cElm).text( cShip.english );
+					if(shipLevel >= 100) {
+						$(".ship_name", cElm).addClass("ship_kekkon-color");
+					}
+					$(".ship_type", cElm).text( KC3Meta.stype(cShip.stype) );
+					var shipLevelConv = shipLevel;
+					$(".ship_lv", cElm).html( "<span>Lv.</span>" + shipLevelConv);
+
+					Object.keys(cShip.quests).forEach(function(questCtr){
+						var questId = cShip.quests[questCtr];
+						var thisQuest = KC3Meta.quest(questId);
+
+						var divTag = $("<div />").addClass("ship_field");
+						divTag.addClass("ship_stat");
+						divTag.addClass("questIcon");
+						divTag.addClass("type"+(String(questId).substring(0,1)));
+						divTag.text(thisQuest.code);
+						divTag.attr("title", self.buildQuestTooltip(questId, thisQuest));
+
+						$(".ship_quests", cElm).append(divTag);
+
+					});
+
+				});
+
+				self.shipList.show();
+				self.shipList.createChildrenTooltips();
+				console.log("Showing this list took", (Date.now() - self.startTime)-100 , "milliseconds");
+			}, 100);
+		},
+
+		shipClickFunc: function(e){
+			KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
+		},
+
+		buildQuestTooltip :function(questId, questMeta){
+			var title = "[{0:id}] {1:code} {2:name}".format(
+				questId, questMeta.code || "N/A",
+				questMeta.name || KC3Meta.term("UntranslatedQuest"));
+			title += $("<p></p>").css("font-size", "11px")
+				.css("margin-left", "1em")
+				.css("text-indent", "-1em")
+				.text(questMeta.desc || KC3Meta.term("UntranslatedQuestTip"))
+				.prop("outerHTML");
+			if(!!questMeta.memo) {
+				title += $("<p></p>")
+					.css("font-size", "11px")
+					.css("color", "#69a").text(questMeta.memo)
+					.prop("outerHTML");
+			}
+			if(!!questMeta.unlock) {
+				for(let ctr in questMeta.unlock) {
+					let cq = KC3Meta.quest(questMeta.unlock[ctr]);
+					if(!!cq) title += "&emsp;" +
+						$("<span></span>").css("font-size", "11px")
+							.css("color", "#a96")
+							.text("-> [{0:id}] {1:code} {2:name}"
+								.format(questMeta.unlock[ctr], cq.code||"N/A", cq.name)
+							).prop("outerHTML") + "<br/>";
+				}
+			}
+			return title;
+		}
+
+	};
+
+})();
