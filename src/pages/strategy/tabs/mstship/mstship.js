@@ -41,6 +41,8 @@
 		// atLevelChange(newLevel) updates info on UI
 		// with current ship & specified new level
 		atLevelChange: null,
+		// Merged master ship data with abyssal stats and seasonal CGs
+		mergedMasterShips: {},
 		
 		/* INIT
 		Prepares static data needed
@@ -49,6 +51,8 @@
 			KC3Meta.loadQuotes();
 			var MyServer = (new KC3Server()).setNum( PlayerManager.hq.server );
 			this.server_ip = MyServer.ip;
+			// Ship master data will not changed frequently
+			this.mergedMasterShips = KC3Master.all_ships(true, true);
 		},
 		
 		/* RELOAD
@@ -89,11 +93,10 @@
 			};
 
 			// List all ships
-			var shipBox;
-			$.each(KC3Master.all_ships(true, true), function(index, ShipData){
+			$.each(this.mergedMasterShips, function(index, ShipData){
 				if(!ShipData) { return true; }
 				
-				shipBox = $(".tab_mstship .factory .shipRecord").clone();
+				var shipBox = $(".tab_mstship .factory .shipRecord").clone();
 				shipBox.attr("data-id", ShipData.api_id);
 				shipBox.data("bs", ShipData.kc3_bship);
 				
@@ -259,7 +262,7 @@
 			ship_id = Number(ship_id||"405");
 			var
 				self = this,
-				shipData = KC3Master.ship(ship_id),
+				shipData = this.mergedMasterShips[ship_id],
 				saltState = function(){
 					return ConfigManager.info_salt && shipData.kc3_bship && ConfigManager.salt_list.indexOf(shipData.kc3_bship)>=0;
 				},
@@ -612,9 +615,10 @@
 				// show stats if encounter once, or show stats of internal db
 				KC3Database.get_enemyInfo(ship_id, function(enemyDbStats){
 					var abyssDb = KC3Master.abyssalShip(ship_id, false);
-					var abyssMaster = KC3Master.abyssalShip(ship_id, true);
+					var abyssMaster = self.mergedMasterShips[ship_id];
 					console.debug("Enemy DB stats", enemyDbStats);
 					console.debug("Abyssal internal stats", abyssDb);
+					console.debug("Merged abyssal master", abyssMaster);
 					$(".tab_mstship .shipInfo .encounter").toggle(!!enemyDbStats);
 					if(enemyDbStats || abyssDb){
 						$(".tab_mstship .shipInfo .stats").empty();
