@@ -41,6 +41,8 @@
 		// atLevelChange(newLevel) updates info on UI
 		// with current ship & specified new level
 		atLevelChange: null,
+		// Merged master ship data with abyssal stats and seasonal CGs
+		mergedMasterShips: {},
 		
 		/* INIT
 		Prepares static data needed
@@ -49,6 +51,8 @@
 			KC3Meta.loadQuotes();
 			var MyServer = (new KC3Server()).setNum( PlayerManager.hq.server );
 			this.server_ip = MyServer.ip;
+			// Ship master data will not changed frequently
+			this.mergedMasterShips = KC3Master.all_ships(true, true);
 		},
 		
 		/* RELOAD
@@ -89,11 +93,10 @@
 			};
 
 			// List all ships
-			var shipBox;
-			$.each(KC3Master.all_ships(true, true), function(index, ShipData){
+			$.each(this.mergedMasterShips, function(index, ShipData){
 				if(!ShipData) { return true; }
 				
-				shipBox = $(".tab_mstship .factory .shipRecord").clone();
+				var shipBox = $(".tab_mstship .factory .shipRecord").clone();
 				shipBox.attr("data-id", ShipData.api_id);
 				shipBox.data("bs", ShipData.kc3_bship);
 				
@@ -259,7 +262,7 @@
 			ship_id = Number(ship_id||"405");
 			var
 				self = this,
-				shipData = KC3Master.ship(ship_id),
+				shipData = this.mergedMasterShips[ship_id],
 				saltState = function(){
 					return ConfigManager.info_salt && shipData.kc3_bship && ConfigManager.salt_list.indexOf(shipData.kc3_bship)>=0;
 				},
@@ -611,13 +614,13 @@
 				// ENEMY STATS
 				// show stats if encounter once, or show stats of internal db
 				KC3Database.get_enemyInfo(ship_id, function(enemyDbStats){
-					var abyssMaster = KC3Master.abyssalShip(ship_id, false);
-					console.debug("enemyDbStats", enemyDbStats);
-					console.debug("abyssalMaster", abyssMaster);
+					var abyssDb = KC3Master.abyssalShip(ship_id, false);
+					var abyssMaster = self.mergedMasterShips[ship_id];
+					console.debug("Enemy DB stats", enemyDbStats);
+					console.debug("Abyssal internal stats", abyssDb);
+					console.debug("Merged abyssal master", abyssMaster);
 					$(".tab_mstship .shipInfo .encounter").toggle(!!enemyDbStats);
-					if(enemyDbStats || abyssMaster){
-						// Merge to official master
-						abyssMaster = KC3Master.abyssalShip(ship_id, true);
+					if(enemyDbStats || abyssDb){
 						$(".tab_mstship .shipInfo .stats").empty();
 						$.each([
 							["hp", "taik"],
@@ -642,14 +645,14 @@
 								);
 								$(".ship_stat_max", statBox).hide();
 								// Check diff for updating `abyssal_stats.json`
-								if(enemyDbStats && (!abyssMaster ||
-									typeof abyssMaster["api_" + stat[1]] === "undefined" ||
-									enemyDbStats[stat[0]] != abyssMaster["api_" + stat[1]])){
+								if(enemyDbStats && (!abyssDb ||
+									typeof abyssDb["api_" + stat[1]] === "undefined" ||
+									enemyDbStats[stat[0]] != abyssDb["api_" + stat[1]])){
 									// Different color to indicate stats attribute to be updated
 									$(".ship_stat_min", statBox).html(
 										$("<span style='color:orangered'></span>").text($(".ship_stat_min", statBox).text())
 									).attr("title",
-										"{0} => {1}".format(abyssMaster["api_" + stat[1]], enemyDbStats[stat[0]])
+										"{0} => {1}".format(abyssDb["api_" + stat[1]], enemyDbStats[stat[0]])
 									);
 								}
 							}
@@ -660,13 +663,13 @@
 						$(".tab_mstship .shipInfo .stats").css("width", "220px");
 						$(".tab_mstship .equipments .equipment").each(function(index){
 							$(this).show();
-							if(abyssMaster && typeof abyssMaster.api_maxeq[index] !== "undefined"){
+							if(abyssDb && abyssDb.api_maxeq && typeof abyssMaster.api_maxeq[index] !== "undefined"){
 								$(".capacity", this).text(abyssMaster.api_maxeq[index]).show();
 							} else {
 								$(".capacity", this).text(index >= abyssMaster.api_slot_num ? "-" : "?").show();
 							}
 							// Priority to show equipment recorded via encounter
-							var equipId = enemyDbStats ? enemyDbStats["eq"+(index+1)] : abyssMaster.kc3_slots[index];
+							var equipId = enemyDbStats ? enemyDbStats["eq"+(index+1)] : (abyssMaster.kc3_slots || [])[index];
 							if (equipId > 0) {
 								var equipment = KC3Master.slotitem( equipId );
 								$(".slotitem", this).text(KC3Meta.gearName( equipment.api_name ) )
@@ -680,13 +683,13 @@
 								$(".sloticon img", this).show();
 								$(".sloticon", this).addClass("hover");
 								// Check diff for updating `abyssal_stats.json`
-								if(enemyDbStats && (!abyssMaster ||
+								if(enemyDbStats && (!abyssDb || !abyssDb.kc3_slots ||
 									typeof abyssMaster.kc3_slots[index] === "undefined" ||
 									enemyDbStats["eq"+(index+1)] != abyssMaster.kc3_slots[index])){
 									$(".slotitem", this).html(
 										$("<span style='color:yellow'></span>").text($(".slotitem", this).text())
 									).attr("title",
-										"{0} => {1}".format(abyssMaster.kc3_slots[index], enemyDbStats["eq"+(index+1)])
+										"{0} => {1}".format((abyssMaster.kc3_slots||[])[index], enemyDbStats["eq"+(index+1)])
 									);
 								}
 							} else {

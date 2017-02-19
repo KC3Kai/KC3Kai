@@ -745,6 +745,7 @@ Contains summary information about a fleet and its 6 ships
 			40: 0.6, // Sonar
 			41: 0.6, // Large Flying Boat
 			45: 0.6, // Seaplane Fighter
+			51: 0.6, // Submarine Radar
 			57: 0.6, // Jet Bomber
 			94: 1 // Carrier-Based Reconnaissance Aircraft
 		};

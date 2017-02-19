@@ -102,42 +102,6 @@
 				return false;
 			});
 			
-			// Fix ledger data of IndexedDB, current:
-			// 0: LBAS type, 1: Consumables empty useitem
-			// Should be reserved until next several releases when most users have their fixed data
-			if(!localStorage.fixed_ledger_db){
-				KC3Database.get_lodger_data(Range(0,Infinity,0,1),
-				function(ld){
-					ld.forEach(function(d){
-						if(d.type === "sortie0" || d.type === "lbas"){
-							KC3Database.con.navaloverall.where("id").equals(d.id).modify(function(r){r.type="lbas6";});
-						}
-					});
-				});
-				delete localStorage.fixed_lbas_ledger;
-				localStorage.fixed_ledger_db = 1;
-				console.info("Ledger data of LBAS have been fixed");
-			} else if(localStorage.fixed_ledger_db == 1){
-				// Fix "hq": "0"
-				KC3Database.con.useitem.where("hq").equals("0").modify(function(mr){mr.hq = PlayerManager.hq.id;});
-				// Fix undefined consumables via using values of previous hour
-				KC3Database.get_useitem(null, function(rs){
-					var i,j,r,rp;
-					for(i in rs){
-						r = rs[i];
-						for(j=i-1; j>0; j--){ rp = rs[j];
-							if(typeof rp.torch !== "undefined") break;
-						}
-						if(typeof r.torch === "undefined" && typeof rp.torch !== "undefined"){
-							rp.id = r.id; rp.hour = r.hour;
-							KC3Database.con.useitem.put(rp);
-						}
-					}
-				});
-				localStorage.fixed_ledger_db = 2;
-				console.info("Ledger data of Consumables have been fixed");
-			}
-			
 			// Export all data
 			$(".tab_profile .export_data").on("click", function(){
 				var exportObject = {
@@ -343,17 +307,32 @@
 			
 			// Clear Quick Data
 			$(".tab_profile .clear_storage").on("click", function(event){
+				if( ! confirm("Are you sure? Lost data would not be recovered."))
+					return false;
 				localStorage.clear();
 				window.location.reload();
 			});
 			
 			// Clear Histories
 			$(".tab_profile .clear_history").on("click", function(event){
+				if( ! confirm("Are you sure? Lost data would not be recovered."))
+					return false;
 				KC3Database.clear(function(){
 					window.location.reload();
 				});
 			});
 			
+			// Clear RemodelDb
+			$(".tab_profile .clear_remodeldb").on("click", function(event) {
+				let result = confirm(
+					"You are about to remove ship remodel information, " +
+						"it won't be available until next time you restart game with KC3.");
+				if(result === true) {
+					delete localStorage.remodelDb;
+					window.location.reload();
+				}
+			});
+
 			// Reset Dismissed messages
 			$(".tab_profile .clear_dismissed").on("click", function(event){
 				// These variables may be moved into ConfigManager
@@ -361,12 +340,13 @@
 				delete localStorage.read_api_notice_55;
 				delete localStorage.read_dmm_notice_55;
 				delete localStorage.repotedQuests;
+				delete localStorage.fixed_lbas_ledger;
+				delete localStorage.fixed_ledger_db;
 				ConfigManager.load();
 				ConfigManager.dismissed_hints = {};
 				ConfigManager.save();
-				// For debugging or special case
-				delete localStorage.fixed_lbas_ledger;
-				delete localStorage.fixed_ledger_db;
+				// Give a response instead of alert
+				window.location.reload();
 			});
 			
 			// Clear transient properties
@@ -401,6 +381,42 @@
 					});
 				});
 			});
+			
+			// Fix buggy ledger data, current possible types:
+			// 1: LBAS type, 2: Consumables empty useitem
+			$(".tab_profile .fix_ledger").on("click", function(event){
+				// Fix LBAS type
+				KC3Database.get_lodger_data(Range(0,Infinity,0,1),
+				function(ld){
+					ld.forEach(function(d){
+						if(d.type === "sortie0" || d.type === "lbas"){
+							KC3Database.con.navaloverall.where("id").equals(d.id).modify(function(r){r.type="lbas6";});
+						}
+					});
+				});
+				console.info("Ledger data of LBAS have been fixed");
+				alert("Done 1/2~");
+				
+				// Fix "hq": "0"
+				KC3Database.con.useitem.where("hq").equals("0").modify(function(mr){mr.hq = PlayerManager.hq.id;});
+				// Fix undefined consumables via using values of previous hour
+				KC3Database.get_useitem(null, function(rs){
+					var i,j,r,rp;
+					for(i in rs){
+						r = rs[i];
+						for(j=i-1; j>0; j--){ rp = rs[j];
+							if(typeof rp.torch !== "undefined") break;
+						}
+						if(typeof r.torch === "undefined" && typeof rp.torch !== "undefined"){
+							rp.id = r.id; rp.hour = r.hour;
+							KC3Database.con.useitem.put(rp);
+						}
+					}
+				});
+				console.info("Graph data of Consumables have been fixed");
+				alert("Done 2/2!");
+			});
+			
 		},
 		
 		refreshNewsfeed: function(showRawNewsfeed){
