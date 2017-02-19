@@ -3002,6 +3002,22 @@ ABYSS FLEET
 	margin:-60% -50%;
 	-webkit-mask-image:-webkit-linear-gradient(right, rgba(34,34,34,1) 30%,rgba(34,34,34,0) 100%);
 }
+.base_plane_star {
+	width:12px;
+	height:12px;
+	position:relative;
+	float:left;
+	margin:10px 0px 0px -24px;
+	border-radius:6px;
+	font-size:10px;
+	line-height:12px;
+	text-align:center;
+	overflow:hidden;
+	color:#ff0;
+	background:#45a9a5;
+	pointer-events:none;
+	display:none;
+}
 .base_plane_icon {
 	width:20px;
 	line-height:20px;

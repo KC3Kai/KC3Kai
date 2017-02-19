@@ -266,7 +266,7 @@
 							.css("color", "#a96")
 							.text("-> [{0:id}] {1:code} {2:name}"
 								.format(questMeta.unlock[ctr], cq.code||"N/A", cq.name)
-							).prop("outerHTML");
+							).prop("outerHTML") + "<br/>";
 				}
 			}
 			return title;

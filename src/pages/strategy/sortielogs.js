@@ -401,7 +401,7 @@
 							.attr("data-diff",KC3Meta.term("EventHistoryRank"+sortie.diff));
 					$(".sortie_id", sortieBox).html( sortie.id );
 					$(".sortie_date", sortieBox).html( new Date(sortie.time*1000).format("mmm d") );
-					$(".sortie_date", sortieBox).attr("title", new Date(sortie.time*1000).format("mmm d, yyyy hh:MM:ss") );
+					$(".sortie_date", sortieBox).attr("title", new Date(sortie.time*1000).format("yyyy-mm-dd HH:MM:ss") );
 					$(".sortie_map", sortieBox).html( (sortie.world >= 10 ? "E" : sortie.world) + "-" + sortie.mapnum );
 					
 					fleetkey = ["main","escort","preboss","boss"];
