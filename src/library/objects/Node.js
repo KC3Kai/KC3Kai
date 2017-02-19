@@ -1192,10 +1192,6 @@ Used by SortieManager
 							case 15:	// 15 = AP
 								console.log("You sunk a AP");
 								sunkApCnt += 1;
-								if (! ConfigManager.spCounterAdjust ) {
-									KC3QuestManager.get(218).increment();
-									KC3QuestManager.get(212).increment();
-								}
 								KC3QuestManager.get(213).increment();
 								KC3QuestManager.get(221).increment();
 								break;
@@ -1204,7 +1200,7 @@ Used by SortieManager
 
 				}
 			}
-			if(ConfigManager.spCounterAdjust && sunkApCnt > 0){
+			if(sunkApCnt > 0){
 				// Bd6 must inc first than Bd5 as its id smaller :)
 				KC3QuestManager.get(212).increment(0, sunkApCnt);
 				KC3QuestManager.get(218).increment(0, sunkApCnt);

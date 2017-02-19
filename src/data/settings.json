@@ -300,11 +300,6 @@
 					"type": "Integer"
 				},
 				"options" : { "label" : "" }
-			},
-			{
-				"id": "spCounterAdjust",
-				"name": "SettingsSpecialCounterAdjust",
-				"type": "check"
 			}
 		]
 	},
