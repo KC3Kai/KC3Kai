@@ -107,15 +107,6 @@ known IDs see QuestManager
 	KC3Quest.prototype.increment = function(reqNum=0, amount=1, isAdjustingCounter=false){
 		var self = this;
 		var isIncreased = false;
-		if (! ConfigManager.spCounterAdjust) {
-			if (this.tracking && this.isSelected()) {
-				if (this.tracking[reqNum][0] + amount <= this.tracking[reqNum][1]) {
-					this.tracking[reqNum][0] += amount;
-				}
-				KC3QuestManager.save();
-			}
-			return;
-		}
 
 		// is selected on progress, or force to be adjusted on shared counter
 		if(this.tracking && (this.isSelected() || !!isAdjustingCounter)){
