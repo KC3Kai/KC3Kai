@@ -500,6 +500,7 @@ Xxxxxxx
 		 * @return a tuple contains [
 		 *           computed fighter power (without improvement and proficiency bonus),
 		 *           sum of known slot capacity,
+		 *           sum of slot capacity without air power,
 		 *           exception map indicates which ship or gear missing required data:
 		 *             {shipId: null || {gearId: null || aaStat}}
 		 *         ]
@@ -507,7 +508,8 @@ Xxxxxxx
 		 */
 		enemyFighterPower :function(enemyFleetShips, enemyShipSlots){
 			var totalPower = false;
-			var totalCapacity = false;
+			var totalCapacity = 0;
+			var noAirPowerCapacity = 0;
 			var exceptions = {};
 			// no ship IDs
 			if(!enemyFleetShips){
@@ -551,6 +553,8 @@ Xxxxxxx
 							if(aaStat > 0){
 								totalCapacity += capacity;
 								totalPower += Math.floor(Math.sqrt(capacity) * aaStat);
+							} else {
+								noAirPowerCapacity += capacity;
 							}
 						} else {
 							// no slot maxeq (capacity)
@@ -560,7 +564,7 @@ Xxxxxxx
 					}
 				}
 			});
-			return [totalPower, totalCapacity, exceptions];
+			return [totalPower, totalCapacity, noAirPowerCapacity, exceptions];
 		}
 	};
 	

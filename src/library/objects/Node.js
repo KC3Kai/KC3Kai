@@ -1352,9 +1352,9 @@ Used by SortieManager
 	KC3Node.prototype.buildAirPowerMessage = function(){
 		var tooltip = this.airbattle[2] || "";
 		var apTuple = KC3SortieManager.enemyFighterPower(this.eships, this.eSlot);
-		var ap = apTuple[0];
 		// Air Power: AI<1/3, 1/3<=AD<2/3, 2/3<=AP<3/2, 3/2<=AS<3, 3<=AS+
 		// No i18n yet as it's for researchers
+		var ap = apTuple[0];
 		if(!!ap){
 			tooltip += "\nPOW: {0} (AI< {1}< AD< {2}< AP< {3}< AS< {4}< AS+)"
 				.format(ap, Math.floor(ap / 3), Math.floor(2 * ap / 3),
@@ -1362,10 +1362,13 @@ Used by SortieManager
 		}
 		var enemyTotalPlanes = this.planeFighters.abyssal[0];
 		if(!!enemyTotalPlanes){
-			tooltip += "\nFTG: {0} /{1}".format(apTuple[1] || 0, enemyTotalPlanes);
+			tooltip += "\nFTG: {0} /{1}".format(apTuple[1], enemyTotalPlanes);
+			// 'total - AA Fighter - No AA (Bomber)' may be unknown slot or shot down by support
+			tooltip += " (AA0: {0}, UFO: {1})"
+				.format(apTuple[2], enemyTotalPlanes - apTuple[1] - apTuple[2]);
 		}
-		if(Object.keys(apTuple[2]).length > 0){
-			tooltip += "\nERR: " + JSON.stringify(apTuple[2]);
+		if(Object.keys(apTuple[3]).length > 0){
+			tooltip += "\nERR: " + JSON.stringify(apTuple[3]);
 		}
 		return tooltip;
 	};

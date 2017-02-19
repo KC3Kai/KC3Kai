@@ -893,6 +893,7 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_map/start":function(params, response, headers){
 			var UTCTime = Date.toUTCseconds(headers.Date);
+			var fleetNum = parseInt(params.api_deck_id, 10);
 			KC3SortieManager.startSortie(
 				response.api_data.api_maparea_id,
 				response.api_data.api_mapinfo_no,
@@ -931,7 +932,11 @@ Previously known as "Reactor"
 			KC3Network.trigger("SortieStart");
 			KC3Network.trigger("CompassResult");
 			KC3Network.trigger("Quests");
-			KC3Network.trigger("Fleet");
+			if(fleetNum > 0){
+				KC3Network.trigger("Fleet", { switchTo: PlayerManager.combinedFleet ? "combined" : fleetNum });
+			} else {
+				KC3Network.trigger("Fleet");
+			}
 		},
 		
 		/* Start LBAS Sortie
@@ -1447,6 +1452,7 @@ Previously known as "Reactor"
 		/* PVP Start
 		-------------------------------------------------------*/
 		"api_req_practice/battle":function(params, response, headers){
+			var fleetNum = parseInt(params.api_deck_id, 10);
 			KC3SortieManager.sortieTime = Math.hrdInt('floor',Date.safeToUtcTime(headers.Date),3,1);
 			KC3SortieManager.map_world  = -1;
 			KC3SortieManager.snapshotFleetState();
@@ -1454,6 +1460,11 @@ Previously known as "Reactor"
 				battle: response.api_data,
 				fleetSent: params.api_deck_id
 			});
+			if(fleetNum > 0){
+				KC3Network.trigger("Fleet", { switchTo: fleetNum });
+			} else {
+				KC3Network.trigger("Fleet");
+			}
 		},
 		
 		/* PVP Start

@@ -1594,6 +1594,11 @@
 								eqIconSrc = "../../../../assets/img/items/"+itemObj.master().api_type[3]+".png";
 								$(".base_plane_icon img", planeBox).attr("src", eqIconSrc);
 								
+								if (itemObj.stars > 0) {
+									$(".base_plane_star", planeBox).text(itemObj.stars);
+									$(".base_plane_star", planeBox).show();
+								}
+								
 								if (itemObj.ace > -1) {
 									eqChevSrc = "../../../../assets/img/client/achev/"+itemObj.ace+".png";
 									$(".base_plane_chevs img", planeBox).attr("src", eqChevSrc);
