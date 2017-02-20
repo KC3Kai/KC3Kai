@@ -226,23 +226,34 @@
 							if(element.clear == 1){
 								$(".map_hp_txt", mapBox).text("Cleared!");
 								mapBox.addClass("cleared");
+								if(typeof element.maxhp != "undefined")
+									$(".map_hp_txt", mapBox).lazyInitTooltip()
+										.attr("title", "{0} / {1}".format(element.curhp, element.maxhp));
+								else if(!!KC3Meta.gauge(element.id))
+									$(".map_hp_txt", mapBox).lazyInitTooltip()
+										.attr("title", "{0} kills".format(KC3Meta.gauge(element.id)));
 							}else{
 								mapBox.addClass("notcleared");
 								// If HP-based gauge
 								if(typeof element.maxhp != "undefined"){
-									if(element.curhp>(element.baseHp || 1)){ // i want to approach last kill as JUST DO IT instead leaving 1HP only.
+									// want to approach last kill as JUST DO IT instead leaving 1HP only.
+									// but recent boss changes form for possible last dance and HP becomes lesser,
+									// so only show it on 1HP, leave exact left HP shown even < element.baseHp.
+									if(element.curhp > 1){
 										if((element.maxhp === 9999) || (element.curhp === 9999))
 											$(".map_hp_txt", mapBox).text( "???? / ????" );
 										else
-											$(".map_hp_txt", mapBox).text( element.curhp+" / "+element.maxhp );
+											$(".map_hp_txt", mapBox).text( "{0} / {1}".format(element.curhp, element.maxhp) );
 										$(".map_bar", mapBox).css("width", ((element.curhp/element.maxhp)*80)+"px");
 									}else{
 										mapBox.addClass("noclearnogauge");
 										if(ConfigManager.info_troll)
 											mapBox
 												.addClass("justdoit")
-												.attr("title","just kill her already, yesterday you said tommorow! JUST DO IT!!!"); // placeholder class...
-										$(".map_hp_txt", mapBox).text(KC3Meta.term("StrategyEvents1HP"));
+												.attr("title", "Just kill her already, yesterday you said tommorow! JUST DO IT!!!"); // placeholder class...
+										$(".map_hp_txt", mapBox).text(KC3Meta.term("StrategyEvents1HP"))
+											.attr("title", "{0} < {1} / {2}".format(element.curhp, element.baseHp, element.maxhp))
+											.lazyInitTooltip();
 									}
 								// If kill-based gauge
 								}else{
@@ -250,9 +261,11 @@
 									var killsLeft = totalKills - element.kills;
 									if(totalKills){
 										if(killsLeft > 1)
-											$(".map_hp_txt", mapBox).text( killsLeft+" / "+totalKills+" kills left");
+											$(".map_hp_txt", mapBox).text( "{0} / {1} kills left".format(killsLeft, totalKills) );
 										else
-											$(".map_hp_txt", mapBox).text( KC3Meta.term("StrategyEvents1HP") );
+											$(".map_hp_txt", mapBox).text( KC3Meta.term("StrategyEvents1HP") )
+												.attr("title", "{0} / {1}".format(killsLeft, totalKills))
+												.lazyInitTooltip();
 										$(".map_bar", mapBox).css("width", ((killsLeft/totalKills)*80)+"px");
 									} else {
 										mapBox.addClass("noclearnogauge");
