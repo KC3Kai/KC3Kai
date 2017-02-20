@@ -16,7 +16,7 @@
 		sorters: {},
 
 		/* INIT
-		Prepares all data needed
+		Prepares initial static data needed.
 		---------------------------------*/
 		init :function(){
 			// Load ships quests data
@@ -27,7 +27,7 @@
 		},
 
 		/* RELOAD
-		Prepares latest ships data
+		Loads latest player or game data if needed.
 		---------------------------------*/
 		reload :function(){
 			// Cache ship info
@@ -35,7 +35,6 @@
 			KC3QuestManager.load();
 
 			this.shipCache = [];
-
 			var ctr, ThisShip, ThisShipData;
 			for(ctr in KC3ShipManager.list){
 				ThisShip = KC3ShipManager.list[ctr];
@@ -59,9 +58,9 @@
 
 			var cached = {
 				id: ThisShip.rosterId,
-				bid: ThisShip.masterId,
+				masterId: ThisShip.masterId,
 				stype: MasterShip.api_stype,
-				english: ThisShip.name(),
+				name: ThisShip.name(),
 				level: ThisShip.level,
 				quests: Quests,
 			};
@@ -109,7 +108,7 @@
 			var define = this.defineSimpleSorter.bind(this);
 
 			define("id", "Id", function(x) { return x.id; });
-			define("name", "Name", function(x) { return x.english; });
+			define("name", "Name", function(x) { return x.name; });
 			define("type", "Type", function(x) { return x.stype; });
 			define("lv", "Level", function(x) { return -x.level; });
 		},
@@ -144,6 +143,7 @@
 		},
 
 		/* EXECUTE
+		Places data onto the interface from scratch.
 		---------------------------------*/
 		execute :function(){
 			var self = this;
@@ -164,7 +164,8 @@
 			this.showList();
 		},
 
-		/* SHOW PAGE
+		/* SHOW SHIP LIST
+		Pagination not support yet.
 		---------------------------------*/
 		showList :function(){
 			var self = this;
@@ -190,10 +191,10 @@
 					if(shipCtr%2 === 0){ cElm.addClass("even"); }else{ cElm.addClass("odd"); }
 
 					$(".ship_id", cElm).text( cShip.id );
-					$(".ship_img .ship_icon", cElm).attr("src", KC3Meta.shipIcon(cShip.bid));
-					$(".ship_img .ship_icon", cElm).attr("alt", cShip.bid);
+					$(".ship_img .ship_icon", cElm).attr("src", KC3Meta.shipIcon(cShip.masterId));
+					$(".ship_img .ship_icon", cElm).attr("alt", cShip.masterId);
 					$(".ship_img .ship_icon", this).click(self.shipClickFunc);
-					$(".ship_name", cElm).text( cShip.english );
+					$(".ship_name", cElm).text( cShip.name );
 					if(shipLevel >= 100) {
 						$(".ship_name", cElm).addClass("ship_kekkon-color");
 					}
