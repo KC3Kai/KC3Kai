@@ -175,18 +175,6 @@ $(document).on("ready", function(){
 			.css('width', "40%");
 	}
 	
-	// I've read the Chrome 54 API Link notice
-	$("#chrome54flash .api_notice_close").on('click', function(){
-		localStorage.read_api_notice = 1;
-		$("#chrome54flash").hide();
-	});
-	
-	// I've read the Chrome 55 API Link notice
-	$("#chrome55network .api_notice_close").on('click', function(){
-		localStorage.read_api_notice_55 = 1;
-		$("#chrome55network").hide();
-	});
-	
 	// untranslated quest copiable text form
 	$(".overlay_quests").on("click", ".no_tl", function(){
 		chrome.tabs.create({
@@ -666,7 +654,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, response){
 	if((request.identifier||"") == "kc3_gamescreen"){
 		// If action requested is supported
 		if(typeof interactions[request.action] !== "undefined"){
-			ConfigManager.loadIfNecessary();
 			// Execute the action
 			interactions[request.action](request, sender, response);
 			return true;

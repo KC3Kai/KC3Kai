@@ -1094,7 +1094,7 @@
 			}
 
 			// TAIHA ALERT CHECK
-			ConfigManager.loadIfNecessary();
+			//ConfigManager.loadIfNecessary();
 			// if not PvP and Taiha alert setting is enabled
 			if(ConfigManager.alert_taiha && !KC3SortieManager.isPvP() &&
 				PlayerManager.fleets

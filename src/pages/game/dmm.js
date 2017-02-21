@@ -191,13 +191,6 @@ $(document).on("ready", function(){
 		}
 	});
 	
-	// I've read the Chrome 55 API Link notice
-	$("#chrome55frame .api_notice_close").on('click', function(){
-		localStorage.read_dmm_notice_55 = 1;
-		$("#chrome55frame").hide();
-	});
-	
-	
 	// Configure Idle Timer
 	/*
 	  unsafe-tick  : remove the safe marker of API idle time
@@ -652,7 +645,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, response){
 	if((request.identifier||"") == "kc3_gamescreen"){
 		// If action requested is supported
 		if(typeof interactions[request.action] !== "undefined"){
-			ConfigManager.loadIfNecessary();
 			// Execute the action
 			interactions[request.action](request, sender, response);
 			return true;

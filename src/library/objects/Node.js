@@ -590,7 +590,6 @@ Used by SortieManager
 					//&& [6].indexOf(this.eventKind)<0
 					){
 					this.predictedRank = KC3Node.predictRank( beginHPs, endHPs, battleData.api_name );
-					// console.debug("Rank Predict:", this.predictedRank);
 				}
 				
 			// PLAYER COMBINED FLEET
@@ -901,7 +900,6 @@ Used by SortieManager
 				}
 			}
 			
-			
 		// PLAYER SINGLE FLEET
 		} else {
 			fleet = PlayerManager.fleets[fleetId - 1];
@@ -969,9 +967,10 @@ Used by SortieManager
 		console.log("enemyHP", this.enemyHP);
 		console.log("enemySunk", this.enemySunk);
 		
-		if(ConfigManager.info_btrank){
-			this.predictedRankNight = KC3Node.predictRank( beginHPs, endHPs );
-			// console.debug("Rank Predict (Night):", this.predictedRankNight);
+		// both single fleet predictable only for now
+		if(ConfigManager.info_btrank &&
+			!isEnemyCombined && (!PlayerManager.combinedFleet || fleetId > 1)){
+			this.predictedRankNight = KC3Node.predictRank( beginHPs, endHPs, nightData.api_name );
 		}
 		
 		if(this.gaugeDamage > -1
