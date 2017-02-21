@@ -384,6 +384,28 @@ Used by SortieManager
 			this.airBaseAttack = battleData.api_air_base_attack;
 			// No plane from, just injecting from far away air base :)
 			this.airBaseJetInjection = battleData.api_air_base_injection;
+			// Jet planes also consume steels each LBAS attack, the same with on carrier:
+			// see Fleet.calcJetsSteelCost()
+			if(!!this.airBaseJetInjection && !!this.airBaseJetInjection.api_stage1
+				&& this.airBaseJetInjection.api_stage1.api_f_count > 0
+				&& KC3SortieManager.onSortie > 0){
+				let consumedSteel = 0;
+				$.each(this.airBaseJetInjection.api_air_base_data, function(_, jet){
+					consumedSteel += Math.round(
+						jet.api_count
+						* KC3Master.slotitem(jet.api_mst_id).api_cost
+						* KC3GearManager.jetBomberSteelCostRatioPerSlot
+					) || 0;
+				});
+				console.log("Jets LBAS consumed steel:", consumedSteel);
+				if(consumedSteel > 0){
+					KC3Database.Naverall({
+						hour: Math.hrdInt("floor", Date.safeToUtcTime() / 3.6, 6, 1),
+						type: "lbas" + KC3SortieManager.map_world,
+						data: [0,0,-consumedSteel,0].concat([0,0,0,0])
+					});
+				}
+			}
 		}
 		
 		// Air phases
@@ -470,10 +492,10 @@ Used by SortieManager
 				this.planeJetBombers.abyssal[1] = jetPlanePhase.api_stage2.api_e_lostcount;
 			}
 			// Jet planes consume steels each battle based on:
-			// pendingConsumingSteel = floor(jetMaster.api_cost * ship.slots[jetIdx] * 0.2)
+			// pendingConsumingSteel = round(jetMaster.api_cost * ship.slots[jetIdx] * 0.2)
 			if(this.planeJetFighters.player[0] > 0
 				&& (KC3SortieManager.onSortie > 0 || KC3SortieManager.isPvP())){
-				var consumedSteel = PlayerManager.fleets[
+				let consumedSteel = PlayerManager.fleets[
 					(parseInt(fleetSent) || KC3SortieManager.fleetSent) - 1
 				].calcJetsSteelCost(KC3SortieManager.sortieName(2));
 				console.log("Jets consumed steel:", consumedSteel);
