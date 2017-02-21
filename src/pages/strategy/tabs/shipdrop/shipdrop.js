@@ -25,8 +25,8 @@
 			let contentRoot = $(".tab_shipdrop .content_root");
 			let factory = $(".tab_shipdrop .factory");
 			let hq = PlayerManager.hq.id;
-			let world = 4;
-			let subMap = 2;
+			let world = 37;
+			let subMap = 3;
 			let sorties37_1 = KC3Database.con.sortie.where("world").equals(world).and( data => data.mapnum === subMap && data.hq === hq);
 			let dropTable = {};
 			let pList = [];
