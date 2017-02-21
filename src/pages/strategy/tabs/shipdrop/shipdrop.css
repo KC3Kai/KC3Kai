@@ -1,0 +1,21 @@
+.tab_shipdrop {
+	width:680px;
+}
+
+.tab_shipdrop .content_root .node_drop .ship > img {
+	width: 24px;
+	height: 24px;
+}
+
+.tab_shipdrop .content_root .node_drop .ship * {
+	float: left;
+
+}
+
+.tab_shipdrop .content_root .node_drop .ship {
+	display:inline-block;
+}
+
+.tab_shipdrop .factory {
+	display:none;
+}
