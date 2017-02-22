@@ -71,10 +71,12 @@
 				showGoalTemplates: true,
 				showRecommended: true,
 				showOtherShips: true,
+                shipsOrderType: "id",
+                shipsSortDirection: "up",
 				closeToRemodelLevelDiff: 5
 			};
 			var settings;
-			if (typeof localStorage.srExpcalc === "undefined") {
+			if (typeof localStorage.srExpcalc === "undefined" || typeof JSON.parse(localStorage.srExpcalc)["shipsOrderType"] === "undefined") {
 				localStorage.srExpcalc = JSON.stringify( defSettings );
 				settings = defSettings;
 			} else {
@@ -101,6 +103,8 @@
 			var jqToggleGT = $(".toggle_goal_templates");
 			var jqToggleRecom = $(".toggle_recommended");
 			var jqToggleOther = $(".toggle_other_ships");
+            
+            var jqOrderTypes = $(".order_line dd");
 
 			var jqCloseToRemLvlDiff = $("input#inp_lvl_diff");
 
@@ -109,6 +113,8 @@
 				jqGoalTemplates.toggle( settings.showGoalTemplates );
 				jqRecommended.toggle( settings.showRecommended );
 				jqOtherShips.toggle( settings.showOtherShips );
+                jqOrderTypes.removeClass("active up down");
+                jqOrderTypes.filter(".order_" + settings.shipsOrderType).addClass("active").addClass(settings.shipsSortDirection);
 
 				jqToggleGT
 					.toggleClass("active", settings.showGoalTemplates);
@@ -128,6 +134,13 @@
 					return obj;
 				};
 			}
+            
+            function updateOrder(field, newState) {
+                return function(obj) {
+                    obj[field] = newState;
+                    return obj;
+                };
+            }
 
 			jqToggleGT.on("click", function() {
 				self.modifySettings( negateField("showGoalTemplates") );
@@ -142,6 +155,12 @@
 				self.modifySettings( negateField("showOtherShips") );
 				updateUI();
 			});
+            jqOrderTypes.on("click", function() {
+                ($(this).hasClass("up")) ? self.modifySettings(updateOrder("shipsSortDirection", "down")) : self.modifySettings(updateOrder("shipsSortDirection", "up"));
+                self.modifySettings(updateOrder("shipsOrderType", $(this).data("order")));
+                orderShips($(this).data("order"), ($(this).hasClass("up")) ? "down" : "up");
+                updateUI();
+            });
 			jqCloseToRemLvlDiff
 				.on("blur", function() {
 					var jqObj = $(this);
@@ -172,6 +191,41 @@
 						e.preventDefault();
 					}
 				});
+                
+            function orderShips(sortKey, sortOrder) {
+                function sortBoxes(boxSorted) {
+                    var sortedElements = $(boxSorted).find(".ship_goal");
+                    sortedElements.sort(function(a, b) {
+                        // Various order types, if someone wants to clean this up or add secondary sort by ID, feel free to <3
+                        if (sortOrder == "up" && sortKey == "id") {
+                            return +$(a).attr("id").substr(7) - +$(b).attr("id").substr(7);
+                        } else if (sortKey == "id") {
+                            return +$(b).attr("id").substr(7) - +$(a).attr("id").substr(7);
+                        } else if (sortOrder == "up" && sortKey == "name") {
+                            return ($(a).find(".ship_info .ship_name").text().toUpperCase() > $(b).find(".ship_info .ship_name").text().toUpperCase()) ? 1 : -1;
+                        } else if (sortKey == "name") {
+                            return ($(b).find(".ship_info .ship_name").text().toUpperCase() > $(a).find(".ship_info .ship_name").text().toUpperCase()) ? 1 : -1;
+                        } else if (sortOrder == "up" && sortKey == "level") {
+                            return +$(a).find(".ship_lv .ship_value").text() - +$(b).find(".ship_lv .ship_value").text();
+                        } else if (sortKey == "level") {
+                            return +$(b).find(".ship_lv .ship_value").text() - +$(a).find(".ship_lv .ship_value").text();
+                        } else if (sortOrder == "up" && sortKey == "remodel") {
+                            return +$(a).find(".ship_target .ship_value").text() - +$(b).find(".ship_target .ship_value").text();
+                        } else if (sortKey == "remodel") {
+                            return +$(b).find(".ship_target .ship_value").text() - +$(a).find(".ship_target .ship_value").text();
+                        } else if (sortOrder == "up" && sortKey == "difference") {
+                            return (+$(a).find(".ship_target .ship_value").text() - +$(a).find(".ship_lv .ship_value").text()) - (+$(b).find(".ship_target .ship_value").text() - +$(b).find(".ship_lv .ship_value").text());
+                        } else if (sortKey == "difference") {
+                            return (+$(b).find(".ship_target .ship_value").text() - +$(b).find(".ship_lv .ship_value").text()) - (+$(a).find(".ship_target .ship_value").text() - +$(a).find(".ship_lv .ship_value").text());
+                        }
+                    })
+                    .prependTo(boxSorted);
+                }
+                
+                sortBoxes(".box_goals");
+                sortBoxes(".box_recommend");
+                sortBoxes(".box_other");
+            }
 		},
 
 		configHighlightToggles: function() {
