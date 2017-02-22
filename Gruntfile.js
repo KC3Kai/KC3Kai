@@ -1,5 +1,7 @@
 module.exports = function(grunt) {
 
+	require('load-grunt-tasks')(grunt);
+
 	grunt.initConfig({
 		clean: {
 			tmp: {
@@ -7,6 +9,9 @@ module.exports = function(grunt) {
 			},
 			release: {
 				src: [ 'build/release/**/*', 'build/release/' ]
+			},
+			testenv: {
+				src: [ 'build/testenv/**/*', 'build/testenv/' ]
 			}
 		},
 		copy: {
@@ -15,6 +20,19 @@ module.exports = function(grunt) {
 				cwd: 'src/',
 				src: '**/*',
 				dest: 'build/tmp/'
+			},
+			testenv: {
+				expand: true,
+				src: [
+					// some tests would load from the following 2 paths:
+					'node_modules/qunitjs/**/*',
+					'node_modules/jquery/**/*',
+
+					'src/**/*',
+					'!src/data/lang/node_modules/**/*',
+					'tests/**/*'
+				],
+				dest: 'build/testenv/'
 			},
 			statics: {
 				expand: true,
@@ -31,9 +49,11 @@ module.exports = function(grunt) {
 					'assets/js/KanColleHelpers.js',
 					'assets/js/twbsPagination.min.js',
 					'assets/js/WhoCallsTheFleetShipDb.json',
+					'assets/js/WhoCallsTheFleetItemDb.json',
 					'assets/js/jszip.min.js',
 					'assets/js/bootstrap-slider.min.js',
-					'assets/js/no_ga.js'
+					'assets/js/no_ga.js',
+					'assets/js/markdown.min.js'
 				],
 				dest: 'build/release/'
 			},
@@ -42,10 +62,13 @@ module.exports = function(grunt) {
 				cwd: 'build/tmp/',
 				src: [
 					'assets/css/keys.css',
+					'assets/css/jquery-ui.min.css',
 					'assets/css/bootstrap-slider.min.css',
 					'library/helpers/*.js',
 					'library/injections/*.js',
+					'library/injections/*.css',
 					'library/modules/*.js',
+					'library/workers/*.js',
 					'pages/**/*',
 					'!pages/strategy/tabs/**/*.js',
 					'manifest.json',
@@ -107,6 +130,11 @@ module.exports = function(grunt) {
 		},
 		uglify: {
 			all : {
+				options: {
+					mangle: {
+						except: ['window', 'this']
+					}
+				},
 				files: [{
 					expand: true,
 					cwd: 'build/tmp/',
@@ -160,41 +188,78 @@ module.exports = function(grunt) {
 						}
 					]
 				}
-			},
-			buildobjects: {
-				src: 'build/tmp/manifest.json',
-				dest: 'build/tmp/',
+			}
+		},
+		modify_json: {
+			manifest_info: {
 				options: {
-					replacements: [
-						{
-							pattern: /assets\/js\/jquery\-2\.1\.3\.min\.js/ig,
-							replacement: 'assets/js/global.js'
-						},
-						{
-							pattern: /library\/objects\/Messengers\.js/ig,
-							replacement: 'library/objects.js'
-						},
-						{
-							pattern: /library\/managers\/ConfigManager\.js/ig,
-							replacement: 'library/managers.js'
+					fields: {
+						"name": "KanColle Command Center 改",
+						"browser_action": {
+							"default_icon": "assets/img/logo/19.png",
+							"default_popup": "pages/popup/popup.html"
 						}
-					]
+					}
+				},
+				files: {
+					'build/tmp/manifest.json': ['build/tmp/manifest.json'],
 				}
 			},
-			manifest: {
-				src: 'build/tmp/manifest.json',
-				dest: 'build/tmp/',
+			manifest_scripts: {
 				options: {
-					replacements: [
-						{
-							pattern: /KC3改 Development/ig,
-							replacement: 'KanColle Command Center 改'
+					fields: {
+						"background": {
+							"scripts": [
+								"assets/js/global.js",
+								"library/objects.js",
+								"library/managers.js",
+								"library/modules/Master.js",
+								"library/modules/RemodelDb.js",
+								"library/modules/Meta.js",
+								"library/modules/Translation.js",
+								"library/modules/Service.js"
+							]
 						},
-						{
-							pattern: /assets\/img\/logo\/dev\.png/ig,
-							replacement: 'assets/img/logo/19.png'
-						}
-					]
+						"content_scripts": [
+							{
+								"matches":["*://www.dmm.com/*"],
+								"js": ["library/injections/cookie.js"],
+								"run_at": "document_end",
+								"all_frames": true
+							},
+							{
+								"matches":["*://www.dmm.com/netgame/*/app_id=854854*"],
+								"css": [
+									"library/injections/dmm.css"
+								],
+								"js": [
+									"assets/js/global.js",
+									"library/objects.js",
+									"library/managers.js",
+									"library/modules/Master.js",
+									"library/modules/Meta.js",
+									"library/modules/Translation.js",
+									"library/injections/dmm_takeover.js",
+									"library/injections/dmm.js"
+								],
+								"run_at": "document_end",
+								"all_frames": true
+							},
+							{
+								"matches":["*://osapi.dmm.com/gadgets/*aid=854854*"],
+								"js": [
+									"assets/js/global.js",
+									"library/objects.js",
+									"library/injections/osapi.js"
+								],
+								"run_at": "document_end",
+								"all_frames": true
+							}
+						],
+					}
+				},
+				files: {
+					'build/tmp/manifest.json': ['build/tmp/manifest.json'],
 				}
 			}
 		},
@@ -268,7 +333,7 @@ module.exports = function(grunt) {
 		},
 		qunit: {
 			all: [
-				'tests/**/*.html'
+				'build/testenv/tests/**/*.html'
 			]
 		},
 		compress: {
@@ -278,8 +343,8 @@ module.exports = function(grunt) {
 					pretty: true
 				},
 				expand: true,
-				cwd: 'build/',
-				src: [ 'release/**/*' ],
+				cwd: 'build/release/',
+				src: [ '**/*' ],
 				dest: './'
 			}
 		},
@@ -300,6 +365,29 @@ module.exports = function(grunt) {
 					zip: "build/release.zip"      
 				}
 			}
+		},
+		// currently use just for running tests
+		babel: {
+			options: {
+				sourceMap: true,
+				presets: ['babel-preset-es2015']
+			},
+			testenv: {
+				files: [
+					{  
+						expand: true,
+						cwd: 'build/testenv/',
+						// for now only transpile code in "library" & "pages" (whitelist)
+						// avoiding stepping into "assets" and "data".
+						// same reason for "tests/library".
+						src: [ "src/library/**/*.js",
+							   "src/pages/**/*.js",
+							   "tests/library/**/*.js"
+							 ],
+						dest: 'build/testenv/'
+					}
+				]
+			}
 		}
 	});
 	
@@ -317,6 +405,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks("grunt-contrib-qunit");
 	grunt.loadNpmTasks('grunt-contrib-compress');
 	grunt.loadNpmTasks('grunt-webstore-upload');
+	grunt.loadNpmTasks('grunt-modify-json');
 	
 	grunt.registerTask('local', [
 		'clean:tmp',
@@ -327,7 +416,7 @@ module.exports = function(grunt) {
 		'cssmin',
 		'string-replace:allhtml',
 		'htmlmin',
-		'string-replace:buildobjects',
+		'modify_json:manifest_scripts',
 		'jsonlint:build',
 		'json-minify',
 		'copy:processed',
@@ -350,8 +439,8 @@ module.exports = function(grunt) {
 		'uglify',
 		'string-replace:allhtml',
 		'htmlmin',
-		'string-replace:buildobjects',
-		'string-replace:manifest',
+		'modify_json:manifest_scripts',
+		'modify_json:manifest_info',
 		'jsonlint:build',
 		'json-minify',
 		'copy:processed',
@@ -368,6 +457,9 @@ module.exports = function(grunt) {
 	]);
 	
 	grunt.registerTask('test-unit', [
+		'clean:testenv',
+		'copy:testenv',
+		'babel:testenv',
 		'qunit'
 	]);
 	

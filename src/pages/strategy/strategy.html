@@ -6,6 +6,7 @@
 		<link href="../../assets/css/bootstrap.css" rel="stylesheet" type="text/css">
 		<!-- @nonbuildend -->
 		<link href="../../assets/css/global.css" rel="stylesheet" type="text/css">
+		<link href="../../assets/css/jquery-ui.min.css" rel="stylesheet" type="text/css">
 		<link href="../../assets/css/bootstrap-slider.min.css" rel="stylesheet" type="text/css">
 		<link href="strategy.css" rel="stylesheet" type="text/css">
 		<title>KC3改 Strategy Room</title>
@@ -64,6 +65,7 @@
 						<div class="title">Quests</div>
 						<ul class="menulist">
 							<li data-id="flowchart">Flowchart</li>
+							<li data-id="shipquests">Required Ships</li>
 						</ul>
 					</div>
 					<div class="submenu">
@@ -79,7 +81,8 @@
 						<div class="title">Expeditions</div>
 						<ul class="menulist">
 							<li data-id="expedpast">History</li>
-							<li data-id="expedtable">Scorer</li>
+							<li data-id="expedscorer">Scorer</li>
+							<li data-id="expedtable">Table</li>
 						</ul>
 					</div>
 					<div class="submenu">
@@ -142,6 +145,7 @@
 		<script type="text/javascript" src="../../library/objects/Ship.js"></script>
 		<script type="text/javascript" src="../../library/objects/Sortie.js"></script>
 		<script type="text/javascript" src="../../library/objects/LandBase.js"></script>
+		<script type="text/javascript" src="../../library/objects/ShowcaseExporter.js"></script>
 		<script type="text/javascript" src="../../library/managers/ConfigManager.js"></script>
 		<script type="text/javascript" src="../../library/managers/GearManager.js"></script>
 		<script type="text/javascript" src="../../library/managers/PlayerManager.js"></script>
@@ -151,15 +155,16 @@
 		<script type="text/javascript" src="../../library/managers/ShipManager.js"></script>
 		<script type="text/javascript" src="../../library/managers/GoalTemplateManager.js"></script>
 		<!-- @nonbuildend -->
-		<script type="text/javascript" src="../../../../library/modules/RemodelDb.js"></script>
-		<script type="text/javascript" src="../../../../library/modules/Database.js"></script>
-		<script type="text/javascript" src="../../../../library/modules/Master.js"></script>
-		<script type="text/javascript" src="../../../../library/modules/Translation.js"></script>
-		<script type="text/javascript" src="../../../../library/modules/Meta.js"></script>
-		<script type="text/javascript" src="../../../../library/modules/DataBackup.js"></script>
-		<script type="text/javascript" src="../../../../library/modules/WhoCallsTheFleetDb.js">
-		</script><script type="text/javascript" src="../../library/modules/PictureBook.js"></script>
 		<script type="text/javascript" src="../../library/modules/RemodelDb.js"></script>
+		<script type="text/javascript" src="../../library/modules/Database.js"></script>
+		<script type="text/javascript" src="../../library/modules/Master.js"></script>
+		<script type="text/javascript" src="../../library/modules/Translation.js"></script>
+		<script type="text/javascript" src="../../library/modules/Meta.js"></script>
+		<script type="text/javascript" src="../../library/modules/DataBackup.js"></script>
+		<script type="text/javascript" src="../../library/modules/WhoCallsTheFleetDb.js"></script>
+		<script type="text/javascript" src="../../library/modules/PictureBook.js"></script>
+		<script type="text/javascript" src="../../library/modules/AntiAir.js"></script>
+		<script type="text/javascript" src="../../library/modules/Expedition.js"></script>
 
 		<script type="text/javascript" src="strategy.js"></script>
 
@@ -183,11 +188,13 @@
 		<script type="text/javascript" src="tabs/crafts/crafts.js"></script>
 		<script type="text/javascript" src="tabs/fleet/fleet.js"></script>
 		<script type="text/javascript" src="tabs/flowchart/flowchart.js"></script>
+		<script type="text/javascript" src="tabs/shipquests/shipquests.js"></script>
 		<script type="text/javascript" src="tabs/maps/maps.js"></script>
 		<script type="text/javascript" src="tabs/event/event.js"></script>
 		<script type="text/javascript" src="tabs/showcase/showcase.js"></script>
 		<script type="text/javascript" src="tabs/locking/locking.js"></script>
 		<script type="text/javascript" src="tabs/aircraft/aircraft.js"></script>
+		<script type="text/javascript" src="tabs/expedscorer/expedscorer.js"></script>
 		<script type="text/javascript" src="tabs/expedtable/expedtable.js"></script>
 		<script type="text/javascript" src="tabs/screenshots/screenshots.js"></script>
 		<script type="text/javascript" src="tabs/akashi/akashi.js"></script>

@@ -26,11 +26,16 @@
 				var row = $(".factory .tr-item").clone();
 				var nested = function(obj){
 					if(Array.isArray(obj)){
-						return nested(obj[0]);
+						return obj.length === 0 ? {} : nested(obj[0]);
+					}
+					if(typeof obj === "object"){
+						if(!!obj.tag){ return obj; }
+						var n = obj[Object.keys(obj)[0]];
+						return !n ? {} : !n.tag ? nested(n) : n;
 					}
 					return obj;
 				};
-				var tag = v.tag || nested(v).tag;
+				var tag = v.tag || nested(v).tag || language;
 
 				row.addClass( 
 					language === tag ?
@@ -40,7 +45,7 @@
 				$(".tr-key",row).click(jsonToggleFunc);
 				$(".tr-from",row).text(tag);
 
-				if(!v.val && Array.isArray(v)){
+				if(!v.val && (Array.isArray(v) || typeof v === "object") ){
 					$(".tr-content",row).text(JSON.stringify(originalJson[k]));
 				} else {
 					if($("#html-rendering").is(":checked")){
@@ -144,7 +149,16 @@
 				items: {
 					callback: self.showDict
 				},
+				equiptype: {
+					callback: self.showDict
+				},
+				useitems: {
+					callback: self.showDict
+				},
 				ships: {
+					callback: self.showDict
+				},
+				ship_affix: {
 					callback: self.showDict
 				},
 				quests: {

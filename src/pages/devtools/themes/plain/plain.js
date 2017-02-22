@@ -30,8 +30,7 @@
 	var moraleClockRemain = 0;
 	
 	// Experience Calculation
-	var mapexp = [], maplist = {}, rankFactors = [0, 0.5, 0.7, 0.8, 1, 1, 1.2],
-		newGoals, grindData, expLeft, expPerSortie;
+	var mapexp = [], maplist = {}, rankFactors = [0, 0.5, 0.7, 0.8, 1, 1, 1.2];
 
 	// make sure localStorage.expedTab is available
 	// and is in correct format.
@@ -159,6 +158,8 @@
 		// Initialize data managers
 		ConfigManager.load();
 		KC3Master.init();
+		RemodelDb.init();
+		WhoCallsTheFleetDb.init("../../../../");
 		KC3Meta.init("../../../../data/");
 		KC3Meta.defaultIcon("../../../../assets/img/ui/empty.png");
 		KC3Meta.loadQuotes();
@@ -256,7 +257,7 @@
 		$(".summary-eqlos").on("click",function(){
 			ConfigManager.scrollElosMode();
 			$(".summary-eqlos img", self.domElement).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png"); 
-			$(".summary-eqlos .summary_text").text( Math.round(((selectedFleet < 5) ? PlayerManager.fleets[selectedFleet-1].eLoS() : PlayerManager.fleets[0].eLoS()+PlayerManager.fleets[1].eLoS()) * 100) / 100 );
+			$(".summary-eqlos .summary_text").text( Math.qckInt("floor", ((selectedFleet < 5) ? PlayerManager.fleets[selectedFleet-1].eLoS() : PlayerManager.fleets[0].eLoS()+PlayerManager.fleets[1].eLoS()), 1) );
 		}).addClass("hover");
 		
 		// Fighter Power Toggle
@@ -287,13 +288,7 @@
 		// Export button
 		$(".module.controls .btn_export").on("click", function(){
 			window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck=".concat(encodeURI(
-				JSON.stringify({
-					"version":3,
-					"f1":generate_fleet_JSON(PlayerManager.fleets[0]),
-					"f2":generate_fleet_JSON(PlayerManager.fleets[1]),
-					"f3":generate_fleet_JSON(PlayerManager.fleets[2]),
-					"f4":generate_fleet_JSON(PlayerManager.fleets[3]),
-					})
+				JSON.stringify(PlayerManager.prepareDeckbuilder())
 				)));
 		});
 		
@@ -341,44 +336,6 @@
 				}
 			}
 		}, 1000);
-		
-		
-		/* Code for generating deckbuilder style JSON data.
-		--------------------------------------------*/
-		function generate_fleet_JSON(fleet) {
-			var result = {};
-			for(var i = 0; i < fleet.ships.length; i++) {
-				if(fleet.ships[i] > -1){
-					result["s".concat(i+1)] = generate_ship_JSON(fleet.ships[i]);
-				}
-			}
-			return result;
-		}
-		
-		function generate_ship_JSON (ship_ID) {
-			var result = {};
-			var ship = KC3ShipManager.get(ship_ID);
-			result.id = ship.masterId;
-			result.lv = ship.level;
-			result.luck = ship.lk[0];
-			result.items = generate_equipment_JSON(ship);
-			return result;
-		}
-		
-		function generate_equipment_JSON (shipObj) {
-			var result = {};
-			for(var i = 0; i < 4; i++) {
-				if(shipObj.items[i]> -1){
-					var item = KC3GearManager.get(shipObj.items[i]);
-					var rank = (item.ace === -1) ? item.stars : item.ace ;
-					result["i".concat(i+1)] ={
-							"id":item.masterId,
-							"rf":rank
-					};
-				} else {break;}
-			}
-			return result;
-		}
 		
 		// Fleet selection
 		$(".module.controls .fleet_num").on("click", function(){
@@ -812,7 +769,7 @@
 				// Compile fleet attributes
 				FleetSummary = {
 					lv: MainFleet.totalLevel() + EscortFleet.totalLevel(),
-					elos: Math.qckInt(null,MainFleet.eLoS()+EscortFleet.eLoS(),2),
+					elos: Math.qckInt("floor", MainFleet.eLoS()+EscortFleet.eLoS(), 1),
 					air: MainFleet.fighterPowerText(),
 					speed:
 						(MainFleet.fastFleet && EscortFleet.fastFleet)
@@ -864,7 +821,7 @@
 				// Compile fleet attributes
 				FleetSummary = {
 					lv: CurrentFleet.totalLevel(),
-					elos: Math.round( CurrentFleet.eLoS() * 100) / 100,
+					elos: Math.qckInt("floor", CurrentFleet.eLoS(), 1),
 					air: CurrentFleet.fighterPowerText(),
 					speed: CurrentFleet.speed(),
 					docking: MainRepairs.docking,
@@ -1451,25 +1408,32 @@
 			
 			// Show experience calculation
 			if(selectedFleet<5){
+				let expJustGained = data.api_get_ship_exp;
 				var CurrentFleet = PlayerManager.fleets[selectedFleet-1];
-				var ThisShip;
-				newGoals = JSON.parse(localStorage.goals || "{}");
+				let newGoals = JSON.parse(localStorage.goals || "{}");
 				$.each(CurrentFleet.ships, function(index, rosterId){
 					if(typeof newGoals["s"+rosterId] != "undefined"){
-						grindData = newGoals["s"+rosterId];
+						let grindData = newGoals["s"+rosterId];
 						if(grindData.length===0){ return true; }
-						ThisShip = KC3ShipManager.get( rosterId );
-						expLeft = KC3Meta.expShip(grindData[0])[1] - ThisShip.exp[0];
+						let ThisShip = KC3ShipManager.get( rosterId );
+						// we are at battle result page and old ship exp data has not yet been updated,
+						// so here we need to add  "expJustGained" to get the correct exp.
+						// also we don't update ship.exp here, as it will be automatically sync-ed
+						// once we back to port or continue sortie.
+						let expLeft = KC3Meta.expShip(grindData[0])[1] - (ThisShip.exp[0] + expJustGained[index+1]);
+						console.debug("Ship", rosterId, "target exp", expLeft);
 						if(expLeft < 0){ return true; } // if the ship has reached the goal, skip it
-						expPerSortie = maplist[ grindData[1]+"-"+grindData[2] ];
+						let expPerSortie = maplist[ grindData[1]+"-"+grindData[2] ];
 						if(grindData[6]===1){ expPerSortie = expPerSortie * 2; }
 						if(grindData[5]===1){ expPerSortie = expPerSortie * 1.5; }
 						expPerSortie = expPerSortie * rankFactors[grindData[4]];
-						
-						$("<div />").addClass("expNotice").text( Math.ceil(expLeft / expPerSortie) ).appendTo("#ShipBox"+rosterId+" .ship_exp_label").delay( 5000 ).fadeOut(1000, function(){ $(this).remove(); } );
+						$("<div />").addClass("expNotice").text( Math.ceil(expLeft / expPerSortie) )
+							.appendTo("#ShipBox"+rosterId+" .ship_exp_label")
+							.delay( 5000 )
+							.fadeOut(1000, function(){ $(this).remove(); } );
 					}
 				});
-				
+
 			}
 		},
 		
@@ -1912,9 +1876,6 @@
 			var ExpdIncome = KEIB.getExpeditionIncomeBase(selectedExpedition);
 			var ExpdFleetCost = fleetObj.calcExpeditionCost( selectedExpedition );
 
-			var landingCraftFactor = fleetObj.calcLandingCraftBonus() + 1;
-			var greatSuccessFactor = plannerIsGreatSuccess ? 1.5 : 1;
-
 			$(".module.activity .activity_expeditionPlanner .estimated_time").text( String( 60*ExpdCost.time ).toHHMMSS() );
 
 			// setup expedition item colors
@@ -1931,28 +1892,18 @@
 
 			var resourceRoot = $(".module.activity .activity_expeditionPlanner .expres_resos");
 			$.each(["fuel","ammo","steel","bauxite"], function(i,v) {
-				var incomeVal = Math.floor( ExpdIncome[v] * landingCraftFactor * greatSuccessFactor );
+				var basicIncome = ExpdIncome[v];
 				var jqObj = $( "."+v, resourceRoot );
-				var netResourceIncome = incomeVal;
+				var resupply;
 				if (v === "fuel" || v === "ammo") {
-					netResourceIncome -= ExpdFleetCost[v];
+					resupply = ExpdFleetCost[v];
+				} else {
+					resupply = 0;
 				}
 
-				var tooltipText = "{0} = {1}".format(netResourceIncome, incomeVal);
-				if (incomeVal > 0) {
-					tooltipText += "{=" + String(ExpdIncome[v]);
-					if (landingCraftFactor > 1)
-						tooltipText += "*" + String(landingCraftFactor);
-					if (greatSuccessFactor > 1)
-						tooltipText += "*" + String(greatSuccessFactor);
-					tooltipText += "}";
-				}
-				if (v === "fuel" || v === "ammo") {
-					tooltipText += " - " + String(ExpdFleetCost[v]);
-				}
-
-				jqObj.text( netResourceIncome );
-				jqObj.attr( 'title', tooltipText );
+				var tooltipText = fleetObj.landingCraftBonusTextAndVal(basicIncome,resupply,plannerIsGreatSuccess);
+				jqObj.text( tooltipText.val );
+				jqObj.attr( 'title', tooltipText.text );
 			});
 
 			var markFailed = function (jq) {

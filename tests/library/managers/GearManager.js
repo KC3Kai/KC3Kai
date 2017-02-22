@@ -16,6 +16,7 @@ QUnit.test("Managers > Gear > Saving", function( assert ) {
 });
 
 QUnit.test("Managers > Gear > Loading", function( assert ) {
+	ConfigManager.load();
 	var x = $.extend(true, {}, KC3GearManager);
 	x.load();
 	

@@ -17,44 +17,41 @@
 		
 		$(".myVersion").text(myVersion);
 		
-		// Chrome 55 incompatibilities
-		if (parseInt(getChromeVersion(), 10) >= 55) {
-			$("#play_cc, #play_dmmf").addClass("short");
-			$("#play_cc .desc").text(KC3Meta.term("Chrome55Incompatible"));
-			$("#play_dmmf .desc").text(KC3Meta.term("Chrome55Incompatible"));
-			$("#play_dmm").prependTo("#wrapper");
-			$(".wrapper").css("height", "473px");
-		}
-		
 		// Show estimated time until next update
 		$.ajax({
 			dataType: "json",
 			async: true,
 			url: "https://raw.githubusercontent.com/KC3Kai/KC3Kai/master/update?v="+(Date.now()),
 			success: function(data, textStatus, request){
-				if (!!data.pr) {
-					$(".nextVersion").attr("href", data.pr);
-				}
-				if( myVersion != data.version ){
-					// If unknown time
-					if (data.time === "") {
-						$(".nextVersion").html( data.version+" "+KC3Meta.term("MenuScheduledSoon"));
+				// Check for available extension updates
+				if (typeof localStorage.updateAvailable != "undefined" && localStorage.updateAvailable != myVersion) {
+					// Update available, as notified by chrome itself
+					$(".nextVersion").html( localStorage.updateAvailable+" "+KC3Meta.term("UpdateAvailableNow"));
 					
-					// If there is a fixed scheduled time
-					} else {
-						// If current installed version less than latest
-						var UpdateDiff = (new Date(data.time)).getTime() - Date.now();
+				} else {
+					// Check the GitHub JSON
+					if( myVersion != data.version ){
+						// If unknown time
+						if (data.time === "") {
+							$(".nextVersion").html( data.version+" "+KC3Meta.term("MenuScheduledSoon"));
 						
-						if(UpdateDiff > 0){
-							$(".nextVersion").html( data.version+" in <span class=\"timer\">"+String(UpdateDiff/1000).toHHMMSS()+"</span>");
-						}else{
-							$(".nextVersion").html( data.version+" "+KC3Meta.term("MenuScheduledNow"));
+						// If there is a fixed scheduled time
+						} else {
+							// If current installed version less than latest
+							var UpdateDiff = (new Date(data.time)).getTime() - Date.now();
+							
+							if(UpdateDiff > 0){
+								$(".nextVersion").html( data.version+" in <span class=\"timer\">"+String(UpdateDiff/1000).toHHMMSS()+"</span>");
+							}else{
+								$(".nextVersion").html( data.version+" "+KC3Meta.term("MenuScheduledNow"));
+							}
 						}
+					}else{
+						// Installed version is the same or greater than latest
+						$(".nextVersion").html( KC3Meta.term("MenuOnLatest") );
 					}
-				}else{
-					// Installed version is the same or greater than latest
-					$(".nextVersion").html( KC3Meta.term("MenuOnLatest") );
 				}
+				
 				// Next Maintenance time
 				if (data.maintenance_start) {
 					var nextMtDate = new Date(data.maintenance_start);
@@ -77,76 +74,19 @@
 			}
 		});
 		
-		checkDMMLogin(function(isLoggedIn){
-			if (!isLoggedIn) {
-				$("#play_cc").hide();
-				$("#play_dmm").hide();
-				$("#play_dmmf").hide();
-				
-				$("#login_dmm").show();
-				
-				$(".wrapper").css("height", "372px");
-			}
-		});
-		
-		// Login on DMM
-		$("#login_dmm").on('click', function(){
-			localStorage.extract_api = false;
-			localStorage.dmmplay = false;
-			window.open("https://www.dmm.com/my/-/login/=/path=Sg__/", "dmm_login");
-		});
-		
-		// Refresh API Link
-		// $("#get_api").on('click', function(){
-		$("#play_cc").on('click', function(){
-			chrome.cookies.set({
-				url: "http://www.dmm.com",
-				name: "ckcy",
-				value: "1",
-				domain: ".dmm.com",
-				expirationDate: Math.ceil((new Date("Sun, 09 Feb 2019 09:00:09 GMT")).getTime()/1000),
-				path: '/netgame/',
-			}, function(cookie){
-				localStorage.extract_api = true;
-				localStorage.dmmplay = false;
-				window.open("http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/", "kc3kai_game");
-			});
-		});
-		
 		// Play DMM Website
 		$("#play_dmm").on('click', function(){
-			chrome.cookies.set({
-				url: "http://www.dmm.com",
-				name: "ckcy",
-				value: "1",
-				domain: ".dmm.com",
-				expirationDate: Math.ceil((new Date("Sun, 09 Feb 2019 09:00:09 GMT")).getTime()/1000),
-				path: '/netgame/',
-			}, function(cookie){
-				localStorage.extract_api = false;
-				localStorage.dmmplay = true;
-				window.open("../game/web.html", "kc3kai_game");
-			});
-		});
-		
-		// Play via DMM Frame
-		$("#play_dmmf").on('click', function(){
-			chrome.cookies.set({
-				url: "http://www.dmm.com",
-				name: "ckcy",
-				value: "1",
-				domain: ".dmm.com",
-				expirationDate: Math.ceil((new Date("Sun, 09 Feb 2019 09:00:09 GMT")).getTime()/1000),
-				path: '/netgame/',
-			}, function(cookie){
-				localStorage.extract_api = false;
-				localStorage.dmmplay = false;
-				window.open("../game/dmm.html", "kc3kai_game");
-			});
+			localStorage.extract_api = false;
+			localStorage.dmmplay = true;
+			window.open("../game/direct.html", "kc3kai_game");
 		});
 		
 		// Strategy Room
 		$("#strategy").on('click', function(){
+			// To unify Strategy Room open method (always 1 tab), maybe a setting for it
+			//(new RMsg("service", "strategyRoomPage", { tabPath: "profile" })).execute();
+			//window.close();
+			// To allow multi Strategy Room tabs
 			window.open("../strategy/strategy.html", "kc3kai_strategy");
 		});
 		
@@ -158,11 +98,6 @@
 		// About
 		$("#about").on('click', function(){
 			window.open("../about/about.html", "kc3kai_about");
-		});
-		
-		// About
-		$("#facebook").on('click', function(){
-			window.open("https://www.facebook.com/kc3kai", "_blank");
 		});
 		
 		// Calculate reset countdowns
@@ -196,33 +131,5 @@
 			UTC6PM.getTime() - now);
 		$(".timePvP").text( String(remaining/1000).toHHMMSS() );
 	});
-	
-	function checkDMMLogin(callback){
-		// should be exactly of value "false",
-		// so we can fallback as if it's default value "true"
-		if (ConfigManager.forceDMMLogin === false) {
-			callback(true);
-			return;
-		}
-		// Check if user is already logged in on DMM
-		chrome.cookies.get({
-			url: "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/",
-			name: "INT_SESID"
-		}, function(cookie){
-			// Not yet logged in
-			if(cookie===null){
-				callback(false);
-				
-			// Already logged in
-			}else{
-				callback(true);
-			}
-		});
-	}
-	
-	function getChromeVersion() {
-		var raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
-		return raw ? parseInt(raw[2], 10) : false;
-	}
 	
 })();

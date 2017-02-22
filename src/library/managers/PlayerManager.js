@@ -13,6 +13,7 @@ Does not include Ships and Gears which are managed by other Managers
 		consumables: {},
 		fleets: [],
 		bases: [],
+		baseConvertingSlots: [],
 		fleetCount: 1,
 		repairSlots: 2,
 		repairShips: [-1,-1,-1,-1,-1],
@@ -28,6 +29,7 @@ Does not include Ships and Gears which are managed by other Managers
 				devmats : 0,
 				screws: 0,
 				torch: 0,
+				medals: 0,
 				blueprints: 0
 			};
 			this.fleets = [
@@ -73,6 +75,7 @@ Does not include Ships and Gears which are managed by other Managers
 				self.bases.splice(data.length < 4 ? 4 : data.length);
 			}
 			localStorage.bases = JSON.stringify(self.bases);
+			localStorage.setObject("baseConvertingSlots", self.baseConvertingSlots);
 		},
 
 		setRepairDocks :function( data ){
@@ -162,10 +165,13 @@ Does not include Ships and Gears which are managed by other Managers
 
 		setConsumables :function( data, stime ){
 			$.extend(this.consumables, data);
+			localStorage.consumables = JSON.stringify(this.consumables);
 
 			if(typeof localStorage.lastUseitem == "undefined"){ localStorage.lastUseitem = 0; }
 			var ResourceHour = Math.floor(stime/3600);
-			if(ResourceHour == localStorage.lastUseitem){ return false; }
+			if(ResourceHour == localStorage.lastUseitem || Object.keys(data).length < 4){
+				return false;
+			}
 			localStorage.lastUseitem = ResourceHour;
 			KC3Database.Useitem({
 				torch : data.torch,
@@ -212,10 +218,14 @@ Does not include Ships and Gears which are managed by other Managers
 
 		setNewsfeed :function( data, stime ){
 			//console.log("newsfeed", data);
+			localStorage.playerNewsFeed = JSON.stringify({ time: stime, log: data });
+			// Give up to save into DB, just keep recent 6 logs
+			return;
+			// No way to track which logs are already recorded,
+			// because no cursor/timestamp/state could be found in API
+			/*
 			$.each(data, function( index, element){
-				//console.log("checking newsfeed item", element);
 				if(parseInt(element.api_state, 10) !== 0){
-					//console.log("saved news", element);
 					KC3Database.Newsfeed({
 						type: element.api_type,
 						message: element.api_message,
@@ -223,6 +233,18 @@ Does not include Ships and Gears which are managed by other Managers
 					});
 				}
 			});
+			*/
+		},
+
+		// make sure to "loadFleets" before calling this function.
+		prepareDeckbuilder: function() {
+			return {
+				version: 4,
+				f1: PlayerManager.fleets[0].deckbuilder(),
+				f2: PlayerManager.fleets[1].deckbuilder(),
+				f3: PlayerManager.fleets[2].deckbuilder(),
+				f4: PlayerManager.fleets[3].deckbuilder()
+			};
 		},
 
 		portRefresh :function( data ){
@@ -284,12 +306,21 @@ Does not include Ships and Gears which are managed by other Managers
 			}
 		},
 
+		loadConsumables :function(){
+			if(typeof localStorage.consumables != "undefined"){
+				this.consumables =  $.extend(this.consumables, JSON.parse(localStorage.consumables));
+			}
+		},
+
 		loadBases :function(){
 			if(typeof localStorage.bases != "undefined"){
 				var oldBases = JSON.parse( localStorage.bases );
 				this.bases = oldBases.map(function(baseData){
 					return (new KC3LandBase()).defineFormatted(baseData);
 				});
+			}
+			if(typeof localStorage.baseConvertingSlots != "undefined"){
+				this.baseConvertingSlots = localStorage.getObject("baseConvertingSlots");
 			}
 		},
 

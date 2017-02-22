@@ -15,13 +15,16 @@ Used by SortieManager
 		this.isPvP = false;
 	};
 
-	// static function. predicts battle rank,
-	// arguments are beginHPs, endHPs in following structure:
-	// { ally: [array of hps]
-	// , enemy: [array of hps]
-	// }
-	// arrays are all begins at 0
-	KC3Node.predictRank = function(beginHPs, endHPs) {
+	/**
+	// Return predicted battle rank letter. Static function.
+	// @param beginHPs, endHPs in following structure:
+	//   { ally: [array of hps],
+	//     enemy: [array of hps]
+	//   }
+	//   arrays are all begins at 0.
+	// @param battleName - optional, the API call name invoked currently
+	*/
+	KC3Node.predictRank = function(beginHPs, endHPs, battleName) {
 		console.assert( 
 			beginHPs.ally.length === endHPs.ally.length,
 			"ally data length mismatched");
@@ -29,7 +32,7 @@ Used by SortieManager
 			beginHPs.enemy.length === endHPs.enemy.length,
 			"enemy data length mismatched");
 
-		// removes "-1"s in begin HPs
+		// Removes "-1"s in begin HPs
 		// also removes data from same position
 		// in end HPs
 		// in addition, negative end HP values are set to 0
@@ -86,10 +89,32 @@ Used by SortieManager
 			enemyBeginHP += beginHPs.enemy[i];
 		}
 
+		// Related comments:
+		// - https://github.com/KC3Kai/KC3Kai/issues/728#issuecomment-139681987
+		// - https://github.com/KC3Kai/KC3Kai/issues/1766#issuecomment-275883784
+		// - https://github.com/andanteyk/ElectronicObserver/blob/master/ElectronicObserver/Other/Information/kcmemo.md#%E6%88%A6%E9%97%98%E5%8B%9D%E5%88%A9%E5%88%A4%E5%AE%9A
+		// The flooring behavior is intended and important.
+		// Please do not change it unless it's proved to be more accurate than
+		// the formula referred to by the comments above.
 		var allyGaugeRate = Math.floor(allyGauge / allyBeginHP * 100);
 		var enemyGaugeRate = Math.floor(enemyGauge / enemyBeginHP * 100);
 		var equalOrMore = enemyGaugeRate > (0.9 * allyGaugeRate);
 		var superior = enemyGaugeRate > 0 && enemyGaugeRate > (2.5 * allyGaugeRate);
+
+		// For long distance air raid
+		if ( (battleName||"").indexOf("ld_airbattle") >-1 ) {
+			// Based on long distance air raid rules from:
+			// https://github.com/andanteyk/ElectronicObserver/blob/master/ElectronicObserver/Other/Information/kcmemo.md#%E9%95%B7%E8%B7%9D%E9%9B%A2%E7%A9%BA%E8%A5%B2%E6%88%A6%E3%81%A7%E3%81%AE%E5%8B%9D%E5%88%A9%E5%88%A4%E5%AE%9A
+			// Also referenced:
+			// - http://kancolle.wikia.com/wiki/Events/Mechanics (as of 2017-01-28)
+			// - http://nga.178.com/read.php?tid=8989155
+			return (allyGauge === 0) ? "SS"
+				: (allyGaugeRate < 10) ? "A"
+				: (allyGaugeRate < 20) ? "B"
+				: (allyGaugeRate < 50) ? "C"
+				: (allyGaugeRate < 80) ? "D"
+				: /* otherwise */ "E";
+		}
 
 		if (allySunkCount === 0) {
 			if (enemySunkCount === enemyCount) {
@@ -157,6 +182,27 @@ Used by SortieManager
 		return this;
 	};
 	
+	// Building up resource / item gain / loss descriptions
+	KC3Node.prototype.buildItemNodeDesc = function(itemInfoArray) {
+		var resourceNameMap = {
+			"1": 31, "2": 32, "3": 33, "4": 34, // Fuel, Ammo, Steel, Bauxite
+			"5": 2 , "6": 1 , "7": 3 // Blowtorch, Bucket, DevMat, Compass
+		};
+		var resourceDescs = [];
+		itemInfoArray.forEach(function(item) {
+			var rescKeyDesc = KC3Meta.useItemName(
+				resourceNameMap[item.api_icon_id] || item.api_icon_id
+			);
+			if (!rescKeyDesc)
+				return;
+			if (typeof item.api_getcount !== "undefined")
+				resourceDescs.push( rescKeyDesc + ": " + item.api_getcount );
+			else if (typeof item.api_count !== "undefined")
+				resourceDescs.push( rescKeyDesc + ": -" + item.api_count );
+		});
+		return resourceDescs.join("\n");
+	};
+	
 	KC3Node.prototype.defineAsResource = function( nodeData ){
 		var self = this;
 		this.type = "resource";
@@ -166,6 +212,7 @@ Used by SortieManager
 		if (typeof nodeData.api_itemget == "object" && typeof nodeData.api_itemget.api_id != "undefined") {
 			nodeData.api_itemget = [nodeData.api_itemget];
 		}
+		this.nodeDesc = this.buildItemNodeDesc( nodeData.api_itemget );
 		nodeData.api_itemget.forEach(function(itemget){
 			var icon_id = itemget.api_icon_id;
 			var getcount = itemget.api_getcount;
@@ -196,6 +243,11 @@ Used by SortieManager
 				[self.item-1]
 			)+".png";
 		};
+		this.nodeDesc = this.buildItemNodeDesc([
+			{ api_icon_id: nodeData.api_itemget_eo_comment.api_id,
+			  api_getcount: nodeData.api_itemget_eo_comment.api_getcount
+			}
+		]);
 		this.amount = nodeData.api_itemget_eo_comment.api_getcount;
 		KC3SortieManager.materialGain[this.item-1] += this.amount;
 		
@@ -213,6 +265,7 @@ Used by SortieManager
 				[nodeData.api_happening.api_icon_id-1]
 			)+".png";
 		};
+		this.nodeDesc = this.buildItemNodeDesc( [nodeData.api_happening] );
 		this.amount = nodeData.api_happening.api_count;
 		return this;
 	};
@@ -273,6 +326,11 @@ Used by SortieManager
 		this.ecships = undefined;
 		this.eformation = battleData.api_formation[1];
 		
+		this.elevels = battleData.api_ship_lv.slice(1);
+		if(isEnemyCombined) {
+			this.elevels = this.elevels.concat(battleData.api_ship_lv_combined.slice(1));
+		}
+		
 		this.eParam = battleData.api_eParam;
 		if (typeof battleData.api_eParam_combined != "undefined") {
 			this.eParam = this.eParam.concat(battleData.api_eParam_combined);
@@ -318,6 +376,37 @@ Used by SortieManager
 		
 		this.detection = KC3Meta.detection( battleData.api_search[0] );
 		this.engagement = KC3Meta.engagement( battleData.api_formation[2] );
+		
+		// LBAS attack phase, including jet plane assault
+		this.lbasFlag = typeof battleData.api_air_base_attack != "undefined";
+		if(this.lbasFlag){
+			// Array of engaged land bases
+			this.airBaseAttack = battleData.api_air_base_attack;
+			// No plane from, just injecting from far away air base :)
+			this.airBaseJetInjection = battleData.api_air_base_injection;
+			// Jet planes also consume steels each LBAS attack, the same with on carrier:
+			// see Fleet.calcJetsSteelCost()
+			if(!!this.airBaseJetInjection && !!this.airBaseJetInjection.api_stage1
+				&& this.airBaseJetInjection.api_stage1.api_f_count > 0
+				&& KC3SortieManager.onSortie > 0){
+				let consumedSteel = 0;
+				$.each(this.airBaseJetInjection.api_air_base_data, function(_, jet){
+					consumedSteel += Math.round(
+						jet.api_count
+						* KC3Master.slotitem(jet.api_mst_id).api_cost
+						* KC3GearManager.jetBomberSteelCostRatioPerSlot
+					) || 0;
+				});
+				console.log("Jets LBAS consumed steel:", consumedSteel);
+				if(consumedSteel > 0){
+					KC3Database.Naverall({
+						hour: Math.hrdInt("floor", Date.safeToUtcTime() / 3.6, 6, 1),
+						type: "lbas" + KC3SortieManager.map_world,
+						data: [0,0,-consumedSteel,0].concat([0,0,0,0])
+					});
+				}
+			}
+		}
 		
 		// Air phases
 		var
@@ -384,6 +473,32 @@ Used by SortieManager
 					}
 					this.antiAirFire[1] = battleData.api_kouku2.api_stage2.api_air_fire;
 				}
+			}
+		}
+		
+		// Jet plane phase, happen before fighter attack phase
+		if(typeof battleData.api_injection_kouku != "undefined"){
+			var jetPlanePhase = battleData.api_injection_kouku;
+			this.planeJetFighters = { player:[0,0], abyssal:[0,0] };
+			this.planeJetBombers = { player:[0,0], abyssal:[0,0] };
+			this.planeJetFighters.player[0] = jetPlanePhase.api_stage1.api_f_count;
+			this.planeJetFighters.player[1] = jetPlanePhase.api_stage1.api_f_lostcount;
+			this.planeJetFighters.abyssal[0] = jetPlanePhase.api_stage1.api_e_count;
+			this.planeJetFighters.abyssal[1] = jetPlanePhase.api_stage1.api_e_lostcount;
+			if(!!jetPlanePhase.api_stage2){
+				this.planeJetBombers.player[0] = jetPlanePhase.api_stage2.api_f_count;
+				this.planeJetBombers.player[1] = jetPlanePhase.api_stage2.api_f_lostcount;
+				this.planeJetBombers.abyssal[0] = jetPlanePhase.api_stage2.api_e_count;
+				this.planeJetBombers.abyssal[1] = jetPlanePhase.api_stage2.api_e_lostcount;
+			}
+			// Jet planes consume steels each battle based on:
+			// pendingConsumingSteel = round(jetMaster.api_cost * ship.slots[jetIdx] * 0.2)
+			if(this.planeJetFighters.player[0] > 0
+				&& (KC3SortieManager.onSortie > 0 || KC3SortieManager.isPvP())){
+				let consumedSteel = PlayerManager.fleets[
+					(parseInt(fleetSent) || KC3SortieManager.fleetSent) - 1
+				].calcJetsSteelCost(KC3SortieManager.sortieName(2));
+				console.log("Jets consumed steel:", consumedSteel);
 			}
 		}
 		
@@ -469,12 +584,12 @@ Used by SortieManager
 					}
 				}
 				
-				if(ConfigManager.info_btrank &&
-					// long distance aerial battle not predictable for now, see #1333
+				if(ConfigManager.info_btrank
+					// long distance aerial battle not accurate for now, see #1333
 					// but go for aerial battle (eventKind:4) possible Yasen
-					[6].indexOf(this.eventKind)<0 ){
-					this.predictedRank = KC3Node.predictRank( beginHPs, endHPs );
-					// console.debug("Rank Predict:", this.predictedRank);
+					//&& [6].indexOf(this.eventKind)<0
+					){
+					this.predictedRank = KC3Node.predictRank( beginHPs, endHPs, battleData.api_name );
 				}
 				
 			// PLAYER COMBINED FLEET
@@ -649,7 +764,8 @@ Used by SortieManager
 		var isEnemyCombined = (typeof nightData.api_ship_ke_combined !== "undefined");
 		
 		this.eships = enemyships;
-		this.eformation = this.eformation || nightData.api_formation[1];
+		this.elevels = nightData.api_ship_lv.slice(1);
+		this.eformation = this.eformation || (nightData.api_formation || [])[1];
 		this.eParam = nightData.api_eParam;
 		this.eKyouka = nightData.api_eKyouka || [-1,-1,-1,-1,-1,-1];
 		this.eSlot = nightData.api_eSlot;
@@ -735,6 +851,7 @@ Used by SortieManager
 					enemyships = nightData.api_ship_ke_combined;
 					if(enemyships[0]==-1){ enemyships.splice(0,1); }
 					this.eships = enemyships;
+					this.elevels = nightData.api_ship_lv_combined.slice(1);
 					this.eParam = nightData.api_eParam_combined;
 					this.eSlot = nightData.api_eSlot_combined;
 					for (i = 7; i < 13; i++) {
@@ -783,7 +900,6 @@ Used by SortieManager
 				}
 			}
 			
-			
 		// PLAYER SINGLE FLEET
 		} else {
 			fleet = PlayerManager.fleets[fleetId - 1];
@@ -811,6 +927,7 @@ Used by SortieManager
 					enemyships = nightData.api_ship_ke_combined;
 					if(enemyships[0]==-1){ enemyships.splice(0,1); }
 					this.eships = enemyships;
+					this.elevels = nightData.api_ship_lv_combined.slice(1);
 					this.eParam = nightData.api_eParam_combined;
 					this.eSlot = nightData.api_eSlot_combined;
 					for (i = 7; i < 13; i++) {
@@ -850,9 +967,10 @@ Used by SortieManager
 		console.log("enemyHP", this.enemyHP);
 		console.log("enemySunk", this.enemySunk);
 		
-		if(ConfigManager.info_btrank){
-			this.predictedRankNight = KC3Node.predictRank( beginHPs, endHPs );
-			// console.debug("Rank Predict (Night):", this.predictedRankNight);
+		// both single fleet predictable only for now
+		if(ConfigManager.info_btrank &&
+			!isEnemyCombined && (!PlayerManager.combinedFleet || fleetId > 1)){
+			this.predictedRankNight = KC3Node.predictRank( beginHPs, endHPs, nightData.api_name );
 		}
 		
 		if(this.gaugeDamage > -1
@@ -997,7 +1115,7 @@ Used by SortieManager
 				});
 			}).call(this,resultData.api_get_eventitem);
 			
-			ConfigManager.load();
+			ConfigManager.loadIfNecessary();
 			ship_get.forEach(function(newShipId){
 				var wish_kind = ["salt","wish"];
 				
@@ -1072,12 +1190,13 @@ Used by SortieManager
 			//var enemySS = [530, 532, 534, 531, 533, 535, 570, 571, 572];
 			//var enemyAP = [513, 526, 558];
 			var eshipCnt = (this.ecships || []).length || 6;
+			var sunkApCnt = 0;
 			for(var i = 0; i < eshipCnt; i++) {
 				if (this.enemySunk[i]) {
 					var enemyShip = KC3Master.ship( (this.ecships || this.eships)[i] );
 					if (!enemyShip) {
 						console.log("Cannot find enemy " + this.eships[i]);
-					} else if (this.eships[i] < 500) {
+					} else if (this.eships[i] <= 500) {
 						console.log("Enemy ship is not Abyssal!");
 					} else {
 						switch(enemyShip.api_stype) {
@@ -1095,17 +1214,20 @@ Used by SortieManager
 								break;
 							case 15:	// 15 = AP
 								console.log("You sunk a AP");
-								KC3QuestManager.get(218).increment();
-								KC3QuestManager.get(212).increment();
+								sunkApCnt += 1;
 								KC3QuestManager.get(213).increment();
 								KC3QuestManager.get(221).increment();
 								break;
 						}
 					}
-					
+
 				}
 			}
-			
+			if(sunkApCnt > 0){
+				// Bd6 must inc first than Bd5 as its id smaller :)
+				KC3QuestManager.get(212).increment(0, sunkApCnt);
+				KC3QuestManager.get(218).increment(0, sunkApCnt);
+			}
 			// Save enemy deck name for encounter
 			var name = resultData.api_enemy_info.api_deck_name;
 			if(KC3SortieManager.onSortie > 0 && !!name){
@@ -1128,11 +1250,146 @@ Used by SortieManager
 		} catch (e) {
 			console.error("Captured an exception ==>", e,"\n==> proceeds safely");
 		} finally {
-			// Reserved for future PvP history storage
 			this.savePvPOnDB(resultData);
 		}
 	};
 	
+	/**
+	 * Builds a complex long message for results of Exped/LBAS support attack,
+	 * Used as a tooltip by devtools panel or SRoom Maps History for now.
+	 * return a empty string if no any support triggered.
+	 */
+	KC3Node.prototype.buildSupportAttackMessage = function(){
+		var thisNode = this;
+		var supportTips = "";
+		if(thisNode.supportFlag && !!thisNode.supportInfo){
+			var fleetId = "", supportDamage = 0;
+			var attackType = thisNode.supportInfo.api_support_flag;
+			if(attackType === 1){
+				var airatack = thisNode.supportInfo.api_support_airatack;
+				fleetId = airatack.api_deck_id;
+				supportDamage = !airatack.api_stage3 ? 0 :
+					Math.floor(airatack.api_stage3.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
+				// Support air attack has the same structure with kouku/LBAS
+				// So disp_seiku, plane xxx_count are also possible to be displayed
+				// Should break BattleSupportTips into another type for air attack
+			} else if([2,3].indexOf(attackType) > -1){
+				var hourai = thisNode.supportInfo.api_support_hourai;
+				fleetId = hourai.api_deck_id;
+				supportDamage = !hourai.api_damage ? 0 :
+					Math.floor(hourai.api_damage.slice(1).reduce(function(a,b){return a+b;},0));
+			}
+			supportTips = KC3Meta.term("BattleSupportTips").format(fleetId, KC3Meta.support(attackType), supportDamage);
+		}
+		var lbasTips = "";
+		if(thisNode.lbasFlag && !!thisNode.airBaseAttack){
+			if(!!thisNode.airBaseJetInjection){
+				var jet = thisNode.airBaseJetInjection;
+				var jetStage2 = jet.api_stage2 || {};
+				var jetPlanes = jet.api_stage1.api_f_count;
+				var jetShotdown = jet.api_stage1.api_e_lostcount + (jetStage2.api_e_lostcount || 0);
+				var jetDamage = !jet.api_stage3 ? 0 :
+					Math.floor(jet.api_stage3.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
+				jetDamage += !jet.api_stage3_combined ? 0 :
+					Math.floor(jet.api_stage3_combined.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
+				var jetLost = jet.api_stage1.api_f_lostcount + (jetStage2.api_f_lostcount || 0);
+				var jetEnemyPlanes = jet.api_stage1.api_e_count;
+				if(jetEnemyPlanes > 0) {
+					jetShotdown = "{0:eLostCount} / {1:eTotalCount}".format(jetShotdown, jetEnemyPlanes);
+				}
+				lbasTips += KC3Meta.term("BattleLbasJetSupportTips").format(jetPlanes, jetShotdown, jetDamage, jetLost);
+			}
+			$.each(thisNode.airBaseAttack, function(i, ab){
+				var baseId = ab.api_base_id;
+				var stage2 = ab.api_stage2 || {};
+				var airBattle = KC3Meta.airbattle(ab.api_stage1.api_disp_seiku)[2];
+				airBattle += ab.api_stage1.api_touch_plane[0] > 0 ? "+" + KC3Meta.term("BattleContact") : "";
+				var planes = ab.api_stage1.api_f_count;
+				var shotdown = ab.api_stage1.api_e_lostcount + (stage2.api_e_lostcount || 0);
+				var damage = !ab.api_stage3 ? 0 :
+					Math.floor(ab.api_stage3.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
+				damage += !ab.api_stage3_combined ? 0 :
+					Math.floor(ab.api_stage3_combined.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
+				var lost = ab.api_stage1.api_f_lostcount + (stage2.api_f_lostcount || 0);
+				var enemyPlanes = ab.api_stage1.api_e_count;
+				if(enemyPlanes > 0) {
+					shotdown = "{0:eLostCount} / {1:eTotalCount}".format(shotdown, enemyPlanes);
+				}
+				if(!!lbasTips) { lbasTips += "\n"; }
+				lbasTips += KC3Meta.term("BattleLbasSupportTips").format(planes, baseId, shotdown, damage, lost, airBattle);
+			});
+			if(!!supportTips && !!lbasTips) { supportTips += "\n"; }
+		}
+		return supportTips + lbasTips === "" ? "" : $("<p></p>")
+			.css("font-size", "11px")
+			.text(supportTips + lbasTips)
+			.prop("outerHTML");
+	};
+	
+	/**
+	 * Builds a complex long message for results of AACI fire,
+	 * Used as a tooltip by devtools panel or SRoom Maps History for now.
+	 * return a empty string if no any AACI triggered.
+	 */
+	KC3Node.prototype.buildAntiAirCutinMessage = function(){
+		var thisNode = this;
+		var aaciTips = "";
+		if(!!thisNode.antiAirFire && thisNode.antiAirFire.length > 0){
+			thisNode.antiAirFire.forEach(function(fire){
+				if(!!fire){
+					var fireShipPos = fire.api_idx; // starts from 0
+					// fireShipPos = [0,5]: in normal fleet or main fleet
+					// fireShipPos = [6,11]: in escort fleet
+					if(fireShipPos >= 0 && fireShipPos < 12){
+						var sentFleet = PlayerManager.fleets[fireShipPos >= 6 ? 1 : KC3SortieManager.fleetSent-1];
+						var shipName = KC3ShipManager.get(sentFleet.ships[fireShipPos % 6]).name();
+						aaciTips += (!!aaciTips ? "\n" : "") + shipName;
+						var aaciType = AntiAir.AACITable[fire.api_kind];
+						if(!!aaciType){
+							aaciTips += "\n[{0}] +{1} (x{2})"
+								.format(aaciType.id, aaciType.fixed, aaciType.modifier);
+						}
+					}
+					var itemList = fire.api_use_items;
+					if(!!itemList && itemList.length > 0){
+						for(var itemIdx = 0; itemIdx < Math.min(itemList.length,4); itemIdx++) {
+							if(itemList[itemIdx] > -1) aaciTips += "\n" +
+								KC3Meta.gearName(KC3Master.slotitem(itemList[itemIdx]).api_name);
+						}
+					}
+				}
+			});
+		}
+		return aaciTips;
+	};
+	
+	/**
+		Build a tooltip about computed enemy air power for researching air battle
+	*/
+	KC3Node.prototype.buildAirPowerMessage = function(){
+		var tooltip = this.airbattle[2] || "";
+		var apTuple = KC3SortieManager.enemyFighterPower(this.eships, this.eSlot);
+		// Air Power: AI<1/3, 1/3<=AD<2/3, 2/3<=AP<3/2, 3/2<=AS<3, 3<=AS+
+		// No i18n yet as it's for researchers
+		var ap = apTuple[0];
+		if(!!ap){
+			tooltip += "\nPOW: {0} (AI< {1}< AD< {2}< AP< {3}< AS< {4}< AS+)"
+				.format(ap, Math.floor(ap / 3), Math.floor(2 * ap / 3),
+					Math.floor(3 * ap / 2), 3 * ap);
+		}
+		var enemyTotalPlanes = this.planeFighters.abyssal[0];
+		if(!!enemyTotalPlanes){
+			tooltip += "\nFTG: {0} /{1}".format(apTuple[1], enemyTotalPlanes);
+			// 'total - AA Fighter - No AA (Bomber)' may be unknown slot or shot down by support
+			tooltip += " (AA0: {0}, UFO: {1})"
+				.format(apTuple[2], enemyTotalPlanes - apTuple[1] - apTuple[2]);
+		}
+		if(Object.keys(apTuple[3]).length > 0){
+			tooltip += "\nERR: " + JSON.stringify(apTuple[3]);
+		}
+		return tooltip;
+	};
+
 	/**
 	 * Not real battle on this node in fact. Enemy raid just randomly occurs before entering node.
 	 * See: http://kancolle.wikia.com/wiki/Land-Base_Aerial_Support#Enemy_Raid
@@ -1152,7 +1409,8 @@ Used by SortieManager
 				api_e_count    :0,
 				api_e_lostcount:0,
 			},
-			attackPhase = battleData.api_air_base_attack.api_stage2;
+			attackPhase = battleData.api_air_base_attack.api_stage2,
+			bomberPhase = battleData.api_air_base_attack.api_stage3;
 		this.fplaneFrom = battleData.api_air_base_attack.api_plane_from[0];
 		this.fcontactId = planePhase.api_touch_plane[0];
 		this.fcontact = this.fcontactId > 0 ? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
@@ -1184,6 +1442,9 @@ Used by SortieManager
 			this.planeBombers.abyssal[0] = attackPhase.api_e_count;
 			this.planeBombers.abyssal[1] = attackPhase.api_e_lostcount;
 		}
+		this.baseDamage = bomberPhase && bomberPhase.api_fdam ? Math.floor(
+			bomberPhase.api_fdam.slice(1).reduce(function(a,b){return a+b;},0)
+		) : 0;
 	};
 	
 	KC3Node.prototype.isBoss = function(){

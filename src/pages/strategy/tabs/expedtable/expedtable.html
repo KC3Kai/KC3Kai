@@ -1,160 +1,345 @@
 <div class="page_title">
-	Expedition Scorer
+	Expedition Table and Configuration
 	<div class="page_help_btn hover"><span>?</span> Help Topics</div>
 </div>
 
 <!-- HELP TOPICS -->
 <div class="page_help">
-	 <div class="help_q">What does this page do?</div>
-	 <div class="help_a">
-		It lets you input your expedition preferences on which resource type is your priority and AFK hours, then gives you the best three expeditions to run during that time.
-	 </div>
-	 
-	 <div class="help_q">Does this consider resupply costs?</div>
-	 <div class="help_a">
-		Yes, it is necessary to consider resupply costs in the calculations to give you the best output. Expeditions that are actually worse may get ranked better just because resupply is not considered when they have much higher costs. <a href="https://github.com/dragonjet/KC3Kai/issues/301#issuecomment-132015707" target="_blank">See discussion</a>.
-	 </div>
-	 
-	 <div class="help_q">Then what do you use as the minimal resupply costs?</div>
-	 <div class="help_a">
-		See <a href="https://gist.github.com/Javran/07e07ef81638f2b9cec0#file-expedition-minimal-costen-md" target="_blank">Javran's gist</a>.
-	 </div>
-	 
-	 <div class="help_q">What do I put in the resource text boxes?</div>
-	 <div class="help_a">
-		You can give each resource a priority, of any whole number. It will be considered so that the results are affected by the resource type you want most.
-	 </div>
-	 
-	 <div class="help_q">What is the "AFK Time"?</div>
-	 <div class="help_a">
-		The hours and minutes you're goign to be offline, and is also considered in scoring the expeditions.
-	 </div>
-	
-	<div class="help_more">
-		<a href="https://github.com/KC3Kai/KC3Kai/wiki/Strategy-Room%3A-Scorer">Learn more</a>
+	<div class="help_q">What is this tab for?</div>
+	<div class="help_a">
+		<p>This table gives you a detail and accurate view of expeditions. Expedition scorer also uses the configuration you set in this tab to figure out some best set of expeditions to be run parallelly for you.</p>
+	</div>
+
+	<div class="help_q">tl;dr</div>
+	<div class="help_a">
+		<p>If this is the first time you run into this page:</p>
+		<ul>
+			<li>Scroll down to bottom and click <code>Reset</code>.</li>
+			<li>Congrats, your expedition scorer is now more accurate than before!</li>
+		</ul>
+		<p>otherwise, have fun messing around with these views and sorting methods xD</p>
+	</div>
+
+	<div class="help_q">What is expedition configuration?</div>
+	<div class="help_a">
+		<p>Expedition configuration represents how you normally run expedtions: for a single expedition, this includes whether you want to guarantee great success, how many Daihatsu your fleet usually carry and what fleet composition you use for running the expedition.</p>
+		<ul>
+			<li><p>Each expedition is associated with its own configuration.</p></li>
+			<li><p>For each expedition, a configuration consists of 2 parts:</p>
+				<ul>
+					<li><p><code>Income Modifier</code> is a number applied directly to the basic resource income. For example, great success grants you 50% extra resource income, which is equivalent to an income modifier of <code>1.5</code> (i.e. 150%). Having 4 daihatsu in your fleet will further boost the income modifier to <code>1.8</code> (<code>= 1.5 x (1 + 0.05x4) = 1.5 x 1.2</code>).</p>
+						<p>There are two methods of configuring income modifier:</p>
+						<ul>
+							<li><p><code>Normal</code> method allows you to specify whether great success is intended and how many Daihatsu you want to carry, and works out the income modifier for you.</p></li>
+							<li><p><code>Custom</code> method is for advanced users. You can fill in an income modifier directly in case you have Toku Daihatsu or improved Daihatsu and want more accurate results. For example, if you want 4 fully improved Daihatsu (122%) together with guaranteed great success (150%), Your income modifier will be <code>1.83</code> (<code>=1.22 x 1.5</code>).</p></li>
+					</ul></li>
+					<li><p><code>Resupply Cost</code> is the fuel and ammo cost per run.</p>
+						<p>There are two ways of configuring resupply cost:</p>
+						<ul>
+							<li><p><code>Normal</code> method estimates the fuel and ammo cost for you, all you need to do is to set <code>Number of Ships</code> and <code>wildcard</code>. Take expedition 5 as an example, for a successful run you would just need 4 ships including one light cruiser (<code>1CL</code>) and two destroyers (<code>2DD</code>). For an almost guaranteed great success rate (about 95%), however, you would need 5 sparkled ships in total. and the actual fleet composition would be <code>1CL4DD</code>. Here the <code>Number of Ships</code> is <code>5</code> in total, and in addition to the require <code>1CL2DD</code>, you have two <code>DD</code> as <code>wildcard</code> ships.</p>
+								<p>In case you are interested about how the resupply cost is estimated, see <code>Cost Model</code> section.</p></li>
+							<li><p><code>Custom</code> method lets you accurately specify the cost: say if you have a fleet of 6 Mutsuki-class destroyers for expedition 38 (so it's 80% fuel and 80% ammo consumption), you would set both <code>Fuel</code> and <code>Ammo</code> to <code>72</code>. Because one Mutsuki-class destroyer will cost 12 fuel and 12 ammo per run. and you have 6 of them in fleet summing up to <code>72</code> (<code>=12x6</code>) fuel and <code>72</code> ammo cost per run.</p></li>
+					</ul></li>
+			</ul></li>
+		</ul>
+
+	</div>
+
+	<div class="help_q">I can't see any expeditions</div>
+	<div class="help_a">
+		<p>If you are entering this tab for the first time, you need to reset your configuration, please find <code>Reset Configuration</code> section below and pick one resetting method you like.</p>
+	</div>
+
+	<div class="help_q">I can't change view method or sort expeditions</div>
+	<div class="help_a">
+		<p>All these functions are disabled when you are editing expeditions.</p>
+	</div>
+
+	<div class="help_q">What does <code>General Config</code> button do?</div>
+	<div class="help_a">
+		<p>Normally expedition table tries to represent your configuration instead of some general numbers. A <code>General Config</code> view forces every expedition configuration to show its actual bonus and resupply cost.</p>
+	</div>
+
+	<div class="help_q">Resetting</div>
+	<div class="help_a">
+		<p>Reseting allows you to initialize your expedition configuration.</p>
+		<p>There are two resetting methods:</p>
+		<ul>
+			<li><p><code>Normal</code> method sets default configuration to all expeditions. A default configuration considers basic income as your final income - not aim for great success and no Daihatsu is carried.</p></li>
+			<li><p><code>Recommended</code> method tries to aim for great success if one expedition has decent income per run. For an expedition to be considered decent, its <code>fuel + ammo + steel + bauxite x 3</code> value must be no less than <code>500</code>.</p></li>
+		</ul>
+		<p>Optionally you can let KC3 guess some configuration from your recent expedition history.</p>
+	</div>
+
+	<div class="help_q">What are <code>Gross Income</code>, <code>Net Income</code> and <code>Basic Income</code>?</div>
+	<div class="help_a">
+		<ul>
+			<li><code>Basic Inome</code> is the amount of resource you get when you have a normally successful expedition.</li>
+			<li><code>Gross Income</code> considers everything: great success, Daihatsu, except resupply cost.</li>
+			<li><code>Net Income</code> is <code>Gross Income</code> but with resupply cost in mind.</li>
+		</ul>
+	</div>
+
+
+
+
+	<div class="help_q">Why can't I have multiple configuration for a single expedition?</div>
+	<div class="help_a">
+		<p>That would mean even more complicated user interface and algorithm to support it. If you do want to try things like having different amount of Daihatsu for different expeditions, you can have both this tab and <code>Expedition Scorer</code> opened, change configs in this tab and whenever you click <code>Calculate</code> button on <code>Expedition Scorer</code>, it always uses your latest configs.</p>
+	</div>
+
+
+	<div class="help_q">How can I sort in reversed order?</div>
+	<div class="help_a">
+		<p>Clicking on an already-active sorting method reverses the whole list.</p>
+	</div>
+	<div class="help_q">Why switching view methods deactivates the current sorting method?</div>
+	<div class="help_a">
+		<p>Because switching view methods, especially between <code>Total</code> view and <code>Hourly</code> view makes the current list no longer sorted. On the other hand, if current list is sorted by expedition id or time, it will be kept.</p>
+	</div>
+
+	<div class="help_q">What is <code>Cost Model</code>?</div>
+	<div class="help_a">
+		<p>A cost model is a function that estimates resupply cost given a fleet composition. You can work out the resupply cost manually by adding up corresponding table cells in <code>Cost Model</code> section.</p>
+		<p>For example, given fleet composition <code>1CL5DD</code>, with 80% fuel and ammo cost:</p>
+		<ul>
+			<li>first look for <code>CL - 1 Ship</code> cell, which indicates the cost is 20 fuel and 20 ammo.</li>
+			<li>then look for <code>DD - 5 Ships</code> cell, which indicates the cost is 60 fuel and 60 ammo.</li>
+		</ul>
+		<p>Therefore <code>1CL5DD</code> sums up to a total cost of 80 fuel and 80 ammo.</p>
+
 	</div>
 </div>
 
-<div class="expedNumBoxes page_panel">
-	 <div class="expedNumBox expedNumBox_1">
-		
-	 </div>
-	 <div class="expedNumBox expedNumBox_2">
-		
-	 </div>
-	 <div class="expedNumBox expedNumBox_3">
-		
-	 </div>
-	 <div class="expedNumBox expedNumBox_4">
-		
-	 </div>
-	 <div class="expedNumBox expedNumBox_5">
-		
-	 </div>
-	 <div class="expedNumBox fleetCounts">
-		<div class="fleetCount">
-			<div class="fleetRadio"><input type="radio" name="fleetCount" value="1" /></div>
-			<div class="fleetText">1 fleet</div>
-			<div class="clear"></div>
-		</div>
-		<div class="fleetCount">
-			<div class="fleetRadio"><input type="radio" name="fleetCount" value="2" /></div>
-			<div class="fleetText">2 fleets</div>
-			<div class="clear"></div>
-		</div>
-		<div class="fleetCount">
-			<div class="fleetRadio"><input type="radio" name="fleetCount" value="3" CHECKED /></div>
-			<div class="fleetText">3 fleets</div>
-			<div class="clear"></div>
-		</div>
-	 </div>
-	 <div class="clear"></div>
-</div>
-
-<div class="expedControls page_panel">
-	
-	<!-- Resource Priorities -->
-	<div class="control_box control_priorities">
-		<div class="control_title">Resource Priority</div>
-		<div class="clear"></div>
-		<div class="control">
-			<div class="control_label"><img src="../../assets/img/client/fuel.png" /></div>
-			<div class="control_input"><input type="text" class="priorityFuel" value="1" /></div>
-			<div class="clear"></div>
-		</div>
-		 <div class="control">
-			<div class="control_label"><img src="../../assets/img/client/ammo.png" /></div>
-			<div class="control_input"><input type="text" class="priorityAmmo" value="1" /></div>
-			<div class="clear"></div>
-		</div>
-		<div class="control">
-			<div class="control_label"><img src="../../assets/img/client/steel.png" /></div>
-			<div class="control_input"><input type="text" class="prioritySteel" value="1" /></div>
-			<div class="clear"></div>
-		</div>
-		<div class="control">
-			<div class="control_label"><img src="../../assets/img/client/bauxite.png" /></div>
-			<div class="control_input"><input type="text" class="priorityBaux" value="1" /></div>
-			<div class="clear"></div>
-		</div>
-		<div class="clear"></div>
-	</div>
-	
-	<!-- AFK Time -->
-	<div class="control_box control_afktime">
-		<div class="control_title">AFK Time</div>
-		<div class="clear"></div>
-		<div class="control">
-			<div class="control_label">Hrs</div>
-			<div class="control_input"><input type="text" class="afkH" value="0" /></div>
-			<div class="clear"></div>
-		</div>
-		<div class="control">
-			<div class="control_label">Mins</div>
-			<div class="control_input"><input type="text" class="afkM" value="0" /></div>
-			<div class="clear"></div>
-		</div>
-		<div class="clear"></div>
-	</div>
-	
-	<!-- Calculate button -->
-	<div class="control_box control_calculate">
-		<div class="calculate_btn hover">Calculate</div>
-	</div>
-	<div class="clear"></div>
-</div>
-
+<!-- CONTENT -->
 <div class="page_padding">
-	
-	<!-- Results Table -->
-	<table class="table table-hover results">
-		<thead>
-			<tr>
-				<th>Expedition set</th>
-				<th><img src="../../assets/img/client/fuel.png" /> /hr</th>
-				<th><img src="../../assets/img/client/ammo.png" /> /hr</th>
-				<th><img src="../../assets/img/client/steel.png" /> /hr</th>
-				<th><img src="../../assets/img/client/bauxite.png" /> /hr</th>
-				<th>Score</th>
-			</tr>
-		</thead>
-		<tbody>
-			
-		</tbody>
-	</table>
-	
+	<div class="page_section">Expeditions</div>
+	<div class="section_body exped_table" id="exped_table_content_root">
+		<div class="alert alert-info first_time">
+			It appears this is the first time you use this page.
+			Please use "Reset Configuration" section below to generate a configuration
+			before this section can function.
+		</div>
+		<div class="exped_control_row view_control">
+			<div class="control_header">View: </div>
+			<div class="btn-group denom_control">
+				<button type="button" class="btn btn-secondary view_total"
+						data-mode="total">Total</button>
+				<button type="button" class="btn btn-secondary view_hourly"
+						data-mode="hourly">Hourly</button>
+			</div>
+			<div class="btn-group income_control">
+				<button type="button" class="btn btn-secondary view_gross_income"
+						data-mode="gross"
+						title="Resource income without resupply">Gross Income</button>
+				<button type="button" class="btn btn-secondary view_net_income"
+						data-mode="net"
+						title="Resource income with resupply cost">Net Income</button>
+				<button type="button" class="btn btn-secondary view_basic_income"
+						data-mode="basic"
+						title="Basic resource income without great success">Basic Income</button>
+			</div>
+			<div class="btn-group">
+				<button
+					type="button" class="btn btn-secondary force_general"
+					title="Force income gain percentage view and estimated resupply cost view on all configs">
+					General Config</button>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="exped_control_row sort_control">
+			<div class="control_header">Sort by: </div>
+			<div class="btn-group sort_methods">
+				<button type="button" class="btn btn-secondary" data-sort-by="id">
+					<div class="sorter_name">#</div><div class="ord"></div></button>
+				<button type="button" class="btn btn-secondary" data-sort-by="time">
+					<div class="sorter_name">Time</div><div class="ord"></div></button>
+				<button type="button" class="btn btn-secondary resource" data-sort-by="fuel">
+					<img class="sorter_name" src="../../assets/img/client/fuel.png" />
+					<div class="ord"></div>
+				</button>
+				<button type="button" class="btn btn-secondary resource" data-sort-by="ammo">
+					<img class="sorter_name" src="../../assets/img/client/ammo.png" />
+					<div class="ord"></div>
+				</button>
+				<button type="button" class="btn btn-secondary resource" data-sort-by="steel">
+					<img class="sorter_name" src="../../assets/img/client/steel.png" />
+					<div class="ord"></div>
+				</button>
+				<button type="button" class="btn btn-secondary resource" data-sort-by="bauxite">
+					<img class="sorter_name" src="../../assets/img/client/bauxite.png" />
+					<div class="ord"></div>
+				</button>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+	<div class="page_section">Cost Model</div>
+	<div class="section_body cost_model" id="cost_model_content_root">
+		<select class="cost_preset">
+			<option value="title">Presets ...</option>
+		</select>
+		<div class="control_group">
+			<div class="control_row fuel">
+				<div class="view name">Fuel:</div>
+				<div class="view val">100%</div>
+				<input id="cost_model_fuel"></input>
+				<div class="clear"></div>
+			</div>
+			<div class="control_row ammo">
+				<div class="view name">Ammo:</div>
+				<div class="view val">100%</div>
+				<input id="cost_model_ammo"></input>
+				<div class="clear"></div>
+			</div>
+		</div>
+		<table class="table">
+			<thead>
+				<tr>
+					<th class="stype">Ship Type</th>
+					<th class="ship_count">1 Ship</th>
+					<th class="ship_count">2 Ships</th>
+					<th class="ship_count">3 Ships</th>
+					<th class="ship_count">4 Ships</th>
+					<th class="ship_count">5 Ships</th>
+					<th class="ship_count">6 Ships</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+	<div class="page_section">Reset Configuration</div>
+	<div class="section_body reset">
+		<div class="alert alert-success config_gen_success">
+			Configuration generated. Please refresh if the page doesn't reload itself.
+		</div>
+		<div class="description">
+			You can reset your configuration with following options if you are unsatisfied with the current one
+			and want to work from scratch.
+		</div>
+		<label><input type="radio" name="reset_mode" value="recommended" checked>
+			Recommended (turn on great success if one time resource income is decent)</label><br>
+		<label><input type="radio" name="reset_mode" value="normal">
+			Normal (great success turned off on all expeditions)</label><br>
+		<label><input type="checkbox" class="reset_guess" checked>
+			Guess configuration from my expedition history
+		</label><br>
+		<button type="button" class="btn btn-primary reset">Reset</button>
+	</div>
 </div>
 
 <div class="factory">
-	
-	<!-- Expedition checkboxes for candidates -->
-	<div class="expedNum">
-		<div class="expedCheck"><input type="checkbox" CHECKED /></div>
-		<div class="expedText"></div>
-		<div class="expedTime"></div>
-		<div class="clear"></div>
+	<div class="exped_row">
+		<div class="exped_view">
+			<div class="info_col id"></div>
+			<div class="info_col time"></div>
+			<div class="info_col resource fuel"></div>
+			<div class="info_col resource ammo"></div>
+			<div class="info_col resource steel"></div>
+			<div class="info_col resource bauxite"></div>
+			<div class="info_col item item1"></div>
+			<div class="info_col item item2"></div>
+			<div class="info_col modifier">
+				<!--
+					 "view"s are mutual exclusive and exactly one of them should be visible.
+					 "view_general" displays the most general parameter
+					 while "view_normal" contains more details
+					 but is only suitable for non-custom settings.
+				  -->
+				<div class="view view_general"></div>
+				<div class="view view_normal">
+					<img class="gs" />
+					<img class="dht" src="../../assets/img/items/20.png" />
+					<div class="dht_times"></div>
+					<div class="clear"></div>
+				</div>
+			</div>
+			<div class="info_col cost">
+				<div class="view view_general">
+					<div class="fuel"></div>
+					<div class="ammo"></div>
+				</div>
+				<div class="view view_normal">
+					<div class="limit">≥4</div>
+					<img src="../../assets/img/client/ship.png" />
+					<div class="wildcard">(*=DD)</div>
+				</div>
+			</div>
+			<div class="info_col edit_btn hover">
+				&#9668;
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="exped_config">
+			<div class="modifier config_box">
+				<div class="header">
+					Income Modifier
+				</div>
+				<div class="content">
+					<label><input type="radio" name="modifier" value="normal"> Normal</label><br>
+					<div class="group mod_normal">
+						<label><div class="key">Great Success:</div>
+							<input type="checkbox" name="gs"/></label> <br>
+						<div class="key">Number of
+							<img class="dht" src="../../assets/img/items/20.png"
+								 style="width: 25px; height: 25px;"/>:</div>
+						<select class="dht">
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+						</select>
+						<div class="clear"></div>
+					</div>
+					<label><input type="radio" name="modifier" value="custom"> Custom</label>
+					<div class="group mod_custom">
+						<div class="key">Modifier:</div>
+						<input type="text" name="modifier" class="custom_val"><br>
+					</div>
+				</div>
+			</div>
+			<div class="cost config_box">
+				<div class="header">
+					Resupply Cost
+				</div>
+				<div class="content">
+					<label><input type="radio" name="cost" value="normal"> Normal</label><br>
+					<div class="group cost_normal">
+						<div class="key">Wildcard:</div>
+						<select class="wildcard">
+							<option value="None">None</option>
+							<option value="SS">SS</option>
+							<option value="DD">DD</option>
+						</select><br>
+						<div class="key">Number of Ships:</div>
+						<select class="count">
+							<!-- reversed because the first few are more frequently used -->
+							<option value="6">6 ships</option>
+							<option value="5">5 ships</option>
+							<option value="4">4 ships</option>
+							<option value="3">3 ships</option>
+							<option value="2">2 ships</option>
+							<option value="1">1 ship</option>
+							<option value="0">No ship</option>
+						</select>
+					</div>
+					<label><input type="radio" name="cost" value="custom"> Custom</label>
+					<div class="group cost_custom">
+						<div class="key">Fuel:</div><input type="text" name="fuel"><br>
+						<div class="key">Ammo:</div><input type="text" name="ammo"><br>
+					</div>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
 	</div>
-	
-	<!-- Expedition result row -->
-	
+	<div class="cost_cell">
+		<div class="fuel"></div>
+		<div class="ammo"></div>
+	</div>
+	<div class="cost_cell_na">
+		N/A
+	</div>
 </div>

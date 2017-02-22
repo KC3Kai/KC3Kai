@@ -67,6 +67,25 @@
 				KC3StrategyTabs.gotoTab(null, $(this).data("world_num"));
 			});
 			
+			// Toggleable world scroll
+			$(".tab_"+tabCode+" .world_shift").on("click", function(){
+				var le,cr,re;
+				le = 0;
+				cr = $(window).data("world_off");
+				re = $(window).data("world_max");
+				$(window).data("world_off",cr = Math.max(le,Math.min(re,(function(e){
+					if(e.hasClass("disabled"))
+						return cr;
+					else if(e.hasClass("left"))
+						return cr-1;
+					else if(e.hasClass("right"))
+						return cr+1;
+					else
+						return cr;
+				})($(this)))));
+				updateScrollItem("world", 116);
+			});
+			
 			// On-click map menus
 			$(".tab_"+tabCode+" .map_list").on("click", ".map_box", function(){
 				KC3StrategyTabs.gotoTab(null, self.selectedWorld, $(this).data("map_num"));
@@ -88,7 +107,7 @@
 					else
 						return cr;
 				})($(this)))));
-				updateScrollItem();
+				updateScrollItem("map", 97);
 			});
 			
 			// On-click sortie ID export battle
@@ -139,9 +158,21 @@
 			$(".tab_"+tabCode+" .world_box").removeClass("active");
 			$(".tab_"+tabCode+" .world_box[data-world_num={0}]".format(self.selectedWorld)).addClass("active");
 
-			$(".tab_"+tabCode+" .map_list").html("").css("width","").css("margin-left","");
-			$(".tab_"+tabCode+" .page_list").html("");
-			$(".tab_"+tabCode+" .sortie_list").html("");
+			$(".tab_"+tabCode+" .map_list").empty().css("width","").css("margin-left","");
+			$(".tab_"+tabCode+" .page_list").empty();
+			$(".tab_"+tabCode+" .sortie_list").empty();
+			var countWorlds = $(".tab_"+tabCode+" .world_box").length;
+			var worldOffset = $(window).data("world_off");
+			var selectOffset = $(".tab_"+tabCode+" .world_box[data-world_num={0}]".format(self.selectedWorld)).index();
+			if(typeof worldOffset === "undefined"){
+				$(window).data("world_off", Math.min(selectOffset, countWorlds-6));
+			} else if(selectOffset < worldOffset){
+				$(window).data("world_off", selectOffset);
+			} else if(selectOffset >= 6+((tabCode=="maps")&1) && worldOffset < selectOffset-5){
+				$(window).data("world_off", selectOffset-5);
+			}
+			$(window).data("world_max", Math.max(0, countWorlds-6));
+			updateScrollItem("world", 116);
 
 			if(self.selectedWorld !== 0){
 				// Add all maps in this world selection
@@ -161,7 +192,7 @@
 				mapBox.addClass("empty");
 				mapBox.addClass("active");
 
-				updateScrollItem(tabCode);
+				updateScrollItem("map", 97);
 
 				var diffStr = ["E","N","H"];
 				// Check player's map list
@@ -195,23 +226,34 @@
 							if(element.clear == 1){
 								$(".map_hp_txt", mapBox).text("Cleared!");
 								mapBox.addClass("cleared");
+								if(typeof element.maxhp != "undefined")
+									$(".map_hp_txt", mapBox).lazyInitTooltip()
+										.attr("title", "{0} / {1}".format(element.curhp, element.maxhp));
+								else if(!!KC3Meta.gauge(element.id))
+									$(".map_hp_txt", mapBox).lazyInitTooltip()
+										.attr("title", "{0} kills".format(KC3Meta.gauge(element.id)));
 							}else{
 								mapBox.addClass("notcleared");
 								// If HP-based gauge
 								if(typeof element.maxhp != "undefined"){
-									if(element.curhp>(element.baseHp || 1)){ // i want to approach last kill as JUST DO IT instead leaving 1HP only.
+									// want to approach last kill as JUST DO IT instead leaving 1HP only.
+									// but recent boss changes form for possible last dance and HP becomes lesser,
+									// so only show it on 1HP, leave exact left HP shown even < element.baseHp.
+									if(element.curhp > 1){
 										if((element.maxhp === 9999) || (element.curhp === 9999))
 											$(".map_hp_txt", mapBox).text( "???? / ????" );
 										else
-											$(".map_hp_txt", mapBox).text( element.curhp+" / "+element.maxhp );
+											$(".map_hp_txt", mapBox).text( "{0} / {1}".format(element.curhp, element.maxhp) );
 										$(".map_bar", mapBox).css("width", ((element.curhp/element.maxhp)*80)+"px");
 									}else{
 										mapBox.addClass("noclearnogauge");
 										if(ConfigManager.info_troll)
 											mapBox
 												.addClass("justdoit")
-												.attr("title","just kill her already, yesterday you said tommorow! JUST DO IT!!!"); // placeholder class...
-										$(".map_hp_txt", mapBox).text(KC3Meta.term("StrategyEvents1HP"));
+												.attr("title", "Just kill her already, yesterday you said tommorow! JUST DO IT!!!"); // placeholder class...
+										$(".map_hp_txt", mapBox).text(KC3Meta.term("StrategyEvents1HP"))
+											.attr("title", "{0} < {1} / {2}".format(element.curhp, element.baseHp, element.maxhp))
+											.lazyInitTooltip();
 									}
 								// If kill-based gauge
 								}else{
@@ -219,9 +261,11 @@
 									var killsLeft = totalKills - element.kills;
 									if(totalKills){
 										if(killsLeft > 1)
-											$(".map_hp_txt", mapBox).text( killsLeft+" / "+totalKills+" kills left");
+											$(".map_hp_txt", mapBox).text( "{0} / {1} kills left".format(killsLeft, totalKills) );
 										else
-											$(".map_hp_txt", mapBox).text( KC3Meta.term("StrategyEvents1HP") );
+											$(".map_hp_txt", mapBox).text( KC3Meta.term("StrategyEvents1HP") )
+												.attr("title", "{0} / {1}".format(killsLeft, totalKills))
+												.lazyInitTooltip();
 										$(".map_bar", mapBox).css("width", ((killsLeft/totalKills)*80)+"px");
 									} else {
 										mapBox.addClass("noclearnogauge");
@@ -321,7 +365,7 @@
 		this.showPage = function(){
 			var self = this;
 			$(".tab_"+tabCode+" .pagination").hide();
-			$(".tab_"+tabCode+" .sortie_list").html("");
+			$(".tab_"+tabCode+" .sortie_list").empty();
 			
 			// Show all sorties
 			if(this.selectedWorld === 0){
@@ -370,7 +414,7 @@
 							.attr("data-diff",KC3Meta.term("EventHistoryRank"+sortie.diff));
 					$(".sortie_id", sortieBox).html( sortie.id );
 					$(".sortie_date", sortieBox).html( new Date(sortie.time*1000).format("mmm d") );
-					$(".sortie_date", sortieBox).attr("title", new Date(sortie.time*1000).format("mmm d, yyyy hh:MM:ss") );
+					$(".sortie_date", sortieBox).attr("title", new Date(sortie.time*1000).format("yyyy-mm-dd HH:MM:ss") );
 					$(".sortie_map", sortieBox).html( (sortie.world >= 10 ? "E" : sortie.world) + "-" + sortie.mapnum );
 					
 					fleetkey = ["main","escort","preboss","boss"];
@@ -462,6 +506,11 @@
 								return true;
 							}
 							var airRaidLostKind = (battle.airRaid || {}).api_lost_kind;
+							var baseTotalDamage = battle.airRaid && battle.airRaid.api_air_base_attack
+									&& battle.airRaid.api_air_base_attack.api_stage3
+									&& battle.airRaid.api_air_base_attack.api_stage3.api_fdam ?
+									Math.floor(battle.airRaid.api_air_base_attack.api_stage3.api_fdam.slice(1).reduce(function(a,b){return a+b;},0))
+								: 0;
 							
 							battle.shizunde |= [[],[]];
 							
@@ -474,6 +523,11 @@
 							$(".node_id", nodeBox).text( KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node ) );
 							if(airRaidLostKind > 0){
 								$(".node_id", nodeBox).addClass(airRaidLostKind === 4 ? "nodamage" : "damaged");
+								// Show Enemy Air Raid damage
+								if(airRaidLostKind != 4){
+									$(".node_id", nodeBox).attr("title",
+										KC3Meta.term("BattleAirBaseLossTip").format(baseTotalDamage, Math.round(baseTotalDamage * 0.9 + 0.1)));
+								}
 							} else {
 								$(".node_id", nodeBox).removeClass("nodamage damaged");
 							}
@@ -491,13 +545,6 @@
 								$(".node_drop", nodeBox).addClass("hover");
 							}else{
 								$(".node_drop img", nodeBox).attr("src", "../../assets/img/ui/shipdrop-x.png");
-							}
-							
-							// Support Exped Triggered
-							if(battle.data.api_support_flag > 0){
-								$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support.png");
-							}else{
-								$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support-x.png");
 							}
 							
 							// Enemies
@@ -530,6 +577,21 @@
 							sinkShips[0].concat(battle.shizunde[0]);
 							sinkShips[1].concat(battle.shizunde[1]);
 							
+							// Support Exped/LBAS Triggered
+							if(thisNode.supportFlag || thisNode.lbasFlag){
+								$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support.png");
+								if(thisNode.supportFlag && !!battleData.api_support_info){
+									var fleetId = (battleData.api_support_info.api_support_airatack||{}).api_deck_id
+										|| (battleData.api_support_info.api_support_hourai||{}).api_deck_id || "?";
+									$(".node_support .exped", nodeBox).text(fleetId);
+									$(".node_support .exped", nodeBox).show();
+								}
+								$(".node_support .lbas", nodeBox).toggle(thisNode.lbasFlag);
+								$(".node_support", nodeBox).attr("title", thisNode.buildSupportAttackMessage(thisNode));
+							}else{
+								$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support-x.png");
+							}
+							
 							// Conditions
 							$(".node_engage", nodeBox).text( thisNode.engagement[2] );
 							$(".node_engage", nodeBox).addClass( thisNode.engagement[1] );
@@ -542,6 +604,9 @@
 								
 								$(".node_airbattle", nodeBox).text( thisNode.airbattle[0] );
 								$(".node_airbattle", nodeBox).addClass( thisNode.airbattle[1] );
+								$(".node_airbattle", nodeBox).attr("title",
+									thisNode.buildAirPowerMessage()
+								);
 								
 								["Fighters","Bombers"].forEach(function(planeType){
 									["player","abyssal"].forEach(function(side,jndex){
@@ -605,24 +670,25 @@
 			});
 			
 			$(".tab_"+tabCode+" .pagination").show();
+			$(".tab_"+tabCode+" .sortie_list").createChildrenTooltips();
 		};
 		
-		function updateScrollItem() {
+		function updateScrollItem(worldMap, itemWidth) {
 			var
 				le = 0,
-				cr = $(window).data("map_off"),
-				re = $(window).data("map_max");
+				cr = $(window).data(worldMap + "_off"),
+				re = $(window).data(worldMap + "_max");
 			if(cr<=le)
-				$(".tab_"+tabCode+" .map_shift.left").addClass("disabled");
+				$(".tab_"+tabCode+" ."+worldMap+"_shift.left").addClass("disabled");
 			else
-				$(".tab_"+tabCode+" .map_shift.left").removeClass("disabled");
-				
-			if(cr>=re)
-				$(".tab_"+tabCode+" .map_shift.right").addClass("disabled");
-			else
-				$(".tab_"+tabCode+" .map_shift.right").removeClass("disabled");
+				$(".tab_"+tabCode+" ."+worldMap+"_shift.left").removeClass("disabled");
 			
-			$(".tab_"+tabCode+" .map_list").css("margin-left",(cr * -97) + "px");
+			if(cr>=re)
+				$(".tab_"+tabCode+" ."+worldMap+"_shift.right").addClass("disabled");
+			else
+				$(".tab_"+tabCode+" ."+worldMap+"_shift.right").removeClass("disabled");
+			
+			$(".tab_"+tabCode+" ."+worldMap+"_list").css("margin-left",(cr * -itemWidth) + "px");
 		}
 		
 		/* EXPORT REPLAY IMAGE
@@ -649,7 +715,6 @@
 			rcanvas.height = 400;
 			var rcontext = rcanvas.getContext("2d");
 			
-			
 			var domImg = new Image();
 			domImg.onload = function(){
 				rcontext.drawImage( domImg, 0, 0, 400, 400, 0, 0, 400, 400 );
@@ -661,7 +726,7 @@
 						return false;
 					}
 					
-					console.log(rcontext,sortieData);
+					console.log("Downloading reply", sortieId, ", data:", sortieData);
 					rcontext.font = "26pt Calibri";
 					rcontext.fillStyle = '#ffffff';
 					rcontext.fillText(sortieData.world+"-"+sortieData.mapnum, 20, 215);
@@ -678,18 +743,26 @@
 					});
 					
 					withDataCover64 = rcanvas.toDataURL("image/png");
-					// window.open(withDataCover64);
 					
-					var newImg = steganography.encode(JSON.stringify(sortieData), withDataCover64);
-					
-					chrome.downloads.download({
-						url: newImg,
-						filename: ConfigManager.ss_directory+'/replay/'+PlayerManager.hq.name+"_"+sortieId+'.png',
-						conflictAction: "uniquify"
-					}, function(downloadId){
-						self.exportingReplay = false;
-						$("body").css("opacity", "1");
+					steg.encode(JSON.stringify(sortieData), withDataCover64, {
+						success: function(newImg){
+							chrome.downloads.download({
+								url: newImg,
+								filename: ConfigManager.ss_directory+'/replay/'+PlayerManager.hq.name+"_"+sortieId+'.png',
+								conflictAction: "uniquify"
+							}, function(downloadId){
+								self.exportingReplay = false;
+								$("body").css("opacity", "1");
+							});
+						},
+						error: function(e){
+							console.error("Failed to encode replay data by", e, e.stack);
+							self.exportingReplay = false;
+							$("body").css("opacity", "1");
+							return false;
+						}
 					});
+					
 				});
 				
 			};

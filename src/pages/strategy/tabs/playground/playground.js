@@ -1,17 +1,17 @@
 (function(){
 	"use strict";
-	
+
 	KC3StrategyTabs.playground = new KC3StrategyTab("playground");
-	
+
 	KC3StrategyTabs.playground.definition = {
 		tabSelf: KC3StrategyTabs.playground,
-		
+
 		/* INIT: mandatory
 		Prepares initial static data needed.
 		---------------------------------*/
 		init: function() {
 		},
-		
+
 		/* RELOAD: optional
 		Loads latest player or game data if needed.
 		---------------------------------*/

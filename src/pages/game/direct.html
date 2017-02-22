@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<!-- @nonbuildstart -->
+		<link href="../../assets/css/bootstrap.css" rel="stylesheet" type="text/css">
+		<!-- @nonbuildend -->
+		<link href="../../assets/css/global.css" rel="stylesheet" type="text/css">
+		<link href="../../assets/css/keys.css" rel="stylesheet" type="text/css">
+		<link href="direct.css" rel="stylesheet" type="text/css">
+		<title>KC3改</title>
+		<link rel="shortcut icon" href="../../assets/img/logo/48.png" type="image/x-icon" />
+	</head>
+	<body>
+		<div class="box-wrap">
+			<div class="headBox">
+				<div class="headImage"><img src="../../assets/img/logo/32.png" /></div>
+				<div class="headTitle i18n">GamePlayViaKC3</div>
+			</div>
+			
+			<!-- SCREEN CUSTOMIZATION -->
+			<div class="section">
+				<!-- Title -->
+				<div class="sectionHead">
+					<div class="sectionIcon"><img src="../../assets/img/ui/empty.png" /></div>
+					<div class="sectionText">
+						<span class="i18n">GameToggleFeatures</span>
+						<a href="../settings/settings.html" target="_blank" class="i18n">GameEditMoreSettings</a>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<!-- Customization List -->
+				<div class="sectionBody">
+					<div class="customization">
+						<label class="switch">
+							<input type="checkbox" id="background">
+							<div class="slider round"></div>
+						</label>
+						<div class="customizationText i18n">SettingsDMMCustomize</div>
+						<div class="clear"></div>
+					</div>
+					<div class="customization dependsOnCustomization">
+						<label class="switch">
+							<input type="checkbox" id="subtitles">
+							<div class="slider round"></div>
+						</label>
+						<div class="customizationText i18n">SettingsSubtitles</div>
+						<div class="clear"></div>
+					</div>
+					<div class="customization dependsOnCustomization">
+						<label class="switch">
+							<input type="checkbox" id="questtl">
+							<div class="slider round"></div>
+						</label>
+						<div class="customizationText i18n">SettingsQuestOverlay</div>
+						<div class="clear"></div>
+					</div>
+					<div class="customization dependsOnCustomization">
+						<label class="switch">
+							<input type="checkbox" id="mapmarkers">
+							<div class="slider round"></div>
+						</label>
+						<div class="customizationText i18n">SettingsMapNodeMarkers</div>
+						<div class="clear"></div>
+					</div>
+					<div class="customization dependsOnCustomization">
+						<label class="switch">
+							<input type="checkbox" id="exitconfirm">
+							<div class="slider round"></div>
+						</label>
+						<div class="customizationText i18n">SettingsConfirmExit</div>
+						<div class="clear"></div>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+			<div class="clear"></div>
+			
+			<!-- HOTKEYS -->
+			<div class="section half">
+				<!-- Title -->
+				<div class="sectionHead">
+					<div class="sectionIcon"><img src="../../assets/img/ui/empty.png" /></div>
+					<div class="sectionText">
+						<span class="i18n">GameSpecialHotkeys</span>
+						<a href="https://github.com/KC3Kai/KC3Kai/wiki/Hotkeys" target="_blank" class="i18n">GameMoreHotkeys</a>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<!-- List of Hotkeys -->
+				<div class="sectionBody dependsOnCustomization">
+					<ul class="hotkeys">
+						<li class="disabled"><kbd>Esc</kbd> <kbd>Esc</kbd> <kbd>Esc</kbd> <span class="i18n">GameHotkeyExit</span></li>
+						<li class="disabled"><kbd>Tab</kbd> <span class="i18n">GameHotkeyHUD</span></li>
+						<li><kbd>F7</kbd> <span class="i18n">GameHotkeyType</span></li>
+						<li><kbd>F9</kbd> <span class="i18n">GameHotkeyScreenshot</span></li>
+						<li><kbd>F10</kbd> <span class="i18n">GameHotkeyClear</span></li>
+					</ul>
+					<div class="clear"></div>
+				</div>
+			</div>
+			
+			<!-- GAMEP[LAY MODES -->
+			<div class="section half">
+				<!-- Title -->
+				<div class="sectionHead">
+					<div class="sectionIcon"><img src="../../assets/img/ui/empty.png" /></div>
+					<div class="sectionText">
+						<span class="i18n">GameGameModes</span>
+						<a href="https://github.com/KC3Kai/KC3Kai/wiki/Startup-problems" target="_blank" class="i18n">GameReadMore</a>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<!-- List of Hotkeys -->
+				<div class="sectionBody">
+					<ul class="altGameModes">
+						<li class="selected">
+							<div class="modeIcon"><img src="../../assets/img/ui/menu/dmm.png" /></div>
+							<div class="modeName activeMode i18n">GameCustomizeWeb</div>
+							<div class="modeDesc i18n">GameAltDMMInfo</div>
+							<div class="clear"></div>
+						</li>
+						<li class="deprecated">
+							<div class="modeIcon"><img src="../../assets/img/ui/menu/dmmf.png" /></div>
+							<div class="modeName oldMode i18n">MenuPlayDMMFName</div>
+							<div class="modeDesc i18n">GameAltFrameInfo</div>
+							<div class="modePlay i18n hover" data-mode="frame">GameAltIgnore</div>
+							<div class="clear"></div>
+						</li>
+						<li class="deprecated">
+							<div class="modeIcon"><img src="../../assets/img/ui/menu/api.png" /></div>
+							<div class="modeName oldMode i18n">MenuPlayAPIName</div>
+							<div class="modeDesc i18n">GameAltAPIInfo</div>
+							<div class="modePlay i18n hover" data-mode="api">GameAltIgnore</div>
+							<div class="clear"></div>
+						</li>
+					</ul>
+					<div class="clear"></div>
+				</div>
+			</div>
+			<div class="clear"></div>
+			
+			<!-- START GAME -->
+			<div class="section">
+				<!-- Title -->
+				<div class="sectionHead">
+					<div class="sectionIcon"><img src="../../assets/img/ui/empty.png" /></div>
+					<div class="sectionText">
+						<span class="i18n">GameStartGame</span>
+						<a href="#" id="startAnyway" class="i18n">GameStartNoPanel</a>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<!-- Instructions -->
+				<div class="sectionBody">
+					<div class="instructStep instructF12 win cros linux openbsd">
+						<div class="stepNum">1</div>
+						<div class="stepText"><kbd>F12</kbd> <span class="i18n">GameOReither</span> <kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>J</kbd></div>
+						<div class="clear"></div>
+					</div>
+					<div class="instructStep instructF12 mac">
+						<div class="stepNum">1</div>
+						<div class="stepText"><kbd>&#8984;</kbd> <kbd>Option</kbd> <kbd>I</kbd></div>
+						<div class="clear"></div>
+					</div>
+					<div class="instructStep instructKancolleTab">
+						<div class="stepNum">2</div>
+						<div class="stepText i18n">GameStep2</div>
+						<div class="clear"></div>
+					</div>
+					<div class="instructStep">
+						<div class="stepNum">3</div>
+						<div class="stepText i18n">GameStep3</div>
+						<div class="clear"></div>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+			<div class="clear"></div>
+			
+			<!-- LINKS -->
+			<div class="section short hide">
+				<div class="sectionHead">
+					<div class="sectionIcon"><img src="../../assets/img/ui/empty.png" /></div>
+					<div class="sectionText i18n">GameSocialLinks</div>
+					<div class="clear"></div>
+				</div>
+				<div class="sectionBody">
+					<ul class="linkList">
+						<li>
+							<a class="linkItem" target="_blank" href="https://chrome.google.com/webstore/detail/kancolle-command-center-%E6%94%B9/hkgmldnainaglpjngpajnnjfhpdjkohh/reviews">
+								<div class="linkIcon"><img src="../../assets/img/social/ws.png" /></div>
+								<div class="linkName i18n">SocialTextWebstore</div>
+								<div class="clear"></div>
+							</a>
+						</li>
+						<li>
+							<a class="linkItem" target="_blank" href="https://www.facebook.com/kc3kai/">
+								<div class="linkIcon"><img src="../../assets/img/social/fb.png" /></div>
+								<div class="linkName i18n">SocialTextFacebook</div>
+								<div class="clear"></div>
+							</a>
+						</li>
+						<li>
+							<a class="linkItem" target="_blank" href="https://twitter.com/kc3kai">
+								<div class="linkIcon"><img src="../../assets/img/social/tw.png" /></div>
+								<div class="linkName i18n">SocialTextTwitter</div>
+								<div class="clear"></div>
+							</a>
+						</li>
+						<li>
+							<a class="linkItem" target="_blank" href="https://github.com/KC3Kai/KC3Kai">
+								<div class="linkIcon"><img src="../../assets/img/social/gh.png" /></div>
+								<div class="linkName i18n">SocialTextGithub</div>
+								<div class="clear"></div>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			
+			<!-- PLACEHOLDER -->
+			<div class="section medium hide">
+				<div class="sectionHead">
+					<div class="sectionIcon"><img src="../../assets/img/ui/empty.png" /></div>
+					<div class="sectionText i18n">Login to KC3改 Data Cloud</div>
+					<div class="clear"></div>
+				</div>
+				<div class="sectionBody">
+					
+				</div>
+			</div>
+			<div class="clear"></div>
+			
+		</div>
+		<script type="text/javascript" src="../../assets/js/global.js"></script>
+		<script type="text/javascript" src="../../assets/js/Dexie.min.js"></script>
+		<!-- @nonbuildstart -->
+		<script type="text/javascript" src="../../assets/js/jquery-2.1.3.min.js"></script>
+		<script type="text/javascript" src="../../library/managers/ConfigManager.js"></script>
+		<script type="text/javascript" src="../../library/objects/SettingsBox.js"></script>
+		<!-- @nonbuildend -->
+		<!-- @buildimportjs ../../library/objects.js -->
+		<!-- @buildimportjs ../../library/managers.js -->
+		<script type="text/javascript" src="../../library/modules/Translation.js"></script>
+		<script type="text/javascript" src="../../library/modules/Meta.js"></script>
+		<script type="text/javascript" src="../../library/modules/Database.js"></script>
+		<script type="text/javascript" src="direct.js"></script>
+	</body>
+</html>

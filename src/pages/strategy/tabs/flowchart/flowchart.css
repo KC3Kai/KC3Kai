@@ -82,6 +82,21 @@
 	line-height:18px;
 	float:left;
 }
+.tab_flowchart .questFlowItem .questIcon.progress {
+	background-image:url(../../../../assets/img/ui/quest_active.png);
+	background-repeat:no-repeat;
+	background-size:20px 17px;
+	background-position-x:-7px;
+	background-position-y:1px;
+}
+.tab_flowchart .questFlowItem .questIcon.ticked {
+	background-image:url(../../../../assets/img/ui/quest_check.png);
+	background-repeat:no-repeat;
+	background-size:16px 16px;
+	background-position-x:25px;
+	background-position-y:4px;
+	background-blend-mode:normal;
+}
 .tab_flowchart .questFlowItem .questDesc {
 	max-width:66%;
 	margin:0px 5px 0px 0px;
@@ -129,7 +144,6 @@
 	height:16px;
 	float:left;
 	margin:0px 0px 0px 4px;
-	background:#fff;
 	border-radius:8px;
 }
 .tab_flowchart .questFlowItem .questToggle img {
@@ -143,7 +157,6 @@
 	height:16px;
 	float:left;
 	margin:0px 0px 0px 3px;
-	background:#fff;
 	border-radius:8px;
 }
 .tab_flowchart .questFlowItem .questRemove img {
@@ -241,7 +254,6 @@
 	height:16px;
 	float:left;
 	margin:0px 0px 0px 9px;
-	background:#fff;
 	border-radius:8px;
 }
 .tab_flowchart .questExtraItem .questRemove img {

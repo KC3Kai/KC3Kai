@@ -3,47 +3,235 @@
 body {
 	background:#eee;
 }
-#wrapper {
-	width:600px;
-	margin:30px auto;
-	background:#fff;
-	padding:20px 20px 10px;
-}
-.logo {
-	width:100px;
-	height:100px;
-	line-height:100px;
-	float:left;
-	margin:0px 10px 0px 0px;
-}
-.logo img {
-	width:100px;
-	height:100px;
-	vertical-align:too;
+#factory {
+	display:none;
 }
 
-.versionInfo {
-	width:450px;
-	height:100px;
-	float:left;
+/* NOTICE BOXES
+--------------------------*/
+.notice {
+	width:800px;
+	margin:0px auto 10px;
+	border-radius:4px;
+	min-height:50px;
+	font-size:12px;
+	display:none;
 }
-.versionName {
-	width:450px;
-	height:24px;
-	line-height:24px;
-	margin:0px 0px 6px 0px;
-	font-size:20px;
-	font-weight:bold;
+.noticeTitle {
+	font-size:14px;
+	font-weight: bold;
 }
-.versionNotes {
-	width:450px;
-	height:70px;
+.noticeText {
 	font-size:12px;
 }
 
-.viewButtons {
-	width:560px;
+/* HEADER
+--------------------------*/
+#header {
+	width:800px;
+	margin:10px auto 10px;
+	height:30px;
+	line-height:30px;
+}
+#header .logo {
+	width:30px;
+	height:30px;
 	float:left;
-	margin:20px 0px 10px 0px;
-	text-align:center;
+	margin:0px 6px 0px 0px;
+}
+#header .logo img {
+	width:30px;
+	height:30px;
+	vertical-align: top;
+}
+#header .title {
+	width:530px;
+	height:30px;
+	float:left;
+	font-size:20px;
+}
+#header .howToUpdateBtn {
+	float:left;
+	display:block;
+	width:230px;
+	height:30px;
+	line-height:30px;
+	text-align:right;
+	font-size:12px;
+	text-decoration: none;
+}
+
+/* UPDATE READY
+--------------------------*/
+#updateReady {
+	border:2px solid #e3d081;
+	background:url('../../assets/img/ui/catbomb.png') 5px 5px no-repeat #f1ebcf;
+	padding:5px 10px 10px 65px;
+}
+#updateReady .updateReadyTitle {
+	height:20px;
+	line-height:20px;
+	margin:0px 0px 2px 0px;
+}
+#updateReady .updateReadyText {
+	margin:0px 0px 5px 0px;
+}
+#updateReady .updateReadyButtons {
+	width:500px;
+}
+#updateReady .updateReadyButton {
+	padding:0px 20px;
+	height:20px;
+	line-height:20px;
+	border-top:1px solid #e3d081;
+	border-bottom:1px solid #e3d081;
+	float:left;
+	margin:0px 10px 0px 0px;
+	text-align: center;
+	color:#00f;
+	background: linear-gradient(to right, #f1ebcf 0%,#ebdda4 50%,#f1ebcf 100%);
+}
+
+/* RECENTLY INSTALLED
+--------------------------*/
+#installed {
+	border:2px solid #a1c488;
+	background: #c8f4aa;
+	padding:5px 10px 10px 10px;
+}
+#installed .installedTitle {
+	margin:0px 0px 2px 0px;
+}
+#installed .installedText {
+	
+}
+
+/* RECENTLY UPDATED
+--------------------------*/
+#updated {
+	border:2px solid #a1c488;
+	background: #c8f4aa;
+	padding:5px 10px 10px 10px;
+}
+#updated .updatedTitle {
+	margin:0px 0px 2px 0px;
+}
+#updated .updatedText {
+	
+}
+/* VERSIONS
+--------------------------*/
+#versions {
+	width:800px;
+	margin:0px auto;
+}
+
+#versions .loading {
+	width:200px;
+}
+#versions .loading img {
+	content:url(../../assets/img/ui/indicator.svg);
+	width:32px;
+	height:32px;
+	margin-left:auto;
+	margin-right:auto;
+	display:block;
+}
+
+/* Version List */
+#versionList {
+	width:200px;
+	float:left;
+	padding:10px 0px 0px 0px;
+}
+.versionPR {
+	width:200px;
+	height:40px;
+	margin:0px 0px 3px 0px;
+	background:#f7f7f7;
+	position:relative;
+}
+.versionPR.active {
+	background:#fff;
+}
+.versionPR .versionStatus {
+	width:6px;
+	height:40px;
+	float:left;
+	margin:0px 2px 0px 0px;
+}
+.versionPR .versionIcon {
+	width:30px;
+	float:left;
+	height:40px;
+	padding:5px 0px;
+	margin:0px 2px 0px 0px;
+}
+.versionPR .versionIcon img {
+	width:30px;
+	height:30px;
+}
+.versionPR .versionName {
+	width:160px;
+	float:left;
+	height:18px;
+	line-height:18px;
+	font-weight:bold;
+	font-size:14px;
+	color:#000;
+	margin:5px 0px 0px 0px;
+}
+.versionPR .versionDate {
+	width:160px;
+	float:left;
+	height:12px;
+	line-height:12px;
+	font-size:10px;
+	color:#999;
+}
+.versionPR .installed {
+	display:none;
+}
+.versionPR.pending img {
+	width:16px;
+	height:16px;
+	margin:7px;
+}
+.versionPR.installed .installed {
+	display:block;
+	position:absolute;
+	top:4px;
+	right:-5px;
+	height:10px;
+	line-height:10px;
+	font-size:9px;
+	padding:0px 3px 0px 3px;
+	background:#933;
+	color:#dddd99;
+}
+
+/* Version Text */
+#versionText {
+	width:600px;
+	float:left;
+	min-height:550px;
+	background:#fff;
+	padding:10px 20px;
+	margin:0px 0px 10px 0px;
+}
+#versionText .title {
+	width:560px;
+	height:24px;
+	line-height:24px;
+	font-size:18px;
+}
+#versionText .link {
+	width:560px;
+	height:16px;
+	line-height:16px;
+	font-size:12px;
+	margin:0px 0px 10px 0px;
+}
+#versionText .desc {
+	zoom:90%;
 }

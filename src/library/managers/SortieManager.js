@@ -70,6 +70,7 @@ Xxxxxxx
 				fleet4: PlayerManager.fleets[3].sortieJson(),
 				support1: this.getSupportingFleet(false),
 				support2: this.getSupportingFleet(true),
+				lbas: this.getWorldLandBases(world),
 				time: stime
 			}, function(id){
 				self.onSortie = id;
@@ -117,6 +118,18 @@ Xxxxxxx
 					}
 				}
 			return 0;
+		},
+		
+		getWorldLandBases :function(world){
+			var lbas = [];
+			$.each(PlayerManager.bases, function(i, base){
+				if(base.rid > -1 && base.map === world
+					// Only sortie and defend needed
+					&& [1,2].indexOf(base.action) > -1){
+					lbas.push(base.sortieJson());
+				}
+			});
+			return lbas;
 		},
 		
 		getSortieFleet: function() {
@@ -362,21 +375,23 @@ Xxxxxxx
 			localStorage.setObject('sortie',this);
 		},
 		
-		endSortie :function(){
-			var
-				pvpData = JSON.parse(localStorage.statistics || "{}").pvp,
-				sentFleet = this.fleetSent,
-				self = this,
-				cons = {};
-			this.fleetSent = 1;
-			cons.name = self.isPvP() ? (
+		sortieName :function(diff){
+			var pvpData = JSON.parse(localStorage.statistics || "{}").pvp;
+			return this.isPvP() ? (
 				/* There's a possibility to encounter String bug
 				   -- if either win/lose counter is zero
 				*/
-				"pvp" + (self.onSortie = (Number(pvpData.win) + Number(pvpData.lose) + 1))
-			) : ("sortie" + self.onSortie);
+				"pvp" + (this.onSortie = (Number(pvpData.win) + Number(pvpData.lose) + (diff||1)))
+			) : ("sortie" + this.onSortie);
+		},
+		
+		endSortie :function(){
+			var sentFleet = this.fleetSent,
+				self = this,
+				cons = {};
+			this.fleetSent = 1;
+			cons.name = self.sortieName();
 			cons.resc = Array.apply(null,{length:8}).map(function(){return 0;});
-			console.log("Pre-%s State",cons.name,PlayerManager.hq.lastSortie);
 			// Calculate sortie difference with buffer
 			(PlayerManager.hq.lastSortie || []).forEach(function(fleet,fleet_id){
 				fleet.forEach(function(after,ship_fleet){
@@ -401,21 +416,23 @@ Xxxxxxx
 						repLen   = before.repair.length * !self.isPvP(),
 						repair   = [1,2,9].map(function(x){
 							return (x<repLen) ? Math.min(0,after.repair[x] - before.repair[x]) : 0;
-						});
+						}),
+						pendingCon = before.pendingConsumption[cons.name];
 					if(!self.isPvP())
 						before.lastSortie.unshift(cons.name);
-					if(!(supply.every(function(matr){return !matr;}) && repair.every(function(matr){return !matr;})))
-						if(true) {
-							console.log(rosterId,repair);
-							before.pendingConsumption[cons.name] = [supply,repair];
-						} else
-							[supply.repair].forEach(function(cost){
-								cost.forEach(function(matr,indx){
-									cons.resc[indx] -= matr;
-								});
-							});
+					console.log("Pending consumption",pendingCon);
+					// Count steel consumed by jet
+					if(Array.isArray(pendingCon) && pendingCon.length > 2) {
+						cons.resc[2] += pendingCon[2][0] || 0;
+						pendingCon.splice(2,1);
+					}
+					if(!(supply.every(function(matr){return !matr;}) && repair.every(function(matr){return !matr;}))){
+						console.log("Repair consumption",rosterId,repair);
+						before.pendingConsumption[cons.name] = [supply, repair];
+					}
 				});
 			});
+			console.log("Pre-%s State",cons.name,cons.resc,PlayerManager.hq.lastSortie);
 			// Ignore every resource gain if disconnected during sortie
 			if(this.onCat)
 				this.materialGain.fill(0);
@@ -474,6 +491,80 @@ Xxxxxxx
 			this.onCat = false;
 			this.sortieTime = 0;
 			this.save();
+		},
+		/**
+		 * Get battle opponent's fighter power only based on master data.
+		 * @param enemyFleetShips - master ID array of opponent fleet ships.
+		 * @param enemyShipSlots - master ID array of equip slots, optional.
+		 *                         length should be the same with enemyFleetShips.
+		 * @return a tuple contains [
+		 *           computed fighter power (without improvement and proficiency bonus),
+		 *           sum of known slot capacity,
+		 *           sum of slot capacity without air power,
+		 *           exception map indicates which ship or gear missing required data:
+		 *             {shipId: null || {gearId: null || aaStat}}
+		 *         ]
+		 * @see To compute fighter power of our fleet, see Fleet, Ship, Gear classes.
+		 */
+		enemyFighterPower :function(enemyFleetShips, enemyShipSlots){
+			var totalPower = false;
+			var totalCapacity = 0;
+			var noAirPowerCapacity = 0;
+			var exceptions = {};
+			// no ship IDs
+			if(!enemyFleetShips){
+				exceptions.ship = null;
+				return [totalPower, totalCapacity, exceptions];
+			}
+			$.each(enemyFleetShips, function(shipIdx, shipId){
+				// ignore -1 placeholder
+				if(!shipId || shipId < 0){
+					return;
+				}
+				let shipMst = (shipId <= 500) ?
+					KC3Master.ship(shipId) : KC3Master.abyssalShip(shipId, true);
+				// no ship master data
+				if(!shipMst){
+					exceptions[shipId] = null;
+					return;
+				}
+				let shipSlots = (enemyShipSlots || [])[shipIdx] || shipMst.kc3_slots;
+				// no slot gear IDs
+				if(!Array.isArray(shipSlots)){
+					exceptions[shipId] = {};
+					return;
+				}
+				// mainly remove -1 placeholders
+				shipSlots = shipSlots.filter(function(id) { return id > 0; });
+				for(let slotIdx = 0; slotIdx < shipSlots.length; slotIdx++){
+					let gearId = shipSlots[slotIdx];
+					let gearMst = KC3Master.slotitem(gearId);
+					// no gear master data
+					if(!gearMst){
+						exceptions[shipId] = exceptions[shipId] || {};
+						exceptions[shipId][gearId] = null;
+						continue;
+					}
+					if(KC3GearManager.antiAirFighterType2Ids.indexOf(
+						String(gearMst.api_type[2]) ) > -1){
+						let aaStat = gearMst.api_tyku || 0;
+						let capacity = (shipMst.api_maxeq || [])[slotIdx];
+						if(typeof capacity !== "undefined"){
+							if(aaStat > 0){
+								totalCapacity += capacity;
+								totalPower += Math.floor(Math.sqrt(capacity) * aaStat);
+							} else {
+								noAirPowerCapacity += capacity;
+							}
+						} else {
+							// no slot maxeq (capacity)
+							exceptions[shipId] = exceptions[shipId] || {};
+							exceptions[shipId][gearId] = aaStat;
+						}
+					}
+				}
+			});
+			return [totalPower, totalCapacity, noAirPowerCapacity, exceptions];
 		}
 	};
 	

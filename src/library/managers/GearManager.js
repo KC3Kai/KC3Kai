@@ -12,10 +12,28 @@ Saves and loads list to and from localStorage
 		max: 497,
 		pendingGearNum: 0,
 
-		carrierBasedAircraftType3Ids: [6,7,8,9,10,21,22,33],
-		landBasedAircraftType3Ids: [6,7,8,9,10,33,37,38],
-		antiAirFighterType2Ids: [6,7,8,11,45],
+		carrierBasedAircraftType3Ids: [6,7,8,9,10,21,22,33,39,40],
+		landBasedAircraftType3Ids: [6,7,8,9,10,33,37,38,39,40],
+		// To avoid manually update, see `load`
+		antiAirFighterType2Ids: ["6","7","8","11","45","47","48","57"],
 		interceptorsType3Ids: [38],
+
+		carrierSupplyBauxiteCostPerSlot: 5,
+		// LBAS mechanism still in progress
+		landBaseSupplyBauxiteCostPerSlot: 5,
+		landBaseSupplyFuelCostPerSlot: 3,
+		landBaseBomberSortieFuelCostPerSlot: 1.5,
+		landBaseReconnSortieFuelCostPerSlot: 1.0,
+		landBaseOtherSortieFuelCostPerSlot: 1.0,
+		landBaseBomberSortieAmmoCostPerSlot: 0.67,
+		landBaseReconnSortieAmmoCostPerSlot: 0.75,
+		landBaseOtherSortieAmmoCostPerSlot: 0.62,
+		landBaseReconnMaxSlot: 4,
+		landBaseOtherMaxSlot: 18,
+		landBaseReconnType2Ids: [9,10,41],
+		// Jet aircraft mechanism still in progress
+		jetBomberSteelCostRatioPerSlot: 0.2,
+		// steel_consumption = floor(api_cost * current_slot * 0.2)
 
 		// Get a specific item by ID
 		// NOTE: if you want to write testcases, avoid setting KC3GearManager.list["x0"]
@@ -31,20 +49,45 @@ Saves and loads list to and from localStorage
 			  ? (new KC3Gear())
 			  : (this.list["x"+itemId] || new KC3Gear());
 		},
+
 		// Count number of items
-		count :function(){
-			return Object.size(this.list) + this.pendingGearNum;
+		// - when "cond" is given, count items satisfying "cond"
+		//   and pending items are not included
+		// - when "cond" is not given, count items
+		//   including pending ones.
+		count :function( cond ){
+			if (typeof cond === "undefined") {
+				return Object.size(this.list) + this.pendingGearNum;
+			}
+			var n = 0;
+			var x;
+			for (var ind in this.list) {
+				x = this.list[ind];
+				if (cond.call(x,x)) {
+					n += 1;
+				}
+			}
+			return n;
 		},
 		
 		// Count number of equipment by master item
 		countByMasterId :function(slotitem_id){
-			var returnCount = 0;
-			for(var ctr in this.list){
-				if(this.list[ctr].masterId == slotitem_id){
-					returnCount++;
+			return this.count( function() {
+				return this.masterId == slotitem_id;
+			});
+		},
+		
+		// Look for items by specified conditions
+		find :function( cond ){
+			var result = [];
+			var x;
+			for(var i in this.list) {
+				x = this.list[i];
+				if(cond.call(x, x)) {
+					result.push(x);
 				}
 			}
-			return returnCount;
+			return result;
 		},
 		
 		// Add or replace an item on the list
@@ -89,6 +132,13 @@ Saves and loads list to and from localStorage
 		
 		// Load from storage and add each one to manager list
 		load: function(){
+			// Use ConfigManager's defaults instead, but remember: elements are String
+			var configured = ConfigManager.defaults().air_average
+				|| ConfigManager.defaults().air_bounds;
+			// Here skip config if ConfigManager not load first
+			if(typeof configured === "object" && Object.keys(configured).length > 0){
+				this.antiAirFighterType2Ids = Object.keys(configured);
+			}
 			if(typeof localStorage.gears != "undefined"){
 				this.clear();
 				var GearList = JSON.parse(localStorage.gears);

@@ -22,6 +22,28 @@ a:hover {
 	color:#ffffff;
 }
 
+button, input, select, textarea {
+	background:#121212;
+}
+
+.ui-tooltip {
+	max-width:500px;
+	padding:2px 5px 3px 6px;
+	border-width:1px !important;
+	border:1px solid #eee;
+	box-shadow:0 0 5px 1px #777;
+	color:#cccccc;
+	background:#444;
+	font-family:inherit;
+	font-size:12px;
+}
+.ui-tooltip-content hr {
+	margin:3px 0px 3px 0px;
+}
+.ui-tooltip-content p {
+	margin:0px;
+}
+
 /* COLORS
 -------------------------------*/
 .fcolor1 { color:#ffffff; }
@@ -123,7 +145,7 @@ a:hover {
 -------------------------------*/
 #content {
 	width:700px;
-	min-height:1300px;
+	min-height:1320px;
 	float:left;
 	background:#222222;
 	overflow:hidden;
@@ -232,7 +254,8 @@ a:hover {
 	color:#fff;
 	margin:0px 1px 0px;
 }
-.page_panel ul.pagination li a:hover {
+.page_panel ul.pagination li a:hover,
+.page_panel ul.pagination li.active a {
 	background:#000000;
 	color:#ffcc00;
 }
@@ -310,9 +333,29 @@ a:hover {
 .tab_resources .legend_color {
 	border:1px solid #000000;
 }
+.tab_resources .date_input input {
+	border:1px solid #555;
+	background:#333;
+}
+.tab_resources .dropdown_input select {
+	border:1px solid #555;
+}
+.tab_resources .option_preset {
+	color:#eee;
+}
 /* Consumables */
 .tab_consumables .legend_color {
 	border:1px solid #000000;
+}
+.tab_consumables .date_input input {
+	border:1px solid #555;
+	background:#333;
+}
+.tab_consumables .dropdown_input select {
+	border:1px solid #555;
+}
+.tab_consumables .option_preset {
+	color:#eee;
 }
 /* Showcase */
 .tab_showcase .stype_box {
@@ -377,7 +420,16 @@ a:hover {
 	display:none;
 }
 .tab_showcase .show_gear .gear_stat_icon img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
+}
+.tab_showcase .controls {
+	background:#464646;
+	border-bottom:1px solid #a2a2a2;
+}
+.tab_showcase  .control {
+	background:#808080;
+	color:#fff;
 }
 /* Ledger */
 .tab_overlodger .filterBox {
@@ -440,9 +492,10 @@ a:hover {
 	border-radius:0px !important;
 }
 .tab_ships .massSelect dl{
-	width: 218px !important;
+	width: 215px !important;
 }
 .tab_ships .ship_header .ship_stat img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
 .tab_ships .filters .ship_filter_type:hover {
@@ -519,10 +572,10 @@ a:hover {
 }
 .tab_ships .ship_item .ship_tp.max {
 	background:#073e78;
-}rgb(198, 191, 130)
+}
 .tab_ships .ship_item .ship_yasen.max {
 	background:#555555;
-	color:#FFFFFF;
+	color:#ffffff;
 }
 .tab_ships .ship_item .ship_aa.max {
 	background:#935b07;
@@ -536,6 +589,10 @@ a:hover {
 .tab_ships .ship_item.even .ship_field.ship_lk {
 	background:#116311;
 }
+.tab_ships .ship_item .ship_equip .ship_equip_ex .empty {
+	background:#555555 !important;
+}
+
 /* Construction */
 .tab_builds .build_item {
 	background:#333333;
@@ -684,12 +741,37 @@ a:hover {
 	color:#ccc;
 }
 /* Leveling Goals */
+.tab_expcalc .box_control {
+	background-color:#333333;
+	border:1px solid #666;
+}
+.tab_expcalc .box_control_line .toggle {
+	border-radius: 4px;
+	background: #000;
+}
+.tab_expcalc .box_control_line .hover.active {
+	background: #33ccff;
+	color: #000;
+}
 .tab_expcalc .ship_goal {
 	background-color:#333333;
 	border-radius: 0px !important;
 }
+.tab_expcalc .ship_goal.highlight_stype {
+	background-color:#330000;
+}
+.tab_expcalc .ship_goal.highlight_closeToRemodel {
+	background-color:#04242f;
+}
+
+.tab_expcalc .ship_goal.highlight_canBeRemodelled {
+	background-color:#062d2b;
+}
+.tab_expcalc .goal_template {
+	background-color:#cdf;
+}
 .tab_expcalc .ship_goal .ship_value {
-	color:#fff !important;
+	color:#cdf;
 }
 .tab_expcalc .ship_goal .ship_info .ship_name {
 	color:#fff;
@@ -741,33 +823,10 @@ a:hover {
 	background-color:#333333;
 	border-radius: 0px !important;
 }
-.tab_expcalc .ship_goal.ship_closeToRemodel{
-	background-color:#555555;
+.tab_expcalc .goal_template.disabled {
+	background: #666666;
+	border: 1px solid;
 }
-@-webkit-keyframes ship_closeToRemodel{
-	0%  {background-color:#555555;}
-	50%  {background-color:#000000;}
-	100%  {background-color:#555555;}
-}
-@keyframes ship_closeToRemodel {
-	0%  {background-color:#555555;}
-	50%  {background-color:#000000;}
-	100%  {background-color:#555555;}
-}
-.tab_expcalc .ship_goal.ship_canBeRemodelled{
-	background-color:#555555;
-}
-@-webkit-keyframes ship_canBeRemodelled{
-	0%  {background-color:#555555;}
-	50%  {background-color:#000000;}
-	100%  {background-color:#555555;}
-}
-@keyframes ship_canBeRemodelled {
-	0%  {background-color:#555555;}
-	50%  {background-color: #000000;}
-	100%  {background-color:#555555;}
-}
-
 .tab_expcalc .goal_template .goal_value {
 	color:#fff !important;
 }
@@ -798,6 +857,22 @@ a:hover {
 	line-height:22px;
 	margin-top:10px;
 }
+.tab_expcalc .gt_content.new_template {
+	background: #333333;
+	border: 1px;
+}
+
+.tab_expcalc .ship_goal .ship_result .ship_value,
+.tab_expcalc .ship_goal .ship_value.yes_or_no,
+.tab_expcalc .goal_template .goal_value.yes_or_no {
+	color:#fbb;
+}
+
+.tab_expcalc .ship_goal .ship_value.yes_or_no.bool_no,
+.tab_expcalc .goal_template .goal_value.yes_or_no.bool_no {
+	color:#cdf;
+}
+
 /* Badge */
 .tab_badge .export_box {
     background:#131313;
@@ -828,6 +903,7 @@ a:hover {
 	color:#ffcc00;
 }
 .tab_gears .itemSorters .sortControl img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
 .tab_gears .itemSorters .sortControl:hover {
@@ -835,6 +911,7 @@ a:hover {
 	color:#000000;
 }
 .tab_gears .itemSorters .sortControl:hover img {
+	filter: invert(0%);
 	-webkit-filter: invert(0%);
 }
 
@@ -848,6 +925,7 @@ a:hover {
 	background:none !important;
 }
 .tab_gears .slotitem .info .item_stat img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
 .tab_gears .slotitem .holders dt {
@@ -901,6 +979,7 @@ a:hover {
 	padding:5px 0px 10px 0px;
 }
 .tab_aircraft .slotitem .info .item_stat img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
 .tab_aircraft .slotitem .info .icon {
@@ -910,6 +989,7 @@ a:hover {
 	
 }
 .tab_aircraft .slotitem .instance_aaicon img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
 .tab_aircraft .slotitem .instance_aaval.activeSquad {
@@ -922,13 +1002,17 @@ a:hover {
 }
 
 /* Akashi */
+.tab_akashi .control {
+	background:#444;
+	color:#fff;
+}
 .tab_akashi .weekday {
 	color:#ffffff;
 	background:#555555;
 }
 .tab_akashi .weekday.active {
 	color:#333333;
-	background:#CCCCCC;
+	background:#cccccc;
 }
 .tab_akashi .equipment {
 	border-bottom:1px solid #777;
@@ -937,6 +1021,21 @@ a:hover {
 .tab_akashi .equipment.disabled {
 	opacity:0.4;
 	background:#621f1f;
+}
+.tab_akashi .eq_res .eq_res_line.insufficient {
+	background:#710 !important;
+}
+.tab_akashi .eq_res .insufficient {
+	color:#f10 !important;
+}
+.tab_akashi .equipment {
+	color:#9e9e9e;
+}
+.tab_akashi .eq_res .eq_res_value {
+	color:#9e9e9e;
+}
+.tab_akashi .eq_res .eq_res_value.consumed_name > div.cnt.locked {
+	color:#ec0;
 }
 
 /* Fleet */
@@ -956,6 +1055,7 @@ a:hover {
 	background:#131313;
 }
 .detail_field img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
 .detail_field.incomplete {
@@ -964,10 +1064,36 @@ a:hover {
 .tab_fleet .fleet_ships {
 	height:160px;
 }
+.ui-tooltip-content .ship_tooltip .ship_full_name span.ship_yomi {
+	color:#777 !important;
+}
+.ui-tooltip-content .ship_tooltip .stat_icon img {
+	filter: invert(100%);
+	-webkit-filter: invert(100%);
+}
+.ui-tooltip-content .ship_tooltip .stat_icon {
+	background-color:#333 !important;
+	border:1px solid #111 !important;
+	border-right-color:#333 !important;
+	border-bottom-color:#555 !important;
+}
+.ui-tooltip-content .ship_tooltip .stat_value {
+	background-color:#444 !important;
+	border:1px solid #222 !important;
+	border-right-color:#777 !important;
+	border-bottom-color:#777 !important;
+}
+.ui-tooltip-content .ship_tooltip .aa_col {
+	background-color:#444 !important;
+	border:1px solid #222 !important;
+	border-right-color:#777 !important;
+	border-bottom-color:#777 !important;
+}
+
 /* SHIP BOX
 --------------------------------*/
 .tab_fleet .fleet_ship {
-	height:160px;
+	height:175px;
 	margin:5px 2px 0px 0px;
 	background:#131313;
 	border:1px solid #444444;
@@ -1095,12 +1221,20 @@ a:hover {
 	font-weight:bold;
 }
 
-.tab_flowchart .questInfo.complete {
-	color:#016901;
+.tab_flowchart .questInfo.complete .questDesc {
+	color:#4caf50;
 }
 .tab_flowchart .questExtraItem.active {
 	background:#81811a;
 	color:#fff;
+}
+.tab_flowchart .questFlowItem .questOverride {
+	color:#444 !important;
+}
+.tab_flowchart .questFlowItem .questToggle,
+.tab_flowchart .questFlowItem .questRemove,
+.tab_flowchart .questExtraItem .questRemove {
+	background:#444;
 }
 
 .tab_flowchart .questIcon.type3 {
@@ -1116,6 +1250,17 @@ a:hover {
 	color:#fff;
 }
 
+/* SHIP QUESTS
+--------------------------------*/
+.tab_shipquests .ship_item.odd .ship_field {
+	background:#303030;
+}
+.tab_shipquests .ship_item.even .ship_field {
+	background:#303030;
+}
+.tab_shipquests .ship_item:hover .ship_field {
+	background:#000000;
+}
 
 /* MAPS
 --------------------------------*/
@@ -1215,10 +1360,12 @@ a:hover {
 
 .tab_event .sortie_list .node_formation img,
 .tab_maps .sortie_list .node_formation img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
 .tab_event .sortie_list .node_eformation img,
 .tab_maps .sortie_list .node_eformation img {
+	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
 .tab_event .sortie_list .node_exp,
@@ -1238,7 +1385,34 @@ a:hover {
 .tab_encounters .encounter_record {
 	background:#414141 !important;
 }
-
+/* PVP
+--------------------------------*/
+.tab_pvp .page_list {
+	background:#222 !important;
+}
+.tab_pvp .toggles {
+	background:#222 !important;
+}
+.tab_pvp .pvp_record {
+	background:#303030 !important;
+}
+.tab_pvp .pvp_battle {
+	border-left:1px solid #369 !important;
+	border-right:1px solid #369 !important;
+}
+.tab_pvp .pvp_details_ship {
+	background:#222 !important;
+}
+.tab_pvp .pvp_player .pvp_details_ship {
+	border:1px solid #004d99;
+}
+.tab_pvp .pvp_opponent .pvp_details_ship {
+	border:1px solid #b30000;
+}
+.tab_pvp .pvp_info .pvp_dl {
+	background:#369 !important;
+	border:1px solid #3f8cd9;
+}
 /* SHIPS LIBRARY
 --------------------------------*/
 .tab_mstship .filters {
@@ -1251,21 +1425,312 @@ a:hover {
 .tab_mstship .shipRecords {
 	background:#222 !important;
 }
+.tab_mstship .shipRecord:hover {
+	background:#039 !important;
+}
+.tab_mstship .shipInfo .more .remodel_name a {
+	color:#ffcc00 !important;
+}
 .tab_mstship .shipInfo .ship_stat_icon img {
+	filter:invert(100%);
+	-webkit-filter:invert(100%);
+}
+.tab_mstship .shipInfo .at_level .rsc_icon img {
+	filter:invert(100%);
 	-webkit-filter:invert(100%);
 }
 .tab_mstship .shipInfo .voice {
 	background:#222 !important;
+	border:1px solid #3e3e3e !important;
 }
+.tab_mstship .shipInfo .aaci .aaciPattern.odd {
+	background:#444 !important;
+}
+.tab_mstship .shipInfo .aaci .aaciPattern.even {
+	background:#333 !important;
+}
+.tab_mstship .shipInfo .aaci .aaciPattern.triggerable {
+	background:#ed3;
+}
+
 /* GEARS LIBRARY
 --------------------------------*/
 .tab_mstgear .gearRecords {
 	background:#222 !important;
 }
+.tab_mstgear .gearRecord:hover {
+	background:#039 !important;
+}
 .tab_mstgear .gearInfo {
 	background:#222 !important;
-
 }
 .tab_mstgear .gearInfo .stat_icon img {
+	filter:invert(100%);
 	-webkit-filter:invert(100%);
+}
+/* SHIP COMPARE
+--------------------------------*/
+.tab_compare .compare_select_back {
+	color: black;
+}
+.tab_compare .compare_list {
+	border-bottom:1px solid #585858 !important;
+}
+.tab_compare .compare_ship {
+	background: #333333;
+}
+.tab_compare .compare_remove {
+	background:#7d3e3e !important;
+}
+.tab_compare .compare_ship_stat {
+	background:#017701;
+}
+.tab_compare .compare_ship_stat.mono img {
+	filter:invert(100%);
+	-webkit-filter:invert(100%);
+}
+.tab_compare .compare_select_back {
+	border:1px solid #77;
+	background:#292929;
+	color:#aaa;
+}
+.tab_compare .compare_select_back.active {
+	background: #777;
+	color:#ccc;
+}
+.tab_compare .compare_select_stat {
+	border:1px solid #444;
+	background:#292929;
+}
+.tab_compare .compare_select_stat.active {
+	background: #777;
+}
+.tab_compare .compare_select_stat.mono img {
+	filter:invert(100%);
+	-webkit-filter:invert(100%);
+}
+.tab_compare .compare_ship_bar {
+	background:#888;
+}
+
+/* EXPEDITION SCORER
+--------------------------------*/
+.tab_expedscorer .page_panel {
+	width: 700px;
+}
+.tab_expedscorer .control_box {
+	background: #666666;
+}
+
+.tab_expedscorer .control_box > .header {
+	background-color: #cacaca;
+	color: black;
+}
+
+.tab_expedscorer .control_box .content button {
+	background: #9c9c9c;
+	border-color: #9c9c9c;
+	color: white;
+}
+
+.tab_expedscorer .table-hover tbody tr:hover td,
+.tab_expedscorer .table-hover tbody tr:hover th {
+	color: black;
+}
+
+.tab_expedscorer .control_box.resource .resource_box > .slider .slider-handle {
+	/* this was used just for steel, and other resources have their own coloring:
+
+		fuel:
+			background-image:linear-gradient(to bottom,#5ca353 0,#177e09 100%);
+		ammo:
+			background-image:linear-gradient(to bottom,#a79b6d 0,#5b4d2c 100%);
+		bauxite:
+			background-image:linear-gradient(to bottom,#f0b07b 0,#935f39 100%);
+
+		the effect does not look good, so let's just use this for every slider
+	 */
+	background-image:linear-gradient(to bottom,#cecece 0,#909090 100%);
+}
+
+.tab_expedscorer .control_box.calc.out_of_sync button {
+	color: #0056ff;
+}
+
+/* EXPEDITION HISTORY
+--------------------------------*/
+.tab_expedpast .page_panel {
+	width: 700px;
+}
+
+.tab_expedpast .expedNumBox {
+	background: #666666;
+}
+.tab_expedpast .exped_item {
+	background: #666666;
+	color: black;
+}
+.tab_expedpast .exped_item .exped_info {
+	color: white;
+}
+
+.tab_expedpast .pagination > li > a {
+	color: white;
+	background: #666666;
+}
+
+.tab_expedpast .pagination > li.active > a {
+	color: white;
+	background: #337ab7;
+}
+/* QUOTES
+--------------------------------*/
+.tab_quotes .ship_list {
+	background:#222 !important;
+}
+
+.tab_quotes .ship_list .ship_entity:hover {
+	background:#039 !important;
+}
+
+.tab_quotes .part_right .voice_entity.direct {
+	background: #003300;
+}
+
+.tab_quotes .part_right .voice_entity.inherit {
+	background: #00344d;
+}
+.tab_quotes .part_right .voice_entity .jp_src,.en_src {
+	background: #333;
+}
+.tab_quotes .part_right .voice_entity .sp_quote {
+	background: #625;
+}
+.tab_quotes .part_right .voice_entity .voice {
+	border: 1px solid gray;
+	background: #00264d;
+}
+
+.tab_quotes .part_right .voice_entity.inherit .source {
+    color: #00ffff;
+}
+.tab_quotes .part_right .voice_entity.direct .source {
+    color: #00ff00;
+}
+/* TRANSLATIONS
+--------------------------------*/
+.tab_translations .tr-item.translation_done .tr-key,
+.tab_translations .tr-item.translation_done .tr-from,
+.tab_translations .tq-item.translation_done .tq-key,
+.tab_translations .tq-item.translation_done .tq-from {
+	color: cyan;
+}
+
+.tab_translations .tr-item.translation_missing .tr-key,
+.tab_translations .tr-item.translation_missing .tr-from,
+.tab_translations .tq-item.translation_missing .tq-key,
+.tab_translations .tq-item.translation_missing .tq-from,
+.tab_translations .tq-item .tq-name.translation_missing,
+.tab_translations .tq-item .tq-desc.translation_missing {
+	color: firebrick;
+}
+.tab_translations .page_content select {
+	background-color: black;
+	font-weight: bold;
+}
+
+/* EXPEDITION TABLE
+--------------------------------*/
+.tab_expedtable .btn-group {
+	border:1px solid #555 !important;
+}
+.tab_expedtable .btn-group button {
+    background-color: #141414;
+    background-image: none;
+    border: 0px none !important;
+	border-radius:0px !important;
+	color: #aaa;
+}
+.tab_expedtable .btn-secondary:hover {
+	background-color: #000;
+}
+.tab_expedtable .btn-secondary:active,
+.tab_expedtable .btn-secondary.active,
+.tab_expedtable .show > .btn-secondary.dropdown-toggle {
+	background:#353535;
+	color:#ffcc00;
+}
+.tab_expedtable .btn-secondary.disabled,
+.tab_expedtable .btn-secondary:disabled {
+  opacity:0.4;
+}
+
+.tab_expedtable .exped_row {
+	color: white;
+	border:0px none !important;
+	font-size:12px;
+	margin-bottom:2px;
+}
+
+.tab_expedtable .exped_row .exped_view {
+	background-color: #2f2f2f;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.resource {
+	background: #003366;
+}
+
+.tab_expedtable .exped_row {
+	border: 1px solid #7a7a84;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box .header {
+	background: #151515;
+	border-bottom: 1px solid #414141;
+	padding:3px 0px 3px 5px;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box {
+	background-color: #2f2f2f;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.item2 {
+	background: #5f4100;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.resource.fuel,
+.tab_expedtable .exped_row .exped_view .cost .view_general .fuel,
+.tab_expedtable #cost_model_content_root table .fuel {
+	color: #92c992;
+}
+
+.tab_expedtable .exped_row .exped_view .cost .view_general .ammo,
+.tab_expedtable #cost_model_content_root table .ammo,
+.tab_expedtable .exped_row .exped_view .info_col.resource.ammo {
+	color: #dec558;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.resource.steel {
+	color: #cccccc;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.resource.bauxite {
+	color: #b68f55;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.edit_btn {
+	color:#aaa;
+	font-size:12px;
+}
+
+.tab_expedtable .config_box input[type=text] {
+	border:1px solid #414141;
+}
+.tab_expedtable .config_box input[type=text]:disabled {
+	border:0px none;
+}
+.tab_expedtable  .sort_methods .ord {
+	line-height:20px;
+	color:#aaa;
+	font-size:12px;
 }

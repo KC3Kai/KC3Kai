@@ -1,0 +1,432 @@
+/* GLOBAL
+--------------------------*/
+body {
+	background-color:#f5f5f5;
+}
+.box-wrap {
+	width:800px;
+	min-height:600px;
+	margin:0px auto;
+	background:#fcfcfc;
+	padding:10px 10px 0px;
+	font-size:14px;
+}
+.disabled {
+	display:none;
+}
+.notApplicable {
+	opacity:0.2;
+	filter:blur(1px);
+	pointer-events: none;
+}
+
+/* HEADER
+--------------------------*/
+.headBox {
+	width:780px;
+	margin:10px 0px 20px 0px;
+}
+.headBox .headImage {
+	width:24px;
+	height:24px;
+	float:left;
+	margin:0px 6px 0px 0px;
+}
+.headBox .headImage img {
+	width:24px;
+	height:24px;
+	vertical-align: top;
+}
+.headBox .headTitle {
+	width:750px;
+	height:24px;
+	line-height:24px;
+	font-size:18px;
+}
+
+/* SECTIONS
+--------------------------*/
+.section {
+	width:780px;
+	margin:13px 0px 0px 0px;
+}
+.section.hide {
+	display:none;
+}
+.section .sectionHead {
+	width:780px;
+	line-height:20px;
+	font-size:10px;
+	margin:0px 0px 10px 0px;
+	border-bottom:1px solid #e5e5e5;
+	padding:4px 5px;
+}
+.section .sectionIcon {
+	width:18px;
+	height:18px;
+	margin:0px 5px 0px 0px;
+	float:left;
+}
+.section .sectionIcon img {
+	width:18px;
+	height:18px;
+	vertical-align: top;
+}
+.section .sectionText {
+	width:747px;
+	height:18px;
+	float:left;
+	font-size:16px;
+}
+.section .sectionText a {
+	float:right;
+	font-size:12px;
+}
+.section .sectionBody {
+	padding:0px 0px 0px 20px;
+}
+.section .sectionDesc {
+	font-size:12px;
+	margin:0px 0px 5px 0px;
+}
+.section ul {
+	list-style: none;
+	margin:0px;
+	padding:0px;
+}
+.divider {
+	height:30px;
+}
+
+/* SECTION-HALF (1/2)
+--------------------------*/
+.section.half {
+	width:380px;
+	min-height:10px;
+	margin-right:10px;
+	float:left;
+}
+.section.half .sectionHead {
+	width:380px;
+}
+.section.half .sectionText {
+	width:345px;
+}
+.section.half .sectionBody {
+	padding:0px 5px 0px 5px;
+}
+
+/* SECTION-MEDIUM (2/3)
+--------------------------*/
+.section.medium {
+	width:510px;
+	min-height:10px;
+	margin-right:10px;
+	float:left;
+}
+.section.medium .sectionHead {
+	width:510px;
+}
+.section.medium .sectionText {
+	width:477px;
+}
+.section.medium .sectionBody {
+	padding:0px 5px 0px 5px;
+}
+
+/* SECTION-SHORT (1/3)
+--------------------------*/
+.section.short {
+	width:250px;
+	min-height:10px;
+	margin-right:10px;
+	float:left;
+}
+.section.short .sectionHead {
+	width:250px;
+}
+.section.short .sectionText {
+	width:217px;
+}
+.section.short .sectionBody {
+	padding:0px 5px 0px 5px;
+}
+
+/* CUSTOMIZE OPTIONS
+--------------------------*/
+.enableCustomizations {
+	width:780px;
+	margin:0px 0px 10px 0px;
+}
+.enableCustomizations .customization {
+	width:780px;
+	
+}
+.enableCustomizations .customizationText {
+	width:745px;
+}
+.customization {
+	width:240px;
+	height:18px;
+	margin:0px 5px 5px 0px;
+	float:left;
+}
+.customizationText {
+	width:205px;
+	height:18px;
+	line-height:18px;
+	float:left;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+
+/* HOTKEYS
+--------------------------*/
+.hotkeys {
+	margin:0px;
+	padding:0px;
+	list-style: none;
+}
+.hotkeys li {
+	width:490px;
+	margin:0px 0px 7px 0px;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+.hotkeys li kbd {
+	font-size:14px;
+}
+.hotkeys li span {
+	font-size:12px;
+}
+
+/* ALT GAME MODES
+--------------------------*/
+ul.altGameModes {
+	padding:0px 0px 0px 10px;
+}
+ul.altGameModes li {
+	width:370px;
+	margin:0px 0px 3px 0px;
+	padding:3px 5px
+}
+ul.altGameModes li.selected {
+	background:#def;
+}
+ul.altGameModes li.deprecated:hover {
+	background:#fee;
+}
+ul.altGameModes li .modeIcon {
+	float:left;
+	width:30px;
+}
+ul.altGameModes li .modeIcon img {
+	width:30px;
+	height:30px;
+}
+ul.altGameModes li .modeName {
+	float:right;
+	width:320px;
+	line-height:16px;
+	font-size:12px;
+}
+ul.altGameModes li .modeName.activeMode {
+	color:#5295b8;
+	font-weight:bold;
+}
+ul.altGameModes li .modeName.oldMode {
+	color:#bbb;
+}
+ul.altGameModes li .modeDesc {
+	float:right;
+	width:320px;
+	line-height:12px;
+	margin:0px 0px 2px 0px;
+	font-size:11px;
+}
+ul.altGameModes li .modePlay {
+	float:right;
+	width:320px;
+	font-size:11px;
+	color:#daa6a6;
+}
+
+/* LINKS
+--------------------------*/
+.linkItem {
+	width:250px;
+	height:30px;
+	margin:0px 0px 5px 0px;
+	line-height:30px;
+	display: block;
+}
+.linkIcon {
+	width:30px;
+	height:30px;
+	float:left;
+	margin:0px 5px 0px 0px;
+}
+.linkIcon img {
+	width:20px;
+	height:20px;
+	margin:5px;
+	vertical-align: top;
+}
+.linkName {
+	width:215px;
+	height:30px;
+	float:left;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+
+/* F12 INSTRUCTIONS
+--------------------------*/
+.instructStep  {
+	margin:0px 0px 10px 0px;
+}
+.instructStep .stepNum {
+	width:30px;
+	height:30px;
+	line-height:30px;
+	border-radius:20px;
+	font-size:20px;
+	color:#fff;
+	background:#69b;
+	text-align:center;
+	float:left;
+	margin:0px 10px 0px 0px;
+}
+.instructStep .stepText {
+	width:720px;
+	height:30px;
+	line-height:30px;
+	float:left;
+}
+.instructF12 {
+	font-size:18px;
+	display:none;
+}
+.instructKancolleTab {
+	font-size:14px;
+}
+
+/* IMPORTED
+--------------------------*/
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 30px;
+	height: 16px;
+	float:left;
+	margin:1px 5px 0px 0px;
+}
+.switch input { display:none; }
+.slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #c55;
+	-webkit-transition: .4s;
+	transition: .4s;
+}
+.slider:before {
+	position: absolute;
+	content: "";
+	height: 12px;
+	width: 12px;
+	left: 2px;
+	bottom: 2px;
+	background-color: white;
+	-webkit-transition: .4s;
+	transition: .4s;
+}
+input:checked + .slider {
+	background-color: #5c5;
+}
+input:focus + .slider {
+	box-shadow: 0 0 1px #5c5;
+}
+input:disabled + .slider {
+	background-color: #c55;
+}
+input:checked + .slider:before {
+	-webkit-transform: translateX(14px);
+	-ms-transform: translateX(14px);
+	transform: translateX(14px);
+}
+.slider.round {
+	border-radius: 16px;
+}
+.slider.round:before {
+	border-radius: 50%;
+}
+
+/* Loader Animation */
+.loader {
+  font-size: 10px;
+  text-indent: -9999em;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #aaa;
+  background: -moz-linear-gradient(left, #aaa 10%, rgba(255, 255, 255, 0) 42%);
+  background: -webkit-linear-gradient(left, #aaa 10%, rgba(255, 255, 255, 0) 42%);
+  background: -o-linear-gradient(left, #aaa 10%, rgba(255, 255, 255, 0) 42%);
+  background: -ms-linear-gradient(left, #aaa 10%, rgba(255, 255, 255, 0) 42%);
+  background: linear-gradient(to right, #aaa 10%, rgba(255, 255, 255, 0) 42%);
+  position: relative;
+  -webkit-animation: load3 1.4s infinite linear;
+  animation: load3 1.4s infinite linear;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+}
+.loader:before {
+  width: 50%;
+  height: 50%;
+  background: #aaa;
+  border-radius: 100% 0 0 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  content: '';
+}
+.loader:after {
+  background: #fff;
+  width: 75%;
+  height: 75%;
+  border-radius: 50%;
+  content: '';
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+@-webkit-keyframes load3 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes load3 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}

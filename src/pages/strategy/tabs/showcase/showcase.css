@@ -1,7 +1,48 @@
 .tab_showcase .factory {
 	display:none;
 }
+/* BUTTONS
+-----------------------------*/
+.tab_showcase .options .output_method {
+	margin-right: 10px;
+	float: left;
+}
+.tab_showcase .controls .control {
+	width: 140px;
+	height: 20px;
+	line-height: 20px;
+	margin: 0px 5px 0px 0px;
+	font-weight: bold;
+	font-size: 12px;
+	text-align: center;
+	float: left;
+	border-radius: 7px;
+}
+.tab_showcase  .control {
+}
 
+.tab_showcase  .control:hover {
+	background-color: #0066CC;
+}
+
+.tab_showcase .controls {
+	width: 700px;
+	margin: 0px 0px 0px 0px;
+	padding: 5px 10px;
+}
+.tab_showcase  .control.disabled {
+	background-color:#eee;
+}
+.tab_showcase  .control.disabled:hover {
+	background-color: #eee;
+	cursor:default;
+}
+.tab_showcase .exportResults div:first-child{
+	margin-top:10px;
+}
+.tab_showcase .exportResults a{
+	cursor: pointer;
+}
 /* SHIPS
 -----------------------------*/
 .tab_showcase .stype_box {

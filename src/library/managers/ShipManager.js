@@ -26,9 +26,22 @@ Saves and loads list to and from localStorage
 			return this.list["x"+rosterId] || (new KC3Ship());
 		},
 		
-		// Count number of ships
-		count :function(){
-			return Object.size(this.list) + this.pendingShipNum;
+		// Count number of ships satisfying some precondition.
+		// when precondition is not explicitly given, it counts all ships
+		// including pending ships.
+		// but pending ships are not counted when a precondition is given.
+		count: function( cond ){
+			if (typeof cond === "undefined") {
+				return Object.size(this.list) + this.pendingShipNum;
+			}
+			var n = 0;
+			var x;
+			for (var ind in this.list) {
+				x = this.list[ind];
+				if (cond.call(x, x))
+					n += 1;
+			}
+			return n;
 		},
 		
 		// Add or replace a ship on the list
@@ -88,6 +101,7 @@ Saves and loads list to and from localStorage
 				}).call(this);
 			} else {
 				// check ship master in lock_prep before lock request it
+				ConfigManager.loadIfNecessary();
 				if(ConfigManager.lock_prep[0] == cShip.rosterId) {
 					ConfigManager.lock_prep.shift();
 					if(!cShip.lock)
@@ -183,7 +197,7 @@ Saves and loads list to and from localStorage
 		remove :function( rosterId ){
 			console.log("removing ship", rosterId);
 			var thisShip = this.list["x"+rosterId];
-			if(thisShip != "undefined"){
+			if(typeof thisShip != "undefined"){
 				// initializing for fleet sanitizing of zombie ships
 				var shipTargetFleetID = this.locateOnFleet(rosterId);
 				// check whether the designated ship is on fleet or not
@@ -191,9 +205,10 @@ Saves and loads list to and from localStorage
 					PlayerManager.fleets[shipTargetFleetID].discard(rosterId);
 				}
 				// remove any equipments from her
-				for(var gctr in thisShip.items){
-					if(thisShip.items[gctr] > -1){
-						KC3GearManager.remove( thisShip.items[gctr] );
+				var items = thisShip.equipment(true);
+				for(var gctr in items){
+					if(items[gctr].itemId > 0){
+						KC3GearManager.remove( items[gctr].itemId );
 					}
 				}
 				
@@ -201,6 +216,19 @@ Saves and loads list to and from localStorage
 				this.save();
 				KC3GearManager.save();
 			}
+		},
+		
+		// Look for ships by specified conditions
+		find :function( cond ){
+			var result = [];
+			var x;
+			for(var i in this.list) {
+				x = this.list[i];
+				if(cond.call(x, x)) {
+					result.push(x);
+				}
+			}
+			return result;
 		},
 		
 		// Locate which fleet the ship is in, return -1 if not in any fleet

@@ -44,7 +44,7 @@ KC3改 Equipment Object
 		if(this.itemId===0){ return 0; }
 
 		// Check if this object is a fighter plane
-		if( KC3GearManager.antiAirFighterType2Ids.indexOf( this.master().api_type[2] ) > -1){
+		if( KC3GearManager.antiAirFighterType2Ids.indexOf( String(this.master().api_type[2]) ) > -1){
 			return Math.floor( Math.sqrt(capacity) * this.master().api_tyku );
 		}
 
@@ -88,13 +88,21 @@ KC3改 Equipment Object
 		if(this.itemId===0){ return 0; }
 
 		// Check if this object is a fighter plane
-		if( KC3GearManager.antiAirFighterType2Ids.indexOf( this.master().api_type[2] ) > -1){
+		if( KC3GearManager.antiAirFighterType2Ids.indexOf( String(this.master().api_type[2]) ) > -1){
 			var typInd = String( this.master().api_type[2] );
-
-			if (typeof ConfigManager.air_average[typInd] == 'undefined') {
-				ConfigManager.resetValueOf('air_average');
-			}
 			var airAverageTable = ConfigManager.air_average[typInd];
+			// if new type added to default, have to reset to default
+			if(typeof airAverageTable === 'undefined') {
+				var defaultTable = ConfigManager.defaults().air_average[typInd];
+				if(typeof defaultTable !== 'undefined') {
+					ConfigManager.resetValueOf('air_average');
+					airAverageTable = defaultTable;
+					console.info("Setting 'air_average' reset to default for missing type:", typInd);
+				} else {
+					console.warn("No 'air_average' setting found for type:", typInd);
+					return 0;
+				}
+			}
 
 			var veteranBonus;
 			if(this.ace==-1){
@@ -120,14 +128,24 @@ KC3改 Equipment Object
 		if(this.itemId===0){ return [0,0]; }
 
 		// Check if this object is a fighter plane
-		if( KC3GearManager.antiAirFighterType2Ids.indexOf( this.master().api_type[2] ) > -1){
+		if( KC3GearManager.antiAirFighterType2Ids.indexOf( String(this.master().api_type[2]) ) > -1){
 			// console.log("this.ace", this.ace);
 
 			var typInd = String( this.master().api_type[2] );
-			if (typeof ConfigManager.air_bounds[typInd] == 'undefined') {
-				ConfigManager.resetValueOf('air_bounds');
-			}
 			var airBoundTable = ConfigManager.air_bounds[typInd];
+			// if new type added to default, have to reset to default
+			if(typeof airBoundTable === 'undefined') {
+				var defaultTable = ConfigManager.defaults().air_bounds[typInd];
+				if(typeof defaultTable !== 'undefined') {
+					ConfigManager.resetValueOf('air_bounds');
+					airBoundTable = defaultTable;
+					console.info("Setting 'air_bounds' reset to default for missing type:", typInd);
+				} else {
+					console.warn("No 'air_bounds' setting found for type:", typInd);
+					return [0,0];
+				}
+			} 
+
 			var veteranBounds;
 			if(this.ace==-1){
 				veteranBounds = airBoundTable[ 0 ];
@@ -210,11 +228,41 @@ KC3改 Equipment Object
 	};
 
 	KC3Gear.prototype.bauxiteCost = function(slotCurrent, slotMaxeq){
+		// Only used for the slot already equiped aircrafts, unused for now
 		if(this.itemId===0){ return 0; }
-		if( KC3GearManager.antiAirFighterType2Ids.indexOf( this.master().api_type[2] ) > -1){
-			return 5 * (slotMaxeq - slotCurrent);
+		if( KC3GearManager.carrierBasedAircraftType3Ids.indexOf( this.master().api_type[3] ) > -1){
+			return KC3GearManager.carrierSupplyBauxiteCostPerSlot * (slotMaxeq - slotCurrent);
 		}
 		return 0;
 	};
 
+
+	KC3Gear.prototype.aaDefense = function(forFleet) {
+		if (this.masterId === 0)
+			return 0;
+		// permissive on "this.stars" in case the improvement level is not yet available.
+		var stars = (typeof this.stars === "number") ? this.stars : 0;
+		return KC3Gear.aaDefense( this.master(), stars, forFleet );
+	};
+
+	// there is no need of any Gear instance to calculate this
+	// as long as we know the improvement level
+	// serves as a shortcut to AntiAir module
+	KC3Gear.aaDefense = function(mst,stars,forFleet) {
+		return AntiAir.calcEquipmentAADefense(mst,stars,forFleet);
+	};
+  
+	// prepare info necessary for deckbuilder
+	KC3Gear.prototype.deckbuilder = function() {
+		if (this.masterId <= 0)
+			return false;
+		var result = {id: this.masterId};
+		if (typeof this.stars !== "undefined" &&
+			this.stars > 0)
+			result.rf = this.stars;
+		if (typeof this.ace !== "undefined" &&
+			this.ace > 0)
+			result.mas = this.ace;
+		return result;
+	};
 })();

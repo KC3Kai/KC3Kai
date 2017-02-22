@@ -92,6 +92,10 @@
 	overflow:hidden;
 	white-space:nowrap;
 }
+.tab_mstgear .gearInfo .name:hover {
+	text-overflow:clip;
+	white-space:normal;
+}
 .tab_mstgear .gearInfo .types {
 	width:270px;
 	height:20px;
@@ -143,6 +147,19 @@
 	float:left;
 	padding:0px 0px 0px 5px;
 	font-weight: bold;
+}
+.tab_mstgear .gearInfo .scrap {
+	height:20px;
+	margin:0px 0px 10px 0px;
+}
+.tab_mstgear .gearInfo .scrap div {
+	width:60px;
+	float:left;
+	padding:0px 5px 0px 0px;
+}
+.tab_mstgear .gearInfo .scrap div span {
+	font-weight:bold;
+	padding:0px 0px 0px 5px;
 }
 
 /* INTRO */

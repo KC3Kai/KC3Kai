@@ -3,7 +3,7 @@
 	"name": "KC3改 Development",
 	"short_name": "KC3改",
 	"description": "Kantai Collection Game Viewer and Helper",
-	"version": "30.12.0",
+	"version": "31.1.0",
 	"devtools_page": "pages/devtools/init.html",
 	"options_page": "pages/settings/settings.html",
 	"icons": {
@@ -30,9 +30,17 @@
 	],
 	"background": {
 		"scripts": [
+			"assets/js/global.js",
 			"assets/js/jquery-2.1.3.min.js",
 			"library/objects/Messengers.js",
+			"library/objects/Quest.js",
+			"library/objects/Screenshot.js",
 			"library/managers/ConfigManager.js",
+			"library/managers/QuestManager.js",
+			"library/modules/Master.js",
+			"library/modules/RemodelDb.js",
+			"library/modules/Meta.js",
+			"library/modules/Translation.js",
 			"library/modules/Service.js"
 		]
 	},
@@ -45,9 +53,20 @@
 		},
 		{
 			"matches":["*://www.dmm.com/netgame/*/app_id=854854*"],
+			"css": [
+				"library/injections/dmm.css"
+			],
 			"js": [
+				"assets/js/global.js",
 				"assets/js/jquery-2.1.3.min.js",
 				"library/objects/Messengers.js",
+				"library/objects/Quest.js",
+				"library/managers/ConfigManager.js",
+				"library/managers/QuestManager.js",
+				"library/modules/Master.js",
+				"library/modules/Meta.js",
+				"library/modules/Translation.js",
+				"library/injections/dmm_takeover.js",
 				"library/injections/dmm.js"
 			],
 			"run_at": "document_end",
@@ -64,5 +83,8 @@
 			"all_frames": true
 		}
 	],
-	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com 'unsafe-eval'; object-src 'self'"
+	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com 'unsafe-eval'; object-src 'self'",
+	"web_accessible_resources": [
+		"assets/img/*"
+	]
 }

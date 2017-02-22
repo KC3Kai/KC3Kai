@@ -26,11 +26,37 @@
 	<div class="help_q">Night scout seaplane should be on the Night gear box!</div>
 	<div class="help_a">Unfortunately, in game data it is still categorized under sea planes. I am sorry but we will not go for the extra effort of making an exception for this equipment.</div>
 
+	<div class="help_q">Why some of my equipment\ships are not shown on export image?</div>
+	<div class="help_a">Image are showing only locked ships and items. If you acquired and locked item in current game session, you might need to go to home port once.</div>
+
+	<div class="help_q">Exporter is downloading image instead of opening it in new tab or Imgur!</div>
+	<div class="help_a">In case of Imgur error or image data string is being too big for new tab to handle it will be downloaded.</div>
+
 	<div class="help_more">
 		<a href="https://github.com/KC3Kai/KC3Kai/wiki/Strategy-Room%3A-Showcase">Learn more</a>
 	</div>
 </div>
 
+<div class="controls">
+	<div class="options">
+		<div class="output_method">
+			<label for="exportOutputMode">Output to </label>
+			<select id="exportOutputMode">
+				<option value="2">New Tab</option>
+				<option value="1">Imgur</option>
+				<option value="0">Download</option>
+			</select>
+		</div>
+		<div class="admiral_info">
+			<input type="checkbox" id="exportAddName">
+			<label for="exportAddName">Show my name and level on image</label>
+		</div>
+	</div>
+	<div class="control hover" id="exportShips">Export Ships</div>
+    <div class="control hover" id="exportEquipment">Export Equipment</div>
+	<div class="clear"></div>
+	<div class="exportResults"></div>
+</div>
 
 <div class="page_padding">
 	<div class="page_section">Ships</div>

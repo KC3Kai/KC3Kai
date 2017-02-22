@@ -24,14 +24,20 @@ KC3改 Ship Object
 		this.ls = [0,0];
 		this.lk = [0,0];
 		this.range = 0;
+		// corresponds to "api_slot" in the API,
+		// but devs change it to length == 5 someday,
+		// and item of ex slot still not at 5th.
 		this.items = [-1,-1,-1,-1];
-        // ex_item correponses to "api_slot_ex" in the API,
-        // which has special meanings on few values:
-        // 0: ex slot is not available
-        // -1: ex slot is available but nothing is equipped
+		// corresponds to "api_slot_ex" in the API,
+		// which has special meanings on few values:
+		// 0: ex slot is not available
+		// -1: ex slot is available but nothing is equipped
 		this.ex_item = 0;
-		this.slots = [0,0,0,0];
+		// "api_onslot" in API, also changed to length 5,
+		// not sure it represent size of ex slot or not
+		this.slots = [0,0,0,0,0];
 		this.slotnum = 0;
+		this.speed = 0;
 		this.mod = [0,0,0,0,0];
 		this.fuel = 0;
 		this.ammo = 0;
@@ -52,10 +58,11 @@ KC3改 Ship Object
 			/* Data Example
 			typeName: type + W {WorldNum} + M {MapNum} + literal underscore + type_id
 				type_id can be described as sortie/pvp/expedition id
-			valueStructure: typeName int[2][3] of [fuel, ammo, bauxites] and [fuel, steel, buckets]
+			valueStructure: typeName int[3][3] of [fuel, ammo, bauxites] and [fuel, steel, buckets] and [steel]
 				"sortie3000":[[12,24, 0],[ 0, 0, 0]], // OREL (3 nodes)
 				"sortie3001":[[ 8,16, 0],[ 0, 0, 0]], // SPARKLE GO 1-1 (2 nodes)
 				"sortie3002":[[ 4,12, 0],[ 0, 0, 0]], // PVP (1 node+yasen)
+				"sortie3003":[[ 0, 0, 0],[ 0, 0, 0],[-88]], // 1 node with Jet battle of 36 slot
 
 				Practice and Expedition automatically ignore repair consumption.
 				For every action will be recorded before the sortie.
@@ -109,7 +116,8 @@ KC3改 Ship Object
 				this.ls = data.api_sakuteki;
 				this.lk = data.api_lucky;
 				this.range = data.api_leng;
-				this.items = data.api_slot;
+				// git rid of unused 5th, guarantee equipment(4) is exItem
+				this.items = data.api_slot.slice(0, 4);
 				if(typeof data.api_slot_ex != "undefined"){
 					this.ex_item = data.api_slot_ex;
 				}
@@ -118,6 +126,7 @@ KC3改 Ship Object
 				}
 				this.slotnum = data.api_slotnum;
 				this.slots = data.api_onslot;
+				this.speed = data.api_soku;
 				this.mod = data.api_kyouka;
 				this.fuel = data.api_fuel;
 				this.ammo = data.api_bull;
@@ -154,7 +163,11 @@ KC3改 Ship Object
 			case 'number':
 			case 'string':
 				/* Number/String => converted as equipment slot key */
-				return self.getGearManager().get( this.items[slot] );
+				return self.getGearManager().get( slot>=this.items.length ? this.ex_item : this.items[slot] );
+			case 'boolean':
+				/* Boolean => return all equipments with ex item if true */
+				return slot ? this.equipment().concat(this.exItem())
+					: this.equipment();
 			case 'undefined':
 				/* Undefined => returns whole equipment as equip object */
 				return Array.apply(null, this.items)
@@ -167,10 +180,12 @@ KC3改 Ship Object
 				});
 		}
 	};
-	KC3Ship.prototype.isFast = function(){ return this.master().api_soku>=10; };
+	KC3Ship.prototype.isFast = function(){ return (this.speed || this.master().api_soku) >= 10; };
 	KC3Ship.prototype.exItem = function(){ return this.getGearManager().get(this.ex_item); };
 	KC3Ship.prototype.isStriped = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.5); };
 	KC3Ship.prototype.isTaiha   = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.25) && !this.isRepaired(); };
+	KC3Ship.prototype.speedName = function(){ return KC3Meta.shipSpeed(this.speed); };
+	KC3Ship.prototype.rangeName = function(){ return KC3Meta.shipRange(this.range); };
 	KC3Ship.prototype.getDefer = function(){
 		// returns a new defer if possible
 		return deferList[this.rosterId] || [];
@@ -264,6 +279,28 @@ KC3改 Ship Object
 		this.repair.fill(0);
 	};
 
+	/**
+	 * Return max HP of a ship. Static method for library.
+	 * Especially after marriage, api_taik[1] is not used in game.
+	 * @return false if ship ID belongs to aybssal or nonexistence
+	 * @see http://wikiwiki.jp/kancolle/?%A5%B1%A5%C3%A5%B3%A5%F3%A5%AB%A5%C3%A5%B3%A5%AB%A5%EA
+	 */
+	KC3Ship.getMaxHp = function(masterId, currentLevel){
+		var masterHp = masterId > 500 ? undefined :
+			(KC3Master.ship(masterId) || {"api_taik":[]}).api_taik[0];
+		return ((currentLevel || 155) < 100 ? masterHp :
+			masterHp >  90 ? masterHp + 9 :
+			masterHp >= 70 ? masterHp + 8 :
+			masterHp >= 50 ? masterHp + 7 :
+			masterHp >= 40 ? masterHp + 6 :
+			masterHp >= 30 ? masterHp + 5 :
+			masterHp >= 8  ? masterHp + 4 :
+			masterHp + 3) || false;
+	};
+	KC3Ship.prototype.maxHp = function(){
+		return KC3Ship.getMaxHp(this.masterId, this.level);
+	};
+
 	/* REPAIR TIME
 	Get ship's docking and Akashi times
 	when optAfterHp is true, return repair time based on afterHp
@@ -305,8 +342,7 @@ KC3改 Ship Object
 	KC3Ship.prototype.equipmentTotalLoS = function () {
 		var sumLoS = 0;
 		var self = this;
-		$.each([0,1,2,3], function(_,ind) {
-			var item = self.equipment(ind);
+		$.each(this.equipment(true), function(_,item) {
 			if (item.masterId !== 0) {
 				sumLoS += item.master().api_saku;
 			}
@@ -319,11 +355,10 @@ KC3改 Ship Object
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.countEquipment = function(masterId) {
 		var self = this;
-		var getEquip = function(slotInd) {
-			var eId = self.equipment(slotInd);
-			return (eId.masterId === masterId) ? 1 : 0;
+		var getEquip = function(item) {
+			return (item.masterId === masterId) ? 1 : 0;
 		};
-		return [0,1,2,3].map( getEquip ).reduce(
+		return this.equipment(true).map( getEquip ).reduce(
 			function(a,b) { return a + b; }, 0 );
 	};
 
@@ -457,6 +492,7 @@ KC3改 Ship Object
 			supportPower += Number(this.equipment(1).supportPower());
 			supportPower += Number(this.equipment(2).supportPower());
 			supportPower += Number(this.equipment(3).supportPower());
+			supportPower += Number(this.equipment(4).supportPower());
 
 		}else{
 			// console.log( this.name(), "normal firepower for support" );
@@ -470,9 +506,10 @@ KC3改 Ship Object
 	   0 <= fuelPercent <= 1, < 0 use current fuel
 	   0 <= ammoPercent <= 1, < 0 use current ammo
 	   to calculate bauxite cost: bauxiteNeeded == true
-	   returns an object: {fuel: <fuelCost>, ammo: <ammoCost>, bauxite: <bauxiteCost>}
+	   to calculate steel cost per battles: steelNeeded == true
+	   returns an object: {fuel: <fuelCost>, ammo: <ammoCost>, steel: <steelCost>, bauxite: <bauxiteCost>}
 	 */
-	KC3Ship.prototype.calcResupplyCost = function(fuelPercent, ammoPercent, bauxiteNeeded) {
+	KC3Ship.prototype.calcResupplyCost = function(fuelPercent, ammoPercent, bauxiteNeeded, steelNeeded) {
 		var self = this;
 		var master = this.master();
 		var fullFuel = master.api_fuel_max;
@@ -492,18 +529,57 @@ KC3改 Ship Object
 		result.fuel = marriageConserve(result.fuel);
 		result.ammo = marriageConserve(result.ammo);
 		if(!!bauxiteNeeded){
-			var equipBauxiteCost = function() {
-				return self.equipment(0).bauxiteCost(self.slots[0], master.api_maxeq[0])
-					+ self.equipment(1).bauxiteCost(self.slots[1], master.api_maxeq[1])
-					+ self.equipment(2).bauxiteCost(self.slots[2], master.api_maxeq[2])
-					+ self.equipment(3).bauxiteCost(self.slots[3], master.api_maxeq[3]);
+			var slotsBauxiteCost = function(current, max) {
+				return current < max ? (max-current) * KC3GearManager.carrierSupplyBauxiteCostPerSlot : 0;
 			};
-			result.bauxite = equipBauxiteCost();
-			// Bauxite cost to replace planes shot down does not change by marriage.
+			var shipBauxiteCost = function() {
+				return slotsBauxiteCost(self.slots[0], master.api_maxeq[0])
+					+ slotsBauxiteCost(self.slots[1], master.api_maxeq[1])
+					+ slotsBauxiteCost(self.slots[2], master.api_maxeq[2])
+					+ slotsBauxiteCost(self.slots[3], master.api_maxeq[3]);
+			};
+			result.bauxite = shipBauxiteCost();
+			// Bauxite cost to fill slots not affected by marriage.
 			// via http://kancolle.wikia.com/wiki/Marriage
 			//result.bauxite = marriageConserve(result.bauxite);
 		}
+		if(!!steelNeeded){
+			result.steel = this.calcJetsSteelCost();
+		}
 		return result;
+	};
+
+	/**
+	 * Calculate steel cost of jet aircraft for 1 battle based on current slot size.
+	 * returns total steel cost for this ship at this time
+	 */
+	KC3Ship.prototype.calcJetsSteelCost = function(currentSortieId) {
+		var i, item, pc, self = this;
+		var totalSteel = 0, consumedSteel = 0;
+		for(i = 0; i < self.items.length; i++) {
+			item = self.equipment(i);
+			// Is Jet aircraft and left slot > 0
+			if(item.masterId > 0 && item.master().api_type[2] == 57 && self.slots[i] > 0) {
+				consumedSteel = Math.round(
+					self.slots[i]
+					* item.master().api_cost
+					* KC3GearManager.jetBomberSteelCostRatioPerSlot
+				) || 0;
+				totalSteel += consumedSteel;
+				if(!!currentSortieId) {
+					pc = self.pendingConsumption[currentSortieId];
+					if(!pc) {
+						pc = [[0,0,0],[0,0,0],[0]];
+						self.pendingConsumption[currentSortieId] = pc;
+					}
+					pc[2][0] -= consumedSteel;
+				}
+			}
+		}
+		if(!!currentSortieId && totalSteel > 0) {
+			KC3ShipManager.save();
+		}
+		return totalSteel;
 	};
 
 	/* Expedition Supply Change Check */
@@ -547,16 +623,87 @@ KC3改 Ship Object
 			return false;
 		
 		// only few DDs and CLs are capable of equipping daihatsu
-		// including:
-		// Abukuma K2(200), Verniy(147), Ooshio K2(199),
-		// Satsuki K2(418), Mutsuki K2(434), Kisaragi K2(435),
-		// Kasumi K2(464), Kasumi K2B(470),
-		// Asashio K2D(468), Kawakaze K2(469),
-		// Kinu K2(487)
-		if ([2,3].indexOf( master.api_stype ) !== -1 &&
-			[147,199,200,418,434,435,464,470,468,469,487].indexOf( this.masterId ) === -1)
+		// see comments below.
+		if ([2 /* DD */,3 /* CL */].indexOf( master.api_stype ) !== -1 &&
+			[
+				// Abukuma K2(200), Kinu K2(487)
+				200, 487,
+				// Satsuki K2(418), Mutsuki K2(434), Kisaragi K2(435)
+				418, 434, 435,
+				// Kasumi K2(464), Kasumi K2B(470), Ooshio K2(199), Asashio K2D(468), Arashio K2(490)
+				464, 470, 199, 468, 490,
+				// Verniy(147), Kawakaze K2(469)
+				147, 469
+			].indexOf( this.masterId ) === -1)
 			return false;
 		return true;
+	};
+
+	// test to see if this ship is capable of opening ASW
+	// reference: http://kancolle.wikia.com/wiki/Partials/Opening_ASW as of Feb 3, 2017
+	// there are two requirements:
+	// - sonar should be equipped
+	// - ASW stat >= 100
+	// also Isuzu K2 can do OASW unconditionally
+	KC3Ship.prototype.canDoOASW = function () {
+		// master Id for Isuzu
+		if (this.masterId === 141)
+			return true;
+
+		// shortcutting on the stricter condition first
+		if (this.as[0] < 100)
+			return false;
+
+		function isSonar(masterData) {
+			/* checking on equipment type sounds better than
+			   letting a list of master Ids
+			   should match the following equipments: (id, name)
+			   - 46: T93 Passive Sonar
+			   - 47: T3 Active Sonar
+			   - 132: T0 Passive
+			   - 149: T4 Passive
+			 */
+			return masterData &&
+				masterData.api_type[1] === 10;
+		}
+		let hasSonar = [0,1,2,3,4]
+			.some( slot => isSonar( this.equipment(slot).master() ));
+		return hasSonar;
+	};
+
+	KC3Ship.prototype.equipmentAntiAir = function(forFleet) {
+		return AntiAir.shipEquipmentAntiAir(this, forFleet);
+	};
+
+	KC3Ship.prototype.adjustedAntiAir = function() {
+		var floor = AntiAir.specialFloor(this);
+		return floor(AntiAir.shipAdjustedAntiAir(this));
+	};
+
+	KC3Ship.prototype.proportionalShotdownRate = function() {
+		return AntiAir.shipProportionalShotdownRate(this);
+	};
+
+	KC3Ship.prototype.proportionalShotdown = function(n) {
+		return AntiAir.shipProportionalShotdown(this,n);
+	};
+
+	// note:
+	// - fixed shotdown makes no sense if the current ship is not in a fleet.
+	// - formationId takes one of the following:
+	//   - 1/4/5 (for line ahead / echelon / line abreast)
+	//   - 2 (for double line)
+	//   - 3 (for diamond)
+	// - all possible AACIs are considered and the largest AACI modifier
+	//   is used for calculation the maximum number of fixed shotdown
+	KC3Ship.prototype.fixedShotdownRange = function(formationId) {
+		var fleetObj = PlayerManager.fleets[ this.onFleet() - 1 ];
+		return AntiAir.shipFixedShotdownRangeWithAACI(this, fleetObj,
+			AntiAir. getFormationModifiers(formationId || 1) );
+	};
+
+	KC3Ship.prototype.maxAaciShotdownBonuses = function() {
+		return AntiAir.shipMaxShotdownAllBonuses( this );
 	};
 
 	function consumePending(index,mapping,clear,args) {
@@ -631,4 +778,36 @@ KC3改 Ship Object
 
 		KC3ShipManager.save();
 	}
+
+	KC3Ship.prototype.deckbuilder = function() {
+		var itemsInfo = {};
+		var result = {
+			id: this.masterId,
+			lv: this.level,
+			luck: this.lk[0],
+			items: itemsInfo
+		};
+
+		var gearInfo;
+		for(var i=0; i<4; ++i) {
+			gearInfo = this.equipment(i).deckbuilder();
+			if (gearInfo)
+				itemsInfo["i".concat(i+1)] = gearInfo;
+			else 
+				break;
+		}
+		gearInfo = this.exItem().deckbuilder();
+		if (gearInfo) {
+			// #1726 Deckbuilder: if max slot not reach 4, `ix` will not be used
+			var usedSlot = Object.keys(itemsInfo).length;
+			if(usedSlot < 4) {
+				itemsInfo["i".concat(usedSlot+1)] = gearInfo;
+			} else {
+				itemsInfo.ix = gearInfo;
+			}
+		}
+		
+		return result;
+	};
+
 })();

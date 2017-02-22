@@ -16,7 +16,6 @@
 		
 		init :function(){},
 		reload :function(){
-			this.toggleMode = 1;
 		},
 		execute :function(){
 			var self = this;
@@ -81,7 +80,13 @@
 		---------------------------------*/
 		showPage :function(pageNum){
 			var self = this;
+			this.toggleMode = 1;
 			$("#pvp_list").empty();
+			$(".tab_pvp .pvp_toggle").removeClass("active");
+			$(".tab_pvp .pvp_toggle_ships").addClass("active");
+			$(".tab_pvp .pvp_player").width(290);
+			$(".tab_pvp .pvp_opponent").width(290);
+			$(".tab_pvp .pvp_battle").width(0);
 			KC3Database.get_pvps(pageNum, function(results){
 				$.each(results, function(index, pvpBattle){
 					self.cloneBattleBox(pvpBattle);
@@ -92,7 +97,7 @@
 		/* CLONE ONE BATTLE BOX RECORD
 		---------------------------------*/
 		cloneBattleBox :function(pvpBattle){
-			console.debug("PvP battle record:", pvpBattle);
+			//console.debug("PvP battle record:", pvpBattle);
 			var self = this;
 			
 			self.box_record = $(".tab_pvp .factory .pvp_record").clone();
@@ -206,7 +211,7 @@
 		/* FILL ONE BATTLE BOX (DAY/NIGHT)
 		---------------------------------*/
 		fillBattleBox :function(nodeInfo, targetBox){
-			console.debug("Simulated node info:", nodeInfo);
+			//console.debug("Simulated node info:", nodeInfo);
 			$(".node_engage", targetBox).text( nodeInfo.engagement[2] );
 			$(".node_engage", targetBox).addClass( nodeInfo.engagement[1] );
 			$(".node_contact", targetBox).text(nodeInfo.fcontact +" vs "+nodeInfo.econtact);
@@ -316,16 +321,25 @@
 						mapnum: 0,
 					};
 					
-					var newImg = steganography.encode(JSON.stringify(encodeData), withDataCover64);
-					
-					chrome.downloads.download({
-						url: newImg,
-						filename: ConfigManager.ss_directory+'/replay/'+PlayerManager.hq.name+"_pvp_"+pvpData.id+'.png',
-						conflictAction: "uniquify"
-					}, function(downloadId){
-						self.exportingReplay = false;
-						$("body").css("opacity", "1");
+					steg.encode(JSON.stringify(encodeData), withDataCover64, {
+						success: function(newImg){
+							chrome.downloads.download({
+								url: newImg,
+								filename: ConfigManager.ss_directory+'/replay/'+PlayerManager.hq.name+"_pvp_"+pvpData.id+'.png',
+								conflictAction: "uniquify"
+							}, function(downloadId){
+								self.exportingReplay = false;
+								$("body").css("opacity", "1");
+							});
+						},
+						error: function(e){
+							console.error("Failed to encode replay data by", e, e.stack);
+							self.exportingReplay = false;
+							$("body").css("opacity", "1");
+							return false;
+						}
 					});
+					
 				});
 				
 			};

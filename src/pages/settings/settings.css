@@ -13,6 +13,18 @@ body {
 	display:none;
 }
 
+.ui-tooltip {
+	max-width:500px;
+	padding:2px 5px 3px 6px;
+	border-width:1px !important;
+	border:1px solid #222;
+	box-shadow:0 0 5px 1px #888;
+	color:#575757;
+	background:#fff;
+	font-family:inherit;
+	font-size:12px;
+}
+
 /* ABOUT
 --------------------------*/
 .about {
@@ -117,26 +129,48 @@ body {
 	margin:0px 0px 0px 15px;
 }
 .settingBox .options {
-	width:450px;
-	/*height:40px;*/
+	width:440px;
 	float:left;
 	margin:0px 5px 0px 0px;
 }
 .settingBox .note {
-	width: 192px;
+	width:192px;
 	height:40px;
 	line-height:40px;
 	float:left;
-	text-align: right;
-	/*font-size:16px;*/
+	text-align:right;
 	font-weight:bold;
 	color:#009900;
 	display:none;
-	position: absolute;
-	right: 16px;
-	top: 2px;
+	position:absolute;
+	right:16px;
+	top:12px;
 	pointer-events:none;
 }
+.settingBox .resetButton {
+	max-width:85px;
+	height:18px;
+	line-height:17px;
+	float:right;
+	padding:0px 8px;
+	position:relative;
+	top:4px;
+	right:10px;
+	border-radius:7px;
+	font-size:11px;
+	color:#000;
+	background:#ffc;
+	border:1px solid #ccc;
+	overflow:hidden;
+	white-space:nowrap;
+	display:none;
+}
+.settingBox .resetButton:hover {
+	background:#7ad;
+	border:1px solid #369;
+	color:#fff;
+}
+
 /* Settings Options */
 .settingBox .options .checkbox {
 	width:20px;
@@ -163,7 +197,7 @@ body {
 	padding:0px 2px;
 }
 .settingBox .options .long_text {
-	width:440px;
+	width:430px;
 	height:22px;
 	line-height:22px;
 	font-size:12px;
@@ -218,7 +252,7 @@ body {
 }
 
 .settingBox .options .huge_text {
-	width:440px;
+	width:430px;
 	min-width:440px;
 	max-width:440px;
 	height:100px;
@@ -238,7 +272,7 @@ body {
 }
 
 .settingBox .options .dropdown {
-	width:440px;
+	width:430px;
 	height:25px;
 	line-height:23px;
 	font-size:14px;

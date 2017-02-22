@@ -15,8 +15,11 @@ Provides access to data on built-in JSON files
 		_exp_ship:{},
 		_gauges:{},
 		_ship:{},
+		_shipAffix:{},
 		_defeq:{},
 		_slotitem:{},
+		_useitems:{},
+		_equiptype:[],
 		_quests:{},
 		_ranks:{},
 		_stype:{},
@@ -88,7 +91,10 @@ Provides access to data on built-in JSON files
 			
 			// Load Translations
 			this._ship 		= KC3Translation.getJSON(repo, 'ships', true);
+			this._shipAffix	= KC3Translation.getJSON(repo, 'ship_affix', true);
 			this._slotitem	= KC3Translation.getJSON(repo, 'items', true);
+			this._useitems	= KC3Translation.getJSON(repo, 'useitems', true);
+			this._equiptype	= KC3Translation.getJSON(repo, 'equiptype', true);
 			this._quests	= KC3Translation.getJSON(repo, 'quests', true);
 			this._ranks		= KC3Translation.getJSON(repo, 'ranks', true);
 			this._stype		= KC3Translation.getJSON(repo, 'stype', true);
@@ -110,11 +116,12 @@ Provides access to data on built-in JSON files
 			this._defaultIcon = iconSrc;
 		},
 		getIcon: function(id, empty) {
+			id = Number(id);
 			if(this._icons.indexOf(id) > -1){
-				var path = id >= 500 ? "abyss/" : "ships/";
+				var path = id > 500 ? "abyss/" : "ships/";
 				return "chrome-extension://"+chrome.runtime.id+"/assets/img/"+path+id+".png";
 			}
-			if(typeof empty == "undefined"){
+			if(typeof empty === "undefined"){
 				return this._defaultIcon;
 			}
 			return empty;
@@ -131,70 +138,90 @@ Provides access to data on built-in JSON files
 			return this._battle.formation[formationId] || "";
 		},
 		
-		shipName :function( jp_name ){
-			// console.log( "---------request to TL---------", jp_name );
-			//if(typeof jp_name == "undefined"){ return "Unknown ship"; }
-			if(typeof this._cache[jp_name] !== "undefined"){ return this._cache[jp_name]; }
-			if(typeof this._ship[jp_name] !== "undefined"){
-				this._cache[jp_name] = this._ship[jp_name];
-				return this._cache[jp_name];
-			}
-			if(Object.keys(this._ship).length === 0){
-				return jp_name;
-			}
-			var
-				bare = jp_name,
-				combin = [],
-				repTab = {
-					"甲"    : '_A',
-					"乙"    : '_B',
-					"丙"    : '_C',
-					"丁"    : '_D',
-					"改二"  : '_KaiNi',
-					"改"    : '_Kai',
-					" zwei" : '_Zwei',
-					" drei" : '_Drei'
-				},
-				repRes = null,
-				replaced = false;
-			// in here, the regular expression will read which one comes first (which mean, to be in the end of the name
-			// and then, the bare string will be chopped by how long the pattern match...
-			// the matched one, added to the combination stack (FILO)
-			// removing from the replacement table in order to prevent infinite loop ^^;
-			// if there's no match, it'll instantly stop and return the actual value
-			// just translate the items start with '_' in ships.json, and keep the necessary prefix space
-			while( !!(repRes = (new RegExp(".+("+(Object.keys(repTab).join("|"))+")$",'gi')).exec(bare)) ){
-				bare = bare.substr(0, bare.length-repRes[1].length);
-				combin.unshift(this._ship[repTab[repRes[1]]]);
-				delete repTab[repRes[1]];
-				replaced = true;
-			}
-			// console.log("Remaining", bare, "with combination", combin.join(" "));
-			if(replaced) {
-				// console.log("this._ship", this._ship);
-				// console.log("this._ship[bare]", this._ship[bare]);
-				if(typeof this._ship[bare] !== "undefined"){
-				} else {
-					if (typeof this._cache[bare] !== "undefined") {
-						this._cache[bare] = bare;
-					}
-				}
-				
-				this._cache[jp_name] = (this._ship[bare] || this._cache[bare] || bare) +
-					(combin.length > 0 ? combin.join("") : "");
-				return this._cache[jp_name] ;
-				// console.log("this._cache[jp_name]", this._cache[jp_name]);
-				// return this._cache[jp_name]; // being here means the jp_name is not cached. there's already a cache checker at the start of this function
-			}
-			// console.log("returning original:", jp_name);
-			return jp_name;
+		shipNameAffix :function(affix){
+			// Just translate the prefixes and suffixes in `ship_affix.json`
+			// And keep the necessary space after or before the affixes
+			return this._shipAffix[affix] || {};
 		},
 		
-		gearName :function( jp_name ){
-			if(typeof this._slotitem[ jp_name ] !== "undefined"){
-				return this._slotitem[ jp_name ];
+		shipName :function(jpName){
+			// No translation needed for empty ship.json like JP
+			if(Object.keys(this._ship).length === 0){ return jpName; }
+			// If translation and combination done once, use the cache instantly
+			if(typeof this._cache[jpName] !== "undefined"){ return this._cache[jpName]; }
+			// If full string matched, no combination needed
+			if(typeof this._ship[jpName] !== "undefined"){
+				this._cache[jpName] = this._ship[jpName];
+				return this._cache[jpName];
 			}
-			return jp_name;
+			var root = jpName,
+				combinedPrefixes = [],
+				prefixesList = Object.keys(this.shipNameAffix("prefixes")),
+				combinedSuffixes = [],
+				suffixesList = Object.keys(this.shipNameAffix("suffixes")),
+				occurs = [],
+				replaced = false;
+			/**********************************************
+			// To combine the translations of root name and prefix/suffix,
+			// the regular expression will read which one comes first,
+			// which mean the prefixes and suffixes in the ship name.
+			// and then, the root string will be chopped to remove the affixes,
+			// the matched one, added to the combination stack (FILO)
+			// removing from the replacement table in order to prevent infinite loop.
+			// if there's no match, it'll instantly stop and return the actual value.
+			***********************************************/
+			if(prefixesList.length > 0){
+				while( !!(occurs = (new RegExp("^("+prefixesList.join("|")+").+$","i")).exec(root)) ){
+					root = root.replace(new RegExp("^"+occurs[1],"i"), "");
+					combinedPrefixes.unshift(this.shipNameAffix("prefixes")[occurs[1]]);
+					prefixesList.splice(prefixesList.indexOf(occurs[1]), 1);
+					replaced = true;
+				}
+			}
+			if(suffixesList.length > 0){
+				while( !!(occurs = (new RegExp(".+("+suffixesList.join("|")+")$","i")).exec(root)) ){
+					root = root.replace(new RegExp(occurs[1]+"$","i"), "");
+					combinedSuffixes.unshift(this.shipNameAffix("suffixes")[occurs[1]]);
+					suffixesList.splice(suffixesList.indexOf(occurs[1]), 1);
+					replaced = true;
+				}
+			}
+			if(replaced){
+				// Put combined name into cache
+				this._cache[jpName] = [
+					(combinedPrefixes.length > 0 ? combinedPrefixes.join("") : "") ,
+					(this._ship[root] || root) ,
+					(combinedSuffixes.length > 0 ? combinedSuffixes.join("") : "")
+				].join("");
+				return this._cache[jpName];
+			}
+			return root;
+		},
+		
+		shipReadingName :function(jpYomi){
+			// Translate api_yomi, might be just Romaji. Priorly use yomi in affix
+			return this.shipNameAffix("yomi")[jpYomi] || this.shipName(jpYomi);
+		},
+		
+		gearName :function(jpName){
+			if(typeof this._slotitem[jpName] !== "undefined"){
+				return this._slotitem[jpName];
+			}
+			return jpName;
+		},
+		
+		gearTypeName :function(categoryType, categoryId){
+			if(typeof categoryType === "undefined"){
+				return this._equiptype || [[],[],[],[],[]];
+			}
+			if(typeof categoryId === "undefined"){
+				return this._equiptype[categoryType] || [];
+			}
+			return this._equiptype[categoryType][categoryId] || "";
+		},
+		
+		useItemName :function(id){
+			return this._useitems[id] || (KC3Master.useitem(id) || {}).api_name || "";
 		},
 		
 		abyssShipName :function(ship){
@@ -202,7 +229,7 @@ Provides access to data on built-in JSON files
 			if(!shipMaster.api_name){
 				shipMaster = KC3Master.ship(Number(ship));
 			}
-			return [this.shipName(shipMaster.api_name), this.shipName(shipMaster.api_yomi)]
+			return [this.shipName(shipMaster.api_name), this.shipReadingName(shipMaster.api_yomi)]
 				.filter(function(x){return !!x&&x!=="-";})
 				.join("");
 		},
@@ -227,6 +254,18 @@ Provides access to data on built-in JSON files
 				return "boss";
 			}
 			return shipMaster.api_id > 500 ? shipMaster.api_yomi.replace("-", "") : "";
+		},
+		
+		shipSpeed :function(apiSoku, returnTerm){
+			var speedTermsMap = {"0":"SpeedLand", "5":"SpeedSlow", "10":"SpeedFast", "15":"SpeedFaster", "20":"SpeedFastest"};
+			var term = speedTermsMap[apiSoku] || "Unknown";
+			return !returnTerm ? this.term(term) : term;
+		},
+		
+		shipRange :function(apiLeng, returnTerm){
+			var rangeTermsMap = {"1":"RangeShort", "2":"RangeMedium", "3":"RangeLong", "4":"RangeVeryLong"};
+			var term = rangeTermsMap[apiLeng] || "Unknown";
+			return !returnTerm ? this.term(term) : term;
 		},
 		
 		exp :function(level){
@@ -268,36 +307,53 @@ Provides access to data on built-in JSON files
 		},
 		
 		defaultEquip :function(id){
-			if (typeof this._defeq["s" + id] == "undefined") {
-				console.log("No ship has master id " + id + " in defeq.json");
-			}
-			return this._defeq["s" + id] || 0;
+			var eq = WhoCallsTheFleetDb.getEquippedSlotCount(id);
+			// Just return 0 if wanna remove _defeq json
+			return eq !== false ? eq : (this._defeq["s" + id] || 0);
 		},
-
+		
+		battleSeverityClass :function(battleArray){
+			return (Array.isArray(battleArray) && battleArray[0].length >= 2) ?
+				battleArray.map(function(e){if(!!e[1]) return e[1];})
+					.reduce(function(p, c){if(!!c && p.indexOf(c) < 0) p.push(c);
+						return p;}, []).join(" ")
+				: "";
+		},
+		
 		support :function(index){
-			return this._battle.support[index] || "";
+			return (typeof index === "undefined") ? this._battle.support :
+				this._battle.support[index] || "";
 		},
-
+		
 		detection :function(index){
-			return this._battle.detection[index] || ["","",""];
+			return (typeof index === "undefined") ? this._battle.detection :
+				this._battle.detection[index] || ["","",""];
 		},
 		
 		airbattle :function(index){
-			return this._battle.airbattle[index] || ["","","Unknown"];
+			return (typeof index === "undefined") ? this._battle.airbattle :
+				this._battle.airbattle[index] || ["","","Unknown"];
 		},
 		
 		airraiddamage :function(index){
-			return this._battle.airraiddamage[index] || "";
+			return (typeof index === "undefined") ? this._battle.airraiddamage :
+				this._battle.airraiddamage[index] || "";
 		},
 		
 		engagement :function(index){
-			return this._battle.engagement[index] || ["","",""];
+			return (typeof index === "undefined") ? this._battle.engagement :
+				this._battle.engagement[index] || ["","",""];
+		},
+		
+		aacitype :function(index){
+			return (typeof index === "undefined") ? this._battle.aacitype :
+				this._battle.aacitype[index] || [];
 		},
 		
 		term: function(key) {
 			return (ConfigManager.info_troll && this._terms.troll[key]) || this._terms.lang[key] || key;
 		},
-
+		
 		nodeLetter : function(worldId, mapId, edgeId) {
 			var map = this._edges["World " + worldId + "-" + mapId];
 			if (typeof map !== "undefined") {

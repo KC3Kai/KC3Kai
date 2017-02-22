@@ -24,6 +24,8 @@
 		ConfigManager.load();
 		KC3Master.init();
 		KC3Meta.init("../../data/");
+		KC3Master.loadAbyssalShips("../../data/");
+		KC3Master.loadSeasonalShips("../../data/");
 		KC3Meta.defaultIcon("../../assets/img/ui/empty.png");
 		PlayerManager.init();
 		KC3ShipManager.load();
@@ -175,5 +177,49 @@
 			KC3StrategyTabs.reloadTab();
 		}
 	};
+
+	KC3StrategyTabs.isTextEllipsis = function(element){
+		var $c = $(element).clone()
+			.css({display: 'inline', width: 'auto', visibility: 'hidden'})
+			.appendTo('body');
+		var cWidth = $c.width();
+		$c.remove();
+		return cWidth > $(element).width();
+	};
+
+	// A jquery-ui tooltip options like native one
+	KC3StrategyTabs.nativeTooltipOptions = {
+		position: { my: "left top", at: "left+25 bottom", collision: "flipfit" },
+		content: function(){
+			// Default escaping not used, keep html, simulate native one
+			return $(this).attr("title")
+				.replace(/\n/g, "<br/>")
+				.replace(/\t/g, "&emsp;&emsp;");
+		}
+	};
+	(function($) {
+		// A lazy initialzing method, prevent duplicate tooltip instance
+		$.fn.lazyInitTooltip = function(opts) {
+			if(typeof this.tooltip("instance") === "undefined") {
+				this.tooltip(opts || KC3StrategyTabs.nativeTooltipOptions);
+			}
+			return this;
+		};
+		// Actively close tooltips of element and its children
+		$.fn.hideChildrenTooltips = function() {
+			$.each($("[title]:not([disabled])", this), function(_, el){
+				if(typeof $(el).tooltip("instance") !== "undefined")
+					$(el).tooltip("close");
+			});
+			return this;
+		};
+		// Create native-like tooltips of element and its children
+		$.fn.createChildrenTooltips = function() {
+			$.each($("[title]:not([disabled])", this), function(_, el){
+				$(el).lazyInitTooltip();
+			});
+			return this;
+		};
+	}(jQuery));
 
 })();

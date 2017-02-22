@@ -7,10 +7,8 @@
 
 .tab_expcalc .box_control {
 	width:700px;
-	background:#def;
 	margin:0px 0px 3px 0px;
 	line-height:34px;
-	border:1px solid #ace;
 	padding-bottom: 5px;
 }
 
@@ -33,16 +31,6 @@
 	margin: 0 0 0 4px;
 }
 
-.tab_expcalc .box_control_line .hover.active {
-	background: #3333ff;
-	color: #fff;
-}
-
-.tab_expcalc .box_control_line .toggle {
-	border-radius: 4px;
-	background: #fff;
-}
-
 .tab_expcalc .box_goals {
 	margin:0px 0px 20px 0px;
 }
@@ -63,16 +51,7 @@
 	padding:2px 4px;
 	line-height:34px;
 }
-.tab_expcalc .ship_goal.highlight_stype {
-	background-color:#fdd;
-}
-.tab_expcalc .ship_goal.highlight_closeToRemodel {
-	background-color:#71d3f4;
-}
 
-.tab_expcalc .ship_goal.highlight_canBeRemodelled {
-	background-color:#60ebe2;
-}
 .tab_expcalc .ship_goal .ship_col {
 	height:34px;
 	float:left;
@@ -90,14 +69,8 @@
 	text-align:center;
 	font-size:16px;
 	font-weight:bold;
-	color:#039;
 }
-.tab_expcalc .ship_goal .ship_value.yes_or_no {
-	color:#e33;
-}
-.tab_expcalc .ship_goal .ship_value.yes_or_no.bool_no {
-	color:#039;
-}
+
 .tab_expcalc .ship_goal .ship_input {
 	height:20px;
 	line-height:20px;
@@ -164,9 +137,7 @@
 	width:60px;
 	margin:0px 2px 0px 0px;
 }
-.tab_expcalc .ship_goal .ship_result .ship_value {
-	color:#e33;
-}
+
 .tab_expcalc .ship_goal .ship_map {
 	width:70px;
 	margin:0px 2px 0px 0px;
@@ -291,12 +262,6 @@
 	color: #039;
 }
 
-.tab_expcalc .goal_template .goal_value.yes_or_no {
-	color:#e33;
-}
-.tab_expcalc .goal_template .goal_value.yes_or_no.bool_no {
-	color:#039;
-}
 
 .tab_expcalc .goal_template .goal_input {
 	height: 20px;
@@ -396,11 +361,9 @@
 
 .tab_expcalc .gt_content.new_template {
 	width: 680px;
-	background: #def;
 	border-radius: 8px;
 	margin: 0px 0px 3px 0px;
 	padding: 2px 4px;
 	line-height: 34px;
-	border: 1px solid #ace;
 	text-align: center;
 }

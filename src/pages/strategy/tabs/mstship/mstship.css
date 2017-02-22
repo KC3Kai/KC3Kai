@@ -250,6 +250,29 @@
 	background:#ffc;
 	padding:5px;
 }
+/* Abyssal boss flag & encounter */
+.tab_mstship .shipInfo .encounter {
+	position:relative;
+	left:-20px;
+	top:-93px;
+	float:left;
+	display:none;
+}
+.tab_mstship .shipInfo .encounter img {
+	width:20px;
+	height:20px;
+}
+.tab_mstship .shipInfo .boss {
+	position:absolute;
+	left:128px;
+	top:445px;
+	float:left;
+	display:none;
+}
+.tab_mstship .shipInfo .boss img {
+	width:15px;
+	height:15px;
+}
 
 /* Intro message */
 .tab_mstship .shipInfo .intro {
@@ -404,6 +427,93 @@
 	width:60px;
 	margin:0px 3px 2px 3px;
 }
+/* AACI
+--------------------------------*/
+.tab_mstship .shipInfo .aaci {
+	width:468px;
+	margin:0px 0px 10px 0px;
+}
+.tab_mstship .shipInfo .aaci .aaciPattern {
+	width:290px;
+	height:22px;
+	margin:0px 0px 1px 0px;
+	border-radius:6px;
+	font-size:12px;
+}
+.tab_mstship .shipInfo .aaci .apiId {
+	width:40px;
+	height:20px;
+	margin:0px 5px 0px 0px;
+	padding:2px 5px;
+	float:left;
+}
+.tab_mstship .shipInfo .aaci .shipIcon {
+	width:20px;
+	height:20px;
+	margin:0px 1px 0px 0px;
+	padding:2px 5px;
+	float:left;
+}
+.tab_mstship .shipInfo .aaci .shipIcon img {
+	width:20px;
+	height:20px;
+	margin-top:-2px;
+}
+.tab_mstship .shipInfo .aaci .equipIcons {
+	width:100px;
+	height:20px;
+	margin:0px 5px 0px 0px;
+	padding:2px 5px;
+	float:left;
+}
+.tab_mstship .shipInfo .aaci .equipIcons img {
+	width:20px;
+	height:20px;
+}
+.tab_mstship .shipInfo .aaci .equipIcons .plusIcon {
+	width:15px;
+	height:15px;
+	margin:6px 0px 0px -12px;
+	position:relative;
+	pointer-events:none;
+	filter:hue-rotate(75deg);
+	-webkit-filter:hue-rotate(75deg);
+	transform:scaleX(-1);
+}
+.tab_mstship .shipInfo .aaci .equipIcons .minusIcon {
+	width:15px;
+	height:15px;
+	margin:6px 0px 0px -12px;
+	position:relative;
+	pointer-events:none;
+	filter:hue-rotate(-90deg);
+	-webkit-filter:hue-rotate(-90deg);
+	transform:scaleX(-1);
+}
+.tab_mstship .shipInfo .aaci .fixed {
+	width:50px;
+	height:20px;
+	margin:0px 5px 0px 0px;
+	padding:2px 5px;
+	float:left;
+}
+.tab_mstship .shipInfo .aaci .modifier {
+	width:50px;
+	height:20px;
+	margin:0px 5px 0px 0px;
+	padding:2px 5px;
+	float:left;
+}
+.tab_mstship .shipInfo .aaci .aaciPattern.odd {
+	background:#ddd;
+}
+.tab_mstship .shipInfo .aaci .aaciPattern.even {
+	background:#ccc;
+}
+.tab_mstship .shipInfo .aaci .aaciPattern.triggerable {
+	background:#ed3;
+}
+
 /* GUNFIT
 --------------------------------*/
 .tab_mstship .shipInfo .gunfit {
@@ -424,6 +534,9 @@
 	margin:0px 5px 0px 0px;
 	float:left;
 	font-size:12px;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
 }
 .tab_mstship .shipInfo .gunfit .fitgear .gearFit {
 	width:150px;
@@ -431,6 +544,8 @@
 	float:left;
 	text-align:center;
 	font-size:10px;
+	white-space:nowrap;
+	overflow:hidden;
 }
 .tab_mstship .shipInfo .gunfit .fitgear.fit_bonus {
 	color:#fff;
@@ -445,7 +560,6 @@
 	background:#a55;
 }
 .tab_mstship .shipInfo .gunfit .fitgear.fit_unknown {
-	
 }
 
 /* SPECIAL (Salt Check)
@@ -493,6 +607,7 @@
 /* salt check */
 .tab_mstship .shipInfo.salted #saltable {
 	/* blur salt */
+	filter: blur(24px);
 	-webkit-filter: blur(24px);
 }
 .tab_mstship .shipRecord.salted {

@@ -20,14 +20,40 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	
 	console.info("KC3改 Background Service loaded");
 	
+	ConfigManager.load();
+	KC3Meta.init("../../data/");
 	
-	if (typeof localStorage.kc3version == "undefined"){
-		window.open("../../pages/update/update.html#installed", "kc3kai_updates");
-		
-	} else {
-		if (localStorage.kc3version != chrome.runtime.getManifest().version) {
-			window.open("../../pages/update/update.html#updated", "kc3kai_updates");
-		}
+	switch (ConfigManager.updateNotification) {
+		case 2: // Open update status page
+			if (typeof localStorage.kc3version == "undefined"){
+				window.open("../../pages/update/update.html#installed", "kc3_update_page");
+			} else {
+				if (localStorage.kc3version != chrome.runtime.getManifest().version) {
+					window.open("../../pages/update/update.html#updated", "kc3_update_page");
+				}
+			}
+			break;
+		case 3: // Just desktop notification
+			if (typeof localStorage.kc3version == "undefined"){
+				chrome.notifications.clear("kc3kai_update");
+				chrome.notifications.create("kc3kai_update", {
+					type: "basic",
+					iconUrl: chrome.extension.getURL("assets/img/logo/128.png"),
+					title: KC3Meta.term("InstalledTitle"),
+					message: KC3Meta.term("InstalledText"),
+				});
+			} else {
+				if (localStorage.kc3version != chrome.runtime.getManifest().version) {
+					chrome.notifications.clear("kc3kai_update");
+					chrome.notifications.create("kc3kai_update", {
+						type: "basic",
+						iconUrl: chrome.extension.getURL("assets/img/logo/128.png"),
+						title: KC3Meta.term("UpdatedTitle"),
+						message: KC3Meta.term("UpdatedText"),
+					});
+				}
+			}
+			break;
 	}
 	
 	localStorage.kc3version = chrome.runtime.getManifest().version;
@@ -67,9 +93,29 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		Ask the game container to take a screenshot
 		------------------------------------------*/
 		"screenshot" :function(request, sender, response){
-			(new TMsg(request.tabId, "gamescreen", "screenshot", {
-				playerName: request.playerName
-			}, response)).execute();
+			var senderUrl = sender.url || sender.tab.url || "";
+			// If devtools, a tab ID should be in the request param
+			if (isDevtools(senderUrl)) {
+				// Get tab information to get URL of requester
+				chrome.tabs.get(request.tabId, function(tabDetails){
+					if( isDMMFrame(tabDetails.url) || isAPIFrame(tabDetails.url)){
+						// If API or DMM Frame, use traditional screenshot call
+						(new TMsg(request.tabId, "gamescreen", "screenshot", {
+							playerName: request.playerName
+						}, response)).execute();
+						return true;
+						
+					} else {
+						// If not API or DMM Frame, must be special mode
+						screenshotSpecialMode(request.tabId, response);
+						return true;
+					}
+				});
+			} else if (sender.tab && sender.tab.id){
+				screenshotSpecialMode(sender.tab.id, response);
+			} else {
+				response({ value: false });
+			}
 			return true;
 		},
 		
@@ -103,7 +149,9 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		We don't want global runtime message that will show overlays on all windows
 		------------------------------------------*/
 		"questOverlay" :function(request, sender, response){
+			KC3QuestManager.load();
 			(new TMsg(request.tabId, "gamescreen", "questOverlay", {
+				KC3QuestManager: KC3QuestManager,
 				questlist: request.questlist
 			})).execute();
 		},
@@ -144,7 +192,32 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		Auto-resize browser window to fit the game screen
 		------------------------------------------*/
 		"fitScreen" :function(request, sender, response){
-			(new TMsg(request.tabId, "gamescreen", "fitScreen")).execute();
+			// Get tab information to get URL of requester
+			chrome.tabs.get(request.tabId, function(tabDetails){
+				if( isDMMFrame(tabDetails.url) || isAPIFrame(tabDetails.url)){
+					// If API or DMM Frame, use traditional screenshot call
+					(new TMsg(request.tabId, "gamescreen", "fitScreen")).execute();
+					return true;
+					
+				} else {
+					// If not API or DMM Frame, must be special mode
+					chrome.tabs.getZoom(request.tabId, function(ZoomFactor){
+						// Resize the window
+						chrome.windows.getCurrent(function(wind){
+							(new TMsg(request.tabId, "gamescreen", "getWindowSize", {}, function(size){
+								chrome.windows.update(wind.id, {
+									width: Math.ceil(800*ZoomFactor*size.game_zoom)
+										+ (wind.width- Math.ceil(size.width*ZoomFactor) ),
+									height: Math.ceil((480+size.margin_top)*size.game_zoom*ZoomFactor)
+										+ (wind.height- Math.ceil(size.height*ZoomFactor) )
+								});
+							})).execute();
+						});
+					});
+					return true;
+				}
+			});
+			return true;
 		},
 		
 		/* IS MUTED
@@ -188,14 +261,89 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			});
 		},
 		
+		/* OPEN CHROME EXTENSION PAGE
+		DevTools open about:blank page when trying to open new tab by itself
+		------------------------------------------*/
+		"openExtensionPage" :function(request, sender, response){
+			chrome.tabs.create({
+				url: chrome.extension.getURL(request.path)
+			});
+		},
+		
+		/* OPEN OR UPDATE STRATEGY ROOM PAGE
+		Similar with `openExtensionPage`, to reuse Strategy Room existed page
+		@param request.tabPath -
+			different with `request.path`, no prefix of Strategy Room path needed
+		------------------------------------------*/
+		"strategyRoomPage" :function(request, sender, response){
+			var sroomUrlPrefix = "pages/strategy/strategy.html";
+			var tabId = 0;
+			// Find first existed SRoom page tab
+			chrome.tabs.query({
+				url: chrome.extension.getURL(sroomUrlPrefix)
+			}, function(tabs){
+				if(!!tabs[0]){
+					tabId = tabs[0].id;
+					// Found existed tab, update url and activate it
+					chrome.tabs.update(tabId, {
+						url: chrome.extension.getURL(sroomUrlPrefix + "#" + request.tabPath),
+						active: true
+					}, function(tab) {
+						tabId = tab.id;
+					});
+				} else {
+					// No existed tab, create new
+					chrome.tabs.create({
+						url: chrome.extension.getURL(sroomUrlPrefix + "#" + request.tabPath)
+					}, function(tab){
+						tabId = tab.id;
+					});
+				}
+					
+			});
+		},
+		
 		/* DMM FRMAE INJECTION
 		Responds if content script should inject DMM Frame customizations
 		------------------------------------------*/
 		"dmmFrameInject" :function(request, sender, response){
-			if(sender.tab.url.indexOf("/pages/game/dmm.html") > -1){
-				response({value:true});
-			}else{
-				response({value:false});
+			var senderUrl = (sender.tab)?sender.tab.url:false || sender.url  || "";
+			
+			ConfigManager.load();
+			if( isDMMFrame(senderUrl) ){
+				// DMM FRAME
+				response({ mode: 'frame', scale: ConfigManager.api_gameScale});
+				
+			} else if(ConfigManager.dmm_customize && localStorage.extract_api != "true") {
+				var props = {
+					highlighted: true
+				};
+				// Prevent Chrome auto discard the game tab
+				// autoDiscardable since Chrome 54
+				if(parseChromeVersion() >= 54) {
+					props.autoDiscardable = false;
+				}
+				// DMM CUSTOMIZATION
+				chrome.tabs.update(sender.tab.id, props, function(){
+					ConfigManager.load();
+					KC3Master.init();
+					RemodelDb.init();
+					KC3Meta.init("../../data/");
+					KC3Meta.loadQuotes();
+					KC3QuestManager.load();
+					response({
+						mode: 'inject',
+						config: ConfigManager,
+						master: KC3Master,
+						meta: KC3Meta,
+						quest: KC3QuestManager,
+					});
+				});
+				return true;
+				
+			} else {
+				// NO DMM EXECUTIONS
+				response({ mode: false });
 			}
 		},
 		
@@ -212,7 +360,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		"taihaAlertStop" :function(request, sender, response){
 			(new TMsg(request.tabId, "gamescreen", "taihaAlertStop")).execute();
 		},
-
+		
 		/* SUBTITLES
 		When a ship speaks, show subtitles
 		------------------------------------------*/
@@ -225,6 +373,18 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				voiceNum: request.voiceNum,
 				url: request.url
 			})).execute();
+		},
+		
+		/* GET VERSIONS
+		Return platform related manifest and versions
+		------------------------------------------*/
+		"getVersion" :function(request, sender, response){
+			// May be more, such as OS arch, version
+			response({
+				chrome: parseChromeVersion(),
+				manifest: chrome.runtime.getManifest(),
+				kc3version: chrome.runtime.getManifest().version
+			});
 		}
 		
 	};
@@ -302,5 +462,89 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	});
 	
 	
+	/* On Update Available
+	This will avoid auto-restart when webstore update is available
+	Officially handle the moment update is release and user is playing
+	------------------------------------------*/
+	delete localStorage.updateAvailable;
+	chrome.runtime.onUpdateAvailable.addListener(function(details){
+		localStorage.updateAvailable = details.version;
+		
+		ConfigManager.load();
+		switch (ConfigManager.updateNotification) {
+			case 2: // Open update status page
+				chrome.windows.getCurrent(null, function(cwindow){
+					chrome.tabs.create({
+						windowId: cwindow.id,
+						url: chrome.extension.getURL("pages/update/update.html"),
+						active: false
+					});
+				});
+				break;
+			case 3: // Just desktop notification
+				chrome.notifications.clear("kc3kai_update");
+				chrome.notifications.create("kc3kai_update", {
+					type: "basic",
+					iconUrl: chrome.extension.getURL("assets/img/logo/128.png"),
+					title: KC3Meta.term("UpdateNotifTitle").format(details.version),
+					message: KC3Meta.term("UpdateNotifText"),
+					buttons: [
+						{ title: KC3Meta.term("PageUpdateRestartNow") },
+						{ title: KC3Meta.term("PageUpdateRestartLater") }
+					],
+					requireInteraction: true
+				});
+				break;
+		}
+	});
+	
+	// Chrome Desktop Notifications: Box Click
+	chrome.notifications.onClicked.addListener(function(notificationId, byUser){
+		if (notificationId == "kc3kai_update") {
+			window.open("../../pages/update/update.html", "kc3_update_page");
+			chrome.notifications.clear("kc3kai_update");
+		}
+	});
+	
+	// Chrome Desktop Notifications: Button Click
+	chrome.notifications.onButtonClicked.addListener(function(notificationId, buttonIndex){
+		if (notificationId == "kc3kai_update") {
+			if (buttonIndex === 0) {
+				reloadApp();
+			} else {
+				chrome.notifications.clear("kc3kai_update");
+			}
+		}
+	});
+	
+	function reloadApp(){ chrome.runtime.reload(); }
+	
+	function isDMMFrame(url){
+		return url.indexOf("/pages/game/dmm.html") > -1;
+	}
+	
+	function isAPIFrame(url){
+		return url.indexOf("/pages/game/api.html") > -1;
+	}
+	
+	function isDevtools(url){
+		return url.indexOf("/pages/devtools/themes/") > -1;
+	}
+	
+	function screenshotSpecialMode(tabId, response){
+		ConfigManager.load();
+		if(ConfigManager.dmm_customize) {
+			(new TMsg(tabId, "gamescreen", "getGamescreenOffset", {}, function(offset){
+				(new KCScreenshot())
+					.setCallback(response)
+					.remoteStart(tabId, offset);
+			})).execute();
+		}
+	}
+	
+	function parseChromeVersion() {
+		var raw = navigator.appVersion.match(/Chrom(e|ium)\/([0-9]+)\./);
+		return raw ? parseInt(raw[2], 10) : 0;
+	}
 	
 })();

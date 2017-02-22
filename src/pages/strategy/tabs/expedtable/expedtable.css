@@ -1,189 +1,341 @@
 .tab_expedtable {
 	width:680px;
 }
-.tab_expedtable .factory{
+
+.tab_expedtable .btn-secondary {
+  color: #292b2c;
+  background-color: #fff;
+  border-color: #ccc;
+}
+
+.tab_expedtable .btn-secondary:focus,
+.tab_expedtable .btn-secondary.focus {
+  -webkit-box-shadow: 0 0 0 2px rgba(204, 204, 204, 0.5);
+          box-shadow: 0 0 0 2px rgba(204, 204, 204, 0.5);
+}
+
+.tab_expedtable .btn-secondary:active,
+.tab_expedtable .btn-secondary.active,
+.tab_expedtable .show > .btn-secondary.dropdown-toggle {
+  background-image: none;
+  border-color: #adadad;
+}
+
+.tab_expedtable #exped_table_content_root .exped_control_row > div:not(:last-child) {
+	float: left;
+}
+
+.tab_expedtable #exped_table_content_root .exped_control_row {
+	margin-bottom: 10px;
+}
+
+.tab_expedtable #exped_table_content_root .exped_control_row > .btn-group {
+	margin-right: 6px;
+}
+
+.tab_expedtable #exped_table_content_root .exped_control_row > .btn-group > button {
+	height: 30px;
+	outline: none;
+	font-size: 12px;
+	-webkit-box-shadow: 0 0 0 0 rgba(204, 204, 204, 0.5);
+	box-shadow: 0 0 0 0 rgba(204, 204, 204, 0.5);
+}
+
+.tab_expedtable #exped_table_content_root
+  .exped_control_row.sort_control > .btn-group > button.resource {
+	width: 60px;
+}
+
+.tab_expedtable #exped_table_content_root
+  .exped_control_row.sort_control > .btn-group > button > .sorter_name {
+	float: left;
+	padding-left: 5px;
+}
+
+.tab_expedtable #exped_table_content_root
+  .exped_control_row.sort_control > .btn-group > button[data-sort-by=id] {
+	width: 50px;
+}
+
+.tab_expedtable #exped_table_content_root
+  .exped_control_row.sort_control > .btn-group > button[data-sort-by=time] {
+	width: 70px;
+}
+
+.tab_expedtable #exped_table_content_root .exped_control_row .control_header {
+	width: 65px;
+	padding: 5px 0 5px 0;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.tab_expedtable .exped_row .exped_view {
+	height: 30px;
+}
+
+.tab_expedtable .exped_row {
+	overflow: hidden;
+}
+
+.tab_expedtable .exped_view .edit_btn {
+	-webkit-user-select: none;
+}
+
+.tab_expedtable .exped_row .exped_config {
+	/* configs are invisible by default */
+	display: none;
+	border-top: 1px solid;
+	background-color: #eee;
+}
+
+.tab_expedtable .exped_row.active .exped_config {
+	display: initial;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box {
+	width: 48%;
+	margin: 5px 5px 5px 5px;
+	overflow: hidden;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box .content {
+	margin: 5px;
+	height: 160px;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box .content .group {
+	margin: 5px 0 5px 10px;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box .content .group .key {
+	width: 120px;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box .content .group .key,
+.tab_expedtable .exped_row .exped_config .config_box .content .group input {
+	float: left;
+	font-weight: normal;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box .content .group input[type=text]{
+	height: 20px;
+	width: 100px;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box .content .group input[type=checkbox] {
+	width: auto;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box.modifier {
+	float: left;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box.cost {
+	float: right;
+}
+
+.tab_expedtable .exped_row .exped_config .config_box.modifier {
+	float: left;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col {
+	height: 100%;
+	float: left;
+	margin: 0px 3px 0px 3px;
+	font-size: 14px;
+	padding: 5px 0px 5px 0px;
+	text-align: center;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.id {
+	width: 20px;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.time {
+	width: 60px;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.resource {
+	width: 55px;
+	font-weight: bold;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.resource.fuel {
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.resource.ammo {
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.resource.steel {
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.resource.bauxite {
+}
+
+
+.tab_expedtable .exped_row .exped_view .info_col.item {
+	width: 50px;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.item2 {
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.modifier {
+	width: 80px;
+	margin-left: 2px;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.cost {
+	width: 100px;
+}
+
+.tab_expedtable .factory {
 	display:none;
 }
 
-
-/* NUMBERS
------------------------------*/
-.tab_expedtable .expedNumBoxes {
-	
-}
-.tab_expedtable .expedNumBox {
-	width:110px;
-	height:152px;
-	float:left;
-	margin:0px 3px 0px 0px;
-	background:#def;
-	border-radius:8px;
-	padding:3px 5px;
-}
-.tab_expedpast .expedNumBox .expedNum,
-.tab_expedpast .expedNumBox .expedWhole {
-	width:100px;
-	height:15px;
-	line-height:15px;
-	margin:0px 0px 1px 0px;
-}
-.tab_expedtable .expedNumBox .expedCheck {
-	width:15px;
-	height:15px;
-	float:left;
-	margin:0px 5px 0px 5px;
-}
-.tab_expedtable .expedNumBox .expedCheck input {
-	width:13px;
-	height:13px;
-	margin:1px;
-}
-.tab_expedtable .expedNumBox .expedText {
-	width:25px;
-	height:15px;
-	float:left;
-	text-align:center;
-	margin:0px 5px 0px 0px;
-	font-size:12px;
-}
-.tab_expedtable .expedNumBox .expedWhole .expedText {
-	width:70px;
-	margin:0px;
-}
-.tab_expedtable .expedNumBox .expedTime {
-	width:40px;
-	height:15px;
-	float:left;
-	font-size:11px;
-	color:#999;
-}
-.tab_expedtable .fleetCounts .fleetCount {
-	width:100px;
-	height:20px;
-	line-height:20px;
-}
-.tab_expedtable .fleetCounts .fleetRadio {
-	width:20px;
-	height:20px;
-	float:left;
-}
-.tab_expedtable .fleetCounts .fleetRadio input {
-	width:14px;
-	height:14px;
-	margin:3px;
-}
-.tab_expedtable .fleetCounts .fleetText {
-	width:50px;
-	height:15px;
-	float:left;
+.tab_expedtable .exped_row .exped_view .modifier .view_normal img,
+.tab_expedtable .exped_row .exped_view .modifier .view_normal div {
+	float: left;
 }
 
-/* CONTROLS
------------------------------*/
-.tab_expedtable .expedControls {
-	line-height:20px;
-}
-.tab_expedtable .expedControls .control_box {
-	height:50px;
-	float:left;
-	margin:0px 20px 0px 0px;
-	border-right:1px solid #ccc;
-}
-.tab_expedtable .expedControls .control_title {
-	height:20px;
-	margin:0px 0px 5px 0px;
-	text-align:center;
-	font-weight:bold;
-	color:#33a;
+.tab_expedtable .exped_row .exped_view .modifier .view_normal img.gs {
+	width: 25px;
+	height: 25px;
+	margin: 0px 10px 0px 2px;
 }
 
-/* Resource Priorities */
-.tab_expedtable .expedControls .control_priorities {
-	width:320px;
-}
-.tab_expedtable .control_priorities .control {
-	width:75px;
-	height:20px;
-	line-height:20px;
-	float:left;
-	margin:0px 3px 0px 0px;
-}
-.tab_expedtable .control_priorities .control_label {
-	width:20px;
-	height:20px;
-	float:left;
-	margin:0px 5px 0px 0px;
-}
-.tab_expedtable .control_priorities .control_label img {
-	width:18px;
-	height:18px;
-	margin:1px;
-	vertical-align:top;
-}
-.tab_expedtable .control_priorities .control_input {
-	width:50px;
-	height:18px;
-	line-height:18px;
-	float:left;
-}
-.tab_expedtable .control_priorities .control_input input {
-	width:50px;
-	height:18px;
-	line-height:18px;
-	font-size:12px;
-	padding:0px;
-	text-align:center;
+.tab_expedtable .exped_row .exped_view .modifier .view_normal img.dht {
+	width: 25px;
+	height: 25px;
 }
 
-/* AFK Time */
-.tab_expedtable .expedControls .control_afktime {
-	width:200px;
-}
-.tab_expedtable .control_afktime .control {
-	width:95px;
-	height:20px;
-	line-height:20px;
-	float:left;
-	margin:0px 3px 0px 0px;
-}
-.tab_expedtable .control_afktime .control_label {
-	width:30px;
-	height:20px;
-	float:left;
-	margin:0px 5px 0px 0px;
-}
-.tab_expedtable .control_afktime .control_input {
-	width:55px;
-	height:18px;
-	line-height:18px;
-	float:left;
-}
-.tab_expedtable .control_afktime .control_input input {
-	width:55px;
-	height:18px;
-	line-height:18px;
-	font-size:12px;
-	padding:0px;
-	text-align:center;
+.tab_expedtable .exped_row .exped_view .cost .view_general div {
+	float: left;
+	width: 50%;
+	font-weight: bold;
 }
 
-/* Calculate button */
-.tab_expedtable .expedControls .control_calculate {
-	width:120px;
-	margin-right:0px;
-	border-right:0px none;
-}
-.tab_expedtable .expedControls .calculate_btn {
-	width:100px;
-	height:30px;
-	line-height:28px;
-	margin:10px 0px;
-	border-radius:10px;
-	background:#cde;
-	text-align:center;
-	border:1px outset #ace;
+.tab_expedtable .exped_row .exped_view .cost .view_normal {
+	width: 100%;
+	font-size: 12px;
+	padding-left: 12px;
+	float: left;
 }
 
+.tab_expedtable .exped_row .exped_view .cost .view_normal img,
+.tab_expedtable .exped_row .exped_view .cost .view_normal div {
+	float: left
+}
 
-/* CONTENT
------------------------------*/
+.tab_expedtable .exped_row .exped_view .cost .view_normal img {
+	margin: 0px 2px 0px 2px;
+}
+
+.tab_expedtable .exped_row .exped_view .info_col.edit_btn {
+	width: 24px;
+	height: 24px;
+	float: right;
+	margin: 4px 4px 0px 0px;
+	padding: 2px 0px 2px 0px;
+	border-radius: 10px;
+	text-align: center;
+	line-height: 20px;
+}
+
+.tab_expedtable #cost_model_content_root .control_group .control_row > div,
+.tab_expedtable #cost_model_content_root .control_group .control_row > input {
+	float: left;
+}
+
+.tab_expedtable #cost_model_content_root .control_group .control_row {
+	height: 40px;
+	padding-left: 10px;
+}
+
+.tab_expedtable #cost_model_content_root .control_group .control_row .view {
+	font-weight: bold;
+	font-size: 16px;
+}
+
+.tab_expedtable #cost_model_content_root .control_group .control_row .view.name {
+	width: 80px;
+}
+
+.tab_expedtable #cost_model_content_root .control_group .control_row .view.val {
+	width: 80px;
+	text-align: right;
+	padding-right: 20px;
+}
+
+.tab_expedtable #cost_model_content_root .control_group .control_row .slider {
+	width: 480px;
+}
+
+.tab_expedtable #cost_model_content_root table > thead > tr th.stype {
+	width: 12%;
+}
+
+.tab_expedtable #cost_model_content_root table > thead > tr th.ship_count {
+	width: 14%;
+	text-align: center;
+}
+
+.tab_expedtable #cost_model_content_root table > tbody > tr > th {
+	vertical-align: middle;
+}
+
+.tab_expedtable #cost_model_content_root table > tbody {
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.tab_expedtable #cost_model_content_root table > tbody > tr > td {
+	vertical-align: middle;
+}
+
+.tab_expedtable #cost_model_content_root .cost_cell
+.tab_expedtable #cost_model_content_root .cost_cell_na {
+	width: 80px;
+	height: 40px;
+}
+
+.tab_expedtable #cost_model_content_root .cost_cell div {
+	text-align: center;
+}
+
+.tab_expedtable #cost_model_content_root .cost_cell div.fuel {
+	text-align: left;
+	margin-left: 15px;
+}
+
+.tab_expedtable #cost_model_content_root .cost_cell div.ammo {
+	text-align: right;
+	margin-right: 15px;
+}
+
+.tab_expedtable #cost_model_content_root .cost_cell_na {
+	text-align: center;
+}
+
+.tab_expedtable #cost_model_content_root select.cost_preset {
+	min-width: 200px;
+	margin: 0 0 15px 10px;
+}
+
+.tab_expedtable .section_body.reset {
+	margin: 0 0 15px 0;
+}
+
+.tab_expedtable .section_body.reset button.reset {
+	width: 100px;
+	height: 30px;
+	margin: 10px 0 0 0;
+}
+
+.tab_expedtable .section_body.exped_table .alert.first_time {
+	display: none;
+}
+
+.tab_expedtable .section_body.reset .alert.config_gen_success {
+	display: none;
+}

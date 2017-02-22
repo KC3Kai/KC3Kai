@@ -102,13 +102,13 @@
 			// Japanese special case where ships and items sources are already in JP
 			if(
 				(["jp", "tcn"].indexOf(language) > -1)
-				&& (filename==="ships" || filename==="items")
+				&& (["ships", "items", "useitems", "ship_affix"].indexOf(filename) > -1)
 			){
 				extendEnglish = false;
 			}
-			// make ships.json and items.json an option to be always in specified one
+			// make ships and items related an option to be always in specified one
 			if (!!info_force_ship_lang
-				&& (filename==="ships" || filename==="items")){
+				&& (["ships", "items", "useitems", "ship_affix"].indexOf(filename) > -1)){
 				extendEnglish = false;
 				language = info_force_ship_lang;
 			}
@@ -134,7 +134,7 @@
 					}
 				} catch (e) {
 					console.error(e.stack);
-					var errMsg = $("<p>Fatal error when loading {0} en TL data: {1}</p>" +
+					let errMsg = $("<p>Fatal error when loading {0} en TL data: {1}</p>" +
 						"<p>Contact developers plz! &gt;_&lt;</p>".format(filename, e));
 					if($("#error").length>0){
 						$("#error").append(errMsg);
@@ -176,7 +176,7 @@
 				} else {
 					// Unknown error still needs to be handled asap
 					console.error(e.stack);/*RemoveLogging:skip*/
-					var errMsg = $("<p>Fatal error when loading {0} TL data of {1}: {2}</p>" +
+					let errMsg = $("<p>Fatal error when loading {0} TL data of {1}: {2}</p>" +
 						"<p>Contact developers plz! &gt;_&lt;</p>".format(filename, language, e));
 					if($("#error").length>0){
 						$("#error").append(errMsg);
@@ -313,7 +313,7 @@
 							// temporary hack for scn quotes
 							// as we don't use special key for seasonal lines
 							// and en will always has priority on that.
-							if (["scn"].indexOf(language) > -1) {
+							if (["scn", "kr"].indexOf(language) > -1) {
 								if (subId === 2) {
 									v[6547] = v[subKey];
 								}

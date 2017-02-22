@@ -242,8 +242,8 @@ Contains summary information about a fleet and its 6 ships
 	// calculate accurate landing craft bonus
 	// formula taken from 
 	// http://kancolle.wikia.com/wiki/Expedition/Introduction#Extra_bonuses_to_expedition_incomes
-	// as of Nov 7th, 2016
-	KC3Fleet.prototype.calcLandingCraftBonus = function() {
+	// as of Dec 23th, 2016
+	KC3Fleet.prototype.calcLandingCraftInfo = function() {
 		var self = this;
 		// use addImprove() to update this value instead of modifying it directly
 		var improveCount = 0;
@@ -294,7 +294,9 @@ Contains summary information about a fleet and its 6 ships
 		// "B1" in the formula (see comment link of this function)
 		var cappedBasicBonus = Math.min(0.2, basicBonus);
 		// "B2" in the formula
-		var tokuBonus = Math.min(0.05, 0.02*tokuCount);
+		// 5% for <= 3 toku and 5.4% for > 3 toku
+		var tokuCap = tokuCount <= 3 ? 0.05 : 0.054;
+		var tokuBonus = Math.min(tokuCap, 0.02*tokuCount);
 		var landingCraftCount = normalCount + t89Count + t2Count + tokuCount;
 		// "B3" in the formula
 		var improveBonus = landingCraftCount > 0
@@ -307,11 +309,99 @@ Contains summary information about a fleet and its 6 ships
 		// that can be applied to a base resource,
 		// we can do no better than this without rewriting some other parts of the code.
 
-		// TODO: a better solution would be passing [cappedBasicBonus, tokuBonus, improveBonus]
-		// as the result value, but that requires some modification on other parts of the code.
-		// plus that this formula is not the final version anyway (still under investigation
-		// as there are still unsolved counter-examples)
-		return cappedBasicBonus + tokuBonus + improveBonus;
+		return {
+			basicBonus: cappedBasicBonus + improveBonus,
+			tokuBonus: tokuBonus,
+			dhCount: landingCraftCount,
+			dhStarCount: improveCount
+		};
+	};
+
+	KC3Fleet.prototype.landingCraftBonusTextAndVal = function(
+		base /* basic resource income */,
+		resupply /* must be a non-negative number */, 
+		greatSuccess /* must be boolean */) {
+		if (typeof greatSuccess !== "boolean") {
+			console.error( "greatSuccess has non-boolean value" );
+			return;
+		}
+		if (typeof resupply !== "number") {
+			console.error( "resupply is not a number" );
+			return;
+		}
+
+		var info = this.calcLandingCraftInfo();
+		var outputs = [];
+		function o(text) {
+			outputs.push(text);
+		}
+
+		// keep at most 5 digits after decimal point
+		// but if a shorter representation is possible, it will be used instead
+		function formatFloat(v) {
+			if (typeof v !== "number") {
+				console.error( "formatFloat", "argument not taking a number");
+			}
+			var fixed = v.toFixed(5);
+			var converted = "" + v;
+			return (fixed.length <= converted.length) ? fixed : converted;
+		}
+
+		// "+percent% (actual)"
+		// p = 100*percent
+		function bonusText(p, actual) {
+			return "+" + formatFloat(100*p) + "% (" + formatFloat(actual) + ")";
+		}
+		
+		// "a: b"
+		function pairText(a,b) {
+			return a + ": " + b;
+		}
+
+		var actualBase = Math.floor( greatSuccess ? 1.5 * base : base );
+		var total = actualBase;
+		var totalText = "" + actualBase;
+		if (greatSuccess) {
+			o( pairText(KC3Meta.term("ExpedBaseGreat"), actualBase + " = " + base + "x150%" ));
+		} else {
+			o( pairText(KC3Meta.term("ExpedBaseNormal"), actualBase) );
+		}
+		if (info.dhCount > 0 && info.dhStarCount > 0) {
+			o( pairText(KC3Meta.term("ExpedAveStars"),
+						formatFloat(info.dhStarCount/info.dhCount) + " = " + 
+						info.dhStarCount + "/" + info.dhCount ) );
+		}
+
+		var bonus1 = Math.floor( actualBase * info.basicBonus );
+		if (info.basicBonus > 0) {
+			o( pairText(KC3Meta.term("ExpedBonus"), bonusText(info.basicBonus, bonus1)) );
+			total += bonus1;
+			totalText += "+" + bonus1;
+		}
+
+		var bonus2 = Math.floor( actualBase * info.tokuBonus );
+		if (info.tokuBonus > 0) {
+			o( pairText(KC3Meta.term("ExpedBonusToku"), bonusText(info.tokuBonus, bonus2)) );
+			total += bonus2;
+			totalText += "+" + bonus2;
+		}
+
+		var totalNoSup = total;
+		if (resupply > 0) {
+			o( pairText(KC3Meta.term("ExpedResupply") , "-" + formatFloat( resupply )));
+			total -= resupply;
+			totalText += "-" + resupply;
+		}
+		
+		totalText = "" + total + " = " + totalText;
+		if (resupply > 0) {
+			totalText += " = " + totalNoSup + "-" + resupply;
+		}
+
+		o( pairText(KC3Meta.term("ExpedTotalIncome"), totalText ) );
+		// "outputs" is always non-empty at this point, safe to reduce.
+		return { text: outputs.reduce( function(acc,i) { return acc + "\n" + i; } ),
+				 val: total };
 	};
 	
 	KC3Fleet.prototype.averageLevel = function(){
@@ -385,6 +475,12 @@ Contains summary information about a fleet and its 6 ships
 		return (this.fastFleet) ? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow");
 	};
 
+	KC3Fleet.prototype.adjustedAntiAir = function(formationId){
+		return Math.floor(
+			AntiAir.fleetAdjustedAntiAir(this, AntiAir.getFormationModifiers(formationId || 1))
+		);
+	};
+
 	/* Calculate expedition cost of a fleet
 	   -------------------------------------
 	   1 <= expeditionId <= 40
@@ -408,19 +504,31 @@ Contains summary information about a fleet and its 6 ships
 
 	KC3Fleet.prototype.calcResupplyCost = function() {
 		var self = this;
-		var totalFuel = 0;
-		var totalAmmo = 0;
-		var totalBauxite = 0;
+		var totalFuel = 0,
+			totalAmmo = 0,
+			totalSteel = 0,
+			totalBauxite = 0;
 		$.each( this.ships, function(i, shipId) {
 			if (shipId > -1) {
 				var shipObj = self.ship(i);
-				var cost = shipObj.calcResupplyCost(-1, -1, true);
+				var cost = shipObj.calcResupplyCost(-1, -1, true, true);
 				totalFuel += cost.fuel;
 				totalAmmo += cost.ammo;
+				totalSteel += cost.steel;
 				totalBauxite += cost.bauxite;
 			}
 		});
-		return {fuel: totalFuel, ammo: totalAmmo, bauxite:totalBauxite};
+		return {fuel: totalFuel, ammo: totalAmmo, steel: totalSteel, bauxite: totalBauxite};
+	};
+
+	KC3Fleet.prototype.calcJetsSteelCost = function(currentSortieId) {
+		var i, ship;
+		var totalSteel = 0;
+		for(i = 0; i < this.countShips(); i++) {
+			ship = this.ship(i);
+			totalSteel += ship.calcJetsSteelCost(currentSortieId);
+		}
+		return totalSteel;
 	};
 
 	/*--------------------------------------------------------*/
@@ -613,9 +721,13 @@ Contains summary information about a fleet and its 6 ships
 	 *  http://kancolle.wikia.com/wiki/Line_of_Sight
 	 *  http://ja.kancolle.wikia.com/wiki/%E3%83%9E%E3%83%83%E3%83%97%E7%B4%A2%E6%95%B5
 	 *  ID refer to start2 API, api_mst_slotitem_equiptype
+	 * @param nodeDivaricatedFactor
 	 * @returns {number}
 	 */
-	KC3Fleet.prototype.eLos4 = function(){
+	KC3Fleet.prototype.eLos4 = function(nodeDivaricatedFactor){
+		// The weighting of the eqipment sum part
+		// For now: 2-5(H,I):x1, 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
+		nodeDivaricatedFactor = nodeDivaricatedFactor || 1;
 		var multipliers = {
 			6: 0.6, // Carrier-Based Fighter
 			7: 0.6, // Carrier-Based Dive Bomber
@@ -632,7 +744,9 @@ Contains summary information about a fleet and its 6 ships
 			39: 0.6, // Skilled Lookouts
 			40: 0.6, // Sonar
 			41: 0.6, // Large Flying Boat
-			45: 0.6,  // Seaplane Fighter
+			45: 0.6, // Seaplane Fighter
+			51: 0.6, // Submarine Radar
+			57: 0.6, // Jet Bomber
 			94: 1 // Carrier-Based Reconnaissance Aircraft
 		};
 
@@ -653,33 +767,33 @@ Contains summary information about a fleet and its 6 ships
 			total += Math.sqrt(shipData.nakedLoS());
 
 			// iterate ship's equipment
-			for (var j = 0; j < 4; j++) {
-				if (shipData.items[j] > -1) {
-					var itemData = shipData.equipment(j);
-					if (itemData.itemId !== 0) {
-						var itemType = itemData.master().api_type[2];
-						var multiplier = multipliers[itemType];
-						if (multiplier) {
-							var equipment_bonus = Math.sqrt(itemData.stars);
+			var equipTotal = 0;
+			var allEquips = shipData.equipment(true);
+			for (var j in allEquips) {
+				var itemData = allEquips[j];
+				if (itemData.itemId > 0) {
+					var itemType = itemData.master().api_type[2];
+					var multiplier = multipliers[itemType];
+					if (multiplier) {
+						var equipment_bonus = Math.sqrt(itemData.stars);
 
-							if (itemType === 12 ||
-								itemType === 13) {
-								// radar bonus
-								equipment_bonus *= 1.25;
-							} else if (itemType === 10) {
-								// Reconnaissance Seaplane bonus
-								equipment_bonus *= 1.2;
-							} else {
-								// all other equipment with no bonus
-								equipment_bonus = 0;
-							}
-
-							// multiple * (raw equipment los + equipment bonus)
-							total += multiplier * (itemData.master().api_saku + equipment_bonus);
+						if ([12, 13].indexOf(itemType) > -1) {
+							// Radar bonus
+							equipment_bonus *= 1.25;
+						} else if ([9, 10].indexOf(itemType) > -1) {
+							// Reconnaissance Plane/Seaplane bonus
+							equipment_bonus *= 1.2;
+						} else {
+							// all other equipment with no bonus
+							equipment_bonus = 0;
 						}
+
+						// multiple * (raw equipment los + equipment bonus)
+						equipTotal += multiplier * (itemData.master().api_saku + equipment_bonus);
 					}
 				}
 			}
+			total += nodeDivaricatedFactor * equipTotal;
 
 		}
 
@@ -703,6 +817,78 @@ Contains summary information about a fleet and its 6 ships
 		this.checkAkashi(true);
 	};
 	
+	/**
+	 * Look up for Katori Class Exp Bonus from current Fleet.
+	 * @return exp bonus modifier, default is 1.0
+	 * @see http://wikiwiki.jp/kancolle/?%B1%E9%BD%AC#v657609b
+	 */
+	KC3Fleet.prototype.lookupKatoriClassBonus = function() {
+		var ctBonusTable = [
+			// ~9,  ~29,  ~59,  ~99, ~155?
+			[ 1.0,  1.0,  1.0,  1.0,  1.0], // No CT
+			[1.05, 1.08, 1.12, 1.15, 1.20], // CT x 1 as flagship
+			[1.03, 1.05, 1.07, 1.10, 1.15], // CT x 1
+			[1.10, 1.13, 1.16, 1.20, 1.25], // CT x 2, 1 flagship
+			[1.04, 1.06, 1.08, 1.12, 1.175] // CT x 2
+		];
+		var fsCtLevel = 0, maxCtLevel = 0, katoriIndex = 0;
+		this.ship(function(rid, idx, ship){
+			if(ship.master().api_stype == 21){
+				if(ship.level > maxCtLevel) maxCtLevel = ship.level;
+				if(idx === 0){
+					katoriIndex = 1;
+					fsCtLevel = ship.level;
+				} else {
+					katoriIndex = katoriIndex < 3 ?
+						katoriIndex + 2 : katoriIndex;
+				}
+			}
+		});
+		if(katoriIndex === 3) maxCtLevel = fsCtLevel;
+		var levelIndex =
+			(maxCtLevel < 10)  ? 0 :
+			(maxCtLevel < 30)  ? 1 :
+			(maxCtLevel < 60)  ? 2 :
+			(maxCtLevel < 100) ? 3 :
+			4;
+		return ctBonusTable[katoriIndex][levelIndex] || 1;
+	};
+
+	/**
+	 * Predicts PvP opponent's battle formation.
+	 * @param opponentFleetShips - master ID array of opponent fleet, no -1 placeholders
+	 * @return predicted formation ID
+	 * @see http://wikiwiki.jp/kancolle/?%B1%E9%BD%AC#m478a4e5
+	 */
+	KC3Fleet.prototype.predictOpponentFormation = function(opponentFleetShips){
+		// Convert fleet ships to master IDs, remove -1 elements
+		var playerFleetShips = this.ships
+			.filter(function(v){return v > 0;})
+			.map(function(v){return KC3ShipManager.get(v).masterId;});
+		var playerFlagshipMst = KC3Master.ship(playerFleetShips[0]);
+		var opponentFlagshipMst = KC3Master.ship(opponentFleetShips[0]);
+		var playerSubmarineCount = playerFleetShips.reduce(function(acc, v){
+			return acc + ([13,14].indexOf(KC3Master.ship(v).api_stype) > -1 & 1);
+		}, 0);
+		// 1st priority: flagship is SS/SSV and SS/SSV > 1 in our fleet, ships >= 4 of enemy fleet
+		if(opponentFleetShips.length >= 4
+			&& [13, 14].indexOf(playerFlagshipMst.api_stype) > -1
+			&& playerSubmarineCount > 1){
+			return 5; // Line Abreast
+		}
+		// flagship is SS/SSV and ships >= 4 in enemy fleet
+		if(opponentFleetShips.length >= 4
+			&& [13, 14].indexOf(opponentFlagshipMst.api_stype) > -1){
+			return 4; // Echelon
+		}
+		// flagship is CV/CVL/AV/CVB and ships >= 5 in enemy fleet
+		if(opponentFleetShips.length >= 5
+			&& [7, 11, 16, 18].indexOf(opponentFlagshipMst.api_stype) > -1){
+			return 3; // Diamond
+		}
+		return 1; // Line Ahead
+	};
+
 	/* SORTIE JSON
 	Used for recording sorties on indexedDB
 	Generate fleet summary object without referential data (all masterId)
@@ -727,6 +913,20 @@ Contains summary information about a fleet and its 6 ships
 							ship.equipment(3).masterId,
 							ship.exItem().masterId
 						],
+						stars: [
+							ship.equipment(0).stars,
+							ship.equipment(1).stars,
+							ship.equipment(2).stars,
+							ship.equipment(3).stars,
+							ship.exItem().stars
+						],
+						ace: [
+							ship.equipment(0).ace,
+							ship.equipment(1).ace,
+							ship.equipment(2).ace,
+							ship.equipment(3).ace,
+							ship.exItem().ace
+						]
 					});
 				}
 			});
@@ -734,6 +934,14 @@ Contains summary information about a fleet and its 6 ships
 		}else{
 			return {};
 		}
+	};
+
+	KC3Fleet.prototype.deckbuilder = function() {
+		var result = {};
+		this.ship().map( function(x,i) {
+			result["s".concat(i+1)] = x.deckbuilder();
+		});
+		return result;
 	};
 
 })();

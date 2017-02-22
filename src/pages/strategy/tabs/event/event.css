@@ -14,8 +14,10 @@
 /* WORLD LIST
 ---------------------------------*/
 .tab_event .world_list {
-	width:700px;
 	height:31px;
+	position:relative;
+	min-width:700px;
+	overflow:hidden;
 }
 .tab_event .world_box {
 	width:116px;
@@ -30,6 +32,25 @@
 	height:31px;
 	line-height:29px;
 	border-bottom:0px none;
+}
+.tab_event .world_shift {
+	position:absolute;
+	top:0px;
+	width:10px;
+	height:95%;
+	display:flex;
+	align-items:center;
+	cursor:pointer;
+}
+.tab_event .world_shift.left {
+	left:-3px;
+}
+.tab_event .world_shift.right {
+	right:3px;
+}
+.tab_event .world_shift.disabled {
+	cursor:default;
+	display:none;
 }
 
 /* MAP LIST
@@ -123,6 +144,10 @@
 }
 .tab_event .map_box.noclearnogauge .map_gauge {
 	display:none;
+}
+
+.tab_event .page_list .pagination {
+	margin:5px 0px 0px 0px;
 }
 
 /* SORTIE LIST
@@ -327,7 +352,7 @@
 
 /* Sortie Nodes */
 .tab_event .sortie_list .sortie_nodes {
-	width:670px;
+	width:675px;
 	margin:5px 0px 2px 0px;
 	display:none;
 }
@@ -382,6 +407,36 @@
 	width:20px;
 	height:20px;
 	vertical-align:top;
+}
+.tab_event .sortie_list .node_result_box .exped {
+	width:10px;
+	height:11px;
+	line-height:11px;
+	border-radius:6px;
+	margin:9px 0px 0px -1px;
+	position:absolute;
+	font-size:8px;
+	text-align:center;
+	color:#fff;
+	background:#a69de6;
+	overflow:hidden;
+	pointer-events:none;
+	display:none;
+}
+.tab_event .sortie_list .node_result_box .lbas {
+	width:12px;
+	height:12px;
+	line-height:12px;
+	border-radius:6px;
+	margin:8px 0px 0px 7px;
+	position:absolute;
+	font-size:8px;
+	text-align:center;
+	color:#ff0;
+	background:#5b5;
+	overflow:hidden;
+	pointer-events:none;
+	display:none;
 }
 
 .tab_event .sortie_list .node_enemy {
@@ -462,10 +517,22 @@
 	float:left;
 	font-weight:bold;
 }
+.tab_event .sortie_list .node_cond_value.best {
+	color:#009900;
+}
+.tab_event .sortie_list .node_cond_value.better {
+	color:#009900;
+}
 .tab_event .sortie_list .node_cond_value.good {
 	color:#009900;
 }
 .tab_event .sortie_list .node_cond_value.bad {
+	color:#f33;
+}
+.tab_event .sortie_list .node_cond_value.worse {
+	color:#f33;
+}
+.tab_event .sortie_list .node_cond_value.worst {
 	color:#f33;
 }
 

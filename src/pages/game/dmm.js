@@ -59,6 +59,7 @@ function ActivateGame(){
 		.attr("src", "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/")
 		.end()
 		.show();
+	$(".box-wrap").css("zoom", ((ConfigManager.api_gameScale || 100) / 100));
 	idleTimer = setInterval(idleFunction,1000);
 	if(ConfigManager.alert_idle_counter) {
 		$(".game-idle-timer").trigger("refresh-tick");
@@ -66,13 +67,6 @@ function ActivateGame(){
 }
 
 $(document).on("ready", function(){
-	// Chrome 55 incompatibilities
-	if (parseInt(getChromeVersion(), 10) >= 55) {
-		if(typeof localStorage.read_dmm_notice_55 == "undefined") {
-			$("#chrome55frame").show();
-		}
-	}
-	
 	// Initialize data managers
 	ConfigManager.load();
 	KC3Master.init();
@@ -115,7 +109,8 @@ $(document).on("ready", function(){
 					top: "auto",
 					bottom: "auto",
 					right: "auto",
-					width: $(".box-game").width()
+					width: $(".box-game").width(),
+					zoom: ((ConfigManager.api_gameScale || 100) / 100)
 				});
 				break;
 			case "stick":
@@ -146,9 +141,10 @@ $(document).on("ready", function(){
 	if(ConfigManager.api_mustPanel) {
 		$(".play_btn")
 			.off('click')
+			.attr("disabled", "disabled")
 			.text(KC3Meta.term("APIWaitToggle"))
-			.css('color','#f00')
-			.css('width','40%');
+			.css("color", "#777")
+			.css('width', "40%");
 	}
 	
 	// Configure Refresh Toggle (using $(".game-refresh").trigger("click") is possible)
@@ -195,13 +191,6 @@ $(document).on("ready", function(){
 		}
 	});
 	
-	// I've read the Chrome 55 API Link notice
-	$("#chrome55frame .api_notice_close").on('click', function(){
-		localStorage.read_dmm_notice_55 = 1;
-		$("#chrome55frame").hide();
-	});
-	
-	
 	// Configure Idle Timer
 	/*
 	  unsafe-tick  : remove the safe marker of API idle time
@@ -219,8 +208,15 @@ $(document).on("ready", function(){
 	idleFunction = function(){
 		if(ConfigManager.alert_idle_counter) {
 			$(".game-idle-timer").text(String(Math.floor((Date.now() - lastRequestMark) / 1000)).toHHMMSS());
+			// Show Idle Counter
+			if(ConfigManager.alert_idle_counter > 1) {
+				$(".game-idle-timer").show();
+			} else {
+				$(".game-idle-timer").hide();
+			}
 		} else {
 			$(".game-idle-timer").text(String(NaN).toHHMMSS());
+			$(".game-idle-timer").hide();
 			clearInterval(idleTimer);
 		}
 	};
@@ -229,11 +225,6 @@ $(document).on("ready", function(){
 	if(ConfigManager.api_directRefresh) {
 		$(".game-refresh").css("display","flex");
 	}
-	// Show Idle Counter
-	if(ConfigManager.alert_idle_counter > 1) {
-		$(".game-idle-timer").show();
-	}
-	
 	
 	// Exit confirmation
 	window.onbeforeunload = function(){
@@ -242,6 +233,8 @@ $(document).on("ready", function(){
 		if(ConfigManager.api_askExit==1 && !trustedExit && !waiting){
 			trustedExit = true;
 			setTimeout(function(){ trustedExit = false; }, 100);
+			// Not support custom message any more, see:
+			// https://bugs.chromium.org/p/chromium/issues/detail?id=587940
 			return KC3Meta.term("UnwantedExitDMM");
 		}
 	};
@@ -509,7 +502,6 @@ var interactions = {
 	
 	// Taiha Alert Start
 	taihaAlertStart :function(request, sender, response, callback){
-		ConfigManager.load();
 		taihaStatus = true;
 		
 		if(ConfigManager.alert_taiha_blur) {
@@ -659,8 +651,3 @@ chrome.runtime.onMessage.addListener(function(request, sender, response){
 		}
 	}
 });
-
-function getChromeVersion() {
-	var raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
-	return raw ? parseInt(raw[2], 10) : false;
-}

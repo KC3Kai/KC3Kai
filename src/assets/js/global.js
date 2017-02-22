@@ -199,22 +199,30 @@ String.prototype.toArray = function() {
 	return this.split("");
 };
 
-/** String.format("msg {0} is {1}", args)
+/**
+ * String.format("msg {0} is {1}", args) - convenient placeholders replacing,
  * from http://jqueryvalidation.org/jQuery.validator.format/
+ *
+ * @return a new string replaced with given expressions like template literals in ES6
+ * @param {an Array/String..} args - the real values to be replaced with
+ * notes:
+ *   - in fact, NO l10n format feature like Date, Currency, Float Number
+ *   - placeholders can be commented via {0:commentGoesHere} (no space)
+ *   - if first parameter is Array, left params will be ignored
+ *   - if param or element in Array is not String, will be auto toString
 ------------------------------------------------------------ */
 String.prototype.format = function(params) {
-	var source = this;
+	var source = this.toString();
 	if (arguments.length < 1) {
 		return source;
-	}
-	if (arguments.length > 1 && params.constructor !== Array) {
+	} else if(!Array.isArray(params)) {
 		params = $.makeArray(arguments);
 	}
-	if (params.constructor !== Array) {
-		params = [ params ];
-	}
+	// A-Z a-z 0-9 _ $ [more unicodes]
+	var validCommentChars = "[_$\\w\\d\\xA0-\\uFFFF]*";
 	$.each(params, function( i, n ) {
-		source = source.replace( new RegExp("\\{" + i + "\\}", "g"), function() {
+		source = source.replace( new RegExp("\\{" + i
+			+ "(:" + validCommentChars + ")?\\}", "g"), function() {
 			return n;
 		});
 	});
@@ -696,7 +704,14 @@ Math.stdev  = function(p1f /*, data*/){
 	},0)/(args.length - !p1f));
 };
 
-/* LIMIT ROUNDING
+/** LIMIT ROUNDING
+ * @param command: do Math."round"(default) or "ceil" or "floor"
+ * @param value: the number to be rounded
+ * @param rate: how many decimal digits to be reserved
+ * @param rev: if false, moving decimal point "rate" place(s) to the right,
+ *             then integer will be returned
+ * @param magn: if true, negative rounding behaves like positive
+ * @return the rounded number
 -------------------------------*/
 Math.qckInt = function(command,value,rate,rev,magn) {
 	if (["round","ceil","floor"].indexOf(command) < 0)
@@ -711,6 +726,7 @@ Math.qckInt = function(command,value,rate,rev,magn) {
 	return (magn ? Math.sign(value) : 1) *
 		Math[command]((magn ? Math.abs(value) : value) * shift) / (rev ? shift : 1);
 };
+/* Rounding towards left side of decimal point */
 Math.hrdInt = function(command,value,rate,rev) {
 	return Math.qckInt(command,value,-rate,rev);
 };

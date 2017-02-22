@@ -1,0 +1,184 @@
+.tab_expedscorer {
+	width:680px;
+}
+.tab_expedscorer .factory {
+	display:none;
+}
+
+.tab_expedscorer .control_row > .control_box,
+.tab_expedscorer .control_row.row2 .control_col {
+	margin: 5px 2px 0 2px;
+	float: left;
+}
+
+.tab_expedscorer .control_box {
+	border-radius: 6px;
+	overflow: hidden;
+}
+
+.tab_expedscorer .control_box > .header {
+	text-align: center;
+}
+
+.tab_expedscorer .control_box > .content {
+	padding: 2px;
+}
+
+.tab_expedscorer .control_box > .content input[type=text] {
+	background-color: white;
+	color: black;
+}
+
+.tab_expedscorer .control_row {
+	margin: 0 5px 0 5px;
+}
+
+.tab_expedscorer .control_row.row1 .control_box {
+	height: 160px;
+}
+
+.tab_expedscorer .control_box.world {
+	width: 110px;
+}
+
+.tab_expedscorer .control_box.world label {
+	display: inline;
+}
+.tab_expedscorer .control_box.world .toggle_row {
+	padding: 0 0 0 15px;
+}
+.tab_expedscorer .control_box.world .toggle_row * {
+	float: left;
+	line-height: 15px;
+}
+.tab_expedscorer .control_box.world .toggle_row input[type=checkbox] {
+	width:13px;
+	height:13px;
+	margin:1px;
+}
+.tab_expedscorer .control_box.world .toggle_row .name {
+	width:25px;
+	height:15px;
+	float:left;
+	text-align:center;
+	font-size:12px;
+}
+.tab_expedscorer .control_box.world .toggle_row .time {
+	width:40px;
+	height:15px;
+	float:left;
+	text-align: center;
+	font-size:11px;
+	color:#999;
+}
+
+.tab_expedscorer .control_box.preset {
+	width: 115px;
+}
+
+.tab_expedscorer .control_box .content button:hover {
+	color: #ffcc00;
+}
+
+.tab_expedscorer .control_box .content button {
+	font-size: 11px;
+	font-weight: bold;
+	height: 25px;
+	width: 100px;
+	margin: 5px 0 0 5px;
+	padding-left: 5px;
+}
+
+.tab_expedscorer .control_box.preset .content button {
+	height: 25px;
+}
+
+.tab_expedscorer .control_box.resource {
+	width: 400px;
+}
+
+.tab_expedscorer .control_box.resource > .content {
+
+}
+
+.tab_expedscorer .control_box.resource .resource_box > * {
+	float: left;
+}
+
+.tab_expedscorer .control_box.resource .resource_box > *:not(.slider) {
+	margin: 5px 6px 5px 2px;
+}
+
+.tab_expedscorer .control_box.resource .resource_box > .slider {
+	margin: 5px 9px 5px 9px;
+	width: 120px;
+}
+
+.tab_expedscorer .control_box.resource .resource_box > .view {
+	width: 20px;
+	text-align: center;
+	font-weight: bold;
+}
+
+.tab_expedscorer .control_box.resource button.reset,
+.tab_expedscorer .control_box.resource button.balanced {
+	float: right;
+	margin: 8px 5px 0 0;
+}
+
+.tab_expedscorer .control_box.afktime,
+.tab_expedscorer .control_box.fleet {
+	width: 162px;
+	height: 57.5px;
+	float: none;
+ }
+
+.tab_expedscorer .control_box.afktime .content * {
+	float: left;
+	margin: 5px 2px 5px 3px;
+}
+
+.tab_expedscorer .control_box.afktime .content input[type=text] {
+	width: 40px;
+	height: 20px;
+	text-align: center;
+}
+
+.tab_expedscorer .control_box.fleet {
+	margin: 5px 0 0 0;
+}
+
+.tab_expedscorer .control_box.fleet .content {
+	padding-top: 7px;
+}
+
+.tab_expedscorer .control_box.fleet .fleet_radio {
+	height: 20px;
+	margin: 0 10px 0 10px;
+}
+
+.tab_expedscorer .control_box.calc {
+	width: 115px;
+}
+
+.tab_expedscorer .control_row.row2 > .control_box,
+.tab_expedscorer .control_row.row2 > .control_col {
+	height: 120px;
+}
+
+.tab_expedscorer .control_box.calc button {
+	font-size: 16px;
+	height: 60px;
+	padding-left: 8px;
+}
+
+.tab_expedscorer .control_box.calc.out_of_sync button {
+}
+
+.tab_expedscorer .control_box.calc .content {
+	padding-top: 14px;
+}
+
+.tab_expedscorer .table.results {
+	display: none;
+}

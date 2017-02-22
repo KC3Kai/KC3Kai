@@ -84,6 +84,14 @@
 			"t37": "dv",
 			// interceptor
 			"t38": "aa",
+			// jet bomber (keiun)
+			"t39": "dv",
+			// jet bomber (kikka)
+			"t40": "dv",
+			// transport material
+			"t41": "overall",
+			// submarine radar
+			"t42": "ev",
 			// all types
 			"tall": "type",
 		},
@@ -124,12 +132,13 @@
 				return sumAllGetter(b) - sumAllGetter(a);
 			};
 			self._comparator.type = function(a,b) {
-				var result = a.type_id - b.type_id;
-				if (result === 0) {
-					return self._comparator[self._defaultCompareMethod["t" + a.type_id]](a, b);
-				} else {
-					return result;
-				}
+				return a.type_id - b.type_id
+					|| self._comparator[self._defaultCompareMethod["t" + a.type_id]](a, b);
+			};
+			self._comparator.total = function(a,b) {
+				return (b.held.length+b.extras.length) - (a.held.length+a.extras.length)
+					|| b.extras.length - a.extras.length
+					|| a.type_id - b.type_id;
 			};
 		},
 
@@ -147,6 +156,7 @@
 			// Reload data from local storage
 			KC3ShipManager.load();
 			KC3GearManager.load();
+			PlayerManager.loadBases();
 			// Clean old data
 			this._items = {};
 			this._holders = {};
@@ -158,6 +168,9 @@
 				this.checkShipSlotForItemHolder(2, KC3ShipManager.list[ctr]);
 				this.checkShipSlotForItemHolder(3, KC3ShipManager.list[ctr]);
 				this.checkShipSlotForItemHolder(-1, KC3ShipManager.list[ctr]);
+			}
+			for(ctr in PlayerManager.bases){
+				this.checkLbasSlotForItemHolder(PlayerManager.bases[ctr]);
 			}
 
 			// Compile ships on Index
@@ -251,8 +264,18 @@
 				if(ThisShip.ex_item > 0){
 					this._holders["s"+ThisShip.ex_item] = ThisShip;
 				}
-			} else if(ThisShip.items[slot] > -1){
+			} else if(ThisShip.items[slot] > 0){
 				this._holders["s"+ThisShip.items[slot]] = ThisShip;
+			}
+		},
+
+		/* Check LBAS slot of an aircraft is equipped
+		--------------------------------------------*/
+		checkLbasSlotForItemHolder :function(LandBase){
+			for(var squad in LandBase.planes){
+				if(LandBase.planes[squad].api_slotid > 0){
+					this._holders["s"+LandBase.planes[squad].api_slotid] = LandBase;
+				}
 			}
 		},
 
@@ -270,6 +293,7 @@
 			var sortControls = this._allProperties.slice(0);
 			sortControls.push( "overall" );
 			sortControls.push( "type" );
+			sortControls.push( "total" );
 			sortControls.forEach( function(property,i) {
 				$(".tab_gears .itemSorters .sortControl." + property).on("click", function() {
 					KC3StrategyTabs.gotoTab(null, self._currentTypeId, property);
@@ -401,18 +425,30 @@
 
 				var els = $();
 				for( var j in arranged[i].holder ){
-					els = els.add(
-						$('<div/>',{
-							'class':	'holder',
-							'html':		'<img src="'+KC3Meta.shipIcon(
-												arranged[i].holder[j].holder.masterId,
-												"../../assets/img/ui/empty.png"
-											)+'"/>'
-										+ '<font>'+arranged[i].holder[j].holder.name()+'</font>'
-										+ '<span>Lv'+arranged[i].holder[j].holder.level+'</span>'
-										+ '<span>x' +arranged[i].holder[j].count+ '</span>'
-						})
-					);
+					if(arranged[i].holder[j].holder instanceof KC3LandBase){
+						els = els.add(
+							$('<div/>',{
+								'class':	'holder',
+								'html':		'<img src="../../../../assets/img/items/33.png" />'
+											+ '<font>LBAS World '+arranged[i].holder[j].holder.map+'</font>'
+											+ '<span>#'+arranged[i].holder[j].holder.rid+'</span>'
+											+ '<span>x'+arranged[i].holder[j].count+'</span>'
+							})
+						);
+					} else {
+						els = els.add(
+							$('<div/>',{
+								'class':	'holder',
+								'html':		'<img src="'+KC3Meta.shipIcon(
+													arranged[i].holder[j].holder.masterId,
+													"../../assets/img/ui/empty.png"
+												)+'"/>'
+											+ '<font>'+arranged[i].holder[j].holder.name()+'</font>'
+											+ '<span>Lv'+arranged[i].holder[j].holder.level+'</span>'
+											+ '<span>x'+arranged[i].holder[j].count+'</span>'
+							})
+						);
+					}
 				}
 				return els;
 			}

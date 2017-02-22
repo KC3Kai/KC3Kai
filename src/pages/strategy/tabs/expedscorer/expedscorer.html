@@ -1,0 +1,183 @@
+<div class="page_title">
+	Expedition Scorer
+	<div class="page_help_btn hover"><span>?</span> Help Topics</div>
+</div>
+
+<!-- HELP TOPICS -->
+<div class="page_help">
+	<div class="help_q"> What does this page do?</div>
+	<div class="help_a">
+		<p>It lets you input your expedition preferences on which resource type is your priority and AFK hours, then gives you some best sets of expeditions to run during that time.</p>
+		<p>Also take a look at <code>Expedition &gt; Table</code>, which allows you to configure your expedition preference in more details.</p>
+	</div>
+
+	<div class="help_q">Does this consider resupply costs?</div>
+	<div class="help_a">
+		<p>Yes, it is necessary to consider resupply costs in the calculations to give you the best output. Expeditions that are actually worse may get ranked better just because resupply is not considered when they have much higher costs. <a href="https://github.com/dragonjet/KC3Kai/issues/301#issuecomment-132015707">See discussion</a>.</p>
+	</div>
+
+	<div class="help_q">Then what do you use as resupply costs?</div>
+	<div class="help_a">
+		<p>Basically the scorer will try to use cost-effective ships as much as possible. See <a href="https://gist.github.com/Javran/07e07ef81638f2b9cec0#file-expedition-minimal-costen-md">Javran's gist</a>.</p>
+		<p>Also the <code>Cost Model</code> section of <code>Expedition &gt; Table</code> shows you the exact amount of resupply cost used by this scorer. If you are unsatisfied about the resupply cost, each individual expedition's resupply cost can be customized exactly from <code>Expeditions</code> section of <code>Expedition &gt; Table</code>.</p>
+	</div>
+
+	<div class="help_q">Select Expeditions</div>
+	<div class="help_a">
+		<ul>
+			<li><p>Scorer will only take checked expeditions into account. If there is any expedition in the result that you don't want to run, simply uncheck that expedition and the click <code>Calculate</code> button again.</p></li>
+			<li><p>There are <code>Presets</code> which <strong>overwrites</strong> all your expedition selections. These presets are:</p>
+				<ul>
+					<li><code>All</code>: selects all expeditions</li>
+					<li><code>Recommended</code>: some expeditions that have poor resource gains are excluded</li>
+					<li><code>Buckets</code>: all expeditions that might have Buckets (a.k.a. Instant Repair). Note that for some expedition you would need to achieve great success for it to be possible to produce Buckets.</li>
+					<li><code>None</code>: nothing is selected</li>
+			</ul></li>
+		</ul>
+	</div>
+
+	<div class="help_q">How can I input my resource priority?</div>
+	<div class="help_a">
+		<p>In <code>Resource Priority</code> section, each resource is associated with a value, move sliders to adjust these values. A higher value means higher priority for that resource. For a given set of expeditions, this value is directly multiplied to the per hour income of that resource and then values from all 4 resources are added up together to yield the final score for that set of expeditions.</p>
+		<p><code>Reset</code> button resets all resource priorty to <code>5</code>, and <code>Balanced</code> button tries to give you a resource priority that would make all your resources even. <a href="https://github.com/KC3Kai/KC3Kai/issues/1530#issue-175759666">See discussion about <code>Balanced</code> here</a>.</p>
+	</div>
+
+	<div class="help_q">Think carefully about resource priority.</div>
+	<div class="help_a">
+		<p>Everyone would have a different play style and game plan, <code>Balanced</code> resource priority might not be suitable for you: if you are leveling ships, you would try to gain more fuel and ammo; if you want to craft planes or radars, more priority on bauxite would be prefered. You are encouraged to adjust resource priorities to your needs!</p>
+	</div>
+
+	<div class="help_q">Think carefully about results.</div>
+	<div class="help_a">
+		<p>Keep in mind that <strong>first result might not always be the best one</strong>: for example, you might intend for an even amount of fuel and ammo income and don't care about steel and bauxite, and you would set resource priority to <code>1</code> for both fuel and ammo, <code>0</code> for both steel and bauxite. A set of expedition that gives you 400 fuel and 10 ammo per hour (i.e. <code>400+10=410</code>) might have a higher score than another set of expedition that gives you 200 fuel and 200 ammo per hour (i.e. <code>200+200=400</code>), while the latter might be more desired. Therefore, <strong>always take a look at resource per hour columns of the result</strong> before making decisions.</p>
+	</div>
+
+	<div class="help_q">What if I want more Buckets?</div>
+	<div class="help_a">
+		<p>Bucket income is not considered in expedition scorer. However, you can try making good use of <code>Bucket</code> preset and <code>Available Fleets</code> feature: for example, you can make two fleets run expeditions only from <code>Bucket</code> preset (with available fleet being <code>2</code>), and remaining 1 fleet to focus on other resources you want (with available fleet being <code>1</code>).</p>
+		<p>Alternatively (and probably better), take a look at <code>Expeditions</code> section of <code>Expedition &gt; Table</code>, sort expeditions by time and prioritize expeditions that are both short and have Bucket incomes.</p>
+	</div>
+
+	<div class="help_q">What is the <code>AFK Time</code>?</div>
+	<div class="help_a">
+		<p>The hours and minutes you're going to be offline, and is also considered in scoring the expeditions: if an expedition time is shorter than your AFK time, your AFK time will be used to compute that expedition's per hour income.</p>
+	</div>
+
+	<!-- this part is commented out because the link seems broken
+		 <div class="help_more">
+			 <a href="https://github.com/KC3Kai/KC3Kai/wiki/Strategy-Room%3A-Scorer">Learn more</a>
+		 </div>
+		 -->
+</div>
+
+<div class="controls" id="exped_scorer_control_root">
+	<!-- for world boxes, and presets -->
+	<div class="control_row row1">
+		<div class="control_box preset">
+			<div class="header">
+				Preset
+			</div>
+			<div class="content">
+				<button type="button" class="btn" data-name="all">All</button>
+				<button type="button" class="btn" data-name="recommended">Recommended</button>
+				<button type="button" class="btn" data-name="buckets">Buckets</button>
+				<button type="button" class="btn" data-name="none">None</button>
+			</div>
+		</div>
+		<div class="clear"></div>
+	</div>
+
+	<!-- for priority control, AFK time, fleet number and compute button -->
+	<div class="control_row row2">
+		<div class="control_box resource">
+			<div class="header">
+				Resource Priority
+			</div>
+			<div class="content">
+				<button type="button" class="btn reset">Reset</button>
+				<button type="button" class="btn balanced">Balanced</button>
+				<div class="clear"></div>
+			</div>
+		</div>
+		<div class="control_col">
+			<div class="control_box afktime">
+				<div class="header">
+					AFK Time
+				</div>
+				<div class="content">
+					<input type="text" name="hrs" value="0" /><div>Hrs</div>
+					<input type="text" name="mins" value="0" /><div>Mins</div>
+				</div>
+			</div>
+			<div class="control_box fleet">
+				<div class="header">
+					Available Fleets
+				</div>
+				<div class="content">
+					<label><div class="fleet_radio">
+							<input type="radio" name="fleet_count" value="1"/>
+							1
+					</div></label>
+					<label><div class="fleet_radio">
+							<input type="radio" name="fleet_count" value="2"/>
+							2
+					</div></label>
+					<label><div class="fleet_radio">
+							<input type="radio" name="fleet_count" value="3"/>
+							3
+					</div></label>
+					<div class="clear"></div>
+				</div>
+			</div>
+		</div>
+		<div class="control_box calc">
+			<div class="header">
+				Calculate
+			</div>
+			<div class="content">
+				<button type="button" class="btn calc">Calculate</button>
+			</div>
+		</div>
+		<div class="clear"></div>
+	</div>
+</div>
+<div class="page_padding">
+	<!-- Results Table -->
+	<table class="table table-hover results">
+		<thead>
+			<tr>
+				<th>Expedition set</th>
+				<th><img src="../../assets/img/client/fuel.png" /> /hr</th>
+				<th><img src="../../assets/img/client/ammo.png" /> /hr</th>
+				<th><img src="../../assets/img/client/steel.png" /> /hr</th>
+				<th><img src="../../assets/img/client/bauxite.png" /> /hr</th>
+				<th>Score</th>
+			</tr>
+		</thead>
+		<tbody>
+
+		</tbody>
+	</table>
+</div>
+
+<div class="factory">
+	<div class="control_box">
+		<div class="header">
+		</div>
+		<div class="content">
+		</div>
+	</div>
+	<div class="resource_box">
+		<img />
+		<div class="view"></div>
+		<input class="slider" />
+	</div>
+	<label class="exped_toggle">
+		<div class="toggle_row">
+			<input type="checkbox"/>
+			<div class="name"></div>
+			<div class="time"></div>
+			<div class="clear"></div>
+		</div>
+	</label>
+</div>

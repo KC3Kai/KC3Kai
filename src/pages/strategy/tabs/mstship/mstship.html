@@ -31,6 +31,16 @@
 	<div class="help_q">Where are the default equipment? or the evasion, LoS, ASW?</div>
 	<div class="help_a">New ship data may not be ready, just wait for updating. <a href="http://kancolle.wikia.com" target="_blank">Or just visit the wikia</a>.</div>
 	
+	<div class="help_q">What do those icons mean for abyssal?</div>
+	<div class="help_a">
+		<li><span style="position:relative;left:-1em;">Boss icon with horns means its border color of icon will be rendered with boss style.</span></li>
+		<li><span style="position:relative;left:-1em;">Ship icon means you have ever encountered this exact abyssal ship, her stats and equipment are from your history database.
+			Otherwise, they are from KC3 internal data which are collected by us manually, that means they might be out of date or inaccuracy.
+			Besides, equip slot capacities are always from internal data.</span></li>
+		<li><span style="position:relative;left:-1em;">If you see different text color of stats or equipment, that means our internal data is different with your encounter's. You could help us by reporting the correct value on tool-tip to us.</span></li>
+		<li><span style="position:relative;left:-1em;">If you see no stats and equipment but a JSON text, that means there is no data yet for her in our internal data. You could help us once you encounter her.</span></li>
+	</div>
+	
 	<div class="help_q">Why is Harusame so cute?</div>
 	<div class="help_a">I know right! kyaaa!</div>
 </div>
@@ -89,38 +99,39 @@
 						<div class="slotitem"></div>
 						<div class="clear"></div>
 					</div>
+					<div class="encounter"><img src="../../../../assets/img/ui/fleet.png"/></div>
 				</div>
-					
-			<div class="intro"></div>
-			<div class="json"></div>
-		</div>
-		<div class="clear"></div>
-		<div class="more">
-			
-			<!-- Remodel Info -->
-			<div class="remodel moreinfo_box">
-				<div class="ship_label">Next Remodel</div>
-				<div class="remodel_name"><a class="hover"></a></div>
-				<div class="remodel_level">Lv. <span></span></div>
-				<div class="rsc remodel_ammo">
-					<div class="rsc_icon"><img src="../../../../assets/img/client/ammo.png" /></div>
-					<div class="rsc_value"></div>
+				<div class="boss"><img src="../../../../assets/img/client/boss.png"/></div>
+				<div class="intro"></div>
+				<div class="json"></div>
+			</div>
+			<div class="clear"></div>
+			<div class="more">
+				
+				<!-- Remodel Info -->
+				<div class="remodel moreinfo_box">
+					<div class="ship_label">Next Remodel</div>
+					<div class="remodel_name"><a class="hover"></a></div>
+					<div class="remodel_level">Lv. <span></span></div>
+					<div class="rsc remodel_ammo">
+						<div class="rsc_icon"><img src="../../../../assets/img/client/ammo.png" /></div>
+						<div class="rsc_value"></div>
+						<div class="clear"></div>
+					</div>
+					<div class="rsc remodel_steel">
+						<div class="rsc_icon"><img src="../../../../assets/img/client/steel.png" /></div>
+						<div class="rsc_value"></div>
+						<div class="clear"></div>
+					</div>
 					<div class="clear"></div>
 				</div>
-				<div class="rsc remodel_steel">
-					<div class="rsc_icon"><img src="../../../../assets/img/client/steel.png" /></div>
-					<div class="rsc_value"></div>
-					<div class="clear"></div>
+				
+				<!-- Other forms -->
+				<div class="other_forms moreinfo_box"> 
+					<div class="ship_label">Other forms</div>
+					<div class="other_forms_list"></div>
 				</div>
-				<div class="clear"></div>
-			</div>
-			
-			<!-- Other forms -->
-			<div class="other_forms moreinfo_box"> 
-				<div class="ship_label">Other forms</div>
-				<div class="other_forms_list"></div>
-			</div>
-			
+				
 				<!-- Scrap Value -->
 				<div class="scrap moreinfo_box">
 					<div class="ship_label">Scrap value</div>
@@ -186,7 +197,7 @@
 					</div>
 					<div class="clear"></div>
 				</div>
-
+				
 				<!-- Ship's level-dependent stats -->
 				<div class="at_level moreinfo_box">
 					<div class="ship_label">Stats at Level</div>
@@ -213,25 +224,32 @@
 					</input>
 				</div>
 			</div>
-
 			<div class="clear"></div>
 		</div>
 		<div class="subtitles">
-			
 		</div>
 		<div class="voices">
-			
-			
 		</div>
 		
 		<div class="clear"></div>
 		<div class="hourlies">
-			
+		</div>
+		
+		<div class="clear"></div>
+		<div class="aaci">
+			<div class="aaciPattern">
+				<div class="apiId">AACI</div>
+				<div class="shipIcon"></div>
+				<div class="equipIcons">Type</div>
+				<div class="fixed">Fixed</div>
+				<div class="modifier">Modifier</div>
+			</div>
+			<div class="aaciList">
+			</div>
 		</div>
 		
 		<div class="clear"></div>
 		<div class="gunfit gunfitList">
-			
 		</div>
 		
 		<div class="clear"></div>
@@ -266,6 +284,14 @@
 		<div class="gearName"></div>
 		<div class="gearFit"></div>
 		<div class="clear"></div>
+	</div>
+	
+	<div class="aaciPattern">
+		<div class="apiId"></div>
+		<div class="shipIcon"><img/></div>
+		<div class="equipIcons"></div>
+		<div class="fixed"></div>
+		<div class="modifier"></div>
 	</div>
 	
 </div>

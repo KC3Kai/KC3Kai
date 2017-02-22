@@ -163,12 +163,13 @@
 				],
 				aa: [MasterShip.api_tyku[1], MasterShip.api_tyku[0]+ThisShip.mod[2], ThisShip.aa[0] ],
 				ar: [MasterShip.api_souk[1], MasterShip.api_souk[0]+ThisShip.mod[3], ThisShip.ar[0] ],
-				as: [this.getDerivedStatNaked("tais", ThisShip.as[0], ThisShip.items), ThisShip.as[0] ],
-				ev: [this.getDerivedStatNaked("houk", ThisShip.ev[0], ThisShip.items), ThisShip.ev[0] ],
-				ls: [this.getDerivedStatNaked("saku", ThisShip.ls[0], ThisShip.items), ThisShip.ls[0] ],
+				as: [this.getDerivedStatNaked("tais", ThisShip.as[0], ThisShip), ThisShip.as[0] ],
+				ev: [this.getDerivedStatNaked("houk", ThisShip.ev[0], ThisShip), ThisShip.ev[0] ],
+				ls: [this.getDerivedStatNaked("saku", ThisShip.ls[0], ThisShip), ThisShip.ls[0] ],
 				lk: ThisShip.lk[0],
-				sp: MasterShip.api_soku,
+				sp: ThisShip.speed,
 				slots: ThisShip.slots,
+				exSlot: ThisShip.ex_item,
 				fleet: ThisShip.onFleet(),
 				ship: ThisShip,
 				master: ThisShip.master(),
@@ -198,8 +199,8 @@
 			var sCtr, cElm;
 
 			for(sCtr in KC3Meta._stype){
-				// stype 1, 15 not used by shipgirl
-				if(KC3Meta._stype[sCtr] && ["1", "15"].indexOf(sCtr) < 0){
+				// stype 1, 12, 15 not used by shipgirl
+				if(KC3Meta._stype[sCtr] && ["1", "12", "15"].indexOf(sCtr) < 0){
 					cElm = $(".tab_ships .factory .ship_filter_type").clone().appendTo(".tab_ships .filters .ship_types");
 					cElm.data("id", sCtr);
 					$(".filter_name", cElm).text(KC3Meta.stype(sCtr));
@@ -410,11 +411,13 @@
 			self.defineShipFilter(
 				"speed",
 				0,
-				["all","fast","slow"],
+				["all","slow","fast","faster","fastest"],
 				function(curVal,ship) {
 					return (curVal === 0)
-						|| (curVal === 1 && ship.sp >= 10)
-						|| (curVal === 2 && ship.sp < 10);
+						|| (curVal === 1 && ship.sp > 0 && ship.sp < 10)
+						|| (curVal === 2 && ship.sp >= 10 && ship.sp < 15)
+						|| (curVal === 3 && ship.sp >= 15 && ship.sp < 20)
+						|| (curVal === 4 && ship.sp >= 20);
 				});
 
 			self.defineShipFilter(
@@ -445,11 +448,20 @@
 						|| (curVal === 1 && ship.canEquipDaihatsu)
 						|| (curVal === 2 && !ship.canEquipDaihatsu);
 				});
+			self.defineShipFilter(
+				"exslot",
+				0,
+				["all", "yes","no"],
+				function(curVal, ship) {
+					return (curVal === 0)
+						|| (curVal === 1 && (ship.exSlot > 0 || ship.exSlot === -1))
+						|| (curVal === 2 && ship.exSlot === 0);
+				});
 
 			var stypes = Object
 				.keys(KC3Meta._stype)
 				.map(function(x) { return parseInt(x,10); })
-				.filter(function(x) { return [1,15].indexOf(x)<0; })
+				.filter(function(x) { return [1,12,15].indexOf(x)<0; })
 				.sort(function(a,b) { return a-b; });
 			console.assert(stypes[0] === 0);
 			// remove initial "0", which is invalid
@@ -727,6 +739,9 @@
 					[1,2,3,4].forEach(function(x){
 						self.equipImg(cElm, x, cShip.slots[x-1], cShip.equip[x-1]);
 					});
+					if(cShip.exSlot !== 0){
+						self.equipImg(cElm, "ex", -2, cShip.exSlot);
+					}
 
 					if(FilteredShips[shipCtr].locked){ $(".ship_lock img", cElm).show(); }
 
@@ -759,10 +774,11 @@
 
 		/* Compute Derived Stats without Equipment
 		--------------------------------------------*/
-		getDerivedStatNaked :function(StatName, EquippedValue, Items){
+		getDerivedStatNaked :function(StatName, EquippedValue, ShipObj){
+			var Items = ShipObj.equipment(true);
 			for(var ctr in Items){
-				if(Items[ctr] > -1){
-					EquippedValue -= KC3GearManager.get( Items[ctr] ).master()["api_"+StatName];
+				if(Items[ctr].itemId > 0){
+					EquippedValue -= Items[ctr].master()["api_"+StatName];
 				}
 			}
 			return EquippedValue;
@@ -781,22 +797,26 @@
 
 		/* Show single equipment icon
 		--------------------------------------------*/
-		equipImg :function(cElm, equipNum, equipSlot, gear_id){
+		equipImg :function(cElm, equipNum, equipSlot, gearId){
 			var element = $(".ship_equip_" + equipNum, cElm);
-			if(gear_id > -1){
-				var gear = KC3GearManager.get(gear_id);
+			if(gearId > 0){
+				var gear = KC3GearManager.get(gearId);
 				if(gear.itemId<=0){ element.hide(); return; }
 
 				$("img",element)
 					.attr("src", "../../assets/img/items/" + gear.master().api_type[3] + ".png")
 					.attr("title", gear.name())
-					.attr("alt", gear.master().api_id);
+					.attr("alt", gear.master().api_id)
+					.show();
 				$("span",element).css('visibility','hidden');
 			} else {
 				$("img",element).hide();
 				$("span",element).each(function(i,x){
 					if(equipSlot > 0)
 						$(x).text(equipSlot);
+					else if(equipSlot === -2)
+						// for ex slot opened, but not equipped
+						$(x).addClass("empty");
 					else
 						$(x).css('visibility','hidden');
 				});

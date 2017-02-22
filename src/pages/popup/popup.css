@@ -1,18 +1,17 @@
 /* GLOBAL
 --------------------------*/
 body {
-	background:#f3f3f3;
+	background:#f9f9f9;
 }
 .wrapper {
 	width:240px;
-	/*height:521px;*/
-	height:498px;
+	height:352px;
 	overflow:hidden;
 }
 .separator {
 	width:240px;
 	margin:5px auto;
-	border-top:1px solid #ddd;
+	border-top:1px solid #e5e5e5;
 	border-bottom:1px solid #fff;
 }
 
@@ -23,10 +22,10 @@ body {
 	height:63px;
 	padding:5px;
 	border-top:1px solid #fff;
-	border-bottom:1px solid #ddd;
+	border-bottom:1px solid #e5e5e5;
 }
 .menu:hover {
-	background:#cfc;
+	background:#e5effa;
 }
 .menu .icon {
 	width:30px;
@@ -55,57 +54,32 @@ body {
 	line-height:15px;
 	font-size:11px;
 	float:left;
-	/*color:#aaa;*/
 	color:#999;
 }
 
 /* MENU: SHORT
 --------------------------*/
 .menu.short {
-	height:50px;
+	height:35px;
+	padding-bottom:10px;
 }
-.menu.short .icon img {
-	opacity:0.5;
-}
-.menu.short .text {
-	color:#cc0000;
-}
-.menu.short .desc {
-	height:15px;
-	color:#ccaaaa;
-}
-
-/* FACEBOOK
---------------------------*/
-.footFb {
-	width:240px;
-	height:44px;
-	padding:7px 5px 7px 5px;
-	border-top:1px solid #fff;
-	margin:0px 0px 1px 0px;
-}
-.footFb:hover {
-	background:#cfc;
-}
-.footFb .icon {
-	width:30px;
-	height:30px;
+.menu.short .icon {
+	width:20px;
+	height:20px;
 	margin:0px 5px 0px 0px;
 	float:left;
 }
-.footFb .icon img {
-	width:30px;
-	height:30px;
+.menu.short .icon img {
+	width:20px;
+	height:20px;
 	margin:0px 0px 0px 0px;
 }
-.footFb .text {
-	width:195px;
-	height:30px;
-	line-height:30px;
-	overflow:hidden;
-	font-size:14px;
-	font-weight:bold;
-	float:left;
+.menu.short .text {
+	line-height:20px;
+	height:20px;
+}
+.menu.short .desc {
+	
 }
 
 /* FOOTER DATA
@@ -115,10 +89,11 @@ body {
 	height:20px;
 	line-height:18px;
 	border-top:1px solid #fff;
-	border-bottom:1px solid #ace;
+	border-bottom:1px solid #e5e5e5;
 	font-size:12px;
 	padding:0px 0px 0px 5px;
-	background:#def;
+	word-break: break-all;
+	overflow: hidden;
 }
 .updateTime {
 	color:#f00;
@@ -127,44 +102,4 @@ body {
 .resetTime {
 	color:#00f;
 	font-weight:bold;
-}
-
-/* FOOTER LINKS
---------------------------*/
-.footLinks {
-	height:20px;
-	padding:2px;
-	font-size:11px;
-}
-.footLinks .footLink {
-	height:16px;
-	line-height:16px;
-	float:left;
-	margin:0px 5px 0px 0px;
-}
-#foot-support {
-	width:40px;
-}
-.footLinks .footSocial {
-	width:16px;
-}
-.footLinks .footLink img {
-	width:16px;
-	height:16px;
-}
-#btn-donate {
-	width:56px;
-}
-#btn-donate input[type=image] {
-	width:56px;
-	height:16px;
-}
-#foot-servers {
-	width:80px;
-}
-
-/* CUSTOM
---------------------------*/
-#login_dmm {
-	display:none;
 }

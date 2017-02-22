@@ -1,0 +1,183 @@
+/* DEFAULTS
+--------------------------*/
+.kc3 .hover {
+	cursor:hand;
+	cursor:pointer;
+}
+.kc3 .clear {
+	clear:both !important;
+}
+.kc3 #area-game {
+	font-family:"Helvetica Neue",Tahoma,Helvetica,Arial,sans-serif;
+	font-size:12px;
+	text-align:left;
+	overflow:hidden;
+}
+.kc3 #factory {
+	display:none;
+}
+
+/* OVERLAY: QUEST
+--------------------------*/
+.kc3 .overlays {
+	font-family:"Helvetica Neue",Tahoma,Helvetica,Arial,sans-serif;
+	width:800px;
+	height:480px;
+	position:absolute;
+	top:0px;
+	left:0px;
+	overflow:hidden;
+	pointer-events:none;
+}
+.kc3 .overlay_box {
+	position:absolute;
+}
+
+/* OVERLAY: QUEST
+--------------------------*/
+.kc3 .overlay_quests {
+	width:629px;
+	height:336px;
+	top:110px;
+	left:144px;
+}
+.kc3 .ol_quest {
+	width:629px;
+	height:64px;
+	margin:0px 0px 4px 0px;
+}
+.kc3 .ol_quest .icon {
+	width:72px;
+	height:64px;
+	float:left;
+}
+.kc3 .ol_quest .content {
+	width:431px;
+	height:40px;
+	background:#E4D5C2;
+	float:left;
+	margin:2px 0px 0px 0px;
+}
+.kc3 .ol_quest .content .name {
+	width:431px;
+	height:13px;
+	line-height:13px;
+	font-size:13px;
+	margin:2px 0px 2px 0px;
+}
+.kc3 .ol_quest .content .desc {
+	width:431px;
+	height:24px;
+	line-height:12px;
+	font-size:11px;
+	overflow:hidden;
+}
+.kc3 .ol_quest .tracking {
+	width:60px;
+	height:40px;
+	line-height:60px;
+	margin:2px 0px 0px 0px;
+	float:left;
+	font-size:18px;
+	font-weight:bold;
+	text-align:center;
+	color:#555;
+	background:#E4D5C2;
+	opacity:0.80;
+}
+.kc3 .ol_quest .tracking.small {
+	line-height:10px;
+	font-size:11px;
+}
+.kc3 .ol_quest .no_tl {
+	width: 24px;
+	height: 24px;
+	background: rgba(150,190,230, 0.6);
+	float: right;
+	margin: 20px -26px 0px 0px;
+	position:relative;
+	border-radius: 15px;
+	line-height: 24px;
+	text-align: center;
+	font-size: 16px;
+	font-weight: bold;
+	color: #fff;
+	pointer-events: visible;
+	display:none;
+}
+
+/* OVERLAY: SUBTITLES
+--------------------------*/
+.kc3 .overlay_subtitles {
+	width:96%;
+	position:absolute;
+	bottom:5px;
+	left:2%;
+	text-align: center;
+	color:#fff;
+	text-shadow:
+		0px 0px 2px #000,
+		1px 1px 2px #000,
+		1px -1px 2px #000,
+		-1px -1px 2px #000,
+		-1px 1px 2px #000,
+		0px 0px 2px #000;
+	pointer-events: none;
+}
+.kc3 .overlay_subtitles.ghost {
+	opacity: 0.2;
+	filter: blur(1px);
+}
+.kc3 .overlay_subtitles span {
+	width:100%;
+	pointer-events: visible;
+}
+.kc3 .overlay_subtitles.ghost span {
+	pointer-events:none !important;
+}
+
+/* OVERLAY: MAP MARKERS
+--------------------------*/
+.kc3 .overlay_markers {
+	width:750px;
+	height:372px;
+	left:26px;
+	top:18px;
+}
+.kc3 .overlay_markers .letter {
+	position:absolute;
+	margin:0;
+	padding:0;
+	float:left;
+	line-height:24px;
+	font-family:"Helvetica Neue",Tahoma,Helvetica,Arial,sans-serif;
+	font-size:22px;
+	font-weight:bold;
+	text-shadow:1px 1px 2px #f5f5f5, 0px 0px 2px #f5f5f5;
+	pointer-events:none;
+}
+.kc3 .overlay_markers .icon {
+	position:absolute;
+	margin:0;
+	padding:0;
+	float:left;
+	pointer-events:none;
+}
+
+/* OVERLAY: IDLE SCREEN
+--------------------------*/
+.kc3 .overlay_idle {
+	width:790px;
+	height:480px;
+	padding:445px 10px 0px 0px;
+	text-align:right;
+	font-size:22px;
+	color:#fff;
+	font-weight:normal;
+	text-shadow:1px 1px 2px #151515,
+		-1px -1px 2px #151515,
+		-1px 1px 2px #151515,
+		1px -1px 2px #151515;
+	pointer-events: all;
+	display:none;
+}
