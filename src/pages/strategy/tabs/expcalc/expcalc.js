@@ -76,11 +76,18 @@
 				closeToRemodelLevelDiff: 5
 			};
 			var settings;
-			if (typeof localStorage.srExpcalc === "undefined" || typeof JSON.parse(localStorage.srExpcalc)["shipsOrderType"] === "undefined") {
+			if (typeof localStorage.srExpcalc === "undefined") {
 				localStorage.srExpcalc = JSON.stringify( defSettings );
 				settings = defSettings;
 			} else {
-				settings = JSON.parse( localStorage.srExpcalc );
+				// For smooth transition to ordering version
+				if (typeof JSON.parse(localStorage.srExpcalc)["shipsOrderType"] === "undefined" || typeof JSON.parse(localStorage.srExpcalc)["shipsSortDirection"] === "undefined") {
+					settings = JSON.parse( localStorage.srExpcalc );
+					settings.shipsOrderType = "id";
+					settings.shipsSortDirection = "up";
+				} else {
+					settings = JSON.parse( localStorage.srExpcalc );
+				}
 			}
 			return settings;
 		},
@@ -197,26 +204,24 @@
                     var sortedElements = $(boxSorted).find(".ship_goal");
                     sortedElements.sort(function(a, b) {
                         // Various order types, if someone wants to clean this up or add secondary sort by ID, feel free to <3
-                        if (sortOrder == "up" && sortKey == "id") {
-                            return +$(a).attr("id").substr(7) - +$(b).attr("id").substr(7);
-                        } else if (sortKey == "id") {
-                            return +$(b).attr("id").substr(7) - +$(a).attr("id").substr(7);
-                        } else if (sortOrder == "up" && sortKey == "name") {
-                            return ($(a).find(".ship_info .ship_name").text().toUpperCase() > $(b).find(".ship_info .ship_name").text().toUpperCase()) ? 1 : -1;
+                        var isUp = (sortOrder == "up") ? -1 : 1;
+                        if (sortKey == "id") {
+                            return isUp * (+$(b).attr("id").substr(7) - +$(a).attr("id").substr(7));
                         } else if (sortKey == "name") {
-                            return ($(b).find(".ship_info .ship_name").text().toUpperCase() > $(a).find(".ship_info .ship_name").text().toUpperCase()) ? 1 : -1;
-                        } else if (sortOrder == "up" && sortKey == "level") {
-                            return +$(a).find(".ship_lv .ship_value").text() - +$(b).find(".ship_lv .ship_value").text();
+                            return isUp * (($(b).find(".ship_info .ship_name").text().toUpperCase() > $(a).find(".ship_info .ship_name").text().toUpperCase()) ? 1 : -1);
                         } else if (sortKey == "level") {
-                            return +$(b).find(".ship_lv .ship_value").text() - +$(a).find(".ship_lv .ship_value").text();
-                        } else if (sortOrder == "up" && sortKey == "remodel") {
-                            return +$(a).find(".ship_target .ship_value").text() - +$(b).find(".ship_target .ship_value").text();
+                            return isUp * (+$(b).find(".ship_lv .ship_value").text() - +$(a).find(".ship_lv .ship_value").text());
                         } else if (sortKey == "remodel") {
-                            return +$(b).find(".ship_target .ship_value").text() - +$(a).find(".ship_target .ship_value").text();
-                        } else if (sortOrder == "up" && sortKey == "difference") {
-                            return (+$(a).find(".ship_target .ship_value").text() - +$(a).find(".ship_lv .ship_value").text()) - (+$(b).find(".ship_target .ship_value").text() - +$(b).find(".ship_lv .ship_value").text());
-                        } else if (sortKey == "difference") {
-                            return (+$(b).find(".ship_target .ship_value").text() - +$(b).find(".ship_lv .ship_value").text()) - (+$(a).find(".ship_target .ship_value").text() - +$(a).find(".ship_lv .ship_value").text());
+                            return isUp * (+$(b).find(".ship_target .ship_value").text() - +$(a).find(".ship_target .ship_value").text());
+                        } else if (sortKey == "lvldiff") {
+                            return isUp * ((+$(b).find(".ship_target .ship_value").text() - +$(b).find(".ship_lv .ship_value").text()) - (+$(a).find(".ship_target .ship_value").text() - +$(a).find(".ship_lv .ship_value").text()));
+                        } else if (sortKey == "xpdiff") {
+                            // Doesn't take current progress through current level in account for non-active ships
+                            if (+$(b).find(".ship_exp .ship_value").text() == 0 || +$(a).find(".ship_exp .ship_value").text() == 0) {
+                                return isUp * ((KC3Meta.expShip(+$(b).find(".ship_target .ship_value").text())[1] - KC3Meta.expShip(+$(b).find(".ship_lv .ship_value").text())[1]) - (KC3Meta.expShip(+$(a).find(".ship_target .ship_value").text())[1] - KC3Meta.expShip(+$(a).find(".ship_lv .ship_value").text())[1]));
+							} else {
+                                return isUp * (+$(b).find(".ship_exp .ship_value").text() - +$(a).find(".ship_exp .ship_value").text());
+							}
                         }
                     })
                     .prependTo(boxSorted);
