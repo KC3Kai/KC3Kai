@@ -145,7 +145,7 @@ button, input, select, textarea {
 -------------------------------*/
 #content {
 	width:700px;
-	min-height:1300px;
+	min-height:1320px;
 	float:left;
 	background:#222222;
 	overflow:hidden;
@@ -1250,6 +1250,17 @@ button, input, select, textarea {
 	color:#fff;
 }
 
+/* SHIP QUESTS
+--------------------------------*/
+.tab_shipquests .ship_item.odd .ship_field {
+	background:#303030;
+}
+.tab_shipquests .ship_item.even .ship_field {
+	background:#303030;
+}
+.tab_shipquests .ship_item:hover .ship_field {
+	background:#000000;
+}
 
 /* MAPS
 --------------------------------*/

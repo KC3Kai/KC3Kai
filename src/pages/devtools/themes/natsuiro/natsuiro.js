@@ -1094,7 +1094,7 @@
 			}
 
 			// TAIHA ALERT CHECK
-			ConfigManager.loadIfNecessary();
+			//ConfigManager.loadIfNecessary();
 			// if not PvP and Taiha alert setting is enabled
 			if(ConfigManager.alert_taiha && !KC3SortieManager.isPvP() &&
 				PlayerManager.fleets
@@ -3166,13 +3166,13 @@
 				$(".activity_gunfit .fit_gear_level").hide();
 			}
 			if (data.thisFit !== false) {
+				$(".activity_gunfit .fit_value").removeClass("fit_unknown fit_penalty fit_bonus fit_neutral");
 				if (data.thisFit === "") {
 					$(".activity_gunfit .fit_value").text(KC3Meta.term("FitWeightUnknown"));
 					$(".activity_gunfit .fit_value").addClass("fit_unknown");
 				} else {
 					var fitValue = parseInt(data.thisFit, 10);
 					$(".activity_gunfit .fit_value").text(KC3Meta.term("FitWeight_"+fitValue));
-					$(".activity_gunfit .fit_value").removeClass("fit_penalty fit_bonus fit_neutral");
 					if (fitValue < 0) {
 						$(".activity_gunfit .fit_value").addClass("fit_penalty");
 					} else if (fitValue > 0) {

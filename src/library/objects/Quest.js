@@ -4,13 +4,14 @@ KC3改 Quest Class
 Instantiatable class to represent a single Quest
 Mainly used by QuestManager to store quest information
 
-Quest Type:
-1 = One time
-2 = Daily
-3 = Weekly
-4 = Sink 3 Aircraft Carrier (only on dates ending in -3rd, -7th, or -0th) Bd4
-5 = Sink Transport Fleet (only on dates ending in -2nd or -8th} Bd6
-6 = Monthly
+Known Quest Type (api_type):
+1 = Daily
+2 = Weekly
+3 = Monthly
+4 = Once
+5 = Other (Bd4, Bd6, Quarterly, etc)
+
+known IDs see QuestManager
 */
 (function(){
 	"use strict";
@@ -106,15 +107,6 @@ Quest Type:
 	KC3Quest.prototype.increment = function(reqNum=0, amount=1, isAdjustingCounter=false){
 		var self = this;
 		var isIncreased = false;
-		if (! ConfigManager.spCounterAdjust) {
-			if (this.tracking && this.isSelected()) {
-				if (this.tracking[reqNum][0] + amount <= this.tracking[reqNum][1]) {
-					this.tracking[reqNum][0] += amount;
-				}
-				KC3QuestManager.save();
-			}
-			return;
-		}
 
 		// is selected on progress, or force to be adjusted on shared counter
 		if(this.tracking && (this.isSelected() || !!isAdjustingCounter)){
@@ -196,17 +188,23 @@ Quest Type:
 	};
 
 	KC3Quest.prototype.isDaily = function(){
-		return (this.type == 2)		// Daily Quest
-			|| (this.type == 4)		// Bd4
-			|| (this.type == 5);	// Bd6
+		return (this.type == 1)		// Daily Quest
+			|| (this.id == 211)		// Bd4, but type == 5
+			|| (this.id == 212)		// Bd6, but type == 5
+			// Other known cases
+			|| KC3QuestManager._dailyIds.indexOf(this.id) > -1;
 	};
 
 	KC3Quest.prototype.isWeekly = function(){
-		return this.type == 3;	// Weekly Quest
+		return this.type == 2;	// Weekly Quest
 	};
 
 	KC3Quest.prototype.isMonthly = function(){
-		return this.type == 6;	// Weekly Quest
+		return this.type == 3;	// Monthly Quest
+	};
+
+	KC3Quest.prototype.isQuarterly = function(){
+		return KC3QuestManager._quarterlyIds.indexOf(this.id) > -1;
 	};
 
 	KC3Quest.prototype.isUnselected = function(){
@@ -221,28 +219,104 @@ Quest Type:
 		return this.status == 3;	// Completed
 	};
 
-	KC3Quest.prototype.autoAdjustCounter = function(){
-		if(this.tracking){
-			if(this.isCompleted()) {
-				this.tracking[0][0] = this.tracking[0][1];
+	KC3Quest.prototype.autoAdjustCounter = function() {
+		if (! this.tracking || !Array.isArray(this.tracking))
+			return;
+
+		if (this.isCompleted()) {
+			// avoid using "for ... of" syntax for now
+			// which needs babel-polyfill to work
+			// and getting that to work is bs.
+			for (const ind in this.tracking) {
+				const trackingData = this.tracking[ind];
+				if (trackingData[0] !== trackingData[1]) {
+					console.log("Adjusting quest", this.id, "tracking (multi-counter)",
+								"index", ind, "tracking", trackingData[0],
+								"to", trackingData[1],
+								"upon completion.");
+					trackingData[0] = trackingData[1];
+				}
+			}
+			return;
+		}
+
+		// known fact at this point: the actual quest is *not* completed
+
+		// no adjustment for multi-counter quests
+		// an example of this Bw1 (questId = 214)
+		if (this.tracking.length > 1)
+			return;
+
+		// at this point we can confirm this is a singleton array
+		// so only need to deal with one tracking data, let's give it a name
+		const trackingData = this.tracking[0];
+
+		let currentCount = trackingData[0];
+		let maxCount = parseFloat(trackingData[1]);
+
+		// no adjustment for F7 and F8:
+		// these two quests have a weird behavior that 1/3 is marked as being 50% completed
+		// so our auto-adjustment won't work for them.
+		if([607, 608].indexOf(this.id) > -1
+			&& currentCount > 0 && currentCount < maxCount)
+			return;
+
+		// pFlag: short for Progress Flag,
+		// for incompleted quests:
+		// pFlag = 2: 80% <= progress percentage < 100%
+		// pFlag = 1: 50% <= progress percentage < 80%
+		// pFlag = 0:        progress percentage < 50%
+		let actualPFlag = this.progress;
+		console.assert([0,1,2].indexOf( actualPFlag ) !== -1);
+		let progress =
+			actualPFlag === 0 ? 0.0
+			: actualPFlag === 1 ? 0.5
+			: actualPFlag === 2 ? 0.8
+			: NaN /* unreachable */;
+
+		// we compare actual pFlag and pFlag under our track
+		// to see if they are consistent,
+		// by doing so we not only correct counter falling-behind problems,
+		// but also overshotting ones.
+		let trackedPFlag =
+			/* cur/max >= 4/5 (80%) */
+			5*currentCount >= 4*maxCount ? 2
+		/* cur/max >= 1/2 (50%) */
+			: 2*currentCount >= maxCount ? 1
+			: 0;
+
+		// does the actual correction and announce it
+		let announcedCorrection = newCurrentCount => {
+			console.log("Adjusting quest", this.id, "tracking", currentCount,
+						"to", newCurrentCount , "=", progress * 100 + "%",
+						"of", maxCount);
+			trackingData[0] = newCurrentCount;
+		};
+
+		// it's good if pFlag is consistent
+		// but something is defintely wrong if cur >= max
+		if (trackedPFlag === actualPFlag &&
+			currentCount < maxCount)
+			return;
+
+		if (maxCount >= 5) {
+			announcedCorrection( Math.ceil(maxCount*progress) );
+		} else {
+			// things special about maxCount < 5 quests is that
+			// it is possible for:
+			//   ceil(maxCount * 0.8), maxCount
+			// to take the same number
+
+			// so if we end up making new "currentCount" equal to "maxCount",
+			// we must minus 1 from it to prevent it from completion
+			let potentialCount = Math.ceil(maxCount * progress);
+			if (potentialCount === maxCount)
+				potentialCount = maxCount-1;
+			// if what we have figured out is the same as current counter
+			// then it's still fine.
+			if (potentialCount === currentCount)
 				return;
-			}
-			// No adjustment for Bw1, F7, F8
-			if([214, 607, 608].indexOf(this.id) < 0){
-				var currentCount = this.tracking[0][0];
-				var maxCount = parseFloat(this.tracking[0][1]);
-				var progress = 0;
-				if (this.progress == 1) {
-					progress = 0.5;
-				} else if (this.progress == 2) {
-					progress = 0.8;
-				}
-				if (currentCount/maxCount < progress) {
-					console.log("Adjusting quest", this.id, "tracking", currentCount,
-						"to", Math.ceil(maxCount * progress), "=", progress * 100 + "%", "of", maxCount);
-					this.tracking[0][0] = Math.ceil(maxCount * progress);
-				}
-			}
+			announcedCorrection( potentialCount );
 		}
 	};
 
@@ -256,8 +330,8 @@ Quest Type:
 		} else if(this.isCompleted()){
 			console.info("Re-select quest again:", this.id);
 			this.status = 2;
-			// Reset counter, but do not touch Bw1
-			if(this.tracking && this.id != 214){
+			// Reset counter, but do not touch multi-counter (Bw1 for now)
+			if(Array.isArray(this.tracking) && this.tracking.length === 1){
 				this.tracking[0][0] = 0;
 			}
 			KC3QuestManager.save();

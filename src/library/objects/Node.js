@@ -384,6 +384,28 @@ Used by SortieManager
 			this.airBaseAttack = battleData.api_air_base_attack;
 			// No plane from, just injecting from far away air base :)
 			this.airBaseJetInjection = battleData.api_air_base_injection;
+			// Jet planes also consume steels each LBAS attack, the same with on carrier:
+			// see Fleet.calcJetsSteelCost()
+			if(!!this.airBaseJetInjection && !!this.airBaseJetInjection.api_stage1
+				&& this.airBaseJetInjection.api_stage1.api_f_count > 0
+				&& KC3SortieManager.onSortie > 0){
+				let consumedSteel = 0;
+				$.each(this.airBaseJetInjection.api_air_base_data, function(_, jet){
+					consumedSteel += Math.round(
+						jet.api_count
+						* KC3Master.slotitem(jet.api_mst_id).api_cost
+						* KC3GearManager.jetBomberSteelCostRatioPerSlot
+					) || 0;
+				});
+				console.log("Jets LBAS consumed steel:", consumedSteel);
+				if(consumedSteel > 0){
+					KC3Database.Naverall({
+						hour: Math.hrdInt("floor", Date.safeToUtcTime() / 3.6, 6, 1),
+						type: "lbas" + KC3SortieManager.map_world,
+						data: [0,0,-consumedSteel,0].concat([0,0,0,0])
+					});
+				}
+			}
 		}
 		
 		// Air phases
@@ -470,10 +492,10 @@ Used by SortieManager
 				this.planeJetBombers.abyssal[1] = jetPlanePhase.api_stage2.api_e_lostcount;
 			}
 			// Jet planes consume steels each battle based on:
-			// pendingConsumingSteel = floor(jetMaster.api_cost * ship.slots[jetIdx] * 0.2)
+			// pendingConsumingSteel = round(jetMaster.api_cost * ship.slots[jetIdx] * 0.2)
 			if(this.planeJetFighters.player[0] > 0
 				&& (KC3SortieManager.onSortie > 0 || KC3SortieManager.isPvP())){
-				var consumedSteel = PlayerManager.fleets[
+				let consumedSteel = PlayerManager.fleets[
 					(parseInt(fleetSent) || KC3SortieManager.fleetSent) - 1
 				].calcJetsSteelCost(KC3SortieManager.sortieName(2));
 				console.log("Jets consumed steel:", consumedSteel);
@@ -568,7 +590,6 @@ Used by SortieManager
 					//&& [6].indexOf(this.eventKind)<0
 					){
 					this.predictedRank = KC3Node.predictRank( beginHPs, endHPs, battleData.api_name );
-					// console.debug("Rank Predict:", this.predictedRank);
 				}
 				
 			// PLAYER COMBINED FLEET
@@ -879,7 +900,6 @@ Used by SortieManager
 				}
 			}
 			
-			
 		// PLAYER SINGLE FLEET
 		} else {
 			fleet = PlayerManager.fleets[fleetId - 1];
@@ -947,9 +967,10 @@ Used by SortieManager
 		console.log("enemyHP", this.enemyHP);
 		console.log("enemySunk", this.enemySunk);
 		
-		if(ConfigManager.info_btrank){
-			this.predictedRankNight = KC3Node.predictRank( beginHPs, endHPs );
-			// console.debug("Rank Predict (Night):", this.predictedRankNight);
+		// both single fleet predictable only for now
+		if(ConfigManager.info_btrank &&
+			!isEnemyCombined && (!PlayerManager.combinedFleet || fleetId > 1)){
+			this.predictedRankNight = KC3Node.predictRank( beginHPs, endHPs, nightData.api_name );
 		}
 		
 		if(this.gaugeDamage > -1
@@ -1194,10 +1215,6 @@ Used by SortieManager
 							case 15:	// 15 = AP
 								console.log("You sunk a AP");
 								sunkApCnt += 1;
-								if (! ConfigManager.spCounterAdjust ) {
-									KC3QuestManager.get(218).increment();
-									KC3QuestManager.get(212).increment();
-								}
 								KC3QuestManager.get(213).increment();
 								KC3QuestManager.get(221).increment();
 								break;
@@ -1206,7 +1223,7 @@ Used by SortieManager
 
 				}
 			}
-			if(ConfigManager.spCounterAdjust && sunkApCnt > 0){
+			if(sunkApCnt > 0){
 				// Bd6 must inc first than Bd5 as its id smaller :)
 				KC3QuestManager.get(212).increment(0, sunkApCnt);
 				KC3QuestManager.get(218).increment(0, sunkApCnt);

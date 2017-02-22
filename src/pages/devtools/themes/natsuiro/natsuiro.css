@@ -1619,10 +1619,8 @@ ABYSS FLEET
 	background:#a55;
 }
 .module.activity .activity_gunfit .fit_value.fit_unknown {
-
-}
-.module.activity .activity_gunfit .fit_more {
-	color:#aaa;
+	color:#000;
+	background:#ccc;
 }
 
 .module.activity .activity_gunfit .aaci {

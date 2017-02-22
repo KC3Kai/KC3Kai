@@ -560,7 +560,7 @@ KC3改 Ship Object
 			item = self.equipment(i);
 			// Is Jet aircraft and left slot > 0
 			if(item.masterId > 0 && item.master().api_type[2] == 57 && self.slots[i] > 0) {
-				consumedSteel = Math.floor(
+				consumedSteel = Math.round(
 					self.slots[i]
 					* item.master().api_cost
 					* KC3GearManager.jetBomberSteelCostRatioPerSlot
@@ -637,6 +637,38 @@ KC3改 Ship Object
 			].indexOf( this.masterId ) === -1)
 			return false;
 		return true;
+	};
+
+	// test to see if this ship is capable of opening ASW
+	// reference: http://kancolle.wikia.com/wiki/Partials/Opening_ASW as of Feb 3, 2017
+	// there are two requirements:
+	// - sonar should be equipped
+	// - ASW stat >= 100
+	// also Isuzu K2 can do OASW unconditionally
+	KC3Ship.prototype.canDoOASW = function () {
+		// master Id for Isuzu
+		if (this.masterId === 141)
+			return true;
+
+		// shortcutting on the stricter condition first
+		if (this.as[0] < 100)
+			return false;
+
+		function isSonar(masterData) {
+			/* checking on equipment type sounds better than
+			   letting a list of master Ids
+			   should match the following equipments: (id, name)
+			   - 46: T93 Passive Sonar
+			   - 47: T3 Active Sonar
+			   - 132: T0 Passive
+			   - 149: T4 Passive
+			 */
+			return masterData &&
+				masterData.api_type[1] === 10;
+		}
+		let hasSonar = [0,1,2,3,4]
+			.some( slot => isSonar( this.equipment(slot).master() ));
+		return hasSonar;
 	};
 
 	KC3Ship.prototype.equipmentAntiAir = function(forFleet) {
@@ -778,35 +810,4 @@ KC3改 Ship Object
 		return result;
 	};
 
-	// test to see if this ship is capable of opening ASW
-	// reference: http://kancolle.wikia.com/wiki/Partials/Opening_ASW as of Feb 3, 2017
-	// there are two requirements:
-	// - sonar should be equipped
-	// - ASW stat >= 100
-	// also Isuzu K2 can do OASW unconditionally
-	KC3Ship.prototype.canDoOASW = function () {
-		// master Id for Isuzu
-		if (this.masterId === 141)
-			return true;
-
-		// shortcutting on the stricter condition first
-		if (this.as[0] < 100)
-			return false;
-
-		function isSonar(masterData) {
-			/* checking on equipment type sounds better than
-			   letting a list of master Ids
-			   should match the following equipments: (id, name)
-			   - 46: T93 Passive Sonar
-			   - 47: T3 Active Sonar
-			   - 132: T0 Passive
-			   - 149: T4 Passive
-			 */
-			return masterData &&
-				masterData.api_type[1] === 10;
-		}
-		let hasSonar = [0,1,2,3,4]
-			.some( slot => isSonar( this.equipment(slot).master() ));
-		return hasSonar;
-	};
 })();

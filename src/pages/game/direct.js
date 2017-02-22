@@ -1,6 +1,8 @@
 (function(){
 	"use strict";
 	var source = 'https://raw.githubusercontent.com/KC3Kai/kc3-translations/dev-autotl/data';
+	localStorage.extract_api = false;
+	localStorage.dmmplay = true;
 	
 	// Redirect to DMM play page when activated
 	function ActivateGame(){
@@ -47,6 +49,22 @@
 		
 		$("#background").on("change", customizationConsequence);
 		customizationConsequence();
+		
+		// Game modes
+		$(".altGameModes .modePlay").on("click", function(){
+			switch ($(this).data("mode")) {
+				case "frame":
+					localStorage.extract_api = false;
+					localStorage.dmmplay = false;
+					applyCookiesAndRedirect("dmm.html");
+					break;
+				case "api":
+					localStorage.extract_api = true;
+					localStorage.dmmplay = false;
+					applyCookiesAndRedirect("http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/");
+					break;
+			}
+		});
 		
 		// Auto-check live translations
 		$(".tl_checknow").on("click", function(){
@@ -127,6 +145,19 @@
 		if (filesLoaded >= 4) {
 			$(".tl_checklive_status").text("Done.");
 		}
+	}
+	
+	function applyCookiesAndRedirect(htmlLink){
+		chrome.cookies.set({
+			url: "http://www.dmm.com",
+			name: "ckcy",
+			value: "1",
+			domain: ".dmm.com",
+			expirationDate: Math.ceil((new Date("Sun, 09 Feb 2019 09:00:09 GMT")).getTime()/1000),
+			path: '/netgame/',
+		}, function(cookie){
+			window.location.href = htmlLink;
+		});
 	}
 	
 	// Extension Interaction

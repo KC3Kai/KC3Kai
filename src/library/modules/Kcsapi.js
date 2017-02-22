@@ -933,7 +933,7 @@ Previously known as "Reactor"
 			KC3Network.trigger("CompassResult");
 			KC3Network.trigger("Quests");
 			if(fleetNum > 0){
-				KC3Network.trigger("Fleet", { switchTo: PlayerManager.combinedFleet ? "combined" : fleetNum });
+				KC3Network.trigger("Fleet", { switchTo: PlayerManager.combinedFleet && fleetNum === 1 ? "combined" : fleetNum });
 			} else {
 				KC3Network.trigger("Fleet");
 			}
