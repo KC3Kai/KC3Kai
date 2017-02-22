@@ -142,7 +142,7 @@ Retreives when needed to apply on components
 				
 				alert_taiha			: false,
 				alert_taiha_blur	: false,
-				alert_taiha_blood	: true,
+				alert_taiha_blood	: false,
 				alert_taiha_ss		: false,
 				alert_taiha_sound	: false,
 				alert_taiha_panel	: true,

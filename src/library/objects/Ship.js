@@ -479,7 +479,7 @@ KC3改 Ship Object
 					reconModifier =
 						(los <= 7) ? 1.2 :
 						(los >= 9) ? 1.3 :
-						1.2;
+						1; // they say los = 8 not exists
 				// Recon Seaplane, Flying Boat, etc
 				} else {
 					reconModifier =

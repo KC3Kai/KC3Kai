@@ -182,13 +182,12 @@ KC3改 Equipment Object
 	KC3Gear.prototype.interceptionPower = function(capacity){
 		// Empty item means no fighter power
 		if(this.itemId===0){ return 0; }
-		
-		// Check if this object is a fighter plane
+		// Check if this object is a interceptor plane or not
 		if( KC3GearManager.interceptorsType3Ids.indexOf(this.master().api_type[3]) > -1) {
-			// If slot has plne capacity
+			// If slot has plane capacity
 			if (capacity) {
 				var interceptPower = (
-					// Base anti-air
+					// Base anti-air power
 					this.master().api_tyku +
 					// Interception is from evasion
 					this.master().api_houk +
@@ -198,7 +197,7 @@ KC3改 Equipment Object
 					this.AAStatImprovementBonous()
 				) * Math.sqrt(capacity);
 				
-				// Proficiency Bonus, no fail-over
+				// Proficiency Bonus, no fail-over here
 				if(this.ace != 1){
 					var typInd = String(this.master().api_type[2]);
 					var airAverageTable = ConfigManager.air_average[typInd];
