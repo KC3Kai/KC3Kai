@@ -81,7 +81,7 @@
 				settings = defSettings;
 			} else {
 				// For smooth transition to ordering version
-				if (typeof JSON.parse(localStorage.srExpcalc)["shipsOrderType"] === "undefined" || typeof JSON.parse(localStorage.srExpcalc)["shipsSortDirection"] === "undefined") {
+				if (typeof JSON.parse(localStorage.srExpcalc).shipsOrderType === "undefined" || typeof JSON.parse(localStorage.srExpcalc).shipsSortDirection === "undefined") {
 					settings = JSON.parse( localStorage.srExpcalc );
 					settings.shipsOrderType = "id";
 					settings.shipsSortDirection = "up";
@@ -163,7 +163,11 @@
 				updateUI();
 			});
             jqOrderTypes.on("click", function() {
-                ($(this).hasClass("up")) ? self.modifySettings(updateOrder("shipsSortDirection", "down")) : self.modifySettings(updateOrder("shipsSortDirection", "up"));
+                if ($(this).hasClass("up")) {
+					self.modifySettings(updateOrder("shipsSortDirection", "down"));
+				} else {
+					self.modifySettings(updateOrder("shipsSortDirection", "up"));
+				}
                 self.modifySettings(updateOrder("shipsOrderType", $(this).data("order")));
                 orderShips($(this).data("order"), ($(this).hasClass("up")) ? "down" : "up");
                 updateUI();
@@ -217,7 +221,7 @@
                             return isUp * ((+$(b).find(".ship_target .ship_value").text() - +$(b).find(".ship_lv .ship_value").text()) - (+$(a).find(".ship_target .ship_value").text() - +$(a).find(".ship_lv .ship_value").text()));
                         } else if (sortKey == "xpdiff") {
                             // Doesn't take current progress through current level in account for non-active ships
-                            if (+$(b).find(".ship_exp .ship_value").text() == 0 || +$(a).find(".ship_exp .ship_value").text() == 0) {
+                            if (+$(b).find(".ship_exp .ship_value").text() === 0 || +$(a).find(".ship_exp .ship_value").text() === 0) {
                                 return isUp * ((KC3Meta.expShip(+$(b).find(".ship_target .ship_value").text())[1] - KC3Meta.expShip(+$(b).find(".ship_lv .ship_value").text())[1]) - (KC3Meta.expShip(+$(a).find(".ship_target .ship_value").text())[1] - KC3Meta.expShip(+$(a).find(".ship_lv .ship_value").text())[1]));
 							} else {
                                 return isUp * (+$(b).find(".ship_exp .ship_value").text() - +$(a).find(".ship_exp .ship_value").text());
