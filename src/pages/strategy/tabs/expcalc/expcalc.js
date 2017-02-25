@@ -73,6 +73,8 @@
 				showOtherShips: true,
                 shipsOrderType: "id",
                 shipsSortDirection: "up",
+                shipsOrderSecondType: "id",
+                shipsSortSecondDirection: "up",
 				closeToRemodelLevelDiff: 5
 			};
 			var settings;
@@ -81,10 +83,13 @@
 				settings = defSettings;
 			} else {
 				// For smooth transition to ordering version
-				if (typeof JSON.parse(localStorage.srExpcalc).shipsOrderType === "undefined" || typeof JSON.parse(localStorage.srExpcalc).shipsSortDirection === "undefined") {
+				if (typeof JSON.parse(localStorage.srExpcalc).shipsOrderType === "undefined" || typeof JSON.parse(localStorage.srExpcalc).shipsSortDirection === "undefined"
+                    || typeof JSON.parse(localStorage.srExpcalc).shipsOrderSecondType === "undefined" || typeof JSON.parse(localStorage.srExpcalc).shipsSortSecondDirection === "undefined") {
 					settings = JSON.parse( localStorage.srExpcalc );
 					settings.shipsOrderType = "id";
 					settings.shipsSortDirection = "up";
+					settings.shipsOrderSecondType = "id";
+					settings.shipsSortSecondDirection = "up";
 				} else {
 					settings = JSON.parse( localStorage.srExpcalc );
 				}
@@ -122,6 +127,7 @@
 				jqOtherShips.toggle( settings.showOtherShips );
                 jqOrderTypes.removeClass("active up down");
                 jqOrderTypes.filter(".order_" + settings.shipsOrderType).addClass("active").addClass(settings.shipsSortDirection);
+                jqOrderTypes.filter(".order_" + settings.shipsOrderSecondType).addClass("active").addClass(settings.shipsSortSecondDirection); // other style for secondary?
 
 				jqToggleGT
 					.toggleClass("active", settings.showGoalTemplates);
@@ -131,7 +137,7 @@
 					.toggleClass("active", settings.showOtherShips);
 
 				jqCloseToRemLvlDiff.val( settings.closeToRemodelLevelDiff );
-				orderShips(settings.shipsOrderType, settings.shipsSortDirection);
+				orderShips(settings.shipsOrderType, settings.shipsSortDirection, settings.shipsOrderSecondType, settings.shipsSortSecondDirection);
 			}
 
 			updateUI();
@@ -163,14 +169,27 @@
 				self.modifySettings( negateField("showOtherShips") );
 				updateUI();
 			});
-            jqOrderTypes.on("click", function() {
-                if ($(this).hasClass("up")) {
-					self.modifySettings(updateOrder("shipsSortDirection", "down"));
-				} else {
-					self.modifySettings(updateOrder("shipsSortDirection", "up"));
-				}
-                self.modifySettings(updateOrder("shipsOrderType", $(this).data("order")));
-                updateUI();
+            jqOrderTypes.on("click", function(e) {
+                if (e.shiftKey) {
+					if ($(this).hasClass("up")) {
+						self.modifySettings(updateOrder("shipsSortSecondDirection", "down"));
+					} else {
+						self.modifySettings(updateOrder("shipsSortSecondDirection", "up"));
+					}
+					self.modifySettings(updateOrder("shipsOrderSecondType", $(this).data("order")));
+                } else {
+					if ($(this).hasClass("up")) {
+						self.modifySettings(updateOrder("shipsSortDirection", "down"));
+					} else {
+						self.modifySettings(updateOrder("shipsSortDirection", "up"));
+					}
+					self.modifySettings(updateOrder("shipsOrderType", $(this).data("order")));
+                    self.modifySettings(updateOrder("shipsOrderSecondType", ""));
+                }
+				updateUI();
+            });
+            jqOrderTypes.on("keyup keydown", function() {
+				updateUI();
             });
 			jqCloseToRemLvlDiff
 				.on("blur", function() {
@@ -203,25 +222,30 @@
 					}
 				});
                 
-            function orderShips(sortKey, sortOrder) {
+            function orderShips(sortKey, sortOrder, sortSecondKey, sortSecondOrder) {
                 function sortBoxes(boxSorted) {
                     var sortedElements = $(boxSorted).find(".ship_goal");
-                    sortedElements.sort(function(a, b) {
-                        // Various order types, if someone wants to clean this up or add secondary sort by ID, feel free to <3
-                        var isUp = (sortOrder == "up") ? -1 : 1;
-                        if (sortKey == "id") {
+                    var sorter = function(a, b, sortType, order) {
+                        var isUp = (order == "up") ? -1 : 1;
+
+                        // Various order types
+                        if (sortType == "id") {
                             return isUp * (+$(b).attr("id").substr(7) - +$(a).attr("id").substr(7));
-                        } else if (sortKey == "name") {
+                        } else if (sortType == "name") {
                             return isUp * (($(b).find(".ship_info .ship_name").text().toUpperCase() > $(a).find(".ship_info .ship_name").text().toUpperCase()) ? 1 : -1);
-                        } else if (sortKey == "level") {
+                        } else if (sortType == "level") {
                             return isUp * (+$(b).find(".ship_lv .ship_value").text() - +$(a).find(".ship_lv .ship_value").text());
-                        } else if (sortKey == "remodel") {
+                        } else if (sortType == "remodel") {
                             return isUp * (+$(b).find(".ship_target .ship_value").text() - +$(a).find(".ship_target .ship_value").text());
-                        } else if (sortKey == "lvldiff") {
+                        } else if (sortType == "lvldiff") {
                             return isUp * ((+$(b).find(".ship_target .ship_value").text() - +$(b).find(".ship_lv .ship_value").text()) - (+$(a).find(".ship_target .ship_value").text() - +$(a).find(".ship_lv .ship_value").text()));
-                        } else if (sortKey == "xpdiff") {
+                        } else if (sortType == "xpdiff") {
                             return isUp * (+$(b).find(".ship_exp .ship_value").text() - +$(a).find(".ship_exp .ship_value").text());
                         }
+                    };
+                    sortedElements.sort(function(a, b) {
+                        var primarySort = sorter(a, b, sortKey, sortOrder);
+                        return primarySort ? primarySort : sorter(a, b, sortSecondKey, sortSecondOrder);
                     })
                     .prependTo(boxSorted);
                 }
