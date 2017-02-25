@@ -241,6 +241,8 @@
                             return isUp * ((+$(b).find(".ship_target .ship_value").text() - +$(b).find(".ship_lv .ship_value").text()) - (+$(a).find(".ship_target .ship_value").text() - +$(a).find(".ship_lv .ship_value").text()));
                         } else if (sortType == "xpdiff") {
                             return isUp * (+$(b).find(".ship_exp .ship_value").text() - +$(a).find(".ship_exp .ship_value").text());
+                        } else if (sortType == "shiptype") {
+                            return isUp * (($(b).find(".ship_info .ship_type").text() > $(a).find(".ship_info .ship_type").text()) ? 1 : -1);
                         }
                     };
                     sortedElements.sort(function(a, b) {
