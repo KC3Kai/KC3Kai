@@ -73,7 +73,7 @@
 				showOtherShips: true,
                 shipsOrderType: "id",
                 shipsSortDirection: "up",
-                shipsOrderSecondType: "id",
+                shipsOrderSecondType: "",
                 shipsSortSecondDirection: "up",
 				closeToRemodelLevelDiff: 5
 			};
@@ -88,7 +88,7 @@
 					settings = JSON.parse( localStorage.srExpcalc );
 					settings.shipsOrderType = "id";
 					settings.shipsSortDirection = "up";
-					settings.shipsOrderSecondType = "id";
+					settings.shipsOrderSecondType = "";
 					settings.shipsSortSecondDirection = "up";
 				} else {
 					settings = JSON.parse( localStorage.srExpcalc );
@@ -170,7 +170,7 @@
 				updateUI();
 			});
             jqOrderTypes.on("click", function(e) {
-                if (e.shiftKey) {
+                if (e.shiftKey && self.getSettings().shipsOrderType != $(this).data("order")) {
 					if ($(this).hasClass("up")) {
 						self.modifySettings(updateOrder("shipsSortSecondDirection", "down"));
 					} else {
@@ -232,7 +232,7 @@
                         if (sortType == "id") {
                             return isUp * (+$(b).attr("id").substr(7) - +$(a).attr("id").substr(7));
                         } else if (sortType == "name") {
-                            return isUp * (($(b).find(".ship_info .ship_name").text().toUpperCase() > $(a).find(".ship_info .ship_name").text().toUpperCase()) ? 1 : -1);
+                            return isUp * ($(b).find(".ship_info .ship_name").text().toUpperCase().localeCompare($(a).find(".ship_info .ship_name").text().toUpperCase()));
                         } else if (sortType == "level") {
                             return isUp * (+$(b).find(".ship_lv .ship_value").text() - +$(a).find(".ship_lv .ship_value").text());
                         } else if (sortType == "remodel") {
@@ -242,7 +242,7 @@
                         } else if (sortType == "xpdiff") {
                             return isUp * (+$(b).find(".ship_exp .ship_value").text() - +$(a).find(".ship_exp .ship_value").text());
                         } else if (sortType == "shiptype") {
-                            return isUp * (($(b).find(".ship_info .ship_type").text() > $(a).find(".ship_info .ship_type").text()) ? 1 : -1);
+                            return isUp * ($(b).find(".ship_info .ship_type").text().localeCompare($(a).find(".ship_info .ship_type").text()));
                         }
                     };
                     sortedElements.sort(function(a, b) {
