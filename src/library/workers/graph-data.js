@@ -98,10 +98,11 @@ function formatData(startHour, endHour, options, result){
 		});
 	});
 	
+	let datasetsValues = Object.keys(datasets).map(key => datasets[key]);
 	// Delta mode, only computed after all data is filled above
-	if (options.delta && Object.values(datasets).length > 0) {
+	if (options.delta && datasetsValues.length > 0) {
 		let previous = {};
-		Object.values(datasets)[0].data.forEach((e, i) => {
+		datasetsValues[0].data.forEach((e, i) => {
 			options.graphableItems.dbkey.forEach(function(dbkey){
 				if (previous[dbkey]) {
 					let originalValue = datasets[dbkey].data[i];
