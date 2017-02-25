@@ -131,6 +131,7 @@
 					.toggleClass("active", settings.showOtherShips);
 
 				jqCloseToRemLvlDiff.val( settings.closeToRemodelLevelDiff );
+				orderShips(settings.shipsOrderType, settings.shipsSortDirection);
 			}
 
 			updateUI();
@@ -169,7 +170,6 @@
 					self.modifySettings(updateOrder("shipsSortDirection", "up"));
 				}
                 self.modifySettings(updateOrder("shipsOrderType", $(this).data("order")));
-                orderShips($(this).data("order"), ($(this).hasClass("up")) ? "down" : "up");
                 updateUI();
             });
 			jqCloseToRemLvlDiff
@@ -220,12 +220,7 @@
                         } else if (sortKey == "lvldiff") {
                             return isUp * ((+$(b).find(".ship_target .ship_value").text() - +$(b).find(".ship_lv .ship_value").text()) - (+$(a).find(".ship_target .ship_value").text() - +$(a).find(".ship_lv .ship_value").text()));
                         } else if (sortKey == "xpdiff") {
-                            // Doesn't take current progress through current level in account for non-active ships
-                            if (+$(b).find(".ship_exp .ship_value").text() === 0 || +$(a).find(".ship_exp .ship_value").text() === 0) {
-                                return isUp * ((KC3Meta.expShip(+$(b).find(".ship_target .ship_value").text())[1] - KC3Meta.expShip(+$(b).find(".ship_lv .ship_value").text())[1]) - (KC3Meta.expShip(+$(a).find(".ship_target .ship_value").text())[1] - KC3Meta.expShip(+$(a).find(".ship_lv .ship_value").text())[1]));
-							} else {
-                                return isUp * (+$(b).find(".ship_exp .ship_value").text() - +$(a).find(".ship_exp .ship_value").text());
-							}
+                            return isUp * (+$(b).find(".ship_exp .ship_value").text() - +$(a).find(".ship_exp .ship_value").text());
                         }
                     })
                     .prependTo(boxSorted);
@@ -305,8 +300,6 @@
 		---------------------------------*/
 		execute :function(){
 			var self = this;
-			self.configSectionToggles();
-			self.configHighlightToggles();
 
 			// Add map list into the factory drop-downs
 			$.each(this.maplist, function(MapName, MapExp){
@@ -702,6 +695,8 @@
 					return true;
 
 				$(".ship_target .ship_value", goalBox).text( goalLevel );
+				var expLeft = KC3Meta.expShip(goalLevel)[1] - ThisShip.exp[0];
+				$(".ship_exp .ship_value", goalBox).text( expLeft );
 				if (goalLevel < 99) {
 					goalBox.appendTo(".section_expcalc .box_recommend");
 					return true;
@@ -714,6 +709,8 @@
 
 			//this.save();
 
+			self.configSectionToggles();
+			self.configHighlightToggles();
 			$("<div />").addClass("clear").appendTo(".section_expcalc .box_recommend");
 			$("<div />").addClass("clear").appendTo(".section_expcalc .box_other");
 		},
