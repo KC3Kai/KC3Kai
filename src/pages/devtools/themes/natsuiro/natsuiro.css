@@ -305,8 +305,8 @@ html,body {
 	float:left;
 	text-align:center;
 	border-radius:5px 5px 0px 0px;
-	filter:brightness(0.6) drop-shadow(1px 0px 0px) opacity(0.62);
-	-webkit-filter:brightness(0.6) drop-shadow(1px 0px 0px) opacity(0.62);
+	filter:brightness(0.7) drop-shadow(1px 0px 0px black) opacity(0.62);
+	-webkit-filter:brightness(0.7) drop-shadow(1px 0px 0px black) opacity(0.62);
 }
 #atab_activity {
 	cursor:default;

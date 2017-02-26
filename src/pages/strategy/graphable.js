@@ -127,8 +127,8 @@
 			});
 			
 			// New chart JS only accepts an array, not object
-			data.datasets = Object.values(data.datasets);
-			console.log('datasets', data.datasets);
+			data.datasets = Object.keys(data.datasets).map(key => data.datasets[key]);
+			console.debug("datasets", data.datasets);
 			
 			// Draw graph
 			this.ctx = $("#chart").get(0).getContext("2d");

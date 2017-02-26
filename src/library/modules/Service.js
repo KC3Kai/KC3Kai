@@ -181,11 +181,34 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		
 		/* GET CONFIG
 		For content scripts who doesnt have access to localStorage
-		Mainly used at the moment for DMM cookie injection
+		Mainly used at the moment for DMM/OSAPI/cookie injection
 		------------------------------------------*/
 		"getConfig" :function(request, sender, response){
+			var resultObj = {};
 			ConfigManager.load();
-			response({value: ConfigManager[request.id]});
+			// return all configs
+			if(!request.id){
+				resultObj.value = ConfigManager;
+			// return multi keys of configs
+			} else if(Array.isArray(request.id)) {
+				resultObj.value = request.id.map(function(a){ return ConfigManager[a]; });
+			// return one key
+			} else {
+				resultObj.value = ConfigManager[request.id];
+			}
+			if(typeof request.attr !== "undefined"){
+				// return all localStorage, caution: may include privacy
+				if(!request.attr){
+					resultObj.storage = localStorage;
+				// return multi attributes of localStorage
+				} else if(Array.isArray(request.attr)) {
+					resultObj.storage = request.attr.map(function(a){ return localStorage[a]; });
+				// return one attribute
+				} else {
+					resultObj.storage = localStorage[request.attr];
+				}
+			}
+			response(resultObj);
 		},
 		
 		/* FIT SCREEN
@@ -310,10 +333,9 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			var senderUrl = (sender.tab)?sender.tab.url:false || sender.url  || "";
 			
 			ConfigManager.load();
-			if( isDMMFrame(senderUrl) ){
+			if( isDMMFrame(senderUrl) && localStorage.dmmplay == "false"){
 				// DMM FRAME
 				response({ mode: 'frame', scale: ConfigManager.api_gameScale});
-				
 			} else if(ConfigManager.dmm_customize && localStorage.extract_api != "true") {
 				var props = {
 					highlighted: true
