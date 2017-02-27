@@ -1053,6 +1053,11 @@ body {
 	border-radius:10px;
 	margin:0px 0px 5px 0px;
 }
+.tab_event .sortie_list .sortie_dl,
+.tab_maps .sortie_list .sortie_dl {
+	background:#ffc;
+	border:1px solid #ace;
+}
 .tab_event .sortie_list .sortie_date,
 .tab_maps .sortie_list .sortie_date {
 	color:#3399cc;

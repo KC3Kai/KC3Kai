@@ -111,8 +111,8 @@
 			});
 			
 			// On-click sortie ID export battle
-			$(".sortie_list").on("click", ".sortie_id", function(){
-				self.exportBattleImg(parseInt($(this).text()));
+			$(".sortie_list").on("click", ".sortie_dl", function(){
+				self.exportBattleImg(parseInt($(this).data("id")));
 			});
 			
 			// On-click sortie toggles
@@ -412,10 +412,11 @@
 						$(sortieBox)
 							.addClass("sortie_rank_"+sortie.diff)
 							.attr("data-diff",KC3Meta.term("EventHistoryRank"+sortie.diff));
-					$(".sortie_id", sortieBox).html( sortie.id );
-					$(".sortie_date", sortieBox).html( new Date(sortie.time*1000).format("mmm d") );
+					$(".sortie_id", sortieBox).text( sortie.id );
+					$(".sortie_dl", sortieBox).data("id", sortie.id);
+					$(".sortie_date", sortieBox).text( new Date(sortie.time*1000).format("mmm d") );
 					$(".sortie_date", sortieBox).attr("title", new Date(sortie.time*1000).format("yyyy-mm-dd HH:MM:ss") );
-					$(".sortie_map", sortieBox).html( (sortie.world >= 10 ? "E" : sortie.world) + "-" + sortie.mapnum );
+					$(".sortie_map", sortieBox).text( (sortie.world >= 10 ? "E" : sortie.world) + "-" + sortie.mapnum );
 					
 					fleetkey = ["main","escort","preboss","boss"];
 					fleets   = [

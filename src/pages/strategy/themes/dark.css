@@ -1308,6 +1308,11 @@ button, input, select, textarea {
 	background:#303030;
 	margin:0px 0px 2px 0px;
 }
+.tab_event .sortie_list .sortie_dl,
+.tab_maps .sortie_list .sortie_dl {
+	background:#369;
+	border:1px solid #3f8cd9;
+}
 .tab_event .sortie_list .sortie_date ,
 .tab_maps .sortie_list .sortie_date {
 	color:#aaa;

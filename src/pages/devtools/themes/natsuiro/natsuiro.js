@@ -796,12 +796,12 @@
 		$(".module.activity .battle_cond_value").text("");
 		$(".module.activity .battle_engagement").prev().text(KC3Meta.term("BattleEngangement"));
 		$(".module.activity .battle_engagement").removeClass(KC3Meta.battleSeverityClass(KC3Meta.engagement()));
-		$(".module.activity .battle_engagement").attr("title", "");
+		$(".module.activity .battle_engagement").attr("title", "").lazyInitTooltip();
 		$(".module.activity .battle_detection").prev().text(KC3Meta.term("BattleDetection"));
 		$(".module.activity .battle_detection").removeClass(KC3Meta.battleSeverityClass(KC3Meta.detection()));
-		$(".module.activity .battle_detection").attr("title", "");
+		$(".module.activity .battle_detection").attr("title", "").lazyInitTooltip();
 		$(".module.activity .battle_airbattle").removeClass(KC3Meta.battleSeverityClass(KC3Meta.airbattle()));
-		$(".module.activity .battle_airbattle").attr("title", "");
+		$(".module.activity .battle_airbattle").attr("title", "").lazyInitTooltip();
 		$(".module.activity .plane_text span").text("");
 		$(".module.activity .sink_icons .sunk img").hide();
 		$(".module.activity .battle_planes .fighter_ally .plane_icon img").attr("src", "../../../../assets/img/items/6.png");
@@ -1841,7 +1841,7 @@
 					// http://wikiwiki.jp/kancolle/?%B4%F0%C3%CF%B9%D2%B6%F5%C2%E2#airraid
 					$(".module.activity .battle_engagement").attr("title", KC3Meta.term("BattleAirBaseLossTip")
 						.format( thisNode.baseDamage, Math.round(thisNode.baseDamage * 0.9 + 0.1) )
-					).lazyInitTooltip();
+					);
 				}
 				var contactSpan = buildContactPlaneSpan(thisNode.fcontactId, thisNode.fcontact, thisNode.econtactId, thisNode.econtact);
 				$(".module.activity .battle_contact").html(contactSpan.html()).lazyInitTooltip();
@@ -3209,7 +3209,8 @@
 					if(aaciObj.icons[0] > 0) {
 						$(".shipIcon img", aaciBox)
 							.attr("src", KC3Meta.shipIcon(aaciObj.icons[0]) )
-							.attr("title", KC3Meta.aacitype(aaciObj.id)[0] || "");
+							.attr("title", KC3Meta.aacitype(aaciObj.id)[0] || "")
+							.lazyInitTooltip();
 					} else {
 						$(".shipIcon img", aaciBox).hide();
 					}
@@ -3219,6 +3220,7 @@
 							$("<img/>")
 								.attr("src", "../../../../assets/img/items/"+equipIcon[0]+".png")
 								.attr("title", KC3Meta.aacitype(aaciObj.id)[i] || "")
+								.lazyInitTooltip()
 								.appendTo($(".equipIcons", aaciBox));
 							if(equipIcon.length>1) {
 								$('<img/>')
