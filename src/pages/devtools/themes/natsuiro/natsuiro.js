@@ -87,6 +87,8 @@
 		response: "",
 		serverUtc: 0,
 		kc3Version: "",
+		dmmPlay: "",
+		extractApi: "",
 		userAgent: "",
 		utc: 0
 	};
@@ -871,6 +873,8 @@
 				errorReport.response = data.response;
 				errorReport.serverUtc = data.serverUtc;
 				errorReport.kc3Version = data.kc3Manifest;
+				errorReport.dmmPlay = localStorage.dmmplay;
+				errorReport.extractApi = localStorage.extract_api;
 				errorReport.userAgent = navigator.userAgent;
 				errorReport.utc = Date.now();
 			} else {
@@ -1357,7 +1361,7 @@
 					let f33x3 = Math.qckInt("floor", PlayerManager.fleets[selectedFleet-1].eLos4(3), 1);
 					let f33x4 = Math.qckInt("floor", PlayerManager.fleets[selectedFleet-1].eLos4(4), 1);
 					$(".summary-eqlos").attr("title",
-						"x4={0} \t3-5(G>28), 6-1(E>16, F>25)\nx3={1} \t6-2(F<43/>50, H>40), 6-3(H>38)"
+						"x4={0} \t3-5(G>28), 6-1(E>16, F>25)\nx3={1} \t6-2(F<43/F>50, H>40), 6-3(H>38)"
 						.format(f33x4, f33x3)
 					).lazyInitTooltip();
 				// No reference values for combined fleet yet, only show computed values
@@ -1581,6 +1585,10 @@
 								console.log("PLANE", i, planeInfo);
 								
 								itemObj = KC3GearManager.get(planeInfo.api_slotid);
+								if(itemObj.itemId <= 0 || itemObj.master() === false) {
+									$("div", planeBox).remove();
+									return;
+								}
 								
 								$(".base_plane_name", planeBox).text(itemObj.name());
 								
