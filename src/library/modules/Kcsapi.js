@@ -102,7 +102,8 @@ Previously known as "Reactor"
 			PlayerManager.consumables.fcoin = response.api_data.api_basic.api_fcoin;
 			
 			KC3ShipManager.max = response.api_data.api_basic.api_max_chara;
-			KC3GearManager.max = response.api_data.api_basic.api_max_slotitem;
+			// Not sure why, but always shown +3 at client side. see #1860
+			KC3GearManager.max = 3 + response.api_data.api_basic.api_max_slotitem;
 			
 			PlayerManager.setFleets( response.api_data.api_deck_port );
 			PlayerManager.setRepairDocks( response.api_data.api_ndock );
@@ -200,7 +201,7 @@ Previously known as "Reactor"
 			PlayerManager.repairSlots = response.api_data.api_count_ndock;
 			PlayerManager.buildSlots = response.api_data.api_count_kdock;
 			KC3ShipManager.max = response.api_data.api_max_chara;
-			KC3GearManager.max = response.api_data.api_max_slotitem;
+			KC3GearManager.max = 3 + response.api_data.api_max_slotitem;
 			
 			PlayerManager.setStatistics({
 				exped: {
@@ -243,7 +244,7 @@ Previously known as "Reactor"
 			PlayerManager.repairSlots = response.api_data.api_ndoc;
 			PlayerManager.buildSlots = response.api_data.api_kdoc;
 			KC3ShipManager.max = response.api_data.api_ship[1];
-			KC3GearManager.max = response.api_data.api_slotitem[1];
+			KC3GearManager.max = 3 + response.api_data.api_slotitem[1];
 			
 			PlayerManager.setStatistics({
 				exped: {
