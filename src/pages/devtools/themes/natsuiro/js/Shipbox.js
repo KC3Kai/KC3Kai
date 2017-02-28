@@ -24,7 +24,7 @@ KC3改 Ship Box for Natsuiro theme
 	Short ship box for combined fleets
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.commonElements = function( isCombinedEscort ){
-		var shipDb = WhoCallsTheFleetDb.getShipStat(this.shipData.masterId);
+		//var shipDb = WhoCallsTheFleetDb.getShipStat(this.shipData.masterId);
 		var tooltipBox = $("#factory .ship_face_tooltip_outer").clone();
 		tooltipBox.hide();
 		tooltipBox.appendTo(this.element);
@@ -43,7 +43,7 @@ KC3改 Ship Box for Natsuiro theme
 		$(".ship_face_tooltip .stat_tp", tooltipBox).text(this.shipData.tp[0]);
 		$(".ship_face_tooltip .stat_ev", tooltipBox).text(this.shipData.ev[0]);
 		$(".ship_face_tooltip .stat_aa", tooltipBox).text(this.shipData.aa[0]);
-		$(".ship_face_tooltip .stat_ac", tooltipBox).text(shipDb.carry >= 0 ? shipDb.carry : "?");
+		$(".ship_face_tooltip .stat_ac", tooltipBox).text(this.shipData.carrySlots());
 		$(".ship_face_tooltip .stat_as", tooltipBox).text(this.shipData.as[0])
 			.toggleClass("oasw", this.shipData.canDoOASW());
 		$(".ship_face_tooltip .stat_sp", tooltipBox).text(this.shipData.speedName())

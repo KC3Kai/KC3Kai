@@ -301,6 +301,19 @@ KC3改 Ship Object
 		return KC3Ship.getMaxHp(this.masterId, this.level);
 	};
 
+	/**
+	 * Return total count of aircraft slots of a ship. Static method for library.
+	 * @return -1 if ship ID belongs to aybssal or nonexistence
+	 */
+	KC3Ship.getCarrySlots = function(masterId){
+		var maxeq = masterId > 500 ? undefined :
+			(KC3Master.ship(masterId) || {}).api_maxeq;
+		return Array.isArray(maxeq) ? maxeq.reduce(function(acc, v){return acc + v;}, 0) : -1;
+	};
+	KC3Ship.prototype.carrySlots = function(){
+		return KC3Ship.getCarrySlots(this.masterId);
+	};
+
 	/* REPAIR TIME
 	Get ship's docking and Akashi times
 	when optAfterHp is true, return repair time based on afterHp
