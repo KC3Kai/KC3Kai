@@ -13,6 +13,11 @@ env:
   - secure: iNlrBA5NB+DtY3wuFA34ThiZayswnXBdf/4vCQyAz6NJYT7IUx8CjVwAb1UOmb9UfFppcnZOSLpzboMuaWsVeKSsPuppGgiWDSU0whoBvpNC9ImD4YO7ZRpeZ25WsAOCp6lz/ypbicu0lSwvmCguVSus8F9EPQUWuEp0oHw+ZMs=
   - secure: ccwwpdxdUpufkFqQUWGdCQAF1TI+Nx1TDVHCIaRM8IdoBU0wc6XD7HEEqq9gNeB3GG5tvPYzwLfj9ARpEiO+KZObLCcaEI5ZKSXPNADzL05fmL8uUDQENR7q+K1iSe5lpE+iBWH1/SHUxUbIzIY1qlaA9+qoKZzzai6JQXEKdzE=
 
+# CACHE DEPENDENCIES
+cache:
+  directories:
+    - node_modules
+
 # BUILD WEBSTORE PACKAGE
 before_script:
 - npm test
