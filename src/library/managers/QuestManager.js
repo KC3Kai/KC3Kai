@@ -89,7 +89,7 @@ Uses KC3Quest objects to play around with
 			
 			// Quarterly quests reset on the first day of every March, June, September, and December at 05:00 JST
 			var quarterTables = {"0":2,"1":1,"2":3,"3":2,"4":1,"5":3,"6":2,"7":1,"8":3,"9":2,"10":1,"11":3};
-			var nextQuarterFirstDay8PmGmt = (new Date(thisMonthFirstDay8PmGmt)).shiftMonth(quarterTables[thisMonthFirstDay8PmGmt.getMonth()]);
+			var nextQuarterFirstDay8PmGmt = (new Date(nextMonthFirstDay8PmGmt)).shiftMonth(quarterTables[nextMonthFirstDay8PmGmt.getMonth()]);
 			var nextQuarterLastDay8PmGmt = (new Date(nextQuarterFirstDay8PmGmt)).shiftDate(-1);
 			
 			ServerJstClock.shiftHour(-4);
