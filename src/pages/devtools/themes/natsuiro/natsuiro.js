@@ -1542,8 +1542,7 @@
 				$(".airbase_list").show();
 				
 				var baseBox, planeBox, itemObj, paddedId,
-					eqImgSrc, eqIconSrc, eqChevSrc, eqMorale, eqCondSrc,
-					shipObj, afpLower;
+					eqImgSrc, eqIconSrc, eqChevSrc, eqMorale, eqCondSrc;
 				
 				$.each(PlayerManager.bases, function(i, baseInfo){
 					if (baseInfo.rid != -1) {
@@ -1559,7 +1558,7 @@
 							KC3Meta.term("LandBaseActionRest")
 						][baseInfo.action]);
 						
-						shipObj = new KC3Ship();
+						let shipObj = new KC3Ship();
 						shipObj.rosterId = -1;
 						shipObj.items = baseInfo.planes.map(function(planeInfo){
 							return planeInfo.api_state == 1 ? planeInfo.api_slotid : -1;
@@ -1568,15 +1567,16 @@
 							return planeInfo.api_state == 1 ? planeInfo.api_count : 0;
 						});
 						
-						afpLower = shipObj.fighterBounds()[0];
-						if (afpLower > 0) {
-							$(".base_afp .base_stat_value", baseBox).html( afpLower+"+" );
-						} else {
-							$(".base_afp .base_stat_value", baseBox).html( KC3Meta.term("None") );
-						}
-						
-						$(".base_ifp .base_stat_value", baseBox).html(shipObj.interceptionPower("aa"));
-						$(".base_ibp .base_stat_value", baseBox).html(shipObj.interceptionPower("dv"));
+						// Regular fighter power on sortie
+						let afpLower = shipObj.fighterBounds()[0];
+						$(".base_afp .base_stat_value", baseBox).text(
+							!!afpLower ? afpLower + "+" : KC3Meta.term("None")
+						);
+						// Land-base interception power on air defense
+						let ifp = shipObj.interceptionPower();
+						$(".base_ifp .base_stat_value", baseBox).text(
+							!!ifp ? ifp : KC3Meta.term("None")
+						);
 						
 						$.each(baseInfo.planes, function(i, planeInfo){
 							planeBox = $("#factory .airbase_plane").clone();
@@ -1597,7 +1597,13 @@
 								$(".base_plane_img img", planeBox).attr("src", eqImgSrc);
 								$(".base_plane_img", planeBox)
 									.attr("title", $(".base_plane_name", planeBox).text())
-									.lazyInitTooltip();
+									.lazyInitTooltip()
+									.data("masterId", itemObj.masterId)
+									.on("dblclick", function(e){
+										(new RMsg("service", "strategyRoomPage", {
+											tabPath: "mstgear-{0}".format($(this).data("masterId"))
+										})).execute();
+									});
 								
 								eqIconSrc = "../../../../assets/img/items/"+itemObj.master().api_type[3]+".png";
 								$(".base_plane_icon img", planeBox).attr("src", eqIconSrc);
