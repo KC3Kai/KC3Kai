@@ -213,7 +213,7 @@ Uses KC3Quest objects to play around with
 			
 			/* RESET QUARTERLY QUESTS
 			-----------------------------------------------------*/
-			// Update localStorage
+			// Update next reset time of localStorage if necessary
 			if (this.timeToResetQuarterlyQuests === -1) {
 				timeFromLocalStorage = this.getTimeToResetFromLocalStorage("timeToResetQuarterlyQuests");
 				if (timeFromLocalStorage === -1) {
