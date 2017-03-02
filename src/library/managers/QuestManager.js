@@ -66,172 +66,171 @@ Uses KC3Quest objects to play around with
 			return result;
 		},
 		
-		checkAndResetQuests :function(serverJstTime){
-			this.load();
+		calcNextResetTime :function(serverDatetime){
+			var result = {};
+			// 5AM JST = 8PM GMT (previous day), shift 4 hours to midnight
+			var serverMidnight = new Date(serverDatetime).shiftHour(4);
+			// Perform copy constructor
+			result.prevDay8PmGmt = new Date(serverMidnight);
+			result.prevDay8PmGmt.shiftDate(-2,true).shiftHour(20);
+			result.nextDay8PmGmt = (new Date(result.prevDay8PmGmt)).shiftDate(1);
 			
-			// 5AM JST = 8PM GMT (previous day)
-			var millisecondsInDay = 24*60*60*1000;
-			var ServerJstClock = new Date( serverJstTime ).shiftHour(4);
-			var today8PmGmt = new Date(ServerJstClock); // perform copy constructor
-			today8PmGmt.shiftDate(-2,true).shiftHour(20);
+			result.prevWeekSunday8PmGmt = (new Date(result.prevDay8PmGmt)).shiftWeek(0,-1,0);
+			result.nextWeekSunday8PmGmt = (new Date(result.prevWeekSunday8PmGmt)).shiftWeek(null,null,1);
 			
-			var tomorrow8PmGmt = (new Date(today8PmGmt)).shiftDate(1);
-			
-			var thisWeekSunday8PmGmt = (new Date(today8PmGmt)).shiftWeek(0,-1,0);
-			var nextWeekSunday8PmGmt = (new Date(thisWeekSunday8PmGmt)).shiftWeek(null,null,1);
-			
-			var thisMonthFirstDay8PmGmt = (new Date(today8PmGmt)).resetTime(4).shiftHour(20);
-			var nextMonthFirstDay8PmGmt = (new Date(thisMonthFirstDay8PmGmt)).shiftMonth(1);
-			var thisMonthLastDay8PmGmt = (new Date(nextMonthFirstDay8PmGmt)).shiftDate(-1);
-			
-			var nextNextMonthFirstDay8PmGmt = (new Date(thisMonthFirstDay8PmGmt)).shiftMonth(2);
-			var nextMonthLastDay8PmGmt = (new Date(nextNextMonthFirstDay8PmGmt)).shiftDate(-1);
+			// Naming is regarding first day of month of server date:
+			// prevMonth = thisMonth-1 only if date = 1 (firstDay)
+			// prevMonth = thisMonth if date in [2, lastDay]
+			result.prevMonthFirstDay8PmGmt = (new Date(result.prevDay8PmGmt)).resetTime(4).shiftHour(20);
+			var nextPrevMonthFirstDay8PmGmt = (new Date(result.prevMonthFirstDay8PmGmt)).shiftMonth(1);
+			result.prevMonthLastDay8PmGmt = (new Date(nextPrevMonthFirstDay8PmGmt)).shiftDate(-1);
+			// So nextMonth will be next next month if date > 1
+			result.nextMonthFirstDay8PmGmt = (new Date(result.prevMonthFirstDay8PmGmt)).shiftMonth(2);
+			result.nextMonthPrevDay8PmGmt = (new Date(result.nextMonthFirstDay8PmGmt)).shiftDate(-1);
 			
 			// Quarterly quests reset on the first day of every March, June, September, and December at 05:00 JST
 			var quarterTables = {"0":2,"1":1,"2":3,"3":2,"4":1,"5":3,"6":2,"7":1,"8":3,"9":2,"10":1,"11":3};
-			var nextQuarterFirstDay8PmGmt = (new Date(nextMonthFirstDay8PmGmt)).shiftMonth(quarterTables[nextMonthFirstDay8PmGmt.getMonth()]);
-			var nextQuarterLastDay8PmGmt = (new Date(nextQuarterFirstDay8PmGmt)).shiftDate(-1);
+			var thisMonthFirstDay8PmGmt = (new Date(result.nextDay8PmGmt)).resetTime(4).shiftHour(20);
+			result.nextQuarterFirstDay8PmGmt = (new Date(thisMonthFirstDay8PmGmt)).shiftMonth(quarterTables[thisMonthFirstDay8PmGmt.getMonth()]);
+			result.nextQuarterPrevDay8PmGmt = (new Date(result.nextQuarterFirstDay8PmGmt)).shiftDate(-1);
 			
-			ServerJstClock.shiftHour(-4);
+			/*
+			console.log("============================================");
+			var mask = dateFormat.masks.isoUtcDateTime;
+			console.log("Time      ", serverDatetime.format(mask,true) );
+			console.log("Prev day  ", result.prevDay8PmGmt.format(mask,true) );
+			console.log("Next day  ", result.nextDay8PmGmt.format(mask,true) );
+			console.log("Prev week ", result.prevWeekSunday8PmGmt.format(mask,true) );
+			console.log("Next week ", result.nextWeekSunday8PmGmt.format(mask,true) );
+			console.log("Prev month", result.prevMonthFirstDay8PmGmt.format(mask,true), result.prevMonthLastDay8PmGmt.format(mask,true) );
+			console.log("Next month", result.nextMonthFirstDay8PmGmt.format(mask,true), result.nextMonthPrevDay8PmGmt.format(mask,true) );
+			console.log("Next quart", result.nextQuarterFirstDay8PmGmt.format(mask,true), result.nextQuarterPrevDay8PmGmt.format(mask,true) );
+			*/
+			return result;
+		},
+		
+		checkAndResetQuests :function(serverDatetime){
+			this.load();
 			
-			//console.log("============================================");
-			//console.log( 'Time      ', ServerJstClock.format(undefined,true) );
-			//console.log( 'Curr day  ', today8PmGmt.format(undefined,true) );
-			//console.log( 'Next day  ', tomorrow8PmGmt.format(undefined,true) );
-			//console.log( 'Curr week ', thisWeekSunday8PmGmt.format(undefined,true) );
-			//console.log( 'Next week ', nextWeekSunday8PmGmt.format(undefined,true) );
-			//console.log( 'Curr month', thisMonthFirstDay8PmGmt.format(undefined,true), thisMonthLastDay8PmGmt.format(undefined,true) );
-			//console.log( 'Next month', nextMonthFirstDay8PmGmt.format(undefined,true), nextMonthLastDay8PmGmt.format(undefined,true) );
-			//console.log( 'Next quart', nextQuarterFirstDay8PmGmt.format(undefined,true), nextQuarterLastDay8PmGmt.format(undefined,true) );
-			
-			/*if ( ServerJstClock.getTime() > today8PmGmt.getTime()) {
-				console.log("Passed 5AM JST");
-			}*/
+			var currentServerTimestamp = new Date(serverDatetime).getTime();
+			var NextResetTime = this.calcNextResetTime(serverDatetime);
 			var timeFromLocalStorage;
 			
 			/* RESET DAILY QUESTS
 			-----------------------------------------------------*/
+			// Update next reset time of localStorage if necessary
 			if (this.timeToResetDailyQuests === -1) {
 				timeFromLocalStorage = this.getTimeToResetFromLocalStorage("timeToResetDailyQuests");
-				
-				// Nothing in localStorage
 				if (timeFromLocalStorage === -1) {
-					if (today8PmGmt.getTime() < ServerJstClock.getTime()) {
-						this.timeToResetDailyQuests = tomorrow8PmGmt.getTime();
+					if (NextResetTime.prevDay8PmGmt.getTime() < currentServerTimestamp) {
+						this.timeToResetDailyQuests = NextResetTime.nextDay8PmGmt.getTime();
 					} else {
-						this.timeToResetDailyQuests = today8PmGmt.getTime();
+						this.timeToResetDailyQuests = NextResetTime.prevDay8PmGmt.getTime();
 					}
-					
-					// Update localStorage
 					localStorage.timeToResetDailyQuests = this.timeToResetDailyQuests;
 				} else {
 					this.timeToResetDailyQuests = timeFromLocalStorage;
 				}
-				console.log("Reset Daily Quests: " + this.timeToResetDailyQuests + " " + new Date(this.timeToResetDailyQuests));
+				console.log("Reset Daily Quests at", this.timeToResetDailyQuests, new Date(this.timeToResetDailyQuests));
 			}
-			
-			if (this.timeToResetDailyQuests <= ServerJstClock.getTime()) {
+			// Check if reset time passed by, update next reset time if reset
+			var millisecondsInDay = 24*60*60*1000;
+			if (this.timeToResetDailyQuests <= currentServerTimestamp) {
 				this.resetDailies();
-				if (this.timeToResetDailyQuests < today8PmGmt.getTime()) {
-					this.timeToResetDailyQuests = today8PmGmt.getTime();
+				if (this.timeToResetDailyQuests < NextResetTime.prevDay8PmGmt.getTime()) {
+					this.timeToResetDailyQuests = NextResetTime.prevDay8PmGmt.getTime();
 				} else {
-					this.timeToResetDailyQuests = tomorrow8PmGmt.getTime();
+					this.timeToResetDailyQuests = NextResetTime.nextDay8PmGmt.getTime();
 				}
 				localStorage.timeToResetDailyQuests = this.timeToResetDailyQuests;
-				KC3Network.trigger("Quests");
-			} else if (this.timeToResetDailyQuests > ServerJstClock.getTime() + millisecondsInDay) {
+				if(typeof KC3Network === "object")
+					KC3Network.trigger("Quests");
+			} else if (this.timeToResetDailyQuests > currentServerTimestamp + millisecondsInDay) {
+				// Fix time diff larger than 1 day
 				this.timeToResetDailyQuests -= millisecondsInDay;
 				localStorage.timeToResetDailyQuests = this.timeToResetDailyQuests;
 			}
 			
-			var remainingTime = this.timeToResetDailyQuests - ServerJstClock.getTime();
-			var remainingHours = Math.floor(remainingTime / (60*60*1000));
-			var remainingMinutes = Math.floor((remainingTime / (60*1000))%60);
-			var remainingSeconds = Math.floor((remainingTime / (1000))%60);
-			
-			//console.log("Time until reset daily quests: " + remainingHours + ":" + remainingMinutes + ":" + remainingSeconds);
-			
 			/* RESET WEEKLY QUESTS
 			-----------------------------------------------------*/
+			// Update next reset time of localStorage if necessary
 			if (this.timeToResetWeeklyQuests === -1) {
 				timeFromLocalStorage = this.getTimeToResetFromLocalStorage("timeToResetWeeklyQuests");
-				
-				// Nothing in localStorage
 				if (timeFromLocalStorage === -1) {
-					if (thisWeekSunday8PmGmt.getTime() < ServerJstClock.getTime()) {
-						this.timeToResetWeeklyQuests = nextWeekSunday8PmGmt.getTime();
+					if (NextResetTime.prevWeekSunday8PmGmt.getTime() < currentServerTimestamp) {
+						this.timeToResetWeeklyQuests = NextResetTime.nextWeekSunday8PmGmt.getTime();
 					} else {
-						this.timeToResetWeeklyQuests = thisWeekSunday8PmGmt.getTime();
+						this.timeToResetWeeklyQuests = NextResetTime.prevWeekSunday8PmGmt.getTime();
 					}
-					
-					// Update localStorage
 					localStorage.timeToResetWeeklyQuests = this.timeToResetWeeklyQuests;
 				} else {
 					this.timeToResetWeeklyQuests = timeFromLocalStorage;
 				}
-				console.log("Reset Weekly Quests: " + this.timeToResetWeeklyQuests + " " + new Date(this.timeToResetWeeklyQuests));
+				console.log("Reset Weekly Quests at", this.timeToResetWeeklyQuests, new Date(this.timeToResetWeeklyQuests));
 			}
-			
-			if (this.timeToResetWeeklyQuests <= ServerJstClock.getTime()) {
+			// Check if reset time passed by, update next reset time if reset
+			if (this.timeToResetWeeklyQuests <= currentServerTimestamp) {
 				this.resetWeeklies();
-				if (this.timeToResetWeeklyQuests < thisWeekSunday8PmGmt.getTime()) {
-					this.timeToResetWeeklyQuests = thisWeekSunday8PmGmt.getTime();
+				if (this.timeToResetWeeklyQuests < NextResetTime.prevWeekSunday8PmGmt.getTime()) {
+					this.timeToResetWeeklyQuests = NextResetTime.prevWeekSunday8PmGmt.getTime();
 				} else {
-					this.timeToResetWeeklyQuests = nextWeekSunday8PmGmt.getTime();
+					this.timeToResetWeeklyQuests = NextResetTime.nextWeekSunday8PmGmt.getTime();
 				}
 				localStorage.timeToResetWeeklyQuests = this.timeToResetWeeklyQuests;
-				KC3Network.trigger("Quests");
+				if(typeof KC3Network === "object")
+					KC3Network.trigger("Quests");
 			}
 			
 			/* RESET MONTHLY QUESTS
 			-----------------------------------------------------*/
+			// Update next reset time of localStorage if necessary
 			if (this.timeToResetMonthlyQuests === -1) {
 				timeFromLocalStorage = this.getTimeToResetFromLocalStorage("timeToResetMonthlyQuests");
-				
-				// Nothing in localStorage
 				if (timeFromLocalStorage === -1) {
-					if (thisMonthLastDay8PmGmt.getTime() < ServerJstClock.getTime()) {
-						this.timeToResetMonthlyQuests = nextMonthLastDay8PmGmt.getTime();
+					if (NextResetTime.prevMonthLastDay8PmGmt.getTime() < currentServerTimestamp) {
+						this.timeToResetMonthlyQuests = NextResetTime.nextMonthLastDay8PmGmt.getTime();
 					} else {
-						this.timeToResetMonthlyQuests = thisMonthLastDay8PmGmt.getTime();
+						this.timeToResetMonthlyQuests = NextResetTime.prevMonthLastDay8PmGmt.getTime();
 					}
-					
-					// Update localStorage
 					localStorage.timeToResetMonthlyQuests = this.timeToResetMonthlyQuests;
 				} else {
 					this.timeToResetMonthlyQuests = timeFromLocalStorage;
 				}
-				console.log("Reset Monthly Quests: " + this.timeToResetMonthlyQuests + " " + new Date(this.timeToResetMonthlyQuests));
+				console.log("Reset Monthly Quests at", this.timeToResetMonthlyQuests, new Date(this.timeToResetMonthlyQuests));
 			}
-			
-			if (this.timeToResetMonthlyQuests <= ServerJstClock.getTime()) {
+			// Check if reset time passed by, update next reset time if reset
+			if (this.timeToResetMonthlyQuests <= currentServerTimestamp) {
 				this.resetMonthlies();
-				if (this.timeToResetMonthlyQuests < thisMonthLastDay8PmGmt.getTime()) {
-					this.timeToResetMonthlyQuests = thisMonthLastDay8PmGmt.getTime();
+				if (this.timeToResetMonthlyQuests < NextResetTime.prevMonthLastDay8PmGmt.getTime()) {
+					this.timeToResetMonthlyQuests = NextResetTime.prevMonthLastDay8PmGmt.getTime();
 				} else {
-					this.timeToResetMonthlyQuests = nextMonthLastDay8PmGmt.getTime();
+					this.timeToResetMonthlyQuests = NextResetTime.nextMonthLastDay8PmGmt.getTime();
 				}
 				localStorage.timeToResetMonthlyQuests = this.timeToResetMonthlyQuests;
-				KC3Network.trigger("Quests");
+				if(typeof KC3Network === "object")
+					KC3Network.trigger("Quests");
 			}
 			
 			/* RESET QUARTERLY QUESTS
 			-----------------------------------------------------*/
+			// Update localStorage
 			if (this.timeToResetQuarterlyQuests === -1) {
 				timeFromLocalStorage = this.getTimeToResetFromLocalStorage("timeToResetQuarterlyQuests");
 				if (timeFromLocalStorage === -1) {
-					this.timeToResetQuarterlyQuests = nextQuarterLastDay8PmGmt.getTime();
+					this.timeToResetQuarterlyQuests = NextResetTime.nextQuarterPrevDay8PmGmt.getTime();
 					localStorage.timeToResetQuarterlyQuests = this.timeToResetQuarterlyQuests;
 				} else {
 					this.timeToResetQuarterlyQuests = timeFromLocalStorage;
 				}
-				console.log("Reset Quarterly Quests: " + this.timeToResetQuarterlyQuests + " " + new Date(this.timeToResetQuarterlyQuests));
+				console.log("Reset Quarterly Quests at", this.timeToResetQuarterlyQuests, new Date(this.timeToResetQuarterlyQuests));
 			}
-			if (this.timeToResetQuarterlyQuests <= ServerJstClock.getTime()) {
+			// Check if reset time passed by, update next reset time if reset
+			if (this.timeToResetQuarterlyQuests <= currentServerTimestamp) {
 				this.resetQuarterlies();
-				this.timeToResetQuarterlyQuests = nextQuarterLastDay8PmGmt.getTime();
+				this.timeToResetQuarterlyQuests = NextResetTime.nextQuarterPrevDay8PmGmt.getTime();
 				localStorage.timeToResetQuarterlyQuests = this.timeToResetQuarterlyQuests;
-				KC3Network.trigger("Quests");
+				if(typeof KC3Network === "object")
+					KC3Network.trigger("Quests");
 			}
 			
 			this.save();
