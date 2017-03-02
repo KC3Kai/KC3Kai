@@ -112,6 +112,10 @@ KC3改 Equipment Object
 			}
 			var aaStat = this.master().api_tyku;
 			aaStat += this.AAStatImprovementBonous();
+			// Interceptor use evasion as interception stat against fighter
+			var intStat = KC3GearManager.interceptorsType3Ids.indexOf(this.master().api_type[3]) > -1 ?
+				this.master().api_houk : 0;
+			aaStat += intStat * 1.5;
 			return Math.floor( Math.sqrt(capacity) * aaStat + veteranBonus );
 		}
 
@@ -154,9 +158,11 @@ KC3改 Equipment Object
 			}
 			var aaStat = this.master().api_tyku;
 			aaStat += this.AAStatImprovementBonous();
+			// Interceptor use evasion as interception stat against fighter
+			var intStat = KC3GearManager.interceptorsType3Ids.indexOf(this.master().api_type[3]) > -1 ?
+				this.master().api_houk : 0;
+			aaStat += intStat * 1.5;
 
-			// console.log("ConfigManager.air_bounds",ConfigManager.air_bounds);
-			// console.log("veteranBounds", veteranBounds);
 			return [
 				Math.floor( Math.sqrt(capacity) * aaStat + veteranBounds[0] ),
 				Math.floor( Math.sqrt(capacity) * aaStat + veteranBounds[1] ),
@@ -167,45 +173,36 @@ KC3改 Equipment Object
 		return [0,0];
 	};
 	
-	/* FIGHTER POWER with INTERCEPTOR FORMULA
-	Normal planes get usual fighter power formula
-	Interceptor planes get special formula
-	INTPOW = floor((aa + 1.5 * radius + impr_cost(type) * impr_level) * sqrt(slot) + sqrt(0.1 * internal_level(prof_level)) + bonus(prof_level, type)) 
+	/* FIGHTER POWER on Air Defense with INTERCEPTOR FORMULA
+	 * Normal planes get usual fighter power formula
+	 * Interceptor planes get two special stats: interception, anti-bomber
+	see http://wikiwiki.jp/kancolle/?%B4%F0%C3%CF%B9%D2%B6%F5%C2%E2#sccf3a4c
+	see http://kancolle.wikia.com/wiki/Land-Base_Aerial_Support#Fighter_Power_Calculations
 	--------------------------------------------------------------*/
-	KC3Gear.prototype.interceptionPower = function(type, capacity){
+	KC3Gear.prototype.interceptionPower = function(capacity){
 		// Empty item means no fighter power
 		if(this.itemId===0){ return 0; }
-		
-		// Check if this object is a fighter plane
-		if( KC3GearManager.interceptorsType3Ids.indexOf( this.master().api_type[3] ) > -1) {
-			// If slot has plne capacity
+		// Check if this object is a interceptor plane or not
+		if( KC3GearManager.interceptorsType3Ids.indexOf(this.master().api_type[3]) > -1) {
+			// If slot has plane capacity
 			if (capacity) {
-				// Intercept AA is from evasion; Intercept DV is from accuracy
-				var statPower = 0;
-				if (type == "aa") {
-					statPower = this.master().api_houk;
-				} else if (type == "dv") {
-					statPower = this.master().api_houm;
-				} else {
-					return 0;
-				}
-				
-				// Base Intercept formula
 				var interceptPower = (
-					this.master().api_tyku + 1.5
-					*
-					statPower + this.AAStatImprovementBonous()
+					// Base anti-air power
+					this.master().api_tyku +
+					// Interception is from evasion
+					this.master().api_houk +
+					// Anti-Bomber is from hit accuracy
+					this.master().api_houm * 2 +
+					// Although no interceptor can be improved for now
+					this.AAStatImprovementBonous()
 				) * Math.sqrt(capacity);
 				
-				// Proficiency Bonus
+				// Proficiency Bonus, no fail-over here
 				if(this.ace != 1){
-					var typInd = String( this.master().api_type[2] );
-					if (typeof ConfigManager.air_average[typInd] == 'undefined') {
-						ConfigManager.resetValueOf('air_average');
-					}
+					var typInd = String(this.master().api_type[2]);
 					var airAverageTable = ConfigManager.air_average[typInd];
 					if (typeof airAverageTable != "undefined") {
-						interceptPower += airAverageTable[ this.ace ];
+						interceptPower += airAverageTable[this.ace] || 0;
 					}
 				}
 				

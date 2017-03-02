@@ -476,17 +476,38 @@ KC3改 Ship Object
 		];
 	};
 
-	/* FIGHTER POWER with INTERCEPTOR FORMULA
-	Normal planes get usual fighter power formula
-	Interceptor planes get special formula
+	/* FIGHTER POWER on Air Defense with INTERCEPTOR FORMULA
+	Recon plane gives a modifier to total interception power
 	--------------------------------------------------------------*/
-	KC3Ship.prototype.interceptionPower = function(type){
-		if(this.rosterId===0){ return 0; }
-		if (typeof type == "undefined") { type = "aa"; }
-		return this.equipment(0).interceptionPower( type, this.slots[0] )
-			+ this.equipment(1).interceptionPower( type, this.slots[1] )
-			+ this.equipment(2).interceptionPower( type, this.slots[2] )
-			+ this.equipment(3).interceptionPower( type, this.slots[3] );
+	KC3Ship.prototype.interceptionPower = function(){
+		if(this.rosterId === 0){ return 0; }
+		var reconModifier = 1;
+		this.equipment(function(id, idx, gear){
+			if(id === 0){ return; }
+			var type2 = gear.master().api_type[2];
+			var los = gear.master().api_saku;
+			if(KC3GearManager.landBaseReconnType2Ids.indexOf(type2)>-1){
+				// Carrier Recon Aircraft
+				if(type2 == 9){
+					reconModifier =
+						(los <= 7) ? 1.2 :
+						(los >= 9) ? 1.3 :
+						1; // they say los = 8 not exists
+				// Recon Seaplane, Flying Boat, etc
+				} else {
+					reconModifier =
+						(los <= 7) ? 1.1  :
+						(los >= 9) ? 1.16 :
+						1.13;
+				}
+			}
+		});
+		var interceptionPower =
+			  this.equipment(0).interceptionPower(this.slots[0])
+			+ this.equipment(1).interceptionPower(this.slots[1])
+			+ this.equipment(2).interceptionPower(this.slots[2])
+			+ this.equipment(3).interceptionPower(this.slots[3]);
+		return Math.floor(interceptionPower * reconModifier);
 	};
 
 	/* SUPPORT POWER
