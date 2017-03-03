@@ -1,7 +1,6 @@
 .tab_databackup {
 	width:680px;
 }
-
 .tab_databackup img{
 	max-width:100%;
 	max-height:100%;
@@ -10,21 +9,72 @@
 	margin-top: 20px;
 }
 .tab_databackup .datapanel{
-  margin : 10px 10px 10px 10px;
+	margin : 10px 10px 10px 10px;
 }
-
 .tab_databackup .tmptextbox{
-  height : 0px;
+	height : 0px;
 }
-
 .tab_databackup table{
 	padding : 5px;
 }
 .tab_databackup th, .tab_databackup td {
-    padding: 15px;
-    text-align: left;
+	padding: 15px;
+	text-align: left;
 }
 .tab_databackup strong {
-		text-decoration: underline;
-		color: #CC0000;
+	text-decoration: underline;
+	color: #CC0000;
+}
+.tab_databackup .export_box {
+	border-radius: 8px;
+	/*background:#def;*/
+	padding:10px;
+	margin:10px 0px 0px 0px;
+}
+.tab_databackup .factory {
+	display:none;
+}
+
+/* DATA TO INCLUDE
+------------------------------*/
+.tab_databackup .export_parts {
+}
+.tab_databackup .export_parts .export_field {
+	width:660px;
+	height:20px;
+	margin:0px 0px 3px 0px;
+}
+.tab_databackup .export_parts .export_col {
+	float:left;
+	height:20px;
+	margin:0px 4px 0px 0px;
+}
+.tab_databackup .export_parts .export_check {
+	width:20px;
+	font-weight:bold;
+	text-align:center;
+}
+.tab_databackup .export_parts .export_check img {
+	width:12px;
+	height:12px;
+	margin:2px;
+	vertical-align:top;
+}
+.tab_databackup .export_parts .export_name {
+	width:120px;
+}
+.tab_databackup .export_parts .export_value {
+	width:500px;
+	font-weight:bold;
+}
+.tab_databackup .export_parts .export_value input {
+	width:500px;
+	line-height:20px;
+	border:1px solid transparent;
+	padding:0px;
+}
+.tab_databackup .delimiter {
+	height:3px;
+	border-bottom:1px solid #ddd;
+	margin:10px 0px 10px 0px;
 }

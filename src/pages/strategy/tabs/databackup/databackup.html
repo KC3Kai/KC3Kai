@@ -5,55 +5,103 @@
 
 <!-- HELP TOPICS -->
 <div class="page_help">
-	<div class="help_q"></div>
-	<div class="help_a"></div>
+	<div class="help_q">Why do I need an External Backup?</div>
+	<div class="help_a">This can be useful for external backup and sync via different devices.</div>
+
+	<div class="help_q">How to get Access Token for Dropbox?</div>
+	<div class="help_a">Go to <a href="https://www.dropbox.com/developers/apps">My Apps</a> page and click "Create app" button.</div>
+	<div class="help_a">Choose "Dropbox API" in the first point.</div>
+	<div class="help_a">Choose "App folder" in the second point.</div>
+	<div class="help_a">Enter App name "KC3Kai" or what you want.</div>
+	<div class="help_a">Click "Create app" button.</div>
+	<div class="help_a">Go to "Settings" tab and click "Generate" button under "Generated access token".</div>
+
+	<div class="help_more">
+		<a href="https://github.com/KC3Kai/KC3Kai/wiki/Strategy-Room%3A-DataBackup">Learn more</a>
+	</div>
 </div>
 
 <div class="tmptextbox">
 </div>
 
 <div class="page_padding">
+	<div class="dataselect">
+		<div class="page_section">Local backup</div>
+		<div class="local export_box section_body export_parts bscolor2">
+			<ul>
+				<li><a class="export_data fscolor3 hover">Export Data To a File(.kc3data)</a></li>
+				<li>Import Data From File(.kc3data)</li>
+				<ul style="list-style-type:decimal">
+					<li>
+					Read <a class = "warningbtn fscolor3 hover">WARNING</a> first
+					<div class="warning" style="display: none;">
+						<ul style="list-style-type:roman">
+							<li><strong>DO NOT</strong> go to other tab while importing data.</li>
+							<li><strong>DO NOT</strong> close the window while importing data.</li>
+							<li><strong>DO NOT</strong> input other files.</li>
+							<li>Big files COULD take more than 5 minutes to process.
+								BE PATIENT.</li>
+						</ul>
+					<div/>
 
-    <div class ="dataselect">
-    <ul>
-        <li><a class="export_data fscolor3">Export Data To a File(.kc3data)</a></li>
-        <li>Import Data From File(.kc3data)</li>
-        <ul style="list-style-type:decimal">
-            <li>
-            Read <a class = "warningbtn fscolor3">WARNING</a> first
-            <div class="warning" style="display: none;">
-              <ul style="list-style-type:roman">
-                <li><strong>DO NOT</strong> go to other tab while importing data.</li>
-                <li><strong>DO NOT</strong> close the window while importing data.</li>
-                <li><strong>DO NOT</strong> input other files.</li>
-                <li>Big files COULD take more than 5 minutes to process.
-                    BE PATIENT.</li>
-              </ul>
-            <div/>
+					<li>Select file<input type="file" class="import_file" name="import_file" accept=".kc3data" /></li>
+					<li>
+						<!--<a class="merge_data">Merge data</a> --> <a class="overwrite_data fscolor3 hover">Overwrite data</a>
+					</li>
+				</ul>
+			</ul>
+		</div>
 
-            <li>Select file<input type="file" class="import_file" name="import_file"  accept=".kc3data" /></li>
-            <li>
-                <!--<a class="merge_data">Merge data</a> --> <a class="overwrite_data fscolor3">Overwrite data</a>
-            </li>
-        </ul>
-    </ul>
-  </div>
+		<div class="page_section">External backup</div>
+		<div class="dropbox export_box section_body export_parts bscolor2">
+			<form>
+				<div class="export_field">
+					<div class="export_col export_check"><input type="checkbox" id="ep_name"></div>
+					<div class="export_col export_name"><label for="dropbox">Enable Dropbox</label></div>
+					<div class="export_col export_value">
+						<input type="text" placeholder="Access Token" />
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="export_field">
+					<div class="export_col export_check"></div>
+					<div class="export_col export_name"><label for="dropbox_file">Select file</label></div>
+					<input type="file" class="export_file_dropbox" name="export_file_dropbox" accept=".kc3data" />
+					<div class="clear"></div>
+				</div>
+				<div class="delimiter" style="display: none;"></div>
+			</form>
+		</div>
+	</div>
 
-  <div class="processDisplay">
-      <table>
-          <tr>
-              <td>
-                   <div>Please be patient.<br />
-                    This process could take long.</div>
-                   <div><strong>DO NOT TOUCH ANYTHING<br />
-                              BEFORE THE "Finished!" MESSEGE!!!</strong></div>
-                  <img src="../../assets/img/ui/loadingakatsuki.gif"   />
-              </td>
-              <td  width="240"><div class="processText" >
+	<div class="processDisplay">
+		<table>
+			<tr>
+				<td>
+					<div>Please be patient.<br />
+					This process could take long.</div>
+					<div><strong>DO NOT TOUCH ANYTHING<br />
+								BEFORE THE "Finished!" MESSEGE!!!</strong></div>
+					<img src="../../assets/img/ui/loadingakatsuki.gif" />
+				</td>
+				<td width="240">
+					<div class="processText"></div>
+				</td>
+			</tr>
+		</table>
+	</div>
 
-              </div></td>
-          </tr>
-      </table>
-  </div>
+	<div class="factory">
+		<div class="export_field">
+			<div class="export_col export_name"></div>
+			<div class="export_col export_value">
+				<a class="export_data fscolor3 hover"></a>
+			</div>
+			<div class="export_col export_check">
+				<a class="export_data fscolor3 hover"><img src="../../assets/img/ui/sunk.png" /></a>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</div>
 
 </div>
