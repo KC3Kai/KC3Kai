@@ -126,8 +126,20 @@
 	height:30px;
 }
 .tab_maps .sortie_list .sortie_record {
-	width:50px;
-	margin:0px 10px 0px 0px;
+	width:75px;
+	margin:0px 5px 0px 0px;
+}
+.tab_maps .sortie_list .sortie_dl {
+	width:25px;
+	height:30px;
+	line-height:28px;
+	border-radius:5px;
+	margin:0px;
+	text-align:center;
+	font-size:10px;
+	white-space:nowrap;
+	overflow:hidden;
+	float:left;
 }
 .tab_maps .sortie_list .sortie_id {
 	width:50px;
@@ -136,6 +148,7 @@
 	font-size:14px;
 	font-weight:bold;
 	text-align:center;
+	float:left;
 }
 .tab_maps .sortie_list .sortie_date {
 	width:50px;
@@ -143,13 +156,14 @@
 	line-height:14px;
 	font-size:12px;
 	text-align:center;
+	float:left;
 }
 
 /* Sortie Info: MAP */
 .tab_maps .sortie_list .sortie_map {
 	width:40px;
 	line-height:30px;
-	margin:0px 10px 0px 0px;
+	margin:0px 5px 0px 0px;
 	text-align:center;
 	font-size:16px;
 	font-weight:bold;
@@ -158,8 +172,7 @@
 /* Sortie Info: FLEET */
 .tab_maps .sortie_list .sortie_fleet {
 	width:210px;
-	/*background:#ffc;*/
-	margin:0px 10px 0px 0px;
+	margin:0px 5px 0px 0px;
 }
 .tab_maps .sortie_list .sortie_ship {
 	width:30px;
@@ -179,8 +192,7 @@
 /* Sortie Info: EDGES */
 .tab_maps .sortie_list .sortie_edges {
 	width:175px;
-	/*background:#ffc;*/
-	margin:0px 10px 0px 0px;
+	margin:0px 5px 0px 0px;
 }
 .tab_maps .sortie_list .nonodes {
 	height:30px;

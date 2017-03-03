@@ -305,8 +305,8 @@ html,body {
 	float:left;
 	text-align:center;
 	border-radius:5px 5px 0px 0px;
-	filter:brightness(0.6) drop-shadow(1px 0px 0px) opacity(0.62);
-	-webkit-filter:brightness(0.6) drop-shadow(1px 0px 0px) opacity(0.62);
+	filter:brightness(0.7) drop-shadow(1px 0px 0px black) opacity(0.62);
+	-webkit-filter:brightness(0.7) drop-shadow(1px 0px 0px black) opacity(0.62);
 }
 #atab_activity {
 	cursor:default;
@@ -2899,7 +2899,7 @@ ABYSS FLEET
 	float:left;
 }
 .airbase .base_name {
-	width:90px;
+	width:100px;
 	height:20px;
 	overflow:hidden;
 	float:left;
@@ -2913,13 +2913,13 @@ ABYSS FLEET
 }
 
 .airbase .base_stats {
-	width:200px;
+	width:190px;
 	height:20px;
 	float:left;
 	overflow:hidden;
 }
 .airbase .base_stats .base_stat {
-	width:50px;
+	width:60px;
 	height:20px;
 	float:left;
 	overflow:hidden;
@@ -2942,7 +2942,7 @@ ABYSS FLEET
 	vertical-align: top;
 }
 .airbase .base_stats .base_stat_value {
-	width:30px;
+	width:40px;
 	height:20px;
 	line-height:20px;
 	float:left;
@@ -2951,7 +2951,6 @@ ABYSS FLEET
 	color:#cccccc;
 	font-size:11px;
 }
-
 .airbase .base_action {
 	width:40px;
 	height:20px;

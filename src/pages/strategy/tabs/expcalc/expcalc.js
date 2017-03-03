@@ -71,10 +71,10 @@
 				showGoalTemplates: true,
 				showRecommended: true,
 				showOtherShips: true,
-                shipsOrderType: "id",
-                shipsSortDirection: "up",
-                shipsOrderSecondType: "",
-                shipsSortSecondDirection: "up",
+				shipsOrderType: "id",
+				shipsSortDirection: "up",
+				shipsOrderSecondType: "",
+				shipsSortSecondDirection: "up",
 				closeToRemodelLevelDiff: 5
 			};
 			var settings;
@@ -82,16 +82,16 @@
 				localStorage.srExpcalc = JSON.stringify( defSettings );
 				settings = defSettings;
 			} else {
+				settings = JSON.parse( localStorage.srExpcalc );
 				// For smooth transition to ordering version
-				if (typeof JSON.parse(localStorage.srExpcalc).shipsOrderType === "undefined" || typeof JSON.parse(localStorage.srExpcalc).shipsSortDirection === "undefined"
-                    || typeof JSON.parse(localStorage.srExpcalc).shipsOrderSecondType === "undefined" || typeof JSON.parse(localStorage.srExpcalc).shipsSortSecondDirection === "undefined") {
-					settings = JSON.parse( localStorage.srExpcalc );
+				if (typeof settings.shipsOrderType === "undefined"
+					|| typeof settings.shipsSortDirection === "undefined"
+					|| typeof settings.shipsOrderSecondType === "undefined"
+					|| typeof settings.shipsSortSecondDirection === "undefined") {
 					settings.shipsOrderType = "id";
 					settings.shipsSortDirection = "up";
 					settings.shipsOrderSecondType = "";
 					settings.shipsSortSecondDirection = "up";
-				} else {
-					settings = JSON.parse( localStorage.srExpcalc );
 				}
 			}
 			return settings;
@@ -115,8 +115,8 @@
 			var jqToggleGT = $(".toggle_goal_templates");
 			var jqToggleRecom = $(".toggle_recommended");
 			var jqToggleOther = $(".toggle_other_ships");
-            
-            var jqOrderTypes = $(".order_line dd");
+			
+			var jqOrderTypes = $(".order_line dd");
 
 			var jqCloseToRemLvlDiff = $("input#inp_lvl_diff");
 
@@ -125,9 +125,9 @@
 				jqGoalTemplates.toggle( settings.showGoalTemplates );
 				jqRecommended.toggle( settings.showRecommended );
 				jqOtherShips.toggle( settings.showOtherShips );
-                jqOrderTypes.removeClass("active up down");
-                jqOrderTypes.filter(".order_" + settings.shipsOrderType).addClass("active").addClass(settings.shipsSortDirection);
-                jqOrderTypes.filter(".order_" + settings.shipsOrderSecondType).addClass("active").addClass(settings.shipsSortSecondDirection); // other style for secondary?
+				jqOrderTypes.removeClass("active up down");
+				jqOrderTypes.filter(".order_" + settings.shipsOrderType).addClass("active").addClass(settings.shipsSortDirection);
+				jqOrderTypes.filter(".order_" + settings.shipsOrderSecondType).addClass("active").addClass(settings.shipsSortSecondDirection); // other style for secondary?
 
 				jqToggleGT
 					.toggleClass("active", settings.showGoalTemplates);
@@ -148,13 +148,13 @@
 					return obj;
 				};
 			}
-            
-            function updateOrder(field, newState) {
-                return function(obj) {
-                    obj[field] = newState;
-                    return obj;
-                };
-            }
+			
+			function updateOrder(field, newState) {
+				return function(obj) {
+					obj[field] = newState;
+					return obj;
+				};
+			}
 
 			jqToggleGT.on("click", function() {
 				self.modifySettings( negateField("showGoalTemplates") );
@@ -169,28 +169,28 @@
 				self.modifySettings( negateField("showOtherShips") );
 				updateUI();
 			});
-            jqOrderTypes.on("click", function(e) {
-                if (e.shiftKey && self.getSettings().shipsOrderType != $(this).data("order")) {
+			jqOrderTypes.on("click", function(e) {
+				if (e.shiftKey && self.getSettings().shipsOrderType != $(this).data("order")) {
 					if ($(this).hasClass("up")) {
 						self.modifySettings(updateOrder("shipsSortSecondDirection", "down"));
 					} else {
 						self.modifySettings(updateOrder("shipsSortSecondDirection", "up"));
 					}
 					self.modifySettings(updateOrder("shipsOrderSecondType", $(this).data("order")));
-                } else {
+				} else {
 					if ($(this).hasClass("up")) {
 						self.modifySettings(updateOrder("shipsSortDirection", "down"));
 					} else {
 						self.modifySettings(updateOrder("shipsSortDirection", "up"));
 					}
 					self.modifySettings(updateOrder("shipsOrderType", $(this).data("order")));
-                    self.modifySettings(updateOrder("shipsOrderSecondType", ""));
-                }
+					self.modifySettings(updateOrder("shipsOrderSecondType", ""));
+				}
 				updateUI();
-            });
-            jqOrderTypes.on("keyup keydown", function() {
+			});
+			jqOrderTypes.on("keyup keydown", function() {
 				updateUI();
-            });
+			});
 			jqCloseToRemLvlDiff
 				.on("blur", function() {
 					var jqObj = $(this);
@@ -221,41 +221,41 @@
 						e.preventDefault();
 					}
 				});
-                
-            function orderShips(sortKey, sortOrder, sortSecondKey, sortSecondOrder) {
-                function sortBoxes(boxSorted) {
-                    var sortedElements = $(boxSorted).find(".ship_goal");
-                    var sorter = function(a, b, sortType, order) {
-                        var isUp = (order == "up") ? -1 : 1;
+				
+			function orderShips(sortKey, sortOrder, sortSecondKey, sortSecondOrder) {
+				function sortBoxes(boxSorted) {
+					var sortedElements = $(boxSorted).find(".ship_goal");
+					var sorter = function(a, b, sortType, order) {
+						var isUp = (order == "up") ? -1 : 1;
 
-                        // Various order types
-                        if (sortType == "id") {
-                            return isUp * (+$(b).attr("id").substr(7) - +$(a).attr("id").substr(7));
-                        } else if (sortType == "name") {
-                            return isUp * ($(b).find(".ship_info .ship_name").text().toUpperCase().localeCompare($(a).find(".ship_info .ship_name").text().toUpperCase()));
-                        } else if (sortType == "level") {
-                            return isUp * (+$(b).find(".ship_lv .ship_value").text() - +$(a).find(".ship_lv .ship_value").text());
-                        } else if (sortType == "remodel") {
-                            return isUp * (+$(b).find(".ship_target .ship_value").text() - +$(a).find(".ship_target .ship_value").text());
-                        } else if (sortType == "lvldiff") {
-                            return isUp * ((+$(b).find(".ship_target .ship_value").text() - +$(b).find(".ship_lv .ship_value").text()) - (+$(a).find(".ship_target .ship_value").text() - +$(a).find(".ship_lv .ship_value").text()));
-                        } else if (sortType == "xpdiff") {
-                            return isUp * (+$(b).find(".ship_exp .ship_value").text() - +$(a).find(".ship_exp .ship_value").text());
-                        } else if (sortType == "shiptype") {
-                            return isUp * ($(b).find(".ship_info .ship_type").text().localeCompare($(a).find(".ship_info .ship_type").text()));
-                        }
-                    };
-                    sortedElements.sort(function(a, b) {
-                        var primarySort = sorter(a, b, sortKey, sortOrder);
-                        return primarySort ? primarySort : sorter(a, b, sortSecondKey, sortSecondOrder);
-                    })
-                    .prependTo(boxSorted);
-                }
-                
-                sortBoxes(".box_goals");
-                sortBoxes(".box_recommend");
-                sortBoxes(".box_other");
-            }
+						// Various order types
+						if (sortType == "id") {
+							return isUp * (+$(b).attr("id").substr(7) - +$(a).attr("id").substr(7));
+						} else if (sortType == "name") {
+							return isUp * ($(b).find(".ship_info .ship_name").text().toUpperCase().localeCompare($(a).find(".ship_info .ship_name").text().toUpperCase()));
+						} else if (sortType == "level") {
+							return isUp * (+$(b).find(".ship_lv .ship_value").text() - +$(a).find(".ship_lv .ship_value").text());
+						} else if (sortType == "remodel") {
+							return isUp * (+$(b).find(".ship_target .ship_value").text() - +$(a).find(".ship_target .ship_value").text());
+						} else if (sortType == "lvldiff") {
+							return isUp * ((+$(b).find(".ship_target .ship_value").text() - +$(b).find(".ship_lv .ship_value").text()) - (+$(a).find(".ship_target .ship_value").text() - +$(a).find(".ship_lv .ship_value").text()));
+						} else if (sortType == "xpdiff") {
+							return isUp * (+$(b).find(".ship_exp .ship_value").text() - +$(a).find(".ship_exp .ship_value").text());
+						} else if (sortType == "shiptype") {
+							return isUp * ($(b).find(".ship_info .ship_type").text().localeCompare($(a).find(".ship_info .ship_type").text()));
+						}
+					};
+					sortedElements.sort(function(a, b) {
+						var primarySort = sorter(a, b, sortKey, sortOrder);
+						return primarySort ? primarySort : sorter(a, b, sortSecondKey, sortSecondOrder);
+					})
+					.prependTo(boxSorted);
+				}
+				
+				sortBoxes(".box_goals");
+				sortBoxes(".box_recommend");
+				sortBoxes(".box_other");
+			}
 		},
 
 		configHighlightToggles: function() {

@@ -24,7 +24,7 @@ KC3改 Ship Box for Natsuiro theme
 	Short ship box for combined fleets
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.commonElements = function( isCombinedEscort ){
-		var shipDb = WhoCallsTheFleetDb.getShipStat(this.shipData.masterId);
+		//var shipDb = WhoCallsTheFleetDb.getShipStat(this.shipData.masterId);
 		var tooltipBox = $("#factory .ship_face_tooltip_outer").clone();
 		tooltipBox.hide();
 		tooltipBox.appendTo(this.element);
@@ -43,7 +43,7 @@ KC3改 Ship Box for Natsuiro theme
 		$(".ship_face_tooltip .stat_tp", tooltipBox).text(this.shipData.tp[0]);
 		$(".ship_face_tooltip .stat_ev", tooltipBox).text(this.shipData.ev[0]);
 		$(".ship_face_tooltip .stat_aa", tooltipBox).text(this.shipData.aa[0]);
-		$(".ship_face_tooltip .stat_ac", tooltipBox).text(shipDb.carry >= 0 ? shipDb.carry : "?");
+		$(".ship_face_tooltip .stat_ac", tooltipBox).text(this.shipData.carrySlots());
 		$(".ship_face_tooltip .stat_as", tooltipBox).text(this.shipData.as[0])
 			.toggleClass("oasw", this.shipData.canDoOASW());
 		$(".ship_face_tooltip .stat_sp", tooltipBox).text(this.shipData.speedName())
@@ -136,7 +136,13 @@ KC3改 Ship Box for Natsuiro theme
 		var myExItem = this.shipData.exItem();
 		if( myExItem && (myExItem.masterId > 0)){
 			$(".ex_item img", this.element).attr("src", "../../../../assets/img/items/"+myExItem.master().api_type[3]+".png");
-			$(".ex_item img", this.element).attr("title", this.buildEquipmentTooltip(myExItem))
+			$(".ex_item img", this.element).attr("title", myExItem.htmlTooltip())
+				.data("masterId", myExItem.masterId)
+				.on("dblclick", function(e){
+					(new RMsg("service", "strategyRoomPage", {
+						tabPath: "mstgear-{0}".format($(this).data("masterId"))
+					})).execute();
+				})
 				.lazyInitTooltip();
 			if (myExItem.masterId == 43) {
 				$(".ex_item", this.element).addClass("goddess");
@@ -418,7 +424,7 @@ KC3改 Ship Box for Natsuiro theme
 					"../../../../assets/img/items/"+thisGear.master().api_type[3]+".png");
 				$(".ship_gear_"+(slot+1), this.element).addClass("equipped");
 				$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element)
-					.attr("title", this.buildEquipmentTooltip(thisGear))
+					.attr("title", thisGear.htmlTooltip())
 					.lazyInitTooltip()
 					.data("masterId", thisGear.masterId)
 					.on("dblclick", function(e){
@@ -488,47 +494,6 @@ KC3改 Ship Box for Natsuiro theme
 			$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element).hide();
 			$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).hide();
 		}
-	};
-	
-	/* Build Tooltip HTML of equipment
-	---------------------------------------------------*/
-	KC3NatsuiroShipbox.prototype.buildEquipmentTooltip = function(gearObj){
-		var gearData = gearObj.master();
-		var title = $('<div><span class="name"></span><br/></div>');
-		$(".name", title).text(gearObj.name());
-		// Some stats only shown at Equipment Library
-		$.each([
-			["hp", "taik"],
-			["fp", "houg"],
-			["ar", "souk"],
-			["tp", "raig"],
-			["dv", "baku"],
-			["aa", "tyku"],
-			["as", "tais"],
-			["ht", "houm"],
-			["ev", "houk"],
-			["ls", "saku"],
-			["rn", "leng"],
-			["or", "distance"]
-		], function(index, sdata){
-			var statBox = $('<div><img class="icon"/> <span class="value"></span>&nbsp;</div>');
-			statBox.css("font-size", "11px");
-			if((gearData["api_"+sdata[1]]||0) !== 0
-				&& (["or","kk"].indexOf(sdata[0]) < 0
-				|| (["or","kk"].indexOf(sdata[0]) >=0 &&
-					KC3GearManager.landBasedAircraftType3Ids.indexOf(gearData.api_type[3])>-1) )
-			){
-				$(".icon", statBox).attr("src", "../../../../assets/img/stats/"+sdata[0]+".png");
-				$(".icon", statBox).width(13).height(13).css("margin-top", "-3px");
-				if(sdata[0]==="rn"){
-					$(".value", statBox).text(["?","S","M","L","VL","XL"][gearData["api_"+sdata[1]]]||"?");
-				} else {
-					$(".value", statBox).text(gearData["api_"+sdata[1]]);
-				}
-				title.append(statBox.html());
-			}
-		});
-		return title.html();
 	};
 	
 })();

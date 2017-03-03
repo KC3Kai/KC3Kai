@@ -87,6 +87,8 @@
 		response: "",
 		serverUtc: 0,
 		kc3Version: "",
+		dmmPlay: "",
+		extractApi: "",
 		userAgent: "",
 		utc: 0
 	};
@@ -794,12 +796,12 @@
 		$(".module.activity .battle_cond_value").text("");
 		$(".module.activity .battle_engagement").prev().text(KC3Meta.term("BattleEngangement"));
 		$(".module.activity .battle_engagement").removeClass(KC3Meta.battleSeverityClass(KC3Meta.engagement()));
-		$(".module.activity .battle_engagement").attr("title", "");
+		$(".module.activity .battle_engagement").attr("title", "").lazyInitTooltip();
 		$(".module.activity .battle_detection").prev().text(KC3Meta.term("BattleDetection"));
 		$(".module.activity .battle_detection").removeClass(KC3Meta.battleSeverityClass(KC3Meta.detection()));
-		$(".module.activity .battle_detection").attr("title", "");
+		$(".module.activity .battle_detection").attr("title", "").lazyInitTooltip();
 		$(".module.activity .battle_airbattle").removeClass(KC3Meta.battleSeverityClass(KC3Meta.airbattle()));
-		$(".module.activity .battle_airbattle").attr("title", "");
+		$(".module.activity .battle_airbattle").attr("title", "").lazyInitTooltip();
 		$(".module.activity .plane_text span").text("");
 		$(".module.activity .sink_icons .sunk img").hide();
 		$(".module.activity .battle_planes .fighter_ally .plane_icon img").attr("src", "../../../../assets/img/items/6.png");
@@ -871,6 +873,8 @@
 				errorReport.response = data.response;
 				errorReport.serverUtc = data.serverUtc;
 				errorReport.kc3Version = data.kc3Manifest;
+				errorReport.dmmPlay = localStorage.dmmplay;
+				errorReport.extractApi = localStorage.extract_api;
 				errorReport.userAgent = navigator.userAgent;
 				errorReport.utc = Date.now();
 			} else {
@@ -1357,7 +1361,7 @@
 					let f33x3 = Math.qckInt("floor", PlayerManager.fleets[selectedFleet-1].eLos4(3), 1);
 					let f33x4 = Math.qckInt("floor", PlayerManager.fleets[selectedFleet-1].eLos4(4), 1);
 					$(".summary-eqlos").attr("title",
-						"x4={0} \t3-5(G>28), 6-1(E>16, F>25)\nx3={1} \t6-2(F<43/>50, H>40), 6-3(H>38)"
+						"x4={0} \t3-5(G>28), 6-1(E>16, F>25)\nx3={1} \t6-2(F<43/F>50, H>40), 6-3(H>38)"
 						.format(f33x4, f33x3)
 					).lazyInitTooltip();
 				// No reference values for combined fleet yet, only show computed values
@@ -1538,8 +1542,7 @@
 				$(".airbase_list").show();
 				
 				var baseBox, planeBox, itemObj, paddedId,
-					eqImgSrc, eqIconSrc, eqChevSrc, eqMorale, eqCondSrc,
-					shipObj, afpLower;
+					eqImgSrc, eqIconSrc, eqChevSrc, eqMorale, eqCondSrc;
 				
 				$.each(PlayerManager.bases, function(i, baseInfo){
 					if (baseInfo.rid != -1) {
@@ -1555,7 +1558,7 @@
 							KC3Meta.term("LandBaseActionRest")
 						][baseInfo.action]);
 						
-						shipObj = new KC3Ship();
+						let shipObj = new KC3Ship();
 						shipObj.rosterId = -1;
 						shipObj.items = baseInfo.planes.map(function(planeInfo){
 							return planeInfo.api_state == 1 ? planeInfo.api_slotid : -1;
@@ -1564,15 +1567,16 @@
 							return planeInfo.api_state == 1 ? planeInfo.api_count : 0;
 						});
 						
-						afpLower = shipObj.fighterBounds()[0];
-						if (afpLower > 0) {
-							$(".base_afp .base_stat_value", baseBox).html( afpLower+"+" );
-						} else {
-							$(".base_afp .base_stat_value", baseBox).html( KC3Meta.term("None") );
-						}
-						
-						$(".base_ifp .base_stat_value", baseBox).html(shipObj.interceptionPower("aa"));
-						$(".base_ibp .base_stat_value", baseBox).html(shipObj.interceptionPower("dv"));
+						// Regular fighter power on sortie
+						let afpLower = shipObj.fighterBounds()[0];
+						$(".base_afp .base_stat_value", baseBox).text(
+							!!afpLower ? afpLower + "+" : KC3Meta.term("None")
+						);
+						// Land-base interception power on air defense
+						let ifp = shipObj.interceptionPower();
+						$(".base_ifp .base_stat_value", baseBox).text(
+							!!ifp ? ifp : KC3Meta.term("None")
+						);
 						
 						$.each(baseInfo.planes, function(i, planeInfo){
 							planeBox = $("#factory .airbase_plane").clone();
@@ -1581,6 +1585,10 @@
 								console.log("PLANE", i, planeInfo);
 								
 								itemObj = KC3GearManager.get(planeInfo.api_slotid);
+								if(itemObj.itemId <= 0 || itemObj.master() === false) {
+									$("div", planeBox).remove();
+									return;
+								}
 								
 								$(".base_plane_name", planeBox).text(itemObj.name());
 								
@@ -1589,7 +1597,13 @@
 								$(".base_plane_img img", planeBox).attr("src", eqImgSrc);
 								$(".base_plane_img", planeBox)
 									.attr("title", $(".base_plane_name", planeBox).text())
-									.lazyInitTooltip();
+									.lazyInitTooltip()
+									.data("masterId", itemObj.masterId)
+									.on("dblclick", function(e){
+										(new RMsg("service", "strategyRoomPage", {
+											tabPath: "mstgear-{0}".format($(this).data("masterId"))
+										})).execute();
+									});
 								
 								eqIconSrc = "../../../../assets/img/items/"+itemObj.master().api_type[3]+".png";
 								$(".base_plane_icon img", planeBox).attr("src", eqIconSrc);
@@ -1833,7 +1847,7 @@
 					// http://wikiwiki.jp/kancolle/?%B4%F0%C3%CF%B9%D2%B6%F5%C2%E2#airraid
 					$(".module.activity .battle_engagement").attr("title", KC3Meta.term("BattleAirBaseLossTip")
 						.format( thisNode.baseDamage, Math.round(thisNode.baseDamage * 0.9 + 0.1) )
-					).lazyInitTooltip();
+					);
 				}
 				var contactSpan = buildContactPlaneSpan(thisNode.fcontactId, thisNode.fcontact, thisNode.econtactId, thisNode.econtact);
 				$(".module.activity .battle_contact").html(contactSpan.html()).lazyInitTooltip();
@@ -3201,7 +3215,8 @@
 					if(aaciObj.icons[0] > 0) {
 						$(".shipIcon img", aaciBox)
 							.attr("src", KC3Meta.shipIcon(aaciObj.icons[0]) )
-							.attr("title", KC3Meta.aacitype(aaciObj.id)[0] || "");
+							.attr("title", KC3Meta.aacitype(aaciObj.id)[0] || "")
+							.lazyInitTooltip();
 					} else {
 						$(".shipIcon img", aaciBox).hide();
 					}
@@ -3211,6 +3226,7 @@
 							$("<img/>")
 								.attr("src", "../../../../assets/img/items/"+equipIcon[0]+".png")
 								.attr("title", KC3Meta.aacitype(aaciObj.id)[i] || "")
+								.lazyInitTooltip()
 								.appendTo($(".equipIcons", aaciBox));
 							if(equipIcon.length>1) {
 								$('<img/>')

@@ -102,7 +102,8 @@ Previously known as "Reactor"
 			PlayerManager.consumables.fcoin = response.api_data.api_basic.api_fcoin;
 			
 			KC3ShipManager.max = response.api_data.api_basic.api_max_chara;
-			KC3GearManager.max = response.api_data.api_basic.api_max_slotitem;
+			// Not sure why, but always shown +3 at client side. see #1860
+			KC3GearManager.max = 3 + response.api_data.api_basic.api_max_slotitem;
 			
 			PlayerManager.setFleets( response.api_data.api_deck_port );
 			PlayerManager.setRepairDocks( response.api_data.api_ndock );
@@ -154,20 +155,7 @@ Previously known as "Reactor"
 			
 			PlayerManager.loadBases();
 			
-			PlayerManager.baseConvertingSlots = [];
-			if(typeof response.api_data.api_plane_info !== "undefined"){
-				// Let client know: these types of slotitem are free
-				/*
-				if(!!response.api_data.api_plane_info.api_unset_slot){
-				}
-				*/
-				// Let client know: these slotitems are moving, not equippable
-				// For now, moving peroid of LBAS plane is 12 mins.
-				if(Array.isArray(response.api_data.api_plane_info.api_base_convert_slot)){
-					[].push.apply(PlayerManager.baseConvertingSlots, response.api_data.api_plane_info.api_base_convert_slot);
-				}
-			}
-			localStorage.setObject("baseConvertingSlots", PlayerManager.baseConvertingSlots);
+			PlayerManager.setBaseConvertingSlots(response.api_data.api_plane_info);
 			
 			KC3Network.trigger("HQ");
 			KC3Network.trigger("Consumables");
@@ -200,7 +188,7 @@ Previously known as "Reactor"
 			PlayerManager.repairSlots = response.api_data.api_count_ndock;
 			PlayerManager.buildSlots = response.api_data.api_count_kdock;
 			KC3ShipManager.max = response.api_data.api_max_chara;
-			KC3GearManager.max = response.api_data.api_max_slotitem;
+			KC3GearManager.max = 3 + response.api_data.api_max_slotitem;
 			
 			PlayerManager.setStatistics({
 				exped: {
@@ -243,7 +231,7 @@ Previously known as "Reactor"
 			PlayerManager.repairSlots = response.api_data.api_ndoc;
 			PlayerManager.buildSlots = response.api_data.api_kdoc;
 			KC3ShipManager.max = response.api_data.api_ship[1];
-			KC3GearManager.max = response.api_data.api_slotitem[1];
+			KC3GearManager.max = 3 + response.api_data.api_slotitem[1];
 			
 			PlayerManager.setStatistics({
 				exped: {
@@ -1856,12 +1844,8 @@ Previously known as "Reactor"
 			}
 			localStorage.maps = JSON.stringify(maps);
 			
-			if(typeof response.api_data.api_air_base !== "undefined") {
-				PlayerManager.setBases(response.api_data.api_air_base);
-				KC3Network.trigger("Lbas");
-			} else if(PlayerManager.bases[0].map > 0) {
-				// Clean land bases after event if World 6 not opened
-				PlayerManager.setBases([]);
+			// If LBAS info updated, trigger updating view
+			if(PlayerManager.setBasesOnWorldMap(response.api_data)) {
 				KC3Network.trigger("Lbas");
 			}
 		},
