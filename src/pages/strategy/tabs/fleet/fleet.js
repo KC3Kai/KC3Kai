@@ -505,7 +505,9 @@
 			if(KC3GearManager.carrierBasedAircraftType3Ids.indexOf(masterData.api_type[3])>-1){
 				$(".gear_name .slot", gearBox).text( " x{0}".format(capacity) );
 			}
-			$(".gear_name", gearBox).attr("title", $(".gear_name", gearBox).text() );
+			$(".gear_name", gearBox).attr("title",
+				KC3Gear.buildGearTooltip(kcGear, $(".gear_name", gearBox).text())
+			).lazyInitTooltip();
 		},
 
 		createKCFleetObject: function(fleetObj) {
