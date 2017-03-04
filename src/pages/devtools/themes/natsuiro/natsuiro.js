@@ -1527,7 +1527,8 @@
 
 		},
 		
-		Lbas :function(){
+		Lbas: function(){
+			var self = this;
 			$(".module.controls .fleet_lbas").removeClass("needsSupply");
 			if(!$(".module.controls .fleet_lbas").hasClass("active")
 				&& !PlayerManager.isBasesSupplied()){
@@ -1599,7 +1600,7 @@
 									.attr("title", $(".base_plane_name", planeBox).text())
 									.lazyInitTooltip()
 									.data("masterId", itemObj.masterId)
-									.on("dblclick", gearDoubleClickFunction);
+									.on("dblclick", self.gearDoubleClickFunction);
 								
 								eqIconSrc = "../../../../assets/img/items/"+itemObj.master().api_type[3]+".png";
 								$(".base_plane_icon img", planeBox).attr("src", eqIconSrc);
@@ -1880,6 +1881,7 @@
 		},
 
 		BattleStart: function(data){
+			var self = this;
 			// Clear battle details box just to make sure
 			clearBattleData();
 
@@ -1919,7 +1921,7 @@
 							.lazyInitTooltip();
 						$(enemyFleetBoxSelector+" .abyss_ship_"+(index+1))
 							.data("masterId", eshipId)
-							.on("dblclick", shipDoubleClickFunction)
+							.on("dblclick", self.shipDoubleClickFunction)
 							.show();
 					}
 				}
@@ -2109,6 +2111,7 @@
 		},
 
 		BattleNight: function(data){
+			var self = this;
 			// Enemy HP Predictions
 			var thisNode = KC3SortieManager.currentNode();
 			
@@ -2127,7 +2130,7 @@
 								.lazyInitTooltip();
 							$(".module.activity .abyss_single .abyss_ship_"+(index+1))
 								.data("masterId", eshipId)
-								.on("dblclick", shipDoubleClickFunction)
+								.on("dblclick", self.shipDoubleClickFunction)
 								.show();
 						}
 						
@@ -2201,7 +2204,7 @@
 					$(".module.activity .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop));
 					$(".module.activity .battle_drop")
 						.data("masterId", thisNode.drop)
-						.on("dblclick", shipDoubleClickFunction)
+						.on("dblclick", this.shipDoubleClickFunction)
 						.attr("title", KC3Meta.shipName( KC3Master.ship(thisNode.drop).api_name ))
 						.lazyInitTooltip();
 				}
@@ -2405,6 +2408,7 @@
 		},
 
 		PvPFleet: function(data){
+			var self = this;
 			if(!ConfigManager.info_pvp_info)
 				return;
 			console.log("PvP Enemy Fleet", data);
@@ -2437,7 +2441,7 @@
 					var shipBox = $("#factory .pvpFleetShip").clone();
 					$(".pvp_fleet_ship_icon img", shipBox).attr("src", KC3Meta.shipIcon(ship.api_ship_id))
 						.data("masterId", ship.api_ship_id)
-						.on("dblclick", shipDoubleClickFunction)
+						.on("dblclick", self.shipDoubleClickFunction)
 						.attr("title", KC3Meta.stype(shipMaster.api_stype)).lazyInitTooltip();
 					$(".pvp_fleet_ship_name", shipBox).text(shipName).attr("title", shipName).lazyInitTooltip();
 					$(".pvp_fleet_ship_level .value", shipBox).text(ship.api_level);
@@ -2488,6 +2492,7 @@
 		},
 
 		PvPStart: function(data){
+			var self = this;
 			// Clear battle details box just to make sure
 			clearBattleData();
 			$(".module.activity .map_world").text( KC3Meta.term("BattleMapWorldPvP") );
@@ -2541,7 +2546,7 @@
 						.lazyInitTooltip();
 					$(".module.activity .abyss_single .abyss_ship_"+(index+1))
 						.data("masterId", eshipId)
-						.on("dblclick", shipDoubleClickFunction)
+						.on("dblclick", self.shipDoubleClickFunction)
 						.show();
 				}
 			});
@@ -3231,6 +3236,26 @@
 			$(".module.activity .activity_box").hideChildrenTooltips();
 			$(".module.activity .activity_box").hide();
 			$(".module.activity .activity_gunfit").fadeIn(500);
+		},
+		
+		shipDoubleClickFunction: function(e) {
+			var id = $(this).data("masterId");
+			if(id > 0){
+				(new RMsg("service", "strategyRoomPage", {
+					tabPath: "mstship-{0}".format(id)
+				})).execute();
+			}
+			return false;
+		},
+		
+		gearDoubleClickFunction: function(e) {
+			var id = $(this).data("masterId");
+			if(id > 0){
+				(new RMsg("service", "strategyRoomPage", {
+					tabPath: "mstgear-{0}".format(id)
+				})).execute();
+			}
+			return false;
 		}
 	};
 
@@ -3259,26 +3284,6 @@
 			$("img", thisStatBox).attr("src", "../../../../assets/img/stats/"+Code+".png");
 			$(".equipStatText", thisStatBox).text( MasterItem["api_"+StatProperty] );
 		}
-	}
-
-	function shipDoubleClickFunction(e){
-		var id = $(this).data("masterId");
-		if(id > 0){
-			(new RMsg("service", "strategyRoomPage", {
-				tabPath: "mstship-{0}".format(id)
-			})).execute();
-		}
-		return false;
-	}
-
-	function gearDoubleClickFunction(e){
-		var id = $(this).data("masterId");
-		if(id > 0){
-			(new RMsg("service", "strategyRoomPage", {
-				tabPath: "mstgear-{0}".format(id)
-			})).execute();
-		}
-		return false;
 	}
 
 	function buildEnemyFaceTooltip(eshipId, level, maxHP, eParam, eSlot, isPvP) {
