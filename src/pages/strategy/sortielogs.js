@@ -210,7 +210,7 @@
 				// Add all maps in this world selection
 				var mapBox,countMaps;
 				mapBox = $(".tab_"+tabCode+" .factory .map_box").clone();
-				if(typeof exexe == "undefined" || typeof exexe.show_all == "undefined" || exexe.show_all == true){
+				if(typeof exexe == "undefined" || typeof exexe.show_all == "undefined" || exexe.show_all === true){
 					mapBox.appendTo(".tab_"+tabCode+" .map_list");
 					$(".map_title", mapBox)
 						.text((function(x){
