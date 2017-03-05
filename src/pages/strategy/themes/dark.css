@@ -1743,45 +1743,55 @@ button, input, select, textarea {
 .tab_maps .sortie_controls .sortie_count {
 	color:#fff;
 }
+.tab_shipdrop .world_box.active,
 .tab_event .world_box.active,
 .tab_maps .world_box.active {
 	background:#555;
 }
+.tab_shipdrop .map_box,
 .tab_event .map_box,
 .tab_maps .map_box {
 	background:#131313;
 }
+.tab_shipdrop .map_box.active,
 .tab_event .map_box.active,
 .tab_maps .map_box.active {
 	background:#555;
 }
+.tab_shipdrop .map_box .map_title,
 .tab_event .map_box .map_title,
 .tab_maps .map_box .map_title {
 	color:#aaa;
 }
+.tab_shipdrop .map_box .map_gauge,
 .tab_event .map_box .map_gauge,
 .tab_maps .map_box .map_gauge {
 	background:#fff;
 	height:8px !important;
 }
+.tab_shipdrop .map_box .map_bar,
 .tab_event .map_box .map_bar,
 .tab_maps .map_box .map_bar {
 	background:#d21414;
 	height:8px !important;
 }
+.tab_shipdrop .map_box.cleared .map_gauge,
 .tab_event .map_box.cleared .map_gauge,
 .tab_maps .map_box.cleared .map_gauge {
 	background:#036b03;
 }
 /* Map is NOT Cleared */
+.tab_shipdrop .map_box.notcleared,
 .tab_event .map_box.notcleared,
 .tab_maps .map_box.notcleared {
 	background:#440404;
 }
+.tab_shipdrop .map_box.active.notcleared,
 .tab_event .map_box.active.notcleared,
 .tab_maps .map_box.active.notcleared {
 	background:#7c0606;
 }
+.tab_shipdrop .sortie_list .sortie_box,
 .tab_event .sortie_list .sortie_box,
 .tab_maps .sortie_list .sortie_box,
 .tab_event .sortie_batch_toggles,
@@ -1794,27 +1804,33 @@ button, input, select, textarea {
 	background:#369;
 	border:1px solid #3f8cd9;
 }
-.tab_event .sortie_list .sortie_date ,
+.tab_shipdrop .sortie_list .sortie_date,
+.tab_event .sortie_list .sortie_date,
 .tab_maps .sortie_list .sortie_date {
 	color:#aaa;
 }
+.tab_shipdrop .sortie_list .sortie_map,
 .tab_event .sortie_list .sortie_map,
 .tab_maps .sortie_list .sortie_map {
 	background:#222;
 	color:#fff;
 }
+.tab_shipdrop .sortie_list .sortie_ship,
 .tab_event .sortie_list .sortie_ship,
 .tab_maps .sortie_list .sortie_ship {
 	background:#000;
 }
+.tab_shipdrop .sortie_list .sortie_edge,
 .tab_event .sortie_list .sortie_edge,
 .tab_maps .sortie_list .sortie_edge {
 	background:#222;
 }
+.tab_shipdrop .sortie_list .sortie_edge.active,
 .tab_event .sortie_list .sortie_edge.active,
 .tab_maps .sortie_list .sortie_edge.active {
 	color:#fff;
 }
+.tab_shipdrop .sortie_list .sortie_toggle,
 .tab_event .sortie_list .sortie_toggle,
 .tab_maps .sortie_list .sortie_toggle,
 .tab_event .sortie_batch_toggles .sortie_toggle,
@@ -1822,6 +1838,7 @@ button, input, select, textarea {
 	background:#000;
 	color:#999;
 }
+.tab_shipdrop .sortie_list .sortie_toggle.active,
 .tab_event .sortie_list .sortie_toggle.active,
 .tab_maps .sortie_list .sortie_toggle.active,
 .tab_event .sortie_batch_toggles .sortie_toggle.active,
@@ -1829,6 +1846,7 @@ button, input, select, textarea {
 	background:#555;
 	color:#fff;
 }
+.tab_shipdrop .sortie_list .sortie_toggle_in,
 .tab_event .sortie_list .sortie_toggle_in,
 .tab_maps .sortie_list .sortie_toggle_in,
 .tab_event .sortie_batch_toggles .sortie_toggle_in,
@@ -1836,38 +1854,46 @@ button, input, select, textarea {
 	background:#000;
 	color:#999;
 }
+.tab_shipdrop .sortie_list .sortie_rfleet,
 .tab_event .sortie_list .sortie_rfleet,
 .tab_maps .sortie_list .sortie_rfleet {
 	background:#222;
 }
+.tab_shipdrop .sortie_list .rfleet_title,
 .tab_event .sortie_list .rfleet_title,
 .tab_maps .sortie_list .rfleet_title {
 	background:#131313;
 }
+.tab_shipdrop .sortie_list .sortie_nodeinfo,
 .tab_event .sortie_list .sortie_nodeinfo,
 .tab_maps .sortie_list .sortie_nodeinfo {
 	background:#222;
 	color:#aaa;
 }
 
+.tab_shipdrop .sortie_list .node_formation img,
 .tab_event .sortie_list .node_formation img,
 .tab_maps .sortie_list .node_formation img {
 	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
+.tab_shipdrop .sortie_list .node_eformation img,
 .tab_event .sortie_list .node_eformation img,
 .tab_maps .sortie_list .node_eformation img {
 	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
+.tab_shipdrop .sortie_list .node_exp,
 .tab_event .sortie_list .node_exp,
 .tab_maps .sortie_list .node_exp {
 	color: rgb(91, 172, 223);
 }
+.tab_shipdrop .sortie_list .node_exp span,
 .tab_event .sortie_list .node_exp span,
 .tab_maps .sortie_list .node_exp span {
 	color: #fff;
 }
+.tab_shipdrop .sortie_list .node_exp:before,
 .tab_event .sortie_list .node_exp:before,
 .tab_maps .sortie_list .node_exp:before {
 	color: #aaa;
