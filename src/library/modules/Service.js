@@ -427,6 +427,25 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			})).execute();
 		},
 		
+		/* LIVE RELOAD META DATA
+		Such as Quotes, Quotes of subtitles
+		------------------------------------------*/
+		"reloadMeta" :function(request, sender, response){
+			var metaType = request.type;
+			if(ConfigManager.dmm_customize && localStorage.extract_api != "true") {
+				// Reload meta at background for DMM takeover
+				if(metaType === "Quotes") {
+					KC3Meta.loadQuotes();
+				} else if(metaType === "Quests") {
+					KC3Meta.reloadQuests();
+				}
+			}
+			(new TMsg(request.tabId, "gamescreen", "reloadMeta", {
+				metaType: metaType,
+				meta: KC3Meta
+			})).execute();
+		},
+		
 		/* GET VERSIONS
 		Return platform related manifest and versions
 		------------------------------------------*/

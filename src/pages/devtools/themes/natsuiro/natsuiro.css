@@ -2177,7 +2177,7 @@ ABYSS FLEET
 	border-radius:8px;
 	background:#333333;
 	text-align:center;
-	margin:0px 0px 3px 0px;
+	margin:0px 5px 3px 0px;
 	font-size:16px;
 	font-weight:bold;
 	text-align:center;
@@ -2192,15 +2192,47 @@ ABYSS FLEET
 .module.controls .fleet_lbas.needsSupply img {
 	margin-top:-2px;
 }
+.module.controls .scrollable {
+	height:38px;
+	margin:0px 5px 3px 0px;
+	font-size:0px;
+	word-spacing:0px;
+	letter-spacing:0px;
+	white-space:nowrap;
+	overflow-x:hidden;
+	overflow-y:hidden;
+}
+.module.controls .scroll_btn {
+	width:0px;
+	height:0px;
+	margin:2px 5px 3px 0px;
+}
+.module.controls .scroll_left {
+	border-top:13px solid transparent;
+	border-bottom:13px solid transparent;
+	border-right:15px solid #999999;
+}
+.module.controls .scroll_right {
+	border-top:13px solid transparent;
+	border-bottom:13px solid transparent;
+	border-left:15px solid #999999;
+}
+.module.controls .scroll_left.disabled {
+	border-right:15px solid #333333;
+}
+.module.controls .scroll_right.disabled {
+	border-left:15px solid #333333;
+}
 .module.controls .control_btn {
 	width:40px;
 	border-radius:15px;
 	background:#999999;
-	text-align:center;
 	margin:0px 5px 0px 0px;
 	text-align:center;
 	overflow:hidden;
 	padding:3px;
+	display:inline-block;
+	float:initial;
 }
 .module.controls .control_btn img {
 	width:34px;
@@ -3181,14 +3213,19 @@ ABYSS FLEET
 	left:205px; top:5px;
 }
 .h .module.controls .control_btn {
-	float:right;
+/*	float:right;*/
 	width:30px;
 	line-height:29px;
-	padding:0px;
+	padding:1px;
 }
 .h .module.controls .control_btn img {
 	width:26px;
 	height:20px;
+}
+.h .module.controls .control_btn.btn_reload_quotes img,
+.h .module.controls .control_btn.btn_reload_quests img {
+	width:22px;
+	height:22px;
 }
 .h .module.summary {
 	width:343px;
@@ -3212,6 +3249,9 @@ ABYSS FLEET
 }
 .h .module.controls .fleet_rengo {
 	margin:0px 2px 3px 0px;
+}
+.h .module.controls .scrollable {
+	width:100px;
 }
 .h .module.status {
 	width:340px;
@@ -3239,6 +3279,9 @@ ABYSS FLEET
 	width:240px;
 	height:66px;
 	left:555px; top:5px;
+}
+.v .module.controls .scrollable {
+	width:175px;
 }
 .v .module.summary {
 	width:240px;

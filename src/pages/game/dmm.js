@@ -639,6 +639,16 @@ var interactions = {
 		}
 	},
 	
+	// Live reloading meta data
+	reloadMeta :function(request, sender, response){
+		if(request.metaType === "Quotes") {
+			KC3Meta.loadQuotes();
+		} else if(request.metaType === "Quests") {
+			KC3Meta.reloadQuests();
+		}
+		console.info(request.metaType, "reloaded");
+	},
+	
 	// Dummy action
 	dummy :function(request, sender, response){
 		

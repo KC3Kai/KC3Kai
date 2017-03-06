@@ -25,6 +25,7 @@
 			this.screenshotHotkey();
 
 			chrome.runtime.onMessage.addListener(this.subtitlesOverlay());
+			chrome.runtime.onMessage.addListener(this.reloadMeta());
 			chrome.runtime.onMessage.addListener(this.clearOverlays());
 			chrome.runtime.onMessage.addListener(this.questOverlay());
 			chrome.runtime.onMessage.addListener(this.mapMarkersOverlay());
@@ -357,6 +358,16 @@
 						$(".overlay_subtitles span").html("{0}: {1}".format(quoteSpeaker, subtitleText));
 					}
 				}
+			};
+		},
+
+		// Live reloading meta data
+		reloadMeta: function(){
+			var self = this;
+			return function(request, sender, response){
+				if(request.action != "reloadMeta") return true;
+				meta = $.extend(true, KC3Meta, request.meta);
+				console.log(request.metaType, "reloaded");
 			};
 		},
 

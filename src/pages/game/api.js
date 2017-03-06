@@ -650,6 +650,16 @@ var interactions = {
 				$(".overlay_subtitles span").html("{0}: {1}".format(quoteSpeaker, subtitleText));
 			}
 		}
+	},
+	
+	// Live reloading meta data
+	reloadMeta :function(request, sender, response){
+		if(request.metaType === "Quotes") {
+			KC3Meta.loadQuotes();
+		} else if(request.metaType === "Quests") {
+			KC3Meta.reloadQuests();
+		}
+		console.info(request.metaType, "reloaded");
 	}
 	
 };
