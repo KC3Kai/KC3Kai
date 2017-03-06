@@ -69,6 +69,7 @@
 							let shipPanel = $(".ship", factory).clone();
 							if (ship_id !== "0") {
 								$("img", shipPanel).attr("src", KC3Meta.getIcon( ship_id ));
+								$("img", shipPanel).attr("alt", ship_id);
 								$("img", shipPanel).addClass("hover");
 								$("img", shipPanel).click(shipClickFunc);
 

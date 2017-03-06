@@ -447,10 +447,10 @@
 								if(ship===false){ return false; }
 								
 								$(".sortie_ship_"+(index+1)+" img", sortieBox).attr("src", KC3Meta.shipIcon(ship.mst_id));
-								$(".sortie_ship_"+(index+1)+" img", sortieBox).attr("alt", ship.mst_id);
+								//$(".sortie_ship_"+(index+1)+" img", sortieBox).attr("alt", ship.mst_id);
 								$(".sortie_ship_"+(index+1)+" img", sortieBox).click(shipClickFunc);
 								$(".sortie_ship_"+(index+1), sortieBox).addClass("hover");
-								$(".sortie_ship_"+(index+1), sortieBox).addClass("simg-"+ship.mst_id);
+								//$(".sortie_ship_"+(index+1), sortieBox).addClass("simg-"+ship.mst_id);
 								$(".sortie_ship_"+(index+1), sortieBox).show();
 							}
 							
