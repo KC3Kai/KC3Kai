@@ -239,15 +239,17 @@
 				$(".ingame_page").hide();
 			});
             
-            //console.log(RemodelDb.remodelGroup(187));
+            /* Filter for duplicates */
             $(".dupe_filter").on("click", function() {
                 if (!$(this).hasClass("active")) {
                     $(".ship_list .ship_item").each(function() {
                         var thisShipId = parseInt($(this).find(".ship_id").text());
+                        /* Find master ID */
                         var result = $.grep(KC3StrategyTabs.ships.definition.shipCache, function(e) {
                             return e.id === thisShipId;
                         });
                         var dupeCount = 0;
+                        /* Iterate ship group of master ID over every ship in list */
                         for (var i = 0, len = RemodelDb.remodelGroup(result[0].bid).length; i < len; i++) {
                             var dupeCheck = $.grep(KC3StrategyTabs.ships.definition.shipCache, function(e) {
                                 if (e.bid === RemodelDb.remodelGroup(result[0].bid)[i])
@@ -265,6 +267,7 @@
                 $(this).toggleClass("active");
             });
             
+            /* Name filter */
             $(".name_filter").on("keyup", function() {
                 if ($(".name_filter").length > 0) {
                     $(".ship_list .ship_item").each(function() {
