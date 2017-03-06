@@ -382,6 +382,9 @@ body {
 .tab_ships .advanced_sorter .adv_sorter:hover {
 	background:#cfc;
 }
+.tab_ships .name_dupe_filter .dupe_filter:hover {
+	background: #cfc
+}
 .tab_ships .advanced_sorter .filter_box {
 	border:1px solid #000;
 }
@@ -392,6 +395,16 @@ body {
 	border:1px solid #000;
 }
 .tab_ships .ship_filter_type .filter_check {
+	background:#000;
+}
+.tab_ships .name_filter {
+	border:1px solid #000;
+	height: 18px;
+}
+.tab_ships .name_dupe_filter .dupe_filter_box {
+	border:1px solid #000;
+}
+.tab_ships .name_dupe_filter .dupe_filter_check {
 	background:#000;
 }
 .tab_ships .ship_item.odd .ship_field {

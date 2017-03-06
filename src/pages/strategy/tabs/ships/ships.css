@@ -87,6 +87,7 @@
 	width:55px;
 	height:18px;
 	float:left;
+	line-height: 16px;
 }
 .tab_ships .advanced_sorter .sorter_desc {
 	font-size:12px;
@@ -109,6 +110,39 @@
 	width:55px;
 	height:18px;
 	float:left;
+}
+.tab_ships .name_dupe_filter .name_dupe_label {
+	float: left;
+	font-weight: bold;
+	font-size: 12px;
+	padding-right: 5px;
+	line-height: 18px;
+}
+.tab_ships .name_dupe_filter input[type="text"] {
+	float: left;
+	font-size: 12px;
+	padding: 1px 3px;
+}
+.tab_ships .name_dupe_filter .dupe_filter {
+	float: left;
+}
+.tab_ships .name_dupe_filter .dupe_filter_box {
+	width:10px;
+	height:10px;
+	margin:4px 5px 0px 8px;
+	float:left;
+}
+.tab_ships .name_dupe_filter .dupe_filter_check {
+	width:6px;
+	height:6px;
+	margin:1px;
+    display: none;
+}
+.tab_ships .name_dupe_filter .dupe_filter_name {
+	width:auto;
+	height:18px;
+	float:left;
+	line-height: 18px;
 }
 
 /* HEADER
@@ -340,3 +374,10 @@
 	display:none;
 }
 
+/* Ship hiding from filters */
+.tab_ships .ship_item.name_hidden {
+    display: none;
+}
+.tab_ships .ship_item.dupe_hidden {
+    display: none;
+}

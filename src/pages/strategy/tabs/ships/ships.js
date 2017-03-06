@@ -238,6 +238,48 @@
 			$(".pages_no").on("click", function(){
 				$(".ingame_page").hide();
 			});
+            
+            //console.log(RemodelDb.remodelGroup(187));
+            $(".dupe_filter").on("click", function() {
+                if (!$(this).hasClass("active")) {
+                    $(".ship_list .ship_item").each(function() {
+                        var thisShipId = parseInt($(this).find(".ship_id").text());
+                        var result = $.grep(KC3StrategyTabs.ships.definition.shipCache, function(e) {
+                            return e.id === thisShipId;
+                        });
+                        var dupeCount = 0;
+                        for (var i = 0, len = RemodelDb.remodelGroup(result[0].bid).length; i < len; i++) {
+                            var dupeCheck = $.grep(KC3StrategyTabs.ships.definition.shipCache, function(e) {
+                                if (e.bid === RemodelDb.remodelGroup(result[0].bid)[i])
+                                    dupeCount++;
+                            });
+                        }
+                        if (dupeCount === 1) {
+                            $(this).addClass("dupe_hidden");
+                        }
+                    });
+                } else {
+                    $(".ship_list .ship_item").removeClass("dupe_hidden");
+                }
+                $(this).find(".dupe_filter_check").toggle();
+                $(this).toggleClass("active");
+            });
+            
+            $(".name_filter").on("keyup", function() {
+                if ($(".name_filter").length > 0) {
+                    $(".ship_list .ship_item").each(function() {
+                        var currentShipName = $(this).find(".ship_name").text();
+                        var shipSearch = $(".name_filter").val();
+                        if (currentShipName.toLowerCase().indexOf(shipSearch.toLowerCase()) < 0) {
+                            $(this).addClass("name_hidden");
+                        } else {
+                            $(this).removeClass("name_hidden");
+                        }
+                    });
+                } else {
+                    $(".ship_list .ship_item").removeClass("name_hidden");
+                }
+            })
 
 			this.prepareFilters();
 			this.shipList = $(".tab_ships .ship_list");
