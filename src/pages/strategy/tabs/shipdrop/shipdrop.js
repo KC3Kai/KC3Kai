@@ -56,6 +56,9 @@
 					let keys_node = Object.keys( node_tot );
 					keys_node.sort( (ka,kb) => ka - kb );
 					$.each(keys_node , function(i , node) {
+						var shipClickFunc = function(e){
+							KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
+						};
 						console.log("Node: " + node);
 						let nodeDrop = $(".node_drop", factory).clone();
 						$(".node_name", nodeDrop).text( "Node: " + node);
@@ -66,6 +69,9 @@
 							let shipPanel = $(".ship", factory).clone();
 							if (ship_id !== "0") {
 								$("img", shipPanel).attr("src", KC3Meta.getIcon( ship_id ));
+								$("img", shipPanel).addClass("hover");
+								$("img", shipPanel).click(shipClickFunc);
+
 							} else {
 								$("img", shipPanel).attr("src", "../../assets/img/ui/dark_shipdrop-x.png");
 							}
@@ -78,7 +84,7 @@
 				});
 			});
 		}
-	};
+	}
 
 	
 	KC3StrategyTabs.shipdrop.definition = new KC3SortieLogs("shipdrop" , exexe);
