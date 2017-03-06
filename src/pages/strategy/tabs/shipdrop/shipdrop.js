@@ -84,7 +84,7 @@
 				});
 			});
 		}
-	}
+	};
 
 	
 	KC3StrategyTabs.shipdrop.definition = new KC3SortieLogs("shipdrop" , exexe);
