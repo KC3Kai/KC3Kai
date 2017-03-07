@@ -249,12 +249,15 @@
                             return e.id === thisShipId;
                         });
                         var dupeCount = 0;
-                        /* Iterate ship group of master ID over every ship in list */
-                        for (var i = 0, len = RemodelDb.remodelGroup(result[0].bid).length; i < len; i++) {
+                        function getDupeShipsCount() {
                             var dupeCheck = $.grep(KC3StrategyTabs.ships.definition.shipCache, function(e) {
                                 if (e.bid === RemodelDb.remodelGroup(result[0].bid)[i])
                                     dupeCount++;
                             });
+                        }
+                        /* Iterate ship group of master ID over every ship in list */
+                        for (var i = 0, len = RemodelDb.remodelGroup(result[0].bid).length; i < len; i++) {
+                            getDupeShipsCount();
                         }
                         if (dupeCount === 1) {
                             $(this).addClass("dupe_hidden");
@@ -282,7 +285,7 @@
                 } else {
                     $(".ship_list .ship_item").removeClass("name_hidden");
                 }
-            })
+            });
 
 			this.prepareFilters();
 			this.shipList = $(".tab_ships .ship_list");
