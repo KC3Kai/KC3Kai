@@ -707,7 +707,10 @@ Previously known as "Reactor"
 						PlayerManager.fleets[oldFleet].ships.splice(oldSwaperSlot % 6, 1);
 						PlayerManager.fleets[oldFleet].ships.push(-1);
 					}
-					PlayerManager.fleets[oldFleet].checkAkashi(true);
+					// If not the same fleet, also recheck akashi repair of source fleet
+					if(oldFleet !== fleetIndex-1){
+						PlayerManager.fleets[oldFleet].checkAkashi(true);
+					}
 				}
 			} else { // Remove ship
 				PlayerManager.fleets[fleetIndex-1].ships.splice(changedIndex, 1);
