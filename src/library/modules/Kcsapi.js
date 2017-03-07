@@ -476,7 +476,7 @@ Previously known as "Reactor"
 		"api_req_hensei/preset_select":function(params, response, headers){
 			var deckId = parseInt(params.api_deck_id, 10);
 			PlayerManager.fleets[deckId-1].update( response.api_data );
-			localStorage.fleets = JSON.stringify(PlayerManager.fleets);
+			PlayerManager.saveFleets();
 			KC3Network.trigger("Fleet", { switchTo: deckId });
 		},
 		
@@ -561,7 +561,7 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_member/updatedeckname":function(params, response, headers){
 			PlayerManager.fleets[params.api_deck_id-1].name = decodeURIComponent(params.api_name);
-			localStorage.fleets = JSON.stringify(PlayerManager.fleets);
+			PlayerManager.saveFleets();
 		},
 		
 		/*-------------------------------------------------------*/
@@ -670,39 +670,52 @@ Previously known as "Reactor"
 		/* Change fleet member
 		-------------------------------------------------------*/
 		"api_req_hensei/change":function(params, response, headers){
-			var FleetIndex = parseInt(params.api_id, 10);
+			var fleetIndex = parseInt(params.api_id, 10);
 			
 			// If removing all ships except flagship
 			if(typeof response.api_data != "undefined"){
 				if(typeof response.api_data.api_change_count != "undefined"){
-					PlayerManager.fleets[ FleetIndex-1 ].clearNonFlagShips();
-					KC3Network.trigger("Fleet", { switchTo: FleetIndex });
+					PlayerManager.fleets[ fleetIndex-1 ].clearNonFlagShips();
+					KC3Network.trigger("Fleet", { switchTo: fleetIndex });
 					return true;
 				}
 			}
 			
-			// Ship swapping
+			// Ship deploying / removing / swapping
+			// Concat all ship IDs in all fleets into an array
 			var flatShips  = PlayerManager.fleets
 				.map(function(x){ return x.ships; })
 				.reduce(function(x,y){ return x.concat(y); });
-			var ChangedIndex = parseInt(params.api_ship_idx,10);
-			var ChangingShip = parseInt(params.api_ship_id,10);
-			var OldSwaperSlot = flatShips.indexOf(ChangingShip); // move to slot
-			var OldSwapeeSlot = flatShips[ (FleetIndex-1) * 6 + ChangedIndex ]; // swap from slot
-			var oldFleet = Math.floor(OldSwaperSlot / 6);
-			if(ChangingShip > -1){
-				// If swapping on same fleet
-				if(OldSwaperSlot >= 0){
-					PlayerManager.fleets[oldFleet].ships[OldSwaperSlot % 6] = OldSwapeeSlot;
+			// Target ship index in a fleet
+			var changedIndex = parseInt(params.api_ship_idx, 10);
+			// Target ship ID, -1 if removed
+			var changingShip = parseInt(params.api_ship_id,10);
+			// Swap from source ship index in flat array
+			var oldSwaperSlot = flatShips.indexOf(changingShip);
+			// Swap from source ship ID, -1 if empty
+			var oldSwapeeSlot = flatShips[ (fleetIndex-1) * 6 + changedIndex ];
+			// Swap from source fleet index
+			var oldFleet = Math.floor(oldSwaperSlot / 6);
+			if(changingShip > -1){ // Deploy or swap ship
+				// Deploy ship to target fleet first, to avoid issue when swapping in the same fleet
+				PlayerManager.fleets[fleetIndex-1].ships[changedIndex] = changingShip;
+				// Swap ship from source fleet
+				if(oldSwaperSlot > -1){
+					PlayerManager.fleets[oldFleet].ships[oldSwaperSlot % 6] = oldSwapeeSlot;
+					// If source ship slot is empty, apply ship removing on source fleet
+					if(oldSwapeeSlot <= 0){
+						PlayerManager.fleets[oldFleet].ships.splice(oldSwaperSlot % 6, 1);
+						PlayerManager.fleets[oldFleet].ships.push(-1);
+					}
 					PlayerManager.fleets[oldFleet].checkAkashi(true);
 				}
-				PlayerManager.fleets[FleetIndex-1].ships[ChangedIndex] = ChangingShip;
-			}else{
-				PlayerManager.fleets[FleetIndex-1].ships.splice(ChangedIndex, 1);
-				PlayerManager.fleets[FleetIndex-1].ships.push(-1);
+			} else { // Remove ship
+				PlayerManager.fleets[fleetIndex-1].ships.splice(changedIndex, 1);
+				PlayerManager.fleets[fleetIndex-1].ships.push(-1);
 			}
-			PlayerManager.fleets[FleetIndex-1].checkAkashi(true);
-			KC3Network.trigger("Fleet", { switchTo: FleetIndex });
+			PlayerManager.fleets[fleetIndex-1].checkAkashi(true);
+			PlayerManager.saveFleets();
+			KC3Network.trigger("Fleet", { switchTo: fleetIndex });
 		},
 		
 		/* Lock a ship
