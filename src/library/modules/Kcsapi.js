@@ -2033,13 +2033,13 @@ Previously known as "Reactor"
 				 /* [Quest ID, index of tracking, [world, map], isBoss] */
 				[ /* E RANK / It does not matter */
 					[216,0,false,false], // Bd2: Defeat the flagship of an enemy fleet
+					[210,0,false,false], // Bd3: Attack 10 abyssal fleets
 					[214,1,false, true]  // Bw1: 2nd requirement: Encounter 24 bosses (index:1)
 				],
 				[ /* D RANK */ ],
 				[ /* C RANK */ ],
 				[ /* B RANK */
 					[201,0,false,false], // Bd1: Defeat an enemy fleet
-					[210,0,false,false], // Bd3: Defeat 10 abyssal fleets (B rank+)
 					[226,0,[ 2 ], true], // Bd7: Defeat 5 bosses in World 2
 					[241,0,[3,3], true], // Bw7: Defeat 5 bosses in W3-3,3-4,3-5
 					[241,0,[3,4], true],
