@@ -93,7 +93,7 @@ Xxxxxxx
 		},
 		
 		snapshotFleetState :function(){
-			PlayerManager.hq.lastSortie = PlayerManager.fleets_backup();
+			PlayerManager.hq.lastSortie = PlayerManager.cloneFleets();
 			focusedFleet = (PlayerManager.combinedFleet&&this.fleetSent===1) ? [0,1] : [this.fleetSent-1];
 			PlayerManager.hq.save();
 		},

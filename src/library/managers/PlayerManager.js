@@ -2,7 +2,7 @@
 KC3改 Player Manager
 
 Manages info about the player and all its holdings
-Includes HQ, Fleet, Docks
+Includes HQ, Fleets, Docks, LandBases
 Does not include Ships and Gears which are managed by other Managers
 */
 (function(){
@@ -77,7 +77,7 @@ Does not include Ships and Gears which are managed by other Managers
 			if(self.bases.length > 4 && data.length < self.bases.length){
 				self.bases.splice(data.length < 4 ? 4 : data.length);
 			}
-			localStorage.bases = JSON.stringify(self.bases);
+			this.saveBases();
 			localStorage.setObject("baseConvertingSlots", self.baseConvertingSlots);
 			return this;
 		},
@@ -199,7 +199,7 @@ Does not include Ships and Gears which are managed by other Managers
 
 		// data array always: [fuel, ammo, steel, bauxite]
 		setResources :function( serverSeconds, absData, deltaData ){
-			// Only for displaying, because accurracy depends on previous values
+			// Only for displaying, because accuracy depends on previous values
 			if(Array.isArray(deltaData) && deltaData.length === 4){
 				this.hq.lastMaterial[0] += deltaData[0] || 0;
 				this.hq.lastMaterial[1] += deltaData[1] || 0;
@@ -230,7 +230,7 @@ Does not include Ships and Gears which are managed by other Managers
 		// To only save consumables to localStorage without DB recording, let dataObj falsy
 		// basic 4 consumables represented in array always: [torch, buckets, devmats, screws]
 		setConsumables :function( serverSeconds, dataObj, deltaArray ){
-			// Only for displaying, because accurracy depends on previous values
+			// Only for displaying, because accuracy depends on previous values
 			if(Array.isArray(deltaArray) && deltaArray.length === 4){
 				this.consumables.torch += deltaArray[0] || 0;
 				this.consumables.buckets += deltaArray[1] || 0;
@@ -397,6 +397,11 @@ Does not include Ships and Gears which are managed by other Managers
 			return this;
 		},
 
+		saveBases :function(){
+			localStorage.bases = JSON.stringify(this.bases);
+			return this;
+		},
+
 		loadBases :function(){
 			if(typeof localStorage.bases != "undefined"){
 				var oldBases = JSON.parse( localStorage.bases );
@@ -416,7 +421,7 @@ Does not include Ships and Gears which are managed by other Managers
 			});
 		},
 
-		fleets_backup :function(){
+		cloneFleets :function(){
 			return this.fleets.map(function(x,i){
 				return x.ships.map(function(s){
 					return new KC3Ship(KC3ShipManager.get(s));
