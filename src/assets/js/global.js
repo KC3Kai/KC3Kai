@@ -161,7 +161,13 @@ Date.safeToUtcTime = function(date) {
  * Convert String to UTC timestamp/1000.
  */
 Date.toUTCseconds = function(dateStr) {
-	return Math.floor(Date.safeToUtcTime(dateStr)/1000);
+	return Math.hrdInt("floor", Date.safeToUtcTime(dateStr), 3, 1);
+};
+/**
+ * Convert String to UTC timestamp/1000/3600.
+ */
+Date.toUTChours = function(dateStr) {
+	return Math.hrdInt("floor", Date.safeToUtcTime(dateStr) / 3.6, 6, 1);
 };
 
 /* BASE */

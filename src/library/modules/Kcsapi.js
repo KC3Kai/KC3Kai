@@ -109,28 +109,19 @@ Previously known as "Reactor"
 			PlayerManager.setRepairDocks( response.api_data.api_ndock );
 			PlayerManager.buildSlots = response.api_data.api_basic.api_count_kdock;
 			
-			var UTCtime = Date.toUTCseconds(headers.Date);
+			var utcSeconds = Date.toUTCseconds(headers.Date);
 			
-			PlayerManager.portRefresh({
-				time: UTCtime * 1000,
-				matAbs: response.api_data.api_material.slice(0,4).map(function(x){return x.api_value;}),
-			});
-			
-			PlayerManager.setResources([
-				response.api_data.api_material[0].api_value,
-				response.api_data.api_material[1].api_value,
-				response.api_data.api_material[2].api_value,
-				response.api_data.api_material[3].api_value
-			], UTCtime);
-			
-			PlayerManager.setConsumables({
+			PlayerManager.portRefresh(utcSeconds,
+				response.api_data.api_material.slice(0,4).map(x=>x.api_value))
+			.setResources(utcSeconds,
+				response.api_data.api_material.slice(0,4).map(x=>x.api_value))
+			.setConsumables(utcSeconds, {
 				torch: response.api_data.api_material[4].api_value,
 				buckets: response.api_data.api_material[5].api_value,
 				devmats: response.api_data.api_material[6].api_value,
 				screws: response.api_data.api_material[7].api_value
-			}, UTCtime);
-			
-			PlayerManager.setStatistics({
+			})
+			.setStatistics({
 				exped: {
 					total: response.api_data.api_basic.api_ms_count,
 					success: response.api_data.api_basic.api_ms_success
@@ -145,17 +136,15 @@ Previously known as "Reactor"
 					win: response.api_data.api_basic.api_st_win,
 					lose: response.api_data.api_basic.api_st_lose
 				}
-			});
-			
-			PlayerManager.setNewsfeed(response.api_data.api_log, UTCtime * 1000 );
+			})
+			.setNewsfeed(response.api_data.api_log, utcSeconds * 1000);
 			
 			PlayerManager.combinedFleet = response.api_data.api_combined_flag || 0;
 			
 			KC3SortieManager.endSortie(response);
 			
-			PlayerManager.loadBases();
-			
-			PlayerManager.setBaseConvertingSlots(response.api_data.api_plane_info);
+			PlayerManager.loadBases()
+				.setBaseConvertingSlots(response.api_data.api_plane_info);
 			
 			KC3Network.trigger("HQ");
 			KC3Network.trigger("Consumables");
@@ -265,7 +254,7 @@ Previously known as "Reactor"
 		},
 		
 		"api_get_member/material":function(params, response, headers){
-			var UTCtime = Date.toUTCseconds(headers.Date);
+			var utcSeconds = Date.toUTCseconds(headers.Date);
 			
 			var thisItem, myResources=[];
 			for(var ctr in response.api_data){
@@ -283,13 +272,13 @@ Previously known as "Reactor"
 				}
 			}
 			
-			PlayerManager.setResources(myResources, UTCtime);
-			PlayerManager.setConsumables({}, UTCtime);
+			PlayerManager.setResources(utcSeconds, myResources);
+			PlayerManager.setConsumables(utcSeconds);
 			KC3Network.trigger("Consumables");
 		},
 		
 		"api_get_member/useitem":function(params, response, headers){
-			var UTCtime = Date.toUTCseconds(headers.Date);
+			var utcSeconds = Date.toUTCseconds(headers.Date);
 			
 			var thisItem;
 			for(var ctr in response.api_data){
@@ -327,7 +316,7 @@ Previously known as "Reactor"
 				}
 			}
 			console.log("useitems", PlayerManager.consumables);
-			PlayerManager.setConsumables({}, UTCtime);
+			PlayerManager.setConsumables(utcSeconds);
 			KC3Network.trigger("Consumables");
 		},
 		
@@ -410,9 +399,10 @@ Previously known as "Reactor"
 		
 		"api_req_kaisou/remodeling":function(params, response, headers){
 			var
-				ctime    = Date.safeToUtcTime(headers.Date),
+				utcHour  = Date.toUTChours(headers.Date),
 				ship     = KC3ShipManager.get(params.api_id),
 				master   = ship.master(),
+				// NOTE: api_afterfuel is steel usage!
 				material = [0,-master.api_afterbull,-master.api_afterfuel,0,0,0,0,0];
 			
 			// For every pending supply and repair, it'll be counted towards this
@@ -449,10 +439,13 @@ Previously known as "Reactor"
 			});
 			
 			KC3Database.Naverall({
-				hour: Math.hrdInt("floor",ctime/3.6,6,1),
+				hour: utcHour,
 				type: "remodel" + master.api_id,
 				data: material
 			});
+			// Refresh panel display
+			PlayerManager.setResources(utcHour * 3600, null, material.slice(0, 4));
+			KC3Network.trigger("Consumables");
 		},
 		
 		/* Fleet Presets
@@ -571,8 +564,7 @@ Previously known as "Reactor"
 		/* Construct a Ship
 		-------------------------------------------------------*/
 		"api_req_kousyou/createship":function(params, response, headers){
-			var 
-				ctime    = Date.safeToUtcTime(headers.Date);
+			var utcHour = Date.toUTChours(headers.Date);
 			this.shipConstruction = {
 				active: true,
 				dock_num: params.api_kdock_id,
@@ -588,7 +580,7 @@ Previously known as "Reactor"
 				]
 			};
 			KC3Database.Naverall({
-				hour: Math.hrdInt("floor",ctime/3.6,6,1),
+				hour: utcHour,
 				type: "crship"+params.api_kdock_id,
 				data: [
 					params.api_item1,params.api_item2,params.api_item3,params.api_item4,
@@ -598,12 +590,16 @@ Previously known as "Reactor"
 			KC3QuestManager.get(606).increment(); // F2: Daily Construction 1
 			KC3QuestManager.get(608).increment(); // F4: Daily Construction 2
 			KC3Network.trigger("Quests");
+			// Refresh panel display
+			PlayerManager.setResources(utcHour * 3600, null,
+				this.shipConstruction.resources.slice(0, 4).map(v=>-v));
+			KC3Network.trigger("Consumables");
 		},
 		
 		/* Construction Docks
 		-------------------------------------------------------*/
 		"api_get_member/kdock":function(params, response, headers){
-			var UTCtime = Math.hrdInt("floor",Date.safeToUtcTime(headers.Date),3,1);
+			var utcSeconds = Date.toUTCseconds(headers.Date);
 			if(this.shipConstruction.active){
 				if(this.shipConstruction.lsc == 1){
 					KC3Database.LSC({
@@ -614,7 +610,7 @@ Previously known as "Reactor"
 						rsc4: this.shipConstruction.resources[3],
 						devmat: this.shipConstruction.resources[4],
 						result: response.api_data[this.shipConstruction.dock_num-1].api_created_ship_id,
-						time: UTCtime
+						time: utcSeconds
 					});
 				}else{
 					KC3Database.Build({
@@ -624,7 +620,7 @@ Previously known as "Reactor"
 						rsc3: this.shipConstruction.resources[2],
 						rsc4: this.shipConstruction.resources[3],
 						result: response.api_data[this.shipConstruction.dock_num-1].api_created_ship_id,
-						time: UTCtime
+						time: utcSeconds
 					});
 				}
 				
@@ -831,12 +827,12 @@ Previously known as "Reactor"
 		/* Re-supply a ship
 		-------------------------------------------------------*/
 		"api_req_hokyu/charge":function(params, response, headers){
-			KC3QuestManager.get(504).increment(); // E4: Daily Resupplies
-			var
-				ctime    = Math.hrdInt('floor',(new Date(headers.Date)).getTime(),3,1),
-				shipList = response.api_data.api_ship,
+			var utcSeconds = Date.toUTCseconds(headers.Date);
+			var shipList = response.api_data.api_ship,
 				charge   = parseInt(params.api_kind),
 				sParam   = {noFuel:!(charge & 1),noAmmo:!(charge & 2)};
+			
+			KC3QuestManager.get(504).increment(); // E4: Daily Resupplies
 			
 			$.each(shipList, function( index, ship ) {
 				var
@@ -853,11 +849,9 @@ Previously known as "Reactor"
 				
 				shipDf.then(shipFn);
 			});
-			
 			KC3ShipManager.save();
 			
-			PlayerManager.setResources( response.api_data.api_material , ctime);
-			
+			PlayerManager.setResources(utcSeconds, response.api_data.api_material);
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Quests");
 			KC3Network.trigger("Fleet");
@@ -896,13 +890,13 @@ Previously known as "Reactor"
 		/* Start Sortie
 		-------------------------------------------------------*/
 		"api_req_map/start":function(params, response, headers){
-			var UTCTime = Date.toUTCseconds(headers.Date);
+			var utcSeconds = Date.toUTCseconds(headers.Date);
 			var fleetNum = parseInt(params.api_deck_id, 10);
 			KC3SortieManager.startSortie(
 				response.api_data.api_maparea_id,
 				response.api_data.api_mapinfo_no,
 				params.api_deck_id,
-				UTCTime,
+				utcSeconds,
 				response.api_data.api_eventmap
 			);
 			
@@ -925,7 +919,7 @@ Previously known as "Reactor"
 				}
 			}
 
-			KC3SortieManager.advanceNode( response.api_data, UTCTime );
+			KC3SortieManager.advanceNode( response.api_data, utcSeconds );
 			KC3Network.hasOverlay = true;
 			(new RMsg("service", "mapMarkers", {
 				tabId: chrome.devtools.inspectedWindow.tabId,
@@ -949,7 +943,7 @@ Previously known as "Reactor"
 			var strikePoint1 = params.api_strike_point_1,
 				strikePoint2 = params.api_strike_point_2,
 				strikePoint3 = params.api_strike_point_3;
-			var hour = Math.hrdInt("floor", Date.safeToUtcTime(headers.Date)/3.6,6,1);
+			var utcHour = Date.toUTChours(headers.Date);
 			var consumedFuel = 0, consumedAmmo = 0;
 			$.each(PlayerManager.bases, function(i, base){
 				// Land Base of this world, Action: sortie
@@ -979,15 +973,11 @@ Previously known as "Reactor"
 			console.log("Consumed fuel & ammo:", consumedFuel, consumedAmmo);
 			if(consumedFuel > 0 || consumedAmmo > 0){
 				KC3Database.Naverall({
-					hour: hour,
+					hour: utcHour,
 					type: "lbas" + KC3SortieManager.map_world,
 					data: [-consumedFuel,-consumedAmmo,0,0].concat([0,0,0,0])
 				});
-				var fuel = PlayerManager.hq.lastMaterial[0] - consumedFuel,
-					ammo = PlayerManager.hq.lastMaterial[1] - consumedAmmo,
-					steel = PlayerManager.hq.lastMaterial[2],
-					bauxite = PlayerManager.hq.lastMaterial[3];
-				PlayerManager.setResources([fuel, ammo, steel, bauxite], hour);
+				PlayerManager.setResources(utcHour * 3600, null, [-consumedFuel,-consumedAmmo,0,0]);
 				KC3Network.trigger("Consumables");
 			}
 			// TODO Show indicator of sortied LBAS at panel (also show striked nodes name?)
@@ -996,9 +986,9 @@ Previously known as "Reactor"
 		/* Traverse Map
 		-------------------------------------------------------*/
 		"api_req_map/next":function(params, response, headers){
-			var UTCTime = Date.toUTCseconds(headers.Date);
+			var utcSeconds = Date.toUTCseconds(headers.Date);
 			KC3SortieManager.discardSunk();
-			KC3SortieManager.advanceNode( response.api_data, UTCTime );
+			KC3SortieManager.advanceNode( response.api_data, utcSeconds );
 			KC3Network.hasOverlay = true;
 			(new RMsg("service", "mapMarkers", {
 				tabId: chrome.devtools.inspectedWindow.tabId,
@@ -1237,21 +1227,17 @@ Previously known as "Reactor"
 			// Record material consuming. Yes, set plane use your bauxite :)
 			// Known formula:
 			//var landSlot = KC3GearManager.landBaseReconnType2Ids.indexOf(planeMaster.api_type[2])>-1 ?
-			//	KC3GearManager.landBaseReconnMaxSlot : KC3GearManager.landBaseOtherMaxSlot;
+			//KC3GearManager.landBaseReconnMaxSlot : KC3GearManager.landBaseOtherMaxSlot;
 			//var deployBauxiteCost = planeMaster.api_cost * landSlot;
 			if(typeof response.api_data.api_after_bauxite !== "undefined"){
-				var hour = Math.hrdInt("floor", Date.safeToUtcTime(headers.Date)/3.6,6,1);
-				var fuel = PlayerManager.hq.lastMaterial[0],
-					ammo = PlayerManager.hq.lastMaterial[1],
-					steel = PlayerManager.hq.lastMaterial[2],
-					bauxite = response.api_data.api_after_bauxite;
-				var consumedBauxite = bauxite - PlayerManager.hq.lastMaterial[3];
+				var utcHour = Date.toUTChours(headers.Date);
+				var consumedBauxite = response.api_data.api_after_bauxite - PlayerManager.hq.lastMaterial[3];
 				KC3Database.Naverall({
-					hour: hour,
+					hour: utcHour,
 					type: "lbas" + (params.api_area_id || "0"),
 					data: [0,0,0,consumedBauxite].concat([0,0,0,0])
 				});
-				PlayerManager.setResources([fuel, ammo, steel, bauxite] , hour);
+				PlayerManager.setResources(utcHour * 3600, null, [0,0,0,-consumedBauxite]);
 				KC3Network.trigger("Consumables");
 			}
 			KC3Network.trigger("Lbas");
@@ -1269,20 +1255,15 @@ Previously known as "Reactor"
 			});
 			localStorage.bases = JSON.stringify(PlayerManager.bases);
 			// Record material consuming, using a new type called: lbas
-			// NOT yet record fuel and ammo cost for sortie land base squadron
-			var hour = Math.hrdInt("floor", Date.safeToUtcTime(headers.Date)/3.6,6,1);
-			var fuel = response.api_data.api_after_fuel,
-				ammo = PlayerManager.hq.lastMaterial[1],
-				steel = PlayerManager.hq.lastMaterial[2],
-				bauxite = response.api_data.api_after_bauxite;
-			var consumedFuel = fuel - PlayerManager.hq.lastMaterial[0],
-				consumedBauxite = bauxite - PlayerManager.hq.lastMaterial[3];
+			var utcHour = Date.toUTChours(headers.Date);
+			var consumedFuel = response.api_data.api_after_fuel - PlayerManager.hq.lastMaterial[0],
+				consumedBauxite = response.api_data.api_after_bauxite - PlayerManager.hq.lastMaterial[3];
 			KC3Database.Naverall({
-				hour: hour,
+				hour: utcHour,
 				type: "lbas" + (params.api_area_id || "0"),
 				data: [consumedFuel,0,0,consumedBauxite].concat([0,0,0,0])
 			});
-			PlayerManager.setResources([fuel, ammo, steel, bauxite] , hour);
+			PlayerManager.setResources(utcHour * 3600, null, [-consumedFuel,0,0,-consumedBauxite]);
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Lbas");
 		},
@@ -1315,8 +1296,7 @@ Previously known as "Reactor"
 		},
 		
 		"api_req_quest/clearitemget": function(params, response, headers){
-			var 
-				ctime    = Date.safeToUtcTime(headers.Date),
+			var utcHour  = Date.toUTChours(headers.Date),
 				quest    = Number(params.api_quest_id),
 				data     = response.api_data,
 				material = data.api_material,
@@ -1338,7 +1318,7 @@ Previously known as "Reactor"
 			});
 			material = material.concat(consume);
 			KC3Database.Naverall({
-				hour: Math.hrdInt("floor",ctime/3.6,6,1),
+				hour: utcHour,
 				type: "quest"+quest,
 				data: material
 			});
@@ -1346,6 +1326,11 @@ Previously known as "Reactor"
 			
 			// Trigger quest listeners
 			KC3Network.trigger("Quests");
+			// Update resources
+			PlayerManager.setResources(utcHour * 3600, null, material.slice(0,4));
+			PlayerManager.setConsumables(utcHour * 3600, null, consume);
+			// Trigger panel refresh
+			KC3Network.trigger("Consumables");
 		},
 		
 		/* Stop Quest
@@ -1457,7 +1442,7 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_practice/battle":function(params, response, headers){
 			var fleetNum = parseInt(params.api_deck_id, 10);
-			KC3SortieManager.sortieTime = Math.hrdInt('floor',Date.safeToUtcTime(headers.Date),3,1);
+			KC3SortieManager.sortieTime = Date.toUTCseconds(headers.Date);
 			KC3SortieManager.map_world  = -1;
 			KC3SortieManager.snapshotFleetState();
 			KC3Network.trigger("PvPStart", {
@@ -1506,8 +1491,7 @@ Previously known as "Reactor"
 		/* Complete Expedition
 		-------------------------------------------------------*/
 		"api_req_mission/result":function(params, response, headers){
-			var
-				ctime    = Date.safeToUtcTime(headers.Date),
+			var utcHour  = Date.toUTChours(headers.Date),
 				deck     = parseInt(params.api_deck_id, 10),
 				timerRef = KC3TimerManager._exped[ deck-2 ],
 				shipList = PlayerManager.fleets[deck - 1].ships.slice(0),
@@ -1606,7 +1590,7 @@ Previously known as "Reactor"
 					rsc = rsc.concat(csm);
 					
 					KC3Database.Naverall({
-						hour: Math.hrdInt("floor",ctime/3.6,6,1),
+						hour: utcHour,
 						type: uniqId,
 						data: rsc
 					},null,true);
@@ -1629,6 +1613,9 @@ Previously known as "Reactor"
 					KC3ShipManager.save();
 					
 					console.log("Materials",rsc);
+					PlayerManager.setResources(utcHour * 3600, null, rsc.slice(0,4));
+					PlayerManager.setConsumables(utcHour * 3600, null, csm);
+					KC3Network.trigger("Consumables");
 				}
 			});
 		},
@@ -1647,8 +1634,8 @@ Previously known as "Reactor"
 			var
 				resourceUsed = [ params.api_item1, params.api_item2, params.api_item3, params.api_item4 ],
 				failed       = (typeof response.api_data.api_slot_item == "undefined"),
-				ctime        = Math.hrdInt("floor",Date.safeToUtcTime(headers.Date),3,1),
-				hour         = Math.hrdInt("floor",ctime/3.6,3,1);
+				utcSeconds   = Date.toUTCseconds(headers.Date),
+				utcHour      = Date.toUTChours(headers.Date);
 			
 			// Log into development History
 			KC3Database.Develop({
@@ -1658,18 +1645,19 @@ Previously known as "Reactor"
 				rsc3: resourceUsed[2],
 				rsc4: resourceUsed[3],
 				result: (!failed)?response.api_data.api_slot_item.api_slotitem_id:-1,
-				time: ctime
+				time: utcSeconds
 			});
 			
 			KC3Database.Naverall({
-				hour: hour,
+				hour: utcHour,
 				type: "critem",
 				data: resourceUsed.concat([0,0,!failed,0]).map(function(x){return -x;})
 			});
 			
 			if(Array.isArray(response.api_data.api_material)){
-				PlayerManager.setResources(response.api_data.api_material.slice(0,4), hour);
+				PlayerManager.setResources(utcSeconds, response.api_data.api_material.slice(0,4));
 				PlayerManager.consumables.devmats = response.api_data.api_material[6];
+				PlayerManager.setConsumables(utcSeconds);
 			}
 			
 			KC3QuestManager.get(605).increment(); // F1: Daily Development 1
@@ -1710,7 +1698,7 @@ Previously known as "Reactor"
 				rsc   = [0,0,0,0,0,0,0,0],
 				ship  = KC3ShipManager.get(params.api_ship_id),
 				scrap = [],
-				ctime = Date.safeToUtcTime(headers.Date);
+				utcHour = Date.toUTChours(headers.Date);
 			
 			// Base ship scrap value
 			scrap.push(ship.master());
@@ -1730,14 +1718,16 @@ Previously known as "Reactor"
 				});
 			});
 			KC3Database.Naverall({
-				hour: Math.hrdInt("floor",ctime/3.6,6,1),
+				hour: utcHour,
 				type: "dsship" + ship.masterId,
 				data: rsc
 			});
 			KC3ShipManager.remove( params.api_ship_id );
 			KC3QuestManager.get(609).increment(); // F5: Daily Dismantlement
+			PlayerManager.setResources(utcHour * 3600, null, rsc.slice(0,4));
 			KC3Network.trigger("ShipSlots");
 			KC3Network.trigger("GearSlots");
+			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Fleet");
 			KC3Network.trigger("Quests");
 		},
@@ -1747,7 +1737,7 @@ Previously known as "Reactor"
 		"api_req_kousyou/destroyitem2":function(params, response, headers){
 			var
 				rsc   = [0,0,0,0,0,0,0,0],
-				ctime = Date.safeToUtcTime(headers.Date);
+				utcHour = Date.toUTChours(headers.Date);
 			$.each(params.api_slotitem_ids.split("%2C"), function(index, itemId){
 				var gearMaster = KC3GearManager.get(itemId).master();
 				gearMaster.api_broken.forEach(function(x,i){
@@ -1761,12 +1751,14 @@ Previously known as "Reactor"
 			});
 			KC3GearManager.save();
 			KC3Database.Naverall({
-				hour: Math.hrdInt("floor",ctime/3.6,6,1),
+				hour: utcHour,
 				type: "dsitem",
 				data: rsc
 			});
 			KC3QuestManager.get(613).increment(); // F12: Weekly Dismantlement
+			PlayerManager.setResources(utcHour * 3600, null, rsc.slice(0,4));
 			KC3Network.trigger("GearSlots");
+			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Quests");
 		},
 		
@@ -1923,9 +1915,8 @@ Previously known as "Reactor"
 		/* Item Consumption
 		-------------------------------------------------------*/
 		"api_req_member/itemuse":function(params, response, headers){
-			var
-				ctime  = Date.safeToUtcTime(headers.Date),
-				itemId = parseInt(params.api_useitem_id,10),
+			var utcHour = Date.toUTChours(headers.Date);
+			var itemId = parseInt(params.api_useitem_id,10),
 				fForce = parseInt(params.api_force_flag,10),
 				fExchg = parseInt(params.api_exchange_type,10), // pops out from present box
 				aData  = response.api_data,
@@ -1941,10 +1932,13 @@ Previously known as "Reactor"
 					// Obtained Material
 					var dMatr  = aData.api_material;
 					KC3Database.Naverall({
-						hour: Math.hrdInt("floor",ctime/3.6,6,1),
+						hour: utcHour,
 						type: "useitem" + itemId,
 						data: dMatr
 					});
+					PlayerManager.setResources(utcHour * 3600, null, dMatr.slice(0,4));
+					PlayerManager.setConsumables(utcHour * 3600, null, dMatr.slice(4,8));
+					KC3Network.trigger("Consumables");
 					break;
 			}
 		},
@@ -1989,7 +1983,7 @@ Previously known as "Reactor"
 				rm = self.remodelSlot,
 				ky = (parseInt(params.api_certain_flag) && "certain") || "req",
 				cu = rm.slotCur,
-				ct = Date.safeToUtcTime(headers.Date),
+				hr = Date.toUTChours(headers.Date),
 				mt = Array.apply(null,{length:8}).map(function(){return 0;}),
 				ms = KC3GearManager.get(parseInt(params.api_slot_id)).master();
 			['fuel','bull','steel','bauxite','','','buildkit','remodelkit'].forEach(function(dk,id){
@@ -1999,10 +1993,10 @@ Previously known as "Reactor"
 				var sk = ['api',(id >= 4) ? ky : 'req',dk].join('_');
 				mt[id] = -cu[sk];
 			});
-			console.info.apply(console,["Remodel Cost"].concat(mt));
+			console.info("Remodel Cost", mt);
 			// Store to Lodger
 			KC3Database.Naverall({
-				hour: Math.hrdInt("floor",ct/3.6,6,1),
+				hour: hr,
 				type: "rmditem" + ms.api_id,
 				data: mt
 			});
@@ -2010,10 +2004,12 @@ Previously known as "Reactor"
 			(response.api_data.api_use_slot_id || []).forEach(function(gearId){ KC3GearManager.remove(gearId); });
 			KC3GearManager.set([ response.api_data.api_after_slot ]);
 			
+			PlayerManager.setResources(hr * 3600, response.api_data.api_after_material.slice(0, 4));
+			PlayerManager.consumables.torch = response.api_data.api_after_material[4];
 			PlayerManager.consumables.buckets = response.api_data.api_after_material[5];
 			PlayerManager.consumables.devmats = response.api_data.api_after_material[6];
 			PlayerManager.consumables.screws = response.api_data.api_after_material[7];
-			PlayerManager.consumables.torch = response.api_data.api_after_material[4];
+			PlayerManager.setConsumables(hr * 3600);
 			KC3QuestManager.get(619).increment();
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("GearSlots");
