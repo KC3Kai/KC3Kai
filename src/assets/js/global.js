@@ -372,6 +372,12 @@ String.prototype.hashCode = function() {
 			return ret;
 		}
 	};
+	
+	Number.prototype.valueBetween = function(lfs, rfs) {
+		lfs = lfs === undefined ? -Infinity : lfs;
+		rfs = rfs === undefined ? Infinity : rfs;
+		return Math.min(Math.max(lfs, rfs), Math.max(Math.min(lfs, rfs), this));
+	};
 }).call(Number);
 
 /* JS NATIVE CLASS */

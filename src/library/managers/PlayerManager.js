@@ -20,6 +20,8 @@ Does not include Ships and Gears which are managed by other Managers
 		buildSlots: 2,
 		combinedFleet: 0,
 		statistics: {},
+		maxResource: 300000,
+		maxConsumable: 3000,
 
 		init :function(){
 			this.hq = new KC3Player();
@@ -205,6 +207,10 @@ Does not include Ships and Gears which are managed by other Managers
 				this.hq.lastMaterial[1] += deltaData[1] || 0;
 				this.hq.lastMaterial[2] += deltaData[2] || 0;
 				this.hq.lastMaterial[3] += deltaData[3] || 0;
+				// Limit resource values between [0, 300000]
+				this.hq.lastMaterial.map((v, i) => {
+					this.hq.lastMaterial[i] = v.valueBetween(0, this.maxResource);
+				});
 				this.hq.save();
 				return this;
 			}
@@ -233,9 +239,13 @@ Does not include Ships and Gears which are managed by other Managers
 			// Only for displaying, because accuracy depends on previous values
 			if(Array.isArray(deltaArray) && deltaArray.length === 4){
 				this.consumables.torch += deltaArray[0] || 0;
+				this.consumables.torch = this.consumables.torch.valueBetween(0, this.maxConsumable);
 				this.consumables.buckets += deltaArray[1] || 0;
+				this.consumables.buckets = this.consumables.buckets.valueBetween(0, this.maxConsumable);
 				this.consumables.devmats += deltaArray[2] || 0;
+				this.consumables.devmats = this.consumables.devmats.valueBetween(0, this.maxConsumable);
 				this.consumables.screws += deltaArray[3] || 0;
+				this.consumables.screws = this.consumables.screws.valueBetween(0, this.maxConsumable);
 				localStorage.consumables = JSON.stringify(this.consumables);
 				return this;
 			}
