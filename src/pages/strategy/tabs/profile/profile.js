@@ -162,13 +162,16 @@
 				}
 			});
 			
-			// text/csv uses CRLF as line breaks according rfc4180
+			// MIME text/csv uses CRLF as line breaks according RFC-4180
 			const CSV_LINE_BREAKS = String.fromCharCode(13) + String.fromCharCode(10);
+			// Precompiled regexp for better performance
+			const CSV_QUOTE_TEST_REGEXP = /(\s|\r|\n|\")/;
+			const CSV_DQUOTE_REGEXP = /\"/g;
 			let csvDquoteEscaped = function(field) {
-				return '"' + field.replace(/\"/g, '""') + '"';
+				return '"' + field.replace(CSV_DQUOTE_REGEXP, '""') + '"';
 			};
 			let csvQuoteIfNecessary = function(field) {
-				return (/(\s|\r|\n|\")/).test(field) ? csvDquoteEscaped(field) : field;
+				return CSV_QUOTE_TEST_REGEXP.test(field) ? csvDquoteEscaped(field) : field;
 			};
 			// Export CSV: Sortie
 			/*$(".tab_profile .export_csv_sortie").on("click", function(event){
@@ -208,12 +211,14 @@
 					"Ship #4", "Ship #5", "Ship #6"
 				].join(",") + CSV_LINE_BREAKS;
 				var buildRewardItemText = function(data, index) {
-					var flag = data.api_useitem_flag[index - 1];
-					var getItem = data["api_get_item" + index];
-					return (flag === 4 ?
-						KC3Meta.useItemName(getItem.api_useitem_id) :
-						({"0":"None","1":"Bucket","2":"Blowtorch","3":"DevMat"})[flag] || flag
-						) + (flag > 0 && getItem ? " x" + getItem.api_useitem_count : "");
+					var flag = data.api_useitem_flag[index - 1],
+						getItem = data["api_get_item" + index];
+					return csvQuoteIfNecessary(
+						(flag === 4 ? KC3Meta.useItemName(getItem.api_useitem_id) :
+						({"0":"None","1":"Bucket","2":"Blowtorch","3":"DevMat"})[flag] || flag)
+						+
+						(flag > 0 && getItem ? " x" + getItem.api_useitem_count : "")
+					);
 				};
 				// Get data from local DB
 				KC3Database.con.expedition
@@ -221,11 +226,15 @@
 					.reverse()
 					.toArray(function(result){
 						result.forEach(function(expedInfo){
-							var shipsInfo = expedInfo.fleet.map(
-								ship => csvQuoteIfNecessary(KC3Meta.shipName(KC3Master.ship(ship.mst_id).api_name)
-									+ " Lv" + ship.level + " ("
-									+ [ship.morale, ship.equip.reduce((drums, id) => drums+=id===75, 0)].join("/")
-									+ ")")
+							var shipsInfo = expedInfo.fleet.map(ship => ship.mst_id > 0 ?
+								csvQuoteIfNecessary(
+									// Give up using String.format for better performance
+									[KC3Meta.shipName(KC3Master.ship(ship.mst_id).api_name),
+									 "Lv" + ship.level,
+									 "(" + ship.morale + "/" +
+									   ship.equip.reduce((drums, id) => drums+=(id===75), 0) + ")"
+									].join(" ")
+								) : "-"
 							);
 							if(shipsInfo.length < 6){
 								shipsInfo.length = 6;
