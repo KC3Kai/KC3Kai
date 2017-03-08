@@ -373,7 +373,7 @@ Previously known as "Reactor"
 			var utcHour  = Date.toUTChours(headers.Date),
 				ship     = KC3ShipManager.get(params.api_id),
 				master   = ship.master(),
-				// NOTE: api_afterfuel is steel usage!
+				// NOTE: api_afterfuel is steel consumption!
 				material = [0,-master.api_afterbull,-master.api_afterfuel,0,0,0,0,0];
 			
 			// For every pending supply and repair, it'll be counted towards this
@@ -1335,7 +1335,7 @@ Previously known as "Reactor"
 				nDockNum   = parseInt( params.api_ndock_id , 10),
 				shipData   = KC3ShipManager.get( shipId );
 			
-			if(bucket==1){
+			if(bucket == 1){
 				PlayerManager.consumables.buckets -= 1;
 				PlayerManager.setConsumables(utcSeconds);
 				
@@ -1356,8 +1356,9 @@ Previously known as "Reactor"
 			
 			shipData.perform('repair');
 			KC3ShipManager.save();
-			
 			KC3QuestManager.get(503).increment(); // E3: Daily Repairs
+			PlayerManager.setResources(utcSeconds, null, [-shipData.repair[1],0,-shipData.repair[2],0]);
+			
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Quests");
 			KC3Network.trigger("Fleet");
@@ -1977,8 +1978,6 @@ Previously known as "Reactor"
 			KC3GearManager.set([ response.api_data.api_after_slot ]);
 			
 			PlayerManager.setResources(hr * 3600, response.api_data.api_after_material.slice(0, 4));
-			PlayerManager.consumables.torch = response.api_data.api_after_material[4];
-			PlayerManager.consumables.buckets = response.api_data.api_after_material[5];
 			PlayerManager.consumables.devmats = response.api_data.api_after_material[6];
 			PlayerManager.consumables.screws = response.api_data.api_after_material[7];
 			PlayerManager.setConsumables(hr * 3600);
