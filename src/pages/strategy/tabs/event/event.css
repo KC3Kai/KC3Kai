@@ -200,6 +200,8 @@
     font-size: 11px;
     line-height: 12px;
     color: #666;
+	float: right;
+	margin-top: 5px;
 }
 
 .tab_event .page_list .pagination {

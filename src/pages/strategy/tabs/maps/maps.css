@@ -104,6 +104,8 @@
     font-size: 11px;
     line-height: 12px;
     color: #666;
+	float: right;
+	margin-top: 5px;
 }
 
 .tab_maps .page_list .pagination {
