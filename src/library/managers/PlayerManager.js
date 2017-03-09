@@ -304,7 +304,7 @@ Does not include Ships and Gears which are managed by other Managers
 			return this;
 		},
 
-		setNewsfeed :function( data, timestamp ){
+		setNewsfeed :function( data, timestamp = Date.now() ){
 			//console.log("newsfeed", data);
 			localStorage.playerNewsFeed = JSON.stringify({ time: timestamp, log: data });
 			// Give up to save into DB, just keep recent 6 logs
