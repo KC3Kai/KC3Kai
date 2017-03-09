@@ -100,6 +100,12 @@
 	display:none;
 }
 
+.tab_maps .page_list .sortie-count {
+    font-size: 11px;
+    line-height: 12px;
+    color: #666;
+}
+
 .tab_maps .page_list .pagination {
 	margin:5px 0px 0px 0px;
 }

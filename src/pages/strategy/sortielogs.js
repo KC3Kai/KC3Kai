@@ -226,6 +226,20 @@
 							if(element.clear == 1){
 								$(".map_hp_txt", mapBox).text("Cleared!");
 								mapBox.addClass("cleared");
+                                if (cWorld>=10) {
+                                    mapBox.addClass((function(x){
+                                        switch(x){
+                                            case 1:
+                                                return "easy";
+                                            case 2:
+                                                return "normal";
+                                            case 3:
+                                                return "hard";
+                                            default:
+                                                return "";
+                                        }
+                                    })(element.difficulty));
+                                }
 								if(typeof element.maxhp != "undefined")
 									$(".map_hp_txt", mapBox).lazyInitTooltip()
 										.attr("title", "{0} / {1}".format(element.curhp, element.maxhp));
@@ -341,6 +355,7 @@
 			var self = this;
 			var countPages = Math.ceil( countSorties / this.itemsPerPage );
 			$(".tab_"+tabCode+" .page_list").html('<ul class="pagination pagination-sm"></ul>');
+            if (countSorties > 0) {$(".tab_"+tabCode+" .page_list").prepend('<div class="sortie-count">Total sorties: ' + countSorties + '</div>');}
 			
 			if(countPages > 0){
 				$(".tab_"+tabCode+" .pagination").twbsPagination({
