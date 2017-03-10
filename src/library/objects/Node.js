@@ -1391,6 +1391,70 @@ Used by SortieManager
 	};
 
 	/**
+		Build HTML tooltip for details of air battle losses
+	*/
+	KC3Node.prototype.buildAirBattleLossMessage = function(){
+		var template = $('<table><tr><th class="type">&nbsp;</th><th>Friendly&nbsp;</th><th>Abyssal</th></tr>' +
+			'<tr class="contact_row"><td>Contact</td><td class="ally_contact"></td><td class="enemy_contact"></td></tr>' +
+			'<tr class="airbattle_row"><td>Battle</td><td colspan="2" class="airbattle"></td></tr>' +
+			'<tr><td>Stage1</td><td class="ally_fighter"></td><td class="enemy_fighter"></td></tr>' + 
+			'<tr><td>Stage2</td><td class="ally_bomber"></td><td class="enemy_bomber"></td></tr></table>');
+		var tooltip = $("<div></div>");
+		var fillAirBattleData = function(typeName, koukuApiData){
+			var table = template.clone();
+			var stage1 = koukuApiData.api_stage1 || {
+					api_f_count:0,api_f_lostcount:0,
+					api_e_count:0,api_e_lostcount:0
+				},
+				stage2 = koukuApiData.api_stage2;
+			$(".type", table).html(typeName + "&nbsp;");
+			if(stage1.api_touch_plane){
+				$(".ally_contact", table).text(stage1.api_touch_plane[0] <= 0 ? "None" : "[{0}]".format(stage1.api_touch_plane[0]));
+				$(".enemy_contact", table).text(stage1.api_touch_plane[1] <= 0 ? "None" : "[{0}]".format(stage1.api_touch_plane[1]));
+			} else {
+				$(".ally_contact", table).text("---");
+				$(".enemy_contact", table).text("---");
+				$(".contact_row", table).hide();
+			}
+			if(stage1.api_disp_seiku !== undefined){
+				$(".airbattle", table).text(KC3Meta.airbattle(stage1.api_disp_seiku)[2]);
+			} else {
+				$(".airbattle", table).text("---");
+				$(".airbattle_row", table).hide();
+			}
+			$(".ally_fighter", table).text(stage1.api_f_count + (stage1.api_f_lostcount > 0 ? " -" + stage1.api_f_lostcount : ""));
+			$(".enemy_fighter", table).text(stage1.api_e_count + (stage1.api_e_lostcount > 0 ? " -" + stage1.api_e_lostcount : ""));
+			if(stage2){
+				$(".ally_bomber", table).text(stage2.api_f_count + (stage2.api_f_lostcount > 0 ? " -" + stage2.api_f_lostcount : ""));
+				$(".enemy_bomber", table).text(stage2.api_e_count + (stage2.api_e_lostcount > 0 ? " -" + stage2.api_e_lostcount : ""));
+			} else {
+				$(".ally_bomber", table).text("---");
+				$(".enemy_bomber", table).text("---");
+			}
+			return table;
+		};
+		// Land-Base Jet Assult
+		if(this.battleDay.api_air_base_injection)
+			fillAirBattleData("LBAS Jets", this.battleDay.api_air_base_injection).appendTo(tooltip);
+		// Land-Base Aerial Support(s)
+		if(this.battleDay.api_air_base_attack){
+			$.each(this.battleDay.api_air_base_attack, function(i, lb){
+				fillAirBattleData("LBAS #{0}".format(i + 1), lb).appendTo(tooltip);
+			});
+		}
+		// Carrier Jet Assult
+		if(this.battleDay.api_injection_kouku)
+			fillAirBattleData("Jet Assult", this.battleDay.api_injection_kouku).appendTo(tooltip);
+		// Carrier Aerial Combat / (Long Distance) Aerial Raid
+		if(this.battleDay.api_kouku)
+			fillAirBattleData("Air Battle", this.battleDay.api_kouku).appendTo(tooltip);
+		// Exped Aerial Support
+		if(this.battleDay.api_support_info && this.battleDay.api_support_info.api_support_airatack)
+			fillAirBattleData("Exped Support", this.battleDay.api_support_info.api_support_airatack).appendTo(tooltip);
+		return tooltip.html();
+	};
+
+	/**
 	 * Not real battle on this node in fact. Enemy raid just randomly occurs before entering node.
 	 * See: http://kancolle.wikia.com/wiki/Land-Base_Aerial_Support#Enemy_Raid
 	 */
