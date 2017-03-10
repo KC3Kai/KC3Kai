@@ -1396,7 +1396,7 @@ Used by SortieManager
 	KC3Node.prototype.buildAirBattleLossMessage = function(){
 		var template = $('<table><tr><th class="type">&nbsp;</th><th>Friendly&nbsp;</th><th>Abyssal</th></tr>' +
 			'<tr class="contact_row"><td>Contact</td><td class="ally_contact"></td><td class="enemy_contact"></td></tr>' +
-			'<tr class="airbattle_row"><td>Battle</td><td colspan="2" class="airbattle"></td></tr>' +
+			'<tr class="airbattle_row"><td>Result</td><td colspan="2" class="airbattle"></td></tr>' +
 			'<tr><td>Stage1</td><td class="ally_fighter"></td><td class="enemy_fighter"></td></tr>' + 
 			'<tr><td>Stage2</td><td class="ally_bomber"></td><td class="enemy_bomber"></td></tr></table>');
 		var tooltip = $("<div></div>");
@@ -1407,10 +1407,11 @@ Used by SortieManager
 					api_e_count:0,api_e_lostcount:0
 				},
 				stage2 = koukuApiData.api_stage2;
+			table.css("font-size", "11px");
 			$(".type", table).html(typeName + "&nbsp;");
 			if(stage1.api_touch_plane){
-				$(".ally_contact", table).text(stage1.api_touch_plane[0] <= 0 ? "None" : "[{0}]".format(stage1.api_touch_plane[0]));
-				$(".enemy_contact", table).text(stage1.api_touch_plane[1] <= 0 ? "None" : "[{0}]".format(stage1.api_touch_plane[1]));
+				$(".ally_contact", table).text(stage1.api_touch_plane[0] <= 0 ? "No" : "[{0}]".format(stage1.api_touch_plane[0]));
+				$(".enemy_contact", table).text(stage1.api_touch_plane[1] <= 0 ? "No" : "[{0}]".format(stage1.api_touch_plane[1]));
 			} else {
 				$(".ally_contact", table).text("---");
 				$(".enemy_contact", table).text("---");
