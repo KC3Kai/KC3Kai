@@ -55,6 +55,7 @@
 		}
 		
 		// show dev-only pages conditionally
+		ConfigManager.devOnlyPages = true;
 		if ( ConfigManager.devOnlyPages ) {
 			$("#menu .submenu.dev-only").show();
 		}
