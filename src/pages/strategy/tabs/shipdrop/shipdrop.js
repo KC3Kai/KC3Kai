@@ -22,8 +22,7 @@
 			let world = parseInt(cworld);
 			let subMap = parseInt(cmap);
 			let sorties37_1;
-			if (world <= 6) sorties37_1 = KC3Database.con.sortie.where("world").equals(world).and( data => data.mapnum === subMap && data.hq === hq);
-			else sorties37_1 = KC3Database.con.sortie.where("world").equals(world).and( data => data.mapnum === subMap && data.hq === hq);
+			sorties37_1 = KC3Database.con.sortie.where("world").equals(world).and( data => data.mapnum === subMap && data.hq === hq);
 			let dropTable = {};
 			let pList = [];
 			//first: get info from KC3Database and count the drop of different node
