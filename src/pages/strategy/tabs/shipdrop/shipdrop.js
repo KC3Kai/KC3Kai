@@ -138,7 +138,7 @@
 						 map_clone.attr("value" , cMap);
 						 map_clone.appendTo(map_list);
 					}
-				})
+				});
 			});
 
 			map_list.change(function(){
