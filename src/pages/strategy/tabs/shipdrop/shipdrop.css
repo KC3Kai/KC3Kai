@@ -3,21 +3,17 @@
 }
 
 .tab_shipdrop .content_root .node_drop .ship > img {
-	width:25px;
-	height:25px;
+	width: 24px;
+	height: 24px;
 }
 
 .tab_shipdrop .content_root .node_drop .ship * {
-	width:30px;
-	height:30px;
 	line-height:30px;
 	margin:0px 5px 0px 0px;
 	border-radius:15px;
 	float:left;
 	overflow:hidden;
 }
-
-
 
 .tab_shipdrop .content_root .node_drop .ship {
 	display:inline-block;
@@ -49,14 +45,20 @@
 /* WORLD LIST
 ---------------------------------*/
 .tab_shipdrop .control_panel .world_list {
-	min-width: 110px;
+	min-width: 120px;
 	margin: 0 0 15px 10px;
 }
 
 /* MAP LIST
 ---------------------------------*/
 .tab_shipdrop .control_panel .map_list {
-	min-width: 110px;
+	min-width: 120px;
 	margin: 0 0 15px 10px;
 }
 
+/* DIFFICULTY LIS
+---------------------------------*/
+.tab_shipdrop .control_panel .difficulty_list {
+	min-width: 120px;
+	margin: 0 0 15px 10px;
+}
