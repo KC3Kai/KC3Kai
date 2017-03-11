@@ -12,16 +12,18 @@
 		selectedWorld : 0,
 		selectedMap : 0,
 		maps : {},
-
 		hash_world_to_index : {},
-		fresh_ship_drop : function(){
+
+		fresh_ship_drop : function(cworld , cmap){
 			let contentRoot = $(".tab_shipdrop .content_root");
 			contentRoot.empty();
 			let factory = $(".tab_shipdrop .factory");
 			let hq = PlayerManager.hq.id;
-			let world = parseInt(this.selectedWorld);
-			let subMap = parseInt(this.selectedMap);
-			let sorties37_1 = KC3Database.con.sortie.where("world").equals(world).and( data => data.mapnum === subMap && data.hq === hq);
+			let world = parseInt(cworld);
+			let subMap = parseInt(cmap);
+			let sorties37_1;
+			if (world <= 6) sorties37_1 = KC3Database.con.sortie.where("world").equals(world).and( data => data.mapnum === subMap && data.hq === hq);
+			else sorties37_1 = KC3Database.con.sortie.where("world").equals(world).and( data => data.mapnum === subMap && data.hq === hq);
 			let dropTable = {};
 			let pList = [];
 			//first: get info from KC3Database and count the drop of different node
@@ -74,7 +76,6 @@
 						let keys_ship = Object.keys( node_tot[node] );
 						keys_ship.sort( (ka,kb) => ka - kb );
 						$.each(keys_ship , function(i , ship_id){
-							console.log( ship_id , node_tot[node][ship_id]);
 							let shipPanel = $(".ship", factory).clone();
 							if (ship_id !== "0") {
 								$("img", shipPanel).attr("src", KC3Meta.getIcon( ship_id ));
@@ -122,29 +123,40 @@
 				let world_value = world.value;
 				self.hash_world_to_index[world_value] = world.dataset.world_num;
 			});
-			//console.log(self.hash_world_to_index);
 			world_list.change(function(){
 				self.selectedWorld = self.hash_world_to_index[this.value];
 				map_list.empty();
 				map_clone.appendTo(map_list);
 
 				//update maps that can be selected
+				let diffStr = ["E","N","H"];
+
+				//update difficulty that can be selected
 				$.each(self.maps , function(index , element){
 					let cWorld = (""+element.id).substr(0, (""+element.id).length-1);
 					let cMap = (""+element.id).substr((""+element.id).length-1);
 
 					if(cWorld == self.selectedWorld){
-						 let map_clone = $(".factory option").clone().text(cWorld + " - " + cMap);
+						let map_clone = $(".factory option")
+						.clone().text((cWorld>=10 ? "E" : cWorld)+" - "+cMap+(function(x){
+							switch(x){
+								case 1: case 2: case 3:
+									return " " + diffStr[x-1];
+								default:
+									return "";
+							}
+						})(element.difficulty));
 						 map_clone.attr("value" , cMap);
 						 map_clone.appendTo(map_list);
 					}
 				});
 			});
 
-			map_list.change(function(){
+			map_list.change(function() {
 				self.selectedMap = this.value;
 				self.fresh_ship_drop(self.selectedWorld , self.selectedMap);
 			});
+
 		},
 
 		/* EXECUTE: mandatory

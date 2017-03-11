@@ -27,7 +27,7 @@
 			callable -- database function
 	*/
 	
-	window.KC3SortieLogs = function(tabCode , exexe) {
+	window.KC3SortieLogs = function(tabCode) {
 		this.tabSelf        = KC3StrategyTabs[tabCode];
 		
 		this.maps           = {};
@@ -209,14 +209,11 @@
 				self.maps = JSON.parse(localStorage.maps || "{}");
 				// Add all maps in this world selection
 				var mapBox,countMaps;
-				mapBox = $(".tab_"+tabCode+" .factory .map_box").clone();
-				if(typeof exexe == "undefined" || typeof exexe.show_all == "undefined" || exexe.show_all === true){
-					mapBox.appendTo(".tab_"+tabCode+" .map_list");
-					$(".map_title", mapBox)
-						.text((function(x){
-							return (x>=10) ? KC3Meta.term("StrategyEventGo") : ("All W"+x);
-						})(self.selectedWorld));
-				}
+				mapBox = $(".tab_"+tabCode+" .factory .map_box").clone().appendTo(".tab_"+tabCode+" .map_list");
+				$(".map_title", mapBox)
+					.text((function(x){
+						return (x>=10) ? KC3Meta.term("StrategyEventGo") : ("All W"+x);
+					})(self.selectedWorld));
 
 				for(countMaps = 1;!!self.maps["m"+self.selectedWorld+countMaps];countMaps++){}
 				$(".tab_"+tabCode+" .map_list").css("width",Math.max(7,countMaps)*100);
@@ -346,11 +343,6 @@
 			self.selectedMap = Number(mapNum);
 			$(".tab_"+tabCode+" .map_box").removeClass("active");
 			$(".tab_"+tabCode+" .map_box[data-map_num={0}]".format(self.selectedMap)).addClass("active");
-			if(typeof exexe != "undefined"){
-				exexe.world = self.selectedWorld;
-				exexe.subMap = self.selectedMap;
-				exexe.exe();
-			}
 			self.showMap();
 		};
 		
