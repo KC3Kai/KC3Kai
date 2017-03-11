@@ -2341,13 +2341,6 @@ button, input, select, textarea {
 }
 
 /*ship-drop*/
-.tab_shipdrop .btn-group {
-	border:1px solid #555 !important;
-}
-.tab_shipdrop .btn-group button {
-    background-color: #141414;
-    background-image: none;
-    border: 0px none !important;
-	border-radius:0px !important;
-	color: #aaa;
+.tab_shipdrop .content_root .node_drop .ship{
+	background:#303030;
 }

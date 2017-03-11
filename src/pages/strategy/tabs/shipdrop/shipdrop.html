@@ -9,22 +9,30 @@
 	<div class="help_a"></div>
 </div>
 
-<!-- WORLD LIST -->
-<div class="btn-group">
-	<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">原始 
-		<span class="caret"></span>
-	</button>
-	<ul class="dropdown-menu" role="menu">
-		<li><a href="#">功能</a></li>
-		<li><a href="#">另一个功能</a></li>
-		<li><a href="#">其他</a></li>
-		<li class="divider"></li>
-		<li><a href="#">分离的链接</a></li>
-	</ul>
-</div>
+<div class = "control_panel">
+	<!-- WORLD LIST -->
+	<select class="world_list">
+		<option value="title" data-world_num="0">select world...</option>
+		<option value="World 1" data-world_num="1">World 1</option>
+		<option value="World 2" data-world_num="2">World 2</option>
+		<option value="World 3" data-world_num="3">World 3</option>
+		<option value="World 4" data-world_num="4">World 4</option>
+		<option value="World 5" data-world_num="5">World 5</option>
+		<option value="World 6" data-world_num="6">World 6</option>
+		<option value="Spring 2015" data-world_num="30">Spring 2015</option>
+		<option value="Summer 2015" data-world_num="31">Summer 2015</option>
+		<option value="Fall 2015" data-world_num="32">Fall 2015</option>
+		<option value="Winter 2016" data-world_num="33">Winter 2016</option>
+		<option value="Spring 2016" data-world_num="34">Spring 2016</option>
+		<option value="Summer 2016" data-world_num="35">Summer 2016</option>
+		<option value="Fall 2016" data-world_num="36">Fall 2016</option>
+		<option value="Winter 2017" data-world_num="37">Winter 2017</option>
+	</select>
 
-<!-- MAP LIST -->
-<div class="map_list">
+	<!-- MAP LIST -->
+	<select class="map_list">
+		<option value="0">select map...</option>
+	</select>
 </div>
 
 <!-- CONTENT -->
@@ -33,22 +41,21 @@
 	</div>
 </div>
 
+
 <!-- CLONABLES -->
 <div class="factory">
 	
-	<!-- MAP BOX (up to 7 instances under a single world) -->
-	<div class="map_box hover">
-		<div class="map_title">Template</div>
+	<!--map_option-->
+	<option>select map...</option>
+
+	<div class="node_drop">
+		<div class="node_name"></div>
+		<div class="ships"></div>
 	</div>
-	<div class="sortie_box">
-		<div class="node_drop">
-			<div class="node_name"></div>
-			<div class="ships"></div>
-		</div>
-		<div class="ship">
-			<img />
-			<div class="drop_times"></div>
-		</div>
+
+	<div class="ship">
+		<img />
+		<div class="drop_times"></div>
 	</div>
 	
 </div>
