@@ -136,6 +136,56 @@
 	display:none;
 }
 
+.tab_event .map_box.cleared {
+    position: relative;
+}
+
+.tab_event .map_box.cleared.easy:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -1px;
+    right: -8px;
+    width: 21px;
+    height: 36px;
+    background: transparent url('../../../../assets/img/client/medals/easy_medal.png');
+    background-size: contain;
+    pointer-events: none;
+}
+
+.tab_event .map_box.cleared.normal:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -1px;
+    right: -8px;
+    width: 29px;
+    height: 37px;
+    background: transparent url('../../../../assets/img/client/medals/normal_medal.png');
+    background-size: contain;
+    pointer-events: none;
+}
+
+.tab_event .map_box.cleared.hard:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -1px;
+    right: -8px;
+    width: 34px;
+    height: 38px;
+    background: transparent url('../../../../assets/img/client/medals/hard_medal.png');
+    background-size: contain;
+    pointer-events: none;
+}
+
+.tab_event .map_box.cleared.active.easy:after,
+.tab_event .map_box.cleared.active.normal:after,
+.tab_event .map_box.cleared.active.hard:after {
+    top: -3px;
+    right: -10px;
+}
+
 
 /* Map not cleared and no gauge */
 .tab_event .map_box.noclearnogauge .map_title {
@@ -144,6 +194,14 @@
 }
 .tab_event .map_box.noclearnogauge .map_gauge {
 	display:none;
+}
+
+.tab_event .page_list .sortie-count {
+    font-size: 11px;
+    line-height: 12px;
+    color: #666;
+	float: right;
+	margin-top: 5px;
 }
 
 .tab_event .page_list .pagination {
