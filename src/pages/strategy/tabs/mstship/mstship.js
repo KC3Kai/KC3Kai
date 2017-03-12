@@ -43,6 +43,7 @@
 		atLevelChange: null,
 		// Merged master ship data with abyssal stats and seasonal CGs
 		mergedMasterShips: {},
+		damagedBossFileSuffix: "_d",
 		
 		/* INIT
 		Prepares static data needed
@@ -188,6 +189,11 @@
 				});
 			}
 			
+			// Show damaged CG of abyssal boss
+			$(".tab_mstship .shipInfo .boss").on("click", function(e){
+				self.showShip(self.currentShipId, true);
+			});
+			
 			// Link to quotes developer page
 			if(ConfigManager.devOnlyPages){
 				$(".tab_mstship .shipInfo").on("click", ".to-quotes", function(e){
@@ -258,7 +264,7 @@
 			shipList.scrollTop(scrollTop);
 		},
 
-		showShip :function(ship_id){
+		showShip :function(ship_id, tryDamagedGraph = false){
 			ship_id = Number(ship_id||"405");
 			var
 				self = this,
@@ -294,11 +300,11 @@
 			this.currentGraph = shipFile;
 			this.currentCardVersion = shipVersions[0];
 			
-			var shipSrc = "../../../../assets/swf/card.swf?sip="+this.server_ip
-					+"&shipFile="+shipFile
-					+"&abyss="+(ship_id>500 && ship_id<=800 ?1:0)
-					+(ship_id > 800 ? "&forceFrame=6":"")
-					+(!this.currentCardVersion?"":"&ver="+this.currentCardVersion);
+			var shipSrc = "../../../../assets/swf/card.swf?sip=" + this.server_ip
+					+ ("&shipFile=" + shipFile + (tryDamagedGraph ? this.damagedBossFileSuffix : ""))
+					+ ("&abyss=" + (ship_id > 500 && ship_id <= 800 ? 1 : 0))
+					+ (ship_id > 800 ? "&forceFrame=6" : "")
+					+ (!this.currentCardVersion ? "" : "&ver=" + this.currentCardVersion);
 			
 			$(".tab_mstship .shipInfo .cgswf embed").remove();
 			$("<embed/>")
