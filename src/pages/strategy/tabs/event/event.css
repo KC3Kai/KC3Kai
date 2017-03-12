@@ -200,11 +200,11 @@
 	margin:5px 0px 0px 0px;
 }
 .tab_event .page_list .sortie-count {
-	font-size:12px;
+	font-size:11px;
 	line-height:12px;
-	color:#337ab7;
-	float:right;
-	margin:13px 10px 0px 10px;
+	float:left;
+	position:absolute;
+	margin:-6px 0px 0px 500px;
 }
 
 /* SORTIE LIST

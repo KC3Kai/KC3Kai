@@ -989,6 +989,10 @@ body {
 
 /* MAPS
 --------------------------------*/
+.tab_event .page_list .sortie-count,
+.tab_maps .page_list .sortie-count {
+	color:#337ab7;
+}
 .tab_event .world_list,
 .tab_maps .world_list {
 	background:#f0f5ff;

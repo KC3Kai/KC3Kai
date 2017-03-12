@@ -1264,6 +1264,10 @@ button, input, select, textarea {
 
 /* MAPS
 --------------------------------*/
+.tab_event .page_list .sortie-count,
+.tab_maps .page_list .sortie-count {
+	color:#fff;
+}
 .tab_event .world_box.active,
 .tab_maps .world_box.active {
 	background:#555;
