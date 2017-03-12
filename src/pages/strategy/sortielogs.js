@@ -355,7 +355,6 @@
 			var self = this;
 			var countPages = Math.ceil( countSorties / this.itemsPerPage );
 			$(".tab_"+tabCode+" .page_list").html('<ul class="pagination pagination-sm"></ul>');
-            if (countSorties > 0) {$(".tab_"+tabCode+" .page_list").prepend('<div class="sortie-count">Total sorties: ' + countSorties + '</div>');}
 			
 			if(countPages > 0){
 				$(".tab_"+tabCode+" .pagination").twbsPagination({
@@ -368,6 +367,8 @@
 				});
 				self.pageNum = 1;
 				self.showPage();
+				$(".tab_"+tabCode+" .page_list")
+					.append('<div class="sortie-count">Total: {0} </div>'.format(countSorties));
 			}else{
 				$(".tab_"+tabCode+" .pagination").hide();
 			}
@@ -379,7 +380,7 @@
 		---------------------------------*/
 		this.showPage = function(){
 			var self = this;
-			$(".tab_"+tabCode+" .pagination").hide();
+			$(".tab_"+tabCode+" .pagination").show();
 			$(".tab_"+tabCode+" .sortie_list").empty();
 			
 			// Show all sorties
@@ -686,7 +687,6 @@
 				}catch(e){console.error(e.stack);}
 			});
 			
-			$(".tab_"+tabCode+" .pagination").show();
 			$(".tab_"+tabCode+" .sortie_list").createChildrenTooltips();
 		};
 		

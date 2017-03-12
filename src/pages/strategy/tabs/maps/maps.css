@@ -100,16 +100,15 @@
 	display:none;
 }
 
-.tab_maps .page_list .sortie-count {
-    font-size: 11px;
-    line-height: 12px;
-    color: #666;
-	float: right;
-	margin-top: 5px;
-}
-
 .tab_maps .page_list .pagination {
 	margin:5px 0px 0px 0px;
+}
+.tab_maps .page_list .sortie-count {
+	font-size:12px;
+	line-height:12px;
+	color:#337ab7;
+	float:right;
+	margin:13px 10px 0px 10px;
 }
 
 /* SORTIE LIST
