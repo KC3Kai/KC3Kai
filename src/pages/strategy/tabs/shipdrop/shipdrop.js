@@ -170,6 +170,17 @@
 		gen_ship_filter : function() {
 			let self = this;
 			let sCtr, cElm;
+			let cBox_filter = function() {
+				return $(this).data("id") === "" + sCtr;
+			}
+			let cBox_on = function(cCtr , cBox) {
+				$(".filter_box .filter_check" , cBox).toggle();
+				if(self.ship_filter_checkbox[cCtr + ""])
+					self.ship_filter_checkbox[cCtr + ""] = false;
+				else
+					self.ship_filter_checkbox[cCtr + ""] = true;
+				self.fresh_ship_drop(self.selectedWorld , self.selectedMap);
+			}
 
 			for(sCtr in KC3Meta._stype){
 				// stype 1, 12, 15 not used by shipgirl
@@ -180,18 +191,9 @@
 					if(typeof self.ship_filter_checkbox[sCtr + ""] === "undefined")
 						self.ship_filter_checkbox[sCtr + ""] = true;
 					let cBox = $(".tab_shipdrop .filters .ship_types .ship_filter_type")
-						.filter( function() {
-						 return $(this).data("id") === "" + sCtr
-					});
+						.filter( cBox_filter );
 					let cCtr = sCtr;
-					cBox.on("click" , function() {
-						$(".filter_box .filter_check" , cBox).toggle();
-						if(self.ship_filter_checkbox[cCtr + ""])
-							self.ship_filter_checkbox[cCtr + ""] = false;
-						else
-							self.ship_filter_checkbox[cCtr + ""] = true;
-						self.fresh_ship_drop(self.selectedWorld , self.selectedMap);
-					});
+					cBox.on("click" , cBox_on.bind(this , cCtr , cBox));
 				}
 			}
 		},
