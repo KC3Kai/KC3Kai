@@ -790,6 +790,22 @@ Provides access to data on built-in JSON files
 			} else {
 				return this._gunfit[shipMstId];
 			}
+		},
+		
+		sortedGunfits :function(shipMstId){
+			var gunfits = this.gunfit(shipMstId);
+			if(gunfits !== false) {
+				var sortedGearIds = Object.keys(gunfits).sort((a, b) =>
+						// Unknown go last
+						(gunfits[a] === "" || gunfits[b] === "") ? 1 :
+						// By day bonus desc
+						gunfits[b][0] - gunfits[a][0]
+						// Fallback to ID asc
+						|| Number(a) - Number(b)
+				);
+				return sortedGearIds.map(id => ({id: id, bonus: gunfits[id]}));
+			}
+			return false;
 		}
 	};
 	

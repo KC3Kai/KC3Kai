@@ -614,9 +614,8 @@
 				$(".aaciList").empty();
 				var aaciList = AntiAir.sortedPossibleAaciList( AntiAir.shipAllPossibleAACIs(shipData) );
 				if (aaciList.length > 0) {
-					var aaciBox, equipIcon, i;
 					$.each(aaciList, function(idx, aaciObj){
-						aaciBox = $(".tab_mstship .factory .aaciPattern").clone();
+						let aaciBox = $(".tab_mstship .factory .aaciPattern").clone();
 						$(".apiId", aaciBox).text("[{0}]".format(aaciObj.id));
 						if(aaciObj.icons[0] > 0) {
 							$(".shipIcon img", aaciBox)
@@ -626,8 +625,8 @@
 							$(".shipIcon img", aaciBox).hide();
 						}
 						if(aaciObj.icons.length > 1) {
-							for(i = 1; i < aaciObj.icons.length; i++) {
-								equipIcon = String(aaciObj.icons[i]).split(/[+-]/);
+							for(let i = 1; i < aaciObj.icons.length; i++) {
+								let equipIcon = String(aaciObj.icons[i]).split(/[+-]/);
 								$("<img/>")
 									.attr("src", "../../../../assets/img/items/"+equipIcon[0]+".png")
 									.attr("title", KC3Meta.aacitype(aaciObj.id)[i] || "")
@@ -655,29 +654,31 @@
 				
 				// GUN FITS
 				$(".gunfitList").empty();
-				var gunfits = KC3Meta.gunfit(shipData.api_id);
+				var gunfits = KC3Meta.sortedGunfits(shipData.api_id);
 				if (gunfits) {
-					var gunfitBox, gearObj;
-					$.each(gunfits, function(itemId, fitValue){
-						
-						gunfitBox = $(".tab_mstship .factory .fitgear").clone();
-						gearObj = KC3Master.slotitem(itemId);
-						
+					$.each(gunfits, function(idx, gunfitObj){
+						let itemId = gunfitObj.id;
+						let fitValue = gunfitObj.bonus;
+						let gunfitBox = $(".tab_mstship .factory .fitgear").clone();
+						let gearObj = KC3Master.slotitem(itemId);
 						$(".gearName", gunfitBox).text(KC3Meta.gearName(gearObj.api_name));
 						
 						if (fitValue === "") {
-							$(".gearFit", gunfitBox).text(KC3Meta.term("FitWeightUnknown"));
-							gunfitBox.addClass("fit_unknown");
+							$(".gearFitDay", gunfitBox).text(KC3Meta.term("FitWeightUnknown"))
+								.addClass("fit_unknown");
+							$(".gearFitNight", gunfitBox).width(0);
 						} else {
-							$(".gearFit", gunfitBox).text(KC3Meta.term("FitWeight_"+fitValue));
-							fitValue = parseInt(fitValue, 10);
-							if (fitValue < 0) {
-								gunfitBox.addClass("fit_penalty");
-							} else if (fitValue > 0) {
-								gunfitBox.addClass("fit_bonus");
-							} else {
-								gunfitBox.addClass("fit_neutral");
-							}
+							var fillGearFitValue = function(value, className) {
+								value = Number(value);
+								$(".gearFit{0}".format(className), gunfitBox).text(
+									(value > 0 ? "+" : "") + value
+								);
+								$(".gearFit{0}".format(className), gunfitBox).addClass(
+									["fit_penalty", "fit_neutral", "fit_bonus"][Math.sign(value) + 1]
+								);
+							};
+							fillGearFitValue(fitValue[0], "Day");
+							fillGearFitValue(fitValue[1], "Night");
 						}
 						
 						gunfitBox.appendTo(".gunfitList");

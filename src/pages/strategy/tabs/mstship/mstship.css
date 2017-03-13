@@ -568,6 +568,7 @@
 	padding:2px 5px;
 	border-radius:6px;
 	line-height:20px;
+	background:#ccc;
 }
 .tab_mstship .shipInfo .gunfit .fitgear .gearName {
 	width:230px;
@@ -579,28 +580,43 @@
 	overflow:hidden;
 	text-overflow:ellipsis;
 }
-.tab_mstship .shipInfo .gunfit .fitgear .gearFit {
-	width:150px;
+.tab_mstship .shipInfo .gunfit .fitgear .gearFitDay {
+	width:75px;
 	height:20px;
+	background:#ace;
+	border-radius:3px;
 	float:left;
 	text-align:center;
-	font-size:10px;
+	font-size:11px;
+	font-weight:bold;
 	white-space:nowrap;
 	overflow:hidden;
 }
-.tab_mstship .shipInfo .gunfit .fitgear.fit_bonus {
-	color:#fff;
-	background:#5a5;
+.tab_mstship .shipInfo .gunfit .fitgear .gearFitNight {
+	width:75px;
+	height:20px;
+	background:#258;
+	border-radius:3px;
+	float:left;
+	text-align:center;
+	font-size:11px;
+	font-weight:bold;
+	white-space:nowrap;
+	overflow:hidden;
 }
-.tab_mstship .shipInfo .gunfit .fitgear.fit_neutral {
-	color:#000;
-	background:#ccc;
+.tab_mstship .shipInfo .gunfit .fitgear .fit_bonus {
+	color:#2b0;
 }
-.tab_mstship .shipInfo .gunfit .fitgear.fit_penalty {
-	color:#fff;
-	background:#a55;
+.tab_mstship .shipInfo .gunfit .fitgear .fit_neutral {
+	color:#333;
 }
-.tab_mstship .shipInfo .gunfit .fitgear.fit_unknown {
+.tab_mstship .shipInfo .gunfit .fitgear .fit_penalty {
+	color:#d11;
+}
+.tab_mstship .shipInfo .gunfit .fitgear .fit_unknown {
+	width:150px;
+	font-weight:normal;
+	background:inherit;
 }
 
 /* SPECIAL (Salt Check)
