@@ -226,6 +226,20 @@
 							if(element.clear == 1){
 								$(".map_hp_txt", mapBox).text("Cleared!");
 								mapBox.addClass("cleared");
+								if (cWorld>=10) {
+									mapBox.addClass((function(x){
+										switch(x){
+											case 1:
+												return "easy";
+											case 2:
+												return "normal";
+											case 3:
+												return "hard";
+											default:
+												return "";
+										}
+									})(element.difficulty));
+								}
 								if(typeof element.maxhp != "undefined")
 									$(".map_hp_txt", mapBox).lazyInitTooltip()
 										.attr("title", "{0} / {1}".format(element.curhp, element.maxhp));
@@ -353,6 +367,9 @@
 				});
 				self.pageNum = 1;
 				self.showPage();
+				$(".tab_"+tabCode+" .page_list")
+					.prepend('<div class="sortie_count">Total pages: {0}, sorties: {1}</div>'
+						.format(countPages, countSorties));
 			}else{
 				$(".tab_"+tabCode+" .pagination").hide();
 			}
@@ -364,7 +381,7 @@
 		---------------------------------*/
 		this.showPage = function(){
 			var self = this;
-			$(".tab_"+tabCode+" .pagination").hide();
+			$(".tab_"+tabCode+" .pagination").show();
 			$(".tab_"+tabCode+" .sortie_list").empty();
 			
 			// Show all sorties
@@ -619,6 +636,7 @@
 											$(nodeName+"L",nodeBox).text("-"+thisNode["plane"+planeType][side][1]);
 									});
 								});
+								$(".node_planes", nodeBox).attr("title", thisNode.buildAirBattleLossMessage());
 							}
 							
 							// Node EXP
@@ -670,7 +688,6 @@
 				}catch(e){console.error(e.stack);}
 			});
 			
-			$(".tab_"+tabCode+" .pagination").show();
 			$(".tab_"+tabCode+" .sortie_list").createChildrenTooltips();
 		};
 		

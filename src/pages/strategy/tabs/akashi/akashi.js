@@ -161,7 +161,7 @@
 				$(".eq_res_value.consumed_name.plus{0} .val".format(stars), ResBox)
 					.text( KC3Meta.gearName(consumedItem.api_name) );
 				$(".eq_res_value.consumed_name.plus{0} .val".format(stars), ResBox)
-					.attr("title", KC3Meta.gearName(consumedItem.api_name) );
+					.attr("title", "[{0}] {1}".format(consumedItem.api_id, KC3Meta.gearName(consumedItem.api_name)) );
 				$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), ResBox)
 					.text( "x{0}".format(toAmountStr(amount)) );
 			};
@@ -209,7 +209,6 @@
 				
 				$(".eq_name", ThisBox).text( ItemName );
 				$(".eq_name", ThisBox).attr("title", "[{0}] {1}".format(itemId, ItemName) );
-				//ThisBox.attr("title", ItemName );
 				
 				hasShip = false;
 				// If shipList not empty means all ships can upgrade this item
@@ -237,7 +236,7 @@
 					$(".eq_ship_icon img", ShipBox).attr("alt", ShipId );
 					$(".eq_ship_icon img", ShipBox).click(shipClickFunc);
 					$(".eq_ship_name", ShipBox).text( KC3Meta.shipName( KC3Master.ship(ShipId).api_name ) );
-					$(".eq_ship_name", ShipBox).attr("title", KC3Meta.shipName( KC3Master.ship(ShipId).api_name ) );
+					$(".eq_ship_name", ShipBox).attr("title", "[{0}] {1}".format(ShipId, KC3Meta.shipName( KC3Master.ship(ShipId).api_name )) );
 					$(".eq_ships", ThisBox).append(ShipBox);
 				}
 				
@@ -326,7 +325,7 @@
 							$(".eq_next .eq_res_icon", ResBox).attr("alt", upgradedItem.api_id);
 							$(".eq_next .eq_res_icon", ResBox).click(gearClickFunc);
 							$(".eq_next .eq_res_name", ResBox).text( KC3Meta.gearName(upgradedItem.api_name) );
-							$(".eq_next .eq_res_name", ResBox).attr("title", KC3Meta.gearName(upgradedItem.api_name) );
+							$(".eq_next .eq_res_name", ResBox).attr("title", "[{0}] {1}".format(upgradedItem.api_id, KC3Meta.gearName(upgradedItem.api_name)) );
 						} else {
 							$(".eq_res_line.plusmax", ResBox).hide();
 							$(".eq_next", ResBox).hide();

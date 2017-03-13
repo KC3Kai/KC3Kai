@@ -1,3 +1,4 @@
+﻿@charset "utf-8";
 .tab_expcalc {
 	width:680px;
 }
@@ -39,6 +40,18 @@
 }
 .tab_expcalc .box_other {
 	margin:0px 0px 10px 0px;
+}
+
+.tab_expcalc .box_control_line dl dd.up:after {
+	content: " ▲";
+	font-size: 12px;
+	vertical-align: text-top;
+}
+
+.tab_expcalc .box_control_line dl dd.down:after {
+	content: " ▼";
+	font-size: 12px;
+	vertical-align: text-top;
 }
 
 /* RECORD

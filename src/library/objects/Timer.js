@@ -51,14 +51,21 @@ Has functions for TimerManager to use
 		}
 	};
 	
-	KC3Timer.prototype.face = function( faceId){
+	KC3Timer.prototype.face = function(faceId){
 		if(typeof faceId != "undefined"){ this.faceId = faceId; }
 		if(this.faceId > 0){
 			$(".timer-img img", this.element).attr("src", KC3Meta.shipIcon(this.faceId, "../../../../assets/img/ui/empty.png"));
 			$(".timer-img", this.element).attr("title", KC3Meta.shipName( KC3Master.ship(this.faceId).api_name ) );
+			$(".timer-img", this.element).data("masterId", this.faceId).off("dblclick")
+				.on("dblclick", function(e){
+					(new RMsg("service", "strategyRoomPage", {
+						tabPath: "mstship-{0}".format($(this).data("masterId"))
+					})).execute();
+				});
 			$(".timer-img img", this.element).show();
 		}else{
-			$(".timer-img", this.element).attr("title", "");
+			$(".timer-img", this.element).attr("title", "")
+				.removeData("masterId").off("dblclick");
 			$(".timer-img img", this.element).hide();
 		}
 		return $(".timer-img", this.element);

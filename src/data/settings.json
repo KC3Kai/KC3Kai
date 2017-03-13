@@ -64,6 +64,7 @@
 			{
 				"id": "forceDMMLogin",
 				"name": "SettingsForceDMMLogin",
+				"hide" : 1,
 				"type": "check"
 			},
 			{
@@ -259,8 +260,7 @@
 					"choices" : [
 						[ 1, "SettingsAFPNoBonus" ],
 						[ 2, "SettingsAFPVeteran" ],
-						[ 3, "SettingsAFPRange" ],
-						[ 4, "SettingsIntercept" ]
+						[ 3, "SettingsAFPRange" ]
 					]
 				}
 			},

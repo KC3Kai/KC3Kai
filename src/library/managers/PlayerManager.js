@@ -62,7 +62,7 @@ Does not include Ships and Gears which are managed by other Managers
 			[0,1,2,3].forEach(function(i){
 				self.fleets[i].update( data[i] || {} );
 			});
-			localStorage.fleets = JSON.stringify(this.fleets);
+			this.saveFleets();
 		},
 
 		setBases :function( data ){
@@ -76,6 +76,48 @@ Does not include Ships and Gears which are managed by other Managers
 			}
 			localStorage.bases = JSON.stringify(self.bases);
 			localStorage.setObject("baseConvertingSlots", self.baseConvertingSlots);
+		},
+
+		setBasesOnWorldMap :function( data ){
+			var airBase = data.api_air_base,
+				mapInfo = data.api_map_info;
+			if(typeof airBase !== "undefined") {
+				// Map and keep World IDs only
+				var openedWorldIds = (mapInfo || []).map(m => m.api_id)
+					.map(id => String(id).slice(0, -1));
+				// Remove duplicate IDs
+				openedWorldIds = [...new Set(openedWorldIds)];
+				// Filter unset land bases after event if event world API data still exist
+				var openedBases = airBase.filter(ab => openedWorldIds.indexOf(String(ab.api_area_id)) > -1);
+				this.setBases(openedBases);
+				return true;
+			} else if(this.bases[0].map > 0) {
+				// Clean land bases after event if World 6 not opened
+				this.setBases([]);
+				return true;
+			}
+			// No base is set, tell invoker
+			return false;
+		},
+
+		setBaseConvertingSlots :function( data ){
+			// Clear Array to empty (reference unchanged)
+			this.baseConvertingSlots.length = 0;
+			if(typeof data !== "undefined") {
+				// Let client know: these types of slotitem are free to equipped.
+				// KC3 does not track them for now.
+				/*
+				if(!!data.api_unset_slot){
+					// Same structure with `api_get_member/require_info.api_unsetslot`
+				}
+				*/
+				// Let client know: these slotitems are moving, not equippable.
+				// For now, moving peroid of LBAS plane is 12 mins.
+				if(Array.isArray(data.api_base_convert_slot)) {
+					[].push.apply(this.baseConvertingSlots, data.api_base_convert_slot);
+				}
+			}
+			localStorage.setObject("baseConvertingSlots", this.baseConvertingSlots);
 		},
 
 		setRepairDocks :function( data ){
@@ -295,6 +337,10 @@ Does not include Ships and Gears which are managed by other Managers
 			this.hq.lastMaterial = data.matAbs || this.hq.lastMaterial;
 
 			this.hq.save();
+		},
+
+		saveFleets :function(){
+			localStorage.fleets = JSON.stringify(this.fleets);
 		},
 
 		loadFleets :function(){

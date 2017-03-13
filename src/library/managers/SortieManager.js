@@ -437,10 +437,14 @@ Xxxxxxx
 			if(this.onCat)
 				this.materialGain.fill(0);
 			// Fill the resource gain to the current material checkout
+			// Not need to increase lastMaterial because they've already updated at API 'api_port/port'
+			// Otherwise lastMaterial will become 'doubled' issue.
+			/*
 			this.materialGain.forEach(function(x,i){
 				if(i<(PlayerManager.hq.lastMaterial || []).length)
 					PlayerManager.hq.lastMaterial[i] += x;
 			});
+			*/
 			// Control Consumption of the Current Sortie
 			cons.resc.forEach(function(matr,indx){
 				self.materialGain[indx] += matr;

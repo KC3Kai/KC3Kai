@@ -102,7 +102,8 @@ Previously known as "Reactor"
 			PlayerManager.consumables.fcoin = response.api_data.api_basic.api_fcoin;
 			
 			KC3ShipManager.max = response.api_data.api_basic.api_max_chara;
-			KC3GearManager.max = response.api_data.api_basic.api_max_slotitem;
+			// Not sure why, but always shown +3 at client side. see #1860
+			KC3GearManager.max = 3 + response.api_data.api_basic.api_max_slotitem;
 			
 			PlayerManager.setFleets( response.api_data.api_deck_port );
 			PlayerManager.setRepairDocks( response.api_data.api_ndock );
@@ -154,20 +155,7 @@ Previously known as "Reactor"
 			
 			PlayerManager.loadBases();
 			
-			PlayerManager.baseConvertingSlots = [];
-			if(typeof response.api_data.api_plane_info !== "undefined"){
-				// Let client know: these types of slotitem are free
-				/*
-				if(!!response.api_data.api_plane_info.api_unset_slot){
-				}
-				*/
-				// Let client know: these slotitems are moving, not equippable
-				// For now, moving peroid of LBAS plane is 12 mins.
-				if(Array.isArray(response.api_data.api_plane_info.api_base_convert_slot)){
-					[].push.apply(PlayerManager.baseConvertingSlots, response.api_data.api_plane_info.api_base_convert_slot);
-				}
-			}
-			localStorage.setObject("baseConvertingSlots", PlayerManager.baseConvertingSlots);
+			PlayerManager.setBaseConvertingSlots(response.api_data.api_plane_info);
 			
 			KC3Network.trigger("HQ");
 			KC3Network.trigger("Consumables");
@@ -200,7 +188,7 @@ Previously known as "Reactor"
 			PlayerManager.repairSlots = response.api_data.api_count_ndock;
 			PlayerManager.buildSlots = response.api_data.api_count_kdock;
 			KC3ShipManager.max = response.api_data.api_max_chara;
-			KC3GearManager.max = response.api_data.api_max_slotitem;
+			KC3GearManager.max = 3 + response.api_data.api_max_slotitem;
 			
 			PlayerManager.setStatistics({
 				exped: {
@@ -243,7 +231,7 @@ Previously known as "Reactor"
 			PlayerManager.repairSlots = response.api_data.api_ndoc;
 			PlayerManager.buildSlots = response.api_data.api_kdoc;
 			KC3ShipManager.max = response.api_data.api_ship[1];
-			KC3GearManager.max = response.api_data.api_slotitem[1];
+			KC3GearManager.max = 3 + response.api_data.api_slotitem[1];
 			
 			PlayerManager.setStatistics({
 				exped: {
@@ -488,7 +476,7 @@ Previously known as "Reactor"
 		"api_req_hensei/preset_select":function(params, response, headers){
 			var deckId = parseInt(params.api_deck_id, 10);
 			PlayerManager.fleets[deckId-1].update( response.api_data );
-			localStorage.fleets = JSON.stringify(PlayerManager.fleets);
+			PlayerManager.saveFleets();
 			KC3Network.trigger("Fleet", { switchTo: deckId });
 		},
 		
@@ -573,7 +561,7 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_member/updatedeckname":function(params, response, headers){
 			PlayerManager.fleets[params.api_deck_id-1].name = decodeURIComponent(params.api_name);
-			localStorage.fleets = JSON.stringify(PlayerManager.fleets);
+			PlayerManager.saveFleets();
 		},
 		
 		/*-------------------------------------------------------*/
@@ -682,39 +670,55 @@ Previously known as "Reactor"
 		/* Change fleet member
 		-------------------------------------------------------*/
 		"api_req_hensei/change":function(params, response, headers){
-			var FleetIndex = parseInt(params.api_id, 10);
+			var fleetIndex = parseInt(params.api_id, 10);
 			
 			// If removing all ships except flagship
 			if(typeof response.api_data != "undefined"){
 				if(typeof response.api_data.api_change_count != "undefined"){
-					PlayerManager.fleets[ FleetIndex-1 ].clearNonFlagShips();
-					KC3Network.trigger("Fleet", { switchTo: FleetIndex });
+					PlayerManager.fleets[ fleetIndex-1 ].clearNonFlagShips();
+					KC3Network.trigger("Fleet", { switchTo: fleetIndex });
 					return true;
 				}
 			}
 			
-			// Ship swapping
+			// Ship deploying / removing / swapping
+			// Concat all ship IDs in all fleets into an array
 			var flatShips  = PlayerManager.fleets
 				.map(function(x){ return x.ships; })
 				.reduce(function(x,y){ return x.concat(y); });
-			var ChangedIndex = parseInt(params.api_ship_idx,10);
-			var ChangingShip = parseInt(params.api_ship_id,10);
-			var OldSwaperSlot = flatShips.indexOf(ChangingShip); // move to slot
-			var OldSwapeeSlot = flatShips[ (FleetIndex-1) * 6 + ChangedIndex ]; // swap from slot
-			var oldFleet = Math.floor(OldSwaperSlot / 6);
-			if(ChangingShip > -1){
-				// If swapping on same fleet
-				if(OldSwaperSlot >= 0){
-					PlayerManager.fleets[oldFleet].ships[OldSwaperSlot % 6] = OldSwapeeSlot;
-					PlayerManager.fleets[oldFleet].checkAkashi(true);
+			// Target ship index in a fleet
+			var changedIndex = parseInt(params.api_ship_idx, 10);
+			// Target ship ID, -1 if removed
+			var changingShip = parseInt(params.api_ship_id,10);
+			// Swap from source ship index in flat array
+			var oldSwaperSlot = flatShips.indexOf(changingShip);
+			// Swap from source ship ID, -1 if empty
+			var oldSwapeeSlot = flatShips[ (fleetIndex-1) * 6 + changedIndex ];
+			// Swap from source fleet index
+			var oldFleet = Math.floor(oldSwaperSlot / 6);
+			if(changingShip > -1){ // Deploy or swap ship
+				// Deploy ship to target fleet first, to avoid issue when swapping in the same fleet
+				PlayerManager.fleets[fleetIndex-1].ships[changedIndex] = changingShip;
+				// Swap ship from source fleet
+				if(oldSwaperSlot > -1){
+					PlayerManager.fleets[oldFleet].ships[oldSwaperSlot % 6] = oldSwapeeSlot;
+					// If source ship slot is empty, apply ship removing on source fleet
+					if(oldSwapeeSlot <= 0){
+						PlayerManager.fleets[oldFleet].ships.splice(oldSwaperSlot % 6, 1);
+						PlayerManager.fleets[oldFleet].ships.push(-1);
+					}
+					// If not the same fleet, also recheck akashi repair of source fleet
+					if(oldFleet !== fleetIndex-1){
+						PlayerManager.fleets[oldFleet].checkAkashi(true);
+					}
 				}
-				PlayerManager.fleets[FleetIndex-1].ships[ChangedIndex] = ChangingShip;
-			}else{
-				PlayerManager.fleets[FleetIndex-1].ships.splice(ChangedIndex, 1);
-				PlayerManager.fleets[FleetIndex-1].ships.push(-1);
+			} else { // Remove ship
+				PlayerManager.fleets[fleetIndex-1].ships.splice(changedIndex, 1);
+				PlayerManager.fleets[fleetIndex-1].ships.push(-1);
 			}
-			PlayerManager.fleets[FleetIndex-1].checkAkashi(true);
-			KC3Network.trigger("Fleet", { switchTo: FleetIndex });
+			PlayerManager.fleets[fleetIndex-1].checkAkashi(true);
+			PlayerManager.saveFleets();
+			KC3Network.trigger("Fleet", { switchTo: fleetIndex });
 		},
 		
 		/* Lock a ship
@@ -1856,12 +1860,8 @@ Previously known as "Reactor"
 			}
 			localStorage.maps = JSON.stringify(maps);
 			
-			if(typeof response.api_data.api_air_base !== "undefined") {
-				PlayerManager.setBases(response.api_data.api_air_base);
-				KC3Network.trigger("Lbas");
-			} else if(PlayerManager.bases[0].map > 0) {
-				// Clean land bases after event if World 6 not opened
-				PlayerManager.setBases([]);
+			// If LBAS info updated, trigger updating view
+			if(PlayerManager.setBasesOnWorldMap(response.api_data)) {
 				KC3Network.trigger("Lbas");
 			}
 		},
@@ -2049,13 +2049,13 @@ Previously known as "Reactor"
 				 /* [Quest ID, index of tracking, [world, map], isBoss] */
 				[ /* E RANK / It does not matter */
 					[216,0,false,false], // Bd2: Defeat the flagship of an enemy fleet
+					[210,0,false,false], // Bd3: Attack 10 abyssal fleets
 					[214,1,false, true]  // Bw1: 2nd requirement: Encounter 24 bosses (index:1)
 				],
 				[ /* D RANK */ ],
 				[ /* C RANK */ ],
 				[ /* B RANK */
 					[201,0,false,false], // Bd1: Defeat an enemy fleet
-					[210,0,false,false], // Bd3: Defeat 10 abyssal fleets (B rank+)
 					[226,0,[ 2 ], true], // Bd7: Defeat 5 bosses in World 2
 					[241,0,[3,3], true], // Bw7: Defeat 5 bosses in W3-3,3-4,3-5
 					[241,0,[3,4], true],
