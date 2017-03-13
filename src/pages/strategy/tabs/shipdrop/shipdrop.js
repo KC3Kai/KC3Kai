@@ -13,8 +13,10 @@
 		selectedMap : 0,
 		maps : {},
 		hash_world_to_index : {},
+		ship_filter_checkbox : {},
 
 		fresh_ship_drop : function(cworld , cmap){
+			let self = this;
 			let contentRoot = $(".tab_shipdrop .content_root");
 			contentRoot.empty();
 			let factory = $(".tab_shipdrop .factory");
@@ -39,7 +41,6 @@
 				});
 				pList.push(p);
 			}).then( function() {
-				
 				Promise.all(pList).then( function() {
 					let node_tot = {};
 					$.each( dropTable, function(nodeNum, dropInfo) {
@@ -74,21 +75,29 @@
 						$(".node_name", nodeDrop).text( "Node: " + node);
 						let keys_ship = Object.keys( node_tot[node] );
 						keys_ship.sort( (ka,kb) => ka - kb );
-						$.each(keys_ship , function(i , ship_id){
-							let shipPanel = $(".ship", factory).clone();
-							if (ship_id !== "0") {
-								$("img", shipPanel).attr("src", KC3Meta.getIcon( ship_id ));
-								$("img", shipPanel).attr("alt", ship_id);
-								$("img", shipPanel).addClass("hover");
-								$("img", shipPanel).click(shipClickFunc);
-							} else {
-								$("img", shipPanel).attr("src", "../../assets/img/ui/dark_shipdrop-x.png");
+						let flag = false;
+						$.each(keys_ship , function(i , ship_id) {
+							let Master = KC3Master.ship(ship_id);
+							let tmp_stype = Master.api_stype !== "undefined" ? Master.api_stype : 0;
+							if(self.ship_filter_checkbox[tmp_stype] === true) {
+								flag = true;
+								let shipPanel = $(".ship", factory).clone();
+								if (ship_id !== "0") {
+									$("img", shipPanel).attr("src", KC3Meta.getIcon( ship_id ));
+									$("img", shipPanel).attr("alt", ship_id);
+									$("img", shipPanel).addClass("hover");
+									$("img", shipPanel).click(shipClickFunc);
+								} else {
+									$("img", shipPanel).attr("src", "../../assets/img/ui/dark_shipdrop-x.png");
+								}
+								$(".drop_times", shipPanel).text( "x" + node_tot[node][ship_id] );
+								shipPanel.appendTo( nodeDrop );
 							}
-							$(".drop_times", shipPanel).text( "x" + node_tot[node][ship_id] );
-							shipPanel.appendTo( nodeDrop );
 						});
-						nodeDrop.append( $('<div class="clear"></div>') );
-						nodeDrop.appendTo( contentRoot );
+						if(flag) {
+							nodeDrop.append( $('<div class="clear"></div>') );
+							nodeDrop.appendTo( contentRoot );
+						}
 					});
 				});
 			});
@@ -158,12 +167,42 @@
 
 		},
 
+		gen_ship_filter : function() {
+			let self = this;
+			let sCtr, cElm;
+
+			for(sCtr in KC3Meta._stype){
+				// stype 1, 12, 15 not used by shipgirl
+				if(["1", "12", "15"].indexOf(sCtr) < 0){
+					cElm = $(".tab_shipdrop .factory .ship_filter_type").clone().appendTo(".tab_shipdrop .filters .ship_types");
+					cElm.data("id", sCtr);
+					$(".filter_name", cElm).text(KC3Meta.stype(sCtr) != "??" ? KC3Meta.stype(sCtr) : "NULL");
+					if(typeof self.ship_filter_checkbox[sCtr + ""] === "undefined")
+						self.ship_filter_checkbox[sCtr + ""] = true;
+					let cBox = $(".tab_shipdrop .filters .ship_types .ship_filter_type")
+						.filter( function() {
+						 return $(this).data("id") === "" + sCtr
+					});
+					let cCtr = sCtr;
+					cBox.on("click" , function() {
+						$(".filter_box .filter_check" , cBox).toggle();
+						if(self.ship_filter_checkbox[cCtr + ""])
+							self.ship_filter_checkbox[cCtr + ""] = false;
+						else
+							self.ship_filter_checkbox[cCtr + ""] = true;
+						self.fresh_ship_drop(self.selectedWorld , self.selectedMap);
+					})			
+				}
+			}
+		},
+
 		/* EXECUTE: mandatory
 		Places data onto the interface from scratch.
 		---------------------------------*/
 		execute: function() {
 			// TODO codes stub, remove this if nothing to do
 			this.listen();
+			this.gen_ship_filter();
 		},
 
 		/* UPDATE: optional

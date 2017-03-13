@@ -2340,7 +2340,20 @@ button, input, select, textarea {
 	color:#555;
 }
 
-/*ship-drop*/
+/* SHIP_DROP
+--------------------------------*/
+.tab_shipdrop .control_panel {
+	background: #131313;
+}
 .tab_shipdrop .content_root .node_drop .ship{
 	background:#303030;
+}
+.tab_shipdrop .ship_filter_type .filter_box {
+	border:1px solid #888888;
+}
+.tab_shipdrop .ship_filter_type .filter_check {
+	background:#ffffff;
+}
+.tab_shipdrop .filters .ship_filter_type:hover {
+	background:#555555;
 }

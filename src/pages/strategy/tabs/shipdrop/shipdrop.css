@@ -46,19 +46,44 @@
 ---------------------------------*/
 .tab_shipdrop .control_panel .world_list {
 	min-width: 120px;
-	margin: 0 0 15px 10px;
+	margin: 10px 10px 10px 10px;
 }
 
 /* MAP LIST
 ---------------------------------*/
 .tab_shipdrop .control_panel .map_list {
 	min-width: 120px;
-	margin: 0 0 15px 10px;
+	margin: 10px 10px 15px 10px;
 }
 
-/* DIFFICULTY LIS
+/* FILTER
 ---------------------------------*/
-.tab_shipdrop .control_panel .difficulty_list {
-	min-width: 120px;
-	margin: 0 0 15px 10px;
+.tab_shipdrop .filters .ship_types {
+	width:680px;
+	height:60px;
+	margin:10px 10px 10px 10px;
+}
+.tab_shipdrop .filters .ship_filter_type {
+	width:80px;
+	height:18px;
+	line-height:18px;
+	margin:0px 5px 2px 0px;
+	float:left;
+}
+
+.tab_shipdrop .ship_filter_type .filter_box {
+	width:10px;
+	height:10px;
+	margin:3px 7px 0px 3px;
+	float:left;
+}
+.tab_shipdrop .ship_filter_type .filter_check {
+	width:6px;
+	height:6px;
+	margin:1px;
+}
+.tab_shipdrop .ship_filter_type .filter_name {
+	width:55px;
+	height:18px;
+	float:left;
 }
