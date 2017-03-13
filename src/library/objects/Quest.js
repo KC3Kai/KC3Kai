@@ -157,31 +157,47 @@ known IDs see QuestManager
 	Define tracking from meta if current object's is empty
 	------------------------------------------*/
 	KC3Quest.prototype.attachMeta = function(){
+		var questMeta = KC3Meta.quest(this.id);
 		// If this object doesn't have meta yet
-		if(typeof this.meta == "undefined"){
-			// Get data from Meta Manager
-			var MyMeta = KC3Meta.quest( this.id );
-
+		if(this.meta === undefined || !this.meta().available){
 			// If we have meta for this quest
-			if(MyMeta){
+			if(questMeta){
 				// Attach meta info to this object
 				this.meta = function(){ return {
-					available: true,
-					code : MyMeta.code,
-					name : MyMeta.name,
-					desc : MyMeta.desc,
-					memo : MyMeta.memo
+					available : true,
+					code : questMeta.code,
+					name : questMeta.name,
+					desc : questMeta.desc,
+					memo : questMeta.memo
 				}; };
 				// If tracking is empty and Meta is defined
 				if(this.tracking === false){
-					this.tracking = MyMeta.tracking;
+					this.tracking = questMeta.tracking;
 				}
-			}else{
-				// Attach meta info to this object
+			} else if(this.meta === undefined) {
 				this.meta = function(){ return {
+					available : undefined,
 					code : "N/A",
 					name : KC3Meta.term("UntranslatedQuest"),
 					desc : KC3Meta.term("UntranslatedQuestTip")
+				}; };
+			}
+		} else {
+			// Check if translation updated
+			var oldMeta = this.meta();
+			if(questMeta
+				&&(oldMeta.code !== questMeta.code
+				|| oldMeta.name !== questMeta.name
+				|| oldMeta.desc !== questMeta.desc
+				|| oldMeta.memo !== questMeta.memo
+				)){
+				// Only update meta text, keep tracking untouched
+				this.meta = function(){ return {
+					available : true,
+					code : questMeta.code,
+					name : questMeta.name,
+					desc : questMeta.desc,
+					memo : questMeta.memo
 				}; };
 			}
 		}
