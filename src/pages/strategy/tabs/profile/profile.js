@@ -102,6 +102,29 @@
 				return false;
 			});
 			
+			// Show health metric
+			let lastMonthSecs = Math.floor(new Date().shiftDate(-30).getTime() / 1000);
+			let last2DaySecs = Math.floor(new Date().shiftHour(-48).getTime() / 1000);
+			let lastDaySecs = Math.floor(new Date().shiftHour(-24).getTime() / 1000);
+			let lastMonthAvgBattle = 0, lastDayBattle = 0, last2DayBattle = 0;
+			KC3Database.count_sortie_battle(function(sc, bc){
+				$(".day_battle_total_24 .rank_content").html("{0} (during {1} sorties)".format(bc, sc));
+				lastDayBattle = bc;
+			}, lastDaySecs);
+			KC3Database.count_sortie_battle(function(sc, bc){
+				$(".day_battle_total_48 .rank_content").html("{0} (during {1} sorties)".format(bc, sc));
+				last2DayBattle = bc;
+			}, last2DaySecs);
+			KC3Database.count_sortie_battle(function(sc, bc){
+				$(".month_battle_total .rank_content").html("{0} (during {1} sorties)".format(bc, sc));
+				lastMonthAvgBattle = Math.round(bc / 30);
+				$(".month_battle_average .rank_content").html(lastMonthAvgBattle);
+				if(last2DayBattle > lastMonthAvgBattle * 3)
+					$(".day_battle_total_48 .rank_content").css("color", "orange");
+				if(lastDayBattle > lastMonthAvgBattle * 2)
+					$(".day_battle_total_24 .rank_content").css("color", "orange");
+			}, lastMonthSecs);
+			
 			// Export all data
 			$(".tab_profile .export_data").on("click", function(){
 				var exportObject = {
