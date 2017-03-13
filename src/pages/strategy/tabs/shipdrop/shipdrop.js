@@ -172,7 +172,7 @@
 			let sCtr, cElm;
 			let cBox_filter = function() {
 				return $(this).data("id") === "" + sCtr;
-			}
+			};
 			let cBox_on = function(cCtr , cBox) {
 				$(".filter_box .filter_check" , cBox).toggle();
 				if(self.ship_filter_checkbox[cCtr + ""])
@@ -180,7 +180,7 @@
 				else
 					self.ship_filter_checkbox[cCtr + ""] = true;
 				self.fresh_ship_drop(self.selectedWorld , self.selectedMap);
-			}
+			};
 
 			for(sCtr in KC3Meta._stype){
 				// stype 1, 12, 15 not used by shipgirl
