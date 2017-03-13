@@ -191,7 +191,7 @@
 						else
 							self.ship_filter_checkbox[cCtr + ""] = true;
 						self.fresh_ship_drop(self.selectedWorld , self.selectedMap);
-					})			
+					});
 				}
 			}
 		},
