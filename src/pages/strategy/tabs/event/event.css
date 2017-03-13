@@ -199,7 +199,7 @@
 .tab_event .page_list .pagination {
 	margin:5px 0px 0px 0px;
 }
-.tab_event .page_list .sortie-count {
+.tab_event .page_list .sortie_count {
 	font-size:11px;
 	line-height:12px;
 	float:left;
