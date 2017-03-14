@@ -14,6 +14,7 @@
 		maps : {},
 		hash_world_to_index : {},
 		ship_filter_checkbox : {},
+		rank_filter_checkbox : {},
 
 		fresh_ship_drop : function(cworld , cmap){
 			let self = this;
@@ -30,14 +31,16 @@
 			//first: get info from KC3Database and count the drop of different node
 			sorties37_1.each( function(sortie) {
 				let p = KC3Database.con.battle.where("sortie_id").equals(sortie.id).each( function(battle) {
-					if (typeof dropTable[battle.node] === "undefined"){
-						dropTable[battle.node] = {};
+					if(self.rank_filter_checkbox[battle.rating]){
+						if (typeof dropTable[battle.node] === "undefined"){
+							dropTable[battle.node] = {};
+						}
+						let tbl = dropTable[battle.node];
+						if (typeof tbl[battle.drop] === "undefined") {
+							tbl[battle.drop] = 0;
+						}
+						++ tbl[battle.drop];
 					}
-					let tbl = dropTable[battle.node];
-					if (typeof tbl[battle.drop] === "undefined") {
-						tbl[battle.drop] = 0;
-					}
-					++ tbl[battle.drop];
 				});
 				pList.push(p);
 			}).then( function() {
@@ -167,18 +170,18 @@
 
 		},
 
-		gen_ship_filter : function() {
+		gen_filter : function() {
 			let self = this;
 			let sCtr, cElm;
 			let cBox_filter = function() {
 				return $(this).data("id") === "" + sCtr;
 			};
-			let cBox_on = function(cCtr , cBox) {
+			let cBox_on = function(cCtr , cBox , checkbox) {
 				$(".filter_box .filter_check" , cBox).toggle();
-				if(self.ship_filter_checkbox[cCtr + ""])
-					self.ship_filter_checkbox[cCtr + ""] = false;
+				if(checkbox[cCtr + ""])
+					checkbox[cCtr + ""] = false;
 				else
-					self.ship_filter_checkbox[cCtr + ""] = true;
+					checkbox[cCtr + ""] = true;
 				self.fresh_ship_drop(self.selectedWorld , self.selectedMap);
 			};
 
@@ -193,9 +196,22 @@
 					let cBox = $(".tab_shipdrop .filters .ship_types .ship_filter_type")
 						.filter( cBox_filter );
 					let cCtr = sCtr;
-					cBox.on("click" , cBox_on.bind(this , cCtr , cBox));
+					cBox.on("click" , cBox_on.bind(this , cCtr , cBox , self.ship_filter_checkbox));
 				}
 			}
+
+			["SS" , "S" , "A" , "B" , "C" , "D" , "E"].map(function(rank , index) {
+				cElm = $(".tab_shipdrop .factory .ship_filter_type").clone().appendTo(".tab_shipdrop .filters .battle_rank");
+				cElm.data("id", rank + "");
+				$(".filter_name", cElm).text(rank);
+				sCtr = rank + "";
+				if(typeof self.rank_filter_checkbox[sCtr + ""] === "undefined")
+					self.rank_filter_checkbox[sCtr + ""] = true;
+				let cBox = $(".tab_shipdrop .filters .battle_rank .ship_filter_type")
+					.filter( cBox_filter );
+				let cCtr = sCtr;
+				cBox.on("click" , cBox_on.bind(this , cCtr , cBox , self.rank_filter_checkbox));
+			})
 		},
 
 		/* EXECUTE: mandatory
@@ -204,7 +220,7 @@
 		execute: function() {
 			// TODO codes stub, remove this if nothing to do
 			this.listen();
-			this.gen_ship_filter();
+			this.gen_filter();
 		},
 
 		/* UPDATE: optional

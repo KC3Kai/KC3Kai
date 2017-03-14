@@ -56,6 +56,13 @@
 	margin: 10px 10px 15px 10px;
 }
 
+/* FONT
+---------------------------------*/
+.tab_shipdrop .control_panel .filters >p {
+	font-weight:bold;
+	margin:0px 0px 10px 10px;
+}
+
 /* FILTER
 ---------------------------------*/
 .tab_shipdrop .filters .ship_types {
@@ -86,4 +93,10 @@
 	width:55px;
 	height:18px;
 	float:left;
+}
+
+.tab_shipdrop .filters .battle_rank {
+	width:680px;
+	height:30px;
+	margin:10px 10px 10px 10px;
 }
