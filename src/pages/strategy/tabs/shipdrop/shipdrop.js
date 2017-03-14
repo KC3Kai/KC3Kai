@@ -211,7 +211,7 @@
 					.filter( cBox_filter );
 				let cCtr = sCtr;
 				cBox.on("click" , cBox_on.bind(this , cCtr , cBox , self.rank_filter_checkbox));
-			})
+			});
 		},
 
 		/* EXECUTE: mandatory
