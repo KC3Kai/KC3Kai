@@ -1264,6 +1264,10 @@ button, input, select, textarea {
 
 /* MAPS
 --------------------------------*/
+.tab_event .page_list .sortie_count,
+.tab_maps .page_list .sortie_count {
+	color:#fff;
+}
 .tab_event .world_box.active,
 .tab_maps .world_box.active {
 	background:#555;
@@ -1394,6 +1398,10 @@ button, input, select, textarea {
 --------------------------------*/
 .tab_pvp .page_list {
 	background:#222 !important;
+}
+.tab_pvp .page_list .pvp_count,
+.tab_pvp .page_list .pvp_count {
+	color:#fff;
 }
 .tab_pvp .toggles {
 	background:#222 !important;

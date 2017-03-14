@@ -103,6 +103,13 @@
 .tab_maps .page_list .pagination {
 	margin:5px 0px 0px 0px;
 }
+.tab_maps .page_list .sortie_count {
+	font-size:11px;
+	line-height:12px;
+	float:left;
+	position:absolute;
+	margin:-6px 0px 0px 500px;
+}
 
 /* SORTIE LIST
 ---------------------------------*/

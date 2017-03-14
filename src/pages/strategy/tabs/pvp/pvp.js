@@ -13,6 +13,7 @@
 		stegcover64: "",
 		
 		toggleMode: 1,
+		itemsPerPage: 10,
 		
 		init :function(){},
 		reload :function(){
@@ -21,13 +22,17 @@
 			var self = this;
 			// Count PvP records for pagination
 			KC3Database.count_pvps(function(result){
-				self.pages = Math.ceil( result / 10 );
+				self.items = result;
+				self.pages = Math.ceil( result / self.itemsPerPage );
 				if(self.pages > 0){
 					self.showPagination();
 					self.showPage(1);
 				} else {
 					$(".tab_pvp .pagination").hide();
 				}
+				$(".tab_pvp .page_list")
+					.append('<div class="pvp_count">Total {0}</div>'
+						.format(self.items, self.pages, self.itemsPerPage));
 			});
 			
 			// Download replay button
@@ -91,6 +96,7 @@
 				$.each(results, function(index, pvpBattle){
 					self.cloneBattleBox(pvpBattle);
 				});
+				$("#pvp_list").createChildrenTooltips();
 			});
 		},
 		
@@ -105,12 +111,15 @@
 			// Basic battle info
 			$(".pvp_id", self.box_record).text(pvpBattle.id);
 			if (pvpBattle.time) {
-				$(".pvp_date", self.box_record).text(new Date(pvpBattle.time*1000).format("mmm d"));
+				let pvpTime = new Date(pvpBattle.time * 1000);
+				$(".pvp_date", self.box_record).text(pvpTime.format("mmm d"))
+					.attr("title", pvpTime.format("yyyy-mm-dd HH:MM:ss"));
 			} else {
-				$(".pvp_date", self.box_record).text("unknown");
+				$(".pvp_date", self.box_record).text("Unknown");
 			}
-			$(".pvp_result img", self.box_record).attr("src", "../../assets/img/client/ratings/"+pvpBattle.rating+".png");
-			$(".pvp_result img", self.box_record).attr("title", "Base EXP "+pvpBattle.baseEXP );
+			$(".pvp_result img", self.box_record)
+				.attr("src", "../../assets/img/client/ratings/"+pvpBattle.rating+".png")
+				.attr("title", "Base EXP " + pvpBattle.baseEXP );
 			$(".pvp_dl", self.box_record).data("id", pvpBattle.id);
 			
 			// Player fleet
@@ -153,19 +162,20 @@
 			};
 			this.box_ship = $(".tab_pvp .factory .pvp_details_ship").clone();
 			
-			$(".pvp_ship_icon img", this.box_ship).attr("src", KC3Meta.shipIcon(data.mst_id));
-			$(".pvp_ship_icon img", this.box_ship).attr("alt", data.mst_id);
-			$(".pvp_ship_icon img", this.box_ship).click(shipClickFunc);
+			let shipName = KC3Meta.shipName(KC3Master.ship(data.mst_id).api_name);
+			$(".pvp_ship_icon img", this.box_ship).attr("src", KC3Meta.shipIcon(data.mst_id))
+				.attr("alt", data.mst_id).click(shipClickFunc);
 			$(".pvp_ship_icon", this.box_ship).addClass("simg-"+data.mst_id);
 			$(".pvp_ship_icon", this.box_ship).addClass("hover");
-			$(".pvp_ship_name", this.box_ship).text(KC3Meta.shipName(KC3Master.ship(data.mst_id).api_name));
+			$(".pvp_ship_name", this.box_ship).text(shipName)
+				.attr("title", shipName);
 			
 			$(".pvp_ship_level span", this.box_ship).text(data.level);
 			if (!data.opponent) {
 				if (data.mvp) $(".pvp_ship_mvp_icon", this.box_ship).show();
 			} else {
 				$(".pvp_ship_hp span", this.box_ship).text(data.hp);
-				$(".pvp_ship_level", this.box_ship).attr("title", "HP "+data.hp);
+				$(".pvp_ship_level", this.box_ship).attr("title", "HP " + data.hp);
 				$(".pvp_ship_fp", this.box_ship).text(data.stats[0]);
 				$(".pvp_ship_tp", this.box_ship).text(data.stats[1]);
 				$(".pvp_ship_aa", this.box_ship).text(data.stats[2]);

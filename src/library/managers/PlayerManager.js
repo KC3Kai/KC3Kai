@@ -62,7 +62,7 @@ Does not include Ships and Gears which are managed by other Managers
 			[0,1,2,3].forEach(function(i){
 				self.fleets[i].update( data[i] || {} );
 			});
-			localStorage.fleets = JSON.stringify(this.fleets);
+			this.saveFleets();
 		},
 
 		setBases :function( data ){
@@ -337,6 +337,10 @@ Does not include Ships and Gears which are managed by other Managers
 			this.hq.lastMaterial = data.matAbs || this.hq.lastMaterial;
 
 			this.hq.save();
+		},
+
+		saveFleets :function(){
+			localStorage.fleets = JSON.stringify(this.fleets);
 		},
 
 		loadFleets :function(){
