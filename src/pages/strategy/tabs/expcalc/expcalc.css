@@ -183,6 +183,8 @@
 }
 .tab_expcalc .ship_goal .ship_add {
 	background:#3c9;
+	line-height: 22px;
+	font-weight: bold;
 }
 .tab_expcalc .ship_goal .ship_rem {
 	background:#c77;

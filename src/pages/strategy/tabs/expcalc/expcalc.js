@@ -342,7 +342,7 @@
 
 				$(".ship_target input", editingBox).val( grindData[0] );
 				$(".ship_map select", editingBox).val( grindData[1]+"-"+grindData[2] );
-				$(".ship_rank select", editingBox).val(	 grindData[4] );
+				$(".ship_rank select", editingBox).val( grindData[4] );
 				$(".ship_fs input", editingBox).prop("checked", grindData[5]);
 				$(".ship_mvp input", editingBox).prop("checked", grindData[6]);
 
@@ -660,6 +660,9 @@
 				delete self.goals["s"+ editingBox.data("id") ];
 				self.save();
 				//window.location.reload();
+
+				$(".ship_value" , editingBox).show();
+				$(".ship_input" , editingBox).hide();
 
 				$(".ship_save", editingBox).hide();
 				$(".ship_edit", editingBox).hide();
