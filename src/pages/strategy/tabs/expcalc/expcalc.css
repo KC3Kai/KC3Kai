@@ -90,6 +90,14 @@
 	text-align:center;
 }
 
+.tab_expcalc .ship_goal .ship_input input[type="textbox"] {
+    width: 40px;
+    height: 20px;
+    border: 1px solid #AAA;
+    border-radius: 1px;
+    text-align: center;
+}
+
 /* COLUMNS
 --------------------------------*/
 .tab_expcalc .ship_goal .ship_icon {
