@@ -314,7 +314,7 @@
 					if (nextLevels !== false &&
 						nextLevels.length > 0 &&
 						!RemodelDb.isFinalForm(ThisShip.masterId) &&
-						nextLevels[0] < ThisShip.level) {
+						nextLevels[0] <= ThisShip.level) {
 						jqObj.addClass("highlight_canBeRemodelled");
 					}
 				});
