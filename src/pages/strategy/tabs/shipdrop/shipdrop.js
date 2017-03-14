@@ -78,7 +78,7 @@
 						let flag = false;
 						$.each(keys_ship , function(i , ship_id) {
 							let Master = KC3Master.ship(ship_id);
-							let tmp_stype = Master.api_stype !== "undefined" ? Master.api_stype : 0;
+							let tmp_stype = typeof Master.api_stype !== "undefined" ? Master.api_stype : 0;
 							if(self.ship_filter_checkbox[tmp_stype] === true) {
 								flag = true;
 								let shipPanel = $(".ship", factory).clone();
