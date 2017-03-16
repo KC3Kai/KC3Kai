@@ -111,6 +111,36 @@
 	margin:-6px 0px 0px 500px;
 }
 
+/* SORTIE SWITCHER
+---------------------------------*/
+.tab_maps .sortie_switcher {
+	width: 165px;
+	line-height:40px;
+	padding: 0px 5px;
+	margin: 5px 5px 0px 525px;
+	background: none;
+}
+.tab_maps .sortie_switcher:after {
+	content: "";
+	display: block;
+	width: 100%;
+	height: 1px;
+	clear: both;
+}
+.tab_maps .sortie_switcher .sortie_toggles {
+	width:150px;
+	float: right;
+}
+.tab_maps .sortie_switcher .sortie_toggle {
+	width:25px;
+	height:20px;
+	line-height:18px;
+	float:left;
+	text-align:center;
+	margin:0px 5px 0px 0px;
+	font-size:12px;
+}
+
 /* SORTIE LIST
 ---------------------------------*/
 .tab_maps .sortie_list {
