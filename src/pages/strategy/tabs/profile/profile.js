@@ -10,12 +10,13 @@
 		statistics: false,
 		newsfeed: {},
 		showRawNewsfeed: false,
+		battleCounts: {},
 		
 		/* INIT
 		Prepares static data needed
 		---------------------------------*/
 		init :function(){
-
+			this.battleCounts.lastPortTime = 0;
 		},
 
 		/* RELOAD
@@ -102,6 +103,30 @@
 				return false;
 			});
 			
+			// Show health metric
+			if(PlayerManager.hq.lastPortTime > this.battleCounts.lastPortTime){
+				let lastMonthSec = Math.floor(new Date().shiftDate(-30).getTime() / 1000);
+				let last2DaySec = Math.floor(new Date().shiftHour(-48).getTime() / 1000);
+				let lastDaySec = Math.floor(new Date().shiftHour(-24).getTime() / 1000);
+				KC3Database.count_sortie_battle(function(sc, bc){
+					self.battleCounts.lastDaySortie = sc;
+					self.battleCounts.lastDayBattle = bc;
+				}, lastDaySec);
+				KC3Database.count_sortie_battle(function(sc, bc){
+					self.battleCounts.last2DaySortie = sc;
+					self.battleCounts.last2DayBattle = bc;
+				}, last2DaySec);
+				KC3Database.count_sortie_battle(function(sc, bc){
+					self.battleCounts.lastMonthSortie = sc;
+					self.battleCounts.lastMonthBattle = bc;
+					self.battleCounts.lastMonthAvgBattle = Math.round(bc / 30);
+					self.battleCounts.lastPortTime = PlayerManager.hq.lastPortTime;
+					self.refreshHealthMetric();
+				}, lastMonthSec);
+			} else {
+				this.refreshHealthMetric();
+			}
+			
 			// Export all data
 			$(".tab_profile .export_data").on("click", function(){
 				var exportObject = {
@@ -162,12 +187,23 @@
 				}
 			});
 			
+			// MIME text/csv uses CRLF as line breaks according RFC-4180
+			const CSV_LINE_BREAKS = String.fromCharCode(13) + String.fromCharCode(10);
+			// Precompiled regexp for better performance
+			const CSV_QUOTE_TEST_REGEXP = /(\s|\r|\n|\")/;
+			const CSV_DQUOTE_REGEXP = /\"/g;
+			let csvDquoteEscaped = function(field) {
+				return '"' + field.replace(CSV_DQUOTE_REGEXP, '""') + '"';
+			};
+			let csvQuoteIfNecessary = function(field) {
+				return CSV_QUOTE_TEST_REGEXP.test(field) ? csvDquoteEscaped(field) : field;
+			};
 			// Export CSV: Sortie
 			/*$(".tab_profile .export_csv_sortie").on("click", function(event){
 				// CSV Headers
 				var exportData = [
 					"Secretary", "Fuel", "Ammo", "Steel", "Bauxite", "Result", "Date"
-				].join(",")+String.fromCharCode(13);
+				].join(",")+CSV_LINE_BREAKS;
 				
 				// Get data from local DB
 				KC3Database.con.develop
@@ -181,7 +217,7 @@
 								buildInfo.rsc1, buildInfo.rsc2, buildInfo.rsc3, buildInfo.rsc4,
 								KC3Meta.gearName(KC3Master.slotitem(buildInfo.result).api_name) || "Junk",
 								"\""+(new Date(buildInfo.time*1000)).format("mmm dd, yyyy hh:MM tt")+"\"",
-							].join(",")+String.fromCharCode(13);
+							].join(",")+CSV_LINE_BREAKS;
 						});
 						
 						var filename = self.makeFilename("LSC", ".csv");
@@ -195,26 +231,51 @@
 				var exportData = [
 					"Expedition", "HQ Exp",
 					"Fuel", "Ammo", "Steel", "Bauxite",
-					"Reward 1", "Reward 2", "Result", "Date"
-				].join(",")+String.fromCharCode(13);
-				
+					"Reward 1", "Reward 2", "Result", "Date",
+					"Ship #1 (Morale/Drums)", "Ship #2", "Ship #3",
+					"Ship #4", "Ship #5", "Ship #6"
+				].join(",") + CSV_LINE_BREAKS;
+				var buildRewardItemText = function(data, index) {
+					var flag = data.api_useitem_flag[index - 1],
+						getItem = data["api_get_item" + index];
+					return csvQuoteIfNecessary(
+						(flag === 4 ? KC3Meta.useItemName(getItem.api_useitem_id) :
+						({"0":"None","1":"Bucket","2":"Blowtorch","3":"DevMat"})[flag] || flag)
+						+
+						(flag > 0 && getItem ? " x" + getItem.api_useitem_count : "")
+					);
+				};
 				// Get data from local DB
 				KC3Database.con.expedition
 					.where("hq").equals(PlayerManager.hq.id)
 					.reverse()
 					.toArray(function(result){
 						result.forEach(function(expedInfo){
+							var shipsInfo = expedInfo.fleet.map(ship => ship.mst_id > 0 ?
+								csvQuoteIfNecessary(
+									// Give up using String.format for better performance
+									[KC3Meta.shipName(KC3Master.ship(ship.mst_id).api_name),
+									 "Lv" + ship.level,
+									 "(" + ship.morale + "/" +
+									   ship.equip.reduce((drums, id) => drums+=(id===75), 0) + ")"
+									].join(" ")
+								) : "-"
+							);
+							if(shipsInfo.length < 6){
+								shipsInfo.length = 6;
+								shipsInfo.fill("-", expedInfo.fleet.length);
+							}
 							exportData += [
 								expedInfo.mission, expedInfo.admiralXP,
 								expedInfo.data.api_get_material[0],
 								expedInfo.data.api_get_material[1],
 								expedInfo.data.api_get_material[2],
 								expedInfo.data.api_get_material[3],
-								expedInfo.data.api_useitem_flag[0],
-								expedInfo.data.api_useitem_flag[1],
-								expedInfo.data.api_clear_result,
-								"\""+(new Date(expedInfo.time*1000)).format("mmm dd, yyyy hh:MM tt")+"\"",
-							].join(",")+String.fromCharCode(13);
+								buildRewardItemText(expedInfo.data, 1),
+								buildRewardItemText(expedInfo.data, 2),
+								["F", "S", "GS"][expedInfo.data.api_clear_result] || expedInfo.data.api_clear_result,
+								csvQuoteIfNecessary(new Date(expedInfo.time*1000).format("mmm dd, yyyy hh:MM tt"))
+							].concat(shipsInfo).join(",") + CSV_LINE_BREAKS;
 						});
 						
 						var filename = self.makeFilename("Expeditions", "csv");
@@ -227,7 +288,7 @@
 				// CSV Headers
 				var exportData = [
 					"Secretary", "Fuel", "Ammo", "Steel", "Bauxite", "Result", "Date"
-				].join(",")+String.fromCharCode(13);
+				].join(",")+CSV_LINE_BREAKS;
 				
 				// Get data from local DB
 				KC3Database.con.build
@@ -237,11 +298,11 @@
 						result.forEach(function(buildInfo){
 							//console.log(buildInfo);
 							exportData += [
-								KC3Meta.shipName(KC3Master.ship(buildInfo.flag).api_name),
+								csvQuoteIfNecessary(KC3Meta.shipName(KC3Master.ship(buildInfo.flag).api_name)),
 								buildInfo.rsc1, buildInfo.rsc2, buildInfo.rsc3, buildInfo.rsc4,
-								KC3Meta.shipName(KC3Master.ship(buildInfo.result).api_name),
-								"\""+(new Date(buildInfo.time*1000)).format("mmm dd, yyyy hh:MM tt")+"\"",
-							].join(",")+String.fromCharCode(13);
+								csvQuoteIfNecessary(KC3Meta.shipName(KC3Master.ship(buildInfo.result).api_name)),
+								csvQuoteIfNecessary(new Date(buildInfo.time*1000).format("mmm dd, yyyy hh:MM tt")),
+							].join(",")+CSV_LINE_BREAKS;
 						});
 						
 						var filename = self.makeFilename("Constructions", "csv");
@@ -254,7 +315,7 @@
 				// CSV Headers
 				var exportData = [
 					"Secretary", "Fuel", "Ammo", "Steel", "Bauxite", "Result", "Date"
-				].join(",")+String.fromCharCode(13);
+				].join(",")+CSV_LINE_BREAKS;
 				
 				// Get data from local DB
 				KC3Database.con.develop
@@ -264,11 +325,11 @@
 						result.forEach(function(buildInfo){
 							//console.log(buildInfo);
 							exportData += [
-								KC3Meta.shipName(KC3Master.ship(buildInfo.flag).api_name),
+								csvQuoteIfNecessary(KC3Meta.shipName(KC3Master.ship(buildInfo.flag).api_name)),
 								buildInfo.rsc1, buildInfo.rsc2, buildInfo.rsc3, buildInfo.rsc4,
-								KC3Meta.gearName(KC3Master.slotitem(buildInfo.result).api_name) || "Junk",
-								"\""+(new Date(buildInfo.time*1000)).format("mmm dd, yyyy hh:MM tt")+"\"",
-							].join(",")+String.fromCharCode(13);
+								csvQuoteIfNecessary(KC3Meta.gearName(KC3Master.slotitem(buildInfo.result).api_name) || "Junk"),
+								csvQuoteIfNecessary(new Date(buildInfo.time*1000).format("mmm dd, yyyy hh:MM tt")),
+							].join(",")+CSV_LINE_BREAKS;
 						});
 						
 						var filename = self.makeFilename("Crafting", "csv");
@@ -281,7 +342,7 @@
 				// CSV Headers
 				var exportData = [
 					"Secretary", "Fuel", "Ammo", "Steel", "Bauxite", "Dev Mat", "Result", "Date"
-				].join(",")+String.fromCharCode(13);
+				].join(",")+CSV_LINE_BREAKS;
 				
 				// Get data from local DB
 				KC3Database.con.lsc
@@ -291,12 +352,12 @@
 						result.forEach(function(buildInfo){
 							//console.log(buildInfo);
 							exportData += [
-								KC3Meta.shipName(KC3Master.ship(buildInfo.flag).api_name),
+								csvQuoteIfNecessary(KC3Meta.shipName(KC3Master.ship(buildInfo.flag).api_name)),
 								buildInfo.rsc1, buildInfo.rsc2, buildInfo.rsc3, buildInfo.rsc4,
 								buildInfo.devmat,
-								KC3Meta.shipName(KC3Master.ship(buildInfo.result).api_name),
-								"\""+(new Date(buildInfo.time*1000)).format("mmm dd, yyyy hh:MM tt")+"\"",
-							].join(",")+String.fromCharCode(13);
+								csvQuoteIfNecessary(KC3Meta.shipName(KC3Master.ship(buildInfo.result).api_name)),
+								csvQuoteIfNecessary(new Date(buildInfo.time*1000).format("mmm dd, yyyy hh:MM tt")),
+							].join(",")+CSV_LINE_BREAKS;
 						});
 						
 						var filename = self.makeFilename("LSC", "csv");
@@ -417,6 +478,27 @@
 				alert("Done 2/2!");
 			});
 			
+		},
+		
+		refreshHealthMetric: function(){
+			var bc = this.battleCounts;
+			$(".day_battle_total_24 .rank_content").html(
+				'{0}<span style="font-weight:normal"> (during {1} sorties)</span>'
+					.format(bc.lastDayBattle, bc.lastDaySortie)
+			);
+			$(".day_battle_total_48 .rank_content").html(
+				'{0}<span style="font-weight:normal"> (during {1} sorties)</span>'
+					.format(bc.last2DayBattle, bc.last2DaySortie)
+			);
+			$(".month_battle_total .rank_content").html(
+				'{0}<span style="font-weight:normal"> (during {1} sorties)</span>'
+					.format(bc.lastMonthBattle, bc.lastMonthSortie)
+			);
+			$(".month_battle_average .rank_content").text(bc.lastMonthAvgBattle);
+			if(bc.last2DayBattle > 300 && bc.last2DayBattle > bc.lastMonthAvgBattle * 3)
+				$(".day_battle_total_48 .rank_content").css("color", "orange");
+			if(bc.lastDayBattle > 200 && bc.lastDayBattle > bc.lastMonthAvgBattle * 2)
+				$(".day_battle_total_24 .rank_content").css("color", "orange");
 		},
 		
 		refreshNewsfeed: function(showRawNewsfeed){
