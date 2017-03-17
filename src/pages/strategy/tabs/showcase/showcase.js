@@ -51,7 +51,8 @@
 			},
 			"t10": {
 				name: "Seaplanes",
-				order: "ls"
+				order: "ls",
+				types: [ 10, 43 ]
 			},
 			"t19": {
 				name: "Turbines",
