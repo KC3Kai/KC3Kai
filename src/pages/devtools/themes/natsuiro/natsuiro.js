@@ -723,6 +723,7 @@
 	});
 
 	function Activate(){
+		if(isRunning === true){ return true; }
 		isRunning = true;
 		Orientation();
 		$(".waitingForActions").hide();
