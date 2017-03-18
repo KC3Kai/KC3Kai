@@ -796,12 +796,12 @@
 		$(".module.activity .battle_cond_value").text("");
 		$(".module.activity .battle_engagement").prev().text(KC3Meta.term("BattleEngangement"));
 		$(".module.activity .battle_engagement").removeClass(KC3Meta.battleSeverityClass(KC3Meta.engagement()));
-		$(".module.activity .battle_engagement").attr("title", "");
+		$(".module.activity .battle_engagement").attr("title", "").lazyInitTooltip();
 		$(".module.activity .battle_detection").prev().text(KC3Meta.term("BattleDetection"));
 		$(".module.activity .battle_detection").removeClass(KC3Meta.battleSeverityClass(KC3Meta.detection()));
-		$(".module.activity .battle_detection").attr("title", "");
+		$(".module.activity .battle_detection").attr("title", "").lazyInitTooltip();
 		$(".module.activity .battle_airbattle").removeClass(KC3Meta.battleSeverityClass(KC3Meta.airbattle()));
-		$(".module.activity .battle_airbattle").attr("title", "");
+		$(".module.activity .battle_airbattle").attr("title", "").lazyInitTooltip();
 		$(".module.activity .plane_text span").text("");
 		$(".module.activity .sink_icons .sunk img").hide();
 		$(".module.activity .battle_planes .fighter_ally .plane_icon img").attr("src", "../../../../assets/img/items/6.png");
@@ -1527,7 +1527,8 @@
 
 		},
 		
-		Lbas :function(){
+		Lbas: function(){
+			var self = this;
 			$(".module.controls .fleet_lbas").removeClass("needsSupply");
 			if(!$(".module.controls .fleet_lbas").hasClass("active")
 				&& !PlayerManager.isBasesSupplied()){
@@ -1542,8 +1543,7 @@
 				$(".airbase_list").show();
 				
 				var baseBox, planeBox, itemObj, paddedId,
-					eqImgSrc, eqIconSrc, eqChevSrc, eqMorale, eqCondSrc,
-					shipObj, afpLower;
+					eqImgSrc, eqIconSrc, eqChevSrc, eqMorale, eqCondSrc;
 				
 				$.each(PlayerManager.bases, function(i, baseInfo){
 					if (baseInfo.rid != -1) {
@@ -1559,7 +1559,7 @@
 							KC3Meta.term("LandBaseActionRest")
 						][baseInfo.action]);
 						
-						shipObj = new KC3Ship();
+						let shipObj = new KC3Ship();
 						shipObj.rosterId = -1;
 						shipObj.items = baseInfo.planes.map(function(planeInfo){
 							return planeInfo.api_state == 1 ? planeInfo.api_slotid : -1;
@@ -1568,15 +1568,16 @@
 							return planeInfo.api_state == 1 ? planeInfo.api_count : 0;
 						});
 						
-						afpLower = shipObj.fighterBounds()[0];
-						if (afpLower > 0) {
-							$(".base_afp .base_stat_value", baseBox).html( afpLower+"+" );
-						} else {
-							$(".base_afp .base_stat_value", baseBox).html( KC3Meta.term("None") );
-						}
-						
-						$(".base_ifp .base_stat_value", baseBox).html(shipObj.interceptionPower("aa"));
-						$(".base_ibp .base_stat_value", baseBox).html(shipObj.interceptionPower("dv"));
+						// Regular fighter power on sortie
+						let afpLower = shipObj.fighterBounds()[0];
+						$(".base_afp .base_stat_value", baseBox).text(
+							!!afpLower ? afpLower + "+" : KC3Meta.term("None")
+						);
+						// Land-base interception power on air defense
+						let ifp = shipObj.interceptionPower();
+						$(".base_ifp .base_stat_value", baseBox).text(
+							!!ifp ? ifp : KC3Meta.term("None")
+						);
 						
 						$.each(baseInfo.planes, function(i, planeInfo){
 							planeBox = $("#factory .airbase_plane").clone();
@@ -1597,7 +1598,9 @@
 								$(".base_plane_img img", planeBox).attr("src", eqImgSrc);
 								$(".base_plane_img", planeBox)
 									.attr("title", $(".base_plane_name", planeBox).text())
-									.lazyInitTooltip();
+									.lazyInitTooltip()
+									.data("masterId", itemObj.masterId)
+									.on("dblclick", self.gearDoubleClickFunction);
 								
 								eqIconSrc = "../../../../assets/img/items/"+itemObj.master().api_type[3]+".png";
 								$(".base_plane_icon img", planeBox).attr("src", eqIconSrc);
@@ -1841,7 +1844,7 @@
 					// http://wikiwiki.jp/kancolle/?%B4%F0%C3%CF%B9%D2%B6%F5%C2%E2#airraid
 					$(".module.activity .battle_engagement").attr("title", KC3Meta.term("BattleAirBaseLossTip")
 						.format( thisNode.baseDamage, Math.round(thisNode.baseDamage * 0.9 + 0.1) )
-					).lazyInitTooltip();
+					);
 				}
 				var contactSpan = buildContactPlaneSpan(thisNode.fcontactId, thisNode.fcontact, thisNode.econtactId, thisNode.econtact);
 				$(".module.activity .battle_contact").html(contactSpan.html()).lazyInitTooltip();
@@ -1878,6 +1881,7 @@
 		},
 
 		BattleStart: function(data){
+			var self = this;
 			// Clear battle details box just to make sure
 			clearBattleData();
 
@@ -1917,11 +1921,8 @@
 							.lazyInitTooltip();
 						$(enemyFleetBoxSelector+" .abyss_ship_"+(index+1))
 							.data("masterId", eshipId)
-							.on("dblclick", function(e){
-								(new RMsg("service", "strategyRoomPage", {
-									tabPath: "mstship-{0}".format($(this).data("masterId"))
-								})).execute();
-							}).show();
+							.on("dblclick", self.shipDoubleClickFunction)
+							.show();
 					}
 				}
 			});
@@ -2110,6 +2111,7 @@
 		},
 
 		BattleNight: function(data){
+			var self = this;
 			// Enemy HP Predictions
 			var thisNode = KC3SortieManager.currentNode();
 			
@@ -2128,11 +2130,8 @@
 								.lazyInitTooltip();
 							$(".module.activity .abyss_single .abyss_ship_"+(index+1))
 								.data("masterId", eshipId)
-								.on("dblclick", function(e){
-									(new RMsg("service", "strategyRoomPage", {
-										tabPath: "mstship-{0}".format($(this).data("masterId"))
-									})).execute();
-								}).show();
+								.on("dblclick", self.shipDoubleClickFunction)
+								.show();
 						}
 						
 						if(!index &&
@@ -2205,13 +2204,9 @@
 					$(".module.activity .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop));
 					$(".module.activity .battle_drop")
 						.data("masterId", thisNode.drop)
+						.on("dblclick", this.shipDoubleClickFunction)
 						.attr("title", KC3Meta.shipName( KC3Master.ship(thisNode.drop).api_name ))
-						.lazyInitTooltip()
-						.on("dblclick", function(e){
-							(new RMsg("service", "strategyRoomPage", {
-								tabPath: "mstship-{0}".format($(this).data("masterId"))
-							})).execute();
-						});
+						.lazyInitTooltip();
 				}
 
 				// Update Counts
@@ -2413,6 +2408,7 @@
 		},
 
 		PvPFleet: function(data){
+			var self = this;
 			if(!ConfigManager.info_pvp_info)
 				return;
 			console.log("PvP Enemy Fleet", data);
@@ -2435,11 +2431,6 @@
 			// This is not shown in game
 			$(".activity_pvp .pvp_fleet_name").text(data.api_deckname);
 			$(".activity_pvp .pvp_fleet_list").empty();
-			var doubleClickFunc = function(e){
-				(new RMsg("service", "strategyRoomPage", {
-					tabPath: "mstship-{0}".format($(this).attr("alt"))
-				})).execute();
-			};
 			var levelFlagship = 0, level2ndShip = 0;
 			$.each(data.api_deck.api_ships, function(idx, ship){
 				if(ship.api_id > 0){
@@ -2449,7 +2440,8 @@
 					if(idx === 1) level2ndShip = ship.api_level;
 					var shipBox = $("#factory .pvpFleetShip").clone();
 					$(".pvp_fleet_ship_icon img", shipBox).attr("src", KC3Meta.shipIcon(ship.api_ship_id))
-						.attr("alt", ship.api_ship_id).on("dblclick", doubleClickFunc)
+						.data("masterId", ship.api_ship_id)
+						.on("dblclick", self.shipDoubleClickFunction)
 						.attr("title", KC3Meta.stype(shipMaster.api_stype)).lazyInitTooltip();
 					$(".pvp_fleet_ship_name", shipBox).text(shipName).attr("title", shipName).lazyInitTooltip();
 					$(".pvp_fleet_ship_level .value", shipBox).text(ship.api_level);
@@ -2500,6 +2492,7 @@
 		},
 
 		PvPStart: function(data){
+			var self = this;
 			// Clear battle details box just to make sure
 			clearBattleData();
 			$(".module.activity .map_world").text( KC3Meta.term("BattleMapWorldPvP") );
@@ -2553,11 +2546,8 @@
 						.lazyInitTooltip();
 					$(".module.activity .abyss_single .abyss_ship_"+(index+1))
 						.data("masterId", eshipId)
-						.on("dblclick", function(e){
-							(new RMsg("service", "strategyRoomPage", {
-								tabPath: "mstship-{0}".format($(this).data("masterId"))
-							})).execute();
-						}).show();
+						.on("dblclick", self.shipDoubleClickFunction)
+						.show();
 				}
 			});
 
@@ -3191,7 +3181,7 @@
 				}
 				$(".activity_gunfit .fit_value").off("click").on("click", function(e){
 					(new RMsg("service", "strategyRoomPage", {
-						tabPath: "mstship-{0}".format(data.shipObj.masterId)
+						tabPath: "mstship-{0}-gunfit".format(data.shipObj.masterId)
 					})).execute();
 					e.stopPropagation();
 				});
@@ -3209,7 +3199,8 @@
 					if(aaciObj.icons[0] > 0) {
 						$(".shipIcon img", aaciBox)
 							.attr("src", KC3Meta.shipIcon(aaciObj.icons[0]) )
-							.attr("title", KC3Meta.aacitype(aaciObj.id)[0] || "");
+							.attr("title", KC3Meta.aacitype(aaciObj.id)[0] || "")
+							.lazyInitTooltip();
 					} else {
 						$(".shipIcon img", aaciBox).hide();
 					}
@@ -3219,6 +3210,7 @@
 							$("<img/>")
 								.attr("src", "../../../../assets/img/items/"+equipIcon[0]+".png")
 								.attr("title", KC3Meta.aacitype(aaciObj.id)[i] || "")
+								.lazyInitTooltip()
 								.appendTo($(".equipIcons", aaciBox));
 							if(equipIcon.length>1) {
 								$('<img/>')
@@ -3244,6 +3236,26 @@
 			$(".module.activity .activity_box").hideChildrenTooltips();
 			$(".module.activity .activity_box").hide();
 			$(".module.activity .activity_gunfit").fadeIn(500);
+		},
+		
+		shipDoubleClickFunction: function(e) {
+			var id = $(this).data("masterId");
+			if(id > 0){
+				(new RMsg("service", "strategyRoomPage", {
+					tabPath: "mstship-{0}".format(id)
+				})).execute();
+			}
+			return false;
+		},
+		
+		gearDoubleClickFunction: function(e) {
+			var id = $(this).data("masterId");
+			if(id > 0){
+				(new RMsg("service", "strategyRoomPage", {
+					tabPath: "mstgear-{0}".format(id)
+				})).execute();
+			}
+			return false;
 		}
 	};
 

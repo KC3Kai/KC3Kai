@@ -254,7 +254,6 @@
 							$(".holder_level", PlaneBox).text( "#"+ThisPlane.MyHolder().rid );
 							ThisCapacity = ThisPlane.MyHolder().planes
 								.filter(lbasPlanesFilter)[0].api_max_count;
-							// Lazy to compute fighter power for LBAS :)
 						} else if(ThisPlane.MyHolder() === "LbasMoving"){
 							$(".holder_pic img", PlaneBox).attr("src", "../../../../assets/img/items/33.png" );
 							$(".holder_name", PlaneBox).text( "LBAS Moving" );

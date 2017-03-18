@@ -989,6 +989,10 @@ body {
 
 /* MAPS
 --------------------------------*/
+.tab_event .page_list .sortie_count,
+.tab_maps .page_list .sortie_count {
+	color:#337ab7;
+}
 .tab_event .world_list,
 .tab_maps .world_list {
 	background:#f0f5ff;
@@ -1052,6 +1056,11 @@ body {
 	background:#def;
 	border-radius:10px;
 	margin:0px 0px 5px 0px;
+}
+.tab_event .sortie_list .sortie_dl,
+.tab_maps .sortie_list .sortie_dl {
+	background:#ffc;
+	border:1px solid #ace;
 }
 .tab_event .sortie_list .sortie_date,
 .tab_maps .sortie_list .sortie_date {
@@ -1176,6 +1185,10 @@ body {
 }
 /* PVP
 --------------------------------*/
+.tab_pvp .page_list .pvp_count,
+.tab_pvp .page_list .pvp_count {
+	color:#337ab7;
+}
 .tab_pvp .pvp_player .pvp_details_ship {
 	border:1px solid #ace;
 }

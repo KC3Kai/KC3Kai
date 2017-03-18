@@ -1264,6 +1264,10 @@ button, input, select, textarea {
 
 /* MAPS
 --------------------------------*/
+.tab_event .page_list .sortie_count,
+.tab_maps .page_list .sortie_count {
+	color:#fff;
+}
 .tab_event .world_box.active,
 .tab_maps .world_box.active {
 	background:#555;
@@ -1307,6 +1311,11 @@ button, input, select, textarea {
 .tab_maps .sortie_list .sortie_box {
 	background:#303030;
 	margin:0px 0px 2px 0px;
+}
+.tab_event .sortie_list .sortie_dl,
+.tab_maps .sortie_list .sortie_dl {
+	background:#369;
+	border:1px solid #3f8cd9;
 }
 .tab_event .sortie_list .sortie_date ,
 .tab_maps .sortie_list .sortie_date {
@@ -1390,6 +1399,10 @@ button, input, select, textarea {
 .tab_pvp .page_list {
 	background:#222 !important;
 }
+.tab_pvp .page_list .pvp_count,
+.tab_pvp .page_list .pvp_count {
+	color:#fff;
+}
 .tab_pvp .toggles {
 	background:#222 !important;
 }
@@ -1442,6 +1455,10 @@ button, input, select, textarea {
 .tab_mstship .shipInfo .voice {
 	background:#222 !important;
 	border:1px solid #3e3e3e !important;
+}
+.tab_mstship .shipInfo .accordion .head {
+	border:1px solid #3e3e3e !important;
+	background:#222 !important;
 }
 .tab_mstship .shipInfo .aaci .aaciPattern.odd {
 	background:#444 !important;

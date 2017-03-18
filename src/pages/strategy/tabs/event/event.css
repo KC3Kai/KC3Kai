@@ -136,6 +136,56 @@
 	display:none;
 }
 
+.tab_event .map_box.cleared {
+    position: relative;
+}
+
+.tab_event .map_box.cleared.easy:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -1px;
+    right: -8px;
+    width: 21px;
+    height: 36px;
+    background: transparent url('../../../../assets/img/client/medals/easy_medal.png');
+    background-size: contain;
+    pointer-events: none;
+}
+
+.tab_event .map_box.cleared.normal:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -1px;
+    right: -8px;
+    width: 29px;
+    height: 37px;
+    background: transparent url('../../../../assets/img/client/medals/normal_medal.png');
+    background-size: contain;
+    pointer-events: none;
+}
+
+.tab_event .map_box.cleared.hard:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -1px;
+    right: -8px;
+    width: 34px;
+    height: 38px;
+    background: transparent url('../../../../assets/img/client/medals/hard_medal.png');
+    background-size: contain;
+    pointer-events: none;
+}
+
+.tab_event .map_box.cleared.active.easy:after,
+.tab_event .map_box.cleared.active.normal:after,
+.tab_event .map_box.cleared.active.hard:after {
+    top: -3px;
+    right: -10px;
+}
+
 
 /* Map not cleared and no gauge */
 .tab_event .map_box.noclearnogauge .map_title {
@@ -148,6 +198,13 @@
 
 .tab_event .page_list .pagination {
 	margin:5px 0px 0px 0px;
+}
+.tab_event .page_list .sortie_count {
+	font-size:11px;
+	line-height:12px;
+	float:left;
+	position:absolute;
+	margin:-6px 0px 0px 500px;
 }
 
 /* SORTIE LIST
@@ -173,8 +230,20 @@
 	height:30px;
 }
 .tab_event .sortie_list .sortie_record {
-	width:50px;
-	margin:0px 10px 0px 0px;
+	width:75px;
+	margin:0px 5px 0px 0px;
+}
+.tab_event .sortie_list .sortie_dl {
+	width:25px;
+	height:30px;
+	line-height:28px;
+	border-radius:5px;
+	margin:0px;
+	text-align:center;
+	font-size:10px;
+	white-space:nowrap;
+	overflow:hidden;
+	float:left;
 }
 .tab_event .sortie_list .sortie_id {
 	width:50px;
@@ -183,6 +252,7 @@
 	font-size:14px;
 	font-weight:bold;
 	text-align:center;
+	float:left;
 }
 .tab_event .sortie_list .sortie_date {
 	width:50px;
@@ -190,13 +260,14 @@
 	line-height:14px;
 	font-size:12px;
 	text-align:center;
+	float:left;
 }
 
 /* Sortie Info: MAP */
 .tab_event .sortie_list .sortie_map {
 	width:40px;
 	line-height:30px;
-	margin:0px 10px 0px 0px;
+	margin:0px 5px 0px 0px;
 	text-align:center;
 	font-size:16px;
 	font-weight:bold;
@@ -205,7 +276,7 @@
 /* Sortie Info: FLEET */
 .tab_event .sortie_list .sortie_fleet {
 	width:210px;
-	margin:0px 10px 0px 0px;
+	margin:0px 5px 0px 0px;
 }
 .tab_event .sortie_list .sortie_ship {
 	width:30px;
@@ -225,7 +296,7 @@
 /* Sortie Info: EDGES */
 .tab_event .sortie_list .sortie_edges {
 	width:175px;
-	margin:0px 10px 0px 0px;
+	margin:0px 5px 0px 0px;
 }
 .tab_event .sortie_list .nonodes {
 	height:30px;

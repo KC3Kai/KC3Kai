@@ -71,6 +71,10 @@
 				showGoalTemplates: true,
 				showRecommended: true,
 				showOtherShips: true,
+				shipsOrderType: "id",
+				shipsSortDirection: "up",
+				shipsOrderSecondType: "",
+				shipsSortSecondDirection: "up",
 				closeToRemodelLevelDiff: 5
 			};
 			var settings;
@@ -79,6 +83,16 @@
 				settings = defSettings;
 			} else {
 				settings = JSON.parse( localStorage.srExpcalc );
+				// For smooth transition to ordering version
+				if (typeof settings.shipsOrderType === "undefined"
+					|| typeof settings.shipsSortDirection === "undefined"
+					|| typeof settings.shipsOrderSecondType === "undefined"
+					|| typeof settings.shipsSortSecondDirection === "undefined") {
+					settings.shipsOrderType = "id";
+					settings.shipsSortDirection = "up";
+					settings.shipsOrderSecondType = "";
+					settings.shipsSortSecondDirection = "up";
+				}
 			}
 			return settings;
 		},
@@ -101,6 +115,8 @@
 			var jqToggleGT = $(".toggle_goal_templates");
 			var jqToggleRecom = $(".toggle_recommended");
 			var jqToggleOther = $(".toggle_other_ships");
+			
+			var jqOrderTypes = $(".order_line dd");
 
 			var jqCloseToRemLvlDiff = $("input#inp_lvl_diff");
 
@@ -109,6 +125,9 @@
 				jqGoalTemplates.toggle( settings.showGoalTemplates );
 				jqRecommended.toggle( settings.showRecommended );
 				jqOtherShips.toggle( settings.showOtherShips );
+				jqOrderTypes.removeClass("active up down");
+				jqOrderTypes.filter(".order_" + settings.shipsOrderType).addClass("active").addClass(settings.shipsSortDirection);
+				jqOrderTypes.filter(".order_" + settings.shipsOrderSecondType).addClass("active").addClass(settings.shipsSortSecondDirection); // other style for secondary?
 
 				jqToggleGT
 					.toggleClass("active", settings.showGoalTemplates);
@@ -118,6 +137,7 @@
 					.toggleClass("active", settings.showOtherShips);
 
 				jqCloseToRemLvlDiff.val( settings.closeToRemodelLevelDiff );
+				orderShips(settings.shipsOrderType, settings.shipsSortDirection, settings.shipsOrderSecondType, settings.shipsSortSecondDirection);
 			}
 
 			updateUI();
@@ -125,6 +145,13 @@
 				return function(obj) {
 					// well, make sure not to use old obj afterwards.
 					obj[field] = !obj[field];
+					return obj;
+				};
+			}
+			
+			function updateOrder(field, newState) {
+				return function(obj) {
+					obj[field] = newState;
 					return obj;
 				};
 			}
@@ -140,6 +167,28 @@
 
 			jqToggleOther.on("click", function() {
 				self.modifySettings( negateField("showOtherShips") );
+				updateUI();
+			});
+			jqOrderTypes.on("click", function(e) {
+				if (e.shiftKey && self.getSettings().shipsOrderType != $(this).data("order")) {
+					if ($(this).hasClass("up")) {
+						self.modifySettings(updateOrder("shipsSortSecondDirection", "down"));
+					} else {
+						self.modifySettings(updateOrder("shipsSortSecondDirection", "up"));
+					}
+					self.modifySettings(updateOrder("shipsOrderSecondType", $(this).data("order")));
+				} else {
+					if ($(this).hasClass("up")) {
+						self.modifySettings(updateOrder("shipsSortDirection", "down"));
+					} else {
+						self.modifySettings(updateOrder("shipsSortDirection", "up"));
+					}
+					self.modifySettings(updateOrder("shipsOrderType", $(this).data("order")));
+					self.modifySettings(updateOrder("shipsOrderSecondType", ""));
+				}
+				updateUI();
+			});
+			jqOrderTypes.on("keyup keydown", function() {
 				updateUI();
 			});
 			jqCloseToRemLvlDiff
@@ -172,6 +221,41 @@
 						e.preventDefault();
 					}
 				});
+				
+			function orderShips(sortKey, sortOrder, sortSecondKey, sortSecondOrder) {
+				function sortBoxes(boxSorted) {
+					var sortedElements = $(boxSorted).find(".ship_goal");
+					var sorter = function(a, b, sortType, order) {
+						var isUp = (order == "up") ? -1 : 1;
+
+						// Various order types
+						if (sortType == "id") {
+							return isUp * (+$(b).attr("id").substr(7) - +$(a).attr("id").substr(7));
+						} else if (sortType == "name") {
+							return isUp * ($(b).find(".ship_info .ship_name").text().toUpperCase().localeCompare($(a).find(".ship_info .ship_name").text().toUpperCase()));
+						} else if (sortType == "level") {
+							return isUp * (+$(b).find(".ship_lv .ship_value").text() - +$(a).find(".ship_lv .ship_value").text());
+						} else if (sortType == "remodel") {
+							return isUp * (+$(b).find(".ship_target .ship_value").text() - +$(a).find(".ship_target .ship_value").text());
+						} else if (sortType == "lvldiff") {
+							return isUp * ((+$(b).find(".ship_target .ship_value").text() - +$(b).find(".ship_lv .ship_value").text()) - (+$(a).find(".ship_target .ship_value").text() - +$(a).find(".ship_lv .ship_value").text()));
+						} else if (sortType == "xpdiff") {
+							return isUp * (+$(b).find(".ship_exp .ship_value").text() - +$(a).find(".ship_exp .ship_value").text());
+						} else if (sortType == "shiptype") {
+							return isUp * ($(b).find(".ship_info .ship_type").text().localeCompare($(a).find(".ship_info .ship_type").text()));
+						}
+					};
+					sortedElements.sort(function(a, b) {
+						var primarySort = sorter(a, b, sortKey, sortOrder);
+						return primarySort ? primarySort : sorter(a, b, sortSecondKey, sortSecondOrder);
+					})
+					.prependTo(boxSorted);
+				}
+				
+				sortBoxes(".box_goals");
+				sortBoxes(".box_recommend");
+				sortBoxes(".box_other");
+			}
 		},
 
 		configHighlightToggles: function() {
@@ -230,7 +314,7 @@
 					if (nextLevels !== false &&
 						nextLevels.length > 0 &&
 						!RemodelDb.isFinalForm(ThisShip.masterId) &&
-						nextLevels[0] < ThisShip.level) {
+						nextLevels[0] <= ThisShip.level) {
 						jqObj.addClass("highlight_canBeRemodelled");
 					}
 				});
@@ -242,8 +326,6 @@
 		---------------------------------*/
 		execute :function(){
 			var self = this;
-			self.configSectionToggles();
-			self.configHighlightToggles();
 
 			// Add map list into the factory drop-downs
 			$.each(this.maplist, function(MapName, MapExp){
@@ -260,7 +342,7 @@
 
 				$(".ship_target input", editingBox).val( grindData[0] );
 				$(".ship_map select", editingBox).val( grindData[1]+"-"+grindData[2] );
-				$(".ship_rank select", editingBox).val(	 grindData[4] );
+				$(".ship_rank select", editingBox).val( grindData[4] );
 				$(".ship_fs input", editingBox).prop("checked", grindData[5]);
 				$(".ship_mvp input", editingBox).prop("checked", grindData[6]);
 
@@ -579,6 +661,9 @@
 				self.save();
 				//window.location.reload();
 
+				$(".ship_value" , editingBox).show();
+				$(".ship_input" , editingBox).hide();
+
 				$(".ship_save", editingBox).hide();
 				$(".ship_edit", editingBox).hide();
 				$(".ship_rem", editingBox).hide();
@@ -639,6 +724,8 @@
 					return true;
 
 				$(".ship_target .ship_value", goalBox).text( goalLevel );
+				var expLeft = KC3Meta.expShip(goalLevel)[1] - ThisShip.exp[0];
+				$(".ship_exp .ship_value", goalBox).text( expLeft );
 				if (goalLevel < 99) {
 					goalBox.appendTo(".section_expcalc .box_recommend");
 					return true;
@@ -651,6 +738,8 @@
 
 			//this.save();
 
+			self.configSectionToggles();
+			self.configHighlightToggles();
 			$("<div />").addClass("clear").appendTo(".section_expcalc .box_recommend");
 			$("<div />").addClass("clear").appendTo(".section_expcalc .box_other");
 		},

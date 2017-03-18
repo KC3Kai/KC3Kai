@@ -64,7 +64,7 @@
 <div class="box_control">
   <div class="box_control_line">
 	<dl>
-	  <dt class="hover">Sections</dt>
+	  <dt>Sections</dt>
 	  <dd class="toggle_goal_templates hover toggle">Goal Templates</dd>
 	  <dd class="toggle_recommended hover toggle">Recommended</dd>
 	  <dd class="toggle_other_ships hover toggle">Other Ships</dd>
@@ -72,7 +72,7 @@
   </div>
   <div class="box_control_line">
 	<dl>
-	  <dt class="hover">Highlight</dt>
+	  <dt>Highlight</dt>
 	  <dd class="btn_hl_clear hover toggle">Clear All</dd>
 	  <dd class="btn_hl_close_to_remodel hover toggle">Close To Remodel</dd>
 	  <dd class="btn_hl_can_be_remodelled hover toggle">Can Be Remodelled</dd>
@@ -80,8 +80,20 @@
   </div>
   <div class="box_control_line line_close_to_remodel">
 	<dl>
-	  <dt class="hover">Close-to-remodel maximum level difference</dt>
-	  <dd><input type="text" id="inp_lvl_diff"></dd>
+	  <dt>Close-to-remodel maximum level difference</dt>
+	  <dd style="margin-left:5px"><input type="text" id="inp_lvl_diff"></dd>
+	</dl>
+  </div>
+  <div class="box_control_line order_line">
+	<dl>
+	  <dt>Order Ships By</dt>
+	  <dd class="order_id hover toggle active up" data-order="id">ID</dd>
+	  <dd class="order_xpdiff hover toggle" data-order="xpdiff">XP Left</dd>
+	  <dd class="order_name hover toggle" data-order="name">Name</dd>
+	  <dd class="order_shiptype hover toggle" data-order="shiptype">Ship Type</dd>
+	  <dd class="order_level hover toggle" data-order="level">Level</dd>
+	  <dd class="order_remodel hover toggle" data-order="remodel">Goal</dd>
+	  <dd class="order_lvldiff hover toggle" data-order="lvldiff">Levels To Goal</dd>
 	</dl>
   </div>
 </div>

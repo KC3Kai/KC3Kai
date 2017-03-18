@@ -1,3 +1,4 @@
+﻿@charset "utf-8";
 .tab_expcalc {
 	width:680px;
 }
@@ -41,6 +42,18 @@
 	margin:0px 0px 10px 0px;
 }
 
+.tab_expcalc .box_control_line dl dd.up:after {
+	content: " ▲";
+	font-size: 12px;
+	vertical-align: text-top;
+}
+
+.tab_expcalc .box_control_line dl dd.down:after {
+	content: " ▼";
+	font-size: 12px;
+	vertical-align: text-top;
+}
+
 /* RECORD
 --------------------------------*/
 .tab_expcalc .ship_goal {
@@ -75,6 +88,17 @@
 	height:20px;
 	line-height:20px;
 	text-align:center;
+	display:none;
+}
+.tab_expcalc .ship_goal .ship_input input[type=textbox] {
+	width:50px;
+	height:20px;
+	border:1px solid #a9a9a9;
+	text-align:center;
+}
+.tab_expcalc .ship_goal .ship_input select {
+	height:20px;
+	border:1px solid #a9a9a9;
 }
 
 /* COLUMNS
@@ -170,6 +194,8 @@
 }
 .tab_expcalc .ship_goal .ship_add {
 	background:#3c9;
+	line-height: 22px;
+	font-weight: bold;
 }
 .tab_expcalc .ship_goal .ship_rem {
 	background:#c77;
