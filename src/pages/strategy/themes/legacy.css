@@ -1824,3 +1824,11 @@ body {
 .tab_shipdrop .filters .ship_filter_type:hover {
 	background:#cfc;
 }
+.tab_shipdrop .massSelect .hover {
+	border-radius: 4px;
+	color:#00f;
+}
+.tab_shipdrop .massSelect .hover.on {
+	color:#fff;
+	background: hsl(220, 100%, 60%);
+}
