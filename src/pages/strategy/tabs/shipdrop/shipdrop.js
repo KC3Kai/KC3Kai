@@ -5,7 +5,6 @@
 	KC3StrategyTabs.shipdrop.definition = {
 		tabSelf: KC3StrategyTabs.shipdrop,
 
-		pList : [],
 		dropTable : {},
 		selectedWorld : 0,
 		selectedMap : 0,
@@ -44,7 +43,7 @@
 			let sorties37_1;
 			sorties37_1 = KC3Database.con.sortie.where("world").equals(world).and( data => data.mapnum === subMap && data.hq === hq);
 			self.dropTable = {};
-			self.pList = [];
+			let pList = [];
 			//first: get info from KC3Database and count the drop of different node
 			sorties37_1.each( function(sortie) {
 				if(typeof self.dropTable[sortie.diff] === "undefined")
@@ -62,9 +61,9 @@
 					}
 					++ tbl[battle.drop];
 				});
-				self.pList.push(p);
+				pList.push(p);
 			}).then( function() {
-				Promise.all(self.pList).then(self.filter_ship_drop());
+				Promise.all(pList).then(self.filter_ship_drop.bind(self));
 			});
 		},
 
