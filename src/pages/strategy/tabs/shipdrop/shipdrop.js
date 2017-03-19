@@ -240,7 +240,7 @@
 					self.rank_filter_checkbox[self.rankOp[self.rank_iterator][i]] = true;
 				}
 				if(self.rankOp[self.rank_iterator][0] == "S")
-					self.rank_filter_checkbox['SS'] = true;
+					self.rank_filter_checkbox.SS = true;
 			};
 			let opElm_rank_on = function(index , opElm) {
 				$(".tab_shipdrop .control_panel .filters .massSelect" + " .dif_" + 
