@@ -273,6 +273,7 @@
 					self.diff_iterator[index] = true;
 					self.diff_filter_checkbox[index + 1] = true;
 				}
+				self.filter_ship_drop();
 			};
 			self.diffOp.map(function(diff , index) {
 				cElm = $(".tab_shipdrop .control_panel .filters .massSelect");
