@@ -75,32 +75,33 @@
 			let self = this;
 			let node_tot = {};
 			let rating = ["SS" , "S" , "A" , "B"];
+			let renderer = function(nodeNum, dropInfo) {
+				let node = KC3Meta.nodeLetter(self.selectedWorld,self.selectedMap,nodeNum);
+				if(typeof node_tot[node] === "undefined") node_tot[node] = {};
+
+				let keys = Object.keys( dropInfo );
+				keys.sort( (ka,kb) => dropInfo[kb] - dropInfo[ka] );
+				//handle the drop info
+				$.each( keys, function(ind,mstId) {
+					let count = dropInfo[mstId];
+					let shipPanel = $(".ship", factory).clone();
+					let name = KC3Master.ship(mstId).api_name || "<nothing>";
+					if(mstId !== "0" && name != "<nothing>") {
+						if(typeof node_tot[node][mstId] == "undefined") node_tot[node][mstId] = 0;
+						node_tot[node][mstId] += count;
+					}
+					else {
+						if(typeof node_tot[node][0] === "undefined") node_tot[node][0] = 0;
+						node_tot[node][0] += count;
+					}
+				});
+			};
 			for(let i = 0 ; i <= 5; ++ i) for(let j = 0 ; j < 4 ; ++ j) {
 				if(self.rank_filter_checkbox[rating[j]] === false) continue;
 				if(self.diff_filter_checkbox[rating[j]] === false) continue;
 				if(typeof self.dropTable[i] !== "undefined") {
 					if(typeof self.dropTable[i][rating[j]] === "undefined") continue;
-					$.each( self.dropTable[i][rating[j]], function(nodeNum, dropInfo) {
-						let node = KC3Meta.nodeLetter(self.selectedWorld,self.selectedMap,nodeNum);
-						if(typeof node_tot[node] === "undefined") node_tot[node] = {};
-
-						let keys = Object.keys( dropInfo );
-						keys.sort( (ka,kb) => dropInfo[kb] - dropInfo[ka] );
-						//handle the drop info
-						$.each( keys, function(ind,mstId) {
-							let count = dropInfo[mstId];
-							let shipPanel = $(".ship", factory).clone();
-							let name = KC3Master.ship(mstId).api_name || "<nothing>";
-							if(mstId !== "0" && name != "<nothing>") {
-								if(typeof node_tot[node][mstId] == "undefined") node_tot[node][mstId] = 0;
-								node_tot[node][mstId] += count;
-							}
-							else {
-								if(typeof node_tot[node][0] === "undefined") node_tot[node][0] = 0;
-								node_tot[node][0] += count;
-							}
-						});
-					});
+					$.each( self.dropTable[i][rating[j]], renderer);
 				}
 			}
 
@@ -239,7 +240,7 @@
 					self.rank_filter_checkbox[self.rankOp[self.rank_iterator][i]] = true;
 				}
 				if(self.rankOp[self.rank_iterator][0] == "S")
-					self.rank_filter_checkbox["SS"] = true;
+					self.rank_filter_checkbox['SS'] = true;
 			};
 			let opElm_rank_on = function(index , opElm) {
 				$(".tab_shipdrop .control_panel .filters .massSelect" + " .dif_" + 
