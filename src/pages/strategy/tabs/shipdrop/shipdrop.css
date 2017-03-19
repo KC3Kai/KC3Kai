@@ -69,6 +69,7 @@
 	width:680px;
 	height:60px;
 	margin:10px 10px 10px 10px;
+	display:none;
 }
 .tab_shipdrop .filters .ship_filter_type {
 	width:80px;
@@ -99,4 +100,32 @@
 	width:680px;
 	height:30px;
 	margin:10px 10px 10px 10px;
+}
+
+.tab_shipdrop .massSelect {
+	margin:10px 10px 10px 10px;
+}
+
+.tab_shipdrop .massSelect dl{
+	width: 220px;
+	display: 	inline-block;
+	vertical-align: top;
+	margin: 0px 0px 5px 0px;
+	overflow: 	hidden;
+}
+.tab_shipdrop .massSelect dl dt,
+.tab_shipdrop .massSelect dl dd{
+	float: 		left;
+	line-height:inherit;
+}
+.tab_shipdrop .massSelect .massLabel {
+	font-weight:bold;
+}
+.tab_shipdrop .massSelect .hover {
+	margin:0px 0px 0px 4px;
+	padding: 0 3px;
+	border-radius: 4px;
+}
+.tab_shipdrop .massSelect .hover.on {
+	
 }
