@@ -111,8 +111,8 @@
 			});
 			
 			// On-click sortie ID export battle
-			$(".sortie_list").on("click", ".sortie_dl", function(){
-				self.exportBattleImg(parseInt($(this).data("id")));
+			$(".sortie_list").on("click", ".sortie_dl", function(e){
+				self.exportBattleImg(parseInt($(this).data("id")), e);
 			});
 			
 			// On-click sortie toggles
@@ -746,7 +746,7 @@
 		
 		/* EXPORT REPLAY IMAGE
 		-------------------------------*/
-		this.exportBattleImg = function(sortieId){
+		this.exportBattleImg = function(sortieId, e){
 			if(this.exportingReplay) return false;
 			this.exportingReplay = true;
 			
@@ -779,6 +779,13 @@
 						return false;
 					}
 					
+					if(e.shiftKey) {
+						window.open("https://kc3kai.github.io/kancolle-replay/battleplayer.html#" + encodeURIComponent(JSON.stringify(sortieData), "_blank"));
+						self.exportingReplay = false;
+						$("body").css("opacity", "1");
+						return true;
+					}
+
 					console.log("Downloading reply", sortieId, ", data:", sortieData);
 					rcontext.font = "26pt Calibri";
 					rcontext.fillStyle = '#ffffff';
