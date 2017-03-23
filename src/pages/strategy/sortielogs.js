@@ -684,7 +684,7 @@
 							});
 							
 							// Taiha border
-							if (
+							if ( 0
 								// TODO
 							) {
 								nodeBox.addClass("taiha");

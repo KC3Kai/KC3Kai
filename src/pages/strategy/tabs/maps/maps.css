@@ -363,6 +363,9 @@
 	overflow:hidden;
 	padding:5px;
 }
+.tab_maps .sortie_list .sortie_nodeinfo.taiha {
+	box-shadow: inset 0px 0px 0px 2px #C00;
+}
 .tab_maps .sortie_list .node_id {
 	width:24px;
 	height:24px;
