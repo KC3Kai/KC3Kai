@@ -400,7 +400,7 @@ Used by SortieManager
 				console.log("Jets LBAS consumed steel:", consumedSteel);
 				if(consumedSteel > 0){
 					KC3Database.Naverall({
-						hour: Math.hrdInt("floor", Date.safeToUtcTime() / 3.6, 6, 1),
+						hour: Date.toUTChours(),
 						type: "lbas" + KC3SortieManager.map_world,
 						data: [0,0,-consumedSteel,0].concat([0,0,0,0])
 					});
