@@ -683,13 +683,6 @@
 								}
 							});
 							
-							// Taiha border
-							if (
-								// TODO
-							) {
-								nodeBox.addClass("taiha");
-							}
-							
 							// Add box to UI
 							$(".sortie_nodes", sortieBox).append( nodeBox );
 						});
