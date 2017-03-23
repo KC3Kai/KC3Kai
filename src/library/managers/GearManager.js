@@ -12,8 +12,8 @@ Saves and loads list to and from localStorage
 		max: 497,
 		pendingGearNum: 0,
 
-		carrierBasedAircraftType3Ids: [6,7,8,9,10,21,22,33,39,40],
-		landBasedAircraftType3Ids: [6,7,8,9,10,33,37,38,39,40],
+		carrierBasedAircraftType3Ids: [6,7,8,9,10,21,22,33,39,40,43],
+		landBasedAircraftType3Ids: [6,7,8,9,10,33,37,38,39,40,43],
 		// To avoid manually update, see `load`
 		antiAirFighterType2Ids: ["6","7","8","11","45","47","48","57"],
 		interceptorsType3Ids: [38],

@@ -2,10 +2,10 @@
 	"use strict";
 	_gaq.push(['_trackPageview']);
 	
-	var HASH_PARAM_DELIM = "-";
-	var WINDOW_TITLE = "KC3改 Strategy Room";
+	const HASH_PARAM_DELIM = "-";
+	const WINDOW_TITLE = "KC3改 Strategy Room";
 	var activeTab;
-	var THEME;
+	var themeName;
 	
 	Object.defineProperties(window,{
 		activeTab:{
@@ -35,11 +35,11 @@
 		KC3Translation.execute();
 		WhoCallsTheFleetDb.init("../../");
 		
-		THEME = ConfigManager.sr_theme || "dark";
+		themeName = ConfigManager.sr_theme || "dark";
 		var themeCSS = document.createElement("link");
 		themeCSS.rel = "stylesheet";
 		themeCSS.type = "text/css";
-		themeCSS.href = "./themes/"+THEME+".css";
+		themeCSS.href = "./themes/"+themeName+".css";
 		$("head").append(themeCSS);
 		
 		if(!KC3Master.available){

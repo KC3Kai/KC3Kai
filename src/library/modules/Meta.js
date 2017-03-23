@@ -104,16 +104,24 @@ Provides access to data on built-in JSON files
 			this._terms.troll		= JSON.parse( $.ajax(repo+'lang/data/troll/terms.json', { async: false }).responseText );
 			// other language loaded here
 			this._terms.lang		= KC3Translation.getJSON(repo, 'terms', true);
+			return this;
 		},
 		
 		loadQuotes :function(){
 			this._quotes = KC3Translation.getQuotes(this.repo);
+			return this;
+		},
+		
+		reloadQuests :function(){
+			this._quests = KC3Translation.getJSON(this.repo, "quests", true);
+			return this;
 		},
 		
 		/* Data Access
 		-------------------------------------------------------*/
 		defaultIcon :function(iconSrc){
 			this._defaultIcon = iconSrc;
+			return this;
 		},
 		getIcon: function(id, empty) {
 			id = Number(id);

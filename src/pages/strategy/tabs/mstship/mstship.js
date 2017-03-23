@@ -43,6 +43,7 @@
 		atLevelChange: null,
 		// Merged master ship data with abyssal stats and seasonal CGs
 		mergedMasterShips: {},
+		damagedBossFileSuffix: "_d",
 		
 		/* INIT
 		Prepares static data needed
@@ -188,6 +189,17 @@
 				});
 			}
 			
+			// Fold/unfold sections like a accordion widget
+			$(".tab_mstship .shipInfo .accordion .head").on("click", function(e){
+				$(this).next().slideToggle();
+				return false;
+			}).next().hide();
+			
+			// Show damaged CG of abyssal boss
+			$(".tab_mstship .shipInfo .boss").on("click", function(e){
+				self.showShip(self.currentShipId, true);
+			});
+			
 			// Link to quotes developer page
 			if(ConfigManager.devOnlyPages){
 				$(".tab_mstship .shipInfo").on("click", ".to-quotes", function(e){
@@ -220,6 +232,13 @@
 			// Link to ship specified by URL hash
 			if(!!KC3StrategyTabs.pageParams[1]){
 				this.showShip(KC3StrategyTabs.pageParams[1]);
+				// Also expand unfolded section
+				if(KC3StrategyTabs.pageParams.indexOf("aaci") > 1){
+					$(".tab_mstship .shipInfo .aaci").parent().show();
+				}
+				if(KC3StrategyTabs.pageParams.indexOf("gunfit") > 1){
+					$(".tab_mstship .shipInfo .gunfit").parent().show();
+				}
 			}else{
 				this.showShip();
 			}
@@ -258,7 +277,7 @@
 			shipList.scrollTop(scrollTop);
 		},
 
-		showShip :function(ship_id){
+		showShip :function(ship_id, tryDamagedGraph = false){
 			ship_id = Number(ship_id||"405");
 			var
 				self = this,
@@ -294,11 +313,11 @@
 			this.currentGraph = shipFile;
 			this.currentCardVersion = shipVersions[0];
 			
-			var shipSrc = "../../../../assets/swf/card.swf?sip="+this.server_ip
-					+"&shipFile="+shipFile
-					+"&abyss="+(ship_id>500 && ship_id<=800 ?1:0)
-					+(ship_id > 800 ? "&forceFrame=6":"")
-					+(!this.currentCardVersion?"":"&ver="+this.currentCardVersion);
+			var shipSrc = "../../../../assets/swf/card.swf?sip=" + this.server_ip
+					+ ("&shipFile=" + shipFile + (tryDamagedGraph ? this.damagedBossFileSuffix : ""))
+					+ ("&abyss=" + (ship_id > 500 && ship_id <= 800 ? 1 : 0))
+					+ (ship_id > 800 ? "&forceFrame=6" : "")
+					+ (!this.currentCardVersion ? "" : "&ver=" + this.currentCardVersion);
 			
 			$(".tab_mstship .shipInfo .cgswf embed").remove();
 			$("<embed/>")
@@ -543,8 +562,10 @@
 						aaciBox.appendTo(".aaciList");
 					});
 					$(".aaci").show();
+					$(".aaci").parent().prev().show();
 				} else {
 					$(".aaci").hide();
+					$(".aaci").parent().prev().hide();
 				}
 				
 				// GUN FITS
@@ -576,6 +597,9 @@
 						
 						gunfitBox.appendTo(".gunfitList");
 					});
+					$(".gunfit").parent().prev().show();
+				} else {
+					$(".gunfit").parent().prev().hide();
 				}
 				
 				// BOXES
@@ -586,7 +610,7 @@
 				$(".tab_mstship .shipInfo .json").hide();
 				$(".tab_mstship .shipInfo .boss").hide();
 				$(".tab_mstship .shipInfo .encounter").hide();
-				$(".tab_mstship .shipInfo .gunfit").show();
+				$(".tab_mstship .shipInfo .accordion").show();
 				$(".tab_mstship .shipInfo .tokubest").show();
 				if(ConfigManager.info_salt)
 					$(".tab_mstship .shipInfo .tokubest .salty-zone").show();
@@ -712,8 +736,7 @@
 				$(".tab_mstship .shipInfo .hourlies").hide();
 				$(".tab_mstship .shipInfo .intro").hide();
 				$(".tab_mstship .shipInfo .more").hide();
-				$(".tab_mstship .shipInfo .aaci").hide();
-				$(".tab_mstship .shipInfo .gunfit").hide();
+				$(".tab_mstship .shipInfo .accordion").hide();
 				$(".tab_mstship .shipInfo .tokubest").hide();
 			} else {
 				$(".tab_mstship .shipInfo .stats").hide();
@@ -729,8 +752,7 @@
 				$(".tab_mstship .shipInfo .boss").hide();
 				$(".tab_mstship .shipInfo .encounter").hide();
 				$(".tab_mstship .shipInfo .more").hide();
-				$(".tab_mstship .shipInfo .aaci").hide();
-				$(".tab_mstship .shipInfo .gunfit").hide();
+				$(".tab_mstship .shipInfo .accordion").hide();
 				$(".tab_mstship .shipInfo .tokubest").hide();
 			}
 		}

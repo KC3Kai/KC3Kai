@@ -3181,7 +3181,7 @@
 				}
 				$(".activity_gunfit .fit_value").off("click").on("click", function(e){
 					(new RMsg("service", "strategyRoomPage", {
-						tabPath: "mstship-{0}".format(data.shipObj.masterId)
+						tabPath: "mstship-{0}-gunfit".format(data.shipObj.masterId)
 					})).execute();
 					e.stopPropagation();
 				});
