@@ -56,8 +56,8 @@ KC3改 Equipment Object
 	KC3Gear.prototype.AAStatImprovementBonous = function() {
 		if (this.itemId !== 0) {
 			var hasBeenImproved = typeof(this.stars) !== "undefined" && this.stars > 0;
-			// reference 1:
-			// http://wikiwiki.jp/kancolle/?%B2%FE%BD%A4%B9%A9%BE%B3#v63b3544
+			// reference:
+			// http://wikiwiki.jp/kancolle/?%B2%FE%BD%A4%B9%A9%BE%B3#ic9d577c
 			// for carrier-based fighters,
 			// every star grants +0.2 AA stat, which is added to the AA stat bonus
 			// of the gear.
@@ -65,14 +65,22 @@ KC3改 Equipment Object
 				hasBeenImproved) {
 				return 0.2 * this.stars;
 			}
-			// reference 2:
+			// seaplane fighters are improvable now, 0.192 < AA bonus < 0.2014 (still verifying)
+			// refs: https://twitter.com/syoukuretin/status/843271212377690112
+			//       https://twitter.com/DarkQuetzal/status/842686753815191556
+			// seaplane bombers are still not improvable
+			if (this.master().api_type[3] === 43 // is seaplane fighter but not bomber/recon
+				&& hasBeenImproved) {
+				return 0.2 * this.stars;
+			}
+			// reference:
 			// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:951#32
 			// for fighter-bombers, every star grants +0.25 AA stat.
 			// there's no distinction between bomber and fighter-bomber from KCAPI,
 			// so let's just say the rule applies to all bombers.
 			// (regular bombers cannot be improved anyway, for now...)
-			if (this.master().api_type[2] === 7 && // is bomber
-				hasBeenImproved) {
+			if (this.master().api_type[2] === 7 // is bomber
+				&& hasBeenImproved) {
 				return 0.25 * this.stars;
 			}
 		}

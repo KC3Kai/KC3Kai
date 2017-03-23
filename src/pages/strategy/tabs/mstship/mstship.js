@@ -189,6 +189,12 @@
 				});
 			}
 			
+			// Fold/unfold sections like a accordion widget
+			$(".tab_mstship .shipInfo .accordion .head").on("click", function(e){
+				$(this).next().slideToggle();
+				return false;
+			}).next().hide();
+			
 			// Show damaged CG of abyssal boss
 			$(".tab_mstship .shipInfo .boss").on("click", function(e){
 				self.showShip(self.currentShipId, true);
@@ -226,6 +232,13 @@
 			// Link to ship specified by URL hash
 			if(!!KC3StrategyTabs.pageParams[1]){
 				this.showShip(KC3StrategyTabs.pageParams[1]);
+				// Also expand unfolded section
+				if(KC3StrategyTabs.pageParams.indexOf("aaci") > 1){
+					$(".tab_mstship .shipInfo .aaci").parent().show();
+				}
+				if(KC3StrategyTabs.pageParams.indexOf("gunfit") > 1){
+					$(".tab_mstship .shipInfo .gunfit").parent().show();
+				}
 			}else{
 				this.showShip();
 			}
@@ -549,8 +562,10 @@
 						aaciBox.appendTo(".aaciList");
 					});
 					$(".aaci").show();
+					$(".aaci").parent().prev().show();
 				} else {
 					$(".aaci").hide();
+					$(".aaci").parent().prev().hide();
 				}
 				
 				// GUN FITS
@@ -582,6 +597,9 @@
 						
 						gunfitBox.appendTo(".gunfitList");
 					});
+					$(".gunfit").parent().prev().show();
+				} else {
+					$(".gunfit").parent().prev().hide();
 				}
 				
 				// BOXES
@@ -592,7 +610,7 @@
 				$(".tab_mstship .shipInfo .json").hide();
 				$(".tab_mstship .shipInfo .boss").hide();
 				$(".tab_mstship .shipInfo .encounter").hide();
-				$(".tab_mstship .shipInfo .gunfit").show();
+				$(".tab_mstship .shipInfo .accordion").show();
 				$(".tab_mstship .shipInfo .tokubest").show();
 				if(ConfigManager.info_salt)
 					$(".tab_mstship .shipInfo .tokubest .salty-zone").show();
@@ -718,8 +736,7 @@
 				$(".tab_mstship .shipInfo .hourlies").hide();
 				$(".tab_mstship .shipInfo .intro").hide();
 				$(".tab_mstship .shipInfo .more").hide();
-				$(".tab_mstship .shipInfo .aaci").hide();
-				$(".tab_mstship .shipInfo .gunfit").hide();
+				$(".tab_mstship .shipInfo .accordion").hide();
 				$(".tab_mstship .shipInfo .tokubest").hide();
 			} else {
 				$(".tab_mstship .shipInfo .stats").hide();
@@ -735,8 +752,7 @@
 				$(".tab_mstship .shipInfo .boss").hide();
 				$(".tab_mstship .shipInfo .encounter").hide();
 				$(".tab_mstship .shipInfo .more").hide();
-				$(".tab_mstship .shipInfo .aaci").hide();
-				$(".tab_mstship .shipInfo .gunfit").hide();
+				$(".tab_mstship .shipInfo .accordion").hide();
 				$(".tab_mstship .shipInfo .tokubest").hide();
 			}
 		}

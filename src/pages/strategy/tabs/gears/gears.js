@@ -92,6 +92,8 @@
 			"t41": "overall",
 			// submarine radar
 			"t42": "ev",
+			// seaplane fighter
+			"t43": "aa",
 			// all types
 			"tall": "type",
 		},
