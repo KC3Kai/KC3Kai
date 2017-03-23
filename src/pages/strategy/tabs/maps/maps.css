@@ -106,9 +106,9 @@
 .tab_maps .page_list .sortie_count {
 	font-size:11px;
 	line-height:12px;
-	float:left;
-	position:absolute;
-	margin:-6px 0px 0px 500px;
+	float: right;
+	display: inline-block;
+	margin: 5px 5px 0px 0px;
 }
 
 /* SORTIE LIST
