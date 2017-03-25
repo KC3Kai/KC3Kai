@@ -16,6 +16,20 @@ Manages the timer for a player's Akashi repairs.
   /*----------------------[ GETTERS ]-----------------------*/
   /*--------------------------------------------------------*/
 
+  // Calculate the amount of HP that can be repaired,
+  // and the amount of time until the next point of HP can be repaired
+  KC3AkashiRepair.prototype.getProgress = function (dockTime, hpLost) {
+    if (!dockTime || !hpLost) { return { repairedHp: 0, timeToNextRepair: 0 }; }
+    var elapsed = this.timer.getElapsed();
+
+    if (!elapsed.canDoRepair()) {
+      return KC3AkashiRepair.calculatePreRepairProgress(elapsed);
+    }
+
+    var tickLength = KC3AkashiRepair.calculateTickLength(dockTime, hpLost);
+    return KC3AkashiRepair.calculateProgress(elapsed, tickLength, hpLost);
+  };
+
   KC3AkashiRepair.prototype.isRunning = function () {
     return this.timer.isRunning();
   };
@@ -89,5 +103,50 @@ Manages the timer for a player's Akashi repairs.
   KC3AkashiRepair.hasRepairFlagship = function (fleet) {
     var flagship = fleet.ship(0);
     return flagship.master().api_stype === 19;
+  };
+
+  /*------------------[ REPAIR PROGRESS ]-------------------*/
+
+  // Calculate the amount of time it takes to repair 1 HP
+  KC3AkashiRepair.calculateTickLength = function (dockTime, hpLost) {
+    var baseTime = dockTime - 30 * MS_PER_SECOND;
+    var akashiTime = Math.ceil(baseTime / MS_PER_MINUTE) * MS_PER_MINUTE;
+    return Math.ceil(akashiTime / hpLost);
+  };
+
+  // Calculate progress when no repairs are ready yet
+  KC3AkashiRepair.calculatePreRepairProgress = function (dt) {
+    return {
+      repairedHp: 0,
+      timeToNextRepair: 20 * MS_PER_MINUTE - dt.ms(),
+    };
+  };
+
+  var roundUpToMinute = function (ms) {
+    return Math.ceil(ms / MS_PER_MINUTE) * MS_PER_MINUTE;
+  };
+  var roundDownToMinute = function (ms) {
+    return Math.floor(ms / MS_PER_MINUTE) * MS_PER_MINUTE;
+  };
+
+  // Calculate progress when there are repairs ready
+  KC3AkashiRepair.calculateProgress = function (deltaTime, tickLength, hpLost) {
+    var result = { repairedHp: 0, timeToNextRepair: 0 };
+    while (result.repairedHp < hpLost) {
+      var nextTick = tickLength * (result.repairedHp + 1);
+      if (roundDownToMinute(deltaTime.ms()) >= nextTick) {
+        result.repairedHp += 1;
+      } else {
+        result.timeToNextRepair = roundUpToMinute(nextTick) - deltaTime.ms();
+        break;
+      }
+    }
+    if (result.repairedHp === 0) {
+      return {
+        repairedHp: 1,
+        timeToNextRepair: roundUpToMinute(tickLength * 2) - deltaTime.ms(),
+      };
+    }
+    return result;
   };
 })();
