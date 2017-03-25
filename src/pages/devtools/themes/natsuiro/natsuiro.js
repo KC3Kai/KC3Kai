@@ -3298,19 +3298,13 @@
 			abyssMaster = KC3Master.abyssalShip(eshipId, true);
 			tooltip += "{0}: {1}\n".format(eshipId,
 				!!isPvP ? KC3Meta.shipName(shipMaster.api_name) : KC3Meta.abyssShipName(eshipId));
-			if(ConfigManager.info_battle)
-				tooltip += "{0} Lv {1} HP {2}/{3}\n".format(
-					KC3Meta.stype(shipMaster.api_stype),
-					level || "?",
-					currentHP || "?",
-					maxHP || "?"
-				);
-			else
-				tooltip += "{0} Lv {1} HP {2}\n".format(
-					KC3Meta.stype(shipMaster.api_stype),
-					level || "?",
-					maxHP || "?"
-				);
+			tooltip += "{0} Lv {1} HP {2}\n".format(
+				KC3Meta.stype(shipMaster.api_stype),
+				level || "?",
+				ConfigManager.info_battle ?
+					"{0} /{1}".format(currentHP === undefined ? "?" : currentHP, maxHP || "?")
+					: maxHP || "?"
+			);
 			if(Array.isArray(eParam)){
 				tooltip += $("<img />").attr("src", "../../../../assets/img/client/mod_fp.png")
 					.css(iconStyles).prop("outerHTML");

@@ -2360,10 +2360,11 @@ ABYSS FLEET
 	line-height:15px;
 	float:left;
 	font-size:10px;
-	color:#00FFFF;
+	color:#00ffff;
+	white-space:nowrap;
 }
 .module.fleet .lship .ship_level {
-	width:40px;
+	width:35px;
 	height:15px;
 	line-height:15px;
 	float:left;
@@ -2372,16 +2373,24 @@ ABYSS FLEET
 	white-space:nowrap;
 }
 .module.fleet .lship .ship_hp_text {
-	width:50px;
+	width:55px;
 	height:15px;
 	line-height:15px;
 	float:left;
-	color:#00FF00;
+	color:#0f0;
 	text-align:right;
+	white-space:nowrap;
 }
 .module.fleet .lship .ship_hp_cur {
 	color:#0f0;
 	font-size:12px;
+}
+.module.fleet .lship .ship_hp_diff {
+	color:#f00;
+	font-size:11px;
+	margin-left:-4px;
+	margin-right:-2px;
+	display:none;
 }
 .module.fleet .lship .ship_hp_max {
 	color:#aaa;
