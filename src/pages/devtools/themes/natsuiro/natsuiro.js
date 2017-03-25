@@ -306,12 +306,9 @@
 		var baseElement = (TotalFleet.length > 1) ? ['main','escort'] : ['single'];
 		var ctime = Date.now();
 		baseElement.forEach(function(baseKey,index){
-			var FleetData = PlayerManager.fleets[TotalFleet[index]];
-
 			var baseContainer = $([".shiplist",baseKey].join('_'));
-			var akashiDuration = (function(){
-				return Math.min(359999,Math.hrdInt('floor',ctime - this.akashi_tick,3,1));
-			}).call(FleetData);
+			var akashiDuration = Math.hrdInt('floor', PlayerManager.akashiRepair.getElapsed(), 3, 1);
+			var canDoRepair = PlayerManager.akashiRepair.canDoRepair();
 
 			$(".sship,.lship",baseContainer).each(function(index,shipBox){
 				var repairBox = $('.ship_repair_data',shipBox);
@@ -322,7 +319,7 @@
 					repairTime = Math.max(0,Math.hrdInt('floor',shipData.repair[0],3,1) - 30),
 					repairTick = Math.max(1,(hpLoss > 0) ? (repairTime/hpLoss) : 1),
 					repairHP   = Math.min(hpLoss,
-						FleetData.checkAkashiExpire() ?
+						canDoRepair ?
 							Math.floor(hpLoss*Math.min(1,Math.max(akashiDuration-30,0) / repairTime)) :
 							0
 					);
@@ -330,7 +327,8 @@
 				$('.ship_repair_tick' ,shipBox).attr('data-tick',repairHP);
 				$('.ship_repair_timer',shipBox).text((
 					(repairHP < hpLoss) ? (
-						!FleetData.checkAkashiExpire() ? (1200-akashiDuration) :
+						!canDoRepair ?
+							(1200-akashiDuration) :
 							(repairTick - Math.min(repairTime,akashiDuration - 30) % repairTick)
 					) : NaN
 				).toString().toHHMMSS() );
