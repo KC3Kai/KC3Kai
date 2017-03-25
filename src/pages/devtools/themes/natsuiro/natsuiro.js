@@ -1916,8 +1916,8 @@
 						$(enemyFleetBoxSelector+" .abyss_ship_"+(index+1)+" img")
 							.attr("src", KC3Meta.abyssIcon(eshipId))
 							.attr("title", buildEnemyFaceTooltip(eshipId, thisNode.elevels[index],
-								thisNode.maxHPs.enemy[index], thisNode.eParam[index],
-								thisNode.eSlot[index], false))
+								thisNode.enemyHP[index].hp, thisNode.maxHPs.enemy[index], 
+								thisNode.eParam[index], thisNode.eSlot[index], false))
 							.lazyInitTooltip();
 						$(enemyFleetBoxSelector+" .abyss_ship_"+(index+1))
 							.data("masterId", eshipId)
@@ -2125,8 +2125,8 @@
 							$(".module.activity .abyss_single .abyss_ship_"+(index+1)+" img")
 								.attr("src", thisNode.isPvP ? KC3Meta.shipIcon(eshipId) : KC3Meta.abyssIcon(eshipId))
 								.attr("title", buildEnemyFaceTooltip(eshipId, thisNode.elevels[index],
-									thisNode.maxHPs.enemy[index], thisNode.eParam[index],
-									thisNode.eSlot[index], thisNode.isPvP))
+									thisNode.enemyHP[index].hp, thisNode.maxHPs.enemy[index], 
+									thisNode.eParam[index], thisNode.eSlot[index], thisNode.isPvP))
 								.lazyInitTooltip();
 							$(".module.activity .abyss_single .abyss_ship_"+(index+1))
 								.data("masterId", eshipId)
@@ -2541,8 +2541,8 @@
 					$(".module.activity .abyss_single .abyss_ship_"+(index+1)+" img")
 						.attr("src", KC3Meta.shipIcon(eshipId))
 						.attr("title", buildEnemyFaceTooltip(eshipId, thisPvP.elevels[index],
-							thisPvP.maxHPs.enemy[index], thisPvP.eParam[index],
-							thisPvP.eSlot[index], true))
+							thisPvP.enemyHP[index].hp, thisPvP.maxHPs.enemy[index], 
+							thisPvP.eParam[index], thisPvP.eSlot[index], true))
 						.lazyInitTooltip();
 					$(".module.activity .abyss_single .abyss_ship_"+(index+1))
 						.data("masterId", eshipId)
@@ -3286,7 +3286,7 @@
 		}
 	}
 
-	function buildEnemyFaceTooltip(eshipId, level, maxHP, eParam, eSlot, isPvP) {
+	function buildEnemyFaceTooltip(eshipId, level, currentHP, maxHP, eParam, eSlot, isPvP) {
 		var tooltip = "", shipMaster, gearMaster, slotIdx;
 		var abyssMaster, slotMaxeq;
 		var iconStyles = {
@@ -3298,11 +3298,19 @@
 			abyssMaster = KC3Master.abyssalShip(eshipId, true);
 			tooltip += "{0}: {1}\n".format(eshipId,
 				!!isPvP ? KC3Meta.shipName(shipMaster.api_name) : KC3Meta.abyssShipName(eshipId));
-			tooltip += "{0} Lv {1} HP {2}\n".format(
-				KC3Meta.stype(shipMaster.api_stype),
-				level || "?",
-				maxHP || "?"
-			);
+			if(ConfigManager.info_battle)
+				tooltip += "{0} Lv {1} HP {2}/{3}\n".format(
+					KC3Meta.stype(shipMaster.api_stype),
+					level || "?",
+					currentHP || "?",
+					maxHP || "?"
+				);
+			else
+				tooltip += "{0} Lv {1} HP {2}\n".format(
+					KC3Meta.stype(shipMaster.api_stype),
+					level || "?",
+					maxHP || "?"
+				);
 			if(Array.isArray(eParam)){
 				tooltip += $("<img />").attr("src", "../../../../assets/img/client/mod_fp.png")
 					.css(iconStyles).prop("outerHTML");
