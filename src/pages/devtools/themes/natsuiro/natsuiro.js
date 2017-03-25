@@ -451,6 +451,14 @@
 			$("body").css("background-repeat", "no-repeat");
 		}
 
+		// Panel customizations: custom css
+		if(ConfigManager.pan_custom_css !== ""){
+			var customCSS = document.createElement("style");
+			customCSS.type = "text/css";
+			customCSS.innerHTML = ConfigManager.pan_custom_css;
+			$("head").append(customCSS);
+		}
+
 		// Close CatBomb modal
 		$(".modalBox").on("click", ".closebtn", function(){
 			$(this).parent().parent().fadeOut(300);

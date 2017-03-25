@@ -41,6 +41,13 @@
 		themeCSS.type = "text/css";
 		themeCSS.href = "./themes/"+themeName+".css";
 		$("head").append(themeCSS);
+
+		if(ConfigManager.sr_custom_css !== ""){
+			var customCSS = document.createElement("style");
+			customCSS.type = "text/css";
+			customCSS.innerHTML = ConfigManager.sr_custom_css;
+			$("head").append(customCSS);
+		}
 		
 		if(!KC3Master.available){
 			$("#error").text("Strategy Room is not ready. Please open the game once so we can get data. Also make sure following the instructions, that open the F12 devtools panel first before the Game Player shown.");

@@ -189,8 +189,10 @@ Retreives when needed to apply on components
 				pan_bg_position		: "top center",
 				pan_opacity 		: 100,
 				pan_box_bcolor 		: "rgba(100, 100, 100, 0.618)",
+				pan_custom_css		: "",
 
-				sr_theme			: "legacy"
+				sr_theme			: "legacy",
+				sr_custom_css		: ""
 			};
 		},
         
