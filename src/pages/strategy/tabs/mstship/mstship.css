@@ -361,8 +361,18 @@
 	overflow: hidden;
 	white-space: nowrap;
 }
-.tab_mstship .shipInfo .more .other_forms_list a {
+.tab_mstship .shipInfo .more .other_forms_list a,
+.tab_mstship .shipInfo .more .seasonal_cg_list a {
 	margin:0px 10px 0px 0px;
+	max-length:50px;
+}
+.tab_mstship .shipInfo .more .seasonal_cg.moreinfo_box {
+	height:auto;
+}
+.tab_mstship .shipInfo .more .seasonal_cg_list {
+	float:left;
+	width:370px;
+	font-size:12px;
 }
 /* Scrap Value */
 
