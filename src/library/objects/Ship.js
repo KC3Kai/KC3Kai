@@ -326,11 +326,15 @@ KC3改 Ship Object
 
 			hpArr = optAfterHp ? this.afterHp : this.hp;
 
-		var result = {};
+		var result = { akashi: 0 };
 
-		result.akashi = ( HPPercent > 0.50 && HPPercent < 1.00 && this.isFree()) ?
-			/* RepairCalc.facilityInSecJSNum( this.master().api_stype, this.level, this.hp[0], this.hp[1] ) */
-			Math.max(Math.min((1200 * (this.hp[1] - this.hp[0])),RepairTSec),1200) : 0;
+		if (HPPercent > 0.5 && HPPercent < 1.00 && this.isFree()) {
+			var repairTime = KC3AkashiRepair.calculateRepairTime(this.repair[0]);
+			result.akashi = Math.max(
+				Math.hrdInt('floor', repairTime,3,1), // convert to seconds
+				20 * 60 // should be at least 20 minutes
+			);
+		}
 
 		if (optAfterHp) {
 			result.docking = RepairCalc.dockingInSecJSNum( this.master().api_stype, this.level, hpArr[0], hpArr[1] );

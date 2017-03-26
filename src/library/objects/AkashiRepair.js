@@ -26,7 +26,8 @@ Manages the timer for a player's Akashi repairs.
       return KC3AkashiRepair.calculatePreRepairProgress(elapsed);
     }
 
-    var tickLength = KC3AkashiRepair.calculateTickLength(dockTime, hpLost);
+    var repairTime = KC3AkashiRepair.calculateRepairTime(dockTime);
+    var tickLength = KC3AkashiRepair.calculateTickLength(repairTime, hpLost);
     return KC3AkashiRepair.calculateProgress(elapsed, tickLength, hpLost);
   };
 
@@ -71,6 +72,16 @@ Manages the timer for a player's Akashi repairs.
   };
 
   /*--------------------------------------------------------*/
+  /*-------------------[ PUBLIC HELPERS ]-------------------*/
+  /*--------------------------------------------------------*/
+
+  // Calculate the length of an Akashi repair in ms, 
+  // based on the length of an equivalent dock repair
+  KC3AkashiRepair.calculateRepairTime = function (dockTime) {
+    return roundUpToMinute(dockTime - 30 * MS_PER_SECOND);
+  };
+
+  /*--------------------------------------------------------*/
   /*------------------[ INTERNAL CLASSES ]------------------*/
   /*--------------------------------------------------------*/
 
@@ -107,11 +118,10 @@ Manages the timer for a player's Akashi repairs.
 
   /*------------------[ REPAIR PROGRESS ]-------------------*/
 
-  // Calculate the amount of time it takes to repair 1 HP
-  KC3AkashiRepair.calculateTickLength = function (dockTime, hpLost) {
-    var baseTime = dockTime - 30 * MS_PER_SECOND;
-    var akashiTime = Math.ceil(baseTime / MS_PER_MINUTE) * MS_PER_MINUTE;
-    return Math.ceil(akashiTime / hpLost);
+  // Calculate the amount of time it takes to repair 1 HP,
+  // rounded up to the nearest ms
+  KC3AkashiRepair.calculateTickLength = function (repairTime, hpLost) {
+    return Math.ceil(repairTime / hpLost);
   };
 
   // Calculate progress when no repairs are ready yet
