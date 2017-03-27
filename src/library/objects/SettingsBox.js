@@ -230,6 +230,7 @@ To be dynamically used on the settings page
 		$(".options", this.element).append(
 			$("<textarea/>")
 				.attr("title", KC3Meta.term( (options || {}).tooltip ) )
+				.attr("maxlength", 64000)
 				.addClass("huge_text")
 				.prop("disabled", this.disabled)
 				.val( ConfigManager[ this.config ] )
