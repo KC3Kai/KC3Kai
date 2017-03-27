@@ -891,11 +891,10 @@
 			},
 			{
 				"id" : "pan_custom_css",
-				"name" : "SettingsPanelBoxCustomCSS",
+				"name" : "SettingsPanelCustomCSS",
 				"type" : "textarea",
 				"options" : {
-					"placeholder" : "SettingsCustomCSSDesc",
-					"tooltip" : "SettingsCustomCSSDesc"
+					"tooltip" : "SettingsPanelCustomCSSTip"
 				}
 			}
 		]
@@ -920,8 +919,7 @@
 				"name" : "SettingsStrategyCustomCSS",
 				"type" : "textarea",
 				"options" : {
-					"placeholder" : "SettingsCustomCSSDesc",
-					"tooltip" : "SettingsCustomCSSDesc"
+					"tooltip" : "SettingsStrategyCustomCSSTip"
 				}
 			}
 		]
