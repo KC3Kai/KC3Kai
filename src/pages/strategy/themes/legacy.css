@@ -989,6 +989,10 @@ body {
 
 /* MAPS
 --------------------------------*/
+.tab_event .page_list .sortie_count,
+.tab_maps .page_list .sortie_count {
+	color:#337ab7;
+}
 .tab_event .world_list,
 .tab_maps .world_list {
 	background:#f0f5ff;
@@ -1048,7 +1052,9 @@ body {
 	border:2px inset #FAA;
 }
 .tab_event .sortie_list .sortie_box,
-.tab_maps .sortie_list .sortie_box {
+.tab_maps .sortie_list .sortie_box,
+.tab_event .sortie_switcher,
+.tab_maps .sortie_switcher {
 	background:#def;
 	border-radius:10px;
 	margin:0px 0px 5px 0px;
@@ -1076,20 +1082,26 @@ body {
 	background:#fff;
 }
 .tab_event .sortie_list .sortie_toggle,
-.tab_maps .sortie_list .sortie_toggle {
+.tab_maps .sortie_list .sortie_toggle,
+.tab_event .sortie_switcher .sortie_toggle,
+.tab_maps .sortie_switcher .sortie_toggle {
 	background:#ace;
 	color:#fff;
 	border-radius:5px;
 	border:1px outset #9bd;
 }
 .tab_event .sortie_list .sortie_toggle.active,
-.tab_maps .sortie_list .sortie_toggle.active {
+.tab_maps .sortie_list .sortie_toggle.active,
+.tab_event .sortie_switcher .sortie_toggle.active,
+.tab_maps .sortie_switcher .sortie_toggle.active {
 	line-height:16px;
 	border-width:2px;
 	border-style:inset;
 }
 .tab_event .sortie_list .sortie_toggle_in,
-.tab_maps .sortie_list .sortie_toggle_in {
+.tab_maps .sortie_list .sortie_toggle_in,
+.tab_event .sortie_switcher .sortie_toggle_in,
+.tab_maps .sortie_switcher .sortie_toggle_in {
 	background:#cde;
 	color:#000;
 }
@@ -1181,6 +1193,10 @@ body {
 }
 /* PVP
 --------------------------------*/
+.tab_pvp .page_list .pvp_count,
+.tab_pvp .page_list .pvp_count {
+	color:#337ab7;
+}
 .tab_pvp .pvp_player .pvp_details_ship {
 	border:1px solid #ace;
 }

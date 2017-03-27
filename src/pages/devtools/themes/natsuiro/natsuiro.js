@@ -451,6 +451,14 @@
 			$("body").css("background-repeat", "no-repeat");
 		}
 
+		// Panel customizations: custom css
+		if(ConfigManager.pan_custom_css !== ""){
+			var customCSS = document.createElement("style");
+			customCSS.type = "text/css";
+			customCSS.innerHTML = ConfigManager.pan_custom_css;
+			$("head").append(customCSS);
+		}
+
 		// Close CatBomb modal
 		$(".modalBox").on("click", ".closebtn", function(){
 			$(this).parent().parent().fadeOut(300);
@@ -1916,8 +1924,8 @@
 						$(enemyFleetBoxSelector+" .abyss_ship_"+(index+1)+" img")
 							.attr("src", KC3Meta.abyssIcon(eshipId))
 							.attr("title", buildEnemyFaceTooltip(eshipId, thisNode.elevels[index],
-								thisNode.maxHPs.enemy[index], thisNode.eParam[index],
-								thisNode.eSlot[index], false))
+								thisNode.enemyHP[index].hp, thisNode.maxHPs.enemy[index], 
+								thisNode.eParam[index], thisNode.eSlot[index], false))
 							.lazyInitTooltip();
 						$(enemyFleetBoxSelector+" .abyss_ship_"+(index+1))
 							.data("masterId", eshipId)
@@ -2125,8 +2133,8 @@
 							$(".module.activity .abyss_single .abyss_ship_"+(index+1)+" img")
 								.attr("src", thisNode.isPvP ? KC3Meta.shipIcon(eshipId) : KC3Meta.abyssIcon(eshipId))
 								.attr("title", buildEnemyFaceTooltip(eshipId, thisNode.elevels[index],
-									thisNode.maxHPs.enemy[index], thisNode.eParam[index],
-									thisNode.eSlot[index], thisNode.isPvP))
+									thisNode.enemyHP[index].hp, thisNode.maxHPs.enemy[index], 
+									thisNode.eParam[index], thisNode.eSlot[index], thisNode.isPvP))
 								.lazyInitTooltip();
 							$(".module.activity .abyss_single .abyss_ship_"+(index+1))
 								.data("masterId", eshipId)
@@ -2541,8 +2549,8 @@
 					$(".module.activity .abyss_single .abyss_ship_"+(index+1)+" img")
 						.attr("src", KC3Meta.shipIcon(eshipId))
 						.attr("title", buildEnemyFaceTooltip(eshipId, thisPvP.elevels[index],
-							thisPvP.maxHPs.enemy[index], thisPvP.eParam[index],
-							thisPvP.eSlot[index], true))
+							thisPvP.enemyHP[index].hp, thisPvP.maxHPs.enemy[index], 
+							thisPvP.eParam[index], thisPvP.eSlot[index], true))
 						.lazyInitTooltip();
 					$(".module.activity .abyss_single .abyss_ship_"+(index+1))
 						.data("masterId", eshipId)
@@ -3181,7 +3189,7 @@
 				}
 				$(".activity_gunfit .fit_value").off("click").on("click", function(e){
 					(new RMsg("service", "strategyRoomPage", {
-						tabPath: "mstship-{0}".format(data.shipObj.masterId)
+						tabPath: "mstship-{0}-gunfit".format(data.shipObj.masterId)
 					})).execute();
 					e.stopPropagation();
 				});
@@ -3286,7 +3294,7 @@
 		}
 	}
 
-	function buildEnemyFaceTooltip(eshipId, level, maxHP, eParam, eSlot, isPvP) {
+	function buildEnemyFaceTooltip(eshipId, level, currentHP, maxHP, eParam, eSlot, isPvP) {
 		var tooltip = "", shipMaster, gearMaster, slotIdx;
 		var abyssMaster, slotMaxeq;
 		var iconStyles = {
@@ -3301,7 +3309,9 @@
 			tooltip += "{0} Lv {1} HP {2}\n".format(
 				KC3Meta.stype(shipMaster.api_stype),
 				level || "?",
-				maxHP || "?"
+				ConfigManager.info_battle ?
+					"{0} /{1}".format(currentHP === undefined ? "?" : currentHP, maxHP || "?")
+					: maxHP || "?"
 			);
 			if(Array.isArray(eParam)){
 				tooltip += $("<img />").attr("src", "../../../../assets/img/client/mod_fp.png")

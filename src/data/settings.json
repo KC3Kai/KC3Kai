@@ -888,6 +888,15 @@
 					"placeholder" : "SettingsBGColorDesc",
 					"tooltip" : "SettingsBGColorDesc"
 				}
+			},
+			{
+				"id" : "pan_custom_css",
+				"name" : "SettingsPanelBoxCustomCSS",
+				"type" : "textarea",
+				"options" : {
+					"placeholder" : "SettingsCustomCSSDesc",
+					"tooltip" : "SettingsCustomCSSDesc"
+				}
 			}
 		]
 	},
@@ -904,6 +913,15 @@
 						[ "legacy", "Traditional" ],
 						[ "dark", "Dark" ]
 					]
+				}
+			},
+			{
+				"id" : "sr_custom_css",
+				"name" : "SettingsStrategyCustomCSS",
+				"type" : "textarea",
+				"options" : {
+					"placeholder" : "SettingsCustomCSSDesc",
+					"tooltip" : "SettingsCustomCSSDesc"
 				}
 			}
 		]

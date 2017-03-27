@@ -111,33 +111,52 @@
 			});
 			
 			// On-click sortie ID export battle
-			$(".sortie_list").on("click", ".sortie_dl", function(){
-				self.exportBattleImg(parseInt($(this).data("id")));
+			$(".sortie_list").on("click", ".sortie_dl", function(e){
+				self.exportBattleImg(parseInt($(this).data("id")), e);
 			});
 			
 			// On-click sortie toggles
-			$(".tab_"+tabCode+" .sortie_list").on("click", ".sortie_box .sortie_toggles .sortie_toggle", function(){
-				var targetName = $(this).data("target");
-				var targetParent = $(this).parent().parent().parent();
+			function toggleSortie(origin, globalSwitch) {
+				var targetName = $(origin).data("target");
+				var targetParent = globalSwitch ? $(".tab_"+tabCode+" .sortie_box") : $(origin).parent().parent().parent();
 				var targetBox = targetParent.find("."+targetName);
-				var expandedQualif = !$(this).hasClass("sortie_toggle_in");
-				var expandedBefore = $(".sortie_toggle.active:not(.sortie_toggle_in)",$(this).parent()).length;
+				var expandedQualif = !$(origin).hasClass("sortie_toggle_in");
+				var expandedBefore = $(".sortie_toggle.active:not(.sortie_toggle_in)",$(origin).parent()).length;
+				var expandedAfter = $(".sortie_toggle.active:not(.sortie_toggle_in)",$(origin).parent()).length;
 				
-				if( $(this).hasClass("active") ){
-					$(this).removeClass("active");
-				}else{
-					$(this).addClass("active");
+				if( $(origin).hasClass("active") ){
+					$(origin).removeClass("active");
+					if (globalSwitch) {
+						targetParent.find("[data-target=" + targetName + "]").removeClass("active");
+					}
+					// Hide the target box
+					targetBox.slideUp(undefined,function(){
+						if(expandedQualif && expandedBefore < 1)
+							targetParent.addClass("expanded");
+					});
+				} else {
+					$(origin).addClass("active");
+					if (globalSwitch) {
+						targetParent.find("[data-target=" + targetName + "]").addClass("active");
+					}
+					// Show the target box
+					targetBox.slideDown(undefined,function(){
+						if(expandedQualif && expandedBefore < 1)
+							targetParent.addClass("expanded");
+					});
 				}
 				
-				var expandedAfter = $(".sortie_toggle.active:not(.sortie_toggle_in)",$(this).parent()).length;
-				
-				// Show or hide the target box
-				targetBox.slideToggle(undefined,function(){
-					if(expandedQualif && expandedBefore < 1)
-						targetParent.addClass("expanded");
-				});
 				if(expandedQualif && expandedAfter < 1)
 					targetParent.removeClass("expanded");
+			}
+			
+			$(".tab_"+tabCode+" .sortie_list").on("click", ".sortie_box .sortie_toggles .sortie_toggle", function(){
+				toggleSortie(this, false);
+			});
+			
+			// On-click global sortie toggles
+			$(".tab_"+tabCode+" .sortie_switcher").on("click", ".sortie_toggles .sortie_toggle", function(){
+				toggleSortie(this, true);
 			});
 
 			if(!!KC3StrategyTabs.pageParams[1]){
@@ -160,6 +179,7 @@
 
 			$(".tab_"+tabCode+" .map_list").empty().css("width","").css("margin-left","");
 			$(".tab_"+tabCode+" .page_list").empty();
+			$(".tab_"+tabCode+" .sortie_switcher").empty();
 			$(".tab_"+tabCode+" .sortie_list").empty();
 			var countWorlds = $(".tab_"+tabCode+" .world_box").length;
 			var worldOffset = $(window).data("world_off");
@@ -226,6 +246,20 @@
 							if(element.clear == 1){
 								$(".map_hp_txt", mapBox).text("Cleared!");
 								mapBox.addClass("cleared");
+								if (cWorld>=10) {
+									mapBox.addClass((function(x){
+										switch(x){
+											case 1:
+												return "easy";
+											case 2:
+												return "normal";
+											case 3:
+												return "hard";
+											default:
+												return "";
+										}
+									})(element.difficulty));
+								}
 								if(typeof element.maxhp != "undefined")
 									$(".map_hp_txt", mapBox).lazyInitTooltip()
 										.attr("title", "{0} / {1}".format(element.curhp, element.maxhp));
@@ -313,6 +347,7 @@
 			if(this.selectedWorld === 0){
 				KC3Database.count_normal_sorties(function(countSorties){
 					self.showPagination(countSorties);
+					self.showSwitcher(countSorties);
 				});
 				
 			// Selected specific world
@@ -322,6 +357,7 @@
 					KC3Database.count_world(this.selectedWorld, function(countSorties){
 						console.log("count_world", countSorties);
 						self.showPagination(countSorties);
+						self.showSwitcher(countSorties);
 					});
 					
 				// Selected specifc map
@@ -329,6 +365,7 @@
 					KC3Database.count_map(this.selectedWorld, this.selectedMap, function(countSorties){
 						console.log("count_map", countSorties);
 						self.showPagination(countSorties);
+						self.showSwitcher(countSorties);
 					});
 				}
 			}
@@ -353,8 +390,23 @@
 				});
 				self.pageNum = 1;
 				self.showPage();
+				$(".tab_"+tabCode+" .page_list")
+					.prepend('<div class="sortie_count">Total pages: {0}, sorties: {1}</div>'
+						.format(countPages, countSorties));
 			}else{
 				$(".tab_"+tabCode+" .pagination").hide();
+			}
+		};
+
+		/* SHOW SORTIE SWITCHER
+		Show controls for global switching in all sorties
+		-------------------------------------------------*/
+		this.showSwitcher = function(countSorties) {
+			var self = this;
+			var sortie_switcher;
+			
+			if (countSorties > 0) {
+				sortie_switcher = $(".tab_"+tabCode+" .factory .sortie_column.sortie_toggles").clone().appendTo(".tab_"+tabCode+" .sortie_switcher");
 			}
 		};
 		
@@ -364,7 +416,7 @@
 		---------------------------------*/
 		this.showPage = function(){
 			var self = this;
-			$(".tab_"+tabCode+" .pagination").hide();
+			$(".tab_"+tabCode+" .pagination").show();
 			$(".tab_"+tabCode+" .sortie_list").empty();
 			
 			// Show all sorties
@@ -619,6 +671,7 @@
 											$(nodeName+"L",nodeBox).text("-"+thisNode["plane"+planeType][side][1]);
 									});
 								});
+								$(".node_planes", nodeBox).attr("title", thisNode.buildAirBattleLossMessage());
 							}
 							
 							// Node EXP
@@ -670,7 +723,6 @@
 				}catch(e){console.error(e.stack);}
 			});
 			
-			$(".tab_"+tabCode+" .pagination").show();
 			$(".tab_"+tabCode+" .sortie_list").createChildrenTooltips();
 		};
 		
@@ -694,7 +746,7 @@
 		
 		/* EXPORT REPLAY IMAGE
 		-------------------------------*/
-		this.exportBattleImg = function(sortieId){
+		this.exportBattleImg = function(sortieId, e){
 			if(this.exportingReplay) return false;
 			this.exportingReplay = true;
 			
@@ -727,6 +779,13 @@
 						return false;
 					}
 					
+					if(e.shiftKey) {
+						window.open("https://kc3kai.github.io/kancolle-replay/battleplayer.html#" + encodeURIComponent(JSON.stringify(sortieData), "_blank"));
+						self.exportingReplay = false;
+						$("body").css("opacity", "1");
+						return true;
+					}
+
 					console.log("Downloading reply", sortieId, ", data:", sortieData);
 					rcontext.font = "26pt Calibri";
 					rcontext.fillStyle = '#ffffff';

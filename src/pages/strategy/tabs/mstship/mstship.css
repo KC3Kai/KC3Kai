@@ -361,8 +361,18 @@
 	overflow: hidden;
 	white-space: nowrap;
 }
-.tab_mstship .shipInfo .more .other_forms_list a {
+.tab_mstship .shipInfo .more .other_forms_list a,
+.tab_mstship .shipInfo .more .seasonal_cg_list a {
 	margin:0px 10px 0px 0px;
+	max-length:50px;
+}
+.tab_mstship .shipInfo .more .seasonal_cg.moreinfo_box {
+	height:auto;
+}
+.tab_mstship .shipInfo .more .seasonal_cg_list {
+	float:left;
+	width:370px;
+	font-size:12px;
 }
 /* Scrap Value */
 
@@ -427,11 +437,32 @@
 	width:60px;
 	margin:0px 3px 2px 3px;
 }
+/* Accordion like */
+.tab_mstship .shipInfo .accordion {
+}
+.tab_mstship .shipInfo .accordion .head {
+	height:24px;
+	line-height:20px;
+	color:#888;
+	background:#def;
+	border:1px solid #039;
+	border-radius:3px;
+	font-size:12px;
+	font-weight:bold;
+	padding:1px 5px 1px 5px;
+	margin:2px 3px 2px 3px;
+	white-space:nowrap;
+	overflow:hidden;
+}
+.tab_mstship .shipInfo .accordion .body {
+	width:470px;
+	margin-top:5px;
+	margin-bottom:5px;
+}
 /* AACI
 --------------------------------*/
 .tab_mstship .shipInfo .aaci {
 	width:468px;
-	margin:0px 0px 10px 0px;
 }
 .tab_mstship .shipInfo .aaci .aaciPattern {
 	width:290px;
@@ -518,7 +549,6 @@
 --------------------------------*/
 .tab_mstship .shipInfo .gunfit {
 	width:470px;
-	margin:0px 0px 10px 0px;
 }
 .tab_mstship .shipInfo .gunfit .fitgear {
 	width:400px;

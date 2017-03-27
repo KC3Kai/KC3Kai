@@ -53,7 +53,7 @@
 		prepareShipData: function(ship) {
 			var ThisShip = ship;
 			var MasterShip = ThisShip.master();
-			var BaseRemodelForm = RemodelDb.remodelGroup(ThisShip.masterId)[0];
+			var BaseRemodelForm = RemodelDb.originOf(ThisShip.masterId);
 			var Quests = this.getShipQuests(BaseRemodelForm);
 
 			var cached = {

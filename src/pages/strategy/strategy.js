@@ -2,10 +2,10 @@
 	"use strict";
 	_gaq.push(['_trackPageview']);
 	
-	var HASH_PARAM_DELIM = "-";
-	var WINDOW_TITLE = "KC3改 Strategy Room";
+	const HASH_PARAM_DELIM = "-";
+	const WINDOW_TITLE = "KC3改 Strategy Room";
 	var activeTab;
-	var THEME;
+	var themeName;
 	
 	Object.defineProperties(window,{
 		activeTab:{
@@ -35,12 +35,19 @@
 		KC3Translation.execute();
 		WhoCallsTheFleetDb.init("../../");
 		
-		THEME = ConfigManager.sr_theme || "dark";
+		themeName = ConfigManager.sr_theme || "dark";
 		var themeCSS = document.createElement("link");
 		themeCSS.rel = "stylesheet";
 		themeCSS.type = "text/css";
-		themeCSS.href = "./themes/"+THEME+".css";
+		themeCSS.href = "./themes/"+themeName+".css";
 		$("head").append(themeCSS);
+
+		if(ConfigManager.sr_custom_css !== ""){
+			var customCSS = document.createElement("style");
+			customCSS.type = "text/css";
+			customCSS.innerHTML = ConfigManager.sr_custom_css;
+			$("head").append(customCSS);
+		}
 		
 		if(!KC3Master.available){
 			$("#error").text("Strategy Room is not ready. Please open the game once so we can get data. Also make sure following the instructions, that open the F12 devtools panel first before the Game Player shown.");
