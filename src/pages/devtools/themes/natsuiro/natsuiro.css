@@ -2388,8 +2388,6 @@ ABYSS FLEET
 .module.fleet .lship .ship_hp_diff {
 	color:#f00;
 	font-size:11px;
-	margin-left:-4px;
-	margin-right:-2px;
 	display:none;
 }
 .module.fleet .lship .ship_hp_max {
@@ -2398,17 +2396,31 @@ ABYSS FLEET
 }
 .module.fleet .lship .ship_hp_box {
 	width:120px;
-	height:10px;
+	height:12px;
 	float:left;
 	border:1px solid #000;
 	background:#555;
 	position:relative;
 }
 .module.fleet .lship .ship_hp_bar {
-	height:8px;
+	height:10px;
 }
 .module.fleet .lship .ship_hp_prediction {
-	height:8px;
+	height:10px;
+}
+.module.fleet .lship .ship_hp_prediction_counter {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	line-height: 9px;
+	text-align: center;
+}
+.module.fleet .lship .ship_hp_prediction_counter .ship_hp_cur  {
+	color: #F00;
+	font-size: 11px;
+	margin-right: 2px;
+	display: none;
 }
 
 /* ==> Akashi Timer <== */
