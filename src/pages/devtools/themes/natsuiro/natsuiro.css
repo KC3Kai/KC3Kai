@@ -2386,7 +2386,7 @@ ABYSS FLEET
 	font-size:12px;
 }
 .module.fleet .lship .ship_hp_diff {
-	color:#f00;
+	color:#ff7979;
 	font-size:11px;
 	display:none;
 }
