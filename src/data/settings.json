@@ -775,6 +775,18 @@
 		]
 	},
 	{
+		"section": "SettingsDataSynchronization",
+		"help": "",
+		"contents": [
+			{
+				"id": "chromeSyncQuests",
+				"name": "SettingsChromeSyncQuests",
+				"type": "check",
+				"options" : {}
+			}
+		]
+	},
+	{
 		"section": "SettingsKC3DBSubmission",
 		"help" : "",
 		"contents" :[
