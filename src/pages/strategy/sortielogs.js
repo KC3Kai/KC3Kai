@@ -111,7 +111,8 @@
 			});
 			
 			// On-click sortie ID export battle
-			$(".sortie_list").on("click", ".sortie_dl", function(e){
+			$(".sortie_list").on("click contextmenu", ".sortie_dl", function(e){
+				e.preventDefault();
 				self.exportBattleImg(parseInt($(this).data("id")), e);
 			});
 			
@@ -779,7 +780,7 @@
 						return false;
 					}
 					
-					if(e.shiftKey) {
+					if(e.which === 3) {
 						window.open("https://kc3kai.github.io/kancolle-replay/battleplayer.html#" + encodeURIComponent(JSON.stringify(sortieData), "_blank"));
 						self.exportingReplay = false;
 						$("body").css("opacity", "1");
