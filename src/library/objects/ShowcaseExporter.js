@@ -351,12 +351,16 @@
     };
 
     ShowcaseExporter.prototype._openInNewTab = function (dataURL, topLine) {
-        if (dataURL.length >= 2 * 1024 * 1024) {
-            this._download(dataURL, topLine);
-        } else {
-            window.open(dataURL, "_blank");
-            this.complete({});
-        }
+        var byteString = atob(dataURL.split(',')[1]);
+        var mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
+        var ab = new ArrayBuffer(byteString.length);
+        var ia = new Uint8Array(ab);
+        for (var i = 0; i < byteString.length; i++)
+            ia[i] = byteString.charCodeAt(i);
+
+        var blob = new Blob([ab], {type: mimeString});
+        window.open(URL.createObjectURL(blob), "_blank");
+        this.complete({});
     };
 
     /* SHIP EXPORT
