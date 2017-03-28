@@ -44,8 +44,7 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 	}, function(response){
 		if(response.value && response.storage){
 			// Change osapi whole page zoom based on configured scale
-			if(
-				// if dmm site play mode and customize enabled
+			if( // if dmm site play mode and customize enabled
 				(response.value[1] && response.storage[0] == "true" && response.storage[1] == "false")
 				// if dmm frame or api link play mode
 				|| response.storage[0] == "false" || response.storage[1] == "true"
@@ -55,7 +54,7 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 			}
 			// Hide spacing top for dmm site play mode
 			if(response.value[1] && response.storage[0] == "true" && response.storage[1] == "false"){
-				document.getElementById("spacing_top").style.display = "none";
+				document.getElementById("spacing_top").style = "height:0px;display:none;";
 			}
 		}
 	})).execute();
