@@ -361,9 +361,8 @@ KC3改 Ship Box for Natsuiro theme
 			var hpDiff = this.shipData.hp[0] - this.shipData.afterHp[0];
 			$(".ship_hp_diff", this.element).text("-" + hpDiff).show();
 			
-			// Prediction HP result, prediction HP diff base
+			// Prediction HP result
 			$(".ship_hp_pred", this.element).text( this.shipData.hp[0] - hpDiff );
-			$(".ship_hp_cur", this.element).text( this.shipData.hp[0] ).show();
 			
 			// HP-based UI and colors
 			if(ConfigManager.info_btstamp && afterHpPercent <= 0.00) {
