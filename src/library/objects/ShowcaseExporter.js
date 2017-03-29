@@ -9,17 +9,19 @@
     }
 
     //TODO remove once min supported chrome version will be 50+
-    HTMLCanvasElement.prototype.toBlob || Object.defineProperty( HTMLCanvasElement.prototype, 'toBlob', {
-        value: function( callback, type, quality ) {
-            var xhr = new XMLHttpRequest;
-            xhr.open( 'GET', this.toDataURL( type, quality ) );
-            xhr.responseType = 'arraybuffer';
-            xhr.onload = function(e) {
-                callback( new Blob( [this.response], {type: type || 'image/png'} ) );
+    if(typeof HTMLCanvasElement.prototype.toBlob!="function"){
+        Object.defineProperty( HTMLCanvasElement.prototype, 'toBlob', {
+            value: function( callback, type, quality ) {
+                var xhr = new XMLHttpRequest();
+                xhr.open( 'GET', this.toDataURL( type, quality ) );
+                xhr.responseType = 'arraybuffer';
+                xhr.onload = function(e) {
+                    callback( new Blob( [this.response], {type: type || 'image/png'} ) );
+                };
+                xhr.send();
             }
-            xhr.send();
-        }
-    });
+        });
+    }
 
     window.ShowcaseExporter = function () {
         this.canvas = {};
