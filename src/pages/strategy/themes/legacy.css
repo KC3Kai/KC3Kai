@@ -1053,8 +1053,8 @@ body {
 }
 .tab_event .sortie_list .sortie_box,
 .tab_maps .sortie_list .sortie_box,
-.tab_event .sortie_switcher,
-.tab_maps .sortie_switcher {
+.tab_event .sortie_batch_toggles,
+.tab_maps .sortie_batch_toggles {
 	background:#def;
 	border-radius:10px;
 	margin:0px 0px 5px 0px;
@@ -1083,8 +1083,8 @@ body {
 }
 .tab_event .sortie_list .sortie_toggle,
 .tab_maps .sortie_list .sortie_toggle,
-.tab_event .sortie_switcher .sortie_toggle,
-.tab_maps .sortie_switcher .sortie_toggle {
+.tab_event .sortie_batch_toggles .sortie_toggle,
+.tab_maps .sortie_batch_toggles .sortie_toggle {
 	background:#ace;
 	color:#fff;
 	border-radius:5px;
@@ -1092,16 +1092,16 @@ body {
 }
 .tab_event .sortie_list .sortie_toggle.active,
 .tab_maps .sortie_list .sortie_toggle.active,
-.tab_event .sortie_switcher .sortie_toggle.active,
-.tab_maps .sortie_switcher .sortie_toggle.active {
+.tab_event .sortie_batch_toggles .sortie_toggle.active,
+.tab_maps .sortie_batch_toggles .sortie_toggle.active {
 	line-height:16px;
 	border-width:2px;
 	border-style:inset;
 }
 .tab_event .sortie_list .sortie_toggle_in,
 .tab_maps .sortie_list .sortie_toggle_in,
-.tab_event .sortie_switcher .sortie_toggle_in,
-.tab_maps .sortie_switcher .sortie_toggle_in {
+.tab_event .sortie_batch_toggles .sortie_toggle_in,
+.tab_maps .sortie_batch_toggles .sortie_toggle_in {
 	background:#cde;
 	color:#000;
 }

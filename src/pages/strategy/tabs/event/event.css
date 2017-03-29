@@ -137,53 +137,53 @@
 }
 
 .tab_event .map_box.cleared {
-    position: relative;
+	position: relative;
 }
 
 .tab_event .map_box.cleared.easy:after {
-    content: "";
-    display: block;
-    position: absolute;
-    top: -1px;
-    right: -8px;
-    width: 21px;
-    height: 36px;
-    background: transparent url('../../../../assets/img/client/medals/easy_medal.png');
-    background-size: contain;
-    pointer-events: none;
+	content: "";
+	display: block;
+	position: absolute;
+	top: -1px;
+	right: -8px;
+	width: 21px;
+	height: 36px;
+	background: transparent url('../../../../assets/img/client/medals/easy_medal.png');
+	background-size: contain;
+	pointer-events: none;
 }
 
 .tab_event .map_box.cleared.normal:after {
-    content: "";
-    display: block;
-    position: absolute;
-    top: -1px;
-    right: -8px;
-    width: 29px;
-    height: 37px;
-    background: transparent url('../../../../assets/img/client/medals/normal_medal.png');
-    background-size: contain;
-    pointer-events: none;
+	content: "";
+	display: block;
+	position: absolute;
+	top: -1px;
+	right: -8px;
+	width: 29px;
+	height: 37px;
+	background: transparent url('../../../../assets/img/client/medals/normal_medal.png');
+	background-size: contain;
+	pointer-events: none;
 }
 
 .tab_event .map_box.cleared.hard:after {
-    content: "";
-    display: block;
-    position: absolute;
-    top: -1px;
-    right: -8px;
-    width: 34px;
-    height: 38px;
-    background: transparent url('../../../../assets/img/client/medals/hard_medal.png');
-    background-size: contain;
-    pointer-events: none;
+	content: "";
+	display: block;
+	position: absolute;
+	top: -1px;
+	right: -8px;
+	width: 34px;
+	height: 38px;
+	background: transparent url('../../../../assets/img/client/medals/hard_medal.png');
+	background-size: contain;
+	pointer-events: none;
 }
 
 .tab_event .map_box.cleared.active.easy:after,
 .tab_event .map_box.cleared.active.normal:after,
 .tab_event .map_box.cleared.active.hard:after {
-    top: -3px;
-    right: -10px;
+	top: -3px;
+	right: -10px;
 }
 
 
@@ -209,25 +209,18 @@
 
 /* SORTIE SWITCHER
 ---------------------------------*/
-.tab_event .sortie_switcher {
-	width: 165px;
-	line-height:40px;
-	padding: 0px 5px;
-	margin: 5px 5px 0px 525px;
-	background: none;
+.tab_event .sortie_batch_toggles {
+	width:165px;
+	height:20px;
+	margin:5px 5px -5px 525px;
+	background:none;
 }
-.tab_event .sortie_switcher:after {
-	content: "";
-	display: block;
-	width: 100%;
-	height: 1px;
-	clear: both;
-}
-.tab_event .sortie_switcher .sortie_toggles {
+.tab_event .sortie_batch_toggles .sortie_toggles {
 	width:150px;
-	float: right;
+	margin:0px 4px 0px 0px;
+	float:right;
 }
-.tab_event .sortie_switcher .sortie_toggle {
+.tab_event .sortie_batch_toggles .sortie_toggle {
 	width:20px;
 	height:20px;
 	line-height:18px;

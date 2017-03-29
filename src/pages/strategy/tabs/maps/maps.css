@@ -111,27 +111,20 @@
 	margin: 5px 5px 0px 0px;
 }
 
-/* SORTIE SWITCHER
+/* SORTIE TOGGLES
 ---------------------------------*/
-.tab_maps .sortie_switcher {
-	width: 165px;
-	line-height:40px;
-	padding: 0px 5px;
-	margin: 5px 5px 0px 525px;
-	background: none;
+.tab_maps .sortie_batch_toggles {
+	width:165px;
+	height:20px;
+	margin:5px 5px -5px 525px;
+	background:none;
 }
-.tab_maps .sortie_switcher:after {
-	content: "";
-	display: block;
-	width: 100%;
-	height: 1px;
-	clear: both;
-}
-.tab_maps .sortie_switcher .sortie_toggles {
+.tab_maps .sortie_batch_toggles .sortie_toggles {
 	width:150px;
-	float: right;
+	margin:0px 5px 0px 0px;
+	float:right;
 }
-.tab_maps .sortie_switcher .sortie_toggle {
+.tab_maps .sortie_batch_toggles .sortie_toggle {
 	width:25px;
 	height:20px;
 	line-height:18px;
