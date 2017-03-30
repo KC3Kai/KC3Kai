@@ -260,10 +260,9 @@ KC3改 Ship Box for Natsuiro theme
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.showHP = function(){
 		// HP text
-		$(".ship_hp_pred", this.element).text( this.shipData.hp[0] );
+		$(".ship_hp_cur", this.element).text( this.shipData.hp[0] );
 		$(".ship_hp_max", this.element).text( "/"+this.shipData.hp[1] );
-		$(".ship_hp_cur", this.element).hide();
-		$(".ship_hp_diff", this.element).hide();
+		$(".ship_hp_pred_value", this.element).hide();
 		
 		// HP bar
 		var hpPercent = this.shipData.hp[0] / this.shipData.hp[1];
@@ -272,7 +271,7 @@ KC3改 Ship Box for Natsuiro theme
 		// Left HP to be Taiha
 		var taihaHp = Math.floor(0.25 * this.shipData.hp[1]);
 		if(this.shipData.hp[0] > taihaHp && this.shipData.hp[0] < this.shipData.hp[1]){
-			$(".ship_hp_pred", this.element)
+			$(".ship_hp_cur", this.element)
 				.attr("title", KC3Meta.term("PanelTaihaHpLeft").format(taihaHp, this.shipData.hp[0] - taihaHp) )
 				.lazyInitTooltip();
 		}
@@ -357,12 +356,11 @@ KC3改 Ship Box for Natsuiro theme
 			var afterHpPercent = this.shipData.afterHp[0] / this.shipData.afterHp[1];
 			$(".ship_hp_prediction", this.element).css("width", (this.hpBarLength*afterHpPercent)+"px");
 			
-			// Prediction HP diff
+			// Prediction HP result and diff values
 			var hpDiff = this.shipData.hp[0] - this.shipData.afterHp[0];
-			$(".ship_hp_diff", this.element).text("-" + hpDiff).show();
-			
-			// Prediction HP result
-			$(".ship_hp_pred", this.element).text( this.shipData.hp[0] - hpDiff );
+			$(".ship_hp_diff", this.element).text("-" + hpDiff);
+			$(".ship_hp_cur", this.element).text(this.shipData.afterHp[0]);
+			$(".ship_hp_pred_value", this.element).show();
 			
 			// HP-based UI and colors
 			if(ConfigManager.info_btstamp && afterHpPercent <= 0.00) {
