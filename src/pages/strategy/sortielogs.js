@@ -391,9 +391,9 @@
 				});
 				self.pageNum = 1;
 				self.showPage();
-				$(".tab_"+tabCode+" .page_list")
-					.prepend('<div class="sortie_count">Total pages: {0}, sorties: {1}</div>'
-						.format(countPages, countSorties));
+				$(".tab_"+tabCode+" .sortie_controls .sortie_count").text(
+					"Total pages: {0}, sorties: {1}".format(countPages, countSorties)
+				);
 				$(".tab_"+tabCode+" .sortie_batch_toggles").show();
 			}else{
 				$(".tab_"+tabCode+" .pagination").hide();

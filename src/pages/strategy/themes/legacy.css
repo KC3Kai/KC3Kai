@@ -989,8 +989,8 @@ body {
 
 /* MAPS
 --------------------------------*/
-.tab_event .page_list .sortie_count,
-.tab_maps .page_list .sortie_count {
+.tab_event .sortie_controls .sortie_count,
+.tab_maps .sortie_controls .sortie_count {
 	color:#337ab7;
 }
 .tab_event .world_list,
@@ -1193,8 +1193,8 @@ body {
 }
 /* PVP
 --------------------------------*/
-.tab_pvp .page_list .pvp_count,
-.tab_pvp .page_list .pvp_count {
+.tab_pvp .toggles .pvp_count,
+.tab_pvp .toggles .pvp_count {
 	color:#337ab7;
 }
 .tab_pvp .pvp_player .pvp_details_ship {

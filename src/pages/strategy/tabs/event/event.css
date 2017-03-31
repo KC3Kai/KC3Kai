@@ -199,12 +199,12 @@
 .tab_event .page_list .pagination {
 	margin:5px 0px 0px 0px;
 }
-.tab_event .page_list .sortie_count {
-	font-size:11px;
+
+.tab_event .sortie_controls .sortie_count {
+	font-size:12px;
 	line-height:12px;
-	float: right;
-	display: inline-block;
-	margin: 5px 5px 0px 0px;
+	float:left;
+	margin:4px 5px 5px 20px;
 }
 
 /* SORTIE SWITCHER
