@@ -36,8 +36,9 @@
 			});
 			
 			// Download replay button
-			$("#pvp_list").on("click", ".pvp_dl", function(){
-				self.downloadReplay($(this).data("id"));
+			$("#pvp_list").on("click contextmenu", ".pvp_dl", function(e){
+				e.preventDefault();
+				self.downloadReplay($(this).data("id"), e);
 			});
 			
 			// Show ship info
@@ -257,7 +258,7 @@
 		
 		/* DOWNLOAD REPLAY
 		---------------------------------*/
-		downloadReplay :function(pvp_id){
+		downloadReplay :function(pvp_id, e){
 			if(this.exportingReplay) return false;
 			this.exportingReplay = true;
 			
@@ -330,6 +331,13 @@
 						world: 0,
 						mapnum: 0,
 					};
+					
+					if(e.which === 3) {
+						window.open("https://kc3kai.github.io/kancolle-replay/battleplayer.html#" + encodeURIComponent(JSON.stringify(encodeData), "_blank"));
+						self.exportingReplay = false;
+						$("body").css("opacity", "1");
+						return true;
+					}
 					
 					steg.encode(JSON.stringify(encodeData), withDataCover64, {
 						success: function(newImg){
