@@ -738,14 +738,16 @@
 
 	function Orientation(){
 		if(!isRunning){ return false; }
-
+		var scrollBarWidth = (window.innerWidth - $(window).width()) || 0;
+		var expectedVerticalWidth = 800 - scrollBarWidth;
 		// Wide interface, switch to vertical if not yet
-		if( $(window).width() >= 800 && currentLayout != "vertical" ){
+		if($(window).width() >= expectedVerticalWidth && currentLayout != "vertical"){
 			$(".wrapper").removeClass("h").addClass("v");
-
+			currentLayout = "vertical";
 		// Narrow interface, switch to horizontal if not yet
-		}else if( $(window).width() < 800 && currentLayout != "horizontal" ){
+		} else if($(window).width() < expectedVerticalWidth && currentLayout != "horizontal"){
 			$(".wrapper").removeClass("v").addClass("h");
+			currentLayout = "horizontal";
 		}
 	}
 
