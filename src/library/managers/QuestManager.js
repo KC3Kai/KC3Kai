@@ -86,7 +86,7 @@ Uses KC3Quest objects to play around with
 			result.prevMonthLastDay8PmGmt = (new Date(nextPrevMonthFirstDay8PmGmt)).shiftDate(-1);
 			// So nextMonth will be next next month if date > 1
 			result.nextMonthFirstDay8PmGmt = (new Date(result.prevMonthFirstDay8PmGmt)).shiftMonth(2);
-			result.nextMonthLastDay8PmGmt = (new Date(result.nextMonthFirstDay8PmGmt)).shiftDate(-1);
+			result.nextMonthPrevDay8PmGmt = (new Date(result.nextMonthFirstDay8PmGmt)).shiftDate(-1);
 			
 			// Quarterly quests reset on the first day of every March, June, September, and December at 05:00 JST
 			var quarterTables = {"0":2,"1":1,"2":3,"3":2,"4":1,"5":3,"6":2,"7":1,"8":3,"9":2,"10":1,"11":3};
@@ -188,7 +188,7 @@ Uses KC3Quest objects to play around with
 				timeFromLocalStorage = this.getTimeToResetFromLocalStorage("timeToResetMonthlyQuests");
 				if (timeFromLocalStorage === -1) {
 					if (NextResetTime.prevMonthLastDay8PmGmt.getTime() < currentServerTimestamp) {
-						this.timeToResetMonthlyQuests = NextResetTime.nextMonthLastDay8PmGmt.getTime();
+						this.timeToResetMonthlyQuests = NextResetTime.nextMonthPrevDay8PmGmt.getTime();
 					} else {
 						this.timeToResetMonthlyQuests = NextResetTime.prevMonthLastDay8PmGmt.getTime();
 					}
@@ -204,7 +204,7 @@ Uses KC3Quest objects to play around with
 				if (this.timeToResetMonthlyQuests < NextResetTime.prevMonthLastDay8PmGmt.getTime()) {
 					this.timeToResetMonthlyQuests = NextResetTime.prevMonthLastDay8PmGmt.getTime();
 				} else {
-					this.timeToResetMonthlyQuests = NextResetTime.nextMonthLastDay8PmGmt.getTime();
+					this.timeToResetMonthlyQuests = NextResetTime.nextMonthPrevDay8PmGmt.getTime();
 				}
 				localStorage.timeToResetMonthlyQuests = this.timeToResetMonthlyQuests;
 				if(typeof KC3Network === "object")
