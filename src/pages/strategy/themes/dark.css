@@ -906,8 +906,11 @@ button, input, select, textarea {
 	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
+.tab_gears .itemSorters .sortControl.active {
+	background:#555;
+}
 .tab_gears .itemSorters .sortControl:hover {
-	background:#CCCCCC;
+	background:#cccccc;
 	color:#000000;
 }
 .tab_gears .itemSorters .sortControl:hover img {

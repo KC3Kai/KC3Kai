@@ -603,6 +603,9 @@ body {
 .tab_gears .itemSorters {
 	border-bottom:1px solid #369;
 }
+.tab_gears .itemSorters .sortControl.active {
+	background:#cccccc;
+}
 .tab_gears .itemSorters .sortControl {
 	color:#00f;
 	border-radius:7px;
