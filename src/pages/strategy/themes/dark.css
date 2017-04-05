@@ -906,8 +906,11 @@ button, input, select, textarea {
 	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
+.tab_gears .itemSorters .sortControl.active {
+	background:#555;
+}
 .tab_gears .itemSorters .sortControl:hover {
-	background:#CCCCCC;
+	background:#cccccc;
 	color:#000000;
 }
 .tab_gears .itemSorters .sortControl:hover img {
@@ -1264,8 +1267,8 @@ button, input, select, textarea {
 
 /* MAPS
 --------------------------------*/
-.tab_event .page_list .sortie_count,
-.tab_maps .page_list .sortie_count {
+.tab_event .sortie_controls .sortie_count,
+.tab_maps .sortie_controls .sortie_count {
 	color:#fff;
 }
 .tab_event .world_box.active,
@@ -1309,8 +1312,8 @@ button, input, select, textarea {
 }
 .tab_event .sortie_list .sortie_box,
 .tab_maps .sortie_list .sortie_box,
-.tab_event .sortie_switcher,
-.tab_maps .sortie_switcher {
+.tab_event .sortie_batch_toggles,
+.tab_maps .sortie_batch_toggles {
 	background:#303030;
 	margin:0px 0px 2px 0px;
 }
@@ -1342,22 +1345,22 @@ button, input, select, textarea {
 }
 .tab_event .sortie_list .sortie_toggle,
 .tab_maps .sortie_list .sortie_toggle,
-.tab_event .sortie_switcher .sortie_toggle,
-.tab_maps .sortie_switcher .sortie_toggle {
+.tab_event .sortie_batch_toggles .sortie_toggle,
+.tab_maps .sortie_batch_toggles .sortie_toggle {
 	background:#000;
 	color:#999;
 }
 .tab_event .sortie_list .sortie_toggle.active,
 .tab_maps .sortie_list .sortie_toggle.active,
-.tab_event .sortie_switcher .sortie_toggle.active,
-.tab_maps .sortie_switcher .sortie_toggle.active {
+.tab_event .sortie_batch_toggles .sortie_toggle.active,
+.tab_maps .sortie_batch_toggles .sortie_toggle.active {
 	background:#555;
 	color:#fff;
 }
 .tab_event .sortie_list .sortie_toggle_in,
 .tab_maps .sortie_list .sortie_toggle_in,
-.tab_event .sortie_switcher .sortie_toggle_in,
-.tab_maps .sortie_switcher .sortie_toggle_in {
+.tab_event .sortie_batch_toggles .sortie_toggle_in,
+.tab_maps .sortie_batch_toggles .sortie_toggle_in {
 	background:#000;
 	color:#999;
 }
@@ -1407,8 +1410,8 @@ button, input, select, textarea {
 .tab_pvp .page_list {
 	background:#222 !important;
 }
-.tab_pvp .page_list .pvp_count,
-.tab_pvp .page_list .pvp_count {
+.tab_pvp .toggles .pvp_count,
+.tab_pvp .toggles .pvp_count {
 	color:#fff;
 }
 .tab_pvp .toggles {

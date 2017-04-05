@@ -525,7 +525,7 @@ Xxxxxxx
 				if(!shipId || shipId < 0){
 					return;
 				}
-				let shipMst = (shipId <= 500) ?
+				let shipMst = (shipId <= KC3Master.abyssalShipIdFrom) ?
 					KC3Master.ship(shipId) : KC3Master.abyssalShip(shipId, true);
 				// no ship master data
 				if(!shipMst){

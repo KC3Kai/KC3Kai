@@ -10,6 +10,10 @@ Saves and loads significant data for future use
 
 	window.KC3Master = {
 		available: false,
+		// Not start from, excluding
+		abyssalShipIdFrom: 1500,
+		abyssalGearIdFrom: 500,
+		seasonalCgIdFrom: 800,
 
 		_raw: {},
 		_abyssalShips: {},
@@ -194,7 +198,7 @@ Saves and loads significant data for future use
 		},
 
 		abyssalShip :function(id, isMasterMerged){
-			var master = !!isMasterMerged && id > 500 && $.extend({}, this.ship(id)) || {};
+			var master = !!isMasterMerged && id > this.abyssalShipIdFrom && $.extend({}, this.ship(id)) || {};
 			return Object.keys(master).length === 0 &&
 				(Object.keys(this._abyssalShips).length === 0 || !this._abyssalShips[id]) ?
 				false : $.extend(master, this._abyssalShips[id]);

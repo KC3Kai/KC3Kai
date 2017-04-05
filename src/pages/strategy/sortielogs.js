@@ -116,50 +116,18 @@
 				self.exportBattleImg(parseInt($(this).data("id")), e);
 			});
 			
-			// On-click sortie toggles
-			function toggleSortie(origin, globalSwitch) {
-				var targetName = $(origin).data("target");
-				var targetParent = globalSwitch ? $(".tab_"+tabCode+" .sortie_box") : $(origin).parent().parent().parent();
-				var targetBox = targetParent.find("."+targetName);
-				var expandedQualif = !$(origin).hasClass("sortie_toggle_in");
-				var expandedBefore = $(".sortie_toggle.active:not(.sortie_toggle_in)",$(origin).parent()).length;
-				var expandedAfter = $(".sortie_toggle.active:not(.sortie_toggle_in)",$(origin).parent()).length;
-				
-				if( $(origin).hasClass("active") ){
-					$(origin).removeClass("active");
-					if (globalSwitch) {
-						targetParent.find("[data-target=" + targetName + "]").removeClass("active");
-					}
-					// Hide the target box
-					targetBox.slideUp(undefined,function(){
-						if(expandedQualif && expandedBefore < 1)
-							targetParent.addClass("expanded");
-					});
-				} else {
-					$(origin).addClass("active");
-					if (globalSwitch) {
-						targetParent.find("[data-target=" + targetName + "]").addClass("active");
-					}
-					// Show the target box
-					targetBox.slideDown(undefined,function(){
-						if(expandedQualif && expandedBefore < 1)
-							targetParent.addClass("expanded");
-					});
-				}
-				
-				if(expandedQualif && expandedAfter < 1)
-					targetParent.removeClass("expanded");
-			}
-			
+			// On-click single sortie toggles
 			$(".tab_"+tabCode+" .sortie_list").on("click", ".sortie_box .sortie_toggles .sortie_toggle", function(){
-				toggleSortie(this, false);
+				self.toggleSortie(this, false);
 			});
 			
-			// On-click global sortie toggles
-			$(".tab_"+tabCode+" .sortie_switcher").on("click", ".sortie_toggles .sortie_toggle", function(){
-				toggleSortie(this, true);
+			// On-click batch sortie toggles
+			$(".tab_"+tabCode+" .sortie_batch_toggles").append(
+				$(".tab_"+tabCode+" .factory .sortie_column.sortie_toggles").clone()
+			).createChildrenTooltips().on("click", ".sortie_toggles .sortie_toggle", function(){
+				self.toggleSortie(this, true);
 			});
-
+			
 			if(!!KC3StrategyTabs.pageParams[1]){
 				this.switchWorld(KC3StrategyTabs.pageParams[1],
 					KC3StrategyTabs.pageParams[2]);
@@ -167,6 +135,41 @@
 				// Select default opened world
 				this.switchWorld($(".tab_"+tabCode+" .world_box.active").data("world_num"));
 			}
+		};
+
+		// Common sortie toggling method
+		this.toggleSortie = function(origin, globalSwitch) {
+			var targetName = $(origin).data("target");
+			var targetParent = globalSwitch ? $(".tab_"+tabCode+" .sortie_box") : $(origin).parent().parent().parent();
+			var targetBox = targetParent.find("."+targetName);
+			var expandedQualif = !$(origin).hasClass("sortie_toggle_in");
+			var expandedBefore = $(".sortie_toggle.active:not(.sortie_toggle_in)",$(origin).parent()).length;
+			
+			if( $(origin).hasClass("active") ){
+				$(origin).removeClass("active");
+				if (globalSwitch) {
+					targetParent.find("[data-target=" + targetName + "]").removeClass("active");
+				}
+				// Hide the target box
+				targetBox.slideUp(undefined,function(){
+					if(expandedQualif && expandedBefore < 1)
+						targetParent.addClass("expanded");
+				});
+			} else {
+				$(origin).addClass("active");
+				if (globalSwitch) {
+					targetParent.find("[data-target=" + targetName + "]").addClass("active");
+				}
+				// Show the target box
+				targetBox.slideDown(undefined,function(){
+					if(expandedQualif && expandedBefore < 1)
+						targetParent.addClass("expanded");
+				});
+			}
+			
+			var expandedAfter = $(".sortie_toggle.active:not(.sortie_toggle_in)",$(origin).parent()).length;
+			if(expandedQualif && expandedAfter < 1)
+				targetParent.removeClass("expanded");
 		};
 
 		/* SWITCH WORLD
@@ -180,13 +183,12 @@
 
 			$(".tab_"+tabCode+" .map_list").empty().css("width","").css("margin-left","");
 			$(".tab_"+tabCode+" .page_list").empty();
-			$(".tab_"+tabCode+" .sortie_switcher").empty();
 			$(".tab_"+tabCode+" .sortie_list").empty();
 			var countWorlds = $(".tab_"+tabCode+" .world_box").length;
 			var worldOffset = $(window).data("world_off");
 			var selectOffset = $(".tab_"+tabCode+" .world_box[data-world_num={0}]".format(self.selectedWorld)).index();
 			if(typeof worldOffset === "undefined"){
-				$(window).data("world_off", Math.min(selectOffset, countWorlds-6));
+				$(window).data("world_off", Math.min(selectOffset, countWorlds-6-((tabCode=="maps")&1)));
 			} else if(selectOffset < worldOffset){
 				$(window).data("world_off", selectOffset);
 			} else if(selectOffset >= 6+((tabCode=="maps")&1) && worldOffset < selectOffset-5){
@@ -341,14 +343,14 @@
 		this.showMap = function(){
 			var self = this;
 			this.pageNum = 1;
-			$(".tab_"+tabCode+" .page_list").html("");
-			$(".tab_"+tabCode+" .sortie_list").html("");
+			$(".tab_"+tabCode+" .page_list").empty();
+			$(".tab_"+tabCode+" .sortie_list").empty();
+			$(".tab_"+tabCode+" .sortie_batch_toggles").hide();
 			
 			// Show all sorties
 			if(this.selectedWorld === 0){
 				KC3Database.count_normal_sorties(function(countSorties){
 					self.showPagination(countSorties);
-					self.showSwitcher(countSorties);
 				});
 				
 			// Selected specific world
@@ -358,7 +360,6 @@
 					KC3Database.count_world(this.selectedWorld, function(countSorties){
 						console.log("count_world", countSorties);
 						self.showPagination(countSorties);
-						self.showSwitcher(countSorties);
 					});
 					
 				// Selected specifc map
@@ -366,7 +367,6 @@
 					KC3Database.count_map(this.selectedWorld, this.selectedMap, function(countSorties){
 						console.log("count_map", countSorties);
 						self.showPagination(countSorties);
-						self.showSwitcher(countSorties);
 					});
 				}
 			}
@@ -391,26 +391,14 @@
 				});
 				self.pageNum = 1;
 				self.showPage();
-				$(".tab_"+tabCode+" .page_list")
-					.prepend('<div class="sortie_count">Total pages: {0}, sorties: {1}</div>'
-						.format(countPages, countSorties));
+				$(".tab_"+tabCode+" .sortie_controls .sortie_count").text(
+					"Total pages: {0}, sorties: {1}".format(countPages, countSorties)
+				);
+				$(".tab_"+tabCode+" .sortie_batch_toggles").show();
 			}else{
 				$(".tab_"+tabCode+" .pagination").hide();
 			}
 		};
-
-		/* SHOW SORTIE SWITCHER
-		Show controls for global switching in all sorties
-		-------------------------------------------------*/
-		this.showSwitcher = function(countSorties) {
-			var self = this;
-			var sortie_switcher;
-			
-			if (countSorties > 0) {
-				sortie_switcher = $(".tab_"+tabCode+" .factory .sortie_column.sortie_toggles").clone().appendTo(".tab_"+tabCode+" .sortie_switcher");
-			}
-		};
-		
 		
 		/* SHOW PAGE
 		Determines list type and gets data from IndexedDB

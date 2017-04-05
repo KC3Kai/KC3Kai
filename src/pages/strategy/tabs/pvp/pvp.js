@@ -30,9 +30,9 @@
 				} else {
 					$(".tab_pvp .pagination").hide();
 				}
-				$(".tab_pvp .page_list")
-					.append('<div class="pvp_count">Total {0}</div>'
-						.format(self.items, self.pages, self.itemsPerPage));
+				$(".tab_pvp .toggles .pvp_count").text(
+					"Total pages: {1}, battles: {0}".format(self.items, self.pages, self.itemsPerPage)
+				);
 			});
 			
 			// Download replay button

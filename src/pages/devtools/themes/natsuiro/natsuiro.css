@@ -2337,7 +2337,7 @@ ABYSS FLEET
 
 .module.fleet .lship .ship_col1 {
 	width:120px;
-	height:40px;
+	height:41px;
 	float:left;
 	margin:0px 5px 0px 0px;
 }
@@ -2385,30 +2385,41 @@ ABYSS FLEET
 	color:#0f0;
 	font-size:12px;
 }
-.module.fleet .lship .ship_hp_diff {
-	color:#f00;
-	font-size:11px;
-	margin-left:-4px;
-	margin-right:-2px;
-	display:none;
-}
 .module.fleet .lship .ship_hp_max {
 	color:#aaa;
 	font-size:11px;
 }
 .module.fleet .lship .ship_hp_box {
 	width:120px;
-	height:10px;
+	height:11px;
 	float:left;
 	border:1px solid #000;
 	background:#555;
 	position:relative;
 }
 .module.fleet .lship .ship_hp_bar {
-	height:8px;
+	height:9px;
 }
 .module.fleet .lship .ship_hp_prediction {
-	height:8px;
+	height:9px;
+}
+.module.fleet .lship .ship_hp_pred_value {
+	position:absolute;
+	top:0px;
+	left:0px;
+	width:100%;
+	line-height:7px;
+	text-align:center;
+	display:none;
+}
+.module.fleet .lship .ship_hp_pred_value .ship_hp_diff {
+	color:#ff7979;
+	font-size:11px;
+	text-shadow:
+		-1px -1px 1px #3d1414, 0px -1px 1px #3d1414, 1px -1px 1px #3d1414,
+		-1px 0px 1px #3d1414, 1px 0px 1px #3d1414,
+		-1px 1px 1px #3d1414, 0px 1px 1px #3d1414, 1px 1px 1px #3d1414;
+	opacity:0.84;
 }
 
 /* ==> Akashi Timer <== */

@@ -259,3 +259,6 @@
 	text-align:center;
 	float:left;
 }
+.tab_gears .itemSorters .sortControl img {
+	margin-top:-3px;
+}

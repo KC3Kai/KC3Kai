@@ -10,7 +10,7 @@
 		_holders: {},
 		_comparator: {},
 		_currentTypeId: 1, // keep track of current type_id
-		_allProperties: ["fp","tp","aa","ar","as","ev","ls","dv","ht","rn", "or"],
+		_allProperties: ["fp","tp","aa","ar","as","ev","ls","dv","ht","rn","or"],
 		_defaultCompareMethod: {
 			// main guns
 			"t1": "fp",
@@ -120,7 +120,7 @@
 			var allProperties = this._allProperties;
 			var sumAllGetter = function(obj) {
 				return allProperties
-					.map( function(p) { return obj.stats[p]; } )
+					.map( function(p) { return obj.stats[p] || 0; } )
 					.reduce( function(a,b) { return a+b; }, 0);
 			};
 
@@ -419,6 +419,9 @@
 			var comparator = this._comparator[compareMethod];
 			if (typeof comparator == "undefined") {
 				console.warn("comparator missing for: " + compareMethod);
+			} else {
+				$(".tab_gears .sortControl").removeClass("active");
+				$(".tab_gears .sortControl.{0}".format(compareMethod)).addClass("active");
 			}
 
 			function showEqList(i,arranged){
