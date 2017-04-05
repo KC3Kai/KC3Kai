@@ -10465,7 +10465,7 @@ var PS = {};
       throw new Error("Failed pattern match at KanColle.Remodel line 57, column 1 - line 63, column 1: " + [ steel.constructor.name ]);
   };
   var fromMstShip = function (ms) {
-      if (ms.api_id >= 500 || ms.api_aftershipid === "0") {
+      if (ms.api_id > KC3Master.abyssalShipIdFrom || ms.api_aftershipid === "0") {
           return Data_Maybe.Nothing.value;
       };
       if (Data_Boolean.otherwise) {
