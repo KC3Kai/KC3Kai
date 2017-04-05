@@ -15,12 +15,6 @@
 .tab_pvp .page_list .pagination {
 	margin:0px;
 }
-.tab_pvp .page_list .pvp_count {
-	font-size:11px;
-	line-height:12px;
-	float:right;
-	margin:9px 5px 0px 0px;
-}
 
 /* TOGGLES
 ---------------------------------*/
@@ -44,6 +38,12 @@
 	background:#369;
 	border-radius:5px;
 	color:#fff;
+}
+.tab_pvp .toggles .pvp_count {
+	font-size:12px;
+	line-height:12px;
+	float:right;
+	margin:6px 10px 5px 5px;
 }
 
 /* PVP RECORD
