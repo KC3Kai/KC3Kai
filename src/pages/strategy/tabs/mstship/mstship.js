@@ -101,7 +101,7 @@
 				shipBox.attr("data-id", ShipData.api_id);
 				shipBox.data("bs", ShipData.kc3_bship);
 				
-				if(ShipData.api_id<=500){
+				if(ShipData.api_id <= KC3Master.abyssalShipIdFrom){
 					$("img", shipBox).attr("src", KC3Meta.shipIcon(ShipData.api_id) );
 				}else{
 					$("img", shipBox).attr("src", KC3Meta.abyssIcon(ShipData.api_id) );
@@ -205,7 +205,7 @@
 			
 			// View big CG mode of our shipgirl
 			$(".tab_mstship .shipInfo .type").addClass("hover").on("click", function(e){
-				if(self.currentShipId <= 500){
+				if(self.currentShipId <= KC3Master.seasonalCgIdFrom){
 					self.showShip(self.currentShipId, false, true);
 				}
 			});
@@ -332,8 +332,9 @@
 			
 			var shipSrc = "../../../../assets/swf/card.swf?sip=" + this.server_ip
 					+ ("&shipFile=" + shipFile + (tryDamagedGraph ? this.damagedBossFileSuffix : ""))
-					+ ("&abyss=" + (ship_id > 500 && ship_id <= 800 ? 1 : 0))
-					+ (ship_id > 800 || viewCgMode ? "&forceFrame=6" : "")
+					+ ("&abyss=" + (ship_id > KC3Master.abyssalShipIdFrom ? 1 : 0))
+					+ ((ship_id > KC3Master.seasonalCgIdFrom && ship_id <= KC3Master.abyssalShipIdFrom)
+						|| viewCgMode ? "&forceFrame=6" : "")
 					+ (!this.currentCardVersion ? "" : "&ver=" + this.currentCardVersion);
 			
 			$(".tab_mstship .shipInfo .cgswf embed").remove();
@@ -348,7 +349,7 @@
 			saltClassUpdate();
 			
 			var statBox;
-			if(ship_id <= 500 && !viewCgMode){
+			if(ship_id <= KC3Master.seasonalCgIdFrom && !viewCgMode){
 				// Ship-only, non abyssal
 				$(".tab_mstship .shipInfo .stats").empty();
 				$(".tab_mstship .shipInfo .stats").css("width", "");
@@ -484,7 +485,8 @@
 
 				// seasonal CGs
 				var seasonalCgIds = Object.keys(this.mergedMasterShips).filter(
-					id => id > 800 && this.mergedMasterShips[id].api_yomi === shipData.api_yomi
+					id => id > KC3Master.seasonalCgIdFrom && id <= KC3Master.abyssalShipIdFrom
+						&& this.mergedMasterShips[id].api_yomi === shipData.api_yomi
 				);
 				if (seasonalCgIds.length > 0) {
 					$(".tab_mstship .shipInfo .more .seasonal_cg a").remove();
@@ -653,7 +655,7 @@
 					$(".tab_mstship .shipInfo .tokubest .to-quotes").show();
 				else
 					$(".tab_mstship .shipInfo .tokubest .to-quotes").hide();
-			} else if (ship_id > 500 && shipData.api_id <= 800) {
+			} else if (ship_id > KC3Master.abyssalShipIdFrom) {
 				// abyssals, show larger CG viewer
 				$(".tab_mstship .shipInfo .stats").hide();
 				$(".tab_mstship .shipInfo .equipments").hide();
