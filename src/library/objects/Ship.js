@@ -286,7 +286,7 @@ KC3改 Ship Object
 	 * @see http://wikiwiki.jp/kancolle/?%A5%B1%A5%C3%A5%B3%A5%F3%A5%AB%A5%C3%A5%B3%A5%AB%A5%EA
 	 */
 	KC3Ship.getMaxHp = function(masterId, currentLevel){
-		var masterHp = masterId > KC3Master.abyssalShipIdFrom ? undefined :
+		var masterHp = KC3Master.isNotRegularShip(masterId) ? undefined :
 			(KC3Master.ship(masterId) || {"api_taik":[]}).api_taik[0];
 		return ((currentLevel || 155) < 100 ? masterHp :
 			masterHp >  90 ? masterHp + 9 :
@@ -306,7 +306,7 @@ KC3改 Ship Object
 	 * @return -1 if ship ID belongs to aybssal or nonexistence
 	 */
 	KC3Ship.getCarrySlots = function(masterId){
-		var maxeq = masterId > KC3Master.abyssalShipIdFrom ? undefined :
+		var maxeq = KC3Master.isNotRegularShip(masterId) ? undefined :
 			(KC3Master.ship(masterId) || {}).api_maxeq;
 		return Array.isArray(maxeq) ? maxeq.reduce(function(acc, v){return acc + v;}, 0) : -1;
 	};
