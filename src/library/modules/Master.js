@@ -142,7 +142,8 @@ Saves and loads significant data for future use
 					if(!ss) { ships[id] = this._seasonalShips[id]; }
 				}
 				// Apply a patch for Mikuma typo of KC devs
-				ships[882] = this._seasonalShips[882];
+				//ships[882] = this._seasonalShips[882];
+				// Seasonal data no longer leaked since 2017-04-05
 			}
 			return ships;
 		},
