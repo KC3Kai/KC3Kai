@@ -262,6 +262,7 @@
 
   KC3ImageExport.saveLink = function (link) {
     KC3Database.Screenshot(link);
+    KC3ImageExport.openTab({ url: link });
     return link;
   };
 
