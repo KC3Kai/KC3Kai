@@ -63,7 +63,7 @@
     const { checkCanUpload, upload, saveLink } = KC3ImageExport;
 
     return checkCanUpload()
-      .then(this.imageData.toUrl.bind(null, { forceDataUrl: true }))
+      .then(this.imageData.toBlob)
       .then(upload)
       .then(saveLink);
   };
@@ -71,44 +71,31 @@
   /*--------------------------------------------------------*/
   /* ---------------------[ IMAGE DATA ]------------------- */
   /*--------------------------------------------------------*/
-
-  KC3ImageExport.composeImageData = function (canvas, format, quality) {
-    const { makeDataUrl, makeObjectUrl } = KC3ImageExport;
-    return {
-      toUrl({ forceDataUrl } = {}) {
-        if (forceDataUrl) {
-          return makeDataUrl(canvas, format, quality);
-        }
-        return makeObjectUrl(canvas, format, quality);
-      },
-    };
-  };
-
   const mimeTypes = {
     jpg: 'image/jpeg',
     png: 'image/png',
   };
-  KC3ImageExport.makeDataUrl = function (canvas, format, quality) {
-    try {
-      return Promise.resolve({ url: canvas.toDataURL(mimeTypes[format], quality) });
-    } catch (e) {
-      return Promise.reject(e);
-    }
+  const createObjectURL = function (blob) {
+    const url = URL.createObjectURL(blob);
+    return { url, cleanup() { URL.revokeObjectURL(url); } };
   };
 
-  const toBlob = function (canvas, format, quality) {
+  KC3ImageExport.composeImageData = function (canvas, format, quality) {
+    const { toBlob, toUrl } = KC3ImageExport;
+    return {
+      toUrl() { return toUrl(canvas, format, quality); },
+      toBlob() { return toBlob(canvas, format, quality); },
+    };
+  };
+
+  KC3ImageExport.toBlob = function (canvas, format, quality) {
     return new Promise((resolve) => {
       canvas.toBlob(resolve, mimeTypes[format], quality);
     });
   };
-  const createObjectURL = function (blob) {
-    const url = URL.createObjectURL(blob);
-    return {
-      url,
-      cleanup() { URL.revokeObjectURL(url); },
-    };
-  };
-  KC3ImageExport.makeObjectUrl = function (canvas, format, quality) {
+
+  KC3ImageExport.toUrl = function (canvas, format, quality) {
+    const { toBlob } = KC3ImageExport;
     return toBlob(canvas, format, quality)
       .then(createObjectURL);
   };
@@ -237,7 +224,11 @@
     });
   };
 
-  KC3ImageExport.upload = function ({ url }) {
+  KC3ImageExport.upload = function (blob) {
+    const fd = new FormData();
+    fd.append('image', blob);
+    fd.append('type', 'file');
+
     return new Promise((resolve, reject) => {
       $.ajax({
         url: 'https://api.imgur.com/3/image',
@@ -246,10 +237,9 @@
           Authorization: 'Client-ID 088cfe6034340b1',
           Accept: 'application/json',
         },
-        data: {
-          image: url.split(',')[1],
-          type: 'base64',
-        },
+        processData: false,
+        contentType: false,
+        data: fd,
         success({ data: { link } }) {
           resolve(link);
         },
