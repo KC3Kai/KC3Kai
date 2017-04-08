@@ -275,7 +275,7 @@
 
   KC3ImageExport.createTab = function (url) {
     return new Promise((resolve) => {
-      chrome.tabs.create({ url }, resolve);
+      chrome.tabs.create({ url, active: false }, resolve);
     });
   };
 
