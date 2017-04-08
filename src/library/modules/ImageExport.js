@@ -240,9 +240,7 @@
         processData: false,
         contentType: false,
         data: fd,
-        success({ data: { link } }) {
-          resolve(link);
-        },
+        success: resolve,
         error(xhr, textStatus, errorThrown) {
           reject(new Error(`${textStatus}: ${errorThrown}`));
         },
@@ -250,8 +248,8 @@
     });
   };
 
-  KC3ImageExport.saveLink = function (link) {
-    KC3Database.Screenshot(link);
+  KC3ImageExport.saveLink = function ({ data: { link, deletehash } }) {
+    KC3Database.Screenshot(link, deletehash);
     KC3ImageExport.openTab({ url: link });
     return link;
   };
