@@ -1,4 +1,36 @@
 QUnit.module('modules > ImageExport', function () {
+  QUnit.module('setMethodOrder', {
+    beforeEach() {
+      this.subject = KC3ImageExport.setMethodOrder;
+    },
+  }, function () {
+    QUnit.test('download first', function (assert) {
+      const result = this.subject('0');
+
+      assert.deepEqual(result, ['saveDownload', 'saveTab', 'saveImgur']);
+    });
+
+    QUnit.test('tab first', function (assert) {
+      const result = this.subject('2');
+
+      assert.deepEqual(result, ['saveTab', 'saveDownload', 'saveImgur']);
+    });
+
+    QUnit.test('imgur first', function (assert) {
+      const result = this.subject('1');
+
+      assert.deepEqual(result, ['saveImgur', 'saveDownload', 'saveTab']);
+    });
+
+    QUnit.test('bad params', function (assert) {
+      const DEFAULT = ['saveDownload', 'saveTab', 'saveImgur'];
+
+      assert.deepEqual(this.subject('-1'), DEFAULT);
+      assert.deepEqual(this.subject('3'), DEFAULT);
+      assert.deepEqual(this.subject('blah'), DEFAULT);
+    });
+  });
+
   QUnit.module('composeDownloadPath', {
     beforeEach() {
       this.subject = KC3ImageExport.composeDownloadPath;

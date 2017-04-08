@@ -21,7 +21,7 @@
       (quality || ConfigManager.ss_quality) / 100
     );
 
-    this.method = KC3ImageExport.getOutputMethod(method || ConfigManager.ss_mode);
+    this.methodOrder = KC3ImageExport.setMethodOrder(method || ConfigManager.ss_mode);
 
     return this;
   }
@@ -33,9 +33,10 @@
   /*--------------------------------------------------------*/
 
   KC3ImageExport.prototype.export = function (callback) {
-    const { logError } = KC3ImageExport;
+    const { bindMethodContext, runExportFuncs, logError } = KC3ImageExport;
     return Promise.resolve()
-      .then(() => { return this[this.method](); })
+      .then(bindMethodContext.bind(null, this, this.methodOrder))
+      .then(runExportFuncs)
       .then((result) => { callback(null, result); })
       .catch((error) => {
         logError(error);
@@ -116,13 +117,42 @@
   /* ----------------------[ HELPERS ]--------------------- */
   /*--------------------------------------------------------*/
 
-  const methods = ['saveDownload', 'saveImgur', 'saveTab'];
-  KC3ImageExport.getOutputMethod = function (ssMode) {
+  KC3ImageExport.setMethodOrder = function (ssMode) {
+    const funcs = [
+      { name: 'saveDownload', priority: 0 },
+      { name: 'saveImgur', priority: 2 },
+      { name: 'saveTab', priority: 1 },
+    ];
     let selected = parseInt(ssMode, 10);
-    if (selected < 0 || selected >= methods.length || isNaN(selected)) {
+    if (selected < 0 || selected >= funcs.length || isNaN(selected)) {
       selected = 0;
     }
-    return methods[selected];
+
+    // order by ascending priority and hoist selected method to the front
+    const selectedMethod = funcs.splice(selected, 1)[0];
+    funcs.sort((a, b) => { return a.priority - b.priority; });
+    funcs.unshift(selectedMethod);
+
+    return funcs.map(({ name }) => { return name; });
+  };
+
+  /* ----------------------[ EXPORT ]---------------------- */
+
+  KC3ImageExport.bindMethodContext = function (context, funcs) {
+    return funcs.map((name) => { return context[name].bind(context); });
+  };
+
+  KC3ImageExport.runExportFuncs = function (funcs) {
+    const p = funcs.reduce((pacc, fn) => {
+      // should only call a fn IFF all previous methods failed
+      return pacc.then(null, fn)
+        .catch((e) => {
+          KC3ImageExport.logError(e);
+          return Promise.reject();
+        });
+    }, Promise.reject());
+    // let the caller know that all funcs failed
+    return p.catch(() => { throw new Error('ImageExport: export failed'); });
   };
 
   /* ---------------------[ DOWNLOAD ]--------------------- */
