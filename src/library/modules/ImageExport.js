@@ -105,7 +105,7 @@
   /*--------------------------------------------------------*/
 
   KC3ImageExport.setMethodOrder = function (ssMode) {
-    const funcs = [
+    let funcs = [
       { name: 'saveDownload', priority: 0 },
       { name: 'saveImgur', priority: 2 },
       { name: 'saveTab', priority: 1 },
@@ -116,7 +116,9 @@
     }
 
     // order by ascending priority and hoist selected method to the front
+    // saveImgur should be excluded as a fallback
     const selectedMethod = funcs.splice(selected, 1)[0];
+    funcs = funcs.filter(({ name }) => { return name !== 'saveImgur'; });
     funcs.sort((a, b) => { return a.priority - b.priority; });
     funcs.unshift(selectedMethod);
 

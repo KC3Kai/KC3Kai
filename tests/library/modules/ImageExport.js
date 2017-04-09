@@ -7,13 +7,13 @@ QUnit.module('modules > ImageExport', function () {
     QUnit.test('download first', function (assert) {
       const result = this.subject('0');
 
-      assert.deepEqual(result, ['saveDownload', 'saveTab', 'saveImgur']);
+      assert.deepEqual(result, ['saveDownload', 'saveTab']);
     });
 
     QUnit.test('tab first', function (assert) {
       const result = this.subject('2');
 
-      assert.deepEqual(result, ['saveTab', 'saveDownload', 'saveImgur']);
+      assert.deepEqual(result, ['saveTab', 'saveDownload']);
     });
 
     QUnit.test('imgur first', function (assert) {
@@ -23,7 +23,7 @@ QUnit.module('modules > ImageExport', function () {
     });
 
     QUnit.test('bad params', function (assert) {
-      const DEFAULT = ['saveDownload', 'saveTab', 'saveImgur'];
+      const DEFAULT = ['saveDownload', 'saveTab'];
 
       assert.deepEqual(this.subject('-1'), DEFAULT);
       assert.deepEqual(this.subject('3'), DEFAULT);
