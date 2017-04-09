@@ -33,6 +33,20 @@
 	width:160px;
 	height:96px;
 }
+.tab_screenshots .ss_delete {
+	width:18px;
+	height:18px;
+	border-radius:10px;
+	float:left;
+	position:relative;
+	left:140px;
+	top:-94px;
+	color:#fff;
+	background-color:#f00;
+	font-size:14px;
+	line-height:16px;
+	text-align:center;
+}
 .tab_screenshots .ss_date {
 	width:160px;
 	height:14px;

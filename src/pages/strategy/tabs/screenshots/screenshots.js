@@ -42,15 +42,54 @@
 		Show single page of screenshors
 		---------------------------------*/
 		showPage :function( page ){
+			var self = this;
+			var openInNewTab = function(e) {
+				window.open($(this).attr("src"));
+			};
 			KC3Database.get_screenshots(page, function(screenshots){
-				$(".screenshot_list").html("");
-				var ss_thumb;
-				$.each(screenshots, function(i, screenshot){
-					ss_thumb = $(".tab_screenshots .factory .ss_thumb").clone().appendTo(".screenshot_list");
-					$("img", ss_thumb).attr("src", screenshot.imgur);
-					$(".ss_date", ss_thumb).text( (new Date(screenshot.ltime*1000)).format("mmm dd, yyyy - hh:MM tt") );
+				$(".screenshot_list").empty();
+				$.each(screenshots, function(i, img){
+					var thumb = $(".tab_screenshots .factory .ss_thumb").clone().appendTo(".screenshot_list");
+					$("img", thumb).attr("src", img.imgur).click(openInNewTab);
+					$(".ss_delete", thumb).data("ssid", img.id).data("deletehash", img.deletehash)
+						.click(self.deleteImage);
+					$(".ss_date", thumb).text( (new Date(img.ltime*1000)).format("yyyy-mm-dd HH:MM:ss") );
 				});
 			});
+		},
+		
+		/* Delete image from both local database and remote imgur.com */
+		deleteImage :function(event){
+			var self = this;
+			if( ! confirm("Will also delete image from imgur.com (if possible),\nAre you sure?") )
+				return false;
+			var ssId = $(this).data("ssid");
+			var deleteHash = $(this).data("deletehash");
+			var deleteDbRecord = function() {
+				console.info("Deleting image record from local database, id =", ssId);
+				KC3Database.con.screenshots.where("id").equals(ssId)
+					.delete().then(cnt => {
+						console.info("Found", cnt, "record, deleted!");
+						KC3StrategyTabs.reloadTab(undefined, true);
+					}).catch(e => {
+						console.error(e, e.stack);
+					});
+			};
+			if(deleteHash){
+				// This way seems not work as always out of quota :(
+				//window.open("https://imgur.com/delete/" + deleteHash);
+				console.info("Deleting imgur image via deletehash:", deleteHash);
+				Promise.resolve()
+					.then(KC3ImageExport.deleteUpload.bind(null, deleteHash))
+					.then(deleteDbRecord)
+					.catch(e => {
+						console.error(e, e.stack);
+						if(confirm("Failed to delete image from imgur.com, still remove this record?"))
+							deleteDbRecord();
+					});
+			} else {
+				deleteDbRecord();
+			}
 		}
 	};
 	
