@@ -8,6 +8,21 @@
         return weight + " " + px + "px \"Helvetica Neue\", Helvetica, Arial, sans-serif";
     }
 
+    //TODO remove once min supported chrome version will be 50+
+    if(typeof HTMLCanvasElement.prototype.toBlob!="function"){
+        Object.defineProperty( HTMLCanvasElement.prototype, 'toBlob', {
+            value: function( callback, type, quality ) {
+                var xhr = new XMLHttpRequest();
+                xhr.open( 'GET', this.toDataURL( type, quality ) );
+                xhr.responseType = 'arraybuffer';
+                xhr.onload = function(e) {
+                    callback( new Blob( [this.response], {type: type || 'image/png'} ) );
+                };
+                xhr.send();
+            }
+        });
+    }
+
     window.ShowcaseExporter = function () {
         this.canvas = {};
         this.ctx = {};
@@ -184,7 +199,7 @@
                 0, 0,
                 this.exporter.rowParams.height * 2, this.exporter.rowParams.height * 2
             );
-            this.exporter._finish(canvas.toDataURL("image/png"), topLine);
+            this.exporter._finish(canvas, topLine);
         };
         img.src = "/assets/img/logo/128.png";
 
@@ -260,16 +275,16 @@
         this._equipGroupCanvases = {};
     };
 
-    ShowcaseExporter.prototype._finish = function (dataURL, topLine) {
+    ShowcaseExporter.prototype._finish = function (canvas, topLine) {
         switch (parseInt(this.buildSettings.output, 10)) {
             case 0:
-                this._download(dataURL, topLine);
+                this._download(canvas, topLine);
                 break;
             case 1:
-                this._postToImgur(dataURL, topLine);
+                this._postToImgur(canvas, topLine);
                 break;
             default:
-                this._openInNewTab(dataURL, topLine);
+                this._openInNewTab(canvas, topLine);
                 break;
         }
     };
@@ -281,7 +296,7 @@
         return false;
     };
 
-    ShowcaseExporter.prototype._download = function (dataURL) {
+    ShowcaseExporter.prototype._download = function (canvas) {
         if (enableShelfTimer) {
             clearTimeout(enableShelfTimer);
         }
@@ -290,7 +305,7 @@
         var filename = ConfigManager.ss_directory + '/' + dateFormat("yyyy-mm-dd") + '_' + topLine + ".png";
         chrome.downloads.setShelfEnabled(false);
         chrome.downloads.download({
-            url: dataURL,
+            url: canvas.toDataURL("image/png"),
             filename: filename,
             conflictAction: "uniquify"
         }, function (downloadId) {
@@ -303,12 +318,12 @@
         });
     };
 
-    ShowcaseExporter.prototype._postToImgur = function (dataURL, topLine) {
+    ShowcaseExporter.prototype._postToImgur = function (canvas, topLine) {
         var stampNow = Math.floor((new Date()).getTime() / 1000);
         if (stampNow - imgurLimit > 10) {
             imgurLimit = stampNow;
         } else {
-            this._download(dataURL, topLine);
+            this._download(canvas, topLine);
             return false;
         }
 
@@ -330,33 +345,32 @@
                             Accept: 'application/json'
                         },
                         data: {
-                            image: dataURL.substring(22),
+                            image: canvas.toDataURL().substring(22),
                             type: 'base64'
                         },
                         success: function (response) {
                             self.complete({url: response.data.link});
                         },
                         error: function () {
-                            self._download(dataURL, topLine);
+                            self._download(canvas, topLine);
                         }
                     });
                 } else {
-                    self._download(dataURL, topLine);
+                    self._download(canvas, topLine);
                 }
             },
             error: function () {
-                self._download(dataURL, topLine);
+                self._download(canvas, topLine);
             }
         });
     };
 
-    ShowcaseExporter.prototype._openInNewTab = function (dataURL, topLine) {
-        if (dataURL.length >= 2 * 1024 * 1024) {
-            this._download(dataURL, topLine);
-        } else {
-            window.open(dataURL, "_blank");
-            this.complete({});
-        }
+    ShowcaseExporter.prototype._openInNewTab = function (canvas, topLine) {
+        var self = this;
+        canvas.toBlob(function(blob){
+            window.open(URL.createObjectURL(blob), "_blank");
+            self.complete({});
+        },'image/png');
     };
 
     /* SHIP EXPORT
