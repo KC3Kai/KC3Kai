@@ -101,11 +101,9 @@
 				shipBox.attr("data-id", ShipData.api_id);
 				shipBox.data("bs", ShipData.kc3_bship);
 				
-				if(ShipData.api_id <= KC3Master.abyssalShipIdFrom){
-					$("img", shipBox).attr("src", KC3Meta.shipIcon(ShipData.api_id) );
-				}else{
-					$("img", shipBox).attr("src", KC3Meta.abyssIcon(ShipData.api_id) );
-				}
+				$("img", shipBox).attr("src", KC3Master.isAbyssalShip(ShipData.api_id) ?
+					KC3Meta.abyssIcon(ShipData.api_id) : KC3Meta.shipIcon(ShipData.api_id)
+				);
 				
 				if(ConfigManager.salt_list.indexOf(ShipData.kc3_bship)>=0) {
 					shipBox.addClass('salted');
@@ -205,7 +203,7 @@
 			
 			// View big CG mode of our shipgirl
 			$(".tab_mstship .shipInfo .type").addClass("hover").on("click", function(e){
-				if(self.currentShipId <= KC3Master.seasonalCgIdFrom){
+				if(KC3Master.isRegularShip(self.currentShipId)){
 					self.showShip(self.currentShipId, false, true);
 				}
 			});
@@ -332,9 +330,8 @@
 			
 			var shipSrc = "../../../../assets/swf/card.swf?sip=" + this.server_ip
 					+ ("&shipFile=" + shipFile + (tryDamagedGraph ? this.damagedBossFileSuffix : ""))
-					+ ("&abyss=" + (ship_id > KC3Master.abyssalShipIdFrom ? 1 : 0))
-					+ ((ship_id > KC3Master.seasonalCgIdFrom && ship_id <= KC3Master.abyssalShipIdFrom)
-						|| viewCgMode ? "&forceFrame=6" : "")
+					+ ("&abyss=" + (KC3Master.isAbyssalShip(ship_id) ? 1 : 0))
+					+ (KC3Master.isSeasonalShip(ship_id) || viewCgMode ? "&forceFrame=6" : "")
 					+ (!this.currentCardVersion ? "" : "&ver=" + this.currentCardVersion);
 			
 			$(".tab_mstship .shipInfo .cgswf embed").remove();
@@ -349,7 +346,7 @@
 			saltClassUpdate();
 			
 			var statBox;
-			if(ship_id <= KC3Master.seasonalCgIdFrom && !viewCgMode){
+			if(KC3Master.isRegularShip(ship_id) && !viewCgMode){
 				// Ship-only, non abyssal
 				$(".tab_mstship .shipInfo .stats").empty();
 				$(".tab_mstship .shipInfo .stats").css("width", "");
@@ -485,7 +482,7 @@
 
 				// seasonal CGs
 				var seasonalCgIds = Object.keys(this.mergedMasterShips).filter(
-					id => id > KC3Master.seasonalCgIdFrom && id <= KC3Master.abyssalShipIdFrom
+					id => KC3Master.isSeasonalShip(id)
 						&& this.mergedMasterShips[id].api_yomi === shipData.api_yomi
 				);
 				if (seasonalCgIds.length > 0) {
@@ -655,7 +652,7 @@
 					$(".tab_mstship .shipInfo .tokubest .to-quotes").show();
 				else
 					$(".tab_mstship .shipInfo .tokubest .to-quotes").hide();
-			} else if (ship_id > KC3Master.abyssalShipIdFrom) {
+			} else if (KC3Master.isAbyssalShip(ship_id)) {
 				// abyssals, show larger CG viewer
 				$(".tab_mstship .shipInfo .stats").hide();
 				$(".tab_mstship .shipInfo .equipments").hide();

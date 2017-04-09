@@ -432,6 +432,7 @@ Previously known as "Reactor"
 		// Use a Preset
 		"api_req_hensei/preset_select":function(params, response, headers){
 			var deckId = parseInt(params.api_deck_id, 10);
+			PlayerManager.akashiRepair.onPresetSelect(PlayerManager.fleets[deckId-1]);
 			PlayerManager.fleets[deckId-1].update( response.api_data );
 			PlayerManager.saveFleets();
 			KC3Network.trigger("Fleet", { switchTo: deckId });
@@ -668,14 +669,16 @@ Previously known as "Reactor"
 					}
 					// If not the same fleet, also recheck akashi repair of source fleet
 					if(oldFleet !== fleetIndex-1){
-						PlayerManager.fleets[oldFleet].checkAkashi(true);
+						PlayerManager.akashiRepair.onChange(PlayerManager.fleets[oldFleet]);
+						PlayerManager.fleets[oldFleet].updateAkashiRepairDisplay();
 					}
 				}
 			} else { // Remove ship
 				PlayerManager.fleets[fleetIndex-1].ships.splice(changedIndex, 1);
 				PlayerManager.fleets[fleetIndex-1].ships.push(-1);
 			}
-			PlayerManager.fleets[fleetIndex-1].checkAkashi(true);
+			PlayerManager.akashiRepair.onChange(PlayerManager.fleets[fleetIndex-1]);
+			PlayerManager.fleets[fleetIndex-1].updateAkashiRepairDisplay();
 			PlayerManager.saveFleets();
 			KC3Network.trigger("Fleet", { switchTo: fleetIndex });
 		},
