@@ -47,7 +47,7 @@
 			// Clone all ships
 			var box;
 			$.each(KC3Master.all_ships(), function(index, ShipData){
-				if (ShipData.api_id > KC3Master.seasonalCgIdFrom) return false;
+				if (KC3Master.isNotRegularShip(ShipData.api_id)) return false;
 				box = $(".tab_compare .factory .compare_suggest_item").clone();
 				$(".compare_suggest_icon img", box).attr("src", KC3Meta.shipIcon(ShipData.api_id));
 				$(".compare_suggest_name", box).html(KC3Meta.shipName(ShipData.api_name));

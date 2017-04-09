@@ -126,7 +126,7 @@ Provides access to data on built-in JSON files
 		getIcon: function(id, empty) {
 			id = Number(id);
 			if(this._icons.indexOf(id) > -1){
-				var path = id > KC3Master.abyssalShipIdFrom ? "abyss/" : "ships/";
+				var path = KC3Master.isAbyssalShip(id) ? "abyss/" : "ships/";
 				// Devs bump 1000 for master ID of abyssal ships from 2017-04-05
 				// To prevent mess file renaming for images, patch it here.
 				id = path === "abyss/" ? id - 1000 : id;
@@ -264,7 +264,7 @@ Provides access to data on built-in JSON files
 				this.abyssNonBossIds.indexOf(shipMaster.api_id) < 0){
 				return "boss";
 			}
-			return shipMaster.api_id > KC3Master.abyssalShipIdFrom ? shipMaster.api_yomi.replace("-", "") : "";
+			return KC3Master.isAbyssalShip(shipMaster.api_id) ? shipMaster.api_yomi.replace("-", "") : "";
 		},
 		
 		shipSpeed :function(apiSoku, returnTerm){

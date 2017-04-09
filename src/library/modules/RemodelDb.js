@@ -73,7 +73,7 @@
             var shipDstIds = {};
 
             $.each(masterData.api_mst_ship, function(i,x){
-                if (x.api_id > KC3Master.seasonalCgIdFrom)
+                if (!KC3Master.isRegularShip(x.api_id))
                     return;
                 shipIds.push( x.api_id );
                 var shipId_to = parseInt(x.api_aftershipid,10) || 0;
