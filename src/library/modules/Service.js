@@ -483,6 +483,27 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		}
 	});
 	
+	/* On Chrome Storage Changed
+	Sync localStorage parts with Chrome Storage
+	Used for sync quests data on different machines
+	------------------------------------------*/
+	chrome.storage.onChanged.addListener(function(changes, namespace) {
+		for (var key in changes) {
+			// console.log(key, changes[key]);
+			if (namespace == "sync" && key == "KC3QuestsData") {
+				var questsTimeStamp = changes[key].newValue.questsTimeStamp;
+				if ((typeof localStorage.questsTimeStamp == "undefined") || (questsTimeStamp > localStorage.questsTimeStamp)) {
+					localStorage.quests = changes[key].newValue.quests;
+					localStorage.questsTimeStamp = changes[key].newValue.questsTimeStamp;
+					localStorage.timeToResetDailyQuests = changes[key].newValue.timeToResetDailyQuests;
+					localStorage.timeToResetWeeklyQuests = changes[key].newValue.timeToResetWeeklyQuests;
+					localStorage.timeToResetMonthlyQuests = changes[key].newValue.timeToResetMonthlyQuests;
+					localStorage.timeToResetQuarterlyQuests = changes[key].newValue.timeToResetQuarterlyQuests;
+					KC3QuestManager.load();
+				}
+			}
+		}
+	});
 	
 	/* On Update Available
 	This will avoid auto-restart when webstore update is available

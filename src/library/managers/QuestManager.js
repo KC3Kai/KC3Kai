@@ -405,6 +405,19 @@ Uses KC3Quest objects to play around with
 		save :function(){
 			// Store only the list. The actives and opens will be redefined on load()
 			localStorage.quests = JSON.stringify(this.list);
+			localStorage.questsTimeStamp = Date.now();
+			// Store quests data to Chrome Storage
+			if (Object.keys(this.list).length > 0) {
+				var questsData = {
+					quests: localStorage.quests,
+					questsTimeStamp: localStorage.questsTimeStamp,
+					timeToResetDailyQuests: localStorage.timeToResetDailyQuests,
+					timeToResetWeeklyQuests: localStorage.timeToResetWeeklyQuests,
+					timeToResetMonthlyQuests: localStorage.timeToResetMonthlyQuests,
+					timeToResetQuarterlyQuests: localStorage.timeToResetQuarterlyQuests
+				};
+				chrome.storage.sync.set({KC3QuestsData: questsData});
+			}
 		},
 		
 		/* LOAD
@@ -424,11 +437,6 @@ Uses KC3Quest objects to play around with
 					tempQuest = tempQuests[ctr];
 					
 					// Add to actives or opens depeding on status
-					// 1: Unselected
-					// 2: Selected
-					if(tempQuest.status==1 || tempQuest.status==2){
-						
-					}
 					switch( tempQuest.status ){
 						case 1:	// Unselected
 							this.isOpen( tempQuest.id, true );
