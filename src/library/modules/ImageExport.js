@@ -265,8 +265,6 @@
           Authorization: 'Client-ID 088cfe6034340b1',
           Accept: 'application/json',
         },
-        processData: false,
-        contentType: false,
         success: resolve,
         error(xhr, textStatus, errorThrown) {
           reject(new Error(`${textStatus}: ${errorThrown}`));

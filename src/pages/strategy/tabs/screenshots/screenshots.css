@@ -33,6 +33,13 @@
 	width:160px;
 	height:96px;
 }
+.tab_screenshots .ss_date {
+	width:160px;
+	height:14px;
+	line-height:14px;
+	text-align:center;
+	font-size:11px;
+}
 .tab_screenshots .ss_delete {
 	width:18px;
 	height:18px;
@@ -40,17 +47,10 @@
 	float:left;
 	position:relative;
 	left:140px;
-	top:-94px;
+	top:-108px;
 	color:#fff;
 	background-color:#f00;
 	font-size:14px;
-	line-height:16px;
+	line-height:17px;
 	text-align:center;
-}
-.tab_screenshots .ss_date {
-	width:160px;
-	height:14px;
-	line-height:14px;
-	text-align:center;
-	font-size:11px;
 }
