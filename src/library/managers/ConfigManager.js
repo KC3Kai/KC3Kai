@@ -28,6 +28,7 @@ Retreives when needed to apply on components
 				forceDMMLogin		: false,
 				apiRecorder			: false,
 				updateNotification	: 2,
+				dataSyncNotification	: false,
 				chromeSyncQuests	: false,
 
 				showCatBombs		: true,
