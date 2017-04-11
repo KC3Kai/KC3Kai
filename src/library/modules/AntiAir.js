@@ -458,7 +458,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		7, 3, 1.35,
 		[surfaceShipIcon, haMountIcon, aaFdIcon, radarIcon],
-		predAllOf(isNotSubmarine, slotNumAtLeast(3)),
+		predAllOf(isNotSubmarine, slotNumAtLeast(2)),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isHighAngleMount ),
@@ -470,7 +470,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		9, 2, 1.3,
 		[surfaceShipIcon, haMountIcon, aaFdIcon],
-		predAllOf(isNotSubmarine, slotNumAtLeast(2)),
+		predAllOf(isNotSubmarine, slotNumAtLeast(1)),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isHighAngleMount ),
@@ -522,7 +522,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		1, 7, 1.7,
 		[akizukiIcon, haMountIcon, haMountIcon, radarIcon],
-		predAllOf(isAkizukiClass, slotNumAtLeast(3)),
+		predAllOf(isAkizukiClass),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( isHighAngleMount, 2 ),
@@ -532,7 +532,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		2, 6, 1.7,
 		[akizukiIcon, haMountIcon, radarIcon],
-		predAllOf(isAkizukiClass, slotNumAtLeast(2)),
+		predAllOf(isAkizukiClass),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isHighAngleMount ),
@@ -542,7 +542,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		3, 4, 1.6,
 		[akizukiIcon, haMountIcon, haMountIcon],
-		predAllOf(isAkizukiClass, slotNumAtLeast(2)),
+		predAllOf(isAkizukiClass),
 		withEquipmentMsts(
 			hasAtLeast( isHighAngleMount, 2 )
 		)

@@ -2337,7 +2337,7 @@ ABYSS FLEET
 
 .module.fleet .lship .ship_col1 {
 	width:120px;
-	height:40px;
+	height:41px;
 	float:left;
 	margin:0px 5px 0px 0px;
 }
@@ -2360,10 +2360,11 @@ ABYSS FLEET
 	line-height:15px;
 	float:left;
 	font-size:10px;
-	color:#00FFFF;
+	color:#00ffff;
+	white-space:nowrap;
 }
 .module.fleet .lship .ship_level {
-	width:40px;
+	width:35px;
 	height:15px;
 	line-height:15px;
 	float:left;
@@ -2372,12 +2373,13 @@ ABYSS FLEET
 	white-space:nowrap;
 }
 .module.fleet .lship .ship_hp_text {
-	width:50px;
+	width:55px;
 	height:15px;
 	line-height:15px;
 	float:left;
-	color:#00FF00;
+	color:#0f0;
 	text-align:right;
+	white-space:nowrap;
 }
 .module.fleet .lship .ship_hp_cur {
 	color:#0f0;
@@ -2389,17 +2391,35 @@ ABYSS FLEET
 }
 .module.fleet .lship .ship_hp_box {
 	width:120px;
-	height:10px;
+	height:11px;
 	float:left;
 	border:1px solid #000;
 	background:#555;
 	position:relative;
 }
 .module.fleet .lship .ship_hp_bar {
-	height:8px;
+	height:9px;
 }
 .module.fleet .lship .ship_hp_prediction {
-	height:8px;
+	height:9px;
+}
+.module.fleet .lship .ship_hp_pred_value {
+	position:absolute;
+	top:0px;
+	left:0px;
+	width:100%;
+	line-height:7px;
+	text-align:center;
+	display:none;
+}
+.module.fleet .lship .ship_hp_pred_value .ship_hp_diff {
+	color:#ff7979;
+	font-size:11px;
+	text-shadow:
+		-1px -1px 1px #3d1414, 0px -1px 1px #3d1414, 1px -1px 1px #3d1414,
+		-1px 0px 1px #3d1414, 1px 0px 1px #3d1414,
+		-1px 1px 1px #3d1414, 0px 1px 1px #3d1414, 1px 1px 1px #3d1414;
+	opacity:0.84;
 }
 
 /* ==> Akashi Timer <== */

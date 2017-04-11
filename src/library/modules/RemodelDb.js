@@ -73,7 +73,7 @@
             var shipDstIds = {};
 
             $.each(masterData.api_mst_ship, function(i,x){
-                if (x.api_id > 500)
+                if (!KC3Master.isRegularShip(x.api_id))
                     return;
                 shipIds.push( x.api_id );
                 var shipId_to = parseInt(x.api_aftershipid,10) || 0;
@@ -176,23 +176,23 @@
         },
         // return root ship in this ships's remodel chain
         originOf: function(shipId) {
-            return this._db.originOf[shipId];
+            return this._db ? this._db.originOf[shipId] : undefined;
         },
         // return remodel info, including cost and required level
         remodelInfo: function(shipId) {
-            return this._db.remodelInfo[shipId];
+            return this._db ? this._db.remodelInfo[shipId] : undefined;
         },
         // return all ships in ship's remodel chain
         // in other words, all ships that considered "same" kanmusu
         remodelGroup: function(shipId) {
             var oid = this.originOf(shipId);
-            return oid?this._db.remodelGroups[oid].group:false;
+            return oid ? this._db.remodelGroups[oid].group : [];
         },
         // get final forms / remodels of one ship,
         // cyclic remodels are all considered final
         finalForms: function(shipId) {
             var oid = this.originOf(shipId);
-            return oid?this._db.remodelGroups[oid].final_forms:false;
+            return oid ? this._db.remodelGroups[oid].final_forms : [];
         },
         // check if one ship is in her final form
         isFinalForm: function(shipId) {
@@ -223,7 +223,7 @@
             return prevInfo.level;
         },
         dumpRemodelGroups: function() {
-            return JSON.stringify( this._db.remodelGroups );
+            return this._db ? JSON.stringify( this._db.remodelGroups ) : "";
         },
         // returns all possible remodel levels for current ship
         // returns false if the shipId is invalid

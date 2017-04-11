@@ -111,35 +111,23 @@
 			});
 			
 			// On-click sortie ID export battle
-			$(".sortie_list").on("click", ".sortie_dl", function(){
-				self.exportBattleImg(parseInt($(this).data("id")));
+			$(".sortie_list").on("click contextmenu", ".sortie_dl", function(e){
+				e.preventDefault();
+				self.exportBattleImg(parseInt($(this).data("id")), e);
 			});
 			
-			// On-click sortie toggles
+			// On-click single sortie toggles
 			$(".tab_"+tabCode+" .sortie_list").on("click", ".sortie_box .sortie_toggles .sortie_toggle", function(){
-				var targetName = $(this).data("target");
-				var targetParent = $(this).parent().parent().parent();
-				var targetBox = targetParent.find("."+targetName);
-				var expandedQualif = !$(this).hasClass("sortie_toggle_in");
-				var expandedBefore = $(".sortie_toggle.active:not(.sortie_toggle_in)",$(this).parent()).length;
-				
-				if( $(this).hasClass("active") ){
-					$(this).removeClass("active");
-				}else{
-					$(this).addClass("active");
-				}
-				
-				var expandedAfter = $(".sortie_toggle.active:not(.sortie_toggle_in)",$(this).parent()).length;
-				
-				// Show or hide the target box
-				targetBox.slideToggle(undefined,function(){
-					if(expandedQualif && expandedBefore < 1)
-						targetParent.addClass("expanded");
-				});
-				if(expandedQualif && expandedAfter < 1)
-					targetParent.removeClass("expanded");
+				self.toggleSortie(this, false);
 			});
-
+			
+			// On-click batch sortie toggles
+			$(".tab_"+tabCode+" .sortie_batch_toggles").append(
+				$(".tab_"+tabCode+" .factory .sortie_column.sortie_toggles").clone()
+			).createChildrenTooltips().on("click", ".sortie_toggles .sortie_toggle", function(){
+				self.toggleSortie(this, true);
+			});
+			
 			if(!!KC3StrategyTabs.pageParams[1]){
 				this.switchWorld(KC3StrategyTabs.pageParams[1],
 					KC3StrategyTabs.pageParams[2]);
@@ -147,6 +135,41 @@
 				// Select default opened world
 				this.switchWorld($(".tab_"+tabCode+" .world_box.active").data("world_num"));
 			}
+		};
+
+		// Common sortie toggling method
+		this.toggleSortie = function(origin, globalSwitch) {
+			var targetName = $(origin).data("target");
+			var targetParent = globalSwitch ? $(".tab_"+tabCode+" .sortie_box") : $(origin).parent().parent().parent();
+			var targetBox = targetParent.find("."+targetName);
+			var expandedQualif = !$(origin).hasClass("sortie_toggle_in");
+			var expandedBefore = $(".sortie_toggle.active:not(.sortie_toggle_in)",$(origin).parent()).length;
+			
+			if( $(origin).hasClass("active") ){
+				$(origin).removeClass("active");
+				if (globalSwitch) {
+					targetParent.find("[data-target=" + targetName + "]").removeClass("active");
+				}
+				// Hide the target box
+				targetBox.slideUp(undefined,function(){
+					if(expandedQualif && expandedBefore < 1)
+						targetParent.addClass("expanded");
+				});
+			} else {
+				$(origin).addClass("active");
+				if (globalSwitch) {
+					targetParent.find("[data-target=" + targetName + "]").addClass("active");
+				}
+				// Show the target box
+				targetBox.slideDown(undefined,function(){
+					if(expandedQualif && expandedBefore < 1)
+						targetParent.addClass("expanded");
+				});
+			}
+			
+			var expandedAfter = $(".sortie_toggle.active:not(.sortie_toggle_in)",$(origin).parent()).length;
+			if(expandedQualif && expandedAfter < 1)
+				targetParent.removeClass("expanded");
 		};
 
 		/* SWITCH WORLD
@@ -165,7 +188,7 @@
 			var worldOffset = $(window).data("world_off");
 			var selectOffset = $(".tab_"+tabCode+" .world_box[data-world_num={0}]".format(self.selectedWorld)).index();
 			if(typeof worldOffset === "undefined"){
-				$(window).data("world_off", Math.min(selectOffset, countWorlds-6));
+				$(window).data("world_off", Math.min(selectOffset, countWorlds-6-((tabCode=="maps")&1)));
 			} else if(selectOffset < worldOffset){
 				$(window).data("world_off", selectOffset);
 			} else if(selectOffset >= 6+((tabCode=="maps")&1) && worldOffset < selectOffset-5){
@@ -320,8 +343,9 @@
 		this.showMap = function(){
 			var self = this;
 			this.pageNum = 1;
-			$(".tab_"+tabCode+" .page_list").html("");
-			$(".tab_"+tabCode+" .sortie_list").html("");
+			$(".tab_"+tabCode+" .page_list").empty();
+			$(".tab_"+tabCode+" .sortie_list").empty();
+			$(".tab_"+tabCode+" .sortie_batch_toggles").hide();
 			
 			// Show all sorties
 			if(this.selectedWorld === 0){
@@ -367,14 +391,14 @@
 				});
 				self.pageNum = 1;
 				self.showPage();
-				$(".tab_"+tabCode+" .page_list")
-					.prepend('<div class="sortie_count">Total pages: {0}, sorties: {1}</div>'
-						.format(countPages, countSorties));
+				$(".tab_"+tabCode+" .sortie_controls .sortie_count").text(
+					"Total pages: {0}, sorties: {1}".format(countPages, countSorties)
+				);
+				$(".tab_"+tabCode+" .sortie_batch_toggles").show();
 			}else{
 				$(".tab_"+tabCode+" .pagination").hide();
 			}
 		};
-		
 		
 		/* SHOW PAGE
 		Determines list type and gets data from IndexedDB
@@ -711,7 +735,7 @@
 		
 		/* EXPORT REPLAY IMAGE
 		-------------------------------*/
-		this.exportBattleImg = function(sortieId){
+		this.exportBattleImg = function(sortieId, e){
 			if(this.exportingReplay) return false;
 			this.exportingReplay = true;
 			
@@ -744,6 +768,13 @@
 						return false;
 					}
 					
+					if(e.which === 3) {
+						window.open("https://kc3kai.github.io/kancolle-replay/battleplayer.html#" + encodeURIComponent(JSON.stringify(sortieData), "_blank"));
+						self.exportingReplay = false;
+						$("body").css("opacity", "1");
+						return true;
+					}
+
 					console.log("Downloading reply", sortieId, ", data:", sortieData);
 					rcontext.font = "26pt Calibri";
 					rcontext.fillStyle = '#ffffff';
@@ -764,19 +795,20 @@
 					
 					steg.encode(JSON.stringify(sortieData), withDataCover64, {
 						success: function(newImg){
-							chrome.downloads.download({
-								url: newImg,
-								filename: ConfigManager.ss_directory+'/replay/'+PlayerManager.hq.name+"_"+sortieId+'.png',
-								conflictAction: "uniquify"
-							}, function(downloadId){
-								self.exportingReplay = false;
-								$("body").css("opacity", "1");
+							KC3ImageExport.writeToCanvas(newImg, { width: 400, height: 400 }, function (error, canvas) {
+								if (error) {
+									self.endExport(error);
+									return;
+								}
+								new KC3ImageExport(canvas, {
+									filename: PlayerManager.hq.name + '_' + sortieId,
+									format: 'png',
+									subDir: 'replay',
+								}).export(self.endExport.bind(self));
 							});
 						},
 						error: function(e){
-							console.error("Failed to encode replay data by", e, e.stack);
-							self.exportingReplay = false;
-							$("body").css("opacity", "1");
+							self.endExport(e);
 							return false;
 						}
 					});
@@ -786,6 +818,14 @@
 			};
 			domImg.src = this.stegcover64;
 			
+		};
+
+		this.endExport = function (error) {
+			if (error) {
+				console.error("Failed to encode replay data by", e, e.stack);
+			}
+			this.exportingReplay = false;
+			$("body").css("opacity", "1");
 		};
 		
 	};

@@ -304,36 +304,29 @@
 		
 		// Akashi current
 		var baseElement = (TotalFleet.length > 1) ? ['main','escort'] : ['single'];
-		var ctime = Date.now();
 		baseElement.forEach(function(baseKey,index){
-			var FleetData = PlayerManager.fleets[TotalFleet[index]];
-
 			var baseContainer = $([".shiplist",baseKey].join('_'));
-			var akashiDuration = (function(){
-				return Math.min(359999,Math.hrdInt('floor',ctime - this.akashi_tick,3,1));
-			}).call(FleetData);
 
 			$(".sship,.lship",baseContainer).each(function(index,shipBox){
 				var repairBox = $('.ship_repair_data',shipBox);
 
 				var
-					shipData   = KC3ShipManager.get(repairBox.data('sid')),
-					hpLoss     = shipData.hp[1] - shipData.hp[0],
-					repairTime = Math.max(0,Math.hrdInt('floor',shipData.repair[0],3,1) - 30),
-					repairTick = Math.max(1,(hpLoss > 0) ? (repairTime/hpLoss) : 1),
-					repairHP   = Math.min(hpLoss,
-						FleetData.checkAkashiExpire() ?
-							Math.floor(hpLoss*Math.min(1,Math.max(akashiDuration-30,0) / repairTime)) :
-							0
-					);
+					shipData = KC3ShipManager.get(repairBox.data('sid')),
+					hpLost = shipData.hp[1] - shipData.hp[0],
+					dockTime = shipData.repair[0],
+					repairProgress = PlayerManager.akashiRepair.getProgress(dockTime, hpLost);
 
-				$('.ship_repair_tick' ,shipBox).attr('data-tick',repairHP);
-				$('.ship_repair_timer',shipBox).text((
-					(repairHP < hpLoss) ? (
-						!FleetData.checkAkashiExpire() ? (1200-akashiDuration) :
-							(repairTick - Math.min(repairTime,akashiDuration - 30) % repairTick)
-					) : NaN
-				).toString().toHHMMSS() );
+				$('.ship_repair_tick', shipBox).attr('data-tick', repairProgress.repairedHp);
+				$('.ship_repair_timer', shipBox).text(
+					(function (t) {
+						if (t === 0) {
+							return '--:--:--';
+						} else if (!t || Number.isNaN(parseInt(t))) {
+							return '??:??:??';
+						}
+						return Math.ceil(t / 1000).toString().toHHMMSS();
+					})(repairProgress.timeToNextRepair)
+				);
 			});
 		});
 	}
@@ -449,6 +442,14 @@
 			$("body").css("background-size", ConfigManager.pan_bg_size);
 			$("body").css("background-position", ConfigManager.pan_bg_position);
 			$("body").css("background-repeat", "no-repeat");
+		}
+
+		// Panel customizations: custom css
+		if(ConfigManager.pan_custom_css !== ""){
+			var customCSS = document.createElement("style");
+			customCSS.type = "text/css";
+			customCSS.innerHTML = ConfigManager.pan_custom_css;
+			$("head").append(customCSS);
 		}
 
 		// Close CatBomb modal
@@ -730,14 +731,16 @@
 
 	function Orientation(){
 		if(!isRunning){ return false; }
-
+		var scrollBarWidth = (window.innerWidth - $(window).width()) || 0;
+		var expectedVerticalWidth = 800 - scrollBarWidth;
 		// Wide interface, switch to vertical if not yet
-		if( $(window).width() >= 800 && currentLayout != "vertical" ){
+		if($(window).width() >= expectedVerticalWidth && currentLayout != "vertical"){
 			$(".wrapper").removeClass("h").addClass("v");
-
+			currentLayout = "vertical";
 		// Narrow interface, switch to horizontal if not yet
-		}else if( $(window).width() < 800 && currentLayout != "horizontal" ){
+		} else if($(window).width() < expectedVerticalWidth && currentLayout != "horizontal"){
 			$(".wrapper").removeClass("v").addClass("h");
+			currentLayout = "horizontal";
 		}
 	}
 
@@ -1916,8 +1919,8 @@
 						$(enemyFleetBoxSelector+" .abyss_ship_"+(index+1)+" img")
 							.attr("src", KC3Meta.abyssIcon(eshipId))
 							.attr("title", buildEnemyFaceTooltip(eshipId, thisNode.elevels[index],
-								thisNode.maxHPs.enemy[index], thisNode.eParam[index],
-								thisNode.eSlot[index], false))
+								thisNode.enemyHP[index].hp, thisNode.maxHPs.enemy[index], 
+								thisNode.eParam[index], thisNode.eSlot[index], false))
 							.lazyInitTooltip();
 						$(enemyFleetBoxSelector+" .abyss_ship_"+(index+1))
 							.data("masterId", eshipId)
@@ -2125,8 +2128,8 @@
 							$(".module.activity .abyss_single .abyss_ship_"+(index+1)+" img")
 								.attr("src", thisNode.isPvP ? KC3Meta.shipIcon(eshipId) : KC3Meta.abyssIcon(eshipId))
 								.attr("title", buildEnemyFaceTooltip(eshipId, thisNode.elevels[index],
-									thisNode.maxHPs.enemy[index], thisNode.eParam[index],
-									thisNode.eSlot[index], thisNode.isPvP))
+									thisNode.enemyHP[index].hp, thisNode.maxHPs.enemy[index], 
+									thisNode.eParam[index], thisNode.eSlot[index], thisNode.isPvP))
 								.lazyInitTooltip();
 							$(".module.activity .abyss_single .abyss_ship_"+(index+1))
 								.data("masterId", eshipId)
@@ -2541,8 +2544,8 @@
 					$(".module.activity .abyss_single .abyss_ship_"+(index+1)+" img")
 						.attr("src", KC3Meta.shipIcon(eshipId))
 						.attr("title", buildEnemyFaceTooltip(eshipId, thisPvP.elevels[index],
-							thisPvP.maxHPs.enemy[index], thisPvP.eParam[index],
-							thisPvP.eSlot[index], true))
+							thisPvP.enemyHP[index].hp, thisPvP.maxHPs.enemy[index], 
+							thisPvP.eParam[index], thisPvP.eSlot[index], true))
 						.lazyInitTooltip();
 					$(".module.activity .abyss_single .abyss_ship_"+(index+1))
 						.data("masterId", eshipId)
@@ -3286,7 +3289,7 @@
 		}
 	}
 
-	function buildEnemyFaceTooltip(eshipId, level, maxHP, eParam, eSlot, isPvP) {
+	function buildEnemyFaceTooltip(eshipId, level, currentHP, maxHP, eParam, eSlot, isPvP) {
 		var tooltip = "", shipMaster, gearMaster, slotIdx;
 		var abyssMaster, slotMaxeq;
 		var iconStyles = {
@@ -3301,7 +3304,9 @@
 			tooltip += "{0} Lv {1} HP {2}\n".format(
 				KC3Meta.stype(shipMaster.api_stype),
 				level || "?",
-				maxHP || "?"
+				ConfigManager.info_battle ?
+					"{0} /{1}".format(currentHP === undefined ? "?" : currentHP, maxHP || "?")
+					: maxHP || "?"
 			);
 			if(Array.isArray(eParam)){
 				tooltip += $("<img />").attr("src", "../../../../assets/img/client/mod_fp.png")

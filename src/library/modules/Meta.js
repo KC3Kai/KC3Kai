@@ -60,14 +60,14 @@ Provides access to data on built-in JSON files
 		},
 		
 		abyssKaiShipIds: [
-			565, 566, 567, 616, 617, 618, 714, 715
+			1565, 1566, 1567, 1616, 1617, 1618, 1714, 1715
 		],
 		abyssNonBossIds: [
-			541, 542, 543, 549, 550, 551, 552, 553, 554, 555,
-			558, 559, 560, 561, 562, 563, 564, 570, 571, 572,
-			575, 576, 577, 578, 579, 580, 591, 592, 593, 594,
-			595, 614, 615, 621, 622, 623, 624, 637, 638, 639,
-			640, 665, 666, 667
+			1541, 1542, 1543, 1549, 1550, 1551, 1552, 1553, 1554, 1555,
+			1558, 1559, 1560, 1561, 1562, 1563, 1564, 1570, 1571, 1572,
+			1575, 1576, 1577, 1578, 1579, 1580, 1591, 1592, 1593, 1594,
+			1595, 1614, 1615, 1621, 1622, 1623, 1624, 1637, 1638, 1639,
+			1640, 1665, 1666, 1667
 		],
 		
 		/* Initialization
@@ -126,7 +126,10 @@ Provides access to data on built-in JSON files
 		getIcon: function(id, empty) {
 			id = Number(id);
 			if(this._icons.indexOf(id) > -1){
-				var path = id > 500 ? "abyss/" : "ships/";
+				var path = KC3Master.isAbyssalShip(id) ? "abyss/" : "ships/";
+				// Devs bump 1000 for master ID of abyssal ships from 2017-04-05
+				// To prevent mess file renaming for images, patch it here.
+				id = path === "abyss/" ? id - 1000 : id;
 				return "chrome-extension://"+chrome.runtime.id+"/assets/img/"+path+id+".png";
 			}
 			if(typeof empty === "undefined"){
@@ -257,11 +260,11 @@ Provides access to data on built-in JSON files
 			}
 			// Princesses and demons, using black-list
 			// To reduce updating work, consider new abyssal ships as boss by default
-			if(shipMaster.api_id > 538 && shipMaster.api_id <= 800 &&
+			if(shipMaster.api_id > (KC3Master.abyssalShipIdFrom + 38) &&
 				this.abyssNonBossIds.indexOf(shipMaster.api_id) < 0){
 				return "boss";
 			}
-			return shipMaster.api_id > 500 ? shipMaster.api_yomi.replace("-", "") : "";
+			return KC3Master.isAbyssalShip(shipMaster.api_id) ? shipMaster.api_yomi.replace("-", "") : "";
 		},
 		
 		shipSpeed :function(apiSoku, returnTerm){

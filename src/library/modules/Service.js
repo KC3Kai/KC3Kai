@@ -483,6 +483,40 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		}
 	});
 	
+	/* On Chrome Storage Changed
+	Sync localStorage parts with Chrome Storage
+	Used for sync quests data on different machines
+	------------------------------------------*/
+	chrome.storage.onChanged.addListener(function(changes, namespace) {
+		// Check if synchronization is enabled, expected changes present and namespace is "sync"
+		if (ConfigManager.chromeSyncQuests && changes.KC3QuestsData && namespace == "sync") {
+			var newValue = changes.KC3QuestsData.newValue;
+			// Check if remote data structure version is matching with current expected structure
+			if (newValue.dataStructVersion == 1) {
+				// Check if local timestamp not set or remote timestamp is more then local
+				if ((typeof localStorage.questsTimeStamp == "undefined") || (newValue.questsTimeStamp > localStorage.questsTimeStamp)) {
+					// Check if JSON strings are the same, then there's nothing to do
+					if (newValue.quests === localStorage.quests) { return true; }
+					// Set new values
+					localStorage.quests = newValue.quests;
+					localStorage.questsTimeStamp = newValue.questsTimeStamp;
+					localStorage.timeToResetDailyQuests = newValue.timeToResetDailyQuests;
+					localStorage.timeToResetWeeklyQuests = newValue.timeToResetWeeklyQuests;
+					localStorage.timeToResetMonthlyQuests = newValue.timeToResetMonthlyQuests;
+					localStorage.timeToResetQuarterlyQuests = newValue.timeToResetQuarterlyQuests;
+					// Desktop notification
+					if (ConfigManager.alert_desktop) {
+						chrome.notifications.create("kc3kai_quests", {
+							type: "basic",
+							title: KC3Meta.term("DesktopNotifyQuestsSyncTitle"),
+							message: KC3Meta.term("DesktopNotifyQuestsSyncMessage").format(Date(+newValue.questsTimeStamp)),
+							iconUrl: "../../assets/img/logo/128.png"
+						});
+					}
+				}
+			}
+		}
+	});
 	
 	/* On Update Available
 	This will avoid auto-restart when webstore update is available

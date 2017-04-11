@@ -775,6 +775,18 @@
 		]
 	},
 	{
+		"section": "SettingsDataSynchronization",
+		"help": "",
+		"contents": [
+			{
+				"id": "chromeSyncQuests",
+				"name": "SettingsChromeSyncQuests",
+				"type": "check",
+				"options" : {}
+			}
+		]
+	},
+	{
 		"section": "SettingsKC3DBSubmission",
 		"help" : "",
 		"contents" :[
@@ -888,6 +900,14 @@
 					"placeholder" : "SettingsBGColorDesc",
 					"tooltip" : "SettingsBGColorDesc"
 				}
+			},
+			{
+				"id" : "pan_custom_css",
+				"name" : "SettingsPanelCustomCSS",
+				"type" : "textarea",
+				"options" : {
+					"tooltip" : "SettingsPanelCustomCSSTip"
+				}
 			}
 		]
 	},
@@ -904,6 +924,14 @@
 						[ "legacy", "Traditional" ],
 						[ "dark", "Dark" ]
 					]
+				}
+			},
+			{
+				"id" : "sr_custom_css",
+				"name" : "SettingsStrategyCustomCSS",
+				"type" : "textarea",
+				"options" : {
+					"tooltip" : "SettingsStrategyCustomCSSTip"
 				}
 			}
 		]

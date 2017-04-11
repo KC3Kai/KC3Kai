@@ -252,6 +252,7 @@
 .tab_ships .ship_item .ship_img img.ship_icon {
 	width:20px;
 	height:20px;
+	margin-top:-3px;
 }
 .tab_ships .ship_item .ship_img img.ship_kekkon {
 	position:absolute;
@@ -343,6 +344,7 @@
 .tab_ships .ship_item .ship_equip img {
 	width:17px;
 	height:18px;
+	margin-top:-3px;
 }
 .tab_ships .ship_item .ship_equip span {
 	position:absolute;

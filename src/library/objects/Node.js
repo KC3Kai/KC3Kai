@@ -1196,7 +1196,7 @@ Used by SortieManager
 					var enemyShip = KC3Master.ship( (this.ecships || this.eships)[i] );
 					if (!enemyShip) {
 						console.log("Cannot find enemy " + this.eships[i]);
-					} else if (this.eships[i] <= 500) {
+					} else if (!KC3Master.isAbyssalShip(this.eships[i])) {
 						console.log("Enemy ship is not Abyssal!");
 					} else {
 						switch(enemyShip.api_stype) {
@@ -1551,8 +1551,8 @@ Used by SortieManager
 		// Save enemy info
 		for(i = 0; i < 6; i++) {
 			enemyId = this.eships[i] || -1;
-			// Only record ships with ID more than 500 coz abyss only
-			if (enemyId > 500) {
+			// Only record ships for abyssal
+			if (KC3Master.isAbyssalShip(enemyId)) {
 				KC3Database.Enemy({
 					id: enemyId,
 					hp: battleData.api_maxhps[i+7],
@@ -1571,7 +1571,7 @@ Used by SortieManager
 		if(this.eships.length > 6) {
 			for(i = 6; i < 13; i++) {
 				enemyId = this.eships[i] || -1;
-				if (enemyId > 500) {
+				if (KC3Master.isAbyssalShip(enemyId)) {
 					KC3Database.Enemy({
 						id: enemyId,
 						hp: battleData.api_maxhps_combined[i+1],

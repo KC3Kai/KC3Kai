@@ -286,7 +286,7 @@ KC3改 Ship Object
 	 * @see http://wikiwiki.jp/kancolle/?%A5%B1%A5%C3%A5%B3%A5%F3%A5%AB%A5%C3%A5%B3%A5%AB%A5%EA
 	 */
 	KC3Ship.getMaxHp = function(masterId, currentLevel){
-		var masterHp = masterId > 500 ? undefined :
+		var masterHp = KC3Master.isNotRegularShip(masterId) ? undefined :
 			(KC3Master.ship(masterId) || {"api_taik":[]}).api_taik[0];
 		return ((currentLevel || 155) < 100 ? masterHp :
 			masterHp >  90 ? masterHp + 9 :
@@ -306,7 +306,7 @@ KC3改 Ship Object
 	 * @return -1 if ship ID belongs to aybssal or nonexistence
 	 */
 	KC3Ship.getCarrySlots = function(masterId){
-		var maxeq = masterId > 500 ? undefined :
+		var maxeq = KC3Master.isNotRegularShip(masterId) ? undefined :
 			(KC3Master.ship(masterId) || {}).api_maxeq;
 		return Array.isArray(maxeq) ? maxeq.reduce(function(acc, v){return acc + v;}, 0) : -1;
 	};
@@ -326,11 +326,15 @@ KC3改 Ship Object
 
 			hpArr = optAfterHp ? this.afterHp : this.hp;
 
-		var result = {};
+		var result = { akashi: 0 };
 
-		result.akashi = ( HPPercent > 0.50 && HPPercent < 1.00 && this.isFree()) ?
-			/* RepairCalc.facilityInSecJSNum( this.master().api_stype, this.level, this.hp[0], this.hp[1] ) */
-			Math.max(Math.min((1200 * (this.hp[1] - this.hp[0])),RepairTSec),1200) : 0;
+		if (HPPercent > 0.5 && HPPercent < 1.00 && this.isFree()) {
+			var repairTime = KC3AkashiRepair.calculateRepairTime(this.repair[0]);
+			result.akashi = Math.max(
+				Math.hrdInt('floor', repairTime,3,1), // convert to seconds
+				20 * 60 // should be at least 20 minutes
+			);
+		}
 
 		if (optAfterHp) {
 			result.docking = RepairCalc.dockingInSecJSNum( this.master().api_stype, this.level, hpArr[0], hpArr[1] );
