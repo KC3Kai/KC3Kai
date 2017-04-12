@@ -2962,11 +2962,18 @@
 				if (rate >= 100) { return "guaranteed"; }
 			}(estSuccessRate));
 
-			var tooltipText = KC3Meta.term("ExpedGSRateExplainSparkle").format(sparkledCount);
-			// apply tooltip to overdrum expeds
-			if (typeof gsDrumCount !== "undefined")
-				tooltipText += "\n" + KC3Meta.term("ExpedGSRateExplainExtraDrum").format(fleetDrumCount, gsDrumCount);
 
+			var tooltipText = (function () {
+				if (!condCheckWithoutResupply) { return KC3Meta.term('ExpedGSRateExplainCondUnmet'); }
+				if (condIsUnsparkledShip && !condIsDrumExpedition) {
+					return KC3Meta.term('ExpedGSRateExplainMissingSparkle');
+				}
+				if (condIsDrumExpedition && !condIsOverdrum) {
+					return KC3Meta.term('ExpedGSRateExplainNoOverdrum').format(fleetDrumCount, gsDrumCount);
+				}
+				return KC3Meta.term('ExpedGSRateExplainSparkle').format(sparkledCount);
+			})();
+			
 			jqGSRate.attr("title", tooltipText).lazyInitTooltip();
 
 			// hide GS rate if user does not intend doing so.
