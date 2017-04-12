@@ -127,6 +127,9 @@ Retreives when needed to apply on components
 				ss_quality 			: 70,
 				ss_directory 		: 'KanColle',
 				ss_dppx 			: 1,
+
+				PushAlerts_enabled: 0,
+				PushAlerts_key : '',
 				
 				alert_diff 			: 59,
 				alert_morale_notif	: true,
