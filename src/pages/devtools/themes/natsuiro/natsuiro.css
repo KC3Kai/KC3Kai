@@ -373,6 +373,12 @@ html,body {
 	float:left;
 	color:#ccc;
 }
+.module.activity .consumable_ltext.regenCap {
+	color:#EAF918;
+}
+.module.activity .consumable_ltext.hardCap {
+	color:#FF7979;
+}
 .module.activity .consumable_text.danger {
 	color:#FF7979;
 }
