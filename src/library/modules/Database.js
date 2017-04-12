@@ -310,10 +310,11 @@ Uses Dexie.js third-party plugin on the assets directory
 			this.con.useitem.add(data);
 		},
 		
-		Screenshot :function(imgur){
+		Screenshot :function(imgur, deletehash){
 			this.con.screenshots.add({
 				hq : 0,
 				imgur : imgur,
+				deletehash: deletehash,
 				ltime : Math.floor(Date.now()/1000),
 			});
 		},

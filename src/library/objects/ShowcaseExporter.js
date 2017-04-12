@@ -184,7 +184,7 @@
                 0, 0,
                 this.exporter.rowParams.height * 2, this.exporter.rowParams.height * 2
             );
-            this.exporter._finish(canvas.toDataURL("image/png"), topLine);
+            this.exporter._finish(canvas, topLine);
         };
         img.src = "/assets/img/logo/128.png";
 
@@ -260,18 +260,14 @@
         this._equipGroupCanvases = {};
     };
 
-    ShowcaseExporter.prototype._finish = function (dataURL, topLine) {
-        switch (parseInt(this.buildSettings.output, 10)) {
-            case 0:
-                this._download(dataURL, topLine);
-                break;
-            case 1:
-                this._postToImgur(dataURL, topLine);
-                break;
-            default:
-                this._openInNewTab(dataURL, topLine);
-                break;
-        }
+    ShowcaseExporter.prototype._finish = function (canvas, topLine) {
+        var self = this;
+        new KC3ImageExport(canvas, {
+            filename: topLine,
+            method: this.buildSettings.output,
+        }).export(function (error, result) {
+            self.complete(result || {});
+        });
     };
 
     ShowcaseExporter.prototype._heartLockAlert = function(){
@@ -279,84 +275,6 @@
         alert("Please heartlock your ships\\equipment or use \"Full\" mode.\nYou can read about heartlocking on wiki.");
         this.complete({});
         return false;
-    };
-
-    ShowcaseExporter.prototype._download = function (dataURL) {
-        if (enableShelfTimer) {
-            clearTimeout(enableShelfTimer);
-        }
-        var self = this;
-        var topLine = this.isShipList ? "Ship_List" : "Equipment_List";
-        var filename = ConfigManager.ss_directory + '/' + dateFormat("yyyy-mm-dd") + '_' + topLine + ".png";
-        chrome.downloads.setShelfEnabled(false);
-        chrome.downloads.download({
-            url: dataURL,
-            filename: filename,
-            conflictAction: "uniquify"
-        }, function (downloadId) {
-            enableShelfTimer = setTimeout(function () {
-                chrome.downloads.setShelfEnabled(true);
-                enableShelfTimer = false;
-                self.cleanUp();
-                self.complete({downloadId: downloadId, filename: filename});
-            }, 100);
-        });
-    };
-
-    ShowcaseExporter.prototype._postToImgur = function (dataURL, topLine) {
-        var stampNow = Math.floor((new Date()).getTime() / 1000);
-        if (stampNow - imgurLimit > 10) {
-            imgurLimit = stampNow;
-        } else {
-            this._download(dataURL, topLine);
-            return false;
-        }
-
-        var self = this;
-        $.ajax({
-            url: 'https://api.imgur.com/3/credits',
-            method: 'GET',
-            headers: {
-                Authorization: 'Client-ID 088cfe6034340b1',
-                Accept: 'application/json'
-            },
-            success: function (response) {
-                if (response.data.UserRemaining > 10 && response.data.ClientRemaining > 100) {
-                    $.ajax({
-                        url: 'https://api.imgur.com/3/image',
-                        method: 'POST',
-                        headers: {
-                            Authorization: 'Client-ID 088cfe6034340b1',
-                            Accept: 'application/json'
-                        },
-                        data: {
-                            image: dataURL.substring(22),
-                            type: 'base64'
-                        },
-                        success: function (response) {
-                            self.complete({url: response.data.link});
-                        },
-                        error: function () {
-                            self._download(dataURL, topLine);
-                        }
-                    });
-                } else {
-                    self._download(dataURL, topLine);
-                }
-            },
-            error: function () {
-                self._download(dataURL, topLine);
-            }
-        });
-    };
-
-    ShowcaseExporter.prototype._openInNewTab = function (dataURL, topLine) {
-        if (dataURL.length >= 2 * 1024 * 1024) {
-            this._download(dataURL, topLine);
-        } else {
-            window.open(dataURL, "_blank");
-            this.complete({});
-        }
     };
 
     /* SHIP EXPORT
