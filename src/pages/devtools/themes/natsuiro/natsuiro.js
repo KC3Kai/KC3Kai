@@ -2953,8 +2953,14 @@
 				})(estSuccessRate)
 			);
 
-			// turn gsRate text gold if high chance of GS
-			jqGSRate.toggleClass("golden", estSuccessRate > 80);
+			// colour GS text based on GS chance
+			jqGSRate.attr('data-gsState', function (rate) {
+				if (rate <= 0) { return "impossible"; }
+				if (condIsDrumExpedition && !condIsOverdrum) { return "no-overdrum"; }
+				if (rate < 80) { return ""; } // no colour
+				if (rate < 100 ) { return "likely"; }
+				if (rate >= 100) { return "guaranteed"; }
+			}(estSuccessRate));
 
 			var tooltipText = KC3Meta.term("ExpedGSRateExplainSparkle").format(sparkledCount);
 			// apply tooltip to overdrum expeds
