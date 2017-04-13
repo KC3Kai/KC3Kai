@@ -1530,8 +1530,17 @@ ABYSS FLEET
 	font-size: 14px;
 	color:#ccc
 }
-.module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content.golden {
+.module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content[data-gsState="impossible"] {
+	color:#FF5555;
+}
+.module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content[data-gsState="no-overdrum"] {
+	color:orange;
+}
+.module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content[data-gsState="likely"] {
 	color:gold;
+}
+.module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content[data-gsState="guaranteed"] {
+	color:#00CC00;
 }
 .module.activity .activity_expeditionPlanner .expPlanner_text_passed {
 	font-size: 14px;

@@ -2949,7 +2949,8 @@
 			var jqGSRate = $(".module.activity .activity_expeditionPlanner .row_gsrate .gsrate_content");
 
 			// "???" instead of "?" to make it more noticable.
-			var sparkedCount = fleetObj.ship().filter( function(s) { return s.morale >= 50; } ).length;
+			var sparkledCount = fleetObj.ship().filter( function(s) { return s.morale >= 50; } ).length;
+			var fleetShipCount = fleetObj.countShips();
 			var fleetDrumCount = fleetObj.countDrums();
 			// reference: http://wikiwiki.jp/kancolle/?%B1%F3%C0%AC
 			var gsDrumCountTable = {
@@ -2960,45 +2961,52 @@
 				40: 0+4 };
 			var gsDrumCount = gsDrumCountTable[selectedExpedition];
 
-			var condCheckEnoughSparkled = sparkedCount >= 4;
-			// check if # of sparkled ship & extra drum requirement is met
-			// this variable only make sense when gsDrumCount refers to a valid drum count
-			var condCheckExtraDrumExped = condCheckEnoughSparkled && fleetDrumCount >= gsDrumCount;
+			var condIsDrumExpedition = !!gsDrumCount;
+			var condIsUnsparkledShip = fleetShipCount > sparkledCount;
+			var condIsOverdrum = fleetDrumCount >= gsDrumCount;
 
-			// GS rate estimation in general: +19% for each sparkled ship
-			// (experiment shows that this estimation might be very inaccurate
-			// when there are less than 4 sparkled ships
-			// so we decide to make it shown only when there are >= 4 sparkled ships)
-			var estSuccessRate = Math.min( 99, 19 * sparkedCount );
-			// for expeditions that support extra drums,
-			// a GS is almost guaranteed when there are >= 4 sparkled ships and sufficient # of extra drums.
-			if ((typeof gsDrumCount !== "undefined") && condCheckExtraDrumExped)
-				estSuccessRate = 99;
+			var estSuccessRate = 0;
+			// can GS if:
+			// - expedition requirements are satisfied
+			// - either drum expedition, or regular expedition with all ships sparkled
+			if (condCheckWithoutResupply && !(condIsUnsparkledShip && !condIsDrumExpedition)) {
+				// based on the datamined vita formula,
+				// see https://github.com/KC3Kai/KC3Kai/issues/1951#issuecomment-292883907
+				estSuccessRate = 21 + 15 * sparkledCount;
+				if (condIsDrumExpedition) {
+					estSuccessRate += condIsOverdrum ? 20 : -15;
+				}
+			}
 
-			// GS rate is only shown when all of the followings are true:
-			// - expedition requirement are met
-			//   (without resupply taken into account)
-			// - there are >= 4 sparked ships
-			// otherwise it is forced to be unknown 
-			// and is capped at 99%.
 			jqGSRate.text(
-				(condCheckWithoutResupply && condCheckEnoughSparkled)
-					? "~" + estSuccessRate + "%"
-					: "???");
+				(function (rate) {
+					if (rate === 0) { return "0%"; }
+					if (rate >= 100) { return "100%"; }
+					return "~" + rate + "%";
+				})(estSuccessRate)
+			);
 
-			// apply golden text when we have >= 4 sparked ships.
-			// for overdrum expeds, we further require extra number of drums
-			jqGSRate.toggleClass(
-				"golden",
-				(typeof gsDrumCount !== "undefined"
-				 ? condCheckExtraDrumExped
-				 : condCheckEnoughSparkled));
+			// colour GS text based on GS chance
+			jqGSRate.attr('data-gsState', function (rate) {
+				if (rate <= 0) { return "impossible"; }
+				if (condIsDrumExpedition && !condIsOverdrum) { return "no-overdrum"; }
+				if (rate < 80) { return ""; } // no colour
+				if (rate < 100 ) { return "likely"; }
+				if (rate >= 100) { return "guaranteed"; }
+			}(estSuccessRate));
 
-			var tooltipText = KC3Meta.term("ExpedGSRateExplainSparkle").format(sparkedCount);
-			// apply tooltip to overdrum expeds
-			if (typeof gsDrumCount !== "undefined")
-				tooltipText += "\n" + KC3Meta.term("ExpedGSRateExplainExtraDrum").format(fleetDrumCount, gsDrumCount);
 
+			var tooltipText = (function () {
+				if (!condCheckWithoutResupply) { return KC3Meta.term('ExpedGSRateExplainCondUnmet'); }
+				if (condIsUnsparkledShip && !condIsDrumExpedition) {
+					return KC3Meta.term('ExpedGSRateExplainMissingSparkle');
+				}
+				if (condIsDrumExpedition && !condIsOverdrum) {
+					return KC3Meta.term('ExpedGSRateExplainNoOverdrum').format(fleetDrumCount, gsDrumCount);
+				}
+				return KC3Meta.term('ExpedGSRateExplainSparkle').format(sparkledCount);
+			})();
+			
 			jqGSRate.attr("title", tooltipText).lazyInitTooltip();
 
 			// hide GS rate if user does not intend doing so.
