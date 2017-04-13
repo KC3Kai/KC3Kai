@@ -474,6 +474,17 @@
 				"options" : {
 					"tooltip" : "SettingsIdleWarnDesc"
 				}
+			},
+			{
+				"id" : "alert_rsc_cap",
+				"name" : "SettingsRscCapWarnFrom",
+				"type" : "small_text",
+				"bound" : {
+					"min" :   1,
+					"max" : 100,
+					"type": "Number"
+				},
+				"options" : { "label" : "%" }
 			}
 		]
 	},

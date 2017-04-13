@@ -937,45 +937,55 @@
 		},
 
 		Consumables: function(data){
-			$(".count_fcoin").text( PlayerManager.consumables.fcoin || 0 )
-				.toggleClass("hardCap", PlayerManager.consumables.fcoin >= 200000);
-			$(".count_buckets").text( PlayerManager.consumables.buckets || 0 )
-				.toggleClass("hardCap", PlayerManager.consumables.buckets >= PlayerManager.maxConsumable);
-			$(".count_screws").text( PlayerManager.consumables.screws || 0 )
-				.toggleClass("hardCap", PlayerManager.consumables.screws >= PlayerManager.maxConsumable);
-			$(".count_torch").text( PlayerManager.consumables.torch || 0 )
-				.toggleClass("hardCap", PlayerManager.consumables.torch >= PlayerManager.maxConsumable);
-			$(".count_devmats").text( PlayerManager.consumables.devmats || 0 )
-				.toggleClass("hardCap", PlayerManager.consumables.devmats >= PlayerManager.maxConsumable);
-			if(!!PlayerManager.hq.lastMaterial){
+			let getWarnRscCap = max => Math.floor(max * (ConfigManager.alert_rsc_cap / 100));
+			$(".count_fcoin")
+				.text( PlayerManager.consumables.fcoin || 0 )
+				.toggleClass("hardCap", PlayerManager.consumables.fcoin >= getWarnRscCap(PlayerManager.maxCoin));
+			$(".count_buckets")
+				.text( PlayerManager.consumables.buckets || 0 )
+				.toggleClass("hardCap", PlayerManager.consumables.buckets >= getWarnRscCap(PlayerManager.maxConsumable));
+			$(".count_screws")
+				.text( PlayerManager.consumables.screws || 0 )
+				.toggleClass("hardCap", PlayerManager.consumables.screws >= getWarnRscCap(PlayerManager.maxConsumable));
+			$(".count_torch")
+				.text( PlayerManager.consumables.torch || 0 )
+				.toggleClass("hardCap", PlayerManager.consumables.torch >= getWarnRscCap(PlayerManager.maxConsumable));
+			$(".count_devmats")
+				.text( PlayerManager.consumables.devmats || 0 )
+				.toggleClass("hardCap", PlayerManager.consumables.devmats >= getWarnRscCap(PlayerManager.maxConsumable));
+			if(Array.isArray(PlayerManager.hq.lastMaterial)){
 				// Regen for fuel, ammo, steel: +3 every 3 minutes. bauxite +1 / 3mins
-				let roundUpTo3Mins = function(m) { return String(60 * (m + (m % 3 ? 3 - m % 3 : 0))); };
+				let roundUpTo3Mins = m => String(60 * (m + (m % 3 ? 3 - m % 3 : 0)));
 				let regenCap = PlayerManager.hq.getRegenCap();
 				let fuel = PlayerManager.hq.lastMaterial[0],
 					ammo = PlayerManager.hq.lastMaterial[1],
 					steel = PlayerManager.hq.lastMaterial[2],
 					bauxite = PlayerManager.hq.lastMaterial[3];
-				$(".count_fuel").text( fuel )
+				$(".count_fuel")
+					.text( fuel )
 					.toggleClass("regenCap", fuel >= regenCap)
-					.toggleClass("hardCap", fuel >= PlayerManager.maxResource)
-					.attr("title",fuel >= regenCap ? "\u27A4" + regenCap :
+					.toggleClass("hardCap", fuel >= getWarnRscCap(PlayerManager.maxResource))
+					.attr("title", fuel >= regenCap ? "\u27A4" + regenCap :
 						"{0} \u27A4{1}".format(roundUpTo3Mins(regenCap - fuel).toHHMMSS(), regenCap))
 					.lazyInitTooltip();
-				$(".count_steel").text( steel )
+				$(".count_steel")
+					.text( steel )
 					.toggleClass("regenCap", steel >= regenCap)
-					.toggleClass("hardCap", steel >= PlayerManager.maxResource)
+					.toggleClass("hardCap", steel >= getWarnRscCap(PlayerManager.maxResource))
 					.attr("title", steel >= regenCap ? "\u27A4" + regenCap :
 						"{0} \u27A4{1}".format(roundUpTo3Mins(regenCap - steel).toHHMMSS(), regenCap))
 					.lazyInitTooltip();
-				$(".count_ammo").text( ammo )
+				$(".count_ammo")
+					.text( ammo )
 					.toggleClass("regenCap", ammo >= regenCap)
-					.toggleClass("hardCap", ammo >= PlayerManager.maxResource)
+					.toggleClass("hardCap", ammo >= getWarnRscCap(PlayerManager.maxResource))
 					.attr("title", ammo >= regenCap ? "\u27A4" + regenCap :
 						"{0} \u27A4{1}".format(roundUpTo3Mins(regenCap - ammo).toHHMMSS(), regenCap))
 					.lazyInitTooltip();
-				$(".count_bauxite").text( bauxite )
+				$(".count_bauxite")
+					.text( bauxite )
 					.toggleClass("regenCap", bauxite >= regenCap)
-					.toggleClass("hardCap", bauxite >= PlayerManager.maxResource)
+					.toggleClass("hardCap", bauxite >= getWarnRscCap(PlayerManager.maxResource))
 					.attr("title", bauxite >= regenCap ? "\u27A4" + regenCap :
 						"{0} \u27A4{1}".format(String(180 * (regenCap - bauxite)).toHHMMSS(), regenCap))
 					.lazyInitTooltip();
