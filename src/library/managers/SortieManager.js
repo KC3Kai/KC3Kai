@@ -341,7 +341,7 @@ Xxxxxxx
 		},
 		
 		addSunk :function(shizuList){
-			console.log(shizuList);
+			console.log("sink list", shizuList);
 			this.sinkList.main = this.sinkList.main.concat(shizuList[0]);
 			this.sinkList.escr = this.sinkList.escr.concat(shizuList[1]);
 		},

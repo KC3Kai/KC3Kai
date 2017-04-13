@@ -256,6 +256,23 @@
     return link;
   };
 
+  KC3ImageExport.deleteUpload = function (deletehash) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: 'https://api.imgur.com/3/image/' + deletehash,
+        method: 'DELETE',
+        headers: {
+          Authorization: 'Client-ID 088cfe6034340b1',
+          Accept: 'application/json',
+        },
+        success: resolve,
+        error(xhr, textStatus, errorThrown) {
+          reject(new Error(`${textStatus}: ${errorThrown}`));
+        },
+      });
+    });
+  };
+
   /* -----------------------[ TAB ]------------------------ */
 
   KC3ImageExport.openTab = function ({ url, cleanup = () => {} }) {
