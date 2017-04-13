@@ -88,6 +88,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				chrome.notifications.create("kc3kai_"+request.notifId, request.data);
 				
 			});
+			// Sending Mobile Push notification if enabled
 			ConfigManager.load();
 			if(ConfigManager.PushAlerts_enabled) {
 				$.ajax({
