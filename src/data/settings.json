@@ -800,7 +800,7 @@
 	},
 	{
 		"section": "SettingsPushAlerts",
-		"help" : "",
+		"help" : "https://github.com/KC3Kai/KC3Kai/wiki/Settings%3A-PushNotifications",
 		"contents" :[
 			{
 				"id" : "PushAlerts_enabled",
