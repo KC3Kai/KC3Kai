@@ -366,28 +366,6 @@
 		]
 	},
 	{
-		"section": "SettingsPushAlerts",
-		"help" : "",
-		"contents" :[
-			{
-				"id" : "PushAlerts_enabled",
-				"name" : "SettingsEnablePushAlerts",
-				"type" : "check",
-				"options" : {}
-			},
-			{
-				"id" : "PushAlerts_key",
-				"name" : "SettingsPushAlertsKey",
-				"type" : "long_text",
-				"options" : {"placeholder" : "API Key" },
-				"bound" : {
-					"length_min" : 27,
-					"length_max" : 27
-				}
-			}
-		]
-	},
-	{
 		"section": "SettingsAlerts",
 		"help" : "https://github.com/KC3Kai/KC3Kai/wiki/Settings%3A-Alerts",
 		"contents" : [
@@ -817,6 +795,28 @@
 				"name" : "SettingsEnableKC3DBSubmission",
 				"type" : "check",
 				"options" : {}
+			}
+		]
+	},
+	{
+		"section": "SettingsPushAlerts",
+		"help" : "",
+		"contents" :[
+			{
+				"id" : "PushAlerts_enabled",
+				"name" : "SettingsEnablePushAlerts",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "PushAlerts_key",
+				"name" : "SettingsPushAlertsKey",
+				"type" : "long_text",
+				"options" : {"placeholder" : "Access Token" },
+				"bound" : {
+					"length_min" : 27,
+					"length_max" : 27
+				}
 			}
 		]
 	},

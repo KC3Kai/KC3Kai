@@ -42,6 +42,9 @@ Retreives when needed to apply on components
 				
 				KC3DBSubmission_enabled: true,
 				
+				PushAlerts_enabled: 0,
+				PushAlerts_key : '',
+				
 				info_face 			: true,
 				info_drop 			: true,
 				info_craft 			: true,
@@ -128,9 +131,6 @@ Retreives when needed to apply on components
 				ss_quality 			: 70,
 				ss_directory 		: 'KanColle',
 				ss_dppx 			: 1,
-
-				PushAlerts_enabled: 0,
-				PushAlerts_key : '',
 				
 				alert_diff 			: 59,
 				alert_morale_notif	: true,
