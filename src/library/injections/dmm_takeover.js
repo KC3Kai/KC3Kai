@@ -102,7 +102,7 @@
 		resizeTimer: 0,
 		layout: function(){
 			$("body").addClass("kc3");
-			$("body").css({ margin:0, padding:0, 'min-width':0 });
+			$("body").css({ margin:0, padding:0, 'min-width':0, 'min-height':$(window).height() });
 			$("#main-ntg").css({ position: 'static' });
 			$("#area-game").css({
 				'margin-left': 'auto',
@@ -121,6 +121,7 @@
 			$(".area-naviapp").hide();
 			$("#ntg-recommend").hide();
 			$("#foot").hide();
+			$("#foot").next().hide();
 			$("#w, #main-ntg, #page").css({
 				margin:0,
 				padding:0,
@@ -144,6 +145,7 @@
 				width: 800,
 				height: 480
 			});
+			$("body").css("min-height", $(window).height());
 		},
 		// Final process on document ready
 		resizeGameFrameFinal: function(){
