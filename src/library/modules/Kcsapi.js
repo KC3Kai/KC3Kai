@@ -367,8 +367,11 @@ Previously known as "Reactor"
 			var utcHour  = Date.toUTChours(headers.Date),
 				ship     = KC3ShipManager.get(params.api_id),
 				master   = ship.master(),
+				remodel  = RemodelDb.remodelInfo(master.api_id) || {},
+				// Materials: [fuel, ammo, steel, bauxite, torch, bucket, devmat, screw]
 				// NOTE: api_afterfuel is steel consumption!
-				material = [0,-master.api_afterbull,-master.api_afterfuel,0,0,0,0,0];
+				material = [0, -master.api_afterbull, -master.api_afterfuel, 0,
+							-(remodel.torch || 0), 0, -(remodel.devmat || 0), 0];
 			
 			// For every pending supply and repair, it'll be counted towards this
 			/*
@@ -408,7 +411,14 @@ Previously known as "Reactor"
 				type: "remodel" + master.api_id,
 				data: material
 			});
+			if(remodel.blueprint > 0){
+				PlayerManager.consumables.blueprints -= remodel.blueprint;
+			}
+			if(remodel.catapult > 0){
+				PlayerManager.consumables.protoCatapult -= remodel.catapult;
+			}
 			PlayerManager.setResources(utcHour * 3600, null, material.slice(0, 4));
+			PlayerManager.setConsumables(utcHour * 3600, null, material.slice(4, 8));
 			KC3Network.trigger("Consumables");
 		},
 		

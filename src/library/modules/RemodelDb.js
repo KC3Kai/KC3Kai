@@ -50,6 +50,11 @@
                 : ( steel < 6500) ? 15
                 : 20;
         },
+        // convert Suzuya (Kou) K2 also consumes torches, to be confirmed
+        calcTorch: function(ship_id_from) {
+            return (ship_id_from === 503 || ship_id_from === 508) ? 20
+                : 0;
+        },
         mkDb: function(masterData) {
             var self = this;
             // step 1: collect remodel info
@@ -63,6 +68,7 @@
                  , catapult: Int
                  , blueprint: Int
                  , devmat: Int
+                 , torch: Int
                  }
              */
             var remodelInfo = {};
@@ -91,10 +97,12 @@
                       // these fields are unknown for now
                       catapult: 0,
                       blueprint: 0,
-                      devmat: 0
+                      devmat: 0,
+                      torch: 0
                     };
 
                 remodel.devmat = self.calcDevMat(remodel.steel);
+                remodel.torch = self.calcTorch(remodel.ship_id_from);
                 remodelInfo[x.api_id] = remodel;
 
             });
