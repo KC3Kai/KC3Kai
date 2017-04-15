@@ -179,33 +179,33 @@
 			});
 		},
 
-        getSettings: function() {
-            var defSettings = {
-                exportMode: "standard",
+		getSettings: function() {
+			var defSettings = {
+				exportMode: "standard",
 				output: 2, // new tab
 				exportName: false
-            };
-            var settings;
-            if (typeof localStorage.srShowcase === "undefined") {
-                localStorage.srShowcase = JSON.stringify( defSettings );
-                settings = defSettings;
-            } else {
-                settings = JSON.parse( localStorage.srShowcase );
-            }
-            return settings;
-        },
+			};
+			var settings;
+			if (typeof localStorage.srShowcase === "undefined") {
+				localStorage.srShowcase = JSON.stringify( defSettings );
+				settings = defSettings;
+			} else {
+				settings = JSON.parse( localStorage.srShowcase );
+			}
+			return settings;
+		},
 
-        modifySettings: function(settingModifier) {
-            var newSettings = settingModifier(this.getSettings());
-            localStorage.srShowcase = JSON.stringify( newSettings );
-            return newSettings;
-        },
+		modifySettings: function(settingModifier) {
+			var newSettings = settingModifier(this.getSettings());
+			localStorage.srShowcase = JSON.stringify( newSettings );
+			return newSettings;
+		},
 
 		updateUI: function (){
 			var settings = this.getSettings();
-            $("#exportOutputMode").val(settings.output);
-            $("#exportAddName")[0].checked = settings.exportName;
-            $("#exportMode").val(settings.exportMode);
+			$("#exportOutputMode").val(settings.output);
+			$("#exportAddName")[0].checked = settings.exportName;
+			$("#exportMode").val(settings.exportMode);
 
 		},
 
@@ -250,56 +250,54 @@
 
 			// BUTTONS
 			function setupExporter(button){
-                if ($(button).hasClass("disabled"))
-                    return null;
-                $(button).addClass("disabled");
-                var exporter = new ShowcaseExporter();
-                exporter.buildSettings = self.getSettings();
-                exporter.complete = function (data) {
-                    self.displayExportResult(data);
-                    $(button).removeClass("disabled");
-                };
-                return exporter;
+				if ($(button).hasClass("disabled"))
+					return null;
+				$(button).addClass("disabled");
+				var exporter = new ShowcaseExporter();
+				exporter.buildSettings = self.getSettings();
+				exporter.complete = function (data) {
+					self.displayExportResult(data);
+					$(button).removeClass("disabled");
+				};
+				return exporter;
 
 			}
 
 			$("#exportShips").on("click", function(){
 				var exporter = setupExporter(this);
-                if (exporter !== null)
-                    exporter.exportShips();
+				if (exporter !== null)
+					exporter.exportShips();
 			});
 
-            $("#exportEquipment").on("click", function () {
-                var exporter = setupExporter(this);
-                if (exporter !== null)
-                    exporter.exportEquip();
-            });
+			$("#exportEquipment").on("click", function () {
+				var exporter = setupExporter(this);
+				if (exporter !== null)
+					exporter.exportEquip();
+			});
 
-            $("#exportOutputMode").change(function(){
-            	var val = this.value;
+			$("#exportOutputMode").change(function(){
+				var val = this.value;
 				self.modifySettings(function(settings){
 					settings.output = val;
 					return settings;
 				});
 			});
 
-            $("#exportAddName").change(function(){
-                var checked = this.checked;
-                self.modifySettings(function(settings){
-                    settings.exportName = checked;
-                    return settings;
-                });
-            });
+			$("#exportAddName").change(function(){
+				var checked = this.checked;
+				self.modifySettings(function(settings){
+					settings.exportName = checked;
+					return settings;
+				});
+			});
 
-            $("#exportMode").change(function(){
-                var val = this.value;
-                self.modifySettings(function(settings){
-                    settings.exportMode = val;
-                    return settings;
-                });
-            });
-
-
+			$("#exportMode").change(function(){
+				var val = this.value;
+				self.modifySettings(function(settings){
+					settings.exportMode = val;
+					return settings;
+				});
+			});
 
 			// SHIPS
 			$.each(this.shipCache, function(stype, stypeList){

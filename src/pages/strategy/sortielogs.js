@@ -819,10 +819,14 @@
 			domImg.src = this.stegcover64;
 			
 		};
-
-		this.endExport = function (error) {
+		
+		this.endExport = function (error, result) {
 			if (error) {
-				console.error("Failed to encode replay data by", e, e.stack);
+				console.error(error, error.stack);
+				alert("Failed to generate replay data");
+			} else if (result && result.filename) {
+				// Show a response 'cause download bar is hidden
+				alert("Saved to {0}".format(result.filename));
 			}
 			this.exportingReplay = false;
 			$("body").css("opacity", "1");
