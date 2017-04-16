@@ -51,8 +51,14 @@
 
 			// Press F7 to stop focusing on window to get time to focus on flash
 			$(document).on("keydown", function(event){
-				if (event.keyCode == 118) {
+				if (event.which === 118) {
 					self.nonFocusSeconds = 20;
+				}
+				// Press Tab to show special HUD
+				if (event.which === 9) {
+					// reserved for implementation
+					event.stopPropagation();
+					event.preventDefault();
 				}
 			});
 		},
@@ -402,7 +408,8 @@
 		clearOverlayHotKey: function(){
 			var self = this;
 			$(document).on("keydown", function(event){
-				if (event.keyCode == 121) {
+				// F10: Clear overlays
+				if (event.which === 121) {
 					self.clearOverlays()({action:'clearOverlays'}, {}, function(){});
 				}
 			});
@@ -454,7 +461,7 @@
 			var self = this;
 			$(document).on("keydown", function(event){
 				// F9: Screenshot
-				if (event.keyCode == 120) {
+				if (event.which === 120) {
 					(new RMsg("service", "screenshot", {})).execute();
 				}
 			});
