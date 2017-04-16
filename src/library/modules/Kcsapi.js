@@ -1353,7 +1353,6 @@ Previously known as "Reactor"
 				},shipData.lastSortie[0]);
 				
 				shipData.applyRepair();
-				shipData.resetAfterHp();
 				KC3TimerManager.repair( nDockNum ).deactivate();
 			}
 			
@@ -1383,7 +1382,6 @@ Previously known as "Reactor"
 			},shipData.lastSortie[0]);
 			shipData.perform('repair');
 			shipData.applyRepair();
-			shipData.resetAfterHp();
 			KC3ShipManager.save();
 			
 			KC3TimerManager.repair( params.api_ndock_id ).deactivate();
