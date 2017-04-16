@@ -14,13 +14,17 @@
             // load stored db if any
             if (typeof localStorage.remodelDb !== 'undefined')
                 this._db = JSON.parse( localStorage.remodelDb );
-
-            if (masterData && this.requireUpdate(masterData)) {
+            var isRaw = false;
+            if (!masterData && KC3Master.available) {
+                masterData = KC3Master._raw;
+                isRaw = true;
+            }
+            if (masterData && this.requireUpdate(masterData, isRaw)) {
                 try {
-                    var db = this.mkDb(masterData);
+                    var db = this.mkDb(masterData, isRaw);
                     localStorage.remodelDb = JSON.stringify(db);
                     this._db = db;
-                    console.info("RemodelDb: database updated");
+                    console.info("RemodelDb: database updated based on", isRaw ? "Master raw" : "api_start2");
                 } catch (e) {
                     console.error("RemodelDb:", e.stack);/*RemoveLogging:skip*/
                 }
@@ -34,11 +38,11 @@
         },
         // compare master data against _db (could be null)
         // if this function returns true, then we need to perform a db update
-        requireUpdate: function(masterData) {
+        requireUpdate: function(masterData, isRaw) {
             if (!this._db)
                 return true;
-            if (this._db.shipCount !== masterData.api_mst_ship.length ||
-                this._db.upgradeCount !== masterData.api_mst_shipupgrade.length)
+            if (this._db.shipCount !== (isRaw ? Object.keys(masterData.ship).length : masterData.api_mst_ship.length) ||
+                this._db.upgradeCount !== (isRaw ? Object.keys(masterData.shipupgrade).length : masterData.api_mst_shipupgrade.length))
                 return true;
             return false;
         },
@@ -55,7 +59,7 @@
             return (ship_id_from === 503 || ship_id_from === 508) ? 20
                 : 0;
         },
-        mkDb: function(masterData) {
+        mkDb: function(masterData, isRaw) {
             var self = this;
             // step 1: collect remodel info
             /*
@@ -78,7 +82,7 @@
             // stored as a set.
             var shipDstIds = {};
 
-            $.each(masterData.api_mst_ship, function(i,x){
+            $.each(isRaw ? masterData.ship : masterData.api_mst_ship, function(i,x){
                 if (!KC3Master.isRegularShip(x.api_id))
                     return;
                 shipIds.push( x.api_id );
@@ -111,7 +115,7 @@
                 return KC3Meta.shipName( KC3Master.ship(id).api_name );
             }
 
-            $.each(masterData.api_mst_shipupgrade, function(i,x) {
+            $.each(isRaw ? masterData.shipupgrade : masterData.api_mst_shipupgrade, function(i,x) {
                 if (x.api_current_ship_id === 0)
                     return;
                 var remodel = remodelInfo[x.api_current_ship_id];
@@ -178,8 +182,8 @@
                      originOf: originOf,
                      // this 2 numbers are "checksum"s, if master data does not change
                      // on this 2 numbers, we don't recompute
-                     shipCount: masterData.api_mst_ship.length,
-                     upgradeCount: masterData.api_mst_shipupgrade.length
+                     shipCount: isRaw ? Object.keys(masterData.ship).length : masterData.api_mst_ship.length,
+                     upgradeCount: isRaw ? Object.keys(masterData.shipupgrade).length : masterData.api_mst_shipupgrade.length
                    };
         },
         // return root ship in this ships's remodel chain
