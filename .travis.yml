@@ -31,7 +31,7 @@ script:
 before_deploy:
   - git config --global user.email "builds@travis-ci.com"
   - git config --global user.name "Travis CI"
-  - git tag $KC3_VERSION -a -m "Automated GitHub release for $KC3_VERSION"
+  - git tag $KC3_VERSION -a -m "[See changelog of $KC3_VERSION](https://github.com/KC3Kai/KC3Kai/pulls?q=is%3Apr%20label%3Atype%3Arelease%20$KC3_VERSION)"
   - git push -q https://dragonjet:$GITHUB_API_KEY@github.com/KC3Kai/KC3Kai --tags
   - mv build/release.zip build/kc3kai-$KC3_VERSION.zip
 deploy:
