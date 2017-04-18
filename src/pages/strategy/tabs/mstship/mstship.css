@@ -330,9 +330,14 @@
 	padding:0px 0px 0px 5px;
 	float:left;
 }
+.tab_mstship .shipInfo .more .rsc.remodel_blueprint {
+	width:20px;
+	margin:0px 0px 0px 0px;
+	display:none;
+}
 /* Remodel */
 .tab_mstship .shipInfo .more .remodel_name {
-	width:130px;
+	width:125px;
 	height:20px;
 	float:left;
 	margin:0px 5px 0px 0px;
