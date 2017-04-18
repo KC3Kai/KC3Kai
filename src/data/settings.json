@@ -816,6 +816,28 @@
 		]
 	},
 	{
+		"section": "SettingsPushAlerts",
+		"help" : "https://github.com/KC3Kai/KC3Kai/wiki/Settings%3A-PushNotifications",
+		"contents" :[
+			{
+				"id" : "PushAlerts_enabled",
+				"name" : "SettingsEnablePushAlerts",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "PushAlerts_key",
+				"name" : "SettingsPushAlertsKey",
+				"type" : "long_text",
+				"options" : {"placeholder" : "Access Token" },
+				"bound" : {
+					"length_min" : 27,
+					"length_max" : 27
+				}
+			}
+		]
+	},
+	{
 		"section": "SettingsDBSubmission",
 		"help" : "",
 		"contents" :[

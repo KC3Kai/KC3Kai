@@ -52,9 +52,14 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 				console.log("Setting zoom to scale", response.value[0] + "%");
 				document.body.style.zoom = (response.value[0] || 100) / 100;
 			}
-			// Hide spacing top for dmm site play mode
+			// For dmm site play mode
 			if(response.value[1] && response.storage[0] == "true" && response.storage[1] == "false"){
+				// Hide spacing top
 				document.getElementById("spacing_top").style = "height:0px;display:none;";
+				// Prevent Tab key scrolling
+				$(document).on("keydown", function(e){
+					if(event.which === 9) { e.stopPropagation(); e.preventDefault(); }
+				});
 			}
 		}
 	})).execute();

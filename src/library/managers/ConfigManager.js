@@ -43,6 +43,9 @@ Retreives when needed to apply on components
 				
 				KC3DBSubmission_enabled: true,
 				
+				PushAlerts_enabled: 0,
+				PushAlerts_key : '',
+				
 				info_face 			: true,
 				info_drop 			: true,
 				info_craft 			: true,
