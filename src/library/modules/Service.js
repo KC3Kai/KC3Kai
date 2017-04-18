@@ -86,7 +86,27 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			chrome.notifications.clear("kc3kai_"+request.notifId, function(){
 				// Add notification
 				chrome.notifications.create("kc3kai_"+request.notifId, request.data);
+				
 			});
+			// Sending Mobile Push notification if enabled
+			ConfigManager.load();
+			if(ConfigManager.PushAlerts_enabled) {
+				$.ajax({
+					async: true,
+					crossDomain: true,
+					url: "https://api.pushbullet.com/v2/pushes",
+					method: "POST",
+					headers: {
+						"content-type": "application/json",
+						"access-token": ConfigManager.PushAlerts_key,
+					},
+					"data": JSON.stringify({
+						  "type": "note",
+						  "title": request.data.title,
+						  "body": request.data.message
+					})
+				});
+			}
 		},
 		
 		/* SCREENSHOT
