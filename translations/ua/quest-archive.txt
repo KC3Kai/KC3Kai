@@ -1,0 +1,118 @@
+    //Summer 2015 "Second SN Operation" Quest
+    
+    "280": {
+        "code": "SN01",
+        "name": "Second SN strategy, Initial Operations",
+        "desc": "Clear the Summer 2015 Event Map 2"
+    },
+    "620": {
+        "code": "SN02",
+        "name": "Tidying Up the Arsenal",
+        "desc": " Scrap Equipment 5 times"
+    },
+    "281": {
+        "code": "SN03",
+        "name": "Carry Out the Patrol for Main Force's Route",
+        "desc": "Sink 6 abyssal sumbarines"
+    },
+    "158": {
+        "code": "SN04",
+        "name": "Assign the Murata Squadron Torpedo Bomber to Akagi",
+        "desc": "Set Akagi as the Secretary Ship and equip her with Type 97 Torpedo Bomber (Murata Squadron)"
+    },
+    "282": {
+        "code": "SN05",
+        "name": "Snatch Away the Air Superiority in the Solomon Sea Area",
+        "desc": "Clear the Summer 2015 Event Map 4"
+    },
+    "159": {
+        "code": "SN06",
+        "name": "Reassign the Murata Squadron Torpedo Bomber to Shoukaku",
+        "desc": "Set Shoukaku as the Secretary Ship and equip her with Type 97 Torpedo Bomber (Murata Squadron)"
+    },
+    "310": {
+        "code": "SN07",
+        "name": "Naval Practice in Preparation for Operation FS",
+        "desc": "Get 4 victories in practice mode"
+    },
+    "621": {
+        "code": "SN08",
+        "name": "Model Conversion (Murata Squadron to Tenzan)",
+        "desc": "Have Shoukaku as the Secretary Ship and equip her with Type 97 Torpedo Bomber (Murata Squadron), then scrap 2 Tenzan"
+    },
+    "160": {
+        "code": "SN09",
+        "name": "Organize the Third Fleet of the Carrier Task Force",
+        "desc": "Create a Carrier Task Force (Combined Fleet) containing Shoukaku, Zuikaku and Zuihou in the first fleet"
+    },
+    "284": {
+        "code": "SN10",
+        "name": "Establish a Bridgehead to Operation FS",
+        "desc": "Sink 10 Abyssal CV(L)"
+    },
+    "283": {
+        "code": "SN11",
+        "name": "Eastern Area Dispatch Fleet, Sortie!",
+        "desc": "Clear the Summer 2015 Event Map 5"
+    }
+    
+	//Pacific Saury Festival
+    "290": {
+        "name": "Saury Fishing: Let's catch some sauries!",
+        "desc": "Defeat the enemy fleet positioned in the fisheries of Northern and Perimeter Zone and obtain 3 sauries!"
+    },
+    "291": {
+        "name": "Saury Fishing: We need to catch even more sauries!",
+        "desc": "It might be a bit tiring, but you have to secure the safety of the fisheries and get 10 sauries!"
+    },
+    "292": {
+        "name": "Saury Fishing: You can try even harder!",
+        "desc": "It will be really hard, but you can try to fish sauries even more diligently!"
+    },
+    
+    	//End of Year Preparation
+    "298": {
+        "code": "BC1",
+        "name": "Help Mamiya in Year End Preparation",
+        "desc": "Collect 16 Decoration Materials"
+    },
+    
+    "299": {
+        "code": "BC2",
+        "name": "Help Mamiya in Preparation for New Year's Eve",
+        "desc": "Collect 32 Decoration Materials and hand them to Mamiya"
+    },
+
+    	//New Year 2016 Quest
+    "801": {
+        "code": "NY1",
+        "name": "Happy New Year! Torpedo Squadron, sortie!",
+        "desc": "Clear 1-3 once with a Torpedo Squadron (1 CL 3~5 DD)"
+    },
+    "802": {
+        "code": "NY2",
+        "name": "Help out Irako during New Year!",
+        "desc": "Clear 2-3 with S-Rank 3 times"
+    },
+    "803": {
+        "code": "NY3",
+        "name": "The burning soul of a battleship! A New Year with the big guns!",
+        "desc": "Clear 4-2 twice with 4 BB in your fleet"
+    },
+    "804": {
+        "code": "NY4",
+        "name": "A happy new year! Carrier Task Force, sortie!",
+        "desc": "Clear 6-2 twice with 2 CV in your fleet"
+    },
+    
+    	//Winter 2016 "Operation Rei-go" Quest
+    "234": {
+        "code": "RG01",
+        "name": "Complete Winter 2016 Operation Rei-go",
+        "desc": "Clear Winter 2016 E-1 and E-2 maps"
+    },
+    "421": {
+        "code": "RG02",
+        "name": "Friendly Ship Naval Review Participation",
+        "desc": "Send any 6 ships (Flagship Lv6+) and clear Expedition 175"
+    },
