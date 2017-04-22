@@ -240,6 +240,7 @@
 						$(nodeName+"L", targetBox).text("-"+nodeInfo["plane"+planeType][side][1]);
 				});
 			});
+			$(".node_planes", targetBox).attr("title", nodeInfo.buildAirBattleLossMessage());
 		},
 		
 		/* PAGINATION
