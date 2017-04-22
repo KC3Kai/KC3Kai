@@ -7,17 +7,19 @@
 		tabSelf: KC3StrategyTabs.ships,
 
 		shipCache:[],
-		options: [],
+		settings: {},
 		// default sorting method to Level
 		currentSorters: [{name:"lv", reverse:false}],
 		equipMode: 0,
 		isLoading: false,
 		multiKey: false,
+		pageNo: false,
 
 		newFilterRep: {},
 		// all sorters
 		sorters: {},
 		sorterDescCtrl: null,
+		viewElements: {},
 
 		/* INIT
 		Prepares static data needed
@@ -35,11 +37,10 @@
 			KC3ShipManager.load();
 			KC3GearManager.load();
 			this.shipCache = [];
-			var ctr, ThisShip, ThisShipData;
-			for(ctr in KC3ShipManager.list){
-				ThisShip = KC3ShipManager.list[ctr];
-				ThisShipData = this.prepareShipData(ThisShip);
-				this.shipCache.push(ThisShipData);
+			for(let key in KC3ShipManager.list){
+				let shipData = KC3ShipManager.list[key];
+				let preparedData = this.prepareShipData(shipData);
+				this.shipCache.push(preparedData);
 			}
 		},
 
@@ -194,6 +195,7 @@
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
+			var self = this;
 			// now we need to do this before preparing filters
 			// Ship types
 			var sCtr, cElm;
@@ -207,23 +209,34 @@
 				}
 			}
 
-			this.sorterDescCtrl = $(".advanced_sorter .sorter_desc");
-			this.updateSorterDescription();
+			$(".pages_yes").on("click", function(){
+				$(".ingame_page").show();
+				if(!self.pageNo){
+					self.pageNo = true;
+					self.saveSettings();
+				}
+			});
+			$(".pages_no").on("click", function(){
+				$(".ingame_page").hide();
+				if(self.pageNo){
+					self.pageNo = false;
+					self.saveSettings();
+				}
+			});
+			$(".control_buttons .reset_default").on("click", function(){
+				delete localStorage.srShiplist;
+				KC3StrategyTabs.reloadTab(undefined, true);
+			});
 
-			var self = this;
 			var multiKeyCtrl = $( ".advanced_sorter .adv_sorter" );
-
-			function updateControl() {
-				$(".filter_check",multiKeyCtrl).toggle( self.multiKey );
+			var updateSorterControl = function() {
+				$(".filter_check", multiKeyCtrl).toggle( self.multiKey );
 				self.sorterDescCtrl.toggle(self.multiKey);
-			}
-
-			updateControl();
-
+			};
 			multiKeyCtrl.on("click", function() {
 				self.multiKey = ! self.multiKey;
 
-				updateControl();
+				updateSorterControl();
 
 				if (! self.multiKey) {
 					var needUpdate = self.cutCurrentSorter();
@@ -232,13 +245,10 @@
 				}
 			});
 
-			$(".pages_yes").on("click", function(){
-				$(".ingame_page").show();
-			});
-			$(".pages_no").on("click", function(){
-				$(".ingame_page").hide();
-			});
-
+			this.loadSettings();
+			this.sorterDescCtrl = $(".advanced_sorter .sorter_desc");
+			this.updateSorterDescription();
+			updateSorterControl();
 			this.prepareFilters();
 			this.shipList = $(".tab_ships .ship_list");
 			this.showFilters();
@@ -368,9 +378,10 @@
 
 		prepareFilters: function() {
 			var self = this;
+			var savedFilterValues = this.settings.filters || {};
 			self.defineShipFilter(
 				"marriage",
-				0,
+				savedFilterValues.marriage || 0,
 				[ "in","on","ex" ],
 				function(curVal, ship) {
 					return (curVal === 0)
@@ -380,7 +391,7 @@
 
 			self.defineShipFilter(
 				"remodel",
-				0,
+				savedFilterValues.remodel || 0,
 				["all","max","nomax"],
 				function(curVal, ship) {
 					return (curVal === 0)
@@ -390,7 +401,7 @@
 
 			self.defineShipFilter(
 				"modernization",
-				0,
+				savedFilterValues.modernization || 0,
 				["all","max","nomax"],
 				function(curVal, ship) {
 					return (curVal === 0)
@@ -400,7 +411,7 @@
 
 			self.defineShipFilter(
 				"heartlock",
-				 0,
+				savedFilterValues.heartlock || 0,
 				["all","yes","no"],
 				function(curVal, ship) {
 					return (curVal === 0)
@@ -410,7 +421,7 @@
 
 			self.defineShipFilter(
 				"speed",
-				0,
+				savedFilterValues.speed || 0,
 				["all","slow","fast","faster","fastest"],
 				function(curVal,ship) {
 					return (curVal === 0)
@@ -422,7 +433,7 @@
 
 			self.defineShipFilter(
 				"fleet",
-				0,
+				savedFilterValues.fleet || 0,
 				["all", "yes","no"],
 				function(curVal,ship) {
 					return (curVal === 0)
@@ -432,7 +443,7 @@
 
 			self.defineShipFilter(
 				"sparkle",
-				0,
+				savedFilterValues.sparkle || 0,
 				["all", "yes","no"],
 				function(curVal, ship) {
 					return (curVal === 0)
@@ -441,7 +452,7 @@
 				});
 			self.defineShipFilter(
 				"daihatsu",
-				0,
+				savedFilterValues.daihatsu || 0,
 				["all", "yes","no"],
 				function(curVal, ship) {
 					return (curVal === 0)
@@ -450,7 +461,7 @@
 				});
 			self.defineShipFilter(
 				"exslot",
-				0,
+				savedFilterValues.exslot || 0,
 				["all", "yes","no"],
 				function(curVal, ship) {
 					return (curVal === 0)
@@ -473,7 +484,7 @@
 
 			self.defineShipFilter(
 				"stype",
-				stypeDefValue,
+				savedFilterValues.stype || stypeDefValue,
 				// valid ship types and addtionally 3 controls
 				stypes.concat(["all","none","invert"]),
 				// testShip
@@ -492,7 +503,7 @@
 					}
 				},
 				// onToggle
-				function(selectedInd, optionRep,initializing) {
+				function(selectedInd, optionRep, initializing) {
 					if (initializing) {
 						// the variable name is a bit misleading..
 						// but at this point we should set the initial value
@@ -519,7 +530,6 @@
 							$( ".filter_check", x.view ).toggle( optionRep.curValue[x.name]  );
 						}
 					});
-
 					if (!initializing)
 						self.refreshTable();
 				}
@@ -528,15 +538,39 @@
 
 		// execute all registered filters on a ship
 		executeFilters: function(ship) {
-			var filterKeys = Object.keys(this.newFilterRep);
-			var i;
-			for (i=0;i<filterKeys.length;++i) {
-				var key = filterKeys[i];
+			for(let key in this.newFilterRep) {
 				var filter = this.newFilterRep[key].testShip;
-				if (!filter(ship))
-					return false;
+				if (!filter(ship)) return false;
 			}
 			return true;
+		},
+
+		saveSettings: function() {
+			var shrinkedSettings = {
+				sorters: this.currentSorters,
+				filters: {},
+				views: {}
+			};
+			for(let key in this.newFilterRep) {
+				shrinkedSettings.filters[key] = this.newFilterRep[key].curValue;
+			}
+			shrinkedSettings.views.equip = this.equipMode;
+			shrinkedSettings.views.page = this.pageNo;
+			this.settings = shrinkedSettings;
+			localStorage.srShiplist = JSON.stringify(this.settings);
+		},
+
+		loadSettings: function() {
+			this.settings = JSON.parse( localStorage.srShiplist || "{}" );
+			if(this.settings.sorters){
+				this.currentSorters = this.settings.sorters;
+				if(this.currentSorters.length > 1)
+					this.multiKey = true;
+			}
+			if(this.settings.views){
+				this.equipMode = this.settings.views.equip || 0;
+				this.pageNo = this.settings.views.page || false;
+			}
 		},
 
 		/* FILTERS
@@ -546,28 +580,29 @@
 			var self = this;
 			var sCtr;
 
-
 			// Equip Stats: Yes
-			self.options.equip_yes = $(".tab_ships .filters .massSelect .equip_yes").on("click", function(){
+			self.viewElements.equip_yes = $(".tab_ships .filters .massSelect .equip_yes")
+			.on("click", function(){
 				self.equipMode = 1;
 				self.refreshTable();
-				self.options.equip_yes.addClass('on');
-				self.options.equip_no.removeClass('on');
+				self.viewElements.equip_yes.addClass('on');
+				self.viewElements.equip_no.removeClass('on');
 			});
 
 			// Equip Stats: No
-			self.options.equip_no = $(".tab_ships .filters .massSelect .equip_no").on("click", function(){
+			self.viewElements.equip_no = $(".tab_ships .filters .massSelect .equip_no")
+			.on("click", function(){
 				self.equipMode = 0;
 				self.refreshTable();
-				self.options.equip_yes.removeClass('on');
-				self.options.equip_no.addClass('on');
+				self.viewElements.equip_yes.removeClass('on');
+				self.viewElements.equip_no.addClass('on');
 			});
 
 			// Default status
 			if( self.equipMode )
-				self.options.equip_yes.addClass('on');
+				self.viewElements.equip_yes.addClass('on');
 			else
-				self.options.equip_no.addClass('on');
+				self.viewElements.equip_no.addClass('on');
 
 			// Column header sorting
 			$(".tab_ships .ship_header .ship_field.hover").on("click", function(){
@@ -651,16 +686,22 @@
 		Reload ship list based on filters
 		---------------------------------*/
 		refreshTable :function(){
-			// TODO: use "isLoading" to check if we need UI update.
+			// use "isLoading" to check if we need UI update.
 			if(this.isLoading){ return false; }
 			this.isLoading = true;
+			this.saveSettings();
 
 			var self = this;
 			this.startTime = Date.now();
 
-			// Clear list
-			this.shipList.html("").hide();
+			// Update indicators of sorters
+			$(".tab_ships .ship_header .ship_field.hover").removeClass("sorted");
+			$.each(this.currentSorters, function(i, s){
+				$(".tab_ships .ship_header .ship_field.hover.ship_{0}".format(s.name)).addClass("sorted");
+			});
 
+			// Clear list
+			this.shipList.empty().hide();
 
 			// Wait until execute
 			setTimeout(function(){
@@ -759,9 +800,10 @@
 				});
 
 				self.shipList.show();
+				$(".ingame_page").toggle(self.pageNo);
 				self.isLoading = false;
 				console.log("Showing this list took", (Date.now() - self.startTime)-100 , "milliseconds");
-			},100);
+			}, 100);
 		},
 
 		shipClickFunc: function(e){

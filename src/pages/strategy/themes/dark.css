@@ -522,11 +522,13 @@ button, input, select, textarea {
 .tab_ships .ship_list {
 	margin:0px 0px 5px 0px !important;
 }
+.tab_ships .ship_item .ship_field.sorted {
+	background:#303030;
+}
 .tab_ships .ship_item.odd .ship_field {
 	background:#303030;
 }
 .tab_ships .ship_item.even .ship_field {
-	/*background:#404040;*/
 	background:#303030;
 }
 .tab_ships .ship_item:hover .ship_field {
