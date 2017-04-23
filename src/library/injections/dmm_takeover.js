@@ -108,7 +108,7 @@
 		resizeTimer: 0,
 		layout: function(){
 			$("body").addClass("kc3");
-			$("body").css({ margin:0, padding:0, 'min-width':0, 'min-height':$(window).height() });
+			$("body").css({ margin:0, padding:0, 'min-width':800, 'min-height':480 });
 			$("#main-ntg").css({ position: 'static' });
 			$("#area-game").css({
 				'margin-left': 'auto',
