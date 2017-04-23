@@ -184,7 +184,7 @@
                 0, 0,
                 this.exporter.rowParams.height * 2, this.exporter.rowParams.height * 2
             );
-            this.exporter._finish(canvas.toDataURL("image/png"), topLine);
+            this.exporter._finish(canvas, topLine);
         };
         img.src = "/assets/img/logo/128.png";
 
@@ -260,18 +260,14 @@
         this._equipGroupCanvases = {};
     };
 
-    ShowcaseExporter.prototype._finish = function (dataURL, topLine) {
-        switch (parseInt(this.buildSettings.output, 10)) {
-            case 0:
-                this._download(dataURL, topLine);
-                break;
-            case 1:
-                this._postToImgur(dataURL, topLine);
-                break;
-            default:
-                this._openInNewTab(dataURL, topLine);
-                break;
-        }
+    ShowcaseExporter.prototype._finish = function (canvas, topLine) {
+        var self = this;
+        new KC3ImageExport(canvas, {
+            filename: topLine,
+            method: this.buildSettings.output,
+        }).export(function (error, result) {
+            self.complete(result || {});
+        });
     };
 
     ShowcaseExporter.prototype._heartLockAlert = function(){
@@ -279,84 +275,6 @@
         alert("Please heartlock your ships\\equipment or use \"Full\" mode.\nYou can read about heartlocking on wiki.");
         this.complete({});
         return false;
-    };
-
-    ShowcaseExporter.prototype._download = function (dataURL) {
-        if (enableShelfTimer) {
-            clearTimeout(enableShelfTimer);
-        }
-        var self = this;
-        var topLine = this.isShipList ? "Ship_List" : "Equipment_List";
-        var filename = ConfigManager.ss_directory + '/' + dateFormat("yyyy-mm-dd") + '_' + topLine + ".png";
-        chrome.downloads.setShelfEnabled(false);
-        chrome.downloads.download({
-            url: dataURL,
-            filename: filename,
-            conflictAction: "uniquify"
-        }, function (downloadId) {
-            enableShelfTimer = setTimeout(function () {
-                chrome.downloads.setShelfEnabled(true);
-                enableShelfTimer = false;
-                self.cleanUp();
-                self.complete({downloadId: downloadId, filename: filename});
-            }, 100);
-        });
-    };
-
-    ShowcaseExporter.prototype._postToImgur = function (dataURL, topLine) {
-        var stampNow = Math.floor((new Date()).getTime() / 1000);
-        if (stampNow - imgurLimit > 10) {
-            imgurLimit = stampNow;
-        } else {
-            this._download(dataURL, topLine);
-            return false;
-        }
-
-        var self = this;
-        $.ajax({
-            url: 'https://api.imgur.com/3/credits',
-            method: 'GET',
-            headers: {
-                Authorization: 'Client-ID 088cfe6034340b1',
-                Accept: 'application/json'
-            },
-            success: function (response) {
-                if (response.data.UserRemaining > 10 && response.data.ClientRemaining > 100) {
-                    $.ajax({
-                        url: 'https://api.imgur.com/3/image',
-                        method: 'POST',
-                        headers: {
-                            Authorization: 'Client-ID 088cfe6034340b1',
-                            Accept: 'application/json'
-                        },
-                        data: {
-                            image: dataURL.substring(22),
-                            type: 'base64'
-                        },
-                        success: function (response) {
-                            self.complete({url: response.data.link});
-                        },
-                        error: function () {
-                            self._download(dataURL, topLine);
-                        }
-                    });
-                } else {
-                    self._download(dataURL, topLine);
-                }
-            },
-            error: function () {
-                self._download(dataURL, topLine);
-            }
-        });
-    };
-
-    ShowcaseExporter.prototype._openInNewTab = function (dataURL, topLine) {
-        if (dataURL.length >= 2 * 1024 * 1024) {
-            this._download(dataURL, topLine);
-        } else {
-            window.open(dataURL, "_blank");
-            this.complete({});
-        }
     };
 
     /* SHIP EXPORT
@@ -881,36 +799,38 @@
             var text = "";
             if (i === 0) {
                 fontSize = 18;
+                y += (this.rowParams.height + fontSize) / 2;
                 text = "x" + equip.total;
                 ctx.font = generateFontString(400, fontSize);
                 ctx.fillStyle = this.colors.equipCount;
                 if (!fake)
-                    ctx.fillText(text, x + this.rowParams.width - this.rowParams.height * 0.5 - ctx.measureText(text).width, y + (this.rowParams.height + fontSize) / 2);
+                    ctx.fillText(text, x + this.rowParams.width - this.rowParams.height * 0.3 - ctx.measureText(text).width, y);
             } else {
                 fontSize = 13;
                 if (equip["s" + i] === 0)
                     continue;
+                y += fontSize + 2;
+
                 ctx.fillStyle = this.colors.equipCount;
                 ctx.font = generateFontString(400, fontSize);
                 text = " x" + equip["s" + i];
                 var xOffset = ctx.measureText(text).width;
                 if (!fake)
-                    ctx.fillText(text, x + this.rowParams.width - this.rowParams.height * 0.5 - ctx.measureText(text).width, y + (this.rowParams.height + fontSize) / 2);
+                    ctx.fillText(text, x + this.rowParams.width - this.rowParams.height * 0.3 - ctx.measureText(text).width, y);
 
 
                 text = "★" + i;
                 ctx.fillStyle = this.colors.equipStars;
                 ctx.font = generateFontString(600, fontSize);
                 if (!fake)
-                    ctx.fillText(text, x + this.rowParams.width - this.rowParams.height * 0.5 - xOffset - ctx.measureText(text).width, y + (this.rowParams.height + fontSize) / 2);
+                    ctx.fillText(text, x + this.rowParams.width - this.rowParams.height * 0.3 - xOffset - ctx.measureText(text).width, y);
             }
-            y += fontSize + 4;
         }
         if (equipMaxY > y)
             y = equipMaxY;
 
         this._equipCanvases["m" + equip.masterId] = canvas;
-        return y + 5;
+        return y + ((this.buildSettings.exportMode !== "light") ? 5 : 0);
     };
 
     ShowcaseExporter.prototype._drawEquipInfo = function (equip, ctx, x, y, fake) {
@@ -919,20 +839,25 @@
         ctx.font = generateFontString(400, fontSize);
         ctx.fillStyle = this.colors.equipInfo;
 
-        var available = this.rowParams.width - this.rowParams.height * 3.5;
+        /**
+         * 1 - equip image
+         * 0.3 - padding right
+         * 1.6 - for count text and stars
+         */
+        var available = this.rowParams.width - this.rowParams.height * 2.9;
 
         var name = this._splitText(equip.name, ctx, available);
-        y = this._drawEquipName(name, ctx, x + 30, y, fontSize, fake);
+        var miltiLine = this.buildSettings.exportMode !== "light" && equip.name !== KC3Master.slotitem(equip.masterId).api_name;
 
-        if (this.buildSettings.exportMode !== "light" && equip.name !== KC3Master.slotitem(equip.masterId).api_name) {
+        y = this._drawEquipName(name, ctx, x + 30, y, fontSize, miltiLine, fake);
+
+        if (miltiLine) {
             name = this._splitText(KC3Master.slotitem(equip.masterId).api_name, ctx, available, "");
-            y = this._drawEquipName(name, ctx, x + 30, y, fontSize, fake);
+            y = this._drawEquipName(name, ctx, x + 30, y, fontSize, miltiLine, fake);
         }
         y = y < startY + 30 ? startY + 30 : y;
-
-        available = this.rowParams.width - this.rowParams.height * 3.5;
-
         y += 5;
+
         var statsY = 0;
         if(this.buildSettings.exportMode !== "light")
             statsY = this._drawEquipStats(equip, ctx, x + this.rowParams.height, y, available, fake);
@@ -942,11 +867,12 @@
         return y;
     };
 
-    ShowcaseExporter.prototype._drawEquipName = function (nameLines, ctx, x, y, fontSize, fake) {
+    ShowcaseExporter.prototype._drawEquipName = function (nameLines, ctx, x, y, fontSize, multiLine, fake) {
         if (nameLines.length === 1) {
+            var addY = (multiLine) ? (fontSize + 2) : ((this.rowParams.height + fontSize)/2);
             if (!fake)
-                ctx.fillText(nameLines[0], x, y + fontSize + 2);
-            y += fontSize + 5;
+                ctx.fillText(nameLines[0], x, y + addY);
+            y += addY + 5;
         } else {
             for (var i = 0; i < nameLines.length; i++) {
                 if (!fake)
@@ -961,20 +887,33 @@
         if (typeof splitter === "undefined")
             splitter = " ";
 
-        if (text.indexOf(splitter) === -1)
-            splitter = "";
-
+        //@TODO smarter split  "ABC ( D E F )" -> ["ABC", "( D E F )"]
         var rows = [];
         var words = text.split(splitter);
 
-        //@TODO what if single word will be so long so it goes outside maxWidth?
         while (words.length > 0) {
             var line = [];
             var next = words.shift();
+            var brokenWord;
+            if (ctx.measureText(next).width >= maxWidth) {
+                brokenWord = this._splitText(next, ctx, maxWidth - ctx.measureText("-").width, "");
+                next = brokenWord.shift() + "-";
+                words = brokenWord.concat(words);
+            }
             while (ctx.measureText((line.join(splitter) + splitter + next).trim()).width < maxWidth && next !== "") {
                 line.push(next);
-                if (words.length > 0)
+                if (words.length > 0) {
                     next = words.shift();
+                    if (ctx.measureText(next).width >= maxWidth) {
+                        var remainWidth = maxWidth - ctx.measureText((line.join(splitter) + splitter + "-")).width;
+                        if (remainWidth / maxWidth < 0.3) {
+                            remainWidth = maxWidth;
+                        }
+                        brokenWord = this._splitText(next, ctx, remainWidth, "");
+                        next = brokenWord.shift() + "-";
+                        words.unshift(brokenWord.join(""));
+                    }
+                }
                 else
                     next = "";
             }

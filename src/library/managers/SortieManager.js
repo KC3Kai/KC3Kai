@@ -341,7 +341,7 @@ Xxxxxxx
 		},
 		
 		addSunk :function(shizuList){
-			console.log(shizuList);
+			console.log("sink list", shizuList);
 			this.sinkList.main = this.sinkList.main.concat(shizuList[0]);
 			this.sinkList.escr = this.sinkList.escr.concat(shizuList[1]);
 		},
@@ -525,8 +525,8 @@ Xxxxxxx
 				if(!shipId || shipId < 0){
 					return;
 				}
-				let shipMst = (shipId <= KC3Master.abyssalShipIdFrom) ?
-					KC3Master.ship(shipId) : KC3Master.abyssalShip(shipId, true);
+				let shipMst = KC3Master.isAbyssalShip(shipId) ?
+					KC3Master.abyssalShip(shipId, true) : KC3Master.ship(shipId);
 				// no ship master data
 				if(!shipMst){
 					exceptions[shipId] = null;

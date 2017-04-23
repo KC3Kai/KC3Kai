@@ -144,88 +144,13 @@ KCScreenshot.prototype.crop = function(offset){
 			480 * self.scale
 		);
 		
-		// Convert image to base64
-		self.base64img = self.canvas.toDataURL(self.format[2]);
-		
-		// Call output function on what to do with the base64 image
 		self.output();
 	});
 };
 
-KCScreenshot.prototype.output = function(){
-	switch(parseInt(ConfigManager.ss_mode, 10)){
-		case 0: this.saveDownload(); break;
-		case 1: this.saveImgur(); break;
-		default: this.saveTab(); break;
-	}
-};
-
-KCScreenshot.prototype.complete = function(){
-	(this.callback || function(){})();
-};
-
-KCScreenshot.prototype.saveDownload = function(){
-	if (enableShelfTimer) {
-		clearTimeout(enableShelfTimer);
-	}
-	var self = this;
-	chrome.downloads.setShelfEnabled(false);
-	chrome.downloads.download({
-		url: this.base64img,
-		filename: ConfigManager.ss_directory+'/'+this.screenshotFilename+"."+this.format[1],
-		conflictAction: "uniquify"
-	}, function(downloadId){
-		enableShelfTimer = setTimeout(function(){
-			chrome.downloads.setShelfEnabled(true);
-			enableShelfTimer = false;
-			self.complete();
-		}, 300);
-	});
-};
-
-KCScreenshot.prototype.saveImgur = function(){
-	var stampNow = Math.floor((new Date()).getTime()/1000);
-	if(stampNow - imgurLimit > 10){
-		imgurLimit = stampNow;
-	}else{
-		this.saveDownload();
-		return false;
-	}
-	
-	var self = this;
-	$.ajax({
-		url: 'https://api.imgur.com/3/credits',
-		method: 'GET',
-		headers: {
-			Authorization: 'Client-ID 088cfe6034340b1',
-			Accept: 'application/json'
-		},
-		success: function(response){
-			if(response.data.UserRemaining>10 && response.data.ClientRemaining>100){
-				$.ajax({
-					url: 'https://api.imgur.com/3/image',
-					method: 'POST',
-					headers: {
-						Authorization: 'Client-ID 088cfe6034340b1',
-						Accept: 'application/json'
-					},
-					data: {
-						image: self.base64img.split(',')[1],
-						type: 'base64'
-					},
-					success: function(response){
-						KC3Database.Screenshot(response.data.link);
-						self.complete();
-					}
-				});
-			}else{
-				self.saveDownload();
-			}
-		}
-	});
-};
-
-KCScreenshot.prototype.saveTab = function(){
-	window.open(this.base64img, "_blank");
-	this.complete();
+KCScreenshot.prototype.output = function () {
+	new KC3ImageExport(this.canvas, {
+		filename: this.screenshotFilename,
+		quality: this.quality,
+	}).export(this.callback.bind(this));
 };

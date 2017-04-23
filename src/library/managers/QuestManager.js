@@ -13,6 +13,8 @@ Uses KC3Quest objects to play around with
 		open: [], // Array of quests seen on the quests page, regardless of state
 		active: [], // Array of quests that are active and counting
 		
+		syncStructVersion: 2, // Version of data structure, used for quests synchronization
+		
 		timeToResetDailyQuests: -1,
 		timeToResetWeeklyQuests: -1,
 		timeToResetMonthlyQuests: -1,
@@ -26,7 +28,7 @@ Uses KC3Quest objects to play around with
 		_dailyIds: [201, 216, 210, 211, 218, 212, 226, 230, 303, 304, 402, 403, 503, 504, 605, 606, 607, 608, 609, 619, 702],
 		_weeklyIds: [214, 220, 213, 221, 228, 229, 241, 242, 243, 261, 302, 404, 410, 411, 613, 638, 703],
 		_monthlyIds: [249, 256, 257, 259, 265, 264, 266, 311, 626, 628, 645],
-		_quarterlyIds: [637, 643, 822],
+		_quarterlyIds: [637, 643, 822, 854],
 		
 		/* GET
 		Get a specific quest object in the list using its ID
@@ -405,6 +407,25 @@ Uses KC3Quest objects to play around with
 		save :function(){
 			// Store only the list. The actives and opens will be redefined on load()
 			localStorage.quests = JSON.stringify(this.list);
+			
+			// Check if synchronization is enabled and quests list is not empty
+			if (ConfigManager.chromeSyncQuests && Object.keys(this.list).length > 0) {
+				if (typeof localStorage.questsVersion == "undefined") {
+					localStorage.questsVersion = 0;
+				}
+				localStorage.questsVersion++;
+				var questsData = {
+					quests: localStorage.quests,
+					questsVersion: localStorage.questsVersion,
+					timeToResetDailyQuests: localStorage.timeToResetDailyQuests,
+					timeToResetWeeklyQuests: localStorage.timeToResetWeeklyQuests,
+					timeToResetMonthlyQuests: localStorage.timeToResetMonthlyQuests,
+					timeToResetQuarterlyQuests: localStorage.timeToResetQuarterlyQuests,
+					syncStructVersion: this.syncStructVersion,
+					syncTimeStamp: Date.now()
+				};
+				chrome.storage.sync.set({KC3QuestsData: questsData});
+			}
 		},
 		
 		/* LOAD
@@ -424,11 +445,6 @@ Uses KC3Quest objects to play around with
 					tempQuest = tempQuests[ctr];
 					
 					// Add to actives or opens depeding on status
-					// 1: Unselected
-					// 2: Selected
-					if(tempQuest.status==1 || tempQuest.status==2){
-						
-					}
 					switch( tempQuest.status ){
 						case 1:	// Unselected
 							this.isOpen( tempQuest.id, true );

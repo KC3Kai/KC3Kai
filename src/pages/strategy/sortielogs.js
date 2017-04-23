@@ -795,19 +795,20 @@
 					
 					steg.encode(JSON.stringify(sortieData), withDataCover64, {
 						success: function(newImg){
-							chrome.downloads.download({
-								url: newImg,
-								filename: ConfigManager.ss_directory+'/replay/'+PlayerManager.hq.name+"_"+sortieId+'.png',
-								conflictAction: "uniquify"
-							}, function(downloadId){
-								self.exportingReplay = false;
-								$("body").css("opacity", "1");
+							KC3ImageExport.writeToCanvas(newImg, { width: 400, height: 400 }, function (error, canvas) {
+								if (error) {
+									self.endExport(error);
+									return;
+								}
+								new KC3ImageExport(canvas, {
+									filename: PlayerManager.hq.name + '_' + sortieId,
+									format: 'png',
+									subDir: 'replay',
+								}).export(self.endExport.bind(self));
 							});
 						},
 						error: function(e){
-							console.error("Failed to encode replay data by", e, e.stack);
-							self.exportingReplay = false;
-							$("body").css("opacity", "1");
+							self.endExport(e);
 							return false;
 						}
 					});
@@ -817,6 +818,18 @@
 			};
 			domImg.src = this.stegcover64;
 			
+		};
+		
+		this.endExport = function (error, result) {
+			if (error) {
+				console.error(error, error.stack);
+				alert("Failed to generate replay data");
+			} else if (result && result.filename) {
+				// Show a response 'cause download bar is hidden
+				alert("Saved to {0}".format(result.filename));
+			}
+			this.exportingReplay = false;
+			$("body").css("opacity", "1");
 		};
 		
 	};

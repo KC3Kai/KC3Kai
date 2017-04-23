@@ -13,6 +13,7 @@ Saves and loads significant data for future use
 		// Not start from, excluding
 		abyssalShipIdFrom: 1500,
 		abyssalGearIdFrom: 500,
+		// Might be updated soon, depending on next seasonal ID going ~811 or 997~
 		seasonalCgIdFrom: 800,
 
 		_raw: {},
@@ -141,7 +142,8 @@ Saves and loads significant data for future use
 					if(!ss) { ships[id] = this._seasonalShips[id]; }
 				}
 				// Apply a patch for Mikuma typo of KC devs
-				ships[882] = this._seasonalShips[882];
+				//ships[882] = this._seasonalShips[882];
+				// Seasonal data no longer leaked since 2017-04-05
 			}
 			return ships;
 		},
@@ -198,10 +200,32 @@ Saves and loads significant data for future use
 		},
 
 		abyssalShip :function(id, isMasterMerged){
-			var master = !!isMasterMerged && id > this.abyssalShipIdFrom && $.extend({}, this.ship(id)) || {};
+			var master = !!isMasterMerged && this.isAbyssalShip(id) && $.extend({}, this.ship(id)) || {};
 			return Object.keys(master).length === 0 &&
 				(Object.keys(this._abyssalShips).length === 0 || !this._abyssalShips[id]) ?
 				false : $.extend(master, this._abyssalShips[id]);
+		},
+
+		isRegularShip :function(id){
+			// Master ID starts from 1, so range should be (lbound, ubound]
+			// falsy id always returns false
+			return !!id && !(this.isAbyssalShip(id) || this.isSeasonalShip(id));
+		},
+
+		isNotRegularShip :function(id){
+			return !this.isRegularShip(id);
+		},
+
+		isSeasonalShip :function(id){
+			return id > this.seasonalCgIdFrom && id <= this.abyssalShipIdFrom;
+		},
+
+		isAbyssalShip :function(id){
+			return id > this.abyssalShipIdFrom;
+		},
+
+		isAbyssalGear :function(id){
+			return id > this.abyssalGearIdFrom;
 		},
 
 		/* Save to localStorage

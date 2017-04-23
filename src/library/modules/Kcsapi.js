@@ -367,8 +367,11 @@ Previously known as "Reactor"
 			var utcHour  = Date.toUTChours(headers.Date),
 				ship     = KC3ShipManager.get(params.api_id),
 				master   = ship.master(),
+				remodel  = RemodelDb.remodelInfo(master.api_id) || {},
+				// Materials: [fuel, ammo, steel, bauxite, torch, bucket, devmat, screw]
 				// NOTE: api_afterfuel is steel consumption!
-				material = [0,-master.api_afterbull,-master.api_afterfuel,0,0,0,0,0];
+				material = [0, -master.api_afterbull, -master.api_afterfuel, 0,
+							-(remodel.torch || 0), 0, -(remodel.devmat || 0), 0];
 			
 			// For every pending supply and repair, it'll be counted towards this
 			/*
@@ -408,7 +411,14 @@ Previously known as "Reactor"
 				type: "remodel" + master.api_id,
 				data: material
 			});
+			if(remodel.blueprint > 0){
+				PlayerManager.consumables.blueprints -= remodel.blueprint;
+			}
+			if(remodel.catapult > 0){
+				PlayerManager.consumables.protoCatapult -= remodel.catapult;
+			}
 			PlayerManager.setResources(utcHour * 3600, null, material.slice(0, 4));
+			PlayerManager.setConsumables(utcHour * 3600, null, material.slice(4, 8));
 			KC3Network.trigger("Consumables");
 		},
 		
@@ -432,6 +442,7 @@ Previously known as "Reactor"
 		// Use a Preset
 		"api_req_hensei/preset_select":function(params, response, headers){
 			var deckId = parseInt(params.api_deck_id, 10);
+			PlayerManager.akashiRepair.onPresetSelect(PlayerManager.fleets[deckId-1]);
 			PlayerManager.fleets[deckId-1].update( response.api_data );
 			PlayerManager.saveFleets();
 			KC3Network.trigger("Fleet", { switchTo: deckId });
@@ -668,14 +679,16 @@ Previously known as "Reactor"
 					}
 					// If not the same fleet, also recheck akashi repair of source fleet
 					if(oldFleet !== fleetIndex-1){
-						PlayerManager.fleets[oldFleet].checkAkashi(true);
+						PlayerManager.akashiRepair.onChange(PlayerManager.fleets[oldFleet]);
+						PlayerManager.fleets[oldFleet].updateAkashiRepairDisplay();
 					}
 				}
 			} else { // Remove ship
 				PlayerManager.fleets[fleetIndex-1].ships.splice(changedIndex, 1);
 				PlayerManager.fleets[fleetIndex-1].ships.push(-1);
 			}
-			PlayerManager.fleets[fleetIndex-1].checkAkashi(true);
+			PlayerManager.akashiRepair.onChange(PlayerManager.fleets[fleetIndex-1]);
+			PlayerManager.fleets[fleetIndex-1].updateAkashiRepairDisplay();
 			PlayerManager.saveFleets();
 			KC3Network.trigger("Fleet", { switchTo: fleetIndex });
 		},
@@ -1340,7 +1353,6 @@ Previously known as "Reactor"
 				},shipData.lastSortie[0]);
 				
 				shipData.applyRepair();
-				shipData.resetAfterHp();
 				KC3TimerManager.repair( nDockNum ).deactivate();
 			}
 			
@@ -1370,7 +1382,6 @@ Previously known as "Reactor"
 			},shipData.lastSortie[0]);
 			shipData.perform('repair');
 			shipData.applyRepair();
-			shipData.resetAfterHp();
 			KC3ShipManager.save();
 			
 			KC3TimerManager.repair( params.api_ndock_id ).deactivate();

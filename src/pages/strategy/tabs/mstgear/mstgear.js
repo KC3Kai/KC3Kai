@@ -84,7 +84,7 @@
 			console.debug("gearData", gearData);
 			self.currentGearId = gear_id;
 			
-			if(gear_id <= KC3Master.abyssalGearIdFrom){
+			if(!KC3Master.isAbyssalGear(gear_id)){
 				var gearHost = "http://"+this.server_ip+"/kcs/resources/image/slotitem/";
 				var paddedId = (gear_id<10?"00":gear_id<100?"0":"")+gear_id;
 				$(".tab_mstgear .gearInfo .gearAsset img").attr("src", "");
@@ -118,7 +118,7 @@
 			if(gearData.api_rare===0){
 				$(".tab_mstgear .gearInfo .rarity").append("&#10031;");
 			}
-			if(gear_id <= KC3Master.abyssalGearIdFrom && gearData.api_broken.length >= 4){
+			if(!KC3Master.isAbyssalGear(gear_id) && gearData.api_broken.length >= 4){
 				$(".tab_mstgear .gearInfo .scrap .fuel span").text(gearData.api_broken[0]);
 				$(".tab_mstgear .gearInfo .scrap .ammo span").text(gearData.api_broken[1]);
 				$(".tab_mstgear .gearInfo .scrap .steel span").text(gearData.api_broken[2]);

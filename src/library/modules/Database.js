@@ -209,9 +209,18 @@ Uses Dexie.js third-party plugin on the assets directory
 							pvp: "++id,hq,fleet,enemy,data,yasen,rating,baseEXP,mvp,time"
 						},
 						up: function(t){
-							console.log("Databse v73", t);
+							console.log("Database v73", t);
 						},
 						vr: 73,
+					},
+					{
+						ch: {
+							screenshots: "++id,hq,imgur,deletehash,ltime"
+						},
+						up: function(t){
+							console.log("Database v74", t);
+						},
+						vr: 74,
 					}
 					/*
 					Database versions are only integers, no decimals.
@@ -310,10 +319,11 @@ Uses Dexie.js third-party plugin on the assets directory
 			this.con.useitem.add(data);
 		},
 		
-		Screenshot :function(imgur){
+		Screenshot :function(imgur, deletehash){
 			this.con.screenshots.add({
 				hq : 0,
 				imgur : imgur,
+				deletehash: deletehash,
 				ltime : Math.floor(Date.now()/1000),
 			});
 		},

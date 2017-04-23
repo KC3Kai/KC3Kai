@@ -28,6 +28,8 @@ Retreives when needed to apply on components
 				forceDMMLogin		: false,
 				apiRecorder			: false,
 				updateNotification	: 2,
+				dataSyncNotification	: false,
+				chromeSyncQuests	: false,
 
 				showCatBombs		: true,
 				showApiError		: true,
@@ -40,6 +42,9 @@ Retreives when needed to apply on components
 				PoiDBSubmission_enabled: false,
 				
 				KC3DBSubmission_enabled: true,
+				
+				PushAlerts_enabled: 0,
+				PushAlerts_key : '',
 				
 				info_face 			: true,
 				info_drop 			: true,
@@ -139,6 +144,7 @@ Retreives when needed to apply on components
 				alert_supply_exped 	:true,
 				alert_idle_counter	: 1,
 				alert_idle_start	: 0,
+				alert_rsc_cap		: 95,
 				
 				alert_taiha			: false,
 				alert_taiha_blur	: false,

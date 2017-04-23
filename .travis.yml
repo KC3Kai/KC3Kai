@@ -4,7 +4,7 @@ node_js:
 before_install:
 - npm install -g grunt-cli
 - npm install
-- if ! patch -R --dry-run -s -d node_modules/grunt-contrib-uglify -p2 < misc/uglify-harmony.patch; then patch -N -d node_modules/grunt-contrib-uglify -p2 < misc/uglify-harmony.patch; fi
+- patch -N -d node_modules/grunt-contrib-uglify -p2 < misc/uglify-harmony.patch
 
 # ENVIRONMENT VARIABLES: CHROME WEBSTORE CREDENTIALS
 env:
@@ -14,9 +14,9 @@ env:
   - secure: ccwwpdxdUpufkFqQUWGdCQAF1TI+Nx1TDVHCIaRM8IdoBU0wc6XD7HEEqq9gNeB3GG5tvPYzwLfj9ARpEiO+KZObLCcaEI5ZKSXPNADzL05fmL8uUDQENR7q+K1iSe5lpE+iBWH1/SHUxUbIzIY1qlaA9+qoKZzzai6JQXEKdzE=
 
 # CACHE DEPENDENCIES
-cache:
-  directories:
-    - node_modules
+#cache:
+#  directories:
+#    - node_modules
 
 # BUILD WEBSTORE PACKAGE
 before_script:

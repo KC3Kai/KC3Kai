@@ -169,6 +169,7 @@
 					ExpedDate = new Date(ThisExped.time*1000);
 					$(".exped_date", ExpedBox).text( ExpedDate.format("mmm dd") );
 					$(".exped_time", ExpedBox).text( ExpedDate.format("hh:MM tt") );
+					$(".exped_info", ExpedBox).attr("title", ExpedDate.format("yyyy-mm-dd HH:MM:ss"));
 					
 					// Number and HQ exp
 					$(".exped_number", ExpedBox).text( ThisExped.mission );

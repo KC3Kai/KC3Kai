@@ -70,18 +70,18 @@
 				shipVersion = KC3Master.graph(shipData.api_id).api_version[0];
 				shipSrc = "../../../../assets/swf/card.swf?sip="+self.server_ip+"&shipFile="+shipFile;
 				
-				if (shipData.api_id <= KC3Master.seasonalCgIdFrom) {
-					// NON-SEASONAL CG
-					shipSrc += "&abyss=0"+(!shipVersion?"":"&ver="+shipVersion);
-					appendToBox = ".tab_mstupdate .mstships";
-				} else if (shipData.api_id > KC3Master.abyssalShipIdFrom) {
+				if (KC3Master.isSeasonalShip(shipData.api_id)) {
+					// SEASONAL CG
+					shipSrc += "&abyss=0&forceFrame=8";
+					appendToBox = ".tab_mstupdate .mstseason";
+				} else if (KC3Master.isAbyssalShip(shipData.api_id)) {
 					// ABYSSALS
 					shipSrc += "&abyss=1"+(!shipVersion?"":"&ver="+shipVersion);
 					appendToBox = ".tab_mstupdate .mstabyss";
 				} else {
-					// SEASONAL CG
-					shipSrc += "&abyss=0&forceFrame=8";
-					appendToBox = ".tab_mstupdate .mstseason";
+					// NON-SEASONAL CG
+					shipSrc += "&abyss=0"+(!shipVersion?"":"&ver="+shipVersion);
+					appendToBox = ".tab_mstupdate .mstships";
 				}
 				
 				shipSrc += !shipVersion ? "" : "&ver="+shipVersion;
@@ -100,7 +100,7 @@
 			$.each(this.newGears, function(index, GearData){
 				gearBox = $(".tab_mstupdate .factory .mstgear").clone();
 				
-				if(GearData.api_id <= KC3Master.abyssalGearIdFrom){
+				if(!KC3Master.isAbyssalGear(GearData.api_id)){
 					var paddedId = (GearData.api_id<10?"00":GearData.api_id<100?"0":"")+GearData.api_id;
 					$(".gear_cg img", gearBox).attr("src", "http://"+self.server_ip+"/kcs/resources/image/slotitem/card/"+paddedId+".png");
 				}else{

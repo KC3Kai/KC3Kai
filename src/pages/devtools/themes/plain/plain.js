@@ -438,36 +438,29 @@
 			
 			// Akashi current
 			var baseElement = (TotalFleet.length > 1) ? ['main','escort'] : ['single'];
-			var ctime = Date.now();
 			baseElement.forEach(function(baseKey,index){
-				var FleetData = PlayerManager.fleets[TotalFleet[index]];
-				
 				var baseContainer = $([".shiplist",baseKey].join('_'));
-				var akashiDuration = (function(){
-					return Math.min(359999,Math.hrdInt('floor',ctime - this.akashi_tick,3,1));
-				}).call(FleetData);
 				
 				$(".sship,.lship",baseContainer).each(function(index,shipBox){
 					var repairBox = $('.ship_repair_data',shipBox);
 					
-					var
-						shipData   = KC3ShipManager.get(repairBox.data('sid')),
-						hpLoss     = shipData.hp[1] - shipData.hp[0],
-						repairTime = Math.max(0,Math.hrdInt('floor',shipData.repair[0],3,1) - 30),
-						repairTick = Math.max(1,(hpLoss > 0) ? (repairTime/hpLoss) : 1),
-						repairHP   = Math.min(hpLoss,
-							FleetData.checkAkashiExpire() ?
-								Math.floor(hpLoss*Math.min(1,Math.max(akashiDuration-30,0) / repairTime)) :
-								0
-						);
+				var
+					shipData = KC3ShipManager.get(repairBox.data('sid')),
+					hpLost = shipData.hp[1] - shipData.hp[0],
+					dockTime = shipData.repair[0],
+					repairProgress = PlayerManager.akashiRepair.getProgress(dockTime, hpLost);
 					
-					$('.ship_repair_tick' ,shipBox).attr('data-tick',repairHP);
-					$('.ship_repair_timer',shipBox).text((
-						(repairHP < hpLoss) ? (
-							!FleetData.checkAkashiExpire() ? (1200-akashiDuration) : 
-								(repairTick - Math.min(repairTime,akashiDuration - 30) % repairTick)
-						) : NaN
-					).toString().toHHMMSS() );
+					$('.ship_repair_tick', shipBox).attr('data-tick', repairProgress.repairedHp);
+					$('.ship_repair_timer', shipBox).text(
+						(function (t) {
+							if (t === 0) {
+								return '--:--:--';
+							} else if (!t || Number.isNaN(parseInt(t))) {
+								return '??:??:??';
+							}
+							return Math.ceil(t / 1000).toString().toHHMMSS();
+						})(repairProgress.timeToNextRepair)
+					);
 				});
 			});
 		}, 1000);

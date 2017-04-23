@@ -13,7 +13,6 @@ Contains summary information about a fleet and its 6 ships
 		this.name = "";
 		this.ships = [ -1, -1, -1, -1, -1, -1 ];
 		this.mission = [ 0, 0, 0, 0 ];
-		this.akashi_tick = 0;
 
 		// Define properties not included in stringifications
 		Object.defineProperties(this,{
@@ -104,11 +103,8 @@ Contains summary information about a fleet and its 6 ships
 					KC3TimerManager.exped( this.fleetId ).deactivate();
 				}
 			}
-			
-			if(!shipState.cmp('pre','post')) {
-				this.akashi_tick = 0;
-			}
-			this.checkAkashi();
+
+			this.updateAkashiRepairDisplay();
 		}
 	};
 	
@@ -118,7 +114,6 @@ Contains summary information about a fleet and its 6 ships
 		this.name = data.name;
 		this.ships = data.ships;
 		this.mission = data.mission;
-		this.akashi_tick = data.akashi_tick;
 		return this;
 	};
 	
@@ -167,54 +162,47 @@ Contains summary information about a fleet and its 6 ships
 	};
 	
 	KC3Fleet.prototype.clearNonFlagShips = function(){
-		this.ship(function(x,i,s){s.akashiMark = false;});
 		this.ships.fill(-1,1,6);
-		this.checkAkashi();
+		this.updateAkashiRepairDisplay();
 	};
-	
-	KC3Fleet.prototype.checkAkashi = function(forceReset){
-		forceReset = !!forceReset;
-		
+
+	/*--------------------------------------------------------*/
+	/*-------------------[ AKASHI REPAIR ]--------------------*/
+	/*--------------------------------------------------------*/
+
+	// Mark the fleet's ships as being repaired (or not)
+	// Called when the fleet changes, or their equipment does
+	KC3Fleet.prototype.updateAkashiRepairDisplay = function () {
+		var repairSlots = this._getRepairSlots();
+		this.ship(this._updateRepairStatus(repairSlots));
+	};
+
+	KC3Fleet.prototype._canDoRepair = function (flagship) {
+		return this._isAkashi(flagship) && !flagship.isStriped() && flagship.isFree();
+	};
+
+	KC3Fleet.prototype._isAkashi = function (ship) {
+		return ship.master().api_stype === 19;
+	};
+
+	// Return the number of ships that will be targetted by an Akashi repair
+	KC3Fleet.prototype._getRepairSlots = function () {
 		var flagship = this.ship(0);
-		if(
-			flagship.master().api_stype == 19 &&
-			!(flagship.isStriped() || !flagship.isFree())
-		) {
-			// only applies to AR that is spending her time in port
-			// but neither striped or even bathing.
-			var
-				prevTick = !forceReset && this.akashi_tick,
-				nextTick = Date.now(),
-				shftTick = prevTick && Math.hrdInt('floor',(nextTick - prevTick)/1.2,6)*1.2;
-			this.akashi_tick = (prevTick + shftTick) || nextTick;
-			
-			var akashiRange = flagship.countEquipment(86) + 1;
-			
-			this.ship(function(roster,index,ship){
-				ship.akashiMark = (index <= akashiRange) && ship.isFree() && !ship.isStriped();
-			});
-			return true;
-		} else {
-			this.akashi_tick = 0;
-			this.ship(function(roster,index,ship){
-				ship.akashiMark = false;
-			});
-			return false;
+		if (!this._canDoRepair(flagship)) {
+			return 0;
 		}
+		var cranesEquipped = flagship.countEquipment(86);
+		return cranesEquipped + 2;
 	};
-	
-	KC3Fleet.prototype.checkAkashiValid = function() {
-		return !!this.akashi_tick;
+
+	// Return a function to pass to this.ship() that will update the ships' repair status 
+	KC3Fleet.prototype._updateRepairStatus = function (repairSlotCount) {
+		return function (rosterId, position, ship) {
+			var inRange = position < repairSlotCount;
+			ship.akashiMark = inRange && !ship.isStriped() && ship.isFree();
+		};
 	};
-	
-	KC3Fleet.prototype.checkAkashiExpire = function() {
-		return !!this.checkAkashiTick();
-	};
-	
-	KC3Fleet.prototype.checkAkashiTick = function() {
-		return Math.hrdInt('floor',(Date.now() - this.akashi_tick)/1.2,6,1);
-	};
-	
+
 	/*--------------------------------------------------------*/
 	/*------------------[ FLEET ATTRIBUTES ]------------------*/
 	/*--------------------------------------------------------*/
@@ -582,20 +570,16 @@ Contains summary information about a fleet and its 6 ships
 		var
 			self  = this,
 			highestDocking = 0,
-			highestAkashi = 0,
-			ctime = Date.now();
+			highestAkashi = 0;
 		
 		this.ship(function(rosterId,index,shipData){
 			if(shipData.didFlee) { return false; }
 			var myRepairTime = shipData.repairTime();
-			myRepairTime.akashi -= Math.max(
-				0,
-				(!!akashiReduce &&
-					self.akashi_tick && shipData.akashiMark && myRepairTime.akashi && 
-					Math.hrdInt('floor',(ctime - self.akashi_tick),3,1)
-				)
-			);
-			
+			if(akashiReduce && shipData.akashiMark){
+				myRepairTime.akashi -=
+					Math.hrdInt('floor', PlayerManager.akashiRepair.getElapsed(),3,1) ||
+					0;
+			}
 			if(myRepairTime.docking > highestDocking){ highestDocking = myRepairTime.docking; }
 			if(myRepairTime.akashi > highestAkashi){ highestAkashi = myRepairTime.akashi; }
 		});
@@ -603,7 +587,10 @@ Contains summary information about a fleet and its 6 ships
 		return {
 			docking: highestDocking,
 			akashi: highestAkashi,
-			akashiCheck: [this.checkAkashiValid(),this.checkAkashiExpire()]
+			akashiCheck: [
+				PlayerManager.akashiRepair.isRunning(),
+				PlayerManager.akashiRepair.canDoRepair()
+			],
 		};
 	};
 	
@@ -814,7 +801,6 @@ Contains summary information about a fleet and its 6 ships
 			this.ships.splice(pos,1);
 			this.ships.push(-1);
 		}
-		this.checkAkashi(true);
 	};
 	
 	/**

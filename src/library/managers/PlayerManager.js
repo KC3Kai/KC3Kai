@@ -22,6 +22,7 @@ Does not include Ships and Gears which are managed by other Managers
 		statistics: {},
 		maxResource: 300000,
 		maxConsumable: 3000,
+		maxCoin: 200000,
 
 		init :function(){
 			this.hq = new KC3Player();
@@ -46,6 +47,7 @@ Does not include Ships and Gears which are managed by other Managers
 				new KC3LandBase(),
 				new KC3LandBase()
 			];
+			this.akashiRepair = new KC3AkashiRepair();
 			return this;
 		},
 
@@ -348,7 +350,7 @@ Does not include Ships and Gears which are managed by other Managers
 				return this;
 			}
 
-			this.fleets.forEach(function(fleet){ fleet.checkAkashi(); });
+			this.akashiRepair.onPort(this.fleets);
 
 			var
 				// get current player regen cap
