@@ -575,10 +575,11 @@ Contains summary information about a fleet and its 6 ships
 		this.ship(function(rosterId,index,shipData){
 			if(shipData.didFlee) { return false; }
 			var myRepairTime = shipData.repairTime();
-			myRepairTime.akashi -=
-				Math.hrdInt('floor', PlayerManager.akashiRepair.getElapsed(),3,1) ||
-				0;
-			
+			if(akashiReduce && shipData.akashiMark){
+				myRepairTime.akashi -=
+					Math.hrdInt('floor', PlayerManager.akashiRepair.getElapsed(),3,1) ||
+					0;
+			}
 			if(myRepairTime.docking > highestDocking){ highestDocking = myRepairTime.docking; }
 			if(myRepairTime.akashi > highestAkashi){ highestAkashi = myRepairTime.akashi; }
 		});

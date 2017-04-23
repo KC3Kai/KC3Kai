@@ -47,17 +47,30 @@
             return false;
         },
         // according to the following doc:
-        // https://github.com/andanteyk/ElectronicObserver/blob/d28e1d904521ea60b25c15010d06f130ae36dc62/ElectronicObserver/Other/Information/kcmemo.md#%E6%94%B9%E8%A3%85%E6%99%82%E3%81%AB%E5%BF%85%E8%A6%81%E3%81%AA%E9%96%8B%E7%99%BA%E8%B3%87%E6%9D%90
+        // https://github.com/andanteyk/ElectronicObserver/blob/3d3286c15ddb587eb9d95146b855d1c0964ef064/ElectronicObserver/Other/Information/kcmemo.md#%E6%94%B9%E8%A3%85%E6%99%82%E3%81%AB%E5%BF%85%E8%A6%81%E3%81%AA%E7%89%B9%E6%AE%8A%E8%B3%87%E6%9D%90
         calcDevMat: function(steel) {
             return (steel < 4500) ? 0
                 : ( steel < 5500) ? 10
                 : ( steel < 6500) ? 15
                 : 20;
         },
-        // convert Suzuya (Kou) K2 also consumes torches, to be confirmed
+        // does not consume devmat if using blueprint,
+        // except converting Suzuya K2 to Kou K2, still consumes devmats
+        isIgnoreDevMat: function(blueprint_count, ship_id_from) {
+            return blueprint_count > 0 && ship_id_from !== 503;
+        },
+        // converting Suzuya (Kou) K2 also consumes torches, see also:
+        // https://github.com/andanteyk/ElectronicObserver/blob/3d3286c15ddb587eb9d95146b855d1c0964ef064/ElectronicObserver/Other/Information/kcmemo.md#%E9%AB%98%E9%80%9F%E5%BB%BA%E9%80%A0%E6%9D%90
         calcTorch: function(ship_id_from) {
-            return (ship_id_from === 503 || ship_id_from === 508) ? 20
-                : 0;
+            return (ship_id_from === 503 || ship_id_from === 508) ? 20 : 0;
+        },
+        // thanks to remodel of converting, all api_catapult_count are 0 in api_mst_shipupgrade,
+        // and api_drawing_count of these special cases might be 0.
+        // definitively missing the shipupgrade record before the converting, eg: Kai -> Kai Ni
+        knownShipUpgradeOverwrittenByConvertRemodel: {
+            "461A":{"api_id":461,"api_current_ship_id":288,"api_original_ship_id":110,"api_upgrade_type":1,"api_upgrade_level":2,"api_drawing_count":1,"api_catapult_count":1,"api_sortno":261},
+            "462A":{"api_id":462,"api_current_ship_id":112,"api_original_ship_id":111,"api_upgrade_type":1,"api_upgrade_level":2,"api_drawing_count":1,"api_catapult_count":1,"api_sortno":262},
+            "503A":{"api_id":503,"api_current_ship_id":129,"api_original_ship_id":124,"api_upgrade_type":1,"api_upgrade_level":2,"api_drawing_count":1,"api_catapult_count":0,"api_sortno":303}
         },
         mkDb: function(masterData, isRaw) {
             var self = this;
@@ -115,16 +128,21 @@
                 return KC3Meta.shipName( KC3Master.ship(id).api_name );
             }
 
-            $.each(isRaw ? masterData.shipupgrade : masterData.api_mst_shipupgrade, function(i,x) {
+            var fixedShipupgrade = $.extend({},
+                isRaw ? masterData.shipupgrade : masterData.api_mst_shipupgrade,
+                self.knownShipUpgradeOverwrittenByConvertRemodel
+            );
+            $.each(fixedShipupgrade, function(i,x) {
                 if (x.api_current_ship_id === 0)
                     return;
                 var remodel = remodelInfo[x.api_current_ship_id];
                 console.assert(
                     remodel.ship_id_to === x.api_id,
-                    "data inconsistent:"+x.api_id);
+                    "data inconsistent:", x.api_id);
                 remodel.catapult = x.api_catapult_count;
                 remodel.blueprint = x.api_drawing_count;
-                remodelInfo[x.api_current_ship_id] = remodel;
+                if(self.isIgnoreDevMat(remodel.blueprint, remodel.ship_id_from))
+                    remodel.devmat = 0;
             });
 
             // step 2: get all original ship ids
