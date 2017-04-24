@@ -373,6 +373,12 @@ html,body {
 	float:left;
 	color:#ccc;
 }
+.module.activity .consumable_ltext.regenCap {
+	color:#EAF918;
+}
+.module.activity .consumable_ltext.hardCap {
+	color:#FF7979;
+}
 .module.activity .consumable_text.danger {
 	color:#FF7979;
 }
@@ -1524,8 +1530,17 @@ ABYSS FLEET
 	font-size: 14px;
 	color:#ccc
 }
-.module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content.golden {
+.module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content[data-gsState="impossible"] {
+	color:#FF5555;
+}
+.module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content[data-gsState="no-overdrum"] {
+	color:orange;
+}
+.module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content[data-gsState="likely"] {
 	color:gold;
+}
+.module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content[data-gsState="guaranteed"] {
+	color:#00CC00;
 }
 .module.activity .activity_expeditionPlanner .expPlanner_text_passed {
 	font-size: 14px;
@@ -2413,7 +2428,7 @@ ABYSS FLEET
 	display:none;
 }
 .module.fleet .lship .ship_hp_pred_value .ship_hp_diff {
-	color:#ff7979;
+	color:#ff6565;
 	font-size:11px;
 	text-shadow:
 		-1px -1px 1px #3d1414, 0px -1px 1px #3d1414, 1px -1px 1px #3d1414,

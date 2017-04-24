@@ -13,6 +13,8 @@ Uses KC3Quest objects to play around with
 		open: [], // Array of quests seen on the quests page, regardless of state
 		active: [], // Array of quests that are active and counting
 		
+		syncStructVersion: 2, // Version of data structure, used for quests synchronization
+		
 		timeToResetDailyQuests: -1,
 		timeToResetWeeklyQuests: -1,
 		timeToResetMonthlyQuests: -1,
@@ -405,18 +407,22 @@ Uses KC3Quest objects to play around with
 		save :function(){
 			// Store only the list. The actives and opens will be redefined on load()
 			localStorage.quests = JSON.stringify(this.list);
-
+			
 			// Check if synchronization is enabled and quests list is not empty
 			if (ConfigManager.chromeSyncQuests && Object.keys(this.list).length > 0) {
-				localStorage.questsTimeStamp = Date.now();
+				if (typeof localStorage.questsVersion == "undefined") {
+					localStorage.questsVersion = 0;
+				}
+				localStorage.questsVersion++;
 				var questsData = {
 					quests: localStorage.quests,
-					questsTimeStamp: localStorage.questsTimeStamp,
+					questsVersion: localStorage.questsVersion,
 					timeToResetDailyQuests: localStorage.timeToResetDailyQuests,
 					timeToResetWeeklyQuests: localStorage.timeToResetWeeklyQuests,
 					timeToResetMonthlyQuests: localStorage.timeToResetMonthlyQuests,
 					timeToResetQuarterlyQuests: localStorage.timeToResetQuarterlyQuests,
-					dataStructVersion: 1
+					syncStructVersion: this.syncStructVersion,
+					syncTimeStamp: Date.now()
 				};
 				chrome.storage.sync.set({KC3QuestsData: questsData});
 			}

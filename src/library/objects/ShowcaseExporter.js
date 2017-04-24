@@ -799,36 +799,38 @@
             var text = "";
             if (i === 0) {
                 fontSize = 18;
+                y += (this.rowParams.height + fontSize) / 2;
                 text = "x" + equip.total;
                 ctx.font = generateFontString(400, fontSize);
                 ctx.fillStyle = this.colors.equipCount;
                 if (!fake)
-                    ctx.fillText(text, x + this.rowParams.width - this.rowParams.height * 0.5 - ctx.measureText(text).width, y + (this.rowParams.height + fontSize) / 2);
+                    ctx.fillText(text, x + this.rowParams.width - this.rowParams.height * 0.3 - ctx.measureText(text).width, y);
             } else {
                 fontSize = 13;
                 if (equip["s" + i] === 0)
                     continue;
+                y += fontSize + 2;
+
                 ctx.fillStyle = this.colors.equipCount;
                 ctx.font = generateFontString(400, fontSize);
                 text = " x" + equip["s" + i];
                 var xOffset = ctx.measureText(text).width;
                 if (!fake)
-                    ctx.fillText(text, x + this.rowParams.width - this.rowParams.height * 0.5 - ctx.measureText(text).width, y + (this.rowParams.height + fontSize) / 2);
+                    ctx.fillText(text, x + this.rowParams.width - this.rowParams.height * 0.3 - ctx.measureText(text).width, y);
 
 
                 text = "★" + i;
                 ctx.fillStyle = this.colors.equipStars;
                 ctx.font = generateFontString(600, fontSize);
                 if (!fake)
-                    ctx.fillText(text, x + this.rowParams.width - this.rowParams.height * 0.5 - xOffset - ctx.measureText(text).width, y + (this.rowParams.height + fontSize) / 2);
+                    ctx.fillText(text, x + this.rowParams.width - this.rowParams.height * 0.3 - xOffset - ctx.measureText(text).width, y);
             }
-            y += fontSize + 4;
         }
         if (equipMaxY > y)
             y = equipMaxY;
 
         this._equipCanvases["m" + equip.masterId] = canvas;
-        return y + 5;
+        return y + ((this.buildSettings.exportMode !== "light") ? 5 : 0);
     };
 
     ShowcaseExporter.prototype._drawEquipInfo = function (equip, ctx, x, y, fake) {
@@ -837,20 +839,25 @@
         ctx.font = generateFontString(400, fontSize);
         ctx.fillStyle = this.colors.equipInfo;
 
-        var available = this.rowParams.width - this.rowParams.height * 3.5;
+        /**
+         * 1 - equip image
+         * 0.3 - padding right
+         * 1.6 - for count text and stars
+         */
+        var available = this.rowParams.width - this.rowParams.height * 2.9;
 
         var name = this._splitText(equip.name, ctx, available);
-        y = this._drawEquipName(name, ctx, x + 30, y, fontSize, fake);
+        var miltiLine = this.buildSettings.exportMode !== "light" && equip.name !== KC3Master.slotitem(equip.masterId).api_name;
 
-        if (this.buildSettings.exportMode !== "light" && equip.name !== KC3Master.slotitem(equip.masterId).api_name) {
+        y = this._drawEquipName(name, ctx, x + 30, y, fontSize, miltiLine, fake);
+
+        if (miltiLine) {
             name = this._splitText(KC3Master.slotitem(equip.masterId).api_name, ctx, available, "");
-            y = this._drawEquipName(name, ctx, x + 30, y, fontSize, fake);
+            y = this._drawEquipName(name, ctx, x + 30, y, fontSize, miltiLine, fake);
         }
         y = y < startY + 30 ? startY + 30 : y;
-
-        available = this.rowParams.width - this.rowParams.height * 3.5;
-
         y += 5;
+
         var statsY = 0;
         if(this.buildSettings.exportMode !== "light")
             statsY = this._drawEquipStats(equip, ctx, x + this.rowParams.height, y, available, fake);
@@ -860,11 +867,12 @@
         return y;
     };
 
-    ShowcaseExporter.prototype._drawEquipName = function (nameLines, ctx, x, y, fontSize, fake) {
+    ShowcaseExporter.prototype._drawEquipName = function (nameLines, ctx, x, y, fontSize, multiLine, fake) {
         if (nameLines.length === 1) {
+            var addY = (multiLine) ? (fontSize + 2) : ((this.rowParams.height + fontSize)/2);
             if (!fake)
-                ctx.fillText(nameLines[0], x, y + fontSize + 2);
-            y += fontSize + 5;
+                ctx.fillText(nameLines[0], x, y + addY);
+            y += addY + 5;
         } else {
             for (var i = 0; i < nameLines.length; i++) {
                 if (!fake)
@@ -879,20 +887,33 @@
         if (typeof splitter === "undefined")
             splitter = " ";
 
-        if (text.indexOf(splitter) === -1)
-            splitter = "";
-
+        //@TODO smarter split  "ABC ( D E F )" -> ["ABC", "( D E F )"]
         var rows = [];
         var words = text.split(splitter);
 
-        //@TODO what if single word will be so long so it goes outside maxWidth?
         while (words.length > 0) {
             var line = [];
             var next = words.shift();
+            var brokenWord;
+            if (ctx.measureText(next).width >= maxWidth) {
+                brokenWord = this._splitText(next, ctx, maxWidth - ctx.measureText("-").width, "");
+                next = brokenWord.shift() + "-";
+                words = brokenWord.concat(words);
+            }
             while (ctx.measureText((line.join(splitter) + splitter + next).trim()).width < maxWidth && next !== "") {
                 line.push(next);
-                if (words.length > 0)
+                if (words.length > 0) {
                     next = words.shift();
+                    if (ctx.measureText(next).width >= maxWidth) {
+                        var remainWidth = maxWidth - ctx.measureText((line.join(splitter) + splitter + "-")).width;
+                        if (remainWidth / maxWidth < 0.3) {
+                            remainWidth = maxWidth;
+                        }
+                        brokenWord = this._splitText(next, ctx, remainWidth, "");
+                        next = brokenWord.shift() + "-";
+                        words.unshift(brokenWord.join(""));
+                    }
+                }
                 else
                     next = "";
             }

@@ -350,8 +350,9 @@
 					url : repo+'lang/data/en/quotes.json',
 					async: false
 				}).responseText);
+				this.transformQuotes(enJSON, "en", false);
 				if (track) {
-					self.addTags(enJSON,"en");
+					self.addTags(enJSON, "en");
 				}
 			} catch(e) {
 				if (e instanceof SyntaxError){

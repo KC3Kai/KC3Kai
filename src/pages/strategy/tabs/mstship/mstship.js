@@ -409,7 +409,8 @@
 				});
 				
 				var stockEquipments = WhoCallsTheFleetDb.getStockEquipment( ship_id );
-
+				var remodelInfo = RemodelDb.remodelInfo( ship_id );
+				
 				// EQUIPMENT
 				$(".tab_mstship .equipments .equipment").each(function(index){
 					$(".capacity", this).text( shipData.api_maxeq[index] ).show();
@@ -451,8 +452,9 @@
 					$(".tab_mstship .shipInfo .remodel_name a").text( KC3Meta.shipName(KC3Master.ship(shipData.api_aftershipid).api_name) );
 					$(".tab_mstship .shipInfo .remodel_name a").data("sid", shipData.api_aftershipid);
 					$(".tab_mstship .shipInfo .remodel_level span").text( shipData.api_afterlv );
-					$(".tab_mstship .shipInfo .remodel_ammo .rsc_value").text( shipData.api_afterfuel );
-					$(".tab_mstship .shipInfo .remodel_steel .rsc_value").text( shipData.api_afterbull );
+					$(".tab_mstship .shipInfo .remodel_ammo .rsc_value").text( shipData.api_afterbull );
+					$(".tab_mstship .shipInfo .remodel_steel .rsc_value").text( shipData.api_afterfuel );
+					$(".tab_mstship .shipInfo .remodel_blueprint").toggle( remodelInfo.blueprint > 0 );
 					$(".tab_mstship .shipInfo .remodel").show();
 				}else{
 					$(".tab_mstship .shipInfo .remodel").hide();

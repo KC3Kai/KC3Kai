@@ -275,7 +275,9 @@ KC3改 Ship Object
 
 	KC3Ship.prototype.applyRepair = function(){
 		this.hp[0]  = this.hp[1];
-		this.morale = Math.max(40,this.morale);
+		// also keep afterHp consistent
+		this.resetAfterHp();
+		this.morale = Math.max(40, this.morale);
 		this.repair.fill(0);
 	};
 
