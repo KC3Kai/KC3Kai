@@ -19,7 +19,11 @@ Manages the timer for a player's Akashi repairs.
   // Calculate the amount of HP that can be repaired,
   // and the amount of time until the next point of HP can be repaired
   KC3AkashiRepair.prototype.getProgress = function (dockTime, hpLost) {
-    if (!dockTime || !hpLost) { return { repairedHp: 0, timeToNextRepair: 0 }; }
+    if (hpLost === 0) { return { repairedHp: 0, timeToNextRepair: 0 }; }
+    // if we don't have enough information, just give up
+    if (!Number.isInteger(hpLost) || !Number.isInteger(dockTime) || !this.timer.isRunning()) {
+      return {/* repairedHp: undefined, timeToNextRepair: undefined */};
+    }
     var elapsed = this.timer.getElapsed();
 
     if (!elapsed.canDoRepair()) {
@@ -85,14 +89,31 @@ Manages the timer for a player's Akashi repairs.
   /*------------------[ INTERNAL CLASSES ]------------------*/
   /*--------------------------------------------------------*/
 
-  var Timer = function () { this.startTime = undefined; };
-  Timer.prototype.start = function () { this.startTime = Date.now(); };
-  Timer.prototype.stop = function () { this.startTime = undefined; };
+  /*-----------------------[ TIMER ]------------------------*/
+
+  var LOCAL_STORAGE_KEY = 'akashiRepairStartTime';
+
+  var Timer = function () {
+    this.startTime = parseInt(localStorage.getItem(LOCAL_STORAGE_KEY), 10) || undefined;
+  };
+
+  Timer.prototype.start = function () {
+    this.startTime = Date.now();
+    localStorage.setItem(LOCAL_STORAGE_KEY, this.startTime);
+  };
+  Timer.prototype.stop = function () {
+    this.startTime = undefined;
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
+  };
+
   Timer.prototype.isRunning = function () { return !!this.startTime; };
+
   Timer.prototype.getElapsed = function () {
     return new KC3AkashiRepair.DeltaTime(this.startTime);
   };
   KC3AkashiRepair.Timer = Timer;
+
+  /*---------------------[ DELTA TIME ]---------------------*/
 
   var DeltaTime = function (startTime) {
     this.startTime = startTime;
