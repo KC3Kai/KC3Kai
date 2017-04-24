@@ -19,7 +19,11 @@ Manages the timer for a player's Akashi repairs.
   // Calculate the amount of HP that can be repaired,
   // and the amount of time until the next point of HP can be repaired
   KC3AkashiRepair.prototype.getProgress = function (dockTime, hpLost) {
-    if (!dockTime || !hpLost) { return { repairedHp: 0, timeToNextRepair: 0 }; }
+    if (hpLost === 0) { return { repairedHp: 0, timeToNextRepair: 0 }; }
+    // if we don't have enough information, just give up
+    if (!Number.isInteger(hpLost) || !Number.isInteger(dockTime) || !this.timer.isRunning()) {
+      return {/* repairedHp: undefined, timeToNextRepair: undefined */};
+    }
     var elapsed = this.timer.getElapsed();
 
     if (!elapsed.canDoRepair()) {
