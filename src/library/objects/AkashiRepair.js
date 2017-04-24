@@ -89,14 +89,31 @@ Manages the timer for a player's Akashi repairs.
   /*------------------[ INTERNAL CLASSES ]------------------*/
   /*--------------------------------------------------------*/
 
-  var Timer = function () { this.startTime = undefined; };
-  Timer.prototype.start = function () { this.startTime = Date.now(); };
-  Timer.prototype.stop = function () { this.startTime = undefined; };
+  /*-----------------------[ TIMER ]------------------------*/
+
+  var LOCAL_STORAGE_KEY = 'akashiRepairStartTime';
+
+  var Timer = function () {
+    this.startTime = parseInt(localStorage.getItem(LOCAL_STORAGE_KEY), 10) || undefined;
+  };
+
+  Timer.prototype.start = function () {
+    this.startTime = Date.now();
+    localStorage.setItem(LOCAL_STORAGE_KEY, this.startTime);
+  };
+  Timer.prototype.stop = function () {
+    this.startTime = undefined;
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
+  };
+
   Timer.prototype.isRunning = function () { return !!this.startTime; };
+
   Timer.prototype.getElapsed = function () {
     return new KC3AkashiRepair.DeltaTime(this.startTime);
   };
   KC3AkashiRepair.Timer = Timer;
+
+  /*---------------------[ DELTA TIME ]---------------------*/
 
   var DeltaTime = function (startTime) {
     this.startTime = startTime;
