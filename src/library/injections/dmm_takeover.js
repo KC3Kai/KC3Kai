@@ -51,8 +51,14 @@
 
 			// Press F7 to stop focusing on window to get time to focus on flash
 			$(document).on("keydown", function(event){
-				if (event.keyCode == 118) {
+				if (event.which === 118) {
 					self.nonFocusSeconds = 20;
+				}
+				// Press Tab to show special HUD
+				if (event.which === 9) {
+					// reserved for implementation
+					event.stopPropagation();
+					event.preventDefault();
 				}
 			});
 		},
@@ -102,7 +108,7 @@
 		resizeTimer: 0,
 		layout: function(){
 			$("body").addClass("kc3");
-			$("body").css({ margin:0, padding:0, 'min-width':0 });
+			$("body").css({ margin:0, padding:0, 'min-width':800, 'min-height':480 });
 			$("#main-ntg").css({ position: 'static' });
 			$("#area-game").css({
 				'margin-left': 'auto',
@@ -121,6 +127,7 @@
 			$(".area-naviapp").hide();
 			$("#ntg-recommend").hide();
 			$("#foot").hide();
+			$("#foot").next().hide();
 			$("#w, #main-ntg, #page").css({
 				margin:0,
 				padding:0,
@@ -144,6 +151,7 @@
 				width: 800,
 				height: 480
 			});
+			$("body").css("min-height", $(window).height());
 		},
 		// Final process on document ready
 		resizeGameFrameFinal: function(){
@@ -400,7 +408,8 @@
 		clearOverlayHotKey: function(){
 			var self = this;
 			$(document).on("keydown", function(event){
-				if (event.keyCode == 121) {
+				// F10: Clear overlays
+				if (event.which === 121) {
 					self.clearOverlays()({action:'clearOverlays'}, {}, function(){});
 				}
 			});
@@ -452,7 +461,7 @@
 			var self = this;
 			$(document).on("keydown", function(event){
 				// F9: Screenshot
-				if (event.keyCode == 120) {
+				if (event.which === 120) {
 					(new RMsg("service", "screenshot", {})).execute();
 				}
 			});

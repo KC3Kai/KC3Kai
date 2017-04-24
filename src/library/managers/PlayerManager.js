@@ -22,6 +22,7 @@ Does not include Ships and Gears which are managed by other Managers
 		statistics: {},
 		maxResource: 300000,
 		maxConsumable: 3000,
+		maxCoin: 200000,
 
 		init :function(){
 			this.hq = new KC3Player();

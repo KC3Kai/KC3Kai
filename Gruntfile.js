@@ -211,8 +211,11 @@ module.exports = function(grunt) {
 						"background": {
 							"scripts": [
 								"assets/js/global.js",
+								"assets/js/Dexie.min.js",
 								"library/objects.js",
 								"library/managers.js",
+								"library/modules/Database.js",
+								"library/modules/ImageExport.js",
 								"library/modules/Master.js",
 								"library/modules/RemodelDb.js",
 								"library/modules/Meta.js",
@@ -314,7 +317,7 @@ module.exports = function(grunt) {
 			},
 			global_js: {
 				src: [
-					'build/tmp/assets/js/jquery-2.1.3.min.js',
+					'build/tmp/assets/js/jquery.min.js',
 					'build/tmp/assets/js/global.js'
 				],
 				dest: 'build/release/assets/js/global.js'

@@ -40,3 +40,17 @@
 	text-align:center;
 	font-size:11px;
 }
+.tab_screenshots .ss_delete {
+	width:18px;
+	height:18px;
+	border-radius:10px;
+	float:left;
+	position:relative;
+	left:140px;
+	top:-108px;
+	color:#fff;
+	background-color:#f00;
+	font-size:14px;
+	line-height:17px;
+	text-align:center;
+}
