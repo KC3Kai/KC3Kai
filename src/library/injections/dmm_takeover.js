@@ -191,7 +191,7 @@
 			// Keep background image size fitting to window
 			var autoFitWindowHeight = function(){
 				$("body").css("min-height",
-					$(window).height() - self.gameZoomScale * config.api_margin
+					$(window).height() - self.gameZoomScale * $("#area-game").offset().top
 				);
 			};
 			autoFitWindowHeight();
