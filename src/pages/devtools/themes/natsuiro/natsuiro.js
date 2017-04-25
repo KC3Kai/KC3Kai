@@ -53,7 +53,7 @@
 		// A lazy initialzing method, prevent duplicate tooltip instance
 		$.fn.lazyInitTooltip = function(opts) {
 			if(typeof this.tooltip("instance") === "undefined") {
-				this.tooltip(opts || nativeTooltipOptions);
+				this.tooltip($.extend(true, {}, nativeTooltipOptions, opts));
 			}
 			return this;
 		};
@@ -316,7 +316,8 @@
 					dockTime = shipData.repair[0],
 					repairProgress = PlayerManager.akashiRepair.getProgress(dockTime, hpLost);
 
-				$('.ship_repair_tick', shipBox).attr('data-tick', repairProgress.repairedHp);
+				$('.ship_repair_tick', shipBox).attr('data-tick',
+					Number.isInteger(repairProgress.repairedHp) ? repairProgress.repairedHp : '?');
 				$('.ship_repair_timer', shipBox).text(
 					(function (t) {
 						if (t === 0) {
