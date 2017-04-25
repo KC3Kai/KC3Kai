@@ -72,7 +72,9 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			// If refreshing API link, close source tabs and re-open game frame
 			if(JSON.parse(localStorage.extract_api)){ // localStorage has problems with native boolean
 				localStorage.extract_api = false;
-				window.open("../pages/game/api.html", "kc3kai_game");
+				// To avoid cross-domain warning of chrome
+				//window.open("../pages/game/api.html", "kc3kai_game");
+				chrome.tabs.create({ url: chrome.extension.getURL("../pages/game/api.html") });
 				chrome.tabs.remove([sender.tab.id], function(){});
 			}
 		},
@@ -508,33 +510,45 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	Used for sync quests data on different machines
 	------------------------------------------*/
 	chrome.storage.onChanged.addListener(function(changes, namespace) {
-		// Check if synchronization is enabled, expected changes present and namespace is "sync"
-		if (ConfigManager.chromeSyncQuests && changes.KC3QuestsData && namespace == "sync") {
-			var newValue = changes.KC3QuestsData.newValue;
-			// Check if remote data structure version is matching with current expected structure
-			if (newValue.syncStructVersion == KC3QuestManager.syncStructVersion) {
-				// Check if local quests version not set or remote version is more then local
-				if ((typeof localStorage.questsVersion == "undefined") || (newValue.questsVersion > localStorage.questsVersion)) {
-					localStorage.questsVersion = newValue.questsVersion;
-					// Check if JSON strings are the same, then there's nothing to do
-					if (newValue.quests === localStorage.quests) { return true; }
-					// Set new quests and reset times
-					localStorage.quests = newValue.quests;
-					localStorage.timeToResetDailyQuests = newValue.timeToResetDailyQuests;
-					localStorage.timeToResetWeeklyQuests = newValue.timeToResetWeeklyQuests;
-					localStorage.timeToResetMonthlyQuests = newValue.timeToResetMonthlyQuests;
-					localStorage.timeToResetQuarterlyQuests = newValue.timeToResetQuarterlyQuests;
-					// Check if desktop notifications enabled
-					if (ConfigManager.dataSyncNotification) {
-						var dt = new Date(+newValue.syncTimeStamp).toLocaleString();
-						chrome.notifications.create("kc3kai_quests", {
-							type: "basic",
-							title: KC3Meta.term("DesktopNotifyQuestsSyncTitle"),
-							message: KC3Meta.term("DesktopNotifyQuestsSyncMessage").format(dt),
-							iconUrl: "../../assets/img/quests/sortie.jpg"
-						});
+		// Check if expected changes present and namespace is "sync"
+		if (changes.KC3QuestsData && namespace == "sync") {
+			// Check if synchronization is enabled
+			ConfigManager.load();
+			if (ConfigManager.chromeSyncQuests) {
+				var newValue = changes.KC3QuestsData.newValue;
+				// Check if remote data structure version is matching with current expected structure
+				if (newValue.syncStructVersion == KC3QuestManager.syncStructVersion) {
+					// Check if local quests version not set or remote version is more then local
+					var dataVer = localStorage.questsVersion;
+					if (typeof dataVer === "undefined"
+						|| Number(newValue.questsVersion) > Number(dataVer)) {
+						localStorage.questsVersion = newValue.questsVersion;
+						// Check if JSON strings are the same, then there's nothing to do
+						if (newValue.quests === localStorage.quests) { return true; }
+						// Set new quests and reset times
+						localStorage.quests = newValue.quests;
+						localStorage.timeToResetDailyQuests = newValue.timeToResetDailyQuests;
+						localStorage.timeToResetWeeklyQuests = newValue.timeToResetWeeklyQuests;
+						localStorage.timeToResetMonthlyQuests = newValue.timeToResetMonthlyQuests;
+						localStorage.timeToResetQuarterlyQuests = newValue.timeToResetQuarterlyQuests;
+						// Check if desktop notifications enabled
+						if (ConfigManager.dataSyncNotification) {
+							var dt = new Date(+newValue.syncTimeStamp).toLocaleString();
+							chrome.notifications.create("kc3kai_quests", {
+								type: "basic",
+								title: KC3Meta.term("DesktopNotifyQuestsSyncTitle"),
+								message: KC3Meta.term("DesktopNotifyQuestsSyncMessage").format(dt),
+								iconUrl: "../../assets/img/quests/sortie.jpg"
+							});
+						}
+					} else {
+						console.info("Quest old version data received, ignored");
 					}
+				} else {
+					console.info("Quest unexpected data structure received, version:", newValue.syncStructVersion);
 				}
+			} else {
+				console.info("Quest data received, ignored as sync disabled by setting");
 			}
 		}
 	});
