@@ -106,9 +106,11 @@
 		Override layout to only show game frame
 		--------------------------------------*/
 		resizeTimer: 0,
+		gameZoomScale: 1,
 		layout: function(){
+			this.gameZoomScale = (config.api_gameScale || 100) / 100;
 			$("body").addClass("kc3");
-			$("body").css({ margin:0, padding:0, 'min-width':800, 'min-height':480 });
+			$("body").css({ margin:0, padding:0, 'min-width':0, 'min-height':0 });
 			$("#main-ntg").css({ position: 'static' });
 			$("#area-game").css({
 				'margin-left': 'auto',
@@ -117,7 +119,7 @@
 				width: 800,
 				height: 480,
 				position: 'relative',
-				zoom: (ConfigManager.api_gameScale || 100) / 100
+				zoom: this.gameZoomScale
 			});
 			$("#game_frame").css({
 				width: 800,
@@ -142,7 +144,7 @@
 				if ($("#game_frame").width() != 800 || $("#game_frame").height() != 480) {
 					self.resizeGameFrame();
 				}
-			}, 30000);
+			}, 10000);
 		},
 		// Resize game frame to 800x480
 		resizeGameFrame: function(){
@@ -151,7 +153,6 @@
 				width: 800,
 				height: 480
 			});
-			$("body").css("min-height", $(window).height());
 		},
 		// Final process on document ready
 		resizeGameFrameFinal: function(){
@@ -170,6 +171,7 @@
 		Let users customize background via settings
 		--------------------------------------*/
 		backgrounds: function(){
+			var self = this;
 			// Top Margin from game frame to window
 			$("#area-game").css("margin-top", config.api_margin+"px");
 
@@ -184,6 +186,23 @@
 				$("body").css("background-size", config.api_bg_size);
 				$("body").css("background-position", config.api_bg_position);
 				$("body").css("background-repeat", "no-repeat");
+			}
+
+			// Keep background image size fitting to window
+			var autoFitWindowHeight = function(){
+				$("body").css("min-height",
+					$(window).height() - self.gameZoomScale * $("#area-game").offset().top
+				);
+			};
+			autoFitWindowHeight();
+			$(window).resize(autoFitWindowHeight);
+
+			// User css customizations
+			if(config.dmm_custom_css !== ""){
+				var customCSS = document.createElement("style");
+				customCSS.type = "text/css";
+				customCSS.innerHTML = ConfigManager.dmm_custom_css;
+				$("head").append(customCSS);
 			}
 		},
 

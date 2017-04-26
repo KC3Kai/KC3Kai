@@ -289,9 +289,10 @@ KC3改 Ship Box for Natsuiro theme
 					((RepairTimes.akashi>0)
 						?String(RepairTimes.akashi).toHHMMSS()
 						:KC3Meta.term("PanelCantRepair"))
-			).lazyInitTooltip();
+			).lazyInitTooltip({ position: { at: "left+25 bottom+5" } });
 		}else{
-			$(".ship_hp_box", this.element).attr("title", KC3Meta.term("PanelNoRepair")).lazyInitTooltip();
+			$(".ship_hp_box", this.element).attr("title", KC3Meta.term("PanelNoRepair"))
+				.lazyInitTooltip({ position: { at: "left+25 bottom+5" } });
 		}
 		
 		// If ship is being repaired
