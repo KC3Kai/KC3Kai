@@ -174,17 +174,9 @@ Retreives when needed to apply on components
 				subtitle_speaker	: false,
 				google_translate	: true,
 				map_markers			: true,
-				
 				dmm_forcecookies	: false,
 				dmm_customize		: false,
-				dmm_translation		: true,
-				dmm_tracking		: true,
-				dmm_askExit			: false,
-				dmm_margin			: 0,
-				dmm_bg_color		: "#def",
-				dmm_bg_image		: "",
-				dmm_bg_size			: "cover",
-				dmm_bg_position		: "top center",
+				dmm_custom_css		: "",
 				
 				pan_theme			: "natsuiro",
 				pan_size			: "big",
