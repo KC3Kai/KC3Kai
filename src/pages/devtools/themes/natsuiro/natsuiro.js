@@ -796,7 +796,7 @@
 		$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/ui/dark_rating.png").css("opacity", "");
 		$(".module.activity .battle_rating").lazyInitTooltip();
 		$(".module.activity .battle_drop img").attr("src", "../../../../assets/img/ui/dark_shipdrop.png");
-		$(".module.activity .battle_drop").removeData("masterId").off("dblclick");
+		$(".module.activity .battle_drop").removeData("masterId").off("dblclick").removeClass("new_ship");
 		$(".module.activity .battle_drop").attr("title", "").lazyInitTooltip();
 		$(".module.activity .battle_cond_value").text("");
 		$(".module.activity .battle_engagement").prev().text(KC3Meta.term("BattleEngangement"));
@@ -2253,6 +2253,7 @@
 						.data("masterId", thisNode.drop)
 						.on("dblclick", this.shipDoubleClickFunction)
 						.attr("title", KC3Meta.shipName( KC3Master.ship(thisNode.drop).api_name ))
+						.toggleClass("new_ship", KC3ShipManager.find(w => RemodelDb.remodelGroup(thisNode.drop) === RemodelDb.remodelGroup(w.masterId)).length === 0)
 						.lazyInitTooltip();
 				}
 
