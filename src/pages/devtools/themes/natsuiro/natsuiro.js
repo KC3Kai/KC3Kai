@@ -2253,8 +2253,10 @@
 						.data("masterId", thisNode.drop)
 						.on("dblclick", this.shipDoubleClickFunction)
 						.attr("title", KC3Meta.shipName( KC3Master.ship(thisNode.drop).api_name ))
-						.toggleClass("new_ship", KC3ShipManager.find(w => RemodelDb.remodelGroup(thisNode.drop) === RemodelDb.remodelGroup(w.masterId)).length === 0)
-						.lazyInitTooltip();
+						.toggleClass("new_ship", KC3ShipManager.count(
+								ship => RemodelDb.originOf(ship.masterId) === RemodelDb.originOf(thisNode.drop)
+							) === 0 // Not own this shipgirl of any remodel form
+						).lazyInitTooltip();
 				}
 
 				// Update Counts
