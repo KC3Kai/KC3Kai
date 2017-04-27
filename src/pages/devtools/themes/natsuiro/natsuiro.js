@@ -938,7 +938,7 @@
 		},
 
 		Consumables: function(data){
-			let getWarnRscCap = max => Math.floor(max * (ConfigManager.alert_rsc_cap / 100));
+			let getWarnRscCap = max => Math.floor(max * (ConfigManager.alert_rsc_cap / 100)) || Infinity;
 			$(".count_fcoin")
 				.text( PlayerManager.consumables.fcoin || 0 )
 				.toggleClass("hardCap", PlayerManager.consumables.fcoin >= getWarnRscCap(PlayerManager.maxCoin));
