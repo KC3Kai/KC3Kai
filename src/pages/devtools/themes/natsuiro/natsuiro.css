@@ -2457,12 +2457,16 @@ ABYSS FLEET
 	width:100%;
 	height:100%;
 }
-
 .module.fleet .lship .ship_repair_tick:before {
-	content:"x" attr(data-tick);
+	content:"+" attr(data-tick);
 }
-
-.module.fleet .lship .ship_repair_tick,
+.module.fleet .lship .ship_repair_tick {
+	width:50%;
+	float:left;
+	text-align:center;
+	background-color:white;
+	color:green;
+}
 .module.fleet .lship .ship_repair_timer {
 	width:50%;
 	float:left;
