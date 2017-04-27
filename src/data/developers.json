@@ -768,7 +768,7 @@
 		{
 			"name": "AboutPartnerKCDBNetName",
 			"desc": "AboutPartnerKCDBNetDesc",
-			"image": "http://kancolle-calc.net/favicon.ico",
+			"image": "http://kancolle-db.net/apple-touch-icon-72x72.png",
 			"links": [
 				"http://kancolle-db.net"
 			]
@@ -776,7 +776,7 @@
 		{
 			"name": "AboutPartnerKCCalcName",
 			"desc": "AboutPartnerKCCalcDesc",
-			"image": "http://kancolle-db.net/apple-touch-icon-72x72.png",
+			"image": "http://kancolle-calc.net/favicon.ico",
 			"links": [
 				"http://kancolle-calc.net"
 			]

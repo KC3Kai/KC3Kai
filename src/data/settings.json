@@ -479,7 +479,7 @@
 				"name" : "SettingsRscCapWarnFrom",
 				"type" : "small_text",
 				"bound" : {
-					"min" :   1,
+					"min" :   0,
 					"max" : 100,
 					"type": "Number"
 				},

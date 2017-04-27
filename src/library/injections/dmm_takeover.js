@@ -188,10 +188,14 @@
 				$("body").css("background-repeat", "no-repeat");
 			}
 
-			// Keep background image size fitting to window
+			// Keep background image size fitting to window, see issue #1824
 			var autoFitWindowHeight = function(){
 				$("body").css("min-height",
-					$(window).height() - self.gameZoomScale * $("#area-game").offset().top
+					// Only suppose for narrow window (such as horizontal panel),
+					// as viewport height will be larger than game player, but computed body height is 0
+					// For wide window, the height may not fit viewport height,
+					// especially when it's smaller than game player, and scrollbar appears
+					$("body").height() - self.gameZoomScale * $("#area-game").offset().top
 				);
 			};
 			autoFitWindowHeight();
