@@ -158,14 +158,34 @@ http://swaytwig.com/opendb/
 		// get data handler based on URL given
 		// `null` is returned if no handler is found
 		processData: function( requestObj ) {
-			var apiName = this.getApiName( requestObj.url );
-			var handler = this.handlers[apiName];
-			if ( handler ) {
-				// bind module to "this"
-				handler.call(this, requestObj);
-				return true;
+			try {
+				var apiName = this.getApiName( requestObj.url );
+				var handler = this.handlers[apiName];
+				if ( handler ) {
+					// bind module to "this"
+					handler.call(this, requestObj);
+					return true;
+				}
+				return false;
+			} catch (e) {
+				console.warn("Poi DB Submission exception:", e.stack);/*RemoveLogging:skip*/
+				// Pop up APIError on unexpected runtime expcetion
+				var reportParams = $.extend({}, requestObj.params);
+				delete reportParams.api_token;
+				KC3Network.trigger("APIError", {
+					title: KC3Meta.term("APIErrorNoticeTitle"),
+					message: KC3Meta.term("APIErrorNoticeMessage").format("PoiDBSubmission"),
+					stack: e.stack,
+					request: {
+						url: requestObj.url,
+						headers: requestObj.headers,
+						statusCode: requestObj.statusCode
+					},
+					params: reportParams,
+					response: requestObj.response,
+					serverUtc: Date.safeToUtcTime(requestObj.headers.Date)
+				});
 			}
-			return false;
 		},
 		cleanup: function() {
 			if (this.state !== null) {
@@ -187,11 +207,9 @@ http://swaytwig.com/opendb/
 				method: "POST",
 				data: data,
 			}).done(function( msg ) {
-				console.log('OpenDB Submission done:');
-				console.log(msg);
-			}).fail(function( jqXHR, textStatus ) {
-				console.log('OpenDB Submission failed: Status ' + textStatus);
-				console.log(jqXHR);
+				console.log("OpenDB Submission done: ", msg);
+			}).fail( function(jqXHR, textStatus, errorThrown) {
+				console.warn( "Poi DB Submission failed:", textStatus, errorThrown);
 			});
 		}
     };
