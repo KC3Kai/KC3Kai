@@ -409,6 +409,7 @@
 				delete localStorage.repotedQuests;
 				delete localStorage.fixed_lbas_ledger;
 				delete localStorage.fixed_ledger_db;
+				delete localStorage.apiUsage;
 				ConfigManager.load();
 				ConfigManager.dismissed_hints = {};
 				ConfigManager.save();

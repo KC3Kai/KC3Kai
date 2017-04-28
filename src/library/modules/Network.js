@@ -127,16 +127,19 @@ Listens to network history and triggers callback if game events happen
 						if(thisRequest.validateData()){
 							// -- Poi DB Submission
 							// turns out "Request.process()" modifies the request,
-							// so we handle the process before that is invoked.
+							// so we handle the process before that is invoked,
+							// and suppose all exceptions thrown are caught already.
 							if (ConfigManager.PoiDBSubmission_enabled) {
 								PoiDBSubmission.processData( thisRequest );
 							}
+							// -- OpenDB Submmission
 							if (ConfigManager.OpenDBSubmission_enabled) {
 								OpenDBSubmission.processData( thisRequest );
 							}
-
+							
 							thisRequest.process();
-							//---Kancolle DB Submission
+							
+							// -- Kancolle DB Submission
 							if (ConfigManager.DBSubmission_enabled && DBSubmission.checkIfDataNeeded(request.request.url)){
 								request.getContent(function(content, encoding){
 									DBSubmission.submitData(request.request.url,request.request.postData, content);
@@ -153,7 +156,7 @@ Listens to network history and triggers callback if game events happen
 							// Only prevent the data parsing error
 							message.api_status = e.name;
 							message.api_result = e.message;
-							console.error("Prevented ",e.name,e.message,e.stack);/*RemoveLogging:skip*/
+							console.error("Prevented", e.name, e.message, e.stack);/*RemoveLogging:skip*/
 						} finally {
 							(new RMsg("service", "gameScreenChg", message)).execute();
 						}

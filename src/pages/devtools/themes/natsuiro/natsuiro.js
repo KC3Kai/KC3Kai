@@ -77,7 +77,7 @@
 	// Experience Calculation
 	var mapexp = [], maplist = {}, rankFactors = [0, 0.5, 0.7, 0.8, 1, 1, 1.2];
 
-	// Error reporting
+	// Reusable contents of Error Report
 	var errorReport = {
 		title: "",
 		message: "",
@@ -86,9 +86,9 @@
 		params: "",
 		response: "",
 		serverUtc: 0,
-		kc3Version: "",
+		kc3Version: [chrome.runtime.getManifest().name, chrome.runtime.getManifest().version].join(" "),
 		dmmPlay: "",
-		extractApi: "",
+		gameTabUrl: "",
 		userAgent: "",
 		utc: 0
 	};
@@ -691,15 +691,19 @@
 		});
 		KC3Network.listen();
 
-		// Get if inspected tab is muted, and update the mute icon
-		(new RMsg("service", "isMuted", {
+		// Get info of the inspected tab
+		(new RMsg("service", "getTabInfo", {
 			tabId: chrome.devtools.inspectedWindow.tabId
-		}, function(isMuted){
-			if(isMuted){
-				$(".module.controls .btn_mute img").attr("src", "img/mute-x.png");
-			}
+		}, function(tabInfo){
+			errorReport.gameTabUrl = tabInfo.url;
+			// if inspected tab is muted, update the mute icon
+			try {
+				if(tabInfo.mutedInfo.muted){
+					$(".module.controls .btn_mute img").attr("src", "../../../../assets/img/ui/mute-x.png");
+				}
+			} catch(e) {}
 		})).execute();
-
+		
 		// Attempt to activate game on inspected window
 		(new RMsg("service", "activateGame", {
 			tabId: chrome.devtools.inspectedWindow.tabId
@@ -877,9 +881,7 @@
 				errorReport.params = JSON.stringify(data.params);
 				errorReport.response = data.response;
 				errorReport.serverUtc = data.serverUtc;
-				errorReport.kc3Version = data.kc3Manifest;
 				errorReport.dmmPlay = localStorage.dmmplay;
-				errorReport.extractApi = localStorage.extract_api;
 				errorReport.userAgent = navigator.userAgent;
 				errorReport.utc = Date.now();
 			} else {
