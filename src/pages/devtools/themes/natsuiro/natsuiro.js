@@ -1051,15 +1051,15 @@
 			// Repair faces
 			KC3TimerManager._repair[0].face().lazyInitTooltip();
 			KC3TimerManager._repair[1].face().lazyInitTooltip();
-			KC3TimerManager._repair[2].face().lazyInitTooltip();
-			KC3TimerManager._repair[3].face().lazyInitTooltip();
+			KC3TimerManager._repair[2].face(undefined, PlayerManager.repairSlots < 3).lazyInitTooltip();
+			KC3TimerManager._repair[3].face(undefined, PlayerManager.repairSlots < 4).lazyInitTooltip();
 
 			// Construction faces
 			if(ConfigManager.info_face){
 				KC3TimerManager._build[0].face().lazyInitTooltip();
 				KC3TimerManager._build[1].face().lazyInitTooltip();
-				KC3TimerManager._build[2].face().lazyInitTooltip();
-				KC3TimerManager._build[3].face().lazyInitTooltip();
+				KC3TimerManager._build[2].face(undefined, PlayerManager.buildSlots < 3).lazyInitTooltip();
+				KC3TimerManager._build[3].face(undefined, PlayerManager.buildSlots < 4).lazyInitTooltip();
 			}
 		},
 
@@ -1141,9 +1141,9 @@
 				KC3TimerManager._exped[0].faceId = PlayerManager.fleets[1].ship(0).masterId;
 				KC3TimerManager._exped[1].faceId = PlayerManager.fleets[2].ship(0).masterId;
 				KC3TimerManager._exped[2].faceId = PlayerManager.fleets[3].ship(0).masterId;
-				KC3TimerManager._exped[0].face().lazyInitTooltip();
-				KC3TimerManager._exped[1].face().lazyInitTooltip();
-				KC3TimerManager._exped[2].face().lazyInitTooltip();
+				KC3TimerManager._exped[0].face(undefined, PlayerManager.fleetCount < 2).lazyInitTooltip();
+				KC3TimerManager._exped[1].face(undefined, PlayerManager.fleetCount < 3).lazyInitTooltip();
+				KC3TimerManager._exped[2].face(undefined, PlayerManager.fleetCount < 4).lazyInitTooltip();
 			}
 
 			// TAIHA ALERT CHECK

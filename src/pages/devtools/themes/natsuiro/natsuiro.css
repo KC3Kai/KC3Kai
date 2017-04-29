@@ -489,6 +489,13 @@ html,body {
 	background:#996600;
 }
 
+.module.activity .timer-img.locked {
+	background-image:url(../../../../assets/img/ui/lock.png);
+	background-size:17px;
+	background-position:3px 3px;
+	background-repeat:no-repeat;
+}
+
 /*------- ACTIVITY: BATTLE -------*/
 .module.activity .activity_battle {
 	white-space:nowrap;
