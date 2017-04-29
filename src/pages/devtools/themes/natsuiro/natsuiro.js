@@ -1652,7 +1652,8 @@
 								
 								paddedId = (itemObj.masterId<10?"00":itemObj.masterId<100?"0":"")+itemObj.masterId;
 								eqImgSrc = "../../../../assets/img/planes/"+paddedId+".png";
-								$(".base_plane_img img", planeBox).attr("src", eqImgSrc);
+								$(".base_plane_img img", planeBox).attr("src", eqImgSrc)
+									.error(function() { $(this).unbind("error").attr("src", "../../../../assets/img/ui/empty.png"); });
 								$(".base_plane_img", planeBox)
 									.attr("title", $(".base_plane_name", planeBox).text())
 									.lazyInitTooltip()
@@ -1660,7 +1661,8 @@
 									.on("dblclick", self.gearDoubleClickFunction);
 								
 								eqIconSrc = "../../../../assets/img/items/"+itemObj.master().api_type[3]+".png";
-								$(".base_plane_icon img", planeBox).attr("src", eqIconSrc);
+								$(".base_plane_icon img", planeBox).attr("src", eqIconSrc)
+									.error(function() { $(this).unbind("error").attr("src", "../../../../assets/img/ui/empty.png"); });
 								
 								if (itemObj.stars > 0) {
 									$(".base_plane_star", planeBox).text(itemObj.stars);
