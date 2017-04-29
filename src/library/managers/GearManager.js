@@ -9,7 +9,7 @@ Saves and loads list to and from localStorage
 	
 	window.KC3GearManager = {
 		list: {},
-		max: 497,
+		max: 500,
 		pendingGearNum: 0,
 
 		carrierBasedAircraftType3Ids: [6,7,8,9,10,21,22,33,39,40,43],
