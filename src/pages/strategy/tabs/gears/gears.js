@@ -94,7 +94,7 @@
 			"t42": "ev",
 			// seaplane fighter
 			"t43": "aa",
-			// new land interceptor
+			// land base fighter (new interceptor)
 			"t44": "aa",
 			// all types
 			"tall": "type",

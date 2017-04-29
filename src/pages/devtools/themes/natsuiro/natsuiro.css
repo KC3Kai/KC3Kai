@@ -2308,7 +2308,7 @@ ABYSS FLEET
 	overflow:hidden;
 }
 .module.fleet .lship .ex_item.item_being_used {
-	background:#f99;
+	background:#fe3;
 }
 .module.fleet .lship .ex_item.goddess {
 	box-shadow:0px 0px 4px #ff0,
@@ -2582,14 +2582,14 @@ ABYSS FLEET
 	border-radius:9px;
 	margin:1px 3px 0px 0px;
 }
-.module.fleet .lship .ship_gear_icon.item_being_used {
-	background:#f99;
-}
 .module.fleet .lship .ship_gear.equipped .ship_gear_icon {
 	background:#fff;
 }
 .module.fleet .lship .ship_gear.empty .ship_gear_icon {
 	background:rgba(150,150,150,0.4);
+}
+.module.fleet .lship .ship_gear_icon.item_being_used {
+	background:#fe3;
 }
 .module.fleet .lship .ship_gear_icon.goddess {
 	box-shadow:0px 0px 4px #ff0,
@@ -2699,7 +2699,7 @@ ABYSS FLEET
 	overflow:hidden;
 }
 .module.fleet .sship .ex_item.item_being_used {
-	background:#f99;
+	background:#fe3;
 }
 .module.fleet .sship .ex_item.goddess {
 	box-shadow:0px 0px 4px #ff0,

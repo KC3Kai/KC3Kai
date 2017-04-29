@@ -1243,6 +1243,7 @@
 
 			var thisNode = KC3SortieManager.onSortie ? KC3SortieManager.currentNode() || {} : {};
 			var dameConConsumed = false;
+			var flarePos = thisNode.flarePos || 0;
 
 			// COMBINED
 			if(selectedFleet==5){
@@ -1255,7 +1256,9 @@
 						if(KC3SortieManager.onSortie && KC3SortieManager.fleetSent === 1){
 							dameConConsumed = (thisNode.dameConConsumed || [])[index];
 						}
-						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars, dameConConsumed))
+						var starShellUsed = (flarePos == index+1) &&
+							!PlayerManager.combinedFleet && KC3SortieManager.fleetSent === 1;
+						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars, dameConConsumed, starShellUsed))
 							.commonElements()
 							.defineShort( MainFleet )
 							.appendTo(".module.fleet .shiplist_main");
@@ -1274,7 +1277,10 @@
 								dameConConsumed = (thisNode.dameConConsumed || [])[index];
 							}
 						}
-						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars, dameConConsumed))
+						var starShellUsed = (flarePos == index+1) &&
+							((!!PlayerManager.combinedFleet && KC3SortieManager.fleetSent === 1) ||
+							(!PlayerManager.combinedFleet && KC3SortieManager.fleetSent === 2));
+						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars, dameConConsumed, starShellUsed))
 							.commonElements(true)
 							.defineShort( EscortFleet )
 							.appendTo(".module.fleet .shiplist_escort");
@@ -1346,7 +1352,9 @@
 						if(KC3SortieManager.onSortie && selectedFleet === KC3SortieManager.fleetSent){
 							dameConConsumed = (thisNode.dameConConsumed || [])[index];
 						}
-						(new KC3NatsuiroShipbox(".lship", rosterId, showCombinedFleetBars, dameConConsumed))
+						var starShellUsed = (flarePos == index+1) &&
+							selectedFleet === KC3SortieManager.fleetSent;
+						(new KC3NatsuiroShipbox(".lship", rosterId, showCombinedFleetBars, dameConConsumed, starShellUsed))
 							.commonElements()
 							.defineLong( CurrentFleet )
 							.appendTo(".module.fleet .shiplist_single");
