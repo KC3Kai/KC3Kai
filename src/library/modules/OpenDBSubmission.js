@@ -94,7 +94,7 @@ http://swaytwig.com/opendb/
 		},
 		processStartNext: function( requestObj ) {
 			this.cleanup();
-			if(KC3ShipManager.count() >= KC3ShipManager.max || KC3GearManager.count() >= KC3GearManager.max)
+			if(KC3ShipManager.count() >= KC3ShipManager.max || (KC3GearManager.max - KC3GearManager.count()) <= 3)
 				return;
 			var response = requestObj.response.api_data;
 
@@ -168,13 +168,13 @@ http://swaytwig.com/opendb/
 				}
 				return false;
 			} catch (e) {
-				console.warn("Poi DB Submission exception:", e.stack);/*RemoveLogging:skip*/
+				console.warn("Open DB Submission exception:", e.stack);/*RemoveLogging:skip*/
 				// Pop up APIError on unexpected runtime expcetion
 				var reportParams = $.extend({}, requestObj.params);
 				delete reportParams.api_token;
 				KC3Network.trigger("APIError", {
 					title: KC3Meta.term("APIErrorNoticeTitle"),
-					message: KC3Meta.term("APIErrorNoticeMessage").format("PoiDBSubmission"),
+					message: KC3Meta.term("APIErrorNoticeMessage").format("OpenDBSubmission"),
 					stack: e.stack,
 					request: {
 						url: requestObj.url,
@@ -209,7 +209,7 @@ http://swaytwig.com/opendb/
 			}).done(function( msg ) {
 				console.log("OpenDB Submission done: ", msg);
 			}).fail( function(jqXHR, textStatus, errorThrown) {
-				console.warn( "Poi DB Submission failed:", textStatus, errorThrown);
+				console.warn( "OpenDB Submission failed:", textStatus, errorThrown);
 			});
 		}
     };
