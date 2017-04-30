@@ -1241,7 +1241,8 @@
 			$(".airbase_list").empty();
 			$(".airbase_list").hide();
 
-			var thisNode = KC3SortieManager.onSortie ? KC3SortieManager.currentNode() || {} : {};
+			var thisNode = KC3SortieManager.onSortie || KC3SortieManager.isPvP() ?
+				KC3SortieManager.currentNode() || {} : {};
 			var dameConConsumed = false;
 			var flarePos = thisNode.flarePos || 0;
 

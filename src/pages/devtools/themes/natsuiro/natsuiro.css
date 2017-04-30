@@ -423,6 +423,12 @@ html,body {
 	height:25px;
 	margin:2px;
 }
+.module.activity .expeditions .timer-img.locked {
+	background-image:url(../../../../assets/img/ui/lock.png);
+	background-size:19px;
+	background-position:5px 5px;
+	background-repeat:no-repeat;
+}
 .module.activity .expeditions .timer-expnum {
 	height:14px;
 	line-height:14px;
@@ -489,7 +495,8 @@ html,body {
 	background:#996600;
 }
 
-.module.activity .timer-img.locked {
+.module.activity .repairs .timer-img.locked,
+.module.activity .builds .timer-img.locked {
 	background-image:url(../../../../assets/img/ui/lock.png);
 	background-size:17px;
 	background-position:3px 3px;
@@ -2592,11 +2599,11 @@ ABYSS FLEET
 .module.fleet .lship .ship_gear.equipped .ship_gear_icon {
 	background:#fff;
 }
+.module.fleet .lship .ship_gear.equipped .ship_gear_icon.item_being_used {
+	background:#fe3;
+}
 .module.fleet .lship .ship_gear.empty .ship_gear_icon {
 	background:rgba(150,150,150,0.4);
-}
-.module.fleet .lship .ship_gear_icon.item_being_used {
-	background:#fe3;
 }
 .module.fleet .lship .ship_gear_icon.goddess {
 	box-shadow:0px 0px 4px #ff0,
