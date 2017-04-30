@@ -221,6 +221,15 @@ Uses Dexie.js third-party plugin on the assets directory
 							console.log("Database v74", t);
 						},
 						vr: 74,
+					},
+					{
+						ch: {
+							experience: "++id,hq,exp,level,hour",
+						},
+						up: function(t){
+							console.log("Database v75", t);
+						},
+						vr: 75,
 					}
 					/*
 					Database versions are only integers, no decimals.
@@ -317,6 +326,11 @@ Uses Dexie.js third-party plugin on the assets directory
 		Useitem :function(data, stime){
 			data.hq = this.index;
 			this.con.useitem.add(data);
+		},
+
+		Experience :function(data, stime){
+			data.hq = this.index;
+			this.con.experience.add(data);
 		},
 		
 		Screenshot :function(imgur, deletehash){

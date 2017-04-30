@@ -88,7 +88,9 @@ Previously known as "Reactor"
 			KC3ShipManager.set(response.api_data.api_ship,true);
 			this.serverOffset = this.moraleRefresh.calibrate( headers.Date );
 			
-			PlayerManager.setHQ({
+			var utcSeconds = Date.toUTCseconds(headers.Date);
+
+			PlayerManager.setHQ(utcSeconds, {
 				mid: response.api_data.api_basic.api_member_id,
 				name: response.api_data.api_basic.api_nickname,
 				nameId: response.api_data.api_basic.api_nickname_id,
@@ -107,8 +109,6 @@ Previously known as "Reactor"
 			PlayerManager.setFleets( response.api_data.api_deck_port );
 			PlayerManager.setRepairDocks( response.api_data.api_ndock );
 			PlayerManager.buildSlots = response.api_data.api_basic.api_count_kdock;
-			
-			var utcSeconds = Date.toUTCseconds(headers.Date);
 			
 			PlayerManager.portRefresh(utcSeconds,
 				response.api_data.api_material.slice(0,4).map(x=>x.api_value))
@@ -161,7 +161,7 @@ Previously known as "Reactor"
 		/* User Basic Information
 		-------------------------------------------------------*/
 		"api_get_member/basic":function(params, response, headers){
-			PlayerManager.setHQ({
+			PlayerManager.setHQ(Date.toUTCseconds(headers.Date), {
 				mid: response.api_data.api_member_id,
 				name: response.api_data.api_nickname,
 				nameId: response.api_data.api_nickname_id,
@@ -204,7 +204,7 @@ Previously known as "Reactor"
 		/* HQ Record Screen
 		-------------------------------------------------------*/
 		"api_get_member/record":function(params, response, headers){
-			PlayerManager.setHQ({
+			PlayerManager.setHQ(Date.toUTCseconds(headers.Date), {
 				mid: response.api_data.api_member_id,
 				name: response.api_data.api_nickname,
 				nameId: response.api_data.api_nickname_id,
