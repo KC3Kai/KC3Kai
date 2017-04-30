@@ -1254,11 +1254,11 @@
 				// Show ships on main fleet
 				$.each(MainFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						if(KC3SortieManager.onSortie && KC3SortieManager.fleetSent === 1){
+						if(KC3SortieManager.onSortie && KC3SortieManager.fleetSent == 1){
 							dameConConsumed = (thisNode.dameConConsumed || [])[index];
 						}
 						var starShellUsed = (flarePos == index+1) &&
-							!PlayerManager.combinedFleet && KC3SortieManager.fleetSent === 1;
+							!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 1;
 						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars, dameConConsumed, starShellUsed))
 							.commonElements()
 							.defineShort( MainFleet )
@@ -1270,17 +1270,17 @@
 				$.each(EscortFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
 						if(KC3SortieManager.onSortie){
-							if(!!PlayerManager.combinedFleet && KC3SortieManager.fleetSent === 1){
+							if(!!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 1){
 								// Send combined fleet, get escort info
 								dameConConsumed = (thisNode.dameConConsumedEscort || [])[index];
-							} else if(!PlayerManager.combinedFleet && KC3SortieManager.fleetSent === 2){
+							} else if(!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 2){
 								// Not combined, but send fleet #2, get regular info
 								dameConConsumed = (thisNode.dameConConsumed || [])[index];
 							}
 						}
 						var starShellUsed = (flarePos == index+1) &&
-							((!!PlayerManager.combinedFleet && KC3SortieManager.fleetSent === 1) ||
-							(!PlayerManager.combinedFleet && KC3SortieManager.fleetSent === 2));
+							((!!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 1) ||
+							(!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 2));
 						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars, dameConConsumed, starShellUsed))
 							.commonElements(true)
 							.defineShort( EscortFleet )
@@ -1350,11 +1350,11 @@
 				// Show ships on selected fleet
 				$.each(CurrentFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						if(KC3SortieManager.onSortie && selectedFleet === KC3SortieManager.fleetSent){
+						if(KC3SortieManager.onSortie && selectedFleet == KC3SortieManager.fleetSent){
 							dameConConsumed = (thisNode.dameConConsumed || [])[index];
 						}
 						var starShellUsed = (flarePos == index+1) &&
-							selectedFleet === KC3SortieManager.fleetSent;
+							selectedFleet == KC3SortieManager.fleetSent;
 						(new KC3NatsuiroShipbox(".lship", rosterId, showCombinedFleetBars, dameConConsumed, starShellUsed))
 							.commonElements()
 							.defineLong( CurrentFleet )
@@ -2566,13 +2566,13 @@
 			$(".module.activity .abyss_combined").hide();
 			
 			// Process PvP Battle
-			KC3SortieManager.fleetSent = data.fleetSent;
+			KC3SortieManager.fleetSent = parseInt(data.fleetSent, 10);
 			KC3SortieManager.onPvP = true;
 
 			var thisPvP;
 			KC3SortieManager.nodes.push(thisPvP = (new KC3Node()).defineAsBattle());
 			thisPvP.isPvP = true;
-			thisPvP.engage( data.battle,data.fleetSent );
+			thisPvP.engage( data.battle, data.fleetSent );
 
 			// PvP battle activities data should be hidden when `info_compass` turned off,
 			// Here left it unfixed to keep identical.

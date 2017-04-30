@@ -745,7 +745,11 @@ body {
 	display: none;
 }
 .tab_fleet button:disabled {
-	color: #AAA;
+	color: #aaa;
+}
+.tab_fleet select:disabled {
+	color: #aaa;
+	background: #ebebe4;
 }
 .tab_fleet .fleet_box {
 	height:215px;
