@@ -791,6 +791,11 @@
 				rcontext.drawImage( domImg, 0, 0, 400, 400, 0, 0, 400, 400 );
 				
 				KC3Database.get_sortie_data( sortieId, function(sortieData){
+					var mapdata = JSON.parse(localStorage.maps)["m"+sortieData.world+sortieData.mapnum];
+					var bossStat = mapdata.stat.onBoss;
+					sortieData.defeat_count = mapdata.kills;
+					sortieData.now_maphp = bossStat.hpdat[sortieData.id][0];
+					sortieData.max_maphp = bossStat.hpdat[sortieData.id][1];
 					if(sortieData.battles.length===0){
 						self.exportingReplay = false;
 						$("body").css("opacity", "1");
