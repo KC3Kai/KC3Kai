@@ -228,5 +228,54 @@
 			return this;
 		};
 	}(jQuery));
+	
+	/**
+	 * Simulate throttle/debounce func like the ones in lodash
+	 * docs see: https://github.com/cowboy/jquery-throttle-debounce
+	 * note: not actually depend on jQuery, just bind them to $
+	 */
+	(function($) {
+		var jq_throttle = function(delay, no_trailing, callback, this_obj, debounce_mode) {
+			var timeout_id, last_exec = 0;
+			if ( typeof no_trailing !== 'boolean' ) {
+				debounce_mode = callback;
+				callback = no_trailing;
+				no_trailing = undefined;
+			}
+			function wrapper() {
+				/* jshint validthis:true */
+				var self = this || this_obj, args = arguments;
+				var elapsed = Date.now() - last_exec;
+				function exec() {
+					last_exec = Date.now();
+					callback.apply( self, args );
+				}
+				function clear() {
+					timeout_id = undefined;
+				}
+				if ( debounce_mode && !timeout_id ) {
+					exec();
+				}
+				if ( timeout_id ) {
+					clearTimeout( timeout_id );
+				}
+				if ( debounce_mode === undefined && elapsed > delay ) {
+					exec();
+				} else if ( no_trailing !== true ) {
+					timeout_id = setTimeout( debounce_mode ? clear : exec, debounce_mode === undefined ? delay - elapsed : delay );
+				}
+			}
+			if ( $.guid ) {
+				wrapper.guid = callback.guid = callback.guid || $.guid++;
+			}
+			return wrapper;
+		};
+		$.throttle = jq_throttle;
+		$.debounce = function(delay, at_begin, callback, this_obj) {
+			return callback === undefined
+				? jq_throttle( delay, at_begin, false )
+				: jq_throttle( delay, callback, at_begin !== false, this_obj );
+		};
+	}(jQuery));
 
 })();

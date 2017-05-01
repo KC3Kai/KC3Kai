@@ -87,7 +87,7 @@ Previously known as "Reactor"
 			this.serverOffset = this.moraleRefresh.calibrate( headers.Date );
 			
 			var utcSeconds = Date.toUTCseconds(headers.Date);
-
+			
 			PlayerManager.setHQ(utcSeconds, {
 				mid: response.api_data.api_basic.api_member_id,
 				name: response.api_data.api_basic.api_nickname,

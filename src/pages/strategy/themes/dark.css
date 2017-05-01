@@ -145,7 +145,7 @@ button, input, select, textarea {
 -------------------------------*/
 #content {
 	width:700px;
-	min-height:1320px;
+	min-height:1300px;
 	float:left;
 	background:#222222;
 	overflow:hidden;
