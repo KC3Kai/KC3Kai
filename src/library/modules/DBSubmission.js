@@ -74,12 +74,11 @@ Listens to network history and triggers callback if game events happen
 				});
 
 				post.done(function( msg ) {
-					console.log('DB Submission done:');
-					console.log(msg);
+					console.log('DB Submission done:', msg);
 				});
 
 				post.fail(function( jqXHR, textStatus ) {
-					console.log('DB Submission failed: Status ' + textStatus);
+					console.log('DB Submission failed:', textStatus);
 					console.log(jqXHR);
 				});
 			}

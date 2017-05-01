@@ -261,14 +261,34 @@
 		// get data handler based on URL given
 		// `null` is returned if no handler is found
 		processData: function( requestObj ) {
-			var apiName = this.getApiName( requestObj.url );
-			var handler = this.handlers[apiName];
-			if ( handler ) {
-				// bind module to "this"
-				handler.call(this, requestObj);
-				return true;
+			try {
+				var apiName = this.getApiName( requestObj.url );
+				var handler = this.handlers[apiName];
+				if ( handler ) {
+					// bind module to "this"
+					handler.call(this, requestObj);
+					return true;
+				}
+				return false;
+			} catch (e) {
+				console.warn("Poi DB Submission exception:", e.stack);/*RemoveLogging:skip*/
+				// Pop up APIError on unexpected runtime expcetion
+				var reportParams = $.extend({}, requestObj.params);
+				delete reportParams.api_token;
+				KC3Network.trigger("APIError", {
+					title: KC3Meta.term("APIErrorNoticeTitle"),
+					message: KC3Meta.term("APIErrorNoticeMessage").format("PoiDBSubmission"),
+					stack: e.stack,
+					request: {
+						url: requestObj.url,
+						headers: requestObj.headers,
+						statusCode: requestObj.statusCode
+					},
+					params: reportParams,
+					response: requestObj.response,
+					serverUtc: Date.safeToUtcTime(requestObj.headers.Date)
+				});
 			}
-			return false;
 		},
 		cleanup: function() {
 			if (this.state !== null) {
@@ -281,7 +301,7 @@
 			this.dropShipData = null;
 		},
 		sendData: function(target, payload) {
-			var server = "http://poi.0u0.moe" ;
+			var server = "http://poi.0u0.moe";
 			var url = server + "/api/report/v2/" + target;
 			var myVersion = chrome.runtime.getManifest().version;
 			var client = "KC3Kai " + myVersion;
@@ -295,11 +315,8 @@
 				},
 			}).done( function() {
 				console.log( "Poi DB Submission done." );
-			}).fail( function(jqXHR,textStatus,errorThrown) {
-				console.warn( "Poi DB Submission failed." );
-				console.warn( textStatus );
-				console.warn( errorThrown );
-				console.warn( jqXHR.status );
+			}).fail( function(jqXHR, textStatus, errorThrown) {
+				console.warn( "Poi DB Submission failed:", textStatus, errorThrown);
 			});
 			return;
 		}
