@@ -814,6 +814,18 @@
 		]
 	},
 	{
+		"section": "SettingsOpenDBSubmission",
+		"help" : "",
+		"contents" :[
+			{
+				"id" : "OpenDBSubmission_enabled",
+				"name" : "SettingsEnableOpenDBSubmission",
+				"type" : "check",
+				"options" : {}
+			}
+		]
+	},
+	{
 		"section": "Panel",
 		"help" : "https://github.com/KC3Kai/KC3Kai/wiki/Settings%3A-Panel",
 		"contents" : [

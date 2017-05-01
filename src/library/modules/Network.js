@@ -131,6 +131,9 @@ Listens to network history and triggers callback if game events happen
 							if (ConfigManager.PoiDBSubmission_enabled) {
 								PoiDBSubmission.processData( thisRequest );
 							}
+							if (ConfigManager.OpenDBSubmission_enabled) {
+								OpenDBSubmission.processData( thisRequest );
+							}
 
 							thisRequest.process();
 							//---Kancolle DB Submission
