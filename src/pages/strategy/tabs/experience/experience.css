@@ -1,0 +1,130 @@
+.tab_experience {
+	width:680px;
+}
+.tab_experience .legend_item {
+	width:150px;
+	height:20px;
+	float:left;
+}
+.tab_experience .legend_toggle {
+	width:20px;
+	height:20px;
+	line-height:20px;
+	float:left;
+}
+.tab_experience .legend_color {
+	width:14px;
+	height:14px;
+	margin:3px 5px 0px 3px;
+	float:left;
+}
+.tab_experience .color_exp {
+	background:#239E9f;
+}
+.tab_experience .color_level {
+	background:#AAFFAA;
+}
+.tab_experience .legend_icon {
+	width:20px;
+	height:20px;
+	margin:0px 5px 0px 0px;
+	float:left;
+}
+.tab_experience .legend_icon img {
+	width:16px;
+	height:16px;
+	margin:2px;
+}
+.tab_experience .legend_label {
+	width:70px;
+	float:left;
+}
+
+.tab_experience .graph_option {
+	float:left;
+	margin:0px 5px 0px 0px;
+	/*background:#cfc;*/
+}
+.tab_experience .graph_option div {
+	line-height:20px;
+	float:left;
+}
+.tab_experience .graph_option label {
+	font-weight:normal;
+	font-size:12px;
+}
+/* Start at zero */
+.tab_experience .graph_check {
+	margin:0px 20px 0px 0px;
+}
+.tab_experience .checkbox_input {
+	margin:0px 3px 0px 0px;
+}
+.tab_experience .checkbox_label {
+	
+}
+/* Date range */
+.tab_experience .graph_date {
+	width:160px;
+	margin:0px 15px 0px 0px;
+}
+.tab_experience .date_label {
+	width:40px;
+}
+.tab_experience .date_input {
+	width:120px;
+}
+.tab_experience .date_input input {
+	width:120px;
+	height:18px;
+	margin:1px 0px 0px 0px;
+	font-size:12px;
+}
+/* Interval */
+.tab_experience .graph_dropdown {
+	width:120px;
+}
+.tab_experience .dropdown_label {
+	width:45px;
+}
+.tab_experience .dropdown_input {
+	width:75px;
+}
+.tab_experience .dropdown_input select {
+	width:75px;
+	height:18px;
+	margin:1px 0px 0px 0px;
+	font-size:12px;
+}
+
+/* Filter presets */
+.tab_experience .preset_label {
+	height:22px;
+	line-height:22px;
+	float:left;
+	font-size:12px;
+	color:#aaa;
+	margin:0px 10px 0px 0px;
+}
+.tab_experience .option_preset {
+	height:22px;
+	line-height:22px;
+	float:left;
+	font-size:12px;
+	margin:0px 0px 0px 20px;
+}
+
+.tab_experience .main_graph {
+	margin:15px 0px 0px 0px;
+}
+.tab_experience .loading {
+	margin:2px 3px 0px 0px;
+	float:left;
+	display:block;
+}
+.tab_experience .loading img {
+	content:url(../../../../assets/img/ui/indicator.svg);
+	width:20px;
+	height:20px;
+	display:block;
+}

@@ -357,6 +357,20 @@ button, input, select, textarea {
 .tab_consumables .option_preset {
 	color:#eee;
 }
+/* Experience */
+.tab_experience .legend_color {
+	border:1px solid #000000;
+}
+.tab_experience .date_input input {
+	border:1px solid #555;
+	background:#333;
+}
+.tab_experience .dropdown_input select {
+	border:1px solid #555;
+}
+.tab_experience .option_preset {
+	color:#eee;
+}
 /* Showcase */
 .tab_showcase .stype_box {
 	height:128px !important;
