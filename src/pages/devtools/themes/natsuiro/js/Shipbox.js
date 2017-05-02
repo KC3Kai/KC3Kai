@@ -4,11 +4,12 @@ KC3改 Ship Box for Natsuiro theme
 (function(){
 	"use strict";
 	
-	window.KC3NatsuiroShipbox = function( base, rosterId, showCombinedFleetBars, dameConConsumed ){
+	window.KC3NatsuiroShipbox = function( base, rosterId, showCombinedFleetBars, dameConConsumed, isStarShellUsed ){
 		this.element = $("#factory "+base).clone();
 		this.element.attr("id", "ShipBox"+rosterId);
 		this.shipData = KC3ShipManager.get( rosterId );
 		this.dameConConsumed = dameConConsumed || false;
+		this.starShellUsed = isStarShellUsed || false;
 		
 		this.showCombinedFleetBars = true;
 		if(typeof showCombinedFleetBars != "undefined"){
@@ -152,11 +153,11 @@ KC3改 Ship Box for Natsuiro theme
 		}else{
 			$(".ex_item", this.element).hide();
 		}
-		if(this.dameConConsumed.pos == 4){
-			$(".ex_item", this.element).addClass("item_being_used");
-		} else {
-			$(".ex_item", this.element).removeClass("item_being_used");
-		}
+		$(".ex_item", this.element).toggleClass("item_being_used",
+			ConfigManager.info_battle && (this.dameConConsumed.pos == 4 ||
+				// Although starshell not equippable at ex-slot for now
+				(this.starShellUsed && myExItem.masterId == 101))
+		);
 		
 		// MVP icon
 		if(this.shipData.mvp){
@@ -459,11 +460,14 @@ KC3改 Ship Box for Natsuiro theme
 					$(".ship_gear_"+(slot+1)+" .ship_gear_star", this.element).text(thisGear.stars);
 				}
 				
-				// Check damecon if prediction is enabled
-				if(this.dameConConsumed && ConfigManager.info_battle){
-					if(this.dameConConsumed.pos == slot){
-						$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element).addClass("item_being_used");
-					}
+				// Check damecon or starshell if prediction is enabled
+				if(ConfigManager.info_battle){
+					$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element).toggleClass("item_being_used",
+						// Consumed damecon slot
+						this.dameConConsumed.pos == slot ||
+						// Mark all equipped starshell
+						(this.starShellUsed && thisGear.masterId == 101)
+					);
 				} else {
 					$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element).removeClass("item_being_used");
 				}

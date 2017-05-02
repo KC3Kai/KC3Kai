@@ -35,7 +35,8 @@
 }
 
 .tab_fleet button:disabled {
-	color: #AAA;
+}
+.tab_fleet select:disabled {
 }
 
 /* FLEET BOX

@@ -45,7 +45,7 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 		if(response.value && response.storage){
 			// Change osapi whole page zoom based on configured scale
 			if( // if dmm site play mode and customize enabled
-				(response.value[1] && response.storage[0] == "true" && response.storage[1] == "false")
+				(response.value[1] && response.storage[0] == "true")
 				// if dmm frame or api link play mode
 				|| response.storage[0] == "false" || response.storage[1] == "true"
 			){
@@ -53,7 +53,7 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 				document.body.style.zoom = (response.value[0] || 100) / 100;
 			}
 			// For dmm site play mode
-			if(response.value[1] && response.storage[0] == "true" && response.storage[1] == "false"){
+			if(response.value[1] && response.storage[0] == "true"){
 				// Hide spacing top
 				document.getElementById("spacing_top").style = "height:0px;display:none;";
 				// Prevent Tab key scrolling

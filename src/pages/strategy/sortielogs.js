@@ -379,18 +379,29 @@
 			var self = this;
 			var countPages = Math.ceil( countSorties / this.itemsPerPage );
 			$(".tab_"+tabCode+" .page_list").html('<ul class="pagination pagination-sm"></ul>');
-			
+			var twbsPageObj;
+			// Because showPage() is using async DB operation and time expensive (ofen > 1000ms),
+			// to prevent adding elements to list duplicatedly when switch between pages/maps quickly,
+			// should stop to re-enter it during a quota of time wait.
+			if(self.showPageTime && !self.debouncedShowPage){
+				self.debouncedShowPage = $.debounce(250 + self.showPageTime,
+					self.showPageTime > 500, self.showPage, self);
+			}
 			if(countPages > 0){
-				$(".tab_"+tabCode+" .pagination").twbsPagination({
+				twbsPageObj = $(".tab_"+tabCode+" .pagination").twbsPagination({
 					totalPages: countPages,
 					visiblePages: 9,
-					onPageClick: function (event, page) {
-						self.pageNum = page;
-						self.showPage();
+					onPageClick: function(event, page) {
+						// only reload on different page, as event also triggered after init or enabled
+						if(self.pageNum != page){
+							self.showPage(page, twbsPageObj);
+						}
 					}
 				});
-				self.pageNum = 1;
-				self.showPage();
+				if(self.debouncedShowPage)
+					self.debouncedShowPage(1, twbsPageObj);
+				else
+					self.showPage(1, twbsPageObj);
 				$(".tab_"+tabCode+" .sortie_controls .sortie_count").text(
 					"Total pages: {0}, sorties: {1}".format(countPages, countSorties)
 				);
@@ -403,15 +414,26 @@
 		/* SHOW PAGE
 		Determines list type and gets data from IndexedDB
 		---------------------------------*/
-		this.showPage = function(){
+		this.showPage = function(page, twbsPageObj){
 			var self = this;
+			var startTime = Date.now();
+			this.showPageTime = 0;
+			this.pageNum = page || 1;
+			var postShowList = function(){
+				self.showPageTime = Date.now() - startTime;
+				console.log("Showing this list took", self.showPageTime, "milliseconds");
+				if(twbsPageObj) twbsPageObj.twbsPagination("enable");
+			};
 			$(".tab_"+tabCode+" .pagination").show();
 			$(".tab_"+tabCode+" .sortie_list").empty();
 			
+			// Prevent to quickly switch on pagination
+			if(twbsPageObj) twbsPageObj.twbsPagination("disable");
 			// Show all sorties
 			if(this.selectedWorld === 0){
 				KC3Database.get_normal_sorties(this.pageNum, this.itemsPerPage, function( sortieList ){
 					self.showList( sortieList );
+					postShowList();
 				});
 				
 			// Selected specific world
@@ -420,12 +442,14 @@
 				if(this.selectedMap === 0){
 					KC3Database.get_world(this.selectedWorld, this.pageNum, this.itemsPerPage, function( sortieList ){
 						self.showList( sortieList );
+						postShowList();
 					});
 					
 				// Selected specifc map
 				}else{
 					KC3Database.get_map(this.selectedWorld, this.selectedMap, this.pageNum, this.itemsPerPage, function( sortieList ){
 						self.showList( sortieList );
+						postShowList();
 					});
 				}
 			}

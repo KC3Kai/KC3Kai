@@ -51,7 +51,7 @@ Does not include Ships and Gears which are managed by other Managers
 			return this;
 		},
 
-		setHQ :function( data ){
+		setHQ :function( serverSeconds, data ){
 			// Check if player suddenly changed
 			if(this.hq.id !== 0 && this.hq.id != data.mid){
 				this.hq.logout();
@@ -60,6 +60,17 @@ Does not include Ships and Gears which are managed by other Managers
 			// Update player with new data
 			this.hq.update( data );
 			this.hq.save();
+
+			// Record values of recent hour if necessary
+			if(typeof localStorage.lastExperience == "undefined"){ localStorage.lastExperience = 0; }
+			var currentHour = Math.floor(serverSeconds / 3600);
+			if(currentHour == localStorage.lastExperience){ return this; }
+			localStorage.lastExperience = currentHour;
+			KC3Database.Experience({
+				exp  : data.exp,
+				level: data.level,
+				hour : currentHour
+			});
 			return this;
 		},
 

@@ -77,7 +77,7 @@
 	// Experience Calculation
 	var mapexp = [], maplist = {}, rankFactors = [0, 0.5, 0.7, 0.8, 1, 1, 1.2];
 
-	// Error reporting
+	// Reusable contents of Error Report
 	var errorReport = {
 		title: "",
 		message: "",
@@ -86,9 +86,9 @@
 		params: "",
 		response: "",
 		serverUtc: 0,
-		kc3Version: "",
+		kc3Version: [chrome.runtime.getManifest().name, chrome.runtime.getManifest().version].join(" "),
 		dmmPlay: "",
-		extractApi: "",
+		gameTabUrl: "",
 		userAgent: "",
 		utc: 0
 	};
@@ -691,15 +691,19 @@
 		});
 		KC3Network.listen();
 
-		// Get if inspected tab is muted, and update the mute icon
-		(new RMsg("service", "isMuted", {
+		// Get info of the inspected tab
+		(new RMsg("service", "getTabInfo", {
 			tabId: chrome.devtools.inspectedWindow.tabId
-		}, function(isMuted){
-			if(isMuted){
-				$(".module.controls .btn_mute img").attr("src", "img/mute-x.png");
-			}
+		}, function(tabInfo){
+			errorReport.gameTabUrl = tabInfo.url;
+			// if inspected tab is muted, update the mute icon
+			try {
+				if(tabInfo.mutedInfo.muted){
+					$(".module.controls .btn_mute img").attr("src", "img/mute-x.png");
+				}
+			} catch(e) {}
 		})).execute();
-
+		
 		// Attempt to activate game on inspected window
 		(new RMsg("service", "activateGame", {
 			tabId: chrome.devtools.inspectedWindow.tabId
@@ -877,9 +881,7 @@
 				errorReport.params = JSON.stringify(data.params);
 				errorReport.response = data.response;
 				errorReport.serverUtc = data.serverUtc;
-				errorReport.kc3Version = data.kc3Manifest;
 				errorReport.dmmPlay = localStorage.dmmplay;
-				errorReport.extractApi = localStorage.extract_api;
 				errorReport.userAgent = navigator.userAgent;
 				errorReport.utc = Date.now();
 			} else {
@@ -1049,15 +1051,15 @@
 			// Repair faces
 			KC3TimerManager._repair[0].face().lazyInitTooltip();
 			KC3TimerManager._repair[1].face().lazyInitTooltip();
-			KC3TimerManager._repair[2].face().lazyInitTooltip();
-			KC3TimerManager._repair[3].face().lazyInitTooltip();
+			KC3TimerManager._repair[2].face(undefined, PlayerManager.repairSlots < 3).lazyInitTooltip();
+			KC3TimerManager._repair[3].face(undefined, PlayerManager.repairSlots < 4).lazyInitTooltip();
 
 			// Construction faces
 			if(ConfigManager.info_face){
 				KC3TimerManager._build[0].face().lazyInitTooltip();
 				KC3TimerManager._build[1].face().lazyInitTooltip();
-				KC3TimerManager._build[2].face().lazyInitTooltip();
-				KC3TimerManager._build[3].face().lazyInitTooltip();
+				KC3TimerManager._build[2].face(undefined, PlayerManager.buildSlots < 3).lazyInitTooltip();
+				KC3TimerManager._build[3].face(undefined, PlayerManager.buildSlots < 4).lazyInitTooltip();
 			}
 		},
 
@@ -1139,9 +1141,9 @@
 				KC3TimerManager._exped[0].faceId = PlayerManager.fleets[1].ship(0).masterId;
 				KC3TimerManager._exped[1].faceId = PlayerManager.fleets[2].ship(0).masterId;
 				KC3TimerManager._exped[2].faceId = PlayerManager.fleets[3].ship(0).masterId;
-				KC3TimerManager._exped[0].face().lazyInitTooltip();
-				KC3TimerManager._exped[1].face().lazyInitTooltip();
-				KC3TimerManager._exped[2].face().lazyInitTooltip();
+				KC3TimerManager._exped[0].face(undefined, PlayerManager.fleetCount < 2).lazyInitTooltip();
+				KC3TimerManager._exped[1].face(undefined, PlayerManager.fleetCount < 3).lazyInitTooltip();
+				KC3TimerManager._exped[2].face(undefined, PlayerManager.fleetCount < 4).lazyInitTooltip();
 			}
 
 			// TAIHA ALERT CHECK
@@ -1239,8 +1241,10 @@
 			$(".airbase_list").empty();
 			$(".airbase_list").hide();
 
-			var thisNode = KC3SortieManager.onSortie ? KC3SortieManager.currentNode() || {} : {};
+			var thisNode = KC3SortieManager.onSortie || KC3SortieManager.isPvP() ?
+				KC3SortieManager.currentNode() || {} : {};
 			var dameConConsumed = false;
+			var flarePos = thisNode.flarePos || 0;
 
 			// COMBINED
 			if(selectedFleet==5){
@@ -1250,10 +1254,12 @@
 				// Show ships on main fleet
 				$.each(MainFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						if(KC3SortieManager.onSortie && KC3SortieManager.fleetSent === 1){
+						if(KC3SortieManager.onSortie && KC3SortieManager.fleetSent == 1){
 							dameConConsumed = (thisNode.dameConConsumed || [])[index];
 						}
-						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars, dameConConsumed))
+						var starShellUsed = (flarePos == index+1) &&
+							!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 1;
+						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars, dameConConsumed, starShellUsed))
 							.commonElements()
 							.defineShort( MainFleet )
 							.appendTo(".module.fleet .shiplist_main");
@@ -1264,15 +1270,18 @@
 				$.each(EscortFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
 						if(KC3SortieManager.onSortie){
-							if(!!PlayerManager.combinedFleet && KC3SortieManager.fleetSent === 1){
+							if(!!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 1){
 								// Send combined fleet, get escort info
 								dameConConsumed = (thisNode.dameConConsumedEscort || [])[index];
-							} else if(!PlayerManager.combinedFleet && KC3SortieManager.fleetSent === 2){
+							} else if(!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 2){
 								// Not combined, but send fleet #2, get regular info
 								dameConConsumed = (thisNode.dameConConsumed || [])[index];
 							}
 						}
-						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars, dameConConsumed))
+						var starShellUsed = (flarePos == index+1) &&
+							((!!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 1) ||
+							(!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 2));
+						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars, dameConConsumed, starShellUsed))
 							.commonElements(true)
 							.defineShort( EscortFleet )
 							.appendTo(".module.fleet .shiplist_escort");
@@ -1341,10 +1350,12 @@
 				// Show ships on selected fleet
 				$.each(CurrentFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						if(KC3SortieManager.onSortie && selectedFleet === KC3SortieManager.fleetSent){
+						if(KC3SortieManager.onSortie && selectedFleet == KC3SortieManager.fleetSent){
 							dameConConsumed = (thisNode.dameConConsumed || [])[index];
 						}
-						(new KC3NatsuiroShipbox(".lship", rosterId, showCombinedFleetBars, dameConConsumed))
+						var starShellUsed = (flarePos == index+1) &&
+							selectedFleet == KC3SortieManager.fleetSent;
+						(new KC3NatsuiroShipbox(".lship", rosterId, showCombinedFleetBars, dameConConsumed, starShellUsed))
 							.commonElements()
 							.defineLong( CurrentFleet )
 							.appendTo(".module.fleet .shiplist_single");
@@ -1642,7 +1653,8 @@
 								
 								paddedId = (itemObj.masterId<10?"00":itemObj.masterId<100?"0":"")+itemObj.masterId;
 								eqImgSrc = "../../../../assets/img/planes/"+paddedId+".png";
-								$(".base_plane_img img", planeBox).attr("src", eqImgSrc);
+								$(".base_plane_img img", planeBox).attr("src", eqImgSrc)
+									.error(function() { $(this).unbind("error").attr("src", "../../../../assets/img/ui/empty.png"); });
 								$(".base_plane_img", planeBox)
 									.attr("title", $(".base_plane_name", planeBox).text())
 									.lazyInitTooltip()
@@ -1650,7 +1662,8 @@
 									.on("dblclick", self.gearDoubleClickFunction);
 								
 								eqIconSrc = "../../../../assets/img/items/"+itemObj.master().api_type[3]+".png";
-								$(".base_plane_icon img", planeBox).attr("src", eqIconSrc);
+								$(".base_plane_icon img", planeBox).attr("src", eqIconSrc)
+									.error(function() { $(this).unbind("error").attr("src", "../../../../assets/img/ui/empty.png"); });
 								
 								if (itemObj.stars > 0) {
 									$(".base_plane_star", planeBox).text(itemObj.stars);
@@ -2553,13 +2566,13 @@
 			$(".module.activity .abyss_combined").hide();
 			
 			// Process PvP Battle
-			KC3SortieManager.fleetSent = data.fleetSent;
+			KC3SortieManager.fleetSent = parseInt(data.fleetSent, 10);
 			KC3SortieManager.onPvP = true;
 
 			var thisPvP;
 			KC3SortieManager.nodes.push(thisPvP = (new KC3Node()).defineAsBattle());
 			thisPvP.isPvP = true;
-			thisPvP.engage( data.battle,data.fleetSent );
+			thisPvP.engage( data.battle, data.fleetSent );
 
 			// PvP battle activities data should be hidden when `info_compass` turned off,
 			// Here left it unfixed to keep identical.

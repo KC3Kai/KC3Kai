@@ -133,6 +133,7 @@ Instantiatable class to represent one player
 		localStorage.removeItem("lock_plan");
 		localStorage.removeItem("lastResource");
 		localStorage.removeItem("lastUseitem");
+		localStorage.removeItem("lastExperience");
 		
 		KC3ShipManager.clear();
 		KC3GearManager.clear();
