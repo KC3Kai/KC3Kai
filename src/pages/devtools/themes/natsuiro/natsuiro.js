@@ -699,7 +699,7 @@
 			// if inspected tab is muted, update the mute icon
 			try {
 				if(tabInfo.mutedInfo.muted){
-					$(".module.controls .btn_mute img").attr("src", "../../../../assets/img/ui/mute-x.png");
+					$(".module.controls .btn_mute img").attr("src", "img/mute-x.png");
 				}
 			} catch(e) {}
 		})).execute();

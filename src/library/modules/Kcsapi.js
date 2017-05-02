@@ -87,7 +87,7 @@ Previously known as "Reactor"
 			this.serverOffset = this.moraleRefresh.calibrate( headers.Date );
 			
 			var utcSeconds = Date.toUTCseconds(headers.Date);
-
+			
 			PlayerManager.setHQ(utcSeconds, {
 				mid: response.api_data.api_basic.api_member_id,
 				name: response.api_data.api_basic.api_nickname,
@@ -106,6 +106,8 @@ Previously known as "Reactor"
 			
 			PlayerManager.setFleets( response.api_data.api_deck_port );
 			PlayerManager.setRepairDocks( response.api_data.api_ndock );
+			PlayerManager.fleetCount = response.api_data.api_basic.api_count_deck;
+			PlayerManager.repairSlots = response.api_data.api_basic.api_count_ndock;
 			PlayerManager.buildSlots = response.api_data.api_basic.api_count_kdock;
 			
 			PlayerManager.portRefresh(utcSeconds,
@@ -157,6 +159,7 @@ Previously known as "Reactor"
 		/*-------------------------------------------------------*/
 		
 		/* User Basic Information
+		 * deprecated by kc devs, included in /port
 		-------------------------------------------------------*/
 		"api_get_member/basic":function(params, response, headers){
 			PlayerManager.setHQ(Date.toUTCseconds(headers.Date), {
