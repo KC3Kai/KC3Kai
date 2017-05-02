@@ -1,0 +1,91 @@
+<div class="page_title">
+	Experience
+	<div class="page_help_btn hover"><span>?</span> Help Topics</div>
+</div>
+
+<!-- HELP TOPICS -->
+<div class="page_help">
+	<div class="help_q"></div>
+	<div class="help_a"></div>
+
+	<div class="help_more">
+		<a href="https://github.com/KC3Kai/KC3Kai/wiki/Strategy-Room%3A-Experience">Learn more</a>
+	</div>
+</div>
+
+<!-- LEGEND -->
+<div class="page_panel">
+	<div class="legend_item">
+		<label>
+		<div class="legend_toggle"><input type="radio" name="selector" data-type="exp" class="graph_input" CHECKED /></div>
+		<div class="legend_color color_exp"></div>
+		<div class="legend_label">Experience</div>
+		</label>
+		<div class="clear"></div>
+	</div>
+	<div class="legend_item">
+		<label>
+		<div class="legend_toggle"><input type="radio" name="selector" data-type="level" class="graph_input" /></div>
+		<div class="legend_color color_level"></div>
+		<div class="legend_label">Level</div>
+		</label>
+		<div class="clear"></div>
+	</div>
+	<div class="clear"></div>
+</div>
+<div class="page_panel graph_options">
+	<div class="graph_option graph_date">
+		<div class="date_label"><label for="startDate">Start</label></div>
+		<div class="date_input"><input type="date" id="startDate" class="graph_input" /></div>
+	</div>
+	<div class="graph_option graph_date">
+		<div class="date_label"><label for="endDate">End</label></div>
+		<div class="date_input"><input type="date" id="endDate" class="graph_input" /></div>
+	</div>
+	<div class="graph_option graph_dropdown">
+		<div class="dropdown_label"><label for="graphInterval">Interval</label></div>
+		<div class="dropdown_input">
+			<select id="graphInterval" class="graph_input">
+				<option value="1">1 hour</option>
+				<option value="3">3 hours</option>
+				<option value="6">6 hours</option>
+				<option value="12">12 hours</option>
+				<option value="24" SELECTED>1 day</option>
+				<option value="72">3 days</option>
+				<option value="168">1 week</option>
+				<option value="336">2 weeks</option>
+				<option value="504">3 weeks</option>
+				<option value="672">4 weeks</option>
+				<option value="720">30 days</option>
+			</select>
+		</div>
+	</div>
+	<div class="graph_option option_preset hover" data-preset="day">Day</div>
+	<div class="graph_option option_preset hover" data-preset="week">Week</div>
+	<div class="graph_option option_preset hover" data-preset="month">Month</div>
+	<div class="clear"></div>
+</div>
+<div class="page_panel">
+	<div class="graph_option graph_check">
+		<div class="checkbox_input"><input type="checkbox" id="startZero" class="graph_input" /></div>
+		<div class="checkbox_label"><label for="startZero">Start at zero</label></div>
+	</div>
+	<div class="graph_option graph_check">
+		<div class="checkbox_input"><input type="checkbox" id="deltaMode" class="graph_input" /></div>
+		<div class="checkbox_label"><label for="deltaMode">Delta mode</label></div>
+	</div>
+	<div class="graph_option graph_check">
+		<div class="checkbox_input"><input type="checkbox" id="showTooltips" class="graph_input" /></div>
+		<div class="checkbox_label"><label for="showTooltips">Tooltips</label></div>
+	</div>
+	<div class="clear"></div>
+</div>
+
+<!-- GRAPHS -->
+<div class="page_padding">
+	<div class="loading"><img /></div>
+	<div class="page_section graph_title"></div>
+	<div class="section_body">
+		<canvas id="chart" width="680" height="350"></canvas>
+	</div>
+</div>

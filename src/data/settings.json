@@ -479,7 +479,7 @@
 				"name" : "SettingsRscCapWarnFrom",
 				"type" : "small_text",
 				"bound" : {
-					"min" :   1,
+					"min" :   0,
 					"max" : 100,
 					"type": "Number"
 				},
@@ -808,6 +808,18 @@
 			{
 				"id" : "PoiDBSubmission_enabled",
 				"name" : "SettingsEnablePoiDBSubmission",
+				"type" : "check",
+				"options" : {}
+			}
+		]
+	},
+	{
+		"section": "SettingsOpenDBSubmission",
+		"help" : "",
+		"contents" :[
+			{
+				"id" : "OpenDBSubmission_enabled",
+				"name" : "SettingsEnableOpenDBSubmission",
 				"type" : "check",
 				"options" : {}
 			}

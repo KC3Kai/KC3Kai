@@ -57,6 +57,8 @@
 }
 
 .tab_ships .advanced_sorter {
+	float:left;
+	width:600px;
 	margin:0px 0px 3px 0px;
 }
 .tab_ships .advanced_sorter .adv_label {
@@ -70,6 +72,16 @@
 	height:18px;
 	line-height:18px;
 	float:left;
+}
+
+.tab_ships .control_buttons {
+	float:right;
+	margin:0px 0px 3px 0px;
+}
+.tab_ships .control_buttons .reset_default {
+	float:right;
+	font-size:12px;
+	line-height:18px;
 }
 
 .tab_ships .advanced_sorter .filter_box {
@@ -195,6 +207,24 @@
 	height:20px;
 	float:left;
 	margin:0px 2px 0px 0px;
+}
+.tab_ships .ship_item .ship_field .order.asc {
+	float:right;
+	width:0;
+	height:0;
+	margin-top:7px;
+	border-left:3px solid transparent;
+	border-right:3px solid transparent;
+	border-bottom:5px solid #333;
+}
+.tab_ships .ship_item .ship_field .order.desc {
+	float:right;
+	width:0;
+	height:0;
+	margin-top:7px;
+	border-left:3px solid transparent;
+	border-right:3px solid transparent;
+	border-top:5px solid #333;
 }
 .tab_ships .ingame_page {
 	width:680px;

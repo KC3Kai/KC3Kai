@@ -423,6 +423,12 @@ html,body {
 	height:25px;
 	margin:2px;
 }
+.module.activity .expeditions .timer-img.locked {
+	background-image:url(../../../../assets/img/ui/lock.png);
+	background-size:19px;
+	background-position:5px 5px;
+	background-repeat:no-repeat;
+}
 .module.activity .expeditions .timer-expnum {
 	height:14px;
 	line-height:14px;
@@ -487,6 +493,14 @@ html,body {
 .module.activity .builds {}
 .module.activity .builds .timer-img {
 	background:#996600;
+}
+
+.module.activity .repairs .timer-img.locked,
+.module.activity .builds .timer-img.locked {
+	background-image:url(../../../../assets/img/ui/lock.png);
+	background-size:17px;
+	background-position:3px 3px;
+	background-repeat:no-repeat;
 }
 
 /*------- ACTIVITY: BATTLE -------*/
@@ -887,6 +901,10 @@ ABYSS FLEET
 	width:15px;
 	height:15px;
 	vertical-align:top;
+}
+.module.activity .battle_drop.new_ship {
+	filter:drop-shadow(0px 0px 3px #1f1);
+	-webkit-filter:drop-shadow(0px 0px 3px #1f1);
 }
 /* Battle Planes */
 .module.activity .battle_planes {
@@ -2304,7 +2322,7 @@ ABYSS FLEET
 	overflow:hidden;
 }
 .module.fleet .lship .ex_item.item_being_used {
-	background:#f99;
+	background:#fe3;
 }
 .module.fleet .lship .ex_item.goddess {
 	box-shadow:0px 0px 4px #ff0,
@@ -2453,12 +2471,16 @@ ABYSS FLEET
 	width:100%;
 	height:100%;
 }
-
 .module.fleet .lship .ship_repair_tick:before {
-	content:"x" attr(data-tick);
+	content:"+" attr(data-tick);
 }
-
-.module.fleet .lship .ship_repair_tick,
+.module.fleet .lship .ship_repair_tick {
+	width:50%;
+	float:left;
+	text-align:center;
+	background-color:white;
+	color:green;
+}
 .module.fleet .lship .ship_repair_timer {
 	width:50%;
 	float:left;
@@ -2574,11 +2596,11 @@ ABYSS FLEET
 	border-radius:9px;
 	margin:1px 3px 0px 0px;
 }
-.module.fleet .lship .ship_gear_icon.item_being_used {
-	background:#f99;
-}
 .module.fleet .lship .ship_gear.equipped .ship_gear_icon {
 	background:#fff;
+}
+.module.fleet .lship .ship_gear.equipped .ship_gear_icon.item_being_used {
+	background:#fe3;
 }
 .module.fleet .lship .ship_gear.empty .ship_gear_icon {
 	background:rgba(150,150,150,0.4);
@@ -2691,7 +2713,7 @@ ABYSS FLEET
 	overflow:hidden;
 }
 .module.fleet .sship .ex_item.item_being_used {
-	background:#f99;
+	background:#fe3;
 }
 .module.fleet .sship .ex_item.goddess {
 	box-shadow:0px 0px 4px #ff0,

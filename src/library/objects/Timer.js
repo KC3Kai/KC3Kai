@@ -51,7 +51,7 @@ Has functions for TimerManager to use
 		}
 	};
 	
-	KC3Timer.prototype.face = function(faceId){
+	KC3Timer.prototype.face = function(faceId, isLocked = false){
 		if(typeof faceId != "undefined"){ this.faceId = faceId; }
 		if(this.faceId > 0){
 			$(".timer-img img", this.element).attr("src", KC3Meta.shipIcon(this.faceId, "../../../../assets/img/ui/empty.png"));
@@ -62,11 +62,13 @@ Has functions for TimerManager to use
 						tabPath: "mstship-{0}".format($(this).data("masterId"))
 					})).execute();
 				});
+			$(".timer-img", this.element).removeClass("locked");
 			$(".timer-img img", this.element).show();
 		}else{
 			$(".timer-img", this.element).attr("title", "")
 				.removeData("masterId").off("dblclick");
 			$(".timer-img img", this.element).hide();
+			$(".timer-img", this.element).toggleClass("locked", isLocked);
 		}
 		return $(".timer-img", this.element);
 	};

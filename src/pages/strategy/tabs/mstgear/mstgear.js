@@ -35,7 +35,8 @@
 			$.each(KC3Master.all_slotitems(), function(index, GearData){
 				gearBox = $(".tab_mstgear .factory .gearRecord").clone();
 				gearBox.attr("data-id", GearData.api_id);
-				$(".gearIcon img", gearBox).attr("src", "../../../../assets/img/items/"+GearData.api_type[3]+".png" );
+				$(".gearIcon img", gearBox).attr("src", "../../../../assets/img/items/"+GearData.api_type[3]+".png")
+					.error(function() { $(this).unbind("error").attr("src", "../../assets/img/ui/empty.png"); });
 				$(".gearName", gearBox).text( "[" + GearData.api_id + "] " + KC3Meta.gearName(GearData.api_name) );
 				gearBox.appendTo(".tab_mstgear .gearRecords");
 			});

@@ -127,6 +127,12 @@
 				this.refreshHealthMetric();
 			}
 			
+			// Show localStorage space usage (unit is Kilo chars, not bytes)
+			let usedChars = localStorage.usedSpace();
+			let kiloChars = Math.floor(usedChars / 1024);
+			let usedPercent = Math.floor(usedChars / localStorage.quotaLength * 1000) / 10;
+			$(".management .used").text("Used {0}K, {1}%".format(kiloChars, usedPercent));
+			
 			// Export all data
 			$(".tab_profile .export_data").on("click", function(){
 				var exportObject = {
@@ -403,6 +409,7 @@
 				delete localStorage.repotedQuests;
 				delete localStorage.fixed_lbas_ledger;
 				delete localStorage.fixed_ledger_db;
+				delete localStorage.apiUsage;
 				ConfigManager.load();
 				ConfigManager.dismissed_hints = {};
 				ConfigManager.save();
