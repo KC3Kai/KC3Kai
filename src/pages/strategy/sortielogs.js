@@ -791,21 +791,28 @@
 				rcontext.drawImage( domImg, 0, 0, 400, 400, 0, 0, 400, 400 );
 				
 				KC3Database.get_sortie_data( sortieId, function(sortieData){
-					var mapdata = self.maps["m"+sortieData.world+sortieData.mapnum];
-					var mapStat = mapdata.stat;
-					
-					if(mapdata.kills) sortieData.defeat_count = mapdata.kills;
-					console.debug("kills", mapdata.kills);
-					console.debug("mapStat", mapdata.stat);
-					if(mapStat) {
-						sortieData.now_maphp = mapStat.onBoss.hpdat[sortieData.id][0];
-						sortieData.max_maphp = mapStat.onBoss.hpdat[sortieData.id][1];
-					}
-					
 					if(sortieData.battles.length===0){
 						self.exportingReplay = false;
 						$("body").css("opacity", "1");
 						return false;
+					}
+					
+					let mapId = ["m", sortieData.world, sortieData.mapnum].join("");
+					let mapData = self.maps[mapId];
+					if(mapData.kills){
+						sortieData.defeat_count = mapData.kills;
+						console.debug("Map {0} boss gauge: {1}/{2} kills"
+							.format(mapId, mapData.kills, KC3Meta.gauge(mapId.substr(1)))
+						);
+					} else if(mapData.stat && mapData.stat.onBoss && mapData.stat.onBoss.hpdat){
+						let bossHpArr = mapData.stat.onBoss.hpdat[sortieData.id];
+						if(Array.isArray(bossHpArr)){
+							sortieData.now_maphp = bossHpArr[0];
+							sortieData.max_maphp = bossHpArr[1];
+							console.debug("Map {0} boss gauge: HP {1}/{2}"
+								.format(mapId, bossHpArr[0], bossHpArr[1])
+							);
+						}
 					}
 					
 					if(e.which === 3) {
