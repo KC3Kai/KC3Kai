@@ -225,6 +225,10 @@
 				}
 			});
 			$(".control_buttons .reset_default").on("click", function(){
+				self.equipMode = 0;
+				self.pageNo = false;
+				self.multiKey = false;
+				self.currentSorters = [{name:"lv", reverse:false}];
 				delete localStorage.srShiplist;
 				KC3StrategyTabs.reloadTab(undefined, true);
 			});
