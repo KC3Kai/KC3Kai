@@ -3,7 +3,7 @@
 
 	window.WhoCallsTheFleetDb = {
 		db: {},
-		expectedShipCount: 461,
+		expectedShipCount: 466,
 		expectedItemCount: 228,
 		init: function(repo) {
 			var self = this;
@@ -79,7 +79,8 @@
 
 		estimateStat: function(statBound, level) {
 			var self = this;
-			if (!statBound || statBound.base < 0 || statBound.max < 0)
+			if (!statBound || statBound.base < 0 || (statBound.base !== 0 && !statBound.base)
+				|| statBound.max < 0 || (statBound.max !== 0 && !statBound.max))
 				return false;
 			var retVal = statBound.base +
 				Math.floor((statBound.max - statBound.base)*level / 99.0);
