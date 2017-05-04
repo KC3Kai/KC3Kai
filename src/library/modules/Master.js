@@ -63,6 +63,8 @@ Saves and loads significant data for future use
 						var elem_key = elem.api_id || i;
 						// Add elements to local raw, with their IDs as indexes
 						// Elements have no IDs, store them with their original indexes
+						// There are duplicated api_id in `shipupgrade`, so use indexes instead
+						if(short_mst_name === "shipupgrade") elem_key = i;
 						self._raw[short_mst_name][elem_key] = elem;
 
 						if(!!diff[short_mst_name] && !!oraw[short_mst_name]) {
