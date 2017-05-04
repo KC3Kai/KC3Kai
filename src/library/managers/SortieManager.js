@@ -187,12 +187,12 @@ Xxxxxxx
 			if (typeof nodeData.api_select_route != "undefined") {
 				console.log("nodeData.api_select_route found, defining as selector");
 				nodeKind = "Selector";
-			// Battle avoided node (Enemy not found)
+			// Battle avoided node (Enemy not found / Peace sea / ...)
 			// api_event_id = 6
-			// api_event_kind = 1
-			}else if(nodeData.api_event_id == 6 && nodeData.api_event_kind == 1) {
-				console.log("nodeData.api_event_id:6 and api_event_kind:1, defining as dud");
-				// Another name may needed
+			// api_event_kind = 0/1/3/4
+			}else if(nodeData.api_event_id == 6) {
+				console.log("nodeData.api_event_id = 6 and api_event_kind != 2, defining as dud");
+				// Another name may needed to show other messages
 				//nodeKind = "Dud";
 			// Battle Node
 			// api_event_kind = 1 (day battle)

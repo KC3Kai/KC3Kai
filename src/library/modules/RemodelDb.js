@@ -64,14 +64,6 @@
         calcTorch: function(ship_id_from) {
             return (ship_id_from === 503 || ship_id_from === 508) ? 20 : 0;
         },
-        // thanks to remodel of converting, all api_catapult_count are 0 in api_mst_shipupgrade,
-        // and api_drawing_count of these special cases might be 0.
-        // definitively missing the shipupgrade record before the converting, eg: Kai -> Kai Ni
-        knownShipUpgradeOverwrittenByConvertRemodel: {
-            "461A":{"api_id":461,"api_current_ship_id":288,"api_original_ship_id":110,"api_upgrade_type":1,"api_upgrade_level":2,"api_drawing_count":1,"api_catapult_count":1,"api_sortno":261},
-            "462A":{"api_id":462,"api_current_ship_id":112,"api_original_ship_id":111,"api_upgrade_type":1,"api_upgrade_level":2,"api_drawing_count":1,"api_catapult_count":1,"api_sortno":262},
-            "503A":{"api_id":503,"api_current_ship_id":129,"api_original_ship_id":124,"api_upgrade_type":1,"api_upgrade_level":2,"api_drawing_count":1,"api_catapult_count":0,"api_sortno":303}
-        },
         mkDb: function(masterData, isRaw) {
             var self = this;
             // step 1: collect remodel info
@@ -128,11 +120,7 @@
                 return KC3Meta.shipName( KC3Master.ship(id).api_name );
             }
 
-            var fixedShipupgrade = $.extend({},
-                isRaw ? masterData.shipupgrade : masterData.api_mst_shipupgrade,
-                self.knownShipUpgradeOverwrittenByConvertRemodel
-            );
-            $.each(fixedShipupgrade, function(i,x) {
+            $.each(isRaw ? masterData.shipupgrade : masterData.api_mst_shipupgrade, function(i,x) {
                 if (x.api_current_ship_id === 0)
                     return;
                 var remodel = remodelInfo[x.api_current_ship_id];
