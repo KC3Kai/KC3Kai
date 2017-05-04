@@ -20,7 +20,7 @@
 			"2" : true ,
 			"3" : true
 		},
-		diffOp : ["hard" , "normal" , "easy"],
+		diffOp : ["Hard" , "Normal" , "Easy"],
 		diff_iterator : {
 			"0" : true ,
 			"1" : true ,
@@ -144,14 +144,12 @@
 		Prepares initial static data needed.
 		---------------------------------*/
 		init: function() {
-			// TODO codes stub, remove this if nothing to do
 		},
 		
 		/* RELOAD: optional
 		Loads latest player or game data if needed.
 		---------------------------------*/
 		reload: function() {
-			// TODO codes stub, remove this if nothing to do
 			if(typeof localStorage.maps != "undefined"){
 				this.maps = JSON.parse( localStorage.maps );
 			}else{
@@ -181,7 +179,7 @@
 				$.each(self.maps , function(index , element){
 					let cWorld = (""+element.id).substr(0, (""+element.id).length-1);
 					let cMap = (""+element.id).substr((""+element.id).length-1);
-					let mapName = (cWorld>=10 ? "E" : cWorld)+" - "+cMap;
+					let mapName = (cWorld>=10 ? "E" : cWorld)+"-"+cMap;
 					if(cWorld == self.selectedWorld && typeof dropSame[mapName] === "undefined") {
 						dropSame[mapName] = true;
 						let map_clone = $(".factory option").clone().text(mapName);
@@ -216,8 +214,8 @@
 				self.filter_ship_drop();
 			};
 			for(sCtr in KC3Meta._stype){
-				// stype 1, 12, 15 not used by shipgirl
-				if(["1", "12", "15"].indexOf(sCtr) < 0){
+				// stype 12, 15 not used by shipgirl
+				if(["12", "15"].indexOf(sCtr) < 0){
 					cElm = $(".tab_shipdrop .factory .ship_filter_type").clone().appendTo(".tab_shipdrop .filters .ship_types");
 					cElm.data("id", sCtr);
 					$(".filter_name", cElm).text(KC3Meta.stype(sCtr) != "??" ? KC3Meta.stype(sCtr) : "NULL");
@@ -289,7 +287,6 @@
 		Places data onto the interface from scratch.
 		---------------------------------*/
 		execute: function() {
-			// TODO codes stub, remove this if nothing to do
 			this.listen();
 			this.gen_filter();
 		},
@@ -306,8 +303,6 @@
 			// Use `pageParams` for latest page hash values,
 			// KC3StrategyTabs.pageParams keeps the old values for states tracking
 			
-			// TODO codes stub, remove this if nothing to do
-
 			// Returning `true` means updating has been handled.
 			return false;
 		}
