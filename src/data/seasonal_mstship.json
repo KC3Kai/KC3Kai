@@ -1,4 +1,12 @@
 {
+	"810": {
+		"api_id": 810,
+		"api_name": "買い物榛名",
+		"api_yomi": "はるな",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
 	"811": {
 		"api_id": 811,
 		"api_name": "桃節句潮",
