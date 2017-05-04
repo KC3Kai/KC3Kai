@@ -1207,11 +1207,11 @@ Previously known as "Reactor"
 			//var deployBauxiteCost = planeMaster.api_cost * landSlot;
 			if(typeof response.api_data.api_after_bauxite !== "undefined"){
 				var utcHour = Date.toUTChours(headers.Date);
-				var consumedBauxite = response.api_data.api_after_bauxite - PlayerManager.hq.lastMaterial[3];
+				var consumedBauxite = PlayerManager.hq.lastMaterial[3] - response.api_data.api_after_bauxite;
 				KC3Database.Naverall({
 					hour: utcHour,
 					type: "lbas" + (params.api_area_id || "0"),
-					data: [0,0,0,consumedBauxite].concat([0,0,0,0])
+					data: [0,0,0,-consumedBauxite].concat([0,0,0,0])
 				});
 				PlayerManager.setResources(utcHour * 3600, null, [0,0,0,-consumedBauxite]);
 				KC3Network.trigger("Consumables");
@@ -1232,12 +1232,12 @@ Previously known as "Reactor"
 			PlayerManager.saveBases();
 			// Record material consuming, using a new type called: lbas
 			var utcHour = Date.toUTChours(headers.Date);
-			var consumedFuel = response.api_data.api_after_fuel - PlayerManager.hq.lastMaterial[0],
-				consumedBauxite = response.api_data.api_after_bauxite - PlayerManager.hq.lastMaterial[3];
+			var consumedFuel = PlayerManager.hq.lastMaterial[0] - response.api_data.api_after_fuel,
+				consumedBauxite = PlayerManager.hq.lastMaterial[3] - response.api_data.api_after_bauxite;
 			KC3Database.Naverall({
 				hour: utcHour,
 				type: "lbas" + (params.api_area_id || "0"),
-				data: [consumedFuel,0,0,consumedBauxite].concat([0,0,0,0])
+				data: [-consumedFuel,0,0,-consumedBauxite].concat([0,0,0,0])
 			});
 			PlayerManager.setResources(utcHour * 3600, null, [-consumedFuel,0,0,-consumedBauxite]);
 			KC3Network.trigger("Consumables");
