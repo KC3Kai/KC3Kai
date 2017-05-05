@@ -15882,7 +15882,6 @@ var SHIPDATA = {
 		unknownstats: true,
 		RNG: 1,
 		SPD: 5,
-		SLOTS: [0, 0, 0, 0],
 	},
 	1723: {
 		name: 'Escort Princess 2',
@@ -15901,7 +15900,6 @@ var SHIPDATA = {
 		unknownstats: true,
 		RNG: 1,
 		SPD: 5,
-		SLOTS: [0, 0, 0, 0],
 	},
 	1724: {
 		name: 'Escort Princess 3',
@@ -15920,7 +15918,6 @@ var SHIPDATA = {
 		unknownstats: true,
 		RNG: 1,
 		SPD: 5,
-		SLOTS: [0, 0, 0, 0],
 	},
 	1725: {
 		name: 'Northernmost Landing Princess 1',
@@ -15939,7 +15936,6 @@ var SHIPDATA = {
 		unknownstats: true,
 		RNG: 1,
 		SPD: 0,
-		SLOTS: [0, 0, 0, 0],
 	},
 	1726: {
 		name: 'Northernmost Landing Princess 2',
@@ -15958,7 +15954,6 @@ var SHIPDATA = {
 		unknownstats: true,
 		RNG: 1,
 		SPD: 0,
-		SLOTS: [0, 0, 0, 0],
 	},
 	1727: {
 		name: 'Northernmost Landing Princess 3',
@@ -15977,7 +15972,6 @@ var SHIPDATA = {
 		unknownstats: true,
 		RNG: 1,
 		SPD: 0,
-		SLOTS: [0, 0, 0, 0],
 	},
 	1728: {
 		name: 'Northern Water Princess 1',
@@ -15996,7 +15990,6 @@ var SHIPDATA = {
 		unknownstats: true,
 		RNG: 1,
 		SPD: 5,
-		SLOTS: [0, 0, 0, 0],
 	},
 	1729: {
 		name: 'Northern Water Princess 2',
@@ -16015,7 +16008,6 @@ var SHIPDATA = {
 		unknownstats: true,
 		RNG: 1,
 		SPD: 5,
-		SLOTS: [0, 0, 0, 0],
 	},
 	1730: {
 		name: 'Northern Water Princess 3',
@@ -16034,7 +16026,6 @@ var SHIPDATA = {
 		unknownstats: true,
 		RNG: 1,
 		SPD: 5,
-		SLOTS: [0, 0, 0, 0],
 	},
 	1731: {
 		name: 'Northern Water Princess - Damaged 1',
@@ -16053,7 +16044,6 @@ var SHIPDATA = {
 		unknownstats: true,
 		RNG: 1,
 		SPD: 5,
-		SLOTS: [0, 0, 0, 0],
 	},
 	1732: {
 		name: 'Northern Water Princess - Damaged 2',
@@ -16072,7 +16062,6 @@ var SHIPDATA = {
 		unknownstats: true,
 		RNG: 1,
 		SPD: 5,
-		SLOTS: [0, 0, 0, 0],
 	},
 	1733: {
 		name: 'Northern Water Princess - Damaged 3',
@@ -16091,31 +16080,11 @@ var SHIPDATA = {
 		unknownstats: true,
 		RNG: 1,
 		SPD: 5,
-		SLOTS: [0, 0, 0, 0],
 	},
 	1734: {
 		name: 'CVL Nu-Class Kai Elite',
 		nameJP: '軽母ヌ級改',
 		image: 'SNuE.jpg',
-		type: 'CVL',
-		HP: 1,
-		FP: 1,
-		TP: 1,
-		AA: 1,
-		AR: 1,
-		EV: 0,
-		ASW: 0,
-		LOS: 0,
-		LUK: 1,
-		unknownstats: true,
-		RNG: 1,
-		SPD: 5,
-		SLOTS: [22, 22, 22, 22]
-	},
-	1735: {
-		name: 'CVL Nu-Class Kai Flagship',
-		nameJP: '軽母ヌ級改',
-		image: 'SNuF.jpg',
 		type: 'CVL',
 		HP: 88,
 		FP: 35,
@@ -16129,8 +16098,28 @@ var SHIPDATA = {
 		unknownstats: true,
 		RNG: 1,
 		SPD: 5,
-		SLOTS: [24, 24, 24, 24],
+		SLOTS: [22, 22, 22, 22],
 		EQUIPS: [574, 524, 520, 574]
+	},
+	1735: {
+		name: 'CVL Nu-Class Kai Flagship',
+		nameJP: '軽母ヌ級改',
+		image: 'SNuF.jpg',
+		type: 'CVL',
+		HP: 118,
+		FP: 45,
+		TP: 0,
+		AA: 68,
+		AR: 93,
+		EV: 0,
+		ASW: 0,
+		LOS: 0,
+		LUK: 1,
+		unknownstats: true,
+		RNG: 1,
+		SPD: 5,
+		SLOTS: [23, 23, 27, 23],
+		EQUIPS: [575, 524, 520, 575]
 	},
 	2001: {
 		name: 'Iona',
