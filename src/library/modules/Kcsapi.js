@@ -59,7 +59,7 @@ Previously known as "Reactor"
 			// if there is either new ship(s) or new item(s)
 			console.log("api_start2 newCounts", newCounts);
 			if(newCounts[0]>0 || newCounts[1]>0){
-				console.log("triggering GameUpdate");
+				console.log("Triggering GameUpdate:", newCounts);
 				KC3Network.trigger("GameUpdate", newCounts);
 			}
 		},
@@ -80,7 +80,7 @@ Previously known as "Reactor"
 		
 		/* Home Port Screen
 		-------------------------------------------------------*/
-		"api_port/port":function(params, response, headers){	
+		"api_port/port":function(params, response, headers){
 			KC3Network.trigger("HomeScreen");
 			
 			KC3ShipManager.set(response.api_data.api_ship,true);
@@ -152,6 +152,11 @@ Previously known as "Reactor"
 			KC3Network.trigger("Timers");
 			KC3Network.trigger("Quests");
 			KC3Network.trigger("Fleet");
+			
+			// To detect event boss debuffed sound effect
+			if(response.api_data.api_event_object){
+				KC3Network.trigger("DebuffNotify", response.api_data.api_event_object);
+			}
 		},
 		
 		/*-------------------------------------------------------*/

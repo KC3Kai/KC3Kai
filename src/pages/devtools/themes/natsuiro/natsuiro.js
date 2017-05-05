@@ -9,6 +9,7 @@
 	var currentLayout = "";
 	var isRunning = false;
 	var lastApiError = false;
+	var lastApiFlag2 = false;
 
 	// Interface values
 	var selectedFleet = 1;
@@ -903,26 +904,64 @@
 			$("#catBomb").fadeIn(300);
 		},
 
-		GameUpdate: function(data){
-			console.debug("GameUpdate triggered:", data);
+		// General green modal message box, reuse #gameUpdate div elements
+		ModalBox: function(data){
 			$("#gameUpdate").hide();
-
-			if(data[0] > 0 && data[1] > 0){
-				$("#gameUpdate .description a").html( KC3Meta.term("GameUpdateBoth").format(data[0], data[1]) );
-			}else if(data[0] > 0){
-				$("#gameUpdate .description a").html( KC3Meta.term("GameUpdateShips").format(data[0]) );
-			}else{
-				$("#gameUpdate .description a").html( KC3Meta.term("GameUpdateEquips").format(data[1]) );
+			$("#gameUpdate .title").html(data.title);
+			if(data.message){
+				$("#gameUpdate .description .message").html(data.message);
+				$("#gameUpdate .description .message").show();
+			} else {
+				$("#gameUpdate .description .message").hide();
 			}
-			
-			$("#gameUpdate .description a").off("click").on("click", function(e){
-				(new RMsg("service", "strategyRoomPage", {
-					tabPath: "mstupdate"
-				})).execute();
-				return false;
-			});
-
+			if(data.link){
+				$("#gameUpdate .description a").html(data.link);
+				$("#gameUpdate .description a").off("click");
+				if(typeof data.onClick === "function"){
+					$("#gameUpdate .description a").on("click", data.onClick);
+				}
+				$("#gameUpdate .description a").show();
+			} else {
+				$("#gameUpdate .description a").hide();
+			}
 			$("#gameUpdate").fadeIn(300);
+		},
+
+		GameUpdate: function(data){
+			let msg = "";
+			if(data[0] > 0 && data[1] > 0){
+				msg = KC3Meta.term("GameUpdateBoth").format(data[0], data[1]);
+			}else if(data[0] > 0){
+				msg = KC3Meta.term("GameUpdateShips").format(data[0]);
+			}else{
+				msg = KC3Meta.term("GameUpdateEquips").format(data[1]);
+			}
+			this.ModalBox({
+				title: KC3Meta.term("GameUpdateDetected"),
+				message: msg,
+				link: KC3Meta.term("GameUpdateLink"),
+				onClick: function(e){
+					(new RMsg("service", "strategyRoomPage", {
+						tabPath: "mstupdate"
+					})).execute();
+					return false;
+				}
+			});
+		},
+
+		DebuffNotify: function(data){
+			if(data.api_m_flag2 !== undefined && lastApiFlag2 != data.api_m_flag2){
+				// From Event Summer 2016
+				// devs set api_m_flag2 to 1 on port, to play the debuff SE
+				let isDebuffed = data.api_m_flag2 == 1;
+				this.ModalBox({
+					title: KC3Meta.term("BossDebuffedTitle"),
+					message: KC3Meta.term("BossDebuffedMessage").format(
+						KC3Meta.term(isDebuffed ? "BossDebuffedYes" : "BossDebuffedNo")
+					)
+				});
+				lastApiFlag2 = data.api_m_flag2;
+			}
 		},
 
 		HQ: function(data){
@@ -1783,15 +1822,16 @@
 						.lazyInitTooltip();
 					var resBoxDiv = $(".module.activity .node_type_resource");
 					resBoxDiv.removeClass("node_type_maelstrom");
-					resBoxDiv.children().remove();
+					$(".clone", resBoxDiv).remove();
+					resBoxDiv.children().hide();
 					$.each(thisNode.icon, function(i, icon){
-						var iconDiv = $('<div class="node_res_icon"><img/></div>');
-						var textDiv = $('<div class="node_res_text"></div>');
+						var iconDiv = $('<div class="node_res_icon clone"><img/></div>');
+						var textDiv = $('<div class="node_res_text clone"></div>');
 						resBoxDiv.append(iconDiv).append(textDiv);
 						$("img", iconDiv).attr("src", icon("../../../../assets/img/client/"));
 						textDiv.text( thisNode.amount[i] );
 					});
-					resBoxDiv.append($('<div class="clear"></div>'));
+					resBoxDiv.append($('<div class="clear clone"></div>'));
 					resBoxDiv.show();
 					break;
 
@@ -1802,10 +1842,11 @@
 						.attr("title", thisNode.nodeDesc)
 						.lazyInitTooltip();
 					$(".module.activity .node_type_resource").removeClass("node_type_maelstrom");
+					$(".module.activity .node_type_resource .clone").remove();
 					$(".module.activity .node_type_resource .node_res_icon img").attr("src",
 						thisNode.icon("../../../../assets/img/client/"));
 					$(".module.activity .node_type_resource .node_res_text").text( thisNode.amount );
-					$(".module.activity .node_type_resource").show();
+					$(".module.activity .node_type_resource").show().children().show();
 
 					if(KC3SortieManager.getCurrentMapData().kind=='multiple') {
 						updateMapGauge(true,true,true);
@@ -1819,10 +1860,11 @@
 						.attr("title", thisNode.nodeDesc)
 						.lazyInitTooltip();
 					$(".module.activity .node_type_resource").addClass("node_type_maelstrom");
+					$(".module.activity .node_type_resource .clone").remove();
 					$(".module.activity .node_type_resource .node_res_icon img").attr("src",
 						thisNode.icon("../../../../assets/img/client/"));
 					$(".module.activity .node_type_resource .node_res_text").text( -thisNode.amount );
-					$(".module.activity .node_type_resource").show();
+					$(".module.activity .node_type_resource").show().children().show();
 					break;
 
 				// Selection node
@@ -1839,12 +1881,13 @@
 				case "transport":
 					$(".module.activity .sortie_node_"+numNodes).addClass("nc_resource");
 					$(".module.activity .node_type_resource").removeClass("node_type_maelstrom");
+					$(".module.activity .node_type_resource .clone").remove();
 					$(".module.activity .node_type_resource .node_res_icon img").attr("src",
 						"../../../../assets/img/items/25.png");
 					var lowTPGain = isNaN(thisNode.amount) ? "?" : Math.floor(0.7 * thisNode.amount);
 					var highTPGain = isNaN(thisNode.amount) ? "?" : thisNode.amount;
 					$(".module.activity .node_type_resource .node_res_text").text( "{0} ~ {1} TP".format(lowTPGain, highTPGain) );
-					$(".module.activity .node_type_resource").show();
+					$(".module.activity .node_type_resource").show().children().show();
 					break;
 
 				// Battle avoided node
