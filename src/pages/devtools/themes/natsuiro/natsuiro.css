@@ -86,6 +86,7 @@ html,body {
 	font-size:14px;
 	font-weight:bold;
 	float:left;
+	white-space:nowrap;
 }
 #catBomb .closebtn {
 	width:25px;
@@ -143,6 +144,7 @@ html,body {
 	font-size:14px;
 	font-weight:bold;
 	float:left;
+	white-space:nowrap;
 }
 #gameUpdate .closebtn {
 	width:25px;

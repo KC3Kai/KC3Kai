@@ -695,7 +695,7 @@ KC3改 Ship Object
 		let isTaiyou = RemodelDb.originOf(this.masterId) === 521 && this.masterId !== 521;
 		// lower condition for DE and Taiyou
 		let aswThreshold = this.master().api_stype == 1 ? 60
-			: isTaiyou ? 65
+			: isTaiyou ? 60
 			: 100;
 
 		// shortcutting on the stricter condition first

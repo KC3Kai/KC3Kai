@@ -371,6 +371,37 @@
 					});
 			});
 			
+			// Export CSV: Abyssal Enemies
+			$(".tab_profile .export_csv_abyssal").on("click", function(event){
+				// CSV Headers
+				var exportData = [
+					"ID", "Name", "SType", "HP", "FP", "AR", "TP", "AA", "Speed", "Equip1", "Equip2", "Equip3", "Equip4"
+				].join(",")+CSV_LINE_BREAKS;
+				KC3Database.con.enemy
+					.toArray(function(result){
+						result.forEach(function(ab){
+							exportData += [
+								ab.id,
+								csvQuoteIfNecessary(KC3Meta.abyssShipName(ab.id)),
+								csvQuoteIfNecessary(KC3Meta.stype(KC3Master.ship(ab.id).api_stype)),
+								ab.hp,
+								ab.fp,
+								ab.ar,
+								ab.tp,
+								ab.aa,
+								csvQuoteIfNecessary(KC3Meta.shipSpeed(KC3Master.ship(ab.id).api_soku)),
+								csvQuoteIfNecessary("[" + ab.eq1 + "] " + KC3Meta.gearName(KC3Master.slotitem(ab.eq1).api_name || "")),
+								csvQuoteIfNecessary("[" + ab.eq2 + "] " + KC3Meta.gearName(KC3Master.slotitem(ab.eq2).api_name || "")),
+								csvQuoteIfNecessary("[" + ab.eq3 + "] " + KC3Meta.gearName(KC3Master.slotitem(ab.eq3).api_name || "")),
+								csvQuoteIfNecessary("[" + ab.eq4 + "] " + KC3Meta.gearName(KC3Master.slotitem(ab.eq4).api_name || ""))
+							].join(",")+CSV_LINE_BREAKS;
+						});
+						
+						var filename = self.makeFilename("AbyssalShips", "csv");
+						self.saveFile(filename, exportData, "text/csv");
+					});
+			});
+			
 			
 			// Clear Quick Data
 			$(".tab_profile .clear_storage").on("click", function(event){
