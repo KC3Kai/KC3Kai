@@ -1395,13 +1395,20 @@
 				MainRepairs = CurrentFleet.highestRepairTimes(true);
 
 				// Show ships on selected fleet
+				let isSelectedSortiedFleet = (selectedFleet == KC3SortieManager.fleetSent);
+				let isSelected2ndFleetOnCombined = (selectedFleet == 2 && KC3SortieManager.fleetSent == 1 && !!PlayerManager.combinedFleet);
 				$.each(CurrentFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						if(KC3SortieManager.onSortie && selectedFleet == KC3SortieManager.fleetSent){
-							dameConConsumed = (thisNode.dameConConsumed || [])[index];
+						if(KC3SortieManager.onSortie){
+							if(isSelectedSortiedFleet){
+								dameConConsumed = (thisNode.dameConConsumed || [])[index];
+							} else if(isSelected2ndFleetOnCombined){
+								// Send combined fleet, select and get escort info
+								dameConConsumed = (thisNode.dameConConsumedEscort || [])[index];
+							}
 						}
 						var starShellUsed = (flarePos == index+1) &&
-							selectedFleet == KC3SortieManager.fleetSent;
+							(isSelectedSortiedFleet || isSelected2ndFleetOnCombined);
 						(new KC3NatsuiroShipbox(".lship", rosterId, showCombinedFleetBars, dameConConsumed, starShellUsed))
 							.commonElements()
 							.defineLong( CurrentFleet )
