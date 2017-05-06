@@ -1703,7 +1703,7 @@
 								$(".base_plane_img img", planeBox).attr("src", eqImgSrc)
 									.error(function() { $(this).unbind("error").attr("src", "../../../../assets/img/ui/empty.png"); });
 								$(".base_plane_img", planeBox)
-									.attr("title", $(".base_plane_name", planeBox).text())
+									.attr("title", KC3Gear.buildGearTooltip(itemObj, $(".base_plane_name", planeBox).text()) )
 									.lazyInitTooltip()
 									.data("masterId", itemObj.masterId)
 									.on("dblclick", self.gearDoubleClickFunction);
