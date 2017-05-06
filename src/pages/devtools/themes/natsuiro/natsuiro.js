@@ -904,7 +904,7 @@
 			$("#catBomb").fadeIn(300);
 		},
 
-		// General green modal message box, reuse #gameUpdate div elements
+		// General green modal message box, reusing #gameUpdate div elements
 		ModalBox: function(data){
 			$("#gameUpdate").hide();
 			$("#gameUpdate .title").html(data.title);
@@ -950,16 +950,24 @@
 		},
 
 		DebuffNotify: function(data){
-			if(data.api_m_flag2 !== undefined && lastApiFlag2 != data.api_m_flag2){
-				// From Event Summer 2016
-				// devs set api_m_flag2 to 1 on port, to play the debuff SE
-				let isDebuffed = data.api_m_flag2 == 1;
+			// From Event Summer 2016,
+			// devs set api_m_flag2 to 1 on port, to play the debuff SE.
+			if(data.api_m_flag2 === undefined){
+				lastApiFlag2 = false;
+			} else if(data.api_m_flag2 > 0){
+				// so the flag does not indicate state of the debuff,
+				// it only indicates: time to play a SE.
+				// we cannot detect: is the debuff reseted?
+				//let isDebuffed = data.api_m_flag2 == 1;
 				this.ModalBox({
 					title: KC3Meta.term("BossDebuffedTitle"),
 					message: KC3Meta.term("BossDebuffedMessage").format(
-						KC3Meta.term(isDebuffed ? "BossDebuffedYes" : "BossDebuffedNo")
+						//KC3Meta.term(isDebuffed ? "BossDebuffedYes" : "BossDebuffedNo")
+						KC3Meta.term("BossDebuffedYes")
 					)
 				});
+				// this cached flag not used for now,
+				// as api_m_flag2 will be always reset to 0 if playing SE not required
 				lastApiFlag2 = data.api_m_flag2;
 			}
 		},
