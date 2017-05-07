@@ -140,6 +140,15 @@ Does not include Ships and Gears which are managed by other Managers
 			return this;
 		},
 
+		getBasesResupplyCost :function(){
+			var total = {fuel: 0, ammo: 0, steel: 0, bauxite: 0};
+			$.each(this.bases, function(i, b){
+				var cost = b.calcResupplyCost();
+				Object.keys(total).map(k => { total[k] += cost[k]; });
+			});
+			return total;
+		},
+
 		setRepairDocks :function( data ){
 			var lastRepair = this.repairShips.map(function(x){return x;}); // clone
 			this.repairShips.splice(0);

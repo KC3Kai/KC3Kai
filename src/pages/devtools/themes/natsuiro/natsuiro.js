@@ -1276,6 +1276,12 @@
 
 			// If LBAS is selected, do not respond to rest fleet update
 			if (selectedFleet == 6) {
+				let lbasSupplyCost = PlayerManager.getBasesResupplyCost();
+				$(".module.status .status_supply").attr("title",
+					KC3Meta.term("PanelResupplyCosts").format(
+						lbasSupplyCost.fuel, lbasSupplyCost.ammo, lbasSupplyCost.bauxite
+					)
+				).lazyInitTooltip();
 				return false;
 			}
 
@@ -1739,9 +1745,16 @@
 									$(".base_plane_cond img", planeBox).attr("src", eqCondSrc);
 									
 									if (planeInfo.api_count < planeInfo.api_max_count) {
+										let cost = baseInfo.calcResupplyCost();
 										$(".base_plane_count", planeBox).addClass("unsupplied");
+										$(".base_plane_count", planeBox).attr("title",
+											KC3Meta.term("PanelResupplyCosts").format(
+												cost.fuel, cost.ammo, cost.bauxite
+											)
+										).lazyInitTooltip();
 									} else {
 										$(".base_plane_count", planeBox).removeClass("unsupplied");
+										$(".base_plane_count", planeBox).attr("title", "");
 									}
 									
 								} else if (planeInfo.api_state == 2) {
@@ -1762,6 +1775,13 @@
 						$(".module.fleet .airbase_list").append(baseBox);
 					}
 				});
+				
+				let lbasSupplyCost = PlayerManager.getBasesResupplyCost();
+				$(".module.status .status_supply").attr("title",
+					KC3Meta.term("PanelResupplyCosts").format(
+						lbasSupplyCost.fuel, lbasSupplyCost.ammo, lbasSupplyCost.bauxite
+					)
+				).lazyInitTooltip();
 			}
 		},
 
