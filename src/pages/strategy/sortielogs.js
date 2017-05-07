@@ -53,6 +53,8 @@
 			}else{
 				return false;
 			}
+			this.exportingReplay = false;
+			this.enterCount = 0;
 		};
 		
 		/* EXECUTE
@@ -343,6 +345,11 @@
 		this.showMap = function(){
 			var self = this;
 			this.pageNum = 1;
+			this.enterCount += 1;
+			// Because showPage() is using async DB operation and time expensive (ofen > 1000ms),
+			// to prevent executing and adding elements to list duplicatedly
+			// when switch between worlds/maps quickly, should stop to re-enter it.
+			var expectedEnterCount = this.enterCount;
 			$(".tab_"+tabCode+" .page_list").empty();
 			$(".tab_"+tabCode+" .sortie_list").empty();
 			$(".tab_"+tabCode+" .sortie_batch_toggles").hide();
@@ -350,7 +357,9 @@
 			// Show all sorties
 			if(this.selectedWorld === 0){
 				KC3Database.count_normal_sorties(function(countSorties){
-					self.showPagination(countSorties);
+					console.log("count_all", countSorties);
+					if(expectedEnterCount === self.enterCount)
+						self.showPagination(countSorties);
 				});
 				
 			// Selected specific world
@@ -359,14 +368,16 @@
 				if(this.selectedMap === 0){
 					KC3Database.count_world(this.selectedWorld, function(countSorties){
 						console.log("count_world", countSorties);
-						self.showPagination(countSorties);
+						if(expectedEnterCount === self.enterCount)
+							self.showPagination(countSorties);
 					});
 					
 				// Selected specifc map
 				}else{
 					KC3Database.count_map(this.selectedWorld, this.selectedMap, function(countSorties){
 						console.log("count_map", countSorties);
-						self.showPagination(countSorties);
+						if(expectedEnterCount === self.enterCount)
+							self.showPagination(countSorties);
 					});
 				}
 			}
@@ -380,13 +391,6 @@
 			var countPages = Math.ceil( countSorties / this.itemsPerPage );
 			$(".tab_"+tabCode+" .page_list").html('<ul class="pagination pagination-sm"></ul>');
 			var twbsPageObj;
-			// Because showPage() is using async DB operation and time expensive (ofen > 1000ms),
-			// to prevent adding elements to list duplicatedly when switch between pages/maps quickly,
-			// should stop to re-enter it during a quota of time wait.
-			if(self.showPageTime && !self.debouncedShowPage){
-				self.debouncedShowPage = $.debounce(250 + self.showPageTime,
-					self.showPageTime > 500, self.showPage, self);
-			}
 			if(countPages > 0){
 				twbsPageObj = $(".tab_"+tabCode+" .pagination").twbsPagination({
 					totalPages: countPages,
@@ -398,10 +402,7 @@
 						}
 					}
 				});
-				if(self.debouncedShowPage)
-					self.debouncedShowPage(1, twbsPageObj);
-				else
-					self.showPage(1, twbsPageObj);
+				self.showPage(1, twbsPageObj);
 				$(".tab_"+tabCode+" .sortie_controls .sortie_count").text(
 					"Total pages: {0}, sorties: {1}".format(countPages, countSorties)
 				);
@@ -417,18 +418,17 @@
 		this.showPage = function(page, twbsPageObj){
 			var self = this;
 			var startTime = Date.now();
-			this.showPageTime = 0;
 			this.pageNum = page || 1;
 			var postShowList = function(){
-				self.showPageTime = Date.now() - startTime;
-				console.log("Showing this list took", self.showPageTime, "milliseconds");
+				var showPageTime = Date.now() - startTime;
+				console.log("Showing this list took", showPageTime, "milliseconds");
 				if(twbsPageObj) twbsPageObj.twbsPagination("enable");
 			};
+			// Prevent to quickly switch on pagination
+			if(twbsPageObj) twbsPageObj.twbsPagination("disable");
 			$(".tab_"+tabCode+" .pagination").show();
 			$(".tab_"+tabCode+" .sortie_list").empty();
 			
-			// Prevent to quickly switch on pagination
-			if(twbsPageObj) twbsPageObj.twbsPagination("disable");
 			// Show all sorties
 			if(this.selectedWorld === 0){
 				KC3Database.get_normal_sorties(this.pageNum, this.itemsPerPage, function( sortieList ){
