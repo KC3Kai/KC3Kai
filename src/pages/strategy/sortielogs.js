@@ -805,7 +805,22 @@
 							.format(mapId, mapData.kills, KC3Meta.gauge(mapId.substr(1)))
 						);
 					} else if(mapData.stat && mapData.stat.onBoss && mapData.stat.onBoss.hpdat){
-						let bossHpArr = mapData.stat.onBoss.hpdat[sortieData.id];
+						let hpObj = mapData.stat.onBoss.hpdat;
+						let bossHpArr = hpObj[sortieData.id];
+						if(Array.isArray(bossHpArr)){
+							// Get boss HP on previous sortie
+							let hpKeyArr = Object.keys(hpObj);
+							let sortieKeyIdx = hpKeyArr.indexOf(String(sortieData.id));
+							if(sortieKeyIdx > 0){
+								let prevBossHpArr = hpObj[hpKeyArr[sortieKeyIdx - 1]];
+								// Do not use previous HP if max changed
+								if(bossHpArr[1] !== prevBossHpArr[1]){
+									bossHpArr = [bossHpArr[1], bossHpArr[1]];
+								} else {
+									bossHpArr = prevBossHpArr;
+								}
+							}
+						}
 						if(Array.isArray(bossHpArr)){
 							sortieData.now_maphp = bossHpArr[0];
 							sortieData.max_maphp = bossHpArr[1];
