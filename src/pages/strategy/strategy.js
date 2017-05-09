@@ -1,11 +1,11 @@
 (function(){
 	"use strict";
 	_gaq.push(['_trackPageview']);
-
+	
 	const HASH_PARAM_DELIM = "-";
 	var activeTab;
 	var themeName;
-
+	
 	Object.defineProperties(window,{
 		activeTab:{
 			get:function(){return activeTab;},
@@ -17,12 +17,12 @@
 			get:function(){return activeTab.definition;}
 		}
 	});
-
+	
 	$(document).on("ready", function(){
 		// Initialize data managers
 		ConfigManager.load();
 		KC3Master.init();
-		KC3Meta.init("../../data/");
+		KC3Meta.init("../../data/", true);
 		KC3Master.loadAbyssalShips("../../data/");
 		KC3Master.loadSeasonalShips("../../data/");
 		KC3Meta.defaultIcon("../../assets/img/ui/empty.png");
@@ -33,7 +33,7 @@
 		RemodelDb.init();
 		KC3Translation.execute();
 		WhoCallsTheFleetDb.init("../../");
-
+		
 		themeName = ConfigManager.sr_theme || "dark";
 		var themeCSS = document.createElement("link");
 		themeCSS.rel = "stylesheet";
@@ -47,32 +47,32 @@
 			customCSS.innerHTML = ConfigManager.sr_custom_css;
 			$("head").append(customCSS);
 		}
-
+		
 		if(!KC3Master.available){
-			$("#error").text("Strategy Room is not ready. Please open the game once so we can get data. Also make sure following the instructions, that open the F12 devtools panel first before the Game Player shown.");
+			$("#error").text( KC3Meta.term("FirstRunMessage") );
 			$("#error").show();
 		}
-
+		
 		// show dev-only pages conditionally
-		if ( ConfigManager.devOnlyPages ) {
+		if(ConfigManager.devOnlyPages){
 			$("#menu .submenu.dev-only").show();
 		}
-
+		
 		// Click a menu item
 		$("#menu .submenu ul.menulist li").on("click", function(){
 			// Google Analytics just for click event
 			var gaEvent = "Strategy Room: " + $(this).data("id");
 			_gaq.push(['_trackEvent', gaEvent, 'clicked']);
-
+			
 			KC3StrategyTabs.reloadTab(this);
 		});
-
+		
 		// Refresh current tab and force data reloading
 		$(".logo").on("click", function(){
 			console.debug("Reloading current tab [", KC3StrategyTabs.pageParams[0], "] on demand");
 			KC3StrategyTabs.reloadTab(undefined, true);
 		});
-
+		
 		$("#contentHtml").on("click", ".page_help_btn", function(){
 			if( $(".page_help").is(":visible") ){
 				$(".page_help").fadeOut();
@@ -80,7 +80,7 @@
 				$(".page_help").fadeIn();
 			}
 		});
-
+		
 		// Add back to top and reload float button
 		$(window).scroll(function(){
 			if($(this).scrollTop() > 90){
@@ -95,24 +95,24 @@
 		$(".float_toolbar .reload").on("click", function(){
 			$(".logo").trigger("click");
 		});
-
+		
 		$("#error").on("click", function(){
 			$(this).empty().hide();
 		});
-
+		
 		// Add listener to react on URL hash changed
 		window.addEventListener('popstate', KC3StrategyTabs.onpopstate);
-
+		
 		// If there is a hash tag on URL, set it as initial selected
 		KC3StrategyTabs.pageParams = window.location.hash.substring(1).split(HASH_PARAM_DELIM);
 		if(KC3StrategyTabs.pageParams[0] !== ""){
 			$("#menu .submenu ul.menulist li").removeClass("active");
 			$("#menu .submenu ul.menulist li[data-id="+KC3StrategyTabs.pageParams[0]+"]").addClass("active");
 		}
-
+		
 		// Load initially selected
 		$("#menu .submenu ul.menulist li.active").click();
-
+		
 	});
 
 	KC3StrategyTabs.gotoTab = function(tab, hashParams) {
@@ -147,8 +147,8 @@
 		$("#menu .submenu ul.menulist li").removeClass("active");
 		$(tab).addClass("active");
 		$("#contentHtml").hide().empty();
-		const WINDOW_TITLE = $(document).find("title").text().split("-")[0];
-		window.document.title = "{0} - {1}".format(WINDOW_TITLE, $(tab).text());
+		window.document.title = KC3Meta.term("StrategyRoomTitlePattern")
+			.format(KC3Meta.term("StrategyRoomTitle"), $(tab).text());
 		if(KC3StrategyTabs.loading != KC3StrategyTabs.pageParams[0]) {
 			window.location.hash = KC3StrategyTabs.loading;
 			KC3StrategyTabs.pageParams = [KC3StrategyTabs.loading];
@@ -206,9 +206,13 @@
 	};
 	(function($) {
 		// A lazy initialzing method, prevent duplicate tooltip instance
-		$.fn.lazyInitTooltip = function(opts) {
+		$.fn.lazyInitTooltip = function(opts, isExtendDefault = true) {
 			if(typeof this.tooltip("instance") === "undefined") {
-				this.tooltip(opts || KC3StrategyTabs.nativeTooltipOptions);
+				this.tooltip(
+					isExtendDefault ?
+						$.extend(true, {}, KC3StrategyTabs.nativeTooltipOptions, opts) :
+						opts || KC3StrategyTabs.nativeTooltipOptions
+				);
 			}
 			return this;
 		};
@@ -228,7 +232,7 @@
 			return this;
 		};
 	}(jQuery));
-
+	
 	/**
 	 * Simulate throttle/debounce func like the ones in lodash
 	 * docs see: https://github.com/cowboy/jquery-throttle-debounce

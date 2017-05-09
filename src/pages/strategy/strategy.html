@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<!-- @nonbuildstart -->
@@ -9,7 +9,7 @@
 		<link href="../../assets/css/jquery-ui.min.css" rel="stylesheet" type="text/css">
 		<link href="../../assets/css/bootstrap-slider.min.css" rel="stylesheet" type="text/css">
 		<link href="strategy.css" rel="stylesheet" type="text/css">
-		<title class="i18n">KC3KaiStrategyRoom</title>
+		<title class="i18n">StrategyRoomTitle</title>
 		<link rel="shortcut icon" href="../../assets/img/logo/48.png" type="image/x-icon" />
 	</head>
 	<body class="xhidden">
@@ -18,89 +18,88 @@
 			<div id="body">
 				<!-- MENU -->
 				<div id="menu">
-					<div class="logo hover" title="Refresh current page">
+					<div class="logo hover i18n_title" title="LogoTooltip">
 						<img src="../../assets/img/logo/128.png" alt="KC3改" />
 					</div>
 					<div class="submenu">
-						<div class="title i18n">Player</div>
+						<div class="title i18n">TabTopMenuPlayer</div>
 						<ul class="menulist">
-							<li data-id="profile" class="active i18n">Profile</li>
-							<!-- <li data-id="newsfeed">Newsfeed</li> -->
-							<li data-id="screenshots" class="i18n">Screenshots</li>
-							<li data-id="resources" class="i18n">Resources</li>
-							<li data-id="consumables" class="i18n">Consumables</li>
-							<li data-id="experience" class="i18n">Experience</li>
-							<li data-id="showcase" class="i18n">Showcase</li>
-							<li data-id="overlodger" class="i18n">Ledger</li>
-							<li data-id="databackup" class="i18n">Data Backup</li>
+							<li data-id="profile" class="active i18n">TabSubMenuProfile</li>
+							<li data-id="screenshots" class="i18n">TabSubMenuScreenshots</li>
+							<li data-id="resources" class="i18n">TabSubMenuResources</li>
+							<li data-id="consumables" class="i18n">TabSubMenuConsumables</li>
+							<li data-id="experience" class="i18n">TabSubMenuExperience</li>
+							<li data-id="showcase" class="i18n">TabSubMenuShowcase</li>
+							<li data-id="overlodger" class="i18n">TabSubMenuLedger</li>
+							<li data-id="databackup" class="i18n">TabSubMenuDataBackup</li>
 						</ul>
 					</div>
 					<div class="submenu">
-						<div class="title i18n">Ships</div>
+						<div class="title i18n">TabTopMenuShips</div>
 						<ul class="menulist">
-							<li data-id="ships" class="i18n">Ship List</li>
-							<li data-id="builds" class="i18n">Construction</li>
-							<li data-id="lscs" class="i18n">LSC</li>
-							<li data-id="docking" class="i18n">Docking</li>
-							<li data-id="expcalc" class="i18n">Leveling</li>
-							<li data-id="badge" class="i18n">Badge</li>
+							<li data-id="ships" class="i18n">TabSubMenuShipList</li>
+							<li data-id="builds" class="i18n">TabSubMenuConstruction</li>
+							<li data-id="lscs" class="i18n">TabSubMenuLSC</li>
+							<li data-id="docking" class="i18n">TabSubMenuDocking</li>
+							<li data-id="expcalc" class="i18n">TabSubMenuLeveling</li>
+							<li data-id="badge" class="i18n">TabSubMenuBadge</li>
 						</ul>
 					</div>
 					<div class="submenu">
-						<div class="title i18n">Equipment</div>
+						<div class="title i18n">TabTopMenuEquipment</div>
 						<ul class="menulist">
-							<li data-id="gears" class="i18n">Equipment List</li>
-							<li data-id="crafts" class="i18n">Crafting</li>
-							<li data-id="aircraft" class="i18n">Aircraft</li>
-							<li data-id="akashi" class="i18n">Akashi</li>
+							<li data-id="gears" class="i18n">TabSubMenuEquipmentList</li>
+							<li data-id="crafts" class="i18n">TabSubMenuCrafting</li>
+							<li data-id="aircraft" class="i18n">TabSubMenuAircraft</li>
+							<li data-id="akashi" class="i18n">TabSubMenuAkashi</li>
 						</ul>
 					</div>
 					<div class="submenu">
-						<div class="title i18n">Fleet</div>
+						<div class="title i18n">TabTopMenuFleet</div>
 						<ul class="menulist">
-							<li data-id="fleet" class="i18n">Manager</li>
-							<li data-id="locking" class="i18n">Locking</li>
+							<li data-id="fleet" class="i18n">TabSubMenuManager</li>
+							<li data-id="locking" class="i18n">TabSubMenuLocking</li>
 						</ul>
 					</div>
 					<div class="submenu">
-						<div class="title i18n">Quests</div>
+						<div class="title i18n">TabTopMenuQuests</div>
 						<ul class="menulist">
-							<li data-id="flowchart" class="i18n">Flowchart</li>
-							<li data-id="shipquests" class="i18n">Required Ships</li>
+							<li data-id="flowchart" class="i18n">TabSubMenuFlowchart</li>
+							<li data-id="shipquests" class="i18n">TabSubMenuRequiredShips</li>
 						</ul>
 					</div>
 					<div class="submenu">
-						<div class="title i18n">Battles</div>
+						<div class="title i18n">TabTopMenuBattles</div>
 						<ul class="menulist">
-							<li data-id="maps" class="i18n">Maps</li>
-							<li data-id="event" class="i18n">Events</li>
-							<li data-id="encounters" class="i18n">Encounters</li>
-							<li data-id="pvp" class="i18n">PvP History</li>
+							<li data-id="maps" class="i18n">TabSubMenuMaps</li>
+							<li data-id="event" class="i18n">TabSubMenuEvents</li>
+							<li data-id="encounters" class="i18n">TabSubMenuEncounters</li>
+							<li data-id="pvp" class="i18n">TabSubMenuPvP</li>
 						</ul>
 					</div>
 					<div class="submenu">
-						<div class="title i18n">Expeditions</div>
+						<div class="title i18n">TabTopMenuExpeditions</div>
 						<ul class="menulist">
-							<li data-id="expedpast" class="i18n">History</li>
-							<li data-id="expedscorer" class="i18n">Scorer</li>
-							<li data-id="expedtable" class="i18n">Table</li>
+							<li data-id="expedpast" class="i18n">TabSubMenuHistory</li>
+							<li data-id="expedscorer" class="i18n">TabSubMenuScorer</li>
+							<li data-id="expedtable" class="i18n">TabSubMenuTable</li>
 						</ul>
 					</div>
 					<div class="submenu">
-						<div class="title i18n">Library</div>
+						<div class="title i18n">TabTopMenuLibrary</div>
 						<ul class="menulist">
-							<li data-id="mstupdate" class="i18n">Updates</li>
-							<li data-id="mstship" class="i18n">Ships</li>
-							<li data-id="mstgear" class="i18n">Equipment</li>
-							<li data-id="compare" class="i18n">Compare</li>
+							<li data-id="mstupdate" class="i18n">TabSubMenuUpdates</li>
+							<li data-id="mstship" class="i18n">TabSubMenuShips</li>
+							<li data-id="mstgear" class="i18n">TabSubMenuEquipment</li>
+							<li data-id="compare" class="i18n">TabSubMenuCompare</li>
 						</ul>
 					</div>
 					<div class="submenu dev-only">
-						<div class="title i18n">Dev-Only</div>
+						<div class="title">Dev-Only</div>
 						<ul class="menulist">
-							<li data-id="playground" class="i18n">Playground</li>
-							<li data-id="translations" class="i18n">Translations</li>
-							<li data-id="quotes" class="i18n">Quotes</li>
+							<li data-id="playground">Playground</li>
+							<li data-id="translations">Translations</li>
+							<li data-id="quotes">Quotes</li>
 						</ul>
 					</div>
 				</div>
@@ -112,8 +111,8 @@
 				<div class="clear"></div>
 			</div>
 			<div class="float_toolbar">
-				<div class="back_to_top hover i18n">Back to Top</div>
-				<div class="reload hover i18n">Refresh Tab</div>
+				<div class="back_to_top hover i18n">FloatToolbarBackToTop</div>
+				<div class="reload hover i18n">FloatToolbarRefresh</div>
 			</div>
 		</div>
 

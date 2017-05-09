@@ -34,7 +34,7 @@
 			// Specialized fonts
 			var fontFamily = false;
 			switch(ConfigManager.language){
-				
+				// Default font family for CJK languages
 				case "scn": fontFamily = '"HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,"Nimbus Sans L",Arial,"Lucida Grande","Liberation Sans","Microsoft YaHei UI","Microsoft YaHei","Hiragino Sans GB","Wenquanyi Micro Hei","WenQuanYi Zen Hei","ST Heiti",SimHei,"WenQuanYi Zen Hei Sharp",sans-serif'; break;
 				
 				case "tcn": fontFamily = '"Helvetica Neue", Helvetica, "Microsoft JhengHei", "Microsoft JhengHei UI", Arial,"Heiti TC", sans-serif'; break;
@@ -43,11 +43,24 @@
 				
 				default: break;
 			}
-			
+			// Can be also defined in terms
+			var fontFamilyInTerm = KC3Meta.term("BodyFontFamily");
+			if(!!fontFamilyInTerm && fontFamilyInTerm !== "BodyFontFamily"){
+				fontFamily = fontFamilyInTerm;
+			}
 			if(fontFamily){ $("body").css("font-family", fontFamily); }
 			
 			// Apply HTML language code
 			$("html").attr("lang", ConfigManager.language);
+			
+			// Apply custom CSS for language specified in terms
+			var cssInTerm = KC3Meta.term("LangCustomCSS");
+			if(!!cssInTerm && cssInTerm !== "LangCustomCSS"){
+				var customCSS = document.createElement("style");
+				customCSS.type = "text/css";
+				customCSS.innerHTML = cssInTerm;
+				$("head").append(customCSS);
+			}
 		},
 
 		/*
