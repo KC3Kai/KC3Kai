@@ -1470,8 +1470,17 @@ Used by SortieManager
 		this.lostKind = battleData.api_lost_kind;
 		this.eships = battleData.api_ship_ke.slice(1);
 		this.eformation = battleData.api_formation[1];
+		this.elevels = battleData.api_ship_lv.slice(1);
 		this.eSlot = battleData.api_eSlot;
 		this.engagement = KC3Meta.engagement(battleData.api_formation[2]);
+		this.maxHPs = {
+			ally: battleData.api_maxhps.slice(1,7),
+			enemy: battleData.api_maxhps.slice(7,13)
+		};
+		this.beginHPs = {
+			ally: battleData.api_nowhps.slice(1,7),
+			enemy: battleData.api_nowhps.slice(7,13)
+		};
 		var planePhase = battleData.api_air_base_attack.api_stage1 || {
 				api_touch_plane:[-1,-1],
 				api_f_count    :0,

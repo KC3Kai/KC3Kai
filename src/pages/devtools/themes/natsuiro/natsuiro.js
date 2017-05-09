@@ -1956,7 +1956,11 @@
 						$(".module.activity .abyss_single .abyss_ship_"+(index+1)).addClass(KC3Meta.abyssShipBorderClass(eshipId));
 						$(".module.activity .abyss_single .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.abyssIcon(eshipId));
 						$(".module.activity .abyss_single .abyss_ship_"+(index+1)+" img")
-							.attr("title", "{0}: {1}\n".format(eshipId, KC3Meta.abyssShipName(eshipId)))
+							.data("masterId", eshipId)
+							.on("dblclick", self.shipDoubleClickFunction)
+							.attr("title", buildEnemyFaceTooltip(eshipId, thisNode.elevels[index],
+								thisNode.beginHPs.enemy[index], thisNode.maxHPs.enemy[index], 
+								undefined, thisNode.eSlot[index], false))
 							.lazyInitTooltip();
 						$(".module.activity .abyss_single .abyss_ship_"+(index+1)).show();
 					}
