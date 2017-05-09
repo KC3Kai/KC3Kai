@@ -1,12 +1,11 @@
 (function(){
 	"use strict";
 	_gaq.push(['_trackPageview']);
-	
+
 	const HASH_PARAM_DELIM = "-";
-	const WINDOW_TITLE = "KC3改 Strategy Room";
 	var activeTab;
 	var themeName;
-	
+
 	Object.defineProperties(window,{
 		activeTab:{
 			get:function(){return activeTab;},
@@ -18,7 +17,7 @@
 			get:function(){return activeTab.definition;}
 		}
 	});
-	
+
 	$(document).on("ready", function(){
 		// Initialize data managers
 		ConfigManager.load();
@@ -34,7 +33,7 @@
 		RemodelDb.init();
 		KC3Translation.execute();
 		WhoCallsTheFleetDb.init("../../");
-		
+
 		themeName = ConfigManager.sr_theme || "dark";
 		var themeCSS = document.createElement("link");
 		themeCSS.id = "themeCSS";
@@ -60,17 +59,18 @@
 			customCSS.innerHTML = ConfigManager.sr_custom_css;
 			$("head").append(customCSS);
 		}
-		
+
 		if(!KC3Master.available){
 			$("#error").text("Strategy Room is not ready. Please open the game once so we can get data. Also make sure following the instructions, that open the F12 devtools panel first before the Game Player shown.");
 			$("#error").show();
 		}
-		
+
 		// show dev-only pages conditionally
 		if ( ConfigManager.devOnlyPages ) {
 			$("#menu .submenu.dev-only").show();
 			$("#content").addClass("dev-only");
 		}
+
 		// auto adjust min-height of content div to fit all tabs
 		const baseHeight = {
 			"legacy": 270,
@@ -80,22 +80,22 @@
 			+ (ConfigManager.devOnlyPages ? 190 : 0)
 			+ 25 * $("#menu ul li").length
 		);
-		
+
 		// Click a menu item
 		$("#menu .submenu ul.menulist li").on("click", function(){
 			// Google Analytics just for click event
 			var gaEvent = "Strategy Room: " + $(this).data("id");
 			_gaq.push(['_trackEvent', gaEvent, 'clicked']);
-			
+
 			KC3StrategyTabs.reloadTab(this);
 		});
-		
+
 		// Refresh current tab and force data reloading
 		$(".logo").on("click", function(){
 			console.debug("Reloading current tab [", KC3StrategyTabs.pageParams[0], "] on demand");
 			KC3StrategyTabs.reloadTab(undefined, true);
 		});
-		
+
 		$("#contentHtml").on("click", ".page_help_btn", function(){
 			if( $(".page_help").is(":visible") ){
 				$(".page_help").fadeOut();
@@ -103,7 +103,7 @@
 				$(".page_help").fadeIn();
 			}
 		});
-		
+
 		// Add back to top and reload float button
 		$(window).scroll(function(){
 			if($(this).scrollTop() > 90){
@@ -118,7 +118,7 @@
 		$(".float_toolbar .reload").on("click", function(){
 			$(".logo").trigger("click");
 		});
-		
+
 		$("#error").on("click", function(){
 			$(this).empty().hide();
 		});
@@ -135,17 +135,17 @@
 		
 		// Add listener to react on URL hash changed
 		window.addEventListener('popstate', KC3StrategyTabs.onpopstate);
-		
+
 		// If there is a hash tag on URL, set it as initial selected
 		KC3StrategyTabs.pageParams = window.location.hash.substring(1).split(HASH_PARAM_DELIM);
 		if(KC3StrategyTabs.pageParams[0] !== ""){
 			$("#menu .submenu ul.menulist li").removeClass("active");
 			$("#menu .submenu ul.menulist li[data-id="+KC3StrategyTabs.pageParams[0]+"]").addClass("active");
 		}
-		
+
 		// Load initially selected
 		$("#menu .submenu ul.menulist li.active").click();
-		
+
 	});
 
 	KC3StrategyTabs.gotoTab = function(tab, hashParams) {
@@ -180,6 +180,7 @@
 		$("#menu .submenu ul.menulist li").removeClass("active");
 		$(tab).addClass("active");
 		$("#contentHtml").hide().empty();
+		const WINDOW_TITLE = $(document).find("title").text().split("-")[0];
 		window.document.title = "{0} - {1}".format(WINDOW_TITLE, $(tab).text());
 		if(KC3StrategyTabs.loading != KC3StrategyTabs.pageParams[0]) {
 			window.location.hash = KC3StrategyTabs.loading;
