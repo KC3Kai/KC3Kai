@@ -22,7 +22,7 @@
 		// Initialize data managers
 		ConfigManager.load();
 		KC3Master.init();
-		KC3Meta.init("../../data/");
+		KC3Meta.init("../../data/", true);
 		KC3Master.loadAbyssalShips("../../data/");
 		KC3Master.loadSeasonalShips("../../data/");
 		KC3Meta.defaultIcon("../../assets/img/ui/empty.png");
@@ -61,12 +61,12 @@
 		}
 
 		if(!KC3Master.available){
-			$("#error").text("Strategy Room is not ready. Please open the game once so we can get data. Also make sure following the instructions, that open the F12 devtools panel first before the Game Player shown.");
+			$("#error").text( KC3Meta.term("FirstRunMessage") );
 			$("#error").show();
 		}
 
 		// show dev-only pages conditionally
-		if ( ConfigManager.devOnlyPages ) {
+		if(ConfigManager.devOnlyPages){
 			$("#menu .submenu.dev-only").show();
 			$("#content").addClass("dev-only");
 		}
@@ -122,7 +122,7 @@
 		$("#error").on("click", function(){
 			$(this).empty().hide();
 		});
-		
+
 		// Add listener to react on config key changed
 		/* Strategy Room not needs it yet, as it can be reloaded at any time
 		window.addEventListener("storage", function({key, timeStamp, url}){
@@ -132,7 +132,7 @@
 			}
 		});
 		*/
-		
+
 		// Add listener to react on URL hash changed
 		window.addEventListener('popstate', KC3StrategyTabs.onpopstate);
 
@@ -180,8 +180,8 @@
 		$("#menu .submenu ul.menulist li").removeClass("active");
 		$(tab).addClass("active");
 		$("#contentHtml").hide().empty();
-		const WINDOW_TITLE = $(document).find("title").text().split("-")[0];
-		window.document.title = "{0} - {1}".format(WINDOW_TITLE, $(tab).text());
+		window.document.title = KC3Meta.term("StrategyRoomTitlePattern")
+			.format(KC3Meta.term("StrategyRoomTitle"), $(tab).text());
 		if(KC3StrategyTabs.loading != KC3StrategyTabs.pageParams[0]) {
 			window.location.hash = KC3StrategyTabs.loading;
 			KC3StrategyTabs.pageParams = [KC3StrategyTabs.loading];
@@ -263,9 +263,13 @@
 		};
 		*/
 		// A lazy initializing method, prevent duplicate tooltip instance
-		$.fn.lazyInitTooltip = function(opts) {
+		$.fn.lazyInitTooltip = function(opts, isExtendDefault = true) {
 			if(typeof this.tooltip("instance") === "undefined") {
-				this.tooltip($.extend(true, {}, KC3StrategyTabs.nativeTooltipOptions, opts));
+				this.tooltip(
+					isExtendDefault ?
+						$.extend(true, {}, KC3StrategyTabs.nativeTooltipOptions, opts) :
+						opts || KC3StrategyTabs.nativeTooltipOptions
+				);
 			}
 			return this;
 		};
