@@ -5343,7 +5343,13 @@ var PS = {};
           }
       };
   };
-  var calcSupportAirAttackDamageAC = calcKoukuDamageAC;
+  var calcSupportAirAttackDamageAC = function (info) {
+      var converted = KanColle_Util.fleetSplit(false)(convertFEDam(info.api_stage3.api_edam));
+      return {
+          left: KanColle_Util.memptyLR(monoidDamageVector),
+          right: KanColle_Util.lrMap(mkDV)(converted)
+      };
+  };
   var calcKoukuDamage = function (kk) {
       return fromFDamAndEDam(kk.api_stage3);
   };
