@@ -734,17 +734,24 @@ Used by SortieManager
 		}
 		
 		if(this.gaugeDamage > -1) {
-			this.gaugeDamage = Math.min(this.originalHPs[7],this.originalHPs[7] - this.enemyHP[0].hp);
+			var enemyFlagshipHp = this.originalHPs[7];
+			this.gaugeDamage = Math.min(enemyFlagshipHp, enemyFlagshipHp - this.enemyHP[0].hp);
 			
 			(function(sortieData){
-				var
-					maps = localStorage.getObject('maps'),
+				var maps = localStorage.getObject('maps'),
 					desg = ['m',sortieData.map_world,sortieData.map_num].join('');
 				if(this.isBoss() && maps[desg].kind == 'gauge-hp') {
-					maps[desg].baseHp = maps[desg].baseHp || this.originalHPs[7];
+					maps[desg].baseHp = maps[desg].baseHp || enemyFlagshipHp;
+					if(maps[desg].baseHp != enemyFlagshipHp) {
+						console.log("Different boss HP detected:", maps[desg].baseHp + " -> " + enemyFlagshipHp);
+						// If new HP lesser than old, should update it for Last Kill
+						if(enemyFlagshipHp < maps[desg].baseHp) {
+							maps[desg].baseHp = enemyFlagshipHp;
+						}
+					}
 				}
 				localStorage.setObject('maps',maps);
-			}).call(this,KC3SortieManager);
+			}).call(this, KC3SortieManager);
 		}
 		
 		// Record encoutners only if on sortie

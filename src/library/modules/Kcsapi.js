@@ -854,18 +854,20 @@ Previously known as "Reactor"
 		/* Select difficulty
 		-------------------------------------------------------*/
 		"api_req_map/select_eventmap_rank":function(params, response, headers){
-			var
-				allMaps = JSON.parse(localStorage.maps),
+			var allMaps = JSON.parse(localStorage.maps),
 				mkey    = "m" + params.api_maparea_id + params.api_map_no;
-			allMaps[mkey].difficulty = parseInt(params.api_rank);
+			var thisMap = allMaps[mkey];
+			thisMap.difficulty = parseInt(params.api_rank);
 			try{
-				allMaps[mkey].curhp = allMaps[mkey].maxhp = parseInt(response.api_data.api_max_maphp,10);
+				thisMap.curhp = thisMap.maxhp = parseInt(response.api_data.api_max_maphp, 10);
 			}catch(e){
 				console.warn("Map HP data is not given, leaving 9999HP as placeholder");
-				allMaps[mkey].curhp = allMaps[mkey].maxhp = 9999;
+				thisMap.curhp = allMaps[mkey].maxhp = 9999;
 			}
-			allMaps[mkey].kind  = allMaps[mkey].dkind; // reset the current map gauge kind
-			
+			// clear old progress of this map
+			delete thisMap.kinds;
+			delete thisMap.maxhps;
+			delete thisMap.baseHp;
 			localStorage.maps = JSON.stringify(allMaps);
 		},
 		
@@ -1755,7 +1757,7 @@ Previously known as "Reactor"
 			if(localStorage.maps=="null"){ localStorage.maps = ""; }
 			
 			var maps = JSON.parse(localStorage.maps || "{}");
-			var ctr, thisMap, localMap, etcStat, defStat;
+			var ctr, thisMap, oldMap, localMap, etcStat, defStat;
 			
 			// Prepare event despair stat ^w^)!
 			etcStat = {};
@@ -1785,50 +1787,62 @@ Previously known as "Reactor"
 			for(ctr in response.api_data.api_map_info){
 				thisMap = response.api_data.api_map_info[ctr];
 				var key = "m"+thisMap.api_id;
+				oldMap = maps[key];
 				
-				if(typeof (maps[key]||{}).curhp !== 'undefined')
+				if(typeof (oldMap||{}).curhp !== "undefined")
 					etcStat[key] = $.extend(true,{},defStat,maps[key].stat);
 				
 				// Create map object
 				localMap = {
 					id: thisMap.api_id,
 					clear: thisMap.api_cleared,
-					kind: 'single'
+					kind: "single"
 				};
 				
 				// Check for boss gauge kills
-				if(typeof thisMap.api_defeat_count != "undefined"){
+				if(typeof thisMap.api_defeat_count !== "undefined"){
 					localMap.kills = thisMap.api_defeat_count;
-					localMap.kind  = 'multiple';
+					localMap.kind  = "multiple";
 				}
 				
 				// Check for event map info
-				if(typeof thisMap.api_eventmap != "undefined"){
+				if(typeof thisMap.api_eventmap !== "undefined"){
 					var eventData = thisMap.api_eventmap;
 					localMap.curhp      = eventData.api_now_maphp;
 					localMap.maxhp      = eventData.api_max_maphp;
 					localMap.difficulty = eventData.api_selected_rank;
 					
-					if(typeof (maps[key]||{}).baseHp !== 'undefined')
-						localMap.baseHp     = maps[key].baseHp;
-					localMap.stat       = $.extend(true,{},defStat,etcStat[ key ]);
 					switch(eventData.api_gauge_type || 0) {
+						case 0:
 						case 2:
-							localMap.kind   = 'gauge-hp';
+							localMap.kind   = "gauge-hp";
 							break;
 						case 3:
-							localMap.kind   = 'gauge-tp';
+							localMap.kind   = "gauge-tp";
 							break;
 						default:
-							localMap.kind   = 'gauge-hp';
-							console.info('Reported new API Gauge Type',eventData.api_gauge_type);
+							localMap.kind   = "gauge-hp";
+							console.info("Reported new API Gauge Type", eventData.api_gauge_type);
 					}
-				}
-				
-				// Check default gauge info
-				if(typeof maps[key] !== 'undefined'
-					&& typeof maps[key].dkind === 'undefined') {
-					maps[key].dkind = maps[key].kind;
+					
+					if(typeof oldMap !== "undefined"){
+						// Different gauge detected
+						if(!!oldMap.kind && oldMap.kind !== localMap.kind){
+							localMap.kinds = oldMap.kinds || [oldMap.kind];
+							localMap.kinds.push[localMap.kind];
+							console.log("New gauge phase detected:", oldMap.kind + " -> " + localMap.kind);
+						}
+						// Different max value detected
+						if((oldMap.maxhp || 9999) !== 9999
+							&& oldMap.maxhp !== localMap.maxhp){
+							localMaps.maxhps = oldMap.maxhps || [oldMap.maxhp];
+							localMaps.maxhps.push[localMap.maxhp];
+							console.log("New max HP detected:", oldMap.maxhp + " -> " + localMap.maxhp);
+						} else if(!!oldMap.baseHp){
+							localMap.baseHp = oldMap.baseHp;
+						}
+					}
+					localMap.stat       = $.extend(true,{},defStat,etcStat[ key ]);
 				}
 				
 				maps[ key ] = localMap;
