@@ -888,6 +888,10 @@ ABYSS FLEET
 	height:15px;
 	vertical-align:top;
 }
+.module.activity .battle_drop.new_ship {
+	filter:drop-shadow(0px 0px 3px #1f1);
+	-webkit-filter:drop-shadow(0px 0px 3px #1f1);
+}
 /* Battle Planes */
 .module.activity .battle_planes {
 	width:180px;
@@ -2453,12 +2457,16 @@ ABYSS FLEET
 	width:100%;
 	height:100%;
 }
-
 .module.fleet .lship .ship_repair_tick:before {
-	content:"x" attr(data-tick);
+	content:"+" attr(data-tick);
 }
-
-.module.fleet .lship .ship_repair_tick,
+.module.fleet .lship .ship_repair_tick {
+	width:50%;
+	float:left;
+	text-align:center;
+	background-color:white;
+	color:green;
+}
 .module.fleet .lship .ship_repair_timer {
 	width:50%;
 	float:left;

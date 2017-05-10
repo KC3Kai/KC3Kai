@@ -53,7 +53,7 @@
 		// A lazy initialzing method, prevent duplicate tooltip instance
 		$.fn.lazyInitTooltip = function(opts) {
 			if(typeof this.tooltip("instance") === "undefined") {
-				this.tooltip(opts || nativeTooltipOptions);
+				this.tooltip($.extend(true, {}, nativeTooltipOptions, opts));
 			}
 			return this;
 		};
@@ -316,7 +316,8 @@
 					dockTime = shipData.repair[0],
 					repairProgress = PlayerManager.akashiRepair.getProgress(dockTime, hpLost);
 
-				$('.ship_repair_tick', shipBox).attr('data-tick', repairProgress.repairedHp);
+				$('.ship_repair_tick', shipBox).attr('data-tick',
+					Number.isInteger(repairProgress.repairedHp) ? repairProgress.repairedHp : '?');
 				$('.ship_repair_timer', shipBox).text(
 					(function (t) {
 						if (t === 0) {
@@ -795,7 +796,7 @@
 		$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/ui/dark_rating.png").css("opacity", "");
 		$(".module.activity .battle_rating").lazyInitTooltip();
 		$(".module.activity .battle_drop img").attr("src", "../../../../assets/img/ui/dark_shipdrop.png");
-		$(".module.activity .battle_drop").removeData("masterId").off("dblclick");
+		$(".module.activity .battle_drop").removeData("masterId").off("dblclick").removeClass("new_ship");
 		$(".module.activity .battle_drop").attr("title", "").lazyInitTooltip();
 		$(".module.activity .battle_cond_value").text("");
 		$(".module.activity .battle_engagement").prev().text(KC3Meta.term("BattleEngangement"));
@@ -937,7 +938,7 @@
 		},
 
 		Consumables: function(data){
-			let getWarnRscCap = max => Math.floor(max * (ConfigManager.alert_rsc_cap / 100));
+			let getWarnRscCap = max => Math.floor(max * (ConfigManager.alert_rsc_cap / 100)) || Infinity;
 			$(".count_fcoin")
 				.text( PlayerManager.consumables.fcoin || 0 )
 				.toggleClass("hardCap", PlayerManager.consumables.fcoin >= getWarnRscCap(PlayerManager.maxCoin));
@@ -2252,7 +2253,10 @@
 						.data("masterId", thisNode.drop)
 						.on("dblclick", this.shipDoubleClickFunction)
 						.attr("title", KC3Meta.shipName( KC3Master.ship(thisNode.drop).api_name ))
-						.lazyInitTooltip();
+						.toggleClass("new_ship", KC3ShipManager.count(
+								ship => RemodelDb.originOf(ship.masterId) === RemodelDb.originOf(thisNode.drop)
+							) === 0 // Not own this shipgirl of any remodel form
+						).lazyInitTooltip();
 				}
 
 				// Update Counts

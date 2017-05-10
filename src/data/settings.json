@@ -224,7 +224,6 @@
 				"id" : "info_salt",
 				"name" : "SettingsSaltyShip",
 				"type" : "check",
-				"hide" : 0,
 				"options" : {}
 			},
 			{
@@ -480,7 +479,7 @@
 				"name" : "SettingsRscCapWarnFrom",
 				"type" : "small_text",
 				"bound" : {
-					"min" :   1,
+					"min" :   0,
 					"max" : 100,
 					"type": "Number"
 				},
@@ -719,68 +718,11 @@
 				"options" : {}
 			},
 			{
-				"id" : "dmm_translation",
-				"name" : "SettingsQuestOverlay",
-				"type" : "check",
-				"hide" : 1,
-				"options" : {}
-			},
-			{
-				"id" : "dmm_tracking",
-				"name" : "SettingsQuestTracking",
-				"type" : "check",
-				"hide" : 1,
-				"options" : {}
-			},
-			{
-				"id" : "dmm_askExit",
-				"name" : "SettingsConfirmExit",
-				"type" : "check",
-				"hide" : 1,
-				"options" : {}
-			},
-			{
-				"id" : "dmm_margin",
-				"name" : "SettingsScreenMargin",
-				"type" : "small_text",
-				"hide" : 1,
-				"options" : { "label" : "pixels" }
-			},
-			{
-				"id" : "dmm_bg_color",
-				"name" : "SettingsBGColor",
-				"type" : "long_text",
-				"hide" : 1,
+				"id" : "dmm_custom_css",
+				"name" : "SettingsDMMCustomCSS",
+				"type" : "textarea",
 				"options" : {
-					"placeholder" : "SettingsBGColorDesc",
-					"tooltip" : "SettingsBGColorDesc"
-				}
-			},
-			{
-				"id" : "dmm_bg_image",
-				"name" : "SettingsBGImage",
-				"type" : "long_text",
-				"hide" : 1,
-				"options" : { "placeholder" : "http://" }
-			},
-			{
-				"id" : "dmm_bg_size",
-				"name" : "SettingsBGSize",
-				"type" : "long_text",
-				"hide" : 1,
-				"options" : {
-					"placeholder" : "SettingsBGSizeDesc",
-					"tooltip" : "SettingsBGSizeDesc"
-				}
-			},
-			{
-				"id" : "dmm_bg_position",
-				"name" : "SettingsBGPosition",
-				"type" : "long_text",
-				"hide" : 1,
-				"options" : {
-					"placeholder" : "SettingsBGPositionDesc",
-					"tooltip" : "SettingsBGPositionDesc"
+					"tooltip" : "SettingsDMMCustomCSSTip"
 				}
 			}
 		]

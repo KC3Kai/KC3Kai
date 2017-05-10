@@ -407,6 +407,9 @@ body {
 .tab_ships .name_dupe_filter .dupe_filter_check {
 	background:#000;
 }
+.tab_ships .ship_item .ship_field.sorted {
+	background:#c4c4c4;
+}
 .tab_ships .ship_item.odd .ship_field {
 	background:#efefef;
 }

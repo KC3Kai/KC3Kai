@@ -752,11 +752,31 @@ Math.hrdInt = function(command,value,rate,rev) {
 	http://stackoverflow.com/questions/2010892/storing-objects-in-html5-localstorage/2010994
 */
 Storage.prototype.setObject = function(key, value) {
-	this.setItem(key,JSON.stringify(value));
+	this.setItem(key, JSON.stringify(value));
 };
 
 Storage.prototype.getObject = function(key) {
 	return JSON.parse(this.getItem(key));
+};
+/**
+ * https://stackoverflow.com/questions/3027142/calculating-usage-of-localstorage-space
+ * DOMException (code 22, name: QuotaExceededError) will be thrown on
+ * 5M characters (yes it's not byte) exceeded for Chromium.
+ * They are different for other browser engines:
+ * https://en.wikipedia.org/wiki/Web_storage#Storage_size
+ **/
+Storage.prototype.quotaLength = 1024 * 1024 * 5;
+// Both length of key and value should be taken into account,
+// but not include those JSON-specific characters and functions.
+Storage.prototype.usedSpace = function() {
+	var total = 0, key;
+	for(key in this)
+		if(this.hasOwnProperty(key))
+			total += (this[key].length + key.length);
+	return total;
+};
+Storage.prototype.remainingSpace = function() {
+	return this.quotaLength - this.usedSpace();
 };
 
 /*******************************\
