@@ -130,7 +130,7 @@ body {
 -------------------------------*/
 #content {
 	width:700px;
-	min-height:1320px;
+	min-height:1345px;
 	float:left;
 	background:#fff;
 	border-radius:10px;
@@ -758,7 +758,11 @@ body {
 	display: none;
 }
 .tab_fleet button:disabled {
-	color: #AAA;
+	color: #aaa;
+}
+.tab_fleet select:disabled {
+	color: #aaa;
+	background: #ebebe4;
 }
 .tab_fleet .fleet_box {
 	height:215px;

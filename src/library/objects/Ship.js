@@ -685,14 +685,25 @@ KC3改 Ship Object
 	// - sonar should be equipped
 	// - ASW stat >= 100
 	// also Isuzu K2 can do OASW unconditionally
+	// also ship type DE and Taiyou are special cases
 	KC3Ship.prototype.canDoOASW = function () {
 		// master Id for Isuzu
 		if (this.masterId === 141)
 			return true;
 
+		// is Taiyou but not Kasugamaru
+		let isTaiyou = RemodelDb.originOf(this.masterId) === 521 && this.masterId !== 521;
+		// lower condition for DE and Taiyou
+		let aswThreshold = this.master().api_stype == 1 ? 60
+			: isTaiyou ? 60
+			: 100;
+
 		// shortcutting on the stricter condition first
-		if (this.as[0] < 100)
+		if (this.as[0] < aswThreshold)
 			return false;
+
+		// not require Sonar for Taiyou
+		if (isTaiyou) return true;
 
 		function isSonar(masterData) {
 			/* checking on equipment type sounds better than

@@ -9,6 +9,7 @@
 	var currentLayout = "";
 	var isRunning = false;
 	var lastApiError = false;
+	var lastApiFlag2 = false;
 
 	// Interface values
 	var selectedFleet = 1;
@@ -77,7 +78,7 @@
 	// Experience Calculation
 	var mapexp = [], maplist = {}, rankFactors = [0, 0.5, 0.7, 0.8, 1, 1, 1.2];
 
-	// Error reporting
+	// Reusable contents of Error Report
 	var errorReport = {
 		title: "",
 		message: "",
@@ -86,9 +87,9 @@
 		params: "",
 		response: "",
 		serverUtc: 0,
-		kc3Version: "",
+		kc3Version: [chrome.runtime.getManifest().name, chrome.runtime.getManifest().version].join(" "),
 		dmmPlay: "",
-		extractApi: "",
+		gameTabUrl: "",
 		userAgent: "",
 		utc: 0
 	};
@@ -691,15 +692,19 @@
 		});
 		KC3Network.listen();
 
-		// Get if inspected tab is muted, and update the mute icon
-		(new RMsg("service", "isMuted", {
+		// Get info of the inspected tab
+		(new RMsg("service", "getTabInfo", {
 			tabId: chrome.devtools.inspectedWindow.tabId
-		}, function(isMuted){
-			if(isMuted){
-				$(".module.controls .btn_mute img").attr("src", "img/mute-x.png");
-			}
+		}, function(tabInfo){
+			errorReport.gameTabUrl = tabInfo.url;
+			// if inspected tab is muted, update the mute icon
+			try {
+				if(tabInfo.mutedInfo.muted){
+					$(".module.controls .btn_mute img").attr("src", "img/mute-x.png");
+				}
+			} catch(e) {}
 		})).execute();
-
+		
 		// Attempt to activate game on inspected window
 		(new RMsg("service", "activateGame", {
 			tabId: chrome.devtools.inspectedWindow.tabId
@@ -877,9 +882,7 @@
 				errorReport.params = JSON.stringify(data.params);
 				errorReport.response = data.response;
 				errorReport.serverUtc = data.serverUtc;
-				errorReport.kc3Version = data.kc3Manifest;
 				errorReport.dmmPlay = localStorage.dmmplay;
-				errorReport.extractApi = localStorage.extract_api;
 				errorReport.userAgent = navigator.userAgent;
 				errorReport.utc = Date.now();
 			} else {
@@ -901,26 +904,72 @@
 			$("#catBomb").fadeIn(300);
 		},
 
-		GameUpdate: function(data){
-			console.debug("GameUpdate triggered:", data);
+		// General green modal message box, reusing #gameUpdate div elements
+		ModalBox: function(data){
 			$("#gameUpdate").hide();
-
-			if(data[0] > 0 && data[1] > 0){
-				$("#gameUpdate .description a").html( KC3Meta.term("GameUpdateBoth").format(data[0], data[1]) );
-			}else if(data[0] > 0){
-				$("#gameUpdate .description a").html( KC3Meta.term("GameUpdateShips").format(data[0]) );
-			}else{
-				$("#gameUpdate .description a").html( KC3Meta.term("GameUpdateEquips").format(data[1]) );
+			$("#gameUpdate .title").html(data.title);
+			if(data.message){
+				$("#gameUpdate .description .message").html(data.message);
+				$("#gameUpdate .description .message").show();
+			} else {
+				$("#gameUpdate .description .message").hide();
 			}
-			
-			$("#gameUpdate .description a").off("click").on("click", function(e){
-				(new RMsg("service", "strategyRoomPage", {
-					tabPath: "mstupdate"
-				})).execute();
-				return false;
-			});
-
+			if(data.link){
+				$("#gameUpdate .description a").html(data.link);
+				$("#gameUpdate .description a").off("click");
+				if(typeof data.onClick === "function"){
+					$("#gameUpdate .description a").on("click", data.onClick);
+				}
+				$("#gameUpdate .description a").show();
+			} else {
+				$("#gameUpdate .description a").hide();
+			}
 			$("#gameUpdate").fadeIn(300);
+		},
+
+		GameUpdate: function(data){
+			let msg = "";
+			if(data[0] > 0 && data[1] > 0){
+				msg = KC3Meta.term("GameUpdateBoth").format(data[0], data[1]);
+			}else if(data[0] > 0){
+				msg = KC3Meta.term("GameUpdateShips").format(data[0]);
+			}else{
+				msg = KC3Meta.term("GameUpdateEquips").format(data[1]);
+			}
+			this.ModalBox({
+				title: KC3Meta.term("GameUpdateDetected"),
+				message: msg,
+				link: KC3Meta.term("GameUpdateLink"),
+				onClick: function(e){
+					(new RMsg("service", "strategyRoomPage", {
+						tabPath: "mstupdate"
+					})).execute();
+					return false;
+				}
+			});
+		},
+
+		DebuffNotify: function(data){
+			// From Event Summer 2016,
+			// devs set api_m_flag2 to 1 on port, to play the debuff SE.
+			if(data.api_m_flag2 === undefined){
+				lastApiFlag2 = false;
+			} else if(data.api_m_flag2 > 0){
+				// so the flag does not indicate state of the debuff,
+				// it only indicates: time to play a SE.
+				// we cannot detect: is the debuff reseted?
+				//let isDebuffed = data.api_m_flag2 == 1;
+				this.ModalBox({
+					title: KC3Meta.term("BossDebuffedTitle"),
+					message: KC3Meta.term("BossDebuffedMessage").format(
+						//KC3Meta.term(isDebuffed ? "BossDebuffedYes" : "BossDebuffedNo")
+						KC3Meta.term("BossDebuffedYes")
+					)
+				});
+				// this cached flag not used for now,
+				// as api_m_flag2 will be always reset to 0 if playing SE not required
+				lastApiFlag2 = data.api_m_flag2;
+			}
 		},
 
 		HQ: function(data){
@@ -1049,15 +1098,15 @@
 			// Repair faces
 			KC3TimerManager._repair[0].face().lazyInitTooltip();
 			KC3TimerManager._repair[1].face().lazyInitTooltip();
-			KC3TimerManager._repair[2].face().lazyInitTooltip();
-			KC3TimerManager._repair[3].face().lazyInitTooltip();
+			KC3TimerManager._repair[2].face(undefined, PlayerManager.repairSlots < 3).lazyInitTooltip();
+			KC3TimerManager._repair[3].face(undefined, PlayerManager.repairSlots < 4).lazyInitTooltip();
 
 			// Construction faces
 			if(ConfigManager.info_face){
 				KC3TimerManager._build[0].face().lazyInitTooltip();
 				KC3TimerManager._build[1].face().lazyInitTooltip();
-				KC3TimerManager._build[2].face().lazyInitTooltip();
-				KC3TimerManager._build[3].face().lazyInitTooltip();
+				KC3TimerManager._build[2].face(undefined, PlayerManager.buildSlots < 3).lazyInitTooltip();
+				KC3TimerManager._build[3].face(undefined, PlayerManager.buildSlots < 4).lazyInitTooltip();
 			}
 		},
 
@@ -1139,9 +1188,9 @@
 				KC3TimerManager._exped[0].faceId = PlayerManager.fleets[1].ship(0).masterId;
 				KC3TimerManager._exped[1].faceId = PlayerManager.fleets[2].ship(0).masterId;
 				KC3TimerManager._exped[2].faceId = PlayerManager.fleets[3].ship(0).masterId;
-				KC3TimerManager._exped[0].face().lazyInitTooltip();
-				KC3TimerManager._exped[1].face().lazyInitTooltip();
-				KC3TimerManager._exped[2].face().lazyInitTooltip();
+				KC3TimerManager._exped[0].face(undefined, PlayerManager.fleetCount < 2).lazyInitTooltip();
+				KC3TimerManager._exped[1].face(undefined, PlayerManager.fleetCount < 3).lazyInitTooltip();
+				KC3TimerManager._exped[2].face(undefined, PlayerManager.fleetCount < 4).lazyInitTooltip();
 			}
 
 			// TAIHA ALERT CHECK
@@ -1239,8 +1288,10 @@
 			$(".airbase_list").empty();
 			$(".airbase_list").hide();
 
-			var thisNode = KC3SortieManager.onSortie ? KC3SortieManager.currentNode() || {} : {};
+			var thisNode = KC3SortieManager.onSortie || KC3SortieManager.isPvP() ?
+				KC3SortieManager.currentNode() || {} : {};
 			var dameConConsumed = false;
+			var flarePos = thisNode.flarePos || 0;
 
 			// COMBINED
 			if(selectedFleet==5){
@@ -1250,10 +1301,12 @@
 				// Show ships on main fleet
 				$.each(MainFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						if(KC3SortieManager.onSortie && KC3SortieManager.fleetSent === 1){
+						if(KC3SortieManager.onSortie && KC3SortieManager.fleetSent == 1){
 							dameConConsumed = (thisNode.dameConConsumed || [])[index];
 						}
-						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars, dameConConsumed))
+						var starShellUsed = (flarePos == index+1) &&
+							!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 1;
+						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars, dameConConsumed, starShellUsed))
 							.commonElements()
 							.defineShort( MainFleet )
 							.appendTo(".module.fleet .shiplist_main");
@@ -1264,15 +1317,18 @@
 				$.each(EscortFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
 						if(KC3SortieManager.onSortie){
-							if(!!PlayerManager.combinedFleet && KC3SortieManager.fleetSent === 1){
+							if(!!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 1){
 								// Send combined fleet, get escort info
 								dameConConsumed = (thisNode.dameConConsumedEscort || [])[index];
-							} else if(!PlayerManager.combinedFleet && KC3SortieManager.fleetSent === 2){
+							} else if(!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 2){
 								// Not combined, but send fleet #2, get regular info
 								dameConConsumed = (thisNode.dameConConsumed || [])[index];
 							}
 						}
-						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars, dameConConsumed))
+						var starShellUsed = (flarePos == index+1) &&
+							((!!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 1) ||
+							(!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 2));
+						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars, dameConConsumed, starShellUsed))
 							.commonElements(true)
 							.defineShort( EscortFleet )
 							.appendTo(".module.fleet .shiplist_escort");
@@ -1341,10 +1397,12 @@
 				// Show ships on selected fleet
 				$.each(CurrentFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						if(KC3SortieManager.onSortie && selectedFleet === KC3SortieManager.fleetSent){
+						if(KC3SortieManager.onSortie && selectedFleet == KC3SortieManager.fleetSent){
 							dameConConsumed = (thisNode.dameConConsumed || [])[index];
 						}
-						(new KC3NatsuiroShipbox(".lship", rosterId, showCombinedFleetBars, dameConConsumed))
+						var starShellUsed = (flarePos == index+1) &&
+							selectedFleet == KC3SortieManager.fleetSent;
+						(new KC3NatsuiroShipbox(".lship", rosterId, showCombinedFleetBars, dameConConsumed, starShellUsed))
 							.commonElements()
 							.defineLong( CurrentFleet )
 							.appendTo(".module.fleet .shiplist_single");
@@ -1642,15 +1700,17 @@
 								
 								paddedId = (itemObj.masterId<10?"00":itemObj.masterId<100?"0":"")+itemObj.masterId;
 								eqImgSrc = "../../../../assets/img/planes/"+paddedId+".png";
-								$(".base_plane_img img", planeBox).attr("src", eqImgSrc);
+								$(".base_plane_img img", planeBox).attr("src", eqImgSrc)
+									.error(function() { $(this).unbind("error").attr("src", "../../../../assets/img/ui/empty.png"); });
 								$(".base_plane_img", planeBox)
-									.attr("title", $(".base_plane_name", planeBox).text())
+									.attr("title", KC3Gear.buildGearTooltip(itemObj, $(".base_plane_name", planeBox).text()) )
 									.lazyInitTooltip()
 									.data("masterId", itemObj.masterId)
 									.on("dblclick", self.gearDoubleClickFunction);
 								
 								eqIconSrc = "../../../../assets/img/items/"+itemObj.master().api_type[3]+".png";
-								$(".base_plane_icon img", planeBox).attr("src", eqIconSrc);
+								$(".base_plane_icon img", planeBox).attr("src", eqIconSrc)
+									.error(function() { $(this).unbind("error").attr("src", "../../../../assets/img/ui/empty.png"); });
 								
 								if (itemObj.stars > 0) {
 									$(".base_plane_star", planeBox).text(itemObj.stars);
@@ -1770,15 +1830,16 @@
 						.lazyInitTooltip();
 					var resBoxDiv = $(".module.activity .node_type_resource");
 					resBoxDiv.removeClass("node_type_maelstrom");
-					resBoxDiv.children().remove();
+					$(".clone", resBoxDiv).remove();
+					resBoxDiv.children().hide();
 					$.each(thisNode.icon, function(i, icon){
-						var iconDiv = $('<div class="node_res_icon"><img/></div>');
-						var textDiv = $('<div class="node_res_text"></div>');
+						var iconDiv = $('<div class="node_res_icon clone"><img/></div>');
+						var textDiv = $('<div class="node_res_text clone"></div>');
 						resBoxDiv.append(iconDiv).append(textDiv);
 						$("img", iconDiv).attr("src", icon("../../../../assets/img/client/"));
 						textDiv.text( thisNode.amount[i] );
 					});
-					resBoxDiv.append($('<div class="clear"></div>'));
+					resBoxDiv.append($('<div class="clear clone"></div>'));
 					resBoxDiv.show();
 					break;
 
@@ -1789,10 +1850,11 @@
 						.attr("title", thisNode.nodeDesc)
 						.lazyInitTooltip();
 					$(".module.activity .node_type_resource").removeClass("node_type_maelstrom");
+					$(".module.activity .node_type_resource .clone").remove();
 					$(".module.activity .node_type_resource .node_res_icon img").attr("src",
 						thisNode.icon("../../../../assets/img/client/"));
 					$(".module.activity .node_type_resource .node_res_text").text( thisNode.amount );
-					$(".module.activity .node_type_resource").show();
+					$(".module.activity .node_type_resource").show().children().show();
 
 					if(KC3SortieManager.getCurrentMapData().kind=='multiple') {
 						updateMapGauge(true,true,true);
@@ -1806,10 +1868,11 @@
 						.attr("title", thisNode.nodeDesc)
 						.lazyInitTooltip();
 					$(".module.activity .node_type_resource").addClass("node_type_maelstrom");
+					$(".module.activity .node_type_resource .clone").remove();
 					$(".module.activity .node_type_resource .node_res_icon img").attr("src",
 						thisNode.icon("../../../../assets/img/client/"));
 					$(".module.activity .node_type_resource .node_res_text").text( -thisNode.amount );
-					$(".module.activity .node_type_resource").show();
+					$(".module.activity .node_type_resource").show().children().show();
 					break;
 
 				// Selection node
@@ -1826,12 +1889,13 @@
 				case "transport":
 					$(".module.activity .sortie_node_"+numNodes).addClass("nc_resource");
 					$(".module.activity .node_type_resource").removeClass("node_type_maelstrom");
+					$(".module.activity .node_type_resource .clone").remove();
 					$(".module.activity .node_type_resource .node_res_icon img").attr("src",
 						"../../../../assets/img/items/25.png");
 					var lowTPGain = isNaN(thisNode.amount) ? "?" : Math.floor(0.7 * thisNode.amount);
 					var highTPGain = isNaN(thisNode.amount) ? "?" : thisNode.amount;
 					$(".module.activity .node_type_resource .node_res_text").text( "{0} ~ {1} TP".format(lowTPGain, highTPGain) );
-					$(".module.activity .node_type_resource").show();
+					$(".module.activity .node_type_resource").show().children().show();
 					break;
 
 				// Battle avoided node
@@ -2553,13 +2617,13 @@
 			$(".module.activity .abyss_combined").hide();
 			
 			// Process PvP Battle
-			KC3SortieManager.fleetSent = data.fleetSent;
+			KC3SortieManager.fleetSent = parseInt(data.fleetSent, 10);
 			KC3SortieManager.onPvP = true;
 
 			var thisPvP;
 			KC3SortieManager.nodes.push(thisPvP = (new KC3Node()).defineAsBattle());
 			thisPvP.isPvP = true;
-			thisPvP.engage( data.battle,data.fleetSent );
+			thisPvP.engage( data.battle, data.fleetSent );
 
 			// PvP battle activities data should be hidden when `info_compass` turned off,
 			// Here left it unfixed to keep identical.

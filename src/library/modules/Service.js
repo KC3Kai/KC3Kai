@@ -265,6 +265,15 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			return true;
 		},
 		
+		/* GET TAB INFO
+		Return all info of the tab inspected by devtools panel
+		------------------------------------------*/
+		"getTabInfo" :function(request, sender, response){
+			chrome.tabs.get(request.tabId, function(tabInfo){
+				response(tabInfo);
+			});
+		},
+		
 		/* IS MUTED
 		Returns boolean if the tab is muted or not
 		------------------------------------------*/

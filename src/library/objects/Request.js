@@ -175,7 +175,7 @@ Executes processing and relies on KC3Network for the triggers
 					params: reportParams,
 					response: this.response,
 					serverUtc: serverTime,
-					kc3Manifest: [chrome.runtime.getManifest().name, chrome.runtime.getManifest().version].join(" ")
+					kc3Manifest: chrome.runtime.getManifest()
 				});
 				// Keep stack logging in extension's console
 				console.log(e.stack);/*RemoveLogging:skip*/

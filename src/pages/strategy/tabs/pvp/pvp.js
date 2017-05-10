@@ -205,18 +205,22 @@
 		/* FILL BATTLE INFO WITH DATA
 		---------------------------------*/
 		fillBattleInfo :function(data, targetBox){
-			// Process battle
-			KC3SortieManager.onPvP = true;
+			// Process battle, create simulated node info
 			var thisPvP = (new KC3Node()).defineAsBattle();
-			KC3SortieManager.nodes.push(thisPvP);
 			thisPvP.isPvP = true;
+			// For now, not required to simulate states of PvP sortie
+			//KC3SortieManager.onPvP = true;
+			//KC3SortieManager.nodes.push(thisPvP);
 			
 			var battle_info_html = $(".tab_pvp .factory .pvp_battle_info").html();
-			
 			// Day Battle
 			thisPvP.engage( data.data, 1);
 			$(".pvp_battle_day", targetBox).html(battle_info_html);
 			this.fillBattleBox(thisPvP, $(".pvp_battle_day", targetBox));
+			
+			// Clean states if SortieManager is changed
+			//KC3SortieManager.onPvP = false;
+			//KC3SortieManager.nodes.length = 0;
 		},
 		
 		/* FILL ONE BATTLE BOX (DAY/NIGHT)

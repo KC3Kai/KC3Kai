@@ -145,7 +145,7 @@ button, input, select, textarea {
 -------------------------------*/
 #content {
 	width:700px;
-	min-height:1320px;
+	min-height:1300px;
 	float:left;
 	background:#222222;
 	overflow:hidden;
@@ -355,6 +355,20 @@ button, input, select, textarea {
 	border:1px solid #555;
 }
 .tab_consumables .option_preset {
+	color:#eee;
+}
+/* Experience */
+.tab_experience .legend_color {
+	border:1px solid #000000;
+}
+.tab_experience .date_input input {
+	border:1px solid #555;
+	background:#333;
+}
+.tab_experience .dropdown_input select {
+	border:1px solid #555;
+}
+.tab_experience .option_preset {
 	color:#eee;
 }
 /* Showcase */
@@ -1056,6 +1070,13 @@ button, input, select, textarea {
 	border:1px solid #444444;
 	background:#121212;
 }
+.tab_fleet button:disabled {
+	color:#444444;
+}
+.tab_fleet input:disabled::-webkit-input-placeholder,
+.tab_fleet select:disabled {
+	color:#444444;
+}
 .detail_field {
 	background:#131313;
 }
@@ -1438,6 +1459,12 @@ button, input, select, textarea {
 .tab_pvp .pvp_info .pvp_dl {
 	background:#369 !important;
 	border:1px solid #3f8cd9;
+}
+/* LIBRARY UPDATE
+--------------------------------*/
+.tab_mstupdate .mstship .ship_name,
+.tab_mstupdate .mstgear .gear_name {
+	background:#444444;
 }
 /* SHIPS LIBRARY
 --------------------------------*/

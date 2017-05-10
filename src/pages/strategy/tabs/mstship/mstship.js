@@ -395,11 +395,19 @@
 					}else if(stat[1].startsWith("db_")){
 						var realName = stat[1].slice(3);
 						$(".ship_stat_name", statBox).text(realName);
-						$(".ship_stat_min", statBox).text(statFromDb[realName]==-1?"tbc":statFromDb[realName]);
+						$(".ship_stat_min", statBox).text(
+							statFromDb[realName] < 0 || statFromDb[realName] === ""
+								? "tbc"
+								: statFromDb[realName]
+						);
 						if(realName==="carry"){
 							$(".ship_stat_max", statBox).hide();
 						} else {
-							$(".ship_stat_max span", statBox).text(statFromDb[realName+"_max"]==-1?"tbc":statFromDb[realName+"_max"]);
+							$(".ship_stat_max span", statBox).text(
+								statFromDb[realName+"_max"] < 0 || statFromDb[realName+"_max"] === ""
+									? "tbc"
+									: statFromDb[realName+"_max"]
+							);
 						}
 					}else{
 						$(".ship_stat_min", statBox).text(shipData["api_"+stat[1]][0]);
@@ -686,6 +694,7 @@
 							["tp", "raig"],
 							["aa", "tyku"],
 							["sp", "soku"],
+							["if", "airpow"],
 						], function(index, stat){
 							statBox = $(".tab_mstship .factory .ship_stat").clone();
 							$("img", statBox).attr("src", "../../../../assets/img/stats/"+stat[0]+".png");
@@ -695,6 +704,12 @@
 								$(".ship_stat_text", statBox).text(speedEnNameMap[shipData.api_soku]);
 								$(".ship_stat_text", statBox).show();
 								$(".ship_stat_value", statBox).hide();
+							} else if(stat[0]=="if"){
+								// Compute fighter air power based on known slots
+								$(".ship_stat_min", statBox).text(
+									KC3SortieManager.enemyFighterPower([abyssMaster.api_id])[0] || 0
+								);
+								$(".ship_stat_max", statBox).hide();
 							} else {
 								$(".ship_stat_min", statBox).text(
 									// Priority to show stats recorded via encounter

@@ -94,6 +94,8 @@
 			"t42": "ev",
 			// seaplane fighter
 			"t43": "aa",
+			// land base fighter (new interceptor)
+			"t44": "aa",
 			// all types
 			"tall": "type",
 		},
@@ -482,7 +484,8 @@
 			var allProperties = this._allProperties;
 			$.each(SlotItems, function(index,ThisSlotitem) {
 				ItemElem = $(".tab_gears .factory .slotitem").clone().appendTo(".tab_gears .item_list");
-				$(".icon img", ItemElem).attr("src", "../../assets/img/items/"+ThisSlotitem.type_id+".png");
+				$(".icon img", ItemElem).attr("src", "../../assets/img/items/"+ThisSlotitem.type_id+".png")
+					.error(function() { $(this).unbind("error").attr("src", "../../assets/img/ui/empty.png"); });
 				$(".icon img", ItemElem).attr("alt", ThisSlotitem.id);
 				$(".icon img", ItemElem).on("click", gearClickFunc);
 				$(".english", ItemElem).text(ThisSlotitem.english);

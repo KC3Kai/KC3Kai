@@ -201,8 +201,9 @@
 			var sCtr, cElm;
 
 			for(sCtr in KC3Meta._stype){
-				// stype 1, 12, 15 not used by shipgirl
-				if(KC3Meta._stype[sCtr] && ["1", "12", "15"].indexOf(sCtr) < 0){
+				// stype 12, 15 not used by shipgirl
+				// stype 1 is used from 2017-05-02
+				if(KC3Meta._stype[sCtr] && ["12", "15"].indexOf(sCtr) < 0){
 					cElm = $(".tab_ships .factory .ship_filter_type").clone().appendTo(".tab_ships .filters .ship_types");
 					cElm.data("id", sCtr);
 					$(".filter_name", cElm).text(KC3Meta.stype(sCtr));
@@ -224,6 +225,10 @@
 				}
 			});
 			$(".control_buttons .reset_default").on("click", function(){
+				self.equipMode = 0;
+				self.pageNo = false;
+				self.multiKey = false;
+				self.currentSorters = [{name:"lv", reverse:false}];
 				delete localStorage.srShiplist;
 				KC3StrategyTabs.reloadTab(undefined, true);
 			});
@@ -528,7 +533,7 @@
 			var stypes = Object
 				.keys(KC3Meta._stype)
 				.map(function(x) { return parseInt(x,10); })
-				.filter(function(x) { return [1,12,15].indexOf(x)<0; })
+				.filter(function(x) { return [12,15].indexOf(x)<0; })
 				.sort(function(a,b) { return a-b; });
 			console.assert(stypes[0] === 0);
 			// remove initial "0", which is invalid
