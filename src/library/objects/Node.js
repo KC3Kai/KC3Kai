@@ -1439,18 +1439,18 @@ Used by SortieManager
 			}
 			return table;
 		};
-		// Land-Base Jet Assult
+		// Land-Base Jet Assault
 		if(this.battleDay.api_air_base_injection)
 			fillAirBattleData("LBAS Jets", this.battleDay.api_air_base_injection).appendTo(tooltip);
+		// Carrier Jet Assault
+		if(this.battleDay.api_injection_kouku)
+			fillAirBattleData("Jet Assult", this.battleDay.api_injection_kouku).appendTo(tooltip);
 		// Land-Base Aerial Support(s)
 		if(this.battleDay.api_air_base_attack){
 			$.each(this.battleDay.api_air_base_attack, function(i, lb){
 				fillAirBattleData("LBAS #{0}".format(i + 1), lb).appendTo(tooltip);
 			});
 		}
-		// Carrier Jet Assult
-		if(this.battleDay.api_injection_kouku)
-			fillAirBattleData("Jet Assult", this.battleDay.api_injection_kouku).appendTo(tooltip);
 		// Carrier Aerial Combat / (Long Distance) Aerial Raid
 		if(this.battleDay.api_kouku)
 			fillAirBattleData("Air Battle", this.battleDay.api_kouku).appendTo(tooltip);

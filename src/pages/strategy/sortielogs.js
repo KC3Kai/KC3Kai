@@ -605,9 +605,10 @@
 							
 							// Kanmusu Drop
 							if(battle.drop > 0){
-								$(".node_drop img", nodeBox).attr("src", KC3Meta.shipIcon( battle.drop ) );
-								$(".node_drop img", nodeBox).attr("alt", battle.drop);
-								$(".node_drop img", nodeBox).click(shipClickFunc);
+								$(".node_drop img", nodeBox).attr("src", KC3Meta.shipIcon( battle.drop ) )
+									.attr("title", KC3Meta.shipName( KC3Master.ship(battle.drop).api_name ) )
+									.attr("alt", battle.drop)
+									.click(shipClickFunc);
 								$(".node_drop", nodeBox).addClass("hover");
 							}else{
 								$(".node_drop img", nodeBox).attr("src", "../../assets/img/ui/shipdrop-x.png");
