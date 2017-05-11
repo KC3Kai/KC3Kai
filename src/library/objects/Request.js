@@ -166,7 +166,7 @@ Executes processing and relies on KC3Network for the triggers
 				KC3Network.trigger("APIError", {
 					title: KC3Meta.term("APIErrorNoticeTitle"),
 					message: KC3Meta.term("APIErrorNoticeMessage").format([this.call]),
-					stack: e.stack,
+					stack: e.stack || e.toString(),
 					request: {
 						url: this.url,
 						headers: this.headers,
@@ -178,7 +178,7 @@ Executes processing and relies on KC3Network for the triggers
 					kc3Manifest: chrome.runtime.getManifest()
 				});
 				// Keep stack logging in extension's console
-				console.log(e.stack);/*RemoveLogging:skip*/
+				console.error(e.stack);/*RemoveLogging:skip*/
 			}
 		}
 	};

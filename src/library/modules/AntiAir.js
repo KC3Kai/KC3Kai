@@ -103,6 +103,7 @@ AntiAir: anti-air related calculations
 	// AA Radar
 	// Surface Radar are excluded by checking whether
 	// the equipment gives AA stat (api_tyku)
+	// EO memo: api_tyku >= 2
 	function isAARadar(mst) {
 		return isRadar(mst) && 
 			mst.api_tyku > 0;
@@ -132,6 +133,7 @@ AntiAir: anti-air related calculations
 
 	var isLargeCaliberMainGun = categoryEq(3);
 
+	// EO memo: api_tyku >= 8
 	function isBuiltinHighAngleMount(mst) {
 		return [
 			122 /* aki-gun */,
@@ -141,6 +143,7 @@ AntiAir: anti-air related calculations
 		].indexOf( mst.api_id ) !== -1;
 	}
 
+	// EO memo: api_tyku >= 9
 	function isCDMG(mst) {
 		return [
 			131 /* 25mm triple (CD) */,

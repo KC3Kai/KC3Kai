@@ -589,7 +589,8 @@ Contains summary information about a fleet and its 6 ships
 			akashi: highestAkashi,
 			akashiCheck: [
 				PlayerManager.akashiRepair.isRunning(),
-				PlayerManager.akashiRepair.canDoRepair()
+				PlayerManager.akashiRepair.canDoRepair(),
+				KC3AkashiRepair.hasRepairFlagship(self)
 			],
 		};
 	};

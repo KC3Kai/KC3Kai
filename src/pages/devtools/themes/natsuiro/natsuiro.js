@@ -1276,6 +1276,12 @@
 
 			// If LBAS is selected, do not respond to rest fleet update
 			if (selectedFleet == 6) {
+				let lbasSupplyCost = PlayerManager.getBasesResupplyCost();
+				$(".module.status .status_supply").attr("title",
+					KC3Meta.term("PanelResupplyCosts").format(
+						lbasSupplyCost.fuel, lbasSupplyCost.ammo, lbasSupplyCost.bauxite
+					)
+				).lazyInitTooltip();
 				return false;
 			}
 
@@ -1395,13 +1401,20 @@
 				MainRepairs = CurrentFleet.highestRepairTimes(true);
 
 				// Show ships on selected fleet
+				let isSelectedSortiedFleet = (selectedFleet == KC3SortieManager.fleetSent);
+				let isSelected2ndFleetOnCombined = (selectedFleet == 2 && KC3SortieManager.fleetSent == 1 && !!PlayerManager.combinedFleet);
 				$.each(CurrentFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						if(KC3SortieManager.onSortie && selectedFleet == KC3SortieManager.fleetSent){
-							dameConConsumed = (thisNode.dameConConsumed || [])[index];
+						if(KC3SortieManager.onSortie){
+							if(isSelectedSortiedFleet){
+								dameConConsumed = (thisNode.dameConConsumed || [])[index];
+							} else if(isSelected2ndFleetOnCombined){
+								// Send combined fleet, select and get escort info
+								dameConConsumed = (thisNode.dameConConsumedEscort || [])[index];
+							}
 						}
 						var starShellUsed = (flarePos == index+1) &&
-							selectedFleet == KC3SortieManager.fleetSent;
+							(isSelectedSortiedFleet || isSelected2ndFleetOnCombined);
 						(new KC3NatsuiroShipbox(".lship", rosterId, showCombinedFleetBars, dameConConsumed, starShellUsed))
 							.commonElements()
 							.defineLong( CurrentFleet )
@@ -1732,9 +1745,16 @@
 									$(".base_plane_cond img", planeBox).attr("src", eqCondSrc);
 									
 									if (planeInfo.api_count < planeInfo.api_max_count) {
+										let cost = baseInfo.calcResupplyCost();
 										$(".base_plane_count", planeBox).addClass("unsupplied");
+										$(".base_plane_count", planeBox).attr("title",
+											KC3Meta.term("PanelResupplyCosts").format(
+												cost.fuel, cost.ammo, cost.bauxite
+											)
+										).lazyInitTooltip();
 									} else {
 										$(".base_plane_count", planeBox).removeClass("unsupplied");
+										$(".base_plane_count", planeBox).attr("title", "");
 									}
 									
 								} else if (planeInfo.api_state == 2) {
@@ -1755,6 +1775,13 @@
 						$(".module.fleet .airbase_list").append(baseBox);
 					}
 				});
+				
+				let lbasSupplyCost = PlayerManager.getBasesResupplyCost();
+				$(".module.status .status_supply").attr("title",
+					KC3Meta.term("PanelResupplyCosts").format(
+						lbasSupplyCost.fuel, lbasSupplyCost.ammo, lbasSupplyCost.bauxite
+					)
+				).lazyInitTooltip();
 			}
 		},
 
@@ -1929,9 +1956,14 @@
 						$(".module.activity .abyss_single .abyss_ship_"+(index+1)).addClass(KC3Meta.abyssShipBorderClass(eshipId));
 						$(".module.activity .abyss_single .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.abyssIcon(eshipId));
 						$(".module.activity .abyss_single .abyss_ship_"+(index+1)+" img")
-							.attr("title", "{0}: {1}\n".format(eshipId, KC3Meta.abyssShipName(eshipId)))
+							.attr("title", buildEnemyFaceTooltip(eshipId, thisNode.elevels[index],
+								thisNode.beginHPs.enemy[index], thisNode.maxHPs.enemy[index], 
+								undefined, thisNode.eSlot[index], false))
 							.lazyInitTooltip();
-						$(".module.activity .abyss_single .abyss_ship_"+(index+1)).show();
+						$(".module.activity .abyss_single .abyss_ship_"+(index+1))
+							.data("masterId", eshipId)
+							.on("dblclick", self.shipDoubleClickFunction)
+							.show();
 					}
 				});
 				if((typeof thisNode.eformation != "undefined") && (thisNode.eformation > -1)){

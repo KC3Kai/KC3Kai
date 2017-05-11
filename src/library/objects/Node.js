@@ -734,17 +734,24 @@ Used by SortieManager
 		}
 		
 		if(this.gaugeDamage > -1) {
-			this.gaugeDamage = Math.min(this.originalHPs[7],this.originalHPs[7] - this.enemyHP[0].hp);
+			var enemyFlagshipHp = this.originalHPs[7];
+			this.gaugeDamage = Math.min(enemyFlagshipHp, enemyFlagshipHp - this.enemyHP[0].hp);
 			
 			(function(sortieData){
-				var
-					maps = localStorage.getObject('maps'),
+				var maps = localStorage.getObject('maps'),
 					desg = ['m',sortieData.map_world,sortieData.map_num].join('');
 				if(this.isBoss() && maps[desg].kind == 'gauge-hp') {
-					maps[desg].baseHp = maps[desg].baseHp || this.originalHPs[7];
+					maps[desg].baseHp = maps[desg].baseHp || enemyFlagshipHp;
+					if(maps[desg].baseHp != enemyFlagshipHp) {
+						console.log("Different boss HP detected:", maps[desg].baseHp + " -> " + enemyFlagshipHp);
+						// If new HP lesser than old, should update it for Last Kill
+						if(enemyFlagshipHp < maps[desg].baseHp) {
+							maps[desg].baseHp = enemyFlagshipHp;
+						}
+					}
 				}
 				localStorage.setObject('maps',maps);
-			}).call(this,KC3SortieManager);
+			}).call(this, KC3SortieManager);
 		}
 		
 		// Record encoutners only if on sortie
@@ -1439,18 +1446,18 @@ Used by SortieManager
 			}
 			return table;
 		};
-		// Land-Base Jet Assult
+		// Land-Base Jet Assault
 		if(this.battleDay.api_air_base_injection)
 			fillAirBattleData("LBAS Jets", this.battleDay.api_air_base_injection).appendTo(tooltip);
+		// Carrier Jet Assault
+		if(this.battleDay.api_injection_kouku)
+			fillAirBattleData("Jet Assult", this.battleDay.api_injection_kouku).appendTo(tooltip);
 		// Land-Base Aerial Support(s)
 		if(this.battleDay.api_air_base_attack){
 			$.each(this.battleDay.api_air_base_attack, function(i, lb){
 				fillAirBattleData("LBAS #{0}".format(i + 1), lb).appendTo(tooltip);
 			});
 		}
-		// Carrier Jet Assult
-		if(this.battleDay.api_injection_kouku)
-			fillAirBattleData("Jet Assult", this.battleDay.api_injection_kouku).appendTo(tooltip);
 		// Carrier Aerial Combat / (Long Distance) Aerial Raid
 		if(this.battleDay.api_kouku)
 			fillAirBattleData("Air Battle", this.battleDay.api_kouku).appendTo(tooltip);
@@ -1470,8 +1477,17 @@ Used by SortieManager
 		this.lostKind = battleData.api_lost_kind;
 		this.eships = battleData.api_ship_ke.slice(1);
 		this.eformation = battleData.api_formation[1];
+		this.elevels = battleData.api_ship_lv.slice(1);
 		this.eSlot = battleData.api_eSlot;
 		this.engagement = KC3Meta.engagement(battleData.api_formation[2]);
+		this.maxHPs = {
+			ally: battleData.api_maxhps.slice(1,7),
+			enemy: battleData.api_maxhps.slice(7,13)
+		};
+		this.beginHPs = {
+			ally: battleData.api_nowhps.slice(1,7),
+			enemy: battleData.api_nowhps.slice(7,13)
+		};
 		var planePhase = battleData.api_air_base_attack.api_stage1 || {
 				api_touch_plane:[-1,-1],
 				api_f_count    :0,
