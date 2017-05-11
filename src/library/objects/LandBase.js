@@ -43,6 +43,19 @@
 		});
 	};
 	
+	KC3LandBase.prototype.calcResupplyCost = function() {
+		var totalFuel = 0,
+			totalBauxite = 0;
+		$.each(this.planes, function(i, p) {
+			if (p.api_slotid > 0 && p.api_state == 1 && p.api_max_count > 0) {
+				var lostCount = p.api_max_count - p.api_count;
+				totalFuel += lostCount * KC3GearManager.landBaseSupplyFuelCostPerSlot;
+				totalBauxite += lostCount * KC3GearManager.landBaseSupplyBauxiteCostPerSlot;
+			}
+		});
+		return {fuel: totalFuel, ammo: 0, steel: 0, bauxite: totalBauxite};
+	};
+	
 	/**
 	 * Convert to new Object used to record sorties on indexedDB
 	 * Use masterId instead of rosterId, also record stars and ace of aircraft.
