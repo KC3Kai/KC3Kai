@@ -1811,8 +1811,9 @@ Previously known as "Reactor"
 					localMap.curhp      = eventData.api_now_maphp;
 					localMap.maxhp      = eventData.api_max_maphp;
 					localMap.difficulty = eventData.api_selected_rank;
+					localMap.gaugeType  = eventData.api_gauge_type || 0;
 					
-					switch(eventData.api_gauge_type || 0) {
+					switch(localMap.gaugeType) {
 						case 0:
 						case 2:
 							localMap.kind   = "gauge-hp";
@@ -1822,21 +1823,21 @@ Previously known as "Reactor"
 							break;
 						default:
 							localMap.kind   = "gauge-hp";
-							console.info("Reported new API Gauge Type", eventData.api_gauge_type);
+							console.info("Reported new API gauge type", eventData.api_gauge_type);
 					}
 					
 					if(typeof oldMap !== "undefined"){
 						// Different gauge detected
 						if(!!oldMap.kind && oldMap.kind !== localMap.kind){
 							localMap.kinds = oldMap.kinds || [oldMap.kind];
-							localMap.kinds.push[localMap.kind];
+							localMap.kinds.push(localMap.kind);
 							console.log("New gauge phase detected:", oldMap.kind + " -> " + localMap.kind);
 						}
 						// Different max value detected
 						if((oldMap.maxhp || 9999) !== 9999
 							&& oldMap.maxhp !== localMap.maxhp){
 							localMaps.maxhps = oldMap.maxhps || [oldMap.maxhp];
-							localMaps.maxhps.push[localMap.maxhp];
+							localMaps.maxhps.push(localMap.maxhp);
 							console.log("New max HP detected:", oldMap.maxhp + " -> " + localMap.maxhp);
 						} else if(!!oldMap.baseHp){
 							localMap.baseHp = oldMap.baseHp;
