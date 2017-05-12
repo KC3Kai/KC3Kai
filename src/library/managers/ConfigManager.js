@@ -344,7 +344,7 @@ Retreives when needed to apply on components
 					return nLen;
 				}},
 				unshift:{value:function unshift(){
-					var _ushf,_args,nLen;
+					var _ushf, _args, nAry, nLen;
 					_args = Array.prototype.slice.apply(arguments);
 					_ushf = Function.prototype.apply.bind(Array.prototype.unshift,this);
 					nAry  = _args.filter(arrayUniquefy).filter(filterFun.bind(this));

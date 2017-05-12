@@ -495,12 +495,12 @@
 		// eLoS Toggle
 		$(".summary-eqlos").on("click",function(){
 			ConfigManager.scrollElosMode();
-			$(".summary-eqlos img", self.domElement).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png");
+			$("img", this).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png");
 			NatsuiroListeners.Fleet();
 		}).addClass("hover");
 		// Update with configured icon when non-default
 		if(ConfigManager.elosFormula !== 3){
-			$(".summary-eqlos img", self.domElement).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png");
+			$(".summary-eqlos img").attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png");
 		}
 
 		// Fighter Power Toggle
@@ -2757,7 +2757,7 @@
 			$(".module.activity .battle_airbattle").attr("title",
 				thisPvP.buildAirPowerMessage()
 			).lazyInitTooltip();
-			$(".module.activity .battle_engagement").text( thisPvP.engagement[2] || thisNode.engagement[0] );
+			$(".module.activity .battle_engagement").text( thisPvP.engagement[2] || thisPvP.engagement[0] );
 			$(".module.activity .battle_engagement").addClass( thisPvP.engagement[1] );
 			var contactSpan = buildContactPlaneSpan(thisPvP.fcontactId, thisPvP.fcontact, thisPvP.econtactId, thisPvP.econtact);
 			$(".module.activity .battle_contact").html(contactSpan.html()).lazyInitTooltip();

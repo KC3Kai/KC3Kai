@@ -1,3 +1,5 @@
+/* globals api_start2: true */
+/* globals battleSample: true */
 QUnit.module( "Module", function() {
     localStorage.clear();
     
