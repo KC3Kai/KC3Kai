@@ -1840,7 +1840,7 @@
 			$(".module.activity .battle_fish").hide();
 			$(".module.activity .battle_support").show();
 
-			console.debug("Processing next node", thisNode);
+			console.debug("Next node", thisNode);
 			if(thisNode.isBoss()){
 				$(".module.activity .sortie_nodes .boss_node .boss_circle").text(nodeId);
 				$(".module.activity .sortie_nodes .boss_node").css("left", 20 * (numNodes-1));

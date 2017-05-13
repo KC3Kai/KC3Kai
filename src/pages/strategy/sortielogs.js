@@ -48,11 +48,7 @@
 		Prepares reloadable data
 		---------------------------------*/
 		this.reload = function(){
-			if(typeof localStorage.maps != "undefined"){
-				this.maps = JSON.parse( localStorage.maps );
-			}else{
-				return false;
-			}
+			this.maps = JSON.parse(localStorage.maps || "{}");
 			this.exportingReplay = false;
 			this.enterCount = 0;
 		};
@@ -200,6 +196,8 @@
 			updateScrollItem("world", 116);
 
 			if(self.selectedWorld !== 0){
+				// As IndexedDB real-time updated, also load Storage maps
+				self.maps = JSON.parse(localStorage.maps || "{}");
 				// Add all maps in this world selection
 				var mapBox,countMaps;
 				mapBox = $(".tab_"+tabCode+" .factory .map_box").clone().appendTo(".tab_"+tabCode+" .map_list");
