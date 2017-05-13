@@ -538,6 +538,12 @@
 				"name" : "SettingsRedShadeOnPanel",
 				"type" : "check",
 				"options" : {}
+			},
+			{
+				"id" : "alert_taiha_noanim",
+				"name" : "SettingsNoAnimation",
+				"type" : "check",
+				"options" : {}
 			}
 		]
 	},

@@ -1220,9 +1220,13 @@
 				if(ConfigManager.alert_taiha_panel){
 					$("#critical").show();
 					if(critAnim){ clearInterval(critAnim); }
-					critAnim = setInterval(function() {
-						$("#critical").toggleClass("anim2");
-					}, 500);
+					if(!ConfigManager.alert_taiha_noanim){
+						critAnim = setInterval(function() {
+							$("#critical").toggleClass("anim2");
+						}, 500);
+					} else {
+						$("#critical").addClass("anim2");
+					}
 				}
 
 				if(ConfigManager.alert_taiha_sound){
