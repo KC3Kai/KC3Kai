@@ -5,12 +5,12 @@
 
 <!-- HELP TOPICS -->
 <div class="page_help">
-	<div class="help_q">Where is the heartlock column?</div>
-	<div class="help_a">It is currently disabled in favor of the night battle capability column in black. There are plans to enhance this table in the future.</div>
-	<div class="help_q">Where is the speed column?</div>
-	<div class="help_a">The same with heartlock.</div>
-	<div class="help_q">Where are the ship-types of DDE, XBB and AP?</div>
+	<div class="help_q">Where is the heartlock, speed or marry column?</div>
+	<div class="help_a">They are currently disabled or hidden by the limitation of page width.</div>
+	<div class="help_q">Where are the ship types of XBB and AP?</div>
 	<div class="help_a">They are not used by our shipgirls (AP taken by abyssal).</div>
+	<div class="help_q">Can I filter or sort by current HP or repair time of my shipgirls?</div>
+	<div class="help_a">Not here, go to <strong>Docking</strong> page instead.</div>
 	<div class="help_q">What is "Sort By Multiple Keys"?</div>
 	<div class="help_a"><p>Normally you can sort ships by levels, or sort by ship types so that ships of same type are grouped together. But this doesn't give you the ability to say &quot;sort ship by their types, and under the same type, sort them by level.&quot;.</p>
 	  <p>And sorting by multiple keys solves this problem: you can first sort ships by type to group them, then use ship level as the second key to sort under each type.</p>
@@ -31,12 +31,18 @@
 
 <!-- TOGGLE FILTERS -->
 <div class="page_panel filters">
+	<div class="filters_label hover">Options &amp; Filters:<div class="fold_button glyph_minus"></div></div>
+	
 	<div class="massSelect">
 		<dl>
-			<dt class="massLabel">Ship Type</dt>
-			<dd class="hover all">All</dd>
-			<dd class="hover none">None</dd>
-			<dd class="hover invert">Invert</dd>
+			<dt class="massLabel">List Scrollbar</dt>
+			<dd class="hover scroll_fix">Fixed</dd>
+			<dd class="hover scroll_none">None</dd>
+		</dl>
+		<dl>
+			<dt class="massLabel">Pages</dt>
+			<dd class="hover pages_yes">Show</dd>
+			<dd class="hover pages_no">Hide</dd>
 		</dl>
 		<dl>
 			<dt class="massLabel">Equip Stats</dt>
@@ -100,9 +106,16 @@
 			<dd class="hover exslot_no">No</dd>
 		</dl>
 		<dl>
-			<dt class="massLabel">Pages</dt>
-			<dd class="hover pages_yes">Show</dd>
-			<dd class="hover pages_no">Hide</dd>
+			<dt class="massLabel">Duplicated</dt>
+			<dd class="hover dupe_all">All</dd>
+			<dd class="hover dupe_yes">Yes</dd>
+			<dd class="hover dupe_no">No</dd>
+		</dl>
+		<dl>
+			<dt class="massLabel">Ship Type</dt>
+			<dd class="hover all">All</dd>
+			<dd class="hover none">None</dd>
+			<dd class="hover invert">Invert</dd>
 		</dl>
 	</div>
 	<div class="clear"></div>
