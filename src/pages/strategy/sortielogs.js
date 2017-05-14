@@ -816,7 +816,17 @@
 					
 					withDataCover64 = rcanvas.toDataURL("image/png");
 					
-					steg.encode(JSON.stringify(sortieData), withDataCover64, {
+					// Clear properties duplicated or may not used by replayer for now
+					$.each(sortieData.battles, function(_, battle){
+						delete battle.hq;
+						delete battle.airRaid;
+						delete battle.shizunde;
+					});
+					var jsonData = JSON.stringify(sortieData);
+					if(jsonData.length > 30000){
+						console.warn("Replayer data is too large to be encoded, size:", jsonData.length);
+					}
+					steg.encode(jsonData, withDataCover64, {
 						success: function(newImg){
 							KC3ImageExport.writeToCanvas(newImg, { width: 400, height: 400 }, function (error, canvas) {
 								if (error) {
