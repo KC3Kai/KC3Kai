@@ -702,6 +702,12 @@
 				"name" : "SettingsMapNodeMarkers",
 				"type" : "check",
 				"options" : {}
+			},
+			{
+				"id" : "mute_game_tab",
+				"name" : "SettingsMuteGameTab",
+				"type" : "check",
+				"options" : {}
 			}
 			
 		]

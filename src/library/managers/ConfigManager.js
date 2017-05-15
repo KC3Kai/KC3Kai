@@ -177,6 +177,7 @@ Retreives when needed to apply on components
 				subtitle_speaker	: false,
 				google_translate	: true,
 				map_markers			: true,
+				mute_game_tab		: false,
 				dmm_forcecookies	: false,
 				dmm_customize		: false,
 				dmm_custom_css		: "",
