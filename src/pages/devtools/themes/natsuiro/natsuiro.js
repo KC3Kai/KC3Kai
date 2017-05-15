@@ -2375,8 +2375,9 @@
 				);
 			}
 
-			// Show experience calculation
-			if(selectedFleet<5){
+			// Show experience calculation if leveling global found in sent fleet
+			if(selectedFleet <= (PlayerManager.combinedFleet ? 2 : 4) &&
+				KC3SortieManager.fleetSent == (PlayerManager.combinedFleet ? 1 : selectedFleet)){
 				let expJustGained = data.api_get_ship_exp;
 				var CurrentFleet = PlayerManager.fleets[selectedFleet-1];
 				let newGoals = JSON.parse(localStorage.goals || "{}");
