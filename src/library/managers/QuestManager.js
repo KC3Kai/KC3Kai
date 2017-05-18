@@ -224,6 +224,10 @@ Uses KC3Quest objects to play around with
 				} else {
 					this.timeToResetQuarterlyQuests = timeFromLocalStorage;
 				}
+
+				// need to drop a save here, otherwise if "this.resetQuarterlies()" below is executed
+				// QuestManager will be reloaded nullifying what has been done here.
+				this.save();
 				console.log("Reset Quarterly Quests at", this.timeToResetQuarterlyQuests, new Date(this.timeToResetQuarterlyQuests));
 			}
 			// Check if reset time passed by, update next reset time if reset
