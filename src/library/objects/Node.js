@@ -611,7 +611,7 @@ Used by SortieManager
 						console.log("STF both combined", result);
 						
 					} else {
-						console.error( "Unknown combined fleet code: " + PlayerManager.combinedFleet );
+						console.error("Unknown combined fleet code:", PlayerManager.combinedFleet);
 					}
 					
 					// Update enemy
@@ -682,7 +682,7 @@ Used by SortieManager
 						console.log("TECF only player is combined", result);
 						
 					} else {
-						console.error( "Unknown combined fleet code: " + PlayerManager.combinedFleet );
+						console.error("Unknown combined fleet code:", PlayerManager.combinedFleet);
 					}
 					
 					// Update enemy
@@ -1208,7 +1208,9 @@ Used by SortieManager
 					let enemyShip = KC3Master.ship(shipId);
 					if (!enemyShip) {
 						// ID starts from 1, -1 represents empty slot
-						if(shipId > 0) console.log("Cannot find enemy", shipId);
+						if(shipId > 0){
+							console.log("Cannot find enemy", shipId);
+						}
 					} else if (!KC3Master.isAbyssalShip(shipId)) {
 						console.log("Enemy ship is not Abyssal", shipId);
 					} else {
@@ -1247,7 +1249,7 @@ Used by SortieManager
 				this.saveEnemyEncounterInfo(null, name);
 			}
 		} catch (e) {
-			console.error("Captured an exception ==>", e,"\n==> proceeds safely");
+			console.error("Caught an exception:", e.stack, "\nProceeds safely");/*RemoveLogging:skip*/
 		} finally {
 			this.saveBattleOnDB(resultData);
 		}
@@ -1261,7 +1263,7 @@ Used by SortieManager
 				this.rating = "SS";
 			this.mvps = [resultData.api_mvp || 0];
 		} catch (e) {
-			console.error("Captured an exception ==>", e,"\n==> proceeds safely");
+			console.error("Captured an exception:", e.stack, "\nProceeds safely");/*RemoveLogging:skip*/
 		} finally {
 			this.savePvPOnDB(resultData);
 		}
