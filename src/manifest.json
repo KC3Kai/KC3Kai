@@ -8,8 +8,8 @@
 	"options_page": "pages/settings/settings.html",
 	"icons": {
 		"16": "assets/img/logo/16.png",
-        "48": "assets/img/logo/48.png",
-        "128": "assets/img/logo/128.png"
+		"48": "assets/img/logo/48.png",
+		"128": "assets/img/logo/128.png"
 	},
 	"browser_action": {
 		"default_icon": "assets/img/logo/dev.png",
