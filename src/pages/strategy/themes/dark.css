@@ -1800,3 +1800,42 @@ button, input, select, textarea {
 	color:#aaa;
 	font-size:12px;
 }
+
+/* LOGS
+--------------------------------*/
+.tab_logger .log_entry {
+	border-radius:0px !important;
+}
+.tab_logger .labelled_rule .date {
+	background:#222222 !important;
+}
+.tab_logger .log_entry .summary .time {
+	color:#bbb;
+}
+.tab_logger .log_entry .summary .msg .dataline {
+	color:#999 !important;
+}
+.tab_logger .log_entry .summary .msg {
+	color:#cccccc;
+}
+.tab_logger .log_entry .summary .source {
+	color:#0b1452 !important;
+}
+.tab_logger .log_entry .summary .context {
+	color:#222222 !important;
+}
+.tab_logger .log_entry .stack {
+	color:#ff1414 !important;
+}
+.bg-success {
+	background-color:#356b37;
+}
+.bg-info {
+	background-color:#00584b;
+}
+.bg-warning {
+	background-color:#5f5b10;
+}
+.bg-danger {
+	background-color:#960f30;
+}

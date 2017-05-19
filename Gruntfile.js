@@ -395,7 +395,8 @@ module.exports = function(grunt) {
 						// same reason for "tests/library".
 						src: [ "src/library/**/*.js",
 							   "src/pages/**/*.js",
-							   "tests/library/**/*.js"
+							   "tests/library/**/*.js",
+							   "tests/pages/**/*.js"
 							 ],
 						dest: 'build/testenv/'
 					}

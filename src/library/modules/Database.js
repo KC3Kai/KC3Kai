@@ -893,6 +893,32 @@ Uses Dexie.js third-party plugin on the assets directory
 				.then (callbackSucc || function(){})
 				.catch(callbackFail || function(e){console.error(e.stack);});
 		},
+
+		count_log_entries :function (filters) {
+			return filters.reduce((tableOrCollection, filter, index) => {
+				if (index === 0) {
+					// we have a Table
+					return tableOrCollection.filter(filter);
+				}
+				// otherwise we have a Collection
+				return tableOrCollection.and(filter);
+			}, this.con.logs).count();
+		},
+
+		get_log_entries :function ({ pageNumber, itemsPerPage, filters }) {
+			const collection = this.con.logs.orderBy('timestamp').reverse();
+
+			const filteredCollection = filters.reduce((result, filter) => result.and(filter), collection);
+
+			return filteredCollection
+				.offset((pageNumber - 1) * itemsPerPage)
+				.limit(itemsPerPage)
+				.toArray();
+		},
+
+		delete_log_entries :function () {
+			return this.con.logs.clear();
+		},
 		
 	};
 	

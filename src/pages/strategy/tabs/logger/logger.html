@@ -1,0 +1,54 @@
+<div class="page_title">
+  Console Logs
+  <div class="page_help_btn hover"><span>?</span> Help Topics</div>
+</div>
+
+<!-- HELP TOPICS -->
+<div class="page_help">
+  <div class="help_q"></div>
+  <div class="help_a"></div>
+</div>
+
+<div class="page_panel">
+  <div class="clear_logs hover">Clear logs</div>
+  <div data-filter-type="logTypes"></div>
+  <div data-filter-type="contexts"></div>
+  <form id="log_search">
+    <input type="text" />
+    <button type="submit">Search</button>
+  </form>
+</div>
+
+<div class="page_panel">
+  <ul class="pagination pagination-sm"></ul>
+</div>
+
+<div class="page_padding">
+  <div class="log_list"></div>
+</div>
+
+<div class="factory">
+  <label class="entry_filter">
+    <input type="checkbox" />
+    <span class="filter_label text-capitalize"></span>
+    <div class="clear"></div>
+  </label>
+
+  <div class="log_entry">
+    <div class="summary">
+      <div class="time">[<span class="timestamp"></span>]</div>
+      <div class="msg"><span class="message"></span> <span class="dataline"></span></div>
+      <div class="source"></div>
+      <div class="context"></div>
+      <div class="clear"></div>
+    </div>
+    <div class="data"></div>
+    <div class="stack"></div>
+  </div>
+
+  <div class="date_separator">
+    <h5 class="labelled_rule">
+      <span class="date"></span>
+    </h5>
+  </div>
+</div>
