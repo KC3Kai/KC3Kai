@@ -6,18 +6,24 @@
 	KC3StrategyTabs.ships.definition = {
 		tabSelf: KC3StrategyTabs.ships,
 
-		shipCache:[],
-		settings: {},
-		// default sorting method to Level
-		currentSorters: [{name:"lv", reverse:false}],
-		equipMode: 0,
 		isLoading: false,
-		multiKey: false,
-		pageNo: false,
-		scrollList: false,
-
+		shipCache:[],
+		// Formatted settings to be stored into localStorage
+		settings: {},
+		// Default properties of sorters and views
+		defaultSettings: {
+			// default sorting method to Level
+			currentSorters: [{name:"lv", reverse:false}],
+			// default options of view
+			equipMode: 0,
+			multiKey: false,
+			pageNo: false,
+			scrollList: false
+			// default values of filters are defined at `prepareFilters`
+		},
+		// All pre-defined filters instances
 		newFilterRep: {},
-		// all sorters
+		// All pre-defined sorters instances
 		sorters: {},
 		sorterDescCtrl: null,
 		viewElements: {},
@@ -26,6 +32,7 @@
 		Prepares static data needed
 		---------------------------------*/
 		init :function(){
+			$.extend(true, this, this.defaultSettings);
 			this.prepareSorters();
 		},
 
@@ -33,10 +40,10 @@
 		Prepares latest ships data
 		---------------------------------*/
 		reload :function(){
-			// Cache ship info
 			PlayerManager.loadFleets();
 			KC3ShipManager.load();
 			KC3GearManager.load();
+			// Cache pre-processed ship info
 			this.shipCache = [];
 			for(let key in KC3ShipManager.list){
 				let shipData = KC3ShipManager.list[key];
@@ -50,20 +57,8 @@
 		---------------------------------*/
 		execute :function(){
 			var self = this;
-			// now we need to do this before preparing filters
-			// Ship types
-			var sCtr, cElm;
 
-			for(sCtr in KC3Meta._stype){
-				// stype 12, 15 not used by shipgirl
-				// stype 1 is used from 2017-05-02
-				if(KC3Meta._stype[sCtr] && ["12", "15"].indexOf(sCtr) < 0){
-					cElm = $(".tab_ships .factory .ship_filter_type").clone().appendTo(".tab_ships .filters .ship_types");
-					cElm.data("id", sCtr);
-					$(".filter_name", cElm).text(KC3Meta.stype(sCtr));
-				}
-			}
-
+			// Binding click event starts
 			$(".filters_label").on("click", function(){
 				$(".filters .ship_types").slideToggle(300);
 				$(".filters .massSelect").slideToggle(300, function(){
@@ -104,15 +99,25 @@
 				KC3StrategyTabs.reloadTab(undefined, true);
 			});
 			$(".control_buttons .reset_default").on("click", function(){
-				self.equipMode = 0;
-				self.pageNo = false;
-				self.scrollList = false;
-				self.multiKey = false;
-				self.currentSorters = [{name:"lv", reverse:false}];
+				delete self.currentSorters;
+				$.extend(true, self, self.defaultSettings);
 				delete localStorage.srShiplist;
 				KC3StrategyTabs.reloadTab(undefined, true);
 			});
+			// Binding click event ends
 
+			// Add filter elements of ship types before `prepareFilters` executed
+			for(let sCtr in KC3Meta._stype){
+				// stype 12, 15 not used by shipgirl
+				// stype 1 is used from 2017-05-02
+				if(KC3Meta._stype[sCtr] && ["12", "15"].indexOf(sCtr) < 0){
+					let cElm = $(".tab_ships .factory .ship_filter_type").clone().appendTo(".tab_ships .filters .ship_types");
+					cElm.data("id", sCtr);
+					$(".filter_name", cElm).text(KC3Meta.stype(sCtr));
+				}
+			}
+
+			// Update multi sorter elements
 			var multiKeyCtrl = $( ".advanced_sorter .adv_sorter" );
 			var updateSorterControl = function() {
 				$(".filter_check", multiKeyCtrl).toggle( self.multiKey );
@@ -326,7 +331,6 @@
 
 		/*
 		   defineShipFilter defines a filter that has UI controls.
-
 		   see comments on each arguments for detail.
 		 */
 		defineShipFilter: function(
