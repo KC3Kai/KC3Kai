@@ -825,6 +825,7 @@
 					// Clear properties duplicated or may not used by replayer for now
 					$.each(sortieData.battles, function(_, battle){
 						delete battle.hq;
+						delete battle.enemyId;
 						delete battle.airRaid;
 						delete battle.shizunde;
 					});

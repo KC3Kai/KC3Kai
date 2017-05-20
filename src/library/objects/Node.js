@@ -179,6 +179,7 @@ Used by SortieManager
 		this.mvps = [];
 		this.dameConConsumed = [];
 		this.dameConConsumedEscort = [];
+		this.enemyEncounter = {};
 		return this;
 	};
 	
@@ -1546,7 +1547,7 @@ Used by SortieManager
 	KC3Node.prototype.saveEnemyEncounterInfo = function(battleData, updatedName){
 		// Update name only if new name offered
 		if(!battleData && !!updatedName){
-			if(!!this.enemyEncounter){
+			if(!!this.enemyEncounter.uniqid){
 				this.enemyEncounter.name = updatedName;
 				KC3Database.Encounter(this.enemyEncounter, false);
 				return true;
@@ -1615,14 +1616,16 @@ Used by SortieManager
 	};
 	
 	KC3Node.prototype.saveBattleOnDB = function( resultData ){
-		KC3Database.Battle({
+		var b = {
+			// TODO ref to the uniq key of sortie table which is not the auto-increment ID
+			// foreign key to sortie
 			sortie_id: (this.sortie || KC3SortieManager.onSortie || 0),
 			node: this.id,
-			boss: this.isBoss(),
-			enemyId: (this.epattern || 0),
+			// foreign key to encounters
+			//enemyId: (this.enemyEncounter.uniqid || ""),
+			enemyId: 0, // 0 as placeholder. Because unused for now, encounter uniqid is too long
 			data: (this.battleDay || {}),
 			yasen: (this.battleNight || {}),
-			airRaid: (this.battleDestruction || {}),
 			rating: this.rating,
 			drop: this.drop,
 			time: this.stime,
@@ -1634,14 +1637,19 @@ Used by SortieManager
 				});
 			}),
 			mvp: this.mvps
-		});
+		};
+		// Optional properties
+		if(this.battleDestruction){ b.airRaid = this.battleDestruction; }
+		if(this.isBoss()){ b.boss = true; }
+		console.log("Saving battle", b);
+		KC3Database.Battle(b);
 	};
 	
 	KC3Node.prototype.savePvPOnDB = function( resultData ){
 		console.log("Saving PvP, fake SortieManager", KC3SortieManager);
 		KC3Database.PvP({
 			fleet: PlayerManager.fleets[KC3SortieManager.fleetSent-1].sortieJson(),
-			enemy: [],
+			enemy: [], // Unused
 			data: (this.battleDay || {}),
 			yasen: (this.battleNight || {}),
 			rating: this.rating,
