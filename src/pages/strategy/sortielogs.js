@@ -545,14 +545,14 @@
 					
 					// console.log("sortie.battles", sortie.battles);
 					
+					var finalNodeIndex = -1;
 					// For each battle
-					if(sortie.battles.length===0){
-						$(".sortie_edges", sortieBox).append("<div class=\"nonodes\">Unable to record nodes</div>");
-						$(".sortie_edge ", sortieBox).hide();
-						
-						
+					if(sortie.battles.length === 0){
+						$(".sortie_edges", sortieBox).append("<div class=\"nonodes\">No available node recorded</div>");
+						$(".sortie_edge",  sortieBox).hide();
 					}else{
 						$.each(sortie.battles, function(index, battle){
+							finalNodeIndex = index;
 							var battleData, battleType;
 							
 							// Determine if day or night battle node
@@ -579,8 +579,12 @@
 							battle.shizunde |= [[],[]];
 							
 							// Show on node list
-							$(".sortie_edge_"+(index+1), sortieBox).addClass("active");
+							$(".sortie_edge_"+(index+1), sortieBox).addClass("active")
+								.toggleClass("boss", !!battle.boss);
 							$(".sortie_edge_"+(index+1), sortieBox).html( KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node ) );
+							if(index === 5){
+								$(".sortie_edges", sortieBox).removeClass("one_line").addClass("two_lines");
+							}
 							
 							// HTML elements
 							nodeBox = $(".tab_"+tabCode+" .factory .sortie_nodeinfo").clone();
@@ -638,7 +642,6 @@
 							}else if(typeof battle.yasen.api_deck_id != "undefined"){
 								thisNode.engageNight( battleData, sortie.fleetnum );
 							}
-							
 							sinkShips[0].concat(battle.shizunde[0]);
 							sinkShips[1].concat(battle.shizunde[1]);
 							
@@ -728,6 +731,9 @@
 									["../../../../assets/img/ui/estat_boss",stateKey || 'fresh',".png"].join('')
 								)
 								.css('opacity',1 / (1 + !stateKey));
+							if(finalNodeIndex > -1 && stateKey && stateKey !== "faild"){
+								$(".sortie_edge_"+(finalNodeIndex+1), sortieBox).addClass("boss");
+							}
 						} catch (e) {
 							throw e;
 						}

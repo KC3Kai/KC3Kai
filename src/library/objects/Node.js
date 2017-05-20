@@ -1129,7 +1129,7 @@ Used by SortieManager
 				}).call(this, resultData.api_get_eventitem);
 			}
 			
-			ConfigManager.loadIfNecessary();
+			ConfigManager.load();
 			ship_get.forEach(function(newShipId){
 				var wish_kind = ["salt","wish"];
 				
@@ -1618,6 +1618,7 @@ Used by SortieManager
 		KC3Database.Battle({
 			sortie_id: (this.sortie || KC3SortieManager.onSortie || 0),
 			node: this.id,
+			boss: this.isBoss(),
 			enemyId: (this.epattern || 0),
 			data: (this.battleDay || {}),
 			yasen: (this.battleNight || {}),
