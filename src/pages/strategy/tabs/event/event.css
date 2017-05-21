@@ -332,14 +332,34 @@
 	line-height:30px;
 	float:left;
 	text-align:center;
-	margin:0px 5px 0px 0px;
+	margin:0px 5px 1px 0px;
 	color:#fff;
 	border-radius:15px;
 	font-size:14px;
 	font-weight:bold;
 }
+.tab_event .sortie_list .sortie_edges.one_line .sortie_edge_6,
+.tab_event .sortie_list .sortie_edges.one_line .sortie_edge_7,
+.tab_event .sortie_list .sortie_edges.one_line .sortie_edge_8,
+.tab_event .sortie_list .sortie_edges.one_line .sortie_edge_9,
+.tab_event .sortie_list .sortie_edges.one_line .sortie_edge_10 {
+	display:none;
+}
+.tab_event .sortie_list .sortie_edges.two_lines .sortie_edge {
+	width:30px;
+	height:14px;
+	line-height:14px;
+	font-weight:normal;
+}
 .tab_event .sortie_list .sortie_edge.active {
-	background:#B50000;
+	background:#b50000;
+}
+.tab_event .sortie_list .sortie_edges .sortie_edge.active.boss {
+	background-image:url(../../../../assets/img/client/boss.png);
+	background-repeat:no-repeat;
+	background-position:4px 50%;
+	background-size:22px;
+	background-blend-mode:multiply;
 }
 
 /* Sortie Info: TOGGLES */

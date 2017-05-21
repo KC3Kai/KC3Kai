@@ -495,12 +495,12 @@
 		// eLoS Toggle
 		$(".summary-eqlos").on("click",function(){
 			ConfigManager.scrollElosMode();
-			$(".summary-eqlos img", self.domElement).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png");
+			$("img", this).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png");
 			NatsuiroListeners.Fleet();
 		}).addClass("hover");
 		// Update with configured icon when non-default
 		if(ConfigManager.elosFormula !== 3){
-			$(".summary-eqlos img", self.domElement).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png");
+			$(".summary-eqlos img").attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png");
 		}
 
 		// Fighter Power Toggle
@@ -644,11 +644,8 @@
 			(new RMsg("service", "toggleSounds", {
 				tabId: chrome.devtools.inspectedWindow.tabId
 			},function(isMuted){
-				if(isMuted){
-					$(".module.controls .btn_mute img").attr("src", "img/mute-x.png");
-				}else{
-					$(".module.controls .btn_mute img").attr("src", "img/mute.png");
-				}
+				$(".module.controls .btn_mute img")
+					.attr("src", "img/mute{0}.png".format(isMuted ? "-x" : ""));
 			})).execute();
 		});
 
@@ -701,6 +698,13 @@
 			try {
 				if(tabInfo.mutedInfo.muted){
 					$(".module.controls .btn_mute img").attr("src", "img/mute-x.png");
+				} else if(ConfigManager.mute_game_tab) {
+					(new RMsg("service", "toggleSounds", {
+						tabId: chrome.devtools.inspectedWindow.tabId
+					}, function(isMuted){
+						$(".module.controls .btn_mute img")
+							.attr("src", "img/mute{0}.png".format(isMuted ? "-x" : ""));
+					})).execute();
 				}
 			} catch(e) {}
 		})).execute();
@@ -1220,9 +1224,13 @@
 				if(ConfigManager.alert_taiha_panel){
 					$("#critical").show();
 					if(critAnim){ clearInterval(critAnim); }
-					critAnim = setInterval(function() {
-						$("#critical").toggleClass("anim2");
-					}, 500);
+					if(!ConfigManager.alert_taiha_noanim){
+						critAnim = setInterval(function() {
+							$("#critical").toggleClass("anim2");
+						}, 500);
+					} else {
+						$("#critical").addClass("anim2");
+					}
 				}
 
 				if(ConfigManager.alert_taiha_sound){
@@ -1662,13 +1670,18 @@
 				
 				var baseBox, planeBox, itemObj, paddedId,
 					eqImgSrc, eqIconSrc, eqChevSrc, eqMorale, eqCondSrc;
+				var togglePlaneName = function(e){
+					$(".module.fleet .airbase_list .base_plane_name").toggle();
+					$(".module.fleet .airbase_list .name_toggle_group").toggle();
+				};
 				
 				$.each(PlayerManager.bases, function(i, baseInfo){
 					if (baseInfo.rid != -1) {
 						console.log("AIRBASE", i, baseInfo);
 						baseBox = $("#factory .airbase").clone();
-						$(".base_name", baseBox).html(baseInfo.name);
-						$(".base_range .base_stat_value", baseBox).html(baseInfo.range);
+						$(".base_map", baseBox).text(baseInfo.map);
+						$(".base_name", baseBox).text(baseInfo.name);
+						$(".base_range .base_stat_value", baseBox).text(baseInfo.range);
 						$(".base_action", baseBox).html([
 							KC3Meta.term("LandBaseActionWaiting"),
 							KC3Meta.term("LandBaseActionSortie"),
@@ -1697,6 +1710,8 @@
 							!!ifp ? ifp : KC3Meta.term("None")
 						);
 						
+						$(".airbase_infos", baseBox).on("click", togglePlaneName);
+						
 						$.each(baseInfo.planes, function(i, planeInfo){
 							planeBox = $("#factory .airbase_plane").clone();
 							
@@ -1709,14 +1724,15 @@
 									return;
 								}
 								
-								$(".base_plane_name", planeBox).text(itemObj.name());
+								$(".base_plane_name", planeBox).text(itemObj.name())
+									.attr("title", itemObj.name()).lazyInitTooltip();
 								
 								paddedId = (itemObj.masterId<10?"00":itemObj.masterId<100?"0":"")+itemObj.masterId;
 								eqImgSrc = "../../../../assets/img/planes/"+paddedId+".png";
 								$(".base_plane_img img", planeBox).attr("src", eqImgSrc)
 									.error(function() { $(this).unbind("error").attr("src", "../../../../assets/img/ui/empty.png"); });
 								$(".base_plane_img", planeBox)
-									.attr("title", KC3Gear.buildGearTooltip(itemObj, $(".base_plane_name", planeBox).text()) )
+									.attr("title", itemObj.name())
 									.lazyInitTooltip()
 									.data("masterId", itemObj.masterId)
 									.on("dblclick", self.gearDoubleClickFunction);
@@ -1724,6 +1740,11 @@
 								eqIconSrc = "../../../../assets/img/items/"+itemObj.master().api_type[3]+".png";
 								$(".base_plane_icon img", planeBox).attr("src", eqIconSrc)
 									.error(function() { $(this).unbind("error").attr("src", "../../../../assets/img/ui/empty.png"); });
+								$(".base_plane_icon", planeBox)
+									.attr("title", KC3Gear.buildGearTooltip(itemObj, itemObj.name()) )
+									.lazyInitTooltip()
+									.data("masterId", itemObj.masterId)
+									.on("dblclick", self.gearDoubleClickFunction);
 								
 								if (itemObj.stars > 0) {
 									$(".base_plane_star", planeBox).text(itemObj.stars);
@@ -1763,7 +1784,6 @@
 									$(".base_plane_count", planeBox).text("");
 									$(".base_plane_cond img", planeBox).remove();
 								}
-								
 							} else {
 								// No plane on slot
 								$("div", planeBox).remove();
@@ -1836,7 +1856,7 @@
 			$(".module.activity .battle_fish").hide();
 			$(".module.activity .battle_support").show();
 
-			console.debug("Processing next node", thisNode);
+			console.debug("Next node", thisNode);
 			if(thisNode.isBoss()){
 				$(".module.activity .sortie_nodes .boss_node .boss_circle").text(nodeId);
 				$(".module.activity .sortie_nodes .boss_node").css("left", 20 * (numNodes-1));
@@ -2133,7 +2153,7 @@
 			// Battle conditions
 			$(".module.activity .battle_engagement").text( thisNode.engagement[2] || thisNode.engagement[0] );
 			$(".module.activity .battle_engagement").addClass( thisNode.engagement[1] );
-			$(".module.activity .battle_engagement").attr("title", thisNode.engagement[0] );
+			$(".module.activity .battle_engagement").attr("title", thisNode.engagement[3] || "" );
 			var contactSpan = buildContactPlaneSpan(thisNode.fcontactId, thisNode.fcontact, thisNode.econtactId, thisNode.econtact);
 			$(".module.activity .battle_contact").html(contactSpan.html()).lazyInitTooltip();
 
@@ -2371,8 +2391,9 @@
 				);
 			}
 
-			// Show experience calculation
-			if(selectedFleet<5){
+			// Show experience calculation if leveling global found in sent fleet
+			if(selectedFleet <= (PlayerManager.combinedFleet ? 2 : 4) &&
+				KC3SortieManager.fleetSent == (PlayerManager.combinedFleet ? 1 : selectedFleet)){
 				let expJustGained = data.api_get_ship_exp;
 				var CurrentFleet = PlayerManager.fleets[selectedFleet-1];
 				let newGoals = JSON.parse(localStorage.goals || "{}");
@@ -2757,8 +2778,9 @@
 			$(".module.activity .battle_airbattle").attr("title",
 				thisPvP.buildAirPowerMessage()
 			).lazyInitTooltip();
-			$(".module.activity .battle_engagement").text( thisPvP.engagement[2] || thisNode.engagement[0] );
+			$(".module.activity .battle_engagement").text( thisPvP.engagement[2] || thisPvP.engagement[0] );
 			$(".module.activity .battle_engagement").addClass( thisPvP.engagement[1] );
+			$(".module.activity .battle_engagement").attr("title", thisPvP.engagement[3] || "");
 			var contactSpan = buildContactPlaneSpan(thisPvP.fcontactId, thisPvP.fcontact, thisPvP.econtactId, thisPvP.econtact);
 			$(".module.activity .battle_contact").html(contactSpan.html()).lazyInitTooltip();
 

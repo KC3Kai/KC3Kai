@@ -685,7 +685,7 @@ KC3改 Ship Object
 	// - sonar should be equipped
 	// - ASW stat >= 100
 	// also Isuzu K2 can do OASW unconditionally
-	// also ship type Escort (PF) and Taiyou are special cases
+	// also ship type Escort and CVL Taiyou are special cases
 	KC3Ship.prototype.canDoOASW = function () {
 		// master Id for Isuzu K2
 		if (this.masterId === 141)
@@ -713,21 +713,22 @@ KC3改 Ship Object
 			return masterData &&
 				masterData.api_id === 82 || masterData.api_id === 83;
 		}
-		// for Taiyou Kai or Kai2, any equippable bomber will work
+		// for Taiyou Kai or Kai2, any equippable aircraft should work
 		function isAswAircraft(masterData) {
 			/*
 			 * - 7: Dive Bomber
 			 * - 8: Torpedo Bomber
 			 * - 11: Seaplane Bomber (not equippable)
-			 * - 25: Autogyro (equippable?)
-			 * - 26: Anti-Sub PBY (equippable?)
+			 * - 25: Autogyro (Kai2 equippable)
+			 * - 26: Anti-Sub PBY
 			 * - 41: Large Flying Boat (not equippable)
 			 */
 			return masterData &&
-				[7, 8, 25, 26].indexOf(masterData.api_type[2]) > -1;
+				[7, 8, 11, 25, 26, 41].indexOf(masterData.api_type[2]) > -1;
 		}
 
-		// only Sonar equipped will not let CVL anti-sub, so may not work for oasw
+		// Only Autogyro or PBY equipped will not let CVL anti-sub in day shelling phase,
+		// but Taiyou Kai+ can still OASW. only Sonar equipped can do neither.
 		if (isTaiyouKaiAfter) {
 			return [0,1,2,3,4].some( slot => isAswAircraft( this.equipment(slot).master() ));
 		} else if (isTaiyouBase) {
@@ -748,6 +749,17 @@ KC3改 Ship Object
 		}
 		let hasSonar = [0,1,2,3,4]
 			.some( slot => isSonar( this.equipment(slot).master() ));
+
+		// Escort can OASW without Sonar, but total asw >= 75 and equipped total plus asw >= 4
+		// see https://twitter.com/a_t_o_6/status/863445975007805440
+		if(this.master().api_stype == 1) {
+			if(hasSonar) return true;
+			let equipAswSum = [0,1,2,3,4]
+				.map(slot => this.equipment(slot).master().api_tais || 0)
+				.reduce((ac, p) => ac + p, 0);
+			return this.as[0] >= 75 && equipAswSum >= 4;
+		}
+
 		return hasSonar;
 	};
 

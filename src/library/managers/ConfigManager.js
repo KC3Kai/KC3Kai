@@ -156,6 +156,7 @@ Retreives when needed to apply on components
 				alert_taiha_panel	: true,
 				alert_taiha_homeport: false,
 				alert_taiha_damecon	: false,
+				alert_taiha_noanim	: false,
 				
 				api_translation		: true,
 				api_tracking 		: true,
@@ -176,6 +177,7 @@ Retreives when needed to apply on components
 				subtitle_speaker	: false,
 				google_translate	: true,
 				map_markers			: true,
+				mute_game_tab		: false,
 				dmm_forcecookies	: false,
 				dmm_customize		: false,
 				dmm_custom_css		: "",
@@ -344,7 +346,7 @@ Retreives when needed to apply on components
 					return nLen;
 				}},
 				unshift:{value:function unshift(){
-					var _ushf,_args,nLen;
+					var _ushf, _args, nAry, nLen;
 					_args = Array.prototype.slice.apply(arguments);
 					_ushf = Function.prototype.apply.bind(Array.prototype.unshift,this);
 					nAry  = _args.filter(arrayUniquefy).filter(filterFun.bind(this));

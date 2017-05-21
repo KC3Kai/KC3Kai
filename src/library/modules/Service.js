@@ -369,7 +369,8 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				response({ mode: 'frame', scale: ConfigManager.api_gameScale});
 			} else if(ConfigManager.dmm_customize && localStorage.extract_api != "true") {
 				var props = {
-					highlighted: true
+					highlighted: true,
+					muted: !!ConfigManager.mute_game_tab
 				};
 				// Prevent Chrome auto discard the game tab
 				// autoDiscardable since Chrome 54

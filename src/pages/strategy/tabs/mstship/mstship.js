@@ -395,11 +395,16 @@
 					}else if(stat[1].startsWith("db_")){
 						var realName = stat[1].slice(3);
 						$(".ship_stat_name", statBox).text(realName);
-						$(".ship_stat_min", statBox).text(
-							statFromDb[realName] < 0 || statFromDb[realName] === ""
-								? "tbc"
-								: statFromDb[realName]
-						);
+						// New initial asw statisic added for Anti-sub Carrier (Taiyou for now)
+						if(stat[0]=="as" && shipData.api_tais){
+							$(".ship_stat_min", statBox).text(shipData.api_tais[0]);
+						} else {
+							$(".ship_stat_min", statBox).text(
+								statFromDb[realName] < 0 || statFromDb[realName] === ""
+									? "tbc"
+									: statFromDb[realName]
+							);
+						}
 						if(realName==="carry"){
 							$(".ship_stat_max", statBox).hide();
 						} else {
