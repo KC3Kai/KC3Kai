@@ -48,11 +48,9 @@
 		Prepares reloadable data
 		---------------------------------*/
 		this.reload = function(){
-			if(typeof localStorage.maps != "undefined"){
-				this.maps = JSON.parse( localStorage.maps );
-			}else{
-				return false;
-			}
+			this.maps = JSON.parse(localStorage.maps || "{}");
+			this.exportingReplay = false;
+			this.enterCount = 0;
 		};
 		
 		/* EXECUTE
@@ -198,6 +196,8 @@
 			updateScrollItem("world", 116);
 
 			if(self.selectedWorld !== 0){
+				// As IndexedDB real-time updated, also load Storage maps
+				self.maps = JSON.parse(localStorage.maps || "{}");
 				// Add all maps in this world selection
 				var mapBox,countMaps;
 				mapBox = $(".tab_"+tabCode+" .factory .map_box").clone().appendTo(".tab_"+tabCode+" .map_list");
@@ -343,6 +343,11 @@
 		this.showMap = function(){
 			var self = this;
 			this.pageNum = 1;
+			this.enterCount += 1;
+			// Because showPage() is using async DB operation and time expensive (ofen > 1000ms),
+			// to prevent executing and adding elements to list duplicatedly
+			// when switch between worlds/maps quickly, should stop to re-enter it.
+			var expectedEnterCount = this.enterCount;
 			$(".tab_"+tabCode+" .page_list").empty();
 			$(".tab_"+tabCode+" .sortie_list").empty();
 			$(".tab_"+tabCode+" .sortie_batch_toggles").hide();
@@ -350,7 +355,9 @@
 			// Show all sorties
 			if(this.selectedWorld === 0){
 				KC3Database.count_normal_sorties(function(countSorties){
-					self.showPagination(countSorties);
+					console.log("count_all", countSorties);
+					if(expectedEnterCount === self.enterCount)
+						self.showPagination(countSorties);
 				});
 				
 			// Selected specific world
@@ -359,14 +366,16 @@
 				if(this.selectedMap === 0){
 					KC3Database.count_world(this.selectedWorld, function(countSorties){
 						console.log("count_world", countSorties);
-						self.showPagination(countSorties);
+						if(expectedEnterCount === self.enterCount)
+							self.showPagination(countSorties);
 					});
 					
 				// Selected specifc map
 				}else{
 					KC3Database.count_map(this.selectedWorld, this.selectedMap, function(countSorties){
 						console.log("count_map", countSorties);
-						self.showPagination(countSorties);
+						if(expectedEnterCount === self.enterCount)
+							self.showPagination(countSorties);
 					});
 				}
 			}
@@ -380,13 +389,6 @@
 			var countPages = Math.ceil( countSorties / this.itemsPerPage );
 			$(".tab_"+tabCode+" .page_list").html('<ul class="pagination pagination-sm"></ul>');
 			var twbsPageObj;
-			// Because showPage() is using async DB operation and time expensive (ofen > 1000ms),
-			// to prevent adding elements to list duplicatedly when switch between pages/maps quickly,
-			// should stop to re-enter it during a quota of time wait.
-			if(self.showPageTime && !self.debouncedShowPage){
-				self.debouncedShowPage = $.debounce(250 + self.showPageTime,
-					self.showPageTime > 500, self.showPage, self);
-			}
 			if(countPages > 0){
 				twbsPageObj = $(".tab_"+tabCode+" .pagination").twbsPagination({
 					totalPages: countPages,
@@ -398,10 +400,7 @@
 						}
 					}
 				});
-				if(self.debouncedShowPage)
-					self.debouncedShowPage(1, twbsPageObj);
-				else
-					self.showPage(1, twbsPageObj);
+				self.showPage(1, twbsPageObj);
 				$(".tab_"+tabCode+" .sortie_controls .sortie_count").text(
 					"Total pages: {0}, sorties: {1}".format(countPages, countSorties)
 				);
@@ -417,18 +416,17 @@
 		this.showPage = function(page, twbsPageObj){
 			var self = this;
 			var startTime = Date.now();
-			this.showPageTime = 0;
 			this.pageNum = page || 1;
 			var postShowList = function(){
-				self.showPageTime = Date.now() - startTime;
-				console.log("Showing this list took", self.showPageTime, "milliseconds");
+				var showPageTime = Date.now() - startTime;
+				console.log("Showing this list took", showPageTime, "milliseconds");
 				if(twbsPageObj) twbsPageObj.twbsPagination("enable");
 			};
+			// Prevent to quickly switch on pagination
+			if(twbsPageObj) twbsPageObj.twbsPagination("disable");
 			$(".tab_"+tabCode+" .pagination").show();
 			$(".tab_"+tabCode+" .sortie_list").empty();
 			
-			// Prevent to quickly switch on pagination
-			if(twbsPageObj) twbsPageObj.twbsPagination("disable");
 			// Show all sorties
 			if(this.selectedWorld === 0){
 				KC3Database.get_normal_sorties(this.pageNum, this.itemsPerPage, function( sortieList ){
@@ -471,7 +469,7 @@
 					// Create sortie box
 					sortieBox = $(".tab_"+tabCode+" .factory .sortie_box").clone().appendTo(".tab_"+tabCode+" .sortie_list");
 					if(sortie.world >= 10) {
-						sortie.diff = sortie.diff || (maps[skey] || {difficulty:0}).difficulty || 0;
+						sortie.diff = sortie.diff || (self.maps[skey] || {difficulty:0}).difficulty || 0;
 					}
 					if((sortie.diff || 0) > 0)
 						$(sortieBox)
@@ -547,14 +545,14 @@
 					
 					// console.log("sortie.battles", sortie.battles);
 					
+					var finalNodeIndex = -1;
 					// For each battle
-					if(sortie.battles.length===0){
-						$(".sortie_edges", sortieBox).append("<div class=\"nonodes\">Unable to record nodes</div>");
-						$(".sortie_edge ", sortieBox).hide();
-						
-						
+					if(sortie.battles.length === 0){
+						$(".sortie_edges", sortieBox).append("<div class=\"nonodes\">No available node recorded</div>");
+						$(".sortie_edge",  sortieBox).hide();
 					}else{
 						$.each(sortie.battles, function(index, battle){
+							finalNodeIndex = index;
 							var battleData, battleType;
 							
 							// Determine if day or night battle node
@@ -581,8 +579,12 @@
 							battle.shizunde |= [[],[]];
 							
 							// Show on node list
-							$(".sortie_edge_"+(index+1), sortieBox).addClass("active");
+							$(".sortie_edge_"+(index+1), sortieBox).addClass("active")
+								.toggleClass("boss", !!battle.boss);
 							$(".sortie_edge_"+(index+1), sortieBox).html( KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node ) );
+							if(index === 5){
+								$(".sortie_edges", sortieBox).removeClass("one_line").addClass("two_lines");
+							}
 							
 							// HTML elements
 							nodeBox = $(".tab_"+tabCode+" .factory .sortie_nodeinfo").clone();
@@ -605,9 +607,10 @@
 							
 							// Kanmusu Drop
 							if(battle.drop > 0){
-								$(".node_drop img", nodeBox).attr("src", KC3Meta.shipIcon( battle.drop ) );
-								$(".node_drop img", nodeBox).attr("alt", battle.drop);
-								$(".node_drop img", nodeBox).click(shipClickFunc);
+								$(".node_drop img", nodeBox).attr("src", KC3Meta.shipIcon( battle.drop ) )
+									.attr("title", KC3Meta.shipName( KC3Master.ship(battle.drop).api_name ) )
+									.attr("alt", battle.drop)
+									.click(shipClickFunc);
 								$(".node_drop", nodeBox).addClass("hover");
 							}else{
 								$(".node_drop img", nodeBox).attr("src", "../../assets/img/ui/shipdrop-x.png");
@@ -639,7 +642,6 @@
 							}else if(typeof battle.yasen.api_deck_id != "undefined"){
 								thisNode.engageNight( battleData, sortie.fleetnum );
 							}
-							
 							sinkShips[0].concat(battle.shizunde[0]);
 							sinkShips[1].concat(battle.shizunde[1]);
 							
@@ -729,6 +731,9 @@
 									["../../../../assets/img/ui/estat_boss",stateKey || 'fresh',".png"].join('')
 								)
 								.css('opacity',1 / (1 + !stateKey));
+							if(finalNodeIndex > -1 && stateKey && stateKey !== "faild"){
+								$(".sortie_edge_"+(finalNodeIndex+1), sortieBox).addClass("boss");
+							}
 						} catch (e) {
 							throw e;
 						}
@@ -817,7 +822,18 @@
 					
 					withDataCover64 = rcanvas.toDataURL("image/png");
 					
-					steg.encode(JSON.stringify(sortieData), withDataCover64, {
+					// Clear properties duplicated or may not used by replayer for now
+					$.each(sortieData.battles, function(_, battle){
+						delete battle.hq;
+						delete battle.enemyId;
+						delete battle.airRaid;
+						delete battle.shizunde;
+					});
+					var jsonData = JSON.stringify(sortieData);
+					if(jsonData.length > 30000){
+						console.warn("Replayer data is too large to be encoded, size:", jsonData.length);
+					}
+					steg.encode(jsonData, withDataCover64, {
 						success: function(newImg){
 							KC3ImageExport.writeToCanvas(newImg, { width: 400, height: 400 }, function (error, canvas) {
 								if (error) {

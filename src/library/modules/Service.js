@@ -72,10 +72,10 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			// If refreshing API link, close source tabs and re-open game frame
 			if(JSON.parse(localStorage.extract_api)){ // localStorage has problems with native boolean
 				localStorage.extract_api = false;
+				chrome.tabs.remove([sender.tab.id], function(){});
 				// To avoid cross-domain warning of chrome
 				//window.open("../pages/game/api.html", "kc3kai_game");
 				chrome.tabs.create({ url: chrome.extension.getURL("../pages/game/api.html") });
-				chrome.tabs.remove([sender.tab.id], function(){});
 			}
 		},
 		
@@ -369,7 +369,8 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				response({ mode: 'frame', scale: ConfigManager.api_gameScale});
 			} else if(ConfigManager.dmm_customize && localStorage.extract_api != "true") {
 				var props = {
-					highlighted: true
+					highlighted: true,
+					muted: !!ConfigManager.mute_game_tab
 				};
 				// Prevent Chrome auto discard the game tab
 				// autoDiscardable since Chrome 54

@@ -685,25 +685,55 @@ KC3改 Ship Object
 	// - sonar should be equipped
 	// - ASW stat >= 100
 	// also Isuzu K2 can do OASW unconditionally
-	// also ship type DE and Taiyou are special cases
+	// also ship type Escort and CVL Taiyou are special cases
 	KC3Ship.prototype.canDoOASW = function () {
-		// master Id for Isuzu
+		// master Id for Isuzu K2
 		if (this.masterId === 141)
 			return true;
 
-		// is Taiyou but not Kasugamaru
-		let isTaiyou = RemodelDb.originOf(this.masterId) === 521 && this.masterId !== 521;
-		// lower condition for DE and Taiyou
+		// is Taiyou series:
+		// tho Kasugamaru not possible to reach high asw for now
+		// and base asw stat of Kai and Kai2 already exceed 70
+		let isTaiyouSeries = RemodelDb.originOf(this.masterId) === 521;
+		let isTaiyouBase = this.masterId === 526;
+		let isTaiyouKaiAfter = RemodelDb.remodelGroup(521).indexOf(this.masterId) > 1;
+
+		// lower condition for Escort and Taiyou
 		let aswThreshold = this.master().api_stype == 1 ? 60
-			: isTaiyou ? 60
+			: isTaiyouSeries ? 65
 			: 100;
 
 		// shortcutting on the stricter condition first
 		if (this.as[0] < aswThreshold)
 			return false;
 
-		// not require Sonar for Taiyou
-		if (isTaiyou) return true;
+		// according test, Taiyou needs T97/Tenzan Torpedo Bomber 931 Air Group
+		// see http://wikiwiki.jp/kancolle/?%C2%E7%C2%EB
+		function isBomber931AirGroup(masterData) {
+			return masterData &&
+				masterData.api_id === 82 || masterData.api_id === 83;
+		}
+		// for Taiyou Kai or Kai2, any equippable aircraft should work
+		function isAswAircraft(masterData) {
+			/*
+			 * - 7: Dive Bomber
+			 * - 8: Torpedo Bomber
+			 * - 11: Seaplane Bomber (not equippable)
+			 * - 25: Autogyro (Kai2 equippable)
+			 * - 26: Anti-Sub PBY
+			 * - 41: Large Flying Boat (not equippable)
+			 */
+			return masterData &&
+				[7, 8, 11, 25, 26, 41].indexOf(masterData.api_type[2]) > -1;
+		}
+
+		// Only Autogyro or PBY equipped will not let CVL anti-sub in day shelling phase,
+		// but Taiyou Kai+ can still OASW. only Sonar equipped can do neither.
+		if (isTaiyouKaiAfter) {
+			return [0,1,2,3,4].some( slot => isAswAircraft( this.equipment(slot).master() ));
+		} else if (isTaiyouBase) {
+			return [0,1,2,3,4].some( slot => isBomber931AirGroup( this.equipment(slot).master() ));
+		}
 
 		function isSonar(masterData) {
 			/* checking on equipment type sounds better than
@@ -719,6 +749,17 @@ KC3改 Ship Object
 		}
 		let hasSonar = [0,1,2,3,4]
 			.some( slot => isSonar( this.equipment(slot).master() ));
+
+		// Escort can OASW without Sonar, but total asw >= 75 and equipped total plus asw >= 4
+		// see https://twitter.com/a_t_o_6/status/863445975007805440
+		if(this.master().api_stype == 1) {
+			if(hasSonar) return true;
+			let equipAswSum = [0,1,2,3,4]
+				.map(slot => this.equipment(slot).master().api_tais || 0)
+				.reduce((ac, p) => ac + p, 0);
+			return this.as[0] >= 75 && equipAswSum >= 4;
+		}
+
 		return hasSonar;
 	};
 

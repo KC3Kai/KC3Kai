@@ -320,7 +320,7 @@ Cover.prototype.decode = function(image, options) {
   return message;
   }
   if(image.length) {
-    return util.loadImg(image, onload, callback, options.success, options.error);
+    return util.loadImg(image, onload, options.success, options.error);
   }
 };
 return new Cover();

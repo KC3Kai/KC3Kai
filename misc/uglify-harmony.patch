@@ -5,7 +5,7 @@
      "lodash": "^3.2.0",
      "maxmin": "^1.0.0",
 -    "uglify-js": "^2.4.24",
-+    "uglify-js": "git+https://github.com/mishoo/UglifyJS2.git#harmony",
++    "uglify-js": "git+https://github.com/mishoo/UglifyJS2.git#harmony-v2.8.22",
      "uri-path": "0.0.2"
    },
    "description": "Minify files with UglifyJS",

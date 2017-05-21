@@ -1091,8 +1091,8 @@
 						gearHolderColor = "rgba(0, 0, 0, 1)";
 						equipCapacityColor = "#fff";
 				}
-				$(".ship-gear img", self.domElement).css("background", gearHolderColor);
-				$(".fleet-ships .ship-equip-capacity", self.domElement).css("color", equipCapacityColor);
+				$(".ship-gear img").css("background", gearHolderColor);
+				$(".fleet-ships .ship-equip-capacity").css("color", equipCapacityColor);
 				ConfigManager.save();
 			});
 
@@ -1102,7 +1102,7 @@
 			}else{
 				$(".ship-equip-capacity", element).text("");
 			}
-			$(".fleet-ships .ship-equip-capacity", self.domElement).css("color", equipCapacityColor);
+			$(".fleet-ships .ship-equip-capacity").css("color", equipCapacityColor);
 		}
 	}
 	

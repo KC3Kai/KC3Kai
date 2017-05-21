@@ -182,9 +182,9 @@
 			var
 				emptyLedger = ['first','clear','last'].reduce(function(objk,itky){
 					objk[itky] = NaN; return objk;
-				},{}),
-				rangeNullFil = function(dt,id){
-					return dt || cr[id]; };
+				},{});
+				//rangeNullFil = function(dt,id){
+				//	return dt || cr[id]; };
 			function cache(x,f,w,m,p,r) {
 				// x - ledger id
 				// f - filter
