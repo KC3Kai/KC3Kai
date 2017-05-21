@@ -940,5 +940,45 @@
 				}
 			}
 		]
+	},
+	{
+		"section": "SettingsLogging",
+		"help": "",
+		"contents": [
+			{
+				"id": "disableConsoleLogHooks",
+				"name": "SettingsConsoleLogHooks",
+				"type": "check",
+				"options": {
+					"tooltip": "SettingsConsoleLogHooksTip"
+				}
+			},
+			{
+				"id": "hoursToKeepErrors",
+				"name": "SettingsErrorKeepDuration",
+				"type" : "small_text",
+				"bound" : {
+					"min" : 0,
+					"type": "Integer"
+				},
+				"options": {
+					"label": "hours",
+					"tooltip": "SettingsErrorKeepDurationTip"
+				}
+			},
+			{
+				"id": "hoursToKeepLogs",
+				"name": "SettingsLogKeepDuration",
+				"type" : "small_text",
+				"bound" : {
+					"min" : 0,
+					"type": "Integer"
+				},
+				"options": {
+					"label": "hours",
+					"tooltip": "SettingsLogKeepDurationTip"
+				}
+			}
+		]
 	}
 ]
