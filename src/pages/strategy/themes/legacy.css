@@ -368,6 +368,9 @@ body {
 	background-color: #bcd;
 }
 /* Ship List */
+.tab_ships .filters .fold_button {
+	background:#333;
+}
 .tab_ships .massSelect .hover {
 	border-radius: 4px;
 	color:#00f;
@@ -387,6 +390,9 @@ body {
 }
 .tab_ships .advanced_sorter .filter_check {
 	background:#000;
+}
+.tab_ships .control_buttons .reset_default:hover {
+	background:#cfc;
 }
 .tab_ships .ship_filter_type .filter_box {
 	border:1px solid #000;
