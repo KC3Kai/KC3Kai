@@ -3619,19 +3619,19 @@
 	function UpdateRepairTimerDisplays(docking, akashi){
 		var
 			akashiTick = [false, false],
-			context = $(".module.status"),
-			dockElm = $(".status_docking .status_text", context),
-			koskElm = $(".status_akashi  .status_text", context);
-		if(typeof docking==="object") {
+			dockElm = $(".module.status .status_docking .status_text"),
+			koskElm = $(".module.status .status_akashi .status_text");
+		if(typeof docking === "object") {
 			akashi     = docking.akashi;
 			akashiTick = docking.akashiCheck;
 			docking    = docking.docking;
 		}
-		if(typeof docking!=="undefined") dockElm.data("value", Math.ceil(docking));
-		if(typeof  akashi!=="undefined") koskElm.data("value", Math.ceil( akashi));
+		if(typeof docking !== "undefined") dockElm.data("value", Math.ceil(docking));
+		if(typeof  akashi !== "undefined") koskElm.data("value", Math.ceil( akashi));
 		koskElm.data("tick", akashiTick);
 		[dockElm, koskElm].forEach(function(elm){
-			elm.removeClass("good bad").attr("title", "").lazyInitTooltip();
+			var title = "";
+			elm.removeClass("good bad");
 			switch (ConfigManager.timerDisplayType) {
 			case 1:
 				elm.text(String(elm.data("value")).toHHMMSS());
@@ -3639,19 +3639,24 @@
 			case 2:
 				elm.text(String(elm.data("value") || NaN).plusCurrentTime());
 				if((elm.data("value") || 0) > 86400) {
-					elm.addClass("bad").attr("title", KC3Meta.term("PanelRepairMoreDays") );
+					elm.addClass("bad");
+					title = KC3Meta.term("PanelRepairMoreDays");
 				}
 				break;
 			}
 			if((elm.data("tick") || [false]).every(function(x){return x;})) {
-				elm.removeClass('bad').addClass("good").attr("title", KC3Meta.term("PanelRepairing") );
+				elm.removeClass('bad').addClass("good");
+				title = KC3Meta.term("PanelRepairing");
 			}
+			if(elm === koskElm && !title) {
+				title = String(
+					Math.hrdInt("floor", PlayerManager.akashiRepair.getElapsed() || 0, 3, 1)
+				).toHHMMSS();
+			}
+			elm.attr("titlealt", title).lazyInitTooltip({
+				items: "[titlealt]",
+				content: function() { return $(this).attr("titlealt"); }
+			});
 		});
-		if(!koskElm.attr("title")) {
-			let globalAkashiTimerElapsed = String(
-				Math.hrdInt("floor", PlayerManager.akashiRepair.getElapsed() || 0, 3, 1)
-			).toHHMMSS();
-			koskElm.attr("title", globalAkashiTimerElapsed);
-		}
 	}
 })();
