@@ -18,7 +18,8 @@
 			equipMode: 0,
 			multiKey: false,
 			pageNo: false,
-			scrollList: false
+			scrollList: false,
+			heartLockMode: 0
 			// default values of filters are defined at `prepareFilters`
 		},
 		// All pre-defined filters instances
@@ -94,6 +95,27 @@
 				self.toggleTableScrollbar(false);
 				if(self.scrollList){
 					self.scrollList = false;
+					self.saveSettings();
+				}
+				KC3StrategyTabs.reloadTab(undefined, true);
+			});
+			$(".lock_none").on("click", function(){
+				$(".ship_list .ship_lock").hide();
+				if(!!self.heartLockMode){
+					self.heartLockMode = 0;
+					self.saveSettings();
+				}
+			});
+			$(".lock_yes").on("click", function(){
+				if(self.heartLockMode !== 1){
+					self.heartLockMode = 1;
+					self.saveSettings();
+				}
+				KC3StrategyTabs.reloadTab(undefined, true);
+			});
+			$(".lock_no").on("click", function(){
+				if(self.heartLockMode !== 2){
+					self.heartLockMode = 2;
 					self.saveSettings();
 				}
 				KC3StrategyTabs.reloadTab(undefined, true);
@@ -613,6 +635,7 @@
 			shrinkedSettings.views.equip = this.equipMode;
 			shrinkedSettings.views.page = this.pageNo;
 			shrinkedSettings.views.scroll = this.scrollList;
+			shrinkedSettings.views.lock = this.heartLockMode;
 			this.settings = shrinkedSettings;
 			localStorage.srShiplist = JSON.stringify(this.settings);
 		},
@@ -628,6 +651,7 @@
 				this.equipMode = this.settings.views.equip || 0;
 				this.pageNo = this.settings.views.page || false;
 				this.scrollList = this.settings.views.scroll || false;
+				this.heartLockMode = this.settings.views.lock || 0;
 			}
 		},
 
@@ -846,7 +870,16 @@
 						self.equipImg(cElm, "ex", -2, cShip.exSlot);
 					}
 
-					if(FilteredShips[shipCtr].locked){ $(".ship_lock img", cElm).show(); }
+					$(".ship_lock img", cElm).attr("src",
+						"../../assets/img/client/heartlock{0}.png".format(!cShip.locked ? "-x" : "")
+					);
+					if(self.heartLockMode === 1 && cShip.locked){
+						$(".ship_lock img", cElm).show();
+					} else if(self.heartLockMode === 2 && !cShip.locked){
+						$(".ship_lock img", cElm).show();
+					} else {
+						$(".ship_lock", cElm).hide();
+					}
 
 					// Check whether remodel is max
 					if( !cShip.remodel )

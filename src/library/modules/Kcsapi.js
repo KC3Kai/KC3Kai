@@ -1517,12 +1517,15 @@ Previously known as "Reactor"
 					KC3QuestManager.get(404).increment(); // D4: Weekly Expeditions
 					
 					// If expedition 37 or 38
-					if(expedNum==37 || expedNum==38){
+					if(expedNum == 37 || expedNum == 38){
 						KC3QuestManager.get(410).increment(); // D9: Weekly Expedition 2
 						KC3QuestManager.get(411).increment(); // D11: Weekly Expedition 3
 					}
+					// If expedition 5
+					if(expedNum == 5){
+						KC3QuestManager.get(424).increment(); // D22: Monthly Expeditions
+					}
 					KC3Network.trigger("Quests");
-					
 			}
 			
 			KC3ShipManager.save();
