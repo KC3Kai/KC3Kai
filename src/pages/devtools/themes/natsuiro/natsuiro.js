@@ -1644,9 +1644,9 @@
 
 				// STATUS: REPAIRS
 				UpdateRepairTimerDisplays(FleetSummary.docking, FleetSummary.akashi);
-				$(".module.status .status_docking").attr("title", KC3Meta.term("PanelHighestDocking") );
-				$(".module.status .status_akashi").attr("title", KC3Meta.term("PanelHighestAkashi") );
-				$(".module.status .status_support").attr("title", KC3Meta.term("PanelSupportPower") );
+				$(".module.status .status_docking .status_icon").attr("title", KC3Meta.term("PanelHighestDocking") );
+				$(".module.status .status_akashi .status_icon").attr("title", KC3Meta.term("PanelHighestAkashi") );
+				$(".module.status .status_support .status_icon").attr("title", KC3Meta.term("PanelSupportPower") );
 			}else{
 				$(".module.status").hide();
 			}
@@ -3618,21 +3618,20 @@
 
 	function UpdateRepairTimerDisplays(docking, akashi){
 		var
-			akashiTick = [false,false],
-
+			akashiTick = [false, false],
 			context = $(".module.status"),
-			dockElm = $(".status_docking .status_text",context),
-			koskElm = $(".status_akashi  .status_text",context); // kousaka-kan
+			dockElm = $(".status_docking .status_text", context),
+			koskElm = $(".status_akashi  .status_text", context);
 		if(typeof docking==="object") {
 			akashi     = docking.akashi;
 			akashiTick = docking.akashiCheck;
 			docking    = docking.docking;
 		}
-		if(typeof docking!=="undefined") dockElm.data("value",Math.ceil(docking));
-		if(typeof  akashi!=="undefined") koskElm.data("value",Math.ceil( akashi));
-		koskElm.data("tick",akashiTick);
-		[dockElm,koskElm].forEach(function(elm){
-			elm.removeClass("good bad").removeAttr("title");
+		if(typeof docking!=="undefined") dockElm.data("value", Math.ceil(docking));
+		if(typeof  akashi!=="undefined") koskElm.data("value", Math.ceil( akashi));
+		koskElm.data("tick", akashiTick);
+		[dockElm, koskElm].forEach(function(elm){
+			elm.removeClass("good bad").attr("title", "").lazyInitTooltip();
 			switch (ConfigManager.timerDisplayType) {
 			case 1:
 				elm.text(String(elm.data("value")).toHHMMSS());
@@ -3648,5 +3647,11 @@
 				elm.removeClass('bad').addClass("good").attr("title", KC3Meta.term("PanelRepairing") );
 			}
 		});
+		if(!koskElm.attr("title")) {
+			let globalAkashiTimerElapsed = String(
+				Math.hrdInt("floor", PlayerManager.akashiRepair.getElapsed() || 0, 3, 1)
+			).toHHMMSS();
+			koskElm.attr("title", globalAkashiTimerElapsed);
+		}
 	}
 })();
