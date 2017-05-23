@@ -3,13 +3,13 @@
 	"name": "KC3改 Development",
 	"short_name": "KC3改",
 	"description": "Kantai Collection Game Viewer and Helper",
-	"version": "31.6.4",
+	"version": "31.6.5",
 	"devtools_page": "pages/devtools/init.html",
 	"options_page": "pages/settings/settings.html",
 	"icons": {
 		"16": "assets/img/logo/16.png",
-        "48": "assets/img/logo/48.png",
-        "128": "assets/img/logo/128.png"
+		"48": "assets/img/logo/48.png",
+		"128": "assets/img/logo/128.png"
 	},
 	"browser_action": {
 		"default_icon": "assets/img/logo/dev.png",

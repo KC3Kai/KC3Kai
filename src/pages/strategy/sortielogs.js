@@ -48,11 +48,7 @@
 		Prepares reloadable data
 		---------------------------------*/
 		this.reload = function(){
-			if(typeof localStorage.maps != "undefined"){
-				this.maps = JSON.parse( localStorage.maps );
-			}else{
-				return false;
-			}
+			this.maps = JSON.parse(localStorage.maps || "{}");
 			this.exportingReplay = false;
 			this.enterCount = 0;
 		};
@@ -200,6 +196,8 @@
 			updateScrollItem("world", 116);
 
 			if(self.selectedWorld !== 0){
+				// As IndexedDB real-time updated, also load Storage maps
+				self.maps = JSON.parse(localStorage.maps || "{}");
 				// Add all maps in this world selection
 				var mapBox,countMaps;
 				mapBox = $(".tab_"+tabCode+" .factory .map_box").clone().appendTo(".tab_"+tabCode+" .map_list");
@@ -471,7 +469,7 @@
 					// Create sortie box
 					sortieBox = $(".tab_"+tabCode+" .factory .sortie_box").clone().appendTo(".tab_"+tabCode+" .sortie_list");
 					if(sortie.world >= 10) {
-						sortie.diff = sortie.diff || (maps[skey] || {difficulty:0}).difficulty || 0;
+						sortie.diff = sortie.diff || (self.maps[skey] || {difficulty:0}).difficulty || 0;
 					}
 					if((sortie.diff || 0) > 0)
 						$(sortieBox)
@@ -547,14 +545,14 @@
 					
 					// console.log("sortie.battles", sortie.battles);
 					
+					var finalNodeIndex = -1;
 					// For each battle
-					if(sortie.battles.length===0){
-						$(".sortie_edges", sortieBox).append("<div class=\"nonodes\">Unable to record nodes</div>");
-						$(".sortie_edge ", sortieBox).hide();
-						
-						
+					if(sortie.battles.length === 0){
+						$(".sortie_edges", sortieBox).append("<div class=\"nonodes\">No available node recorded</div>");
+						$(".sortie_edge",  sortieBox).hide();
 					}else{
 						$.each(sortie.battles, function(index, battle){
+							finalNodeIndex = index;
 							var battleData, battleType;
 							
 							// Determine if day or night battle node
@@ -581,8 +579,12 @@
 							battle.shizunde |= [[],[]];
 							
 							// Show on node list
-							$(".sortie_edge_"+(index+1), sortieBox).addClass("active");
+							$(".sortie_edge_"+(index+1), sortieBox).addClass("active")
+								.toggleClass("boss", !!battle.boss);
 							$(".sortie_edge_"+(index+1), sortieBox).html( KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node ) );
+							if(index === 5){
+								$(".sortie_edges", sortieBox).removeClass("one_line").addClass("two_lines");
+							}
 							
 							// HTML elements
 							nodeBox = $(".tab_"+tabCode+" .factory .sortie_nodeinfo").clone();
@@ -640,7 +642,6 @@
 							}else if(typeof battle.yasen.api_deck_id != "undefined"){
 								thisNode.engageNight( battleData, sortie.fleetnum );
 							}
-							
 							sinkShips[0].concat(battle.shizunde[0]);
 							sinkShips[1].concat(battle.shizunde[1]);
 							
@@ -730,6 +731,9 @@
 									["../../../../assets/img/ui/estat_boss",stateKey || 'fresh',".png"].join('')
 								)
 								.css('opacity',1 / (1 + !stateKey));
+							if(finalNodeIndex > -1 && stateKey && stateKey !== "faild"){
+								$(".sortie_edge_"+(finalNodeIndex+1), sortieBox).addClass("boss");
+							}
 						} catch (e) {
 							throw e;
 						}
@@ -756,6 +760,53 @@
 				$(".tab_"+tabCode+" ."+worldMap+"_shift.right").removeClass("disabled");
 			
 			$(".tab_"+tabCode+" ."+worldMap+"_list").css("margin-left",(cr * -itemWidth) + "px");
+		}
+		
+		function updateMapHpInfo(self, sortieData) {
+			let mapId = ["m", sortieData.world, sortieData.mapnum].join("");
+			let mapData = self.maps[mapId];
+			if(sortieData.mapinfo){
+				let maxKills = KC3Meta.gauge(mapId.substr(1));
+				if(!!sortieData.mapinfo.api_cleared){
+					sortieData.defeat_count = maxKills;
+				} else {
+					sortieData.defeat_count = sortieData.mapinfo.api_defeat_count || 0;
+				}
+				console.debug("Map {0} boss gauge: {1}/{2} kills"
+					.format(mapId, sortieData.defeat_count, maxKills)
+				);
+			} else if(sortieData.eventmap && sortieData.eventmap.api_gauge_type !== undefined) {
+				sortieData.now_maphp = sortieData.eventmap.api_now_maphp;
+				sortieData.max_maphp = sortieData.eventmap.api_max_maphp;
+				console.debug("Map {0} boss gauge {3}: HP {1}/{2}"
+					.format(mapId, sortieData.now_maphp, sortieData.max_maphp,
+						sortieData.eventmap.api_gauge_type)
+				);
+			} else if(mapData.stat && mapData.stat.onBoss && mapData.stat.onBoss.hpdat){
+				let hpObj = mapData.stat.onBoss.hpdat;
+				let bossHpArr = hpObj[sortieData.id];
+				if(Array.isArray(bossHpArr)){
+					// Get boss HP on previous sortie
+					let hpKeyArr = Object.keys(hpObj);
+					let sortieKeyIdx = hpKeyArr.indexOf(String(sortieData.id));
+					if(sortieKeyIdx > 0){
+						let prevBossHpArr = hpObj[hpKeyArr[sortieKeyIdx - 1]];
+						// Do not use previous HP if max changed
+						if(bossHpArr[1] !== prevBossHpArr[1]){
+							bossHpArr = [bossHpArr[1], bossHpArr[1]];
+						} else {
+							bossHpArr = prevBossHpArr;
+						}
+					}
+				}
+				if(Array.isArray(bossHpArr)){
+					sortieData.now_maphp = bossHpArr[0];
+					sortieData.max_maphp = bossHpArr[1];
+					console.debug("Map {0} boss gauge: HP {1}/{2}"
+						.format(mapId, bossHpArr[0], bossHpArr[1])
+					);
+				}
+			}
 		}
 		
 		/* EXPORT REPLAY IMAGE
@@ -793,6 +844,8 @@
 						return false;
 					}
 					
+					updateMapHpInfo(self, sortieData);
+					
 					if(e.which === 3) {
 						window.open("https://kc3kai.github.io/kancolle-replay/battleplayer.html#" + encodeURIComponent(JSON.stringify(sortieData), "_blank"));
 						self.exportingReplay = false;
@@ -818,7 +871,18 @@
 					
 					withDataCover64 = rcanvas.toDataURL("image/png");
 					
-					steg.encode(JSON.stringify(sortieData), withDataCover64, {
+					// Clear properties duplicated or may not used by replayer for now
+					$.each(sortieData.battles, function(_, battle){
+						delete battle.hq;
+						delete battle.enemyId;
+						delete battle.airRaid;
+						delete battle.shizunde;
+					});
+					var jsonData = JSON.stringify(sortieData);
+					if(jsonData.length > 30000){
+						console.warn("Replayer data is too large to be encoded, size:", jsonData.length);
+					}
+					steg.encode(jsonData, withDataCover64, {
 						success: function(newImg){
 							KC3ImageExport.writeToCanvas(newImg, { width: 400, height: 400 }, function (error, canvas) {
 								if (error) {

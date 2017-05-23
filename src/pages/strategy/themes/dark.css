@@ -497,6 +497,9 @@ button, input, select, textarea {
 	
 }
 /* Ship List */
+.tab_ships .filters .fold_button {
+	background:#cccccc;
+}
 .tab_ships .massSelect .hover {
 	color:#ffffff
 }
@@ -523,6 +526,9 @@ button, input, select, textarea {
 }
 .tab_ships .advanced_sorter .filter_check {
 	background:#ffffff;
+}
+.tab_ships .control_buttons .reset_default:hover {
+	background:#555555;
 }
 .tab_ships .ship_filter_type .filter_box {
 	border:1px solid #888888;

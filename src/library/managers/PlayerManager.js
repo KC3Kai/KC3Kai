@@ -388,12 +388,12 @@ Does not include Ships and Gears which are managed by other Managers
 				regenVal  = [3,3,3,1]
 					.map(function(x){return regenRate * x;})
 					.map(function(x,i){return Math.max(0,Math.min(x,regenCap - self.hq.lastMaterial[i]));});
-			console.log(this.hq.lastPortTime,regenTime,serverSeconds);
+			console.log("Last port", this.hq.lastPortTime, regenTime, serverSeconds);
 			// Check whether a server time is supplied, or keep the last refresh time.
 			this.hq.lastPortTime = serverSeconds || this.hq.lastPortTime;
-			console.info("regen" ,regenVal);
-			console.info.apply(console,["pRegenMat"].concat(this.hq.lastMaterial));
-			console.info.apply(console,["actualMat"].concat((this.hq.lastMaterial || []).map(function(x,i){
+			console.log.apply(console, ["Materials before"].concat(this.hq.lastMaterial));
+			console.log("Regenerated materials", regenVal);
+			console.log.apply(console, ["Meterials after"].concat((this.hq.lastMaterial || []).map(function(x,i){
 				return (x || 0) + regenVal[i];
 			})));
 			KC3Database.Naverall({

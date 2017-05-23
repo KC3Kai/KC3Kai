@@ -538,6 +538,12 @@
 				"name" : "SettingsRedShadeOnPanel",
 				"type" : "check",
 				"options" : {}
+			},
+			{
+				"id" : "alert_taiha_noanim",
+				"name" : "SettingsNoAnimation",
+				"type" : "check",
+				"options" : {}
 			}
 		]
 	},
@@ -694,6 +700,12 @@
 			{
 				"id" : "map_markers",
 				"name" : "SettingsMapNodeMarkers",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "mute_game_tab",
+				"name" : "SettingsMuteGameTab",
 				"type" : "check",
 				"options" : {}
 			}

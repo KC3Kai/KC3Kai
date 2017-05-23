@@ -30,16 +30,15 @@
 		Loads latest player or game data if needed.
 		---------------------------------*/
 		reload :function(){
-			// Cache ship info
 			KC3ShipManager.load();
 			KC3QuestManager.load();
 
+			// Cache ship info
 			this.shipCache = [];
-			var ctr, ThisShip, ThisShipData;
-			for(ctr in KC3ShipManager.list){
-				ThisShip = KC3ShipManager.list[ctr];
-				ThisShipData = this.prepareShipData(ThisShip);
-				this.shipCache.push(ThisShipData);
+			for(let ctr in KC3ShipManager.list){
+				let thisShip = KC3ShipManager.list[ctr];
+				let shipData = this.prepareShipData(thisShip);
+				this.shipCache.push(shipData);
 			}
 		},
 
@@ -60,6 +59,7 @@
 				id: ThisShip.rosterId,
 				masterId: ThisShip.masterId,
 				stype: MasterShip.api_stype,
+				sortno: MasterShip.api_sortno,
 				name: ThisShip.name(),
 				level: ThisShip.level,
 				quests: Quests,
@@ -98,9 +98,7 @@
 				function(a,b) {
 					var va = getter.call(self,a);
 					var vb = getter.call(self,b);
-					return va === vb
-						 ? 0
-						 : (va < vb) ? -1 : 1;
+					return typeof va === "string" ? va.localeCompare(vb) : va - vb;
 				});
 		},
 
@@ -111,30 +109,30 @@
 			define("name", "Name", function(x) { return x.name; });
 			define("type", "Type", function(x) { return x.stype; });
 			define("lv", "Level", function(x) { return -x.level; });
+			define("sortno", "BookNo", function(x) { return x.sortno; });
 		},
 
 		// create comparator based on current list sorters
 		makeComparator: function() {
 			function reversed(comparator) {
-				return function(a,b) {
-					var result = comparator(a,b);
-					return result === 0
-						? 0
-						: result < 0 ? 1 : -1;
-				};
+				return (l, r) => -comparator(l, r);
 			}
-
-			function compose(prevCmp,curCmp) {
-				return function(a,b) {
-					var prevResult = prevCmp(a,b);
-					return prevResult !== 0 ? prevResult : curCmp(a,b);
-				};
+			function compose(prevComparator, nextComparator) {
+				return (l, r) => prevComparator(l, r) || nextComparator(l, r);
 			}
-
-			var self = this;
-			return this.currentSorters
-				.map( function(sorterInfo) {
-					var sorter = self.sorters[sorterInfo.name];
+			var mergedSorters = this.currentSorters.concat([{
+				name: "sortno",
+				reverse: false
+			}]);
+			if(this.currentSorters.every(si => si.name !== "id")){
+				mergedSorters.push({
+					name: "id",
+					reverse: false
+				});
+			}
+			return mergedSorters
+				.map( sorterInfo => {
+					var sorter = this.sorters[sorterInfo.name];
 					return sorterInfo.reverse
 						? reversed(sorter.comparator)
 						: sorter.comparator;

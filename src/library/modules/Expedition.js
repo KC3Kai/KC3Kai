@@ -403,7 +403,7 @@ Expedition: Expedition information, income estimation, scoring and utils for Exp
 				};
 			});
 			return mergeExpedCost( fleetActualCost );
-		} else if (cost.type === "costmodel") {
+		} else if (cost.type === "custom") {
 			return {
 				fuel: cost.fuel,
 				ammo: cost.ammo };

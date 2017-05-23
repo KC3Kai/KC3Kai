@@ -357,7 +357,7 @@
 			} catch(e) {
 				if (e instanceof SyntaxError){
 					console.warn(e.stack);/*RemoveLogging:skip*/
-					translation = null;
+					enJSON = {};
 				} else {
 					throw e;
 				}

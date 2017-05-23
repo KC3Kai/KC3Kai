@@ -524,10 +524,11 @@ var interactions = {
 		
 		if(ConfigManager.alert_taiha_blood) {
 			if(critAnim){ clearInterval(critAnim); }
-			critAnim = setInterval(function() {
-				$(".taiha_red").toggleClass("anim2");
-			}, 500);
-			
+			if(!ConfigManager.alert_taiha_noanim){
+				critAnim = setInterval(function() {
+					$(".taiha_red").toggleClass("anim2");
+				}, 500);
+			}
 			$(".taiha_blood").show(0, function(){
 				$(".taiha_red").show(0, function(){
 					(callback || function(){})();
