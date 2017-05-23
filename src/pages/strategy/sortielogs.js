@@ -765,10 +765,15 @@
 		function updateMapHpInfo(self, sortieData) {
 			let mapId = ["m", sortieData.world, sortieData.mapnum].join("");
 			let mapData = self.maps[mapId];
-			if(mapData.kills !== undefined){
-				sortieData.defeat_count = mapData.kills;
+			if(sortieData.mapinfo){
+				let maxKills = KC3Meta.gauge(mapId.substr(1));
+				if(!!sortieData.mapinfo.api_cleared){
+					sortieData.defeat_count = maxKills;
+				} else {
+					sortieData.defeat_count = sortieData.mapinfo.api_defeat_count || 0;
+				}
 				console.debug("Map {0} boss gauge: {1}/{2} kills"
-					.format(mapId, mapData.kills, KC3Meta.gauge(mapId.substr(1)))
+					.format(mapId, sortieData.defeat_count, maxKills)
 				);
 			} else if(sortieData.eventmap && sortieData.eventmap.api_gauge_type !== undefined) {
 				sortieData.now_maphp = sortieData.eventmap.api_now_maphp;

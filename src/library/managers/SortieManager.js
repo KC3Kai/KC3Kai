@@ -67,6 +67,14 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				time: stime
 			};
 			// Add optional properties
+			// Record states of unclear normal (or EO) maps
+			if((world < 10 && mapnum > 4) || typeof thisMap.kills !== "undefined"){
+				sortie.mapinfo = { "api_cleared": thisMap.clear };
+				if(typeof thisMap.kills !== "undefined"){
+					sortie.mapinfo.api_defeat_count = thisMap.kills;
+				}
+			}
+			// Reocrd boss HP gauge states of event maps
 			if(eventData){
 				var mergedEventInfo = {};
 				$.extend(mergedEventInfo, eventData, {
