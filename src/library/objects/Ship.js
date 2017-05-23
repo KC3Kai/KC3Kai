@@ -652,9 +652,9 @@ KC3改 Ship Object
 	// check if this ship is capable of equipping Daihatsu (landing craft)
 	KC3Ship.prototype.canEquipDaihatsu = function() {
 		var master = this.master();
-		// ship types: DD=2, CL=3, AV=16, LHA=17, AO=22
+		// ship types: DD=2, CL=3, BB=9, AV=16, LHA=17, AO=22
 		// so far only ships with types above can equip daihatsu.
-		if ([2,3,16,17,22].indexOf( master.api_stype ) === -1)
+		if ([2,3,9,16,17,22].indexOf( master.api_stype ) === -1)
 			return false;
 
 		// excluding Akitsushima(445) and Hayasui(352)
@@ -664,7 +664,7 @@ KC3改 Ship Object
 		
 		// only few DDs and CLs are capable of equipping daihatsu
 		// see comments below.
-		if ([2 /* DD */,3 /* CL */].indexOf( master.api_stype ) !== -1 &&
+		if ([2 /* DD */,3 /* CL */,9 /* BB */].indexOf( master.api_stype ) !== -1 &&
 			[
 				// Abukuma K2(200), Kinu K2(487)
 				200, 487,
@@ -673,7 +673,9 @@ KC3改 Ship Object
 				// Kasumi K2(464), Kasumi K2B(470), Ooshio K2(199), Asashio K2D(468), Arashio K2(490)
 				464, 470, 199, 468, 490,
 				// Verniy(147), Kawakaze K2(469)
-				147, 469
+				147, 469,
+				// Nagato K2(541)
+				541
 			].indexOf( this.masterId ) === -1)
 			return false;
 		return true;

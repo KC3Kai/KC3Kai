@@ -762,6 +762,53 @@
 			$(".tab_"+tabCode+" ."+worldMap+"_list").css("margin-left",(cr * -itemWidth) + "px");
 		}
 		
+		function updateMapHpInfo(self, sortieData) {
+			let mapId = ["m", sortieData.world, sortieData.mapnum].join("");
+			let mapData = self.maps[mapId];
+			if(sortieData.mapinfo){
+				let maxKills = KC3Meta.gauge(mapId.substr(1));
+				if(!!sortieData.mapinfo.api_cleared){
+					sortieData.defeat_count = maxKills;
+				} else {
+					sortieData.defeat_count = sortieData.mapinfo.api_defeat_count || 0;
+				}
+				console.debug("Map {0} boss gauge: {1}/{2} kills"
+					.format(mapId, sortieData.defeat_count, maxKills)
+				);
+			} else if(sortieData.eventmap && sortieData.eventmap.api_gauge_type !== undefined) {
+				sortieData.now_maphp = sortieData.eventmap.api_now_maphp;
+				sortieData.max_maphp = sortieData.eventmap.api_max_maphp;
+				console.debug("Map {0} boss gauge {3}: HP {1}/{2}"
+					.format(mapId, sortieData.now_maphp, sortieData.max_maphp,
+						sortieData.eventmap.api_gauge_type)
+				);
+			} else if(mapData.stat && mapData.stat.onBoss && mapData.stat.onBoss.hpdat){
+				let hpObj = mapData.stat.onBoss.hpdat;
+				let bossHpArr = hpObj[sortieData.id];
+				if(Array.isArray(bossHpArr)){
+					// Get boss HP on previous sortie
+					let hpKeyArr = Object.keys(hpObj);
+					let sortieKeyIdx = hpKeyArr.indexOf(String(sortieData.id));
+					if(sortieKeyIdx > 0){
+						let prevBossHpArr = hpObj[hpKeyArr[sortieKeyIdx - 1]];
+						// Do not use previous HP if max changed
+						if(bossHpArr[1] !== prevBossHpArr[1]){
+							bossHpArr = [bossHpArr[1], bossHpArr[1]];
+						} else {
+							bossHpArr = prevBossHpArr;
+						}
+					}
+				}
+				if(Array.isArray(bossHpArr)){
+					sortieData.now_maphp = bossHpArr[0];
+					sortieData.max_maphp = bossHpArr[1];
+					console.debug("Map {0} boss gauge: HP {1}/{2}"
+						.format(mapId, bossHpArr[0], bossHpArr[1])
+					);
+				}
+			}
+		}
+		
 		/* EXPORT REPLAY IMAGE
 		-------------------------------*/
 		this.exportBattleImg = function(sortieId, e){
@@ -796,6 +843,8 @@
 						$("body").css("opacity", "1");
 						return false;
 					}
+					
+					updateMapHpInfo(self, sortieData);
 					
 					if(e.which === 3) {
 						window.open("https://kc3kai.github.io/kancolle-replay/battleplayer.html#" + encodeURIComponent(JSON.stringify(sortieData), "_blank"));
