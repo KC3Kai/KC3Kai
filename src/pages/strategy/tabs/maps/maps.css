@@ -244,6 +244,13 @@
 .tab_maps .sortie_list .sortie_edge.active {
 	background:#B50000;
 }
+.tab_maps .sortie_list .sortie_edges .sortie_edge.active.boss {
+	background-image:url(../../../../assets/img/client/boss.png);
+	background-repeat:no-repeat;
+	background-position:4px 50%;
+	background-size:22px;
+	background-blend-mode:multiply;
+}
 
 /* Sortie Info: TOGGLES */
 .tab_maps .sortie_list .sortie_toggles {

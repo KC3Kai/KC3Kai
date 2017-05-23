@@ -1,14 +1,10 @@
 /* SortieManager.js
 KC3改 Sortie Manager
 
-Xxxxxxx
+Stores and manages states and functions during sortie of fleets (including PvP battle).
 */
 (function(){
 	"use strict";
-	
-	var 
-		focusedFleet = [],
-		preSortieFleet = [];
 	
 	window.KC3SortieManager = {
 		onSortie: 0,
@@ -23,6 +19,7 @@ Xxxxxxx
 		nodes: [],
 		boss: {},
 		onBossAvailable: false,
+		focusedFleet: [],
 		fcfCheck: [],
 		escapedList: [],
 		materialGain: Array.apply(null,{length:8}).map(function(){return 0;}),
@@ -30,6 +27,7 @@ Xxxxxxx
 		sortieTime: 0,
 		
 		startSortie :function(world, mapnum, fleetNum, stime, eventData){
+			var self = this;
 			// If still on sortie, end previous one
 			if(this.onSortie > 0){ this.endSortie(); }
 			
@@ -47,25 +45,13 @@ Xxxxxxx
 				comp: -1,
 				letters: []
 			};
-			var mergedEventInfo = {};
-			if(eventData){
-				$.extend(mergedEventInfo, eventData, {
-					// api_state not stored, use this instead
-					"api_cleared": thisMap.clear,
-					"api_gauge_type": thisMap.gaugeType
-				});
-				// api_dmg seems always 0 on sortie start
-				delete mergedEventInfo.api_dmg;
-			}
 			
 			this.snapshotFleetState();
-			
 			var fleet = PlayerManager.fleets[this.fleetSent-1];
 			fleet.resetAfterHp();
 			
-			// Save on database and remember current sortieId
-			var self = this;
-			KC3Database.Sortie({
+			// Prepare sortie database record
+			var sortie = {
 				diff: this.map_difficulty,
 				world: world,
 				mapnum: mapnum,
@@ -78,9 +64,31 @@ Xxxxxxx
 				support1: this.getSupportingFleet(false),
 				support2: this.getSupportingFleet(true),
 				lbas: this.getWorldLandBases(world),
-				eventmap: mergedEventInfo,
 				time: stime
-			}, function(id){
+			};
+			// Add optional properties
+			// Record states of unclear normal (or EO) maps
+			if((world < 10 && mapnum > 4) || typeof thisMap.kills !== "undefined"){
+				sortie.mapinfo = { "api_cleared": thisMap.clear };
+				if(typeof thisMap.kills !== "undefined"){
+					sortie.mapinfo.api_defeat_count = thisMap.kills;
+				}
+			}
+			// Reocrd boss HP gauge states of event maps
+			if(eventData){
+				var mergedEventInfo = {};
+				$.extend(mergedEventInfo, eventData, {
+					// api_state not stored, use this instead
+					"api_cleared": thisMap.clear,
+					"api_gauge_type": thisMap.gaugeType
+				});
+				// api_dmg seems always 0 on sortie start
+				delete mergedEventInfo.api_dmg;
+				
+				sortie.eventmap = mergedEventInfo;
+			}
+			// Save on database and remember current sortieId
+			KC3Database.Sortie(sortie, function(id){
 				self.onSortie = id;
 				self.sortieTime = stime;
 				self.save();
@@ -103,7 +111,7 @@ Xxxxxxx
 		
 		snapshotFleetState :function(){
 			PlayerManager.hq.lastSortie = PlayerManager.cloneFleets();
-			focusedFleet = (PlayerManager.combinedFleet&&this.fleetSent===1) ? [0,1] : [this.fleetSent-1];
+			this.focusedFleet = (PlayerManager.combinedFleet&&this.fleetSent===1) ? [0,1] : [this.fleetSent-1];
 			PlayerManager.hq.save();
 		},
 		
@@ -142,11 +150,11 @@ Xxxxxxx
 		},
 		
 		getSortieFleet: function() {
-			return focusedFleet.slice(0);
+			return this.focusedFleet.slice(0);
 		},
 		
 		isFullySupplied: function() {
-			return focusedFleet.map(function(x){
+			return this.focusedFleet.map(function(x){
 				return PlayerManager.hq.lastSortie[x];
 			}).every(function(ships){
 				return ships.every(function(ship){

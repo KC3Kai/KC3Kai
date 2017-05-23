@@ -7,7 +7,6 @@
 		tabSelf: KC3StrategyTabs.docking,
 
 		shipCache:[],
-		options: [],
 		sortBy: "repair_docking",
 		sortAsc: true,
 		isLoading: false,
@@ -27,17 +26,17 @@
 			// we need to refresh the Ship Manager
 			KC3ShipManager.load();
 
-			var ctr, ThisShip, MasterShip, ThisShipData;
 			this.shipCache = [];
-			for(ctr in KC3ShipManager.list){
-				ThisShip = KC3ShipManager.list[ctr];
-				MasterShip = ThisShip.master();
-				var RepairTime = ThisShip.repairTime();
-				ThisShipData = {
+			for(let ctr in KC3ShipManager.list){
+				let ThisShip = KC3ShipManager.list[ctr];
+				let MasterShip = ThisShip.master();
+				let RepairTime = ThisShip.repairTime();
+				let ThisShipData = {
 					id : ThisShip.rosterId,
 					bid : ThisShip.masterId,
 					stype: MasterShip.api_stype,
-					english: ThisShip.name(),
+					sortno: MasterShip.api_sortno,
+					name: ThisShip.name(),
 					level: ThisShip.level,
 					morale: ThisShip.morale,
 					equip: ThisShip.items,
@@ -60,30 +59,25 @@
 		   Places data onto the interface
 		   ---------------------------------*/
 		execute :function(){
+			var self = this;
 			// Get latest data even clicking on tab
 			this.reload();
 			this.shipList = $(".tab_docking .ship_list");
-			this.showFilters();
-		},
-
-		/* FILTERS
-		   Ship types, and other toggles
-		   ---------------------------------*/
-		showFilters :function(){
-			var self = this;
 			// Column header sorting
 			$(".tab_docking .ship_header .ship_field.hover").on("click", function(){
-				if($(this).data('type') == self.sortBy){
+				var sortby = $(this).data("type");
+				if(!sortby){ return; }
+				if(sortby == self.sortBy){
 					self.sortAsc = !self.sortAsc;
 				}else{
 					self.sortAsc = true;
 				}
-				self.sortBy = $(this).data('type');
+				self.sortBy = sortby;
 				self.refreshTable();
 			});
-
 			this.refreshTable();
 		},
+
 		// assuming PlayerManager.fleets is up-to-date
 		// return akashi coverage. (an array of ship ids)
 		getAnchoredShips: function() {
@@ -121,7 +115,7 @@
 			};
 
 			// Clear list
-			this.shipList.html("").hide();
+			this.shipList.empty().hide();
 
 			// Wait until execute
 			setTimeout(function(){
@@ -176,36 +170,30 @@
 				});
 
 				// Sorting
-				FilteredShips.sort(function(a,b){
-					var returnVal = 0;
+				FilteredShips.sort(function(a, b){
+					var r = 0;
 					switch(self.sortBy){
-					case "id":
-						if((a.id-b.id) > 0){ returnVal = 1; }
-						else if((a.id-b.id) < 0){ returnVal = -1; }
-						break;
-					case "name":
-						if(a.english < b.english) returnVal = -1;
-						else if(a.english > b.english) returnVal = 1;
-						break;
-					case "type": returnVal = a.stype  - b.stype; break;
-					case "lv": returnVal = b.level	- a.level; break;
-					case "morale": returnVal = b.morale	 - a.morale; break;
-					case "hp": returnVal = b.hp	 - a.hp; break;
-					case "status": returnVal = a.hp / a.maxhp  - b.hp / b.maxhp; break;
+					case "id"    : r = a.id - b.id; break;
+					case "name"  : r = a.name.localeCompare(b.name); break;
+					case "type"  : r = a.stype - b.stype; break;
+					case "lv"    : r = b.level - a.level; break;
+					case "morale": r = b.morale - a.morale; break;
+					case "hp"    : r = b.hp - a.hp; break;
+					case "status": r = a.hp / a.maxhp - b.hp / b.maxhp; break;
 					case "repair_docking":
-						returnVal = b.repairDocking - a.repairDocking;
-						if (returnVal === 0 || (!isFinite(a.repairDocking) && !isFinite(b.repairDocking)))
-							returnVal = b.repairAkashi - a.repairAkashi;
+						r = b.repairDocking - a.repairDocking;
+						if (r === 0 || (!isFinite(a.repairDocking) && !isFinite(b.repairDocking)))
+							r = b.repairAkashi - a.repairAkashi;
 						break;
 					case "repair_akashi":
-						returnVal = b.repairAkashi - a.repairAkashi;
-						if (returnVal === 0 || (!isFinite(a.repairAkashi) && !isFinite(b.repairAkashi)))
-							returnVal = b.repairDocking - a.repairDocking;
+						r = b.repairAkashi - a.repairAkashi;
+						if (r === 0 || (!isFinite(a.repairAkashi) && !isFinite(b.repairAkashi)))
+							r = b.repairDocking - a.repairDocking;
 						break;
-					default: returnVal = 0; break;
 					}
-					if(!self.sortAsc){ returnVal =- returnVal; }
-					return returnVal;
+					r = r || a.sortno - b.sortno || a.id - b.id;
+					if(!self.sortAsc){ r = -r; }
+					return r;
 				});
 
 				// Fill up list
@@ -223,7 +211,7 @@
 					$(".ship_img .ship_icon", cElm).attr("src", KC3Meta.shipIcon(cShip.bid));
 					$(".ship_img .ship_icon", cElm).attr("alt", cShip.bid);
 					$(".ship_img .ship_icon", cElm).click(shipClickFunc);
-					$(".ship_name", cElm).text( cShip.english );
+					$(".ship_name", cElm).text( cShip.name );
 					$(".ship_type", cElm).text( KC3Meta.stype(cShip.stype) );
 					var shipLevelConv = shipLevel;
 					$(".ship_lv", cElm).html( "<span>Lv.</span>" + shipLevelConv);
