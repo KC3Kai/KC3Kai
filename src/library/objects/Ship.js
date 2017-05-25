@@ -657,12 +657,12 @@ KC3改 Ship Object
 		if ([2,3,9,16,17,22].indexOf( master.api_stype ) === -1)
 			return false;
 
-		// excluding Akitsushima(445) and Hayasui(352)
+		// excluding Akitsushima(445), Hayasui(460), Kamoi(162)
 		// (however their remodels are capable of equipping daihatsu
-		if (this.masterId === 445 || this.masterId === 460)
+		if ([445, 460, 162].indexOf( this.masterId ) !== -1)
 			return false;
 		
-		// only few DDs and CLs are capable of equipping daihatsu
+		// only few DDs, CLs and 1 BB are capable of equipping daihatsu
 		// see comments below.
 		if ([2 /* DD */,3 /* CL */,9 /* BB */].indexOf( master.api_stype ) !== -1 &&
 			[
