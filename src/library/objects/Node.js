@@ -72,7 +72,7 @@ Used by SortieManager
 		var enemySunkCount = endHPs.enemy.filter(function(x){return x===0;}).length;
 		var enemyCount = endHPs.enemy.length;
 
-		var requiredSunk = enemyCount === 6 ? 4 : Math.ceil( enemyCount / 2);
+		var requiredSunk = enemyCount === 1 ? 1 : Math.floor( enemyCount * 0.7);
 		
 		var i;
 		// damage taken by ally

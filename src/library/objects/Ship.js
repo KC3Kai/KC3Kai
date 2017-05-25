@@ -283,14 +283,16 @@ KC3改 Ship Object
 
 	/**
 	 * Return max HP of a ship. Static method for library.
-	 * Especially after marriage, api_taik[1] is not used in game.
+	 * Especially after marriage, api_taik[1] is hard to reach in game.
 	 * @return false if ship ID belongs to aybssal or nonexistence
 	 * @see http://wikiwiki.jp/kancolle/?%A5%B1%A5%C3%A5%B3%A5%F3%A5%AB%A5%C3%A5%B3%A5%AB%A5%EA
+	 * @see https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E3%82%B1%E3%83%83%E3%82%B3%E3%83%B3%E3%82%AB%E3%83%83%E3%82%B3%E3%82%AB%E3%83%AA%E5%BE%8C%E3%81%AE%E8%80%90%E4%B9%85%E5%80%A4
 	 */
 	KC3Ship.getMaxHp = function(masterId, currentLevel){
-		var masterHp = KC3Master.isNotRegularShip(masterId) ? undefined :
-			(KC3Master.ship(masterId) || {"api_taik":[]}).api_taik[0];
-		return ((currentLevel || 155) < 100 ? masterHp :
+		var masterHpArr = KC3Master.isNotRegularShip(masterId) ? [] :
+			(KC3Master.ship(masterId) || {"api_taik":[]}).api_taik;
+		var masterHp = masterHpArr[0], maxLimitHp = masterHpArr[1];
+		var expected = ((currentLevel || 155) < 100 ? masterHp :
 			masterHp >  90 ? masterHp + 9 :
 			masterHp >= 70 ? masterHp + 8 :
 			masterHp >= 50 ? masterHp + 7 :
@@ -298,6 +300,7 @@ KC3改 Ship Object
 			masterHp >= 30 ? masterHp + 5 :
 			masterHp >= 8  ? masterHp + 4 :
 			masterHp + 3) || false;
+		return maxLimitHp && expected > maxLimitHp ? maxLimitHp : expected;
 	};
 	KC3Ship.prototype.maxHp = function(){
 		return KC3Ship.getMaxHp(this.masterId, this.level);
