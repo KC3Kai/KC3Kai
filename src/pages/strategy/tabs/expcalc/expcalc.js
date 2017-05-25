@@ -778,7 +778,7 @@
 				for (i=0; i<self.goalTemplates.length; ++i) {
 					var template = self.goalTemplates[i];
 					if (template.enable &&
-						GoalTemplateManager.checkShipType(MasterShip.api_stype,template)) {
+						GoalTemplateManager.checkShipType(MasterShip.api_stype, template)) {
 						grindData = GoalTemplateManager.applyTemplate(grindData, template);
 						break;
 					}
