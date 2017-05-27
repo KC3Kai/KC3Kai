@@ -11,6 +11,7 @@
 		"KC3SortieManager": true,
 		"KC3TimerManager": true,
 		"AntiAir": true,
+		"KC3QuestSync": true,
 		"KC3Dashboard": true,
 		"KC3DataBackup": true,
 		"KC3Database": true,
