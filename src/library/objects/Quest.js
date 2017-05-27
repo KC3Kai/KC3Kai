@@ -208,7 +208,7 @@ known IDs see QuestManager
 			|| (this.id == 211)		// Bd4, but type == 5
 			|| (this.id == 212)		// Bd6, but type == 5
 			// Other known cases
-			|| KC3QuestManager._dailyIds.indexOf(this.id) > -1;
+			|| KC3QuestManager.getRepeatableIds('daily').indexOf(this.id) > -1;
 	};
 
 	KC3Quest.prototype.isWeekly = function(){
@@ -220,7 +220,7 @@ known IDs see QuestManager
 	};
 
 	KC3Quest.prototype.isQuarterly = function(){
-		return KC3QuestManager._quarterlyIds.indexOf(this.id) > -1;
+		return KC3QuestManager.getRepeatableIds('quarterly').indexOf(this.id) > -1;
 	};
 
 	KC3Quest.prototype.isUnselected = function(){
