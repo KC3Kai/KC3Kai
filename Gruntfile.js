@@ -241,6 +241,8 @@ module.exports = function(grunt) {
 									"assets/js/global.js",
 									"library/objects.js",
 									"library/managers.js",
+									"library/modules/QuestSync/Sync.js",
+									"library/modules/QuestSync/ContentScript.js",
 									"library/modules/Master.js",
 									"library/modules/Meta.js",
 									"library/modules/Translation.js",
