@@ -566,6 +566,9 @@ body {
 .tab_expcalc .ship_goal {
 	background-color:#def;
 }
+.tab_expcalc .ship_goal.goaled {
+	background-color:#fe2;
+}
 .tab_expcalc .ship_goal.highlight_stype {
 	background-color:#fdd;
 }
