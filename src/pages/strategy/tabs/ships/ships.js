@@ -895,6 +895,9 @@
 				});
 
 				self.shipList.show();
+				$(".ship_count .count_value").text(
+					"{0} /{1}".format(FilteredShips.length, self.shipCache.length)
+				);
 				$(".ingame_page").toggle(self.pageNo);
 				self.toggleTableScrollbar(self.scrollList);
 				self.isLoading = false;
