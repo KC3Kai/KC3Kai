@@ -482,7 +482,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					}
 				});
 			});
-			console.log("Pre-%s State",cons.name,cons.resc,PlayerManager.hq.lastSortie);
+			console.log("Previous %s state", cons.name, cons.resc, PlayerManager.hq.lastSortie);
 			// Ignore every resource gain if disconnected during sortie
 			if(this.onCat)
 				this.materialGain.fill(0);
