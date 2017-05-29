@@ -375,6 +375,7 @@
 		KC3GearManager.load();
 		KC3Database.init();
 		KC3Translation.execute();
+		KC3QuestSync.init();
 
 		// Live translations
 		if(ConfigManager.checkLiveQuests && ConfigManager.language=="en"){

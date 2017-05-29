@@ -261,8 +261,8 @@ Contains summary information about a fleet and its 6 ships
 					// T2
 					t2Count += 1;
 					addImprove( eObj.stars );
-				} else if (eObj.masterId === 193 || eObj.masterId === 230) {
-					// toku landing craft (+ 11th tank)
+				} else if (eObj.masterId === 193) {
+					// toku landing craft (230: +11th tank no count)
 					tokuCount += 1;
 					addImprove( eObj.stars );
 				}

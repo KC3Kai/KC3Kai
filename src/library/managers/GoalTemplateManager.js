@@ -29,8 +29,17 @@
 
     window.GoalTemplateManager = {
         validSTypes: [],
+        enSTypeMeta: {},
 
+        initValidSTypes: function() {
+            this.enSTypeMeta = KC3Translation.getJSONWithOptions(KC3Meta.repo, "stype", false, "en", false, true);
+            delete this.enSTypeMeta['0'];
+            this.validSTypes = Object.keys(this.enSTypeMeta).map(id => this.enSTypeMeta[id]);
+        },
         load: function() {
+            if(this.validSTypes.length === 0) {
+                this.initValidSTypes();
+            }
             return JSON.parse(localStorage.goalTemplates || "[]");
         },
         save: function(t) {
@@ -94,27 +103,15 @@
             result[6] = template.mvp?1:0;
             return result;
         },
+        mapShipTypeAbbrs2Ids: function(stypeAbbrs) {
+            return (stypeAbbrs || []).map(stype => this.validSTypes.indexOf(stype) + 1);
+        },
         checkShipType: function(stypeId, template) {
             if (template.stype.indexOf("*") != -1)
                 return true;
-            var KGS = PS["KanColle.Generated.SType"];
-            var stypeIds = template.stype.map( function(x) {
-                return KGS.toInt(KGS.readSType(x));
-            });
+            var stypeIds = this.mapShipTypeAbbrs2Ids(template.stype);
             return stypeIds.indexOf(stypeId) != -1;
         }
     };
 
-    // initialize valid stypes
-    var stypeRaw =
-        "DDE DD  CL  CLT " +
-        "CA  CAV CVL FBB " +
-        "BB  BBV CV  XBB " +
-        "SS  SSV AP  AV  " +
-        "LHA CVB AR  AS  " +
-        "CT  AO";
-    window.GoalTemplateManager.validSTypes =
-        stypeRaw
-          .split(" ")
-          .filter( function(x) { return x.length > 0; });
 })();

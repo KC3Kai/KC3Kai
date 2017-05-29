@@ -67,7 +67,7 @@
 .tab_ships .filters .ship_types {
 	width:680px;
 	height:60px;
-	margin:0px 0px 10px 0px;
+	margin:0px 0px 5px 0px;
 }
 .tab_ships .filters .ship_filter_type {
 	width:80px;
@@ -78,15 +78,13 @@
 }
 
 .tab_ships .advanced_sorter {
-	float:left;
-	width:600px;
-	margin:0px 0px 3px 0px;
+	margin:0px 0px 2px 0px;
 }
 .tab_ships .advanced_sorter .adv_label {
-	float: left;
-	font-weight: bold;
-	font-size: 12px;
-	padding-right: 5px;
+	float:left;
+	font-weight:bold;
+	font-size:12px;
+	padding-right:5px;
 }
 .tab_ships .advanced_sorter .adv_sorter {
 	width:80px;
@@ -95,9 +93,23 @@
 	float:left;
 }
 
+.tab_ships .ship_count {
+	float:left;
+	margin:0px 0px 2px 0px;
+	line-height:18px;
+}
+.tab_ships .ship_count div {
+	float:left;
+	font-size:12px;
+}
+.tab_ships .ship_count .count_label {
+	font-weight:bold;
+	padding-right:5px;
+}
+
 .tab_ships .control_buttons {
 	float:right;
-	margin:0px 0px 3px 0px;
+	margin:0px 0px 2px 0px;
 }
 .tab_ships .control_buttons .reset_default {
 	float:right;

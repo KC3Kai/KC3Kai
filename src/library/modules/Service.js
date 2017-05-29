@@ -439,8 +439,24 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				manifest: chrome.runtime.getManifest(),
 				kc3version: chrome.runtime.getManifest().version
 			});
-		}
+		},
 		
+		/* QUEST SYNC
+		Facilitate remote invocation of background methods
+		------------------------------------------*/
+		"questSync" :function({ method, args, isAsync }, sender, response){
+			if (isAsync) {
+				KC3QuestSync[method](...args)
+					.then((result) => { response({ success: result }); })
+					.catch((error) => { response({ error }); });
+			} else {
+				try {
+					response({ success: KC3QuestSync[method](...args) });
+				} catch (error) {
+					response({ error });
+				}
+			}
+		},
 	};
 	
 	/* Runtime Message Listener
@@ -511,54 +527,6 @@ See Manifest File [manifest.json] under "background" > "scripts"
 					// console.log("cklg cookie re-hacked", cookie);
 				});
 				
-			}
-		}
-	});
-	
-	/* On Chrome Storage Changed
-	Sync localStorage parts with Chrome Storage
-	Used for sync quests data on different machines
-	------------------------------------------*/
-	chrome.storage.onChanged.addListener(function(changes, namespace) {
-		// Check if expected changes present and namespace is "sync"
-		if (changes.KC3QuestsData && namespace == "sync") {
-			// Check if synchronization is enabled
-			ConfigManager.load();
-			if (ConfigManager.chromeSyncQuests) {
-				var newValue = changes.KC3QuestsData.newValue;
-				// Check if remote data structure version is matching with current expected structure
-				if (newValue.syncStructVersion == KC3QuestManager.syncStructVersion) {
-					// Check if local quests version not set or remote version is more then local
-					var dataVer = localStorage.questsVersion;
-					if (typeof dataVer === "undefined"
-						|| Number(newValue.questsVersion) > Number(dataVer)) {
-						localStorage.questsVersion = newValue.questsVersion;
-						// Check if JSON strings are the same, then there's nothing to do
-						if (newValue.quests === localStorage.quests) { return true; }
-						// Set new quests and reset times
-						localStorage.quests = newValue.quests;
-						localStorage.timeToResetDailyQuests = newValue.timeToResetDailyQuests;
-						localStorage.timeToResetWeeklyQuests = newValue.timeToResetWeeklyQuests;
-						localStorage.timeToResetMonthlyQuests = newValue.timeToResetMonthlyQuests;
-						localStorage.timeToResetQuarterlyQuests = newValue.timeToResetQuarterlyQuests;
-						// Check if desktop notifications enabled
-						if (ConfigManager.dataSyncNotification) {
-							var dt = new Date(+newValue.syncTimeStamp).toLocaleString();
-							chrome.notifications.create("kc3kai_quests", {
-								type: "basic",
-								title: KC3Meta.term("DesktopNotifyQuestsSyncTitle"),
-								message: KC3Meta.term("DesktopNotifyQuestsSyncMessage").format(dt),
-								iconUrl: "../../assets/img/quests/sortie.jpg"
-							});
-						}
-					} else {
-						console.info("Quest old version data received, ignored");
-					}
-				} else {
-					console.info("Quest unexpected data structure received, version:", newValue.syncStructVersion);
-				}
-			} else {
-				console.info("Quest data received, ignored as sync disabled by setting");
 			}
 		}
 	});
