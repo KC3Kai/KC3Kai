@@ -57,9 +57,8 @@ Previously known as "Reactor"
 			KC3Network.trigger("GameStart");
 			
 			// if there is either new ship(s) or new item(s)
-			console.log("api_start2 newCounts", newCounts);
-			if(newCounts[0]>0 || newCounts[1]>0){
-				console.log("Triggering GameUpdate:", newCounts);
+			if(newCounts[0] > 0 || newCounts[1] > 0){
+				console.log("Triggering GameUpdate, newCounts:", newCounts);
 				KC3Network.trigger("GameUpdate", newCounts);
 			}
 		},
@@ -309,7 +308,7 @@ Previously known as "Reactor"
 					default: break;
 				}
 			}
-			console.log("useitems", PlayerManager.consumables);
+			console.log("Refresh useitems", PlayerManager.consumables);
 			PlayerManager.setConsumables();
 			KC3Network.trigger("Consumables");
 		},
@@ -366,7 +365,7 @@ Previously known as "Reactor"
 				ship     = KC3ShipManager.get(sid),
 				mast     = ship.master(),
 				ship_obj = response.api_data;
-			console.log("Perform Marriage", sid, ship.name());
+			console.log("Perform Marriage with", sid, ship.name());
 		},
 		
 		"api_req_kaisou/remodeling":function(params, response, headers){
@@ -406,7 +405,7 @@ Previously known as "Reactor"
 							arrayData.fill(0,0,3);
 						break;
 						default:
-							console.error("Expected array of length 2 on",pendingData,"consumption data");/*RemoveLogging:skip*/
+							console.warn("Expected array of length 2 on consumption data", pendingData);/*RemoveLogging:skip*/
 						break;
 					}
 				});
@@ -432,17 +431,17 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		// List Presets
 		"api_get_member/preset_deck":function(params, response, headers){
-			console.log("LIST PRESETS", response.api_data.api_deck);
+			console.log("List Presets", response.api_data.api_deck);
 		},
 		
 		// Register preset
 		"api_req_hensei/preset_register":function(params, response, headers){
-			console.log("REGISTERED PRESET", response.api_data.api_preset_no, response.api_data);
+			console.log("Registered Preset", response.api_data.api_preset_no, response.api_data);
 		},
 		
 		// Remove Preset from list
 		"api_req_hensei/preset_delete":function(params, response, headers){
-			console.log("DELETED PRESET", params.api_preset_no);
+			console.log("Deleted Preset", params.api_preset_no);
 		},
 		
 		// Use a Preset
@@ -707,7 +706,7 @@ Previously known as "Reactor"
 			var shipData  = KC3ShipManager.get(shipID);
 			
 			if(shipData.lock) {
-				console.warn("Unlocked",shipData.rosterId,shipData.name());
+				console.log("Unlocked", shipData.rosterId, shipData.name());
 			} else {
 				ConfigManager.loadIfNecessary();
 				var lockID = ConfigManager.lock_list.indexOf(shipID);
@@ -715,7 +714,7 @@ Previously known as "Reactor"
 					ConfigManager.lock_list.splice(lockID,1);
 					ConfigManager.save();
 				} else {
-					console.info("Locked (~)",shipData.rosterId,shipData.name());
+					console.log("Locked", shipData.rosterId, shipData.name());
 				}
 			}
 			
@@ -920,7 +919,7 @@ Previously known as "Reactor"
 			$.each(PlayerManager.bases, function(i, base){
 				// Land Base of this world, Action: sortie
 				if(base.map === KC3SortieManager.map_world && base.action === 1){
-					console.log("Sortied LBAS:", base);
+					console.log("Sortied LBAS", base);
 					$.each(base.planes, function(j, plane){
 						// Plane is set, not moving
 						if(plane.api_slotid > 0 && plane.api_state === 1){
@@ -1277,7 +1276,7 @@ Previously known as "Reactor"
 				material = data.api_material,
 				consume  = [0,0,0,0],
 				bonuses  = data.api_bounus;
-			console.log(quest,data);
+			console.log("Quest clear", quest, data);
 			
 			// Force to mark quest as complete
 			KC3QuestManager.get(quest).toggleCompletion(true);
@@ -1297,7 +1296,7 @@ Previously known as "Reactor"
 				type: "quest"+quest,
 				data: material
 			});
-			console.log("Quest Item",material);
+			console.log("Quest gained", quest, material);
 			
 			PlayerManager.setResources(utcHour * 3600, null, material.slice(0,4));
 			PlayerManager.setConsumables(utcHour * 3600, null, consume);
@@ -1477,7 +1476,7 @@ Previously known as "Reactor"
 				response:response.api_data
 			});
 			
-			console.log("Fleet #",deck,"has returned from Expedition #",expedNum,"with result",response.api_data);
+			console.log("Fleet #" + deck + " has returned from Expedition #", expedNum, "with result", response.api_data);
 			
 			shipList.forEach(function(rosterId){
 				var shipData = KC3ShipManager.get(rosterId);
@@ -1489,7 +1488,7 @@ Previously known as "Reactor"
 						-shipData.ammo,
 						-shipData.slots.reduce(function(x,y){return x+y;})
 					],[0,0,0]];
-					console.log("Offering a preparation of async to", rosterId, shipData.name());
+					//console.debug("Offering a preparation of async to", rosterId, shipData.name());
 					var df = shipData.checkDefer();
 					df[0].then(function(expedId,supplyData){
 						if(typeof expedId !== 'undefined' && expedId !== null) {
@@ -1502,7 +1501,8 @@ Previously known as "Reactor"
 								}) : rscdat;
 							});
 							delete kan.pendingConsumption.costnull;
-							console.log.apply(console,["Exped ship",rosterId].concat(key && kan.pendingConsumption[key]));
+							console.log.apply(console, ["Consumption for Exped ship", rosterId]
+								.concat(key && kan.pendingConsumption[key]));
 							KC3ShipManager.save();
 						} else {
 							console.log("Ignoring signal for", rosterId, "detected");
@@ -1579,7 +1579,7 @@ Previously known as "Reactor"
 							consDat  = [shipData.fuel,shipData.ammo,shipData.slots.reduce(function(x,y){return x+y;})];
 						if(shipData.masterId > 0) {
 							// if there's a change in ship supply
-							console.log("Pending resupply",rosterId,shipData.name(),dataInd,pendCond.costnull,consDat);
+							console.debug("Pending consumption for Exped ship", rosterId, dataInd, pendCond.costnull, consDat);
 							if(dataInd >= 0) {
 								shipData.getDefer()[1].resolve(dbId);
 							}
@@ -1588,7 +1588,7 @@ Previously known as "Reactor"
 					
 					KC3ShipManager.save();
 					
-					console.log("Current materials", rsc);
+					console.log("Exped materials gained", expedNum, rsc);
 					PlayerManager.setResources(utcHour * 3600, null, rsc.slice(0,4));
 					PlayerManager.setConsumables(utcHour * 3600, null, csm);
 					KC3Network.trigger("Consumables");
@@ -1688,7 +1688,7 @@ Previously known as "Reactor"
 			);
 			// Sum everything
 			scrap.forEach(function(scrapData){
-				console.log.apply(console,["Scrapped ship", scrapData.api_name].concat(scrapData.api_broken));
+				console.log("Scrapping", scrapData.api_id, scrapData.api_name, scrapData.api_broken);
 				scrapData.api_broken.forEach(function(val,ind){
 					rsc[ind] += val;
 				});
@@ -1716,6 +1716,7 @@ Previously known as "Reactor"
 				utcHour = Date.toUTChours(headers.Date);
 			$.each(params.api_slotitem_ids.split("%2C"), function(index, itemId){
 				var gearMaster = KC3GearManager.get(itemId).master();
+				console.log("Scrapping", gearMaster.api_id, gearMaster.api_name, gearMaster.api_broken);
 				gearMaster.api_broken.forEach(function(x,i){
 					rsc[i] += x;
 				});
@@ -1822,14 +1823,14 @@ Previously known as "Reactor"
 						if(!!oldMap.gaugeType && oldMap.gaugeType !== localMap.gaugeType){
 							localMap.kinds = oldMap.kinds || [oldMap.gaugeType];
 							localMap.kinds.push(localMap.gaugeType);
-							console.log("New gauge phase detected:", oldMap.gaugeType + " -> " + localMap.gaugeType);
+							console.info("New gauge phase detected:", oldMap.gaugeType + " -> " + localMap.gaugeType);
 						}
 						// Different max value detected
 						if((oldMap.maxhp || 9999) !== 9999
 							&& oldMap.maxhp !== localMap.maxhp){
 							localMap.maxhps = oldMap.maxhps || [oldMap.maxhp];
 							localMap.maxhps.push(localMap.maxhp);
-							console.log("New max HP detected:", oldMap.maxhp + " -> " + localMap.maxhp);
+							console.info("New max HP detected:", oldMap.maxhp + " -> " + localMap.maxhp);
 						} else if(!!oldMap.baseHp){
 							localMap.baseHp = oldMap.baseHp;
 						}
@@ -1969,7 +1970,6 @@ Previously known as "Reactor"
 		/* Equipment Modernize
 		-------------------------------------------------------*/
 		"api_req_kousyou/remodel_slot":function(params, response, headers){
-			// Check consumption
 			var
 				self = this,
 				rm = self.remodelSlot,
@@ -1985,7 +1985,7 @@ Previously known as "Reactor"
 				var sk = ['api',(id >= 4) ? ky : 'req',dk].join('_');
 				mt[id] = -cu[sk];
 			});
-			console.info("Remodel Cost", mt);
+			console.log("Improvement cost materials", mt);
 			// Store to Lodger
 			KC3Database.Naverall({
 				hour: hr,
@@ -1993,6 +1993,7 @@ Previously known as "Reactor"
 				data: mt
 			});
 			// Update equipment on local data
+			console.log("Improvement used items", response.api_data.api_use_slot_id);
 			(response.api_data.api_use_slot_id || []).forEach(function(gearId){ KC3GearManager.remove(gearId); });
 			KC3GearManager.set([ response.api_data.api_after_slot ]);
 			
@@ -2023,7 +2024,7 @@ Previously known as "Reactor"
 			getRank = function(r){ return ['E','D','C','B','A','S','SS'].indexOf(r); },
 			qLog = function(r){ // this one is used to track things
 				var q = KC3QuestManager.get(r);
-				console.log("Quest",r,"progress ["+(q.tracking ? q.tracking : '-----')+"], in progress:",q.isSelected());
+				console.log("Quest",r,"progress ["+(q.tracking ? q.tracking : '---')+"], in progress:",q.isSelected());
 				return q;
 			};
 		

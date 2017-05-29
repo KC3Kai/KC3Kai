@@ -195,8 +195,7 @@ Does not include Ships and Gears which are managed by other Managers
 						dockingShips[key] = v.completeTime;
 					});
 				} catch (err) {
-					console.error( "Error while processing cached docking ship" );
-					console.error(err);
+					console.error("Error while processing cached docking ship", err.stack);
 				}
 			}
 			return dockingShips;
@@ -391,11 +390,8 @@ Does not include Ships and Gears which are managed by other Managers
 			console.log("Last port", this.hq.lastPortTime, regenTime, serverSeconds);
 			// Check whether a server time is supplied, or keep the last refresh time.
 			this.hq.lastPortTime = serverSeconds || this.hq.lastPortTime;
-			console.log.apply(console, ["Materials before"].concat(this.hq.lastMaterial));
 			console.log("Regenerated materials", regenVal);
-			console.log.apply(console, ["Meterials after"].concat((this.hq.lastMaterial || []).map(function(x,i){
-				return (x || 0) + regenVal[i];
-			})));
+			console.log("Materials before after", this.hq.lastMaterial, absMaterial);
 			KC3Database.Naverall({
 				hour:Math.hrdInt('floor',serverSeconds/3.6,3,1),
 				type:'regen',

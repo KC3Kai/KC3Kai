@@ -117,13 +117,12 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		
 		getSupportingFleet :function(bossSupport){
 			function supportFormula(expedNum, isBoss){
-				//console.log("checking support", expedNum, "isboss", isBoss);
+				//console.debug("Checking support fleets", expedNum, "isboss", isBoss);
 				var e,w,n;
 				e = (expedNum > 100);
 				if(e) expedNum -= 100;
 				w = ((expedNum-1) / 8)+1;
 				n = (expedNum-1) % 8;
-				//console.log(e,w,n,(w == 5 || e) && (n == 0 + isBoss));
 				return (w == 5 || e) && (n == isBoss);
 			}
 			
@@ -179,7 +178,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			this.boss.bosscell = cellno;
 			this.boss.comp = comp;
 			this.boss.letters = [KC3Meta.nodeLetter(this.map_world, this.map_num, cellno)];
-			console.log("Boss node info on start", this.boss);
+			console.debug("Boss node info on start", this.boss);
 			// Init on boss node callback
 			var self = this;
 			this.onBossAvailable = this.onBossAvailable || function(nodeObj){
@@ -201,7 +200,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		
 		advanceNode :function( nodeData, UTCTime ){
 			var thisNode, nodeKind;
-			console.log("Raw nodeData", nodeData);
+			//console.debug("Raw next node data", nodeData);
 			
 			nodeKind = "Dud";
 			// Selection node
@@ -253,14 +252,13 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				
 			}
 			let definedKind = "defineAs" + nodeKind;
-			console.log("Next node", nodeData.api_no, definedKind);
-			
 			let bossLetter = KC3Meta.nodeLetter(this.map_world, this.map_num, nodeData.api_bosscell_no);
 			if(this.boss.letters.indexOf(bossLetter) < 0) this.boss.letters.push(bossLetter);
-			console.log("Next edge points to boss node", nodeData.api_bosscell_no, bossLetter);
+			console.debug("Next edge points to boss node", nodeData.api_bosscell_no, bossLetter);
 			
 			thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime ))[definedKind](nodeData);
 			this.nodes.push(thisNode);
+			console.log("Next node", nodeData.api_no, definedKind, thisNode);
 			this.save();
 		},
 		
@@ -369,7 +367,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		},
 		
 		addSunk :function(shizuList){
-			console.log("Sink list", shizuList);
+			console.debug("Adding sink list", shizuList);
 			this.sinkList.main = this.sinkList.main.concat(shizuList[0]);
 			this.sinkList.escr = this.sinkList.escr.concat(shizuList[1]);
 		},
@@ -378,11 +376,11 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			var fleetDesg = [this.fleetSent-1,1],
 				self = this;
 			Object.keys(this.sinkList).forEach(function(fleetType, fleetId){
-				console.log("Fleet", fleetDesg[fleetId] + 1,
+				console.log("Checking " + fleetType + " fleet #", fleetDesg[fleetId] + 1,
 					"consisting of", PlayerManager.fleets[fleetDesg[fleetId]].ships);
 				var sinkList = self.sinkList[fleetType];
 				if(Array.isArray(sinkList) && sinkList.length > 0){
-					console.log("       ", "losses", sinkList);
+					console.log("Found sink losses", sinkList);
 					sinkList.map(function(x){
 						KC3ShipManager.remove(x);
 						return x;
@@ -482,7 +480,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					}
 				});
 			});
-			console.log("Previous %s state", cons.name, cons.resc, PlayerManager.hq.lastSortie);
+			console.log("Previous " + cons.name +" state", cons.resc, PlayerManager.hq.lastSortie);
 			// Ignore every resource gain if disconnected during sortie
 			if(this.onCat)
 				this.materialGain.fill(0);

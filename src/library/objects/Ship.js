@@ -199,7 +199,7 @@ KC3改 Ship Object
 		if(ca && cd && cd.state() == "pending")
 			return ca;
 
-		//console.log("replacing",this.rosterId,"cause",!cd ? typeof cd : cd.state());
+		//console.debug("replacing",this.rosterId,"cause",!cd ? typeof cd : cd.state());
 		ca = deferList[this.rosterId] = Array.apply(null,{length:2}).map(function(){return $.Deferred();});
 		cd = $.when.apply(null,ca);
 		ca.unshift(cd);
@@ -437,7 +437,6 @@ KC3改 Ship Object
 			if (this.masterId == 487) {
 				tp.add(KC3Meta.tpObtained({slots:[68]}));
 			}
-			//console.log(this.name(),this.rosterId,tp1,tp2,tp3);
 		}
 		return tp;
 	};
@@ -478,7 +477,6 @@ KC3改 Ship Object
 			this.equipment(2).fighterBounds( this.slots[2] ),
 			this.equipment(3).fighterBounds( this.slots[3] )
 		];
-		//console.log.apply(console,["GearPowers"].concat(GearPowers));
 		return [
 			GearPowers[0][0]+GearPowers[1][0]+GearPowers[2][0]+GearPowers[3][0],
 			GearPowers[0][1]+GearPowers[1][1]+GearPowers[2][1]+GearPowers[3][1],
@@ -527,7 +525,6 @@ KC3改 Ship Object
 
 		var supportPower;
 		if(this.master().api_stype==11 || this.master().api_stype==7){
-			// console.log( this.name(), "special support calculation for CV(L)" );
 			supportPower = 55;
 			supportPower += (1.5 * Number(this.fp[0]));
 			supportPower += (1.5 * Number(this.tp[0]));
@@ -538,7 +535,6 @@ KC3改 Ship Object
 			supportPower += Number(this.equipment(4).supportPower());
 
 		}else{
-			// console.log( this.name(), "normal firepower for support" );
 			supportPower = this.fp[0];
 		}
 		return supportPower;
@@ -632,7 +628,7 @@ KC3改 Ship Object
 			command = command.slice(0,1).toUpperCase() + command.slice(1).toLowerCase();
 			this["perform"+command].call(this,args);
 		} catch (e) {
-			console.error(e);
+			console.error("Failed when perform" + command, e.stack);
 			return false;
 		} finally {
 			return true;
@@ -842,7 +838,9 @@ KC3改 Ship Object
 			});
 
 
-			console.log.apply(console,["Ship",self.rosterId,"Consume",shipConsumption,sid,[iterant,lastN].join('/')].concat(rsc.map(function(x){return -x;})).concat(dat[index]));
+			console.log("Ship " + self.rosterId + " consumed", shipConsumption, sid,
+				[iterant,lastN].join('/'), rsc.map(function(x){return -x;}), dat[index]
+			);
 
 			// Store supplied resource count to database by updating the source
 			KC3Database.Naverall({

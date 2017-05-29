@@ -170,8 +170,7 @@
 			try {
 				dropShipData.enemyFormation = response.api_formation[1];
 			} catch (err) {
-				console.warn("error while extracting enemy formation");
-				console.warn(err);
+				console.warn("Error while extracting enemy formation", err, err.stack);
 				// when there's something wrong extracting enemy formation
 				// 0 is returned respecting poi's behavior
 				// see: https://github.com/poooi/poi/blob/53e5ac3a992f72b3d2f4a7db9feb094879a12851/views/battle-env.coffee#L24
@@ -183,20 +182,19 @@
 			try {
 				enemyShips = response.api_ship_ke.slice(1,7);
 			} catch (err) {
-				console.warn("error while extracting enemy ship array");
-				console.warn(err);
-				console.warn("using an empty ship array as placeholder");
+				console.warn("Error while extracting enemy ship array", err, err.stack);
+				console.info("Using an empty ship array as placeholder");
 				enemyShips = [-1,-1,-1,-1,-1,-1];
 			}
 			if (enemyShips.length !== 6) {
-				console.warn("processBattle: incorrect enemy ship arr length expect 6 but got " 
+				console.warn("ProcessBattle: incorrect enemy ship arr length expect 6 but got " 
 							 + enemyShips.length );
 			}
 			if (typeof response.api_ship_ke_combined !== "undefined") {
 				// console.log("processBattle: enemy fleet is combined");
 				enemyShips = enemyShips.concat( response.api_ship_ke_combined.slice(1,7) );
 				if (enemyShips.length !== 12) {
-					console.warn("processBattle: incorrect enemy ship arr length expect 12 but got " 
+					console.warn("ProcessBattle: incorrect enemy ship arr length expect 12 but got " 
 								 + enemyShips.length );
 				}
 			}
@@ -228,7 +226,7 @@
 			dropShipData.teitokuLv = PlayerManager.hq.level;
 
 			if (typeof dropShipData.enemyShips === "undefined") {
-				console.warn("[dropship] missing enemy ship info during battle, info from battleresult is used instead.");
+				console.info("[dropship] missing enemy ship info during battle, info from battleresult is used instead.");
 				dropShipData.enemyShips = response.api_ship_id.slice(1);
 			}
 
@@ -236,7 +234,7 @@
 				? -1
 				: response.api_get_useitem.api_useitem_id;
 
-			console.log( "[dropship] prepared: " + JSON.stringify( dropShipData ) );
+			console.debug("[dropship] prepared dropShipData", JSON.stringify( dropShipData ));
 			this.sendData( "drop_ship", dropShipData );
 			this.state = null;
 
@@ -249,8 +247,7 @@
 					mapId: dropShipData.mapId,
 					mapLv: dropShipData.mapLv
 				};
-				console.log( "Passing an event map!" );
-				console.log( JSON.stringify( passEventData ) );
+				console.debug("Passing an event map, raw data", JSON.stringify( passEventData ));
 				this.sendData("pass_event", passEventData);
 			}
 		},
@@ -271,14 +268,14 @@
 				}
 				return false;
 			} catch (e) {
-				console.warn("Poi DB Submission exception:", e.stack);/*RemoveLogging:skip*/
+				console.warn("Poi DB Submission exception:", e, e.stack);/*RemoveLogging:skip*/
 				// Pop up APIError on unexpected runtime expcetion
 				var reportParams = $.extend({}, requestObj.params);
 				delete reportParams.api_token;
 				KC3Network.trigger("APIError", {
 					title: KC3Meta.term("APIErrorNoticeTitle"),
 					message: KC3Meta.term("APIErrorNoticeMessage").format("PoiDBSubmission"),
-					stack: e.stack,
+					stack: e.stack || e.toString(),
 					request: {
 						url: requestObj.url,
 						headers: requestObj.headers,
@@ -292,8 +289,7 @@
 		},
 		cleanup: function() {
 			if (this.state !== null) {
-				console.log( "aborting previous data report" );
-				console.log( "interal state was: " + this.state );
+				console.log( "Aborting previous data report, interal state was:", this.state );
 			}
 
 			this.state = null;
@@ -306,7 +302,7 @@
 			var myVersion = chrome.runtime.getManifest().version;
 			var client = "KC3Kai " + myVersion;
 			payload.origin = client;
-			// console.log( JSON.stringify( payload ) );
+			// console.debug( JSON.stringify( payload ) );
 			$.ajax({
 				url: url,
 				method: "POST",

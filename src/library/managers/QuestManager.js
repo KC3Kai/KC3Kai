@@ -348,7 +348,7 @@ Uses KC3Quest objects to play around with
 		
 		resetDailies :function(){
 			this.load();
-			console.log("resetting dailies");
+			console.log("Resetting dailies");
 			this.resetLoop(this.getRepeatableIds('daily'));
 			this.resetCounterLoop([311]);
 			this.save();
@@ -356,21 +356,21 @@ Uses KC3Quest objects to play around with
 		
 		resetWeeklies :function(){
 			this.load();
-			console.log("resetting weeklies");
+			console.log("Resetting weeklies");
 			this.resetLoop(this.getRepeatableIds('weekly'));
 			this.save();
 		},
 		
 		resetMonthlies :function(){
 			this.load();
-			console.log("resetting monthlies");
+			console.log("Resetting monthlies");
 			this.resetLoop(this.getRepeatableIds('monthly'));
 			this.save();
 		},
 		
 		resetQuarterlies :function(){
 			this.load();
-			console.log("resetting quarterlies");
+			console.log("Resetting quarterlies");
 			this.resetLoop(this.getRepeatableIds('quarterly'));
 			this.save();
 		},
@@ -588,7 +588,7 @@ Uses KC3Quest objects to play around with
 		},
 
 		logError: function (e) {
-			console.error(e, e.stack);/* RemoveLogging:skip */
+			console.error("QuestManager", e, e.stack);/* RemoveLogging:skip */
 		},
 	};
 	

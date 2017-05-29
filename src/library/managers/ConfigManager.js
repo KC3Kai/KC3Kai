@@ -202,13 +202,14 @@ Retreives when needed to apply on components
 		resetValueOf: function(key) {
 			ConfigManager.loadIfNecessary();
 			this[key] = this.defaults()[key];
-			console.log( "reset key", key, " to default:", JSON.stringify(this[key]) );
+			console.log("Reset config key", key, " to default:", JSON.stringify(this[key]) );
 			this.save();
 		},
 		
 		// Reset to default values
 		clear : function(){
 			$.extend(this, this.defaults());
+			console.log("Reset all configs to default");
 			this.save();
 		},
 

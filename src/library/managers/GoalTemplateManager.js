@@ -49,7 +49,7 @@
                 localStorage.goalTemplates =
                     JSON.stringify(t);
             } catch (err) {
-                console.log("error when saving:", err);
+                console.error("Error while saving GoalTemplate", err.stack);
             }
         },
         newTemplate: function() {
