@@ -605,11 +605,19 @@ button, input, select, textarea {
 .tab_ships .ship_item .ship_ar.max {
 	background:#947600;
 }
-.tab_ships .ship_item.odd .ship_field.ship_lk{
-	background:#116311;
+.tab_ships .ship_item .ship_stat span {
+	color:#999999 !important;
 }
+.tab_ships .ship_item.odd .ship_field.ship_lk,
 .tab_ships .ship_item.even .ship_field.ship_lk {
 	background:#116311;
+}
+.tab_ships .ship_item.odd .ship_field.ship_lk.max,
+.tab_ships .ship_item.even .ship_field.ship_lk.max {
+	background:#09a709;
+}
+.tab_ships .ship_item .ship_lk .sub {
+	color:#999999;
 }
 .tab_ships .ship_item .ship_equip .ship_equip_ex .empty {
 	background:#555555 !important;

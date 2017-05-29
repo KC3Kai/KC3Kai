@@ -435,12 +435,21 @@ body {
 .tab_ships .ship_item .ship_ar.max {
 	background:#ffcc00;
 }
-.tab_ships .ship_item.odd .ship_field.ship_lk{
-	background:#66FF66;
+.tab_ships .ship_item .ship_stat span {
+	color:#aaa;
 }
+.tab_ships .ship_item.odd .ship_field.ship_lk,
 .tab_ships .ship_item.even .ship_field.ship_lk {
 	background:#66FF66;
 }
+.tab_ships .ship_item.odd .ship_field.ship_lk.max,
+.tab_ships .ship_item.even .ship_field.ship_lk.max {
+	background:#52d052;
+}
+.tab_ships .ship_item .ship_lk .sub {
+	color:#aaa;
+}
+
 /* Construction */
 .tab_builds .build_item {
 	background:#eee;

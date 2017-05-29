@@ -296,7 +296,7 @@
 				as: [this.getDerivedStatNaked("tais", ThisShip.as[0], ThisShip), ThisShip.as[0] ],
 				ev: [this.getDerivedStatNaked("houk", ThisShip.ev[0], ThisShip), ThisShip.ev[0] ],
 				ls: [this.getDerivedStatNaked("saku", ThisShip.ls[0], ThisShip), ThisShip.ls[0] ],
-				lk: ThisShip.lk[0],
+				lk: [ThisShip.lk[0], ThisShip.lk[1], MasterShip.api_luck[0]],
 				sp: ThisShip.speed,
 				slots: ThisShip.slots,
 				exSlot: ThisShip.ex_item,
@@ -759,7 +759,7 @@
 			define("ls", "LoS",
 				   function(x) { return -x.ls[this.equipMode]; });
 			define("lk", "Luck",
-				   function(x) { return -x.lk; });
+				   function(x) { return -x.lk[0]; });
 			define("ctype", "Class",
 				   function(x) { return x.ctype; });
 			define("bid", "ShipId",
@@ -840,7 +840,12 @@
 					$(".ship_lv", cElm).html( "<span>Lv.</span>" + shipLevelConv);
 					$(".ship_morale", cElm).html( cShip.morale );
 					$(".ship_hp", cElm).text( cShip.hp );
-					$(".ship_lk", cElm).text( cShip.lk );
+					$(".ship_lk", cElm).text( cShip.lk[0] );
+					if(cShip.lk[0] >= cShip.lk[1]){
+						$(".ship_lk", cElm).addClass("max");
+					} else if(cShip.lk[0] > cShip.lk[2]){
+						$(".ship_lk", cElm).append("<sup class='sub'>{0}</sup>".format(cShip.lk[0] - cShip.lk[2]));
+					}
 
 					if(cShip.morale >= 50){ $(".ship_morale", cElm).addClass("sparkled"); }
 
