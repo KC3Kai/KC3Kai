@@ -1489,7 +1489,7 @@ Previously known as "Reactor"
 						-shipData.ammo,
 						-shipData.slots.reduce(function(x,y){return x+y;})
 					],[0,0,0]];
-					console.log.apply(console,["Offering a preparation of async to",shipData.name()]);
+					console.log("Offering a preparation of async to", rosterId, shipData.name());
 					var df = shipData.checkDefer();
 					df[0].then(function(expedId,supplyData){
 						if(typeof expedId !== 'undefined' && expedId !== null) {
@@ -1502,10 +1502,10 @@ Previously known as "Reactor"
 								}) : rscdat;
 							});
 							delete kan.pendingConsumption.costnull;
-							console.info.apply(console,["",rosterId].concat(key && kan.pendingConsumption[key]));
+							console.log.apply(console,["Exped ship",rosterId].concat(key && kan.pendingConsumption[key]));
 							KC3ShipManager.save();
 						} else {
-							console.info("Ignoring Signal for",rosterId,"detected");
+							console.log("Ignoring signal for", rosterId, "detected");
 						}
 					});
 				}
@@ -1579,7 +1579,7 @@ Previously known as "Reactor"
 							consDat  = [shipData.fuel,shipData.ammo,shipData.slots.reduce(function(x,y){return x+y;})];
 						if(shipData.masterId > 0) {
 							// if there's a change in ship supply
-							console.log(shipData.name(),dataInd,pendCond.costnull,consDat);
+							console.log("Pending resupply",rosterId,shipData.name(),dataInd,pendCond.costnull,consDat);
 							if(dataInd >= 0) {
 								shipData.getDefer()[1].resolve(dbId);
 							}
@@ -1588,7 +1588,7 @@ Previously known as "Reactor"
 					
 					KC3ShipManager.save();
 					
-					console.log("Materials",rsc);
+					console.log("Current materials", rsc);
 					PlayerManager.setResources(utcHour * 3600, null, rsc.slice(0,4));
 					PlayerManager.setConsumables(utcHour * 3600, null, csm);
 					KC3Network.trigger("Consumables");
@@ -1688,7 +1688,7 @@ Previously known as "Reactor"
 			);
 			// Sum everything
 			scrap.forEach(function(scrapData){
-				console.log.apply(console,[scrapData.api_name].concat(scrapData.api_broken));
+				console.log.apply(console,["Scrapped ship", scrapData.api_name].concat(scrapData.api_broken));
 				scrapData.api_broken.forEach(function(val,ind){
 					rsc[ind] += val;
 				});

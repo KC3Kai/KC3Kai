@@ -779,6 +779,9 @@ button, input, select, textarea {
 	background-color:#333333;
 	border-radius: 0px !important;
 }
+.tab_expcalc .ship_goal.goaled {
+	background-color:#968300;
+}
 .tab_expcalc .ship_goal.highlight_stype {
 	background-color:#330000;
 }

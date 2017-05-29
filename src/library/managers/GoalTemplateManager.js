@@ -103,10 +103,13 @@
             result[6] = template.mvp?1:0;
             return result;
         },
+        mapShipTypeAbbrs2Ids: function(stypeAbbrs) {
+            return (stypeAbbrs || []).map(stype => this.validSTypes.indexOf(stype) + 1);
+        },
         checkShipType: function(stypeId, template) {
             if (template.stype.indexOf("*") != -1)
                 return true;
-            var stypeIds = template.stype.map(stype => this.validSTypes.indexOf(stype) + 1);
+            var stypeIds = this.mapShipTypeAbbrs2Ids(template.stype);
             return stypeIds.indexOf(stypeId) != -1;
         }
     };

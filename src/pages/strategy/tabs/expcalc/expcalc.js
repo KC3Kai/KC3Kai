@@ -545,12 +545,7 @@
 				// we will end up highlighting everything
 				if (stypes.indexOf("*") != -1)
 					return true;
-
-				var KGS = PS["KanColle.Generated.SType"];
-				var stypeIds = stypes.map( function(x) {
-					return KGS.toInt(KGS.readSType(x));
-				});
-
+				var stypeIds = GoalTemplateManager.mapShipTypeAbbrs2Ids(stypes);
 				// traverse all ships, toggle "highlight" flag
 				$(".section_body .ship_goal").each( function(i,x) {
 					var jqObj = $(x);
@@ -562,11 +557,7 @@
 					var ThisShip = KC3ShipManager.get( rosterId );
 					var MasterShip = ThisShip.master();
 					var stypeId = MasterShip.api_stype;
-					if (stypeIds.indexOf(stypeId) != -1) {
-						jqObj.addClass("highlight_stype");
-					} else {
-						jqObj.removeClass("highlight_stype");
-					}
+					jqObj.toggleClass("highlight_stype", stypeIds.indexOf(stypeId) != -1);
 				});
 			});
 
@@ -795,6 +786,7 @@
 			// Experience Left
 			var expLeft = KC3Meta.expShip(grindData[0])[1] - ThisShip.exp[0];
 			$(".ship_exp .ship_value", goalBox).text( expLeft );
+			goalBox.toggleClass("goaled", expLeft <= 0);
 
 			// Base Experience: MAP
 			$(".ship_map .ship_value", goalBox).text( grindData[1]+"-"+grindData[2] );
