@@ -760,9 +760,12 @@ Contains summary information about a fleet and its 6 ships
 					if (multiplier) {
 						var equipment_bonus = Math.sqrt(itemData.stars);
 
-						if ([12, 13].indexOf(itemType) > -1) {
-							// Radar bonus
+						if (12 === itemType) {
+							// Small Radar bonus
 							equipment_bonus *= 1.25;
+						} else if (13 === itemType) {
+							// Large Radar bonus
+							equipment_bonus *= 1.4;
 						} else if ([9, 10].indexOf(itemType) > -1) {
 							// Reconnaissance Plane/Seaplane bonus
 							equipment_bonus *= 1.2;
