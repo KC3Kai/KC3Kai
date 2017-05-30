@@ -133,7 +133,7 @@
 						self.unoverrideAttr(enJSON, "memo");
 					}
 				} catch (e) {
-					console.error("Loading translation failed", e.stack);/*RemoveLogging:skip*/
+					console.error("Loading translation failed", e);/*RemoveLogging:skip*/
 					let errMsg = $("<p>Fatal error when loading {0} en TL data: {1}</p>" +
 						"<p>Contact developers plz! &gt;_&lt;</p>".format(filename, e));
 					if($("#error").length>0){
@@ -175,7 +175,7 @@
 					}
 				} else {
 					// Unknown error still needs to be handled asap
-					console.error("Loading translation failed", e.stack);/*RemoveLogging:skip*/
+					console.error("Loading translation failed", e);/*RemoveLogging:skip*/
 					let errMsg = $("<p>Fatal error when loading {0} TL data of {1}: {2}</p>" +
 						"<p>Contact developers plz! &gt;_&lt;</p>".format(filename, language, e));
 					if($("#error").length>0){
@@ -388,7 +388,7 @@
 						langJSON = enJSON;
 						language = "en";
 					} else {
-						console.error("Loading quotes failed", e.stack);/*RemoveLogging:skip*/
+						console.error("Loading quotes failed", e);/*RemoveLogging:skip*/
 						throw e;
 					}
 				}

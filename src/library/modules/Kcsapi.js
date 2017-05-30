@@ -49,7 +49,7 @@ Previously known as "Reactor"
 					mp.stat.onError.push(si);
 				} else {
 					// binary bomb quotes ^~^)v
-					console.warn("You're lucky that the catbomb is not on the event map!");
+					console.info("You're lucky that the catbomb is not on the event map!");
 				}
 				localStorage.setObject('maps',ma);
 			}
@@ -860,7 +860,7 @@ Previously known as "Reactor"
 			try{
 				thisMap.curhp = thisMap.maxhp = parseInt(response.api_data.api_max_maphp, 10);
 			}catch(e){
-				console.warn("Map HP data is not given, leaving 9999HP as placeholder");
+				console.info("Map HP data is not given, leaving 9999HP as placeholder");
 				thisMap.curhp = allMaps[mkey].maxhp = 9999;
 			}
 			// clear old progress of this map

@@ -325,7 +325,7 @@ var interactions = {
 			}
 			return true;
 		}catch(e){
-			console.error(e);
+			console.error("CatBomb exception", e);
 		}finally{
 			return false;
 		}

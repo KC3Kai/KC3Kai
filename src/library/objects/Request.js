@@ -166,7 +166,7 @@ Executes processing and relies on KC3Network for the triggers
 				KC3Network.trigger("APIError", {
 					title: KC3Meta.term("APIErrorNoticeTitle"),
 					message: KC3Meta.term("APIErrorNoticeMessage").format([this.call]),
-					stack: e.stack || e.toString(),
+					stack: e.stack || String(e),
 					request: {
 						url: this.url,
 						headers: this.headers,

@@ -552,7 +552,7 @@
 				.map(function(x) { return parseInt(x,10); })
 				.filter(function(x) { return [12,15].indexOf(x)<0; })
 				.sort(function(a,b) { return a-b; });
-			console.assert(stypes[0] === 0);
+			console.assert(stypes[0] === 0, "stype should start with element 0");
 			// remove initial "0", which is invalid
 			stypes.shift();
 			var stypeDefValue = [];
@@ -906,7 +906,7 @@
 				$(".ingame_page").toggle(self.pageNo);
 				self.toggleTableScrollbar(self.scrollList);
 				self.isLoading = false;
-				console.log("Showing this list took", (Date.now() - self.startTime)-100 , "milliseconds");
+				console.debug("Showing ship list took", (Date.now() - self.startTime)-100 , "milliseconds");
 			}, 100);
 		},
 

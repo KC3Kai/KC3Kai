@@ -26,7 +26,7 @@
     return this;
   }
 
-  KC3ImageExport.logError = function (e) { console.error(e); };
+  KC3ImageExport.logError = function (e) { console.error(e);/*RemoveLogging:skip*/ };
 
   /*--------------------------------------------------------*/
   /* ----------------------[ EXPORT ]---------------------- */

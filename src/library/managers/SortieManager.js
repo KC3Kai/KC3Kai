@@ -267,22 +267,22 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		},
 		
 		engageBattle :function( battleData, stime ){
-			if(this.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
+			if(this.currentNode().type != "battle"){ console.warn("Wrong node handling"); return false; }
 			this.currentNode().engage( battleData, this.fleetSent );
 		},
 		
 		engageBattleNight :function( nightData, stime ){
-			if(this.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
+			if(this.currentNode().type != "battle"){ console.warn("Wrong node handling"); return false; }
 			this.currentNode().engageNight( nightData, this.fleetSent );
 		},
 		
 		engageNight :function( nightData ){
-			if(this.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
+			if(this.currentNode().type != "battle"){ console.warn("Wrong node handling"); return false; }
 			this.currentNode().night( nightData );
 		},
 		
 		resultScreen :function( resultData ){
-			if(this.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
+			if(this.currentNode().type != "battle"){ console.warn("Wrong node handling"); return false; }
 			this.hqExpGained += resultData.api_get_exp;
 			if(this.isPvP()){
 				this.currentNode().resultsPvP( resultData );

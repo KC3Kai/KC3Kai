@@ -175,7 +175,7 @@ http://swaytwig.com/opendb/
 				KC3Network.trigger("APIError", {
 					title: KC3Meta.term("APIErrorNoticeTitle"),
 					message: KC3Meta.term("APIErrorNoticeMessage").format("OpenDBSubmission"),
-					stack: e.stack,
+					stack: e.stack || String(e),
 					request: {
 						url: requestObj.url,
 						headers: requestObj.headers,

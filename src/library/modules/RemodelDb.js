@@ -26,7 +26,7 @@
                     this._db = db;
                     console.info("RemodelDb: database updated based on", isRaw ? "Master raw" : "api_start2");
                 } catch (e) {
-                    console.error("RemodelDb:", e.stack);/*RemoveLogging:skip*/
+                    console.error("RemodelDb: updating error", e);/*RemoveLogging:skip*/
                 }
             } else {
                 console.log("RemodelDb: no update required");

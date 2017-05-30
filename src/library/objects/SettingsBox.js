@@ -97,7 +97,7 @@ To be dynamically used on the settings page
 							.replace("%CMP",KC3Meta.term("SettingsError" + ((ERRCODE & 2) == 2 ? "Above" :  "Below")))
 							.replace("%VAL",self.bound[((ERRCODE & 4) == 4 ? "" : "length_") + ((ERRCODE & 2) == 2 ? "max" : "min")]);
 					}
-					console.info(errstr);
+					console.log(errstr);
 					elementControl($(this).parent().siblings(".note"),'red',errstr);
 					$(this).val(ConfigManager[self.config]);
 					return false;
@@ -170,7 +170,7 @@ To be dynamically used on the settings page
 		}
 
 		$("."+choiceClass, this.element).on("click", function(){
-			console.log(this,arguments);
+			console.debug(this, arguments);
 			$("."+$(this).data("class")).removeClass("active");
 			$(this).addClass("active");
 			ConfigManager.loadIfNecessary();
@@ -292,7 +292,7 @@ To be dynamically used on the settings page
 		// lsb-2 : value check if set, length check if not
 		// having all bit is set means invalid value
 		// otherwise, having all bit is unset means valid value
-		console.log(bound);
+		console.debug(bound);
 		var isNumber = function(str){
 			return !(isNaN(str) || str === "" || str === null || str === false);
 		};

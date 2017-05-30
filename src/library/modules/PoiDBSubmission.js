@@ -275,7 +275,7 @@
 				KC3Network.trigger("APIError", {
 					title: KC3Meta.term("APIErrorNoticeTitle"),
 					message: KC3Meta.term("APIErrorNoticeMessage").format("PoiDBSubmission"),
-					stack: e.stack || e.toString(),
+					stack: e.stack || String(e),
 					request: {
 						url: requestObj.url,
 						headers: requestObj.headers,

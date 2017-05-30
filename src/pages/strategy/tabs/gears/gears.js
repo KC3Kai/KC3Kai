@@ -420,7 +420,7 @@
 
 			var comparator = this._comparator[compareMethod];
 			if (typeof comparator == "undefined") {
-				console.warn("comparator missing for: " + compareMethod);
+				console.warn("Missing comparator for: ", compareMethod);
 			} else {
 				$(".tab_gears .sortControl").removeClass("active");
 				$(".tab_gears .sortControl.{0}".format(compareMethod)).addClass("active");
@@ -498,8 +498,6 @@
 				});
 
 				var holderCtr, ThisHolder, HolderElem;
-				//console.log(ThisSlotitem);
-
 				for( var i in ThisSlotitem.arranged ){
 					$('<dl/>')
 						.append( $('<dt/>',{

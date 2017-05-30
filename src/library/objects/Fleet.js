@@ -76,7 +76,7 @@ Contains summary information about a fleet and its 6 ships
 										});
 								});
 						} catch (e) {
-							console.error(e.stack);/*RemoveLogging:skip*/
+							console.error("Updating fleet unexpected error", e);/*RemoveLogging:skip*/
 							return false;
 						}
 					}
@@ -310,11 +310,11 @@ Contains summary information about a fleet and its 6 ships
 		resupply /* must be a non-negative number */, 
 		greatSuccess /* must be boolean */) {
 		if (typeof greatSuccess !== "boolean") {
-			console.error( "greatSuccess has non-boolean value" );
+			console.warn("greatSuccess must be boolean", greatSuccess);
 			return;
 		}
 		if (typeof resupply !== "number") {
-			console.error( "resupply is not a number" );
+			console.warn("resupply must be number", resupply);
 			return;
 		}
 
@@ -328,7 +328,7 @@ Contains summary information about a fleet and its 6 ships
 		// but if a shorter representation is possible, it will be used instead
 		function formatFloat(v) {
 			if (typeof v !== "number") {
-				console.error( "formatFloat", "argument not taking a number");
+				console.warn("formatFloat argument must be number", v);
 			}
 			var fixed = v.toFixed(5);
 			var converted = "" + v;

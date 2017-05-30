@@ -555,7 +555,7 @@
 						}
 						return keArr;
 					};
-					var logError = function(e){ console.error(e); };
+					var logError = function(e){ console.error(e);/*RemoveLogging:skip*/ };
 					try {
 						for(let r of battleList){
 							let day = r.data;
@@ -572,7 +572,7 @@
 						}
 						console.info("Battle enemies have been fixed");
 					} catch(e) {
-						console.error(e);
+						console.error(e);/*RemoveLogging:skip*/
 					}
 					alert("Done 3/3!");
 				});

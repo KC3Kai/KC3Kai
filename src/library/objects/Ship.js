@@ -628,7 +628,7 @@ KC3改 Ship Object
 			command = command.slice(0,1).toUpperCase() + command.slice(1).toLowerCase();
 			this["perform"+command].call(this,args);
 		} catch (e) {
-			console.error("Failed when perform" + command, e.stack);
+			console.error("Failed when perform" + command, e);
 			return false;
 		} finally {
 			return true;

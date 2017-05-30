@@ -514,7 +514,7 @@
 			return function(request, sender, response){
 				if(request.action != "markersOverlay") return true;
 				if(!config.map_markers) { response({success:false}); return true; }
-				console.log('markers', request);
+				console.debug('Node markers', request);
 
 				var sortieStartDelayMillis = 2800;
 				var markersShowMillis = 5000;

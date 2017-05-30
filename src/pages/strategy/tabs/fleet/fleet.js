@@ -141,7 +141,7 @@
 
 			$("button#control_export_dbuilder").on("click", function() {
 				var converted = self.fleetsObjToDeckBuilder( self.currentFleetsObj );
-				console.log( JSON.stringify( converted ) );
+				console.log( "JSON to be exported", JSON.stringify( converted ) );
 				window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck="+
 							encodeURI( JSON.stringify( converted )));
 
@@ -221,7 +221,7 @@
 				}
 				this.showFleetFromSortieId(sortieId);
 			} else {
-				console.error("unknown view type: " + viewType);
+				console.error("Unknown view type: ", viewType);
 			}
 		},
 
