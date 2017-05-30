@@ -133,16 +133,24 @@
 				self._comparator[property] = mkComparator(getter);
 			});
 			self._comparator.overall = function(a,b) {
-				return sumAllGetter(b) - sumAllGetter(a);
+				return sumAllGetter(b) - sumAllGetter(a)
+					|| a.id - b.id;
 			};
 			self._comparator.type = function(a,b) {
 				return a.type_id - b.type_id
-					|| self._comparator[self._defaultCompareMethod["t" + a.type_id]](a, b);
+					|| self._comparator[self._defaultCompareMethod["t" + a.type_id]](a, b)
+					|| a.id - b.id;
 			};
 			self._comparator.total = function(a,b) {
 				return (b.held.length+b.extras.length) - (a.held.length+a.extras.length)
 					|| b.extras.length - a.extras.length
-					|| a.type_id - b.type_id;
+					|| a.type_id - b.type_id
+					|| a.id - b.id;
+			};
+			self._comparator.ingame = function(a,b) {
+				// in-game it sorted by sp(api_type[2]) asc, masterId asc, rosterId asc
+				return a.category - b.category
+					|| a.id - b.id;
 			};
 		},
 
@@ -177,6 +185,13 @@
 				this.checkLbasSlotForItemHolder(PlayerManager.bases[ctr]);
 			}
 
+			var getSpecialEquipType = (mstId, type2) => {
+				const SLOTITEM_SPECIAL_FLAGS = {
+					128: 38,
+					142: 43,
+				};
+				return SLOTITEM_SPECIAL_FLAGS[mstId] || type2;
+			};
 			// Compile ships on Index
 			for(ctr in KC3GearManager.list){
 				ThisItem = KC3GearManager.list[ctr];
@@ -191,8 +206,10 @@
 				// Check if slotitem_id is filled
 				if(typeof this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id] == "undefined"){
 					this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id] = {
+						rid: ThisItem.id,
 						id: ThisItem.masterId,
 						type_id: MasterItem.api_type[3],
+						category: getSpecialEquipType(ThisItem.masterId, MasterItem.api_type[2]),
 						english: ThisItem.name(),
 						japanese: MasterItem.api_name,
 						stats: {
@@ -298,6 +315,7 @@
 			sortControls.push( "overall" );
 			sortControls.push( "type" );
 			sortControls.push( "total" );
+			sortControls.push( "ingame" );
 			sortControls.forEach( function(property,i) {
 				$(".tab_gears .itemSorters .sortControl." + property).on("click", function() {
 					KC3StrategyTabs.gotoTab(null, self._currentTypeId, property);

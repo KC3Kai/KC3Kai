@@ -162,7 +162,7 @@
 			thisTab.apply(reloadData);
 			window.scrollTo(0,0);
 		}else{
-			console.info("Clicked ", KC3StrategyTabs.loading, "menu with no bound actions");
+			console.warn("Clicked ", KC3StrategyTabs.loading, "menu with no bound actions");
 			KC3StrategyTabs.loading = false;
 		}
 	};

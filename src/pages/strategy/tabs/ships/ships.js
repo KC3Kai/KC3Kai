@@ -249,6 +249,14 @@
 				name: "sortno",
 				reverse: false
 			}]);
+			// To simulate in game behavior, if 1st sorter is stype, and no level found
+			if(this.currentSorters[0].name == "type"
+				&& this.currentSorters.every(si => si.name !== "lv")){
+				mergedSorters.push({
+					name: "lv",
+					reverse: false
+				});
+			}
 			// For duplicated ships, final sorter if roster ID not used
 			if(this.currentSorters.every(si => si.name !== "id")){
 				mergedSorters.push({
@@ -552,7 +560,7 @@
 				.map(function(x) { return parseInt(x,10); })
 				.filter(function(x) { return [12,15].indexOf(x)<0; })
 				.sort(function(a,b) { return a-b; });
-			console.assert(stypes[0] === 0, "stype should start with element 0");
+			console.assert(stypes[0] === 0, "stype array should start with element 0");
 			// remove initial "0", which is invalid
 			stypes.shift();
 			var stypeDefValue = [];
