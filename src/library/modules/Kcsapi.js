@@ -1670,9 +1670,9 @@ Previously known as "Reactor"
 		/* Scrap a Ship
 		-------------------------------------------------------*/
 		"api_req_kousyou/destroyship":function(params, response, headers){
-			var
-				rsc   = [0,0,0,0,0,0,0,0],
-				ship  = KC3ShipManager.get(params.api_ship_id),
+			var rsc   = [0,0,0,0,0,0,0,0],
+				memId = params.api_ship_id,
+				ship  = KC3ShipManager.get(memId),
 				scrap = [],
 				utcHour = Date.toUTChours(headers.Date);
 			
@@ -1698,8 +1698,9 @@ Previously known as "Reactor"
 				type: "dsship" + ship.masterId,
 				data: rsc
 			});
-			KC3ShipManager.remove( params.api_ship_id );
-			KC3QuestManager.get(609).increment(); // F5: Daily Dismantlement
+			KC3ShipManager.remove(memId);
+			// F5: Daily Dismantlement
+			KC3QuestManager.get(609).increment();
 			PlayerManager.setResources(utcHour * 3600, null, rsc.slice(0,4));
 			KC3Network.trigger("ShipSlots");
 			KC3Network.trigger("GearSlots");
@@ -1711,12 +1712,12 @@ Previously known as "Reactor"
 		/* Scrap a Gear
 		-------------------------------------------------------*/
 		"api_req_kousyou/destroyitem2":function(params, response, headers){
-			var
-				rsc   = [0,0,0,0,0,0,0,0],
+			var rsc     = [0,0,0,0,0,0,0,0],
+				itemIds = params.api_slotitem_ids,
 				utcHour = Date.toUTChours(headers.Date);
-			$.each(params.api_slotitem_ids.split("%2C"), function(index, itemId){
+			$.each(itemIds.split("%2C"), function(index, itemId){
 				var gearMaster = KC3GearManager.get(itemId).master();
-				console.log("Scrapping", gearMaster.api_id, gearMaster.api_name, gearMaster.api_broken);
+				console.log("Scrapping", itemId, gearMaster.api_id, gearMaster.api_name, gearMaster.api_broken);
 				gearMaster.api_broken.forEach(function(x,i){
 					rsc[i] += x;
 				});
@@ -1724,7 +1725,7 @@ Previously known as "Reactor"
 				if([21].indexOf(gearMaster.api_type[2]) >-1){
 					KC3QuestManager.get(638).increment();
 				}
-				KC3GearManager.remove( itemId );
+				KC3GearManager.remove(itemId);
 			});
 			KC3GearManager.save();
 			KC3Database.Naverall({
@@ -1732,7 +1733,8 @@ Previously known as "Reactor"
 				type: "dsitem",
 				data: rsc
 			});
-			KC3QuestManager.get(613).increment(); // F12: Weekly Dismantlement
+			// F12: Weekly Dismantlement
+			KC3QuestManager.get(613).increment();
 			PlayerManager.setResources(utcHour * 3600, null, rsc.slice(0,4));
 			KC3Network.trigger("GearSlots");
 			KC3Network.trigger("Consumables");
