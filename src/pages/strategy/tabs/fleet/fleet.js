@@ -221,7 +221,7 @@
 				}
 				this.showFleetFromSortieId(sortieId);
 			} else {
-				console.error("Unknown view type: ", viewType);
+				console.error("Unknown view type:", viewType);
 			}
 		},
 

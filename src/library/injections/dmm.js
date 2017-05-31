@@ -1,6 +1,6 @@
 // Check if we are on KC3改 frame to override DMM style to apply customizations
 (new RMsg("service", "dmmFrameInject", {}, function(response){
-	console.log("DMM site inject response", response);
+	console.debug("DMM site inject response", response);
 	switch (response.mode) {
 		case 'frame':
 			$("body").css("margin", "0px");

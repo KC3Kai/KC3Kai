@@ -455,6 +455,14 @@
 			$("head").append(customCSS);
 		}
 
+		// Disable Tab key to prevent it scrolling any window
+		$(document).on("keydown", function(e){
+			if(e.which === 9) {
+				e.stopPropagation();
+				e.preventDefault();
+			}
+		});
+
 		// Close CatBomb modal
 		$(".modalBox").on("click", ".closebtn", function(){
 			$(this).parent().parent().fadeOut(300);

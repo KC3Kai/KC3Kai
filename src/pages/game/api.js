@@ -344,7 +344,7 @@ var interactions = {
 			clearInterval(idleTimer);
 			clearTimeout(idleTimeout);
 			$(".game-idle-timer").trigger("unsafe-tick");
-			console.error("API Link cease to functioning anymore after",String(Math.floor((Date.now() - lastRequestMark)/1000)).toHHMMSS(),"idle time");
+			console.info("API Link cease to be functional anymore after idle time", String(Math.floor((Date.now() - lastRequestMark)/1000)).toHHMMSS());
 		}
 	},
 	

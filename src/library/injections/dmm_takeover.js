@@ -195,7 +195,8 @@
 					// as viewport height will be larger than game player, but computed body height is 0
 					// For wide window, the height may not fit viewport height,
 					// especially when it's smaller than game player, and scrollbar appears
-					$("body").height() - self.gameZoomScale * $("#area-game").offset().top
+					($("body").height() || $(window).height())
+						- self.gameZoomScale * $("#area-game").offset().top
 				);
 			};
 			autoFitWindowHeight();
@@ -514,7 +515,7 @@
 			return function(request, sender, response){
 				if(request.action != "markersOverlay") return true;
 				if(!config.map_markers) { response({success:false}); return true; }
-				console.debug('Node markers', request);
+				//console.debug('Node markers', request);
 
 				var sortieStartDelayMillis = 2800;
 				var markersShowMillis = 5000;

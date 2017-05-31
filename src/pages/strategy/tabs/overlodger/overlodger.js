@@ -835,7 +835,7 @@
 							}).fail(function(){
 								console.error('Execution', name, 'failed after', time, 'ms');
 							}).progress(function(x){
-								console.warn('Execution', name, 'still ongoing after', Date.now() - time, 'ms on milestone:', x);
+								console.info('Execution', name, 'still ongoing after', Date.now() - time, 'ms on milestone:', x);
 							});
 							this.push(ctr);
 							return ctr;
@@ -1025,7 +1025,7 @@
 									}
 									[].unshift.apply(self.totalBuffer,newTotalBuffer);
 								} catch (e) {
-									console.error("Fetching incremental data exception", e);
+									console.error("Fetching incremental data", e);
 								} finally {
 									bufferCancel = false;
 									thr.resolve(newBuffer.length);
