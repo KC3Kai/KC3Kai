@@ -71,7 +71,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			if((world < 10 && mapnum > 4) || typeof thisMap.kills !== "undefined"){
 				sortie.mapinfo = { "api_cleared": thisMap.clear };
 				if(typeof thisMap.kills !== "undefined"){
-					sortie.mapinfo.api_defeat_count = thisMap.kills;
+					sortie.mapinfo.api_defeat_count = thisMap.kills || 0;
 				}
 			}
 			// Reocrd boss HP gauge states of event maps
