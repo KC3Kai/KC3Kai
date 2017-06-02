@@ -749,7 +749,7 @@ Used by SortieManager
 					if(maps[desg].kind === "gauge-hp") {
 						maps[desg].baseHp = maps[desg].baseHp || enemyFlagshipHp;
 						if(maps[desg].baseHp != enemyFlagshipHp) {
-							console.info("Different boss HP detected:", maps[desg].baseHp + " -> " + enemyFlagshipHp);
+							console.info("Different boss HP detected:", maps[desg].baseHp + " -> " + enemyFlagshipHp);/*RemoveLogging:skip*/
 							// If new HP lesser than old, should update it for Last Kill
 							if(enemyFlagshipHp < maps[desg].baseHp) {
 								maps[desg].baseHp = enemyFlagshipHp;
@@ -1132,7 +1132,7 @@ Used by SortieManager
 							case 3: // Equip
 							break;
 							default:
-								console.info("Unknown item type", eventItem);
+								console.info("Unknown item type", eventItem);/*RemoveLogging:skip*/
 							break;
 						}
 					});
@@ -1196,13 +1196,8 @@ Used by SortieManager
 					if(!!checkSunk) {
 						var rtv = PlayerManager.fleets[fleetDesg[fleetNum]].ships[rosterPos];
 						if(KC3ShipManager.get(rtv).didFlee) return 0;
-						
-						console.info("このクソ提督、深海に%c%s%cが沈んだ (ID:%d)",
-							'color:red,font-weight:bold',
-							KC3ShipManager.get(rtv).master().api_name,
-							'color:initial,font-weight:initial',
-							rtv
-						);
+						var name = KC3ShipManager.get(rtv).master().api_name;
+						console.info("このクソ提督、深海に" + name + "を沈みさせやがったな", rtv);/*RemoveLogging:skip*/
 						return rtv;
 					} else {
 						return 0;
@@ -1259,7 +1254,7 @@ Used by SortieManager
 				this.saveEnemyEncounterInfo(null, name);
 			}
 		} catch (e) {
-			console.error("Caught an exception:", e.stack, "\nProceeds safely");/*RemoveLogging:skip*/
+			console.warn("Caught an exception:", e, "\nProceeds safely");/*RemoveLogging:skip*/
 		} finally {
 			this.saveBattleOnDB(resultData);
 		}
@@ -1273,7 +1268,7 @@ Used by SortieManager
 				this.rating = "SS";
 			this.mvps = [resultData.api_mvp || 0];
 		} catch (e) {
-			console.error("Captured an exception:", e.stack, "\nProceeds safely");/*RemoveLogging:skip*/
+			console.warn("Captured an exception:", e, "\nProceeds safely");/*RemoveLogging:skip*/
 		} finally {
 			this.savePvPOnDB(resultData);
 		}

@@ -184,7 +184,8 @@
 				var visibleHeight = $(window).height() - self.gameZoomScale * $("#area-game").offset().top;
 				$("body").css("min-height", visibleHeight);
 				// Prevent scrollbar shown if computed height not accurate but larger than game player
-				$("body").css("overflow-y", visibleHeight > self.gameZoomScale * 480 ? "hidden" : "auto");
+				$("body").css("overflow-y", !$("#alert").is(":visible")
+					&& visibleHeight > self.gameZoomScale * 480 ? "hidden" : "auto");
 			};
 			// Background
 			if(!config.api_bg_image){

@@ -837,10 +837,8 @@ KC3改 Ship Object
 					dat[index][key] = 0;
 			});
 
-
 			console.log("Ship " + self.rosterId + " consumed", shipConsumption, sid,
-				[iterant,lastN].join('/'), rsc.map(function(x){return -x;}), dat[index]
-			);
+				[iterant, lastN].join('/'), rsc.map(x => -x), dat[index]);
 
 			// Store supplied resource count to database by updating the source
 			KC3Database.Naverall({

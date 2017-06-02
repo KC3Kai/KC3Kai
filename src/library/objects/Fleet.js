@@ -76,7 +76,7 @@ Contains summary information about a fleet and its 6 ships
 										});
 								});
 						} catch (e) {
-							console.error("Updating fleet unexpected error", e);/*RemoveLogging:skip*/
+							console.error("Updating fleet unexpected error", e);
 							return false;
 						}
 					}

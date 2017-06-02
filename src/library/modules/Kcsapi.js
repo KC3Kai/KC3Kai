@@ -49,7 +49,7 @@ Previously known as "Reactor"
 					mp.stat.onError.push(si);
 				} else {
 					// binary bomb quotes ^~^)v
-					console.info("You're lucky that the catbomb is not on the event map!");
+					console.info("You're lucky that the catbomb is not on the event map!");/*RemoveLogging:skip*/
 				}
 				localStorage.setObject('maps',ma);
 			}
@@ -1501,8 +1501,7 @@ Previously known as "Reactor"
 								}) : rscdat;
 							});
 							delete kan.pendingConsumption.costnull;
-							console.log.apply(console, ["Consumption for Exped ship", rosterId]
-								.concat(key && kan.pendingConsumption[key]));
+							console.log("Consumption for Exped ship", rosterId, key, kan.pendingConsumption[key]);
 							KC3ShipManager.save();
 						} else {
 							console.log("Ignoring signal for", rosterId, "detected");
@@ -1817,7 +1816,7 @@ Previously known as "Reactor"
 							break;
 						default:
 							localMap.kind   = "gauge-hp";
-							console.info("Reported new API gauge type", eventData.api_gauge_type);
+							console.info("Reported new API gauge type", eventData.api_gauge_type);/*RemoveLogging:skip*/
 					}
 					
 					if(typeof oldMap !== "undefined"){

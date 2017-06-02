@@ -26,7 +26,7 @@ Executes processing and relies on KC3Network for the triggers
 	KC3Request.prototype.validateHeaders = function(){
 		// If response header statusCode is not 200, means non-in-game error
 		if(this.statusCode != 200){
-			console.error("Response invalid", this.statusCode, this.response);/*RemoveLogging:skip*/
+			console.warn("Response invalid:", this.statusCode, this.response);
 			KC3Network.trigger("CatBomb", {
 				title: KC3Meta.term("CatBombServerCommErrorTitle"),
 				message: KC3Meta.term("CatBombServerCommErrorMsg").format([this.call])
@@ -74,7 +74,7 @@ Executes processing and relies on KC3Network for the triggers
 	KC3Request.prototype.validateData = function(){
 		// If gameStatus is not 1. Game API returns 1 if complete success
 		if(this.gameStatus != 1){
-			console.error("Game Status error", this.gameStatus, this.response);/*RemoveLogging:skip*/
+			console.warn("Game Status Error:", this.gameStatus, this.response);
 			
 			// Error 201
 			if (parseInt(this.gameStatus, 10) === 201) {
@@ -150,11 +150,7 @@ Executes processing and relies on KC3Network for the triggers
 		if(typeof Kcsapi[this.call] != "undefined"){
 			// check clock and clear quests at 5AM JST
 			var serverTime = Date.safeToUtcTime( this.headers.Date );
-			try {
-				KC3QuestManager.checkAndResetQuests(serverTime);
-			} catch (e) {
-				console.error("Reset Quests error", e.stack);/*RemoveLogging:skip*/
-			}
+			KC3QuestManager.checkAndResetQuests(serverTime);
 			
 			// Execute by passing data
 			try {
@@ -178,7 +174,7 @@ Executes processing and relies on KC3Network for the triggers
 					kc3Manifest: chrome.runtime.getManifest()
 				});
 				// Keep stack logging in extension's console
-				console.error("Game API call error", e, e.stack);/*RemoveLogging:skip*/
+				console.error("Game API Call Error:", e);/*RemoveLogging:skip*/
 			}
 		}
 	};

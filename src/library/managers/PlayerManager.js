@@ -195,7 +195,7 @@ Does not include Ships and Gears which are managed by other Managers
 						dockingShips[key] = v.completeTime;
 					});
 				} catch (err) {
-					console.error("Error while processing cached docking ship", err.stack);
+					console.error("Error while processing cached docking ship", err);
 				}
 			}
 			return dockingShips;

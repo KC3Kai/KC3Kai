@@ -168,7 +168,7 @@ http://swaytwig.com/opendb/
 				}
 				return false;
 			} catch (e) {
-				console.warn("Open DB Submission exception:", e, e.stack);/*RemoveLogging:skip*/
+				console.warn("Open DB Submission Error", e);/*RemoveLogging:skip*/
 				// Pop up APIError on unexpected runtime expcetion
 				var reportParams = $.extend({}, requestObj.params);
 				delete reportParams.api_token;

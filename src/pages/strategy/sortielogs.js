@@ -738,7 +738,7 @@
 							throw e;
 						}
 					}
-				}catch(e){ console.error("Sortie battle rendering exception", e);/*RemoveLogging:skip*/ }
+				}catch(e){ console.error("Sortie battle rendering exception", e); }
 			});
 			
 			$(".tab_"+tabCode+" .sortie_list").createChildrenTooltips();

@@ -377,24 +377,23 @@
 		KC3Translation.execute();
 		KC3QuestSync.init();
 
-		// Live translations
+		// Live translations of Quests, only work for EN
 		if(ConfigManager.checkLiveQuests && ConfigManager.language=="en"){
 			$.ajax({
 				async: true,
 				dataType: "JSON",
 				url: "https://raw.githubusercontent.com/KC3Kai/kc3-translations/master/data/"+ConfigManager.language+"/quests.json?v="+(Date.now()),
 				success: function(newQuestTLs){
-					if(JSON.stringify(newQuestTLs) != JSON.stringify(KC3Meta._quests)){
-						console.info("New quests detected, updating quest list from live");
+					if(JSON.stringify(newQuestTLs) !== JSON.stringify(KC3Meta._quests)){
 						var enQuests = JSON.parse($.ajax({
 							url : '../../../../data/lang/data/en/quests.json',
 							async: false
 						}).responseText);
-
 						KC3Meta._quests = $.extend(true, enQuests, newQuestTLs);
-						console.debug(KC3Meta._quests);
+						//console.debug(KC3Meta._quests);
+						console.info("New quests detected, live updated");/*RemoveLogging:skip*/
 					}else{
-						console.info("No new quests...");
+						console.info("Quests is up to date");
 					}
 				}
 			});
@@ -408,8 +407,9 @@
 				dataType: "JSON",
 				url: "https://raw.githubusercontent.com/KC3Kai/KC3Kai/master/src/data/tp_mult.json?v="+(Date.now()),
 				success: function(newTPData){
-					if(JSON.stringify(newTPData) != JSON.stringify(KC3Meta._tpmult)) {
-						$.extend(true,KC3Meta._tpmult,newTPData);
+					if(JSON.stringify(newTPData) !== JSON.stringify(KC3Meta._tpmult)) {
+						$.extend(true, KC3Meta._tpmult, newTPData);
+						console.info("TP value multiplier live updated");/*RemoveLogging:skip*/
 					}
 				}
 			});

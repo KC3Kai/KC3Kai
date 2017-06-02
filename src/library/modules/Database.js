@@ -716,7 +716,7 @@ Uses Dexie.js third-party plugin on the assets directory
 					});
 				return true;
 			} catch (e) {
-				console.error(e.stack);
+				console.warn(e);
 			}
 		},
 		
@@ -854,7 +854,7 @@ Uses Dexie.js third-party plugin on the assets directory
 				.reverse()
 				.toArray()
 				.then (callbackSucc || function(){})
-				.catch(callbackFail || function(e){console.error(e.stack);});
+				.catch(callbackFail || function(e){console.error(e);});
 		},
 		
 	};

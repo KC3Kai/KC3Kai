@@ -80,7 +80,7 @@ Uses KC3Quest objects to play around with
 
 				KC3QuestManager.save();
 			} catch (error) {
-				KC3QuestManager.logError(error);
+				console.error("Reset Quest Error:", error);
 			}
 		},
 
@@ -588,7 +588,7 @@ Uses KC3Quest objects to play around with
 		},
 
 		logError: function (e) {
-			console.error("QuestManager", e, e.stack);/* RemoveLogging:skip */
+			console.error(e);
 		},
 	};
 	

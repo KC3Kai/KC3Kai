@@ -268,7 +268,7 @@
 				}
 				return false;
 			} catch (e) {
-				console.warn("Poi DB Submission exception:", e, e.stack);/*RemoveLogging:skip*/
+				console.warn("Poi DB Submission Error", e);
 				// Pop up APIError on unexpected runtime expcetion
 				var reportParams = $.extend({}, requestObj.params);
 				delete reportParams.api_token;
