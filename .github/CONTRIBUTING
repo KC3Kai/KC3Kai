@@ -1,0 +1,90 @@
+# KC3改 Contributing Guidelines
+
+### Contents
+* Getting Started
+  * Forking
+  * Cloning
+* Codebase
+* Incorporating your changes
+* Testers and Dev builds
+* Translators
+
+----
+## Getting Started
+### Forking
+* 
+* 
+
+### Cloning
+* 
+* 
+
+----
+## Codebase
+
+### Scripting Laguage
+* 
+* 
+
+### 
+
+----
+## Incorporating your changes
+
+### Making Pull Requests
+In a discussion in [this GitHub thread](https://github.com/KC3Kai/KC3Kai/issues/1698), it is now highly recommended to create features and enhancements on branches, and making pull requests to master.
+
+Here are few tips in making pull requests:
+* Include screenshots
+* State what the chages are / affected pages
+* Tag involved or relevant contributors
+* You can optionally make a to-do list if you created a pull request while it is a work in progress, so followers can see progress.
+* Tag the issue thread the update is fixing
+   * Optionally mention issue threads in your pull request description, and if done in correct format, the issue will be closed automatically when your changes are merged.
+
+The following example, when included in a pull request description will automatically close the specified thread, in this case [issue 1707](https://github.com/KC3Kai/KC3Kai/issues/1707), once the pull request is merged.
+```
+Fix #1707 Add file for contributing guidelines
+```
+Learn more about [comment tagging here](https://help.github.com/articles/closing-issues-via-commit-messages/). Although it says "_via commit messages_", this also works when included in pull request descriptions.
+
+### Approval of Pull Requests
+The point of review process is not just for spotting technical or coding errors but also for keeping an eye on readability - bringing in ES6 features means more black-magic can happen so we need more eyes to make sure the code is maintainable by other developers.
+
+One importance is that we also get peers to give comments, ideas or suggestions - not just in terms of coding, but user experience, interface, gameplay accuracy and the like. While you may be confident in your coding, but we are not the best players out there, and also not the ones most invested in time playing the game, so minds other than your own may shed light in concepts or ways of implementation your previously might not have thought of.
+
+* Approval of pull requests can be done be any member/collaborator of the KC3Kai GitHub organization
+  * However, it is recommended that multiple contributors approve before actually merging, though some features may not be of interest to many, you can opt to merge it if reviewers are scarce.
+* If you are not (yet) a member/collaborator in the KC3Kai GitHub organization, and would like to approve or comment on pull requests, you may do so as well, just leave you comment in the pull request thread, and join the discussion.
+  * Don't worry your input is just as good as ours
+* Optionally make use or the "Review" mechanism on GitHub, i.e. reviewer list on the right side pane. Requested reviewers will be notified and can "approve" or comment on the pull request, which adds markings to your pull request (green check mark if approved).
+  * If you don't know anyone who is relevant that may review your work, don't worry this step is optional and there will be contributors checking regularly.
+
+
+### Pushing directly to `master`
+While not entirely recommended to push directly to master, there are exceptions that it is fully acceptable. Some of which, but not limited to, are:
+* Updating translation repository pointer
+* Bumping version numbers for release (`package.json`, `manifest.json`)
+* Fixing build errors (travis)
+
+If your changes include features, enhancements, it is recommended to make pull requests for it. This means it should be pushed to its own branch.
+
+This apply less on forks, since you can push to your own master and will inevitable make a pull request to upstream. However, we still recommend you do branching even on forks, for your own good as well :)
+
+----
+
+## Testers and Dev builds
+
+### Using the development build
+
+### Bug reports
+
+### New ideas or suggestions
+
+
+### Discussion
+
+
+----
+
+## Translators
