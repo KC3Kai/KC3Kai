@@ -102,7 +102,7 @@
 		});
 		
 		// Add listener to react on config key changed
-		/* Strategy Room not needs, as it can be reload at any time
+		/* Strategy Room not needs it yet, as it can be reloaded at any time
 		window.addEventListener("storage", function({key, timeStamp, url}){
 			if(key === ConfigManager.keyName()) {
 				ConfigManager.load();
