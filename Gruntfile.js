@@ -25,6 +25,7 @@ module.exports = function(grunt) {
 				expand: true,
 				src: [
 					// some tests would load from the following 2 paths:
+					'node_modules/babel-polyfill/dist/polyfill.min.js',
 					'node_modules/qunitjs/**/*',
 					'node_modules/jquery/**/*',
 
