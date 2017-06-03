@@ -1,0 +1,17 @@
+{
+	"id" : "quest-track",
+	"name" : "Quest Tracking",
+	"description" : "Automated quest progress counting system",
+	"hooks" : {
+		"devtools": [
+			"devtools/QuestTrack.js"
+			"devtools/QuestTrackPanel.js"
+		],
+		"strategy": [
+			"strategy/QuestTrackRoom.js"
+		],
+		"game": [
+			"game/QuestTrackScreen.js"
+		]
+	}
+}

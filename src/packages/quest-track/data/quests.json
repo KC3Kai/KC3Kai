@@ -1,0 +1,998 @@
+{
+    "101": {
+        "code": "A1",
+        "unlock": [ 102 ]
+    },
+    "102": {
+        "code": "A2",
+        "unlock": [ 103 ]
+    },
+    "103": {
+        "code": "A3",
+        "unlock": [ 104, 105 ]
+    },
+    "104": {
+        "code": "A4",
+        "unlock": [ 115, 116 ]
+    },
+    "105": {
+        "code": "A5",
+        "unlock": [ 106, 108, 254, 401 ]
+    },
+    "106": {
+        "code": "A7",
+        "unlock": [ 215 ]
+    },
+    "107": {
+        "code": "A12",
+        "unlock": [ 217 ]
+    },
+    "108": {
+        "code": "A8",
+        "unlock": [ 111 ]
+    },
+    "109": {
+        "code": "A14",
+        "unlock": [ 110, 704 ]
+    },
+    "110": {
+        "code": "A15",
+        "unlock": [ 118 ]
+    },
+    "111": {
+        "code": "A17",
+        "unlock": [ 112 ]
+    },
+    "112": {
+        "code": "A18",
+        "unlock": [ 153 ]
+    },
+    "113": {
+        "code": "A13",
+        "unlock": [ 114, 119 ]
+    },
+    "114": {
+        "code": "A19",
+        "unlock": [ 625 ]
+    },
+    "115": {
+        "code": "A6",
+        "unlock": [ 215 ]
+    },
+    "116": {
+        "code": "A9",
+        "unlock": [ 120, 146 ]
+    },
+    "117": {
+        "code": "A11",
+        "unlock": [ 217 ]
+    },
+    "118": {
+        "code": "A16",
+        "unlock": [ 611 ]
+    },
+    "119": {
+        "code": "A20",
+        "unlock": [ 121, 219 ]
+    },
+    "120": {
+        "code": "A10",
+        "unlock": [ 128, 222, 274 ]
+    },
+    "121": {
+        "code": "A21",
+        "unlock": [ 122, 124, 125, 127, 129, 223 ]
+    },
+    "122": {
+        "code": "A22",
+        "unlock": [ 123, 126, 224 ]
+    },
+    "123": {
+        "code": "A23",
+        "unlock": [ 143, 148, 161, 225 ]
+    },
+    "124": {
+        "code": "A24",
+        "unlock": [ 227 ]
+    },
+    "125": {
+        "code": "A25",
+        "unlock": [ 131, 231 ]
+    },
+    "126": {
+        "code": "A26",
+        "unlock": [ 232 ]
+    },
+    "127": {
+        "code": "A27",
+        "unlock": [ 139, 405 ]
+    },
+    "128": {
+        "code": "A28",
+        "unlock": [ 138, 233 ]
+    },
+    "129": {
+        "code": "A29",
+        "unlock": [ 130 ]
+    },
+    "130": {
+        "code": "A30",
+        "unlock": [ 410 ]
+    },
+    "131": {
+        "code": "A31",
+        "unlock": [ 133, 239 ]
+    },
+    "132": {
+        "code": "A32",
+        "unlock": [ 144, 149, 240 ]
+    },
+    "133": {
+        "code": "A33",
+        "unlock": [ 136, 244 ]
+    },
+    "134": {
+        "code": "WA01",
+        "unlock": [ 245 ]
+    },
+    "135": {
+        "code": "WA02",
+        "unlock": [ 246 ]
+    },
+    "136": {
+        "code": "A34",
+        "unlock": [ 152, 248 ]
+    },
+    "137": {
+        "code": "A35",
+        "unlock": [ 140, 147, 249, 418 ]
+    },
+    "138": {
+        "code": "A36",
+        "unlock": [ 250 ]
+    },
+    "139": {
+        "code": "A37",
+        "unlock": [ 414 ]
+    },
+    "140": {
+        "code": "A38"
+    },
+    "141": {
+        "code": "A39",
+        "unlock": [ 251, 627 ]
+    },
+    "142": {
+        "code": "A40"
+    },
+    "143": {
+        "code": "A41",
+        "unlock": [ 253 ]
+    },
+    "144": {
+        "code": "A42",
+        "unlock": [ 258 ]
+    },
+    "145": {
+        "code": "A43",
+        "unlock": [ 259 ]
+    },
+    "146": {
+        "code": "A45",
+        "unlock": [ 261, 618 ]
+    },
+    "147": {
+        "code": "A44",
+        "unlock": [ 262 ]
+    },
+    "148": {
+        "code": "A46",
+        "unlock": [ 266 ]
+    },
+    "149": {
+        "code": "A47",
+        "unlock": [ 267, 268 ]
+    },
+    "150": {
+        "code": "A48",
+        "unlock": [ 269 ]
+    },
+    "151": {
+        "code": "A49",
+        "unlock": [ 270 ]
+    },
+    "152": {
+        "code": "A50",
+        "unlock": [ 162, 307 ]
+    },
+    "153": {
+        "code": "A51",
+        "unlock": [ 275 ]
+    },
+    "154": {
+        "code": "A52",
+        "unlock": [ 276 ]
+    },
+    "155": {
+        "code": "A53",
+        "unlock": [ 277 ]
+    },
+    "156": {
+        "code": "A54",
+        "unlock": [ 278 ]
+    },
+    "157": {
+        "code": "A55",
+        "unlock": [ 279 ]
+    },
+    "161": {
+        "code": "A56",
+        "unlock": [ 287 ]
+    },
+    "162": {
+        "code": "A57",
+        "unlock": [ 288 ]
+    },
+    "163": {
+        "code": "A58",
+        "unlock": [ 289 ]
+    },
+    "164": {
+        "code": "A59",
+        "unlock": [ 293, 627 ]
+    },
+    "165": {
+        "code": "A60",
+        "unlock": [ 166 ]
+    },
+    "166": {
+        "code": "A61",
+        "unlock": [ 294 ]
+    },
+    "167": {
+        "code": "A62",
+        "unlock": [ 633 ]
+    },
+    "168": {
+        "code": "A63",
+        "unlock": [ 295 ]
+    },
+    "169": {
+        "code": "A64",
+        "unlock": [ 296 ]
+    },
+    "170": {
+        "code": "A65",
+        "unlock": [ 297 ]
+    },
+    "171": {
+        "code": "A66",
+        "unlock": [ 807 ]
+    },
+    "172":{
+        "code": "A67",
+        "unlock": [ 808 ]
+    },
+    
+    
+    "202": {
+        "code": "B1"
+    },
+    "203": {
+        "code": "B2",
+        "unlock": [ 501, 502 ]
+    },
+    "204": {
+        "code": "B4",
+        "unlock": [ 201 ]
+    },
+    "205": {
+        "code": "B5",
+        "unlock": [ 206 ]
+    },
+    "206": {
+        "code": "B6",
+        "unlock": [ 207, 255 ]
+    },
+    "207": {
+        "code": "B7",
+        "unlock": [ 208, 416 ]
+    },
+    "208": {
+        "code": "B8",
+        "unlock": [ 209 ]
+    },
+    "209": {
+        "code": "B9"
+    },
+    "215": {
+        "code": "B3",
+        "unlock": [ 117 ]
+    },
+    "217": {
+        "code": "B10"
+    },
+    "219": {
+        "code": "B11"
+    },
+    "222": {
+        "code": "B12"
+    },
+    "223": {
+        "code": "B13"
+    },
+    "224": {
+        "code": "B14",
+        "unlock": [ 147, 148, 155 ]
+    },
+    "225": {
+        "code": "B15"
+    },
+    "227": {
+        "code": "B16",
+        "unlock": [ 152, 154 ]
+    },
+    "231": {
+        "code": "B17"
+    },
+    "232": {
+        "code": "B18"
+    },
+    "233": {
+        "code": "B19",
+        "unlock": [ 263 ]
+    },
+    "239": {
+        "code": "B20",
+        "unlock": [ 132, 264, 412 ]
+    },
+    "240": {
+        "code": "B21",
+        "unlock": [ 265 ]
+    },
+    "244": {
+        "code": "B22"
+    },
+    "245": {
+        "code": "WB01",
+        "unlock": [ 135 ]
+    },
+    "246": {
+        "code": "WB02",
+        "unlock": [ 142 ]
+    },
+    "247": {
+        "code": "B23"
+    },
+    "248": {
+        "code": "B24",
+        "unlock": [ 137, 252 ]
+    },
+    "250": {
+        "code": "B25",
+        "unlock": [ 141, 614, 615 ]
+    },
+    "251": {
+        "code": "B26"
+    },
+    "252": {
+        "code": "B27"
+    },
+    "253": {
+        "code": "B28",
+        "unlock": [ 616 ]
+    },
+    "254": {
+        "code": "B29"
+    },
+    "255": {
+        "code": "B30",
+        "unlock": [ 256 ]
+    },
+    "258": {
+        "code": "B31",
+        "unlock": [ 145 ]
+    },
+    "260": {
+        "code": "B32",
+        "unlock": [ 285 ]
+    },
+    "262": {
+        "code": "B33"
+    },
+    "263": {
+        "code": "B34"
+    },
+    "267": {
+        "code": "B35",
+        "unlock": [ 150 ]
+    },
+    "268": {
+        "code": "B36"
+    },
+    "269": {
+        "code": "B37",
+        "unlock": [ 271 ]
+    },
+    "270": {
+        "code": "B39"
+    },
+    "271": {
+        "code": "B38",
+        "unlock": [ 151 ]
+    },
+    "272": {
+        "code": "B40",
+        "unlock": [ 417 ]
+    },
+    "273": {
+        "code": "B41"
+    },
+    "274": {
+        "code": "B42",
+        "unlock": [ 153, 277 ]
+    },
+    "275": {
+        "code": "B43"
+    },
+    "276": {
+        "code": "B44"
+    },
+    "277": {
+        "code": "B45"
+    },
+    "278": {
+        "code": "B46",
+        "unlock": [ 309 ]
+    },
+    "279": {
+        "code": "B47"
+    },
+    "285": {
+        "code": "B49"
+    },
+    "286": {
+        "code": "B48"
+    },
+    "287": {
+        "code": "B50",
+        "unlock": [ 169, 622, 623, 420 ]
+    },
+    "288": {
+        "code": "B51"
+    },
+    "289": {
+        "code": "B52",
+        "unlock": [ 168 ]
+    },
+    "293": {
+        "code": "B53",
+        "unlock": [ 165 ]
+    },
+    "294": {
+        "code": "B54",
+        "unlock": [ 626 ]
+    },
+    "295": {
+        "code": "B55",
+        "unlock": [ 169 ]
+    },
+    "296": {
+        "code": "B56",
+        "unlock": [ 170 ]
+    },
+    "297": {
+        "code": "B57"
+    },
+    "805": {
+        "code": "B58",
+        "unlock": [ 806 ]
+    },
+    "806": {
+        "code": "B59"
+    },
+    "807": {
+        "code": "B60"
+    },
+    "808": {
+        "code": "B61"
+    },
+    "809": {
+        "code": "B62"
+    },
+    "810": {
+        "code": "B63"
+    },
+    "811x": {
+        "code": "B64"
+    },
+    "812x": {
+        "code": "B65"
+    },
+    "813x": {
+        "code": "B66"
+    },
+    
+    
+    "201": {
+        "code": "Bd1",
+        "unlock": [ 216, 211, 212 ],
+        "tracking": [
+            {
+                "map": null,
+                "need_boss": false,
+                "need_flag": false,
+                "count": 1,
+                "min_rank": "B",
+                "sink_type": false,
+            }
+        ]
+    },
+    "216": {
+        "code": "Bd2",
+        "unlock": [ 172, 210, 218, 214, 213, 311, 810 ],
+        "tracking": [
+            {
+                "map": false,
+                "need_boss": false,
+                "need_flag": true,
+                "count": 1,
+                "min_rank": false,
+                "sink_type": false,
+            }
+        ]
+    },
+    "210": {
+        "code": "Bd3",
+        "tracking": [
+            {
+                "map": false,
+                "need_boss": false,
+                "need_flag": false,
+                "count": 10,
+                "min_rank": "B",
+                "sink_type": false,
+            }
+        ]
+    },
+    "211": {
+        "code": "Bd4",
+        "tracking": [
+            {
+                "map": false,
+                "need_boss": false,
+                "need_flag": false,
+                "count": 3,
+                "min_rank": false,
+                "sink_type": ["CV", "CVL"]
+            }
+        ]
+    },
+    "218": {
+        "code": "Bd5",
+        "unlock": [ 226, 220 ],
+        "tracking": [
+            {
+                "map": false,
+                "need_boss": false,
+                "need_flag": false,
+                "count": 3,
+                "min_rank": false,
+                "sink_type": ["AP"]
+            }
+        ]
+    },
+    "212": {
+        "code": "Bd6",
+        "tracking": [
+            {
+                "map": false,
+                "need_boss": false,
+                "need_flag": false,
+                "count": 5,
+                "min_rank": false,
+                "sink_type": ["AP"]
+            }
+        ]
+    },
+    "226": {
+        "code": "Bd7",
+        "unlock": [ 230 ],
+        "tracking": [
+            {
+                "map": [ [2,1], [2,2], [2,3], [2,4], [2,5], [2,6] ],
+                "need_boss": true,
+                "need_flag": false,
+                "count": 5,
+                "min_rank": "B",
+                "sink_type": false
+            }
+        ]
+    },
+    "230": {
+        "code": "Bd8",
+        "tracking": [
+            {
+                "map": false,
+                "need_boss": false,
+                "need_flag": false,
+                "count": 6,
+                "min_rank": false,
+                "sink_type": ["SS", "SSV"]
+            }
+        ]
+    },
+    
+    
+    "214": {
+        "code": "Bw1",
+        "unlock": [ 221 ],
+        "tracking": [
+            {
+                "map": false,
+                "need_boss": false,
+                "need_flag": false,
+                "count": 36,
+                "min_rank": false,
+                "sink_type": false
+            },
+            {
+                "map": false,
+                "need_boss": true,
+                "need_flag": false,
+                "count": 24,
+                "min_rank": false,
+                "sink_type": false
+            },
+            {
+                "map": false,
+                "need_boss": true,
+                "need_flag": false,
+                "count": 12,
+                "min_rank": "B",
+                "sink_type": false
+            },
+            {
+                "map": false,
+                "need_boss": false,
+                "need_flag": false,
+                "count": 6,
+                "min_rank": "S",
+                "sink_type": false
+            }
+        ]
+    },
+    "220": {
+        "code": "Bw2",
+        "unlock": [ 228 ],
+        "tracking": [ [0,20] ]
+    },
+    "213": {
+        "code": "Bw3",
+        "tracking": [ [0,20] ]
+    },
+    "221": {
+        "code": "Bw4",
+        "unlock": [ 261, 257, 264 ],
+        "tracking": [ [0,50] ]
+    },
+    "228": {
+        "code": "Bw5",
+        "unlock": [ 229, 241, 613 ],
+        "tracking": [ [0,15] ]
+    },
+    "229": {
+        "code": "Bw6",
+        "unlock": [ 242 ],
+        "tracking": [ [0,12] ]
+    },
+    "241": {
+        "code": "Bw7",
+        "tracking": [ [0,5] ]
+    },
+    "242": {
+        "code": "Bw8",
+        "unlock": [ 243 ],
+        "tracking": [ [0,1] ]
+    },
+    "243": {
+        "code": "Bw9",
+        "unlock": [ 809 ],
+        "tracking": [ [0,2] ]
+    },
+    "261": {
+        "code": "Bw10",
+        "tracking": [ [0,3] ]
+    },
+    
+    "249": {
+        "code": "Bm1",
+        "unlock": [ 265 ]
+    },
+    "256": {
+        "code": "Bm2",
+        "tracking": [ [0,3] ]
+    },
+    "257": {
+        "code": "Bm3"
+    },
+    "259": {
+        "code": "Bm4"
+    },
+    "265": {
+        "code": "Bm5",
+        "unlock": [ 628 ],
+        "tracking": [ [0,10] ]
+    },
+    "264": {
+        "code": "Bm6",
+        "unlock": [ 266, 626 ]
+    },
+    "266": {
+        "code": "Bm7"
+    },
+    
+    
+    "301": {
+        "code": "C1"
+    },
+    "303": {
+        "code": "C2",
+        "unlock": [ 304, 302 ],
+        "tracking": [ [0,3] ]
+    },
+    "304": {
+        "code": "C3",
+        "tracking": [ [0,5] ]
+    },
+    "302": {
+        "code": "C4",
+        "tracking": [ [0,20] ]
+    },
+    "306": {
+        "code": "WC01",
+        "unlock": [ 134 ]
+    },
+    "307": {
+        "code": "C5",
+        "unlock": [ 273 ]
+    },
+    "308": {
+        "code": "C6",
+        "unlock": [ 419 ]
+    },
+    "309": {
+        "code": "C7",
+        "unlock": [ 157 ]
+    },
+    "311": {
+        "code": "C8",
+        "tracking": [ [0,7] ]
+    },
+    
+    
+    "401": {
+        "code": "D1"
+    },
+    "402": {
+        "code": "D2",
+        "unlock": [ 403 ],
+        "tracking": [ [0,3] ]
+    },
+    "403": {
+        "code": "D3",
+        "tracking": [ [0,10] ]
+    },
+    "404": {
+        "code": "D4",
+        "tracking": [ [0,30] ]
+    },
+    "405": {
+        "code": "D5",
+        "unlock": [ 406 ]
+    },
+    "406": {
+        "code": "D6",
+        "unlock": [ 408 ]
+    },
+    "408": {
+        "code": "D7",
+        "unlock": [ 409 ]
+    },
+    "409": {
+        "code": "D8"
+    },
+    "410": {
+        "code": "D9",
+        "unlock": [ 411, 420 ],
+        "tracking": [ [0,1] ]
+    },
+    "412": {
+        "code": "D10",
+        "unlock": [ 247, 413 ]
+    },
+    "411": {
+        "code": "D11",
+        "tracking": [ [0,6] ]
+    },
+    "413": {
+        "code": "D12"
+    },
+    "414": {
+        "code": "D13",
+        "unlock": [ 415 ]
+    },
+    "415": {
+        "code": "D14",
+        "unlock": [ 272 ]
+    },
+    "416": {
+        "code": "D15"
+    },
+    "417": {
+        "code": "D16",
+        "unlock": [ 308 ]
+    },
+    "418": {
+        "code": "D17"
+    },
+    "419": {
+        "code": "D18"
+    },
+    "420": {
+        "code": "D19",
+        "unlock": [ 624 ]
+    },
+    
+    
+    "501": {
+        "code": "E1"
+    },
+    "502": {
+        "code": "E2"
+    },
+    "503": {
+        "code": "E3",
+        "unlock": [ 504 ],
+        "tracking": [ [0,5] ]
+    },
+    "504": {
+        "code": "E4",
+        "tracking": [ [0,15] ]
+    },
+    
+    
+    "605": {
+        "code": "F5",
+        "unlock": [ 606 ],
+        "tracking": [ [0,1] ]
+    },
+    "606": {
+        "code": "F6",
+        "unlock": [ 607 ],
+        "tracking": [ [0,1] ]
+    },
+    "607": {
+        "code": "F7",
+        "unlock": [ 608 ],
+        "tracking": [ [0,3] ]
+    },
+     "608": {
+        "code": "F8",
+        "unlock": [ 609, 617, 619 ],
+        "tracking": [ [0,3] ]
+    },
+     "609": {
+        "code": "F9",
+        "tracking": [ [0,2] ]
+    },
+    "619": {
+        "code": "F18",
+        "tracking": [ [0,1] ]
+    },
+    
+    "601": {
+        "code": "F1"
+    },
+    "602": {
+        "code": "F2"
+    },
+    "603": {
+        "code": "F3"
+    },
+    "604": {
+        "code": "F4"
+    },
+    "610": {
+        "code": "F10"
+    },
+    "611": {
+        "code": "WF01",
+        "unlock": [ 306 ]
+    },
+    "612": {
+        "code": "F11"
+    },
+    "613": {
+        "code": "F12",
+        "tracking": [ [0,24] ]
+    },
+     "614": {
+        "code": "F13"
+    },
+    "615": {
+        "code": "F14"
+    },
+    "616": {
+        "code": "F15"
+    },
+    "617": {
+        "code": "F16"
+    },
+    "618": {
+        "code": "F17",
+        "unlock": [ 619 ]
+    },
+    "622": {
+        "code": "F19"
+    },
+    "623": {
+        "code": "F20"
+    },
+    "624": {
+        "code": "F21"
+    },
+    "625": {
+        "code": "F22",
+        "unlock": [ 627, 630 ]
+    },
+    "626": {
+        "code": "F23",
+        "unlock": [ 632 ]
+    },
+    "627": {
+        "code": "F24",
+        "unlock": [ 628, 629 ]
+    },
+    "628": {
+        "code": "F25"
+    },
+    "629": {
+        "code": "F26",
+        "unlock": [ 631 ]
+    },
+    "630": {
+        "code": "F28",
+        "unlock": [ 632 ]
+    },
+    "631": {
+        "code": "F27"
+    },
+    "632": {
+        "code": "F29",
+        "unlock": [ 167 ]
+    },
+    "633": {
+        "code": "F30"
+    },
+    "634": {
+        "code": "F31"
+    },
+    
+    
+    "701": {
+        "code": "G1"
+    },
+    "702": {
+        "code": "G2",
+        "unlock": [ 703 ],
+        "tracking": [ [0,2] ]
+    },
+    "703": {
+        "code": "G3",
+        "tracking": [ [0,15] ]
+    },
+    "704": {
+        "code": "G4"
+    }
+}
