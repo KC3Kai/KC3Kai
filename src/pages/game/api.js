@@ -175,7 +175,14 @@ $(document).on("ready", function(){
 			.css('width', "40%");
 	}
 	
-	// untranslated quest copiable text form
+	// Listen ConfigManager changed
+	window.addEventListener("storage", function({key, timeStamp, url}){
+		if(key === ConfigManager.keyName()) {
+			ConfigManager.load();
+		}
+	});
+	
+	// Untranslated quest copiable text form
 	$(".overlay_quests").on("click", ".no_tl", function(){
 		chrome.tabs.create({
 			url: "https://translate.google.com/#ja/"+ConfigManager.language+"/"
@@ -238,7 +245,6 @@ $(document).on("ready", function(){
 	
 	// Exit confirmation
 	window.onbeforeunload = function(){
-		ConfigManager.loadIfNecessary();
 		// added waiting condition should be ignored
 		if(
 			ConfigManager.api_askExit==1 &&

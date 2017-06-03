@@ -101,6 +101,16 @@
 			$(this).empty().hide();
 		});
 		
+		// Add listener to react on config key changed
+		/* Strategy Room not needs, as it can be reload at any time
+		window.addEventListener("storage", function({key, timeStamp, url}){
+			if(key === ConfigManager.keyName()) {
+				ConfigManager.load();
+				console.debug("Reload ConfigManager caused by", (url || "").match(/\/\/[^\/]+\/([^\?]+)/)[1]);
+			}
+		});
+		*/
+		
 		// Add listener to react on URL hash changed
 		window.addEventListener('popstate', KC3StrategyTabs.onpopstate);
 		

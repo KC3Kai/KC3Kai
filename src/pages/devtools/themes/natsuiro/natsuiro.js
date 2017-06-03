@@ -455,6 +455,14 @@
 			$("head").append(customCSS);
 		}
 
+		// Listen config key changed
+		window.addEventListener("storage", function({key, timeStamp, url}){
+			if(key === ConfigManager.keyName()) {
+				ConfigManager.load();
+				console.debug("Reload ConfigManager caused by", (url || "").match(/\/\/[^\/]+\/([^\?]+)/)[1]);
+			}
+		});
+
 		// Disable Tab key to prevent it scrolling any window
 		$(document).on("keydown", function(e){
 			if(e.which === 9) {
@@ -858,7 +866,6 @@
 		CatBomb: function(data){
 			$("#catBomb").hide();
 			
-			ConfigManager.loadIfNecessary();
 			if (!ConfigManager.showCatBombs) return false;
 			
 			$("#catBomb .title").html( data.title );
@@ -871,7 +878,6 @@
 		APIError: function(data){
 			$("#catBomb").hide();
 			
-			ConfigManager.loadIfNecessary();
 			if (!ConfigManager.showApiError
 				|| (!ConfigManager.repeatApiError
 					&& !!lastApiError && lastApiError.stack === data.stack
@@ -906,7 +912,6 @@
 		Bomb201: function(data){
 			$("#catBomb").hide();
 			
-			ConfigManager.loadIfNecessary();
 			if (!ConfigManager.showCatBombs) return false;
 			
 			$("#catBomb .title").html( data.title );
@@ -1206,7 +1211,6 @@
 			}
 
 			// TAIHA ALERT CHECK
-			//ConfigManager.loadIfNecessary();
 			// if not PvP and Taiha alert setting is enabled
 			if(ConfigManager.alert_taiha && !KC3SortieManager.isPvP() &&
 				PlayerManager.fleets

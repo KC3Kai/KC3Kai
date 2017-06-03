@@ -121,7 +121,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				if(event) expedNum -= 100;
 				var world = Math.floor((expedNum - 1) / 8) + 1;
 				var n = (expedNum - 1) % 8;
-				return (world === 5 || event) && (isBoss ? n == 1 : n == 0);
+				return (world === 5 || event) && (isBoss ? n === 1 : n === 0);
 			}
 			for(var i = 2; i <= 4; i++)
 				if(PlayerManager.fleets[i-1].active){

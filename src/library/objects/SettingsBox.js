@@ -86,7 +86,7 @@ To be dynamically used on the settings page
 				}
 
 				// Invalid Value Attempt
-				var ERRCODE = isInvalid(self.bound,$(this).val());
+				var ERRCODE = isInvalid(self.bound, $(this).val());
 				if(!!ERRCODE) {
 					var errstr = KC3Meta.term("SettingsErrorOrder");
 					if(ERRCODE === -1) {
@@ -97,8 +97,8 @@ To be dynamically used on the settings page
 							.replace("%CMP",KC3Meta.term("SettingsError" + ((ERRCODE & 2) == 2 ? "Above" :  "Below")))
 							.replace("%VAL",self.bound[((ERRCODE & 4) == 4 ? "" : "length_") + ((ERRCODE & 2) == 2 ? "max" : "min")]);
 					}
-					console.log(errstr);
-					elementControl($(this).parent().siblings(".note"),'red',errstr);
+					console.log("Validation failed:", $(this).val(), errstr, self.bound);
+					elementControl($(this).parent().siblings(".note"), 'red', errstr);
 					$(this).val(ConfigManager[self.config]);
 					return false;
 				}
@@ -170,7 +170,7 @@ To be dynamically used on the settings page
 		}
 
 		$("."+choiceClass, this.element).on("click", function(){
-			console.debug(this, arguments);
+			//console.debug(this, arguments);
 			$("."+$(this).data("class")).removeClass("active");
 			$(this).addClass("active");
 			ConfigManager.loadIfNecessary();
@@ -292,7 +292,7 @@ To be dynamically used on the settings page
 		// lsb-2 : value check if set, length check if not
 		// having all bit is set means invalid value
 		// otherwise, having all bit is unset means valid value
-		console.debug(bound);
+		//console.debug(bound);
 		var isNumber = function(str){
 			return !(isNaN(str) || str === "" || str === null || str === false);
 		};

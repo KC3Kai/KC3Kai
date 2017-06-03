@@ -373,7 +373,7 @@
 				// Selected specifc map
 				}else{
 					KC3Database.count_map(this.selectedWorld, this.selectedMap, function(countSorties){
-						console.log("Count of Map", self.selectedWorld, self.selectedMap, countSorties);
+						console.debug("Count of Map", self.selectedWorld, self.selectedMap, countSorties);
 						if(expectedEnterCount === self.enterCount)
 							self.showPagination(countSorties);
 					});
