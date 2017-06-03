@@ -117,16 +117,13 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		
 		getSupportingFleet :function(bossSupport){
 			function supportFormula(expedNum, isBoss){
-				//console.debug("Checking support fleets", expedNum, "isboss", isBoss);
-				var e,w,n;
-				e = (expedNum > 100);
-				if(e) expedNum -= 100;
-				w = ((expedNum-1) / 8)+1;
-				n = (expedNum-1) % 8;
-				return (w == 5 || e) && (n == isBoss);
+				var event = (expedNum > 100);
+				if(event) expedNum -= 100;
+				var world = Math.floor((expedNum - 1) / 8) + 1;
+				var n = (expedNum - 1) % 8;
+				return (world === 5 || event) && (isBoss ? n == 1 : n == 0);
 			}
-			
-			for(var i=2;i<=4;i++)
+			for(var i = 2; i <= 4; i++)
 				if(PlayerManager.fleets[i-1].active){
 					var fleetExpedition = PlayerManager.fleets[i-1].mission[1];
 					if(supportFormula(fleetExpedition, bossSupport)){
