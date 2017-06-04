@@ -466,7 +466,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		// Check if message is intended for this script
 		if( (request.identifier || false) == "kc3_service"){
 			// Log message contents and sender for debugging
-			console.log(request.action, { "Request": request, "Sender": sender });
+			console.debug(request.action, { "Request": request, "Sender": sender });
 			
 			// Check requested action is supported
 			if(typeof window.KC3Service[ request.action ] != "undefined"){
