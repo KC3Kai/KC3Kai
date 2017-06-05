@@ -116,10 +116,18 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			this.focusedFleet = (PlayerManager.combinedFleet && this.fleetSent === 1) ? [0,1] : [this.fleetSent-1];
 			// remember index(es) of sent fleet(s) to exped support
 			this.supportFleet = [];
-			var support1 = this.getSupportingFleet(false),
-				support2 = this.getSupportingFleet(true);
-			if(support1) this.supportFleet.push(support1 - 1);
-			if(support2) this.supportFleet.push(support2 - 1);
+			if(!this.isPvP()){
+				var support1 = this.getSupportingFleet(false),
+					support2 = this.getSupportingFleet(true);
+				if(support1 > 0){
+					this.supportFleet.push(support1 - 1);
+					console.assert(this.focusedFleet.indexOf(support1 - 1) < 0, "focused fleet should not include pre-boss support");
+				}
+				if(support2 > 0){
+					this.supportFleet.push(support2 - 1);
+					console.assert(this.focusedFleet.indexOf(support2 - 1) < 0, "focused fleet should not include boss support");
+				}
+			}
 			PlayerManager.hq.save();
 		},
 		
@@ -438,7 +446,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			) : ("sortie" + this.onSortie);
 		},
 		
-		endSortie :function(){
+		endSortie :function(portApiData){
 			var sentFleet = this.fleetSent,
 				self = this,
 				cons = {};
@@ -527,7 +535,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			this.hqExpGained = 0;
 			this.nodes = [];
 			this.boss = { info: false };
-			if(PlayerManager.combinedFleet && this.fleetSent === 1){
+			if(PlayerManager.combinedFleet && sentFleet === 1){
 				this.cleanMvpShips(PlayerManager.fleets[0].ships);
 				this.cleanMvpShips(PlayerManager.fleets[1].ships);
 			} else {
@@ -548,6 +556,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			KC3ShipManager.pendingShipNum = 0;
 			KC3GearManager.pendingGearNum = 0;
 			this.onSortie = 0; // clear sortie ID last
+			this.onPvP = false;
 			this.onCat = false;
 			this.sortieTime = 0;
 			this.save();

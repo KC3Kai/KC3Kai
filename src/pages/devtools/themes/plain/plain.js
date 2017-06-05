@@ -586,7 +586,6 @@
 			}else{
 				overrideFocus = false;
 			}
-			KC3SortieManager.onPvP = false;
 		},
 		
 		CatBomb: function(data){
@@ -1547,9 +1546,6 @@
 			$(".module.activity .map_world").text("PvP");
 			
 			// Process PvP Battle
-			KC3SortieManager.fleetSent = data.fleetSent;
-			KC3SortieManager.onPvP = true;
-			
 			var thisPvP;
 			KC3SortieManager.nodes.push(thisPvP = (new KC3Node()).defineAsBattle());
 			thisPvP.isPvP = true;
@@ -1695,7 +1691,6 @@
 		},
 		
 		PvPEnd: function(data){
-			KC3SortieManager.onPvP = false;
 			var thisPvP = KC3SortieManager.currentNode();
 			
 			$(".module.activity .battle_rating img")
