@@ -230,7 +230,16 @@ Uses Dexie.js third-party plugin on the assets directory
 							console.log("Database v75", t);
 						},
 						vr: 75,
-					}
+					},
+					{
+						ch: {
+							logs: "++id,type,timestamp,context",
+						},
+						up: function (t){
+							console.log("Databse v76", t);
+						},
+						vr: 76,
+					},
 					/*
 					Database versions are only integers, no decimals.
 					7.2 was detected as 72 by chrome, and thus specifying 8 is actually lower version
@@ -263,7 +272,14 @@ Uses Dexie.js third-party plugin on the assets directory
 					dbVer.upgrade(dbCurr.up);
 				}
 			});
-			this.con.open();
+			return this.con.open();
+		},
+
+		loadIfNecessary :function() {
+			if (!(this.con.isOpen && this.con.isOpen())) {
+				return this.init();
+			}
+			return Promise.resolve();
 		},
 		
 		clear :function(callback){
@@ -392,6 +408,27 @@ Uses Dexie.js third-party plugin on the assets directory
 		PvP :function(data, callback){
 			data.hq = this.index;
 			this.con.pvp.add(data).then(callback);
+		},
+
+		Log :function (data, { expireAt }){
+			return KC3Database.deleteExpiredLogs(expireAt)
+				.then(() => KC3Database.addLog(data));
+		},
+
+		deleteExpiredLogs :function(expireAt){
+			const promises = Object.keys(expireAt).map((logType) => {
+				const expireTime = expireAt[logType];
+				return this.con.logs
+					.where('timestamp')
+					.belowOrEqual(expireTime)
+					.and(({ type }) => type === logType)
+					.delete();
+			});
+			return Dexie.Promise.all(promises);
+		},
+
+		addLog :function(data){
+			return this.con.logs.add(data);
 		},
 		
 		/* [GET] Retrive logs from Local DB
@@ -855,6 +892,32 @@ Uses Dexie.js third-party plugin on the assets directory
 				.toArray()
 				.then (callbackSucc || function(){})
 				.catch(callbackFail || function(e){console.error(e);});
+		},
+
+		count_log_entries :function (filters) {
+			return filters.reduce((tableOrCollection, filter, index) => {
+				if (index === 0) {
+					// we have a Table
+					return tableOrCollection.filter(filter);
+				}
+				// otherwise we have a Collection
+				return tableOrCollection.and(filter);
+			}, this.con.logs).count();
+		},
+
+		get_log_entries :function ({ pageNumber, itemsPerPage, filters }) {
+			const collection = this.con.logs.orderBy('timestamp').reverse();
+
+			const filteredCollection = filters.reduce((result, filter) => result.and(filter), collection);
+
+			return filteredCollection
+				.offset((pageNumber - 1) * itemsPerPage)
+				.limit(itemsPerPage)
+				.toArray();
+		},
+
+		delete_log_entries :function () {
+			return this.con.logs.clear();
 		},
 		
 	};

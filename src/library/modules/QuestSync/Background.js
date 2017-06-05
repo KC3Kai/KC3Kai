@@ -101,7 +101,7 @@
 
   QuestSync.validateSyncData = (remoteData) => {
     if (!remoteData) {
-      console.log('No sync data');
+      console.info('No sync data'); /* RemoveLogging:skip */
       return false;
     }
     if (remoteData.syncStructVersion !== KC3QuestSync.syncStructVersion) {
@@ -110,7 +110,7 @@
 
     // shortcircuit if no changes
     if (remoteData.quests === localStorage.quests) {
-      console.log('No changes to be made');
+      console.info('No changes to be made'); /* RemoveLogging:skip */
       return false;
     }
 

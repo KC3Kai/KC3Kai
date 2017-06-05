@@ -40,5 +40,8 @@
     "test": "grunt test-src && grunt test-unit",
     "build": "grunt build",
     "webstore": "grunt webstore"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.23.0"
   }
 }

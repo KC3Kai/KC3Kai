@@ -196,7 +196,11 @@ Retreives when needed to apply on components
 				pan_custom_css		: "",
 
 				sr_theme			: "legacy",
-				sr_custom_css		: ""
+				sr_custom_css		: "",
+
+				disableConsoleLogHooks: false,
+				hoursToKeepLogs: 1,
+				hoursToKeepErrors: 168,
 			};
 		},
 		
