@@ -58,6 +58,13 @@ Provides access to data on built-in JSON files
 			"6547": 2, // whiteday 2015
 			"1471": 3 // whiteday 2015
 		},
+		specialShipVoices: {
+			// Graf Zeppelin (Kai):
+			//   17:Yasen(2) is replaced with 917. might map to 17, but not for now;
+			//   18 still used at day as random Attack, 918 used at night opening
+			432: {917: 917, 918: 918},
+			353: {917: 917, 918: 918}
+		},
 		
 		abyssKaiShipIds: [
 			1565, 1566, 1567, 1616, 1617, 1618, 1714, 1715, 1734, 1735
@@ -478,6 +485,11 @@ Provides access to data on built-in JSON files
 		Get voice line number by filename
 		*/
 		getVoiceLineByFilename :function(ship_id, filename){
+			// Some ships use special voice line filenames
+			var specialMap = this.specialShipVoices[ship_id];
+			if(specialMap && specialMap[filename]){
+				return specialMap[filename];
+			}
 			var computedDiff = this.getVoiceDiffByFilename(ship_id, filename);
 			var computedIndex = this.voiceDiffs.indexOf(computedDiff);
 			// If computed diff is not in voiceDiffs, return the computedDiff itself so we can lookup quotes via voiceDiff
@@ -489,9 +501,11 @@ Provides access to data on built-in JSON files
 		Getting new filename for ship voices
 		Source: がか (gakada)
 		https://github.com/KC3Kai/KC3Kai/issues/1180#issuecomment-195654746
+		Latest workingDiffs('vcKey') and algorithm can be found at decompiled swf:
+		  Core.swf/common.util.SoundUtil.createFileName
 		*/
 		getFilenameByVoiceLine :function(ship_id, lineNum){
-			return 100000 + 17 * (ship_id + 7) * (this.workingDiffs[lineNum - 1]) % 99173;
+			return lineNum <= 53 ? 100000 + 17 * (ship_id + 7) * (this.workingDiffs[lineNum - 1]) % 99173 : lineNum;
 		},
 		
 		// Subtitle quotes

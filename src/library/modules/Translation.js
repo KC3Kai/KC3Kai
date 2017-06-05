@@ -236,6 +236,8 @@
 			"Sunk" : 22,
 			"Idle" : 29,
 			"Repair" : 6,
+			"Yasen(3)" : 917,
+			"Yasen(4)" : 918,
 
 			"H0000":30, "H0100":31, "H0200":32, "H0300":33,
 			"H0400":34, "H0500":35, "H0600":36, "H0700":37,
@@ -254,7 +256,7 @@
 
 		// numeric voice key to descriptive one
 		voiceNumToDesc: function(k) {
-			return this._idToDesc[k];
+			return this._idToDesc[k] || "";
 		},
 
 		// get available ship voice numbers by checking 
@@ -284,6 +286,10 @@
 
 			if (includeHourlies && this.shipHasHourlyVoices(masterId))
 				sortedVoiceNums = sortedVoiceNums.concat(hourlyNums);
+
+			if (KC3Meta.specialShipVoices[masterId]){
+				sortedVoiceNums = sortedVoiceNums.concat(Object.keys(KC3Meta.specialShipVoices[masterId]));
+			}
 
 			return sortedVoiceNums;
 		},
