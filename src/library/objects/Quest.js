@@ -338,13 +338,13 @@ known IDs see QuestManager
 
 	KC3Quest.prototype.toggleCompletion = function(forceCompleted){
 		if(this.isSelected() || !!forceCompleted){
-			console.info("Force to complete quest:", this.id);
+			console.log("Force to complete quest:", this.id);
 			this.status = 3;
 			// Do not set tracking counter to max,
 			// as quest will be always completed when re-activated
 			KC3QuestManager.save();
 		} else if(this.isCompleted()){
-			console.info("Re-select quest again:", this.id);
+			console.log("Re-select quest again:", this.id);
 			this.status = 2;
 			// Reset counter, but do not touch multi-counter (Bw1 for now)
 			if(Array.isArray(this.tracking) && this.tracking.length === 1){

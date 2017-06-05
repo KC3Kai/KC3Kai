@@ -116,11 +116,6 @@ Saves and loads list to and from localStorage
 			delete this.list["x"+itemId];
 		},
 		
-		// Show JSON string of the list for debugging purposes
-		json: function(){
-			console.log(JSON.stringify(this.list));
-		},
-		
 		// Save item list onto local storage
 		clear: function(){
 			this.list = {};

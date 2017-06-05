@@ -175,8 +175,20 @@
 			// Top Margin from game frame to window
 			$("#area-game").css("margin-top", config.api_margin+"px");
 
+			// Keep background image size fitting to window, see issue #1824
+			var autoFitWindowHeight = function(){
+				// Only suppose for narrow window (such as horizontal panel),
+				// as viewport height will be larger than game player, but computed body height is 0
+				// For wide window, the height may not fit viewport height,
+				// especially when it's smaller than game player, and scrollbar appears
+				var visibleHeight = $(window).height() - self.gameZoomScale * $("#area-game").offset().top;
+				$("body").css("min-height", visibleHeight);
+				// Prevent scrollbar shown if computed height not accurate but larger than game player
+				$("body").css("overflow-y", !$("#alert").is(":visible")
+					&& visibleHeight > self.gameZoomScale * 480 ? "hidden" : "auto");
+			};
 			// Background
-			if(config.api_bg_image === ""){
+			if(!config.api_bg_image){
 				// Solid color
 				$("body").css("background", config.api_bg_color);
 			}else{
@@ -186,20 +198,9 @@
 				$("body").css("background-size", config.api_bg_size);
 				$("body").css("background-position", config.api_bg_position);
 				$("body").css("background-repeat", "no-repeat");
+				autoFitWindowHeight();
+				$(window).resize(autoFitWindowHeight);
 			}
-
-			// Keep background image size fitting to window, see issue #1824
-			var autoFitWindowHeight = function(){
-				$("body").css("min-height",
-					// Only suppose for narrow window (such as horizontal panel),
-					// as viewport height will be larger than game player, but computed body height is 0
-					// For wide window, the height may not fit viewport height,
-					// especially when it's smaller than game player, and scrollbar appears
-					$("body").height() - self.gameZoomScale * $("#area-game").offset().top
-				);
-			};
-			autoFitWindowHeight();
-			$(window).resize(autoFitWindowHeight);
 
 			// User css customizations
 			if(config.dmm_custom_css !== ""){
@@ -514,7 +515,7 @@
 			return function(request, sender, response){
 				if(request.action != "markersOverlay") return true;
 				if(!config.map_markers) { response({success:false}); return true; }
-				console.log('markers', request);
+				//console.debug('Node markers', request);
 
 				var sortieStartDelayMillis = 2800;
 				var markersShowMillis = 5000;

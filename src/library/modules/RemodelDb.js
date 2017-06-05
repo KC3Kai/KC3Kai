@@ -26,14 +26,14 @@
                     this._db = db;
                     console.info("RemodelDb: database updated based on", isRaw ? "Master raw" : "api_start2");
                 } catch (e) {
-                    console.error("RemodelDb:", e.stack);/*RemoveLogging:skip*/
+                    console.error("RemodelDb: updating error", e);
                 }
             } else {
-                console.info("RemodelDb: no update required");
+                console.log("RemodelDb: no update required");
             }
 
             if (! this._db) {
-                console.warn("RemodelDb: database unavailable, need to re-initialize with master data");/*RemoveLogging:skip*/
+                console.info("RemodelDb: database unavailable, need to re-initialize with master data");/*RemoveLogging:skip*/
             }
         },
         // compare master data against _db (could be null)

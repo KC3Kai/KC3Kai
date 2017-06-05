@@ -309,7 +309,7 @@ Used by SortieManager
 	---------------------------------------------*/
 	KC3Node.prototype.engage = function( battleData, fleetSent ){
 		this.battleDay = battleData;
-		//console.log("battleData", battleData);
+		//console.log("Raw battle data", battleData);
 		
 		var enemyships = battleData.api_ship_ke;
 		if(enemyships[0]==-1){ enemyships.splice(0,1); }
@@ -749,7 +749,7 @@ Used by SortieManager
 					if(maps[desg].kind === "gauge-hp") {
 						maps[desg].baseHp = maps[desg].baseHp || enemyFlagshipHp;
 						if(maps[desg].baseHp != enemyFlagshipHp) {
-							console.log("Different boss HP detected:", maps[desg].baseHp + " -> " + enemyFlagshipHp);
+							console.info("Different boss HP detected:", maps[desg].baseHp + " -> " + enemyFlagshipHp);/*RemoveLogging:skip*/
 							// If new HP lesser than old, should update it for Last Kill
 							if(enemyFlagshipHp < maps[desg].baseHp) {
 								maps[desg].baseHp = enemyFlagshipHp;
@@ -764,6 +764,9 @@ Used by SortieManager
 		// Record encoutners only if on sortie
 		if(KC3SortieManager.onSortie > 0) {
 			this.saveEnemyEncounterInfo(this.battleDay);
+			
+			// Don't log at Strategy Room Maps/Events History
+			console.log("Parsed battle node", this);
 		}
 	};
 	
@@ -772,6 +775,7 @@ Used by SortieManager
 		
 		this.battleNight = nightData;
 		this.startNight = !!fleetSent;
+		//console.debug("Raw night battle data", nightData);
 		
 		var enemyships = nightData.api_ship_ke;
 		if(enemyships[0]==-1){ enemyships.splice(0,1); }
@@ -848,7 +852,7 @@ Used by SortieManager
 					if (dameConCode.length < 7) {
 						dameConCode = dameConCode.concat([0,0,0,0,0,0]);
 					}
-					console.log("dameConCode", dameConCode);
+					console.log("Fleet dameConCode", dameConCode);
 					result = DA.analyzeBothCombinedNightBattleJS(dameConCode, nightData); 
 					console.log("Player combined", "enemy combined", result);
 					
@@ -982,8 +986,8 @@ Used by SortieManager
 				}
 			}
 			
-			console.log("enemyHP", this.enemyHP);
-			console.log("enemySunk", this.enemySunk);
+			console.log("Predicted enemyHP", this.enemyHP);
+			console.log("Predicted enemySunk", this.enemySunk);
 			
 			// both single fleet predictable only for now
 			if(ConfigManager.info_btrank &&
@@ -1002,6 +1006,10 @@ Used by SortieManager
 		if(this.startNight && KC3SortieManager.onSortie > 0) {
 			this.saveEnemyEncounterInfo(this.battleNight);
 		}
+		// Don't log at Strategy Room Maps/Events History
+		if(KC3SortieManager.onSortie > 0) {
+			console.log("Parsed night battle node", this);
+		}
 	};
 	
 	KC3Node.prototype.night = function( nightData ){
@@ -1009,10 +1017,11 @@ Used by SortieManager
 	};
 	
 	KC3Node.prototype.results = function( resultData ){
+		//console.debug("Raw battle result data", resultData);
 		try {
 			this.rating = resultData.api_win_rank;
 			this.nodalXP = resultData.api_get_base_exp;
-			console.log("This battle rank", this.rating, "/ Ally fleet no damage", this.allyNoDamage);
+			console.log("Battle rank " + this.rating, "with ally fleet no damage", !!this.allyNoDamage);
 			if(this.allyNoDamage && this.rating === "S")
 				this.rating = "SS";
 			
@@ -1123,7 +1132,7 @@ Used by SortieManager
 							case 3: // Equip
 							break;
 							default:
-								console.log("Unknown type", eventItem);
+								console.info("Unknown item type", eventItem);/*RemoveLogging:skip*/
 							break;
 						}
 					});
@@ -1187,13 +1196,8 @@ Used by SortieManager
 					if(!!checkSunk) {
 						var rtv = PlayerManager.fleets[fleetDesg[fleetNum]].ships[rosterPos];
 						if(KC3ShipManager.get(rtv).didFlee) return 0;
-						
-						console.log("このクソ提督、深海に%c%s%cが沈んだ (ID:%d)",
-							'color:red,font-weight:bold',
-							KC3ShipManager.get(rtv).master().api_name,
-							'color:initial,font-weight:initial',
-							rtv
-						);
+						var name = KC3ShipManager.get(rtv).master().api_name;
+						console.info("このクソ提督、深海に" + name + "を沈みさせやがったな", rtv);/*RemoveLogging:skip*/
 						return rtv;
 					} else {
 						return 0;
@@ -1210,10 +1214,10 @@ Used by SortieManager
 					if (!enemyShip) {
 						// ID starts from 1, -1 represents empty slot
 						if(shipId > 0){
-							console.log("Cannot find enemy", shipId);
+							console.info("Cannot find enemy", shipId);
 						}
 					} else if (!KC3Master.isAbyssalShip(shipId)) {
-						console.log("Enemy ship is not Abyssal", shipId);
+						console.info("Enemy ship is not Abyssal", shipId);
 					} else {
 						switch(enemyShip.api_stype) {
 							case  7:	// 7 = CVL
@@ -1250,7 +1254,7 @@ Used by SortieManager
 				this.saveEnemyEncounterInfo(null, name);
 			}
 		} catch (e) {
-			console.error("Caught an exception:", e.stack, "\nProceeds safely");/*RemoveLogging:skip*/
+			console.warn("Caught an exception:", e, "\nProceeds safely");/*RemoveLogging:skip*/
 		} finally {
 			this.saveBattleOnDB(resultData);
 		}
@@ -1264,7 +1268,7 @@ Used by SortieManager
 				this.rating = "SS";
 			this.mvps = [resultData.api_mvp || 0];
 		} catch (e) {
-			console.error("Captured an exception:", e.stack, "\nProceeds safely");/*RemoveLogging:skip*/
+			console.warn("Captured an exception:", e, "\nProceeds safely");/*RemoveLogging:skip*/
 		} finally {
 			this.savePvPOnDB(resultData);
 		}
@@ -1477,7 +1481,7 @@ Used by SortieManager
 	 */
 	KC3Node.prototype.airBaseRaid = function( battleData ){
 		this.battleDestruction = battleData;
-		console.log("AirBaseRaidBattle", battleData);
+		//console.debug("Raw Air Base Raid data", battleData);
 		this.lostKind = battleData.api_lost_kind;
 		this.eships = battleData.api_ship_ke.slice(1);
 		this.eformation = battleData.api_formation[1];
@@ -1646,8 +1650,7 @@ Used by SortieManager
 	};
 	
 	KC3Node.prototype.savePvPOnDB = function( resultData ){
-		console.log("Saving PvP, fake SortieManager", KC3SortieManager);
-		KC3Database.PvP({
+		var p = {
 			fleet: PlayerManager.fleets[KC3SortieManager.fleetSent-1].sortieJson(),
 			enemy: [], // Unused
 			data: (this.battleDay || {}),
@@ -1656,7 +1659,9 @@ Used by SortieManager
 			baseEXP: this.nodalXP,
 			mvp: this.mvps,
 			time: KC3SortieManager.sortieTime
-		});
+		};
+		console.log("Saving PvP battle", p, "fake SortieManager", KC3SortieManager);
+		KC3Database.PvP(p);
 	};
 	
 })();

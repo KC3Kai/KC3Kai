@@ -8,6 +8,8 @@ Retreives when needed to apply on components
 (function(){
 	"use strict";
 	
+	const CONFIG_KEY_NAME = "config";
+	
 	window.ConfigManager = {
 		
 		// Default values. As a function to not include on JSON string
@@ -194,21 +196,30 @@ Retreives when needed to apply on components
 				pan_custom_css		: "",
 
 				sr_theme			: "legacy",
-				sr_custom_css		: ""
+				sr_custom_css		: "",
+
+				disableConsoleLogHooks: false,
+				hoursToKeepLogs: 1,
+				hoursToKeepErrors: 168,
 			};
 		},
-        
+		
+		keyName : function(){
+			return CONFIG_KEY_NAME;
+		},
+		
 		// Reset value of a specific key to the current default value
-		resetValueOf: function(key) {
+		resetValueOf : function(key){
 			ConfigManager.loadIfNecessary();
 			this[key] = this.defaults()[key];
-			console.log( "reset key", key, " to default:", JSON.stringify(this[key]) );
+			console.log("Reset config key", key, " to default:", JSON.stringify(this[key]) );
 			this.save();
 		},
 		
 		// Reset to default values
 		clear : function(){
 			$.extend(this, this.defaults());
+			console.log("Reset all configs to default");
 			this.save();
 		},
 
@@ -216,7 +227,7 @@ Retreives when needed to apply on components
 		load : function(){
 			var self = this;
 			// Get old config or create dummy if none
-			var oldConfig = JSON.parse(localStorage.config || "{}");
+			var oldConfig = JSON.parse(localStorage[CONFIG_KEY_NAME] || "{}");
 			
 			['salt','wish','lock'].forEach(function(shipListType){
 				var k = [shipListType,'list'].join('_');
@@ -226,7 +237,7 @@ Retreives when needed to apply on components
 			// Check if old config has versioning and if its lower version
 			if( !oldConfig.version || (oldConfig.version < this.defaults().version) ){
 				// Old config is an old version, clear it, set defaults, and save on storage
-				localStorage.removeItem("config");
+				localStorage.removeItem(CONFIG_KEY_NAME);
 				$.extend(this, this.defaults());
 				this.save();
 			}else{
@@ -241,14 +252,14 @@ Retreives when needed to apply on components
 		
 		loadIfNecessary : function(){
 			var currentConfig = JSON.stringify(this);
-			if(currentConfig !== localStorage.config){
+			if(currentConfig !== localStorage[CONFIG_KEY_NAME]){
 				this.load();
 			}
 		},
 		
 		// Save current config onto localStorage
 		save : function(){
-			localStorage.config = JSON.stringify(this);
+			localStorage[CONFIG_KEY_NAME] = JSON.stringify(this);
 		},
 		
 		// Toggle HQ Info Page

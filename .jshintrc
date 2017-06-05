@@ -10,6 +10,7 @@
 		"KC3ShipManager": true,
 		"KC3SortieManager": true,
 		"KC3TimerManager": true,
+		"KC3Log": true,
 		"AntiAir": true,
 		"KC3QuestSync": true,
 		"KC3Dashboard": true,

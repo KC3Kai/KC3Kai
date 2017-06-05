@@ -401,6 +401,17 @@
 						self.saveFile(filename, exportData, "text/csv");
 					});
 			});
+
+			$(".tab_profile .export_json_logs").on("click", () => {
+				KC3Database.con.logs
+					.orderBy('timestamp')
+					.and(({ type }) => type === 'error' || type === 'warn')
+					.toArray()
+					.then((data) => {
+						const filename = self.makeFilename("ErrorLog", "json");
+						self.saveFile(filename, JSON.stringify(data), "text/json");
+					});
+			});
 			
 			
 			// Clear Quick Data
@@ -492,7 +503,7 @@
 							KC3Database.con.navaloverall.where("id").equals(d.id).modify(function(r){r.type="lbas6";});
 						}
 					});
-					console.info("Ledger data of LBAS have been fixed");
+					console.info("Ledger data of LBAS have been fixed");/*RemoveLogging:skip*/
 				});
 				alert("Done 1/2~");
 				
@@ -511,7 +522,7 @@
 							KC3Database.con.useitem.put(rp);
 						}
 					}
-					console.info("Graph data of Consumables have been fixed");
+					console.info("Graph data of Consumables have been fixed");/*RemoveLogging:skip*/
 				});
 				alert("Done 2/2!");
 			});
@@ -525,7 +536,7 @@
 						if(r.id < 1501) { r.id += 1000; }
 						KC3Database.Enemy(r);
 					}
-					console.info("Enemy stats have been fixed");
+					console.info("Enemy stats have been fixed");/*RemoveLogging:skip*/
 					alert("Done 1/3~");
 				});
 				
@@ -543,7 +554,7 @@
 						}
 						KC3Database.Encounter(r, false);
 					}
-					console.info("Encounters have been fixed");
+					console.info("Encounters have been fixed");/*RemoveLogging:skip*/
 					alert("Done 2/3~");
 				});
 				
@@ -555,7 +566,7 @@
 						}
 						return keArr;
 					};
-					var logError = function(e){ console.error(e); };
+					var logError = function(e){ console.error("Database fixing error", e); };
 					try {
 						for(let r of battleList){
 							let day = r.data;
@@ -570,9 +581,9 @@
 								night.api_ship_ke_combined = updateKe(night.api_ship_ke_combined);
 							KC3Database.con.battle.put(r).catch(logError);
 						}
-						console.info("Battle enemies have been fixed");
+						console.info("Battle enemies have been fixed");/*RemoveLogging:skip*/
 					} catch(e) {
-						console.error(e);
+						console.error("Fixing battle enemies error", e);
 					}
 					alert("Done 3/3!");
 				});

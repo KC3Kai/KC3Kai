@@ -249,6 +249,14 @@
 				name: "sortno",
 				reverse: false
 			}]);
+			// To simulate in game behavior, if 1st sorter is stype, and no level found
+			if(this.currentSorters[0].name == "type"
+				&& this.currentSorters.every(si => si.name !== "lv")){
+				mergedSorters.push({
+					name: "lv",
+					reverse: false
+				});
+			}
 			// For duplicated ships, final sorter if roster ID not used
 			if(this.currentSorters.every(si => si.name !== "id")){
 				mergedSorters.push({
@@ -296,7 +304,7 @@
 				as: [this.getDerivedStatNaked("tais", ThisShip.as[0], ThisShip), ThisShip.as[0] ],
 				ev: [this.getDerivedStatNaked("houk", ThisShip.ev[0], ThisShip), ThisShip.ev[0] ],
 				ls: [this.getDerivedStatNaked("saku", ThisShip.ls[0], ThisShip), ThisShip.ls[0] ],
-				lk: ThisShip.lk[0],
+				lk: [ThisShip.lk[0], ThisShip.lk[1], MasterShip.api_luck[0]],
 				sp: ThisShip.speed,
 				slots: ThisShip.slots,
 				exSlot: ThisShip.ex_item,
@@ -552,7 +560,7 @@
 				.map(function(x) { return parseInt(x,10); })
 				.filter(function(x) { return [12,15].indexOf(x)<0; })
 				.sort(function(a,b) { return a-b; });
-			console.assert(stypes[0] === 0);
+			console.assert(stypes[0] === 0, "stype array should start with element 0");
 			// remove initial "0", which is invalid
 			stypes.shift();
 			var stypeDefValue = [];
@@ -759,7 +767,7 @@
 			define("ls", "LoS",
 				   function(x) { return -x.ls[this.equipMode]; });
 			define("lk", "Luck",
-				   function(x) { return -x.lk; });
+				   function(x) { return -x.lk[0]; });
 			define("ctype", "Class",
 				   function(x) { return x.ctype; });
 			define("bid", "ShipId",
@@ -840,7 +848,12 @@
 					$(".ship_lv", cElm).html( "<span>Lv.</span>" + shipLevelConv);
 					$(".ship_morale", cElm).html( cShip.morale );
 					$(".ship_hp", cElm).text( cShip.hp );
-					$(".ship_lk", cElm).text( cShip.lk );
+					$(".ship_lk", cElm).text( cShip.lk[0] );
+					if(cShip.lk[0] >= cShip.lk[1]){
+						$(".ship_lk", cElm).addClass("max");
+					} else if(cShip.lk[0] > cShip.lk[2]){
+						$(".ship_lk", cElm).append("<sup class='sub'>{0}</sup>".format(cShip.lk[0] - cShip.lk[2]));
+					}
 
 					if(cShip.morale >= 50){ $(".ship_morale", cElm).addClass("sparkled"); }
 
@@ -895,10 +908,13 @@
 				});
 
 				self.shipList.show();
+				$(".ship_count .count_value").text(
+					"{0} /{1}".format(FilteredShips.length, self.shipCache.length)
+				);
 				$(".ingame_page").toggle(self.pageNo);
 				self.toggleTableScrollbar(self.scrollList);
 				self.isLoading = false;
-				console.log("Showing this list took", (Date.now() - self.startTime)-100 , "milliseconds");
+				console.debug("Showing ship list took", (Date.now() - self.startTime)-100 , "milliseconds");
 			}, 100);
 		},
 

@@ -33,6 +33,7 @@
 
         initValidSTypes: function() {
             this.enSTypeMeta = KC3Translation.getJSONWithOptions(KC3Meta.repo, "stype", false, "en", false, true);
+            console.assert(this.enSTypeMeta['0'] === "", "stype should start with element 0: ''");
             delete this.enSTypeMeta['0'];
             this.validSTypes = Object.keys(this.enSTypeMeta).map(id => this.enSTypeMeta[id]);
         },
@@ -43,14 +44,10 @@
             return JSON.parse(localStorage.goalTemplates || "[]");
         },
         save: function(t) {
-            try {
-                if (!Array.isArray(t))
-                    throw "not an array";
-                localStorage.goalTemplates =
-                    JSON.stringify(t);
-            } catch (err) {
-                console.log("error when saving:", err);
-            }
+            if (Array.isArray(t))
+                localStorage.goalTemplates = JSON.stringify(t);
+            else
+                console.error("Data to be saved is not an array", t);
         },
         newTemplate: function() {
             return {
@@ -103,10 +100,13 @@
             result[6] = template.mvp?1:0;
             return result;
         },
+        mapShipTypeAbbrs2Ids: function(stypeAbbrs) {
+            return (stypeAbbrs || []).map(stype => this.validSTypes.indexOf(stype) + 1);
+        },
         checkShipType: function(stypeId, template) {
             if (template.stype.indexOf("*") != -1)
                 return true;
-            var stypeIds = template.stype.map(stype => this.validSTypes.indexOf(stype) + 1);
+            var stypeIds = this.mapShipTypeAbbrs2Ids(template.stype);
             return stypeIds.indexOf(stypeId) != -1;
         }
     };

@@ -82,7 +82,7 @@
 			gear_id = Number(gear_id||"124");
 			var self = this;
 			var gearData = KC3Master.slotitem( gear_id );
-			console.debug("gearData", gearData);
+			console.debug("Viewing gearData", gearData);
 			self.currentGearId = gear_id;
 			
 			if(!KC3Master.isAbyssalGear(gear_id)){

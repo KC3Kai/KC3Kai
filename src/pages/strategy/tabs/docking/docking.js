@@ -138,8 +138,7 @@
 							expeditionFleets.push( i );
 						}
 					} catch (err) {
-						console.log("error while processing fleet info");
-						console.log(err);
+						console.warn("Error while processing fleet info", err);
 					}
 				});
 
@@ -157,8 +156,7 @@
 							// for docking ship, facility cannot be used
 							cShip.repairAkashi = Infinity;
 						} catch (err) {
-							console.log("Error while calculating remaining docking time");
-							console.log(err);
+							console.warn("Error while calculating remaining docking time", err);
 						}
 					}
 
@@ -259,7 +257,7 @@
 
 				self.shipList.show();
 				self.isLoading = false;
-				console.log("Showing this list took", ((new Date()).getTime() - self.startTime)-100 , "milliseconds");
+				console.debug("Showing docking list took", ((new Date()).getTime() - self.startTime)-100 , "milliseconds");
 			},100);
 		},
 

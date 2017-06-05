@@ -71,7 +71,7 @@ http://swaytwig.com/opendb/
 				requestObj.response.api_data[createShipData.kdockId].api_created_ship_id;
 			delete createShipData.kdockId;
 
-			// console.log( "[createship] prepared: " + JSON.stringify( createShipData ) );
+			// console.debug( "[createship] prepared: " + JSON.stringify( createShipData ) );
 			this.submitData("ship_dev.php", createShipData);
 			this.state = null;
 		},
@@ -89,7 +89,7 @@ http://swaytwig.com/opendb/
 				result: (response.api_slot_item === undefined) ? 0 : response.api_slot_item.api_slotitem_id
 			};
 
-			// console.log( "[createitem] prepared: " + JSON.stringify( createItemData ));
+			// console.debug( "[createitem] prepared: " + JSON.stringify( createItemData ));
 			this.submitData("equip_dev.php", createItemData);
 		},
 		processStartNext: function( requestObj ) {
@@ -136,7 +136,7 @@ http://swaytwig.com/opendb/
 			this.cleanup();
 			var params = requestObj.params;
 			var response = requestObj.response.api_data;
-			//console.log( "[createitem] received: " + JSON.stringify( response ));
+			//console.debug( "[createitem] received: " + JSON.stringify( response ));
 			if(params.api_certain_flag === 1)
 				return;
 			var currentItem = KC3GearManager.get(parseInt(params.api_slot_id));
@@ -168,14 +168,14 @@ http://swaytwig.com/opendb/
 				}
 				return false;
 			} catch (e) {
-				console.warn("Open DB Submission exception:", e.stack);/*RemoveLogging:skip*/
+				console.warn("Open DB Submission Error", e);/*RemoveLogging:skip*/
 				// Pop up APIError on unexpected runtime expcetion
 				var reportParams = $.extend({}, requestObj.params);
 				delete reportParams.api_token;
 				KC3Network.trigger("APIError", {
 					title: KC3Meta.term("APIErrorNoticeTitle"),
 					message: KC3Meta.term("APIErrorNoticeMessage").format("OpenDBSubmission"),
-					stack: e.stack,
+					stack: e.stack || String(e),
 					request: {
 						url: requestObj.url,
 						headers: requestObj.headers,
@@ -189,16 +189,15 @@ http://swaytwig.com/opendb/
 		},
 		cleanup: function() {
 			if (this.state !== null) {
-				console.log( "aborting previous data report" );
-				console.log( "interal state was: " + this.state );
-			}
+				console.log("Aborting previous data report, interal state was:", this.state);
+		}
 
 			this.state = null;
 			this.createShipData = null;
 			this.dropShipData = null;
 		},
 		submitData: function (APIurl, data){
-			/*console.log("Sending to " + APIurl + " Data: " + JSON.stringify(data))
+			/*console.debug("Sending to " + APIurl + " Data: " + JSON.stringify(data))
 			if(true)
 				return;
 			}*/
@@ -207,7 +206,7 @@ http://swaytwig.com/opendb/
 				method: "POST",
 				data: data,
 			}).done(function( msg ) {
-				console.log("OpenDB Submission done: ", msg);
+				console.log("OpenDB Submission done:", msg);
 			}).fail( function(jqXHR, textStatus, errorThrown) {
 				console.warn( "OpenDB Submission failed:", textStatus, errorThrown);
 			});

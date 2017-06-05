@@ -102,7 +102,7 @@
 		var lang = ConfigManager.language;
 		
 		$(document).ajaxError(function(event, request, settings){
-			console.log(event, request, settings);
+			console.debug(event, request, settings);
 			$(".tl_checklive_status").text("Unable to load online translations for this language");
 			$(".tl_checklive_status").css({ color:'#f00' });
 		});

@@ -18,7 +18,7 @@ Redirects to KanColle game page after writing
 		document.cookie = "ckcy=1;expires=Sun, 09 Feb 2019 09:00:09 GMT;domain=.dmm.com;path=/";
 		document.cookie = "ckcy=1;expires=Sun, 09 Feb 2019 09:00:09 GMT;domain=.dmm.com;path=/netgame/";
 		document.cookie = "ckcy=1;expires=Sun, 09 Feb 2019 09:00:09 GMT;domain=.dmm.com;path=/netgame_s/";
-		console.log("cookies written!");
+		console.log("Hacked cookies written!");
 	}
 	
 	// Check if "Force Cookies" enabled
@@ -30,7 +30,7 @@ Redirects to KanColle game page after writing
 		if(response.value){
 			writeCookies();
 		}else{
-			console.log("KC3改 forcing cookies disabled, enjoy error areas..");
+			console.log("KC3改 forcing cookies disabled, enjoy error areas.");
 		}
 	});
 	

@@ -358,7 +358,7 @@
 				editingBox = $(this).parent();
 
 				mapSplit = $(".ship_map select", editingBox).val().split("-");
-				console.log("mapSplit", mapSplit);
+				//console.debug("mapSplit", mapSplit);
 				self.goals["s"+ editingBox.data("id") ] = [
 					/*0*/ parseInt($(".ship_target input", editingBox).val(), 10), // target level
 					/*1*/ parseInt(mapSplit[0], 10), // world
@@ -545,12 +545,7 @@
 				// we will end up highlighting everything
 				if (stypes.indexOf("*") != -1)
 					return true;
-
-				var KGS = PS["KanColle.Generated.SType"];
-				var stypeIds = stypes.map( function(x) {
-					return KGS.toInt(KGS.readSType(x));
-				});
-
+				var stypeIds = GoalTemplateManager.mapShipTypeAbbrs2Ids(stypes);
 				// traverse all ships, toggle "highlight" flag
 				$(".section_body .ship_goal").each( function(i,x) {
 					var jqObj = $(x);
@@ -562,11 +557,7 @@
 					var ThisShip = KC3ShipManager.get( rosterId );
 					var MasterShip = ThisShip.master();
 					var stypeId = MasterShip.api_stype;
-					if (stypeIds.indexOf(stypeId) != -1) {
-						jqObj.addClass("highlight_stype");
-					} else {
-						jqObj.removeClass("highlight_stype");
-					}
+					jqObj.toggleClass("highlight_stype", stypeIds.indexOf(stypeId) != -1);
 				});
 			});
 
@@ -597,7 +588,7 @@
 					return true;
 
 				$.each( targetShips, function(i,x) {
-					console.log( JSON.stringify(x) );
+					console.debug("Target ship", JSON.stringify(x) );
 					var grindData = self.goals["s" + x.rosterId];
 					self.goals["s" + x.rosterId] =
 						GoalTemplateManager.applyTemplate(grindData, template);
@@ -795,6 +786,7 @@
 			// Experience Left
 			var expLeft = KC3Meta.expShip(grindData[0])[1] - ThisShip.exp[0];
 			$(".ship_exp .ship_value", goalBox).text( expLeft );
+			goalBox.toggleClass("goaled", expLeft <= 0);
 
 			// Base Experience: MAP
 			$(".ship_map .ship_value", goalBox).text( grindData[1]+"-"+grindData[2] );

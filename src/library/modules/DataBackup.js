@@ -55,7 +55,7 @@
 			processDB : function(dbstring,overwrite,elementkey,callback){//load data from DB string, elementkey can be null
 				var ekex = ((typeof elementkey)==="string");
 				var dbdata = JSON.parse(dbstring);
-                if(ekex)$(elementkey).text("");
+				if(ekex)$(elementkey).text("");
 				var processTables = function(dbdata_, overwrite){
 					var dothing = function(){
 						var tableCount = -1;
@@ -68,7 +68,7 @@
 						console.log("Processing tables...");
 						KC3Database.init();
 						KC3Database.con.open();
-            			if(ekex)$(elementkey).append("<div class =\"datatransaction\">-DB Transaction Started-</div>");
+						if(ekex)$(elementkey).append("<div class =\"datatransaction\">-DB Transaction Started-</div>");
 						var alertwhenfinished = function() {
 								setTimeout(function() {
 									if(tableCount===0)  callback();
@@ -85,7 +85,7 @@
 							var tabledata = tableobj[index];
 							var table = KC3Database.con[index];
 							KC3Database.con.transaction("rw!",table,function(){
-								console.log("Processing "+index+" 『size : "+tabledata.length+"』");
+								console.log("Processing "+index, table, "size:", tabledata.length);
 								if(ekex)$(elementkey+" ."+index).text("Processing "+index+" 『size : "+tabledata.length+"』");
 
 								if(tableCount == -1)tableCount=1;
@@ -103,10 +103,10 @@
 
 							}).then(function(){
 								if(ekex)$(elementkey+" ."+index).text("Processed "+index);
-							}).catch(console.log).finally(function(){tableCount--;delete tableobj[index];arrEach(tableobj);});
+							}).catch(console.error).finally(function(){tableCount--;delete tableobj[index];arrEach(tableobj);});
 						};//arreach
 						arrEach(dbdata_);
-           				if(ekex)$(elementkey+" .datatransaction").text("=DB transaction all queued=");
+						if(ekex)$(elementkey+" .datatransaction").text("=DB transaction all queued=");
 					};//dothinh
 				  dothing();
 
@@ -137,18 +137,17 @@
 									case "db.json":
 										console.info("db.json detected.");
 										setTimeout(function(){
-                                            KC3DataBackup.processDB(zipEntry.asText(),overwrite,elementkey,callback);
-                                        },0);
+											KC3DataBackup.processDB(zipEntry.asText(),overwrite,elementkey,callback);
+										},0);
 										break;
 									case "storage.json":
 										console.info("storage.json detected.");
 										if(overwrite)
-												setTimeout(function()
-												{
-                                                     if(ekex)$(elementkey).append("<div class =\"localstorageprocess\">-storage processing-</div>");
-                                                    window.KC3DataBackup.processStorage(zipEntry.asText(),overwrite);
-                                                     if(ekex)$(elementkey+" .localstorageprocess").text("=storage processed=");
-                                                },10);
+												setTimeout(function() {
+													if(ekex)$(elementkey).append("<div class =\"localstorageprocess\">-storage processing-</div>");
+													window.KC3DataBackup.processStorage(zipEntry.asText(),overwrite);
+													if(ekex)$(elementkey+" .localstorageprocess").text("=storage processed=");
+												},10);
 										break;
 									default:
 										alert("Could be wrong file");

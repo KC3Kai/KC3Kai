@@ -138,9 +138,8 @@ Saves and loads list to and from localStorage
 				// Reduce Consumption Counter
 				// df (delta)      = [0,5,20]
 				df.shift(); df.push(0);
-				console.info("Akashi repaired",cShip.name(),cShip.hp.reduceRight(function(hi,lo){return hi-lo;}),
-					df,df.map(function(rsc){ return Math.floor(rsc * plt); })
-				);
+				console.log("Akashi repaired", cShip.name(), cShip.hp.reduceRight((hi, lo) => hi-lo),
+					df, df.map(rsc => Math.floor(rsc * plt)) );
 				Object.keys(pc).reverse().forEach(function(d){
 					// if the difference is not all-zero, keep going
 					if(df.every(function(x){return !x;}))
@@ -195,7 +194,7 @@ Saves and loads list to and from localStorage
 		
 		// Remove ship from the list, scrapped, mod-fodded, or sunk
 		remove :function( rosterId ){
-			console.log("removing ship", rosterId);
+			console.log("Removing ship", rosterId);
 			var thisShip = this.list["x"+rosterId];
 			if(typeof thisShip != "undefined"){
 				// initializing for fleet sanitizing of zombie ships
@@ -238,11 +237,6 @@ Saves and loads list to and from localStorage
 				.reduce(function(x,y){ return x.concat(y); });
 			var shipIndex = flatShips.indexOf(Number(rosterId));
 			return shipIndex < 0 ? -1 : Math.floor(shipIndex / 6);
-		},
-		
-		// Show JSON string of the list for debugging purposes
-		json: function(){
-			console.log(this.encoded());
 		},
 		
 		// Save ship list onto local storage

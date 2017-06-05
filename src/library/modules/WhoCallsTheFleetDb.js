@@ -4,7 +4,7 @@
 	window.WhoCallsTheFleetDb = {
 		db: {},
 		expectedShipCount: 467,
-		expectedItemCount: 228,
+		expectedItemCount: 229,
 		init: function(repo) {
 			var self = this;
 			var loadAndParseDb = function(prefix, filename, expectedCount) {
@@ -25,10 +25,10 @@
 					.filter( function(x) {return x;});
 				
 				if (content.length < expectedCount) {
-					console.warn("Unexpected entity number,",
+					console.warn("WhoCallsTheFleetDB: unexpected entity number,",
 								 filename, "might has been changed.");
 				} else if(content.length > expectedCount) {
-					console.info(filename, "has been updated,",
+					console.info("WhoCallsTheFleetDB:", filename, "has been updated,",
 								 "commit `expected(Ship|Item)Count:", content.length +
 								 ",` instead of `" + expectedCount + "` plz.");
 				}
