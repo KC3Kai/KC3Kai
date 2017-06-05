@@ -125,7 +125,6 @@
 			var language = ConfigManager.language;
 
 			$.each(servers, function(i, d) {
-				console.log(d);
 				var row = $(".factory .tr-item").clone();
 				row.addClass( 
 					language === d.dat.name.tag ?

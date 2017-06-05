@@ -355,7 +355,7 @@
 			// Show all sorties
 			if(this.selectedWorld === 0){
 				KC3Database.count_normal_sorties(function(countSorties){
-					console.log("count_all", countSorties);
+					console.debug("Count of All", countSorties);
 					if(expectedEnterCount === self.enterCount)
 						self.showPagination(countSorties);
 				});
@@ -365,7 +365,7 @@
 				// Show all on this world
 				if(this.selectedMap === 0){
 					KC3Database.count_world(this.selectedWorld, function(countSorties){
-						console.log("count_world", countSorties);
+						console.debug("Count of World", self.selectedWorld, countSorties);
 						if(expectedEnterCount === self.enterCount)
 							self.showPagination(countSorties);
 					});
@@ -373,7 +373,7 @@
 				// Selected specifc map
 				}else{
 					KC3Database.count_map(this.selectedWorld, this.selectedMap, function(countSorties){
-						console.log("count_map", countSorties);
+						console.debug("Count of Map", self.selectedWorld, self.selectedMap, countSorties);
 						if(expectedEnterCount === self.enterCount)
 							self.showPagination(countSorties);
 					});
@@ -419,7 +419,7 @@
 			this.pageNum = page || 1;
 			var postShowList = function(){
 				var showPageTime = Date.now() - startTime;
-				console.log("Showing this list took", showPageTime, "milliseconds");
+				console.debug("Showing sortie history list took", showPageTime, "milliseconds");
 				if(twbsPageObj) twbsPageObj.twbsPagination("enable");
 			};
 			// Prevent to quickly switch on pagination
@@ -738,7 +738,7 @@
 							throw e;
 						}
 					}
-				}catch(e){console.error(e.stack);}
+				}catch(e){ console.error("Sortie battle rendering exception", e); }
 			});
 			
 			$(".tab_"+tabCode+" .sortie_list").createChildrenTooltips();
@@ -853,7 +853,7 @@
 						return true;
 					}
 
-					console.log("Downloading reply", sortieId, ", data:", sortieData);
+					console.debug("Downloading reply", sortieId, ", data:", sortieData);
 					rcontext.font = "26pt Calibri";
 					rcontext.fillStyle = '#ffffff';
 					rcontext.fillText(sortieData.world+"-"+sortieData.mapnum, 20, 215);
@@ -911,7 +911,7 @@
 		
 		this.endExport = function (error, result) {
 			if (error) {
-				console.error(error, error.stack);
+				console.error("Generating replay data failed", error);
 				alert("Failed to generate replay data");
 			} else if (result && result.filename) {
 				// Show a response 'cause download bar is hidden

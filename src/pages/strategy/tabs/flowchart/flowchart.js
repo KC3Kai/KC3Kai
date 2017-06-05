@@ -100,7 +100,7 @@
 			// Manual override quest status
 			$(".flowchart").on("click", ".questToggle", function(){
 				var editingQuest = KC3QuestManager.get($(this).data("id"));
-				console.log(editingQuest.status);
+				console.log("Quest status before", editingQuest.status);
 				editingQuest.status++;
 				if(editingQuest.status>=4){ editingQuest.status=0; }
 				KC3QuestManager.save();
@@ -110,7 +110,7 @@
 			// Manual remove quest
 			$(".page_padding").on("click", ".questRemove", function(){
 				var removingQuest = KC3QuestManager.get($(this).data("id"));
-				console.log(removingQuest);
+				console.log("Quest to be removed", removingQuest);
 				if(KC3QuestManager.remove(removingQuest)){
 					KC3QuestManager.save();
 					KC3StrategyTabs.reloadTab(undefined, true);

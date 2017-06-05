@@ -80,7 +80,16 @@ module.exports = function(grunt) {
 		},
 		removelogging: {
 			'build/tmp': {
-				src: "build/tmp/**/*.js"
+				src: "build/tmp/**/*.js",
+				options: {
+					// keep all 'warn' and 'error' by default
+					methods: [
+						'log', 'info', 'assert', 'count', 'clear',
+						'group', 'groupEnd', 'groupCollapsed', 'trace',
+						'debug', 'dir', 'dirxml', 'profile', 'profileEnd',
+						'time', 'timeEnd', 'timeStamp', 'table', 'exception'
+					]
+				}
 			}
 		},
 		jshint: {

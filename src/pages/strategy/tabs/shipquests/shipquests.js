@@ -219,7 +219,7 @@
 
 				self.shipList.show();
 				self.shipList.createChildrenTooltips();
-				console.log("Showing this list took", (Date.now() - self.startTime)-100 , "milliseconds");
+				console.debug("Showing ship quests took", (Date.now() - self.startTime)-100 , "milliseconds");
 			}, 100);
 		},
 

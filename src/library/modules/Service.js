@@ -91,7 +91,6 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				
 			});
 			// Sending Mobile Push notification if enabled
-			ConfigManager.load();
 			if(ConfigManager.PushAlerts_enabled) {
 				$.ajax({
 					async: true,
@@ -363,7 +362,6 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		"dmmFrameInject" :function(request, sender, response){
 			var senderUrl = (sender.tab)?sender.tab.url:false || sender.url  || "";
 			
-			ConfigManager.load();
 			if( isDMMFrame(senderUrl) && localStorage.dmmplay == "false"){
 				// DMM FRAME
 				response({ mode: 'frame', scale: ConfigManager.api_gameScale});
@@ -531,6 +529,18 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		}
 	});
 	
+	/* On Web Storage (localStorage here) Changed
+	Reload our ConfigManager as soon as possible on the key `config` changed,
+	Instead of explicitly invoking `load` method everywhere.
+	------------------------------------------*/
+	window.addEventListener("storage", function({type, key, timeStamp, url}) {
+		//console.debug("storageEvent", {type, key, timeStamp, url});
+		if(key === ConfigManager.keyName()) {
+			ConfigManager.load();
+			console.debug("Reload ConfigManager caused by", (url || "").match(/\/\/[^\/]+\/([^\?]+)/)[1]);
+		}
+	});
+	
 	/* On Update Available
 	This will avoid auto-restart when webstore update is available
 	Officially handle the moment update is release and user is playing
@@ -601,7 +611,6 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	}
 	
 	function screenshotSpecialMode(tabId, response){
-		ConfigManager.load();
 		if(ConfigManager.dmm_customize) {
 			(new TMsg(tabId, "gamescreen", "getGamescreenOffset", {}, function(offset){
 				(new KCScreenshot())
