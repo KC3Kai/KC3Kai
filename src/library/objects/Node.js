@@ -101,6 +101,13 @@ Used by SortieManager
 		var equalOrMore = enemyGaugeRate > (0.9 * allyGaugeRate);
 		var superior = enemyGaugeRate > 0 && enemyGaugeRate > (2.5 * allyGaugeRate);
 
+		console.log("Predicted HP gauge rate",
+			"-{0}/{1} = {2}%".format(allyGauge, allyBeginHP, allyGaugeRate),
+			"vs",
+			"{2}% = -{0}/{1}".format(enemyGauge, enemyBeginHP, enemyGaugeRate),
+			"enemy -{1}, A needs {2}/{0} ".format(enemyCount, enemySunkCount, requiredSunk)
+		);
+
 		// For long distance air raid
 		if ( (battleName||"").indexOf("ld_airbattle") >-1 ) {
 			// Based on long distance air raid rules from:

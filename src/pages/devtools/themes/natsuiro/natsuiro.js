@@ -2657,6 +2657,10 @@
 				.attr("src", KC3Meta.formationIcon(predictedFormation))
 				.attr("title", KC3Meta.formationText(predictedFormation))
 				.lazyInitTooltip();
+			console.log("Predicted PvP exp and formation",
+				[baseExp, baseExpWoCT, baseExpS, baseExpAB, baseExpC, baseExpD],
+				KC3Meta.formationText(predictedFormation)
+			);
 			
 			$(".module.activity .activity_tab").removeClass("active");
 			$("#atab_activity").addClass("active");

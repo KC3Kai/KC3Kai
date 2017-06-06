@@ -389,7 +389,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			var fleetDesg = [this.fleetSent-1,1],
 				self = this;
 			Object.keys(this.sinkList).forEach(function(fleetType, fleetId){
-				console.log("Checking " + fleetType + " fleet #", fleetDesg[fleetId] + 1,
+				console.debug("Checking " + fleetType + " fleet #", fleetDesg[fleetId] + 1,
 					"consisting of", PlayerManager.fleets[fleetDesg[fleetId]].ships);
 				var sinkList = self.sinkList[fleetType];
 				if(Array.isArray(sinkList) && sinkList.length > 0){
