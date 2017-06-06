@@ -460,10 +460,27 @@
 			var self = this;
 			// Show sortie records on list
 			var sortieBox, fleets, fleetkey, mainFleet, isCombined, rshipBox, nodeBox, thisNode, sinkShips;
+			var shipNameEquipSwitchFunc = function(e){
+				var ref = $(this).parent().parent();
+				if($(".rfleet_detail",ref).css("display")==="none") {
+					$(".rfleet_detail",ref).show();
+					$(".rfleet_equips",ref).hide();
+				} else {
+					$(".rfleet_detail",ref).hide();
+					$(".rfleet_equips",ref).show();
+				}
+			};
 			var shipClickFunc = function(e){
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 			};
+			var gearClickFunc = function(e){
+				KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
+			};
+			var viewFleetAtManagerFunc = function(e){
+				KC3StrategyTabs.gotoTab("fleet", "history", $(this).data("id"));
+			};
 			$.each(sortieList, function(id, sortie){
+				//console.debug("list.sortie", id, sortie);
 				try {
 					var skey = ["m",sortie.world,sortie.mapnum].join('');
 					// Create sortie box
@@ -480,6 +497,8 @@
 					$(".sortie_date", sortieBox).text( new Date(sortie.time*1000).format("mmm d") );
 					$(".sortie_date", sortieBox).attr("title", new Date(sortie.time*1000).format("yyyy-mm-dd HH:MM:ss") );
 					$(".sortie_map", sortieBox).text( (sortie.world >= 10 ? "E" : sortie.world) + "-" + sortie.mapnum );
+					$(".button_tomanager", sortieBox).data("id", sortie.id)
+						.on("click", viewFleetAtManagerFunc);
 					
 					fleetkey = ["main","escort","preboss","boss"];
 					fleets   = [
@@ -502,49 +521,97 @@
 							if(i===0) {
 								if(ship===false){ return false; }
 								
-								$(".sortie_ship_"+(index+1)+" img", sortieBox).attr("src", KC3Meta.shipIcon(ship.mst_id));
-								$(".sortie_ship_"+(index+1)+" img", sortieBox).attr("alt", ship.mst_id);
-								$(".sortie_ship_"+(index+1)+" img", sortieBox).click(shipClickFunc);
-								$(".sortie_ship_"+(index+1), sortieBox).addClass("hover");
-								$(".sortie_ship_"+(index+1), sortieBox).addClass("simg-"+ship.mst_id);
-								$(".sortie_ship_"+(index+1), sortieBox).show();
+								$(".sortie_ship_"+(index+1)+" img", sortieBox)
+									.attr("src", KC3Meta.shipIcon(ship.mst_id))
+									.attr("alt", ship.mst_id)
+									.click(shipClickFunc);
+								$(".sortie_ship_"+(index+1), sortieBox)
+									.addClass("hover")
+									.addClass("simg-"+ship.mst_id)
+									.show();
 							}
 							
 							rshipBox = $(".tab_"+tabCode+" .factory .rfleet_ship").clone();
 							$(".rfleet_pic img", rshipBox)
-								.attr("src", KC3Meta.shipIcon(ship.mst_id) )
-								.click(function(){
-									var ref = $(this).parent().parent();
-									if($(".rfleet_detail",ref).css("display")=="none") {
-										$(".rfleet_detail",ref).show();
-										$(".rfleet_equips",ref).hide();
-									} else {
-										$(".rfleet_detail",ref).hide();
-										$(".rfleet_equips",ref).show();
-									}
-								});
-							$(".rfleet_name", rshipBox).html( KC3Meta.shipName( KC3Master.ship(ship.mst_id).api_name ) );
-							$(".rfleet_level", rshipBox).html( KC3Meta.term("LevelText")+" "+ship.level);
+								.attr("src", KC3Meta.shipIcon(ship.mst_id))
+								.addClass("hover")
+								.click(shipNameEquipSwitchFunc);
+							$(".rfleet_name", rshipBox).text(
+								KC3Meta.shipName( KC3Master.ship(ship.mst_id).api_name )
+							).attr("title",
+								KC3Meta.shipName( KC3Master.ship(ship.mst_id).api_name )
+							);
+							$(".rfleet_level", rshipBox).text(
+								KC3Meta.term("LevelText") + " " + ship.level
+							);
 							
-							ship.equip.filter(function(x){return x>0;})
-								.forEach(function(x,i){
-									var masterGear = KC3Master.slotitem(x);
-									$(".rfleet_equips .rfleet_equip.rfleet_equip_"+(i+1),rshipBox)
-										.find('img')
-										.attr("src","../../assets/img/items/" + masterGear.api_type[3] + ".png")
-										.attr("title",KC3Meta.gearName(masterGear.api_name));
-								});/* comment stopper */
+							ship.equip.filter(id => id > 0).forEach((gearId, i) => {
+								let masterGear = KC3Master.slotitem(gearId);
+								$(".rfleet_equips .rfleet_equip.rfleet_equip_"+(i+1),rshipBox)
+									.find('img')
+									.attr("src","../../assets/img/items/" + masterGear.api_type[3] + ".png")
+									.attr("title", KC3Meta.gearName(masterGear.api_name))
+									.addClass("hover").attr("alt", gearId)
+									.click(gearClickFunc);
+							});
 							$(".rfleet_detail", rshipBox).show();
 							$(".rfleet_equips", rshipBox).hide();
 							
 							$(".rfleet_"+fleetkey[i]+" .rfleet_body", sortieBox).append( rshipBox );
 						});
-						$(".rfleet_"+fleetkey[i]+" .rfleet_body", sortieBox).append( $("<div>").addClass("clear") 
+						$(".rfleet_"+fleetkey[i]+" .rfleet_body", sortieBox).append(
+							$("<div>").addClass("clear")
 						);
 					});
 					
-					// console.log("sortie.battles", sortie.battles);
+					$(".rfleet_lbas", sortieBox).addClass("disabled");
+					$.each(sortie.lbas || [], function(lbi, landbase){
+						$(".rfleet_lbas"+(lbi+1), sortieBox).removeClass("disabled");
+						$(".rfleet_lbas"+(lbi+1)+" .rfleet_title .num", sortieBox)
+							.text("#{0}".format(landbase.rid));
+						$(".rfleet_lbas"+(lbi+1)+" .rfleet_title .action", sortieBox)
+							.text([KC3Meta.term("LandBaseActionWaiting"),
+								KC3Meta.term("LandBaseActionSortie"),
+								KC3Meta.term("LandBaseActionDefend"),
+								KC3Meta.term("LandBaseActionRetreat"),
+								KC3Meta.term("LandBaseActionRest")
+								][landbase.action]);
+						$.each(landbase.planes, function(pi, plane){
+							if(!plane.mst_id){ return false; }
+							var planeBox = $(".tab_"+tabCode+" .factory .rfleet_lbas_plane").clone();
+							var planeMaster = KC3Master.slotitem(plane.mst_id);
+							$(".rfleet_pic img", planeBox)
+								.attr("src", "../../assets/img/items/" + planeMaster.api_type[3] + ".png")
+								.attr("alt", plane.mst_id)
+								.click(gearClickFunc)
+								.addClass("hover");
+							$(".rfleet_detail .rfleet_name ", planeBox)
+								.text(KC3Meta.gearName(planeMaster.api_name))
+								.attr("title", KC3Meta.gearName(planeMaster.api_name));
+							if(plane.state === 1){
+								$(".rfleet_stars img", planeBox)
+									.attr("src", "../../assets/img/client/eqstar.png");
+								$(".rfleet_stars span", planeBox).text(plane.stars || 0);
+								if(plane.ace > -1) {
+									$(".rfleet_ace img", planeBox)
+										.attr("src", "../../assets/img/client/achev/" + plane.ace + ".png");
+								} else {
+									$(".rfleet_ace img", planeBox).hide();
+								}
+								$(".rfleet_count", planeBox).text(plane.count);
+								$(".rfleet_morale img", planeBox)
+									.attr("src", "../../assets/img/client/morale/" + ["","3","2","1"][plane.morale] + ".png");
+							} else {
+								$(".rfleet_stars", planeBox).hide();
+								$(".rfleet_ace", planeBox).hide();
+								$(".rfleet_count", planeBox).hide();
+								$(".rfleet_morale", planeBox).hide();
+							}
+							$(".rfleet_lbas"+(lbi+1)+" .rfleet_body", sortieBox).append(planeBox);
+						});
+					});
 					
+					// console.debug("sortie.battles", sortie.battles);
 					var finalNodeIndex = -1;
 					// For each battle
 					if(sortie.battles.length === 0){
