@@ -591,11 +591,7 @@ Used by SortieManager
 					}
 				}
 				
-				if(ConfigManager.info_btrank
-					// long distance aerial battle not accurate for now, see #1333
-					// but go for aerial battle (eventKind:4) possible Yasen
-					//&& [6].indexOf(this.eventKind)<0
-					){
+				if(ConfigManager.info_btrank){
 					this.predictedRank = KC3Node.predictRank( beginHPs, endHPs, battleData.api_name );
 				}
 				
@@ -993,8 +989,7 @@ Used by SortieManager
 				}
 			}
 			
-			console.log("Predicted enemyHP", this.enemyHP);
-			console.log("Predicted enemySunk", this.enemySunk);
+			console.log("Predicted enemyHP & Sunk", this.enemyHP, this.enemySunk);
 			
 			// both single fleet predictable only for now
 			if(ConfigManager.info_btrank &&

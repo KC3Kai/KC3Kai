@@ -454,7 +454,8 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			cons.name = self.sortieName();
 			cons.resc = Array.apply(null,{length:8}).map(function(){return 0;});
 			// Calculate sortie difference with buffer
-			var sentBattleSupportFleets = this.focusedFleet.concat(this.supportFleet);
+			var sentBattleSupportFleets = Array.isArray(PlayerManager.hq.lastSortie)
+				? this.focusedFleet.concat(this.supportFleet) : [];
 			sentBattleSupportFleets.map(id => PlayerManager.hq.lastSortie[id]).forEach(function(fleet, fleetIdx){
 				fleet.forEach(function(after, ship_pos){
 					var fleet_id = sentBattleSupportFleets[fleetIdx] + 1,
