@@ -305,6 +305,7 @@ Previously known as "Reactor"
 					case 72: PlayerManager.consumables.decoMaterial = thisItem.api_count; break;
 					case 73: PlayerManager.consumables.constCorps = thisItem.api_count; break;
 					case 74: PlayerManager.consumables.newAircraftBlueprint = thisItem.api_count; break;
+					case 75: PlayerManager.consumables.newGunMountMaterial = thisItem.api_count; break;
 					default: break;
 				}
 			}

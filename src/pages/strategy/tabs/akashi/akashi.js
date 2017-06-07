@@ -136,6 +136,11 @@
 			var toAmountStr = function(v){
 				return typeof v === "undefined" || v < 0  ? "?" : String(v);
 			};
+			var toSlotOrUseItem = function(v){
+				return typeof v === "string" && v.startsWith("consumable")
+					? [Number(v.match(/_(\d+)$/)[1]), KC3Meta.useItemName(v.match(/_(\d+)$/)[1])]
+					: KC3Master.slotitem(v);
+			};
 			var showDevScrew = function(stars, devmats, devmatsGS, screws, screwsGS){
 				$(".eq_res_value.devmats.plus{0} .val".format(stars), ResBox)
 					.text( toAmountStr(devmats) );
@@ -150,6 +155,17 @@
 				if(!consumedItem){
 					$(".eq_res_icon.consumed_icon.plus{0}".format(stars), ResBox).hide();
 					$(".eq_res_value.consumed_name.plus{0}".format(stars), ResBox).hide();
+					return;
+				}
+				// Array represents the id and name of useitem (not slotitem)
+				if(Array.isArray(consumedItem)){
+					$(".eq_res_icon.consumed_icon.plus{0} img".format(stars), ResBox).hide();
+					$(".eq_res_value.consumed_name.plus{0} .val".format(stars), ResBox)
+						.text( consumedItem[1] );
+					$(".eq_res_value.consumed_name.plus{0} .val".format(stars), ResBox)
+						.attr("title", "[{0}] {1}".format(consumedItem[0], consumedItem[1]) );
+					$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), ResBox)
+						.text( "x{0}".format(toAmountStr(amount)) );
 					return;
 				}
 				$(".eq_res_icon.consumed_icon.plus{0} img".format(stars), ResBox)
@@ -168,11 +184,11 @@
 			var checkDevScrew = function(stars, itemId, devmats, screws){
 				if(!hasGear || !hasShip) return;
 				var redLine = false;
-				if(PlayerManager.consumables.devmats < devmats){
+				if((PlayerManager.consumables.devmats || 0) < devmats){
 					redLine = true;
 					$(".eq_res_value.devmats.plus{0} .val".format(stars), ResBox).addClass("insufficient");
 				}
-				if(PlayerManager.consumables.screws < screws){
+				if((PlayerManager.consumables.screws || 0) < screws){
 					redLine = true;
 					$(".eq_res_value.screws.plus{0} .val".format(stars), ResBox).addClass("insufficient");
 				}
@@ -186,6 +202,21 @@
 			};
 			var checkConsumedItem = function(stars, consumedItem, amount){
 				if(!hasGear || !hasShip) return;
+				// Check useitem instead of slotitem
+				if(Array.isArray(consumedItem)){
+					let isNotEnoughUseItem = function(id, amount){
+						switch(id){
+						case 71: return (PlayerManager.consumables.nEngine || 0) < amount;
+						case 75: return (PlayerManager.consumables.newGunMountMaterial || 0) < amount;
+						}
+						return false;
+					};
+					if(isNotEnoughUseItem(consumedItem[0], amount)){
+						$(".eq_res_line.plus{0}".format(stars), ResBox).addClass("insufficient");
+						$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), ResBox).addClass("insufficient");
+					}
+					return;
+				}
 				if(!self.instances[consumedItem.api_id]
 					|| self.instances[consumedItem.api_id].total < amount){
 					$(".eq_res_line.plus{0}".format(stars), ResBox).addClass("insufficient");
@@ -293,8 +324,8 @@
 						
 						showDevScrew("0_5", resArr[1][0], resArr[1][1], resArr[1][2], resArr[1][3]);
 						checkDevScrew("0_5", itemId, resArr[1][1], resArr[1][3]);
-						if(resArr[1][4] > 0){
-							consumedItem = KC3Master.slotitem(resArr[1][4]);
+						if(resArr[1][4] > 0 || typeof resArr[1][4] === "string"){
+							consumedItem = toSlotOrUseItem(resArr[1][4]);
 							showConsumedItem("0_5", consumedItem, resArr[1][5]);
 							checkConsumedItem("0_5", consumedItem, resArr[1][5]);
 						} else {
@@ -303,8 +334,8 @@
 						
 						showDevScrew("6_9", resArr[2][0], resArr[2][1], resArr[2][2], resArr[2][3]);
 						checkDevScrew("6_9", itemId, resArr[2][1], resArr[2][3]);
-						if(resArr[2][4] > 0){
-							consumedItem = KC3Master.slotitem(resArr[2][4]);
+						if(resArr[2][4] > 0 || typeof resArr[2][4] === "string"){
+							consumedItem = toSlotOrUseItem(resArr[2][4]);
 							showConsumedItem("6_9", consumedItem, resArr[2][5]);
 							checkConsumedItem("6_9", consumedItem, resArr[2][5]);
 						} else {
@@ -313,8 +344,8 @@
 						if(imp.upgrade && imp.upgrade[0] > 0){
 							showDevScrew("max", resArr[3][0], resArr[3][1], resArr[3][2], resArr[3][3]);
 							checkDevScrew("max", itemId, resArr[3][1], resArr[3][3]);
-							if(resArr[3][4] > 0){
-								consumedItem = KC3Master.slotitem(resArr[3][4]);
+							if(resArr[3][4] > 0 || typeof resArr[3][4] === "string"){
+								consumedItem = toSlotOrUseItem(resArr[3][4]);
 								showConsumedItem("max", consumedItem, resArr[3][5]);
 								checkConsumedItem("max", consumedItem, resArr[3][5]);
 							} else {
