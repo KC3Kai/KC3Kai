@@ -432,7 +432,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		------------------------------------------*/
 		"reloadMeta" :function(request, sender, response){
 			var metaType = request.type;
-			if(ConfigManager.dmm_customize && localStorage.extract_api != "true") {
+			if(localStorage.dmmplay == "true" && ConfigManager.dmm_customize) {
 				// Reload meta at background for DMM takeover
 				if(metaType === "Quotes") {
 					KC3Meta.loadQuotes();
