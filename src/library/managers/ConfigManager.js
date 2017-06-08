@@ -199,8 +199,9 @@ Retreives when needed to apply on components
 				sr_custom_css		: "",
 
 				disableConsoleLogHooks: false,
-				hoursToKeepLogs: 1,
-				hoursToKeepErrors: 168,
+				forwardConsoleOutput: false,
+				hoursToKeepLogs   : 12,
+				hoursToKeepErrors : 168,
 			};
 		},
 		

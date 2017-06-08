@@ -852,7 +852,6 @@
 			}else{
 				overrideFocus = false;
 			}
-			KC3SortieManager.onPvP = false;
 
 			checkAndRestartMoraleTimer();
 			checkAndRestartUiTimer();
@@ -2658,6 +2657,10 @@
 				.attr("src", KC3Meta.formationIcon(predictedFormation))
 				.attr("title", KC3Meta.formationText(predictedFormation))
 				.lazyInitTooltip();
+			console.log("Predicted PvP exp and formation",
+				[baseExp, baseExpWoCT, baseExpS, baseExpAB, baseExpC, baseExpD],
+				KC3Meta.formationText(predictedFormation)
+			);
 			
 			$(".module.activity .activity_tab").removeClass("active");
 			$("#atab_activity").addClass("active");
@@ -2679,12 +2682,9 @@
 			$(".module.activity .abyss_single").show();
 			$(".module.activity .abyss_combined").hide();
 			
-			// Process PvP Battle
-			KC3SortieManager.fleetSent = parseInt(data.fleetSent, 10);
-			KC3SortieManager.onPvP = true;
-
-			var thisPvP;
-			KC3SortieManager.nodes.push(thisPvP = (new KC3Node()).defineAsBattle());
+			// Create a battle node for PvP battle
+			var thisPvP = (new KC3Node()).defineAsBattle();
+			KC3SortieManager.nodes.push(thisPvP);
 			thisPvP.isPvP = true;
 			thisPvP.engage( data.battle, data.fleetSent );
 
@@ -2871,9 +2871,7 @@
 		},
 
 		PvPEnd: function(data){
-			KC3SortieManager.onPvP = false;
 			var thisPvP = KC3SortieManager.currentNode();
-
 			$(".module.activity .battle_rating img")
 				.attr("src", "../../../../assets/img/client/ratings/"+thisPvP.rating+".png")
 				.css("opacity", 1);

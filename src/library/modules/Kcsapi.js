@@ -139,7 +139,7 @@ Previously known as "Reactor"
 			
 			PlayerManager.combinedFleet = response.api_data.api_combined_flag || 0;
 			
-			KC3SortieManager.endSortie(response);
+			KC3SortieManager.endSortie(response.api_data);
 			
 			PlayerManager.loadBases()
 				.setBaseConvertingSlots(response.api_data.api_plane_info);
@@ -305,6 +305,7 @@ Previously known as "Reactor"
 					case 72: PlayerManager.consumables.decoMaterial = thisItem.api_count; break;
 					case 73: PlayerManager.consumables.constCorps = thisItem.api_count; break;
 					case 74: PlayerManager.consumables.newAircraftBlueprint = thisItem.api_count; break;
+					case 75: PlayerManager.consumables.newGunMountMaterial = thisItem.api_count; break;
 					default: break;
 				}
 			}
@@ -1415,8 +1416,11 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_practice/battle":function(params, response, headers){
 			var fleetNum = parseInt(params.api_deck_id, 10);
+			// Simulate PvP battle as special sortie
 			KC3SortieManager.sortieTime = Date.toUTCseconds(headers.Date);
+			KC3SortieManager.fleetSent = fleetNum;
 			KC3SortieManager.map_world  = -1;
+			KC3SortieManager.onPvP = true;
 			KC3SortieManager.snapshotFleetState();
 			KC3Network.trigger("PvPStart", {
 				battle: response.api_data,

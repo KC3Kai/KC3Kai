@@ -471,6 +471,7 @@
 					"type": "Number"
 				},
 				"options" : {
+					"label": "SettingsSeconds",
 					"tooltip" : "SettingsIdleWarnDesc"
 				}
 			},
@@ -962,7 +963,7 @@
 					"type": "Integer"
 				},
 				"options": {
-					"label": "hours",
+					"label": "SettingsHours",
 					"tooltip": "SettingsErrorKeepDurationTip"
 				}
 			},
@@ -975,7 +976,7 @@
 					"type": "Integer"
 				},
 				"options": {
-					"label": "hours",
+					"label": "SettingsHours",
 					"tooltip": "SettingsLogKeepDurationTip"
 				}
 			}
