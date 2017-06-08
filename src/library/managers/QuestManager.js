@@ -164,7 +164,7 @@ Uses KC3Quest objects to play around with
 			quarterly: {
 				type: 'quarterly',
 				key: 'timeToResetQuarterlyQuests',
-				questIds: [637, 643, 822, 854],
+				questIds: [637, 643, 663, 822, 854],
 				resetQuests: function () { KC3QuestManager.resetQuarterlies(); },
 				calculateNextReset: function (serverTime) {
 					const nextMonthlyReset = new Date(
