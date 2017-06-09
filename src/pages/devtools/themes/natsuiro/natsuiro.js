@@ -2416,12 +2416,12 @@
 						// also we don't update ship.exp here, as it will be automatically sync-ed
 						// once we back to port or continue sortie.
 						let expLeft = KC3Meta.expShip(grindData[0])[1] - (ThisShip.exp[0] + expJustGained[index+1]);
-						console.debug("Ship", rosterId, "target exp", expLeft);
 						if(expLeft < 0){ return true; } // if the ship has reached the goal, skip it
 						let expPerSortie = maplist[ grindData[1]+"-"+grindData[2] ];
 						if(grindData[6]===1){ expPerSortie = expPerSortie * 2; }
 						if(grindData[5]===1){ expPerSortie = expPerSortie * 1.5; }
 						expPerSortie = expPerSortie * rankFactors[grindData[4]];
+						console.log("Ship exp goal", rosterId, ThisShip.name(), [expLeft, expPerSortie], Math.ceil(expLeft / expPerSortie));
 						$("<div />").addClass("expNotice").text( Math.ceil(expLeft / expPerSortie) )
 							.appendTo("#ShipBox"+rosterId+" .ship_exp_label")
 							.delay( 5000 )

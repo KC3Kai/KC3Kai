@@ -1997,8 +1997,11 @@ Previously known as "Reactor"
 				type: "rmditem" + ms.api_id,
 				data: mt
 			});
-			// Update equipment on local data
-			console.log("Improvement used items", response.api_data.api_use_slot_id);
+			// Update equipment or consumables on local data
+			console.log("Improvement consumed slot or use item",
+				response.api_data.api_use_slot_id || "none",
+				response.api_data.api_use_useitem_id || "none"
+			);
 			(response.api_data.api_use_slot_id || []).forEach(function(gearId){ KC3GearManager.remove(gearId); });
 			KC3GearManager.set([ response.api_data.api_after_slot ]);
 			
