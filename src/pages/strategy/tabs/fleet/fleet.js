@@ -221,8 +221,6 @@
 				var name = $("#saved_fleet_sel option:selected").val();
 				if (name) {
 					this.showSavedFleets(name);
-				} else {
-					this.showCurrentFleets();
 				}
 			} else if (viewType === "history") {
 				if (viewName !== undefined) {
