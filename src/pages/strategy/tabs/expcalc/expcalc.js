@@ -358,7 +358,7 @@
 				editingBox = $(this).parent();
 
 				mapSplit = $(".ship_map select", editingBox).val().split("-");
-				console.log("mapSplit", mapSplit);
+				//console.debug("mapSplit", mapSplit);
 				self.goals["s"+ editingBox.data("id") ] = [
 					/*0*/ parseInt($(".ship_target input", editingBox).val(), 10), // target level
 					/*1*/ parseInt(mapSplit[0], 10), // world
@@ -588,7 +588,7 @@
 					return true;
 
 				$.each( targetShips, function(i,x) {
-					console.log( JSON.stringify(x) );
+					console.debug("Target ship", JSON.stringify(x) );
 					var grindData = self.goals["s" + x.rosterId];
 					self.goals["s" + x.rosterId] =
 						GoalTemplateManager.applyTemplate(grindData, template);

@@ -373,7 +373,7 @@
 		
 		endExport : function(error, result) {
 			if (error) {
-				console.error(error, error.stack);
+				console.error("Generating replay data failed", error);
 				alert("Failed to generate replay data");
 			} else if (result && result.filename) {
 				// Show a response 'cause download bar is hidden

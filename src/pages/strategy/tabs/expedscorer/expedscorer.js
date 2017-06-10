@@ -154,7 +154,7 @@
 						throw "hq.lastMaterial is empty";
 					currentResources = PlayerManager.hq.lastMaterial;
 				} catch (e) {
-					console.warn("error while getting hq resources", e);
+					console.warn("Error while getting hq resources", e);
 					currentResources = [0,0,0,0];
 				}
 				// * +10 for making every value non-zero
@@ -200,7 +200,7 @@
 
 			let afkHH = Math.floor( userSelections.afkTime / 60 );
 			let afkMM = userSelections.afkTime - afkHH*60;
-			console.log(afkHH, afkMM);
+			console.debug("afkHH, afkMM", afkHH, afkMM);
 			$(".control_box.afktime input[type=text][name=hrs]",jqRoot).val(afkHH);
 			$(".control_box.afktime input[type=text][name=mins]",jqRoot).val(afkMM);
 

@@ -101,7 +101,7 @@
 			let bTotal = b.ammo + b.fuel;
 			return bTotal - aTotal;
 		});
-		console.log(JSON.stringify(grouped));
+		console.debug(JSON.stringify(grouped));
 	}
 
 	// generated from generateCostGrouping()
@@ -544,7 +544,7 @@
 			// instead of having another state to maintain, let's just track sorting order
 			// by testing the text carried by ".ord", and require that active sorter
 			// must have it set to either "⬆" or "⬇".
-			console.log(ordText);
+			console.debug("Order text", ordText);
 			ascending = order === "asc";
 			/*if (order === "asc") {
 				ascending = true;

@@ -471,6 +471,7 @@
 					"type": "Number"
 				},
 				"options" : {
+					"label": "SettingsSeconds",
 					"tooltip" : "SettingsIdleWarnDesc"
 				}
 			},
@@ -937,6 +938,46 @@
 				"type" : "textarea",
 				"options" : {
 					"tooltip" : "SettingsStrategyCustomCSSTip"
+				}
+			}
+		]
+	},
+	{
+		"section": "SettingsLogging",
+		"help": "",
+		"contents": [
+			{
+				"id": "disableConsoleLogHooks",
+				"name": "SettingsConsoleLogHooks",
+				"type": "check",
+				"options": {
+					"tooltip": "SettingsConsoleLogHooksTip"
+				}
+			},
+			{
+				"id": "hoursToKeepErrors",
+				"name": "SettingsErrorKeepDuration",
+				"type" : "small_text",
+				"bound" : {
+					"min" : 0,
+					"type": "Integer"
+				},
+				"options": {
+					"label": "SettingsHours",
+					"tooltip": "SettingsErrorKeepDurationTip"
+				}
+			},
+			{
+				"id": "hoursToKeepLogs",
+				"name": "SettingsLogKeepDuration",
+				"type" : "small_text",
+				"bound" : {
+					"min" : 0,
+					"type": "Integer"
+				},
+				"options": {
+					"label": "SettingsHours",
+					"tooltip": "SettingsLogKeepDurationTip"
 				}
 			}
 		]

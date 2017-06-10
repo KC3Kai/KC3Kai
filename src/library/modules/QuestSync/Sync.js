@@ -32,7 +32,7 @@
       .catch(KC3QuestSync.logError);
   };
 
-  QuestSync.logError = (error) => { console.error(error, error.stack);/* RemoveLogging:skip */ };
+  QuestSync.logError = (error) => { console.error("Quest Sync:", error); };
 
   // ------------------------------[ SAVE ]--------------------------------- //
 

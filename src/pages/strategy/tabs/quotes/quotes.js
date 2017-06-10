@@ -4,7 +4,6 @@
 	KC3StrategyTabs.quotes = new KC3StrategyTab("quotes");
 	
 	KC3StrategyTabs.quotes.definition = {
-		tabSelf: KC3StrategyTabs.quotes,
 		audio: false,
 		server_ip: "",
 		repo_loc: "../../data/",

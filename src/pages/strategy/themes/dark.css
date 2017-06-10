@@ -145,7 +145,7 @@ button, input, select, textarea {
 -------------------------------*/
 #content {
 	width:700px;
-	min-height:1300px;
+	min-height:1320px;
 	float:left;
 	background:#222222;
 	overflow:hidden;
@@ -605,11 +605,19 @@ button, input, select, textarea {
 .tab_ships .ship_item .ship_ar.max {
 	background:#947600;
 }
-.tab_ships .ship_item.odd .ship_field.ship_lk{
-	background:#116311;
+.tab_ships .ship_item .ship_stat span {
+	color:#999999 !important;
 }
+.tab_ships .ship_item.odd .ship_field.ship_lk,
 .tab_ships .ship_item.even .ship_field.ship_lk {
 	background:#116311;
+}
+.tab_ships .ship_item.odd .ship_field.ship_lk.max,
+.tab_ships .ship_item.even .ship_field.ship_lk.max {
+	background:#09a709;
+}
+.tab_ships .ship_item .ship_lk .sub {
+	color:#999999;
 }
 .tab_ships .ship_item .ship_equip .ship_equip_ex .empty {
 	background:#555555 !important;
@@ -1799,4 +1807,43 @@ button, input, select, textarea {
 	line-height:20px;
 	color:#aaa;
 	font-size:12px;
+}
+
+/* LOGS
+--------------------------------*/
+.tab_logger .log_entry {
+	border-radius:0px !important;
+}
+.tab_logger .labelled_rule .date {
+	background:#222222 !important;
+}
+.tab_logger .log_entry .summary .time {
+	color:#bbb;
+}
+.tab_logger .log_entry .summary .msg .dataline {
+	color:#999 !important;
+}
+.tab_logger .log_entry .summary .msg {
+	color:#cccccc;
+}
+.tab_logger .log_entry .summary .source {
+	color:#0b1452 !important;
+}
+.tab_logger .log_entry .summary .context {
+	color:#222222 !important;
+}
+.tab_logger .log_entry .stack {
+	color:#ff1414 !important;
+}
+.bg-success {
+	background-color:#356b37;
+}
+.bg-info {
+	background-color:#00584b;
+}
+.bg-warning {
+	background-color:#5f5b10;
+}
+.bg-danger {
+	background-color:#960f30;
 }

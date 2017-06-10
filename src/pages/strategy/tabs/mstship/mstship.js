@@ -311,7 +311,7 @@
 				},
 				viewCgMode = switchCgView && $(".tab_mstship .shipInfo .intro").is(":visible");
 			this.currentShipId = ship_id;
-			console.debug("shipData", shipData);
+			console.debug("Viewing shipData", shipData);
 			if(!shipData) { return; }
 			
 			$(".tab_mstship .shipInfo .name").text( "[{0}] {1} {2}"
@@ -324,7 +324,7 @@
 			var shipFile = KC3Master.graph(ship_id).api_filename;
 			// Changed to an Array from 2016-04-01
 			var shipVersions = KC3Master.graph(ship_id).api_version;
-			console.debug("shipgraph.api_version", shipVersions);
+			//console.debug("shipgraph.api_version", shipVersions);
 			this.currentGraph = shipFile;
 			this.currentCardVersion = shipVersions[0];
 			
