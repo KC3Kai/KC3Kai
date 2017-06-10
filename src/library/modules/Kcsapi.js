@@ -1725,8 +1725,12 @@ Previously known as "Reactor"
 					rsc[i] += x;
 				});
 				// F34: Weekly Scrap Anti-Air Guns
-				if([21].indexOf(gearMaster.api_type[2]) >-1){
+				if([21].indexOf(gearMaster.api_type[2]) > -1){
 					KC3QuestManager.get(638).increment();
+				}
+				// F55: Quartly Scrap 10 Large Caliber Main Guns
+				if([3].indexOf(gearMaster.api_type[2]) > -1){
+					KC3QuestManager.get(663).increment();
 				}
 				KC3GearManager.remove(itemId);
 			});

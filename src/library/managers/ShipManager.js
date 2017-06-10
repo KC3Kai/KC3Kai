@@ -138,7 +138,8 @@ Saves and loads list to and from localStorage
 				// Reduce Consumption Counter
 				// df (delta)      = [0,5,20]
 				df.shift(); df.push(0);
-				console.log("Akashi repaired", cShip.name(), cShip.hp.reduceRight((hi, lo) => hi-lo),
+				console.log("Akashi repaired", cShip.rosterId, cShip.name(),
+					cShip.hp.reduceRight((hi, lo) => hi - lo),
 					df, df.map(rsc => Math.floor(rsc * plt)) );
 				Object.keys(pc).reverse().forEach(function(d){
 					// if the difference is not all-zero, keep going
