@@ -355,8 +355,17 @@
 							$(".eq_next .eq_res_icon img", ResBox).attr("src", "../../assets/img/items/"+upgradedItem.api_type[3]+".png");
 							$(".eq_next .eq_res_icon", ResBox).attr("alt", upgradedItem.api_id);
 							$(".eq_next .eq_res_icon", ResBox).click(gearClickFunc);
-							$(".eq_next .eq_res_name", ResBox).text( KC3Meta.gearName(upgradedItem.api_name) );
-							$(".eq_next .eq_res_name", ResBox).attr("title", "[{0}] {1}".format(upgradedItem.api_id, KC3Meta.gearName(upgradedItem.api_name)) );
+							$(".eq_next .eq_res_name .name_val", ResBox).text( KC3Meta.gearName(upgradedItem.api_name) );
+							if(imp.upgrade[1]){
+								$(".eq_next .eq_res_name .stars_val", ResBox).text(
+									imp.upgrade[1] >= 10 ? "max" : "+"+imp.upgrade[1]
+								);
+							} else {
+								$(".eq_next .eq_res_name .stars", ResBox).hide();
+							}
+							$(".eq_next .eq_res_name", ResBox).attr("title",
+								"[{0}] {1}".format(upgradedItem.api_id, KC3Meta.gearName(upgradedItem.api_name))
+							);
 						} else {
 							$(".eq_res_line.plusmax", ResBox).hide();
 							$(".eq_next", ResBox).hide();
