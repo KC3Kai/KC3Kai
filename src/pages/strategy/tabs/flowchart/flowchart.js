@@ -155,6 +155,11 @@
 					$(".questTrack", thisBox).hide();
 				} else {
 					$(".questCount", thisBox).text( questRecord.outputShort() );
+					if(questRecord.tracking.length  > 1){
+						$(".questCount", thisBox)
+							.attr("title", questRecord.outputShort(true))
+							.lazyInitTooltip();
+					}
 				}
 				
 				// Status-based actions
