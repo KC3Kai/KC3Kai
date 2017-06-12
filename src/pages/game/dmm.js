@@ -367,13 +367,11 @@ var interactions = {
 					
 					if(ConfigManager.api_tracking){
 						$(".tracking", QuestBox).html( QuestData.outputHtml() );
+						if(QuestData.tracking && QuestData.tracking.length > 1){
+							$(".tracking", QuestBox).addClass("small");
+						}
 					}else{
 						$(".tracking", QuestBox).hide();
-					}
-					
-					// Special Bw1 case multiple requirements
-					if( QuestRaw.api_no == 214 ){
-						$(".tracking", QuestBox).addClass("small");
 					}
 				}else{
 					if(ConfigManager.google_translate) {
