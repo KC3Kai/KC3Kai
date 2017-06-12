@@ -26,7 +26,7 @@ Executes processing and relies on KC3Network for the triggers
 	KC3Request.prototype.validateHeaders = function(){
 		// If response header statusCode is not 200, means non-in-game error
 		if(this.statusCode != 200){
-			console.warn("Response invalid:", this.statusCode, this.response);
+			console.warn("Response status invalid:", this.statusCode, this.url, this.headers);
 			KC3Network.trigger("CatBomb", {
 				title: KC3Meta.term("CatBombServerCommErrorTitle"),
 				message: KC3Meta.term("CatBombServerCommErrorMsg").format([this.call])

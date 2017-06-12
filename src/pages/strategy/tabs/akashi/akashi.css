@@ -200,3 +200,6 @@
 	white-space:nowrap;
 	text-overflow:ellipsis;
 }
+.tab_akashi .eq_res .eq_next .eq_res_name .stars {
+	color:#45a9a5;
+}

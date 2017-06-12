@@ -2061,17 +2061,21 @@ Previously known as "Reactor"
 					[241,0,[3,5], true],
 					[229,0,[ 4 ], true], // Bw6: Defeat 12 bosses in horned nodes in World 4
 					[242,0,[4,4], true], // Bw8: Defeat a boss in World [W4-4]
-					[214,2,false, true], // Bw1: 3rd requirement: Win vs 12 bosses (index:2)
+					[214,2,false, true]  // Bw1: 3rd requirement: Win vs 12 bosses (index:2)
 				],
 				[ /* A RANK */
 					[261,0,[1,5], true], // Bw10: Sortie to [W1-5] and A-rank+ the boss node 3 times
-					[265,0,[1,5], true]  // Bm5: Deploy a fleet to [W1-5] and A-rank+ the boss node 10 times
+					[265,0,[1,5], true], // Bm5: Deploy a fleet to [W1-5] and A-rank+ the boss node 10 times
+					[854,0,[2,4], true], // Bq2: 1st requirement: [W2-4] A-rank+ the boss node (index:0)
+					[854,1,[6,1], true], // Bq2: 2nd requirement: [W6-1] A-rank+ the boss node (index:1)
+					[854,2,[6,3], true]  // Bq2: 3rd requirement: [W6-3] A-rank+ the boss node (index:2)
 				],
 				[ /* S RANK */
 					[214,3,false,false], // Bw1: 4th requirement: 6 S ranks (index:3)
 					[243,0,[5,2], true], // Bw9: Sortie to [W5-2] and S-rank the boss node 2 times
 					[256,0,[6,1], true], // Bm2: Deploy to [W6-1] and obtain an S-rank the boss node 3 times
-					[822,0,[2,4], true]  // Bq1: Sortie to [W2-4] and S-rank the boss node 2 times
+					[822,0,[2,4], true], // Bq1: Sortie to [W2-4] and S-rank the boss node 2 times
+					[854,3,[6,4], true]  // Bq2: 4th requirement: [W6-4] S-rank the boss node (index:3)
 				],
 				[ /* SS RANK Kanzen shohri */ ]
 			].slice(0, rankPt+1)
