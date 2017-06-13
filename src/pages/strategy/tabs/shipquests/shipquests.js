@@ -62,6 +62,7 @@
 				sortno: MasterShip.api_sortno,
 				name: ThisShip.name(),
 				level: ThisShip.level,
+				levelClass: ThisShip.levelClass(),
 				quests: Quests,
 			};
 
@@ -197,8 +198,8 @@
 						$(".ship_name", cElm).addClass("ship_kekkon-color");
 					}
 					$(".ship_type", cElm).text( KC3Meta.stype(cShip.stype) );
-					var shipLevelConv = shipLevel;
-					$(".ship_lv", cElm).html( "<span>Lv.</span>" + shipLevelConv);
+					$(".ship_lv .value", cElm).text( shipLevel )
+						.addClass( cShip.levelClass );
 
 					Object.keys(cShip.quests).forEach(function(questCtr){
 						var questId = cShip.quests[questCtr];

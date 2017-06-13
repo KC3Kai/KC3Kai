@@ -38,6 +38,7 @@
 					sortno: MasterShip.api_sortno,
 					name: ThisShip.name(),
 					level: ThisShip.level,
+					levelClass: ThisShip.levelClass(),
 					morale: ThisShip.morale,
 					equip: ThisShip.items,
 					locked: ThisShip.lock,
@@ -211,9 +212,9 @@
 					$(".ship_img .ship_icon", cElm).click(shipClickFunc);
 					$(".ship_name", cElm).text( cShip.name );
 					$(".ship_type", cElm).text( KC3Meta.stype(cShip.stype) );
-					var shipLevelConv = shipLevel;
-					$(".ship_lv", cElm).html( "<span>Lv.</span>" + shipLevelConv);
-					$(".ship_morale", cElm).html( cShip.morale );
+					$(".ship_lv .value", cElm).text( shipLevel )
+						.addClass( cShip.levelClass );
+					$(".ship_morale", cElm).text( cShip.morale );
 
 					var hpStatus = cShip.hp.toString() + " / " + cShip.maxhp.toString();
 					$(".ship_status", cElm).text( hpStatus );
@@ -227,7 +228,7 @@
 
 					if (cShip.damageStatus == "full" ||
 						cShip.damageStatus == "dummy") {
-						console.warn("damage status shouldn't be full / dummy in this docking page");
+						console.warn("Damage status shouldn't be full / dummy in this docking page", cShip);
 					}
 
 					$(".ship_status", cElm).addClass("ship_" + cShip.damageStatus);
