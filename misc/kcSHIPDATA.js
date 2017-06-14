@@ -14219,7 +14219,7 @@ var SHIPDATA = {
 		FP: 50,
 		TP: 140,
 		AA: 0,
-		AR: 53,
+		AR: 49,
 		EV: 20,
 		ASW: 0,
 		LOS: 15,
@@ -14269,7 +14269,7 @@ var SHIPDATA = {
 		FP: 90,
 		TP: 170,
 		AA: 0,
-		AR: 93,
+		AR: 89,
 		EV: 28,
 		ASW: 0,
 		LOS: 18,
@@ -15393,7 +15393,7 @@ var SHIPDATA = {
 		TP: 140,
 		AA: 0,
 		AR: 38,
-		SLOTS: [0,0],
+		SLOTS: [0,0,0],
 		EQUIPS: [570,515],
 		RNG: 1,
 		SPD: 5,
@@ -16660,4 +16660,4 @@ aby[s]=as;
 };
 //console.log(aby);
 copy(JSON.stringify(aby));
-console.log("JSON copied to clipboard");
+console.debug("JSON copied to clipboard");
