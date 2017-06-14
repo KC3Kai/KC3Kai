@@ -63,11 +63,11 @@
 			
 			$(".hq_rank .hq_content").html(PlayerManager.hq.rank);
 			$(".hq_level .hq_content").html(PlayerManager.hq.level);
-			$(".hq_exp .hq_content").html( "{0} / {1}".format(PlayerManager.hq.exp[3], PlayerManager.hq.exp[1]+PlayerManager.hq.exp[3]) );
+			$(".hq_exp .hq_content").html( "{0} / {1}".format(PlayerManager.hq.exp[3].toLocaleString(), (PlayerManager.hq.exp[1]+PlayerManager.hq.exp[3]).toLocaleString()));
 			
-			$(".rank_previous .rank_content").html(PlayerManager.hq.rankPtLastCount);
-			$(".rank_cutval .rank_content").html(PlayerManager.hq.rankPtCutoff);
-			$(".rank_current .rank_content").html(PlayerManager.hq.getRankPoints());
+			$(".rank_previous .rank_content").html(PlayerManager.hq.rankPtLastCount.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }));
+			$(".rank_cutval .rank_content").html(PlayerManager.hq.rankPtCutoff.toLocaleString());
+			$(".rank_current .rank_content").html(PlayerManager.hq.getRankPoints().toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) );
 			
 			// Manual rank cut-off
 			$("#rank_manual_cut").on("click", function(){

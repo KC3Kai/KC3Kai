@@ -993,7 +993,7 @@
 			$(".admiral_comm").text( PlayerManager.hq.desc );
 			$(".admiral_rank").text( PlayerManager.hq.rank );
 			if(ConfigManager.rankPtsMode === 2){
-				$(".admiral_rank").text(PlayerManager.hq.getRankPoints() + KC3Meta.term("HQRankPoints"));
+				$(".admiral_rank").text(PlayerManager.hq.getRankPoints().toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + KC3Meta.term("HQRankPoints"));
 			}else{
 				$(".admiral_rank").text(PlayerManager.hq.rank);
 			}
@@ -3458,7 +3458,7 @@
 				else
 					return "";
 			}()))
-			.text( PlayerManager.hq.exp[hqDt] );
+			.text( PlayerManager.hq.exp[hqDt].toLocaleString() );
 	}
 
 	function CraftGearStats(MasterItem, StatProperty, Code){
