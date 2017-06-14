@@ -199,6 +199,8 @@
 	width:50px;
 	text-align:center;
 	position:relative;
+	overflow:hidden;
+	white-space:nowrap;
 }
 .tab_shipquests .ship_item .ship_lv.ship_kekkon {
 }
@@ -206,10 +208,18 @@
 	width:430px;
 	text-align:left;
 }
-.tab_shipquests .ship_item .ship_lv span {
+.tab_shipquests .ship_item .ship_lv span.i18n {
 	color:#888;
 }
-/* Fields: Stats */
+.tab_shipquests .ship_item .ship_lv span.value.married {
+	color:#a97417;
+}
+.tab_shipquests .ship_item .ship_lv span.value.high {
+	color:#107e57;
+}
+.tab_shipquests .ship_item .ship_lv span.value.medium {
+	color:#36c2db;
+}
 .tab_shipquests .ship_item .ship_stat {
 	width:35px;
 	text-align:center;

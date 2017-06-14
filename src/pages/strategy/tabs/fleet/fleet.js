@@ -412,6 +412,7 @@
 				$(".ship_tooltip .ship_rosterId span", shipBox).text(kcShip.rosterId);
 				$(".ship_tooltip .ship_stype", shipBox).text(kcShip.stype());
 				$(".ship_tooltip .ship_level span.value", shipBox).text(kcShip.level);
+				//$(".ship_tooltip .ship_level span.value", shipBox).addClass(kcShip.levelClass());
 				$(".ship_tooltip .ship_hp span.hp", shipBox).text(kcShip.hp[0]);
 				$(".ship_tooltip .ship_hp span.mhp", shipBox).text(kcShip.hp[1]);
 				$(".ship_tooltip .stat_hp", shipBox).text(kcShip.hp[1]);
