@@ -79,6 +79,7 @@
 .tab_blueprints .ship_item .ship_img img.ship_icon {
 	width:20px;
 	height:20px;
+	margin-top:-2px;
 }
 .tab_blueprints .ship_item .ship_img img.ship_kekkon {
 	position:absolute;
@@ -166,9 +167,16 @@
 .tab_blueprints .ship_item .need_materials .materialIcon span.used {
 	color:#aaa;
 }
+.tab_blueprints .ship_item .ship_lock img {
+	width:13px;
+	height:13px;
+	margin:-35px 0px 0px 39px;
+	position:relative;
+}
 
 .tab_blueprints .total {
 	margin:5px 0px 5px 0px;
+	display:none;
 }
 .tab_blueprints .total .total_item {
 	float:left;

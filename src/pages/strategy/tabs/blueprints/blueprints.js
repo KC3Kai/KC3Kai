@@ -15,6 +15,7 @@
 				(ship) => -ship.materials.length);
 			this.defineSimpleFilter("materials", [], 0, (index, ship) => ship.materials.length);
 			this.showListRowCallback = this.showRemodelMaterials;
+			this.heartLockMode = 2;
 		}
 
 		/* RELOAD
@@ -81,7 +82,7 @@
 		}
 
 		showTotalMaterials(event, { shipList }) {
-			const totalDiv = $(".tab_blueprints .total");
+			const totalDiv = $(".tab_blueprints .total .total_items").empty();
 			let totalItemDiv = $("<div />").addClass("total_item").appendTo(totalDiv);
 			$("<img />")
 				.attr("src", "../../assets/img/client/ship.png")
@@ -90,9 +91,13 @@
 				.text("x{0}".format(shipList.length))
 				.appendTo(totalItemDiv);
 			
+			// Count total remodel materials
 			const materialCount = {};
-			[].concat(...shipList.map(ship => ship.materials.map(m => m.icon)))
-				.map(icon => {
+			[].concat(...shipList.map(ship => ship.materials.map(
+				m => new Array(m.icon === 58 ? m.info.blueprint :
+								m.icon === 65 ? m.info.catapult :
+								1).fill(m.icon)
+				))).map(icon => {
 					materialCount[icon] = materialCount[icon] || 0;
 					materialCount[icon] += 1;
 				});
@@ -105,10 +110,12 @@
 					.text("x{0}".format(materialCount[icon]))
 					.appendTo(totalItemDiv);
 			}
+			totalDiv.parent().show();
 		}
 
 		buildMaterialTooltip(remodelInfo) {
 			let title = $("<div />");
+			// Ship icons from to
 			let line = $("<div />");
 			$("<img />")
 				.attr("src", KC3Meta.shipIcon(remodelInfo.ship_id_from))
@@ -123,6 +130,7 @@
 				.appendTo(line);
 			title.append(line);
 			
+			// Consumption of ammo and steel
 			line = $("<div />");
 			$("<img />")
 				.attr("src", "../../assets/img/client/ammo.png")
@@ -140,6 +148,29 @@
 				.appendTo(line);
 			title.append(line);
 			
+			// Blueprints or catapults
+			line = $("<div />");
+			if(remodelInfo.blueprint) {
+				$("<img />")
+					.attr("src", "../../assets/img/useitems/58.png")
+					.width(15).height(15).css("margin-right", 2)
+					.appendTo(line);
+				$("<span></span>").css("margin-right", 10)
+					.text(remodelInfo.blueprint)
+					.appendTo(line);
+			}
+			if(remodelInfo.catapult) {
+				$("<img />")
+					.attr("src", "../../assets/img/useitems/65.png")
+					.width(15).height(15).css("margin-right", 2)
+					.appendTo(line);
+				$("<span></span>").css("margin-right", 2)
+					.text(remodelInfo.catapult)
+					.appendTo(line);
+			}
+			title.append(line);
+			
+			// Consumption of devmats or torch
 			line = $("<div />");
 			if(remodelInfo.devmat) {
 				$("<img />")
