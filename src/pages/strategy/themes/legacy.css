@@ -1353,3 +1353,15 @@ body {
 .tab_expedtable .exped_row .exped_view .info_col.edit_btn {
 	background-color: #93bcff;
 }
+
+/* BLUEPRINTS
+--------------------------------*/
+.tab_blueprints .ship_item.odd .ship_field {
+	background:#efefef;
+}
+.tab_blueprints .ship_item.even .ship_field {
+	background:#e4e4e4;
+}
+.tab_blueprints .ship_item:hover .ship_field {
+	background:#ffffcc;
+}
