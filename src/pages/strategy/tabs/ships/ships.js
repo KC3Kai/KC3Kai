@@ -786,7 +786,7 @@
 				   function(x) { return x.ctype; });
 			define("bid", "ShipId",
 				   function(x) { return x.bid; });
-			define("sortno", "BookNo",
+			define("sortno", "SortOrder",
 				   function(x) { return x.sortno; });
 		},
 
