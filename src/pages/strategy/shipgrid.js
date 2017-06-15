@@ -12,6 +12,7 @@
 			this.sorterDefinitions = {};
 			this.filterDefinitions = {};
 			this.pageNo = false;
+			this.heartLockMode = 0;
 			this.isLoading = false;
 		}
 
@@ -73,9 +74,22 @@
 						.click(this.shipClickFunc);
 					$(".ship_name", shipRow).text(ship.name)
 						.toggleClass("ship_kekkon-color", ship.level >= 100);
+					if(KC3StrategyTabs.isTextEllipsis($(".ship_name", shipRow))) {
+						$(".ship_name", shipRow).attr("title", ship.name);
+					}
 					$(".ship_type", shipRow).text(KC3Meta.stype(ship.stype));
 					$(".ship_lv .value", shipRow).text(ship.level)
 						.addClass(ship.levelClass);
+					$(".ship_lock img", shipRow).attr("src",
+						"../../assets/img/client/heartlock{0}.png".format(!ship.locked ? "-x" : "")
+					);
+					if(this.heartLockMode === 1 && ship.locked){
+						$(".ship_lock img", shipRow).show();
+					} else if(this.heartLockMode === 2 && !ship.locked){
+						$(".ship_lock img", shipRow).show();
+					} else {
+						$(".ship_lock", shipRow).hide();
+					}
 					
 					// Invoke more rendering of ship row
 					if(typeof this.showListRowCallback === "function") {
