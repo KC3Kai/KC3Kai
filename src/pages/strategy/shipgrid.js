@@ -45,6 +45,8 @@
 			console.assert(this.shipRowTemplateDiv.length, "ship row template element not found");
 			this.isLoading = true;
 			this.loadStartTime = Date.now();
+			// Trigger pre-show event
+			this.shipListDiv.trigger("preShow");
 			// Clear old list
 			this.shipListDiv.empty().hide();
 			const delayMillis = 100;
@@ -98,7 +100,8 @@
 				}
 				this.shipListDiv.show().createChildrenTooltips();
 				$(".ingame_page").toggle(this.pageNo);
-				this.shipListDiv.trigger("onshow", {shipList: filteredShipList});
+				// Trigger post-show event
+				this.shipListDiv.trigger("postShow", {shipList: filteredShipList});
 				this.isLoading = false;
 				console.debug("Showing", this.tabName, "list took",
 					(Date.now() - this.loadStartTime) - delayMillis, "milliseconds");
