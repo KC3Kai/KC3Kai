@@ -1,5 +1,5 @@
 <div class="page_title">
-	Required blueprints, etc to remodel ships
+	Required blueprints to remodel ships
 	<div class="page_help_btn hover"><span>?</span> Help Topics</div>
 </div>
 
@@ -9,7 +9,10 @@
 	<div class="help_a">This page shows player's ships with required remodeling materials, such as blueprints.</div>
 
 	<div class="help_q">What do gray materials mean?</div>
-	<div class="help_a">Your current remodel of shipgirl indicates you have already used those materials.</div>
+	<div class="help_a">Your current remodel of shipgirl indicates you have already used those materials to get corsponding remodeled ships.</div>
+
+	<div class="help_q">Why my data seem weird or wrong after game maintenance?</div>
+	<div class="help_a">Sometimes KanColle devs may not update remodel info in time or put dummy data into API result if multi maintenances scheduled shortly. To fix such issues after in-game data stable, you might try to refresh our remodel info cache by clicking <b>'Clear Ship Remodel Information'</b> link at Profile page.</div>
 
 	<div class="help_more">
 		<a href="https://github.com/KC3Kai/KC3Kai/wiki/Strategy-Room%3A-Blueprints">Learn more</a>
@@ -17,14 +20,12 @@
 </div>
 
 <div class="view_types">
-	<div class="view_type">
-		<input type="radio" name="view_type" id="shiplist" checked />
-		<label for="shiplist" class="view_label">Owned Ships</label>
-	</div>
-	<div class="view_type">
-		<input type="radio" name="view_type" id="masterlist" />
-		<label for="masterlist" class="view_label">All Ships</label>
-	</div>
+	<label class="view_type">
+		<input type="radio" name="view_type" value="owned" checked /><span>Owned Ships</span>
+	</label>
+	<label class="view_type">
+		<input type="radio" name="view_type" value="all" /><span>All Ships</span>
+	</label>
 </div>
 <div class="clear"></div>
 

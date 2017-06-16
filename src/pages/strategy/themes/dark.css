@@ -1847,3 +1847,23 @@ button, input, select, textarea {
 .bg-danger {
 	background-color:#960f30;
 }
+
+/* BLUEPRINTS
+--------------------------------*/
+.tab_blueprints .view_types {
+	background:#131313;
+	border-bottom:1px solid #444444;
+}
+
+.tab_blueprints .ship_item.odd .ship_field {
+	background:#303030;
+}
+.tab_blueprints .ship_item.even .ship_field {
+	background:#303030;
+}
+.tab_blueprints .ship_item:hover .ship_field {
+	background:#000000;
+}
+.tab_blueprints .ship_item .need_materials .icon span.used {
+	color:#555;
+}

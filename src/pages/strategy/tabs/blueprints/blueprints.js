@@ -16,6 +16,7 @@
 			this.defineSimpleFilter("materials", [], 0, (index, ship) => ship.materials.length);
 			this.showListRowCallback = this.showRemodelMaterials;
 			this.heartLockMode = 2;
+			this.viewType = "owned";
 		}
 
 		/* RELOAD
@@ -24,32 +25,100 @@
 		reload() {
 			PlayerManager.loadConsumables();
 			KC3ShipManager.load();
-			this.prepareShipList(true, this.mapRemodelMaterials);
 		}
 
 		/* EXECUTE
 		Places data onto the interface from scratch.
 		---------------------------------*/
 		execute() {
+			$(".tab_blueprints .view_type input[type=radio][name=view_type]")
+				.on("change", function() {
+				const viewType = $("input[type=radio][name=view_type]:checked").val();
+				KC3StrategyTabs.gotoTab(undefined, viewType);
+			});
 			this.shipListDiv = $(".tab_blueprints .ship_list");
 			this.shipRowTemplateDiv = $(".tab_blueprints .factory .ship_item");
 			this.registerShipListHeaderEvent(
 				$(".tab_blueprints .ship_header .ship_field.hover")
 			);
-			this.shipListDiv.on("onshow", this.showTotalMaterials);
+			this.shipListDiv.on("preShow", () => {
+				$(".tab_blueprints .total").hide();
+				$(".tab_blueprints .owned").hide();
+			});
+			this.shipListDiv.on("postShow", this.showTotalMaterials);
+			if(KC3StrategyTabs.pageParams[1]){
+				this.loadView(KC3StrategyTabs.pageParams[1]);
+			} else {
+				this.loadView();
+			}
+		}
+
+		loadView(viewType = "owned") {
+			this.viewType = viewType;
+			$(".tab_blueprints .view_type input[type=radio][name=view_type][value={0}]"
+				.format(this.viewType)).prop("checked", true);
+			switch(this.viewType) {
+				case "owned":
+					this.setSorter("lv");
+					this.prepareShipList(true, this.mapRemodelMaterials);
+					break;
+				case "all":
+					this.setSorter("type");
+					this.prepareShipListFromRemodelDb();
+					break;
+				default:
+					console.warn("Unsupported view type:", this.viewType);
+					return;
+			}
 			this.showListGrid();
+		}
+
+		prepareShipListFromRemodelDb() {
+			const allRemodelInfo = RemodelDb._db.remodelInfo;
+			this.shipList.length = 0;
+			Object.keys(allRemodelInfo).forEach(key => {
+				const remodelInfo = allRemodelInfo[key];
+				if(remodelInfo.blueprint || remodelInfo.catapult) {
+					const shipMaster = KC3Master.ship(remodelInfo.ship_id_from);
+					const shipData = {
+						id: remodelInfo.ship_id_from,
+						masterId: remodelInfo.ship_id_from,
+						stype: shipMaster.api_stype,
+						ctype: shipMaster.api_ctype,
+						sortno: shipMaster.api_sortno,
+						name: KC3Meta.shipName(shipMaster.api_name),
+						level: remodelInfo.level,
+						levelClass: "",
+						locked: 1
+					};
+					const remodelFormIds = RemodelDb.remodelGroup(remodelInfo.ship_id_to);
+					const ownedMasterId = KC3ShipManager.find(
+						ship => remodelFormIds.indexOf(ship.masterId) >=
+							remodelFormIds.indexOf(remodelInfo.ship_id_to)
+					).length > 0 ? remodelInfo.ship_id_to : 0;
+					this.attachRemodelMaterials(shipData, [shipData.masterId], ownedMasterId);
+					this.shipList.push(shipData);
+				}
+			});
+			return true;
 		}
 
 		mapRemodelMaterials(shipObj) {
 			const mappedObj = this.defaultShipDataMapping(shipObj);
-			const remodelForms = RemodelDb.remodelGroup(mappedObj.masterId);
+			this.attachRemodelMaterials(mappedObj,
+				RemodelDb.remodelGroup(mappedObj.masterId));
+			return mappedObj;
+		}
+
+		attachRemodelMaterials(mappedObj, remodelFormIds = [], ownedMasterId = 0) {
+			const remodelGroup = RemodelDb.remodelGroup(mappedObj.masterId);
 			mappedObj.materials = [];
-			for(let masterId of remodelForms) {
+			for(let masterId of remodelFormIds) {
 				const remodelInfo = RemodelDb.remodelInfo(masterId);
 				if(remodelInfo) {
 					// Check and mark possibly used material
-					const isUsed = remodelForms.indexOf(mappedObj.masterId)
-						>= remodelForms.indexOf(remodelInfo.ship_id_to);
+					const isUsed = remodelGroup.indexOf(ownedMasterId || mappedObj.masterId)
+						>= remodelGroup.indexOf(remodelInfo.ship_id_to);
 					// Current remodel info support these materials
 					if(remodelInfo.blueprint) {
 						mappedObj.materials.push({
@@ -71,9 +140,12 @@
 		}
 
 		showRemodelMaterials(ship, shipRow) {
+			let firstMaterial = null;
 			for(let material of ship.materials) {
+				firstMaterial = firstMaterial || material;
 				const iconDiv = $("<div />")
-					.addClass("ship_field materialIcon");
+					.addClass("ship_field icon")
+					.toggleClass("limited", this.viewType === "all");
 				$("<img />")
 					.attr("src", "../../assets/img/useitems/" + material.icon + ".png")
 					.appendTo(iconDiv);
@@ -82,6 +154,24 @@
 					.toggleClass("used", material.used).appendTo(iconDiv);
 				iconDiv.attr("title", this.buildMaterialTooltip(material.info));
 				$(".need_materials", shipRow).append(iconDiv);
+			}
+			if(this.viewType === "all" && firstMaterial) {
+				const shipDiv = $("<div />")
+					.addClass("ship_field icon")
+					.toggleClass("limited", this.viewType === "all");
+				$("<img />").attr("src", "../../assets/img/ui/arrow.png")
+					.appendTo(shipDiv);
+				$("<img />")
+					.attr("src", KC3Meta.shipIcon(firstMaterial.info.ship_id_to))
+					.attr("alt", firstMaterial.info.ship_id_to)
+					.click(this.shipClickFunc)
+					.addClass("hover")
+					.appendTo(shipDiv);
+				$("<span></span>")
+					.text(KC3Meta.shipName(
+						KC3Master.ship(firstMaterial.info.ship_id_to).api_name
+					)).appendTo(shipDiv);
+				$(".need_materials", shipRow).append(shipDiv);
 			}
 		}
 
@@ -153,8 +243,8 @@
 				.attr("src", KC3Meta.shipIcon(remodelInfo.ship_id_from))
 				.width(18).height(18).css("vertical-align", "top")
 				.appendTo(line);
-			$("<span></span>")
-				.text(" Lv {0} \u2bc8\u2bc8 ".format(remodelInfo.level))
+			$("<img />").attr("src", "../../assets/img/ui/arrow.png")
+				.css("margin", "0px 10px 0px 10px")
 				.appendTo(line);
 			$("<img />")
 				.attr("src", KC3Meta.shipIcon(remodelInfo.ship_id_to))

@@ -130,7 +130,7 @@ body {
 -------------------------------*/
 #content {
 	width:700px;
-	min-height:1370px;
+	min-height:1400px;
 	float:left;
 	background:#fff;
 	border-radius:10px;
@@ -1356,6 +1356,11 @@ body {
 
 /* BLUEPRINTS
 --------------------------------*/
+.tab_blueprints .view_types {
+	background:#f0f5ff;
+	border-bottom:1px solid #369;
+}
+
 .tab_blueprints .ship_item.odd .ship_field {
 	background:#efefef;
 }
@@ -1364,4 +1369,7 @@ body {
 }
 .tab_blueprints .ship_item:hover .ship_field {
 	background:#ffffcc;
+}
+.tab_blueprints .ship_item .need_materials .icon span.used {
+	color:#aaa;
 }
