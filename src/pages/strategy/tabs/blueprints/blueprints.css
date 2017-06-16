@@ -4,9 +4,9 @@
 
 .tab_blueprints .view_types {
 	width:700px;
-	margin:0px 0px 10px 0px;
+	margin:0px 0px 5px 0px;
 	padding:5px 10px;
-	height:35px;
+	height:30px;
 }
 .tab_blueprints .view_type {
 	float:left;
@@ -181,30 +181,18 @@
 	position:relative;
 }
 
-.tab_blueprints .total {
+.tab_blueprints .summary {
 	margin:5px 0px 5px 0px;
 	display:none;
 }
-.tab_blueprints .total .total_item {
+.tab_blueprints .summary .summary_item {
 	float:left;
 	margin:0px 5px 0px 0px;
 }
-.tab_blueprints .total .total_item img {
-	width:16px;
-	height:16px;
-	margin:0px 2px 0px 0px;
-	vertical-align:top;
+.tab_blueprints .summary .summary_item.i18n {
+	font-weight:bold;
 }
-
-.tab_blueprints .owned {
-	margin:5px 0px 5px 0px;
-	display:none;
-}
-.tab_blueprints .owned .owned_item {
-	float:left;
-	margin:0px 5px 0px 0px;
-}
-.tab_blueprints .owned .owned_item img {
+.tab_blueprints .summary .summary_item img {
 	width:16px;
 	height:16px;
 	margin:0px 2px 0px 0px;

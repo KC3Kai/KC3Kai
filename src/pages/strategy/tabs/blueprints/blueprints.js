@@ -179,7 +179,7 @@
 			const totalDiv = $(".tab_blueprints .total .total_items").empty();
 			const ownedDiv = $(".tab_blueprints .owned .owned_items").empty();
 			
-			let totalItemDiv = $("<div />").addClass("total_item").appendTo(totalDiv);
+			let totalItemDiv = $("<div />").addClass("summary_item").appendTo(totalDiv);
 			$("<img />")
 				.attr("src", "../../assets/img/client/ship.png")
 				.appendTo(totalItemDiv);
@@ -206,14 +206,14 @@
 			// Show total results and owned materials
 			const appendOwnedItem = (iconImg, count) => {
 				const ownedItemDiv = $("<div />")
-					.addClass("owned_item").appendTo(ownedDiv);
+					.addClass("summary_item").appendTo(ownedDiv);
 				iconImg.clone().appendTo(ownedItemDiv);
 				$("<span></span>")
 					.text("x{0}".format(count || 0))
 					.appendTo(ownedItemDiv);
 			};
 			for(let icon in materialCount) {
-				const totalItemDiv = $("<div />").addClass("total_item").appendTo(totalDiv);
+				const totalItemDiv = $("<div />").addClass("summary_item").appendTo(totalDiv);
 				const iconImg = $("<img />")
 					.attr("src", "../../assets/img/useitems/" + icon + ".png")
 					.appendTo(totalItemDiv);
