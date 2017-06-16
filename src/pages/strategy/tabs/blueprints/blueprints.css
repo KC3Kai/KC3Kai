@@ -79,7 +79,7 @@
 .tab_blueprints .ship_item .ship_img img.ship_icon {
 	width:20px;
 	height:20px;
-	margin-top:-2px;
+	vertical-align:bottom;
 }
 .tab_blueprints .ship_item .ship_img img.ship_kekkon {
 	position:absolute;
@@ -162,7 +162,8 @@
 .tab_blueprints .ship_item .need_materials .materialIcon img {
 	width:18px;
 	height:18px;
-	margin:-4px 2px 0px 0px;
+	margin:0px 2px 0px 0px;
+	vertical-align:top;
 }
 .tab_blueprints .ship_item .need_materials .materialIcon span.used {
 	color:#aaa;
@@ -185,5 +186,21 @@
 .tab_blueprints .total .total_item img {
 	width:16px;
 	height:16px;
-	margin:-4px 2px 0px 0px;
+	margin:0px 2px 0px 0px;
+	vertical-align:top;
+}
+
+.tab_blueprints .owned {
+	margin:5px 0px 5px 0px;
+	display:none;
+}
+.tab_blueprints .owned .owned_item {
+	float:left;
+	margin:0px 5px 0px 0px;
+}
+.tab_blueprints .owned .owned_item img {
+	width:16px;
+	height:16px;
+	margin:0px 2px 0px 0px;
+	vertical-align:top;
 }

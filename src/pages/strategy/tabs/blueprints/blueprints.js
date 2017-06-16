@@ -22,6 +22,7 @@
 		Loads latest player or game data if needed.
 		---------------------------------*/
 		reload() {
+			PlayerManager.loadConsumables();
 			KC3ShipManager.load();
 			this.prepareShipList(true, this.mapRemodelMaterials);
 		}
@@ -41,21 +42,27 @@
 
 		mapRemodelMaterials(shipObj) {
 			const mappedObj = this.defaultShipDataMapping(shipObj);
-			const remodelForms = RemodelDb.remodelGroup(shipObj.masterId);
+			const remodelForms = RemodelDb.remodelGroup(mappedObj.masterId);
 			mappedObj.materials = [];
 			for(let masterId of remodelForms) {
 				const remodelInfo = RemodelDb.remodelInfo(masterId);
 				if(remodelInfo) {
+					// Check and mark possibly used material
+					const isUsed = remodelForms.indexOf(mappedObj.masterId)
+						>= remodelForms.indexOf(remodelInfo.ship_id_to);
+					// Current remodel info support these materials
 					if(remodelInfo.blueprint) {
 						mappedObj.materials.push({
 							icon: 58,
-							info: remodelInfo
+							info: remodelInfo,
+							used: isUsed
 						});
 					}
 					if(remodelInfo.catapult) {
 						mappedObj.materials.push({
 							icon: 65,
-							info: remodelInfo
+							info: remodelInfo,
+							used: isUsed
 						});
 					}
 				}
@@ -70,12 +77,9 @@
 				$("<img />")
 					.attr("src", "../../assets/img/useitems/" + material.icon + ".png")
 					.appendTo(iconDiv);
-				const remodelIds = RemodelDb.remodelGroup(ship.masterId);
 				$("<span></span>")
 					.text(KC3Meta.useItemName(material.icon))
-					.toggleClass("used",
-						remodelIds.indexOf(ship.masterId) >= remodelIds.indexOf(material.info.ship_id_to)
-					).appendTo(iconDiv);
+					.toggleClass("used", material.used).appendTo(iconDiv);
 				iconDiv.attr("title", this.buildMaterialTooltip(material.info));
 				$(".need_materials", shipRow).append(iconDiv);
 			}
@@ -83,6 +87,8 @@
 
 		showTotalMaterials(event, { shipList }) {
 			const totalDiv = $(".tab_blueprints .total .total_items").empty();
+			const ownedDiv = $(".tab_blueprints .owned .owned_items").empty();
+			
 			let totalItemDiv = $("<div />").addClass("total_item").appendTo(totalDiv);
 			$("<img />")
 				.attr("src", "../../assets/img/client/ship.png")
@@ -91,26 +97,52 @@
 				.text("x{0}".format(shipList.length))
 				.appendTo(totalItemDiv);
 			
-			// Count total remodel materials
-			const materialCount = {};
-			[].concat(...shipList.map(ship => ship.materials.map(
-				m => new Array(m.icon === 58 ? m.info.blueprint :
-								m.icon === 65 ? m.info.catapult :
-								1).fill(m.icon)
+			// Count total and used remodel materials
+			const countMaterials = (resultMap = ({}), filter = (m => true)) => {
+				[].concat(...shipList.map(ship => ship.materials
+					.filter(filter).map(
+					m => new Array(m.icon === 58 ? m.info.blueprint :
+									m.icon === 65 ? m.info.catapult :
+									1).fill(m.icon)
 				))).map(icon => {
-					materialCount[icon] = materialCount[icon] || 0;
-					materialCount[icon] += 1;
+					resultMap[icon] = resultMap[icon] || 0;
+					resultMap[icon] += 1;
 				});
+				return resultMap;
+			};
+			const materialCount = countMaterials();
+			const usedCount = countMaterials({}, (m => m.used));
+			
+			// Show total results and owned materials
+			const appendOwnedItem = (iconImg, count) => {
+				const ownedItemDiv = $("<div />")
+					.addClass("owned_item").appendTo(ownedDiv);
+				iconImg.clone().appendTo(ownedItemDiv);
+				$("<span></span>")
+					.text("x{0}".format(count || 0))
+					.appendTo(ownedItemDiv);
+			};
 			for(let icon in materialCount) {
-				let totalItemDiv = $("<div />").addClass("total_item").appendTo(totalDiv);
-				$("<img />")
+				const totalItemDiv = $("<div />").addClass("total_item").appendTo(totalDiv);
+				const iconImg = $("<img />")
 					.attr("src", "../../assets/img/useitems/" + icon + ".png")
 					.appendTo(totalItemDiv);
 				$("<span></span>")
-					.text("x{0}".format(materialCount[icon]))
-					.appendTo(totalItemDiv);
+					.text("x{0}/{1}".format(
+						materialCount[icon] - (usedCount[icon] || 0),
+						materialCount[icon]
+					)).appendTo(totalItemDiv);
+				switch(Number(icon)) {
+					case 58:
+						appendOwnedItem(iconImg, PlayerManager.consumables.blueprints);
+						break;
+					case 65:
+						appendOwnedItem(iconImg, PlayerManager.consumables.protoCatapult);
+						break;
+				}
 			}
 			totalDiv.parent().show();
+			ownedDiv.parent().show();
 		}
 
 		buildMaterialTooltip(remodelInfo) {
@@ -119,14 +151,14 @@
 			let line = $("<div />");
 			$("<img />")
 				.attr("src", KC3Meta.shipIcon(remodelInfo.ship_id_from))
-				.width(18).height(18)
+				.width(18).height(18).css("vertical-align", "top")
 				.appendTo(line);
 			$("<span></span>")
 				.text(" Lv {0} \u2bc8\u2bc8 ".format(remodelInfo.level))
 				.appendTo(line);
 			$("<img />")
 				.attr("src", KC3Meta.shipIcon(remodelInfo.ship_id_to))
-				.width(18).height(18)
+				.width(18).height(18).css("vertical-align", "top")
 				.appendTo(line);
 			title.append(line);
 			
@@ -135,6 +167,7 @@
 			$("<img />")
 				.attr("src", "../../assets/img/client/ammo.png")
 				.width(15).height(15).css("margin-right", 2)
+				.css("vertical-align", "top")
 				.appendTo(line);
 			$("<span></span>").css("margin-right", 10)
 				.text(remodelInfo.ammo)
@@ -142,6 +175,7 @@
 			$("<img />")
 				.attr("src", "../../assets/img/client/steel.png")
 				.width(15).height(15).css("margin-right", 2)
+				.css("vertical-align", "top")
 				.appendTo(line);
 			$("<span></span>").css("margin-right", 2)
 				.text(remodelInfo.steel)
@@ -154,6 +188,7 @@
 				$("<img />")
 					.attr("src", "../../assets/img/useitems/58.png")
 					.width(15).height(15).css("margin-right", 2)
+					.css("vertical-align", "top")
 					.appendTo(line);
 				$("<span></span>").css("margin-right", 10)
 					.text(remodelInfo.blueprint)
@@ -163,6 +198,7 @@
 				$("<img />")
 					.attr("src", "../../assets/img/useitems/65.png")
 					.width(15).height(15).css("margin-right", 2)
+					.css("vertical-align", "top")
 					.appendTo(line);
 				$("<span></span>").css("margin-right", 2)
 					.text(remodelInfo.catapult)
@@ -176,6 +212,7 @@
 				$("<img />")
 					.attr("src", "../../assets/img/client/devmat.png")
 					.width(15).height(15).css("margin-right", 2)
+					.css("vertical-align", "top")
 					.appendTo(line);
 				$("<span></span>").css("margin-right", 10)
 					.text(remodelInfo.devmat)
@@ -185,6 +222,7 @@
 				$("<img />")
 					.attr("src", "../../assets/img/client/ibuild.png")
 					.width(15).height(15).css("margin-right", 2)
+					.css("vertical-align", "top")
 					.appendTo(line);
 				$("<span></span>").css("margin-right", 2)
 					.text(remodelInfo.torch)
