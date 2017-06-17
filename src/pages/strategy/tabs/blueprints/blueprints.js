@@ -46,11 +46,7 @@
 				$(".tab_blueprints .owned").hide();
 			});
 			this.shipListDiv.on("postShow", this.showTotalMaterials);
-			if(KC3StrategyTabs.pageParams[1]){
-				this.loadView(KC3StrategyTabs.pageParams[1]);
-			} else {
-				this.loadView();
-			}
+			this.loadView(KC3StrategyTabs.pageParams[1]);
 		}
 
 		loadView(viewType = "owned") {

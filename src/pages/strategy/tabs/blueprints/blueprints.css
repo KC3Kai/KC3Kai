@@ -160,9 +160,11 @@
 .tab_blueprints .ship_item .need_materials .icon {
 	width:auto;
 	margin:0px 5px 0px 0px;
+	display:inline-block;
+	float:initial;
 }
 .tab_blueprints .ship_item .need_materials .icon.limited {
-	max-width:165px;
+	max-width:150px;
 	overflow:hidden;
 	text-overflow:ellipsis;
 }
