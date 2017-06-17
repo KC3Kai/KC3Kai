@@ -175,7 +175,7 @@
 			const totalDiv = $(".tab_blueprints .total .total_items").empty();
 			const ownedDiv = $(".tab_blueprints .owned .owned_items").empty();
 			
-			let totalItemDiv = $("<div />").addClass("summary_item").appendTo(totalDiv);
+			const totalItemDiv = $("<div />").addClass("summary_item").appendTo(totalDiv);
 			$("<img />")
 				.attr("src", "../../assets/img/client/ship.png")
 				.appendTo(totalItemDiv);
@@ -232,24 +232,36 @@
 		}
 
 		buildMaterialTooltip(remodelInfo) {
-			let title = $("<div />");
-			// Ship icons from to
+			const title = $("<div />");
+			// Ship icon and name from prev to next remodel
 			let line = $("<div />");
 			$("<img />")
 				.attr("src", KC3Meta.shipIcon(remodelInfo.ship_id_from))
-				.width(18).height(18).css("vertical-align", "top")
+				.width(18).height(18).css("margin-right", 2)
+				.css("vertical-align", "bottom")
 				.appendTo(line);
+			$("<span></span>").text(
+				KC3Meta.shipName(KC3Master.ship(remodelInfo.ship_id_from).api_name)
+			).appendTo(line);
 			$("<img />").attr("src", "../../assets/img/ui/arrow.png")
-				.css("margin", "0px 10px 0px 10px")
+				.css("vertical-align", "text-top")
+				.css("margin", "0px 5px 0px 5px")
 				.appendTo(line);
 			$("<img />")
 				.attr("src", KC3Meta.shipIcon(remodelInfo.ship_id_to))
-				.width(18).height(18).css("vertical-align", "top")
+				.width(18).height(18).css("margin-right", 2)
+				.css("vertical-align", "bottom")
 				.appendTo(line);
+			$("<span></span>").text(
+				KC3Meta.shipName(KC3Master.ship(remodelInfo.ship_id_to).api_name)
+			).appendTo(line);
 			title.append(line);
 			
-			// Consumption of ammo and steel
+			// Level and consumption of ammo and steel
 			line = $("<div />");
+			$("<span></span>").css("margin-right", 10)
+				.text("{0} {1}".format(KC3Meta.term("LevelShort"), remodelInfo.level))
+				.appendTo(line);
 			$("<img />")
 				.attr("src", "../../assets/img/client/ammo.png")
 				.width(15).height(15).css("margin-right", 2)
@@ -268,7 +280,7 @@
 				.appendTo(line);
 			title.append(line);
 			
-			// Blueprints or catapults
+			// Blueprints, catapults, devmats and torches
 			line = $("<div />");
 			if(remodelInfo.blueprint) {
 				$("<img />")
@@ -290,10 +302,6 @@
 					.text(remodelInfo.catapult)
 					.appendTo(line);
 			}
-			title.append(line);
-			
-			// Consumption of devmats or torch
-			line = $("<div />");
 			if(remodelInfo.devmat) {
 				$("<img />")
 					.attr("src", "../../assets/img/client/devmat.png")
