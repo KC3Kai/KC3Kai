@@ -416,6 +416,15 @@ body {
 .tab_ships .ship_onfleet-color2 {background: #BBDDBA !important;}
 .tab_ships .ship_onfleet-color3 {background: #E8E68F !important;}
 .tab_ships .ship_onfleet-color4 {background: #F6D0A0 !important;}
+.tab_ships .ship_item .ship_lv span.value.married {
+	color:#a97417;
+}
+.tab_ships .ship_item .ship_lv span.value.high {
+	color:#107e57;
+}
+.tab_ships .ship_item .ship_lv span.value.medium {
+	color:#2ea6bb;
+}
 .tab_ships .ship_item .ship_morale.sparkled {
 	background:#ff0;
 }
@@ -519,6 +528,18 @@ body {
 }
 .tab_docking .ship_item:hover .ship_field {
 	background:#ffffcc;
+}
+.tab_docking .ship_item .ship_lv span.i18n {
+	color:#888;
+}
+.tab_docking .ship_item .ship_lv span.value.married {
+	color:#a97417;
+}
+.tab_docking .ship_item .ship_lv span.value.high {
+	color:#107e57;
+}
+.tab_docking .ship_item .ship_lv span.value.medium {
+	color:#2ea6bb;
 }
 .tab_docking .ship_item .ship_hp_box {
 	background:#777;
@@ -1014,6 +1035,18 @@ body {
 .tab_shipquests .ship_item:hover .ship_field {
 	background:#ffffcc;
 }
+.tab_shipquests .ship_item .ship_lv span.i18n {
+	color:#888;
+}
+.tab_shipquests .ship_item .ship_lv span.value.married {
+	color:#a97417;
+}
+.tab_shipquests .ship_item .ship_lv span.value.high {
+	color:#107e57;
+}
+.tab_shipquests .ship_item .ship_lv span.value.medium {
+	color:#2ea6bb;
+}
 
 /* MAPS
 --------------------------------*/
@@ -1369,6 +1402,18 @@ body {
 }
 .tab_blueprints .ship_item:hover .ship_field {
 	background:#ffffcc;
+}
+.tab_blueprints .ship_item .ship_lv span.i18n {
+	color:#888;
+}
+.tab_blueprints .ship_item .ship_lv span.value.married {
+	color:#a97417;
+}
+.tab_blueprints .ship_item .ship_lv span.value.high {
+	color:#107e57;
+}
+.tab_blueprints .ship_item .ship_lv span.value.medium {
+	color:#2ea6bb;
 }
 .tab_blueprints .ship_item .need_materials .icon span.used {
 	color:#aaa;

@@ -344,16 +344,12 @@
 	text-align:center;
 }
 .tab_ships .ship_item .ship_lv span.i18n {
-	color:#888;
 }
 .tab_ships .ship_item .ship_lv span.value.married {
-	color:#a97417;
 }
 .tab_ships .ship_item .ship_lv span.value.high {
-	color:#107e57;
 }
 .tab_ships .ship_item .ship_lv span.value.medium {
-	color:#36c2db;
 }
 
 /* Fields: Stats */

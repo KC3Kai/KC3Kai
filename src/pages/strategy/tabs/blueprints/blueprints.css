@@ -129,20 +129,6 @@
 	overflow:hidden;
 	white-space:nowrap;
 }
-.tab_blueprints .ship_item .ship_lv.ship_kekkon {
-}
-.tab_blueprints .ship_item .ship_lv span.i18n {
-	color:#888;
-}
-.tab_blueprints .ship_item .ship_lv span.value.married {
-	color:#a97417;
-}
-.tab_blueprints .ship_item .ship_lv span.value.high {
-	color:#107e57;
-}
-.tab_blueprints .ship_item .ship_lv span.value.medium {
-	color:#36c2db;
-}
 .tab_blueprints .ship_item .ship_stat {
 	width:35px;
 	text-align:center;
