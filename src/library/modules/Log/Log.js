@@ -18,7 +18,12 @@
     if (d instanceof Error || typeof d !== 'object') {
       return String(d);
     }
-    return JSON.stringify(d);
+    try {
+      return JSON.stringify(d);
+    } catch (e) {
+      // fail-safe on some objects not able to be stringified
+      return String(d);
+    }
   };
 
   // ----------------------------------------------------------------------- //
@@ -32,8 +37,7 @@
 
   Log.assert = (assertion, message, ...data) => {
     if (assertion) { return Promise.resolve(); }
-
-    return KC3Log.logMessage('error', message, data)
+    return KC3Log.logMessage('error', 'Assertion failed: ' + (message || 'console.assert'), data)
       .catch((error) => {
         KC3Log.printError(error);
         return Promise.reject(error);
@@ -45,12 +49,15 @@
   // ----------------------------------------------------------------------- //
 
   Log.printError = (error) => {
-    Log.console.error(error, error.stack); /* RemoveLogging:skip */
+    Log.console.error(error, error.stack);
   };
 
   // ---------------------------[ LOG MESSAGE ]----------------------------- //
 
   Log.logMessage = (logLevel, message, data) => {
+    if (ConfigManager.forwardConsoleOutput) {
+      KC3Log.console[logLevel].apply(KC3Log.console, [message].concat(data));
+    }
     try {
       const stack = KC3Log.getStackTrace(logLevel, message, data);
       const result = KC3Log.composeEntry({ type: logLevel, message, data, stack });
@@ -106,11 +113,11 @@
   Log.generateStackTrace = (message) => {
     // create stack trace
     const obj = { message: stringify(message) };
-    Error.captureStackTrace(obj);
+    Error.captureStackTrace(obj, KC3Log.logMessage);
 
     // remove KC3Log's function calls
     const lines = obj.stack.split(/\r?\n/);
-    return lines.filter(line => line.indexOf('modules/Log/Log.js') === -1).join('\n');
+    return lines.filter(line => !line.includes('library/modules/Log/Log.js')).join('\n');
   };
 
   // ----------------------------------------------------------------------- //
@@ -126,7 +133,7 @@
   };
 
   Log.updateConsoleHooks = () => {
-    ConfigManager.loadIfNecessary();
+    ConfigManager.load();
     if (!ConfigManager.disableConsoleLogHooks) {
       KC3Log.loadConsoleHooks();
     } else {

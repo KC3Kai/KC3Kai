@@ -252,7 +252,7 @@
 		$(".admiral_rank").on("click",function(){
 			// If title, switch to points
 			if($(this).data("mode")==1){
-				$(this).text(PlayerManager.hq.getRankPoints()+KC3Meta.term("HQRankPoints"));
+				$(this).text(PlayerManager.hq.getRankPoints().toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) +KC3Meta.term("HQRankPoints"));
 				$(this).data("mode", 0);
 				
 			// If points, switch to title
@@ -586,7 +586,6 @@
 			}else{
 				overrideFocus = false;
 			}
-			KC3SortieManager.onPvP = false;
 		},
 		
 		CatBomb: function(data){
@@ -618,7 +617,7 @@
 			if($(".admiral_rank").data("mode")==1){
 				$(".admiral_rank").text(PlayerManager.hq.rank);
 			}else{
-				$(".admiral_rank").text(PlayerManager.hq.getRankPoints()+KC3Meta.term("HQRankPoints"));
+				$(".admiral_rank").text(PlayerManager.hq.getRankPoints().toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })+KC3Meta.term("HQRankPoints"));
 			}
 			$(".admiral_lvval").text( PlayerManager.hq.level );
 			$(".admiral_lvbar").css({width: Math.round(PlayerManager.hq.exp[0]*58)+"px"});
@@ -1547,9 +1546,6 @@
 			$(".module.activity .map_world").text("PvP");
 			
 			// Process PvP Battle
-			KC3SortieManager.fleetSent = data.fleetSent;
-			KC3SortieManager.onPvP = true;
-			
 			var thisPvP;
 			KC3SortieManager.nodes.push(thisPvP = (new KC3Node()).defineAsBattle());
 			thisPvP.isPvP = true;
@@ -1695,7 +1691,6 @@
 		},
 		
 		PvPEnd: function(data){
-			KC3SortieManager.onPvP = false;
 			var thisPvP = KC3SortieManager.currentNode();
 			
 			$(".module.activity .battle_rating img")
@@ -2085,7 +2080,7 @@
 				else
 					return "";
 			}()))
-			.text( PlayerManager.hq.exp[hqDt] );
+			.text( PlayerManager.hq.exp[hqDt].toLocaleString() );
 	}
 	
 	function buildContactPlaneSpan(fcontactId, fcontact, econtactId, econtact) {

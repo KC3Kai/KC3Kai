@@ -40,6 +40,7 @@
 			this.seedBranch( rootQuestTree, 249 ); // Bm1
 			this.seedBranch( rootQuestTree, 256 ); // Bm2
 			this.seedBranch( rootQuestTree, 259 ); // Bm4
+			this.seedBranch( rootQuestTree, 663 ); // F55
 			
 			// Other non-flowchart quests
 			var rootQuestList = $(".tab_flowchart .extralist ul.questList");
@@ -154,6 +155,11 @@
 					$(".questTrack", thisBox).hide();
 				} else {
 					$(".questCount", thisBox).text( questRecord.outputShort() );
+					if(questRecord.tracking.length  > 1){
+						$(".questCount", thisBox)
+							.attr("title", questRecord.outputShort(true))
+							.lazyInitTooltip();
+					}
 				}
 				
 				// Status-based actions

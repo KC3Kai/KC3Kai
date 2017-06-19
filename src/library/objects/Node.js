@@ -101,6 +101,13 @@ Used by SortieManager
 		var equalOrMore = enemyGaugeRate > (0.9 * allyGaugeRate);
 		var superior = enemyGaugeRate > 0 && enemyGaugeRate > (2.5 * allyGaugeRate);
 
+		console.log("Predicted HP gauge rate",
+			"-{0}/{1} = {2}%".format(allyGauge, allyBeginHP, allyGaugeRate),
+			"vs",
+			"{2}% = -{0}/{1}".format(enemyGauge, enemyBeginHP, enemyGaugeRate),
+			"enemy -{1}, A needs {2}/{0} ".format(enemyCount, enemySunkCount, requiredSunk)
+		);
+
 		// For long distance air raid
 		if ( (battleName||"").indexOf("ld_airbattle") >-1 ) {
 			// Based on long distance air raid rules from:
@@ -584,11 +591,7 @@ Used by SortieManager
 					}
 				}
 				
-				if(ConfigManager.info_btrank
-					// long distance aerial battle not accurate for now, see #1333
-					// but go for aerial battle (eventKind:4) possible Yasen
-					//&& [6].indexOf(this.eventKind)<0
-					){
+				if(ConfigManager.info_btrank){
 					this.predictedRank = KC3Node.predictRank( beginHPs, endHPs, battleData.api_name );
 				}
 				
@@ -986,8 +989,7 @@ Used by SortieManager
 				}
 			}
 			
-			console.log("Predicted enemyHP", this.enemyHP);
-			console.log("Predicted enemySunk", this.enemySunk);
+			console.log("Predicted enemyHP & Sunk", this.enemyHP, this.enemySunk);
 			
 			// both single fleet predictable only for now
 			if(ConfigManager.info_btrank &&

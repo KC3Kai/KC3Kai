@@ -36,6 +36,7 @@ KC3改 Ship Box for Natsuiro theme
 		$(".ship_face_tooltip .ship_rosterId span", tooltipBox).text(this.shipData.rosterId);
 		$(".ship_face_tooltip .ship_stype", tooltipBox).text(this.shipData.stype());
 		$(".ship_face_tooltip .ship_level span.value", tooltipBox).text(this.shipData.level);
+		//$(".ship_face_tooltip .ship_level span.value", tooltipBox).addClass(this.shipData.levelClass());
 		$(".ship_face_tooltip .ship_hp span.hp", tooltipBox).text(this.shipData.hp[0]);
 		$(".ship_face_tooltip .ship_hp span.mhp", tooltipBox).text(this.shipData.hp[1]);
 		$(".ship_face_tooltip .stat_hp", tooltipBox).text(this.shipData.hp[1]);

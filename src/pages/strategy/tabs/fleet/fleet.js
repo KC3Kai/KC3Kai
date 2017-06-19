@@ -148,7 +148,11 @@
 			});
 
 			this.refreshSavedFleets();
-			this.executeView("current");
+			if(!!KC3StrategyTabs.pageParams[1]){
+				this.executeView(KC3StrategyTabs.pageParams[1], KC3StrategyTabs.pageParams[2] || false);
+			}else{
+				this.executeView("current");
+			}
 		},
 
 		ifFleetsObjExists: function(name) {
@@ -203,16 +207,28 @@
 			});
 		},
 
-		executeView: function(viewType) {
+		executeView: function(viewType, viewName) {
 			$(".fleet_error_msg").text("").hide();
 			if (viewType === "current") {
 				this.showCurrentFleets();
 			} else if (viewType === "saved") {
+				if (viewName !== undefined) {
+					if(!$("#saved").prop("checked")) {
+						$("#saved").trigger("click");
+					}
+					$("#saved_fleet_sel").prop("selectedIndex", viewName || 0);
+				}
 				var name = $("#saved_fleet_sel option:selected").val();
 				if (name) {
 					this.showSavedFleets(name);
 				}
 			} else if (viewType === "history") {
+				if (viewName !== undefined) {
+					if (!$("#history").prop("checked")) {
+						$("#history").trigger("click");
+					}
+					$("input#hist_query").val(viewName);
+				}
 				var q = $("input#hist_query").val();
 				var sortieId = parseInt(q,10);
 				if (!sortieId) {
@@ -221,7 +237,8 @@
 				}
 				this.showFleetFromSortieId(sortieId);
 			} else {
-				console.error("Unknown view type:", viewType);
+				console.warn("Unknown view type:", viewType);
+				this.showCurrentFleets();
 			}
 		},
 
@@ -395,6 +412,7 @@
 				$(".ship_tooltip .ship_rosterId span", shipBox).text(kcShip.rosterId);
 				$(".ship_tooltip .ship_stype", shipBox).text(kcShip.stype());
 				$(".ship_tooltip .ship_level span.value", shipBox).text(kcShip.level);
+				//$(".ship_tooltip .ship_level span.value", shipBox).addClass(kcShip.levelClass());
 				$(".ship_tooltip .ship_hp span.hp", shipBox).text(kcShip.hp[0]);
 				$(".ship_tooltip .ship_hp span.mhp", shipBox).text(kcShip.hp[1]);
 				$(".ship_tooltip .stat_hp", shipBox).text(kcShip.hp[1]);

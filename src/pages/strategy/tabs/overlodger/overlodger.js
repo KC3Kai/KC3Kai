@@ -627,7 +627,7 @@
 						});
 					}
 				});
-			console.debug("Cached data", sortieCache,ledgerCache);
+			//console.debug("Cached data", sortieCache,ledgerCache);
 			
 			$.each(mapBuffer,function(k,v){
 				mapBuffer[k] = v = Object.freeze(
@@ -1035,7 +1035,7 @@
 					}).call(this,threads.watchThread('CollectBuffer'));
 					
 					$.when.apply(null,threads).then(function(){
-						console.debug.apply(console,["Async Completed"].concat([].slice.apply(arguments)));
+						console.debug.apply(console,["Async completed"].concat([].slice.apply(arguments)));
 						// Finalize
 						refreshCurrentBuffer.call(self);
 						$(".filterRefresh",baseContext).trigger('click');

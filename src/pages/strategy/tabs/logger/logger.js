@@ -15,9 +15,9 @@
         error: true,
       },
       contexts: {
-        Background: true,
+        'Background': true,
         'Strategy Room': true,
-        Devtools: true,
+        'Devtools': true,
         'Content Script': true,
       },
       logSearch: '',
@@ -32,10 +32,14 @@
         const { contexts: isVisible } = KC3StrategyTabs.logger.definition.filterState;
         return isVisible[context];
       },
-      logSearch({ message, data }) {
+      logSearch({ message, data, stack }) {
         const { logSearch } = KC3StrategyTabs.logger.definition.filterState;
+        const { getCallsite } = KC3StrategyTabs.logger.definition;
         const searchString = logSearch.toLowerCase();
         const targets = message ? [message.concat(data)] : data;
+        if (stack) {
+          targets.push(getCallsite(stack).full);
+        }
         return targets.some((target) => { return target.toLowerCase().includes(searchString); });
       },
     },
@@ -56,8 +60,8 @@
         .then(initStackToggle)
         .then(initSearchBox)
         .then(initLogClearButton)
-        .then(initFilter.bind(null, 'logTypes'))
-        .then(initFilter.bind(null, 'contexts'))
+        .then(initFilter.bind(this, 'logTypes'))
+        .then(initFilter.bind(this, 'contexts'))
         .then(initPagination)
         .catch(logError);
     },
@@ -82,6 +86,10 @@
     initSearchBox() {
       const { filterState, initPagination } = KC3StrategyTabs.logger.definition;
       const form = $('.tab_logger form#log_search');
+      $('input', form).val(filterState.logSearch)
+        .on('focus', () => {
+          $('input', form).select();
+        });
       form.submit(() => {
         // record search string
         filterState.logSearch = $('input', form).val();
@@ -151,7 +159,9 @@
       element.twbsPagination({
         totalPages: pageCount,
         visiblePages: VISIBLE_PAGES,
-        onPageClick(event, page) { renderPage(page); },
+        onPageClick(event, page) {
+          renderPage(page);
+        },
       });
     },
 
@@ -159,7 +169,7 @@
       const { clearEntries, getLogEntries, splitByDate, renderElement } =
         KC3StrategyTabs.logger.definition;
       return Promise.resolve()
-        .then(getLogEntries.bind(null, pageNum))
+        .then(getLogEntries.bind(this, pageNum))
         .then(splitByDate)
         .then((elements) => {
           clearEntries();
@@ -372,8 +382,9 @@
     },
 
     logError(error) {
-      KC3Log.console.error(error, error.stack); /* RemoveLogging:skip */
+      KC3Log.console.error(error, error.stack);
     },
+
   };
 }());
 

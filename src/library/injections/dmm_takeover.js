@@ -401,14 +401,14 @@
 
 							if(config.api_tracking){
 								$(".tracking", QuestBox).html( QuestData.outputHtml() );
+								// Special cases multiple requirements, such as Bw1, Bq2
+								if(QuestData.tracking && QuestData.tracking.length > 1){
+									$(".tracking", QuestBox).addClass("small");
+								}
 							}else{
 								$(".tracking", QuestBox).hide();
 							}
 
-							// Special Bw1 case multiple requirements
-							if( QuestRaw.api_no == 214 ){
-								$(".tracking", QuestBox).addClass("small");
-							}
 						}else{
 							if(config.google_translate) {
 								$(".with_tl", QuestBox).css({ visibility: "hidden" });

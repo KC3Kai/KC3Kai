@@ -20,6 +20,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		boss: {},
 		onBossAvailable: false,
 		focusedFleet: [],
+		supportFleet: [],
 		fcfCheck: [],
 		escapedList: [],
 		materialGain: Array.apply(null,{length:8}).map(function(){return 0;}),
@@ -111,7 +112,22 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		
 		snapshotFleetState :function(){
 			PlayerManager.hq.lastSortie = PlayerManager.cloneFleets();
-			this.focusedFleet = (PlayerManager.combinedFleet&&this.fleetSent===1) ? [0,1] : [this.fleetSent-1];
+			// remember index(es) of sent fleet(s) to battle
+			this.focusedFleet = (PlayerManager.combinedFleet && this.fleetSent === 1) ? [0,1] : [this.fleetSent-1];
+			// remember index(es) of sent fleet(s) to exped support
+			this.supportFleet = [];
+			if(!this.isPvP()){
+				var support1 = this.getSupportingFleet(false),
+					support2 = this.getSupportingFleet(true);
+				if(support1 > 0){
+					this.supportFleet.push(support1 - 1);
+					console.assert(this.focusedFleet.indexOf(support1 - 1) < 0, "focused fleet should not include pre-boss support");
+				}
+				if(support2 > 0){
+					this.supportFleet.push(support2 - 1);
+					console.assert(this.focusedFleet.indexOf(support2 - 1) < 0, "focused fleet should not include boss support");
+				}
+			}
 			PlayerManager.hq.save();
 		},
 		
@@ -373,7 +389,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			var fleetDesg = [this.fleetSent-1,1],
 				self = this;
 			Object.keys(this.sinkList).forEach(function(fleetType, fleetId){
-				console.log("Checking " + fleetType + " fleet #", fleetDesg[fleetId] + 1,
+				console.debug("Checking " + fleetType + " fleet #", fleetDesg[fleetId] + 1,
 					"consisting of", PlayerManager.fleets[fleetDesg[fleetId]].ships);
 				var sinkList = self.sinkList[fleetType];
 				if(Array.isArray(sinkList) && sinkList.length > 0){
@@ -430,7 +446,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			) : ("sortie" + this.onSortie);
 		},
 		
-		endSortie :function(){
+		endSortie :function(portApiData){
 			var sentFleet = this.fleetSent,
 				self = this,
 				cons = {};
@@ -438,9 +454,11 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			cons.name = self.sortieName();
 			cons.resc = Array.apply(null,{length:8}).map(function(){return 0;});
 			// Calculate sortie difference with buffer
-			(PlayerManager.hq.lastSortie || []).forEach(function(fleet, fleet_id){
-				fleet.forEach(function(after, ship_fleet){
-					var
+			var sentBattleSupportFleets = Array.isArray(PlayerManager.hq.lastSortie)
+				? this.focusedFleet.concat(this.supportFleet) : [];
+			sentBattleSupportFleets.map(id => PlayerManager.hq.lastSortie[id]).forEach(function(fleet, fleetIdx){
+				fleet.forEach(function(after, ship_pos){
+					var fleet_id = sentBattleSupportFleets[fleetIdx] + 1,
 						rosterId = after.rosterId,
 						before   = KC3ShipManager.get(rosterId),
 						supply   = [
@@ -463,21 +481,27 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 							return (x<repLen) ? Math.min(0, after.repair[x] - before.repair[x]) : 0;
 						}),
 						pendingCon = before.pendingConsumption[cons.name];
-					if(!self.isPvP())
+					if(!self.isPvP()) {
 						before.lastSortie.unshift(cons.name);
-					if(pendingCon) console.log("Pending consumption", fleet_id, ship_fleet, pendingCon);
+					}
+					if(pendingCon) {
+						console.log("Battle pending consumption #", fleet_id, ship_pos, rosterId, pendingCon);
+					}
 					// Count steel consumed by jet
 					if(Array.isArray(pendingCon) && pendingCon.length > 2) {
 						cons.resc[2] += pendingCon[2][0] || 0;
 						pendingCon.splice(2,1);
 					}
 					if(!(supply.every(function(matr){return !matr;}) && repair.every(function(matr){return !matr;}))){
-						console.log("Repair consumption", rosterId, repair);
+						console.log("Supply & repair pending consumption #", fleet_id, ship_pos, rosterId, supply, repair);
 						before.pendingConsumption[cons.name] = [supply, repair];
 					}
 				});
 			});
-			console.log("Previous " + cons.name +" state", cons.resc, PlayerManager.hq.lastSortie);
+			if(cons.name !== "sortie0") {
+				console.log("Before " + cons.name +" sent fleets", sentBattleSupportFleets, PlayerManager.hq.lastSortie);
+				console.log("After " + cons.name +" battle consumption and fleets", cons.resc, PlayerManager.cloneFleets());
+			}
 			// Ignore every resource gain if disconnected during sortie
 			if(this.onCat)
 				this.materialGain.fill(0);
@@ -512,7 +536,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			this.hqExpGained = 0;
 			this.nodes = [];
 			this.boss = { info: false };
-			if(PlayerManager.combinedFleet && this.fleetSent === 1){
+			if(PlayerManager.combinedFleet && sentFleet === 1){
 				this.cleanMvpShips(PlayerManager.fleets[0].ships);
 				this.cleanMvpShips(PlayerManager.fleets[1].ships);
 			} else {
@@ -523,6 +547,8 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			}
 			KC3ShipManager.save();
 			
+			this.focusedFleet = [];
+			this.supportFleet = [];
 			this.fcfCheck = [];
 			this.escapedList = [];
 			this.materialGain.fill(0);
@@ -531,6 +557,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			KC3ShipManager.pendingShipNum = 0;
 			KC3GearManager.pendingGearNum = 0;
 			this.onSortie = 0; // clear sortie ID last
+			this.onPvP = false;
 			this.onCat = false;
 			this.sortieTime = 0;
 			this.save();

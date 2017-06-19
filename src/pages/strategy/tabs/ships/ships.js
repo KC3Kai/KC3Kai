@@ -287,6 +287,7 @@
 				sortno: MasterShip.api_sortno,
 				english: ThisShip.name(),
 				level: ThisShip.level,
+				levelClass: ThisShip.levelClass(),
 				morale: ThisShip.morale,
 				equip: ThisShip.items,
 				locked: ThisShip.lock,
@@ -306,6 +307,7 @@
 				ls: [this.getDerivedStatNaked("saku", ThisShip.ls[0], ThisShip), ThisShip.ls[0] ],
 				lk: [ThisShip.lk[0], ThisShip.lk[1], MasterShip.api_luck[0]],
 				sp: ThisShip.speed,
+				range: ThisShip.range,
 				slots: ThisShip.slots,
 				exSlot: ThisShip.ex_item,
 				fleet: ThisShip.onFleet(),
@@ -523,6 +525,7 @@
 						|| (curVal === 1 && ship.morale >= 50)
 						|| (curVal === 2 && ship.morale < 50);
 				});
+
 			self.defineShipFilter(
 				"daihatsu",
 				savedFilterValues.daihatsu || 0,
@@ -532,6 +535,7 @@
 						|| (curVal === 1 && ship.canEquipDaihatsu)
 						|| (curVal === 2 && !ship.canEquipDaihatsu);
 				});
+
 			self.defineShipFilter(
 				"exslot",
 				savedFilterValues.exslot || 0,
@@ -541,6 +545,7 @@
 						|| (curVal === 1 && (ship.exSlot > 0 || ship.exSlot === -1))
 						|| (curVal === 2 && ship.exSlot === 0);
 				});
+
 			self.defineShipFilter(
 				"dupe",
 				savedFilterValues.dupe || 0,
@@ -553,6 +558,15 @@
 					);
 					return (curVal === 1 && dupeShips.length > 0)
 							|| (curVal === 2 && dupeShips.length === 0);
+				});
+
+			self.defineShipFilter(
+				"range",
+				savedFilterValues.range || 0,
+				["all","short","medium","long","verylong"],
+				function(curVal, ship) {
+					return (curVal === 0)
+						|| (curVal === ship.range);
 				});
 
 			var stypes = Object
@@ -772,7 +786,7 @@
 				   function(x) { return x.ctype; });
 			define("bid", "ShipId",
 				   function(x) { return x.bid; });
-			define("sortno", "BookNo",
+			define("sortno", "SortOrder",
 				   function(x) { return x.sortno; });
 		},
 
@@ -844,9 +858,9 @@
 						$(".ship_name", cElm).addClass("ship_onfleet-color" + cShip.fleet);
 					}
 					$(".ship_type", cElm).text( KC3Meta.stype(cShip.stype) );
-					var shipLevelConv = shipLevel;
-					$(".ship_lv", cElm).html( "<span>Lv.</span>" + shipLevelConv);
-					$(".ship_morale", cElm).html( cShip.morale );
+					$(".ship_lv .value", cElm).text( shipLevel )
+						.addClass( cShip.levelClass );
+					$(".ship_morale", cElm).text( cShip.morale );
 					$(".ship_hp", cElm).text( cShip.hp );
 					$(".ship_lk", cElm).text( cShip.lk[0] );
 					if(cShip.lk[0] >= cShip.lk[1]){

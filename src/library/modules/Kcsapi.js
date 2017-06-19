@@ -139,7 +139,7 @@ Previously known as "Reactor"
 			
 			PlayerManager.combinedFleet = response.api_data.api_combined_flag || 0;
 			
-			KC3SortieManager.endSortie(response);
+			KC3SortieManager.endSortie(response.api_data);
 			
 			PlayerManager.loadBases()
 				.setBaseConvertingSlots(response.api_data.api_plane_info);
@@ -305,6 +305,7 @@ Previously known as "Reactor"
 					case 72: PlayerManager.consumables.decoMaterial = thisItem.api_count; break;
 					case 73: PlayerManager.consumables.constCorps = thisItem.api_count; break;
 					case 74: PlayerManager.consumables.newAircraftBlueprint = thisItem.api_count; break;
+					case 75: PlayerManager.consumables.newGunMountMaterial = thisItem.api_count; break;
 					default: break;
 				}
 			}
@@ -1415,8 +1416,11 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_practice/battle":function(params, response, headers){
 			var fleetNum = parseInt(params.api_deck_id, 10);
+			// Simulate PvP battle as special sortie
 			KC3SortieManager.sortieTime = Date.toUTCseconds(headers.Date);
+			KC3SortieManager.fleetSent = fleetNum;
 			KC3SortieManager.map_world  = -1;
+			KC3SortieManager.onPvP = true;
 			KC3SortieManager.snapshotFleetState();
 			KC3Network.trigger("PvPStart", {
 				battle: response.api_data,
@@ -1721,8 +1725,12 @@ Previously known as "Reactor"
 					rsc[i] += x;
 				});
 				// F34: Weekly Scrap Anti-Air Guns
-				if([21].indexOf(gearMaster.api_type[2]) >-1){
+				if([21].indexOf(gearMaster.api_type[2]) > -1){
 					KC3QuestManager.get(638).increment();
+				}
+				// F55: Quartly Scrap 10 Large Caliber Main Guns
+				if([3].indexOf(gearMaster.api_type[2]) > -1){
+					KC3QuestManager.get(663).increment();
 				}
 				KC3GearManager.remove(itemId);
 			});
@@ -1993,8 +2001,11 @@ Previously known as "Reactor"
 				type: "rmditem" + ms.api_id,
 				data: mt
 			});
-			// Update equipment on local data
-			console.log("Improvement used items", response.api_data.api_use_slot_id);
+			// Update equipment or consumables on local data
+			console.log("Improvement consumed slot or use item",
+				response.api_data.api_use_slot_id || "none",
+				response.api_data.api_use_useitem_id || "none"
+			);
 			(response.api_data.api_use_slot_id || []).forEach(function(gearId){ KC3GearManager.remove(gearId); });
 			KC3GearManager.set([ response.api_data.api_after_slot ]);
 			
@@ -2034,7 +2045,7 @@ Previously known as "Reactor"
 		if(rankPt==5 && KC3SortieManager.currentNode().allyNoDamage) rankPt++;
 		if(!isPvP) {
 			[ /* Rank Requirement Table */
-				 /* [Quest ID, index of tracking, [world, map], isBoss] */
+			  /* Define: [Quest ID, index of tracking, [world, map], isBoss, isCheckCompos] */
 				[ /* E RANK / It does not matter */
 					[216,0,false,false], // Bd2: Defeat the flagship of an enemy fleet
 					[210,0,false,false], // Bd3: Attack 10 abyssal fleets
@@ -2050,17 +2061,21 @@ Previously known as "Reactor"
 					[241,0,[3,5], true],
 					[229,0,[ 4 ], true], // Bw6: Defeat 12 bosses in horned nodes in World 4
 					[242,0,[4,4], true], // Bw8: Defeat a boss in World [W4-4]
-					[214,2,false, true], // Bw1: 3rd requirement: Win vs 12 bosses (index:2)
+					[214,2,false, true]  // Bw1: 3rd requirement: Win vs 12 bosses (index:2)
 				],
 				[ /* A RANK */
 					[261,0,[1,5], true], // Bw10: Sortie to [W1-5] and A-rank+ the boss node 3 times
-					[265,0,[1,5], true]  // Bm5: Deploy a fleet to [W1-5] and A-rank+ the boss node 10 times
+					[265,0,[1,5], true], // Bm5: Deploy a fleet to [W1-5] and A-rank+ the boss node 10 times
+					[854,0,[2,4], true, true], // Bq2: 1st requirement: [W2-4] A-rank+ the boss node
+					[854,1,[6,1], true, true], // Bq2: 2nd requirement: [W6-1] A-rank+ the boss node
+					[854,2,[6,3], true, true]  // Bq2: 3rd requirement: [W6-3] A-rank+ the boss node
 				],
 				[ /* S RANK */
 					[214,3,false,false], // Bw1: 4th requirement: 6 S ranks (index:3)
 					[243,0,[5,2], true], // Bw9: Sortie to [W5-2] and S-rank the boss node 2 times
 					[256,0,[6,1], true], // Bm2: Deploy to [W6-1] and obtain an S-rank the boss node 3 times
-					[822,0,[2,4], true]  // Bq1: Sortie to [W2-4] and S-rank the boss node 2 times
+					[822,0,[2,4], true], // Bq1: Sortie to [W2-4] and S-rank the boss node 2 times
+					[854,3,[6,4], true, true]  // Bq2: 4th requirement: [W6-4] S-rank the boss node
 				],
 				[ /* SS RANK Kanzen shohri */ ]
 			].slice(0, rankPt+1)
@@ -2069,6 +2084,7 @@ Previously known as "Reactor"
 					return (
 						(!x[2] || KC3SortieManager.isSortieAt.apply(KC3SortieManager,x[2])) && /* Is sortie at */
 						(!x[3] || KC3SortieManager.currentNode().isBoss())                  && /* Is on boss node */
+						(!x[4] || KC3QuestManager.isPrerequisiteFulfilled(x[0]) !== false)  && /* Is fleet composition matched */
 						true
 					);
 				})
