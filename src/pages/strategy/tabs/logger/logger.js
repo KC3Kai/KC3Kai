@@ -15,9 +15,9 @@
         error: true,
       },
       contexts: {
-        Background: true,
+        'Background': true,
         'Strategy Room': true,
-        Devtools: true,
+        'Devtools': true,
         'Content Script': true,
       },
       logSearch: '',
@@ -60,8 +60,8 @@
         .then(initStackToggle)
         .then(initSearchBox)
         .then(initLogClearButton)
-        .then(initFilter.bind(null, 'logTypes'))
-        .then(initFilter.bind(null, 'contexts'))
+        .then(initFilter.bind(this, 'logTypes'))
+        .then(initFilter.bind(this, 'contexts'))
         .then(initPagination)
         .catch(logError);
     },
@@ -159,7 +159,9 @@
       element.twbsPagination({
         totalPages: pageCount,
         visiblePages: VISIBLE_PAGES,
-        onPageClick(event, page) { renderPage(page); },
+        onPageClick(event, page) {
+          renderPage(page);
+        },
       });
     },
 
@@ -167,7 +169,7 @@
       const { clearEntries, getLogEntries, splitByDate, renderElement } =
         KC3StrategyTabs.logger.definition;
       return Promise.resolve()
-        .then(getLogEntries.bind(null, pageNum))
+        .then(getLogEntries.bind(this, pageNum))
         .then(splitByDate)
         .then((elements) => {
           clearEntries();
@@ -382,6 +384,7 @@
     logError(error) {
       KC3Log.console.error(error, error.stack);
     },
+
   };
 }());
 

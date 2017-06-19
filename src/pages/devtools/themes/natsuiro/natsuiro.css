@@ -3354,6 +3354,15 @@ ABYSS FLEET
 .ui-tooltip-content .ship_face_tooltip .ship_level span.i18n {
 	color:#3ec0bf;
 }
+.ui-tooltip-content .ship_face_tooltip .ship_level span.value.married {
+	color:#a97417;
+}
+.ui-tooltip-content .ship_face_tooltip .ship_level span.value.high {
+	color:#107e57;
+}
+.ui-tooltip-content .ship_face_tooltip .ship_level span.value.medium {
+	color:#36c2db;
+}
 .ui-tooltip-content .ship_face_tooltip .ship_hp {
 	width:64px;
 	height:17px;

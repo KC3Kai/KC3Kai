@@ -55,6 +55,7 @@
 		"KC3Graphable": true,
 		"KC3LodgerBuffer": true,
 		"KC3SortieLogs": true,
+		"KC3ShipListGrid": true,
 		"KC3NatsuiroShipbox": true,
 		"DMMCustomizations": true,
 		"interactions": true,

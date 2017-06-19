@@ -63,7 +63,7 @@
 .tab_docking .ship_item .ship_img img.ship_icon {
 	width:20px;
 	height:20px;
-	margin-top:-3px;
+	vertical-align:top;
 }
 .tab_docking .ship_item .ship_img img.ship_kekkon {
 	position:absolute;
@@ -140,23 +140,31 @@
 	width:70px;
 	text-align:center;
 	position:relative;
+	overflow:hidden;
+	white-space:nowrap;
 }
-
 .tab_docking .ship_item .ship_lv.ship_kekkon {
 	/*width:70px;*/
 }
 .tab_docking .ship_item .ship_morale {
 	width:20px;
-	/*margin:0px 5px 0px 0px;*/
 	text-align:center;
 }
 .tab_docking .ship_item .ship_morale.sparkled {
 	background:#ff0;
 }
-.tab_docking .ship_item .ship_lv span {
+.tab_docking .ship_item .ship_lv span.i18n {
 	color:#888;
 }
-/* Fields: Stats */
+.tab_docking .ship_item .ship_lv span.value.married {
+	color:#a97417;
+}
+.tab_docking .ship_item .ship_lv span.value.high {
+	color:#107e57;
+}
+.tab_docking .ship_item .ship_lv span.value.medium {
+	color:#36c2db;
+}
 .tab_docking .ship_item .ship_stat {
 	width:25px;
 	text-align:center;
@@ -190,7 +198,7 @@
 .tab_docking .ship_item .ship_equip img {
 	width:20px;
 	height:20px;
-	margin-top:-3px;
+	vertical-align:top;
 }
 .tab_docking .ship_item .ship_equip span {
 	position: absolute;

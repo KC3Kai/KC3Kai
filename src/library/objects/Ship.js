@@ -186,6 +186,13 @@ KC3改 Ship Object
 	KC3Ship.prototype.isTaiha   = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.25) && !this.isRepaired(); };
 	KC3Ship.prototype.speedName = function(){ return KC3Meta.shipSpeed(this.speed); };
 	KC3Ship.prototype.rangeName = function(){ return KC3Meta.shipRange(this.range); };
+	KC3Ship.prototype.levelClass = function(){
+		return this.level === 155 ? "married max" :
+			this.level >= 100 ? "married" :
+			this.level >= 80  ? "high" :
+			this.level >= 50  ? "medium" :
+			"";
+	};
 	KC3Ship.prototype.getDefer = function(){
 		// returns a new defer if possible
 		return deferList[this.rosterId] || [];
