@@ -152,7 +152,8 @@
             this._addConsumableImage(ctx, canvas, x, "screws");
         }
 
-        var topLine = this.isShipList ? "Ship List" : "Equipment List";
+        var fileName, topLine = fileName = this.isShipList ? "Ship List" : "Equipment List";
+        fileName += dateFormat(" yyyy-mm-dd");
         if (this.buildSettings.exportName) {
             topLine = PlayerManager.hq.rank + " " + PlayerManager.hq.name + " " + topLine;
         }
@@ -184,7 +185,7 @@
                 0, 0,
                 this.exporter.rowParams.height * 2, this.exporter.rowParams.height * 2
             );
-            this.exporter._finish(canvas, topLine);
+            this.exporter._finish(canvas, fileName);
         };
         img.src = "/assets/img/logo/128.png";
 
