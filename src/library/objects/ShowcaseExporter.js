@@ -152,8 +152,8 @@
             this._addConsumableImage(ctx, canvas, x, "screws");
         }
 
-        var fileName, topLine = fileName = this.isShipList ? "Ship List" : "Equipment List";
-        fileName += dateFormat(" yyyy-mm-dd");
+        var topLine = this.isShipList ? "Ship List" : "Equipment List";
+        var fileName = topLine + dateFormat(" yyyy-mm-dd");
         if (this.buildSettings.exportName) {
             topLine = PlayerManager.hq.rank + " " + PlayerManager.hq.name + " " + topLine;
         }
