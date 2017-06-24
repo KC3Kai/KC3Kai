@@ -661,8 +661,10 @@
 				editingBox.addClass("inactive");
 
 				// the only can when nextLevel === false is when your ship have reached Lv.155
-				if (nextLevel === false)
+				if (nextLevel === false) {
+					editingBox.remove();
 					return;
+				}
 
 				if (nextLevel < 99) {
 					$(".section_expcalc .box_recommend .clear").remove();
