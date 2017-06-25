@@ -187,21 +187,21 @@
 				$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container)
 					.text( "x{0}".format(toAmountStr(amount)) );
 			};
-			var showConsumedItemList = function(stars, resArrElm4, resArrElm5){
+			var showConsumedItemList = function(stars, resArrElm4, resArrElm5, container = ResBox){
 				var consumedResArr = Array.isArray(resArrElm4) ? resArrElm4 : [[resArrElm4, resArrElm5]];
 				consumedResArr.forEach((res, i) => {
 					let [itemName, itemCount] = destructConsumeResource(res[0], res[1]);
 					if(i === 0){
 						if(itemName !== null){
 							let consumedItem = toSlotOrUseItem(itemName);
-							showConsumedItem(stars, consumedItem, itemCount);
-							checkConsumedItem(stars, consumedItem, itemCount);
+							showConsumedItem(stars, consumedItem, itemCount, container);
+							checkConsumedItem(stars, consumedItem, itemCount, container);
 						} else {
-							showConsumedItem(stars, null);
+							showConsumedItem(stars, null, container);
 						}
 					} else if(itemName !== null){
-						let extraBox = $(".extra_consumed.plus{0}".format(stars), ResBox)
-							.clone().appendTo($(".eq_res_line.plus{0}".format(stars), ResBox));
+						let extraBox = $(".extra_consumed.plus{0}".format(stars), container)
+							.clone().appendTo($(".eq_res_line.plus{0}".format(stars), container));
 						let consumedItem = toSlotOrUseItem(itemName);
 						showConsumedItem(stars, consumedItem, itemCount, extraBox);
 						checkConsumedItem(stars, consumedItem, itemCount, extraBox);
@@ -230,6 +230,8 @@
 			};
 			var checkConsumedItem = function(stars, consumedItem, amount, container = ResBox){
 				if(!hasGear || !hasShip) return;
+				$(".eq_res_line.plus{0}".format(stars), container).removeClass("insufficient locked");
+				$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container).removeClass("insufficient locked");
 				// Check useitem instead of slotitem
 				if(Array.isArray(consumedItem)){
 					let isNotEnoughUseItem = function(id, amount){

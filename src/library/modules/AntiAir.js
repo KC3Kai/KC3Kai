@@ -383,6 +383,7 @@ AntiAir: anti-air related calculations
 		kasumiK2BIcon = 470,
 		satsukiK2Icon = 418,
 		kinuK2Icon = 487,
+		yuraK2Icon = 488,
 		haMountIcon = 16,
 		radarIcon = 11,
 		aaFdIcon = 30,
@@ -399,6 +400,7 @@ AntiAir: anti-air related calculations
 	var isKasumiK2B = masterIdEq( kasumiK2BIcon );
 	var isSatsukiK2 = masterIdEq( satsukiK2Icon );
 	var isKinuK2 = masterIdEq( kinuK2Icon );
+	var isYuraK2 = masterIdEq( yuraK2Icon );
 
 	// turns a "shipObj" into the list of her equipments
 	// for its parameter function "pred"
@@ -650,6 +652,18 @@ AntiAir: anti-air related calculations
 		predAllOf(isKinuK2),
 		withEquipmentMsts(
 			hasSome( isCDMG )
+		)
+	);
+
+	// Yura K2
+	declareAACI(
+		21, 5, 1.45,
+		[yuraK2Icon, haMountIcon, radarIcon],
+		predAllOf(isYuraK2),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( isHighAngleMount ),
+				hasSome( isAARadar ))
 		)
 	);
 
