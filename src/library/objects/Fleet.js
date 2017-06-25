@@ -518,6 +518,59 @@ Contains summary information about a fleet and its 6 ships
 	/*-----------------[ STATUS INDICATORS ]------------------*/
 	/*--------------------------------------------------------*/
 	
+	KC3Fleet.prototype.hasShip = function(expected, pos){
+		return this.ship().some((ship, index) => {
+			if(pos === undefined || pos === index) {
+				if(typeof expected === "number"
+					|| typeof expected === "string") {
+					return RemodelDb.originOf(expected)
+						=== RemodelDb.originOf(ship.masterId);
+				} else if(Array.isArray(expected)) {
+					return expected.indexOf(ship.masterId) > -1;
+				} else if(expected instanceof KC3Ship) {
+					return expected.masterId === ship.masterId;
+				}
+			}
+			return false;
+		});
+	};
+	
+	KC3Fleet.prototype.countShip = function(expected, isExclude = false){
+		return this.ship().reduce((count, ship) => {
+			if(Array.isArray(expected)) {
+				return count + (1 & (isExclude !==
+					(expected.indexOf(ship.masterId) > -1)));
+			}
+			return count + (1 & (isExclude !==
+				(RemodelDb.originOf(expected) === RemodelDb.originOf(ship.masterId))));
+		}, 0);
+	};
+	
+	KC3Fleet.prototype.hasShipType = function(expected, pos){
+		return this.ship().some((ship, index) => {
+			if(pos === undefined || pos === index) {
+				if(typeof expected === "number"
+					|| typeof expected === "string") {
+					return expected == ship.master().api_stype;
+				} else if(Array.isArray(expected)) {
+					return expected.indexOf(ship.master().api_stype) > -1;
+				}
+			}
+			return false;
+		});
+	};
+	
+	KC3Fleet.prototype.countShipType = function(expected, isExclude = false){
+		return this.ship().reduce((count, ship) => {
+			if(Array.isArray(expected)) {
+				return count + (1 & (isExclude !==
+					(expected.indexOf(ship.master().api_stype) > -1)));
+			}
+			return count + (1 & (isExclude !==
+				(expected == ship.master().api_stype)));
+		}, 0);
+	};
+	
 	KC3Fleet.prototype.hasTaiha = function(){
 		return this.ship().some(function(ship){
 			return ship.isTaiha() && !ship.didFlee;

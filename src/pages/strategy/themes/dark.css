@@ -145,7 +145,7 @@ button, input, select, textarea {
 -------------------------------*/
 #content {
 	width:700px;
-	min-height:1320px;
+	min-height:1340px;
 	float:left;
 	background:#222222;
 	overflow:hidden;
@@ -589,6 +589,18 @@ button, input, select, textarea {
 	background:#b1b101;
 	color:#000;
 }
+.tab_ships .ship_item .ship_lv span.i18n {
+	color:#888;
+}
+.tab_ships .ship_item .ship_lv span.value.married {
+	color:#d3911d;
+}
+.tab_ships .ship_item .ship_lv span.value.high {
+	color:#1cdb98;
+}
+.tab_ships .ship_item .ship_lv span.value.medium {
+	color:#36c2db;
+}
 .tab_ships .ship_item .ship_fp.max {
 	background:#833232;
 }
@@ -719,6 +731,18 @@ button, input, select, textarea {
 }
 .tab_docking .ship_item:hover .ship_field {
 	background:#000000;
+}
+.tab_docking .ship_item .ship_lv span.i18n {
+	color:#888;
+}
+.tab_docking .ship_item .ship_lv span.value.married {
+	color:#d3911d;
+}
+.tab_docking .ship_item .ship_lv span.value.high {
+	color:#1cdb98;
+}
+.tab_docking .ship_item .ship_lv span.value.medium {
+	color:#36c2db;
 }
 .tab_docking .ship_item .ship_status {
 	color:#ffffff;
@@ -1304,6 +1328,18 @@ button, input, select, textarea {
 .tab_shipquests .ship_item:hover .ship_field {
 	background:#000000;
 }
+.tab_shipquests .ship_item .ship_lv span.i18n {
+	color:#888;
+}
+.tab_shipquests .ship_item .ship_lv span.value.married {
+	color:#d3911d;
+}
+.tab_shipquests .ship_item .ship_lv span.value.high {
+	color:#1cdb98;
+}
+.tab_shipquests .ship_item .ship_lv span.value.medium {
+	color:#36c2db;
+}
 
 /* MAPS
 --------------------------------*/
@@ -1846,4 +1882,36 @@ button, input, select, textarea {
 }
 .bg-danger {
 	background-color:#960f30;
+}
+
+/* BLUEPRINTS
+--------------------------------*/
+.tab_blueprints .view_types {
+	background:#131313;
+	border-bottom:1px solid #444444;
+}
+
+.tab_blueprints .ship_item.odd .ship_field {
+	background:#303030;
+}
+.tab_blueprints .ship_item.even .ship_field {
+	background:#303030;
+}
+.tab_blueprints .ship_item:hover .ship_field {
+	background:#000000;
+}
+.tab_blueprints .ship_item .ship_lv span.i18n {
+	color:#888;
+}
+.tab_blueprints .ship_item .ship_lv span.value.married {
+	color:#d3911d;
+}
+.tab_blueprints .ship_item .ship_lv span.value.high {
+	color:#1cdb98;
+}
+.tab_blueprints .ship_item .ship_lv span.value.medium {
+	color:#36c2db;
+}
+.tab_blueprints .ship_item .need_materials .icon span.used {
+	color:#555;
 }

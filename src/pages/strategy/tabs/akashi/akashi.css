@@ -176,6 +176,10 @@
 }
 .tab_akashi .eq_res .eq_res_value.consumed_name > div.cnt.locked {
 }
+.tab_akashi .eq_res .extra_consumed {
+	float:right;
+	display:none;
+}
 
 .tab_akashi .eq_res .eq_next {
 	margin-left:42px;

@@ -2045,7 +2045,7 @@ Previously known as "Reactor"
 		if(rankPt==5 && KC3SortieManager.currentNode().allyNoDamage) rankPt++;
 		if(!isPvP) {
 			[ /* Rank Requirement Table */
-				 /* [Quest ID, index of tracking, [world, map], isBoss] */
+			  /* Define: [Quest ID, index of tracking, [world, map], isBoss, isCheckCompos] */
 				[ /* E RANK / It does not matter */
 					[216,0,false,false], // Bd2: Defeat the flagship of an enemy fleet
 					[210,0,false,false], // Bd3: Attack 10 abyssal fleets
@@ -2066,16 +2066,16 @@ Previously known as "Reactor"
 				[ /* A RANK */
 					[261,0,[1,5], true], // Bw10: Sortie to [W1-5] and A-rank+ the boss node 3 times
 					[265,0,[1,5], true], // Bm5: Deploy a fleet to [W1-5] and A-rank+ the boss node 10 times
-					[854,0,[2,4], true], // Bq2: 1st requirement: [W2-4] A-rank+ the boss node (index:0)
-					[854,1,[6,1], true], // Bq2: 2nd requirement: [W6-1] A-rank+ the boss node (index:1)
-					[854,2,[6,3], true]  // Bq2: 3rd requirement: [W6-3] A-rank+ the boss node (index:2)
+					[854,0,[2,4], true, true], // Bq2: 1st requirement: [W2-4] A-rank+ the boss node
+					[854,1,[6,1], true, true], // Bq2: 2nd requirement: [W6-1] A-rank+ the boss node
+					[854,2,[6,3], true, true]  // Bq2: 3rd requirement: [W6-3] A-rank+ the boss node
 				],
 				[ /* S RANK */
 					[214,3,false,false], // Bw1: 4th requirement: 6 S ranks (index:3)
 					[243,0,[5,2], true], // Bw9: Sortie to [W5-2] and S-rank the boss node 2 times
 					[256,0,[6,1], true], // Bm2: Deploy to [W6-1] and obtain an S-rank the boss node 3 times
 					[822,0,[2,4], true], // Bq1: Sortie to [W2-4] and S-rank the boss node 2 times
-					[854,3,[6,4], true]  // Bq2: 4th requirement: [W6-4] S-rank the boss node (index:3)
+					[854,3,[6,4], true, true]  // Bq2: 4th requirement: [W6-4] S-rank the boss node
 				],
 				[ /* SS RANK Kanzen shohri */ ]
 			].slice(0, rankPt+1)
@@ -2084,6 +2084,7 @@ Previously known as "Reactor"
 					return (
 						(!x[2] || KC3SortieManager.isSortieAt.apply(KC3SortieManager,x[2])) && /* Is sortie at */
 						(!x[3] || KC3SortieManager.currentNode().isBoss())                  && /* Is on boss node */
+						(!x[4] || KC3QuestManager.isPrerequisiteFulfilled(x[0]) !== false)  && /* Is fleet composition matched */
 						true
 					);
 				})

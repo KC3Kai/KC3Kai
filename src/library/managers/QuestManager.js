@@ -224,7 +224,6 @@ Uses KC3Quest objects to play around with
 		------------------------------------------*/
 		definePage :function( questList, questPage ){
 			// For each element in quest List
-			//console.log("=================PAGE " + questPage + "===================");
 			var untranslated = [];
 			var reportedQuests = JSON.parse(localStorage.reportedQuests||"[]");
 			for(var ctr in questList){
@@ -380,6 +379,79 @@ Uses KC3Quest objects to play around with
 			this.active = [];
 			this.open = [];
 			this.save();
+		},
+		
+		/**
+		 * Check if specified quest's completion prerequisites are fulfilled.
+		 * Such quests usually require some conditions can be checked at client-side,
+		 * such as: specified composition of ships, have xxx resources / equipment...
+		 *
+		 * @param questId - the api_id of quest to be checked
+		 * @param extraContexts - extra context object, eg: fleet num to be sent to sortie
+		 * @see https://github.com/andanteyk/ElectronicObserver/blob/master/ElectronicObserver/Other/Information/kcmemo.md#%E3%82%AF%E3%83%A9%E3%82%A4%E3%82%A2%E3%83%B3%E3%83%88%E5%81%B4%E3%81%A7%E9%81%94%E6%88%90%E5%88%A4%E5%AE%9A%E3%81%8C%E3%81%AA%E3%81%95%E3%82%8C%E3%82%8B%E4%BB%BB%E5%8B%99
+		 * @see `Kcsapi.resultScreenQuestFulfillment` about conditions of sortie and battles.
+		 * @return true if current state fulfill the prerequisites of the quest; false if not.
+		 *         undefined if condition of specified quest is undefined.
+		 *
+		 * Should move this to an independent module if condition library grows bigger.
+		 */
+		isPrerequisiteFulfilled(questId, extraContexts = {}){
+			var questObj = this.get(questId);
+			// Definitions of prerequisites, not take 'tracking' counts into account here.
+			// Just give some typical samples, not completed for all period quests yet.
+			var questCondsLibrary = {
+				"249": // Bm1 Sortie a fleet has: Myoukou, Nachi, Haguro
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.hasShip(62) && fleet.hasShip(63) && fleet.hasShip(65);
+					},
+				"257": // Bm3 Sortie 1 CL as flagship, 0-2 other CL and 1 DD at least, no other ship type
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.hasShipType(3, 0)
+							&& fleet.countShipType(3) <= 3
+							&& fleet.countShipType(2) >= 1
+							&& fleet.countShipType([2, 3], true) === 0;
+					},
+				"259": // Bm4 Sortie 3 BB (4 classes below only) and 1 CL
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.countShip([
+								131, 136, 143, 148,         // Yamato-class
+								80, 275, 541, 81, 276,      // Nagato-class
+								77, 82, 87, 88,             // Ise-class
+								26, 286, 411, 27, 287, 412  // Fusou-class
+							]) === 3 && fleet.countShipType(3) === 1;
+					},
+				"626": // F22 Have 1 Skilled Crew Member. Houshou as secretary, equip her with a >> Type 0 Fighter Model 21
+					() => {
+						const firstFleet = PlayerManager.fleets[0];
+						const isMaxProType0Model21Equipped = firstFleet.ship(0)
+							.equipment().some(gear => gear.masterId === 20 && gear.ace >= 7);
+						return PlayerManager.consumables.skilledCrew >= 1
+							&& firstFleet.hasShip(89, 0)
+							&& isMaxProType0Model21Equipped;
+					},
+				"643": // F32 Have 1 Type 96 Land-based Attack Aircraft and 2 Type 97 Torpedo Bombers
+					() => (KC3GearManager.countFree(168) >= 1
+						&& KC3GearManager.countFree(16) >= 2
+					),
+				"645": // F41 Have 750 fuel, 750 ammo, 2 Drum Canisters and 1 Type 91 AP Shell
+					() => (PlayerManager.hq.lastMaterial[0] >= 750
+						&& PlayerManager.hq.lastMaterial[1] >= 750
+						&& KC3GearManager.countFree(75) >= 2
+						&& KC3GearManager.countFree(36) >= 1
+					),
+				"663": // F55 Have 18000 steel (scrapping not counted here)
+					() => PlayerManager.hq.lastMaterial[2] >= 18000,
+				"854": // Bq2 Sortie 1st fleet (sortie maps and battle ranks not counted here)
+					() => KC3SortieManager.onSortie && KC3SortieManager.fleetSent == 1,
+			};
+			if(questObj.id && questCondsLibrary[questId]){
+				return !!questCondsLibrary[questId].call(questObj, extraContexts);
+			}
+			// if no condition definition found, return undefined as 'unknown'
+			return;
 		},
 		
 		/* SAVE
@@ -587,8 +659,8 @@ Uses KC3Quest objects to play around with
 			});
 		},
 
-		logError: function (e) {
-			console.error(e);
+		printError: function (e) {
+			KC3Log.console.error(e, e.stack);
 		},
 	};
 	

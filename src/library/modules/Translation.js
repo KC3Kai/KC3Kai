@@ -133,7 +133,7 @@
 						self.unoverrideAttr(enJSON, "memo");
 					}
 				} catch (e) {
-					console.error("Loading translation failed", e);
+					console.error("Loading translation failed", filename, e);
 					let errMsg = $("<p>Fatal error when loading {0} en TL data: {1}</p>" +
 						"<p>Contact developers plz! &gt;_&lt;</p>".format(filename, e));
 					if($("#error").length>0){
@@ -164,7 +164,7 @@
 			} catch (e) {
 				// As EN can be used, fail-safe for other JSON syntax error
 				if (e instanceof SyntaxError && extendEnglish && language!=="en"){
-					console.warn("Loading translation failed", e);/*RemoveLogging:skip*/
+					console.warn("Loading translation failed", filename, language, e);/*RemoveLogging:skip*/
 					translation = null;
 					// Show error message for Strategy Room
 					if($("#error").length>0){
@@ -175,7 +175,7 @@
 					}
 				} else {
 					// Unknown error still needs to be handled asap
-					console.error("Loading translation failed", e);
+					console.error("Loading translation failed", filename, language, e);
 					let errMsg = $("<p>Fatal error when loading {0} TL data of {1}: {2}</p>" +
 						"<p>Contact developers plz! &gt;_&lt;</p>".format(filename, language, e));
 					if($("#error").length>0){
@@ -382,7 +382,7 @@
 					}).responseText);
 				} catch (e) {
 					if (e instanceof SyntaxError){
-						console.warn("Loading quotes failed", e);/*RemoveLogging:skip*/
+						console.warn("Loading quotes failed", language, e);/*RemoveLogging:skip*/
 						console.info("Failed to load " + language + " quotes, falling back to en version");
 						// Show unduplicated error message for Strategy Room
 						if($("#error").length>0 && $("#error").text().indexOf("quotes.json")<0){
@@ -394,7 +394,7 @@
 						langJSON = enJSON;
 						language = "en";
 					} else {
-						console.error("Loading quotes failed", e);
+						console.error("Loading quotes failed", language, e);
 						throw e;
 					}
 				}

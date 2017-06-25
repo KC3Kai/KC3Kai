@@ -287,6 +287,7 @@
 				sortno: MasterShip.api_sortno,
 				english: ThisShip.name(),
 				level: ThisShip.level,
+				levelClass: ThisShip.levelClass(),
 				morale: ThisShip.morale,
 				equip: ThisShip.items,
 				locked: ThisShip.lock,
@@ -785,7 +786,7 @@
 				   function(x) { return x.ctype; });
 			define("bid", "ShipId",
 				   function(x) { return x.bid; });
-			define("sortno", "BookNo",
+			define("sortno", "SortOrder",
 				   function(x) { return x.sortno; });
 		},
 
@@ -857,9 +858,9 @@
 						$(".ship_name", cElm).addClass("ship_onfleet-color" + cShip.fleet);
 					}
 					$(".ship_type", cElm).text( KC3Meta.stype(cShip.stype) );
-					var shipLevelConv = shipLevel;
-					$(".ship_lv", cElm).html( "<span>Lv.</span>" + shipLevelConv);
-					$(".ship_morale", cElm).html( cShip.morale );
+					$(".ship_lv .value", cElm).text( shipLevel )
+						.addClass( cShip.levelClass );
+					$(".ship_morale", cElm).text( cShip.morale );
 					$(".ship_hp", cElm).text( cShip.hp );
 					$(".ship_lk", cElm).text( cShip.lk[0] );
 					if(cShip.lk[0] >= cShip.lk[1]){

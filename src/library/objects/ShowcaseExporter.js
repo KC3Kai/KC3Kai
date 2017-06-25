@@ -153,6 +153,7 @@
         }
 
         var topLine = this.isShipList ? "Ship List" : "Equipment List";
+        var fileName = topLine + dateFormat(" yyyy-mm-dd");
         if (this.buildSettings.exportName) {
             topLine = PlayerManager.hq.rank + " " + PlayerManager.hq.name + " " + topLine;
         }
@@ -184,7 +185,7 @@
                 0, 0,
                 this.exporter.rowParams.height * 2, this.exporter.rowParams.height * 2
             );
-            this.exporter._finish(canvas, topLine);
+            this.exporter._finish(canvas, fileName);
         };
         img.src = "/assets/img/logo/128.png";
 
