@@ -65,10 +65,10 @@ KC3改 Equipment Object
 				hasBeenImproved) {
 				return 0.2 * this.stars;
 			}
-			// seaplane fighters are improvable now, 0.192 < AA bonus < 0.2014 (still verifying)
+			// seaplane fighters are improvable now, 0.192 < AA bonus < 0.2014
 			// refs: https://twitter.com/syoukuretin/status/843271212377690112
 			//       https://twitter.com/DarkQuetzal/status/842686753815191556
-			// seaplane bombers are still not improvable
+			// seaplane bombers are improvable now, but no AA bonus found yet (found DV & LoS bonus)
 			if (this.master().api_type[3] === 43 // is seaplane fighter but not bomber/recon
 				&& hasBeenImproved) {
 				return 0.2 * this.stars;
