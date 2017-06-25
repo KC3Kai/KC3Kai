@@ -258,12 +258,14 @@ KC3改 Ship Object
 	};
 
 	KC3Ship.prototype.onFleet = function(){
-		var shipList = PlayerManager.fleets.map(function(x){return x.ships;}).reduce(function(x,y){return x.concat(y);});
-		return Math.qckInt("ceil",(shipList.indexOf(this.rosterId) + 1)/6,0);
+		var shipList = PlayerManager.fleets
+			.map(fleet => fleet.ships)
+			.reduce((acc, ships) => acc.concat(ships), []);
+		return Math.qckInt("ceil", (shipList.indexOf(this.rosterId) + 1) / 6, 0);
 	};
 
 	KC3Ship.prototype.isRepaired = function(){
-		return PlayerManager.repairShips.indexOf(this.rosterId)>=0;
+		return PlayerManager.repairShips.indexOf(this.rosterId) >= 0;
 	};
 
 	KC3Ship.prototype.isAway = function(){
@@ -320,7 +322,7 @@ KC3改 Ship Object
 	KC3Ship.getCarrySlots = function(masterId){
 		var maxeq = KC3Master.isNotRegularShip(masterId) ? undefined :
 			(KC3Master.ship(masterId) || {}).api_maxeq;
-		return Array.isArray(maxeq) ? maxeq.reduce(function(acc, v){return acc + v;}, 0) : -1;
+		return Array.isArray(maxeq) ? maxeq.reduce((acc, v) => acc + v, 0) : -1;
 	};
 	KC3Ship.prototype.carrySlots = function(){
 		return KC3Ship.getCarrySlots(this.masterId);
@@ -387,8 +389,8 @@ KC3改 Ship Object
 		var getEquip = function(item) {
 			return (item.masterId === masterId) ? 1 : 0;
 		};
-		return this.equipment(true).map( getEquip ).reduce(
-			function(a,b) { return a + b; }, 0 );
+		return this.equipment(true).map( getEquip )
+			.reduce( (acc, v) => acc + v, 0 );
 	};
 
 	/* COUNT DRUMS
@@ -764,7 +766,7 @@ KC3改 Ship Object
 			if(hasSonar) return true;
 			let equipAswSum = [0,1,2,3,4]
 				.map(slot => this.equipment(slot).master().api_tais || 0)
-				.reduce((ac, p) => ac + p, 0);
+				.reduce((acc, v) => acc + v, 0);
 			return this.as[0] >= 75 && equipAswSum >= 4;
 		}
 
