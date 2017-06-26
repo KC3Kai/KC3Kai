@@ -18,11 +18,12 @@ Provides access to data on built-in JSON files
 		_shipAffix:{},
 		_defeq:{},
 		_slotitem:{},
-		_useitems:{},
+		_useitems:[],
 		_equiptype:[],
 		_quests:{},
-		_ranks:{},
-		_stype:{},
+		_ranks:[],
+		_stype:[],
+		_ctype:[],
 		_servers:{},
 		_battle:{},
 		_quotes:{},
@@ -86,31 +87,32 @@ Provides access to data on built-in JSON files
 			*/
 			
 			// Load Common Meta
-			this._icons		= JSON.parse( $.ajax(repo+'icons.json', { async: false }).responseText );
-			this._exp		= JSON.parse( $.ajax(repo+'exp_hq.json', { async: false }).responseText );
-			this._exp_ship	= JSON.parse( $.ajax(repo+'exp_ship.json', { async: false }).responseText );
-			this._gauges	= JSON.parse( $.ajax(repo+'gauges.json', { async: false }).responseText );
-			this._defeq		= JSON.parse( $.ajax(repo+'defeq.json', { async: false }).responseText );
-			this._edges		= JSON.parse( $.ajax(repo+'edges.json', { async: false }).responseText );
-			this._nodes		= JSON.parse( $.ajax(repo+'nodes.json', { async: false }).responseText );
-			this._tpmult	= JSON.parse( $.ajax(repo+'tp_mult.json', { async: false }).responseText );
-			this._gunfit	= JSON.parse( $.ajax(repo+'gunfit.json', { async: false }).responseText );
+			this._icons    = JSON.parse( $.ajax(repo+'icons.json', { async: false }).responseText );
+			this._exp      = JSON.parse( $.ajax(repo+'exp_hq.json', { async: false }).responseText );
+			this._exp_ship = JSON.parse( $.ajax(repo+'exp_ship.json', { async: false }).responseText );
+			this._gauges   = JSON.parse( $.ajax(repo+'gauges.json', { async: false }).responseText );
+			this._defeq    = JSON.parse( $.ajax(repo+'defeq.json', { async: false }).responseText );
+			this._edges    = JSON.parse( $.ajax(repo+'edges.json', { async: false }).responseText );
+			this._nodes    = JSON.parse( $.ajax(repo+'nodes.json', { async: false }).responseText );
+			this._tpmult   = JSON.parse( $.ajax(repo+'tp_mult.json', { async: false }).responseText );
+			this._gunfit   = JSON.parse( $.ajax(repo+'gunfit.json', { async: false }).responseText );
 			
 			// Load Translations
-			this._ship 		= KC3Translation.getJSON(repo, 'ships', true);
-			this._shipAffix	= KC3Translation.getJSON(repo, 'ship_affix', true);
-			this._slotitem	= KC3Translation.getJSON(repo, 'items', true);
-			this._useitems	= KC3Translation.getJSON(repo, 'useitems', true);
-			this._equiptype	= KC3Translation.getJSON(repo, 'equiptype', true);
-			this._quests	= KC3Translation.getJSON(repo, 'quests', true);
-			this._ranks		= KC3Translation.getJSON(repo, 'ranks', true);
-			this._stype		= KC3Translation.getJSON(repo, 'stype', true);
-			this._servers	= KC3Translation.getJSON(repo, 'servers', true);
-			this._battle	= KC3Translation.getJSON(repo, 'battle', true);
+			this._ship      = KC3Translation.getJSON(repo, 'ships', true);
+			this._shipAffix = KC3Translation.getJSON(repo, 'ship_affix', true);
+			this._slotitem  = KC3Translation.getJSON(repo, 'items', true);
+			this._useitems  = KC3Translation.getJSON(repo, 'useitems', true);
+			this._equiptype = KC3Translation.getJSON(repo, 'equiptype', true);
+			this._quests    = KC3Translation.getJSON(repo, 'quests', true);
+			this._ranks     = KC3Translation.getJSON(repo, 'ranks', true);
+			this._stype     = KC3Translation.getJSON(repo, 'stype', true);
+			this._ctype     = KC3Translation.getJSON(repo, 'ctype', true);
+			this._servers   = KC3Translation.getJSON(repo, 'servers', true);
+			this._battle    = KC3Translation.getJSON(repo, 'battle', true);
 			// troll language always loaded
-			this._terms.troll		= JSON.parse( $.ajax(repo+'lang/data/troll/terms.json', { async: false }).responseText );
+			this._terms.troll = JSON.parse( $.ajax(repo+'lang/data/troll/terms.json', { async: false }).responseText );
 			// other language loaded here
-			this._terms.lang		= KC3Translation.getJSON(repo, 'terms', true);
+			this._terms.lang = KC3Translation.getJSON(repo, 'terms', true);
 			return this;
 		},
 		
@@ -162,7 +164,7 @@ Provides access to data on built-in JSON files
 			return this._shipAffix[affix] || {};
 		},
 		
-		shipName :function(jpName){
+		shipName :function(jpName, suffixKey = "suffixes", prefixKey = "prefixes"){
 			// No translation needed for empty ship.json like JP
 			if(Object.keys(this._ship).length === 0){ return jpName; }
 			// If translation and combination done once, use the cache instantly
@@ -174,9 +176,11 @@ Provides access to data on built-in JSON files
 			}
 			var root = jpName,
 				combinedPrefixes = [],
-				prefixesList = Object.keys(this.shipNameAffix("prefixes")),
+				prefixesMap = this.shipNameAffix(prefixKey),
+				prefixesList = Object.keys(prefixesMap),
 				combinedSuffixes = [],
-				suffixesList = Object.keys(this.shipNameAffix("suffixes")),
+				suffixesMap = this.shipNameAffix(suffixKey),
+				suffixesList = Object.keys(suffixesMap),
 				occurs = [],
 				replaced = false;
 			/**********************************************
@@ -191,7 +195,7 @@ Provides access to data on built-in JSON files
 			if(prefixesList.length > 0){
 				while( !!(occurs = (new RegExp("^("+prefixesList.join("|")+").+$","i")).exec(root)) ){
 					root = root.replace(new RegExp("^"+occurs[1],"i"), "");
-					combinedPrefixes.unshift(this.shipNameAffix("prefixes")[occurs[1]]);
+					combinedPrefixes.unshift(prefixesMap[occurs[1]]);
 					prefixesList.splice(prefixesList.indexOf(occurs[1]), 1);
 					replaced = true;
 				}
@@ -199,7 +203,7 @@ Provides access to data on built-in JSON files
 			if(suffixesList.length > 0){
 				while( !!(occurs = (new RegExp(".+("+suffixesList.join("|")+")$","i")).exec(root)) ){
 					root = root.replace(new RegExp(occurs[1]+"$","i"), "");
-					combinedSuffixes.unshift(this.shipNameAffix("suffixes")[occurs[1]]);
+					combinedSuffixes.unshift(suffixesMap[occurs[1]]);
 					suffixesList.splice(suffixesList.indexOf(occurs[1]), 1);
 					replaced = true;
 				}
@@ -304,6 +308,14 @@ Provides access to data on built-in JSON files
 		
 		stype :function(id){
 			return this._stype[id] || "??";
+		},
+		
+		ctype :function(id){
+			return this._ctype[id] || "??";
+		},
+		
+		ctypeName :function(id){
+			return this.shipName(this.ctype(id), "ctype");
 		},
 		
 		server :function(ip){

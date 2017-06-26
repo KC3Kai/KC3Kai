@@ -316,7 +316,11 @@
 			
 			$(".tab_mstship .shipInfo .name").text( "[{0}] {1} {2}"
 				.format(ship_id, KC3Meta.shipName(shipData.api_name),
-					KC3Meta.shipReadingName(shipData.api_yomi).replace("-", "") ) );
+					KC3Meta.shipReadingName(shipData.api_yomi).replace("-", "") ) )
+				.attr("title",
+					KC3Master.isAbyssalShip(ship_id) ? "" : // Abyssal ships
+					KC3Meta.ctypeName(shipData.api_ctype).replace("??", "") // No tooltip for seasonal CGs
+				).lazyInitTooltip();
 			$(".tab_mstship .shipInfo .type").text( "{0}".format(KC3Meta.stype(shipData.api_stype)) );
 			$(".tab_mstship .shipInfo .json").text( '"{0}":{1}'.format(ship_id, JSON.stringify(shipData)) );
 			

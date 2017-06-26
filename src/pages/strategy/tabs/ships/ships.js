@@ -19,7 +19,8 @@
 			multiKey: false,
 			pageNo: false,
 			scrollList: false,
-			heartLockMode: 0
+			heartLockMode: 0,
+			className: false,
 			// default values of filters are defined at `prepareFilters`
 		},
 		// All pre-defined filters instances
@@ -97,7 +98,7 @@
 					self.scrollList = false;
 					self.saveSettings();
 				}
-				KC3StrategyTabs.reloadTab(undefined, true);
+				KC3StrategyTabs.reloadTab(undefined, false);
 			});
 			$(".lock_none").on("click", function(){
 				$(".ship_list .ship_lock").hide();
@@ -116,6 +117,20 @@
 			$(".lock_no").on("click", function(){
 				if(self.heartLockMode !== 2){
 					self.heartLockMode = 2;
+					self.saveSettings();
+				}
+				KC3StrategyTabs.reloadTab(undefined, true);
+			});
+			$(".class_yes").on("click", function(){
+				if(!self.className){
+					self.className = true;
+					self.saveSettings();
+				}
+				KC3StrategyTabs.reloadTab(undefined, true);
+			});
+			$(".class_no").on("click", function(){
+				if(self.className){
+					self.className = false;
 					self.saveSettings();
 				}
 				KC3StrategyTabs.reloadTab(undefined, true);
@@ -245,9 +260,10 @@
 				};
 			}
 			// Append sortno as default sorter to keep order stable
+			var lastSorterReverse = this.getLastCurrentSorter().reverse;
 			var mergedSorters = this.currentSorters.concat([{
 				name: "sortno",
-				reverse: false
+				reverse: lastSorterReverse
 			}]);
 			// To simulate in game behavior, if 1st sorter is stype, and no level found
 			if(this.currentSorters[0].name == "type"
@@ -285,7 +301,9 @@
 				stype: MasterShip.api_stype,
 				ctype: MasterShip.api_ctype,
 				sortno: MasterShip.api_sortno,
-				english: ThisShip.name(),
+				name: ThisShip.name(),
+				className: KC3Meta.ctypeName(MasterShip.api_ctype),
+				fullName: KC3Meta.ctypeName(MasterShip.api_ctype) + " " + ThisShip.name(),
 				level: ThisShip.level,
 				levelClass: ThisShip.levelClass(),
 				morale: ThisShip.morale,
@@ -658,6 +676,7 @@
 			shrinkedSettings.views.page = this.pageNo;
 			shrinkedSettings.views.scroll = this.scrollList;
 			shrinkedSettings.views.lock = this.heartLockMode;
+			shrinkedSettings.views.ctype = this.className;
 			this.settings = shrinkedSettings;
 			localStorage.srShiplist = JSON.stringify(this.settings);
 		},
@@ -674,6 +693,7 @@
 				this.pageNo = this.settings.views.page || false;
 				this.scrollList = this.settings.views.scroll || false;
 				this.heartLockMode = this.settings.views.lock || 0;
+				this.className = this.settings.views.ctype || false;
 			}
 		},
 
@@ -755,7 +775,7 @@
 			define("id", "Id",
 				   function(x) { return x.id; });
 			define("name", "Name",
-				   function(x) { return x.english; });
+				   function(x) { return this.className ? x.fullName : x.name; });
 			define("type", "Type",
 				   function(x) { return x.stype; });
 			define("lv", "Level",
@@ -850,7 +870,11 @@
 					$(".ship_id", cElm).text( cShip.id );
 					$(".ship_img .ship_icon", cElm).attr("src", KC3Meta.shipIcon(cShip.bid));
 					$(".ship_img .ship_icon", cElm).attr("alt", cShip.bid);
-					$(".ship_name", cElm).text( cShip.english );
+					const showName = self.className ? cShip.fullName : cShip.name;
+					$(".ship_name", cElm).text( showName );
+					if(KC3StrategyTabs.isTextEllipsis($(".ship_name", cElm))) {
+						$(".ship_name", cElm).attr("title", showName);
+					}
 					if(shipLevel >= 100) {
 						$(".ship_name", cElm).addClass("ship_kekkon-color");
 					}
@@ -921,7 +945,7 @@
 						cElm.addClass('modernization-able');
 				});
 
-				self.shipList.show();
+				self.shipList.show().createChildrenTooltips();
 				$(".ship_count .count_value").text(
 					"{0} /{1}".format(FilteredShips.length, self.shipCache.length)
 				);
