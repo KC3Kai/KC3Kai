@@ -259,15 +259,25 @@ KC3改 Equipment Object
 	/*
 	 * Build tooltip HTML of this Gear. Used by Panel/Strategy Room.
 	 */
-	KC3Gear.prototype.htmlTooltip = function() {
-		return KC3Gear.buildGearTooltip(this);
+	KC3Gear.prototype.htmlTooltip = function(slotSize) {
+		return KC3Gear.buildGearTooltip(this, slotSize !== undefined, slotSize);
 	};
 	/** Also export a static method */
-	KC3Gear.buildGearTooltip = function(gearObj, altName) {
+	KC3Gear.buildGearTooltip = function(gearObj, altName, slotSize) {
 		var gearData = gearObj.master();
 		if(gearObj.itemId === 0 || gearData === false){ return ""; }
 		var title = $('<div><span class="name"></span><br/></div>');
-		$(".name", title).html(altName || gearObj.name());
+		var nameText = altName || gearObj.name();
+		if(altName === true){
+			nameText = gearObj.name();
+			if(gearObj.stars > 0){ nameText += " \u2605{0}".format(gearObj.stars); }
+			if(gearObj.ace > 0){ nameText += " \u00bb{0}".format(gearObj.ace); }
+			if(slotSize > 0 &&
+				KC3GearManager.carrierBasedAircraftType3Ids.indexOf(gearData.api_type[3]) >- 1){
+				nameText += " x{0}".format(slotSize);
+			}
+		}
+		$(".name", title).html(nameText);
 		// Some stats only shown at Equipment Library, omitted here.
 		var planeStats = ["or", "kk"];
 		$.each([

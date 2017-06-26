@@ -2321,7 +2321,21 @@ ABYSS FLEET
 	background:#fff;
 	border-radius:9px;
 	z-index:1;
+}
+.module.fleet .lship .ex_item .gear_star {
+	width:12px;
+	position:absolute;
+	font-size:8px;
+	margin:8px 0px 0px -5px;
+	height:12px;
 	overflow:hidden;
+	border-radius:6px;
+	text-align:center;
+	line-height:12px;
+	color:#ff0;
+	background:#45a9a5;
+	pointer-events:none;
+	display:none;
 }
 .module.fleet .lship .ex_item.item_being_used {
 	background:#fe3;
@@ -2331,7 +2345,10 @@ ABYSS FLEET
 		0px 0px 4px #ff0,
 		0px 0px 4px #ff0;
 }
-.module.fleet .lship .ex_item img {
+.module.fleet .lship .ex_item .gear_icon {
+	overflow:hidden;
+}
+.module.fleet .lship .ex_item .gear_icon img {
 	width:18px;
 	height:18px;
 	line-height:18px;
@@ -2554,33 +2571,33 @@ ABYSS FLEET
 	float:left;
 }
 .module.fleet .lship .ship_gear_star {
-	width: 12px;
-	position: absolute;
-	font-size: 8px;
-	margin: 8px 0px 0px -5px;
-	height: 12px;
-	overflow: hidden;
-	border-radius: 6px;
-	text-align: center;
-	line-height: 13px;
-	color: #ff0;
-	background: #45a9a5;
-	pointer-events: none;
-	display: none;
+	width:12px;
+	position:absolute;
+	font-size:8px;
+	margin:8px 0px 0px -5px;
+	height:12px;
+	overflow:hidden;
+	border-radius:6px;
+	text-align:center;
+	line-height:12px;
+	color:#ff0;
+	background:#45a9a5;
+	pointer-events:none;
+	display:none;
 }
 .module.fleet .lship .ship_gear_ace {
-	width: 12px;
-	position: absolute;
-	font-size: 8px;
-	margin: 4px 0px 0px 15px;
-	height: 12px;
-	overflow: hidden;
-	border-radius: 6px;
-	text-align: center;
-	line-height: 13px;
-	color: #ff0;
-	pointer-events: none;
-	display: none;
+	width:12px;
+	position:absolute;
+	font-size:8px;
+	margin:4px 0px 0px 15px;
+	height:12px;
+	overflow:hidden;
+	border-radius:6px;
+	text-align:center;
+	line-height:12px;
+	color:#ff0;
+	pointer-events:none;
+	display:none;
 }
 .module.fleet .lship .ship_gear_ace img {
 	vertical-align:middle;
@@ -2712,7 +2729,21 @@ ABYSS FLEET
 	background:#fff;
 	border-radius:9px;
 	z-index:1;
+}
+.module.fleet .sship .ex_item .gear_star {
+	width:12px;
+	position:absolute;
+	font-size:8px;
+	margin:8px 0px 0px -5px;
+	height:12px;
 	overflow:hidden;
+	border-radius:6px;
+	text-align:center;
+	line-height:12px;
+	color:#ff0;
+	background:#45a9a5;
+	pointer-events:none;
+	display:none;
 }
 .module.fleet .sship .ex_item.item_being_used {
 	background:#fe3;
@@ -2722,7 +2753,10 @@ ABYSS FLEET
 		0px 0px 4px #ff0,
 		0px 0px 4px #ff0;
 }
-.module.fleet .sship .ex_item img {
+.module.fleet .sship .ex_item .gear_icon {
+	overflow:hidden;
+}
+.module.fleet .sship .ex_item .gear_icon img {
 	width:18px;
 	height:18px;
 	line-height:18px;
