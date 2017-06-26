@@ -26,14 +26,14 @@
                     this._db = db;
                     console.info("RemodelDb: database updated based on", isRaw ? "Master raw" : "api_start2");
                 } catch (e) {
-                    console.error("RemodelDb:", e.stack);/*RemoveLogging:skip*/
+                    console.error("RemodelDb: updating error", e);
                 }
             } else {
-                console.info("RemodelDb: no update required");
+                console.log("RemodelDb: no update required");
             }
 
             if (! this._db) {
-                console.warn("RemodelDb: database unavailable, need to re-initialize with master data");/*RemoveLogging:skip*/
+                console.info("RemodelDb: database unavailable, need to re-initialize with master data");/*RemoveLogging:skip*/
             }
         },
         // compare master data against _db (could be null)
@@ -55,14 +55,14 @@
                 : 20;
         },
         // does not consume devmat if using blueprint,
-        // except converting Suzuya K2 to Kou K2, still consumes devmats
+        // except converting Suzuya/Kumano K2 to Kou K2, still consumes devmats
         isIgnoreDevMat: function(blueprint_count, ship_id_from) {
-            return blueprint_count > 0 && ship_id_from !== 503;
+            return blueprint_count > 0 && [503, 504].indexOf(ship_id_from) < 0;
         },
-        // converting Suzuya (Kou) K2 also consumes torches, see also:
+        // converting Suzuya/Kumano (Kou) K2 also consumes torches, see also:
         // https://github.com/andanteyk/ElectronicObserver/blob/3d3286c15ddb587eb9d95146b855d1c0964ef064/ElectronicObserver/Other/Information/kcmemo.md#%E9%AB%98%E9%80%9F%E5%BB%BA%E9%80%A0%E6%9D%90
         calcTorch: function(ship_id_from) {
-            return (ship_id_from === 503 || ship_id_from === 508) ? 20 : 0;
+            return [503, 504, 508, 509].indexOf(ship_id_from) > -1 ? 20 : 0;
         },
         mkDb: function(masterData, isRaw) {
             var self = this;

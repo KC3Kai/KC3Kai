@@ -78,6 +78,29 @@ Saves and loads list to and from localStorage
 			});
 		},
 		
+		// Count number of equipment is not equipped by any ship or land-base
+		// Assume KC3ShipManager and PlayerManager are up to date
+		countFree :function(slotitem_id, isUnlock){
+			const heldRosterIds = [];
+			const rosterIdFilter = id => id > 0;
+			const landBasePlaneIdMap = p => p.api_slotid;
+			// Collect roster IDs of equipped (held) items by ships, land bases
+			for(let key in KC3ShipManager.list){
+				heldRosterIds.push(...KC3ShipManager.list[key].items.filter(rosterIdFilter));
+			}
+			for(let base of PlayerManager.bases){
+				heldRosterIds.push(...base.planes.map(landBasePlaneIdMap).filter(rosterIdFilter));
+			}
+			for(let id of PlayerManager.baseConvertingSlots){
+				heldRosterIds.push(id);
+			}
+			return this.count( gear => {
+				return gear.masterId == slotitem_id
+					&& heldRosterIds.indexOf(gear.itemId) === -1
+					&& (!isUnlock || gear.lock === 0);
+			});
+		},
+		
 		// Look for items by specified conditions
 		find :function( cond ){
 			var result = [];
@@ -114,11 +137,6 @@ Saves and loads list to and from localStorage
 		// Remove item from the list
 		remove :function( itemId ){
 			delete this.list["x"+itemId];
-		},
-		
-		// Show JSON string of the list for debugging purposes
-		json: function(){
-			console.log(JSON.stringify(this.list));
 		},
 		
 		// Save item list onto local storage

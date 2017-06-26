@@ -1,3 +1,4 @@
+/* globals api_start2: true */
 QUnit.module("Master Module", function(){ localStorage.clear(); });
 
 QUnit.test("Module > Master > Saving", function( assert ) {

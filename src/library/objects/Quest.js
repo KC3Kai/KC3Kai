@@ -208,7 +208,7 @@ known IDs see QuestManager
 			|| (this.id == 211)		// Bd4, but type == 5
 			|| (this.id == 212)		// Bd6, but type == 5
 			// Other known cases
-			|| KC3QuestManager._dailyIds.indexOf(this.id) > -1;
+			|| KC3QuestManager.getRepeatableIds('daily').indexOf(this.id) > -1;
 	};
 
 	KC3Quest.prototype.isWeekly = function(){
@@ -220,7 +220,7 @@ known IDs see QuestManager
 	};
 
 	KC3Quest.prototype.isQuarterly = function(){
-		return KC3QuestManager._quarterlyIds.indexOf(this.id) > -1;
+		return KC3QuestManager.getRepeatableIds('quarterly').indexOf(this.id) > -1;
 	};
 
 	KC3Quest.prototype.isUnselected = function(){
@@ -338,13 +338,13 @@ known IDs see QuestManager
 
 	KC3Quest.prototype.toggleCompletion = function(forceCompleted){
 		if(this.isSelected() || !!forceCompleted){
-			console.info("Force to complete quest:", this.id);
+			console.log("Force to complete quest:", this.id);
 			this.status = 3;
 			// Do not set tracking counter to max,
 			// as quest will be always completed when re-activated
 			KC3QuestManager.save();
 		} else if(this.isCompleted()){
-			console.info("Re-select quest again:", this.id);
+			console.log("Re-select quest again:", this.id);
 			this.status = 2;
 			// Reset counter, but do not touch multi-counter (Bw1 for now)
 			if(Array.isArray(this.tracking) && this.tracking.length === 1){

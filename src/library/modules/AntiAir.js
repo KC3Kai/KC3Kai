@@ -103,6 +103,7 @@ AntiAir: anti-air related calculations
 	// AA Radar
 	// Surface Radar are excluded by checking whether
 	// the equipment gives AA stat (api_tyku)
+	// EO memo: api_tyku >= 2
 	function isAARadar(mst) {
 		return isRadar(mst) && 
 			mst.api_tyku > 0;
@@ -132,6 +133,7 @@ AntiAir: anti-air related calculations
 
 	var isLargeCaliberMainGun = categoryEq(3);
 
+	// EO memo: api_tyku >= 8
 	function isBuiltinHighAngleMount(mst) {
 		return [
 			122 /* aki-gun */,
@@ -141,6 +143,7 @@ AntiAir: anti-air related calculations
 		].indexOf( mst.api_id ) !== -1;
 	}
 
+	// EO memo: api_tyku >= 9
 	function isCDMG(mst) {
 		return [
 			131 /* 25mm triple (CD) */,
@@ -380,6 +383,7 @@ AntiAir: anti-air related calculations
 		kasumiK2BIcon = 470,
 		satsukiK2Icon = 418,
 		kinuK2Icon = 487,
+		yuraK2Icon = 488,
 		haMountIcon = 16,
 		radarIcon = 11,
 		aaFdIcon = 30,
@@ -396,6 +400,7 @@ AntiAir: anti-air related calculations
 	var isKasumiK2B = masterIdEq( kasumiK2BIcon );
 	var isSatsukiK2 = masterIdEq( satsukiK2Icon );
 	var isKinuK2 = masterIdEq( kinuK2Icon );
+	var isYuraK2 = masterIdEq( yuraK2Icon );
 
 	// turns a "shipObj" into the list of her equipments
 	// for its parameter function "pred"
@@ -647,6 +652,18 @@ AntiAir: anti-air related calculations
 		predAllOf(isKinuK2),
 		withEquipmentMsts(
 			hasSome( isCDMG )
+		)
+	);
+
+	// Yura K2
+	declareAACI(
+		21, 5, 1.45,
+		[yuraK2Icon, haMountIcon, radarIcon],
+		predAllOf(isYuraK2),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( isHighAngleMount ),
+				hasSome( isAARadar ))
 		)
 	);
 

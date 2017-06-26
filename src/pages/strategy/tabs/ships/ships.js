@@ -6,17 +6,25 @@
 	KC3StrategyTabs.ships.definition = {
 		tabSelf: KC3StrategyTabs.ships,
 
-		shipCache:[],
-		settings: {},
-		// default sorting method to Level
-		currentSorters: [{name:"lv", reverse:false}],
-		equipMode: 0,
 		isLoading: false,
-		multiKey: false,
-		pageNo: false,
-
+		shipCache:[],
+		// Formatted settings to be stored into localStorage
+		settings: {},
+		// Default properties of sorters and views
+		defaultSettings: {
+			// default sorting method to Level
+			currentSorters: [{name:"lv", reverse:false}],
+			// default options of view
+			equipMode: 0,
+			multiKey: false,
+			pageNo: false,
+			scrollList: false,
+			heartLockMode: 0
+			// default values of filters are defined at `prepareFilters`
+		},
+		// All pre-defined filters instances
 		newFilterRep: {},
-		// all sorters
+		// All pre-defined sorters instances
 		sorters: {},
 		sorterDescCtrl: null,
 		viewElements: {},
@@ -25,6 +33,7 @@
 		Prepares static data needed
 		---------------------------------*/
 		init :function(){
+			$.extend(true, this, this.defaultSettings);
 			this.prepareSorters();
 		},
 
@@ -32,16 +41,129 @@
 		Prepares latest ships data
 		---------------------------------*/
 		reload :function(){
-			// Cache ship info
 			PlayerManager.loadFleets();
 			KC3ShipManager.load();
 			KC3GearManager.load();
+			// Cache pre-processed ship info
 			this.shipCache = [];
 			for(let key in KC3ShipManager.list){
 				let shipData = KC3ShipManager.list[key];
 				let preparedData = this.prepareShipData(shipData);
 				this.shipCache.push(preparedData);
 			}
+		},
+
+		/* EXECUTE
+		Places data onto the interface
+		---------------------------------*/
+		execute :function(){
+			var self = this;
+
+			// Binding click event starts
+			$(".filters_label").on("click", function(){
+				$(".filters .ship_types").slideToggle(300);
+				$(".filters .massSelect").slideToggle(300, function(){
+					$(".fold_button").toggleClass("glyph_minus", $(this).is(":visible"));
+					$(".fold_button").toggleClass("glyph_plus", !$(this).is(":visible"));
+					if(self.scrollList){
+						self.toggleTableScrollbar(true);
+					}
+				});
+			});
+			$(".pages_yes").on("click", function(){
+				$(".ingame_page").show();
+				if(!self.pageNo){
+					self.pageNo = true;
+					self.saveSettings();
+				}
+			});
+			$(".pages_no").on("click", function(){
+				$(".ingame_page").hide();
+				if(self.pageNo){
+					self.pageNo = false;
+					self.saveSettings();
+				}
+			});
+			$(".scroll_fix").on("click", function(){
+				self.toggleTableScrollbar(true);
+				if(!self.scrollList){
+					self.scrollList = true;
+					self.saveSettings();
+				}
+			});
+			$(".scroll_none").on("click", function(){
+				self.toggleTableScrollbar(false);
+				if(self.scrollList){
+					self.scrollList = false;
+					self.saveSettings();
+				}
+				KC3StrategyTabs.reloadTab(undefined, true);
+			});
+			$(".lock_none").on("click", function(){
+				$(".ship_list .ship_lock").hide();
+				if(!!self.heartLockMode){
+					self.heartLockMode = 0;
+					self.saveSettings();
+				}
+			});
+			$(".lock_yes").on("click", function(){
+				if(self.heartLockMode !== 1){
+					self.heartLockMode = 1;
+					self.saveSettings();
+				}
+				KC3StrategyTabs.reloadTab(undefined, true);
+			});
+			$(".lock_no").on("click", function(){
+				if(self.heartLockMode !== 2){
+					self.heartLockMode = 2;
+					self.saveSettings();
+				}
+				KC3StrategyTabs.reloadTab(undefined, true);
+			});
+			$(".control_buttons .reset_default").on("click", function(){
+				delete self.currentSorters;
+				$.extend(true, self, self.defaultSettings);
+				delete localStorage.srShiplist;
+				KC3StrategyTabs.reloadTab(undefined, true);
+			});
+			// Binding click event ends
+
+			// Add filter elements of ship types before `prepareFilters` executed
+			for(let sCtr in KC3Meta._stype){
+				// stype 12, 15 not used by shipgirl
+				// stype 1 is used from 2017-05-02
+				if(KC3Meta._stype[sCtr] && ["12", "15"].indexOf(sCtr) < 0){
+					let cElm = $(".tab_ships .factory .ship_filter_type").clone().appendTo(".tab_ships .filters .ship_types");
+					cElm.data("id", sCtr);
+					$(".filter_name", cElm).text(KC3Meta.stype(sCtr));
+				}
+			}
+
+			// Update multi sorter elements
+			var multiKeyCtrl = $( ".advanced_sorter .adv_sorter" );
+			var updateSorterControl = function() {
+				$(".filter_check", multiKeyCtrl).toggle( self.multiKey );
+				self.sorterDescCtrl.toggle(self.multiKey);
+			};
+			multiKeyCtrl.on("click", function() {
+				self.multiKey = ! self.multiKey;
+
+				updateSorterControl();
+
+				if (! self.multiKey) {
+					var needUpdate = self.cutCurrentSorter();
+					if (needUpdate)
+						self.refreshTable();
+				}
+			});
+
+			this.loadSettings();
+			this.sorterDescCtrl = $(".advanced_sorter .sorter_desc");
+			this.updateSorterDescription();
+			updateSorterControl();
+			this.prepareFilters();
+			this.shipList = $(".tab_ships .ship_list");
+			this.showFilters();
 		},
 
 		getLastCurrentSorter: function() {
@@ -113,25 +235,38 @@
 		// create comparator based on current list sorters
 		makeComparator: function() {
 			function reversed(comparator) {
-				return function(a,b) {
-					var result = comparator(a,b);
-					return result === 0
-						? 0
-						: result < 0 ? 1 : -1;
+				return function(l, r) {
+					return -comparator(l, r);
 				};
 			}
-
-			function compose(prevCmp,curCmp) {
-				return function(a,b) {
-					var prevResult = prevCmp(a,b);
-					return prevResult !== 0 ? prevResult : curCmp(a,b);
+			function compose(prevComparator, nextComparator) {
+				return function(l, r) {
+					return prevComparator(l, r) || nextComparator(l, r);
 				};
 			}
-
-			var self = this;
-			return this.currentSorters
-				.map( function(sorterInfo) {
-					var sorter = self.sorters[sorterInfo.name];
+			// Append sortno as default sorter to keep order stable
+			var mergedSorters = this.currentSorters.concat([{
+				name: "sortno",
+				reverse: false
+			}]);
+			// To simulate in game behavior, if 1st sorter is stype, and no level found
+			if(this.currentSorters[0].name == "type"
+				&& this.currentSorters.every(si => si.name !== "lv")){
+				mergedSorters.push({
+					name: "lv",
+					reverse: false
+				});
+			}
+			// For duplicated ships, final sorter if roster ID not used
+			if(this.currentSorters.every(si => si.name !== "id")){
+				mergedSorters.push({
+					name: "id",
+					reverse: false
+				});
+			}
+			return mergedSorters
+				.map( sorterInfo => {
+					var sorter = this.sorters[sorterInfo.name];
 					return sorterInfo.reverse
 						? reversed(sorter.comparator)
 						: sorter.comparator;
@@ -148,8 +283,11 @@
 				id: ThisShip.rosterId,
 				bid : ThisShip.masterId,
 				stype: MasterShip.api_stype,
+				ctype: MasterShip.api_ctype,
+				sortno: MasterShip.api_sortno,
 				english: ThisShip.name(),
 				level: ThisShip.level,
+				levelClass: ThisShip.levelClass(),
 				morale: ThisShip.morale,
 				equip: ThisShip.items,
 				locked: ThisShip.lock,
@@ -167,8 +305,9 @@
 				as: [this.getDerivedStatNaked("tais", ThisShip.as[0], ThisShip), ThisShip.as[0] ],
 				ev: [this.getDerivedStatNaked("houk", ThisShip.ev[0], ThisShip), ThisShip.ev[0] ],
 				ls: [this.getDerivedStatNaked("saku", ThisShip.ls[0], ThisShip), ThisShip.ls[0] ],
-				lk: ThisShip.lk[0],
+				lk: [ThisShip.lk[0], ThisShip.lk[1], MasterShip.api_luck[0]],
 				sp: ThisShip.speed,
+				range: ThisShip.range,
 				slots: ThisShip.slots,
 				exSlot: ThisShip.ex_item,
 				fleet: ThisShip.onFleet(),
@@ -348,7 +487,6 @@
 
 		/*
 		   defineShipFilter defines a filter that has UI controls.
-
 		   see comments on each arguments for detail.
 		 */
 		defineShipFilter: function(
@@ -511,6 +649,7 @@
 						|| (curVal === 1 && ship.morale >= 50)
 						|| (curVal === 2 && ship.morale < 50);
 				});
+
 			self.defineShipFilter(
 				"daihatsu",
 				savedFilterValues.daihatsu || 0,
@@ -520,6 +659,7 @@
 						|| (curVal === 1 && ship.canEquipDaihatsu)
 						|| (curVal === 2 && !ship.canEquipDaihatsu);
 				});
+
 			self.defineShipFilter(
 				"exslot",
 				savedFilterValues.exslot || 0,
@@ -530,12 +670,35 @@
 						|| (curVal === 2 && ship.exSlot === 0);
 				});
 
+			self.defineShipFilter(
+				"dupe",
+				savedFilterValues.dupe || 0,
+				["all", "yes","no"],
+				function(curVal, ship) {
+					if(curVal === 0) return true;
+					var dupeShips = self.shipCache.filter(s =>
+						(RemodelDb.originOf(ship.bid) === RemodelDb.originOf(s.bid)
+							&& s.id !== ship.id)
+					);
+					return (curVal === 1 && dupeShips.length > 0)
+							|| (curVal === 2 && dupeShips.length === 0);
+				});
+
+			self.defineShipFilter(
+				"range",
+				savedFilterValues.range || 0,
+				["all","short","medium","long","verylong"],
+				function(curVal, ship) {
+					return (curVal === 0)
+						|| (curVal === ship.range);
+				});
+
 			var stypes = Object
 				.keys(KC3Meta._stype)
 				.map(function(x) { return parseInt(x,10); })
 				.filter(function(x) { return [12,15].indexOf(x)<0; })
 				.sort(function(a,b) { return a-b; });
-			console.assert(stypes[0] === 0);
+			console.assert(stypes[0] === 0, "stype array should start with element 0");
 			// remove initial "0", which is invalid
 			stypes.shift();
 			var stypeDefValue = [];
@@ -617,6 +780,8 @@
 			}
 			shrinkedSettings.views.equip = this.equipMode;
 			shrinkedSettings.views.page = this.pageNo;
+			shrinkedSettings.views.scroll = this.scrollList;
+			shrinkedSettings.views.lock = this.heartLockMode;
 			this.settings = shrinkedSettings;
 			localStorage.srShiplist = JSON.stringify(this.settings);
 		},
@@ -631,6 +796,8 @@
 			if(this.settings.views){
 				this.equipMode = this.settings.views.equip || 0;
 				this.pageNo = this.settings.views.page || false;
+				this.scrollList = this.settings.views.scroll || false;
+				this.heartLockMode = this.settings.views.lock || 0;
 			}
 		},
 
@@ -702,9 +869,7 @@
 				function(a,b) {
 					var va = getter.call(self,a);
 					var vb = getter.call(self,b);
-					return va === vb
-						 ? 0
-						 : (va < vb) ? -1 : 1;
+					return typeof va === "string" ? va.localeCompare(vb) : va - vb;
 				});
 		},
 
@@ -740,7 +905,13 @@
 			define("ls", "LoS",
 				   function(x) { return -x.ls[this.equipMode]; });
 			define("lk", "Luck",
-				   function(x) { return -x.lk; });
+				   function(x) { return -x.lk[0]; });
+			define("ctype", "Class",
+				   function(x) { return x.ctype; });
+			define("bid", "ShipId",
+				   function(x) { return x.bid; });
+			define("sortno", "SortOrder",
+				   function(x) { return x.sortno; });
 		},
 
 		/* REFRESH TABLE
@@ -811,11 +982,16 @@
 						$(".ship_name", cElm).addClass("ship_onfleet-color" + cShip.fleet);
 					}
 					$(".ship_type", cElm).text( KC3Meta.stype(cShip.stype) );
-					var shipLevelConv = shipLevel;
-					$(".ship_lv", cElm).html( "<span>Lv.</span>" + shipLevelConv);
-					$(".ship_morale", cElm).html( cShip.morale );
+					$(".ship_lv .value", cElm).text( shipLevel )
+						.addClass( cShip.levelClass );
+					$(".ship_morale", cElm).text( cShip.morale );
 					$(".ship_hp", cElm).text( cShip.hp );
-					$(".ship_lk", cElm).text( cShip.lk );
+					$(".ship_lk", cElm).text( cShip.lk[0] );
+					if(cShip.lk[0] >= cShip.lk[1]){
+						$(".ship_lk", cElm).addClass("max");
+					} else if(cShip.lk[0] > cShip.lk[2]){
+						$(".ship_lk", cElm).append("<sup class='sub'>{0}</sup>".format(cShip.lk[0] - cShip.lk[2]));
+					}
 
 					if(cShip.morale >= 50){ $(".ship_morale", cElm).addClass("sparkled"); }
 
@@ -845,7 +1021,16 @@
 						self.equipImg(cElm, "ex", -2, cShip.exSlot);
 					}
 
-					if(FilteredShips[shipCtr].locked){ $(".ship_lock img", cElm).show(); }
+					$(".ship_lock img", cElm).attr("src",
+						"../../assets/img/client/heartlock{0}.png".format(!cShip.locked ? "-x" : "")
+					);
+					if(self.heartLockMode === 1 && cShip.locked){
+						$(".ship_lock img", cElm).show();
+					} else if(self.heartLockMode === 2 && !cShip.locked){
+						$(".ship_lock img", cElm).show();
+					} else {
+						$(".ship_lock", cElm).hide();
+					}
 
 					// Check whether remodel is max
 					if( !cShip.remodel )
@@ -861,9 +1046,13 @@
 				});
 
 				self.shipList.show();
+				$(".ship_count .count_value").text(
+					"{0} /{1}".format(FilteredShips.length, self.shipCache.length)
+				);
 				$(".ingame_page").toggle(self.pageNo);
+				self.toggleTableScrollbar(self.scrollList);
 				self.isLoading = false;
-				console.log("Showing this list took", (Date.now() - self.startTime)-100 , "milliseconds");
+				console.debug("Showing ship list took", (Date.now() - self.startTime)-100 , "milliseconds");
 			}, 100);
 		},
 
@@ -873,6 +1062,14 @@
 
 		gearClickFunc: function(e){
 			KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
+		},
+
+		toggleTableScrollbar: function(isFixed){
+			$(".ship_list").toggleClass("scroll_fix", isFixed);
+			$(".page_padding").toggleClass("scroll_fix", isFixed);
+			if(isFixed){
+				$(".ship_list").height(window.innerHeight - $(".ship_list").offset().top - 5);
+			}
 		},
 
 		/* Compute Derived Stats without Equipment

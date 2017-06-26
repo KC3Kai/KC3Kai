@@ -25,6 +25,7 @@ module.exports = function(grunt) {
 				expand: true,
 				src: [
 					// some tests would load from the following 2 paths:
+					'node_modules/babel-polyfill/dist/polyfill.min.js',
 					'node_modules/qunitjs/**/*',
 					'node_modules/jquery/**/*',
 
@@ -67,7 +68,7 @@ module.exports = function(grunt) {
 					'library/helpers/*.js',
 					'library/injections/*.js',
 					'library/injections/*.css',
-					'library/modules/*.js',
+					'library/modules/**/*.js',
 					'library/workers/*.js',
 					'pages/**/*',
 					'!pages/strategy/tabs/**/*.js',
@@ -80,7 +81,16 @@ module.exports = function(grunt) {
 		},
 		removelogging: {
 			'build/tmp': {
-				src: "build/tmp/**/*.js"
+				src: "build/tmp/**/*.js",
+				options: {
+					// keep all 'warn' and 'error' by default
+					methods: [
+						'log', 'info', 'assert', 'count', 'clear',
+						'group', 'groupEnd', 'groupCollapsed', 'trace',
+						'debug', 'dir', 'dirxml', 'profile', 'profileEnd',
+						'time', 'timeEnd', 'timeStamp', 'table', 'exception'
+					]
+				}
 			}
 		},
 		jshint: {
@@ -214,7 +224,11 @@ module.exports = function(grunt) {
 								"assets/js/Dexie.min.js",
 								"library/objects.js",
 								"library/managers.js",
+								"library/modules/QuestSync/Sync.js",
+								"library/modules/QuestSync/Background.js",
 								"library/modules/Database.js",
+								"library/modules/Log/Log.js",
+								"library/modules/Log/Background.js",
 								"library/modules/ImageExport.js",
 								"library/modules/Master.js",
 								"library/modules/RemodelDb.js",
@@ -239,9 +253,14 @@ module.exports = function(grunt) {
 									"assets/js/global.js",
 									"library/objects.js",
 									"library/managers.js",
+									"library/modules/QuestSync/Sync.js",
+									"library/modules/QuestSync/ContentScript.js",
 									"library/modules/Master.js",
 									"library/modules/Meta.js",
 									"library/modules/Translation.js",
+									"library/modules/Log/Log.js",
+									"library/modules/Log/Messaging.js",
+									"library/modules/Log/ContentScript.js",
 									"library/injections/dmm_takeover.js",
 									"library/injections/dmm.js"
 								],
@@ -385,7 +404,8 @@ module.exports = function(grunt) {
 						// same reason for "tests/library".
 						src: [ "src/library/**/*.js",
 							   "src/pages/**/*.js",
-							   "tests/library/**/*.js"
+							   "tests/library/**/*.js",
+							   "tests/pages/**/*.js"
 							 ],
 						dest: 'build/testenv/'
 					}

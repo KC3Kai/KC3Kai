@@ -145,7 +145,7 @@ button, input, select, textarea {
 -------------------------------*/
 #content {
 	width:700px;
-	min-height:1300px;
+	min-height:1340px;
 	float:left;
 	background:#222222;
 	overflow:hidden;
@@ -497,6 +497,9 @@ button, input, select, textarea {
 	
 }
 /* Ship List */
+.tab_ships .filters .fold_button {
+	background:#cccccc;
+}
 .tab_ships .massSelect .hover {
 	color:#ffffff
 }
@@ -523,6 +526,9 @@ button, input, select, textarea {
 }
 .tab_ships .advanced_sorter .filter_check {
 	background:#ffffff;
+}
+.tab_ships .control_buttons .reset_default:hover {
+	background:#555555;
 }
 .tab_ships .ship_filter_type .filter_box {
 	border:1px solid #888888;
@@ -583,6 +589,18 @@ button, input, select, textarea {
 	background:#b1b101;
 	color:#000;
 }
+.tab_ships .ship_item .ship_lv span.i18n {
+	color:#888;
+}
+.tab_ships .ship_item .ship_lv span.value.married {
+	color:#d3911d;
+}
+.tab_ships .ship_item .ship_lv span.value.high {
+	color:#1cdb98;
+}
+.tab_ships .ship_item .ship_lv span.value.medium {
+	color:#36c2db;
+}
 .tab_ships .ship_item .ship_fp.max {
 	background:#833232;
 }
@@ -599,11 +617,19 @@ button, input, select, textarea {
 .tab_ships .ship_item .ship_ar.max {
 	background:#947600;
 }
-.tab_ships .ship_item.odd .ship_field.ship_lk{
-	background:#116311;
+.tab_ships .ship_item .ship_stat span {
+	color:#999999 !important;
 }
+.tab_ships .ship_item.odd .ship_field.ship_lk,
 .tab_ships .ship_item.even .ship_field.ship_lk {
 	background:#116311;
+}
+.tab_ships .ship_item.odd .ship_field.ship_lk.max,
+.tab_ships .ship_item.even .ship_field.ship_lk.max {
+	background:#09a709;
+}
+.tab_ships .ship_item .ship_lk .sub {
+	color:#999999;
 }
 .tab_ships .ship_item .ship_equip .ship_equip_ex .empty {
 	background:#555555 !important;
@@ -706,6 +732,18 @@ button, input, select, textarea {
 .tab_docking .ship_item:hover .ship_field {
 	background:#000000;
 }
+.tab_docking .ship_item .ship_lv span.i18n {
+	color:#888;
+}
+.tab_docking .ship_item .ship_lv span.value.married {
+	color:#d3911d;
+}
+.tab_docking .ship_item .ship_lv span.value.high {
+	color:#1cdb98;
+}
+.tab_docking .ship_item .ship_lv span.value.medium {
+	color:#36c2db;
+}
 .tab_docking .ship_item .ship_status {
 	color:#ffffff;
 }
@@ -772,6 +810,9 @@ button, input, select, textarea {
 .tab_expcalc .ship_goal {
 	background-color:#333333;
 	border-radius: 0px !important;
+}
+.tab_expcalc .ship_goal.goaled {
+	background-color:#968300;
 }
 .tab_expcalc .ship_goal.highlight_stype {
 	background-color:#330000;
@@ -1287,6 +1328,18 @@ button, input, select, textarea {
 .tab_shipquests .ship_item:hover .ship_field {
 	background:#000000;
 }
+.tab_shipquests .ship_item .ship_lv span.i18n {
+	color:#888;
+}
+.tab_shipquests .ship_item .ship_lv span.value.married {
+	color:#d3911d;
+}
+.tab_shipquests .ship_item .ship_lv span.value.high {
+	color:#1cdb98;
+}
+.tab_shipquests .ship_item .ship_lv span.value.medium {
+	color:#36c2db;
+}
 
 /* MAPS
 --------------------------------*/
@@ -1790,4 +1843,75 @@ button, input, select, textarea {
 	line-height:20px;
 	color:#aaa;
 	font-size:12px;
+}
+
+/* LOGS
+--------------------------------*/
+.tab_logger .log_entry {
+	border-radius:0px !important;
+}
+.tab_logger .labelled_rule .date {
+	background:#222222 !important;
+}
+.tab_logger .log_entry .summary .time {
+	color:#bbb;
+}
+.tab_logger .log_entry .summary .msg .dataline {
+	color:#999 !important;
+}
+.tab_logger .log_entry .summary .msg {
+	color:#cccccc;
+}
+.tab_logger .log_entry .summary .source {
+	color:#0b1452 !important;
+}
+.tab_logger .log_entry .summary .context {
+	color:#222222 !important;
+}
+.tab_logger .log_entry .stack {
+	color:#ff1414 !important;
+}
+.bg-success {
+	background-color:#356b37;
+}
+.bg-info {
+	background-color:#00584b;
+}
+.bg-warning {
+	background-color:#5f5b10;
+}
+.bg-danger {
+	background-color:#960f30;
+}
+
+/* BLUEPRINTS
+--------------------------------*/
+.tab_blueprints .view_types {
+	background:#131313;
+	border-bottom:1px solid #444444;
+}
+
+.tab_blueprints .ship_item.odd .ship_field {
+	background:#303030;
+}
+.tab_blueprints .ship_item.even .ship_field {
+	background:#303030;
+}
+.tab_blueprints .ship_item:hover .ship_field {
+	background:#000000;
+}
+.tab_blueprints .ship_item .ship_lv span.i18n {
+	color:#888;
+}
+.tab_blueprints .ship_item .ship_lv span.value.married {
+	color:#d3911d;
+}
+.tab_blueprints .ship_item .ship_lv span.value.high {
+	color:#1cdb98;
+}
+.tab_blueprints .ship_item .ship_lv span.value.medium {
+	color:#36c2db;
+}
+.tab_blueprints .ship_item .need_materials .icon span.used {
+	color:#555;
 }

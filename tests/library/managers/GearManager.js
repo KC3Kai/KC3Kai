@@ -1,3 +1,4 @@
+/* globals api_get_member_require_info: true */
 QUnit.module("Gear Manager", function(){ localStorage.clear(); });
 
 QUnit.test("Managers > Gear > Feeding new data", function( assert ) {

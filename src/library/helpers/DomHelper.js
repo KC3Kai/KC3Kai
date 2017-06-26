@@ -1,3 +1,4 @@
+/* jshint undef: false, unused: false */
 (function ($) {
     "use strict";
 	

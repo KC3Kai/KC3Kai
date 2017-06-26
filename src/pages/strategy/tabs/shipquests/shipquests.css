@@ -155,6 +155,7 @@
 .tab_shipquests .ship_item .ship_img img.ship_icon {
 	width:20px;
 	height:20px;
+	vertical-align:top;
 }
 .tab_shipquests .ship_item .ship_img img.ship_kekkon {
 	position:absolute;
@@ -199,17 +200,13 @@
 	width:50px;
 	text-align:center;
 	position:relative;
-}
-.tab_shipquests .ship_item .ship_lv.ship_kekkon {
+	overflow:hidden;
+	white-space:nowrap;
 }
 .tab_shipquests .ship_item .ship_quests {
 	width:430px;
 	text-align:left;
 }
-.tab_shipquests .ship_item .ship_lv span {
-	color:#888;
-}
-/* Fields: Stats */
 .tab_shipquests .ship_item .ship_stat {
 	width:35px;
 	text-align:center;

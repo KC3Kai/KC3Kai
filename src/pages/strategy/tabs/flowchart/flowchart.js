@@ -40,6 +40,7 @@
 			this.seedBranch( rootQuestTree, 249 ); // Bm1
 			this.seedBranch( rootQuestTree, 256 ); // Bm2
 			this.seedBranch( rootQuestTree, 259 ); // Bm4
+			this.seedBranch( rootQuestTree, 663 ); // F55
 			
 			// Other non-flowchart quests
 			var rootQuestList = $(".tab_flowchart .extralist ul.questList");
@@ -100,7 +101,7 @@
 			// Manual override quest status
 			$(".flowchart").on("click", ".questToggle", function(){
 				var editingQuest = KC3QuestManager.get($(this).data("id"));
-				console.log(editingQuest.status);
+				console.log("Quest status before", editingQuest.status);
 				editingQuest.status++;
 				if(editingQuest.status>=4){ editingQuest.status=0; }
 				KC3QuestManager.save();
@@ -110,7 +111,7 @@
 			// Manual remove quest
 			$(".page_padding").on("click", ".questRemove", function(){
 				var removingQuest = KC3QuestManager.get($(this).data("id"));
-				console.log(removingQuest);
+				console.log("Quest to be removed", removingQuest);
 				if(KC3QuestManager.remove(removingQuest)){
 					KC3QuestManager.save();
 					KC3StrategyTabs.reloadTab(undefined, true);
@@ -154,6 +155,11 @@
 					$(".questTrack", thisBox).hide();
 				} else {
 					$(".questCount", thisBox).text( questRecord.outputShort() );
+					if(questRecord.tracking.length  > 1){
+						$(".questCount", thisBox)
+							.attr("title", questRecord.outputShort(true))
+							.lazyInitTooltip();
+					}
 				}
 				
 				// Status-based actions

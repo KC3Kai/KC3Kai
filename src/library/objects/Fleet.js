@@ -76,7 +76,7 @@ Contains summary information about a fleet and its 6 ships
 										});
 								});
 						} catch (e) {
-							console.error(e.stack);/*RemoveLogging:skip*/
+							console.error("Updating fleet unexpected error", e);
 							return false;
 						}
 					}
@@ -262,7 +262,7 @@ Contains summary information about a fleet and its 6 ships
 					t2Count += 1;
 					addImprove( eObj.stars );
 				} else if (eObj.masterId === 193) {
-					// toku landing craft
+					// toku landing craft (230: +11th tank no count)
 					tokuCount += 1;
 					addImprove( eObj.stars );
 				}
@@ -310,11 +310,11 @@ Contains summary information about a fleet and its 6 ships
 		resupply /* must be a non-negative number */, 
 		greatSuccess /* must be boolean */) {
 		if (typeof greatSuccess !== "boolean") {
-			console.error( "greatSuccess has non-boolean value" );
+			console.warn("greatSuccess must be boolean", greatSuccess);
 			return;
 		}
 		if (typeof resupply !== "number") {
-			console.error( "resupply is not a number" );
+			console.warn("resupply must be number", resupply);
 			return;
 		}
 
@@ -328,7 +328,7 @@ Contains summary information about a fleet and its 6 ships
 		// but if a shorter representation is possible, it will be used instead
 		function formatFloat(v) {
 			if (typeof v !== "number") {
-				console.error( "formatFloat", "argument not taking a number");
+				console.warn("formatFloat argument must be number", v);
 			}
 			var fixed = v.toFixed(5);
 			var converted = "" + v;
@@ -397,38 +397,33 @@ Contains summary information about a fleet and its 6 ships
 	};
 	
 	KC3Fleet.prototype.fighterPower = function(){
-		var self = this;
-		return Math.round(Array.apply(null, {length: 6})
-			.map(Number.call, Number)
-			.map(function(x){return self.ship(x).fighterPower();})
-			.reduce(function(x,y){return x+y;}) * 100)/100;
+		return Math.round(
+				Array.apply(null, {length: 6}).map(Number.call, Number)
+				.map(i => (this.ship(i).didFlee ? 0 : this.ship(i).fighterPower()))
+				.reduce((x, y) => x + y)
+			* 100) / 100;
 	};
 	
 	KC3Fleet.prototype.fighterVeteran = function(){
-		var self = this;
-		return Math.round(Array.apply(null, {length: 6})
-			.map(Number.call, Number)
-			.map(function(x){return self.ship(x).fighterVeteran();})
-			.reduce(function(x,y){return x+y;}) * 100)/100;
+		return Math.round(
+				Array.apply(null, {length: 6}).map(Number.call, Number)
+				.map(i => (this.ship(i).didFlee ? 0 : this.ship(i).fighterVeteran()))
+				.reduce((x, y) => x + y)
+			* 100) / 100;
 	};
 	
 	KC3Fleet.prototype.fighterBounds = function(){
-		var self = this;
-		var TotalPower = [0,0];
-		
-		var ShipPower;
-		for(var ShipCtr in this.ships){
-			if(this.ships[ShipCtr] > -1){
-				ShipPower = this.ship(ShipCtr).fighterBounds();
-				if(typeof ShipPower == "object"){
-					TotalPower[0] += Math.floor(ShipPower[0]);
-					TotalPower[1] += Math.floor(ShipPower[1]);
-					// floor it just in case
+		var totalPower = [0,0];
+		for(let index in this.ships){
+			if(this.ships[index] > 0 && !this.ship(index).didFlee){
+				let fighterPower = this.ship(index).fighterBounds();
+				if(Array.isArray(fighterPower)){
+					totalPower[0] += Math.floor(fighterPower[0]);
+					totalPower[1] += Math.floor(fighterPower[1]);
 				}
 			}
 		}
-		
-		return TotalPower;
+		return totalPower;
 	};
 	
 	KC3Fleet.prototype.fighterPowerText = function(){
@@ -523,6 +518,59 @@ Contains summary information about a fleet and its 6 ships
 	/*-----------------[ STATUS INDICATORS ]------------------*/
 	/*--------------------------------------------------------*/
 	
+	KC3Fleet.prototype.hasShip = function(expected, pos){
+		return this.ship().some((ship, index) => {
+			if(pos === undefined || pos === index) {
+				if(typeof expected === "number"
+					|| typeof expected === "string") {
+					return RemodelDb.originOf(expected)
+						=== RemodelDb.originOf(ship.masterId);
+				} else if(Array.isArray(expected)) {
+					return expected.indexOf(ship.masterId) > -1;
+				} else if(expected instanceof KC3Ship) {
+					return expected.masterId === ship.masterId;
+				}
+			}
+			return false;
+		});
+	};
+	
+	KC3Fleet.prototype.countShip = function(expected, isExclude = false){
+		return this.ship().reduce((count, ship) => {
+			if(Array.isArray(expected)) {
+				return count + (1 & (isExclude !==
+					(expected.indexOf(ship.masterId) > -1)));
+			}
+			return count + (1 & (isExclude !==
+				(RemodelDb.originOf(expected) === RemodelDb.originOf(ship.masterId))));
+		}, 0);
+	};
+	
+	KC3Fleet.prototype.hasShipType = function(expected, pos){
+		return this.ship().some((ship, index) => {
+			if(pos === undefined || pos === index) {
+				if(typeof expected === "number"
+					|| typeof expected === "string") {
+					return expected == ship.master().api_stype;
+				} else if(Array.isArray(expected)) {
+					return expected.indexOf(ship.master().api_stype) > -1;
+				}
+			}
+			return false;
+		});
+	};
+	
+	KC3Fleet.prototype.countShipType = function(expected, isExclude = false){
+		return this.ship().reduce((count, ship) => {
+			if(Array.isArray(expected)) {
+				return count + (1 & (isExclude !==
+					(expected.indexOf(ship.master().api_stype) > -1)));
+			}
+			return count + (1 & (isExclude !==
+				(expected == ship.master().api_stype)));
+		}, 0);
+	};
+	
 	KC3Fleet.prototype.hasTaiha = function(){
 		return this.ship().some(function(ship){
 			return ship.isTaiha() && !ship.didFlee;
@@ -589,7 +637,8 @@ Contains summary information about a fleet and its 6 ships
 			akashi: highestAkashi,
 			akashiCheck: [
 				PlayerManager.akashiRepair.isRunning(),
-				PlayerManager.akashiRepair.canDoRepair()
+				PlayerManager.akashiRepair.canDoRepair(),
+				KC3AkashiRepair.hasRepairFlagship(self)
 			],
 		};
 	};
@@ -764,9 +813,12 @@ Contains summary information about a fleet and its 6 ships
 					if (multiplier) {
 						var equipment_bonus = Math.sqrt(itemData.stars);
 
-						if ([12, 13].indexOf(itemType) > -1) {
-							// Radar bonus
+						if (12 === itemType) {
+							// Small Radar bonus
 							equipment_bonus *= 1.25;
+						} else if (13 === itemType) {
+							// Large Radar bonus
+							equipment_bonus *= 1.4;
 						} else if ([9, 10].indexOf(itemType) > -1) {
 							// Reconnaissance Plane/Seaplane bonus
 							equipment_bonus *= 1.2;

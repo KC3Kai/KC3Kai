@@ -1,3 +1,4 @@
+/* jshint undef: false */
 let window = self;
 onmessage = function(request) {
 	this.window = self;

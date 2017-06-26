@@ -36,6 +36,7 @@ KC3改 Ship Box for Natsuiro theme
 		$(".ship_face_tooltip .ship_rosterId span", tooltipBox).text(this.shipData.rosterId);
 		$(".ship_face_tooltip .ship_stype", tooltipBox).text(this.shipData.stype());
 		$(".ship_face_tooltip .ship_level span.value", tooltipBox).text(this.shipData.level);
+		//$(".ship_face_tooltip .ship_level span.value", tooltipBox).addClass(this.shipData.levelClass());
 		$(".ship_face_tooltip .ship_hp span.hp", tooltipBox).text(this.shipData.hp[0]);
 		$(".ship_face_tooltip .ship_hp span.mhp", tooltipBox).text(this.shipData.hp[1]);
 		$(".ship_face_tooltip .stat_hp", tooltipBox).text(this.shipData.hp[1]);
@@ -360,9 +361,14 @@ KC3改 Ship Box for Natsuiro theme
 			
 			// Prediction HP result and diff values
 			var hpDiff = this.shipData.afterHp[0] - this.shipData.hp[0];
-			$(".ship_hp_diff", this.element).text((hpDiff > 0 ? "+" : "") + hpDiff);
-			$(".ship_hp_cur", this.element).text(this.shipData.afterHp[0]);
-			$(".ship_hp_pred_value", this.element).show();
+			if(this.shipData.hp[0] <= 0) {
+				// Already sunk ship will get negtive hp and no prediction
+				$(".ship_hp_cur", this.element).text(this.shipData.hp[0]);
+			} else {
+				$(".ship_hp_diff", this.element).text((hpDiff > 0 ? "+" : "") + hpDiff);
+				$(".ship_hp_cur", this.element).text(this.shipData.afterHp[0]);
+				$(".ship_hp_pred_value", this.element).show();
+			}
 			
 			// HP-based UI and colors
 			if(ConfigManager.info_btstamp && afterHpPercent <= 0.00) {

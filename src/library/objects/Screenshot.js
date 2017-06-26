@@ -62,15 +62,15 @@ KCScreenshot.prototype.generateScreenshotFilename = function(withPlayerName) {
 	withPlayerName = typeof withPlayerName == 'undefined' ? true : withPlayerName;
 	
 	var d = new Date();
-	curr_month = (d.getMonth()+1) + "";
+	var curr_month = (d.getMonth()+1) + "";
 	if (curr_month.length == 1) { curr_month = "0" + curr_month; }
-	curr_date = d.getDate() + "";
+	var curr_date = d.getDate() + "";
 	if (curr_date.length == 1) { curr_date = "0" + curr_date; }
-	curr_hour = d.getHours() + "";
+	var curr_hour = d.getHours() + "";
 	if (curr_hour.length == 1) { curr_hour = "0" + curr_hour; }
-	curr_min = d.getMinutes() + "";
+	var curr_min = d.getMinutes() + "";
 	if (curr_min.length == 1) { curr_min = "0" + curr_min; }
-	curr_second = d.getSeconds() + "";
+	var curr_second = d.getSeconds() + "";
 	if (curr_second.length == 1) { curr_second = "0" + curr_second; }
 	
 	if (withPlayerName) {
@@ -88,7 +88,7 @@ KCScreenshot.prototype.capture = function(){
 	var self = this;
 	
 	// If taiha alert appear on screenshot is off, hide taiha alert in the mean time
-	if(!ConfigManager.alert_taiha_ss) {
+	if(!ConfigManager.alert_taiha_ss && interactions) {
 		interactions.suspendTaiha(function(){
 			self.startCapture();
 		});

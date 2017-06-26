@@ -1,0 +1,188 @@
+.tab_blueprints .factory {
+	display:none;
+}
+
+.tab_blueprints .view_types {
+	width:700px;
+	margin:0px 0px 5px 0px;
+	padding:5px 10px;
+	height:30px;
+}
+.tab_blueprints .view_type {
+	float:left;
+	margin:0px 10px 0px 0px;
+}
+.tab_blueprints .view_type span {
+	margin-left:4px;
+	vertical-align:text-bottom;
+}
+
+/* HEADER
+------------------------------*/
+.tab_blueprints .ship_header {
+	width:680px;
+	height:22px;
+	margin:0px 0px 0px 0px;
+}
+.tab_blueprints .ship_header .ship_item {
+	width:680px;
+	height:20px;
+	line-height:20px;
+	font-size:12px;
+	font-weight:bold;
+	margin:0px 0px 3px 0px;
+}
+
+/* SHIP LIST
+------------------------------*/
+.tab_blueprints .ship_list {
+	width:680px;
+	min-height:50px;
+	margin:0px 0px 5px 0px;
+}
+.tab_blueprints .ship_list .ship_item {
+	width:680px;
+	height:20px;
+	line-height:20px;
+	font-size:12px;
+	margin:0px 0px 2px 0px;
+	overflow:hidden;
+	position:relative;
+}
+.tab_blueprints .ship_item .ship_field {
+	height:20px;
+	float:left;
+	margin:0px 2px 0px 0px;
+}
+.tab_blueprints .ingame_page {
+	width:680px;
+	line-height:14px;
+	font-size:14px;
+	margin:0px 0px 2px 0px;
+	text-align:left;
+	padding:0px 0px 0px 10px;
+	color:#aaa;
+	display:none;
+}
+.tab_blueprints .ship_item.odd .ship_field {
+}
+.tab_blueprints .ship_item.even .ship_field {
+}
+.tab_blueprints .ship_item:hover .ship_field {
+}
+.tab_blueprints .ship_item .ship_id {
+	width:44px;
+	text-align:center;
+}
+.tab_blueprints .ship_item .ship_img {
+	position:relative;
+	width:20px;
+}
+.tab_blueprints .ship_item .ship_img img.ship_icon {
+	width:20px;
+	height:20px;
+	vertical-align:top;
+}
+.tab_blueprints .ship_item .ship_img img.ship_kekkon {
+	position:absolute;
+	right:0;
+	bottom:0;
+	width:50%;
+	height:50%;
+	display:none;
+}
+.tab_blueprints .ship_item .ship_kekkon-color {
+	color: #eec5c3;
+	text-shadow: #2f2727 -0px -0px 1px, #2f2727 1px 1px 1px;
+	-webkit-font-smoothing: antialiased;
+}
+.tab_blueprints .ship_item .ship_kekkon:after {
+	display: inline;
+	position: absolute;
+	width: 100%;
+	right: 0;
+	opacity:0.5;
+	content: "x";
+	color: rgba(0,0,0,0);
+	background-position: 100%;
+	background-image: url('../../assets/img/client/kekkon.png');
+	background-size: 10px;
+	background-repeat: no-repeat;
+	text-align: right;
+}
+.tab_blueprints .ship_item .ship_name {
+	width:92px;
+	overflow:hidden;
+	white-space:nowrap;
+	position:relative;
+}
+.tab_blueprints .ship_item .ship_name.ship_kekkon {
+}
+.tab_blueprints .ship_item .ship_type {
+	width:30px;
+	text-align:center;
+}
+.tab_blueprints .ship_item .ship_lv {
+	width:50px;
+	text-align:center;
+	position:relative;
+	overflow:hidden;
+	white-space:nowrap;
+}
+.tab_blueprints .ship_item .ship_stat {
+	width:35px;
+	text-align:center;
+}
+.tab_blueprints .ship_item .ship_stat span {
+	font-size:8px;
+	color:#aaa;
+}
+.tab_blueprints .ship_item .need_materials {
+	width:430px;
+	text-align:left;
+	white-space:nowrap;
+	overflow:hidden;
+}
+.tab_blueprints .ship_item .need_materials .icon {
+	width:auto;
+	margin:0px 5px 0px 0px;
+	display:inline-block;
+	float:initial;
+}
+.tab_blueprints .ship_item .need_materials .icon.limited {
+	max-width:150px;
+	overflow:hidden;
+	text-overflow:ellipsis;
+}
+.tab_blueprints .ship_item .need_materials .icon img {
+	width:18px;
+	height:18px;
+	margin:0px 2px 0px 0px;
+	vertical-align:top;
+}
+.tab_blueprints .ship_item .need_materials .icon span.used {
+}
+.tab_blueprints .ship_item .ship_lock img {
+	width:13px;
+	height:13px;
+	margin:-35px 0px 0px 39px;
+	position:relative;
+}
+
+.tab_blueprints .summary {
+	margin:5px 0px 5px 0px;
+	display:none;
+}
+.tab_blueprints .summary .summary_item {
+	float:left;
+	margin:0px 5px 0px 0px;
+}
+.tab_blueprints .summary .summary_item.i18n {
+	font-weight:bold;
+}
+.tab_blueprints .summary .summary_item img {
+	width:16px;
+	height:16px;
+	margin:0px 2px 0px 0px;
+	vertical-align:top;
+}

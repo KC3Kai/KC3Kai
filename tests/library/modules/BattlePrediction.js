@@ -1,3 +1,5 @@
+/* globals api_start2: true */
+/* globals battleSample: true */
 QUnit.module( "Module", function() {
     localStorage.clear();
     
@@ -20,10 +22,10 @@ QUnit.module( "Module", function() {
             expectedHPNight) {
             QUnit.test(testTitle, function(assert) {
                 var pathToSrc = "../../../src/";
+                ConfigManager.load();
                 KC3Master.init(api_start2.api_data);
                 KC3Meta.init(pathToSrc+"data/");
                 KC3Meta.defaultIcon(pathToSrc+"assets/img/ui/empty.png");
-                ConfigManager.load();
                 PlayerManager.init();
                 KC3ShipManager.load();
                 KC3GearManager.load();
