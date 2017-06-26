@@ -1005,7 +1005,7 @@
 
 				$("img",element)
 					.attr("src", "../../assets/img/items/" + gear.master().api_type[3] + ".png")
-					.attr("title", gear.name())
+					.attr("title", gear.htmlTooltip(equipSlot))
 					.attr("alt", gear.master().api_id)
 					.show();
 				$("span",element).css('visibility','hidden');
