@@ -140,6 +140,15 @@ Does not include Ships and Gears which are managed by other Managers
 			return this;
 		},
 
+		getBasesResupplyCost :function(){
+			var total = {fuel: 0, ammo: 0, steel: 0, bauxite: 0};
+			$.each(this.bases, function(i, b){
+				var cost = b.calcResupplyCost();
+				Object.keys(total).map(k => { total[k] += cost[k]; });
+			});
+			return total;
+		},
+
 		setRepairDocks :function( data ){
 			var lastRepair = this.repairShips.map(function(x){return x;}); // clone
 			this.repairShips.splice(0);
@@ -186,8 +195,7 @@ Does not include Ships and Gears which are managed by other Managers
 						dockingShips[key] = v.completeTime;
 					});
 				} catch (err) {
-					console.error( "Error while processing cached docking ship" );
-					console.error(err);
+					console.error("Error while processing cached docking ship", err);
 				}
 			}
 			return dockingShips;
@@ -379,14 +387,11 @@ Does not include Ships and Gears which are managed by other Managers
 				regenVal  = [3,3,3,1]
 					.map(function(x){return regenRate * x;})
 					.map(function(x,i){return Math.max(0,Math.min(x,regenCap - self.hq.lastMaterial[i]));});
-			console.log(this.hq.lastPortTime,regenTime,serverSeconds);
+			console.log("Last port", this.hq.lastPortTime, regenTime, serverSeconds);
 			// Check whether a server time is supplied, or keep the last refresh time.
 			this.hq.lastPortTime = serverSeconds || this.hq.lastPortTime;
-			console.info("regen" ,regenVal);
-			console.info.apply(console,["pRegenMat"].concat(this.hq.lastMaterial));
-			console.info.apply(console,["actualMat"].concat((this.hq.lastMaterial || []).map(function(x,i){
-				return (x || 0) + regenVal[i];
-			})));
+			console.log("Regenerated materials", regenVal);
+			console.log("Materials before after", this.hq.lastMaterial, absMaterial);
 			KC3Database.Naverall({
 				hour:Math.hrdInt('floor',serverSeconds/3.6,3,1),
 				type:'regen',

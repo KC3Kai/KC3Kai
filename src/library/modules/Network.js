@@ -75,8 +75,9 @@ Listens to network history and triggers callback if game events happen
 				});
 				this.delayedUpdate[eventName] = 0;
 			} else {
-				console.log("Prevented call to", eventName);
 				this.delayedUpdate[eventName] -= 1;
+				console.log("Prevented call to [" + eventName + "],",
+					"delay", this.delayedUpdate[eventName], "left");
 			}
 		},
 
@@ -113,8 +114,7 @@ Listens to network history and triggers callback if game events happen
 				KC3Network.clearOverlays();
 
 				// Create new request and process it
-				// console.log(request);
-				// console.log(request.request);
+				// console.debug(request, request.request);
 				var
 					thisRequest = new KC3Request( request ),
 					message = {
@@ -158,7 +158,7 @@ Listens to network history and triggers callback if game events happen
 							// Only prevent the data parsing error
 							message.api_status = e.name;
 							message.api_result = e.message;
-							console.error("Prevented", e.name, e.message, e.stack);/*RemoveLogging:skip*/
+							console.error("Prevented " + e.name, e.message, e);
 						} finally {
 							(new RMsg("service", "gameScreenChg", message)).execute();
 						}
@@ -181,7 +181,7 @@ Listens to network history and triggers callback if game events happen
 			if(request.request.url.indexOf("/kcs/sound/") > -1){
 				var soundPaths = request.request.url.split("/");
 				if(soundPaths[5]=="titlecall"){
-					console.log("DETECTED titlecall sound");
+					// console.debug("DETECTED titlecall sound");
 					(new RMsg("service", "subtitle", {
 						voicetype: "titlecall",
 						filename: soundPaths[6],
@@ -189,7 +189,7 @@ Listens to network history and triggers callback if game events happen
 						tabId: chrome.devtools.inspectedWindow.tabId
 					})).execute();
 				}else if(soundPaths[5]=="kc9999"){
-					console.log("DETECTED NPC sound", soundPaths);
+					// console.debug("DETECTED NPC sound", soundPaths);
 					(new RMsg("service", "subtitle", {
 						voicetype: "npc",
 						filename: "",
@@ -197,7 +197,7 @@ Listens to network history and triggers callback if game events happen
 						tabId: chrome.devtools.inspectedWindow.tabId
 					})).execute();
 				}else{
-					console.log("DETECTED shipgirl sound");
+					// console.debug("DETECTED shipgirl sound");
 					var shipGirl = KC3Master.graph_file(soundPaths[5].substring(2));
 					var voiceLine = KC3Meta.getVoiceLineByFilename(shipGirl, soundPaths[6].split(".")[0]);
 					(new RMsg("service", "subtitle", {

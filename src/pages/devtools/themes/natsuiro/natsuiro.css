@@ -2957,22 +2957,34 @@ ABYSS FLEET
 .airbase .airbase_info {
 	float:left;
 }
+.airbase .base_map {
+	width:18px;
+	font-size:11px;
+	font-weight:bold;
+	color:#ffcc00;
+	text-shadow:1px 1px 3px #333;
+	text-align:right;
+	line-height:20px;
+	margin:0px 4px 0px 0px;
+	white-space:nowrap;
+	overflow:hidden;
+}
 .airbase .base_name {
 	width:100px;
 	height:20px;
-	overflow:hidden;
 	float:left;
 	color:#cccccc;
 	text-shadow:1px 1px 3px #333;
 	white-space:nowrap;
 	text-overflow:ellipsis;
+	overflow:hidden;
 	font-size:11px;
 	line-height:20px;
-	margin:0px 5px 0px 0px;
+	margin:0px 3px 0px 0px;
 }
 
 .airbase .base_stats {
-	width:190px;
+	width:165px;
 	height:20px;
 	float:left;
 	overflow:hidden;
@@ -2996,9 +3008,9 @@ ABYSS FLEET
 .airbase .base_stats .base_stat_icon img {
 	width:16px;
 	height:16px;
-	filter: invert(100%);
-	-webkit-filter: invert(100%);
-	vertical-align: top;
+	filter:invert(100%);
+	-webkit-filter:invert(100%);
+	vertical-align:top;
 }
 .airbase .base_stats .base_stat_value {
 	width:40px;
@@ -3006,9 +3018,15 @@ ABYSS FLEET
 	line-height:20px;
 	float:left;
 	text-align:left;
-	overflow:hidden;
+	white-space:nowrap;
 	color:#cccccc;
 	font-size:11px;
+}
+.airbase .base_stats .base_stat.base_range {
+	width:45px;
+}
+.airbase .base_stats .base_stat.base_range .base_stat_value {
+	width:25px;
 }
 .airbase .base_action {
 	width:40px;
@@ -3018,7 +3036,7 @@ ABYSS FLEET
 	float:left;
 	color:#ffffff;
 	text-align:right;
-	font-size: 11px;
+	font-size:11px;
 }
 .airbase .base_planes {
 	width:340px;
@@ -3050,9 +3068,9 @@ ABYSS FLEET
 	width:80px;
 	text-align:center;
 	position:relative;
-	margin:0px 0px 0px -10px;
+	margin:0px -5px 0px -10px;
 }
-.base_plane_img  img {
+.base_plane_img img {
 	width:100%;
 	vertical-align:middle;
 	margin:-60% -50%;
@@ -3077,7 +3095,7 @@ ABYSS FLEET
 .base_plane_icon {
 	width:20px;
 	line-height:20px;
-	padding:2px 0px;
+	margin:2px 0px 0px 5px;
 }
 .base_plane_icon img {
 	width:20px;
@@ -3095,6 +3113,16 @@ ABYSS FLEET
 }
 .base_plane_name {
 	display:none;
+	line-height:24px;
+	font-size:11px;
+	text-shadow:2px 2px 4px #333,
+		2px 2px 4px #333;
+	color:#ccc;
+	margin:0px 0px 0px 2px;
+	width:120px;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
 }
 .base_plane_count {
 	line-height:24px;
@@ -3325,6 +3353,15 @@ ABYSS FLEET
 }
 .ui-tooltip-content .ship_face_tooltip .ship_level span.i18n {
 	color:#3ec0bf;
+}
+.ui-tooltip-content .ship_face_tooltip .ship_level span.value.married {
+	color:#a97417;
+}
+.ui-tooltip-content .ship_face_tooltip .ship_level span.value.high {
+	color:#107e57;
+}
+.ui-tooltip-content .ship_face_tooltip .ship_level span.value.medium {
+	color:#36c2db;
 }
 .ui-tooltip-content .ship_face_tooltip .ship_hp {
 	width:64px;

@@ -26,7 +26,7 @@ Executes processing and relies on KC3Network for the triggers
 	KC3Request.prototype.validateHeaders = function(){
 		// If response header statusCode is not 200, means non-in-game error
 		if(this.statusCode != 200){
-			console.error(this.statusCode, this.response);
+			console.warn("Response status invalid:", this.statusCode, this.url, this.headers);
 			KC3Network.trigger("CatBomb", {
 				title: KC3Meta.term("CatBombServerCommErrorTitle"),
 				message: KC3Meta.term("CatBombServerCommErrorMsg").format([this.call])
@@ -74,7 +74,7 @@ Executes processing and relies on KC3Network for the triggers
 	KC3Request.prototype.validateData = function(){
 		// If gameStatus is not 1. Game API returns 1 if complete success
 		if(this.gameStatus != 1){
-			console.error("Error Game Status", this.gameStatus, this.response);
+			console.warn("Game Status Error:", this.gameStatus, this.response);
 			
 			// Error 201
 			if (parseInt(this.gameStatus, 10) === 201) {
@@ -150,11 +150,7 @@ Executes processing and relies on KC3Network for the triggers
 		if(typeof Kcsapi[this.call] != "undefined"){
 			// check clock and clear quests at 5AM JST
 			var serverTime = Date.safeToUtcTime( this.headers.Date );
-			try {
-				KC3QuestManager.checkAndResetQuests(serverTime);
-			} catch (e) {
-				console.error(e.stack);/*RemoveLogging:skip*/
-			}
+			KC3QuestManager.checkAndResetQuests(serverTime);
 			
 			// Execute by passing data
 			try {
@@ -166,7 +162,7 @@ Executes processing and relies on KC3Network for the triggers
 				KC3Network.trigger("APIError", {
 					title: KC3Meta.term("APIErrorNoticeTitle"),
 					message: KC3Meta.term("APIErrorNoticeMessage").format([this.call]),
-					stack: e.stack,
+					stack: e.stack || String(e),
 					request: {
 						url: this.url,
 						headers: this.headers,
@@ -178,7 +174,7 @@ Executes processing and relies on KC3Network for the triggers
 					kc3Manifest: chrome.runtime.getManifest()
 				});
 				// Keep stack logging in extension's console
-				console.log(e.stack);/*RemoveLogging:skip*/
+				console.error("Game API Call Error:", e);/*RemoveLogging:skip*/
 			}
 		}
 	};

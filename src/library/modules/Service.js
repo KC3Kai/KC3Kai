@@ -72,10 +72,10 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			// If refreshing API link, close source tabs and re-open game frame
 			if(JSON.parse(localStorage.extract_api)){ // localStorage has problems with native boolean
 				localStorage.extract_api = false;
+				chrome.tabs.remove([sender.tab.id], function(){});
 				// To avoid cross-domain warning of chrome
 				//window.open("../pages/game/api.html", "kc3kai_game");
 				chrome.tabs.create({ url: chrome.extension.getURL("../pages/game/api.html") });
-				chrome.tabs.remove([sender.tab.id], function(){});
 			}
 		},
 		
@@ -91,7 +91,6 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				
 			});
 			// Sending Mobile Push notification if enabled
-			ConfigManager.load();
 			if(ConfigManager.PushAlerts_enabled) {
 				$.ajax({
 					async: true,
@@ -363,13 +362,13 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		"dmmFrameInject" :function(request, sender, response){
 			var senderUrl = (sender.tab)?sender.tab.url:false || sender.url  || "";
 			
-			ConfigManager.load();
 			if( isDMMFrame(senderUrl) && localStorage.dmmplay == "false"){
 				// DMM FRAME
 				response({ mode: 'frame', scale: ConfigManager.api_gameScale});
 			} else if(ConfigManager.dmm_customize && localStorage.extract_api != "true") {
 				var props = {
-					highlighted: true
+					highlighted: true,
+					muted: !!ConfigManager.mute_game_tab
 				};
 				// Prevent Chrome auto discard the game tab
 				// autoDiscardable since Chrome 54
@@ -438,8 +437,24 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				manifest: chrome.runtime.getManifest(),
 				kc3version: chrome.runtime.getManifest().version
 			});
-		}
+		},
 		
+		/* QUEST SYNC
+		Facilitate remote invocation of background methods
+		------------------------------------------*/
+		"questSync" :function({ method, args, isAsync }, sender, response){
+			if (isAsync) {
+				KC3QuestSync[method](...args)
+					.then((result) => { response({ success: result }); })
+					.catch((error) => { response({ error }); });
+			} else {
+				try {
+					response({ success: KC3QuestSync[method](...args) });
+				} catch (error) {
+					response({ error });
+				}
+			}
+		},
 	};
 	
 	/* Runtime Message Listener
@@ -451,7 +466,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		// Check if message is intended for this script
 		if( (request.identifier || false) == "kc3_service"){
 			// Log message contents and sender for debugging
-			console.log(request.action, { "Request": request, "Sender": sender });
+			console.debug(request.action, { "Request": request, "Sender": sender });
 			
 			// Check requested action is supported
 			if(typeof window.KC3Service[ request.action ] != "undefined"){
@@ -514,51 +529,15 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		}
 	});
 	
-	/* On Chrome Storage Changed
-	Sync localStorage parts with Chrome Storage
-	Used for sync quests data on different machines
+	/* On Web Storage (localStorage here) Changed
+	Reload our ConfigManager as soon as possible on the key `config` changed,
+	Instead of explicitly invoking `load` method everywhere.
 	------------------------------------------*/
-	chrome.storage.onChanged.addListener(function(changes, namespace) {
-		// Check if expected changes present and namespace is "sync"
-		if (changes.KC3QuestsData && namespace == "sync") {
-			// Check if synchronization is enabled
+	window.addEventListener("storage", function({type, key, timeStamp, url}) {
+		//console.debug("storageEvent", {type, key, timeStamp, url});
+		if(key === ConfigManager.keyName()) {
 			ConfigManager.load();
-			if (ConfigManager.chromeSyncQuests) {
-				var newValue = changes.KC3QuestsData.newValue;
-				// Check if remote data structure version is matching with current expected structure
-				if (newValue.syncStructVersion == KC3QuestManager.syncStructVersion) {
-					// Check if local quests version not set or remote version is more then local
-					var dataVer = localStorage.questsVersion;
-					if (typeof dataVer === "undefined"
-						|| Number(newValue.questsVersion) > Number(dataVer)) {
-						localStorage.questsVersion = newValue.questsVersion;
-						// Check if JSON strings are the same, then there's nothing to do
-						if (newValue.quests === localStorage.quests) { return true; }
-						// Set new quests and reset times
-						localStorage.quests = newValue.quests;
-						localStorage.timeToResetDailyQuests = newValue.timeToResetDailyQuests;
-						localStorage.timeToResetWeeklyQuests = newValue.timeToResetWeeklyQuests;
-						localStorage.timeToResetMonthlyQuests = newValue.timeToResetMonthlyQuests;
-						localStorage.timeToResetQuarterlyQuests = newValue.timeToResetQuarterlyQuests;
-						// Check if desktop notifications enabled
-						if (ConfigManager.dataSyncNotification) {
-							var dt = new Date(+newValue.syncTimeStamp).toLocaleString();
-							chrome.notifications.create("kc3kai_quests", {
-								type: "basic",
-								title: KC3Meta.term("DesktopNotifyQuestsSyncTitle"),
-								message: KC3Meta.term("DesktopNotifyQuestsSyncMessage").format(dt),
-								iconUrl: "../../assets/img/quests/sortie.jpg"
-							});
-						}
-					} else {
-						console.info("Quest old version data received, ignored");
-					}
-				} else {
-					console.info("Quest unexpected data structure received, version:", newValue.syncStructVersion);
-				}
-			} else {
-				console.info("Quest data received, ignored as sync disabled by setting");
-			}
+			console.debug("Reload ConfigManager caused by", (url || "").match(/\/\/[^\/]+\/([^\?]+)/)[1]);
 		}
 	});
 	
@@ -632,7 +611,6 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	}
 	
 	function screenshotSpecialMode(tabId, response){
-		ConfigManager.load();
 		if(ConfigManager.dmm_customize) {
 			(new TMsg(tabId, "gamescreen", "getGamescreenOffset", {}, function(offset){
 				(new KCScreenshot())

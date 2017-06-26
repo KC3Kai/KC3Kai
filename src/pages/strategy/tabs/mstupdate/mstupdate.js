@@ -21,10 +21,10 @@
 			var masterChanged = false;
 			
 			$.each(KC3Master.new_ships(), function(ship_id, ship_time){
-				console.log("testing ship time", timeNow, ship_time, "diff=", timeNow-ship_time);
+				console.debug("Testing ship time", timeNow, ship_time, "diff=", timeNow-ship_time);
 				if(timeNow-ship_time > 7*24*60*60*1000){
 					KC3Master.remove_new_ship(ship_id);
-					console.log("SHIP", ship_id, "has expired from update list");
+					console.debug("SHIP", ship_id, "has expired from update list");
 					masterChanged = true;
 				}else{
 					self.newShips.push( KC3Master.ship(ship_id) );
@@ -32,10 +32,10 @@
 			});
 			
 			$.each(KC3Master.new_slotitems(), function(item_id, item_time){
-				console.log("testing item time", timeNow, item_time, "diff=", timeNow-item_time);
+				console.debug("Testing item time", timeNow, item_time, "diff=", timeNow-item_time);
 				if(timeNow-item_time > 7*24*60*60*1000){
 					KC3Master.remove_new_slotitem(item_id);
-					console.log("ITEM", item_id, "has expired from update list");
+					console.debug("ITEM", item_id, "has expired from update list");
 					masterChanged = true;
 				}else{
 					self.newGears.push( KC3Master.slotitem(item_id) );
@@ -43,12 +43,11 @@
 			});
 			
 			if(masterChanged){
-				console.log("master changed, saving..");
+				console.debug("master changed, saving..");
 				KC3Master.save();
 			}
 			
-			console.log(this.newShips);
-			console.log(this.newGears);
+			console.debug("New ships and gears", this.newShips, this.newGears);
 		},
 		
 		/* EXECUTE

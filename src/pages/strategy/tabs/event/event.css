@@ -332,14 +332,34 @@
 	line-height:30px;
 	float:left;
 	text-align:center;
-	margin:0px 5px 0px 0px;
+	margin:0px 5px 1px 0px;
 	color:#fff;
 	border-radius:15px;
 	font-size:14px;
 	font-weight:bold;
 }
+.tab_event .sortie_list .sortie_edges.one_line .sortie_edge_6,
+.tab_event .sortie_list .sortie_edges.one_line .sortie_edge_7,
+.tab_event .sortie_list .sortie_edges.one_line .sortie_edge_8,
+.tab_event .sortie_list .sortie_edges.one_line .sortie_edge_9,
+.tab_event .sortie_list .sortie_edges.one_line .sortie_edge_10 {
+	display:none;
+}
+.tab_event .sortie_list .sortie_edges.two_lines .sortie_edge {
+	width:30px;
+	height:14px;
+	line-height:14px;
+	font-weight:normal;
+}
 .tab_event .sortie_list .sortie_edge.active {
-	background:#B50000;
+	background:#b50000;
+}
+.tab_event .sortie_list .sortie_edges .sortie_edge.active.boss {
+	background-image:url(../../../../assets/img/client/boss.png);
+	background-repeat:no-repeat;
+	background-position:4px 50%;
+	background-size:22px;
+	background-blend-mode:multiply;
 }
 
 /* Sortie Info: TOGGLES */
@@ -366,7 +386,7 @@
 .tab_event .sortie_list .sortie_rfleet {
 	width:163px;
 	height:92px;
-	margin:0px 2px 0px 2px;
+	margin:0px 2px 2px 2px;
 	float:left;
 	overflow:hidden;
 }
@@ -381,6 +401,7 @@
 	text-align:center;
 	font-size:11px;
 	font-weight:bold;
+	overflow:hidden;
 }
 .tab_event .sortie_list .rfleet_body {
 	width:163px;
@@ -393,7 +414,6 @@
 	margin:3px 1px 0px 0px;
 	float:left;
 	overflow:hidden;
-	/*background:#ccf;*/
 }
 .tab_event .sortie_list .rfleet_pic {
 	width:20px;
@@ -401,7 +421,6 @@
 	line-height:20px;
 	border-radius:10px;
 	overflow:hidden;
-	/*background:#ccc;*/
 	float:left;
 	margin:0px 3px 0px 0px;
 }
@@ -418,8 +437,9 @@
 	font-size:10px;
 	transform:scale(0.85);
 	transform-origin:left;
+	white-space:nowrap;
 	overflow:hidden;
-	/*background:#fcc;*/
+	text-overflow:ellipsis;
 }
 .tab_event .sortie_list .rfleet_level {
 	width:55px;
@@ -429,8 +449,8 @@
 	font-size:10px;
 	transform:scale(0.75);
 	transform-origin:left;
+	white-space:nowrap;
 	overflow:hidden;
-	/*background:#cfc;*/
 }
 .tab_event .sortie_list .rfleet_equips {
 	width:55px;
@@ -442,6 +462,67 @@
 	float:left;
 	line-height: auto;
 	width:12px;
+}
+
+.tab_event .sortie_list .rfleet_lbas_plane {
+	width:80px;
+	height:32px;
+	margin:3px 1px 0px 0px;
+	float:left;
+	overflow:hidden;
+}
+.tab_event .sortie_list .rfleet_lbas_plane .rfleet_detail div {
+	height:15px;
+	line-height:15px;
+	font-size:10px;
+	float:left;
+	white-space:nowrap;
+	overflow:hidden;
+}
+.tab_event .sortie_list .rfleet_lbas_plane .rfleet_name {
+	width:55px;
+	font-size:11px !important;
+	text-overflow:ellipsis;
+	transform:initial;
+}
+.tab_event .sortie_list .rfleet_stars {
+	width:22px;
+	margin-left:-2px;
+}
+.tab_event .sortie_list .rfleet_stars img {
+	width:10px;
+	height:10px;
+	margin-top:-2px;
+}
+.tab_event .sortie_list .rfleet_stars span {
+	color:#45a9a5;
+}
+.tab_event .sortie_list .rfleet_ace {
+	width:10px;
+}
+.tab_event .sortie_list .rfleet_ace img {
+	width:20px;
+	height:12px;
+	margin-top:-2px;
+	margin-left:-5px;
+}
+.tab_event .sortie_list .rfleet_count {
+	width:15px;
+}
+.tab_event .sortie_list .rfleet_morale {
+	width:10px;
+}
+.tab_event .sortie_list .rfleet_morale img {
+	width:10px;
+	height:10px;
+	margin-top:-2px;
+}
+
+.tab_event .sortie_list .button_tomanager {
+	width:auto;
+	float:none;
+	padding:0px 5px 0px 5px;
+	margin:5px 5px 5px 5px;
 }
 
 /* Sortie Nodes */
