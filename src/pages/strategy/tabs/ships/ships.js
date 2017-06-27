@@ -303,7 +303,8 @@
 				sortno: MasterShip.api_sortno,
 				name: ThisShip.name(),
 				className: KC3Meta.ctypeName(MasterShip.api_ctype),
-				fullName: KC3Meta.ctypeName(MasterShip.api_ctype) + " " + ThisShip.name(),
+				fullName: KC3Meta.term("ShipListFullNamePattern")
+					.format(KC3Meta.ctypeName(MasterShip.api_ctype), ThisShip.name()),
 				level: ThisShip.level,
 				levelClass: ThisShip.levelClass(),
 				morale: ThisShip.morale,
