@@ -39,7 +39,7 @@ KC3改 Equipment Object
 	/* FIGHTER POWER
 	Get fighter power of this equipment on a slot
 	--------------------------------------------------------------*/
-	KC3Gear.prototype.fighterPower = function(capacity){
+	KC3Gear.prototype.fighterPower = function(capacity = 0){
 		// Empty item means no fighter power
 		if(this.itemId===0){ return 0; }
 
@@ -91,9 +91,9 @@ KC3改 Equipment Object
 	Get fighter power of this equipment
 	with added whole number proficiency bonus
 	--------------------------------------------------------------*/
-	KC3Gear.prototype.fighterVeteran = function(capacity){
+	KC3Gear.prototype.fighterVeteran = function(capacity = 0){
 		// Empty item or slot means no fighter power
-		if(this.itemId === 0 || !(capacity > 0)){ return 0; }
+		if(this.itemId === 0 || capacity <= 0){ return 0; }
 
 		// Check if this object is a fighter plane
 		if( KC3GearManager.antiAirFighterType2Ids.indexOf( String(this.master().api_type[2]) ) > -1){
@@ -129,9 +129,9 @@ KC3改 Equipment Object
 	Get fighter power of this equipment
 	as an array with lower and upper bound bonuses
 	--------------------------------------------------------------*/
-	KC3Gear.prototype.fighterBounds = function(capacity){
+	KC3Gear.prototype.fighterBounds = function(capacity = 0){
 		// Empty item or slot means no fighter power
-		if(this.itemId === 0 || !(capacity > 0)){ return [0,0]; }
+		if(this.itemId === 0 || capacity <= 0){ return [0,0]; }
 
 		// Check if this object is a fighter plane
 		if( KC3GearManager.antiAirFighterType2Ids.indexOf( String(this.master().api_type[2]) ) > -1){
@@ -174,9 +174,9 @@ KC3改 Equipment Object
 	see http://wikiwiki.jp/kancolle/?%B4%F0%C3%CF%B9%D2%B6%F5%C2%E2#sccf3a4c
 	see http://kancolle.wikia.com/wiki/Land-Base_Aerial_Support#Fighter_Power_Calculations
 	--------------------------------------------------------------*/
-	KC3Gear.prototype.interceptionPower = function(capacity){
+	KC3Gear.prototype.interceptionPower = function(capacity = 0){
 		// Empty item or slot means no fighter power
-		if(this.itemId === 0 || !(capacity > 0)){ return 0; }
+		if(this.itemId === 0 || capacity <= 0){ return 0; }
 		// Check if this object is a interceptor plane or not
 		if( KC3GearManager.interceptorsType3Ids.indexOf(this.master().api_type[3]) > -1) {
 			var interceptPower = (
