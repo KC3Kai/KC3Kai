@@ -92,8 +92,8 @@ KC3改 Equipment Object
 	with added whole number proficiency bonus
 	--------------------------------------------------------------*/
 	KC3Gear.prototype.fighterVeteran = function(capacity){
-		// Empty item means no fighter power
-		if(this.itemId===0){ return 0; }
+		// Empty item or slot means no fighter power
+		if(this.itemId === 0 || !(capacity > 0)){ return 0; }
 
 		// Check if this object is a fighter plane
 		if( KC3GearManager.antiAirFighterType2Ids.indexOf( String(this.master().api_type[2]) ) > -1){
@@ -111,13 +111,7 @@ KC3改 Equipment Object
 					return 0;
 				}
 			}
-
-			var veteranBonus;
-			if(this.ace==-1){
-				veteranBonus = airAverageTable[ 0 ];
-			}else{
-				veteranBonus = airAverageTable[ this.ace ];
-			}
+			var veteranBonus = airAverageTable[ this.ace > 0 ? this.ace : 0 ];
 			var aaStat = this.master().api_tyku;
 			aaStat += this.AAStatImprovementBonous();
 			// Interceptor use evasion as interception stat against fighter
@@ -136,12 +130,11 @@ KC3改 Equipment Object
 	as an array with lower and upper bound bonuses
 	--------------------------------------------------------------*/
 	KC3Gear.prototype.fighterBounds = function(capacity){
-		// Empty item means no fighter power
-		if(this.itemId===0){ return [0,0]; }
+		// Empty item or slot means no fighter power
+		if(this.itemId === 0 || !(capacity > 0)){ return [0,0]; }
 
 		// Check if this object is a fighter plane
 		if( KC3GearManager.antiAirFighterType2Ids.indexOf( String(this.master().api_type[2]) ) > -1){
-			// console.log("this.ace", this.ace);
 
 			var typInd = String( this.master().api_type[2] );
 			var airBoundTable = ConfigManager.air_bounds[typInd];
@@ -157,13 +150,7 @@ KC3改 Equipment Object
 					return [0,0];
 				}
 			} 
-
-			var veteranBounds;
-			if(this.ace==-1){
-				veteranBounds = airBoundTable[ 0 ];
-			}else{
-				veteranBounds = airBoundTable[ this.ace ];
-			}
+			var veteranBounds = airBoundTable[ this.ace > 0 ? this.ace : 0 ];
 			var aaStat = this.master().api_tyku;
 			aaStat += this.AAStatImprovementBonous();
 			// Interceptor use evasion as interception stat against fighter
@@ -188,36 +175,31 @@ KC3改 Equipment Object
 	see http://kancolle.wikia.com/wiki/Land-Base_Aerial_Support#Fighter_Power_Calculations
 	--------------------------------------------------------------*/
 	KC3Gear.prototype.interceptionPower = function(capacity){
-		// Empty item means no fighter power
-		if(this.itemId===0){ return 0; }
+		// Empty item or slot means no fighter power
+		if(this.itemId === 0 || !(capacity > 0)){ return 0; }
 		// Check if this object is a interceptor plane or not
 		if( KC3GearManager.interceptorsType3Ids.indexOf(this.master().api_type[3]) > -1) {
-			// If slot has plane capacity
-			if (capacity) {
-				var interceptPower = (
-					// Base anti-air power
-					this.master().api_tyku +
-					// Interception is from evasion
-					this.master().api_houk +
-					// Anti-Bomber is from hit accuracy
-					this.master().api_houm * 2 +
-					// Although no interceptor can be improved for now
-					this.AAStatImprovementBonous()
-				) * Math.sqrt(capacity);
-				
-				// Proficiency Bonus, no fail-over here
-				if(this.ace != 1){
-					var typInd = String(this.master().api_type[2]);
-					var airAverageTable = ConfigManager.air_average[typInd];
-					if (typeof airAverageTable != "undefined") {
-						interceptPower += airAverageTable[this.ace] || 0;
-					}
+			var interceptPower = (
+				// Base anti-air power
+				this.master().api_tyku +
+				// Interception is from evasion
+				this.master().api_houk +
+				// Anti-Bomber is from hit accuracy
+				this.master().api_houm * 2 +
+				// Although no interceptor can be improved for now
+				this.AAStatImprovementBonous()
+			) * Math.sqrt(capacity);
+			
+			// Proficiency Bonus, no fail-over here
+			if(this.ace > 0){
+				var typInd = String(this.master().api_type[2]);
+				var airAverageTable = ConfigManager.air_average[typInd];
+				if (typeof airAverageTable != "undefined") {
+					interceptPower += airAverageTable[this.ace] || 0;
 				}
-				
-				return Math.floor(interceptPower);
-			} else {
-				return 0;
 			}
+			
+			return Math.floor(interceptPower);
 		} else {
 			return this.fighterVeteran(capacity);
 		}
