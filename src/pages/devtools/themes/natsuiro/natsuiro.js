@@ -991,11 +991,17 @@
 		HQ: function(data){
 			$(".admiral_name").text( PlayerManager.hq.name );
 			$(".admiral_comm").text( PlayerManager.hq.desc );
-			$(".admiral_rank").text( PlayerManager.hq.rank );
 			if(ConfigManager.rankPtsMode === 2){
-				$(".admiral_rank").text(PlayerManager.hq.getRankPoints().toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + KC3Meta.term("HQRankPoints"));
-			}else{
-				$(".admiral_rank").text(PlayerManager.hq.rank);
+				$(".admiral_rank").text(PlayerManager.hq.getRankPoints()
+					.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+					+ KC3Meta.term("HQRankPoints")
+				).attr("title", KC3Meta.term("HQRankPointsTip")
+					.format(!PlayerManager.hq.rankPtLastTimestamp ? "?"
+						: new Date(PlayerManager.hq.rankPtLastTimestamp).format("yyyy-mm-dd HH:MM:ss"))
+				).lazyInitTooltip().tooltip("enable");
+			} else {
+				$(".admiral_rank").text(PlayerManager.hq.rank)
+					.attr("title", "").lazyInitTooltip().tooltip("disable");
 			}
 			$(".admiral_lvval").text( PlayerManager.hq.level );
 			$(".admiral_lvbar").css({width: Math.round(PlayerManager.hq.exp[0]*58)+"px"});
@@ -1752,7 +1758,7 @@
 								$(".base_plane_icon img", planeBox).attr("src", eqIconSrc)
 									.error(function() { $(this).unbind("error").attr("src", "../../../../assets/img/ui/empty.png"); });
 								$(".base_plane_icon", planeBox)
-									.attr("title", KC3Gear.buildGearTooltip(itemObj, itemObj.name()) )
+									.attr("title", itemObj.htmlTooltip(planeInfo.api_max_count) )
 									.lazyInitTooltip()
 									.data("masterId", itemObj.masterId)
 									.on("dblclick", self.gearDoubleClickFunction);
