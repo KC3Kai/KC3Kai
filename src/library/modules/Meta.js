@@ -195,7 +195,11 @@ Provides access to data on built-in JSON files
 			if(prefixesList.length > 0){
 				while( !!(occurs = (new RegExp("^("+prefixesList.join("|")+").+$","i")).exec(root)) ){
 					root = root.replace(new RegExp("^"+occurs[1],"i"), "");
-					combinedPrefixes.unshift(prefixesMap[occurs[1]]);
+					if(prefixesMap[occurs[1]].slice(-1) === "$"){
+						combinedSuffixes.unshift(prefixesMap[occurs[1]].slice(0, -1));
+					} else {
+						combinedPrefixes.unshift(prefixesMap[occurs[1]]);
+					}
 					prefixesList.splice(prefixesList.indexOf(occurs[1]), 1);
 					replaced = true;
 				}
@@ -203,7 +207,11 @@ Provides access to data on built-in JSON files
 			if(suffixesList.length > 0){
 				while( !!(occurs = (new RegExp(".+("+suffixesList.join("|")+")$","i")).exec(root)) ){
 					root = root.replace(new RegExp(occurs[1]+"$","i"), "");
-					combinedSuffixes.unshift(suffixesMap[occurs[1]]);
+					if(suffixesMap[occurs[1]].slice(0, 1) === "^"){
+						combinedPrefixes.unshift(suffixesMap[occurs[1]].slice(1));
+					} else {
+						combinedSuffixes.unshift(suffixesMap[occurs[1]]);
+					}
 					suffixesList.splice(suffixesList.indexOf(occurs[1]), 1);
 					replaced = true;
 				}
