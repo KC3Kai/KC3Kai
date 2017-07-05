@@ -311,7 +311,7 @@
 				equip: ThisShip.items,
 				locked: ThisShip.lock,
 
-				hp: ThisShip.hp[0],
+				hp: ThisShip.hp[1],
 				fp: [MasterShip.api_houg[1], MasterShip.api_houg[0]+ThisShip.mod[0], ThisShip.fp[0] ],
 				tp: [MasterShip.api_raig[1], MasterShip.api_raig[0]+ThisShip.mod[1], ThisShip.tp[0] ],
 				yasen: [

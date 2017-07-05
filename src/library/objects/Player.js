@@ -38,7 +38,8 @@ Instantiatable class to represent one player
 		this.desc = data.desc;
 		this.rank = KC3Meta.rank( data.rank );
 		
-		this.updateLevel(data.level,data.exp);
+		this.updateLevel(data.level, data.exp);
+		this.checkRankPoints();
 	};
 	
 	KC3Player.prototype.updateLevel = function( level, exp ){
@@ -55,8 +56,6 @@ Instantiatable class to represent one player
 			exp_percent = 1.0;
 		}
 		this.exp = [ exp_percent, exp_next, exp_current, ExpCurrLevel + exp_current ];
-		
-		this.checkRankPoints();
 	};
 	
 	KC3Player.prototype.checkRankPoints = function(){

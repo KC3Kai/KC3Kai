@@ -305,8 +305,10 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				this.checkFCF( resultData.api_escape );
 			}
 			this.updateMvps( this.currentNode().mvps );
-			if(!ConfigManager.info_delta)
+			if(!ConfigManager.info_delta){
+				PlayerManager.hq.checkRankPoints();
 				PlayerManager.hq.updateLevel( resultData.api_member_lv, resultData.api_member_exp);
+			}
 		},
 		
 		updateMvps :function(mvps){
