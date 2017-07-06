@@ -723,18 +723,19 @@ KC3改 Ship Object
 			return masterData &&
 				masterData.api_id === 82 || masterData.api_id === 83;
 		}
-		// for Taiyou Kai or Kai2, any equippable aircraft should work
+		// for Taiyou Kai or Kai2, any equippable aircraft with asw should work
 		function isAswAircraft(masterData) {
 			/*
 			 * - 7: Dive Bomber
-			 * - 8: Torpedo Bomber
+			 * - 8: Torpedo Bomber (known no asw stat: Re.2001 G Kai)
 			 * - 11: Seaplane Bomber (not equippable)
 			 * - 25: Autogyro (Kai2 equippable)
 			 * - 26: Anti-Sub PBY
 			 * - 41: Large Flying Boat (not equippable)
 			 */
 			return masterData &&
-				[7, 8, 11, 25, 26, 41].indexOf(masterData.api_type[2]) > -1;
+				[7, 8, 11, 25, 26, 41].indexOf(masterData.api_type[2]) > -1 &&
+				masterData.api_tais > 0;
 		}
 
 		// Only Autogyro or PBY equipped will not let CVL anti-sub in day shelling phase,

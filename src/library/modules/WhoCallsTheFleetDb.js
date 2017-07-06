@@ -87,6 +87,12 @@
 			return retVal;
 		},
 
+		estimateStatBase: function(stat, statMax, level) {
+			var retVal = stat / (( 99 - level) / 99.0)
+				- statMax * level / ( 99 - level);
+			return Math.ceil(retVal);
+		},
+
 		getShipRemodel: function(shipId) {
 			var entry = this.db["s"+shipId];
 			return entry ? entry.remodel : false;
