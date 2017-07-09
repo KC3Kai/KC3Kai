@@ -27,6 +27,7 @@ Provides access to data on built-in JSON files
 		_servers:{},
 		_battle:{},
 		_quotes:{},
+		_quotesSize:{},
 		_terms:{
 			troll:{},
 			lang:{},
@@ -96,6 +97,7 @@ Provides access to data on built-in JSON files
 			this._nodes    = JSON.parse( $.ajax(repo+'nodes.json', { async: false }).responseText );
 			this._tpmult   = JSON.parse( $.ajax(repo+'tp_mult.json', { async: false }).responseText );
 			this._gunfit   = JSON.parse( $.ajax(repo+'gunfit.json', { async: false }).responseText );
+			this._quotesSize = JSON.parse( $.ajax(repo+'quotes_size.json', { async: false }).responseText );
 			
 			// Load Translations
 			this._ship      = KC3Translation.getJSON(repo, 'ships', true);
@@ -529,11 +531,12 @@ Provides access to data on built-in JSON files
 		},
 		
 		// Subtitle quotes
-		quote :function(identifier, voiceNum){
+		quote :function(identifier, voiceNum, voiceSize = 0){
 			if (!identifier) return false;
 
 			var quoteTable = this._quotes[identifier];
 			if(typeof quoteTable === "undefined") return false;
+			var fileSizeTable = this._quotesSize[identifier];
 
 			function lookupVoice(vNum) {
 				if (typeof vNum === "undefined")
@@ -542,17 +545,34 @@ Provides access to data on built-in JSON files
 				return typeof retVal !== "undefined" ? retVal : false;
 			}
 
-			var voiceLine = lookupVoice(voiceNum);
-			if (voiceLine) return voiceLine;
+			function lookupByFileSize(vNum, fileSize) {
+				if(fileSizeTable && fileSize){
+					var knownVoiceSizes = fileSizeTable[vNum];
+					var seasonalKey = (knownVoiceSizes || {})[fileSize];
+					//console.debug(`Quote known size[${vNum}]["${fileSize}"] = "${seasonalKey}"`);
+					if(knownVoiceSizes && seasonalKey){
+						return lookupVoice(vNum + "@" + seasonalKey);
+					}
+				}
+				return false;
+			}
 
-			if (identifier !== "timing" ){
+			var voiceLine = lookupVoice(voiceNum);
+			if(voiceLine) {
+				// check if seasonal lines found
+				return lookupByFileSize(voiceNum, voiceSize) || voiceLine;
+			} else if(identifier !== "timing"){
 				// no quote for that voice line, check if it's a seasonal line
 				var specialVoiceNum = this.specialDiffs[voiceNum];
 				// check if default for seasonal line exists
-				//console.debug("Quote this.specialDiffs["+voiceNum+"] =", specialVoiceNum);
-				var specialVoiceLine = lookupVoice(specialVoiceNum);
-				if (specialVoiceLine) {
-					//console.debug("Quote using special default:", specialVoiceLine);
+				//console.debug(`Quote this.specialDiffs["${voiceNum}"] = ${specialVoiceNum}`);
+				voiceLine = lookupVoice(specialVoiceNum);
+				// try to check seasonal line by voice file size
+				var specialVoiceLine = lookupByFileSize(specialVoiceNum, voiceSize) || voiceLine;
+				if(specialVoiceLine){
+					if(specialVoiceLine !== voiceLine){
+						//console.debug(`Quote using special "${specialVoiceLine}" instead of "${voiceLine}"`);
+					}
 					return specialVoiceLine;
 				}
 			}

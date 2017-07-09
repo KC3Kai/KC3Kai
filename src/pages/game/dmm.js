@@ -575,6 +575,7 @@ var interactions = {
 		var subtitleText = false;
 		var quoteIdentifier = "";
 		var quoteVoiceNum = request.voiceNum;
+		var quoteVoiceSize = request.voiceSize;
 		var quoteSpeaker = "";
 		switch(request.voicetype){
 			case "titlecall":
@@ -590,7 +591,7 @@ var interactions = {
 				}
 				break;
 		}
-		subtitleText = KC3Meta.quote( quoteIdentifier, quoteVoiceNum );
+		subtitleText = KC3Meta.quote( quoteIdentifier, quoteVoiceNum, quoteVoiceSize );
 		
 		// hide first to fading will stop
 		$(".overlay_subtitles").stop(true, true);

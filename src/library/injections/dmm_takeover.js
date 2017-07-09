@@ -299,6 +299,7 @@
 				var subtitleText = false;
 				var quoteIdentifier = "";
 				var quoteVoiceNum = request.voiceNum;
+				var quoteVoiceSize = request.voiceSize;
 				var quoteSpeaker = "";
 				switch(request.voicetype){
 					case "titlecall":
@@ -314,7 +315,7 @@
 						}
 						break;
 				}
-				subtitleText = meta.quote( quoteIdentifier, quoteVoiceNum );
+				subtitleText = meta.quote( quoteIdentifier, quoteVoiceNum, quoteVoiceSize );
 
 				// hide first to fading will stop
 				$(".overlay_subtitles").stop(true, true);
