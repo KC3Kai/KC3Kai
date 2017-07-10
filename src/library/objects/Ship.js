@@ -674,8 +674,8 @@ KC3改 Ship Object
 		// see comments below.
 		if ([2 /* DD */,3 /* CL */,9 /* BB */].indexOf( master.api_stype ) !== -1 &&
 			[
-				// Abukuma K2(200), Kinu K2(487)
-				200, 487,
+				// Abukuma K2(200), Kinu K2(487), Yura K2(488)
+				200, 487, 488,
 				// Satsuki K2(418), Mutsuki K2(434), Kisaragi K2(435)
 				418, 434, 435,
 				// Kasumi K2(464), Kasumi K2B(470), Ooshio K2(199), Asashio K2D(468), Arashio K2(490)
