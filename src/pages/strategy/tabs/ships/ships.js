@@ -19,7 +19,8 @@
 			multiKey: false,
 			pageNo: false,
 			scrollList: false,
-			heartLockMode: 0
+			heartLockMode: 0,
+			className: false,
 			// default values of filters are defined at `prepareFilters`
 		},
 		// All pre-defined filters instances
@@ -97,7 +98,7 @@
 					self.scrollList = false;
 					self.saveSettings();
 				}
-				KC3StrategyTabs.reloadTab(undefined, true);
+				KC3StrategyTabs.reloadTab(undefined, false);
 			});
 			$(".lock_none").on("click", function(){
 				$(".ship_list .ship_lock").hide();
@@ -111,14 +112,28 @@
 					self.heartLockMode = 1;
 					self.saveSettings();
 				}
-				KC3StrategyTabs.reloadTab(undefined, true);
+				KC3StrategyTabs.reloadTab(undefined, false);
 			});
 			$(".lock_no").on("click", function(){
 				if(self.heartLockMode !== 2){
 					self.heartLockMode = 2;
 					self.saveSettings();
 				}
-				KC3StrategyTabs.reloadTab(undefined, true);
+				KC3StrategyTabs.reloadTab(undefined, false);
+			});
+			$(".class_yes").on("click", function(){
+				if(!self.className){
+					self.className = true;
+					self.saveSettings();
+				}
+				KC3StrategyTabs.reloadTab(undefined, false);
+			});
+			$(".class_no").on("click", function(){
+				if(self.className){
+					self.className = false;
+					self.saveSettings();
+				}
+				KC3StrategyTabs.reloadTab(undefined, false);
 			});
 			$(".control_buttons .reset_default").on("click", function(){
 				delete self.currentSorters;
@@ -245,9 +260,10 @@
 				};
 			}
 			// Append sortno as default sorter to keep order stable
+			var lastSorterReverse = this.getLastCurrentSorter().reverse;
 			var mergedSorters = this.currentSorters.concat([{
 				name: "sortno",
-				reverse: false
+				reverse: lastSorterReverse
 			}]);
 			// To simulate in game behavior, if 1st sorter is stype, and no level found
 			if(this.currentSorters[0].name == "type"
@@ -285,14 +301,17 @@
 				stype: MasterShip.api_stype,
 				ctype: MasterShip.api_ctype,
 				sortno: MasterShip.api_sortno,
-				english: ThisShip.name(),
+				name: ThisShip.name(),
+				className: KC3Meta.ctypeName(MasterShip.api_ctype),
+				fullName: KC3Meta.term("ShipListFullNamePattern")
+					.format(KC3Meta.ctypeName(MasterShip.api_ctype), ThisShip.name()),
 				level: ThisShip.level,
 				levelClass: ThisShip.levelClass(),
 				morale: ThisShip.morale,
 				equip: ThisShip.items,
 				locked: ThisShip.lock,
 
-				hp: ThisShip.hp[0],
+				hp: ThisShip.hp[1],
 				fp: [MasterShip.api_houg[1], MasterShip.api_houg[0]+ThisShip.mod[0], ThisShip.fp[0] ],
 				tp: [MasterShip.api_raig[1], MasterShip.api_raig[0]+ThisShip.mod[1], ThisShip.tp[0] ],
 				yasen: [
@@ -658,6 +677,7 @@
 			shrinkedSettings.views.page = this.pageNo;
 			shrinkedSettings.views.scroll = this.scrollList;
 			shrinkedSettings.views.lock = this.heartLockMode;
+			shrinkedSettings.views.ctype = this.className;
 			this.settings = shrinkedSettings;
 			localStorage.srShiplist = JSON.stringify(this.settings);
 		},
@@ -674,6 +694,7 @@
 				this.pageNo = this.settings.views.page || false;
 				this.scrollList = this.settings.views.scroll || false;
 				this.heartLockMode = this.settings.views.lock || 0;
+				this.className = this.settings.views.ctype || false;
 			}
 		},
 
@@ -755,7 +776,7 @@
 			define("id", "Id",
 				   function(x) { return x.id; });
 			define("name", "Name",
-				   function(x) { return x.english; });
+				   function(x) { return this.className ? x.fullName : x.name; });
 			define("type", "Type",
 				   function(x) { return x.stype; });
 			define("lv", "Level",
@@ -826,7 +847,9 @@
 				// Fill up list
 				Object.keys(FilteredShips).forEach(function(shipCtr){
 					if(shipCtr%10 === 0){
-						$("<div>").addClass("ingame_page").html("Page "+Math.ceil((Number(shipCtr)+1)/10)).appendTo(self.shipList);
+						$("<div>").addClass("ingame_page")
+							.html("Page "+Math.ceil((Number(shipCtr)+1)/10))
+							.appendTo(self.shipList);
 					}
 
 					cShip = FilteredShips[shipCtr];
@@ -843,6 +866,7 @@
 						return;
 					}
 
+					// elements constructing for the time-consuming 'first time rendering'
 					cElm = $(".tab_ships .factory .ship_item").clone().appendTo(self.shipList);
 					cShip.view = cElm;
 					if(shipCtr%2 === 0){ cElm.addClass("even"); }else{ cElm.addClass("odd"); }
@@ -850,7 +874,6 @@
 					$(".ship_id", cElm).text( cShip.id );
 					$(".ship_img .ship_icon", cElm).attr("src", KC3Meta.shipIcon(cShip.bid));
 					$(".ship_img .ship_icon", cElm).attr("alt", cShip.bid);
-					$(".ship_name", cElm).text( cShip.english );
 					if(shipLevel >= 100) {
 						$(".ship_name", cElm).addClass("ship_kekkon-color");
 					}
@@ -866,47 +889,11 @@
 					if(cShip.lk[0] >= cShip.lk[1]){
 						$(".ship_lk", cElm).addClass("max");
 					} else if(cShip.lk[0] > cShip.lk[2]){
-						$(".ship_lk", cElm).append("<sup class='sub'>{0}</sup>".format(cShip.lk[0] - cShip.lk[2]));
+						$(".ship_lk", cElm)
+							.append("<sup class='sub'>{0}</sup>".format(cShip.lk[0] - cShip.lk[2]));
 					}
 
 					if(cShip.morale >= 50){ $(".ship_morale", cElm).addClass("sparkled"); }
-
-					// callback for things that has to be recomputed
-					cElm.onRecompute = function(ship) {
-						var thisShip = ship || cShip;
-						// Recomputes stats
-						self.modernizableStat("fp", this, thisShip.fp);
-						self.modernizableStat("tp", this, thisShip.tp);
-						self.modernizableStat("yasen", this, thisShip.yasen);
-						self.modernizableStat("aa", this, thisShip.aa);
-						self.modernizableStat("ar", this, thisShip.ar);
-						$(".ship_as", this).text( thisShip.as[self.equipMode] );
-						$(".ship_ev", this).text( thisShip.ev[self.equipMode] );
-						$(".ship_ls", this).text( thisShip.ls[self.equipMode] );
-						// Rebind click handlers
-						$(".ship_img .ship_icon", this).click(self.shipClickFunc);
-						$(".ship_equip_icon img", this).click(self.gearClickFunc);
-					};
-
-					cElm.onRecompute(cShip);
-
-					[1,2,3,4].forEach(function(x){
-						self.equipImg(cElm, x, cShip.slots[x-1], cShip.equip[x-1]);
-					});
-					if(cShip.exSlot !== 0){
-						self.equipImg(cElm, "ex", -2, cShip.exSlot);
-					}
-
-					$(".ship_lock img", cElm).attr("src",
-						"../../assets/img/client/heartlock{0}.png".format(!cShip.locked ? "-x" : "")
-					);
-					if(self.heartLockMode === 1 && cShip.locked){
-						$(".ship_lock img", cElm).show();
-					} else if(self.heartLockMode === 2 && !cShip.locked){
-						$(".ship_lock img", cElm).show();
-					} else {
-						$(".ship_lock", cElm).hide();
-					}
 
 					// Check whether remodel is max
 					if( !cShip.remodel )
@@ -919,9 +906,54 @@
 						cElm.addClass('modernization-max');
 					else
 						cElm.addClass('modernization-able');
+
+					[1,2,3,4].forEach(function(x){
+						self.equipImg(cElm, x, cShip.slots[x-1], cShip.equip[x-1]);
+					});
+					if(cShip.exSlot !== 0){
+						self.equipImg(cElm, "ex", -2, cShip.exSlot);
+					}
+
+					// callback for things that has to be recomputed
+					cElm.onRecompute = function(ship) {
+						const thisShip = ship || cShip;
+						// Reset shown ship name
+						const showName = self.className ? thisShip.fullName : thisShip.name;
+						$(".ship_name", this)
+							.text( showName )
+							.attr("title",
+								KC3StrategyTabs.isTextEllipsis($(".ship_name", this)) ? showName : ""
+							);
+						// Recomputes stats
+						self.modernizableStat("fp", this, thisShip.fp);
+						self.modernizableStat("tp", this, thisShip.tp);
+						self.modernizableStat("yasen", this, thisShip.yasen);
+						self.modernizableStat("aa", this, thisShip.aa);
+						self.modernizableStat("ar", this, thisShip.ar);
+						$(".ship_as", this).text( thisShip.as[self.equipMode] );
+						$(".ship_ev", this).text( thisShip.ev[self.equipMode] );
+						$(".ship_ls", this).text( thisShip.ls[self.equipMode] );
+						// Reset heart-lock icon
+						$(".ship_lock img", this).attr("src",
+							"../../assets/img/client/heartlock{0}.png"
+								.format(!thisShip.locked ? "-x" : "")
+						).show();
+						if((self.heartLockMode === 1 && thisShip.locked)
+						|| (self.heartLockMode === 2 && !thisShip.locked)) {
+							$(".ship_lock", this).show();
+						} else {
+							$(".ship_lock", this).hide();
+						}
+						// Rebind click handlers
+						$(".ship_img .ship_icon", this).click(self.shipClickFunc);
+						$(".ship_equip_icon img", this).click(self.gearClickFunc);
+					};
+					// also invoke recompute for the first time
+					cElm.onRecompute(cShip);
+
 				});
 
-				self.shipList.show();
+				self.shipList.show().createChildrenTooltips();
 				$(".ship_count .count_value").text(
 					"{0} /{1}".format(FilteredShips.length, self.shipCache.length)
 				);
@@ -981,7 +1013,7 @@
 
 				$("img",element)
 					.attr("src", "../../assets/img/items/" + gear.master().api_type[3] + ".png")
-					.attr("title", gear.name())
+					.attr("title", gear.htmlTooltip(equipSlot))
 					.attr("alt", gear.master().api_id)
 					.show();
 				$("span",element).css('visibility','hidden');

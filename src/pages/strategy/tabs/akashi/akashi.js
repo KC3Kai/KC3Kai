@@ -236,6 +236,7 @@
 				if(Array.isArray(consumedItem)){
 					let isNotEnoughUseItem = function(id, amount){
 						switch(id){
+						case 70: return (PlayerManager.consumables.skilledCrew || 0) < amount;
 						case 71: return (PlayerManager.consumables.nEngine || 0) < amount;
 						case 75: return (PlayerManager.consumables.newGunMountMaterial || 0) < amount;
 						}

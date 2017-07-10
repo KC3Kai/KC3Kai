@@ -4,7 +4,7 @@
 	window.WhoCallsTheFleetDb = {
 		db: {},
 		expectedShipCount: 470,
-		expectedItemCount: 233,
+		expectedItemCount: 235,
 		init: function(repo) {
 			var self = this;
 			var loadAndParseDb = function(prefix, filename, expectedCount) {
@@ -85,6 +85,12 @@
 			var retVal = statBound.base +
 				Math.floor((statBound.max - statBound.base)*level / 99.0);
 			return retVal;
+		},
+
+		estimateStatBase: function(stat, statMax, level) {
+			var retVal = stat / (( 99 - level) / 99.0)
+				- statMax * level / ( 99 - level);
+			return Math.ceil(retVal);
 		},
 
 		getShipRemodel: function(shipId) {

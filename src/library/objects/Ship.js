@@ -674,8 +674,8 @@ KC3改 Ship Object
 		// see comments below.
 		if ([2 /* DD */,3 /* CL */,9 /* BB */].indexOf( master.api_stype ) !== -1 &&
 			[
-				// Abukuma K2(200), Kinu K2(487)
-				200, 487,
+				// Abukuma K2(200), Kinu K2(487), Yura K2(488)
+				200, 487, 488,
 				// Satsuki K2(418), Mutsuki K2(434), Kisaragi K2(435)
 				418, 434, 435,
 				// Kasumi K2(464), Kasumi K2B(470), Ooshio K2(199), Asashio K2D(468), Arashio K2(490)
@@ -723,18 +723,19 @@ KC3改 Ship Object
 			return masterData &&
 				masterData.api_id === 82 || masterData.api_id === 83;
 		}
-		// for Taiyou Kai or Kai2, any equippable aircraft should work
+		// for Taiyou Kai or Kai2, any equippable aircraft with asw should work
 		function isAswAircraft(masterData) {
 			/*
 			 * - 7: Dive Bomber
-			 * - 8: Torpedo Bomber
+			 * - 8: Torpedo Bomber (known no asw stat: Re.2001 G Kai)
 			 * - 11: Seaplane Bomber (not equippable)
 			 * - 25: Autogyro (Kai2 equippable)
 			 * - 26: Anti-Sub PBY
 			 * - 41: Large Flying Boat (not equippable)
 			 */
 			return masterData &&
-				[7, 8, 11, 25, 26, 41].indexOf(masterData.api_type[2]) > -1;
+				[7, 8, 11, 25, 26, 41].indexOf(masterData.api_type[2]) > -1 &&
+				masterData.api_tais > 0;
 		}
 
 		// Only Autogyro or PBY equipped will not let CVL anti-sub in day shelling phase,

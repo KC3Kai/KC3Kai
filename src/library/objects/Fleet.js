@@ -822,6 +822,9 @@ Contains summary information about a fleet and its 6 ships
 						} else if ([9, 10].indexOf(itemType) > -1) {
 							// Reconnaissance Plane/Seaplane bonus
 							equipment_bonus *= 1.2;
+						} else if (11 === itemType) {
+							// Seaplane bomber bonus
+							equipment_bonus *= 1.15;
 						} else {
 							// all other equipment with no bonus
 							equipment_bonus = 0;
