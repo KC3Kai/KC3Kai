@@ -156,8 +156,8 @@
 						);
 					}
 				};
-				// Get audio file size first for seasonal Poke(1/2)
-				if(vnum === 2 || vnum === 3){
+				// Get audio file size first for seasonal Poke(1/2/3)
+				if(vnum >= 2 && vnum <= 4){
 					$.ajax({
 						type: "HEAD",
 						url: voiceSrc,

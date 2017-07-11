@@ -67,6 +67,64 @@ Provides access to data on built-in JSON files
 			432: {917: 917, 918: 918},
 			353: {917: 917, 918: 918}
 		},
+		specialQuotesSizes: {
+			"44": { // Murasame Poke(1)
+				"2": {
+					"49728": {
+						"Setsubun": [3, 4, 5],
+						"Xmas": [12, 1]
+					}
+				}
+			},
+			"68": { // Maya Poke(1)
+				"2": {
+					"58800": {
+						"NewYears": [1, 2],
+						"Rainy": [5, 6, 7]
+					}
+				}
+			},
+			"90": { // Souryuu Poke(1)
+				"2": {
+					"60312": {
+						"Setsubun": [3, 4, 5],
+						"Saury": [8, 9, 10]
+					}
+				}
+			},
+			"124": { // Suzuya Poke(1)
+				"2": {
+					"66528": {
+						"EarlySummer": [6, 7, 8],
+						"Xmas": [12, 1]
+					}
+				}
+			},
+			"169": { // Tanikaze Poke(1)
+				"2": {
+					"90888": {
+						"Fall": [9, 10, 11],
+						"Xmas": [12, 1]
+					}
+				}
+			},
+			"186": { // Tokitsukaze Poke(1)
+				"2": {
+					"72408": {
+						"Valentines": [2, 3],
+						"Xmas": [12, 1]
+					}
+				}
+			},
+			"448": { // Zara Poke(1)
+				"2": {
+					"54936": {
+						"Valentines": [2, 3],
+						"Saury": [8, 9, 10]
+					}
+				}
+			}
+		},
 		
 		abyssKaiShipIds: [
 			1565, 1566, 1567, 1616, 1617, 1618, 1714, 1715, 1734, 1735
@@ -97,7 +155,6 @@ Provides access to data on built-in JSON files
 			this._nodes    = JSON.parse( $.ajax(repo+'nodes.json', { async: false }).responseText );
 			this._tpmult   = JSON.parse( $.ajax(repo+'tp_mult.json', { async: false }).responseText );
 			this._gunfit   = JSON.parse( $.ajax(repo+'gunfit.json', { async: false }).responseText );
-			this._quotesSize = JSON.parse( $.ajax(repo+'quotes_size.json', { async: false }).responseText );
 			
 			// Load Translations
 			this._ship      = KC3Translation.getJSON(repo, 'ships', true);
@@ -120,6 +177,7 @@ Provides access to data on built-in JSON files
 		
 		loadQuotes :function(){
 			this._quotes = KC3Translation.getQuotes(this.repo);
+			this._quotesSize = JSON.parse($.ajax(this.repo + "quotes_size.json", { async: false }).responseText);
 			return this;
 		},
 		
@@ -536,31 +594,55 @@ Provides access to data on built-in JSON files
 
 			var quoteTable = this._quotes[identifier];
 			if(typeof quoteTable === "undefined") return false;
-			var fileSizeTable = this._quotesSize[identifier];
 
-			function lookupVoice(vNum) {
+			var lookupVoice = (vNum) => {
 				if (typeof vNum === "undefined")
 					return false;
 				var retVal = quoteTable[vNum];
 				return typeof retVal !== "undefined" ? retVal : false;
-			}
+			};
 
-			function lookupByFileSize(vNum, fileSize) {
-				if(fileSizeTable && fileSize){
-					var knownVoiceSizes = fileSizeTable[vNum];
-					var seasonalKey = (knownVoiceSizes || {})[fileSize];
-					//console.debug(`Quote known size[${vNum}]["${fileSize}"] = "${seasonalKey}"`);
-					if(knownVoiceSizes && seasonalKey){
-						return lookupVoice(vNum + "@" + seasonalKey);
+			var lookupSpecialSeasonalKey = (shipId, vNum, fileSize) => {
+				// this table only contains base form IDs
+				const spFileSizeTable = this.specialQuotesSizes[
+					RemodelDb.originOf(shipId) || shipId
+				];
+				if(spFileSizeTable && fileSize){
+					const knownVoiceSizes = spFileSizeTable[vNum];
+					const seasonalKeyConf = (knownVoiceSizes || {})[fileSize];
+					if(knownVoiceSizes && seasonalKeyConf){
+						const seasonalKeys = Object.keys(seasonalKeyConf);
+						for(let i in seasonalKeys){
+							const key = seasonalKeys[i];
+							const keyCond = seasonalKeyConf[key];
+							if(Array.isArray(keyCond) // match key by current month
+								&& keyCond.indexOf(new Date().getMonth() + 1) > -1){
+								return key;
+							}
+						}
 					}
 				}
 				return false;
-			}
+			};
+
+			var lookupByFileSize = (shipId, vNum, fileSize) => {
+				var seasonalKey = lookupSpecialSeasonalKey(shipId, vNum, fileSize);
+				const fileSizeTable = this._quotesSize[shipId];
+				if(!seasonalKey && fileSizeTable && fileSize){
+					const knownVoiceSizes = fileSizeTable[vNum];
+					seasonalKey = (knownVoiceSizes || {})[fileSize];
+				}
+				//console.debug(`Quote known size[${vNum}]["${fileSize}"] = "${seasonalKey}"`);
+				if(seasonalKey){
+					return lookupVoice(vNum + "@" + seasonalKey);
+				}
+				return false;
+			};
 
 			var voiceLine = lookupVoice(voiceNum);
 			if(voiceLine) {
 				// check if seasonal lines found
-				return lookupByFileSize(voiceNum, voiceSize) || voiceLine;
+				return lookupByFileSize(identifier, voiceNum, voiceSize) || voiceLine;
 			} else if(identifier !== "timing"){
 				// no quote for that voice line, check if it's a seasonal line
 				var specialVoiceNum = this.specialDiffs[voiceNum];
@@ -568,7 +650,7 @@ Provides access to data on built-in JSON files
 				//console.debug(`Quote this.specialDiffs["${voiceNum}"] = ${specialVoiceNum}`);
 				voiceLine = lookupVoice(specialVoiceNum);
 				// try to check seasonal line by voice file size
-				var specialVoiceLine = lookupByFileSize(specialVoiceNum, voiceSize) || voiceLine;
+				var specialVoiceLine = lookupByFileSize(identifier, specialVoiceNum, voiceSize) || voiceLine;
 				if(specialVoiceLine){
 					if(specialVoiceLine !== voiceLine){
 						//console.debug(`Quote using special "${specialVoiceLine}" instead of "${voiceLine}"`);
