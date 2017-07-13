@@ -1395,7 +1395,14 @@
 					hasTaiha: MainFleet.hasTaiha() || EscortFleet.hasTaiha(),
 					taihaIndexes: MainFleet.getTaihas().concat( EscortFleet.getTaihas() ),
 					supplied: MainFleet.isSupplied() && EscortFleet.isSupplied(),
-					supplyCost: MainFleet.calcResupplyCost(),
+					supplyCost: Object.sumValuesByKey(
+							MainFleet.calcResupplyCost(),
+							EscortFleet.calcResupplyCost()
+						),
+					battleCost: Object.sumValuesByKey(
+							MainFleet.calcBattleCost(),
+							EscortFleet.calcBattleCost()
+						),
 					badState: [
 						MainFleet.needsSupply(false)|| EscortFleet.needsSupply(false),
 						MainFleet.needsSupply(true) || EscortFleet.needsSupply(true) ,
@@ -1412,10 +1419,6 @@
 							.reduce(function(pre,cur){ return pre.add(cur); }, KC3Meta.tpObtained());
 					}).reduce(function(pre,cur){ return pre.add(cur); }, KC3Meta.tpObtained()).value)
 				};
-				var escortSupplyCost = EscortFleet.calcResupplyCost();
-				FleetSummary.supplyCost.fuel += escortSupplyCost.fuel;
-				FleetSummary.supplyCost.ammo += escortSupplyCost.ammo;
-				FleetSummary.supplyCost.bauxite += escortSupplyCost.bauxite;
 
 			// SINGLE
 			}else{
@@ -1463,6 +1466,7 @@
 					taihaIndexes: CurrentFleet.getTaihas(),
 					supplied: CurrentFleet.isSupplied(),
 					supplyCost: CurrentFleet.calcResupplyCost(),
+					battleCost: CurrentFleet.calcBattleCost(),
 					badState: [
 						CurrentFleet.needsSupply(false) ||
 						(
@@ -1551,7 +1555,10 @@
 				$(".module.status .status_supply").attr("title",
 					KC3Meta.term("PanelResupplyCosts").format(
 						FleetSummary.supplyCost.fuel, FleetSummary.supplyCost.ammo, FleetSummary.supplyCost.bauxite
-					) + (!FleetSummary.supplyCost.steel ? "" :
+					) + ("\n" + KC3Meta.term("PanelBattleConsumes").format(
+						FleetSummary.battleCost.fuel, FleetSummary.battleCost.dayOnlyAmmo, FleetSummary.battleCost.nightBattleAmmo,
+						FleetSummary.battleCost.airRaidFuel, FleetSummary.battleCost.airRaidAmmo
+					)) + (!FleetSummary.supplyCost.steel ? "" :
 						"\n" + KC3Meta.term("PanelConsumedSteel").format(FleetSummary.supplyCost.steel))
 				).lazyInitTooltip();
 
