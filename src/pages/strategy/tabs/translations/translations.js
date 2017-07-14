@@ -78,6 +78,7 @@
 				var questName = v.name.val;
 				var questDesc = v.desc.val;
 				var questMemo = v.memo ? v.memo.val : false;
+				var questTrackTypes = v.trackTypes ? v.trackTypes : false;
 
 				var questNameL = v.name.tag;
 				var questDescL = v.desc.tag;
@@ -98,14 +99,24 @@
 				if(questMemo){
 					if($("#html-rendering").is(":checked")){
 						$(".tq-memo",row).html(questMemo.replace(/\n/g,"<br/>")).addClass(
-							language === v.desc.tag ?
+							language === v.memo.tag ?
 							"translation_done" : "translation_missing");
 					} else {
 						$(".tq-memo",row).text(questMemo.replace(/\n/g,"\\n")).addClass(
-							language === v.desc.tag ?
+							language === v.memo.tag ?
 							"translation_done" : "translation_missing");
 					}
 				}
+				if(questTrackTypes){
+					for(var index = 0; index < questTrackTypes.length; index++){
+						var questTrack = $("<div/>").addClass("tq-trackTypes");
+						questTrack.text("[" + index + "] " + questTrackTypes[index].val).addClass(
+							language === questTrackTypes[index].tag ?
+								"translation_done" : "translation_missing");
+						questTrack.appendTo(row);
+					}
+				}
+
 				$(".tq-json",row).text('{0}:{1},'.format(JSON.stringify(k), JSON.stringify(originalJson[k])));
 
 				row.appendTo( "#tr-container" );

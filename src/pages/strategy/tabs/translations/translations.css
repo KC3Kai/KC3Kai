@@ -66,6 +66,11 @@
 	clear: both;
 }
 
+.tab_translations .tq-trackTypes {
+	font-size: smaller;
+	clear: both;
+}
+
 .tab_translations .tq-json {
 	font-family: monospace;
 	color: gray;
