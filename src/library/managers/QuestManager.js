@@ -164,7 +164,7 @@ Uses KC3Quest objects to play around with
 			quarterly: {
 				type: 'quarterly',
 				key: 'timeToResetQuarterlyQuests',
-				questIds: [637, 643, 663, 822, 854],
+				questIds: [426, 637, 643, 663, 822, 854, 861, 862],
 				resetQuests: function () { KC3QuestManager.resetQuarterlies(); },
 				calculateNextReset: function (serverTime) {
 					const nextMonthlyReset = new Date(
@@ -446,6 +446,18 @@ Uses KC3Quest objects to play around with
 					() => PlayerManager.hq.lastMaterial[2] >= 18000,
 				"854": // Bq2 Sortie 1st fleet (sortie maps and battle ranks not counted here)
 					() => KC3SortieManager.onSortie && KC3SortieManager.fleetSent == 1,
+				"861": // Bq3 Sortie 2 BBV or AO
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.countShipType(10) === 2
+							|| fleet.countShipType(22) === 2;
+					},
+				"862": // Bq4 Sortie 1 AV, 2 CL
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.countShipType(16) === 1
+							&& fleet.countShipType(3) === 2;
+					},
 			};
 			if(questObj.id && questCondsLibrary[questId]){
 				return !!questCondsLibrary[questId].call(questObj, extraContexts);
