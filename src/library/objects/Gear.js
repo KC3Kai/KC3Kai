@@ -276,7 +276,7 @@ KC3改 Equipment Object
 			["rn", "leng"],
 			["or", "distance"]
 		], function(index, sdata) {
-			var statBox = $('<div><img class="icon"/> <span class="value"></span>&nbsp;</div>');
+			var statBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span>&nbsp;</div>');
 			statBox.css("font-size", "11px");
 			if((gearData["api_" + sdata[1]] || 0) !== 0
 				&& (planeStats.indexOf(sdata[0]) < 0
