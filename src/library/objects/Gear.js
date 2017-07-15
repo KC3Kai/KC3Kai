@@ -259,7 +259,7 @@ KC3改 Equipment Object
 				nameText += " x{0}".format(slotSize);
 			}
 		}
-		$(".name", title).html(nameText);
+		$(".name", title).text(nameText);
 		// Some stats only shown at Equipment Library, omitted here.
 		var planeStats = ["or", "kk"];
 		$.each([
