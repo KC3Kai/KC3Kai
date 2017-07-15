@@ -497,6 +497,20 @@ Array.numbers = function(start, end){
 };
 
 /*******************************\
+|*** Object                     |
+\*******************************/
+/** Sum values in Objects with same properties */
+Object.sumValuesByKey = function(){
+	return Array.from(arguments).reduce(function(acc, o){
+		for(var k in o){
+			if(o.hasOwnProperty(k))
+				acc[k] = Number(acc[k] || 0) + Number(o[k]);
+		}
+		return acc;
+	}, {});
+};
+
+/*******************************\
 |*** Date                       |
 \*******************************/
 (function(){
