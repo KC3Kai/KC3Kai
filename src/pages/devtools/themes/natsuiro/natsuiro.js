@@ -991,11 +991,17 @@
 		HQ: function(data){
 			$(".admiral_name").text( PlayerManager.hq.name );
 			$(".admiral_comm").text( PlayerManager.hq.desc );
-			$(".admiral_rank").text( PlayerManager.hq.rank );
 			if(ConfigManager.rankPtsMode === 2){
-				$(".admiral_rank").text(PlayerManager.hq.getRankPoints().toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + KC3Meta.term("HQRankPoints"));
-			}else{
-				$(".admiral_rank").text(PlayerManager.hq.rank);
+				$(".admiral_rank").text(PlayerManager.hq.getRankPoints()
+					.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+					+ KC3Meta.term("HQRankPoints")
+				).attr("title", KC3Meta.term("HQRankPointsTip")
+					.format(!PlayerManager.hq.rankPtLastTimestamp ? "?"
+						: new Date(PlayerManager.hq.rankPtLastTimestamp).format("yyyy-mm-dd HH:MM:ss"))
+				).lazyInitTooltip().tooltip("enable");
+			} else {
+				$(".admiral_rank").text(PlayerManager.hq.rank)
+					.attr("title", "").lazyInitTooltip().tooltip("disable");
 			}
 			$(".admiral_lvval").text( PlayerManager.hq.level );
 			$(".admiral_lvbar").css({width: Math.round(PlayerManager.hq.exp[0]*58)+"px"});
@@ -1389,7 +1395,14 @@
 					hasTaiha: MainFleet.hasTaiha() || EscortFleet.hasTaiha(),
 					taihaIndexes: MainFleet.getTaihas().concat( EscortFleet.getTaihas() ),
 					supplied: MainFleet.isSupplied() && EscortFleet.isSupplied(),
-					supplyCost: MainFleet.calcResupplyCost(),
+					supplyCost: Object.sumValuesByKey(
+							MainFleet.calcResupplyCost(),
+							EscortFleet.calcResupplyCost()
+						),
+					battleCost: Object.sumValuesByKey(
+							MainFleet.calcBattleCost(),
+							EscortFleet.calcBattleCost()
+						),
 					badState: [
 						MainFleet.needsSupply(false)|| EscortFleet.needsSupply(false),
 						MainFleet.needsSupply(true) || EscortFleet.needsSupply(true) ,
@@ -1406,10 +1419,6 @@
 							.reduce(function(pre,cur){ return pre.add(cur); }, KC3Meta.tpObtained());
 					}).reduce(function(pre,cur){ return pre.add(cur); }, KC3Meta.tpObtained()).value)
 				};
-				var escortSupplyCost = EscortFleet.calcResupplyCost();
-				FleetSummary.supplyCost.fuel += escortSupplyCost.fuel;
-				FleetSummary.supplyCost.ammo += escortSupplyCost.ammo;
-				FleetSummary.supplyCost.bauxite += escortSupplyCost.bauxite;
 
 			// SINGLE
 			}else{
@@ -1457,6 +1466,7 @@
 					taihaIndexes: CurrentFleet.getTaihas(),
 					supplied: CurrentFleet.isSupplied(),
 					supplyCost: CurrentFleet.calcResupplyCost(),
+					battleCost: CurrentFleet.calcBattleCost(),
 					badState: [
 						CurrentFleet.needsSupply(false) ||
 						(
@@ -1545,7 +1555,10 @@
 				$(".module.status .status_supply").attr("title",
 					KC3Meta.term("PanelResupplyCosts").format(
 						FleetSummary.supplyCost.fuel, FleetSummary.supplyCost.ammo, FleetSummary.supplyCost.bauxite
-					) + (!FleetSummary.supplyCost.steel ? "" :
+					) + ("\n" + KC3Meta.term("PanelBattleConsumes").format(
+						FleetSummary.battleCost.fuel, FleetSummary.battleCost.dayOnlyAmmo, FleetSummary.battleCost.nightBattleAmmo,
+						FleetSummary.battleCost.airRaidFuel, FleetSummary.battleCost.airRaidAmmo
+					)) + (!FleetSummary.supplyCost.steel ? "" :
 						"\n" + KC3Meta.term("PanelConsumedSteel").format(FleetSummary.supplyCost.steel))
 				).lazyInitTooltip();
 
@@ -1752,7 +1765,7 @@
 								$(".base_plane_icon img", planeBox).attr("src", eqIconSrc)
 									.error(function() { $(this).unbind("error").attr("src", "../../../../assets/img/ui/empty.png"); });
 								$(".base_plane_icon", planeBox)
-									.attr("title", KC3Gear.buildGearTooltip(itemObj, itemObj.name()) )
+									.attr("title", itemObj.htmlTooltip(planeInfo.api_max_count) )
 									.lazyInitTooltip()
 									.data("masterId", itemObj.masterId)
 									.on("dblclick", self.gearDoubleClickFunction);

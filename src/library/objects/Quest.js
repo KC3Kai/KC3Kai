@@ -57,7 +57,7 @@ known IDs see QuestManager
 	};
 
 	/* OUTPUT SHORT
-	Return tracking text to be shown on Panel
+	Return tracking text to be shown on Panel and Strategy Room
 	------------------------------------------*/
 	KC3Quest.prototype.outputShort = function(showAll){
 		if (typeof showAll == "undefined") {
@@ -69,7 +69,7 @@ known IDs see QuestManager
 			var textToShow = "";
 			for(ctr in this.tracking){
 				textToShow = this.tracking[ctr][0]+"/"+this.tracking[ctr][1];
-				trackingText.push(textToShow);
+				trackingText.push((this.meta().trackingDesc ? this.meta().trackingDesc[ctr] : "{0}").format(textToShow));
 				if (!showAll && (this.tracking[ctr][0] < this.tracking[ctr][1])) {
 					return textToShow;
 				}
@@ -84,7 +84,7 @@ known IDs see QuestManager
 	};
 
 	/* OUTPUT HTML
-	Return tracking text to be shown on Strategy Room
+	Return tracking text to be shown on in-game quest overlay
 	------------------------------------------*/
 	KC3Quest.prototype.outputHtml = function(){
 		if(this.tracking){
@@ -168,7 +168,8 @@ known IDs see QuestManager
 					code : questMeta.code,
 					name : questMeta.name,
 					desc : questMeta.desc,
-					memo : questMeta.memo
+					memo : questMeta.memo,
+					trackingDesc : questMeta.trackingDesc
 				}; };
 				// If tracking is empty and Meta is defined
 				if(this.tracking === false){
@@ -190,6 +191,7 @@ known IDs see QuestManager
 				|| oldMeta.name !== questMeta.name
 				|| oldMeta.desc !== questMeta.desc
 				|| oldMeta.memo !== questMeta.memo
+				|| oldMeta.trackingDesc !== questMeta.trackingDesc
 				)){
 				// Only update meta text, keep tracking untouched
 				this.meta = function(){ return {
@@ -197,7 +199,8 @@ known IDs see QuestManager
 					code : questMeta.code,
 					name : questMeta.name,
 					desc : questMeta.desc,
-					memo : questMeta.memo
+					memo : questMeta.memo,
+					trackingDesc : questMeta.trackingDesc
 				}; };
 			}
 		}

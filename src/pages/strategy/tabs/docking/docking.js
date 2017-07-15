@@ -180,7 +180,7 @@
 				}
 				$("img", equipDiv)
 					.attr("src", "../../assets/img/items/" + gear.master().api_type[3] + ".png")
-					.attr("title", gear.name())
+					.attr("title", gear.htmlTooltip(slotSize))
 					.attr("alt", gear.master().api_id)
 					.click(this.gearClickFunc)
 					.error(function() {
