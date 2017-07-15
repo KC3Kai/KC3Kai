@@ -264,7 +264,7 @@ Used by SortieManager
 		
 		// Bq3: Sortie 2 BBV/AO to [W1-6], reach node N twice
 		if(KC3SortieManager.isSortieAt(1, 6)
-			&& KC3QuestManager.isPrerequisiteFulfilled(861, KC3SortieManager.fleetSent)){
+			&& KC3QuestManager.isPrerequisiteFulfilled(861)){
 			KC3QuestManager.get(861).increment();
 		}
 		return this;

@@ -446,11 +446,11 @@ Uses KC3Quest objects to play around with
 					() => PlayerManager.hq.lastMaterial[2] >= 18000,
 				"854": // Bq2 Sortie 1st fleet (sortie maps and battle ranks not counted here)
 					() => KC3SortieManager.onSortie && KC3SortieManager.fleetSent == 1,
-				"861": // Bq3 Sortie 2 BBV or AO
+				"861": // Bq3 Sortie 2 of BBV or AO
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
-						return fleet.countShipType(10) === 2
-							|| fleet.countShipType(22) === 2;
+						return (fleet.countShipType(10) +
+							fleet.countShipType(22)) === 2;
 					},
 				"862": // Bq4 Sortie 1 AV, 2 CL
 					({fleetSent = KC3SortieManager.fleetSent}) => {
