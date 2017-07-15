@@ -515,7 +515,7 @@
 			});
 			$(".gear_name .name", gearBox).text(kcGear.name());
 			if(kcGear.stars>0){
-				$(".gear_name .stars", gearBox).text( " +{0}".format(kcGear.stars) );
+				$(".gear_name .stars", gearBox).text( " \u2605{0}".format(kcGear.stars) );
 			}
 			if(kcGear.ace>0){
 				$(".gear_name .ace", gearBox).text( " \u00bb{0}".format(kcGear.ace) );
@@ -524,7 +524,7 @@
 				$(".gear_name .slot", gearBox).text( " x{0}".format(capacity) );
 			}
 			$(".gear_name", gearBox).attr("title",
-				KC3Gear.buildGearTooltip(kcGear, $(".gear_name", gearBox).text())
+				KC3Gear.buildGearTooltip(kcGear, true, capacity)
 			).lazyInitTooltip();
 		},
 

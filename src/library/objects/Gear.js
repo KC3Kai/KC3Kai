@@ -39,7 +39,7 @@ KC3改 Equipment Object
 	/* FIGHTER POWER
 	Get fighter power of this equipment on a slot
 	--------------------------------------------------------------*/
-	KC3Gear.prototype.fighterPower = function(capacity){
+	KC3Gear.prototype.fighterPower = function(capacity = 0){
 		// Empty item means no fighter power
 		if(this.itemId===0){ return 0; }
 
@@ -65,10 +65,10 @@ KC3改 Equipment Object
 				hasBeenImproved) {
 				return 0.2 * this.stars;
 			}
-			// seaplane fighters are improvable now, 0.192 < AA bonus < 0.2014 (still verifying)
+			// seaplane fighters are improvable now, 0.192 < AA bonus < 0.2014
 			// refs: https://twitter.com/syoukuretin/status/843271212377690112
 			//       https://twitter.com/DarkQuetzal/status/842686753815191556
-			// seaplane bombers are still not improvable
+			// seaplane bombers are improvable now, but no AA bonus found yet (found DV & LoS bonus)
 			if (this.master().api_type[3] === 43 // is seaplane fighter but not bomber/recon
 				&& hasBeenImproved) {
 				return 0.2 * this.stars;
@@ -91,9 +91,9 @@ KC3改 Equipment Object
 	Get fighter power of this equipment
 	with added whole number proficiency bonus
 	--------------------------------------------------------------*/
-	KC3Gear.prototype.fighterVeteran = function(capacity){
-		// Empty item means no fighter power
-		if(this.itemId===0){ return 0; }
+	KC3Gear.prototype.fighterVeteran = function(capacity = 0){
+		// Empty item or slot means no fighter power
+		if(this.itemId === 0 || capacity <= 0){ return 0; }
 
 		// Check if this object is a fighter plane
 		if( KC3GearManager.antiAirFighterType2Ids.indexOf( String(this.master().api_type[2]) ) > -1){
@@ -111,13 +111,7 @@ KC3改 Equipment Object
 					return 0;
 				}
 			}
-
-			var veteranBonus;
-			if(this.ace==-1){
-				veteranBonus = airAverageTable[ 0 ];
-			}else{
-				veteranBonus = airAverageTable[ this.ace ];
-			}
+			var veteranBonus = airAverageTable[ this.ace > 0 ? this.ace : 0 ];
 			var aaStat = this.master().api_tyku;
 			aaStat += this.AAStatImprovementBonous();
 			// Interceptor use evasion as interception stat against fighter
@@ -135,13 +129,12 @@ KC3改 Equipment Object
 	Get fighter power of this equipment
 	as an array with lower and upper bound bonuses
 	--------------------------------------------------------------*/
-	KC3Gear.prototype.fighterBounds = function(capacity){
-		// Empty item means no fighter power
-		if(this.itemId===0){ return [0,0]; }
+	KC3Gear.prototype.fighterBounds = function(capacity = 0){
+		// Empty item or slot means no fighter power
+		if(this.itemId === 0 || capacity <= 0){ return [0,0]; }
 
 		// Check if this object is a fighter plane
 		if( KC3GearManager.antiAirFighterType2Ids.indexOf( String(this.master().api_type[2]) ) > -1){
-			// console.log("this.ace", this.ace);
 
 			var typInd = String( this.master().api_type[2] );
 			var airBoundTable = ConfigManager.air_bounds[typInd];
@@ -157,13 +150,7 @@ KC3改 Equipment Object
 					return [0,0];
 				}
 			} 
-
-			var veteranBounds;
-			if(this.ace==-1){
-				veteranBounds = airBoundTable[ 0 ];
-			}else{
-				veteranBounds = airBoundTable[ this.ace ];
-			}
+			var veteranBounds = airBoundTable[ this.ace > 0 ? this.ace : 0 ];
 			var aaStat = this.master().api_tyku;
 			aaStat += this.AAStatImprovementBonous();
 			// Interceptor use evasion as interception stat against fighter
@@ -187,37 +174,32 @@ KC3改 Equipment Object
 	see http://wikiwiki.jp/kancolle/?%B4%F0%C3%CF%B9%D2%B6%F5%C2%E2#sccf3a4c
 	see http://kancolle.wikia.com/wiki/Land-Base_Aerial_Support#Fighter_Power_Calculations
 	--------------------------------------------------------------*/
-	KC3Gear.prototype.interceptionPower = function(capacity){
-		// Empty item means no fighter power
-		if(this.itemId===0){ return 0; }
+	KC3Gear.prototype.interceptionPower = function(capacity = 0){
+		// Empty item or slot means no fighter power
+		if(this.itemId === 0 || capacity <= 0){ return 0; }
 		// Check if this object is a interceptor plane or not
 		if( KC3GearManager.interceptorsType3Ids.indexOf(this.master().api_type[3]) > -1) {
-			// If slot has plane capacity
-			if (capacity) {
-				var interceptPower = (
-					// Base anti-air power
-					this.master().api_tyku +
-					// Interception is from evasion
-					this.master().api_houk +
-					// Anti-Bomber is from hit accuracy
-					this.master().api_houm * 2 +
-					// Although no interceptor can be improved for now
-					this.AAStatImprovementBonous()
-				) * Math.sqrt(capacity);
-				
-				// Proficiency Bonus, no fail-over here
-				if(this.ace != 1){
-					var typInd = String(this.master().api_type[2]);
-					var airAverageTable = ConfigManager.air_average[typInd];
-					if (typeof airAverageTable != "undefined") {
-						interceptPower += airAverageTable[this.ace] || 0;
-					}
+			var interceptPower = (
+				// Base anti-air power
+				this.master().api_tyku +
+				// Interception is from evasion
+				this.master().api_houk +
+				// Anti-Bomber is from hit accuracy
+				this.master().api_houm * 2 +
+				// Although no interceptor can be improved for now
+				this.AAStatImprovementBonous()
+			) * Math.sqrt(capacity);
+			
+			// Proficiency Bonus, no fail-over here
+			if(this.ace > 0){
+				var typInd = String(this.master().api_type[2]);
+				var airAverageTable = ConfigManager.air_average[typInd];
+				if (typeof airAverageTable != "undefined") {
+					interceptPower += airAverageTable[this.ace] || 0;
 				}
-				
-				return Math.floor(interceptPower);
-			} else {
-				return 0;
 			}
+			
+			return Math.floor(interceptPower);
 		} else {
 			return this.fighterVeteran(capacity);
 		}
@@ -259,15 +241,25 @@ KC3改 Equipment Object
 	/*
 	 * Build tooltip HTML of this Gear. Used by Panel/Strategy Room.
 	 */
-	KC3Gear.prototype.htmlTooltip = function() {
-		return KC3Gear.buildGearTooltip(this);
+	KC3Gear.prototype.htmlTooltip = function(slotSize) {
+		return KC3Gear.buildGearTooltip(this, slotSize !== undefined, slotSize);
 	};
 	/** Also export a static method */
-	KC3Gear.buildGearTooltip = function(gearObj, altName) {
+	KC3Gear.buildGearTooltip = function(gearObj, altName, slotSize) {
 		var gearData = gearObj.master();
 		if(gearObj.itemId === 0 || gearData === false){ return ""; }
 		var title = $('<div><span class="name"></span><br/></div>');
-		$(".name", title).html(altName || gearObj.name());
+		var nameText = altName || gearObj.name();
+		if(altName === true){
+			nameText = gearObj.name();
+			if(gearObj.stars > 0){ nameText += " \u2605{0}".format(gearObj.stars); }
+			if(gearObj.ace > 0){ nameText += " \u00bb{0}".format(gearObj.ace); }
+			if(slotSize > 0 &&
+				KC3GearManager.carrierBasedAircraftType3Ids.indexOf(gearData.api_type[3]) >- 1){
+				nameText += " x{0}".format(slotSize);
+			}
+		}
+		$(".name", title).html(nameText);
 		// Some stats only shown at Equipment Library, omitted here.
 		var planeStats = ["or", "kk"];
 		$.each([
