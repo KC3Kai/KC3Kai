@@ -78,7 +78,7 @@
 				var questName = v.name.val;
 				var questDesc = v.desc.val;
 				var questMemo = v.memo ? v.memo.val : false;
-				var questTrackTypes = v.trackTypes ? v.trackTypes : false;
+				var questTrackingDesc = v.trackingDesc ? v.trackingDesc : false;
 
 				var questNameL = v.name.tag;
 				var questDescL = v.desc.tag;
@@ -107,11 +107,11 @@
 							"translation_done" : "translation_missing");
 					}
 				}
-				if(questTrackTypes){
-					for(var index = 0; index < questTrackTypes.length; index++){
-						var questTrack = $("<div/>").addClass("tq-trackTypes");
-						questTrack.text("[" + index + "] " + questTrackTypes[index].val).addClass(
-							language === questTrackTypes[index].tag ?
+				if(questTrackingDesc){
+					for(var index = 0; index < questTrackingDesc.length; index++){
+						var questTrack = $("<div/>").addClass("tq-trackingDesc");
+						questTrack.text("[" + index + "] " + questTrackingDesc[index].val).addClass(
+							language === questTrackingDesc[index].tag ?
 								"translation_done" : "translation_missing");
 						questTrack.appendTo(row);
 					}

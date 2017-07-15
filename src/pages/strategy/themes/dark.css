@@ -1742,7 +1742,7 @@ button, input, select, textarea {
 .tab_translations .tq-item.translation_missing .tq-from,
 .tab_translations .tq-item .tq-name.translation_missing,
 .tab_translations .tq-item .tq-desc.translation_missing,
-.tab_translations .tq-item .tq-trackTypes.translation_missing {
+.tab_translations .tq-item .tq-trackingDesc.translation_missing {
 	color: firebrick;
 }
 .tab_translations .page_content select {
