@@ -181,7 +181,8 @@
 				// as viewport height will be larger than game player, but computed body height is 0
 				// For wide window, the height may not fit viewport height,
 				// especially when it's smaller than game player, and scrollbar appears
-				var visibleHeight = $(window).height() - self.gameZoomScale * $("#area-game").offset().top;
+				var visibleHeight = $(window).height() - self.gameZoomScale
+					* (($("#area-game").offset() || {}).top || 0);
 				$("body").css("min-height", visibleHeight);
 				// Prevent scrollbar shown if computed height not accurate but larger than game player
 				$("body").css("overflow-y", !$("#alert").is(":visible")

@@ -1,4 +1,44 @@
 {
+	"805": {
+		"api_id": 805,
+		"api_name": "梅雨漣",
+		"api_yomi": "さざなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"806": {
+		"api_id": 806,
+		"api_name": "梅雨扶桑",
+		"api_yomi": "ふそう",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"807": {
+		"api_id": 807,
+		"api_name": "梅雨神威",
+		"api_yomi": "かもい",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"808": {
+		"api_id": 808,
+		"api_name": "梅雨神威改",
+		"api_yomi": "かもい",
+		"api_stype": 16,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"809": {
+		"api_id": 809,
+		"api_name": "梅雨神威改母",
+		"api_yomi": "かもい",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
 	"810": {
 		"api_id": 810,
 		"api_name": "買い物榛名",

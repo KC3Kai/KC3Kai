@@ -514,6 +514,27 @@ Contains summary information about a fleet and its 6 ships
 		return totalSteel;
 	};
 
+	KC3Fleet.prototype.calcBattleCost = function() {
+		const totalCost = {
+			fuel: 0,
+			dayOnlyAmmo: 0,
+			nightBattleAmmo: 0,
+			airRaidFuel: 0,
+			airRaidAmmo: 0
+		};
+		for(let i = 0; i < this.countShips(); i++) {
+			const ship = this.ship(i);
+			const maxFuel = ship.master().api_fuel_max,
+			      maxAmmo = ship.master().api_bull_max;
+			totalCost.fuel += Math.ceil(maxFuel * 0.2);
+			totalCost.dayOnlyAmmo += Math.ceil(maxAmmo * 0.2);
+			totalCost.nightBattleAmmo += Math.ceil(maxAmmo * 0.3);
+			totalCost.airRaidFuel += Math.ceil(maxAmmo * 0.08);
+			totalCost.airRaidAmmo += Math.ceil(maxAmmo * 0.04);
+		}
+		return totalCost;
+	};
+
 	/*--------------------------------------------------------*/
 	/*-----------------[ STATUS INDICATORS ]------------------*/
 	/*--------------------------------------------------------*/
@@ -822,6 +843,9 @@ Contains summary information about a fleet and its 6 ships
 						} else if ([9, 10].indexOf(itemType) > -1) {
 							// Reconnaissance Plane/Seaplane bonus
 							equipment_bonus *= 1.2;
+						} else if (11 === itemType) {
+							// Seaplane bomber bonus
+							equipment_bonus *= 1.15;
 						} else {
 							// all other equipment with no bonus
 							equipment_bonus = 0;

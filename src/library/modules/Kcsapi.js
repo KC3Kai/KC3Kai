@@ -1519,14 +1519,25 @@ Previously known as "Reactor"
 					KC3QuestManager.get(403).increment(); // D3: Daily Expeditions 2
 					KC3QuestManager.get(404).increment(); // D4: Weekly Expeditions
 					
-					// If expedition 37 or 38
-					if(expedNum == 37 || expedNum == 38){
+					switch(Number(expedNum)){
+					case 3:
+						KC3QuestManager.get(426).increment(0); // D24: Quarterly, index 0
+						break;
+					case 4:
+						KC3QuestManager.get(426).increment(1); // D24: Quarterly, index 1
+						break;
+					case 5:
+						KC3QuestManager.get(424).increment();  // D22: Monthly Expeditions
+						KC3QuestManager.get(426).increment(2); // D24: Quarterly, index 2
+						break;
+					case 10:
+						KC3QuestManager.get(426).increment(3); // D24: Quarterly, index 3
+						break;
+					case 37:
+					case 38:
 						KC3QuestManager.get(410).increment(); // D9: Weekly Expedition 2
 						KC3QuestManager.get(411).increment(); // D11: Weekly Expedition 3
-					}
-					// If expedition 5
-					if(expedNum == 5){
-						KC3QuestManager.get(424).increment(); // D22: Monthly Expeditions
+						break;
 					}
 					KC3Network.trigger("Quests");
 			}
@@ -2068,7 +2079,8 @@ Previously known as "Reactor"
 					[265,0,[1,5], true], // Bm5: Deploy a fleet to [W1-5] and A-rank+ the boss node 10 times
 					[854,0,[2,4], true, true], // Bq2: 1st requirement: [W2-4] A-rank+ the boss node
 					[854,1,[6,1], true, true], // Bq2: 2nd requirement: [W6-1] A-rank+ the boss node
-					[854,2,[6,3], true, true]  // Bq2: 3rd requirement: [W6-3] A-rank+ the boss node
+					[854,2,[6,3], true, true], // Bq2: 3rd requirement: [W6-3] A-rank+ the boss node
+					[862,0,[6,3], true, true]  // Bq4: Sortie to [W6-3] A-rank+ the boss node 2 times
 				],
 				[ /* S RANK */
 					[214,3,false,false], // Bw1: 4th requirement: 6 S ranks (index:3)
@@ -2099,16 +2111,6 @@ Previously known as "Reactor"
 				KC3QuestManager.get(311).increment(); // C8: Elite Fleet Practice
 			}
 		}
-		
-		// hunt quests - requires "battle prediction" to know which enemies sunk
-		// KC3QuestManager.get(211).increment(); // Bd4: Sink 3 abyssal CV(L)
-		// KC3QuestManager.get(218).increment(); // Bd5: Sink 3 abyssal transport ships
-		// KC3QuestManager.get(212).increment(); // Bd6: Sink 5 abyssal transport ships
-		// KC3QuestManager.get(230).increment(); // Bd8: Sink 6 abyssal submarines
-		// KC3QuestManager.get(220).increment(); // Bw2: Sink 20 abyssal CV(L)
-		// KC3QuestManager.get(213).increment(); // Bw3: Sink 20 transport ships
-		// KC3QuestManager.get(221).increment(); // Bw4: Sink 50 transport ships
-		// KC3QuestManager.get(228).increment(); // Bw5: Sink 15 submarines
 	}
 	
 })();
