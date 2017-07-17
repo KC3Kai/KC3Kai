@@ -19,8 +19,8 @@
 	width:700px;
 	margin:0px 0px 10px 0px;
 	background:#f0f5ff;
-	padding:5px 10px;
-	border-bottom:1px solid #369;
+/*	padding:5px 10px; */
+	border-bottom:0px solid #369;
 }
 .tab_mstship .filters .stype {
 	padding:0px 8px;
@@ -337,17 +337,23 @@
 }
 /* Remodel */
 .tab_mstship .shipInfo .more .remodel_name {
-	width:125px;
+	width:145px;
 	height:20px;
 	float:left;
 	margin:0px 5px 0px 0px;
 	overflow:hidden;
+	white-space:nowrap;
 	font-weight:bold;
 	font-size:14px;
 	color:#039;
 }
+.tab_mstship .shipInfo .more .remodel_name:hover {
+	overflow:visible;
+	width:auto;
+	min-width:145px;
+}
 .tab_mstship .shipInfo .more .remodel_level {
-	width:70px;
+	width:40px;
 	height:20px;
 	float:left;
 	margin:0px 5px 0px 0px;

@@ -66,15 +66,16 @@
 				
 				if(typeof self.instances[ThisGear.masterId] == "undefined"){
 					self.instances[ThisGear.masterId] = {
-						total:0,star0_5:0,star6_9:0,starmax:0,free:0
+						total:0, star0:0, star0_5:0, star6_9:0, starmax:0, free:0
 					};
 				}
 				self.instances[ThisGear.masterId].id = ThisGear.masterId;
 				self.instances[ThisGear.masterId].total += 1;
+				self.instances[ThisGear.masterId].star0 += (!ThisGear.stars) & 1;
 				self.instances[ThisGear.masterId].star0_5 += (!ThisGear.stars || ThisGear.stars < 6) & 1;
 				self.instances[ThisGear.masterId].star6_9 += (ThisGear.stars >= 6 && ThisGear.stars < 10) & 1;
 				self.instances[ThisGear.masterId].starmax += (ThisGear.stars == 10) & 1;
-				self.instances[ThisGear.masterId].free += 1 & ( ThisGear.lock === 0 
+				self.instances[ThisGear.masterId].free += 1 & ( ThisGear.lock === 0 && !ThisGear.stars
 					&& self.heldGearRosterIds.indexOf(ThisGear.itemId) === -1 );
 			});
 		},
@@ -136,6 +137,16 @@
 			var toAmountStr = function(v){
 				return typeof v === "undefined" || v < 0  ? "?" : String(v);
 			};
+			var destructConsumeResource = function(res4, res5){
+				var [itemName, itemCount] = Array.isArray(res4) ? res4[0] : [res4, res5];
+				itemName = typeof itemName === "string" || itemName > 0 ? itemName : null;
+				return [itemName, itemCount];
+			};
+			var toSlotOrUseItem = function(v){
+				return typeof v === "string" && v.startsWith("consumable")
+					? [Number(v.match(/_(\d+)$/)[1]), KC3Meta.useItemName(v.match(/_(\d+)$/)[1])]
+					: KC3Master.slotitem(v);
+			};
 			var showDevScrew = function(stars, devmats, devmatsGS, screws, screwsGS){
 				$(".eq_res_value.devmats.plus{0} .val".format(stars), ResBox)
 					.text( toAmountStr(devmats) );
@@ -146,33 +157,66 @@
 				$(".eq_res_value.screws.plus{0} .cnt".format(stars), ResBox)
 					.text( "({0})".format(toAmountStr(screwsGS)) );
 			};
-			var showConsumedItem = function(stars, consumedItem, amount){
+			var showConsumedItem = function(stars, consumedItem, amount, container = ResBox){
 				if(!consumedItem){
-					$(".eq_res_icon.consumed_icon.plus{0}".format(stars), ResBox).hide();
-					$(".eq_res_value.consumed_name.plus{0}".format(stars), ResBox).hide();
+					$(".eq_res_icon.consumed_icon.plus{0}".format(stars), container).hide();
+					$(".eq_res_value.consumed_name.plus{0}".format(stars), container).hide();
 					return;
 				}
-				$(".eq_res_icon.consumed_icon.plus{0} img".format(stars), ResBox)
+				// Array represents the id and name of useitem (not slotitem)
+				if(Array.isArray(consumedItem)){
+					$(".eq_res_icon.consumed_icon.plus{0} img".format(stars), container).hide();
+					$(".eq_res_value.consumed_name.plus{0} .val".format(stars), container)
+						.text( consumedItem[1] );
+					$(".eq_res_value.consumed_name.plus{0} .val".format(stars), container)
+						.attr("title", "[{0}] {1}".format(consumedItem[0], consumedItem[1]) );
+					$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container)
+						.text( "x{0}".format(toAmountStr(amount)) );
+					return;
+				}
+				$(".eq_res_icon.consumed_icon.plus{0} img".format(stars), container)
 					.attr("src", "../../assets/img/items/"+consumedItem.api_type[3]+".png");
-				$(".eq_res_icon.consumed_icon.plus{0}".format(stars), ResBox)
+				$(".eq_res_icon.consumed_icon.plus{0}".format(stars), container)
 					.attr("alt", consumedItem.api_id);
-				$(".eq_res_icon.consumed_icon.plus{0}".format(stars), ResBox)
+				$(".eq_res_icon.consumed_icon.plus{0}".format(stars), container)
 					.click(gearClickFunc);
-				$(".eq_res_value.consumed_name.plus{0} .val".format(stars), ResBox)
+				$(".eq_res_value.consumed_name.plus{0} .val".format(stars), container)
 					.text( KC3Meta.gearName(consumedItem.api_name) );
-				$(".eq_res_value.consumed_name.plus{0} .val".format(stars), ResBox)
+				$(".eq_res_value.consumed_name.plus{0} .val".format(stars), container)
 					.attr("title", "[{0}] {1}".format(consumedItem.api_id, KC3Meta.gearName(consumedItem.api_name)) );
-				$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), ResBox)
+				$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container)
 					.text( "x{0}".format(toAmountStr(amount)) );
+			};
+			var showConsumedItemList = function(stars, resArrElm4, resArrElm5, container = ResBox){
+				var consumedResArr = Array.isArray(resArrElm4) ? resArrElm4 : [[resArrElm4, resArrElm5]];
+				consumedResArr.forEach((res, i) => {
+					let [itemName, itemCount] = destructConsumeResource(res[0], res[1]);
+					if(i === 0){
+						if(itemName !== null){
+							let consumedItem = toSlotOrUseItem(itemName);
+							showConsumedItem(stars, consumedItem, itemCount, container);
+							checkConsumedItem(stars, consumedItem, itemCount, container);
+						} else {
+							showConsumedItem(stars, null, container);
+						}
+					} else if(itemName !== null){
+						let extraBox = $(".extra_consumed.plus{0}".format(stars), container)
+							.clone().appendTo($(".eq_res_line.plus{0}".format(stars), container));
+						let consumedItem = toSlotOrUseItem(itemName);
+						showConsumedItem(stars, consumedItem, itemCount, extraBox);
+						checkConsumedItem(stars, consumedItem, itemCount, extraBox);
+						extraBox.show();
+					}
+				});
 			};
 			var checkDevScrew = function(stars, itemId, devmats, screws){
 				if(!hasGear || !hasShip) return;
 				var redLine = false;
-				if(PlayerManager.consumables.devmats < devmats){
+				if((PlayerManager.consumables.devmats || 0) < devmats){
 					redLine = true;
 					$(".eq_res_value.devmats.plus{0} .val".format(stars), ResBox).addClass("insufficient");
 				}
-				if(PlayerManager.consumables.screws < screws){
+				if((PlayerManager.consumables.screws || 0) < screws){
 					redLine = true;
 					$(".eq_res_value.screws.plus{0} .val".format(stars), ResBox).addClass("insufficient");
 				}
@@ -184,15 +228,33 @@
 					$(".eq_res_line.plus{0}".format(stars), ResBox).addClass("insufficient");
 				}
 			};
-			var checkConsumedItem = function(stars, consumedItem, amount){
+			var checkConsumedItem = function(stars, consumedItem, amount, container = ResBox){
 				if(!hasGear || !hasShip) return;
+				$(".eq_res_line.plus{0}".format(stars), container).removeClass("insufficient locked");
+				$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container).removeClass("insufficient locked");
+				// Check useitem instead of slotitem
+				if(Array.isArray(consumedItem)){
+					let isNotEnoughUseItem = function(id, amount){
+						switch(id){
+						case 70: return (PlayerManager.consumables.skilledCrew || 0) < amount;
+						case 71: return (PlayerManager.consumables.nEngine || 0) < amount;
+						case 75: return (PlayerManager.consumables.newGunMountMaterial || 0) < amount;
+						}
+						return false;
+					};
+					if(isNotEnoughUseItem(consumedItem[0], amount)){
+						$(".eq_res_line.plus{0}".format(stars), container).addClass("insufficient");
+						$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container).addClass("insufficient");
+					}
+					return;
+				}
 				if(!self.instances[consumedItem.api_id]
-					|| self.instances[consumedItem.api_id].total < amount){
-					$(".eq_res_line.plus{0}".format(stars), ResBox).addClass("insufficient");
-					$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), ResBox).addClass("insufficient");
+					|| self.instances[consumedItem.api_id].star0 < amount){
+					$(".eq_res_line.plus{0}".format(stars), container).addClass("insufficient");
+					$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container).addClass("insufficient");
 				} else if(!!self.instances[consumedItem.api_id]
 					&& self.instances[consumedItem.api_id].free < amount){
-					$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), ResBox).addClass("locked");
+					$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container).addClass("locked");
 				}
 			};
 			
@@ -293,39 +355,30 @@
 						
 						showDevScrew("0_5", resArr[1][0], resArr[1][1], resArr[1][2], resArr[1][3]);
 						checkDevScrew("0_5", itemId, resArr[1][1], resArr[1][3]);
-						if(resArr[1][4] > 0){
-							consumedItem = KC3Master.slotitem(resArr[1][4]);
-							showConsumedItem("0_5", consumedItem, resArr[1][5]);
-							checkConsumedItem("0_5", consumedItem, resArr[1][5]);
-						} else {
-							showConsumedItem("0_5", null);
-						}
+						showConsumedItemList("0_5", resArr[1][4], resArr[1][5]);
 						
 						showDevScrew("6_9", resArr[2][0], resArr[2][1], resArr[2][2], resArr[2][3]);
 						checkDevScrew("6_9", itemId, resArr[2][1], resArr[2][3]);
-						if(resArr[2][4] > 0){
-							consumedItem = KC3Master.slotitem(resArr[2][4]);
-							showConsumedItem("6_9", consumedItem, resArr[2][5]);
-							checkConsumedItem("6_9", consumedItem, resArr[2][5]);
-						} else {
-							showConsumedItem("6_9", null);
-						}
+						showConsumedItemList("6_9", resArr[2][4], resArr[2][5]);
 						if(imp.upgrade && imp.upgrade[0] > 0){
 							showDevScrew("max", resArr[3][0], resArr[3][1], resArr[3][2], resArr[3][3]);
 							checkDevScrew("max", itemId, resArr[3][1], resArr[3][3]);
-							if(resArr[3][4] > 0){
-								consumedItem = KC3Master.slotitem(resArr[3][4]);
-								showConsumedItem("max", consumedItem, resArr[3][5]);
-								checkConsumedItem("max", consumedItem, resArr[3][5]);
-							} else {
-								showConsumedItem("max", null);
-							}
+							showConsumedItemList("max", resArr[3][4], resArr[3][5]);
 							upgradedItem = KC3Master.slotitem(imp.upgrade[0]);
 							$(".eq_next .eq_res_icon img", ResBox).attr("src", "../../assets/img/items/"+upgradedItem.api_type[3]+".png");
 							$(".eq_next .eq_res_icon", ResBox).attr("alt", upgradedItem.api_id);
 							$(".eq_next .eq_res_icon", ResBox).click(gearClickFunc);
-							$(".eq_next .eq_res_name", ResBox).text( KC3Meta.gearName(upgradedItem.api_name) );
-							$(".eq_next .eq_res_name", ResBox).attr("title", "[{0}] {1}".format(upgradedItem.api_id, KC3Meta.gearName(upgradedItem.api_name)) );
+							$(".eq_next .eq_res_name .name_val", ResBox).text( KC3Meta.gearName(upgradedItem.api_name) );
+							if(imp.upgrade[1]){
+								$(".eq_next .eq_res_name .stars_val", ResBox).text(
+									imp.upgrade[1] >= 10 ? "max" : "+"+imp.upgrade[1]
+								);
+							} else {
+								$(".eq_next .eq_res_name .stars", ResBox).hide();
+							}
+							$(".eq_next .eq_res_name", ResBox).attr("title",
+								"[{0}] {1}".format(upgradedItem.api_id, KC3Meta.gearName(upgradedItem.api_name))
+							);
 						} else {
 							$(".eq_res_line.plusmax", ResBox).hide();
 							$(".eq_next", ResBox).hide();

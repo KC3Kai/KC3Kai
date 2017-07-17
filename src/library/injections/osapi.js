@@ -58,7 +58,11 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 				document.getElementById("spacing_top").style = "height:0px;display:none;";
 				// Prevent Tab key scrolling
 				$(document).on("keydown", function(e){
-					if(event.which === 9) { e.stopPropagation(); e.preventDefault(); }
+					if(e.which === 9) {
+						$(document).scrollTop(0);
+						e.stopPropagation();
+						e.preventDefault();
+					}
 				});
 			}
 		}

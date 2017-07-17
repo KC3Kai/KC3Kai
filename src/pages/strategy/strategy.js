@@ -101,6 +101,16 @@
 			$(this).empty().hide();
 		});
 		
+		// Add listener to react on config key changed
+		/* Strategy Room not needs it yet, as it can be reloaded at any time
+		window.addEventListener("storage", function({key, timeStamp, url}){
+			if(key === ConfigManager.keyName()) {
+				ConfigManager.load();
+				console.debug("Reload ConfigManager caused by", (url || "").match(/\/\/[^\/]+\/([^\?]+)/)[1]);
+			}
+		});
+		*/
+		
 		// Add listener to react on URL hash changed
 		window.addEventListener('popstate', KC3StrategyTabs.onpopstate);
 		
@@ -162,7 +172,7 @@
 			thisTab.apply(reloadData);
 			window.scrollTo(0,0);
 		}else{
-			console.info("Clicked ", KC3StrategyTabs.loading, "menu with no bound actions");
+			console.warn("Clicked ", KC3StrategyTabs.loading, "menu with no bound actions");
 			KC3StrategyTabs.loading = false;
 		}
 	};

@@ -141,14 +141,18 @@
 
 			$("button#control_export_dbuilder").on("click", function() {
 				var converted = self.fleetsObjToDeckBuilder( self.currentFleetsObj );
-				console.log( JSON.stringify( converted ) );
+				console.log( "JSON to be exported", JSON.stringify( converted ) );
 				window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck="+
 							encodeURI( JSON.stringify( converted )));
 
 			});
 
 			this.refreshSavedFleets();
-			this.executeView("current");
+			if(!!KC3StrategyTabs.pageParams[1]){
+				this.executeView(KC3StrategyTabs.pageParams[1], KC3StrategyTabs.pageParams[2] || false);
+			}else{
+				this.executeView("current");
+			}
 		},
 
 		ifFleetsObjExists: function(name) {
@@ -203,16 +207,28 @@
 			});
 		},
 
-		executeView: function(viewType) {
+		executeView: function(viewType, viewName) {
 			$(".fleet_error_msg").text("").hide();
 			if (viewType === "current") {
 				this.showCurrentFleets();
 			} else if (viewType === "saved") {
+				if (viewName !== undefined) {
+					if(!$("#saved").prop("checked")) {
+						$("#saved").trigger("click");
+					}
+					$("#saved_fleet_sel").prop("selectedIndex", viewName || 0);
+				}
 				var name = $("#saved_fleet_sel option:selected").val();
 				if (name) {
 					this.showSavedFleets(name);
 				}
 			} else if (viewType === "history") {
+				if (viewName !== undefined) {
+					if (!$("#history").prop("checked")) {
+						$("#history").trigger("click");
+					}
+					$("input#hist_query").val(viewName);
+				}
 				var q = $("input#hist_query").val();
 				var sortieId = parseInt(q,10);
 				if (!sortieId) {
@@ -221,7 +237,8 @@
 				}
 				this.showFleetFromSortieId(sortieId);
 			} else {
-				console.error("unknown view type: " + viewType);
+				console.warn("Unknown view type:", viewType);
+				this.showCurrentFleets();
 			}
 		},
 
@@ -395,6 +412,7 @@
 				$(".ship_tooltip .ship_rosterId span", shipBox).text(kcShip.rosterId);
 				$(".ship_tooltip .ship_stype", shipBox).text(kcShip.stype());
 				$(".ship_tooltip .ship_level span.value", shipBox).text(kcShip.level);
+				//$(".ship_tooltip .ship_level span.value", shipBox).addClass(kcShip.levelClass());
 				$(".ship_tooltip .ship_hp span.hp", shipBox).text(kcShip.hp[0]);
 				$(".ship_tooltip .ship_hp span.mhp", shipBox).text(kcShip.hp[1]);
 				$(".ship_tooltip .stat_hp", shipBox).text(kcShip.hp[1]);
@@ -497,7 +515,7 @@
 			});
 			$(".gear_name .name", gearBox).text(kcGear.name());
 			if(kcGear.stars>0){
-				$(".gear_name .stars", gearBox).text( " +{0}".format(kcGear.stars) );
+				$(".gear_name .stars", gearBox).text( " \u2605{0}".format(kcGear.stars) );
 			}
 			if(kcGear.ace>0){
 				$(".gear_name .ace", gearBox).text( " \u00bb{0}".format(kcGear.ace) );
@@ -506,7 +524,7 @@
 				$(".gear_name .slot", gearBox).text( " x{0}".format(capacity) );
 			}
 			$(".gear_name", gearBox).attr("title",
-				KC3Gear.buildGearTooltip(kcGear, $(".gear_name", gearBox).text())
+				KC3Gear.buildGearTooltip(kcGear, true, capacity)
 			).lazyInitTooltip();
 		},
 

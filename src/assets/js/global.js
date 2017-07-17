@@ -9,7 +9,8 @@ if (typeof NO_GA == "undefined") {
 	(function() {
 		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
 		ga.src = 'https://ssl.google-analytics.com/ga.js';
-		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		var s = document.getElementsByTagName('script')[0];
+		if(s && s.parentNode) s.parentNode.insertBefore(ga, s);
 	})();
 }
 
@@ -139,11 +140,11 @@ http://stackoverflow.com/a/10088053/483704
 -------------------------------*/
 Date.getJstDate = function() {
 	// create Date object for current location
-	d = new Date();
+	var d = new Date();
 	// convert to msec
 	// add local time zone offset
 	// get UTC time in msec
-	utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+	var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
 	// create new Date object for different city
 	// using supplied offset
 	return new Date(utc + (3600000*9));
@@ -493,6 +494,20 @@ Array.numbers = function(start, end){
 	var i = m - n + 1, a = [];
 	while(i-- > 0) a[i] = n + i;
 	return a;
+};
+
+/*******************************\
+|*** Object                     |
+\*******************************/
+/** Sum values in Objects with same properties */
+Object.sumValuesByKey = function(){
+	return Array.from(arguments).reduce(function(acc, o){
+		for(var k in o){
+			if(o.hasOwnProperty(k))
+				acc[k] = Number(acc[k] || 0) + Number(o[k]);
+		}
+		return acc;
+	}, {});
 };
 
 /*******************************\

@@ -57,7 +57,7 @@ known IDs see QuestManager
 	};
 
 	/* OUTPUT SHORT
-	Return tracking text to be shown on Panel
+	Return tracking text to be shown on Panel and Strategy Room
 	------------------------------------------*/
 	KC3Quest.prototype.outputShort = function(showAll){
 		if (typeof showAll == "undefined") {
@@ -69,7 +69,7 @@ known IDs see QuestManager
 			var textToShow = "";
 			for(ctr in this.tracking){
 				textToShow = this.tracking[ctr][0]+"/"+this.tracking[ctr][1];
-				trackingText.push(textToShow);
+				trackingText.push((this.meta().trackingDesc ? this.meta().trackingDesc[ctr] : "{0}").format(textToShow));
 				if (!showAll && (this.tracking[ctr][0] < this.tracking[ctr][1])) {
 					return textToShow;
 				}
@@ -84,7 +84,7 @@ known IDs see QuestManager
 	};
 
 	/* OUTPUT HTML
-	Return tracking text to be shown on Strategy Room
+	Return tracking text to be shown on in-game quest overlay
 	------------------------------------------*/
 	KC3Quest.prototype.outputHtml = function(){
 		if(this.tracking){
@@ -168,7 +168,8 @@ known IDs see QuestManager
 					code : questMeta.code,
 					name : questMeta.name,
 					desc : questMeta.desc,
-					memo : questMeta.memo
+					memo : questMeta.memo,
+					trackingDesc : questMeta.trackingDesc
 				}; };
 				// If tracking is empty and Meta is defined
 				if(this.tracking === false){
@@ -190,6 +191,7 @@ known IDs see QuestManager
 				|| oldMeta.name !== questMeta.name
 				|| oldMeta.desc !== questMeta.desc
 				|| oldMeta.memo !== questMeta.memo
+				|| oldMeta.trackingDesc !== questMeta.trackingDesc
 				)){
 				// Only update meta text, keep tracking untouched
 				this.meta = function(){ return {
@@ -197,7 +199,8 @@ known IDs see QuestManager
 					code : questMeta.code,
 					name : questMeta.name,
 					desc : questMeta.desc,
-					memo : questMeta.memo
+					memo : questMeta.memo,
+					trackingDesc : questMeta.trackingDesc
 				}; };
 			}
 		}
@@ -208,7 +211,7 @@ known IDs see QuestManager
 			|| (this.id == 211)		// Bd4, but type == 5
 			|| (this.id == 212)		// Bd6, but type == 5
 			// Other known cases
-			|| KC3QuestManager._dailyIds.indexOf(this.id) > -1;
+			|| KC3QuestManager.getRepeatableIds('daily').indexOf(this.id) > -1;
 	};
 
 	KC3Quest.prototype.isWeekly = function(){
@@ -220,7 +223,7 @@ known IDs see QuestManager
 	};
 
 	KC3Quest.prototype.isQuarterly = function(){
-		return KC3QuestManager._quarterlyIds.indexOf(this.id) > -1;
+		return KC3QuestManager.getRepeatableIds('quarterly').indexOf(this.id) > -1;
 	};
 
 	KC3Quest.prototype.isUnselected = function(){
@@ -338,13 +341,13 @@ known IDs see QuestManager
 
 	KC3Quest.prototype.toggleCompletion = function(forceCompleted){
 		if(this.isSelected() || !!forceCompleted){
-			console.info("Force to complete quest:", this.id);
+			console.log("Force to complete quest:", this.id);
 			this.status = 3;
 			// Do not set tracking counter to max,
 			// as quest will be always completed when re-activated
 			KC3QuestManager.save();
 		} else if(this.isCompleted()){
-			console.info("Re-select quest again:", this.id);
+			console.log("Re-select quest again:", this.id);
 			this.status = 2;
 			// Reset counter, but do not touch multi-counter (Bw1 for now)
 			if(Array.isArray(this.tracking) && this.tracking.length === 1){

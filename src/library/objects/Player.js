@@ -19,6 +19,7 @@ Instantiatable class to represent one player
 			this.rankPtLastCount = 0;
 			this.rankPtCutoff = 0;
 			this.rankPtLastCheck = 0;
+			this.rankPtLastTimestamp = 0;
 			this.lastMaterial = null;
 			this.lastPortTime = null;
 			this.lastSortie   = null;
@@ -37,7 +38,8 @@ Instantiatable class to represent one player
 		this.desc = data.desc;
 		this.rank = KC3Meta.rank( data.rank );
 		
-		this.updateLevel(data.level,data.exp);
+		this.updateLevel(data.level, data.exp);
+		this.checkRankPoints();
 	};
 	
 	KC3Player.prototype.updateLevel = function( level, exp ){
@@ -54,8 +56,6 @@ Instantiatable class to represent one player
 			exp_percent = 1.0;
 		}
 		this.exp = [ exp_percent, exp_next, exp_current, ExpCurrLevel + exp_current ];
-		
-		this.checkRankPoints();
 	};
 	
 	KC3Player.prototype.checkRankPoints = function(){
@@ -94,6 +94,7 @@ Instantiatable class to represent one player
 	
 	KC3Player.prototype.rankCutOff = function(){
 		this.rankPtLastCount = this.getRankPoints();
+		this.rankPtLastTimestamp = Date.now();
 		this.rankPtCutoff = this.exp[3];
 	};
 	
@@ -115,7 +116,7 @@ Instantiatable class to represent one player
 			}
 		}*/
 		
-		return Math.floor((this.exp[3] - this.rankPtCutoff)/1428) + ExOpBonus;
+		return (this.exp[3] - this.rankPtCutoff) * 7 / 10000 + ExOpBonus;
 	};
 	
 	KC3Player.prototype.getRegenCap = function(){
@@ -123,10 +124,13 @@ Instantiatable class to represent one player
 	};
 
 	KC3Player.prototype.logout = function(){
+		// Clear all cached / tracked game data related to specified player member,
+		// KC3 user settings, Strategy Room options untouched, may cause minor conflict.
 		localStorage.removeItem("player");
 		localStorage.removeItem("fleets");
 		localStorage.removeItem("ships");
 		localStorage.removeItem("gears");
+		// History of map clear and event boss hp info will be lost, unrecoverable
 		localStorage.removeItem("maps");
 		localStorage.removeItem("statistics");
 		localStorage.removeItem("quests");
@@ -134,6 +138,14 @@ Instantiatable class to represent one player
 		localStorage.removeItem("lastResource");
 		localStorage.removeItem("lastUseitem");
 		localStorage.removeItem("lastExperience");
+		localStorage.removeItem("akashiRepairStartTime");
+		localStorage.removeItem("baseConvertingSlots");
+		localStorage.removeItem("bases");
+		localStorage.removeItem("consumables");
+		localStorage.removeItem("dockingShips");
+		localStorage.removeItem("longestIdleTime");
+		localStorage.removeItem("pictureBook");
+		localStorage.removeItem("playerNewsFeed");
 		
 		KC3ShipManager.clear();
 		KC3GearManager.clear();
@@ -156,6 +168,7 @@ Instantiatable class to represent one player
 			this.exp = playerInfo.exp;
 			this.server = playerInfo.server;
 			this.rankPtLastCount = (playerInfo.rankPtLastCount || 0);
+			this.rankPtLastTimestamp = (playerInfo.rankPtLastTimestamp || 0);
 			this.rankPtCutoff = (playerInfo.rankPtCutoff || 0);
 			this.rankPtLastCheck = (playerInfo.rankPtLastCheck || 0);
 			this.lastMaterial = playerInfo.lastMaterial || null;

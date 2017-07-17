@@ -186,6 +186,13 @@ KC3改 Ship Object
 	KC3Ship.prototype.isTaiha   = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.25) && !this.isRepaired(); };
 	KC3Ship.prototype.speedName = function(){ return KC3Meta.shipSpeed(this.speed); };
 	KC3Ship.prototype.rangeName = function(){ return KC3Meta.shipRange(this.range); };
+	KC3Ship.prototype.levelClass = function(){
+		return this.level === 155 ? "married max" :
+			this.level >= 100 ? "married" :
+			this.level >= 80  ? "high" :
+			this.level >= 50  ? "medium" :
+			"";
+	};
 	KC3Ship.prototype.getDefer = function(){
 		// returns a new defer if possible
 		return deferList[this.rosterId] || [];
@@ -199,7 +206,7 @@ KC3改 Ship Object
 		if(ca && cd && cd.state() == "pending")
 			return ca;
 
-		//console.log("replacing",this.rosterId,"cause",!cd ? typeof cd : cd.state());
+		//console.debug("replacing",this.rosterId,"cause",!cd ? typeof cd : cd.state());
 		ca = deferList[this.rosterId] = Array.apply(null,{length:2}).map(function(){return $.Deferred();});
 		cd = $.when.apply(null,ca);
 		ca.unshift(cd);
@@ -251,12 +258,14 @@ KC3改 Ship Object
 	};
 
 	KC3Ship.prototype.onFleet = function(){
-		var shipList = PlayerManager.fleets.map(function(x){return x.ships;}).reduce(function(x,y){return x.concat(y);});
-		return Math.qckInt("ceil",(shipList.indexOf(this.rosterId) + 1)/6,0);
+		var shipList = PlayerManager.fleets
+			.map(fleet => fleet.ships)
+			.reduce((acc, ships) => acc.concat(ships), []);
+		return Math.qckInt("ceil", (shipList.indexOf(this.rosterId) + 1) / 6, 0);
 	};
 
 	KC3Ship.prototype.isRepaired = function(){
-		return PlayerManager.repairShips.indexOf(this.rosterId)>=0;
+		return PlayerManager.repairShips.indexOf(this.rosterId) >= 0;
 	};
 
 	KC3Ship.prototype.isAway = function(){
@@ -283,14 +292,16 @@ KC3改 Ship Object
 
 	/**
 	 * Return max HP of a ship. Static method for library.
-	 * Especially after marriage, api_taik[1] is not used in game.
+	 * Especially after marriage, api_taik[1] is hard to reach in game.
 	 * @return false if ship ID belongs to aybssal or nonexistence
 	 * @see http://wikiwiki.jp/kancolle/?%A5%B1%A5%C3%A5%B3%A5%F3%A5%AB%A5%C3%A5%B3%A5%AB%A5%EA
+	 * @see https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E3%82%B1%E3%83%83%E3%82%B3%E3%83%B3%E3%82%AB%E3%83%83%E3%82%B3%E3%82%AB%E3%83%AA%E5%BE%8C%E3%81%AE%E8%80%90%E4%B9%85%E5%80%A4
 	 */
 	KC3Ship.getMaxHp = function(masterId, currentLevel){
-		var masterHp = KC3Master.isNotRegularShip(masterId) ? undefined :
-			(KC3Master.ship(masterId) || {"api_taik":[]}).api_taik[0];
-		return ((currentLevel || 155) < 100 ? masterHp :
+		var masterHpArr = KC3Master.isNotRegularShip(masterId) ? [] :
+			(KC3Master.ship(masterId) || {"api_taik":[]}).api_taik;
+		var masterHp = masterHpArr[0], maxLimitHp = masterHpArr[1];
+		var expected = ((currentLevel || 155) < 100 ? masterHp :
 			masterHp >  90 ? masterHp + 9 :
 			masterHp >= 70 ? masterHp + 8 :
 			masterHp >= 50 ? masterHp + 7 :
@@ -298,6 +309,7 @@ KC3改 Ship Object
 			masterHp >= 30 ? masterHp + 5 :
 			masterHp >= 8  ? masterHp + 4 :
 			masterHp + 3) || false;
+		return maxLimitHp && expected > maxLimitHp ? maxLimitHp : expected;
 	};
 	KC3Ship.prototype.maxHp = function(){
 		return KC3Ship.getMaxHp(this.masterId, this.level);
@@ -310,7 +322,7 @@ KC3改 Ship Object
 	KC3Ship.getCarrySlots = function(masterId){
 		var maxeq = KC3Master.isNotRegularShip(masterId) ? undefined :
 			(KC3Master.ship(masterId) || {}).api_maxeq;
-		return Array.isArray(maxeq) ? maxeq.reduce(function(acc, v){return acc + v;}, 0) : -1;
+		return Array.isArray(maxeq) ? maxeq.reduce((acc, v) => acc + v, 0) : -1;
 	};
 	KC3Ship.prototype.carrySlots = function(){
 		return KC3Ship.getCarrySlots(this.masterId);
@@ -377,8 +389,8 @@ KC3改 Ship Object
 		var getEquip = function(item) {
 			return (item.masterId === masterId) ? 1 : 0;
 		};
-		return this.equipment(true).map( getEquip ).reduce(
-			function(a,b) { return a + b; }, 0 );
+		return this.equipment(true).map( getEquip )
+			.reduce( (acc, v) => acc + v, 0 );
 	};
 
 	/* COUNT DRUMS
@@ -434,7 +446,6 @@ KC3改 Ship Object
 			if (this.masterId == 487) {
 				tp.add(KC3Meta.tpObtained({slots:[68]}));
 			}
-			//console.log(this.name(),this.rosterId,tp1,tp2,tp3);
 		}
 		return tp;
 	};
@@ -475,7 +486,6 @@ KC3改 Ship Object
 			this.equipment(2).fighterBounds( this.slots[2] ),
 			this.equipment(3).fighterBounds( this.slots[3] )
 		];
-		//console.log.apply(console,["GearPowers"].concat(GearPowers));
 		return [
 			GearPowers[0][0]+GearPowers[1][0]+GearPowers[2][0]+GearPowers[3][0],
 			GearPowers[0][1]+GearPowers[1][1]+GearPowers[2][1]+GearPowers[3][1],
@@ -524,7 +534,6 @@ KC3改 Ship Object
 
 		var supportPower;
 		if(this.master().api_stype==11 || this.master().api_stype==7){
-			// console.log( this.name(), "special support calculation for CV(L)" );
 			supportPower = 55;
 			supportPower += (1.5 * Number(this.fp[0]));
 			supportPower += (1.5 * Number(this.tp[0]));
@@ -535,7 +544,6 @@ KC3改 Ship Object
 			supportPower += Number(this.equipment(4).supportPower());
 
 		}else{
-			// console.log( this.name(), "normal firepower for support" );
 			supportPower = this.fp[0];
 		}
 		return supportPower;
@@ -629,7 +637,7 @@ KC3改 Ship Object
 			command = command.slice(0,1).toUpperCase() + command.slice(1).toLowerCase();
 			this["perform"+command].call(this,args);
 		} catch (e) {
-			console.error(e);
+			console.error("Failed when perform" + command, e);
 			return false;
 		} finally {
 			return true;
@@ -652,28 +660,30 @@ KC3改 Ship Object
 	// check if this ship is capable of equipping Daihatsu (landing craft)
 	KC3Ship.prototype.canEquipDaihatsu = function() {
 		var master = this.master();
-		// ship types: DD=2, CL=3, AV=16, LHA=17, AO=22
+		// ship types: DD=2, CL=3, BB=9, AV=16, LHA=17, AO=22
 		// so far only ships with types above can equip daihatsu.
-		if ([2,3,16,17,22].indexOf( master.api_stype ) === -1)
+		if ([2,3,9,16,17,22].indexOf( master.api_stype ) === -1)
 			return false;
 
-		// excluding Akitsushima(445) and Hayasui(352)
+		// excluding Akitsushima(445), Hayasui(460), Kamoi(162)
 		// (however their remodels are capable of equipping daihatsu
-		if (this.masterId === 445 || this.masterId === 460)
+		if ([445, 460, 162].indexOf( this.masterId ) !== -1)
 			return false;
 		
-		// only few DDs and CLs are capable of equipping daihatsu
+		// only few DDs, CLs and 1 BB are capable of equipping daihatsu
 		// see comments below.
-		if ([2 /* DD */,3 /* CL */].indexOf( master.api_stype ) !== -1 &&
+		if ([2 /* DD */,3 /* CL */,9 /* BB */].indexOf( master.api_stype ) !== -1 &&
 			[
-				// Abukuma K2(200), Kinu K2(487)
-				200, 487,
+				// Abukuma K2(200), Kinu K2(487), Yura K2(488)
+				200, 487, 488,
 				// Satsuki K2(418), Mutsuki K2(434), Kisaragi K2(435)
 				418, 434, 435,
 				// Kasumi K2(464), Kasumi K2B(470), Ooshio K2(199), Asashio K2D(468), Arashio K2(490)
 				464, 470, 199, 468, 490,
 				// Verniy(147), Kawakaze K2(469)
-				147, 469
+				147, 469,
+				// Nagato K2(541)
+				541
 			].indexOf( this.masterId ) === -1)
 			return false;
 		return true;
@@ -685,25 +695,56 @@ KC3改 Ship Object
 	// - sonar should be equipped
 	// - ASW stat >= 100
 	// also Isuzu K2 can do OASW unconditionally
-	// also ship type DE and Taiyou are special cases
+	// also ship type Escort and CVL Taiyou are special cases
 	KC3Ship.prototype.canDoOASW = function () {
-		// master Id for Isuzu
+		// master Id for Isuzu K2
 		if (this.masterId === 141)
 			return true;
 
-		// is Taiyou but not Kasugamaru
-		let isTaiyou = RemodelDb.originOf(this.masterId) === 521 && this.masterId !== 521;
-		// lower condition for DE and Taiyou
+		// is Taiyou series:
+		// tho Kasugamaru not possible to reach high asw for now
+		// and base asw stat of Kai and Kai2 already exceed 70
+		let isTaiyouSeries = RemodelDb.originOf(this.masterId) === 521;
+		let isTaiyouBase = this.masterId === 526;
+		let isTaiyouKaiAfter = RemodelDb.remodelGroup(521).indexOf(this.masterId) > 1;
+
+		// lower condition for Escort and Taiyou
 		let aswThreshold = this.master().api_stype == 1 ? 60
-			: isTaiyou ? 60
+			: isTaiyouSeries ? 65
 			: 100;
 
 		// shortcutting on the stricter condition first
 		if (this.as[0] < aswThreshold)
 			return false;
 
-		// not require Sonar for Taiyou
-		if (isTaiyou) return true;
+		// according test, Taiyou needs T97/Tenzan Torpedo Bomber 931 Air Group
+		// see http://wikiwiki.jp/kancolle/?%C2%E7%C2%EB
+		function isBomber931AirGroup(masterData) {
+			return masterData &&
+				masterData.api_id === 82 || masterData.api_id === 83;
+		}
+		// for Taiyou Kai or Kai2, any equippable aircraft with asw should work
+		function isAswAircraft(masterData) {
+			/*
+			 * - 7: Dive Bomber
+			 * - 8: Torpedo Bomber (known no asw stat: Re.2001 G Kai)
+			 * - 11: Seaplane Bomber (not equippable)
+			 * - 25: Autogyro (Kai2 equippable)
+			 * - 26: Anti-Sub PBY
+			 * - 41: Large Flying Boat (not equippable)
+			 */
+			return masterData &&
+				[7, 8, 11, 25, 26, 41].indexOf(masterData.api_type[2]) > -1 &&
+				masterData.api_tais > 0;
+		}
+
+		// Only Autogyro or PBY equipped will not let CVL anti-sub in day shelling phase,
+		// but Taiyou Kai+ can still OASW. only Sonar equipped can do neither.
+		if (isTaiyouKaiAfter) {
+			return [0,1,2,3,4].some( slot => isAswAircraft( this.equipment(slot).master() ));
+		} else if (isTaiyouBase) {
+			return [0,1,2,3,4].some( slot => isBomber931AirGroup( this.equipment(slot).master() ));
+		}
 
 		function isSonar(masterData) {
 			/* checking on equipment type sounds better than
@@ -719,6 +760,17 @@ KC3改 Ship Object
 		}
 		let hasSonar = [0,1,2,3,4]
 			.some( slot => isSonar( this.equipment(slot).master() ));
+
+		// Escort can OASW without Sonar, but total asw >= 75 and equipped total plus asw >= 4
+		// see https://twitter.com/a_t_o_6/status/863445975007805440
+		if(this.master().api_stype == 1) {
+			if(hasSonar) return true;
+			let equipAswSum = [0,1,2,3,4]
+				.map(slot => this.equipment(slot).master().api_tais || 0)
+				.reduce((acc, v) => acc + v, 0);
+			return this.as[0] >= 75 && equipAswSum >= 4;
+		}
+
 		return hasSonar;
 	};
 
@@ -795,8 +847,8 @@ KC3改 Ship Object
 					dat[index][key] = 0;
 			});
 
-
-			console.log.apply(console,["Ship",self.rosterId,"Consume",shipConsumption,sid,[iterant,lastN].join('/')].concat(rsc.map(function(x){return -x;})).concat(dat[index]));
+			console.log("Ship " + self.rosterId + " consumed", shipConsumption, sid,
+				[iterant, lastN].join('/'), rsc.map(x => -x), dat[index]);
 
 			// Store supplied resource count to database by updating the source
 			KC3Database.Naverall({

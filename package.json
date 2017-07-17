@@ -1,6 +1,6 @@
 {
   "name": "KC3Kai",
-  "version": "31.6.2",
+  "version": "31.7.3",
   "description": "Kantai Collection Game Viewer and Tools",
   "repository": {
     "type": "git",
@@ -40,5 +40,8 @@
     "test": "grunt test-src && grunt test-unit",
     "build": "grunt build",
     "webstore": "grunt webstore"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.23.0"
   }
 }

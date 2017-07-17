@@ -160,7 +160,14 @@ $(document).on("ready", function(){
 		}
 	});
 	
-	// untranslated quest copiable text form
+	// Listen ConfigManager changed
+	window.addEventListener("storage", function({key, timeStamp, url}){
+		if(key === ConfigManager.keyName()) {
+			ConfigManager.load();
+		}
+	});
+	
+	// Untranslated quest copiable text form
 	$(".overlay_quests").on("click", ".no_tl", function(){
 		chrome.tabs.create({
 			url: "https://translate.google.com/#ja/"+ConfigManager.language+"/"
@@ -228,7 +235,6 @@ $(document).on("ready", function(){
 	
 	// Exit confirmation
 	window.onbeforeunload = function(){
-		ConfigManager.load();
 		// added waiting condition should be ignored
 		if(ConfigManager.api_askExit==1 && !trustedExit && !waiting){
 			trustedExit = true;
@@ -312,7 +318,7 @@ var interactions = {
 			}
 			response({success:true});
 		}catch(e){
-			console.error(e);
+			console.error("CatBomb exception", e);
 		}finally{
 			response({success:false});
 		}
@@ -361,13 +367,11 @@ var interactions = {
 					
 					if(ConfigManager.api_tracking){
 						$(".tracking", QuestBox).html( QuestData.outputHtml() );
+						if(QuestData.tracking && QuestData.tracking.length > 1){
+							$(".tracking", QuestBox).addClass("small");
+						}
 					}else{
 						$(".tracking", QuestBox).hide();
-					}
-					
-					// Special Bw1 case multiple requirements
-					if( QuestRaw.api_no == 214 ){
-						$(".tracking", QuestBox).addClass("small");
 					}
 				}else{
 					if(ConfigManager.google_translate) {
@@ -510,10 +514,11 @@ var interactions = {
 		
 		if(ConfigManager.alert_taiha_blood) {
 			if(critAnim){ clearInterval(critAnim); }
-			critAnim = setInterval(function() {
-				$(".taiha_red").toggleClass("anim2");
-			}, 500);
-			
+			if(!ConfigManager.alert_taiha_noanim){
+				critAnim = setInterval(function() {
+					$(".taiha_red").toggleClass("anim2");
+				}, 500);
+			}
 			$(".taiha_blood").show(0, function(){
 				$(".taiha_red").show(0, function(){
 					(callback || function(){})();

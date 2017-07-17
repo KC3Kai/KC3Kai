@@ -471,6 +471,7 @@
 					"type": "Number"
 				},
 				"options" : {
+					"label": "SettingsSeconds",
 					"tooltip" : "SettingsIdleWarnDesc"
 				}
 			},
@@ -536,6 +537,12 @@
 			{
 				"id" : "alert_taiha_panel",
 				"name" : "SettingsRedShadeOnPanel",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "alert_taiha_noanim",
+				"name" : "SettingsNoAnimation",
 				"type" : "check",
 				"options" : {}
 			}
@@ -694,6 +701,12 @@
 			{
 				"id" : "map_markers",
 				"name" : "SettingsMapNodeMarkers",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "mute_game_tab",
+				"name" : "SettingsMuteGameTab",
 				"type" : "check",
 				"options" : {}
 			}
@@ -925,6 +938,46 @@
 				"type" : "textarea",
 				"options" : {
 					"tooltip" : "SettingsStrategyCustomCSSTip"
+				}
+			}
+		]
+	},
+	{
+		"section": "SettingsLogging",
+		"help": "",
+		"contents": [
+			{
+				"id": "disableConsoleLogHooks",
+				"name": "SettingsConsoleLogHooks",
+				"type": "check",
+				"options": {
+					"tooltip": "SettingsConsoleLogHooksTip"
+				}
+			},
+			{
+				"id": "hoursToKeepErrors",
+				"name": "SettingsErrorKeepDuration",
+				"type" : "small_text",
+				"bound" : {
+					"min" : 0,
+					"type": "Integer"
+				},
+				"options": {
+					"label": "SettingsHours",
+					"tooltip": "SettingsErrorKeepDurationTip"
+				}
+			},
+			{
+				"id": "hoursToKeepLogs",
+				"name": "SettingsLogKeepDuration",
+				"type" : "small_text",
+				"bound" : {
+					"min" : 0,
+					"type": "Integer"
+				},
+				"options": {
+					"label": "SettingsHours",
+					"tooltip": "SettingsLogKeepDurationTip"
 				}
 			}
 		]

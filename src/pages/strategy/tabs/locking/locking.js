@@ -102,7 +102,7 @@
 			
 			var removingRoster, removingFromBox, removingShip, removingIndex;
 			$(".tab_locking .ships_area").on("click", ".lship", function(event){
-				if(self.loading && !self.clearAllFlag){ console.log("nope"); return false; }
+				if(self.loading && !self.clearAllFlag){ return false; }
 				
 				// Get details of clicked ship
 				removingRoster = Number( $(this).attr("data-rosterId") );

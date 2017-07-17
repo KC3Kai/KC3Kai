@@ -44,6 +44,7 @@
 							<li data-id="docking">Docking</li>
 							<li data-id="expcalc">Leveling</li>
 							<li data-id="badge">Badge</li>
+							<li data-id="blueprints">Blueprints</li>
 						</ul>
 					</div>
 					<div class="submenu">
@@ -98,9 +99,10 @@
 					<div class="submenu dev-only">
 						<div class="title">Dev-Only</div>
 						<ul class="menulist">
-							<li data-id="playground">Playground</li>
+							<li data-id="logger">Logs</li>
 							<li data-id="translations">Translations</li>
 							<li data-id="quotes">Quotes</li>
+							<li data-id="playground">Playground</li>
 						</ul>
 					</div>
 				</div>
@@ -157,8 +159,13 @@
 		<script type="text/javascript" src="../../library/managers/ShipManager.js"></script>
 		<script type="text/javascript" src="../../library/managers/GoalTemplateManager.js"></script>
 		<!-- @nonbuildend -->
+		<script type="text/javascript" src="../../library/modules/QuestSync/Sync.js"></script>
+		<script type="text/javascript" src="../../library/modules/QuestSync/ContentScript.js"></script>
 		<script type="text/javascript" src="../../library/modules/RemodelDb.js"></script>
 		<script type="text/javascript" src="../../library/modules/Database.js"></script>
+		<script type="text/javascript" src="../../library/modules/Log/Log.js"></script>
+		<script type="text/javascript" src="../../library/modules/Log/Messaging.js"></script>
+		<script type="text/javascript" src="../../library/modules/Log/Strategy.js"></script>
 		<script type="text/javascript" src="../../library/modules/ImageExport.js"></script>
 		<script type="text/javascript" src="../../library/modules/Master.js"></script>
 		<script type="text/javascript" src="../../library/modules/Translation.js"></script>
@@ -173,6 +180,7 @@
 
 		<script type="text/javascript" src="graphable.js"></script>
 		<script type="text/javascript" src="sortielogs.js"></script>
+		<script type="text/javascript" src="shipgrid.js"></script>
 		<!-- @buildimportjs allstrategytabs.js -->
 
 		<!-- @nonbuildstart -->
@@ -181,6 +189,7 @@
 		<script type="text/javascript" src="tabs/docking/docking.js"></script>
 		<script type="text/javascript" src="tabs/gears/gears.js"></script>
 		<script type="text/javascript" src="tabs/newsfeed/newsfeed.js"></script>
+		<script type="text/javascript" src="tabs/logger/logger.js"></script>
 
 		<!-- experience, resources and consumables, implements graphable -->
 		<script type="text/javascript" src="tabs/resources/resources.js"></script>
@@ -215,6 +224,7 @@
 		<script type="text/javascript" src="tabs/quotes/quotes.js"></script>
 		<script type="text/javascript" src="tabs/pvp/pvp.js"></script>
 		<script type="text/javascript" src="tabs/compare/compare.js"></script>
+		<script type="text/javascript" src="tabs/blueprints/blueprints.js"></script>
 		<!-- @nonbuildend -->
 
 	</body>

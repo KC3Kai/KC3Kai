@@ -36,6 +36,7 @@ KC3改 Ship Box for Natsuiro theme
 		$(".ship_face_tooltip .ship_rosterId span", tooltipBox).text(this.shipData.rosterId);
 		$(".ship_face_tooltip .ship_stype", tooltipBox).text(this.shipData.stype());
 		$(".ship_face_tooltip .ship_level span.value", tooltipBox).text(this.shipData.level);
+		//$(".ship_face_tooltip .ship_level span.value", tooltipBox).addClass(this.shipData.levelClass());
 		$(".ship_face_tooltip .ship_hp span.hp", tooltipBox).text(this.shipData.hp[0]);
 		$(".ship_face_tooltip .ship_hp span.mhp", tooltipBox).text(this.shipData.hp[1]);
 		$(".ship_face_tooltip .stat_hp", tooltipBox).text(this.shipData.hp[1]);
@@ -135,9 +136,10 @@ KC3改 Ship Box for Natsuiro theme
 		
 		// Item on 5th slot
 		var myExItem = this.shipData.exItem();
-		if( myExItem && (myExItem.masterId > 0)){
-			$(".ex_item img", this.element).attr("src", "../../../../assets/img/items/"+myExItem.master().api_type[3]+".png");
-			$(".ex_item img", this.element).attr("title", myExItem.htmlTooltip())
+		if( myExItem && myExItem.masterId > 0 ) {
+			$(".ex_item .gear_icon img", this.element)
+				.attr("src", "../../../../assets/img/items/"+myExItem.master().api_type[3]+".png")
+				.attr("title", myExItem.htmlTooltip(0))
 				.data("masterId", myExItem.masterId)
 				.on("dblclick", function(e){
 					(new RMsg("service", "strategyRoomPage", {
@@ -145,12 +147,12 @@ KC3改 Ship Box for Natsuiro theme
 					})).execute();
 				})
 				.lazyInitTooltip();
-			if (myExItem.masterId == 43) {
-				$(".ex_item", this.element).addClass("goddess");
-			} else {
-				$(".ex_item", this.element).removeClass("goddess");
+			$(".ex_item", this.element).toggleClass("goddess", myExItem.masterId == 43);
+			if (myExItem.stars > 0) {
+				$(".ex_item .gear_star", this.element).show()
+					.text(myExItem.stars >= 10 ? "\u2605" : myExItem.stars);
 			}
-		}else{
+		} else {
 			$(".ex_item", this.element).hide();
 		}
 		$(".ex_item", this.element).toggleClass("item_being_used",
@@ -360,9 +362,14 @@ KC3改 Ship Box for Natsuiro theme
 			
 			// Prediction HP result and diff values
 			var hpDiff = this.shipData.afterHp[0] - this.shipData.hp[0];
-			$(".ship_hp_diff", this.element).text((hpDiff > 0 ? "+" : "") + hpDiff);
-			$(".ship_hp_cur", this.element).text(this.shipData.afterHp[0]);
-			$(".ship_hp_pred_value", this.element).show();
+			if(this.shipData.hp[0] <= 0) {
+				// Already sunk ship will get negtive hp and no prediction
+				$(".ship_hp_cur", this.element).text(this.shipData.hp[0]);
+			} else {
+				$(".ship_hp_diff", this.element).text((hpDiff > 0 ? "+" : "") + hpDiff);
+				$(".ship_hp_cur", this.element).text(this.shipData.afterHp[0]);
+				$(".ship_hp_pred_value", this.element).show();
+			}
 			
 			// HP-based UI and colors
 			if(ConfigManager.info_btstamp && afterHpPercent <= 0.00) {
@@ -433,7 +440,7 @@ KC3改 Ship Box for Natsuiro theme
 					"../../../../assets/img/items/"+thisGear.master().api_type[3]+".png");
 				$(".ship_gear_"+(slot+1), this.element).addClass("equipped");
 				$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element)
-					.attr("title", thisGear.htmlTooltip())
+					.attr("title", thisGear.htmlTooltip(this.shipData.master().api_maxeq[slot]))
 					.lazyInitTooltip()
 					.data("masterId", thisGear.masterId)
 					.on("dblclick", function(e){
@@ -448,16 +455,18 @@ KC3改 Ship Box for Natsuiro theme
 					$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element).removeClass("goddess");
 				}
 				
-				if (typeof thisGear.ace !== "undefined" && thisGear.ace > 0) {
+				if (thisGear.ace > 0) {
 					// Is a plane with veterancy
 					$(".ship_gear_"+(slot+1)+" .ship_gear_ace", this.element).show();
 					$(".ship_gear_"+(slot+1)+" .ship_gear_ace img", this.element)
 						.attr("src", "../../../../assets/img/client/achev/"+thisGear.ace+".png");
 				}
-				if (typeof thisGear.stars !== "undefined" && thisGear.stars > 0){
+				if (thisGear.stars > 0){
 				    // Is a normal equipment that can be upgraded
 					$(".ship_gear_"+(slot+1)+" .ship_gear_star", this.element).show();
-					$(".ship_gear_"+(slot+1)+" .ship_gear_star", this.element).text(thisGear.stars);
+					$(".ship_gear_"+(slot+1)+" .ship_gear_star", this.element).text(
+						thisGear.stars >= 10 ? "\u2605" : thisGear.stars
+					);
 				}
 				
 				// Check damecon or starshell if prediction is enabled
