@@ -44,6 +44,11 @@ button, input, select, textarea {
 	margin:0px;
 }
 
+.ui-tooltip-content .stats_icon_img {
+	filter:invert(100%);
+	-webkit-filter:invert(100%);
+}
+
 /* COLORS
 -------------------------------*/
 .fcolor1 { color:#ffffff; }

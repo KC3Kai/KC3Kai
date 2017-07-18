@@ -289,7 +289,7 @@
 			domImg.onload = function(){
 				rcontext.drawImage( domImg, 0, 0, 400, 400, 0, 0, 400, 400 );
 				
-				KC3Database.get_pvp_data( pvp_id, function(pvpData){
+				KC3Database.get_pvp_data(pvp_id, function(pvpData){
 					console.debug("Downloading reply", pvp_id, ", data:", pvpData);
 					if (pvpData.length === 0) {
 						self.exportingReplay = false;
@@ -365,6 +365,9 @@
 						}
 					});
 					
+				}).catch(function(e) {
+					self.endExport(e);
+					return false;
 				});
 				
 			};

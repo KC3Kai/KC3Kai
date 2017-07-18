@@ -1302,10 +1302,15 @@
 			// If LBAS is selected, do not respond to rest fleet update
 			if (selectedFleet == 6) {
 				let lbasSupplyCost = PlayerManager.getBasesResupplyCost();
+				let lbasSortieCost = PlayerManager.getBasesSortieCost();
 				$(".module.status .status_supply").attr("title",
 					KC3Meta.term("PanelResupplyCosts").format(
 						lbasSupplyCost.fuel, lbasSupplyCost.ammo, lbasSupplyCost.bauxite
-					)
+					) + "\n" +
+					KC3Meta.term("PanelLbasSortieCosts").format(
+						lbasSortieCost.fuel, lbasSortieCost.ammo
+					) + (!lbasSortieCost.steel ? "" :
+						"\n" + KC3Meta.term("PanelConsumedSteel").format(lbasSortieCost.steel))
 				).lazyInitTooltip();
 				return false;
 			}
@@ -1821,10 +1826,15 @@
 				});
 				
 				let lbasSupplyCost = PlayerManager.getBasesResupplyCost();
+				let lbasSortieCost = PlayerManager.getBasesSortieCost();
 				$(".module.status .status_supply").attr("title",
 					KC3Meta.term("PanelResupplyCosts").format(
 						lbasSupplyCost.fuel, lbasSupplyCost.ammo, lbasSupplyCost.bauxite
-					)
+					) + "\n" +
+					KC3Meta.term("PanelLbasSortieCosts").format(
+						lbasSortieCost.fuel, lbasSortieCost.ammo
+					) + (!lbasSortieCost.steel ? "" :
+						"\n" + KC3Meta.term("PanelConsumedSteel").format(lbasSortieCost.steel))
 				).lazyInitTooltip();
 			}
 		},
