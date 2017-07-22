@@ -41,7 +41,6 @@
 			this.seedBranch( rootQuestTree, 256 ); // Bm2
 			this.seedBranch( rootQuestTree, 259 ); // Bm4
 			this.seedBranch( rootQuestTree, 861 ); // Bq3
-			this.seedBranch( rootQuestTree, 426 ); // D24
 			
 			// Other non-flowchart quests
 			var rootQuestList = $(".tab_flowchart .extralist ul.questList");

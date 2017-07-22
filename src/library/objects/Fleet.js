@@ -917,12 +917,53 @@ Contains summary information about a fleet and its 6 ships
 	};
 
 	/**
+	 * Estimate base XP gained in PvP battle.
+	 * @param levels of first two ships - if omitted, use the ones of this fleet
+	 * @param ctBonus - exp mulitiplier of CT (Katori-class) bonus, default is 1
+	 * @return variant exp values by battle ranks
+	 * @see http://wikiwiki.jp/kancolle/?%B1%E9%BD%AC#v657609b
+	 */
+	KC3Fleet.prototype.estimatePvpBaseExp = function(
+		firstShipLevel = this.ship(0).level,
+		secondShipLevel = this.ship(1).level,
+		ctBonus = 1
+	) {
+		var baseExp = 3 + Math.floor(
+			KC3Meta.expShip(firstShipLevel)[1] / 100 +
+			KC3Meta.expShip(secondShipLevel)[1] / 300
+		);
+		if(baseExp > 500){
+			baseExp = Math.floor(500 + Math.sqrt(baseExp - 500));
+		}
+		const baseExpWoCT = Math.floor(baseExp * 1.2),
+			baseExpS  = Math.floor(Math.floor(baseExp * 1.2) * ctBonus),
+			baseExpAB = Math.floor(Math.floor(baseExp * 1.0) * ctBonus),
+			baseExpC  = Math.floor(Math.floor(baseExp * 0.64) * ctBonus),
+			baseExpD  = Math.floor(Math.floor(Math.floor(baseExp * 0.56) * 0.8) * ctBonus),
+			// rank E is not verified by sufficent sample data
+			baseExpE  = Math.floor(Math.floor(baseExp * 0.401) * ctBonus);
+		return {
+			levelFlagship: firstShipLevel,
+			level2ndship: secondShipLevel,
+			ctBonus: ctBonus,
+			base: baseExp,
+			sIngame: baseExpWoCT,
+			s: baseExpS,
+			a: baseExpAB,
+			b: baseExpAB,
+			c: baseExpC,
+			d: baseExpD,
+			e: baseExpE
+		};
+	};
+
+	/**
 	 * Predicts PvP opponent's battle formation.
 	 * @param opponentFleetShips - master ID array of opponent fleet, no -1 placeholders
 	 * @return predicted formation ID
 	 * @see http://wikiwiki.jp/kancolle/?%B1%E9%BD%AC#m478a4e5
 	 */
-	KC3Fleet.prototype.predictOpponentFormation = function(opponentFleetShips){
+	KC3Fleet.prototype.predictOpponentFormation = function(opponentFleetShips) {
 		// Convert fleet ships to master IDs, remove -1 elements
 		var playerFleetShips = this.ships
 			.filter(function(v){return v > 0;})
