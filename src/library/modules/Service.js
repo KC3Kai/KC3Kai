@@ -388,6 +388,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 						config: ConfigManager,
 						master: KC3Master,
 						meta: KC3Meta,
+						remodel: RemodelDb,
 						quest: KC3QuestManager,
 					});
 				});

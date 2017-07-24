@@ -14,6 +14,7 @@
 			master = $.extend(true, KC3Master, response.master);
 			meta = $.extend(true, KC3Meta, response.meta);
 			quests = $.extend(true, KC3QuestManager, response.quests);
+			$.extend(true, RemodelDb, response.remodel);
 
 			this.windowFocus();
 			this.attachHTML();
