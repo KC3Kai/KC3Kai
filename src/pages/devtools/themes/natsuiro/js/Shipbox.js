@@ -214,7 +214,8 @@ KC3改 Ship Box for Natsuiro theme
 			+ "\n" + KC3Meta.term("PanelResupplyCosts").format(
 				"+{0} \u27A4{1}".format(resupplyCost.fuel, this.shipData.master().api_fuel_max),
 				"+{0} \u27A4{1}".format(resupplyCost.ammo, this.shipData.master().api_bull_max),
-				resupplyCost.bauxite
+				resupplyCost.bauxite,
+				this.shipData.isMarried() ? KC3Meta.term("PanelResupplyMarriedHint") : ""
 			)
 		).lazyInitTooltip();
 		
@@ -257,7 +258,8 @@ KC3改 Ship Box for Natsuiro theme
 				KC3Meta.term("PanelResupplyCosts").format(
 					"+{0} \u27A4{1}".format(resupplyCost.fuel, this.shipData.master().api_fuel_max),
 					"+{0} \u27A4{1}".format(resupplyCost.ammo, this.shipData.master().api_bull_max),
-					resupplyCost.bauxite
+					resupplyCost.bauxite,
+					this.shipData.isMarried() ? KC3Meta.term("PanelResupplyMarriedHint") : ""
 				)
 			).lazyInitTooltip();
 		} else {

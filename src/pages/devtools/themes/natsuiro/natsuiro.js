@@ -1305,7 +1305,7 @@
 				let lbasSortieCost = PlayerManager.getBasesSortieCost();
 				$(".module.status .status_supply").attr("title",
 					KC3Meta.term("PanelResupplyCosts").format(
-						lbasSupplyCost.fuel, lbasSupplyCost.ammo, lbasSupplyCost.bauxite
+						lbasSupplyCost.fuel, lbasSupplyCost.ammo, lbasSupplyCost.bauxite, ""
 					) + "\n" +
 					KC3Meta.term("PanelLbasSortieCosts").format(
 						lbasSortieCost.fuel, lbasSortieCost.ammo
@@ -1564,7 +1564,8 @@
 				}
 				$(".module.status .status_supply").attr("title",
 					KC3Meta.term("PanelResupplyCosts").format(
-						FleetSummary.supplyCost.fuel, FleetSummary.supplyCost.ammo, FleetSummary.supplyCost.bauxite
+						FleetSummary.supplyCost.fuel, FleetSummary.supplyCost.ammo, FleetSummary.supplyCost.bauxite,
+						FleetSummary.supplyCost.hasMarried ? KC3Meta.term("PanelResupplyMarriedHint") : ""
 					) + ("\n" + KC3Meta.term("PanelBattleConsumes").format(
 						FleetSummary.battleCost.fuel, FleetSummary.battleCost.dayOnlyAmmo, FleetSummary.battleCost.nightBattleAmmo,
 						FleetSummary.battleCost.airRaidFuel, FleetSummary.battleCost.airRaidAmmo
@@ -1804,7 +1805,7 @@
 										$(".base_plane_count", planeBox).addClass("unsupplied");
 										$(".base_plane_count", planeBox).attr("title",
 											KC3Meta.term("PanelResupplyCosts").format(
-												cost.fuel, cost.ammo, cost.bauxite
+												cost.fuel, cost.ammo, cost.bauxite, ""
 											)
 										).lazyInitTooltip();
 									} else {
@@ -1834,7 +1835,7 @@
 				let lbasSortieCost = PlayerManager.getBasesSortieCost();
 				$(".module.status .status_supply").attr("title",
 					KC3Meta.term("PanelResupplyCosts").format(
-						lbasSupplyCost.fuel, lbasSupplyCost.ammo, lbasSupplyCost.bauxite
+						lbasSupplyCost.fuel, lbasSupplyCost.ammo, lbasSupplyCost.bauxite, ""
 					) + "\n" +
 					KC3Meta.term("PanelLbasSortieCosts").format(
 						lbasSortieCost.fuel, lbasSortieCost.ammo
