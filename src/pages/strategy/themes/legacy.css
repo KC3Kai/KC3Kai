@@ -745,6 +745,9 @@ body {
 	background:#def;
 	border-radius:8px;
 }
+.tab_akashi .equipment.equipped {
+	background:#ffc;
+}
 .tab_akashi .equipment.disabled {
 	opacity:0.4;
 	background:#fcc;
@@ -1311,7 +1314,8 @@ body {
 .tab_translations .tq-item.translation_missing .tq-key,
 .tab_translations .tq-item.translation_missing .tq-from,
 .tab_translations .tq-item .tq-name.translation_missing,
-.tab_translations .tq-item .tq-desc.translation_missing {
+.tab_translations .tq-item .tq-desc.translation_missing,
+.tab_translations .tq-item .tq-trackingDesc.translation_missing {
 	color: red;
 }
 

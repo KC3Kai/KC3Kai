@@ -29,6 +29,11 @@ KC3改 Ship Box for Natsuiro theme
 		var tooltipBox = $("#factory .ship_face_tooltip_outer").clone();
 		tooltipBox.hide();
 		tooltipBox.appendTo(this.element);
+		var nakedStats = this.shipData.nakedStats(),
+			maxedStats = this.shipData.maxedStats(),
+			diffStats = {},
+			modLeftStats = this.shipData.modernizeLeftStats();
+		Object.keys(maxedStats).map(s => {diffStats[s] = maxedStats[s] - nakedStats[s];});
 		// Show a rich text tool-tip like stats in game
 		$(".ship_face_tooltip .ship_full_name .ship_masterId", tooltipBox).text("[{0}]".format(this.shipData.masterId));
 		$(".ship_face_tooltip .ship_full_name span.value", tooltipBox).text(this.shipData.name());
@@ -40,19 +45,31 @@ KC3改 Ship Box for Natsuiro theme
 		$(".ship_face_tooltip .ship_hp span.hp", tooltipBox).text(this.shipData.hp[0]);
 		$(".ship_face_tooltip .ship_hp span.mhp", tooltipBox).text(this.shipData.hp[1]);
 		$(".ship_face_tooltip .stat_hp", tooltipBox).text(this.shipData.hp[1]);
-		$(".ship_face_tooltip .stat_fp", tooltipBox).text(this.shipData.fp[0]);
-		$(".ship_face_tooltip .stat_ar", tooltipBox).text(this.shipData.ar[0]);
-		$(".ship_face_tooltip .stat_tp", tooltipBox).text(this.shipData.tp[0]);
-		$(".ship_face_tooltip .stat_ev", tooltipBox).text(this.shipData.ev[0]);
-		$(".ship_face_tooltip .stat_aa", tooltipBox).text(this.shipData.aa[0]);
+		$(".ship_face_tooltip .stat_fp .current", tooltipBox).text(this.shipData.fp[0]);
+		$(".ship_face_tooltip .stat_fp .mod", tooltipBox).text("+" + modLeftStats.fp).toggle(!!modLeftStats.fp);
+		$(".ship_face_tooltip .stat_ar .current", tooltipBox).text(this.shipData.ar[0]);
+		$(".ship_face_tooltip .stat_ar .mod", tooltipBox).text("+" + modLeftStats.ar).toggle(!!modLeftStats.ar);
+		$(".ship_face_tooltip .stat_tp .current", tooltipBox).text(this.shipData.tp[0]);
+		$(".ship_face_tooltip .stat_tp .mod", tooltipBox).text("+" + modLeftStats.tp).toggle(!!modLeftStats.tp);
+		$(".ship_face_tooltip .stat_ev .current", tooltipBox).text(this.shipData.ev[0]);
+		$(".ship_face_tooltip .stat_ev .level", tooltipBox)
+			.text((diffStats.ev > 0 ? "+" : "") + diffStats.ev).toggle(!!diffStats.ev);
+		$(".ship_face_tooltip .stat_aa .current", tooltipBox).text(this.shipData.aa[0]);
+		$(".ship_face_tooltip .stat_aa .mod", tooltipBox).text("+" + modLeftStats.aa).toggle(!!modLeftStats.aa);
 		$(".ship_face_tooltip .stat_ac", tooltipBox).text(this.shipData.carrySlots());
-		$(".ship_face_tooltip .stat_as", tooltipBox).text(this.shipData.as[0])
+		$(".ship_face_tooltip .stat_as .current", tooltipBox).text(this.shipData.as[0])
 			.toggleClass("oasw", this.shipData.canDoOASW());
+		$(".ship_face_tooltip .stat_as .level", tooltipBox)
+			.text((diffStats.as > 0 ? "+" : "") + diffStats.as).toggle(!!diffStats.as);
 		$(".ship_face_tooltip .stat_sp", tooltipBox).text(this.shipData.speedName())
 			.addClass(KC3Meta.shipSpeed(this.shipData.speed, true));
-		$(".ship_face_tooltip .stat_ls", tooltipBox).text(this.shipData.ls[0]);
+		$(".ship_face_tooltip .stat_ls .current", tooltipBox).text(this.shipData.ls[0]);
+		$(".ship_face_tooltip .stat_ls .level", tooltipBox)
+			.text((diffStats.ls > 0 ? "+" : "") + diffStats.ls).toggle(!!diffStats.ls);
 		$(".ship_face_tooltip .stat_rn", tooltipBox).text(this.shipData.rangeName());
-		$(".ship_face_tooltip .stat_lk", tooltipBox).text(this.shipData.lk[0]);
+		$(".ship_face_tooltip .stat_lk .current", tooltipBox).text(this.shipData.lk[0]);
+		$(".ship_face_tooltip .stat_lk .luck", tooltipBox)
+			.text("+" + modLeftStats.lk).toggle(this.shipData.lk[0] > this.shipData.master().api_luck[0]);
 		$(".ship_face_tooltip .adjustedAntiAir", tooltipBox).text(
 			KC3Meta.term("ShipAAAdjusted").format(this.shipData.adjustedAntiAir())
 		);
@@ -197,7 +214,8 @@ KC3改 Ship Box for Natsuiro theme
 			+ "\n" + KC3Meta.term("PanelResupplyCosts").format(
 				"+{0} \u27A4{1}".format(resupplyCost.fuel, this.shipData.master().api_fuel_max),
 				"+{0} \u27A4{1}".format(resupplyCost.ammo, this.shipData.master().api_bull_max),
-				resupplyCost.bauxite
+				resupplyCost.bauxite,
+				this.shipData.isMarried() ? KC3Meta.term("PanelResupplyMarriedHint") : ""
 			)
 		).lazyInitTooltip();
 		
@@ -240,7 +258,8 @@ KC3改 Ship Box for Natsuiro theme
 				KC3Meta.term("PanelResupplyCosts").format(
 					"+{0} \u27A4{1}".format(resupplyCost.fuel, this.shipData.master().api_fuel_max),
 					"+{0} \u27A4{1}".format(resupplyCost.ammo, this.shipData.master().api_bull_max),
-					resupplyCost.bauxite
+					resupplyCost.bauxite,
+					this.shipData.isMarried() ? KC3Meta.term("PanelResupplyMarriedHint") : ""
 				)
 			).lazyInitTooltip();
 		} else {
