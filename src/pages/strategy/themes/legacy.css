@@ -745,6 +745,9 @@ body {
 	background:#def;
 	border-radius:8px;
 }
+.tab_akashi .equipment.equipped {
+	background:#ffc;
+}
 .tab_akashi .equipment.disabled {
 	opacity:0.4;
 	background:#fcc;

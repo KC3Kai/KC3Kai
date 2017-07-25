@@ -1083,6 +1083,9 @@ button, input, select, textarea {
 	border-bottom:1px solid #777;
 	margin:0px !important;
 }
+.tab_akashi .equipment.equipped {
+	background:#4c4100;
+}
 .tab_akashi .equipment.disabled {
 	opacity:0.4;
 	background:#621f1f;
