@@ -97,9 +97,18 @@
 			
 			$("#disabled_toggle").on("click", function(){
 				self.hideNotImprovable = !self.hideNotImprovable;
-				$(".equipment.disabled").toggle(!self.hideNotImprovable);
-				$(".equipment.equipped").toggle(!self.hideNotImprovable);
-				$(".equipment.insufficient").toggle(!self.hideNotImprovable);
+				var equipList = $(".equipment_list");
+				if(self.hideNotImprovable){
+					$(".equipment.disabled," +
+					  ".equipment.equipped," +
+					  ".equipment.insufficient",
+						equipList).slideUp(300);
+				} else {
+					$(".equipment.disabled," +
+					  ".equipment.equipped," +
+					  ".equipment.insufficient",
+						equipList).slideDown();
+				}
 			});
 			
 			// Link to weekday specified by hash parameter
@@ -216,7 +225,6 @@
 				});
 			};
 			var checkDevScrew = function(stars, itemId, devmats, screws){
-				if(!hasGear || !hasShip) return;
 				var redLine = false;
 				if((PlayerManager.consumables.devmats || 0) < devmats){
 					redLine = true;
@@ -226,7 +234,9 @@
 					redLine = true;
 					$(".eq_res_value.screws.plus{0} .val".format(stars), ResBox).addClass("insufficient");
 				}
-				if(!!self.instances[itemId] && !self.instances[itemId]["star"+stars]){
+				$(".eq_res_label.plus{0}".format(stars), ResBox).attr("title",
+					(self.instances[itemId]||{})["star"+stars] || 0);
+				if(!self.instances[itemId] || !self.instances[itemId]["star"+stars]){
 					redLine = true;
 					$(".eq_res_label.plus{0}".format(stars), ResBox).addClass("insufficient");
 				}
@@ -235,7 +245,6 @@
 				}
 			};
 			var checkConsumedItem = function(stars, consumedItem, amount, container = ResBox){
-				if(!hasGear || !hasShip) return;
 				$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container).removeClass("insufficient locked");
 				// Check useitem instead of slotitem
 				if(Array.isArray(consumedItem)){
@@ -253,6 +262,13 @@
 					}
 					return;
 				}
+				$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container).attr("title",
+					"{0} (\u2605+0 /total: {1} /{2})".format(
+						(self.instances[consumedItem.api_id]||{}).freestar0 || 0,
+						(self.instances[consumedItem.api_id]||{}).star0 || 0,
+						(self.instances[consumedItem.api_id]||{}).total || 0
+					)
+				);
 				if(!self.instances[consumedItem.api_id]
 					|| self.instances[consumedItem.api_id].star0 < amount){
 					$(".eq_res_line.plus{0}".format(stars), container).addClass("insufficient");
@@ -387,11 +403,13 @@
 							$(".eq_next", ResBox).hide();
 						}
 						$(".eq_resources", ThisBox).append(ResBox);
-						// If material or all consumables insufficient, add a class to hide this item
+						// If materials or all consumables insufficient, add a class to hide this item
 						ThisBox.toggleClass("insufficient",
+							hasGear && hasShip && (
 							$(".eq_res_line.material", ResBox).hasClass("insufficient") ||
-							($(".eq_res_line.insufficient", ResBox).length >=
-							 $(".eq_res_line", ResBox).length - 1)
+							$(".eq_res_line.insufficient", ResBox).length >=
+								$(".eq_res_line", ResBox).length - 1
+							)
 						);
 					});
 				} else {
