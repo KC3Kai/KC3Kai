@@ -386,6 +386,7 @@
 
 			var self = this;
 			var shipDb = WhoCallsTheFleetDb.getShipStat(kcShip.masterId);
+			var shipMst = kcShip.master();
 			var shipBox = $(".tab_fleet .factory .fleet_ship").clone();
 			$(".fleet_ships", fleetBox).append( shipBox );
 
@@ -405,10 +406,15 @@
 			// Only available for current fleet as no ship attribute omitted
 			var viewType = $("input[type=radio][name=view_type]:checked").val();
 			if(viewType === "current"){
+				var nakedStats = kcShip.nakedStats(),
+					maxedStats = kcShip.maxedStats(),
+					diffStats = {},
+					modLeftStats = kcShip.modernizeLeftStats();
+				Object.keys(maxedStats).map(s => {diffStats[s] = maxedStats[s] - nakedStats[s];});
 				// Show a rich text tool-tip like stats in game
 				$(".ship_tooltip .ship_full_name .ship_masterId", shipBox).text("[{0}]".format(kcShip.masterId));
 				$(".ship_tooltip .ship_full_name span.value", shipBox).text(kcShip.name());
-				$(".ship_tooltip .ship_full_name .ship_yomi", shipBox).text(KC3Meta.shipReadingName(kcShip.master().api_yomi));
+				$(".ship_tooltip .ship_full_name .ship_yomi", shipBox).text(KC3Meta.shipReadingName(shipMst.api_yomi));
 				$(".ship_tooltip .ship_rosterId span", shipBox).text(kcShip.rosterId);
 				$(".ship_tooltip .ship_stype", shipBox).text(kcShip.stype());
 				$(".ship_tooltip .ship_level span.value", shipBox).text(kcShip.level);
@@ -416,19 +422,31 @@
 				$(".ship_tooltip .ship_hp span.hp", shipBox).text(kcShip.hp[0]);
 				$(".ship_tooltip .ship_hp span.mhp", shipBox).text(kcShip.hp[1]);
 				$(".ship_tooltip .stat_hp", shipBox).text(kcShip.hp[1]);
-				$(".ship_tooltip .stat_fp", shipBox).text(kcShip.fp[0]);
-				$(".ship_tooltip .stat_ar", shipBox).text(kcShip.ar[0]);
-				$(".ship_tooltip .stat_tp", shipBox).text(kcShip.tp[0]);
-				$(".ship_tooltip .stat_ev", shipBox).text(kcShip.ev[0]);
-				$(".ship_tooltip .stat_aa", shipBox).text(kcShip.aa[0]);
+				$(".ship_tooltip .stat_fp .current", shipBox).text(kcShip.fp[0]);
+				$(".ship_tooltip .stat_fp .mod", shipBox).text("+" + modLeftStats.fp).toggle(!!modLeftStats.fp);
+				$(".ship_tooltip .stat_ar .current", shipBox).text(kcShip.ar[0]);
+				$(".ship_tooltip .stat_ar .mod", shipBox).text("+" + modLeftStats.ar).toggle(!!modLeftStats.ar);
+				$(".ship_tooltip .stat_tp .current", shipBox).text(kcShip.tp[0]);
+				$(".ship_tooltip .stat_tp .mod", shipBox).text("+" + modLeftStats.tp).toggle(!!modLeftStats.tp);
+				$(".ship_tooltip .stat_ev .current", shipBox).text(kcShip.ev[0]);
+				$(".ship_tooltip .stat_ev .level", shipBox)
+					.text((diffStats.ev > 0 ? "+" : "") + diffStats.ev).toggle(!!diffStats.ev);
+				$(".ship_tooltip .stat_aa .current", shipBox).text(kcShip.aa[0]);
+				$(".ship_tooltip .stat_aa .mod", shipBox).text("+" + modLeftStats.aa).toggle(!!modLeftStats.aa);
 				$(".ship_tooltip .stat_ac", shipBox).text(kcShip.carrySlots());
-				$(".ship_tooltip .stat_as", shipBox).text(kcShip.as[0])
+				$(".ship_tooltip .stat_as .current", shipBox).text(kcShip.as[0])
 					.toggleClass("oasw", kcShip.canDoOASW());
+				$(".ship_tooltip .stat_as .level", shipBox)
+					.text((diffStats.as > 0 ? "+" : "") + diffStats.as).toggle(!!diffStats.as);
 				$(".ship_tooltip .stat_sp", shipBox).text(kcShip.speedName())
 					.addClass(KC3Meta.shipSpeed(kcShip.speed, true));
-				$(".ship_tooltip .stat_ls", shipBox).text(kcShip.ls[0]);
+				$(".ship_tooltip .stat_ls .current", shipBox).text(kcShip.ls[0]);
+				$(".ship_tooltip .stat_ls .level", shipBox)
+					.text((diffStats.ls > 0 ? "+" : "") + diffStats.ls).toggle(!!diffStats.ls);
 				$(".ship_tooltip .stat_rn", shipBox).text(kcShip.rangeName());
-				$(".ship_tooltip .stat_lk", shipBox).text(kcShip.lk[0]);
+				$(".ship_tooltip .stat_lk .current", shipBox).text(kcShip.lk[0]);
+				$(".ship_tooltip .stat_lk .luck", shipBox)
+					.text("+" + modLeftStats.lk).toggle(kcShip.lk[0] > shipMst.api_luck[0]);
 				$(".ship_tooltip .adjustedAntiAir", shipBox).text(
 					KC3Meta.term("ShipAAAdjusted").format(kcShip.adjustedAntiAir())
 				);

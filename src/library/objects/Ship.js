@@ -4,8 +4,7 @@ KC3改 Ship Object
 (function(){
 	"use strict";
 
-	var
-		deferList = {};
+	var deferList = {};
 
 	window.KC3Ship = function( data ){
 		// Default object properties included in stringifications
@@ -186,9 +185,12 @@ KC3改 Ship Object
 	KC3Ship.prototype.isTaiha   = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.25) && !this.isRepaired(); };
 	KC3Ship.prototype.speedName = function(){ return KC3Meta.shipSpeed(this.speed); };
 	KC3Ship.prototype.rangeName = function(){ return KC3Meta.shipRange(this.range); };
+	KC3Ship.getMarriedLevel = function(){ return 100; };
+	KC3Ship.getMaxLevel = function(){ return 155; };
+	KC3Ship.prototype.isMarried = function(){ return this.level >= KC3Ship.getMarriedLevel(); };
 	KC3Ship.prototype.levelClass = function(){
-		return this.level === 155 ? "married max" :
-			this.level >= 100 ? "married" :
+		return this.level === KC3Ship.getMaxLevel() ? "married max" :
+			this.level >= KC3Ship.getMarriedLevel() ? "married" :
 			this.level >= 80  ? "high" :
 			this.level >= 50  ? "medium" :
 			"";
@@ -301,7 +303,8 @@ KC3改 Ship Object
 		var masterHpArr = KC3Master.isNotRegularShip(masterId) ? [] :
 			(KC3Master.ship(masterId) || {"api_taik":[]}).api_taik;
 		var masterHp = masterHpArr[0], maxLimitHp = masterHpArr[1];
-		var expected = ((currentLevel || 155) < 100 ? masterHp :
+		var expected = ((currentLevel || KC3Ship.getMaxLevel())
+			< KC3Ship.getMarriedLevel() ? masterHp :
 			masterHp >  90 ? masterHp + 9 :
 			masterHp >= 70 ? masterHp + 8 :
 			masterHp >= 50 ? masterHp + 7 :
@@ -361,24 +364,105 @@ KC3改 Ship Object
 		return result;
 	};
 
-	/* NAKED LOS
-	   LoS without the equipment
-	--------------------------------------------------------------*/
-	KC3Ship.prototype.nakedLoS = function(){
-		var MyNakedLos = this.ls[0];
-		MyNakedLos -= this.equipmentTotalLoS();
-		return MyNakedLos;
+	/**
+	 * Naked stats of this ship.
+	 * @return stats without the equipment but with modernization.
+	 */
+	KC3Ship.prototype.nakedStats = function(statAttr){
+		const stats = {
+			aa: this.aa[0],
+			ar: this.ar[0],
+			as: this.as[0],
+			ev: this.ev[0],
+			fp: this.fp[0],
+			// Naked HP maybe mean HP before marriage
+			hp: this.master().api_taik[0],
+			// Luck can be only added by modernization
+			lk: this.master().api_luck[0],
+			ls: this.ls[0],
+			tp: this.tp[0]
+		};
+		const statApiNames = {
+			"tyku": "aa",
+			"souk": "ar",
+			"tais": "as",
+			"houk": "ev",
+			"houg": "fp",
+			"saku": "ls",
+			"raig": "tp"
+		};
+		for(const apiName in statApiNames) {
+			const equipStats = this.equipmentTotalStats(apiName);
+			stats[statApiNames[apiName]] -= equipStats;
+		}
+		return !statAttr ? stats : stats[statAttr];
 	};
 
-	KC3Ship.prototype.equipmentTotalLoS = function () {
-		var sumLoS = 0;
-		var self = this;
-		$.each(this.equipment(true), function(_,item) {
-			if (item.masterId !== 0) {
-				sumLoS += item.master().api_saku;
+	KC3Ship.prototype.equipmentTotalStats = function(apiName){
+		var total = 0;
+		this.equipment(true).forEach(equip => {
+			if(equip.masterId > 0) {
+				total += (equip.master()["api_" + apiName] || 0);
 			}
 		});
-		return sumLoS;
+		return total;
+	};
+
+	KC3Ship.prototype.nakedLoS = function(){
+		return this.nakedStats("ls");
+	};
+
+	KC3Ship.prototype.equipmentTotalLoS = function (){
+		return this.equipmentTotalStats("saku");
+	};
+
+	/**
+	 * Maxed stats of this ship.
+	 * @return stats without the equipment but with modernization at Lv.99,
+	 *         stats at Lv.155 can be only estimated by data from known database.
+	 */
+	KC3Ship.prototype.maxedStats = function(statAttr, isMarried = this.isMarried()){
+		const stats = {
+			aa: this.aa[1],
+			ar: this.ar[1],
+			as: this.as[1],
+			ev: this.ev[1],
+			fp: this.fp[1],
+			hp: this.hp[1],
+			// Maxed Luck includes full modernizated + marriage bonus
+			lk: this.lk[1],
+			ls: this.ls[1],
+			tp: this.tp[1]
+		};
+		if(isMarried){
+			stats.hp = KC3Ship.getMaxHp(this.masterId);
+			const asBound = WhoCallsTheFleetDb.getStatBound(this.masterId, "asw");
+			const asw = WhoCallsTheFleetDb.estimateStat(asBound, KC3Ship.getMaxLevel());
+			if(asw !== false) { stats.as = asw; }
+			const lsBound = WhoCallsTheFleetDb.getStatBound(this.masterId, "los");
+			const los = WhoCallsTheFleetDb.estimateStat(lsBound, KC3Ship.getMaxLevel());
+			if(los !== false) { stats.ls = los; }
+			const evBound = WhoCallsTheFleetDb.getStatBound(this.masterId, "evasion");
+			const evs = WhoCallsTheFleetDb.estimateStat(evBound, KC3Ship.getMaxLevel());
+			if(evs !== false) { stats.ev = evs; }
+		}
+		return !statAttr ? stats : stats[statAttr];
+	};
+
+	/**
+	 * Left modernizable stats of this ship.
+	 * @return stats to be maxed modernization
+	 */
+	KC3Ship.prototype.modernizeLeftStats = function(statAttr){
+		const shipMst = this.master();
+		const stats = {
+			fp: shipMst.api_houg[1] - shipMst.api_houg[0] - this.mod[0],
+			tp: shipMst.api_raig[1] - shipMst.api_raig[0] - this.mod[1],
+			aa: shipMst.api_tyku[1] - shipMst.api_tyku[0] - this.mod[2],
+			ar: shipMst.api_souk[1] - shipMst.api_souk[0] - this.mod[3],
+			lk: this.lk[1] - this.lk[0]
+		};
+		return !statAttr ? stats : stats[statAttr];
 	};
 
 	/* COUNT EQUIPMENT
@@ -567,7 +651,7 @@ KC3改 Ship Object
 			return Math.floor( a * percent );
 		};
 		var marriageConserve = function (v) {
-			return self.level >= 100 ? Math.floor(0.85 * v) : v;
+			return self.isMarried() ? Math.floor(0.85 * v) : v;
 		};
 		var result = {
 			fuel: fuelPercent < 0 ? fullFuel - this.fuel : mulRounded(fullFuel, fuelPercent),
@@ -644,7 +728,7 @@ KC3改 Ship Object
 		}
 	};
 	KC3Ship.prototype.performSupply = function(args) {
-		consumePending.call(this,0,{0:0,1:1,2:3,c: 1 - ((this.level >= 100) && 0.15),i: 0},[0,1,2],args);
+		consumePending.call(this,0,{0:0,1:1,2:3,c: 1 - (this.isMarried() && 0.15),i: 0},[0,1,2],args);
 	};
 	KC3Ship.prototype.performRepair = function(args) {
 		consumePending.call(this,1,{0:0,1:2,2:6,c: 1,i: 0},[0,1,2],args);

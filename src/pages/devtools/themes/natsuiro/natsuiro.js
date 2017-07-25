@@ -1302,10 +1302,15 @@
 			// If LBAS is selected, do not respond to rest fleet update
 			if (selectedFleet == 6) {
 				let lbasSupplyCost = PlayerManager.getBasesResupplyCost();
+				let lbasSortieCost = PlayerManager.getBasesSortieCost();
 				$(".module.status .status_supply").attr("title",
 					KC3Meta.term("PanelResupplyCosts").format(
-						lbasSupplyCost.fuel, lbasSupplyCost.ammo, lbasSupplyCost.bauxite
-					)
+						lbasSupplyCost.fuel, lbasSupplyCost.ammo, lbasSupplyCost.bauxite, ""
+					) + "\n" +
+					KC3Meta.term("PanelLbasSortieCosts").format(
+						lbasSortieCost.fuel, lbasSortieCost.ammo
+					) + (!lbasSortieCost.steel ? "" :
+						"\n" + KC3Meta.term("PanelConsumedSteel").format(lbasSortieCost.steel))
 				).lazyInitTooltip();
 				return false;
 			}
@@ -1456,6 +1461,7 @@
 				// Compile fleet attributes
 				FleetSummary = {
 					lv: CurrentFleet.totalLevel(),
+					baseExp: CurrentFleet.estimatePvpBaseExp(),
 					elos: Math.qckInt("floor", CurrentFleet.eLoS(), 1),
 					air: CurrentFleet.fighterPowerText(),
 					antiAir: CurrentFleet.adjustedAntiAir(ConfigManager.aaFormation),
@@ -1493,7 +1499,11 @@
 			console.debug("Current fleet summary", FleetSummary);
 
 			// Fleet Summary Stats
-			$(".summary-level .summary_text").text( FleetSummary.lv );
+			$(".summary-level .summary_text").text( FleetSummary.lv )
+				.attr("title", selectedFleet > 1 ? "" :
+					KC3Meta.term("FirstFleetLevelTip")
+						.format(FleetSummary.baseExp.base, FleetSummary.baseExp.s)
+				).lazyInitTooltip();
 			$(".summary-eqlos .summary_text").text( FleetSummary.elos );
 			$(".summary-airfp .summary_text").text( FleetSummary.air );
 			$(".summary-antiair .summary_icon img")
@@ -1554,7 +1564,8 @@
 				}
 				$(".module.status .status_supply").attr("title",
 					KC3Meta.term("PanelResupplyCosts").format(
-						FleetSummary.supplyCost.fuel, FleetSummary.supplyCost.ammo, FleetSummary.supplyCost.bauxite
+						FleetSummary.supplyCost.fuel, FleetSummary.supplyCost.ammo, FleetSummary.supplyCost.bauxite,
+						FleetSummary.supplyCost.hasMarried ? KC3Meta.term("PanelResupplyMarriedHint") : ""
 					) + ("\n" + KC3Meta.term("PanelBattleConsumes").format(
 						FleetSummary.battleCost.fuel, FleetSummary.battleCost.dayOnlyAmmo, FleetSummary.battleCost.nightBattleAmmo,
 						FleetSummary.battleCost.airRaidFuel, FleetSummary.battleCost.airRaidAmmo
@@ -1794,7 +1805,7 @@
 										$(".base_plane_count", planeBox).addClass("unsupplied");
 										$(".base_plane_count", planeBox).attr("title",
 											KC3Meta.term("PanelResupplyCosts").format(
-												cost.fuel, cost.ammo, cost.bauxite
+												cost.fuel, cost.ammo, cost.bauxite, ""
 											)
 										).lazyInitTooltip();
 									} else {
@@ -1821,10 +1832,15 @@
 				});
 				
 				let lbasSupplyCost = PlayerManager.getBasesResupplyCost();
+				let lbasSortieCost = PlayerManager.getBasesSortieCost();
 				$(".module.status .status_supply").attr("title",
 					KC3Meta.term("PanelResupplyCosts").format(
-						lbasSupplyCost.fuel, lbasSupplyCost.ammo, lbasSupplyCost.bauxite
-					)
+						lbasSupplyCost.fuel, lbasSupplyCost.ammo, lbasSupplyCost.bauxite, ""
+					) + "\n" +
+					KC3Meta.term("PanelLbasSortieCosts").format(
+						lbasSortieCost.fuel, lbasSortieCost.ammo
+					) + (!lbasSortieCost.steel ? "" :
+						"\n" + KC3Meta.term("PanelConsumedSteel").format(lbasSortieCost.steel))
 				).lazyInitTooltip();
 			}
 		},
@@ -2638,27 +2654,18 @@
 					shipBox.appendTo(".activity_pvp .pvp_fleet_list");
 				}
 			});
-			// Base EXP only affected by first two ships of opponent's fleet
-			var baseExp = 3 + Math.floor(KC3Meta.expShip(levelFlagship)[1] / 100 + KC3Meta.expShip(level2ndShip)[1] / 300);
-			if(baseExp > 500){
-				baseExp = Math.floor(500 + Math.sqrt(baseExp - 500));
-			}
 			// Check CT bonus in current selected fleet
 			var playerFleet = PlayerManager.fleets[selectedFleet > 4 ? 0 : selectedFleet - 1];
 			var ctBonus = playerFleet.lookupKatoriClassBonus();
-			// Variant of battle rank
-			var baseExpWoCT = Math.floor(baseExp * 1.2),
-				baseExpS  = Math.floor(Math.floor(baseExp * 1.2) * ctBonus),
-				baseExpAB = Math.floor(Math.floor(baseExp * 1.0) * ctBonus),
-				baseExpC  = Math.floor(Math.floor(baseExp * 0.64) * ctBonus),
-				baseExpD  = Math.floor(Math.floor(Math.floor(baseExp * 0.56) * 0.8) * ctBonus);
-			$(".activity_pvp .pvp_base_exp .value").text(baseExpS);
+			// Base EXP only affected by first two ships of opponent's fleet
+			var baseExp = playerFleet.estimatePvpBaseExp(levelFlagship, level2ndShip, ctBonus);
+			$(".activity_pvp .pvp_base_exp .value").text(baseExp.s);
 			$(".activity_pvp .pvp_base_exp").attr("title",
 				("{0}: {1}\nSS/S: {2}\nA/B: {3}\nC: {4}\nD: {5}"
 				 + (ctBonus > 1 ? "\n{6}: {7}" : ""))
 					.format(KC3Meta.term("PvpBaseExp"),
-						baseExp, baseExpS, baseExpAB, baseExpC, baseExpD,
-						KC3Meta.term("PvpDispBaseExpWoCT").format(ctBonus), baseExpWoCT)
+						baseExp.base, baseExp.s, baseExp.a, baseExp.c, baseExp.d,
+						KC3Meta.term("PvpDispBaseExpWoCT").format(ctBonus), baseExp.sIngame)
 			).lazyInitTooltip();
 			var predictedFormation = playerFleet.predictOpponentFormation(
 				// Normalize opponent's fleet: convert Object to Array, remove -1 elements
@@ -2666,14 +2673,12 @@
 					.map(function(v){return v.api_id > 0 ? v.api_ship_id : -1;})
 					.filter(function(v){return v > 0;})
 			);
+			var formationText = KC3Meta.formationText(predictedFormation);
 			$(".activity_pvp .pvp_formation img")
 				.attr("src", KC3Meta.formationIcon(predictedFormation))
-				.attr("title", KC3Meta.formationText(predictedFormation))
+				.attr("title", formationText)
 				.lazyInitTooltip();
-			console.log("Predicted PvP exp and formation",
-				[baseExp, baseExpWoCT, baseExpS, baseExpAB, baseExpC, baseExpD],
-				KC3Meta.formationText(predictedFormation)
-			);
+			console.log("Predicted PvP formation and exp", formationText, baseExp);
 			
 			$(".module.activity .activity_tab").removeClass("active");
 			$("#atab_activity").addClass("active");
