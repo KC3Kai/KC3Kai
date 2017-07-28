@@ -44,6 +44,11 @@ button, input, select, textarea {
 	margin:0px;
 }
 
+.ui-tooltip-content .stats_icon_img {
+	filter:invert(100%);
+	-webkit-filter:invert(100%);
+}
+
 /* COLORS
 -------------------------------*/
 .fcolor1 { color:#ffffff; }
@@ -1077,6 +1082,9 @@ button, input, select, textarea {
 .tab_akashi .equipment {
 	border-bottom:1px solid #777;
 	margin:0px !important;
+}
+.tab_akashi .equipment.equipped {
+	background:#4c4100;
 }
 .tab_akashi .equipment.disabled {
 	opacity:0.4;

@@ -239,7 +239,7 @@ module.exports = function(grunt) {
 						},
 						"content_scripts": [
 							{
-								"matches":["*://www.dmm.com/*"],
+								"matches": ["*://*.dmm.com/*"],
 								"js": ["library/injections/cookie.js"],
 								"run_at": "document_end",
 								"all_frames": true
