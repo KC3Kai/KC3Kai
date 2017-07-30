@@ -1284,10 +1284,11 @@ body {
 .tab_quotes .part_right .voice_entity.inherit {
 	background: #e6f7ff;
 }
-.tab_quotes .part_right .voice_entity .jp_src,.en_src {
+.tab_quotes .part_right .voice_entity .jp_src,
+.tab_quotes .part_right .voice_entity .en_src {
 	background: #eeeeee;
 }
-.tab_quotes .part_right .voice_entity .sp_quote {
+.tab_quotes .part_right .voice_entity .seasonal {
 	background: #fff0fd;
 }
 .tab_quotes .part_right .voice_entity .voice {
