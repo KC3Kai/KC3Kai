@@ -215,12 +215,12 @@
 }
 
 .ui-tooltip-content .ship_tooltip {
-	width:202px;
+	width:252px;
 	height:280px;
 	padding:2px 0px 2px 0px;
 }
 .ui-tooltip-content .ship_tooltip .ship_full_name {
-	width:158px;
+	width:208px;
 	height:17px;
 	line-height:17px;
 	padding:0px 2px 0px 2px;
@@ -290,12 +290,12 @@
 	white-space:nowrap;
 }
 .ui-tooltip-content .ship_tooltip .ship_stats_col {
-	width:101px;
+	width:126px;
 	margin:0px 0px 0px 0px;
 	float:left;
 }
 .ui-tooltip-content .ship_tooltip .ship_stats_row {
-	width:200px;
+	width:250px;
 	margin:0px 0px 0px 0px;
 	float:left;
 }
@@ -324,13 +324,13 @@
 	margin:0px 0px 0px 2px;
 }
 .ui-tooltip-content .ship_tooltip .stat_value {
-	width:46px;
+	width:71px;
 	height:19px;
 	line-height:17px;
 	padding:0px 2px 1px 2px;
 	margin:0px 2px 1px 0px;
 	float:left;
-	font-size:12px;
+	font-size:11px;
 	text-align:right;
 	overflow:hidden;
 	white-space:nowrap;
@@ -339,23 +339,23 @@
 	border-right-color:#f0f0f0;
 	border-bottom-color:#f0f0f0;
 }
+.ui-tooltip-content .ship_tooltip .stat_value .equip {
+	font-size:10px;
+	color:#1a1;
+	margin-right:1px;
+}
 .ui-tooltip-content .ship_tooltip .stat_value .mod {
-	font-size:9px;
+	font-size:10px;
 	color:#aaa;
 	margin-left:1px;
 }
 .ui-tooltip-content .ship_tooltip .stat_value .level {
-	font-size:9px;
+	font-size:10px;
 	color:#3ec0bf;
 	margin-left:1px;
 }
-.ui-tooltip-content .ship_tooltip .stat_value .equip {
-	font-size:9px;
-	color:#1a1;
-	margin-left:1px;
-}
 .ui-tooltip-content .ship_tooltip .stat_value .luck {
-	font-size:9px;
+	font-size:10px;
 	color:#2b2;
 	margin-left:1px;
 }
@@ -369,10 +369,10 @@
 }
 
 .ui-tooltip-content .ship_tooltip .stat_wide {
-	width:199px;
+	width:249px;
 }
 .ui-tooltip-content .ship_tooltip .aa_col {
-	width: 39px;
+	width:49px;
 	height:19px;
 	line-height:17px;
 	padding:0px 2px 0px 2px;

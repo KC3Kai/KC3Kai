@@ -226,8 +226,10 @@
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ 0, "SettingsShipStatsLeftToMax" ],
-						[ 1, "SettingsShipStatsEquipAdded" ]
+						[ 0, "SettingsShipStatsCurrent" ],
+						[ 1, "SettingsShipStatsUnequipped" ],
+						[ 2, "SettingsShipStatsLeftToMax" ],
+						[ 3, "SettingsShipStatsAll" ]
 					]
 				}
 			},

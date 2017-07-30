@@ -63,7 +63,7 @@ Retreives when needed to apply on components
 				info_auto_exped_tab : true,
 				info_auto_fleet_view: true,
 				info_pvp_info		: true,
-				info_stats_diff		: 0,
+				info_stats_diff		: 3,
 				info_eng_stype		: false,
 				info_force_ship_lang: "",
 				info_salt 			: false,

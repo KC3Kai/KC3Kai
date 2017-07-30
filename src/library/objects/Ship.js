@@ -861,6 +861,37 @@ KC3改 Ship Object
 		return hasSonar;
 	};
 
+	// see http://wikiwiki.jp/kancolle/?%CC%BF%C3%E6%A4%C8%B2%F3%C8%F2%A4%CB%A4%C4%A4%A4%A4%C6
+	// see http://kancolle.wikia.com/wiki/Combat/Accuracy_and_Evasion
+	KC3Ship.prototype.shellingAccuracy = function(formationModifier = 1) {
+		const onLevel = 2 * Math.sqrt(this.level - 1);
+		const onLuck = 1.5 * Math.sqrt(this.lk[0]);
+		const onEquip = -this.nakedStats().ac;
+		// http://kancolle.wikia.com/wiki/Improvements
+		const onImprove = this.equipment(true).map(
+			// Main/Secondary/AP shell/Sonar/Radar/AAFD
+			e => e.itemId > 0 && [1,2,8,10,24,25].indexOf(e.master().api_type[1]) > -1
+				&& e.stars
+		).reduce((acc, v) => acc + Math.sqrt(v), 0);
+		const moraleModifier = (
+			this.morale > 52 ? 1.2 :
+			this.morale > 32 ? 1.0 :
+			this.morale > 19 ? 0.8 :
+			0.5
+		);
+		// TODO To be implemented
+		const gunfit = 0;
+		const base = 3 + gunfit +
+			Math.floor((90 + onLevel + onLuck + onEquip + onImprove) * formationModifier * moraleModifier * 10) / 10;
+		return {
+			accuracy: base,
+			equipmentStats: onEquip,
+			equipImprovement: onImprove,
+			moraleModifier: moraleModifier,
+			formationModifier: formationModifier
+		};
+	};
+
 	KC3Ship.prototype.equipmentAntiAir = function(forFleet) {
 		return AntiAir.shipEquipmentAntiAir(this, forFleet);
 	};
@@ -986,6 +1017,7 @@ KC3改 Ship Object
 			  modLeftStats = shipObj.modernizeLeftStats();
 		Object.keys(maxedStats).map(s => {maxDiffStats[s] = maxedStats[s] - nakedStats[s];});
 		Object.keys(nakedStats).map(s => {equipDiffStats[s] = nakedStats[s] - (shipObj[s]||[])[0];});
+		const signedNumber = n => (n > 0 ? '+' : n === 0 ? '\u00b1' : '') + n;
 		$(".ship_full_name .ship_masterId", tooltipBox).text("[{0}]".format(shipObj.masterId));
 		$(".ship_full_name span.value", tooltipBox).text(shipObj.name());
 		$(".ship_full_name .ship_yomi", tooltipBox).text(KC3Meta.shipReadingName(shipObj.master().api_yomi));
@@ -997,55 +1029,64 @@ KC3改 Ship Object
 		$(".ship_hp span.mhp", tooltipBox).text(shipObj.hp[1]);
 		$(".stat_hp", tooltipBox).text(shipObj.hp[1]);
 		$(".stat_fp .current", tooltipBox).text(shipObj.fp[0]);
-		$(".stat_fp .mod", tooltipBox).text("+" + modLeftStats.fp).toggle(!!modLeftStats.fp);
-		$(".stat_fp .equip", tooltipBox)
-			.text((equipDiffStats.fp > 0 ? "+" : "") + equipDiffStats.fp).toggle(!!equipDiffStats.fp);
+		$(".stat_fp .mod", tooltipBox).text(signedNumber(modLeftStats.fp))
+			.toggle(!!modLeftStats.fp);
+		$(".stat_fp .equip", tooltipBox).text("({0})".format(nakedStats.fp))
+			.toggle(!!equipDiffStats.fp);
 		$(".stat_ar .current", tooltipBox).text(shipObj.ar[0]);
-		$(".stat_ar .mod", tooltipBox).text("+" + modLeftStats.ar).toggle(!!modLeftStats.ar);
-		$(".stat_ar .equip", tooltipBox)
-			.text((equipDiffStats.ar > 0 ? "+" : "") + equipDiffStats.ar).toggle(!!equipDiffStats.ar);
+		$(".stat_ar .mod", tooltipBox).text(signedNumber(modLeftStats.ar))
+			.toggle(!!modLeftStats.ar);
+		$(".stat_ar .equip", tooltipBox).text("({0})".format(nakedStats.ar))
+			.toggle(!!equipDiffStats.ar);
 		$(".stat_tp .current", tooltipBox).text(shipObj.tp[0]);
-		$(".stat_tp .mod", tooltipBox).text("+" + modLeftStats.tp).toggle(!!modLeftStats.tp);
-		$(".stat_tp .equip", tooltipBox)
-			.text((equipDiffStats.tp > 0 ? "+" : "") + equipDiffStats.tp).toggle(!!equipDiffStats.tp);
+		$(".stat_tp .mod", tooltipBox).text(signedNumber(modLeftStats.tp))
+			.toggle(!!modLeftStats.tp);
+		$(".stat_tp .equip", tooltipBox).text("({0})".format(nakedStats.tp))
+			.toggle(!!equipDiffStats.tp);
 		$(".stat_ev .current", tooltipBox).text(shipObj.ev[0]);
-		$(".stat_ev .level", tooltipBox)
-			.text((maxDiffStats.ev > 0 ? "+" : "") + maxDiffStats.ev).toggle(!!maxDiffStats.ev);
-		$(".stat_ev .equip", tooltipBox)
-			.text((equipDiffStats.ev > 0 ? "+" : "") + equipDiffStats.ev).toggle(!!equipDiffStats.ev);
+		$(".stat_ev .level", tooltipBox).text(signedNumber(maxDiffStats.ev))
+			.toggle(!!maxDiffStats.ev);
+		$(".stat_ev .equip", tooltipBox).text("({0})".format(nakedStats.ev))
+			.toggle(!!equipDiffStats.ev);
 		$(".stat_aa .current", tooltipBox).text(shipObj.aa[0]);
-		$(".stat_aa .mod", tooltipBox).text("+" + modLeftStats.aa).toggle(!!modLeftStats.aa);
-		$(".stat_aa .equip", tooltipBox)
-			.text((equipDiffStats.aa > 0 ? "+" : "") + equipDiffStats.aa).toggle(!!equipDiffStats.aa);
+		$(".stat_aa .mod", tooltipBox).text(signedNumber(modLeftStats.aa))
+			.toggle(!!modLeftStats.aa);
+		$(".stat_aa .equip", tooltipBox).text("({0})".format(nakedStats.aa))
+			.toggle(!!equipDiffStats.aa);
 		$(".stat_ac .current", tooltipBox).text(shipObj.carrySlots());
-		// No accuracy stat shown ingame, reuse carry slots column and show negtive value
-		$(".stat_ac .equip", tooltipBox)
-			.text((nakedStats.ac < 0 ? "+" : "") + -nakedStats.ac).toggle(!!nakedStats.ac);
 		$(".stat_as .current", tooltipBox).text(shipObj.as[0])
 			.toggleClass("oasw", shipObj.canDoOASW());
-		$(".stat_as .level", tooltipBox)
-			.text((maxDiffStats.as > 0 ? "+" : "") + maxDiffStats.as).toggle(!!maxDiffStats.as);
-		$(".stat_as .equip", tooltipBox)
-			.text((equipDiffStats.as > 0 ? "+" : "") + equipDiffStats.as).toggle(!!equipDiffStats.as);
+		$(".stat_as .level", tooltipBox).text(signedNumber(maxDiffStats.as))
+			.toggle(!!maxDiffStats.as);
+		$(".stat_as .equip", tooltipBox).text("({0})".format(nakedStats.as))
+			.toggle(!!equipDiffStats.as);
 		$(".stat_sp", tooltipBox).text(shipObj.speedName())
 			.addClass(KC3Meta.shipSpeed(shipObj.speed, true));
 		$(".stat_ls .current", tooltipBox).text(shipObj.ls[0]);
-		$(".stat_ls .level", tooltipBox)
-			.text((maxDiffStats.ls > 0 ? "+" : "") + maxDiffStats.ls).toggle(!!maxDiffStats.ls);
-		$(".stat_ls .equip", tooltipBox)
-			.text((equipDiffStats.ls > 0 ? "+" : "") + equipDiffStats.ls).toggle(!!equipDiffStats.ls);
+		$(".stat_ls .level", tooltipBox).text(signedNumber(maxDiffStats.ls))
+			.toggle(!!maxDiffStats.ls);
+		$(".stat_ls .equip", tooltipBox).text("({0})".format(nakedStats.ls))
+			.toggle(!!equipDiffStats.ls);
 		$(".stat_rn", tooltipBox).text(shipObj.rangeName())
 			.toggleClass("RangeChanged", shipObj.range != shipObj.master().api_leng);
 		$(".stat_lk .current", tooltipBox).text(shipObj.lk[0]);
-		if(ConfigManager.info_stats_diff === 1){
-			$(".stat_lk .luck", tooltipBox)
-				.text(equipDiffStats.lk).toggle(!!equipDiffStats.lk);
-			$(".mod,.level", tooltipBox).hide();
-		} else {
-			$(".stat_lk .luck", tooltipBox)
-				.text("+" + modLeftStats.lk).toggle(shipObj.lk[0] > shipObj.master().api_luck[0]);
+		$(".stat_lk .luck", tooltipBox).text(signedNumber(modLeftStats.lk));
+		$(".stat_lk .equip", tooltipBox).text("({0})".format(nakedStats.lk))
+			.toggle(!!equipDiffStats.lk);
+		if(!(ConfigManager.info_stats_diff & 1)){
 			$(".equip", tooltipBox).hide();
 		}
+		if(!(ConfigManager.info_stats_diff & 2)){
+			$(".mod,.level,.luck", tooltipBox).hide();
+		}
+		const shellingAccuracy = shipObj.shellingAccuracy();
+		$(".shellingAccuracy", tooltipBox).text(
+			KC3Meta.term("ShipAccShelling").format(
+				shellingAccuracy.accuracy,
+				signedNumber(shellingAccuracy.equipmentStats),
+				signedNumber(shellingAccuracy.equipImprovement)
+			)
+		);
 		$(".adjustedAntiAir", tooltipBox).text(
 			KC3Meta.term("ShipAAAdjusted").format(shipObj.adjustedAntiAir())
 		);
