@@ -406,107 +406,12 @@
 			// Only available for current fleet as no ship attribute omitted
 			var viewType = $("input[type=radio][name=view_type]:checked").val();
 			if(viewType === "current"){
-				var nakedStats = kcShip.nakedStats(),
-					maxedStats = kcShip.maxedStats(),
-					diffStats = {},
-					modLeftStats = kcShip.modernizeLeftStats();
-				Object.keys(maxedStats).map(s => {diffStats[s] = maxedStats[s] - nakedStats[s];});
 				// Show a rich text tool-tip like stats in game
-				$(".ship_tooltip .ship_full_name .ship_masterId", shipBox).text("[{0}]".format(kcShip.masterId));
-				$(".ship_tooltip .ship_full_name span.value", shipBox).text(kcShip.name());
-				$(".ship_tooltip .ship_full_name .ship_yomi", shipBox).text(KC3Meta.shipReadingName(shipMst.api_yomi));
-				$(".ship_tooltip .ship_rosterId span", shipBox).text(kcShip.rosterId);
-				$(".ship_tooltip .ship_stype", shipBox).text(kcShip.stype());
-				$(".ship_tooltip .ship_level span.value", shipBox).text(kcShip.level);
-				//$(".ship_tooltip .ship_level span.value", shipBox).addClass(kcShip.levelClass());
-				$(".ship_tooltip .ship_hp span.hp", shipBox).text(kcShip.hp[0]);
-				$(".ship_tooltip .ship_hp span.mhp", shipBox).text(kcShip.hp[1]);
-				$(".ship_tooltip .stat_hp", shipBox).text(kcShip.hp[1]);
-				$(".ship_tooltip .stat_fp .current", shipBox).text(kcShip.fp[0]);
-				$(".ship_tooltip .stat_fp .mod", shipBox).text("+" + modLeftStats.fp).toggle(!!modLeftStats.fp);
-				$(".ship_tooltip .stat_ar .current", shipBox).text(kcShip.ar[0]);
-				$(".ship_tooltip .stat_ar .mod", shipBox).text("+" + modLeftStats.ar).toggle(!!modLeftStats.ar);
-				$(".ship_tooltip .stat_tp .current", shipBox).text(kcShip.tp[0]);
-				$(".ship_tooltip .stat_tp .mod", shipBox).text("+" + modLeftStats.tp).toggle(!!modLeftStats.tp);
-				$(".ship_tooltip .stat_ev .current", shipBox).text(kcShip.ev[0]);
-				$(".ship_tooltip .stat_ev .level", shipBox)
-					.text((diffStats.ev > 0 ? "+" : "") + diffStats.ev).toggle(!!diffStats.ev);
-				$(".ship_tooltip .stat_aa .current", shipBox).text(kcShip.aa[0]);
-				$(".ship_tooltip .stat_aa .mod", shipBox).text("+" + modLeftStats.aa).toggle(!!modLeftStats.aa);
-				$(".ship_tooltip .stat_ac", shipBox).text(kcShip.carrySlots());
-				$(".ship_tooltip .stat_as .current", shipBox).text(kcShip.as[0])
-					.toggleClass("oasw", kcShip.canDoOASW());
-				$(".ship_tooltip .stat_as .level", shipBox)
-					.text((diffStats.as > 0 ? "+" : "") + diffStats.as).toggle(!!diffStats.as);
-				$(".ship_tooltip .stat_sp", shipBox).text(kcShip.speedName())
-					.addClass(KC3Meta.shipSpeed(kcShip.speed, true));
-				$(".ship_tooltip .stat_ls .current", shipBox).text(kcShip.ls[0]);
-				$(".ship_tooltip .stat_ls .level", shipBox)
-					.text((diffStats.ls > 0 ? "+" : "") + diffStats.ls).toggle(!!diffStats.ls);
-				$(".ship_tooltip .stat_rn", shipBox).text(kcShip.rangeName());
-				$(".ship_tooltip .stat_lk .current", shipBox).text(kcShip.lk[0]);
-				$(".ship_tooltip .stat_lk .luck", shipBox)
-					.text("+" + modLeftStats.lk).toggle(kcShip.lk[0] > shipMst.api_luck[0]);
-				$(".ship_tooltip .adjustedAntiAir", shipBox).text(
-					KC3Meta.term("ShipAAAdjusted").format(kcShip.adjustedAntiAir())
-				);
-				$(".ship_tooltip .propShotdownRate", shipBox).text(
-						KC3Meta.term("ShipAAShotdownRate").format(
-							Math.qckInt("floor", kcShip.proportionalShotdownRate() * 100, 1)
-						)
-					);
-				var fixedShotdownRange = kcShip.fixedShotdownRange(ConfigManager.aaFormation);
-				var fleetPossibleAaci = fixedShotdownRange[2];
-				if(fleetPossibleAaci > 0){
-					$(".ship_tooltip .fixedShotdown", shipBox).text(
-						KC3Meta.term("ShipAAFixedShotdown").format(
-							"{0}~{1} (x{2})".format(fixedShotdownRange[0], fixedShotdownRange[1],
-								AntiAir.AACITable[fleetPossibleAaci].modifier)
-						)
-					);
-				} else {
-					$(".ship_tooltip .fixedShotdown", shipBox).text(
-						KC3Meta.term("ShipAAFixedShotdown").format(fixedShotdownRange[0])
-					);
-				}
-				var maxAaciParams = kcShip.maxAaciShotdownBonuses();
-				if(maxAaciParams[0] > 0){
-					$(".ship_tooltip .aaciMaxBonus", shipBox).text(
-						KC3Meta.term("ShipAACIMaxBonus").format(
-							"+{0} (x{1})".format(maxAaciParams[1], maxAaciParams[2])
-						)
-					);
-				} else {
-					$(".ship_tooltip .aaciMaxBonus", shipBox).text(
-						KC3Meta.term("ShipAACIMaxBonus").format(KC3Meta.term("None"))
-					);
-				}
-				var propShotdown = kcShip.proportionalShotdown(ConfigManager.imaginaryEnemySlot);
-				var aaciFixedShotdown = fleetPossibleAaci > 0 ? AntiAir.AACITable[fleetPossibleAaci].fixed : 0;
-				$.each($(".ship_tooltip .sd_title .aa_col", shipBox), function(idx, col){
-					$(col).text(KC3Meta.term("ShipAAShotdownTitles").split("/")[idx] || "");
-				});
-				$(".ship_tooltip .bomberSlot span", shipBox).text(ConfigManager.imaginaryEnemySlot);
-				$(".ship_tooltip .sd_both span", shipBox).text(
-					// Both succeeded
-					propShotdown + fixedShotdownRange[1] + aaciFixedShotdown + 1
-				);
-				$(".ship_tooltip .sd_prop span", shipBox).text(
-					// Proportional succeeded only
-					propShotdown + aaciFixedShotdown + 1
-				);
-				$(".ship_tooltip .sd_fixed span", shipBox).text(
-					// Fixed succeeded only
-					fixedShotdownRange[1] + aaciFixedShotdown + 1
-				);
-				$(".ship_tooltip .sd_fail span", shipBox).text(
-					// Both failed
-					aaciFixedShotdown + 1
-				);
+				const tooltipBox = kcShip.htmlTooltip($(".ship_tooltip", shipBox));
 				$(".ship_hover", shipBox).tooltip({
 					position: { my: "left top", at: "right+10 top" },
 					items: "div",
-					content: $(".ship_tooltip", shipBox).prop("outerHTML")
+					content: tooltipBox.prop("outerHTML")
 				});
 			}
 

@@ -221,6 +221,17 @@
 				}
 			},
 			{
+				"id" : "info_stats_diff",
+				"name" : "SettingsShipStatsDiffType",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "SettingsShipStatsLeftToMax" ],
+						[ 1, "SettingsShipStatsEquipAdded" ]
+					]
+				}
+			},
+			{
 				"id" : "info_salt",
 				"name" : "SettingsSaltyShip",
 				"type" : "check",

@@ -799,6 +799,7 @@ Contains summary information about a fleet and its 6 ships
 			13: 0.6, // Large Radar
 			26: 0.6, // ASW Patrol Aircraft
 			29: 0.6, // Searchlight Small / Large
+			32: 0, // Submarine Torpedo (los stat found, but unverified)
 			34: 0.6, // Fleet Command Facility
 			35: 0.6, // SCAMP
 			39: 0.6, // Skilled Lookouts

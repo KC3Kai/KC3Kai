@@ -238,7 +238,7 @@ KC3改 Equipment Object
 		return AntiAir.calcEquipmentAADefense(mst, stars, forFleet);
 	};
 
-	/*
+	/**
 	 * Build tooltip HTML of this Gear. Used by Panel/Strategy Room.
 	 */
 	KC3Gear.prototype.htmlTooltip = function(slotSize) {

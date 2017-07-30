@@ -342,26 +342,32 @@
 .ui-tooltip-content .ship_tooltip .stat_value .mod {
 	font-size:9px;
 	color:#aaa;
+	margin-left:1px;
 }
 .ui-tooltip-content .ship_tooltip .stat_value .level {
 	font-size:9px;
 	color:#3ec0bf;
+	margin-left:1px;
+}
+.ui-tooltip-content .ship_tooltip .stat_value .equip {
+	font-size:9px;
+	color:#1a1;
+	margin-left:1px;
 }
 .ui-tooltip-content .ship_tooltip .stat_value .luck {
 	font-size:9px;
 	color:#2b2;
+	margin-left:1px;
 }
 .ui-tooltip-content .ship_tooltip .stat_value .oasw {
 	color:#0cd;
 }
 .ui-tooltip-content .ship_tooltip .stat_value.SpeedFaster,
-.ui-tooltip-content .ship_tooltip .stat_value.SpeedFastest {
+.ui-tooltip-content .ship_tooltip .stat_value.SpeedFastest,
+.ui-tooltip-content .ship_tooltip .stat_value.RangeChanged {
 	color:#7aabb8;
 }
-.ui-tooltip-content .ship_tooltip .stat_value .equip {
-	font-size:smaller;
-	color:#2bf;
-}
+
 .ui-tooltip-content .ship_tooltip .stat_wide {
 	width:199px;
 }
