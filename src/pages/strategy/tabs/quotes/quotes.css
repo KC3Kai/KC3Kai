@@ -94,11 +94,13 @@
 	background: #9ad;
 }
 
-.tab_quotes .part_right .voice_entity .jp_src,.en_src {
+.tab_quotes .part_right .voice_entity .jp_src,
+.tab_quotes .part_right .voice_entity .en_src {
 	display: none;
 }
-.tab_quotes .part_right .voice_entity .sp_quote {
+.tab_quotes .part_right .voice_entity .seasonal {
 	display: none;
+	font-size: 12px;
 }
 
 .tab_quotes .part_right .voice_entity.direct {

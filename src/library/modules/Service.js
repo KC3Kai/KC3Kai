@@ -388,6 +388,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 						config: ConfigManager,
 						master: KC3Master,
 						meta: KC3Meta,
+						remodel: RemodelDb,
 						quest: KC3QuestManager,
 					});
 				});
@@ -423,6 +424,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				filename: request.filename || false,
 				shipID: request.shipID || false,
 				voiceNum: request.voiceNum,
+				voiceSize: request.voiceSize,
 				url: request.url
 			})).execute();
 		},
