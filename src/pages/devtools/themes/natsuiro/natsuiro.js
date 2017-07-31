@@ -989,8 +989,10 @@
 		},
 
 		HQ: function(data){
+			$(".module.admiral").hideChildrenTooltips();
 			$(".admiral_name").text( PlayerManager.hq.name );
 			$(".admiral_comm").text( PlayerManager.hq.desc );
+			$(".admiral_rank").lazyInitTooltip();
 			if(ConfigManager.rankPtsMode === 2){
 				$(".admiral_rank").text(PlayerManager.hq.getRankPoints()
 					.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
@@ -998,10 +1000,9 @@
 				).attr("title", KC3Meta.term("HQRankPointsTip")
 					.format(!PlayerManager.hq.rankPtLastTimestamp ? "?"
 						: new Date(PlayerManager.hq.rankPtLastTimestamp).format("yyyy-mm-dd HH:MM:ss"))
-				).lazyInitTooltip().tooltip("enable");
+				);
 			} else {
-				$(".admiral_rank").text(PlayerManager.hq.rank)
-					.attr("title", "").lazyInitTooltip().tooltip("disable");
+				$(".admiral_rank").text(PlayerManager.hq.rank).attr("title", "");
 			}
 			$(".admiral_lvval").text( PlayerManager.hq.level );
 			$(".admiral_lvbar").css({width: Math.round(PlayerManager.hq.exp[0]*58)+"px"});
@@ -1009,6 +1010,7 @@
 		},
 
 		Consumables: function(data){
+			$(".activity_basic .consumables").hideChildrenTooltips();
 			let getWarnRscCap = max => Math.floor(max * (ConfigManager.alert_rsc_cap / 100)) || Infinity;
 			$(".count_fcoin")
 				.text( PlayerManager.consumables.fcoin || 0 )
@@ -1082,6 +1084,7 @@
 		},
 
 		ShipSlots: function(data){
+			$(".activity_basic .consumables").hideChildrenTooltips();
 			var shipCount = KC3ShipManager.count();
 			var lockedShipCount = KC3ShipManager.count( function() {
 				return this.lock;
@@ -1097,6 +1100,7 @@
 		},
 
 		GearSlots: function(data){
+			$(".activity_basic .consumables").hideChildrenTooltips();
 			var gearCount = KC3GearManager.count();
 			var lockedGearCount = KC3GearManager.count( function() {
 				return this.lock;

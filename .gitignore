@@ -24,7 +24,19 @@ build
 
 # Dependency directory
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
-node_modules
+node_modules/
+package-lock.json
+
+# Optional npm cache directory
+.npm/
+npm-debug.log
+
+# VSCode
+.vscode/
+jsconfig.json
+
+# Typescript v1 declaration files
+typings/
 
 # Custom KC3 Ignores
 $devFiles

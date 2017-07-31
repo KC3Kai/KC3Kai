@@ -380,7 +380,9 @@ KC3改 Ship Object
 			// Luck can be only added by modernization
 			lk: this.master().api_luck[0],
 			ls: this.ls[0],
-			tp: this.tp[0]
+			tp: this.tp[0],
+			// Accuracy not shown ingame, so naked value might be plus-minus 0
+			ac: 0
 		};
 		const statApiNames = {
 			"tyku": "aa",
@@ -389,7 +391,8 @@ KC3改 Ship Object
 			"houk": "ev",
 			"houg": "fp",
 			"saku": "ls",
-			"raig": "tp"
+			"raig": "tp",
+			"houm": "ac"
 		};
 		for(const apiName in statApiNames) {
 			const equipStats = this.equipmentTotalStats(apiName);
@@ -858,6 +861,37 @@ KC3改 Ship Object
 		return hasSonar;
 	};
 
+	// see http://wikiwiki.jp/kancolle/?%CC%BF%C3%E6%A4%C8%B2%F3%C8%F2%A4%CB%A4%C4%A4%A4%A4%C6
+	// see http://kancolle.wikia.com/wiki/Combat/Accuracy_and_Evasion
+	KC3Ship.prototype.shellingAccuracy = function(formationModifier = 1) {
+		const onLevel = 2 * Math.sqrt(this.level - 1);
+		const onLuck = 1.5 * Math.sqrt(this.lk[0]);
+		const onEquip = -this.nakedStats().ac;
+		// http://kancolle.wikia.com/wiki/Improvements
+		const onImprove = this.equipment(true).map(
+			// Main/Secondary/AP shell/Sonar/Radar/AAFD
+			e => e.itemId > 0 && [1,2,8,10,24,25].indexOf(e.master().api_type[1]) > -1
+				&& e.stars
+		).reduce((acc, v) => acc + Math.sqrt(v), 0);
+		const moraleModifier = (
+			this.morale > 52 ? 1.2 :
+			this.morale > 32 ? 1.0 :
+			this.morale > 19 ? 0.8 :
+			0.5
+		);
+		// TODO To be implemented
+		const gunfit = 0;
+		const base = 3 + gunfit +
+			Math.floor((90 + onLevel + onLuck + onEquip + onImprove) * formationModifier * moraleModifier * 10) / 10;
+		return {
+			accuracy: base,
+			equipmentStats: onEquip,
+			equipImprovement: onImprove,
+			moraleModifier: moraleModifier,
+			formationModifier: formationModifier
+		};
+	};
+
 	KC3Ship.prototype.equipmentAntiAir = function(forFleet) {
 		return AntiAir.shipEquipmentAntiAir(this, forFleet);
 	};
@@ -965,6 +999,152 @@ KC3改 Ship Object
 
 		KC3ShipManager.save();
 	}
+
+	/**
+	 * Fill data of this Ship into predefined tooltip HTML elements. Used by Panel/Strategy Room.
+	 * @param tooltipBox - the object of predefined tooltip HTML jq element
+	 * @return return back the jq element of param `tooltipBox`
+	 */
+	KC3Ship.prototype.htmlTooltip = function(tooltipBox) {
+		return KC3Ship.buildShipTooltip(this, tooltipBox);
+	};
+	KC3Ship.buildShipTooltip = function(shipObj, tooltipBox) {
+		//const shipDb = WhoCallsTheFleetDb.getShipStat(shipObj.masterId);
+		const nakedStats = shipObj.nakedStats(),
+			  maxedStats = shipObj.maxedStats(),
+			  maxDiffStats = {},
+			  equipDiffStats = {},
+			  modLeftStats = shipObj.modernizeLeftStats();
+		Object.keys(maxedStats).map(s => {maxDiffStats[s] = maxedStats[s] - nakedStats[s];});
+		Object.keys(nakedStats).map(s => {equipDiffStats[s] = nakedStats[s] - (shipObj[s]||[])[0];});
+		const signedNumber = n => (n > 0 ? '+' : n === 0 ? '\u00b1' : '') + n;
+		$(".ship_full_name .ship_masterId", tooltipBox).text("[{0}]".format(shipObj.masterId));
+		$(".ship_full_name span.value", tooltipBox).text(shipObj.name());
+		$(".ship_full_name .ship_yomi", tooltipBox).text(KC3Meta.shipReadingName(shipObj.master().api_yomi));
+		$(".ship_rosterId span", tooltipBox).text(shipObj.rosterId);
+		$(".ship_stype", tooltipBox).text(shipObj.stype());
+		$(".ship_level span.value", tooltipBox).text(shipObj.level);
+		//$(".ship_level span.value", tooltipBox).addClass(shipObj.levelClass());
+		$(".ship_hp span.hp", tooltipBox).text(shipObj.hp[0]);
+		$(".ship_hp span.mhp", tooltipBox).text(shipObj.hp[1]);
+		$(".stat_hp", tooltipBox).text(shipObj.hp[1]);
+		$(".stat_fp .current", tooltipBox).text(shipObj.fp[0]);
+		$(".stat_fp .mod", tooltipBox).text(signedNumber(modLeftStats.fp))
+			.toggle(!!modLeftStats.fp);
+		$(".stat_fp .equip", tooltipBox).text("({0})".format(nakedStats.fp))
+			.toggle(!!equipDiffStats.fp);
+		$(".stat_ar .current", tooltipBox).text(shipObj.ar[0]);
+		$(".stat_ar .mod", tooltipBox).text(signedNumber(modLeftStats.ar))
+			.toggle(!!modLeftStats.ar);
+		$(".stat_ar .equip", tooltipBox).text("({0})".format(nakedStats.ar))
+			.toggle(!!equipDiffStats.ar);
+		$(".stat_tp .current", tooltipBox).text(shipObj.tp[0]);
+		$(".stat_tp .mod", tooltipBox).text(signedNumber(modLeftStats.tp))
+			.toggle(!!modLeftStats.tp);
+		$(".stat_tp .equip", tooltipBox).text("({0})".format(nakedStats.tp))
+			.toggle(!!equipDiffStats.tp);
+		$(".stat_ev .current", tooltipBox).text(shipObj.ev[0]);
+		$(".stat_ev .level", tooltipBox).text(signedNumber(maxDiffStats.ev))
+			.toggle(!!maxDiffStats.ev);
+		$(".stat_ev .equip", tooltipBox).text("({0})".format(nakedStats.ev))
+			.toggle(!!equipDiffStats.ev);
+		$(".stat_aa .current", tooltipBox).text(shipObj.aa[0]);
+		$(".stat_aa .mod", tooltipBox).text(signedNumber(modLeftStats.aa))
+			.toggle(!!modLeftStats.aa);
+		$(".stat_aa .equip", tooltipBox).text("({0})".format(nakedStats.aa))
+			.toggle(!!equipDiffStats.aa);
+		$(".stat_ac .current", tooltipBox).text(shipObj.carrySlots());
+		$(".stat_as .current", tooltipBox).text(shipObj.as[0])
+			.toggleClass("oasw", shipObj.canDoOASW());
+		$(".stat_as .level", tooltipBox).text(signedNumber(maxDiffStats.as))
+			.toggle(!!maxDiffStats.as);
+		$(".stat_as .equip", tooltipBox).text("({0})".format(nakedStats.as))
+			.toggle(!!equipDiffStats.as);
+		$(".stat_sp", tooltipBox).text(shipObj.speedName())
+			.addClass(KC3Meta.shipSpeed(shipObj.speed, true));
+		$(".stat_ls .current", tooltipBox).text(shipObj.ls[0]);
+		$(".stat_ls .level", tooltipBox).text(signedNumber(maxDiffStats.ls))
+			.toggle(!!maxDiffStats.ls);
+		$(".stat_ls .equip", tooltipBox).text("({0})".format(nakedStats.ls))
+			.toggle(!!equipDiffStats.ls);
+		$(".stat_rn", tooltipBox).text(shipObj.rangeName())
+			.toggleClass("RangeChanged", shipObj.range != shipObj.master().api_leng);
+		$(".stat_lk .current", tooltipBox).text(shipObj.lk[0]);
+		$(".stat_lk .luck", tooltipBox).text(signedNumber(modLeftStats.lk));
+		$(".stat_lk .equip", tooltipBox).text("({0})".format(nakedStats.lk))
+			.toggle(!!equipDiffStats.lk);
+		if(!(ConfigManager.info_stats_diff & 1)){
+			$(".equip", tooltipBox).hide();
+		}
+		if(!(ConfigManager.info_stats_diff & 2)){
+			$(".mod,.level,.luck", tooltipBox).hide();
+		}
+		const shellingAccuracy = shipObj.shellingAccuracy();
+		$(".shellingAccuracy", tooltipBox).text(
+			KC3Meta.term("ShipAccShelling").format(
+				shellingAccuracy.accuracy,
+				signedNumber(shellingAccuracy.equipmentStats),
+				signedNumber(shellingAccuracy.equipImprovement)
+			)
+		);
+		$(".adjustedAntiAir", tooltipBox).text(
+			KC3Meta.term("ShipAAAdjusted").format(shipObj.adjustedAntiAir())
+		);
+		$(".propShotdownRate", tooltipBox).text(
+				KC3Meta.term("ShipAAShotdownRate").format(
+					Math.qckInt("floor", shipObj.proportionalShotdownRate() * 100, 1)
+				)
+			);
+		const fixedShotdownRange = shipObj.fixedShotdownRange(ConfigManager.aaFormation);
+		const fleetPossibleAaci = fixedShotdownRange[2];
+		if(fleetPossibleAaci > 0){
+			$(".fixedShotdown", tooltipBox).text(
+				KC3Meta.term("ShipAAFixedShotdown").format(
+					"{0}~{1} (x{2})".format(fixedShotdownRange[0], fixedShotdownRange[1],
+						AntiAir.AACITable[fleetPossibleAaci].modifier)
+				)
+			);
+		} else {
+			$(".fixedShotdown", tooltipBox).text(
+				KC3Meta.term("ShipAAFixedShotdown").format(fixedShotdownRange[0])
+			);
+		}
+		const maxAaciParams = shipObj.maxAaciShotdownBonuses();
+		if(maxAaciParams[0] > 0){
+			$(".aaciMaxBonus", tooltipBox).text(
+				KC3Meta.term("ShipAACIMaxBonus").format(
+					"+{0} (x{1})".format(maxAaciParams[1], maxAaciParams[2])
+				)
+			);
+		} else {
+			$(".aaciMaxBonus", tooltipBox).text(
+				KC3Meta.term("ShipAACIMaxBonus").format(KC3Meta.term("None"))
+			);
+		}
+		const propShotdown = shipObj.proportionalShotdown(ConfigManager.imaginaryEnemySlot);
+		const aaciFixedShotdown = fleetPossibleAaci > 0 ? AntiAir.AACITable[fleetPossibleAaci].fixed : 0;
+		$.each($(".sd_title .aa_col", tooltipBox), function(idx, col){
+			$(col).text(KC3Meta.term("ShipAAShotdownTitles").split("/")[idx] || "");
+		});
+		$(".bomberSlot span", tooltipBox).text(ConfigManager.imaginaryEnemySlot);
+		$(".sd_both span", tooltipBox).text(
+			// Both succeeded
+			propShotdown + fixedShotdownRange[1] + aaciFixedShotdown + 1
+		);
+		$(".sd_prop span", tooltipBox).text(
+			// Proportional succeeded only
+			propShotdown + aaciFixedShotdown + 1
+		);
+		$(".sd_fixed span", tooltipBox).text(
+			// Fixed succeeded only
+			fixedShotdownRange[1] + aaciFixedShotdown + 1
+		);
+		$(".sd_fail span", tooltipBox).text(
+			// Both failed
+			aaciFixedShotdown + 1
+		);
+		return tooltipBox;
+	};
 
 	KC3Ship.prototype.deckbuilder = function() {
 		var itemsInfo = {};
