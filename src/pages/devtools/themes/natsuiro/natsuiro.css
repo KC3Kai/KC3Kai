@@ -3380,7 +3380,7 @@ ABYSS FLEET
 	white-space:nowrap;
 }
 .ui-tooltip-content .ship_face_tooltip .ship_level {
-	width:48px;
+	width:45px;
 	height:17px;
 	line-height:17px;
 	padding:0px 0px 0px 0px;
@@ -3401,8 +3401,39 @@ ABYSS FLEET
 .ui-tooltip-content .ship_face_tooltip .ship_level span.value.medium {
 	color:#36c2db;
 }
+.ui-tooltip-content .ship_face_tooltip .ship_exp_next {
+	width:75px;
+	height:17px;
+	line-height:16px;
+	padding:0px 0px 0px 0px;
+	margin:0px 2px 0px 0px;
+	font-size:11px;
+	float:left;
+	overflow:hidden;
+	white-space:nowrap;
+}
+.ui-tooltip-content .ship_face_tooltip .ship_exp_next span.i18n {
+	color:#7ca99f;
+}
+.ui-tooltip-content .ship_face_tooltip .ship_morale {
+	width:32px;
+	height:17px;
+	line-height:16px;
+	padding:0px 0px 0px 0px;
+	margin:0px 2px 0px 0px;
+	font-size:11px;
+	float:left;
+	overflow:hidden;
+	white-space:nowrap;
+}
+.ui-tooltip-content .ship_face_tooltip .ship_morale img {
+	width:13px;
+	height:13px;
+	vertical-align:text-bottom;
+	margin-right:1px;
+}
 .ui-tooltip-content .ship_face_tooltip .ship_hp {
-	width:64px;
+	width:48px;
 	height:17px;
 	line-height:17px;
 	padding:0px 0px 0px 0px;
@@ -3464,7 +3495,7 @@ ABYSS FLEET
 }
 .ui-tooltip-content .ship_face_tooltip .stat_value .equip {
 	font-size:10px;
-	color:#1a1;
+	color:#888;
 	margin-right:1px;
 }
 .ui-tooltip-content .ship_face_tooltip .stat_value .mod {

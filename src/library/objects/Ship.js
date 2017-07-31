@@ -186,7 +186,7 @@ KC3改 Ship Object
 	KC3Ship.prototype.speedName = function(){ return KC3Meta.shipSpeed(this.speed); };
 	KC3Ship.prototype.rangeName = function(){ return KC3Meta.shipRange(this.range); };
 	KC3Ship.getMarriedLevel = function(){ return 100; };
-	KC3Ship.getMaxLevel = function(){ return 155; };
+	KC3Ship.getMaxLevel = function(){ return 165; };
 	KC3Ship.prototype.isMarried = function(){ return this.level >= KC3Ship.getMarriedLevel(); };
 	KC3Ship.prototype.levelClass = function(){
 		return this.level === KC3Ship.getMaxLevel() ? "married max" :
@@ -194,6 +194,22 @@ KC3改 Ship Object
 			this.level >= 80  ? "high" :
 			this.level >= 50  ? "medium" :
 			"";
+	};
+	KC3Ship.prototype.moraleIcon = function(){
+		return KC3Ship.moraleIcon(this.morale);
+	};
+	KC3Ship.moraleIcon = function(morale){
+		return morale > 49 ? "4" :
+			   morale > 39 ? "3" :
+			   morale > 19 ? "2" :
+			   "1";
+	};
+	KC3Ship.prototype.moraleEffectLevel = function(valuesArray = [0, 1, 2, 3, 4]){
+		return this.morale > 52 ? valuesArray[4] :
+			this.morale > 32 ? valuesArray[3] :
+			this.morale > 19 ? valuesArray[2] :
+			this.morale >= 0 ? valuesArray[1] :
+			valuesArray[0];
 	};
 	KC3Ship.prototype.getDefer = function(){
 		// returns a new defer if possible
@@ -422,7 +438,7 @@ KC3改 Ship Object
 	/**
 	 * Maxed stats of this ship.
 	 * @return stats without the equipment but with modernization at Lv.99,
-	 *         stats at Lv.155 can be only estimated by data from known database.
+	 *         stats at Lv.165 can be only estimated by data from known database.
 	 */
 	KC3Ship.prototype.maxedStats = function(statAttr, isMarried = this.isMarried()){
 		const stats = {
@@ -873,16 +889,12 @@ KC3改 Ship Object
 			e => e.itemId > 0 && [1,2,8,10,24,25].indexOf(e.master().api_type[1]) > -1
 				&& e.stars
 		).reduce((acc, v) => acc + Math.sqrt(v), 0);
-		const moraleModifier = (
-			this.morale > 52 ? 1.2 :
-			this.morale > 32 ? 1.0 :
-			this.morale > 19 ? 0.8 :
-			0.5
-		);
+		const moraleModifier = this.moraleEffectLevel([1, 0.5, 0.8, 1, 1.2]);
 		// TODO To be implemented
 		const gunfit = 0;
 		const base = 3 + gunfit +
-			Math.floor((90 + onLevel + onLuck + onEquip + onImprove) * formationModifier * moraleModifier * 10) / 10;
+			Math.qckInt("floor", Math.floor(90 + onLevel + onLuck + onEquip + onImprove) *
+				formationModifier * moraleModifier, 1);
 		return {
 			accuracy: base,
 			equipmentStats: onEquip,
@@ -1018,6 +1030,7 @@ KC3改 Ship Object
 		Object.keys(maxedStats).map(s => {maxDiffStats[s] = maxedStats[s] - nakedStats[s];});
 		Object.keys(nakedStats).map(s => {equipDiffStats[s] = nakedStats[s] - (shipObj[s]||[])[0];});
 		const signedNumber = n => (n > 0 ? '+' : n === 0 ? '\u00b1' : '') + n;
+		const replaceFilename = (file, newName) => file.slice(0, file.lastIndexOf("/") + 1) + newName;
 		$(".ship_full_name .ship_masterId", tooltipBox).text("[{0}]".format(shipObj.masterId));
 		$(".ship_full_name span.value", tooltipBox).text(shipObj.name());
 		$(".ship_full_name .ship_yomi", tooltipBox).text(KC3Meta.shipReadingName(shipObj.master().api_yomi));
@@ -1027,6 +1040,11 @@ KC3改 Ship Object
 		//$(".ship_level span.value", tooltipBox).addClass(shipObj.levelClass());
 		$(".ship_hp span.hp", tooltipBox).text(shipObj.hp[0]);
 		$(".ship_hp span.mhp", tooltipBox).text(shipObj.hp[1]);
+		$(".ship_morale img", tooltipBox).attr("src",
+			replaceFilename($(".ship_morale img", tooltipBox).attr("src"), shipObj.moraleIcon() + ".png")
+		);
+		$(".ship_morale span.value", tooltipBox).text(shipObj.morale);
+		$(".ship_exp_next span.value", tooltipBox).text(shipObj.exp[1]);
 		$(".stat_hp", tooltipBox).text(shipObj.hp[1]);
 		$(".stat_fp .current", tooltipBox).text(shipObj.fp[0]);
 		$(".stat_fp .mod", tooltipBox).text(signedNumber(modLeftStats.fp))
@@ -1084,7 +1102,7 @@ KC3改 Ship Object
 			KC3Meta.term("ShipAccShelling").format(
 				shellingAccuracy.accuracy,
 				signedNumber(shellingAccuracy.equipmentStats),
-				signedNumber(shellingAccuracy.equipImprovement)
+				signedNumber(Math.qckInt("floor", shellingAccuracy.equipImprovement, 1))
 			)
 		);
 		$(".adjustedAntiAir", tooltipBox).text(

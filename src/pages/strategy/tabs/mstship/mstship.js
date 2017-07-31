@@ -551,7 +551,7 @@
 				self.atLvlSlider.slider('destroy');
 				self.atLvlSlider.slider({
 					tooltip: 'hide',
-					ticks: [lowestLevel,99,155]
+					ticks: [lowestLevel, 99, 165]
 				});
 				self.atLvlSlider.on('change', function(e) {
 					self.atLevelChange( e.value.newValue );
