@@ -55,10 +55,10 @@
 					arr.push(x);
 			}
 			// figure out a list of possible goal levels in ascending order.
-			// a goal level might be remodel level or 99 (can be married) / 155 (full exp)
+			// a goal level might be remodel level or 99 (can be married) / 165 (full exp)
 			var possibleNextLevels = RemodelDb.nextLevels( masterId );
 			setAdd(possibleNextLevels, 99);
-			setAdd(possibleNextLevels, 155);
+			setAdd(possibleNextLevels, 165);
 
 			while (possibleNextLevels.length > 0 && possibleNextLevels[0] <= currentLevel)
 				possibleNextLevels.shift();
@@ -660,7 +660,7 @@
 				$(".ship_rem", editingBox).hide();
 				editingBox.addClass("inactive");
 
-				// the only can when nextLevel === false is when your ship have reached Lv.155
+				// the only can when nextLevel === false is when your ship have reached Lv.max
 				if (nextLevel === false) {
 					editingBox.remove();
 					return;
@@ -753,7 +753,7 @@
 				var goalLevel = self.computeNextLevel( ThisShip.masterId, ThisShip.level );
 				// if we ever want to run "recompute" on any ship, that particular ship
 				// should have already been added in this tab
-				// (those locked but have not yet reached Lv 155) in the first place.
+				// (those locked but have not yet reached Lv max) in the first place.
 				console.assert( goalLevel !== false, "targeting ship that has no goal?" );
 				// As much as possible use arrays nowadays to shrink JSON size,
 				// we might run out of the 5MB localStorage allocated for our app
