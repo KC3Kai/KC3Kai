@@ -2085,7 +2085,7 @@
 			clearBattleData();
 
 			var thisNode = KC3SortieManager.currentNode();
-			var battleData = (thisNode.startNight)? thisNode.battleNight : thisNode.battleDay;
+			var battleData = (thisNode.startsFromNight)? thisNode.battleNight : thisNode.battleDay;
 			var enemyFleetBox = thisNode.eships.length > 6 ? "combined" : "single";
 			var enemyFleetBoxSelector = ".module.activity .abyss_" + enemyFleetBox;
 			if (enemyFleetBox == "combined") {
@@ -2197,7 +2197,7 @@
 			$(".module.activity .battle_support").show();
 
 			// Day battle-only environment
-			if(!thisNode.startNight){
+			if(!thisNode.startsFromNight){
 				// If support expedition or LBAS is triggered on this battle
 				$(".module.activity .battle_support img").attr("src",
 					"../../../../assets/img/ui/dark_support"+["-x",""][(thisNode.supportFlag||thisNode.lbasFlag)&1]+".png");
