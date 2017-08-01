@@ -293,7 +293,7 @@
 					var goalLevel = 
 						self.computeNextLevel( ThisShip.masterId, ThisShip.level );
 
-					if (goalLevel === false || goalLevel >= 99)
+					if (goalLevel === false || goalLevel >= KC3Ship.getMarriedLevel() - 1)
 						return;
 					if (goalLevel - ThisShip.level <= settings.closeToRemodelLevelDiff ) {
 						jqObj.addClass("highlight_closeToRemodel");
@@ -632,7 +632,7 @@
 				// and the current goal set is fewer than that,
 				// we can ask user whether he wants to update the goal level
 				// instead of removing this goal.
-				if (nextLevel < 99
+				if (nextLevel < KC3Ship.getMarriedLevel() - 1
 					&& typeof curGoal !== "undefined"
 					&& curGoal[0] < nextLevel) {
 
@@ -666,7 +666,7 @@
 					return;
 				}
 
-				if (nextLevel < 99) {
+				if (nextLevel < KC3Ship.getMarriedLevel() - 1) {
 					$(".section_expcalc .box_recommend .clear").remove();
 					editingBox.appendTo(".section_expcalc .box_recommend");
 					$("<div />").addClass("clear").appendTo(".section_expcalc .box_recommend");
@@ -719,7 +719,7 @@
 				$(".ship_target .ship_value", goalBox).text( goalLevel );
 				var expLeft = KC3Meta.expShip(goalLevel)[1] - ThisShip.exp[0];
 				$(".ship_exp .ship_value", goalBox).text( expLeft );
-				if (goalLevel < 99) {
+				if (goalLevel < KC3Ship.getMarriedLevel() - 1) {
 					goalBox.appendTo(".section_expcalc .box_recommend");
 					return true;
 				} else {

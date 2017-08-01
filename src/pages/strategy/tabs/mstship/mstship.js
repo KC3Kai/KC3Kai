@@ -551,12 +551,12 @@
 				self.atLvlSlider.slider('destroy');
 				self.atLvlSlider.slider({
 					tooltip: 'hide',
-					ticks: [lowestLevel, 99, 165]
+					ticks: [lowestLevel, KC3Ship.getMarriedLevel() - 1, KC3Ship.getMaxLevel()]
 				});
 				self.atLvlSlider.on('change', function(e) {
 					self.atLevelChange( e.value.newValue );
 				});
-				self.atLvlSlider.slider('setValue',99,true,true);
+				self.atLvlSlider.slider('setValue', KC3Ship.getMarriedLevel() - 1, true, true);
 
 				$(".tab_mstship .shipInfo .subtitles").empty();
 				
