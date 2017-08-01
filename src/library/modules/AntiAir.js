@@ -671,7 +671,7 @@ AntiAir: anti-air related calculations
 
 	// Fumizuki K2
 	declareAACI(
-		22, 2, 1.25,
+		22, 2, 1.2,
 		[fumizukiK2Icon, cdmgIcon],
 		predAllOf(isFumizukiK2),
 		withEquipmentMsts(

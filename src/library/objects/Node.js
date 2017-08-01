@@ -1076,25 +1076,28 @@ Used by SortieManager
 				
 				/* FLAGSHIP ATTACKING ==> */
 				console.log("Damaged Flagship", this.gaugeDamage, "/", maps[ckey].curhp || 0, "pts");
+				// also check if destroyed flagship is from main fleet (boss)
+				const mainFlagshipKilled = (!this.activatedEnemyFleet || this.activatedEnemyFleet == 1) ?
+					resultData.api_destsf : 0;
 				switch(maps[ckey].kind) {
 					case 'single':   /* Single Victory */
 						break;
 					case 'multiple': /* Kill-based */
 						if((KC3Meta.gauge(ckey.replace("m","")) - (maps[ckey].kills || 0)) > 0)
-							maps[ckey].kills += resultData.api_destsf;
+							maps[ckey].kills += mainFlagshipKilled;
 						break;
 					case 'gauge-hp': /* HP-Gauge */
 						if((this.gaugeDamage >= 0) && (maps[ckey].curhp || 0) > 0) {
 							maps[ckey].curhp -= this.gaugeDamage;
 							if(maps[ckey].curhp <= 0) // if last kill -- check whether flagship is killed or not -- flagship killed = map clear
-								maps[ckey].curhp = 1-(maps[ckey].clear = resultData.api_destsf);
+								maps[ckey].curhp = 1 - (maps[ckey].clear = mainFlagshipKilled);
 						}
 						break;
 					case 'gauge-tp': /* TP-Gauge */
 						/* TP Gauge */
 						if (typeof resultData.api_landing_hp != "undefined") {
 							var TPdata = resultData.api_landing_hp;
-							this.gaugeDamage = Math.min(TPdata.api_now_hp,TPdata.api_sub_value);
+							this.gaugeDamage = Math.min(TPdata.api_now_hp, TPdata.api_sub_value);
 							maps[ckey].curhp = TPdata.api_now_hp - this.gaugeDamage;
 							maps[ckey].maxhp = TPdata.api_max_hp - 0;
 						} else {
