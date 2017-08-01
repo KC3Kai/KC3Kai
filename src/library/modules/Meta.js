@@ -123,6 +123,14 @@ Provides access to data on built-in JSON files
 						"Saury": [8, 9, 10]
 					}
 				}
+			},
+			"481": { // Minazuki Poke(1)
+				"2": {
+					"86856": {
+						"Summer2017": [6, 7, 8, 9],
+						"Xmas": [12, 1]
+					}
+				}
 			}
 		},
 		
