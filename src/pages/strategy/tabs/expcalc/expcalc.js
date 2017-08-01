@@ -57,8 +57,8 @@
 			// figure out a list of possible goal levels in ascending order.
 			// a goal level might be remodel level or 99 (can be married) / 165 (full exp)
 			var possibleNextLevels = RemodelDb.nextLevels( masterId );
-			setAdd(possibleNextLevels, 99);
-			setAdd(possibleNextLevels, 165);
+			setAdd(possibleNextLevels, KC3Ship.getMarriedLevel() - 1);
+			setAdd(possibleNextLevels, KC3Ship.getMaxLevel());
 
 			while (possibleNextLevels.length > 0 && possibleNextLevels[0] <= currentLevel)
 				possibleNextLevels.shift();
