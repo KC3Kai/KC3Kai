@@ -27,7 +27,7 @@
 				</div>
 				<div class="admiral_name hover"></div>
 				<div class="admiral_comm"></div>
-				<div class="admiral_rank hover" data-mode="1"></div>
+				<div class="admiral_rank hover"></div>
 			</div>
 			
 			<!-- Module: Activity Box -->
@@ -1148,17 +1148,19 @@
 					<div class="ship_stats_row">
 						<div class="ship_stype"></div>
 						<div class="ship_level"><span class="i18n">LevelShort</span> <span class="value"></span></div>
+						<div class="ship_exp_next"><span class="i18n">LevelNext</span> <span class="value"></span></div>
+						<div class="ship_morale"><img src="../../../../assets/img/client/morale/3.png"/><span class="value"></span></div>
 						<div class="ship_hp"><span class="hp"></span> /<span class="mhp"></span></div>
 					</div>
 					<div class="ship_stats_col">
 						<div class="stat_icon"><img src="../../../../assets/img/stats/hp.png"/><span class="stat_name i18n">ShipHp</span></div>
 						<div class="stat_value stat_hp"></div>
 						<div class="stat_icon"><img src="../../../../assets/img/stats/ar.png"/><span class="stat_name i18n">ShipArmor</span></div>
-						<div class="stat_value stat_ar"><span class="current"></span><span class="mod"></div>
+						<div class="stat_value stat_ar"><span class="equip"></span><span class="current"></span><span class="mod"></span></div>
 						<div class="stat_icon"><img src="../../../../assets/img/stats/ev.png"/><span class="stat_name i18n">ShipEvasion</span></div>
-						<div class="stat_value stat_ev"><span class="current"></span><span class="level"></span></div>
+						<div class="stat_value stat_ev"><span class="equip"></span><span class="current"></span><span class="level"></span></div>
 						<div class="stat_icon"><img src="../../../../assets/img/stats/ac.png"/><span class="stat_name i18n">ShipCarry</span></div>
-						<div class="stat_value stat_ac"></div>
+						<div class="stat_value stat_ac"><span class="current"></span></div>
 						<div class="stat_icon"><img src="../../../../assets/img/stats/sp.png"/><span class="stat_name i18n">ShipSpeed</span></div>
 						<div class="stat_value stat_sp text_center"></div>
 						<div class="stat_icon"><img src="../../../../assets/img/stats/rn.png"/><span class="stat_name i18n">ShipLength</span></div>
@@ -1166,20 +1168,22 @@
 					</div>
 					<div class="ship_stats_col">
 						<div class="stat_icon"><img src="../../../../assets/img/stats/fp.png"/><span class="stat_name i18n">ShipFire</span></div>
-						<div class="stat_value stat_fp"><span class="current"></span><span class="mod"></div>
+						<div class="stat_value stat_fp"><span class="equip"></span><span class="current"></span><span class="mod"></span></div>
 						<div class="stat_icon"><img src="../../../../assets/img/stats/tp.png"/><span class="stat_name i18n">ShipTorpedo</span></div>
-						<div class="stat_value stat_tp"><span class="current"></span><span class="mod"></div>
+						<div class="stat_value stat_tp"><span class="equip"></span><span class="current"></span><span class="mod"></span></div>
 						<div class="stat_icon"><img src="../../../../assets/img/stats/aa.png"/><span class="stat_name i18n">ShipAntiAir</span></div>
-						<div class="stat_value stat_aa"><span class="current"></span><span class="mod"></div>
+						<div class="stat_value stat_aa"><span class="equip"></span><span class="current"></span><span class="mod"></span></div>
 						<div class="stat_icon"><img src="../../../../assets/img/stats/as.png"/><span class="stat_name i18n">ShipAsw</span></div>
-						<div class="stat_value stat_as"><span class="current"></span><span class="level"></span></div>
+						<div class="stat_value stat_as"><span class="equip"></span><span class="current"></span><span class="level"></span></div>
 						<div class="stat_icon"><img src="../../../../assets/img/stats/ls.png"/><span class="stat_name i18n">ShipLos</span></div>
-						<div class="stat_value stat_ls"><span class="current"></span><span class="level"></span></div>
+						<div class="stat_value stat_ls"><span class="equip"></span><span class="current"></span><span class="level"></span></div>
 						<div class="stat_icon"><img src="../../../../assets/img/stats/lk.png"/><span class="stat_name i18n">ShipLuck</span></div>
-						<div class="stat_value stat_lk"><span class="current"></span><span class="luck"></span></div>
+						<div class="stat_value stat_lk"><span class="equip"></span><span class="current"></span><span class="luck"></span></div>
 					</div>
-					<div class="ship_stats_row"><div class="stat_value stat_wide text_left adjustedAntiAir"></div></div>
-					<div class="ship_stats_row"><div class="stat_value stat_wide text_left propShotdownRate"></div></div>
+					<div class="ship_stats_row"><div class="stat_value stat_wide text_left shellingAccuracy"></div></div>
+					<div class="ship_stats_row"><div class="stat_value stat_wide text_left">
+						<span class="adjustedAntiAir"></span>; <span class="propShotdownRate"></span>
+					</div></div>
 					<div class="ship_stats_row"><div class="stat_value stat_wide text_left fixedShotdown"></div></div>
 					<div class="ship_stats_row"><div class="stat_value stat_wide text_left aaciMaxBonus"></div></div>
 					<div class="ship_stats_row sd_title">

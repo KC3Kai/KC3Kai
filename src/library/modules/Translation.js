@@ -295,21 +295,22 @@
 		},
 
 		// insert quote id as key if descriptive key is used.
-		transformQuotes: function(quotes, language, checkKey) {
+		transformQuotes: function(quotes, language, checkKey = false, removeSeasonals = false) {
 			var self = this;
 			function isIntStr(s) {
 				return parseInt(s,10).toString() === s;
 			}
 
-			$.each( quotes, function(k,v) {
+			$.each( quotes, function(k, v) {
 				if (! isIntStr(k) )
 					return;
 				// transforming "v" object
 
 				// get an immutable list of keys for further operation
 				var subKeys = Object.keys(v);
-				$.each(subKeys, function(i,subKey) {
+				$.each(subKeys, function(i, subKey) {
 					var subId = self.voiceDescToNum(subKey);
+					var isSeasonalKey = subKey.indexOf("@") > -1;
 					if (subId) {
 						// force overwriting regardless of original content
 						// empty content not replaced
@@ -319,6 +320,7 @@
 							// temporary hack for scn quotes
 							// as we don't use special key for seasonal lines
 							// and en will always has priority on that.
+							/*
 							if (["scn", "kr"].indexOf(language) > -1) {
 								if (subId === 2) {
 									v[6547] = v[subKey];
@@ -327,12 +329,16 @@
 									v[1471] = v[subKey];
 								}
 							}
+							*/
 						}
 					} else {
-						if (!!checkKey && ! isIntStr(subKey) ) {
+						if (isSeasonalKey) {
+							if (!!removeSeasonals) {
+								delete v[subKey];
+							}
+						} else if (!!checkKey && !isIntStr(subKey) ) {
 							// neither a descriptive key nor a normal number
-							console.debug( "Not transformed subtitle key:", subKey,
-								"(masterId=", k, ")");
+							console.debug(`Not transformed subtitle key "${subKey}" for ship ${k}`);
 						}
 					}
 				});
@@ -356,7 +362,9 @@
 					url : repo+'lang/data/en/quotes.json',
 					async: false
 				}).responseText);
-				this.transformQuotes(enJSON, "en", false);
+				this.transformQuotes(enJSON, "en", false,
+					// remove seasonals extending for these languages
+					["jp", "scn", "kr"].indexOf(language) > -1);
 				if (track) {
 					self.addTags(enJSON, "en");
 				}

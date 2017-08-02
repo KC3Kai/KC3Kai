@@ -989,8 +989,10 @@
 		},
 
 		HQ: function(data){
+			$(".module.admiral").hideChildrenTooltips();
 			$(".admiral_name").text( PlayerManager.hq.name );
 			$(".admiral_comm").text( PlayerManager.hq.desc );
+			$(".admiral_rank").lazyInitTooltip();
 			if(ConfigManager.rankPtsMode === 2){
 				$(".admiral_rank").text(PlayerManager.hq.getRankPoints()
 					.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
@@ -998,10 +1000,9 @@
 				).attr("title", KC3Meta.term("HQRankPointsTip")
 					.format(!PlayerManager.hq.rankPtLastTimestamp ? "?"
 						: new Date(PlayerManager.hq.rankPtLastTimestamp).format("yyyy-mm-dd HH:MM:ss"))
-				).lazyInitTooltip().tooltip("enable");
+				);
 			} else {
-				$(".admiral_rank").text(PlayerManager.hq.rank)
-					.attr("title", "").lazyInitTooltip().tooltip("disable");
+				$(".admiral_rank").text(PlayerManager.hq.rank).attr("title", "");
 			}
 			$(".admiral_lvval").text( PlayerManager.hq.level );
 			$(".admiral_lvbar").css({width: Math.round(PlayerManager.hq.exp[0]*58)+"px"});
@@ -1009,6 +1010,7 @@
 		},
 
 		Consumables: function(data){
+			$(".activity_basic .consumables").hideChildrenTooltips();
 			let getWarnRscCap = max => Math.floor(max * (ConfigManager.alert_rsc_cap / 100)) || Infinity;
 			$(".count_fcoin")
 				.text( PlayerManager.consumables.fcoin || 0 )
@@ -1082,6 +1084,7 @@
 		},
 
 		ShipSlots: function(data){
+			$(".activity_basic .consumables").hideChildrenTooltips();
 			var shipCount = KC3ShipManager.count();
 			var lockedShipCount = KC3ShipManager.count( function() {
 				return this.lock;
@@ -1097,6 +1100,7 @@
 		},
 
 		GearSlots: function(data){
+			$(".activity_basic .consumables").hideChildrenTooltips();
 			var gearCount = KC3GearManager.count();
 			var lockedGearCount = KC3GearManager.count( function() {
 				return this.lock;
@@ -1600,15 +1604,8 @@
 				}
 
 				// STATUS: MORALE ICON (independent from notification status)
-				if( FleetSummary.lowestMorale > 49 ){
-					$(".module.status .status_morale img").attr("src", "../../../../assets/img/client/morale/4.png");
-				}else if( FleetSummary.lowestMorale > 39 ){
-					$(".module.status .status_morale img").attr("src", "../../../../assets/img/client/morale/3.png");
-				}else if( FleetSummary.lowestMorale > 19 ){
-					$(".module.status .status_morale img").attr("src", "../../../../assets/img/client/morale/2.png");
-				}else{
-					$(".module.status .status_morale img").attr("src", "../../../../assets/img/client/morale/1.png");
-				}
+				$(".module.status .status_morale img").attr("src", "../../../../assets/img/client/morale/" +
+					KC3Ship.moraleIcon(FleetSummary.lowestMorale) + ".png");
 
 				// STATUS: TAIHA
 				if( (FleetSummary.hasTaiha || FleetSummary.badState[2])
@@ -2088,7 +2085,7 @@
 			clearBattleData();
 
 			var thisNode = KC3SortieManager.currentNode();
-			var battleData = (thisNode.startNight)? thisNode.battleNight : thisNode.battleDay;
+			var battleData = (thisNode.startsFromNight)? thisNode.battleNight : thisNode.battleDay;
 			var enemyFleetBox = thisNode.eships.length > 6 ? "combined" : "single";
 			var enemyFleetBoxSelector = ".module.activity .abyss_" + enemyFleetBox;
 			if (enemyFleetBox == "combined") {
@@ -2200,7 +2197,7 @@
 			$(".module.activity .battle_support").show();
 
 			// Day battle-only environment
-			if(!thisNode.startNight){
+			if(!thisNode.startsFromNight){
 				// If support expedition or LBAS is triggered on this battle
 				$(".module.activity .battle_support img").attr("src",
 					"../../../../assets/img/ui/dark_support"+["-x",""][(thisNode.supportFlag||thisNode.lbasFlag)&1]+".png");
@@ -3107,7 +3104,7 @@
 			var jqGSRate = $(".module.activity .activity_expeditionPlanner .row_gsrate .gsrate_content");
 
 			// "???" instead of "?" to make it more noticable.
-			var sparkledCount = fleetObj.ship().filter( function(s) { return s.morale >= 50; } ).length;
+			var sparkledCount = fleetObj.ship().filter( s => s.morale >= 50 ).length;
 			var fleetShipCount = fleetObj.countShips();
 			var fleetDrumCount = fleetObj.countDrums();
 			// reference: http://wikiwiki.jp/kancolle/?%B1%F3%C0%AC

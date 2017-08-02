@@ -245,7 +245,9 @@
 				}
 			};
 			var checkConsumedItem = function(stars, consumedItem, amount, container = ResBox){
-				$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container).removeClass("insufficient locked");
+				$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container)
+					.removeClass("insufficient locked")
+					.removeAttr("title");
 				// Check useitem instead of slotitem
 				if(Array.isArray(consumedItem)){
 					let isNotEnoughUseItem = function(id, amount){
