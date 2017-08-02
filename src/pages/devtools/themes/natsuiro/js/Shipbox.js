@@ -314,28 +314,28 @@ KC3改 Ship Box for Natsuiro theme
 	
 	/* SHOW MORALE
 	Morale value on the circle, and its colors
-	Add special glow if more than 54
+	Add special glow if more than 53
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.showMorale = function(){
 		$(".ship_morale", this.element).text( this.shipData.morale );
 		switch(true){
-			case this.shipData.morale > 53:
+			case this.shipData.morale > 52: // sparkle and get buff
 				$(".ship_morale", this.element).css("background", "#FFFF00");
 				$(".ship_morale", this.element).addClass("glowing");
 				break;
-			case this.shipData.morale > 49:
+			case this.shipData.morale > 49: // sparkle in-game
 				$(".ship_morale", this.element).css("background", "#FFFF00");
 				break;
-			case this.shipData.morale > 39:
+			case this.shipData.morale > 39: // no effect in-game, regular state
 				$(".ship_morale", this.element).css("background", "#FFFFFF");
 				break;
-			case this.shipData.morale > 29:
+			case this.shipData.morale > 29: // mamiya/irako usable, debuff when < 33
 				$(".ship_morale", this.element).css("background", "#FFDDBB");
 				break;
-			case this.shipData.morale > 19:
+			case this.shipData.morale > 19: // orange face, debuff
 				$(".ship_morale", this.element).css("background", "#FFB74A");
 				break;
-			default:
+			default: // red face, heavy debuff
 				$(".ship_morale", this.element).css("background", "#FFA6A6");
 				break;
 		}

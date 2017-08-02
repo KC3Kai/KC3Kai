@@ -1604,15 +1604,8 @@
 				}
 
 				// STATUS: MORALE ICON (independent from notification status)
-				if( FleetSummary.lowestMorale > 49 ){
-					$(".module.status .status_morale img").attr("src", "../../../../assets/img/client/morale/4.png");
-				}else if( FleetSummary.lowestMorale > 39 ){
-					$(".module.status .status_morale img").attr("src", "../../../../assets/img/client/morale/3.png");
-				}else if( FleetSummary.lowestMorale > 19 ){
-					$(".module.status .status_morale img").attr("src", "../../../../assets/img/client/morale/2.png");
-				}else{
-					$(".module.status .status_morale img").attr("src", "../../../../assets/img/client/morale/1.png");
-				}
+				$(".module.status .status_morale img").attr("src", "../../../../assets/img/client/morale/" +
+					KC3Ship.moraleIcon(FleetSummary.lowestMorale) + ".png");
 
 				// STATUS: TAIHA
 				if( (FleetSummary.hasTaiha || FleetSummary.badState[2])
@@ -2092,7 +2085,7 @@
 			clearBattleData();
 
 			var thisNode = KC3SortieManager.currentNode();
-			var battleData = (thisNode.startNight)? thisNode.battleNight : thisNode.battleDay;
+			var battleData = (thisNode.startsFromNight)? thisNode.battleNight : thisNode.battleDay;
 			var enemyFleetBox = thisNode.eships.length > 6 ? "combined" : "single";
 			var enemyFleetBoxSelector = ".module.activity .abyss_" + enemyFleetBox;
 			if (enemyFleetBox == "combined") {
@@ -2204,7 +2197,7 @@
 			$(".module.activity .battle_support").show();
 
 			// Day battle-only environment
-			if(!thisNode.startNight){
+			if(!thisNode.startsFromNight){
 				// If support expedition or LBAS is triggered on this battle
 				$(".module.activity .battle_support img").attr("src",
 					"../../../../assets/img/ui/dark_support"+["-x",""][(thisNode.supportFlag||thisNode.lbasFlag)&1]+".png");
@@ -3111,7 +3104,7 @@
 			var jqGSRate = $(".module.activity .activity_expeditionPlanner .row_gsrate .gsrate_content");
 
 			// "???" instead of "?" to make it more noticable.
-			var sparkledCount = fleetObj.ship().filter( function(s) { return s.morale >= 50; } ).length;
+			var sparkledCount = fleetObj.ship().filter( s => s.morale >= 50 ).length;
 			var fleetShipCount = fleetObj.countShips();
 			var fleetDrumCount = fleetObj.countDrums();
 			// reference: http://wikiwiki.jp/kancolle/?%B1%F3%C0%AC

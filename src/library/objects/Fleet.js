@@ -532,8 +532,8 @@ Contains summary information about a fleet and its 6 ships
 			totalCost.fuel += Math.ceil(maxFuel * 0.2);
 			totalCost.dayOnlyAmmo += Math.ceil(maxAmmo * 0.2);
 			totalCost.nightBattleAmmo += Math.ceil(maxAmmo * 0.3);
-			totalCost.airRaidFuel += Math.ceil(maxAmmo * 0.08);
-			totalCost.airRaidAmmo += Math.ceil(maxAmmo * 0.04);
+			totalCost.airRaidFuel += Math.floor(maxAmmo * 0.07) || 1;
+			totalCost.airRaidAmmo += Math.floor(maxAmmo * 0.04) || 1;
 		}
 		return totalCost;
 	};
@@ -890,7 +890,7 @@ Contains summary information about a fleet and its 6 ships
 	 */
 	KC3Fleet.prototype.lookupKatoriClassBonus = function() {
 		var ctBonusTable = [
-			// ~9,  ~29,  ~59,  ~99, ~155?
+			// ~9,  ~29,  ~59,  ~99, ~165?
 			[ 1.0,  1.0,  1.0,  1.0,  1.0], // No CT
 			[1.05, 1.08, 1.12, 1.15, 1.20], // CT x 1 as flagship
 			[1.03, 1.05, 1.07, 1.10, 1.15], // CT x 1

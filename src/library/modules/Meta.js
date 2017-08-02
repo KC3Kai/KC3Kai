@@ -640,7 +640,7 @@ Provides access to data on built-in JSON files
 					const knownVoiceSizes = fileSizeTable[vNum];
 					seasonalKey = (knownVoiceSizes || {})[fileSize];
 					// try to match among lines of Poke(1,2,3) because devs reuse them around
-					if(!seasonalKey && vNum >= 2 && vNum <= 4){
+					if(seasonalKey === undefined && vNum >= 2 && vNum <= 4){
 						for(let vn = 2; vn <= 4; vn++){
 							if(vn !== vNum &&
 								fileSizeTable[vn] && fileSizeTable[vn][fileSize]){
