@@ -199,10 +199,10 @@ KC3改 Ship Object
 		return KC3Ship.moraleIcon(this.morale);
 	};
 	KC3Ship.moraleIcon = function(morale){
-		return morale > 49 ? "4" :
-			   morale > 39 ? "3" :
-			   morale > 19 ? "2" :
-			   "1";
+		return morale > 49 ? "4" : // sparkle
+			morale > 29 ? "3" : // normal
+			morale > 19 ? "2" : // orange face
+			"1"; // red face
 	};
 	KC3Ship.prototype.moraleEffectLevel = function(valuesArray = [0, 1, 2, 3, 4]){
 		return this.morale > 52 ? valuesArray[4] :
