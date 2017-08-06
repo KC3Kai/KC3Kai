@@ -492,7 +492,8 @@ module.exports = function(grunt) {
 	
 	grunt.registerTask('webstore', [
 		'compress:release',
-		'webstore_upload:kc3kai'
+		// 'webstore_upload:kc3kai'
+		'webstore-custom'
 	]);
 	
 	grunt.registerTask('webstore-custom', 'Chrome Webstore upload task', function(){

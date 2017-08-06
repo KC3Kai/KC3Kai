@@ -15,7 +15,7 @@ before_script:
 # DEPLOY TO CHROME WEBSTORE
 script:
 - if [ $TRAVIS_BRANCH == 'webstore' ]; then grunt build; fi
-- if [ $TRAVIS_BRANCH == 'webstore' ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then export KC3_VERSION=$(node -p -e "require('./package.json').version") && grunt webstore-custom; fi
+- if [ $TRAVIS_BRANCH == 'webstore' ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then export KC3_VERSION=$(node -p -e "require('./package.json').version") && grunt webstore; fi
 
 # DEPLOY TO GITHUB RELEASES
 before_deploy:
