@@ -1,6 +1,6 @@
 {
   "name": "KC3Kai",
-  "version": "31.8.5",
+  "version": "31.8.6",
   "description": "Kantai Collection Game Viewer and Tools",
   "repository": {
     "type": "git",
@@ -14,7 +14,6 @@
   "homepage": "https://github.com/KC3Kai/KC3Kai",
   "devDependencies": {
     "babel-preset-es2015": "^6.18.0",
-    "chrome-webstore-upload": "^0.2.1",
     "grunt": "0.4.5",
     "grunt-babel": "^6.0.0",
     "grunt-contrib-clean": "~0.6.0",

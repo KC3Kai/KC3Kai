@@ -1,6 +1,3 @@
-const fs = require('fs')
-const webStorePkg = require('chrome-webstore-upload')
-
 module.exports = function(grunt) {
 
 	require('load-grunt-tasks')(grunt);
@@ -492,31 +489,7 @@ module.exports = function(grunt) {
 	
 	grunt.registerTask('webstore', [
 		'compress:release',
-		// 'webstore_upload:kc3kai'
-		'webstore-custom'
+		'webstore_upload:kc3kai'
 	]);
-	
-	grunt.registerTask('webstore-custom', 'Chrome Webstore upload task', function(){
-		let done = this.async();
-		let webstoreObj = webStorePkg({
-			extensionId: 'hkgmldnainaglpjngpajnnjfhpdjkohh',
-			clientId: process.env.WEBSTORE_CLIENT_ID,
-			clientSecret: process.env.WEBSTORE_CLIENT_SECRET,
-			refreshToken: process.env.WEBSTORE_REFRESH_TOKEN
-		});
-		const releaseZip = fs.createReadStream('./build/release.zip');
-		webstoreObj.uploadExisting(releaseZip).then(function(uploadRes) {
-			if(uploadRes.uploadState !== "SUCCESS") {
-				grunt.log.writeln('Error uploading new version: ' + JSON.stringify(uploadRes));
-				done();
-			} else {
-				grunt.log.writeln('Successfully uploaded new version');
-				webStore.publish(target, token).then(function(publishRes) {
-					grunt.log.writeln('Publish extension' + JSON.stringify(publishRes));
-					done();
-				});
-			}
-		});
-	});
 	
 };
