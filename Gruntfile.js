@@ -40,6 +40,8 @@ module.exports = function(grunt) {
 				cwd: 'build/tmp/',
 				src: [
 					'assets/img/**',
+					'!assets/img/planes/**',
+					'!assets/img/useitems/pay*',
 					'assets/snd/**',
 					'assets/swf/**',
 					'assets/js/Chart.min.js',
