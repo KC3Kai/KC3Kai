@@ -66,7 +66,8 @@
 				
 				if(typeof self.instances[ThisGear.masterId] == "undefined"){
 					self.instances[ThisGear.masterId] = {
-						total:0, star0:0, star0_5:0, star6_9:0, starmax:0, free:0
+						total:0, star0:0, star0_5:0, star6_9:0, starmax:0,
+						unequipped:0, free:0, freestar0:0
 					};
 				}
 				self.instances[ThisGear.masterId].id = ThisGear.masterId;
@@ -75,8 +76,11 @@
 				self.instances[ThisGear.masterId].star0_5 += (!ThisGear.stars || ThisGear.stars < 6) & 1;
 				self.instances[ThisGear.masterId].star6_9 += (ThisGear.stars >= 6 && ThisGear.stars < 10) & 1;
 				self.instances[ThisGear.masterId].starmax += (ThisGear.stars == 10) & 1;
-				self.instances[ThisGear.masterId].free += 1 & ( ThisGear.lock === 0 && !ThisGear.stars
-					&& self.heldGearRosterIds.indexOf(ThisGear.itemId) === -1 );
+				self.instances[ThisGear.masterId].unequipped += 1 & (self.heldGearRosterIds.indexOf(ThisGear.itemId) === -1);
+				self.instances[ThisGear.masterId].free += 1 & (ThisGear.lock === 0 &&
+					self.heldGearRosterIds.indexOf(ThisGear.itemId) === -1);
+				self.instances[ThisGear.masterId].freestar0 += 1 & (!ThisGear.stars && ThisGear.lock === 0 &&
+					self.heldGearRosterIds.indexOf(ThisGear.itemId) === -1);
 			});
 		},
 		
@@ -93,7 +97,18 @@
 			
 			$("#disabled_toggle").on("click", function(){
 				self.hideNotImprovable = !self.hideNotImprovable;
-				$(".equipment.disabled").toggle(!self.hideNotImprovable);
+				var equipList = $(".equipment_list");
+				if(self.hideNotImprovable){
+					$(".equipment.disabled," +
+					  ".equipment.equipped," +
+					  ".equipment.insufficient",
+						equipList).slideUp(300);
+				} else {
+					$(".equipment.disabled," +
+					  ".equipment.equipped," +
+					  ".equipment.insufficient",
+						equipList).slideDown();
+				}
 			});
 			
 			// Link to weekday specified by hash parameter
@@ -210,7 +225,6 @@
 				});
 			};
 			var checkDevScrew = function(stars, itemId, devmats, screws){
-				if(!hasGear || !hasShip) return;
 				var redLine = false;
 				if((PlayerManager.consumables.devmats || 0) < devmats){
 					redLine = true;
@@ -220,7 +234,9 @@
 					redLine = true;
 					$(".eq_res_value.screws.plus{0} .val".format(stars), ResBox).addClass("insufficient");
 				}
-				if(!!self.instances[itemId] && self.instances[itemId]["star"+stars] === 0){
+				$(".eq_res_label.plus{0}".format(stars), ResBox).attr("title",
+					(self.instances[itemId]||{})["star"+stars] || 0);
+				if(!self.instances[itemId] || !self.instances[itemId]["star"+stars]){
 					redLine = true;
 					$(".eq_res_label.plus{0}".format(stars), ResBox).addClass("insufficient");
 				}
@@ -229,9 +245,9 @@
 				}
 			};
 			var checkConsumedItem = function(stars, consumedItem, amount, container = ResBox){
-				if(!hasGear || !hasShip) return;
-				$(".eq_res_line.plus{0}".format(stars), container).removeClass("insufficient locked");
-				$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container).removeClass("insufficient locked");
+				$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container)
+					.removeClass("insufficient locked")
+					.removeAttr("title");
 				// Check useitem instead of slotitem
 				if(Array.isArray(consumedItem)){
 					let isNotEnoughUseItem = function(id, amount){
@@ -248,12 +264,20 @@
 					}
 					return;
 				}
+				$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container).attr("title",
+					"{0} (\u2605+0 /total: {1} /{2})".format(
+						(self.instances[consumedItem.api_id]||{}).freestar0 || 0,
+						(self.instances[consumedItem.api_id]||{}).star0 || 0,
+						(self.instances[consumedItem.api_id]||{}).total || 0
+					)
+				);
 				if(!self.instances[consumedItem.api_id]
 					|| self.instances[consumedItem.api_id].star0 < amount){
 					$(".eq_res_line.plus{0}".format(stars), container).addClass("insufficient");
 					$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container).addClass("insufficient");
 				} else if(!!self.instances[consumedItem.api_id]
-					&& self.instances[consumedItem.api_id].free < amount){
+					&& self.instances[consumedItem.api_id].freestar0 < amount){
+					$(".eq_res_line.plus{0}".format(stars), container).addClass("insufficient");
 					$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container).addClass("locked");
 				}
 			};
@@ -279,10 +303,7 @@
 				}
 				
 				// If player has this item, check for marking
-				hasGear = false;
-				if(self.gears.indexOf(parseInt(itemId,10)) > -1){
-					hasGear = true;
-				}
+				hasGear = self.gears.indexOf(parseInt(itemId, 10)) > -1;
 				
 				for(ctr in shipList){
 					ShipId = shipList[ctr];
@@ -302,10 +323,10 @@
 					$(".eq_ships", ThisBox).append(ShipBox);
 				}
 				
-				// If doesn't have either ship or gear
-				if(!hasGear || !hasShip){
-					ThisBox.addClass("disabled");
-				}
+				// If doesn't have either ship or gear, show disabled red box
+				ThisBox.toggleClass("disabled", !hasGear || !hasShip)
+				// If all gear equipped, show yellow box
+					.toggleClass("equipped", hasGear && hasShip && !self.instances[itemId].unequipped);
 				
 				var imps = WhoCallsTheFleetDb.getItemImprovement(MasterItem.api_id);
 				if(Array.isArray(imps) && imps.length > 0){
@@ -380,15 +401,22 @@
 								"[{0}] {1}".format(upgradedItem.api_id, KC3Meta.gearName(upgradedItem.api_name))
 							);
 						} else {
-							$(".eq_res_line.plusmax", ResBox).hide();
+							$(".eq_res_line.plusmax", ResBox).addClass("insufficient").hide();
 							$(".eq_next", ResBox).hide();
 						}
 						$(".eq_resources", ThisBox).append(ResBox);
+						// If materials or all consumables insufficient, add a class to hide this item
+						ThisBox.toggleClass("insufficient",
+							hasGear && hasShip && (
+							$(".eq_res_line.material", ResBox).hasClass("insufficient") ||
+							$(".eq_res_line.insufficient", ResBox).length >=
+								$(".eq_res_line", ResBox).length - 1
+							)
+						);
 					});
 				} else {
 					$(".eq_resources", ThisBox).hide();
 				}
-				
 			});
 			
 		}

@@ -486,22 +486,25 @@ Contains summary information about a fleet and its 6 ships
 	};
 
 	KC3Fleet.prototype.calcResupplyCost = function() {
-		var self = this;
-		var totalFuel = 0,
-			totalAmmo = 0,
-			totalSteel = 0,
-			totalBauxite = 0;
-		$.each( this.ships, function(i, shipId) {
+		const totalCost = {
+			fuel: 0,
+			ammo: 0,
+			steel: 0,
+			bauxite: 0,
+			hasMarried: false
+		};
+		$.each(this.ships, (i, shipId) => {
 			if (shipId > -1) {
-				var shipObj = self.ship(i);
-				var cost = shipObj.calcResupplyCost(-1, -1, true, true);
-				totalFuel += cost.fuel;
-				totalAmmo += cost.ammo;
-				totalSteel += cost.steel;
-				totalBauxite += cost.bauxite;
+				const shipObj = this.ship(i);
+				const cost = shipObj.calcResupplyCost(-1, -1, true, true);
+				totalCost.fuel += cost.fuel;
+				totalCost.ammo += cost.ammo;
+				totalCost.steel += cost.steel;
+				totalCost.bauxite += cost.bauxite;
+				totalCost.hasMarried |= shipObj.isMarried();
 			}
 		});
-		return {fuel: totalFuel, ammo: totalAmmo, steel: totalSteel, bauxite: totalBauxite};
+		return totalCost;
 	};
 
 	KC3Fleet.prototype.calcJetsSteelCost = function(currentSortieId) {
@@ -529,8 +532,8 @@ Contains summary information about a fleet and its 6 ships
 			totalCost.fuel += Math.ceil(maxFuel * 0.2);
 			totalCost.dayOnlyAmmo += Math.ceil(maxAmmo * 0.2);
 			totalCost.nightBattleAmmo += Math.ceil(maxAmmo * 0.3);
-			totalCost.airRaidFuel += Math.ceil(maxAmmo * 0.08);
-			totalCost.airRaidAmmo += Math.ceil(maxAmmo * 0.04);
+			totalCost.airRaidFuel += Math.floor(maxAmmo * 0.07) || 1;
+			totalCost.airRaidAmmo += Math.floor(maxAmmo * 0.04) || 1;
 		}
 		return totalCost;
 	};
@@ -796,6 +799,7 @@ Contains summary information about a fleet and its 6 ships
 			13: 0.6, // Large Radar
 			26: 0.6, // ASW Patrol Aircraft
 			29: 0.6, // Searchlight Small / Large
+			32: 0, // Submarine Torpedo (los stat found, but unverified)
 			34: 0.6, // Fleet Command Facility
 			35: 0.6, // SCAMP
 			39: 0.6, // Skilled Lookouts
@@ -886,7 +890,7 @@ Contains summary information about a fleet and its 6 ships
 	 */
 	KC3Fleet.prototype.lookupKatoriClassBonus = function() {
 		var ctBonusTable = [
-			// ~9,  ~29,  ~59,  ~99, ~155?
+			// ~9,  ~29,  ~59,  ~99, ~165?
 			[ 1.0,  1.0,  1.0,  1.0,  1.0], // No CT
 			[1.05, 1.08, 1.12, 1.15, 1.20], // CT x 1 as flagship
 			[1.03, 1.05, 1.07, 1.10, 1.15], // CT x 1
@@ -917,12 +921,53 @@ Contains summary information about a fleet and its 6 ships
 	};
 
 	/**
+	 * Estimate base XP gained in PvP battle.
+	 * @param levels of first two ships - if omitted, use the ones of this fleet
+	 * @param ctBonus - exp mulitiplier of CT (Katori-class) bonus, default is 1
+	 * @return variant exp values by battle ranks
+	 * @see http://wikiwiki.jp/kancolle/?%B1%E9%BD%AC#v657609b
+	 */
+	KC3Fleet.prototype.estimatePvpBaseExp = function(
+		firstShipLevel = this.ship(0).level,
+		secondShipLevel = this.ship(1).level,
+		ctBonus = 1
+	) {
+		var baseExp = 3 + Math.floor(
+			KC3Meta.expShip(firstShipLevel)[1] / 100 +
+			KC3Meta.expShip(secondShipLevel)[1] / 300
+		);
+		if(baseExp > 500){
+			baseExp = Math.floor(500 + Math.sqrt(baseExp - 500));
+		}
+		const baseExpWoCT = Math.floor(baseExp * 1.2),
+			baseExpS  = Math.floor(Math.floor(baseExp * 1.2) * ctBonus),
+			baseExpAB = Math.floor(Math.floor(baseExp * 1.0) * ctBonus),
+			baseExpC  = Math.floor(Math.floor(baseExp * 0.64) * ctBonus),
+			baseExpD  = Math.floor(Math.floor(Math.floor(baseExp * 0.56) * 0.8) * ctBonus),
+			// rank E is not verified by sufficent sample data
+			baseExpE  = Math.floor(Math.floor(baseExp * 0.401) * ctBonus);
+		return {
+			levelFlagship: firstShipLevel,
+			level2ndship: secondShipLevel,
+			ctBonus: ctBonus,
+			base: baseExp,
+			sIngame: baseExpWoCT,
+			s: baseExpS,
+			a: baseExpAB,
+			b: baseExpAB,
+			c: baseExpC,
+			d: baseExpD,
+			e: baseExpE
+		};
+	};
+
+	/**
 	 * Predicts PvP opponent's battle formation.
 	 * @param opponentFleetShips - master ID array of opponent fleet, no -1 placeholders
 	 * @return predicted formation ID
 	 * @see http://wikiwiki.jp/kancolle/?%B1%E9%BD%AC#m478a4e5
 	 */
-	KC3Fleet.prototype.predictOpponentFormation = function(opponentFleetShips){
+	KC3Fleet.prototype.predictOpponentFormation = function(opponentFleetShips) {
 		// Convert fleet ships to master IDs, remove -1 elements
 		var playerFleetShips = this.ships
 			.filter(function(v){return v > 0;})

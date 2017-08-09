@@ -59,9 +59,9 @@
 	margin:0px 0px 5px 0px;
 	padding:5px;
 }
+.tab_akashi .equipment.equipped {
+}
 .tab_akashi .equipment.disabled {
-	opacity:0.4;
-	background:#fcc;
 }
 
 .tab_akashi .equipment .eq_icon {

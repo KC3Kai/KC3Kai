@@ -40,6 +40,8 @@ module.exports = function(grunt) {
 				cwd: 'build/tmp/',
 				src: [
 					'assets/img/**',
+					'!assets/img/planes/**',
+					'!assets/img/useitems/pay*',
 					'assets/snd/**',
 					'assets/swf/**',
 					'assets/js/Chart.min.js',
@@ -239,7 +241,7 @@ module.exports = function(grunt) {
 						},
 						"content_scripts": [
 							{
-								"matches":["*://www.dmm.com/*"],
+								"matches": ["*://*.dmm.com/*"],
 								"js": ["library/injections/cookie.js"],
 								"run_at": "document_end",
 								"all_frames": true
@@ -253,14 +255,15 @@ module.exports = function(grunt) {
 									"assets/js/global.js",
 									"library/objects.js",
 									"library/managers.js",
+									"library/modules/Log/Log.js",
+									"library/modules/Log/Messaging.js",
+									"library/modules/Log/ContentScript.js",
 									"library/modules/QuestSync/Sync.js",
 									"library/modules/QuestSync/ContentScript.js",
 									"library/modules/Master.js",
 									"library/modules/Meta.js",
+									"library/modules/RemodelDb.js",
 									"library/modules/Translation.js",
-									"library/modules/Log/Log.js",
-									"library/modules/Log/Messaging.js",
-									"library/modules/Log/ContentScript.js",
 									"library/injections/dmm_takeover.js",
 									"library/injections/dmm.js"
 								],

@@ -921,24 +921,9 @@ Previously known as "Reactor"
 				// Land Base of this world, Action: sortie
 				if(base.map === KC3SortieManager.map_world && base.action === 1){
 					console.log("Sortied LBAS", base);
-					$.each(base.planes, function(j, plane){
-						// Plane is set, not moving
-						if(plane.api_slotid > 0 && plane.api_state === 1){
-							var planeType2 = KC3GearManager.get(plane.api_slotid).master().api_type[2];
-							var fuelCostPerSlot = KC3GearManager.landBaseReconnType2Ids.indexOf(planeType2) > -1 ?
-								KC3GearManager.landBaseReconnSortieFuelCostPerSlot : planeType2 === 47 ?
-								KC3GearManager.landBaseBomberSortieFuelCostPerSlot :
-								KC3GearManager.landBaseOtherSortieFuelCostPerSlot;
-							var ammoCostPerSlot = KC3GearManager.landBaseReconnType2Ids.indexOf(planeType2) > -1 ?
-								KC3GearManager.landBaseReconnSortieAmmoCostPerSlot : planeType2 === 47 ?
-								KC3GearManager.landBaseBomberSortieAmmoCostPerSlot :
-								KC3GearManager.landBaseOtherSortieAmmoCostPerSlot;
-							// After testing, should use api_count, not api_max_count
-							// but the accuray depend on costPerSlot series constants
-							consumedFuel += Math.round(plane.api_count * fuelCostPerSlot);
-							consumedAmmo += Math.round(plane.api_count * ammoCostPerSlot);
-						}
-					});
+					var cost = base.calcSortieCost();
+					consumedFuel += cost.fuel;
+					consumedAmmo += cost.ammo;
 				}
 			});
 			// Record hidden fuel & ammo consumption of sortied LBAS
@@ -1169,7 +1154,7 @@ Previously known as "Reactor"
 				if(base.map == params.api_area_id){
 					$.each(params.api_base_id.split("%2C"), function(j, baseId){
 						if(base.rid == baseId){
-							base.action = params.api_action_kind.split("%2C")[j];
+							base.action = parseInt(params.api_action_kind.split("%2C")[j], 10);
 						}
 					});
 				}
