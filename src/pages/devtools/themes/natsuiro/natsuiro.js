@@ -1522,7 +1522,7 @@
 					let f33x3 = Math.qckInt("floor", PlayerManager.fleets[selectedFleet-1].eLos4(3), 1);
 					let f33x4 = Math.qckInt("floor", PlayerManager.fleets[selectedFleet-1].eLos4(4), 1);
 					$(".summary-eqlos").attr("title",
-						"x4={0} \t3-5(G>28), 6-1(E>16, F>25)\nx3={1} \t6-2(F<43/F>50, H>40), 6-3(H>38)"
+						"x4={0} \t3-5(G>28), 6-1(E>16, F>36)\nx3={1} \t6-2(F<43/F>50, H>40), 6-3(H>38)"
 						.format(f33x4, f33x3)
 					).lazyInitTooltip();
 				// No reference values for combined fleet yet, only show computed values
@@ -1700,8 +1700,7 @@
 				$(".airbase_list").empty();
 				$(".airbase_list").show();
 				
-				var baseBox, planeBox, itemObj, paddedId,
-					eqImgSrc, eqIconSrc, eqChevSrc, eqMorale, eqCondSrc;
+				var baseBox, planeBox, itemObj, myServerHost;
 				var togglePlaneName = function(e){
 					$(".module.fleet .airbase_list .base_plane_name").toggle();
 					$(".module.fleet .airbase_list .name_toggle_group").toggle();
@@ -1759,19 +1758,34 @@
 								$(".base_plane_name", planeBox).text(itemObj.name())
 									.attr("title", itemObj.name()).lazyInitTooltip();
 								
-								paddedId = (itemObj.masterId<10?"00":itemObj.masterId<100?"0":"")+itemObj.masterId;
-								eqImgSrc = "../../../../assets/img/planes/"+paddedId+".png";
-								$(".base_plane_img img", planeBox).attr("src", eqImgSrc)
-									.error(function() { $(this).unbind("error").attr("src", "../../../../assets/img/ui/empty.png"); });
+								const paddedId = (itemObj.masterId<10?"00":itemObj.masterId<100?"0":"") + itemObj.masterId;
+								let eqImgSrc = "/assets/img/planes/" + paddedId + ".png";
+								// show local plane image first
+								$(".base_plane_img img", planeBox).attr("alt", paddedId)
+									.attr("src", eqImgSrc).error(function() {
+										if(!myServerHost) { // reuse host after lazy initialized
+											myServerHost = (new KC3Server()).setNum(PlayerManager.hq.server).ip;
+											myServerHost = myServerHost ? "http://" + myServerHost : "..";
+										}
+										// fall-back to fetch image from online kcs resources
+										eqImgSrc = myServerHost + "/kcs/resources/image/slotitem/item_up/"
+											+ $(this).attr("alt") + ".png";
+										$(this).off("error").attr("src", eqImgSrc)
+											// fail-safe to show a placeholder icon
+											.error(function() {
+												eqImgSrc = "/assets/img/ui/empty.png";
+												$(this).off("error").attr("src", eqImgSrc);
+											});
+									});
 								$(".base_plane_img", planeBox)
 									.attr("title", itemObj.name())
 									.lazyInitTooltip()
 									.data("masterId", itemObj.masterId)
 									.on("dblclick", self.gearDoubleClickFunction);
 								
-								eqIconSrc = "../../../../assets/img/items/"+itemObj.master().api_type[3]+".png";
+								const eqIconSrc = "/assets/img/items/"+itemObj.master().api_type[3]+".png";
 								$(".base_plane_icon img", planeBox).attr("src", eqIconSrc)
-									.error(function() { $(this).unbind("error").attr("src", "../../../../assets/img/ui/empty.png"); });
+									.error(function() { $(this).off("error").attr("src", "/assets/img/ui/empty.png"); });
 								$(".base_plane_icon", planeBox)
 									.attr("title", itemObj.htmlTooltip(planeInfo.api_max_count) )
 									.lazyInitTooltip()
@@ -1784,7 +1798,7 @@
 								}
 								
 								if (itemObj.ace > -1) {
-									eqChevSrc = "../../../../assets/img/client/achev/"+itemObj.ace+".png";
+									const eqChevSrc = "/assets/img/client/achev/"+itemObj.ace+".png";
 									$(".base_plane_chevs img", planeBox).attr("src", eqChevSrc);
 								} else {
 									$(".base_plane_chevs img", planeBox).remove();
@@ -1792,8 +1806,8 @@
 								
 								if (planeInfo.api_state == 1) {
 									// Plane on standby
-									eqMorale = ["","3","2","1"][planeInfo.api_cond];
-									eqCondSrc = "../../../../assets/img/client/morale/"+eqMorale+".png";
+									const eqMorale = ["","3","2","1"][planeInfo.api_cond] || "3";
+									const eqCondSrc = "/assets/img/client/morale/"+eqMorale+".png";
 									$(".base_plane_count", planeBox).text(planeInfo.api_count+" / "+planeInfo.api_max_count);
 									$(".base_plane_cond img", planeBox).attr("src", eqCondSrc);
 									
