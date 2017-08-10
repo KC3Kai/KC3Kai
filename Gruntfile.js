@@ -73,6 +73,7 @@ module.exports = function(grunt) {
 					'pages/**/*',
 					'!pages/devtools/themes/default/**',
 					'!pages/strategy/tabs/**/*.js',
+					'!pages/strategy/tabs/_tpl/**',
 					'manifest.json',
 					'data/*.json',
 					'data/*.nedb',
