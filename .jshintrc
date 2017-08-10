@@ -59,7 +59,6 @@
 		"KC3NatsuiroShipbox": true,
 		"DMMCustomizations": true,
 		"interactions": true,
-		"QUnit": true,
 
 		"chrome": true,
 		"localStorage": true,
@@ -95,13 +94,16 @@
 		"JSZip": true,
 		"Dexie": true,
 		"markdown": true,
-		"steg": true,
-		"jQuery": true,
-		"$": true
+		"steg": true
 	},
 	"undef": true,
 	"unused": false,
 	"newcap": false,
 	"laxbreak": true,
+	"jquery": true,
+	"worker": true,
+	"node": true,
+	"qunit": true,
+	"phantom": true,
 	"esversion": 6
 }

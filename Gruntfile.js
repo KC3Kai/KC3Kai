@@ -73,6 +73,7 @@ module.exports = function(grunt) {
 					'library/modules/**/*.js',
 					'library/workers/*.js',
 					'pages/**/*',
+					'!pages/devtools/themes/default/',
 					'!pages/strategy/tabs/**/*.js',
 					'manifest.json',
 					'data/*.json',
@@ -247,7 +248,7 @@ module.exports = function(grunt) {
 								"all_frames": true
 							},
 							{
-								"matches":["*://www.dmm.com/netgame/*/app_id=854854*"],
+								"matches": ["*://www.dmm.com/netgame/*/app_id=854854*"],
 								"css": [
 									"library/injections/dmm.css"
 								],
@@ -271,7 +272,7 @@ module.exports = function(grunt) {
 								"all_frames": true
 							},
 							{
-								"matches":["*://osapi.dmm.com/gadgets/*aid=854854*"],
+								"matches": ["*://osapi.dmm.com/gadgets/*aid=854854*"],
 								"js": [
 									"assets/js/global.js",
 									"library/objects.js",
@@ -385,9 +386,9 @@ module.exports = function(grunt) {
 			"extensions": {
 				"kc3kai": {
 					account: "dragonjet",
-					publish: true, 
+					publish: true,
 					appID: "hkgmldnainaglpjngpajnnjfhpdjkohh",
-					zip: "build/release.zip"      
+					zip: "build/release.zip"
 				}
 			}
 		},
