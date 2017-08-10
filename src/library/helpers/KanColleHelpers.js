@@ -7415,7 +7415,7 @@ var PS = {};
           return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(30)(6))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(2)(KanColle_Generated_SType.AV.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Generated_SType.CL.value))(sty(1)(KanColle_Generated_SType.DD.value))));
       };
       if (v === 37) {
-          return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(50)(6))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(lvlCnt(200))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Generated_SType.CL.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(5)(KanColle_Generated_SType.DD.value))([ new FleetShipWithDrum(4) ]))));
+          return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(50)(6))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(lvlCnt(200))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Generated_SType.CL.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(5)(KanColle_Generated_SType.DD.value))([ new FleetShipWithDrum(3), new FleetDrum(4) ]))));
       };
       if (v === 38) {
           return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(65)(6))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(lvlCnt(240))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(5)(KanColle_Generated_SType.DD.value))([ new FleetShipWithDrum(4), new FleetDrum(8) ])));
