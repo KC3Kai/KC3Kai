@@ -752,6 +752,9 @@ body {
 	opacity:0.4;
 	background:#fcc;
 }
+.tab_akashi .eq_res .eq_res_line.locked {
+	background:#ffc;
+}
 .tab_akashi .eq_res .eq_res_line.insufficient {
 	background:#fcc;
 }
