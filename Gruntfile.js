@@ -51,8 +51,6 @@ module.exports = function(grunt) {
 					'assets/js/jquery-ui.min.js',
 					'assets/js/KanColleHelpers.js',
 					'assets/js/twbsPagination.min.js',
-					'assets/js/WhoCallsTheFleetShipDb.json',
-					'assets/js/WhoCallsTheFleetItemDb.json',
 					'assets/js/jszip.min.js',
 					'assets/js/bootstrap-slider.min.js',
 					'assets/js/no_ga.js',
@@ -73,10 +71,11 @@ module.exports = function(grunt) {
 					'library/modules/**/*.js',
 					'library/workers/*.js',
 					'pages/**/*',
-					'!pages/devtools/themes/default/',
+					'!pages/devtools/themes/default/**',
 					'!pages/strategy/tabs/**/*.js',
 					'manifest.json',
 					'data/*.json',
+					'data/*.nedb',
 					'data/lang/data/**/*.json'
 				],
 				dest: 'build/release/'
