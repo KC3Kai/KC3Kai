@@ -773,8 +773,7 @@
 					
 					$(".sortie_nodes", sortieBox).append( $("<div>").addClass("clear") );
 					
-					var
-						mstat = self.maps[skey].stat,
+					var mstat = (self.maps[skey] || {}).stat,
 						sstat = $(".sortie_stat", sortieBox),
 						kstat = ["now","max"];
 					if(mstat && sstat.length) {
@@ -831,7 +830,7 @@
 		
 		function updateMapHpInfo(self, sortieData) {
 			let mapId = ["m", sortieData.world, sortieData.mapnum].join("");
-			let mapData = self.maps[mapId];
+			let mapData = self.maps[mapId] || {};
 			if(sortieData.mapinfo){
 				let maxKills = KC3Meta.gauge(mapId.substr(1));
 				if(!!sortieData.mapinfo.api_cleared){
@@ -904,7 +903,7 @@
 			domImg.onload = function(){
 				rcontext.drawImage( domImg, 0, 0, 400, 400, 0, 0, 400, 400 );
 				
-				KC3Database.get_sortie_data( sortieId, function(sortieData){
+				KC3Database.get_sortie_data(sortieId, function(sortieData){
 					if(sortieData.battles.length===0){
 						self.exportingReplay = false;
 						$("body").css("opacity", "1");
@@ -969,6 +968,9 @@
 						}
 					});
 					
+				}, function(e){
+					self.endExport(e);
+					return false;
 				});
 				
 			};

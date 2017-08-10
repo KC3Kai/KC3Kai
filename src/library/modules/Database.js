@@ -636,7 +636,7 @@ Uses Dexie.js third-party plugin on the assets directory
 				});
 		},
 		
-		get_sortie_data :function(sortie_id, callback){
+		get_sortie_data :function(sortie_id, callback, errorCallback){
 			var self = this;
 			var sortie_data = {};
 			this.con.sortie
@@ -651,8 +651,9 @@ Uses Dexie.js third-party plugin on the assets directory
 							console.debug("battleList", battleList);
 							sortie_data.battles = battleList;
 							callback(sortie_data);
-						});
-				});
+						}).catch(errorCallback
+							|| function(e){console.error(e);});
+				}).catch(errorCallback || function(e){console.error(e);});
 		},
 		
 		get_battle : function(mapArea, mapNo, battleNode, enemyId, callback) {
@@ -711,7 +712,7 @@ Uses Dexie.js third-party plugin on the assets directory
 		},
 		
 		get_pvp_data :function(pvp_id, callback){
-			this.con.pvp
+			return this.con.pvp
 				.where("id").equals(pvp_id)
 				.toArray(callback);
 		},

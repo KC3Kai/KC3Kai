@@ -14,6 +14,7 @@
 			master = $.extend(true, KC3Master, response.master);
 			meta = $.extend(true, KC3Meta, response.meta);
 			quests = $.extend(true, KC3QuestManager, response.quests);
+			$.extend(true, RemodelDb, response.remodel);
 
 			this.windowFocus();
 			this.attachHTML();
@@ -299,6 +300,7 @@
 				var subtitleText = false;
 				var quoteIdentifier = "";
 				var quoteVoiceNum = request.voiceNum;
+				var quoteVoiceSize = request.voiceSize;
 				var quoteSpeaker = "";
 				switch(request.voicetype){
 					case "titlecall":
@@ -314,7 +316,7 @@
 						}
 						break;
 				}
-				subtitleText = meta.quote( quoteIdentifier, quoteVoiceNum );
+				subtitleText = meta.quote( quoteIdentifier, quoteVoiceNum, quoteVoiceSize );
 
 				// hide first to fading will stop
 				$(".overlay_subtitles").stop(true, true);

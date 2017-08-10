@@ -386,6 +386,7 @@
 
 			var self = this;
 			var shipDb = WhoCallsTheFleetDb.getShipStat(kcShip.masterId);
+			var shipMst = kcShip.master();
 			var shipBox = $(".tab_fleet .factory .fleet_ship").clone();
 			$(".fleet_ships", fleetBox).append( shipBox );
 
@@ -406,89 +407,11 @@
 			var viewType = $("input[type=radio][name=view_type]:checked").val();
 			if(viewType === "current"){
 				// Show a rich text tool-tip like stats in game
-				$(".ship_tooltip .ship_full_name .ship_masterId", shipBox).text("[{0}]".format(kcShip.masterId));
-				$(".ship_tooltip .ship_full_name span.value", shipBox).text(kcShip.name());
-				$(".ship_tooltip .ship_full_name .ship_yomi", shipBox).text(KC3Meta.shipReadingName(kcShip.master().api_yomi));
-				$(".ship_tooltip .ship_rosterId span", shipBox).text(kcShip.rosterId);
-				$(".ship_tooltip .ship_stype", shipBox).text(kcShip.stype());
-				$(".ship_tooltip .ship_level span.value", shipBox).text(kcShip.level);
-				//$(".ship_tooltip .ship_level span.value", shipBox).addClass(kcShip.levelClass());
-				$(".ship_tooltip .ship_hp span.hp", shipBox).text(kcShip.hp[0]);
-				$(".ship_tooltip .ship_hp span.mhp", shipBox).text(kcShip.hp[1]);
-				$(".ship_tooltip .stat_hp", shipBox).text(kcShip.hp[1]);
-				$(".ship_tooltip .stat_fp", shipBox).text(kcShip.fp[0]);
-				$(".ship_tooltip .stat_ar", shipBox).text(kcShip.ar[0]);
-				$(".ship_tooltip .stat_tp", shipBox).text(kcShip.tp[0]);
-				$(".ship_tooltip .stat_ev", shipBox).text(kcShip.ev[0]);
-				$(".ship_tooltip .stat_aa", shipBox).text(kcShip.aa[0]);
-				$(".ship_tooltip .stat_ac", shipBox).text(kcShip.carrySlots());
-				$(".ship_tooltip .stat_as", shipBox).text(kcShip.as[0])
-					.toggleClass("oasw", kcShip.canDoOASW());
-				$(".ship_tooltip .stat_sp", shipBox).text(kcShip.speedName())
-					.addClass(KC3Meta.shipSpeed(kcShip.speed, true));
-				$(".ship_tooltip .stat_ls", shipBox).text(kcShip.ls[0]);
-				$(".ship_tooltip .stat_rn", shipBox).text(kcShip.rangeName());
-				$(".ship_tooltip .stat_lk", shipBox).text(kcShip.lk[0]);
-				$(".ship_tooltip .adjustedAntiAir", shipBox).text(
-					KC3Meta.term("ShipAAAdjusted").format(kcShip.adjustedAntiAir())
-				);
-				$(".ship_tooltip .propShotdownRate", shipBox).text(
-						KC3Meta.term("ShipAAShotdownRate").format(
-							Math.qckInt("floor", kcShip.proportionalShotdownRate() * 100, 1)
-						)
-					);
-				var fixedShotdownRange = kcShip.fixedShotdownRange(ConfigManager.aaFormation);
-				var fleetPossibleAaci = fixedShotdownRange[2];
-				if(fleetPossibleAaci > 0){
-					$(".ship_tooltip .fixedShotdown", shipBox).text(
-						KC3Meta.term("ShipAAFixedShotdown").format(
-							"{0}~{1} (x{2})".format(fixedShotdownRange[0], fixedShotdownRange[1],
-								AntiAir.AACITable[fleetPossibleAaci].modifier)
-						)
-					);
-				} else {
-					$(".ship_tooltip .fixedShotdown", shipBox).text(
-						KC3Meta.term("ShipAAFixedShotdown").format(fixedShotdownRange[0])
-					);
-				}
-				var maxAaciParams = kcShip.maxAaciShotdownBonuses();
-				if(maxAaciParams[0] > 0){
-					$(".ship_tooltip .aaciMaxBonus", shipBox).text(
-						KC3Meta.term("ShipAACIMaxBonus").format(
-							"+{0} (x{1})".format(maxAaciParams[1], maxAaciParams[2])
-						)
-					);
-				} else {
-					$(".ship_tooltip .aaciMaxBonus", shipBox).text(
-						KC3Meta.term("ShipAACIMaxBonus").format(KC3Meta.term("None"))
-					);
-				}
-				var propShotdown = kcShip.proportionalShotdown(ConfigManager.imaginaryEnemySlot);
-				var aaciFixedShotdown = fleetPossibleAaci > 0 ? AntiAir.AACITable[fleetPossibleAaci].fixed : 0;
-				$.each($(".ship_tooltip .sd_title .aa_col", shipBox), function(idx, col){
-					$(col).text(KC3Meta.term("ShipAAShotdownTitles").split("/")[idx] || "");
-				});
-				$(".ship_tooltip .bomberSlot span", shipBox).text(ConfigManager.imaginaryEnemySlot);
-				$(".ship_tooltip .sd_both span", shipBox).text(
-					// Both succeeded
-					propShotdown + fixedShotdownRange[1] + aaciFixedShotdown + 1
-				);
-				$(".ship_tooltip .sd_prop span", shipBox).text(
-					// Proportional succeeded only
-					propShotdown + aaciFixedShotdown + 1
-				);
-				$(".ship_tooltip .sd_fixed span", shipBox).text(
-					// Fixed succeeded only
-					fixedShotdownRange[1] + aaciFixedShotdown + 1
-				);
-				$(".ship_tooltip .sd_fail span", shipBox).text(
-					// Both failed
-					aaciFixedShotdown + 1
-				);
+				const tooltipBox = kcShip.htmlTooltip($(".ship_tooltip", shipBox));
 				$(".ship_hover", shipBox).tooltip({
 					position: { my: "left top", at: "right+10 top" },
 					items: "div",
-					content: $(".ship_tooltip", shipBox).prop("outerHTML")
+					content: tooltipBox.prop("outerHTML")
 				});
 			}
 

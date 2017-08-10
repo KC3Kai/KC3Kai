@@ -388,6 +388,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 						config: ConfigManager,
 						master: KC3Master,
 						meta: KC3Meta,
+						remodel: RemodelDb,
 						quest: KC3QuestManager,
 					});
 				});
@@ -417,12 +418,13 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		When a ship speaks, show subtitles
 		------------------------------------------*/
 		"subtitle" :function(request, sender, response){
-			console.debug("subtitle", request);
+			//console.debug("subtitle", request);
 			(new TMsg(request.tabId, "gamescreen", "subtitle", {
 				voicetype: request.voicetype,
 				filename: request.filename || false,
 				shipID: request.shipID || false,
 				voiceNum: request.voiceNum,
+				voiceSize: request.voiceSize,
 				url: request.url
 			})).execute();
 		},
@@ -466,7 +468,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		// Check if message is intended for this script
 		if( (request.identifier || false) == "kc3_service"){
 			// Log message contents and sender for debugging
-			console.debug(request.action, { "Request": request, "Sender": sender });
+			//console.debug(request.action, { "Request": request, "Sender": sender });
 			
 			// Check requested action is supported
 			if(typeof window.KC3Service[ request.action ] != "undefined"){

@@ -775,7 +775,7 @@
 				if(KC3SortieManager.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
 				
 				var thisNode = KC3SortieManager.currentNode();
-				var battleData = (thisNode.startNight)? thisNode.battleNight : thisNode.battleDay;
+				var battleData = (thisNode.startsFromNight)? thisNode.battleNight : thisNode.battleDay;
 				
 				var enemies = thisNode.eships.filter(function(x){return x>=0;});
 				if(ConfigManager.info_troll) {
@@ -829,7 +829,7 @@
 				
 				$(".battle .battle_support",container).show();
 				// Day battle-only environment
-				if(!thisNode.startNight){
+				if(!thisNode.startsFromNight){
 					$(".battle .battle_current", container).text("DAY BATTLE");
 
 					// If support expedition is triggered on this battle

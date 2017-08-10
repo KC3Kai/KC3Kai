@@ -745,6 +745,9 @@ body {
 	background:#def;
 	border-radius:8px;
 }
+.tab_akashi .equipment.equipped {
+	background:#ffc;
+}
 .tab_akashi .equipment.disabled {
 	opacity:0.4;
 	background:#fcc;
@@ -1281,10 +1284,11 @@ body {
 .tab_quotes .part_right .voice_entity.inherit {
 	background: #e6f7ff;
 }
-.tab_quotes .part_right .voice_entity .jp_src,.en_src {
+.tab_quotes .part_right .voice_entity .jp_src,
+.tab_quotes .part_right .voice_entity .en_src {
 	background: #eeeeee;
 }
-.tab_quotes .part_right .voice_entity .sp_quote {
+.tab_quotes .part_right .voice_entity .seasonal {
 	background: #fff0fd;
 }
 .tab_quotes .part_right .voice_entity .voice {
@@ -1311,7 +1315,8 @@ body {
 .tab_translations .tq-item.translation_missing .tq-key,
 .tab_translations .tq-item.translation_missing .tq-from,
 .tab_translations .tq-item .tq-name.translation_missing,
-.tab_translations .tq-item .tq-desc.translation_missing {
+.tab_translations .tq-item .tq-desc.translation_missing,
+.tab_translations .tq-item .tq-trackingDesc.translation_missing {
 	color: red;
 }
 

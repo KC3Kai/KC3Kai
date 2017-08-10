@@ -260,6 +260,7 @@ html,body {
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow: ellipsis;
+	user-select: none;
 	-webkit-user-select: none;
 	color:#ffcc00;
 }
@@ -332,6 +333,7 @@ html,body {
 }
 .module.activity .activity_dismissable {
 	cursor:pointer;
+	user-select: none;
 	-webkit-user-select:none;
 }
 
@@ -2878,6 +2880,7 @@ ABYSS FLEET
 .module.fleet .sship .ship_bar {
 	width:120px;
 	height:2px;
+	user-select: none;
 	-webkit-user-select: none;
 }
 .module.fleet .sship .ship_bar.ship_exp {
@@ -2951,6 +2954,7 @@ ABYSS FLEET
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow: ellipsis;
+	user-select: none;
 	-webkit-user-select: none;
 }
 .module.status .status_text.bad {
@@ -3334,12 +3338,12 @@ ABYSS FLEET
 }
 
 .ui-tooltip-content .ship_face_tooltip {
-	width:202px;
+	width:252px;
 	height:280px;
 	padding:2px 0px 2px 0px;
 }
 .ui-tooltip-content .ship_face_tooltip .ship_full_name {
-	width:158px;
+	width:208px;
 	height:17px;
 	line-height:17px;
 	padding:0px 2px 0px 2px;
@@ -3376,7 +3380,7 @@ ABYSS FLEET
 	white-space:nowrap;
 }
 .ui-tooltip-content .ship_face_tooltip .ship_level {
-	width:48px;
+	width:45px;
 	height:17px;
 	line-height:17px;
 	padding:0px 0px 0px 0px;
@@ -3397,8 +3401,39 @@ ABYSS FLEET
 .ui-tooltip-content .ship_face_tooltip .ship_level span.value.medium {
 	color:#36c2db;
 }
+.ui-tooltip-content .ship_face_tooltip .ship_exp_next {
+	width:75px;
+	height:17px;
+	line-height:16px;
+	padding:0px 0px 0px 0px;
+	margin:0px 2px 0px 0px;
+	font-size:11px;
+	float:left;
+	overflow:hidden;
+	white-space:nowrap;
+}
+.ui-tooltip-content .ship_face_tooltip .ship_exp_next span.i18n {
+	color:#7ca99f;
+}
+.ui-tooltip-content .ship_face_tooltip .ship_morale {
+	width:32px;
+	height:17px;
+	line-height:16px;
+	padding:0px 0px 0px 0px;
+	margin:0px 2px 0px 0px;
+	font-size:11px;
+	float:left;
+	overflow:hidden;
+	white-space:nowrap;
+}
+.ui-tooltip-content .ship_face_tooltip .ship_morale img {
+	width:13px;
+	height:13px;
+	vertical-align:text-bottom;
+	margin-right:1px;
+}
 .ui-tooltip-content .ship_face_tooltip .ship_hp {
-	width:64px;
+	width:48px;
 	height:17px;
 	line-height:17px;
 	padding:0px 0px 0px 0px;
@@ -3409,12 +3444,12 @@ ABYSS FLEET
 	white-space:nowrap;
 }
 .ui-tooltip-content .ship_face_tooltip .ship_stats_col {
-	width:101px;
+	width:126px;
 	margin:0px 0px 0px 0px;
 	float:left;
 }
 .ui-tooltip-content .ship_face_tooltip .ship_stats_row {
-	width:200px;
+	width:250px;
 	margin:0px 0px 0px 0px;
 	float:left;
 }
@@ -3443,13 +3478,13 @@ ABYSS FLEET
 	margin:0px 0px 0px 2px;
 }
 .ui-tooltip-content .ship_face_tooltip .stat_value {
-	width:46px;
+	width:71px;
 	height:19px;
 	line-height:17px;
 	padding:0px 2px 1px 2px;
 	margin:0px 2px 1px 0px;
 	float:left;
-	font-size:12px;
+	font-size:11px;
 	text-align:right;
 	overflow:hidden;
 	white-space:nowrap;
@@ -3458,18 +3493,39 @@ ABYSS FLEET
 	border-right-color:#f0f0f0;
 	border-bottom-color:#f0f0f0;
 }
-.ui-tooltip-content .ship_face_tooltip .stat_value.oasw {
+.ui-tooltip-content .ship_face_tooltip .stat_value .equip {
+	font-size:10px;
+	color:#888;
+	margin-right:1px;
+}
+.ui-tooltip-content .ship_face_tooltip .stat_value .mod {
+	font-size:10px;
+	color:#aaa;
+	margin-left:1px;
+}
+.ui-tooltip-content .ship_face_tooltip .stat_value .level {
+	font-size:10px;
+	color:#3ec0bf;
+	margin-left:1px;
+}
+.ui-tooltip-content .ship_face_tooltip .stat_value .luck {
+	font-size:10px;
+	color:#2b2;
+	margin-left:1px;
+}
+.ui-tooltip-content .ship_face_tooltip .stat_value .oasw {
 	color:#0cd;
 }
 .ui-tooltip-content .ship_face_tooltip .stat_value.SpeedFaster,
-.ui-tooltip-content .ship_face_tooltip .stat_value.SpeedFastest {
+.ui-tooltip-content .ship_face_tooltip .stat_value.SpeedFastest,
+.ui-tooltip-content .ship_face_tooltip .stat_value.RangeChanged {
 	color:#7aabb8;
 }
 .ui-tooltip-content .ship_face_tooltip .stat_wide {
-	width:199px;
+	width:249px;
 }
 .ui-tooltip-content .ship_face_tooltip .aa_col {
-	width: 39px;
+	width:49px;
 	height:19px;
 	line-height:17px;
 	padding:0px 2px 0px 2px;
