@@ -27,6 +27,7 @@ Provides access to data on built-in JSON files
 		_servers:{},
 		_battle:{},
 		_quotes:{},
+		_quotesSize:{},
 		_terms:{
 			troll:{},
 			lang:{},
@@ -66,6 +67,72 @@ Provides access to data on built-in JSON files
 			432: {917: 917, 918: 918},
 			353: {917: 917, 918: 918}
 		},
+		specialQuotesSizes: {
+			"44": { // Murasame Poke(1)
+				"2": {
+					"49728": {
+						"Setsubun": [3, 4, 5],
+						"Xmas": [12, 1]
+					}
+				}
+			},
+			"68": { // Maya Poke(1)
+				"2": {
+					"58800": {
+						"NewYears": [1, 2],
+						"Rainy": [5, 6, 7]
+					}
+				}
+			},
+			"90": { // Souryuu Poke(1)
+				"2": {
+					"60312": {
+						"Setsubun": [3, 4, 5],
+						"Saury": [8, 9, 10]
+					}
+				}
+			},
+			"124": { // Suzuya Poke(1)
+				"2": {
+					"66528": {
+						"EarlySummer": [6, 7, 8],
+						"Xmas": [12, 1]
+					}
+				}
+			},
+			"169": { // Tanikaze Poke(1)
+				"2": {
+					"90888": {
+						"Fall": [9, 10, 11],
+						"Xmas": [12, 1]
+					}
+				}
+			},
+			"186": { // Tokitsukaze Poke(1)
+				"2": {
+					"72408": {
+						"Valentines": [2, 3],
+						"Xmas": [12, 1]
+					}
+				}
+			},
+			"448": { // Zara Poke(1)
+				"2": {
+					"54936": {
+						"Valentines": [2, 3],
+						"Saury": [8, 9, 10]
+					}
+				}
+			},
+			"481": { // Minazuki Poke(1)
+				"2": {
+					"86856": {
+						"Summer2017": [6, 7, 8, 9],
+						"Xmas": [12, 1]
+					}
+				}
+			}
+		},
 		
 		abyssKaiShipIds: [
 			1565, 1566, 1567, 1616, 1617, 1618, 1714, 1715, 1734, 1735
@@ -75,7 +142,8 @@ Provides access to data on built-in JSON files
 			1558, 1559, 1560, 1561, 1562, 1563, 1564, 1570, 1571, 1572,
 			1575, 1576, 1577, 1578, 1579, 1580, 1591, 1592, 1593, 1594,
 			1595, 1614, 1615, 1621, 1622, 1623, 1624, 1637, 1638, 1639,
-			1640, 1665, 1666, 1667
+			1640, 1665, 1666, 1667, 1739, 1740, 1741, 1742, 1743, 1744,
+			1761
 		],
 		
 		/* Initialization
@@ -118,6 +186,7 @@ Provides access to data on built-in JSON files
 		
 		loadQuotes :function(){
 			this._quotes = KC3Translation.getQuotes(this.repo);
+			this._quotesSize = JSON.parse($.ajax(this.repo + "quotes_size.json", { async: false }).responseText);
 			return this;
 		},
 		
@@ -529,30 +598,83 @@ Provides access to data on built-in JSON files
 		},
 		
 		// Subtitle quotes
-		quote :function(identifier, voiceNum){
+		quote :function(identifier, voiceNum, voiceSize = 0){
 			if (!identifier) return false;
 
 			var quoteTable = this._quotes[identifier];
 			if(typeof quoteTable === "undefined") return false;
 
-			function lookupVoice(vNum) {
+			var lookupVoice = (vNum) => {
 				if (typeof vNum === "undefined")
 					return false;
 				var retVal = quoteTable[vNum];
 				return typeof retVal !== "undefined" ? retVal : false;
-			}
+			};
+
+			var lookupSpecialSeasonalKey = (shipId, vNum, fileSize) => {
+				// this table only contains base form IDs
+				const spFileSizeTable = this.specialQuotesSizes[
+					RemodelDb.originOf(shipId) || shipId
+				];
+				if(spFileSizeTable && fileSize){
+					const knownVoiceSizes = spFileSizeTable[vNum];
+					const seasonalKeyConf = (knownVoiceSizes || {})[fileSize];
+					if(knownVoiceSizes && seasonalKeyConf){
+						const seasonalKeys = Object.keys(seasonalKeyConf);
+						for(let i in seasonalKeys){
+							const key = seasonalKeys[i];
+							const keyCond = seasonalKeyConf[key];
+							if(Array.isArray(keyCond) // match key by current month
+								&& keyCond.indexOf(new Date().getMonth() + 1) > -1){
+								return key;
+							}
+						}
+					}
+				}
+				return false;
+			};
+
+			var lookupByFileSize = (shipId, vNum, fileSize) => {
+				var seasonalKey = lookupSpecialSeasonalKey(shipId, vNum, fileSize);
+				const fileSizeTable = this._quotesSize[shipId];
+				if(!seasonalKey && fileSizeTable && fileSize){
+					const knownVoiceSizes = fileSizeTable[vNum];
+					seasonalKey = (knownVoiceSizes || {})[fileSize];
+					// try to match among lines of Poke(1,2,3) because devs reuse them around
+					if(seasonalKey === undefined && vNum >= 2 && vNum <= 4){
+						for(let vn = 2; vn <= 4; vn++){
+							if(vn !== vNum &&
+								fileSizeTable[vn] && fileSizeTable[vn][fileSize]){
+								seasonalKey = fileSizeTable[vn][fileSize];
+								vNum = vn;
+								break;
+							}
+						}
+					}
+				}
+				//console.debug(`Quote known size[${vNum}]["${fileSize}"] = "${seasonalKey}"`);
+				if(seasonalKey){
+					return lookupVoice(vNum + "@" + seasonalKey);
+				}
+				return false;
+			};
 
 			var voiceLine = lookupVoice(voiceNum);
-			if (voiceLine) return voiceLine;
-
-			if (identifier !== "timing" ){
+			if(voiceLine) {
+				// check if seasonal lines found
+				return lookupByFileSize(identifier, voiceNum, voiceSize) || voiceLine;
+			} else if(identifier !== "timing"){
 				// no quote for that voice line, check if it's a seasonal line
 				var specialVoiceNum = this.specialDiffs[voiceNum];
 				// check if default for seasonal line exists
-				//console.debug("Quote this.specialDiffs["+voiceNum+"] =", specialVoiceNum);
-				var specialVoiceLine = lookupVoice(specialVoiceNum);
-				if (specialVoiceLine) {
-					//console.debug("Quote using special default:", specialVoiceLine);
+				//console.debug(`Quote this.specialDiffs["${voiceNum}"] = ${specialVoiceNum}`);
+				voiceLine = lookupVoice(specialVoiceNum);
+				// try to check seasonal line by voice file size
+				var specialVoiceLine = lookupByFileSize(identifier, specialVoiceNum, voiceSize) || voiceLine;
+				if(specialVoiceLine){
+					if(specialVoiceLine !== voiceLine){
+						//console.debug(`Quote using special "${specialVoiceLine}" instead of "${voiceLine}"`);
+					}
 					return specialVoiceLine;
 				}
 			}

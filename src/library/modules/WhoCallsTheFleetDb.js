@@ -3,16 +3,20 @@
 
 	window.WhoCallsTheFleetDb = {
 		db: {},
-		expectedShipCount: 470,
-		expectedItemCount: 236,
+		expectedShipCount: 479,
+		expectedItemCount: 248,
 		init: function(repo) {
 			var self = this;
 			var loadAndParseDb = function(prefix, filename, expectedCount) {
 				var rawDb = $.ajax({
-					url : repo + 'assets/js/' + filename,
+					url : repo + 'data/' + filename,
 					async: false
 				}).responseText;
 
+				/**
+				 * WhoCallsTheFleet-DB using nedb storage, which is a line seperated json-like format.
+				 * @see https://github.com/louischatriot/nedb
+				 */
 				var content = rawDb
 					.split("\n")
 					.map( function(x) {
@@ -29,7 +33,7 @@
 								 filename, "might has been changed.");
 				} else if(content.length > expectedCount) {
 					console.info("WhoCallsTheFleetDB:", filename, "has been updated,",
-								 "commit `expected(Ship|Item)Count:", content.length +
+								 "commit `expected(Ship|Item)Count: " + content.length +
 								 ",` instead of `" + expectedCount + "` plz.");
 				}
 
@@ -41,8 +45,8 @@
 			};
 
 			this.db = {};
-			this.expectedShipCount = loadAndParseDb("s", "WhoCallsTheFleetShipDb.json", this.expectedShipCount);
-			this.expectedItemCount = loadAndParseDb("i", "WhoCallsTheFleetItemDb.json", this.expectedItemCount);
+			this.expectedShipCount = loadAndParseDb("s", "WhoCallsTheFleet_ships.nedb", this.expectedShipCount);
+			this.expectedItemCount = loadAndParseDb("i", "WhoCallsTheFleet_items.nedb", this.expectedItemCount);
 		},
 
 		getShipStat: function(shipId) {

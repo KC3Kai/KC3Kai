@@ -200,10 +200,12 @@ Listens to network history and triggers callback if game events happen
 					// console.debug("DETECTED shipgirl sound");
 					var shipGirl = KC3Master.graph_file(soundPaths[5].substring(2));
 					var voiceLine = KC3Meta.getVoiceLineByFilename(shipGirl, soundPaths[6].split(".")[0]);
+					var audioFileSize = request.response.content.size || 0;
 					(new RMsg("service", "subtitle", {
 						voicetype: "shipgirl",
 						shipID: shipGirl,
 						voiceNum: voiceLine,
+						voiceSize: audioFileSize,
 						tabId: chrome.devtools.inspectedWindow.tabId
 					})).execute();
 				}

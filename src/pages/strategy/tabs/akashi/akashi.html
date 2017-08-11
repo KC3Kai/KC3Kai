@@ -5,9 +5,10 @@
 
 <!-- HELP TOPICS -->
 <div class="page_help">
-	<div class="help_q">What do the red boxes and colored numbers mean?</div>
-	<div class="help_a">Red text and equipment boxes mean you cannot execute this upgrade. It's either you do not have this item or item with these stars, or you do not have any of the required ships, insufficient resources, devmats, screws or related items to be consumed.<br />
-	Yellow numbers mean the amount of items to be consumed you already have, but they are currently equipped or locked.
+	<div class="help_q">What do the colored boxes and colored numbers mean?</div>
+	<div class="help_a">
+		Red texts or equipment boxes mean you cannot execute this upgrade. It's either you do not have this item or item with these stars, or you do not have any of the required ships, insufficient resources, devmats, screws or related items to be consumed.<br />
+		Yellow ones mean this item or the amount of items to be consumed you already have, but they are currently equipped or locked. To improve, you have to take them off from your ships or land bases; To upgrade, you have to unlock them.
 	</div>
 	
 	<div class="help_q">Why are some amounts question mark? why are some improvable items in game not here?</div>
@@ -25,6 +26,10 @@
 <!-- CONTROLS -->
 <div class="controls">
 	<div class="control hover" id="disabled_toggle">Toggle Improvable</div>
+	<div class="option">
+		<input type="checkbox" id="equipped_checkbox">
+		<label for="equipped_checkbox">Equipped/Locked as Improvable</label>
+	</div>
 	<div class="clear"></div>
 </div>
 <!-- CONTENT -->

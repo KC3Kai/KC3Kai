@@ -27,88 +27,9 @@ KC3改 Ship Box for Natsuiro theme
 	KC3NatsuiroShipbox.prototype.commonElements = function( isCombinedEscort ){
 		//var shipDb = WhoCallsTheFleetDb.getShipStat(this.shipData.masterId);
 		var tooltipBox = $("#factory .ship_face_tooltip_outer").clone();
-		tooltipBox.hide();
-		tooltipBox.appendTo(this.element);
+		tooltipBox.hide().appendTo(this.element);
+		this.shipData.htmlTooltip(tooltipBox);
 		// Show a rich text tool-tip like stats in game
-		$(".ship_face_tooltip .ship_full_name .ship_masterId", tooltipBox).text("[{0}]".format(this.shipData.masterId));
-		$(".ship_face_tooltip .ship_full_name span.value", tooltipBox).text(this.shipData.name());
-		$(".ship_face_tooltip .ship_full_name .ship_yomi", tooltipBox).text(KC3Meta.shipReadingName(this.shipData.master().api_yomi));
-		$(".ship_face_tooltip .ship_rosterId span", tooltipBox).text(this.shipData.rosterId);
-		$(".ship_face_tooltip .ship_stype", tooltipBox).text(this.shipData.stype());
-		$(".ship_face_tooltip .ship_level span.value", tooltipBox).text(this.shipData.level);
-		//$(".ship_face_tooltip .ship_level span.value", tooltipBox).addClass(this.shipData.levelClass());
-		$(".ship_face_tooltip .ship_hp span.hp", tooltipBox).text(this.shipData.hp[0]);
-		$(".ship_face_tooltip .ship_hp span.mhp", tooltipBox).text(this.shipData.hp[1]);
-		$(".ship_face_tooltip .stat_hp", tooltipBox).text(this.shipData.hp[1]);
-		$(".ship_face_tooltip .stat_fp", tooltipBox).text(this.shipData.fp[0]);
-		$(".ship_face_tooltip .stat_ar", tooltipBox).text(this.shipData.ar[0]);
-		$(".ship_face_tooltip .stat_tp", tooltipBox).text(this.shipData.tp[0]);
-		$(".ship_face_tooltip .stat_ev", tooltipBox).text(this.shipData.ev[0]);
-		$(".ship_face_tooltip .stat_aa", tooltipBox).text(this.shipData.aa[0]);
-		$(".ship_face_tooltip .stat_ac", tooltipBox).text(this.shipData.carrySlots());
-		$(".ship_face_tooltip .stat_as", tooltipBox).text(this.shipData.as[0])
-			.toggleClass("oasw", this.shipData.canDoOASW());
-		$(".ship_face_tooltip .stat_sp", tooltipBox).text(this.shipData.speedName())
-			.addClass(KC3Meta.shipSpeed(this.shipData.speed, true));
-		$(".ship_face_tooltip .stat_ls", tooltipBox).text(this.shipData.ls[0]);
-		$(".ship_face_tooltip .stat_rn", tooltipBox).text(this.shipData.rangeName());
-		$(".ship_face_tooltip .stat_lk", tooltipBox).text(this.shipData.lk[0]);
-		$(".ship_face_tooltip .adjustedAntiAir", tooltipBox).text(
-			KC3Meta.term("ShipAAAdjusted").format(this.shipData.adjustedAntiAir())
-		);
-		$(".ship_face_tooltip .propShotdownRate", tooltipBox).text(
-				KC3Meta.term("ShipAAShotdownRate").format(
-					Math.qckInt("floor", this.shipData.proportionalShotdownRate() * 100, 1)
-				)
-			);
-		var fixedShotdownRange = this.shipData.fixedShotdownRange(ConfigManager.aaFormation);
-		var fleetPossibleAaci = fixedShotdownRange[2];
-		if(fleetPossibleAaci > 0){
-			$(".ship_face_tooltip .fixedShotdown", tooltipBox).text(
-				KC3Meta.term("ShipAAFixedShotdown").format(
-					"{0}~{1} (x{2})".format(fixedShotdownRange[0], fixedShotdownRange[1],
-						AntiAir.AACITable[fleetPossibleAaci].modifier)
-				)
-			);
-		} else {
-			$(".ship_face_tooltip .fixedShotdown", tooltipBox).text(
-				KC3Meta.term("ShipAAFixedShotdown").format(fixedShotdownRange[0])
-			);
-		}
-		var maxAaciParams = this.shipData.maxAaciShotdownBonuses();
-		if(maxAaciParams[0] > 0){
-			$(".ship_face_tooltip .aaciMaxBonus", tooltipBox).text(
-				KC3Meta.term("ShipAACIMaxBonus").format(
-					"+{0} (x{1})".format(maxAaciParams[1], maxAaciParams[2])
-				)
-			);
-		} else {
-			$(".ship_face_tooltip .aaciMaxBonus", tooltipBox).text(
-				KC3Meta.term("ShipAACIMaxBonus").format(KC3Meta.term("None"))
-			);
-		}
-		var propShotdown = this.shipData.proportionalShotdown(ConfigManager.imaginaryEnemySlot);
-		var aaciFixedShotdown = fleetPossibleAaci > 0 ? AntiAir.AACITable[fleetPossibleAaci].fixed : 0;
-		$.each($(".ship_face_tooltip .sd_title .aa_col", tooltipBox), function(idx, col){
-			$(col).text(KC3Meta.term("ShipAAShotdownTitles").split("/")[idx] || "");
-		});
-		$(".ship_face_tooltip .bomberSlot span", tooltipBox).text(ConfigManager.imaginaryEnemySlot);
-		$(".ship_face_tooltip .sd_both span", tooltipBox).text(
-			// Both succeeded
-			propShotdown + fixedShotdownRange[1] + aaciFixedShotdown + 1
-		);
-		$(".ship_face_tooltip .sd_prop span", tooltipBox).text(
-			// Proportional succeeded only
-			propShotdown + aaciFixedShotdown + 1
-		);
-		$(".ship_face_tooltip .sd_fixed span", tooltipBox).text(
-			// Fixed succeeded only
-			fixedShotdownRange[1] + aaciFixedShotdown + 1
-		);
-		$(".ship_face_tooltip .sd_fail span", tooltipBox).text(
-			// Both failed
-			aaciFixedShotdown + 1
-		);
 		$(".ship_img", this.element).tooltip({
 			position: { my: !!isCombinedEscort ? "left-50 top" : "left+50 top",
 				at: "left top", of: $(".module.fleet") },
@@ -197,7 +118,8 @@ KC3改 Ship Box for Natsuiro theme
 			+ "\n" + KC3Meta.term("PanelResupplyCosts").format(
 				"+{0} \u27A4{1}".format(resupplyCost.fuel, this.shipData.master().api_fuel_max),
 				"+{0} \u27A4{1}".format(resupplyCost.ammo, this.shipData.master().api_bull_max),
-				resupplyCost.bauxite
+				resupplyCost.bauxite,
+				this.shipData.isMarried() ? KC3Meta.term("PanelResupplyMarriedHint") : ""
 			)
 		).lazyInitTooltip();
 		
@@ -240,7 +162,8 @@ KC3改 Ship Box for Natsuiro theme
 				KC3Meta.term("PanelResupplyCosts").format(
 					"+{0} \u27A4{1}".format(resupplyCost.fuel, this.shipData.master().api_fuel_max),
 					"+{0} \u27A4{1}".format(resupplyCost.ammo, this.shipData.master().api_bull_max),
-					resupplyCost.bauxite
+					resupplyCost.bauxite,
+					this.shipData.isMarried() ? KC3Meta.term("PanelResupplyMarriedHint") : ""
 				)
 			).lazyInitTooltip();
 		} else {
@@ -391,28 +314,28 @@ KC3改 Ship Box for Natsuiro theme
 	
 	/* SHOW MORALE
 	Morale value on the circle, and its colors
-	Add special glow if more than 54
+	Add special glow if more than 53
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.showMorale = function(){
 		$(".ship_morale", this.element).text( this.shipData.morale );
 		switch(true){
-			case this.shipData.morale > 53:
+			case this.shipData.morale > 52: // sparkle and get buff
 				$(".ship_morale", this.element).css("background", "#FFFF00");
 				$(".ship_morale", this.element).addClass("glowing");
 				break;
-			case this.shipData.morale > 49:
+			case this.shipData.morale > 49: // sparkle in-game
 				$(".ship_morale", this.element).css("background", "#FFFF00");
 				break;
-			case this.shipData.morale > 39:
+			case this.shipData.morale > 39: // no effect in-game, regular state
 				$(".ship_morale", this.element).css("background", "#FFFFFF");
 				break;
-			case this.shipData.morale > 29:
+			case this.shipData.morale > 29: // mamiya/irako usable, debuff when < 33
 				$(".ship_morale", this.element).css("background", "#FFDDBB");
 				break;
-			case this.shipData.morale > 19:
+			case this.shipData.morale > 19: // orange face, debuff
 				$(".ship_morale", this.element).css("background", "#FFB74A");
 				break;
-			default:
+			default: // red face, heavy debuff
 				$(".ship_morale", this.element).css("background", "#FFA6A6");
 				break;
 		}

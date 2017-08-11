@@ -63,8 +63,7 @@
 				KC3StrategyTabs.gotoTab(null, $(this).data("sid"));
 			};
 			var toggleSrcFunc = function(){
-				$(".en_src", $(this).parent()).toggle();
-				$(".jp_src", $(this).parent()).toggle();
+				$(".ref_sub", $(this).parent()).slideToggle(200);
 			};
 
 			var allVoiceNums = KC3Translation.getShipVoiceNums(masterId);
@@ -127,9 +126,15 @@
 				if(self.jpQuotes && self.jpQuotes[masterId] && self.jpQuotes[masterId][voiceNum]){
 					$(".jp_src",elm).text(self.jpQuotes[masterId][voiceNum]);
 				}
-				var spQuote = KC3Meta.quote(masterId, voiceLine);
-				if(state !== "missing" && spQuote && src.val !== spQuote){
-					$(".sp_quote",elm).text("[{0}] {1}".format(voiceLine, spQuote)).show();
+				const seasonalKeys = Object.keys(shipLines).filter(k => k.startsWith(voiceNum + '@'));
+				if(seasonalKeys.length){
+					let spQuotes = "";
+					seasonalKeys.forEach(key => {
+						spQuotes += "<b>[{0}]</b> {1}"
+							.format(key.slice(key.indexOf('@') + 1), shipLines[key].val) +
+							"<br/>";
+					});
+					$(".seasonal",elm).html(spQuotes).show();
 				}
 				$(".voice_list").append(elm);
 			});

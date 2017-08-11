@@ -214,12 +214,12 @@ KC3改 Ship Box for Natsuiro theme
 	
 	/* SHOW MORALE
 	Morale value on the circle, and its colors
-	Add special glow if more than 54
+	Add special glow if more than 53
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.showMorale = function(){
 		$(".ship_morale", this.element).text( this.shipData.morale );
 		switch(true){
-			case this.shipData.morale > 53:
+			case this.shipData.morale > 52:
 				$(".ship_morale", this.element).css("background", "#FFFF00");
 				$(".ship_morale", this.element).addClass("glowing");
 				break;

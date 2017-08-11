@@ -127,7 +127,6 @@
 				if(self.audio){ self.audio.pause(); }
 				var vnum = Number($(this).data("vnum"));
 				var voiceFile = KC3Meta.getFilenameByVoiceLine(self.currentShipId, vnum);
-				//console.debug("VOICE META: voiceFile", voiceFile);
 				$(".tab_mstship .shipInfo .subtitles").show();
 				if(!voiceFile || voiceFile==100000){
 					$(".tab_mstship .shipInfo .subtitles").html("This voice is currently disabled to be replayable in KC3Kai");
@@ -137,21 +136,40 @@
 				var voiceSrc = "http://"+self.server_ip
 							+ "/kcs/sound/kc"+self.currentGraph+"/"+voiceFile+".mp3"
 							+ (!self.currentCardVersion?"":"?version="+self.currentCardVersion);
-				self.audio = new Audio(voiceSrc);
-				self.audio.play();
-				console.debug("PLAYING: shipId, vnum, voiceFile", self.currentShipId, vnum, voiceFile);
-				
-				// Emulate subtitles
-				var shipGirl = KC3Master.graph_file(self.currentGraph);
-				var voiceLine = KC3Meta.getVoiceLineByFilename(shipGirl, voiceFile);
-				console.debug("SUBTITLE: shipId, voiceFile, voiceLine", shipGirl, voiceFile, voiceLine);
-				var quote = KC3Meta.quote( shipGirl, voiceLine );
-				if(quote){
-					$(".tab_mstship .shipInfo .subtitles").html(quote);
+				var voiceSize = 0;
+				var playAndShowSubtitle = function(){
+					// Playback voice audio file
+					if(self.audio) { self.audio.pause(); }
+					self.audio = new Audio(voiceSrc);
+					self.audio.play();
+					// Emulate subtitles
+					var shipGirl = KC3Master.graph_file(self.currentGraph);
+					var voiceLine = KC3Meta.getVoiceLineByFilename(shipGirl, voiceFile);
+					var quote = KC3Meta.quote( shipGirl, voiceLine, voiceSize );
+					console.debug("Playing subtitle: shipId, vnum, voiceLine, voiceFile, voiceSize:",
+						shipGirl, vnum, voiceLine, voiceFile, voiceSize);
+					if(quote){
+						$(".tab_mstship .shipInfo .subtitles").html(quote);
+					} else {
+						$(".tab_mstship .shipInfo .subtitles").html(
+							"Quote not found yet for: ship={0}, vnum={1}, vline={2}"
+								.format(shipGirl, vnum, voiceLine)
+						);
+					}
+				};
+				// Get audio file size first for seasonal Poke(1/2/3)
+				if(vnum >= 2 && vnum <= 4){
+					$.ajax({
+						type: "HEAD",
+						url: voiceSrc,
+						async: true,
+						success: (data, status, xhr) => {
+							voiceSize = parseInt(xhr.getResponseHeader("Content-Length"), 10) || 0;
+							playAndShowSubtitle();
+						}
+					});
 				} else {
-					$(".tab_mstship .shipInfo .subtitles").html(
-						"Quote not found yet for: ship={0}, vnum={1}, vline={2}".format(shipGirl, vnum, voiceLine)
-					);
+					playAndShowSubtitle();
 				}
 			});
 			
@@ -534,12 +552,12 @@
 				self.atLvlSlider.slider('destroy');
 				self.atLvlSlider.slider({
 					tooltip: 'hide',
-					ticks: [lowestLevel,99,155]
+					ticks: [lowestLevel, KC3Ship.getMarriedLevel() - 1, KC3Ship.getMaxLevel()]
 				});
 				self.atLvlSlider.on('change', function(e) {
 					self.atLevelChange( e.value.newValue );
 				});
-				self.atLvlSlider.slider('setValue',99,true,true);
+				self.atLvlSlider.slider('setValue', KC3Ship.getMarriedLevel() - 1, true, true);
 
 				$(".tab_mstship .shipInfo .subtitles").empty();
 				
