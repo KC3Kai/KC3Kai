@@ -139,6 +139,7 @@
 				var voiceSize = 0;
 				var playAndShowSubtitle = function(){
 					// Playback voice audio file
+					if(self.audio) { self.audio.pause(); }
 					self.audio = new Audio(voiceSrc);
 					self.audio.play();
 					// Emulate subtitles
