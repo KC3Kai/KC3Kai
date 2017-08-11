@@ -13,8 +13,8 @@ Saves and loads significant data for future use
 		// Not start from, excluding
 		abyssalShipIdFrom: 1500,
 		abyssalGearIdFrom: 500,
-		// Might be updated soon, depending on next seasonal ID going ~811 or 997~
-		seasonalCgIdFrom: 800,
+		// Devs still archive seasonal ID backward from current max 997
+		seasonalCgIdFrom: 700,
 
 		_raw: {},
 		_abyssalShips: {},
@@ -40,10 +40,12 @@ Saves and loads significant data for future use
 			}
 			this._raw.newShips = this._raw.newShips || {};
 			this._raw.newItems = this._raw.newItems || {};
+			this._raw.newGraphs = this._raw.newGraphs || {};
+			this._raw.changedGraphs = this._raw.changedGraphs || {};
 
 			var
 				self = this,
-				diff = {"ship":"newShips", "slotitem":"newItems"},
+				diff = {"ship":"newShips", "slotitem":"newItems", "shipgraph":"newGraphs"},
 				oraw = $.extend({}, this._raw),
 				newCounts = [0, 0],
 				ctime = Date.now();
@@ -54,7 +56,7 @@ Saves and loads significant data for future use
 				var short_mst_name = mst_name.replace("api_mst_", "");
 
 				// If the current master item is an array
-				if (Object.prototype.toString.call(mst_data) === '[object Array]') {
+				if (Array.isArray(mst_data)) {
 					// Add the master item to local raw, as empty object
 					self._raw[short_mst_name] = {};
 
@@ -71,6 +73,11 @@ Saves and loads significant data for future use
 							if(!oraw[short_mst_name][elem_key]) {
 								self._raw[diff[short_mst_name]][elem_key] = ctime;
 							} else {
+								if(short_mst_name === "shipgraph" &&
+									self._raw[short_mst_name][elem_key].api_version[0] >
+									oraw[short_mst_name][elem_key].api_version[0]) {
+									self._raw.changedGraphs[elem_key] = ctime;
+								}
 								delete self._raw[diff[short_mst_name]][elem_key];
 							}
 						}
@@ -150,6 +157,10 @@ Saves and loads significant data for future use
 			return ships;
 		},
 
+		seasonal_ship :function(id){
+			return this._seasonalShips[id] || false;
+		},
+
 		new_ships :function(){
 			return this._raw.newShips || {};
 		},
@@ -167,6 +178,22 @@ Saves and loads significant data for future use
 			return !this.available ? false : Object.keys(this._raw.shipgraph).filter(function(key){
 				return self._raw.shipgraph[key].api_filename === filename;
 			})[0];
+		},
+
+		new_graphs :function(){
+			return this._raw.newGraphs || {};
+		},
+
+		remove_new_graphs :function(id){
+			delete this._raw.newGraphs[id];
+		},
+
+		changed_graphs :function(){
+			return this._raw.changedGraphs || {};
+		},
+
+		remove_changed_graphs :function(id){
+			delete this._raw.changedGraphs[id];
 		},
 
 		slotitem :function(id){
@@ -251,6 +278,8 @@ Saves and loads significant data for future use
 					this._raw.stype = data.stype;
 					this._raw.newShips = data.newShips || {};
 					this._raw.newItems = data.newItems || {};
+					this._raw.newGraphs = data.newGraphs || {};
+					this._raw.changedGraphs = data.changedGraphs || {};
 					return true;
 				},
 			};
