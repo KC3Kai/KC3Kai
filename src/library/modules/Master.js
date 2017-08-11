@@ -15,6 +15,8 @@ Saves and loads significant data for future use
 		abyssalGearIdFrom: 500,
 		// Devs still archive seasonal ID backward from current max 997
 		seasonalCgIdFrom: 700,
+		// Clear new updates data after 1 week
+		newUpdatesExpiredAfter: 7 * 24 * 60 * 60 * 1000,
 
 		_raw: {},
 		_abyssalShips: {},
@@ -43,8 +45,7 @@ Saves and loads significant data for future use
 			this._raw.newGraphs = this._raw.newGraphs || {};
 			this._raw.changedGraphs = this._raw.changedGraphs || {};
 
-			var
-				self = this,
+			var self = this,
 				diff = {"ship":"newShips", "slotitem":"newItems", "shipgraph":"newGraphs"},
 				oraw = $.extend({}, this._raw),
 				newCounts = [0, 0],
@@ -73,12 +74,19 @@ Saves and loads significant data for future use
 							if(!oraw[short_mst_name][elem_key]) {
 								self._raw[diff[short_mst_name]][elem_key] = ctime;
 							} else {
-								if(short_mst_name === "shipgraph" &&
-									self._raw[short_mst_name][elem_key].api_version[0] >
-									oraw[short_mst_name][elem_key].api_version[0]) {
-									self._raw.changedGraphs[elem_key] = ctime;
+								if(short_mst_name === "shipgraph") {
+									if(self._raw[short_mst_name][elem_key].api_version[0]
+										!= oraw[short_mst_name][elem_key].api_version[0]) {
+										self._raw.changedGraphs[elem_key] = ctime;
+									} else if(self._raw.changedGraphs[elem_key] &&
+										(ctime - self._raw.changedGraphs[elem_key]) > self.newUpdatesExpiredAfter) {
+										delete self._raw.changedGraphs[elem_key];
+									}
 								}
-								delete self._raw[diff[short_mst_name]][elem_key];
+								if(self._raw[diff[short_mst_name]][elem_key] &&
+									(ctime - self._raw[diff[short_mst_name]][elem_key]) > self.newUpdatesExpiredAfter) {
+									delete self._raw[diff[short_mst_name]][elem_key];
+								}
 							}
 						}
 					});

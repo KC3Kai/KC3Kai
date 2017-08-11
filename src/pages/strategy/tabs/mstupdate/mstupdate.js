@@ -24,16 +24,15 @@
 		reload :function(){
 			const self = this;
 			const timeNow = Date.now();
-			const expireTime = 7 * 24 * 60 * 60 * 1000;
-			var masterChanged = false;
 			this.newShips.length = 0;
 			this.newGears.length = 0;
 			this.newCgs.length = 0;
 			this.archivedCgs.length = 0;
+			var masterChanged = false;
 			KC3Master.load();
 			const checkExpired = (masterColle, colleName, removeMethod, resolveMethod) => {
 				$.each(masterColle, function(mstId, timeAdded) {
-					if(timeNow - timeAdded > expireTime) {
+					if(timeNow - timeAdded > KC3Master.newUpdatesExpiredAfter) {
 						removeMethod.call(KC3Master, mstId);
 						console.debug("{0} {1} has expired from update list".format(colleName, mstId));
 						masterChanged = true;
