@@ -1050,7 +1050,7 @@ Used by SortieManager
 					srid = KC3SortieManager.onSortie;
 				/* DESPAIR STATISTICS ==> */
 				if(stat) {
-					let fs = [this.gaugeDamage, this.enemyFlagshipHp],
+					var fs = [this.gaugeDamage, this.enemyFlagshipHp],
 						pt = 'dummy',
 						sb = stat.onBoss,
 						oc = 0;

@@ -13,6 +13,7 @@
 		heldGearRosterIds: [],
 		instances: {},
 		hideNotImprovable: false,
+		showEquippedLocked: false,
 		
 		/* INIT
 		Prepares static data needed
@@ -100,16 +101,28 @@
 				var equipList = $(".equipment_list");
 				if(self.hideNotImprovable){
 					$(".equipment.disabled," +
-					  ".equipment.equipped," +
+					  (self.showEquippedLocked ? "" : ".equipment.equipped,") +
 					  ".equipment.insufficient",
 						equipList).slideUp(300);
 				} else {
 					$(".equipment.disabled," +
-					  ".equipment.equipped," +
+					  (self.showEquippedLocked ? "" : ".equipment.equipped,") +
 					  ".equipment.insufficient",
 						equipList).slideDown();
 				}
 			});
+			
+			$("#equipped_checkbox").on("change", function(){
+				self.showEquippedLocked = this.checked;
+				$(".equipment.disabled," +
+					".equipment.equipped," +
+					".equipment.insufficient",
+					$(".equipment_list")).slideDown(400);
+				// To recheck consumable items if locked
+				setTimeout(function(){
+					KC3StrategyTabs.reloadTab(undefined, false);
+				}, 400);
+			}).prop("checked", this.showEquippedLocked);
 			
 			// Link to weekday specified by hash parameter
 			if(!!KC3StrategyTabs.pageParams[1]){
@@ -277,7 +290,7 @@
 					$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container).addClass("insufficient");
 				} else if(!!self.instances[consumedItem.api_id]
 					&& self.instances[consumedItem.api_id].freestar0 < amount){
-					$(".eq_res_line.plus{0}".format(stars), container).addClass("insufficient");
+					$(".eq_res_line.plus{0}".format(stars), container).addClass(self.showEquippedLocked ? "locked" : "insufficient");
 					$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container).addClass("locked");
 				}
 			};

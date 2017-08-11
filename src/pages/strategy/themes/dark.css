@@ -1095,6 +1095,10 @@ button, input, select, textarea {
 	width:346px !important;
 	padding-left:1px !important;
 }
+.tab_akashi .eq_res .eq_res_line.locked {
+	background:#4c4100;
+	border-radius:0px;
+}
 .tab_akashi .eq_res .eq_res_line.insufficient {
 	background:#621f1f;
 	border-radius:0px;
