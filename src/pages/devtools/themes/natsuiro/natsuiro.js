@@ -3576,12 +3576,10 @@
 		return contactSpan;
 	}
 
-	function updateMapGauge(gaugeDmg,fsKill,noBoss) {
+	function updateMapGauge(gaugeDmg, fsKill, noBoss) {
 		// Map Gauge and status
-		var
-			AllMaps   = localStorage.getObject('maps'),
-			thisMapId = "m"+KC3SortieManager.map_world+KC3SortieManager.map_num,
-			thisMap   = AllMaps[thisMapId],
+		var thisMapId = [KC3SortieManager.map_world, KC3SortieManager.map_num].join(''),
+			thisMap   = KC3SortieManager.getCurrentMapData(),
 			mapHP     = 0,
 			onBoss    = KC3SortieManager.currentNode().isBoss(),
 			depleteOK = onBoss || !!noBoss;
@@ -3590,7 +3588,7 @@
 		fsKill = !!fsKill;
 		gaugeDmg = (gaugeDmg || 0) * (depleteOK);
 
-		if(typeof thisMap != "undefined"){
+		if(Object.keys(thisMap).length > 0){
 			$(".module.activity .map_info").removeClass("map_finisher");
 			if( thisMap.clear ){
 				$(".module.activity .map_hp").text( KC3Meta.term("BattleMapCleared") );
@@ -3620,9 +3618,8 @@
 					requireFinisher = (thisMap.curhp <= thisMap.baseHp);
 				// If kill-based gauge
 				}else{
-					var totalKills = KC3Meta.gauge( thisMapId.slice(1) );
-					console.debug("World, map:", KC3SortieManager.map_world, KC3SortieManager.map_num);
-					console.debug("thisMapId", thisMapId, "KC3Meta", KC3Meta._gauges, "totalKills", totalKills);
+					var totalKills = KC3Meta.gauge( thisMapId );
+					console.debug("Map " + thisMapId + " total kills:", totalKills);
 					var
 						killsLeft  = totalKills - thisMap.kills + (!onBoss && !!noBoss),
 						postBounty = killsLeft - (depleteOK && fsKill);

@@ -854,54 +854,41 @@ Previously known as "Reactor"
 		/* Select difficulty
 		-------------------------------------------------------*/
 		"api_req_map/select_eventmap_rank":function(params, response, headers){
-			var allMaps = JSON.parse(localStorage.maps),
-				mkey    = "m" + params.api_maparea_id + params.api_map_no;
-			var thisMap = allMaps[mkey];
-			thisMap.difficulty = parseInt(params.api_rank);
-			try{
+			var world = parseInt(params.api_maparea_id, 10),
+				map = parseInt(params.api_map_no, 10);
+			var thisMap = KC3SortieManager.getCurrentMapData(world, map);
+			thisMap.difficulty = parseInt(params.api_rank, 10);
+			// if api gives new hp data
+			if(response.api_data && response.api_data.api_max_maphp){
 				thisMap.curhp = thisMap.maxhp = parseInt(response.api_data.api_max_maphp, 10);
-			}catch(e){
-				console.info("Map HP data is not given, leaving 9999HP as placeholder");
-				thisMap.curhp = allMaps[mkey].maxhp = 9999;
+			} else {
+				console.log("Event map new rank HP data is not given, leaving 9999 as placeholder");
+				thisMap.curhp = thisMap.maxhp = 9999;
 			}
 			// clear old progress of this map
 			delete thisMap.kinds;
 			delete thisMap.maxhps;
 			delete thisMap.baseHp;
-			localStorage.maps = JSON.stringify(allMaps);
+			KC3SortieManager.setCurrentMapData(thisMap, world, map);
 		},
 		
 		/* Start Sortie
 		-------------------------------------------------------*/
 		"api_req_map/start":function(params, response, headers){
 			var utcSeconds = Date.toUTCseconds(headers.Date);
+			var mapId = parseInt(response.api_data.api_maparea_id, 10);
+			var mapNo = parseInt(response.api_data.api_mapinfo_no, 10);
 			var fleetNum = parseInt(params.api_deck_id, 10);
 			KC3SortieManager.startSortie(
-				response.api_data.api_maparea_id,
-				response.api_data.api_mapinfo_no,
-				params.api_deck_id,
-				utcSeconds,
+				mapId, mapNo, fleetNum, utcSeconds,
 				response.api_data.api_eventmap
 			);
-			
 			KC3SortieManager.setBoss(
 				response.api_data.api_bosscell_no,
 				response.api_data.api_bosscomp
 			);
 			
 			KC3QuestManager.get(214).increment(0); // Bw1: 1st requirement: Sortie 36 times (index:0)
-			
-			// Update map HPs just after rank selected, because previous /mapinfo got 9999
-			if (typeof response.api_data.api_eventmap !== "undefined") {
-				var allMaps = JSON.parse(localStorage.maps),
-					mkey = "m" + response.api_data.api_maparea_id + response.api_data.api_mapinfo_no,
-					thisMap = allMaps[mkey];
-				if (thisMap.curhp || 9999 === 9999) {
-					thisMap.curhp = response.api_data.api_eventmap.api_now_maphp;
-					thisMap.maxhp = response.api_data.api_eventmap.api_max_maphp;
-					localStorage.maps = JSON.stringify(allMaps);
-				}
-			}
 			
 			KC3SortieManager.advanceNode( response.api_data, utcSeconds );
 			KC3Network.hasOverlay = true;
@@ -1763,9 +1750,10 @@ Previously known as "Reactor"
 		/* View World Maps
 		-------------------------------------------------------*/
 		"api_get_member/mapinfo":function(params, response, headers){
-			if(localStorage.maps=="null"){ localStorage.maps = ""; }
+			// fix bugged falsy 'null' value
+			if(localStorage.maps == "null"){ delete localStorage.maps; }
 			
-			var maps = JSON.parse(localStorage.maps || "{}");
+			var maps = KC3SortieManager.getAllMapData();
 			var ctr, thisMap, oldMap, localMap, etcStat, defStat;
 			
 			// Prepare event despair stat ^w^)!
@@ -1857,7 +1845,7 @@ Previously known as "Reactor"
 				
 				maps[ key ] = localMap;
 			}
-			localStorage.maps = JSON.stringify(maps);
+			KC3SortieManager.setAllMapData(maps);
 			
 			// If LBAS info updated, trigger updating view
 			if(PlayerManager.setBasesOnWorldMap(response.api_data)) {
