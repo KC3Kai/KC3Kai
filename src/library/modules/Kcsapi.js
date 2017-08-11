@@ -891,6 +891,18 @@ Previously known as "Reactor"
 			
 			KC3QuestManager.get(214).increment(0); // Bw1: 1st requirement: Sortie 36 times (index:0)
 			
+			// Update map HPs just after rank selected, because previous /mapinfo got 9999
+			if (typeof response.api_data.api_eventmap !== "undefined") {
+				var allMaps = JSON.parse(localStorage.maps),
+					mkey = "m" + response.api_data.api_maparea_id + response.api_data.api_mapinfo_no,
+					thisMap = allMaps[mkey];
+				if (thisMap.curhp || 9999 === 9999) {
+					thisMap.curhp = response.api_data.api_eventmap.api_now_maphp;
+					thisMap.maxhp = response.api_data.api_eventmap.api_max_maphp;
+					localStorage.maps = JSON.stringify(allMaps);
+				}
+			}
+			
 			KC3SortieManager.advanceNode( response.api_data, utcSeconds );
 			KC3Network.hasOverlay = true;
 			(new RMsg("service", "mapMarkers", {

@@ -41,6 +41,7 @@ module.exports = function(grunt) {
 				src: [
 					'assets/img/**',
 					'!assets/img/planes/**',
+					'!assets/img/useitems/pay*',
 					'assets/snd/**',
 					'assets/swf/**',
 					'assets/js/Chart.min.js',
@@ -50,8 +51,6 @@ module.exports = function(grunt) {
 					'assets/js/jquery-ui.min.js',
 					'assets/js/KanColleHelpers.js',
 					'assets/js/twbsPagination.min.js',
-					'assets/js/WhoCallsTheFleetShipDb.json',
-					'assets/js/WhoCallsTheFleetItemDb.json',
 					'assets/js/jszip.min.js',
 					'assets/js/bootstrap-slider.min.js',
 					'assets/js/no_ga.js',
@@ -72,9 +71,12 @@ module.exports = function(grunt) {
 					'library/modules/**/*.js',
 					'library/workers/*.js',
 					'pages/**/*',
+					'!pages/devtools/themes/default/**',
 					'!pages/strategy/tabs/**/*.js',
+					'!pages/strategy/tabs/_tpl/**',
 					'manifest.json',
 					'data/*.json',
+					'data/*.nedb',
 					'data/lang/data/**/*.json'
 				],
 				dest: 'build/release/'
@@ -246,7 +248,7 @@ module.exports = function(grunt) {
 								"all_frames": true
 							},
 							{
-								"matches":["*://www.dmm.com/netgame/*/app_id=854854*"],
+								"matches": ["*://www.dmm.com/netgame/*/app_id=854854*"],
 								"css": [
 									"library/injections/dmm.css"
 								],
@@ -270,7 +272,7 @@ module.exports = function(grunt) {
 								"all_frames": true
 							},
 							{
-								"matches":["*://osapi.dmm.com/gadgets/*aid=854854*"],
+								"matches": ["*://osapi.dmm.com/gadgets/*aid=854854*"],
 								"js": [
 									"assets/js/global.js",
 									"library/objects.js",
@@ -384,9 +386,9 @@ module.exports = function(grunt) {
 			"extensions": {
 				"kc3kai": {
 					account: "dragonjet",
-					publish: true, 
+					publish: true,
 					appID: "hkgmldnainaglpjngpajnnjfhpdjkohh",
-					zip: "build/release.zip"      
+					zip: "build/release.zip"
 				}
 			}
 		},

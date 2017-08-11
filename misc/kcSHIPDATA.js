@@ -1,8 +1,8 @@
 var SHIPDATA = {
-    0: {
-        name: "",
-        image: "Kblank.png"
-    },
+	0: {
+		name: "",
+		image: "Kblank.png"
+	},
 	1: {
 		name: 'Mutsuki',
 		nameJP: '睦月',
@@ -16637,27 +16637,39 @@ var SHIPDATA = {
 	
 };
 
-var aby = {};
-for(var s in SHIPDATA) {
-if(s>1500&&s<1901){
-var as={};
-as.api_id=Number(s);
-as.api_taik=SHIPDATA[s].HP;
-as.api_souk=SHIPDATA[s].AR;
-as.api_houg=SHIPDATA[s].FP;
-as.api_raig=SHIPDATA[s].TP;
-as.api_tyku=SHIPDATA[s].AA;
-as.api_luck=SHIPDATA[s].LUK||0;
-as.api_leng=SHIPDATA[s].RNG;
-as.api_soku=SHIPDATA[s].SPD;
-as.kc3_evas=SHIPDATA[s].EV||0;
-as.kc3_asw=SHIPDATA[s].ASW||0;
-as.kc3_los=SHIPDATA[s].LOS||0;
-as.api_maxeq=SHIPDATA[s].SLOTS;
-as.kc3_slots=SHIPDATA[s].EQUIPS;
-aby[s]=as;
+/**
+ * Convert kcSHIPDATA to `abyssal_stats.json`.
+ * Data from https://github.com/KC3Kai/kancolle-replay/blob/master/js/kcSHIPDATA.js
+ * Only abyssal part used.
+ */
+const aby = {};
+for(const s in SHIPDATA) {
+	if(s > 1500 && s < 1901) {
+		const as = {};
+		as.api_id    = Number(s);
+		as.api_taik  = SHIPDATA[s].HP;
+		as.api_souk  = SHIPDATA[s].AR;
+		as.api_houg  = SHIPDATA[s].FP;
+		as.api_raig  = SHIPDATA[s].TP;
+		as.api_tyku  = SHIPDATA[s].AA;
+		as.api_luck  = SHIPDATA[s].LUK || 0;
+		as.api_leng  = SHIPDATA[s].RNG;
+		as.api_soku  = SHIPDATA[s].SPD;
+		as.kc3_evas  = SHIPDATA[s].EV  || 0;
+		as.kc3_asw   = SHIPDATA[s].ASW || 0;
+		as.kc3_los   = SHIPDATA[s].LOS || 0;
+		as.api_maxeq = SHIPDATA[s].SLOTS;
+		as.kc3_slots = SHIPDATA[s].EQUIPS;
+		aby[s] = as;
+	}
 }
-};
-//console.log(aby);
-copy(JSON.stringify(aby));
-console.debug("JSON copied to clipboard");
+const json = JSON.stringify(aby);
+
+// Node executable
+console.info(`Current working dir: ${process.cwd()}`);
+const output = '../src/data/abyssal_stats.json';
+require('fs').writeFileSync(output, json, 'utf8');
+console.info(`JSON written to ${output}`);
+
+// WebKit executable
+// copy(json); console.debug("JSON copied to clipboard");

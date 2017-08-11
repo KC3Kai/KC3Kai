@@ -11,8 +11,11 @@
 		---------------------------------*/
 		init() {
 			this.defaultSorterDefinitions();
-			this.defineSimpleSorter("materials", "Consumptions",
-				(ship) => -ship.materials.length);
+			this.defineSorter("materials", "Consumptions",
+				(ls, rs) => (rs.materials.length - rs.materialsUsed)
+					- (ls.materials.length - ls.materialsUsed)
+					|| rs.materials.length - ls.materials.length
+					|| ls.id - rs.id);
 			this.defineSimpleFilter("materials", [], 0, (index, ship) => ship.materials.length);
 			this.showListRowCallback = this.showRemodelMaterials;
 			this.heartLockMode = 2;
@@ -109,6 +112,7 @@
 		attachRemodelMaterials(mappedObj, remodelFormIds = [], ownedMasterId = 0) {
 			const remodelGroup = RemodelDb.remodelGroup(mappedObj.masterId);
 			mappedObj.materials = [];
+			mappedObj.materialsUsed = 0;
 			for(let masterId of remodelFormIds) {
 				const remodelInfo = RemodelDb.remodelInfo(masterId);
 				if(remodelInfo) {
@@ -122,6 +126,7 @@
 							info: remodelInfo,
 							used: isUsed
 						});
+						mappedObj.materialsUsed += isUsed;
 					}
 					if(remodelInfo.catapult) {
 						mappedObj.materials.push({
@@ -129,6 +134,7 @@
 							info: remodelInfo,
 							used: isUsed
 						});
+						mappedObj.materialsUsed += isUsed;
 					}
 				}
 			}
