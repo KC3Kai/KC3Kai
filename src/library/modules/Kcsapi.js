@@ -298,6 +298,7 @@ Previously known as "Reactor"
 					// 66 and 67 not found in this API, as they are slotitem
 					//case 66: PlayerManager.consumables.ration = thisItem.api_count; break;
 					//case 67: PlayerManager.consumables.resupplier = thisItem.api_count; break;
+					//case 76: PlayerManager.consumables.rationSpecial = thisItem.api_count; break;
 					case 68: PlayerManager.consumables.mackerel = thisItem.api_count; break;
 					case 69: PlayerManager.consumables.mackerelCan = thisItem.api_count; break;
 					case 70: PlayerManager.consumables.skilledCrew = thisItem.api_count; break;
@@ -305,7 +306,8 @@ Previously known as "Reactor"
 					case 72: PlayerManager.consumables.decoMaterial = thisItem.api_count; break;
 					case 73: PlayerManager.consumables.constCorps = thisItem.api_count; break;
 					case 74: PlayerManager.consumables.newAircraftBlueprint = thisItem.api_count; break;
-					case 75: PlayerManager.consumables.newGunMountMaterial = thisItem.api_count; break;
+					case 75: PlayerManager.consumables.newArtilleryMaterial = thisItem.api_count; break;
+					case 77: PlayerManager.consumables.newAviationMaterial = thisItem.api_count; break;
 					default: break;
 				}
 			}
