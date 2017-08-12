@@ -7,47 +7,63 @@
 		tabSelf: KC3StrategyTabs.mstupdate,
 		newShips: [],
 		newGears: [],
-		server_ip: "",
+		newCgs: [],
+		archivedCgs: [],
+		myServerIp: "",
 		
 		/* INIT
 		Prepares all data needed
 		---------------------------------*/
 		init :function(){
-			var MyServer = (new KC3Server()).setNum( PlayerManager.hq.server );
-			this.server_ip = MyServer.ip;
-			
-			var timeNow = (new Date()).getTime();
-			var self = this;
+			this.myServerIp = (new KC3Server()).setNum( PlayerManager.hq.server ).ip;
+		},
+		
+		/* RELOAD
+		Prepares latest fleets data
+		---------------------------------*/
+		reload :function(){
+			const self = this;
+			const timeNow = Date.now();
+			this.newShips.length = 0;
+			this.newGears.length = 0;
+			this.newCgs.length = 0;
+			this.archivedCgs.length = 0;
 			var masterChanged = false;
-			
-			$.each(KC3Master.new_ships(), function(ship_id, ship_time){
-				console.debug("Testing ship time", timeNow, ship_time, "diff=", timeNow-ship_time);
-				if(timeNow-ship_time > 7*24*60*60*1000){
-					KC3Master.remove_new_ship(ship_id);
-					console.debug("SHIP", ship_id, "has expired from update list");
-					masterChanged = true;
-				}else{
-					self.newShips.push( KC3Master.ship(ship_id) );
+			KC3Master.load();
+			const checkExpired = (masterColle, colleName, removeMethod, resolveMethod) => {
+				$.each(masterColle, function(mstId, timeAdded) {
+					if(timeNow - timeAdded > KC3Master.newUpdatesExpiredAfter) {
+						removeMethod.call(KC3Master, mstId);
+						console.debug("{0} {1} has expired from update list".format(colleName, mstId));
+						masterChanged = true;
+					} else {
+						resolveMethod.call(self, mstId);
+					}
+				});
+			};
+			checkExpired(KC3Master.new_ships(), "Ship", KC3Master.remove_new_ship, (id) => {
+				this.newShips.push(KC3Master.ship(id));
+			});
+			checkExpired(KC3Master.new_slotitems(), "Item", KC3Master.remove_new_slotitem, (id) => {
+				this.newGears.push(KC3Master.slotitem(id));
+			});
+			checkExpired(KC3Master.new_graphs(), "Archived CG", KC3Master.remove_new_graphs, (id) => {
+				// Only seasonal IDs needed, other parts are same things with new ships
+				if(KC3Master.isSeasonalShip(id)) {
+					this.archivedCgs.push(id);
 				}
 			});
-			
-			$.each(KC3Master.new_slotitems(), function(item_id, item_time){
-				console.debug("Testing item time", timeNow, item_time, "diff=", timeNow-item_time);
-				if(timeNow-item_time > 7*24*60*60*1000){
-					KC3Master.remove_new_slotitem(item_id);
-					console.debug("ITEM", item_id, "has expired from update list");
-					masterChanged = true;
-				}else{
-					self.newGears.push( KC3Master.slotitem(item_id) );
+			checkExpired(KC3Master.changed_graphs(), "New CG", KC3Master.remove_changed_graphs, (id) => {
+				if(KC3Master.isRegularShip(id)) {
+					this.newCgs.push(KC3Master.ship(id));
+				} else {
+					console.debug("Seasonal CG or Abyssals graph {0} version change detected".format(id));
 				}
 			});
-			
 			if(masterChanged){
-				console.debug("master changed, saving..");
 				KC3Master.save();
 			}
-			
-			console.debug("New ships and gears", this.newShips, this.newGears);
+			console.debug("New data", this.newShips, this.newGears, this.newCgs, this.archivedCgs);
 		},
 		
 		/* EXECUTE
@@ -63,27 +79,27 @@
 			};
 
 			// New Ship list
-			$.each(this.newShips, function(index, shipData){
+			$.each(this.newShips, function(index, shipData) {
 				shipBox = $(".tab_mstupdate .factory .mstship").clone();
 				shipFile = KC3Master.graph(shipData.api_id).api_filename;
 				shipVersion = KC3Master.graph(shipData.api_id).api_version[0];
-				shipSrc = "../../../../assets/swf/card.swf?sip="+self.server_ip+"&shipFile="+shipFile;
+				shipSrc = "/assets/swf/card.swf?sip=" + self.myServerIp + "&shipFile=" + shipFile;
 				
 				if (KC3Master.isSeasonalShip(shipData.api_id)) {
-					// SEASONAL CG
+					// SEASONAL CG, no longer work since 2017-04-05 no seasonal item leak
 					shipSrc += "&abyss=0&forceFrame=8";
 					appendToBox = ".tab_mstupdate .mstseason";
 				} else if (KC3Master.isAbyssalShip(shipData.api_id)) {
 					// ABYSSALS
-					shipSrc += "&abyss=1"+(!shipVersion?"":"&ver="+shipVersion);
+					shipSrc += "&abyss=1" + (!shipVersion ? "" : "&ver=" + shipVersion);
 					appendToBox = ".tab_mstupdate .mstabyss";
 				} else {
 					// NON-SEASONAL CG
-					shipSrc += "&abyss=0"+(!shipVersion?"":"&ver="+shipVersion);
+					shipSrc += "&abyss=0" + (!shipVersion ? "" : "&ver=" + shipVersion);
 					appendToBox = ".tab_mstupdate .mstships";
 				}
 				
-				shipSrc += !shipVersion ? "" : "&ver="+shipVersion;
+				shipSrc += !shipVersion ? "" : "&ver=" + shipVersion;
 				
 				$(".ship_cg embed", shipBox).attr("src", shipSrc).attr("menu", "false");
 				$(".ship_name", shipBox).text( KC3Meta.shipName( shipData.api_name ) );
@@ -96,24 +112,64 @@
 			$("<div/>").addClass("clear").appendTo(".tab_mstupdate .mstships");
 
 			// New Equipment List
-			$.each(this.newGears, function(index, GearData){
+			$.each(this.newGears, function(index, gearData) {
 				gearBox = $(".tab_mstupdate .factory .mstgear").clone();
 				
-				if(!KC3Master.isAbyssalGear(GearData.api_id)){
-					var paddedId = (GearData.api_id<10?"00":GearData.api_id<100?"0":"")+GearData.api_id;
-					$(".gear_cg img", gearBox).attr("src", "http://"+self.server_ip+"/kcs/resources/image/slotitem/card/"+paddedId+".png");
-				}else{
+				if(!KC3Master.isAbyssalGear(gearData.api_id)) {
+					var paddedId = (gearData.api_id<10?"00":gearData.api_id<100?"0":"") + gearData.api_id;
+					$(".gear_cg img", gearBox).attr("src",
+						"http://" + self.myServerIp + "/kcs/resources/image/slotitem/card/" + paddedId + ".png");
+				} else {
 					$(".gear_cg img", gearBox).hide();
 				}
 				
-				$(".gear_name", gearBox).text( KC3Meta.gearName( GearData.api_name ) );
+				$(".gear_name", gearBox).text( KC3Meta.gearName( gearData.api_name ) );
 				$(".gear_name", gearBox).data("tab", "mstgear");
-				$(".gear_name", gearBox).data("api_id", GearData.api_id);
+				$(".gear_name", gearBox).data("api_id", gearData.api_id);
 				$(".gear_name", gearBox).click(linkClickFunc);
 				
 				gearBox.appendTo(".tab_mstupdate .mstgears");
 			});
 			$("<div/>").addClass("clear").appendTo(".tab_mstupdate .mstgears");
+			
+			// New Ship Seasonal CG
+			$.each(this.newCgs, function(index, shipData) {
+				shipBox = $(".tab_mstupdate .factory .mstship").clone();
+				shipFile = KC3Master.graph(shipData.api_id).api_filename;
+				shipVersion = KC3Master.graph(shipData.api_id).api_version[0];
+				shipSrc = "/assets/swf/card.swf?sip=" + self.myServerIp + "&shipFile=" + shipFile;
+				shipSrc += "&abyss=0&forceFrame=10";
+				shipSrc += !shipVersion ? "" : "&ver=" + shipVersion;
+				
+				$(".ship_cg embed", shipBox).attr("src", shipSrc).attr("menu", "false");
+				$(".ship_name", shipBox).text( KC3Meta.shipName( shipData.api_name ) );
+				$(".ship_name", shipBox).data("tab", "mstship");
+				$(".ship_name", shipBox).data("api_id", shipData.api_id);
+				$(".ship_name", shipBox).click(linkClickFunc);
+				
+				shipBox.appendTo(".tab_mstupdate .mstgraph");
+			});
+			$("<div/>").addClass("clear").appendTo(".tab_mstupdate .mstgraph");
+			
+			// Archived (removed) Ship Seasonal CG
+			$.each(this.archivedCgs, function(index, shipId) {
+				shipBox = $(".tab_mstupdate .factory .mstship").clone();
+				shipFile = KC3Master.graph(shipId).api_filename;
+				shipVersion = KC3Master.graph(shipId).api_version[0];
+				shipSrc = "/assets/swf/card.swf?sip=" + self.myServerIp + "&shipFile=" + shipFile;
+				shipSrc += "&abyss=0&forceFrame=8";
+				shipSrc += !shipVersion ? "" : "&ver=" + shipVersion;
+				var seasonalData = KC3Master.seasonal_ship(shipId);
+				
+				$(".ship_cg embed", shipBox).attr("src", shipSrc).attr("menu", "false");
+				$(".ship_name", shipBox).text(seasonalData ? seasonalData.api_name : "Link not available");
+				$(".ship_name", shipBox).data("tab", "mstship");
+				$(".ship_name", shipBox).data("api_id", shipId);
+				$(".ship_name", shipBox).click(linkClickFunc);
+				
+				shipBox.appendTo(".tab_mstupdate .mstseason");
+			});
+			$("<div/>").addClass("clear").appendTo(".tab_mstupdate .mstseason");
 			
 		}
 		
