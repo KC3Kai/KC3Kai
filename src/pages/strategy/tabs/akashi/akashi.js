@@ -267,7 +267,7 @@
 						switch(id){
 						case 70: return (PlayerManager.consumables.skilledCrew || 0) < amount;
 						case 71: return (PlayerManager.consumables.nEngine || 0) < amount;
-						case 75: return (PlayerManager.consumables.newGunMountMaterial || 0) < amount;
+						case 75: return (PlayerManager.consumables.newArtilleryMaterial || 0) < amount;
 						}
 						return false;
 					};

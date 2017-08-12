@@ -239,10 +239,9 @@ Used by SortieManager
 	};
 	
 	KC3Node.prototype.defineAsBounty = function( nodeData ){
-		var
-			self = this,
-			maps = JSON.parse(localStorage.maps),
-			ckey = ["m",KC3SortieManager.map_world,KC3SortieManager.map_num].join("");
+		var self = this,
+			mapKey = [KC3SortieManager.map_world, KC3SortieManager.map_num].join(''),
+			currentMap = KC3SortieManager.getCurrentMapData();
 		this.type = "bounty";
 		this.item = nodeData.api_itemget_eo_comment.api_id;
 		this.icon = function(folder){
@@ -259,8 +258,8 @@ Used by SortieManager
 		this.amount = nodeData.api_itemget_eo_comment.api_getcount;
 		KC3SortieManager.materialGain[this.item-1] += this.amount;
 		
-		maps[ckey].clear |= (++maps[ckey].kills) >= KC3Meta.gauge(ckey.replace("m",""));
-		localStorage.maps = JSON.stringify(maps);
+		currentMap.clear |= (++currentMap.kills) >= KC3Meta.gauge(mapKey);
+		KC3SortieManager.setCurrentMapData(currentMap);
 		
 		// Bq3: Sortie 2 BBV/AO to [W1-6], reach node N twice
 		if(KC3SortieManager.isSortieAt(1, 6)
@@ -750,25 +749,24 @@ Used by SortieManager
 			this.gaugeDamage = Math.min(this.enemyFlagshipHp, this.enemyFlagshipHp - this.enemyHP[0].hp);
 			
 			(function(sortieData){
-				var maps = localStorage.getObject("maps"),
-					desg = ['m', sortieData.map_world, sortieData.map_num].join('');
 				if(this.isBoss()) {
 					// Invoke on boss event callback
 					if(sortieData.onSortie > 0 && sortieData.onBossAvailable) {
 						sortieData.onBossAvailable(this);
 					}
 					// Save boss HP for future sortie
-					if(maps[desg].kind === "gauge-hp") {
-						maps[desg].baseHp = maps[desg].baseHp || this.enemyFlagshipHp;
-						if(maps[desg].baseHp != this.enemyFlagshipHp) {
-							console.info("Different boss HP detected:", maps[desg].baseHp + " -> " + this.enemyFlagshipHp);/*RemoveLogging:skip*/
+					var thisMap = sortieData.getCurrentMapData();
+					if(thisMap.kind === "gauge-hp") {
+						thisMap.baseHp = thisMap.baseHp || this.enemyFlagshipHp;
+						if(thisMap.baseHp != this.enemyFlagshipHp) {
+							console.info("Different boss HP detected:", thisMap.baseHp + " -> " + this.enemyFlagshipHp);/*RemoveLogging:skip*/
 							// If new HP lesser than old, should update it for Last Kill
-							if(this.enemyFlagshipHp < maps[desg].baseHp) {
-								maps[desg].baseHp = this.enemyFlagshipHp;
+							if(this.enemyFlagshipHp < thisMap.baseHp) {
+								thisMap.baseHp = this.enemyFlagshipHp;
 							}
 						}
+						sortieData.setCurrentMapData(thisMap);
 					}
-					localStorage.setObject("maps", maps);
 				}
 			}).call(this, KC3SortieManager);
 		}
@@ -1044,7 +1042,8 @@ Used by SortieManager
 				this.rating = "SS";
 			
 			if(this.isBoss()) {
-				var maps = localStorage.getObject("maps"),
+				// assumed maps[ckey] already initialzed at /mapinfo or /start
+				var maps = KC3SortieManager.getAllMapData(),
 					ckey = ['m', KC3SortieManager.map_world, KC3SortieManager.map_num].join(''),
 					stat = maps[ckey].stat,
 					srid = KC3SortieManager.onSortie;
@@ -1117,9 +1116,7 @@ Used by SortieManager
 						stat.onClear = srid; // retrieve sortie ID for first clear mark
 				}
 				
-				/* ==> FLAGSHIP ATTACKING */
-				
-				localStorage.setObject('maps',maps);
+				KC3SortieManager.setAllMapData(maps);
 			}
 			
 			var ship_get = [];

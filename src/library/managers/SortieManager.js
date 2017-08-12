@@ -87,25 +87,29 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				delete mergedEventInfo.api_dmg;
 				
 				sortie.eventmap = mergedEventInfo;
+
+				// Update event map now/max hp at once for panel display,
+				// because first run after rank selected, they were set to 9999
+				if((thisMap.curhp || 9999) === 9999 && eventData.api_now_maphp){
+					thisMap.curhp = parseInt(eventData.api_now_maphp, 10);
+					thisMap.maxhp = parseInt(eventData.api_max_maphp, 10);
+					this.setCurrentMapData(thisMap);
+				}
 			}
 			// Save on database and remember current sortieId
 			KC3Database.Sortie(sortie, function(id){
 				self.onSortie = id;
 				self.sortieTime = stime;
 				self.save();
-				
-				// Save event maphp now/max to localStorage.maps
+				// Lazy save event map hp to stat.onBoss.hpdat after sortie id confirmed
 				if(eventData){
-					if(!thisMap.curhp){
-						thisMap.curhp = eventData.api_now_maphp;
-						thisMap.maxhp = eventData.api_max_maphp;
-					}
 					if(thisMap.stat && thisMap.stat.onBoss){
-						let hpData = thisMap.stat.onBoss.hpdat || [];
+						var hpData = thisMap.stat.onBoss.hpdat || [];
 						hpData[id] = [eventData.api_now_maphp, eventData.api_max_maphp];
 						thisMap.stat.onBoss.hpdat = hpData;
+						self.setCurrentMapData(thisMap);
+						console.log("Event map HP on sortie " + id + " recorded as", hpData[id]);
 					}
-					self.setCurrentMapData(thisMap);
 				}
 			});
 		},
