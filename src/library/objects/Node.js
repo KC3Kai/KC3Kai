@@ -155,6 +155,14 @@ Used by SortieManager
 		return "D";
 	};
 	
+	// Update this list if more extra classes added
+	KC3Node.knownNodeExtraClasses = function(){
+		return [
+			"nc_night_battle", "nc_air_battle",
+			"nc_enemy_combined", "nc_air_raid"
+		];
+	};
+	
 	KC3Node.prototype.defineAsBattle = function( nodeData ){
 		this.type = "battle";
 		this.startsFromNight = false;
@@ -162,13 +170,23 @@ Used by SortieManager
 		// If passed initial values
 		if(typeof nodeData != "undefined"){
 			
-			// If passed raw data from compass
-			//"api_event_id":4,"api_event_kind":1
+			// If passed raw data from compass,
+			// about api_event_id and api_event_kind, see SortieManager.js#L237
 			if(typeof nodeData.api_event_kind != "undefined"){
 				this.eships = [];
 				this.eventKind = nodeData.api_event_kind;
 				this.eventId = nodeData.api_event_id;
 				this.gaugeDamage = 0; // calculate this on result screen. make it fair :D
+				this.nodeDesc = ["", "",
+					KC3Meta.term("BattleKindNightStart"),
+					KC3Meta.term("BattleKindNightStart"),
+					KC3Meta.term("BattleKindAirBattleOnly"),
+					KC3Meta.term("BattleKindEnemyCombined"),
+					KC3Meta.term("BattleKindAirDefendOnly")][this.eventKind];
+				this.nodeExtraClass = ["", "",
+					"nc_night_battle", "nc_night_battle",
+					"nc_air_battle", "nc_enemy_combined", "nc_air_raid"
+					][this.eventKind];
 			}
 			
 			// If passed formatted enemy list from PVP

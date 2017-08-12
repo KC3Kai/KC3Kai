@@ -778,14 +778,9 @@
 		$(".module.activity .map_info").removeClass("map_finisher");
 		$(".module.activity .map_gauge *:not(.clear)").css("width", "0%");
 		$(".module.activity .map_hp").text("");
-		$(".module.activity .sortie_node")
-			.text("")
-			.removeAttr("title")
-			.removeClass("nc_battle")
-			.removeClass("nc_resource")
-			.removeClass("nc_maelstrom")
-			.removeClass("nc_select")
-			.removeClass("nc_avoid");
+		$(".module.activity .sortie_node").text("").removeAttr("title")
+			.removeClass("nc_battle nc_resource nc_maelstrom nc_select nc_avoid")
+			.removeClass(KC3Node.knownNodeExtraClasses().join(" "));
 		$(".module.activity .sortie_nodes .boss_node").removeAttr("style");
 		$(".module.activity .sortie_nodes .boss_node").hide();
 		$(".module.activity .node_types").hide();
@@ -1916,7 +1911,11 @@
 			switch(thisNode.type){
 				// Battle node
 				case "battle":
-					$(".module.activity .sortie_node_"+numNodes).addClass("nc_battle");
+					$(".module.activity .sortie_node_"+numNodes)
+						.addClass("nc_battle")
+						.addClass(thisNode.nodeExtraClass || "")
+						.attr("title", thisNode.nodeDesc || "")
+						.lazyInitTooltip();
 					$(".module.activity .node_type_battle").show();
 					break;
 
@@ -1924,7 +1923,8 @@
 				case "resource":
 					$(".module.activity .sortie_node_"+numNodes)
 						.addClass("nc_resource")
-						.attr("title", thisNode.nodeDesc)
+						.addClass(thisNode.nodeExtraClass || "")
+						.attr("title", thisNode.nodeDesc || "")
 						.lazyInitTooltip();
 					var resBoxDiv = $(".module.activity .node_type_resource");
 					resBoxDiv.removeClass("node_type_maelstrom");
@@ -1945,7 +1945,8 @@
 				case "bounty":
 					$(".module.activity .sortie_node_"+numNodes)
 						.addClass("nc_resource")
-						.attr("title", thisNode.nodeDesc)
+						.addClass(thisNode.nodeExtraClass || "")
+						.attr("title", thisNode.nodeDesc || "")
 						.lazyInitTooltip();
 					$(".module.activity .node_type_resource").removeClass("node_type_maelstrom");
 					$(".module.activity .node_type_resource .clone").remove();
@@ -1963,7 +1964,8 @@
 				case "maelstrom":
 					$(".module.activity .sortie_node_"+numNodes)
 						.addClass("nc_maelstrom")
-						.attr("title", thisNode.nodeDesc)
+						.addClass(thisNode.nodeExtraClass || "")
+						.attr("title", thisNode.nodeDesc || "")
 						.lazyInitTooltip();
 					$(".module.activity .node_type_resource").addClass("node_type_maelstrom");
 					$(".module.activity .node_type_resource .clone").remove();
@@ -1975,7 +1977,11 @@
 
 				// Selection node
 				case "select":
-					$(".module.activity .sortie_node_"+numNodes).addClass("nc_select");
+					$(".module.activity .sortie_node_"+numNodes)
+						.addClass("nc_select")
+						.addClass(thisNode.nodeExtraClass || "")
+						.attr("title", thisNode.nodeDesc || "")
+						.lazyInitTooltip();
 					$(".module.activity .node_type_text").text( KC3Meta.term("BattleSelect") +
 						KC3Meta.term("BattleSelectNodes").format(thisNode.choices[0], thisNode.choices[1]));
 					$(".module.activity .node_type_text").addClass("select");
@@ -1984,7 +1990,11 @@
 
 				// Transport node
 				case "transport":
-					$(".module.activity .sortie_node_"+numNodes).addClass("nc_resource");
+					$(".module.activity .sortie_node_"+numNodes)
+						.addClass("nc_resource")
+						.addClass(thisNode.nodeExtraClass || "")
+						.attr("title", thisNode.nodeDesc || "")
+						.lazyInitTooltip();
 					$(".module.activity .node_type_resource").removeClass("node_type_maelstrom");
 					$(".module.activity .node_type_resource .clone").remove();
 					$(".module.activity .node_type_resource .node_res_icon img").attr("src",
@@ -1997,7 +2007,11 @@
 
 				// Battle avoided node
 				default:
-					$(".module.activity .sortie_node_"+numNodes).addClass("nc_avoid");
+					$(".module.activity .sortie_node_"+numNodes)
+						.addClass("nc_avoid")
+						.addClass(thisNode.nodeExtraClass || "")
+						.attr("title", thisNode.nodeDesc || "")
+						.lazyInitTooltip();
 					$(".module.activity .node_type_text").text( KC3Meta.term("BattleAvoided") );
 					$(".module.activity .node_type_text").addClass("dud");
 					$(".module.activity .node_type_text").show();
