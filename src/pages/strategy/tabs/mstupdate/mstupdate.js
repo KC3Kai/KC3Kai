@@ -47,7 +47,8 @@
 			checkExpired(KC3Master.new_slotitems(), "Item", KC3Master.remove_new_slotitem, (id) => {
 				this.newGears.push(KC3Master.slotitem(id));
 			});
-			checkExpired(KC3Master.new_graphs(), "Removed CG", KC3Master.remove_new_graphs, (id) => {
+			checkExpired(KC3Master.new_graphs(), "Archived CG", KC3Master.remove_new_graphs, (id) => {
+				// Only seasonal IDs needed, other parts are same things with new ships
 				if(KC3Master.isSeasonalShip(id)) {
 					this.archivedCgs.push(id);
 				}
@@ -55,6 +56,8 @@
 			checkExpired(KC3Master.changed_graphs(), "New CG", KC3Master.remove_changed_graphs, (id) => {
 				if(KC3Master.isRegularShip(id)) {
 					this.newCgs.push(KC3Master.ship(id));
+				} else {
+					console.debug("Seasonal CG or Abyssals graph {0} version change detected".format(id));
 				}
 			});
 			if(masterChanged){
@@ -76,7 +79,7 @@
 			};
 
 			// New Ship list
-			$.each(this.newShips, function(index, shipData){
+			$.each(this.newShips, function(index, shipData) {
 				shipBox = $(".tab_mstupdate .factory .mstship").clone();
 				shipFile = KC3Master.graph(shipData.api_id).api_filename;
 				shipVersion = KC3Master.graph(shipData.api_id).api_version[0];
@@ -88,15 +91,15 @@
 					appendToBox = ".tab_mstupdate .mstseason";
 				} else if (KC3Master.isAbyssalShip(shipData.api_id)) {
 					// ABYSSALS
-					shipSrc += "&abyss=1"+(!shipVersion?"":"&ver="+shipVersion);
+					shipSrc += "&abyss=1" + (!shipVersion ? "" : "&ver=" + shipVersion);
 					appendToBox = ".tab_mstupdate .mstabyss";
 				} else {
 					// NON-SEASONAL CG
-					shipSrc += "&abyss=0"+(!shipVersion?"":"&ver="+shipVersion);
+					shipSrc += "&abyss=0" + (!shipVersion ? "" : "&ver=" + shipVersion);
 					appendToBox = ".tab_mstupdate .mstships";
 				}
 				
-				shipSrc += !shipVersion ? "" : "&ver="+shipVersion;
+				shipSrc += !shipVersion ? "" : "&ver=" + shipVersion;
 				
 				$(".ship_cg embed", shipBox).attr("src", shipSrc).attr("menu", "false");
 				$(".ship_name", shipBox).text( KC3Meta.shipName( shipData.api_name ) );
@@ -109,20 +112,20 @@
 			$("<div/>").addClass("clear").appendTo(".tab_mstupdate .mstships");
 
 			// New Equipment List
-			$.each(this.newGears, function(index, GearData){
+			$.each(this.newGears, function(index, gearData) {
 				gearBox = $(".tab_mstupdate .factory .mstgear").clone();
 				
-				if(!KC3Master.isAbyssalGear(GearData.api_id)){
-					var paddedId = (GearData.api_id<10?"00":GearData.api_id<100?"0":"")+GearData.api_id;
+				if(!KC3Master.isAbyssalGear(gearData.api_id)) {
+					var paddedId = (gearData.api_id<10?"00":gearData.api_id<100?"0":"") + gearData.api_id;
 					$(".gear_cg img", gearBox).attr("src",
 						"http://" + self.myServerIp + "/kcs/resources/image/slotitem/card/" + paddedId + ".png");
-				}else{
+				} else {
 					$(".gear_cg img", gearBox).hide();
 				}
 				
-				$(".gear_name", gearBox).text( KC3Meta.gearName( GearData.api_name ) );
+				$(".gear_name", gearBox).text( KC3Meta.gearName( gearData.api_name ) );
 				$(".gear_name", gearBox).data("tab", "mstgear");
-				$(".gear_name", gearBox).data("api_id", GearData.api_id);
+				$(".gear_name", gearBox).data("api_id", gearData.api_id);
 				$(".gear_name", gearBox).click(linkClickFunc);
 				
 				gearBox.appendTo(".tab_mstupdate .mstgears");
@@ -130,7 +133,7 @@
 			$("<div/>").addClass("clear").appendTo(".tab_mstupdate .mstgears");
 			
 			// New Ship Seasonal CG
-			$.each(this.newCgs, function(index, shipData){
+			$.each(this.newCgs, function(index, shipData) {
 				shipBox = $(".tab_mstupdate .factory .mstship").clone();
 				shipFile = KC3Master.graph(shipData.api_id).api_filename;
 				shipVersion = KC3Master.graph(shipData.api_id).api_version[0];
@@ -149,7 +152,7 @@
 			$("<div/>").addClass("clear").appendTo(".tab_mstupdate .mstgraph");
 			
 			// Archived (removed) Ship Seasonal CG
-			$.each(this.archivedCgs, function(index, shipId){
+			$.each(this.archivedCgs, function(index, shipId) {
 				shipBox = $(".tab_mstupdate .factory .mstship").clone();
 				shipFile = KC3Master.graph(shipId).api_filename;
 				shipVersion = KC3Master.graph(shipId).api_version[0];
