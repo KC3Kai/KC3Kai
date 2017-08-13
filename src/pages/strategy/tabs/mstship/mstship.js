@@ -565,7 +565,7 @@
 				$(".tab_mstship .shipInfo .voices").show();
 				$(".tab_mstship .shipInfo .voices").empty();
 
-				var allVoiceNums = KC3Translation.getShipVoiceNums(shipData.api_id,false,false);
+				var allVoiceNums = KC3Translation.getShipVoiceNums(shipData.api_id, false, true);
 				$.each(allVoiceNums, function(ignored, vnum){
 					$("<div/>")
 						.addClass("hover")

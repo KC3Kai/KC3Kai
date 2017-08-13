@@ -67,6 +67,20 @@ Provides access to data on built-in JSON files
 			432: {917: 917, 918: 918},
 			353: {917: 917, 918: 918}
 		},
+		specialReairVoiceShips: [
+			// These ships got special (unused?) voice line (6, aka. Repair) implemented,
+			// tested by trying and succeeding to http fetch mp3 from kc server
+			56, 160, 224,  // Naka
+			65, 194, 268,  // Haguro
+			114, 200, 290, // Abukuma
+			123, 142, 295, // Kinukasa
+			126, 398,      // I-168
+			127, 399,      // I-58
+			135, 304,      // Naganami
+			136,           // Yamato Kai
+			418,           // Satsuki Kai Ni
+			496            // Zara due
+		],
 		specialQuotesSizes: {
 			"44": { // Murasame Poke(1)
 				"2": {
@@ -559,11 +573,16 @@ Provides access to data on built-in JSON files
 		*/
 		getVoiceDiffByFilename :function(ship_id, filename){
 			ship_id = parseInt(ship_id, 10);
-			var k = 17 * (ship_id + 7), r = filename - 100000;
-			for (var i = 0; i < 1000; ++i) {
-				var a = r + i * 99173;
-				if (a % k === 0) {
-					return a / k;
+			var f = parseInt(filename, 10);
+			var k = 17 * (ship_id + 7), r = f - 100000;
+			if(f > 53 && r < 0) {
+				return f;
+			} else if(!isNaN(f)) {
+				for (var i = 0; i < 1000; ++i) {
+					var a = r + i * 99173;
+					if (a % k === 0) {
+						return a / k;
+					}
 				}
 			}
 			return false;

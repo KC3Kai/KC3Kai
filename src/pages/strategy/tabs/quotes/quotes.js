@@ -66,7 +66,7 @@
 				$(".ref_sub", $(this).parent()).slideToggle(200);
 			};
 
-			var allVoiceNums = KC3Translation.getShipVoiceNums(masterId);
+			var allVoiceNums = KC3Translation.getShipVoiceNums(masterId, true, true);
 			$.each(allVoiceNums,function(i,voiceNum) {
 				var elm = $(".factory .voice_entity").clone();
 

@@ -197,6 +197,11 @@
 			return (1 & this.getShipVoiceFlag(shipMasterId)) !== 0;
 		},
 
+		// check if a ship has special idle voice
+		shipHasSpIdleVoice: function (shipMasterId) {
+			return (4 & this.getShipVoiceFlag(shipMasterId)) !== 0;
+		},
+
 		// check if a ship has hourly voices
 		shipHasHourlyVoices: function (shipMasterId) {
 			return (2 & this.getShipVoiceFlag(shipMasterId)) !== 0;
@@ -232,6 +237,7 @@
 			"Damaged(3)" : 21,
 			"Sunk" : 22,
 			"Idle" : 29,
+			"Idle(2)" : 129,
 			"Repair" : 6,
 			"Yasen(3)" : 917,
 			"Yasen(4)" : 918,
@@ -264,11 +270,7 @@
 		// get available ship voice numbers by checking 
 		// voice flag of a ship.
 		// the result is sorted.
-		getShipVoiceNums: function(masterId,includeHourlies,includeRepair) {
-			if (typeof includeHourlies === "undefined")
-				includeHourlies = true;
-			if (typeof includeRepair === "undefined")
-				includeRepair = false;
+		getShipVoiceNums: function(masterId, includeHourlies = true, includeRepair = true) {
 			var sortedVoiceNums =  [
 				1,25,2,3,4,28,24,8,13,9,10,26,27,11,
 				12,5,7,14,15,16,18,17,23,19,20,21,22,
@@ -281,9 +283,12 @@
 			// add idle voice key
 			if (this.shipHasIdleVoice(masterId))
 				sortedVoiceNums.push(29);
+			// add another special idle voice key, when morale >= 50 (sparkle cond)
+			if (this.shipHasSpIdleVoice(masterId))
+				sortedVoiceNums.push(129);
 
 			// add repair key
-			if (includeRepair)
+			if (includeRepair && KC3Meta.specialReairVoiceShips.indexOf(masterId) > -1)
 				sortedVoiceNums.push(6);
 
 			if (includeHourlies && this.shipHasHourlyVoices(masterId))
