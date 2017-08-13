@@ -18,10 +18,10 @@
 			ConfigManager.load();
 			this.enQuotes = [];
 			if(ConfigManager.language !== "en")
-				this.enQuotes = KC3Translation.getQuotes(this.repo_loc, false, "en");
+				this.enQuotes = KC3Translation.getQuotes(this.repo_loc, false, "en", false, false);
 			this.jpQuotes = [];
 			if(ConfigManager.language !== "jp")
-				this.jpQuotes = KC3Translation.getQuotes(this.repo_loc, false, "jp");
+				this.jpQuotes = KC3Translation.getQuotes(this.repo_loc, false, "jp", false, false);
 		},
 		buildShipName: function(masterId, shipData) {
 			return "[{0}] {1}".format(masterId, KC3Meta.shipName((shipData||KC3Master.ship(masterId)).api_name) );
