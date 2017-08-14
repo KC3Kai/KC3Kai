@@ -623,6 +623,48 @@ html,body {
 .module.activity .sortie_node.nc_avoid {
 	background:#00B3B1;
 }
+.module.activity .sortie_node.nc_night_battle {
+	background:
+		-webkit-linear-gradient(left, rgba(0, 26, 199, 0.6) 25%, rgba(0,0,0,0) 25%),
+		#7d0000;
+	background:
+		linear-gradient(to right, rgba(0, 26, 199, 0.6) 25%, rgba(0,0,0,0) 25%),
+		#7d0000;
+	background-size: 200% 100%;
+}
+.module.activity .sortie_node.nc_air_battle {
+	background:
+		-webkit-linear-gradient(bottom left, rgba(0,0,0,0) 75%, #11a 75%),
+		-webkit-linear-gradient(top right, rgba(0,0,0,0) 75%, #e20 75%),
+		#7d0000;
+	background:
+		linear-gradient(to top right, rgba(0,0,0,0) 75%, #11a 75%),
+		linear-gradient(to bottom left, rgba(0,0,0,0) 75%, #e20 75%),
+		#7d0000;
+	background-size: 18px 18px;
+	background-position: -9px -10px, -27px -45px;
+}
+.module.activity .sortie_node.nc_air_raid {
+	background:
+		-webkit-linear-gradient(top right, rgba(0,0,0,0) 75%, #e20 75%),
+		#7d0000;
+	background:
+		linear-gradient(to bottom left, rgba(0,0,0,0) 75%, #e20 75%),
+		#7d0000;
+	background-size: 22px 22px;
+	background-position: -39px -53px;
+}
+.module.activity .sortie_node.nc_enemy_combined {
+	background:
+		radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
+		radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
+		radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
+		radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
+		#7d0000;
+	background-size: 25px 25px;
+	background-position: -7px -7px, 0px 18px, -32px 24px, -50px 49px;
+}
+
 /* Abyss Ships */
 .module.activity .node_type_battle {
 	position: relative;

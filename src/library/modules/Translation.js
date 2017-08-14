@@ -87,17 +87,14 @@
 
 		getJSONWithOptions: function(repo, filename, extendEnglish,
 									 language, info_force_ship_lang, info_eng_stype,
-									 track_source) {
-			var self = this;
-
+									 track_source = false) {
 			if (filename === "quotes") {
 				console.info("Warning: using KC3Translation.getQuotes to get quotes");
 				return this.getQuotes(repo);
 			}
 
-			// Check if desired to extend english files
-			if (typeof extendEnglish=="undefined") { extendEnglish=false; }
-			if (typeof track_source==="undefined") { track_source = false; }
+			// Check if desired to extend English files
+			extendEnglish = extendEnglish || false;
 
 			// Japanese special case where ships and items sources are already in JP
 			if(
@@ -127,10 +124,10 @@
 					}).responseText);
 
 					if (track_source) {
-						self.addTags(enJSON, "en");
+						this.addTags(enJSON, "en");
 					}
 					if (filename === "quests") {
-						self.unoverrideAttr(enJSON, "memo");
+						this.unoverrideAttr(enJSON, "memo");
 					}
 				} catch (e) {
 					console.error("Loading translation failed", filename, e);
@@ -159,7 +156,7 @@
 				}).responseText);
 
 				if (track_source) {
-					self.addTags(translation, language);
+					this.addTags(translation, language);
 				}
 			} catch (e) {
 				// As EN can be used, fail-safe for other JSON syntax error
@@ -200,6 +197,11 @@
 			return (1 & this.getShipVoiceFlag(shipMasterId)) !== 0;
 		},
 
+		// check if a ship has special idle voice
+		shipHasSpIdleVoice: function (shipMasterId) {
+			return (4 & this.getShipVoiceFlag(shipMasterId)) !== 0;
+		},
+
 		// check if a ship has hourly voices
 		shipHasHourlyVoices: function (shipMasterId) {
 			return (2 & this.getShipVoiceFlag(shipMasterId)) !== 0;
@@ -235,6 +237,7 @@
 			"Damaged(3)" : 21,
 			"Sunk" : 22,
 			"Idle" : 29,
+			"Idle(2)" : 129,
 			"Repair" : 6,
 			"Yasen(3)" : 917,
 			"Yasen(4)" : 918,
@@ -247,7 +250,7 @@
 			"H2000":50, "H2100":51, "H2200":52, "H2300":53
 		},
 		// see initialization code below.
-		_idToDesc: null,
+		_idToDesc: undefined,
 
 		// descriptive voice key to numeric one
 		voiceDescToNum: function(k) {
@@ -256,17 +259,18 @@
 
 		// numeric voice key to descriptive one
 		voiceNumToDesc: function(k) {
+			if(!this._idToDesc) {
+				this._idToDesc = Object.keys(this._descToId).reduce(
+					(o, k) => Object.assign({}, o, { [this._descToId[k]]:k }), {}
+				);
+			}
 			return this._idToDesc[k] || "";
 		},
 
 		// get available ship voice numbers by checking 
 		// voice flag of a ship.
 		// the result is sorted.
-		getShipVoiceNums: function(masterId,includeHourlies,includeRepair) {
-			if (typeof includeHourlies === "undefined")
-				includeHourlies = true;
-			if (typeof includeRepair === "undefined")
-				includeRepair = false;
+		getShipVoiceNums: function(masterId, includeHourlies = true, includeRepair = true) {
 			var sortedVoiceNums =  [
 				1,25,2,3,4,28,24,8,13,9,10,26,27,11,
 				12,5,7,14,15,16,18,17,23,19,20,21,22,
@@ -279,9 +283,12 @@
 			// add idle voice key
 			if (this.shipHasIdleVoice(masterId))
 				sortedVoiceNums.push(29);
+			// add another special idle voice key, when morale >= 50 (sparkle cond)
+			if (this.shipHasSpIdleVoice(masterId))
+				sortedVoiceNums.push(129);
 
 			// add repair key
-			if (includeRepair)
+			if (includeRepair && KC3Meta.specialReairVoiceShips.indexOf(masterId) > -1)
 				sortedVoiceNums.push(6);
 
 			if (includeHourlies && this.shipHasHourlyVoices(masterId))
@@ -347,38 +354,71 @@
 			return quotes;
 		},
 
-		getQuotes: function(repo, track, language, checkKey) {
-			var self = this;
-			if (typeof track === "undefined")
-				track = false;
+		getQuotes: function(repo, track = false, language = ConfigManager.language,
+			checkKey = false, extendEnglish = true) {
 
-			// we always use English version quotes as the base,
+			var remodelGroups = {};
+			if (typeof RemodelDb !== "undefined" && !!RemodelDb._db && !!RemodelDb._db.remodelGroups) {
+				remodelGroups = RemodelDb._db.remodelGroups;
+			} else {
+				console.warn("Translation: failed to load RemodelDb, " +
+							 "please make sure it's been initialized properly");/*RemoveLogging:skip*/
+			}
+			const extendQuotesFromRemodelGroups = (langJson, track = false) => {
+				$.each(remodelGroups, function(orgShipIdStr, groupInfo) {
+					// a group of ship ids that consider as "same ship"
+					// sorted by remodels
+					var group = groupInfo.group;
+					// accumulate quotes
+					var curQuotes = {};
+					$.each(group, function(i, curShipId) {
+						// implicit casting index from num to str
+						var quotes = langJson[curShipId] || {};
+						if (track) {
+							$.each(quotes, function(k, v) {
+								quotes[k].tag = curShipId;
+							});
+						}
+						// accumulate to curQuotes
+						curQuotes = $.extend(true, {}, curQuotes, quotes);
+						// note that curQuotes now refers to a different obj
+						// and we haven't done any modification on curQuotes
+						// so it's safe to be assigned to a table
+						langJson[curShipId] = curQuotes;
+					});
+				});
+			};
+
+			// Use English version quotes as the base by default,
 			// assuming all quotes are complete so there
 			// is no need to extend the table by considering pre-remodel ship quotes.
 			var enJSON = {};
-			language = language || ConfigManager.language;
-			try {
-				enJSON = JSON.parse($.ajax({
-					url : repo+'lang/data/en/quotes.json',
-					async: false
-				}).responseText);
-				this.transformQuotes(enJSON, "en", false,
-					// remove seasonals extending for these languages
-					["jp", "scn", "kr"].indexOf(language) > -1);
-				if (track) {
-					self.addTags(enJSON, "en");
-				}
-			} catch(e) {
-				if (e instanceof SyntaxError){
-					console.warn("Loading quotes failed", e);/*RemoveLogging:skip*/
-					enJSON = {};
-				} else {
-					throw e;
+			const isGetEnglish = language === "en";
+			if(isGetEnglish || extendEnglish) {
+				try {
+					enJSON = JSON.parse($.ajax({
+						url : repo+'lang/data/en/quotes.json',
+						async: false
+					}).responseText);
+					this.transformQuotes(enJSON, "en", checkKey && isGetEnglish,
+						// remove seasonals extending for these languages
+						["jp", "scn", "kr"].indexOf(language) > -1);
+					if (track) {
+						this.addTags(enJSON, "en");
+					}
+					extendQuotesFromRemodelGroups(enJSON, track && isGetEnglish);
+				} catch(e) {
+					if (e instanceof SyntaxError){
+						console.warn("Loading quotes failed", e);/*RemoveLogging:skip*/
+						enJSON = {};
+					} else {
+						throw e;
+					}
 				}
 			}
 
 			var langJSON;
-			if (language === "en") {
+			if (isGetEnglish) {
 				// if it's already English the we are done.
 				langJSON = enJSON;
 			} else {
@@ -406,51 +446,21 @@
 						throw e;
 					}
 				}
+				// if still non-English JSON pending to be processed
+				if(language !== "en") {
+					// 1st pass: interpret descriptive keys as keys
+					this.transformQuotes(langJSON, language, checkKey);
+					if (track) {
+						this.addTags(langJSON, language);
+					}
+					// extend quotes by reusing ship's pre-remodels
+					// 2nd pass: extend langJSON by considering pre-models
+					extendQuotesFromRemodelGroups(langJSON, track);
+					// 3rd pass: extend langJSON using enJSON to fill in any missing parts
+					langJSON = $.extend(true, {}, enJSON, langJSON);
+				}
 			}
 
-			// 1st pass: interpret descriptive keys as keys
-			this.transformQuotes(langJSON, language, checkKey);
-			if (track && language !== "en") {
-				self.addTags(langJSON, language);
-			}
-
-			// extend quotes by reusing ship's pre-remodels
-			// 2nd pass: extend langJSON by considering pre-models
-			if (typeof RemodelDb !== "undefined" && !!RemodelDb._db && !!RemodelDb._db.remodelGroups) {
-				$.each(RemodelDb._db.remodelGroups, function(orgShipIdStr,groupInfo) {
-					// a group of ship ids that consider as "same ship"
-					// sorted by remodels
-					var group = groupInfo.group;
-					var i,curShipId;
-					// accumulate quotes
-					var curQuotes = {};
-					var q;
-
-					$.each(group, function(i,curShipId) {
-						// implicit casting index from num to str
-						q = langJSON[curShipId] || {};
-						if (track) {
-							$.each(q,function(k,v) {
-								q[k].tag = curShipId;
-							});
-						}
-						// accumulate to curQuotes
-						curQuotes = $.extend(true, {}, curQuotes, q);
-						// note that curQuotes now refers to a different obj
-						// and we haven't done any modification on curQuotes
-						// so it's safe to be assigned to a table
-						langJSON[curShipId] = curQuotes;
-					});
-				});
-			} else {
-				console.warn("Translation: failed to load RemodelDb, " +
-							 "please make sure it's been initialized properly");/*RemoveLogging:skip*/
-			}
-
-			// 3rd pass: extend langJSON using enJSON to fill in any missing parts
-			if (language !== "en") {
-				langJSON = $.extend(true, {}, enJSON, langJSON);
-			}
 			return langJSON;
 		},
 
@@ -469,8 +479,4 @@
 		
 	};
 
-	KC3Translation._idToDesc = {};
-	$.each(KC3Translation._descToId, function(k,v) {
-		KC3Translation._idToDesc[v] = k;
-	});
 })();
