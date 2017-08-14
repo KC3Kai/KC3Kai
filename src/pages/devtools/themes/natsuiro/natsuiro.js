@@ -1118,12 +1118,14 @@
 			KC3TimerManager._exped[1].expnum();
 			KC3TimerManager._exped[2].expnum();
 
+			$(".activity_basic .expeditions").hideChildrenTooltips();
 			// Repair faces
 			KC3TimerManager._repair[0].face().lazyInitTooltip();
 			KC3TimerManager._repair[1].face().lazyInitTooltip();
 			KC3TimerManager._repair[2].face(undefined, PlayerManager.repairSlots < 3).lazyInitTooltip();
 			KC3TimerManager._repair[3].face(undefined, PlayerManager.repairSlots < 4).lazyInitTooltip();
 
+			$(".activity_basic .timers").hideChildrenTooltips();
 			// Construction faces
 			if(ConfigManager.info_face){
 				KC3TimerManager._build[0].face().lazyInitTooltip();
@@ -1208,6 +1210,7 @@
 
 			// Expedition Timer Faces
 			if(KC3TimerManager._exped.length > 0){
+				$(".activity_basic .expeditions").hideChildrenTooltips();
 				KC3TimerManager._exped[0].faceId = PlayerManager.fleets[1].ship(0).masterId;
 				KC3TimerManager._exped[1].faceId = PlayerManager.fleets[2].ship(0).masterId;
 				KC3TimerManager._exped[2].faceId = PlayerManager.fleets[3].ship(0).masterId;
@@ -1267,6 +1270,10 @@
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
 			}
+
+			// Close opened tooltips to avoid buggy double popup
+			$(".module.summary").hideChildrenTooltips();
+			$(".module.status").hideChildrenTooltips();
 
 			// FLEET BUTTONS RESUPPLY STATUSES
 			$(".module.controls .fleet_num").each(function(i, element){
@@ -1839,6 +1846,7 @@
 					}
 				});
 				
+				$(".module.status").hideChildrenTooltips();
 				let lbasSupplyCost = PlayerManager.getBasesResupplyCost();
 				let lbasSortieCost = PlayerManager.getBasesSortieCost();
 				$(".module.status .status_supply").attr("title",
@@ -3103,6 +3111,7 @@
 			var ExpdFleetCost = fleetObj.calcExpeditionCost( selectedExpedition );
 
 			$(".module.activity .activity_expeditionPlanner .estimated_time").text( String( 60*ExpdCost.time ).toHHMMSS() );
+			$(".module.activity .activity_expeditionPlanner").hideChildrenTooltips();
 
 			// setup expedition item colors
 			$( ".activity_expeditionPlanner .expedition_entry" ).each( function(i,v) {
