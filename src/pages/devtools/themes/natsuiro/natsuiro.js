@@ -583,14 +583,16 @@
 
 		// Switching Activity Tabs
 		$(".module.activity .activity_tab").on("click", function(){
-			// if($(this).data("target")===""){ return false; }
+			var target = $(this).data("target");
 			$(".module.activity .activity_tab").removeClass("active");
 			$(this).addClass("active");
 			$(".module.activity .activity_box").hide();
-			$(".module.activity .activity_"+$(this).data("target")).show();
+			if(target === "expeditionPlanner"){
+				NatsuiroListeners.UpdateExpeditionPlanner();
+			}
+			$(".module.activity .activity_" + target).show();
 		});
 		$(".module.activity .activity_tab.active").trigger("click");
-
 
 		$(".module.activity .activity_dismissable").on("click", function(){
 			$("#atab_basic").trigger("click");
@@ -3040,21 +3042,22 @@
 
 		UpdateExpeditionPlanner: function (data) {
 			// if combined fleet or LBAS, cancel action
-			if(selectedFleet===5 || selectedFleet===6){ return false; }
+			if(selectedFleet === 5 || selectedFleet === 6) { return false; }
+			// if expedition planner not activated, no update required
+			if (!$("#atab_expeditionPlanner").hasClass("active")) { return false; }
 
 			$( ".module.activity .activity_expeditionPlanner .expres_greatbtn img" )
 				.attr("src", "../../../../assets/img/ui/btn-"+(plannerIsGreatSuccess?"":"x")+"gs.png");
 			$(".module.activity .activity_expeditionPlanner .dropdown_title")
 				.text(KC3Meta.term("ExpedNumLabel")+String(selectedExpedition));
 
-			var
-				allShips,
+			var allShips,
 				fleetObj = PlayerManager.fleets[selectedFleet-1];
 
 			//fleets' subsripts start from 0 !
 			allShips = fleetObj.ships.map(function(rosterId, index) {
 				return KC3ShipManager.get(rosterId);
-			}).filter(function (rosterData, index){
+			}).filter(function (rosterData, index) {
 				return (rosterData.masterId > 0);
 			});
 
@@ -3358,8 +3361,6 @@
 		},
 		
 		GunFit: function(data) {
-			console.debug("GunFit/AACI", data);
-
 			// if expedition planner is activated,
 			// user are probably configuring exped fleets and
 			// in that case we prevent gunfit or AACI info from popping up
@@ -3367,6 +3368,7 @@
 				return;
 			}
 
+			console.debug("GunFit/AACI", data);
 			if(!data.isShow){
 				if($("#atab_activity").hasClass("active")) $("#atab_basic").trigger("click");
 				return;
