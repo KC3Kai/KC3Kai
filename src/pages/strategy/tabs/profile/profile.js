@@ -476,6 +476,15 @@
 				window.location.reload();
 			});
 			
+			// Clear inconsistent localStorage cached ships & gears
+			$(".tab_profile .clear_localcache").on("click", function(event){
+				if(!confirm("Have you closed the game?\nThis fix won't work if you haven't closed all other KC3 tabs."))
+					return false;
+				delete localStorage.ships;
+				delete localStorage.gears;
+				alert("Done! Cache data will be available again after you restart the game.");
+			});
+			
 			// Clear transient properties
 			$(".tab_profile .clear_fcf").on("click", function(event){
 				if(!confirm("Have you closed the game?\nThis fix won't work if you haven't closed the game."))

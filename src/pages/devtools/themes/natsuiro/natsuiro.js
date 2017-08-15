@@ -583,14 +583,16 @@
 
 		// Switching Activity Tabs
 		$(".module.activity .activity_tab").on("click", function(){
-			// if($(this).data("target")===""){ return false; }
+			var target = $(this).data("target");
 			$(".module.activity .activity_tab").removeClass("active");
 			$(this).addClass("active");
 			$(".module.activity .activity_box").hide();
-			$(".module.activity .activity_"+$(this).data("target")).show();
+			if(target === "expeditionPlanner"){
+				NatsuiroListeners.UpdateExpeditionPlanner();
+			}
+			$(".module.activity .activity_" + target).show();
 		});
 		$(".module.activity .activity_tab.active").trigger("click");
-
 
 		$(".module.activity .activity_dismissable").on("click", function(){
 			$("#atab_basic").trigger("click");
@@ -778,14 +780,9 @@
 		$(".module.activity .map_info").removeClass("map_finisher");
 		$(".module.activity .map_gauge *:not(.clear)").css("width", "0%");
 		$(".module.activity .map_hp").text("");
-		$(".module.activity .sortie_node")
-			.text("")
-			.removeAttr("title")
-			.removeClass("nc_battle")
-			.removeClass("nc_resource")
-			.removeClass("nc_maelstrom")
-			.removeClass("nc_select")
-			.removeClass("nc_avoid");
+		$(".module.activity .sortie_node").text("").removeAttr("title")
+			.removeClass("nc_battle nc_resource nc_maelstrom nc_select nc_avoid")
+			.removeClass(KC3Node.knownNodeExtraClasses().join(" "));
 		$(".module.activity .sortie_nodes .boss_node").removeAttr("style");
 		$(".module.activity .sortie_nodes .boss_node").hide();
 		$(".module.activity .node_types").hide();
@@ -1121,12 +1118,14 @@
 			KC3TimerManager._exped[1].expnum();
 			KC3TimerManager._exped[2].expnum();
 
+			$(".activity_basic .expeditions").hideChildrenTooltips();
 			// Repair faces
 			KC3TimerManager._repair[0].face().lazyInitTooltip();
 			KC3TimerManager._repair[1].face().lazyInitTooltip();
 			KC3TimerManager._repair[2].face(undefined, PlayerManager.repairSlots < 3).lazyInitTooltip();
 			KC3TimerManager._repair[3].face(undefined, PlayerManager.repairSlots < 4).lazyInitTooltip();
 
+			$(".activity_basic .timers").hideChildrenTooltips();
 			// Construction faces
 			if(ConfigManager.info_face){
 				KC3TimerManager._build[0].face().lazyInitTooltip();
@@ -1211,6 +1210,7 @@
 
 			// Expedition Timer Faces
 			if(KC3TimerManager._exped.length > 0){
+				$(".activity_basic .expeditions").hideChildrenTooltips();
 				KC3TimerManager._exped[0].faceId = PlayerManager.fleets[1].ship(0).masterId;
 				KC3TimerManager._exped[1].faceId = PlayerManager.fleets[2].ship(0).masterId;
 				KC3TimerManager._exped[2].faceId = PlayerManager.fleets[3].ship(0).masterId;
@@ -1270,6 +1270,10 @@
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
 			}
+
+			// Close opened tooltips to avoid buggy double popup
+			$(".module.summary").hideChildrenTooltips();
+			$(".module.status").hideChildrenTooltips();
 
 			// FLEET BUTTONS RESUPPLY STATUSES
 			$(".module.controls .fleet_num").each(function(i, element){
@@ -1842,6 +1846,7 @@
 					}
 				});
 				
+				$(".module.status").hideChildrenTooltips();
 				let lbasSupplyCost = PlayerManager.getBasesResupplyCost();
 				let lbasSortieCost = PlayerManager.getBasesSortieCost();
 				$(".module.status .status_supply").attr("title",
@@ -1916,7 +1921,11 @@
 			switch(thisNode.type){
 				// Battle node
 				case "battle":
-					$(".module.activity .sortie_node_"+numNodes).addClass("nc_battle");
+					$(".module.activity .sortie_node_"+numNodes)
+						.addClass("nc_battle")
+						.addClass(thisNode.nodeExtraClass || "")
+						.attr("title", thisNode.nodeDesc || "")
+						.lazyInitTooltip();
 					$(".module.activity .node_type_battle").show();
 					break;
 
@@ -1924,7 +1933,8 @@
 				case "resource":
 					$(".module.activity .sortie_node_"+numNodes)
 						.addClass("nc_resource")
-						.attr("title", thisNode.nodeDesc)
+						.addClass(thisNode.nodeExtraClass || "")
+						.attr("title", thisNode.nodeDesc || "")
 						.lazyInitTooltip();
 					var resBoxDiv = $(".module.activity .node_type_resource");
 					resBoxDiv.removeClass("node_type_maelstrom");
@@ -1945,7 +1955,8 @@
 				case "bounty":
 					$(".module.activity .sortie_node_"+numNodes)
 						.addClass("nc_resource")
-						.attr("title", thisNode.nodeDesc)
+						.addClass(thisNode.nodeExtraClass || "")
+						.attr("title", thisNode.nodeDesc || "")
 						.lazyInitTooltip();
 					$(".module.activity .node_type_resource").removeClass("node_type_maelstrom");
 					$(".module.activity .node_type_resource .clone").remove();
@@ -1963,7 +1974,8 @@
 				case "maelstrom":
 					$(".module.activity .sortie_node_"+numNodes)
 						.addClass("nc_maelstrom")
-						.attr("title", thisNode.nodeDesc)
+						.addClass(thisNode.nodeExtraClass || "")
+						.attr("title", thisNode.nodeDesc || "")
 						.lazyInitTooltip();
 					$(".module.activity .node_type_resource").addClass("node_type_maelstrom");
 					$(".module.activity .node_type_resource .clone").remove();
@@ -1975,7 +1987,11 @@
 
 				// Selection node
 				case "select":
-					$(".module.activity .sortie_node_"+numNodes).addClass("nc_select");
+					$(".module.activity .sortie_node_"+numNodes)
+						.addClass("nc_select")
+						.addClass(thisNode.nodeExtraClass || "")
+						.attr("title", thisNode.nodeDesc || "")
+						.lazyInitTooltip();
 					$(".module.activity .node_type_text").text( KC3Meta.term("BattleSelect") +
 						KC3Meta.term("BattleSelectNodes").format(thisNode.choices[0], thisNode.choices[1]));
 					$(".module.activity .node_type_text").addClass("select");
@@ -1984,7 +2000,11 @@
 
 				// Transport node
 				case "transport":
-					$(".module.activity .sortie_node_"+numNodes).addClass("nc_resource");
+					$(".module.activity .sortie_node_"+numNodes)
+						.addClass("nc_resource")
+						.addClass(thisNode.nodeExtraClass || "")
+						.attr("title", thisNode.nodeDesc || "")
+						.lazyInitTooltip();
 					$(".module.activity .node_type_resource").removeClass("node_type_maelstrom");
 					$(".module.activity .node_type_resource .clone").remove();
 					$(".module.activity .node_type_resource .node_res_icon img").attr("src",
@@ -1997,7 +2017,11 @@
 
 				// Battle avoided node
 				default:
-					$(".module.activity .sortie_node_"+numNodes).addClass("nc_avoid");
+					$(".module.activity .sortie_node_"+numNodes)
+						.addClass("nc_avoid")
+						.addClass(thisNode.nodeExtraClass || "")
+						.attr("title", thisNode.nodeDesc || "")
+						.lazyInitTooltip();
 					$(".module.activity .node_type_text").text( KC3Meta.term("BattleAvoided") );
 					$(".module.activity .node_type_text").addClass("dud");
 					$(".module.activity .node_type_text").show();
@@ -3026,21 +3050,22 @@
 
 		UpdateExpeditionPlanner: function (data) {
 			// if combined fleet or LBAS, cancel action
-			if(selectedFleet===5 || selectedFleet===6){ return false; }
+			if(selectedFleet === 5 || selectedFleet === 6) { return false; }
+			// if expedition planner not activated, no update required
+			if (!$("#atab_expeditionPlanner").hasClass("active")) { return false; }
 
 			$( ".module.activity .activity_expeditionPlanner .expres_greatbtn img" )
 				.attr("src", "../../../../assets/img/ui/btn-"+(plannerIsGreatSuccess?"":"x")+"gs.png");
 			$(".module.activity .activity_expeditionPlanner .dropdown_title")
 				.text(KC3Meta.term("ExpedNumLabel")+String(selectedExpedition));
 
-			var
-				allShips,
+			var allShips,
 				fleetObj = PlayerManager.fleets[selectedFleet-1];
 
 			//fleets' subsripts start from 0 !
 			allShips = fleetObj.ships.map(function(rosterId, index) {
 				return KC3ShipManager.get(rosterId);
-			}).filter(function (rosterData, index){
+			}).filter(function (rosterData, index) {
 				return (rosterData.masterId > 0);
 			});
 
@@ -3086,6 +3111,7 @@
 			var ExpdFleetCost = fleetObj.calcExpeditionCost( selectedExpedition );
 
 			$(".module.activity .activity_expeditionPlanner .estimated_time").text( String( 60*ExpdCost.time ).toHHMMSS() );
+			$(".module.activity .activity_expeditionPlanner").hideChildrenTooltips();
 
 			// setup expedition item colors
 			$( ".activity_expeditionPlanner .expedition_entry" ).each( function(i,v) {
@@ -3344,8 +3370,6 @@
 		},
 		
 		GunFit: function(data) {
-			console.debug("GunFit/AACI", data);
-
 			// if expedition planner is activated,
 			// user are probably configuring exped fleets and
 			// in that case we prevent gunfit or AACI info from popping up
@@ -3353,6 +3377,7 @@
 				return;
 			}
 
+			console.debug("GunFit/AACI", data);
 			if(!data.isShow){
 				if($("#atab_activity").hasClass("active")) $("#atab_basic").trigger("click");
 				return;
