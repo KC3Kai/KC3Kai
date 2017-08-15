@@ -1913,17 +1913,61 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_member/itemuse":function(params, response, headers){
 			var utcHour = Date.toUTChours(headers.Date);
-			var itemId = parseInt(params.api_useitem_id,10),
-				fForce = parseInt(params.api_force_flag,10),
-				fExchg = parseInt(params.api_exchange_type,10), // pops out from present box
+			var itemId = parseInt(params.api_useitem_id, 10),
+				fForce = parseInt(params.api_force_flag, 10), // 1 = no over cap confirm dialogue
+				fExchg = parseInt(params.api_exchange_type, 10),
 				aData  = response.api_data,
-				fChuui = aData.api_caution_flag,
+				fChuui = aData.api_caution_flag, // 1 = over cap confirm dialogue to be shown
 				flags  = aData.api_flag;
-			
+			// Handle items to be used:
+			// before api_exchange_type all cases full verified, better to refresh counts via /useitem
+			switch(fExchg){
+				case 1: // exchange 4 medals with 1 blueprint
+					if(itemId === 57) PlayerManager.consumables.medals -= 4;
+				break;
+				case 2: // exchange 1 medals with materials [300,300,300,300, 0, 2, 0, 0] (guessed)
+				case 3: // exchange 1 medals with 4 screws (guessed)
+					if(itemId === 57) PlayerManager.consumables.medals -= 1;
+				break;
+				case 11: // exchange 1 present box with resources [550, 550, 0, 0]
+				case 12: // exchange 1 present box with materials [0, 0, 3, 1]
+				case 13: // exchange 1 present box with 1 irako
+					if(itemId === 60) PlayerManager.consumables.presents -= 1;
+				break;
+				case 21: // exchange 1 hishimochi with resources [600, 0, 0, 200] (guessed)
+				case 22: // exchange 1 hishimochi with materials [0, 2, 0, 1]
+				case 23: // exchange 1 hishimochi with 1 irako (guessed)
+					if(itemId === 62) PlayerManager.consumables.hishimochi -= 1;
+				break;
+				case 41: // exchange all boxes with fcoins
+					if(itemId === 10) PlayerManager.consumables.furniture200 = 0;
+					if(itemId === 11) PlayerManager.consumables.furniture400 = 0;
+					if(itemId === 12) PlayerManager.consumables.furniture700 = 0;
+				break;
+				case 42: // exchange half boxes with fcoins
+					if(itemId === 10) PlayerManager.consumables.furniture200 = Math.floor(PlayerManager.consumables.furniture200 / 2);
+					if(itemId === 11) PlayerManager.consumables.furniture400 = Math.floor(PlayerManager.consumables.furniture400 / 2);
+					if(itemId === 12) PlayerManager.consumables.furniture700 = Math.floor(PlayerManager.consumables.furniture700 / 2);
+				break;
+				case 43: // exchange 10 boxes with fcoins
+					if(itemId === 10) PlayerManager.consumables.furniture200 -= 10;
+					if(itemId === 11) PlayerManager.consumables.furniture400 -= 10;
+					if(itemId === 12) PlayerManager.consumables.furniture700 -= 10;
+				break;
+				default:
+					if(isNaN(fExchg)){
+						// exchange 1 chocolate with resources [700,700,700,1500]
+						if(itemId === 56) PlayerManager.consumables.chocolate -= 1;
+					} else {
+						console.log("Unknown exchange type:", fExchg, itemId, aData);
+					}
+			}
+			// Handle item/materials will obtain:
 			switch(flags){
 				case 1:
 					// Obtained Item
-					var dItem  = aData.api_getitem; // Use Master, Master ID, Get Count "api_getitem":{"api_usemst":5,"api_mst_id":44,"api_getcount":5000} (from furni box)
+					// Use Master, Master ID, Get Count "api_getitem":{"api_usemst":5,"api_mst_id":44,"api_getcount":5000} (from furni box)
+					var dItem  = aData.api_getitem;
 					break;
 				case 2:
 					// Obtained Material
