@@ -701,13 +701,24 @@
 							
 							// Process Battle
 							PlayerManager.combinedFleet = sortie.combined;
-							thisNode = (new KC3Node()).defineAsBattle();
+							thisNode = (new KC3Node(battle.sortie_id, battle.node, battle.time,
+								sortie.world, sortie.mapnum)).defineAsBattle();
 							if(typeof battle.data.api_dock_id != "undefined"){
 								thisNode.engage( battleData, sortie.fleetnum );
+								if(KC3Node.debugRankPrediction() && typeof battle.yasen.api_deck_id != "undefined"){
+									thisNode.night( battle.yasen );
+								}
 							}else if(typeof battle.data.api_deck_id != "undefined"){
 								thisNode.engage( battleData, sortie.fleetnum );
+								if(KC3Node.debugRankPrediction() && typeof battle.yasen.api_deck_id != "undefined"){
+									thisNode.night( battle.yasen );
+								}
 							}else if(typeof battle.yasen.api_deck_id != "undefined"){
 								thisNode.engageNight( battleData, sortie.fleetnum );
+							}
+							if(KC3Node.debugRankPrediction()){
+								console.debug("Node " + thisNode.letter + " result rank", battle.rating, battle.sortie_id);
+								console.assert(battle.rating == (thisNode.predictedRankNight || thisNode.predictedRank), "Rank prediction mismatch");
 							}
 							sinkShips[0].concat(battle.shizunde[0]);
 							sinkShips[1].concat(battle.shizunde[1]);
