@@ -532,7 +532,7 @@ Contains summary information about a fleet and its 6 ships
 			totalCost.fuel += Math.ceil(maxFuel * 0.2);
 			totalCost.dayOnlyAmmo += Math.ceil(maxAmmo * 0.2);
 			totalCost.nightBattleAmmo += Math.ceil(maxAmmo * 0.3);
-			totalCost.airRaidFuel += Math.floor(maxAmmo * 0.07) || 1;
+			totalCost.airRaidFuel += Math.floor(maxFuel * 0.08) || 1;
 			totalCost.airRaidAmmo += Math.floor(maxAmmo * 0.04) || 1;
 		}
 		return totalCost;
