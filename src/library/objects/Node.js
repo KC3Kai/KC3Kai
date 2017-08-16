@@ -850,7 +850,6 @@ Used by SortieManager
 			ally: nightData.api_maxhps.slice(1,7),
 			enemy: nightData.api_maxhps.slice(7,13)
 		};
-		
 		if (typeof nightData.api_maxhps_combined != "undefined") {
 			this.maxHPs.ally = this.maxHPs.ally.concat(nightData.api_maxhps_combined.slice(1,7));
 			this.maxHPs.enemy = this.maxHPs.enemy.concat(nightData.api_maxhps_combined.slice(7,13));
@@ -861,12 +860,15 @@ Used by SortieManager
 			ally: [],
 			enemy: []
 		};
-		
 		if (this.dayBeginHPs) {
 			beginHPs = this.dayBeginHPs;
 		} else {
 			beginHPs.ally = nightData.api_nowhps.slice(1,7);
 			beginHPs.enemy = nightData.api_nowhps.slice(7,13);
+			if (typeof nightData.api_nowhps_combined != "undefined") {
+				beginHPs.ally = beginHPs.ally.concat(nightData.api_nowhps_combined.slice(1,7));
+				beginHPs.enemy = beginHPs.enemy.concat(nightData.api_nowhps_combined.slice(7,13));
+			}
 		}
 		
 		if(setAsOriginalHP){
@@ -894,10 +896,15 @@ Used by SortieManager
 			var ship;
 			var fleetId = this.fleetSent - 1;
 			
+			// use nowhps as initial values which are endHPs of day battle
 			var endHPs = {
-				ally: beginHPs.ally.slice(),
-				enemy: beginHPs.enemy.slice()
+				ally: nightData.api_nowhps.slice(1,7),
+				enemy: nightData.api_nowhps.slice(7,13)
 			};
+			if (typeof nightData.api_nowhps_combined != "undefined") {
+				endHPs.ally = endHPs.ally.concat(nightData.api_nowhps_combined.slice(1,7));
+				endHPs.enemy = endHPs.enemy.concat(nightData.api_nowhps_combined.slice(7,13));
+			}
 			
 			// PLAYER COMBINED FLEET
 			if (PlayerManager.combinedFleet && fleetId < 1) {
@@ -972,7 +979,7 @@ Used by SortieManager
 						endHPs.enemy[i] = result.enemy[i] ? result.enemy[i].hp : -1;
 					}
 					
-					// player fleet
+					// player escort fleet
 					shipNum = fleet.countShips();
 					for(i = 0; i < shipNum; i++) {
 						ship = fleet.ship(i);
@@ -1060,7 +1067,7 @@ Used by SortieManager
 			if(ConfigManager.info_btrank){
 				this.predictedRankNight = KC3Node.predictRank( beginHPs, endHPs, nightData.api_name );
 				if(KC3Node.debugRankPrediction()){
-					console.debug("Predicted before after HPs", beginHPs, endHPs);
+					console.debug("Predicted before after yasen HPs", beginHPs, endHPs);
 					console.debug("Node " + this.letter + " predicted yasen rank", this.predictedRankNight);
 				}
 			}
