@@ -43,6 +43,13 @@
 		});
 	};
 	
+	KC3LandBase.prototype.worstCond = function(){
+		return this.planes.reduce(function(acc, p){
+			return !p.api_slotid || p.api_state !== 1 || !p.api_cond
+				|| p.api_cond < acc ? acc : p.api_cond;
+		}, 0);
+	};
+	
 	KC3LandBase.prototype.calcResupplyCost = function() {
 		var totalFuel = 0,
 			totalBauxite = 0;

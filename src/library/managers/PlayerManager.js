@@ -160,6 +160,19 @@ Does not include Ships and Gears which are managed by other Managers
 			return total;
 		},
 
+		/**
+		 * @return the worst cond value [1, 3] of all land bases which are set to sortie
+		 */
+		getBasesWorstCond :function(){
+			var worst = 1;
+			$.each(this.bases, function(i, b){
+				if(b.action === 1){
+					worst = Math.max(worst, b.worstCond());
+				}
+			});
+			return worst;
+		},
+
 		setRepairDocks :function( data ){
 			var lastRepair = this.repairShips.map(function(x){return x;}); // clone
 			this.repairShips.splice(0);

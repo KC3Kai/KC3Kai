@@ -2236,9 +2236,13 @@ ABYSS FLEET
 	width:30px;
 	height:30px;
 }
+.module.controls .fleet_lbas.badMorale {
+	border:2px solid #faa;
+}
 .module.controls .fleet_lbas.needsSupply {
 	border:2px solid #f00;
 }
+.module.controls .fleet_lbas.badMorale img,
 .module.controls .fleet_lbas.needsSupply img {
 	margin-top:-2px;
 }
