@@ -918,7 +918,7 @@ Used by SortieManager
 				if (isEnemyCombined) {
 					// still needs 12-element array for dameConCode
 					if (dameConCode.length < 7) {
-						dameConCode = PlayerManager.fleets[0].getDameConCodes.concat(dameConCode);
+						dameConCode = PlayerManager.fleets[0].getDameConCodes().concat(dameConCode);
 						console.assert(dameConCode.length === 12, "dameConCode length should be 12 for combined fleets");
 					}
 					//console.debug("Fleet dameConCode", dameConCode);

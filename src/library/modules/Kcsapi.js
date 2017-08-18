@@ -295,7 +295,7 @@ Previously known as "Reactor"
 					case 62: PlayerManager.consumables.hishimochi = thisItem.api_count; break;
 					case 64: PlayerManager.consumables.reinforceExpansion = thisItem.api_count; break;
 					case 65: PlayerManager.consumables.protoCatapult = thisItem.api_count; break;
-					// 66 and 67 not found in this API, as they are slotitem
+					// 66, 67 and 76 not found in this API, as they are slotitem
 					//case 66: PlayerManager.consumables.ration = thisItem.api_count; break;
 					//case 67: PlayerManager.consumables.resupplier = thisItem.api_count; break;
 					//case 76: PlayerManager.consumables.rationSpecial = thisItem.api_count; break;
@@ -323,7 +323,7 @@ Previously known as "Reactor"
 	
 		/* Picture book
 		-------------------------------------------------------*/
-		"api_get_member/picture_book": function(params, response, headers){
+		"api_get_member/picture_book":function(params, response, headers){
 			PictureBook.record(params, response);
 		},
 		
@@ -458,7 +458,7 @@ Previously known as "Reactor"
 		
 		/* Equipment list
 		-------------------------------------------------------*/
-		"api_get_member/slot_item": function(params, response, headers){
+		"api_get_member/slot_item":function(params, response, headers){
 			KC3GearManager.clear();
 			KC3GearManager.set( response.api_data );
 			KC3Network.trigger("GearSlots");
@@ -466,7 +466,7 @@ Previously known as "Reactor"
 		},
 		
 		// Equipment dragging
-		"api_req_kaisou/slot_exchange_index": function(params, response, headers){
+		"api_req_kaisou/slot_exchange_index":function(params, response, headers){
 			var UpdatingShip = KC3ShipManager.get(params.api_id);
 			UpdatingShip.items = response.api_data.api_slot;
 			KC3ShipManager.save();
@@ -480,7 +480,7 @@ Previously known as "Reactor"
 		},
 		
 		// Equipment swap
-		"api_req_kaisou/slot_deprive": function(params, response, headers){
+		"api_req_kaisou/slot_deprive":function(params, response, headers){
 			var ShipFrom = KC3ShipManager.get(params.api_unset_ship);
 			var ShipTo = KC3ShipManager.get(params.api_set_ship);
 			var setExSlot = params.api_set_slot_kind == 1;
@@ -523,14 +523,15 @@ Previously known as "Reactor"
 		/* Mamiya
 		-------------------------------------------------------*/
 		"api_req_member/itemuse_cond":function(params, response, headers){
-			var
-				fleetId = parseInt(params.api_deck_id,10)-1,
-				useFlag = parseInt(params.api_use_type,10),
+			var fleetNo = parseInt(params.api_deck_id, 10),
+				useFlag = parseInt(params.api_use_type, 10),
 				fMamiya = !!(useFlag & 1),
 				fIrako  = !!(useFlag & 2);
-			
-			// there's nothing to do, for now
-			// feel free to check out this listener if you want.
+			PlayerManager.consumables.mamiya -= fMamiya & 1;
+			PlayerManager.consumables.irako -= fIrako & 1;
+			PlayerManager.setConsumables();
+			console.log("Morale item applied to fleet #" + fleetNo, "Mamiya: " + fMamiya, "Irako: " + fIrako);
+			KC3Network.trigger("Consumables");
 		},
 		
 		/* Update fleet name
@@ -735,6 +736,7 @@ Previously known as "Reactor"
 			if(gearObj.itemId > 0){
 				gearObj.lock = lockState;
 				KC3GearManager.save();
+				console.log("Item", itemId, gearObj.name(), "lock state", lockState);
 			}
 		},
 		
@@ -944,6 +946,8 @@ Previously known as "Reactor"
 		/* Traverse Map
 		-------------------------------------------------------*/
 		"api_req_map/next":function(params, response, headers){
+			// 1: repair team used, 2: repair goddess used
+			var dameconUsedType = parseInt(params.api_recovery_type, 10);
 			KC3SortieManager.discardSunk();
 			KC3SortieManager.advanceNode( response.api_data, Date.toUTCseconds(headers.Date) );
 			KC3Network.hasOverlay = true;
@@ -1256,7 +1260,7 @@ Previously known as "Reactor"
 			KC3Network.trigger("Quests");
 		},
 		
-		"api_req_quest/clearitemget": function(params, response, headers){
+		"api_req_quest/clearitemget":function(params, response, headers){
 			var utcHour  = Date.toUTChours(headers.Date),
 				quest    = Number(params.api_quest_id),
 				data     = response.api_data,
@@ -1441,13 +1445,13 @@ Previously known as "Reactor"
 
 		/* Expedition Selection Screen
 		  -------------------------------------------------------*/
-		"api_get_member/mission": function(params, response, headers) {
+		"api_get_member/mission":function(params, response, headers) {
 			KC3Network.trigger("ExpeditionSelection");
 		},
 
 		/* Expedition Start
 		  -------------------------------------------------------*/
-		"api_req_mission/start": function(params, response, headers) {
+		"api_req_mission/start":function(params, response, headers) {
 			KC3Network.trigger("ExpeditionStart");
 		},
 		
