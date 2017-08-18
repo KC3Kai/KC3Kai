@@ -720,6 +720,8 @@
 								thisNode.engageNight( battleData, sortie.fleetnum );
 							}
 							if(KC3Node.debugRankPrediction()){
+								// Known issue: if `api_name` not saved into battle data for old history,
+								// prediction on long distance air raid node will fail
 								console.debug("Node " + thisNode.letter + " result rank", battle.rating, battle.sortie_id);
 								console.assert(battle.rating == (thisNode.predictedRankNight || thisNode.predictedRank), "Rank prediction mismatch");
 							}

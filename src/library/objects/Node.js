@@ -28,7 +28,7 @@ Used by SortieManager
 	//   arrays are all begins at 0.
 	// @param battleName - optional, the API call name invoked currently
 	*/
-	KC3Node.predictRank = function(beginHPs, endHPs, battleName) {
+	KC3Node.predictRank = function(beginHPs, endHPs, battleName = "") {
 		console.assert(
 			beginHPs.ally.length === endHPs.ally.length,
 			"Ally data length mismatched");
@@ -114,8 +114,9 @@ Used by SortieManager
 			);
 		}
 
-		// For long distance air raid
-		if ( (battleName||"").indexOf("ld_airbattle") >-1 ) {
+		// For long distance air raid (api_event_id: 4, api_event_kind: 6),
+		// why not use api_event_kind? because it's not saved as battle data, it's in /next API result.
+		if (battleName.indexOf("ld_airbattle") > -1) {
 			// Based on long distance air raid rules from:
 			// https://github.com/andanteyk/ElectronicObserver/blob/master/ElectronicObserver/Other/Information/kcmemo.md#%E9%95%B7%E8%B7%9D%E9%9B%A2%E7%A9%BA%E8%A5%B2%E6%88%A6%E3%81%A7%E3%81%AE%E5%8B%9D%E5%88%A9%E5%88%A4%E5%AE%9A
 			// Also referenced:
