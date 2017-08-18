@@ -908,8 +908,8 @@
 			var domImg = new Image();
 			domImg.onload = function(){
 				
-				KC3Database.get_sortie_data(sortieId, function(sortieData){
-					if(sortieData.battles.length===0){
+				KC3Database.get_sortie_data(sortieId, function(sortieData) {
+					if(sortieData.battles.length === 0) {
 						self.exportingReplay = false;
 						$("body").css("opacity", "1");
 						return false;
@@ -924,8 +924,9 @@
 						return true;
 					}
 					
+					console.debug("Downloading reply", sortieId, ", data:", sortieData);
 					// Clear properties duplicated or may not used by replayer for now
-					$.each(sortieData.battles, function(_, battle){
+					$.each(sortieData.battles, function(_, battle) {
 						delete battle.hq;
 						delete battle.enemyId;
 						delete battle.airRaid;
@@ -933,34 +934,36 @@
 					});
 					var jsonData = JSON.stringify(sortieData);
 					var scale = Math.ceil(Math.sqrt(jsonData.length / 30000));
+					console.debug("Image scale", scale, "based on data size:", jsonData.length);
 					
 					var rcanvas = document.createElement("canvas");
 					rcanvas.width = 400 * scale;
 					rcanvas.height = 400 * scale;
 					var rcontext = rcanvas.getContext("2d");
-					rcontext.drawImage( domImg, 0, 0, 400, 400, 0, 0, 400 * scale, 400 * scale );
+					rcontext.drawImage(domImg, 0, 0, 400, 400, 0, 0, 400 * scale, 400 * scale);
 
-					console.debug("Downloading reply", sortieId, ", data:", sortieData);
-					rcontext.font = (26*scale) + "pt Calibri";
+					rcontext.font = (26 * scale) + "pt Calibri";
 					rcontext.fillStyle = '#ffffff';
 					rcontext.fillText(sortieData.world+"-"+sortieData.mapnum, 20 * scale, 215 * scale);
 					
-					rcontext.font = (20*scale) + "pt Calibri";
+					rcontext.font = (20 * scale) + "pt Calibri";
 					rcontext.fillStyle = '#ffffff';
 					rcontext.fillText(PlayerManager.hq.name, 100 * scale, 210 * scale);
 					
 					var fleetUsed = sortieData["fleet"+sortieData.fleetnum];
-					var shipIconImage;
-					$.each(fleetUsed, function(ShipIndex, ShipData){
-						shipIconImage = $(".simg-"+ShipData.mst_id+" img")[0];
-						rcontext.drawImage(shipIconImage,0,0,70,70,(25+(60*ShipIndex)) * scale,233 * scale,50 * scale,50 * scale);
+					$.each(fleetUsed, function(shipIndex, ShipData) {
+						var shipIconImage = $(".simg-"+ShipData.mst_id+" img")[0];
+						rcontext.drawImage(shipIconImage, 0, 0, 70, 70,
+							(25 + (60 * shipIndex)) * scale, 233 * scale, 50 * scale, 50 * scale);
 					});
 					
 					withDataCover64 = rcanvas.toDataURL("image/png");
 					
 					steg.encode(jsonData, withDataCover64, {
-						success: function(newImg){
-							KC3ImageExport.writeToCanvas(newImg, { width: 400 * scale, height: 400 * scale }, function (error, canvas) {
+						success: function(newImg) {
+							KC3ImageExport.writeToCanvas(newImg,
+								{ width: 400 * scale, height: 400 * scale },
+								function(error, canvas) {
 								if (error) {
 									self.endExport(error);
 									return;
@@ -972,13 +975,13 @@
 								}).export(self.endExport.bind(self));
 							});
 						},
-						error: function(e){
+						error: function(e) {
 							self.endExport(e);
 							return false;
 						}
 					});
 					
-				}, function(e){
+				}, function(e) {
 					self.endExport(e);
 					return false;
 				});
