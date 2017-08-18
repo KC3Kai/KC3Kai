@@ -295,7 +295,7 @@ Previously known as "Reactor"
 					case 62: PlayerManager.consumables.hishimochi = thisItem.api_count; break;
 					case 64: PlayerManager.consumables.reinforceExpansion = thisItem.api_count; break;
 					case 65: PlayerManager.consumables.protoCatapult = thisItem.api_count; break;
-					// 66 and 67 not found in this API, as they are slotitem
+					// 66, 67 and 76 not found in this API, as they are slotitem
 					//case 66: PlayerManager.consumables.ration = thisItem.api_count; break;
 					//case 67: PlayerManager.consumables.resupplier = thisItem.api_count; break;
 					//case 76: PlayerManager.consumables.rationSpecial = thisItem.api_count; break;
@@ -323,7 +323,7 @@ Previously known as "Reactor"
 	
 		/* Picture book
 		-------------------------------------------------------*/
-		"api_get_member/picture_book": function(params, response, headers){
+		"api_get_member/picture_book":function(params, response, headers){
 			PictureBook.record(params, response);
 		},
 		
@@ -458,7 +458,7 @@ Previously known as "Reactor"
 		
 		/* Equipment list
 		-------------------------------------------------------*/
-		"api_get_member/slot_item": function(params, response, headers){
+		"api_get_member/slot_item":function(params, response, headers){
 			KC3GearManager.clear();
 			KC3GearManager.set( response.api_data );
 			KC3Network.trigger("GearSlots");
@@ -466,7 +466,7 @@ Previously known as "Reactor"
 		},
 		
 		// Equipment dragging
-		"api_req_kaisou/slot_exchange_index": function(params, response, headers){
+		"api_req_kaisou/slot_exchange_index":function(params, response, headers){
 			var UpdatingShip = KC3ShipManager.get(params.api_id);
 			UpdatingShip.items = response.api_data.api_slot;
 			KC3ShipManager.save();
@@ -480,7 +480,7 @@ Previously known as "Reactor"
 		},
 		
 		// Equipment swap
-		"api_req_kaisou/slot_deprive": function(params, response, headers){
+		"api_req_kaisou/slot_deprive":function(params, response, headers){
 			var ShipFrom = KC3ShipManager.get(params.api_unset_ship);
 			var ShipTo = KC3ShipManager.get(params.api_set_ship);
 			var setExSlot = params.api_set_slot_kind == 1;
@@ -523,14 +523,15 @@ Previously known as "Reactor"
 		/* Mamiya
 		-------------------------------------------------------*/
 		"api_req_member/itemuse_cond":function(params, response, headers){
-			var
-				fleetId = parseInt(params.api_deck_id,10)-1,
-				useFlag = parseInt(params.api_use_type,10),
+			var fleetNo = parseInt(params.api_deck_id, 10),
+				useFlag = parseInt(params.api_use_type, 10),
 				fMamiya = !!(useFlag & 1),
 				fIrako  = !!(useFlag & 2);
-			
-			// there's nothing to do, for now
-			// feel free to check out this listener if you want.
+			PlayerManager.consumables.mamiya -= fMamiya & 1;
+			PlayerManager.consumables.irako -= fIrako & 1;
+			PlayerManager.setConsumables();
+			console.log("Morale item applied to fleet #" + fleetNo, "Mamiya: " + fMamiya, "Irako: " + fIrako);
+			KC3Network.trigger("Consumables");
 		},
 		
 		/* Update fleet name
@@ -735,6 +736,7 @@ Previously known as "Reactor"
 			if(gearObj.itemId > 0){
 				gearObj.lock = lockState;
 				KC3GearManager.save();
+				console.log("Item", itemId, gearObj.name(), "lock state", lockState);
 			}
 		},
 		
@@ -944,6 +946,8 @@ Previously known as "Reactor"
 		/* Traverse Map
 		-------------------------------------------------------*/
 		"api_req_map/next":function(params, response, headers){
+			// 1: repair team used, 2: repair goddess used
+			var dameconUsedType = parseInt(params.api_recovery_type, 10);
 			KC3SortieManager.discardSunk();
 			KC3SortieManager.advanceNode( response.api_data, Date.toUTCseconds(headers.Date) );
 			KC3Network.hasOverlay = true;
@@ -1256,7 +1260,7 @@ Previously known as "Reactor"
 			KC3Network.trigger("Quests");
 		},
 		
-		"api_req_quest/clearitemget": function(params, response, headers){
+		"api_req_quest/clearitemget":function(params, response, headers){
 			var utcHour  = Date.toUTChours(headers.Date),
 				quest    = Number(params.api_quest_id),
 				data     = response.api_data,
@@ -1441,13 +1445,13 @@ Previously known as "Reactor"
 
 		/* Expedition Selection Screen
 		  -------------------------------------------------------*/
-		"api_get_member/mission": function(params, response, headers) {
+		"api_get_member/mission":function(params, response, headers) {
 			KC3Network.trigger("ExpeditionSelection");
 		},
 
 		/* Expedition Start
 		  -------------------------------------------------------*/
-		"api_req_mission/start": function(params, response, headers) {
+		"api_req_mission/start":function(params, response, headers) {
 			KC3Network.trigger("ExpeditionStart");
 		},
 		
@@ -1913,17 +1917,61 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_member/itemuse":function(params, response, headers){
 			var utcHour = Date.toUTChours(headers.Date);
-			var itemId = parseInt(params.api_useitem_id,10),
-				fForce = parseInt(params.api_force_flag,10),
-				fExchg = parseInt(params.api_exchange_type,10), // pops out from present box
+			var itemId = parseInt(params.api_useitem_id, 10),
+				fForce = parseInt(params.api_force_flag, 10), // 1 = no over cap confirm dialogue
+				fExchg = parseInt(params.api_exchange_type, 10),
 				aData  = response.api_data,
-				fChuui = aData.api_caution_flag,
+				fChuui = aData.api_caution_flag, // 1 = over cap confirm dialogue to be shown
 				flags  = aData.api_flag;
-			
+			// Handle items to be used:
+			// before api_exchange_type all cases full verified, better to refresh counts via /useitem
+			switch(fExchg){
+				case 1: // exchange 4 medals with 1 blueprint
+					if(itemId === 57) PlayerManager.consumables.medals -= 4;
+				break;
+				case 2: // exchange 1 medals with materials [300,300,300,300, 0, 2, 0, 0] (guessed)
+				case 3: // exchange 1 medals with 4 screws (guessed)
+					if(itemId === 57) PlayerManager.consumables.medals -= 1;
+				break;
+				case 11: // exchange 1 present box with resources [550, 550, 0, 0]
+				case 12: // exchange 1 present box with materials [0, 0, 3, 1]
+				case 13: // exchange 1 present box with 1 irako
+					if(itemId === 60) PlayerManager.consumables.presents -= 1;
+				break;
+				case 21: // exchange 1 hishimochi with resources [600, 0, 0, 200] (guessed)
+				case 22: // exchange 1 hishimochi with materials [0, 2, 0, 1]
+				case 23: // exchange 1 hishimochi with 1 irako (guessed)
+					if(itemId === 62) PlayerManager.consumables.hishimochi -= 1;
+				break;
+				case 41: // exchange all boxes with fcoins
+					if(itemId === 10) PlayerManager.consumables.furniture200 = 0;
+					if(itemId === 11) PlayerManager.consumables.furniture400 = 0;
+					if(itemId === 12) PlayerManager.consumables.furniture700 = 0;
+				break;
+				case 42: // exchange half boxes with fcoins
+					if(itemId === 10) PlayerManager.consumables.furniture200 = Math.floor(PlayerManager.consumables.furniture200 / 2);
+					if(itemId === 11) PlayerManager.consumables.furniture400 = Math.floor(PlayerManager.consumables.furniture400 / 2);
+					if(itemId === 12) PlayerManager.consumables.furniture700 = Math.floor(PlayerManager.consumables.furniture700 / 2);
+				break;
+				case 43: // exchange 10 boxes with fcoins
+					if(itemId === 10) PlayerManager.consumables.furniture200 -= 10;
+					if(itemId === 11) PlayerManager.consumables.furniture400 -= 10;
+					if(itemId === 12) PlayerManager.consumables.furniture700 -= 10;
+				break;
+				default:
+					if(isNaN(fExchg)){
+						// exchange 1 chocolate with resources [700,700,700,1500]
+						if(itemId === 56) PlayerManager.consumables.chocolate -= 1;
+					} else {
+						console.log("Unknown exchange type:", fExchg, itemId, aData);
+					}
+			}
+			// Handle item/materials will obtain:
 			switch(flags){
 				case 1:
 					// Obtained Item
-					var dItem  = aData.api_getitem; // Use Master, Master ID, Get Count "api_getitem":{"api_usemst":5,"api_mst_id":44,"api_getcount":5000} (from furni box)
+					// Use Master, Master ID, Get Count "api_getitem":{"api_usemst":5,"api_mst_id":44,"api_getcount":5000} (from furni box)
+					var dItem  = aData.api_getitem;
 					break;
 				case 2:
 					// Obtained Material

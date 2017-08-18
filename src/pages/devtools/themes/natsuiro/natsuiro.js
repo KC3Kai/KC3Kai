@@ -1291,12 +1291,8 @@
 				}
 			});
 
-			// LBAS button resupply indicator
-			$(".module.controls .fleet_lbas").removeClass("needsSupply");
-			if(!$(".module.controls .fleet_lbas").hasClass("active")
-				&& !PlayerManager.isBasesSupplied()){
-				$(".module.controls .fleet_lbas").addClass("needsSupply");
-			}
+			// LBAS button resupply indicator and statuses
+			this.LbasStatus();
 
 			// whether this update is triggered because of sending expeditions
 			if (expeditionStarted && ConfigManager.info_auto_exped_tab) {
@@ -1308,18 +1304,7 @@
 			}
 
 			// If LBAS is selected, do not respond to rest fleet update
-			if (selectedFleet == 6) {
-				let lbasSupplyCost = PlayerManager.getBasesResupplyCost();
-				let lbasSortieCost = PlayerManager.getBasesSortieCost();
-				$(".module.status .status_supply").attr("title",
-					KC3Meta.term("PanelResupplyCosts").format(
-						lbasSupplyCost.fuel, lbasSupplyCost.ammo, lbasSupplyCost.bauxite, ""
-					) + "\n" +
-					KC3Meta.term("PanelLbasSortieCosts").format(
-						lbasSortieCost.fuel, lbasSortieCost.ammo
-					) + (!lbasSortieCost.steel ? "" :
-						"\n" + KC3Meta.term("PanelConsumedSteel").format(lbasSortieCost.steel))
-				).lazyInitTooltip();
+			if (selectedFleet == 6){
 				return false;
 			}
 
@@ -1691,11 +1676,7 @@
 		
 		Lbas: function(){
 			var self = this;
-			$(".module.controls .fleet_lbas").removeClass("needsSupply");
-			if(!$(".module.controls .fleet_lbas").hasClass("active")
-				&& !PlayerManager.isBasesSupplied()){
-				$(".module.controls .fleet_lbas").addClass("needsSupply");
-			}
+			this.LbasStatus();
 			if (selectedFleet == 6) {
 				$(".shiplist_single").empty();
 				$(".shiplist_single").hide();
@@ -1809,7 +1790,7 @@
 								}
 								
 								if (planeInfo.api_state == 1) {
-									// Plane on standby
+									// Plane on standby, no detail morale value in API, only condition [1, 3]
 									const eqMorale = ["","3","2","1"][planeInfo.api_cond] || "3";
 									const eqCondSrc = "/assets/img/client/morale/"+eqMorale+".png";
 									$(".base_plane_count", planeBox).text(planeInfo.api_count+" / "+planeInfo.api_max_count);
@@ -1845,10 +1826,30 @@
 						$(".module.fleet .airbase_list").append(baseBox);
 					}
 				});
-				
+			}
+		},
+
+		LbasStatus: function(){
+			const lbasIsSupplied = PlayerManager.isBasesSupplied(),
+				lbasWorstCond = PlayerManager.getBasesWorstCond(),
+				lbasCondBad = lbasWorstCond > 1;
+			// Update LBAS button for resupply/morale indicator
+			const lbasViewButton = $(".module.controls .fleet_lbas");
+			lbasViewButton.removeClass("needsSupply badMorale");
+			if (!lbasViewButton.hasClass("active")) {
+				lbasViewButton.toggleClass("badMorale", lbasCondBad);
+				lbasViewButton.toggleClass("needsSupply", !lbasIsSupplied);
+			}
+			if (selectedFleet == 6) {
+				// Update statuses about resupply and condition
 				$(".module.status").hideChildrenTooltips();
-				let lbasSupplyCost = PlayerManager.getBasesResupplyCost();
-				let lbasSortieCost = PlayerManager.getBasesSortieCost();
+				$(".module.status .status_supply .status_text").text(KC3Meta.term(
+					lbasIsSupplied ? "PanelSupplied" : "PanelNotSupplied"
+				)).toggleClass("good", lbasIsSupplied).toggleClass("bad", !lbasIsSupplied);
+				$(".module.status .status_supply img").attr("src",
+					"/assets/img/ui/" + (lbasIsSupplied ? "check.png" : "sunk.png"));
+				const lbasSupplyCost = PlayerManager.getBasesResupplyCost();
+				const lbasSortieCost = PlayerManager.getBasesSortieCost();
 				$(".module.status .status_supply").attr("title",
 					KC3Meta.term("PanelResupplyCosts").format(
 						lbasSupplyCost.fuel, lbasSupplyCost.ammo, lbasSupplyCost.bauxite, ""
@@ -1858,6 +1859,13 @@
 					) + (!lbasSortieCost.steel ? "" :
 						"\n" + KC3Meta.term("PanelConsumedSteel").format(lbasSortieCost.steel))
 				).lazyInitTooltip();
+				$(".module.status .status_morale img").attr("src",
+					"/assets/img/client/morale/" + (["","3","2","1"][lbasWorstCond]) + ".png");
+				$(".module.status .status_morale .status_text")
+					.text(KC3Meta.term(lbasCondBad ? "PanelLbasCondBad" : "PanelGoodMorale"))
+					.toggleClass("bad", lbasCondBad).toggleClass("good", !lbasCondBad);
+				moraleClockValue = 100;
+				moraleClockEnd = 0;
 			}
 		},
 
