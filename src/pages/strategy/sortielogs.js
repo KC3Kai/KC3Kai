@@ -905,14 +905,8 @@
 			
 			var withDataCover64 = this.stegcover64;
 			
-			var rcanvas = document.createElement("canvas");
-			rcanvas.width = 400;
-			rcanvas.height = 400;
-			var rcontext = rcanvas.getContext("2d");
-			
 			var domImg = new Image();
 			domImg.onload = function(){
-				rcontext.drawImage( domImg, 0, 0, 400, 400, 0, 0, 400, 400 );
 				
 				KC3Database.get_sortie_data(sortieId, function(sortieData){
 					if(sortieData.battles.length===0){
@@ -929,24 +923,6 @@
 						$("body").css("opacity", "1");
 						return true;
 					}
-
-					console.debug("Downloading reply", sortieId, ", data:", sortieData);
-					rcontext.font = "26pt Calibri";
-					rcontext.fillStyle = '#ffffff';
-					rcontext.fillText(sortieData.world+"-"+sortieData.mapnum, 20, 215);
-					
-					rcontext.font = "20pt Calibri";
-					rcontext.fillStyle = '#ffffff';
-					rcontext.fillText(PlayerManager.hq.name, 100, 210);
-					
-					var fleetUsed = sortieData["fleet"+sortieData.fleetnum];
-					var shipIconImage;
-					$.each(fleetUsed, function(ShipIndex, ShipData){
-						shipIconImage = $(".simg-"+ShipData.mst_id+" img")[0];
-						rcontext.drawImage(shipIconImage,0,0,70,70,25+(60*ShipIndex),233,50,50);
-					});
-					
-					withDataCover64 = rcanvas.toDataURL("image/png");
 					
 					// Clear properties duplicated or may not used by replayer for now
 					$.each(sortieData.battles, function(_, battle){
@@ -956,12 +932,35 @@
 						delete battle.shizunde;
 					});
 					var jsonData = JSON.stringify(sortieData);
-					if(jsonData.length > 30000){
-						console.warn("Replayer data is too large to be encoded, size:", jsonData.length);
-					}
+					var scale = Math.ceil(Math.sqrt(jsonData.length / 30000));
+					
+					var rcanvas = document.createElement("canvas");
+					rcanvas.width = 400 * scale;
+					rcanvas.height = 400 * scale;
+					var rcontext = rcanvas.getContext("2d");
+					rcontext.drawImage( domImg, 0, 0, 400, 400, 0, 0, 400 * scale, 400 * scale );
+
+					console.debug("Downloading reply", sortieId, ", data:", sortieData);
+					rcontext.font = (26*scale) + "pt Calibri";
+					rcontext.fillStyle = '#ffffff';
+					rcontext.fillText(sortieData.world+"-"+sortieData.mapnum, 20 * scale, 215 * scale);
+					
+					rcontext.font = (20*scale) + "pt Calibri";
+					rcontext.fillStyle = '#ffffff';
+					rcontext.fillText(PlayerManager.hq.name, 100 * scale, 210 * scale);
+					
+					var fleetUsed = sortieData["fleet"+sortieData.fleetnum];
+					var shipIconImage;
+					$.each(fleetUsed, function(ShipIndex, ShipData){
+						shipIconImage = $(".simg-"+ShipData.mst_id+" img")[0];
+						rcontext.drawImage(shipIconImage,0,0,70,70,(25+(60*ShipIndex)) * scale,233 * scale,50 * scale,50 * scale);
+					});
+					
+					withDataCover64 = rcanvas.toDataURL("image/png");
+					
 					steg.encode(jsonData, withDataCover64, {
 						success: function(newImg){
-							KC3ImageExport.writeToCanvas(newImg, { width: 400, height: 400 }, function (error, canvas) {
+							KC3ImageExport.writeToCanvas(newImg, { width: 400 * scale, height: 400 * scale }, function (error, canvas) {
 								if (error) {
 									self.endExport(error);
 									return;
