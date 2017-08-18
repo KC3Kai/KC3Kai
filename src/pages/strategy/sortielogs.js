@@ -699,8 +699,11 @@
 								}
 							});
 							
-							// Process Battle
+							// Process Battle, simulate combinedFleet flag
 							PlayerManager.combinedFleet = sortie.combined;
+							// Known issue: prediction will fail when Damecon used,
+							// as Node not read equipped damecon from sortie history,
+							// and damecon used on which node during 1 sortie have to be remembered.
 							thisNode = (new KC3Node(battle.sortie_id, battle.node, battle.time,
 								sortie.world, sortie.mapnum)).defineAsBattle();
 							if(typeof battle.data.api_dock_id != "undefined"){

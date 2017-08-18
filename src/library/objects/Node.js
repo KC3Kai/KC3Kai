@@ -566,15 +566,16 @@ Used by SortieManager
 			};
 			
 			// PLAYER SINGLE FLEET
-			if ((typeof PlayerManager.combinedFleet === "undefined") || (PlayerManager.combinedFleet === 0) || fleetId>1){
+			if (!PlayerManager.combinedFleet || fleetId >= 1) {
 				// single fleet: not combined, or sent fleet is not first fleet
 				
-				// Update our fleet
+				// Data of current sortied our fleet
 				fleet = PlayerManager.fleets[fleetId];
-				// damecon ignored for PvP
-				dameConCode = KC3SortieManager.isPvP()
-					? [0,0,0,0,0,0]
-					: fleet.getDameConCodes();
+				// Damecon ignored for PvP.
+				// Known issue: get damecon from current fleet will not work with sortie history,
+				// and even read equips from sortie history,
+				// used on which node during 1 sortie still have to be remembered.
+				dameConCode = KC3SortieManager.isPvP() ? [0,0,0,0,0,0] : fleet.getDameConCodes();
 				
 				// ONLY ENEMY IS COMBINED
 				if (isEnemyCombined) {
@@ -916,7 +917,8 @@ Used by SortieManager
 				if (isEnemyCombined) {
 					// still needs 12-element array for dameConCode
 					if (dameConCode.length < 7) {
-						dameConCode = dameConCode.concat([0,0,0,0,0,0]);
+						dameConCode = PlayerManager.fleets[0].getDameConCodes.concat(dameConCode);
+						console.assert(dameConCode.length === 12, "dameConCode length should be 12 for combined fleets");
 					}
 					//console.debug("Fleet dameConCode", dameConCode);
 					result = DA.analyzeBothCombinedNightBattleJS(dameConCode, nightData); 
@@ -959,6 +961,11 @@ Used by SortieManager
 						ship.afterHp[0] = result.allyEscort[i].hp;
 						this.allyNoDamage &= ship.hp[0]==ship.afterHp[0];
 						ship.afterHp[1] = ship.hp[1];
+						if (result.allyEscort[i].dameConConsumed){
+							this.dameConConsumedEscort[i] = ship.findDameCon();
+						} else {
+							this.dameConConsumedEscort[i] = false;
+						}
 					}
 					for(i = 0; i < 12; i++) {
 						endHPs.ally[i] = i < 6 ?
@@ -988,6 +995,11 @@ Used by SortieManager
 						ship.afterHp[0] = result.main[i].hp;
 						this.allyNoDamage &= ship.hp[0]==ship.afterHp[0];
 						ship.afterHp[1] = ship.hp[1];
+						if (result.main[i].dameConConsumed){
+							this.dameConConsumedEscort[i] = ship.findDameCon();
+						} else {
+							this.dameConConsumedEscort[i] = false;
+						}
 					}
 					for(i = 6; i < 12; i++) {
 						endHPs.ally[i] = result.main[i-6] ? result.main[i-6].hp : -1;
@@ -998,7 +1010,7 @@ Used by SortieManager
 			} else {
 				fleet = PlayerManager.fleets[fleetId];
 				// damecon ignored for PvP
-				dameConCode = KC3SortieManager.isPvP() ? [0,0,0, 0,0,0] : fleet.getDameConCodes();
+				dameConCode = KC3SortieManager.isPvP() ? [0,0,0,0,0,0] : fleet.getDameConCodes();
 				
 				// ONLY ENEMY IS COMBINED
 				if (isEnemyCombined) {
@@ -1058,6 +1070,11 @@ Used by SortieManager
 					ship.afterHp[0] = result.main[i].hp;
 					this.allyNoDamage &= ship.hp[0]==ship.afterHp[0];
 					ship.afterHp[1] = ship.hp[1];
+					if (result.main[i].dameConConsumed){
+						this.dameConConsumed[i] = ship.findDameCon();
+					} else {
+						this.dameConConsumed[i] = false;
+					}
 				}
 				for(i = 0; i < 6; i++) {
 					endHPs.ally[i] = result.main[i] ? result.main[i].hp : -1;
