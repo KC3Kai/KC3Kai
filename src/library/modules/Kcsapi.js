@@ -655,6 +655,7 @@ Previously known as "Reactor"
 			if(typeof response.api_data != "undefined"){
 				if(typeof response.api_data.api_change_count != "undefined"){
 					PlayerManager.fleets[ fleetIndex-1 ].clearNonFlagShips();
+					PlayerManager.saveFleets();
 					KC3Network.trigger("Fleet", { switchTo: fleetIndex });
 					return true;
 				}
@@ -749,6 +750,7 @@ Previously known as "Reactor"
 			var shipID = parseInt(params.api_id, 10);
 			var shipObj = KC3ShipManager.get(shipID);
 			shipObj.items[slotIndex] = itemID;
+			KC3ShipManager.save();
 			
 			// If ship is in a fleet, switch view to the fleet containing the ship
 			var fleetNum = KC3ShipManager.locateOnFleet(shipID);
@@ -778,6 +780,8 @@ Previously known as "Reactor"
 			var shipObj = KC3ShipManager.get(shipID);
 			var gearObj = KC3GearManager.get(itemID);
 			shipObj.ex_item = itemID;
+			KC3ShipManager.save();
+			
 			// If ship is in a fleet, switch view to the fleet containing the ship
 			var fleetNum = KC3ShipManager.locateOnFleet(shipID);
 			if (fleetNum > -1) {
@@ -800,6 +804,7 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_kaisou/unsetslot_all":function(params, response, headers){
 			KC3ShipManager.get( params.api_id ).items = [-1,-1,-1,-1];
+			KC3ShipManager.save();
 			
 			// If ship is in a fleet, switch view to the fleet containing the ship
 			var fleetNum = KC3ShipManager.locateOnFleet(params.api_id);
