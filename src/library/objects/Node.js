@@ -162,6 +162,32 @@ Used by SortieManager
 		return "D";
 	};
 	
+	/**
+	 * Set element in `beginHPs.ally` array to -1 to represent her escaping when FCF used.
+	 * Abyssal ships might also be able to escape in future?
+	 * @see http://kancolle.wikia.com/wiki/Fleet_Command_Facility
+	 * @param {Array} allyHps - The array of `beginHPs.ally`.
+	 * @param {Object} rawData - Raw battle kcsapi result.
+	 * @return {number} Count of affected elements.
+	 */
+	KC3Node.excludeEscapedShips = function(allyHps, rawData){
+		let affected = 0;
+		if(Array.isArray(allyHps)) {
+			// this is from kcsapi name `/api_req_combined_battle/goback_port`
+			const goBackPort = (indexes, isCombined) => {
+				if(Array.isArray(indexes)) {
+					indexes.forEach(idx => {
+						allyHps[idx - 1 + (isCombined ? 6 : 0)] = -1;
+						affected += 1;
+					});
+				}
+			};
+			goBackPort(rawData.api_escape_idx, false);
+			goBackPort(rawData.api_escape_idx_combined, true);
+		}
+		return affected;
+	};
+	
 	// Update this list if more extra classes added
 	KC3Node.knownNodeExtraClasses = function(){
 		return [
@@ -782,6 +808,7 @@ Used by SortieManager
 			}
 			
 			if(ConfigManager.info_btrank){
+				KC3Node.excludeEscapedShips( beginHPs.ally, battleData );
 				this.predictedRank = KC3Node.predictRank( beginHPs, endHPs, battleData.api_name );
 				if(KC3Node.debugRankPrediction()){
 					console.debug("Predicted before after HPs", beginHPs, endHPs);
@@ -1083,6 +1110,7 @@ Used by SortieManager
 			}
 			
 			if(ConfigManager.info_btrank){
+				KC3Node.excludeEscapedShips( beginHPs.ally, nightData );
 				this.predictedRankNight = KC3Node.predictRank( beginHPs, endHPs, nightData.api_name );
 				if(KC3Node.debugRankPrediction()){
 					console.debug("Predicted before after yasen HPs", beginHPs, endHPs);

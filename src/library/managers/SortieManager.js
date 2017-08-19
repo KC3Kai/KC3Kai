@@ -349,7 +349,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		
 		checkFCF :function( escapeData ){
 			if ((typeof escapeData !== "undefined") && (escapeData !== null)) {
-				console.log("FCF triggered");
+				console.debug("FCF triggered");
 				
 				var taihadIndex = escapeData.api_escape_idx[0];
 				var taihadShip;
@@ -377,7 +377,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		},
 		
 		sendFCFHome :function(){
-			console.log("Setting escape flag for fcfCheck", this.fcfCheck);
+			console.debug("Setting escape flag for fcfCheck", this.fcfCheck);
 			this.fcfCheck.forEach(function(fcfShip){
 				KC3ShipManager.get(fcfShip).didFlee = true;
 			});

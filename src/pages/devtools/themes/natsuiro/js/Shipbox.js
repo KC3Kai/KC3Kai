@@ -228,8 +228,8 @@ KC3改 Ship Box for Natsuiro theme
 		// If not being repaired
 		}else{
 			if(this.shipData.didFlee){
-				console.log( this.shipData.name(), "fled, setting backgrounds to white");
-				// if FCF, mark hp bar as blue
+				//console.debug("Ship", this.shipData.name(), "fled, setting backgrounds to white");
+				// if FCF, mark background and hp bar as white
 				$(".ship_hp_bar", this.element).css("background", "#fff");
 				this.element.css("background", "rgba(255,255,255,0.4)");
 			}else{
