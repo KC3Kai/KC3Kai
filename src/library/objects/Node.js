@@ -1491,8 +1491,8 @@ Used by SortieManager
 		var ap = apTuple[0];
 		if(!!ap){
 			tooltip += "\nPOW: {0} (AI< {1}< AD< {2}< AP< {3}< AS< {4}< AS+)"
-				.format(ap, Math.floor(ap / 3), Math.floor(2 * ap / 3),
-					Math.floor(3 * ap / 2), 3 * ap);
+				.format(ap, Math.round(ap / 3), Math.round(2 * ap / 3),
+					Math.round(3 * ap / 2), 3 * ap);
 		}
 		var enemyTotalPlanes = this.planeFighters.abyssal[0];
 		if(!!enemyTotalPlanes){
