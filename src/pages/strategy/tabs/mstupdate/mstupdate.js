@@ -47,13 +47,13 @@
 			checkExpired(KC3Master.new_slotitems(), "Item", KC3Master.remove_new_slotitem, (id) => {
 				this.newGears.push(KC3Master.slotitem(id));
 			});
-			checkExpired(KC3Master.new_graphs(), "Archived CG", KC3Master.remove_new_graphs, (id) => {
+			checkExpired(KC3Master.new_graphs(), "New Graph", KC3Master.remove_new_graphs, (id) => {
 				// Only seasonal IDs needed, other parts are same things with new ships
 				if(KC3Master.isSeasonalShip(id)) {
 					this.archivedCgs.push(id);
 				}
 			});
-			checkExpired(KC3Master.changed_graphs(), "New CG", KC3Master.remove_changed_graphs, (id) => {
+			checkExpired(KC3Master.changed_graphs(), "Updated Graph", KC3Master.remove_changed_graphs, (id) => {
 				if(KC3Master.isRegularShip(id)) {
 					this.newCgs.push(KC3Master.ship(id));
 				} else {
@@ -63,7 +63,7 @@
 			if(masterChanged){
 				KC3Master.save();
 			}
-			console.debug("New data", this.newShips, this.newGears, this.newCgs, this.archivedCgs);
+			console.debug("Current updates", this.newShips, this.newGears, this.newCgs, this.archivedCgs);
 		},
 		
 		/* EXECUTE
