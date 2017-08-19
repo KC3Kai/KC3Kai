@@ -41,6 +41,7 @@ typings/
 # Custom KC3 Ignores
 $devFiles
 src.pem
+src/library/modules/BattlePrediction.js
 
 # Mac swap files and DS_Store
 *.DS_Store

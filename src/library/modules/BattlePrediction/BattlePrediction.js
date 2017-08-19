@@ -1,5 +1,6 @@
 // Public API of Battle Prediction module
 // Must be loaded first, since it defines the module's structure
+// Run `grunt concat:battlePredictionDev` to generate the module for testing
 (function () {
   const BP = {
     fleets: {},
@@ -43,7 +44,7 @@
   // PUBLIC ENUMS
   // -------------
 
-  BP.Player = Object.freeze({ SINGLE: 'single', STF: 'stf', CTF: 'ctf', TCF: 'tcf' });
+  BP.Player = Object.freeze({ SINGLE: 'single', STF: 'stf', CTF: 'ctf', TCF: 'ctf' });
 
   BP.Enemy = Object.freeze({ SINGLE: 'single', COMBINED: 'combined' });
 

@@ -7,6 +7,9 @@ module.exports = function(grunt) {
 			tmp: {
 				src: [ 'build/tmp/**/*', 'build/tmp/' ]
 			},
+			battlePrediction: {
+				src: ['build/release/library/modules/BattlePrediction/']
+			},
 			release: {
 				src: [ 'build/release/**/*', 'build/release/' ]
 			},
@@ -347,6 +350,20 @@ module.exports = function(grunt) {
 				],
 				dest: 'build/release/assets/js/global.js'
 			},
+			battlePrediction: {
+				src: [
+					'build/tmp/library/modules/BattlePrediction/BattlePrediction.js',
+					'build/tmp/library/modules/BattlePrediction/**/*.js'
+				],
+				dest: 'build/release/library/modules/BattlePrediction.js',
+			},
+			battlePredictionDev: {
+				src: [
+					'src/library/modules/BattlePrediction/BattlePrediction.js',
+					'src/library/modules/BattlePrediction/**/*.js',
+				],
+				dest: 'src/library/modules/BattlePrediction.js',
+			},
 			library: {
 				files: {
 					'build/release/library/managers.js' : ['build/tmp/library/managers/*.js'],
@@ -357,7 +374,7 @@ module.exports = function(grunt) {
 				files: {
 					'build/release/pages/strategy/allstrategytabs.js' : ['build/tmp/pages/strategy/tabs/*/*.js'],
 				}
-			}
+			},
 		},
 		qunit: {
 			all: [
@@ -451,9 +468,11 @@ module.exports = function(grunt) {
 		'copy:processed',
 		'concat:global_css',
 		'concat:global_js',
+		'concat:battlePrediction',
 		'concat:library',
 		'concat:strategy',
-		'clean:tmp'
+		'clean:tmp',
+		'clean:battlePrediction',
 	]);
 	
 	grunt.registerTask('build', [
@@ -475,8 +494,10 @@ module.exports = function(grunt) {
 		'copy:processed',
 		'concat:global_css',
 		'concat:global_js',
+		'concat:battlePrediction',
 		'concat:library',
-		'concat:strategy'
+		'concat:strategy',
+		'clean:battlePrediction'
 	]);
 	
 	grunt.registerTask('test-src', [
