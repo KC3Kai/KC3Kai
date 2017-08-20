@@ -174,15 +174,17 @@ Does not include Ships and Gears which are managed by other Managers
 		},
 
 		/**
-		 * @param viewFleet - Fleet object currently being viewed.
-		 * @param isCombined - if current view is really Combined Fleet view.
+		 * @param viewFleet - Fleet object currently being viewed, default 1st fleet.
+		 * @param escortFleet - Fleet object of escort for Combined Fleet, default 2nd fleet.
+		 * @param isCombined - if current view is really Combined Fleet view, default false.
 		 * @return fighter power text based on config.
 		 * @see Fleet.fighterPowerText similar function outside of Fleet object.
 		 */
-		getFleetsFighterPowerText :function(viewFleet = this.fleets[0], isCombined = false){
+		getFleetsFighterPowerText :function(viewFleet = this.fleets[0],
+			escortFleet = this.fleets[1],
+			isCombined = false){
 			var mainFleet = viewFleet;
-			var escortFleet = this.fleets[1];
-			if(isCombined){
+			if(isCombined){ // force to 1st fleet if combined
 				mainFleet = viewFleet = this.fleets[0];
 			}
 			switch(ConfigManager.air_formula){

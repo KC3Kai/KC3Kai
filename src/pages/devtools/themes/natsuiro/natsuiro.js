@@ -1385,7 +1385,7 @@
 				FleetSummary = {
 					lv: MainFleet.totalLevel() + EscortFleet.totalLevel(),
 					elos: Math.qckInt("floor", MainFleet.eLoS()+EscortFleet.eLoS(), 1),
-					air: PlayerManager.getFleetsFighterPowerText(MainFleet, true),
+					air: PlayerManager.getFleetsFighterPowerText(MainFleet, EscortFleet, true),
 					antiAir: Math.floor(AntiAir.fleetCombinedAdjustedAntiAir(
 						MainFleet, EscortFleet,
 						AntiAir.getFormationModifiers(ConfigManager.aaFormation))),
@@ -1462,7 +1462,7 @@
 					lv: CurrentFleet.totalLevel(),
 					baseExp: CurrentFleet.estimatePvpBaseExp(),
 					elos: Math.qckInt("floor", CurrentFleet.eLoS(), 1),
-					air: PlayerManager.getFleetsFighterPowerText(CurrentFleet, false),
+					air: PlayerManager.getFleetsFighterPowerText(CurrentFleet),
 					antiAir: CurrentFleet.adjustedAntiAir(ConfigManager.aaFormation),
 					speed: CurrentFleet.speed(),
 					docking: MainRepairs.docking,
