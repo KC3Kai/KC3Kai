@@ -5256,7 +5256,7 @@ var SHIPDATA = {
 		unknownstats: true,
 		RNG: 3,
 		SPD: 10,
-		SLOTS: [64, 72, 56, 0],
+		SLOTS: [64, 54, 56, 0],
 		EQUIPS: [547, 548, 549, 532],
 	},
 	1752: {
