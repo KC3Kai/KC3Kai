@@ -511,29 +511,35 @@
 
 		// eLoS Toggle
 		$(".summary-eqlos").on("click",function(){
+			if(selectedFleet === 6) return;
 			ConfigManager.scrollElosMode();
-			$("img", this).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png");
 			NatsuiroListeners.Fleet();
 		}).addClass("hover");
-		// Update with configured icon when non-default
-		if(ConfigManager.elosFormula !== 3){
-			$(".summary-eqlos img").attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png");
-		}
 
 		// Fighter Power Toggle
-		$(".summary-airfp").on("click",function(){
+		$(".summary-airfp .summary_icon").on("click",function(){
+			if(selectedFleet !== 5) return;
+			ConfigManager.loadIfNecessary();
+			ConfigManager.air_combined = !ConfigManager.air_combined;
+			ConfigManager.save();
+			NatsuiroListeners.Fleet();
+		}).addClass("hover");
+		$(".summary-airfp .summary_text").on("click",function(){
+			if(selectedFleet === 6) return;
 			ConfigManager.scrollFighterPowerMode();
-			$(".summary-airfp .summary_text").text( (selectedFleet < 5) ? PlayerManager.fleets[selectedFleet-1].fighterPowerText() : PlayerManager.fleets[0].fighterPowerText() );
+			NatsuiroListeners.Fleet();
 		}).addClass("hover");
 
 		// AntiAir Formation Toggle
 		$(".summary-antiair").on("click",function(){
+			if(selectedFleet === 6) return;
 			ConfigManager.scrollAntiAirFormation(selectedFleet === 5);
 			NatsuiroListeners.Fleet();
 		}).addClass("hover");
 
 		// Timer Type Toggle
 		$(".status_docking,.status_akashi").on("click",function(){
+			if(selectedFleet !== 6) return;
 			ConfigManager.scrollTimerType();
 			UpdateRepairTimerDisplays();
 		}).addClass("hover");
@@ -1323,7 +1329,7 @@
 			var flarePos = thisNode.flarePos || 0;
 
 			// COMBINED
-			if(selectedFleet==5){
+			if(selectedFleet == 5){
 				var MainFleet = PlayerManager.fleets[0];
 				var EscortFleet = PlayerManager.fleets[1];
 
@@ -1374,12 +1380,12 @@
 				// Update "fastFleet" marker
 				MainFleet.speed();
 				EscortFleet.speed();
-				
+
 				// Compile fleet attributes
 				FleetSummary = {
 					lv: MainFleet.totalLevel() + EscortFleet.totalLevel(),
 					elos: Math.qckInt("floor", MainFleet.eLoS()+EscortFleet.eLoS(), 1),
-					air: MainFleet.fighterPowerText(),
+					air: PlayerManager.getFleetsFighterPowerText(MainFleet, true),
 					antiAir: Math.floor(AntiAir.fleetCombinedAdjustedAntiAir(
 						MainFleet, EscortFleet,
 						AntiAir.getFormationModifiers(ConfigManager.aaFormation))),
@@ -1456,7 +1462,7 @@
 					lv: CurrentFleet.totalLevel(),
 					baseExp: CurrentFleet.estimatePvpBaseExp(),
 					elos: Math.qckInt("floor", CurrentFleet.eLoS(), 1),
-					air: CurrentFleet.fighterPowerText(),
+					air: PlayerManager.getFleetsFighterPowerText(CurrentFleet, false),
 					antiAir: CurrentFleet.adjustedAntiAir(ConfigManager.aaFormation),
 					speed: CurrentFleet.speed(),
 					docking: MainRepairs.docking,
@@ -1497,7 +1503,10 @@
 					KC3Meta.term("FirstFleetLevelTip")
 						.format(FleetSummary.baseExp.base, FleetSummary.baseExp.s)
 				).lazyInitTooltip();
+			$(".summary-eqlos .summary_icon img").attr("src",
+				"../../../../assets/img/stats/los" + ConfigManager.elosFormula + ".png");
 			$(".summary-eqlos .summary_text").text( FleetSummary.elos );
+			$(".summary-airfp .summary_sub").toggle( selectedFleet === 5 && ConfigManager.air_combined );
 			$(".summary-airfp .summary_text").text( FleetSummary.air );
 			$(".summary-antiair .summary_icon img")
 				.attr("src", KC3Meta.formationIcon(ConfigManager.aaFormation));

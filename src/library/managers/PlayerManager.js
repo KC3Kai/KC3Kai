@@ -173,6 +173,39 @@ Does not include Ships and Gears which are managed by other Managers
 			return worst;
 		},
 
+		/**
+		 * @param viewFleet - Fleet object currently being viewed.
+		 * @param isCombined - if current view is really Combined Fleet view.
+		 * @return fighter power text based on config.
+		 * @see Fleet.fighterPowerText similar function outside of Fleet object.
+		 */
+		getFleetsFighterPowerText :function(viewFleet = this.fleets[0], isCombined = false){
+			var mainFleet = viewFleet;
+			var escortFleet = this.fleets[1];
+			if(isCombined){
+				mainFleet = viewFleet = this.fleets[0];
+			}
+			switch(ConfigManager.air_formula){
+				case 2:
+					return "~" + (
+						isCombined && ConfigManager.air_combined ?
+						mainFleet.fighterVeteran() + escortFleet.fighterVeteran() :
+						viewFleet.fighterVeteran());
+				case 3:
+					const mainBounds = mainFleet.fighterBounds();
+					const escortBounds = escortFleet.fighterBounds();
+					return  (isCombined && ConfigManager.air_combined ?
+							mainBounds[0] + escortBounds[0] : mainBounds[0])
+							+ "~" +
+							(isCombined && ConfigManager.air_combined ?
+							mainBounds[1] + escortBounds[1] : mainBounds[1]);
+				default:
+					return isCombined && ConfigManager.air_combined ?
+						mainFleet.fighterPower() + escortFleet.fighterPower() :
+						viewFleet.fighterPower();
+			}
+		},
+
 		setRepairDocks :function( data ){
 			var lastRepair = this.repairShips.map(function(x){return x;}); // clone
 			this.repairShips.splice(0);
