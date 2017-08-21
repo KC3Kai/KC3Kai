@@ -331,6 +331,10 @@ html,body {
 	display:none;
 	padding:5px;
 }
+.module.activity .activity_box.disabled {
+	filter:brightness(0.5);
+	-webkit-filter:brightness(0.5);
+}
 .module.activity .activity_dismissable {
 	cursor:pointer;
 	user-select: none;

@@ -229,7 +229,7 @@ Used by SortieManager
 			}
 		}
 		this.enemySunk = [false, false, false, false, false, false];
-		this.enemyHP = [0,0,0,0,0,0];
+		this.enemyHP = [{},{},{},{},{},{}];
 		this.originalHPs = [0,0,0,0,0,0,0,0,0,0,0,0,0];
 		this.allyNoDamage = true;
 		this.nodalXP = 0;
@@ -613,13 +613,13 @@ Used by SortieManager
 					// Update enemy ships
 					for (i = 0; i < 6; i++) {
 						enemyMain = result.enemyMain[i];
-						this.enemyHP[i] = enemyMain;
+						this.enemyHP[i] = enemyMain || {};
 						this.enemySunk[i] = enemyMain ? enemyMain.sunk : true;
 						endHPs.enemy[i] = enemyMain ? enemyMain.hp : -1;
 					}
 					for (i = 6; i < 12; i++) {
 						enemyEscort = result.enemyEscort[i-6];
-						this.enemyHP[i] = enemyEscort;
+						this.enemyHP[i] = enemyEscort || {};
 						this.enemySunk[i] = enemyEscort ? enemyEscort.sunk : true;
 						endHPs.enemy[i] = enemyEscort ? enemyEscort.hp : -1;
 					}
@@ -632,7 +632,7 @@ Used by SortieManager
 					
 					// Update enemy ships
 					for (i = 0; i < 6; i++) {
-						this.enemyHP[i] = result.enemy[i];
+						this.enemyHP[i] = result.enemy[i] || {};
 						this.enemySunk[i] = result.enemy[i] ? result.enemy[i].sunk : true;
 						endHPs.enemy[i] = result.enemy[i] ? result.enemy[i].hp : -1;
 					}
@@ -684,13 +684,13 @@ Used by SortieManager
 					// Update enemy
 					for(i = 0; i < 6; i++) {
 						enemyMain = result.enemyMain[i];
-						this.enemyHP[i] = enemyMain;
+						this.enemyHP[i] = enemyMain || {};
 						this.enemySunk[i] = enemyMain ? enemyMain.sunk : true;
 						endHPs.enemy[i] = enemyMain ? enemyMain.hp : -1;
 					}
 					for(i = 6; i < 12; i++) {
 						enemyEscort = result.enemyEscort[i-6];
-						this.enemyHP[i] = enemyEscort;
+						this.enemyHP[i] = enemyEscort || {};
 						this.enemySunk[i] = enemyEscort ? enemyEscort.sunk : true;
 						endHPs.enemy[i] = enemyEscort ? enemyEscort.hp : -1;
 					}
@@ -759,7 +759,7 @@ Used by SortieManager
 					// Update enemy
 					for(i = 0; i < 6; i++) {
 						enemyMain = result.enemy[i];
-						this.enemyHP[i] = enemyMain;
+						this.enemyHP[i] = enemyMain || {};
 						this.enemySunk[i] = enemyMain ? enemyMain.sunk : true;
 						endHPs.enemy[i] = enemyMain ? enemyMain.hp : -1;
 					}
@@ -956,7 +956,7 @@ Used by SortieManager
 					if (this.activatedEnemyFleet == 1) {
 						console.log("Enemy main fleet in yasen", result.enemyMain);
 						for (i = 0; i < 6; i++) {
-							this.enemyHP[i] = result.enemyMain[i];
+							this.enemyHP[i] = result.enemyMain[i] || {};
 							this.enemySunk[i] = result.enemyMain[i] ? result.enemyMain[i].sunk : true;
 							endHPs.enemy[i] = result.enemyMain[i] ? result.enemyMain[i].hp : -1;
 							endHPs.enemy[i + 6] = result.enemyEscort[i] ? result.enemyEscort[i].hp : -1;
@@ -973,7 +973,7 @@ Used by SortieManager
 						this.eSlot = nightData.api_eSlot_combined;
 						this.maxHPs.enemy = nightData.api_maxhps_combined.slice(7,13);
 						for (i = 0; i < 6; i++) {
-							this.enemyHP[i] = result.enemyEscort[i];
+							this.enemyHP[i] = result.enemyEscort[i] || {};
 							this.enemySunk[i] = result.enemyEscort[i] ? result.enemyEscort[i].sunk : true;
 							endHPs.enemy[i] = result.enemyMain[i] ? result.enemyMain[i].hp : -1;
 							endHPs.enemy[i + 6] = result.enemyEscort[i] ? result.enemyEscort[i].hp : -1;
@@ -1009,7 +1009,7 @@ Used by SortieManager
 					
 					// update enemy info
 					for (i = 0; i < 6; i++) {
-						this.enemyHP[i] = result.enemy[i];
+						this.enemyHP[i] = result.enemy[i] || {};
 						this.enemySunk[i] = result.enemy[i] ? result.enemy[i].sunk : true;
 						endHPs.enemy[i] = result.enemy[i] ? result.enemy[i].hp : -1;
 					}
@@ -1050,7 +1050,7 @@ Used by SortieManager
 					if (this.activatedEnemyFleet == 1) {
 						console.log("Enemy main fleet in yasen", result.enemyMain);
 						for (i = 0; i < 6; i++) {
-							this.enemyHP[i] = result.enemyMain[i];
+							this.enemyHP[i] = result.enemyMain[i] || {};
 							this.enemySunk[i] = result.enemyMain[i] ? result.enemyMain[i].sunk : true;
 							endHPs.enemy[i] = result.enemyMain[i] ? result.enemyMain[i].hp : -1;
 							endHPs.enemy[i + 6] = result.enemyEscort[i] ? result.enemyEscort[i].hp : -1;
@@ -1067,7 +1067,7 @@ Used by SortieManager
 						this.eSlot = nightData.api_eSlot_combined;
 						this.maxHPs.enemy = nightData.api_maxhps_combined.slice(7,13);
 						for (i = 0; i < 6; i++) {
-							this.enemyHP[i] = result.enemyEscort[i];
+							this.enemyHP[i] = result.enemyEscort[i] || {};
 							this.enemySunk[i] = result.enemyEscort[i] ? result.enemyEscort[i].sunk : true;
 							endHPs.enemy[i] = result.enemyMain[i] ? result.enemyMain[i].hp : -1;
 							endHPs.enemy[i + 6] = result.enemyEscort[i] ? result.enemyEscort[i].hp : -1;
@@ -1082,7 +1082,7 @@ Used by SortieManager
 					
 					// regular yasen enemy info
 					for (i = 0; i < 6; i++) {
-						this.enemyHP[i] = result.enemy[i];
+						this.enemyHP[i] = result.enemy[i] || {};
 						this.enemySunk[i] = result.enemy[i] ? result.enemy[i].sunk : true;
 						endHPs.enemy[i] = result.enemy[i] ? result.enemy[i].hp : -1;
 					}

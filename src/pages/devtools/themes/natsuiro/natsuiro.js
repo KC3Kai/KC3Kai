@@ -136,6 +136,7 @@
 	// selectedExpedition, plannerIsGreatSuccess + selectedFleet => storage
 	function ExpedTabUpdateConfig() {
 		var conf = ExpedTabValidateConfig();
+		if(selectedFleet > 4) return;
 		conf.fleetConf[ selectedFleet ].expedition = selectedExpedition;
 		conf.expedConf[ selectedExpedition ].greatSuccess = plannerIsGreatSuccess;
 		localStorage.expedTab = JSON.stringify( conf );
@@ -147,6 +148,7 @@
 	// storage + selectedFleet => selectedExpedition, plannerIsGreatSuccess
 	function ExpedTabApplyConfig() {
 		var conf = ExpedTabValidateConfig();
+		if(selectedFleet > 4) return;
 		selectedExpedition = conf.fleetConf[selectedFleet].expedition;
 		plannerIsGreatSuccess = conf.expedConf[ selectedExpedition ].greatSuccess;
 	}
@@ -174,11 +176,9 @@
 		if (availableFleetInd !== -1) {
 			selectedFleet = availableFleetInd + 1;
 			console.debug("Find available fleet:", selectedFleet);
-
+			switchToFleet(selectedFleet);
 			if (needTabSwith)
 				$("#atab_expeditionPlanner").trigger("click");
-
-			switchToFleet(availableFleetInd+1);
 		} else {
 			// knowing fleets are all unavailable
 			// we can return focus to the main fleet.
@@ -2186,8 +2186,8 @@
 				var newEnemyHP, enemyHPPercent, enemyBarHeight;
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > -1){
-						if (typeof thisNode.enemyHP[index] != "undefined") {
-							newEnemyHP = Math.max(0,thisNode.enemyHP[index].hp);
+						if (!thisNode.enemyHP[index] && thisNode.enemyHP[index].hp !== undefined){
+							newEnemyHP = Math.max(0, thisNode.enemyHP[index].hp);
 	
 							if(!index &&
 								['multiple','gauge-hp'].indexOf(KC3SortieManager.getCurrentMapData().kind)>=0 /* Flagship */
@@ -2372,8 +2372,8 @@
 				var newEnemyHP, enemyHPPercent, enemyBarHeight;
 				
 				$.each(thisNode.eships, function(index, eshipId){
-					if(eshipId > 0){
-						newEnemyHP = Math.max(0,thisNode.enemyHP[index].hp);
+					if(eshipId > 0 && thisNode.enemyHP[index].hp !== undefined){
+						newEnemyHP = Math.max(0, thisNode.enemyHP[index].hp);
 						if ($(".module.activity .abyss_single .abyss_ship_"+(index+1)).length > 0) {
 							$(".module.activity .abyss_single .abyss_ship_"+(index+1)+" img")
 								.attr("src", thisNode.isPvP ? KC3Meta.shipIcon(eshipId) : KC3Meta.abyssIcon(eshipId))
@@ -2802,7 +2802,7 @@
 			if(ConfigManager.info_battle){
 				var newEnemyHP, enemyHPPercent;
 				$.each(thisPvP.eships, function(index, eshipId){
-					if(eshipId > -1){
+					if(eshipId > 0 && thisPvP.enemyHP[index].hp !== undefined){
 						newEnemyHP = thisPvP.enemyHP[index].hp;
 						if(newEnemyHP < 0){ newEnemyHP = 0; }
 
@@ -3067,7 +3067,12 @@
 
 		UpdateExpeditionPlanner: function (data) {
 			// if combined fleet or LBAS, cancel action
-			if(selectedFleet === 5 || selectedFleet === 6) { return false; }
+			if(selectedFleet > 4) {
+				$(".module.activity .activity_expeditionPlanner").addClass("disabled");
+				return false;
+			} else {
+				$(".module.activity .activity_expeditionPlanner").removeClass("disabled");
+			}
 			// if expedition planner not activated, no update required
 			if (!$("#atab_expeditionPlanner").hasClass("active")) { return false; }
 
