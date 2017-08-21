@@ -82,7 +82,7 @@ Previously known as "Reactor"
 		"api_port/port":function(params, response, headers){
 			KC3Network.trigger("HomeScreen");
 			
-			KC3ShipManager.set(response.api_data.api_ship,true);
+			KC3ShipManager.set(response.api_data.api_ship, true);
 			this.serverOffset = this.moraleRefresh.calibrate( headers.Date );
 			
 			var utcSeconds = Date.toUTCseconds(headers.Date);
