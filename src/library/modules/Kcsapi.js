@@ -1727,16 +1727,20 @@ Previously known as "Reactor"
 			$.each(itemIds.split("%2C"), function(index, itemId){
 				var gearMaster = KC3GearManager.get(itemId).master();
 				console.log("Scrapping", itemId, gearMaster.api_id, gearMaster.api_name, gearMaster.api_broken);
-				gearMaster.api_broken.forEach(function(x,i){
-					rsc[i] += x;
-				});
-				// F34: Weekly Scrap Anti-Air Guns
-				if([21].indexOf(gearMaster.api_type[2]) > -1){
-					KC3QuestManager.get(638).increment();
-				}
-				// F55: Quartly Scrap 10 Large Caliber Main Guns
-				if([3].indexOf(gearMaster.api_type[2]) > -1){
-					KC3QuestManager.get(663).increment();
+				if(!gearMaster){
+					console.warn("There is no data in GearManager, your localStorage.gears may not get synced for item", itemId);
+				} else {
+					gearMaster.api_broken.forEach(function(x,i){
+						rsc[i] += x;
+					});
+					// F34: Weekly Scrap Anti-Air Guns
+					if([21].indexOf(gearMaster.api_type[2]) > -1){
+						KC3QuestManager.get(638).increment();
+					}
+					// F55: Quartly Scrap 10 Large Caliber Main Guns
+					if([3].indexOf(gearMaster.api_type[2]) > -1){
+						KC3QuestManager.get(663).increment();
+					}
 				}
 				KC3GearManager.remove(itemId);
 			});

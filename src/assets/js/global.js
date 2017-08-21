@@ -776,8 +776,11 @@ Storage.prototype.getObject = function(key) {
 /**
  * https://stackoverflow.com/questions/3027142/calculating-usage-of-localstorage-space
  * DOMException (code 22, name: QuotaExceededError) will be thrown on
- * 5M characters (yes it's not byte) exceeded for Chromium.
- * They are different for other browser engines:
+ * 5M characters (yes it's not in bytes) exceeded for Chromium localStorage.
+ * It's equivalent to `chrome.storage.local.QUOTA_BYTES`, but differences are:
+ * chrome.storage.local is in bytes, measured by JSON string and can be unlimitedStorage.
+ * https://developer.chrome.com/extensions/storage
+ * They are also different for other browser engines:
  * https://en.wikipedia.org/wiki/Web_storage#Storage_size
  **/
 Storage.prototype.quotaLength = 1024 * 1024 * 5;

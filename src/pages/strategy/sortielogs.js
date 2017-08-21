@@ -518,9 +518,8 @@
 						var selFleet = sortie["fleet"+n];
 						$.each(selFleet, function(index, ship){
 							// false recorded on older sorties. stop loop when encountered
-							if(i===0) {
-								if(ship===false){ return false; }
-								
+							if(ship === false) { return false; }
+							if(i === 0) {
 								$(".sortie_ship_"+(index+1)+" img", sortieBox)
 									.attr("src", KC3Meta.shipIcon(ship.mst_id))
 									.attr("alt", ship.mst_id)
@@ -529,9 +528,7 @@
 									.addClass("hover")
 									.addClass("simg-"+ship.mst_id)
 									.show();
-							} else if(i == 1) {
-								if(ship===false){ return false; }
-								
+							} else if(i === 1) {
 								$(".sortie_combined_ship_"+(index+1)+" img", sortieBox)
 									.attr("src", KC3Meta.shipIcon(ship.mst_id))
 									.attr("alt", ship.mst_id)
