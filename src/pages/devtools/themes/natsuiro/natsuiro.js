@@ -2186,7 +2186,7 @@
 				var newEnemyHP, enemyHPPercent, enemyBarHeight;
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > -1){
-						if (!thisNode.enemyHP[index] && thisNode.enemyHP[index].hp !== undefined){
+						if (thisNode.enemyHP[index] && thisNode.enemyHP[index].hp !== undefined){
 							newEnemyHP = Math.max(0, thisNode.enemyHP[index].hp);
 	
 							if(!index &&
