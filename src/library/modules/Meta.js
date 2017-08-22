@@ -613,6 +613,28 @@ Provides access to data on built-in JSON files
 			return lineNum <= 53 ? 100000 + 17 * (ship_id + 7) * (this.workingDiffs[lineNum - 1]) % 99173 : lineNum;
 		},
 		
+		// Extract ship ID of abyssal from voice file name
+		// https://github.com/KC3Kai/KC3Kai/pull/2181
+		getAbyssalIdByFilename :function(filename){
+			var id, map = parseInt(filename.substr(0, 2), 10);
+			switch(filename.length){
+				case 7:
+					id = map === 64 ? filename.substr(2, 3) : filename.substr(3, 3);
+					break;
+				case 8:
+					id = map <= 31 ? filename.substr(4, 3) : filename.substr(3, 3);
+					break;
+				case 9:
+					id = filename.substr(3, 4);
+					break;
+				default:
+					console.debug("Unknown abyssal voice file name", filename);
+					id = "";
+			}
+			id = parseInt(id, 10);
+			return isNaN(id) ? false : id <= 1500 ? id + 1000 : id;
+		},
+		
 		// Subtitle quotes
 		quote :function(identifier, voiceNum, voiceSize = 0){
 			if (!identifier) return false;

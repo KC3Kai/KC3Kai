@@ -312,10 +312,7 @@
 					case "abyssal":
 						quoteIdentifier = "abyssal";
 						if(ConfigManager.subtitle_speaker){
-							// old abyssal ID is 3-length digits
-							const abyssalId = quoteVoiceNum.length < 9 ?
-									parseInt(quoteVoiceNum.substr(3, 3), 10) + 1000 :
-									parseInt(quoteVoiceNum.substr(3, 4), 10);
+							const abyssalId = KC3Meta.getAbyssalIdByFilename(quoteVoiceNum);
 							quoteSpeaker = KC3Meta.abyssShipName(abyssalId);
 						}
 						break;
