@@ -329,8 +329,8 @@ ul.altGameModes li .modePlay {
 	display: inline-block;
 	width: 30px;
 	height: 16px;
-	float:left;
-	margin:1px 5px 0px 0px;
+	margin: 1px 5px 0px 0px;
+	float: left;
 }
 .switch input { display:none; }
 .slider {

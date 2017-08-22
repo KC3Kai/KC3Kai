@@ -134,7 +134,7 @@ Listens to network history and triggers callback if game events happen
 							if (ConfigManager.PoiDBSubmission_enabled) {
 								PoiDBSubmission.processData( thisRequest );
 							}
-							// -- OpenDB Submmission
+							// -- OpenDB Submission
 							if (ConfigManager.OpenDBSubmission_enabled) {
 								OpenDBSubmission.processData( thisRequest );
 							}
@@ -188,6 +188,15 @@ Listens to network history and triggers callback if game events happen
 						voiceNum: soundPaths[7].split(".")[0],
 						tabId: chrome.devtools.inspectedWindow.tabId
 					})).execute();
+				}else if(soundPaths[5]=="kc9998"){
+					// console.debug("DETECTED Abyssal sound", soundPaths);
+					(new RMsg("service", "subtitle", {
+						voicetype: "abyssal",
+						filename: "",
+						voiceNum: soundPaths[6].split(".")[0],
+						voiceSize: request.response.content.size || 0,
+						tabId: chrome.devtools.inspectedWindow.tabId
+					})).execute();
 				}else if(soundPaths[5]=="kc9999"){
 					// console.debug("DETECTED NPC sound", soundPaths);
 					(new RMsg("service", "subtitle", {
@@ -198,9 +207,9 @@ Listens to network history and triggers callback if game events happen
 					})).execute();
 				}else{
 					// console.debug("DETECTED shipgirl sound");
-					var shipGirl = KC3Master.graph_file(soundPaths[5].substring(2));
-					var voiceLine = KC3Meta.getVoiceLineByFilename(shipGirl, soundPaths[6].split(".")[0]);
-					var audioFileSize = request.response.content.size || 0;
+					const shipGirl = KC3Master.graph_file(soundPaths[5].substring(2));
+					const voiceLine = KC3Meta.getVoiceLineByFilename(shipGirl, soundPaths[6].split(".")[0]);
+					const audioFileSize = request.response.content.size || 0;
 					(new RMsg("service", "subtitle", {
 						voicetype: "shipgirl",
 						shipID: shipGirl,

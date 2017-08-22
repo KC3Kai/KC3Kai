@@ -55,10 +55,8 @@ body {
 	display:none;
 }
 .no-select {
-	-moz-user-select: none;
-	-khtml-user-select: none;
 	-webkit-user-select: none;
-	-o-user-select: none;
+	user-select: none;
 	cursor: default;
 }
 .notice {
@@ -558,6 +556,15 @@ body {
 		-1px 1px 2px #000,
 		0px 0px 2px #000;
 	pointer-events: none;
+}
+.overlay_subtitles.abyssal {
+	color:#000;
+	text-shadow:
+		0px 0px 2px #ccc,
+		1px 1px 2px #911,
+		1px -1px 2px #fff,
+		-1px -1px 2px #fff,
+		-1px 1px 2px #fff;
 }
 .overlay_subtitles.ghost {
 	opacity: 0.2;

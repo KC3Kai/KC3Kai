@@ -309,6 +309,16 @@
 					case "npc":
 						quoteIdentifier = "npc";
 						break;
+					case "abyssal":
+						quoteIdentifier = "abyssal";
+						if(ConfigManager.subtitle_speaker){
+							// old abyssal ID is 3-length digits
+							const abyssalId = quoteVoiceNum.length < 9 ?
+									parseInt(quoteVoiceNum.substr(3, 3), 10) + 1000 :
+									parseInt(quoteVoiceNum.substr(3, 4), 10);
+							quoteSpeaker = KC3Meta.abyssShipName(abyssalId);
+						}
+						break;
 					default:
 						quoteIdentifier = request.shipID;
 						if(config.subtitle_speaker){
@@ -337,6 +347,7 @@
 				// If subtitles available for the voice
 				if(subtitleText){
 					$(".overlay_subtitles span").html(subtitleText);
+					$(".overlay_subtitles").toggleClass("abyssal", quoteIdentifier === "abyssal");
 					$(".overlay_subtitles").show();
 					var millis = self.subtitleVanishBaseMillis +
 						(self.subtitleVanishExtraMillisPerChar * $(".overlay_subtitles").text().length);

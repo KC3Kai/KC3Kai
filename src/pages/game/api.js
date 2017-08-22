@@ -182,7 +182,7 @@ $(document).on("ready", function(){
 		}
 	});
 	
-	// Untranslated quest copiable text form
+	// Untranslated quest copy-able text form
 	$(".overlay_quests").on("click", ".no_tl", function(){
 		chrome.tabs.create({
 			url: "https://translate.google.com/#ja/"+ConfigManager.language+"/"
@@ -302,7 +302,7 @@ $(document).on("keydown", function(event){
 });
 
 
-/* Invokable actions
+/* Invoke-able actions
 -----------------------------------*/
 var interactions = {
 	
@@ -596,6 +596,16 @@ var interactions = {
 			case "npc":
 				quoteIdentifier = "npc";
 				break;
+			case "abyssal":
+				quoteIdentifier = "abyssal";
+				if(ConfigManager.subtitle_speaker){
+					// old abyssal ID is 3-length digits
+					const abyssalId = quoteVoiceNum.length < 9 ?
+							parseInt(quoteVoiceNum.substr(3, 3), 10) + 1000 :
+							parseInt(quoteVoiceNum.substr(3, 4), 10);
+					quoteSpeaker = KC3Meta.abyssShipName(abyssalId);
+				}
+				break;
 			default:
 				quoteIdentifier = request.shipID;
 				if(ConfigManager.subtitle_speaker){
@@ -625,6 +635,7 @@ var interactions = {
 		// If subtitles available for the voice
 		if(subtitleText){
 			$(".overlay_subtitles span").html(subtitleText);
+			$(".overlay_subtitles").toggleClass("abyssal", quoteIdentifier === "abyssal");
 			$(".overlay_subtitles").show();
 			var millis = subtitleVanishBaseMillis +
 				(subtitleVanishExtraMillisPerChar * $(".overlay_subtitles").text().length);

@@ -16,7 +16,6 @@ Provides access to data on built-in JSON files
 		_gauges:{},
 		_ship:{},
 		_shipAffix:{},
-		_defeq:{},
 		_slotitem:{},
 		_useitems:[],
 		_equiptype:[],
@@ -173,7 +172,6 @@ Provides access to data on built-in JSON files
 			this._exp      = JSON.parse( $.ajax(repo+'exp_hq.json', { async: false }).responseText );
 			this._exp_ship = JSON.parse( $.ajax(repo+'exp_ship.json', { async: false }).responseText );
 			this._gauges   = JSON.parse( $.ajax(repo+'gauges.json', { async: false }).responseText );
-			this._defeq    = JSON.parse( $.ajax(repo+'defeq.json', { async: false }).responseText );
 			this._edges    = JSON.parse( $.ajax(repo+'edges.json', { async: false }).responseText );
 			this._nodes    = JSON.parse( $.ajax(repo+'nodes.json', { async: false }).responseText );
 			this._tpmult   = JSON.parse( $.ajax(repo+'tp_mult.json', { async: false }).responseText );
@@ -312,7 +310,7 @@ Provides access to data on built-in JSON files
 		},
 		
 		shipReadingName :function(jpYomi){
-			// Translate api_yomi, might be just Romaji. Priorly use yomi in affix
+			// Translate api_yomi, might be just Romaji. Priority using yomi in affix
 			return this.shipNameAffix("yomi")[jpYomi] || this.shipName(jpYomi);
 		},
 		
@@ -429,8 +427,7 @@ Provides access to data on built-in JSON files
 		
 		defaultEquip :function(id){
 			var eq = WhoCallsTheFleetDb.getEquippedSlotCount(id);
-			// Just return 0 if wanna remove _defeq json
-			return eq !== false ? eq : (this._defeq["s" + id] || 0);
+			return eq !== false ? eq : 0;
 		},
 		
 		battleSeverityClass :function(battleArray){
