@@ -185,7 +185,7 @@ Contains summary information about a fleet and its 6 ships
 		return ship.master().api_stype === 19;
 	};
 
-	// Return the number of ships that will be targetted by an Akashi repair
+	// Return the number of ships that will be targeted by an Akashi repair
 	KC3Fleet.prototype._getRepairSlots = function () {
 		var flagship = this.ship(0);
 		if (!this._canDoRepair(flagship)) {
@@ -785,7 +785,7 @@ Contains summary information about a fleet and its 6 ships
 	 * @returns {number}
 	 */
 	KC3Fleet.prototype.eLos4 = function(nodeDivaricatedFactor){
-		// The weighting of the eqipment sum part
+		// The weighting of the equipment sum part
 		// For now: 2-5(H,I):x1, 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
 		nodeDivaricatedFactor = nodeDivaricatedFactor || 1;
 		var multipliers = {
@@ -923,7 +923,7 @@ Contains summary information about a fleet and its 6 ships
 	/**
 	 * Estimate base XP gained in PvP battle.
 	 * @param levels of first two ships - if omitted, use the ones of this fleet
-	 * @param ctBonus - exp mulitiplier of CT (Katori-class) bonus, default is 1
+	 * @param ctBonus - exp multiplier of CT (Katori-class) bonus, default is 1
 	 * @return variant exp values by battle ranks
 	 * @see http://wikiwiki.jp/kancolle/?%B1%E9%BD%AC#v657609b
 	 */
@@ -944,7 +944,7 @@ Contains summary information about a fleet and its 6 ships
 			baseExpAB = Math.floor(Math.floor(baseExp * 1.0) * ctBonus),
 			baseExpC  = Math.floor(Math.floor(baseExp * 0.64) * ctBonus),
 			baseExpD  = Math.floor(Math.floor(Math.floor(baseExp * 0.56) * 0.8) * ctBonus),
-			// rank E is not verified by sufficent sample data
+			// rank E is not verified by sufficient sample data
 			baseExpE  = Math.floor(Math.floor(baseExp * 0.401) * ctBonus);
 		return {
 			levelFlagship: firstShipLevel,

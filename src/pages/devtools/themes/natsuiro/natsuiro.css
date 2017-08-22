@@ -334,6 +334,7 @@ html,body {
 .module.activity .activity_box.disabled {
 	filter:brightness(0.5);
 	-webkit-filter:brightness(0.5);
+	pointer-events:none;
 }
 .module.activity .activity_dismissable {
 	cursor:pointer;

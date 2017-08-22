@@ -51,7 +51,7 @@
 		}
 	};
 	(function($) {
-		// A lazy initialzing method, prevent duplicate tooltip instance
+		// A lazy initializing method, prevent duplicate tooltip instance
 		$.fn.lazyInitTooltip = function(opts) {
 			if(typeof this.tooltip("instance") === "undefined") {
 				this.tooltip($.extend(true, {}, nativeTooltipOptions, opts));
@@ -154,8 +154,8 @@
 	}
 
 	function ExpedTabAutoFleetSwitch(needTabSwith) {
-		// set "needTabSwith" to true
-		// for switching to expedition tab when a candicate fleet is found
+		// set "needTabSwitch" to true
+		// for switching to expedition tab when a candidate fleet is found
 		var fleets = PlayerManager.fleets;
 		var availableFleetInd = -1;
 
@@ -539,7 +539,7 @@
 
 		// Timer Type Toggle
 		$(".status_docking,.status_akashi").on("click",function(){
-			if(selectedFleet !== 6) return;
+			if(selectedFleet === 6) return;
 			ConfigManager.scrollTimerType();
 			UpdateRepairTimerDisplays();
 		}).addClass("hover");
@@ -976,7 +976,7 @@
 			} else if(data.api_m_flag2 > 0){
 				// so the flag does not indicate state of the debuff,
 				// it only indicates: time to play a SE.
-				// we cannot detect: is the debuff reseted?
+				// we cannot detect: is the debuff reset?
 				//let isDebuffed = data.api_m_flag2 == 1;
 				this.ModalBox({
 					title: KC3Meta.term("BossDebuffedTitle"),
@@ -3084,7 +3084,7 @@
 			var allShips,
 				fleetObj = PlayerManager.fleets[selectedFleet-1];
 
-			//fleets' subsripts start from 0 !
+			//fleets' subscripts start from 0 !
 			allShips = fleetObj.ships.map(function(rosterId, index) {
 				return KC3ShipManager.get(rosterId);
 			}).filter(function (rosterData, index) {
@@ -3165,7 +3165,7 @@
 
 			var jqGSRate = $(".module.activity .activity_expeditionPlanner .row_gsrate .gsrate_content");
 
-			// "???" instead of "?" to make it more noticable.
+			// "???" instead of "?" to make it more noticeable.
 			var sparkledCount = fleetObj.ship().filter( s => s.morale >= 50 ).length;
 			var fleetShipCount = fleetObj.countShips();
 			var fleetDrumCount = fleetObj.countDrums();

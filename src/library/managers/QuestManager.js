@@ -243,7 +243,7 @@ Uses KC3Quest objects to play around with
 					}
 				}
 				
-				// Add to actives or opens depeding on status
+				// Add to actives or opens depending on status
 				switch( questList[ctr].api_state ){
 					case 1:	// Unselected
 						this.isOpen( questList[ctr].api_no, true );
@@ -507,7 +507,7 @@ Uses KC3Quest objects to play around with
 				for(var ctr in tempQuests){
 					tempQuest = tempQuests[ctr];
 					
-					// Add to actives or opens depeding on status
+					// Add to actives or opens depending on status
 					switch( tempQuest.status ){
 						case 1:	// Unselected
 							this.isOpen( tempQuest.id, true );

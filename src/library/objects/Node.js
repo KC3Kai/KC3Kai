@@ -531,7 +531,7 @@ Used by SortieManager
 			this.planeFighters.player[1] += battleData.api_kouku2.api_stage1.api_f_lostcount;
 			this.planeFighters.abyssal[1] += battleData.api_kouku2.api_stage1.api_e_lostcount;
 			
-			// Bombine phase 2
+			// Bombing phase 2
 			if(battleData.api_kouku2.api_stage2 !== null){
 				this.planeBombers.player[1] += battleData.api_kouku2.api_stage2.api_f_lostcount;
 				this.planeBombers.abyssal[1] += battleData.api_kouku2.api_stage2.api_e_lostcount;
@@ -843,7 +843,7 @@ Used by SortieManager
 			}).call(this, KC3SortieManager);
 		}
 		
-		// Record encoutners only if on sortie
+		// Record encounters only if on sortie
 		if(KC3SortieManager.onSortie > 0) {
 			this.saveEnemyEncounterInfo(this.battleDay);
 			
@@ -1125,7 +1125,7 @@ Used by SortieManager
 			this.gaugeDamage += Math.min(bossCurrentHp, bossCurrentHp - this.enemyHP[0].hp);
 		}
 		
-		// Record encoutners only if on sortie and starts from night
+		// Record encounters only if on sortie and starts from night
 		if(this.startsFromNight && KC3SortieManager.onSortie > 0) {
 			this.saveEnemyEncounterInfo(this.battleNight);
 		}
@@ -1150,7 +1150,7 @@ Used by SortieManager
 				this.rating = "SS";
 			
 			if(this.isBoss()) {
-				// assumed maps[ckey] already initialzed at /mapinfo or /start
+				// assumed maps[ckey] already initialized at /mapinfo or /start
 				var maps = KC3SortieManager.getAllMapData(),
 					ckey = ['m', KC3SortieManager.map_world, KC3SortieManager.map_num].join(''),
 					stat = maps[ckey].stat,

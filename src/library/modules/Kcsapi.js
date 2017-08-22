@@ -744,7 +744,6 @@ Previously known as "Reactor"
 		/* Change equipment of a ship
 		-------------------------------------------------------*/
 		"api_req_kaisou/slotset":function(params, response, headers){
-			// Set params on variables for future understandability
 			var itemID = parseInt(params.api_item_id, 10);
 			var slotIndex = params.api_slot_idx;
 			var shipID = parseInt(params.api_id, 10);
@@ -945,7 +944,7 @@ Previously known as "Reactor"
 				PlayerManager.setResources(utcHour * 3600, null, [-consumedFuel,-consumedAmmo,0,0]);
 				KC3Network.trigger("Consumables");
 			}
-			// TODO Show indicator of sortied LBAS at panel (also show striked nodes name?)
+			// TODO Show indicator of sortied LBAS at panel (also show stricken nodes name?)
 		},
 		
 		/* Traverse Map
@@ -1737,7 +1736,7 @@ Previously known as "Reactor"
 					if([21].indexOf(gearMaster.api_type[2]) > -1){
 						KC3QuestManager.get(638).increment();
 					}
-					// F55: Quartly Scrap 10 Large Caliber Main Guns
+					// F55: Quarterly Scrap 10 Large Caliber Main Guns
 					if([3].indexOf(gearMaster.api_type[2]) > -1){
 						KC3QuestManager.get(663).increment();
 					}
@@ -2133,7 +2132,7 @@ Previously known as "Reactor"
 					[822,0,[2,4], true], // Bq1: Sortie to [W2-4] and S-rank the boss node 2 times
 					[854,3,[6,4], true, true]  // Bq2: 4th requirement: [W6-4] S-rank the boss node
 				],
-				[ /* SS RANK Kanzen shohri */ ]
+				[ /* SS RANK */ ]
 			].slice(0, rankPt+1)
 				.reduce(function(x,y){ return x.concat(y); })
 				.filter(function(x){
