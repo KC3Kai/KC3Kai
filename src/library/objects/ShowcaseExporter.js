@@ -513,7 +513,7 @@
             if (MasterShipStat[0] + ship.mod[this._modToParam.indexOf(stat)] >= 50) {
                 this.ctx.fillRect(x, y, w, h);
             } else if (MasterShipStat[0] + ship.mod[this._modToParam.indexOf(stat)] >= 40) {
-                this.ctx.fillRect(x, y, w, h / 2);
+                this.ctx.fillRect(x, y + h/4, w, h / 2);
             }
         } else if (MasterShipStat[0] + ship.mod[this._modToParam.indexOf(stat)] >= MasterShipStat[1]) {
             this.ctx.fillRect(x, y, w, h);
