@@ -508,8 +508,14 @@
 
     ShowcaseExporter.prototype._drawStat = function (ship, stat, x, y, w, h, color) {
         var MasterShipStat = ship.master()[this._paramToApi[stat]];
-        if(MasterShipStat[0]+ship.mod[this._modToParam.indexOf(stat)]>=MasterShipStat[1]){
-            this.ctx.fillStyle = color;
+        this.ctx.fillStyle = color;
+        if (stat === "lk") {
+            if (MasterShipStat[0] + ship.mod[this._modToParam.indexOf(stat)] >= 50) {
+                this.ctx.fillRect(x, y, w, h);
+            } else if (MasterShipStat[0] + ship.mod[this._modToParam.indexOf(stat)] >= 40) {
+                this.ctx.fillRect(x, y, w, h / 2);
+            }
+        } else if (MasterShipStat[0] + ship.mod[this._modToParam.indexOf(stat)] >= MasterShipStat[1]) {
             this.ctx.fillRect(x, y, w, h);
         }
     };
