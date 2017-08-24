@@ -643,8 +643,13 @@ KC3改 Ship Object
 			supportPower = fixedFP;
 			supportPower += this.equipmentTotalStats("raig");
 			supportPower += Math.floor(1.3 * this.equipmentTotalStats("baku"));
-			supportPower = Math.floor(1.5 * supportPower);
-			supportPower += 55;
+			// will not attack if no dive/torpedo bomber equipped
+			if(supportPower === fixedFP){
+				supportPower = 0;
+			} else {
+				supportPower = Math.floor(1.5 * supportPower);
+				supportPower += 55;
+			}
 		} else {
 			supportPower = 5 + fixedFP + this.equipmentTotalStats("houg");
 		}
