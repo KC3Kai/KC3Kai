@@ -183,7 +183,8 @@
 			var defSettings = {
 				exportMode: "standard",
 				output: 2, // new tab
-				exportName: false
+				exportName: false,
+				eventLocking: false
 			};
 			var settings;
 			if (typeof localStorage.srShowcase === "undefined") {
@@ -206,6 +207,7 @@
 			$("#exportOutputMode").val(settings.output);
 			$("#exportAddName")[0].checked = settings.exportName;
 			$("#exportMode").val(settings.exportMode);
+			$("#exportEventLocking")[0].checked = settings.eventLocking;
 
 		},
 
@@ -290,6 +292,14 @@
 					return settings;
 				});
 			});
+
+            $("#exportEventLocking").change(function(){
+                var checked = this.checked;
+                self.modifySettings(function(settings){
+                    settings.eventLocking = checked;
+                    return settings;
+                });
+            });
 
 			$("#exportMode").change(function(){
 				var val = this.value;
