@@ -637,7 +637,7 @@ KC3改 Ship Object
 	KC3Ship.prototype.supportPower = function(){
 		if(this.rosterId===0){ return 0; }
 		const fixedFP = this.fp[0] - 1;
-		var supportPower = 5 + fixedFP;
+		var supportPower = 0;
 		// For CV / CVL / CVB?
 		if([7, 11, 18].indexOf(this.master().api_stype) > -1){
 			supportPower = fixedFP;
@@ -645,6 +645,8 @@ KC3改 Ship Object
 			supportPower += Math.floor(1.3 * this.equipmentTotalStats("baku"));
 			supportPower = Math.floor(1.5 * supportPower);
 			supportPower += 55;
+		} else {
+			supportPower = 5 + fixedFP + this.equipmentTotalStats("houg");
 		}
 		return supportPower;
 	};
