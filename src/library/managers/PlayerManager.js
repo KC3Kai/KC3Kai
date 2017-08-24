@@ -131,7 +131,7 @@ Does not include Ships and Gears which are managed by other Managers
 				}
 				*/
 				// Let client know: these slotitems are moving, not equippable.
-				// For now, moving peroid of LBAS plane is 12 mins.
+				// For now, moving period of LBAS plane is 12 mins.
 				if(Array.isArray(data.api_base_convert_slot)) {
 					[].push.apply(this.baseConvertingSlots, data.api_base_convert_slot);
 				}
@@ -178,7 +178,7 @@ Does not include Ships and Gears which are managed by other Managers
 		 * @param escortFleet - Fleet object of escort for Combined Fleet, default 2nd fleet.
 		 * @param isCombined - if current view is really Combined Fleet view, default false.
 		 * @return fighter power text based on config.
-		 * @see Fleet.fighterPowerText similar function outside of Fleet object.
+		 * @see Fleet.fighterPowerText similar function only served for Fleet object.
 		 */
 		getFleetsFighterPowerText :function(viewFleet = this.fleets[0],
 			escortFleet = this.fleets[1],
