@@ -636,7 +636,7 @@ KC3改 Ship Object
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.supportPower = function(){
 		if(this.rosterId===0){ return 0; }
-		const fixedFP = this.fp[0] - 1;
+		const fixedFP = this.nakedStats("fp") - 1;
 		var supportPower = 0;
 		// For CV / CVL / CVB?
 		if([7, 11, 18].indexOf(this.master().api_stype) > -1){
