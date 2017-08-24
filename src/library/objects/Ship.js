@@ -630,24 +630,28 @@ KC3改 Ship Object
 	};
 
 	/* SUPPORT POWER
-	Get support expedition power of this ship
+	 * Get support expedition shelling power of this ship
+	 * http://kancolle.wikia.com/wiki/Expedition/Support_Expedition
+	 * http://wikiwiki.jp/kancolle/?%BB%D9%B1%E7%B4%CF%C2%E2
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.supportPower = function(){
 		if(this.rosterId===0){ return 0; }
-
-		var supportPower;
-		if(this.master().api_stype==11 || this.master().api_stype==7){
-			supportPower = 55;
-			supportPower += (1.5 * Number(this.fp[0]));
-			supportPower += (1.5 * Number(this.tp[0]));
-			supportPower += Number(this.equipment(0).supportPower());
-			supportPower += Number(this.equipment(1).supportPower());
-			supportPower += Number(this.equipment(2).supportPower());
-			supportPower += Number(this.equipment(3).supportPower());
-			supportPower += Number(this.equipment(4).supportPower());
-
-		}else{
-			supportPower = this.fp[0];
+		const fixedFP = this.nakedStats("fp") - 1;
+		var supportPower = 0;
+		// For CV / CVL / CVB?
+		if([7, 11, 18].indexOf(this.master().api_stype) > -1){
+			supportPower = fixedFP;
+			supportPower += this.equipmentTotalStats("raig");
+			supportPower += Math.floor(1.3 * this.equipmentTotalStats("baku"));
+			// will not attack if no dive/torpedo bomber equipped
+			if(supportPower === fixedFP){
+				supportPower = 0;
+			} else {
+				supportPower = Math.floor(1.5 * supportPower);
+				supportPower += 55;
+			}
+		} else {
+			supportPower = 5 + fixedFP + this.equipmentTotalStats("houg");
 		}
 		return supportPower;
 	};
