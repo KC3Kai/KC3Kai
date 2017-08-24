@@ -5,7 +5,7 @@ KC3改 Equipment Object
 	"use strict";
 
 	window.KC3Gear = function( data ){
-		// Default object properties incuded in stringifications
+		// Default object properties included in stringifications
 		this.itemId = 0;
 		this.masterId = 0;
 		this.stars = 0;
@@ -76,7 +76,7 @@ KC3改 Equipment Object
 			// reference:
 			// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:951#32
 			// for fighter-bombers, every star grants +0.25 AA stat.
-			// there's no distinction between bomber and fighter-bomber from KCAPI,
+			// there's no distinction between bomber and fighter-bomber from KCSAPI,
 			// so let's just say the rule applies to all bombers.
 			// (regular bombers cannot be improved anyway, for now...)
 			if (this.master().api_type[2] === 7 // is bomber
@@ -205,17 +205,8 @@ KC3改 Equipment Object
 		}
 	};
 
-	KC3Gear.prototype.supportPower = function(){
-		// Empty item means no fighter power
-		if(this.itemId===0){ return 0; }
-
-		// 1.5 TP + 2.0 DV
-		return (1.5 * Number(this.master().api_raig) )
-			+(2.0 * Number(this.master().api_baku) );
-	};
-
 	KC3Gear.prototype.bauxiteCost = function(slotCurrent, slotMaxeq){
-		// Only used for the slot already equiped aircrafts, unused for now
+		// Only used for the slot already equipped aircraft, unused for now
 		if(this.itemId===0){ return 0; }
 		if( KC3GearManager.carrierBasedAircraftType3Ids.indexOf( this.master().api_type[3] ) > -1){
 			return KC3GearManager.carrierSupplyBauxiteCostPerSlot * (slotMaxeq - slotCurrent);
@@ -283,7 +274,7 @@ KC3改 Equipment Object
 				|| (planeStats.indexOf(sdata[0]) >=0
 					&& KC3GearManager.landBasedAircraftType3Ids.indexOf(gearData.api_type[3])>-1)
 				)
-			) { // Path of image should be inputed, maybe
+			) { // Path of image should be inputted, maybe
 				$(".icon", statBox).attr("src", "../../../../assets/img/stats/" + sdata[0] + ".png");
 				$(".icon", statBox).width(13).height(13).css("margin-top", "-3px");
 				if(sdata[0] === "rn") {

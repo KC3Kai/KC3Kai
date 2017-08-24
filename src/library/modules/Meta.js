@@ -16,7 +16,6 @@ Provides access to data on built-in JSON files
 		_gauges:{},
 		_ship:{},
 		_shipAffix:{},
-		_defeq:{},
 		_slotitem:{},
 		_useitems:[],
 		_equiptype:[],
@@ -173,7 +172,6 @@ Provides access to data on built-in JSON files
 			this._exp      = JSON.parse( $.ajax(repo+'exp_hq.json', { async: false }).responseText );
 			this._exp_ship = JSON.parse( $.ajax(repo+'exp_ship.json', { async: false }).responseText );
 			this._gauges   = JSON.parse( $.ajax(repo+'gauges.json', { async: false }).responseText );
-			this._defeq    = JSON.parse( $.ajax(repo+'defeq.json', { async: false }).responseText );
 			this._edges    = JSON.parse( $.ajax(repo+'edges.json', { async: false }).responseText );
 			this._nodes    = JSON.parse( $.ajax(repo+'nodes.json', { async: false }).responseText );
 			this._tpmult   = JSON.parse( $.ajax(repo+'tp_mult.json', { async: false }).responseText );
@@ -312,7 +310,7 @@ Provides access to data on built-in JSON files
 		},
 		
 		shipReadingName :function(jpYomi){
-			// Translate api_yomi, might be just Romaji. Priorly use yomi in affix
+			// Translate api_yomi, might be just Romaji. Priority using yomi in affix
 			return this.shipNameAffix("yomi")[jpYomi] || this.shipName(jpYomi);
 		},
 		
@@ -429,8 +427,7 @@ Provides access to data on built-in JSON files
 		
 		defaultEquip :function(id){
 			var eq = WhoCallsTheFleetDb.getEquippedSlotCount(id);
-			// Just return 0 if wanna remove _defeq json
-			return eq !== false ? eq : (this._defeq["s" + id] || 0);
+			return eq !== false ? eq : 0;
 		},
 		
 		battleSeverityClass :function(battleArray){
@@ -614,6 +611,28 @@ Provides access to data on built-in JSON files
 		*/
 		getFilenameByVoiceLine :function(ship_id, lineNum){
 			return lineNum <= 53 ? 100000 + 17 * (ship_id + 7) * (this.workingDiffs[lineNum - 1]) % 99173 : lineNum;
+		},
+		
+		// Extract ship ID of abyssal from voice file name
+		// https://github.com/KC3Kai/KC3Kai/pull/2181
+		getAbyssalIdByFilename :function(filename){
+			var id, map = parseInt(filename.substr(0, 2), 10);
+			switch(filename.length){
+				case 7:
+					id = map === 64 ? filename.substr(2, 3) : filename.substr(3, 3);
+					break;
+				case 8:
+					id = map <= 31 ? filename.substr(4, 3) : filename.substr(3, 3);
+					break;
+				case 9:
+					id = filename.substr(3, 4);
+					break;
+				default:
+					console.debug("Unknown abyssal voice file name", filename);
+					id = "";
+			}
+			id = parseInt(id, 10);
+			return isNaN(id) ? false : id <= 1500 ? id + 1000 : id;
 		},
 		
 		// Subtitle quotes

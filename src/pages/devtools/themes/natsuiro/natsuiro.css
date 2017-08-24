@@ -331,6 +331,11 @@ html,body {
 	display:none;
 	padding:5px;
 }
+.module.activity .activity_box.disabled {
+	filter:brightness(0.5);
+	-webkit-filter:brightness(0.5);
+	pointer-events:none;
+}
 .module.activity .activity_dismissable {
 	cursor:pointer;
 	user-select: none;
@@ -2322,6 +2327,21 @@ ABYSS FLEET
 }
 .module.summary .summary-speed .summary_text {
 	width:41px;
+}
+.module.summary .summary_sub {
+	width:12px;
+	height:12px;
+	line-height:13px;
+	border-radius:6px;
+	margin:9px 0px 0px 9px;
+	position:absolute;
+	font-size:8px;
+	text-align:center;
+	color:#78736f;
+	background:#fff;
+	overflow:hidden;
+	pointer-events:none;
+	display:none;
 }
 
 /*------- FLEET -------*/

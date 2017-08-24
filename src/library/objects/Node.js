@@ -162,6 +162,32 @@ Used by SortieManager
 		return "D";
 	};
 	
+	/**
+	 * Set element in `beginHPs.ally` array to -1 to represent her escaping when FCF used.
+	 * Abyssal ships might also be able to escape in future?
+	 * @see http://kancolle.wikia.com/wiki/Fleet_Command_Facility
+	 * @param {Array} allyHps - The array of `beginHPs.ally`.
+	 * @param {Object} rawData - Raw battle kcsapi result.
+	 * @return {number} Count of affected elements.
+	 */
+	KC3Node.excludeEscapedShips = function(allyHps, rawData){
+		let affected = 0;
+		if(Array.isArray(allyHps)) {
+			// this is from kcsapi name `/api_req_combined_battle/goback_port`
+			const goBackPort = (indexes, isCombined) => {
+				if(Array.isArray(indexes)) {
+					indexes.forEach(idx => {
+						allyHps[idx - 1 + (isCombined ? 6 : 0)] = -1;
+						affected += 1;
+					});
+				}
+			};
+			goBackPort(rawData.api_escape_idx, false);
+			goBackPort(rawData.api_escape_idx_combined, true);
+		}
+		return affected;
+	};
+	
 	// Update this list if more extra classes added
 	KC3Node.knownNodeExtraClasses = function(){
 		return [
@@ -203,7 +229,7 @@ Used by SortieManager
 			}
 		}
 		this.enemySunk = [false, false, false, false, false, false];
-		this.enemyHP = [0,0,0,0,0,0];
+		this.enemyHP = [{},{},{},{},{},{}];
 		this.originalHPs = [0,0,0,0,0,0,0,0,0,0,0,0,0];
 		this.allyNoDamage = true;
 		this.nodalXP = 0;
@@ -505,7 +531,7 @@ Used by SortieManager
 			this.planeFighters.player[1] += battleData.api_kouku2.api_stage1.api_f_lostcount;
 			this.planeFighters.abyssal[1] += battleData.api_kouku2.api_stage1.api_e_lostcount;
 			
-			// Bombine phase 2
+			// Bombing phase 2
 			if(battleData.api_kouku2.api_stage2 !== null){
 				this.planeBombers.player[1] += battleData.api_kouku2.api_stage2.api_f_lostcount;
 				this.planeBombers.abyssal[1] += battleData.api_kouku2.api_stage2.api_e_lostcount;
@@ -587,13 +613,13 @@ Used by SortieManager
 					// Update enemy ships
 					for (i = 0; i < 6; i++) {
 						enemyMain = result.enemyMain[i];
-						this.enemyHP[i] = enemyMain;
+						this.enemyHP[i] = enemyMain || {};
 						this.enemySunk[i] = enemyMain ? enemyMain.sunk : true;
 						endHPs.enemy[i] = enemyMain ? enemyMain.hp : -1;
 					}
 					for (i = 6; i < 12; i++) {
 						enemyEscort = result.enemyEscort[i-6];
-						this.enemyHP[i] = enemyEscort;
+						this.enemyHP[i] = enemyEscort || {};
 						this.enemySunk[i] = enemyEscort ? enemyEscort.sunk : true;
 						endHPs.enemy[i] = enemyEscort ? enemyEscort.hp : -1;
 					}
@@ -606,7 +632,7 @@ Used by SortieManager
 					
 					// Update enemy ships
 					for (i = 0; i < 6; i++) {
-						this.enemyHP[i] = result.enemy[i];
+						this.enemyHP[i] = result.enemy[i] || {};
 						this.enemySunk[i] = result.enemy[i] ? result.enemy[i].sunk : true;
 						endHPs.enemy[i] = result.enemy[i] ? result.enemy[i].hp : -1;
 					}
@@ -658,13 +684,13 @@ Used by SortieManager
 					// Update enemy
 					for(i = 0; i < 6; i++) {
 						enemyMain = result.enemyMain[i];
-						this.enemyHP[i] = enemyMain;
+						this.enemyHP[i] = enemyMain || {};
 						this.enemySunk[i] = enemyMain ? enemyMain.sunk : true;
 						endHPs.enemy[i] = enemyMain ? enemyMain.hp : -1;
 					}
 					for(i = 6; i < 12; i++) {
 						enemyEscort = result.enemyEscort[i-6];
-						this.enemyHP[i] = enemyEscort;
+						this.enemyHP[i] = enemyEscort || {};
 						this.enemySunk[i] = enemyEscort ? enemyEscort.sunk : true;
 						endHPs.enemy[i] = enemyEscort ? enemyEscort.hp : -1;
 					}
@@ -733,7 +759,7 @@ Used by SortieManager
 					// Update enemy
 					for(i = 0; i < 6; i++) {
 						enemyMain = result.enemy[i];
-						this.enemyHP[i] = enemyMain;
+						this.enemyHP[i] = enemyMain || {};
 						this.enemySunk[i] = enemyMain ? enemyMain.sunk : true;
 						endHPs.enemy[i] = enemyMain ? enemyMain.hp : -1;
 					}
@@ -782,6 +808,7 @@ Used by SortieManager
 			}
 			
 			if(ConfigManager.info_btrank){
+				KC3Node.excludeEscapedShips( beginHPs.ally, battleData );
 				this.predictedRank = KC3Node.predictRank( beginHPs, endHPs, battleData.api_name );
 				if(KC3Node.debugRankPrediction()){
 					console.debug("Predicted before after HPs", beginHPs, endHPs);
@@ -816,7 +843,7 @@ Used by SortieManager
 			}).call(this, KC3SortieManager);
 		}
 		
-		// Record encoutners only if on sortie
+		// Record encounters only if on sortie
 		if(KC3SortieManager.onSortie > 0) {
 			this.saveEnemyEncounterInfo(this.battleDay);
 			
@@ -929,7 +956,7 @@ Used by SortieManager
 					if (this.activatedEnemyFleet == 1) {
 						console.log("Enemy main fleet in yasen", result.enemyMain);
 						for (i = 0; i < 6; i++) {
-							this.enemyHP[i] = result.enemyMain[i];
+							this.enemyHP[i] = result.enemyMain[i] || {};
 							this.enemySunk[i] = result.enemyMain[i] ? result.enemyMain[i].sunk : true;
 							endHPs.enemy[i] = result.enemyMain[i] ? result.enemyMain[i].hp : -1;
 							endHPs.enemy[i + 6] = result.enemyEscort[i] ? result.enemyEscort[i].hp : -1;
@@ -946,7 +973,7 @@ Used by SortieManager
 						this.eSlot = nightData.api_eSlot_combined;
 						this.maxHPs.enemy = nightData.api_maxhps_combined.slice(7,13);
 						for (i = 0; i < 6; i++) {
-							this.enemyHP[i] = result.enemyEscort[i];
+							this.enemyHP[i] = result.enemyEscort[i] || {};
 							this.enemySunk[i] = result.enemyEscort[i] ? result.enemyEscort[i].sunk : true;
 							endHPs.enemy[i] = result.enemyMain[i] ? result.enemyMain[i].hp : -1;
 							endHPs.enemy[i + 6] = result.enemyEscort[i] ? result.enemyEscort[i].hp : -1;
@@ -982,7 +1009,7 @@ Used by SortieManager
 					
 					// update enemy info
 					for (i = 0; i < 6; i++) {
-						this.enemyHP[i] = result.enemy[i];
+						this.enemyHP[i] = result.enemy[i] || {};
 						this.enemySunk[i] = result.enemy[i] ? result.enemy[i].sunk : true;
 						endHPs.enemy[i] = result.enemy[i] ? result.enemy[i].hp : -1;
 					}
@@ -1023,7 +1050,7 @@ Used by SortieManager
 					if (this.activatedEnemyFleet == 1) {
 						console.log("Enemy main fleet in yasen", result.enemyMain);
 						for (i = 0; i < 6; i++) {
-							this.enemyHP[i] = result.enemyMain[i];
+							this.enemyHP[i] = result.enemyMain[i] || {};
 							this.enemySunk[i] = result.enemyMain[i] ? result.enemyMain[i].sunk : true;
 							endHPs.enemy[i] = result.enemyMain[i] ? result.enemyMain[i].hp : -1;
 							endHPs.enemy[i + 6] = result.enemyEscort[i] ? result.enemyEscort[i].hp : -1;
@@ -1040,7 +1067,7 @@ Used by SortieManager
 						this.eSlot = nightData.api_eSlot_combined;
 						this.maxHPs.enemy = nightData.api_maxhps_combined.slice(7,13);
 						for (i = 0; i < 6; i++) {
-							this.enemyHP[i] = result.enemyEscort[i];
+							this.enemyHP[i] = result.enemyEscort[i] || {};
 							this.enemySunk[i] = result.enemyEscort[i] ? result.enemyEscort[i].sunk : true;
 							endHPs.enemy[i] = result.enemyMain[i] ? result.enemyMain[i].hp : -1;
 							endHPs.enemy[i + 6] = result.enemyEscort[i] ? result.enemyEscort[i].hp : -1;
@@ -1055,7 +1082,7 @@ Used by SortieManager
 					
 					// regular yasen enemy info
 					for (i = 0; i < 6; i++) {
-						this.enemyHP[i] = result.enemy[i];
+						this.enemyHP[i] = result.enemy[i] || {};
 						this.enemySunk[i] = result.enemy[i] ? result.enemy[i].sunk : true;
 						endHPs.enemy[i] = result.enemy[i] ? result.enemy[i].hp : -1;
 					}
@@ -1083,6 +1110,7 @@ Used by SortieManager
 			}
 			
 			if(ConfigManager.info_btrank){
+				KC3Node.excludeEscapedShips( beginHPs.ally, nightData );
 				this.predictedRankNight = KC3Node.predictRank( beginHPs, endHPs, nightData.api_name );
 				if(KC3Node.debugRankPrediction()){
 					console.debug("Predicted before after yasen HPs", beginHPs, endHPs);
@@ -1097,7 +1125,7 @@ Used by SortieManager
 			this.gaugeDamage += Math.min(bossCurrentHp, bossCurrentHp - this.enemyHP[0].hp);
 		}
 		
-		// Record encoutners only if on sortie and starts from night
+		// Record encounters only if on sortie and starts from night
 		if(this.startsFromNight && KC3SortieManager.onSortie > 0) {
 			this.saveEnemyEncounterInfo(this.battleNight);
 		}
@@ -1122,7 +1150,7 @@ Used by SortieManager
 				this.rating = "SS";
 			
 			if(this.isBoss()) {
-				// assumed maps[ckey] already initialzed at /mapinfo or /start
+				// assumed maps[ckey] already initialized at /mapinfo or /start
 				var maps = KC3SortieManager.getAllMapData(),
 					ckey = ['m', KC3SortieManager.map_world, KC3SortieManager.map_num].join(''),
 					stat = maps[ckey].stat,

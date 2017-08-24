@@ -220,7 +220,7 @@ KC3改 Ship Object
 		var
 			self= this,
 			ca  = this.getDefer(), // get defer array
-			cd  = ca[0]; // current collection of deferreds
+			cd  = ca[0]; // current collection of deferred
 		if(ca && cd && cd.state() == "pending")
 			return ca;
 
@@ -311,7 +311,7 @@ KC3改 Ship Object
 	/**
 	 * Return max HP of a ship. Static method for library.
 	 * Especially after marriage, api_taik[1] is hard to reach in game.
-	 * @return false if ship ID belongs to aybssal or nonexistence
+	 * @return false if ship ID belongs to abyssal or nonexistence
 	 * @see http://wikiwiki.jp/kancolle/?%A5%B1%A5%C3%A5%B3%A5%F3%A5%AB%A5%C3%A5%B3%A5%AB%A5%EA
 	 * @see https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E3%82%B1%E3%83%83%E3%82%B3%E3%83%B3%E3%82%AB%E3%83%83%E3%82%B3%E3%82%AB%E3%83%AA%E5%BE%8C%E3%81%AE%E8%80%90%E4%B9%85%E5%80%A4
 	 */
@@ -336,7 +336,7 @@ KC3改 Ship Object
 
 	/**
 	 * Return total count of aircraft slots of a ship. Static method for library.
-	 * @return -1 if ship ID belongs to aybssal or nonexistence
+	 * @return -1 if ship ID belongs to abyssal or nonexistence
 	 */
 	KC3Ship.getCarrySlots = function(masterId){
 		var maxeq = KC3Master.isNotRegularShip(masterId) ? undefined :
@@ -397,7 +397,7 @@ KC3改 Ship Object
 			lk: this.master().api_luck[0],
 			ls: this.ls[0],
 			tp: this.tp[0],
-			// Accuracy not shown ingame, so naked value might be plus-minus 0
+			// Accuracy not shown in-game, so naked value might be plus-minus 0
 			ac: 0
 		};
 		const statApiNames = {
@@ -448,7 +448,7 @@ KC3改 Ship Object
 			ev: this.ev[1],
 			fp: this.fp[1],
 			hp: this.hp[1],
-			// Maxed Luck includes full modernizated + marriage bonus
+			// Maxed Luck includes full modernized + marriage bonus
 			lk: this.lk[1],
 			ls: this.ls[1],
 			tp: this.tp[1]
@@ -469,7 +469,7 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * Left modernizable stats of this ship.
+	 * Left modernize-able stats of this ship.
 	 * @return stats to be maxed modernization
 	 */
 	KC3Ship.prototype.modernizeLeftStats = function(statAttr){
@@ -630,24 +630,28 @@ KC3改 Ship Object
 	};
 
 	/* SUPPORT POWER
-	Get support expedition power of this ship
+	 * Get support expedition shelling power of this ship
+	 * http://kancolle.wikia.com/wiki/Expedition/Support_Expedition
+	 * http://wikiwiki.jp/kancolle/?%BB%D9%B1%E7%B4%CF%C2%E2
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.supportPower = function(){
 		if(this.rosterId===0){ return 0; }
-
-		var supportPower;
-		if(this.master().api_stype==11 || this.master().api_stype==7){
-			supportPower = 55;
-			supportPower += (1.5 * Number(this.fp[0]));
-			supportPower += (1.5 * Number(this.tp[0]));
-			supportPower += Number(this.equipment(0).supportPower());
-			supportPower += Number(this.equipment(1).supportPower());
-			supportPower += Number(this.equipment(2).supportPower());
-			supportPower += Number(this.equipment(3).supportPower());
-			supportPower += Number(this.equipment(4).supportPower());
-
-		}else{
-			supportPower = this.fp[0];
+		const fixedFP = this.nakedStats("fp") - 1;
+		var supportPower = 0;
+		// For CV / CVL / CVB?
+		if([7, 11, 18].indexOf(this.master().api_stype) > -1){
+			supportPower = fixedFP;
+			supportPower += this.equipmentTotalStats("raig");
+			supportPower += Math.floor(1.3 * this.equipmentTotalStats("baku"));
+			// will not attack if no dive/torpedo bomber equipped
+			if(supportPower === fixedFP){
+				supportPower = 0;
+			} else {
+				supportPower = Math.floor(1.5 * supportPower);
+				supportPower += 55;
+			}
+		} else {
+			supportPower = 5 + fixedFP + this.equipmentTotalStats("houg");
 		}
 		return supportPower;
 	};
@@ -816,7 +820,7 @@ KC3改 Ship Object
 			: isTaiyouSeries ? 65
 			: 100;
 
-		// shortcutting on the stricter condition first
+		// shortcut on the stricter condition first
 		if (this.as[0] < aswThreshold)
 			return false;
 

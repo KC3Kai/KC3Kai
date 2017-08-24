@@ -518,14 +518,22 @@
 						var selFleet = sortie["fleet"+n];
 						$.each(selFleet, function(index, ship){
 							// false recorded on older sorties. stop loop when encountered
-							if(i===0) {
-								if(ship===false){ return false; }
-								
+							if(ship === false) { return false; }
+							if(i === 0) {
 								$(".sortie_ship_"+(index+1)+" img", sortieBox)
 									.attr("src", KC3Meta.shipIcon(ship.mst_id))
 									.attr("alt", ship.mst_id)
 									.click(shipClickFunc);
 								$(".sortie_ship_"+(index+1), sortieBox)
+									.addClass("hover")
+									.addClass("simg-"+ship.mst_id)
+									.show();
+							} else if(i === 1) {
+								$(".sortie_combined_ship_"+(index+1)+" img", sortieBox)
+									.attr("src", KC3Meta.shipIcon(ship.mst_id))
+									.attr("alt", ship.mst_id)
+									.click(shipClickFunc);
+								$(".sortie_combined_ship_"+(index+1), sortieBox)
 									.addClass("hover")
 									.addClass("simg-"+ship.mst_id)
 									.show();
@@ -956,11 +964,24 @@
 					rcontext.fillText(PlayerManager.hq.name, 100 * scale, 210 * scale);
 					
 					var fleetUsed = sortieData["fleet"+sortieData.fleetnum];
-					$.each(fleetUsed, function(shipIndex, ShipData) {
-						var shipIconImage = $(".simg-"+ShipData.mst_id+" img")[0];
-						rcontext.drawImage(shipIconImage, 0, 0, 70, 70,
-							(25 + (60 * shipIndex)) * scale, 233 * scale, 50 * scale, 50 * scale);
-					});
+					if(sortieData.combined) {
+						$.each(fleetUsed, function(shipIndex, ShipData) {
+							var shipIconImage = $(".simg-"+ShipData.mst_id+" img")[0];
+							rcontext.drawImage(shipIconImage, 0, 0, 70, 70,
+								(18 + (60 * shipIndex)) * scale, 227 * scale, 50 * scale, 50 * scale);
+						});
+						$.each(sortieData.fleet2, function(shipIndex, ShipData) {
+							var shipIconImage = $(".simg-"+ShipData.mst_id+" img")[0];
+							rcontext.drawImage(shipIconImage, 0, 0, 70, 70,
+								(45 + (60 * shipIndex)) * scale, 253 * scale, 35 * scale, 35 * scale);
+						});
+					} else {
+						$.each(fleetUsed, function(shipIndex, ShipData) {
+							var shipIconImage = $(".simg-"+ShipData.mst_id+" img")[0];
+							rcontext.drawImage(shipIconImage, 0, 0, 70, 70,
+								(25 + (60 * shipIndex)) * scale, 233 * scale, 50 * scale, 50 * scale);
+						});
+					}
 					
 					withDataCover64 = rcanvas.toDataURL("image/png");
 					

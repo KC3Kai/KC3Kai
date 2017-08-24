@@ -19,6 +19,7 @@
             width: 330,
             height: 35
         };
+        this.lock_plan = null;
         this.colors = {
             odd: "#e0e0e0",
             even: "#f2f2f2",
@@ -38,8 +39,17 @@
             equipCount: "#000",
             equipStars: "#42837f",
             equipInfo: "#000",
-            equipStat: "#000"
+            equipStat: "#000",
+            /* should match lock mods in light theme. see legacy.css */
+            lock_modes: {
+                1: "#029DD5",
+                2: "#64B162",
+                3: "#CCC700",
+                4: "#EB9528",
+                5: "#B1A2C1"
+            }
         };
+
         this.buildSettings = {};
         this.columnCount = 5;
         this.loadingCount = 0;
@@ -291,6 +301,14 @@
             this.rowParams.width = this.rowParams.height*3;
             this.columnCount=this.columnCount*2;
         }
+        if(this.buildSettings.eventLocking === true && typeof localStorage.lock_plan !== "undefined"){
+            this.lock_plan = {};
+            JSON.parse(localStorage.lock_plan).map((ships, lock_num) => {
+                ships.map((shipId) => {
+                    this.lock_plan[shipId] = lock_num + 1;
+                });
+            });
+        }
         if(!this._getShips()){
             return;
         }
@@ -430,13 +448,41 @@
         this.ctx.fillRect(x, y, this.rowParams.width, this.rowParams.height);
         var xOffset = this.rowParams.height / 7;
 
+        if(this.buildSettings.eventLocking === true){
+            if(ship.sally !== 0){
+                this.ctx.fillStyle = this.ctx.strokeStyle = this.colors.lock_modes[ship.sally];
+                if(this.buildSettings.exportMode==="light"){
+                    this.ctx.fillRect(x + this.rowParams.height * 1.2 + xOffset, y, this.rowParams.width - this.rowParams.height * 1.2 - xOffset, this.rowParams.height);
+                } else {
+                    this.ctx.fillRect(x + this.rowParams.height * 2,y,this.rowParams.width - this.rowParams.height * 2, this.rowParams.height);
+                }
+            } else if(this.lock_plan !== null && this.lock_plan[ship.rosterId]){
+                this.ctx.beginPath();
+                this.ctx.fillStyle = this.ctx.strokeStyle = this.colors.lock_modes[this.lock_plan[ship.rosterId]];
+                var circleRadius = 5;
+                this.ctx.strokeStyle = circleRadius;
+                this.ctx.arc(x + this.rowParams.width - circleRadius * 2, y + this.rowParams.height / 2, circleRadius, 0, 2 * Math.PI);
+                this.ctx.fill();
+                this.ctx.stroke();
+            }
+        }
+
         this._drawStat(ship, "fp", x + xOffset, y, this.rowParams.height / 2, this.rowParams.height / 2, this.colors.statFP);
         this._drawStat(ship, "tp", x + xOffset + this.rowParams.height / 2, y, this.rowParams.height / 2, this.rowParams.height / 2, this.colors.statTP);
         this._drawStat(ship, "aa", x + xOffset + this.rowParams.height / 2, y + this.rowParams.height / 2, this.rowParams.height / 2, this.rowParams.height / 2, this.colors.statAA);
         this._drawStat(ship, "ar", x + xOffset, y + this.rowParams.height / 2, this.rowParams.height / 2, this.rowParams.height / 2, this.colors.statAR);
-        this._drawStat(ship, "lk", x + xOffset + this.rowParams.height, y, this.rowParams.height / 5, this.rowParams.height / 2, this.colors.statLK);
+        this._drawStat(ship, "lk", x + xOffset + this.rowParams.height, y, this.rowParams.height / 5, this.rowParams.height, this.colors.statLK);
 
         this._drawIcon(x + xOffset, y, ship.masterId);
+
+        this.ctx.font = generateFontString(400, 24);
+        this.ctx.fillStyle = this.colors.shipInfo;
+        this.ctx.textBaseline = "middle";
+        this.ctx.fillText(
+            ship.level,
+            x + this.rowParams.width - this.rowParams.height * 0.5 - this.ctx.measureText(ship.level).width,
+            y + this.rowParams.height / 2
+        );
 
         if(this.buildSettings.exportMode !== "light") {
             var fontSize = 24;
@@ -450,15 +496,6 @@
             this.ctx.fillText(ship.name(), x + this.rowParams.height * 2, y + this.rowParams.height / 2);
         }
 
-        this.ctx.font = generateFontString(400, 24);
-        this.ctx.fillStyle = this.colors.shipInfo;
-        this.ctx.textBaseline = "middle";
-        this.ctx.fillText(
-            ship.level,
-            x + this.rowParams.width - this.rowParams.height * 0.5 - this.ctx.measureText(ship.level).width,
-            y + this.rowParams.height / 2
-        );
-
     };
 
     ShowcaseExporter.prototype._drawIcon = function (x, y, shipId) {
@@ -469,10 +506,16 @@
         );
     };
 
-    ShowcaseExporter.prototype._drawStat = function (ship, stat, x, y, w, h, color, background) {
+    ShowcaseExporter.prototype._drawStat = function (ship, stat, x, y, w, h, color) {
         var MasterShipStat = ship.master()[this._paramToApi[stat]];
-        if(MasterShipStat[0]+ship.mod[this._modToParam.indexOf(stat)]>=MasterShipStat[1]){
-            this.ctx.fillStyle = color;
+        this.ctx.fillStyle = color;
+        if (stat === "lk") {
+            if (MasterShipStat[0] + ship.mod[this._modToParam.indexOf(stat)] >= 50) {
+                this.ctx.fillRect(x, y, w, h);
+            } else if (MasterShipStat[0] + ship.mod[this._modToParam.indexOf(stat)] >= 40) {
+                this.ctx.fillRect(x, y + h/4, w, h / 2);
+            }
+        } else if (MasterShipStat[0] + ship.mod[this._modToParam.indexOf(stat)] >= MasterShipStat[1]) {
             this.ctx.fillRect(x, y, w, h);
         }
     };

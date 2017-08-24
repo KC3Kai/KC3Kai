@@ -344,10 +344,11 @@
 		showAllKCFleets: function(kcFleetArray) {
 			var self = this;
 			// Empty fleet list
-			$(".tab_fleet .fleet_list").html("");
+			$(".tab_fleet .fleet_list").empty();
 			$.each(kcFleetArray, function(ind, kcFleet) {
 				self.showKCFleet( kcFleet );
 			});
+			$(".tab_fleet .fleet_list").createChildrenTooltips();
 		},
 
 		/* Show single fleet
@@ -371,6 +372,19 @@
 			$(".detail_level .detail_value", fleetBox).text( kcFleet.totalLevel() );
 			$(".detail_los .detail_icon img", fleetBox).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png" );
 			$(".detail_los .detail_value", fleetBox).text( Math.qckInt("floor", kcFleet.eLoS(), 1) );
+			if(ConfigManager.elosFormula === 4) {
+				let f33Cn = [
+					Math.qckInt("floor", kcFleet.eLos4(), 1),
+					Math.qckInt("floor", kcFleet.eLos4(2), 1),
+					Math.qckInt("floor", kcFleet.eLos4(3), 1),
+					Math.qckInt("floor", kcFleet.eLos4(4), 1),
+					Math.qckInt("floor", kcFleet.eLos4(5), 1)
+				];
+				$(".detail_los .detail_value", fleetBox).attr("title",
+					"Cn1: {0}\nCn3: {1}\nCn4: {2}".format(f33Cn[0], f33Cn[2], f33Cn[3]));
+			} else {
+				$(".detail_los .detail_value").attr("title", "");
+			}
 			$(".detail_air .detail_value", fleetBox).text( kcFleet.fighterPowerText() );
 			$(".detail_antiair .detail_value", fleetBox).text( kcFleet.adjustedAntiAir(ConfigManager.aaFormation) )
 				.attr("title", "Line-Ahead: {0}\nDouble-Line: {1}\nDiamond: {2}"
