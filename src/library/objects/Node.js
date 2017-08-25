@@ -71,24 +71,23 @@ Used by SortieManager
 			enemy: result2[1]
 		};
 
-		var allySunkCount = endHPs.ally.filter(function(x){return x===0;}).length;
+		var allySunkCount = endHPs.ally.filter(x => x === 0).length;
 		var allyCount = endHPs.ally.length;
-		var enemySunkCount = endHPs.enemy.filter(function(x){return x===0;}).length;
+		var enemySunkCount = endHPs.enemy.filter(x => x === 0).length;
 		var enemyCount = endHPs.enemy.length;
 
 		var requiredSunk = enemyCount === 1 ? 1 : Math.floor( enemyCount * 0.7);
 		
-		var i;
-		// damage taken by ally
+		// total damage taken by ally & enemy
 		var allyGauge = 0;
 		var allyBeginHP = 0;
-		for (i=0; i<allyCount; ++i) {
+		for (let i = 0; i < allyCount; ++i) {
 			allyGauge += beginHPs.ally[i] - endHPs.ally[i];
 			allyBeginHP += beginHPs.ally[i];
 		}
 		var enemyGauge = 0;
 		var enemyBeginHP = 0;
-		for (i=0; i<enemyCount; ++i) {
+		for (let i = 0; i < enemyCount; ++i) {
 			enemyGauge += beginHPs.enemy[i] - endHPs.enemy[i];
 			enemyBeginHP += beginHPs.enemy[i];
 		}
@@ -157,7 +156,7 @@ Used by SortieManager
 
 		if (enemyGauge > 0 && equalOrMore)
 			return "C";
-		if (allySunkCount > 0 && allyCount === 1)
+		if (allySunkCount > 0 && (allyCount - allySunkCount) === 1)
 			return "E";
 		return "D";
 	};
