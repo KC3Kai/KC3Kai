@@ -1,6 +1,10 @@
-// Public API of Battle Prediction module
-// Must be loaded first, since it defines the module's structure
-// Run `grunt concat:battlePredictionDev` to generate the module for testing
+/**
+ * Public API of Battle Prediction module.
+ * Must be loaded first, since it defines the module's structure.
+ *
+ * DO NOT modify single file module of `src/library/module/BattlePrediction.js` directly,
+ * To generate the single file module, run `grunt concat:battlePredictionDev`.
+ */
 (function () {
   const BP = {
     fleets: {},

@@ -32,7 +32,7 @@
     return targets.map(bind(convertToTarget, playerRole));
   };
 
-  // Unpack target index from the array KCAPI uses for each attack
+  // Unpack target index from the array KCSAPI uses for each attack
   const normalizeTargetFormat = (dfList) => {
     return dfList.map((indexes) => {
       // Both indexes for a double attack should be the same
@@ -50,7 +50,7 @@
       throw new Error(`Bad target index: ${targetIndex}`);
     }
 
-    // Note: KCACPI uses 1-based indexes, so we need to convert to 0-based indexing
+    // Note: KCSAPI uses 1-based indexes, so we need to convert to 0-based indexing
     if (targetIndex <= 6) {
       return { side: Side.PLAYER, role: playerRole, position: targetIndex - 1 };
     }
@@ -91,7 +91,7 @@
       throw new Error(`Bad target index: ${targetIndex}`);
     }
 
-    // KCAPI uses 1-based indexes, so we need to convert to 0-base
+    // KCSAPI uses 1-based indexes, so we need to convert to 0-base
     return targetIndex <= 6
       ? { role: Role.MAIN_FLEET, position: targetIndex - 1 }
       : { role: Role.ESCORT_FLEET, position: targetIndex - 7 };

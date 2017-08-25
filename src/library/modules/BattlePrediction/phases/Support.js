@@ -6,7 +6,7 @@
   const parseSupport = ({ api_support_airatack, api_support_hourai } = {}) => {
     const { kouku: { parseKouku }, support: { parseHourai } } = KC3BattlePrediction.battle.phases;
 
-    // Misspelling is deliberate - it exists in KCAPI's json
+    // Misspelling is deliberate - it exists in KCSAPI json
     if (api_support_airatack) {
       return parseKouku(api_support_airatack);
     } else if (api_support_hourai) {

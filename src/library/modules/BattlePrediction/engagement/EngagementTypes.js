@@ -215,7 +215,7 @@
   /*--------------------------------------------------------*/
 
   // The engagement types are defined as factory functions to avoid file load order dependencies
-  // NB: It may be worth cacheing instances if performance proves to be an issue
+  // NB: It may be worth caching instances if performance proves to be an issue
   const getEngagementType = (battleType = {}) => {
     const { types } = KC3BattlePrediction.battle.engagement;
 

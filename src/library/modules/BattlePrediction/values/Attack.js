@@ -8,7 +8,7 @@
     });
   };
 
-  // KCAPI adds +0.1 to damage values to indicate flagship protection activated
+  // KCSAPI adds +0.1 to damage values to indicate flagship protection activated
   const normalizeDamage = damage => Math.floor(damage);
 
   Object.assign(window.KC3BattlePrediction.battle, {

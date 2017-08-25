@@ -1,5 +1,10 @@
-// Public API of Battle Prediction module
-// Must be loaded first, since it defines the module's structure
+/**
+ * Public API of Battle Prediction module.
+ * Must be loaded first, since it defines the module's structure.
+ *
+ * DO NOT modify single file module of `src/library/module/BattlePrediction.js` directly,
+ * To generate the single file module, run `grunt concat:battlePredictionDev`.
+ */
 (function () {
   const BP = {
     fleets: {},
@@ -24,10 +29,16 @@
   BP.analyzeBattle = (battleData, playerDamecons, battleType) => {
     const { fleets, battle, formatResult } = KC3BattlePrediction;
 
-    const initialFleets = fleets.getInitialState(battleData, playerDamecons);
-    const result = battle.simulateBattle(battleData, initialFleets, battleType);
+    try {
+      const initialFleets = fleets.getInitialState(battleData, playerDamecons);
+      const result = battle.simulateBattle(battleData, initialFleets, battleType);
 
-    return formatResult(result);
+      return formatResult(result);
+    } catch (error) {
+      // Pass context explicitly, so it is recorded
+      KC3Log.error(error, error.data, { battleType, battleData, playerDamecons });
+      throw error;
+    }
   };
 
   // --------------------------------------------------------------------------
@@ -92,7 +103,8 @@
   /*--------------------------------------------------------*/
 
   battle.simulateBattle = (battleData, initalFleets, battleType) => {
-    const { battle: { parseBattle, simulateAttack } } = KC3BattlePrediction;
+    const { parseBattle, simulateAttack } = KC3BattlePrediction.battle;
+
     const attacks = parseBattle(battleType, battleData);
     return attacks.reduce(simulateAttack, initalFleets);
   };
@@ -105,26 +117,26 @@
 
   battle.simulateAttack = (fleets, { target, damage }) => {
     const { bind, fleets: { update, damageShip } } = KC3BattlePrediction;
+
     return update(fleets, target, bind(damageShip, damage));
   };
 
   /* -----------------[ PARSE BATTLE DATA ]---------------- */
 
-  // TODO: move this subtree to engagement module?
   battle.parseBattle = (battleType, battleData) => {
     const { accumulateAttacks, parsePhases } = KC3BattlePrediction.battle;
 
     return accumulateAttacks(parsePhases(battleType, battleData));
   };
 
-  battle.accumulateAttacks = phases =>
-    phases.reduce((attacks, phase) => attacks.concat(phase), []);
-
   battle.parsePhases = (battleType, battleData) => {
     const { getBattlePhases } = KC3BattlePrediction.battle.engagement;
 
     return getBattlePhases(battleType).map(parsePhase => parsePhase(battleData));
   };
+
+  battle.accumulateAttacks = phases =>
+    phases.reduce((attacks, phase) => attacks.concat(phase), []);
 
   /*--------------------------------------------------------*/
   /* ---------------------[ EXPORTS ]---------------------- */
@@ -501,7 +513,7 @@
   /*--------------------------------------------------------*/
 
   // The engagement types are defined as factory functions to avoid file load order dependencies
-  // NB: It may be worth cacheing instances if performance proves to be an issue
+  // NB: It may be worth caching instances if performance proves to be an issue
   const getEngagementType = (battleType = {}) => {
     const { types } = KC3BattlePrediction.battle.engagement;
 
@@ -600,7 +612,6 @@
   /* --------------------[ PUBLIC API ]-------------------- */
   /*--------------------------------------------------------*/
 
-  // TODO: extend exception context with battleData
   const parseHougeki = (playerRole, battleData) => {
     const { parseTargets, parseDamages, zipAttacks } = KC3BattlePrediction.battle.phases.hougeki;
 
@@ -630,7 +641,7 @@
     return targets.map(bind(convertToTarget, playerRole));
   };
 
-  // Unpack target index from the array KCAPI uses for each attack
+  // Unpack target index from the array KCSAPI uses for each attack
   const normalizeTargetFormat = (dfList) => {
     return dfList.map((indexes) => {
       // Both indexes for a double attack should be the same
@@ -648,7 +659,7 @@
       throw new Error(`Bad target index: ${targetIndex}`);
     }
 
-    // Note: KCACPI uses 1-based indexes, so we need to convert to 0-based indexing
+    // Note: KCSAPI uses 1-based indexes, so we need to convert to 0-based indexing
     if (targetIndex <= 6) {
       return { side: Side.PLAYER, role: playerRole, position: targetIndex - 1 };
     }
@@ -689,7 +700,7 @@
       throw new Error(`Bad target index: ${targetIndex}`);
     }
 
-    // KCAPI uses 1-based indexes, so we need to convert to 0-base
+    // KCSAPI uses 1-based indexes, so we need to convert to 0-base
     return targetIndex <= 6
       ? { role: Role.MAIN_FLEET, position: targetIndex - 1 }
       : { role: Role.ESCORT_FLEET, position: targetIndex - 7 };
@@ -913,7 +924,7 @@
   const parseSupport = ({ api_support_airatack, api_support_hourai } = {}) => {
     const { kouku: { parseKouku }, support: { parseHourai } } = KC3BattlePrediction.battle.phases;
 
-    // Misspelling is deliberate - it exists in KCAPI's json
+    // Misspelling is deliberate - it exists in KCSAPI json
     if (api_support_airatack) {
       return parseKouku(api_support_airatack);
     } else if (api_support_hourai) {
@@ -1103,7 +1114,7 @@
     });
   };
 
-  // KCAPI adds +0.1 to damage values to indicate flagship protection activated
+  // KCSAPI adds +0.1 to damage values to indicate flagship protection activated
   const normalizeDamage = damage => Math.floor(damage);
 
   Object.assign(window.KC3BattlePrediction.battle, {
@@ -1152,8 +1163,9 @@
   const applyUpdate = ({ side, role, position }, updateShip, fleets) => {
     const { cloneFleets } = KC3BattlePrediction.fleets;
 
+    // NB: Cloning is necessary to preserve function purity
+    // Can be replaced by assignment if performance is an issue, though this may cause issues with logging
     const result = cloneFleets(fleets);
-
     result[side][role][position] = updateShip(fleets[side][role][position]);
 
     return result;
@@ -1209,7 +1221,6 @@
     switch (ship.damecon) {
       case Damecon.TEAM:
         return Object.assign({}, ship, {
-          // TODO: confirm rounding
           hp: Math.floor(ship.maxHp * 0.2),
           damecon: Damecon.NONE,
           dameConConsumed: true,
