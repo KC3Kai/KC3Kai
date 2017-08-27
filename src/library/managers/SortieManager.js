@@ -75,7 +75,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					sortie.mapinfo.api_defeat_count = thisMap.kills || 0;
 				}
 			}
-			// Reocrd boss HP gauge states of event maps
+			// Record boss HP gauge states of event maps
 			if(eventData){
 				var mergedEventInfo = {};
 				$.extend(mergedEventInfo, eventData, {
@@ -622,8 +622,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 						exceptions[shipId][gearId] = null;
 						continue;
 					}
-					if(KC3GearManager.antiAirFighterType2Ids.indexOf(
-						String(gearMst.api_type[2]) ) > -1){
+					if(KC3GearManager.antiAirFighterType2Ids.indexOf(gearMst.api_type[2]) > -1){
 						const aaStat = gearMst.api_tyku || 0;
 						const capacity = ((enemySlotSizes || [])[shipIdx] || shipMst.api_maxeq || [])[slotIdx];
 						if(capacity !== undefined){
