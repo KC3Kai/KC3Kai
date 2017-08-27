@@ -688,8 +688,10 @@ Used by SortieManager
 		// Record encounters only if on sortie
 		if(KC3SortieManager.isOnSortie()) {
 			this.saveEnemyEncounterInfo(this.battleDay);
-			
-			// Don't log at Strategy Room Maps/Events History
+		}
+		
+		// Don't log at Strategy Room Maps/Events History
+		if(isRealBattle) {
 			console.log("Parsed battle node", this);
 		}
 	};
@@ -784,9 +786,14 @@ Used by SortieManager
 			})();
 			const enemy = isEnemyCombined ? KC3BattlePrediction.Enemy.COMBINED : KC3BattlePrediction.Enemy.SINGLE;
 			const time = KC3BattlePrediction.Time.NIGHT;
-
-			const playerFleet = PlayerManager.fleets[isPlayerCombined ? 1 : fleetId];
-			const dameConCode = KC3SortieManager.isPvP() ? [] : playerFleet.getDameConCodes();
+			const dameConCode = (() => {
+				if (KC3SortieManager.isPvP()) { return []; }
+				let result = PlayerManager.fleets[fleetId].getDameConCodes();
+				if (isPlayerCombined) {
+					result = result.concat(PlayerManager.fleets[1].getDameConCodes());
+				}
+				return result;
+			})();
 			const result = KC3BattlePrediction.analyzeBattle(nightData, dameConCode, { player, enemy, time });
 
 			// Use nowhps as initial values which are endHPs of day battle
@@ -800,6 +807,7 @@ Used by SortieManager
 			}
 
 			// Update fleets
+			const playerFleet = PlayerManager.fleets[isPlayerCombined ? 1 : fleetId];
 			const playerResult = isPlayerCombined ? result.playerEscort : result.playerMain;
 			playerResult.forEach(({ hp, dameConConsumed }, position) => {
 				endHPs.ally[position + (isPlayerCombined & 6)] = hp;
@@ -847,7 +855,7 @@ Used by SortieManager
 		}
 		
 		if(this.gaugeDamage > -1
-			&& (!isEnemyCombined || this.activatedEnemyFleet == 1) ){
+			&& (!isEnemyCombined || this.activatedEnemyFleet == 1) ) {
 			let bossCurrentHp = nightData.api_nowhps[7];
 			this.gaugeDamage += Math.min(bossCurrentHp, bossCurrentHp - this.enemyHP[0].hp);
 		}
@@ -857,7 +865,7 @@ Used by SortieManager
 			this.saveEnemyEncounterInfo(this.battleNight);
 		}
 		// Don't log at Strategy Room Maps/Events History
-		if(KC3SortieManager.isOnSortie()) {
+		if(isRealBattle) {
 			console.log("Parsed night battle node", this);
 		}
 	};
