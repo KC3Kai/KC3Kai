@@ -275,6 +275,15 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			
 			thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime ))[definedKind](nodeData);
 			this.nodes.push(thisNode);
+
+			if(this.onSortie > 0)
+				KC3Database.updateNodes(this.onSortie, this.nodes.map(function(node){
+					return {
+						id: node.id, 
+						type: node.type, 
+						desc: node.nodeDesc
+					};
+				}));
 			console.log("Next node", nodeData.api_no, definedKind, thisNode);
 			this.save();
 		},

@@ -499,6 +499,17 @@
 					$(".sortie_map", sortieBox).text( (sortie.world >= 10 ? "E" : sortie.world) + "-" + sortie.mapnum );
 					$(".button_tomanager", sortieBox).data("id", sortie.id)
 						.on("click", viewFleetAtManagerFunc);
+					var edges = [];
+					if(sortie.nodes)
+						$.each(sortie.nodes, function(index, node) {
+							var letter = KC3Meta.nodeLetter( sortie.world, sortie.mapnum, node.id );
+							edges.push(node.id);
+							$(".sortie_edge_"+(index+1), sortieBox).addClass("edge_" + node.type)
+								.attr("title", node.desc).html(letter);
+
+							if(index === 5)
+								$(".sortie_edges", sortieBox).removeClass("one_line").addClass("two_lines");
+						});
 					
 					fleetkey = ["main","escort","preboss","boss"];
 					fleets   = [
@@ -654,12 +665,17 @@
 							battle.shizunde |= [[],[]];
 							
 							// Show on node list
-							$(".sortie_edge_"+(index+1), sortieBox).addClass("active")
-								.toggleClass("boss", !!battle.boss);
-							$(".sortie_edge_"+(index+1), sortieBox).html( KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node ) );
-							if(index === 5){
-								$(".sortie_edges", sortieBox).removeClass("one_line").addClass("two_lines");
+							var edgeIndex = edges.indexOf(battle.node);
+							if(edgeIndex < 0) {
+								edgeIndex = edges.length;
+								edges.push(battle.node);
+								$(".sortie_edge_"+(edgeIndex+1), sortieBox).addClass("edge_battle")
+									.html(KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node ));
+								if(edgeIndex === 5){
+									$(".sortie_edges", sortieBox).removeClass("one_line").addClass("two_lines");
+								}
 							}
+							$(".sortie_edge_"+(edgeIndex+1), sortieBox).toggleClass("boss", !!battle.boss).addClass("active");
 							
 							// HTML elements
 							nodeBox = $(".tab_"+tabCode+" .factory .sortie_nodeinfo").clone();
