@@ -12,8 +12,7 @@ Provides access to data on built-in JSON files
 		_cache:{},
 		_icons:{},
 		_exp:{},
-		_exp_ship:{},
-		_gauges:{},
+		_expShip:{},
 		_ship:{},
 		_shipAffix:{},
 		_slotitem:{},
@@ -31,12 +30,14 @@ Provides access to data on built-in JSON files
 			troll:{},
 			lang:{},
 		},
-		_tpmult:{},
+		_dataColle:{},
+		_eventColle:{},
 		_edges:{},
 		_nodes:{},
 		_gunfit:{},
 		_defaultIcon:"",
 		
+		// Following constants nearly unchanged if no furthermore research (decompile) done
 		voiceDiffs: [
 			2475,    0,    0, 8691, 7847, 3595, 1767, 3311, 2507,
 			9651, 5321, 4473, 7117, 5947, 9489, 2669, 8741, 6149,
@@ -80,84 +81,6 @@ Provides access to data on built-in JSON files
 			418,           // Satsuki Kai Ni
 			496            // Zara due
 		],
-		specialQuotesSizes: {
-			"44": { // Murasame Poke(1)
-				"2": {
-					"49728": {
-						"Setsubun": [3, 4, 5],
-						"Xmas": [12, 1]
-					}
-				}
-			},
-			"68": { // Maya Poke(1)
-				"2": {
-					"58800": {
-						"NewYears": [1, 2],
-						"Rainy": [5, 6, 7]
-					}
-				}
-			},
-			"90": { // Souryuu Poke(1)
-				"2": {
-					"60312": {
-						"Setsubun": [3, 4, 5],
-						"Saury": [8, 9, 10]
-					}
-				}
-			},
-			"124": { // Suzuya Poke(1)
-				"2": {
-					"66528": {
-						"EarlySummer": [6, 7, 8],
-						"Xmas": [12, 1]
-					}
-				}
-			},
-			"169": { // Tanikaze Poke(1)
-				"2": {
-					"90888": {
-						"Fall": [9, 10, 11],
-						"Xmas": [12, 1]
-					}
-				}
-			},
-			"186": { // Tokitsukaze Poke(1)
-				"2": {
-					"72408": {
-						"Valentines": [2, 3],
-						"Xmas": [12, 1]
-					}
-				}
-			},
-			"448": { // Zara Poke(1)
-				"2": {
-					"54936": {
-						"Valentines": [2, 3],
-						"Saury": [8, 9, 10]
-					}
-				}
-			},
-			"481": { // Minazuki Poke(1)
-				"2": {
-					"86856": {
-						"Summer2017": [6, 7, 8, 9],
-						"Xmas": [12, 1]
-					}
-				}
-			}
-		},
-		
-		abyssKaiShipIds: [
-			1565, 1566, 1567, 1616, 1617, 1618, 1714, 1715, 1734, 1735
-		],
-		abyssNonBossIds: [
-			1541, 1542, 1543, 1549, 1550, 1551, 1552, 1553, 1554, 1555,
-			1558, 1559, 1560, 1561, 1562, 1563, 1564, 1570, 1571, 1572,
-			1575, 1576, 1577, 1578, 1579, 1580, 1591, 1592, 1593, 1594,
-			1595, 1614, 1615, 1621, 1622, 1623, 1624, 1637, 1638, 1639,
-			1640, 1665, 1666, 1667, 1739, 1740, 1741, 1742, 1743, 1744,
-			1761
-		],
 		
 		/* Initialization
 		-------------------------------------------------------*/
@@ -168,14 +91,15 @@ Provides access to data on built-in JSON files
 			*/
 			
 			// Load Common Meta
-			this._icons    = JSON.parse( $.ajax(repo+'icons.json', { async: false }).responseText );
-			this._exp      = JSON.parse( $.ajax(repo+'exp_hq.json', { async: false }).responseText );
-			this._exp_ship = JSON.parse( $.ajax(repo+'exp_ship.json', { async: false }).responseText );
-			this._gauges   = JSON.parse( $.ajax(repo+'gauges.json', { async: false }).responseText );
-			this._edges    = JSON.parse( $.ajax(repo+'edges.json', { async: false }).responseText );
-			this._nodes    = JSON.parse( $.ajax(repo+'nodes.json', { async: false }).responseText );
-			this._tpmult   = JSON.parse( $.ajax(repo+'tp_mult.json', { async: false }).responseText );
-			this._gunfit   = JSON.parse( $.ajax(repo+'gunfit.json', { async: false }).responseText );
+			this._icons      = JSON.parse( $.ajax(repo+'icons.json', { async: false }).responseText );
+			this._exp        = JSON.parse( $.ajax(repo+'exp_hq.json', { async: false }).responseText );
+			this._expShip    = JSON.parse( $.ajax(repo+'exp_ship.json', { async: false }).responseText );
+			this._edges      = JSON.parse( $.ajax(repo+'edges.json', { async: false }).responseText );
+			this._nodes      = JSON.parse( $.ajax(repo+'nodes.json', { async: false }).responseText );
+			this._gunfit     = JSON.parse( $.ajax(repo+'gunfit.json', { async: false }).responseText );
+			// fud: Frequently updated data. rarely & randomly updated on maintenance weekly in fact
+			this._dataColle  = JSON.parse( $.ajax(repo+'fud_weekly.json', { async: false }).responseText );
+			this._eventColle = JSON.parse( $.ajax(repo+'fud_quarterly.json', { async: false }).responseText );
 			
 			// Load Translations
 			this._ship      = KC3Translation.getJSON(repo, 'ships', true);
@@ -193,6 +117,8 @@ Provides access to data on built-in JSON files
 			this._terms.troll = JSON.parse( $.ajax(repo+'lang/data/troll/terms.json', { async: false }).responseText );
 			// other language loaded here
 			this._terms.lang = KC3Translation.getJSON(repo, 'terms', true);
+			
+			this.updateAircraftTypeIds();
 			return this;
 		},
 		
@@ -220,7 +146,7 @@ Provides access to data on built-in JSON files
 				// Devs bump 1000 for master ID of abyssal ships from 2017-04-05
 				// To prevent mess file renaming for images, patch it here.
 				id = path === "abyss/" ? id - 1000 : id;
-				return "chrome-extension://"+chrome.runtime.id+"/assets/img/"+path+id+".png";
+				return chrome.extension.getURL("/assets/img/" + path + id + ".png");
 			}
 			if(typeof empty === "undefined"){
 				return this._defaultIcon;
@@ -232,7 +158,7 @@ Provides access to data on built-in JSON files
 		},
 		
 		formationIcon :function(formationId){
-			return "../../../../assets/img/formation2/" + formationId + ".png";
+			return "/assets/img/formation2/" + formationId + ".png";
 		},
 		
 		formationText :function(formationId){
@@ -355,13 +281,13 @@ Provides access to data on built-in JSON files
 				shipMaster = KC3Master.ship(Number(ship));
 			}
 			// Abyssal Kai
-			if(this.abyssKaiShipIds.indexOf(shipMaster.api_id) > -1){
+			if((this._eventColle.abyssKaiShipIds || []).indexOf(shipMaster.api_id) > -1){
 				return "kai";
 			}
 			// Princesses and demons, using black-list
 			// To reduce updating work, consider new abyssal ships as boss by default
 			if(shipMaster.api_id > (KC3Master.abyssalShipIdFrom + 38) &&
-				this.abyssNonBossIds.indexOf(shipMaster.api_id) < 0){
+				(this._eventColle.abyssNonBossIds || []).indexOf(shipMaster.api_id) < 0){
 				return "boss";
 			}
 			return KC3Master.isAbyssalShip(shipMaster.api_id) ? shipMaster.api_yomi.replace("-", "") : "";
@@ -384,7 +310,7 @@ Provides access to data on built-in JSON files
 		},
 		
 		expShip :function(level){
-			return this._exp_ship[level] || [0,0];
+			return this._expShip[level] || [0,0];
 		},
 		
 		quest :function(id){
@@ -422,7 +348,38 @@ Provides access to data on built-in JSON files
 		},
 		
 		gauge :function(map_id){
-			return this._gauges["m"+map_id] || false;
+			return (this._dataColle.gauges || {})["m" + map_id] || false;
+		},
+		
+		airPowerAverageBonus :function(ace){
+			// Use default known simple bonus constants if json data lost
+			var bonuses = this._dataColle.airPowerAverageBonuses || [0, 1, 1, 2, 2, 2, 3, 3];
+			return bonuses[ace] || 0;
+		},
+		
+		airPowerTypeBonus :function(type2, ace){
+			var bonuses = this._dataColle.airPowerTypeBonuses || {};
+			return (bonuses[type2] || [])[ace] || 0;
+		},
+		
+		airPowerInternalExpBounds :function(ace){
+			// Use default known xp table constants if json data lost
+			var exp = this._dataColle.airPowerInternalProficiency
+				|| [0, 10, 25, 40, 55, 70, 85, 100, 121];
+			return [exp[ace] || 0, (exp[ace + 1] || 1) - 1];
+		},
+		
+		updateAircraftTypeIds :function(){
+			// Do nothing if KC3GearManager not global yet
+			if(typeof KC3GearManager === "undefined"){ return; }
+			if(Array.isArray(this._dataColle.carrierBasedAircraftType3Ids))
+				KC3GearManager.carrierBasedAircraftType3Ids = this._dataColle.carrierBasedAircraftType3Ids;
+			if(Array.isArray(this._dataColle.landBasedAircraftType3Ids))
+				KC3GearManager.landBasedAircraftType3Ids = this._dataColle.landBasedAircraftType3Ids;
+			if(Array.isArray(this._dataColle.antiAirFighterType2Ids))
+				KC3GearManager.antiAirFighterType2Ids = this._dataColle.antiAirFighterType2Ids;
+			if(Array.isArray(this._dataColle.interceptorsType3Ids))
+				KC3GearManager.interceptorsType3Ids = this._dataColle.interceptorsType3Ids;
 		},
 		
 		defaultEquip :function(id){
@@ -518,12 +475,12 @@ Provides access to data on built-in JSON files
 			};
 
 			var getSType = (function(){
-				var tpBase = $.extend({},tpData);
+				var tpBase = $.extend({}, tpData);
 				function getSType(stype) {
-					var
-						map  = KC3Meta._tpmult.stype,
-						data = map[stype],
-						tprs = $.extend({},tpBase);
+					var tpmult = KC3Meta._eventColle.tpMultipliers || {},
+						stypes = tpmult.stype || {},
+						data   = stypes[stype],
+						tprs   = $.extend({}, tpBase);
 					switch(typeof data) {
 						case 'number':
 							tprs.value = (tprs.clear = isFinite(data) && !isNaN(data)) ? data : tprs.value;
@@ -536,12 +493,12 @@ Provides access to data on built-in JSON files
 				return getSType;
 			}).call(this);
 			var getSlot = (function(){
-				var tpBase = $.extend({},tpData);
+				var tpBase = $.extend({}, tpData);
 				function getSlot(slot) {
-					var
-						map  = KC3Meta._tpmult.slots,
-						data = map[slot],
-						tprs = $.extend({},tpBase);
+					var tpmult = KC3Meta._eventColle.tpMultipliers || {},
+						slots  = tpmult.slots || {},
+						data   = slots[slot],
+						tprs   = $.extend({}, tpBase);
 					switch(typeof data) {
 						case 'number':
 							tprs.value = (tprs.clear = isFinite(data) && !isNaN(data)) ? data : tprs.value;
@@ -651,7 +608,7 @@ Provides access to data on built-in JSON files
 
 			var lookupSpecialSeasonalKey = (shipId, vNum, fileSize) => {
 				// this table only contains base form IDs
-				const spFileSizeTable = this.specialQuotesSizes[
+				const spFileSizeTable = (this._dataColle.specialQuotesSizes || {})[
 					RemodelDb.originOf(shipId) || shipId
 				];
 				if(spFileSizeTable && fileSize){

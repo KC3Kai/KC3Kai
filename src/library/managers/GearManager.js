@@ -12,11 +12,11 @@ Saves and loads list to and from localStorage
 		max: 500,
 		pendingGearNum: 0,
 
+		// These IDs can be updated at `fud_weekly.json`
 		carrierBasedAircraftType3Ids: [6,7,8,9,10,21,22,33,39,40,43],
 		// Dupe `api_cost`, `api_distance` fixed for non aircraft gears since 2017-03-17
 		landBasedAircraftType3Ids: [6,7,8,9,10,33,37,38,39,40,43,44],
-		// To avoid manually update, see `load`
-		antiAirFighterType2Ids: ["6","7","8","11","45","47","48","57"],
+		antiAirFighterType2Ids: [6,7,8,11,45,47,48,57],
 		interceptorsType3Ids: [38,44],
 
 		carrierSupplyBauxiteCostPerSlot: 5,
@@ -37,11 +37,11 @@ Saves and loads list to and from localStorage
 		// steel_consumption = floor(api_cost * current_slot * 0.2)
 
 		// Get a specific item by ID
-		// NOTE: if you want to write testcases, avoid setting KC3GearManager.list["x0"]
+		// NOTE: if you want to write test-cases, avoid setting KC3GearManager.list["x0"]
 		// because it'll never be retrieved by "get(0)"
 		get :function( itemId ){
 			itemId = parseInt(itemId,10);
-			// in KCAPI some item values has special meanings on
+			// in KCSAPI some item values has special meanings on
 			// 0 (e.g. ex_slot == 0 means the slot is available but nothing is equipped.)
 
 			// assuming itemId starts from 1
@@ -151,13 +151,6 @@ Saves and loads list to and from localStorage
 		
 		// Load from storage and add each one to manager list
 		load: function(){
-			// Use ConfigManager's defaults instead, but remember: elements are String
-			var configured = ConfigManager.defaults().air_average
-				|| ConfigManager.defaults().air_bounds;
-			// Here skip config if ConfigManager not load first
-			if(typeof configured === "object" && Object.keys(configured).length > 0){
-				this.antiAirFighterType2Ids = Object.keys(configured);
-			}
 			if(typeof localStorage.gears != "undefined"){
 				this.clear();
 				var GearList = JSON.parse(localStorage.gears);

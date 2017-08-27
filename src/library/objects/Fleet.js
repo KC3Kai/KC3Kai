@@ -397,23 +397,19 @@ Contains summary information about a fleet and its 6 ships
 	};
 	
 	KC3Fleet.prototype.fighterPower = function(){
-		return Math.round(
-				Array.apply(null, {length: 6}).map(Number.call, Number)
-				.map(i => (this.ship(i).didFlee ? 0 : this.ship(i).fighterPower()))
-				.reduce((x, y) => x + y)
-			* 100) / 100;
+		return Array.apply(null, {length: 6}).map(Number.call, Number)
+			.map(i => (this.ship(i).didFlee ? 0 : this.ship(i).fighterPower()))
+			.reduce((acc, v) => acc + v, 0);
 	};
 	
 	KC3Fleet.prototype.fighterVeteran = function(){
-		return Math.round(
-				Array.apply(null, {length: 6}).map(Number.call, Number)
-				.map(i => (this.ship(i).didFlee ? 0 : this.ship(i).fighterVeteran()))
-				.reduce((x, y) => x + y)
-			* 100) / 100;
+		return [0,1,2,3,4,5]
+			.map(i => (this.ship(i).didFlee ? 0 : this.ship(i).fighterVeteran()))
+			.reduce((acc, v) => acc + v, 0);
 	};
 	
 	KC3Fleet.prototype.fighterBounds = function(){
-		var totalPower = [0,0];
+		var totalPower = [0, 0];
 		for(let index in this.ships){
 			if(this.ships[index] > 0 && !this.ship(index).didFlee){
 				let fighterPower = this.ship(index).fighterBounds();
@@ -428,7 +424,7 @@ Contains summary information about a fleet and its 6 ships
 	
 	KC3Fleet.prototype.fighterPowerText = function(){
 		switch(ConfigManager.air_formula){
-			case 2: return "~"+this.fighterVeteran();
+			case 2: return "\u2248"+this.fighterVeteran();
 			case 3:
 				var fighterBounds = this.fighterBounds();
 				return fighterBounds[0]+"~"+fighterBounds[1];

@@ -41,10 +41,10 @@ KC3改 Equipment Object
 	--------------------------------------------------------------*/
 	KC3Gear.prototype.fighterPower = function(capacity = 0){
 		// Empty item means no fighter power
-		if(this.itemId===0){ return 0; }
+		if(this.itemId === 0){ return 0; }
 
 		// Check if this object is a fighter plane
-		if( KC3GearManager.antiAirFighterType2Ids.indexOf( String(this.master().api_type[2]) ) > -1){
+		if(KC3GearManager.antiAirFighterType2Ids.indexOf( this.master().api_type[2] ) > -1){
 			return Math.floor( Math.sqrt(capacity) * this.master().api_tyku );
 		}
 
@@ -53,7 +53,7 @@ KC3改 Equipment Object
 	};
 
 
-	KC3Gear.prototype.AAStatImprovementBonous = function() {
+	KC3Gear.prototype.AAStatImprovementBonus = function() {
 		if (this.itemId !== 0) {
 			var hasBeenImproved = typeof(this.stars) !== "undefined" && this.stars > 0;
 			// reference:
@@ -87,85 +87,70 @@ KC3改 Equipment Object
 		return 0;
 	};
 
-	/* FIGHTER POWER: VETERAN
+	/* FIGHTER POWER: Proficiency Average
 	Get fighter power of this equipment
-	with added whole number proficiency bonus
+	with added whole number average proficiency bonus
 	--------------------------------------------------------------*/
 	KC3Gear.prototype.fighterVeteran = function(capacity = 0){
 		// Empty item or slot means no fighter power
 		if(this.itemId === 0 || capacity <= 0){ return 0; }
 
+		var type2 = this.master().api_type[2],
+			type3 = this.master().api_type[3];
 		// Check if this object is a fighter plane
-		if( KC3GearManager.antiAirFighterType2Ids.indexOf( String(this.master().api_type[2]) ) > -1){
-			var typInd = String( this.master().api_type[2] );
-			var airAverageTable = ConfigManager.air_average[typInd];
-			// if new type added to default, have to reset to default
-			if(typeof airAverageTable === 'undefined') {
-				var defaultTable = ConfigManager.defaults().air_average[typInd];
-				if(typeof defaultTable !== 'undefined') {
-					ConfigManager.resetValueOf('air_average');
-					airAverageTable = defaultTable;
-					console.info("Setting 'air_average' reset to default for missing type:", typInd);
-				} else {
-					console.warn("No 'air_average' setting found for type:", typInd);
-					return 0;
-				}
-			}
-			var veteranBonus = airAverageTable[ this.ace > 0 ? this.ace : 0 ];
+		if(KC3GearManager.antiAirFighterType2Ids.indexOf(type2) > -1){
+			var aceLevel = this.ace > 0 ? this.ace : 0,
+				internalBonus = KC3Meta.airPowerAverageBonus(aceLevel),
+				typeBonus = KC3Meta.airPowerTypeBonus(type2, aceLevel),
+				averageBonus = internalBonus + typeBonus;
 			var aaStat = this.master().api_tyku;
-			aaStat += this.AAStatImprovementBonous();
+			aaStat += this.AAStatImprovementBonus();
 			// Interceptor use evasion as interception stat against fighter
-			var intStat = KC3GearManager.interceptorsType3Ids.indexOf(this.master().api_type[3]) > -1 ?
+			var intStat = KC3GearManager.interceptorsType3Ids.indexOf(type3) > -1 ?
 				this.master().api_houk : 0;
 			aaStat += intStat * 1.5;
-			return Math.floor( Math.sqrt(capacity) * aaStat + veteranBonus );
+			return Math.floor( Math.sqrt(capacity) * aaStat + averageBonus );
 		}
 
 		// Equipment did not return on plane check, no fighter power
 		return 0;
 	};
 
-	/* FIGHTER POWER: VETERAN with BOUNDS
+	/* FIGHTER POWER: Proficiency with Bounds
 	Get fighter power of this equipment
-	as an array with lower and upper bound bonuses
+	as an array with lower and upper bound proficiency bonuses
 	--------------------------------------------------------------*/
 	KC3Gear.prototype.fighterBounds = function(capacity = 0){
 		// Empty item or slot means no fighter power
-		if(this.itemId === 0 || capacity <= 0){ return [0,0]; }
+		if(this.itemId === 0 || capacity <= 0){ return [0, 0]; }
 
+		var type2 = this.master().api_type[2],
+			type3 = this.master().api_type[3];
 		// Check if this object is a fighter plane
-		if( KC3GearManager.antiAirFighterType2Ids.indexOf( String(this.master().api_type[2]) ) > -1){
-
-			var typInd = String( this.master().api_type[2] );
-			var airBoundTable = ConfigManager.air_bounds[typInd];
-			// if new type added to default, have to reset to default
-			if(typeof airBoundTable === 'undefined') {
-				var defaultTable = ConfigManager.defaults().air_bounds[typInd];
-				if(typeof defaultTable !== 'undefined') {
-					ConfigManager.resetValueOf('air_bounds');
-					airBoundTable = defaultTable;
-					console.info("Setting 'air_bounds' reset to default for missing type:", typInd);
-				} else {
-					console.warn("No 'air_bounds' setting found for type:", typInd);
-					return [0,0];
-				}
-			} 
-			var veteranBounds = airBoundTable[ this.ace > 0 ? this.ace : 0 ];
+		if(KC3GearManager.antiAirFighterType2Ids.indexOf(type2) > -1){
+			var aceLevel = this.ace > 0 ? this.ace : 0,
+				internalExps = KC3Meta.airPowerInternalExpBounds(aceLevel),
+				typeBonus = KC3Meta.airPowerTypeBonus(type2, aceLevel),
+				bonusBounds = [
+					Math.sqrt(internalExps[0] / 10) + typeBonus,
+					Math.sqrt(internalExps[1] / 10) + typeBonus
+				];
+			
 			var aaStat = this.master().api_tyku;
-			aaStat += this.AAStatImprovementBonous();
+			aaStat += this.AAStatImprovementBonus();
 			// Interceptor use evasion as interception stat against fighter
-			var intStat = KC3GearManager.interceptorsType3Ids.indexOf(this.master().api_type[3]) > -1 ?
+			var intStat = KC3GearManager.interceptorsType3Ids.indexOf(type3) > -1 ?
 				this.master().api_houk : 0;
 			aaStat += intStat * 1.5;
 
 			return [
-				Math.floor( Math.sqrt(capacity) * aaStat + veteranBounds[0] ),
-				Math.floor( Math.sqrt(capacity) * aaStat + veteranBounds[1] ),
+				Math.floor( Math.sqrt(capacity) * aaStat + bonusBounds[0] ),
+				Math.floor( Math.sqrt(capacity) * aaStat + bonusBounds[1] ),
 			];
 		}
 
 		// Equipment did not return on plane check, no fighter power
-		return [0,0];
+		return [0, 0];
 	};
 	
 	/* FIGHTER POWER on Air Defense with INTERCEPTOR FORMULA
@@ -177,8 +162,10 @@ KC3改 Equipment Object
 	KC3Gear.prototype.interceptionPower = function(capacity = 0){
 		// Empty item or slot means no fighter power
 		if(this.itemId === 0 || capacity <= 0){ return 0; }
+		var type2 = this.master().api_type[2],
+			type3 = this.master().api_type[3];
 		// Check if this object is a interceptor plane or not
-		if( KC3GearManager.interceptorsType3Ids.indexOf(this.master().api_type[3]) > -1) {
+		if(KC3GearManager.interceptorsType3Ids.indexOf(type3) > -1) {
 			var interceptPower = (
 				// Base anti-air power
 				this.master().api_tyku +
@@ -187,16 +174,15 @@ KC3改 Equipment Object
 				// Anti-Bomber is from hit accuracy
 				this.master().api_houm * 2 +
 				// Although no interceptor can be improved for now
-				this.AAStatImprovementBonous()
+				this.AAStatImprovementBonus()
 			) * Math.sqrt(capacity);
 			
-			// Proficiency Bonus, no fail-over here
+			// Add proficiency average bonus
 			if(this.ace > 0){
-				var typInd = String(this.master().api_type[2]);
-				var airAverageTable = ConfigManager.air_average[typInd];
-				if (typeof airAverageTable != "undefined") {
-					interceptPower += airAverageTable[this.ace] || 0;
-				}
+				var internalBonus = KC3Meta.airPowerAverageBonus(this.ace),
+					typeBonus = KC3Meta.airPowerTypeBonus(type2, this.ace),
+					averageBonus = internalBonus + typeBonus;
+				interceptPower += averageBonus;
 			}
 			
 			return Math.floor(interceptPower);
