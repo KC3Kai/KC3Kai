@@ -505,7 +505,7 @@ button, input, select, textarea {
 .tab_ships .filters .fold_button {
 	background:#cccccc;
 }
-.tab_ships .massSelect .hover {
+.tab_ships .hover {
 	color:#ffffff
 }
 .tab_ships .massSelect .hover.on {
