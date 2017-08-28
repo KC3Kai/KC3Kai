@@ -471,7 +471,7 @@ Contains summary information about a fleet and its 6 ships
 		var totalAmmo = 0;
 		var self = this;
 		$.each( this.ships, function(i, shipId) {
-			if (shipId !== -1) {
+			if (shipId > 0) {
 				var shipObj = self.ship(i);
 				var cost = shipObj.calcResupplyCost( costPercent.fuel, costPercent.ammo );
 				totalFuel += cost.fuel;
@@ -479,6 +479,30 @@ Contains summary information about a fleet and its 6 ships
 			}
 		});
 		return {fuel: totalFuel, ammo: totalAmmo};
+	};
+
+	KC3Fleet.prototype.calcSupportExpeditionCost = function() {
+		const totalCost = {
+			fuel: 0,
+			ammo: 0,
+			supportFlag: 0
+		};
+		totalCost.supportFlag = this.estimateSupportType();
+		if(totalCost.supportFlag > 0) {
+			const costPercent = {
+				fuel: [0, 0.5, 0.5, 0.5][totalCost.supportFlag] || 0,
+				ammo: [0, 0.4, 0.8, 0.8][totalCost.supportFlag] || 0
+			};
+			$.each(this.ships, (i, shipId) => {
+				if (shipId > 0) {
+					const shipObj = this.ship(i);
+					const cost = shipObj.calcResupplyCost(costPercent.fuel, costPercent.ammo);
+					totalCost.fuel += cost.fuel;
+					totalCost.ammo += cost.ammo;
+				}
+			});
+		}
+		return totalCost;
 	};
 
 	KC3Fleet.prototype.calcResupplyCost = function() {
@@ -490,7 +514,7 @@ Contains summary information about a fleet and its 6 ships
 			hasMarried: false
 		};
 		$.each(this.ships, (i, shipId) => {
-			if (shipId > -1) {
+			if (shipId > 0) {
 				const shipObj = this.ship(i);
 				const cost = shipObj.calcResupplyCost(-1, -1, true, true);
 				totalCost.fuel += cost.fuel;
@@ -532,6 +556,20 @@ Contains summary information about a fleet and its 6 ships
 			totalCost.airRaidAmmo += Math.floor(maxAmmo * 0.04) || 1;
 		}
 		return totalCost;
+	};
+
+	KC3Fleet.prototype.calcTpObtain = function(...fleetObj) {
+		if(fleetObj.length > 1) {
+			return Math.floor(fleetObj.map(fleet => fleet.ship()
+				.map(ship => ship.obtainTP())
+				.reduce((pre, cur) => pre.add(cur), KC3Meta.tpObtained())
+			).reduce((pre, cur) => pre.add(cur), KC3Meta.tpObtained()).value);
+		}
+		fleetObj = fleetObj[0] || this;
+		return Math.floor(fleetObj.ship()
+			.map(ship => ship.obtainTP())
+			.reduce((pre, cur) => pre.add(cur), KC3Meta.tpObtained())
+			.value);
 	};
 
 	/*--------------------------------------------------------*/
@@ -990,6 +1028,29 @@ Contains summary information about a fleet and its 6 ships
 			return 3; // Diamond
 		}
 		return 1; // Line Ahead
+	};
+
+	/**
+	 * Estimate possible type of support expedition from current composition.
+	 * @return the same value defined by `api_support_flag`,
+	 *         1=Aerial Support, 2=Support Shelling, 3=Long Range Torpedo Attack
+	 *         0=Unmet expedition prerequisite
+	 * @see http://kancolle.wikia.com/wiki/Expedition/Support_Expedition
+	 */
+	KC3Fleet.prototype.estimateSupportType = function() {
+		// Support expedition needs 2 DD at least
+		if(this.countShipType(2) < 2) {
+			return 0;
+		}
+		// 3 or more CV(L/B)/AV/LHA
+		if(this.countShipType([7, 11, 18, 16, 17]) >= 3) {
+			return 1;
+		// 4 or more DD/CL/CLT
+		} else if(this.countShipType([2, 3, 4]) >= 4) {
+			return 3;
+		}
+		// other composition
+		return 2;
 	};
 
 	/* SORTIE JSON

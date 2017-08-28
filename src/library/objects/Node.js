@@ -351,13 +351,10 @@ Used by SortieManager
 	
 	KC3Node.prototype.defineAsTransport = function( nodeData ){
 		this.type = "transport";
-		this.amount = Math.floor(KC3SortieManager.getSortieFleet().map(function(fleetId){
-			return PlayerManager.fleets[fleetId].ship().map(function(ship){
-				return ship.obtainTP();
-			}).reduce(function(pre,cur){ return pre.add(cur); },KC3Meta.tpObtained());
-		}).reduce(function(pre,cur){ return pre.add(cur); },KC3Meta.tpObtained())
-		.value);
-		
+		this.amount = PlayerManager.fleets[KC3SortieManager.fleetSent-1].calcTpObtain(
+			KC3SortieManager.getSortieFleet().map(id => PlayerManager.fleets[id])
+		);
+		console.log("TP amount when arrive TP point", this.amount);
 		return this;
 	};
 	
