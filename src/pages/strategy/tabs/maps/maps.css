@@ -477,10 +477,10 @@
 	font-size:12px;
 	font-weight:bold;
 }
-.tab_maps .sortie_list .node_id.nodamage {
+.tab_maps .sortie_list .nodamage {
 	box-shadow: 0px 0px 2px 2px #8c4;
 }
-.tab_maps .sortie_list .node_id.damaged {
+.tab_maps .sortie_list .damaged {
 	box-shadow: 0px 0px 2px 2px #f90;
 }
 

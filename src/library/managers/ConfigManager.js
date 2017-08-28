@@ -143,6 +143,7 @@ Retrieves when needed to apply on components
 				pan_custom_css		: "",
 
 				sr_theme			: "legacy",
+				sr_show_non_battle	: true,
 				sr_custom_css		: "",
 
 				disableConsoleLogHooks: false,

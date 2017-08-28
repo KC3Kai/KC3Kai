@@ -589,10 +589,10 @@
 	font-size:12px;
 	font-weight:bold;
 }
-.tab_event .sortie_list .node_id.nodamage {
+.tab_event .sortie_list .nodamage {
 	box-shadow: 0px 0px 2px 2px #8c4;
 }
-.tab_event .sortie_list .node_id.damaged {
+.tab_event .sortie_list .damaged {
 	box-shadow: 0px 0px 2px 2px #f90;
 }
 

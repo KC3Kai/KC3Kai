@@ -274,22 +274,17 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			console.debug("Next edge points to boss node", nodeData.api_bosscell_no, bossLetter);
 			
 			thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime ))[definedKind](nodeData);
+			thisNode.nodeData = nodeData;
 			this.nodes.push(thisNode);
 
-			if(this.onSortie > 0)
-				KC3Database.updateNodes(this.onSortie, this.nodes.map(function(node){
-					return {
-						id: node.id, 
-						type: node.type, 
-						desc: node.nodeDesc
-					};
-				}));
+			this.updateNodes();
 			console.log("Next node", nodeData.api_no, definedKind, thisNode);
 			this.save();
 		},
 		
 		engageLandBaseAirRaid :function( battleData ){
 			this.currentNode().airBaseRaid( battleData );
+			this.updateNodes();
 		},
 		
 		engageBattle :function( battleData, stime ){
@@ -417,6 +412,24 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			});
 		},
 		
+		updateNodes: function(){
+			if(this.onSortie > 0) 
+				KC3Database.updateNodes(this.onSortie, this.nodes.map(function(node){
+					var toSave = { id: node.id,	type: node.type };
+					if(node.nodeData) {
+						if(node.nodeData.api_offshore_supply)
+							toSave.offshoreSupply = node.nodeData.api_offshore_supply;
+						if(node.nodeData.api_event_id)
+							toSave.eventId = node.nodeData.api_event_id;
+						if(node.nodeData.api_event_kind)
+							toSave.eventKind = node.nodeData.api_event_kind;
+					}
+					if(node.nodeDesc)
+						toSave.desc = node.nodeDesc;
+					return toSave;
+				}));
+		},
+
 		// return empty object if not found
 		getAllMapData: function(){
 			return localStorage.getObject("maps") || {};
