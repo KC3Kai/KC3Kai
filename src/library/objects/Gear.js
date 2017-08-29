@@ -232,7 +232,8 @@ KC3改 Equipment Object
 			if(gearObj.stars > 0){ nameText += " \u2605{0}".format(gearObj.stars); }
 			if(gearObj.ace > 0){ nameText += " \u00bb{0}".format(gearObj.ace); }
 			if(slotSize > 0 &&
-				KC3GearManager.carrierBasedAircraftType3Ids.indexOf(gearData.api_type[3]) >- 1){
+				(KC3GearManager.carrierBasedAircraftType3Ids.indexOf(gearData.api_type[3]) >- 1
+				|| KC3GearManager.landBasedAircraftType3Ids.indexOf(gearData.api_type[3]) >- 1)){
 				nameText += " x{0}".format(slotSize);
 			}
 		}
