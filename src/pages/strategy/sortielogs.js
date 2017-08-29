@@ -499,6 +499,36 @@
 					$(".sortie_map", sortieBox).text( (sortie.world >= 10 ? "E" : sortie.world) + "-" + sortie.mapnum );
 					$(".button_tomanager", sortieBox).data("id", sortie.id)
 						.on("click", viewFleetAtManagerFunc);
+					var edges = [];
+					if(sortie.nodes && ConfigManager.sr_show_non_battle)
+						$.each(sortie.nodes, function(index, node) {
+							var letter = KC3Meta.nodeLetter( sortie.world, sortie.mapnum, node.id );
+							edges.push(node.id);
+							$(".sortie_edge_"+(index+1), sortieBox).addClass("edge_" + node.type)
+								.attr("title", node.desc).html(letter);
+
+							if(node.airRaid) {
+								// Adding air raids to all nodes, including non battle ones.
+								var airRaid = node.airRaid;
+								var airRaidLostKind = airRaid.api_lost_kind;
+								var baseTotalDamage = airRaid && airRaid.api_air_base_attack
+										&& airRaid.api_air_base_attack.api_stage3
+										&& airRaid.api_air_base_attack.api_stage3.api_fdam ?
+										Math.floor(airRaid.api_air_base_attack.api_stage3.api_fdam.slice(1).reduce(function(a,b){return a+b;},0))
+									: 0;
+
+								if(airRaidLostKind > 0){
+									$(".sortie_edge_"+(index+1), sortieBox).addClass(airRaidLostKind === 4 ? "nodamage" : "damaged");
+									// Show Enemy Air Raid damage
+									if(airRaidLostKind != 4){
+										$(".sortie_edge_"+(index+1), sortieBox).attr("title",
+											KC3Meta.term("BattleAirBaseLossTip").format(baseTotalDamage, Math.round(baseTotalDamage * 0.9 + 0.1)));
+									}
+								}
+							}
+							if(index === 5)
+								$(".sortie_edges", sortieBox).removeClass("one_line").addClass("two_lines");
+						});
 					
 					fleetkey = ["main","escort","preboss","boss"];
 					fleets   = [
@@ -644,31 +674,44 @@
 								battleType = BATTLE_INVALID;
 								return true;
 							}
-							var airRaidLostKind = (battle.airRaid || {}).api_lost_kind;
-							var baseTotalDamage = battle.airRaid && battle.airRaid.api_air_base_attack
-									&& battle.airRaid.api_air_base_attack.api_stage3
-									&& battle.airRaid.api_air_base_attack.api_stage3.api_fdam ?
-									Math.floor(battle.airRaid.api_air_base_attack.api_stage3.api_fdam.slice(1).reduce(function(a,b){return a+b;},0))
-								: 0;
 							
 							battle.shizunde |= [[],[]];
 							
 							// Show on node list
-							$(".sortie_edge_"+(index+1), sortieBox).addClass("active")
-								.toggleClass("boss", !!battle.boss);
-							$(".sortie_edge_"+(index+1), sortieBox).html( KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node ) );
-							if(index === 5){
-								$(".sortie_edges", sortieBox).removeClass("one_line").addClass("two_lines");
+							var edgeIndex = edges.indexOf(battle.node);
+							if(edgeIndex < 0) {
+								edgeIndex = edges.length;
+								edges.push(battle.node);
+								$(".sortie_edge_"+(edgeIndex+1), sortieBox).addClass("edge_battle")
+									.html(KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node ));
+								if(edgeIndex === 5){
+									$(".sortie_edges", sortieBox).removeClass("one_line").addClass("two_lines");
+								}
 							}
+							$(".sortie_edge_"+(edgeIndex+1), sortieBox).toggleClass("boss", !!battle.boss).addClass("active");
 							
+							var airRaid = battle.airRaid;
+							if(!airRaid)
+								airRaid = (sortie.nodes && sortie.nodes.find(function(node) { return node.id === battle.node;}) || {}).airRaid || {};
+							var airRaidLostKind = airRaid.api_lost_kind;
+							var baseTotalDamage = airRaid && airRaid.api_air_base_attack
+									&& airRaid.api_air_base_attack.api_stage3
+									&& airRaid.api_air_base_attack.api_stage3.api_fdam ?
+									Math.floor(airRaid.api_air_base_attack.api_stage3.api_fdam.slice(1).reduce(function(a,b){return a+b;},0))
+								: 0;
+
 							// HTML elements
 							nodeBox = $(".tab_"+tabCode+" .factory .sortie_nodeinfo").clone();
 							$(".node_id", nodeBox).text( KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node ) );
 							if(airRaidLostKind > 0){
+								// Adding to sortie_edge for consistency with old sorties
 								$(".node_id", nodeBox).addClass(airRaidLostKind === 4 ? "nodamage" : "damaged");
+								$(".sortie_edge_"+(edgeIndex+1), sortieBox).addClass(airRaidLostKind === 4 ? "nodamage" : "damaged");
 								// Show Enemy Air Raid damage
 								if(airRaidLostKind != 4){
 									$(".node_id", nodeBox).attr("title",
+										KC3Meta.term("BattleAirBaseLossTip").format(baseTotalDamage, Math.round(baseTotalDamage * 0.9 + 0.1)));
+									$(".sortie_edge_"+(edgeIndex+1), sortieBox).attr("title",
 										KC3Meta.term("BattleAirBaseLossTip").format(baseTotalDamage, Math.round(baseTotalDamage * 0.9 + 0.1)));
 								}
 							} else {

@@ -218,7 +218,7 @@
 	height:30px;
 	vertical-align:top;
 }
-.tab_event .sortie_list .sortie_combined_ship {
+.tab_maps .sortie_list .sortie_combined_ship {
 	position:absolute;
 	margin:-16px 0px 0px 16px;
 	width:20px;
@@ -227,7 +227,7 @@
 	overflow:hidden;
 	display:none;
 }
-.tab_event .sortie_list .sortie_combined_ship img {
+.tab_maps .sortie_list .sortie_combined_ship img {
 	width:20px;
 	height:20px;
 	vertical-align:top;
@@ -256,8 +256,29 @@
 	font-size:14px;
 	font-weight:bold;
 }
+.tab_maps .sortie_list .sortie_edge.edge_battle {
+	background:#700000;
+}
 .tab_maps .sortie_list .sortie_edge.active {
 	background:#B50000;
+}
+.tab_maps .sortie_list .sortie_edge.edge_ {
+	background:#00B3B1;
+}
+.tab_maps .sortie_list .sortie_edge.edge_select {
+	background:#AAAAAA;
+}
+.tab_maps .sortie_list .sortie_edge.edge_resource {
+	background:#70D800;
+}
+.tab_maps .sortie_list .sortie_edge.edge_transport {
+	background:#70D800;
+}
+.tab_maps .sortie_list .sortie_edge.edge_maelstrom {
+	background:#AE87E9;
+}
+.tab_maps .sortie_list .sortie_edge.edge_bounty {
+	background:#14325A;
 }
 .tab_maps .sortie_list .sortie_edges .sortie_edge.active.boss {
 	background-image:url(../../../../assets/img/client/boss.png);
@@ -456,10 +477,10 @@
 	font-size:12px;
 	font-weight:bold;
 }
-.tab_maps .sortie_list .node_id.nodamage {
+.tab_maps .sortie_list .nodamage {
 	box-shadow: 0px 0px 2px 2px #8c4;
 }
-.tab_maps .sortie_list .node_id.damaged {
+.tab_maps .sortie_list .damaged {
 	box-shadow: 0px 0px 2px 2px #f90;
 }
 

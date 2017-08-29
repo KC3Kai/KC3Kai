@@ -12,6 +12,9 @@ QUnit.module( "Module", function() {
             Sortie: function(ignored, callback) {
                 callback(-1);
                 return true;
+            },
+            updateNodes: function(id, newNodes) {
+                return true;
             }
         };
 

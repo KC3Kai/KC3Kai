@@ -366,8 +366,29 @@
 	line-height:14px;
 	font-weight:normal;
 }
+.tab_event .sortie_list .sortie_edge.edge_battle {
+	background:#700000;
+}
 .tab_event .sortie_list .sortie_edge.active {
-	background:#b50000;
+	background:#B50000;
+}
+.tab_event .sortie_list .sortie_edge.edge_ {
+	background:#00B3B1;
+}
+.tab_event .sortie_list .sortie_edge.edge_select {
+	background:#AAAAAA;
+}
+.tab_event .sortie_list .sortie_edge.edge_resource {
+	background:#70D800;
+}
+.tab_event .sortie_list .sortie_edge.edge_transport {
+	background:#70D800;
+}
+.tab_event .sortie_list .sortie_edge.edge_maelstrom {
+	background:#AE87E9;
+}
+.tab_event .sortie_list .sortie_edge.edge_bounty {
+	background:#14325A;
 }
 .tab_event .sortie_list .sortie_edges .sortie_edge.active.boss {
 	background-image:url(../../../../assets/img/client/boss.png);
@@ -568,10 +589,10 @@
 	font-size:12px;
 	font-weight:bold;
 }
-.tab_event .sortie_list .node_id.nodamage {
+.tab_event .sortie_list .nodamage {
 	box-shadow: 0px 0px 2px 2px #8c4;
 }
-.tab_event .sortie_list .node_id.damaged {
+.tab_event .sortie_list .damaged {
 	box-shadow: 0px 0px 2px 2px #f90;
 }
 
