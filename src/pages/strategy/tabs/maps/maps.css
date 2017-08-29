@@ -114,9 +114,9 @@
 /* SORTIE TOGGLES
 ---------------------------------*/
 .tab_maps .sortie_batch_toggles {
-	width:165px;
+	width:185px;
 	height:20px;
-	margin:5px 5px -5px 525px;
+	margin:5px 5px -5px 505px;
 	background:none;
 }
 .tab_maps .sortie_batch_toggles .sortie_toggles {
@@ -493,6 +493,7 @@
 }
 .tab_maps .sortie_list .node_formation img {
 	-webkit-transform: rotate(-90deg);
+	transform: rotate(-90deg);
 }
 .tab_maps .sortie_list .node_result_box {
 	width:20px;
@@ -555,6 +556,7 @@
 	height:20px;
 	margin:10px 0px 0px 0px;
 	-webkit-transform: rotate(-90deg);
+	transform: rotate(-90deg);
 }
 .tab_maps .sortie_list .node_eship {
 	width:20px;

@@ -7,7 +7,7 @@ Used by SortieManager
 (function(){
 	"use strict";
 	
-	window.KC3Node = function(sortie_id, api_no, utcTime, world, map, nodeData){
+	window.KC3Node = function(sortie_id, api_no, utcTime, world, map, raw){
 		this.sortie = sortie_id || 0;
 		this.id = api_no || 0;
 		this.type = "";
@@ -15,7 +15,7 @@ Used by SortieManager
 		this.isPvP = false;
 		this.letter = KC3Meta.nodeLetter(world || KC3SortieManager.map_world,
 			map || KC3SortieManager.map_num, this.id);
-		this.nodeData = nodeData || {};
+		this.nodeData = raw || {};
 	};
 
 	// set true, to test rank predicting easier via SRoom Maps History
@@ -1765,7 +1765,8 @@ Used by SortieManager
 			mvp: this.mvps
 		};
 		// Optional properties
-		// if(this.battleDestruction){ b.airRaid = this.battleDestruction; }
+		// Air raid moved to proper place `sortie.nodes`, no longer here
+		//if(this.battleDestruction){ b.airRaid = this.battleDestruction; }
 		if(this.isBoss()){ b.boss = true; }
 		console.log("Saving battle", b);
 		KC3Database.Battle(b);

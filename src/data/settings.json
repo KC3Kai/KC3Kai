@@ -934,12 +934,6 @@
 				}
 			},
 			{
-				"id" : "sr_show_non_battle",
-				"name" : "SettingsShowNonBattle",
-				"type" : "check",
-				"options" : {}
-			},
-			{
 				"id" : "sr_custom_css",
 				"name" : "SettingsStrategyCustomCSS",
 				"type" : "textarea",
