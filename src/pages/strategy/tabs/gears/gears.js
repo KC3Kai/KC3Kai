@@ -96,6 +96,8 @@
 			"t43": "aa",
 			// land base fighter (new interceptor)
 			"t44": "aa",
+			// night fighter
+			"t45": "aa",
 			// all types
 			"tall": "type",
 		},
@@ -162,7 +164,7 @@
 		},
 
 		/* RELOAD
-		Prepares reloadable data
+		Prepares latest player data
 		---------------------------------*/
 		reload :function(){
 			// Reload data from local storage
@@ -383,15 +385,6 @@
 				for (var item in self._items["t"+type_id]) {
 					var ThisSlotitem = self._items["t"+type_id][item];
 					allProperties.forEach(accumulateStats(statSets, ThisSlotitem));
-
-					// well, if jshlint is trying to be smart and makes code harder
-					// to read, then that's not my fault.
-					// the equivalent code:
-					/*
-					  allProperties.forEach(function(p,i) {
-					  statSets[p].push( ThisSlotitem.stats[p] );
-					  });
-					*/
 				}
 			}
 
@@ -508,8 +501,6 @@
 				$(".icon img", ItemElem).on("click", gearClickFunc);
 				$(".english", ItemElem).text(ThisSlotitem.english);
 				$(".japanese", ItemElem).text(ThisSlotitem.japanese);
-				//$(".counts", ItemElem).html("You have <strong>"+(ThisSlotitem.held.length+ThisSlotitem.extras.length)+"</strong> (<strong>"+ThisSlotitem.held.length+"</strong> worn, <strong>"+ThisSlotitem.extras.length+"</strong> extras)");
-
 
 				allProperties.forEach( function(v,i) {
 					self.slotitem_stat(ItemElem, ThisSlotitem, v);
@@ -542,36 +533,6 @@
 						)
 					) )
 					.appendTo( ItemElem.children('.holders') );
-				/*
-				for(holderCtr in ThisSlotitem.held){
-					ThisHolder = ThisSlotitem.held[holderCtr];
-					HolderElem = $(".tab_gears .factory .holder").clone();
-					$(".holder_list", ItemElem).append(HolderElem);
-
-					$(".holder_pic img", HolderElem).attr("src",
-						KC3Meta.shipIcon(
-							ThisHolder.holder.masterId,
-							"../../assets/img/ui/empty.png"
-						)
-					);
-					$(".holder_name", HolderElem).text(ThisHolder.holder.name());
-					$(".holder_level", HolderElem).text("Lv"+ThisHolder.holder.level);
-
-					if(ThisHolder.level==0){ $(".holder_star", HolderElem).hide(); }
-					else{ $(".holder_star span", HolderElem).text(ThisHolder.level); }
-				}
-
-				for(holderCtr in ThisSlotitem.extras){
-					ThisHolder = ThisSlotitem.extras[holderCtr];
-					HolderElem = $(".tab_gears .factory .xholder").clone();
-					$(".holder_list", ItemElem).append(HolderElem);
-
-					$(".holder_icon img", HolderElem).attr("src", "../../assets/img/items/"+type_id+".png");
-
-					if(ThisHolder.level==0){ $(".holder_star", HolderElem).hide(); }
-					else{ $(".holder_star span", HolderElem).text(ThisHolder.level); }
-				}
-				*/
 			});
 
 		},

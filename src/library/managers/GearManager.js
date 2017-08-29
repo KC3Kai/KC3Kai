@@ -13,9 +13,9 @@ Saves and loads list to and from localStorage
 		pendingGearNum: 0,
 
 		// These IDs can be updated at `fud_weekly.json`
-		carrierBasedAircraftType3Ids: [6,7,8,9,10,21,22,33,39,40,43],
+		carrierBasedAircraftType3Ids: [6,7,8,9,10,21,22,33,39,40,43,45],
 		// Dupe `api_cost`, `api_distance` fixed for non aircraft gears since 2017-03-17
-		landBasedAircraftType3Ids: [6,7,8,9,10,33,37,38,39,40,43,44],
+		landBasedAircraftType3Ids: [6,7,8,9,10,33,37,38,39,40,43,44,45],
 		antiAirFighterType2Ids: [6,7,8,11,45,47,48,57],
 		interceptorsType3Ids: [38,44],
 
