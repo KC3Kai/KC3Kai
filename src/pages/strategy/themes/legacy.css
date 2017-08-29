@@ -371,7 +371,7 @@ body {
 .tab_ships .filters .fold_button {
 	background:#333;
 }
-.tab_ships .massSelect .hover {
+.tab_ships .hover {
 	border-radius: 4px;
 	color:#00f;
 }
