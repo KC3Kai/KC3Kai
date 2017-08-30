@@ -20,6 +20,11 @@
       // Specify phase ordering for each battle type
       engagement: {},
     },
+    // Rank prediciton
+    rank: {
+      airRaid: {},
+      battle: {},
+    },
   };
 
   // --------------------------------------------------------------------------
@@ -31,14 +36,22 @@
 
     try {
       const initialFleets = fleets.getInitialState(battleData, playerDamecons);
-      const result = battle.simulateBattle(battleData, initialFleets, battleType);
+      const resultFleets = battle.simulateBattle(battleData, initialFleets, battleType);
 
-      return formatResult(result);
+      return formatResult(initialFleets, resultFleets);
     } catch (error) {
       // Pass context explicitly, so it is recorded
       KC3Log.error(error, error.data, { battleType, battleData, playerDamecons });
       throw error;
     }
+  };
+
+  BP.predictRank = (apiName, battleStartData, battleResult) => {
+    const { parseStartJson, normalizeFleets, getRankPredictor } = KC3BattlePrediction.rank;
+
+    const battleStart = parseStartJson(battleStartData);
+    return getRankPredictor(apiName)
+      .predict(normalizeFleets(battleStart), normalizeFleets(battleResult));
   };
 
   // --------------------------------------------------------------------------
@@ -70,6 +83,8 @@
   // INTERNAL METHODS
   // --------------------------------------------------------------------------
 
+  BP.EMPTY_SLOT = -1;
+
   BP.extendError = (error, data) =>
     (error.data ? Object.assign(error.data, data) : Object.assign(error, { data }));
 
@@ -77,14 +92,16 @@
 
   BP.bind = (target, ...args) => target.bind(null, ...args);
 
-  const formatFleet = fleet =>
-    fleet.map(({ hp, dameConConsumed = false }) => ({ hp, dameConConsumed, sunk: hp <= 0 }));
-  BP.formatResult = (fleets) => {
+  BP.formatResult = (initialFleets, resultFleets) => {
+    const { formatFleets, isPlayerNoDamage } = KC3BattlePrediction.fleets;
+
+    // TODO: add predictedMVP
+    const initial = formatFleets(initialFleets);
+    const result = formatFleets(resultFleets);
+
     return {
-      playerMain: formatFleet(fleets.player.main),
-      playerEscort: formatFleet(fleets.player.escort),
-      enemyMain: formatFleet(fleets.enemy.main),
-      enemyEscort: formatFleet(fleets.enemy.escort),
+      fleets: result,
+      isPlayerNoDamage: isPlayerNoDamage(initial, result),
     };
   };
 
@@ -184,7 +201,7 @@
   };
 
   const normalizeHps = (hps) => {
-    const { normalizeArrayIndexing } = KC3BattlePrediction;
+    const { normalizeArrayIndexing, EMPTY_SLOT } = KC3BattlePrediction;
 
     // Transform to 0-based indexing
     const result = normalizeArrayIndexing(hps);
@@ -195,7 +212,7 @@
     }
     // In that case, we should pad the array with empty slots
     const emptySlotCount = 6 - (result.length % 6);
-    return result.concat(new Array(emptySlotCount).fill(-1));
+    return result.concat(new Array(emptySlotCount).fill(EMPTY_SLOT));
   };
 
   const convertToShips = (nowHps, maxHps) => {
@@ -208,7 +225,7 @@
     return nowHps.map((currentHp, index) => createShip(currentHp, maxHps[index]));
   };
 
-  const isFleetNotEmpty = ships => ships.some(ship => !!ship);
+  const isFleetNotEmpty = ships => ships.some(ship => ship !== KC3BattlePrediction.EMPTY_SLOT);
   const splitSides = (ships) => {
     if (ships.length !== 6 && ships.length !== 12) {
       throw new Error(`Expected 6 or 12 ships, but got ${ships.length}`);
@@ -1105,6 +1122,255 @@
 }());
 
 (function () {
+  const predict = (initial, result) => {
+    const { getDamageGauge } = KC3BattlePrediction.rank;
+
+    const { player: damageGauge } = getDamageGauge(initial, result);
+
+    if (damageGauge <= 0) { return 'SS'; }
+    if (damageGauge < 10) { return 'A'; }
+    if (damageGauge < 20) { return 'B'; }
+    if (damageGauge < 50) { return 'C'; }
+    if (damageGauge < 80) { return 'D'; }
+    return 'E';
+  };
+
+  Object.assign(KC3BattlePrediction.rank.airRaid, { predict });
+}());
+
+(function () {
+  // Based on: https://github.com/andanteyk/ElectronicObserver/blob/master/ElectronicObserver/Other/Information/kcmemo.md#%E6%88%A6%E9%97%98%E5%8B%9D%E5%88%A9%E5%88%A4%E5%AE%9A
+  const predict = (initialFleets, resultFleets) => {
+    const {
+      getSunkCount,
+      getShipCount,
+      getDamageGauge,
+      battle: { isPlayerNoDamage, isEnemyFlagshipSunk, isPlayerFlagshipTaiha },
+    } = KC3BattlePrediction.rank;
+
+    const sunk = getSunkCount(resultFleets);
+    const ships = getShipCount(resultFleets);
+    if (sunk.player === 0) {
+      if (sunk.enemy === ships.enemy) {
+        return isPlayerNoDamage(initialFleets, resultFleets) ? 'SS' : 'S';
+      }
+      if (ships.enemy > 1 && sunk.enemy >= Math.floor(ships.enemy * 0.7)) {
+        return 'A';
+      }
+    }
+
+    if (isEnemyFlagshipSunk(resultFleets) && sunk.player < sunk.enemy) {
+      return 'B';
+    }
+
+    if (ships.player === 1 && isPlayerFlagshipTaiha(initialFleets, resultFleets)) {
+      return 'D';
+    }
+
+    const damageTaken = getDamageGauge(initialFleets, resultFleets);
+    if (damageTaken.enemy > 2.5 * damageTaken.player) {
+      return 'B';
+    }
+
+    if (damageTaken.enemy > 0.9 * damageTaken.player) {
+      return 'C';
+    }
+
+    if (sunk.player > 0 && ships.player - sunk.player === 1) {
+      return 'E';
+    }
+
+    return 'D';
+  };
+
+  const isPlayerNoDamage = (initialFleets, resultFleets) => {
+    const { getHpTotal } = KC3BattlePrediction.rank;
+
+    const { player: startHp } = getHpTotal(initialFleets);
+    const { player: endHp } = getHpTotal(resultFleets);
+
+    return endHp >= startHp;
+  };
+
+  const isEnemyFlagshipSunk = (resultFleets) => {
+    return resultFleets.enemyMain[0].sunk;
+  };
+
+  const isPlayerFlagshipTaiha = (initialFleets, resultFleets) => {
+    const { maxHp } = initialFleets.playerMain[0];
+    const { hp } = resultFleets.playerMain[0];
+    return hp / maxHp <= 0.25;
+  };
+
+  Object.assign(KC3BattlePrediction.rank.battle, {
+    // Public
+    predict,
+    // Internal
+    isPlayerNoDamage,
+    isEnemyFlagshipSunk,
+    isPlayerFlagshipTaiha,
+  });
+}());
+
+(function () {
+  /*--------------------------------------------------------*/
+  /* --------------------[ PUBLIC API ]-------------------- */
+  /*--------------------------------------------------------*/
+
+  const parseStartJson = (battleData) => {
+    const { makeShips, removeRetreated } = KC3BattlePrediction.rank;
+
+    const main = makeShips(battleData.api_nowhps, battleData.api_maxhps);
+    const escort = makeShips(battleData.api_nowhps_combined, battleData.api_maxhps_combined);
+
+    return {
+      playerMain: removeRetreated(main.player, battleData.api_escape_idx),
+      playerEscort: removeRetreated(escort.player, battleData.api_escape_idx_combined),
+      enemyMain: main.enemy,
+      enemyEscort: escort.enemy,
+    };
+  };
+
+  const normalizeFleets = (battleResult) => {
+    const { omitEmptySlots, hideOverkill } = KC3BattlePrediction.rank;
+
+    return Object.keys(battleResult).reduce((result, key) => {
+      return Object.assign(result, {
+        [key]: hideOverkill(omitEmptySlots(battleResult[key])),
+      });
+    }, {});
+  };
+
+  const predictors = {
+    ld_airbattle: 'airRaid',
+  };
+  const getRankPredictor = (apiName = '') => {
+    const Rank = KC3BattlePrediction.rank;
+
+    const predictorsKey = Object.keys(predictors).find(key => apiName.indexOf(key) !== -1);
+    return predictorsKey
+      ? Rank[predictors[predictorsKey]]
+      : Rank.battle;
+  };
+
+  /*--------------------------------------------------------*/
+  /* --------------------[ INTERNALS ]--------------------- */
+  /*--------------------------------------------------------*/
+
+  /* --------------------[ PARSE JSON ]-------------------- */
+
+  const makeShips = (nowhps, maxhps) => {
+    const { splitSides, zipHps } = KC3BattlePrediction.rank;
+
+    const nowHps = splitSides(nowhps);
+    const maxHps = splitSides(maxhps);
+
+    return {
+      player: zipHps(nowHps.player, maxHps.player),
+      enemy: zipHps(nowHps.enemy, maxHps.enemy),
+    };
+  };
+
+  const isNotEmpty = fleet => fleet.some(hp => hp !== -1);
+  const splitSides = (hps = []) => {
+    const { normalizeArrayIndexing } = KC3BattlePrediction;
+
+    const normalizedHps = normalizeArrayIndexing(hps);
+    const player = normalizedHps.slice(0, 6);
+    const enemy = normalizedHps.slice(6, 12);
+
+    return {
+      player: isNotEmpty(player) ? player : [],
+      enemy,
+    };
+  };
+  const zipHps = (nowHps, maxHps) => {
+    const { extendError } = KC3BattlePrediction;
+
+    if (nowHps.length !== maxHps.length) {
+      throw extendError(new Error('Mismatched nowhps + maxhps'), { nowHps, maxHps });
+    }
+
+    return nowHps.map((hp, index) => ({ hp, maxHp: maxHps[index] }));
+  };
+
+  const removeRetreated = (fleet, escapeIds = []) => {
+    const { EMPTY_SLOT } = KC3BattlePrediction;
+
+    return escapeIds
+      .reduce((result, escapeId) => {
+        result[escapeId - 1] = EMPTY_SLOT;
+        return result;
+      }, fleet);
+  };
+
+  /* --------------------[ NORMALIZE ]--------------------- */
+
+  // NB: Empty slots can be discarded safely, since the only ships whose position matters are the
+  // respective main fleet flagships, who will always exist
+  const omitEmptySlots = fleet => fleet.filter(({ hp }) => hp !== KC3BattlePrediction.EMPTY_SLOT);
+
+  const hideOverkill = fleet => fleet.map((ship) => {
+    return ship.hp < 0 ? Object.assign({}, ship, { hp: 0 }) : ship;
+  });
+
+  /* ---------------------[ HELPERS ]---------------------- */
+
+  const processFleets = (f, { playerMain, playerEscort, enemyMain, enemyEscort }) => ({
+    player: f(playerMain.concat(playerEscort)),
+    enemy: f(enemyMain.concat(enemyEscort)),
+  });
+
+  const getSunkCount = processFleets.bind(null, (fleet) => {
+    const sunkShips = fleet.filter(({ sunk }) => sunk);
+    return sunkShips.length;
+  });
+
+  const getShipCount = processFleets.bind(null, fleet => fleet.length);
+
+  const calculateDamageGauge = (startHp, endHp) => Math.floor(((startHp - endHp) / startHp) * 100);
+  const getDamageGauge = (initialFleets, resultFleets) => {
+    const { getHpTotal } = KC3BattlePrediction.rank;
+
+    const startHp = getHpTotal(initialFleets);
+    const endHp = getHpTotal(resultFleets);
+
+    return {
+      player: calculateDamageGauge(startHp.player, endHp.player),
+      enemy: calculateDamageGauge(startHp.enemy, endHp.enemy),
+    };
+  };
+
+  const getHpTotal = processFleets.bind(null, (fleet) => {
+    return fleet.reduce((result, { hp }) => result + hp, 0);
+  });
+
+  /*--------------------------------------------------------*/
+  /* ---------------------[ EXPORTS ]---------------------- */
+  /*--------------------------------------------------------*/
+
+  Object.assign(KC3BattlePrediction.rank, {
+    // Public API
+    parseStartJson,
+    normalizeFleets,
+    getRankPredictor,
+    // Internal
+    makeShips,
+    splitSides,
+    zipHps,
+    removeRetreated,
+
+    omitEmptySlots,
+    hideOverkill,
+    // Helpers
+    getSunkCount,
+    getShipCount,
+    getDamageGauge,
+    getHpTotal,
+  });
+}());
+
+(function () {
   const createAttack = (side, role, position, damage) => {
     const { createTarget, normalizeDamage } = KC3BattlePrediction.battle;
 
@@ -1126,13 +1392,14 @@
 }());
 
 (function () {
+  const FLEET_SIZE = 6;
   /*--------------------------------------------------------*/
   /* --------------------[ PUBLIC API ]-------------------- */
   /*--------------------------------------------------------*/
   const createFleets = (...fleets) => {
-    const { removeEmptyShips } = KC3BattlePrediction.fleets;
+    const { convertToFleet } = KC3BattlePrediction.fleets;
 
-    const [playerMain, enemyMain, playerEscort, enemyEscort] = fleets.map(removeEmptyShips);
+    const [playerMain, enemyMain, playerEscort, enemyEscort] = fleets.map(convertToFleet);
 
     return {
       player: { main: playerMain, escort: playerEscort },
@@ -1151,20 +1418,51 @@
     return applyUpdate(target, updateShip, fleets);
   };
 
+  const formatFleets = (fleets) => {
+    const { getFleetOutput } = KC3BattlePrediction.fleets;
+
+    return {
+      playerMain: getFleetOutput(fleets.player.main),
+      playerEscort: getFleetOutput(fleets.player.escort),
+      enemyMain: getFleetOutput(fleets.enemy.main),
+      enemyEscort: getFleetOutput(fleets.enemy.escort),
+    };
+  };
+
+  const isPlayerNoDamage = (initialFleets, resultFleets) => {
+    const { extendError, fleets: { isNotDamaged } } = KC3BattlePrediction;
+
+    const initialShips = initialFleets.playerMain.concat(initialFleets.playerEscort);
+    const resultShips = resultFleets.playerMain.concat(resultFleets.playerEscort);
+
+    if (initialShips.length !== resultShips.length) {
+      throw extendError(new Error('Mismatched initial and result fleets'), { initialFleets, resultFleets });
+    }
+
+    return resultShips.every((resultShip, index) => isNotDamaged(initialShips[index], resultShip));
+  };
+
   /*--------------------------------------------------------*/
   /* --------------------[ INTERNALS ]--------------------- */
   /*--------------------------------------------------------*/
 
-  const removeEmptyShips = ships => ships.filter(ship => !!ship);
+  /* ---------------------[ CREATION ]--------------------- */
+
+  const convertToFleet = ships => ships.reduce((result, ship, index) => {
+    return ship !== KC3BattlePrediction.EMPTY_SLOT
+      ? Object.assign(result, { [index]: ship })
+      : result;
+  }, {});
+
+  /* ----------------------[ UPDATE ]---------------------- */
 
   const isTargetInFleets = ({ side, role, position }, fleets) =>
-    !!(fleets[side] && fleets[side][role] && fleets[side][role][position]);
+    fleets[side] && fleets[side][role] && fleets[side][role][position];
 
   const applyUpdate = ({ side, role, position }, updateShip, fleets) => {
     const { cloneFleets } = KC3BattlePrediction.fleets;
 
     // NB: Cloning is necessary to preserve function purity
-    // Can be replaced by assignment if performance is an issue, though this may cause issues with logging
     const result = cloneFleets(fleets);
     result[side][role][position] = updateShip(fleets[side][role][position]);
 
@@ -1172,6 +1470,36 @@
   };
 
   const cloneFleets = fleets => JSON.parse(JSON.stringify(fleets));
+
+  /* ----------------------[ OUTPUT ]---------------------- */
+
+  const getFleetOutput = (fleet) => {
+    const { convertToArray, trimEmptySlots, formatShip } = KC3BattlePrediction.fleets;
+
+    return trimEmptySlots(convertToArray(fleet).map(formatShip));
+  };
+
+  const convertToArray = (fleet) => {
+    const { EMPTY_SLOT } = KC3BattlePrediction;
+    // fill() is called because array elements must have assigned values or map will not work
+    // See: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map#Description
+    return new Array(FLEET_SIZE).fill(EMPTY_SLOT).map((empty, index) => fleet[index] || empty);
+  };
+
+  const findLastIndex = (pred, array) => {
+    // reverse() is in-place, so we need a clone
+    const reverse = array.slice(0).reverse();
+    const reverseIndex = reverse.findIndex(pred);
+    return reverseIndex === -1 ? -1 : array.length - reverseIndex;
+  };
+  const trimEmptySlots = (fleetArray) => {
+    const { EMPTY_SLOT } = KC3BattlePrediction;
+
+    const lastShipIndex = findLastIndex(ship => ship !== EMPTY_SLOT, fleetArray);
+    return lastShipIndex !== -1
+      ? fleetArray.slice(0, lastShipIndex)
+      : [];
+  };
 
   /*--------------------------------------------------------*/
   /* ---------------------[ EXPORTS ]---------------------- */
@@ -1181,17 +1509,23 @@
     // Public
     createFleets,
     update,
+    formatFleets,
+    isPlayerNoDamage,
     // Internal
-    removeEmptyShips,
+    convertToFleet,
 
     isTargetInFleets,
     applyUpdate,
     cloneFleets,
+
+    getFleetOutput,
+    convertToArray,
+    trimEmptySlots,
   });
 }());
 
 (function () {
-  const EMPTY_SLOT = null;
+  const EMPTY_SLOT = KC3BattlePrediction.EMPTY_SLOT;
   /*--------------------------------------------------------*/
   /* --------------------[ PUBLIC API ]-------------------- */
   /*--------------------------------------------------------*/
@@ -1208,6 +1542,9 @@
 
     return result.hp <= 0 ? tryDamecon(result) : result;
   };
+
+  // If damecon increases HP beyond initial value, it counts as no damage
+  const isNotDamaged = (initial, result) => initial.hp <= result.hp;
 
   /*--------------------------------------------------------*/
   /* --------------------[ INTERNALS ]--------------------- */
@@ -1236,6 +1573,12 @@
     }
   };
 
+  const formatShip = (ship) => {
+    return ship !== EMPTY_SLOT
+      ? { hp: ship.hp, dameConConsumed: ship.dameConConsumed || false, sunk: ship.hp <= 0 }
+      : ship;
+  };
+
   /*--------------------------------------------------------*/
   /* ---------------------[ EXPORTS ]---------------------- */
   /*--------------------------------------------------------*/
@@ -1245,9 +1588,11 @@
     createShip,
     installDamecon,
     damageShip,
+    isNotDamaged,
     // Internals
     dealDamage,
     tryDamecon,
+    formatShip,
   });
 }());
 

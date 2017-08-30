@@ -20,6 +20,11 @@
       // Specify phase ordering for each battle type
       engagement: {},
     },
+    // Rank prediciton
+    rank: {
+      airRaid: {},
+      battle: {},
+    },
   };
 
   // --------------------------------------------------------------------------
@@ -31,14 +36,22 @@
 
     try {
       const initialFleets = fleets.getInitialState(battleData, playerDamecons);
-      const result = battle.simulateBattle(battleData, initialFleets, battleType);
+      const resultFleets = battle.simulateBattle(battleData, initialFleets, battleType);
 
-      return formatResult(result);
+      return formatResult(initialFleets, resultFleets);
     } catch (error) {
       // Pass context explicitly, so it is recorded
       KC3Log.error(error, error.data, { battleType, battleData, playerDamecons });
       throw error;
     }
+  };
+
+  BP.predictRank = (apiName, battleStartData, battleResult) => {
+    const { parseStartJson, normalizeFleets, getRankPredictor } = KC3BattlePrediction.rank;
+
+    const battleStart = parseStartJson(battleStartData);
+    return getRankPredictor(apiName)
+      .predict(normalizeFleets(battleStart), normalizeFleets(battleResult));
   };
 
   // --------------------------------------------------------------------------
@@ -70,6 +83,8 @@
   // INTERNAL METHODS
   // --------------------------------------------------------------------------
 
+  BP.EMPTY_SLOT = -1;
+
   BP.extendError = (error, data) =>
     (error.data ? Object.assign(error.data, data) : Object.assign(error, { data }));
 
@@ -77,14 +92,16 @@
 
   BP.bind = (target, ...args) => target.bind(null, ...args);
 
-  const formatFleet = fleet =>
-    fleet.map(({ hp, dameConConsumed = false }) => ({ hp, dameConConsumed, sunk: hp <= 0 }));
-  BP.formatResult = (fleets) => {
+  BP.formatResult = (initialFleets, resultFleets) => {
+    const { formatFleets, isPlayerNoDamage } = KC3BattlePrediction.fleets;
+
+    // TODO: add predictedMVP
+    const initial = formatFleets(initialFleets);
+    const result = formatFleets(resultFleets);
+
     return {
-      playerMain: formatFleet(fleets.player.main),
-      playerEscort: formatFleet(fleets.player.escort),
-      enemyMain: formatFleet(fleets.enemy.main),
-      enemyEscort: formatFleet(fleets.enemy.escort),
+      fleets: result,
+      isPlayerNoDamage: isPlayerNoDamage(initial, result),
     };
   };
 

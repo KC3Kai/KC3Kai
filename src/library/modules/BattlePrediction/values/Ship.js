@@ -1,5 +1,5 @@
 (function () {
-  const EMPTY_SLOT = null;
+  const EMPTY_SLOT = KC3BattlePrediction.EMPTY_SLOT;
   /*--------------------------------------------------------*/
   /* --------------------[ PUBLIC API ]-------------------- */
   /*--------------------------------------------------------*/
@@ -16,6 +16,9 @@
 
     return result.hp <= 0 ? tryDamecon(result) : result;
   };
+
+  // If damecon increases HP beyond initial value, it counts as no damage
+  const isNotDamaged = (initial, result) => initial.hp <= result.hp;
 
   /*--------------------------------------------------------*/
   /* --------------------[ INTERNALS ]--------------------- */
@@ -44,6 +47,12 @@
     }
   };
 
+  const formatShip = (ship) => {
+    return ship !== EMPTY_SLOT
+      ? { hp: ship.hp, dameConConsumed: ship.dameConConsumed || false, sunk: ship.hp <= 0 }
+      : ship;
+  };
+
   /*--------------------------------------------------------*/
   /* ---------------------[ EXPORTS ]---------------------- */
   /*--------------------------------------------------------*/
@@ -53,8 +62,10 @@
     createShip,
     installDamecon,
     damageShip,
+    isNotDamaged,
     // Internals
     dealDamage,
     tryDamecon,
+    formatShip,
   });
 }());

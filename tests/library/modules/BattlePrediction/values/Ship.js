@@ -5,7 +5,7 @@ QUnit.module('modules > BattlePrediction > values > Ship', function () {
     beforeEach() { this.subject = Ship.createShip; },
   }, function () {
     QUnit.test('empty slot', function (assert) {
-      assert.equal(this.subject(-1, -1), null);
+      assert.equal(this.subject(-1, -1), -1);
     });
 
     QUnit.test('success', function (assert) {
@@ -19,7 +19,7 @@ QUnit.module('modules > BattlePrediction > values > Ship', function () {
     beforeEach() { this.subject = Ship.installDamecon; },
   }, function () {
     QUnit.test('empty slot', function (assert) {
-      assert.equal(this.subject('blah', null), null);
+      assert.equal(this.subject('blah', -1), -1);
     });
 
     QUnit.test('success', function (assert) {
@@ -88,6 +88,38 @@ QUnit.module('modules > BattlePrediction > values > Ship', function () {
         damecon: Damecon.NONE,
         dameConConsumed: true,
       });
+    });
+  });
+
+  QUnit.module('formatShip', {
+    beforeEach() {
+      this.subject = Ship.formatShip;
+    },
+  }, function () {
+    QUnit.test('convert to output format', function (assert) {
+      const ship = { hp: 20, maxHp: 30, dameConConsumed: true };
+
+      const result = this.subject(ship);
+
+      assert.deepEqual(result, {
+        hp: 20,
+        dameConConsumed: true,
+        sunk: false,
+      });
+    });
+
+    QUnit.test('set sunk property', function (assert) {
+      assert.equal(this.subject({ hp: 1 }).sunk, false);
+      assert.equal(this.subject({ hp: 0 }).sunk, true);
+      assert.equal(this.subject({ hp: -1 }).sunk, true);
+    });
+
+    QUnit.test('empty slot', function (assert) {
+      assert.equal(this.subject(-1), -1);
+    });
+
+    QUnit.test('default dameConConsumed to false', function (assert) {
+      assert.equal(this.subject({}).dameConConsumed, false);
     });
   });
 });

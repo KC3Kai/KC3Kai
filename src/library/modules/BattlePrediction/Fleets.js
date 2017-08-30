@@ -37,7 +37,7 @@
   };
 
   const normalizeHps = (hps) => {
-    const { normalizeArrayIndexing } = KC3BattlePrediction;
+    const { normalizeArrayIndexing, EMPTY_SLOT } = KC3BattlePrediction;
 
     // Transform to 0-based indexing
     const result = normalizeArrayIndexing(hps);
@@ -48,7 +48,7 @@
     }
     // In that case, we should pad the array with empty slots
     const emptySlotCount = 6 - (result.length % 6);
-    return result.concat(new Array(emptySlotCount).fill(-1));
+    return result.concat(new Array(emptySlotCount).fill(EMPTY_SLOT));
   };
 
   const convertToShips = (nowHps, maxHps) => {
@@ -61,7 +61,7 @@
     return nowHps.map((currentHp, index) => createShip(currentHp, maxHps[index]));
   };
 
-  const isFleetNotEmpty = ships => ships.some(ship => !!ship);
+  const isFleetNotEmpty = ships => ships.some(ship => ship !== KC3BattlePrediction.EMPTY_SLOT);
   const splitSides = (ships) => {
     if (ships.length !== 6 && ships.length !== 12) {
       throw new Error(`Expected 6 or 12 ships, but got ${ships.length}`);
