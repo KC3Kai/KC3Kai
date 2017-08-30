@@ -382,13 +382,19 @@
 	background:#70D800;
 }
 .tab_event .sortie_list .sortie_edge.edge_transport {
-	background:#70D800;
+	background:#40C4FF;
 }
 .tab_event .sortie_list .sortie_edge.edge_maelstrom {
 	background:#AE87E9;
 }
 .tab_event .sortie_list .sortie_edge.edge_bounty {
+	background:#40C4FF;
+}
+.tab_event .sortie_list .sortie_edge.night_battle {
 	background:#14325A;
+}
+.tab_event .sortie_list .sortie_edge.air_raid {
+	background:#FFA500;
 }
 .tab_event .sortie_list .sortie_edges .sortie_edge.active.boss {
 	background-image:url(../../../../assets/img/client/boss.png);
