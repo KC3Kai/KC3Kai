@@ -189,7 +189,7 @@ Does not include Ships and Gears which are managed by other Managers
 			}
 			switch(ConfigManager.air_formula){
 				case 2:
-					return "~" + (
+					return "\u2248" + (
 						isCombined && ConfigManager.air_combined ?
 						mainFleet.fighterVeteran() + escortFleet.fighterVeteran() :
 						viewFleet.fighterVeteran());

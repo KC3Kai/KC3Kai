@@ -7,8 +7,8 @@ AntiAir: anti-air related calculations
 	- shipObj: instance of KC3Ship
 		- mst: master data of either ship or gear
 		- pred: predicates, a function that accepts a single parameter and returns a boolean value
-		- predXXX: predicate combinators. "predXXX(pred1, pred2, ...)" combines pred1, pred2, ...
-          in some specific way to produce a new prediate.
+		- predXXX: predicate combinations. "predXXX(pred1, pred2, ...)" combines pred1, pred2, ...
+          in some specific way to produce a new predicate.
 
 - module contents:
 	- shipProportionalShotdownRate(shipObj)
@@ -41,7 +41,7 @@ AntiAir: anti-air related calculations
 		- fixed: fixed shotdown bonus
 		- modifier: the "K" value to "shipFixedShotdown" when this AACI is triggered
 		- icon: IDs of icons representing this kind of AACI
-		- predicateShipMst: test whether "mst" can perform this kind of AACI ingoring equipments
+		- predicateShipMst: test whether "mst" can perform this kind of AACI ignoring equipments
 		- predicateShipObj: test whether "shipObj" can perform this particular kind of AACI
 	- other not explicitly listed contents are for debugging or internal use only.
 
@@ -63,7 +63,7 @@ AntiAir: anti-air related calculations
 
 	// a predicate combinator, "predAnyOf(f,g)(x)" is the same as "f(x) || g(x)"
 	// test all predicates passed as argument in order,
-	// return the first non-falsy value or "false" if all predicates have falled.
+	// return the first non-falsy value or "false" if all predicates have failed.
 	function predAnyOf(/* list of predicates */) {
 		var args = arguments;
 		return function(x) {
@@ -706,7 +706,7 @@ AntiAir: anti-air related calculations
 		return result;
 	}
 
-	// return a list of unduplicated possible AACI APIs based on all ships in fleet
+	// return a list of deduplicate possible AACI APIs based on all ships in fleet
 	function fleetPossibleAACIs(fleetObj) {
 		var aaciSet = {};
 		fleetObj.ship(function(rId, ind, shipObj) {

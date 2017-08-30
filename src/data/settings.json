@@ -277,18 +277,6 @@
 				}
 			},
 			{
-				"id" : "air_average",
-				"name" : "SettingsAFPAverage",
-				"type" : "json",
-				"options" : {}
-			},
-			{
-				"id" : "air_bounds",
-				"name" : "SettingsAFPBounds",
-				"type" : "json",
-				"options" : {}
-			},
-			{
 				"id" : "aaFormation",
 				"name" : "SettingsAAFormation",
 				"type" : "radio",

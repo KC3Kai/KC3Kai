@@ -292,7 +292,7 @@
 			}else{
 				this.showShip();
 			}
-			// Tell tab manager: Have handled the updating, donot re-execute the rendering
+			// Tell tab manager: Have handled the updating, don't re-execute the rendering
 			return true;
 		},
 		
@@ -417,7 +417,7 @@
 					}else if(stat[1].startsWith("db_")){
 						var realName = stat[1].slice(3);
 						$(".ship_stat_name", statBox).text(realName);
-						// New initial asw statisic added for Anti-sub Carrier (Taiyou for now)
+						// New initial asw statistic added for Anti-sub Carrier (Taiyou for now)
 						if(stat[0]=="as" && shipData.api_tais){
 							$(".ship_stat_min", statBox).text(shipData.api_tais[0]);
 						} else {
@@ -517,7 +517,7 @@
 					$(".tab_mstship .shipInfo .more .other_forms").hide();
 				}
 
-				// seasonal CGs
+				// Seasonal CGs
 				var seasonalCgIds = Object.keys(this.mergedMasterShips).filter(
 					id => KC3Master.isSeasonalShip(id)
 						&& this.mergedMasterShips[id].api_yomi === shipData.api_yomi
@@ -576,7 +576,7 @@
 				});
 				$("<div/>").addClass("clear").appendTo(".tab_mstship .shipInfo .voices");
 				
-				// HOURLIES
+				// Hourly lines
 				$(".tab_mstship .shipInfo .hourlies").show();
 				$(".tab_mstship .shipInfo .hourlies").empty();
 				
@@ -690,7 +690,7 @@
 				else
 					$(".tab_mstship .shipInfo .tokubest .to-quotes").hide();
 			} else if (KC3Master.isAbyssalShip(ship_id)) {
-				// abyssals, show larger CG viewer
+				// Abyssal, show larger CG viewer
 				$(".tab_mstship .shipInfo .stats").hide();
 				$(".tab_mstship .shipInfo .equipments").hide();
 				$(".tab_mstship .shipInfo .json").hide().css("width", "100%");

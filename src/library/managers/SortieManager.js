@@ -75,7 +75,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					sortie.mapinfo.api_defeat_count = thisMap.kills || 0;
 				}
 			}
-			// Reocrd boss HP gauge states of event maps
+			// Record boss HP gauge states of event maps
 			if(eventData){
 				var mergedEventInfo = {};
 				$.extend(mergedEventInfo, eventData, {
@@ -273,8 +273,11 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			if(this.boss.letters.indexOf(bossLetter) < 0) this.boss.letters.push(bossLetter);
 			console.debug("Next edge points to boss node", nodeData.api_bosscell_no, bossLetter);
 			
-			thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime ))[definedKind](nodeData);
+			thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime,
+				this.map_world, this.map_num, nodeData ))[definedKind](nodeData);
 			this.nodes.push(thisNode);
+			this.updateNodeCompassResults();
+			
 			console.log("Next node", nodeData.api_no, definedKind, thisNode);
 			this.save();
 		},
@@ -408,6 +411,35 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			});
 		},
 		
+		updateNodeCompassResults: function(){
+			if(this.onSortie > 0) {
+				KC3Database.updateNodes(this.onSortie, this.nodes.map(node => {
+					// Basic edge ID and parsed type (dud === "")
+					const toSave = { id: node.id, type: node.type };
+					// Raw API result data
+					const mapNext = node.nodeData;
+					if(mapNext) {
+						if(mapNext.api_event_id !== undefined)   // Node raw event ID, 0 should be saved
+							toSave.eventId = mapNext.api_event_id;
+						if(mapNext.api_event_kind !== undefined) // Node raw event kind, 0 should be saved
+							toSave.eventKind = mapNext.api_event_kind;
+						if(mapNext.api_destruction_battle)       // Land Base Enemy Raid
+							toSave.airRaid = mapNext.api_destruction_battle;
+						if(mapNext.api_offshore_supply)          // Resupplier used event
+							toSave.offshoreSupply = mapNext.api_offshore_supply;
+					}
+					// FIXME saving nodeDesc directly will save translated text,
+					// which causes i18n switching not affect old records.
+					// To resolve this, parsed 'type, item & count' info should be saved,
+					// which could be recognized via all these attributes:
+					// api_itemget, api_happening, api_itemget_eo_result, api_itemget_eo_comment
+					if(node.nodeDesc)
+						toSave.desc = node.nodeDesc;
+					return toSave;
+				}));
+			}
+		},
+
 		// return empty object if not found
 		getAllMapData: function(){
 			return localStorage.getObject("maps") || {};
@@ -525,12 +557,15 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				self.materialGain[indx] += matr;
 			});
 			// To detect whether invalid sortie ID or not
-			if(this.onSortie)
+			if(this.onSortie){
 				KC3Database.Naverall({
 					hour: Math.hrdInt('floor',this.sortieTime/3.6,3,1),
 					type: cons.name,
 					data: this.materialGain.slice(0)
 				},null,true);
+				// Save node data to sortie table even end at 1st node
+				this.updateNodeCompassResults();
+			}
 			// Remove sortie comparison buffer
 			PlayerManager.hq.lastSortie = null;
 			
@@ -622,8 +657,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 						exceptions[shipId][gearId] = null;
 						continue;
 					}
-					if(KC3GearManager.antiAirFighterType2Ids.indexOf(
-						String(gearMst.api_type[2]) ) > -1){
+					if(KC3GearManager.antiAirFighterType2Ids.indexOf(gearMst.api_type[2]) > -1){
 						const aaStat = gearMst.api_tyku || 0;
 						const capacity = ((enemySlotSizes || [])[shipIdx] || shipMst.api_maxeq || [])[slotIdx];
 						if(capacity !== undefined){

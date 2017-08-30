@@ -1417,11 +1417,8 @@
 						(MainFleet.lowestMorale() < EscortFleet.lowestMorale())
 						? MainFleet.lowestMorale() : EscortFleet.lowestMorale(),
 					supportPower: 0,
-					tpValueSum: Math.floor([0,1].map(function(fleetId){
-						return PlayerManager.fleets[fleetId].ship()
-							.map(function(ship){ return ship.obtainTP(); })
-							.reduce(function(pre,cur){ return pre.add(cur); }, KC3Meta.tpObtained());
-					}).reduce(function(pre,cur){ return pre.add(cur); }, KC3Meta.tpObtained()).value)
+					supportCost: {},
+					tpValueSum: MainFleet.calcTpObtain(MainFleet, EscortFleet)
 				};
 
 			// SINGLE
@@ -1486,11 +1483,8 @@
 					],
 					lowestMorale: CurrentFleet.lowestMorale(),
 					supportPower: CurrentFleet.supportPower(),
-					tpValueSum: Math.floor(CurrentFleet.ship()
-						.map(function(ship){ return ship.obtainTP(); })
-						.reduce(function(pre,cur){ return pre.add(cur); }, KC3Meta.tpObtained())
-						.value
-						)
+					supportCost: CurrentFleet.calcSupportExpeditionCost(),
+					tpValueSum: CurrentFleet.calcTpObtain()
 				};
 
 			}
@@ -1655,22 +1649,31 @@
 							break;
 					}
 					$(".module.status .status_butai .status_text").attr("title",
-						"{0} ~ {1} TP".format( isNaN(FleetSummary.tpValueSum)? "?" : Math.floor(0.7 * FleetSummary.tpValueSum),
-											   isNaN(FleetSummary.tpValueSum)? "?" : FleetSummary.tpValueSum )
+						KC3Meta.term("PanelTransportPoints").format(
+							isNaN(FleetSummary.tpValueSum)? "?" : Math.floor(0.7 * FleetSummary.tpValueSum),
+							isNaN(FleetSummary.tpValueSum)? "?" : FleetSummary.tpValueSum
+						)
 					).lazyInitTooltip();
 					$(".module.status .status_butai").show();
 					$(".module.status .status_support").hide();
 				}else{
+					// STATUS: SUPPORT
+					$(".module.status .status_support .status_text").text( FleetSummary.supportPower );
+					$(".module.status .status_support .status_text").attr("title",
+						KC3Meta.term("PanelTransportPoints").format(
+							isNaN(FleetSummary.tpValueSum)? "?" : Math.floor(0.7 * FleetSummary.tpValueSum),
+							isNaN(FleetSummary.tpValueSum)? "?" : FleetSummary.tpValueSum
+						)
+						+ "\n" +
+						KC3Meta.term("PanelSupportExpCosts").format(
+							KC3Meta.support(FleetSummary.supportCost.supportFlag) || KC3Meta.term("None"),
+							FleetSummary.supportCost.fuel || "?",
+							FleetSummary.supportCost.ammo || "?"
+						)
+					).lazyInitTooltip();
 					$(".module.status .status_butai").hide();
 					$(".module.status .status_support").show();
 				}
-
-				// STATUS: SUPPORT
-				$(".module.status .status_support .status_text").text( FleetSummary.supportPower );
-				$(".module.status .status_support .status_text").attr("title",
-					"{0} ~ {1} TP".format( isNaN(FleetSummary.tpValueSum)? "?" : Math.floor(0.7 * FleetSummary.tpValueSum),
-										   isNaN(FleetSummary.tpValueSum)? "?" : FleetSummary.tpValueSum )
-				).lazyInitTooltip();
 
 				// STATUS: REPAIRS
 				UpdateRepairTimerDisplays(FleetSummary.docking, FleetSummary.akashi);
