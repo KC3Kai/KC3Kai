@@ -256,6 +256,19 @@
 	font-size:14px;
 	font-weight:bold;
 }
+.tab_maps .sortie_list .sortie_edges.one_line .sortie_edge_6,
+.tab_maps .sortie_list .sortie_edges.one_line .sortie_edge_7,
+.tab_maps .sortie_list .sortie_edges.one_line .sortie_edge_8,
+.tab_maps .sortie_list .sortie_edges.one_line .sortie_edge_9,
+.tab_maps .sortie_list .sortie_edges.one_line .sortie_edge_10 {
+	display:none;
+}
+.tab_maps .sortie_list .sortie_edges.two_lines .sortie_edge {
+	width:30px;
+	height:14px;
+	line-height:14px;
+	font-weight:normal;
+}
 .tab_maps .sortie_list .sortie_edge.edge_battle {
 	background:#700000;
 }
