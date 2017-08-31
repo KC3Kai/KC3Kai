@@ -580,7 +580,7 @@
 				$(".tab_mstship .shipInfo .hourlies").show();
 				$(".tab_mstship .shipInfo .hourlies").empty();
 				
-				if (KC3Translation.shipHasHourlyVoices(shipData.api_id)){
+				if (KC3Meta.shipHasHourlyVoices(shipData.api_id)){
 					$.each(this.hourlies, function(vnum, vname){
 						var hhStr = vname.substring(0,2);
 						var mmStr = vname.substring(2);

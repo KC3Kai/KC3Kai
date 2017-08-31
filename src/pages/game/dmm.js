@@ -10,6 +10,8 @@ var trustedExit = false;
 var subtitleVanishTimer = false;
 var subtitleVanishBaseMillis;
 var subtitleVanishExtraMillisPerChar;
+var subtitleHourlyTimer = false;
+var subtitleHourlyShip = 0;
 
 // Holder object for audio files to test mp3 duration
 var subtitleMp3;
@@ -27,7 +29,6 @@ var suspendedTaiha = false;
 
 // Overlay avoids cursor
 var subtitlePosition = "bottom";
-var subtitleGhostout = false;
 
 // Overlay for map markers
 var markersOverlayTimer = false;
@@ -600,14 +601,6 @@ var interactions = {
 		}
 		subtitleText = KC3Meta.quote( quoteIdentifier, quoteVoiceNum, quoteVoiceSize );
 		
-		// hide first to fading will stop
-		$(".overlay_subtitles").stop(true, true);
-		$(".overlay_subtitles").hide();
-		
-		// If subtitle removal timer is ongoing, reset
-		if(subtitleVanishTimer){
-			clearTimeout(subtitleVanishTimer);
-		}
 		// Lazy init timing parameters
 		if(!subtitleVanishBaseMillis){
 			subtitleVanishBaseMillis = Number(KC3Meta.quote("timing", "baseMillisVoiceLine")) || 2000;
@@ -616,14 +609,24 @@ var interactions = {
 			subtitleVanishExtraMillisPerChar = Number(KC3Meta.quote("timing", "extraMillisPerChar")) || 50;
 		}
 		
-		// If subtitles available for the voice
-		if(subtitleText){
+		const hideSubtitle = () => {
+			// hide first to fading will stop
+			$(".overlay_subtitles").stop(true, true);
+			$(".overlay_subtitles").hide();
+			// If subtitle removal timer is ongoing, reset
+			if(subtitleVanishTimer){
+				clearTimeout(subtitleVanishTimer);
+			}
+		};
+		hideSubtitle();
+		
+		// Display subtitle and set its removal timer
+		const showSubtitle = (subtitleText, quoteIdentifier) => {
 			$(".overlay_subtitles span").html(subtitleText);
 			$(".overlay_subtitles").toggleClass("abyssal", quoteIdentifier === "abyssal");
 			$(".overlay_subtitles").show();
-			var millis = subtitleVanishBaseMillis +
+			const millis = subtitleVanishBaseMillis +
 				(subtitleVanishExtraMillisPerChar * $(".overlay_subtitles").text().length);
-			//console.debug("vanish after", millis, "ms");
 			subtitleVanishTimer = setTimeout(function(){
 				subtitleVanishTimer = false;
 				$(".overlay_subtitles").fadeOut(1000, function(){
@@ -642,6 +645,47 @@ var interactions = {
 			}, millis);
 			if(!!quoteSpeaker){
 				$(".overlay_subtitles span").html("{0}: {1}".format(quoteSpeaker, subtitleText));
+			}
+		};
+		
+		const cancelHourlyLine = () => {
+			if(subtitleHourlyTimer) clearTimeout(subtitleHourlyTimer);
+			subtitleHourlyTimer = false;
+			subtitleHourlyShip = 0;
+		};
+		
+		const bookHourlyLine = (text, shipId) => {
+			cancelHourlyLine();
+			const nextHour = new Date().shiftHour(1).resetTime(["Minutes", "Seconds", "Milliseconds"]).getTime();
+			const diffMillis = nextHour - Date.now();
+			// Do not book on unexpected diff time: passed or >10 minutes
+			if(diffMillis <= 0 || diffMillis > 10 * 60000) {
+				showSubtitle(text, shipId);
+			} else {
+				subtitleHourlyShip = shipId;
+				subtitleHourlyTimer = setTimeout(function(){
+					if(subtitleHourlyShip == shipId){
+						hideSubtitle();
+						showSubtitle(text, shipId);
+					}
+					cancelHourlyLine();
+				}, diffMillis);
+			}
+		};
+		
+		// If subtitles available for the voice
+		if(subtitleText){
+			// Cancel booked hourly line if other voice triggered
+			if(subtitleHourlyTimer && (quoteIdentifier != subtitleHourlyShip
+				|| !KC3Meta.isHomePortVoiceNum(quoteVoiceNum))){
+				cancelHourlyLine();
+			}
+			// Book for a future display if it's a ship's hourly voice,
+			// because game preload voice file in advance (about 5 mins).
+			if(!isNaN(Number(quoteIdentifier)) && KC3Meta.isHourlyVoiceNum(quoteVoiceNum)){
+				bookHourlyLine(subtitleText, quoteIdentifier);
+			} else {
+				showSubtitle(subtitleText, quoteIdentifier);
 			}
 		}
 	},
