@@ -97,6 +97,7 @@
 	float:left;
 	margin:0px 0px 2px 0px;
 	line-height:18px;
+	width:220px;
 }
 .tab_ships .ship_count div {
 	float:left;
@@ -107,6 +108,25 @@
 	padding-right:5px;
 }
 
+.tab_ships .ship_export {
+	float:left;
+	margin:0px 0px 2px 0px;
+	line-height:18px;
+}
+.tab_ships .ship_export div {
+	float:left;
+	font-size:12px;
+	padding-left:4px;
+	padding-right:4px;
+}
+.tab_ships .ship_export .export_label {
+	font-weight:bold;
+}
+.tab_ships .ship_export .hover {
+	font-weight:normal;
+	margin:0px 1px 0px 0px;
+}
+
 .tab_ships .control_buttons {
 	float:right;
 	margin:0px 0px 2px 0px;
@@ -114,6 +134,7 @@
 .tab_ships .control_buttons .reset_default {
 	float:right;
 	font-size:12px;
+	font-weight:bold;
 	line-height:18px;
 	padding:0px 4px 0px 4px;
 }

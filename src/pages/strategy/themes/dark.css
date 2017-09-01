@@ -505,8 +505,12 @@ button, input, select, textarea {
 .tab_ships .filters .fold_button {
 	background:#cccccc;
 }
-.tab_ships .massSelect .hover {
+.tab_ships .massSelect .hover,
+.tab_ships .ship_export .hover {
 	color:#ffffff
+}
+.tab_ships .massSelect .hover {
+	border-radius:0px !important;
 }
 .tab_ships .massSelect .hover.on {
 	color:#ffcc00;
@@ -520,20 +524,21 @@ button, input, select, textarea {
 	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
-.tab_ships .filters .ship_filter_type:hover {
+.tab_ships .filters .massSelect .hover:hover,
+.tab_ships .filters .ship_filter_type:hover,
+.tab_ships .ship_export .hover:hover,
+.tab_ships .advanced_sorter .adv_sorter:hover,
+.tab_ships .control_buttons .reset_default:hover {
 	background:#555555;
 }
-.tab_ships .advanced_sorter .adv_sorter:hover {
-	background:#555555;
+.tab_ships .ship_count {
+	width:215px !important;
 }
 .tab_ships .advanced_sorter .filter_box {
 	border:1px solid #888888;
 }
 .tab_ships .advanced_sorter .filter_check {
 	background:#ffffff;
-}
-.tab_ships .control_buttons .reset_default:hover {
-	background:#555555;
 }
 .tab_ships .ship_filter_type .filter_box {
 	border:1px solid #888888;

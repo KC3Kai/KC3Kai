@@ -371,7 +371,8 @@ body {
 .tab_ships .filters .fold_button {
 	background:#333;
 }
-.tab_ships .massSelect .hover {
+.tab_ships .massSelect .hover,
+.tab_ships .ship_export .hover {
 	border-radius: 4px;
 	color:#00f;
 }
@@ -379,10 +380,11 @@ body {
 	color:#fff;
 	background: hsl(220, 100%, 60%);
 }
-.tab_ships .filters .ship_filter_type:hover {
-	background:#cfc;
-}
-.tab_ships .advanced_sorter .adv_sorter:hover {
+.tab_ships .filters .massSelect .hover:hover,
+.tab_ships .filters .ship_filter_type:hover,
+.tab_ships .ship_export .hover:hover,
+.tab_ships .advanced_sorter .hover:hover,
+.tab_ships .control_buttons .hover:hover {
 	background:#cfc;
 }
 .tab_ships .advanced_sorter .filter_box {
@@ -390,9 +392,6 @@ body {
 }
 .tab_ships .advanced_sorter .filter_check {
 	background:#000;
-}
-.tab_ships .control_buttons .reset_default:hover {
-	background:#cfc;
 }
 .tab_ships .ship_filter_type .filter_box {
 	border:1px solid #000;

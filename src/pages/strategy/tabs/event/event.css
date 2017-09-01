@@ -210,9 +210,9 @@
 /* SORTIE SWITCHER
 ---------------------------------*/
 .tab_event .sortie_batch_toggles {
-	width:165px;
+	width:179px;
 	height:20px;
-	margin:5px 5px -5px 525px;
+	margin:5px 5px -5px 511px;
 	background:none;
 }
 .tab_event .sortie_batch_toggles .sortie_toggles {
@@ -366,8 +366,35 @@
 	line-height:14px;
 	font-weight:normal;
 }
+.tab_event .sortie_list .sortie_edge.edge_battle {
+	background:#700000;
+}
 .tab_event .sortie_list .sortie_edge.active {
-	background:#b50000;
+	background:#B50000;
+}
+.tab_event .sortie_list .sortie_edge.edge_ {
+	background:#00B3B1;
+}
+.tab_event .sortie_list .sortie_edge.edge_select {
+	background:#AAAAAA;
+}
+.tab_event .sortie_list .sortie_edge.edge_resource {
+	background:#70D800;
+}
+.tab_event .sortie_list .sortie_edge.edge_transport {
+	background:#40C4FF;
+}
+.tab_event .sortie_list .sortie_edge.edge_maelstrom {
+	background:#AE87E9;
+}
+.tab_event .sortie_list .sortie_edge.edge_bounty {
+	background:#40C4FF;
+}
+.tab_event .sortie_list .sortie_edge.night_battle {
+	background:#14325A;
+}
+.tab_event .sortie_list .sortie_edge.air_raid {
+	background:#FFA500;
 }
 .tab_event .sortie_list .sortie_edges .sortie_edge.active.boss {
 	background-image:url(../../../../assets/img/client/boss.png);
@@ -568,10 +595,10 @@
 	font-size:12px;
 	font-weight:bold;
 }
-.tab_event .sortie_list .node_id.nodamage {
+.tab_event .sortie_list .nodamage {
 	box-shadow: 0px 0px 2px 2px #8c4;
 }
-.tab_event .sortie_list .node_id.damaged {
+.tab_event .sortie_list .damaged {
 	box-shadow: 0px 0px 2px 2px #f90;
 }
 
@@ -584,6 +611,7 @@
 }
 .tab_event .sortie_list .node_formation img {
 	-webkit-transform: rotate(-90deg);
+	transform: rotate(-90deg);
 }
 .tab_event .sortie_list .node_result_box {
 	width:20px;
@@ -646,6 +674,7 @@
 	height:20px;
 	margin:10px 0px 0px 0px;
 	-webkit-transform: rotate(-90deg);
+	transform: rotate(-90deg);
 }
 .tab_event .sortie_list .node_eship {
 	width:20px;

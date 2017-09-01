@@ -471,6 +471,8 @@
 				delete localStorage.apiUsage;
 				ConfigManager.load();
 				ConfigManager.dismissed_hints = {};
+				delete ConfigManager.air_average;
+				delete ConfigManager.air_bounds;
 				ConfigManager.save();
 				// Give a response instead of alert
 				window.location.reload();

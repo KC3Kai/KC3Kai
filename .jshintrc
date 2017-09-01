@@ -12,6 +12,7 @@
 		"KC3TimerManager": true,
 		"KC3Log": true,
 		"AntiAir": true,
+		"KC3ChromeSync": true,
 		"KC3QuestSync": true,
 		"KC3Dashboard": true,
 		"KC3DataBackup": true,

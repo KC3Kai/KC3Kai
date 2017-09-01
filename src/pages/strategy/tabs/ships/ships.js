@@ -135,6 +135,80 @@
 				}
 				KC3StrategyTabs.reloadTab(undefined, false);
 			});
+			$(".ship_export .export_to_kanmusu_list").on("click", function() {
+				// Export currently visible ships
+				var selectedShips = self.shipCache.filter(function(x) {
+					return self.executeFilters(x);
+				});
+				selectedShips.sort( function(a, b) {
+					return RemodelDb.originOf(a.bid) - RemodelDb.originOf(b.bid) 
+						|| b.ship.level - a.ship.level; 
+				});
+
+				var previousId = 0;
+				var importString = ".2";
+				// Format .2|shipId:shipLevel|shipId2:shipLevel2.remodel,shipLevel3|...
+				for(var i = 0; i < selectedShips.length; i++) {
+					var ship = selectedShips[i];
+					var shipId = ship.bid;
+					if(RemodelDb.originOf(shipId) === previousId)
+						// Dupes are separated with ,
+						importString += ",";
+					else // While first ones are separated by |shipId
+						importString += "|" + RemodelDb.originOf(shipId) + ":";
+					importString += ship.ship.level;
+					if(RemodelDb.remodelInfo(shipId) && ship.ship.level >= RemodelDb.remodelInfo(shipId).level) {
+						var group = RemodelDb.remodelGroup(shipId);
+						var remodelNumber = group.indexOf(shipId) + 1;
+						if(remodelNumber < group.length) // Not necessary for last cyclic remodels
+							importString += "." + remodelNumber;
+					}
+					previousId = RemodelDb.originOf(shipId);
+				}
+
+				// Customized base64 encoding: http://kancolle-calc.net/data/share.js
+				var CODE = [ '0000', '0001', '0010', '0011', '0100', '0101', '0110', '0111',
+					'1000', '1001', '1010', '1011', '1100', '1101' ];
+				var BASE64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-';
+
+				var buff = '';
+				var outputString = '';
+				for (var j = 0; j < importString.length; j++) {
+					var c = importString.charAt(j);
+					var pos;
+					if (c == ',') {
+						pos = 10;
+					} else if (c == '|') {
+						pos = 11;
+					} else if (c == '.') {
+						pos = 12;
+					} else if (c == ':') {
+						pos = 13;
+					} else {
+						pos = parseInt(c);
+					}
+					buff += CODE[pos];
+					if (buff.length >= 6) {
+						var seg = buff.slice(0, 6);
+						outputString += BASE64.charAt(parseInt(seg, 2));
+						buff = buff.slice(6);
+					}
+				}
+				if (buff.length > 0) {
+					while (buff.length < 6) {
+						buff += '1';
+					}
+					outputString += BASE64.charAt(parseInt(buff, 2));
+				}
+				
+				window.open("http://kancolle-calc.net/kanmusu_list.html?data=" + outputString);
+			});
+			$(".ship_export .export_to_kancepts").on("click", function() {
+				window.open("https://javran.github.io/kancepts/?sl=" + 
+					self.shipCache.filter(x => x.locked).map(function(x) {
+						return (x.ship.level > 99 ? "r" : "") + x.bid;
+					}).join(","));
+			});
 			$(".control_buttons .reset_default").on("click", function(){
 				delete self.currentSorters;
 				$.extend(true, self, self.defaultSettings);
@@ -193,7 +267,7 @@
 
 		// try pushing a new sorter to existing list
 		// if the sorter already exists, the its "reverse"
-		// value will be filpped.
+		// value will be flipped.
 		pushToCurrentSorters: function(name) {
 			var i;
 			var found = false;
@@ -353,7 +427,7 @@
 		// NOTE: this function is supposed to be a shared callback function
 		// and should not be called directly.
 		_mutualExclusiveOnToggle: function(selectedInd,optionRep,initializing) {
-			// mutural exclusive options use just value indices
+			// mutual exclusive options use just value indices
 			// as the option value
 			var oldVal = optionRep.curValue;
 			if (oldVal === selectedInd)
@@ -366,7 +440,7 @@
 			});
 			// only trigger update when it's not the first time
 			// first time we just need to give it a initial value (default value)
-			// and then upate UI.
+			// and then update UI.
 			if (!initializing)
 				this.refreshTable();
 		},
@@ -396,7 +470,7 @@
 			// correspond to a toggle / control on UI
 			options,
 			// a callback function testShip(curVal,ship)
-			// that does the actual fitlering:
+			// that does the actual filtering:
 			// returning a falsy value means
 			// the ship should be filtered out from the list.
 			// curVal is the current state of the filter.
@@ -604,7 +678,7 @@
 			self.defineShipFilter(
 				"stype",
 				savedFilterValues.stype || stypeDefValue,
-				// valid ship types and addtionally 3 controls
+				// valid ship types and additionally 3 controls
 				stypes.concat(["all","none","invert"]),
 				// testShip
 				function(curVal,ship) {

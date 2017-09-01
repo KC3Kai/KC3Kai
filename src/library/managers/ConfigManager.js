@@ -3,7 +3,7 @@
 KC3改 Configuration Manager
 
 Stores KC3改 Settings on localStorage for persistence
-Retreives when needed to apply on components
+Retrieves when needed to apply on components
 */
 (function(){
 	"use strict";
@@ -69,62 +69,8 @@ Retreives when needed to apply on components
 				info_salt 			: false,
 				info_troll 			: false,
 
-				// AIR PROFICIENCY BONUSES (Configurable by user)
-				// 1=no veteran 2=veteran average 3=veteran bounds 4=configurable, but unused yet
 				air_formula			: 3,
 				air_combined		: false,
-				air_average			: {
-					"6":  [0, 1.35, 3.5, 7.1, 11.4, 16.8, 17, 25],
-					"7":  [0,    1,	  1,   1,    2,	   2,  2,  3],
-					"8":  [0,    1,	  1,   1,    2,	   2,  2,  3],
-					"11": [0,    1,	  1,   3,    3,	   7,  7,  9],
-					"45": [0, 1.35, 3.5, 7.1, 11.4, 16.8, 17, 25],
-					"47": [0,    1,	  1,   1,    2,	   2,  2,  3],
-					"48": [0, 1.35, 3.5, 7.1, 11.4, 16.8, 17, 25],
-					"57": [0,    1,	  1,   3,    3,	   7,  7,  9]
-				},
-				air_bounds			: {
-					"6": [  // fighter
-						[0.026, 0.845], // 0
-						[1, 1.715], [3.212, 3.984], [6.845, 7.504], // 3
-						[11.205, 11.786], [16.639, 17], [16.999, 17.205], [24.679, 25.411] // 7
-					],
-					"7": [  // dive bomber
-						[0,0], // 0
-						[0,1], [0,1], [0,1], // 3
-						[1,2], [1,2], [1,2], [1,3] // 7
-					],
-					"8": [  // torpedo bomber
-						[0,0], // 0
-						[0,1], [0,1], [0,1], // 3
-						[1,2], [1,2], [1,2], [1,3] // 7
-					],
-					"11": [  // seaplane bomber
-						[0,0], // 0
-						[0,1], [0,1], [1,3], // 3
-						[1,3], [3,7], [3,7], [7,9] // 7
-					],
-					"45": [  // seaplane fighter
-						[0.026, 0.845], // 0
-						[1, 1.715], [3.212, 3.984], [6.845, 7.504], // 3
-						[11.205, 11.786], [16.639, 17], [16.999, 17.205], [24.679, 25.411] // 7
-					],
-					"47": [  // land bomber
-						[0,0], // 0
-						[0,1], [0,1], [0,1], // 3
-						[1,2], [1,2], [1,2], [1,3] // 7
-					],
-					"48": [  // interceptor
-						[0.026, 0.845], // 0
-						[1, 1.715], [3.212, 3.984], [6.845, 7.504], // 3
-						[11.205, 11.786], [16.639, 17], [16.999, 17.205], [24.679, 25.411] // 7
-					],
-					"57": [  // jet fighter-bomber
-						[0,0], // 0
-						[0,1], [0,1], [0,1], // 3
-						[1,2], [1,2], [1,2], [1,3] // 7
-					]  // assumed to be equivalent to regular bombers unless proved otherwise
-				},
 				
 				salt_list 		: new KC3ShipMasterList(),
 				wish_list 		: new KC3ShipMasterList(),
@@ -197,6 +143,7 @@ Retreives when needed to apply on components
 				pan_custom_css		: "",
 
 				sr_theme			: "legacy",
+				sr_show_non_battle	: true,
 				sr_custom_css		: "",
 
 				disableConsoleLogHooks: false,
@@ -279,6 +226,7 @@ Retreives when needed to apply on components
 		},
 		
 		// Toggle Fighter Power
+		// 1=no proficiency 2=proficiency average 3=proficiency bounds
 		scrollFighterPowerMode :function(){
 			this.loadIfNecessary();
 			this.air_formula = (this.air_formula % 3) + 1;
