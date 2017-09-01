@@ -187,26 +187,6 @@
 			return $.extend(true, translationBase, translation);
 		},
 
-		getShipVoiceFlag: function (shipMasterId) {
-			var shipData = KC3Master.ship(shipMasterId);
-			return shipData ? shipData.api_voicef : 0;
-		},
-
-		// check if a ship has idle voice
-		shipHasIdleVoice: function (shipMasterId) {
-			return (1 & this.getShipVoiceFlag(shipMasterId)) !== 0;
-		},
-
-		// check if a ship has special idle voice
-		shipHasSpIdleVoice: function (shipMasterId) {
-			return (4 & this.getShipVoiceFlag(shipMasterId)) !== 0;
-		},
-
-		// check if a ship has hourly voices
-		shipHasHourlyVoices: function (shipMasterId) {
-			return (2 & this.getShipVoiceFlag(shipMasterId)) !== 0;
-		},
-
 		// descriptive keys to numeric keys
 		_descToId: {
 			"Intro" : 1,
@@ -281,17 +261,17 @@
 			];
 
 			// add idle voice key
-			if (this.shipHasIdleVoice(masterId))
+			if (KC3Meta.shipHasIdleVoice(masterId))
 				sortedVoiceNums.push(29);
 			// add another special idle voice key, when morale >= 50 (sparkle cond)
-			if (this.shipHasSpIdleVoice(masterId))
+			if (KC3Meta.shipHasSpIdleVoice(masterId))
 				sortedVoiceNums.push(129);
 
 			// add repair key
 			if (includeRepair && KC3Meta.specialReairVoiceShips.indexOf(masterId) > -1)
 				sortedVoiceNums.push(6);
 
-			if (includeHourlies && this.shipHasHourlyVoices(masterId))
+			if (includeHourlies && KC3Meta.shipHasHourlyVoices(masterId))
 				sortedVoiceNums = sortedVoiceNums.concat(hourlyNums);
 
 			if (KC3Meta.specialShipVoices[masterId]){
@@ -401,7 +381,7 @@
 						async: false
 					}).responseText);
 					this.transformQuotes(enJSON, "en", checkKey && isGetEnglish,
-						// remove seasonals extending for these languages
+						// remove seasonal extending for these languages
 						["jp", "scn", "kr"].indexOf(language) > -1);
 					if (track) {
 						this.addTags(enJSON, "en");
@@ -432,7 +412,7 @@
 					if (e instanceof SyntaxError){
 						console.warn("Loading quotes failed", language, e);/*RemoveLogging:skip*/
 						console.info("Failed to load " + language + " quotes, falling back to en version");
-						// Show unduplicated error message for Strategy Room
+						// Show repeatedly error message for Strategy Room
 						if($("#error").length>0 && $("#error").text().indexOf("quotes.json")<0){
 							$("#error").append(
 								$("<p>Syntax error on {0} quotes.json: {1}</p>".format(language, e.message))

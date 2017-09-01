@@ -256,6 +256,19 @@
 	font-size:14px;
 	font-weight:bold;
 }
+.tab_maps .sortie_list .sortie_edges.one_line .sortie_edge_6,
+.tab_maps .sortie_list .sortie_edges.one_line .sortie_edge_7,
+.tab_maps .sortie_list .sortie_edges.one_line .sortie_edge_8,
+.tab_maps .sortie_list .sortie_edges.one_line .sortie_edge_9,
+.tab_maps .sortie_list .sortie_edges.one_line .sortie_edge_10 {
+	display:none;
+}
+.tab_maps .sortie_list .sortie_edges.two_lines .sortie_edge {
+	width:30px;
+	height:14px;
+	line-height:14px;
+	font-weight:normal;
+}
 .tab_maps .sortie_list .sortie_edge.edge_battle {
 	background:#700000;
 }
@@ -272,13 +285,19 @@
 	background:#70D800;
 }
 .tab_maps .sortie_list .sortie_edge.edge_transport {
-	background:#70D800;
+	background:#40C4FF;
 }
 .tab_maps .sortie_list .sortie_edge.edge_maelstrom {
 	background:#AE87E9;
 }
 .tab_maps .sortie_list .sortie_edge.edge_bounty {
+	background:#40C4FF;
+}
+.tab_maps .sortie_list .sortie_edge.night_battle {
 	background:#14325A;
+}
+.tab_maps .sortie_list .sortie_edge.air_raid {
+	background:#FFA500;
 }
 .tab_maps .sortie_list .sortie_edges .sortie_edge.active.boss {
 	background-image:url(../../../../assets/img/client/boss.png);

@@ -593,6 +593,35 @@ Provides access to data on built-in JSON files
 			return isNaN(id) ? false : id <= 1500 ? id + 1000 : id;
 		},
 		
+		getShipVoiceFlag :function(masterId){
+			var shipData = KC3Master.ship(masterId);
+			return shipData ? shipData.api_voicef : 0;
+		},
+
+		// check if a ship has idle voice
+		shipHasIdleVoice :function(masterId){
+			return (1 & this.getShipVoiceFlag(masterId)) !== 0;
+		},
+
+		// check if a ship has hourly voices
+		shipHasHourlyVoices :function(masterId){
+			return (2 & this.getShipVoiceFlag(masterId)) !== 0;
+		},
+
+		// check if a ship has special idle voice
+		shipHasSpIdleVoice :function(masterId){
+			return (4 & this.getShipVoiceFlag(masterId)) !== 0;
+		},
+
+		isHourlyVoiceNum :function(voiceNum){
+			return voiceNum >= 30 && voiceNum <= 53;
+		},
+		
+		isHomePortVoiceNum :function(voiceNum){
+			// Poke 1~3, Idle, Sp Idle
+			return [2, 3, 4, 29, 129, 1471, 6547].indexOf(Number(voiceNum)) > -1;
+		},
+		
 		// Subtitle quotes
 		quote :function(identifier, voiceNum, voiceSize = 0){
 			if (!identifier) return false;
