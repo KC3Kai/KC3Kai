@@ -1117,20 +1117,6 @@ KC3改 Ship Object
 					Math.qckInt("floor", shipObj.proportionalShotdownRate() * 100, 1)
 				)
 			);
-		const fixedShotdownRange = shipObj.fixedShotdownRange(ConfigManager.aaFormation);
-		const fleetPossibleAaci = fixedShotdownRange[2];
-		if(fleetPossibleAaci > 0){
-			$(".fixedShotdown", tooltipBox).text(
-				KC3Meta.term("ShipAAFixedShotdown").format(
-					"{0}~{1} (x{2})".format(fixedShotdownRange[0], fixedShotdownRange[1],
-						AntiAir.AACITable[fleetPossibleAaci].modifier)
-				)
-			);
-		} else {
-			$(".fixedShotdown", tooltipBox).text(
-				KC3Meta.term("ShipAAFixedShotdown").format(fixedShotdownRange[0])
-			);
-		}
 		const maxAaciParams = shipObj.maxAaciShotdownBonuses();
 		if(maxAaciParams[0] > 0){
 			$(".aaciMaxBonus", tooltipBox).text(
@@ -1143,28 +1129,51 @@ KC3改 Ship Object
 				KC3Meta.term("ShipAACIMaxBonus").format(KC3Meta.term("None"))
 			);
 		}
-		const propShotdown = shipObj.proportionalShotdown(ConfigManager.imaginaryEnemySlot);
-		const aaciFixedShotdown = fleetPossibleAaci > 0 ? AntiAir.AACITable[fleetPossibleAaci].fixed : 0;
-		$.each($(".sd_title .aa_col", tooltipBox), function(idx, col){
-			$(col).text(KC3Meta.term("ShipAAShotdownTitles").split("/")[idx] || "");
-		});
-		$(".bomberSlot span", tooltipBox).text(ConfigManager.imaginaryEnemySlot);
-		$(".sd_both span", tooltipBox).text(
-			// Both succeeded
-			propShotdown + fixedShotdownRange[1] + aaciFixedShotdown + 1
-		);
-		$(".sd_prop span", tooltipBox).text(
-			// Proportional succeeded only
-			propShotdown + aaciFixedShotdown + 1
-		);
-		$(".sd_fixed span", tooltipBox).text(
-			// Fixed succeeded only
-			fixedShotdownRange[1] + aaciFixedShotdown + 1
-		);
-		$(".sd_fail span", tooltipBox).text(
-			// Both failed
-			aaciFixedShotdown + 1
-		);
+		// Not able to get following anti-air things if not on a fleet
+		if(shipObj.onFleet()){
+			const fixedShotdownRange = shipObj.fixedShotdownRange(ConfigManager.aaFormation);
+			const fleetPossibleAaci = fixedShotdownRange[2];
+			if(fleetPossibleAaci > 0){
+				$(".fixedShotdown", tooltipBox).text(
+					KC3Meta.term("ShipAAFixedShotdown").format(
+						"{0}~{1} (x{2})".format(fixedShotdownRange[0], fixedShotdownRange[1],
+							AntiAir.AACITable[fleetPossibleAaci].modifier)
+					)
+				);
+			} else {
+				$(".fixedShotdown", tooltipBox).text(
+					KC3Meta.term("ShipAAFixedShotdown").format(fixedShotdownRange[0])
+				);
+			}
+			const propShotdown = shipObj.proportionalShotdown(ConfigManager.imaginaryEnemySlot);
+			const aaciFixedShotdown = fleetPossibleAaci > 0 ? AntiAir.AACITable[fleetPossibleAaci].fixed : 0;
+			$.each($(".sd_title .aa_col", tooltipBox), function(idx, col){
+				$(col).text(KC3Meta.term("ShipAAShotdownTitles").split("/")[idx] || "");
+			});
+			$(".bomberSlot span", tooltipBox).text(ConfigManager.imaginaryEnemySlot);
+			$(".sd_both span", tooltipBox).text(
+				// Both succeeded
+				propShotdown + fixedShotdownRange[1] + aaciFixedShotdown + 1
+			);
+			$(".sd_prop span", tooltipBox).text(
+				// Proportional succeeded only
+				propShotdown + aaciFixedShotdown + 1
+			);
+			$(".sd_fixed span", tooltipBox).text(
+				// Fixed succeeded only
+				fixedShotdownRange[1] + aaciFixedShotdown + 1
+			);
+			$(".sd_fail span", tooltipBox).text(
+				// Both failed
+				aaciFixedShotdown + 1
+			);
+		} else {
+			$(".fixedShotdown", tooltipBox).text(
+				KC3Meta.term("ShipAAFixedShotdown").format("-"));
+			$.each($(".sd_title .aa_col", tooltipBox), function(idx, col){
+				$(col).text(KC3Meta.term("ShipAAShotdownTitles").split("/")[idx] || "");
+			});
+		}
 		return tooltipBox;
 	};
 

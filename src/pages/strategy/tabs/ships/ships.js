@@ -21,6 +21,7 @@
 			scrollList: false,
 			heartLockMode: 0,
 			className: false,
+			showTooltip: false,
 			// default values of filters are defined at `prepareFilters`
 		},
 		// All pre-defined filters instances
@@ -131,6 +132,20 @@
 			$(".class_no").on("click", function(){
 				if(self.className){
 					self.className = false;
+					self.saveSettings();
+				}
+				KC3StrategyTabs.reloadTab(undefined, false);
+			});
+			$(".tooltip_yes").on("click", function(){
+				if(!self.showTooltip){
+					self.showTooltip = true;
+					self.saveSettings();
+				}
+				KC3StrategyTabs.reloadTab(undefined, false);
+			});
+			$(".tooltip_no").on("click", function(){
+				if(self.showTooltip){
+					self.showTooltip = false;
 					self.saveSettings();
 				}
 				KC3StrategyTabs.reloadTab(undefined, false);
@@ -752,6 +767,7 @@
 			shrinkedSettings.views.scroll = this.scrollList;
 			shrinkedSettings.views.lock = this.heartLockMode;
 			shrinkedSettings.views.ctype = this.className;
+			shrinkedSettings.views.tooltip = this.showTooltip;
 			this.settings = shrinkedSettings;
 			localStorage.srShiplist = JSON.stringify(this.settings);
 		},
@@ -769,6 +785,7 @@
 				this.scrollList = this.settings.views.scroll || false;
 				this.heartLockMode = this.settings.views.lock || 0;
 				this.className = this.settings.views.ctype || false;
+				this.showTooltip = this.settings.views.tooltip || false;
 			}
 		},
 
@@ -946,8 +963,9 @@
 					if(shipCtr%2 === 0){ cElm.addClass("even"); }else{ cElm.addClass("odd"); }
 
 					$(".ship_id", cElm).text( cShip.id );
-					$(".ship_img .ship_icon", cElm).attr("src", KC3Meta.shipIcon(cShip.bid));
-					$(".ship_img .ship_icon", cElm).attr("alt", cShip.bid);
+					$(".ship_img .ship_icon", cElm)
+						.attr("src", KC3Meta.shipIcon(cShip.bid))
+						.attr("alt", cShip.bid);
 					if(shipLevel >= 100) {
 						$(".ship_name", cElm).addClass("ship_kekkon-color");
 					}
@@ -1017,6 +1035,20 @@
 							$(".ship_lock", this).show();
 						} else {
 							$(".ship_lock", this).hide();
+						}
+						// Update tooltip
+						const targetElm = $(".ship_img .ship_icon", this);
+						if(targetElm.tooltip("instance") !== undefined){
+							targetElm.tooltip("destroy");
+						}
+						if(self.showTooltip){
+							const tooltipBox = KC3ShipManager.get(thisShip.id)
+								.htmlTooltip($(".tab_ships .factory .ship_tooltip").clone());
+							targetElm.tooltip({
+								position: { my: "left top", at: "left+25 bottom" },
+								items: "div",
+								content: tooltipBox.prop("outerHTML")
+							});
 						}
 						// Rebind click handlers
 						$(".ship_img .ship_icon", this).click(self.shipClickFunc);
