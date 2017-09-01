@@ -1533,6 +1533,74 @@ Used by SortieManager
 	};
 
 	/**
+	 * Builds a complex long message for battle enemy face icon,
+	 * Used as a tooltip by devtools panel or SRoom Maps History for now.
+	 * @param index - index of enemy data Array, range in [0, 11],
+	 *        should pass left params if this node data not available, otherwise error will occur.
+	 * @param restParams - to override data from this node.
+	 * @return HTML string, a empty string if masterId invalid.
+	 */
+	KC3Node.prototype.buildEnemyStatsMessage = function(index,
+			masterId = this.eships[index],
+			level = this.elevels[index],
+			currentHp = (this.enemyHP[index] || {}).hp,
+			maxHp = this.maxHPs.enemy[index],
+			eParam = this.eParam[index],
+			eSlot = this.eSlot[index],
+			isPvP = this.isPvP){
+		var tooltip = "";
+		const iconStyles = {
+			"width":"13px", "height":"13px",
+			"margin-top":"-3px", "margin-right":"2px"
+		};
+		if(masterId > 0){
+			const shipMaster = KC3Master.ship(masterId);
+			const abyssMaster = KC3Master.abyssalShip(masterId, true);
+			const isCurrentHpShown = ConfigManager.info_battle && Object.keys(this.enemyHP[index]).length > 0;
+			tooltip += "{0}: {1}\n".format(masterId,
+				isPvP ? KC3Meta.shipName(shipMaster.api_name) : KC3Meta.abyssShipName(masterId));
+			tooltip += "{0} Lv {1} HP {2}\n".format(
+				KC3Meta.stype(shipMaster.api_stype),
+				level || "?",
+				!isCurrentHpShown ? maxHp || "?" :
+					"{0} /{1}".format(currentHp === 0 || currentHp ? currentHp : "?", maxHp || "?")
+			);
+			if(Array.isArray(eParam)){
+				tooltip += $("<img />").attr("src", "/assets/img/client/mod_fp.png")
+					.css(iconStyles).prop("outerHTML");
+				tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipFire"), eParam[0]);
+				tooltip += $("<img />").attr("src", "/assets/img/client/mod_tp.png")
+					.css(iconStyles).prop("outerHTML");
+				tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipTorpedo"), eParam[1]);
+				tooltip += $("<img />").attr("src", "/assets/img/client/mod_aa.png")
+					.css(iconStyles).prop("outerHTML");
+				tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipAntiAir"), eParam[2]);
+				tooltip += $("<img />").attr("src", "/assets/img/client/mod_ar.png")
+					.css(iconStyles).prop("outerHTML");
+				tooltip += "{0}: {1}".format(KC3Meta.term("ShipArmor"), eParam[3]);
+			}
+			if(Array.isArray(eSlot) && eSlot.length > 0){
+				for(let slotIdx = 0; slotIdx < Math.min(eSlot.length, 5); slotIdx++){
+					if(eSlot[slotIdx] > 0) {
+						const gearMaster = KC3Master.slotitem(eSlot[slotIdx]);
+						tooltip += "\n" + $("<img />")
+							.attr("src","/assets/img/items/"+gearMaster.api_type[3]+".png")
+							.css(iconStyles).prop("outerHTML");
+						tooltip += KC3Meta.gearName(gearMaster.api_name);
+						if(KC3GearManager.carrierBasedAircraftType3Ids
+							.indexOf(gearMaster.api_type[3]) > -1){
+							let slotMaxeq = isPvP ? shipMaster.api_maxeq[slotIdx] : (abyssMaster.api_maxeq || [])[slotIdx];
+							slotMaxeq = slotMaxeq === undefined ? "?" : slotMaxeq;
+							tooltip += $("<span></span>").css("color", "#999").text(" x"+slotMaxeq).prop("outerHTML");
+						}
+					}
+				}
+			}
+		}
+		return tooltip;
+	};
+
+	/**
 		Build HTML tooltip for details of air battle losses
 	*/
 	KC3Node.prototype.buildAirBattleLossMessage = function(){
