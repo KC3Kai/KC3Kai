@@ -123,22 +123,25 @@ Contains summary information about a fleet and its 6 ships
 	/*--------------------------------------------------------*/
 	
 	KC3Fleet.prototype.ship = function( slot ){
-		var self = this;
 		switch(typeof slot) {
 			case 'number':
 			case 'string':
 				/* Number/String => converted as fleet slot key */
-				return self.getShipManager().get( this.ships[slot] );
+				return this.getShipManager().get( this.ships[slot] );
 			case 'undefined':
 				/* Undefined => returns whole fleet as ship object */
 				return Array.apply(null, {length: this.countShips()})
 					.map(Number.call, Number)
-					.map(function(i){ return self.ship(i); });
+					.map(i => this.ship(i));
 			case 'function':
 				/* Function => iterates over given callback for every ships */
-				this.ship().forEach(function(ship,index){
-					slot.call(null,ship.rosterId,index,ship);
+				var shipObjs = this.ship();
+				shipObjs.forEach((ship, index) => {
+					slot.call(this, ship.rosterId, index, ship);
 				});
+				// forEach always return undefined, return ships for chain use
+				// NOTE: forEach unstoppable, use other functions to do condition testing
+				return shipObjs;
 		}
 	};
 	
@@ -1051,6 +1054,48 @@ Contains summary information about a fleet and its 6 ships
 		}
 		// other composition
 		return 2;
+	};
+
+	/**
+	 * Estimate possibly activated searchlight from current fleet ships.
+	 * Night battle only 1 searchlight of current fleet can be activated,
+	 * the rules and priorities are following:
+	 * @see http://wikiwiki.jp/kancolle/?%C1%F5%C8%F7%B9%CD%BB%A1#c3e3dd4e
+	 *      - priority: Large > Small, look up from flagship to escorts.
+	 * @see https://twitter.com/KanColle_STAFF/status/438561513339498496
+	 *      - ship HP < 2 does not use searchlight.
+	 * @return a tuple: [ship index, equipment index], both starts from 0.
+	 *         return false if no searchlight can be used.
+	 */
+	KC3Fleet.prototype.estimateUsableSearchlight = function() {
+		const searchLightType1Id = 18,
+			smallSlType2Id = 29, largeSlType2Id = 42;
+		// for now only 1 item implemented for each type
+		const normalSlMstId = 74, type96LargeSlMstId = 140;
+		const result = [-1, -1];
+		const lookupSearchlight = type2Id => {
+			this.ship().find((ship, shipIndex) => {
+				if(ship.hp[0] > 1 && !ship.didFlee) {
+					const equipMap = ship.findEquipmentByType(2, type2Id);
+					const equipIndex = equipMap.indexOf(true);
+					if(equipIndex >= 0) {
+						result[0] = shipIndex;
+						result[1] = equipIndex;
+						// stop on first occurring
+						return true;
+					}
+				}
+				return false;
+			});
+			// return true if no any found
+			return result.every(v => v === -1);
+		};
+		// Lookup Large Searchlight first
+		if(lookupSearchlight(largeSlType2Id)) {
+			// then lookup Small Searchlight
+			lookupSearchlight(smallSlType2Id);
+		}
+		return result.every(v => v === -1) ? false : result;
 	};
 
 	/* SORTIE JSON
