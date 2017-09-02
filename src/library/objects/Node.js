@@ -353,7 +353,7 @@ Used by SortieManager
 	KC3Node.prototype.defineAsTransport = function( nodeData ){
 		this.type = "transport";
 		this.amount = PlayerManager.fleets[KC3SortieManager.fleetSent-1].calcTpObtain(
-			KC3SortieManager.getSortieFleet().map(id => PlayerManager.fleets[id])
+			...KC3SortieManager.getSortieFleet().map(id => PlayerManager.fleets[id])
 		);
 		console.log("TP amount when arrive TP point", this.amount);
 		return this;
@@ -412,16 +412,16 @@ Used by SortieManager
 		}
 		this.yasenFlag = (battleData.api_midnight_flag>0);
 		
+		// only used by old theme, replaced by beginHPs
+		this.originalHPs = battleData.api_nowhps;
 		// max HP of enemy main fleet flagship (boss), keep this for later use
 		// especially when enemy combined and active deck is not main fleet on night battle
-		this.originalHPs = battleData.api_nowhps;
 		this.enemyFlagshipHp = this.originalHPs[7];
 		
 		this.maxHPs = {
 			ally: battleData.api_maxhps.slice(1,7),
 			enemy: battleData.api_maxhps.slice(7,13)
 		};
-		
 		if (typeof battleData.api_maxhps_combined != "undefined") {
 			this.maxHPs.ally = this.maxHPs.ally.concat(battleData.api_maxhps_combined.slice(1,7));
 			this.maxHPs.enemy = this.maxHPs.enemy.concat(battleData.api_maxhps_combined.slice(7,13));
@@ -431,7 +431,6 @@ Used by SortieManager
 			ally: battleData.api_nowhps.slice(1,7),
 			enemy: battleData.api_nowhps.slice(7,13)
 		};
-		
 		if (typeof battleData.api_nowhps_combined != "undefined") {
 			beginHPs.ally = beginHPs.ally.concat(battleData.api_nowhps_combined.slice(1,7));
 			beginHPs.enemy = beginHPs.enemy.concat(battleData.api_nowhps_combined.slice(7,13));
@@ -898,8 +897,11 @@ Used by SortieManager
 		}
 		
 		if(setAsOriginalHP){
+			// only reserved for old theme using
 			this.originalHPs = nightData.api_nowhps;
-			if(this.startsFromNight) { this.enemyFlagshipHp = this.originalHPs[7]; }
+		}
+		if(this.enemyFlagshipHp === undefined){
+			this.enemyFlagshipHp = nightData.api_nowhps[7];
 		}
 		
 		this.engagement = this.engagement || KC3Meta.engagement( nightData.api_formation[2] );

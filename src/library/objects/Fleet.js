@@ -558,15 +558,15 @@ Contains summary information about a fleet and its 6 ships
 		return totalCost;
 	};
 
-	KC3Fleet.prototype.calcTpObtain = function(...fleetObj) {
-		if(fleetObj.length > 1) {
-			return Math.floor(fleetObj.map(fleet => fleet.ship()
+	KC3Fleet.prototype.calcTpObtain = function(...fleetArr) {
+		if(fleetArr.length > 1) {
+			return Math.floor(fleetArr.map(fleet => fleet.ship()
 				.map(ship => ship.obtainTP())
 				.reduce((pre, cur) => pre.add(cur), KC3Meta.tpObtained())
 			).reduce((pre, cur) => pre.add(cur), KC3Meta.tpObtained()).value);
 		}
-		fleetObj = fleetObj[0] || this;
-		return Math.floor(fleetObj.ship()
+		const fleet = fleetArr[0] || this;
+		return Math.floor(fleet.ship()
 			.map(ship => ship.obtainTP())
 			.reduce((pre, cur) => pre.add(cur), KC3Meta.tpObtained())
 			.value);
