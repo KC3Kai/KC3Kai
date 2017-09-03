@@ -215,7 +215,7 @@
 		}
 	};
 	(function($) {
-		// A lazy initialzing method, prevent duplicate tooltip instance
+		// A lazy initializing method, prevent duplicate tooltip instance
 		$.fn.lazyInitTooltip = function(opts) {
 			if(typeof this.tooltip("instance") === "undefined") {
 				this.tooltip(opts || KC3StrategyTabs.nativeTooltipOptions);

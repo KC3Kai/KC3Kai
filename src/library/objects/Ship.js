@@ -157,12 +157,11 @@ KC3改 Ship Object
 	KC3Ship.prototype.name = function(){ return KC3Meta.shipName( this.master().api_name ); };
 	KC3Ship.prototype.stype = function(){ return KC3Meta.stype( this.master().api_stype ); };
 	KC3Ship.prototype.equipment = function(slot){
-		var self = this;
 		switch(typeof slot) {
 			case 'number':
 			case 'string':
 				/* Number/String => converted as equipment slot key */
-				return self.getGearManager().get( slot>=this.items.length ? this.ex_item : this.items[slot] );
+				return this.getGearManager().get( slot >= this.items.length ? this.ex_item : this.items[slot] );
 			case 'boolean':
 				/* Boolean => return all equipments with ex item if true */
 				return slot ? this.equipment().concat(this.exItem())
@@ -171,12 +170,15 @@ KC3改 Ship Object
 				/* Undefined => returns whole equipment as equip object */
 				return Array.apply(null, this.items)
 					.map(Number.call, Number)
-					.map(function(i){ return self.equipment(i); });
+					.map(i => this.equipment(i));
 			case 'function':
 				/* Function => iterates over given callback for every equipment */
-				return this.equipment().forEach(function(item,index){
-					slot.call(null,item.itemId,index,item);
+				var equipObjs = this.equipment();
+				equipObjs.forEach((item, index) => {
+					slot.call(this, item.itemId, index, item);
 				});
+				// forEach always return undefined, return equipment for chain use
+				return equipObjs;
 		}
 	};
 	KC3Ship.prototype.isFast = function(){ return (this.speed || this.master().api_soku) >= 10; };
@@ -501,6 +503,32 @@ KC3改 Ship Object
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.countDrums = function(){
 		return this.countEquipment( 75 );
+	};
+
+	/**
+	 * Simple method to find equipment by Master ID from current ship's equipment.
+	 * @return the mapped Array to indicate equipment found or not at corresponding position,
+	 *         max 5-elements including ex-slot.
+	 */
+	KC3Ship.prototype.findEquipmentById = function(masterId, isExslotIncluded = true) {
+		return this.equipment(isExslotIncluded).map(gear =>
+			Array.isArray(masterId) ? masterId.indexOf(gear.masterId) > -1 :
+			masterId === gear.masterId
+		);
+	};
+
+	/**
+	 * Simple method to find equipment by Type ID from current ship's equipment.
+	 * @return the mapped Array to indicate equipment found or not at corresponding position,
+	 *         max 5-elements including ex-slot.
+	 */
+	KC3Ship.prototype.findEquipmentByType = function(typeIndex, typeValue, isExslotIncluded = true) {
+		return this.equipment(isExslotIncluded).map(gear =>
+			gear.masterId > 0 && (
+				Array.isArray(typeValue) ? typeValue.indexOf(gear.master().api_type[typeIndex]) > -1 :
+				typeValue === gear.master().api_type[typeIndex]
+			)
+		);
 	};
 
 	/* FIND DAMECON
@@ -1117,20 +1145,6 @@ KC3改 Ship Object
 					Math.qckInt("floor", shipObj.proportionalShotdownRate() * 100, 1)
 				)
 			);
-		const fixedShotdownRange = shipObj.fixedShotdownRange(ConfigManager.aaFormation);
-		const fleetPossibleAaci = fixedShotdownRange[2];
-		if(fleetPossibleAaci > 0){
-			$(".fixedShotdown", tooltipBox).text(
-				KC3Meta.term("ShipAAFixedShotdown").format(
-					"{0}~{1} (x{2})".format(fixedShotdownRange[0], fixedShotdownRange[1],
-						AntiAir.AACITable[fleetPossibleAaci].modifier)
-				)
-			);
-		} else {
-			$(".fixedShotdown", tooltipBox).text(
-				KC3Meta.term("ShipAAFixedShotdown").format(fixedShotdownRange[0])
-			);
-		}
 		const maxAaciParams = shipObj.maxAaciShotdownBonuses();
 		if(maxAaciParams[0] > 0){
 			$(".aaciMaxBonus", tooltipBox).text(
@@ -1143,28 +1157,51 @@ KC3改 Ship Object
 				KC3Meta.term("ShipAACIMaxBonus").format(KC3Meta.term("None"))
 			);
 		}
-		const propShotdown = shipObj.proportionalShotdown(ConfigManager.imaginaryEnemySlot);
-		const aaciFixedShotdown = fleetPossibleAaci > 0 ? AntiAir.AACITable[fleetPossibleAaci].fixed : 0;
-		$.each($(".sd_title .aa_col", tooltipBox), function(idx, col){
-			$(col).text(KC3Meta.term("ShipAAShotdownTitles").split("/")[idx] || "");
-		});
-		$(".bomberSlot span", tooltipBox).text(ConfigManager.imaginaryEnemySlot);
-		$(".sd_both span", tooltipBox).text(
-			// Both succeeded
-			propShotdown + fixedShotdownRange[1] + aaciFixedShotdown + 1
-		);
-		$(".sd_prop span", tooltipBox).text(
-			// Proportional succeeded only
-			propShotdown + aaciFixedShotdown + 1
-		);
-		$(".sd_fixed span", tooltipBox).text(
-			// Fixed succeeded only
-			fixedShotdownRange[1] + aaciFixedShotdown + 1
-		);
-		$(".sd_fail span", tooltipBox).text(
-			// Both failed
-			aaciFixedShotdown + 1
-		);
+		// Not able to get following anti-air things if not on a fleet
+		if(shipObj.onFleet()){
+			const fixedShotdownRange = shipObj.fixedShotdownRange(ConfigManager.aaFormation);
+			const fleetPossibleAaci = fixedShotdownRange[2];
+			if(fleetPossibleAaci > 0){
+				$(".fixedShotdown", tooltipBox).text(
+					KC3Meta.term("ShipAAFixedShotdown").format(
+						"{0}~{1} (x{2})".format(fixedShotdownRange[0], fixedShotdownRange[1],
+							AntiAir.AACITable[fleetPossibleAaci].modifier)
+					)
+				);
+			} else {
+				$(".fixedShotdown", tooltipBox).text(
+					KC3Meta.term("ShipAAFixedShotdown").format(fixedShotdownRange[0])
+				);
+			}
+			const propShotdown = shipObj.proportionalShotdown(ConfigManager.imaginaryEnemySlot);
+			const aaciFixedShotdown = fleetPossibleAaci > 0 ? AntiAir.AACITable[fleetPossibleAaci].fixed : 0;
+			$.each($(".sd_title .aa_col", tooltipBox), function(idx, col){
+				$(col).text(KC3Meta.term("ShipAAShotdownTitles").split("/")[idx] || "");
+			});
+			$(".bomberSlot span", tooltipBox).text(ConfigManager.imaginaryEnemySlot);
+			$(".sd_both span", tooltipBox).text(
+				// Both succeeded
+				propShotdown + fixedShotdownRange[1] + aaciFixedShotdown + 1
+			);
+			$(".sd_prop span", tooltipBox).text(
+				// Proportional succeeded only
+				propShotdown + aaciFixedShotdown + 1
+			);
+			$(".sd_fixed span", tooltipBox).text(
+				// Fixed succeeded only
+				fixedShotdownRange[1] + aaciFixedShotdown + 1
+			);
+			$(".sd_fail span", tooltipBox).text(
+				// Both failed
+				aaciFixedShotdown + 1
+			);
+		} else {
+			$(".fixedShotdown", tooltipBox).text(
+				KC3Meta.term("ShipAAFixedShotdown").format("-"));
+			$.each($(".sd_title .aa_col", tooltipBox), function(idx, col){
+				$(col).text(KC3Meta.term("ShipAAShotdownTitles").split("/")[idx] || "");
+			});
+		}
 		return tooltipBox;
 	};
 

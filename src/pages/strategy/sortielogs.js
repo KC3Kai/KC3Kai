@@ -756,22 +756,6 @@
 								$(".node_drop img", nodeBox).attr("src", "../../assets/img/ui/shipdrop-x.png");
 							}
 							
-							// Enemies
-							$(".node_eformation img", nodeBox).attr("src", KC3Meta.formationIcon(battleData.api_formation[1]) );
-							$(".node_eformation", nodeBox).attr("title", KC3Meta.formationText(battleData.api_formation[1]) );
-							$.each(battleData.api_ship_ke, function(index, eship){
-								if(eship > -1){
-									$(".node_eship_"+(index+1)+" img", nodeBox).attr("src", KC3Meta.abyssIcon( eship ) );
-									$(".node_eship_"+(index+1), nodeBox).attr("title", KC3Meta.abyssShipName( eship) );
-									$(".node_eship_"+(index+1)+" img", nodeBox).attr("alt", eship);
-									$(".node_eship_"+(index+1)+" img", nodeBox).click(shipClickFunc);
-									$(".node_eship_"+(index+1), nodeBox).addClass("hover");
-									$(".node_eship_"+(index+1), nodeBox).removeClass(KC3Meta.abyssShipBorderClass());
-									$(".node_eship_"+(index+1), nodeBox).addClass(KC3Meta.abyssShipBorderClass(eship));
-									$(".node_eship_"+(index+1), nodeBox).show();
-								}
-							});
-							
 							// Process Battle, simulate combinedFleet flag
 							PlayerManager.combinedFleet = sortie.combined;
 							// Known issue: prediction will fail when Damecon used,
@@ -800,6 +784,23 @@
 							}
 							sinkShips[0].concat(battle.shizunde[0]);
 							sinkShips[1].concat(battle.shizunde[1]);
+							
+							// Enemies
+							$(".node_eformation img", nodeBox).attr("src", KC3Meta.formationIcon(thisNode.eformation) );
+							$(".node_eformation", nodeBox).attr("title", KC3Meta.formationText(thisNode.eformation) );
+							$.each(thisNode.eships.slice(0, 6), function(index, eship){
+								if(eship > 0){
+									$(".node_eship_"+(index+1)+" img", nodeBox)
+										.attr("src", KC3Meta.abyssIcon( eship ) )
+										.attr("alt", eship)
+										.click(shipClickFunc);
+									$(".node_eship_"+(index+1), nodeBox).addClass("hover")
+										.removeClass(KC3Meta.abyssShipBorderClass())
+										.addClass(KC3Meta.abyssShipBorderClass(eship))
+										.attr("title", thisNode.buildEnemyStatsMessage(index))
+										.show();
+								}
+							});
 							
 							// Support Exped/LBAS Triggered
 							if(thisNode.supportFlag || thisNode.lbasFlag){
