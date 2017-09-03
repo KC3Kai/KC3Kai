@@ -1690,7 +1690,7 @@
 		},
 		
 		Lbas: function(){
-			var self = this;
+			const self = this;
 			this.LbasStatus();
 			if (selectedFleet == 6) {
 				$(".shiplist_single").empty();
@@ -1701,7 +1701,7 @@
 				$(".airbase_list").show();
 				
 				var baseBox, planeBox, itemObj, myServerHost;
-				var togglePlaneName = function(e){
+				const togglePlaneName = function(e){
 					$(".module.fleet .airbase_list .base_plane_name").toggle();
 					$(".module.fleet .airbase_list .name_toggle_group").toggle();
 				};
@@ -1721,7 +1721,7 @@
 							KC3Meta.term("LandBaseActionRest")
 						][baseInfo.action]);
 						
-						let shipObj = new KC3Ship();
+						const shipObj = new KC3Ship();
 						shipObj.rosterId = -1;
 						shipObj.items = baseInfo.planes.map(function(planeInfo){
 							return planeInfo.api_state == 1 ? planeInfo.api_slotid : -1;
@@ -1731,14 +1731,14 @@
 						});
 						
 						// Regular fighter power on sortie
-						let afpLower = shipObj.fighterBounds()[0];
+						const [afpLower, afpHigher] = shipObj.fighterBounds();
 						$(".base_afp .base_stat_value", baseBox).text(
-							!!afpLower ? afpLower + "+" : KC3Meta.term("None")
+							!!afpLower ? afpLower + "~" + afpHigher : KC3Meta.term("None")
 						);
 						// Land-base interception power on air defense
-						let ifp = shipObj.interceptionPower();
+						const ifp = shipObj.interceptionPower();
 						$(".base_ifp .base_stat_value", baseBox).text(
-							!!ifp ? ifp : KC3Meta.term("None")
+							!!ifp ? "\u2248" + ifp : KC3Meta.term("None")
 						);
 						
 						$(".airbase_infos", baseBox).on("click", togglePlaneName);
