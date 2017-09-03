@@ -353,7 +353,7 @@ Used by SortieManager
 	KC3Node.prototype.defineAsTransport = function( nodeData ){
 		this.type = "transport";
 		this.amount = PlayerManager.fleets[KC3SortieManager.fleetSent-1].calcTpObtain(
-			KC3SortieManager.getSortieFleet().map(id => PlayerManager.fleets[id])
+			...KC3SortieManager.getSortieFleet().map(id => PlayerManager.fleets[id])
 		);
 		console.log("TP amount when arrive TP point", this.amount);
 		return this;
@@ -412,16 +412,16 @@ Used by SortieManager
 		}
 		this.yasenFlag = (battleData.api_midnight_flag>0);
 		
+		// only used by old theme, replaced by beginHPs
+		this.originalHPs = battleData.api_nowhps;
 		// max HP of enemy main fleet flagship (boss), keep this for later use
 		// especially when enemy combined and active deck is not main fleet on night battle
-		this.originalHPs = battleData.api_nowhps;
 		this.enemyFlagshipHp = this.originalHPs[7];
 		
 		this.maxHPs = {
 			ally: battleData.api_maxhps.slice(1,7),
 			enemy: battleData.api_maxhps.slice(7,13)
 		};
-		
 		if (typeof battleData.api_maxhps_combined != "undefined") {
 			this.maxHPs.ally = this.maxHPs.ally.concat(battleData.api_maxhps_combined.slice(1,7));
 			this.maxHPs.enemy = this.maxHPs.enemy.concat(battleData.api_maxhps_combined.slice(7,13));
@@ -431,7 +431,6 @@ Used by SortieManager
 			ally: battleData.api_nowhps.slice(1,7),
 			enemy: battleData.api_nowhps.slice(7,13)
 		};
-		
 		if (typeof battleData.api_nowhps_combined != "undefined") {
 			beginHPs.ally = beginHPs.ally.concat(battleData.api_nowhps_combined.slice(1,7));
 			beginHPs.enemy = beginHPs.enemy.concat(battleData.api_nowhps_combined.slice(7,13));
@@ -898,8 +897,11 @@ Used by SortieManager
 		}
 		
 		if(setAsOriginalHP){
+			// only reserved for old theme using
 			this.originalHPs = nightData.api_nowhps;
-			if(this.startsFromNight) { this.enemyFlagshipHp = this.originalHPs[7]; }
+		}
+		if(this.enemyFlagshipHp === undefined){
+			this.enemyFlagshipHp = nightData.api_nowhps[7];
 		}
 		
 		this.engagement = this.engagement || KC3Meta.engagement( nightData.api_formation[2] );
@@ -1528,6 +1530,74 @@ Used by SortieManager
 		}
 		if(Object.keys(apTuple[3]).length > 0){
 			tooltip += "\nERR: " + JSON.stringify(apTuple[3]);
+		}
+		return tooltip;
+	};
+
+	/**
+	 * Builds a complex long message for battle enemy face icon,
+	 * Used as a tooltip by devtools panel or SRoom Maps History for now.
+	 * @param index - index of enemy data Array, range in [0, 11],
+	 *        should pass left params if this node data not available, otherwise error will occur.
+	 * @param restParams - to override data from this node.
+	 * @return HTML string, a empty string if masterId invalid.
+	 */
+	KC3Node.prototype.buildEnemyStatsMessage = function(index,
+			masterId = this.eships[index],
+			level = this.elevels[index],
+			currentHp = (this.enemyHP[index] || {}).hp,
+			maxHp = this.maxHPs.enemy[index],
+			eParam = this.eParam[index],
+			eSlot = this.eSlot[index],
+			isPvP = this.isPvP){
+		var tooltip = "";
+		const iconStyles = {
+			"width":"13px", "height":"13px",
+			"margin-top":"-3px", "margin-right":"2px"
+		};
+		if(masterId > 0){
+			const shipMaster = KC3Master.ship(masterId);
+			const abyssMaster = KC3Master.abyssalShip(masterId, true);
+			const isCurrentHpShown = ConfigManager.info_battle && Object.keys(this.enemyHP[index]).length > 0;
+			tooltip += "{0}: {1}\n".format(masterId,
+				isPvP ? KC3Meta.shipName(shipMaster.api_name) : KC3Meta.abyssShipName(masterId));
+			tooltip += "{0} Lv {1} HP {2}\n".format(
+				KC3Meta.stype(shipMaster.api_stype),
+				level || "?",
+				!isCurrentHpShown ? maxHp || "?" :
+					"{0} /{1}".format(currentHp === 0 || currentHp ? currentHp : "?", maxHp || "?")
+			);
+			if(Array.isArray(eParam)){
+				tooltip += $("<img />").attr("src", "/assets/img/client/mod_fp.png")
+					.css(iconStyles).prop("outerHTML");
+				tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipFire"), eParam[0]);
+				tooltip += $("<img />").attr("src", "/assets/img/client/mod_tp.png")
+					.css(iconStyles).prop("outerHTML");
+				tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipTorpedo"), eParam[1]);
+				tooltip += $("<img />").attr("src", "/assets/img/client/mod_aa.png")
+					.css(iconStyles).prop("outerHTML");
+				tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipAntiAir"), eParam[2]);
+				tooltip += $("<img />").attr("src", "/assets/img/client/mod_ar.png")
+					.css(iconStyles).prop("outerHTML");
+				tooltip += "{0}: {1}".format(KC3Meta.term("ShipArmor"), eParam[3]);
+			}
+			if(Array.isArray(eSlot) && eSlot.length > 0){
+				for(let slotIdx = 0; slotIdx < Math.min(eSlot.length, 5); slotIdx++){
+					if(eSlot[slotIdx] > 0) {
+						const gearMaster = KC3Master.slotitem(eSlot[slotIdx]);
+						tooltip += "\n" + $("<img />")
+							.attr("src","/assets/img/items/"+gearMaster.api_type[3]+".png")
+							.css(iconStyles).prop("outerHTML");
+						tooltip += KC3Meta.gearName(gearMaster.api_name);
+						if(KC3GearManager.carrierBasedAircraftType3Ids
+							.indexOf(gearMaster.api_type[3]) > -1){
+							let slotMaxeq = isPvP ? shipMaster.api_maxeq[slotIdx] : (abyssMaster.api_maxeq || [])[slotIdx];
+							slotMaxeq = slotMaxeq === undefined ? "?" : slotMaxeq;
+							tooltip += $("<span></span>").css("color", "#999").text(" x"+slotMaxeq).prop("outerHTML");
+						}
+					}
+				}
+			}
 		}
 		return tooltip;
 	};

@@ -28,6 +28,10 @@ Has functions for TimerManager to use
 		remaining = Math.ceil((remaining - (ConfigManager.alert_diff*1000))/1000);
 		if(remaining <= 0){
 			this.alerted = true;
+			$(".timer-time", this.element).attr("title", "");
+		} else {
+			$(".timer-time", this.element).attr("title",
+				String(remaining).plusCurrentTime(true) );
 		}
 	};
 	
@@ -38,7 +42,7 @@ Has functions for TimerManager to use
 		this.expedNum = 0;
 		$(".timer-img img", this.element).hide();
 		$(".timer-expnum", this.element).text("");
-		$(".timer-time", this.element).text("");
+		$(".timer-time", this.element).text("").attr("title", "");
 	};
 	
 	KC3Timer.prototype.time = function(){
