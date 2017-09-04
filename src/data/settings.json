@@ -940,6 +940,30 @@
 				"options" : {
 					"tooltip" : "SettingsStrategyCustomCSSTip"
 				}
+			},
+			{
+				"id" : "idbSaveSortie",
+				"name" : "SettingsSaveSortieToDb",
+				"type" : "check",
+				"options" : {
+					"tooltip" : "SettingsSaveSortieToDbTip"
+				}
+			},
+			{
+				"id" : "idbSaveExcludeMaps",
+				"name" : "SettingsSaveSortieButMaps",
+				"type" : "json",
+				"options" : {
+					"tooltip" : "SettingsSaveSortieButMapsTip"
+				}
+			},
+			{
+				"id" : "idbSavePvP",
+				"name" : "SettingsSavePvpToDb",
+				"type" : "check",
+				"options" : {
+					"tooltip" : "SettingsSavePvpToDbTip"
+				}
 			}
 		]
 	},

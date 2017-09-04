@@ -36,11 +36,11 @@ Previously known as "Reactor"
 			
 			KC3SortieManager.load();
 			// Marks last sortie as catbombed
-			if(KC3SortieManager.onSortie) {
+			if(KC3SortieManager.isOnSortie()) {
 				KC3SortieManager.onCat = true;
 				var
-					si = KC3SortieManager.onSortie,
-					wm = 'm' + [KC3SortieManager.map_world,KC3SortieManager.map_num].join(''),
+					si = KC3SortieManager.getSortieId(),
+					wm = 'm' + KC3SortieManager.getSortieMap().join(''),
 					ma = localStorage.getObject('maps'),
 					mp = ma[wm],
 					ms = mp.stat;
@@ -1412,9 +1412,10 @@ Previously known as "Reactor"
 			var fleetNum = parseInt(params.api_deck_id, 10);
 			// Simulate PvP battle as special sortie
 			KC3SortieManager.sortieTime = Date.toUTCseconds(headers.Date);
-			KC3SortieManager.fleetSent = fleetNum;
+			KC3SortieManager.fleetSent  = fleetNum;
+			KC3SortieManager.onSortie   = 0;
 			KC3SortieManager.map_world  = -1;
-			KC3SortieManager.onPvP = true;
+			KC3SortieManager.onPvP      = true;
 			KC3SortieManager.snapshotFleetState();
 			KC3Network.trigger("PvPStart", {
 				battle: response.api_data,

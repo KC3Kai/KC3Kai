@@ -97,21 +97,27 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				}
 			}
 			// Save on database and remember current sortieId
-			KC3Database.Sortie(sortie, function(id){
-				self.onSortie = id;
-				self.sortieTime = stime;
-				self.save();
-				// Lazy save event map hp to stat.onBoss.hpdat after sortie id confirmed
-				if(eventData){
-					if(thisMap.stat && thisMap.stat.onBoss){
-						var hpData = thisMap.stat.onBoss.hpdat || [];
-						hpData[id] = [eventData.api_now_maphp, eventData.api_max_maphp];
-						thisMap.stat.onBoss.hpdat = hpData;
-						self.setCurrentMapData(thisMap);
-						console.log("Event map HP on sortie " + id + " recorded as", hpData[id]);
+			if(ConfigManager.isNotToSaveSortie(this.map_world, this.map_num)){
+				this.onSortie = Number.MAX_SAFE_INTEGER;
+				this.sortieTime = stime;
+				this.save();
+			} else {
+				KC3Database.Sortie(sortie, function(id){
+					self.onSortie = id;
+					self.sortieTime = stime;
+					self.save();
+					// Lazy save event map hp to stat.onBoss.hpdat after sortie id confirmed
+					if(eventData){
+						if(thisMap.stat && thisMap.stat.onBoss){
+							var hpData = thisMap.stat.onBoss.hpdat || [];
+							hpData[id] = [eventData.api_now_maphp, eventData.api_max_maphp];
+							thisMap.stat.onBoss.hpdat = hpData;
+							self.setCurrentMapData(thisMap);
+							console.log("Event map HP on sortie " + id + " recorded as", hpData[id]);
+						}
 					}
-				}
-			});
+				});
+			}
 		},
 		
 		snapshotFleetState :function(){
@@ -179,10 +185,26 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			});
 		},
 		
-		isSortieAt: function(world,map) {
+		getSortieId: function() {
+			return this.isOnUnsavedSortie() ? 0 : this.onSortie || 0;
+		},
+		
+		getSortieMap: function() {
+			return [this.map_world, this.map_world];
+		},
+		
+		isOnSortie: function() {
+			return this.onSortie > 0 || this.isOnUnsavedSortie();
+		},
+		
+		isOnUnsavedSortie: function() {
+			return this.onSortie === Number.MAX_SAFE_INTEGER;
+		},
+		
+		isSortieAt: function(world, map) {
 			// Always return false on event maps
 			// (speculated map_world for events > 10 as expedition format follows)
-			return (this.map_world == world && this.map_world <= 10) &&
+			return (this.map_world == world && this.map_world < 10) &&
 				(this.map_num == (map || this.map_num));
 		},
 		
@@ -412,7 +434,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		},
 		
 		updateNodeCompassResults: function(){
-			if(this.onSortie > 0) {
+			if(this.onSortie > 0 && !ConfigManager.isNotToSaveSortie(this.world, this.mapnum)) {
 				KC3Database.updateNodes(this.onSortie, this.nodes.map(node => {
 					// Basic edge ID and parsed type (dud === "")
 					const toSave = { id: node.id, type: node.type };
@@ -481,7 +503,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				   -- if either win/lose counter is zero
 				*/
 				"pvp" + (this.onSortie = (Number(pvpData.win) + Number(pvpData.lose) + (diff||1)))
-			) : ("sortie" + this.onSortie);
+			) : ("sortie" + (this.isOnUnsavedSortie() ? 0 : this.onSortie));
 		},
 		
 		endSortie :function(portApiData){
@@ -613,6 +635,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		 *           computed fighter power (without improvement and proficiency bonus),
 		 *           sum of known slot capacity,
 		 *           sum of slot capacity without air power,
+		 *           sum of slot capacity with recon planes equipped,
 		 *           exception map indicates which ship or gear missing required data:
 		 *             {shipId: null || {gearId: null || aaStat}}
 		 *         ]
@@ -622,6 +645,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			var totalPower = false;
 			var totalCapacity = 0;
 			var noAirPowerCapacity = 0;
+			var reconCapacity = 0;
 			const exceptions = {};
 			// no ship IDs
 			if(!enemyFleetShips){
@@ -672,10 +696,19 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 							exceptions[shipId] = exceptions[shipId] || {};
 							exceptions[shipId][gearId] = aaStat;
 						}
+					} else if(gearMst.api_type[1] == 7){
+						// sum reconn planes
+						const capacity = ((enemySlotSizes || [])[shipIdx] || shipMst.api_maxeq || [])[slotIdx];
+						if(capacity !== undefined){
+							reconCapacity += capacity;
+						} else {
+							exceptions[shipId] = exceptions[shipId] || {};
+							exceptions[shipId][gearId] = "recon";
+						}
 					}
 				}
 			});
-			return [totalPower, totalCapacity, noAirPowerCapacity, exceptions];
+			return [totalPower, totalCapacity, noAirPowerCapacity, reconCapacity, exceptions];
 		}
 	};
 	

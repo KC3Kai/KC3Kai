@@ -1236,7 +1236,7 @@
 						var
 							cf = PlayerManager.combinedFleet, // Marks combined flag
 							fs = KC3SortieManager.fleetSent,  // Which fleet that requires to focus out
-							so = KC3SortieManager.onSortie;   // Is it on sortie or not? if not, focus all fleets.
+							so = KC3SortieManager.isOnSortie();   // Is it on sortie or not? if not, focus all fleets.
 						return !so || ((cf && fs===1) ? i <= 1 : i == fs-1);
 					})
 					.map    (function(fleetObj) { return fleetObj.ships; }) // Convert to ship ID array
@@ -1249,7 +1249,7 @@
 							&& (!ConfigManager.alert_taiha_damecon || shipObj.findDameCon().pos < 0);
 					})
 				// if not disabled at Home Port
-				&& (KC3SortieManager.onSortie || !ConfigManager.alert_taiha_homeport)
+				&& (KC3SortieManager.isOnSortie() || !ConfigManager.alert_taiha_homeport)
 			) {
 				if(ConfigManager.alert_taiha_panel){
 					$("#critical").show();
@@ -1326,7 +1326,7 @@
 			$(".airbase_list").empty();
 			$(".airbase_list").hide();
 
-			var thisNode = KC3SortieManager.onSortie || KC3SortieManager.isPvP() ?
+			var thisNode = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP() ?
 				KC3SortieManager.currentNode() || {} : {};
 			var dameConConsumed = false;
 			var flarePos = thisNode.flarePos || 0;
@@ -1339,7 +1339,7 @@
 				// Show ships on main fleet
 				$.each(MainFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						if(KC3SortieManager.onSortie && KC3SortieManager.fleetSent == 1){
+						if(KC3SortieManager.isOnSortie() && KC3SortieManager.fleetSent == 1){
 							dameConConsumed = (thisNode.dameConConsumed || [])[index];
 						}
 						var starShellUsed = (flarePos == index+1) &&
@@ -1354,7 +1354,7 @@
 				// Show ships on escort fleet
 				$.each(EscortFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						if(KC3SortieManager.onSortie){
+						if(KC3SortieManager.isOnSortie()){
 							if(!!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 1){
 								// Send combined fleet, get escort info
 								dameConConsumed = (thisNode.dameConConsumedEscort || [])[index];
@@ -1437,7 +1437,7 @@
 				let isSelected2ndFleetOnCombined = (selectedFleet == 2 && KC3SortieManager.fleetSent == 1 && !!PlayerManager.combinedFleet);
 				$.each(CurrentFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						if(KC3SortieManager.onSortie){
+						if(KC3SortieManager.isOnSortie()){
 							if(isSelectedSortiedFleet){
 								dameConConsumed = (thisNode.dameConConsumed || [])[index];
 							} else if(isSelected2ndFleetOnCombined){
@@ -1475,7 +1475,7 @@
 					badState: [
 						CurrentFleet.needsSupply(false) ||
 						(
-							!(KC3SortieManager.onSortie && KC3SortieManager.fleetSent == selectedFleet) &&
+							!(KC3SortieManager.isOnSortie() && KC3SortieManager.fleetSent == selectedFleet) &&
 							!CurrentFleet.isSupplied() &&
 							ConfigManager.alert_supply_exped &&
 							selectedFleet > (1+(!!PlayerManager.combinedFleet)) && selectedFleet < 5
@@ -1545,7 +1545,7 @@
 			if(ConfigManager.info_fleetstat){
 				// STATUS: RESUPPLY
 				if( (FleetSummary.supplied ||
-					(KC3SortieManager.onSortie &&
+					(KC3SortieManager.isOnSortie() &&
 						KC3SortieManager.isFullySupplied() &&
 						(KC3SortieManager.fleetSent == (PlayerManager.combinedFleet ? 1 : selectedFleet)))) &&
 					(!FleetSummary.badState[0])
@@ -1890,16 +1890,15 @@
 
 			// Show world map and difficulty
 			$(".module.activity .map_world").text(
-				(KC3SortieManager.map_world>10 ? 'E' : KC3SortieManager.map_world)
-				+"-"
-				+KC3SortieManager.map_num
-				+((KC3SortieManager.map_world>10)
+				(KC3SortieManager.map_world >= 10 ? 'E' : KC3SortieManager.map_world)
+				+ "-" + KC3SortieManager.map_num
+				+ ((KC3SortieManager.map_world >= 10)
 					?["",
 					  KC3Meta.term("EventRankEasyAbbr"),
 					  KC3Meta.term("EventRankNormalAbbr"),
 					  KC3Meta.term("EventRankHardAbbr")]
 					[ KC3SortieManager.map_difficulty ]
-					:"")
+					: "")
 			);
 
 			// Map Gauge and status
@@ -3572,7 +3571,7 @@
 
 	function updateMapGauge(gaugeDmg, fsKill, noBoss) {
 		// Map Gauge and status
-		var thisMapId = [KC3SortieManager.map_world, KC3SortieManager.map_num].join(''),
+		var thisMapId = KC3SortieManager.getSortieMap().join(''),
 			thisMap   = KC3SortieManager.getCurrentMapData(),
 			mapHP     = 0,
 			onBoss    = KC3SortieManager.currentNode().isBoss(),
