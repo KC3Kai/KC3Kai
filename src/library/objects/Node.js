@@ -8,6 +8,7 @@ Used by SortieManager
 	"use strict";
 	
 	window.KC3Node = function(sortie_id, api_no, utcTime, world, map, raw){
+		// will be 0 if sortie has not been saved to DB (yet)
 		this.sortie = sortie_id || 0;
 		this.id = api_no || 0;
 		this.type = "";
@@ -819,7 +820,7 @@ Used by SortieManager
 			(function(sortieData){
 				if(this.isBoss()) {
 					// Invoke on boss event callback
-					if(sortieData.onSortie > 0 && sortieData.onBossAvailable) {
+					if(sortieData.isOnSortie() && sortieData.onBossAvailable) {
 						sortieData.onBossAvailable(this);
 					}
 					// Save boss HP for future sortie

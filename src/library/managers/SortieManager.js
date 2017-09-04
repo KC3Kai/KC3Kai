@@ -96,12 +96,13 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					this.setCurrentMapData(thisMap);
 				}
 			}
-			// Save on database and remember current sortieId
 			if(ConfigManager.isNotToSaveSortie(this.map_world, this.map_num)){
+				// Ignore database saving if user demands, set a pseudo sortie id (keep > 0)
 				this.onSortie = Number.MAX_SAFE_INTEGER;
 				this.sortieTime = stime;
 				this.save();
 			} else {
+				// Save on database and remember current sortie id
 				KC3Database.Sortie(sortie, function(id){
 					self.onSortie = id;
 					self.sortieTime = stime;
@@ -201,6 +202,10 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			return this.onSortie === Number.MAX_SAFE_INTEGER;
 		},
 		
+		isOnSavedSortie: function() {
+			return !this.isOnUnsavedSortie() && this.isOnSortie();
+		},
+		
 		isSortieAt: function(world, map) {
 			// Always return false on event maps
 			// (speculated map_world for events > 10 as expedition format follows)
@@ -295,7 +300,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			if(this.boss.letters.indexOf(bossLetter) < 0) this.boss.letters.push(bossLetter);
 			console.debug("Next edge points to boss node", nodeData.api_bosscell_no, bossLetter);
 			
-			thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime,
+			thisNode = (new KC3Node( this.getSortieId(), nodeData.api_no, UTCTime,
 				this.map_world, this.map_num, nodeData ))[definedKind](nodeData);
 			this.nodes.push(thisNode);
 			this.updateNodeCompassResults();
@@ -434,7 +439,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		},
 		
 		updateNodeCompassResults: function(){
-			if(this.onSortie > 0 && !ConfigManager.isNotToSaveSortie(this.world, this.mapnum)) {
+			if(this.isOnSavedSortie()) {
 				KC3Database.updateNodes(this.onSortie, this.nodes.map(node => {
 					// Basic edge ID and parsed type (dud === "")
 					const toSave = { id: node.id, type: node.type };
@@ -578,13 +583,14 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			cons.resc.forEach(function(matr,indx){
 				self.materialGain[indx] += matr;
 			});
-			// To detect whether invalid sortie ID or not
-			if(this.onSortie){
+			// Still save as a record with sortie id unknown 'sortie0',
+			// for saving resupply / repair costs later
+			if(this.isOnSortie()){
 				KC3Database.Naverall({
-					hour: Math.hrdInt('floor',this.sortieTime/3.6,3,1),
+					hour: Math.hrdInt('floor', this.sortieTime / 3.6, 3, 1),
 					type: cons.name,
 					data: this.materialGain.slice(0)
-				},null,true);
+				}, null, true);
 				// Save node data to sortie table even end at 1st node
 				this.updateNodeCompassResults();
 			}
