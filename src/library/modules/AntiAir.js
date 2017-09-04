@@ -686,7 +686,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// UIT-25 / I-504? (Not confirmed yet)
+	// UIT-25 / I-504
 	// https://docs.google.com/spreadsheets/d/1ljddcPvpEioGVU5yvd5GtPU7afRKPSnzFDEIBbFohh8
 	declareAACI(
 		23, 1, 1.05,

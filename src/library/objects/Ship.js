@@ -858,7 +858,7 @@ KC3改 Ship Object
 		function isHighAswTorpedoBomber(masterData) {
 			return masterData &&
 				masterData.api_type[2] === 8 &&
-				masterData.api_tais >=7;
+				masterData.api_tais >= 7;
 		}
 		// for Taiyou Kai or Kai2, any equippable aircraft with asw should work
 		function isAswAircraft(masterData) {

@@ -1492,6 +1492,9 @@ Used by SortieManager
 						if(!!aaciType){
 							aaciTips += "\n[{0}] +{1} (x{2})"
 								.format(aaciType.id, aaciType.fixed, aaciType.modifier);
+						} else {
+							aaciTips += "\n[{0}] {1}"
+								.format(fire.api_kind, KC3Meta.term("Unknown"));
 						}
 					}
 					var itemList = fire.api_use_items;
