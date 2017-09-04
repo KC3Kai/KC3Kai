@@ -852,17 +852,19 @@ KC3改 Ship Object
 		if (this.as[0] < aswThreshold)
 			return false;
 
-		// according test, Taiyou needs T97/Tenzan Torpedo Bomber 931 Air Group
+		// according test, Taiyou needs a Torpedo Bomber with asw stat >= 7,
+		// current implemented: T97 / Tenzan (931 Air Group), Swordfish Mk.III (Skilled)
 		// see http://wikiwiki.jp/kancolle/?%C2%E7%C2%EB
-		function isBomber931AirGroup(masterData) {
+		function isHighAswTorpedoBomber(masterData) {
 			return masterData &&
-				masterData.api_id === 82 || masterData.api_id === 83;
+				masterData.api_type[2] === 8 &&
+				masterData.api_tais >=7;
 		}
 		// for Taiyou Kai or Kai2, any equippable aircraft with asw should work
 		function isAswAircraft(masterData) {
 			/*
 			 * - 7: Dive Bomber
-			 * - 8: Torpedo Bomber (known no asw stat: Re.2001 G Kai)
+			 * - 8: Torpedo Bomber (known 0 asw stat: Re.2001 G Kai)
 			 * - 11: Seaplane Bomber (not equippable)
 			 * - 25: Autogyro (Kai2 equippable)
 			 * - 26: Anti-Sub PBY
@@ -878,7 +880,7 @@ KC3改 Ship Object
 		if (isTaiyouKaiAfter) {
 			return [0,1,2,3,4].some( slot => isAswAircraft( this.equipment(slot).master() ));
 		} else if (isTaiyouBase) {
-			return [0,1,2,3,4].some( slot => isBomber931AirGroup( this.equipment(slot).master() ));
+			return [0,1,2,3,4].some( slot => isHighAswTorpedoBomber( this.equipment(slot).master() ));
 		}
 
 		function isSonar(masterData) {
