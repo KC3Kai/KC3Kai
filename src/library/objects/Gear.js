@@ -52,6 +52,67 @@ KC3改 Equipment Object
 		return 0;
 	};
 
+	/**
+	 * Get the improvement bonus for kinds of attack type based on current gear stars.
+	 * Modifiers might be broken into a JSON for better maintenance.
+	 * 
+	 * @param {string} - attack type identifier, allow values for now:
+	 *                   `fire`, `torpedo`, `yasen`, `asw`, `support`
+	 * @return {number} computed bonus = modifier * sqrt(stars)
+	 * @see this.AAStatImprovementBonus for Anti-Air improvement bonus
+	 * @see http://kancolle.wikia.com/wiki/Improvements
+	 * @see http://wikiwiki.jp/kancolle/?%B2%FE%BD%A4%B9%A9%BE%B3#ic9d577c
+	 */
+	KC3Gear.prototype.attackPowerImprovementBonus = function(attackType = "fire") {
+		if(this.itemId === 0) { return 0; }
+		const type2 = this.master().api_type[2];
+		const stars = this.stars || 0;
+		// No improvement bonus is default
+		let modifier = 0;
+		switch(attackType.toLowerCase()) {
+			case "fire":
+				switch(type2) {
+					case 1: // Small Cal. Main
+					case 2: // Medium Cal. Main
+					case 4: // Secondary
+					case 19: // AP Shell
+					case 21: // AA Machine Gun
+					case 24: // Landing Craft
+					case 29: // Searchlight
+					case 36: // AA Fire Director
+					case 46: // Amphibious Tank
+						modifier = 1; break;
+					case 3:
+						modifier = 1.5; break;
+					case 14: // Sonar
+					case 15: // Depth Charge
+					case 40: // Large Sonar
+						modifier = 0.75; break;
+				}
+				break;
+			case "torpedo":
+				// Torpedo or AA Machine Gun
+				if(type2 === 5 || type2 === 21)
+					modifier = 1.2;
+				break;
+			case "yasen":
+				// See equiptype for api_type[2]
+				if([1, 2, 3, 4, 5, 19, 24, 29, 36, 46].indexOf(type2) > -1)
+					modifier = 1;
+				break;
+			case "asw":
+				// Depth Charge or Sonar
+				if([14, 15, 40].indexOf(type2) > -1)
+					modifier = 1;
+				break;
+			case "support":
+				// No any improvement bonus found for support fleet for now
+				break;
+			default:
+				console.warn("Unknown attack type:", attackType);
+		}
+		return modifier * Math.sqrt(stars);
+	};
 
 	KC3Gear.prototype.AAStatImprovementBonus = function() {
 		if (this.itemId !== 0) {

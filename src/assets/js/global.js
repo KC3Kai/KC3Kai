@@ -183,7 +183,6 @@ Object.size = function(obj) {
 	return size;
 };
 Object.assignIfDefined = function(target, key, value) {
-	var targetType = typeof target;
 	if(value !== undefined && typeof target === "object") {
 		target[key] = value;
 	}

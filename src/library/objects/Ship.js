@@ -437,6 +437,12 @@ KC3改 Ship Object
 		return this.equipmentTotalStats("saku");
 	};
 
+	KC3Ship.prototype.equipmentTotalImprovementBonus = function(attackType){
+		return this.equipment(true)
+			.map(gear => gear.attackPowerImprovementBonus(attackType))
+			.reduce((acc, v) => acc + (v || 0), 0);
+	};
+
 	/**
 	 * Maxed stats of this ship.
 	 * @return stats without the equipment but with modernization at Lv.99,
@@ -666,7 +672,7 @@ KC3改 Ship Object
 		if(this.rosterId===0){ return 0; }
 		const fixedFP = this.nakedStats("fp") - 1;
 		var supportPower = 0;
-		// For CV / CVL / CVB?
+		// for carrier series: CV, CVL, CVB
 		if([7, 11, 18].indexOf(this.master().api_stype) > -1){
 			supportPower = fixedFP;
 			supportPower += this.equipmentTotalStats("raig");
@@ -682,6 +688,85 @@ KC3改 Ship Object
 			supportPower = 5 + fixedFP + this.equipmentTotalStats("houg");
 		}
 		return supportPower;
+	};
+
+	/**
+	 * Get basic pre-cap shelling fire power of this ship (without pre-cap / post-cap modifier).
+	 *
+	 * @param {number} combinedFleetFactor - additional power if ship is on a combined fleet.
+	 * @return {number} computed fire power, return 0 if unavailable.
+	 * @see http://kancolle.wikia.com/wiki/Damage_Calculation
+	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#ua92169d
+	 */
+	KC3Ship.prototype.shellingFirePower = function(combinedFleetFactor = 0){
+		if(!this.rosterId || !this.masterId) { return 0; }
+		const stype = this.master().api_stype;
+		const carrierStypes = [7, 11, 18];
+		let isCarrierShelling = carrierStypes.indexOf(stype) > -1;
+		if(!isCarrierShelling) {
+			// Hayasui Kai gets special when any Torpedo Bomber equipped
+			isCarrierShelling = this.masterId === 352 &&
+				this.findEquipmentByType(2, 8).some(v => !!v);
+		}
+		let shellingPower = this.fp[0];
+		if(isCarrierShelling) {
+			shellingPower += this.equipmentTotalStats("raig");
+			shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku"));
+			shellingPower += combinedFleetFactor;
+			shellingPower += this.equipmentTotalImprovementBonus("fire");
+			shellingPower = Math.floor(1.5 * shellingPower);
+			shellingPower += 55;
+		} else {
+			shellingPower += combinedFleetFactor;
+			shellingPower += this.equipmentTotalImprovementBonus("fire");
+			shellingPower += 5;
+		}
+		return shellingPower;
+	};
+
+	/**
+	 * Get pre-cap shelling torpedo power of this ship.
+	 */
+	KC3Ship.prototype.shellingTorpedoPower = function(combinedFleetFactor = 0){
+		if(!this.rosterId || !this.masterId) { return 0; }
+		return 5 + this.tp[0] + combinedFleetFactor +
+			this.equipmentTotalImprovementBonus("torpedo");
+	};
+
+	/**
+	 * Get pre-cap anti-sub power of this ship.
+	 */
+	KC3Ship.prototype.antiSubWarfarePower = function(){
+		if(!this.rosterId || !this.masterId) { return 0; }
+		const hasTrue = v => !!v;
+		const isSonarEquipped = this.findEquipmentByType(1, 10).some(hasTrue);
+		const isDepthChargeProjectorEquipped = this.findEquipmentById([44, 45]).some(hasTrue);
+		const isNewDepthChargeEquipped = this.findEquipmentById([226, 227]).some(hasTrue);
+		let synergyModifier = 1;
+		synergyModifier += isSonarEquipped && isNewDepthChargeEquipped ? 0.15 : 0;
+		synergyModifier += isDepthChargeProjectorEquipped && isNewDepthChargeEquipped ? 0.1 : 0;
+		synergyModifier *= isSonarEquipped && isDepthChargeProjectorEquipped ? 1.15 : 1;
+		// TODO check asw attack type by stype & equipment
+		const isAirAttack = false;
+		const attackMethodConst = isAirAttack ? 8 : 13;
+		const nakedAsw = this.nakedStats("as");
+		// FIXME asw stat from some types of equipment not applied to as[0]?
+		const equipmentTotalAsw = this.as[0] - nakedAsw;
+		let aswPower = attackMethodConst;
+		aswPower += 2 * Math.sqrt(nakedAsw);
+		aswPower += 1.5 * equipmentTotalAsw;
+		aswPower += this.equipmentTotalImprovementBonus("asw");
+		aswPower *= synergyModifier;
+		return aswPower;
+	};
+
+	/**
+	 * Get pre-cap night battle power of this ship.
+	 */
+	KC3Ship.prototype.nightBattlePower = function(isNightContacted = false){
+		if(!this.rosterId || !this.masterId) { return 0; }
+		return (isNightContacted & 5) + this.fp[0] + this.tp[0]
+			+ this.equipmentTotalImprovementBonus("yasen");
 	};
 
 	/* Calculate resupply cost
