@@ -191,7 +191,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		},
 		
 		getSortieMap: function() {
-			return [this.map_world, this.map_world];
+			return [this.map_world, this.map_num];
 		},
 		
 		isOnSortie: function() {
@@ -702,8 +702,9 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 							exceptions[shipId] = exceptions[shipId] || {};
 							exceptions[shipId][gearId] = aaStat;
 						}
-					} else if(gearMst.api_type[1] == 7){
-						// sum reconn planes
+					} else if(gearMst.api_type[1] === 7){
+						// sum recon planes not participate normal air battle but LBAA battle,
+						// seaplane fighters/bombers will not be dropped here
 						const capacity = ((enemySlotSizes || [])[shipIdx] || shipMst.api_maxeq || [])[slotIdx];
 						if(capacity !== undefined){
 							reconCapacity += capacity;
