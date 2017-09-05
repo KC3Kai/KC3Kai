@@ -631,21 +631,23 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			this.sortieTime = 0;
 			this.save();
 		},
+		
 		/**
 		 * Get battle opponent's fighter power only based on master data.
-		 * @param {Array} enemyFleetShips - master ID array of opponent fleet ships.
-		 * @param {Array[]}enemyShipSlots - master ID array of equip slots, optional.
-		 *                                  length should be the same with enemyFleetShips.
-		 * @param {Array[]}enemySlotSizes - capacities of equip slots, optional, same length either.
-		 * @return a tuple contains [
+		 *
+		 * @param {Array}  enemyFleetShips - master ID array of opponent fleet ships.
+		 * @param {Array[]} enemyShipSlots - master ID array of equip slots, optional.
+		 *                                   length should be the same with enemyFleetShips.
+		 * @param {Array[]} enemySlotSizes - capacities of equip slots, optional, same length either.
+		 * @return {Array} a tuple contains [
 		 *           computed fighter power (without improvement and proficiency bonus),
 		 *           sum of known slot capacity,
 		 *           sum of slot capacity without air power,
 		 *           sum of slot capacity with recon planes equipped,
 		 *           exception map indicates which ship or gear missing required data:
-		 *             {shipId: null || {gearId: null || aaStat}}
+		 *             {shipId: null || {gearId: null || aaStat || 'recon'}}
 		 *         ]
-		 * @see To compute fighter power of our fleet, see Fleet, Ship, Gear classes.
+		 * @see Fleet, Ship, Gear classes to compute fighter power of player fleet.
 		 */
 		enemyFighterPower :function(enemyFleetShips, enemyShipSlots, enemySlotSizes){
 			var totalPower = false;

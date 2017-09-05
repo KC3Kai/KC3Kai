@@ -60,6 +60,15 @@ Does not include Ships and Gears which are managed by other Managers
 			// Update player with new data
 			this.hq.update( data );
 			this.hq.save();
+			
+			// Update related managers with new data if exists
+			Object.assignIfDefined(PlayerManager.consumables, "fcoin", data.fcoin);
+			PlayerManager.fleetCount = data.fleetCount;
+			PlayerManager.repairSlots = data.repairSlots;
+			PlayerManager.buildSlots = data.buildSlots;
+			KC3ShipManager.max = data.maxShipSlots;
+			// Not sure why, but always shown +3 at client side. see #1860
+			KC3GearManager.max = 3 + data.maxGearSlots;
 
 			// Record values of recent hour if necessary
 			if(typeof localStorage.lastExperience == "undefined"){ localStorage.lastExperience = 0; }
