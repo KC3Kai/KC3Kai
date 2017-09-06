@@ -1388,7 +1388,7 @@
 				FleetSummary = {
 					lv: MainFleet.totalLevel() + EscortFleet.totalLevel(),
 					elos: Math.qckInt("floor", MainFleet.eLoS()+EscortFleet.eLoS(), 1),
-					air: PlayerManager.getFleetsFighterPowerText(MainFleet, EscortFleet, true),
+					air: KC3Calc.getFleetsFighterPowerText(MainFleet, EscortFleet, true),
 					antiAir: Math.floor(AntiAir.fleetCombinedAdjustedAntiAir(
 						MainFleet, EscortFleet,
 						AntiAir.getFormationModifiers(ConfigManager.aaFormation))),
@@ -1462,7 +1462,7 @@
 					lv: CurrentFleet.totalLevel(),
 					baseExp: CurrentFleet.estimatePvpBaseExp(),
 					elos: Math.qckInt("floor", CurrentFleet.eLoS(), 1),
-					air: PlayerManager.getFleetsFighterPowerText(CurrentFleet),
+					air: KC3Calc.getFleetsFighterPowerText(CurrentFleet),
 					antiAir: CurrentFleet.adjustedAntiAir(ConfigManager.aaFormation),
 					speed: CurrentFleet.speed(),
 					docking: MainRepairs.docking,
@@ -1845,8 +1845,8 @@
 		},
 
 		LbasStatus: function(){
-			const lbasIsSupplied = PlayerManager.isBasesSupplied(),
-				lbasWorstCond = PlayerManager.getBasesWorstCond(),
+			const lbasIsSupplied = KC3Calc.isLandBasesSupplied(),
+				lbasWorstCond = KC3Calc.getLandBasesWorstCond(),
 				lbasCondBad = lbasWorstCond > 1;
 			// Update LBAS button for resupply/morale indicator
 			const lbasViewButton = $(".module.controls .fleet_lbas");
@@ -1863,8 +1863,8 @@
 				)).toggleClass("good", lbasIsSupplied).toggleClass("bad", !lbasIsSupplied);
 				$(".module.status .status_supply img").attr("src",
 					"/assets/img/ui/" + (lbasIsSupplied ? "check.png" : "sunk.png"));
-				const lbasSupplyCost = PlayerManager.getBasesResupplyCost();
-				const lbasSortieCost = PlayerManager.getBasesSortieCost();
+				const lbasSupplyCost = KC3Calc.getLandBasesResupplyCost();
+				const lbasSortieCost = KC3Calc.getLandBasesSortieCost();
 				$(".module.status .status_supply").attr("title",
 					KC3Meta.term("PanelResupplyCosts").format(
 						lbasSupplyCost.fuel, lbasSupplyCost.ammo, lbasSupplyCost.bauxite, ""

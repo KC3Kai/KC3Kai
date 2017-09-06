@@ -382,6 +382,87 @@ KC3改 Ship Object
 		return result;
 	};
 
+	/* Calculate resupply cost
+	   ----------------------------------
+	   0 <= fuelPercent <= 1, < 0 use current fuel
+	   0 <= ammoPercent <= 1, < 0 use current ammo
+	   to calculate bauxite cost: bauxiteNeeded == true
+	   to calculate steel cost per battles: steelNeeded == true
+	   returns an object: {fuel: <fuelCost>, ammo: <ammoCost>, steel: <steelCost>, bauxite: <bauxiteCost>}
+	 */
+	KC3Ship.prototype.calcResupplyCost = function(fuelPercent, ammoPercent, bauxiteNeeded, steelNeeded) {
+		var self = this;
+		var master = this.master();
+		var fullFuel = master.api_fuel_max;
+		var fullAmmo = master.api_bull_max;
+
+		var mulRounded = function (a, percent) {
+			return Math.floor( a * percent );
+		};
+		var marriageConserve = function (v) {
+			return self.isMarried() ? Math.floor(0.85 * v) : v;
+		};
+		var result = {
+			fuel: fuelPercent < 0 ? fullFuel - this.fuel : mulRounded(fullFuel, fuelPercent),
+			ammo: ammoPercent < 0 ? fullAmmo - this.ammo : mulRounded(fullAmmo, ammoPercent)
+		};
+		// After testing, 85% is applied to supply cost, not max value
+		result.fuel = marriageConserve(result.fuel);
+		result.ammo = marriageConserve(result.ammo);
+		if(!!bauxiteNeeded){
+			var slotsBauxiteCost = function(current, max) {
+				return current < max ? (max-current) * KC3GearManager.carrierSupplyBauxiteCostPerSlot : 0;
+			};
+			var shipBauxiteCost = function() {
+				return slotsBauxiteCost(self.slots[0], master.api_maxeq[0])
+					+ slotsBauxiteCost(self.slots[1], master.api_maxeq[1])
+					+ slotsBauxiteCost(self.slots[2], master.api_maxeq[2])
+					+ slotsBauxiteCost(self.slots[3], master.api_maxeq[3]);
+			};
+			result.bauxite = shipBauxiteCost();
+			// Bauxite cost to fill slots not affected by marriage.
+			// via http://kancolle.wikia.com/wiki/Marriage
+			//result.bauxite = marriageConserve(result.bauxite);
+		}
+		if(!!steelNeeded){
+			result.steel = this.calcJetsSteelCost();
+		}
+		return result;
+	};
+
+	/**
+	 * Calculate steel cost of jet aircraft for 1 battle based on current slot size.
+	 * returns total steel cost for this ship at this time
+	 */
+	KC3Ship.prototype.calcJetsSteelCost = function(currentSortieId) {
+		var i, item, pc, self = this;
+		var totalSteel = 0, consumedSteel = 0;
+		for(i = 0; i < self.items.length; i++) {
+			item = self.equipment(i);
+			// Is Jet aircraft and left slot > 0
+			if(item.masterId > 0 && item.master().api_type[2] == 57 && self.slots[i] > 0) {
+				consumedSteel = Math.round(
+					self.slots[i]
+					* item.master().api_cost
+					* KC3GearManager.jetBomberSteelCostRatioPerSlot
+				) || 0;
+				totalSteel += consumedSteel;
+				if(!!currentSortieId) {
+					pc = self.pendingConsumption[currentSortieId];
+					if(!pc) {
+						pc = [[0,0,0],[0,0,0],[0]];
+						self.pendingConsumption[currentSortieId] = pc;
+					}
+					pc[2][0] -= consumedSteel;
+				}
+			}
+		}
+		if(!!currentSortieId && totalSteel > 0) {
+			KC3ShipManager.save();
+		}
+		return totalSteel;
+	};
+
 	/**
 	 * Naked stats of this ship.
 	 * @return stats without the equipment but with modernization.
@@ -419,9 +500,18 @@ KC3改 Ship Object
 		return !statAttr ? stats : stats[statAttr];
 	};
 
-	KC3Ship.prototype.equipmentTotalStats = function(apiName){
+	KC3Ship.prototype.equipmentStatsMap = function(apiName, isExslotIncluded = true){
+		return this.equipment(isExslotIncluded).map(equip => {
+			if(equip.masterId > 0) {
+				return equip.master()["api_" + apiName];
+			}
+			return undefined;
+		});
+	};
+
+	KC3Ship.prototype.equipmentTotalStats = function(apiName, isExslotIncluded = true){
 		var total = 0;
-		this.equipment(true).forEach(equip => {
+		this.equipment(isExslotIncluded).forEach(equip => {
 			if(equip.masterId > 0) {
 				total += (equip.master()["api_" + apiName] || 0);
 			}
@@ -435,6 +525,13 @@ KC3改 Ship Object
 
 	KC3Ship.prototype.equipmentTotalLoS = function (){
 		return this.equipmentTotalStats("saku");
+	};
+
+	// estimated LoS without equipments based on WhoCallsTheFleetDb
+	KC3Ship.prototype.estimateNakedLoS = function() {
+		var losInfo = WhoCallsTheFleetDb.getLoSInfo( this.masterId );
+		var retVal = WhoCallsTheFleetDb.estimateStat(losInfo, this.level);
+		return retVal === false ? 0 : retVal;
 	};
 
 	KC3Ship.prototype.equipmentTotalImprovementBonus = function(attackType){
@@ -746,11 +843,12 @@ KC3改 Ship Object
 		synergyModifier += isSonarEquipped && isNewDepthChargeEquipped ? 0.15 : 0;
 		synergyModifier += isDepthChargeProjectorEquipped && isNewDepthChargeEquipped ? 0.1 : 0;
 		synergyModifier *= isSonarEquipped && isDepthChargeProjectorEquipped ? 1.15 : 1;
-		// TODO check asw attack type by stype & equipment
-		const isAirAttack = false;
+		// check asw attack type, 1530 is Abyssal Submarine Ka-Class
+		const isAirAttack = this.estimateDayAttackType(1530)[0] === 7;
 		const attackMethodConst = isAirAttack ? 8 : 13;
 		const nakedAsw = this.nakedStats("as");
 		// FIXME asw stat from some types of equipment not applied to as[0]?
+		// assume these equipment can not be equipped by this ship in-game
 		const equipmentTotalAsw = this.as[0] - nakedAsw;
 		let aswPower = attackMethodConst;
 		aswPower += 2 * Math.sqrt(nakedAsw);
@@ -767,114 +865,6 @@ KC3改 Ship Object
 		if(!this.rosterId || !this.masterId) { return 0; }
 		return (isNightContacted & 5) + this.fp[0] + this.tp[0]
 			+ this.equipmentTotalImprovementBonus("yasen");
-	};
-
-	/* Calculate resupply cost
-	   ----------------------------------
-	   0 <= fuelPercent <= 1, < 0 use current fuel
-	   0 <= ammoPercent <= 1, < 0 use current ammo
-	   to calculate bauxite cost: bauxiteNeeded == true
-	   to calculate steel cost per battles: steelNeeded == true
-	   returns an object: {fuel: <fuelCost>, ammo: <ammoCost>, steel: <steelCost>, bauxite: <bauxiteCost>}
-	 */
-	KC3Ship.prototype.calcResupplyCost = function(fuelPercent, ammoPercent, bauxiteNeeded, steelNeeded) {
-		var self = this;
-		var master = this.master();
-		var fullFuel = master.api_fuel_max;
-		var fullAmmo = master.api_bull_max;
-
-		var mulRounded = function (a, percent) {
-			return Math.floor( a * percent );
-		};
-		var marriageConserve = function (v) {
-			return self.isMarried() ? Math.floor(0.85 * v) : v;
-		};
-		var result = {
-			fuel: fuelPercent < 0 ? fullFuel - this.fuel : mulRounded(fullFuel, fuelPercent),
-			ammo: ammoPercent < 0 ? fullAmmo - this.ammo : mulRounded(fullAmmo, ammoPercent)
-		};
-		// After testing, 85% is applied to supply cost, not max value
-		result.fuel = marriageConserve(result.fuel);
-		result.ammo = marriageConserve(result.ammo);
-		if(!!bauxiteNeeded){
-			var slotsBauxiteCost = function(current, max) {
-				return current < max ? (max-current) * KC3GearManager.carrierSupplyBauxiteCostPerSlot : 0;
-			};
-			var shipBauxiteCost = function() {
-				return slotsBauxiteCost(self.slots[0], master.api_maxeq[0])
-					+ slotsBauxiteCost(self.slots[1], master.api_maxeq[1])
-					+ slotsBauxiteCost(self.slots[2], master.api_maxeq[2])
-					+ slotsBauxiteCost(self.slots[3], master.api_maxeq[3]);
-			};
-			result.bauxite = shipBauxiteCost();
-			// Bauxite cost to fill slots not affected by marriage.
-			// via http://kancolle.wikia.com/wiki/Marriage
-			//result.bauxite = marriageConserve(result.bauxite);
-		}
-		if(!!steelNeeded){
-			result.steel = this.calcJetsSteelCost();
-		}
-		return result;
-	};
-
-	/**
-	 * Calculate steel cost of jet aircraft for 1 battle based on current slot size.
-	 * returns total steel cost for this ship at this time
-	 */
-	KC3Ship.prototype.calcJetsSteelCost = function(currentSortieId) {
-		var i, item, pc, self = this;
-		var totalSteel = 0, consumedSteel = 0;
-		for(i = 0; i < self.items.length; i++) {
-			item = self.equipment(i);
-			// Is Jet aircraft and left slot > 0
-			if(item.masterId > 0 && item.master().api_type[2] == 57 && self.slots[i] > 0) {
-				consumedSteel = Math.round(
-					self.slots[i]
-					* item.master().api_cost
-					* KC3GearManager.jetBomberSteelCostRatioPerSlot
-				) || 0;
-				totalSteel += consumedSteel;
-				if(!!currentSortieId) {
-					pc = self.pendingConsumption[currentSortieId];
-					if(!pc) {
-						pc = [[0,0,0],[0,0,0],[0]];
-						self.pendingConsumption[currentSortieId] = pc;
-					}
-					pc[2][0] -= consumedSteel;
-				}
-			}
-		}
-		if(!!currentSortieId && totalSteel > 0) {
-			KC3ShipManager.save();
-		}
-		return totalSteel;
-	};
-
-	/* Expedition Supply Change Check */
-	KC3Ship.prototype.perform = function(command,args) {
-		try {
-			args = $.extend({noFuel:0,noAmmo:0},args);
-			command = command.slice(0,1).toUpperCase() + command.slice(1).toLowerCase();
-			this["perform"+command].call(this,args);
-		} catch (e) {
-			console.error("Failed when perform" + command, e);
-			return false;
-		} finally {
-			return true;
-		}
-	};
-	KC3Ship.prototype.performSupply = function(args) {
-		consumePending.call(this,0,{0:0,1:1,2:3,c: 1 - (this.isMarried() && 0.15),i: 0},[0,1,2],args);
-	};
-	KC3Ship.prototype.performRepair = function(args) {
-		consumePending.call(this,1,{0:0,1:2,2:6,c: 1,i: 0},[0,1,2],args);
-	};
-
-	// estimated LoS without equipments based on WhoCallsTheFleetDb
-	KC3Ship.prototype.estimateNakedLoS = function() {
-		var losInfo = WhoCallsTheFleetDb.getLoSInfo( this.masterId );
-		var retVal = WhoCallsTheFleetDb.estimateStat(losInfo, this.level);
-		return retVal === false ? 0 : retVal;
 	};
 
 	// check if this ship is capable of equipping Daihatsu (landing craft)
@@ -924,12 +914,12 @@ KC3改 Ship Object
 		// is Taiyou series:
 		// tho Kasugamaru not possible to reach high asw for now
 		// and base asw stat of Kai and Kai2 already exceed 70
-		let isTaiyouSeries = RemodelDb.originOf(this.masterId) === 521;
-		let isTaiyouBase = this.masterId === 526;
-		let isTaiyouKaiAfter = RemodelDb.remodelGroup(521).indexOf(this.masterId) > 1;
+		const isTaiyouSeries = RemodelDb.originOf(this.masterId) === 521;
+		const isTaiyouBase = this.masterId === 526;
+		const isTaiyouKaiAfter = RemodelDb.remodelGroup(521).indexOf(this.masterId) > 1;
 
 		// lower condition for Escort and Taiyou
-		let aswThreshold = this.master().api_stype == 1 ? 60
+		const aswThreshold = this.master().api_stype == 1 ? 60
 			: isTaiyouSeries ? 65
 			: 100;
 
@@ -940,64 +930,214 @@ KC3改 Ship Object
 		// according test, Taiyou needs a Torpedo Bomber with asw stat >= 7,
 		// current implemented: T97 / Tenzan (931 Air Group), Swordfish Mk.III (Skilled)
 		// see http://wikiwiki.jp/kancolle/?%C2%E7%C2%EB
-		function isHighAswTorpedoBomber(masterData) {
+		const isHighAswTorpedoBomber = (masterData) => {
 			return masterData &&
 				masterData.api_type[2] === 8 &&
 				masterData.api_tais >= 7;
-		}
-		// for Taiyou Kai or Kai2, any equippable aircraft with asw should work
-		function isAswAircraft(masterData) {
-			/*
-			 * - 7: Dive Bomber
-			 * - 8: Torpedo Bomber (known 0 asw stat: Re.2001 G Kai)
-			 * - 11: Seaplane Bomber (not equippable)
-			 * - 25: Autogyro (Kai2 equippable)
-			 * - 26: Anti-Sub PBY
-			 * - 41: Large Flying Boat (not equippable)
-			 */
-			return masterData &&
-				[7, 8, 11, 25, 26, 41].indexOf(masterData.api_type[2]) > -1 &&
-				masterData.api_tais > 0;
-		}
-
-		// Only Autogyro or PBY equipped will not let CVL anti-sub in day shelling phase,
+		};
+		// for Taiyou Kai or Kai Ni, any equippable aircraft with asw should work,
+		// only Autogyro or PBY equipped will not let CVL anti-sub in day shelling phase,
 		// but Taiyou Kai+ can still OASW. only Sonar equipped can do neither.
 		if (isTaiyouKaiAfter) {
-			return [0,1,2,3,4].some( slot => isAswAircraft( this.equipment(slot).master() ));
+			return [0,1,2,3,4].some( slot => this.equipment(slot).isAswAircraft() );
 		} else if (isTaiyouBase) {
 			return [0,1,2,3,4].some( slot => isHighAswTorpedoBomber( this.equipment(slot).master() ));
 		}
 
-		function isSonar(masterData) {
-			/* checking on equipment type sounds better than
-			   letting a list of master Ids
-			   should match the following equipments: (id, name)
-			   - 46: T93 Passive Sonar
-			   - 47: T3 Active Sonar
-			   - 132: T0 Passive
-			   - 149: T4 Passive
-			 */
-			return masterData &&
-				masterData.api_type[1] === 10;
-		}
-		let hasSonar = [0,1,2,3,4]
-			.some( slot => isSonar( this.equipment(slot).master() ));
-
+		const hasSonar = this.findEquipmentByType(1, 10).some(v => !!v);
 		// Escort can OASW without Sonar, but total asw >= 75 and equipped total plus asw >= 4
 		// see https://twitter.com/a_t_o_6/status/863445975007805440
 		if(this.master().api_stype == 1) {
 			if(hasSonar) return true;
-			let equipAswSum = [0,1,2,3,4]
-				.map(slot => this.equipment(slot).master().api_tais || 0)
-				.reduce((acc, v) => acc + v, 0);
+			const equipAswSum = this.equipmentTotalStats("tais");
 			return this.as[0] >= 75 && equipAswSum >= 4;
 		}
 
 		return hasSonar;
 	};
 
-	// see http://wikiwiki.jp/kancolle/?%CC%BF%C3%E6%A4%C8%B2%F3%C8%F2%A4%CB%A4%C4%A4%A4%A4%C6
-	// see http://kancolle.wikia.com/wiki/Combat/Accuracy_and_Evasion
+	KC3Ship.prototype.estimateLandingAttackType = function(targetShipMasterId) {
+		const hasTrue = v => !!v;
+		const targetShip = targetShipMasterId > 0 ? KC3Master.ship(targetShipMasterId) : undefined;
+		if(!this.masterId || !targetShip) return 0;
+		if(targetShip.api_soku === 0) {
+			// most priority: Toku Daihatsu + 11th Tank
+			if(this.findEquipmentById(230).some(hasTrue)) return 5;
+			// Abyssal installation could be landing attacked
+			const isTargetLandable =
+				[1668, 1669, 1670, 1671, 1672, // Isolated Island Princess
+					1665, 1666, 1667, // Artillery Imp
+					1653, 1654, 1655, 1656, 1657, 1658, // Supply Depot Princess
+					1753, 1754, // Summer Supply Depot Princess
+				].includes(targetShipMasterId);
+			const isThisSubmarine = [13, 14].includes(this.master().api_stype);
+			// T2 Tank
+			if(this.findEquipmentById(167).some(hasTrue)) {
+				if(isThisSubmarine) return 4;
+				if(isTargetLandable) return 4;
+			}
+			if(isTargetLandable) {
+				// T89 Tank
+				if(this.findEquipmentById(166).some(hasTrue)) return 3;
+				// Toku Daihatsu
+				if(this.findEquipmentById(193).some(hasTrue)) return 2;
+				// Daihatsu
+				if(this.findEquipmentById(68).some(hasTrue)) return 1;
+			}
+		}
+		return 0;
+	};
+
+	/**
+	 * Estimate day time attack type of this ship.
+	 * Only according ship type and equipment, ignoring factors such as ship status, target-able.
+	 * @param {number} targetShipMasterId - a Master ID of being attacked ship, used to indicate some
+	 *        special attack types. eg: attacking a submarine, landing attack an installation.
+	 *        The ID can be just an example to represent this type of target.
+	 * @return {Array} day time attack type constants tuple: [id, name, landing attack id].
+	 *         NOTE: Not take 'can not be targeted' into account yet,
+	 *         such as: CV/CVB against submarine; submarine against land installation;
+	 *         asw aircraft all lost against submarine; torpedo bomber only against land,
+	 *         should not pass targetShipMasterId at all for these scenes.
+	 * @see https://github.com/andanteyk/ElectronicObserver/blob/master/ElectronicObserver/Other/Information/kcmemo.md#%E6%94%BB%E6%92%83%E7%A8%AE%E5%88%A5
+	 */
+	KC3Ship.prototype.estimateDayAttackType = function(targetShipMasterId) {
+		const hasTrue = v => !!v;
+		const countTrue = (acc, v) => acc + (!!v & 1);
+		// if attack target known, will give different attack according target ship
+		const targetShip = targetShipMasterId > 0 ? KC3Master.ship(targetShipMasterId) : undefined;
+		const isTargetSubmarine = targetShip && [13, 14].includes(targetShip.api_stype);
+		const stype = this.master().api_stype;
+		const isThisCarrier = [7, 11, 18].includes(stype);
+		const isThisSubmarine = [13, 14].includes(stype);
+		
+		if(targetShip && targetShip.api_soku === 0) {
+			const landingAttackType = this.estimateLandingAttackType(targetShipMasterId);
+			if(landingAttackType > 0) {
+				return [-1, "LandingAttack", landingAttackType];
+			}
+			const hasRocketLauncher = this.findEquipmentByType(2, 37).some(hasTrue);
+			// no kind number for rocket attack and landing craft attack
+			if(hasRocketLauncher) return [-1, "Rocket"];
+		}
+		// is this ship Hayasui Kai
+		if(this.masterId === 352) {
+			if(isTargetSubmarine) {
+				// air attack if asw aircraft equipped
+				const aswEquip = this.equipment(true).find(equip => equip.isAswAircraft());
+				return aswEquip ? [7, "AirAttack"] : [8, "DepthCharge"];
+			}
+			// air attack if torpedo bomber equipped
+			return this.findEquipmentByType(2, 8).some(hasTrue) ? [7, "AirAttack"] : [0, "SingleAttack"];
+		}
+		// although CV/CVB can not attack submarine
+		if(isThisCarrier) {
+			return [7, "AirAttack"];
+		}
+		// only torpedo attack possible if this ship is submarine (but not shelling phase)
+		if(isThisSubmarine) {
+			return [9, "Torpedo"];
+		}
+		if(isTargetSubmarine) {
+			// CAV, BBV, AV, LHA can only air attack against submarine
+			return ([6, 10, 16, 17].includes(stype)) ? [7, "AirAttack"] : [8, "DepthCharge"];
+		}
+		
+		const hasRecon = this.findEquipmentByType(2, [10, 11]).some(hasTrue);
+		if(hasRecon) {
+			// can do day time special attacks (aka Artillery Spotting)
+			const mainGunCnt = this.findEquipmentByType(2, [1, 2, 3]).reduce(countTrue, 0);
+			const apShellCnt = this.findEquipmentByType(2, 19).reduce(countTrue, 0);
+			if(mainGunCnt === 2 && apShellCnt === 1) return [6, "CutinMainMain"];
+			const secondaryCnt = this.findEquipmentByType(2, 4).reduce(countTrue, 0);
+			if(mainGunCnt === 1 && secondaryCnt === 1 && apShellCnt === 1) return [5, "CutinMainAps"];
+			const radarCnt = this.findEquipmentByType(2, [12, 13]).reduce(countTrue, 0);
+			if(mainGunCnt === 1 && secondaryCnt === 1 && radarCnt === 1) return [4, "CutinMainRadar"];
+			if(mainGunCnt >= 1 && secondaryCnt >= 1) return [3, "CutinMainSec"];
+			if(mainGunCnt >= 2) return [2, "DoubleAttack"];
+		}
+		
+		// default single shelling fire attack. btw, [1, "Laser"] no longer exists.
+		return [0, "SingleAttack"];
+	};
+
+	/**
+	 * Estimate night battle attack type of this ship.
+	 * @param {number} targetShipMasterId - a Master ID of being attacked ship.
+	 * @return {Array} night battle attack type constants tuple.
+	 * @see estimateDayAttackType
+	 */
+	KC3Ship.prototype.estimateNightAttackType = function(targetShipMasterId) {
+		const hasTrue = v => !!v;
+		const countTrue = (acc, v) => acc + (!!v & 1);
+		const targetShip = targetShipMasterId > 0 ? KC3Master.ship(targetShipMasterId) : undefined;
+		const isTargetSubmarine = targetShip && [13, 14].includes(targetShip.api_stype);
+		const stype = this.master().api_stype;
+		const isThisLightCarrier = stype === 7;
+		const isThisCarrier = [7, 11, 18].includes(stype);
+		const isThisSubmarine = [13, 14].includes(stype);
+		
+		if(targetShip && targetShip.api_soku === 0) {
+			const landingAttackType = this.estimateLandingAttackType(targetShipMasterId);
+			if(landingAttackType > 0) {
+				return [-1, "LandingAttack", landingAttackType];
+			}
+			const hasRocketLauncher = this.findEquipmentByType(2, 37).some(hasTrue);
+			if(hasRocketLauncher) return [-1, "Rocket"];
+		}
+		if(isTargetSubmarine && isThisLightCarrier) {
+			return [8, "DepthCharge"];
+		}
+		if(isThisCarrier) {
+			const isSpecialCarrier = [432, 353, // Graf & Graf Kai
+				433 // Saratoga (base form)
+				].includes(this.masterId);
+			if(isSpecialCarrier) return [0, "SingleAttack"];
+			const isSpecialAbyssal = [
+				1679, 1680, 1681, 1682, 1683, // Lycoris Princess
+				1711, 1712, 1713, // Jellyfish Princess
+				].includes[targetShipMasterId];
+			if(isSpecialAbyssal) return [0, "SingleAttack"];
+			return [7, "AirAttack"];
+		}
+		if(isThisSubmarine) {
+			return [9, "Torpedo"];
+		}
+		if(isTargetSubmarine) {
+			return ([6, 10, 16, 17].includes(stype)) ? [7, "AirAttack"] : [8, "DepthCharge"];
+		}
+		
+		// night special attacks
+		const torpedoCnt = this.findEquipmentByType(2, [5, 32]).reduce(countTrue, 0);
+		const lateTorpedoCnt = this.findEquipmentById([213, 214]).reduce(countTrue, 0);
+		const ssRadarCnt = this.findEquipmentByType(2, 51).reduce(countTrue, 0);
+		// special torpedo cut-in for late model submarine torpedo
+		// 3rd element is cut-in type, pre-cap modifiers: 0: 1.5, 1: 1.75, 2: 1.6
+		if(lateTorpedoCnt >= 1 && ssRadarCnt >= 1) return [3, "CutinTorpTorp", 1];
+		if(lateTorpedoCnt >= 2) return [3, "CutinTorpTorp", 2];
+		if(torpedoCnt >= 2) return [3, "CutinTorpTorp", 0];
+		const mainGunCnt = this.findEquipmentByType(2, [1, 2, 3, 38]).reduce(countTrue, 0);
+		if(mainGunCnt >= 3) return [5, "CutinMainMainMain"];
+		const secondaryCnt = this.findEquipmentByType(2, 4).reduce(countTrue, 0);
+		if(mainGunCnt === 2 && secondaryCnt >= 1) return [4, "CutinMainMainSec"];
+		if((mainGunCnt === 2 && secondaryCnt === 0 && torpedoCnt === 1) ||
+			(mainGunCnt === 1 && torpedoCnt === 1)) return [2, "CutinMainTorp"];
+		if((mainGunCnt === 2 && secondaryCnt === 0 && torpedoCnt === 0) ||
+			(mainGunCnt === 1 && secondaryCnt >= 1) ||
+			(secondaryCnt >= 2 && torpedoCnt <= 1)) return [1, "DoubleAttack"];
+		
+		// default torpedo attack if any torpedo equipped
+		return torpedoCnt > 0 ? [9, "Torpedo"] : [0, "SingleAttack"];
+	};
+
+	/**
+	 * Get current shelling attack accuracy related info of this ship.
+	 * NOTE: Not take target evasion part into account at all.
+	 * @param {number} formationModifier
+	 * @return {Object} accuracy factors of this ship.
+	 * @see http://kancolle.wikia.com/wiki/Combat/Accuracy_and_Evasion
+	 * @see http://wikiwiki.jp/kancolle/?%CC%BF%C3%E6%A4%C8%B2%F3%C8%F2%A4%CB%A4%C4%A4%A4%A4%C6
+	 */
 	KC3Ship.prototype.shellingAccuracy = function(formationModifier = 1) {
 		const onLevel = 2 * Math.sqrt(this.level - 1);
 		const onLuck = 1.5 * Math.sqrt(this.lk[0]);
@@ -1056,6 +1196,26 @@ KC3改 Ship Object
 
 	KC3Ship.prototype.maxAaciShotdownBonuses = function() {
 		return AntiAir.shipMaxShotdownAllBonuses( this );
+	};
+
+	/* Expedition Supply Change Check */
+	KC3Ship.prototype.perform = function(command,args) {
+		try {
+			args = $.extend({noFuel:0,noAmmo:0},args);
+			command = command.slice(0,1).toUpperCase() + command.slice(1).toLowerCase();
+			this["perform"+command].call(this,args);
+		} catch (e) {
+			console.error("Failed when perform" + command, e);
+			return false;
+		} finally {
+			return true;
+		}
+	};
+	KC3Ship.prototype.performSupply = function(args) {
+		consumePending.call(this,0,{0:0,1:1,2:3,c: 1 - (this.isMarried() && 0.15),i: 0},[0,1,2],args);
+	};
+	KC3Ship.prototype.performRepair = function(args) {
+		consumePending.call(this,1,{0:0,1:2,2:6,c: 1,i: 0},[0,1,2],args);
 	};
 
 	function consumePending(index,mapping,clear,args) {

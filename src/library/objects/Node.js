@@ -1516,7 +1516,7 @@ Used by SortieManager
 	*/
 	KC3Node.prototype.buildAirPowerMessage = function(){
 		var tooltip = this.airbattle[2] || "";
-		const apTuple = KC3SortieManager.enemyFighterPower(this.eships, this.eSlot);
+		const apTuple = KC3Calc.enemyFighterPower(this.eships, this.eSlot);
 		// Air Power: AI<1/3, 1/3<=AD<2/3, 2/3<=AP<3/2, 3/2<=AS<3, 3<=AS+
 		const ap = apTuple[0];
 		if(!!ap){

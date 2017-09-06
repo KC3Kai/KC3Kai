@@ -145,13 +145,10 @@ Contains summary information about a fleet and its 6 ships
 		}
 	};
 	
-	KC3Fleet.prototype.getDameConCodes = function() {
-		var i;
-		var result = [];
-		for (i=0;i<6;++i) {
-			result.push( this.ship(i).findDameCon().code );
-		}
-		return result;
+	// @return filtered ship object list not contain escaped (didFlee) ships.
+	// use this to reduce a `ship.didFlee` condition if ship position not concerned.
+	KC3Fleet.prototype.shipsUnescaped = function(){
+		return this.ship().filter(ship => !ship.didFlee);
 	};
 	
 	/*--------------------------------------------------------*/
@@ -168,7 +165,15 @@ Contains summary information about a fleet and its 6 ships
 		this.ships.fill(-1,1,6);
 		this.updateAkashiRepairDisplay();
 	};
-
+	
+	KC3Fleet.prototype.discard = function(shipId) {
+		var pos = this.ships.indexOf(Number(shipId));
+		if(pos>=0){
+			this.ships.splice(pos,1);
+			this.ships.push(-1);
+		}
+	};
+	
 	/*--------------------------------------------------------*/
 	/*-------------------[ AKASHI REPAIR ]--------------------*/
 	/*--------------------------------------------------------*/
@@ -413,15 +418,13 @@ Contains summary information about a fleet and its 6 ships
 	
 	KC3Fleet.prototype.fighterBounds = function(){
 		var totalPower = [0, 0];
-		for(let index in this.ships){
-			if(this.ships[index] > 0 && !this.ship(index).didFlee){
-				let fighterPower = this.ship(index).fighterBounds();
-				if(Array.isArray(fighterPower)){
-					totalPower[0] += Math.floor(fighterPower[0]);
-					totalPower[1] += Math.floor(fighterPower[1]);
-				}
+		this.shipsUnescaped().forEach(ship => {
+			let fighterPower = ship.fighterBounds();
+			if(Array.isArray(fighterPower)){
+				totalPower[0] += Math.floor(fighterPower[0]);
+				totalPower[1] += Math.floor(fighterPower[1]);
 			}
-		}
+		});
 		return totalPower;
 	};
 	
@@ -579,8 +582,11 @@ Contains summary information about a fleet and its 6 ships
 	/*-----------------[ STATUS INDICATORS ]------------------*/
 	/*--------------------------------------------------------*/
 	
-	KC3Fleet.prototype.hasShip = function(expected, pos){
+	KC3Fleet.prototype.hasShip = function(expected, pos, isExcludeEscaped = false){
 		return this.ship().some((ship, index) => {
+			if(isExcludeEscaped && ship.didFlee) {
+				return false;
+			}
 			if(pos === undefined || pos === index) {
 				if(typeof expected === "number"
 					|| typeof expected === "string") {
@@ -596,8 +602,9 @@ Contains summary information about a fleet and its 6 ships
 		});
 	};
 	
-	KC3Fleet.prototype.countShip = function(expected, isExclude = false){
-		return this.ship().reduce((count, ship) => {
+	KC3Fleet.prototype.countShip = function(expected, isExclude = false, isExcludeEscaped = false){
+		const ships = isExcludeEscaped ? this.shipsUnescaped() : this.ship();
+		return ships.reduce((count, ship) => {
 			if(Array.isArray(expected)) {
 				return count + (1 & (isExclude !==
 					(expected.indexOf(ship.masterId) > -1)));
@@ -607,8 +614,11 @@ Contains summary information about a fleet and its 6 ships
 		}, 0);
 	};
 	
-	KC3Fleet.prototype.hasShipType = function(expected, pos){
+	KC3Fleet.prototype.hasShipType = function(expected, pos, isExcludeEscaped = false){
 		return this.ship().some((ship, index) => {
+			if(isExcludeEscaped && ship.didFlee) {
+				return false;
+			}
 			if(pos === undefined || pos === index) {
 				if(typeof expected === "number"
 					|| typeof expected === "string") {
@@ -621,8 +631,9 @@ Contains summary information about a fleet and its 6 ships
 		});
 	};
 	
-	KC3Fleet.prototype.countShipType = function(expected, isExclude = false){
-		return this.ship().reduce((count, ship) => {
+	KC3Fleet.prototype.countShipType = function(expected, isExclude = false, isExcludeEscaped = false){
+		const ships = isExcludeEscaped ? this.shipsUnescaped() : this.ship();
+		return ships.reduce((count, ship) => {
 			if(Array.isArray(expected)) {
 				return count + (1 & (isExclude !==
 					(expected.indexOf(ship.master().api_stype) > -1)));
@@ -633,32 +644,34 @@ Contains summary information about a fleet and its 6 ships
 	};
 	
 	KC3Fleet.prototype.hasTaiha = function(){
-		return this.ship().some(function(ship){
-			return ship.isTaiha() && !ship.didFlee;
-		});
+		return this.shipsUnescaped().some(ship => ship.isTaiha());
 	};
 	
 	KC3Fleet.prototype.getTaihas = function(){
 		var taihaIndexes = [];
-		for(var sctr in this.ships){
-			var ship = this.ship(sctr);
+		for(var index in this.ships){
+			var ship = this.ship(index);
 			if(ship.isTaiha() && !ship.didFlee){
-				taihaIndexes.push(sctr);
+				taihaIndexes.push(index);
 			}
 		}
 		return taihaIndexes;
 	};
 	
+	KC3Fleet.prototype.getDameConCodes = function(){
+		var result = [];
+		for(var i=0; i < 6; ++i) {
+			result.push( this.ship(i).findDameCon().code );
+		}
+		return result;
+	};
+	
 	KC3Fleet.prototype.isSupplied = function(){
-		return this.ship().every(function(ship){
-			return !ship.didFlee && ship.isSupplied();
-		});
+		return this.shipsUnescaped().every(ship => ship.isSupplied());
 	};
 	
 	KC3Fleet.prototype.needsSupply = function(isEmpty){
-		return this.ship().some(function(ship){
-			return !ship.didFlee && ship.isNeedSupply(isEmpty);
-		});
+		return this.shipsUnescaped().some(ship => ship.isNeedSupply(isEmpty));
 	};
 	
 	KC3Fleet.prototype.missionOK = function(){
@@ -666,9 +679,8 @@ Contains summary information about a fleet and its 6 ships
 	};
 	
 	KC3Fleet.prototype.lowestMorale = function(){
-		return this.ship().reduce(function(moralePre,shipData,moraleInd){
-			return Math.min(moralePre,shipData.didFlee ? 100 : shipData.morale);
-		},100);
+		return this.shipsUnescaped().reduce(
+			(moralePre, ship) => Math.min(moralePre, ship.morale), 100);
 	};
 	
 	KC3Fleet.prototype.isOnExped = function(){
@@ -676,13 +688,10 @@ Contains summary information about a fleet and its 6 ships
 	};
 	
 	KC3Fleet.prototype.highestRepairTimes = function(akashiReduce){
-		var
-			self  = this,
-			highestDocking = 0,
+		var highestDocking = 0,
 			highestAkashi = 0;
 		
-		this.ship(function(rosterId,index,shipData){
-			if(shipData.didFlee) { return false; }
+		this.shipsUnescaped().forEach(shipData => {
 			var myRepairTime = shipData.repairTime();
 			if(akashiReduce && shipData.akashiMark){
 				myRepairTime.akashi -=
@@ -699,7 +708,7 @@ Contains summary information about a fleet and its 6 ships
 			akashiCheck: [
 				PlayerManager.akashiRepair.isRunning(),
 				PlayerManager.akashiRepair.canDoRepair(),
-				KC3AkashiRepair.hasRepairFlagship(self)
+				KC3AkashiRepair.hasRepairFlagship(this)
 			],
 		};
 	};
@@ -910,15 +919,9 @@ Contains summary information about a fleet and its 6 ships
 		return total;
 	};
 	
-	/* DISCARD SHIP
-	------------------------------------*/
-	KC3Fleet.prototype.discard = function(shipId) {
-		var pos = this.ships.indexOf(Number(shipId));
-		if(pos>=0){
-			this.ships.splice(pos,1);
-			this.ships.push(-1);
-		}
-	};
+	/*--------------------------------------------------------*/
+	/*--------------[ OTHER MECHANISM INFERENCE ]-------------*/
+	/*--------------------------------------------------------*/
 	
 	/**
 	 * Look up for Katori Class Exp Bonus from current Fleet.
@@ -1048,8 +1051,9 @@ Contains summary information about a fleet and its 6 ships
 		// 3 or more CV(L/B)/AV/LHA
 		if(this.countShipType([7, 11, 18, 16, 17]) >= 3) {
 			return 1;
+		}
 		// 4 or more DD/CL/CLT
-		} else if(this.countShipType([2, 3, 4]) >= 4) {
+		if(this.countShipType([2, 3, 4]) >= 4) {
 			return 3;
 		}
 		// other composition
@@ -1097,6 +1101,10 @@ Contains summary information about a fleet and its 6 ships
 		}
 		return result.every(v => v === -1) ? false : result;
 	};
+
+	/*--------------------------------------------------------*/
+	/*----------------------[ DATA EXPORT ]-------------------*/
+	/*--------------------------------------------------------*/
 
 	/* SORTIE JSON
 	Used for recording sorties on indexedDB

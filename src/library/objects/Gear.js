@@ -59,7 +59,7 @@ KC3改 Equipment Object
 	 * @param {string} - attack type identifier, allow values for now:
 	 *                   `fire`, `torpedo`, `yasen`, `asw`, `support`
 	 * @return {number} computed bonus = modifier * sqrt(stars)
-	 * @see this.AAStatImprovementBonus for Anti-Air improvement bonus
+	 * @see AAStatImprovementBonus for Anti-Air improvement bonus
 	 * @see http://kancolle.wikia.com/wiki/Improvements
 	 * @see http://wikiwiki.jp/kancolle/?%B2%FE%BD%A4%B9%A9%BE%B3#ic9d577c
 	 */
@@ -82,7 +82,7 @@ KC3改 Equipment Object
 					case 36: // AA Fire Director
 					case 46: // Amphibious Tank
 						modifier = 1; break;
-					case 3:
+					case 3: // Large Cal. Main
 						modifier = 1.5; break;
 					case 14: // Sonar
 					case 15: // Depth Charge
@@ -259,6 +259,22 @@ KC3改 Equipment Object
 			return KC3GearManager.carrierSupplyBauxiteCostPerSlot * (slotMaxeq - slotCurrent);
 		}
 		return 0;
+	};
+
+	KC3Gear.prototype.isAswAircraft = function(){
+		/* These type of aircraft with asw stat > 0 can do asw:
+		 * - 7: Dive Bomber
+		 * - 8: Torpedo Bomber (known 0 asw stat: Re.2001 G Kai)
+		 * - 11: Seaplane Bomber
+		 * - 25: Autogyro
+		 * - 26: Anti-Sub PBY
+		 * - 41: Large Flying Boat
+		 * - 47: Land Base Bomber (not equipped by carrier anyway)
+		 * - 57: Jet Bomber
+		 */
+		return this.masterId > 0 &&
+			[7, 8, 11, 25, 26, 41, 47, 57].indexOf(this.master().api_type[2]) > -1 &&
+			this.master().api_tais > 0;
 	};
 
 	KC3Gear.prototype.aaDefense = function(forFleet) {
