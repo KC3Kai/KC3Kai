@@ -154,6 +154,7 @@
             x += ctx.measureText("HQ Lv " + PlayerManager.hq.level).width + 50;
         }
 
+        x = this._addSlotsInfo(ctx, canvas, x)+50;
         if (this.isShipList) {
             x = this._addConsumableImage(ctx, canvas, x, "medals") + 50;
             this._addConsumableImage(ctx, canvas, x, "blueprints");
@@ -208,6 +209,24 @@
         return x + 18;
     };
 
+    ShowcaseExporter.prototype._addSlotsInfo = function (ctx, canvas, x) {
+        let text, img;
+        if(this.isShipList){
+            text = KC3ShipManager.count((s)=>{return this.buildSettings.exportMode === "full" || s.lock !== 0;});
+            text += " / " + PlayerManager.hq.shipSlots;
+            img = this._otherImages.shipSlots;
+        }else{
+            text = KC3GearManager.count((g)=>{return this.buildSettings.exportMode === "full" || g.lock !== 0;});
+            text += " / " + PlayerManager.hq.gearSlots;
+            img = this._otherImages.gearSlots;
+        }
+
+        ctx.fillText(text, x, canvas.height - 1);
+        x += ctx.measureText(text).width + 5;
+        ctx.drawImage(img, x, canvas.height - 18, 18, 18);
+        return x + 18;
+    };
+
     ShowcaseExporter.prototype._loadImage = function (imageName, imageGroup, url, callback) {
         var img = new Image();
         var self = this;
@@ -256,6 +275,8 @@
             self._loadImage("blueprints", "_otherImages", "/assets/img/useitems/58.png", callback);
             self._loadImage("screws", "_otherImages", "/assets/img/useitems/4.png", callback);
             self._loadImage("devmats", "_otherImages", "/assets/img/useitems/3.png", callback);
+            self._loadImage("shipSlots", "_otherImages", "/assets/img/client/ship.png", callback);
+            self._loadImage("gearSlots", "_otherImages", "/assets/img/client/gear.png", callback);
         });
     };
 
@@ -325,7 +346,7 @@
                         y = 0;
                     }
 
-                    self._drawShipTypeName(x, y, type, color);
+                    self._drawShipTypeName(x, y, type, self.allShipGroups[type].length, color);
                     y += self.rowParams.height;
 
                     for (var j = 0; j < self.allShipGroups[type].length; j++) {
@@ -347,15 +368,20 @@
         });
     };
 
-    ShowcaseExporter.prototype._drawShipTypeName = function (x, y, type, background) {
+    ShowcaseExporter.prototype._drawShipTypeName = function (x, y, type, count, background) {
         this.ctx.fillStyle = background;
         this.ctx.fillRect(x, y, this.rowParams.width, this.rowParams.height);
-
-        var fontSize = 25;
         this.ctx.textBaseline = "middle";
-        this.ctx.font = generateFontString(600, fontSize);
         this.ctx.fillStyle = this.colors.shipTypeHeader;
-        this.ctx.fillText(KC3Meta.stype(type), x + this.rowParams.height / 2, y + (this.rowParams.height) / 2);
+        this.ctx.font = generateFontString(600, 25);
+
+        if(this.buildSettings.exportMode === "light") {
+            this.ctx.fillText(count, x + this.rowParams.width - 4 - this.ctx.measureText(count).width, y + (this.rowParams.height) / 2);
+            this.ctx.fillText(KC3Meta.stype(type), x + this.rowParams.height / 5, y + (this.rowParams.height) / 2);
+        } else {
+            this.ctx.fillText(count, x + this.rowParams.width - this.rowParams.height / 2 - this.ctx.measureText(count).width, y + (this.rowParams.height) / 2);
+            this.ctx.fillText(KC3Meta.stype(type) , x + this.rowParams.height / 2, y + (this.rowParams.height) / 2);
+        }
     };
 
     ShowcaseExporter.prototype._finalize = function () {
