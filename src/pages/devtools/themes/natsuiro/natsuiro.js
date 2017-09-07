@@ -1389,6 +1389,8 @@
 					lv: MainFleet.totalLevel() + EscortFleet.totalLevel(),
 					elos: Math.qckInt("floor", MainFleet.eLoS()+EscortFleet.eLoS(), 1),
 					air: KC3Calc.getFleetsFighterPowerText(MainFleet, EscortFleet, true),
+					contact: [Math.floor(MainFleet.contactTriggerRate()),
+							Math.floor(MainFleet.contactSelectionFailureRate())],
 					antiAir: Math.floor(AntiAir.fleetCombinedAdjustedAntiAir(
 						MainFleet, EscortFleet,
 						AntiAir.getFormationModifiers(ConfigManager.aaFormation))),
@@ -1463,6 +1465,8 @@
 					baseExp: CurrentFleet.estimatePvpBaseExp(),
 					elos: Math.qckInt("floor", CurrentFleet.eLoS(), 1),
 					air: KC3Calc.getFleetsFighterPowerText(CurrentFleet),
+					contact: [Math.floor(CurrentFleet.contactTriggerRate()),
+							Math.floor(CurrentFleet.contactSelectionFailureRate())],
 					antiAir: CurrentFleet.adjustedAntiAir(ConfigManager.aaFormation),
 					speed: CurrentFleet.speed(),
 					docking: MainRepairs.docking,
@@ -1504,7 +1508,10 @@
 				"../../../../assets/img/stats/los" + ConfigManager.elosFormula + ".png");
 			$(".summary-eqlos .summary_text").text( FleetSummary.elos );
 			$(".summary-airfp .summary_sub").toggle( selectedFleet === 5 && ConfigManager.air_combined );
-			$(".summary-airfp .summary_text").text( FleetSummary.air );
+			$(".summary-airfp .summary_text").text( FleetSummary.air )
+				.attr("title", KC3Meta.term("PanelAirContactTip")
+					.format(KC3Meta.airbattle(1)[2] || "", ...FleetSummary.contact))
+				.lazyInitTooltip();
 			$(".summary-antiair .summary_icon img")
 				.attr("src", KC3Meta.formationIcon(ConfigManager.aaFormation));
 			$(".summary-antiair .summary_text").text( FleetSummary.antiAir )
@@ -2110,9 +2117,9 @@
 				$(".module.activity .battle_contact").html(contactSpan.html()).lazyInitTooltip();
 				$(".module.activity .battle_airbattle").text( thisNode.airbattle[0] );
 				$(".module.activity .battle_airbattle").addClass( thisNode.airbattle[1] );
-				$(".module.activity .battle_airbattle").attr("title",
-					thisNode.buildAirPowerMessage()
-				).lazyInitTooltip();
+				$(".module.activity .battle_airbattle")
+					.attr("title", thisNode.buildAirPowerMessage())
+					.lazyInitTooltip();
 				$(".fighter_ally .plane_before").text(thisNode.planeFighters.player[0]);
 				$(".fighter_enemy .plane_before").text(thisNode.planeFighters.abyssal[0]);
 				$(".bomber_ally .plane_before").text(thisNode.planeBombers.player[0]);

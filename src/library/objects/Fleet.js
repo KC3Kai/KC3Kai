@@ -439,6 +439,59 @@ Contains summary information about a fleet and its 6 ships
 		}
 	};
 	
+	/**
+	 * @param airControlModifier - default is AS+: 1, known AS: 0.6. others unknown.
+	 * @return contact trigger rate % (already x100).
+	 */
+	KC3Fleet.prototype.contactTriggerRate = function(airControlModifier = 1){
+		var rate = 0;
+		this.shipsUnescaped().forEach(ship => {
+			rate += [0, 1, 2, 3].map(idx => {
+				const gear = ship.equipment(idx);
+				return gear.isContactAircraft(false) ?
+					(0.04 * gear.master().api_saku * Math.sqrt(ship.slots[idx])) : 0;
+			}).reduce((acc, v) => acc + v, 0);
+		});
+		return rate * airControlModifier * 100;
+	};
+
+	/**
+	 * @return contact failure rate % (already x100) at selection phase.
+	 * @see contactSelectionChanceTable
+	 */
+	KC3Fleet.prototype.contactSelectionFailureRate = function(airControlModifier){
+		const contactPlanes = this.contactSelectionChanceTable(airControlModifier);
+		return contactPlanes.map(p => p.rate).reduce((acc, v) => acc * (1 - v), 1) * 100;
+	};
+
+	/**
+	 * @param airControlModifier - default is AS+: 0.07, known AS: 0.06, AD: 0.055.
+	 * @return contact selection table of every possible aircraft.
+	 * @see http://wikiwiki.jp/kancolle/?%B9%D2%B6%F5%C0%EF#s1d9a838
+	 */
+	KC3Fleet.prototype.contactSelectionChanceTable = function(airControlModifier = 0.07){
+		const contactPlaneList = [];
+		this.shipsUnescaped().forEach((ship, shipIdx) => {
+			ship.equipment((itemId, gearIdx, gear) => {
+				if(gear.isContactAircraft(true)) {
+					const gearMaster = gear.master();
+					contactPlaneList.push({
+						itemId: itemId,
+						accurcy: gearMaster.api_houm,
+						shipOrder: shipIdx,
+						// LoS improvement should be taken into account, but modifier unknown
+						rate: airControlModifier * gearMaster.api_saku
+					});
+				}
+			});
+		});
+		if(contactPlaneList.length > 0) {
+			// Selection priority order by: accuracy desc, ship position asc
+			contactPlaneList.sort((a, b) => b.accurcy - a.accurcy || a.shipOrder - b.shipOrder);
+		}
+		return contactPlaneList;
+	};
+
 	KC3Fleet.prototype.supportPower = function(){
 		return this.ship(0).supportPower()
 			+this.ship(1).supportPower()

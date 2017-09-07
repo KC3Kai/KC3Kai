@@ -385,10 +385,17 @@
 			} else {
 				$(".detail_los .detail_value").attr("title", "");
 			}
-			$(".detail_air .detail_value", fleetBox).text( kcFleet.fighterPowerText() );
+			$(".detail_air .detail_value", fleetBox).text( kcFleet.fighterPowerText() )
+				.attr("title", "Contact Trigger Chance: {0}%\nContact Selection Cancelled: {1}%"
+					.format(
+						Math.floor(kcFleet.contactTriggerRate()),
+						Math.floor(kcFleet.contactSelectionFailureRate())
+					)
+				);
 			$(".detail_antiair .detail_value", fleetBox).text( kcFleet.adjustedAntiAir(ConfigManager.aaFormation) )
 				.attr("title", "Line-Ahead: {0}\nDouble-Line: {1}\nDiamond: {2}"
-					.format(kcFleet.adjustedAntiAir(1), kcFleet.adjustedAntiAir(2), kcFleet.adjustedAntiAir(3)) );
+					.format(kcFleet.adjustedAntiAir(1), kcFleet.adjustedAntiAir(2), kcFleet.adjustedAntiAir(3))
+				);
 			$(".detail_speed .detail_value", fleetBox).text( kcFleet.speed() );
 			$(".detail_support .detail_value", fleetBox).text( kcFleet.supportPower() );
 		},

@@ -2,7 +2,8 @@
  * CalculatorManager.js exported to window.KC3Calc.
  *
  * A collection or facade of calculation methods implemented by KC3改,
- * to simulate KC game mechanism, client behaviors or just some convenience methods.
+ * to simulate KC game mechanism, client hard-coded behaviors, server-side only
+ * calculations without API result, or just some convenience methods.
  *
  * Lite methods collected here suggested to be general purpose, multi relationships
  * and done within one or few functions.

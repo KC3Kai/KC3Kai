@@ -1532,7 +1532,7 @@ Used by SortieManager
 					apTuple[1] + apTuple[2] - enemyTotalPlanes);
 			// so try to infer unknown count by looking through air base attack
 			let airBaseEnemyTotalPlanes = 0;
-			if(this.airBaseAttack && this.airBaseAttack[0]){
+			if(this.airBaseAttack && this.airBaseAttack[0] && this.airBaseAttack[0].api_stage1){
 				airBaseEnemyTotalPlanes = this.airBaseAttack[0].api_stage1.api_e_count;
 			}
 			if(airBaseEnemyTotalPlanes){
@@ -1542,7 +1542,9 @@ Used by SortieManager
 			}
 			// also try to infer something from exped fleet aerial support
 			let airSupportEnemyTotalPlanes = 0;
-			if(this.battleDay.api_support_info && this.battleDay.api_support_info.api_support_airatack){
+			if(this.battleDay && this.battleDay.api_support_info
+				&& this.battleDay.api_support_info.api_support_airatack
+				&& this.battleDay.api_support_info.api_support_airatack.api_stage1){
 				airSupportEnemyTotalPlanes = this.battleDay.api_support_info.api_support_airatack.api_stage1.api_e_count;
 			}
 			if(airSupportEnemyTotalPlanes){
@@ -1550,6 +1552,7 @@ Used by SortieManager
 					.format(airSupportEnemyTotalPlanes,
 						airSupportEnemyTotalPlanes - apTuple[1] - apTuple[2]);
 			}
+			// also may try to infer something from jet assault phase, if abyssal has one
 		}
 		if(Object.keys(apTuple[4]).length > 0){
 			tooltip += "\n" + KC3Meta.term("InferredExceptions").format(JSON.stringify(apTuple[4]));

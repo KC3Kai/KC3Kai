@@ -277,6 +277,14 @@ KC3改 Equipment Object
 			this.master().api_tais > 0;
 	};
 
+	KC3Gear.prototype.isContactAircraft = function(isSelection = false){
+		// Contact trigger-able by Recon Aircraft, Recon Seaplane, Large Flying Boat
+		// Contact select-able by previous 3 types, plus Torpedo Bomber
+		const type2 = isSelection ? [8, 9, 10, 41, 58, 59] : [9, 10, 11, 59];
+		return this.masterId > 0 &&
+			type2.indexOf(this.master().api_type[2]) > -1;
+	};
+
 	KC3Gear.prototype.aaDefense = function(forFleet) {
 		if (this.masterId === 0)
 			return 0;
