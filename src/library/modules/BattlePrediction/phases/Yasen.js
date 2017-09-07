@@ -1,106 +1,82 @@
 (function () {
+  const Yasen = {};
   /*--------------------------------------------------------*/
   /* --------------------[ PUBLIC API ]-------------------- */
   /*--------------------------------------------------------*/
+  const JSON_FIELDS = ['api_at_list', 'api_df_list', 'api_damage'];
 
-  const parseYasen = (playerRole, enemyRole, battleData) => {
-    const { parseTargets, parseDamages, zipAttacks } = KC3BattlePrediction.battle.phases.yasen;
+  Yasen.parseYasen = (playerRole, enemyRole, battleData) => {
+    const { makeAttacks, extractFromJson } = KC3BattlePrediction.battle.phases;
+    const { parseJson, getTargetFactory } = KC3BattlePrediction.battle.phases.yasen;
 
-    const targets = parseTargets({ player: playerRole, enemy: enemyRole }, battleData);
-    const damages = parseDamages(battleData);
-
-    return zipAttacks(targets, damages);
+    const attacksData = extractFromJson(battleData, JSON_FIELDS).map(parseJson);
+    return makeAttacks(attacksData, getTargetFactory(playerRole, enemyRole));
   };
 
   /*--------------------------------------------------------*/
   /* --------------------[ INTERNALS ]--------------------- */
   /*--------------------------------------------------------*/
 
-  /* ---------------------[ TARGETS ]---------------------- */
+  /* --------------------[ JSON PARSE ]-------------------- */
 
-  const parseTargets = (roles, { api_df_list } = {}) => {
-    const { normalizeArrayIndexing } = KC3BattlePrediction;
-    const { normalizeTargetJson, convertToTarget } = KC3BattlePrediction.battle.phases.yasen;
+  Yasen.parseJson = ({ api_at_list, api_df_list, api_damage }) => {
+    const { parseAttackerIndex, parseDefenderIndices, parseDamage }
+      = KC3BattlePrediction.battle.phases.yasen;
 
-    if (!api_df_list) { return []; }
-
-    return normalizeArrayIndexing(api_df_list).map((targetJson) => {
-      return convertToTarget(roles, normalizeTargetJson(targetJson));
-    });
+    return {
+      attacker: parseAttackerIndex(api_at_list),
+      defender: parseDefenderIndices(api_df_list),
+      damage: parseDamage(api_damage),
+    };
   };
 
-  const normalizeTargetJson = (targetArray = []) => {
-    // regular attack
-    if (targetArray.length === 1) {
-      return targetArray[0];
-    }
-    // double attack + torpedo cut-in
-    if (targetArray.length === 2 && targetArray[0] === targetArray[1]) {
-      return targetArray[0];
-    }
-    // Gun cut-in
-    if (targetArray.length === 3 && targetArray[1] === -1 && targetArray[2] === -1) {
-      return targetArray[0];
-    }
-    throw new Error(`Bad target json: [${targetArray}]`);
-  };
-
-  const convertToTarget = (roles, targetIndex) => {
+  Yasen.parseAttackerIndex = (index) => {
     const { Side } = KC3BattlePrediction;
 
-    if (targetIndex >= 7) {
-      return { side: Side.ENEMY, role: roles.enemy, position: targetIndex - 7 };
+    return index <= 6
+      ? { side: Side.PLAYER, position: index - 1 }
+      : { side: Side.ENEMY, position: index - 7 };
+  };
+
+  Yasen.parseDefenderIndices = (indices) => {
+    const { extendError } = KC3BattlePrediction;
+    const { parseAttackerIndex } = KC3BattlePrediction.battle.phases.yasen;
+
+    // single attack
+    if (indices.length === 1) {
+      return parseAttackerIndex(indices[0]);
     }
-    return { side: Side.PLAYER, role: roles.player, position: targetIndex - 1 };
-  };
-
-  /* ---------------------[ DAMAGES ]---------------------- */
-
-  const parseDamages = ({ api_damage } = {}) => {
-    const { normalizeArrayIndexing } = KC3BattlePrediction;
-    const { convertToDamage } = KC3BattlePrediction.battle.phases.yasen;
-
-    if (!api_damage) { return []; }
-
-    return normalizeArrayIndexing(api_damage).map(convertToDamage);
-  };
-
-  const convertToDamage = (damageArray) => {
-    return damageArray.reduce((sum, damage) => {
-      return damage > 0 ? sum + damage : sum;
-    }, 0);
-  };
-
-  /* ---------------------[ ATTACKS ]---------------------- */
-
-  const zipAttacks = (targets, damages) => {
-    const { createAttack } = KC3BattlePrediction.battle;
-
-    if (targets.length !== damages.length) {
-      throw new Error(`Mismatch between targets (${targets.length}) and damages (${damages.length})`);
+    // double attack
+    if (indices.length === 2 && indices[0] === indices[1]) {
+      return parseAttackerIndex(indices[0]);
     }
+    // cut-in
+    if (indices.length === 3 && indices[1] === -1 && indices[2] === -1) {
+      return parseAttackerIndex(indices[0]);
+    }
+    throw extendError(new Error('Unknown target indices format'), { indices });
+  };
 
-    return targets.reduce((result, { side, role, position }, index) => {
-      const attack = createAttack(side, role, position, damages[index]);
-      return attack.damage ? result.concat(attack) : result;
-    }, []);
+  Yasen.parseDamage = (damageArray) => {
+    return damageArray.reduce((result, damage) => (damage > 0 ? result + damage : result), 0);
+  };
+
+  Yasen.getTargetFactory = (playerRole, enemyRole) => {
+    const { Side, battle: { createTarget } } = KC3BattlePrediction;
+    const roles = {
+      [Side.PLAYER]: playerRole,
+      [Side.ENEMY]: enemyRole,
+    };
+
+    return ({ attacker, defender }) => ({
+      attacker: createTarget(attacker.side, roles[attacker.side], attacker.position),
+      defender: createTarget(defender.side, roles[defender.side], defender.position),
+    });
   };
 
   /*--------------------------------------------------------*/
   /* ---------------------[ EXPORTS ]---------------------- */
   /*--------------------------------------------------------*/
 
-  Object.assign(KC3BattlePrediction.battle.phases.yasen, {
-    // Public
-    parseYasen,
-    // Internal
-    parseTargets,
-    normalizeTargetJson,
-    convertToTarget,
-
-    parseDamages,
-    convertToDamage,
-
-    zipAttacks,
-  });
+  Object.assign(KC3BattlePrediction.battle.phases.yasen, Yasen);
 }());

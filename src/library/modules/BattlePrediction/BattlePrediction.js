@@ -25,6 +25,8 @@
       airRaid: {},
       battle: {},
     },
+    // MVP prediction
+    mvp: {},
   };
 
   // --------------------------------------------------------------------------
@@ -52,6 +54,16 @@
     const battleStart = parseStartJson(battleStartData);
     return getRankPredictor(apiName)
       .predict(normalizeFleets(battleStart), normalizeFleets(battleResult));
+  };
+
+  BP.predictMvp = (dayResult, nightResult) => {
+    const { combineResults, getHighestDamage } = KC3BattlePrediction.mvp;
+
+    const { playerMain, playerEscort } = combineResults(dayResult, nightResult);
+    return {
+      playerMain: getHighestDamage(playerMain),
+      playerEscort: getHighestDamage(playerEscort),
+    };
   };
 
   // --------------------------------------------------------------------------
@@ -92,22 +104,35 @@
 
   BP.bind = (target, ...args) => target.bind(null, ...args);
 
-  BP.formatResult = (initialFleets, resultFleets) => {
-    const { formatFleets, isPlayerNoDamage } = KC3BattlePrediction.fleets;
-
-    // TODO: add predictedMVP
-    const initial = formatFleets(initialFleets);
-    const result = formatFleets(resultFleets);
-
-    return {
-      fleets: result,
-      isPlayerNoDamage: isPlayerNoDamage(initial, result),
-    };
-  };
-
   BP.validateEnum = (enumObj, value) => {
     // Ideally this should use Object.values(), but it was only introduced in Chrome 54
     return Object.keys(enumObj).some(key => enumObj[key] === value);
+  };
+
+  /* ---------------------[ ZIP WITH ]--------------------- */
+
+  const parseArgs = (args) => {
+    const iteratee = args.slice(-1)[0];
+
+    return typeof iteratee === 'function'
+      ? { arrays: args.slice(0, -1), iteratee }
+      : { arrays: args, iteratee: (...elements) => elements };
+  };
+  const getElements = (arrays, index) => arrays.map(array => array[index]);
+  const getLongestArray = arrays =>
+    arrays.reduce((result, array) => (array.length > result ? array.length : result), 0);
+  // See: http://devdocs.io/lodash~4/index#zipWith
+  BP.zipWith = (...args) => {
+    const { arrays, iteratee } = parseArgs(args);
+
+    const length = getLongestArray(arrays);
+    const result = [];
+    for (let i = 0; i < length; i += 1) {
+      const elements = getElements(arrays, i);
+      result.push(iteratee(...elements));
+    }
+
+    return result;
   };
 
   window.KC3BattlePrediction = BP;

@@ -29,4 +29,33 @@ QUnit.module('modules > BattlePrediction', function () {
       assert.deepEqual(result, array);
     });
   });
+
+  QUnit.module('zipWith', {
+    beforeEach() { this.subject = KC3BattlePrediction.zipWith; },
+  }, function () {
+    QUnit.test('group elements of input arrays', function (assert) {
+      const arrays = [[1, 2], [10, 20], [100, 200]];
+      const iteratee = (a, b, c) => a + b + c;
+
+      const result = this.subject(...arrays, iteratee);
+
+      assert.deepEqual(result, [111, 222]);
+    });
+
+    QUnit.test('no iteratee specified', function (assert) {
+      const arrays = [['a', 'b'], [1, 2], [true, false]];
+
+      const result = this.subject(...arrays);
+
+      assert.deepEqual(result, [['a', 1, true], ['b', 2, false]]);
+    });
+
+    QUnit.test('uneven input array lengths', function (assert) {
+      const arrays = [['a'], [1, 2]];
+
+      const result = this.subject(...arrays);
+
+      assert.deepEqual(result, [['a', 1], [undefined, 2]]);
+    });
+  });
 });

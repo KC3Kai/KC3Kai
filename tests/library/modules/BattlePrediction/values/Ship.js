@@ -11,7 +11,7 @@ QUnit.module('modules > BattlePrediction > values > Ship', function () {
     QUnit.test('success', function (assert) {
       const result = this.subject(15, 20);
 
-      assert.deepEqual(result, { hp: 15, maxHp: 20 });
+      assert.deepEqual(result, { hp: 15, maxHp: 20, damageDealt: 0 });
     });
   });
 
@@ -34,20 +34,12 @@ QUnit.module('modules > BattlePrediction > values > Ship', function () {
   QUnit.module('dealDamage', {
     beforeEach() { this.subject = Ship.dealDamage; },
   }, function () {
-    QUnit.test('still alive', function (assert) {
-      const ship = { hp: 10, maxHp: 20 };
+    QUnit.test('add to damage dealt', function (assert) {
+      const ship = { damageDealt: 5, hp: 10 };
 
-      const result = this.subject(5, ship);
+      const result = this.subject(10, ship);
 
-      assert.deepEqual(result, { hp: 5, maxHp: 20 });
-    });
-
-    QUnit.test('sunk', function (assert) {
-      const ship = { hp: 10, maxHp: 20 };
-
-      const result = this.subject(20, ship);
-
-      assert.deepEqual(result, { hp: -10, maxHp: 20 });
+      assert.deepEqual(result, { damageDealt: 15, hp: 10 });
     });
   });
 
@@ -97,7 +89,7 @@ QUnit.module('modules > BattlePrediction > values > Ship', function () {
     },
   }, function () {
     QUnit.test('convert to output format', function (assert) {
-      const ship = { hp: 20, maxHp: 30, dameConConsumed: true };
+      const ship = { hp: 20, maxHp: 30, dameConConsumed: true, damageDealt: 5 };
 
       const result = this.subject(ship);
 
@@ -105,6 +97,7 @@ QUnit.module('modules > BattlePrediction > values > Ship', function () {
         hp: 20,
         dameConConsumed: true,
         sunk: false,
+        damageDealt: 5,
       });
     });
 

@@ -27,11 +27,11 @@
   };
 
   const parseDamageArray = (side, role, damageArray) => {
-    const { normalizeArrayIndexing, battle: { createAttack } } = KC3BattlePrediction;
+    const { normalizeArrayIndexing, battle: { createAttack, createTarget } } = KC3BattlePrediction;
 
     const damages = normalizeArrayIndexing(damageArray);
     return damages.reduce((result, damage, position) => {
-      const attack = createAttack(side, role, position, damage);
+      const attack = createAttack(damage, createTarget(side, role, position));
       return attack.damage ? result.concat(attack) : result;
     }, []);
   };

@@ -5,23 +5,14 @@
   /*--------------------------------------------------------*/
 
   battle.simulateBattle = (battleData, initalFleets, battleType) => {
-    const { parseBattle, simulateAttack } = KC3BattlePrediction.battle;
+    const { battle: { parseBattle }, fleets: { simulateAttack } } = KC3BattlePrediction;
 
-    const attacks = parseBattle(battleType, battleData);
-    return attacks.reduce(simulateAttack, initalFleets);
+    return parseBattle(battleType, battleData).reduce(simulateAttack, initalFleets);
   };
 
   /*--------------------------------------------------------*/
   /* ---------------------[ INTERNAL ]--------------------- */
   /*--------------------------------------------------------*/
-
-  /* -----------------[ SIMULATE ATTACKS ]----------------- */
-
-  battle.simulateAttack = (fleets, { target, damage }) => {
-    const { bind, fleets: { update, damageShip } } = KC3BattlePrediction;
-
-    return update(fleets, target, bind(damageShip, damage));
-  };
 
   /* -----------------[ PARSE BATTLE DATA ]---------------- */
 

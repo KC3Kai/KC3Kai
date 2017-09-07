@@ -1,5 +1,5 @@
 QUnit.module('modules > BattlePrediction > phases > Support', function () {
-  const { Side, Role, battle: { createAttack } } = KC3BattlePrediction;
+  const { Side, Role, battle: { createAttack, createTarget } } = KC3BattlePrediction;
   const Support = KC3BattlePrediction.battle.phases.support;
 
   QUnit.module('parseDamageArray', {
@@ -14,8 +14,8 @@ QUnit.module('modules > BattlePrediction > phases > Support', function () {
       const result = this.subject(role, damageArray);
 
       assert.deepEqual(result, [
-        createAttack(Side.ENEMY, role, 1, 29),
-        createAttack(Side.ENEMY, role, 4, 101),
+        createAttack(29, createTarget(Side.ENEMY, role, 1)),
+        createAttack(101, createTarget(Side.ENEMY, role, 4)),
       ]);
     });
   });

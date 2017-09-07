@@ -4,27 +4,25 @@
   /* --------------------[ PUBLIC API ]-------------------- */
   /*--------------------------------------------------------*/
 
-  const createShip = (hp, maxHp) => (hp !== -1 ? { hp, maxHp } : EMPTY_SLOT);
+  const createShip = (hp, maxHp) => (hp !== -1 ? { hp, maxHp, damageDealt: 0 } : EMPTY_SLOT);
 
   const installDamecon = (damecon, ship) =>
     (ship !== EMPTY_SLOT ? Object.assign({}, ship, { damecon }) : ship);
 
-  const damageShip = (damage, ship) => {
-    const { dealDamage, tryDamecon } = KC3BattlePrediction.fleets;
+  const dealDamage = (damage, ship) =>
+    Object.assign({}, ship, { damageDealt: ship.damageDealt + damage });
 
-    const result = dealDamage(damage, ship);
+  const takeDamage = (damage, ship) => {
+    const { tryDamecon } = KC3BattlePrediction.fleets;
+
+    const result = Object.assign({}, ship, { hp: ship.hp - damage });
 
     return result.hp <= 0 ? tryDamecon(result) : result;
   };
 
-  // If damecon increases HP beyond initial value, it counts as no damage
-  const isNotDamaged = (initial, result) => initial.hp <= result.hp;
-
   /*--------------------------------------------------------*/
   /* --------------------[ INTERNALS ]--------------------- */
   /*--------------------------------------------------------*/
-
-  const dealDamage = (damage, ship) => Object.assign({}, ship, { hp: ship.hp - damage });
 
   const tryDamecon = (ship) => {
     const { Damecon } = KC3BattlePrediction;
@@ -48,9 +46,14 @@
   };
 
   const formatShip = (ship) => {
-    return ship !== EMPTY_SLOT
-      ? { hp: ship.hp, dameConConsumed: ship.dameConConsumed || false, sunk: ship.hp <= 0 }
-      : ship;
+    if (ship === EMPTY_SLOT) { return EMPTY_SLOT; }
+
+    return {
+      hp: ship.hp,
+      dameConConsumed: ship.dameConConsumed || false,
+      sunk: ship.hp <= 0,
+      damageDealt: ship.damageDealt,
+    };
   };
 
   /*--------------------------------------------------------*/
@@ -61,10 +64,9 @@
     // Public
     createShip,
     installDamecon,
-    damageShip,
-    isNotDamaged,
-    // Internals
     dealDamage,
+    takeDamage,
+    // Internals
     tryDamecon,
     formatShip,
   });

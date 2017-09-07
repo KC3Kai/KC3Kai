@@ -1,62 +1,64 @@
 QUnit.module('modules > BattlePrediction > phases > Raigeki', function () {
   const Raigeki = KC3BattlePrediction.battle.phases.raigeki;
 
-  QUnit.module('normalizeDamageArray', {
-    beforeEach() { this.subject = Raigeki.normalizeDamageArray; },
+  QUnit.module('removeEmptyAttacks', {
+    beforeEach() {
+      this.subject = Raigeki.removeEmptyAttacks;
+    },
   }, function () {
-    QUnit.test('no damage array', function (assert) {
-      assert.deepEqual(this.subject(undefined), []);
-    });
+    QUnit.test('remove empty attacks', function (assert) {
+      const attacksJson = [
+        { defender: { position: 0 } },
+        { defender: { position: -1 } },
+        { defender: { position: 5 } },
+      ];
 
-    QUnit.test('convert to 0-based index', function (assert) {
-      assert.deepEqual(this.subject([-1, 0, 0, 44, 122, 0, 0]), [0, 0, 44, 122, 0, 0]);
+      const result = this.subject(attacksJson);
+
+      assert.deepEqual(result, [attacksJson[0], attacksJson[2]]);
     });
   });
 
-  QUnit.module('splitCombinedDamageArray', {
-    beforeEach() { this.subject = Raigeki.splitCombinedDamageArray; },
+  QUnit.module('parseJson', {
+    beforeEach() {
+      this.subject = Raigeki.parseJson;
+    },
   }, function () {
-    QUnit.test('bad array length', function (assert) {
-      const array = new Array(5);
+    QUnit.test('player attack', function (assert) {
+      const json = { api_frai: 0, api_fydam: 0 };
 
-      assert.throws(() => this.subject(array),
-        new Error('Expected array of length 12, but was 5'));
-    });
-
-    QUnit.test('split into main and escort fleet arrays', function (assert) {
-      const array = [0, 4, 0, 0, 0, 0, 0, 178, 0, 0, 0, 0];
-
-      const result = this.subject(array);
+      const result = this.subject(json, 5);
 
       assert.deepEqual(result, {
-        main: [0, 4, 0, 0, 0, 0],
-        escort: [0, 178, 0, 0, 0, 0],
+        attacker: { position: 5 },
+        defender: { position: -1 },
+        damage: 0,
       });
     });
-  });
 
-  QUnit.module('parseDamageArray', {
-    beforeEach() { this.subject = Raigeki.parseDamageArray; },
-  }, function () {
-    const { Side, Role } = KC3BattlePrediction;
-    const { createAttack } = KC3BattlePrediction.battle;
+    QUnit.test('enemy attack', function (assert) {
+      const json = { api_erai: 0, api_eydam: 0 };
 
-    QUnit.test('empty damage array', function (assert) {
-      assert.deepEqual(this.subject('side', 'role', []), []);
+      const result = this.subject(json, 1);
+
+      assert.deepEqual(result, {
+        attacker: { position: 1 },
+        defender: { position: -1 },
+        damage: 0,
+      });
     });
 
-    QUnit.test('convert to Attacks', function (assert) {
-      const side = Side.PLAYER;
-      const role = Role.MAIN_FLEET;
-      const json = [41, 0, 0, 0, 121, 131];
+    QUnit.test('bad json', function (assert) {
+      const json = { test: 'blah' };
 
-      const result = this.subject(side, role, json);
-
-      assert.deepEqual(result, [
-        createAttack(side, role, 0, 41),
-        createAttack(side, role, 4, 121),
-        createAttack(side, role, 5, 131),
-      ]);
+      try {
+        this.subject(json, 'index');
+        assert.notOk(true, 'no exception');
+      } catch (result) {
+        assert.equal(result.message, 'Bad attack json');
+        assert.equal(result.data.attackJson, json);
+        assert.equal(result.data.index, 'index');
+      }
     });
   });
 });

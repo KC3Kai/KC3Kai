@@ -25,6 +25,8 @@
       airRaid: {},
       battle: {},
     },
+    // MVP prediction
+    mvp: {},
   };
 
   // --------------------------------------------------------------------------
@@ -52,6 +54,16 @@
     const battleStart = parseStartJson(battleStartData);
     return getRankPredictor(apiName)
       .predict(normalizeFleets(battleStart), normalizeFleets(battleResult));
+  };
+
+  BP.predictMvp = (dayResult, nightResult) => {
+    const { combineResults, getHighestDamage } = KC3BattlePrediction.mvp;
+
+    const { playerMain, playerEscort } = combineResults(dayResult, nightResult);
+    return {
+      playerMain: getHighestDamage(playerMain),
+      playerEscort: getHighestDamage(playerEscort),
+    };
   };
 
   // --------------------------------------------------------------------------
@@ -92,22 +104,35 @@
 
   BP.bind = (target, ...args) => target.bind(null, ...args);
 
-  BP.formatResult = (initialFleets, resultFleets) => {
-    const { formatFleets, isPlayerNoDamage } = KC3BattlePrediction.fleets;
-
-    // TODO: add predictedMVP
-    const initial = formatFleets(initialFleets);
-    const result = formatFleets(resultFleets);
-
-    return {
-      fleets: result,
-      isPlayerNoDamage: isPlayerNoDamage(initial, result),
-    };
-  };
-
   BP.validateEnum = (enumObj, value) => {
     // Ideally this should use Object.values(), but it was only introduced in Chrome 54
     return Object.keys(enumObj).some(key => enumObj[key] === value);
+  };
+
+  /* ---------------------[ ZIP WITH ]--------------------- */
+
+  const parseArgs = (args) => {
+    const iteratee = args.slice(-1)[0];
+
+    return typeof iteratee === 'function'
+      ? { arrays: args.slice(0, -1), iteratee }
+      : { arrays: args, iteratee: (...elements) => elements };
+  };
+  const getElements = (arrays, index) => arrays.map(array => array[index]);
+  const getLongestArray = arrays =>
+    arrays.reduce((result, array) => (array.length > result ? array.length : result), 0);
+  // See: http://devdocs.io/lodash~4/index#zipWith
+  BP.zipWith = (...args) => {
+    const { arrays, iteratee } = parseArgs(args);
+
+    const length = getLongestArray(arrays);
+    const result = [];
+    for (let i = 0; i < length; i += 1) {
+      const elements = getElements(arrays, i);
+      result.push(iteratee(...elements));
+    }
+
+    return result;
   };
 
   window.KC3BattlePrediction = BP;
@@ -120,23 +145,14 @@
   /*--------------------------------------------------------*/
 
   battle.simulateBattle = (battleData, initalFleets, battleType) => {
-    const { parseBattle, simulateAttack } = KC3BattlePrediction.battle;
+    const { battle: { parseBattle }, fleets: { simulateAttack } } = KC3BattlePrediction;
 
-    const attacks = parseBattle(battleType, battleData);
-    return attacks.reduce(simulateAttack, initalFleets);
+    return parseBattle(battleType, battleData).reduce(simulateAttack, initalFleets);
   };
 
   /*--------------------------------------------------------*/
   /* ---------------------[ INTERNAL ]--------------------- */
   /*--------------------------------------------------------*/
-
-  /* -----------------[ SIMULATE ATTACKS ]----------------- */
-
-  battle.simulateAttack = (fleets, { target, damage }) => {
-    const { bind, fleets: { update, damageShip } } = KC3BattlePrediction;
-
-    return update(fleets, target, bind(damageShip, damage));
-  };
 
   /* -----------------[ PARSE BATTLE DATA ]---------------- */
 
@@ -278,6 +294,108 @@
 
     addDamecons,
     getDamecons,
+  });
+}());
+
+(function () {
+  /*--------------------------------------------------------*/
+  /* --------------------[ PUBLIC API ]-------------------- */
+  /*--------------------------------------------------------*/
+
+  const combineResults = (dayFleets, nightFleets) => {
+    const { combineFleetResults } = KC3BattlePrediction.mvp;
+
+    if (!nightFleets) { return dayFleets; }
+    return {
+      playerMain: combineFleetResults(dayFleets.playerMain, nightFleets.playerMain),
+      playerEscort: combineFleetResults(dayFleets.playerEscort, nightFleets.playerEscort),
+    };
+  };
+
+  const getHighestDamage = (fleet) => {
+    const { index } = fleet.reduce((result, { damageDealt }, i) => {
+      return damageDealt > result.damageDealt
+        ? { damageDealt, index: i }
+        : result;
+    }, { damageDealt: -1 });
+    return index;
+  };
+
+  /*--------------------------------------------------------*/
+  /* --------------------[ INTERNALS ]--------------------- */
+  /*--------------------------------------------------------*/
+
+  const combineFleetResults = (day, night) => {
+    const { zipWith } = KC3BattlePrediction;
+
+    return zipWith(day, night, (dayResult, nightResult) => ({
+      damageDealt: dayResult.damageDealt + nightResult.damageDealt,
+    }));
+  };
+
+  /*--------------------------------------------------------*/
+  /* ---------------------[ EXPORTS ]---------------------- */
+  /*--------------------------------------------------------*/
+
+  Object.assign(KC3BattlePrediction.mvp, {
+    // Public
+    combineResults,
+    getHighestDamage,
+    // Internal
+    combineFleetResults,
+  });
+}());
+
+(function () {
+  /*--------------------------------------------------------*/
+  /* --------------------[ PUBLIC API ]-------------------- */
+  /*--------------------------------------------------------*/
+
+  const formatResult = (initialFleets, resultFleets) => {
+    const { isPlayerNoDamage, fleets: { formatFleets } } = KC3BattlePrediction;
+
+    const initial = formatFleets(initialFleets);
+    const result = formatFleets(resultFleets);
+
+    return {
+      fleets: result,
+      isPlayerNoDamage: isPlayerNoDamage(initial, result),
+    };
+  };
+
+  /*--------------------------------------------------------*/
+  /* --------------------[ INTERNALS ]--------------------- */
+  /*--------------------------------------------------------*/
+
+  /* --------------------[ NO DAMAGE ]--------------------- */
+
+  const isPlayerNoDamage = (initialFleets, resultFleets) => {
+    const { extendError, isNotDamaged } = KC3BattlePrediction;
+
+    const initialShips = initialFleets.playerMain.concat(initialFleets.playerEscort);
+    const resultShips = resultFleets.playerMain.concat(resultFleets.playerEscort);
+
+    if (initialShips.length !== resultShips.length) {
+      throw extendError(new Error('Mismatched initial and result fleets'), { initialFleets, resultFleets });
+    }
+
+    return resultShips.every((resultShip, index) => isNotDamaged(initialShips[index], resultShip));
+  };
+
+  // If damecon increases HP beyond initial value, it counts as no damage
+  const isNotDamaged = (initial, result) => initial.hp <= result.hp;
+
+
+  /*--------------------------------------------------------*/
+  /* ---------------------[ EXPORTS ]---------------------- */
+  /*--------------------------------------------------------*/
+
+  Object.assign(KC3BattlePrediction, {
+    // Public
+    formatResult,
+    // Internals
+    isPlayerNoDamage,
+    isNotDamaged,
   });
 }());
 
@@ -625,179 +743,143 @@
 }());
 
 (function () {
+  const Hougeki = {};
+
   /*--------------------------------------------------------*/
   /* --------------------[ PUBLIC API ]-------------------- */
   /*--------------------------------------------------------*/
 
-  const parseHougeki = (playerRole, battleData) => {
-    const { parseTargets, parseDamages, zipAttacks } = KC3BattlePrediction.battle.phases.hougeki;
+  const JSON_FIELDS = ['api_at_list', 'api_df_list', 'api_damage'];
+  Hougeki.parseHougeki = (playerRole, battleData) => {
+    const { extractFromJson, makeAttacks } = KC3BattlePrediction.battle.phases;
+    const { parseJson, getTargetFactory } = KC3BattlePrediction.battle.phases.hougeki;
 
-    return zipAttacks(parseTargets(playerRole, battleData), parseDamages(battleData));
+    const attackData = extractFromJson(battleData, JSON_FIELDS).map(parseJson);
+    return makeAttacks(attackData, getTargetFactory(playerRole));
   };
 
-  const parseCombinedHougeki = (battleData) => {
-    const { parseCombinedTargets, parseDamages, zipAttacks }
-      = KC3BattlePrediction.battle.phases.hougeki;
+  const COMBINED_JSON_FIELDS = ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage'];
+  Hougeki.parseCombinedHougeki = (battleData) => {
+    const { extractFromJson, makeAttacks } = KC3BattlePrediction.battle.phases;
+    const { parseCombinedJson, getCombinedTargetFactory } = KC3BattlePrediction.battle.phases.hougeki;
 
-    return zipAttacks(parseCombinedTargets(battleData), parseDamages(battleData));
+    const attackData = extractFromJson(battleData, COMBINED_JSON_FIELDS).map(parseCombinedJson);
+    return makeAttacks(attackData, getCombinedTargetFactory());
   };
 
   /*--------------------------------------------------------*/
   /* --------------------[ INTERNALS ]--------------------- */
   /*--------------------------------------------------------*/
 
-  /* ---------------------[ TARGETS ]---------------------- */
+  /* --------------------[ JSON PARSE ]-------------------- */
 
-  const parseTargets = (playerRole, { api_df_list } = {}) => {
-    const { normalizeArrayIndexing, bind } = KC3BattlePrediction;
-    const { normalizeTargetFormat, convertToTarget } = KC3BattlePrediction.battle.phases.hougeki;
+  Hougeki.parseJson = ({ api_at_list, api_df_list, api_damage }) => {
+    const { parseAttackerIndex, parseDefenderIndex, parseDamage } =
+      KC3BattlePrediction.battle.phases.hougeki;
 
-    if (!api_df_list) { throw new Error('No api_df_list in battle data'); }
-
-    const targets = normalizeTargetFormat(normalizeArrayIndexing(api_df_list));
-    return targets.map(bind(convertToTarget, playerRole));
+    return {
+      damage: parseDamage(api_damage),
+      attacker: parseAttackerIndex(api_at_list),
+      defender: parseDefenderIndex(api_df_list),
+    };
   };
 
-  // Unpack target index from the array KCSAPI uses for each attack
-  const normalizeTargetFormat = (dfList) => {
-    return dfList.map((indexes) => {
-      // Both indexes for a double attack should be the same
-      if (!indexes.every(x => x === indexes[0])) {
-        throw new Error(`Bad index: [${indexes}]`);
-      }
-      return indexes[0];
-    });
-  };
-
-  const convertToTarget = (playerRole, targetIndex) => {
-    const { Side, Role } = KC3BattlePrediction;
-
-    if (targetIndex < 1 || targetIndex > 12 || targetIndex !== Math.floor(targetIndex)) {
-      throw new Error(`Bad target index: ${targetIndex}`);
-    }
-
-    // Note: KCSAPI uses 1-based indexes, so we need to convert to 0-based indexing
-    if (targetIndex <= 6) {
-      return { side: Side.PLAYER, role: playerRole, position: targetIndex - 1 };
-    }
-    return { side: Side.ENEMY, role: Role.MAIN_FLEET, position: targetIndex - 7 };
-  };
-
-  /* --------------[ COMBINED FLEET TARGETS ]-------------- */
-
-  const parseCombinedTargets = ({ api_df_list, api_at_eflag } = {}) => {
-    const { normalizeArrayIndexing: normalize } = KC3BattlePrediction;
-    const {
-      parseCombinedTargetIndexes: parseIndexes,
-      parseCombinedTargetSides: parseSides,
-      zipCombinedTargets,
-    } = KC3BattlePrediction.battle.phases.hougeki;
-
-    if (!api_df_list) { throw new Error('No api_df_list in battle data'); }
-    if (!api_at_eflag) { throw new Error('No api_at_eflag in battle data'); }
-
-    const indexes = parseIndexes(normalize(api_df_list));
-    const sides = parseSides(normalize(api_at_eflag));
-
-    return zipCombinedTargets(indexes, sides);
-  };
-
-  const parseCombinedTargetIndexes = (dfList) => {
-    const { normalizeTargetFormat, convertToCombinedTargetIndex }
-      = KC3BattlePrediction.battle.phases.hougeki;
-
-    const targetIndexes = normalizeTargetFormat(dfList);
-    return targetIndexes.map(convertToCombinedTargetIndex);
-  };
-
-  const convertToCombinedTargetIndex = (targetIndex) => {
-    const { Role } = KC3BattlePrediction;
-
-    if (targetIndex < 1 || targetIndex > 12 || targetIndex !== Math.floor(targetIndex)) {
-      throw new Error(`Bad target index: ${targetIndex}`);
-    }
-
-    // KCSAPI uses 1-based indexes, so we need to convert to 0-base
-    return targetIndex <= 6
-      ? { role: Role.MAIN_FLEET, position: targetIndex - 1 }
-      : { role: Role.ESCORT_FLEET, position: targetIndex - 7 };
-  };
-
-  const parseCombinedTargetSides = (atEFlags) => {
+  Hougeki.parseAttackerIndex = (index) => {
     const { Side } = KC3BattlePrediction;
 
-    return atEFlags.map((eFlag) => {
-      switch (eFlag) {
-        case 0: return Side.ENEMY;
-        case 1: return Side.PLAYER;
-        default: throw new Error(`Bad eFlag: ${eFlag}`);
-      }
-    });
+    return index <= 6
+      ? { side: Side.PLAYER, position: index - 1 }
+      : { side: Side.ENEMY, position: index - 7 };
   };
 
-  const zipCombinedTargets = (indexes, sides) => {
-    if (indexes.length !== sides.length) {
-      throw new Error(`Mismatched number of indexes (${indexes.length}) and sides (${sides.length})`);
+  Hougeki.parseDefenderIndex = (targetIndices) => {
+    const { Side, extendError } = KC3BattlePrediction;
+
+    const index = targetIndices[0];
+
+    if (!targetIndices.every(ind => ind === index)) {
+      throw extendError(new Error('Bad target index array'), { targetIndices });
     }
-    return indexes.map(({ role, position }, i) => {
-      const side = sides[i];
-      return { side, role, position };
+
+    return index <= 6
+      ? { side: Side.PLAYER, position: index - 1 }
+      : { side: Side.ENEMY, position: index - 7 };
+  };
+
+  Hougeki.parseDamage = damages => damages.reduce((result, damage) => result + damage, 0);
+
+  Hougeki.parseCombinedJson = ({ api_at_eflag, api_at_list, api_df_list, api_damage }) => {
+    const { parseCombinedAttacker, parseCombinedDefender, parseDamage }
+      = KC3BattlePrediction.battle.phases.hougeki;
+
+    return {
+      attacker: parseCombinedAttacker(api_at_eflag, api_at_list),
+      defender: parseCombinedDefender(api_at_eflag, api_df_list),
+      damage: parseDamage(api_damage),
+    };
+  };
+
+  Hougeki.parseCombinedAttacker = (isEnemyAttackFlag, attackerIndex) => {
+    const { Side, Role, extendError } = KC3BattlePrediction;
+
+    if (!(isEnemyAttackFlag === 1 || isEnemyAttackFlag === 0)) {
+      throw extendError(new Error('Bad api_at_eflag'), { api_at_eflag: isEnemyAttackFlag });
+    }
+
+    const side = isEnemyAttackFlag === 1 ? Side.ENEMY : Side.PLAYER;
+    return attackerIndex <= 6
+      ? { side, role: Role.MAIN_FLEET, position: attackerIndex - 1 }
+      : { side, role: Role.ESCORT_FLEET, position: attackerIndex - 7 };
+  };
+
+  Hougeki.parseCombinedDefender = (isEnemyAttackFlag, defenderIndices) => {
+    const { Side, Role, extendError } = KC3BattlePrediction;
+
+    if (!(isEnemyAttackFlag === 1 || isEnemyAttackFlag === 0)) {
+      throw extendError(new Error('Bad api_at_eflag'), { api_at_eflag: isEnemyAttackFlag });
+    }
+
+    const index = defenderIndices[0];
+    if (!defenderIndices.every(ind => ind === index)) {
+      throw extendError(new Error('Bad target index array'), { api_df_list: defenderIndices });
+    }
+
+    const side = isEnemyAttackFlag === 0 ? Side.ENEMY : Side.PLAYER;
+    return index <= 6
+      ? { side, role: Role.MAIN_FLEET, position: index - 1 }
+      : { side, role: Role.ESCORT_FLEET, position: index - 7 };
+  };
+
+  /* -----------------[ TARGET FACTORIES ]----------------- */
+
+  Hougeki.getTargetFactory = (playerRole) => {
+    const { Side, Role, battle: { createTarget } } = KC3BattlePrediction;
+
+    const roles = {
+      [Side.PLAYER]: playerRole,
+      [Side.ENEMY]: Role.MAIN_FLEET,
+    };
+
+    return ({ attacker, defender }) => ({
+      attacker: createTarget(attacker.side, roles[attacker.side], attacker.position),
+      defender: createTarget(defender.side, roles[defender.side], defender.position),
     });
   };
 
-  /* ----------------------[ DAMAGE ]---------------------- */
+  Hougeki.getCombinedTargetFactory = () => {
+    const { createTarget } = KC3BattlePrediction.battle;
 
-  const parseDamages = ({ api_damage } = {}) => {
-    const { normalizeArrayIndexing } = KC3BattlePrediction;
-    const { convertToDamage } = KC3BattlePrediction.battle.phases.hougeki;
-
-    if (!api_damage) { throw new Error('No api_damage in battle data'); }
-
-    const damages = normalizeArrayIndexing(api_damage);
-    return damages.map(convertToDamage);
-  };
-
-  const convertToDamage = (damages) => {
-    return damages.reduce((sum, x) => sum + x, 0);
-  };
-
-  /* ---------------------[ ATTACKS ]---------------------- */
-
-  const zipAttacks = (targets, damages) => {
-    const { createAttack } = KC3BattlePrediction.battle;
-
-    if (targets.length !== damages.length) { throw new Error('Mismatched number of targets and damages'); }
-
-    return targets.reduce((result, { side, role, position }, index) => {
-      const attack = createAttack(side, role, position, damages[index]);
-      return attack.damage ? result.concat(attack) : result;
-    }, []);
+    return ({ attacker, defender }) => ({
+      attacker: createTarget(attacker.side, attacker.role, attacker.position),
+      defender: createTarget(defender.side, defender.role, defender.position),
+    });
   };
 
   /*--------------------------------------------------------*/
   /* ---------------------[ EXPORTS ]---------------------- */
   /*--------------------------------------------------------*/
 
-  Object.assign(KC3BattlePrediction.battle.phases.hougeki, {
-    // Public
-    parseHougeki,
-    parseCombinedHougeki,
-    // Internal
-    parseTargets,
-    normalizeTargetFormat,
-    convertToTarget,
-
-    parseCombinedTargets,
-    parseCombinedTargetIndexes,
-    convertToCombinedTargetIndex,
-    parseCombinedTargetSides,
-    zipCombinedTargets,
-
-    parseDamages,
-    convertToDamage,
-
-    zipAttacks,
-  });
+  Object.assign(KC3BattlePrediction.battle.phases.hougeki, Hougeki);
 }());
 
 // Parser for 航空 (aerial combat) phase
@@ -829,11 +911,11 @@
   };
 
   const parseDamageArray = (side, role, damageArray) => {
-    const { normalizeArrayIndexing, battle: { createAttack } } = KC3BattlePrediction;
+    const { normalizeArrayIndexing, battle: { createAttack, createTarget } } = KC3BattlePrediction;
 
     const damages = normalizeArrayIndexing(damageArray);
     return damages.reduce((result, damage, position) => {
-      const attack = createAttack(side, role, position, damage);
+      const attack = createAttack(damage, createTarget(side, role, position));
       return attack.damage ? result.concat(attack) : result;
     }, []);
   };
@@ -850,28 +932,37 @@
 }());
 
 (function () {
+  const Raigeki = {};
   /*--------------------------------------------------------*/
   /* --------------------[ PUBLIC API ]-------------------- */
   /*--------------------------------------------------------*/
+  const PLAYER_JSON_FIELDS = ['api_frai', 'api_fydam'];
+  const ENEMY_JSON_FIELDS = ['api_erai', 'api_eydam'];
 
-  const parseRaigeki = (playerRole, { api_fdam, api_edam } = {}) => {
-    const { Side, Role } = KC3BattlePrediction;
-    const { parseDamageArray, normalizeDamageArray: normalize }
-      = KC3BattlePrediction.battle.phases.raigeki;
+  Raigeki.parseRaigeki = (playerRole, battleData) => {
+    const { extractFromJson, raigeki: { getTargetFactories, parseSide } }
+      = KC3BattlePrediction.battle.phases;
 
-    const playerAttacks = parseDamageArray(Side.PLAYER, playerRole, normalize(api_fdam));
-    const enemyAttacks = parseDamageArray(Side.ENEMY, Role.MAIN_FLEET, normalize(api_edam));
+    const targetFactories = getTargetFactories(playerRole);
+
+    const playerAttacks = parseSide(targetFactories.playerAttack,
+      extractFromJson(battleData, PLAYER_JSON_FIELDS));
+    const enemyAttacks = parseSide(targetFactories.enemyAttack,
+      extractFromJson(battleData, ENEMY_JSON_FIELDS));
 
     return playerAttacks.concat(enemyAttacks);
   };
 
-  const parseCombinedRaigeki = ({ api_fdam, api_edam }) => {
-    const { Side } = KC3BattlePrediction;
-    const { parseCombinedSide, normalizeDamageArray: normalize }
-      = KC3BattlePrediction.battle.phases.raigeki;
+  Raigeki.parseCombinedRaigeki = (battleData) => {
+    const { extractFromJson } = KC3BattlePrediction.battle.phases;
+    const { getCombinedTargetFactories, parseSide } = KC3BattlePrediction.battle.phases.raigeki;
 
-    const playerAttacks = parseCombinedSide(Side.PLAYER, normalize(api_fdam));
-    const enemyAttacks = parseCombinedSide(Side.ENEMY, normalize(api_edam));
+    const targetFactories = getCombinedTargetFactories();
+
+    const playerAttacks = parseSide(targetFactories.playerAttack,
+      extractFromJson(battleData, PLAYER_JSON_FIELDS));
+    const enemyAttacks = parseSide(targetFactories.enemyAttack,
+      extractFromJson(battleData, ENEMY_JSON_FIELDS));
 
     return playerAttacks.concat(enemyAttacks);
   };
@@ -880,57 +971,92 @@
   /* --------------------[ INTERNALS ]--------------------- */
   /*--------------------------------------------------------*/
 
-  const normalizeDamageArray = (damageArray) => {
-    const { normalizeArrayIndexing } = KC3BattlePrediction;
+  Raigeki.parseSide = (createTargets, attacksJson) => {
+    const { makeAttacks, raigeki: { removeEmptyAttacks, parseJson } }
+      = KC3BattlePrediction.battle.phases;
 
-    return damageArray ? normalizeArrayIndexing(damageArray) : [];
+    return makeAttacks(removeEmptyAttacks(attacksJson.map(parseJson)), createTargets);
   };
 
-  const parseCombinedSide = (side, combinedDamageArray) => {
-    const { Role } = KC3BattlePrediction;
-    const { splitCombinedDamageArray, parseDamageArray }
-      = KC3BattlePrediction.battle.phases.raigeki;
+  /* --------------------[ JSON PARSE ]-------------------- */
 
-    const { main, escort } = splitCombinedDamageArray(combinedDamageArray);
-    const mainFleetAttacks = parseDamageArray(side, Role.MAIN_FLEET, main);
-    const escortFleetAttacks = parseDamageArray(side, Role.ESCORT_FLEET, escort);
+  Raigeki.removeEmptyAttacks = attacksJson => attacksJson.filter(({ defender: { position } }) => {
+    return position >= 0;
+  });
 
-    return mainFleetAttacks.concat(escortFleetAttacks);
-  };
+  Raigeki.parseJson = (attackJson, index) => {
+    const { extendError } = KC3BattlePrediction;
 
-  const splitCombinedDamageArray = (combinedDamageArray) => {
-    if (combinedDamageArray.length !== 12) {
-      throw new Error(`Expected array of length 12, but was ${combinedDamageArray.length}`);
+    if (attackJson.api_frai !== undefined && attackJson.api_fydam !== undefined) {
+      return {
+        attacker: { position: index },
+        defender: { position: attackJson.api_frai - 1 },
+        damage: attackJson.api_fydam,
+      };
     }
+    if (attackJson.api_erai !== undefined && attackJson.api_eydam !== undefined) {
+      return {
+        attacker: { position: index },
+        defender: { position: attackJson.api_erai - 1 },
+        damage: attackJson.api_eydam,
+      };
+    }
+    throw extendError(new Error('Bad attack json'), { attackJson, index });
+  };
+
+  /* -----------------[ TARGET FACTORIES ]----------------- */
+
+  Raigeki.getTargetFactories = (playerRole) => {
+    const { Side, Role, bind, battle: { createTarget } } = KC3BattlePrediction;
+
+    const playerTarget = bind(createTarget, Side.PLAYER, playerRole);
+    const enemyTarget = bind(createTarget, Side.ENEMY, Role.MAIN_FLEET);
+
     return {
-      main: combinedDamageArray.slice(0, 6),
-      escort: combinedDamageArray.slice(6, 12),
+      playerAttack: ({ attacker, defender }) => ({
+        attacker: playerTarget(attacker.position),
+        defender: enemyTarget(defender.position),
+      }),
+      enemyAttack: ({ attacker, defender }) => ({
+        attacker: enemyTarget(attacker.position),
+        defender: playerTarget(defender.position),
+      }),
     };
   };
 
-  const parseDamageArray = (side, role, damageArray) => {
-    const { createAttack } = KC3BattlePrediction.battle;
+  Raigeki.getCombinedTargetFactories = () => {
+    const { Side } = KC3BattlePrediction;
+    const { createCombinedTargetFactory } = KC3BattlePrediction.battle.phases.raigeki;
 
-    return damageArray.reduce((result, damage, position) => {
-      const attack = createAttack(side, role, position, damage);
-      return attack.damage ? result.concat(attack) : result;
-    }, []);
+    const playerTarget = createCombinedTargetFactory(Side.PLAYER);
+    const enemyTarget = createCombinedTargetFactory(Side.ENEMY);
+
+    return {
+      playerAttack: ({ attacker, defender }) => ({
+        attacker: playerTarget(attacker.position),
+        defender: enemyTarget(defender.position),
+      }),
+      enemyAttack: ({ attacker, defender }) => ({
+        attacker: enemyTarget(attacker.position),
+        defender: playerTarget(defender.position),
+      }),
+    };
+  };
+
+  Raigeki.createCombinedTargetFactory = (side) => {
+    const { Role, battle: { createTarget } } = KC3BattlePrediction;
+
+    return position => (position < 6
+      ? createTarget(side, Role.MAIN_FLEET, position)
+      : createTarget(side, Role.ESCORT_FLEET, position - 6)
+    );
   };
 
   /*--------------------------------------------------------*/
   /* ---------------------[ EXPORTS ]---------------------- */
   /*--------------------------------------------------------*/
 
-  Object.assign(KC3BattlePrediction.battle.phases.raigeki, {
-    // Public
-    parseRaigeki,
-    parseCombinedRaigeki,
-    // Internal
-    normalizeDamageArray,
-    parseCombinedSide,
-    splitCombinedDamageArray,
-    parseDamageArray,
-  });
+  Object.assign(KC3BattlePrediction.battle.phases.raigeki, Raigeki);
 }());
 
 (function () {
@@ -975,10 +1101,10 @@
   };
 
   const parseDamageArray = (role, damageArray) => {
-    const { Side, battle: { createAttack } } = KC3BattlePrediction;
+    const { Side, battle: { createAttack, createTarget } } = KC3BattlePrediction;
 
     return damageArray.reduce((result, damage, position) => {
-      const attack = createAttack(Side.ENEMY, role, position, damage);
+      const attack = createAttack(damage, createTarget(Side.ENEMY, role, position));
       return attack.damage ? result.concat(attack) : result;
     }, []);
   };
@@ -1015,110 +1141,141 @@
 }());
 
 (function () {
+  const Util = {};
+
   /*--------------------------------------------------------*/
   /* --------------------[ PUBLIC API ]-------------------- */
   /*--------------------------------------------------------*/
 
-  const parseYasen = (playerRole, enemyRole, battleData) => {
-    const { parseTargets, parseDamages, zipAttacks } = KC3BattlePrediction.battle.phases.yasen;
+  Util.extractFromJson = (battleData, fields) => {
+    const { extendError, zipWith } = KC3BattlePrediction;
+    const { normalizeFieldArrays, zipJson } = KC3BattlePrediction.battle.phases;
 
-    const targets = parseTargets({ player: playerRole, enemy: enemyRole }, battleData);
-    const damages = parseDamages(battleData);
+    if (fields.length === 0) { return []; }
 
-    return zipAttacks(targets, damages);
+    const arrays = fields.map(name => normalizeFieldArrays(name, battleData[name]));
+
+    if (!arrays.every(array => array.length === arrays[0].length)) {
+      throw extendError(new Error('Mismatched length of json arrays'), { battleData, fields });
+    }
+
+    return zipWith(...arrays, zipJson);
+  };
+
+  Util.makeAttacks = (attacksData, createTargets) => {
+    const { createAttack } = KC3BattlePrediction.battle;
+
+    return attacksData.reduce((result, data) => {
+      const { attacker, defender } = createTargets(data);
+      const attack = createAttack(data.damage, defender, attacker);
+
+      return attack.damage ? result.concat(attack) : result;
+    }, []);
   };
 
   /*--------------------------------------------------------*/
   /* --------------------[ INTERNALS ]--------------------- */
   /*--------------------------------------------------------*/
 
-  /* ---------------------[ TARGETS ]---------------------- */
+  /* ----------------[ EXTRACT FROM JSON ]----------------- */
 
-  const parseTargets = (roles, { api_df_list } = {}) => {
+  // Embed the prop name in the array - it will be needed by zipJson()
+  Util.normalizeFieldArrays = (propName, array) => {
     const { normalizeArrayIndexing } = KC3BattlePrediction;
-    const { normalizeTargetJson, convertToTarget } = KC3BattlePrediction.battle.phases.yasen;
 
-    if (!api_df_list) { return []; }
-
-    return normalizeArrayIndexing(api_df_list).map((targetJson) => {
-      return convertToTarget(roles, normalizeTargetJson(targetJson));
-    });
+    return normalizeArrayIndexing(array).map(value => ({ [propName]: value }));
   };
 
-  const normalizeTargetJson = (targetArray = []) => {
-    // regular attack
-    if (targetArray.length === 1) {
-      return targetArray[0];
-    }
-    // double attack + torpedo cut-in
-    if (targetArray.length === 2 && targetArray[0] === targetArray[1]) {
-      return targetArray[0];
-    }
-    // Gun cut-in
-    if (targetArray.length === 3 && targetArray[1] === -1 && targetArray[2] === -1) {
-      return targetArray[0];
-    }
-    throw new Error(`Bad target json: [${targetArray}]`);
+  Util.zipJson = (...elements) => Object.assign({}, ...elements);
+
+  /*--------------------------------------------------------*/
+  /* ---------------------[ EXPORTS ]---------------------- */
+  /*--------------------------------------------------------*/
+
+  Object.assign(KC3BattlePrediction.battle.phases, Util);
+}());
+
+(function () {
+  const Yasen = {};
+  /*--------------------------------------------------------*/
+  /* --------------------[ PUBLIC API ]-------------------- */
+  /*--------------------------------------------------------*/
+  const JSON_FIELDS = ['api_at_list', 'api_df_list', 'api_damage'];
+
+  Yasen.parseYasen = (playerRole, enemyRole, battleData) => {
+    const { makeAttacks, extractFromJson } = KC3BattlePrediction.battle.phases;
+    const { parseJson, getTargetFactory } = KC3BattlePrediction.battle.phases.yasen;
+
+    const attacksData = extractFromJson(battleData, JSON_FIELDS).map(parseJson);
+    return makeAttacks(attacksData, getTargetFactory(playerRole, enemyRole));
   };
 
-  const convertToTarget = (roles, targetIndex) => {
+  /*--------------------------------------------------------*/
+  /* --------------------[ INTERNALS ]--------------------- */
+  /*--------------------------------------------------------*/
+
+  /* --------------------[ JSON PARSE ]-------------------- */
+
+  Yasen.parseJson = ({ api_at_list, api_df_list, api_damage }) => {
+    const { parseAttackerIndex, parseDefenderIndices, parseDamage }
+      = KC3BattlePrediction.battle.phases.yasen;
+
+    return {
+      attacker: parseAttackerIndex(api_at_list),
+      defender: parseDefenderIndices(api_df_list),
+      damage: parseDamage(api_damage),
+    };
+  };
+
+  Yasen.parseAttackerIndex = (index) => {
     const { Side } = KC3BattlePrediction;
 
-    if (targetIndex >= 7) {
-      return { side: Side.ENEMY, role: roles.enemy, position: targetIndex - 7 };
+    return index <= 6
+      ? { side: Side.PLAYER, position: index - 1 }
+      : { side: Side.ENEMY, position: index - 7 };
+  };
+
+  Yasen.parseDefenderIndices = (indices) => {
+    const { extendError } = KC3BattlePrediction;
+    const { parseAttackerIndex } = KC3BattlePrediction.battle.phases.yasen;
+
+    // single attack
+    if (indices.length === 1) {
+      return parseAttackerIndex(indices[0]);
     }
-    return { side: Side.PLAYER, role: roles.player, position: targetIndex - 1 };
-  };
-
-  /* ---------------------[ DAMAGES ]---------------------- */
-
-  const parseDamages = ({ api_damage } = {}) => {
-    const { normalizeArrayIndexing } = KC3BattlePrediction;
-    const { convertToDamage } = KC3BattlePrediction.battle.phases.yasen;
-
-    if (!api_damage) { return []; }
-
-    return normalizeArrayIndexing(api_damage).map(convertToDamage);
-  };
-
-  const convertToDamage = (damageArray) => {
-    return damageArray.reduce((sum, damage) => {
-      return damage > 0 ? sum + damage : sum;
-    }, 0);
-  };
-
-  /* ---------------------[ ATTACKS ]---------------------- */
-
-  const zipAttacks = (targets, damages) => {
-    const { createAttack } = KC3BattlePrediction.battle;
-
-    if (targets.length !== damages.length) {
-      throw new Error(`Mismatch between targets (${targets.length}) and damages (${damages.length})`);
+    // double attack
+    if (indices.length === 2 && indices[0] === indices[1]) {
+      return parseAttackerIndex(indices[0]);
     }
+    // cut-in
+    if (indices.length === 3 && indices[1] === -1 && indices[2] === -1) {
+      return parseAttackerIndex(indices[0]);
+    }
+    throw extendError(new Error('Unknown target indices format'), { indices });
+  };
 
-    return targets.reduce((result, { side, role, position }, index) => {
-      const attack = createAttack(side, role, position, damages[index]);
-      return attack.damage ? result.concat(attack) : result;
-    }, []);
+  Yasen.parseDamage = (damageArray) => {
+    return damageArray.reduce((result, damage) => (damage > 0 ? result + damage : result), 0);
+  };
+
+  Yasen.getTargetFactory = (playerRole, enemyRole) => {
+    const { Side, battle: { createTarget } } = KC3BattlePrediction;
+    const roles = {
+      [Side.PLAYER]: playerRole,
+      [Side.ENEMY]: enemyRole,
+    };
+
+    return ({ attacker, defender }) => ({
+      attacker: createTarget(attacker.side, roles[attacker.side], attacker.position),
+      defender: createTarget(defender.side, roles[defender.side], defender.position),
+    });
   };
 
   /*--------------------------------------------------------*/
   /* ---------------------[ EXPORTS ]---------------------- */
   /*--------------------------------------------------------*/
 
-  Object.assign(KC3BattlePrediction.battle.phases.yasen, {
-    // Public
-    parseYasen,
-    // Internal
-    parseTargets,
-    normalizeTargetJson,
-    convertToTarget,
-
-    parseDamages,
-    convertToDamage,
-
-    zipAttacks,
-  });
+  Object.assign(KC3BattlePrediction.battle.phases.yasen, Yasen);
 }());
 
 (function () {
@@ -1371,12 +1528,13 @@
 }());
 
 (function () {
-  const createAttack = (side, role, position, damage) => {
-    const { createTarget, normalizeDamage } = KC3BattlePrediction.battle;
+  const createAttack = (damage, defender, attacker) => {
+    const { normalizeDamage } = KC3BattlePrediction.battle;
 
     return Object.freeze({
-      target: createTarget(side, role, position),
       damage: normalizeDamage(damage),
+      defender,
+      attacker,
     });
   };
 
@@ -1407,15 +1565,17 @@
     };
   };
 
-  const update = (fleets, target, updateShip) => {
-    const { extendError } = KC3BattlePrediction;
-    const { isTargetInFleets, applyUpdate } = KC3BattlePrediction.fleets;
+  const simulateAttack = (fleets, { attacker, defender, damage }) => {
+    const { bind } = KC3BattlePrediction;
+    const { cloneFleets, updateShip, dealDamage, takeDamage } = KC3BattlePrediction.fleets;
 
-    if (!isTargetInFleets(target, fleets)) {
-      throw extendError(new Error('Bad target'), { target, fleets });
+    // NB: cloning is necessary to preserve function purity
+    let result = cloneFleets(fleets);
+    result = updateShip(defender, bind(takeDamage, damage), result);
+    if (attacker) {
+      result = updateShip(attacker, bind(dealDamage, damage), result);
     }
-
-    return applyUpdate(target, updateShip, fleets);
+    return result;
   };
 
   const formatFleets = (fleets) => {
@@ -1427,19 +1587,6 @@
       enemyMain: getFleetOutput(fleets.enemy.main),
       enemyEscort: getFleetOutput(fleets.enemy.escort),
     };
-  };
-
-  const isPlayerNoDamage = (initialFleets, resultFleets) => {
-    const { extendError, fleets: { isNotDamaged } } = KC3BattlePrediction;
-
-    const initialShips = initialFleets.playerMain.concat(initialFleets.playerEscort);
-    const resultShips = resultFleets.playerMain.concat(resultFleets.playerEscort);
-
-    if (initialShips.length !== resultShips.length) {
-      throw extendError(new Error('Mismatched initial and result fleets'), { initialFleets, resultFleets });
-    }
-
-    return resultShips.every((resultShip, index) => isNotDamaged(initialShips[index], resultShip));
   };
 
   /*--------------------------------------------------------*/
@@ -1459,14 +1606,17 @@
   const isTargetInFleets = ({ side, role, position }, fleets) =>
     fleets[side] && fleets[side][role] && fleets[side][role][position];
 
-  const applyUpdate = ({ side, role, position }, updateShip, fleets) => {
-    const { cloneFleets } = KC3BattlePrediction.fleets;
+  const updateShip = (target, update, fleets) => {
+    const { extendError, fleets: { isTargetInFleets } } = KC3BattlePrediction;
 
-    // NB: Cloning is necessary to preserve function purity
-    const result = cloneFleets(fleets);
-    result[side][role][position] = updateShip(fleets[side][role][position]);
+    if (!isTargetInFleets(target, fleets)) {
+      throw extendError(new Error('Bad target'), { target, fleets });
+    }
 
-    return result;
+    const { side, role, position } = target;
+    // Modifying the param is fine, since the fleets is cloned in the caller context
+    fleets[side][role][position] = update(fleets[side][role][position]);
+    return fleets;
   };
 
   const cloneFleets = fleets => JSON.parse(JSON.stringify(fleets));
@@ -1508,14 +1658,13 @@
   Object.assign(window.KC3BattlePrediction.fleets, {
     // Public
     createFleets,
-    update,
+    simulateAttack,
     formatFleets,
-    isPlayerNoDamage,
     // Internal
     convertToFleet,
 
     isTargetInFleets,
-    applyUpdate,
+    updateShip,
     cloneFleets,
 
     getFleetOutput,
@@ -1530,27 +1679,25 @@
   /* --------------------[ PUBLIC API ]-------------------- */
   /*--------------------------------------------------------*/
 
-  const createShip = (hp, maxHp) => (hp !== -1 ? { hp, maxHp } : EMPTY_SLOT);
+  const createShip = (hp, maxHp) => (hp !== -1 ? { hp, maxHp, damageDealt: 0 } : EMPTY_SLOT);
 
   const installDamecon = (damecon, ship) =>
     (ship !== EMPTY_SLOT ? Object.assign({}, ship, { damecon }) : ship);
 
-  const damageShip = (damage, ship) => {
-    const { dealDamage, tryDamecon } = KC3BattlePrediction.fleets;
+  const dealDamage = (damage, ship) =>
+    Object.assign({}, ship, { damageDealt: ship.damageDealt + damage });
 
-    const result = dealDamage(damage, ship);
+  const takeDamage = (damage, ship) => {
+    const { tryDamecon } = KC3BattlePrediction.fleets;
+
+    const result = Object.assign({}, ship, { hp: ship.hp - damage });
 
     return result.hp <= 0 ? tryDamecon(result) : result;
   };
 
-  // If damecon increases HP beyond initial value, it counts as no damage
-  const isNotDamaged = (initial, result) => initial.hp <= result.hp;
-
   /*--------------------------------------------------------*/
   /* --------------------[ INTERNALS ]--------------------- */
   /*--------------------------------------------------------*/
-
-  const dealDamage = (damage, ship) => Object.assign({}, ship, { hp: ship.hp - damage });
 
   const tryDamecon = (ship) => {
     const { Damecon } = KC3BattlePrediction;
@@ -1574,9 +1721,14 @@
   };
 
   const formatShip = (ship) => {
-    return ship !== EMPTY_SLOT
-      ? { hp: ship.hp, dameConConsumed: ship.dameConConsumed || false, sunk: ship.hp <= 0 }
-      : ship;
+    if (ship === EMPTY_SLOT) { return EMPTY_SLOT; }
+
+    return {
+      hp: ship.hp,
+      dameConConsumed: ship.dameConConsumed || false,
+      sunk: ship.hp <= 0,
+      damageDealt: ship.damageDealt,
+    };
   };
 
   /*--------------------------------------------------------*/
@@ -1587,10 +1739,9 @@
     // Public
     createShip,
     installDamecon,
-    damageShip,
-    isNotDamaged,
-    // Internals
     dealDamage,
+    takeDamage,
+    // Internals
     tryDamecon,
     formatShip,
   });

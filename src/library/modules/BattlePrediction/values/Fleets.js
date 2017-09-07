@@ -14,15 +14,17 @@
     };
   };
 
-  const update = (fleets, target, updateShip) => {
-    const { extendError } = KC3BattlePrediction;
-    const { isTargetInFleets, applyUpdate } = KC3BattlePrediction.fleets;
+  const simulateAttack = (fleets, { attacker, defender, damage }) => {
+    const { bind } = KC3BattlePrediction;
+    const { cloneFleets, updateShip, dealDamage, takeDamage } = KC3BattlePrediction.fleets;
 
-    if (!isTargetInFleets(target, fleets)) {
-      throw extendError(new Error('Bad target'), { target, fleets });
+    // NB: cloning is necessary to preserve function purity
+    let result = cloneFleets(fleets);
+    result = updateShip(defender, bind(takeDamage, damage), result);
+    if (attacker) {
+      result = updateShip(attacker, bind(dealDamage, damage), result);
     }
-
-    return applyUpdate(target, updateShip, fleets);
+    return result;
   };
 
   const formatFleets = (fleets) => {
@@ -34,19 +36,6 @@
       enemyMain: getFleetOutput(fleets.enemy.main),
       enemyEscort: getFleetOutput(fleets.enemy.escort),
     };
-  };
-
-  const isPlayerNoDamage = (initialFleets, resultFleets) => {
-    const { extendError, fleets: { isNotDamaged } } = KC3BattlePrediction;
-
-    const initialShips = initialFleets.playerMain.concat(initialFleets.playerEscort);
-    const resultShips = resultFleets.playerMain.concat(resultFleets.playerEscort);
-
-    if (initialShips.length !== resultShips.length) {
-      throw extendError(new Error('Mismatched initial and result fleets'), { initialFleets, resultFleets });
-    }
-
-    return resultShips.every((resultShip, index) => isNotDamaged(initialShips[index], resultShip));
   };
 
   /*--------------------------------------------------------*/
@@ -66,14 +55,17 @@
   const isTargetInFleets = ({ side, role, position }, fleets) =>
     fleets[side] && fleets[side][role] && fleets[side][role][position];
 
-  const applyUpdate = ({ side, role, position }, updateShip, fleets) => {
-    const { cloneFleets } = KC3BattlePrediction.fleets;
+  const updateShip = (target, update, fleets) => {
+    const { extendError, fleets: { isTargetInFleets } } = KC3BattlePrediction;
 
-    // NB: Cloning is necessary to preserve function purity
-    const result = cloneFleets(fleets);
-    result[side][role][position] = updateShip(fleets[side][role][position]);
+    if (!isTargetInFleets(target, fleets)) {
+      throw extendError(new Error('Bad target'), { target, fleets });
+    }
 
-    return result;
+    const { side, role, position } = target;
+    // Modifying the param is fine, since the fleets is cloned in the caller context
+    fleets[side][role][position] = update(fleets[side][role][position]);
+    return fleets;
   };
 
   const cloneFleets = fleets => JSON.parse(JSON.stringify(fleets));
@@ -115,14 +107,13 @@
   Object.assign(window.KC3BattlePrediction.fleets, {
     // Public
     createFleets,
-    update,
+    simulateAttack,
     formatFleets,
-    isPlayerNoDamage,
     // Internal
     convertToFleet,
 
     isTargetInFleets,
-    applyUpdate,
+    updateShip,
     cloneFleets,
 
     getFleetOutput,
