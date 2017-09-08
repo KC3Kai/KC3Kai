@@ -59,12 +59,13 @@ KC3改 Equipment Object
 	 * @param {string} - attack type identifier, allow values for now:
 	 *                   `fire`, `torpedo`, `yasen`, `asw`, `support`
 	 * @return {number} computed bonus = modifier * sqrt(stars)
-	 * @see AAStatImprovementBonus for Anti-Air improvement bonus
+	 * @see losStatImprovementBonus for LoS improvement bonus
+	 * @see aaStatImprovementBonus for Anti-Air improvement bonus
 	 * @see http://kancolle.wikia.com/wiki/Improvements
 	 * @see http://wikiwiki.jp/kancolle/?%B2%FE%BD%A4%B9%A9%BE%B3#ic9d577c
 	 */
 	KC3Gear.prototype.attackPowerImprovementBonus = function(attackType = "fire") {
-		if(this.itemId === 0) { return 0; }
+		if(!this.itemId || !this.masterId) { return 0; }
 		const type2 = this.master().api_type[2];
 		const stars = this.stars || 0;
 		// No improvement bonus is default
@@ -114,38 +115,49 @@ KC3改 Equipment Object
 		return modifier * Math.sqrt(stars);
 	};
 
-	KC3Gear.prototype.AAStatImprovementBonus = function() {
-		if (this.itemId !== 0) {
-			var hasBeenImproved = typeof(this.stars) !== "undefined" && this.stars > 0;
-			// reference:
-			// http://wikiwiki.jp/kancolle/?%B2%FE%BD%A4%B9%A9%BE%B3#ic9d577c
-			// for carrier-based fighters,
-			// every star grants +0.2 AA stat, which is added to the AA stat bonus
-			// of the gear.
-			if (this.master().api_type[2] === 6 && // is carrier-based fighter
-				hasBeenImproved) {
-				return 0.2 * this.stars;
-			}
-			// seaplane fighters are improvable now, 0.192 < AA bonus < 0.2014
-			// refs: https://twitter.com/syoukuretin/status/843271212377690112
-			//       https://twitter.com/DarkQuetzal/status/842686753815191556
-			// seaplane bombers are improvable now, but no AA bonus found yet (found DV & LoS bonus)
-			if (this.master().api_type[3] === 43 // is seaplane fighter but not bomber/recon
-				&& hasBeenImproved) {
-				return 0.2 * this.stars;
-			}
-			// reference:
-			// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:951#32
-			// for fighter-bombers, every star grants +0.25 AA stat.
-			// there's no distinction between bomber and fighter-bomber from KCSAPI,
-			// so let's just say the rule applies to all bombers.
-			// (regular bombers cannot be improved anyway, for now...)
-			if (this.master().api_type[2] === 7 // is bomber
-				&& hasBeenImproved) {
-				return 0.25 * this.stars;
-			}
+	/**
+	 * Get improvement bonus of LoS stat.
+	 * LoS improvement applied to eLoS (Formula 33), air contact, etc.
+	 * @see http://wikiwiki.jp/kancolle/?%B2%FE%BD%A4%B9%A9%BE%B3#k9b5bd32
+	 */
+	KC3Gear.prototype.losStatImprovementBonus = function() {
+		if(!this.itemId || !this.masterId) { return 0; }
+		const type2 = this.master().api_type[2];
+		const stars = this.stars || 0;
+		let modifier = 0;
+		switch(type2) {
+			case 12: // Small radar
+				modifier = 1.25; break;
+			case 13: // Large radar
+				modifier = 1.4; break;
+			case 9: // Recon plane
+			case 10: // Seaplane recon
+				modifier = 1.2; break;
+			case 11: // Seaplane bomber
+				modifier = 1.15; break;
 		}
-		return 0;
+		return modifier * Math.sqrt(stars);
+	};
+
+	/**
+	 * Get improvement bonus of anti-air fighters.
+	 * @see http://wikiwiki.jp/kancolle/?%B2%FE%BD%A4%B9%A9%BE%B3#ic9d577c
+	 */
+	KC3Gear.prototype.aaStatImprovementBonus = function() {
+		if(!this.itemId || !this.masterId) { return 0; }
+		const type2 = this.master().api_type[2];
+		const stars = this.stars || 0;
+		let modifier = 0;
+		switch(type2) {
+			case 6: // carrier-based fighter
+				modifier = 0.2; break;
+			case 7: // fighter bomber (dive bomber with AA stat)
+				modifier = 0.25; break;
+			case 45: // seaplane fighter
+				// seaplane bomber no AA bonus found yet, but found DV & LoS bonus
+				modifier = 0.2; break;
+		}
+		return modifier * stars;
 	};
 
 	/* FIGHTER POWER: Proficiency Average
@@ -165,7 +177,7 @@ KC3改 Equipment Object
 				typeBonus = KC3Meta.airPowerTypeBonus(type2, aceLevel),
 				averageBonus = internalBonus + typeBonus;
 			var aaStat = this.master().api_tyku;
-			aaStat += this.AAStatImprovementBonus();
+			aaStat += this.aaStatImprovementBonus();
 			// Interceptor use evasion as interception stat against fighter
 			var intStat = KC3GearManager.interceptorsType3Ids.indexOf(type3) > -1 ?
 				this.master().api_houk : 0;
@@ -198,7 +210,7 @@ KC3改 Equipment Object
 				];
 			
 			var aaStat = this.master().api_tyku;
-			aaStat += this.AAStatImprovementBonus();
+			aaStat += this.aaStatImprovementBonus();
 			// Interceptor use evasion as interception stat against fighter
 			var intStat = KC3GearManager.interceptorsType3Ids.indexOf(type3) > -1 ?
 				this.master().api_houk : 0;
@@ -235,7 +247,7 @@ KC3改 Equipment Object
 				// Anti-Bomber is from hit accuracy
 				this.master().api_houm * 2 +
 				// Although no interceptor can be improved for now
-				this.AAStatImprovementBonus()
+				this.aaStatImprovementBonus()
 			) * Math.sqrt(capacity);
 			
 			// Add proficiency average bonus

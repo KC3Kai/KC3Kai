@@ -438,12 +438,31 @@ Contains summary information about a fleet and its 6 ships
 				return this.fighterPower();
 		}
 	};
-	
+
 	/**
-	 * @param airControlModifier - default is AS+: 1, known AS: 0.6. others unknown.
-	 * @return contact trigger rate % (already x100).
+	 * @param dispSeiku - from `api_disp_seiku`, default is 1 AS+.
+	 * @return air contact chance related info object.
+	 * @see contactTriggerRate
+	 * @see contactSelectionInfo
 	 */
-	KC3Fleet.prototype.contactTriggerRate = function(airControlModifier = 1){
+	KC3Fleet.prototype.contactChanceInfo = function(dispSeiku = 1){
+		const triggerRate = this.contactTriggerRate(dispSeiku);
+		const [selectionFailureRate, planeList] = this.contactSelectionInfo(dispSeiku);
+		const successRate = Math.min(triggerRate, 1.0) * (1.0 - selectionFailureRate);
+		return {
+			success: successRate,
+			trigger: triggerRate,
+			cancelled: selectionFailureRate,
+			planes: planeList
+		};
+	};
+
+	/**
+	 * @param dispSeiku - from `api_disp_seiku`, default is 1 AS+.
+	 * @return contact start chance at trigger phase.
+	 */
+	KC3Fleet.prototype.contactTriggerRate = function(dispSeiku = 1){
+		const airControlModifiers = [0, 1, 0.6, 0.55 /* guessed, unknown value */, 0];
 		var rate = 0;
 		this.shipsUnescaped().forEach(ship => {
 			rate += [0, 1, 2, 3].map(idx => {
@@ -452,24 +471,25 @@ Contains summary information about a fleet and its 6 ships
 					(0.04 * gear.master().api_saku * Math.sqrt(ship.slots[idx])) : 0;
 			}).reduce((acc, v) => acc + v, 0);
 		});
-		return rate * airControlModifier * 100;
+		return rate * (airControlModifiers[dispSeiku] || 0);
 	};
 
 	/**
-	 * @return contact failure rate % (already x100) at selection phase.
+	 * @return contact selection info tuple: [failure chance, contact plane list]
 	 * @see contactSelectionChanceTable
 	 */
-	KC3Fleet.prototype.contactSelectionFailureRate = function(airControlModifier){
-		const contactPlanes = this.contactSelectionChanceTable(airControlModifier);
-		return contactPlanes.map(p => p.rate).reduce((acc, v) => acc * (1 - v), 1) * 100;
+	KC3Fleet.prototype.contactSelectionInfo = function(dispSeiku){
+		const contactPlanes = this.contactSelectionChanceTable(dispSeiku);
+		return [contactPlanes.map(p => p.rate).reduce((acc, v) => acc * (1 - v), 1), contactPlanes];
 	};
 
 	/**
-	 * @param airControlModifier - default is AS+: 0.07, known AS: 0.06, AD: 0.055.
+	 * @param dispSeiku - from `api_disp_seiku`, default is 1 AS+.
 	 * @return contact selection table of every possible aircraft.
 	 * @see http://wikiwiki.jp/kancolle/?%B9%D2%B6%F5%C0%EF#s1d9a838
 	 */
-	KC3Fleet.prototype.contactSelectionChanceTable = function(airControlModifier = 0.07){
+	KC3Fleet.prototype.contactSelectionChanceTable = function(dispSeiku = 1){
+		const airControlModifiers = [0, 0.07, 0.06, 0.055, 0];
 		const contactPlaneList = [];
 		this.shipsUnescaped().forEach((ship, shipIdx) => {
 			ship.equipment((itemId, gearIdx, gear) => {
@@ -477,10 +497,15 @@ Contains summary information about a fleet and its 6 ships
 					const gearMaster = gear.master();
 					contactPlaneList.push({
 						itemId: itemId,
-						accurcy: gearMaster.api_houm,
+						masterId: gear.masterId,
+						icon: gearMaster.api_type[3],
+						stars: gear.stars || 0,
+						accurcy: gearMaster.api_houm || 0,
 						shipOrder: shipIdx,
-						// LoS improvement should be taken into account, but modifier unknown
-						rate: airControlModifier * gearMaster.api_saku
+						shipMasterId: ship.masterId,
+						// LoS improvement taken into account, but any other modifier unknown
+						rate: (gearMaster.api_saku + gear.losStatImprovementBonus())
+							* (airControlModifiers[dispSeiku] || 0)
 					});
 				}
 			});
@@ -489,6 +514,34 @@ Contains summary information about a fleet and its 6 ships
 			// Selection priority order by: accuracy desc, ship position asc
 			contactPlaneList.sort((a, b) => b.accurcy - a.accurcy || a.shipOrder - b.shipOrder);
 		}
+		return contactPlaneList;
+	};
+
+	/**
+	 * Night recon contact chance, under verifying, not usable.
+	 * @see http://wikiwiki.jp/kancolle/?%B6%E5%C8%AC%BC%B0%BF%E5%BE%E5%C4%E5%BB%A1%B5%A1%28%CC%EB%C4%E5%29
+	 */
+	KC3Fleet.prototype.nightContactSelectionChanceTable = function(){
+		const contactPlaneList = [];
+		this.shipsUnescaped().forEach((ship, shipIdx) => {
+			ship.equipment((itemId, gearIdx, gear) => {
+				if(gear.itemId && gear.masterId === 102) {
+					const gearMaster = gear.master();
+					contactPlaneList.push({
+						itemId: itemId,
+						masterId: gear.masterId,
+						icon: gearMaster.api_type[3],
+						stars: gear.stars || 0,
+						slotSize: ship.slots[gearIdx] || 0,
+						shipOrder: shipIdx,
+						shipMasterId: ship.masterId,
+						shipLevel: ship.level,
+						// no info about how slot size multiply, just know 0 will not trigger
+						rate: (Math.sqrt(50 * ship.level) - 3) * Math.sqrt(ship.slots[gearIdx] || 0) / 100
+					});
+				}
+			});
+		});
 		return contactPlaneList;
 	};
 
@@ -887,7 +940,7 @@ Contains summary information about a fleet and its 6 ships
 		// The weighting of the equipment sum part
 		// For now: 2-5(H,I):x1, 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
 		nodeDivaricatedFactor = nodeDivaricatedFactor || 1;
-		var multipliers = {
+		const multipliers = {
 			6: 0.6, // Carrier-Based Fighter
 			7: 0.6, // Carrier-Based Dive Bomber
 			8: 0.8, // Carrier-Based Torpedo Bomber
@@ -935,27 +988,9 @@ Contains summary information about a fleet and its 6 ships
 					var itemType = itemData.master().api_type[2];
 					var multiplier = multipliers[itemType];
 					if (multiplier) {
-						var equipment_bonus = Math.sqrt(itemData.stars);
-
-						if (12 === itemType) {
-							// Small Radar bonus
-							equipment_bonus *= 1.25;
-						} else if (13 === itemType) {
-							// Large Radar bonus
-							equipment_bonus *= 1.4;
-						} else if ([9, 10].indexOf(itemType) > -1) {
-							// Reconnaissance Plane/Seaplane bonus
-							equipment_bonus *= 1.2;
-						} else if (11 === itemType) {
-							// Seaplane bomber bonus
-							equipment_bonus *= 1.15;
-						} else {
-							// all other equipment with no bonus
-							equipment_bonus = 0;
-						}
-
 						// multiple * (raw equipment los + equipment bonus)
-						equipTotal += multiplier * (itemData.master().api_saku + equipment_bonus);
+						equipTotal += multiplier * 
+							(itemData.master().api_saku + itemData.losStatImprovementBonus());
 					}
 				}
 			}

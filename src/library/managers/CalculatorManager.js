@@ -62,6 +62,81 @@
     };
 
     /**
+     * Build contact chance rates tooltip text from 1 or more fleet(s).
+     * @param {Object} viewFleet - Fleet object currently being viewed, default 1st fleet.
+     * @param {Object} escortFleet - Fleet object of escort for Combined Fleet, default 2nd fleet.
+     * @param {boolean} isCombined - if current view is really Combined Fleet view, default false.
+     * @param {number} planeSelectionTopN - how many planes to be listed for selection phase.
+     * @return built html string.
+     * @see Fleet.contactChanceInfo
+     */
+    const buildFleetsContactChanceText = (
+            viewFleet = PlayerManager.fleets[0],
+            escortFleet = PlayerManager.fleets[1],
+            isCombined = false,
+            planeSelectionTopN = 5) => {
+        var mainFleet = viewFleet;
+        if(isCombined) { // force to 1st fleet if combined
+            mainFleet = viewFleet = PlayerManager.fleets[0];
+        }
+        const iconStyles = {
+            "width":"13px", "height":"13px",
+            "margin-top":"-3px", "margin-right":"2px"
+        };
+        let contact = viewFleet.contactChanceInfo();
+        if(isCombined && ConfigManager.air_combined) {
+            // combine contact info from two fleets
+            const main = contact;
+            const escort = escortFleet.contactChanceInfo();
+            // only trigger rate can be summed
+            const combined = {
+                trigger: main.trigger + escort.trigger,
+            };
+            // ship position + 6 for escort fleet
+            escort.planes.forEach(p => {p.shipOrder += 6;});
+            combined.planes = main.planes.concat(escort.planes);
+            // resort based on both fleets
+            combined.planes.sort((a, b) => b.accurcy - a.accurcy || a.shipOrder - b.shipOrder);
+            // recompute failure rate and success rate
+            combined.cancelled = combined.planes.map(p => p.rate).reduce((acc, v) => acc * (1 - v), 1);
+            combined.success = Math.min(combined.trigger, 1.0) * (1.0 - combined.cancelled);
+            contact = combined;
+        }
+        let planeListHtml = "";
+        if(contact.planes.length) {
+            const topN = Math.min(contact.planes.length, planeSelectionTopN);
+            for(let idx = 0; idx < topN; idx++) {
+                const p = contact.planes[idx];
+                planeListHtml += "#{0}\u2003"
+                    .format(1 + idx);
+                planeListHtml += $("<img />").attr("src", KC3Meta.shipIcon(p.shipMasterId))
+                    .css(iconStyles).prop("outerHTML");
+                planeListHtml += $("<img />").attr("src", "/assets/img/items/" + p.icon + ".png")
+                    .css(iconStyles).prop("outerHTML");
+                planeListHtml += '<span style="color:#45a9a5">\u2605</span>{0}\u2003'
+                    .format(p.stars);
+                planeListHtml += "{0}%"
+                    .format(Math.qckInt("floor", p.rate * 100, 1));
+                if(idx < topN - 1) planeListHtml += "\n";
+            }
+            if(contact.planes.length > planeSelectionTopN) planeListHtml += "\n...";
+            planeListHtml = KC3Meta.term("PanelAirContactPlanes")
+                .format(planeSelectionTopN, planeListHtml);
+        }
+        let text = KC3Meta.term("PanelAirContactTip").format(
+            KC3Meta.airbattle(1)[2] || "",
+            Math.qckInt("floor", contact.success * 100, 1),
+            Math.qckInt("floor", contact.trigger * 100, 1),
+            Math.qckInt("floor", contact.cancelled * 100, 1),
+            planeListHtml
+        );
+        return $("<p></p>")
+            .css("font-size", "11px")
+            .html(text)
+            .prop("outerHTML");
+    };
+
+    /**
      * @return total resupply cost of all land bases.
      * @see PlayerManager.bases
      * @see LandBase.calcResupplyCost
@@ -209,6 +284,7 @@
     // Export public API
     window.KC3Calc = Object.assign(publicApi, {
         getFleetsFighterPowerText,
+        buildFleetsContactChanceText,
         
         getLandBasesResupplyCost,
         getLandBasesSortieCost,

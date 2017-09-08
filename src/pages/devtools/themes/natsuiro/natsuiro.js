@@ -1389,8 +1389,6 @@
 					lv: MainFleet.totalLevel() + EscortFleet.totalLevel(),
 					elos: Math.qckInt("floor", MainFleet.eLoS()+EscortFleet.eLoS(), 1),
 					air: KC3Calc.getFleetsFighterPowerText(MainFleet, EscortFleet, true),
-					contact: [Math.floor(MainFleet.contactTriggerRate()),
-							Math.floor(MainFleet.contactSelectionFailureRate())],
 					antiAir: Math.floor(AntiAir.fleetCombinedAdjustedAntiAir(
 						MainFleet, EscortFleet,
 						AntiAir.getFormationModifiers(ConfigManager.aaFormation))),
@@ -1465,8 +1463,6 @@
 					baseExp: CurrentFleet.estimatePvpBaseExp(),
 					elos: Math.qckInt("floor", CurrentFleet.eLoS(), 1),
 					air: KC3Calc.getFleetsFighterPowerText(CurrentFleet),
-					contact: [Math.floor(CurrentFleet.contactTriggerRate()),
-							Math.floor(CurrentFleet.contactSelectionFailureRate())],
 					antiAir: CurrentFleet.adjustedAntiAir(ConfigManager.aaFormation),
 					speed: CurrentFleet.speed(),
 					docking: MainRepairs.docking,
@@ -1507,11 +1503,13 @@
 			$(".summary-eqlos .summary_icon img").attr("src",
 				"../../../../assets/img/stats/los" + ConfigManager.elosFormula + ".png");
 			$(".summary-eqlos .summary_text").text( FleetSummary.elos );
-			$(".summary-airfp .summary_sub").toggle( selectedFleet === 5 && ConfigManager.air_combined );
+			const isCombinedAirView = selectedFleet === 5 && ConfigManager.air_combined;
+			$(".summary-airfp .summary_sub").toggle( isCombinedAirView );
 			$(".summary-airfp .summary_text").text( FleetSummary.air )
-				.attr("title", KC3Meta.term("PanelAirContactTip")
-					.format(KC3Meta.airbattle(1)[2] || "", ...FleetSummary.contact))
-				.lazyInitTooltip();
+				.attr("title", KC3Calc.buildFleetsContactChanceText(
+					PlayerManager.fleets[selectedFleet-1], undefined, selectedFleet === 5,
+					isCombinedAirView ? 8 : 5
+				)).lazyInitTooltip();
 			$(".summary-antiair .summary_icon img")
 				.attr("src", KC3Meta.formationIcon(ConfigManager.aaFormation));
 			$(".summary-antiair .summary_text").text( FleetSummary.antiAir )
