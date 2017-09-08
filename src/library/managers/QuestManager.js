@@ -445,7 +445,7 @@ Uses KC3Quest objects to play around with
 				"663": // F55 Have 18000 steel (scrapping not counted here)
 					() => PlayerManager.hq.lastMaterial[2] >= 18000,
 				"854": // Bq2 Sortie 1st fleet (sortie maps and battle ranks not counted here)
-					() => KC3SortieManager.onSortie && KC3SortieManager.fleetSent == 1,
+					() => KC3SortieManager.isOnSortie() && KC3SortieManager.fleetSent == 1,
 				"861": // Bq3 Sortie 2 of BBV or AO
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];

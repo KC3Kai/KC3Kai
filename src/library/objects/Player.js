@@ -1,7 +1,7 @@
 /* Player.js
 KC3改 Player Class
 
-Instantiatable class to represent one player
+Instantiate-able class to represent one player
 */
 (function(){
 	"use strict";
@@ -23,6 +23,11 @@ Instantiatable class to represent one player
 			this.lastMaterial = null;
 			this.lastPortTime = null;
 			this.lastSortie   = null;
+			this.fleetSlots = 1;
+			this.repairSlots = 2;
+			this.buildSlots = 2;
+			this.shipSlots = 100;
+			this.gearSlots = 500;
 		}
 	};
 	
@@ -37,6 +42,12 @@ Instantiatable class to represent one player
 		
 		this.desc = data.desc;
 		this.rank = KC3Meta.rank( data.rank );
+		
+		this.fleetSlots = data.fleetCount;
+		this.repairSlots = data.repairSlots;
+		this.buildSlots = data.buildSlots;
+		this.shipSlots = data.maxShipSlots;
+		this.gearSlots = 3 + data.maxGearSlots;
 		
 		this.updateLevel(data.level, data.exp);
 		this.checkRankPoints();
@@ -174,6 +185,11 @@ Instantiatable class to represent one player
 			this.lastMaterial = playerInfo.lastMaterial || null;
 			this.lastPortTime = playerInfo.lastPortTime || null;
 			this.lastSortie   = playerInfo.lastSortie || null;
+			this.fleetSlots = playerInfo.fleetSlots || 1;
+			this.repairSlots = playerInfo.repairSlots || 2;
+			this.buildSlots = playerInfo.buildSlots || 2;
+			this.shipSlots = playerInfo.shipSlots || 100;
+			this.gearSlots = playerInfo.gearSlots || 500;
 			return true;
 		}
 		return false;

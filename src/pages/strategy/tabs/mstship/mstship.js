@@ -734,7 +734,7 @@
 							} else if(stat[0]=="if"){
 								// Compute fighter air power based on known slots
 								$(".ship_stat_min", statBox).text(
-									KC3SortieManager.enemyFighterPower([abyssMaster.api_id])[0] || 0
+									KC3Calc.enemyFighterPower([abyssMaster.api_id])[0] || 0
 								);
 								$(".ship_stat_max", statBox).hide();
 							} else {

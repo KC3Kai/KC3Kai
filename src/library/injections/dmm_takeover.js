@@ -384,13 +384,15 @@
 					cancelHourlyLine();
 					const nextHour = new Date().shiftHour(1).resetTime(["Minutes", "Seconds", "Milliseconds"]).getTime();
 					const diffMillis = nextHour - Date.now();
-					// Do not book on unexpected diff time: passed or >10 minutes
+					// Do not book on unexpected diff time: passed or > 10 minutes
 					if(diffMillis <= 0 || diffMillis > 10 * 60000) {
 						showSubtitle(text, shipId);
 					} else {
 						self.subtitleHourlyShip = shipId;
 						self.subtitleHourlyTimer = setTimeout(function(){
-							if(self.subtitleHourlyShip == shipId){
+							if(self.subtitleHourlyShip == shipId
+								// Will not show if Chrome delays timer execution > 3 seconds
+								&& Math.abs(Date.now() - nextHour) < 3000){
 								hideSubtitle();
 								showSubtitle(text, shipId);
 							}

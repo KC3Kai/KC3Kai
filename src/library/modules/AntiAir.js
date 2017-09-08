@@ -152,6 +152,8 @@ AntiAir: anti-air related calculations
 		].indexOf( mst.api_id ) !== -1;
 	}
 
+	var isAAGunNotCD = predAllOf(isAAGun, predNot(isCDMG));
+
 	// for equipments the coefficient is different for
 	// calculating adjusted ship AA stat and fleet AA stat,
 	// so let's use the following naming convention:
@@ -385,6 +387,8 @@ AntiAir: anti-air related calculations
 		kinuK2Icon = 487,
 		yuraK2Icon = 488,
 		fumizukiK2Icon = 548,
+		uit25Icon = 539,
+		i504Icon = 530,
 		haMountIcon = 16,
 		radarIcon = 11,
 		aaFdIcon = 30,
@@ -394,7 +398,8 @@ AntiAir: anti-air related calculations
 		// Special combined icons for Build-in HA / CDMG
 		biHaMountIcon = "16+30",    // HA plus AAFD
 		cdmgIcon = "15+15",         // AAGun double
-		haMountNbifdIcon = "16-30"; // HA without AAFD
+		haMountNbifdIcon = "16-30", // HA without AAFD
+		aaGunNotCdIcon = "15-15";   // Non-CD AA Machine Gun
 
 	var isMayaK2 = masterIdEq( mayaK2Icon );
 	var isIsuzuK2 = masterIdEq( isuzuK2Icon );
@@ -403,6 +408,8 @@ AntiAir: anti-air related calculations
 	var isKinuK2 = masterIdEq( kinuK2Icon );
 	var isYuraK2 = masterIdEq( yuraK2Icon );
 	var isFumizukiK2 = masterIdEq( fumizukiK2Icon );
+	var isUit25 = masterIdEq( uit25Icon );
+	var isI504 = masterIdEq( i504Icon );
 
 	// turns a "shipObj" into the list of her equipments
 	// for its parameter function "pred"
@@ -676,6 +683,17 @@ AntiAir: anti-air related calculations
 		predAllOf(isFumizukiK2),
 		withEquipmentMsts(
 			hasSome( isCDMG )
+		)
+	);
+
+	// UIT-25 / I-504
+	// https://docs.google.com/spreadsheets/d/1ljddcPvpEioGVU5yvd5GtPU7afRKPSnzFDEIBbFohh8
+	declareAACI(
+		23, 1, 1.05,
+		[uit25Icon, aaGunNotCdIcon],
+		predAnyOf(isUit25, isI504),
+		withEquipmentMsts(
+			hasSome( isAAGunNotCD )
 		)
 	);
 
