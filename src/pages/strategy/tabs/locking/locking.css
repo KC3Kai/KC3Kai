@@ -252,8 +252,13 @@
     justify-content: center;
 }
 
-.tab_locking .ship_list .ship_item .ship_sally {
+.tab_locking .ship_list .ship_item .ship_sally.lock_plan,
+.tab_locking .ship_list .ship_item .ship_sally:not([class*="lock_mode"]){
     cursor: pointer;
+}
+
+.tab_locking .ship_header .ship_item .ship_sally{
+    font-weight: 400;
 }
 
 .tab_locking .ship_header .ship_lv,
