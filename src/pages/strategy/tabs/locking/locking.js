@@ -58,7 +58,9 @@
             });
             $(".ship_list").on("click",".ship_item .ship_sally",(e)=>{
                 const ship = this.getShipById($(e.currentTarget).closest(".ship_item").data("ship_id"));
-                this.switchPlannedLock(ship);
+                if (ship.sally === 0) {
+                    this.switchPlannedLock(ship);
+                }
             });
             $(".clearAllPlans", this.tab).on("click", this.clearAllPlannedLocks.bind(this));
         }
