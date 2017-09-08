@@ -107,15 +107,15 @@
             $(".ship_filter_speed", this.tab).empty();
             ["All","Slow","Fast"].map((speed,i)=>{
                 let cElm = $(".factory .ship_filter_radio", this.tab).clone().appendTo(".tab_locking .filters .ship_filter_speed");
-                $("input[type='radio']",cElm).val(speed).attr("name","filter_speed").attr("id","filter_speed_"+speed);
-                $("label",cElm).text(speed).attr("for","filter_speed_"+speed);
+                $("input[type='radio']",cElm).val(i).attr("name","filter_speed").attr("id","filter_speed_"+i);
+                $("label",cElm).text(speed).attr("for","filter_speed_"+i);
                 if(i===0) $("input[type='radio']",cElm)[0].checked=true;
             });
 
-            ["All","With","Without"].map((val,i)=>{
+            ["-","Capable","Incapable"].map((val,i)=>{
                 let cElm = $(".factory .ship_filter_radio", this.tab).clone().appendTo(".tab_locking .filters .ship_filter_daihatsu");
-                $("input[type='radio']",cElm).val(val).attr("name","filter_daihatsu").attr("id","filter_daihatsu_"+val);
-                $("label",cElm).text(val).attr("for","filter_daihatsu_"+val);
+                $("input[type='radio']",cElm).val(i).attr("name","filter_daihatsu").attr("id","filter_daihatsu_"+i);
+                $("label",cElm).text(val).attr("for","filter_daihatsu_"+i);
                 if(i===0) $("input[type='radio']",cElm)[0].checked=true;
             });
 
@@ -253,34 +253,23 @@
 
         equipImg(cElm, equipNum, equipSlot, gearId){
             const element = $(".ship_equip_" + equipNum, cElm);
-            if(gearId > 0){
-                var gear = KC3GearManager.get(gearId);
-                if(gear.itemId<=0){ element.hide(); return; }
+            $("img",element).hide();
+            $("span",element).each(function(i,x){
+                if(equipSlot > 0)
+                    $(x).text(equipSlot);
+                else if(equipSlot === -2)
+                // for ex slot opened, but not equipped
+                    $(x).addClass("empty");
+                else
+                    $(x).css('visibility','hidden');
+            });
 
-                $("img",element)
-                    .attr("src", "../../assets/img/items/" + gear.master().api_type[3] + ".png")
-                    .attr("title", gear.htmlTooltip(equipSlot))
-                    .attr("alt", gear.master().api_id)
-                    .show();
-                $("span",element).css('visibility','hidden');
-            } else {
-                $("img",element).hide();
-                $("span",element).each(function(i,x){
-                    if(equipSlot > 0)
-                        $(x).text(equipSlot);
-                    else if(equipSlot === -2)
-                    // for ex slot opened, but not equipped
-                        $(x).addClass("empty");
-                    else
-                        $(x).css('visibility','hidden');
-                });
-            }
         }
 
         updateFilters(){
-            this.filterSettings ={
-                Speed : ["All","Slow","Fast"].indexOf($("input[name='filter_speed']:checked", this.tab).val()),
-                Daihatsu : ["All","With","Without"].indexOf($("input[name='filter_daihatsu']:checked", this.tab).val()),
+            this.filterValues ={
+                Speed : Number($("input[name='filter_speed']:checked", this.tab).val()),
+                Daihatsu : Number($("input[name='filter_daihatsu']:checked", this.tab).val()),
                 Types : $(".filters .ship_types input[type='checkbox']:checked", this.tab).toArray().map((el)=>Number($(el).data("typeId")))
             };
         }
@@ -288,23 +277,23 @@
         prepareFilters(){
             this.defineSimpleFilter("speed", [], 0,
                 (index, ship) => {
-                    return (this.filterSettings.Speed === 0)
-                        || (this.filterSettings.Speed === 1 && ship.speed<10)
-                        || (this.filterSettings.Speed === 2 && ship.speed>=10);
+                    return (this.filterValues.Speed === 0)
+                        || (this.filterValues.Speed === 1 && ship.speed<10)
+                        || (this.filterValues.Speed === 2 && ship.speed>=10);
                 }
             );
             this.defineSimpleFilter("daihatsu", [], 0,
                 (index, ship) => {
-                    return (this.filterSettings.Daihatsu === 0)
-                        || (this.filterSettings.Daihatsu === 1 && ship.canEquipDaihatsu)
-                        || (this.filterSettings.Daihatsu === 2 && !ship.canEquipDaihatsu);
+                    return (this.filterValues.Daihatsu === 0)
+                        || (this.filterValues.Daihatsu === 1 && ship.canEquipDaihatsu)
+                        || (this.filterValues.Daihatsu === 2 && !ship.canEquipDaihatsu);
                 }
             );
 
             this.defineSimpleFilter("ship_type", [], 0,
                 (index, ship) => {
-                    return (this.filterSettings.Types.length === 0)
-                        || (this.filterSettings.Types.indexOf(ship.stype) !== -1);
+                    return (this.filterValues.Types.length === 0)
+                        || (this.filterValues.Types.indexOf(ship.stype) !== -1);
                 }
             );
         }
