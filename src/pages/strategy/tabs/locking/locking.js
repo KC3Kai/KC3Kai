@@ -166,10 +166,12 @@
                     .addClass("lock_mode_" + ship.sally);
             } else {
                 const icon = $(".ship_icon", shipRow);
-                icon.draggable({
-                    helper: ()=>icon.clone().addClass("ship_icon_dragged").appendTo(".planner_area"),
+                shipRow.draggable({
+                    helper: () => icon.clone().addClass("ship_icon_dragged").appendTo(".planner_area"),
                     revert: "invalid",
-                    containment: $(".planner_area")
+                    containment: $(".planner_area"),
+                    cursor: "pointer",
+                    cursorAt: { left: 18, top: 18 }
                 });
 
                 if(ship.lockPlan !== undefined){
@@ -374,10 +376,10 @@
 
         setDroppable() {
             $(".drop_area").droppable({
-                accept: ".ship_icon",
+                accept: ".ship_item",
                 addClasses: false,
                 drop: (event, ui) => {
-                    const ship = this.getShipById(ui.draggable.closest(".ship_item").data("ship_id"));
+                    const ship = this.getShipById(ui.draggable.data("ship_id"));
                     const boxIndex = $(event.target).data("boxid");
                     this.switchPlannedLock(ship, boxIndex);
                 }
