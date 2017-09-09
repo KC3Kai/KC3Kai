@@ -40,10 +40,10 @@
             
             this.shipListDiv = $(".ship_list", this.tab);
             this.shipListDiv.on("preShow", () => {
-                $(".filters input").each((_, elem) => elem.disabled = true);
+                $(".filters input").each((_, elem) =>{ elem.disabled = true; });
             });
             this.shipListDiv.on("postShow", ()=> {
-                $(".filters input").each((_, elem) => elem.disabled = false);
+                $(".filters input").each((_, elem) =>{ elem.disabled = false; });
                 this.adjustHeight();
             });
             this.shipRowTemplateDiv = $(".factory .ship_item", this.tab);
