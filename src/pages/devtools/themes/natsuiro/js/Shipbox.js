@@ -363,7 +363,7 @@ KC3改 Ship Box for Natsuiro theme
 					"../../../../assets/img/items/"+thisGear.master().api_type[3]+".png");
 				$(".ship_gear_"+(slot+1), this.element).addClass("equipped");
 				$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element)
-					.attr("title", thisGear.htmlTooltip(this.shipData.master().api_maxeq[slot]))
+					.attr("titlealt", thisGear.htmlTooltip(this.shipData.master().api_maxeq[slot]))
 					.lazyInitTooltip()
 					.data("masterId", thisGear.masterId)
 					.on("dblclick", function(e){

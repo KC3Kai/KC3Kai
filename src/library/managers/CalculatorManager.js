@@ -113,7 +113,7 @@
                     .css(iconStyles).prop("outerHTML");
                 planeListHtml += $("<img />").attr("src", "/assets/img/items/" + p.icon + ".png")
                     .css(iconStyles).prop("outerHTML");
-                planeListHtml += '<span style="color:#45a9a5">\u2605</span>{0}\u2003'
+                planeListHtml += '<span style="color:#45a9a5">\u2605{0}</span>\u2003'
                     .format(p.stars);
                 planeListHtml += "{0}%"
                     .format(Math.qckInt("floor", p.rate * 100, 1));
@@ -127,7 +127,7 @@
             KC3Meta.airbattle(1)[2] || "",
             Math.qckInt("floor", contact.success * 100, 1),
             Math.qckInt("floor", contact.trigger * 100, 1),
-            Math.qckInt("floor", contact.cancelled * 100, 1),
+            Math.qckInt("ceil", contact.cancelled * 100, 1),
             planeListHtml
         );
         return $("<p></p>")
