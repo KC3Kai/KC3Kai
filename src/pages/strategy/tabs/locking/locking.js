@@ -236,7 +236,7 @@
 
             // Speed
             $(".ship_filter_speed", this.tab).empty();
-            ["All", "Slow", "Fast"].forEach((speed, i) => {
+            ["All", "Slow", "Fast+"].forEach((speed, i) => {
                 const elm = $(".factory .ship_filter_radio", this.tab).clone()
                     .appendTo(".tab_locking .filters .ship_filter_speed");
                 $("input[type='radio']", elm).val(i).attr("name", "filter_speed")
@@ -246,7 +246,7 @@
             });
 
             // Daihatsu
-            ["-", "Capable", "Incapable"].forEach((val, i) => {
+            ["---", "Capable", "Incapable"].forEach((val, i) => {
                 const elm = $(".factory .ship_filter_radio", this.tab).clone()
                     .appendTo(".tab_locking .filters .ship_filter_daihatsu");
                 $("input[type='radio']", elm).val(i).attr("name", "filter_daihatsu")
@@ -255,8 +255,14 @@
                 if(i === 0) $("input[type='radio']", elm)[0].checked = true;
             });
 
+            // Hide tag locked (not heart locked)
+            let elm = $(".factory .ship_filter_checkbox", this.tab).clone()
+                .appendTo(".tab_locking .filters .ship_filter_taglocked");
+            $("input[type='checkbox']", elm).attr("id", "taglocked");
+            $(".filter_name label", elm).attr("for", "taglocked").text("Locked");
+
             // Equip stats
-            const elm = $(".factory .ship_filter_checkbox", this.tab).clone()
+            elm = $(".factory .ship_filter_checkbox", this.tab).clone()
                 .appendTo(".tab_locking .filters .ship_filter_equipstats");
             $("input[type='checkbox']", elm).attr("id", "equipstats");
             $(".filter_name label", elm).attr("for", "equipstats").text("Stats");
@@ -273,7 +279,10 @@
             this.filterValues = {
                 speed : Number($("input[name='filter_speed']:checked", this.tab).val()),
                 daihatsu : Number($("input[name='filter_daihatsu']:checked", this.tab).val()),
-                equipStats : $(".filters .ship_filter_checkbox input[type='checkbox']", this.tab).prop("checked"),
+                tagLocked : $(".filters .ship_filter_taglocked input[type='checkbox']", this.tab)
+                    .prop("checked"),
+                equipStats : $(".filters .ship_filter_equipstats input[type='checkbox']", this.tab)
+                    .prop("checked"),
                 stypes : $(".filters .ship_types input[type='checkbox']:checked", this.tab)
                     .toArray().map( el => Number($(el).data("typeId")) )
             };
@@ -294,8 +303,14 @@
                         || (this.filterValues.daihatsu === 2 && !ship.canEquipDaihatsu);
                 }
             );
+            this.defineSimpleFilter("tagLocked", [], 0,
+                (index, ship) => {
+                    return (!this.filterValues.tagLocked)
+                        || (this.filterValues.tagLocked && !ship.sally);
+                }
+            );
 
-            this.defineSimpleFilter("shiptype", [], 0,
+            this.defineSimpleFilter("shipType", [], 0,
                 (index, ship) => {
                     return (this.filterValues.stypes.length === 0)
                         || (this.filterValues.stypes.indexOf(ship.stype) !== -1);
