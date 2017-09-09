@@ -746,7 +746,8 @@ button, input, select, textarea {
 .tab_ships .massSelect dl{
 	width: 215px !important;
 }
-.tab_ships .ship_header .ship_stat img {
+.tab_ships .ship_header .ship_stat img,
+.ship_list .ship_header .ship_stat img{
 	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
@@ -778,7 +779,8 @@ button, input, select, textarea {
 .tab_ships .ship_list {
 	margin:0px 0px 5px 0px !important;
 }
-.tab_ships .ship_item .ship_field.sorted {
+.tab_ships .ship_item .ship_field.sorted,
+.ship_header .ship_item .ship_field.sorted{
 	background:#303030;
 }
 .tab_ships .ship_item.odd .ship_field {
