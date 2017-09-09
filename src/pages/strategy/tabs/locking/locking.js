@@ -1,68 +1,67 @@
 (function(){
-	"use strict";
+    "use strict";
 
-	class KC3LockingDefinition extends KC3ShipListGrid{
+    class KC3LockingDefinition extends KC3ShipListGrid{
         constructor() {
             super("locking");
-            this.lock_limit=5;
+            this.lock_limit = 5;
         }
 
-		/* INIT
-		 Prepares initial static data needed.
-		 ---------------------------------*/
+        /* INIT
+        Prepares initial static data needed.
+        ---------------------------------*/
         init() {
             this.defineSorters();
             this.showListRowCallback = this.showShipLockingRow;
         }
 
-		/* RELOAD
-		 Loads latest player or game data if needed.
-		 ---------------------------------*/
+        /* RELOAD
+        Loads latest player or game data if needed.
+        ---------------------------------*/
         reload() {
             KC3ShipManager.load();
             KC3GearManager.load();
-            this.addLockBoxes();
-            $(".map_area, .ships_area", $(".lock_modes")).empty();
-            this.prepareFilters();
             this.loadShipLockPlan();
+            this.prepareFilters();
             this.prepareShipList(true, this.mapShipLockingStatus);
-            this.fillLockBoxes();
-            this.setDroppable();
         }
 
-		/* EXECUTE
-		 Places data onto the interface from scratch.
-		 ---------------------------------*/
+        /* EXECUTE
+        Places data onto the interface from scratch.
+        ---------------------------------*/
         execute() {
-            console.log("execute");
-            // Get latest data even clicking on tab
-            this.reload();
+            this.addLockBoxes();
+            $(".map_area, .ships_area", $(".lock_modes")).empty();
+            this.fillLockBoxes();
+            this.setDroppable();
+            
             this.tab = $(".tab_locking");
+            $(".clearAllPlans", this.tab).on("click", this.clearAllPlannedLocks.bind(this));
+            
             this.shipListDiv = $(".ship_list", this.tab);
-            this.shipListDiv.on("postShow",()=>{
-                $(".filters input").map((n,i)=>{i.disabled=false;});
-                this.adjustHeight();
+            this.shipListDiv.on("preShow", () => {
+                $(".filters input").each((_, elem) => elem.disabled = true);
             });
-            this.shipListDiv.on("preShow",()=>{
-                $(".filters input").map((n,i)=>i.disabled=true);
+            this.shipListDiv.on("postShow", ()=> {
+                $(".filters input").each((_, elem) => elem.disabled = false);
+                this.adjustHeight();
             });
             this.shipRowTemplateDiv = $(".factory .ship_item", this.tab);
             this.addFilterUI();
             this.showListGrid();
-            this.registerShipListHeaderEvent(
-                $(".ship_header .ship_field.hover", this.tab)
-            );
-            $(".ship_header .ship_field.hover", this.tab).on("click",(e)=>{
+            this.shipListHeaderDiv = $(".ship_header .ship_field.hover", this.tab);
+            this.registerShipListHeaderEvent(this.shipListHeaderDiv);
+            this.shipListHeaderDiv.on("click", (e) => {
                 $(".ship_header .ship_field.hover.sorted").removeClass("sorted");
                 $(e.currentTarget).addClass("sorted");
             });
-            $(".ship_list").on("click",".ship_item .ship_sally",(e)=>{
-                const ship = this.getShipById($(e.currentTarget).closest(".ship_item").data("ship_id"));
+            this.shipListDiv.on("click",".ship_item .ship_sally", (e) => {
+                const ship = this.getShipById($(e.currentTarget)
+                    .closest(".ship_item").data("ship_id"));
                 if (ship.sally === 0) {
                     this.switchPlannedLock(ship);
                 }
             });
-            $(".clearAllPlans", this.tab).on("click", this.clearAllPlannedLocks.bind(this));
         }
 
         addLockBoxes(){
@@ -75,44 +74,44 @@
 
         clearAllPlannedLocks(){
             localStorage.removeItem("lock_plan");
-            $(".ships_area .plannedlock",this.tab).remove();
-            this.shipList.map((ship)=>{
+            $(".ships_area .plannedlock", this.tab).remove();
+            this.shipList.forEach(ship => {
                 $(".ship_sally", ship.row).removeClass("lock_mode_" + (ship.lock_plan+1));
                 delete ship.lock_plan;
             });
+            $(".ship_sally", this.shipListDiv).removeClass("lock_plan");
             this.resetShipLockPlan();
             this.adjustHeight();
         }
 
         adjustHeight(){
             $(".ship_list, .filters", this.tab)
-                .css("height","calc( 100vh - " + $(".ship_list",this.tab).offset().top + "px - 5px )");
+                .css("height","calc( 100vh - " + $(".ship_list", this.tab).offset().top + "px - 5px )");
         }
 
         addFilterUI(){
-            //ship type
-            for(let sCtr in KC3Meta._stype){
-                // stype 12, 15 not used by shipgirl
-                // stype 1 is used from 2017-05-02
-                if(KC3Meta._stype[sCtr] && ["12", "15"].indexOf(sCtr) < 0){
+            // ship type
+            for(let idx in KC3Meta._stype){
+                if(KC3Meta._stype[idx] && ["12", "15"].indexOf(idx) < 0){
                     let cElm = $(".factory .ship_filter_type", this.tab).clone().appendTo(".tab_locking .filters .ship_types");
-                    cElm.data("id", sCtr);
-                    $("input[type='checkbox']",cElm).attr("id","shipType_"+sCtr).data("typeId",sCtr);
-                    $("label",cElm).attr("for","shipType_"+sCtr);
-                    $(".filter_name label", cElm).text(KC3Meta.stype(sCtr));
+                    cElm.data("id", idx);
+                    $("input[type='checkbox']",cElm).attr("id","shipType_"+idx).data("typeId",idx);
+                    $("label",cElm).attr("for","shipType_"+idx);
+                    $(".filter_name label", cElm).text(KC3Meta.stype(idx));
                 }
             }
 
-            //speed
+            // Speed
             $(".ship_filter_speed", this.tab).empty();
-            ["All","Slow","Fast"].map((speed,i)=>{
+            ["All","Slow","Fast"].forEach((speed, i) => {
                 let cElm = $(".factory .ship_filter_radio", this.tab).clone().appendTo(".tab_locking .filters .ship_filter_speed");
                 $("input[type='radio']",cElm).val(i).attr("name","filter_speed").attr("id","filter_speed_"+i);
                 $("label",cElm).text(speed).attr("for","filter_speed_"+i);
                 if(i===0) $("input[type='radio']",cElm)[0].checked=true;
             });
 
-            ["-","Capable","Incapable"].map((val,i)=>{
+            // Daihatsu
+            ["-","Capable","Incapable"].forEach((val, i) => {
                 let cElm = $(".factory .ship_filter_radio", this.tab).clone().appendTo(".tab_locking .filters .ship_filter_daihatsu");
                 $("input[type='radio']",cElm).val(i).attr("name","filter_daihatsu").attr("id","filter_daihatsu_"+i);
                 $("label",cElm).text(val).attr("for","filter_daihatsu_"+i);
@@ -121,7 +120,7 @@
 
             this.updateFilters();
 
-            $(".filters",this.tab).change(()=>{
+            $(".filters", this.tab).change(() => {
                 this.updateFilters();
                 this.showListGrid();
             });
@@ -151,7 +150,7 @@
                 canEquipDaihatsu: shipObj.canEquipDaihatsu()
             });
 
-            this.lock_plan.map((tagPlan, tagId) => {
+            this.lock_plan.forEach((tagPlan, tagId) => {
                 if (tagPlan.indexOf(mappedObj.id) !== -1)
                     mappedObj.lock_plan = tagId;
             });
@@ -160,16 +159,16 @@
         }
 
         fillLockBoxes(){
-            this.shipList.map((ship)=>{
+            this.shipList.forEach(ship => {
                 if (ship.sally !== 0) {
-                    this.addShipToBox(ship.sally-1,ship);
+                    this.addShipToBox(ship.sally - 1, ship);
                 }
             });
-            this.lock_plan.map((shipIds,tag)=>{
-                shipIds.map((shipId)=>{
-                    this.shipList.map((ship)=>{
+            this.lock_plan.forEach((shipIds, tag) => {
+                shipIds.forEach(shipId => {
+                    this.shipList.forEach(ship => {
                         if(ship.id === shipId && ship.sally === 0){
-                            this.addShipToBox(tag,ship);
+                            this.addShipToBox(tag, ship);
                         }
                     });
                 });
@@ -226,7 +225,7 @@
                 }
             }
 
-            ["hp","fp","tp","aa","ar","as","ev","ls","lk","yasen"].map((stat)=>{
+            ["hp","fp","tp","aa","ar","as","ev","ls","lk","yasen"].forEach(stat => {
                 const statVal = ship[stat];
                 const el = $(`.ship_stat.ship_${stat}`,shipRow);
 
@@ -243,27 +242,23 @@
                 }
             });
 
-            [1,2,3,4].forEach((x)=>{
-                this.equipImg(shipRow, x, ship.slots[x-1], ship.equip[x-1]);
+            [0,1,2,3].forEach(i => {
+                this.equipImg(shipRow, i + 1, ship.slots[i], ship.equip[i]);
             });
-            if(ship.exSlot !== 0){
-                this.equipImg(shipRow, "ex", -2, ship.exSlot);
-            }
         }
 
         equipImg(cElm, equipNum, equipSlot, gearId){
             const element = $(".ship_equip_" + equipNum, cElm);
-            $("img",element).hide();
-            $("span",element).each(function(i,x){
+            $("img", element).hide();
+            $("span", element).each((_, e) => {
                 if(equipSlot > 0)
-                    $(x).text(equipSlot);
+                    $(e).text(equipSlot);
                 else if(equipSlot === -2)
                 // for ex slot opened, but not equipped
-                    $(x).addClass("empty");
+                    $(e).addClass("empty");
                 else
-                    $(x).css('visibility','hidden');
+                    $(e).css('visibility','hidden');
             });
-
         }
 
         updateFilters(){
@@ -319,8 +314,9 @@
          * Drag & drop
          */
         addShipToBox(boxIndex, ship){
-            $(".ships_area div[data-rosterid='"+ship.id+"']",this.tab).remove();
-            const shipBox = $(".tab_locking .factory .lship").clone().appendTo(".tab_locking .lock_mode_"+(boxIndex+1)+" .ships_area");
+            $(".ships_area div[data-rosterid='"+ship.id+"']", this.tab).remove();
+            const shipBox = $(".tab_locking .factory .lship").clone()
+                .appendTo(".tab_locking .lock_mode_"+(boxIndex+1)+" .ships_area");
 
             $("img", shipBox).attr("src", KC3Meta.shipIcon(ship.masterId));
             shipBox.attr("data-rosterid", ship.id );
@@ -330,20 +326,20 @@
                 shipBox.addClass("gamelocked");
             } else {
                 shipBox.addClass("plannedlock");
-                shipBox.dblclick(()=>{this.cleanupPlannedLock(ship);});
+                shipBox.dblclick(() => {this.cleanupPlannedLock(ship);} );
             }
         }
 
         switchPlannedLock(ship, index){
-            if(arguments.length===1){
+            if(index === undefined) {
                 index = typeof ship.lock_plan !== "undefined" ? ship.lock_plan : -1;
                 if( ++index >= this.lock_limit){
                     return this.cleanupPlannedLock(ship);
                 }
             }
             this.addShipToBox(index, ship);
-            this.lock_plan.map((tagPlan,tagId)=>{
-                this.lock_plan[tagId] = tagPlan.filter((shipInPlanId) => shipInPlanId !== ship.id);
+            this.lock_plan.forEach((tagPlan, tagId) => {
+                this.lock_plan[tagId] = tagPlan.filter(shipInPlanId => shipInPlanId !== ship.id);
             });
             this.lock_plan[index].push(ship.id);
             this.fastUpdateLockPlan(ship, index);
@@ -354,15 +350,15 @@
         cleanupPlannedLock(ship){
             $(".ship_sally",ship.row).removeClass("lock_plan lock_mode_"+(ship.lock_plan+1));
             this.lock_plan[ship.lock_plan] = this.lock_plan[ship.lock_plan]
-                .filter((shipInPlanId) => shipInPlanId !== ship.id);
+                .filter(shipInPlanId => shipInPlanId !== ship.id);
             delete ship.lock_plan;
             this.saveShipLockPlan();
-            $(".ships_area div[data-rosterid='"+ship.id+"']",this.tab).remove();
+            $(".ships_area div[data-rosterid='" + ship.id + "']", this.tab).remove();
             this.adjustHeight();
         }
 
         getShipById(id){
-            return this.shipList.filter((ship)=>ship.id===id)[0];
+            return this.shipList.filter( ship => ship.id === id )[0];
         }
 
         setDroppable(){
@@ -385,8 +381,8 @@
             $(".ship_sally",ship.row).addClass("lock_plan").text("").addClass("lock_mode_"+(new_lock_plan+1));
             ship.lock_plan = new_lock_plan;
         }
-	}
+    }
 
-	KC3StrategyTabs.locking = new KC3StrategyTab("locking");
+    KC3StrategyTabs.locking = new KC3StrategyTab("locking");
     KC3StrategyTabs.locking.definition = new KC3LockingDefinition();
 })();

@@ -3,7 +3,8 @@
 }
 .tab_locking .planner_area {
 	-webkit-user-select: none;
-    padding: 0 5px 0;
+	user-select: none;
+	padding: 0 5px 0;
 }
 
 /* CONTROLS
@@ -11,7 +12,7 @@
 .tab_locking .controls {
 	width:680px;
 	height:20px;
-	margin:0 0 10px 0;
+	margin:5px 0 5px 0;
 }
 .tab_locking .control {
 	height:20px;
@@ -27,7 +28,6 @@
 ------------------------------*/
 .tab_locking .lock_modes {
 	width:680px;
-	padding:5px 0;
 }
 .tab_locking .lock_mode {
 	width:130px;
@@ -89,255 +89,255 @@
 	cursor:pointer;
 }
 
+.tab_locking .shiplist_box {
+	width: 602px;
+	float: left;
+	margin: 5px 0 0 0;
+	padding: 0;
+}
+
 /* SHIP LIST - HEADER
 ------------------------------*/
 .tab_locking .ship_header {
-    width: 602px;
-    height: 22px;
-    margin: 0;
+	width: 602px;
+	height: 22px;
+	margin: 0;
 }
 
 .tab_locking .ship_header .ship_item {
-    width: 614px;
-    height: 20px;
-    line-height: 20px;
-    font-size: 12px;
-    font-weight: bold;
-    margin: 0 0 3px 0;
+	width: 614px;
+	height: 20px;
+	line-height: 20px;
+	font-size: 12px;
+	font-weight: bold;
+	margin: 0 0 3px 0;
 }
 
 /* SHIP LIST - BODY
 ------------------------------*/
 .tab_locking .ship_list {
-    width: 602px;
-    min-height: 50px;
-    margin: 0 0 5px 0;
-    /* scroll fix */
-    overflow-x: hidden;
-    overflow-y: scroll;
-}
-
-.tab_locking .shiplist_box {
-    width: 602px;
-    float: left;
-    margin: 0;
-    padding: 0;
+	width: 602px;
+	min-height: 50px;
+	margin: 0 0 5px 0;
+	/* scroll fix */
+	overflow-x: hidden;
+	overflow-y: scroll;
 }
 
 /* Row */
 .tab_locking .ship_list .ship_item {
-    width: 602px;
-    height: 20px;
-    line-height: 20px;
-    font-size: 12px;
-    margin: 0 0 2px 0;
-    overflow: hidden;
-    position: relative;
+	width: 602px;
+	height: 20px;
+	line-height: 20px;
+	font-size: 12px;
+	margin: 0 0 2px 0;
+	overflow: hidden;
+	position: relative;
 }
 
 /* Cell */
 .tab_locking .ship_item .ship_field {
-    height: 20px;
-    float: left;
-    margin: 0 2px 0 0;
+	height: 20px;
+	float: left;
+	margin: 0 2px 0 0;
 }
 
 .tab_locking .ingame_page {
-    width: 680px;
-    height: 14px;
-    line-height: 14px;
-    font-size: 12px;
-    margin: 4px 0 2px 0;
-    text-align: left;
-    padding: 0 0 0 10px;
-    color: #aaa;
+	width: 680px;
+	height: 14px;
+	line-height: 14px;
+	font-size: 12px;
+	margin: 4px 0 2px 0;
+	text-align: left;
+	padding: 0 0 0 10px;
+	color: #aaa;
 }
 
 /* Fields: Basic */
 .tab_locking .ship_item .ship_id {
-    width: 44px;
-    text-align: center;
+	width: 44px;
+	text-align: center;
 }
 
 .tab_locking .ship_item .ship_img {
-    position: relative;
-    width: 20px;
+	position: relative;
+	width: 20px;
 }
 
 .tab_locking .ship_item .ship_img img.ship_icon {
-    width: 20px;
-    height: 20px;
-    vertical-align: top;
+	width: 20px;
+	height: 20px;
+	vertical-align: top;
 }
 
 .tab_locking .ship_item .ship_name {
-    width: 92px;
-    overflow: hidden;
-    position: relative;
+	width: 92px;
+	overflow: hidden;
+	position: relative;
 }
 
 .tab_locking .ship_item .ship_type {
-    width: 30px;
-    text-align: center;
+	width: 30px;
+	text-align: center;
 }
 
 .tab_locking .ship_item .ship_lv {
-    width: 50px;
-    text-align: center;
-    position: relative;
+	width: 50px;
+	text-align: center;
+	position: relative;
 }
 
 .tab_locking .ship_item .ship_status {
-    width: 70px;
-    text-align: center;
-    position: relative;
+	width: 70px;
+	text-align: center;
+	position: relative;
 }
 
 .tab_locking .ship_item .ship_bar {
-    width: 106px;
-    position: relative;
+	width: 106px;
+	position: relative;
 }
 
 .tab_locking .ship_item .ship_sally {
-    width: 20px;
-    text-align: center;
-    position: relative;
-    font-weight: 800;
+	width: 20px;
+	text-align: center;
+	position: relative;
+	font-weight: 800;
 }
 
 .tab_locking .ship_item .ship_stat {
-    width: 25px;
-    text-align: center;
+	width: 25px;
+	text-align: center;
 }
 
 .tab_locking .ship_item .ship_stat_mod {
-    width: 35px;
-    text-align: center;
+	width: 35px;
+	text-align: center;
 }
 
 .tab_locking .ship_item .ship_stat span {
-    font-size: 8px;
-    color: #aaa;
+	font-size: 8px;
+	color: #aaa;
 }
 
 /* Fields: Equips */
 .tab_locking .ship_item .ship_equip {
-    width: 80px;
+	width: 80px;
 }
 
 .tab_locking .ship_item .ship_equip_icon {
-    width: 20px;
-    height: 20px;
-    float: left;
-    overflow: hidden;
-    position: relative;
+	width: 20px;
+	height: 20px;
+	float: left;
+	overflow: hidden;
+	position: relative;
 }
 
 .tab_locking .ship_item .ship_equip img {
-    width: 20px;
-    height: 20px;
-    vertical-align: top;
+	width: 20px;
+	height: 20px;
+	vertical-align: top;
 }
 
 .tab_locking .ship_item .ship_equip span {
-    position: absolute;
-    display: flex;
-    right: 0;
-    bottom: 0;
-    font-size: 11px;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
+	position: absolute;
+	display: flex;
+	right: 0;
+	bottom: 0;
+	font-size: 11px;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	align-items: center;
+	justify-content: center;
 }
 
 .tab_locking .ship_list .ship_item .ship_sally.lock_plan,
 .tab_locking .ship_list .ship_item .ship_sally:not([class*="lock_mode"]){
-    cursor: pointer;
+	cursor: pointer;
 }
 
 .tab_locking .ship_header .ship_item .ship_sally{
-    font-weight: 400;
+	font-weight: 400;
 }
 
 .tab_locking .ship_header .ship_lv,
 .tab_locking .ship_list .ship_item .ship_lv {
-    width: 25px;
+	width: 25px;
 }
 
 /* FILTERS
 ------------------------------*/
 
 .tab_locking .filters {
-    float: left;
-    width: 88px;
-    margin: 20px 0 0 0;
-    padding: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
+	float: left;
+	width: 88px;
+	margin: 22px 0 0 0;
+	padding: 0;
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 
 .tab_locking .filters .filter_name {
-    width: 55px;
-    height: 18px;
-    float: left;
+	width: 55px;
+	height: 18px;
+	float: left;
 }
 
 .tab_locking .filters .filter_box {
-    width: 10px;
-    height: 10px;
-    margin: 3px 7px 0 3px;
-    float: left;
+	width: 10px;
+	height: 10px;
+	margin: 3px 7px 0 3px;
+	float: left;
 }
 
 .tab_locking .filters .filter_box input {
-    margin: 0;
+	margin: 0;
 }
 
 .tab_locking .filters .filter_group {
-    margin-bottom: 5px;
-    float: left;
+	margin-bottom: 5px;
+	float: left;
 }
 
 @media only screen and (min-height: 640px) {
-    .tab_locking .filters .filter_group {
-        margin-bottom: 20px;
-    }
+	.tab_locking .filters .filter_group {
+		margin-bottom: 20px;
+	}
 }
 
 .tab_locking .ship_filter_type .filter_check {
-    background: #000;
+	background: #000;
 }
 
 .tab_locking .scroll_fix::-webkit-scrollbar {
-    width: 5px;
+	width: 5px;
 }
 
 .tab_locking .scroll_fix::-webkit-scrollbar-track {
-    background: #ddd;
+	background: #ddd;
 }
 
 .tab_locking .scroll_fix::-webkit-scrollbar-thumb {
-    background: #666;
+	background: #666;
 }
 
 .tab_locking .filters label {
-    font-weight: normal;
-    cursor: pointer;
+	font-weight: normal;
+	cursor: pointer;
 }
 
 .tab_locking .filters .filter_header {
-    font-weight: 800;
-    margin-left: 5px;
+	font-weight: 800;
+	margin-left: 5px;
 }
 
 .tab_locking .planner_area .ship_icon_dragged {
-    width: 28px;
-    height: 28px;
+	width: 28px;
+	height: 28px;
 }
 
 .tab_locking .ship_list .ship_item .lock_plan {
-    border: 3px dotted #FFF;
-    line-height: 16px;
+	border: 3px dotted #FFF;
+	line-height: 16px;
 }
