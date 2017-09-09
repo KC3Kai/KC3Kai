@@ -221,8 +221,8 @@
         }
 
         addFilterUI() {
-            // Ship type
-            KC3Meta._stype.forEach((stype, i) => {
+            // Ship type, `KC3Meta._stype` will be an object if language extending occurs
+            $.each(KC3Meta._stype, (i, stype) => {
                 if(stype && [12, 15].indexOf(i) === -1) {
                     const elm = $(".factory .ship_filter_type", this.tab).clone()
                         .appendTo(".tab_locking .filters .ship_types");
