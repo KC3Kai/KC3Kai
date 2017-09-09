@@ -113,6 +113,17 @@
 	margin: 0 0 3px 0;
 }
 
+.tab_locking .ship_header .ship_item .ship_sally {
+	font-weight: normal;
+}
+
+.tab_locking .ship_header .ship_stat img {
+	width: 16px;
+	height: 16px;
+	margin-top: 2px;
+	vertical-align: text-bottom;
+}
+
 /* SHIP LIST - BODY
 ------------------------------*/
 .tab_locking .ship_list {
@@ -202,7 +213,7 @@
 	width: 20px;
 	text-align: center;
 	position: relative;
-	font-weight: 800;
+	font-weight: bold;
 }
 
 .tab_locking .ship_item .ship_stat {
@@ -257,10 +268,6 @@
 	cursor: pointer;
 }
 
-.tab_locking .ship_header .ship_item .ship_sally{
-	font-weight: 400;
-}
-
 .tab_locking .ship_header .ship_lv,
 .tab_locking .ship_list .ship_item .ship_lv {
 	width: 25px;
@@ -302,7 +309,7 @@
 
 @media only screen and (min-height: 640px) {
 	.tab_locking .filters .filter_group {
-		margin-bottom: 20px;
+		margin-bottom: 10px;
 	}
 }
 
@@ -328,7 +335,7 @@
 }
 
 .tab_locking .filters .filter_header {
-	font-weight: 800;
+	font-weight: bold;
 	margin-left: 5px;
 }
 
