@@ -11,16 +11,16 @@
 	<div class="help_a">Double click on her face.</div>
 	
 	<div class="help_q">I cannot remove a ship from a colored box?</div>
-	<div class="help_a">You cannot removed ships already locked-in game, and are signified by the icon's transparency.</div>
+	<div class="help_a">You cannot removed ships already locked in game, and are signified by the icon's transparency.</div>
 	
 	<div class="help_q">When I click "Clear All", some ships remained</div>
-	<div class="help_a">As I said, ships already locked-in game are also locked on the colored boxes here.</div>
+	<div class="help_a">As I said, ships already locked in game are also locked on the colored boxes here.</div>
 	
 	<div class="help_q">The ships get re-arranged after refreshing</div>
 	<div class="help_a">Do not mind the arrangements. This page's goal is to let you plan for the whole fleet's separation into different operations, not to arrange your compositions.</div>
 
 	<div class="help_q">What does <b>Tag</b> column mean?</div>
-	<div class="help_a">If you see number in tag column it means that ship is already locked inside game. You can't do anything about game locked ships.
+	<div class="help_a">If you see number in tag column it means that ship is already locked in game. You can't do anything about game locked ships.
 		Otherwise try clicking inside cell. It should cycle through tags of that ship.
 	</div>
 
@@ -43,7 +43,7 @@
 	<div class="shiplist_box">
 		<div class="ship_header">
 			<div class="ship_item">
-				<div class="ship_field hover ship_sally i18n_title" title="ShipTag" data-type="sally">Tag</div>
+				<div class="ship_field hover ship_sally" data-type="sally">Tag</div>
 
 				<div class="ship_field ship_img"></div>
 				<div class="ship_field hover ship_name" data-type="name">Name</div>
@@ -79,6 +79,16 @@
 		<div class="filter_group">
 			<div class="filter_header">Daihatsu</div>
 			<div class="ship_filter_daihatsu"></div>
+		</div>
+
+		<div class="filter_group">
+			<div class="filter_header">Hide</div>
+			<div class="ship_filter_taglocked"></div>
+		</div>
+
+		<div class="filter_group">
+			<div class="filter_header">Equipment</div>
+			<div class="ship_filter_equipstats"></div>
 		</div>
 
 		<div class="filter_group">
@@ -143,6 +153,11 @@
 
 	<div class="ship_filter_radio">
 		<div class="filter_box"><input type="radio"></div>
+		<div class="filter_name"><label></label></div>
+	</div>
+
+	<div class="ship_filter_checkbox">
+		<div class="filter_box"><input type="checkbox"></div>
 		<div class="filter_name"><label></label></div>
 	</div>
 
