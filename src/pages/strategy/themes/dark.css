@@ -545,6 +545,85 @@ button, input, select, textarea {
 	background-color:#000000;
 }
 
+/* COMMONS: SHIP LIST
+-------------------------------*/
+
+.ship_header .ship_item .ship_field.sorted {
+	background:#303030;
+}
+.ship_header .ship_stat img {
+	filter: invert(100%);
+	-webkit-filter: invert(100%);
+}
+.ship_list .ship_item.odd .ship_field {
+	background:#303030;
+}
+.ship_list .ship_item.even .ship_field {
+	background:#303030;
+}
+.ship_list .ship_item:hover .ship_field {
+	background:#000000;
+}
+.ship_list .ship_onfleet-color1 {
+	background: #2e4a79 !important; color:#fff;
+}
+.ship_list .ship_onfleet-color2 {
+	background: #527e51 !important;
+	color:#fff;
+}
+.ship_list .ship_onfleet-color3 {
+	background: #878533 !important;
+	 color:#fff;
+ }
+.ship_list .ship_onfleet-color4 {
+	background: #946e3d !important;
+	color:#fff;
+}
+.ship_list .ship_item .ship_lv span.value.married {
+	color:#d3911d;
+}
+.ship_list .ship_item .ship_lv span.value.high {
+	color:#1cdb98;
+}
+.ship_list .ship_item .ship_lv span.value.medium {
+	color:#36c2db;
+}
+.ship_list .ship_item .ship_morale.sparkled {
+	background:#b1b101;
+	color:#000;
+}
+.ship_list .ship_item .ship_fp.max {
+	background:#833232;
+}
+.ship_list .ship_item .ship_tp.max {
+	background:#073e78;
+}
+.ship_list .ship_item .ship_yasen.max {
+	background:#555555;
+	color:#ffffff;
+}
+.ship_list .ship_item .ship_aa.max {
+	background:#935b07;
+}
+.ship_list .ship_item .ship_ar.max {
+	background:#947600;
+}
+.ship_list .ship_item .ship_stat span {
+	font-size:8px;
+	color:#999999 !important;
+}
+.ship_list .ship_item.odd .ship_field.ship_lk,
+.ship_list .ship_item.even .ship_field.ship_lk {
+	background:#116311;
+}
+.ship_list .ship_item.odd .ship_field.ship_lk.max,
+.ship_list .ship_item.even .ship_field.ship_lk.max {
+	background:#09a709;
+}
+.ship_list .ship_item .ship_lk .sub {
+	color:#999999;
+}
+
 /* OVERRIDES
 -------------------------------*/
 /* Profile */
@@ -743,7 +822,7 @@ button, input, select, textarea {
 	background: #5f5f5f;
 	border-radius:0px !important;
 }
-.tab_ships .massSelect dl{
+.tab_ships .massSelect dl {
 	width: 215px !important;
 }
 .tab_ships .ship_header .ship_stat img {
@@ -1511,11 +1590,34 @@ button, input, select, textarea {
 
 /* LOCKING
 --------------------------------*/
-.tab_locking .lock_mode_1 { background:#044d67; }
-.tab_locking .lock_mode_2 { background:#2c4e2c; }
-.tab_locking .lock_mode_3 { background:#737006; }
-.tab_locking .lock_mode_4 { background:#6c4513; }
-.tab_locking .lock_mode_5 { background:#544c5c; }
+.tab_locking .controls {
+	margin: 0px 0 5px 0 !important;
+}
+
+.tab_locking .ship_list .ship_item .lock_plan {
+	border: 3px dotted #303030 !important;
+}
+
+.tab_locking .lock_mode_1,
+.tab_locking .ship_list .ship_item .lock_mode_1 {
+	background:#044d67;
+}
+.tab_locking .lock_mode_2,
+.tab_locking .ship_list .ship_item .lock_mode_2 {
+	background:#2c4e2c;
+}
+.tab_locking .lock_mode_3,
+.tab_locking .ship_list .ship_item .lock_mode_3 {
+	background:#737006;
+}
+.tab_locking .lock_mode_4,
+.tab_locking .ship_list .ship_item .lock_mode_4 {
+	background:#6c4513;
+}
+.tab_locking .lock_mode_5,
+.tab_locking .ship_list .ship_item .lock_mode_5 {
+	background:#544c5c;
+}
 
 /* QUEST FLOWCHART
 --------------------------------*/
